@@ -16,6 +16,6 @@ function ControlImage(name, pos, size, imageSrc)
 			this.systemImage.src = this.imageSrc;
 		}
 
-		Globals.Instance.displayHelper.drawControlImage(this);
+		Globals.Instance.display.drawControlImage(this);
 	}
 }

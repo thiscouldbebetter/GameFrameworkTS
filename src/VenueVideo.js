@@ -12,7 +12,7 @@ function VenueVideo(videoName, venueNext)
 	{
 		if (this.video == null)
 		{
-			Globals.Instance.displayHelper.hide();
+			Globals.Instance.display.hide();
 			this.video = Globals.Instance.videoHelper.videos[this.videoName];
 			this.video.play();
 		}	
@@ -26,9 +26,9 @@ function VenueVideo(videoName, venueNext)
 
 		if (this.video.isFinished == true)
 		{
-			var displayHelper = Globals.Instance.displayHelper;
-			displayHelper.clear("Black");
-			displayHelper.show();
+			var display = Globals.Instance.display;
+			display.clear("Black");
+			display.show();
 			var universe = Globals.Instance.universe;
 			universe.venueNext = this.venueNext;
 		}

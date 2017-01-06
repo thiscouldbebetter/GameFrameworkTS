@@ -16,7 +16,7 @@ function Globals()
 	Globals.prototype.initialize = function
 	(
 		programName,
-		millisecondsPerTimerTick, 
+		timerTicksPerSecond, 
 		viewSize, 
 		universe,
 		sounds,
@@ -24,6 +24,7 @@ function Globals()
 	)
 	{
 		this.programName = programName;
+		this.timerTicksPerSecond = timerTicksPerSecond;
 		
 		this.serializer = new Serializer
 		([
@@ -33,7 +34,7 @@ function Globals()
 			World,
 			Universe
 		]);
-		this.displayHelper = new DisplayHelper(viewSize, 10);
+		this.display = new Display(viewSize, 10, "Gray", "White");
 		this.inputHelper = new InputHelper();
 		this.profileHelper = new ProfileHelper();
 		this.soundHelper = new SoundHelper(sounds);
@@ -50,9 +51,11 @@ function Globals()
 		document.body.appendChild(divMain);
 		this.divMain = divMain;
 
-		this.displayHelper.initialize();
+		this.display.initialize();
 		this.inputHelper.initialize();
 		this.universe.initialize();
+
+		var millisecondsPerTimerTick = Math.floor(1000 / this.timerTicksPerSecond);
 
 		this.timer = setInterval
 		(

@@ -18,6 +18,13 @@ function Coords(x, y)
 		return new Coords(this.x, this.y);
 	}
 
+	Coords.prototype.divideScalar = function(scalar)
+	{
+		this.x /= scalar;
+		this.y /= scalar;
+		return this;
+	}
+
 	Coords.prototype.equals = function(other)
 	{
 		return (this.x == other.x && this.y == other.y);
@@ -49,4 +56,12 @@ function Coords(x, y)
 		this.y = y;
 		return this;
 	}
+	
+	Coords.prototype.subtract = function(other)
+	{
+		this.x -= other.x;
+		this.y -= other.y;
+		return this;
+	}
+	
 }

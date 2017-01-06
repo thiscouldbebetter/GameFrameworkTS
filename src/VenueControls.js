@@ -7,7 +7,7 @@ function VenueControls(controlRoot)
 {
 	VenueControls.prototype.draw = function()
 	{
-		Globals.Instance.displayHelper.clear();
+		Globals.Instance.display.clear();
 		this.controlRoot.draw();
 	}
 
@@ -23,24 +23,23 @@ function VenueControls(controlRoot)
 
 			inputHelper.isMouseClicked = false;
 		}
-		else if (inputHelper.keyCodePressed != null)
+		else if (inputHelper.inputsActive.length > 0)
 		{
-			var keyCodePressed = inputHelper.keyCodePressed;
-			var isShiftKeyPressed = inputHelper.isShiftKeyPressed;
-			this.controlRoot.keyPressed
-			(
-				keyCodePressed, 
-				isShiftKeyPressed
-			);
+			var inputsActive = inputHelper.inputsActive;
 
-			inputHelper.keyCodePressed = null;
+			for (var i = 0; i < inputsActive.length; i++)
+			{
+				var inputActive = inputsActive[i];
+				this.controlRoot.inputHandle(inputActive);
+				inputHelper.inputInactivate(inputActive);
+			}
 		}
 
-		var mouseMovePos = inputHelper.mouseMovePos;
-		var mouseMovePosPrev = inputHelper.mouseMovePosPrev;
-
-		if (mouseMovePos.equals(mouseMovePosPrev) == false)
+		if (inputHelper.hasMouseMoved == true)
 		{
+			var mouseMovePos = inputHelper.mouseMovePos;
+			var mouseMovePosPrev = inputHelper.mouseMovePosPrev;
+
 			this.controlRoot.mouseMove
 			(
 				mouseMovePos, mouseMovePosPrev

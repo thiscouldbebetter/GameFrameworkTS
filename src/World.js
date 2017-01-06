@@ -30,14 +30,14 @@ function World(name, cursorPos)
 
 	World.prototype.draw = function()
 	{
-		var displayHelper = Globals.Instance.displayHelper;
+		var display = Globals.Instance.display;
 
-		displayHelper.clear();
-		displayHelper.drawRectangle
+		display.clear();
+		display.drawRectangle
 		(
 			this.cursorPos,
 			World.CursorSize,
-			"Gray", "White"
+			display.colorBack, display.colorFore
 		);
 	}
 
@@ -52,15 +52,20 @@ function World(name, cursorPos)
 			Globals.Instance.soundHelper.soundWithNamePlayAsEffect("Sound");
 		}
 
-		if (inputHelper.keyCodePressed == 27) // escape
+		var inputsActive = inputHelper.inputsActive;
+		for (var i = 0; i < inputsActive.length; i++)
 		{
-			var universe = Globals.Instance.universe;
-			var venueNext = new VenueControls
-			(
-				ControlBuilder.configure()
-			);
-			venueNext = new VenueFader(venueNext);
-			universe.venueNext = venueNext;
+			var inputActive = inputsActive[i];
+			if (inputActive == "Escape")
+			{
+				var universe = Globals.Instance.universe;
+				var venueNext = new VenueControls
+				(
+					ControlBuilder.configure()
+				);
+				venueNext = new VenueFader(venueNext);
+				universe.venueNext = venueNext;
+			}
 		}
 	}
 }

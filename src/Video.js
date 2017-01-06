@@ -14,7 +14,7 @@ function Video(name, sourcePath)
 		this.domElement.autoplay = true;
 		this.domElement.onended = this.stop.bind(this);
 
-		var viewSize = Globals.Instance.displayHelper.viewSize;
+		var viewSize = Globals.Instance.display.viewSize;
 		this.domElement.width = viewSize.x;
 		this.domElement.height = viewSize.y;
 

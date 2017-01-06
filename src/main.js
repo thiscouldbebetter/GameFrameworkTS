@@ -9,7 +9,7 @@ function main()
 	Globals.prototype.initialize
 	(
 		"Cursor Quest",
-		50, // millisecondsPerTimerTick
+		20, // timerTicksPerSecond
 		viewSize,
 		universe0,
 		// sounds

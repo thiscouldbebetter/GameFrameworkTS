@@ -12,4 +12,15 @@ function ArrayExtensions()
 			this[key] = item;
 		}
 	}
+	
+	Array.prototype.remove = function(elementToRemove)
+	{
+		var indexToRemoveAt = this.indexOf(elementToRemove);
+		if (indexToRemoveAt >= 0)
+		{
+			this.splice(indexToRemoveAt, 1);
+		}
+		return this;
+	}
+
 }

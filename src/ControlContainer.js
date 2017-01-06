@@ -34,6 +34,57 @@ function ControlContainer(name, pos, size, children)
 		return returnValue;
 	}
 
+	ControlContainer.prototype.childWithFocusNextInDirection = function(direction)
+	{
+		if (this.indexOfChildWithFocus == null)
+		{
+			var iStart = (direction == 1 ? 0 : this.children.length - 1);
+			var iEnd = (direction == 1 ? this.children.length : -1);
+
+			for (var i = iStart; i != iEnd; i++)
+			{
+				var child = this.children[i];
+				if (child.focusGain != null)
+				{
+					this.indexOfChildWithFocus = i;
+					break;
+				}
+			}
+		}
+		else
+		{
+			var childIndexOriginal = this.indexOfChildWithFocus;
+
+			while (true)
+			{
+				this.indexOfChildWithFocus = NumberHelper.wrapValueToRangeMinMax
+				(
+					this.indexOfChildWithFocus + direction, 0, this.children.length
+				);
+
+				if (this.indexOfChildWithFocus == childIndexOriginal)
+				{
+					break;
+				}
+				else
+				{
+					var child = this.children[this.indexOfChildWithFocus];
+					if (child.focusGain != null)
+					{
+						break;
+					}
+				}
+
+			} // end while (true)
+
+		} // end if
+
+		var returnValue = this.childWithFocus();
+
+		return returnValue;
+	}
+
+
 	ControlContainer.prototype.childrenAtPosAddToList = function
 	(
 		posToCheck, 
@@ -66,17 +117,37 @@ function ControlContainer(name, pos, size, children)
 
 	ControlContainer.prototype.draw = function()
 	{
-		Globals.Instance.displayHelper.drawControlContainer(this);
+		Globals.Instance.display.drawControlContainer(this);
 	}
 
-	ControlContainer.prototype.keyPressed = function(keyCodePressed, isShiftKeyPressed)
+	ControlContainer.prototype.inputHandle = function(inputToHandle)
 	{
 		var childWithFocus = this.childWithFocus();
-		if (childWithFocus != null)
+
+		if (inputToHandle == "ArrowLeft" || inputToHandle == "ArrowRight")
 		{
-			if (childWithFocus.keyPressed != null)
+			var direction = (inputToHandle == "ArrowLeft" ? -1 : 1); 
+
+			if (childWithFocus == null)
 			{
-				childWithFocus.keyPressed(keyCodePressed, isShiftKeyPressed);
+				childWithFocus = this.childWithFocusNextInDirection(direction);
+				if (childWithFocus != null)
+				{
+					childWithFocus.focusGain();
+				}
+			}
+			else
+			{
+				childWithFocus.focusLose();
+				childWithFocus = this.childWithFocusNextInDirection(direction);
+				childWithFocus.focusGain();
+			}			
+		}
+		else if (childWithFocus != null)
+		{
+			if (childWithFocus.inputHandle != null)
+			{
+				childWithFocus.inputHandle(inputToHandle);
 			}
 		}
 	}

@@ -13,7 +13,25 @@ function ControlButton(name, pos, size, text, click)
 {
 	ControlButton.prototype.draw = function()
 	{
-		Globals.Instance.displayHelper.drawControlButton(this);
+		Globals.Instance.display.drawControlButton(this);
+	}
+
+	ControlButton.prototype.focusGain = function()
+	{
+		this.isHighlighted = true;
+	}
+
+	ControlButton.prototype.focusLose = function()
+	{
+		this.isHighlighted = false;
+	}
+
+	ControlButton.prototype.inputHandle = function(inputToHandle)
+	{
+		if (inputToHandle == "Enter")
+		{
+			this.click();
+		}
 	}
 
 	ControlButton.prototype.mouseClick = function(clickPos)

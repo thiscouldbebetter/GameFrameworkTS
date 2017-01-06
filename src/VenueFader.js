@@ -86,14 +86,14 @@ function VenueFader
 
 		alphaOfFadeColor *= alphaOfFadeColor;
 
-		var displayHelper = Globals.Instance.displayHelper;
+		var display = Globals.Instance.display;
 
-		displayHelper.drawRectangle
+		display.drawRectangle
 		(
 			new Coords(0, 0), 
-			displayHelper.viewSize, 
-			null,
-			"rgba(0, 0, 0, " + alphaOfFadeColor + ")"
+			display.viewSize, 
+			"rgba(0, 0, 0, " + alphaOfFadeColor + ")", // colorFill
+			null // colorBorder
 		);
 	}
 }

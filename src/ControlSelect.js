@@ -41,7 +41,7 @@ function ControlSelect
 {
 	ControlSelect.prototype.draw = function()
 	{
-		Globals.Instance.displayHelper.drawControlSelect(this);
+		Globals.Instance.display.drawControlSelect(this);
 	}
 
 	ControlSelect.prototype.optionSelected = function()

@@ -11,6 +11,6 @@ function ControlLabel(name, pos, size, isTextCentered, text)
 {
 	ControlLabel.prototype.draw = function()
 	{
-		Globals.Instance.displayHelper.drawControlLabel(this);
+		Globals.Instance.display.drawControlLabel(this);
 	}
 }
