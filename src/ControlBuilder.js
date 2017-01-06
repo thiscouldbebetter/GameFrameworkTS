@@ -130,15 +130,38 @@ function ControlBuilder()
 					"Quit",
 					// click
 					function()
-					{
-						Globals.Instance.reset();
-						var universe = Globals.Instance.universe;
-						var venueNext = new VenueControls
+					{					
+						var controlConfirm = ControlBuilder.confirm
 						(
-							ControlBuilder.title()
+							"Are you sure you want to quit?",
+							// confirm
+							function()
+							{
+								Globals.Instance.reset();
+								var universe = Globals.Instance.universe;
+								var venueNext = new VenueControls
+								(
+									ControlBuilder.title()
+								);
+								venueNext = new VenueFader(venueNext);
+								universe.venueNext = venueNext;
+							},
+							// cancel
+							function()
+							{
+								var universe = Globals.Instance.universe;
+								var venueNext = new VenueControls
+								(
+									ControlBuilder.configure()
+								);
+								venueNext = new VenueFader(venueNext);
+								universe.venueNext = venueNext;
+							}						
 						);
+
+						var venueNext = new VenueControls(controlConfirm);
 						venueNext = new VenueFader(venueNext);
-						universe.venueNext = venueNext;
+						Globals.Instance.universe.venueNext = venueNext;
 					}
 				),
 			]
@@ -217,25 +240,6 @@ function ControlBuilder()
 					),
 					"name"
 				),
-
-				new ControlButton
-				(
-					"buttonBack",
-					new Coords(10, 10), // pos
-					new Coords(15, 15), // size
-					"<",
-					// click
-					function ()
-					{
-						var venueNext = new VenueControls
-						(
-							ControlBuilder.profileSelect()
-						);
-						venueNext = new VenueFader(venueNext);
-						var universe = Globals.Instance.universe;
-						universe.venueNext = venueNext;
-					}
-				),
 	
 				new ControlButton
 				(
@@ -296,6 +300,25 @@ function ControlBuilder()
 						}
 					}
 				),	
+				
+				new ControlButton
+				(
+					"buttonBack",
+					new Coords(10, 10), // pos
+					new Coords(15, 15), // size
+					"<",
+					// click
+					function ()
+					{
+						var venueNext = new VenueControls
+						(
+							ControlBuilder.profileSelect()
+						);
+						venueNext = new VenueFader(venueNext);
+						var universe = Globals.Instance.universe;
+						universe.venueNext = venueNext;
+					}
+				),
 
 				new ControlButton
 				(

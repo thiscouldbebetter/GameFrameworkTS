@@ -11,11 +11,6 @@ function ControlTextBox(name, pos, size, text)
 }
 
 {
-	ControlTextBox.prototype.draw = function()
-	{
-		Globals.Instance.display.drawControlTextBox(this);
-	}
-
 	ControlTextBox.prototype.focusGain = function()
 	{
 		this.isHighlighted = true;
@@ -59,7 +54,7 @@ function ControlTextBox(name, pos, size, text)
 			(
 				charCodeAtCursor + direction, 
 				"A".charCodeAt(0), 
-				"Z".charCodeAt(0)
+				"Z".charCodeAt(0) + 1
 			);
 
 			var charAtCursor = String.fromCharCode(charCodeAtCursor);
@@ -89,4 +84,55 @@ function ControlTextBox(name, pos, size, text)
 		parent.indexOfChildWithFocus = parent.children.indexOf(this);
 		this.isHighlighted = true;
 	}
+	
+	// drawable
+	
+	ControlTextBox.prototype.draw = function()
+	{
+		var control = this;
+		var display = Globals.Instance.display;
+		
+		var pos = control.pos;
+		var size = control.size;
+
+		var text = control.text;
+
+		display.drawRectangle
+		(
+			pos, size, 
+			display.colorBack, display.colorFore,
+			control.isHighlighted // areColorsReversed
+		)
+
+		var textWidth = display.graphics.measureText(text).width;
+		var textSize = new Coords(textWidth, display.fontHeightInPixels);
+		var textMargin = size.clone().subtract(textSize).divideScalar(2);
+		var drawPos = pos.clone().add(textMargin);
+		display.drawText(text, drawPos, display.colorFore, display.colorBack, control.isHighlighted);				
+
+		if (control.isHighlighted == true)
+		{
+			var textBeforeCursor = control.text.substr(0, control.cursorPos);
+			var textAtCursor = control.text.substr(control.cursorPos, 1);
+			var cursorX = display.graphics.measureText(textBeforeCursor).width;
+			var cursorWidth = display.graphics.measureText(textAtCursor).width;
+			drawPos.x += cursorX;
+			
+			display.drawRectangle
+			(
+				drawPos,
+				new Coords(cursorWidth, display.fontHeightInPixels), // size
+				display.colorBack, 
+				display.colorBack
+			);
+			
+			display.drawText
+			(
+				textAtCursor,
+				drawPos,
+				display.colorFore
+			)
+		}
+	}
+
 }

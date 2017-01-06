@@ -23,6 +23,10 @@ function VenueVideo(videoName, venueNext)
 			inputHelper.isMouseClicked = false;
 			this.video.stop();
 		}
+		else if (inputHelper.inputsActive["Enter"] != null)
+		{
+			this.video.stop();
+		}
 
 		if (this.video.isFinished == true)
 		{

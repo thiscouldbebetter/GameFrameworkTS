@@ -115,11 +115,6 @@ function ControlContainer(name, pos, size, children)
 		return listToAddTo;
 	}
 
-	ControlContainer.prototype.draw = function()
-	{
-		Globals.Instance.display.drawControlContainer(this);
-	}
-
 	ControlContainer.prototype.inputHandle = function(inputToHandle)
 	{
 		var childWithFocus = this.childWithFocus();
@@ -218,4 +213,27 @@ function ControlContainer(name, pos, size, children)
 			}
 		}
 	}
+	
+	// drawable
+	
+	ControlContainer.prototype.draw = function()
+	{
+		var container = this;
+		var display = Globals.Instance.display;
+		
+		var pos = container.pos
+		var size = container.size;
+
+		display.drawRectangle
+		(
+			pos, size, display.colorBack, display.colorFore
+		)
+
+		var children = container.children;
+		for (var i = 0; i < children.length; i++)
+		{
+			var child = children[i];
+			child.draw();
+		}
+	}	
 }

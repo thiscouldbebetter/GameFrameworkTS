@@ -36,12 +36,31 @@ function ControlSelect
 			break;
 		}
 	}
+	
+	this.isHighlighted = false;
 }
 
 {
-	ControlSelect.prototype.draw = function()
+	ControlSelect.prototype.focusGain = function()
 	{
-		Globals.Instance.display.drawControlSelect(this);
+			this.isHighlighted = true;
+	}
+	
+	ControlSelect.prototype.focusLose = function()
+	{
+			this.isHighlighted = false;
+	}
+	
+	ControlSelect.prototype.inputHandle = function(inputToHandle)
+	{
+		if (inputToHandle == "ArrowDown")
+		{
+			this.optionSelectedNextInDirection(-1);			
+		}
+		else if (inputToHandle == "ArrowUp" || inputToHandle == "Enter")
+		{
+			this.optionSelectedNextInDirection(1);
+		}
 	}
 
 	ControlSelect.prototype.optionSelected = function()
@@ -72,6 +91,20 @@ function ControlSelect
 	
 		return returnValue;	
 	}
+	
+	ControlSelect.prototype.optionSelectedNextInDirection = function(direction)
+	{
+		var options = this.options();
+
+		this.indexOfOptionSelected = NumberHelper.wrapValueToRangeMinMax
+		(
+			this.indexOfOptionSelected + direction, 0, options.length
+		);		
+		
+		var optionSelected = this.optionSelected();
+
+		this.dataBindingForValueSelected.set(optionSelected.value);
+	}
 
 	ControlSelect.prototype.options = function()
 	{
@@ -80,22 +113,44 @@ function ControlSelect
 
 	ControlSelect.prototype.mouseClick = function(clickPos)
 	{
-		this.indexOfOptionSelected++;
-
-		var options = this.options();
-
-		if (this.indexOfOptionSelected >= options.length)
-		{
-			this.indexOfOptionSelected = 0;
-		}	
-
-		var optionSelected = this.optionSelected();
-
-		this.dataBindingForValueSelected.set(optionSelected.value);
+		this.optionSelectedNextInDirection(1);
 	}
 
 	ControlSelect.prototype.valueSelected = function()
 	{
 		return this.dataBindingForValueSelected.get();
 	}
+	
+	// drawable
+	
+	ControlSelect.prototype.draw = function()
+	{
+		var control = this;
+		var display = Globals.Instance.display;
+		
+		var pos = control.pos;
+		var size = control.size;
+
+		display.drawRectangle
+		(
+			pos, size, 
+			display.colorBack, display.colorFore,
+			control.isHighlighted // areColorsReversed
+		)
+
+		var text = control.optionSelected().text;
+
+		var textWidth = display.graphics.measureText(text).width;
+		var textSize = new Coords(textWidth, display.fontHeightInPixels);
+		var textMargin = size.clone().subtract(textSize).divideScalar(2); 
+		var drawPos = pos.clone().add(textMargin);
+
+		display.drawText
+		(
+			text, 
+			drawPos, 
+			display.colorFore, display.colorBack, control.isHighlighted
+		);
+	}
+
 }

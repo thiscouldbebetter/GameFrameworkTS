@@ -16,11 +16,6 @@ function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForI
 }
 
 {
-	ControlList.prototype.draw = function()
-	{
-		Globals.Instance.display.drawControlList(this);
-	}
-
 	ControlList.prototype.focusGain = function()
 	{
 		this.isHighlighted = true;
@@ -33,11 +28,11 @@ function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForI
 
 	ControlList.prototype.inputHandle = function(inputToHandle)
 	{
-		if (inputToHandle == "Enter" || inputToHandle == "ArrowRight")
+		if (inputToHandle == "Enter" || inputToHandle == "ArrowDown")
 		{
 			this.itemSelectedNextInDirection(1);
 		}
-		else if (inputToHandle == "ArrowLeft")
+		else if (inputToHandle == "ArrowUp")
 		{
 			this.itemSelectedNextInDirection(-1);			
 		}
@@ -98,4 +93,66 @@ function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForI
 			this.indexOfItemSelected = indexOfItemClicked;
 		}	
 	}
+	
+	// drawable
+	
+	ControlList.prototype.draw = function()
+	{
+		var list = this;
+		var display = Globals.Instance.display;
+		
+		var pos = list.pos
+		var size = list.size;
+
+		display.drawRectangle
+		(
+			pos, size, 
+			display.colorBack, display.colorFore, 
+			list.isHighlighted // areColorsReversed
+		);
+
+		display.graphics.fillStyle = (list.isHighlighted == true ? display.colorBack : display.colorFore);
+		display.graphics.strokeStyle = (list.isHighlighted == true ? display.colorBack : display.colorFore);
+
+		var itemSizeY = list.itemSpacing;
+		var textMarginLeft = 2;
+		var itemPosY = pos.y;
+
+		var items = list.items();
+
+		var numberOfItemsVisible = Math.floor(size.y / itemSizeY);
+		var indexStart = list.indexOfFirstItemVisible;
+		var indexEnd = indexStart + numberOfItemsVisible - 1;
+		if (indexEnd >= items.length)
+		{
+			indexEnd = items.length - 1;
+		}
+
+		for (var i = indexStart; i <= indexEnd; i++)
+		{
+			if (i == list.indexOfItemSelected)
+			{
+				display.graphics.strokeRect
+				(
+					pos.x + textMarginLeft, 
+					itemPosY,
+					size.x - textMarginLeft * 2,
+					itemSizeY
+				)
+			}
+
+			var item = items[i];
+			var text = DataBinding.get
+			(
+				item, list.bindingExpressionForItemText
+			);
+
+			var drawPos = new Coords(pos.x + textMarginLeft, itemPosY);
+
+			display.drawText(text, drawPos, display.colorFore, display.colorBack, list.isHighlighted);
+			
+			itemPosY += itemSizeY;
+		}
+	}
+
 }

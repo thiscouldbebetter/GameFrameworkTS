@@ -15,7 +15,7 @@ function NumberHelper()
 		}
 		else
 		{
-			while (value < 0)
+			while (value < min)
 			{
 				value += rangeSize;
 			}

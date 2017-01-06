@@ -11,11 +11,6 @@ function ControlButton(name, pos, size, text, click)
 }
 
 {
-	ControlButton.prototype.draw = function()
-	{
-		Globals.Instance.display.drawControlButton(this);
-	}
-
 	ControlButton.prototype.focusGain = function()
 	{
 		this.isHighlighted = true;
@@ -47,5 +42,30 @@ function ControlButton(name, pos, size, text, click)
 	ControlButton.prototype.mouseExit = function(mouseMovePos)
 	{
 		this.isHighlighted = false;
+	}
+	
+	ControlButton.prototype.draw = function()
+	{
+		var control = this;
+		var display = Globals.Instance.display;
+		
+		var pos = control.pos;
+		var size = control.size;
+
+		display.drawRectangle
+		(
+			pos, size, 
+			display.colorBack, display.colorFore,
+			control.isHighlighted // areColorsReversed
+		);
+
+		var text = control.text;
+
+		var textWidth = display.graphics.measureText(text).width;
+		var textSize = new Coords(textWidth, display.fontHeightInPixels);
+		var textMargin = size.clone().subtract(textSize).divideScalar(2);
+		var drawPos = pos.clone().add(textMargin);
+
+		display.drawText(text, drawPos, display.colorFore, display.colorBack, control.isHighlighted);
 	}
 }
