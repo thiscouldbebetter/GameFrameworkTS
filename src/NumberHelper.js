@@ -5,6 +5,21 @@ function NumberHelper()
 }
 
 {
+	NumberHelper.trimValueToRangeMinMax = function(value, min, max)
+	{
+		if (value < min)
+		{
+			value = min;
+		}
+		else if (value > max)
+		{
+			value = max;
+		}
+
+		return value;
+	}
+
+	
 	NumberHelper.wrapValueToRangeMinMax = function(value, min, max)
 	{
 		var rangeSize = max - min;

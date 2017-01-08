@@ -10,9 +10,22 @@ function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForI
 	this.itemSpacing = 12; // hack
 
 	this.indexOfItemSelected = 0;
-	this.indexOfFirstItemVisible = 0;
 
 	this.isHighlighted = false;
+	
+	var scrollbarWidth = this.itemSpacing;
+	this.scrollbar = new ControlScrollbar
+	(
+		// pos
+		this.pos.clone().add
+		(
+			new Coords(this.size.x - scrollbarWidth, 0)
+		), 
+		new Coords(scrollbarWidth, this.size.y), // size
+		this.itemSpacing,
+		this.dataBindingForItems,
+		0 // value
+	);
 }
 
 {
@@ -24,6 +37,16 @@ function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForI
 	ControlList.prototype.focusLose = function()
 	{
 		this.isHighlighted = false;
+	}
+	
+	ControlList.prototype.indexOfFirstItemVisible = function()
+	{
+		return this.scrollbar.sliderPosInItems;
+	}
+	
+	ControlList.prototype.indexOfLastItemVisible = function()
+	{
+		return this.scrollbar.sliderPosInItems + Math.floor(this.scrollbar.windowSizeInItems) - 1;
 	}
 
 	ControlList.prototype.inputHandle = function(inputToHandle)
@@ -63,10 +86,22 @@ function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForI
 		}
 		else 
 		{
-			this.indexOfItemSelected = NumberHelper.wrapValueToRangeMinMax
+			this.indexOfItemSelected = NumberHelper.trimValueToRangeMinMax
 			(
-				this.indexOfItemSelected + direction, 0, numberOfItems
+				this.indexOfItemSelected + direction, 0, numberOfItems - 1
 			);
+		}
+		
+		var indexOfFirstItemVisible = this.indexOfFirstItemVisible();
+		var indexOfLastItemVisible = this.indexOfLastItemVisible();
+		
+		if (this.indexOfItemSelected < indexOfFirstItemVisible)
+		{
+			this.scrollbar.sliderPosInItems--;
+		}
+		else if (this.indexOfItemSelected > indexOfLastItemVisible)
+		{
+			this.scrollbar.sliderPosInItems++;			
 		}
 
 		return this.itemSelected();
@@ -79,19 +114,45 @@ function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForI
 
 	ControlList.prototype.mouseClick = function(clickPos)
 	{
-		var offsetOfItemClicked = clickPos.y - this.pos.y;
-		var indexOfItemClicked = 
-			this.indexOfFirstItemVisible 
-			+ Math.floor
-			(
-				offsetOfItemClicked 
-				/ this.itemSpacing
-			);
-
-		if (indexOfItemClicked <= this.items.length)
+		if (clickPos.x - this.pos.x > this.size.x - this.scrollbar.handleSize.x)
 		{
-			this.indexOfItemSelected = indexOfItemClicked;
-		}	
+			if (clickPos.y - this.pos.y <= this.scrollbar.handleSize.y)
+			{
+				this.scrollbar.scrollUp();
+			}
+			else if (clickPos.y - this.pos.y >= this.scrollbar.size.y - this.scrollbar.handleSize.y)
+			{
+				this.scrollbar.scrollDown();
+			}
+			else
+			{
+				var clickPosRelativeToSlideInPixels = clickPos.clone().subtract
+				(
+					this.scrollbar.pos
+				).subtract
+				(
+					new Coords(0, this.scrollbar.handleSize.y)
+				);
+				
+				// todo
+			}
+		}
+		else
+		{
+			var offsetOfItemClicked = clickPos.y - this.pos.y;
+			var indexOfItemClicked = 
+				this.indexOfFirstItemVisible()
+				+ Math.floor
+				(
+					offsetOfItemClicked 
+					/ this.itemSpacing
+				);
+
+			if (indexOfItemClicked < this.items().length)
+			{
+				this.indexOfItemSelected = indexOfItemClicked;
+			}
+		}
 	}
 	
 	// drawable
@@ -121,7 +182,7 @@ function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForI
 		var items = list.items();
 
 		var numberOfItemsVisible = Math.floor(size.y / itemSizeY);
-		var indexStart = list.indexOfFirstItemVisible;
+		var indexStart = list.indexOfFirstItemVisible();
 		var indexEnd = indexStart + numberOfItemsVisible - 1;
 		if (indexEnd >= items.length)
 		{
@@ -153,6 +214,7 @@ function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForI
 			
 			itemPosY += itemSizeY;
 		}
+		
+		this.scrollbar.draw();
 	}
-
 }

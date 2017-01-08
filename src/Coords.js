@@ -17,6 +17,13 @@ function Coords(x, y)
 	{
 		return new Coords(this.x, this.y);
 	}
+	
+	Coords.prototype.divide = function(other)
+	{
+		this.x /= other.x;
+		this.y /= other.y;
+		return this;
+	}
 
 	Coords.prototype.divideScalar = function(scalar)
 	{
@@ -41,6 +48,13 @@ function Coords(x, y)
 		);
 
 		return returnValue;
+	}
+	
+	Coords.prototype.multiply = function(other)
+	{
+		this.x *= other.x;
+		this.y *= other.y;
+		return this;
 	}
 
 	Coords.prototype.overwriteWith = function(other)
