@@ -2,7 +2,7 @@ function main()
 {
 	//localStorage.clear(); 
 
-	var viewSize = new Coords(200, 150);
+	var viewSize = new Coords(400, 300);
 
 	var universe0 = Universe.new(null);
 

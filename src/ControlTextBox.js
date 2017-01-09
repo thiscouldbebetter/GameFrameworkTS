@@ -108,7 +108,10 @@ function ControlTextBox(name, pos, size, text)
 		var textSize = new Coords(textWidth, display.fontHeightInPixels);
 		var textMargin = size.clone().subtract(textSize).divideScalar(2);
 		var drawPos = pos.clone().add(textMargin);
-		display.drawText(text, drawPos, display.colorFore, display.colorBack, control.isHighlighted);				
+		display.drawText
+		(
+			text, null, drawPos, display.colorFore, display.colorBack, control.isHighlighted
+		);				
 
 		if (control.isHighlighted == true)
 		{
@@ -121,6 +124,7 @@ function ControlTextBox(name, pos, size, text)
 			display.drawRectangle
 			(
 				drawPos,
+				null, // fontHeightInPixels
 				new Coords(cursorWidth, display.fontHeightInPixels), // size
 				display.colorBack, 
 				display.colorBack

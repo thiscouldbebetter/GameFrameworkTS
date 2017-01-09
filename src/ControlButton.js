@@ -1,10 +1,11 @@
 
-function ControlButton(name, pos, size, text, click)
+function ControlButton(name, pos, size, text, fontHeightInPixels, click)
 {
 	this.name = name;
 	this.pos = pos;
 	this.size = size;
 	this.text = text;
+	this.fontHeightInPixels = fontHeightInPixels;
 	this.click = click;
 
 	this.isHighlighted = false;	
@@ -61,11 +62,14 @@ function ControlButton(name, pos, size, text, click)
 
 		var text = control.text;
 
-		var textWidth = display.graphics.measureText(text).width;
-		var textSize = new Coords(textWidth, display.fontHeightInPixels);
+		var textWidth = display.textWidthForFontHeight(text, this.fontHeightInPixels);
+		var textSize = new Coords(textWidth, this.fontHeightInPixels);
 		var textMargin = size.clone().subtract(textSize).divideScalar(2);
 		var drawPos = pos.clone().add(textMargin);
 
-		display.drawText(text, drawPos, display.colorFore, display.colorBack, control.isHighlighted);
+		display.drawText
+		(
+			text, this.fontHeightInPixels, drawPos, display.colorFore, display.colorBack, control.isHighlighted
+		);
 	}
 }

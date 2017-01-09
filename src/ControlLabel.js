@@ -1,11 +1,12 @@
 
-function ControlLabel(name, pos, size, isTextCentered, text)
+function ControlLabel(name, pos, size, isTextCentered, text, fontHeightInPixels)
 {
 	this.name = name;
 	this.pos = pos;
 	this.size = size;
 	this.isTextCentered = isTextCentered;
 	this.text = text;
+	this.fontHeightInPixels = fontHeightInPixels;
 }
 
 {
@@ -26,7 +27,7 @@ function ControlLabel(name, pos, size, isTextCentered, text)
 
 		if (control.isTextCentered == true)
 		{
-			var textWidth = display.graphics.measureText(text).width;
+			var textWidth = display.textWidthForFontHeight(text, this.fontHeightInPixels);
 			textMargins = new Coords
 			(
 				(size.x - textWidth) / 2,
@@ -43,6 +44,6 @@ function ControlLabel(name, pos, size, isTextCentered, text)
 		}
 
 		var drawPos = pos.clone().add(textMargins);
-		display.drawText(text, drawPos, display.colorFore);				
+		display.drawText(text, this.fontHeightInPixels, drawPos, display.colorFore);				
 	}
 }

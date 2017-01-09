@@ -7,7 +7,8 @@ function ControlSelect
 	dataBindingForValueSelected,
 	dataBindingForOptions,
 	bindingExpressionForOptionValues,
-	bindingExpressionForOptionText
+	bindingExpressionForOptionText,
+	fontHeightInPixels
 )
 {
 	this.name = name;
@@ -17,6 +18,7 @@ function ControlSelect
 	this.dataBindingForOptions = dataBindingForOptions;
 	this.bindingExpressionForOptionValues = bindingExpressionForOptionValues;
 	this.bindingExpressionForOptionText = bindingExpressionForOptionText;
+	this.fontHeightInPixels = fontHeightInPixels;
 
 	this.indexOfOptionSelected = null;
 	var valueSelected = this.valueSelected();
@@ -140,7 +142,7 @@ function ControlSelect
 
 		var text = control.optionSelected().text;
 
-		var textWidth = display.graphics.measureText(text).width;
+		var textWidth = display.textWidthForFontHeight(text, this.fontHeightInPixels);
 		var textSize = new Coords(textWidth, display.fontHeightInPixels);
 		var textMargin = size.clone().subtract(textSize).divideScalar(2); 
 		var drawPos = pos.clone().add(textMargin);
@@ -148,6 +150,7 @@ function ControlSelect
 		display.drawText
 		(
 			text, 
+			this.fontHeightInPixels,
 			drawPos, 
 			display.colorFore, display.colorBack, control.isHighlighted
 		);

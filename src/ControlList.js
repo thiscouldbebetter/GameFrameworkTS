@@ -1,13 +1,14 @@
 
-function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForItemText)
+function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForItemText, fontHeightInPixels)
 {
 	this.name = name;
 	this.pos = pos;
 	this.size = size;
 	this.dataBindingForItems = dataBindingForItems;
 	this.bindingExpressionForItemText = bindingExpressionForItemText;
+	this.fontHeightInPixels = fontHeightInPixels;
 
-	this.itemSpacing = 12; // hack
+	this.itemSpacing = 1.2 * this.fontHeightInPixels; // hack
 
 	this.indexOfItemSelected = 0;
 
@@ -210,7 +211,10 @@ function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForI
 
 			var drawPos = new Coords(pos.x + textMarginLeft, itemPosY);
 
-			display.drawText(text, drawPos, display.colorFore, display.colorBack, list.isHighlighted);
+			display.drawText
+			(
+				text, this.fontHeightInPixels, drawPos, display.colorFore, display.colorBack, list.isHighlighted
+			);
 			
 			itemPosY += itemSizeY;
 		}

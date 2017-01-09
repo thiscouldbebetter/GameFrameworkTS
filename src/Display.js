@@ -54,9 +54,20 @@ function Display(viewSize, fontHeightInPixels, colorFore, colorBack)
 
 	Display.prototype.drawText = function
 	(
-		text, pos, colorFill, colorReverse, areColorsReversed
+		text, fontHeightInPixels, pos, colorFill, colorReverse, areColorsReversed
 	)
 	{
+		var fontToRestore = this.graphics.font;
+		if (fontHeightInPixels == null)
+		{
+			fontHeightInPixels = this.fontHeightInPixels;
+		}
+		else
+		{
+			this.graphics.font = 
+				"" + fontHeightInPixels + "px sans-serif";
+		}
+
 		if (areColorsReversed == true)
 		{
 			var temp = colorFill;
@@ -70,9 +81,11 @@ function Display(viewSize, fontHeightInPixels, colorFore, colorBack)
 			this.graphics.fillText
 			(
 				text,
-				pos.x, pos.y + this.fontHeightInPixels
+				pos.x, pos.y + fontHeightInPixels
 			);
 		}
+		
+		this.graphics.font = fontToRestore;
 	}
 
 	Display.prototype.hide = function()
@@ -112,5 +125,14 @@ function Display(viewSize, fontHeightInPixels, colorFore, colorBack)
 	Display.prototype.show = function()
 	{
 		Globals.Instance.divMain.appendChild(this.canvasLive);		
+	}
+	
+	Display.prototype.textWidthForFontHeight = function(textToMeasure, fontHeightInPixels)
+	{
+		var fontToRestore = this.graphics.font;
+		this.graphics.font = "" + fontHeightInPixels + "px sans-serif";
+		var returnValue = this.graphics.measureText(textToMeasure).width;
+		this.graphics.font = fontToRestore;
+		return returnValue;
 	}
 }

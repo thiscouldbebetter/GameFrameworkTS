@@ -61,7 +61,7 @@ function World(name, cursorPos)
 				var universe = Globals.Instance.universe;
 				var venueNext = new VenueControls
 				(
-					ControlBuilder.configure()
+					new ControlBuilder().configure(Globals.Instance.display.viewSize)
 				);
 				venueNext = new VenueFader(venueNext);
 				universe.venueNext = venueNext;

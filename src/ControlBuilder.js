@@ -2,23 +2,36 @@
 // classes
 
 function ControlBuilder()
-{}
 {
-	ControlBuilder.configure = function()
-	{
-		return new ControlContainer
+	this.fontHeightInPixelsBase = 10;
+	this.sizeBase = new Coords(200, 150);
+}
+{	
+	ControlBuilder.prototype.configure = function(size)
+	{		
+		if (size == null)
+		{
+			sizeMultiplier = new Coords(1, 1);
+		}
+		else
+		{
+			sizeMultiplier = size.clone().divide(this.sizeBase);
+		}
+	
+		var returnValue = new ControlContainer
 		(
 			"containerConfigure",
-			new Coords(0, 0), // pos
-			new Coords(200, 150), // size
+			new Coords(0, 0).multiply(sizeMultiplier), // pos
+			new Coords(200, 150).multiply(sizeMultiplier), // size
 			// children
 			[
 				new ControlButton
 				(
 					"buttonSave",
-					new Coords(50, 15), // pos
-					new Coords(100, 25), // size
+					new Coords(50, 15).multiply(sizeMultiplier), // pos
+					new Coords(100, 25).multiply(sizeMultiplier), // size
 					"Save",
+					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					// click
 					function ()
 					{
@@ -42,17 +55,18 @@ function ControlBuilder()
 				new ControlLabel
 				(
 					"labelMusicVolume",
-					new Coords(50, 45), // pos
-					new Coords(75, 25), // size
+					new Coords(50, 45).multiply(sizeMultiplier), // pos
+					new Coords(75, 25).multiply(sizeMultiplier), // size
 					false, // isTextCentered
-					"Music Volume:"
+					"Music Volume:",
+					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 
 				new ControlSelect
 				(
 					"selectMusicVolume",
-					new Coords(125, 45), // pos
-					new Coords(25, 25), // size
+					new Coords(125, 45).multiply(sizeMultiplier), // pos
+					new Coords(25, 25).multiply(sizeMultiplier), // size
 
 					// dataBindingForValueSelected
 					new DataBinding
@@ -69,23 +83,25 @@ function ControlBuilder()
 					),
 
 					"value", // bindingExpressionForOptionValues,
-					"text" // bindingExpressionForOptionText
+					"text", // bindingExpressionForOptionText
+					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 
 				new ControlLabel
 				(
 					"labelSoundVolume",
-					new Coords(50, 75), // pos
-					new Coords(75, 25), // size
+					new Coords(50, 75).multiply(sizeMultiplier), // pos
+					new Coords(75, 25).multiply(sizeMultiplier), // size
 					false, // isTextCentered
-					"Sound Volume:"
+					"Sound Volume:",
+					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 
 				new ControlSelect
 				(
 					"selectSoundVolume",
-					new Coords(125, 75), // pos
-					new Coords(25, 25), // size
+					new Coords(125, 75).multiply(sizeMultiplier), // pos
+					new Coords(25, 25).multiply(sizeMultiplier), // size
 
 					// dataBindingForValueSelected
 					new DataBinding
@@ -102,15 +118,17 @@ function ControlBuilder()
 					),
 
 					"value", // bindingExpressionForOptionValues,
-					"text" // bindingExpressionForOptionText
+					"text", // bindingExpressionForOptionText
+					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 
 				new ControlButton
 				(
 					"buttonReturn",
-					new Coords(50, 105), // pos
-					new Coords(45, 25), // size
+					new Coords(50, 105).multiply(sizeMultiplier), // pos
+					new Coords(45, 25).multiply(sizeMultiplier), // size
 					"Return",
+					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					// click
 					function()
 					{
@@ -125,14 +143,16 @@ function ControlBuilder()
 				new ControlButton
 				(
 					"buttonQuit",
-					new Coords(105, 105), // pos
-					new Coords(45, 25), // size
+					new Coords(105, 105).multiply(sizeMultiplier), // pos
+					new Coords(45, 25).multiply(sizeMultiplier), // size
 					"Quit",
+					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					// click
 					function()
 					{					
-						var controlConfirm = ControlBuilder.confirm
+						var controlConfirm = new ControlBuilder().confirm
 						(
+							size,
 							"Are you sure you want to quit?",
 							// confirm
 							function()
@@ -141,7 +161,7 @@ function ControlBuilder()
 								var universe = Globals.Instance.universe;
 								var venueNext = new VenueControls
 								(
-									ControlBuilder.title()
+									new ControlBuilder().title(size)
 								);
 								venueNext = new VenueFader(venueNext);
 								universe.venueNext = venueNext;
@@ -152,7 +172,7 @@ function ControlBuilder()
 								var universe = Globals.Instance.universe;
 								var venueNext = new VenueControls
 								(
-									ControlBuilder.configure()
+									new ControlBuilder().configure(size)
 								);
 								venueNext = new VenueFader(venueNext);
 								universe.venueNext = venueNext;
@@ -166,41 +186,55 @@ function ControlBuilder()
 				),
 			]
 		);
+		
+		return returnValue;
 	}
 
-	ControlBuilder.confirm = function(message, confirm, cancel)
+	ControlBuilder.prototype.confirm = function(size, message, confirm, cancel)
 	{
+		if (size == null)
+		{
+			sizeMultiplier = new Coords(1, 1);
+		}
+		else
+		{
+			sizeMultiplier = size.clone().divide(this.sizeBase);
+		}
+				
 		var returnValue = new ControlContainer
 		(
 			"containerConfirm",
-			new Coords(0, 0), // pos
-			new Coords(200, 150), // size
+			new Coords(0, 0).multiply(sizeMultiplier), // pos
+			new Coords(200, 150).multiply(sizeMultiplier), // size
 			// children
 			[
 				new ControlLabel
 				(
 					"labelMessage",
-					new Coords(50, 50), // pos
-					new Coords(100, 25), // size
+					new Coords(50, 50).multiply(sizeMultiplier), // pos
+					new Coords(100, 25).multiply(sizeMultiplier), // size
 					true, // isTextCentered
-					message
+					message,
+					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 
 				new ControlButton
 				(
 					"buttonConfirm",
-					new Coords(50, 100), // pos
-					new Coords(45, 25), // size
+					new Coords(50, 100).multiply(sizeMultiplier), // pos
+					new Coords(45, 25).multiply(sizeMultiplier), // size
 					"Confirm",
+					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					confirm
 				),
 
 				new ControlButton
 				(
 					"buttonCancel",
-					new Coords(100, 100), // pos
-					new Coords(45, 25), // size
+					new Coords(100, 100).multiply(sizeMultiplier), // pos
+					new Coords(45, 25).multiply(sizeMultiplier), // size
 					"Cancel",
+					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					cancel
 				),
 			]
@@ -210,43 +244,55 @@ function ControlBuilder()
 	}
 
 
-	ControlBuilder.profileDetail = function()
+	ControlBuilder.prototype.profileDetail = function(size)
 	{
+		if (size == null)
+		{
+			sizeMultiplier = new Coords(1, 1);
+		}
+		else
+		{
+			sizeMultiplier = size.clone().divide(this.sizeBase);
+		}
+		
 		var returnValue = new ControlContainer
 		(
 			"containerProfileDetail",
-			new Coords(0, 0), // pos
-			new Coords(200, 150), // size
+			new Coords(0, 0).multiply(sizeMultiplier), // pos
+			new Coords(200, 150).multiply(sizeMultiplier), // size
 			// children
 			[
 				new ControlLabel
 				(
 					"labelProfileName",
-					new Coords(50, 25), // pos
-					new Coords(100, 25), // size
+					new Coords(50, 25).multiply(sizeMultiplier), // pos
+					new Coords(100, 25).multiply(sizeMultiplier), // size
 					true, // isTextCentered
-					Globals.Instance.universe.profile.name
+					Globals.Instance.universe.profile.name,
+					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 
 				new ControlList
 				(
 					"listWorlds",
-					new Coords(25, 50), // pos
-					new Coords(150, 50), // size
+					new Coords(25, 50).multiply(sizeMultiplier), // pos
+					new Coords(150, 50).multiply(sizeMultiplier), // size
 					new DataBinding
 					(
 						Globals.Instance.universe.profile.worlds,
 						null
 					),
-					"name"
+					"name", 
+					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 	
 				new ControlButton
 				(
 					"buttonNew",
-					new Coords(50, 110), // pos
-					new Coords(45, 25), // size
+					new Coords(50, 110).multiply(sizeMultiplier), // pos
+					new Coords(45, 25).multiply(sizeMultiplier), // size
 					"New",
+					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					// click
 					function ()
 					{
@@ -264,7 +310,7 @@ function ControlBuilder()
 						universe.world = world;
 						var venueNext = new VenueControls
 						(
-							ControlBuilder.worldDetail()
+							new ControlBuilder().worldDetail(size)
 						);
 						venueNext = new VenueVideo
 						(
@@ -279,9 +325,10 @@ function ControlBuilder()
 				new ControlButton
 				(
 					"buttonSelect",
-					new Coords(105, 110), // pos
-					new Coords(45, 25), // size
+					new Coords(105, 110).multiply(sizeMultiplier), // pos
+					new Coords(45, 25).multiply(sizeMultiplier), // size
 					"Select",
+					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					// click
 					function ()
 					{
@@ -293,7 +340,7 @@ function ControlBuilder()
 							universe.world = worldSelected;
 							var venueNext = new VenueControls
 							(
-								ControlBuilder.worldDetail()
+								new ControlBuilder().worldDetail(size)
 							);
 							venueNext = new VenueFader(venueNext);
 							universe.venueNext = venueNext;
@@ -304,15 +351,16 @@ function ControlBuilder()
 				new ControlButton
 				(
 					"buttonBack",
-					new Coords(10, 10), // pos
-					new Coords(15, 15), // size
+					new Coords(10, 10).multiply(sizeMultiplier), // pos
+					new Coords(15, 15).multiply(sizeMultiplier), // size
 					"<",
+					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					// click
 					function ()
 					{
 						var venueNext = new VenueControls
 						(
-							ControlBuilder.profileSelect()
+							new ControlBuilder().profileSelect(size)
 						);
 						venueNext = new VenueFader(venueNext);
 						var universe = Globals.Instance.universe;
@@ -323,18 +371,20 @@ function ControlBuilder()
 				new ControlButton
 				(
 					"buttonDelete",
-					new Coords(180, 10), // pos
-					new Coords(15, 15), // size
+					new Coords(180, 10).multiply(sizeMultiplier), // pos
+					new Coords(15, 15).multiply(sizeMultiplier), // size
 					"x",
+					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					// click
 					function ()
 					{
 						var universe = Globals.Instance.universe;
 						var profile = universe.profile;
 
-						var controlConfirm = ControlBuilder.confirm
+						var controlConfirm = new ControlBuilder().confirm
 						(
-							"Delete Profile \"" 
+							size,
+							"Delete profile \"" 
 								+ profile.name 
 								+ "\"?",
 							// confirm
@@ -349,7 +399,7 @@ function ControlBuilder()
 
 								var venueNext = new VenueControls
 								(
-									ControlBuilder.profileSelect()
+									new ControlBuilder().profileSelect(size)
 								);
 								venueNext = new VenueFader(venueNext);
 								universe.venueNext = venueNext;
@@ -359,7 +409,7 @@ function ControlBuilder()
 							{
 								var venueNext = new VenueControls
 								(
-									ControlBuilder.profileDetail()
+									new ControlBuilder().profileDetail(size)
 								);
 								venueNext = new VenueFader(venueNext);
 								var universe = Globals.Instance.universe;
@@ -378,38 +428,49 @@ function ControlBuilder()
 		return returnValue;
 	}
 
-	ControlBuilder.profileNew = function()
+	ControlBuilder.prototype.profileNew = function(size)
 	{
+		if (size == null)
+		{
+			sizeMultiplier = new Coords(1, 1);
+		}
+		else
+		{
+			sizeMultiplier = size.clone().divide(this.sizeBase);
+		}
+		
 		return new ControlContainer
 		(
 			"containerProfileNew",
-			new Coords(0, 0), // pos
-			new Coords(200, 150), // size
+			new Coords(0, 0).multiply(sizeMultiplier), // pos
+			new Coords(200, 150).multiply(sizeMultiplier), // size
 			// children
 			[
 				new ControlLabel
 				(
 					"labelName",
-					new Coords(50, 25), // pos
-					new Coords(100, 25), // size
+					new Coords(50, 25).multiply(sizeMultiplier), // pos
+					new Coords(100, 25).multiply(sizeMultiplier), // size
 					true, // isTextCentered
-					"Name:"
+					"Name:",
+					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 
 				new ControlTextBox
 				(
 					"textBoxName",
-					new Coords(50, 50), // pos
-					new Coords(100, 25), // size
+					new Coords(50, 50).multiply(sizeMultiplier), // pos
+					new Coords(100, 25).multiply(sizeMultiplier), // size
 					""
 				),
 
 				new ControlButton
 				(
 					"buttonCreate",
-					new Coords(50, 80), // pos
-					new Coords(45, 25), // size
+					new Coords(50, 80).multiply(sizeMultiplier), // pos
+					new Coords(45, 25).multiply(sizeMultiplier), // size
 					"Create",
+					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					// click
 					function ()
 					{
@@ -430,7 +491,7 @@ function ControlBuilder()
 						universe.profile = profile;
 						var venueNext = new VenueControls
 						(
-							ControlBuilder.profileDetail()
+							new ControlBuilder().profileDetail(size)
 						);
 						venueNext = new VenueFader(venueNext);
 						universe.venueNext = venueNext;
@@ -440,16 +501,17 @@ function ControlBuilder()
 				new ControlButton
 				(
 					"buttonCancel",
-					new Coords(105, 80), // pos
-					new Coords(45, 25), // size
+					new Coords(105, 80).multiply(sizeMultiplier), // pos
+					new Coords(45, 25).multiply(sizeMultiplier), // size
 					"Cancel",
+					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					// click
 					function ()
 					{
 						var universe = Globals.Instance.universe;
 						var venueNext = new VenueControls
 						(
-							ControlBuilder.profileSelect()
+							new ControlBuilder().profileSelect(size)
 						);
 						venueNext = new VenueFader(venueNext);
 						universe.venueNext = venueNext;
@@ -459,52 +521,64 @@ function ControlBuilder()
 		);
 	}
 
-	ControlBuilder.profileSelect = function()
+	ControlBuilder.prototype.profileSelect = function(size)
 	{
+		if (size == null)
+		{
+			sizeMultiplier = new Coords(1, 1);
+		}
+		else
+		{
+			sizeMultiplier = size.clone().divide(this.sizeBase);
+		}		
+		
 		var profiles = Globals.Instance.profileHelper.profiles();
 		
 		var returnValue = new ControlContainer
 		(
 			"containerProfileSelect",
-			new Coords(0, 0), // pos
-			new Coords(200, 150), // size
+			new Coords(0, 0).multiply(sizeMultiplier), // pos
+			new Coords(200, 150).multiply(sizeMultiplier), // size
 			// children
 			[
 				new ControlLabel
 				(
 					"labelSelectAProfile",
-					new Coords(50, 25), // pos
-					new Coords(100, 25), // size
+					new Coords(50, 25).multiply(sizeMultiplier), // pos
+					new Coords(100, 25).multiply(sizeMultiplier), // size
 					true, // isTextCentered
-					"Select a Profile:"
+					"Select a Profile:",
+					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 
 				new ControlList
 				(
 					"listProfiles",
-					new Coords(50, 55), // pos
-					new Coords(100, 50), // size
+					new Coords(50, 55).multiply(sizeMultiplier), // pos
+					new Coords(100, 50).multiply(sizeMultiplier), // size
 					new DataBinding
 					(
 						profiles,
 						null
 					),
-					"name"
+					"name",
+					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 
 				new ControlButton
 				(
 					"buttonNew",
-					new Coords(50, 110), // pos
-					new Coords(45, 25), // size
+					new Coords(50, 110).multiply(sizeMultiplier), // pos
+					new Coords(45, 25).multiply(sizeMultiplier), // size
 					"New",
+					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					// click
 					function ()
 					{
 						var universe = Globals.Instance.universe;
 						var venueNext = new VenueControls
 						(
-							ControlBuilder.profileNew()
+							new ControlBuilder().profileNew(size)
 						);
 						venueNext = new VenueFader(venueNext);
 						universe.venueNext = venueNext;
@@ -515,9 +589,10 @@ function ControlBuilder()
 				new ControlButton
 				(
 					"buttonSelect",
-					new Coords(105, 110), // pos
-					new Coords(45, 25), // size
+					new Coords(105, 110).multiply(sizeMultiplier), // pos
+					new Coords(45, 25).multiply(sizeMultiplier), // size
 					"Select",
+					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					// click
 					function()
 					{	
@@ -527,7 +602,7 @@ function ControlBuilder()
 						universe.profile = profileSelected;
 						var venueNext = new VenueControls
 						(
-							ControlBuilder.profileDetail()
+							new ControlBuilder().profileDetail(size)
 						);				
 						venueNext = new VenueFader(venueNext);		
 						universe.venueNext = venueNext;
@@ -540,20 +615,29 @@ function ControlBuilder()
 		return returnValue;
 	}
 
-	ControlBuilder.title = function()
+	ControlBuilder.prototype.title = function(size)
 	{
+		if (size == null)
+		{
+			sizeMultiplier = new Coords(1, 1);
+		}
+		else
+		{
+			sizeMultiplier = size.clone().divide(this.sizeBase);
+		}
+				
 		return new ControlContainer
 		(
 			"containerTitle",
-			new Coords(0, 0), // pos
-			new Coords(400, 300), // size
+			new Coords(0, 0).multiply(sizeMultiplier), // pos
+			new Coords(200, 150).multiply(sizeMultiplier), // size
 			// children
 			[
 				new ControlImage
 				(
 					"imageTitle",
-					new Coords(0, 0),
-					new Coords(200, 150), // size
+					new Coords(0, 0).multiply(sizeMultiplier),
+					new Coords(200, 150).multiply(sizeMultiplier), // size
 					"Title.png"
 				),
 	
@@ -571,76 +655,109 @@ function ControlBuilder()
 				new ControlButton
 				(
 					"buttonStart",
-					new Coords(75, 100), // pos
-					new Coords(50, 25), // size
+					new Coords(75, 100).multiply(sizeMultiplier), // pos
+					new Coords(50, 25).multiply(sizeMultiplier), // size
 					"Start",
+					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					// click
 					function()
 					{
 						var venueNext = new VenueControls
 						(
-							ControlBuilder.profileSelect()
+							new ControlBuilder().profileSelect(size)
 						);
 						venueNext = new VenueFader(venueNext);
 						var universe = Globals.Instance.universe;
 						universe.venueNext = venueNext;
 					}
 				),
+				
+				new ControlButton
+				(
+					"buttonTestDemo",
+					new Coords(75, 125).multiply(sizeMultiplier), // pos
+					new Coords(50, 25).multiply(sizeMultiplier), // size
+					"Test Demo",
+					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					// click
+					function()
+					{
+						var universe = Globals.Instance.universe;
+						universe.world = World.new();
+						var venueNext = new VenueWorld(universe.world);
+						universe.venueNext = venueNext;
+					}
+				),
+				
 			]
 		);
 	}
 
-	ControlBuilder.worldDetail = function()
+	ControlBuilder.prototype.worldDetail = function(size)
 	{
+		if (size == null)
+		{
+			sizeMultiplier = new Coords(1, 1);
+		}
+		else
+		{
+			sizeMultiplier = size.clone().divide(this.sizeBase);
+		}		
+		
 		var universe = Globals.Instance.universe;
 		var world = universe.world;
 
 		var returnValue = new ControlContainer
 		(
 			"containerWorldDetail",
-			new Coords(0, 0), // pos
-			new Coords(200, 150), // size
+			new Coords(0, 0).multiply(sizeMultiplier), // pos
+			new Coords(200, 150).multiply(sizeMultiplier), // size
 			// children
 			[
 				new ControlLabel
 				(
 					"labelProfileName",
-					new Coords(50, 15), // pos
-					new Coords(100, 25), // size
+					new Coords(50, 15).multiply(sizeMultiplier), // pos
+					new Coords(100, 25).multiply(sizeMultiplier), // size
 					true, // isTextCentered
-					universe.profile.name
+					universe.profile.name,
+					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 				new ControlLabel
 				(
 					"labelWorldName",
-					new Coords(50, 30), // pos
-					new Coords(100, 25), // size
+					new Coords(50, 30).multiply(sizeMultiplier), // pos
+					new Coords(100, 25).multiply(sizeMultiplier), // size
 					true, // isTextCentered
-					world.name
+					world.name,
+					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 				new ControlLabel
 				(
 					"labelStartDate",
-					new Coords(50, 45), // pos
-					new Coords(100, 25), // size
+					new Coords(50, 45).multiply(sizeMultiplier), // pos
+					new Coords(100, 25).multiply(sizeMultiplier), // size
 					true, // isTextCentered
-					"Started:" + world.dateCreated.toStringTimestamp()
+					"Started:" + world.dateCreated.toStringTimestamp(),
+					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 				new ControlLabel
 				(
 					"labelSavedDate",
-					new Coords(50, 60), // pos
-					new Coords(100, 25), // size
+					new Coords(50, 60).multiply(sizeMultiplier), // pos
+					new Coords(100, 25).multiply(sizeMultiplier), // size
 					true, // isTextCentered
-					"Saved:" + world.dateSaved.toStringTimestamp()
+					"Saved:" + world.dateSaved.toStringTimestamp(),
+					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 
 				new ControlButton
 				(
 					"buttonStart",
-					new Coords(50, 100), // pos
-					new Coords(100, 25), // size
+					new Coords(50, 100).multiply(sizeMultiplier), // pos
+					new Coords(100, 25).multiply(sizeMultiplier), // size
 					"Start",
+					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					// click
 					function ()
 					{
@@ -657,15 +774,16 @@ function ControlBuilder()
 				new ControlButton
 				(
 					"buttonBack",
-					new Coords(10, 10), // pos
-					new Coords(15, 15), // size
+					new Coords(10, 10).multiply(sizeMultiplier), // pos
+					new Coords(15, 15).multiply(sizeMultiplier), // size
 					"<",
+					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					// click
 					function ()
 					{
 						var venueNext = new VenueControls
 						(
-							ControlBuilder.profileDetail()
+							new ControlBuilder().profileDetail(size)
 						);
 						venueNext = new VenueFader(venueNext);
 						var universe = Globals.Instance.universe;
@@ -676,9 +794,10 @@ function ControlBuilder()
 				new ControlButton
 				(
 					"buttonDelete",
-					new Coords(180, 10), // pos
-					new Coords(15, 15), // size
+					new Coords(180, 10).multiply(sizeMultiplier), // pos
+					new Coords(15, 15).multiply(sizeMultiplier), // size
 					"x",
+					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					// click
 					function ()
 					{
@@ -686,9 +805,10 @@ function ControlBuilder()
 						var profile = universe.profile;
 						var world = universe.world;
 
-						var controlConfirm = ControlBuilder.confirm
+						var controlConfirm = new ControlBuilder().confirm
 						(
-							"Delete World \"" 
+							size,
+							"Delete world \"" 
 								+ world.name 
 								+ "\"?",
 							// confirm
@@ -714,7 +834,7 @@ function ControlBuilder()
 
 								var venueNext = new VenueControls
 								(
-									ControlBuilder.profileDetail()
+									new ControlBuilder().profileDetail(size)
 								);
 								venueNext = new VenueFader(venueNext);
 								universe.venueNext = venueNext;
@@ -724,7 +844,7 @@ function ControlBuilder()
 							{
 								var venueNext = new VenueControls
 								(
-									ControlBuilder.worldDetail()
+									new ControlBuilder().worldDetail(size)
 								);
 								venueNext = new VenueFader(venueNext);
 								var universe = Globals.Instance.universe;
