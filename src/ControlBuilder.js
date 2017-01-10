@@ -461,7 +461,8 @@ function ControlBuilder()
 					"textBoxName",
 					new Coords(50, 50).multiply(sizeMultiplier), // pos
 					new Coords(100, 25).multiply(sizeMultiplier), // size
-					""
+					"", // text
+					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 
 				new ControlButton

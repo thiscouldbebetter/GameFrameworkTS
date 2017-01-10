@@ -12,6 +12,14 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, click)
 }
 
 {
+	ControlButton.prototype.actionHandle = function(actionNameToHandle)
+	{
+		if (actionNameToHandle == "ControlConfirm")
+		{
+			this.click();
+		}
+	}
+	
 	ControlButton.prototype.focusGain = function()
 	{
 		this.isHighlighted = true;
@@ -20,14 +28,6 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, click)
 	ControlButton.prototype.focusLose = function()
 	{
 		this.isHighlighted = false;
-	}
-
-	ControlButton.prototype.inputHandle = function(inputToHandle)
-	{
-		if (inputToHandle == "Enter")
-		{
-			this.click();
-		}
 	}
 
 	ControlButton.prototype.mouseClick = function(clickPos)

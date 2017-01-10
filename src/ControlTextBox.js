@@ -1,29 +1,20 @@
 
-function ControlTextBox(name, pos, size, text)
+function ControlTextBox(name, pos, size, text, fontHeightInPixels)
 {
 	this.name = name;
 	this.pos = pos;
 	this.size = size;
 	this.text = text;
+	this.fontHeightInPixels = fontHeightInPixels;
 
 	this.isHighlighted = false;
 	this.cursorPos = this.text.length;
 }
 
 {
-	ControlTextBox.prototype.focusGain = function()
+	ControlTextBox.prototype.actionHandle = function(actionNameToHandle)
 	{
-		this.isHighlighted = true;
-	}
-
-	ControlTextBox.prototype.focusLose = function()
-	{
-		this.isHighlighted = false;
-	}
-	
-	ControlTextBox.prototype.inputHandle = function(inputToHandle)
-	{
-		if (inputToHandle == "Backspace")
+		if (actionNameToHandle == "ControlCancel")
 		{
 			this.text = this.text.substr(0, this.text.length - 1);
 
@@ -32,19 +23,22 @@ function ControlTextBox(name, pos, size, text)
 				this.cursorPos - 1, 0, this.text.length + 1
 			);
 		}
-		else if (inputToHandle == "Enter" || inputToHandle == "Delete")
+		else if (actionNameToHandle == "ControlConfirm")
 		{
-			var direction = (inputToHandle == "Delete" ? -1 : 1);
-
 			this.cursorPos = NumberHelper.wrapValueToRangeMinMax
 			(
-				this.cursorPos + direction, 0, this.text.length + 1
+				this.cursorPos + 1, 0, this.text.length + 1
 			);
 		}
-		else if (inputToHandle == "ArrowDown" || inputToHandle == "ArrowUp")
+		else if 
+		(
+			actionNameToHandle == "ControlIncrement" 
+			|| actionNameToHandle == "ControlDecrement"
+		)
 		{
-			var direction = (inputToHandle == "ArrowDown" ? -1 : 1);
-
+			// This is a bit counterintuitive.
+			var direction = (actionNameToHandle == "ControlIncrement" ? -1 : 1); 
+ 
 			var charCodeAtCursor = 
 			(
 				this.cursorPos < this.text.length ? this.text.charCodeAt(this.cursorPos) : "A".charCodeAt(0) - 1
@@ -64,7 +58,7 @@ function ControlTextBox(name, pos, size, text)
 				+ charAtCursor
 				+ this.text.substr(this.cursorPos + 1); 
 		}
-		else if (inputToHandle.length == 1) // printable character
+		else if (actionNameToHandle.length == 1) // printable character
 		{
 			this.text = 
 				this.text.substr(0, this.cursorPos)
@@ -77,7 +71,17 @@ function ControlTextBox(name, pos, size, text)
 			);
 		}
 	}
+	
+	ControlTextBox.prototype.focusGain = function()
+	{
+		this.isHighlighted = true;
+	}
 
+	ControlTextBox.prototype.focusLose = function()
+	{
+		this.isHighlighted = false;
+	}
+	
 	ControlTextBox.prototype.mouseClick = function(mouseClickPos)
 	{
 		var parent = this.parent;
@@ -102,30 +106,38 @@ function ControlTextBox(name, pos, size, text)
 			pos, size, 
 			display.colorBack, display.colorFore,
 			control.isHighlighted // areColorsReversed
-		)
+		);
 
-		var textWidth = display.graphics.measureText(text).width;
-		var textSize = new Coords(textWidth, display.fontHeightInPixels);
+		var textWidth = display.textWidthForFontHeight(text, this.fontHeightInPixels);
+		var textSize = new Coords(textWidth, this.fontHeightInPixels);
 		var textMargin = size.clone().subtract(textSize).divideScalar(2);
 		var drawPos = pos.clone().add(textMargin);
 		display.drawText
 		(
-			text, null, drawPos, display.colorFore, display.colorBack, control.isHighlighted
+			text, 
+			this.fontHeightInPixels, 
+			drawPos, 
+			display.colorFore, display.colorBack, control.isHighlighted
 		);				
 
 		if (control.isHighlighted == true)
 		{
 			var textBeforeCursor = control.text.substr(0, control.cursorPos);
 			var textAtCursor = control.text.substr(control.cursorPos, 1);
-			var cursorX = display.graphics.measureText(textBeforeCursor).width;
-			var cursorWidth = display.graphics.measureText(textAtCursor).width;
+			var cursorX = display.textWidthForFontHeight
+			(
+				textBeforeCursor, this.fontHeightInPixels
+			);
+			var cursorWidth = display.textWidthForFontHeight
+			(
+				textAtCursor, this.fontHeightInPixels
+			);
 			drawPos.x += cursorX;
 			
 			display.drawRectangle
 			(
 				drawPos,
-				null, // fontHeightInPixels
-				new Coords(cursorWidth, display.fontHeightInPixels), // size
+				new Coords(cursorWidth, this.fontHeightInPixels), // size
 				display.colorBack, 
 				display.colorBack
 			);
@@ -133,6 +145,7 @@ function ControlTextBox(name, pos, size, text)
 			display.drawText
 			(
 				textAtCursor,
+				this.fontHeightInPixels,
 				drawPos,
 				display.colorFore
 			)

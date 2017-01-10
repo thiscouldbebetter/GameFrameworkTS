@@ -43,6 +43,23 @@ function ControlSelect
 }
 
 {
+	ControlSelect.prototype.actionHandle = function(actionNameToHandle)
+	{
+		// This is somewhat counterintuitive.
+		if (actionNameToHandle == "ControlDecrement")
+		{
+			this.optionSelectedNextInDirection(1);			
+		}
+		else if 
+		(
+			actionNameToHandle == "ControlIncrement" 
+			|| actionNameToHandle == "ControlConfirm"
+		)
+		{
+			this.optionSelectedNextInDirection(-1);
+		}
+	}
+		
 	ControlSelect.prototype.focusGain = function()
 	{
 			this.isHighlighted = true;
@@ -53,18 +70,6 @@ function ControlSelect
 			this.isHighlighted = false;
 	}
 	
-	ControlSelect.prototype.inputHandle = function(inputToHandle)
-	{
-		if (inputToHandle == "ArrowDown")
-		{
-			this.optionSelectedNextInDirection(-1);			
-		}
-		else if (inputToHandle == "ArrowUp" || inputToHandle == "Enter")
-		{
-			this.optionSelectedNextInDirection(1);
-		}
-	}
-
 	ControlSelect.prototype.optionSelected = function()
 	{
 		var returnValue = null;

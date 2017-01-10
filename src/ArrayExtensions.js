@@ -7,10 +7,21 @@ function ArrayExtensions()
 	{
 		for (var i = 0; i < this.length; i++)
 		{
-			var item = this[i];
-			var key = item[keyName];
-			this[key] = item;
+			var element = this[i];
+			var key = element[keyName];
+			this[key] = element;
 		}
+		return this;
+	}
+	
+	Array.prototype.append = function(other)
+	{
+		for (var i = 0; i < other.length; i++)
+		{
+			var element = other[i];
+			this.push(element);
+		}
+		return this;
 	}
 	
 	Array.prototype.remove = function(elementToRemove)

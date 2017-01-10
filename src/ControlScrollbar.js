@@ -17,7 +17,7 @@ function ControlScrollbar(pos, size, itemHeight, dataBindingForItems, sliderPosI
 		this.pos.clone(), // pos
 		this.handleSize, // size
 		"-", // text
-		null, // fontHeightInPixels
+		this.itemHeight, // fontHeightInPixels
 		this.scrollUp // click
 	);
 	
@@ -27,13 +27,13 @@ function ControlScrollbar(pos, size, itemHeight, dataBindingForItems, sliderPosI
 		this.pos.clone().add(new Coords(0, this.size.y - this.handleSize.y)), // pos
 		this.handleSize, // size
 		"+", // text
-		null, // fontHeightInPixels
+		this.itemHeight, // fontHeightInPixels
 		this.scrollDown // click
 	);
 }
 
 {
-	ControlScrollbar.prototype.inputHandle = function(inputToHandle)
+	ControlScrollbar.prototype.actionHandle = function(actionNameToHandle)
 	{
 		// todo
 	}

@@ -30,6 +30,18 @@ function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForI
 }
 
 {
+	ControlList.prototype.actionHandle = function(actionNameToHandle)
+	{
+		if (actionNameToHandle == "ControlIncrement")
+		{
+			this.itemSelectedNextInDirection(1);
+		}
+		else if (actionNameToHandle == "ControlDecrement")
+		{
+			this.itemSelectedNextInDirection(-1);			
+		}
+	}
+	
 	ControlList.prototype.focusGain = function()
 	{
 		this.isHighlighted = true;
@@ -48,18 +60,6 @@ function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForI
 	ControlList.prototype.indexOfLastItemVisible = function()
 	{
 		return this.scrollbar.sliderPosInItems + Math.floor(this.scrollbar.windowSizeInItems) - 1;
-	}
-
-	ControlList.prototype.inputHandle = function(inputToHandle)
-	{
-		if (inputToHandle == "Enter" || inputToHandle == "ArrowDown")
-		{
-			this.itemSelectedNextInDirection(1);
-		}
-		else if (inputToHandle == "ArrowUp")
-		{
-			this.itemSelectedNextInDirection(-1);			
-		}
 	}
 
 	ControlList.prototype.itemSelected = function()

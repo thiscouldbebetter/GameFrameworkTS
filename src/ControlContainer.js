@@ -115,13 +115,13 @@ function ControlContainer(name, pos, size, children)
 		return listToAddTo;
 	}
 
-	ControlContainer.prototype.inputHandle = function(inputToHandle)
+	ControlContainer.prototype.actionHandle = function(actionNameToHandle)
 	{
 		var childWithFocus = this.childWithFocus();
 
-		if (inputToHandle == "ArrowLeft" || inputToHandle == "ArrowRight")
+		if (actionNameToHandle == "ControlPrev" || actionNameToHandle == "ControlNext")
 		{
-			var direction = (inputToHandle == "ArrowLeft" ? -1 : 1); 
+			var direction = (actionNameToHandle == "ControlPrev" ? -1 : 1); 
 
 			if (childWithFocus == null)
 			{
@@ -140,9 +140,9 @@ function ControlContainer(name, pos, size, children)
 		}
 		else if (childWithFocus != null)
 		{
-			if (childWithFocus.inputHandle != null)
+			if (childWithFocus.actionHandle != null)
 			{
-				childWithFocus.inputHandle(inputToHandle);
+				childWithFocus.actionHandle(actionNameToHandle);
 			}
 		}
 	}
