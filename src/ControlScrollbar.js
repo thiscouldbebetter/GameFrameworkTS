@@ -8,7 +8,7 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, dataBinding
 	this.dataBindingForItems = dataBindingForItems;
 	this.sliderPosInItems = sliderPosInItems;
 	
-	this.windowSizeInItems = this.size.y / itemHeight;
+	this.windowSizeInItems = Math.floor(this.size.y / itemHeight);
 	
 	this.handleSize = new Coords(this.size.x, this.size.x);
 		
@@ -91,7 +91,7 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, dataBinding
 				this.handleSize.y 
 					+ this.sliderPosInItems 
 					* this.slideSizeInPixels().y 
-					/ this.windowSizeInItems
+					/ this.items().length
 			)
 		);
 		
