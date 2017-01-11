@@ -56,12 +56,15 @@ function World(name, cursorPos)
 		for (var i = 0; i < inputsActive.length; i++)
 		{
 			var inputActive = inputsActive[i];
-			if (inputActive == "Escape")
+			if (inputActive == "Escape") // todo - Use actionName instead of inputName.
 			{
 				var universe = Globals.Instance.universe;
 				var venueNext = new VenueControls
 				(
-					new ControlBuilder().configure(Globals.Instance.display.viewSize)
+					new ControlBuilder().configure
+					(
+						Globals.Instance.display.sizeInPixels
+					)
 				);
 				venueNext = new VenueFader(venueNext);
 				universe.venueNext = venueNext;

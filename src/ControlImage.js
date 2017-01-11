@@ -31,7 +31,7 @@ function ControlImage(name, pos, size, imageSrc)
 		(
 			controlImage.systemImage,
 			pos.x, pos.y,
-			display.viewSize.x, display.viewSize.y
+			display.sizeInPixels.x, display.sizeInPixels.y
 		);
 	}
 

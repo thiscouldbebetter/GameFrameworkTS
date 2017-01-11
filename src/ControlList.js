@@ -23,6 +23,7 @@ function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForI
 			new Coords(this.size.x - scrollbarWidth, 0)
 		), 
 		new Coords(scrollbarWidth, this.size.y), // size
+		this.fontHeightInPixels,
 		this.itemSpacing,
 		this.dataBindingForItems,
 		0 // value

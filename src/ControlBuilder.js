@@ -265,10 +265,20 @@ function ControlBuilder()
 				new ControlLabel
 				(
 					"labelProfileName",
+					new Coords(50, 15).multiply(sizeMultiplier), // pos
+					new Coords(100, 25).multiply(sizeMultiplier), // size
+					true, // isTextCentered
+					"Profile: " + Globals.Instance.universe.profile.name,
+					this.fontHeightInPixelsBase * sizeMultiplier.y
+				),			
+			
+				new ControlLabel
+				(
+					"labelSelectAWorld",
 					new Coords(50, 25).multiply(sizeMultiplier), // pos
 					new Coords(100, 25).multiply(sizeMultiplier), // size
 					true, // isTextCentered
-					Globals.Instance.universe.profile.name,
+					"Select a World:",
 					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 
@@ -452,7 +462,7 @@ function ControlBuilder()
 					new Coords(50, 25).multiply(sizeMultiplier), // pos
 					new Coords(100, 25).multiply(sizeMultiplier), // size
 					true, // isTextCentered
-					"Name:",
+					"Profile Name:",
 					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 
@@ -721,7 +731,7 @@ function ControlBuilder()
 					new Coords(50, 15).multiply(sizeMultiplier), // pos
 					new Coords(100, 25).multiply(sizeMultiplier), // size
 					true, // isTextCentered
-					universe.profile.name,
+					"Profile: " + universe.profile.name,
 					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 				new ControlLabel
@@ -730,7 +740,7 @@ function ControlBuilder()
 					new Coords(50, 30).multiply(sizeMultiplier), // pos
 					new Coords(100, 25).multiply(sizeMultiplier), // size
 					true, // isTextCentered
-					world.name,
+					"World: " + world.name,
 					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 				new ControlLabel

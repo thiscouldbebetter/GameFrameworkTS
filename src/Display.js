@@ -1,7 +1,7 @@
 
-function Display(viewSize, fontHeightInPixels, colorFore, colorBack)
+function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 {
-	this.viewSize = viewSize;
+	this.sizeInPixels = sizeInPixels;
 	this.fontHeightInPixels = fontHeightInPixels;
 	this.colorFore = colorFore;
 	this.colorBack = colorBack;
@@ -13,7 +13,7 @@ function Display(viewSize, fontHeightInPixels, colorFore, colorBack)
 		this.drawRectangle
 		(
 			new Coords(0, 0), 
-			this.viewSize, 
+			this.sizeInPixels, 
 			(colorBack == null ? this.colorBack : colorBack), 
 			(colorBorder == null ? this.colorFore : colorBorder)
 		);
@@ -96,8 +96,8 @@ function Display(viewSize, fontHeightInPixels, colorFore, colorBack)
 	Display.prototype.initialize = function()
 	{
 		this.canvasBuffer = document.createElement("canvas");
-		this.canvasBuffer.width = this.viewSize.x;
-		this.canvasBuffer.height = this.viewSize.y;
+		this.canvasBuffer.width = this.sizeInPixels.x;
+		this.canvasBuffer.height = this.sizeInPixels.y;
 
 		this.graphics = this.canvasBuffer.getContext("2d");
 		this.graphics.font = 
@@ -105,8 +105,8 @@ function Display(viewSize, fontHeightInPixels, colorFore, colorBack)
 
 		/*
 		this.canvasLive = document.createElement("canvas");
-		this.canvasLive.width = this.viewSize.x;
-		this.canvasLive.height = this.viewSize.y;
+		this.canvasLive.width = this.sizeInPixels.x;
+		this.canvasLive.height = this.sizeInPixels.y;
 		this.graphicsLive = this.canvasLive.getContext("2d");
 		*/
 

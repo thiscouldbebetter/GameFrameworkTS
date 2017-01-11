@@ -17,7 +17,7 @@ function Globals()
 	(
 		programName,
 		timerTicksPerSecond, 
-		viewSize, 
+		display, 
 		universe,
 		sounds,
 		videos
@@ -34,7 +34,7 @@ function Globals()
 			World,
 			Universe
 		]);
-		this.display = new Display(viewSize, 10, "Gray", "White");
+		this.display = display;
 		this.inputHelper = new InputHelper();
 		this.profileHelper = new ProfileHelper();
 		this.soundHelper = new SoundHelper(sounds);
@@ -46,8 +46,8 @@ function Globals()
 		divMain.style.position = "absolute";
 		divMain.style.left = "50%";
 		divMain.style.top = "50%";
-		divMain.style.marginTop = 0 - viewSize.x / 2;
-		divMain.style.marginLeft = 0 - viewSize.y / 2;
+		divMain.style.marginTop = 0 - this.display.sizeInPixels.x / 2;
+		divMain.style.marginLeft = 0 - this.display.sizeInPixels.y / 2;
 		document.body.appendChild(divMain);
 		this.divMain = divMain;
 

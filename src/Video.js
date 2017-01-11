@@ -14,9 +14,9 @@ function Video(name, sourcePath)
 		this.domElement.autoplay = true;
 		this.domElement.onended = this.stop.bind(this);
 
-		var viewSize = Globals.Instance.display.viewSize;
-		this.domElement.width = viewSize.x;
-		this.domElement.height = viewSize.y;
+		var displaySize = Globals.Instance.display.sizeInPixels;
+		this.domElement.width = displaySize.x;
+		this.domElement.height = displaySize.y;
 
 		return this.domElement;
 	}

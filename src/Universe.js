@@ -31,7 +31,7 @@ function Universe(name, world)
 	{
 		var venueControlsTitle = new VenueControls
 		(
-			new ControlBuilder().title(Globals.Instance.display.viewSize)
+			new ControlBuilder().title(Globals.Instance.display.sizeInPixels)
 		);
 
 		venueControlsTitle = new VenueFader
