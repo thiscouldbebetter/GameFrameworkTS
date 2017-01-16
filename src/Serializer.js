@@ -260,9 +260,9 @@ function Serializer(knownTypes)
 						delete wrapper.arrayWrapped;
 						for (var grandchildPropertyName in wrapper)
 						{
-							var grandchildProperty = wrapper[grandchildPropertyName];
-							arrayWrapped[grandchildPropertyName] = grandchildProperty; 
-							
+							var indexOfPropertyWithinArray = wrapper[grandchildPropertyName];
+							var grandchildProperty = arrayWrapped[indexOfPropertyWithinArray];
+							arrayWrapped[grandchildPropertyName] = grandchildProperty; 		
 						}
 						
 						childProperty = arrayWrapped;
@@ -306,7 +306,11 @@ function Serializer(knownTypes)
 							if (arrayWrapped.__proto__[grandchildPropertyName] == null)
 							{
 								var grandchildProperty = arrayWrapped[grandchildPropertyName];
-								wrapper[grandchildPropertyName] = grandchildProperty;
+								var indexOfPropertyWithinArray = arrayWrapped.indexOf(grandchildProperty);
+								if (indexOfPropertyWithinArray >= 0)
+								{
+									wrapper[grandchildPropertyName] = indexOfPropertyWithinArray;
+								}
 							}
 						}
 						
