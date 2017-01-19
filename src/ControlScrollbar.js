@@ -19,6 +19,7 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, dataBinding
 		this.handleSize, // size
 		"-", // text
 		this.fontHeightInPixels,
+		true, // hasBorder
 		this.scrollUp // click
 	);
 	
@@ -29,6 +30,7 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, dataBinding
 		this.handleSize, // size
 		"+", // text
 		this.fontHeightInPixels,
+		true, // hasBorder
 		this.scrollDown // click
 	);
 }

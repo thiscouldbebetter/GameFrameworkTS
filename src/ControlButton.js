@@ -1,11 +1,12 @@
 
-function ControlButton(name, pos, size, text, fontHeightInPixels, click)
+function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, click)
 {
 	this.name = name;
 	this.pos = pos;
 	this.size = size;
 	this.text = text;
 	this.fontHeightInPixels = fontHeightInPixels;
+	this.hasBorder = hasBorder;
 	this.click = click;
 
 	this.isHighlighted = false;	
@@ -53,12 +54,15 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, click)
 		var pos = control.pos;
 		var size = control.size;
 
-		display.drawRectangle
-		(
-			pos, size, 
-			display.colorBack, display.colorFore,
-			control.isHighlighted // areColorsReversed
-		);
+		if (this.hasBorder == true)
+		{
+			display.drawRectangle
+			(
+				pos, size, 
+				display.colorBack, display.colorFore,
+				control.isHighlighted // areColorsReversed
+			);
+		}
 
 		var text = control.text;
 
@@ -69,7 +73,12 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, click)
 
 		display.drawText
 		(
-			text, this.fontHeightInPixels, drawPos, display.colorFore, display.colorBack, control.isHighlighted
+			text, 
+			this.fontHeightInPixels, 
+			drawPos, 
+			display.colorFore,
+			display.colorBack,
+			control.isHighlighted
 		);
 	}
 }
