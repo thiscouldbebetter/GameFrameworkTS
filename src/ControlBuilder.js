@@ -1073,7 +1073,7 @@ function ControlBuilder()
 												
 						var venueFileUpload = new VenueFileUpload(null);
 						
-						var venueMessage = new VenueControls
+						var venueMessageReadyToLoad = new VenueControls
 						(
 							new ControlBuilder().message
 							(
@@ -1106,8 +1106,26 @@ function ControlBuilder()
 								}
 							)
 						);
+			
+						var venueMessageCancelled = new VenueControls
+						(
+							new ControlBuilder().message
+							(
+								size,
+								"No file specified.",
+								// acknowledge 
+								function()
+								{
+									var venueNext = new VenueControls(new ControlBuilder().configure(size));
+									venueNext = new VenueFader(venueNext);
+									Globals.Instance.universe.venueNext = venueNext;	
+								}
+							)
+						);
 
-						venueFileUpload.venueNext = venueMessage;
+						venueFileUpload.venueNextIfFileSpecified = venueMessageReadyToLoad;
+						venueFileUpload.venueNextIfCancelled = venueMessageCancelled;
+						
 						universe.venueNext = venueFileUpload;
 					}
 				),
