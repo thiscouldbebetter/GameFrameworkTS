@@ -6,8 +6,8 @@ function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 	
 	this.inputToActionMappings = 
 	[
-		new InputToActionMapping("Escape", "ControlCancel", true),	
-		new InputToActionMapping("Gamepad0Button0", "ControlCancel", true),		
+		new InputToActionMapping("Escape", "ControlCancel", true),
+		new InputToActionMapping("Gamepad0Button0", "ControlCancel", true),
 	].addLookups("inputName");
 }
 
