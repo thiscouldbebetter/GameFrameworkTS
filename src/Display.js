@@ -90,7 +90,7 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 
 	Display.prototype.hide = function()
 	{
-		Globals.Instance.divMain.removeChild(this.canvasLive);		
+		Globals.Instance.platformHelper.domElementRemove(this.canvasLive);		
 	}
 
 	Display.prototype.initialize = function()
@@ -114,7 +114,7 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 		this.canvasLive = this.canvasBuffer;
 		this.graphicsLive = this.graphics;
 
-		Globals.Instance.divMain.appendChild(this.canvasLive);
+		Globals.Instance.platformHelper.domElementAdd(this.canvasLive);
 	}
 
 	Display.prototype.refresh = function()
@@ -124,7 +124,7 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 
 	Display.prototype.show = function()
 	{
-		Globals.Instance.divMain.appendChild(this.canvasLive);		
+		Globals.Instance.platformHelper.domElementAdd(this.canvasLive);		
 	}
 	
 	Display.prototype.textWidthForFontHeight = function(textToMeasure, fontHeightInPixels)

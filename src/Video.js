@@ -24,13 +24,13 @@ function Video(name, sourcePath)
 	Video.prototype.play = function()
 	{
 		this.isFinished = false;
-		Globals.Instance.divMain.appendChild(this.domElementBuild());
+		Globals.Instance.platformHelper.domElementAdd(this.domElementBuild());
 	}
 
 	Video.prototype.stop = function(event)
 	{
 		var domElement = (event == null ? this.domElement : event.srcElement);
-		Globals.Instance.divMain.removeChild(domElement);
+		Globals.Instance.platformHelper.domElementRemove(domElement);
 		this.isFinished = true;
 	}
 }

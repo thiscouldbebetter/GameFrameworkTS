@@ -1,7 +1,14 @@
 
-function VenueFileUpload(venueNext)
+function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 {
-	this.venueNext = venueNext;
+	this.venueNextIfFileSpecified = venueNextIfFileSpecified;
+	this.venueNextIfCancelled = venueNextIfCancelled;
+	
+	this.inputToActionMappings = 
+	[
+		new InputToActionMapping("Escape", "ControlCancel", true),	
+		new InputToActionMapping("Gamepad0Button0", "ControlCancel", true),		
+	].addLookups("inputName");
 }
 
 {
@@ -9,7 +16,7 @@ function VenueFileUpload(venueNext)
 	
 	VenueFileUpload.prototype.finalize = function()
 	{
-		Globals.Instance.divMain.removeChild(this.domElement);		
+		Globals.Instance.platformHelper.domElementRemove(this.domElement);		
 		
 		var display = Globals.Instance.display;
 		display.clear("Black");
@@ -27,7 +34,10 @@ function VenueFileUpload(venueNext)
 			+ ";height:" + display.sizeInPixels.y;
 
 		var labelInstructions = document.createElement("label");
-		labelInstructions.innerHTML = "Choose a file and click Load."
+		labelInstructions.innerHTML = 
+			"Choose a file and click Load."
+			+ "  Due to web browser security features,"
+			+ " a mouse or keyboard will likely be necessary."
 		divFileUpload.appendChild(labelInstructions);
 			
 		var inputFileUpload = document.createElement("input");
@@ -49,8 +59,9 @@ function VenueFileUpload(venueNext)
 		divButtons.appendChild(buttonCancel);
 		divFileUpload.appendChild(divButtons);
 
+		Globals.Instance.platformHelper.domElementAdd(divFileUpload);
 		
-		Globals.Instance.divMain.appendChild(divFileUpload);
+		inputFileUpload.focus();
 		
 		this.domElement = divFileUpload;
 	}
@@ -58,10 +69,20 @@ function VenueFileUpload(venueNext)
 	VenueFileUpload.prototype.updateForTimerTick = function()
 	{
 		var inputHelper = Globals.Instance.inputHelper;
-		// todo - Check actions instead of inputs.
-		if (inputHelper.inputsActive["Escape"] != null) 
+		var inputsActive = inputHelper.inputsActive;
+		for (var i = 0; i < inputsActive.length; i++)
 		{
-			Globals.Instance.universe.venueNext = this.venueNext;		
+			var inputActive = inputsActive[i];
+			var inputToActionMapping = this.inputToActionMappings[inputActive];
+			if (inputToActionMapping != null)
+			{
+				inputHelper.inputInactivate(inputActive);
+				var actionName = inputToActionMapping.actionDefnName;
+				if (actionName == "ControlCancel")
+				{
+					Globals.Instance.universe.venueNext = this.venueNextIfCancelled;
+				}
+			}
 		}
 	}
 	
@@ -69,7 +90,7 @@ function VenueFileUpload(venueNext)
 	
 	VenueFileUpload.prototype.buttonCancel_Clicked = function(event)
 	{
-		Globals.Instance.universe.venueNext = this.venueNext;		
+		Globals.Instance.universe.venueNext = this.venueNextIfCancelled;		
 	}	
 	
 	VenueFileUpload.prototype.buttonLoad_Clicked = function(event)
@@ -78,7 +99,7 @@ function VenueFileUpload(venueNext)
 		var fileToLoad = inputFileUpload.files[0];
 		if (fileToLoad != null)
 		{
-			Globals.Instance.universe.venueNext = this.venueNext;
+			Globals.Instance.universe.venueNext = this.venueNextIfFileSpecified;
 		}
 	}
 }

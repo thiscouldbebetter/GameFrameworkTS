@@ -26,7 +26,7 @@ function InputHelper()
 		document.body.onkeyup = this.handleEventKeyUp.bind(this);
 		if (this.isMouseTracked == true)
 		{
-			var divMain = Globals.Instance.divMain;
+			var divMain = Globals.Instance.platformHelper.divMain;
 			divMain.onmousedown = this.handleEventMouseDown.bind(this);
 			divMain.onmousemove = this.handleEventMouseMove.bind(this);
 			divMain.onmouseup = this.handleEventMouseUp.bind(this);
@@ -145,7 +145,7 @@ function InputHelper()
 
 	InputHelper.prototype.handleEventKeyDown = function(event)
 	{
-		event.preventDefault();
+		//event.preventDefault();
 		
 		var inputPressed = event.key;
 		

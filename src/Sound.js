@@ -41,7 +41,7 @@ function Sound(name, sourcePath, isRepeating)
 		this.domElementBuild(volume);	
 		this.domElement.currentTime = this.offsetInSeconds;
 
-		Globals.Instance.divMain.appendChild
+		Globals.Instance.platformHelper.domElementAdd
 		(
 			this.domElement	
 		);
@@ -55,7 +55,7 @@ function Sound(name, sourcePath, isRepeating)
 	Sound.prototype.stop = function(event)
 	{
 		var domElement = (event == null ? this.domElement : event.srcElement);
-		Globals.Instance.divMain.removeChild(domElement);
+		Globals.Instance.platformHelper.domElementRemove(domElement);
 		this.offsetInSeconds = 0;
 	}
 
