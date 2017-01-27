@@ -1,336 +1,194 @@
 
-function Serializer(knownTypes)
+function Serializer()
 {
-	this.knownTypes = knownTypes;
-
-	for (var i = 0; i < this.knownTypes.length; i++)
-	{
-		var knownType = this.knownTypes[i];
-		this.knownTypes[knownType.name] = knownType;
-	}
+	// do nothing
 }
-
 {
-	// internal classes
-	
-	function _ArrayWrapper(arrayToWrap)
-	{
-		this.arrayWrapped = arrayToWrap;
-	}
-	
-	function _FunctionWrapper(functionBody)
-	{
-		this.functionBody = functionBody;
-	}
-	
-	// methods
-	
 	Serializer.prototype.deserialize = function(stringToDeserialize)
 	{
-		var objectDeserialized = JSON.parse(stringToDeserialize);
-		this.unwrapArraysRecursively(objectDeserialized);
-		this.unwrapFunctionsRecursively(objectDeserialized);
-		this.setPrototypeRecursively(objectDeserialized);
-		this.deleteClassNameRecursively(objectDeserialized);
+		var nodeRoot = JSON.parse(stringToDeserialize);
+		nodeRoot.__proto__ = SerializerNode.prototype;
+		nodeRoot.processAfterDeserialization();
+		var returnValue = nodeRoot.toObjectWrapped([]);
 
-		return objectDeserialized;
+		return returnValue;
 	}
 
 	Serializer.prototype.serialize = function(objectToSerialize)
 	{
-		this.wrapFunctionsRecursively(objectToSerialize);
-		this.wrapArraysRecursively(objectToSerialize);		
-		this.setClassNameRecursively(objectToSerialize);
-		var returnValue = JSON.stringify(objectToSerialize);
-		this.unwrapArraysRecursively(objectToSerialize);		
-		this.unwrapFunctionsRecursively(objectToSerialize);
-		this.deleteClassNameRecursively(objectToSerialize);
+		var nodeRoot = new SerializerNode(objectToSerialize);
 
-		return returnValue;
+		nodeRoot.prepareForSerialization([], []);
+
+		var nodeRootSerialized = JSON.stringify
+		(
+			nodeRoot, 
+			null, // ? 
+			4 // pretty-print indent size
+		);
+
+		return nodeRootSerialized;
 	}
-	
-	// class names
-	
-	Serializer.prototype.deleteClassNameRecursively = function(objectToDeleteClassNameOn)
+}
+
+function SerializerNode(objectWrapped)
+{
+	this.objectWrappedTypeName = null;
+	this.id = null;
+	this.isReference = null;
+
+	this.objectWrapped = objectWrapped;
+}
+{
+	SerializerNode.prototype.prepareForSerialization = function
+	(
+		objectsAlreadyWrapped, objectIndexToNodeLookup
+	)
 	{
-		if (objectToDeleteClassNameOn == null)
+		if (this.objectWrapped != null)
 		{
-			return; //throw "Unrecognized type!"
-		}
-		
-		var className = objectToDeleteClassNameOn.constructor.name;
-		if (this.knownTypes[className] != null)
-		{
-			delete objectToDeleteClassNameOn.className;
-
-			for (var childPropertyName in objectToDeleteClassNameOn)
-			{
-				var childProperty = objectToDeleteClassNameOn[childPropertyName];
-				this.deleteClassNameRecursively(childProperty);
-			}
-		}
-		else if (className == "Array")
-		{
-			delete objectToDeleteClassNameOn.className;
-			for (var i = 0; i < objectToDeleteClassNameOn.length; i++)
-			{
-				var element = objectToDeleteClassNameOn[i];
-				this.deleteClassNameRecursively(element);
-			}
-		}
-	}
-	
-	Serializer.prototype.setClassNameRecursively = function(objectToSetClassNameOn)
-	{
-		if (objectToSetClassNameOn == null)
-		{
-			return; // throw "Unrecognized type!"
-		}
-		var className = objectToSetClassNameOn.constructor.name;
-		
-		if (this.knownTypes[className] != null)
-		{
-			objectToSetClassNameOn.className = className;
-
-			for (var childPropertyName in objectToSetClassNameOn)
-			{
-				var childProperty = objectToSetClassNameOn[childPropertyName];
-				this.setClassNameRecursively(childProperty);
-			}
-		}
-		else if (className == "Array")
-		{
-			for (var i = 0; i < objectToSetClassNameOn.length; i++)
-			{
-				var element = objectToSetClassNameOn[i];
-				this.setClassNameRecursively(element);
-			}
-		}
-		else if (className == "_ArrayWrapper")
-		{
-			objectToSetClassNameOn.className = className;
-
-			var arrayWrapped = objectToSetClassNameOn.arrayWrapped;
-			this.setClassNameRecursively(arrayWrapped);
-		}
-	}
-	
-	// prototypes
-	
-	Serializer.prototype.setPrototypeRecursively = function(objectToSetPrototypeOn)
-	{
-		if (objectToSetPrototypeOn == null)
-		{
-			return; // throw "Unrecognized type!"
-		}
-	
-		var className = objectToSetPrototypeOn.className;
-		var typeOfObjectToSetPrototypeOn = this.knownTypes[className];
-
-		if (typeOfObjectToSetPrototypeOn != null)
-		{
-			objectToSetPrototypeOn.__proto__ = typeOfObjectToSetPrototypeOn.prototype;
-	
-			for (var childPropertyName in objectToSetPrototypeOn)
-			{
-				var childProperty = objectToSetPrototypeOn[childPropertyName];
-				this.setPrototypeRecursively(childProperty);
-			}
-		}
-		else if (objectToSetPrototypeOn.constructor.name == "Array")
-		{
-			for (var i = 0; i < objectToSetPrototypeOn.length; i++)
-			{
-				var element = objectToSetPrototypeOn[i];
-				this.setPrototypeRecursively(element);
-			}
-		}
-	}
-
-	// functions
-	
-	Serializer.prototype.unwrapFunctionsRecursively = function(objectToUnwrapFunctionsOn)
-	{
-		if (objectToUnwrapFunctionsOn == null)
-		{
-			return;
-		}
+			var objectIndexExisting = 
+				objectsAlreadyWrapped.indexOf(this.objectWrapped);
 				
-		var className = objectToUnwrapFunctionsOn.className;
-				
-		if (this.knownTypes[className] != null)
-		{
-			for (var childPropertyName in objectToUnwrapFunctionsOn)
+			if (objectIndexExisting >= 0)
 			{
-				var childProperty = objectToUnwrapFunctionsOn[childPropertyName];
-				if (childProperty != null)
+				var nodeForObjectExisting = objectIndexToNodeLookup[objectIndexExisting];
+				this.id = nodeForObjectExisting.id;
+				this.isReference = true;
+				this.objectWrapped = null;
+			}
+			else
+			{
+				this.isReference = false;
+				var objectIndex = objectsAlreadyWrapped.length;
+				this.id = objectIndex;
+				objectsAlreadyWrapped.push(this.objectWrapped);
+				objectIndexToNodeLookup[objectIndex] = this;
+
+				var typeName = this.objectWrapped.constructor.name;
+				this.objectWrappedTypeName = typeName;
+	
+				if (typeName == "Function")
 				{
-					var childPropertyIsFunctionWrapped = 
-						(childProperty.className == "_FunctionWrapper");
-						
-					if (childPropertyIsFunctionWrapped == true)
-					{
-						var functionBodyAsString = "(" + childProperty.functionBody + ")";
-						delete childProperty.functionBody;
-						var functionBodyAsFunction = eval(functionBodyAsString);
-						functionBodyAsFunction.__proto__ = Function.prototype;
-
-						objectToUnwrapFunctionsOn[childPropertyName] = functionBodyAsFunction;
-					}
-					else
-					{
-						this.unwrapFunctionsRecursively(childProperty);
-					}
+					this.objectWrapped = this.objectWrapped.toString();
 				}
-			}
-		}
-		else if (objectToUnwrapFunctionsOn.constructor.name == "Array")
-		{
-			for (var i = 0; i < objectToUnwrapFunctionsOn.length; i++)
-			{
-				var element = objectToUnwrapFunctionsOn[i];
-				this.unwrapFunctionsRecursively(element);
-			}
-		}
-	}
-	
-	Serializer.prototype.wrapFunctionsRecursively = function(objectToWrapFunctionsOn)
-	{
-		var className = objectToWrapFunctionsOn.constructor.name;
-		if (this.knownTypes[className] != null)
-		{
-			for (var childPropertyName in objectToWrapFunctionsOn)
-			{
-				var childProperty = objectToWrapFunctionsOn[childPropertyName];
-				if (childProperty != null)
+				else if 
+				(
+					typeName == "Boolean"
+					|| typeName == "Number"
+					|| typeName == "String"
+				)
 				{
-					if (childProperty.constructor.name == "Function")
+					// Primitive types.  
+					delete this.isReference;
+				}
+				else
+				{
+					this.children = {};
+	
+					for (var propertyName in this.objectWrapped)
 					{
-						if (objectToWrapFunctionsOn.__proto__[childPropertyName] == null)
+						if (this.objectWrapped.__proto__[propertyName] == null)
 						{
-							childProperty = new _FunctionWrapper
+							var propertyValue = this.objectWrapped[propertyName];
+					
+							var child = new SerializerNode
 							(
-								childProperty.toString()
+								propertyValue // objectWrapped
 							);
-							objectToWrapFunctionsOn[childPropertyName] = childProperty;
+
+							this.children[propertyName] = child;
 						}
 					}
-					else
+
+					delete this.objectWrapped;
+
+					for (var childName in this.children)
 					{
-						this.wrapFunctionsRecursively(childProperty);
+						var child = this.children[childName];
+						child.prepareForSerialization
+						(
+							objectsAlreadyWrapped,
+							objectIndexToNodeLookup
+						);
 					}
 				}
 			}
-		}
-		else if (className == "Array")
-		{
-			for (var i = 0; i < objectToWrapFunctionsOn.length; i++)
-			{
-				var element = objectToWrapFunctionsOn[i];
-				this.wrapFunctionsRecursively(element);
-			}
-		}
-	}
-	
-	// arrays
-	
-	Serializer.prototype.unwrapArraysRecursively = function(objectToUnwrapArraysOn)
+
+		} // end if objectWrapped != null
+
+		return this;		
+
+	} // end method
+
+	SerializerNode.prototype.processAfterDeserialization = function(serializer)
 	{
-		if (objectToUnwrapArraysOn == null)
+		if (this.children != null)
 		{
-			return;
-		}
-				
-		var className = objectToUnwrapArraysOn.className;
-				
-		if (this.knownTypes[className] != null)
-		{
-			for (var childPropertyName in objectToUnwrapArraysOn)
+			for (var childName in this.children)
 			{
-				var childProperty = objectToUnwrapArraysOn[childPropertyName];
-				if (childProperty != null)
-				{
-					var childPropertyIsArrayWrapped = 
-						(childProperty.className == "_ArrayWrapper");
-						
-					if (childPropertyIsArrayWrapped == true)
-					{
-						var wrapper = childProperty;
-						var arrayWrapped = wrapper.arrayWrapped;
-						delete wrapper.arrayWrapped;
-						for (var grandchildPropertyName in wrapper)
-						{
-							var indexOfPropertyWithinArray = wrapper[grandchildPropertyName];
-							var grandchildProperty = arrayWrapped[indexOfPropertyWithinArray];
-							arrayWrapped[grandchildPropertyName] = grandchildProperty; 		
-						}
-						
-						childProperty = arrayWrapped;
-						objectToUnwrapArraysOn[childPropertyName] = childProperty;
-					}
-
-					this.unwrapArraysRecursively(childProperty);
-				}
-			}
-		}
-		else if (objectToUnwrapArraysOn.constructor.name == "Array")
-		{
-			for (var i = 0; i < objectToUnwrapArraysOn.length; i++)
-			{
-				var element = objectToUnwrapArraysOn[i];
-				this.unwrapArraysRecursively(element);
+				var child = this.children[childName];
+				child.__proto__ = SerializerNode.prototype;
+				child.processAfterDeserialization(serializer);
 			}
 		}
 	}
-		
-	Serializer.prototype.wrapArraysRecursively = function(objectToWrapArraysOn)
+
+	SerializerNode.prototype.toObjectWrapped = function(nodesAlreadyProcessed)
 	{
-		var className = objectToWrapArraysOn.constructor.name;
-		if (this.knownTypes[className] != null)
+		if (this.isReference == true)
 		{
-			for (var childPropertyName in objectToWrapArraysOn)
+			var nodeExisting = nodesAlreadyProcessed[this.id];
+			this.objectWrapped = nodeExisting.objectWrapped;
+		}
+		else
+		{
+			nodesAlreadyProcessed[this.id] = this;
+			var typeName = this.objectWrappedTypeName;
+			if (typeName == null)
 			{
-				var childProperty = objectToWrapArraysOn[childPropertyName];
-				if (childProperty != null)
-				{
-					if (childProperty.constructor.name == "Array")
-					{
-						var arrayWrapped = childProperty;
+				// Value is null.  Do nothing.
+			}
+			else if (typeName == "Array")
+			{
+				this.objectWrapped = [];
+			}
+			else if (typeName == "Function")
+			{
+				this.objectWrapped = eval("(" + this.objectWrapped + ")");
+			}
+			else if 
+			(
+				typeName == "Boolean" 
+				|| typeName == "Number" 
+				|| typeName == "String"
+			)
+			{
+				// Primitive types. Do nothing.
+			}
+			else
+			{
+				this.objectWrapped = {};
+				var objectWrappedType = eval("(" + typeName + ")");
+				this.objectWrapped.__proto__ = objectWrappedType.prototype;
+			}
 
-						var wrapper = new _ArrayWrapper(arrayWrapped);
-						
-						objectToWrapArraysOn[childPropertyName] = wrapper;						
-						
-						for (var grandchildPropertyName in arrayWrapped)
-						{
-							if (arrayWrapped.__proto__[grandchildPropertyName] == null)
-							{
-								var grandchildProperty = arrayWrapped[grandchildPropertyName];
-								var indexOfPropertyWithinArray = arrayWrapped.indexOf(grandchildProperty);
-								if (indexOfPropertyWithinArray >= 0)
-								{
-									wrapper[grandchildPropertyName] = indexOfPropertyWithinArray;
-								}
-							}
-						}
-						
-						this.wrapArraysRecursively(arrayWrapped);
-					}
-					else
-					{
-						this.wrapArraysRecursively(childProperty);
-					}
+	
+			if (this.children != null)
+			{
+				for (var childName in this.children)
+				{
+					var child = this.children[childName];
+					var childAsObjectWrapped = child.toObjectWrapped
+					(
+						nodesAlreadyProcessed
+					);
+					this.objectWrapped[childName] = childAsObjectWrapped;
 				}
 			}
-		}
-		else if (className == "Array")
-		{
-			for (var i = 0; i < objectToWrapArraysOn.length; i++)
-			{
-				var element = objectToWrapArraysOn[i];
-				this.wrapArraysRecursively(element);
-			}
-		}
-	}
 
-} // end class Serializer
+		}
+
+		return this.objectWrapped;
+	}
+}

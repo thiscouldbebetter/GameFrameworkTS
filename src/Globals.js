@@ -26,14 +26,7 @@ function Globals()
 		this.programName = programName;
 		this.timerTicksPerSecond = timerTicksPerSecond;
 		
-		this.serializer = new Serializer
-		([
-			Coords,
-			DateTime,
-			Profile,
-			World,
-			Universe
-		]);
+		this.serializer = new Serializer();
 		this.platformHelper = new PlatformHelper();
 		this.display = display;
 		this.inputHelper = new InputHelper();
