@@ -8,8 +8,8 @@ function Serializer()
 	{
 		var nodeRoot = JSON.parse(stringToDeserialize);
 		nodeRoot.__proto__ = SerializerNode.prototype;
-		nodeRoot.processAfterDeserialization();
-		var returnValue = nodeRoot.toObjectWrapped([]);
+		nodeRoot.prototypesAssign();
+		var returnValue = nodeRoot.unwrap([]);
 
 		return returnValue;
 	}
@@ -18,7 +18,7 @@ function Serializer()
 	{
 		var nodeRoot = new SerializerNode(objectToSerialize);
 
-		nodeRoot.prepareForSerialization([], []);
+		nodeRoot.wrap([], []);
 
 		var nodeRootSerialized = JSON.stringify
 		(
@@ -40,13 +40,15 @@ function SerializerNode(objectWrapped)
 	this.objectWrapped = objectWrapped;
 }
 {
-	SerializerNode.prototype.prepareForSerialization = function
+	SerializerNode.prototype.wrap = function
 	(
 		objectsAlreadyWrapped, objectIndexToNodeLookup
 	)
 	{
 		if (this.objectWrapped != null)
-		{
+		{			
+			var typeName = this.objectWrapped.constructor.name;
+
 			var objectIndexExisting = 
 				objectsAlreadyWrapped.indexOf(this.objectWrapped);
 				
@@ -65,22 +67,11 @@ function SerializerNode(objectWrapped)
 				objectsAlreadyWrapped.push(this.objectWrapped);
 				objectIndexToNodeLookup[objectIndex] = this;
 
-				var typeName = this.objectWrapped.constructor.name;
 				this.objectWrappedTypeName = typeName;
 	
 				if (typeName == "Function")
 				{
 					this.objectWrapped = this.objectWrapped.toString();
-				}
-				else if 
-				(
-					typeName == "Boolean"
-					|| typeName == "Number"
-					|| typeName == "String"
-				)
-				{
-					// Primitive types.  
-					delete this.isReference;
 				}
 				else
 				{
@@ -91,26 +82,55 @@ function SerializerNode(objectWrapped)
 						if (this.objectWrapped.__proto__[propertyName] == null)
 						{
 							var propertyValue = this.objectWrapped[propertyName];
-					
-							var child = new SerializerNode
-							(
-								propertyValue // objectWrapped
-							);
+
+							if (propertyValue == null)
+							{
+								child = null;
+							}
+							else 
+							{			
+								var propertyValueTypeName = propertyValue.constructor.name;
+
+								if 
+								(
+									propertyValueTypeName == "Boolean"
+									|| propertyValueTypeName == "Number"
+									|| propertyValueTypeName == "String"
+								)
+								{
+									child = propertyValue;
+								}
+								else
+								{
+									child = new SerializerNode
+									(
+										propertyValue
+									);
+								}
+
+							}
 
 							this.children[propertyName] = child;
 						}
 					}
 
 					delete this.objectWrapped;
-
+	
 					for (var childName in this.children)
 					{
 						var child = this.children[childName];
-						child.prepareForSerialization
-						(
-							objectsAlreadyWrapped,
-							objectIndexToNodeLookup
-						);
+						if (child != null)
+						{
+							var childTypeName = child.constructor.name;
+							if (childTypeName == "SerializerNode")
+							{
+								child.wrap
+								(
+									objectsAlreadyWrapped,
+									objectIndexToNodeLookup
+								);
+							}
+						}
 					}
 				}
 			}
@@ -121,20 +141,27 @@ function SerializerNode(objectWrapped)
 
 	} // end method
 
-	SerializerNode.prototype.processAfterDeserialization = function(serializer)
+	SerializerNode.prototype.prototypesAssign = function()
 	{
 		if (this.children != null)
 		{
 			for (var childName in this.children)
 			{
 				var child = this.children[childName];
-				child.__proto__ = SerializerNode.prototype;
-				child.processAfterDeserialization(serializer);
+				if (child != null)
+				{
+					var childTypeName = child.constructor.name;
+					if (childTypeName == "Object")
+					{
+						child.__proto__ = SerializerNode.prototype;
+						child.prototypesAssign();
+					}
+				}
 			}
 		}
 	}
 
-	SerializerNode.prototype.toObjectWrapped = function(nodesAlreadyProcessed)
+	SerializerNode.prototype.unwrap = function(nodesAlreadyProcessed)
 	{
 		if (this.isReference == true)
 		{
@@ -179,11 +206,19 @@ function SerializerNode(objectWrapped)
 				for (var childName in this.children)
 				{
 					var child = this.children[childName];
-					var childAsObjectWrapped = child.toObjectWrapped
-					(
-						nodesAlreadyProcessed
-					);
-					this.objectWrapped[childName] = childAsObjectWrapped;
+			
+					if (child != null)
+					{
+						if (child.constructor.name == "SerializerNode")
+						{
+							child = child.unwrap
+							(
+								nodesAlreadyProcessed
+							);
+						}
+					}
+
+					this.objectWrapped[childName] = child;
 				}
 			}
 
