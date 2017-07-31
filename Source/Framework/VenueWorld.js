@@ -12,7 +12,7 @@ function VenueWorld()
 
 	VenueWorld.prototype.finalize = function()
 	{
-		Globals.Instance.soundHelper.soundForMusic.pause();		
+		Globals.Instance.soundHelper.soundForMusic.pause();
 	}
 
 	VenueWorld.prototype.initialize = function()

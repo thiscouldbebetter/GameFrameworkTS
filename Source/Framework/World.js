@@ -1,15 +1,18 @@
+// This class, as implemented, is only a demonstration. 
+// Its code is expected to be modified heavily in actual applications,
+// including the constructor, the draw() and update() methods,
+// and the World.new() method.
 
 function World(name, cursorPos)
 {
 	this.name = name;
 	this.cursorPos = cursorPos;
-	this.dateCreated = DateTime.now();
-	this.dateSaved = this.dateCreated;
+	
+	this.cursorSize = new Coords(10, 10);
 }
 {
 	// constants
 
-	World.CursorSize = new Coords(10, 10);
 
 	// static methods
 
@@ -27,6 +30,24 @@ function World(name, cursorPos)
 	}
 
 	// instance methods
+	
+	World.prototype.dateCreated = function () 
+	{ 
+		if (this._dateCreated == null)
+		{
+			this._dateCreated = DateTime.now();	
+		}
+		return this._dateCreated; 
+	}
+
+	World.prototype.dateSaved = function () 
+	{ 
+		if (this._dateSaved == null)
+		{
+			this._dateSaved = this._dateCreated;
+		}
+		return this._dateSaved; 
+	}
 
 	World.prototype.draw = function()
 	{
@@ -36,13 +57,13 @@ function World(name, cursorPos)
 		display.drawRectangle
 		(
 			this.cursorPos,
-			World.CursorSize,
+			this.cursorSize,
 			display.colorBack, display.colorFore
 		);
 	}
 
 	World.prototype.updateForTimerTick = function()
-	{				
+	{
 		var inputHelper = Globals.Instance.inputHelper;
 		if (inputHelper.isMouseClicked == true)
 		{

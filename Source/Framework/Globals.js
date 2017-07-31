@@ -17,10 +17,9 @@ function Globals()
 	(
 		programName,
 		timerTicksPerSecond, 
-		display, 
-		universe,
-		sounds,
-		videos
+		display,
+		mediaLibrary,
+		universe
 	)
 	{
 		this.programName = programName;
@@ -29,12 +28,13 @@ function Globals()
 		this.serializer = new Serializer();
 		this.platformHelper = new PlatformHelper();
 		this.display = display;
+		this.mediaLibrary =  mediaLibrary;
+		this.universe = universe;
+		
 		this.inputHelper = new InputHelper();
 		this.profileHelper = new ProfileHelper();
-		this.soundHelper = new SoundHelper(sounds);
-		this.videoHelper = new VideoHelper(videos);
-
-		this.universe = universe;
+		this.soundHelper = new SoundHelper(mediaLibrary.sounds);
+		this.videoHelper = new VideoHelper(mediaLibrary.videos);
 
 		this.platformHelper.initialize(this.display);
 		this.display.initialize();

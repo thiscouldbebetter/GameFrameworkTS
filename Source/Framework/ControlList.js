@@ -39,7 +39,7 @@ function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForI
 		}
 		else if (actionNameToHandle == "ControlDecrement")
 		{
-			this.itemSelectedNextInDirection(-1);			
+			this.itemSelectedNextInDirection(-1);
 		}
 	}
 	

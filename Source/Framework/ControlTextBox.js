@@ -62,13 +62,15 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels)
 		{
 			this.text = 
 				this.text.substr(0, this.cursorPos)
-				+ inputToHandle
+				+ actionNameToHandle
 				+ this.text.substr(this.cursorPos);
 
 			this.cursorPos = NumberHelper.wrapValueToRangeMinMax
 			(
 				this.cursorPos + 1, 0, this.text.length + 1
 			);
+			
+			Globals.Instance.inputHelper.inputInactivate(actionNameToHandle);
 		}
 	}
 	
@@ -118,7 +120,7 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels)
 			this.fontHeightInPixels, 
 			drawPos, 
 			display.colorFore, display.colorBack, control.isHighlighted
-		);				
+		);
 
 		if (control.isHighlighted == true)
 		{
@@ -148,7 +150,7 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels)
 				this.fontHeightInPixels,
 				drawPos,
 				display.colorFore
-			)
+			);
 		}
 	}
 

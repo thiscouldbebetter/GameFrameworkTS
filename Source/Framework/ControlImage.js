@@ -1,10 +1,10 @@
 
-function ControlImage(name, pos, size, imageSrc)
+function ControlImage(name, pos, size, image)
 {
 	this.name = name;
 	this.pos = pos;
 	this.size = size;
-	this.imageSrc = imageSrc;
+	this.image = image;
 }
 
 {
@@ -13,7 +13,7 @@ function ControlImage(name, pos, size, imageSrc)
 		if (this.systemImage == null)
 		{
 			this.systemImage = document.createElement("img");
-			this.systemImage.src = this.imageSrc;
+			this.systemImage.src = this.image.sourcePath;
 		}
 		
 		var controlImage = this;

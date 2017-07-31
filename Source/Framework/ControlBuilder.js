@@ -161,7 +161,7 @@ function ControlBuilder()
 					true, // hasBorder
 					// click
 					function()
-					{					
+					{
 						var controlConfirm = new ControlBuilder().confirm
 						(
 							size,
@@ -674,8 +674,8 @@ function ControlBuilder()
 						var venueNext = new VenueControls
 						(
 							new ControlBuilder().profileDetail(size)
-						);				
-						venueNext = new VenueFader(venueNext);		
+						);
+						venueNext = new VenueFader(venueNext);
 						universe.venueNext = venueNext;
 					}
 				),
@@ -696,8 +696,8 @@ function ControlBuilder()
 		{
 			sizeMultiplier = size.clone().divide(this.sizeBase);
 		}
-				
-		return new ControlContainer
+		
+		var returnValue = new ControlContainer
 		(
 			"containerTitle",
 			new Coords(0, 0).multiply(sizeMultiplier), // pos
@@ -709,7 +709,7 @@ function ControlBuilder()
 					"imageTitle",
 					new Coords(0, 0).multiply(sizeMultiplier),
 					new Coords(200, 150).multiply(sizeMultiplier), // size
-					"Title.png"
+					Globals.Instance.mediaLibrary.imageGetByName("Title")
 				),
 		
 				new ControlButton
@@ -756,6 +756,8 @@ function ControlBuilder()
 				
 			]
 		);
+		
+		return returnValue
 	}
 
 	ControlBuilder.prototype.worldDetail = function(size)
@@ -803,7 +805,7 @@ function ControlBuilder()
 					new Coords(50, 45).multiply(sizeMultiplier), // pos
 					new Coords(100, 25).multiply(sizeMultiplier), // size
 					true, // isTextCentered
-					"Started:" + world.dateCreated.toStringTimestamp(),
+					"Started:" + world.dateCreated().toStringTimestamp(),
 					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 				new ControlLabel
@@ -812,7 +814,7 @@ function ControlBuilder()
 					new Coords(50, 60).multiply(sizeMultiplier), // pos
 					new Coords(100, 25).multiply(sizeMultiplier), // size
 					true, // isTextCentered
-					"Saved:" + world.dateSaved.toStringTimestamp(),
+					"Saved:" + world.dateSaved().toStringTimestamp(),
 					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 
@@ -830,7 +832,7 @@ function ControlBuilder()
 						var universe = Globals.Instance.universe;
 						var world = universe.world;
 						var venueNext = new VenueWorld(world);
-						if (world.dateSaved.equals(world.dateCreated) == true)
+						if (world.dateSaved().equals(world.dateCreated()) == true)
 						{
 							venueNext = new VenueVideo
 							(
@@ -1187,12 +1189,12 @@ function ControlBuilder()
 						var profile = universe.profile;
 						var world = universe.world;
 
-						world.dateSaved = DateTime.now();
+						world._dateSaved = DateTime.now();
 						Globals.Instance.profileHelper.profileSave
 						(
 							profile
 						);
-												
+						
 						var venueNext = new VenueControls
 						(
 							new ControlBuilder().message
@@ -1229,7 +1231,7 @@ function ControlBuilder()
 						var profile = universe.profile;
 						var world = universe.world;
 
-						world.dateSaved = DateTime.now();
+						world._dateSaved = DateTime.now();
 						var worldSerialized = Globals.Instance.serializer.serialize(world);
 						
 						new FileHelper().saveTextStringToFileWithName

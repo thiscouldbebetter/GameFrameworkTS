@@ -10,27 +10,32 @@ function main()
 		10, // fontHeightInPixels
 		"Gray", "White" // colorFore, colorBack
 	);
+	
+	var mediaLibrary = new MediaLibrary
+	(
+		// images
+		[
+			new Image("Title", "../Media/Title.png"),
+		],
+		// sounds
+		[
+			new Sound("Sound", "../Media/Sound.wav", false),
+			new Sound("Music", "../Media/Music.mp3", true),
+		],
+		// videos
+		[
+			new Video("Movie", "../Media/Movie.webm"),
+		]
+	);
 
 	var universe0 = Universe.new(null);
-	
-	var sounds = 
-	[
-		new Sound("Sound", "Sound.wav", false),
-		new Sound("Music", "Music.mp3", true),
-	];
-	
-	var videos =
-	[
-		new Video("Movie", "Movie.webm"),
-	];
 
 	Globals.prototype.initialize
 	(
 		"Cursor Quest",
 		20, // timerTicksPerSecond
 		display,
-		universe0,
-		sounds,
-		videos
+		mediaLibrary,		
+		universe0
 	);
 }
