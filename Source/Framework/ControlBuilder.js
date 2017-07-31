@@ -134,10 +134,10 @@ function ControlBuilder()
 
 				new ControlButton
 				(
-					"buttonReturn",
+					"buttonResume",
 					new Coords(50, 105).multiply(sizeMultiplier), // pos
 					new Coords(45, 25).multiply(sizeMultiplier), // size
-					"Return",
+					"Resume",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
 					// click
@@ -373,7 +373,7 @@ function ControlBuilder()
 						Globals.Instance.profileHelper.profileSave
 						(
 							profile
-						);				
+						);
 
 						universe.world = world;
 						var venueNext = new VenueControls
@@ -711,7 +711,7 @@ function ControlBuilder()
 					new Coords(200, 150).multiply(sizeMultiplier), // size
 					Globals.Instance.mediaLibrary.imageGetByName("Title")
 				),
-		
+
 				new ControlButton
 				(
 					"buttonStart",
@@ -738,7 +738,7 @@ function ControlBuilder()
 					"buttonTestDemo",
 					new Coords(75, 125).multiply(sizeMultiplier), // pos
 					new Coords(50, 25).multiply(sizeMultiplier), // size
-					"Test Demo",
+					"Test/Demo",
 					this.fontHeightInPixelsBase * sizeMultiplier.y * 2,
 					false, // hasBorder
 					// click
@@ -968,7 +968,7 @@ function ControlBuilder()
 					true, // hasBorder
 					// click
 					function ()
-					{						
+					{
 						var controlConfirm = new ControlBuilder().confirm
 						(
 							size,
@@ -1001,7 +1001,7 @@ function ControlBuilder()
 										break;
 									}
 								}
-															
+								
 								var venueNext = new VenueControls
 								(
 									new ControlBuilder().worldLoad(size)
@@ -1072,7 +1072,7 @@ function ControlBuilder()
 						var universe = Globals.Instance.universe;
 						var profile = universe.profile;
 						var world = universe.world;
-												
+						
 						var venueFileUpload = new VenueFileUpload(null);
 						
 						var venueMessageReadyToLoad = new VenueControls
@@ -1131,7 +1131,7 @@ function ControlBuilder()
 						universe.venueNext = venueFileUpload;
 					}
 				),
-								
+				
 				new ControlButton
 				(
 					"buttonReturn",

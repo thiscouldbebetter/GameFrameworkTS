@@ -10,28 +10,18 @@ function ControlImage(name, pos, size, image)
 {
 	ControlImage.prototype.draw = function()
 	{
-		if (this.systemImage == null)
-		{
-			this.systemImage = document.createElement("img");
-			this.systemImage.src = this.image.sourcePath;
-		}
-		
-		var controlImage = this;
 		var display = Globals.Instance.display;
-
-		var pos = controlImage.pos;
-		var size = controlImage.size;
 
 		display.drawRectangle
 		(
-			pos, size, display.colorBack, display.colorFore
+			this.pos, this.size, display.colorBack, display.colorFore
 		)
 
-		display.graphics.drawImage
+		display.drawImage
 		(
-			controlImage.systemImage,
-			pos.x, pos.y,
-			display.sizeInPixels.x, display.sizeInPixels.y
+			this.image,
+			this.pos,
+			display.sizeInPixels // hack
 		);
 	}
 

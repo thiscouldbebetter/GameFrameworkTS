@@ -5,9 +5,19 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 	this.fontHeightInPixels = fontHeightInPixels;
 	this.colorFore = colorFore;
 	this.colorBack = colorBack;
+	
+	// temporary variables
+	
+	this.drawPos = new Coords();
 }
 
 {
+	// constants
+	
+	Display.RadiansPerCycle = Math.PI * 2.0;
+	
+	// methods
+	
 	Display.prototype.clear = function(colorBorder, colorBack)
 	{
 		this.drawRectangle
@@ -17,6 +27,112 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 			(colorBack == null ? this.colorBack : colorBack), 
 			(colorBorder == null ? this.colorFore : colorBorder)
 		);
+	}
+	
+	Display.prototype.drawArc = function
+	(
+		center, radius, colorFill, colorBorder, angleStartInCycles, angleStopInCycles
+	)
+	{
+		var drawPos = this.drawPos.overwriteWith(center);
+		var angleStartInRadians = angleStartInCycles * Display.RadiansPerCycle;
+		var angleStopInRadians = angleStopInCycles * Display.RadiansPerCycle;
+
+		if (colorFill != null)
+		{
+			this.graphics.fillStyle = colorFill;
+			this.graphics.beginPath();
+			this.graphics.arc
+			(
+				drawPos.x, drawPos.y,
+				radius,
+				angleStartInRadians, angleStopInRadians
+			);
+			this.graphics.fill();
+		}
+
+		if (colorBorder != null)
+		{
+			this.graphics.strokeStyle = colorBorder;
+			this.graphics.beginPath();
+			this.graphics.arc
+			(
+				drawPos.x, drawPos.y,
+				radius,
+				angleStartInRadians, angleStopInRadians
+			);
+			this.graphics.stroke();
+		}
+	}
+
+	Display.prototype.drawCircle = function(center, radius, colorFill, colorBorder)
+	{
+		this.drawArc(center, radius, colorFill, colorBorder, 0, 1);
+	}
+	
+	Display.prototype.drawImage = function(imageToDraw, pos, size)
+	{
+		var systemImage = imageToDraw.systemImage();
+		
+		if (size == null)
+		{
+			this.graphics.drawImage(systemImage, pos.x, pos.y);
+		}
+		else
+		{
+			this.graphics.drawImage(systemImage, pos.x, pos.y, size.x, size.y);
+		}
+	}
+
+	Display.prototype.drawLine = function(fromPos, toPos, color)
+	{
+		var drawPos = this.drawPos;
+
+		this.graphics.strokeStyle = color;
+			this.graphics.beginPath();
+
+		drawPos.overwriteWith(fromPos);
+		this.graphics.moveTo(drawPos.x, drawPos.y);
+
+		drawPos.overwriteWith(toPos);
+		this.graphics.lineTo(drawPos.x, drawPos.y);
+
+		this.graphics.stroke();
+	}
+
+	Display.prototype.drawPolygon = function(vertices, colorFill, colorBorder)
+	{
+		this.graphics.beginPath();
+
+		var drawPos = this.drawPos;
+		
+		for (var i = 0; i < vertices.length; i++)
+		{
+			var vertex = vertices[i];
+			drawPos.overwriteWith(vertex);
+			if (i == 0)
+			{
+				this.graphics.moveTo(drawPos.x, drawPos.y);
+			}
+			else
+			{
+				this.graphics.lineTo(drawPos.x, drawPos.y);
+			}
+		}
+
+		this.graphics.closePath();
+
+		if (colorFill != null)
+		{
+			this.graphics.fillStyle = colorFill;
+			this.graphics.fill();
+		}
+
+		if (colorBorder != null)
+		{
+			this.graphics.strokeStyle = colorBorder;
+			this.graphics.stroke();
+		}
 	}
 
 	Display.prototype.drawRectangle = function

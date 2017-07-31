@@ -5,7 +5,10 @@ function MediaLibrary(images, sounds, videos)
 	this.sounds = sounds.addLookups("name");
 	this.videos = videos.addLookups("name");
 }
-{
+
+{	
+	// accessors
+	
 	MediaLibrary.prototype.imageGetByName = function(name)
 	{
 		return this.images[name];

@@ -96,7 +96,7 @@ function ControlContainer(name, pos, size, children)
 		{
 			var child = this.children[i];
 
-			var doesChildContainPos = posToCheck.isWithinRange
+			var doesChildContainPos = posToCheck.isInRangeMinMax
 			(
 				child.pos,
 				child.pos.clone().add(child.size)
