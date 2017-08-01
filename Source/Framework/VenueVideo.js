@@ -40,7 +40,7 @@ function VenueVideo(videoName, venueNext)
 				if (inputToActionMapping != null)
 				{		
 					inputHelper.inputInactivate(inputActive);
-					var actionName = inputToActionMapping.actionDefnName;
+					var actionName = inputToActionMapping.actionName;
 					if (actionName == "VideoSkip")
 					{
 						hasUserSkippedVideo = true;

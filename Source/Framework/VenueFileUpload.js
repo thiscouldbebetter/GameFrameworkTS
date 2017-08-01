@@ -77,7 +77,7 @@ function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 			if (inputToActionMapping != null)
 			{
 				inputHelper.inputInactivate(inputActive);
-				var actionName = inputToActionMapping.actionDefnName;
+				var actionName = inputToActionMapping.actionName;
 				if (actionName == "ControlCancel")
 				{
 					Globals.Instance.universe.venueNext = this.venueNextIfCancelled;

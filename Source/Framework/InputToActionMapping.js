@@ -1,7 +1,7 @@
 
-function InputToActionMapping(inputName, actionDefnName, inactivateInputWhenActionPerformed)
+function InputToActionMapping(inputName, actionName, inactivateInputWhenActionPerformed)
 {
 	this.inputName = inputName;
-	this.actionDefnName = actionDefnName;
+	this.actionName = actionName;
 	this.inactivateInputWhenActionPerformed = inactivateInputWhenActionPerformed;
 }

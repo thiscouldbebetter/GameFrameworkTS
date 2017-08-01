@@ -67,7 +67,7 @@ function VenueControls(controlRoot)
 				}
 				else
 				{
-					var actionName = mapping.actionDefnName;
+					var actionName = mapping.actionName;
 					this.controlRoot.actionHandle(actionName);
 					if (mapping.inactivateInputWhenActionPerformed == true)
 					{
