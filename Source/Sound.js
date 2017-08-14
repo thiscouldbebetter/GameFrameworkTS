@@ -8,7 +8,7 @@ function Sound(name, sourcePath, isRepeating)
 	this.offsetInSeconds = 0;
 }
 
-{	
+{
 	Sound.prototype.domElementBuild = function(volume)
 	{
 		this.domElement = document.createElement("audio");
@@ -38,7 +38,7 @@ function Sound(name, sourcePath, isRepeating)
 
 	Sound.prototype.play = function(volume)
 	{
-		this.domElementBuild(volume);	
+		this.domElementBuild(volume);
 		this.domElement.currentTime = this.offsetInSeconds;
 
 		Globals.Instance.platformHelper.domElementAdd

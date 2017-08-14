@@ -136,7 +136,7 @@ function ControlContainer(name, pos, size, children)
 				childWithFocus.focusLose();
 				childWithFocus = this.childWithFocusNextInDirection(direction);
 				childWithFocus.focusGain();
-			}			
+			}
 		}
 		else if (childWithFocus != null)
 		{
@@ -235,5 +235,5 @@ function ControlContainer(name, pos, size, children)
 			var child = children[i];
 			child.draw();
 		}
-	}	
+	}
 }

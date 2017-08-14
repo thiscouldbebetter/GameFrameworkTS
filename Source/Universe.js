@@ -53,7 +53,7 @@ function Universe(name, world)
 			)
 			{
 				this.venueCurrent.finalize();
-			}			
+			}
 
 			this.venueCurrent = this.venueNext;
 			this.venueNext = null;

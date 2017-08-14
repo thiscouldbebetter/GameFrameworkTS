@@ -4,7 +4,7 @@ function InputHelper()
 	// do nothing
 }
 
-{	
+{
 	InputHelper.prototype.initialize = function()
 	{
 		this.inputsPressed = [];
@@ -47,7 +47,7 @@ function InputHelper()
 				this.inputsActive[inputPressed] = inputPressed;
 				this.inputsActive.push(inputPressed);
 			}
-		}	
+		}
 	}
 
 	InputHelper.prototype.inputInactivate = function(inputToInactivate)
@@ -102,7 +102,7 @@ function InputHelper()
 					else
 					{
 						this.inputRemove(gamepadIDMove + "Up");
-						this.inputRemove(gamepadIDMove + "Down");						
+						this.inputRemove(gamepadIDMove + "Down");
 					}
 				}
 				else
@@ -114,7 +114,7 @@ function InputHelper()
 					}
 					else
 					{
-						directionName = (axisDisplacement < 0 ? "Up" : "Down");						
+						directionName = (axisDisplacement < 0 ? "Up" : "Down");
 					}
 
 					this.inputAdd(gamepadIDMove + directionName);
@@ -133,7 +133,7 @@ function InputHelper()
 				}
 				else
 				{
-					this.inputRemove(gamepadIDButton + b);					
+					this.inputRemove(gamepadIDButton + b);
 				}
 			}
 		}
@@ -151,7 +151,7 @@ function InputHelper()
 		
 		if (isNaN(parseInt(inputPressed)) == false)
 		{
-			inputPressed = "_" + inputPressed;	
+			inputPressed = "_" + inputPressed;
 		}
 
 		this.inputAdd(inputPressed);
@@ -163,7 +163,7 @@ function InputHelper()
 		
 		if (isNaN(parseInt(inputReleased)) == false)
 		{
-			inputReleased = "_" + inputReleased;	
+			inputReleased = "_" + inputReleased;
 		}
 		
 		this.inputRemove(inputReleased);
@@ -176,7 +176,7 @@ function InputHelper()
 		this.isMouseClicked = true;
 		
 		var canvas = event.target;
-		var canvasBounds = canvas.getBoundingClientRect();	
+		var canvasBounds = canvas.getBoundingClientRect();
 		this.mouseClickPos.overwriteWithXY
 		(
 			event.clientX - canvasBounds.left, 
@@ -194,7 +194,7 @@ function InputHelper()
 		);
 	
 		var canvas = event.target;
-		var canvasBounds = canvas.getBoundingClientRect();	
+		var canvasBounds = canvas.getBoundingClientRect();
 		this.mouseMovePos.overwriteWithXY
 		(
 			event.clientX - canvasBounds.left, 
@@ -205,7 +205,7 @@ function InputHelper()
 	InputHelper.prototype.handleEventMouseUp = function(event)
 	{
 		this.isMouseClicked = false;
-	}	
+	}
 	
 	// gamepads
 	

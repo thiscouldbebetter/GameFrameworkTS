@@ -16,12 +16,12 @@ function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 	
 	VenueFileUpload.prototype.finalize = function()
 	{
-		Globals.Instance.platformHelper.domElementRemove(this.domElement);		
+		Globals.Instance.platformHelper.domElementRemove(this.domElement);
 		
 		var display = Globals.Instance.display;
 		display.clear("Black");
 		display.show();
-	}	
+	}
 	
 	VenueFileUpload.prototype.initialize = function()
 	{
@@ -90,8 +90,8 @@ function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 	
 	VenueFileUpload.prototype.buttonCancel_Clicked = function(event)
 	{
-		Globals.Instance.universe.venueNext = this.venueNextIfCancelled;		
-	}	
+		Globals.Instance.universe.venueNext = this.venueNextIfCancelled;
+	}
 	
 	VenueFileUpload.prototype.buttonLoad_Clicked = function(event)
 	{

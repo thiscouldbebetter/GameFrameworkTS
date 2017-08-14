@@ -207,7 +207,7 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 
 	Display.prototype.hide = function()
 	{
-		Globals.Instance.platformHelper.domElementRemove(this.canvasLive);		
+		Globals.Instance.platformHelper.domElementRemove(this.canvasLive);
 	}
 
 	Display.prototype.initialize = function()
@@ -241,7 +241,7 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 
 	Display.prototype.show = function()
 	{
-		Globals.Instance.platformHelper.domElementAdd(this.canvasLive);		
+		Globals.Instance.platformHelper.domElementAdd(this.canvasLive);
 	}
 	
 	Display.prototype.textWidthForFontHeight = function(textToMeasure, fontHeightInPixels)

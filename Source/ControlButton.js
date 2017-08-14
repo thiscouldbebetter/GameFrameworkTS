@@ -9,7 +9,7 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, cli
 	this.hasBorder = hasBorder;
 	this.click = click;
 
-	this.isHighlighted = false;	
+	this.isHighlighted = false;
 }
 
 {

@@ -1,7 +1,7 @@
 
 function VisualPolygon(color, vertices)
 {
-	this.color = color;	
+	this.color = color;
 	this.vertices = vertices;
 
 	this.verticesTransformed = [];

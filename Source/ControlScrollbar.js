@@ -84,7 +84,7 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, dataBinding
 	}
 		
 	ControlScrollbar.prototype.sliderPosInPixels = function()
-	{					
+	{
 		var sliderPosInPixels = this.pos.clone().add
 		(
 			new Coords
@@ -97,11 +97,11 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, dataBinding
 			)
 		);
 		
-		return sliderPosInPixels;		
+		return sliderPosInPixels;
 	}
 	
 	ControlScrollbar.prototype.sliderSizeInPixels = function()
-	{		
+	{
 		var sliderSizeInPixels = this.slideSizeInPixels().multiply
 		(
 			new Coords(1, this.windowSizeInItems / this.items().length)

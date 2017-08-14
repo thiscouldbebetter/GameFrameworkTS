@@ -48,7 +48,7 @@ function ControlSelect
 		// This is somewhat counterintuitive.
 		if (actionNameToHandle == "ControlDecrement")
 		{
-			this.optionSelectedNextInDirection(1);			
+			this.optionSelectedNextInDirection(1);
 		}
 		else if 
 		(
@@ -96,7 +96,7 @@ function ControlSelect
 			);
 		};
 	
-		return returnValue;	
+		return returnValue;
 	}
 	
 	ControlSelect.prototype.optionSelectedNextInDirection = function(direction)
@@ -106,7 +106,7 @@ function ControlSelect
 		this.indexOfOptionSelected = NumberHelper.wrapValueToRangeMinMax
 		(
 			this.indexOfOptionSelected + direction, 0, options.length
-		);		
+		);
 		
 		var optionSelected = this.optionSelected();
 

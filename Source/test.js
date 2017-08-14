@@ -20,7 +20,7 @@ function test()
 		testSerializer,
 	];
 
-	new TestFixture(tests).runTests();	
+	new TestFixture(tests).runTests();
 }
 
 // classes
@@ -33,7 +33,7 @@ function TestFixture(tests)
 	// methods
 	
 	TestFixture.prototype.runTests = function()
-	{		
+	{
 		var testsFailed = [];
 	
 		for (var i = 0; i < this.tests.length; i++)

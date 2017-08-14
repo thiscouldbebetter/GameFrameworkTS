@@ -21,7 +21,7 @@ function VenueVideo(videoName, venueNext)
 			Globals.Instance.display.hide();
 			this.video = Globals.Instance.videoHelper.videos[this.videoName];
 			this.video.play();
-		}	
+		}
 
 		var hasUserSkippedVideo = false;
 		var inputHelper = Globals.Instance.inputHelper;
@@ -38,7 +38,7 @@ function VenueVideo(videoName, venueNext)
 				var inputActive = inputsActive[i];
 				var inputToActionMapping = this.inputToActionMappings[inputActive];
 				if (inputToActionMapping != null)
-				{		
+				{
 					inputHelper.inputInactivate(inputActive);
 					var actionName = inputToActionMapping.actionName;
 					if (actionName == "VideoSkip")

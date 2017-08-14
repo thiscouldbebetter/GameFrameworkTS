@@ -13,13 +13,13 @@ function VenueMessage(messageToShow, venueNext)
 			// acknowledge
 			function()
 			{
-				Globals.Instance.universe.world.venueNext = venueNext;
+				Globals.Instance.universe.venueNext = venueNext;
 			}
 		)
 	);
 }
 
-{	
+{
 	VenueMessage.prototype.draw = function()
 	{
 		this.venueControls.draw();

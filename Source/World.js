@@ -54,7 +54,7 @@ function World(name, size, cursorPos)
 	{ 
 		if (this._dateCreated == null)
 		{
-			this._dateCreated = DateTime.now();	
+			this._dateCreated = DateTime.now();
 		}
 		return this._dateCreated; 
 	}
@@ -192,14 +192,13 @@ function World(name, size, cursorPos)
 				messageToDisplay = "You win!"
 			}
 		}
-			
+		
 		if (messageToDisplay != null)
 		{
-			var worldNext = World.new();
 			var venueNext = new VenueMessage
 			(
 				messageToDisplay,
-				new VenueWorld(worldNext)
+				new VenueControls(new ControlBuilder().title(Globals.Instance.display.sizeInPixels))
 			);
 			venueNext = new VenueFader(venueNext);
 			

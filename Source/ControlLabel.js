@@ -44,6 +44,6 @@ function ControlLabel(name, pos, size, isTextCentered, text, fontHeightInPixels)
 		}
 
 		var drawPos = pos.clone().add(textMargins);
-		display.drawText(text, this.fontHeightInPixels, drawPos, display.colorFore);				
+		display.drawText(text, this.fontHeightInPixels, drawPos, display.colorFore);
 	}
 }

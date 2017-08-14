@@ -6,7 +6,7 @@ function VenueFader
 	millisecondsPerFade
 )
 {
-	this.millisecondsPerFade = millisecondsPerFade;	
+	this.millisecondsPerFade = millisecondsPerFade;
 	if (this.millisecondsPerFade == null)
 	{
 		this.millisecondsPerFade = 250;
@@ -59,7 +59,7 @@ function VenueFader
 		if (this.venueIndexCurrent == 0)
 		{
 			if (fractionOfFadeCompleted > 1)
-			{			
+			{
 				fractionOfFadeCompleted = 1;
 				this.venueIndexCurrent++;
 				this.timeFadeStarted = null;

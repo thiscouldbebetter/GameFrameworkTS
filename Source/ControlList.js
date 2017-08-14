@@ -103,7 +103,7 @@ function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForI
 		}
 		else if (this.indexOfItemSelected > indexOfLastItemVisible)
 		{
-			this.scrollbar.sliderPosInItems++;			
+			this.scrollbar.sliderPosInItems++;
 		}
 
 		return this.itemSelected();

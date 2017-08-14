@@ -46,7 +46,7 @@ function SerializerNode(objectWrapped)
 	)
 	{
 		if (this.objectWrapped != null)
-		{			
+		{
 			var typeName = this.objectWrapped.constructor.name;
 
 			var objectIndexExisting = 
@@ -88,7 +88,7 @@ function SerializerNode(objectWrapped)
 								child = null;
 							}
 							else 
-							{			
+							{
 								var propertyValueTypeName = propertyValue.constructor.name;
 
 								if 
@@ -137,7 +137,7 @@ function SerializerNode(objectWrapped)
 
 		} // end if objectWrapped != null
 
-		return this;		
+		return this;
 
 	} // end method
 

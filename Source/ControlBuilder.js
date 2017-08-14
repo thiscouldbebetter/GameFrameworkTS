@@ -6,17 +6,15 @@ function ControlBuilder()
 	this.fontHeightInPixelsBase = 10;
 	this.sizeBase = new Coords(200, 150);
 }
-{	
+{
 	ControlBuilder.prototype.configure = function(size)
-	{		
+	{
 		if (size == null)
 		{
-			sizeMultiplier = new Coords(1, 1);
+			size = Globals.Instance.display.sizeInPixels.clone();
 		}
-		else
-		{
-			sizeMultiplier = size.clone().divide(this.sizeBase);
-		}
+
+		sizeMultiplier = size.clone().divide(this.sizeBase);
 	
 		var returnValue = new ControlContainer
 		(
@@ -36,8 +34,8 @@ function ControlBuilder()
 					// click
 					function ()
 					{
-						var universe = Globals.Instance.universe;						
-						var venueNext = new VenueControls(new ControlBuilder().worldSave(size));
+						var universe = Globals.Instance.universe;
+						var venueNext = new VenueControls(new ControlBuilder().worldSave());
 						venueNext = new VenueFader(venueNext);
 						universe.venueNext = venueNext;
 					}
@@ -55,7 +53,7 @@ function ControlBuilder()
 					function ()
 					{
 						var universe = Globals.Instance.universe;
-						var venueNext = new VenueControls(new ControlBuilder().worldLoad(size));
+						var venueNext = new VenueControls(new ControlBuilder().worldLoad());
 						venueNext = new VenueFader(venueNext);
 						universe.venueNext = venueNext;
 					}
@@ -173,7 +171,7 @@ function ControlBuilder()
 								var universe = Globals.Instance.universe;
 								var venueNext = new VenueControls
 								(
-									new ControlBuilder().title(size)
+									new ControlBuilder().title()
 								);
 								venueNext = new VenueFader(venueNext);
 								universe.venueNext = venueNext;
@@ -184,11 +182,11 @@ function ControlBuilder()
 								var universe = Globals.Instance.universe;
 								var venueNext = new VenueControls
 								(
-									new ControlBuilder().configure(size)
+									new ControlBuilder().configure()
 								);
 								venueNext = new VenueFader(venueNext);
 								universe.venueNext = venueNext;
-							}						
+							}
 						);
 
 						var venueNext = new VenueControls(controlConfirm);
@@ -206,12 +204,10 @@ function ControlBuilder()
 	{
 		if (size == null)
 		{
-			sizeMultiplier = new Coords(1, 1);
+			size = Globals.Instance.display.sizeInPixels.clone();
 		}
-		else
-		{
-			sizeMultiplier = size.clone().divide(this.sizeBase);
-		}
+
+		sizeMultiplier = size.clone().divide(this.sizeBase);
 				
 		var returnValue = new ControlContainer
 		(
@@ -261,12 +257,10 @@ function ControlBuilder()
 	{
 		if (size == null)
 		{
-			sizeMultiplier = new Coords(1, 1);
+			size = Globals.Instance.display.sizeInPixels.clone();
 		}
-		else
-		{
-			sizeMultiplier = size.clone().divide(this.sizeBase);
-		}
+
+		sizeMultiplier = size.clone().divide(this.sizeBase);
 				
 		var returnValue = new ControlContainer
 		(
@@ -305,12 +299,10 @@ function ControlBuilder()
 	{
 		if (size == null)
 		{
-			sizeMultiplier = new Coords(1, 1);
+			size = Globals.Instance.display.sizeInPixels.clone();
 		}
-		else
-		{
-			sizeMultiplier = size.clone().divide(this.sizeBase);
-		}
+
+		sizeMultiplier = size.clone().divide(this.sizeBase);
 		
 		var returnValue = new ControlContainer
 		(
@@ -378,7 +370,7 @@ function ControlBuilder()
 						universe.world = world;
 						var venueNext = new VenueControls
 						(
-							new ControlBuilder().worldDetail(size)
+							new ControlBuilder().worldDetail()
 						);
 						venueNext = new VenueFader(venueNext);
 						universe.venueNext = venueNext;
@@ -404,7 +396,7 @@ function ControlBuilder()
 							universe.world = worldSelected;
 							var venueNext = new VenueControls
 							(
-								new ControlBuilder().worldDetail(size)
+								new ControlBuilder().worldDetail()
 							);
 							venueNext = new VenueFader(venueNext);
 							universe.venueNext = venueNext;
@@ -425,7 +417,7 @@ function ControlBuilder()
 					{
 						var venueNext = new VenueControls
 						(
-							new ControlBuilder().profileSelect(size)
+							new ControlBuilder().profileSelect()
 						);
 						venueNext = new VenueFader(venueNext);
 						var universe = Globals.Instance.universe;
@@ -465,7 +457,7 @@ function ControlBuilder()
 
 								var venueNext = new VenueControls
 								(
-									new ControlBuilder().profileSelect(size)
+									new ControlBuilder().profileSelect()
 								);
 								venueNext = new VenueFader(venueNext);
 								universe.venueNext = venueNext;
@@ -475,12 +467,12 @@ function ControlBuilder()
 							{
 								var venueNext = new VenueControls
 								(
-									new ControlBuilder().profileDetail(size)
+									new ControlBuilder().profileDetail()
 								);
 								venueNext = new VenueFader(venueNext);
 								var universe = Globals.Instance.universe;
 								universe.venueNext = venueNext;
-							}						
+							}
 						);
 
 						var venueNext = new VenueControls(controlConfirm);
@@ -498,12 +490,10 @@ function ControlBuilder()
 	{
 		if (size == null)
 		{
-			sizeMultiplier = new Coords(1, 1);
+			size = Globals.Instance.display.sizeInPixels.clone();
 		}
-		else
-		{
-			sizeMultiplier = size.clone().divide(this.sizeBase);
-		}
+
+		sizeMultiplier = size.clone().divide(this.sizeBase);
 		
 		return new ControlContainer
 		(
@@ -559,7 +549,7 @@ function ControlBuilder()
 						universe.profile = profile;
 						var venueNext = new VenueControls
 						(
-							new ControlBuilder().profileDetail(size)
+							new ControlBuilder().profileDetail()
 						);
 						venueNext = new VenueFader(venueNext);
 						universe.venueNext = venueNext;
@@ -580,7 +570,7 @@ function ControlBuilder()
 						var universe = Globals.Instance.universe;
 						var venueNext = new VenueControls
 						(
-							new ControlBuilder().profileSelect(size)
+							new ControlBuilder().profileSelect()
 						);
 						venueNext = new VenueFader(venueNext);
 						universe.venueNext = venueNext;
@@ -594,12 +584,10 @@ function ControlBuilder()
 	{
 		if (size == null)
 		{
-			sizeMultiplier = new Coords(1, 1);
+			size = Globals.Instance.display.sizeInPixels.clone();
 		}
-		else
-		{
-			sizeMultiplier = size.clone().divide(this.sizeBase);
-		}		
+
+		sizeMultiplier = size.clone().divide(this.sizeBase);
 		
 		var profiles = Globals.Instance.profileHelper.profiles();
 		
@@ -648,7 +636,7 @@ function ControlBuilder()
 						var universe = Globals.Instance.universe;
 						var venueNext = new VenueControls
 						(
-							new ControlBuilder().profileNew(size)
+							new ControlBuilder().profileNew()
 						);
 						venueNext = new VenueFader(venueNext);
 						universe.venueNext = venueNext;
@@ -666,14 +654,14 @@ function ControlBuilder()
 					true, // hasBorder
 					// click
 					function()
-					{	
+					{
 						var listProfiles = this.parent.children["listProfiles"];
 						var profileSelected = listProfiles.itemSelected();
 						var universe = Globals.Instance.universe;
 						universe.profile = profileSelected;
 						var venueNext = new VenueControls
 						(
-							new ControlBuilder().profileDetail(size)
+							new ControlBuilder().profileDetail()
 						);
 						venueNext = new VenueFader(venueNext);
 						universe.venueNext = venueNext;
@@ -684,18 +672,16 @@ function ControlBuilder()
 		);
 
 		return returnValue;
-	}	
+	}
 
 	ControlBuilder.prototype.title = function(size)
 	{
 		if (size == null)
 		{
-			sizeMultiplier = new Coords(1, 1);
+			size = Globals.Instance.display.sizeInPixels.clone();
 		}
-		else
-		{
-			sizeMultiplier = size.clone().divide(this.sizeBase);
-		}
+
+		sizeMultiplier = size.clone().divide(this.sizeBase);
 		
 		var returnValue = new ControlContainer
 		(
@@ -725,7 +711,7 @@ function ControlBuilder()
 					{
 						var venueNext = new VenueControls
 						(
-							new ControlBuilder().profileSelect(size)
+							new ControlBuilder().profileSelect()
 						);
 						venueNext = new VenueFader(venueNext);
 						var universe = Globals.Instance.universe;
@@ -757,19 +743,17 @@ function ControlBuilder()
 			]
 		);
 		
-		return returnValue
+		return returnValue;
 	}
 
 	ControlBuilder.prototype.worldDetail = function(size)
 	{
 		if (size == null)
 		{
-			sizeMultiplier = new Coords(1, 1);
+			size = Globals.Instance.display.sizeInPixels.clone();
 		}
-		else
-		{
-			sizeMultiplier = size.clone().divide(this.sizeBase);
-		}		
+
+		sizeMultiplier = size.clone().divide(this.sizeBase);
 		
 		var universe = Globals.Instance.universe;
 		var world = universe.world;
@@ -858,7 +842,7 @@ function ControlBuilder()
 					{
 						var venueNext = new VenueControls
 						(
-							new ControlBuilder().profileDetail(size)
+							new ControlBuilder().profileDetail()
 						);
 						venueNext = new VenueFader(venueNext);
 						var universe = Globals.Instance.universe;
@@ -910,7 +894,7 @@ function ControlBuilder()
 
 								var venueNext = new VenueControls
 								(
-									new ControlBuilder().profileDetail(size)
+									new ControlBuilder().profileDetail()
 								);
 								venueNext = new VenueFader(venueNext);
 								universe.venueNext = venueNext;
@@ -920,12 +904,12 @@ function ControlBuilder()
 							{
 								var venueNext = new VenueControls
 								(
-									new ControlBuilder().worldDetail(size)
+									new ControlBuilder().worldDetail()
 								);
 								venueNext = new VenueFader(venueNext);
 								var universe = Globals.Instance.universe;
 								universe.venueNext = venueNext;
-							}						
+							}
 						);
 
 						var venueNext = new VenueControls(controlConfirm);
@@ -938,18 +922,16 @@ function ControlBuilder()
 		);
 
 		return returnValue;
-	}	
+	}
 	
 	ControlBuilder.prototype.worldLoad = function(size)
-	{		
+	{
 		if (size == null)
 		{
-			sizeMultiplier = new Coords(1, 1);
+			size = Globals.Instance.display.sizeInPixels.clone();
 		}
-		else
-		{
-			sizeMultiplier = size.clone().divide(this.sizeBase);
-		}
+
+		sizeMultiplier = size.clone().divide(this.sizeBase);
 	
 		var returnValue = new ControlContainer
 		(
@@ -1004,7 +986,7 @@ function ControlBuilder()
 								
 								var venueNext = new VenueControls
 								(
-									new ControlBuilder().worldLoad(size)
+									new ControlBuilder().worldLoad()
 								);
 								venueNext = new VenueFader(venueNext);
 								universe.venueNext = venueNext;
@@ -1022,7 +1004,7 @@ function ControlBuilder()
 											{
 												var venueNext = new VenueControls
 												(
-													new ControlBuilder().worldLoad(size)
+													new ControlBuilder().worldLoad()
 												);
 												venueNext = new VenueFader(venueNext);
 												Globals.Instance.universe.venueNext = venueNext;
@@ -1034,7 +1016,7 @@ function ControlBuilder()
 								}
 								else
 								{
-									universe.world = worldReloaded;		
+									universe.world = worldReloaded;
 								}
 								
 							},
@@ -1044,14 +1026,14 @@ function ControlBuilder()
 								var universe = Globals.Instance.universe;
 								var venueNext = new VenueControls
 								(
-									new ControlBuilder().worldLoad(size)
+									new ControlBuilder().worldLoad()
 								);
 								venueNext = new VenueFader(venueNext);
 								universe.venueNext = venueNext;
-							}						
+							}
 						);
 						
-						var universe = Globals.Instance.universe;						
+						var universe = Globals.Instance.universe;
 						var venueNext = new VenueControls(controlConfirm);
 						venueNext = new VenueFader(venueNext);
 						universe.venueNext = venueNext;
@@ -1091,7 +1073,7 @@ function ControlBuilder()
 										var universe = Globals.Instance.universe;
 										universe.world = worldDeserialized;
 				
-										var venueNext = new VenueControls(new ControlBuilder().configure(size));
+										var venueNext = new VenueControls(new ControlBuilder().configure());
 										venueNext = new VenueFader(venueNext);
 										universe.venueNext = venueNext;
 									}
@@ -1118,9 +1100,9 @@ function ControlBuilder()
 								// acknowledge 
 								function()
 								{
-									var venueNext = new VenueControls(new ControlBuilder().configure(size));
+									var venueNext = new VenueControls(new ControlBuilder().configure());
 									venueNext = new VenueFader(venueNext);
-									Globals.Instance.universe.venueNext = venueNext;	
+									Globals.Instance.universe.venueNext = venueNext;
 								}
 							)
 						);
@@ -1144,7 +1126,7 @@ function ControlBuilder()
 					function()
 					{
 						var universe = Globals.Instance.universe;
-						var venueNext = new VenueControls(new ControlBuilder().configure(size));
+						var venueNext = new VenueControls(new ControlBuilder().configure());
 						venueNext = new VenueFader(venueNext);
 						universe.venueNext = venueNext;
 					}
@@ -1157,15 +1139,13 @@ function ControlBuilder()
 	}
 		
 	ControlBuilder.prototype.worldSave = function(size)
-	{		
+	{
 		if (size == null)
 		{
-			sizeMultiplier = new Coords(1, 1);
+			size = Globals.Instance.display.sizeInPixels.clone();
 		}
-		else
-		{
-			sizeMultiplier = size.clone().divide(this.sizeBase);
-		}
+
+		sizeMultiplier = size.clone().divide(this.sizeBase);
 	
 		var returnValue = new ControlContainer
 		(
@@ -1205,7 +1185,7 @@ function ControlBuilder()
 								function()
 								{
 									var universe = Globals.Instance.universe;
-									var venueNext = new VenueControls(new ControlBuilder().configure(size));
+									var venueNext = new VenueControls(new ControlBuilder().configure());
 									venueNext = new VenueFader(venueNext);
 									universe.venueNext = venueNext;
 								}
@@ -1250,7 +1230,7 @@ function ControlBuilder()
 								function()
 								{
 									var universe = Globals.Instance.universe;
-									var venueNext = new VenueControls(new ControlBuilder().configure(size));
+									var venueNext = new VenueControls(new ControlBuilder().configure());
 									venueNext = new VenueFader(venueNext);
 									universe.venueNext = venueNext;
 								}
@@ -1260,7 +1240,7 @@ function ControlBuilder()
 						universe.venueNext = venueNext;
 					}
 				),
-								
+				
 				new ControlButton
 				(
 					"buttonReturn",
@@ -1273,7 +1253,7 @@ function ControlBuilder()
 					function()
 					{
 						var universe = Globals.Instance.universe;
-						var venueNext = new VenueControls(new ControlBuilder().configure(size));
+						var venueNext = new VenueControls(new ControlBuilder().configure());
 						venueNext = new VenueFader(venueNext);
 						universe.venueNext = venueNext;
 					}

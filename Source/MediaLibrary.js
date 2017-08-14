@@ -6,7 +6,7 @@ function MediaLibrary(images, sounds, videos)
 	this.videos = videos.addLookups("name");
 }
 
-{	
+{
 	// accessors
 
 	MediaLibrary.prototype.imagesAdd = function(images)

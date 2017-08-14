@@ -55,7 +55,7 @@ function FileHelper()
 	
 	FileHelper.prototype.saveTextStringToFileWithName = function(textToSave, fileNameToSaveAs)
 	{
-		var textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"});	 
+		var textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"});
         var link = document.createElement("a");
         link.href = window.URL.createObjectURL(textToSaveAsBlob);
         link.download = fileNameToSaveAs;

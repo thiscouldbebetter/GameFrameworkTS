@@ -36,7 +36,7 @@ function CollisionHelper()
 						[entityFromSet0, entityFromSet1]
 					);
 					returnValues.push(collision);
-				}				
+				}
 			}
 		}
 
