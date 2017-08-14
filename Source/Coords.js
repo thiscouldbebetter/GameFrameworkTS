@@ -204,4 +204,11 @@ function Coords(x, y)
 		
 		return this;
 	}
+	
+	// string
+	
+	Coords.prototype.toString = function()
+	{
+		return this.x + "x" + this.y;
+	}
 }
