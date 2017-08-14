@@ -7,6 +7,8 @@ function Location(pos)
 	this.vel = new Coords(0, 0);
 	this.accel = new Coords(0, 0);
 	this.force = new Coords(0, 0);
+	
+	this.timeOffsetInTicks = 0;
 }
 
 {
@@ -17,28 +19,15 @@ function Location(pos)
 			this.pos.clone()
 		);
 
-		returnValue.venue = returnValue.venue;
-		returnValue.vel = returnValue.vel.clone();
-		returnValue.accel = returnValue.accel.clone();
-		returnValue.force = returnValue.force.clone();
+		returnValue.venue = this.venue;
+		returnValue.vel = this.vel.clone();
+		returnValue.accel = this.accel.clone();
+		returnValue.force = this.force.clone();
+		returnValue.timeOffsetInTicks = this.timeOffsetInTicks;
 
 		return returnValue;
 	}
 	
-	Location.prototype.headingInTurns = function()
-	{
-		var forward = this.orientation.forward;
-		var returnValue = 
-			Math.atan2(forward.y, forward.x) / (Math.PI * 2);
-			
-		if (returnValue < 0)
-		{
-			returnValue += 1;
-		}
-		
-		return returnValue;
-	}
-
 	Location.prototype.overwriteWith = function(other)
 	{
 		this.venue = other.venue;

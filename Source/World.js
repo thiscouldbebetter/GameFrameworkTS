@@ -8,13 +8,65 @@ function World(name, size, cursorPos)
 	this.name = name;
 	this.size = size;
 	
+	this.timerTicksSoFar = 0;
+	
 	this.cursorLoc = new Location(cursorPos);
 	this.goalLoc = new Location(new Coords().randomize().multiply(this.size));
 	this.enemyLoc = new Location(this.size.clone().subtract(cursorPos));
 	
 	var entityDimension = 10;
 	var cursorSize = new Coords(1, 1).multiplyScalar(entityDimension);
-	this.visualForCursor = new VisualRectangle("Gray", cursorSize);
+	
+	var cursorColor = "Gray";
+	var visualRectangleLarge = new VisualRectangle(cursorColor, cursorSize);
+	var visualRectangleSmall = new VisualRectangle(cursorColor, cursorSize.clone().divideScalar(4));
+	this.visualForCursor = new VisualGroup
+	([
+		visualRectangleLarge,
+		new VisualDirectional
+		(
+			new VisualNone(),
+			[
+				new VisualAnimation
+				(
+					5, // ticksPerFrame 
+					[
+						new VisualOffset(visualRectangleSmall, new Coords(1, 0).multiplyScalar(entityDimension)),
+						new VisualOffset(visualRectangleSmall, new Coords(1.5, 0).multiplyScalar(entityDimension)),
+						new VisualOffset(visualRectangleSmall, new Coords(2, 0).multiplyScalar(entityDimension)),
+					]
+				),
+				new VisualAnimation
+				(
+					5, // ticksPerFrame 
+					[
+						new VisualOffset(visualRectangleSmall, new Coords(0, 1).multiplyScalar(entityDimension)),
+						new VisualOffset(visualRectangleSmall, new Coords(0, 1.5).multiplyScalar(entityDimension)),
+						new VisualOffset(visualRectangleSmall, new Coords(0, 2).multiplyScalar(entityDimension)),
+					]
+				),
+				new VisualAnimation
+				(
+					5, // ticksPerFrame 
+					[
+						new VisualOffset(visualRectangleSmall, new Coords(-1, 0).multiplyScalar(entityDimension)),
+						new VisualOffset(visualRectangleSmall, new Coords(-1.5, 0).multiplyScalar(entityDimension)),
+						new VisualOffset(visualRectangleSmall, new Coords(-2, 0).multiplyScalar(entityDimension)),
+					]
+				),
+				new VisualAnimation
+				(
+					5, // ticksPerFrame 
+					[
+						new VisualOffset(visualRectangleSmall, new Coords(0, -1).multiplyScalar(entityDimension)),
+						new VisualOffset(visualRectangleSmall, new Coords(0, -1.5).multiplyScalar(entityDimension)),
+						new VisualOffset(visualRectangleSmall, new Coords(0, -2).multiplyScalar(entityDimension)),
+					]
+				),
+			]
+		)
+	]); 
+	
 	this.visualForGoal = new VisualCircle("Green", entityDimension);
 	this.visualForEnemy = new VisualPolygon
 	(
@@ -84,10 +136,13 @@ function World(name, size, cursorPos)
 		this.updateForTimerTick_Input();
 		this.updateForTimerTick_Agents();
 		this.updateForTimerTick_WinOrLose();
+		this.timerTicksSoFar++;
 	}
 	
 	World.prototype.updateForTimerTick_Input = function()
 	{
+		this.cursorLoc.orientation.forward(Coords.Instances.Zeroes);
+
 		var inputHelper = Globals.Instance.inputHelper;
 		if (inputHelper.isMouseClicked == true)
 		{
@@ -143,7 +198,14 @@ function World(name, size, cursorPos)
 					directionToMove = new Coords(0, 0);
 				}
 				
-				this.cursorLoc.pos.add(directionToMove).trimToRangeMax(this.size);
+				this.cursorLoc.orientation.forward(directionToMove);
+				var vel = this.cursorLoc.vel;
+				if (vel.equals(directionToMove) == false)
+				{
+					this.cursorLoc.timeOffsetInTicks = this.timerTicksSoFar;
+				}
+				vel.overwriteWith(directionToMove);
+				this.cursorLoc.pos.add(vel).trimToRangeMax(this.size);
 			}
 		}
 	}
@@ -173,7 +235,7 @@ function World(name, size, cursorPos)
 			this.enemyLoc.pos
 		).magnitude();
 	
-		if (distanceOfCursorFromEnemy < this.visualForCursor.size.x)
+		if (distanceOfCursorFromEnemy < this.visualForCursor.children[0].size.x)
 		{
 			messageToDisplay = "You lose!";
 		}
