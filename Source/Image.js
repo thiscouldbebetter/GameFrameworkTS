@@ -3,22 +3,41 @@ function Image(name, sourcePath)
 {
 	this.name = name;
 	this.sourcePath = sourcePath;
+	
+	this.load();
 }
 {
-	Image.prototype.systemImage = function()
+	// static methods
+
+	Image.fromSystemImage = function(name, systemImage)
 	{
-		if (this._systemImage == null)
-		{
-			var image = this;
-			
-			this._systemImage = document.createElement("img");
-			this._systemImage.onload = function(event)
-			{
-				image.isLoaded = true;
-			}
-			this._systemImage.src = this.sourcePath;
-		}
+		var returnValue = new Image
+		(
+			name, 
+			systemImage.src
+		);
+
+		return returnValue;
+	}
 	
-		return this._systemImage;
+	// instance methods
+		
+	Image.prototype.load = function()
+	{
+		var image = this;
+		
+		var imgElement = document.createElement("img");
+		imgElement.onload = function(event)
+		{
+			var imgLoaded = event.target;
+			image.isLoaded = true;
+			image.systemImage = imgLoaded;
+			image.sizeInPixels = new Coords
+			(
+				imgLoaded.width, 
+				imgLoaded.height
+			);
+		}
+		imgElement.src = this.sourcePath;
 	}
 }

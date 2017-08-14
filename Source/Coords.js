@@ -6,10 +6,32 @@ function Coords(x, y)
 }
 
 {
+	Coords.Instances = new Coords_Instances();
+
+	function Coords_Instances()
+	{
+		this.Ones = new Coords(1, 1);
+		this.Zeroes = new Coords(0, 0);
+	}
+
 	Coords.prototype.add = function(other)
 	{
 		this.x += other.x;
 		this.y += other.y;
+		return this;
+	}
+
+	Coords.prototype.addXY = function(x, y)
+	{
+		this.x += x;
+		this.y += y;
+		return this;
+	}
+	
+	Coords.prototype.clear = function()
+	{
+		this.x = 0;
+		this.y = 0;
 		return this;
 	}
 
@@ -99,6 +121,13 @@ function Coords(x, y)
 		this.y = Math.random();
 		return this;
 	}
+
+	Coords.prototype.round = function()
+	{
+		this.x = Math.round(this.x);
+		this.y = Math.round(this.y);
+		return this;
+	}
 	
 	Coords.prototype.subtract = function(other)
 	{
@@ -125,6 +154,52 @@ function Coords(x, y)
 		else if (this.y >= max.y)
 		{
 			this.y = max.y;
+		}
+		
+		return this;
+	}
+	
+	Coords.prototype.trimToRangeMinMax = function(min, max)
+	{
+		if (this.x < min.x)
+		{
+			this.x = min.x;
+		}
+		else if (this.x >= max.x)
+		{
+			this.x = max.x;
+		}
+
+		if (this.y < min.y)
+		{
+			this.y = min.y;
+		}
+		else if (this.y >= max.y)
+		{
+			this.y = max.y;
+		}
+		
+		return this;
+	}
+	
+	Coords.prototype.wrapToRangeMax = function(max)
+	{
+		while (this.x < 0)
+		{
+			this.x += max.x;
+		}
+		while (this.x >= max.x)
+		{
+			this.x -= max.x;
+		}
+
+		while (this.y < 0)
+		{
+			this.y += max.y;
+		}
+		while (this.y >= max.y)
+		{
+			this.y -= max.y;
 		}
 		
 		return this;

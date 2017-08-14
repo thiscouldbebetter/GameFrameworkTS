@@ -5,12 +5,12 @@ function VisualGroup(children)
 }
 
 {
-	VisualGroup.prototype.drawToDisplayAtLoc = function(display, loc, entity)
+	VisualGroup.prototype.drawToDisplayForDrawableAndLoc = function(display, drawable, loc)
 	{
 		for (var i = 0; i < this.children.length; i++)
 		{
 			var child = this.children[i];
-			child.drawToDisplayAtLoc(display, loc, entity);
+			child.drawToDisplayForDrawableAndLoc(display, drawable, loc);
 		}
 	}
 }

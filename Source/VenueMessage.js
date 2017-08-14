@@ -13,7 +13,7 @@ function VenueMessage(messageToShow, venueNext)
 			// acknowledge
 			function()
 			{
-				Globals.Instance.universe.venueNext = venueNext;
+				Globals.Instance.universe.world.venueNext = venueNext;
 			}
 		)
 	);

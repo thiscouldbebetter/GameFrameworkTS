@@ -24,7 +24,8 @@ function Globals()
 	{
 		this.programName = programName;
 		this.timerTicksPerSecond = timerTicksPerSecond;
-		
+
+		this.collisionHelper = new CollisionHelper();
 		this.serializer = new Serializer();
 		this.platformHelper = new PlatformHelper();
 		this.display = display;

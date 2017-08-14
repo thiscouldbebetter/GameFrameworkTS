@@ -1,13 +1,28 @@
 
-function VisualImage(imageName, size)
+function VisualImage(imageName)
 {
 	this.imageName = imageName;
-	this.size = size;
-	
-	this.sizeHalf = this.size.clone().divideScalar(2);
 }
 
 {
+	// static methods
+
+	VisualImage.manyFromImages = function(images)
+	{
+		var returnValues = [];
+
+		for (var i = 0; i < images.length; i++)
+		{
+			var image = images[i];
+			var visual = new VisualImage(image.name);
+			returnValues.push(visual);
+		}
+
+		return returnValues;
+	}
+
+	// instance methods
+
 	VisualImage.prototype.image = function()
 	{
 		return Globals.Instance.mediaLibrary.imageGetByName(this.imageName);
@@ -15,12 +30,13 @@ function VisualImage(imageName, size)
 	
 	// visual
 	
-	VisualImage.prototype.drawToDisplayAtLoc = function(display, loc, entity)
+	VisualImage.prototype.drawToDisplayForDrawableAndLoc = function(display, drawable, loc)
 	{
 		var image = this.image();
 		var pos = loc.pos;
 		var drawPos = display.drawPos;
-		drawPos.overwriteWith(pos).subtract(this.sizeHalf);
-		display.drawImage(image, drawPos, this.size);
+		var imageSize = image.sizeInPixels;
+		drawPos.clear().subtract(imageSize).divideScalar(2).add(pos);
+		display.drawImage(image, drawPos, imageSize);
 	}
 }

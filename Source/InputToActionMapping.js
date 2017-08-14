@@ -5,3 +5,9 @@ function InputToActionMapping(inputName, actionName, inactivateInputWhenActionPe
 	this.actionName = actionName;
 	this.inactivateInputWhenActionPerformed = inactivateInputWhenActionPerformed;
 }
+{
+	InputToActionMapping.prototype.action = function()
+	{
+		return Globals.Instance.universe.world.actions[this.actionName];
+	}
+}

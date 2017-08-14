@@ -11,7 +11,7 @@ function VisualRay(color, length)
 }
 
 {
-	VisualRay.prototype.drawToDisplayAtLoc = function(display, loc, entity)
+	VisualRay.prototype.drawToDisplayForDrawableAndLoc = function(display, drawable, loc)
 	{
 		this.polar.angleInCycles = loc.heading;
 

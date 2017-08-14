@@ -6,9 +6,10 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 	this.colorFore = colorFore;
 	this.colorBack = colorBack;
 	
-	// temporary variables
+	// helper variables
 	
 	this.drawPos = new Coords();
+	this.drawLoc = new Location(new Coords());
 }
 
 {
@@ -72,7 +73,7 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 	
 	Display.prototype.drawImage = function(imageToDraw, pos, size)
 	{
-		var systemImage = imageToDraw.systemImage();
+		var systemImage = imageToDraw.systemImage;
 		
 		if (size == null)
 		{

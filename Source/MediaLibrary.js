@@ -8,6 +8,19 @@ function MediaLibrary(images, sounds, videos)
 
 {	
 	// accessors
+
+	MediaLibrary.prototype.imagesAdd = function(images)
+	{
+		for (var i = 0; i < images.length; i++)
+		{
+			var image = images[i];
+			if (this.images[image.name] == null)
+			{
+				this.images.push(image);
+				this.images[image.name] = image;
+			}
+		}
+	}
 	
 	MediaLibrary.prototype.imageGetByName = function(name)
 	{

@@ -6,11 +6,11 @@ function VisualDirectional(visualsForDirections)
 }
 
 {
-	VisualDirectional.prototype.drawToDisplayAtLoc = function(display, loc, entity)
+	VisualDirectional.prototype.drawToDisplayForDrawableAndLoc = function(display, drawable, loc)
 	{
-		var headingInCycles = loc.heading;
-		var direction = Math.round(headingInCycles * numberOfDirections - .5);
+		var headingInTurns = loc.headingInTurns();
+		var direction = Math.round(headingInTurns * this.numberOfDirections - .5);
 		var visualForDirection = this.visualsForDirections[direction];
-		visualForDirection.drawToDisplayAtLoc(display, loc, entity);
+		visualForDirection.drawToDisplayForDrawableAndLoc(display, drawable, loc);
 	}
 }

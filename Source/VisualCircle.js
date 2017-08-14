@@ -6,7 +6,7 @@ function VisualCircle(color, radius)
 }
 
 {
-	VisualCircle.prototype.drawToDisplayAtLoc = function(display, loc, entity)
+	VisualCircle.prototype.drawToDisplayForDrawableAndLoc = function(display, drawable, loc)
 	{
 		display.drawCircle(loc.pos, this.radius, this.color, display.colorFore);
 	}

@@ -74,9 +74,9 @@ function World(name, size, cursorPos)
 
 		display.clear();
 		
-		this.visualForGoal.drawToDisplayAtLoc(display, this.goalLoc, null);
-		this.visualForCursor.drawToDisplayAtLoc(display, this.cursorLoc, null);
-		this.visualForEnemy.drawToDisplayAtLoc(display, this.enemyLoc, null);
+		this.visualForGoal.drawToDisplayForDrawableAndLoc(display, null, this.goalLoc);
+		this.visualForCursor.drawToDisplayForDrawableAndLoc(display, null, this.cursorLoc);
+		this.visualForEnemy.drawToDisplayForDrawableAndLoc(display, null, this.enemyLoc);
 	}
 
 	World.prototype.updateForTimerTick = function()

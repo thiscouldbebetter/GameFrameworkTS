@@ -6,7 +6,7 @@ function VisualText(text, color)
 }
 
 {
-	VisualText.prototype.drawToDisplayAtLoc = function(display, loc)
+	VisualText.prototype.drawToDisplayForDrawableAndLoc = function(display, drawable, loc)
 	{
 		display.drawText
 		(
