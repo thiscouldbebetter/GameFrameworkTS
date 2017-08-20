@@ -13,7 +13,7 @@ function VisualRay(color, length)
 {
 	VisualRay.prototype.drawToDisplayForDrawableAndLoc = function(display, drawable, loc)
 	{
-		this.polar.angleInCycles = loc.heading;
+		this.polar.angleInTurns = loc.heading;
 
 		this.polar.toCoords
 		(

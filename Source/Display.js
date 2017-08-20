@@ -7,15 +7,17 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 	this.colorBack = colorBack;
 	
 	// helper variables
-	
+
+	this.drawLoc = new Location(new Coords());	
 	this.drawPos = new Coords();
-	this.drawLoc = new Location(new Coords());
+	this.drawPos2 = new Coords();
+	this.drawPos3 = new Coords();
 }
 
 {
 	// constants
 	
-	Display.RadiansPerCycle = Math.PI * 2.0;
+	Display.RadiansPerTurn = Math.PI * 2.0;
 	
 	// methods
 	
@@ -32,12 +34,12 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 	
 	Display.prototype.drawArc = function
 	(
-		center, radius, colorFill, colorBorder, angleStartInCycles, angleStopInCycles
+		center, radius, colorFill, colorBorder, angleStartInTurns, angleStopInTurns
 	)
 	{
 		var drawPos = this.drawPos.overwriteWith(center);
-		var angleStartInRadians = angleStartInCycles * Display.RadiansPerCycle;
-		var angleStopInRadians = angleStopInCycles * Display.RadiansPerCycle;
+		var angleStartInRadians = angleStartInTurns * Display.RadiansPerTurn;
+		var angleStopInRadians = angleStopInTurns * Display.RadiansPerTurn;
 
 		if (colorFill != null)
 		{

@@ -28,6 +28,12 @@ function Coords(x, y)
 		return this;
 	}
 	
+	Coords.prototype.ceiling = function()
+	{
+		this.x = Math.ceil(this.x);
+		this.y = Math.ceil(this.y);
+	}
+	
 	Coords.prototype.clear = function()
 	{
 		this.x = 0;
@@ -53,10 +59,29 @@ function Coords(x, y)
 		this.y /= scalar;
 		return this;
 	}
+	
+	Coords.prototype.dotProduct = function(other)
+	{
+		return this.x * other.x + this.y * other.y;
+	}
 
 	Coords.prototype.equals = function(other)
 	{
 		return (this.x == other.x && this.y == other.y);
+	}
+	
+	Coords.prototype.floor = function()
+	{
+		this.x = Math.floor(this.x);
+		this.y = Math.floor(this.y);
+		return this;
+	}
+	
+	Coords.prototype.invert = function()
+	{
+		this.x = 0 - this.x;
+		this.y = 0 - this.y;
+		return this;
 	}
 
 	Coords.prototype.isInRangeMinMax = function(min, max)
@@ -121,6 +146,14 @@ function Coords(x, y)
 		this.y = Math.random();
 		return this;
 	}
+	
+	Coords.prototype.right = function()
+	{
+		var temp = this.y;
+		this.y = this.x;
+		this.x = 0 - temp;
+		return this;
+	}
 
 	Coords.prototype.round = function()
 	{
@@ -133,6 +166,16 @@ function Coords(x, y)
 	{
 		this.x -= other.x;
 		this.y -= other.y;
+		return this;
+	}
+	
+	Coords.prototype.trimToMagnitudeMax = function(magnitudeMax)
+	{
+		var magnitude = this.magnitude();
+		if (magnitude > magnitudeMax)
+		{
+			this.divideScalar(magnitude).multiplyScalar(magnitudeMax);
+		}
 		return this;
 	}
 	
