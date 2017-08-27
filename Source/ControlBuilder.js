@@ -4,7 +4,7 @@
 function ControlBuilder()
 {
 	this.fontHeightInPixelsBase = 10;
-	this.sizeBase = new Coords(200, 150);
+	this.sizeBase = new Coords(200, 150, 1);
 }
 {
 	ControlBuilder.prototype.configure = function(size)
@@ -35,7 +35,10 @@ function ControlBuilder()
 					function ()
 					{
 						var universe = Globals.Instance.universe;
-						var venueNext = new VenueControls(new ControlBuilder().worldSave());
+						var venueNext = new VenueControls
+						(
+							Globals.Instance.controlBuilder.worldSave()
+						);
 						venueNext = new VenueFader(venueNext);
 						universe.venueNext = venueNext;
 					}
@@ -53,7 +56,10 @@ function ControlBuilder()
 					function ()
 					{
 						var universe = Globals.Instance.universe;
-						var venueNext = new VenueControls(new ControlBuilder().worldLoad());
+						var venueNext = new VenueControls
+						(
+							Globals.Instance.controlBuilder.worldLoad()
+						);
 						venueNext = new VenueFader(venueNext);
 						universe.venueNext = venueNext;
 					}
@@ -160,7 +166,7 @@ function ControlBuilder()
 					// click
 					function()
 					{
-						var controlConfirm = new ControlBuilder().confirm
+						var controlConfirm = Globals.Instance.controlBuilder.confirm
 						(
 							size,
 							"Are you sure you want to quit?",
@@ -171,7 +177,7 @@ function ControlBuilder()
 								var universe = Globals.Instance.universe;
 								var venueNext = new VenueControls
 								(
-									new ControlBuilder().title()
+									Globals.Instance.controlBuilder.title()
 								);
 								venueNext = new VenueFader(venueNext);
 								universe.venueNext = venueNext;
@@ -182,7 +188,7 @@ function ControlBuilder()
 								var universe = Globals.Instance.universe;
 								var venueNext = new VenueControls
 								(
-									new ControlBuilder().configure()
+									Globals.Instance.controlBuilder.configure()
 								);
 								venueNext = new VenueFader(venueNext);
 								universe.venueNext = venueNext;
@@ -370,7 +376,7 @@ function ControlBuilder()
 						universe.world = world;
 						var venueNext = new VenueControls
 						(
-							new ControlBuilder().worldDetail()
+							Globals.Instance.controlBuilder.worldDetail()
 						);
 						venueNext = new VenueFader(venueNext);
 						universe.venueNext = venueNext;
@@ -396,7 +402,7 @@ function ControlBuilder()
 							universe.world = worldSelected;
 							var venueNext = new VenueControls
 							(
-								new ControlBuilder().worldDetail()
+								Globals.Instance.controlBuilder.worldDetail()
 							);
 							venueNext = new VenueFader(venueNext);
 							universe.venueNext = venueNext;
@@ -417,7 +423,7 @@ function ControlBuilder()
 					{
 						var venueNext = new VenueControls
 						(
-							new ControlBuilder().profileSelect()
+							Globals.Instance.controlBuilder.profileSelect()
 						);
 						venueNext = new VenueFader(venueNext);
 						var universe = Globals.Instance.universe;
@@ -439,7 +445,7 @@ function ControlBuilder()
 						var universe = Globals.Instance.universe;
 						var profile = universe.profile;
 
-						var controlConfirm = new ControlBuilder().confirm
+						var controlConfirm = Globals.Instance.controlBuilder.confirm
 						(
 							size,
 							"Delete profile \"" 
@@ -457,7 +463,7 @@ function ControlBuilder()
 
 								var venueNext = new VenueControls
 								(
-									new ControlBuilder().profileSelect()
+									Globals.Instance.controlBuilder.profileSelect()
 								);
 								venueNext = new VenueFader(venueNext);
 								universe.venueNext = venueNext;
@@ -467,7 +473,7 @@ function ControlBuilder()
 							{
 								var venueNext = new VenueControls
 								(
-									new ControlBuilder().profileDetail()
+									Globals.Instance.controlBuilder.profileDetail()
 								);
 								venueNext = new VenueFader(venueNext);
 								var universe = Globals.Instance.universe;
@@ -549,7 +555,7 @@ function ControlBuilder()
 						universe.profile = profile;
 						var venueNext = new VenueControls
 						(
-							new ControlBuilder().profileDetail()
+							Globals.Instance.controlBuilder.profileDetail()
 						);
 						venueNext = new VenueFader(venueNext);
 						universe.venueNext = venueNext;
@@ -570,7 +576,7 @@ function ControlBuilder()
 						var universe = Globals.Instance.universe;
 						var venueNext = new VenueControls
 						(
-							new ControlBuilder().profileSelect()
+							Globals.Instance.controlBuilder.profileSelect()
 						);
 						venueNext = new VenueFader(venueNext);
 						universe.venueNext = venueNext;
@@ -636,7 +642,7 @@ function ControlBuilder()
 						var universe = Globals.Instance.universe;
 						var venueNext = new VenueControls
 						(
-							new ControlBuilder().profileNew()
+							Globals.Instance.controlBuilder.profileNew()
 						);
 						venueNext = new VenueFader(venueNext);
 						universe.venueNext = venueNext;
@@ -661,7 +667,7 @@ function ControlBuilder()
 						universe.profile = profileSelected;
 						var venueNext = new VenueControls
 						(
-							new ControlBuilder().profileDetail()
+							Globals.Instance.controlBuilder.profileDetail()
 						);
 						venueNext = new VenueFader(venueNext);
 						universe.venueNext = venueNext;
@@ -711,7 +717,7 @@ function ControlBuilder()
 					{
 						var venueNext = new VenueControls
 						(
-							new ControlBuilder().profileSelect()
+							Globals.Instance.controlBuilder.profileSelect()
 						);
 						venueNext = new VenueFader(venueNext);
 						var universe = Globals.Instance.universe;
@@ -758,6 +764,9 @@ function ControlBuilder()
 		var universe = Globals.Instance.universe;
 		var world = universe.world;
 
+		var dateCreated = world.dateCreated;
+		var dateSaved = world.dateSaved == null ? dateCreated : world.dateSaved;
+
 		var returnValue = new ControlContainer
 		(
 			"containerWorldDetail",
@@ -789,7 +798,7 @@ function ControlBuilder()
 					new Coords(50, 45).multiply(sizeMultiplier), // pos
 					new Coords(100, 25).multiply(sizeMultiplier), // size
 					true, // isTextCentered
-					"Started:" + world.dateCreated().toStringTimestamp(),
+					"Started:" + dateCreated.toStringTimestamp(),
 					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 				new ControlLabel
@@ -798,7 +807,7 @@ function ControlBuilder()
 					new Coords(50, 60).multiply(sizeMultiplier), // pos
 					new Coords(100, 25).multiply(sizeMultiplier), // size
 					true, // isTextCentered
-					"Saved:" + world.dateSaved().toStringTimestamp(),
+					"Saved:" + dateSaved.toStringTimestamp(),
 					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 
@@ -816,7 +825,7 @@ function ControlBuilder()
 						var universe = Globals.Instance.universe;
 						var world = universe.world;
 						var venueNext = new VenueWorld(world);
-						if (world.dateSaved().equals(world.dateCreated()) == true)
+						if (world.dateSaved == null)
 						{
 							venueNext = new VenueVideo
 							(
@@ -842,7 +851,7 @@ function ControlBuilder()
 					{
 						var venueNext = new VenueControls
 						(
-							new ControlBuilder().profileDetail()
+							Globals.Instance.controlBuilder.profileDetail()
 						);
 						venueNext = new VenueFader(venueNext);
 						var universe = Globals.Instance.universe;
@@ -865,7 +874,7 @@ function ControlBuilder()
 						var profile = universe.profile;
 						var world = universe.world;
 
-						var controlConfirm = new ControlBuilder().confirm
+						var controlConfirm = Globals.Instance.controlBuilder.confirm
 						(
 							size,
 							"Delete world \"" 
@@ -894,7 +903,7 @@ function ControlBuilder()
 
 								var venueNext = new VenueControls
 								(
-									new ControlBuilder().profileDetail()
+									Globals.Instance.controlBuilder.profileDetail()
 								);
 								venueNext = new VenueFader(venueNext);
 								universe.venueNext = venueNext;
@@ -904,7 +913,7 @@ function ControlBuilder()
 							{
 								var venueNext = new VenueControls
 								(
-									new ControlBuilder().worldDetail()
+									Globals.Instance.controlBuilder.worldDetail()
 								);
 								venueNext = new VenueFader(venueNext);
 								var universe = Globals.Instance.universe;
@@ -951,7 +960,7 @@ function ControlBuilder()
 					// click
 					function ()
 					{
-						var controlConfirm = new ControlBuilder().confirm
+						var controlConfirm = Globals.Instance.controlBuilder.confirm
 						(
 							size,
 							"Abandon the current game?",
@@ -986,7 +995,7 @@ function ControlBuilder()
 								
 								var venueNext = new VenueControls
 								(
-									new ControlBuilder().worldLoad()
+									Globals.Instance.controlBuilder.worldLoad()
 								);
 								venueNext = new VenueFader(venueNext);
 								universe.venueNext = venueNext;
@@ -995,7 +1004,7 @@ function ControlBuilder()
 								{
 									venueNext = new VenueControls
 									(
-										new ControlBuilder().message
+										Globals.Instance.controlBuilder.message
 										(
 											size, 
 											"No save exists to reload!",
@@ -1004,7 +1013,7 @@ function ControlBuilder()
 											{
 												var venueNext = new VenueControls
 												(
-													new ControlBuilder().worldLoad()
+													Globals.Instance.controlBuilder.worldLoad()
 												);
 												venueNext = new VenueFader(venueNext);
 												Globals.Instance.universe.venueNext = venueNext;
@@ -1026,7 +1035,7 @@ function ControlBuilder()
 								var universe = Globals.Instance.universe;
 								var venueNext = new VenueControls
 								(
-									new ControlBuilder().worldLoad()
+									Globals.Instance.controlBuilder.worldLoad()
 								);
 								venueNext = new VenueFader(venueNext);
 								universe.venueNext = venueNext;
@@ -1059,7 +1068,7 @@ function ControlBuilder()
 						
 						var venueMessageReadyToLoad = new VenueControls
 						(
-							new ControlBuilder().message
+							Globals.Instance.controlBuilder.message
 							(
 								size,
 								"Ready to load from file...",
@@ -1073,7 +1082,10 @@ function ControlBuilder()
 										var universe = Globals.Instance.universe;
 										universe.world = worldDeserialized;
 				
-										var venueNext = new VenueControls(new ControlBuilder().configure());
+										var venueNext = new VenueControls
+										(
+											Globals.Instance.controlBuilder.configure()
+										);
 										venueNext = new VenueFader(venueNext);
 										universe.venueNext = venueNext;
 									}
@@ -1093,14 +1105,17 @@ function ControlBuilder()
 			
 						var venueMessageCancelled = new VenueControls
 						(
-							new ControlBuilder().message
+							Globals.Instance.controlBuilder.message
 							(
 								size,
 								"No file specified.",
 								// acknowledge 
 								function()
 								{
-									var venueNext = new VenueControls(new ControlBuilder().configure());
+									var venueNext = new VenueControls
+									(
+										Globals.Instance.controlBuilder.configure()
+									);
 									venueNext = new VenueFader(venueNext);
 									Globals.Instance.universe.venueNext = venueNext;
 								}
@@ -1126,7 +1141,10 @@ function ControlBuilder()
 					function()
 					{
 						var universe = Globals.Instance.universe;
-						var venueNext = new VenueControls(new ControlBuilder().configure());
+						var venueNext = new VenueControls
+						(
+							Globals.Instance.controlBuilder.configure()
+						);
 						venueNext = new VenueFader(venueNext);
 						universe.venueNext = venueNext;
 					}
@@ -1169,7 +1187,7 @@ function ControlBuilder()
 						var profile = universe.profile;
 						var world = universe.world;
 
-						world._dateSaved = DateTime.now();
+						world.dateSaved = DateTime.now();
 						Globals.Instance.profileHelper.profileSave
 						(
 							profile
@@ -1177,7 +1195,7 @@ function ControlBuilder()
 						
 						var venueNext = new VenueControls
 						(
-							new ControlBuilder().message
+							Globals.Instance.controlBuilder.message
 							(
 								size,
 								"Profile saved to server.",
@@ -1185,7 +1203,10 @@ function ControlBuilder()
 								function()
 								{
 									var universe = Globals.Instance.universe;
-									var venueNext = new VenueControls(new ControlBuilder().configure());
+									var venueNext = new VenueControls
+									(
+										Globals.Instance.controlBuilder.configure()
+									);
 									venueNext = new VenueFader(venueNext);
 									universe.venueNext = venueNext;
 								}
@@ -1211,7 +1232,7 @@ function ControlBuilder()
 						var profile = universe.profile;
 						var world = universe.world;
 
-						world._dateSaved = DateTime.now();
+						world.dateSaved = DateTime.now();
 						var worldSerialized = Globals.Instance.serializer.serialize(world);
 						
 						new FileHelper().saveTextStringToFileWithName
@@ -1222,7 +1243,7 @@ function ControlBuilder()
 						
 						var venueNext = new VenueControls
 						(
-							new ControlBuilder().message
+							Globals.Instance.controlBuilder.message
 							(
 								size,
 								"Save must be completed manually.",
@@ -1230,7 +1251,10 @@ function ControlBuilder()
 								function()
 								{
 									var universe = Globals.Instance.universe;
-									var venueNext = new VenueControls(new ControlBuilder().configure());
+									var venueNext = new VenueControls
+									(
+										Globals.Instance.controlBuilder.configure()
+									);
 									venueNext = new VenueFader(venueNext);
 									universe.venueNext = venueNext;
 								}
@@ -1253,7 +1277,10 @@ function ControlBuilder()
 					function()
 					{
 						var universe = Globals.Instance.universe;
-						var venueNext = new VenueControls(new ControlBuilder().configure());
+						var venueNext = new VenueControls
+						(
+							Globals.Instance.controlBuilder.configure()
+						);
 						venueNext = new VenueFader(venueNext);
 						universe.venueNext = venueNext;
 					}

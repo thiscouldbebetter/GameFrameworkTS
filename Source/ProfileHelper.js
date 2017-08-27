@@ -1,45 +1,42 @@
 
-function ProfileHelper()
-{}
+function ProfileHelper(storageHelper)
+{
+	this.storageHelper = storageHelper;
+
+	this.propertyName = "Profiles";
+}
 {
 	ProfileHelper.prototype.profileAdd = function(profile)
 	{
 		var profiles = this.profiles();
 		profiles.push(profile);
-		var propertyName = 
-			Globals.Instance.programName
-			+ ".Profiles";
-		StorageHelper.save
+		this.storageHelper.save
 		(
-			propertyName,
+			this.propertyName,
 			profiles
 		);
 	}
 
 	ProfileHelper.prototype.profileDelete = function(profileToDelete)
 	{
-		var profilesStored = this.profiles();
+		var profiles = this.profiles();
 		
 		var profileIndex = this.profileIndexFindByName
 		(
-			profilesStored,
+			profiles,
 			profileToDelete.name
 		);
 
-		profilesStored.splice
+		profiles.splice
 		(
 			profileIndex,
 			1
 		);
 
-		var propertyName = 
-			Globals.Instance.programName
-			+ ".Profiles";
-
-		StorageHelper.save
+		this.storageHelper.save
 		(
-			propertyName,
-			profilesStored
+			this.propertyName,
+			profiles
 		);
 	}
 
@@ -63,49 +60,41 @@ function ProfileHelper()
 
 	ProfileHelper.prototype.profileSave = function(profileToSave)
 	{
-		var profilesStored = this.profiles();
+		var profiles = this.profiles();
 		
 		var profileIndex = this.profileIndexFindByName
 		(
-			profilesStored,
+			profiles,
 			profileToSave.name
 		);
 
-		profilesStored.splice
+		profiles.splice
 		(
 			profileIndex,
 			1,
 			profileToSave
 		);
 
-		var propertyName = 
-			Globals.Instance.programName
-			+ ".Profiles";
-
-		StorageHelper.save
+		this.storageHelper.save
 		(
-			propertyName,
-			profilesStored
+			this.propertyName,
+			profiles
 		);
 	}
 
 	ProfileHelper.prototype.profiles = function()
 	{
-		var propertyName = 
-			Globals.Instance.programName
-			+ ".Profiles";
-
-		var profiles = StorageHelper.load
+		var profiles = this.storageHelper.load
 		(
-			propertyName
+			this.propertyName
 		);
 
 		if (profiles == null)
 		{
 			profiles = [];
-			StorageHelper.save
+			this.storageHelper.save
 			(
-				propertyName, 
+				this.propertyName, 
 				profiles
 			);
 		}

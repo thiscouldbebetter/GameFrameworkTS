@@ -1,14 +1,25 @@
 
-function StorageHelper()
-{}
+function StorageHelper(propertyNamePrefix, serializer)
 {
-	StorageHelper.load = function(propertyName)
+	this.propertyNamePrefix = propertyNamePrefix;
+	if (this.propertyNamePrefix == null)
+	{
+		this.propertyNamePrefix = ""; 
+	}
+
+	this.serializer = serializer;
+}
+{
+	StorageHelper.prototype.load = function(propertyName)
 	{
 		var returnValue;
 
+		var propertyNamePrefixed = 
+			this.propertyNamePrefix + propertyName;
+
 		var returnValueAsString = localStorage.getItem
 		(
-			propertyName
+			propertyNamePrefixed
 		);
 
 		if (returnValueAsString == null)
@@ -17,7 +28,7 @@ function StorageHelper()
 		}
 		else
 		{
-			returnValue = Globals.Instance.serializer.deserialize
+			returnValue = this.serializer.deserialize
 			(
 				returnValueAsString
 			);
@@ -26,16 +37,19 @@ function StorageHelper()
 		return returnValue;
 	}
 
-	StorageHelper.save = function(propertyName, valueToSave)
+	StorageHelper.prototype.save = function(propertyName, valueToSave)
 	{
-		var valueToSaveSerialized = Globals.Instance.serializer.serialize
+		var valueToSaveSerialized = this.serializer.serialize
 		(
 			valueToSave
 		);
 
+		var propertyNamePrefixed = 
+			this.propertyNamePrefix + propertyName;
+
 		localStorage.setItem
 		(
-			propertyName, 
+			propertyNamePrefixed, 
 			valueToSaveSerialized
 		);
 	}

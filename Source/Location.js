@@ -2,11 +2,15 @@
 function Location(pos)
 {
 	this.pos = pos;
-	this.orientation = new Orientation(new Coords(1, 0));
+	this.orientation = new Orientation
+	(
+		new Coords(1, 0, 0), // forward
+		new Coords(0, 0, 1) // down
+	);
 
-	this.vel = new Coords(0, 0);
-	this.accel = new Coords(0, 0);
-	this.force = new Coords(0, 0);
+	this.vel = new Coords(0, 0, 0);
+	this.accel = new Coords(0, 0, 0);
+	this.force = new Coords(0, 0, 0);
 	
 	this.timeOffsetInTicks = 0;
 }

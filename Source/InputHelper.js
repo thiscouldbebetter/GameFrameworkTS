@@ -177,10 +177,11 @@ function InputHelper()
 		
 		var canvas = event.target;
 		var canvasBounds = canvas.getBoundingClientRect();
-		this.mouseClickPos.overwriteWithXY
+		this.mouseClickPos.overwriteWithDimensions
 		(
 			event.clientX - canvasBounds.left, 
-			event.clientY - canvasBounds.top
+			event.clientY - canvasBounds.top,
+			0
 		);
 	}
 
@@ -195,10 +196,11 @@ function InputHelper()
 	
 		var canvas = event.target;
 		var canvasBounds = canvas.getBoundingClientRect();
-		this.mouseMovePos.overwriteWithXY
+		this.mouseMovePos.overwriteWithDimensions
 		(
 			event.clientX - canvasBounds.left, 
-			event.clientY - canvasBounds.top
+			event.clientY - canvasBounds.top,
+			0
 		);
 	}
 

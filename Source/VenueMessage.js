@@ -6,7 +6,7 @@ function VenueMessage(messageToShow, venueNext)
 	
 	this.venueControls = new VenueControls
 	(
-		new ControlBuilder().message
+		Globals.Instance.controlBuilder.message
 		(
 			Globals.Instance.display.sizeInPixels,
 			this.messageToShow,

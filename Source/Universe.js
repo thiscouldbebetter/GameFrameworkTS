@@ -31,7 +31,10 @@ function Universe(name, world)
 	{
 		var venueControlsTitle = new VenueControls
 		(
-			new ControlBuilder().title(Globals.Instance.display.sizeInPixels)
+			Globals.Instance.controlBuilder.title
+			(
+				Globals.Instance.display.sizeInPixels
+			)
 		);
 
 		venueControlsTitle = new VenueFader
@@ -44,6 +47,7 @@ function Universe(name, world)
 
 	Universe.prototype.updateForTimerTick = function()
 	{
+
 		if (this.venueNext != null)
 		{
 			if 

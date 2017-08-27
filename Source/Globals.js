@@ -26,14 +26,17 @@ function Globals()
 		this.timerTicksPerSecond = timerTicksPerSecond;
 
 		this.collisionHelper = new CollisionHelper();
-		this.serializer = new Serializer();
 		this.platformHelper = new PlatformHelper();
+		this.serializer = new Serializer();
+		this.storageHelper = new StorageHelper(this.programName + "_", this.serializer);
+
 		this.display = display;
 		this.mediaLibrary =  mediaLibrary;
 		this.universe = universe;
-		
+
+		this.controlBuilder = new ControlBuilder();
 		this.inputHelper = new InputHelper();
-		this.profileHelper = new ProfileHelper();
+		this.profileHelper = new ProfileHelper(this.storageHelper);
 		this.soundHelper = new SoundHelper(mediaLibrary.sounds);
 		this.videoHelper = new VideoHelper(mediaLibrary.videos);
 

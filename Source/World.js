@@ -3,9 +3,10 @@
 // including the constructor, the draw() and update() methods,
 // and the World.new() method.
 
-function World(name, size, cursorPos)
+function World(name, dateCreated, size, cursorPos)
 {
 	this.name = name;
+	this.dateCreated = dateCreated;
 	this.size = size;
 	
 	this.timerTicksSoFar = 0;
@@ -93,7 +94,8 @@ function World(name, size, cursorPos)
 
 		var returnValue = new World
 		(
-			"World-" + nowAsString, 
+			"World-" + nowAsString,
+			now, // dateCreated
 			Globals.Instance.display.sizeInPixels.clone(),
 			new Coords(10, 10)
 		);
@@ -102,24 +104,6 @@ function World(name, size, cursorPos)
 
 	// instance methods
 	
-	World.prototype.dateCreated = function () 
-	{ 
-		if (this._dateCreated == null)
-		{
-			this._dateCreated = DateTime.now();
-		}
-		return this._dateCreated; 
-	}
-
-	World.prototype.dateSaved = function () 
-	{ 
-		if (this._dateSaved == null)
-		{
-			this._dateSaved = this._dateCreated;
-		}
-		return this._dateSaved; 
-	}
-
 	World.prototype.draw = function()
 	{
 		var display = Globals.Instance.display;
@@ -141,7 +125,7 @@ function World(name, size, cursorPos)
 	
 	World.prototype.updateForTimerTick_Input = function()
 	{
-		this.cursorLoc.orientation.forward(Coords.Instances.Zeroes);
+		this.cursorLoc.orientation.forwardSet(Coords.Instances.Zeroes);
 
 		var inputHelper = Globals.Instance.inputHelper;
 		if (inputHelper.isMouseClicked == true)
@@ -161,7 +145,7 @@ function World(name, size, cursorPos)
 				var universe = Globals.Instance.universe;
 				var venueNext = new VenueControls
 				(
-					new ControlBuilder().configure
+					Globals.Instance.controlBuilder.configure
 					(
 						Globals.Instance.display.sizeInPixels
 					)
@@ -198,7 +182,7 @@ function World(name, size, cursorPos)
 					directionToMove = new Coords(0, 0);
 				}
 				
-				this.cursorLoc.orientation.forward(directionToMove);
+				this.cursorLoc.orientation.forwardSet(directionToMove);
 				var vel = this.cursorLoc.vel;
 				if (vel.equals(directionToMove) == false)
 				{
@@ -260,7 +244,13 @@ function World(name, size, cursorPos)
 			var venueNext = new VenueMessage
 			(
 				messageToDisplay,
-				new VenueControls(new ControlBuilder().title(Globals.Instance.display.sizeInPixels))
+				new VenueControls
+				(
+					Globals.Instance.controlBuilder.title
+					(
+						Globals.Instance.display.sizeInPixels
+					)
+				)
 			);
 			venueNext = new VenueFader(venueNext);
 			
