@@ -45,31 +45,30 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, cli
 	{
 		this.isHighlighted = false;
 	}
+
+	// drawable
 	
-	ControlButton.prototype.draw = function()
-	{
-		var control = this;
-		var display = Globals.Instance.display;
-		
-		var pos = control.pos;
-		var size = control.size;
+	ControlButton.prototype.drawToDisplayAtLoc = function(display, drawLoc)
+	{	
+		var drawPos = drawLoc.pos;
+		drawPos.add(this.pos);
 
 		if (this.hasBorder == true)
 		{
 			display.drawRectangle
 			(
-				pos, size, 
+				drawPos, this.size, 
 				display.colorBack, display.colorFore,
-				control.isHighlighted // areColorsReversed
+				this.isHighlighted // areColorsReversed
 			);
 		}
 
-		var text = control.text;
+		var text = this.text;
 
 		var textWidth = display.textWidthForFontHeight(text, this.fontHeightInPixels);
 		var textSize = new Coords(textWidth, this.fontHeightInPixels);
-		var textMargin = size.clone().subtract(textSize).divideScalar(2);
-		var drawPos = pos.clone().add(textMargin);
+		var textMargin = this.size.clone().subtract(textSize).divideScalar(2);
+		drawPos.add(textMargin);
 
 		display.drawText
 		(
@@ -78,7 +77,7 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, cli
 			drawPos, 
 			display.colorFore,
 			display.colorBack,
-			control.isHighlighted
+			this.isHighlighted
 		);
 	}
 }

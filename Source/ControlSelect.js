@@ -130,34 +130,31 @@ function ControlSelect
 	
 	// drawable
 	
-	ControlSelect.prototype.draw = function()
+	ControlSelect.prototype.drawToDisplayAtLoc = function(display, drawLoc)
 	{
-		var control = this;
-		var display = Globals.Instance.display;
-		
-		var pos = control.pos;
-		var size = control.size;
+		var drawPos = drawLoc.pos.add(this.pos);
 
 		display.drawRectangle
 		(
-			pos, size, 
+			drawPos, this.size, 
 			display.colorBack, display.colorFore,
-			control.isHighlighted // areColorsReversed
+			this.isHighlighted // areColorsReversed
 		)
 
-		var text = control.optionSelected().text;
+		var text = this.optionSelected().text;
 
 		var textWidth = display.textWidthForFontHeight(text, this.fontHeightInPixels);
 		var textSize = new Coords(textWidth, display.fontHeightInPixels);
-		var textMargin = size.clone().subtract(textSize).divideScalar(2); 
-		var drawPos = pos.clone().add(textMargin);
+		var textMargin = this.size.clone().subtract(textSize).divideScalar(2); 
+		drawPos.add(textMargin);
 
 		display.drawText
 		(
 			text, 
 			this.fontHeightInPixels,
 			drawPos, 
-			display.colorFore, display.colorBack, control.isHighlighted
+			display.colorFore, display.colorBack, 
+			this.isHighlighted
 		);
 	}
 

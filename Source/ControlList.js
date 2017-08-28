@@ -159,32 +159,28 @@ function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForI
 	
 	// drawable
 	
-	ControlList.prototype.draw = function()
-	{
-		var list = this;
-		var display = Globals.Instance.display;
-		
-		var pos = list.pos
-		var size = list.size;
+	ControlList.prototype.drawToDisplayAtLoc = function(display, drawLoc)
+	{		
+		var drawPos = drawLoc.pos.add(this.pos);
 
 		display.drawRectangle
 		(
-			pos, size, 
+			drawPos, this.size, 
 			display.colorBack, display.colorFore, 
-			list.isHighlighted // areColorsReversed
+			this.isHighlighted // areColorsReversed
 		);
 
-		display.graphics.fillStyle = (list.isHighlighted == true ? display.colorBack : display.colorFore);
-		display.graphics.strokeStyle = (list.isHighlighted == true ? display.colorBack : display.colorFore);
+		display.graphics.fillStyle = (this.isHighlighted == true ? display.colorBack : display.colorFore);
+		display.graphics.strokeStyle = (this.isHighlighted == true ? display.colorBack : display.colorFore);
 
-		var itemSizeY = list.itemSpacing;
+		var itemSizeY = this.itemSpacing;
 		var textMarginLeft = 2;
-		var itemPosY = pos.y;
+		var itemPosY = drawPos.y;
 
-		var items = list.items();
+		var items = this.items();
 
-		var numberOfItemsVisible = Math.floor(size.y / itemSizeY);
-		var indexStart = list.indexOfFirstItemVisible();
+		var numberOfItemsVisible = Math.floor(this.size.y / itemSizeY);
+		var indexStart = this.indexOfFirstItemVisible();
 		var indexEnd = indexStart + numberOfItemsVisible - 1;
 		if (indexEnd >= items.length)
 		{
@@ -193,13 +189,13 @@ function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForI
 
 		for (var i = indexStart; i <= indexEnd; i++)
 		{
-			if (i == list.indexOfItemSelected)
+			if (i == this.indexOfItemSelected)
 			{
 				display.graphics.strokeRect
 				(
-					pos.x + textMarginLeft, 
+					drawPos.x + textMarginLeft, 
 					itemPosY,
-					size.x - textMarginLeft * 2,
+					this.size.x - textMarginLeft * 2,
 					itemSizeY
 				)
 			}
@@ -207,19 +203,24 @@ function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForI
 			var item = items[i];
 			var text = DataBinding.get
 			(
-				item, list.bindingExpressionForItemText
+				item, this.bindingExpressionForItemText
 			);
 
-			var drawPos = new Coords(pos.x + textMarginLeft, itemPosY);
+			var drawPos2 = new Coords(drawPos.x + textMarginLeft, itemPosY);
 
 			display.drawText
 			(
-				text, this.fontHeightInPixels, drawPos, display.colorFore, display.colorBack, list.isHighlighted
+				text, 
+				this.fontHeightInPixels, 
+				drawPos2, 
+				display.colorFore, 
+				display.colorBack, 
+				this.isHighlighted
 			);
 			
 			itemPosY += itemSizeY;
 		}
 		
-		this.scrollbar.draw();
+		this.scrollbar.drawToDisplayAtLoc(display, drawLoc);
 	}
 }

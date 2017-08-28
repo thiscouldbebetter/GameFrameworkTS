@@ -113,20 +113,19 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, dataBinding
 	
 	// drawable
 	
-	ControlScrollbar.prototype.draw = function()
+	ControlScrollbar.prototype.drawToDisplayAtLoc = function(display, drawLoc)
 	{
 		var numberOfItems = this.items().length;
 
 		if (this.windowSizeInItems < numberOfItems)
-		{
-			var display = Globals.Instance.display;
-			
-			display.drawRectangle(this.pos, this.size, display.colorFore, null);
+		{			
+			var drawPos = drawLoc.pos.add(this.pos);
+			display.drawRectangle(drawPos, this.size, display.colorFore, null);
 
-			this.buttonScrollDown.draw();
-			this.buttonScrollUp.draw();
+			this.buttonScrollDown.drawToDisplayAtLoc(display, drawLoc);
+			this.buttonScrollUp.drawToDisplayAtLoc(display, drawLoc);
 					
-			var sliderPosInPixels = this.sliderPosInPixels();
+			var sliderPosInPixels = this.sliderPosInPixels().add(drawPos);
 			var sliderSizeInPixels = this.sliderSizeInPixels();
 			
 			display.drawRectangle

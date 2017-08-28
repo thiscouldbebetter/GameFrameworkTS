@@ -12,26 +12,24 @@ function ControlLabel(name, pos, size, isTextCentered, text, fontHeightInPixels)
 {
 	// drawable
 	
-	ControlLabel.prototype.draw = function()
-	{
-		var control = this;
-		var display = Globals.Instance.display;
-		
-		var pos = control.pos;
-		var size = control.size;
-		var text = control.text;
+	ControlLabel.prototype.drawToDisplayAtLoc = function(display, drawLoc)
+	{		
+		var drawPos = drawLoc.pos.add(this.pos);
 
-		var textHeight = display.fontHeightInPixels;
+		var fontHeightInPixels = (this.fontHeightInPixels == null ? display.fontHeightInPixels : this.fontHeightInPixels);
 
 		var textMargins;
 
-		if (control.isTextCentered == true)
+		if (this.isTextCentered == true)
 		{
-			var textWidth = display.textWidthForFontHeight(text, this.fontHeightInPixels);
+			var textWidth = display.textWidthForFontHeight
+			(
+				this.text, this.fontHeightInPixels
+			);
 			textMargins = new Coords
 			(
-				(size.x - textWidth) / 2,
-				(size.y - textHeight) / 2
+				(this.size.x - textWidth) / 2,
+				(this.size.y - fontHeightInPixels) / 2
 			);
 		}
 		else
@@ -39,11 +37,14 @@ function ControlLabel(name, pos, size, isTextCentered, text, fontHeightInPixels)
 			textMargins = new Coords
 			(
 				2,
-				(size.y - textHeight) / 2
+				(this.size.y - fontHeightInPixels) / 2
 			);
 		}
 
-		var drawPos = pos.clone().add(textMargins);
-		display.drawText(text, this.fontHeightInPixels, drawPos, display.colorFore);
+		drawPos.add(textMargins);
+		display.drawText
+		(
+			this.text, fontHeightInPixels, drawPos, display.colorFore
+		);
 	}
 }

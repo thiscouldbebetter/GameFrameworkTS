@@ -93,39 +93,35 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels)
 	
 	// drawable
 	
-	ControlTextBox.prototype.draw = function()
+	ControlTextBox.prototype.drawToDisplayAtLoc = function(display, drawLoc)
 	{
-		var control = this;
-		var display = Globals.Instance.display;
-		
-		var pos = control.pos;
-		var size = control.size;
+		var drawPos = drawLoc.pos.add(this.pos);
 
-		var text = control.text;
+		var text = this.text;
 
 		display.drawRectangle
 		(
-			pos, size, 
+			drawPos, this.size, 
 			display.colorBack, display.colorFore,
-			control.isHighlighted // areColorsReversed
+			this.isHighlighted // areColorsReversed
 		);
 
 		var textWidth = display.textWidthForFontHeight(text, this.fontHeightInPixels);
 		var textSize = new Coords(textWidth, this.fontHeightInPixels);
-		var textMargin = size.clone().subtract(textSize).divideScalar(2);
-		var drawPos = pos.clone().add(textMargin);
+		var textMargin = this.size.clone().subtract(textSize).divideScalar(2);
+		var drawPos2 = drawPos.clone().add(textMargin);
 		display.drawText
 		(
 			text, 
 			this.fontHeightInPixels, 
-			drawPos, 
-			display.colorFore, display.colorBack, control.isHighlighted
+			drawPos2, 
+			display.colorFore, display.colorBack, this.isHighlighted
 		);
 
-		if (control.isHighlighted == true)
+		if (this.isHighlighted == true)
 		{
-			var textBeforeCursor = control.text.substr(0, control.cursorPos);
-			var textAtCursor = control.text.substr(control.cursorPos, 1);
+			var textBeforeCursor = this.text.substr(0, this.cursorPos);
+			var textAtCursor = this.text.substr(this.cursorPos, 1);
 			var cursorX = display.textWidthForFontHeight
 			(
 				textBeforeCursor, this.fontHeightInPixels
@@ -134,11 +130,11 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels)
 			(
 				textAtCursor, this.fontHeightInPixels
 			);
-			drawPos.x += cursorX;
+			drawPos2.x += cursorX;
 			
 			display.drawRectangle
 			(
-				drawPos,
+				drawPos2,
 				new Coords(cursorWidth, this.fontHeightInPixels), // size
 				display.colorBack, 
 				display.colorBack
@@ -148,7 +144,7 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels)
 			(
 				textAtCursor,
 				this.fontHeightInPixels,
-				drawPos,
+				drawPos2,
 				display.colorFore
 			);
 		}

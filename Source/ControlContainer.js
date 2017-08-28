@@ -216,24 +216,21 @@ function ControlContainer(name, pos, size, children)
 	
 	// drawable
 	
-	ControlContainer.prototype.draw = function()
+	ControlContainer.prototype.drawToDisplayAtLoc = function(display, drawLoc)
 	{
-		var container = this;
-		var display = Globals.Instance.display;
-		
-		var pos = container.pos
-		var size = container.size;
+		var drawPos = drawLoc.pos.add(this.pos);
 
 		display.drawRectangle
 		(
-			pos, size, display.colorBack, display.colorFore
+			drawPos, this.size, 
+			display.colorBack, display.colorFore
 		)
 
-		var children = container.children;
+		var children = this.children;
 		for (var i = 0; i < children.length; i++)
 		{
 			var child = children[i];
-			child.draw();
+			child.drawToDisplayAtLoc(display, drawLoc.clone());
 		}
 	}
 }

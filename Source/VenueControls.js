@@ -36,8 +36,11 @@ function VenueControls(controlRoot)
 {
 	VenueControls.prototype.draw = function()
 	{
-		Globals.Instance.display.clear();
-		this.controlRoot.draw();
+		var display = Globals.Instance.display;
+		var drawLoc = display.drawLoc;
+		drawLoc.pos.clear();
+		//display.clear();
+		this.controlRoot.drawToDisplayAtLoc(display, drawLoc);
 	}
 
 	VenueControls.prototype.updateForTimerTick = function()

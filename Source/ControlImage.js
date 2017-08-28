@@ -8,19 +8,20 @@ function ControlImage(name, pos, size, image)
 }
 
 {
-	ControlImage.prototype.draw = function()
+	ControlImage.prototype.drawToDisplayAtLoc = function(display, drawLoc)
 	{
-		var display = Globals.Instance.display;
+		var drawPos = drawLoc.pos.add(this.pos);
 
 		display.drawRectangle
 		(
-			this.pos, this.size, display.colorBack, display.colorFore
-		)
+			drawPos, this.size, 
+			display.colorBack, display.colorFore
+		);
 
 		display.drawImage
 		(
 			this.image,
-			this.pos,
+			drawPos,
 			display.sizeInPixels // hack
 		);
 	}
