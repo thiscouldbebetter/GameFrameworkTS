@@ -5,7 +5,7 @@ function VenueVideo(videoName, venueNext)
 	this.venueNext = venueNext;
 
 	this.hasVideoBeenStarted = false;
-	
+
 	this.inputToActionMappings = 
 	[
 		new InputToActionMapping("Escape", "VideoSkip", true),
@@ -48,7 +48,7 @@ function VenueVideo(videoName, venueNext)
 				}
 			}
 		}
-		
+
 		if (hasUserSkippedVideo == true)
 		{
 			this.video.stop();

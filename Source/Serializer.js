@@ -22,8 +22,8 @@ function Serializer()
 
 		var nodeRootSerialized = JSON.stringify
 		(
-			nodeRoot, 
-			null, // ? 
+			nodeRoot,
+			null, // ?
 			4 // pretty-print indent size
 		);
 
@@ -49,9 +49,9 @@ function SerializerNode(objectWrapped)
 		{
 			var typeName = this.objectWrapped.constructor.name;
 
-			var objectIndexExisting = 
+			var objectIndexExisting =
 				objectsAlreadyWrapped.indexOf(this.objectWrapped);
-				
+
 			if (objectIndexExisting >= 0)
 			{
 				var nodeForObjectExisting = objectIndexToNodeLookup[objectIndexExisting];
@@ -68,7 +68,7 @@ function SerializerNode(objectWrapped)
 				objectIndexToNodeLookup[objectIndex] = this;
 
 				this.objectWrappedTypeName = typeName;
-	
+
 				if (typeName == "Function")
 				{
 					this.objectWrapped = this.objectWrapped.toString();
@@ -76,7 +76,7 @@ function SerializerNode(objectWrapped)
 				else
 				{
 					this.children = {};
-	
+
 					for (var propertyName in this.objectWrapped)
 					{
 						if (this.objectWrapped.__proto__[propertyName] == null)
@@ -87,11 +87,11 @@ function SerializerNode(objectWrapped)
 							{
 								child = null;
 							}
-							else 
+							else
 							{
 								var propertyValueTypeName = propertyValue.constructor.name;
 
-								if 
+								if
 								(
 									propertyValueTypeName == "Boolean"
 									|| propertyValueTypeName == "Number"
@@ -115,7 +115,7 @@ function SerializerNode(objectWrapped)
 					}
 
 					delete this.objectWrapped;
-	
+
 					for (var childName in this.children)
 					{
 						var child = this.children[childName];
@@ -184,10 +184,10 @@ function SerializerNode(objectWrapped)
 			{
 				this.objectWrapped = eval("(" + this.objectWrapped + ")");
 			}
-			else if 
+			else if
 			(
-				typeName == "Boolean" 
-				|| typeName == "Number" 
+				typeName == "Boolean"
+				|| typeName == "Number"
 				|| typeName == "String"
 			)
 			{
@@ -200,13 +200,12 @@ function SerializerNode(objectWrapped)
 				this.objectWrapped.__proto__ = objectWrappedType.prototype;
 			}
 
-	
 			if (this.children != null)
 			{
 				for (var childName in this.children)
 				{
 					var child = this.children[childName];
-			
+
 					if (child != null)
 					{
 						if (child.constructor.name == "SerializerNode")

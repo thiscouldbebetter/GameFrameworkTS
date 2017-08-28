@@ -1,16 +1,16 @@
 function main()
 {
-	//localStorage.clear(); 
+	//localStorage.clear();
 
 	var displaySizeInPixels = new Coords(400, 300);
-	
+
 	var display = new Display
 	(
-		displaySizeInPixels, 
+		displaySizeInPixels,
 		10, // fontHeightInPixels
 		"Gray", "White" // colorFore, colorBack
 	);
-	
+
 	var mediaLibrary = new MediaLibrary
 	(
 		// images
@@ -35,7 +35,7 @@ function main()
 		"Cursor Quest",
 		20, // timerTicksPerSecond
 		display,
-		mediaLibrary,		
+		mediaLibrary,
 		universe0
 	);
 }

@@ -3,7 +3,7 @@ function VenueControls(controlRoot)
 {
 	this.controlRoot = controlRoot;
 
-	this.inputToActionMappings = 
+	this.inputToActionMappings =
 	[
 		new InputToActionMapping("ArrowDown", "ControlIncrement", true),
 		new InputToActionMapping("ArrowLeft", "ControlPrev", true),
@@ -13,12 +13,12 @@ function VenueControls(controlRoot)
 		new InputToActionMapping("Enter", "ControlConfirm", true),
 		new InputToActionMapping("Escape", "ControlCancel", true),
 	];
-	
+
 	var numberOfGamepadsPossible = 4;
 	for (var i = 0; i < numberOfGamepadsPossible; i++)
 	{
 		var gamepadID = "Gamepad" + i;
-		
+
 		this.inputToActionMappings.append
 		([
 			new InputToActionMapping(gamepadID + "MoveDown", "ControlIncrement", true),
@@ -29,7 +29,7 @@ function VenueControls(controlRoot)
 			new InputToActionMapping(gamepadID + "Button1", "ControlConfirm", true),
 		]);
 	}
-	
+
 	this.inputToActionMappings.addLookups("inputName");
 }
 

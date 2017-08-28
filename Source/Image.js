@@ -3,7 +3,7 @@ function Image(name, sourcePath)
 {
 	this.name = name;
 	this.sourcePath = sourcePath;
-	
+
 	this.load();
 }
 {
@@ -13,19 +13,19 @@ function Image(name, sourcePath)
 	{
 		var returnValue = new Image
 		(
-			name, 
+			name,
 			systemImage.src
 		);
 
 		return returnValue;
 	}
-	
+
 	// instance methods
-		
+
 	Image.prototype.load = function()
 	{
 		var image = this;
-		
+
 		var imgElement = document.createElement("img");
 		imgElement.onload = function(event)
 		{
@@ -34,7 +34,7 @@ function Image(name, sourcePath)
 			image.systemImage = imgLoaded;
 			image.sizeInPixels = new Coords
 			(
-				imgLoaded.width, 
+				imgLoaded.width,
 				imgLoaded.height
 			);
 		}

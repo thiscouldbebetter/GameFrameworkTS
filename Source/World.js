@@ -1,4 +1,4 @@
-// This class, as implemented, is only a demonstration. 
+// This class, as implemented, is only a demonstration.
 // Its code is expected to be modified heavily in actual applications,
 // including the constructor, the draw() and update() methods,
 // and the World.new() method.
@@ -8,78 +8,107 @@ function World(name, dateCreated, size, cursorPos)
 	this.name = name;
 	this.dateCreated = dateCreated;
 	this.size = size;
-	
+
 	this.timerTicksSoFar = 0;
-	
+
 	this.cursorLoc = new Location(cursorPos);
 	this.goalLoc = new Location(new Coords().randomize().multiply(this.size));
 	this.enemyLoc = new Location(this.size.clone().subtract(cursorPos));
-	
+
 	var entityDimension = 10;
 	var cursorSize = new Coords(1, 1).multiplyScalar(entityDimension);
-	
+
 	var cursorColor = "Gray";
 	var visualRectangleLarge = new VisualRectangle(cursorColor, cursorSize);
 	var visualRectangleSmall = new VisualRectangle(cursorColor, cursorSize.clone().divideScalar(4));
+	var visualMovementIndicator = new VisualDirectional
+	(
+		new VisualNone(),
+		[
+			new VisualAnimation
+			(
+				5, // ticksPerFrame
+				[
+					new VisualOffset(visualRectangleSmall, new Coords(1, 0).multiplyScalar(entityDimension)),
+					new VisualOffset(visualRectangleSmall, new Coords(1.5, 0).multiplyScalar(entityDimension)),
+					new VisualOffset(visualRectangleSmall, new Coords(2, 0).multiplyScalar(entityDimension)),
+				]
+			),
+			new VisualAnimation
+			(
+				5, // ticksPerFrame
+				[
+					new VisualOffset(visualRectangleSmall, new Coords(0, 1).multiplyScalar(entityDimension)),
+					new VisualOffset(visualRectangleSmall, new Coords(0, 1.5).multiplyScalar(entityDimension)),
+					new VisualOffset(visualRectangleSmall, new Coords(0, 2).multiplyScalar(entityDimension)),
+				]
+			),
+			new VisualAnimation
+			(
+				5, // ticksPerFrame
+				[
+					new VisualOffset(visualRectangleSmall, new Coords(-1, 0).multiplyScalar(entityDimension)),
+					new VisualOffset(visualRectangleSmall, new Coords(-1.5, 0).multiplyScalar(entityDimension)),
+					new VisualOffset(visualRectangleSmall, new Coords(-2, 0).multiplyScalar(entityDimension)),
+				]
+			),
+			new VisualAnimation
+			(
+				5, // ticksPerFrame
+				[
+					new VisualOffset(visualRectangleSmall, new Coords(0, -1).multiplyScalar(entityDimension)),
+					new VisualOffset(visualRectangleSmall, new Coords(0, -1.5).multiplyScalar(entityDimension)),
+					new VisualOffset(visualRectangleSmall, new Coords(0, -2).multiplyScalar(entityDimension)),
+				]
+			),
+		]
+	);
+
+	var visualPlayerName = new VisualOffset
+	(
+		new VisualText("Player", cursorColor),
+		new Coords(0, entityDimension)
+	);
+
 	this.visualForCursor = new VisualGroup
 	([
 		visualRectangleLarge,
-		new VisualDirectional
+		visualPlayerName,
+		visualMovementIndicator,
+	]);
+
+	var goalColor = "Green";
+	this.visualForGoal = new VisualGroup
+	([
+		new VisualCircle(goalColor, entityDimension / 2),
+		new VisualOffset
 		(
-			new VisualNone(),
-			[
-				new VisualAnimation
-				(
-					5, // ticksPerFrame 
-					[
-						new VisualOffset(visualRectangleSmall, new Coords(1, 0).multiplyScalar(entityDimension)),
-						new VisualOffset(visualRectangleSmall, new Coords(1.5, 0).multiplyScalar(entityDimension)),
-						new VisualOffset(visualRectangleSmall, new Coords(2, 0).multiplyScalar(entityDimension)),
-					]
-				),
-				new VisualAnimation
-				(
-					5, // ticksPerFrame 
-					[
-						new VisualOffset(visualRectangleSmall, new Coords(0, 1).multiplyScalar(entityDimension)),
-						new VisualOffset(visualRectangleSmall, new Coords(0, 1.5).multiplyScalar(entityDimension)),
-						new VisualOffset(visualRectangleSmall, new Coords(0, 2).multiplyScalar(entityDimension)),
-					]
-				),
-				new VisualAnimation
-				(
-					5, // ticksPerFrame 
-					[
-						new VisualOffset(visualRectangleSmall, new Coords(-1, 0).multiplyScalar(entityDimension)),
-						new VisualOffset(visualRectangleSmall, new Coords(-1.5, 0).multiplyScalar(entityDimension)),
-						new VisualOffset(visualRectangleSmall, new Coords(-2, 0).multiplyScalar(entityDimension)),
-					]
-				),
-				new VisualAnimation
-				(
-					5, // ticksPerFrame 
-					[
-						new VisualOffset(visualRectangleSmall, new Coords(0, -1).multiplyScalar(entityDimension)),
-						new VisualOffset(visualRectangleSmall, new Coords(0, -1.5).multiplyScalar(entityDimension)),
-						new VisualOffset(visualRectangleSmall, new Coords(0, -2).multiplyScalar(entityDimension)),
-					]
-				),
-			]
+			new VisualText("Goal", goalColor),
+			new Coords(0, entityDimension)
 		)
-	]); 
-	
-	this.visualForGoal = new VisualCircle("Green", entityDimension);
-	this.visualForEnemy = new VisualPolygon
-	(
-		"Red", 
-		// vertices
-		[
-			new Coords(0, -entityDimension),
-			new Coords(entityDimension, entityDimension),
-			new Coords(-entityDimension, entityDimension),
-		]
-	);
-		
+	]);
+
+	var enemyColor = "Red";
+
+	this.visualForEnemy = new VisualGroup
+	([
+		new VisualPolygon
+		(
+			enemyColor,
+			// vertices
+			[
+				new Coords(0, -entityDimension).divideScalar(2),
+				new Coords(entityDimension, entityDimension).divideScalar(2),
+				new Coords(-entityDimension, entityDimension).divideScalar(2),
+			]
+		),
+		new VisualOffset
+		(
+			new VisualText("Enemy", enemyColor),
+			new Coords(0, entityDimension)
+		)
+	]);
+
 	// helper variables
 	this.displacement = new Coords();
 }
@@ -90,7 +119,7 @@ function World(name, dateCreated, size, cursorPos)
 	World.new = function()
 	{
 		var now = DateTime.now();
-		var nowAsString = now.toStringTimestamp();
+		var nowAsString = now.toStringMMDD_HHMM();
 
 		var returnValue = new World
 		(
@@ -103,13 +132,13 @@ function World(name, dateCreated, size, cursorPos)
 	}
 
 	// instance methods
-	
+
 	World.prototype.draw = function()
 	{
 		var display = Globals.Instance.display;
 
 		display.clear();
-		
+
 		this.visualForGoal.drawToDisplayForDrawableAndLoc(display, null, this.goalLoc);
 		this.visualForCursor.drawToDisplayForDrawableAndLoc(display, null, this.cursorLoc);
 		this.visualForEnemy.drawToDisplayForDrawableAndLoc(display, null, this.enemyLoc);
@@ -122,7 +151,7 @@ function World(name, dateCreated, size, cursorPos)
 		this.updateForTimerTick_WinOrLose();
 		this.timerTicksSoFar++;
 	}
-	
+
 	World.prototype.updateForTimerTick_Input = function()
 	{
 		this.cursorLoc.orientation.forwardSet(Coords.Instances.Zeroes);
@@ -153,14 +182,14 @@ function World(name, dateCreated, size, cursorPos)
 				venueNext = new VenueFader(venueNext);
 				universe.venueNext = venueNext;
 			}
-			else if 
+			else if
 			(
 				inputActive.startsWith("Arrow") == true
 				|| inputActive.startsWith("Gamepad") == true
 			)
 			{
 				var directionToMove;
-				
+
 				if (inputActive.endsWith("Down") == true)
 				{
 					directionToMove = new Coords(0, 1);
@@ -181,7 +210,7 @@ function World(name, dateCreated, size, cursorPos)
 				{
 					directionToMove = new Coords(0, 0);
 				}
-				
+
 				this.cursorLoc.orientation.forwardSet(directionToMove);
 				var vel = this.cursorLoc.vel;
 				if (vel.equals(directionToMove) == false)
@@ -193,7 +222,7 @@ function World(name, dateCreated, size, cursorPos)
 			}
 		}
 	}
-	
+
 	World.prototype.updateForTimerTick_Agents = function()
 	{
 		var directionFromEnemyToCursor = this.displacement.overwriteWith
@@ -203,14 +232,14 @@ function World(name, dateCreated, size, cursorPos)
 		(
 			this.enemyLoc.pos
 		).normalize();
-		
+
 		this.enemyLoc.pos.add(directionFromEnemyToCursor);
 	}
-	
+
 	World.prototype.updateForTimerTick_WinOrLose = function()
 	{
 		var messageToDisplay = null;
-	
+
 		var distanceOfCursorFromEnemy = this.displacement.overwriteWith
 		(
 			this.cursorLoc.pos
@@ -218,12 +247,12 @@ function World(name, dateCreated, size, cursorPos)
 		(
 			this.enemyLoc.pos
 		).magnitude();
-	
+
 		if (distanceOfCursorFromEnemy < this.visualForCursor.children[0].size.x)
 		{
 			messageToDisplay = "You lose!";
 		}
-		else 
+		else
 		{
 			var distanceOfCursorFromGoal = this.displacement.overwriteWith
 			(
@@ -233,27 +262,36 @@ function World(name, dateCreated, size, cursorPos)
 				this.goalLoc.pos
 			).magnitude();
 
-			if (distanceOfCursorFromGoal < this.visualForGoal.radius)
+			if (distanceOfCursorFromGoal < this.visualForGoal.children[0].radius)
 			{
 				messageToDisplay = "You win!"
 			}
 		}
-		
+
 		if (messageToDisplay != null)
 		{
-			var venueNext = new VenueMessage
+			var venueMessage = new VenueMessage
 			(
 				messageToDisplay,
+				null // venueNext
+			);
+
+			var venueAfterMessageAcknowedged = new VenueFader
+			(
 				new VenueControls
 				(
 					Globals.Instance.controlBuilder.title
 					(
 						Globals.Instance.display.sizeInPixels
 					)
-				)
+				),
+				venueMessage // venueToFadeFrom
 			);
-			venueNext = new VenueFader(venueNext);
-			
+
+			venueMessage.venueNext = venueAfterMessageAcknowedged;
+
+			var venueNext = new VenueFader(venueMessage);
+
 			var universe = Globals.Instance.universe;
 			universe.venueNext = venueNext;
 		}

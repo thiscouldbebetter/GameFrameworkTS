@@ -16,7 +16,7 @@ function Globals()
 	Globals.prototype.initialize = function
 	(
 		programName,
-		timerTicksPerSecond, 
+		timerTicksPerSecond,
 		display,
 		mediaLibrary,
 		universe

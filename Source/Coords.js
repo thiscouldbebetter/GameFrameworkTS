@@ -35,7 +35,7 @@ function Coords(x, y, z)
 		this.z += z;
 		return this;
 	}
-	
+
 	Coords.prototype.ceiling = function()
 	{
 		this.x = Math.ceil(this.x);
@@ -43,7 +43,7 @@ function Coords(x, y, z)
 		this.z = Math.ceil(this.z);
 		return this;
 	}
-	
+
 	Coords.prototype.clear = function()
 	{
 		this.x = 0;
@@ -66,7 +66,7 @@ function Coords(x, y, z)
 			this.x * other.y - this.y * other.x
 		);
 	}
-	
+
 	Coords.prototype.divide = function(other)
 	{
 		this.x /= other.x;
@@ -82,7 +82,7 @@ function Coords(x, y, z)
 		this.z /= scalar;
 		return this;
 	}
-	
+
 	Coords.prototype.dotProduct = function(other)
 	{
 		return this.x * other.x + this.y * other.y + this.z * other.z;
@@ -92,7 +92,7 @@ function Coords(x, y, z)
 	{
 		return (this.x == other.x && this.y == other.y && this.z == other.z);
 	}
-	
+
 	Coords.prototype.floor = function()
 	{
 		this.x = Math.floor(this.x);
@@ -100,7 +100,7 @@ function Coords(x, y, z)
 		this.z = Math.floor(this.z);
 		return this;
 	}
-	
+
 	Coords.prototype.invert = function()
 	{
 		this.x = 0 - this.x;
@@ -111,7 +111,7 @@ function Coords(x, y, z)
 
 	Coords.prototype.isInRangeMinMax = function(min, max)
 	{
-		var returnValue = 
+		var returnValue =
 		(
 			this.x >= min.x
 			&& this.x <= max.x
@@ -123,12 +123,12 @@ function Coords(x, y, z)
 
 		return returnValue;
 	}
-	
+
 	Coords.prototype.magnitude = function()
 	{
 		return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
 	}
-	
+
 	Coords.prototype.multiply = function(other)
 	{
 		this.x *= other.x;
@@ -136,7 +136,7 @@ function Coords(x, y, z)
 		this.z *= other.z;
 		return this;
 	}
-	
+
 	Coords.prototype.multiplyScalar = function(scalar)
 	{
 		this.x *= scalar;
@@ -144,7 +144,7 @@ function Coords(x, y, z)
 		this.z *= scalar;
 		return this;
 	}
-	
+
 	Coords.prototype.normalize = function()
 	{
 		var magnitude = this.magnitude();
@@ -154,7 +154,7 @@ function Coords(x, y, z)
 		}
 		return this;
 	}
-	
+
 	Coords.prototype.overwriteWith = function(other)
 	{
 		this.x = other.x;
@@ -170,7 +170,7 @@ function Coords(x, y, z)
 		this.z = z;
 		return this;
 	}
-	
+
 	Coords.prototype.randomize = function()
 	{
 		this.x = Math.random();
@@ -178,7 +178,7 @@ function Coords(x, y, z)
 		this.z = Math.random();
 		return this;
 	}
-	
+
 	Coords.prototype.right = function()
 	{
 		var temp = this.y;
@@ -194,7 +194,7 @@ function Coords(x, y, z)
 		this.z = Math.round(this.z);
 		return this;
 	}
-	
+
 	Coords.prototype.subtract = function(other)
 	{
 		this.x -= other.x;
@@ -202,7 +202,7 @@ function Coords(x, y, z)
 		this.z -= other.z;
 		return this;
 	}
-	
+
 	Coords.prototype.trimToMagnitudeMax = function(magnitudeMax)
 	{
 		var magnitude = this.magnitude();
@@ -212,7 +212,7 @@ function Coords(x, y, z)
 		}
 		return this;
 	}
-	
+
 	Coords.prototype.trimToRangeMax = function(max)
 	{
 		if (this.x < 0)
@@ -241,10 +241,10 @@ function Coords(x, y, z)
 		{
 			this.z = max.z;
 		}
-		
+
 		return this;
 	}
-	
+
 	Coords.prototype.trimToRangeMinMax = function(min, max)
 	{
 		if (this.x < min.x)
@@ -273,10 +273,10 @@ function Coords(x, y, z)
 		{
 			this.z = max.z;
 		}
-		
+
 		return this;
 	}
-	
+
 	Coords.prototype.wrapToRangeMax = function(max)
 	{
 		while (this.x < 0)
@@ -305,12 +305,12 @@ function Coords(x, y, z)
 		{
 			this.z -= max.z;
 		}
-		
+
 		return this;
 	}
-	
+
 	// string
-	
+
 	Coords.prototype.toString = function()
 	{
 		return this.x + "x" + this.y + "x" + this.z;

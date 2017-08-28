@@ -11,11 +11,13 @@ function VisualText(text, color)
 		display.drawText
 		(
 			this.text,
-			display.fontHeightInPixels, 
+			display.fontHeightInPixels,
 			loc.pos,
-			this.color, // colorFore 
-			display.colorBack, 
-			false // areColorsReversed
+			this.color, // colorFill
+			display.colorBack,
+			false, // areColorsReversed
+			true, // isCentered
+			null // widthMaxInPixels
 		);
 	}
 }

@@ -20,7 +20,7 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, cli
 			this.click();
 		}
 	}
-	
+
 	ControlButton.prototype.focusGain = function()
 	{
 		this.isHighlighted = true;
@@ -47,9 +47,9 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, cli
 	}
 
 	// drawable
-	
+
 	ControlButton.prototype.drawToDisplayAtLoc = function(display, drawLoc)
-	{	
+	{
 		var drawPos = drawLoc.pos;
 		drawPos.add(this.pos);
 
@@ -57,27 +57,24 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, cli
 		{
 			display.drawRectangle
 			(
-				drawPos, this.size, 
+				drawPos, this.size,
 				display.colorBack, display.colorFore,
 				this.isHighlighted // areColorsReversed
 			);
 		}
 
-		var text = this.text;
-
-		var textWidth = display.textWidthForFontHeight(text, this.fontHeightInPixels);
-		var textSize = new Coords(textWidth, this.fontHeightInPixels);
-		var textMargin = this.size.clone().subtract(textSize).divideScalar(2);
-		drawPos.add(textMargin);
+		drawPos.add(this.size.clone().divideScalar(2));
 
 		display.drawText
 		(
-			text, 
-			this.fontHeightInPixels, 
-			drawPos, 
+			this.text,
+			this.fontHeightInPixels,
+			drawPos,
 			display.colorFore,
 			display.colorBack,
-			this.isHighlighted
+			this.isHighlighted,
+			true, // isCentered
+			this.size.x // widthMaxInPixels
 		);
 	}
 }

@@ -20,7 +20,7 @@ function VisualRay(color, length)
 			this.toPos
 		).add
 		(
-			loc.pos		
+			loc.pos
 		);
 
 		display.drawLine

@@ -27,9 +27,9 @@ function VisualImage(imageName)
 	{
 		return Globals.Instance.mediaLibrary.imageGetByName(this.imageName);
 	}
-	
+
 	// visual
-	
+
 	VisualImage.prototype.drawToDisplayForDrawableAndLoc = function(display, drawable, loc)
 	{
 		var image = this.image();

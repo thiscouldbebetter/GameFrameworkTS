@@ -1,6 +1,4 @@
 
-// classes
-
 function ControlBuilder()
 {
 	this.fontHeightInPixelsBase = 10;
@@ -15,7 +13,7 @@ function ControlBuilder()
 		}
 
 		sizeMultiplier = size.clone().divide(this.sizeBase);
-	
+
 		var returnValue = new ControlContainer
 		(
 			"containerConfigure",
@@ -43,7 +41,7 @@ function ControlBuilder()
 						universe.venueNext = venueNext;
 					}
 				),
-				
+
 				new ControlButton
 				(
 					"buttonLoad",
@@ -64,12 +62,11 @@ function ControlBuilder()
 						universe.venueNext = venueNext;
 					}
 				),
-				
 
 				new ControlLabel
 				(
 					"labelMusicVolume",
-					new Coords(50, 45).multiply(sizeMultiplier), // pos
+					new Coords(50, 50).multiply(sizeMultiplier), // pos
 					new Coords(75, 25).multiply(sizeMultiplier), // size
 					false, // isTextCentered
 					"Music Volume:",
@@ -79,13 +76,13 @@ function ControlBuilder()
 				new ControlSelect
 				(
 					"selectMusicVolume",
-					new Coords(125, 45).multiply(sizeMultiplier), // pos
-					new Coords(25, 25).multiply(sizeMultiplier), // size
+					new Coords(120, 45).multiply(sizeMultiplier), // pos
+					new Coords(30, 25).multiply(sizeMultiplier), // size
 
 					// dataBindingForValueSelected
 					new DataBinding
 					(
-						Globals.Instance.soundHelper, 
+						Globals.Instance.soundHelper,
 						"musicVolume"
 					),
 
@@ -104,7 +101,7 @@ function ControlBuilder()
 				new ControlLabel
 				(
 					"labelSoundVolume",
-					new Coords(50, 75).multiply(sizeMultiplier), // pos
+					new Coords(50, 80).multiply(sizeMultiplier), // pos
 					new Coords(75, 25).multiply(sizeMultiplier), // size
 					false, // isTextCentered
 					"Sound Volume:",
@@ -114,13 +111,13 @@ function ControlBuilder()
 				new ControlSelect
 				(
 					"selectSoundVolume",
-					new Coords(125, 75).multiply(sizeMultiplier), // pos
-					new Coords(25, 25).multiply(sizeMultiplier), // size
+					new Coords(120, 75).multiply(sizeMultiplier), // pos
+					new Coords(30, 25).multiply(sizeMultiplier), // size
 
 					// dataBindingForValueSelected
 					new DataBinding
 					(
-						Globals.Instance.soundHelper, 
+						Globals.Instance.soundHelper,
 						"soundVolume"
 					),
 
@@ -154,7 +151,7 @@ function ControlBuilder()
 						universe.venueNext = venueNext;
 					}
 				),
-	
+
 				new ControlButton
 				(
 					"buttonQuit",
@@ -202,7 +199,7 @@ function ControlBuilder()
 				),
 			]
 		);
-		
+
 		return returnValue;
 	}
 
@@ -214,7 +211,7 @@ function ControlBuilder()
 		}
 
 		sizeMultiplier = size.clone().divide(this.sizeBase);
-				
+
 		var returnValue = new ControlContainer
 		(
 			"containerConfirm",
@@ -225,8 +222,8 @@ function ControlBuilder()
 				new ControlLabel
 				(
 					"labelMessage",
-					new Coords(50, 50).multiply(sizeMultiplier), // pos
-					new Coords(100, 25).multiply(sizeMultiplier), // size
+					new Coords(100, 65).multiply(sizeMultiplier), // pos
+					new Coords(200, 25).multiply(sizeMultiplier), // size
 					true, // isTextCentered
 					message,
 					this.fontHeightInPixelsBase * sizeMultiplier.y
@@ -258,7 +255,7 @@ function ControlBuilder()
 
 		return returnValue;
 	}
-	
+
 	ControlBuilder.prototype.message = function(size, message, acknowledge)
 	{
 		if (size == null)
@@ -267,7 +264,7 @@ function ControlBuilder()
 		}
 
 		sizeMultiplier = size.clone().divide(this.sizeBase);
-				
+
 		var returnValue = new ControlContainer
 		(
 			"containerConfirm",
@@ -278,8 +275,8 @@ function ControlBuilder()
 				new ControlLabel
 				(
 					"labelMessage",
-					new Coords(50, 50).multiply(sizeMultiplier), // pos
-					new Coords(100, 25).multiply(sizeMultiplier), // size
+					new Coords(100, 65).multiply(sizeMultiplier), // pos
+					new Coords(200, 25).multiply(sizeMultiplier), // size
 					true, // isTextCentered
 					message,
 					this.fontHeightInPixelsBase * sizeMultiplier.y
@@ -300,7 +297,7 @@ function ControlBuilder()
 
 		return returnValue;
 	}
-	
+
 	ControlBuilder.prototype.profileDetail = function(size)
 	{
 		if (size == null)
@@ -309,7 +306,7 @@ function ControlBuilder()
 		}
 
 		sizeMultiplier = size.clone().divide(this.sizeBase);
-		
+
 		var returnValue = new ControlContainer
 		(
 			"containerProfileDetail",
@@ -320,17 +317,17 @@ function ControlBuilder()
 				new ControlLabel
 				(
 					"labelProfileName",
-					new Coords(50, 15).multiply(sizeMultiplier), // pos
-					new Coords(100, 25).multiply(sizeMultiplier), // size
+					new Coords(100, 25).multiply(sizeMultiplier), // pos
+					new Coords(120, 25).multiply(sizeMultiplier), // size
 					true, // isTextCentered
 					"Profile: " + Globals.Instance.universe.profile.name,
 					this.fontHeightInPixelsBase * sizeMultiplier.y
-				),			
-			
+				),
+
 				new ControlLabel
 				(
 					"labelSelectAWorld",
-					new Coords(50, 25).multiply(sizeMultiplier), // pos
+					new Coords(100, 40).multiply(sizeMultiplier), // pos
 					new Coords(100, 25).multiply(sizeMultiplier), // size
 					true, // isTextCentered
 					"Select a World:",
@@ -347,10 +344,10 @@ function ControlBuilder()
 						Globals.Instance.universe.profile.worlds,
 						null
 					),
-					"name", 
+					"name",
 					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
-	
+
 				new ControlButton
 				(
 					"buttonNew",
@@ -408,8 +405,8 @@ function ControlBuilder()
 							universe.venueNext = venueNext;
 						}
 					}
-				),	
-				
+				),
+
 				new ControlButton
 				(
 					"buttonBack",
@@ -448,8 +445,8 @@ function ControlBuilder()
 						var controlConfirm = Globals.Instance.controlBuilder.confirm
 						(
 							size,
-							"Delete profile \"" 
-								+ profile.name 
+							"Delete profile \""
+								+ profile.name
 								+ "\"?",
 							// confirm
 							function()
@@ -500,7 +497,7 @@ function ControlBuilder()
 		}
 
 		sizeMultiplier = size.clone().divide(this.sizeBase);
-		
+
 		return new ControlContainer
 		(
 			"containerProfileNew",
@@ -511,7 +508,7 @@ function ControlBuilder()
 				new ControlLabel
 				(
 					"labelName",
-					new Coords(50, 25).multiply(sizeMultiplier), // pos
+					new Coords(100, 40).multiply(sizeMultiplier), // pos
 					new Coords(100, 25).multiply(sizeMultiplier), // size
 					true, // isTextCentered
 					"Profile Name:",
@@ -594,9 +591,9 @@ function ControlBuilder()
 		}
 
 		sizeMultiplier = size.clone().divide(this.sizeBase);
-		
+
 		var profiles = Globals.Instance.profileHelper.profiles();
-		
+
 		var returnValue = new ControlContainer
 		(
 			"containerProfileSelect",
@@ -607,7 +604,7 @@ function ControlBuilder()
 				new ControlLabel
 				(
 					"labelSelectAProfile",
-					new Coords(50, 25).multiply(sizeMultiplier), // pos
+					new Coords(100, 40).multiply(sizeMultiplier), // pos
 					new Coords(100, 25).multiply(sizeMultiplier), // size
 					true, // isTextCentered
 					"Select a Profile:",
@@ -617,8 +614,8 @@ function ControlBuilder()
 				new ControlList
 				(
 					"listProfiles",
-					new Coords(50, 55).multiply(sizeMultiplier), // pos
-					new Coords(100, 50).multiply(sizeMultiplier), // size
+					new Coords(50, 50).multiply(sizeMultiplier), // pos
+					new Coords(100, 40).multiply(sizeMultiplier), // size
 					new DataBinding
 					(
 						profiles,
@@ -631,8 +628,8 @@ function ControlBuilder()
 				new ControlButton
 				(
 					"buttonNew",
-					new Coords(50, 110).multiply(sizeMultiplier), // pos
-					new Coords(45, 25).multiply(sizeMultiplier), // size
+					new Coords(50, 95).multiply(sizeMultiplier), // pos
+					new Coords(30, 25).multiply(sizeMultiplier), // size
 					"New",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
@@ -649,12 +646,11 @@ function ControlBuilder()
 					}
 				),
 
-
 				new ControlButton
 				(
 					"buttonSelect",
-					new Coords(105, 110).multiply(sizeMultiplier), // pos
-					new Coords(45, 25).multiply(sizeMultiplier), // size
+					new Coords(85, 95).multiply(sizeMultiplier), // pos
+					new Coords(30, 25).multiply(sizeMultiplier), // size
 					"Select",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
@@ -674,6 +670,52 @@ function ControlBuilder()
 					}
 				),
 
+				new ControlButton
+				(
+					"buttonSkip",
+					new Coords(120, 95).multiply(sizeMultiplier), // pos
+					new Coords(30, 25).multiply(sizeMultiplier), // size
+					"Skip",
+					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					true, // hasBorder
+					// click
+					function()
+					{
+						var universe = Globals.Instance.universe;
+						var world = World.new();
+						var now = DateTime.now();
+						var nowAsString = now.toStringMMDD_HHMM();
+						var randomNumber = Math.floor(Math.random() * 100);
+						var profileName = "Anon-" + nowAsString + "-" + randomNumber;
+						var profile = new Profile(profileName, [ world ]);
+						universe.profile = profile;
+						universe.world = world;
+						var venueNext = new VenueWorld(universe.world);
+						venueNext = new VenueFader(venueNext);
+						universe.venueNext = venueNext;
+					}
+				),
+
+				new ControlButton
+				(
+					"buttonBack",
+					new Coords(10, 10).multiply(sizeMultiplier), // pos
+					new Coords(15, 15).multiply(sizeMultiplier), // size
+					"<",
+					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					true, // hasBorder
+					// click
+					function ()
+					{
+						var venueNext = new VenueControls
+						(
+							Globals.Instance.controlBuilder.title()
+						);
+						venueNext = new VenueFader(venueNext);
+						var universe = Globals.Instance.universe;
+						universe.venueNext = venueNext;
+					}
+				),
 			]
 		);
 
@@ -688,7 +730,7 @@ function ControlBuilder()
 		}
 
 		sizeMultiplier = size.clone().divide(this.sizeBase);
-		
+
 		var returnValue = new ControlContainer
 		(
 			"containerTitle",
@@ -708,7 +750,7 @@ function ControlBuilder()
 				(
 					"buttonStart",
 					new Coords(75, 100).multiply(sizeMultiplier), // pos
-					new Coords(50, 25).multiply(sizeMultiplier), // size
+					new Coords(50, 40).multiply(sizeMultiplier), // size
 					"Start",
 					this.fontHeightInPixelsBase * sizeMultiplier.y * 2,
 					false, // hasBorder
@@ -723,32 +765,10 @@ function ControlBuilder()
 						var universe = Globals.Instance.universe;
 						universe.venueNext = venueNext;
 					}
-				),
-				
-				new ControlButton
-				(
-					"buttonTestDemo",
-					new Coords(75, 125).multiply(sizeMultiplier), // pos
-					new Coords(50, 25).multiply(sizeMultiplier), // size
-					"Test/Demo",
-					this.fontHeightInPixelsBase * sizeMultiplier.y * 2,
-					false, // hasBorder
-					// click
-					function()
-					{
-						var universe = Globals.Instance.universe;
-						var world = World.new();
-						var profile = new Profile("[Unnamed]", [ world ]);
-						universe.profile = profile;
-						universe.world = world;
-						var venueNext = new VenueWorld(universe.world);
-						universe.venueNext = venueNext;
-					}
-				),
-				
+				)
 			]
 		);
-		
+
 		return returnValue;
 	}
 
@@ -760,7 +780,7 @@ function ControlBuilder()
 		}
 
 		sizeMultiplier = size.clone().divide(this.sizeBase);
-		
+
 		var universe = Globals.Instance.universe;
 		var world = universe.world;
 
@@ -777,7 +797,7 @@ function ControlBuilder()
 				new ControlLabel
 				(
 					"labelProfileName",
-					new Coords(50, 15).multiply(sizeMultiplier), // pos
+					new Coords(100, 40).multiply(sizeMultiplier), // pos
 					new Coords(100, 25).multiply(sizeMultiplier), // size
 					true, // isTextCentered
 					"Profile: " + universe.profile.name,
@@ -786,8 +806,8 @@ function ControlBuilder()
 				new ControlLabel
 				(
 					"labelWorldName",
-					new Coords(50, 30).multiply(sizeMultiplier), // pos
-					new Coords(100, 25).multiply(sizeMultiplier), // size
+					new Coords(100, 55).multiply(sizeMultiplier), // pos
+					new Coords(150, 25).multiply(sizeMultiplier), // size
 					true, // isTextCentered
 					"World: " + world.name,
 					this.fontHeightInPixelsBase * sizeMultiplier.y
@@ -795,8 +815,8 @@ function ControlBuilder()
 				new ControlLabel
 				(
 					"labelStartDate",
-					new Coords(50, 45).multiply(sizeMultiplier), // pos
-					new Coords(100, 25).multiply(sizeMultiplier), // size
+					new Coords(100, 70).multiply(sizeMultiplier), // pos
+					new Coords(150, 25).multiply(sizeMultiplier), // size
 					true, // isTextCentered
 					"Started:" + dateCreated.toStringTimestamp(),
 					this.fontHeightInPixelsBase * sizeMultiplier.y
@@ -804,8 +824,8 @@ function ControlBuilder()
 				new ControlLabel
 				(
 					"labelSavedDate",
-					new Coords(50, 60).multiply(sizeMultiplier), // pos
-					new Coords(100, 25).multiply(sizeMultiplier), // size
+					new Coords(100, 85).multiply(sizeMultiplier), // pos
+					new Coords(150, 25).multiply(sizeMultiplier), // size
 					true, // isTextCentered
 					"Saved:" + dateSaved.toStringTimestamp(),
 					this.fontHeightInPixelsBase * sizeMultiplier.y
@@ -857,7 +877,7 @@ function ControlBuilder()
 						var universe = Globals.Instance.universe;
 						universe.venueNext = venueNext;
 					}
-				),	
+				),
 
 				new ControlButton
 				(
@@ -877,8 +897,8 @@ function ControlBuilder()
 						var controlConfirm = Globals.Instance.controlBuilder.confirm
 						(
 							size,
-							"Delete world \"" 
-								+ world.name 
+							"Delete world \""
+								+ world.name
 								+ "\"?",
 							// confirm
 							function()
@@ -895,7 +915,7 @@ function ControlBuilder()
 									1
 								);
 								universe.world = null;
-								
+
 								Globals.Instance.profileHelper.profileSave
 								(
 									profile
@@ -932,7 +952,7 @@ function ControlBuilder()
 
 		return returnValue;
 	}
-	
+
 	ControlBuilder.prototype.worldLoad = function(size)
 	{
 		if (size == null)
@@ -941,7 +961,7 @@ function ControlBuilder()
 		}
 
 		sizeMultiplier = size.clone().divide(this.sizeBase);
-	
+
 		var returnValue = new ControlContainer
 		(
 			"containerWorldLoad",
@@ -979,7 +999,7 @@ function ControlBuilder()
 										break;
 									}
 								}
-								
+
 								var worldOld = universe.world;
 								var worldsReloaded = universe.profile.worlds;
 								var worldToReload = null;
@@ -992,21 +1012,21 @@ function ControlBuilder()
 										break;
 									}
 								}
-								
+
 								var venueNext = new VenueControls
 								(
 									Globals.Instance.controlBuilder.worldLoad()
 								);
 								venueNext = new VenueFader(venueNext);
 								universe.venueNext = venueNext;
-								
+
 								if (worldToReload == null)
 								{
 									venueNext = new VenueControls
 									(
 										Globals.Instance.controlBuilder.message
 										(
-											size, 
+											size,
 											"No save exists to reload!",
 											// acknowledge
 											function()
@@ -1027,7 +1047,7 @@ function ControlBuilder()
 								{
 									universe.world = worldReloaded;
 								}
-								
+
 							},
 							// cancel
 							function()
@@ -1041,7 +1061,7 @@ function ControlBuilder()
 								universe.venueNext = venueNext;
 							}
 						);
-						
+
 						var universe = Globals.Instance.universe;
 						var venueNext = new VenueControls(controlConfirm);
 						venueNext = new VenueFader(venueNext);
@@ -1063,16 +1083,16 @@ function ControlBuilder()
 						var universe = Globals.Instance.universe;
 						var profile = universe.profile;
 						var world = universe.world;
-						
+
 						var venueFileUpload = new VenueFileUpload(null);
-						
+
 						var venueMessageReadyToLoad = new VenueControls
 						(
 							Globals.Instance.controlBuilder.message
 							(
 								size,
 								"Ready to load from file...",
-								// acknowledge 
+								// acknowledge
 								function()
 								{
 									function callback(fileContentsAsString)
@@ -1081,7 +1101,7 @@ function ControlBuilder()
 										var worldDeserialized = Globals.Instance.serializer.deserialize(worldAsJSON);
 										var universe = Globals.Instance.universe;
 										universe.world = worldDeserialized;
-				
+
 										var venueNext = new VenueControls
 										(
 											Globals.Instance.controlBuilder.configure()
@@ -1089,7 +1109,7 @@ function ControlBuilder()
 										venueNext = new VenueFader(venueNext);
 										universe.venueNext = venueNext;
 									}
-									
+
 									var inputFile = venueFileUpload.domElement.getElementsByTagName("input")[0];
 									var fileToLoad = inputFile.files[0];
 									new FileHelper().loadFileAsText
@@ -1098,18 +1118,18 @@ function ControlBuilder()
 										callback,
 										null // contextForCallback
 									);
-									
+
 								}
 							)
 						);
-			
+
 						var venueMessageCancelled = new VenueControls
 						(
 							Globals.Instance.controlBuilder.message
 							(
 								size,
 								"No file specified.",
-								// acknowledge 
+								// acknowledge
 								function()
 								{
 									var venueNext = new VenueControls
@@ -1124,11 +1144,11 @@ function ControlBuilder()
 
 						venueFileUpload.venueNextIfFileSpecified = venueMessageReadyToLoad;
 						venueFileUpload.venueNextIfCancelled = venueMessageCancelled;
-						
+
 						universe.venueNext = venueFileUpload;
 					}
 				),
-				
+
 				new ControlButton
 				(
 					"buttonReturn",
@@ -1149,13 +1169,13 @@ function ControlBuilder()
 						universe.venueNext = venueNext;
 					}
 				),
-	
+
 			]
 		);
-		
+
 		return returnValue;
 	}
-		
+
 	ControlBuilder.prototype.worldSave = function(size)
 	{
 		if (size == null)
@@ -1164,7 +1184,7 @@ function ControlBuilder()
 		}
 
 		sizeMultiplier = size.clone().divide(this.sizeBase);
-	
+
 		var returnValue = new ControlContainer
 		(
 			"containerSave",
@@ -1192,14 +1212,14 @@ function ControlBuilder()
 						(
 							profile
 						);
-						
+
 						var venueNext = new VenueControls
 						(
 							Globals.Instance.controlBuilder.message
 							(
 								size,
 								"Profile saved to server.",
-								// acknowledge 
+								// acknowledge
 								function()
 								{
 									var universe = Globals.Instance.universe;
@@ -1234,20 +1254,20 @@ function ControlBuilder()
 
 						world.dateSaved = DateTime.now();
 						var worldSerialized = Globals.Instance.serializer.serialize(world);
-						
+
 						new FileHelper().saveTextStringToFileWithName
 						(
 							worldSerialized,
 							world.name + ".json"
 						);
-						
+
 						var venueNext = new VenueControls
 						(
 							Globals.Instance.controlBuilder.message
 							(
 								size,
 								"Save must be completed manually.",
-								// acknowledge 
+								// acknowledge
 								function()
 								{
 									var universe = Globals.Instance.universe;
@@ -1264,7 +1284,7 @@ function ControlBuilder()
 						universe.venueNext = venueNext;
 					}
 				),
-				
+
 				new ControlButton
 				(
 					"buttonReturn",
@@ -1285,10 +1305,9 @@ function ControlBuilder()
 						universe.venueNext = venueNext;
 					}
 				),
-	
 			]
 		);
-		
+
 		return returnValue;
 	}
 }

@@ -50,9 +50,9 @@ function Universe(name, world)
 
 		if (this.venueNext != null)
 		{
-			if 
+			if
 			(
-				this.venueCurrent != null 
+				this.venueCurrent != null
 				&& this.venueCurrent.finalize != null
 			)
 			{

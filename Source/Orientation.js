@@ -25,7 +25,7 @@ function Orientation(forward, down)
 	Orientation.prototype.headingInTurns = function()
 	{
 		var returnValue;
-		
+
 		var forward = this.forward;
 		if (forward.x == 0 && forward.y == 0)
 		{
@@ -34,13 +34,13 @@ function Orientation(forward, down)
 		else
 		{
 			returnValue = Math.atan2(forward.y, forward.x) / (Math.PI * 2);
-			
+
 			if (returnValue < 0)
 			{
 				returnValue += 1;
 			}
 		}
-		
+
 		return returnValue;
 	}
 }

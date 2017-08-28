@@ -20,7 +20,7 @@ function Sound(name, sourcePath, isRepeating)
 
 		var domElementForSoundSource = document.createElement("source");
 		domElementForSoundSource.src = this.sourcePath;
-	
+
 		this.domElement.appendChild
 		(
 			domElementForSoundSource
@@ -43,7 +43,7 @@ function Sound(name, sourcePath, isRepeating)
 
 		Globals.Instance.platformHelper.domElementAdd
 		(
-			this.domElement	
+			this.domElement
 		);
 	}
 

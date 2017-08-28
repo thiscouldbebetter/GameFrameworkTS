@@ -49,9 +49,9 @@ function SoundHelper(sounds)
 
 	SoundHelper.prototype.soundWithNamePlayAsMusic = function(soundName)
 	{
-		if 
+		if
 		(
-			this.soundForMusic != null 
+			this.soundForMusic != null
 			&& this.soundForMusic.name != soundName
 		)
 		{

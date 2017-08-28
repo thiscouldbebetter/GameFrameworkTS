@@ -7,12 +7,12 @@ function PlatformHelper()
 	{
 		this.divMain.appendChild(domElement);
 	}
-	
+
 	PlatformHelper.prototype.domElementRemove = function(domElement)
 	{
 		this.divMain.removeChild(domElement);
 	}
-	
+
 	PlatformHelper.prototype.initialize = function(display)
 	{
 		var divMain = document.createElement("div");

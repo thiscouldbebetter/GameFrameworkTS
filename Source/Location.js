@@ -11,7 +11,7 @@ function Location(pos)
 	this.vel = new Coords(0, 0, 0);
 	this.accel = new Coords(0, 0, 0);
 	this.force = new Coords(0, 0, 0);
-	
+
 	this.timeOffsetInTicks = 0;
 }
 
@@ -31,7 +31,7 @@ function Location(pos)
 
 		return returnValue;
 	}
-	
+
 	Location.prototype.overwriteWith = function(other)
 	{
 		this.venue = other.venue;
@@ -42,7 +42,7 @@ function Location(pos)
 		this.force.overwriteWith(other.force);
 		return this;
 	}
-	
+
 	Location.prototype.toString = function()
 	{
 		return this.pos.clone().round().toString();

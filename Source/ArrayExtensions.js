@@ -13,7 +13,7 @@ function ArrayExtensions()
 		}
 		return this;
 	}
-	
+
 	Array.prototype.append = function(other)
 	{
 		for (var i = 0; i < other.length; i++)
@@ -23,12 +23,12 @@ function ArrayExtensions()
 		}
 		return this;
 	}
-	
+
 	Array.prototype.contains = function(elementToFind)
 	{
 		return (this.indexOf(elementToFind) >= 0);
 	}
-	
+
 	Array.prototype.remove = function(elementToRemove)
 	{
 		var indexToRemoveAt = this.indexOf(elementToRemove);

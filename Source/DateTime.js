@@ -23,7 +23,7 @@ function DateTime(year, month, day, hours, minutes, seconds)
 			systemDate.getMinutes(),
 			systemDate.getSeconds()
 		);
-	
+
 		return returnValue;
 	}
 
@@ -33,10 +33,10 @@ function DateTime(year, month, day, hours, minutes, seconds)
 	}
 
 	// instance methods
-	
+
 	DateTime.prototype.equals = function(other)
 	{
-		var returnValue = 
+		var returnValue =
 		(
 			this.year == other.year
 			&& this.month == other.month
@@ -45,13 +45,26 @@ function DateTime(year, month, day, hours, minutes, seconds)
 			&& this.minutes == other.minutes
 			&& this.seconds == other.seconds
 		);
-		
+
+		return returnValue;
+	}
+
+	DateTime.prototype.toStringMMDD_HHMM = function()
+	{
+		var returnValue =
+			""
+			+ StringHelper.padStringLeft("" + this.month, 2, "0")
+			+ StringHelper.padStringLeft("" + this.day, 2, "0")
+			+ "-"
+			+ StringHelper.padStringLeft("" + this.hours, 2, "0")
+			+ StringHelper.padStringLeft("" + this.minutes, 2, "0")
+
 		return returnValue;
 	}
 
 	DateTime.prototype.toStringTimestamp = function()
 	{
-		var returnValue = 
+		var returnValue =
 			""
 			+ this.year
 			+ "/"

@@ -5,10 +5,10 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 	this.fontHeightInPixels = fontHeightInPixels;
 	this.colorFore = colorFore;
 	this.colorBack = colorBack;
-	
+
 	// helper variables
 
-	this.drawLoc = new Location(new Coords());	
+	this.drawLoc = new Location(new Coords());
 	this.drawPos = new Coords();
 	this.drawPos2 = new Coords();
 	this.drawPos3 = new Coords();
@@ -16,22 +16,22 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 
 {
 	// constants
-	
+
 	Display.RadiansPerTurn = Math.PI * 2.0;
-	
+
 	// methods
-	
+
 	Display.prototype.clear = function(colorBorder, colorBack)
 	{
 		this.drawRectangle
 		(
-			new Coords(0, 0), 
-			this.sizeInPixels, 
-			(colorBack == null ? this.colorBack : colorBack), 
+			new Coords(0, 0),
+			this.sizeInPixels,
+			(colorBack == null ? this.colorBack : colorBack),
 			(colorBorder == null ? this.colorFore : colorBorder)
 		);
 	}
-	
+
 	Display.prototype.drawArc = function
 	(
 		center, radius, colorFill, colorBorder, angleStartInTurns, angleStopInTurns
@@ -72,11 +72,11 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 	{
 		this.drawArc(center, radius, colorFill, colorBorder, 0, 1);
 	}
-	
+
 	Display.prototype.drawImage = function(imageToDraw, pos, size)
 	{
 		var systemImage = imageToDraw.systemImage;
-		
+
 		if (size == null)
 		{
 			this.graphics.drawImage(systemImage, pos.x, pos.y);
@@ -108,7 +108,7 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 		this.graphics.beginPath();
 
 		var drawPos = this.drawPos;
-		
+
 		for (var i = 0; i < vertices.length; i++)
 		{
 			var vertex = vertices[i];
@@ -173,7 +173,14 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 
 	Display.prototype.drawText = function
 	(
-		text, fontHeightInPixels, pos, colorFill, colorReverse, areColorsReversed
+		text,
+		fontHeightInPixels,
+		pos,
+		colorFill,
+		colorOutline,
+		areColorsReversed,
+		isCentered,
+		widthMaxInPixels
 	)
 	{
 		var fontToRestore = this.graphics.font;
@@ -183,27 +190,50 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 		}
 		else
 		{
-			this.graphics.font = 
+			this.graphics.font =
 				"" + fontHeightInPixels + "px sans-serif";
 		}
 
 		if (areColorsReversed == true)
 		{
 			var temp = colorFill;
-			colorFill = colorReverse;
-			colorReverse = temp;
+			colorFill = colorOutline;
+			colorOutline = temp;
 		}
 
 		if (colorFill != null)
 		{
+			var textTrimmed = text;
+			if (widthMaxInPixels != null)
+			{
+				while (this.textWidthForFontHeight(textTrimmed, fontHeightInPixels) > widthMaxInPixels)
+				{
+					textTrimmed = textTrimmed.substr(0, textTrimmed.length - 1);
+				}
+			}
+
+			var textWidthInPixels = this.textWidthForFontHeight(textTrimmed, fontHeightInPixels);
+			var drawPos = new Coords(pos.x, pos.y + fontHeightInPixels);
+			if (isCentered == true)
+			{
+				drawPos.addDimensions(0 - textWidthInPixels / 2, 0 - fontHeightInPixels / 2, 0);
+			}
+
+			if (colorOutline != null)
+			{
+				this.graphics.strokeStyle = colorOutline;
+				this.graphics.strokeText(textTrimmed, drawPos.x, drawPos.y);
+			}
+
 			this.graphics.fillStyle = colorFill;
 			this.graphics.fillText
 			(
-				text,
-				pos.x, pos.y + fontHeightInPixels
+				textTrimmed,
+				drawPos.x,
+				drawPos.y
 			);
 		}
-		
+
 		this.graphics.font = fontToRestore;
 	}
 
@@ -219,7 +249,7 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 		this.canvasBuffer.height = this.sizeInPixels.y;
 
 		this.graphics = this.canvasBuffer.getContext("2d");
-		this.graphics.font = 
+		this.graphics.font =
 			"" + this.fontHeightInPixels + "px sans-serif";
 
 		/*
@@ -245,7 +275,7 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 	{
 		Globals.Instance.platformHelper.domElementAdd(this.canvasLive);
 	}
-	
+
 	Display.prototype.textWidthForFontHeight = function(textToMeasure, fontHeightInPixels)
 	{
 		var fontToRestore = this.graphics.font;

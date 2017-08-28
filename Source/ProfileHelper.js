@@ -20,7 +20,7 @@ function ProfileHelper(storageHelper)
 	ProfileHelper.prototype.profileDelete = function(profileToDelete)
 	{
 		var profiles = this.profiles();
-		
+
 		var profileIndex = this.profileIndexFindByName
 		(
 			profiles,
@@ -61,7 +61,7 @@ function ProfileHelper(storageHelper)
 	ProfileHelper.prototype.profileSave = function(profileToSave)
 	{
 		var profiles = this.profiles();
-		
+
 		var profileIndex = this.profileIndexFindByName
 		(
 			profiles,
@@ -94,7 +94,7 @@ function ProfileHelper(storageHelper)
 			profiles = [];
 			this.storageHelper.save
 			(
-				this.propertyName, 
+				this.propertyName,
 				profiles
 			);
 		}

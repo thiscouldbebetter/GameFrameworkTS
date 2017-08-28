@@ -4,7 +4,7 @@ function StorageHelper(propertyNamePrefix, serializer)
 	this.propertyNamePrefix = propertyNamePrefix;
 	if (this.propertyNamePrefix == null)
 	{
-		this.propertyNamePrefix = ""; 
+		this.propertyNamePrefix = "";
 	}
 
 	this.serializer = serializer;
@@ -14,7 +14,7 @@ function StorageHelper(propertyNamePrefix, serializer)
 	{
 		var returnValue;
 
-		var propertyNamePrefixed = 
+		var propertyNamePrefixed =
 			this.propertyNamePrefix + propertyName;
 
 		var returnValueAsString = localStorage.getItem
@@ -44,12 +44,12 @@ function StorageHelper(propertyNamePrefix, serializer)
 			valueToSave
 		);
 
-		var propertyNamePrefixed = 
+		var propertyNamePrefixed =
 			this.propertyNamePrefix + propertyName;
 
 		localStorage.setItem
 		(
-			propertyNamePrefixed, 
+			propertyNamePrefixed,
 			valueToSaveSerialized
 		);
 	}

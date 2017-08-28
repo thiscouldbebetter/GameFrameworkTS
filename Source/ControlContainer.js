@@ -24,10 +24,10 @@ function ControlContainer(name, pos, size, children)
 
 	ControlContainer.prototype.childWithFocus = function()
 	{
-		var returnValue = 
+		var returnValue =
 		(
-			this.indexOfChildWithFocus == null 
-			? null 
+			this.indexOfChildWithFocus == null
+			? null
 			: this.children[this.indexOfChildWithFocus]
 		);
 
@@ -87,8 +87,8 @@ function ControlContainer(name, pos, size, children)
 
 	ControlContainer.prototype.childrenAtPosAddToList = function
 	(
-		posToCheck, 
-		listToAddTo, 
+		posToCheck,
+		listToAddTo,
 		addFirstChildOnly
 	)
 	{
@@ -121,7 +121,7 @@ function ControlContainer(name, pos, size, children)
 
 		if (actionNameToHandle == "ControlPrev" || actionNameToHandle == "ControlNext")
 		{
-			var direction = (actionNameToHandle == "ControlPrev" ? -1 : 1); 
+			var direction = (actionNameToHandle == "ControlPrev" ? -1 : 1);
 
 			if (childWithFocus == null)
 			{
@@ -151,7 +151,7 @@ function ControlContainer(name, pos, size, children)
 	{
 		var childrenContainingPos = this.childrenContainingPos;
 		childrenContainingPos.length = 0;
-		
+
 		this.childrenAtPosAddToList
 		(
 			mouseClickPos,
@@ -213,16 +213,16 @@ function ControlContainer(name, pos, size, children)
 			}
 		}
 	}
-	
+
 	// drawable
-	
+
 	ControlContainer.prototype.drawToDisplayAtLoc = function(display, drawLoc)
 	{
 		var drawPos = drawLoc.pos.add(this.pos);
 
 		display.drawRectangle
 		(
-			drawPos, this.size, 
+			drawPos, this.size,
 			display.colorBack, display.colorFore
 		)
 

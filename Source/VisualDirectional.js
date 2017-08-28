@@ -11,7 +11,7 @@ function VisualDirectional(visualForNoDirection, visualsForDirections)
 	{
 		var headingInTurns = loc.orientation.headingInTurns();
 		var visualForHeading;
-		
+
 		if (headingInTurns == null)
 		{
 			visualForHeading = this.visualForNoDirection;
@@ -21,7 +21,7 @@ function VisualDirectional(visualForNoDirection, visualsForDirections)
 			var direction = Math.round(headingInTurns * this.numberOfDirections - .5);
 			visualForHeading = this.visualsForDirections[direction];
 		}
-		
+
 		visualForHeading.drawToDisplayForDrawableAndLoc(display, drawable, loc);
 	}
 }

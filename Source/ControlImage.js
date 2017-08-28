@@ -14,7 +14,7 @@ function ControlImage(name, pos, size, image)
 
 		display.drawRectangle
 		(
-			drawPos, this.size, 
+			drawPos, this.size,
 			display.colorBack, display.colorFore
 		);
 

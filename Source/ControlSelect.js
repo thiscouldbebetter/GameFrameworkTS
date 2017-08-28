@@ -1,9 +1,9 @@
 
 function ControlSelect
 (
-	name, 
-	pos, 
-	size, 
+	name,
+	pos,
+	size,
 	dataBindingForValueSelected,
 	dataBindingForOptions,
 	bindingExpressionForOptionValues,
@@ -38,7 +38,7 @@ function ControlSelect
 			break;
 		}
 	}
-	
+
 	this.isHighlighted = false;
 }
 
@@ -50,26 +50,26 @@ function ControlSelect
 		{
 			this.optionSelectedNextInDirection(1);
 		}
-		else if 
+		else if
 		(
-			actionNameToHandle == "ControlIncrement" 
+			actionNameToHandle == "ControlIncrement"
 			|| actionNameToHandle == "ControlConfirm"
 		)
 		{
 			this.optionSelectedNextInDirection(-1);
 		}
 	}
-		
+
 	ControlSelect.prototype.focusGain = function()
 	{
 			this.isHighlighted = true;
 	}
-	
+
 	ControlSelect.prototype.focusLose = function()
 	{
 			this.isHighlighted = false;
 	}
-	
+
 	ControlSelect.prototype.optionSelected = function()
 	{
 		var returnValue = null;
@@ -77,28 +77,28 @@ function ControlSelect
 		if (this.indexOfOptionSelected != null)
 		{
 			var optionAsObject = this.options()[this.indexOfOptionSelected];
-	
+
 			var optionValue = DataBinding.get
 			(
-				optionAsObject, 
+				optionAsObject,
 				this.bindingExpressionForOptionValues
 			);
 			var optionText = DataBinding.get
 			(
-				optionAsObject, 
+				optionAsObject,
 				this.bindingExpressionForOptionText
 			);
-	
+
 			returnValue = new ControlSelectOption
 			(
 				optionValue,
 				optionText
 			);
 		};
-	
+
 		return returnValue;
 	}
-	
+
 	ControlSelect.prototype.optionSelectedNextInDirection = function(direction)
 	{
 		var options = this.options();
@@ -107,7 +107,7 @@ function ControlSelect
 		(
 			this.indexOfOptionSelected + direction, 0, options.length
 		);
-		
+
 		var optionSelected = this.optionSelected();
 
 		this.dataBindingForValueSelected.set(optionSelected.value);
@@ -127,34 +127,34 @@ function ControlSelect
 	{
 		return this.dataBindingForValueSelected.get();
 	}
-	
+
 	// drawable
-	
+
 	ControlSelect.prototype.drawToDisplayAtLoc = function(display, drawLoc)
 	{
 		var drawPos = drawLoc.pos.add(this.pos);
 
 		display.drawRectangle
 		(
-			drawPos, this.size, 
+			drawPos, this.size,
 			display.colorBack, display.colorFore,
 			this.isHighlighted // areColorsReversed
 		)
 
-		var text = this.optionSelected().text;
+		drawPos.add(this.size.clone().divideScalar(2));
 
-		var textWidth = display.textWidthForFontHeight(text, this.fontHeightInPixels);
-		var textSize = new Coords(textWidth, display.fontHeightInPixels);
-		var textMargin = this.size.clone().subtract(textSize).divideScalar(2); 
-		drawPos.add(textMargin);
+		var text = this.optionSelected().text;
 
 		display.drawText
 		(
-			text, 
+			text,
 			this.fontHeightInPixels,
-			drawPos, 
-			display.colorFore, display.colorBack, 
-			this.isHighlighted
+			drawPos,
+			display.colorFore,
+			display.colorBack,
+			this.isHighlighted,
+			true, // isCentered
+			this.size.x // widthMaxInPixels
 		);
 	}
 

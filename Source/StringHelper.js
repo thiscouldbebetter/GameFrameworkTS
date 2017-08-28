@@ -7,8 +7,8 @@ function StringHelper()
 {
 	StringHelper.padStringLeft = function
 	(
-		stringToPad, 
-		lengthAfterPadding, 
+		stringToPad,
+		lengthAfterPadding,
 		characterToPadWith
 	)
 	{
@@ -16,7 +16,7 @@ function StringHelper()
 		{
 			stringToPad = characterToPadWith + stringToPad;
 		}
-	
+
 		return stringToPad;
 	}
 }

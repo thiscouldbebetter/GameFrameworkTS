@@ -3,13 +3,13 @@ function VisualAnimation(ticksPerFrame, frames)
 {
 	this.ticksPerFrame = ticksPerFrame;
 	this.frames = frames;
-	
+
 	this.ticksToComplete = this.frames.length * this.ticksPerFrame;
 }
 
 {
 	// visual
-	
+
 	VisualAnimation.prototype.drawToDisplayForDrawableAndLoc = function(display, drawable, loc)
 	{
 		var world = Globals.Instance.universe.world;

@@ -19,7 +19,6 @@ function NumberHelper()
 		return value;
 	}
 
-	
 	NumberHelper.wrapValueToRangeMinMax = function(value, min, max)
 	{
 		var rangeSize = max - min;

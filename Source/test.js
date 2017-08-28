@@ -12,8 +12,8 @@ function test()
 		"Always Fail",
 		function() { return false; }
 	);
-	
-	var tests = 
+
+	var tests =
 	[
 		testAlwaysPass,
 		//testAlwaysFail,
@@ -31,11 +31,11 @@ function TestFixture(tests)
 }
 {
 	// methods
-	
+
 	TestFixture.prototype.runTests = function()
 	{
 		var testsFailed = [];
-	
+
 		for (var i = 0; i < this.tests.length; i++)
 		{
 			var testToRun = this.tests[i];
@@ -45,7 +45,7 @@ function TestFixture(tests)
 				testsFailed.push(testToRun);
 			}
 		}
-		
+
 		if (testsFailed.length == 0)
 		{
 			document.write("All tests passed!")
@@ -80,14 +80,14 @@ var testSerializer = new Test
 			this.name = name;
 			this.value = value;
 		}
-		
+
 		function ObjectContainer(name, objectsForLookup, functionToWrap)
 		{
 			this.name = name;
 			this.objectsForLookup = objectsForLookup;
 			this.objectsForLookup.addLookups("name");
 		}
-		
+
 		var objectToSerialize = new ObjectContainer
 		(
 			"Test",
@@ -96,23 +96,23 @@ var testSerializer = new Test
 				new ObjectForLookup("zero", 0),
 				new ObjectForLookup("one", 1),
 				new ObjectForLookup("two", 2),
-				new ObjectForLookup("three", 3),				
+				new ObjectForLookup("three", 3),
 			],
 			// functionToWrap
 			function(one, two)
 			{
 				return one + two;
 			}
-		); 
-		
+		);
+
 		var serializer = new Serializer([ObjectContainer, ObjectForLookup]);
-	
+
 		var objectSerialized = serializer.serialize(objectToSerialize);
 		var objectDeserialized = serializer.deserialize(objectSerialized);
 		var objectReserialized = serializer.serialize(objectDeserialized);
-		
+
 		var result = (objectSerialized == objectReserialized);
-				
+
 		return result;
 	}
 );

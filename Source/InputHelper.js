@@ -10,13 +10,13 @@ function InputHelper()
 		this.inputsPressed = [];
 		this.inputsActive = [];
 		this.gamepadsConnected = [];
-		
+
 		this.isMouseTracked = true; // hack
 		if (this.isMouseTracked == true)
 		{
 			this.isMouseClicked = false;
 			this.mouseClickPos = new Coords(0, 0);
-			
+
 			this.hasMouseMoved = false;
 			this.mouseMovePos = new Coords(0, 0);
 			this.mouseMovePosPrev = new Coords(0, 0);
@@ -31,10 +31,10 @@ function InputHelper()
 			divMain.onmousemove = this.handleEventMouseMove.bind(this);
 			divMain.onmouseup = this.handleEventMouseUp.bind(this);
 		}
-		
+
 		this.gamepadsCheck();
 	}
-	
+
 	InputHelper.prototype.inputAdd = function(inputPressed)
 	{
 		if (this.inputsPressed[inputPressed] == null)
@@ -83,18 +83,18 @@ function InputHelper()
 			var gamepad = this.gamepadsConnected[i];
 			var systemGamepad = systemGamepads[gamepad.index];
 			gamepad.updateFromSystemGamepad(systemGamepad);
-			
+
 			var gamepadID = "Gamepad" + i;
-			
+
 			var axisDisplacements = gamepad.axisDisplacements;
 			for (var a = 0; a < axisDisplacements.length; a++)
 			{
 				var gamepadIDMove = gamepadID + "Move";
-					
+
 				var axisDisplacement = axisDisplacements[a];
 				if (axisDisplacement == 0)
 				{
-					if (a == 0) 
+					if (a == 0)
 					{
 						this.inputRemove(gamepadIDMove + "Left");
 						this.inputRemove(gamepadIDMove + "Right");
@@ -108,7 +108,7 @@ function InputHelper()
 				else
 				{
 					var directionName;
-					if (a == 0) 
+					if (a == 0)
 					{
 						directionName = (axisDisplacement < 0 ? "Left" : "Right");
 					}
@@ -120,13 +120,13 @@ function InputHelper()
 					this.inputAdd(gamepadIDMove + directionName);
 				}
 			} // end for
-			
+
 			var gamepadIDButton = gamepadID + "Button";
 			var buttonsPressed = gamepad.buttonsPressed;
 			for (var b = 0; b < buttonsPressed.length; b++)
 			{
 				var buttonPressed = buttonsPressed[b];
-				
+
 				if (buttonPressed == true)
 				{
 					this.inputAdd(gamepadIDButton + b);
@@ -140,15 +140,15 @@ function InputHelper()
 	}
 
 	// events
-	
+
 	// events - keyboard
 
 	InputHelper.prototype.handleEventKeyDown = function(event)
 	{
 		//event.preventDefault();
-		
+
 		var inputPressed = event.key;
-		
+
 		if (isNaN(parseInt(inputPressed)) == false)
 		{
 			inputPressed = "_" + inputPressed;
@@ -160,26 +160,26 @@ function InputHelper()
 	InputHelper.prototype.handleEventKeyUp = function(event)
 	{
 		var inputReleased = event.key;
-		
+
 		if (isNaN(parseInt(inputReleased)) == false)
 		{
 			inputReleased = "_" + inputReleased;
 		}
-		
+
 		this.inputRemove(inputReleased);
 	}
-	
+
 	// events - mouse
-	
+
 	InputHelper.prototype.handleEventMouseDown = function(event)
 	{
 		this.isMouseClicked = true;
-		
+
 		var canvas = event.target;
 		var canvasBounds = canvas.getBoundingClientRect();
 		this.mouseClickPos.overwriteWithDimensions
 		(
-			event.clientX - canvasBounds.left, 
+			event.clientX - canvasBounds.left,
 			event.clientY - canvasBounds.top,
 			0
 		);
@@ -188,17 +188,17 @@ function InputHelper()
 	InputHelper.prototype.handleEventMouseMove = function(event)
 	{
 		this.hasMouseMoved = true;
-	
+
 		this.mouseMovePosPrev.overwriteWith
 		(
 			this.mouseMovePos
 		);
-	
+
 		var canvas = event.target;
 		var canvasBounds = canvas.getBoundingClientRect();
 		this.mouseMovePos.overwriteWithDimensions
 		(
-			event.clientX - canvasBounds.left, 
+			event.clientX - canvasBounds.left,
 			event.clientY - canvasBounds.top,
 			0
 		);
@@ -208,9 +208,9 @@ function InputHelper()
 	{
 		this.isMouseClicked = false;
 	}
-	
+
 	// gamepads
-	
+
 	InputHelper.prototype.gamepadsCheck = function()
 	{
 		var systemGamepads = this.systemGamepads();
@@ -224,7 +224,7 @@ function InputHelper()
 			}
 		}
 	}
-	
+
 	InputHelper.prototype.systemGamepads = function()
 	{
 		return navigator.getGamepads();

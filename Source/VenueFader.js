@@ -1,7 +1,7 @@
 
 function VenueFader
 (
-	venueToFadeTo, 
+	venueToFadeTo,
 	venueToFadeFrom,
 	millisecondsPerFade
 )
@@ -17,7 +17,7 @@ function VenueFader
 		venueToFadeFrom = Globals.Instance.universe.venueCurrent;
 	}
 
-	this.venuesToFadeFromAndTo = 
+	this.venuesToFadeFromAndTo =
 	[
 		venueToFadeFrom,
 		venueToFadeTo
@@ -50,8 +50,8 @@ function VenueFader
 
 		var millisecondsSinceFadeStarted = now - this.timeFadeStarted;
 
-		var fractionOfFadeCompleted = 
-			millisecondsSinceFadeStarted 
+		var fractionOfFadeCompleted =
+			millisecondsSinceFadeStarted
 			/ this.millisecondsPerFade;
 
 		var alphaOfFadeColor;
@@ -90,8 +90,8 @@ function VenueFader
 
 		display.drawRectangle
 		(
-			new Coords(0, 0), 
-			display.sizeInPixels, 
+			new Coords(0, 0),
+			display.sizeInPixels,
 			"rgba(0, 0, 0, " + alphaOfFadeColor + ")", // colorFill
 			null // colorBorder
 		);

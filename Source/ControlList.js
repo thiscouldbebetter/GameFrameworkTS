@@ -13,7 +13,7 @@ function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForI
 	this.indexOfItemSelected = 0;
 
 	this.isHighlighted = false;
-	
+
 	var scrollbarWidth = this.itemSpacing;
 	this.scrollbar = new ControlScrollbar
 	(
@@ -21,7 +21,7 @@ function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForI
 		this.pos.clone().add
 		(
 			new Coords(this.size.x - scrollbarWidth, 0)
-		), 
+		),
 		new Coords(scrollbarWidth, this.size.y), // size
 		this.fontHeightInPixels,
 		this.itemSpacing,
@@ -42,7 +42,7 @@ function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForI
 			this.itemSelectedNextInDirection(-1);
 		}
 	}
-	
+
 	ControlList.prototype.focusGain = function()
 	{
 		this.isHighlighted = true;
@@ -52,12 +52,12 @@ function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForI
 	{
 		this.isHighlighted = false;
 	}
-	
+
 	ControlList.prototype.indexOfFirstItemVisible = function()
 	{
 		return this.scrollbar.sliderPosInItems;
 	}
-	
+
 	ControlList.prototype.indexOfLastItemVisible = function()
 	{
 		return this.scrollbar.sliderPosInItems + Math.floor(this.scrollbar.windowSizeInItems) - 1;
@@ -86,17 +86,17 @@ function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForI
 				}
 			}
 		}
-		else 
+		else
 		{
 			this.indexOfItemSelected = NumberHelper.trimValueToRangeMinMax
 			(
 				this.indexOfItemSelected + direction, 0, numberOfItems - 1
 			);
 		}
-		
+
 		var indexOfFirstItemVisible = this.indexOfFirstItemVisible();
 		var indexOfLastItemVisible = this.indexOfLastItemVisible();
-		
+
 		if (this.indexOfItemSelected < indexOfFirstItemVisible)
 		{
 			this.scrollbar.sliderPosInItems--;
@@ -135,18 +135,18 @@ function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForI
 				(
 					new Coords(0, this.scrollbar.handleSize.y)
 				);
-				
+
 				// todo
 			}
 		}
 		else
 		{
 			var offsetOfItemClicked = clickPos.y - this.pos.y;
-			var indexOfItemClicked = 
+			var indexOfItemClicked =
 				this.indexOfFirstItemVisible()
 				+ Math.floor
 				(
-					offsetOfItemClicked 
+					offsetOfItemClicked
 					/ this.itemSpacing
 				);
 
@@ -156,22 +156,24 @@ function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForI
 			}
 		}
 	}
-	
+
 	// drawable
-	
+
 	ControlList.prototype.drawToDisplayAtLoc = function(display, drawLoc)
-	{		
+	{
 		var drawPos = drawLoc.pos.add(this.pos);
+
+		var colorFore = (this.isHighlighted == true ? display.colorBack : display.colorFore);
+		var colorBack = (this.isHighlighted == true ? display.colorFore : display.colorBack);
 
 		display.drawRectangle
 		(
-			drawPos, this.size, 
-			display.colorBack, display.colorFore, 
-			this.isHighlighted // areColorsReversed
+			drawPos,
+			this.size,
+			colorBack, // fill
+			display.colorFore, // border
+			false // areColorsReversed
 		);
-
-		display.graphics.fillStyle = (this.isHighlighted == true ? display.colorBack : display.colorFore);
-		display.graphics.strokeStyle = (this.isHighlighted == true ? display.colorBack : display.colorFore);
 
 		var itemSizeY = this.itemSpacing;
 		var textMarginLeft = 2;
@@ -191,12 +193,21 @@ function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForI
 		{
 			if (i == this.indexOfItemSelected)
 			{
-				display.graphics.strokeRect
+				display.drawRectangle
 				(
-					drawPos.x + textMarginLeft, 
-					itemPosY,
-					this.size.x - textMarginLeft * 2,
-					itemSizeY
+					// pos
+					new Coords
+					(
+						drawPos.x,
+						itemPosY
+					),
+					// size
+					new Coords
+					(
+						this.size.x,
+						itemSizeY
+					),
+					colorFore // colorFill
 				)
 			}
 
@@ -210,17 +221,19 @@ function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForI
 
 			display.drawText
 			(
-				text, 
-				this.fontHeightInPixels, 
-				drawPos2, 
-				display.colorFore, 
-				display.colorBack, 
-				this.isHighlighted
+				text,
+				this.fontHeightInPixels,
+				drawPos2,
+				colorFore,
+				colorBack,
+				(i == this.indexOfItemSelected), // areColorsReversed
+				false, // isCentered
+				this.size.x // widthMaxInPixels
 			);
-			
+
 			itemPosY += itemSizeY;
 		}
-		
+
 		this.scrollbar.drawToDisplayAtLoc(display, drawLoc);
 	}
 }
