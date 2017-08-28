@@ -1,10 +1,10 @@
 
-function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForItemText, fontHeightInPixels)
+function ControlList(name, pos, size, items, bindingExpressionForItemText, fontHeightInPixels)
 {
 	this.name = name;
 	this.pos = pos;
 	this.size = size;
-	this.dataBindingForItems = dataBindingForItems;
+	this._items = items;
 	this.bindingExpressionForItemText = bindingExpressionForItemText;
 	this.fontHeightInPixels = fontHeightInPixels;
 
@@ -17,15 +17,11 @@ function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForI
 	var scrollbarWidth = this.itemSpacing;
 	this.scrollbar = new ControlScrollbar
 	(
-		// pos
-		this.pos.clone().add
-		(
-			new Coords(this.size.x - scrollbarWidth, 0)
-		),
+		new Coords(this.size.x - scrollbarWidth, 0), // pos
 		new Coords(scrollbarWidth, this.size.y), // size
 		this.fontHeightInPixels,
 		this.itemSpacing,
-		this.dataBindingForItems,
+		this.items,
 		0 // value
 	);
 }
@@ -111,7 +107,7 @@ function ControlList(name, pos, size, dataBindingForItems, bindingExpressionForI
 
 	ControlList.prototype.items = function()
 	{
-		return this.dataBindingForItems.get();
+		return (this._items.get == null ? this._items : this._items.get());
 	}
 
 	ControlList.prototype.mouseClick = function(clickPos)

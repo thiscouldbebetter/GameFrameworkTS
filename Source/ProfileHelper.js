@@ -40,7 +40,6 @@ function ProfileHelper(storageHelper)
 		);
 	}
 
-
 	ProfileHelper.prototype.profileIndexFindByName = function(profiles, profileNameToFind)
 	{
 		var returnValue = null;
@@ -68,12 +67,19 @@ function ProfileHelper(storageHelper)
 			profileToSave.name
 		);
 
-		profiles.splice
-		(
-			profileIndex,
-			1,
-			profileToSave
-		);
+		if (profileIndex == null)
+		{
+			profiles.push(profileToSave);
+		}
+		else
+		{
+			profiles.splice
+			(
+				profileIndex,
+				1,
+				profileToSave
+			);
+		}
 
 		this.storageHelper.save
 		(
@@ -101,4 +107,14 @@ function ProfileHelper(storageHelper)
 
 		return profiles;
 	}
+	
+	ProfileHelper.prototype.profilesAllDelete = function(profileToDelete)
+	{
+		this.storageHelper.save
+		(
+			this.propertyName,
+			""
+		);
+	}
+
 }

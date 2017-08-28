@@ -119,7 +119,7 @@ function World(name, dateCreated, size, cursorPos)
 	World.new = function()
 	{
 		var now = DateTime.now();
-		var nowAsString = now.toStringMMDD_HHMM();
+		var nowAsString = now.toStringMMDD_HHMM_SS();
 
 		var returnValue = new World
 		(

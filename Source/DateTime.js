@@ -49,15 +49,17 @@ function DateTime(year, month, day, hours, minutes, seconds)
 		return returnValue;
 	}
 
-	DateTime.prototype.toStringMMDD_HHMM = function()
+	DateTime.prototype.toStringMMDD_HHMM_SS = function()
 	{
 		var returnValue =
 			""
-			+ StringHelper.padStringLeft("" + this.month, 2, "0")
-			+ StringHelper.padStringLeft("" + this.day, 2, "0")
+			+ ("" + this.month).padLeft(2, "0")
+			+ ("" + this.day).padLeft(2, "0")
 			+ "-"
-			+ StringHelper.padStringLeft("" + this.hours, 2, "0")
-			+ StringHelper.padStringLeft("" + this.minutes, 2, "0")
+			+ ("" + this.hours).padLeft(2, "0")
+			+ ("" + this.minutes).padLeft(2, "0")
+			+ "-"
+			+ ("" + this.seconds).padLeft(2, "0");
 
 		return returnValue;
 	}
@@ -68,15 +70,15 @@ function DateTime(year, month, day, hours, minutes, seconds)
 			""
 			+ this.year
 			+ "/"
-			+ StringHelper.padStringLeft("" + this.month, 2, "0")
+			+ ("" + this.month).padLeft(2, "0")
 			+ "/"
-			+ StringHelper.padStringLeft("" + this.day, 2, "0")
+			+ ("" + this.day).padLeft(2, "0")
 			+ "-"
-			+ StringHelper.padStringLeft("" + this.hours, 2, "0")
+			+ ("" + this.hours).padLeft(2, "0")
 			+ ":"
-			+ StringHelper.padStringLeft("" + this.minutes, 2, "0")
+			+ ("" + this.minutes).padLeft(2, "0")
 			+ ":"
-			+ StringHelper.padStringLeft("" + this.seconds, 2, "0")
+			+ ("" + this.seconds).padLeft(2, "0");
 
 		return returnValue;
 	}

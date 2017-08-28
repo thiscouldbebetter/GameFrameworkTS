@@ -4,31 +4,52 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 	this.name = name;
 	this.pos = pos;
 	this.size = size;
-	this.text = text;
+	this._text = text;
 	this.fontHeightInPixels = fontHeightInPixels;
 	this.numberOfCharsMax = numberOfCharsMax;
 
 	this.isHighlighted = false;
-	this.cursorPos = this.text.length;
+	this.cursorPos = this.text().length;
 }
 
 {
+	ControlTextBox.prototype.text = function(value)
+	{
+		if (value != null)
+		{
+			if (this._text.set == null)
+			{
+				this._text = value;
+			}
+			else
+			{
+				this._text.set(value);
+			}
+		}
+
+		return (this._text.get == null ? this._text : this._text.get() );
+	}
+
+	// events
+
 	ControlTextBox.prototype.actionHandle = function(actionNameToHandle)
 	{
+		var text = this.text();
+
 		if (actionNameToHandle == "ControlCancel")
 		{
-			this.text = this.text.substr(0, this.text.length - 1);
+			this.text(text.substr(0, text.length - 1));
 
 			this.cursorPos = NumberHelper.wrapValueToRangeMinMax
 			(
-				this.cursorPos - 1, 0, this.text.length + 1
+				this.cursorPos - 1, 0, text.length + 1
 			);
 		}
 		else if (actionNameToHandle == "ControlConfirm")
 		{
 			this.cursorPos = NumberHelper.wrapValueToRangeMinMax
 			(
-				this.cursorPos + 1, 0, this.text.length + 1
+				this.cursorPos + 1, 0, text.length + 1
 			);
 		}
 		else if
@@ -42,7 +63,7 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 
 			var charCodeAtCursor =
 			(
-				this.cursorPos < this.text.length ? this.text.charCodeAt(this.cursorPos) : "A".charCodeAt(0) - 1
+				this.cursorPos < text.length ? text.charCodeAt(this.cursorPos) : "A".charCodeAt(0) - 1
 			);
 
 			charCodeAtCursor = NumberHelper.wrapValueToRangeMinMax
@@ -54,23 +75,27 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 
 			var charAtCursor = String.fromCharCode(charCodeAtCursor);
 
-			this.text =
-				this.text.substr(0, this.cursorPos)
+			this.text
+			(
+				text.substr(0, this.cursorPos)
 				+ charAtCursor
-				+ this.text.substr(this.cursorPos + 1);
+				+ text.substr(this.cursorPos + 1)
+			);
 		}
 		else if (actionNameToHandle.length == 1) // printable character
 		{
-			if (this.numberOfCharsMax == null || this.text.length < this.numberOfCharsMax)
+			if (this.numberOfCharsMax == null || text.length < this.numberOfCharsMax)
 			{
-				this.text =
-					this.text.substr(0, this.cursorPos)
+				text = this.text
+				(
+					text.substr(0, this.cursorPos)
 					+ actionNameToHandle
-					+ this.text.substr(this.cursorPos);
+					+ text.substr(this.cursorPos)
+				);
 
 				this.cursorPos = NumberHelper.wrapValueToRangeMinMax
 				(
-					this.cursorPos + 1, 0, this.text.length + 1
+					this.cursorPos + 1, 0, text.length + 1
 				);
 			}
 
@@ -101,7 +126,7 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 	{
 		var drawPos = drawLoc.pos.add(this.pos);
 
-		var text = this.text;
+		var text = this.text();
 
 		display.drawRectangle
 		(
@@ -128,8 +153,8 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 
 		if (this.isHighlighted == true)
 		{
-			var textBeforeCursor = this.text.substr(0, this.cursorPos);
-			var textAtCursor = this.text.substr(this.cursorPos, 1);
+			var textBeforeCursor = text.substr(0, this.cursorPos);
+			var textAtCursor = text.substr(this.cursorPos, 1);
 			var cursorX = display.textWidthForFontHeight
 			(
 				textBeforeCursor, this.fontHeightInPixels

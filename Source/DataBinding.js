@@ -12,7 +12,20 @@ function DataBinding(context, bindingExpression)
 
 		if (bindingExpression != null)
 		{
-			returnValue = returnValue[bindingExpression];
+			var bindingExpressionParts = bindingExpression.split(".");
+			for (var i = 0; i < bindingExpressionParts.length; i++)
+			{
+				var bindingExpressionPart = bindingExpressionParts[i];
+				if (bindingExpressionPart.endsWith("()") == true)
+				{
+					bindingExpressionPart = bindingExpressionPart.substr(0, bindingExpressionPart.length - "()".length);
+					returnValue = returnValue[bindingExpressionPart]();
+				}
+				else
+				{
+					returnValue = returnValue[bindingExpressionPart];
+				}
+			}
 		}
 
 		return returnValue;

@@ -1,11 +1,11 @@
 
-function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, dataBindingForItems, sliderPosInItems)
+function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, sliderPosInItems)
 {
 	this.pos = pos;
 	this.size = size;
 	this.fontHeightInPixels = fontHeightInPixels;
 	this.itemHeight = itemHeight;
-	this.dataBindingForItems = dataBindingForItems;
+	this._items = items;
 	this.sliderPosInItems = sliderPosInItems;
 
 	this.windowSizeInItems = Math.floor(this.size.y / itemHeight);
@@ -15,22 +15,24 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, dataBinding
 	this.buttonScrollUp = new ControlButton
 	(
 		null, // name
-		this.pos.clone(), // pos
+		new Coords(0, 0), // pos
 		this.handleSize, // size
 		"-", // text
 		this.fontHeightInPixels,
 		true, // hasBorder
+		true, // isEnabled
 		this.scrollUp // click
 	);
 
 	this.buttonScrollDown = new ControlButton
 	(
 		null, // name
-		this.pos.clone().add(new Coords(0, this.size.y - this.handleSize.y)), // pos
+		new Coords(0, this.size.y - this.handleSize.y), // pos
 		this.handleSize, // size
 		"+", // text
 		this.fontHeightInPixels,
 		true, // hasBorder
+		true, // isEnabled
 		this.scrollDown // click
 	);
 }
@@ -43,7 +45,7 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, dataBinding
 
 	ControlScrollbar.prototype.items = function()
 	{
-		return this.dataBindingForItems.get();
+		return (this._items.get == null ? this._items : this._items.get());
 	}
 
 	ControlScrollbar.prototype.mouseClick = function(clickPos)
@@ -85,16 +87,13 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, dataBinding
 
 	ControlScrollbar.prototype.sliderPosInPixels = function()
 	{
-		var sliderPosInPixels = this.pos.clone().add
+		var sliderPosInPixels = new Coords
 		(
-			new Coords
-			(
-				this.size.x - this.handleSize.x,
-				this.handleSize.y
-					+ this.sliderPosInItems
-					* this.slideSizeInPixels().y
-					/ this.items().length
-			)
+			this.size.x - this.handleSize.x,
+			this.handleSize.y
+				+ this.sliderPosInItems
+				* this.slideSizeInPixels().y
+				/ this.items().length
 		);
 
 		return sliderPosInPixels;

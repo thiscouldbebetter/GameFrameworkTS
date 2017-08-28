@@ -1,5 +1,5 @@
 
-function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, click)
+function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isEnabled, click)
 {
 	this.name = name;
 	this.pos = pos;
@@ -7,6 +7,7 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, cli
 	this.text = text;
 	this.fontHeightInPixels = fontHeightInPixels;
 	this.hasBorder = hasBorder;
+	this._isEnabled = isEnabled;
 	this.click = click;
 
 	this.isHighlighted = false;
@@ -21,6 +22,13 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, cli
 		}
 	}
 
+	ControlButton.prototype.isEnabled = function()
+	{
+		return (this._isEnabled.get == null ? this._isEnabled : this._isEnabled.get() );
+	}
+
+	// events
+
 	ControlButton.prototype.focusGain = function()
 	{
 		this.isHighlighted = true;
@@ -33,7 +41,10 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, cli
 
 	ControlButton.prototype.mouseClick = function(clickPos)
 	{
-		this.click();
+		if (this.isEnabled() == true)
+		{
+			this.click();
+		}
 	}
 
 	ControlButton.prototype.mouseEnter = function(mouseMovePos)
@@ -50,16 +61,22 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, cli
 
 	ControlButton.prototype.drawToDisplayAtLoc = function(display, drawLoc)
 	{
-		var drawPos = drawLoc.pos;
+		var drawPos = drawLoc.pos.clone();
 		drawPos.add(this.pos);
+		
+		var isEnabled = this.isEnabled();
+		var isHighlighted = this.isHighlighted && isEnabled;
+		
+		var colorFill = display.colorBack;
+		var colorBorder = (isEnabled == true ? display.colorFore : "LightGray" );
 
 		if (this.hasBorder == true)
 		{
 			display.drawRectangle
 			(
 				drawPos, this.size,
-				display.colorBack, display.colorFore,
-				this.isHighlighted // areColorsReversed
+				colorFill, colorBorder,
+				isHighlighted // areColorsReversed
 			);
 		}
 
@@ -70,9 +87,9 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, cli
 			this.text,
 			this.fontHeightInPixels,
 			drawPos,
-			display.colorFore,
-			display.colorBack,
-			this.isHighlighted,
+			colorBorder,
+			colorFill,
+			isHighlighted,
 			true, // isCentered
 			this.size.x // widthMaxInPixels
 		);

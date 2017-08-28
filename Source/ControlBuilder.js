@@ -29,6 +29,7 @@ function ControlBuilder()
 					"Save",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
+					true, // isEnabled
 					// click
 					function ()
 					{
@@ -50,6 +51,7 @@ function ControlBuilder()
 					"Load",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
+					true, // isEnabled
 					// click
 					function ()
 					{
@@ -79,19 +81,15 @@ function ControlBuilder()
 					new Coords(120, 45).multiply(sizeMultiplier), // pos
 					new Coords(30, 25).multiply(sizeMultiplier), // size
 
-					// dataBindingForValueSelected
+					// valueSelected
 					new DataBinding
 					(
 						Globals.Instance.soundHelper,
 						"musicVolume"
 					),
 
-					// dataBindingForOptions
-					new DataBinding
-					(
-						SoundHelper.controlSelectOptionsVolume(),
-						null
-					),
+					// options
+					SoundHelper.controlSelectOptionsVolume(),
 
 					"value", // bindingExpressionForOptionValues,
 					"text", // bindingExpressionForOptionText
@@ -114,19 +112,15 @@ function ControlBuilder()
 					new Coords(120, 75).multiply(sizeMultiplier), // pos
 					new Coords(30, 25).multiply(sizeMultiplier), // size
 
-					// dataBindingForValueSelected
+					// valueSelected
 					new DataBinding
 					(
 						Globals.Instance.soundHelper,
 						"soundVolume"
 					),
 
-					// dataBindingForOptions
-					new DataBinding
-					(
-						SoundHelper.controlSelectOptionsVolume(),
-						null
-					),
+					// options
+					SoundHelper.controlSelectOptionsVolume(),
 
 					"value", // bindingExpressionForOptionValues,
 					"text", // bindingExpressionForOptionText
@@ -141,6 +135,7 @@ function ControlBuilder()
 					"Resume",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
+					true, // isEnabled
 					// click
 					function()
 					{
@@ -160,6 +155,7 @@ function ControlBuilder()
 					"Quit",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
+					true, // isEnabled
 					// click
 					function()
 					{
@@ -237,6 +233,7 @@ function ControlBuilder()
 					"Confirm",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
+					true, // isEnabled
 					confirm
 				),
 
@@ -248,6 +245,7 @@ function ControlBuilder()
 					"Cancel",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
+					true, // isEnabled
 					cancel
 				),
 			]
@@ -290,6 +288,7 @@ function ControlBuilder()
 					"Acknowledge",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
+					true, // isEnabled
 					acknowledge
 				),
 			]
@@ -356,6 +355,7 @@ function ControlBuilder()
 					"New",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
+					true, // isEnabled
 					// click
 					function ()
 					{
@@ -388,6 +388,7 @@ function ControlBuilder()
 					"Select",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
+					true, // isEnabled
 					// click
 					function ()
 					{
@@ -415,6 +416,7 @@ function ControlBuilder()
 					"<",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
+					true, // isEnabled
 					// click
 					function ()
 					{
@@ -436,6 +438,7 @@ function ControlBuilder()
 					"x",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
+					true, // isEnabled
 					// click
 					function ()
 					{
@@ -532,11 +535,28 @@ function ControlBuilder()
 					"Create",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
+					// isEnabled
+					new DataBinding
+					(
+						function() 
+						{ 
+							var controlRoot = Globals.Instance.universe.venueCurrent.controlRoot;
+							if (controlRoot == null)
+							{
+								return false;
+							}
+							else
+							{
+								return controlRoot.children["textBoxName"].text().length > 0; 
+							}
+						}, 
+						"call()"
+					), 
 					// click
 					function ()
 					{
 						var textBoxName = this.parent.children["textBoxName"];
-						var profileName = textBoxName.text;
+						var profileName = textBoxName.text();
 						if (profileName == "")
 						{
 							return;
@@ -567,6 +587,7 @@ function ControlBuilder()
 					"Cancel",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
+					true, // isEnabled
 					// click
 					function ()
 					{
@@ -633,6 +654,7 @@ function ControlBuilder()
 					"New",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
+					true, // isEnabled
 					// click
 					function ()
 					{
@@ -654,6 +676,7 @@ function ControlBuilder()
 					"Select",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
+					true, // isEnabled
 					// click
 					function()
 					{
@@ -678,15 +701,15 @@ function ControlBuilder()
 					"Skip",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
+					true, // isEnabled
 					// click
 					function()
 					{
 						var universe = Globals.Instance.universe;
 						var world = World.new();
 						var now = DateTime.now();
-						var nowAsString = now.toStringMMDD_HHMM();
-						var randomNumber = Math.floor(Math.random() * 100);
-						var profileName = "Anon-" + nowAsString + "-" + randomNumber;
+						var nowAsString = now.toStringMMDD_HHMM_SS();
+						var profileName = "Anon-" + nowAsString;
 						var profile = new Profile(profileName, [ world ]);
 						universe.profile = profile;
 						universe.world = world;
@@ -704,6 +727,7 @@ function ControlBuilder()
 					"<",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
+					true, // isEnabled
 					// click
 					function ()
 					{
@@ -713,6 +737,55 @@ function ControlBuilder()
 						);
 						venueNext = new VenueFader(venueNext);
 						var universe = Globals.Instance.universe;
+						universe.venueNext = venueNext;
+					}
+				),
+				
+				new ControlButton
+				(
+					"buttonDelete",
+					new Coords(180, 10).multiply(sizeMultiplier), // pos
+					new Coords(15, 15).multiply(sizeMultiplier), // size
+					"x",
+					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					true, // hasBorder
+					true, // isEnabled
+					// click
+					function ()
+					{
+						var universe = Globals.Instance.universe;
+						var profile = universe.profile;
+
+						var controlConfirm = Globals.Instance.controlBuilder.confirm
+						(
+							size,
+							"Delete all profiles?",
+							// confirm
+							function()
+							{
+								Globals.Instance.profileHelper.profilesAllDelete();
+								var venueNext = new VenueControls
+								(
+									Globals.Instance.controlBuilder.profileSelect()
+								);
+								venueNext = new VenueFader(venueNext);
+								universe.venueNext = venueNext;
+							},
+							// cancel
+							function()
+							{
+								var venueNext = new VenueControls
+								(
+									Globals.Instance.controlBuilder.profileSelect()
+								);
+								venueNext = new VenueFader(venueNext);
+								var universe = Globals.Instance.universe;
+								universe.venueNext = venueNext;
+							}
+						);
+
+						var venueNext = new VenueControls(controlConfirm);
+						venueNext = new VenueFader(venueNext);
 						universe.venueNext = venueNext;
 					}
 				),
@@ -754,6 +827,7 @@ function ControlBuilder()
 					"Start",
 					this.fontHeightInPixelsBase * sizeMultiplier.y * 2,
 					false, // hasBorder
+					true, // isEnabled
 					// click
 					function()
 					{
@@ -839,6 +913,7 @@ function ControlBuilder()
 					"Start",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
+					true, // isEnabled
 					// click
 					function ()
 					{
@@ -866,6 +941,7 @@ function ControlBuilder()
 					"<",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
+					true, // isEnabled
 					// click
 					function ()
 					{
@@ -887,6 +963,7 @@ function ControlBuilder()
 					"x",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
+					true, // isEnabled
 					// click
 					function ()
 					{
@@ -977,6 +1054,7 @@ function ControlBuilder()
 					"Reload from Server",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
+					true, // isEnabled
 					// click
 					function ()
 					{
@@ -1077,6 +1155,7 @@ function ControlBuilder()
 					"Load from File",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
+					true, // isEnabled
 					// click
 					function ()
 					{
@@ -1157,6 +1236,7 @@ function ControlBuilder()
 					"Return",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
+					true, // isEnabled
 					// click
 					function()
 					{
@@ -1200,6 +1280,7 @@ function ControlBuilder()
 					"Save to Server",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
+					true, // isEnabled
 					// click
 					function ()
 					{
@@ -1245,6 +1326,7 @@ function ControlBuilder()
 					"Save to File",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
+					true, // isEnabled
 					// click
 					function ()
 					{
@@ -1293,6 +1375,7 @@ function ControlBuilder()
 					"Return",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
+					true, // isEnabled
 					// click
 					function()
 					{

@@ -6,7 +6,7 @@ function VenueVideo(videoName, venueNext)
 
 	this.hasVideoBeenStarted = false;
 
-	this.inputToActionMappings = 
+	this.inputToActionMappings =
 	[
 		new InputToActionMapping("Escape", "VideoSkip", true),
 		new InputToActionMapping("Gamepad0Button0", "VideoSkip", true),
@@ -30,7 +30,7 @@ function VenueVideo(videoName, venueNext)
 			inputHelper.isMouseClicked = false;
 			hasUserSkippedVideo = true;
 		}
-		else 
+		else
 		{
 			var inputsActive = inputHelper.inputsActive;
 			for (var i = 0; i < inputsActive.length; i++)

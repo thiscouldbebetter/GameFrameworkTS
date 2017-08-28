@@ -1,17 +1,18 @@
 
-function StringHelper()
+function StringExtensions()
 {
-	// static class
+	// extension class
 }
 
 {
-	StringHelper.padStringLeft = function
+	String.prototype.padLeft = function
 	(
-		stringToPad,
 		lengthAfterPadding,
 		characterToPadWith
 	)
 	{
+		var stringToPad = this;
+
 		while (stringToPad.length < lengthAfterPadding)
 		{
 			stringToPad = characterToPadWith + stringToPad;

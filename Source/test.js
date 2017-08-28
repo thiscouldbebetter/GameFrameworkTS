@@ -17,7 +17,6 @@ function test()
 	[
 		testAlwaysPass,
 		//testAlwaysFail,
-		testSerializer,
 	];
 
 	new TestFixture(tests).runTests();
@@ -70,49 +69,4 @@ function Test(name, run)
 
 // tests
 
-var testSerializer = new Test
-(
-	"Serializer Test",
-	function()
-	{
-		function ObjectForLookup(name, value)
-		{
-			this.name = name;
-			this.value = value;
-		}
-
-		function ObjectContainer(name, objectsForLookup, functionToWrap)
-		{
-			this.name = name;
-			this.objectsForLookup = objectsForLookup;
-			this.objectsForLookup.addLookups("name");
-		}
-
-		var objectToSerialize = new ObjectContainer
-		(
-			"Test",
-			// objectsForLookup
-			[
-				new ObjectForLookup("zero", 0),
-				new ObjectForLookup("one", 1),
-				new ObjectForLookup("two", 2),
-				new ObjectForLookup("three", 3),
-			],
-			// functionToWrap
-			function(one, two)
-			{
-				return one + two;
-			}
-		);
-
-		var serializer = new Serializer([ObjectContainer, ObjectForLookup]);
-
-		var objectSerialized = serializer.serialize(objectToSerialize);
-		var objectDeserialized = serializer.deserialize(objectSerialized);
-		var objectReserialized = serializer.serialize(objectDeserialized);
-
-		var result = (objectSerialized == objectReserialized);
-
-		return result;
-	}
-);
+// No tests yet.

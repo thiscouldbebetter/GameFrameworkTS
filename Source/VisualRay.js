@@ -25,7 +25,7 @@ function VisualRay(color, length)
 
 		display.drawLine
 		(
-			loc.pos, 
+			loc.pos,
 			this.toPos,
 			this.color
 		);

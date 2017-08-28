@@ -4,8 +4,8 @@ function ControlSelect
 	name,
 	pos,
 	size,
-	dataBindingForValueSelected,
-	dataBindingForOptions,
+	valueSelected,
+	options,
 	bindingExpressionForOptionValues,
 	bindingExpressionForOptionText,
 	fontHeightInPixels
@@ -14,8 +14,8 @@ function ControlSelect
 	this.name = name;
 	this.pos = pos;
 	this.size = size;
-	this.dataBindingForValueSelected = dataBindingForValueSelected;
-	this.dataBindingForOptions = dataBindingForOptions;
+	this._valueSelected = valueSelected;
+	this._options = options;
 	this.bindingExpressionForOptionValues = bindingExpressionForOptionValues;
 	this.bindingExpressionForOptionText = bindingExpressionForOptionText;
 	this.fontHeightInPixels = fontHeightInPixels;
@@ -110,12 +110,19 @@ function ControlSelect
 
 		var optionSelected = this.optionSelected();
 
-		this.dataBindingForValueSelected.set(optionSelected.value);
+		if (this._valueSelected != null && this._valueSelected.constructor.name == "DataBinding")
+		{
+			this._valueSelected.set(optionSelected.value);
+		}
+		else
+		{
+			this._valueSelected = optionSelected.value;
+		}
 	}
 
 	ControlSelect.prototype.options = function()
 	{
-		return this.dataBindingForOptions.get();
+		return (this._options.get == null ? this._options : this._options.get() );
 	}
 
 	ControlSelect.prototype.mouseClick = function(clickPos)
@@ -125,7 +132,7 @@ function ControlSelect
 
 	ControlSelect.prototype.valueSelected = function()
 	{
-		return this.dataBindingForValueSelected.get();
+		return (this._valueSelected.get == null ? this._valueSelected : this._valueSelected.get() );
 	}
 
 	// drawable
