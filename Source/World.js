@@ -16,7 +16,11 @@ function World(name, dateCreated, size, cursorPos)
 	this.enemyLoc = new Location(this.size.clone().subtract(cursorPos));
 
 	var entityDimension = 10;
-	var cursorSize = new Coords(1, 1).multiplyScalar(entityDimension);
+	var cursorSize = new Coords(1, 1, 1).multiplyScalar(entityDimension);
+
+	this.colliderForPlayer = new Sphere(cursorPos, entityDimension / 2);
+	this.colliderForGoal = new Sphere(this.goalLoc.pos, entityDimension / 2);
+	this.colliderForEnemy = new Sphere(this.enemyLoc.pos, entityDimension / 2);
 
 	var cursorColor = "Gray";
 	var visualRectangleLarge = new VisualRectangle(cursorColor, cursorSize);
@@ -240,29 +244,27 @@ function World(name, dateCreated, size, cursorPos)
 	{
 		var messageToDisplay = null;
 
-		var distanceOfCursorFromEnemy = this.displacement.overwriteWith
-		(
-			this.cursorLoc.pos
-		).subtract
-		(
-			this.enemyLoc.pos
-		).magnitude();
+		var collisionHelper = Globals.Instance.collisionHelper;
 
-		if (distanceOfCursorFromEnemy < this.visualForCursor.children[0].size.x)
+		var doPlayerAndEnemyCollide = collisionHelper.doCollidersCollide
+		(
+			this.colliderForPlayer,
+			this.colliderForEnemy
+		);
+
+		if (doPlayerAndEnemyCollide == true)
 		{
 			messageToDisplay = "You lose!";
 		}
 		else
 		{
-			var distanceOfCursorFromGoal = this.displacement.overwriteWith
+			var doPlayerAndGoalCollide = collisionHelper.doCollidersCollide
 			(
-				this.cursorLoc.pos
-			).subtract
-			(
-				this.goalLoc.pos
-			).magnitude();
+				this.colliderForPlayer,
+				this.colliderForGoal
+			);
 
-			if (distanceOfCursorFromGoal < this.visualForGoal.children[0].radius)
+			if (doPlayerAndGoalCollide == true)
 			{
 				messageToDisplay = "You win!"
 			}

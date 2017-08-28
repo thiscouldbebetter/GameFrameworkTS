@@ -1,5 +1,5 @@
 
-function Collision(entities)
+function Collision(collidables)
 {
-	this.entities = entities;
+	this.collidables = collidables;
 }

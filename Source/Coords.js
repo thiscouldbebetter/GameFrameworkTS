@@ -54,7 +54,7 @@ function Coords(x, y, z)
 
 	Coords.prototype.clone = function()
 	{
-		return new Coords(this.x, this.y);
+		return new Coords(this.x, this.y, this.z);
 	}
 
 	Coords.prototype.crossProduct = function(other)

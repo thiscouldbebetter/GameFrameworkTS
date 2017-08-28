@@ -740,7 +740,7 @@ function ControlBuilder()
 						universe.venueNext = venueNext;
 					}
 				),
-				
+
 				new ControlButton
 				(
 					"buttonDelete",
