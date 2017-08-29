@@ -8,7 +8,7 @@ function Face(vertices)
 	Face.prototype.containsPoint = function(pointToCheck)
 	{
 		var returnValue = true;
-		
+
 		var edges = this.edges();
 		var normal = this.plane.normal;
 		for (var e = 0; e < edges.length; e++)
@@ -24,25 +24,25 @@ function Face(vertices)
 		}
 		return returnValue;
 	}
-	
+
 	Face.prototype.edges = function()
 	{
 		if (this._edges == null)
 		{
 			this._edges = [];
-			
+
 			for (var v = 0; v < this.vertices.length; v++)
 			{
 				var vNext = NumberHelper.wrapValueToRangeMinMax(v + 1, 0, this.vertices.length);
 				var vertex = this.vertices[v];
 				var vertexNext = this.vertices[vNext];
-				
+
 				var edge = new Edge([vertex, vertexNext]);
-				
+
 				this._edges.push(edge);
 			}
 		}
-		
+
 		return this._edges;
 	}
 }

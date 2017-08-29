@@ -4,9 +4,12 @@ function CollisionHelper()
 	this.colliderTypeNameToCollisionMethodLookup = 
 	{
 		"Bounds_Bounds" : this.doBoundsCollide.bind(this),
-		"Bounds_Sphere" : this.doesBoundsCollideWithSphere.bind(this),
+		"Bounds_Sphere" : this.doBoundsAndSphereCollide.bind(this),
 		"Sphere_Sphere" : this.doSpheresCollide.bind(this)
 	};
+	
+	// helper variables
+	this.tempCoords = new Coords();
 }
 {
 	CollisionHelper.prototype.collisionsOfCollidablesInSets = function(collidableSet0, collidableSet1)
@@ -52,7 +55,7 @@ function CollisionHelper()
 	{
 		var collider0TypeName = collider0.constructor.name;
 		var collider1TypeName = collider1.constructor.name;
-		
+
 		if (collider0TypeName <= collider1TypeName)
 		{
 			collidersAlphabetized = [ collider0, collider1 ];
@@ -61,7 +64,7 @@ function CollisionHelper()
 		{
 			collidersAlphabetized = [ collider1, collider0 ];
 		}
-		
+
 		colliderTypeNamesConcatenated = 
 			collidersAlphabetized[0].constructor.name 
 			+ "_" 
@@ -73,7 +76,7 @@ function CollisionHelper()
 	}
 
 	// colliders
-	
+
 	CollisionHelper.prototype.doBoundsCollide = function(bounds0, bounds1)
 	{
 		var returnValue = bounds0.overlapsWith(bounds1);
@@ -86,46 +89,35 @@ function CollisionHelper()
 		var distance = displacement.magnitude();
 		var sumOfRadii = sphere0.radius + sphere1.radius;
 		var returnValue = (distance < sumOfRadii);
-	
+
 		return returnValue;
 	}
-	
-	CollisionHelper.prototype.doesBoundsCollideWithSphere = function(bounds, sphere)
+
+	CollisionHelper.prototype.doBoundsAndSphereCollide = function(bounds, sphere)
 	{
-		// fix
-		
-		var returnValue = false;
-		
-		var faces = bounds.faces();
-		var sphereCenter = sphere.center;
-		var sphereRadius = sphere.radius;
-		for (var i = 0; i < faces.length; i++)
-		{
-			var face = faces[i];
-			var facePlane = face.plane;
-			var distanceOfSphereCenterAboveFace = 
-				sphereCenter.dotProduct(facePlane.normal) 
-				- facePlane.distanceFromOrigin;
-			
-			if (distanceOfSphereCenterAboveFace < sphereRadius)
-			{
-				var pointOnPlaneClosestToSphere = facePlane.normal.clone().multiplyScalar
-				(
-					distanceOfSphereCenterAboveFace
-				).invert().add
-				(
-					sphereCenter
-				);
-				
-				if (face.containsPoint(pointOnPlaneClosestToSphere) == true)
-				{
-					returnValue = true;
-					break;
-				}
-				
-			}
-		}
-		
-		return returnValue;
+		var displacementBetweenCenters = this.tempCoords.overwriteWith
+		(
+			bounds.center
+		).subtract
+		(
+			sphere.center
+		);
+
+		var direction = displacementBetweenCenters.normalize();
+
+		var pointOnSphereClosestToBoundsCenter = direction.multiplyScalar
+		(
+			sphere.radius
+		).add
+		(
+			sphere.center
+		);
+
+		var isPointOnSphereWithinBounds = bounds.containsPoint
+		(
+			pointOnSphereClosestToBoundsCenter
+		);
+
+		return isPointOnSphereWithinBounds;
 	}
 }

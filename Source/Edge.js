@@ -13,7 +13,7 @@ function Edge(vertices)
 
 		return this._displacement;
 	}
-	
+
 	Edge.prototype.displacement = function()
 	{
 		if (this._displacement == null)
@@ -23,7 +23,7 @@ function Edge(vertices)
 
 		return this._displacement;
 	}
-	
+
 	Edge.prototype.transverse = function(faceNormal)
 	{
 		if (this._transverse == null)

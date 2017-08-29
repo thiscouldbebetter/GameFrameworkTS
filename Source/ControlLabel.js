@@ -14,7 +14,7 @@ function ControlLabel(name, pos, size, isTextCentered, text, fontHeightInPixels)
 	{
 		return (this._text.get == null ? this._text : this._text.get() );
 	}
-	
+
 	// drawable
 
 	ControlLabel.prototype.drawToDisplayAtLoc = function(display, drawLoc)

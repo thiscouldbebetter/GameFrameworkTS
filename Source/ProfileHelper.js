@@ -107,7 +107,7 @@ function ProfileHelper(storageHelper)
 
 		return profiles;
 	}
-	
+
 	ProfileHelper.prototype.profilesAllDelete = function(profileToDelete)
 	{
 		this.storageHelper.save

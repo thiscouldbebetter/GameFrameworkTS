@@ -18,7 +18,7 @@ function World(name, dateCreated, size, cursorPos)
 	var entityDimension = 10;
 	var cursorSize = new Coords(1, 1, 1).multiplyScalar(entityDimension);
 
-	this.colliderForPlayer = new Sphere(cursorPos, entityDimension / 2);
+	this.colliderForPlayer = new Bounds(cursorPos, cursorSize);
 	this.colliderForGoal = new Sphere(this.goalLoc.pos, entityDimension / 2);
 	this.colliderForEnemy = new Sphere(this.enemyLoc.pos, entityDimension / 2);
 
