@@ -16,6 +16,7 @@ function PlatformHelper()
 	PlatformHelper.prototype.initialize = function(display)
 	{
 		var divMain = document.createElement("div");
+		divMain.id = "divMain";
 		divMain.style.position = "absolute";
 		divMain.style.left = "50%";
 		divMain.style.top = "50%";

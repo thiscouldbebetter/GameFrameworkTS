@@ -7,7 +7,7 @@ function CollisionHelper()
 		"Bounds_Sphere" : this.doBoundsAndSphereCollide.bind(this),
 		"Sphere_Sphere" : this.doSpheresCollide.bind(this)
 	};
-	
+
 	// helper variables
 	this.tempCoords = new Coords();
 }
