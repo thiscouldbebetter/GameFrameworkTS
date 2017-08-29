@@ -37,7 +37,7 @@ function VenueFader
 {
 	VenueFader.prototype.updateForTimerTick = function()
 	{
-		var venueCurrent = this.venuesToFadeFromAndTo[this.venueIndexCurrent];
+		var venueCurrent = this.venueCurrent();
 
 		venueCurrent.draw();
 
@@ -95,5 +95,10 @@ function VenueFader
 			"rgba(0, 0, 0, " + alphaOfFadeColor + ")", // colorFill
 			null // colorBorder
 		);
+	}
+
+	VenueFader.prototype.venueCurrent = function()
+	{
+		return this.venuesToFadeFromAndTo[this.venueIndexCurrent];
 	}
 }

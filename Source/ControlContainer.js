@@ -92,6 +92,8 @@ function ControlContainer(name, pos, size, children)
 		addFirstChildOnly
 	)
 	{
+		posToCheck = posToCheck.clone().subtract(this.pos);
+
 		for (var i = this.children.length - 1; i >= 0; i--)
 		{
 			var child = this.children[i];
@@ -156,7 +158,7 @@ function ControlContainer(name, pos, size, children)
 		(
 			mouseClickPos,
 			childrenContainingPos,
-			true
+			true // addFirstChildOnly
 		);
 
 		for (var i = 0; i < childrenContainingPos.length; i++)
@@ -181,7 +183,7 @@ function ControlContainer(name, pos, size, children)
 		(
 			mouseMovePos,
 			childrenContainingPos,
-			true
+			true // addFirstChildOnly
 		);
 
 		for (var i = 0; i < childrenContainingPos.length; i++)

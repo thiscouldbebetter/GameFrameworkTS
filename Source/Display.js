@@ -140,7 +140,11 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 
 	Display.prototype.drawRectangle = function
 	(
-		pos, size, colorFill, colorBorder, areColorsReversed
+		pos, 
+		size, 
+		colorFill, 
+		colorBorder, 
+		areColorsReversed
 	)
 	{
 		if (areColorsReversed == true)
