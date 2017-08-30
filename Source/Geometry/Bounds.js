@@ -28,21 +28,31 @@ function Bounds(center, size)
 	{
 		var returnValue = false;
  
-		var bounds = [ this, other ];
+		var extremaThisAndOther = 
+		[ 
+			[ this.min().dimensions(), this.max().dimensions() ],
+			[ other.min().dimensions(), other.max().dimensions() ]
+		];
  
-		for (var b = 0; b < bounds.length; b++)
+		for (var b = 0; b < extremaThisAndOther.length; b++)
 		{
-			var boundsThis = bounds[b];
-			var boundsOther = bounds[1 - b];
+			var extremaThis = extremaThisAndOther[b];
+			var extremaOther = extremaThisAndOther[1 - b];
+
+			var minThisDimensions = extremaThis[0];
+			var maxThisDimensions = extremaThis[1];
+
+			var minOtherDimensions = extremaOther[0];
+			var maxOtherDimensions = extremaOther[1];
  
 			var doAllDimensionsOverlapSoFar = true;
  
-			for (var d = 0; d < Coords.NumberOfDimensions; d++)
+			for (var d = 0; d < minThisDimensions.length; d++)
 			{
 				if 
 				(
-					boundsThis.max().dimension(d) <= boundsOther.min().dimension(d)
-					|| boundsThis.min().dimension(d) >= boundsOther.max().dimension(d)
+					maxThisDimensions[d] <= minOtherDimensions[d]
+					|| minThisDimensions[d] >= maxOtherDimensions[d]
 				)
 				{
 					doAllDimensionsOverlapSoFar = false;

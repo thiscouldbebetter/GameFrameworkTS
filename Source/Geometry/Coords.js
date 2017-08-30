@@ -12,6 +12,8 @@ function Coords(x, y, z)
 }
 
 {
+	// instances
+
 	Coords.Instances = new Coords_Instances();
 
 	function Coords_Instances()
@@ -65,6 +67,43 @@ function Coords(x, y, z)
 			this.z * other.x - this.x * other.z,
 			this.x * other.y - this.y * other.x
 		);
+	}
+
+	Coords.prototype.dimension = function(dimensionIndex, valueToSet)
+	{
+		var returnValue;
+
+		if (dimensionIndex == 0)
+		{
+			if (valueToSet != null)
+			{
+				this.x = valueToSet;
+			}
+			returnValue = this.x;
+		}
+		else if (dimensionIndex == 1)
+		{
+			if (valueToSet != null)
+			{
+				this.y = valueToSet;
+			}
+			returnValue = this.y;
+		}
+		else if (dimensionIndex == 2)
+		{
+			if (valueToSet != null)
+			{
+				this.z = valueToSet;
+			}
+			returnValue = this.z;
+		}
+
+		return returnValue;
+	}
+
+	Coords.prototype.dimensions = function()
+	{
+		return [ this.x, this.y, this.z ];
 	}
 
 	Coords.prototype.divide = function(other)
