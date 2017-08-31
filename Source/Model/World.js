@@ -84,7 +84,7 @@ function World(name, dateCreated, size, cursorPos)
 	var goalColor = "Green";
 	this.visualForGoal = new VisualGroup
 	([
-		new VisualCircle(goalColor, entityDimension / 2),
+		new VisualCircle(entityDimension / 2, goalColor),
 		new VisualOffset
 		(
 			new VisualText("Goal", goalColor),
