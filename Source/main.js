@@ -30,7 +30,7 @@ function main()
 
 	var universe0 = Universe.new(null);
 
-	Globals.prototype.initialize
+	Globals.Instance.initialize
 	(
 		"Cursor Quest",
 		20, // timerTicksPerSecond
