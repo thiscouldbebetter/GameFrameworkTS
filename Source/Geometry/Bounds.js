@@ -9,11 +9,16 @@ function Bounds(center, size)
 	this._max = new Coords();
 }
 {
+	Bounds.prototype.containsOther = function(other)
+	{
+		return ( this.containsPoint(other.min()) && this.containsPoint(other.max()) );
+	}
+	
 	Bounds.prototype.containsPoint = function(pointToCheck)
 	{
 		return pointToCheck.isInRangeMinMax(this.min(), this.max());
 	}
-
+	
 	Bounds.prototype.max = function()
 	{
 		return this._max.overwriteWith(this.center).add(this.sizeHalf);

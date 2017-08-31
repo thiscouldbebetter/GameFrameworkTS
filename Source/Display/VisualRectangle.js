@@ -1,5 +1,5 @@
 
-function VisualRectangle(color, size)
+function VisualRectangle(size, color)
 {
 	this.color = color;
 	this.size = size;

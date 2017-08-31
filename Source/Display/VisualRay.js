@@ -1,8 +1,8 @@
 
-function VisualRay(color, length)
+function VisualRay(length, color)
 {
-	this.color = color;
 	this.length = length;
+	this.color = color;
 
 	// temps
 
@@ -13,7 +13,7 @@ function VisualRay(color, length)
 {
 	VisualRay.prototype.drawToDisplayForDrawableAndLoc = function(display, drawable, loc)
 	{
-		this.polar.angleInTurns = loc.heading;
+		this.polar.angleInTurns = loc.orientation.headingInTurns();
 
 		this.polar.toCoords
 		(

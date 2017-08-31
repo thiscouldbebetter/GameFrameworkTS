@@ -34,7 +34,7 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 
 	Display.prototype.drawArc = function
 	(
-		center, radius, colorFill, colorBorder, angleStartInTurns, angleStopInTurns
+		center, radiusInner, radiusOuter, angleStartInTurns, angleStopInTurns, colorFill, colorBorder
 	)
 	{
 		var drawPos = this.drawPos.overwriteWith(center);
@@ -44,12 +44,70 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 		if (colorFill != null)
 		{
 			this.graphics.fillStyle = colorFill;
+			
+			this.graphics.beginPath();
+			this.graphics.arc
+			(
+				center.x, center.y,
+				radiusInner,
+				angleStartInRadians, angleStopInRadians
+			);
+			drawPos.overwriteWith(center).add
+			(
+				new Polar(angleStopInTurns, radiusOuter).toCoords( new Coords() )
+			);
+			this.graphics.lineTo(drawPos.x, drawPos.y);
+			this.graphics.arc
+			(
+				center.x, center.y,
+				radiusOuter,
+				angleStopInRadians, angleStartInRadians,
+				true // counterclockwise
+			);
+			this.graphics.closePath();
+			this.graphics.fill();
+		}
+
+		if (colorBorder != null)
+		{
+			this.graphics.strokeStyle = colorBorder;
+			this.graphics.beginPath();
+			this.graphics.arc
+			(
+				center.x, center.y,
+				radiusInner,
+				angleStartInRadians, angleStopInRadians
+			);
+			drawPos.overwriteWith(center).add
+			(
+				new Polar(angleStopInTurns, radiusOuter).toCoords( new Coords() )
+			);
+			this.graphics.lineTo(drawPos.x, drawPos.y);
+			this.graphics.arc
+			(
+				center.x, center.y,
+				radiusOuter,
+				angleStopInRadians, angleStartInRadians,
+				true // counterclockwise
+			);
+			this.graphics.closePath();
+			this.graphics.stroke();
+		}
+	}
+
+	Display.prototype.drawCircle = function(center, radius, colorFill, colorBorder)
+	{
+		var drawPos = this.drawPos.overwriteWith(center);
+
+		if (colorFill != null)
+		{
+			this.graphics.fillStyle = colorFill;
 			this.graphics.beginPath();
 			this.graphics.arc
 			(
 				drawPos.x, drawPos.y,
 				radius,
-				angleStartInRadians, angleStopInRadians
+				0, Display.RadiansPerTurn
 			);
 			this.graphics.fill();
 		}
@@ -62,15 +120,10 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 			(
 				drawPos.x, drawPos.y,
 				radius,
-				angleStartInRadians, angleStopInRadians
+				0, Display.RadiansPerTurn
 			);
 			this.graphics.stroke();
 		}
-	}
-
-	Display.prototype.drawCircle = function(center, radius, colorFill, colorBorder)
-	{
-		this.drawArc(center, radius, colorFill, colorBorder, 0, 1);
 	}
 
 	Display.prototype.drawImage = function(imageToDraw, pos, size)
