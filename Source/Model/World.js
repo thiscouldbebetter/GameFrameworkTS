@@ -10,12 +10,81 @@ function World(name, dateCreated, size, playerPos)
 	this.size = size;
 
 	this.timerTicksSoFar = 0;
+	
+	this.actions = 
+	[
+		Action.Instances.DoNothing,
+		new Action
+		(
+			"ShowMenu",
+			function perform(actor)
+			{
+				var universe = Globals.Instance.universe;
+				var venueNext = new VenueControls
+				(
+					Globals.Instance.controlBuilder.configure
+					(
+						Globals.Instance.display.sizeInPixels
+					)
+				);
+				venueNext = new VenueFader(venueNext);
+				universe.venueNext = venueNext;
+			}
+		),
+		new Action
+		(
+			"MoveDown",
+			function perform(actor)
+			{
+				var world = Globals.Instance.universe.world;
+				world.bodyMoveInDirection(actor, Coords.Instances.ZeroOneZero);
+			}
+		),
+		new Action
+		(
+			"MoveLeft",
+			function perform(actor)
+			{
+				var world = Globals.Instance.universe.world;
+				world.bodyMoveInDirection(actor, Coords.Instances.MinusOneZeroZero);
+			}
+		),
+		new Action
+		(
+			"MoveRight",
+			function perform(actor)
+			{
+				var world = Globals.Instance.universe.world;
+				world.bodyMoveInDirection(actor, Coords.Instances.OneZeroZero);
+			}
+		),
+		new Action
+		(
+			"MoveUp",
+			function perform(actor)
+			{
+				var world = Globals.Instance.universe.world;
+				world.bodyMoveInDirection(actor, Coords.Instances.ZeroMinusOneZero);
+			}
+		),
+	].addLookups("name");
+	
+	this.inputToActionMappings = 
+	[
+		new InputToActionMapping("Escape", "ShowMenu"),
+		new InputToActionMapping("ArrowDown", "MoveDown"),
+		new InputToActionMapping("ArrowLeft", "MoveLeft"),
+		new InputToActionMapping("ArrowRight", "MoveRight"),
+		new InputToActionMapping("ArrowUp", "MoveUp"),
+	].addLookups("inputName");
+	
+	// bodies
 
 	var entityDimension = 10;
 	var entitySize = new Coords(1, 1, 1).multiplyScalar(entityDimension);
 
 	// player
-	
+
 	var playerLoc = new Location(playerPos);
 	var playerCollider = new Sphere(playerLoc.pos, entityDimension / 2);
 	var playerColor = "Gray";
@@ -211,6 +280,20 @@ function World(name, dateCreated, size, playerPos)
 
 	// instance methods
 
+	World.prototype.bodyMoveInDirection = function(body, directionToMove)
+	{
+		var bodyLoc = body.loc;
+		
+		bodyLoc.orientation.forwardSet(directionToMove);
+		var vel = bodyLoc.vel;
+		if (vel.equals(directionToMove) == false)
+		{
+			bodyLoc.timeOffsetInTicks = this.timerTicksSoFar;
+		}
+		vel.overwriteWith(directionToMove);
+		bodyLoc.pos.add(vel).trimToRangeMax(this.size);
+	}
+
 	World.prototype.draw = function()
 	{
 		var display = Globals.Instance.display;
@@ -251,57 +334,10 @@ function World(name, dateCreated, size, playerPos)
 		for (var i = 0; i < inputsActive.length; i++)
 		{
 			var inputActive = inputsActive[i];
-			if (inputActive == "Escape")
-			{
-				var universe = Globals.Instance.universe;
-				var venueNext = new VenueControls
-				(
-					Globals.Instance.controlBuilder.configure
-					(
-						Globals.Instance.display.sizeInPixels
-					)
-				);
-				venueNext = new VenueFader(venueNext);
-				universe.venueNext = venueNext;
-			}
-			else if
-			(
-				inputActive.startsWith("Arrow") == true
-				|| inputActive.startsWith("Gamepad") == true
-			)
-			{
-				var directionToMove;
-
-				if (inputActive.endsWith("Down") == true)
-				{
-					directionToMove = new Coords(0, 1);
-				}
-				else if (inputActive.endsWith("Left") == true)
-				{
-					directionToMove = new Coords(-1, 0);
-				}
-				else if (inputActive.endsWith("Right") == true)
-				{
-					directionToMove = new Coords(1, 0);
-				}
-				else if (inputActive.endsWith("Up") == true)
-				{
-					directionToMove = new Coords(0, -1);
-				}
-				else
-				{
-					directionToMove = new Coords(0, 0);
-				}
-
-				playerLoc.orientation.forwardSet(directionToMove);
-				var vel = playerLoc.vel;
-				if (vel.equals(directionToMove) == false)
-				{
-					playerLoc.timeOffsetInTicks = this.timerTicksSoFar;
-				}
-				vel.overwriteWith(directionToMove);
-				playerLoc.pos.add(vel).trimToRangeMax(this.size);
-			}
+			var mapping = this.inputToActionMappings[inputActive];
+			var actionName = mapping.actionName;
+			var action = this.actions[actionName];
+			action.perform(player);
 		}
 	}
 
