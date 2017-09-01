@@ -11,30 +11,16 @@ function World(name, dateCreated, size, playerPos)
 
 	this.timerTicksSoFar = 0;
 
-	this.playerLoc = new Location(playerPos);
-	var goalPos = new Coords().randomize().multiply(this.size);
-	this.goalLoc = new Location(goalPos);
-	this.enemyLoc = new Location(this.size.clone().subtract(playerPos));
-
 	var entityDimension = 10;
 	var entitySize = new Coords(1, 1, 1).multiplyScalar(entityDimension);
 
-	this.colliderForPlayer = new Sphere(playerPos, entityDimension / 2);
-	this.colliderForGoal = new Bounds(this.goalLoc.pos, entitySize);
-	this.colliderForEnemy = new Sphere(this.enemyLoc.pos, entityDimension / 2);
-	this.colliderForObstacle = new Arc
-	(
-		new Shell
-		(
-			new Sphere(goalPos, entityDimension * 4), // sphereOuter
-			entityDimension * 3 // radiusInner
-		),
-		new Wedge(goalPos, 0, .4) // Error if larger than .5
-	);
-
+	// player
+	
+	var playerLoc = new Location(playerPos);
+	var playerCollider = new Sphere(playerLoc.pos, entityDimension / 2);
 	var playerColor = "Gray";
-	var visualPlayerBody = new VisualCircle(entityDimension / 2, playerColor);
-	var visualPlayerDirectionalIndicator = new VisualDirectional
+	var playerVisualBody = new VisualCircle(entityDimension / 2, playerColor);
+	var playerVisualDirectionalIndicator = new VisualDirectional
 	(
 		new VisualNone(),
 		[
@@ -44,10 +30,9 @@ function World(name, dateCreated, size, playerPos)
 				playerColor
 			)
 		]
-	)
-	
+	);
 	var visualRectangleSmall = new VisualRectangle(entitySize.clone().divideScalar(4), playerColor);
-	var visualPlayerMovementIndicator = new VisualDirectional
+	var playerVisualMovementIndicator = new VisualDirectional
 	(
 		new VisualNone(),
 		[
@@ -90,57 +75,117 @@ function World(name, dateCreated, size, playerPos)
 		]
 	);
 
-	var visualPlayerName = new VisualOffset
+	var playerVisualName = new VisualOffset
 	(
 		new VisualText("Player", playerColor),
 		new Coords(0, entityDimension)
 	);
 
-	this.visualForPlayer = new VisualGroup
+	var playerVisual = new VisualGroup
 	([
-		visualPlayerDirectionalIndicator,
-		visualPlayerBody,
-		visualPlayerName,
-		visualPlayerMovementIndicator,
+		playerVisualDirectionalIndicator,
+		playerVisualBody,
+		playerVisualName,
+		playerVisualMovementIndicator,
 	]);
-
-	var goalColor = "Green";
-	this.visualForGoal = new VisualGroup
-	([
-		new VisualRectangle(entitySize, goalColor),
-		new VisualOffset
-		(
-			new VisualText("Goal", goalColor),
-			new Coords(0, entityDimension)
-		)
-	]);
-
-	var enemyColor = "Red";
-
-	this.visualForEnemy = new VisualGroup
-	([
-		new VisualPolygon
-		(
-			enemyColor,
-			// vertices
-			[
-				new Coords(0, -entityDimension).divideScalar(2),
-				new Coords(entityDimension, entityDimension).divideScalar(2),
-				new Coords(-entityDimension, entityDimension).divideScalar(2),
-			]
-		),
-		new VisualOffset
-		(
-			new VisualText("Enemy", enemyColor),
-			new Coords(0, entityDimension)
-		)
-	]);
-		
-	this.visualForObstacle = new VisualArc
+	
+	var playerBody = new Body
 	(
-		this.colliderForObstacle,
-		enemyColor, enemyColor
+		"Player", 
+		playerLoc, 
+		playerCollider, 
+		playerVisual
 	);
+
+	// goal
+
+	var goalPos = new Coords().randomize().multiplyScalar
+	(
+		.5
+	).addDimensions
+	(
+		.25, .25, 0
+	).multiply
+	(
+		this.size
+	);
+	
+	var goalColor = "Green";
+	var goalBody = new Body
+	(
+		"Goal",
+		new Location(goalPos),
+		new Bounds(goalPos, entitySize), // collider
+		new VisualGroup
+		([
+			new VisualRectangle(entitySize, goalColor),
+			new VisualOffset
+			(
+				new VisualText("Goal", goalColor),
+				new Coords(0, entityDimension)
+			)
+		])
+	)
+
+	// enemy
+	
+	var enemyColor = "Red";
+	var enemyPos = this.size.clone().subtract(playerBody.loc.pos);
+	var enemyBody = new Body
+	(
+		"Enemy",
+		new Location(enemyPos),
+		new Sphere(enemyPos, entityDimension / 2), // collider
+		new VisualGroup
+		([
+			new VisualPolygon
+			(
+				enemyColor,
+				// vertices
+				[
+					new Coords(0, -entityDimension).divideScalar(2),
+					new Coords(entityDimension, entityDimension).divideScalar(2),
+					new Coords(-entityDimension, entityDimension).divideScalar(2),
+				]
+			),
+			new VisualOffset
+			(
+				new VisualText("Enemy", enemyColor),
+				new Coords(0, entityDimension)
+			)
+		])
+	);
+
+	// obstacle
+	
+	var obstaclePos = goalBody.loc.pos;
+	var obstacleColor = enemyColor;
+	var obstacleCollider = new Arc
+	(
+		new Shell
+		(
+			new Sphere(obstaclePos, entityDimension * 3), // sphereOuter
+			entityDimension * 2 // radiusInner
+		),
+		new Wedge(obstaclePos, 0, .85)
+	);
+	
+	var obstacleBody = new Body
+	(
+		"Obstacle",
+		new Location(obstaclePos),
+		obstacleCollider,
+		new VisualArc
+		(
+			obstacleCollider,
+			obstacleColor, obstacleColor
+		)
+	);
+	
+	this.bodies = 
+	[
+		goalBody, playerBody, enemyBody, obstacleBody 
+	].addLookups("name");
 
 	// helper variables
 	this.displacement = new Coords();
@@ -172,10 +217,11 @@ function World(name, dateCreated, size, playerPos)
 
 		display.clear();
 
-		this.visualForGoal.drawToDisplayForDrawableAndLoc(display, null, this.goalLoc);
-		this.visualForPlayer.drawToDisplayForDrawableAndLoc(display, null, this.playerLoc);
-		this.visualForEnemy.drawToDisplayForDrawableAndLoc(display, null, this.enemyLoc);
-		this.visualForObstacle.drawToDisplayForDrawableAndLoc(display, null, this.goalLoc);
+		for (var i = 0; i < this.bodies.length; i++)
+		{
+			var body = this.bodies[i];
+			body.visual.drawToDisplayForDrawableAndLoc(display, body, body.loc);
+		}
 	}
 
 	World.prototype.updateForTimerTick = function()
@@ -188,14 +234,16 @@ function World(name, dateCreated, size, playerPos)
 
 	World.prototype.updateForTimerTick_Input = function()
 	{
-		this.playerLoc.orientation.forwardSet(Coords.Instances.Zeroes);
+		var player = this.bodies["Player"];
+		var playerLoc = player.loc;
+		playerLoc.orientation.forwardSet(Coords.Instances.Zeroes);
 
 		var inputHelper = Globals.Instance.inputHelper;
 		if (inputHelper.isMouseClicked == true)
 		{
 			inputHelper.isMouseClicked = false;
 			var mouseClickPos = inputHelper.mouseClickPos;
-			this.playerLoc.pos.overwriteWith(mouseClickPos);
+			playerLoc.pos.overwriteWith(mouseClickPos);
 			Globals.Instance.soundHelper.soundWithNamePlayAsEffect("Sound");
 		}
 
@@ -245,47 +293,58 @@ function World(name, dateCreated, size, playerPos)
 					directionToMove = new Coords(0, 0);
 				}
 
-				this.playerLoc.orientation.forwardSet(directionToMove);
-				var vel = this.playerLoc.vel;
+				playerLoc.orientation.forwardSet(directionToMove);
+				var vel = playerLoc.vel;
 				if (vel.equals(directionToMove) == false)
 				{
-					this.playerLoc.timeOffsetInTicks = this.timerTicksSoFar;
+					playerLoc.timeOffsetInTicks = this.timerTicksSoFar;
 				}
 				vel.overwriteWith(directionToMove);
-				this.playerLoc.pos.add(vel).trimToRangeMax(this.size);
+				playerLoc.pos.add(vel).trimToRangeMax(this.size);
 			}
 		}
 	}
 
 	World.prototype.updateForTimerTick_Agents = function()
 	{
+		var player = this.bodies["Player"];
+		var enemy = this.bodies["Enemy"];
+		var enemyLoc = enemy.loc;
+		
 		var directionFromEnemyToCursor = this.displacement.overwriteWith
 		(
-			this.playerLoc.pos
+			player.loc.pos
 		).subtract
 		(
-			this.enemyLoc.pos
+			enemyLoc.pos
 		).normalize();
 
-		this.enemyLoc.pos.add(directionFromEnemyToCursor);
+		enemyLoc.pos.add(directionFromEnemyToCursor);
 	}
 
 	World.prototype.updateForTimerTick_WinOrLose = function()
 	{
+		var player = this.bodies["Player"];
+		var playerCollider = player.collider;
+
+		var goal = this.bodies["Goal"];
+		var enemy = this.bodies["Enemy"];
+		var obstacle = this.bodies["Obstacle"];
+
 		var messageToDisplay = null;
 
 		var collisionHelper = Globals.Instance.collisionHelper;
 
 		var doPlayerAndEnemyCollide = collisionHelper.doCollidersCollide
 		(
-			this.colliderForPlayer,
-			this.colliderForEnemy
+			playerCollider,
+			enemy.collider
 		);
 		
 		var doPlayerAndObstacleCollide = collisionHelper.doCollidersCollide
 		(
-			this.colliderForPlayer,
-			this.colliderForObstacle
+			playerCollider,
+			obstacle.collider
 		);
 
 		if (doPlayerAndEnemyCollide == true || doPlayerAndObstacleCollide == true)
@@ -296,8 +355,8 @@ function World(name, dateCreated, size, playerPos)
 		{
 			var doPlayerAndGoalCollide = collisionHelper.doCollidersCollide
 			(
-				this.colliderForPlayer,
-				this.colliderForGoal
+				playerCollider,
+				goal.collider
 			);
 
 			if (doPlayerAndGoalCollide == true)

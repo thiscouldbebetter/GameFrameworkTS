@@ -258,7 +258,7 @@ function CollisionHelper()
 
 	CollisionHelper.prototype.doBoundsAndShapeGroupAnyCollide = function(shape, group)
 	{
-		return this.doShapeGroupAllAndShapeCollide(group, shape);
+		return this.doShapeGroupAnyAndShapeCollide(group, shape);
 	}
 
 	CollisionHelper.prototype.doShapeContainerAndSphereCollide = function(container, sphere)
@@ -268,7 +268,7 @@ function CollisionHelper()
 
 	CollisionHelper.prototype.doShapeGroupAnyAndSphereCollide = function(group, shape)
 	{
-		return this.doShapeGroupAllAndShapeCollide(group, shape);
+		return this.doShapeGroupAnyAndShapeCollide(group, shape);
 	}
 
 	CollisionHelper.prototype.doShapeInverseAndSphereCollide = function(inverse, shape)
@@ -323,7 +323,7 @@ function CollisionHelper()
 		var distanceOfSphereCenterAbovePlane = 
 			sphere.center.dotProduct(plane.normal) 
 			- plane.distanceFromOrigin;
-		var returnValue = (distanceOfSphereCenterAbovePlane >= 0);
+		var returnValue = (distanceOfSphereCenterAbovePlane >= sphere.radius);
 		return returnValue;
 	}
 
