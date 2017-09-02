@@ -859,7 +859,7 @@ function ControlBuilder()
 		var world = universe.world;
 
 		var dateCreated = world.dateCreated;
-		var dateSaved = world.dateSaved == null ? dateCreated : world.dateSaved;
+		var dateSaved = world.dateSaved;
 
 		var returnValue = new ControlContainer
 		(
@@ -901,7 +901,7 @@ function ControlBuilder()
 					new Coords(100, 85).multiply(sizeMultiplier), // pos
 					new Coords(150, 25).multiply(sizeMultiplier), // size
 					true, // isTextCentered
-					"Saved:" + dateSaved.toStringTimestamp(),
+					"Saved:" + (dateSaved == null ? "[never]" : dateSaved.toStringTimestamp()),
 					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 
@@ -1049,9 +1049,9 @@ function ControlBuilder()
 				new ControlButton
 				(
 					"buttonLoadFromServer",
-					new Coords(50, 15).multiply(sizeMultiplier), // pos
-					new Coords(100, 25).multiply(sizeMultiplier), // size
-					"Reload from Server",
+					new Coords(30, 15).multiply(sizeMultiplier), // pos
+					new Coords(140, 25).multiply(sizeMultiplier), // size
+					"Reload from Local Storage",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
 					true, // isEnabled
@@ -1150,8 +1150,8 @@ function ControlBuilder()
 				new ControlButton
 				(
 					"buttonLoadFromFile",
-					new Coords(50, 50).multiply(sizeMultiplier), // pos
-					new Coords(100, 25).multiply(sizeMultiplier), // size
+					new Coords(30, 50).multiply(sizeMultiplier), // pos
+					new Coords(140, 25).multiply(sizeMultiplier), // size
 					"Load from File",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
@@ -1231,8 +1231,8 @@ function ControlBuilder()
 				new ControlButton
 				(
 					"buttonReturn",
-					new Coords(50, 105).multiply(sizeMultiplier), // pos
-					new Coords(100, 25).multiply(sizeMultiplier), // size
+					new Coords(30, 105).multiply(sizeMultiplier), // pos
+					new Coords(140, 25).multiply(sizeMultiplier), // size
 					"Return",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
@@ -1274,10 +1274,10 @@ function ControlBuilder()
 			[
 				new ControlButton
 				(
-					"buttonSaveToServer",
-					new Coords(50, 15).multiply(sizeMultiplier), // pos
-					new Coords(100, 25).multiply(sizeMultiplier), // size
-					"Save to Server",
+					"buttonSaveToLocalStorage",
+					new Coords(30, 15).multiply(sizeMultiplier), // pos
+					new Coords(140, 25).multiply(sizeMultiplier), // size
+					"Save to Local Storage",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
 					true, // isEnabled
@@ -1299,7 +1299,7 @@ function ControlBuilder()
 							Globals.Instance.controlBuilder.message
 							(
 								size,
-								"Profile saved to server.",
+								"Profile saved to local storage.",
 								// acknowledge
 								function()
 								{
@@ -1321,8 +1321,8 @@ function ControlBuilder()
 				new ControlButton
 				(
 					"buttonSaveToFile",
-					new Coords(50, 50).multiply(sizeMultiplier), // pos
-					new Coords(100, 25).multiply(sizeMultiplier), // size
+					new Coords(30, 50).multiply(sizeMultiplier), // pos
+					new Coords(140, 25).multiply(sizeMultiplier), // size
 					"Save to File",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
@@ -1370,8 +1370,8 @@ function ControlBuilder()
 				new ControlButton
 				(
 					"buttonReturn",
-					new Coords(50, 105).multiply(sizeMultiplier), // pos
-					new Coords(100, 25).multiply(sizeMultiplier), // size
+					new Coords(30, 105).multiply(sizeMultiplier), // pos
+					new Coords(140, 25).multiply(sizeMultiplier), // size
 					"Return",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
