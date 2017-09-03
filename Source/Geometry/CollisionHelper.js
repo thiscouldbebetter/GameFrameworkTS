@@ -135,7 +135,7 @@ function CollisionHelper()
 	{
 		var returnValue = false;
 		
-		var vertices = Mesh.fromBounds(bounds).vertices;
+		var vertices = Mesh.fromBounds(bounds).vertices();
 		for (var i = 0; i < vertices.length; i++)
 		{
 			var vertex = vertices[v];
@@ -179,12 +179,116 @@ function CollisionHelper()
 	CollisionHelper.prototype.doHemispaceAndSphereCollide = function(hemispace, sphere)
 	{
 		var plane = hemispace.plane;
+		var distanceOfSphereCenterFromOriginAlongNormal = 
+			sphere.center.dotProduct(plane.normal);
 		var distanceOfSphereCenterAbovePlane = 
-			sphere.center.dotProduct(plane.normal) 
+			distanceOfSphereCenterFromOriginAlongNormal
 			- plane.distanceFromOrigin;
-		var returnValue = (distanceOfSphereCenterAbovePlane > 0 - sphere.radius);
+		var returnValue = (distanceOfSphereCenterAbovePlane < sphere.radius);
 		return returnValue;
 	}
+
+	CollisionHelper.prototype.doMeshAndMeshCollide = function(mesh0, mesh1)
+	{
+		var returnValue = true;
+
+		// hack - Meshes are assumed to be convex.
+
+		var meshVertices = [ mesh0.vertices(), mesh1.vertices() ];
+		var meshFaces = [ mesh0.faces(), mesh1.faces() ];
+
+		for (var m = 0; m < 2; m++)
+		{
+			var meshThisFaces = meshFaces[m];
+			var meshThisVertices = meshVertices[m];
+			var meshOtherVertices = meshOtherVertices[m];
+
+			for (var f = 0; f < meshThisFaces.length; f++)
+			{
+				var face = meshThisFaces[f];
+				var faceNormal = face.plane.normal;
+
+				var vertexThis = meshThisVertices[0];
+				var vertexThisProjectedMin = vertexThis.dotProduct(faceNormal);
+				var vertexThisProjectedMax = vertexThisProjectedMin;
+				for (var v = 1; v < meshThisVertices.length; v++)
+				{
+					vertexThis = meshThisVertices[v];
+					var vertexThisProjected = vertexThis.dotProduct(faceNormal);
+					if (vertexThisProjected < vertexThisProjectedMin)
+					{
+						vertexThisProjectedMin = vertexThisProjected;
+					}
+
+					if (vertexThisProjected > vertexThisProjectedMax)
+					{
+						vertexThisProjectedMax = vertexThisProjected;
+					}
+				}
+
+				var vertexOther = meshOtherVertices[0];
+				var vertexOtherProjectedMin = vertexOther.dotProduct(faceNormal);
+				var vertexOtherProjectedMax = vertexOtherProjectedMin;
+				for (var v = 1; v < meshOtherVertices.length; v++)
+				{
+					vertexOther = meshOtherVertices[v];
+					var vertexOtherProjected = vertexOther.dotProduct(faceNormal);
+					if (vertexOtherProjected < vertexOtherProjectedMin)
+					{
+						vertexOtherProjectedMin = vertexOtherProjected;
+					}
+
+					if (vertexOtherProjected > vertexOtherProjectedMax)
+					{
+						vertexOtherProjectedMax = vertexOtherProjected;
+					}
+				}
+
+				var doProjectionsOverlap = 
+				(
+					vertexThisProjectedMax > vertexOtherProjectedMin
+					&& vertexOtherProjectedMax > vertexThisProjectedMin 
+				);
+
+				if (doProjectionsOverlap == false)
+				{
+					returnValue = false;
+					break;
+				}
+			}
+		}
+
+		return returnValue;
+	}
+
+	CollisionHelper.prototype.doMeshAndSphereCollide = function(mesh, sphere)
+	{
+		var returnValue = true;
+
+		// hack - Mesh is assumed to be convex.
+
+		var meshFaces = mesh.faces();
+		var hemispace = new Hemispace();
+
+		for (var f = 0; f < meshFaces.length; f++)
+		{
+			var face = meshFaces[f];
+			hemispace.plane = face.plane;
+			var doHemispaceAndSphereCollide = this.doHemispaceAndSphereCollide
+			(
+				hemispace,
+				sphere
+			);
+			if (doHemispaceAndSphereCollide == false)
+			{
+				returnValue = false;
+				break;
+			}
+		}
+
+		return returnValue;
+	}
+
 
 	CollisionHelper.prototype.doSphereAndSphereCollide = function(sphere0, sphere1)
 	{

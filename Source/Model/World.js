@@ -200,22 +200,29 @@ function World(name, dateCreated, size, playerPos)
 	
 	var enemyColor = "Red";
 	var enemyPos = this.size.clone().subtract(playerBody.loc.pos);
+	var enemyColliderAsFace = new Face([
+		new Coords(0, -entityDimension).divideScalar(2),
+		new Coords(entityDimension, entityDimension).divideScalar(2),
+		new Coords(-entityDimension, entityDimension).divideScalar(2),
+	]);
+	var enemyCollider = Mesh.fromFace
+	(
+		enemyPos, // center
+		enemyColliderAsFace,
+		1 // thickness
+	);
 	var enemyBody = new Body
 	(
 		"Enemy",
 		new Location(enemyPos),
-		new Sphere(enemyPos, entityDimension / 2), // collider
+		//new Sphere(enemyPos, entityDimension / 2), // collider
+		enemyCollider,
 		new VisualGroup
 		([
 			new VisualPolygon
 			(
 				enemyColor,
-				// vertices
-				[
-					new Coords(0, -entityDimension).divideScalar(2),
-					new Coords(entityDimension, entityDimension).divideScalar(2),
-					new Coords(-entityDimension, entityDimension).divideScalar(2),
-				]
+				enemyColliderAsFace.vertices
 			),
 			new VisualOffset
 			(
@@ -335,9 +342,12 @@ function World(name, dateCreated, size, playerPos)
 		{
 			var inputActive = inputsActive[i];
 			var mapping = this.inputToActionMappings[inputActive];
-			var actionName = mapping.actionName;
-			var action = this.actions[actionName];
-			action.perform(player);
+			if (mapping != null)
+			{
+				var actionName = mapping.actionName;
+				var action = this.actions[actionName];
+				action.perform(player);
+			}
 		}
 	}
 
@@ -364,7 +374,10 @@ function World(name, dateCreated, size, playerPos)
 		var playerCollider = player.collider;
 
 		var goal = this.bodies["Goal"];
+
 		var enemy = this.bodies["Enemy"];
+		var enemyCollider = enemy.collider;
+
 		var obstacle = this.bodies["Obstacle"];
 
 		var messageToDisplay = null;
@@ -374,7 +387,7 @@ function World(name, dateCreated, size, playerPos)
 		var doPlayerAndEnemyCollide = collisionHelper.doCollidersCollide
 		(
 			playerCollider,
-			enemy.collider
+			enemyCollider
 		);
 		
 		var doPlayerAndObstacleCollide = collisionHelper.doCollidersCollide

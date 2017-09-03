@@ -15,19 +15,19 @@ function Wedge(vertex, angleInTurnsMin, angleInTurnsMax)
 
 			var down = new Coords(0, 0, 1);
 
-			var planeMin = Plane.fromPoints
+			var planeMin = new Plane(new Coords()).fromPoints
 			([
 				// Order matters!
 				this.vertex, 
-				this.vertex.clone().add(down),
-				this.vertex.clone().add(rayDirectionMin)
+				this.vertex.clone().add(rayDirectionMin),
+				this.vertex.clone().add(down)
 			]);
 
-			var planeMax = Plane.fromPoints
+			var planeMax = new Plane(new Coords()).fromPoints
 			([
 				this.vertex, 
-				this.vertex.clone().add(rayDirectionMax),
-				this.vertex.clone().add(down)
+				this.vertex.clone().add(down),
+				this.vertex.clone().add(rayDirectionMax)
 			]);
 
 			var hemispaces = 

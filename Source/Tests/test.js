@@ -77,76 +77,49 @@ var testCollisions = new Test
 	{
 		var collisionHelper = new CollisionHelper();
 
-		var wedgeForQuadrant1 = new Wedge(new Coords(0, 0, 0), 0, .25);
-		var wedgeForQuadrant2 = new Wedge(new Coords(0, 0, 0), .25, .5);
+		var meshCubeUnitCenteredAtOrigin = Mesh.cubeUnit();
+		var meshCubeUnitInPositiveOctant = Mesh.cubeUnit().transform
+		(
+			new TransformTranslate(new Coords(1, 1, 1))
+		);
+		var meshCubeUnitInNegativeOctant = Mesh.cubeUnit().transform
+		(
+			new TransformTranslate(new Coords(-1, -1, -1))
+		);
+		var meshCubeUnitRotatedAtOrigin = Mesh.cubeUnit().transform
+		(
+			new TransformOrient
+			(
+				new Orientation
+				(
+					new Coords(1, 1, 1).normalize(), 
+					new Coords(0, 0, 1)
+				)
+			)
+		);
+		var sphereUnitAtOrigin = new Sphere(new Coords(0, 0, 0), 1);
+		var sphereUnitInPositiveOctant = new Sphere(new Coords(1, 1, 1), 1);
 
-		var shellAtOrigin = new Shell(new Sphere(new Coords(0, 0, 0), 1), .5);
-		var shellFarFromOrigin = new Shell(new Sphere(new Coords(100, 100, 100), 1), .5);
-
-		var sphereSmallAtOrigin = new Sphere(new Coords(0, 0, 0), .5);
-		var sphereLargeAtOrigin = new Sphere(new Coords(0, 0, 0), 2);
-		var sphereInQuadrant1 = new Sphere(new Coords(1, 1, 0), .5);
-		var sphereInQuadrant2 = new Sphere(new Coords(-1, 1, 0), .5);
-		var sphereInQuadrant3 = new Sphere(new Coords(-1, -1, 0), .5);
-		var sphereInQuadrant4 = new Sphere(new Coords(1, -1, 0), .5);
-		var sphereFarFromOrigin = new Sphere(new Coords(100, 100, 100), 1);
-
-		var doCollide = collisionHelper.doCollidersCollide(wedgeForQuadrant1, sphereSmallAtOrigin);
+		var collider0 = meshCubeUnitCenteredAtOrigin;
+		var collider1 = sphereUnitAtOrigin;
+		var doCollide = collisionHelper.doCollidersCollide(collider0, collider1);
 		if (doCollide == false)
 		{
 			return false;
 		}
 
-		var doCollide = collisionHelper.doCollidersCollide(wedgeForQuadrant1, sphereInQuadrant1);
+		var collider0 = meshCubeUnitInPositiveOctant;
+		var collider1 = sphereUnitAtOrigin;
+		var doCollide = collisionHelper.doCollidersCollide(collider0, collider1);
 		if (doCollide == false)
 		{
 			return false;
 		}
 
-		var doCollide = collisionHelper.doCollidersCollide(wedgeForQuadrant2, sphereInQuadrant2);
-		if (doCollide == false)
-		{
-			return false;
-		}
-
-		var doCollide = collisionHelper.doCollidersCollide(wedgeForQuadrant1, sphereInQuadrant2);
+		var collider0 = meshCubeUnitInNegativeOctant;
+		var collider1 = sphereUnitInPositiveOctant;
+		var doCollide = collisionHelper.doCollidersCollide(collider0, collider1);
 		if (doCollide == true)
-		{
-			return false;
-		}
-
-		doCollide = collisionHelper.doCollidersCollide(wedgeForQuadrant1, sphereInQuadrant3);
-		if (doCollide == true)
-		{
-			return false;
-		}
-		
-		var doCollide = collisionHelper.doCollidersCollide(wedgeForQuadrant1, sphereInQuadrant4);
-		if (doCollide == true)
-		{
-			return false;
-		}
-		
-		var doCollide = collisionHelper.doCollidersCollide(shellAtOrigin, sphereSmallAtOrigin);
-		if (doCollide == true)
-		{
-			return false;
-		}
-
-		var doCollide = collisionHelper.doCollidersCollide(shellAtOrigin, sphereLargeAtOrigin);
-		if (doCollide == false)
-		{
-			return false;
-		}
-		
-		var doCollide = collisionHelper.doCollidersCollide(shellAtOrigin, sphereFarFromOrigin);
-		if (doCollide == true)
-		{
-			return false;
-		}
-		
-		var doCollide = collisionHelper.doCollidersCollide(shellFarFromOrigin, sphereFarFromOrigin);
-		if (doCollide == false)
 		{
 			return false;
 		}

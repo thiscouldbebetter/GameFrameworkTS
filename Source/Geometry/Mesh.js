@@ -1,18 +1,30 @@
 
-function Mesh(vertices, faceBuilders)
+function Mesh(center, vertexOffsets, faceBuilders)
 {
-	this.vertices = vertices;
+	this.center = center;
+	this.vertexOffsets = vertexOffsets;
 	this.faceBuilders = faceBuilders;
 }
 {
 	// static methods
 
+	Mesh.boxOfSize = function(center, size)
+	{
+		return Mesh.fromBounds(new Bounds(center, size));
+	}
+
+	Mesh.cubeUnit = function(center)
+	{
+		return Mesh.boxOfSize(center, new Coords(2, 2, 2));
+	}
+
 	Mesh.fromBounds = function(bounds)
 	{
-		var min = bounds.min();
-		var max = bounds.max();
+		var boundsSizeHalf = bounds.sizeHalf;
+		var min = new Coords(-sizeHalf.x, -sizeHalf.y, -sizeHalf.z);
+		var max = new Coords(sizeHalf.x, sizeHalf.y, sizeHalf.z);
 
-		var vertices = 
+		var vertexOffsets = 
 		[
 			// top
 			new Coords(min.x, min.y, min.z),
@@ -27,7 +39,6 @@ function Mesh(vertices, faceBuilders)
 			new Coords(min.x, max.y, max.z),
 		];
 
-		// todo - Reorder vertex indices so that normals point in correct directions.
 		var faceBuilders = 
 		[
 			new Mesh_FaceBuilder([0, 1, 5, 4]), // north
@@ -36,11 +47,87 @@ function Mesh(vertices, faceBuilders)
 			new Mesh_FaceBuilder([2, 3, 7, 6]), // south
 			new Mesh_FaceBuilder([3, 0, 4, 7]), // west
 
-			new Mesh_FaceBuilder([0, 1, 2, 3]), // top
+			new Mesh_FaceBuilder([0, 3, 2, 1]), // top
 			new Mesh_FaceBuilder([4, 5, 6, 7]), // bottom
 		];
 
-		var returnValue = new Mesh(vertices, faceBuilders);
+		var returnValue = new Mesh
+		(
+			bounds.center, vertexOffsets, faceBuilders
+		);
+
+		return returnValue;
+	}
+
+	Mesh.fromFace = function(center, faceToExtrude, thickness)
+	{
+		var faceVertices = faceToExtrude.vertices;
+		var numberOfFaceVertices = faceVertices.length;
+		var thicknessHalf = thickness / 2;
+
+		var meshVertices = [];
+		var faceBuilders = [];
+
+		for (var z = 0; z < 2; z++)
+		{
+			var offsetForExtrusion = new Coords
+			(
+				0, 0, (z == 0 ? -1 : 1)
+			).multiplyScalar
+			(
+				thicknessHalf
+			);
+
+			var vertexIndicesTopOrBottom = [];
+
+			for (var v = 0; v < numberOfFaceVertices; v++)
+			{
+				var vertexIndex = meshVertices.length;
+
+				if (z == 0)
+				{
+					var vertexIndexNext = NumberHelper.wrapValueToRangeMinMax
+					(
+						vertexIndex + 1, 0, numberOfFaceVertices
+					);
+
+					var faceBuilderSide = new Mesh_FaceBuilder
+					([
+						vertexIndex, 
+						vertexIndexNext,
+						vertexIndexNext + numberOfFaceVertices, 
+						vertexIndex + numberOfFaceVertices
+					]);
+					faceBuilders.push(faceBuilderSide);
+
+					vertexIndicesTopOrBottom.push(vertexIndex);
+				}
+				else
+				{
+					vertexIndicesTopOrBottom.splice(0, 0, vertexIndex);
+				}
+
+				var vertex = faceVertices[v].clone().add
+				(
+					offsetForExtrusion
+				);
+
+				meshVertices.push(vertex);
+			}
+
+			var faceBuilderTopOrBottom = new Mesh_FaceBuilder
+			(
+				vertexIndicesTopOrBottom
+			);
+			faceBuilders.push(faceBuilderTopOrBottom);
+		}
+
+		var returnValue = new Mesh
+		(
+			center,
+			meshVertices, // vertexOffsets
+			faceBuilders
+		);
 
 		return returnValue;
 	}
@@ -49,16 +136,63 @@ function Mesh(vertices, faceBuilders)
 
 	Mesh.prototype.faces = function()
 	{
+		var vertices = this.vertices();
+
 		if (this._faces == null)
 		{
+			this._faces = [];
+
 			for (var f = 0; f < this.faceBuilders.length; f++)
 			{
 				var faceBuilder = this.faceBuilders[f];
-				faceBuilder.faceBuildForMeshVertices(this.vertices);
+				var face = faceBuilder.faceBuildForMeshVertices(vertices);
+				this._faces.push(face);
+			}
+		}
+		else
+		{
+			for (var f = 0; f < this._faces.length; f++)
+			{
+				var face = this._faces[f];
+				face.recalculate();
 			}
 		}
 
 		return this._faces;
+	}
+
+	Mesh.prototype.vertices = function()
+	{
+		if (this._vertices == null)
+		{
+			this._vertices = [];
+			for (var v = 0; v < this.vertexOffsets.length; v++)
+			{
+				this._vertices.push(new Coords());
+			}
+		}
+
+		for (var v = 0; v < this._vertices.length; v++)
+		{
+			var vertex = this._vertices[v];
+			var vertexOffset = this.vertexOffsets[v];
+			vertex.overwriteWith(this.center).add(vertexOffset);
+		}
+
+		return this._vertices;
+	}
+
+	// transformable
+
+	Mesh.prototype.transform = function(transformToApply)
+	{
+		for (var v = 0; v < this.vertexOffsets.length; v++)
+		{
+			var vertexOffset = this.vertexOffsets[v];
+			transformToApply.transformCoords(vertexOffset);
+		}
+
+		return this;
 	}
 }
 
@@ -70,9 +204,10 @@ function Mesh_FaceBuilder(vertexIndices)
 	Mesh_FaceBuilder.prototype.faceBuildForMeshVertices = function(meshVertices)
 	{
 		var faceVertices = [];
-		for (var v = 0; v < meshVertices.length; v++)
+		for (var vi = 0; vi < this.vertexIndices.length; vi++)
 		{
-			var meshVertex = meshVertices[v];
+			var vertexIndex = this.vertexIndices[vi];
+			var meshVertex = meshVertices[vertexIndex];
 			faceVertices.push(meshVertex);
 		}
 		var returnValue = new Face(faceVertices);

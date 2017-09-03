@@ -5,7 +5,7 @@ function Plane(normal, distanceFromOrigin)
 	this.distanceFromOrigin = distanceFromOrigin;
 }
 {
-	Plane.fromPoints = function(pointsOnPlane)
+	Plane.prototype.fromPoints = function(pointsOnPlane)
 	{
 		var point0 = pointsOnPlane[0];
 		var point1 = pointsOnPlane[1];
@@ -14,15 +14,16 @@ function Plane(normal, distanceFromOrigin)
 		var displacementFromPoint0To1 = point1.clone().subtract(point0);
 		var displacementFromPoint0To2 = point2.clone().subtract(point0);
 
-		var normal = displacementFromPoint0To1.crossProduct
+		this.normal.overwriteWith
+		(
+			displacementFromPoint0To1
+		).crossProduct
 		(
 			displacementFromPoint0To2
 		).normalize();
 
-		var distanceFromOrigin = point0.dotProduct(normal);
+		this.distanceFromOrigin = point0.dotProduct(this.normal);
 
-		var returnValue = new Plane(normal, distanceFromOrigin);
-
-		return returnValue;
+		return this;
 	}
 }
