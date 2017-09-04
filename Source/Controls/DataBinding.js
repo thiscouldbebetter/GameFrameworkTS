@@ -15,11 +15,24 @@ function DataBinding(context, bindingExpression)
 			var bindingExpressionParts = bindingExpression.split(".");
 			for (var i = 0; i < bindingExpressionParts.length; i++)
 			{
+				// hack
+				if (returnValue == null)
+				{
+					break;
+				}
+
 				var bindingExpressionPart = bindingExpressionParts[i];
 				if (bindingExpressionPart.endsWith("()") == true)
 				{
 					bindingExpressionPart = bindingExpressionPart.substr(0, bindingExpressionPart.length - "()".length);
-					returnValue = returnValue[bindingExpressionPart]();
+					if (returnValue[bindingExpressionPart] == null)
+					{
+						returnValue = null; 
+					}
+					else
+					{
+						returnValue = returnValue[bindingExpressionPart]();
+					}
 				}
 				else
 				{

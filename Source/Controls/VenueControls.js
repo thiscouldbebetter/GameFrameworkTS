@@ -51,9 +51,12 @@ function VenueControls(controlRoot)
 		if (inputHelper.isMouseClicked == true)
 		{
 			var mouseClickPos = inputHelper.mouseClickPos;
-			this.controlRoot.mouseClick(mouseClickPos);
+			var wasClickHandled = this.controlRoot.mouseClick(mouseClickPos);
 
-			inputHelper.isMouseClicked = false;
+			if (wasClickHandled == true)
+			{
+				inputHelper.isMouseClicked = false;
+			}
 		}
 		else if (inputHelper.inputsActive.length > 0)
 		{

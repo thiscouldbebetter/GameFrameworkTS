@@ -151,6 +151,8 @@ function ControlContainer(name, pos, size, children)
 
 	ControlContainer.prototype.mouseClick = function(mouseClickPos)
 	{
+		var wasClickHandled = false;
+
 		var childrenContainingPos = this.childrenContainingPos;
 		childrenContainingPos.length = 0;
 
@@ -166,9 +168,15 @@ function ControlContainer(name, pos, size, children)
 			var child = childrenContainingPos[i];
 			if (child.mouseClick != null)
 			{
-				child.mouseClick(mouseClickPos);
+				var wasClickHandledByChild = child.mouseClick(mouseClickPos);
+				if (wasClickHandledByChild == true)
+				{
+					wasClickHandled = true;
+				}
 			}
 		}
+
+		return wasClickHandled;
 	}
 
 	ControlContainer.prototype.mouseMove = function(mouseMovePos)
