@@ -8,14 +8,22 @@ function ControlImage(name, pos, size, image)
 }
 
 {
+	ControlImage.prototype.style = function()
+	{
+		return ControlStyle.Instances[this.styleName == null ? "Default" : this.styleName];
+	}
+
+	// drawable
+
 	ControlImage.prototype.drawToDisplayAtLoc = function(display, drawLoc)
 	{
 		var drawPos = drawLoc.pos.add(this.pos);
+		var style = this.style();
 
 		display.drawRectangle
 		(
 			drawPos, this.size,
-			display.colorBack, display.colorFore
+			style.colorFill, style.colorBorder
 		);
 
 		display.drawImage
@@ -25,6 +33,4 @@ function ControlImage(name, pos, size, image)
 			display.sizeInPixels // hack
 		);
 	}
-
-
 }

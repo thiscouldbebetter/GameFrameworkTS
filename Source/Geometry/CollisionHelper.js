@@ -47,17 +47,17 @@ function CollisionHelper()
 	CollisionHelper.prototype.doCollidersCollide = function(collider0, collider1)
 	{
 		var returnValue;
-		
+
 		while (collider0.collider != null)
 		{
 			collider0 = collider0.collider();
 		}
-		
+
 		while (collider1.collider != null)
 		{
 			collider1 = collider1.collider();
 		}
-	
+
 		var collider0TypeName = collider0.constructor.name;
 		var collider1TypeName = collider1.constructor.name;
 
@@ -71,12 +71,12 @@ function CollisionHelper()
 		}
 
 		var colliderTypeNamesConcatenated =
-			collidersAlphabetized[0].constructor.name 
-			+ "And" 
+			collidersAlphabetized[0].constructor.name
+			+ "And"
 			+ collidersAlphabetized[1].constructor.name;
 		var collisionMethodName = "do" + colliderTypeNamesConcatenated + "Collide";
 		var collisionMethod = this[collisionMethodName];
-		
+
 		if (collisionMethod == null)
 		{
 			throw "Error - No collision method in CollisionHelper named " + collisionMethodName;
@@ -88,7 +88,7 @@ function CollisionHelper()
 
 		return returnValue;
 	}
-	
+
 	CollisionHelper.prototype.doesColliderContainOther = function(collider0, collider1)
 	{
 		var returnValue;
@@ -108,7 +108,7 @@ function CollisionHelper()
 
 		var containsMethodName = "does" + collider0TypeName + "Contain" + collider1TypeName;
 		var containsMethod = this[containsMethodName];
-		
+
 		if (containsMethod == null)
 		{
 			throw "Error - No contains method in CollisionHelper named " + containsMethodName;
@@ -130,11 +130,11 @@ function CollisionHelper()
 		var returnValue = bounds0.overlapsWith(bounds1);
 		return returnValue;
 	}
-	
+
 	CollisionHelper.prototype.doBoundsAndHemispaceCollide = function(bounds, hemispace)
 	{
 		var returnValue = false;
-		
+
 		var vertices = Mesh.fromBounds(bounds).vertices();
 		for (var i = 0; i < vertices.length; i++)
 		{
@@ -147,7 +147,7 @@ function CollisionHelper()
 		}
 		return returnValue;
 	}
-	
+
 	CollisionHelper.prototype.doBoundsAndSphereCollide = function(bounds, sphere)
 	{
 		var displacementBetweenCenters = this.tempCoords.overwriteWith
@@ -179,9 +179,9 @@ function CollisionHelper()
 	CollisionHelper.prototype.doHemispaceAndSphereCollide = function(hemispace, sphere)
 	{
 		var plane = hemispace.plane;
-		var distanceOfSphereCenterFromOriginAlongNormal = 
+		var distanceOfSphereCenterFromOriginAlongNormal =
 			sphere.center.dotProduct(plane.normal);
-		var distanceOfSphereCenterAbovePlane = 
+		var distanceOfSphereCenterAbovePlane =
 			distanceOfSphereCenterFromOriginAlongNormal
 			- plane.distanceFromOrigin;
 		var returnValue = (distanceOfSphereCenterAbovePlane < sphere.radius);
@@ -244,10 +244,10 @@ function CollisionHelper()
 					}
 				}
 
-				var doProjectionsOverlap = 
+				var doProjectionsOverlap =
 				(
 					vertexThisProjectedMax > vertexOtherProjectedMin
-					&& vertexOtherProjectedMax > vertexThisProjectedMin 
+					&& vertexOtherProjectedMax > vertexThisProjectedMin
 				);
 
 				if (doProjectionsOverlap == false)
@@ -305,7 +305,7 @@ function CollisionHelper()
 	CollisionHelper.prototype.doShapeGroupAllAndShapeCollide = function(groupAll, shapeOther)
 	{
 		var returnValue = true;
-		
+
 		var shapesThis = groupAll.shapes;
 		for (var i = 0; i < shapesThis.length; i++)
 		{
@@ -317,10 +317,10 @@ function CollisionHelper()
 				break;
 			}
 		}
-		
+
 		return returnValue;
 	}
-	
+
 	CollisionHelper.prototype.doShapeGroupAnyAndShapeCollide = function(groupAny, shapeOther)
 	{
 		var returnValue = false;
@@ -339,17 +339,17 @@ function CollisionHelper()
 
 		return returnValue;
 	}
-	
+
 	CollisionHelper.prototype.doShapeContainerAndShapeCollide = function(container, shapeOther)
 	{
 		return this.doesColliderContainOther(container.shape, shapeOther);
 	}
-	
+
 	CollisionHelper.prototype.doShapeInverseAndShapeCollide = function(inverse, shapeOther)
 	{
 		return (this.doCollidersCollide(inverse.shape, shapeOther) == false);
 	}
-	
+
 	CollisionHelper.prototype.doBoundsAndShapeGroupAllCollide = function(shape, group)
 	{
 		return this.doShapeGroupAllAndShapeCollide(group, shape);
@@ -381,29 +381,29 @@ function CollisionHelper()
 	}
 
 	// contains
-	
+
 	CollisionHelper.prototype.doesBoundsContainBounds = function(bounds0, bounds1)
 	{
 		return bounds0.containsOther(bounds1);
 	}
-	
+
 	CollisionHelper.prototype.doesBoundsContainHemispace = function(bounds, hemispace)
 	{
 		return false;
 	}
-	
+
 	CollisionHelper.prototype.doesBoundsContainSphere = function(bounds, sphere)
 	{
 		var boundsForSphere = new Bounds
 		(
-			sphere.center, new Coords(1, 1, 1).multiplyScalar(sphere.radius * 2) 
+			sphere.center, new Coords(1, 1, 1).multiplyScalar(sphere.radius * 2)
 		);
-		
+
 		var returnValue = bounds.containsOther(boundsForSphere);
-		
+
 		return returnValue;
 	}
-	
+
 	CollisionHelper.prototype.doesHemispaceContainBounds = function(hemispace, bounds)
 	{
 		var returnValue = true;
@@ -424,8 +424,8 @@ function CollisionHelper()
 	CollisionHelper.prototype.doesHemispaceContainSphere = function(hemispace, sphere)
 	{
 		var plane = hemispace.plane;
-		var distanceOfSphereCenterAbovePlane = 
-			sphere.center.dotProduct(plane.normal) 
+		var distanceOfSphereCenterAbovePlane =
+			sphere.center.dotProduct(plane.normal)
 			- plane.distanceFromOrigin;
 		var returnValue = (distanceOfSphereCenterAbovePlane >= sphere.radius);
 		return returnValue;
@@ -437,12 +437,12 @@ function CollisionHelper()
 		var returnValue = sphere.containsOther(sphereCircumscribingBounds);
 		return returnValue;
 	}
-	
+
 	CollisionHelper.prototype.doesSphereContainHemispace = function(sphere, hemispace)
 	{
 		return false;
 	}
-	
+
 	CollisionHelper.prototype.doesSphereContainSphere = function(sphere0, sphere1)
 	{
 		return sphere0.containsOther(sphere1);

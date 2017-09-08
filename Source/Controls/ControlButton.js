@@ -59,6 +59,11 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 		this.isHighlighted = false;
 	}
 
+	ControlButton.prototype.style = function()
+	{
+		return ControlStyle.Instances[this.styleName == null ? "Default" : this.styleName];
+	}
+
 	// drawable
 
 	ControlButton.prototype.drawToDisplayAtLoc = function(display, drawLoc)
@@ -69,8 +74,9 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 		var isEnabled = this.isEnabled();
 		var isHighlighted = this.isHighlighted && isEnabled;
 
-		var colorFill = display.colorBack;
-		var colorBorder = (isEnabled == true ? display.colorFore : "LightGray" );
+		var style = this.style();
+		var colorFill = style.colorFill;
+		var colorBorder = (isEnabled == true ? style.colorBorder : style.colorDisabled );
 
 		if (this.hasBorder == true)
 		{

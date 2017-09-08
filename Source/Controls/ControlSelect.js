@@ -130,6 +130,11 @@ function ControlSelect
 		this.optionSelectedNextInDirection(1);
 	}
 
+	ControlSelect.prototype.style = function()
+	{
+		return ControlStyle.Instances[this.styleName == null ? "Default" : this.styleName];
+	}
+
 	ControlSelect.prototype.valueSelected = function()
 	{
 		return (this._valueSelected.get == null ? this._valueSelected : this._valueSelected.get() );

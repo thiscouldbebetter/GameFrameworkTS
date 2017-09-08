@@ -1,9 +1,10 @@
 
-function MediaLibrary(images, sounds, videos)
+function MediaLibrary(images, sounds, videos, fonts)
 {
 	this.images = images.addLookups("name");
 	this.sounds = sounds.addLookups("name");
 	this.videos = videos.addLookups("name");
+	this.fonts = fonts.addLookups("name");
 }
 
 {
@@ -20,6 +21,11 @@ function MediaLibrary(images, sounds, videos)
 				this.images[image.name] = image;
 			}
 		}
+	}
+
+	MediaLibrary.prototype.fontGetByName = function(name)
+	{
+		return this.fonts[name];
 	}
 
 	MediaLibrary.prototype.imageGetByName = function(name)

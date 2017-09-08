@@ -27,7 +27,7 @@ function DataBinding(context, bindingExpression)
 					bindingExpressionPart = bindingExpressionPart.substr(0, bindingExpressionPart.length - "()".length);
 					if (returnValue[bindingExpressionPart] == null)
 					{
-						returnValue = null; 
+						returnValue = null;
 					}
 					else
 					{

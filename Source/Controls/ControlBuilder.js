@@ -388,7 +388,24 @@ function ControlBuilder()
 					"Select",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
-					true, // isEnabled
+					// isEnabled
+					new DataBinding
+					(
+						function()
+						{
+							var controlRoot = Globals.Instance.universe.venueCurrent.controlRoot;
+							if (controlRoot == null)
+							{
+								return false;
+							}
+							else
+							{
+								return controlRoot.children["listWorlds"].itemSelected() != null;
+							}
+						},
+						"call()"
+					),
+
 					// click
 					function ()
 					{
@@ -538,8 +555,8 @@ function ControlBuilder()
 					// isEnabled
 					new DataBinding
 					(
-						function() 
-						{ 
+						function()
+						{
 							var controlRoot = Globals.Instance.universe.venueCurrent.controlRoot;
 							if (controlRoot == null)
 							{
@@ -547,11 +564,11 @@ function ControlBuilder()
 							}
 							else
 							{
-								return controlRoot.children["textBoxName"].text().length > 0; 
+								return controlRoot.children["textBoxName"].text().length > 0;
 							}
-						}, 
+						},
 						"call()"
-					), 
+					),
 					// click
 					function ()
 					{
@@ -676,7 +693,23 @@ function ControlBuilder()
 					"Select",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
-					true, // isEnabled
+					// isEnabled
+					new DataBinding
+					(
+						function()
+						{
+							var controlRoot = Globals.Instance.universe.venueCurrent.controlRoot;
+							if (controlRoot == null)
+							{
+								return false;
+							}
+							else
+							{
+								return controlRoot.children["listProfiles"].itemSelected() != null;
+							}
+						},
+						"call()"
+					),
 					// click
 					function()
 					{

@@ -10,6 +10,11 @@ function ControlLabel(name, pos, size, isTextCentered, text, fontHeightInPixels)
 }
 
 {
+	ControlLabel.prototype.style = function()
+	{
+		return ControlStyle.Instances[this.styleName == null ? "Default" : this.styleName];
+	}
+
 	ControlLabel.prototype.text = function()
 	{
 		return (this._text.get == null ? this._text : this._text.get() );
@@ -20,6 +25,7 @@ function ControlLabel(name, pos, size, isTextCentered, text, fontHeightInPixels)
 	ControlLabel.prototype.drawToDisplayAtLoc = function(display, drawLoc)
 	{
 		var drawPos = drawLoc.pos.add(this.pos);
+		var style = this.style();
 		var text = this.text();
 
 		display.drawText
@@ -27,8 +33,8 @@ function ControlLabel(name, pos, size, isTextCentered, text, fontHeightInPixels)
 			text,
 			this.fontHeightInPixels,
 			drawPos,
-			display.colorFore,
-			display.colorBack, // colorOutline
+			style.colorBorder,
+			style.colorFill, // colorOutline
 			null, // areColorsReversed
 			this.isTextCentered,
 			this.size.x // widthMaxInPixels

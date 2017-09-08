@@ -72,7 +72,7 @@ function Test(name, run)
 
 var testCollisions = new Test
 (
-	"Collision", 
+	"Collision",
 	function()
 	{
 		var collisionHelper = new CollisionHelper();
@@ -92,7 +92,7 @@ var testCollisions = new Test
 			(
 				new Orientation
 				(
-					new Coords(1, 1, 1).normalize(), 
+					new Coords(1, 1, 1).normalize(),
 					new Coords(0, 0, 1)
 				)
 			)
@@ -123,7 +123,7 @@ var testCollisions = new Test
 		{
 			return false;
 		}
-		
+
 		return true;
 	}
 );

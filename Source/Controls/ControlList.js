@@ -153,21 +153,27 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 		}
 	}
 
+	ControlList.prototype.style = function()
+	{
+		return ControlStyle.Instances[this.styleName == null ? "Default" : this.styleName];
+	}
+
 	// drawable
 
 	ControlList.prototype.drawToDisplayAtLoc = function(display, drawLoc)
 	{
 		var drawPos = drawLoc.pos.add(this.pos);
 
-		var colorFore = (this.isHighlighted == true ? display.colorBack : display.colorFore);
-		var colorBack = (this.isHighlighted == true ? display.colorFore : display.colorBack);
+		var style = this.style();
+		var colorFore = (this.isHighlighted == true ? style.colorFill : style.colorBorder);
+		var colorBack = (this.isHighlighted == true ? style.colorBorder : style.colorFill);
 
 		display.drawRectangle
 		(
 			drawPos,
 			this.size,
 			colorBack, // fill
-			display.colorFore, // border
+			style.colorBorder, // border
 			false // areColorsReversed
 		);
 

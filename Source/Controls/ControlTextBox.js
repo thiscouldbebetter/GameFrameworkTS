@@ -13,6 +13,11 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 }
 
 {
+	ControlTextBox.prototype.style = function()
+	{
+		return ControlStyle.Instances[this.styleName == null ? "Default" : this.styleName];
+	}
+
 	ControlTextBox.prototype.text = function(value)
 	{
 		if (value != null)
@@ -125,13 +130,14 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 	ControlTextBox.prototype.drawToDisplayAtLoc = function(display, drawLoc)
 	{
 		var drawPos = drawLoc.pos.add(this.pos);
+		var style = this.style();
 
 		var text = this.text();
 
 		display.drawRectangle
 		(
 			drawPos, this.size,
-			display.colorBack, display.colorFore,
+			style.colorFill, style.colorBorder,
 			this.isHighlighted // areColorsReversed
 		);
 
@@ -144,8 +150,8 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 			text,
 			this.fontHeightInPixels,
 			drawPos2,
-			display.colorFore,
-			display.colorBack,
+			style.colorBorder,
+			style.colorFill,
 			this.isHighlighted,
 			false, // isCentered
 			this.size.x // widthMaxInPixels
@@ -169,8 +175,8 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 			(
 				drawPos2,
 				new Coords(cursorWidth, this.fontHeightInPixels), // size
-				display.colorBack,
-				display.colorBack
+				style.colorFill,
+				style.colorFill
 			);
 
 			display.drawText
@@ -178,7 +184,7 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 				textAtCursor,
 				this.fontHeightInPixels,
 				drawPos2,
-				display.colorFore,
+				style.colorBorder,
 				null, // colorBack
 				null, // isHighlighted
 				this.size.x // widthMaxInPixels

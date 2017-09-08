@@ -2,15 +2,6 @@ function main()
 {
 	//localStorage.clear();
 
-	var displaySizeInPixels = new Coords(400, 300);
-
-	var display = new Display
-	(
-		displaySizeInPixels,
-		10, // fontHeightInPixels
-		"Gray", "White" // colorFore, colorBack
-	);
-
 	var mediaLibrary = new MediaLibrary
 	(
 		// images
@@ -25,7 +16,21 @@ function main()
 		// videos
 		[
 			new Video("Movie", "../Media/Movie.webm"),
+		],
+		// fonts
+		[
+			new Font("Font", "../Media/Font.ttf")
 		]
+	);
+
+	var displaySizeInPixels = new Coords(400, 300);
+
+	var display = new Display
+	(
+		displaySizeInPixels,
+		"Font", // fontName
+		10, // fontHeightInPixels
+		"Gray", "White" // colorFore, colorBack
 	);
 
 	var universe0 = Universe.new(null);

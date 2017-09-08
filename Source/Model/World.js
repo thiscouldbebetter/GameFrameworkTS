@@ -10,8 +10,8 @@ function World(name, dateCreated, size, playerPos)
 	this.size = size;
 
 	this.timerTicksSoFar = 0;
-	
-	this.actions = 
+
+	this.actions =
 	[
 		Action.Instances.DoNothing,
 		new Action
@@ -68,8 +68,8 @@ function World(name, dateCreated, size, playerPos)
 			}
 		),
 	].addLookups("name");
-	
-	this.inputToActionMappings = 
+
+	this.inputToActionMappings =
 	[
 		new InputToActionMapping("Escape", "ShowMenu"),
 		new InputToActionMapping("ArrowDown", "MoveDown"),
@@ -77,7 +77,7 @@ function World(name, dateCreated, size, playerPos)
 		new InputToActionMapping("ArrowRight", "MoveRight"),
 		new InputToActionMapping("ArrowUp", "MoveUp"),
 	].addLookups("inputName");
-	
+
 	// bodies
 
 	var entityDimension = 10;
@@ -157,12 +157,12 @@ function World(name, dateCreated, size, playerPos)
 		playerVisualName,
 		playerVisualMovementIndicator,
 	]);
-	
+
 	var playerBody = new Body
 	(
-		"Player", 
-		playerLoc, 
-		playerCollider, 
+		"Player",
+		playerLoc,
+		playerCollider,
 		playerVisual
 	);
 
@@ -178,7 +178,7 @@ function World(name, dateCreated, size, playerPos)
 	(
 		this.size
 	);
-	
+
 	var goalColor = "Green";
 	var goalBody = new Body
 	(
@@ -197,7 +197,7 @@ function World(name, dateCreated, size, playerPos)
 	)
 
 	// enemy
-	
+
 	var enemyColor = "Red";
 	var enemyPos = this.size.clone().subtract(playerBody.loc.pos);
 	var enemyColliderAsFace = new Face([
@@ -233,7 +233,7 @@ function World(name, dateCreated, size, playerPos)
 	);
 
 	// obstacle
-	
+
 	var obstaclePos = goalBody.loc.pos;
 	var obstacleColor = enemyColor;
 	var obstacleCollider = new Arc
@@ -245,7 +245,7 @@ function World(name, dateCreated, size, playerPos)
 		),
 		new Wedge(obstaclePos, 0, .85)
 	);
-	
+
 	var obstacleBody = new Body
 	(
 		"Obstacle",
@@ -257,10 +257,10 @@ function World(name, dateCreated, size, playerPos)
 			obstacleColor, obstacleColor
 		)
 	);
-	
-	this.bodies = 
+
+	this.bodies =
 	[
-		goalBody, playerBody, enemyBody, obstacleBody 
+		goalBody, playerBody, enemyBody, obstacleBody
 	].addLookups("name");
 
 	// helper variables
@@ -290,7 +290,7 @@ function World(name, dateCreated, size, playerPos)
 	World.prototype.bodyMoveInDirection = function(body, directionToMove)
 	{
 		var bodyLoc = body.loc;
-		
+
 		bodyLoc.orientation.forwardSet(directionToMove);
 		var vel = bodyLoc.vel;
 		if (vel.equals(directionToMove) == false)
@@ -356,7 +356,7 @@ function World(name, dateCreated, size, playerPos)
 		var player = this.bodies["Player"];
 		var enemy = this.bodies["Enemy"];
 		var enemyLoc = enemy.loc;
-		
+
 		var directionFromEnemyToCursor = this.displacement.overwriteWith
 		(
 			player.loc.pos
@@ -389,7 +389,7 @@ function World(name, dateCreated, size, playerPos)
 			playerCollider,
 			enemyCollider
 		);
-		
+
 		var doPlayerAndObstacleCollide = collisionHelper.doCollidersCollide
 		(
 			playerCollider,

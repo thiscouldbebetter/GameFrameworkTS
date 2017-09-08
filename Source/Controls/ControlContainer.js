@@ -224,16 +224,22 @@ function ControlContainer(name, pos, size, children)
 		}
 	}
 
+	ControlContainer.prototype.style = function()
+	{
+		return ControlStyle.Instances[this.styleName == null ? "Default" : this.styleName];
+	}
+
 	// drawable
 
 	ControlContainer.prototype.drawToDisplayAtLoc = function(display, drawLoc)
 	{
 		var drawPos = drawLoc.pos.add(this.pos);
+		var style = this.style();
 
 		display.drawRectangle
 		(
 			drawPos, this.size,
-			display.colorBack, display.colorFore
+			style.colorBackground, style.colorBorder
 		)
 
 		var children = this.children;
