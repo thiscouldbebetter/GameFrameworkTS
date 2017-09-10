@@ -1,6 +1,8 @@
 
 function CollisionHelper()
 {
+	this.throwErrorIfCollidersCannotBeCollided = false;
+
 	// helper variables
 	this.tempCoords = new Coords();
 }
@@ -79,7 +81,10 @@ function CollisionHelper()
 
 		if (collisionMethod == null)
 		{
-			throw "Error - No collision method in CollisionHelper named " + collisionMethodName;
+			if (this.throwErrorIfCollidersCannotBeCollided == true)
+			{
+				throw "Error - No collision method in CollisionHelper named " + collisionMethodName;
+			}
 		}
 		else
 		{
@@ -254,6 +259,167 @@ function CollisionHelper()
 				{
 					returnValue = false;
 					break;
+				}
+			}
+		}
+
+		return returnValue;
+	}
+
+	CollisionHelper.prototype.doMapLocatedAndMapLocatedCollide = function(mapLocated0, mapLocated1)
+	{
+		var returnValue = false;
+
+		var doBoundsCollide =
+			this.doBoundsAndBoundsCollide(mapLocated0.bounds, mapLocated1.bounds);
+
+		if (doBoundsCollide == false)
+		{
+			return false;
+		}
+
+		var map0 = mapLocated0.map;
+		var map1 = mapLocated1.map;
+
+		var cell0 = map0.cellPrototype.clone();
+		var cell1 = map1.cellPrototype.clone();
+
+		var cell0PosAbsolute = new Coords();
+
+		var cell0PosInCells = new Coords();
+		var cell1PosInCells = new Coords();
+
+		var cell1PosInCellsMin = new Coords();
+		var cell1PosInCellsMax = new Coords();
+
+		var map0SizeInCells = map0.sizeInCells;
+		var map1SizeInCells = map1.sizeInCells;
+
+		var map1SizeInCellsMinusOnes = map1.sizeInCellsMinusOnes;
+
+		var map0CellSize = map0.cellSize;
+		var map1CellSize = map1.cellSize;
+
+		var map0Pos = mapLocated0.loc.pos;
+		var map1Pos = mapLocated1.loc.pos;
+
+		for (var y0 = 0; y0 < map0SizeInCells.y; y0++)
+		{
+			cell0PosInCells.y = y0;
+			cell0PosAbsolute.y = map0Pos.y + (y0 * map0CellSize.y);
+
+			for (var x0 = 0; x0 < map0SizeInCells.x; x0++)
+			{
+				cell0PosInCells.x = x0;
+				cell0PosAbsolute.x = map0Pos.x + (x0 * map0CellSize.x);
+
+				cell0 = map0.cellAtPosInCells(cell0PosInCells, cell0);
+
+				if (cell0.isBlocking == true)
+				{
+					cell1PosInCellsMin.overwriteWith
+					(
+						cell0PosAbsolute
+					).subtract
+					(
+						map1Pos
+					).divide
+					(
+						map1CellSize
+					).floor();
+
+					cell1PosInCellsMax.overwriteWith
+					(
+						cell0PosAbsolute
+					).subtract
+					(
+						map1Pos
+					).add
+					(
+						map0CellSize
+					).divide
+					(
+						map1CellSize
+					).floor();
+
+					for (var y1 = cell1PosInCellsMin.y; y1 <= cell1PosInCellsMax.y; y1++)
+					{
+						cell1PosInCells.y = y1;
+
+						for (var x1 = cell1PosInCellsMin.x; x1 < cell1PosInCellsMax.x; x1++)
+						{
+							cell1PosInCells.x = x1;
+
+							var isCell1PosInBounds = cell1PosInCells.isInRangeMinMax
+							(
+								Coords.Instances.Zeroes, map1SizeInCellsMinusOnes
+							)
+							if (isCell1PosInBounds == true)
+							{
+								cell1 = map1.cellAtPosInCells(cell1PosInCells, cell1);
+
+								if (cell1.isBlocking == true)
+								{
+									returnValue = true;
+
+									y1 = cell1PosInCellsMax.y;
+									x0 = map0SizeInCells.x;
+									y0 = map0SizeInCells.y;
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return returnValue;
+	}
+
+	CollisionHelper.prototype.doMapLocatedAndSphereCollide = function(mapLocated, sphere)
+	{
+		var returnValue = false;
+
+		var doBoundsCollide =
+			this.doBoundsAndSphereCollide(mapLocated.bounds, sphere);
+
+		if (doBoundsCollide == false)
+		{
+			return false;
+		}
+
+		var map = mapLocated.map;
+		var cell = map.cellPrototype.clone();
+		var cellPosAbsolute = new Coords();
+		var cellPosInCells = new Coords();
+		var mapSizeInCells = map.sizeInCells;
+		var mapCellSize = map.cellSize;
+		var mapSizeHalf = map.sizeHalf;
+		var mapPos = mapLocated.loc.pos;
+		var cellAsBounds = new Bounds( new Coords(), map.cellSize );
+
+		for (var y = 0; y < mapSizeInCells.y; y++)
+		{
+			cellPosInCells.y = y;
+			cellPosAbsolute.y = (y * mapCellSize.y) + mapPos.y - mapSizeHalf.y;
+
+			for (var x = 0; x < mapSizeInCells.x; x++)
+			{
+				cellPosInCells.x = x;
+				cellPosAbsolute.x = (x * mapCellSize.x) + mapPos.x - mapSizeHalf.x;
+
+				cell = map.cellAtPosInCells(cellPosInCells, cell);
+
+				if (cell.isBlocking == true)
+				{
+					cellAsBounds.center.overwriteWith(cellPosAbsolute);
+					var doCellAndSphereCollide = this.doBoundsAndSphereCollide(cellAsBounds, sphere);
+					if (doCellAndSphereCollide == true)
+					{
+						returnValue = true;
+						break;
+					}
 				}
 			}
 		}

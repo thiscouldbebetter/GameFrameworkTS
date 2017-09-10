@@ -158,6 +158,11 @@ function World(name, dateCreated, size, playerPos)
 		playerVisualMovementIndicator,
 	]);
 
+function MapCell()
+{}
+{
+	MapCell.prototype.clone = function() { return new MapCell(); }
+}
 	var playerBody = new Body
 	(
 		"Player",
@@ -200,6 +205,8 @@ function World(name, dateCreated, size, playerPos)
 
 	var enemyColor = "Red";
 	var enemyPos = this.size.clone().subtract(playerBody.loc.pos);
+	var enemyLoc = new Location(enemyPos);
+
 	var enemyColliderAsFace = new Face([
 		new Coords(0, -entityDimension).divideScalar(2),
 		new Coords(entityDimension, entityDimension).divideScalar(2),
@@ -211,25 +218,26 @@ function World(name, dateCreated, size, playerPos)
 		enemyColliderAsFace,
 		1 // thickness
 	);
+	var enemyVisual = new VisualGroup
+	([
+		new VisualPolygon
+		(
+			enemyColor,
+			enemyColliderAsFace.vertices
+		),
+		new VisualOffset
+		(
+			new VisualText("Enemy", enemyColor),
+			new Coords(0, entityDimension)
+		)
+	]);
+
 	var enemyBody = new Body
 	(
 		"Enemy",
-		new Location(enemyPos),
-		//new Sphere(enemyPos, entityDimension / 2), // collider
+		enemyLoc,
 		enemyCollider,
-		new VisualGroup
-		([
-			new VisualPolygon
-			(
-				enemyColor,
-				enemyColliderAsFace.vertices
-			),
-			new VisualOffset
-			(
-				new VisualText("Enemy", enemyColor),
-				new Coords(0, entityDimension)
-			)
-		])
+		enemyVisual
 	);
 
 	// obstacle
@@ -257,10 +265,61 @@ function World(name, dateCreated, size, playerPos)
 			obstacleColor, obstacleColor
 		)
 	);
+	
+	var obstacle2CellSize = new Coords(2, 2, 1);
+	
+	var obstacle2Map = new Map
+	(
+		new Coords(16, 16, 1), //sizeInCells,
+		obstacle2CellSize,
+		new MapCell(), // cellPrototype
+		function cellAtPosInCells(cellPosInCells, cellToOverwrite)
+		{
+			var cellCode = this.cellSource[cellPosInCells.y][cellPosInCells.x];
+			var cellVisualName = (cellCode == "x" ? "Blocking" : "Open");
+			var cellIsBlocking = (cellCode == "x");
+			cellToOverwrite.visualName = cellVisualName;
+			cellToOverwrite.isBlocking = cellIsBlocking;
+			return cellToOverwrite;
+		},
+		// cellSource
+		[
+			"xxxx............",
+			"x..x............",
+			"x..x............",
+			"x..x............",
+			"x..x............",
+			"x..x............",
+			"x..xxxxxxxxxxxxx",
+			"x..............x",
+			"x..............x",
+			"xxxxxxxxxxxxx..x",
+			"............x..x",
+			"............x..x",
+			"............x..x",
+			"............x..x",
+			"............x..x",
+			"............xxxx",
+		]
+	);
 
+	var obstacle2Pos = playerBody.loc.pos.clone().addDimensions(playerBody.loc.pos.x, this.size.y / 2, 0);
+	var obstacle2Loc = new Location(obstacle2Pos);	
+	var obstacle2VisualLookup =
+	{
+		"Blocking" : new VisualRectangle(obstacle2CellSize, "Red"),
+		"Open" : new VisualNone()
+	};
+	var obstacle2Body = new Body
+	(
+		"Obstacle2",
+		obstacle2Loc,
+		new MapLocated(obstacle2Map, obstacle2Loc),
+		new VisualMap(obstacle2Map, obstacle2VisualLookup)
+	);
 	this.bodies =
 	[
-		goalBody, playerBody, enemyBody, obstacleBody
+		goalBody, playerBody, enemyBody, obstacleBody, obstacle2Body
 	].addLookups("name");
 
 	// helper variables
@@ -357,7 +416,7 @@ function World(name, dateCreated, size, playerPos)
 		var enemy = this.bodies["Enemy"];
 		var enemyLoc = enemy.loc;
 
-		var directionFromEnemyToCursor = this.displacement.overwriteWith
+		var directionFromEnemyToPlayer = this.displacement.overwriteWith
 		(
 			player.loc.pos
 		).subtract
@@ -365,7 +424,7 @@ function World(name, dateCreated, size, playerPos)
 			enemyLoc.pos
 		).normalize();
 
-		enemyLoc.pos.add(directionFromEnemyToCursor);
+		enemyLoc.pos.add(directionFromEnemyToPlayer);
 	}
 
 	World.prototype.updateForTimerTick_WinOrLose = function()
@@ -379,6 +438,7 @@ function World(name, dateCreated, size, playerPos)
 		var enemyCollider = enemy.collider;
 
 		var obstacle = this.bodies["Obstacle"];
+		var obstacle2 = this.bodies["Obstacle2"];
 
 		var messageToDisplay = null;
 
@@ -396,7 +456,18 @@ function World(name, dateCreated, size, playerPos)
 			obstacle.collider
 		);
 
-		if (doPlayerAndEnemyCollide == true || doPlayerAndObstacleCollide == true)
+		var doPlayerAndObstacle2Collide = collisionHelper.doCollidersCollide
+		(
+			playerCollider,
+			obstacle2.collider
+		);
+
+		if 
+		(
+			doPlayerAndEnemyCollide == true 
+			|| doPlayerAndObstacleCollide == true
+			|| doPlayerAndObstacle2Collide == true
+		)
 		{
 			messageToDisplay = "You lose!";
 		}

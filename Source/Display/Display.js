@@ -14,7 +14,7 @@ function Display(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorBac
 	this.drawPos2 = new Coords();
 	this.drawPos3 = new Coords();
 	this.fontNameFallthrough = "serif";
-	this.testString = "abcdefghijklmnopqrstuvwxyz 1234567890";
+	this.testString = "ABCDEFGHIJKMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz 1234567890";
 }
 
 {
@@ -305,40 +305,32 @@ function Display(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorBac
 	{
 		this.graphics.font = "" + this.fontHeightInPixels + "px " + fontName;
 		var widthWithFontSpecified = this.graphics.measureText(this.testString).width;
-		this.graphics.font = "" + this.fontHeightInPixels + "px " + this.fontNameFallthrough;
-		var widthWithFontFallthrough = this.graphics.measureText(this.testString).width;
-		var returnValue = (widthWithFontSpecified != widthWithFontFallthrough);
+		var returnValue = (widthWithFontSpecified != this.widthWithFontFallthrough);
 		return returnValue;
 	}
 
 	Display.prototype.hide = function()
 	{
-		Globals.Instance.platformHelper.domElementRemove(this.canvasLive);
+		Globals.Instance.platformHelper.domElementRemove(this.canvas);
 	}
 
 	Display.prototype.initialize = function()
 	{
-		this.canvasBuffer = document.createElement("canvas");
-		this.canvasBuffer.width = this.sizeInPixels.x;
-		this.canvasBuffer.height = this.sizeInPixels.y;
+		this.canvas = document.createElement("canvas");
+		this.canvas.width = this.sizeInPixels.x;
+		this.canvas.height = this.sizeInPixels.y;
 
-		this.graphics = this.canvasBuffer.getContext("2d");
+		this.graphics = this.canvas.getContext("2d");
 
-		// hack - double-buffering test
-		this.canvasLive = this.canvasBuffer;
-		this.graphicsLive = this.graphics;
+		this.graphics.font = "" + this.fontHeightInPixels + "px " + this.fontNameFallthrough;
+		var widthWithFontFallthrough = this.graphics.measureText(this.testString).width;
 
-		Globals.Instance.platformHelper.domElementAdd(this.canvasLive);
-	}
-
-	Display.prototype.refresh = function()
-	{
-		this.graphicsLive.drawImage(this.canvasBuffer, 0, 0);
+		Globals.Instance.platformHelper.domElementAdd(this.canvas);
 	}
 
 	Display.prototype.show = function()
 	{
-		Globals.Instance.platformHelper.domElementAdd(this.canvasLive);
+		Globals.Instance.platformHelper.domElementAdd(this.canvas);
 	}
 
 	Display.prototype.textWidthForFontHeight = function(textToMeasure, fontHeightInPixels)

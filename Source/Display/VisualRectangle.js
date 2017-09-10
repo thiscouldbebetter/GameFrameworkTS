@@ -1,8 +1,9 @@
 
-function VisualRectangle(size, color)
+function VisualRectangle(size, colorFill, colorBorder)
 {
-	this.color = color;
 	this.size = size;
+	this.colorFill = colorFill;
+	this.colorBorder = colorBorder;
 
 	this.sizeHalf = this.size.clone().divideScalar(2);
 }
@@ -15,7 +16,7 @@ function VisualRectangle(size, color)
 		drawPos.overwriteWith(pos).subtract(this.sizeHalf);
 		display.drawRectangle
 		(
-			drawPos, this.size, this.color, display.colorFore
+			drawPos, this.size, this.colorFill, this.colorBorder
 		);
 	}
 }
