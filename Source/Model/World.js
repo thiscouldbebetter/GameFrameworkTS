@@ -158,11 +158,6 @@ function World(name, dateCreated, size, playerPos)
 		playerVisualMovementIndicator,
 	]);
 
-function MapCell()
-{}
-{
-	MapCell.prototype.clone = function() { return new MapCell(); }
-}
 	var playerBody = new Body
 	(
 		"Player",
@@ -265,9 +260,15 @@ function MapCell()
 			obstacleColor, obstacleColor
 		)
 	);
-	
+
 	var obstacle2CellSize = new Coords(2, 2, 1);
-	
+
+	function MapCell()
+	{}
+	{
+		MapCell.prototype.clone = function() { return new MapCell(); }
+	}
+
 	var obstacle2Map = new Map
 	(
 		new Coords(16, 16, 1), //sizeInCells,
