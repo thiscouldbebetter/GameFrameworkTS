@@ -7,10 +7,37 @@ function Orientation(forward, down)
 }
 
 {
+	// instances
+
+	Orientation.Instances = new Orientation_Instances();
+
+	function Orientation_Instances()
+	{
+		this.ForwardXDownZ = new Orientation
+		(
+			new Coords(1, 0, 0), // forward
+			new Coords(0, 0, 1) // down
+		);
+
+		this.ForwardZDownY = new Orientation
+		(
+			new Coords(0, 0, 1), // forward
+			new Coords(0, 1, 0) // down
+		);
+	}
+
+	// methods
+
+	Orientation.prototype.clone = function()
+	{
+		return new Orientation(this.forward.clone(), this.down.clone());
+	}
+
 	Orientation.prototype.forwardSet = function(value)
 	{
 		this.forward.overwriteWith(value).normalize();
 		this.right.overwriteWith(this.down).crossProduct(this.forward).normalize();
+		this.down.overwriteWith(this.forward).crossProduct(this.right).normalize();
 	}
 
 	Orientation.prototype.overwriteWith = function(other)

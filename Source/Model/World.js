@@ -158,11 +158,6 @@ function World(name, dateCreated, size, playerPos)
 		playerVisualMovementIndicator,
 	]);
 
-function MapCell()
-{}
-{
-	MapCell.prototype.clone = function() { return new MapCell(); }
-}
 	var playerBody = new Body
 	(
 		"Player",
@@ -265,9 +260,15 @@ function MapCell()
 			obstacleColor, obstacleColor
 		)
 	);
-	
+
 	var obstacle2CellSize = new Coords(2, 2, 1);
-	
+
+	function MapCell()
+	{}
+	{
+		MapCell.prototype.clone = function() { return new MapCell(); }
+	}
+
 	var obstacle2Map = new Map
 	(
 		new Coords(16, 16, 1), //sizeInCells,
@@ -304,7 +305,7 @@ function MapCell()
 	);
 
 	var obstacle2Pos = playerBody.loc.pos.clone().addDimensions(playerBody.loc.pos.x, this.size.y / 2, 0);
-	var obstacle2Loc = new Location(obstacle2Pos);	
+	var obstacle2Loc = new Location(obstacle2Pos);
 	var obstacle2VisualLookup =
 	{
 		"Blocking" : new VisualRectangle(obstacle2CellSize, "Red"),
@@ -322,8 +323,20 @@ function MapCell()
 		goalBody, playerBody, enemyBody, obstacleBody, obstacle2Body
 	].addLookups("name");
 
+	this.camera = new Camera
+	(
+		Globals.Instance.display.sizeInPixels.clone(),
+		null, // focalLength
+		new Location
+		(
+			new Coords(0, 0, 0),
+			Orientation.Instances.ForwardZDownY.clone()
+		)
+	);
+
 	// helper variables
 	this.displacement = new Coords();
+	this.drawLoc = new Location(new Coords());
 }
 
 {
@@ -366,10 +379,27 @@ function MapCell()
 
 		display.clear();
 
+		var drawLoc = this.drawLoc;
+		var drawPos = drawLoc.pos;
+
+		var bodyPlayer = this.bodies["Player"];
+
+		var camera = this.camera;
+		camera.loc.pos.overwriteWith
+		(
+			bodyPlayer.loc.pos
+		).trimToRangeMinMax
+		(
+			camera.viewSizeHalf,
+			this.size.clone().subtract(camera.viewSizeHalf)
+		);
+
 		for (var i = 0; i < this.bodies.length; i++)
 		{
 			var body = this.bodies[i];
-			body.visual.drawToDisplayForDrawableAndLoc(display, body, body.loc);
+			drawLoc.overwriteWith(body.loc);
+			camera.coordsTransformWorldToView(drawPos);
+			body.visual.drawToDisplayForDrawableAndLoc(display, body, drawLoc);
 		}
 	}
 
@@ -391,8 +421,20 @@ function MapCell()
 		if (inputHelper.isMouseClicked == true)
 		{
 			inputHelper.isMouseClicked = false;
-			var mouseClickPos = inputHelper.mouseClickPos;
-			playerLoc.pos.overwriteWith(mouseClickPos);
+			playerLoc.pos.overwriteWith
+			(
+				inputHelper.mouseClickPos
+			).add
+			(
+				this.camera.loc.pos
+			).subtract
+			(
+				this.camera.viewSizeHalf
+			).trimToRangeMax
+			(
+				this.size
+			);
+
 			Globals.Instance.soundHelper.soundWithNamePlayAsEffect("Sound");
 		}
 

@@ -1,12 +1,13 @@
 
-function Location(pos)
+function Location(pos, orientation)
 {
 	this.pos = pos;
-	this.orientation = new Orientation
-	(
-		new Coords(1, 0, 0), // forward
-		new Coords(0, 0, 1) // down
-	);
+
+	if (orientation == null)
+	{
+		orientation = Orientation.Instances.ForwardXDownZ.clone();
+	}
+	this.orientation = orientation;
 
 	this.vel = new Coords(0, 0, 0);
 	this.accel = new Coords(0, 0, 0);

@@ -263,7 +263,7 @@ function Coords(x, y, z)
 		{
 			this.x = 0;
 		}
-		else if (this.x >= max.x)
+		else if (this.x > max.x)
 		{
 			this.x = max.x;
 		}
@@ -272,7 +272,7 @@ function Coords(x, y, z)
 		{
 			this.y = 0;
 		}
-		else if (this.y >= max.y)
+		else if (this.y > max.y)
 		{
 			this.y = max.y;
 		}
@@ -281,7 +281,7 @@ function Coords(x, y, z)
 		{
 			this.z = 0;
 		}
-		else if (this.z >= max.z)
+		else if (this.z > max.z)
 		{
 			this.z = max.z;
 		}

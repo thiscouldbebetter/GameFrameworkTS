@@ -74,4 +74,9 @@ function Bounds(center, size)
  
 		return returnValue;
 	}
+	
+	Bounds.prototype.trimCoords = function(coordsToTrim)
+	{
+		return coordsToTrim.trimToRangeMinMax(this.min(), this.max());
+	}
 }
