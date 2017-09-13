@@ -146,10 +146,12 @@ function ControlSelect
 	{
 		var drawPos = drawLoc.pos.add(this.pos);
 
+		var style = this.style();
+
 		display.drawRectangle
 		(
 			drawPos, this.size,
-			display.colorBack, display.colorFore,
+			style.colorFill, style.colorBorder,
 			this.isHighlighted // areColorsReversed
 		)
 
@@ -162,8 +164,8 @@ function ControlSelect
 			text,
 			this.fontHeightInPixels,
 			drawPos,
-			display.colorFore,
-			display.colorBack,
+			style.colorBorder,
+			style.colorFill,
 			this.isHighlighted,
 			true, // isCentered
 			this.size.x // widthMaxInPixels
