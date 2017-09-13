@@ -8,22 +8,20 @@ function Polar(angleInTurns, distance)
 
 	Polar.RadiansPerTurn = 2 * Math.PI;
 
-	// static methods
+	// instance methods
 
-	Polar.fromCoords = function(coordsToConvert)
+	Polar.prototype.angleInRadians = function()
+	{
+		return this.angleInTurns * Polar.RadiansPerTurn;
+	}
+
+	Polar.prototype.fromCoords = function(coordsToConvert)
 	{
 		var angleInRadians = Math.atan2(coordsToConvert.y, coordsToConvert.x);
 		var angleInTurns = angleInRadians / Polar.RadiansPerTurn;
 		var distance = coordsToConvert.magnitude();
 		var returnValue = new Polar(angleInTurns, distance);
 		return returnValue;
-	}
-
-	// instance methods
-
-	Polar.prototype.angleInRadians = function()
-	{
-		return this.angleInTurns * Polar.RadiansPerTurn;
 	}
 
 	Polar.prototype.toCoords = function(coordsToOverwrite)
@@ -38,4 +36,19 @@ function Polar(angleInTurns, distance)
 
 		return coordsToOverwrite;
 	}
+
+	Polar.prototype.overwriteWith = function(other)
+	{
+		this.angleInTurns = other.angleInTurns;
+		this.distance = other.distance;
+		return this;
+	}
+
+	Polar.prototype.overwriteWithAngleAndDistance = function(angleInTurns, distance)
+	{
+		this.angleInTurns = angleInTurns;
+		this.distance = distance;
+		return this;
+	}
+
 }

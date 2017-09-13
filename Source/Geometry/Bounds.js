@@ -29,6 +29,50 @@ function Bounds(center, size)
 		return this._min.overwriteWith(this.center).subtract(this.sizeHalf);
 	}
 
+	Bounds.prototype.ofPoints = function(points)
+	{
+		var point0 = points[0];
+		var minSoFar = point0.clone();
+		var maxSoFar = point0.clone();
+
+		for (var i = 1; i < points.length; i++)
+		{
+			var point = points[i];
+
+			if (point.x < minSoFar.x)
+			{
+				minSoFar.x = point.x;
+			}
+			else if (point.x > maxSoFar.x)
+			{
+				maxSoFar.x = point.x;
+			}
+
+			if (point.y < minSoFar.y)
+			{
+				minSoFar.y = point.y;
+			}
+			else if (point.y > maxSoFar.y)
+			{
+				maxSoFar.y = point.y;
+			}
+
+			if (point.z < minSoFar.z)
+			{
+				minSoFar.z = point.z;
+			}
+			else if (point.z > maxSoFar.z)
+			{
+				maxSoFar.z = point.z;
+			}
+		}
+
+		this.center.overwriteWith(minSoFar).add(maxSoFar).divideScalar(2);
+		this.size.overwriteWith(maxSoFar).subtract(minSoFar);
+
+		return this;
+	}
+
 	Bounds.prototype.overlapsWith = function(other)
 	{
 		var returnValue = false;
