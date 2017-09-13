@@ -24,9 +24,9 @@ function VenueWorld(world)
 		soundHelper.soundWithNamePlayAsMusic("Music");
 	}
 
-	VenueWorld.prototype.updateForTimerTick = function()
+	VenueWorld.prototype.updateForTimerTick = function(universe)
 	{
-		this.world.updateForTimerTick();
+		this.world.updateForTimerTick(universe);
 		this.draw();
 	}
 }

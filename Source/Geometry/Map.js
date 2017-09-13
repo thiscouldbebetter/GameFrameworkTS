@@ -4,7 +4,7 @@ function Map(sizeInCells, cellSize, cellPrototype, cellAtPosInCells, cellSource)
 	this.sizeInCells = sizeInCells;
 	this.cellSize = cellSize;
 	this.cellPrototype = cellPrototype;
-	this.cellAtPosInCells = cellAtPosInCells.bind(this);
+	this.cellAtPosInCells = cellAtPosInCells; // Note: Calling bind() here breaks serialization!
 	this.cellSource = cellSource;
 
 	this.sizeInCellsMinusOnes = this.sizeInCells.clone().subtract

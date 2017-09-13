@@ -804,6 +804,7 @@ function ControlBuilder(styles)
 									Globals.Instance.controlBuilder.profileSelect()
 								);
 								venueNext = new VenueFader(venueNext);
+								var universe = Globals.Instance.universe;
 								universe.venueNext = venueNext;
 							},
 							// cancel

@@ -1,7 +1,7 @@
 function main()
 {
-	//localStorage.clear();
-
+	localStorage.clear();
+	
 	var mediaLibrary = new MediaLibrary
 	(
 		// images
@@ -37,7 +37,7 @@ function main()
 
 	Globals.Instance.initialize
 	(
-		"Cursor Quest",
+		"Cursor_Quest",
 		20, // timerTicksPerSecond
 		display,
 		mediaLibrary,
