@@ -158,6 +158,11 @@ function World(name, dateCreated, size, playerPos)
 		playerVisualMovementIndicator,
 	]);
 
+function MapCell()
+{}
+{
+	MapCell.prototype.clone = function() { return new MapCell(); }
+}
 	var playerBody = new Body
 	(
 		"Player",
@@ -260,15 +265,9 @@ function World(name, dateCreated, size, playerPos)
 			obstacleColor, obstacleColor
 		)
 	);
-
+	
 	var obstacle2CellSize = new Coords(2, 2, 1);
-
-	function MapCell()
-	{}
-	{
-		MapCell.prototype.clone = function() { return new MapCell(); }
-	}
-
+	
 	var obstacle2Map = new Map
 	(
 		new Coords(16, 16, 1), //sizeInCells,
@@ -306,6 +305,7 @@ function World(name, dateCreated, size, playerPos)
 
 	var obstacle2Pos = playerBody.loc.pos.clone().addDimensions(playerBody.loc.pos.x, this.size.y / 2, 0);
 	var obstacle2Loc = new Location(obstacle2Pos);
+
 	var obstacle2VisualLookup =
 	{
 		"Blocking" : new VisualRectangle(obstacle2CellSize, "Red"),
