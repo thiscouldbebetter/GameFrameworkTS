@@ -41,6 +41,7 @@ function main()
 		20, // timerTicksPerSecond
 		display,
 		mediaLibrary,
+		new ControlBuilder([ControlStyle.Instances.Default]),
 		universe0
 	);
 }

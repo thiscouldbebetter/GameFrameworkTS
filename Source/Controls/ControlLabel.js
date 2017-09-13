@@ -12,7 +12,7 @@ function ControlLabel(name, pos, size, isTextCentered, text, fontHeightInPixels)
 {
 	ControlLabel.prototype.style = function()
 	{
-		return ControlStyle.Instances[this.styleName == null ? "Default" : this.styleName];
+		return Globals.Instance.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
 	}
 
 	ControlLabel.prototype.text = function()

@@ -1,6 +1,8 @@
 
-function ControlBuilder()
+function ControlBuilder(styles)
 {
+	this.styles = styles.addLookups("name");
+
 	this.fontHeightInPixelsBase = 10;
 	this.sizeBase = new Coords(200, 150, 1);
 }

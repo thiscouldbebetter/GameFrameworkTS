@@ -61,7 +61,7 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 
 	ControlButton.prototype.style = function()
 	{
-		return ControlStyle.Instances[this.styleName == null ? "Default" : this.styleName];
+		return Globals.Instance.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
 	}
 
 	// drawable

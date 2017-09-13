@@ -111,7 +111,7 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 
 	ControlScrollbar.prototype.style = function()
 	{
-		return ControlStyle.Instances[this.styleName == null ? "Default" : this.styleName];
+		return Globals.Instance.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
 	}
 
 	// drawable

@@ -59,6 +59,11 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 		return this.scrollbar.sliderPosInItems + Math.floor(this.scrollbar.windowSizeInItems) - 1;
 	}
 
+	ControlList.prototype.isEnabled = function() 
+	{ 
+		return true; 
+	}
+
 	ControlList.prototype.itemSelected = function()
 	{
 		return (this.indexOfItemSelected == null ? null : this.items()[this.indexOfItemSelected]);
@@ -155,7 +160,7 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 
 	ControlList.prototype.style = function()
 	{
-		return ControlStyle.Instances[this.styleName == null ? "Default" : this.styleName];
+		return Globals.Instance.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
 	}
 
 	// drawable

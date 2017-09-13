@@ -19,6 +19,7 @@ function Globals()
 		timerTicksPerSecond,
 		display,
 		mediaLibrary,
+		controlBuilder,
 		universe
 	)
 	{
@@ -34,7 +35,7 @@ function Globals()
 		this.mediaLibrary =  mediaLibrary;
 		this.universe = universe;
 
-		this.controlBuilder = new ControlBuilder();
+		this.controlBuilder = controlBuilder;
 		this.inputHelper = new InputHelper();
 		this.profileHelper = new ProfileHelper(this.storageHelper);
 		this.soundHelper = new SoundHelper(mediaLibrary.sounds);

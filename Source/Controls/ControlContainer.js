@@ -44,7 +44,7 @@ function ControlContainer(name, pos, size, children)
 			for (var i = iStart; i != iEnd; i++)
 			{
 				var child = this.children[i];
-				if (child.focusGain != null)
+				if (child.focusGain != null && child.isEnabled() == true)
 				{
 					this.indexOfChildWithFocus = i;
 					break;
@@ -69,7 +69,7 @@ function ControlContainer(name, pos, size, children)
 				else
 				{
 					var child = this.children[this.indexOfChildWithFocus];
-					if (child.focusGain != null)
+					if (child.focusGain != null && child.isEnabled())
 					{
 						break;
 					}
@@ -226,7 +226,7 @@ function ControlContainer(name, pos, size, children)
 
 	ControlContainer.prototype.style = function()
 	{
-		return ControlStyle.Instances[this.styleName == null ? "Default" : this.styleName];
+		return Globals.Instance.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
 	}
 
 	// drawable
