@@ -41,7 +41,6 @@ function Globals()
 		this.soundHelper = new SoundHelper(mediaLibrary.sounds);
 		this.videoHelper = new VideoHelper(mediaLibrary.videos);
 
-		this.platformHelper.initialize(this.display);
 		this.display.initialize();
 		this.inputHelper.initialize();
 		this.universe.initialize();

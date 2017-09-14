@@ -59,9 +59,9 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 		return this.scrollbar.sliderPosInItems + Math.floor(this.scrollbar.windowSizeInItems) - 1;
 	}
 
-	ControlList.prototype.isEnabled = function() 
-	{ 
-		return true; 
+	ControlList.prototype.isEnabled = function()
+	{
+		return true;
 	}
 
 	ControlList.prototype.itemSelected = function()

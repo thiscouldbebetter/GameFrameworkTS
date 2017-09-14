@@ -313,7 +313,7 @@ function CollisionHelper()
 				cell0PosInCells.x = x0;
 				cell0PosAbsolute.x = map0Pos.x + (x0 * map0CellSize.x);
 
-				cell0 = map0.cellAtPosInCells(cell0PosInCells, cell0);
+				cell0 = map0.cellAtPosInCells(map0, cell0PosInCells, cell0);
 
 				if (cell0.isBlocking == true)
 				{
@@ -356,7 +356,7 @@ function CollisionHelper()
 							)
 							if (isCell1PosInBounds == true)
 							{
-								cell1 = map1.cellAtPosInCells(cell1PosInCells, cell1);
+								cell1 = map1.cellAtPosInCells(map1, cell1PosInCells, cell1);
 
 								if (cell1.isBlocking == true)
 								{
@@ -409,7 +409,7 @@ function CollisionHelper()
 				cellPosInCells.x = x;
 				cellPosAbsolute.x = (x * mapCellSize.x) + mapPos.x - mapSizeHalf.x;
 
-				cell = map.cellAtPosInCells(cellPosInCells, cell);
+				cell = map.cellAtPosInCells(map, cellPosInCells, cell);
 
 				if (cell.isBlocking == true)
 				{

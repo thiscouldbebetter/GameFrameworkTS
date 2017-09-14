@@ -1,7 +1,7 @@
 function main()
 {
-	localStorage.clear();
-	
+	//localStorage.clear();
+
 	var mediaLibrary = new MediaLibrary
 	(
 		// images
@@ -23,11 +23,15 @@ function main()
 		]
 	);
 
-	var displaySizeInPixels = new Coords(400, 300);
+	var displaySizeInPixelsDefault = new Coords(400, 300);
 
 	var display = new Display
 	(
-		displaySizeInPixels,
+		// sizesAvailable
+		[
+			displaySizeInPixelsDefault,
+			displaySizeInPixelsDefault.clone().divideScalar(2),
+		],
 		"Font", // fontName
 		10, // fontHeightInPixels
 		"Gray", "White" // colorFore, colorBack
