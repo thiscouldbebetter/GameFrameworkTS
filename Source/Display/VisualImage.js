@@ -1,7 +1,8 @@
 
-function VisualImage(imageName)
+function VisualImage(imageName, sizeScaled)
 {
 	this.imageName = imageName;
+	this._sizeScaled = sizeScaled;
 }
 
 {
@@ -28,6 +29,11 @@ function VisualImage(imageName)
 		return Globals.Instance.mediaLibrary.imageGetByName(this.imageName);
 	}
 
+	VisualImage.prototype.imageSizeScaled = function()
+	{
+		return (this._sizeScaled == null ? this.image().sizeInPixels: this._sizeScaled);
+	}
+
 	// visual
 
 	VisualImage.prototype.drawToDisplayForDrawableAndLoc = function(display, drawable, loc)
@@ -35,7 +41,7 @@ function VisualImage(imageName)
 		var image = this.image();
 		var pos = loc.pos;
 		var drawPos = display.drawPos;
-		var imageSize = image.sizeInPixels;
+		var imageSize = this.imageSizeScaled();
 		drawPos.clear().subtract(imageSize).divideScalar(2).add(pos);
 		display.drawImage(image, drawPos, imageSize);
 	}
