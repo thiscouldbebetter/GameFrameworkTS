@@ -4,6 +4,8 @@ function Orientation(forward, down)
 	this.forward = forward.clone().normalize();
 	this.right = down.clone().crossProduct(this.forward).normalize();
 	this.down = this.forward.clone().crossProduct(this.right).normalize();
+
+	this.axes = [ this.forward, this.right, this.down ];
 }
 
 {

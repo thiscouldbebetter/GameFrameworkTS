@@ -224,13 +224,13 @@ function PlaceDemo(size, playerPos)
 	(
 		this.size
 	);
-
+	var goalLoc = new Location(goalPos);
 	var goalColor = "Green";
 	var goalEntity = new Entity
 	(
 		"Goal",
 		[
-			new Locatable(new Location(goalPos)),
+			new Locatable(goalLoc),
 			new Collidable(new Bounds(goalPos, entitySize)), 
 			new Drawable
 			(
@@ -300,9 +300,6 @@ function PlaceDemo(size, playerPos)
 					(
 						actorLoc.pos
 					).normalize();
-					
-					actorLoc.pos.add(actorLoc.vel);
-					actorLoc.vel.clear();
 				}
 			)
 		]
@@ -311,6 +308,8 @@ function PlaceDemo(size, playerPos)
 	// obstacle
 
 	var obstaclePos = goalEntity.locatable.loc.pos;
+	var obstacleLoc = new Location(obstaclePos);
+	obstacleLoc.spin.angleInTurnsRef.value = 0.002;
 	var obstacleColor = enemyColor;
 	var obstacleCollider = new Arc
 	(
@@ -319,14 +318,19 @@ function PlaceDemo(size, playerPos)
 			new Sphere(obstaclePos, entityDimension * 3), // sphereOuter
 			entityDimension * 2 // radiusInner
 		),
-		new Wedge(obstaclePos, 0, .85)
+		new Wedge
+		(
+			obstaclePos, 
+			obstacleLoc.orientation.forward, //new Coords(1, 0, 0), // directionMin
+			.85 // angleSpannedInTurns
+		)
 	);
 
 	var obstacleEntity = new Entity
 	(
 		"Obstacle",
 		[
-			new Locatable(new Location(obstaclePos)),
+			new Locatable(obstacleLoc),
 			new Collidable(obstacleCollider),
 			new Drawable
 			(
@@ -457,7 +461,6 @@ function PlaceDemo(size, playerPos)
 			entityLoc.timeOffsetInTicks = world.timerTicksSoFar;
 		}
 		vel.overwriteWith(directionToMove);
-		entityLoc.pos.add(vel).trimToRangeMax(this.size);
 	}
 
 	PlaceDemo.prototype.updateForTimerTick = function(universe, world)

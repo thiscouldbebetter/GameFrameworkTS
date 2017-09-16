@@ -13,6 +13,8 @@ function Location(pos, orientation)
 	this.accel = new Coords(0, 0, 0);
 	this.force = new Coords(0, 0, 0);
 
+	this.spin = new Rotation(this.orientation.down, new Reference(0));
+
 	this.timeOffsetInTicks = 0;
 }
 

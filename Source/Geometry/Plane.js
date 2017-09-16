@@ -3,23 +3,27 @@ function Plane(normal, distanceFromOrigin)
 {
 	this.normal = normal;
 	this.distanceFromOrigin = distanceFromOrigin;
+
+	this.displacementFromPoint0To2 = new Coords();
 }
 {
-	Plane.prototype.fromPoints = function(pointsOnPlane)
+	Plane.prototype.fromPoints = function(point0, point1, point2)
 	{
-		var point0 = pointsOnPlane[0];
-		var point1 = pointsOnPlane[1];
-		var point2 = pointsOnPlane[2];
-
-		var displacementFromPoint0To1 = point1.clone().subtract(point0);
-		var displacementFromPoint0To2 = point2.clone().subtract(point0);
-
 		this.normal.overwriteWith
 		(
-			displacementFromPoint0To1
+			point1
+		).subtract
+		(
+			point0
 		).crossProduct
 		(
-			displacementFromPoint0To2
+			this.displacementFromPoint0To2.overwriteWith
+			(
+				point2
+			).subtract
+			(
+				point0
+			)
 		).normalize();
 
 		this.distanceFromOrigin = point0.dotProduct(this.normal);

@@ -24,7 +24,7 @@ function VisualArc(arc, colorFill, colorBorder)
 		(
 			drawPos, // center
 			shell.sphereInner.radius, shell.sphereOuter.radius, 
-			wedge.angleInTurnsMin, wedge.angleInTurnsMax,
+			wedge.angleInTurnsMin(), wedge.angleInTurnsMax(),
 			this.colorFill, this.colorBorder
 		);
 	}

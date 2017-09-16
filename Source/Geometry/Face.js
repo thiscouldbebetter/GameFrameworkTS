@@ -2,7 +2,12 @@
 function Face(vertices)
 {
 	this.vertices = vertices;
-	this.plane = new Plane(new Coords()).fromPoints(this.vertices);
+	this.plane = new Plane(new Coords()).fromPoints
+	(
+		this.vertices[0],
+		this.vertices[1],
+		this.vertices[2]
+	);
 }
 {
 	Face.prototype.containsPoint = function(pointToCheck)
@@ -48,6 +53,11 @@ function Face(vertices)
 
 	Face.prototype.recalculate = function()
 	{
-		this.plane.fromPoints(this.vertices);
+		this.plane.fromPoints
+		(
+			this.vertices[0],
+			this.vertices[1],
+			this.vertices[2]
+		);
 	}
 }
