@@ -26,8 +26,8 @@ function ControlBuilder(styles)
 				new ControlButton
 				(
 					"buttonSave",
-					new Coords(50, 15).multiply(sizeMultiplier), // pos
-					new Coords(45, 25).multiply(sizeMultiplier), // size
+					new Coords(30, 15).multiply(sizeMultiplier), // pos
+					new Coords(65, 25).multiply(sizeMultiplier), // size
 					"Save",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
@@ -49,7 +49,7 @@ function ControlBuilder(styles)
 				(
 					"buttonLoad",
 					new Coords(105, 15).multiply(sizeMultiplier), // pos
-					new Coords(45, 25).multiply(sizeMultiplier), // size
+					new Coords(65, 25).multiply(sizeMultiplier), // size
 					"Load",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
@@ -70,17 +70,17 @@ function ControlBuilder(styles)
 				new ControlLabel
 				(
 					"labelMusicVolume",
-					new Coords(50, 50).multiply(sizeMultiplier), // pos
+					new Coords(30, 50).multiply(sizeMultiplier), // pos
 					new Coords(75, 25).multiply(sizeMultiplier), // size
 					false, // isTextCentered
-					"Music Volume:",
+					"Music:",
 					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 
 				new ControlSelect
 				(
 					"selectMusicVolume",
-					new Coords(120, 45).multiply(sizeMultiplier), // pos
+					new Coords(65, 45).multiply(sizeMultiplier), // pos
 					new Coords(30, 25).multiply(sizeMultiplier), // size
 
 					// valueSelected
@@ -101,17 +101,17 @@ function ControlBuilder(styles)
 				new ControlLabel
 				(
 					"labelSoundVolume",
-					new Coords(50, 80).multiply(sizeMultiplier), // pos
+					new Coords(105, 50).multiply(sizeMultiplier), // pos
 					new Coords(75, 25).multiply(sizeMultiplier), // size
 					false, // isTextCentered
-					"Sound Volume:",
+					"Sound:",
 					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 
 				new ControlSelect
 				(
 					"selectSoundVolume",
-					new Coords(120, 75).multiply(sizeMultiplier), // pos
+					new Coords(140, 45).multiply(sizeMultiplier), // pos
 					new Coords(30, 25).multiply(sizeMultiplier), // size
 
 					// valueSelected
@@ -129,11 +129,64 @@ function ControlBuilder(styles)
 					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 
+				new ControlLabel
+				(
+					"labelDisplaySize",
+					new Coords(30, 80).multiply(sizeMultiplier), // pos
+					new Coords(75, 25).multiply(sizeMultiplier), // size
+					false, // isTextCentered
+					"Display:",
+					this.fontHeightInPixelsBase * sizeMultiplier.y
+				),
+
+				new ControlSelect
+				(
+					"selectDisplaySize",
+					new Coords(70, 75).multiply(sizeMultiplier), // pos
+					new Coords(60, 25).multiply(sizeMultiplier), // size
+					Globals.Instance.display.sizeInPixels, // valueSelected
+					// options
+					Globals.Instance.display.sizesAvailable,
+					null, // bindingExpressionForOptionValues,
+					"toStringXY()", // bindingExpressionForOptionText
+					this.fontHeightInPixelsBase * sizeMultiplier.y
+				),
+
+				new ControlButton
+				(
+					"buttonDisplaySizeChange",
+					new Coords(140, 75).multiply(sizeMultiplier), // pos
+					new Coords(30, 25).multiply(sizeMultiplier), // size
+					"Change",
+					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					true, // hasBorder
+					true, // isEnabled
+					// click
+					function()
+					{
+						var controlRoot = Globals.Instance.universe.venueCurrent.controlRoot;
+						var selectDisplaySize = controlRoot.children["selectDisplaySize"];
+						var displaySizeSpecified = selectDisplaySize.optionSelected().value;
+
+						var display = Globals.Instance.display;
+						display.sizeInPixels = displaySizeSpecified;
+						display.initialize();
+
+						var universe = Globals.Instance.universe;
+						var venueNext = new VenueControls
+						(
+							Globals.Instance.controlBuilder.configure()
+						);
+						venueNext = new VenueFader(venueNext);
+						universe.venueNext = venueNext;
+					}
+				),
+
 				new ControlButton
 				(
 					"buttonResume",
-					new Coords(50, 105).multiply(sizeMultiplier), // pos
-					new Coords(45, 25).multiply(sizeMultiplier), // size
+					new Coords(30, 105).multiply(sizeMultiplier), // pos
+					new Coords(65, 25).multiply(sizeMultiplier), // size
 					"Resume",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
@@ -153,7 +206,7 @@ function ControlBuilder(styles)
 				(
 					"buttonQuit",
 					new Coords(105, 105).multiply(sizeMultiplier), // pos
-					new Coords(45, 25).multiply(sizeMultiplier), // size
+					new Coords(65, 25).multiply(sizeMultiplier), // size
 					"Quit",
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder

@@ -1,11 +1,15 @@
 
-function Display(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorBack)
+function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorBack)
 {
-	this.sizeInPixels = sizeInPixels;
+	this.sizesAvailable = sizesAvailable;
+	this.sizeInPixels = this.sizesAvailable[0];
 	this.fontName = fontName;
 	this.fontHeightInPixels = fontHeightInPixels;
 	this.colorFore = colorFore;
 	this.colorBack = colorBack;
+
+	this.fontNameFallthrough = "serif";
+	this.testString = "ABCDEFGHIJKMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz 1234567890";
 
 	// helper variables
 
@@ -13,8 +17,6 @@ function Display(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorBac
 	this.drawPos = new Coords();
 	this.drawPos2 = new Coords();
 	this.drawPos3 = new Coords();
-	this.fontNameFallthrough = "serif";
-	this.testString = "ABCDEFGHIJKMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz 1234567890";
 }
 
 {
@@ -316,6 +318,14 @@ function Display(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorBac
 
 	Display.prototype.initialize = function()
 	{
+		var platformHelper = Globals.Instance.platformHelper;
+		platformHelper.initialize(this);
+
+		if (this.canvas != null)
+		{
+			platformHelper.domElementRemove(this.canvas);
+		}
+
 		this.canvas = document.createElement("canvas");
 		this.canvas.width = this.sizeInPixels.x;
 		this.canvas.height = this.sizeInPixels.y;
@@ -325,7 +335,7 @@ function Display(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorBac
 		this.graphics.font = "" + this.fontHeightInPixels + "px " + this.fontNameFallthrough;
 		var widthWithFontFallthrough = this.graphics.measureText(this.testString).width;
 
-		Globals.Instance.platformHelper.domElementAdd(this.canvas);
+		platformHelper.domElementAdd(this.canvas);
 	}
 
 	Display.prototype.show = function()

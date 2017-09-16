@@ -15,14 +15,18 @@ function PlatformHelper()
 
 	PlatformHelper.prototype.initialize = function(display)
 	{
-		var divMain = document.createElement("div");
-		divMain.id = "divMain";
-		divMain.style.position = "absolute";
-		divMain.style.left = "50%";
-		divMain.style.top = "50%";
+		var divMain = this.divMain;
+		if (divMain == null)
+		{
+			var divMain = document.createElement("div");
+			divMain.id = "divMain";
+			divMain.style.position = "absolute";
+			divMain.style.left = "50%";
+			divMain.style.top = "50%";
+			document.body.appendChild(divMain);
+			this.divMain = divMain;
+		}
 		divMain.style.marginTop = 0 - display.sizeInPixels.x / 2;
 		divMain.style.marginLeft = 0 - display.sizeInPixels.y / 2;
-		document.body.appendChild(divMain);
-		this.divMain = divMain;
 	}
 }

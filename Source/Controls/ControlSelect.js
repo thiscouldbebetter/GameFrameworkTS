@@ -128,6 +128,7 @@ function ControlSelect
 	ControlSelect.prototype.mouseClick = function(clickPos)
 	{
 		this.optionSelectedNextInDirection(1);
+		return true; // wasClickHandled
 	}
 
 	ControlSelect.prototype.style = function()
@@ -157,7 +158,8 @@ function ControlSelect
 
 		drawPos.add(this.size.clone().divideScalar(2));
 
-		var text = this.optionSelected().text;
+		var optionSelected = this.optionSelected();
+		var text = (optionSelected == null ? "-" : optionSelected.text);
 
 		display.drawText
 		(

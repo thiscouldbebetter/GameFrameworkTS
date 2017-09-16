@@ -359,4 +359,9 @@ function Coords(x, y, z)
 	{
 		return this.x + "x" + this.y + "x" + this.z;
 	}
+
+	Coords.prototype.toStringXY = function()
+	{
+		return this.x + "x" + this.y;
+	}
 }
