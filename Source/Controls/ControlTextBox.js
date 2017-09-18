@@ -143,7 +143,7 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 
 		var textWidth = display.textWidthForFontHeight(text, this.fontHeightInPixels);
 		var textSize = new Coords(textWidth, this.fontHeightInPixels);
-		var textMargin = this.size.clone().subtract(textSize).divideScalar(2);
+		var textMargin = this.size.clone().subtract(textSize).half();
 		var drawPos2 = drawPos.clone().add(textMargin);
 		display.drawText
 		(

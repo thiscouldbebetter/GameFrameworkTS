@@ -162,7 +162,7 @@ function ControlSelect
 			this.isHighlighted // areColorsReversed
 		)
 
-		drawPos.add(this.size.clone().divideScalar(2));
+		drawPos.add(this.size.clone().half());
 
 		var optionSelected = this.optionSelected();
 		var text = (optionSelected == null ? "-" : optionSelected.text);

@@ -17,6 +17,11 @@ function ControlContainer(name, pos, size, children)
 	this.indexOfChildWithFocus = null;
 	this.childrenContainingPos = [];
 	this.childrenContainingPosPrev = [];
+
+	// Helper variables.
+	this.mouseClickPos = new Coords();
+	this.mouseMovePos = new Coords();
+	this.mouseMovePosPrev = new Coords();
 }
 
 {
@@ -121,7 +126,48 @@ function ControlContainer(name, pos, size, children)
 	{
 		var childWithFocus = this.childWithFocus();
 
-		if (actionNameToHandle == "ControlPrev" || actionNameToHandle == "ControlNext")
+		if (actionNameToHandle == "MouseClick")
+		{
+			var inputHelper = Globals.Instance.inputHelper;
+			this.mouseClickPos.overwriteWith
+			(
+				inputHelper.mouseClickPos
+			).divide
+			(
+				Globals.Instance.display.scaleFactor
+			);
+			var wasClickHandled = this.mouseClick(this.mouseClickPos);
+
+			if (wasClickHandled == true)
+			{
+				inputHelper.inputRemove(actionNameToHandle);
+			}
+		}
+		else if (actionNameToHandle == "MouseMove")
+		{
+			var inputHelper = Globals.Instance.inputHelper;
+			var scaleFactor = Globals.Instance.display.scaleFactor;
+			this.mouseMovePos.overwriteWith
+			(
+				inputHelper.mouseMovePos
+			).divide
+			(
+				scaleFactor
+			);
+			this.mouseMovePosPrev.overwriteWith
+			(
+				inputHelper.mouseMovePosPrev
+			).divide
+			(
+				scaleFactor
+			);
+
+			this.mouseMove
+			(
+				this.mouseMovePos, this.mouseMovePosPrev
+			);
+		}
+		else if (actionNameToHandle == "ControlPrev" || actionNameToHandle == "ControlNext")
 		{
 			var direction = (actionNameToHandle == "ControlPrev" ? -1 : 1);
 

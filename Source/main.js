@@ -30,7 +30,8 @@ function main()
 		// sizesAvailable
 		[
 			displaySizeInPixelsDefault,
-			displaySizeInPixelsDefault.clone().divideScalar(2),
+			displaySizeInPixelsDefault.clone().half(),
+			displaySizeInPixelsDefault.clone().multiplyScalar(2),
 		],
 		"Font", // fontName
 		10, // fontHeightInPixels

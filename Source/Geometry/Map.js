@@ -12,8 +12,8 @@ function Map(sizeInCells, cellSize, cellPrototype, cellAtPosInCells, cellSource)
 		Coords.Instances.Ones
 	);
 	this.size = this.sizeInCells.clone().multiply(this.cellSize);
-	this.sizeHalf = this.size.clone().divideScalar(2);
-	this.cellSizeHalf = this.cellSize.clone().divideScalar(2);
+	this.sizeHalf = this.size.clone().half();
+	this.cellSizeHalf = this.cellSize.clone().half();
 
 	// Helper variables.
 

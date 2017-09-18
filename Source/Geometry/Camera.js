@@ -5,7 +5,7 @@ function Camera(viewSize, focalLength, loc)
 	this.focalLength = focalLength;
 	this.loc = loc;
 
-	this.viewSizeHalf = this.viewSize.clone().divideScalar(2);
+	this.viewSizeHalf = this.viewSize.clone().half();
 }
 
 {

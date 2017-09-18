@@ -145,6 +145,11 @@ function Coords(x, y, z)
 		return this;
 	}
 
+	Coords.prototype.half = function()
+	{
+		return this.divideScalar(2);
+	}
+
 	Coords.prototype.invert = function()
 	{
 		this.x = 0 - this.x;

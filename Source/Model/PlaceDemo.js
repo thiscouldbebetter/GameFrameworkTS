@@ -251,9 +251,9 @@ function PlaceDemo(size, playerPos)
 	var enemyLoc = new Location(enemyPos);
 
 	var enemyColliderAsFace = new Face([
-		new Coords(0, -entityDimension).divideScalar(2),
-		new Coords(entityDimension, entityDimension).divideScalar(2),
-		new Coords(-entityDimension, entityDimension).divideScalar(2),
+		new Coords(0, -entityDimension).half(),
+		new Coords(entityDimension, entityDimension).half(),
+		new Coords(-entityDimension, entityDimension).half(),
 	]);
 	var enemyCollider = Mesh.fromFace
 	(

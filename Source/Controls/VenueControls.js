@@ -31,12 +31,6 @@ function VenueControls(controlRoot)
 	}
 
 	this.inputToActionMappings.addLookups("inputName");
-
-	// Helper variables.
-
-	this.mouseClickPos = new Coords();
-	this.mouseMovePos = new Coords();
-	this.mouseMovePosPrev = new Coords();
 }
 
 {
@@ -54,23 +48,7 @@ function VenueControls(controlRoot)
 		this.draw();
 
 		var inputHelper = Globals.Instance.inputHelper;
-		if (inputHelper.isMouseClicked == true)
-		{
-			this.mouseClickPos.overwriteWith
-			(
-				inputHelper.mouseClickPos
-			).divide
-			(
-				Globals.Instance.display.scaleFactor
-			);
-			var wasClickHandled = this.controlRoot.mouseClick(this.mouseClickPos);
-
-			// fix
-			// If the VenueControls is nested in another venue, 
-			// this may prevent the parent venue from processing the click.
-			inputHelper.isMouseClicked = false;
-		}
-		else if (inputHelper.inputsActive.length > 0)
+		if (inputHelper.inputsActive.length > 0)
 		{
 			var inputsActive = inputHelper.inputsActive;
 
@@ -80,7 +58,7 @@ function VenueControls(controlRoot)
 				var mapping = this.inputToActionMappings[inputActive];
 				if (mapping == null)
 				{
-					// Pass the raw input, to allow for text entry.
+					// Pass the raw input, to allow for text entry and mouse clicks.
 					this.controlRoot.actionHandle(inputActive);
 				}
 				else
@@ -93,30 +71,6 @@ function VenueControls(controlRoot)
 					}
 				}
 			}
-		}
-
-		if (inputHelper.hasMouseMoved == true)
-		{
-			var scaleFactor = Globals.Instance.display.scaleFactor;
-			this.mouseMovePos.overwriteWith
-			(
-				inputHelper.mouseMovePos
-			).divide
-			(
-				scaleFactor
-			);
-			this.mouseMovePosPrev.overwriteWith
-			(
-				inputHelper.mouseMovePosPrev
-			).divide
-			(
-				scaleFactor
-			);
-
-			this.controlRoot.mouseMove
-			(
-				this.mouseMovePos, this.mouseMovePosPrev
-			);
 		}
 	}
 }

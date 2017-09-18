@@ -88,7 +88,7 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 			);
 		}
 
-		drawPos.add(this.size.clone().divideScalar(2));
+		drawPos.add(this.size.clone().half());
 
 		display.drawText
 		(

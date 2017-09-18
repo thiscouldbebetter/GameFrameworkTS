@@ -5,7 +5,7 @@ function VisualRectangle(size, colorFill, colorBorder)
 	this.colorFill = colorFill;
 	this.colorBorder = colorBorder;
 
-	this.sizeHalf = this.size.clone().divideScalar(2);
+	this.sizeHalf = this.size.clone().half();
 }
 
 {

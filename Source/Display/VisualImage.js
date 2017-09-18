@@ -42,7 +42,7 @@ function VisualImage(imageName, sizeScaled)
 		var pos = loc.pos;
 		var drawPos = display.drawPos;
 		var imageSize = this.imageSizeScaled();
-		drawPos.clear().subtract(imageSize).divideScalar(2).add(pos);
+		drawPos.clear().subtract(imageSize).half().add(pos);
 		display.drawImage(image, drawPos, imageSize);
 	}
 }

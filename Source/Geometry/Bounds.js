@@ -4,7 +4,7 @@ function Bounds(center, size)
 	this.center = center;
 	this.size = size;
 
-	this.sizeHalf = this.size.clone().divideScalar(2);
+	this.sizeHalf = this.size.clone().half();
 	this._min = new Coords();
 	this._max = new Coords();
 }
@@ -67,7 +67,7 @@ function Bounds(center, size)
 			}
 		}
 
-		this.center.overwriteWith(minSoFar).add(maxSoFar).divideScalar(2);
+		this.center.overwriteWith(minSoFar).add(maxSoFar).half();
 		this.size.overwriteWith(maxSoFar).subtract(minSoFar);
 
 		return this;

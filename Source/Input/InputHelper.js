@@ -17,9 +17,9 @@ function InputHelper()
 			this.isMouseClicked = false;
 			this.mouseClickPos = new Coords();
 
-			this.hasMouseMoved = false;
-			this.mouseMovePos = new Coords();
+			this.mouseMovePos = new Coords(0, 0);
 			this.mouseMovePosPrev = new Coords(0, 0);
+			this.mouseMovePosNext = new Coords(0, 0);
 		}
 
 		document.body.onkeydown = this.handleEventKeyDown.bind(this);
@@ -183,30 +183,32 @@ function InputHelper()
 			event.clientY - canvasBounds.top,
 			0
 		);
+		this.inputAdd("MouseClick");
 	}
 
 	InputHelper.prototype.handleEventMouseMove = function(event)
 	{
-		this.hasMouseMoved = true;
-
-		this.mouseMovePosPrev.overwriteWith
-		(
-			this.mouseMovePos
-		);
-
 		var canvas = event.target;
 		var canvasBounds = canvas.getBoundingClientRect();
-		this.mouseMovePos.overwriteWithDimensions
+		this.mouseMovePosNext.overwriteWithDimensions
 		(
 			event.clientX - canvasBounds.left,
 			event.clientY - canvasBounds.top,
 			0
 		);
+		
+		if (this.mouseMovePosNext.equals(this.mouseMovePos) == false)
+		{
+			this.mouseMovePosPrev.overwriteWith(this.mouseMovePos);
+			this.mouseMovePos.overwriteWith(this.mouseMovePosNext);
+			this.inputAdd("MouseMove");
+		}
 	}
 
 	InputHelper.prototype.handleEventMouseUp = function(event)
 	{
 		this.isMouseClicked = false;
+		this.inputRemove("MouseClick");
 	}
 
 	// gamepads
