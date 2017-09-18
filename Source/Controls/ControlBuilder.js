@@ -11,10 +11,10 @@ function ControlBuilder(styles)
 	{
 		if (size == null)
 		{
-			size = Globals.Instance.display.sizeInPixels.clone();
+			size = Globals.Instance.display.sizeDefault;
 		}
 
-		sizeMultiplier = size.clone().divide(this.sizeBase);
+		var sizeMultiplier = size.clone().divide(this.sizeBase);
 
 		var returnValue = new ControlContainer
 		(
@@ -258,10 +258,10 @@ function ControlBuilder(styles)
 	{
 		if (size == null)
 		{
-			size = Globals.Instance.display.sizeInPixels.clone();
+			size = Globals.Instance.display.sizeDefault;
 		}
 
-		sizeMultiplier = size.clone().divide(this.sizeBase);
+		var sizeMultiplier = size.clone().divide(this.sizeBase);
 
 		var returnValue = new ControlContainer
 		(
@@ -313,10 +313,10 @@ function ControlBuilder(styles)
 	{
 		if (size == null)
 		{
-			size = Globals.Instance.display.sizeInPixels.clone();
+			size = Globals.Instance.display.sizeDefault;
 		}
 
-		sizeMultiplier = size.clone().divide(this.sizeBase);
+		var sizeMultiplier = size.clone().divide(this.sizeBase);
 
 		var returnValue = new ControlContainer
 		(
@@ -356,10 +356,10 @@ function ControlBuilder(styles)
 	{
 		if (size == null)
 		{
-			size = Globals.Instance.display.sizeInPixels.clone();
+			size = Globals.Instance.display.sizeDefault;
 		}
 
-		sizeMultiplier = size.clone().divide(this.sizeBase);
+		var sizeMultiplier = size.clone().divide(this.sizeBase);
 
 		var returnValue = new ControlContainer
 		(
@@ -568,10 +568,10 @@ function ControlBuilder(styles)
 	{
 		if (size == null)
 		{
-			size = Globals.Instance.display.sizeInPixels.clone();
+			size = Globals.Instance.display.sizeDefault;
 		}
 
-		sizeMultiplier = size.clone().divide(this.sizeBase);
+		var sizeMultiplier = size.clone().divide(this.sizeBase);
 
 		return new ControlContainer
 		(
@@ -680,10 +680,10 @@ function ControlBuilder(styles)
 	{
 		if (size == null)
 		{
-			size = Globals.Instance.display.sizeInPixels.clone();
+			size = Globals.Instance.display.sizeDefault;
 		}
 
-		sizeMultiplier = size.clone().divide(this.sizeBase);
+		var sizeMultiplier = size.clone().divide(this.sizeBase);
 
 		var profiles = Globals.Instance.profileHelper.profiles();
 
@@ -888,10 +888,10 @@ function ControlBuilder(styles)
 	{
 		if (size == null)
 		{
-			size = Globals.Instance.display.sizeInPixels.clone();
+			size = Globals.Instance.display.sizeDefault;
 		}
 
-		sizeMultiplier = size.clone().divide(this.sizeBase);
+		var sizeMultiplier = size.clone().divide(this.sizeBase);
 
 		var returnValue = new ControlContainer
 		(
@@ -939,10 +939,10 @@ function ControlBuilder(styles)
 	{
 		if (size == null)
 		{
-			size = Globals.Instance.display.sizeInPixels.clone();
+			size = Globals.Instance.display.sizeDefault;
 		}
 
-		sizeMultiplier = size.clone().divide(this.sizeBase);
+		var sizeMultiplier = size.clone().divide(this.sizeBase);
 
 		var universe = Globals.Instance.universe;
 		var world = universe.world;
@@ -1123,10 +1123,10 @@ function ControlBuilder(styles)
 	{
 		if (size == null)
 		{
-			size = Globals.Instance.display.sizeInPixels.clone();
+			size = Globals.Instance.display.sizeDefault;
 		}
 
-		sizeMultiplier = size.clone().divide(this.sizeBase);
+		var sizeMultiplier = size.clone().divide(this.sizeBase);
 
 		var returnValue = new ControlContainer
 		(
@@ -1349,10 +1349,10 @@ function ControlBuilder(styles)
 	{
 		if (size == null)
 		{
-			size = Globals.Instance.display.sizeInPixels.clone();
+			size = Globals.Instance.display.sizeDefault;
 		}
 
-		sizeMultiplier = size.clone().divide(this.sizeBase);
+		var sizeMultiplier = size.clone().divide(this.sizeBase);
 
 		var returnValue = new ControlContainer
 		(

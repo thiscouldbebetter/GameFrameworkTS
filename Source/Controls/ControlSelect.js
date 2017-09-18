@@ -70,6 +70,12 @@ function ControlSelect
 			this.isHighlighted = false;
 	}
 
+	ControlSelect.prototype.isEnabled = function()
+	{
+		// todo
+		return true;
+	}
+
 	ControlSelect.prototype.optionSelected = function()
 	{
 		var returnValue = null;

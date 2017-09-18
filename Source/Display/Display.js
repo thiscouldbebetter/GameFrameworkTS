@@ -2,7 +2,8 @@
 function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorBack)
 {
 	this.sizesAvailable = sizesAvailable;
-	this.sizeInPixels = this.sizesAvailable[0];
+	this.sizeDefault = this.sizesAvailable[0];
+	this.sizeInPixels = this.sizeDefault;
 	this.fontName = fontName;
 	this.fontHeightInPixels = fontHeightInPixels;
 	this.colorFore = colorFore;
@@ -334,6 +335,10 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 
 		this.graphics.font = "" + this.fontHeightInPixels + "px " + this.fontNameFallthrough;
 		var widthWithFontFallthrough = this.graphics.measureText(this.testString).width;
+
+		var sizeBase = this.sizesAvailable[0];
+		var scaleFactor = this.sizeInPixels.clone().divide(sizeBase);
+		this.graphics.scale(scaleFactor.x, scaleFactor.y);
 
 		platformHelper.domElementAdd(this.canvas);
 	}
