@@ -32,7 +32,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		this.drawRectangle
 		(
 			new Coords(0, 0),
-			this.sizeInPixels,
+			this.sizeDefault, // Automatic scaling.
 			(colorBack == null ? this.colorBack : colorBack),
 			(colorBorder == null ? this.colorFore : colorBorder)
 		);
@@ -337,8 +337,8 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		var widthWithFontFallthrough = this.graphics.measureText(this.testString).width;
 
 		var sizeBase = this.sizesAvailable[0];
-		var scaleFactor = this.sizeInPixels.clone().divide(sizeBase);
-		this.graphics.scale(scaleFactor.x, scaleFactor.y);
+		this.scaleFactor = this.sizeInPixels.clone().divide(sizeBase);
+		this.graphics.scale(this.scaleFactor.x, this.scaleFactor.y);
 
 		platformHelper.domElementAdd(this.canvas);
 	}

@@ -30,7 +30,7 @@ function ControlImage(name, pos, size, image)
 		(
 			this.image,
 			drawPos,
-			display.sizeInPixels // hack
+			this.size // hack
 		);
 	}
 }

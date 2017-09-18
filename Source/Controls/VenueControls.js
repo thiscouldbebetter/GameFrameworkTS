@@ -31,6 +31,12 @@ function VenueControls(controlRoot)
 	}
 
 	this.inputToActionMappings.addLookups("inputName");
+
+	// Helper variables.
+
+	this.mouseClickPos = new Coords();
+	this.mouseMovePos = new Coords();
+	this.mouseMovePosPrev = new Coords();
 }
 
 {
@@ -50,13 +56,19 @@ function VenueControls(controlRoot)
 		var inputHelper = Globals.Instance.inputHelper;
 		if (inputHelper.isMouseClicked == true)
 		{
-			var mouseClickPos = inputHelper.mouseClickPos;
-			var wasClickHandled = this.controlRoot.mouseClick(mouseClickPos);
+			this.mouseClickPos.overwriteWith
+			(
+				inputHelper.mouseClickPos
+			).divide
+			(
+				Globals.Instance.display.scaleFactor
+			);
+			var wasClickHandled = this.controlRoot.mouseClick(this.mouseClickPos);
 
-			if (wasClickHandled == true)
-			{
-				inputHelper.isMouseClicked = false;
-			}
+			// fix
+			// If the VenueControls is nested in another venue, 
+			// this may prevent the parent venue from processing the click.
+			inputHelper.isMouseClicked = false;
 		}
 		else if (inputHelper.inputsActive.length > 0)
 		{
@@ -85,12 +97,25 @@ function VenueControls(controlRoot)
 
 		if (inputHelper.hasMouseMoved == true)
 		{
-			var mouseMovePos = inputHelper.mouseMovePos;
-			var mouseMovePosPrev = inputHelper.mouseMovePosPrev;
+			var scaleFactor = Globals.Instance.display.scaleFactor;
+			this.mouseMovePos.overwriteWith
+			(
+				inputHelper.mouseMovePos
+			).divide
+			(
+				scaleFactor
+			);
+			this.mouseMovePosPrev.overwriteWith
+			(
+				inputHelper.mouseMovePosPrev
+			).divide
+			(
+				scaleFactor
+			);
 
 			this.controlRoot.mouseMove
 			(
-				mouseMovePos, mouseMovePosPrev
+				this.mouseMovePos, this.mouseMovePosPrev
 			);
 		}
 	}

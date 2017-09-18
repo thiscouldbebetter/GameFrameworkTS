@@ -15,10 +15,10 @@ function InputHelper()
 		if (this.isMouseTracked == true)
 		{
 			this.isMouseClicked = false;
-			this.mouseClickPos = new Coords(0, 0);
+			this.mouseClickPos = new Coords();
 
 			this.hasMouseMoved = false;
-			this.mouseMovePos = new Coords(0, 0);
+			this.mouseMovePos = new Coords();
 			this.mouseMovePosPrev = new Coords(0, 0);
 		}
 

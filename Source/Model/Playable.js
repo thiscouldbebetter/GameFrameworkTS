@@ -24,6 +24,9 @@ function Playable()
 			playerLoc.pos.overwriteWith
 			(
 				inputHelper.mouseClickPos
+			).divide
+			(
+				Globals.Instance.display.scaleFactor
 			).add
 			(
 				camera.loc.pos

@@ -14,10 +14,7 @@ function PlaceDemo(size, playerPos)
 				var universe = Globals.Instance.universe;
 				var venueNext = new VenueControls
 				(
-					Globals.Instance.controlBuilder.configure
-					(
-						Globals.Instance.display.sizeInPixels
-					)
+					Globals.Instance.controlBuilder.configure()
 				);
 				venueNext = new VenueFader(venueNext);
 				universe.venueNext = venueNext;

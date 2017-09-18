@@ -23,7 +23,7 @@ function main()
 		]
 	);
 
-	var displaySizeInPixelsDefault = new Coords(400, 300);
+	var displaySizeInPixelsDefault = new Coords(400, 300, 1);
 
 	var display = new Display
 	(

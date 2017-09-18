@@ -91,7 +91,7 @@ function VenueFader
 		display.drawRectangle
 		(
 			new Coords(0, 0),
-			display.sizeInPixels,
+			display.sizeDefault, // Scaled automatically.
 			"rgba(0, 0, 0, " + alphaOfFadeColor + ")", // colorFill
 			null // colorBorder
 		);
