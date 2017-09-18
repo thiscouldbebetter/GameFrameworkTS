@@ -4,6 +4,9 @@ function Wedge(vertex, directionMin, angleSpannedInTurns)
 	this.vertex = vertex;
 	this.directionMin = directionMin;
 	this.angleSpannedInTurns = angleSpannedInTurns;
+
+	// Helper variable.
+	this.rayDirectionMinAsPolar = new Polar(0, 1);
 }
 {
 	Wedge.prototype.angleInTurnsMax = function()
