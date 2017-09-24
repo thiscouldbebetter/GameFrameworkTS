@@ -1,8 +1,8 @@
 
-function VenueMessage(messageToShow, venueNext)
+function VenueMessage(messageToShow, acknowledge)
 {
 	this.messageToShow = messageToShow;
-	this.venueNext = venueNext;
+	this.acknowledge = acknowledge;
 }
 {
 	VenueMessage.prototype.draw = function()
@@ -18,7 +18,7 @@ function VenueMessage(messageToShow, venueNext)
 					// acknowledge
 					function()
 					{
-						Globals.Instance.universe.venueNext = this.venueNext;
+						this.acknowledge()
 					}.bind(this)
 				)
 			);

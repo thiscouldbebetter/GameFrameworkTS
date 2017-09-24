@@ -55,17 +55,23 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 
 	ControlScrollbar.prototype.scrollDown = function()
 	{
-		this.sliderPosInItems = NumberHelper.trimValueToRangeMinMax
+		this.sliderPosInItems = 
 		(
-			this.sliderPosInItems + 1, 0, this.sliderMaxInItems()
+			this.sliderPosInItems + 1
+		).trimToRangeMinMax
+		(
+			0, this.sliderMaxInItems()
 		);
 	}
 
 	ControlScrollbar.prototype.scrollUp = function()
 	{
-		this.sliderPosInItems = NumberHelper.trimValueToRangeMinMax
+		this.sliderPosInItems = 
 		(
-			this.sliderPosInItems - 1, 0, this.sliderMaxInItems()
+			this.sliderPosInItems - 1
+		).trimToRangeMinMax
+		(
+			0, this.sliderMaxInItems()
 		);
 	}
 

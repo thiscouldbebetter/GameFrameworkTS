@@ -169,22 +169,22 @@ function PlaceDemo(size, playerPos)
 			var venueMessage = new VenueMessage
 			(
 				messageToDisplay,
-				null // venueNext
+				null // acknowledge
 			);
 
 			var venueAfterMessageAcknowedged = new VenueFader
 			(
 				new VenueControls
 				(
-					Globals.Instance.controlBuilder.title
-					(
-						Globals.Instance.display.sizeInPixels
-					)
+					Globals.Instance.controlBuilder.title()
 				),
 				venueMessage // venueToFadeFrom
 			);
 
-			venueMessage.venueNext = venueAfterMessageAcknowedged;
+			venueMessage.acknowledge = function()
+			{
+				Globals.Instance.universe.venueNext = venueAfterMessageAcknowedged;
+			}
 
 			var venueNext = new VenueFader(venueMessage);
 

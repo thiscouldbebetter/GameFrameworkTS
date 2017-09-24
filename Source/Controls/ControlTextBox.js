@@ -45,17 +45,20 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 		{
 			this.text(text.substr(0, text.length - 1));
 
-			this.cursorPos = NumberHelper.wrapValueToRangeMinMax
+			this.cursorPos = 
 			(
-				this.cursorPos - 1, 0, text.length + 1
+				this.cursorPos - 1
+			).wrapToRangeMinMax
+			(
+				0, text.length + 1
 			);
 		}
 		else if (actionNameToHandle == "ControlConfirm")
 		{
-			this.cursorPos = NumberHelper.wrapValueToRangeMinMax
+			this.cursorPos = 
 			(
-				this.cursorPos + 1, 0, text.length + 1
-			);
+				this.cursorPos + 1
+			).wrapToRangeMinMax(0, text.length + 1);
 		}
 		else if
 		(
@@ -71,9 +74,11 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 				this.cursorPos < text.length ? text.charCodeAt(this.cursorPos) : "A".charCodeAt(0) - 1
 			);
 
-			charCodeAtCursor = NumberHelper.wrapValueToRangeMinMax
+			charCodeAtCursor = 
 			(
-				charCodeAtCursor + direction,
+				charCodeAtCursor + direction
+			).wrapToRangeMinMax
+			(
 				"A".charCodeAt(0),
 				"Z".charCodeAt(0) + 1
 			);
@@ -98,9 +103,12 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 					+ text.substr(this.cursorPos)
 				);
 
-				this.cursorPos = NumberHelper.wrapValueToRangeMinMax
+				this.cursorPos = 
 				(
-					this.cursorPos + 1, 0, text.length + 1
+					this.cursorPos + 1
+				).wrapToRangeMinMax
+				(
+					0, text.length + 1
 				);
 			}
 

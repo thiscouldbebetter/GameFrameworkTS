@@ -11,12 +11,15 @@ function Wedge(vertex, directionMin, angleSpannedInTurns)
 {
 	Wedge.prototype.angleInTurnsMax = function()
 	{
-		return NumberHelper.wrapValueToRangeMinMax
+		var returnValue = 
 		(
-			this.angleInTurnsMin() + this.angleSpannedInTurns,
-			0, // min
-			1 // max
+			this.angleInTurnsMin() + this.angleSpannedInTurns
+		).wrapToRangeMinMax
+		(
+			0, 1
 		);
+
+		return returnValue;
 	}
 
 	Wedge.prototype.angleInTurnsMin = function()

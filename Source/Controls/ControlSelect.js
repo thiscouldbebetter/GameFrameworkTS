@@ -109,9 +109,12 @@ function ControlSelect
 	{
 		var options = this.options();
 
-		this.indexOfOptionSelected = NumberHelper.wrapValueToRangeMinMax
+		this.indexOfOptionSelected = 
 		(
-			this.indexOfOptionSelected + direction, 0, options.length
+			this.indexOfOptionSelected + direction
+		).wrapToRangeMinMax
+		(
+			0, options.length
 		);
 
 		var optionSelected = this.optionSelected();

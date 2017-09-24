@@ -89,10 +89,10 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 		}
 		else
 		{
-			this.indexOfItemSelected = NumberHelper.trimValueToRangeMinMax
+			this.indexOfItemSelected = 
 			(
-				this.indexOfItemSelected + direction, 0, numberOfItems - 1
-			);
+				this.indexOfItemSelected + direction
+			).trimToRangeMinMax(0, numberOfItems - 1);
 		}
 
 		var indexOfFirstItemVisible = this.indexOfFirstItemVisible();

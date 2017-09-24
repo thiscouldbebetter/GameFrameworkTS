@@ -14,6 +14,8 @@ function VisualArc(arc, colorFill, colorBorder)
 		var arc = this.arc;
 		var shell = arc.shell;
 		var wedge = arc.wedge;
+		var wedgeAngleMin = wedge.angleInTurnsMin();
+		var wedgeAngleMax = wedge.angleInTurnsMax();
 		
 		var drawPos = this.drawPos.overwriteWith
 		(
@@ -24,7 +26,7 @@ function VisualArc(arc, colorFill, colorBorder)
 		(
 			drawPos, // center
 			shell.sphereInner.radius, shell.sphereOuter.radius, 
-			wedge.angleInTurnsMin(), wedge.angleInTurnsMax(),
+			wedgeAngleMin, wedgeAngleMax,
 			this.colorFill, this.colorBorder
 		);
 	}

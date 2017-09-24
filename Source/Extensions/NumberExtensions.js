@@ -1,12 +1,14 @@
 
-function NumberHelper()
+function NumberExtensions()
 {
-	// static class
+	// extension class
 }
 
 {
-	NumberHelper.trimValueToRangeMinMax = function(value, min, max)
+	Number.prototype.trimToRangeMinMax = function(min, max)
 	{
+		var value = this;
+
 		if (value < min)
 		{
 			value = min;
@@ -19,8 +21,10 @@ function NumberHelper()
 		return value;
 	}
 
-	NumberHelper.wrapValueToRangeMinMax = function(value, min, max)
+	Number.prototype.wrapToRangeMinMax = function(min, max)
 	{
+		var value = this;
+
 		var rangeSize = max - min;
 
 		if (rangeSize == 0)

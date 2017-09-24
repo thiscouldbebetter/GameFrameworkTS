@@ -18,10 +18,10 @@ function Polar(angleInTurns, distance)
 	Polar.prototype.fromCoords = function(coordsToConvert)
 	{
 		var angleInRadians = Math.atan2(coordsToConvert.y, coordsToConvert.x);
-		var angleInTurns = NumberHelper.wrapValueToRangeMinMax
+		var angleInTurns =
 		(
-			angleInRadians / Polar.RadiansPerTurn, 0, 1
-		);
+			angleInRadians / Polar.RadiansPerTurn
+		).wrapToRangeMinMax(0, 1);
 		var distance = coordsToConvert.magnitude();
 		var returnValue = new Polar(angleInTurns, distance);
 		return returnValue;

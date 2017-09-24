@@ -62,9 +62,12 @@ function ControlContainer(name, pos, size, children)
 
 			while (true)
 			{
-				this.indexOfChildWithFocus = NumberHelper.wrapValueToRangeMinMax
+				this.indexOfChildWithFocus = 
 				(
-					this.indexOfChildWithFocus + direction, 0, this.children.length
+					this.indexOfChildWithFocus + direction
+				).wrapToRangeMinMax
+				(
+					0, this.children.length
 				);
 
 				if (this.indexOfChildWithFocus == childIndexOriginal)

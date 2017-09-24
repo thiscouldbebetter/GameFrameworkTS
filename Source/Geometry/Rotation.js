@@ -16,10 +16,10 @@ function Rotation(axis, angleInTurnsRef)
 		// hack - Assume axis is (0, 0, 1).
 		var polar = new Polar().fromCoords(coordsToTransform);
 
-		polar.angleInTurns = NumberHelper.wrapValueToRangeMinMax
+		polar.angleInTurns = 
 		(
-			polar.angleInTurns + this.angleInTurns(), 0, 1
-		);
+			polar.angleInTurns + this.angleInTurns()
+		).wrapToRangeMinMax(0, 1);
 
 		return polar.toCoords(coordsToTransform);
 	}

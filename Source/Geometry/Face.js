@@ -38,7 +38,7 @@ function Face(vertices)
 
 			for (var v = 0; v < this.vertices.length; v++)
 			{
-				var vNext = NumberHelper.wrapValueToRangeMinMax(v + 1, 0, this.vertices.length);
+				var vNext = (v + 1).wrapToRangeMinMax(0, this.vertices.length);
 				var vertex = this.vertices[v];
 				var vertexNext = this.vertices[vNext];
 

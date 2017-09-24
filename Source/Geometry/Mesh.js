@@ -86,9 +86,12 @@ function Mesh(center, vertexOffsets, faceBuilders)
 
 				if (z == 0)
 				{
-					var vertexIndexNext = NumberHelper.wrapValueToRangeMinMax
+					var vertexIndexNext = 
 					(
-						vertexIndex + 1, 0, numberOfFaceVertices
+						vertexIndex + 1
+					).wrapToRangeMinMax
+					(
+						0, numberOfFaceVertices
 					);
 
 					var faceBuilderSide = new Mesh_FaceBuilder
