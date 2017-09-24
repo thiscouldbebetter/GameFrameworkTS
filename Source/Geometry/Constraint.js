@@ -5,13 +5,13 @@ function Constraint(defnName, target)
 	this.target = target;
 }
 {
-	Constraint.prototype.constrain = function(context, constrainable)
+	Constraint.prototype.constrain = function(universe, world, place, entity)
 	{
-		this.defn().constrain(context, constrainable, this.target);
+		this.defn().constrain(universe, world, place, entity, this.target);
 	}
 	
 	Constraint.prototype.defn = function()
 	{
-		return ConstraintDefn.Instances[this.defnName];
+		return Globals.Instance.universe.world.constraintDefns[this.defnName];
 	}
 }

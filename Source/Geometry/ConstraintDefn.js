@@ -13,7 +13,7 @@ function ConstraintDefn(name, constrain)
 		this._None = new ConstraintDefn
 		(
 			"None", 
-			function constrain(context, constrainable, target)
+			function constrain(universe, world, place, entity, target)
 			{
 				// Do nothing.
 			}
@@ -22,40 +22,40 @@ function ConstraintDefn(name, constrain)
 		this.Attach = new ConstraintDefn
 		(
 			"Attach",
-			function constrain(context, constrainable, targetBodyName)
+			function constrain(universe, world, place, entity, targetBodyName)
 			{
 				var target = context.bodies[targetBodyName];
-				constrainable.loc.pos.overwriteWith(target.loc.pos);
+				entity.loc.pos.overwriteWith(target.loc.pos);
 			}
 		);
 		
 		this.ContainInBounds = new ConstraintDefn
 		(
 			"ContainInBounds",
-			function constrain(context, constrainable, targetBodyName)
+			function constrain(universe, world, place, entity, targetBodyName)
 			{
 				var target = context.bodies[targetBodyName];
 				var targetBounds = target.collider().bounds();
 
-				targetBounds.trimCoords(constrainable.loc.pos);
+				targetBounds.trimCoords(entity.loc.pos);
 			}
 		);
 		
 		this.Offset = new ConstraintDefn
 		(
 			"Offset",
-			function constrain(context, constrainable, targetOffset)
+			function constrain(universe, world, place, entity, targetOffset)
 			{
-				constrainable.loc.pos.add(targetOffset);
+				entity.loc.pos.add(targetOffset);
 			}
 		);
 
 		this.OrientToward = new ConstraintDefn
 		(
 			"OrientToward",
-			function constrain(context, constrainable, targetBodyName)
+			function constrain(universe, world, place, entity, targetBodyName)
 			{
-				var constrainableLoc = constrainable.loc;
+				var constrainableLoc = entity.loc;
 				var constrainablePos = constrainableLoc.pos;
 				var constrainableOrientation = constrainableLoc.orientation;
 				var constrainableForward = constrainableOrientation.forward;
