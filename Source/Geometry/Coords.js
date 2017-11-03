@@ -12,6 +12,10 @@ function Coords(x, y, z)
 }
 
 {
+	// constants
+	
+	Coords.NumberOfDimensions = 3;
+	
 	// instances
 
 	Coords.Instances = new Coords_Instances();
@@ -26,7 +30,17 @@ function Coords(x, y, z)
 		this.ZeroOneZero = new Coords(0, 1, 0);
 		this.Zeroes = new Coords(0, 0, 0);
 	}
-
+	
+	// methods
+	
+	Coords.prototype.absolute = function()
+	{
+		this.x = Math.abs(this.x);
+		this.y = Math.abs(this.y);
+		this.z = Math.abs(this.z);
+		return this;
+	}
+	
 	Coords.prototype.add = function(other)
 	{
 		this.x += other.x;
@@ -157,6 +171,11 @@ function Coords(x, y, z)
 		this.z = 0 - this.z;
 		return this;
 	}
+	
+	Coords.prototype.isInRangeMax = function(max)
+	{
+		return this.isInRangeMinMax(Coords.Instances.Zeroes, max);
+	}	
 
 	Coords.prototype.isInRangeMinMax = function(min, max)
 	{
@@ -172,7 +191,7 @@ function Coords(x, y, z)
 
 		return returnValue;
 	}
-
+	
 	Coords.prototype.magnitude = function()
 	{
 		return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
@@ -219,6 +238,11 @@ function Coords(x, y, z)
 		this.z = z;
 		return this;
 	}
+	
+	Coords.prototype.productOfDimensions = function()
+	{
+		return this.x * this.y * this.z;
+	}
 
 	Coords.prototype.randomize = function()
 	{
@@ -251,6 +275,11 @@ function Coords(x, y, z)
 		this.z -= other.z;
 		return this;
 	}
+	
+	Coords.prototype.sumOfDimensions = function()
+	{
+		return this.x + this.y + this.z;
+	}	
 
 	Coords.prototype.trimToMagnitudeMax = function(magnitudeMax)
 	{

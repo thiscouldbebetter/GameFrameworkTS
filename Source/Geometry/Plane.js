@@ -7,6 +7,11 @@ function Plane(normal, distanceFromOrigin)
 	this.displacementFromPoint0To2 = new Coords();
 }
 {
+	Plane.prototype.equals = function(other)
+	{
+		return (this.normal.equals(other.normal) && this.distanceFromOrigin == other.distanceFromOrigin);
+	}
+	
 	Plane.prototype.fromPoints = function(point0, point1, point2)
 	{
 		this.normal.overwriteWith
