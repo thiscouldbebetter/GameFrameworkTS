@@ -69,6 +69,7 @@ function Bounds(center, size)
 
 		this.center.overwriteWith(minSoFar).add(maxSoFar).half();
 		this.size.overwriteWith(maxSoFar).subtract(minSoFar);
+		this.sizeHalf.overwriteWith(this.size).half();
 
 		return this;
 	}
