@@ -334,7 +334,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		this.graphics = this.canvas.getContext("2d");
 
 		this.graphics.font = "" + this.fontHeightInPixels + "px " + this.fontNameFallthrough;
-		var widthWithFontFallthrough = this.graphics.measureText(this.testString).width;
+		this.widthWithFontFallthrough = this.graphics.measureText(this.testString).width;
 
 		var sizeBase = this.sizesAvailable[0];
 		this.scaleFactor = this.sizeInPixels.clone().divide(sizeBase);
