@@ -2,35 +2,29 @@
 function Edge(vertices)
 {
 	this.vertices = vertices;
+
+	this._direction = new Coords();
+	this._displacement = new Coords();
+	this._transverse = new Coords();
 }
 {
 	Edge.prototype.direction = function()
 	{
-		if (this._direction == null)
-		{
-			this._direction = this.displacement().clone().normalize();
-		}
-
-		return this._displacement;
+		return this._direction.overwriteWith(this.displacement()).normalize();
 	}
 
 	Edge.prototype.displacement = function()
 	{
-		if (this._displacement == null)
-		{
-			this._displacement = this.vertices[1].clone().subtract(this.vertices[0]);
-		}
+		return this._displacement.overwriteWith(this.vertices[1]).subtract(this.vertices[0]);
+	}
 
-		return this._displacement;
+	Edge.prototype.length = function()
+	{
+		return this.displacement().magnitude();
 	}
 
 	Edge.prototype.transverse = function(faceNormal)
 	{
-		if (this._transverse == null)
-		{
-			this._transverse = faceNormal.clone().crossProduct(this.direction());
-		}
-
-		return this._transverse;
+		return this._transverse.overwriteWith(this.direction()).crossProduct(faceNormal);
 	}
 }
