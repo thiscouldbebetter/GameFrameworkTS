@@ -1,57 +1,64 @@
-function Polar(angleInTurns, distance)
+
+function Polar(azimuthInTurns, elevationInTurns, radius)
 {
-	this.angleInTurns = angleInTurns;
-	this.distance = distance;
+	this.azimuthInTurns = azimuthInTurns;
+	this.radius = radius;
+	this.elevationInTurns = (elevationInTurns == null ? 0 : elevationInTurns);
 }
+
 {
 	// constants
 
-	Polar.RadiansPerTurn = 2 * Math.PI;
+	Polar.RadiansPerTurn = Math.PI * 2;
 
-	// instance methods
+	// static methods
 
-	Polar.prototype.angleInRadians = function()
+	Polar.fromCoords = function(coordsToConvert)
 	{
-		return this.angleInTurns * Polar.RadiansPerTurn;
-	}
+		var azimuth = Math.atan2(coordsToConvert.y, coordsToConvert.x);
+		if (azimuth < 0)
+		{
+			azimuth += 1;
+		}
 
-	Polar.prototype.fromCoords = function(coordsToConvert)
-	{
-		var angleInRadians = Math.atan2(coordsToConvert.y, coordsToConvert.x);
-		var angleInTurns =
+		var radius = coordsToConvert.magnitude();
+
+		var elevation = Math.asin(coordsToConvert.z / radius);
+
+		var returnValue = new Polar
 		(
-			angleInRadians / Polar.RadiansPerTurn
-		).wrapToRangeMinMax(0, 1);
-		var distance = coordsToConvert.magnitude();
-		var returnValue = new Polar(angleInTurns, distance);
+			azimuth,
+			radius,
+			elevation
+		);
+
 		return returnValue;
 	}
 
-	Polar.prototype.toCoords = function(coordsToOverwrite)
-	{
-		var angleInRadians = this.angleInRadians();
-		coordsToOverwrite.overwriteWithDimensions
-		(
-			Math.cos(angleInRadians), Math.sin(angleInRadians), 0
-		);
-
-		coordsToOverwrite.multiplyScalar(this.distance);
-
-		return coordsToOverwrite;
-	}
+	// instance methods
 
 	Polar.prototype.overwriteWith = function(other)
 	{
-		this.angleInTurns = other.angleInTurns;
-		this.distance = other.distance;
+		this.azimuthInTurns = other.azimuthInTurns;
+		this.radius = other.radius;
+		this.elevationInTurns = other.elevationInTurns;
 		return this;
 	}
 
-	Polar.prototype.overwriteWithAngleAndDistance = function(angleInTurns, distance)
+	Polar.prototype.toCoords = function()
 	{
-		this.angleInTurns = angleInTurns;
-		this.distance = distance;
-		return this;
-	}
+		var azimuthInRadians = this.azimuthInTurns * Polar.RadiansPerTurn;
+		var elevationInRadians = this.elevationInTurns * Polar.RadiansPerTurn;
 
+		var cosineOfElevation = Math.cos(elevationInRadians);
+
+		var returnValue = new Coords
+		(
+			Math.cos(azimuthInRadians) * cosineOfElevation,
+			Math.sin(azimuthInRadians) * cosineOfElevation,
+			Math.sin(elevationInRadians)
+		).multiplyScalar(this.radius);
+
+		return returnValue;
+	}
 }
