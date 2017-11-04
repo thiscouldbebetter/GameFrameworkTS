@@ -46,7 +46,7 @@ function ControlContainer(name, pos, size, children)
 			var iStart = (direction == 1 ? 0 : this.children.length - 1);
 			var iEnd = (direction == 1 ? this.children.length : -1);
 
-			for (var i = iStart; i != iEnd; i++)
+			for (var i = iStart; i != iEnd; i += direction)
 			{
 				var child = this.children[i];
 				if (child.focusGain != null && child.isEnabled() == true)
