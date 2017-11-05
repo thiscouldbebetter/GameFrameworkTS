@@ -23,8 +23,10 @@ function Coords(x, y, z)
 	function Coords_Instances()
 	{
 		this.MinusOneZeroZero = new Coords(-1, 0, 0);
-		this.OneZeroZero = new Coords(1, 0, 0);
 		this.Ones = new Coords(1, 1, 1);
+		this.OneOneZero = new Coords(1, 1, 0);
+		this.OneZeroZero = new Coords(1, 0, 0);
+		this.TwoTwoZero = new Coords(2, 2, 0);
 		this.ZeroZeroOne = new Coords(0, 0, 1);
 		this.ZeroMinusOneZero = new Coords(0, -1, 0);
 		this.ZeroOneZero = new Coords(0, 1, 0);
@@ -69,6 +71,12 @@ function Coords(x, y, z)
 	{
 		this.x = 0;
 		this.y = 0;
+		this.z = 0;
+		return this;
+	}
+
+	Coords.prototype.clearZ = function()
+	{
 		this.z = 0;
 		return this;
 	}
@@ -123,6 +131,39 @@ function Coords(x, y, z)
 	Coords.prototype.dimensions = function()
 	{
 		return [ this.x, this.y, this.z ];
+	}
+
+	Coords.prototype.directions = function()
+	{
+		if (this.x < 0)
+		{
+			this.x = -1;
+		}
+		else if (this.x > 0)
+		{
+			this.x = 1;
+		}
+
+		if (this.y < 0)
+		{
+			this.y = -1;
+		}
+		else if (this.y > 0)
+		{
+			this.y = 1;
+		}
+
+		if (this.z < 0)
+		{
+			this.z = -1;
+		}
+		else if (this.z > 0)
+		{
+			this.z = 1;
+		}
+
+		return this;
+
 	}
 
 	Coords.prototype.divide = function(other)
