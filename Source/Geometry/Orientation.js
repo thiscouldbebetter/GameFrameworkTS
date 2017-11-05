@@ -68,6 +68,8 @@ function Orientation(forward, down)
 			{
 				returnValue += 1;
 			}
+
+			returnValue = returnValue.wrapToRangeMinMax(0, 1);
 		}
 
 		return returnValue;
