@@ -11,31 +11,27 @@ function Polar(azimuthInTurns, elevationInTurns, radius)
 
 	Polar.RadiansPerTurn = Math.PI * 2;
 
-	// static methods
+	// instance methods
 
-	Polar.fromCoords = function(coordsToConvert)
+	Polar.prototype.fromCoords = function(coordsToConvert)
 	{
-		var azimuth = Math.atan2(coordsToConvert.y, coordsToConvert.x);
-		if (azimuth < 0)
+		this.azimuthInTurns = 
+			Math.atan2(coordsToConvert.y, coordsToConvert.x)
+			/ Polar.RadiansPerTurn;
+
+		if (this.azimuthInTurns < 0)
 		{
-			azimuth += 1;
+			this.azimuthInTurns += 1;
 		}
 
-		var radius = coordsToConvert.magnitude();
+		this.radius = coordsToConvert.magnitude();
 
-		var elevation = Math.asin(coordsToConvert.z / radius);
+		this.elevationInTurns = 
+			Math.asin(coordsToConvert.z / this.radius)
+			/ Polar.RadiansPerTurn;
 
-		var returnValue = new Polar
-		(
-			azimuth,
-			radius,
-			elevation
-		);
-
-		return returnValue;
+		return this;
 	}
-
-	// instance methods
 
 	Polar.prototype.overwriteWith = function(other)
 	{

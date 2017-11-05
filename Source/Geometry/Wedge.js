@@ -27,7 +27,7 @@ function Wedge(vertex, directionMin, angleSpannedInTurns)
 		return this.rayDirectionMinAsPolar.fromCoords
 		(
 			this.directionMin
-		).angleInTurns;
+		).azimuthInTurns;
 	}
 
 	Wedge.prototype.collider = function()

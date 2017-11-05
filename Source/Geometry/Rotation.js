@@ -16,9 +16,9 @@ function Rotation(axis, angleInTurnsRef)
 		// hack - Assume axis is (0, 0, 1).
 		var polar = new Polar().fromCoords(coordsToTransform);
 
-		polar.angleInTurns = 
+		polar.azimuthInTurns = 
 		(
-			polar.angleInTurns + this.angleInTurns()
+			polar.azimuthInTurns + this.angleInTurns()
 		).wrapToRangeMinMax(0, 1);
 
 		return polar.toCoords(coordsToTransform);
