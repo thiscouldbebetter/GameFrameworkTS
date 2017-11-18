@@ -47,7 +47,6 @@ function Universe(name, world)
 
 	Universe.prototype.updateForTimerTick = function()
 	{
-
 		if (this.venueNext != null)
 		{
 			if

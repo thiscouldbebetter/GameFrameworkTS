@@ -14,8 +14,8 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 
 	// helper variables
 
-	this.drawLoc = new Location(new Coords());
 	this.drawPos = new Coords();
+	this.drawLoc = new Location(this.drawPos);
 	this.drawPos2 = new Coords();
 	this.drawPos3 = new Coords();
 }

@@ -37,9 +37,16 @@ function Orientation(forward, down)
 
 	Orientation.prototype.forwardSet = function(value)
 	{
-		this.forward.overwriteWith(value).normalize();
+		this.forward.overwriteWith(value);
+		return this.orthogonalize();
+	}
+
+	Orientation.prototype.orthogonalize = function(value)
+	{
+		this.forward.normalize();
 		this.right.overwriteWith(this.down).crossProduct(this.forward).normalize();
 		this.down.overwriteWith(this.forward).crossProduct(this.right).normalize();
+		return this;
 	}
 
 	Orientation.prototype.overwriteWith = function(other)
@@ -48,6 +55,37 @@ function Orientation(forward, down)
 		this.right.overwriteWith(other.right);
 		this.down.overwriteWith(other.down);
 	}
+
+	Orientation.prototype.projectCoords = function(coords)
+	{
+		coords.overwriteWithDimensions
+		(
+			coords.dotProduct(this.forward),
+			coords.dotProduct(this.right),
+			coords.dotProduct(this.down)
+		);
+		return coords;
+	}
+
+	Orientation.prototype.unprojectCoords = function(coords)
+	{
+		var returnValue = new Coords(0, 0, 0);
+
+		for (var i = 0; i < this.axes.length; i++)
+		{
+			var axis = this.axes[i];
+			returnValue.add
+			(
+				axis.clone().multiplyScalar
+				(
+					coords.dimension(i)
+				)
+			);
+		}
+
+		return coords.overwriteWith(returnValue);
+	}
+
 
 	// heading
 

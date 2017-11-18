@@ -35,6 +35,15 @@ function VenueFader
 }
 
 {
+	VenueFader.prototype.initialize = function()
+	{
+		var venueToFadeTo = this.venueToFadeTo();
+		if (venueToFadeTo.initialize != null)
+		{
+			venueToFadeTo.initialize();
+		}
+	}
+
 	VenueFader.prototype.updateForTimerTick = function()
 	{
 		var venueCurrent = this.venueCurrent();
@@ -95,6 +104,11 @@ function VenueFader
 			"rgba(0, 0, 0, " + alphaOfFadeColor + ")", // colorFill
 			null // colorBorder
 		);
+	}
+
+	VenueFader.prototype.venueToFadeTo = function()
+	{
+		return this.venuesToFadeFromAndTo[1];
 	}
 
 	VenueFader.prototype.venueCurrent = function()
