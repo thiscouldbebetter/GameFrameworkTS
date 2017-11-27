@@ -16,14 +16,15 @@ function World(name, dateCreated, place)
 {
 	// static methods
 
-	World.new = function()
+	World.new = function(universe)
 	{
 		var now = DateTime.now();
 		var nowAsString = now.toStringMMDD_HHMM_SS();
 
 		var place = new PlaceDemo
 		(
-			Globals.Instance.display.sizeInPixels.clone(), // size
+			universe,
+			universe.display.sizeInPixels.clone(), // size
 			new Coords(10, 10) // playerPos
 		);
 		place.placeInner.entitiesSpawn();
@@ -39,9 +40,9 @@ function World(name, dateCreated, place)
 
 	// instance methods
 
-	World.prototype.draw = function()
+	World.prototype.draw = function(universe)
 	{
-		this.place.draw();
+		this.place.draw(universe);
 	}
 
 	World.prototype.updateForTimerTick = function(universe)

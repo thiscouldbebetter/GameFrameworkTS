@@ -14,17 +14,17 @@ function VenueVideo(videoName, venueNext)
 }
 
 {
-	VenueVideo.prototype.updateForTimerTick = function()
+	VenueVideo.prototype.updateForTimerTick = function(universe)
 	{
 		if (this.video == null)
 		{
-			Globals.Instance.display.hide();
-			this.video = Globals.Instance.videoHelper.videos[this.videoName];
-			this.video.play();
+			universe.display.hide(universe);
+			this.video = universe.videoHelper.videos[this.videoName];
+			this.video.play(universe);
 		}
 
 		var hasUserSkippedVideo = false;
-		var inputHelper = Globals.Instance.inputHelper;
+		var inputHelper = universe.inputHelper;
 		if (inputHelper.isMouseClicked == true)
 		{
 			inputHelper.isMouseClicked = false;
@@ -51,11 +51,10 @@ function VenueVideo(videoName, venueNext)
 
 		if (hasUserSkippedVideo == true)
 		{
-			this.video.stop();
-			var display = Globals.Instance.display;
+			this.video.stop(universe);
+			var display = universe.display;
 			display.clear("Black");
-			display.show();
-			var universe = Globals.Instance.universe;
+			display.show(universe);
 			universe.venueNext = this.venueNext;
 		}
 	}

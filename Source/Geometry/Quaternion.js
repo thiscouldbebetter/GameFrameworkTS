@@ -12,10 +12,10 @@ function Quaternion(w, x, y, z)
 
 	Quaternion.fromAxisAndCyclesToRotate = function(axisToRotateAround, cyclesToRotate)
 	{
-		var radiansToRotateHalf = cyclesToRotate * Math.PI;		
+		var radiansToRotateHalf = cyclesToRotate * Math.PI;
 
 		var sineOfRadiansToRotateHalf = Math.sin(radiansToRotateHalf);
-	
+
 		var w = Math.cos(radiansToRotateHalf);
 		var x = axisToRotateAround.x * sineOfRadiansToRotateHalf;
 		var y = axisToRotateAround.y * sineOfRadiansToRotateHalf;
@@ -41,7 +41,7 @@ function Quaternion(w, x, y, z)
 
 		var result = this.clone().multiply
 		(
-			coordsToRotateAsQuaternion	
+			coordsToRotateAsQuaternion
 		).multiply
 		(
 			this.clone().invert()
@@ -50,7 +50,7 @@ function Quaternion(w, x, y, z)
 		coordsToRotate.overwriteWith(result);
 
 		return coordsToRotate;
-	}	
+	}
 
 	Quaternion.prototype.clone = function()
 	{

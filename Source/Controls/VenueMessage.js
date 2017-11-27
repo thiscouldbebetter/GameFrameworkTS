@@ -5,30 +5,31 @@ function VenueMessage(messageToShow, acknowledge)
 	this.acknowledge = acknowledge;
 }
 {
-	VenueMessage.prototype.draw = function()
+	VenueMessage.prototype.draw = function(universe)
 	{
 		if (this.venueControls == null)
 		{
 			this.venueControls = new VenueControls
 			(
-				Globals.Instance.controlBuilder.message
+				universe.controlBuilder.message
 				(
-					Globals.Instance.display.sizeInPixels,
+					universe,
+					universe.display.sizeInPixels,
 					this.messageToShow,
 					// acknowledge
-					function()
+					function(universe)
 					{
-						this.acknowledge()
+						this.acknowledge(universe)
 					}.bind(this)
 				)
 			);
 		}
 
-		this.venueControls.draw();
+		this.venueControls.draw(universe);
 	}
 
-	VenueMessage.prototype.updateForTimerTick = function(world)
+	VenueMessage.prototype.updateForTimerTick = function(universe)
 	{
-		this.venueControls.updateForTimerTick();
+		this.venueControls.updateForTimerTick(universe);
 	}
 }

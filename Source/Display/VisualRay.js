@@ -11,7 +11,7 @@ function VisualRay(length, color)
 }
 
 {
-	VisualRay.prototype.drawToDisplayForDrawableAndLoc = function(display, drawable, loc)
+	VisualRay.prototype.draw = function(universe, display, drawable, loc)
 	{
 		this.polar.angleInTurns = loc.orientation.headingInTurns();
 

@@ -1,5 +1,5 @@
 
-function PlaceDemo(size, playerPos)
+function PlaceDemo(universe, size, playerPos)
 {
 	this.size = size;
 
@@ -11,12 +11,11 @@ function PlaceDemo(size, playerPos)
 			"ShowMenu",
 			function perform(universe, world, place, actor)
 			{
-				var universe = Globals.Instance.universe;
 				var venueNext = new VenueControls
 				(
-					Globals.Instance.controlBuilder.configure()
+					universe.controlBuilder.configure(universe)
 				);
-				venueNext = new VenueFader(venueNext);
+				venueNext = new VenueFader(venueNext, universe.venueCurrent);
 				universe.venueNext = venueNext;
 			}
 		),
@@ -25,7 +24,6 @@ function PlaceDemo(size, playerPos)
 			"MoveDown",
 			function perform(universe, world, place, actor)
 			{
-				var world = Globals.Instance.universe.world;
 				place.entityMoveInDirection(world, actor, Coords.Instances.ZeroOneZero);
 			}
 		),
@@ -34,7 +32,6 @@ function PlaceDemo(size, playerPos)
 			"MoveLeft",
 			function perform(universe, world, place, actor)
 			{
-				var world = Globals.Instance.universe.world;
 				place.entityMoveInDirection(world, actor, Coords.Instances.MinusOneZeroZero);
 			}
 		),
@@ -43,7 +40,6 @@ function PlaceDemo(size, playerPos)
 			"MoveRight",
 			function perform(universe, world, place, actor)
 			{
-				var world = Globals.Instance.universe.world;
 				place.entityMoveInDirection(world, actor, Coords.Instances.OneZeroZero);
 			}
 		),
@@ -52,7 +48,6 @@ function PlaceDemo(size, playerPos)
 			"MoveUp",
 			function perform(universe, world, place, actor)
 			{
-				var world = Globals.Instance.universe.world;
 				place.entityMoveInDirection(world, actor, Coords.Instances.ZeroMinusOneZero);
 			}
 		),
@@ -176,19 +171,17 @@ function PlaceDemo(size, playerPos)
 			(
 				new VenueControls
 				(
-					Globals.Instance.controlBuilder.title()
+					universe.controlBuilder.title(universe)
 				),
 				venueMessage // venueToFadeFrom
 			);
 
 			venueMessage.acknowledge = function()
 			{
-				Globals.Instance.universe.venueNext = venueAfterMessageAcknowedged;
+				universe.venueNext = venueAfterMessageAcknowedged;
 			}
 
-			var venueNext = new VenueFader(venueMessage);
-
-			var universe = Globals.Instance.universe;
+			var venueNext = new VenueFader(venueMessage, universe.venueCurrent);
 			universe.venueNext = venueNext;
 		}
 	}
@@ -396,7 +389,7 @@ function PlaceDemo(size, playerPos)
 	);
 	this.camera = new Camera
 	(
-		Globals.Instance.display.sizeInPixels.clone(),
+		universe.display.sizeInPixels.clone(),
 		null, // focalLength
 		new Location
 		(
@@ -422,9 +415,9 @@ function PlaceDemo(size, playerPos)
 	this.drawLoc = new Location(this.drawPos);
 }
 {
-	PlaceDemo.prototype.draw = function()
+	PlaceDemo.prototype.draw = function(universe)
 	{
-		var display = Globals.Instance.display;
+		var display = universe.display;
 
 		display.clear();
 
@@ -444,7 +437,7 @@ function PlaceDemo(size, playerPos)
 			this.size.clone().subtract(camera.viewSizeHalf)
 		);
 		
-		this.placeInner.draw();
+		this.placeInner.draw(universe);
 	}
 
 	PlaceDemo.prototype.entityMoveInDirection = function(world, entity, directionToMove)

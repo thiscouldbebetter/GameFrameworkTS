@@ -14,11 +14,11 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 }
 
 {
-	ControlButton.prototype.actionHandle = function(actionNameToHandle)
+	ControlButton.prototype.actionHandle = function(universe, actionNameToHandle)
 	{
 		if (actionNameToHandle == "ControlConfirm")
 		{
-			this.click();
+			this.click(universe);
 		}
 	}
 
@@ -39,11 +39,11 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 		this.isHighlighted = false;
 	}
 
-	ControlButton.prototype.mouseClick = function(clickPos)
+	ControlButton.prototype.mouseClick = function(universe, clickPos)
 	{
 		if (this.isEnabled() == true)
 		{
-			this.click();
+			this.click(universe);
 		}
 
 		return true; // wasClickHandled
@@ -59,14 +59,14 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 		this.isHighlighted = false;
 	}
 
-	ControlButton.prototype.style = function()
+	ControlButton.prototype.style = function(universe)
 	{
-		return Globals.Instance.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
+		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
 	}
 
 	// drawable
 
-	ControlButton.prototype.drawToDisplayAtLoc = function(display, drawLoc)
+	ControlButton.prototype.drawToDisplayAtLoc = function(universe, display, drawLoc)
 	{
 		var drawPos = drawLoc.pos.clone();
 		drawPos.add(this.pos);
@@ -74,7 +74,7 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 		var isEnabled = this.isEnabled();
 		var isHighlighted = this.isHighlighted && isEnabled;
 
-		var style = this.style();
+		var style = this.style(universe);
 		var colorFill = style.colorFill;
 		var colorBorder = (isEnabled == true ? style.colorBorder : style.colorDisabled );
 

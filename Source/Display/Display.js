@@ -312,15 +312,15 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		return returnValue;
 	}
 
-	Display.prototype.hide = function()
+	Display.prototype.hide = function(universe)
 	{
-		Globals.Instance.platformHelper.domElementRemove(this.canvas);
+		universe.platformHelper.domElementRemove(this.canvas);
 	}
 
-	Display.prototype.initialize = function()
+	Display.prototype.initialize = function(universe)
 	{
-		var platformHelper = Globals.Instance.platformHelper;
-		platformHelper.initialize(this);
+		var platformHelper = universe.platformHelper;
+		platformHelper.initialize(universe);
 
 		if (this.canvas != null)
 		{
@@ -343,9 +343,9 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		platformHelper.domElementAdd(this.canvas);
 	}
 
-	Display.prototype.show = function()
+	Display.prototype.show = function(universe)
 	{
-		Globals.Instance.platformHelper.domElementAdd(this.canvas);
+		universe.platformHelper.domElementAdd(this.canvas);
 	}
 
 	Display.prototype.textWidthForFontHeight = function(textToMeasure, fontHeightInPixels)

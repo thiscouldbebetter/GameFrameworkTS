@@ -17,7 +17,7 @@ function Playable()
 		var playerLoc = player.locatable.loc;
 		playerLoc.orientation.forwardSet(Coords.Instances.Zeroes);
 
-		var inputHelper = Globals.Instance.inputHelper;
+		var inputHelper = universe.inputHelper;
 		if (inputHelper.isMouseClicked == true)
 		{
 			inputHelper.isMouseClicked = false;
@@ -26,7 +26,7 @@ function Playable()
 				inputHelper.mouseClickPos
 			).divide
 			(
-				Globals.Instance.display.scaleFactor
+				universe.display.scaleFactor
 			).add
 			(
 				camera.loc.pos
@@ -38,7 +38,7 @@ function Playable()
 				size
 			);
 
-			Globals.Instance.soundHelper.soundWithNamePlayAsEffect("Sound");
+			universe.soundHelper.soundWithNamePlayAsEffect(universe, "Sound");
 		}
 
 		var inputsActive = inputHelper.inputsActive;

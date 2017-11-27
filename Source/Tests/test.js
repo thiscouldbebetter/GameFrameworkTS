@@ -17,7 +17,8 @@ function test()
 	[
 		testAlwaysPass,
 		//testAlwaysFail,
-		testCollisions,
+		testCollisionsOfCubesAndSpheres,
+		testCollisionsOfSpheresAndShells,
 	];
 
 	new TestFixture(tests).runTests();
@@ -70,10 +71,10 @@ function Test(name, run)
 
 // tests
 
-var testCollisions = new Test
+var testCollisionsOfCubesAndSpheres = new Test
 (
-	"Collision",
-	function()
+	"CollisionsOfCubesAndSpheres",
+	function run()
 	{
 		var collisionHelper = new CollisionHelper();
 
@@ -120,6 +121,79 @@ var testCollisions = new Test
 		var collider1 = sphereUnitInPositiveOctant;
 		var doCollide = collisionHelper.doCollidersCollide(collider0, collider1);
 		if (doCollide == true)
+		{
+			return false;
+		}
+
+		return true;
+	}
+);
+
+var testCollisionsOfSpheresAndShells = new Test
+(
+	"CollisionsOfSpheresAndShells",
+	function run()
+	{
+		var collisionHelper = new CollisionHelper();
+
+		var sphereUnitAtOrigin = new Sphere
+		(
+			new Coords(0, 0, 0), // center
+			1, // radius
+		);
+
+		var sphereUnitAtX2 = new Sphere
+		(
+			new Coords(2, 0, 0), // center
+			1, // radius
+		);
+
+		var shell2To3AtOrigin = new Shell
+		(
+			new Sphere
+			(
+				new Coords(0, 0, 0), // center
+				3 // radius
+			),
+			2 // radiusInner
+		);
+
+		var doCollide = collisionHelper.doCollidersCollide(sphereUnitAtOrigin, shell2To3AtOrigin);
+		if (doCollide == true)
+		{
+			return false;
+		}
+
+		doCollide = collisionHelper.doCollidersCollide(sphereUnitAtX2, shell2To3AtOrigin);
+		if (doCollide == false)
+		{
+			return false;
+		}
+
+		var wedgeHalfTurn = new Wedge(shell2To3AtOrigin.sphereOuter.center, new Coords(1, 0, 0), .5);
+
+		doCollide = collisionHelper.doCollidersCollide(sphereUnitAtOrigin, wedgeHalfTurn);
+		if (doCollide == false)
+		{
+			return false;
+		}
+
+		doCollide = collisionHelper.doCollidersCollide(sphereUnitAtX2, wedgeHalfTurn);
+		if (doCollide == false)
+		{
+			return false;
+		}
+
+		var arc2To3HalfTurnAtOrigin = new Arc(shell2To3AtOrigin, wedgeHalfTurn);
+
+		doCollide = collisionHelper.doCollidersCollide(sphereUnitAtOrigin, arc2To3HalfTurnAtOrigin);
+		if (doCollide == true)
+		{
+			return false;
+		}
+
+		doCollide = collisionHelper.doCollidersCollide(sphereUnitAtX2, arc2To3HalfTurnAtOrigin);
+		if (doCollide == false)
 		{
 			return false;
 		}

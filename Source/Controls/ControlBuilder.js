@@ -7,11 +7,11 @@ function ControlBuilder(styles)
 	this.sizeBase = new Coords(200, 150, 1);
 }
 {
-	ControlBuilder.prototype.configure = function(size)
+	ControlBuilder.prototype.configure = function(universe, size)
 	{
 		if (size == null)
 		{
-			size = Globals.Instance.display.sizeDefault;
+			size = universe.display.sizeDefault;
 		}
 
 		var sizeMultiplier = size.clone().divide(this.sizeBase);
@@ -32,15 +32,13 @@ function ControlBuilder(styles)
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
 					true, // isEnabled
-					// click
-					function ()
+					function click(universe)
 					{
-						var universe = Globals.Instance.universe;
 						var venueNext = new VenueControls
 						(
-							Globals.Instance.controlBuilder.worldSave()
+							universe.controlBuilder.worldSave(universe)
 						);
-						venueNext = new VenueFader(venueNext);
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
 					}
 				),
@@ -54,15 +52,13 @@ function ControlBuilder(styles)
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
 					true, // isEnabled
-					// click
-					function ()
+					function click(universe)
 					{
-						var universe = Globals.Instance.universe;
 						var venueNext = new VenueControls
 						(
-							Globals.Instance.controlBuilder.worldLoad()
+							universe.controlBuilder.worldLoad(universe)
 						);
-						venueNext = new VenueFader(venueNext);
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
 					}
 				),
@@ -86,7 +82,7 @@ function ControlBuilder(styles)
 					// valueSelected
 					new DataBinding
 					(
-						Globals.Instance.soundHelper,
+						universe.soundHelper,
 						"musicVolume"
 					),
 
@@ -117,7 +113,7 @@ function ControlBuilder(styles)
 					// valueSelected
 					new DataBinding
 					(
-						Globals.Instance.soundHelper,
+						universe.soundHelper,
 						"soundVolume"
 					),
 
@@ -144,9 +140,9 @@ function ControlBuilder(styles)
 					"selectDisplaySize",
 					new Coords(70, 75).multiply(sizeMultiplier), // pos
 					new Coords(60, 25).multiply(sizeMultiplier), // size
-					Globals.Instance.display.sizeInPixels, // valueSelected
+					universe.display.sizeInPixels, // valueSelected
 					// options
-					Globals.Instance.display.sizesAvailable,
+					universe.display.sizesAvailable,
 					null, // bindingExpressionForOptionValues,
 					"toStringXY()", // bindingExpressionForOptionText
 					this.fontHeightInPixelsBase * sizeMultiplier.y
@@ -161,23 +157,21 @@ function ControlBuilder(styles)
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
 					true, // isEnabled
-					// click
-					function()
+					function click(universe)
 					{
-						var controlRoot = Globals.Instance.universe.venueCurrent.controlRoot;
+						var controlRoot = universe.venueCurrent.controlRoot;
 						var selectDisplaySize = controlRoot.children["selectDisplaySize"];
 						var displaySizeSpecified = selectDisplaySize.optionSelected().value;
 
-						var display = Globals.Instance.display;
+						var display = universe.display;
 						display.sizeInPixels = displaySizeSpecified;
-						display.initialize();
+						display.initialize(universe);
 
-						var universe = Globals.Instance.universe;
 						var venueNext = new VenueControls
 						(
-							Globals.Instance.controlBuilder.configure()
+							universe.controlBuilder.configure(universe)
 						);
-						venueNext = new VenueFader(venueNext);
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
 					}
 				),
@@ -191,13 +185,11 @@ function ControlBuilder(styles)
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
 					true, // isEnabled
-					// click
-					function()
+					function click(universe)
 					{
-						var universe = Globals.Instance.universe;
 						var world = universe.world;
 						var venueNext = new VenueWorld(world);
-						venueNext = new VenueFader(venueNext);
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
 					}
 				),
@@ -211,41 +203,37 @@ function ControlBuilder(styles)
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
 					true, // isEnabled
-					// click
-					function()
+					function click(universe)
 					{
-						var controlConfirm = Globals.Instance.controlBuilder.confirm
+						var controlConfirm = universe.controlBuilder.confirm
 						(
+							universe,
 							size,
 							"Are you sure you want to quit?",
-							// confirm
-							function()
+							function confirm(universe)
 							{
-								Globals.Instance.reset();
-								var universe = Globals.Instance.universe;
+								universe.reset();
 								var venueNext = new VenueControls
 								(
-									Globals.Instance.controlBuilder.title()
+									universe.controlBuilder.title(universe)
 								);
-								venueNext = new VenueFader(venueNext);
+								venueNext = new VenueFader(venueNext, universe.venueCurrent);
 								universe.venueNext = venueNext;
 							},
-							// cancel
-							function()
+							function cancel(universe)
 							{
-								var universe = Globals.Instance.universe;
 								var venueNext = new VenueControls
 								(
-									Globals.Instance.controlBuilder.configure()
+									universe.controlBuilder.configure(universe)
 								);
-								venueNext = new VenueFader(venueNext);
+								venueNext = new VenueFader(venueNext, universe.venueCurrent);
 								universe.venueNext = venueNext;
 							}
 						);
 
 						var venueNext = new VenueControls(controlConfirm);
-						venueNext = new VenueFader(venueNext);
-						Globals.Instance.universe.venueNext = venueNext;
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
+						universe.venueNext = venueNext;
 					}
 				),
 			]
@@ -254,11 +242,11 @@ function ControlBuilder(styles)
 		return returnValue;
 	}
 
-	ControlBuilder.prototype.confirm = function(size, message, confirm, cancel)
+	ControlBuilder.prototype.confirm = function(universe, size, message, confirm, cancel)
 	{
 		if (size == null)
 		{
-			size = Globals.Instance.display.sizeDefault;
+			size = universe.display.sizeDefault;
 		}
 
 		var sizeMultiplier = size.clone().divide(this.sizeBase);
@@ -309,11 +297,11 @@ function ControlBuilder(styles)
 		return returnValue;
 	}
 
-	ControlBuilder.prototype.message = function(size, message, acknowledge)
+	ControlBuilder.prototype.message = function(universe, size, message, acknowledge)
 	{
 		if (size == null)
 		{
-			size = Globals.Instance.display.sizeDefault;
+			size = universe.display.sizeDefault;
 		}
 
 		var sizeMultiplier = size.clone().divide(this.sizeBase);
@@ -352,11 +340,11 @@ function ControlBuilder(styles)
 		return returnValue;
 	}
 
-	ControlBuilder.prototype.profileDetail = function(size)
+	ControlBuilder.prototype.profileDetail = function(universe, size)
 	{
 		if (size == null)
 		{
-			size = Globals.Instance.display.sizeDefault;
+			size = universe.display.sizeDefault;
 		}
 
 		var sizeMultiplier = size.clone().divide(this.sizeBase);
@@ -374,7 +362,7 @@ function ControlBuilder(styles)
 					new Coords(100, 25).multiply(sizeMultiplier), // pos
 					new Coords(120, 25).multiply(sizeMultiplier), // size
 					true, // isTextCentered
-					"Profile: " + Globals.Instance.universe.profile.name,
+					"Profile: " + universe.profile.name,
 					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 
@@ -395,7 +383,7 @@ function ControlBuilder(styles)
 					new Coords(150, 50).multiply(sizeMultiplier), // size
 					new DataBinding
 					(
-						Globals.Instance.universe.profile.worlds,
+						universe.profile.worlds,
 						null
 					),
 					"name",
@@ -411,16 +399,14 @@ function ControlBuilder(styles)
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
 					true, // isEnabled
-					// click
-					function ()
+					function click(universe)
 					{
-						var world = World.new();
+						var world = World.new(universe);
 
-						var universe = Globals.Instance.universe;
 						var profile = universe.profile;
 						profile.worlds.push(world);
 
-						Globals.Instance.profileHelper.profileSave
+						universe.profileHelper.profileSave
 						(
 							profile
 						);
@@ -428,9 +414,9 @@ function ControlBuilder(styles)
 						universe.world = world;
 						var venueNext = new VenueControls
 						(
-							Globals.Instance.controlBuilder.worldDetail()
+							universe.controlBuilder.worldDetail(universe)
 						);
-						venueNext = new VenueFader(venueNext);
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
 					}
 				),
@@ -448,7 +434,7 @@ function ControlBuilder(styles)
 					(
 						function()
 						{
-							var controlRoot = Globals.Instance.universe.venueCurrent.controlRoot;
+							var controlRoot = universe.venueCurrent.controlRoot;
 							if (controlRoot == null)
 							{
 								return false;
@@ -460,21 +446,18 @@ function ControlBuilder(styles)
 						},
 						"call()"
 					),
-
-					// click
-					function ()
+					function click(universe)
 					{
 						var listWorlds = this.parent.children["listWorlds"];
 						var worldSelected = listWorlds.itemSelected();
 						if (worldSelected != null)
 						{
-							var universe = Globals.Instance.universe;
 							universe.world = worldSelected;
 							var venueNext = new VenueControls
 							(
-								Globals.Instance.controlBuilder.worldDetail()
+								universe.controlBuilder.worldDetail(universe)
 							);
-							venueNext = new VenueFader(venueNext);
+							venueNext = new VenueFader(venueNext, universe.venueCurrent);
 							universe.venueNext = venueNext;
 						}
 					}
@@ -489,15 +472,13 @@ function ControlBuilder(styles)
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
 					true, // isEnabled
-					// click
-					function ()
+					function click(universe)
 					{
 						var venueNext = new VenueControls
 						(
-							Globals.Instance.controlBuilder.profileSelect()
+							universe.controlBuilder.profileSelect(universe)
 						);
-						venueNext = new VenueFader(venueNext);
-						var universe = Globals.Instance.universe;
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
 					}
 				),
@@ -511,50 +492,45 @@ function ControlBuilder(styles)
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
 					true, // isEnabled
-					// click
-					function ()
+					function click(universe)
 					{
-						var universe = Globals.Instance.universe;
 						var profile = universe.profile;
 
-						var controlConfirm = Globals.Instance.controlBuilder.confirm
+						var controlConfirm = universe.controlBuilder.confirm
 						(
+							universe,
 							size,
 							"Delete profile \""
 								+ profile.name
 								+ "\"?",
-							// confirm
-							function()
+							function confirm(universe)
 							{
-								var universe = Globals.Instance.universe;
 								var profile = universe.profile;
-								Globals.Instance.profileHelper.profileDelete
+								universe.profileHelper.profileDelete
 								(
 									profile
 								);
 
 								var venueNext = new VenueControls
 								(
-									Globals.Instance.controlBuilder.profileSelect()
+									universe.controlBuilder.profileSelect(universe)
 								);
-								venueNext = new VenueFader(venueNext);
+								venueNext = new VenueFader(venueNext, universe.venueCurrent);
 								universe.venueNext = venueNext;
 							},
-							// cancel
-							function()
+							function cancel(universe)
 							{
 								var venueNext = new VenueControls
 								(
-									Globals.Instance.controlBuilder.profileDetail()
+									universe.controlBuilder.profileDetail(universe)
 								);
-								venueNext = new VenueFader(venueNext);
-								var universe = Globals.Instance.universe;
+								venueNext = new VenueFader(venueNext, universe.venueCurrent);
 								universe.venueNext = venueNext;
 							}
 						);
 
 						var venueNext = new VenueControls(controlConfirm);
-						venueNext = new VenueFader(venueNext);
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
 					}
 				),
@@ -564,11 +540,11 @@ function ControlBuilder(styles)
 		return returnValue;
 	}
 
-	ControlBuilder.prototype.profileNew = function(size)
+	ControlBuilder.prototype.profileNew = function(universe, size)
 	{
 		if (size == null)
 		{
-			size = Globals.Instance.display.sizeDefault;
+			size = universe.display.sizeDefault;
 		}
 
 		var sizeMultiplier = size.clone().divide(this.sizeBase);
@@ -612,7 +588,7 @@ function ControlBuilder(styles)
 					(
 						function()
 						{
-							var controlRoot = Globals.Instance.universe.venueCurrent.controlRoot;
+							var controlRoot = universe.venueCurrent.controlRoot;
 							if (controlRoot == null)
 							{
 								return false;
@@ -624,8 +600,7 @@ function ControlBuilder(styles)
 						},
 						"call()"
 					),
-					// click
-					function ()
+					function click(universe)
 					{
 						var textBoxName = this.parent.children["textBoxName"];
 						var profileName = textBoxName.text();
@@ -635,18 +610,17 @@ function ControlBuilder(styles)
 						}
 
 						var profile = new Profile(profileName, []);
-						Globals.Instance.profileHelper.profileAdd
+						universe.profileHelper.profileAdd
 						(
 							profile
 						);
 
-						var universe = Globals.Instance.universe;
 						universe.profile = profile;
 						var venueNext = new VenueControls
 						(
-							Globals.Instance.controlBuilder.profileDetail()
+							universe.controlBuilder.profileDetail(universe)
 						);
-						venueNext = new VenueFader(venueNext);
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
 					}
 				),
@@ -660,15 +634,13 @@ function ControlBuilder(styles)
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
 					true, // isEnabled
-					// click
-					function ()
+					function click(universe)
 					{
-						var universe = Globals.Instance.universe;
 						var venueNext = new VenueControls
 						(
-							Globals.Instance.controlBuilder.profileSelect()
+							universe.controlBuilder.profileSelect(universe)
 						);
-						venueNext = new VenueFader(venueNext);
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
 					}
 				),
@@ -676,16 +648,16 @@ function ControlBuilder(styles)
 		);
 	}
 
-	ControlBuilder.prototype.profileSelect = function(size)
+	ControlBuilder.prototype.profileSelect = function(universe, size)
 	{
 		if (size == null)
 		{
-			size = Globals.Instance.display.sizeDefault;
+			size = universe.display.sizeDefault;
 		}
 
 		var sizeMultiplier = size.clone().divide(this.sizeBase);
 
-		var profiles = Globals.Instance.profileHelper.profiles();
+		var profiles = universe.profileHelper.profiles();
 
 		var returnValue = new ControlContainer
 		(
@@ -727,15 +699,13 @@ function ControlBuilder(styles)
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
 					true, // isEnabled
-					// click
-					function ()
+					function click(universe)
 					{
-						var universe = Globals.Instance.universe;
 						var venueNext = new VenueControls
 						(
-							Globals.Instance.controlBuilder.profileNew()
+							universe.controlBuilder.profileNew(universe)
 						);
-						venueNext = new VenueFader(venueNext);
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
 					}
 				),
@@ -753,7 +723,7 @@ function ControlBuilder(styles)
 					(
 						function()
 						{
-							var controlRoot = Globals.Instance.universe.venueCurrent.controlRoot;
+							var controlRoot = universe.venueCurrent.controlRoot;
 							if (controlRoot == null)
 							{
 								return false;
@@ -765,18 +735,16 @@ function ControlBuilder(styles)
 						},
 						"call()"
 					),
-					// click
-					function()
+					function click(universe)
 					{
 						var listProfiles = this.parent.children["listProfiles"];
 						var profileSelected = listProfiles.itemSelected();
-						var universe = Globals.Instance.universe;
 						universe.profile = profileSelected;
 						var venueNext = new VenueControls
 						(
-							Globals.Instance.controlBuilder.profileDetail()
+							universe.controlBuilder.profileDetail(universe)
 						);
-						venueNext = new VenueFader(venueNext);
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
 					}
 				),
@@ -790,11 +758,9 @@ function ControlBuilder(styles)
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
 					true, // isEnabled
-					// click
-					function()
+					function click(universe)
 					{
-						var universe = Globals.Instance.universe;
-						var world = World.new();
+						var world = World.new(universe);
 						var now = DateTime.now();
 						var nowAsString = now.toStringMMDD_HHMM_SS();
 						var profileName = "Anon-" + nowAsString;
@@ -802,7 +768,7 @@ function ControlBuilder(styles)
 						universe.profile = profile;
 						universe.world = world;
 						var venueNext = new VenueWorld(universe.world);
-						venueNext = new VenueFader(venueNext);
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
 					}
 				),
@@ -816,15 +782,13 @@ function ControlBuilder(styles)
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
 					true, // isEnabled
-					// click
-					function ()
+					function click(universe)
 					{
 						var venueNext = new VenueControls
 						(
-							Globals.Instance.controlBuilder.title()
+							universe.controlBuilder.title(universe)
 						);
-						venueNext = new VenueFader(venueNext);
-						var universe = Globals.Instance.universe;
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
 					}
 				),
@@ -838,43 +802,38 @@ function ControlBuilder(styles)
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
 					true, // isEnabled
-					// click
-					function ()
+					function click(universe)
 					{
-						var universe = Globals.Instance.universe;
 						var profile = universe.profile;
 
-						var controlConfirm = Globals.Instance.controlBuilder.confirm
+						var controlConfirm = universe.controlBuilder.confirm
 						(
+							universe,
 							size,
 							"Delete all profiles?",
-							// confirm
-							function()
+							function confirm(universe)
 							{
-								Globals.Instance.profileHelper.profilesAllDelete();
+								universe.profileHelper.profilesAllDelete();
 								var venueNext = new VenueControls
 								(
-									Globals.Instance.controlBuilder.profileSelect()
+									universe.controlBuilder.profileSelect(universe)
 								);
-								venueNext = new VenueFader(venueNext);
-								var universe = Globals.Instance.universe;
+								venueNext = new VenueFader(venueNext, universe.venueCurrent);
 								universe.venueNext = venueNext;
 							},
-							// cancel
-							function()
+							function cancel(universe)
 							{
 								var venueNext = new VenueControls
 								(
-									Globals.Instance.controlBuilder.profileSelect()
+									universe.controlBuilder.profileSelect(universe)
 								);
-								venueNext = new VenueFader(venueNext);
-								var universe = Globals.Instance.universe;
+								venueNext = new VenueFader(venueNext, universe.venueCurrent);
 								universe.venueNext = venueNext;
 							}
 						);
 
 						var venueNext = new VenueControls(controlConfirm);
-						venueNext = new VenueFader(venueNext);
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
 					}
 				),
@@ -884,11 +843,11 @@ function ControlBuilder(styles)
 		return returnValue;
 	}
 
-	ControlBuilder.prototype.title = function(size)
+	ControlBuilder.prototype.title = function(universe, size)
 	{
 		if (size == null)
 		{
-			size = Globals.Instance.display.sizeDefault;
+			size = universe.display.sizeDefault;
 		}
 
 		var sizeMultiplier = size.clone().divide(this.sizeBase);
@@ -905,7 +864,7 @@ function ControlBuilder(styles)
 					"imageTitle",
 					new Coords(0, 0).multiply(sizeMultiplier),
 					new Coords(200, 150).multiply(sizeMultiplier), // size
-					Globals.Instance.mediaLibrary.imageGetByName("Title")
+					universe.mediaLibrary.imageGetByName("Title")
 				),
 
 				new ControlButton
@@ -917,15 +876,13 @@ function ControlBuilder(styles)
 					this.fontHeightInPixelsBase * sizeMultiplier.y * 2,
 					false, // hasBorder
 					true, // isEnabled
-					// click
-					function()
+					function click(universe)
 					{
 						var venueNext = new VenueControls
 						(
-							Globals.Instance.controlBuilder.profileSelect()
+							universe.controlBuilder.profileSelect(universe)
 						);
-						venueNext = new VenueFader(venueNext);
-						var universe = Globals.Instance.universe;
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
 					}
 				)
@@ -935,16 +892,15 @@ function ControlBuilder(styles)
 		return returnValue;
 	}
 
-	ControlBuilder.prototype.worldDetail = function(size)
+	ControlBuilder.prototype.worldDetail = function(universe, size)
 	{
 		if (size == null)
 		{
-			size = Globals.Instance.display.sizeDefault;
+			size = universe.display.sizeDefault;
 		}
 
 		var sizeMultiplier = size.clone().divide(this.sizeBase);
 
-		var universe = Globals.Instance.universe;
 		var world = universe.world;
 
 		var dateCreated = world.dateCreated;
@@ -1003,10 +959,8 @@ function ControlBuilder(styles)
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
 					true, // isEnabled
-					// click
-					function ()
+					function click(universe)
 					{
-						var universe = Globals.Instance.universe;
 						var world = universe.world;
 						var venueNext = new VenueWorld(world);
 						if (world.dateSaved == null)
@@ -1017,7 +971,7 @@ function ControlBuilder(styles)
 								venueNext
 							);
 						}
-						venueNext = new VenueFader(venueNext);
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
 					}
 				),
@@ -1031,15 +985,13 @@ function ControlBuilder(styles)
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
 					true, // isEnabled
-					// click
-					function ()
+					function click(universe)
 					{
 						var venueNext = new VenueControls
 						(
-							Globals.Instance.controlBuilder.profileDetail()
+							universe.controlBuilder.profileDetail(universe)
 						);
-						venueNext = new VenueFader(venueNext);
-						var universe = Globals.Instance.universe;
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
 					}
 				),
@@ -1053,23 +1005,20 @@ function ControlBuilder(styles)
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
 					true, // isEnabled
-					// click
-					function ()
+					function click(universe)
 					{
-						var universe = Globals.Instance.universe;
 						var profile = universe.profile;
 						var world = universe.world;
 
-						var controlConfirm = Globals.Instance.controlBuilder.confirm
+						var controlConfirm = universe.controlBuilder.confirm
 						(
+							universe,
 							size,
 							"Delete world \""
 								+ world.name
 								+ "\"?",
-							// confirm
-							function()
+							function confirm(universe)
 							{
-								var universe = Globals.Instance.universe;
 								var profile = universe.profile;
 								var world = universe.world;
 								var worlds = profile.worlds;
@@ -1082,33 +1031,31 @@ function ControlBuilder(styles)
 								);
 								universe.world = null;
 
-								Globals.Instance.profileHelper.profileSave
+								universe.profileHelper.profileSave
 								(
 									profile
 								);
 
 								var venueNext = new VenueControls
 								(
-									Globals.Instance.controlBuilder.profileDetail()
+									universe.controlBuilder.profileDetail(universe)
 								);
-								venueNext = new VenueFader(venueNext);
+								venueNext = new VenueFader(venueNext, universe.venueCurrent);
 								universe.venueNext = venueNext;
 							},
-							// cancel
-							function()
+							function cancel(universe)
 							{
 								var venueNext = new VenueControls
 								(
-									Globals.Instance.controlBuilder.worldDetail()
+									universe.controlBuilder.worldDetail(universe)
 								);
-								venueNext = new VenueFader(venueNext);
-								var universe = Globals.Instance.universe;
+								venueNext = new VenueFader(venueNext, universe.venueCurrent);
 								universe.venueNext = venueNext;
 							}
 						);
 
 						var venueNext = new VenueControls(controlConfirm);
-						venueNext = new VenueFader(venueNext);
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 
 						universe.venueNext = venueNext;
 					}
@@ -1119,11 +1066,11 @@ function ControlBuilder(styles)
 		return returnValue;
 	}
 
-	ControlBuilder.prototype.worldLoad = function(size)
+	ControlBuilder.prototype.worldLoad = function(universe, size)
 	{
 		if (size == null)
 		{
-			size = Globals.Instance.display.sizeDefault;
+			size = universe.display.sizeDefault;
 		}
 
 		var sizeMultiplier = size.clone().divide(this.sizeBase);
@@ -1144,19 +1091,17 @@ function ControlBuilder(styles)
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
 					true, // isEnabled
-					// click
-					function ()
+					function click(universe)
 					{
-						var controlConfirm = Globals.Instance.controlBuilder.confirm
+						var controlConfirm = universe.controlBuilder.confirm
 						(
+							universe,
 							size,
 							"Abandon the current game?",
-							// confirm
-							function()
+							function confirm(universe)
 							{
-								var universe = Globals.Instance.universe;
 								var profileOld = universe.profile;
-								var profilesReloaded = Globals.Instance.profileHelper.profiles();
+								var profilesReloaded = universe.profileHelper.profiles();
 								for (var i = 0; i < profilesReloaded.length; i++)
 								{
 									var profileReloaded = profilesReloaded[i];
@@ -1182,32 +1127,32 @@ function ControlBuilder(styles)
 
 								var venueNext = new VenueControls
 								(
-									Globals.Instance.controlBuilder.worldLoad()
+									universe.controlBuilder.worldLoad(universe)
 								);
-								venueNext = new VenueFader(venueNext);
+								venueNext = new VenueFader(venueNext, universe.venueCurrent);
 								universe.venueNext = venueNext;
 
 								if (worldToReload == null)
 								{
 									venueNext = new VenueControls
 									(
-										Globals.Instance.controlBuilder.message
+										universe.controlBuilder.message
 										(
+											universe,
 											size,
 											"No save exists to reload!",
-											// acknowledge
-											function()
+											function acknowledge(universe)
 											{
 												var venueNext = new VenueControls
 												(
-													Globals.Instance.controlBuilder.worldLoad()
+													universe.controlBuilder.worldLoad(universe)
 												);
-												venueNext = new VenueFader(venueNext);
-												Globals.Instance.universe.venueNext = venueNext;
+												venueNext = new VenueFader(venueNext, universe.venueCurrent);
+												universe.venueNext = venueNext;
 											}
 										)
 									);
-									venueNext = new VenueFader(venueNext);
+									venueNext = new VenueFader(venueNext, universe.venueCurrent);
 									universe.venueNext = venueNext;
 								}
 								else
@@ -1216,22 +1161,19 @@ function ControlBuilder(styles)
 								}
 
 							},
-							// cancel
-							function()
+							function cancel(universe)
 							{
-								var universe = Globals.Instance.universe;
 								var venueNext = new VenueControls
 								(
-									Globals.Instance.controlBuilder.worldLoad()
+									universe.controlBuilder.worldLoad(universe)
 								);
-								venueNext = new VenueFader(venueNext);
+								venueNext = new VenueFader(venueNext, universe.venueCurrent);
 								universe.venueNext = venueNext;
 							}
 						);
 
-						var universe = Globals.Instance.universe;
 						var venueNext = new VenueControls(controlConfirm);
-						venueNext = new VenueFader(venueNext);
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
 					}
 				),
@@ -1245,10 +1187,8 @@ function ControlBuilder(styles)
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
 					true, // isEnabled
-					// click
-					function ()
+					function click(universe)
 					{
-						var universe = Globals.Instance.universe;
 						var profile = universe.profile;
 						var world = universe.world;
 
@@ -1256,25 +1196,24 @@ function ControlBuilder(styles)
 
 						var venueMessageReadyToLoad = new VenueControls
 						(
-							Globals.Instance.controlBuilder.message
+							universe.controlBuilder.message
 							(
+								universe,
 								size,
 								"Ready to load from file...",
-								// acknowledge
-								function()
+								function acknowledge(universe)
 								{
 									function callback(fileContentsAsString)
 									{
 										var worldAsJSON = fileContentsAsString;
-										var worldDeserialized = Globals.Instance.serializer.deserialize(worldAsJSON);
-										var universe = Globals.Instance.universe;
+										var worldDeserialized = universe.serializer.deserialize(worldAsJSON);
 										universe.world = worldDeserialized;
 
 										var venueNext = new VenueControls
 										(
-											Globals.Instance.controlBuilder.configure()
+											universe.controlBuilder.configure(universe)
 										);
-										venueNext = new VenueFader(venueNext);
+										venueNext = new VenueFader(venueNext, universe.venueCurrent);
 										universe.venueNext = venueNext;
 									}
 
@@ -1293,19 +1232,19 @@ function ControlBuilder(styles)
 
 						var venueMessageCancelled = new VenueControls
 						(
-							Globals.Instance.controlBuilder.message
+							universe.controlBuilder.message
 							(
+								universe,
 								size,
 								"No file specified.",
-								// acknowledge
-								function()
+								function acknowledge(universe)
 								{
 									var venueNext = new VenueControls
 									(
-										Globals.Instance.controlBuilder.configure()
+										universe.controlBuilder.configure(universe)
 									);
-									venueNext = new VenueFader(venueNext);
-									Globals.Instance.universe.venueNext = venueNext;
+									venueNext = new VenueFader(venueNext, universe.venueCurrent);
+									universe.venueNext = venueNext;
 								}
 							)
 						);
@@ -1326,15 +1265,13 @@ function ControlBuilder(styles)
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
 					true, // isEnabled
-					// click
-					function()
+					function click(universe)
 					{
-						var universe = Globals.Instance.universe;
 						var venueNext = new VenueControls
 						(
-							Globals.Instance.controlBuilder.configure()
+							universe.controlBuilder.configure(universe)
 						);
-						venueNext = new VenueFader(venueNext);
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
 					}
 				),
@@ -1345,11 +1282,11 @@ function ControlBuilder(styles)
 		return returnValue;
 	}
 
-	ControlBuilder.prototype.worldSave = function(size)
+	ControlBuilder.prototype.worldSave = function(universe, size)
 	{
 		if (size == null)
 		{
-			size = Globals.Instance.display.sizeDefault;
+			size = universe.display.sizeDefault;
 		}
 
 		var sizeMultiplier = size.clone().divide(this.sizeBase);
@@ -1370,39 +1307,36 @@ function ControlBuilder(styles)
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
 					true, // isEnabled
-					// click
-					function ()
+					function click(universe)
 					{
-						var universe = Globals.Instance.universe;
 						var profile = universe.profile;
 						var world = universe.world;
 
 						world.dateSaved = DateTime.now();
-						Globals.Instance.profileHelper.profileSave
+						universe.profileHelper.profileSave
 						(
 							profile
 						);
 
 						var venueNext = new VenueControls
 						(
-							Globals.Instance.controlBuilder.message
+							universe.controlBuilder.message
 							(
+								universe,
 								size,
 								"Profile saved to local storage.",
-								// acknowledge
-								function()
+								function acknowledge(universe)
 								{
-									var universe = Globals.Instance.universe;
 									var venueNext = new VenueControls
 									(
-										Globals.Instance.controlBuilder.configure()
+										universe.controlBuilder.configure(universe)
 									);
-									venueNext = new VenueFader(venueNext);
+									venueNext = new VenueFader(venueNext, universe.venueCurrent);
 									universe.venueNext = venueNext;
 								}
 							)
 						);
-						venueNext = new VenueFader(venueNext);
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
 					}
 				),
@@ -1416,15 +1350,13 @@ function ControlBuilder(styles)
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
 					true, // isEnabled
-					// click
-					function ()
+					function click(universe)
 					{
-						var universe = Globals.Instance.universe;
 						var profile = universe.profile;
 						var world = universe.world;
 
 						world.dateSaved = DateTime.now();
-						var worldSerialized = Globals.Instance.serializer.serialize(world);
+						var worldSerialized = universe.serializer.serialize(world);
 
 						new FileHelper().saveTextStringToFileWithName
 						(
@@ -1434,24 +1366,23 @@ function ControlBuilder(styles)
 
 						var venueNext = new VenueControls
 						(
-							Globals.Instance.controlBuilder.message
+							universe.controlBuilder.message
 							(
+								universe,
 								size,
 								"Save must be completed manually.",
-								// acknowledge
-								function()
+								function acknowledge(universe)
 								{
-									var universe = Globals.Instance.universe;
 									var venueNext = new VenueControls
 									(
-										Globals.Instance.controlBuilder.configure()
+										universe.controlBuilder.configure(universe)
 									);
-									venueNext = new VenueFader(venueNext);
+									venueNext = new VenueFader(venueNext, universe.venueCurrent);
 									universe.venueNext = venueNext;
 								}
 							)
 						);
-						venueNext = new VenueFader(venueNext);
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
 					}
 				),
@@ -1465,15 +1396,13 @@ function ControlBuilder(styles)
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
 					true, // isEnabled
-					// click
-					function()
+					function click(universe)
 					{
-						var universe = Globals.Instance.universe;
 						var venueNext = new VenueControls
 						(
-							Globals.Instance.controlBuilder.configure()
+							universe.controlBuilder.configure(universe)
 						);
-						venueNext = new VenueFader(venueNext);
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
 					}
 				),

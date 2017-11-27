@@ -10,10 +10,10 @@ function VisualOffset(child, offset)
 }
 
 {
-	VisualOffset.prototype.drawToDisplayForDrawableAndLoc = function(display, drawable, loc)
+	VisualOffset.prototype.draw = function(universe, display, drawable, loc)
 	{
 		this.drawLoc.overwriteWith(loc);
 		this.drawLoc.pos.add(this.offset);
-		this.child.drawToDisplayForDrawableAndLoc(display, drawable, this.drawLoc);
+		this.child.draw(universe, display, drawable, this.drawLoc);
 	}
 }

@@ -6,27 +6,27 @@ function VenueWorld(world)
 }
 
 {
-	VenueWorld.prototype.draw = function()
+	VenueWorld.prototype.draw = function(universe)
 	{
-		this.world.draw();
+		this.world.draw(universe);
 	}
 
-	VenueWorld.prototype.finalize = function()
+	VenueWorld.prototype.finalize = function(universe)
 	{
-		Globals.Instance.soundHelper.soundForMusic.pause();
+		universe.soundHelper.soundForMusic.pause(universe);
 	}
 
-	VenueWorld.prototype.initialize = function()
+	VenueWorld.prototype.initialize = function(universe)
 	{
-		Globals.Instance.universe.world = this.world;
+		universe.world = this.world;
 
-		var soundHelper = Globals.Instance.soundHelper;
-		soundHelper.soundWithNamePlayAsMusic("Music");
+		var soundHelper = universe.soundHelper;
+		soundHelper.soundWithNamePlayAsMusic(universe, "Music");
 	}
 
 	VenueWorld.prototype.updateForTimerTick = function(universe)
 	{
 		this.world.updateForTimerTick(universe);
-		this.draw();
+		this.draw(universe);
 	}
 }

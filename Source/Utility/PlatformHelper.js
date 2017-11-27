@@ -13,7 +13,7 @@ function PlatformHelper()
 		this.divMain.removeChild(domElement);
 	}
 
-	PlatformHelper.prototype.initialize = function(display)
+	PlatformHelper.prototype.initialize = function(universe)
 	{
 		var divMain = this.divMain;
 		if (divMain == null)
@@ -26,6 +26,7 @@ function PlatformHelper()
 			document.body.appendChild(divMain);
 			this.divMain = divMain;
 		}
+		var display = universe.display;
 		divMain.style.marginLeft = 0 - display.sizeInPixels.x / 2;
 		divMain.style.marginTop = 0 - display.sizeInPixels.y / 2;
 	}

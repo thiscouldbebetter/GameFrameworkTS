@@ -8,17 +8,17 @@ function ControlImage(name, pos, size, image)
 }
 
 {
-	ControlImage.prototype.style = function()
+	ControlImage.prototype.style = function(universe)
 	{
-		return Globals.Instance.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
+		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
 	}
 
 	// drawable
 
-	ControlImage.prototype.drawToDisplayAtLoc = function(display, drawLoc)
+	ControlImage.prototype.drawToDisplayAtLoc = function(universe, display, drawLoc)
 	{
 		var drawPos = drawLoc.pos.add(this.pos);
-		var style = this.style();
+		var style = this.style(universe);
 
 		display.drawRectangle
 		(

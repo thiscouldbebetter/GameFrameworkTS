@@ -1,7 +1,10 @@
 
-function Universe(name, world)
+function Universe(name, timerHelper, display, mediaLibrary, world)
 {
 	this.name = name;
+	this.timerHelper = timerHelper;
+	this.display = display;
+	this.mediaLibrary = mediaLibrary;
 	this.world = world;
 
 	this.venueNext = null;
@@ -10,11 +13,14 @@ function Universe(name, world)
 {
 	// static methods
 
-	Universe.new = function(world)
+	Universe.new = function(name, timerHelper, display, mediaLibrary, world)
 	{
 		var returnValue = new Universe
 		(
-			"Universe0",
+			name,
+			timerHelper,
+			display,
+			mediaLibrary,
 			world,
 			// venues
 			[
@@ -29,11 +35,24 @@ function Universe(name, world)
 
 	Universe.prototype.initialize = function()
 	{
+		this.collisionHelper = new CollisionHelper();
+		this.platformHelper = new PlatformHelper();
+		this.serializer = new Serializer();
+		this.storageHelper = new StorageHelper(this.name + "_", this.serializer);
+		this.profileHelper = new ProfileHelper(this.storageHelper);
+
+		this.display.initialize(this);
+		this.soundHelper = new SoundHelper(this.mediaLibrary.sounds);
+		this.videoHelper = new VideoHelper(this.mediaLibrary.videos);
+
+		this.controlBuilder = new ControlBuilder([ControlStyle.Instances.Default]);
+
 		var venueControlsTitle = new VenueControls
 		(
-			Globals.Instance.controlBuilder.title
+			this.controlBuilder.title
 			(
-				Globals.Instance.display.sizeInPixels
+				this,
+				this.display.sizeInPixels
 			)
 		);
 
@@ -43,6 +62,17 @@ function Universe(name, world)
 		);
 
 		this.venueNext = venueControlsTitle;
+
+		this.inputHelper = new InputHelper();
+		this.inputHelper.initialize(this);
+
+		this.timerHelper.initialize(this.updateForTimerTick.bind(this));
+	}
+
+	Universe.prototype.reset = function()
+	{
+		// hack
+		this.soundHelper.reset();
 	}
 
 	Universe.prototype.updateForTimerTick = function()
@@ -55,7 +85,7 @@ function Universe(name, world)
 				&& this.venueCurrent.finalize != null
 			)
 			{
-				this.venueCurrent.finalize();
+				this.venueCurrent.finalize(this);
 			}
 
 			this.venueCurrent = this.venueNext;
@@ -63,9 +93,9 @@ function Universe(name, world)
 
 			if (this.venueCurrent.initialize != null)
 			{
-				this.venueCurrent.initialize();
+				this.venueCurrent.initialize(this);
 			}
 		}
-		this.venueCurrent.updateForTimerTick();
+		this.venueCurrent.updateForTimerTick(this);
 	}
 }

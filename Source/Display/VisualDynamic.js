@@ -5,9 +5,9 @@ function VisualDynamic(methodForVisual)
 }
 
 {
-	VisualDynamic.prototype.drawToDisplayForDrawableAndLoc = function(display, drawable, loc)
+	VisualDynamic.prototype.draw = function(universe, display, drawable, loc)
 	{
 		var visual = this.methodForVisual.call(this, drawable);
-		visual.drawToDisplayForDrawableAndLoc(display, drawable, loc);
+		visual.draw(universe, display, drawable, loc);
 	}
 }

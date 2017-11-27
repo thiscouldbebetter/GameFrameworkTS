@@ -12,7 +12,7 @@ function VisualPolygon(color, vertices)
 }
 
 {
-	VisualPolygon.prototype.drawToDisplayForDrawableAndLoc = function(display, drawable, loc)
+	VisualPolygon.prototype.draw = function(universe, display, drawable, loc)
 	{
 		var pos = loc.pos;
 

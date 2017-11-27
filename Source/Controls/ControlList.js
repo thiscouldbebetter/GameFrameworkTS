@@ -27,7 +27,7 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 }
 
 {
-	ControlList.prototype.actionHandle = function(actionNameToHandle)
+	ControlList.prototype.actionHandle = function(universe, actionNameToHandle)
 	{
 		if (actionNameToHandle == "ControlIncrement")
 		{
@@ -115,7 +115,7 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 		return (this._items.get == null ? this._items : this._items.get());
 	}
 
-	ControlList.prototype.mouseClick = function(clickPos)
+	ControlList.prototype.mouseClick = function(universe, clickPos)
 	{
 		if (clickPos.x - this.pos.x > this.size.x - this.scrollbar.handleSize.x)
 		{
@@ -158,18 +158,18 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 		}
 	}
 
-	ControlList.prototype.style = function()
+	ControlList.prototype.style = function(universe)
 	{
-		return Globals.Instance.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
+		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
 	}
 
 	// drawable
 
-	ControlList.prototype.drawToDisplayAtLoc = function(display, drawLoc)
+	ControlList.prototype.drawToDisplayAtLoc = function(universe, display, drawLoc)
 	{
 		var drawPos = drawLoc.pos.add(this.pos);
 
-		var style = this.style();
+		var style = this.style(universe);
 		var colorFore = (this.isHighlighted == true ? style.colorFill : style.colorBorder);
 		var colorBack = (this.isHighlighted == true ? style.colorBorder : style.colorFill);
 
@@ -241,6 +241,6 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 			itemPosY += itemSizeY;
 		}
 
-		this.scrollbar.drawToDisplayAtLoc(display, drawLoc);
+		this.scrollbar.drawToDisplayAtLoc(universe, display, drawLoc);
 	}
 }

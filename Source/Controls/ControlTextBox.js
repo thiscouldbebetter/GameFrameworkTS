@@ -13,9 +13,9 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 }
 
 {
-	ControlTextBox.prototype.style = function()
+	ControlTextBox.prototype.style = function(universe)
 	{
-		return Globals.Instance.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
+		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
 	}
 
 	ControlTextBox.prototype.text = function(value)
@@ -37,7 +37,7 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 
 	// events
 
-	ControlTextBox.prototype.actionHandle = function(actionNameToHandle)
+	ControlTextBox.prototype.actionHandle = function(universe, actionNameToHandle)
 	{
 		var text = this.text();
 
@@ -112,7 +112,7 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 				);
 			}
 
-			Globals.Instance.inputHelper.inputInactivate(actionNameToHandle);
+			universe.inputHelper.inputInactivate(actionNameToHandle);
 		}
 	}
 
@@ -126,7 +126,7 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 		this.isHighlighted = false;
 	}
 
-	ControlTextBox.prototype.mouseClick = function(mouseClickPos)
+	ControlTextBox.prototype.mouseClick = function(universe, mouseClickPos)
 	{
 		var parent = this.parent;
 		parent.indexOfChildWithFocus = parent.children.indexOf(this);
@@ -135,10 +135,10 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 
 	// drawable
 
-	ControlTextBox.prototype.drawToDisplayAtLoc = function(display, drawLoc)
+	ControlTextBox.prototype.drawToDisplayAtLoc = function(universe, display, drawLoc)
 	{
 		var drawPos = drawLoc.pos.add(this.pos);
-		var style = this.style();
+		var style = this.style(universe);
 
 		var text = this.text();
 

@@ -9,12 +9,12 @@ function Sound(name, sourcePath, isRepeating)
 }
 
 {
-	Sound.prototype.domElementBuild = function(volume)
+	Sound.prototype.domElementBuild = function(universe, volume)
 	{
 		this.domElement = document.createElement("audio");
 		this.domElement.sound = this;
 		this.domElement.autoplay = true;
-		this.domElement.onended = this.stopOrRepeat.bind(this);
+		this.domElement.onended = this.stopOrRepeat.bind(this, universe);
 		this.domElement.loop = this.isRepeating;
 		this.domElement.volume = volume;
 
@@ -29,19 +29,19 @@ function Sound(name, sourcePath, isRepeating)
 		return this.domElement;
 	}
 
-	Sound.prototype.pause = function()
+	Sound.prototype.pause = function(universe)
 	{
 		var offsetInSeconds = this.domElement.currentTime;
-		this.stop();
+		this.stop(universe);
 		this.offsetInSeconds = offsetInSeconds;
 	}
 
-	Sound.prototype.play = function(volume)
+	Sound.prototype.play = function(universe, volume)
 	{
-		this.domElementBuild(volume);
+		this.domElementBuild(universe, volume);
 		this.domElement.currentTime = this.offsetInSeconds;
 
-		Globals.Instance.platformHelper.domElementAdd
+		universe.platformHelper.domElementAdd
 		(
 			this.domElement
 		);
@@ -52,18 +52,18 @@ function Sound(name, sourcePath, isRepeating)
 		this.offsetInSeconds = 0;
 	}
 
-	Sound.prototype.stop = function(event)
+	Sound.prototype.stop = function(universe, event)
 	{
 		var domElement = (event == null ? this.domElement : event.srcElement);
-		Globals.Instance.platformHelper.domElementRemove(domElement);
+		universe.platformHelper.domElementRemove(domElement);
 		this.offsetInSeconds = 0;
 	}
 
-	Sound.prototype.stopOrRepeat = function(event)
+	Sound.prototype.stopOrRepeat = function(universe, event)
 	{
 		if (this.isRepeating == false)
 		{
-			this.stop(event);
+			this.stop(universe, event);
 		}
 	}
 }

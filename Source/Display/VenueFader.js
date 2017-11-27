@@ -12,11 +12,6 @@ function VenueFader
 		this.millisecondsPerFade = 250;
 	}
 
-	if (venueToFadeFrom == null)
-	{
-		venueToFadeFrom = Globals.Instance.universe.venueCurrent;
-	}
-
 	this.venuesToFadeFromAndTo =
 	[
 		venueToFadeFrom,
@@ -35,20 +30,20 @@ function VenueFader
 }
 
 {
-	VenueFader.prototype.initialize = function()
+	VenueFader.prototype.initialize = function(universe)
 	{
 		var venueToFadeTo = this.venueToFadeTo();
 		if (venueToFadeTo.initialize != null)
 		{
-			venueToFadeTo.initialize();
+			venueToFadeTo.initialize(universe);
 		}
 	}
 
-	VenueFader.prototype.updateForTimerTick = function()
+	VenueFader.prototype.updateForTimerTick = function(universe)
 	{
 		var venueCurrent = this.venueCurrent();
 
-		venueCurrent.draw();
+		venueCurrent.draw(universe);
 
 		var now = new Date();
 
@@ -76,7 +71,7 @@ function VenueFader
 				var venueToFadeTo = this.venuesToFadeFromAndTo[1];
 				if (venueToFadeTo.draw == null)
 				{
-					Globals.Instance.universe.venueNext = venueToFadeTo;
+					universe.venueNext = venueToFadeTo;
 				}
 
 			}
@@ -87,7 +82,7 @@ function VenueFader
 			if (fractionOfFadeCompleted > 1)
 			{
 				fractionOfFadeCompleted = 1;
-				Globals.Instance.universe.venueNext = venueCurrent;
+				universe.venueNext = venueCurrent;
 			}
 
 			alphaOfFadeColor = 1 - fractionOfFadeCompleted;
@@ -95,7 +90,7 @@ function VenueFader
 
 		alphaOfFadeColor *= alphaOfFadeColor;
 
-		var display = Globals.Instance.display;
+		var display = universe.display;
 
 		display.drawRectangle
 		(

@@ -5,7 +5,7 @@ function VisualNone()
 }
 
 {
-	VisualNone.prototype.drawToDisplayForDrawableAndLoc = function(display, drawable, loc)
+	VisualNone.prototype.draw = function(universe, display, drawable, loc)
 	{
 		// do nothing
 	}

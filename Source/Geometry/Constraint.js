@@ -7,11 +7,11 @@ function Constraint(defnName, target)
 {
 	Constraint.prototype.constrain = function(universe, world, place, entity)
 	{
-		this.defn().constrain(universe, world, place, entity, this.target);
+		this.defn(universe).constrain(universe, world, place, entity, this.target);
 	}
 	
-	Constraint.prototype.defn = function()
+	Constraint.prototype.defn = function(universe)
 	{
-		return Globals.Instance.universe.world.constraintDefns[this.defnName];
+		return universe.world.constraintDefns[this.defnName];
 	}
 }

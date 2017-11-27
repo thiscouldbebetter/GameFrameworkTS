@@ -10,17 +10,25 @@ function Mesh(center, vertexOffsets, faceBuilders)
 
 	Mesh.boxOfSize = function(center, size)
 	{
-		return Mesh.fromBounds(new Bounds(center, size));
+		var bounds = new Bounds(center, size);
+		var returnValue = Mesh.fromBounds(bounds);
+		return returnValue;
 	}
 
 	Mesh.cubeUnit = function(center)
 	{
-		return Mesh.boxOfSize(center, new Coords(2, 2, 2));
+		if (center == null)
+		{
+			center = new Coords(0, 0, 0);
+		}
+		var size = new Coords(2, 2, 2);
+		var returnValue = Mesh.boxOfSize(center, size);
+		return returnValue;
 	}
 
 	Mesh.fromBounds = function(bounds)
 	{
-		var boundsSizeHalf = bounds.sizeHalf;
+		var sizeHalf = bounds.sizeHalf;
 		var min = new Coords(-sizeHalf.x, -sizeHalf.y, -sizeHalf.z);
 		var max = new Coords(sizeHalf.x, sizeHalf.y, sizeHalf.z);
 

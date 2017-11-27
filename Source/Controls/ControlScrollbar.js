@@ -38,7 +38,7 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 }
 
 {
-	ControlScrollbar.prototype.actionHandle = function(actionNameToHandle)
+	ControlScrollbar.prototype.actionHandle = function(universe, actionNameToHandle)
 	{
 		// todo
 	}
@@ -48,7 +48,7 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 		return (this._items.get == null ? this._items : this._items.get());
 	}
 
-	ControlScrollbar.prototype.mouseClick = function(clickPos)
+	ControlScrollbar.prototype.mouseClick = function(universe, clickPos)
 	{
 		// todo
 	}
@@ -115,14 +115,14 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 		return sliderSizeInPixels;
 	}
 
-	ControlScrollbar.prototype.style = function()
+	ControlScrollbar.prototype.style = function(universe)
 	{
-		return Globals.Instance.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
+		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
 	}
 
 	// drawable
 
-	ControlScrollbar.prototype.drawToDisplayAtLoc = function(display, drawLoc)
+	ControlScrollbar.prototype.drawToDisplayAtLoc = function(universe, display, drawLoc)
 	{
 		var numberOfItems = this.items().length;
 
@@ -131,8 +131,8 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 			var drawPos = drawLoc.pos.add(this.pos);
 			display.drawRectangle(drawPos, this.size, display.colorFore, null);
 
-			this.buttonScrollDown.drawToDisplayAtLoc(display, drawLoc);
-			this.buttonScrollUp.drawToDisplayAtLoc(display, drawLoc);
+			this.buttonScrollDown.drawToDisplayAtLoc(universe, display, drawLoc);
+			this.buttonScrollUp.drawToDisplayAtLoc(universe, display, drawLoc);
 
 			var sliderPosInPixels = this.sliderPosInPixels().add(drawPos);
 			var sliderSizeInPixels = this.sliderSizeInPixels();

@@ -24,24 +24,24 @@ function VisualImage(imageName, sizeScaled)
 
 	// instance methods
 
-	VisualImage.prototype.image = function()
+	VisualImage.prototype.image = function(universe)
 	{
-		return Globals.Instance.mediaLibrary.imageGetByName(this.imageName);
+		return universe.mediaLibrary.imageGetByName(this.imageName);
 	}
 
-	VisualImage.prototype.imageSizeScaled = function()
+	VisualImage.prototype.imageSizeScaled = function(universe)
 	{
-		return (this._sizeScaled == null ? this.image().sizeInPixels: this._sizeScaled);
+		return (this._sizeScaled == null ? this.image(universe).sizeInPixels: this._sizeScaled);
 	}
 
 	// visual
 
-	VisualImage.prototype.drawToDisplayForDrawableAndLoc = function(display, drawable, loc)
+	VisualImage.prototype.draw = function(universe, display, drawable, loc)
 	{
-		var image = this.image();
+		var image = this.image(universe);
 		var pos = loc.pos;
 		var drawPos = display.drawPos;
-		var imageSize = this.imageSizeScaled();
+		var imageSize = this.imageSizeScaled(universe);
 		drawPos.clear().subtract(imageSize).half().add(pos);
 		display.drawImage(image, drawPos, imageSize);
 	}

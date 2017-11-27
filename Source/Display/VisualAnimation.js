@@ -10,12 +10,12 @@ function VisualAnimation(ticksPerFrame, frames)
 {
 	// visual
 
-	VisualAnimation.prototype.drawToDisplayForDrawableAndLoc = function(display, drawable, loc)
+	VisualAnimation.prototype.draw = function(universe, display, drawable, loc)
 	{
-		var world = Globals.Instance.universe.world;
+		var world = universe.world;
 		var ticksSoFar = (world.timerTicksSoFar - loc.timeOffsetInTicks) % this.ticksToComplete;
 		var frameIndexCurrent = Math.floor(ticksSoFar / this.ticksPerFrame);
 		var frameCurrent = this.frames[frameIndexCurrent];
-		frameCurrent.drawToDisplayForDrawableAndLoc(display, drawable, loc);
+		frameCurrent.draw(universe, display, drawable, loc);
 	}
 }

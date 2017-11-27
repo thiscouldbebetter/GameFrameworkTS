@@ -10,9 +10,9 @@ function ControlLabel(name, pos, size, isTextCentered, text, fontHeightInPixels)
 }
 
 {
-	ControlLabel.prototype.style = function()
+	ControlLabel.prototype.style = function(universe)
 	{
-		return Globals.Instance.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
+		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
 	}
 
 	ControlLabel.prototype.text = function()
@@ -22,10 +22,10 @@ function ControlLabel(name, pos, size, isTextCentered, text, fontHeightInPixels)
 
 	// drawable
 
-	ControlLabel.prototype.drawToDisplayAtLoc = function(display, drawLoc)
+	ControlLabel.prototype.drawToDisplayAtLoc = function(universe, display, drawLoc)
 	{
 		var drawPos = drawLoc.pos.add(this.pos);
-		var style = this.style();
+		var style = this.style(universe);
 		var text = this.text();
 
 		display.drawText

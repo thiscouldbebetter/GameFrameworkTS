@@ -43,7 +43,7 @@ function ControlSelect
 }
 
 {
-	ControlSelect.prototype.actionHandle = function(actionNameToHandle)
+	ControlSelect.prototype.actionHandle = function(universe, actionNameToHandle)
 	{
 		// This is somewhat counterintuitive.
 		if (actionNameToHandle == "ControlDecrement")
@@ -134,15 +134,15 @@ function ControlSelect
 		return (this._options.get == null ? this._options : this._options.get() );
 	}
 
-	ControlSelect.prototype.mouseClick = function(clickPos)
+	ControlSelect.prototype.mouseClick = function(universe, clickPos)
 	{
 		this.optionSelectedNextInDirection(1);
 		return true; // wasClickHandled
 	}
 
-	ControlSelect.prototype.style = function()
+	ControlSelect.prototype.style = function(universe)
 	{
-		return Globals.Instance.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
+		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
 	}
 
 	ControlSelect.prototype.valueSelected = function()
@@ -152,11 +152,11 @@ function ControlSelect
 
 	// drawable
 
-	ControlSelect.prototype.drawToDisplayAtLoc = function(display, drawLoc)
+	ControlSelect.prototype.drawToDisplayAtLoc = function(universe, display, drawLoc)
 	{
 		var drawPos = drawLoc.pos.add(this.pos);
 
-		var style = this.style();
+		var style = this.style(universe);
 
 		display.drawRectangle
 		(

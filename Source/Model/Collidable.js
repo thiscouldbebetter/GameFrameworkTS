@@ -26,7 +26,7 @@ function Collidable(collider, entityPropertyNamesToCollideWith, collideEntities)
 					var colliderThis = entity.collidable.collider;
 					var colliderOther = entityOther.collidable.collider;
 
-					var collisionHelper = Globals.Instance.collisionHelper;
+					var collisionHelper = universe.collisionHelper;
 					var doEntitiesCollide = collisionHelper.doCollidersCollide(colliderThis, colliderOther);
 					if (doEntitiesCollide == true)
 					{

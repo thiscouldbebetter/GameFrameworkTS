@@ -9,7 +9,7 @@ function VisualRectangle(size, colorFill, colorBorder)
 }
 
 {
-	VisualRectangle.prototype.drawToDisplayForDrawableAndLoc = function(display, drawable, loc)
+	VisualRectangle.prototype.draw = function(universe, display, drawable, loc)
 	{
 		var pos = loc.pos;
 		var drawPos = display.drawPos;

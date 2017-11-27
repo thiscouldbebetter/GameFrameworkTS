@@ -42,12 +42,12 @@ function SoundHelper(sounds)
 		}
 	}
 
-	SoundHelper.prototype.soundWithNamePlayAsEffect = function(soundName)
+	SoundHelper.prototype.soundWithNamePlayAsEffect = function(universe, soundName)
 	{
-		this.sounds[soundName].play(this.soundVolume);
+		this.sounds[soundName].play(universe, this.soundVolume);
 	}
 
-	SoundHelper.prototype.soundWithNamePlayAsMusic = function(soundName)
+	SoundHelper.prototype.soundWithNamePlayAsMusic = function(universe, soundName)
 	{
 		if
 		(
@@ -55,10 +55,10 @@ function SoundHelper(sounds)
 			&& this.soundForMusic.name != soundName
 		)
 		{
-			this.soundForMusic.stop();
+			this.soundForMusic.stop(universe);
 		}
 		this.soundForMusic = this.sounds[soundName];
-		this.soundForMusic.play(this.musicVolume);
+		this.soundForMusic.play(universe, this.musicVolume);
 	}
 
 }

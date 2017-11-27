@@ -14,19 +14,19 @@ function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 {
 	// venue
 
-	VenueFileUpload.prototype.finalize = function()
+	VenueFileUpload.prototype.finalize = function(universe)
 	{
-		Globals.Instance.platformHelper.domElementRemove(this.domElement);
+		universe.platformHelper.domElementRemove(this.domElement);
 
-		var display = Globals.Instance.display;
+		var display = universe.display;
 		display.clear("Black");
-		display.show();
+		display.show(universe);
 	}
 
-	VenueFileUpload.prototype.initialize = function()
+	VenueFileUpload.prototype.initialize = function(universe)
 	{
-		var display = Globals.Instance.display;
-		display.hide();
+		var display = universe.display;
+		display.hide(universe);
 
 		var divFileUpload = document.createElement("div");
 		divFileUpload.style =
@@ -48,27 +48,27 @@ function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 
 		var buttonLoad = document.createElement("button");
 		buttonLoad.innerHTML = "Load";
-		buttonLoad.onclick = this.buttonLoad_Clicked.bind(this);
+		buttonLoad.onclick = this.buttonLoad_Clicked.bind(this, universe);
 
 		var buttonCancel = document.createElement("button");
 		buttonCancel.innerHTML = "Cancel";
-		buttonCancel.onclick = this.buttonCancel_Clicked.bind(this);
+		buttonCancel.onclick = this.buttonCancel_Clicked.bind(this, universe);
 
 		var divButtons = document.createElement("div");
 		divButtons.appendChild(buttonLoad);
 		divButtons.appendChild(buttonCancel);
 		divFileUpload.appendChild(divButtons);
 
-		Globals.Instance.platformHelper.domElementAdd(divFileUpload);
+		universe.platformHelper.domElementAdd(divFileUpload);
 
 		inputFileUpload.focus();
 
 		this.domElement = divFileUpload;
 	}
 
-	VenueFileUpload.prototype.updateForTimerTick = function()
+	VenueFileUpload.prototype.updateForTimerTick = function(universe)
 	{
-		var inputHelper = Globals.Instance.inputHelper;
+		var inputHelper = universe.inputHelper;
 		var inputsActive = inputHelper.inputsActive;
 		for (var i = 0; i < inputsActive.length; i++)
 		{
@@ -80,7 +80,7 @@ function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 				var actionName = inputToActionMapping.actionName;
 				if (actionName == "ControlCancel")
 				{
-					Globals.Instance.universe.venueNext = this.venueNextIfCancelled;
+					universe.venueNext = this.venueNextIfCancelled;
 				}
 			}
 		}
@@ -88,18 +88,18 @@ function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 
 	// events
 
-	VenueFileUpload.prototype.buttonCancel_Clicked = function(event)
+	VenueFileUpload.prototype.buttonCancel_Clicked = function(universe, event)
 	{
-		Globals.Instance.universe.venueNext = this.venueNextIfCancelled;
+		universe.venueNext = this.venueNextIfCancelled;
 	}
 
-	VenueFileUpload.prototype.buttonLoad_Clicked = function(event)
+	VenueFileUpload.prototype.buttonLoad_Clicked = function(universe, event)
 	{
 		var inputFileUpload = this.domElement.getElementsByTagName("input")[0];
 		var fileToLoad = inputFileUpload.files[0];
 		if (fileToLoad != null)
 		{
-			Globals.Instance.universe.venueNext = this.venueNextIfFileSpecified;
+			universe.venueNext = this.venueNextIfFileSpecified;
 		}
 	}
 }

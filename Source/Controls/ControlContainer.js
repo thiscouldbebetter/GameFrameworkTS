@@ -125,21 +125,21 @@ function ControlContainer(name, pos, size, children)
 		return listToAddTo;
 	}
 
-	ControlContainer.prototype.actionHandle = function(actionNameToHandle)
+	ControlContainer.prototype.actionHandle = function(universe, actionNameToHandle)
 	{
 		var childWithFocus = this.childWithFocus();
 
 		if (actionNameToHandle == "MouseClick")
 		{
-			var inputHelper = Globals.Instance.inputHelper;
+			var inputHelper = universe.inputHelper;
 			this.mouseClickPos.overwriteWith
 			(
 				inputHelper.mouseClickPos
 			).divide
 			(
-				Globals.Instance.display.scaleFactor
+				universe.display.scaleFactor
 			);
-			var wasClickHandled = this.mouseClick(this.mouseClickPos);
+			var wasClickHandled = this.mouseClick(universe, this.mouseClickPos);
 
 			if (wasClickHandled == true)
 			{
@@ -148,8 +148,8 @@ function ControlContainer(name, pos, size, children)
 		}
 		else if (actionNameToHandle == "MouseMove")
 		{
-			var inputHelper = Globals.Instance.inputHelper;
-			var scaleFactor = Globals.Instance.display.scaleFactor;
+			var inputHelper = universe.inputHelper;
+			var scaleFactor = universe.display.scaleFactor;
 			this.mouseMovePos.overwriteWith
 			(
 				inputHelper.mouseMovePos
@@ -193,12 +193,12 @@ function ControlContainer(name, pos, size, children)
 		{
 			if (childWithFocus.actionHandle != null)
 			{
-				childWithFocus.actionHandle(actionNameToHandle);
+				childWithFocus.actionHandle(universe, actionNameToHandle);
 			}
 		}
 	}
 
-	ControlContainer.prototype.mouseClick = function(mouseClickPos)
+	ControlContainer.prototype.mouseClick = function(universe, mouseClickPos)
 	{
 		var wasClickHandled = false;
 
@@ -217,7 +217,7 @@ function ControlContainer(name, pos, size, children)
 			var child = childrenContainingPos[i];
 			if (child.mouseClick != null)
 			{
-				var wasClickHandledByChild = child.mouseClick(mouseClickPos);
+				var wasClickHandledByChild = child.mouseClick(universe, mouseClickPos);
 				if (wasClickHandledByChild == true)
 				{
 					wasClickHandled = true;
@@ -273,17 +273,17 @@ function ControlContainer(name, pos, size, children)
 		}
 	}
 
-	ControlContainer.prototype.style = function()
+	ControlContainer.prototype.style = function(universe)
 	{
-		return Globals.Instance.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
+		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
 	}
 
 	// drawable
 
-	ControlContainer.prototype.drawToDisplayAtLoc = function(display, drawLoc)
+	ControlContainer.prototype.drawToDisplayAtLoc = function(universe, display, drawLoc)
 	{
 		var drawPos = drawLoc.pos.add(this.pos);
-		var style = this.style();
+		var style = this.style(universe);
 
 		display.drawRectangle
 		(
@@ -295,7 +295,7 @@ function ControlContainer(name, pos, size, children)
 		for (var i = 0; i < children.length; i++)
 		{
 			var child = children[i];
-			child.drawToDisplayAtLoc(display, drawLoc.clone());
+			child.drawToDisplayAtLoc(universe, display, drawLoc.clone());
 		}
 	}
 }

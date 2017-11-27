@@ -38,15 +38,11 @@ function main()
 		"Gray", "White" // colorFore, colorBack
 	);
 
-	var universe0 = Universe.new(null);
+	var timerHelper = new TimerHelper(20);
 
-	Globals.Instance.initialize
+	var universe = Universe.new
 	(
-		"Cursor_Quest",
-		20, // timerTicksPerSecond
-		display,
-		mediaLibrary,
-		new ControlBuilder([ControlStyle.Instances.Default]),
-		universe0
+		"Cursor_Quest", timerHelper, display, mediaLibrary, null
 	);
+	universe.initialize();
 }

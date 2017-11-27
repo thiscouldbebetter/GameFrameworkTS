@@ -34,20 +34,20 @@ function VenueControls(controlRoot)
 }
 
 {
-	VenueControls.prototype.draw = function()
+	VenueControls.prototype.draw = function(universe)
 	{
-		var display = Globals.Instance.display;
+		var display = universe.display;
 		var drawLoc = display.drawLoc;
 		drawLoc.pos.clear();
 		//display.clear();
-		this.controlRoot.drawToDisplayAtLoc(display, drawLoc);
+		this.controlRoot.drawToDisplayAtLoc(universe, display, drawLoc);
 	}
 
-	VenueControls.prototype.updateForTimerTick = function()
+	VenueControls.prototype.updateForTimerTick = function(universe)
 	{
-		this.draw();
+		this.draw(universe);
 
-		var inputHelper = Globals.Instance.inputHelper;
+		var inputHelper = universe.inputHelper;
 		if (inputHelper.inputsActive.length > 0)
 		{
 			var inputsActive = inputHelper.inputsActive;
@@ -59,12 +59,12 @@ function VenueControls(controlRoot)
 				if (mapping == null)
 				{
 					// Pass the raw input, to allow for text entry and mouse clicks.
-					this.controlRoot.actionHandle(inputActive);
+					this.controlRoot.actionHandle(universe, inputActive);
 				}
 				else
 				{
 					var actionName = mapping.actionName;
-					this.controlRoot.actionHandle(actionName);
+					this.controlRoot.actionHandle(universe, actionName);
 					if (mapping.inactivateInputWhenActionPerformed == true)
 					{
 						inputHelper.inputInactivate(inputActive);

@@ -23,7 +23,7 @@ function ArrayExtensions()
 		}
 		return this;
 	}
-	
+
 	Array.prototype.clone = function()
 	{
 		var returnValue = [];
@@ -33,17 +33,17 @@ function ArrayExtensions()
 			var item = this[i];
 			var itemClone = item.clone();
 			returnValue.push(itemClone);
-		}	
+		}
 
 		return returnValue;
-	}	
+	}
 
 	Array.prototype.contains = function(elementToFind)
 	{
 		return (this.indexOf(elementToFind) >= 0);
 	}
-	
-		Array.prototype.prepend = function(other)
+
+	Array.prototype.prepend = function(other)
 	{
 		for (var i = 0; i < other.length; i++)
 		{
