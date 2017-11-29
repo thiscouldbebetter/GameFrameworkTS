@@ -106,18 +106,41 @@ function Camera(viewSize, focalLength, loc)
 
 		return this._clipPlanes;
 	}
-		
+
+	Camera.prototype.coordsTransformViewToWorld = function(viewCoords)
+	{
+		var cameraLoc = this.loc;
+
+		worldCoords = viewCoords.subtract(this.viewSizeHalf);
+
+		cameraLoc.orientation.unprojectCoordsRDF
+		(
+			worldCoords
+		);
+
+		if (this.focalLength != null)
+		{
+			var z = worldCoords.z;
+			worldCoords.multiplyScalar(z).divideScalar(this.focalLength);
+			worldCoords.z = z;
+		}
+
+		worldCoords.add
+		(
+			cameraLoc.pos
+		);
+
+		return worldCoords;
+	}
+
 	Camera.prototype.coordsTransformWorldToView = function(worldCoords)
 	{
 		var cameraPos = this.loc.pos;
 		var cameraOrientation = this.loc.orientation;
 
-		var viewCoords = worldCoords.subtract(cameraPos).overwriteWithDimensions
-		(
-			worldCoords.dotProduct(cameraOrientation.right),
-			worldCoords.dotProduct(cameraOrientation.down),
-			worldCoords.dotProduct(cameraOrientation.forward)
-		)
+		var viewCoords = worldCoords.subtract(cameraPos);
+
+		cameraOrientation.projectCoordsRDF(worldCoords);
 
 		if (this.focalLength != null)
 		{

@@ -6,6 +6,7 @@ function Orientation(forward, down)
 	this.down = this.forward.clone().crossProduct(this.right).normalize();
 
 	this.axes = [ this.forward, this.right, this.down ];
+	this.axesRDF = [ this.right, this.down, this.forward ];
 }
 
 {
@@ -71,21 +72,54 @@ function Orientation(forward, down)
 	{
 		var returnValue = new Coords(0, 0, 0);
 
+		var axisScaled = new Coords();
+
 		for (var i = 0; i < this.axes.length; i++)
 		{
 			var axis = this.axes[i];
-			returnValue.add
+
+			axisScaled.overwriteWith(axis).multiplyScalar
 			(
-				axis.clone().multiplyScalar
-				(
-					coords.dimension(i)
-				)
+				coords.dimension(i)
 			);
+
+			returnValue.add(axisScaled);
 		}
 
 		return coords.overwriteWith(returnValue);
 	}
 
+	Orientation.prototype.projectCoordsRDF = function(coords)
+	{
+		coords.overwriteWithDimensions
+		(
+			coords.dotProduct(this.right),
+			coords.dotProduct(this.down),
+			coords.dotProduct(this.forward)
+		);
+		return coords;
+	}
+
+	Orientation.prototype.unprojectCoordsRDF = function(coords)
+	{
+		var returnValue = new Coords(0, 0, 0);
+
+		var axisScaled = new Coords();
+
+		for (var i = 0; i < this.axesRDF.length; i++)
+		{
+			var axis = this.axesRDF[i];
+
+			axisScaled.overwriteWith(axis).multiplyScalar
+			(
+				coords.dimension(i)
+			);
+
+			returnValue.add(axisScaled);
+		}
+
+		return coords.overwriteWith(returnValue);
+	}
 
 	// heading
 

@@ -1,33 +1,74 @@
 
+function assertExpectedEqualToActual(expected, actual, message)
+{
+	if (expected != actual)
+	{
+		if (message == null)
+		{
+			message = "Expected: '" + expected + "', Actual: '" + actual + "'.";
+		}
+		throw message;
+	}
+}
+
 function test()
 {
 	var testAlwaysPass = new Test
 	(
 		"Always Pass",
-		function() { return true; }
+		function() { }
 	);
 
 	var testAlwaysFail = new Test
 	(
 		"Always Fail",
-		function() { return false; }
+		function() { throw "This test always fails!"; }
 	);
 
-	var tests =
+	var testFixturesToRun = 
 	[
-		testAlwaysPass,
-		//testAlwaysFail,
-		testCollisionsOfCubesAndSpheres,
-		testCollisionsOfSpheresAndShells,
+		new TestFixture
+		(
+			"Camera",
+			[
+				testCameraProjection,
+			]
+		),
+		new TestFixture
+		(
+			"Collisions",
+			[
+				testCollisionsOfCubesAndSpheres,
+				testCollisionsOfSpheresAndShells,
+			]
+		),
 	];
 
-	new TestFixture(tests).runTests();
+	for (var i = 0; i < testFixturesToRun.length; i++)
+	{
+		var testFixture = testFixturesToRun[i];
+		try
+		{
+			testFixture.runTests();
+		}
+		catch (ex)
+		{
+			document.write("Test failed:" + ex);
+		}
+	}
 }
 
 // classes
 
-function TestFixture(tests)
+function Test(name, run)
 {
+	this.name = name;
+	this.run = run;
+}
+
+function TestFixture(name, tests)
+{
+	this.name = name;
 	this.tests = tests;
 }
 {
@@ -35,38 +76,61 @@ function TestFixture(tests)
 
 	TestFixture.prototype.runTests = function()
 	{
-		var testsFailed = [];
+		var testRecords = [];
+		var numberOfTestsFailed = 0;
 
 		for (var i = 0; i < this.tests.length; i++)
 		{
 			var testToRun = this.tests[i];
-			var testResult = testToRun.run();
-			if (testResult != true)
+			try
 			{
-				testsFailed.push(testToRun);
+				testToRun.run();
+				var testRecord = new TestRecord(testToRun, true);
+				testRecords.push(testRecord);
+			}
+			catch (ex)
+			{
+				var testRecord = new TestRecord(testToRun, false, ex);
+				testRecords.push(testRecord);
+				numberOfTestsFailed++;
 			}
 		}
 
-		if (testsFailed.length == 0)
+		if (numberOfTestsFailed == 0)
 		{
-			document.write("All tests passed!")
+			document.write("All tests in fixture passed!<br />")
 		}
 		else
 		{
-			document.write("Failed tests:");
-			for (var i = 0; i < testsFailed.length; i++)
+			document.write("Failed tests:<br />");
+			for (var i = 0; i < testRecords.length; i++)
 			{
-				var testFailed = testsFailed[i];
-				document.write(testFailed.name);
+				var testRecord = testRecords[i];
+				if (testRecord.passed == false)
+				{
+					document.write(testRecord.toString() + "<br />");
+				}
 			}
 		}
 	}
 }
 
-function Test(name, run)
+function TestRecord(test, passed, message)
 {
-	this.name = name;
-	this.run = run;
+	this.test = test;
+	this.passed = passed;
+	this.message = message;
+}
+{
+	TestRecord.prototype.toString = function()
+	{
+		var returnValue =
+			this.test.name + " " 
+			+ (this.passed ? "passed." : ("FAILED: " + this.message) );
+
+		return returnValue;
+	}
+
 }
 
 // tests
@@ -104,28 +168,17 @@ var testCollisionsOfCubesAndSpheres = new Test
 		var collider0 = meshCubeUnitCenteredAtOrigin;
 		var collider1 = sphereUnitAtOrigin;
 		var doCollide = collisionHelper.doCollidersCollide(collider0, collider1);
-		if (doCollide == false)
-		{
-			return false;
-		}
+		assertExpectedEqualToActual(true, doCollide);
 
 		var collider0 = meshCubeUnitInPositiveOctant;
 		var collider1 = sphereUnitAtOrigin;
 		var doCollide = collisionHelper.doCollidersCollide(collider0, collider1);
-		if (doCollide == false)
-		{
-			return false;
-		}
+		assertExpectedEqualToActual(true, doCollide);
 
 		var collider0 = meshCubeUnitInNegativeOctant;
 		var collider1 = sphereUnitInPositiveOctant;
 		var doCollide = collisionHelper.doCollidersCollide(collider0, collider1);
-		if (doCollide == true)
-		{
-			return false;
-		}
-
-		return true;
+		assertExpectedEqualToActual(false, doCollide);
 	}
 );
 
@@ -159,45 +212,81 @@ var testCollisionsOfSpheresAndShells = new Test
 		);
 
 		var doCollide = collisionHelper.doCollidersCollide(sphereUnitAtOrigin, shell2To3AtOrigin);
-		if (doCollide == true)
-		{
-			return false;
-		}
+		assertExpectedEqualToActual(false, doCollide);
 
 		doCollide = collisionHelper.doCollidersCollide(sphereUnitAtX2, shell2To3AtOrigin);
-		if (doCollide == false)
-		{
-			return false;
-		}
+		assertExpectedEqualToActual(true, doCollide);
 
 		var wedgeHalfTurn = new Wedge(shell2To3AtOrigin.sphereOuter.center, new Coords(1, 0, 0), .5);
 
 		doCollide = collisionHelper.doCollidersCollide(sphereUnitAtOrigin, wedgeHalfTurn);
-		if (doCollide == false)
-		{
-			return false;
-		}
+		assertExpectedEqualToActual(true, doCollide);
 
 		doCollide = collisionHelper.doCollidersCollide(sphereUnitAtX2, wedgeHalfTurn);
-		if (doCollide == false)
-		{
-			return false;
-		}
+		assertExpectedEqualToActual(true, doCollide);
 
 		var arc2To3HalfTurnAtOrigin = new Arc(shell2To3AtOrigin, wedgeHalfTurn);
 
 		doCollide = collisionHelper.doCollidersCollide(sphereUnitAtOrigin, arc2To3HalfTurnAtOrigin);
-		if (doCollide == true)
-		{
-			return false;
-		}
+		assertExpectedEqualToActual(false, doCollide);
 
 		doCollide = collisionHelper.doCollidersCollide(sphereUnitAtX2, arc2To3HalfTurnAtOrigin);
-		if (doCollide == false)
-		{
-			return false;
-		}
-
-		return true;
+		assertExpectedEqualToActual(true, doCollide);
 	}
 );
+
+var testCameraProjection = new Test
+(
+	"CameraProjection",
+	function run()
+	{
+		var camera = new Camera
+		(
+			new Coords(100, 100, 1), // viewSize
+			100, // focalLength
+			new Location
+			(
+				new Coords(0, 0, -100),
+				new Orientation
+				(
+					new Coords(0, 0, 1),
+					new Coords(1, 0, 0)
+				)
+			)
+		);
+
+		var worldCoordsGroupToTransform = 
+		[
+			new Coords(0, 0, 0), // origin
+
+			new Coords(1, 0, 0),
+			new Coords(0, 1, 0),
+			new Coords(0, 0, 1),
+
+			new Coords(-1, 0, 0),
+			new Coords(0, -1, 0),
+			new Coords(0, 0, -1),
+
+			new Coords(1, 2, 3),
+		];
+
+		for (var i = 0; i < worldCoordsGroupToTransform.length; i++)
+		{
+			var worldCoordsBefore = worldCoordsGroupToTransform[i];
+			var viewCoords = camera.coordsTransformWorldToView
+			(
+				worldCoordsBefore.clone()
+			);
+			var worldCoordsAfter = camera.coordsTransformViewToWorld
+			(
+				viewCoords.clone()
+			).round();
+
+			var areBeforeAndAfterEqual = worldCoordsAfter.equals(worldCoordsBefore);
+			var beforeAndAfterAsStrings = 
+				"Before:" + worldCoordsBefore.toString()
+				+ ", After:" + worldCoordsAfter.toString();
+			assertExpectedEqualToActual(true, areBeforeAndAfterEqual, beforeAndAfterAsStrings);
+		}
+	}
+)
