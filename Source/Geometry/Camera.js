@@ -5,7 +5,7 @@ function Camera(viewSize, focalLength, loc)
 	this.focalLength = focalLength;
 	this.loc = loc;
 
-	this.viewSizeHalf = this.viewSize.clone().half();
+	this.viewSizeHalf = this.viewSize.clone().clearZ().half();
 }
 
 {
@@ -21,7 +21,7 @@ function Camera(viewSize, focalLength, loc)
 				new Plane(new Coords(0, 0, 0), 0),
 			];			
 		}
-		
+
 		var cameraLoc = this.loc;
 		var cameraOrientation = cameraLoc.orientation;
 
@@ -111,19 +111,17 @@ function Camera(viewSize, focalLength, loc)
 	{
 		var cameraLoc = this.loc;
 
-		worldCoords = viewCoords.subtract(this.viewSizeHalf);
+		if (this.focalLength != null)
+		{
+			viewCoords.z = this.focalLength;
+		}
+
+		var worldCoords = viewCoords.subtract(this.viewSizeHalf);
 
 		cameraLoc.orientation.unprojectCoordsRDF
 		(
 			worldCoords
 		);
-
-		if (this.focalLength != null)
-		{
-			var z = worldCoords.z;
-			worldCoords.multiplyScalar(z).divideScalar(this.focalLength);
-			worldCoords.z = z;
-		}
 
 		worldCoords.add
 		(

@@ -1,5 +1,5 @@
 
-function Polar(azimuthInTurns, elevationInTurns, radius)
+function Polar(azimuthInTurns, radius, elevationInTurns)
 {
 	this.azimuthInTurns = azimuthInTurns;
 	this.radius = radius;
