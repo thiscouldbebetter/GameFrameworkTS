@@ -26,11 +26,11 @@ function ControlSelect
 	for (var i = 0; i < options.length; i++)
 	{
 		var option = options[i];
-		var optionValue = DataBinding.get
+		var optionValue = new DataBinding
 		(
 			option,
 			this.bindingExpressionForOptionValues
-		);
+		).get();
 
 		if (optionValue == valueSelected)
 		{
@@ -88,16 +88,16 @@ function ControlSelect
 		{
 			var optionAsObject = this.options()[this.indexOfOptionSelected];
 
-			var optionValue = DataBinding.get
+			var optionValue = new DataBinding
 			(
 				optionAsObject,
 				this.bindingExpressionForOptionValues
-			);
-			var optionText = DataBinding.get
+			).get();
+			var optionText = new DataBinding
 			(
 				optionAsObject,
 				this.bindingExpressionForOptionText
-			);
+			).get();
 
 			returnValue = new ControlSelectOption
 			(

@@ -6,13 +6,13 @@ function DataBinding(context, bindingExpression)
 }
 
 {
-	DataBinding.get = function(context, bindingExpression)
+	DataBinding.prototype.get = function()
 	{
-		var returnValue = context;
+		var returnValue = this.context;
 
-		if (bindingExpression != null)
+		if (this.bindingExpression != null)
 		{
-			var bindingExpressionParts = bindingExpression.split(".");
+			var bindingExpressionParts = this.bindingExpression.split(".");
 			for (var i = 0; i < bindingExpressionParts.length; i++)
 			{
 				// hack
@@ -24,14 +24,17 @@ function DataBinding(context, bindingExpression)
 				var bindingExpressionPart = bindingExpressionParts[i];
 				if (bindingExpressionPart.endsWith("()") == true)
 				{
-					bindingExpressionPart = bindingExpressionPart.substr(0, bindingExpressionPart.length - "()".length);
+					bindingExpressionPart = bindingExpressionPart.substr
+					(
+						0, bindingExpressionPart.length - "()".length
+					);
 					if (returnValue[bindingExpressionPart] == null)
 					{
 						returnValue = null;
 					}
 					else
 					{
-						returnValue = returnValue[bindingExpressionPart](context);
+						returnValue = returnValue[bindingExpressionPart](this.context);
 					}
 				}
 				else
@@ -44,16 +47,20 @@ function DataBinding(context, bindingExpression)
 		return returnValue;
 	}
 
-	// instance methods
-
-	DataBinding.prototype.get = function()
-	{
-		return DataBinding.get(this.context, this.bindingExpression);
-	}
-
 	DataBinding.prototype.set = function(valueToSet)
 	{
-		// hack
-		this.context[this.bindingExpression] = valueToSet;
+		var context = this.context;
+
+		if (this.bindingExpression != null)
+		{
+			var bindingExpressionParts = this.bindingExpression.split(".");
+			for (var i = 0; i < bindingExpressionParts.length - 1; i++)
+			{
+				var bindingExpressionPart = bindingExpressionParts[i];
+				context = context[bindingExpressionPart];
+			}
+			var bindingExpressionPartFinal = bindingExpressionParts[bindingExpressionParts.length - 1];
+			context[bindingExpressionPartFinal] = valueToSet;
+		}
 	}
 }

@@ -109,10 +109,10 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 
 			if (this.bindingForItemSelected != null)
 			{
-				var valueToSet = DataBinding.get
+				var valueToSet = new DataBinding
 				(
 					this._itemSelected, this.bindingExpressionForItemValue
-				);
+				).get();
 				this.bindingForItemSelected.set(valueToSet);
 			}
 		}
@@ -287,10 +287,10 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 				)
 			}
 
-			var text = DataBinding.get
+			var text = new DataBinding
 			(
 				item, this.bindingExpressionForItemText
-			);
+			).get();
 
 			var drawPos2 = new Coords(drawPos.x + textMarginLeft, itemPosY);
 
