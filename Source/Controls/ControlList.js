@@ -248,6 +248,11 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 
 		var items = this.items();
 
+		if (items == null)
+		{
+			return;
+		}
+
 		var numberOfItemsVisible = Math.floor(this.size.y / itemSizeY);
 		var indexStart = this.indexOfFirstItemVisible();
 		var indexEnd = indexStart + numberOfItemsVisible - 1;
