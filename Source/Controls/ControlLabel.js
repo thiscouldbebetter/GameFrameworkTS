@@ -10,6 +10,7 @@ function ControlLabel(name, pos, size, isTextCentered, text, fontHeightInPixels)
 
 	// Helper variables.
 	this.drawPos = new Coords();
+	this.drawLoc = new Location(this.drawPos);
 }
 
 {

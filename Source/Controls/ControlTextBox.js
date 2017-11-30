@@ -13,6 +13,7 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 
 	// Helper variables.
 	this.drawPos = new Coords();
+	this.drawLoc = new Location(this.drawPos);
 }
 
 {
@@ -95,14 +96,14 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 				+ text.substr(this.cursorPos + 1)
 			);
 		}
-		else if (actionNameToHandle.length == 1) // printable character
+		else if (actionNameToHandle.startsWith("_") && actionNameToHandle.length == "2") // printable character
 		{
 			if (this.numberOfCharsMax == null || text.length < this.numberOfCharsMax)
 			{
 				text = this.text
 				(
 					text.substr(0, this.cursorPos)
-					+ actionNameToHandle
+					+ actionNameToHandle.substr(1)
 					+ text.substr(this.cursorPos)
 				);
 

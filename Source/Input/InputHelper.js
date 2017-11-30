@@ -148,20 +148,17 @@ function InputHelper()
 		//event.preventDefault();
 
 		var inputPressed = event.key;
-
-		if (isNaN(parseInt(inputPressed)) == false)
+		if (inputPressed.length == 1)
 		{
 			inputPressed = "_" + inputPressed;
 		}
-
 		this.inputAdd(inputPressed);
 	}
 
 	InputHelper.prototype.handleEventKeyUp = function(event)
 	{
 		var inputReleased = event.key;
-
-		if (isNaN(parseInt(inputReleased)) == false)
+		if (inputReleased.length == 1)
 		{
 			inputReleased = "_" + inputReleased;
 		}

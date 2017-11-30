@@ -31,7 +31,7 @@ function DataBinding(context, bindingExpression)
 					}
 					else
 					{
-						returnValue = returnValue[bindingExpressionPart]();
+						returnValue = returnValue[bindingExpressionPart](context);
 					}
 				}
 				else

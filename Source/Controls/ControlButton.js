@@ -11,6 +11,10 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 	this.click = click;
 
 	this.isHighlighted = false;
+
+	// Helper variables.
+	this.drawPos = new Coords();
+	this.drawLoc = new Location(this.drawPos);
 }
 
 {
@@ -68,7 +72,7 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 
 	ControlButton.prototype.draw = function(universe, display, drawLoc)
 	{
-		var drawPos = drawLoc.pos.clone();
+		var drawPos = this.drawLoc.overwriteWith(drawLoc).pos;
 		drawPos.add(this.pos);
 
 		var isEnabled = this.isEnabled();

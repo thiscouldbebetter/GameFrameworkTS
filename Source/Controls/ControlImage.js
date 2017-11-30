@@ -8,6 +8,7 @@ function ControlImage(name, pos, size, image)
 
 	// Helper variables.
 	this.drawPos = new Coords();
+	this.drawLoc = new Location(this.drawPos);
 }
 
 {

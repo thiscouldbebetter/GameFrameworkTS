@@ -64,7 +64,7 @@ function ControlContainer(name, pos, size, children)
 
 			while (true)
 			{
-				this.indexOfChildWithFocus = 
+				this.indexOfChildWithFocus =
 				(
 					this.indexOfChildWithFocus + direction
 				).wrapToRangeMinMax
@@ -298,7 +298,8 @@ function ControlContainer(name, pos, size, children)
 		for (var i = 0; i < children.length; i++)
 		{
 			var child = children[i];
-			child.draw(universe, display, drawLoc);
+			child.drawLoc.overwriteWith(drawLoc);
+			child.draw(universe, display, child.drawLoc);
 		}
 	}
 }

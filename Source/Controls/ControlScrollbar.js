@@ -6,7 +6,7 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 	this.fontHeightInPixels = fontHeightInPixels;
 	this.itemHeight = itemHeight;
 	this._items = items;
-	this.sliderPosInItems = sliderPosInItems;
+	this._sliderPosInItems = sliderPosInItems;
 
 	this.windowSizeInItems = Math.floor(this.size.y / itemHeight);
 
@@ -35,9 +35,9 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 		true, // isEnabled
 		this.scrollDown // click
 	);
-	
+
 	// Helper variables.
-	this.drawPos = new Coords();	
+	this.drawPos = new Coords();
 }
 
 {
@@ -58,24 +58,28 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 
 	ControlScrollbar.prototype.scrollDown = function()
 	{
-		this.sliderPosInItems = 
+		var sliderPosInItems = 
 		(
-			this.sliderPosInItems + 1
+			this.sliderPosInItems() + 1
 		).trimToRangeMinMax
 		(
 			0, this.sliderMaxInItems()
 		);
+
+		this._sliderPosInItems = sliderPosInItems;
 	}
 
 	ControlScrollbar.prototype.scrollUp = function()
 	{
-		this.sliderPosInItems = 
+		var sliderPosInItems = 
 		(
-			this.sliderPosInItems - 1
+			this.sliderPosInItems() - 1
 		).trimToRangeMinMax
 		(
 			0, this.sliderMaxInItems()
 		);
+
+		this._sliderPosInItems = sliderPosInItems;
 	}
 
 	ControlScrollbar.prototype.slideSizeInPixels = function()
@@ -89,6 +93,11 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 		return slideSizeInPixels;
 	}
 
+	ControlScrollbar.prototype.sliderPosInItems = function()
+	{
+		return this._sliderPosInItems;
+	}
+
 	ControlScrollbar.prototype.sliderMaxInItems = function()
 	{
 		return this.items().length - Math.floor(this.windowSizeInItems);
@@ -100,7 +109,7 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 		(
 			this.size.x - this.handleSize.x,
 			this.handleSize.y
-				+ this.sliderPosInItems
+				+ this.sliderPosInItems()
 				* this.slideSizeInPixels().y
 				/ this.items().length
 		);
@@ -131,9 +140,14 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 
 		if (this.windowSizeInItems < numberOfItems)
 		{
-			var drawPos = this.drawPos.overwriteWith(drawLoc.pos).add(this.pos);
-			display.drawRectangle(drawPos, this.size, display.colorFore, null);
+			var style = this.style(universe);
+			var colorFore = (this.isHighlighted == true ? style.colorFill : style.colorBorder);
+			var colorBack = (this.isHighlighted == true ? style.colorBorder : style.colorFill);
 
+			var drawPos = this.drawPos.overwriteWith(drawLoc.pos).add(this.pos);
+			display.drawRectangle(drawPos, this.size, colorFore, null);
+
+			drawLoc.pos.add(this.pos);
 			this.buttonScrollDown.draw(universe, display, drawLoc);
 			this.buttonScrollUp.draw(universe, display, drawLoc);
 
@@ -144,8 +158,8 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 			(
 				sliderPosInPixels,
 				sliderSizeInPixels,
-				display.colorBack,
-				display.colorFore
+				colorBack,
+				colorFore
 			);
 		}
 	}

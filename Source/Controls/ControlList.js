@@ -1,5 +1,5 @@
 
-function ControlList(name, pos, size, items, bindingExpressionForItemText, fontHeightInPixels)
+function ControlList(name, pos, size, items, bindingExpressionForItemText, fontHeightInPixels, bindingForItemSelected, bindingExpressionForItemValue)
 {
 	this.name = name;
 	this.pos = pos;
@@ -7,10 +7,10 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 	this._items = items;
 	this.bindingExpressionForItemText = bindingExpressionForItemText;
 	this.fontHeightInPixels = fontHeightInPixels;
+	this.bindingForItemSelected = bindingForItemSelected;
+	this.bindingExpressionForItemValue = bindingExpressionForItemValue;
 
 	this.itemSpacing = 1.2 * this.fontHeightInPixels; // hack
-
-	this.indexOfItemSelected = 0;
 
 	this.isHighlighted = false;
 
@@ -21,12 +21,13 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 		new Coords(scrollbarWidth, this.size.y), // size
 		this.fontHeightInPixels,
 		this.itemSpacing,
-		this.items,
+		this._items,
 		0 // value
 	);
 
 	// Helper variables.
 	this.drawPos = new Coords();
+	this.drawLoc = new Location(this.drawPos);
 }
 
 {
@@ -54,12 +55,32 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 
 	ControlList.prototype.indexOfFirstItemVisible = function()
 	{
-		return this.scrollbar.sliderPosInItems;
+		return this.scrollbar.sliderPosInItems();
+	}
+
+	ControlList.prototype.indexOfItemSelected = function(valueToSet)
+	{
+		var returnValue = valueToSet;
+		var items = this.items();
+		if (valueToSet == null)
+		{
+			returnValue = items.indexOf(this.itemSelected());
+			if (returnValue == -1)
+			{
+				returnValue = null;
+			}
+		}
+		else
+		{
+			var itemToSelect = items[valueToSet];
+			this.itemSelected(itemToSelect);
+		}
+		return returnValue;
 	}
 
 	ControlList.prototype.indexOfLastItemVisible = function()
 	{
-		return this.scrollbar.sliderPosInItems + Math.floor(this.scrollbar.windowSizeInItems) - 1;
+		return this.indexOfFirstItemVisible() + Math.floor(this.scrollbar.windowSizeInItems) - 1;
 	}
 
 	ControlList.prototype.isEnabled = function()
@@ -67,50 +88,86 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 		return true;
 	}
 
-	ControlList.prototype.itemSelected = function()
+	ControlList.prototype.itemSelected = function(itemToSet)
 	{
-		return (this.indexOfItemSelected == null ? null : this.items()[this.indexOfItemSelected]);
+		var returnValue = itemToSet;
+
+		if (itemToSet == null)
+		{
+			if (this._bindingForItemSelected == null)
+			{
+				returnValue = this._itemSelected;
+			}
+			else
+			{
+				returnValue = (this.bindingForItemSelected.get == null ? this._itemSelected : this.bindingForItemSelected.get() );
+			}
+		}
+		else
+		{
+			this._itemSelected = itemToSet;
+
+			if (this.bindingForItemSelected != null)
+			{
+				var valueToSet = DataBinding.get
+				(
+					this._itemSelected, this.bindingExpressionForItemValue
+				);
+				this.bindingForItemSelected.set(valueToSet);
+			}
+		}
+
+		return returnValue;
 	}
 
 	ControlList.prototype.itemSelectedNextInDirection = function(direction)
 	{
-		var numberOfItems = this.items().length;
+		var items = this.items();
+		var numberOfItems = items.length;
 
-		if (this.indexOfItemSelected == null)
+		var itemSelected = this.itemSelected();
+		var indexOfItemSelected = this.indexOfItemSelected();
+
+		if (indexOfItemSelected == null)
 		{
 			if (numberOfItems > 0)
 			{
 				if (direction == 1)
 				{
-					this.indexOfItemSelected = 0;
+					indexOfItemSelected = 0;
 				}
 				else // if (direction == -1)
 				{
-					this.indexOfItemSelected = numberOfItems - 1;
+					indexOfItemSelected = numberOfItems - 1;
 				}
 			}
 		}
 		else
 		{
-			this.indexOfItemSelected = 
+			indexOfItemSelected =
 			(
-				this.indexOfItemSelected + direction
+				indexOfItemSelected + direction
 			).trimToRangeMinMax(0, numberOfItems - 1);
 		}
+
+		var itemToSelect = (indexOfItemSelected == null ? null : items[indexOfItemSelected]);
+		this.itemSelected(itemToSelect);
 
 		var indexOfFirstItemVisible = this.indexOfFirstItemVisible();
 		var indexOfLastItemVisible = this.indexOfLastItemVisible();
 
-		if (this.indexOfItemSelected < indexOfFirstItemVisible)
+		var indexOfItemSelected = this.indexOfItemSelected();
+		if (indexOfItemSelected < indexOfFirstItemVisible)
 		{
-			this.scrollbar.sliderPosInItems--;
+			this.scrollbar.scrollUp();
 		}
-		else if (this.indexOfItemSelected > indexOfLastItemVisible)
+		else if (indexOfItemSelected > indexOfLastItemVisible)
 		{
-			this.scrollbar.sliderPosInItems++;
+			this.scrollbar.scrollDown();
 		}
 
-		return this.itemSelected();
+		var returnValue = this.itemSelected();
+		return returnValue;
 	}
 
 	ControlList.prototype.items = function()
@@ -156,7 +213,7 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 
 			if (indexOfItemClicked < this.items().length)
 			{
-				this.indexOfItemSelected = indexOfItemClicked;
+				this.indexOfItemSelected(indexOfItemClicked);
 			}
 		}
 	}
@@ -199,9 +256,13 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 			indexEnd = items.length - 1;
 		}
 
+		var itemSelected = this.itemSelected();
+
 		for (var i = indexStart; i <= indexEnd; i++)
 		{
-			if (i == this.indexOfItemSelected)
+			var item = items[i];
+
+			if (item == itemSelected)
 			{
 				display.drawRectangle
 				(
@@ -221,7 +282,6 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 				)
 			}
 
-			var item = items[i];
 			var text = DataBinding.get
 			(
 				item, this.bindingExpressionForItemText
@@ -236,7 +296,7 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 				drawPos2,
 				colorFore,
 				colorBack,
-				(i == this.indexOfItemSelected), // areColorsReversed
+				(i == this.indexOfItemSelected()), // areColorsReversed
 				false, // isCentered
 				this.size.x // widthMaxInPixels
 			);

@@ -217,21 +217,38 @@ var testCollisionsOfSpheresAndShells = new Test
 		doCollide = collisionHelper.doCollidersCollide(sphereUnitAtX2, shell2To3AtOrigin);
 		assertExpectedEqualToActual(true, doCollide);
 
-		var wedgeHalfTurn = new Wedge(shell2To3AtOrigin.sphereOuter.center, new Coords(1, 0, 0), .5);
+		var wedgeHalfTurnFirst = new Wedge(shell2To3AtOrigin.sphereOuter.center, new Coords(1, 0, 0), .5);
 
-		doCollide = collisionHelper.doCollidersCollide(sphereUnitAtOrigin, wedgeHalfTurn);
+		doCollide = collisionHelper.doCollidersCollide(sphereUnitAtOrigin, wedgeHalfTurnFirst);
 		assertExpectedEqualToActual(true, doCollide);
 
-		doCollide = collisionHelper.doCollidersCollide(sphereUnitAtX2, wedgeHalfTurn);
+		doCollide = collisionHelper.doCollidersCollide(sphereUnitAtX2, wedgeHalfTurnFirst);
 		assertExpectedEqualToActual(true, doCollide);
 
-		var arc2To3HalfTurnAtOrigin = new Arc(shell2To3AtOrigin, wedgeHalfTurn);
+		var arc2To3HalfTurnFirstAtOrigin = new Arc(shell2To3AtOrigin, wedgeHalfTurnFirst);
 
-		doCollide = collisionHelper.doCollidersCollide(sphereUnitAtOrigin, arc2To3HalfTurnAtOrigin);
+		doCollide = collisionHelper.doCollidersCollide(sphereUnitAtOrigin, arc2To3HalfTurnFirstAtOrigin);
 		assertExpectedEqualToActual(false, doCollide);
 
-		doCollide = collisionHelper.doCollidersCollide(sphereUnitAtX2, arc2To3HalfTurnAtOrigin);
+		doCollide = collisionHelper.doCollidersCollide(sphereUnitAtX2, arc2To3HalfTurnFirstAtOrigin);
 		assertExpectedEqualToActual(true, doCollide);
+
+		var wedgeHalfTurnSecond = new Wedge(shell2To3AtOrigin.sphereOuter.center, new Coords(0, 1, 0), .5);
+
+		doCollide = collisionHelper.doCollidersCollide(sphereUnitAtOrigin, wedgeHalfTurnSecond);
+		assertExpectedEqualToActual(true, doCollide);
+
+		doCollide = collisionHelper.doCollidersCollide(sphereUnitAtX2, wedgeHalfTurnSecond);
+		assertExpectedEqualToActual(true, doCollide);
+
+		var arc2To3HalfTurnSecondAtOrigin = new Arc(shell2To3AtOrigin, wedgeHalfTurnSecond);
+
+		doCollide = collisionHelper.doCollidersCollide(sphereUnitAtOrigin, arc2To3HalfTurnSecondAtOrigin);
+		assertExpectedEqualToActual(false, doCollide);
+
+		doCollide = collisionHelper.doCollidersCollide(sphereUnitAtX2, arc2To3HalfTurnSecondAtOrigin);
+		assertExpectedEqualToActual(true, doCollide);
+
 	}
 );
 
