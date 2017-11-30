@@ -19,7 +19,7 @@ function Camera(viewSize, focalLength, loc)
 				new Plane(new Coords(0, 0, 0), 0),
 				new Plane(new Coords(0, 0, 0), 0),
 				new Plane(new Coords(0, 0, 0), 0),
-			];			
+			];
 		}
 
 		var cameraLoc = this.loc;
@@ -28,7 +28,7 @@ function Camera(viewSize, focalLength, loc)
 		var cameraPos = cameraLoc.pos.clone();
 
 		var centerOfViewPlane = cameraPos.clone().add
-		(	
+		(
 			cameraOrientation.forward.clone().multiplyScalar
 			(
 				this.focalLength
@@ -39,7 +39,7 @@ function Camera(viewSize, focalLength, loc)
 		(
 			this.viewSizeHalf.x
 		);
-		
+
 		var cornerOffsetDown = cameraOrientation.down.clone().multiplyScalar
 		(
 			this.viewSizeHalf.y
@@ -80,7 +80,7 @@ function Camera(viewSize, focalLength, loc)
 			),
 
 		];
-		
+
 		var numberOfCorners = cameraViewCorners.length;
 
 		for (var i = 0; i < numberOfCorners; i++)

@@ -24,6 +24,9 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 		this.items,
 		0 // value
 	);
+
+	// Helper variables.
+	this.drawPos = new Coords();
 }
 
 {
@@ -165,9 +168,9 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 
 	// drawable
 
-	ControlList.prototype.drawToDisplayAtLoc = function(universe, display, drawLoc)
+	ControlList.prototype.draw = function(universe, display, drawLoc)
 	{
-		var drawPos = drawLoc.pos.add(this.pos);
+		var drawPos = this.drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 
 		var style = this.style(universe);
 		var colorFore = (this.isHighlighted == true ? style.colorFill : style.colorBorder);
@@ -241,6 +244,6 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 			itemPosY += itemSizeY;
 		}
 
-		this.scrollbar.drawToDisplayAtLoc(universe, display, drawLoc);
+		this.scrollbar.draw(universe, display, drawLoc);
 	}
 }

@@ -19,6 +19,8 @@ function ControlContainer(name, pos, size, children)
 	this.childrenContainingPosPrev = [];
 
 	// Helper variables.
+	this.drawPos = new Coords();
+	this.drawLoc = new Location(this.drawPos);
 	this.mouseClickPos = new Coords();
 	this.mouseMovePos = new Coords();
 	this.mouseMovePosPrev = new Coords();
@@ -280,9 +282,10 @@ function ControlContainer(name, pos, size, children)
 
 	// drawable
 
-	ControlContainer.prototype.drawToDisplayAtLoc = function(universe, display, drawLoc)
+	ControlContainer.prototype.draw = function(universe, display, drawLoc)
 	{
-		var drawPos = drawLoc.pos.add(this.pos);
+		drawLoc = this.drawLoc.overwriteWith(drawLoc);
+		var drawPos = this.drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 		var style = this.style(universe);
 
 		display.drawRectangle
@@ -295,7 +298,7 @@ function ControlContainer(name, pos, size, children)
 		for (var i = 0; i < children.length; i++)
 		{
 			var child = children[i];
-			child.drawToDisplayAtLoc(universe, display, drawLoc.clone());
+			child.draw(universe, display, drawLoc);
 		}
 	}
 }

@@ -40,7 +40,7 @@ function VenueControls(controlRoot)
 		var drawLoc = display.drawLoc;
 		drawLoc.pos.clear();
 		//display.clear();
-		this.controlRoot.drawToDisplayAtLoc(universe, display, drawLoc);
+		this.controlRoot.draw(universe, display, drawLoc);
 	}
 
 	VenueControls.prototype.updateForTimerTick = function(universe)

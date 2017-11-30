@@ -40,6 +40,9 @@ function ControlSelect
 	}
 
 	this.isHighlighted = false;
+
+	// Helper variables.
+	this.drawPos = new Coords();
 }
 
 {
@@ -147,14 +150,14 @@ function ControlSelect
 
 	ControlSelect.prototype.valueSelected = function()
 	{
-		return (this._valueSelected.get == null ? this._valueSelected : this._valueSelected.get() );
+		return (this._valueSelected == null ? null : (this._valueSelected.get == null ? this._valueSelected : this._valueSelected.get() ) );
 	}
 
 	// drawable
 
-	ControlSelect.prototype.drawToDisplayAtLoc = function(universe, display, drawLoc)
+	ControlSelect.prototype.draw = function(universe, display, drawLoc)
 	{
-		var drawPos = drawLoc.pos.add(this.pos);
+		var drawPos = this.drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 
 		var style = this.style(universe);
 

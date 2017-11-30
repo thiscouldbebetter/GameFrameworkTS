@@ -7,6 +7,9 @@ function ControlLabel(name, pos, size, isTextCentered, text, fontHeightInPixels)
 	this.isTextCentered = isTextCentered;
 	this._text = text;
 	this.fontHeightInPixels = fontHeightInPixels;
+
+	// Helper variables.
+	this.drawPos = new Coords();
 }
 
 {
@@ -22,22 +25,25 @@ function ControlLabel(name, pos, size, isTextCentered, text, fontHeightInPixels)
 
 	// drawable
 
-	ControlLabel.prototype.drawToDisplayAtLoc = function(universe, display, drawLoc)
+	ControlLabel.prototype.draw = function(universe, display, drawLoc)
 	{
-		var drawPos = drawLoc.pos.add(this.pos);
+		var drawPos = this.drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 		var style = this.style(universe);
 		var text = this.text();
 
-		display.drawText
-		(
-			text,
-			this.fontHeightInPixels,
-			drawPos,
-			style.colorBorder,
-			style.colorFill, // colorOutline
-			null, // areColorsReversed
-			this.isTextCentered,
-			this.size.x // widthMaxInPixels
-		);
+		if (text != null)
+		{
+			display.drawText
+			(
+				text,
+				this.fontHeightInPixels,
+				drawPos,
+				style.colorBorder,
+				style.colorFill, // colorOutline
+				null, // areColorsReversed
+				this.isTextCentered,
+				this.size.x // widthMaxInPixels
+			);
+		}
 	}
 }

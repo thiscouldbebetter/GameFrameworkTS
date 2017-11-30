@@ -10,6 +10,9 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 
 	this.isHighlighted = false;
 	this.cursorPos = this.text().length;
+
+	// Helper variables.
+	this.drawPos = new Coords();
 }
 
 {
@@ -135,9 +138,9 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 
 	// drawable
 
-	ControlTextBox.prototype.drawToDisplayAtLoc = function(universe, display, drawLoc)
+	ControlTextBox.prototype.draw = function(universe, display, drawLoc)
 	{
-		var drawPos = drawLoc.pos.add(this.pos);
+		var drawPos = this.drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 		var style = this.style(universe);
 
 		var text = this.text();

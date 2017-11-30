@@ -5,6 +5,9 @@ function ControlImage(name, pos, size, image)
 	this.pos = pos;
 	this.size = size;
 	this.image = image;
+
+	// Helper variables.
+	this.drawPos = new Coords();
 }
 
 {
@@ -15,9 +18,9 @@ function ControlImage(name, pos, size, image)
 
 	// drawable
 
-	ControlImage.prototype.drawToDisplayAtLoc = function(universe, display, drawLoc)
+	ControlImage.prototype.draw = function(universe, display, drawLoc)
 	{
-		var drawPos = drawLoc.pos.add(this.pos);
+		var drawPos = this.drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 		var style = this.style(universe);
 
 		display.drawRectangle

@@ -13,7 +13,7 @@ function VisualRay(length, color)
 {
 	VisualRay.prototype.draw = function(universe, display, drawable, loc)
 	{
-		this.polar.angleInTurns = loc.orientation.headingInTurns();
+		this.polar.azimuthInTurns = loc.orientation.headingInTurns();
 
 		this.polar.toCoords
 		(

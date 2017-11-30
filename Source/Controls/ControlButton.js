@@ -66,7 +66,7 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 
 	// drawable
 
-	ControlButton.prototype.drawToDisplayAtLoc = function(universe, display, drawLoc)
+	ControlButton.prototype.draw = function(universe, display, drawLoc)
 	{
 		var drawPos = drawLoc.pos.clone();
 		drawPos.add(this.pos);
