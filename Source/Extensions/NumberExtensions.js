@@ -5,6 +5,11 @@ function NumberExtensions()
 }
 
 {
+	Number.prototype.isInRangeMinMax = function(min, max)
+	{
+		return (this >= min && this <= max);
+	}
+
 	Number.prototype.trimToRangeMinMax = function(min, max)
 	{
 		var value = this;

@@ -30,100 +30,17 @@ function ControlContainer(name, pos, size, children)
 {
 	// instance methods
 
-	ControlContainer.prototype.childWithFocus = function()
+	ControlContainer.prototype.isEnabled = function()
 	{
-		var returnValue =
-		(
-			this.indexOfChildWithFocus == null
-			? null
-			: this.children[this.indexOfChildWithFocus]
-		);
-
-		return returnValue;
+		return true;
 	}
 
-	ControlContainer.prototype.childWithFocusNextInDirection = function(direction)
+	ControlContainer.prototype.style = function(universe)
 	{
-		if (this.indexOfChildWithFocus == null)
-		{
-			var iStart = (direction == 1 ? 0 : this.children.length - 1);
-			var iEnd = (direction == 1 ? this.children.length : -1);
-
-			for (var i = iStart; i != iEnd; i += direction)
-			{
-				var child = this.children[i];
-				if (child.focusGain != null && child.isEnabled() == true)
-				{
-					this.indexOfChildWithFocus = i;
-					break;
-				}
-			}
-		}
-		else
-		{
-			var childIndexOriginal = this.indexOfChildWithFocus;
-
-			while (true)
-			{
-				this.indexOfChildWithFocus =
-				(
-					this.indexOfChildWithFocus + direction
-				).wrapToRangeMinMax
-				(
-					0, this.children.length
-				);
-
-				if (this.indexOfChildWithFocus == childIndexOriginal)
-				{
-					break;
-				}
-				else
-				{
-					var child = this.children[this.indexOfChildWithFocus];
-					if (child.focusGain != null && child.isEnabled())
-					{
-						break;
-					}
-				}
-
-			} // end while (true)
-
-		} // end if
-
-		var returnValue = this.childWithFocus();
-
-		return returnValue;
+		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
 	}
 
-	ControlContainer.prototype.childrenAtPosAddToList = function
-	(
-		posToCheck,
-		listToAddTo,
-		addFirstChildOnly
-	)
-	{
-		for (var i = this.children.length - 1; i >= 0; i--)
-		{
-			var child = this.children[i];
-
-			var doesChildContainPos = posToCheck.isInRangeMinMax
-			(
-				child.pos,
-				this.childMax.overwriteWith(child.pos).add(child.size)
-			);
-
-			if (doesChildContainPos == true)
-			{
-				listToAddTo.push(child);
-				if (addFirstChildOnly == true)
-				{
-					break;
-				}
-			}
-		}
-
-		return listToAddTo;
-	}
+	// actions
 
 	ControlContainer.prototype.actionHandle = function(universe, actionNameToHandle)
 	{
@@ -180,11 +97,26 @@ function ControlContainer(name, pos, size, children)
 					childWithFocus.focusGain();
 				}
 			}
+			else if (childWithFocus.childWithFocus != null)
+			{
+				childWithFocus.actionHandle(universe, actionNameToHandle);
+				if (childWithFocus.childWithFocus() == null)
+				{
+					childWithFocus = this.childWithFocusNextInDirection(direction);
+					if (childWithFocus != null)
+					{
+						childWithFocus.focusGain();
+					}
+				}
+			}
 			else
 			{
 				childWithFocus.focusLose();
 				childWithFocus = this.childWithFocusNextInDirection(direction);
-				childWithFocus.focusGain();
+				if (childWithFocus != null)
+				{
+					childWithFocus.focusGain();
+				}
 			}
 		}
 		else if (childWithFocus != null)
@@ -193,6 +125,114 @@ function ControlContainer(name, pos, size, children)
 			{
 				childWithFocus.actionHandle(universe, actionNameToHandle);
 			}
+		}
+	}
+
+	ControlContainer.prototype.childWithFocus = function()
+	{
+		return (this.indexOfChildWithFocus == null ? null : this.children[this.indexOfChildWithFocus] );
+	}
+
+	ControlContainer.prototype.childWithFocusNextInDirection = function(direction)
+	{
+		if (this.indexOfChildWithFocus == null)
+		{
+			var iStart = (direction == 1 ? 0 : this.children.length - 1);
+			var iEnd = (direction == 1 ? this.children.length : -1);
+
+			for (var i = iStart; i != iEnd; i += direction)
+			{
+				var child = this.children[i];
+				if (child.focusGain != null && child.isEnabled != null && child.isEnabled())
+				{
+					this.indexOfChildWithFocus = i;
+					break;
+				}
+			}
+		}
+		else
+		{
+			var childIndexOriginal = this.indexOfChildWithFocus;
+
+			while (true)
+			{
+				this.indexOfChildWithFocus += direction;
+
+				var isChildNextInRange = this.indexOfChildWithFocus.isInRangeMinMax
+				(
+					0, this.children.length - 1
+				);
+
+				if (isChildNextInRange == false)
+				{
+					this.indexOfChildWithFocus = null;
+					break;
+				}
+				else
+				{
+					var child = this.children[this.indexOfChildWithFocus];
+					if (child.focusGain != null && child.isEnabled != null && child.isEnabled())
+					{
+						break;
+					}
+				}
+
+			} // end while (true)
+
+		} // end if
+
+		var returnValue = this.childWithFocus();
+
+		return returnValue;
+	}
+
+	ControlContainer.prototype.childrenAtPosAddToList = function
+	(
+		posToCheck,
+		listToAddTo,
+		addFirstChildOnly
+	)
+	{
+		for (var i = this.children.length - 1; i >= 0; i--)
+		{
+			var child = this.children[i];
+
+			var doesChildContainPos = posToCheck.isInRangeMinMax
+			(
+				child.pos,
+				this.childMax.overwriteWith(child.pos).add(child.size)
+			);
+
+			if (doesChildContainPos == true)
+			{
+				listToAddTo.push(child);
+				if (addFirstChildOnly == true)
+				{
+					break;
+				}
+			}
+		}
+
+		return listToAddTo;
+	}
+
+	ControlContainer.prototype.focusGain = function()
+	{
+		this.indexOfChildWithFocus = null;
+		var childWithFocus = this.childWithFocusNextInDirection(1)
+		if (childWithFocus != null)
+		{
+			childWithFocus.focusGain();
+		}
+	}
+
+	ControlContainer.prototype.focusLose = function()
+	{
+		var childWithFocus = this.childWithFocus();
+		if (childWithFocus != null)
+		{
+			childWithFocus.focusLose();
+			this.indexOfChildWithFocus = null;
 		}
 	}
 
@@ -266,11 +306,6 @@ function ControlContainer(name, pos, size, children)
 				}
 			}
 		}
-	}
-
-	ControlContainer.prototype.style = function(universe)
-	{
-		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
 	}
 
 	// drawable
