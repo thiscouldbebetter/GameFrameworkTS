@@ -59,8 +59,26 @@ function DataBinding(context, bindingExpression)
 				var bindingExpressionPart = bindingExpressionParts[i];
 				context = context[bindingExpressionPart];
 			}
-			var bindingExpressionPartFinal = bindingExpressionParts[bindingExpressionParts.length - 1];
-			context[bindingExpressionPartFinal] = valueToSet;
+			var bindingExpressionPart = bindingExpressionParts[bindingExpressionParts.length - 1];
+			if (bindingExpressionPart.endsWith("()") == true)
+			{
+				bindingExpressionPart = bindingExpressionPart.substr
+				(
+					0, bindingExpressionPart.length - "()".length
+				);
+				if (context[bindingExpressionPart] == null)
+				{
+					returnValue = null;
+				}
+				else
+				{
+					returnValue = context[bindingExpressionPart](this.context, valueToSet);
+				}
+			}
+			else
+			{
+				context[bindingExpressionPart] = valueToSet;
+			}
 		}
 	}
 }
