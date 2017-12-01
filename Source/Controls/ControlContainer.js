@@ -95,7 +95,6 @@ function ControlContainer(name, pos, size, children)
 		return returnValue;
 	}
 
-
 	ControlContainer.prototype.childrenAtPosAddToList = function
 	(
 		posToCheck,
@@ -130,46 +129,44 @@ function ControlContainer(name, pos, size, children)
 	{
 		var childWithFocus = this.childWithFocus();
 
-		if (actionNameToHandle == "MouseClick")
-		{
-			var inputHelper = universe.inputHelper;
-			this.mouseClickPos.overwriteWith
-			(
-				inputHelper.mouseClickPos
-			).divide
-			(
-				universe.display.scaleFactor
-			);
-			var wasClickHandled = this.mouseClick(universe, this.mouseClickPos);
-
-			if (wasClickHandled == true)
-			{
-				inputHelper.inputRemove(actionNameToHandle);
-			}
-		}
-		else if (actionNameToHandle == "MouseMove")
+		if (actionNameToHandle.startsWith("Mouse") == true)
 		{
 			var inputHelper = universe.inputHelper;
 			var scaleFactor = universe.display.scaleFactor;
-			this.mouseMovePos.overwriteWith
-			(
-				inputHelper.mouseMovePos
-			).divide
-			(
-				scaleFactor
-			);
-			this.mouseMovePosPrev.overwriteWith
-			(
-				inputHelper.mouseMovePosPrev
-			).divide
-			(
-				scaleFactor
-			);
+			if (actionNameToHandle == "MouseClick")
+			{
+				this.mouseClickPos.overwriteWith
+				(
+					inputHelper.mouseClickPos
+				).divide
+				(
+					scaleFactor
+				);
+				this.mouseClick(universe, this.mouseClickPos);
+				inputHelper.inputRemove(actionNameToHandle);
+			}
+			else if (actionNameToHandle == "MouseMove")
+			{
+				this.mouseMovePos.overwriteWith
+				(
+					inputHelper.mouseMovePos
+				).divide
+				(
+					scaleFactor
+				);
+				this.mouseMovePosPrev.overwriteWith
+				(
+					inputHelper.mouseMovePosPrev
+				).divide
+				(
+					scaleFactor
+				);
 
-			this.mouseMove
-			(
-				this.mouseMovePos, this.mouseMovePosPrev
-			);
+				this.mouseMove
+				(
+					this.mouseMovePos, this.mouseMovePosPrev
+				);
+			}
 		}
 		else if (actionNameToHandle == "ControlPrev" || actionNameToHandle == "ControlNext")
 		{
@@ -201,34 +198,29 @@ function ControlContainer(name, pos, size, children)
 
 	ControlContainer.prototype.mouseClick = function(universe, mouseClickPos)
 	{
-		var wasClickHandled = false;
+		mouseClickPos = this.mouseClickPos.overwriteWith
+		(
+			mouseClickPos
+		).subtract
+		(
+			this.pos
+		);
 
-		var childrenContainingPos = this.childrenContainingPos;
-		childrenContainingPos.length = 0;
-
-		mouseClickPos = this.mouseClickPos.overwriteWith(mouseClickPos).subtract(this.pos);
-
-		this.childrenAtPosAddToList
+		var childrenContainingPos = this.childrenAtPosAddToList
 		(
 			mouseClickPos,
-			childrenContainingPos,
+			this.childrenContainingPos.clear(),
 			true // addFirstChildOnly
 		);
 
-		for (var i = 0; i < childrenContainingPos.length; i++)
+		if (childrenContainingPos.length > 0)
 		{
-			var child = childrenContainingPos[i];
+			var child = childrenContainingPos[0];
 			if (child.mouseClick != null)
 			{
-				var wasClickHandledByChild = child.mouseClick(universe, mouseClickPos);
-				if (wasClickHandledByChild == true)
-				{
-					wasClickHandled = true;
-				}
+				child.mouseClick(universe, mouseClickPos);
 			}
 		}
-
-		return wasClickHandled;
 	}
 
 	ControlContainer.prototype.mouseMove = function(mouseMovePos)
@@ -239,12 +231,10 @@ function ControlContainer(name, pos, size, children)
 
 		mouseMovePos = this.mouseMovePos.overwriteWith(mouseMovePos).subtract(this.pos);
 
-		var childrenContainingPos = this.childrenContainingPos;
-		childrenContainingPos.length = 0;
-		this.childrenAtPosAddToList
+		var childrenContainingPos = this.childrenAtPosAddToList
 		(
 			mouseMovePos,
-			childrenContainingPos,
+			this.childrenContainingPos.clear(),
 			true // addFirstChildOnly
 		);
 

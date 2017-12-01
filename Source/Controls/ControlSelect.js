@@ -142,7 +142,6 @@ function ControlSelect
 	ControlSelect.prototype.mouseClick = function(universe, clickPos)
 	{
 		this.optionSelectedNextInDirection(1);
-		return true; // wasClickHandled
 	}
 
 	ControlSelect.prototype.style = function(universe)

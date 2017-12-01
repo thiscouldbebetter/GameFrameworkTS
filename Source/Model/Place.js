@@ -26,7 +26,7 @@ function Place(entities)
 			this.entities.remove(entity);
 			delete this.entities[entity.name];
 		}
-		this.entitiesToRemove.length = 0;
+		this.entitiesToRemove.clear();
 	}
 
 	Place.prototype.entitiesSpawn = function(universe, world)
@@ -52,7 +52,7 @@ function Place(entities)
 			}
 		}
 
-		this.entitiesToSpawn.length = 0;
+		this.entitiesToSpawn.clear();
 	}
 
 	Place.prototype.updateForTimerTick = function(universe, world)

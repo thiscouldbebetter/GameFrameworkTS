@@ -50,8 +50,6 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 		{
 			this.click(universe);
 		}
-
-		return true; // wasClickHandled
 	}
 
 	ControlButton.prototype.mouseEnter = function()

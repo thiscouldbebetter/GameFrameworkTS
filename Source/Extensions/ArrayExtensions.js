@@ -24,6 +24,12 @@ function ArrayExtensions()
 		return this;
 	}
 
+	Array.prototype.clear = function()
+	{
+		this.length = 0;
+		return this;
+	}
+
 	Array.prototype.clone = function()
 	{
 		var returnValue = [];
