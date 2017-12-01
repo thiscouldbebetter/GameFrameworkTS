@@ -6,7 +6,7 @@ function Action(name, perform)
 }
 {
 	Action.Instances = new Action_Instances();
-	
+
 	function Action_Instances()
 	{
 		this.DoNothing = new Action

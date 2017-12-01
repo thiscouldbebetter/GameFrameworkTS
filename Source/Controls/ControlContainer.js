@@ -19,6 +19,7 @@ function ControlContainer(name, pos, size, children)
 	this.childrenContainingPosPrev = [];
 
 	// Helper variables.
+	this.childMax = new Coords();
 	this.drawPos = new Coords();
 	this.drawLoc = new Location(this.drawPos);
 	this.mouseClickPos = new Coords();
@@ -102,8 +103,6 @@ function ControlContainer(name, pos, size, children)
 		addFirstChildOnly
 	)
 	{
-		posToCheck = posToCheck.clone().subtract(this.pos);
-
 		for (var i = this.children.length - 1; i >= 0; i--)
 		{
 			var child = this.children[i];
@@ -111,7 +110,7 @@ function ControlContainer(name, pos, size, children)
 			var doesChildContainPos = posToCheck.isInRangeMinMax
 			(
 				child.pos,
-				child.pos.clone().add(child.size)
+				this.childMax.overwriteWith(child.pos).add(child.size)
 			);
 
 			if (doesChildContainPos == true)
@@ -207,6 +206,8 @@ function ControlContainer(name, pos, size, children)
 		var childrenContainingPos = this.childrenContainingPos;
 		childrenContainingPos.length = 0;
 
+		mouseClickPos = this.mouseClickPos.overwriteWith(mouseClickPos).subtract(this.pos);
+
 		this.childrenAtPosAddToList
 		(
 			mouseClickPos,
@@ -235,6 +236,8 @@ function ControlContainer(name, pos, size, children)
 		var temp = this.childrenContainingPosPrev;
 		this.childrenContainingPosPrev = this.childrenContainingPos;
 		this.childrenContainingPos = temp;
+
+		mouseMovePos = this.mouseMovePos.overwriteWith(mouseMovePos).subtract(this.pos);
 
 		var childrenContainingPos = this.childrenContainingPos;
 		childrenContainingPos.length = 0;

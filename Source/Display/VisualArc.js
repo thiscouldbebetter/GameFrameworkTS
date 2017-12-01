@@ -4,7 +4,7 @@ function VisualArc(arc, colorFill, colorBorder)
 	this.arc = arc;
 	this.colorFill = colorFill;
 	this.colorBorder = colorBorder;
-	
+
 	// helper variables
 	this.drawPos = new Coords();
 }
@@ -16,12 +16,12 @@ function VisualArc(arc, colorFill, colorBorder)
 		var wedge = arc.wedge;
 		var wedgeAngleMin = wedge.angleInTurnsMin();
 		var wedgeAngleMax = wedge.angleInTurnsMax();
-		
+
 		var drawPos = this.drawPos.overwriteWith
 		(
 			drawLoc.pos
 		);
-		
+
 		display.drawArc
 		(
 			drawPos, // center

@@ -2,7 +2,7 @@
 function TimerHelper(ticksPerSecond)
 {
 	this.ticksPerSecond = ticksPerSecond;
-	
+
 	var millisecondsPerSecond = 1000;
 	this.millisecondsPerTick = Math.floor
 	(

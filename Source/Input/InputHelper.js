@@ -1,7 +1,12 @@
 
 function InputHelper()
 {
-	// do nothing
+	// Helper variables.
+
+	this.mouseClickPos = new Coords();
+	this.mouseMovePos = new Coords(0, 0);
+	this.mouseMovePosPrev = new Coords(0, 0);
+	this.mouseMovePosNext = new Coords(0, 0);
 }
 
 {
@@ -11,25 +16,17 @@ function InputHelper()
 		this.inputsActive = [];
 		this.gamepadsConnected = [];
 
-		this.isMouseTracked = true; // hack
-		if (this.isMouseTracked == true)
-		{
-			this.isMouseClicked = false;
-			this.mouseClickPos = new Coords();
-
-			this.mouseMovePos = new Coords(0, 0);
-			this.mouseMovePosPrev = new Coords(0, 0);
-			this.mouseMovePosNext = new Coords(0, 0);
-		}
-
 		document.body.onkeydown = this.handleEventKeyDown.bind(this);
 		document.body.onkeyup = this.handleEventKeyUp.bind(this);
-		if (this.isMouseTracked == true)
+
+		var divMain = universe.platformHelper.divMain;
+		divMain.onmousedown = this.handleEventMouseDown.bind(this);
+		divMain.onmouseup = this.handleEventMouseUp.bind(this);
+
+		this.isMouseMovementTracked = true; // hack
+		if (this.isMouseMovementTracked == true)
 		{
-			var divMain = universe.platformHelper.divMain;
-			divMain.onmousedown = this.handleEventMouseDown.bind(this);
 			divMain.onmousemove = this.handleEventMouseMove.bind(this);
-			divMain.onmouseup = this.handleEventMouseUp.bind(this);
 		}
 
 		this.gamepadsCheck();
@@ -71,6 +68,25 @@ function InputHelper()
 		{
 			delete this.inputsActive[inputReleased];
 			this.inputsActive.remove(inputReleased);
+		}
+	}
+
+	InputHelper.prototype.isMouseClicked = function(value)
+	{
+		if (value == null)
+		{
+			return (this.inputsActive["MouseClick"] != null);
+		}
+		else
+		{
+			if (value == true)
+			{
+				this.inputAdd("MouseClick");
+			}
+			else
+			{
+				this.inputRemove("MouseClick");
+			}
 		}
 	}
 
@@ -170,8 +186,6 @@ function InputHelper()
 
 	InputHelper.prototype.handleEventMouseDown = function(event)
 	{
-		this.isMouseClicked = true;
-
 		var canvas = event.target;
 		var canvasBounds = canvas.getBoundingClientRect();
 		this.mouseClickPos.overwriteWithDimensions
@@ -193,7 +207,7 @@ function InputHelper()
 			event.clientY - canvasBounds.top,
 			0
 		);
-		
+
 		if (this.mouseMovePosNext.equals(this.mouseMovePos) == false)
 		{
 			this.mouseMovePosPrev.overwriteWith(this.mouseMovePos);
@@ -204,7 +218,6 @@ function InputHelper()
 
 	InputHelper.prototype.handleEventMouseUp = function(event)
 	{
-		this.isMouseClicked = false;
 		this.inputRemove("MouseClick");
 	}
 

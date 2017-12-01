@@ -28,6 +28,7 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 	// Helper variables.
 	this.drawPos = new Coords();
 	this.drawLoc = new Location(this.drawPos);
+	this.mouseClickPos = new Coords();
 }
 
 {
@@ -177,6 +178,8 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 
 	ControlList.prototype.mouseClick = function(universe, clickPos)
 	{
+		clickPos = this.mouseClickPos.overwriteWith(clickPos);
+
 		if (clickPos.x - this.pos.x > this.size.x - this.scrollbar.handleSize.x)
 		{
 			if (clickPos.y - this.pos.y <= this.scrollbar.handleSize.y)
@@ -189,7 +192,7 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 			}
 			else
 			{
-				var clickPosRelativeToSlideInPixels = clickPos.clone().subtract
+				var clickPosRelativeToSlideInPixels = clickPos.subtract
 				(
 					this.scrollbar.pos
 				).subtract

@@ -8,7 +8,7 @@ function Playable()
 	{
 		// hack
 		var place = place.parent;
-		
+
 		var size = place.size;
 		var inputToActionMappings = place.inputToActionMappings;
 		var actions = place.actions;
@@ -18,9 +18,9 @@ function Playable()
 		playerLoc.orientation.forwardSet(Coords.Instances.Zeroes);
 
 		var inputHelper = universe.inputHelper;
-		if (inputHelper.isMouseClicked == true)
+		if (inputHelper.isMouseClicked() == true)
 		{
-			inputHelper.isMouseClicked = false;
+			inputHelper.isMouseClicked(false);
 			playerLoc.pos.overwriteWith
 			(
 				inputHelper.mouseClickPos

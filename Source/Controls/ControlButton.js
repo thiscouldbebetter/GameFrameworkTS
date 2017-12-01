@@ -15,6 +15,7 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 	// Helper variables.
 	this.drawPos = new Coords();
 	this.drawLoc = new Location(this.drawPos);
+	this.sizeHalf = this.size.clone().half();
 }
 
 {
@@ -53,12 +54,12 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 		return true; // wasClickHandled
 	}
 
-	ControlButton.prototype.mouseEnter = function(mouseMovePos)
+	ControlButton.prototype.mouseEnter = function()
 	{
 		this.isHighlighted = true;
 	}
 
-	ControlButton.prototype.mouseExit = function(mouseMovePos)
+	ControlButton.prototype.mouseExit = function()
 	{
 		this.isHighlighted = false;
 	}
@@ -92,7 +93,7 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 			);
 		}
 
-		drawPos.add(this.size.clone().half());
+		drawPos.add(this.sizeHalf);
 
 		display.drawText
 		(

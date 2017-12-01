@@ -13,7 +13,10 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 
 	// Helper variables.
 	this.drawPos = new Coords();
+	this.drawPosText = new Coords();
 	this.drawLoc = new Location(this.drawPos);
+	this.textMargin = new Coords();
+	this.textSize = new Coords();
 }
 
 {
@@ -154,14 +157,14 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 		);
 
 		var textWidth = display.textWidthForFontHeight(text, this.fontHeightInPixels);
-		var textSize = new Coords(textWidth, this.fontHeightInPixels);
-		var textMargin = this.size.clone().subtract(textSize).half();
-		var drawPos2 = drawPos.clone().add(textMargin);
+		var textSize = this.textSize.overwriteWithDimensions(textWidth, this.fontHeightInPixels, 0);
+		var textMargin = this.textMargin.overwriteWith(this.size).subtract(textSize).half();
+		var drawPosText = this.drawPosText.overwriteWith(drawPos).add(textMargin);
 		display.drawText
 		(
 			text,
 			this.fontHeightInPixels,
-			drawPos2,
+			drawPosText,
 			style.colorBorder,
 			style.colorFill,
 			this.isHighlighted,
@@ -181,11 +184,11 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 			(
 				textAtCursor, this.fontHeightInPixels
 			);
-			drawPos2.x += cursorX;
+			drawPosText.x += cursorX;
 
 			display.drawRectangle
 			(
-				drawPos2,
+				drawPosText,
 				new Coords(cursorWidth, this.fontHeightInPixels), // size
 				style.colorFill,
 				style.colorFill
@@ -195,7 +198,7 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 			(
 				textAtCursor,
 				this.fontHeightInPixels,
-				drawPos2,
+				drawPosText,
 				style.colorBorder,
 				null, // colorBack
 				null, // isHighlighted

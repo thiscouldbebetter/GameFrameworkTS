@@ -44,6 +44,7 @@ function ControlSelect
 	// Helper variables.
 	this.drawPos = new Coords();
 	this.drawLoc = new Location(this.drawPos);
+	this.sizeHalf = this.size.clone().half();
 }
 
 {
@@ -169,7 +170,7 @@ function ControlSelect
 			this.isHighlighted // areColorsReversed
 		)
 
-		drawPos.add(this.size.clone().half());
+		drawPos.add(this.sizeHalf);
 
 		var optionSelected = this.optionSelected();
 		var text = (optionSelected == null ? "-" : optionSelected.text);

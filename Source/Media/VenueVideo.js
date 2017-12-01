@@ -14,6 +14,11 @@ function VenueVideo(videoName, venueNext)
 }
 
 {
+	VenueVideo.prototype.draw = function()
+	{
+		// do nothing
+	}
+
 	VenueVideo.prototype.updateForTimerTick = function(universe)
 	{
 		if (this.video == null)
@@ -23,39 +28,47 @@ function VenueVideo(videoName, venueNext)
 			this.video.play(universe);
 		}
 
-		var hasUserSkippedVideo = false;
-		var inputHelper = universe.inputHelper;
-		if (inputHelper.isMouseClicked == true)
+		if (this.video.isFinished == false)
 		{
-			inputHelper.isMouseClicked = false;
-			hasUserSkippedVideo = true;
-		}
-		else
-		{
-			var inputsActive = inputHelper.inputsActive;
-			for (var i = 0; i < inputsActive.length; i++)
+			var shouldVideoBeStopped = false;
+
+			var inputHelper = universe.inputHelper;
+			if (inputHelper.isMouseClicked() == true)
 			{
-				var inputActive = inputsActive[i];
-				var inputToActionMapping = this.inputToActionMappings[inputActive];
-				if (inputToActionMapping != null)
+				inputHelper.isMouseClicked(false);
+				shouldVideoBeStopped = true;
+			}
+			else
+			{
+				var inputsActive = inputHelper.inputsActive;
+				for (var i = 0; i < inputsActive.length; i++)
 				{
-					inputHelper.inputInactivate(inputActive);
-					var actionName = inputToActionMapping.actionName;
-					if (actionName == "VideoSkip")
+					var inputActive = inputsActive[i];
+					var inputToActionMapping = this.inputToActionMappings[inputActive];
+					if (inputToActionMapping != null)
 					{
-						hasUserSkippedVideo = true;
+						inputHelper.inputInactivate(inputActive);
+						var actionName = inputToActionMapping.actionName;
+						if (actionName == "VideoSkip")
+						{
+							shouldVideoBeStopped = true;
+						}
 					}
 				}
 			}
+
+			if (shouldVideoBeStopped == true)
+			{
+				this.video.stop(universe);
+			}
 		}
 
-		if (hasUserSkippedVideo == true)
+		if (this.video.isFinished == true)
 		{
-			this.video.stop(universe);
 			var display = universe.display;
-			display.clear("Black");
+			display.clear("Black", "Black");
 			display.show(universe);
-			universe.venueNext = this.venueNext;
+			universe.venueNext = new VenueFader(this.venueNext, this);
 		}
 	}
 }

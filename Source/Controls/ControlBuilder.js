@@ -5,6 +5,10 @@ function ControlBuilder(styles)
 
 	this.fontHeightInPixelsBase = 10;
 	this.sizeBase = new Coords(200, 150, 1);
+
+	// Helper variables.
+
+	this.sizeMultiplier = new Coords();
 }
 {
 	ControlBuilder.prototype.configure = function(universe, size)
@@ -14,7 +18,7 @@ function ControlBuilder(styles)
 			size = universe.display.sizeDefault;
 		}
 
-		var sizeMultiplier = size.clone().divide(this.sizeBase);
+		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
 
 		var returnValue = new ControlContainer
 		(
@@ -249,7 +253,7 @@ function ControlBuilder(styles)
 			size = universe.display.sizeDefault;
 		}
 
-		var sizeMultiplier = size.clone().divide(this.sizeBase);
+		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
 
 		var returnValue = new ControlContainer
 		(
@@ -304,7 +308,7 @@ function ControlBuilder(styles)
 			size = universe.display.sizeDefault;
 		}
 
-		var sizeMultiplier = size.clone().divide(this.sizeBase);
+		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
 
 		var returnValue = new ControlContainer
 		(
@@ -347,7 +351,7 @@ function ControlBuilder(styles)
 			size = universe.display.sizeDefault;
 		}
 
-		var sizeMultiplier = size.clone().divide(this.sizeBase);
+		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
 
 		var returnValue = new ControlContainer
 		(
@@ -547,7 +551,7 @@ function ControlBuilder(styles)
 			size = universe.display.sizeDefault;
 		}
 
-		var sizeMultiplier = size.clone().divide(this.sizeBase);
+		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
 
 		return new ControlContainer
 		(
@@ -655,7 +659,7 @@ function ControlBuilder(styles)
 			size = universe.display.sizeDefault;
 		}
 
-		var sizeMultiplier = size.clone().divide(this.sizeBase);
+		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
 
 		var profiles = universe.profileHelper.profiles();
 
@@ -850,7 +854,7 @@ function ControlBuilder(styles)
 			size = universe.display.sizeDefault;
 		}
 
-		var sizeMultiplier = size.clone().divide(this.sizeBase);
+		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
 
 		var returnValue = new ControlContainer
 		(
@@ -899,7 +903,7 @@ function ControlBuilder(styles)
 			size = universe.display.sizeDefault;
 		}
 
-		var sizeMultiplier = size.clone().divide(this.sizeBase);
+		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
 
 		var world = universe.world;
 
@@ -1073,7 +1077,7 @@ function ControlBuilder(styles)
 			size = universe.display.sizeDefault;
 		}
 
-		var sizeMultiplier = size.clone().divide(this.sizeBase);
+		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
 
 		var returnValue = new ControlContainer
 		(
@@ -1289,7 +1293,7 @@ function ControlBuilder(styles)
 			size = universe.display.sizeDefault;
 		}
 
-		var sizeMultiplier = size.clone().divide(this.sizeBase);
+		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
 
 		var returnValue = new ControlContainer
 		(

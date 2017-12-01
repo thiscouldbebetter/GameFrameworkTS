@@ -17,7 +17,7 @@ function Place(entities)
 			drawable.updateForTimerTick(universe, world, this, entity);
 		}
 	}
-	
+
 	Place.prototype.entitiesRemove = function()
 	{
 		for (var i = 0; i < this.entitiesToRemove.length; i++)
@@ -28,7 +28,7 @@ function Place(entities)
 		}
 		this.entitiesToRemove.length = 0;
 	}
-	
+
 	Place.prototype.entitiesSpawn = function(universe, world)
 	{
 		for (var i = 0; i < this.entitiesToSpawn.length; i++)
@@ -36,7 +36,7 @@ function Place(entities)
 			var entity = this.entitiesToSpawn[i];
 			this.entities.push(entity);
 			this.entities[entity.name] = entity;
-			
+
 			var entityProperties = entity.properties;
 			for (var p = 0; p < entityProperties.length; p++)
 			{
@@ -51,14 +51,14 @@ function Place(entities)
 				entitiesWithProperty.push(entity);
 			}
 		}
-		
+
 		this.entitiesToSpawn.length = 0;
 	}
-	
+
 	Place.prototype.updateForTimerTick = function(universe, world)
 	{
 		this.entitiesSpawn();
-		
+
 		var propertyNamesToProcess = 
 		[
 			"locatable",

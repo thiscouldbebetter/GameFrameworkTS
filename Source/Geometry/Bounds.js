@@ -13,12 +13,12 @@ function Bounds(center, size)
 	{
 		return ( this.containsPoint(other.min()) && this.containsPoint(other.max()) );
 	}
-	
+
 	Bounds.prototype.containsPoint = function(pointToCheck)
 	{
 		return pointToCheck.isInRangeMinMax(this.min(), this.max());
 	}
-	
+
 	Bounds.prototype.max = function()
 	{
 		return this._max.overwriteWith(this.center).add(this.sizeHalf);
@@ -32,8 +32,8 @@ function Bounds(center, size)
 	Bounds.prototype.ofPoints = function(points)
 	{
 		var point0 = points[0];
-		var minSoFar = point0.clone();
-		var maxSoFar = point0.clone();
+		var minSoFar = this._min.overwriteWith(point0);
+		var maxSoFar = this._max.overwriteWith(point0);
 
 		for (var i = 1; i < points.length; i++)
 		{
@@ -119,7 +119,7 @@ function Bounds(center, size)
  
 		return returnValue;
 	}
-	
+
 	Bounds.prototype.trimCoords = function(coordsToTrim)
 	{
 		return coordsToTrim.trimToRangeMinMax(this.min(), this.max());

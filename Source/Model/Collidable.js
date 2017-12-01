@@ -4,7 +4,7 @@ function Collidable(collider, entityPropertyNamesToCollideWith, collideEntities)
 	this.collider = collider;
 	this.entityPropertyNamesToCollideWith = entityPropertyNamesToCollideWith;
 	this.collideEntities = collideEntities;
-	
+
 	if (this.entityPropertyNamesToCollideWith == null)
 	{
 		this.entityPropertyNamesToCollideWith = [];

@@ -19,7 +19,7 @@ function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 		universe.platformHelper.domElementRemove(this.domElement);
 
 		var display = universe.display;
-		display.clear("Black");
+		display.clear("Black", "Black");
 		display.show(universe);
 	}
 

@@ -3,11 +3,14 @@ function Sphere(center, radius)
 {
 	this.center = center;
 	this.radius = radius;
+
+	// Helper variables.
+	this.displacement = new Coords();
 }
 {
 	Sphere.prototype.containsOther = function(other)
 	{
-		var displacementOfOther = other.center.clone().subtract(this.center);
+		var displacementOfOther = this.displacement.overwriteWith(other.center).subtract(this.center);
 		var distanceOfOther = displacementOfOther.magnitude();
 		var returnValue = (distanceOfOther + other.radius <= this.radius);
 		return returnValue;

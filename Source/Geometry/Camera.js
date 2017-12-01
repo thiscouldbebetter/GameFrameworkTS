@@ -25,7 +25,7 @@ function Camera(viewSize, focalLength, loc)
 		var cameraLoc = this.loc;
 		var cameraOrientation = cameraLoc.orientation;
 
-		var cameraPos = cameraLoc.pos.clone();
+		var cameraPos = cameraLoc.pos;
 
 		var centerOfViewPlane = cameraPos.clone().add
 		(

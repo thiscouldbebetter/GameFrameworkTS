@@ -7,7 +7,7 @@ function Locatable(loc)
 	Locatable.prototype.updateForTimerTick = function(universe, world, place, entity)
 	{
 		var loc = this.loc;
-	
+
 		loc.pos.add(loc.vel);
 		loc.vel.clear();
 

@@ -282,7 +282,7 @@ function PlaceDemo(universe, size, playerPos)
 					var entityToTargetName = "Player";
 					var target = place.entities[entityToTargetName];
 					var actorLoc = actor.locatable.loc;
-					
+
 					actorLoc.vel.overwriteWith
 					(
 						target.locatable.loc.pos
@@ -397,7 +397,7 @@ function PlaceDemo(universe, size, playerPos)
 			Orientation.Instances.ForwardZDownY.clone()
 		)
 	);
-	
+
 	var entities =
 	[
 		goalEntity, 
@@ -405,12 +405,12 @@ function PlaceDemo(universe, size, playerPos)
 		enemyEntity, 
 		obstacleEntity, obstacle2Entity,
 	];
-	
+
 	this.placeInner = new Place(entities);
 	this.placeInner.parent = this;
-	
+
 	// Helper variables.
-	
+
 	this.drawPos = new Coords();
 	this.drawLoc = new Location(this.drawPos);
 }
@@ -436,7 +436,7 @@ function PlaceDemo(universe, size, playerPos)
 			camera.viewSizeHalf,
 			this.size.clone().subtract(camera.viewSizeHalf)
 		);
-		
+
 		this.placeInner.draw(universe);
 	}
 

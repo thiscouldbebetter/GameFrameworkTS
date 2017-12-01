@@ -7,7 +7,7 @@ function ConstraintDefn(name, constrain)
 
 {
 	ConstraintDefn.Instances = new ConstraintDefn_Instances();
-	
+
 	function ConstraintDefn_Instances()
 	{
 		this._None = new ConstraintDefn
@@ -18,7 +18,7 @@ function ConstraintDefn(name, constrain)
 				// Do nothing.
 			}
 		)
-		
+
 		this.Attach = new ConstraintDefn
 		(
 			"Attach",
@@ -28,7 +28,7 @@ function ConstraintDefn(name, constrain)
 				entity.loc.pos.overwriteWith(target.loc.pos);
 			}
 		);
-		
+
 		this.ContainInBounds = new ConstraintDefn
 		(
 			"ContainInBounds",
@@ -40,7 +40,7 @@ function ConstraintDefn(name, constrain)
 				targetBounds.trimCoords(entity.loc.pos);
 			}
 		);
-		
+
 		this.Offset = new ConstraintDefn
 		(
 			"Offset",

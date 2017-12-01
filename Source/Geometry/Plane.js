@@ -11,7 +11,7 @@ function Plane(normal, distanceFromOrigin)
 	{
 		return (this.normal.equals(other.normal) && this.distanceFromOrigin == other.distanceFromOrigin);
 	}
-	
+
 	Plane.prototype.fromPoints = function(point0, point1, point2)
 	{
 		this.normal.overwriteWith

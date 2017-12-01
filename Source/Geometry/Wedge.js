@@ -85,7 +85,7 @@ function Wedge(vertex, directionMin, angleSpannedInTurns)
 		(
 			this.rayDirectionMax
 		);
-		
+
 		this.planeForAngleMin.fromPoints
 		(
 			// Order matters!
