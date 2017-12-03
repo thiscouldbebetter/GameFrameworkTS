@@ -107,11 +107,11 @@ function Camera(viewSize, focalLength, loc)
 		return this._clipPlanes;
 	}
 
-	Camera.prototype.coordsTransformViewToWorld = function(viewCoords)
+	Camera.prototype.coordsTransformViewToWorld = function(viewCoords, ignoreZ)
 	{
 		var cameraLoc = this.loc;
 
-		if (this.focalLength != null)
+		if (ignoreZ == true)
 		{
 			viewCoords.z = this.focalLength;
 		}
@@ -138,7 +138,7 @@ function Camera(viewSize, focalLength, loc)
 
 		var viewCoords = worldCoords.subtract(cameraPos);
 
-		cameraOrientation.projectCoordsRDF(worldCoords);
+		cameraOrientation.projectCoordsRDF(viewCoords);
 
 		if (this.focalLength != null)
 		{
