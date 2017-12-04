@@ -49,6 +49,18 @@ function ArrayExtensions()
 		return (this.indexOf(elementToFind) >= 0);
 	}
 
+	Array.prototype.elementProperties = function(propertyName)
+	{
+		var returnValues = [];
+		for (var i = 0; i < this.length; i++)
+		{
+			var element = this[i];
+			var elementProperty = element[propertyName];
+			returnValues.push(elementProperty);
+		}
+		return returnValues;
+	}
+
 	Array.prototype.prepend = function(other)
 	{
 		for (var i = 0; i < other.length; i++)
