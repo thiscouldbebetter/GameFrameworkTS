@@ -115,7 +115,7 @@ function Mesh(center, vertexOffsets, faceBuilders)
 				}
 				else
 				{
-					vertexIndicesTopOrBottom.splice(0, 0, vertexIndex);
+					vertexIndicesTopOrBottom.insertElementAt(vertexIndex, 0);
 				}
 
 				var vertex = faceVertices[v].clone().add

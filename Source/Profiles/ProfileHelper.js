@@ -27,11 +27,7 @@ function ProfileHelper(storageHelper)
 			profileToDelete.name
 		);
 
-		profiles.splice
-		(
-			profileIndex,
-			1
-		);
+		profiles.removeAt(profileIndex);
 
 		this.storageHelper.save
 		(
@@ -73,11 +69,13 @@ function ProfileHelper(storageHelper)
 		}
 		else
 		{
-			profiles.splice
+			profiles.removeAt
 			(
-				profileIndex,
-				1,
-				profileToSave
+				profileIndex
+			).insertElementAt
+			(
+				profileToSave,
+				profileIndex
 			);
 		}
 

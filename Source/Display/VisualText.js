@@ -1,8 +1,9 @@
 
-function VisualText(text, color)
+function VisualText(text, colorFill, colorBorder)
 {
 	this.text = text;
-	this.color = color;
+	this.colorFill = colorFill;
+	this.colorBorder = colorBorder;
 }
 
 {
@@ -13,8 +14,8 @@ function VisualText(text, color)
 			this.text,
 			display.fontHeightInPixels,
 			loc.pos,
-			this.color, // colorFill
-			display.colorBack,
+			this.colorFill, 
+			this.colorBorder,
 			false, // areColorsReversed
 			true, // isCentered
 			null // widthMaxInPixels

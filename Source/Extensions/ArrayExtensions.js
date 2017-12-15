@@ -61,6 +61,12 @@ function ArrayExtensions()
 		return returnValues;
 	}
 
+	Array.prototype.insertElementAt = function(element, index)
+	{
+		this.splice(index, 0, element);
+		return this;
+	}
+
 	Array.prototype.prepend = function(other)
 	{
 		for (var i = 0; i < other.length; i++)
@@ -81,4 +87,9 @@ function ArrayExtensions()
 		return this;
 	}
 
+	Array.prototype.removeAt = function(index)
+	{
+		this.splice(index, 1);
+		return this;
+	}
 }

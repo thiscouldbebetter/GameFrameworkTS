@@ -258,8 +258,9 @@ function PlaceDemo(universe, size, playerPos)
 	([
 		new VisualPolygon
 		(
+			enemyColliderAsFace.vertices,
 			enemyColor,
-			enemyColliderAsFace.vertices
+			null // colorBorder
 		),
 		new VisualOffset
 		(

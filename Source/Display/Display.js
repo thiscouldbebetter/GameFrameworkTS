@@ -105,31 +105,59 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 	{
 		var drawPos = this.drawPos.overwriteWith(center);
 
+		this.graphics.beginPath();
+		this.graphics.arc
+		(
+			drawPos.x, drawPos.y,
+			radius,
+			0, Display.RadiansPerTurn
+		);
+
 		if (colorFill != null)
 		{
 			this.graphics.fillStyle = colorFill;
-			this.graphics.beginPath();
-			this.graphics.arc
-			(
-				drawPos.x, drawPos.y,
-				radius,
-				0, Display.RadiansPerTurn
-			);
 			this.graphics.fill();
 		}
 
 		if (colorBorder != null)
 		{
 			this.graphics.strokeStyle = colorBorder;
-			this.graphics.beginPath();
-			this.graphics.arc
-			(
-				drawPos.x, drawPos.y,
-				radius,
-				0, Display.RadiansPerTurn
-			);
 			this.graphics.stroke();
 		}
+	}
+
+	Display.prototype.drawCircleWithGradient = function(center, radius, gradientFill, colorBorder)
+	{
+		this.graphics.beginPath();
+		this.graphics.arc
+		(
+			center.x, center.y,
+			radius,
+			0, Display.RadiansPerTurn
+		);
+
+		var systemGradient = this.graphics.createRadialGradient
+		(
+			center.x, center.y, 0,
+			center.x, center.y, radius
+		);
+
+		var gradientStops = gradientFill.stops;
+		for (var i = 0; i < gradientStops.length; i++)
+		{
+			var stop = gradientStops[i];
+			systemGradient.addColorStop(stop.position, stop.color);
+		}
+
+		this.graphics.fillStyle = systemGradient;
+		this.graphics.fill();
+
+		if (colorBorder != null)
+		{
+			this.graphics.strokeStyle = colorBorder;
+			this.graphics.stroke();
+		}
+
 	}
 
 	Display.prototype.drawImage = function(imageToDraw, pos, size)
@@ -261,30 +289,30 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 			colorOutline = temp;
 		}
 
+		var textTrimmed = text;
+		if (widthMaxInPixels != null)
+		{
+			while (this.textWidthForFontHeight(textTrimmed, fontHeightInPixels) > widthMaxInPixels)
+			{
+				textTrimmed = textTrimmed.substr(0, textTrimmed.length - 1);
+			}
+		}
+
+		var textWidthInPixels = this.textWidthForFontHeight(textTrimmed, fontHeightInPixels);
+		var drawPos = new Coords(pos.x, pos.y + fontHeightInPixels);
+		if (isCentered == true)
+		{
+			drawPos.addDimensions(0 - textWidthInPixels / 2, 0 - fontHeightInPixels / 2, 0);
+		}
+
+		if (colorOutline != null)
+		{
+			this.graphics.strokeStyle = colorOutline;
+			this.graphics.strokeText(textTrimmed, drawPos.x, drawPos.y);
+		}
+
 		if (colorFill != null)
 		{
-			var textTrimmed = text;
-			if (widthMaxInPixels != null)
-			{
-				while (this.textWidthForFontHeight(textTrimmed, fontHeightInPixels) > widthMaxInPixels)
-				{
-					textTrimmed = textTrimmed.substr(0, textTrimmed.length - 1);
-				}
-			}
-
-			var textWidthInPixels = this.textWidthForFontHeight(textTrimmed, fontHeightInPixels);
-			var drawPos = new Coords(pos.x, pos.y + fontHeightInPixels);
-			if (isCentered == true)
-			{
-				drawPos.addDimensions(0 - textWidthInPixels / 2, 0 - fontHeightInPixels / 2, 0);
-			}
-
-			if (colorOutline != null)
-			{
-				this.graphics.strokeStyle = colorOutline;
-				this.graphics.strokeText(textTrimmed, drawPos.x, drawPos.y);
-			}
-
 			this.graphics.fillStyle = colorFill;
 			this.graphics.fillText
 			(

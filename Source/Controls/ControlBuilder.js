@@ -1026,13 +1026,8 @@ function ControlBuilder(styles)
 								var profile = universe.profile;
 								var world = universe.world;
 								var worlds = profile.worlds;
-								var worldIndex = worlds.indexOf(world);
 
-								worlds.splice
-								(
-									worldIndex,
-									1
-								);
+								worlds.remove(world);
 								universe.world = null;
 
 								universe.profileHelper.profileSave

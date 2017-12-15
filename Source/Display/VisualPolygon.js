@@ -1,8 +1,9 @@
 
-function VisualPolygon(color, vertices)
+function VisualPolygon(vertices, colorFill, colorBorder)
 {
-	this.color = color;
 	this.vertices = vertices;
+	this.colorFill = colorFill;
+	this.colorBorder = colorBorder;	
 
 	this.verticesTransformed = [];
 	for (var i = 0; i < this.vertices.length; i++)
@@ -26,7 +27,7 @@ function VisualPolygon(color, vertices)
 
 		display.drawPolygon
 		(
-			this.verticesTransformed, this.color, display.colorFore
+			this.verticesTransformed, this.colorFill, this.colorBorder
 		);
 	}
 }
