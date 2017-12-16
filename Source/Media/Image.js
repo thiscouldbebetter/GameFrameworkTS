@@ -17,6 +17,9 @@ function Image(name, sourcePath)
 			systemImage.src
 		);
 
+		returnValue.systemImage = systemImage;
+		returnValue.sizeInPixels = new Coords(systemImage.width, systemImage.height);
+
 		return returnValue;
 	}
 

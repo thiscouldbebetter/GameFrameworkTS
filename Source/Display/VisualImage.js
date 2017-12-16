@@ -3,6 +3,9 @@ function VisualImage(imageName, sizeScaled)
 {
 	this.imageName = imageName;
 	this._sizeScaled = sizeScaled;
+
+	// Helper variables.
+	this.drawPos = new Coords();
 }
 
 {
@@ -40,9 +43,8 @@ function VisualImage(imageName, sizeScaled)
 	{
 		var image = this.image(universe);
 		var pos = loc.pos;
-		var drawPos = display.drawPos;
 		var imageSize = this.imageSizeScaled(universe);
-		drawPos.clear().subtract(imageSize).half().add(pos);
+		var drawPos = this.drawPos.clear().subtract(imageSize).half().add(pos);
 		display.drawImage(image, drawPos, imageSize);
 	}
 }

@@ -35,7 +35,7 @@ function ConstraintDefn(name, constrain)
 			function constrain(universe, world, place, entity, targetBodyName)
 			{
 				var target = context.bodies[targetBodyName];
-				var targetBounds = target.collider().bounds();
+				var targetBounds = target.collider().bounds(world);
 
 				targetBounds.trimCoords(entity.loc.pos);
 			}
