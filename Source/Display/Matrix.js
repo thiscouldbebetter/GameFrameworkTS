@@ -162,7 +162,7 @@ function Matrix(values)
 			right.x, 	right.y, 	right.z,	0,
 			down.x, 	down.y,		down.z,		0,
 			0, 		0, 		0, 		1,
-		]);	
+		]);
 
 		return this;
 	}

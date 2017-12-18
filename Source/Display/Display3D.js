@@ -37,7 +37,7 @@ function Display3D(sizeInPixels)
 			matrixCamera.toWebGLArray()
 		);
 	}
-	
+
 	Display3D.prototype.clear = function()
 	{
 		var webGLContext = this.webGLContext;
@@ -47,7 +47,7 @@ function Display3D(sizeInPixels)
 		gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	}
-	
+
 	Display3D.prototype.drawMesh = function(mesh)
 	{
 		var webGLContext = this.webGLContext;
@@ -163,7 +163,7 @@ function Display3D(sizeInPixels)
 			gl.ARRAY_BUFFER, 
 			new Float32Array(vertexNormalsAsFloatArray), 
 			gl.STATIC_DRAW
-		);		
+		);
 		gl.vertexAttribPointer
 		(
 			shaderProgram.vertexNormalAttribute, 
@@ -235,11 +235,11 @@ function Display3D(sizeInPixels)
 			numberOfTrianglesSoFar * Mesh.VerticesInATriangle
 		);
 	}
-	
+
 	Display3D.prototype.drawMeshWithOrientation = function(mesh, meshOrientation)
-	{					
+	{
 		var matrixOrient = this.matrixOrient;
-		
+
 		var matrixEntity = this.matrixEntity.overwriteWithOrientationMover
 		(
 			meshOrientation
@@ -250,11 +250,11 @@ function Display3D(sizeInPixels)
 				meshOrientation
 			)
 		);
-		
+
 		var webGLContext = this.webGLContext;
 		var gl = webGLContext.gl;
-		var shaderProgram = webGLContext.shaderProgram;		
-				
+		var shaderProgram = webGLContext.shaderProgram;
+
 		gl.uniformMatrix4fv
 		(
 			shaderProgram.normalMatrix, 
@@ -268,10 +268,10 @@ function Display3D(sizeInPixels)
 			false, // transpose
 			matrixEntity.toWebGLArray()
 		);
-	
+
 		this.drawMesh(mesh);
-	}		
-		
+	}
+
 	Display3D.prototype.initialize = function()
 	{
 		var canvas = document.createElement("canvas");
@@ -303,15 +303,15 @@ function Display3D(sizeInPixels)
 		this.tempMatrix0 = Matrix.buildZeroes();
 		this.tempMatrix1 = Matrix.buildZeroes();
 	}
-	
+
 	Display3D.prototype.lightingSet = function(todo)
 	{
 		var webGLContext = this.webGLContext;
-		var gl = webGLContext.gl;		
-		var shaderProgram = webGLContext.shaderProgram;		
-		
+		var gl = webGLContext.gl;
+		var shaderProgram = webGLContext.shaderProgram;
+
 		var lighting = this.lighting;
-		
+
 		gl.uniform1f
 		(
 			shaderProgram.lightAmbientIntensity,
@@ -328,6 +328,6 @@ function Display3D(sizeInPixels)
 		(
 			shaderProgram.lightDirectionalIntensity,
 			lighting.directionalIntensity
-		);				
+		);
 	}
 }
