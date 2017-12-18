@@ -66,7 +66,19 @@ function ArrayExtensions()
 		this.splice(index, 0, element);
 		return this;
 	}
+	
+	Array.prototype.overwriteWith = function(other)
+	{
+		for (var i = 0; i < this.length; i++)
+		{
+			var elementThis = this[i];
+			var elementOther = other[i];
+			elementThis.overwriteWith(elementOther);
+		}
 
+		return this;
+	}
+	
 	Array.prototype.prepend = function(other)
 	{
 		for (var i = 0; i < other.length; i++)
