@@ -39,12 +39,14 @@ function VisualImage(imageName, sizeScaled)
 
 	// visual
 
-	VisualImage.prototype.draw = function(universe, display, drawable, loc)
+	VisualImage.prototype.draw = function(universe, world, display, drawable)
 	{
 		var image = this.image(universe);
-		var pos = loc.pos;
 		var imageSize = this.imageSizeScaled(universe);
-		var drawPos = this.drawPos.clear().subtract(imageSize).half().add(pos);
+		var drawPos = this.drawPos.clear().subtract(imageSize).half().add
+		(
+			drawable.loc.pos
+		);
 		display.drawImage(image, drawPos, imageSize);
 	}
 }

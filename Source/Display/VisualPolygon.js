@@ -13,9 +13,9 @@ function VisualPolygon(vertices, colorFill, colorBorder)
 }
 
 {
-	VisualPolygon.prototype.draw = function(universe, display, drawable, loc)
+	VisualPolygon.prototype.draw = function(universe, world, display, drawable)
 	{
-		var pos = loc.pos;
+		var pos = drawable.loc.pos;
 
 		for (var i = 0; i < this.verticesTransformed.length; i++)
 		{

@@ -5,12 +5,12 @@ function VisualGroup(children)
 }
 
 {
-	VisualGroup.prototype.draw = function(universe, display, drawable, loc)
+	VisualGroup.prototype.draw = function(universe, world, display, drawable)
 	{
 		for (var i = 0; i < this.children.length; i++)
 		{
 			var child = this.children[i];
-			child.draw(universe, display, drawable, loc);
+			child.draw(universe, world, display, drawable);
 		}
 	}
 }

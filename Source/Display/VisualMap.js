@@ -8,16 +8,17 @@ function VisualMap(map, visualLookup)
 	this.cell = this.map.cellPrototype.clone();
 	this.cellPosInCells = new Coords();
 	this.drawPos = new Coords();
-	this.drawLoc = new Location(this.drawPos);
+	this.posSaved = new Coords();
 }
 
 {
-	VisualMap.prototype.draw = function(universe, display, drawable, loc)
+	VisualMap.prototype.draw = function(universe, world, display, drawable)
 	{
 		var mapSizeInCells = this.map.sizeInCells;
 		var mapSizeHalf = this.map.sizeHalf;
 		var cellPosInCells = this.cellPosInCells;
 		var cellSizeInPixels = this.map.cellSize;
+		var drawablePos = drawable.loc.pos;
 
 		for (var y = 0; y < mapSizeInCells.y; y++)
 		{
@@ -27,11 +28,14 @@ function VisualMap(map, visualLookup)
 			{
 				cellPosInCells.x = x;
 
-				var cell = this.map.cellAtPosInCells(this.map, cellPosInCells, this.cell);
+				var cell = this.map.cellAtPosInCells
+				(
+					this.map, cellPosInCells, this.cell
+				);
 				var cellVisualName = cell.visualName;
 				var cellVisual = this.visualLookup[cellVisualName];
 
-				this.drawPos.overwriteWith
+				var drawPos = this.drawPos.overwriteWith
 				(
 					cellPosInCells
 				).multiply
@@ -42,10 +46,13 @@ function VisualMap(map, visualLookup)
 					mapSizeHalf
 				).add
 				(
-					loc.pos
+					drawablePos
 				);
 
-				cellVisual.draw(universe, display, null, this.drawLoc);
+				this.posSaved.overwriteWith(drawablePos);
+				drawablePos.overwriteWith(drawPos);
+				cellVisual.draw(universe, world, display, drawable);
+				drawablePos.overwriteWith(this.posSaved);
 			}
 		}
 	}

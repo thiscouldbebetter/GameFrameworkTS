@@ -9,13 +9,24 @@ function VisualAnimation(ticksPerFrame, frames)
 
 {
 	// visual
-
-	VisualAnimation.prototype.draw = function(universe, display, drawable, loc)
+	VisualAnimation.prototype.draw = function(universe, world, display, drawable)
 	{
-		var world = universe.world;
-		var ticksSoFar = (world.timerTicksSoFar - loc.timeOffsetInTicks) % this.ticksToComplete;
-		var frameIndexCurrent = Math.floor(ticksSoFar / this.ticksPerFrame);
+		var ticksSinceStarted = drawable.timerTicksSinceAnimationStarted;
+		if (ticksSinceStarted == null)
+		{
+			ticksSinceStarted = 0;
+			drawable.timerTicksSinceAnimationStarted = ticksSinceStarted;
+		}
+
+		var frameIndexCurrent = Math.floor(ticksSinceStarted / this.ticksPerFrame);
 		var frameCurrent = this.frames[frameIndexCurrent];
-		frameCurrent.draw(universe, display, drawable, loc);
+		frameCurrent.draw(universe, world, display, drawable);
+
+		ticksSinceStarted++;
+		ticksSinceStarted = ticksSinceStarted.wrapToRangeMinMax
+		(
+			0, this.ticksToComplete
+		);
+		drawable.timerTicksSinceAnimationStarted = ticksSinceStarted;
 	}
 }

@@ -7,13 +7,13 @@ function VisualText(text, colorFill, colorBorder)
 }
 
 {
-	VisualText.prototype.draw = function(universe, display, drawable, loc)
+	VisualText.prototype.draw = function(universe, world, display, drawable)
 	{
 		display.drawText
 		(
 			this.text,
 			display.fontHeightInPixels,
-			loc.pos,
+			drawable.loc.pos,
 			this.colorFill, 
 			this.colorBorder,
 			false, // areColorsReversed

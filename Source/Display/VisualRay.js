@@ -11,21 +11,24 @@ function VisualRay(length, color)
 }
 
 {
-	VisualRay.prototype.draw = function(universe, display, drawable, loc)
+	VisualRay.prototype.draw = function(universe, world, display, drawable)
 	{
-		this.polar.azimuthInTurns = loc.orientation.headingInTurns();
+		var drawableLoc = drawable.loc;
+		var drawablePos = drawableLoc.pos;
+
+		this.polar.azimuthInTurns = drawableLoc.orientation.headingInTurns();
 
 		this.polar.toCoords
 		(
 			this.toPos
 		).add
 		(
-			loc.pos
+			drawablePos
 		);
 
 		display.drawLine
 		(
-			loc.pos,
+			drawablePos,
 			this.toPos,
 			this.color
 		);

@@ -12,11 +12,12 @@ function VisualLine(fromPos, toPos, color)
 }
 
 {
-	VisualLine.prototype.draw = function(universe, display, drawable, loc)
+	VisualLine.prototype.draw = function(universe, world, display, drawable)
 	{
+		var pos = drawable.loc.pos;
 		var drawPosFrom = this.drawPosFrom.overwriteWith
 		(
-			loc.pos
+			pos
 		).add
 		(
 			this.fromPos
@@ -24,7 +25,7 @@ function VisualLine(fromPos, toPos, color)
 
 		var drawPosTo = this.drawPosTo.overwriteWith
 		(
-			loc.pos
+			pos
 		).add
 		(
 			this.toPos

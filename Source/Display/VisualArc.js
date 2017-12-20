@@ -9,7 +9,7 @@ function VisualArc(arc, colorFill, colorBorder)
 	this.drawPos = new Coords();
 }
 {
-	VisualArc.prototype.draw = function(universe, display, drawable, drawLoc)
+	VisualArc.prototype.draw = function(universe, world, display, drawable)
 	{
 		var arc = this.arc;
 		var shell = arc.shell;
@@ -19,7 +19,7 @@ function VisualArc(arc, colorFill, colorBorder)
 
 		var drawPos = this.drawPos.overwriteWith
 		(
-			drawLoc.pos
+			drawable.loc.pos
 		);
 
 		display.drawArc

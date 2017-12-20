@@ -6,14 +6,21 @@ function VisualRectangle(size, colorFill, colorBorder)
 	this.colorBorder = colorBorder;
 
 	this.sizeHalf = this.size.clone().half();
+	
+	this.drawPos = new Coords();
 }
 
 {
-	VisualRectangle.prototype.draw = function(universe, display, drawable, loc)
+	VisualRectangle.prototype.draw = function(universe, world,  display, drawable)
 	{
-		var pos = loc.pos;
-		var drawPos = display.drawPos;
-		drawPos.overwriteWith(pos).subtract(this.sizeHalf);
+		var drawPos = this.drawPos.overwriteWith
+		(
+			drawable.loc.pos
+		).subtract
+		(
+			this.sizeHalf
+		);
+
 		display.drawRectangle
 		(
 			drawPos, this.size, this.colorFill, this.colorBorder

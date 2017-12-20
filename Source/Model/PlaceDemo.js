@@ -416,7 +416,7 @@ function PlaceDemo(universe, size, playerPos)
 	this.drawLoc = new Location(this.drawPos);
 }
 {
-	PlaceDemo.prototype.draw = function(universe)
+	PlaceDemo.prototype.draw = function(universe, world)
 	{
 		var display = universe.display;
 
@@ -438,7 +438,7 @@ function PlaceDemo(universe, size, playerPos)
 			this.size.clone().subtract(camera.viewSizeHalf)
 		);
 
-		this.placeInner.draw(universe);
+		this.placeInner.draw(universe, world);
 	}
 
 	PlaceDemo.prototype.entityMoveInDirection = function(world, entity, directionToMove)

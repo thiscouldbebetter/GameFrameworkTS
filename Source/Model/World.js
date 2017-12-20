@@ -42,7 +42,7 @@ function World(name, dateCreated, place)
 
 	World.prototype.draw = function(universe)
 	{
-		this.place.draw(universe);
+		this.place.draw(universe, this);
 	}
 
 	World.prototype.updateForTimerTick = function(universe)

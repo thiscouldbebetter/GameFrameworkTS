@@ -4,16 +4,17 @@ function VisualOffset(child, offset)
 	this.child = child;
 	this.offset = offset;
 
-	// temps
-
-	this.drawLoc = new Location(new Coords());
+	// Helper variables.
+	this.posSaved = new Coords();
 }
 
 {
-	VisualOffset.prototype.draw = function(universe, display, drawable, loc)
+	VisualOffset.prototype.draw = function(universe, world, display, drawable)
 	{
-		this.drawLoc.overwriteWith(loc);
-		this.drawLoc.pos.add(this.offset);
-		this.child.draw(universe, display, drawable, this.drawLoc);
+		var drawablePos = drawable.loc.pos;
+		this.posSaved.overwriteWith(drawablePos);
+		drawablePos.add(this.offset);
+		this.child.draw(universe, world, display, drawable);
+		drawablePos.overwriteWith(this.posSaved);
 	}
 }
