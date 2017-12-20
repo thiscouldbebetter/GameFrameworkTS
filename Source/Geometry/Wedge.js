@@ -55,9 +55,9 @@ function Wedge(vertex, directionMin, angleSpannedInTurns)
 		var angleInTurnsMin = this.angleInTurnsMin();
 		var angleInTurnsMax = this.angleInTurnsMax();
 
-		this.rayDirectionMinAsPolar.angleInTurns = angleInTurnsMin;
+		this.rayDirectionMinAsPolar.azimuthInTurns = angleInTurnsMin;
 		this.rayDirectionMinAsPolar.toCoords(this.rayDirectionMin);
-		this.rayDirectionMaxAsPolar.angleInTurns = angleInTurnsMax;
+		this.rayDirectionMaxAsPolar.azimuthInTurns = angleInTurnsMax;
 		this.rayDirectionMaxAsPolar.toCoords(this.rayDirectionMax);
 
 		var down = Coords.Instances.ZeroZeroOne;
