@@ -3,8 +3,8 @@ function CollisionHelper()
 {
 	this.throwErrorIfCollidersCannotBeCollided = false;
 
-	// helper variables
-	this.tempCoords = new Coords();
+	// Helper variables.
+	this.displacement = new Coords();
 }
 {
 	CollisionHelper.prototype.collisionsOfCollidablesInSets = function(collidableSet0, collidableSet1)
@@ -136,6 +136,45 @@ function CollisionHelper()
 		return returnValue;
 	}
 
+	CollisionHelper.prototype.doBoundsAndCylinderCollide = function(bounds, cylinder)
+	{
+		var returnValue = false;
+
+		var displacementBetweenCenters = this.displacement.overwriteWith
+		(
+			bounds.center
+		).subtract
+		(
+			cylinder.center
+		);
+
+		if (displacementBetweenCenters.z < bounds.sizeHalf.z + cylinder.lengthHalf);
+		{
+			displacementBetweenCenters.clearZ();
+
+			var direction = displacementBetweenCenters.normalize();
+
+			var pointOnCylinderClosestToBoundsCenter = direction.multiplyScalar
+			(
+				cylinder.radius
+			).add
+			(
+				cylinder.center
+			);
+
+			pointOnCylinderClosestToBoundsCenter.z = bounds.center.z;
+
+			var isPointOnCylinderWithinBounds = bounds.containsPoint
+			(
+				pointOnCylinderClosestToBoundsCenter
+			);
+
+			returnValue = isPointOnCylinderWithinBounds;
+		}
+
+		return returnValue;
+	}
+
 	CollisionHelper.prototype.doBoundsAndHemispaceCollide = function(bounds, hemispace)
 	{
 		var returnValue = false;
@@ -155,7 +194,7 @@ function CollisionHelper()
 
 	CollisionHelper.prototype.doBoundsAndSphereCollide = function(bounds, sphere)
 	{
-		var displacementBetweenCenters = this.tempCoords.overwriteWith
+		var displacementBetweenCenters = this.displacement.overwriteWith
 		(
 			bounds.center
 		).subtract
@@ -179,6 +218,56 @@ function CollisionHelper()
 		);
 
 		return isPointOnSphereWithinBounds;
+	}
+
+	CollisionHelper.prototype.doCylinderAndCylinderCollide = function(cylinder0, cylinder1)
+	{
+		var returnValue = false;
+
+		var displacement = this.displacement.overwriteWith
+		(
+			cylinder1.center
+		).subtract
+		(
+			cylinder0.center
+		).clearZ();
+
+		var distance = displacement.magnitude();
+		var sumOfRadii = sphere0.radius + sphere1.radius;
+		var doRadiiOverlap = (distance < sumOfRadii);
+		if (doRadiiOverlap == true)
+		{
+			var doLengthsOverlap = 
+			(
+				(
+					cylinder0.zMin > cylinder1.zMin
+					&& cylinder0.zMin < cylinder1.zMax
+				)
+				||
+				(
+					cylinder0.zMax > cylinder1.zMin
+					&& cylinder0.zMax < cylinder1.zMax
+				)
+				||
+				(
+					cylinder1.zMin > cylinder0.zMin
+					&& cylinder1.zMin < cylinder0.zMax
+				)
+				||
+				(
+					cylinder1.zMax > cylinder0.zMin
+					&& cylinder1.zMax < cylinder0.zMax
+				)
+			);
+
+			if (doLengthsOverlap == true)
+			{
+				returnValue = true;
+			}
+		}
+
+		return returnValue;
+
 	}
 
 	CollisionHelper.prototype.doHemispaceAndSphereCollide = function(hemispace, sphere)
@@ -455,10 +544,15 @@ function CollisionHelper()
 		return returnValue;
 	}
 
-
 	CollisionHelper.prototype.doSphereAndSphereCollide = function(sphere0, sphere1)
 	{
-		var displacement = sphere1.center.clone().subtract(sphere0.center);
+		var displacement = this.displacement.overwriteWith
+		(
+			sphere1.center
+		).subtract
+		(
+			sphere0.center
+		);
 		var distance = displacement.magnitude();
 		var sumOfRadii = sphere0.radius + sphere1.radius;
 		var returnValue = (distance < sumOfRadii);
