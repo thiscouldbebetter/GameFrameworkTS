@@ -165,7 +165,46 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 			this.graphics.strokeStyle = colorBorder;
 			this.graphics.stroke();
 		}
+	}
 
+	Display.prototype.drawEllipse = function
+	(
+		center, semimajorAxis, semiminorAxis, rotationInTurns, colorFill, colorBorder
+	)
+	{
+		var drawPos = this.drawPos.overwriteWith(center);
+
+		this.graphics.save();
+
+		this.graphics.translate(center.x, center.y);
+
+		var rotationInRadians = rotationInTurns * Polar.RadiansPerTurn;
+		this.graphics.rotate(rotationInRadians); 
+
+		var ratioOfHeightToWidth = semiminorAxis / semimajorAxis;
+		this.graphics.scale(1, ratioOfHeightToWidth);
+
+		this.graphics.beginPath();
+		this.graphics.arc
+		(
+			0, 0, // center
+			semimajorAxis, // "radius"
+			0, Math.PI * 2.0 // start, stop angle
+		);
+
+		if (colorFill != null)
+		{
+			this.graphics.fillStyle = colorFill;
+			this.graphics.fill();
+		}
+
+		if (colorBorder != null)
+		{
+			this.graphics.strokeStyle = colorBorder;
+			this.graphics.stroke();
+		}
+
+		this.graphics.restore();
 	}
 
 	Display.prototype.drawImage = function(imageToDraw, pos, size)
