@@ -1,7 +1,11 @@
 
-function Display3D(sizeInPixels)
+function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorBack)
 {
 	this.sizeInPixels = sizeInPixels;
+
+	this.sizeDefault = sizeInPixels;
+	this.scaleFactor = new Coords(1, 1, 1);
+	this._display2DOverlay = new Display([sizeInPixels], fontName, fontHeightInPixels, colorFore, colorBack);
 }
 
 {
@@ -280,14 +284,23 @@ function Display3D(sizeInPixels)
 		this.drawMesh(mesh);
 	}
 
-	Display3D.prototype.initialize = function()
+	Display3D.prototype.initialize = function(universe)
 	{
-		var canvas = document.createElement("canvas");
-		canvas.width = this.sizeInPixels.x;
-		canvas.height = this.sizeInPixels.y;
-		document.body.appendChild(canvas);
+		var platformHelper = universe.platformHelper;
+		platformHelper.initialize(universe);
 
-		this.webGLContext = new WebGLContext(canvas);
+		if (this.canvas != null)
+		{
+			platformHelper.domElementRemove(this.canvas);
+		}
+
+		this.canvas = document.createElement("canvas");
+		this.canvas.style.position = "absolute";
+		this.canvas.width = this.sizeInPixels.x;
+		this.canvas.height = this.sizeInPixels.y;
+		divMain.appendChild(this.canvas);
+
+		this.webGLContext = new WebGLContext(this.canvas);
 
 		this.texturesRegistered = [];
 
@@ -299,6 +312,8 @@ function Display3D(sizeInPixels)
 			new Coords(-1, -1, -1), // direction
 			.3 // directionalIntensity
 		);
+
+		this._display2DOverlay.initialize(universe);
 
 		// temps
 
@@ -338,4 +353,115 @@ function Display3D(sizeInPixels)
 			lighting.directionalIntensity
 		);
 	}
+
+	// Display2D overlay.
+
+	Display3D.prototype.clear = function()
+	{
+		this._display2DOverlay.clear();
+	}
+
+	Display3D.prototype.drawArc = function
+	(
+		center, radiusInner, radiusOuter, angleStartInTurns, angleStopInTurns, colorFill, colorBorder
+	)
+	{
+		this._display2DOverlay.drawArc(center, radiusInner, radiusOuter, angleStartInTurns, angleStopInTurns, colorFill, colorBorder);
+	}
+
+	Display3D.prototype.drawBackground = function()
+	{
+		this._display2DOverlay.drawBackground();
+	}
+
+	Display3D.prototype.drawCircle = function(center, radius, colorFill, colorBorder)
+	{
+		this._display2DOverlay.drawCircle(center, radius, colorFill, colorBorder);
+	}
+
+	Display3D.prototype.drawCircleWithGradient = function(center, radius, gradientFill, colorBorder)
+	{
+		this._display2DOverlay.drawCircleWithGradient(center, radius, gradientFill, colorBorder);
+	}
+
+	Display3D.prototype.drawImage = function(imageToDraw, pos, size)
+	{
+		this._display2DOverlay.drawImage(imageToDraw, pos, size);
+	}
+
+	Display3D.prototype.drawLine = function(fromPos, toPos, color)
+	{
+		this._display2DOverlay.drawLine(fromPos, toPos, color);
+	}
+
+	Display3D.prototype.drawPolygon = function(vertices, colorFill, colorBorder)
+	{
+		this._display2DOverlay.drawPolygon(vertices, colorFill, colorBorder);
+	}
+
+	Display3D.prototype.drawRectangle = function
+	(
+		pos,
+		size,
+		colorFill,
+		colorBorder,
+		areColorsReversed
+	)
+	{
+		this._display2DOverlay.drawRectangle
+		(
+			pos, size, colorFill, colorBorder, areColorsReversed
+		);
+	}
+
+	Display3D.prototype.drawText = function
+	(
+		text,
+		fontHeightInPixels,
+		pos,
+		colorFill,
+		colorOutline,
+		areColorsReversed,
+		isCentered,
+		widthMaxInPixels
+	)
+	{
+		this._display2DOverlay.drawText
+		(
+			text,
+			fontHeightInPixels,
+			pos,
+			colorFill,
+			colorOutline,
+			areColorsReversed,
+			isCentered,
+			widthMaxInPixels
+		);
+	}
+
+	Display3D.prototype.fontSizeSet = function(fontHeightInPixels)
+	{
+		this._display2DOverlay.fontSizeSet(fontHeightInPixels);
+	}
+
+	Display3D.prototype.fontValidate = function(fontName)
+	{
+		this._display2DOverlay.fontValidate(fontName);
+	}
+
+	Display3D.prototype.hide = function(universe)
+	{
+		this._display2DOverlay.hide(universe);
+	}
+
+	Display3D.prototype.show = function(universe)
+	{
+		this._display2DOverlay.show(universe);
+	}
+
+	Display3D.prototype.textWidthForFontHeight = function(textToMeasure, fontHeightInPixels)
+	{
+		return this._display2DOverlay.textWidthForFontHeight(textToMeasure, fontHeightInPixels);
+	}
+
 }

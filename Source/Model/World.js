@@ -45,6 +45,11 @@ function World(name, dateCreated, place)
 		this.place.draw(universe, this);
 	}
 
+	World.prototype.initialize = function(universe)
+	{
+		this.place.initialize(universe, this);
+	}
+
 	World.prototype.updateForTimerTick = function(universe)
 	{
 		this.place.updateForTimerTick(universe, this);

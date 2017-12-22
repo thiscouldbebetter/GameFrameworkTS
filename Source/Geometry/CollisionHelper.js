@@ -528,7 +528,7 @@ function CollisionHelper()
 		for (var f = 0; f < meshFaces.length; f++)
 		{
 			var face = meshFaces[f];
-			hemispace.plane = face.plane;
+			hemispace.plane = face.plane();
 			var doHemispaceAndSphereCollide = this.doHemispaceAndSphereCollide
 			(
 				hemispace,

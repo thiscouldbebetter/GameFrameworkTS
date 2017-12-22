@@ -420,7 +420,7 @@ function PlaceDemo(universe, size, playerPos)
 	{
 		var display = universe.display;
 
-		display.clear();
+		display.drawBackground();
 
 		var drawLoc = this.drawLoc;
 		var drawPos = drawLoc.pos;
@@ -452,6 +452,11 @@ function PlaceDemo(universe, size, playerPos)
 			entityLoc.timeOffsetInTicks = world.timerTicksSoFar;
 		}
 		vel.overwriteWith(directionToMove);
+	}
+
+	PlaceDemo.prototype.initialize = function(universe, world)
+	{
+		this.placeInner.initialize(universe, world);
 	}
 
 	PlaceDemo.prototype.updateForTimerTick = function(universe, world)

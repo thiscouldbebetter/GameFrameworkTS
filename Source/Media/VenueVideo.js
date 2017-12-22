@@ -66,7 +66,7 @@ function VenueVideo(videoName, venueNext)
 		if (this.video.isFinished == true)
 		{
 			var display = universe.display;
-			display.clear("Black", "Black");
+			display.drawBackground("Black", "Black");
 			display.show(universe);
 			universe.venueNext = new VenueFader(this.venueNext, this);
 		}

@@ -27,14 +27,11 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 
 	// methods
 
-	Display.prototype.clear = function(colorBorder, colorBack)
+	Display.prototype.clear = function()
 	{
-		this.drawRectangle
+		this.graphics.clearRect
 		(
-			new Coords(0, 0),
-			this.sizeDefault, // Automatic scaling.
-			(colorBack == null ? this.colorBack : colorBack),
-			(colorBorder == null ? this.colorFore : colorBorder)
+			0, 0, this.sizeInPixels.x, this.sizeInPixels.y
 		);
 	}
 
@@ -99,6 +96,17 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 			this.graphics.closePath();
 			this.graphics.stroke();
 		}
+	}
+
+	Display.prototype.drawBackground = function(colorBorder, colorBack)
+	{
+		this.drawRectangle
+		(
+			new Coords(0, 0),
+			this.sizeDefault, // Automatic scaling.
+			(colorBack == null ? this.colorBack : colorBack),
+			(colorBorder == null ? this.colorFore : colorBorder)
+		);
 	}
 
 	Display.prototype.drawCircle = function(center, radius, colorFill, colorBorder)

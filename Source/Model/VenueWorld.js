@@ -19,6 +19,7 @@ function VenueWorld(world)
 	VenueWorld.prototype.initialize = function(universe)
 	{
 		universe.world = this.world;
+		this.world.initialize(universe);
 
 		var soundHelper = universe.soundHelper;
 		soundHelper.soundWithNamePlayAsMusic(universe, "Music");

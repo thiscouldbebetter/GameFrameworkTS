@@ -31,15 +31,18 @@ function VenueControls(controlRoot)
 	}
 
 	this.inputToActionMappings.addLookups("inputName");
+
+	// Helper variables.
+
+	this._drawLoc = new Location(new Coords());
 }
 
 {
 	VenueControls.prototype.draw = function(universe)
 	{
 		var display = universe.display;
-		var drawLoc = display.drawLoc;
+		var drawLoc = this._drawLoc;
 		drawLoc.pos.clear();
-		//display.clear();
 		this.controlRoot.draw(universe, display, drawLoc);
 	}
 

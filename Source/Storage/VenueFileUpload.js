@@ -17,9 +17,8 @@ function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 	VenueFileUpload.prototype.finalize = function(universe)
 	{
 		universe.platformHelper.domElementRemove(this.domElement);
-
 		var display = universe.display;
-		display.clear("Black", "Black");
+		display.drawBackground("Black", "Black");
 		display.show(universe);
 	}
 

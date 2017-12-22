@@ -55,6 +55,11 @@ function Place(entities)
 		this.entitiesToSpawn.clear();
 	}
 
+	Place.prototype.initialize = function(universe, world)
+	{
+		// Do nothing.
+	}
+
 	Place.prototype.updateForTimerTick = function(universe, world)
 	{
 		this.entitiesSpawn();

@@ -37,6 +37,7 @@ function Universe(name, timerHelper, display, mediaLibrary, world)
 	{
 		this.collisionHelper = new CollisionHelper();
 		this.platformHelper = new PlatformHelper();
+		this.platformHelper.initialize(this);
 		this.serializer = new Serializer();
 		this.storageHelper = new StorageHelper(this.name + "_", this.serializer);
 		this.profileHelper = new ProfileHelper(this.storageHelper);
