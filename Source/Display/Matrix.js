@@ -138,7 +138,7 @@ function Matrix(values)
 			0-forward.x, 	0-forward.y, 	0-forward.z, 	0,
 			0, 		0, 		0, 		1,
 		]);
-	
+
 		return this;
 	}
 
@@ -182,7 +182,7 @@ function Matrix(values)
 		// Must be adjusted if viewSize changes.
 
 		var scaleFactorMultiplier = .7;
-		scaleFactorX *= scaleFactorMultiplier;	
+		scaleFactorX *= scaleFactorMultiplier;
 		scaleFactorY *= scaleFactorMultiplier;
 
 		var clipRange = clipDistanceNear - clipDistanceFar;

@@ -36,7 +36,7 @@ function Transform_BonePose(boneName, cyclesToRotateAroundAxesDownRightForward)
 		(
 			this.boneName,
 			cyclesToRotateAroundAxesDownRightForwardInterpolated
-		);	
+		);
 
 		return returnValue;
 	}
@@ -46,7 +46,7 @@ function Transform_BonePose(boneName, cyclesToRotateAroundAxesDownRightForward)
 		var skeletonToTransform = transformableToTransform;
 
 		var boneToTransform = skeletonToTransform.bonesAll[this.boneName];
-		var boneOrientation = boneToTransform.orientation;	
+		var boneOrientation = boneToTransform.orientation;
 
 		var axesToRotateAround = 
 		[
@@ -78,7 +78,7 @@ function Transform_BonePose(boneName, cyclesToRotateAroundAxesDownRightForward)
 	}
 
 	Transform_BonePose.prototype.transform_Bone = function(quaternionsForRotation, boneToTransform)
-	{	
+	{
 		var axesToTransform = boneToTransform.orientation.axes;
 
 		for (var i = 0; i < quaternionsForRotation.length; i++)
@@ -88,9 +88,9 @@ function Transform_BonePose(boneName, cyclesToRotateAroundAxesDownRightForward)
 			{
 				var axisToTransform = axesToTransform[a];
 
-				quaternionForRotation.applyToCoordsAsRotation
+				quaternionForRotation.transformCoordsAsRotation
 				(
-					axisToTransform		
+					axisToTransform
 				);
 			}
 		}

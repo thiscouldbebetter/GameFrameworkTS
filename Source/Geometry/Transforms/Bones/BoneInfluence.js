@@ -22,7 +22,7 @@ function BoneInfluence
 			var boneName = vertexGroup.name;
 
 			var bone = bones[boneName];
-	
+
 			if (bone != null)
 			{
 				var boneInfluence = new BoneInfluence

@@ -24,7 +24,7 @@ function Transform()
 	{
 		for (var i = 0; i < coordsSetToTransform.length; i++)
 		{
-			transformToApply.applyToCoords(coordsSetToTransform[i]);
+			transformToApply.transformCoords(coordsSetToTransform[i]);
 		}
 	}
 }

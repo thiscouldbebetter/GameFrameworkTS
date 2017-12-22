@@ -5,7 +5,7 @@ function Transform_Perspective(focalLength)
 }
 
 {
-	Transform_Perspective.prototype.applyToCoords = function(coordsToTransform)
+	Transform_Perspective.prototype.transformCoords = function(coordsToTransform)
 	{
 		var distanceAlongCameraForward = coordsToTransform.z;
 

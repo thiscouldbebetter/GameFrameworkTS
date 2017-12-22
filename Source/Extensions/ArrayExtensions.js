@@ -36,9 +36,9 @@ function ArrayExtensions()
 
 		for (var i = 0; i < this.length; i++)
 		{
-			var item = this[i];
-			var itemClone = item.clone();
-			returnValue.push(itemClone);
+			var element = this[i];
+			var elementCloned = element.clone();
+			returnValue.push(elementCloned);
 		}
 
 		return returnValue;
@@ -66,19 +66,26 @@ function ArrayExtensions()
 		this.splice(index, 0, element);
 		return this;
 	}
-	
+
 	Array.prototype.overwriteWith = function(other)
 	{
 		for (var i = 0; i < this.length; i++)
 		{
 			var elementThis = this[i];
 			var elementOther = other[i];
-			elementThis.overwriteWith(elementOther);
+			if (elementThis.overwriteWith == null)
+			{
+				this[i] = elementOther;
+			}
+			else
+			{
+				elementThis.overwriteWith(elementOther);
+			}
 		}
 
 		return this;
 	}
-	
+
 	Array.prototype.prepend = function(other)
 	{
 		for (var i = 0; i < other.length; i++)

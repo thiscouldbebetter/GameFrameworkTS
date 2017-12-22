@@ -300,7 +300,7 @@ function CollisionHelper()
 			for (var f = 0; f < meshThisFaces.length; f++)
 			{
 				var face = meshThisFaces[f];
-				var faceNormal = face.plane.normal;
+				var faceNormal = face.plane().normal;
 
 				var vertexThis = meshThisVertices[0];
 				var vertexThisProjectedMin = vertexThis.dotProduct(faceNormal);

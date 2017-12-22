@@ -5,6 +5,12 @@ function Display3D(sizeInPixels)
 }
 
 {
+	// constants
+
+	Display3D.VerticesPerTriangle = 3;
+
+	// methods
+
 	Display3D.prototype.cameraSet = function(camera)
 	{
 		var cameraLoc = camera.loc;
@@ -61,14 +67,15 @@ function Display3D(sizeInPixels)
 		var vertexTextureUVsAsFloatArray = [];
 
 		var numberOfTrianglesSoFar = 0;
-		var faces = mesh.faces;
+		var faces = mesh.faces();
 		var textureUVsForFaceVertices = mesh.textureUVsForFaceVertices;
 
 		for (var f = 0; f < faces.length; f++)
 		{
 			var face = faces[f];
 			var faceMaterial = face.material;
-			var faceNormal = face.plane.normal;
+			var faceGeometry = face.geometry;
+			var faceNormal = faceGeometry.plane().normal;
 			var vertexNormalsForFaceVertices = mesh.vertexNormalsForFaceVertices;
 
 			var vertexIndicesForTriangles = 
@@ -76,7 +83,8 @@ function Display3D(sizeInPixels)
 				[0, 1, 2]
 			];
 
-			var numberOfVerticesInFace = face.vertices.length;
+			var faceVertices = faceGeometry.vertices;
+			var numberOfVerticesInFace = faceVertices.length;
 
 			if (numberOfVerticesInFace == 4)
 			{
@@ -90,7 +98,7 @@ function Display3D(sizeInPixels)
 				for (var vi = 0; vi < vertexIndicesForTriangle.length; vi++)
 				{
 					var vertexIndex = vertexIndicesForTriangle[vi];
-					var vertex = face.vertices[vertexIndex];
+					var vertex = faceVertices[vertexIndex];
 
 					vertexPositionsAsFloatArray = vertexPositionsAsFloatArray.concat
 					(
@@ -232,7 +240,7 @@ function Display3D(sizeInPixels)
 		(
 			gl.TRIANGLES,
 			0, 
-			numberOfTrianglesSoFar * Mesh.VerticesInATriangle
+			numberOfTrianglesSoFar * Display3D.VerticesPerTriangle
 		);
 	}
 

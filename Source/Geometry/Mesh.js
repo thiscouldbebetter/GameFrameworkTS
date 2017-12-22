@@ -145,6 +145,16 @@ function Mesh(center, vertexOffsets, faceBuilders)
 
 	// instance methods
 
+	Mesh.prototype.bounds = function()
+	{
+		if (this._bounds == null)
+		{
+			this._bounds = new Bounds(new Coords(), new Coords());
+		}
+		this._bounds.ofPoints(this.vertices());
+		return this._bounds;
+	}
+
 	Mesh.prototype.faces = function()
 	{
 		var vertices = this.vertices();
@@ -156,16 +166,8 @@ function Mesh(center, vertexOffsets, faceBuilders)
 			for (var f = 0; f < this.faceBuilders.length; f++)
 			{
 				var faceBuilder = this.faceBuilders[f];
-				var face = faceBuilder.faceBuildForMeshVertices(vertices);
+				var face = faceBuilder.toFace(vertices);
 				this._faces.push(face);
-			}
-		}
-		else
-		{
-			for (var f = 0; f < this._faces.length; f++)
-			{
-				var face = this._faces[f];
-				face.recalculate();
 			}
 		}
 
@@ -203,7 +205,28 @@ function Mesh(center, vertexOffsets, faceBuilders)
 			transformToApply.transformCoords(vertexOffset);
 		}
 
+		this.vertices(); // hack - Recalculate.
+
 		return this;
+	}
+
+	// clonable
+
+	Mesh.prototype.clone = function()
+	{
+		return new Mesh
+		(
+			this.center.clone(),
+			this.vertexOffsets.clone(), 
+			this.faceBuilders.clone()
+		);
+	}
+
+	Mesh.prototype.overwriteWith = function(other)
+	{
+		this.center.overwriteWith(other.center);
+		this.vertexOffsets.overwriteWith(other.vertexOffsets);
+		this.faceBuilders.overwriteWith(other.faceBuilders);
 	}
 }
 
@@ -212,7 +235,7 @@ function Mesh_FaceBuilder(vertexIndices)
 	this.vertexIndices = vertexIndices;
 }
 {
-	Mesh_FaceBuilder.prototype.faceBuildForMeshVertices = function(meshVertices)
+	Mesh_FaceBuilder.prototype.toFace = function(meshVertices)
 	{
 		var faceVertices = [];
 		for (var vi = 0; vi < this.vertexIndices.length; vi++)
@@ -223,6 +246,28 @@ function Mesh_FaceBuilder(vertexIndices)
 		}
 		var returnValue = new Face(faceVertices);
 		return returnValue;
+	}
+
+	Mesh_FaceBuilder.prototype.vertexIndicesShift = function(offset)
+	{
+		for (var i = 0; i < this.vertexIndices.length; i++)
+		{
+			var vertexIndex = this.vertexIndices[i];
+			vertexIndex += offset;
+			this.vertexIndices[i] = vertexIndex;
+		}
+	}
+
+	// clonable
+
+	Mesh_FaceBuilder.prototype.clone = function()
+	{
+		return new Mesh_FaceBuilder(this.vertexIndices.slice());
+	}
+
+	Mesh_FaceBuilder.prototype.overwriteWith = function(other)
+	{
+		this.vertexIndices.overwriteWith(other.vertexIndices);
 	}
 }
 

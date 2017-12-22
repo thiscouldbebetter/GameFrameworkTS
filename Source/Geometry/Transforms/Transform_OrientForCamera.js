@@ -5,7 +5,7 @@ function Transform_OrientForCamera(orientation)
 }
 
 {
-	Transform_OrientForCamera.prototype.applyToCoords = function(coordsToTransform)
+	Transform_OrientForCamera.prototype.transformCoords = function(coordsToTransform)
 	{
 		coordsToTransform.overwriteWithDimensions
 		(

@@ -5,7 +5,7 @@ function Transform_Orient(orientation)
 }
 
 {
-	Transform_Orient.prototype.applyToCoords = function(coordsToTransform)
+	Transform_Orient.prototype.transformCoords = function(coordsToTransform)
 	{
 		coordsToTransform.overwriteWithDimensions
 		(

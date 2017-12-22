@@ -5,12 +5,12 @@ function Transform_Multiple(transforms)
 }
 
 {
-	Transform_Multiple.prototype.applyToCoords = function(coordsToTransform)
+	Transform_Multiple.prototype.transformCoords = function(coordsToTransform)
 	{
 		for (var i = 0; i < this.transforms.length; i++)
 		{
 			var transform = this.transforms[i];
-			transform.applyToCoords(coordsToTransform);
+			transform.transformCoords(coordsToTransform);
 		}
 		return coordsToTransform;
 	}

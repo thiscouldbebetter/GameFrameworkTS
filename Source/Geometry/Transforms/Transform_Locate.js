@@ -3,15 +3,19 @@ function Transform_Locate(loc)
 {
 	this.loc = loc;
 
-	this.transformOrient = new Transform_Orient(loc.orientation);
-	this.transformTranslate = new Transform_Translate(loc.pos);
+	this.transformOrient = new Transform_Orient();
+	this.transformTranslate = new Transform_Translate();
 }
 
 {
-	Transform_Locate.prototype.applyToCoords = function(coordsToTransform)
+	Transform_Locate.prototype.transformCoords = function(coordsToTransform)
 	{
-		this.transformOrient.applyToCoords(coordsToTransform);
-		this.transformTranslate.applyToCoords(coordsToTransform);
+		this.transformOrient.orientation = this.loc.orientation;
+		this.transformOrient.transformCoords(coordsToTransform);
+
+		this.transformTranslate.displacement = this.loc.pos;
+		this.transformTranslate.transformCoords(coordsToTransform);
+
 		return coordsToTransform;
 	}
 }

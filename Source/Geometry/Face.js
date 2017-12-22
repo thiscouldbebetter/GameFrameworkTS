@@ -2,14 +2,18 @@
 function Face(vertices)
 {
 	this.vertices = vertices;
-	this.plane = new Plane(new Coords()).fromPoints
-	(
-		this.vertices[0],
-		this.vertices[1],
-		this.vertices[2]
-	);
 }
 {
+	Face.prototype.bounds = function()
+	{
+		if (this._bounds == null)
+		{
+			this._bounds = new Bounds(new Coords(0, 0, 0), new Coords(0, 0, 0));
+		}
+		this._bounds.ofPoints(this.vertices);
+		return this._bounds;
+	}
+
 	Face.prototype.containsPoint = function(pointToCheck)
 	{
 		var returnValue = true;
@@ -51,13 +55,21 @@ function Face(vertices)
 		return this._edges;
 	}
 
-	Face.prototype.recalculate = function()
+	Face.prototype.plane = function()
 	{
-		this.plane.fromPoints
+		if (this._plane == null)
+		{
+			this._plane = new Plane(new Coords(), 0);
+		}
+
+		this._plane.fromPoints
 		(
 			this.vertices[0],
 			this.vertices[1],
 			this.vertices[2]
 		);
+
+		return this._plane;
 	}
+
 }

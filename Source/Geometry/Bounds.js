@@ -124,4 +124,11 @@ function Bounds(center, size)
 	{
 		return coordsToTrim.trimToRangeMinMax(this.min(), this.max());
 	}
+
+	// string
+
+	Bounds.prototype.toString = function()
+	{
+		return this.min().toString() + ":" + this.max().toString();
+	}
 }

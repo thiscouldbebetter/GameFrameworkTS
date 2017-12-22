@@ -134,7 +134,7 @@ function SkeletonHelper()
 				)
 			]
 		); // end spine
-	
+
 		var skeletonBiped = new Skeleton
 		(
 			"Skeleton0",
@@ -251,7 +251,7 @@ function SkeletonHelper()
 						new Transform_BonePose("Shin.R", 	[ .25 ]),
 					]
 				),
-				
+
 			]
 		);
 
@@ -279,7 +279,7 @@ function SkeletonHelper()
 						new Transform_BonePose("Shin.R", 	[ 0 ]),
 					]
 				),
-				
+
 				new AnimationKeyframe
 				(
 					5, 
@@ -291,19 +291,19 @@ function SkeletonHelper()
 						new Transform_BonePose("Shin.R", 	[ 0 ]),
 					]
 				),
-	
+
 				new AnimationKeyframe
 				(
 					10, 
 					[
 						new Transform_BonePose("Thigh.L", 	[ 0 ]),
 						new Transform_BonePose("Shin.L", 	[ 0 ]),
-	
+
 						new Transform_BonePose("Thigh.R", 	[ 0 ]),
 						new Transform_BonePose("Shin.R", 	[ .1 ]),
 					]
 				),
-	
+
 				new AnimationKeyframe
 				(
 					15, 
@@ -311,21 +311,21 @@ function SkeletonHelper()
 						new Transform_BonePose("Bicep.L", 	[ .1 ]),
 						new Transform_BonePose("Forearm.L", 	[ .1 ]),
 						new Transform_BonePose("Thigh.L", 	[ -.05 ]),
-	
+
 						new Transform_BonePose("Bicep.R", 	[ -.1 ]),
 						new Transform_BonePose("Forearm.R", 	[ 0 ]),
 						new Transform_BonePose("Thigh.R", 	[ .1 ]),
 						new Transform_BonePose("Shin.R", 	[ 0 ]),
 					]
 				),
-	
+
 				new AnimationKeyframe
 				(
 					20, 
 					[
 						new Transform_BonePose("Thigh.L", 	[ -.1 ]),
 						new Transform_BonePose("Shin.L", 	[ 0 ]),
-	
+
 						new Transform_BonePose("Thigh.R", 	[ .1 ]),
 						new Transform_BonePose("Shin.R", 	[ .1 ]),
 					]
@@ -337,7 +337,7 @@ function SkeletonHelper()
 					[
 						new Transform_BonePose("Thigh.L", 	[ 0 ]),
 						new Transform_BonePose("Shin.L", 	[ .1 ]),
-	
+
 						new Transform_BonePose("Thigh.R", 	[ 0 ]),
 						new Transform_BonePose("Shin.R", 	[ 0 ]),
 					]
@@ -382,7 +382,7 @@ function SkeletonHelper()
 
 			var distanceLeastSoFar = Number.POSITIVE_INFINITY;
 			var indexOfBoneClosestSoFar = null;
-			
+
 			for (var b = 0; b < bones.length; b++)
 			{
 				var bone = bones[b];
@@ -399,7 +399,7 @@ function SkeletonHelper()
 				);
 
 				var distance = displacement.magnitude();
-				
+
 				if (distance < distanceLeastSoFar)
 				{
 					distanceLeastSoFar = distance;

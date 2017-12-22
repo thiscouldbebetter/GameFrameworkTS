@@ -8,6 +8,16 @@ function Edge(vertices)
 	this._transverse = new Coords();
 }
 {
+	Edge.prototype.bounds = function()
+	{
+		if (this._bounds == null)
+		{
+			this._bounds = new Bounds(new Coords(), new Coords());
+		}
+		this._bounds.ofPoints(this.vertices);
+		return this._bounds;
+	}
+
 	Edge.prototype.direction = function()
 	{
 		return this._direction.overwriteWith(this.displacement()).normalize();

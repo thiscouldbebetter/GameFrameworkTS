@@ -72,7 +72,7 @@ var orientationCloned = this.orientation.clone();
 		for (var i = 0; i < axes.length; i++)
 		{
 			var axis = axes[i];
-			transformToApply.applyToCoords(axis);
+			transformToApply.transformCoords(axis);
 		}
 	}
 }

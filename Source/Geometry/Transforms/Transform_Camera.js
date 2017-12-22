@@ -1,7 +1,7 @@
 
 function Transform_Camera(camera)
 {
-	this.camera = camera;	
+	this.camera = camera;
 
 	this.transformTranslateInvert = new Transform_TranslateInvert
 	(
@@ -22,12 +22,12 @@ function Transform_Camera(camera)
 }
 
 {
-	Transform_Camera.prototype.applyToCoords = function(coordsToTransform)
+	Transform_Camera.prototype.transformCoords = function(coordsToTransform)
 	{
-		this.transformTranslateInvert.applyToCoords(coordsToTransform);
-		this.transformOrientForCamera.applyToCoords(coordsToTransform);
-		this.transformPerspective.applyToCoords(coordsToTransform);
-		this.transformViewCenter.applyToCoords(coordsToTransform);
+		this.transformTranslateInvert.transformCoords(coordsToTransform);
+		this.transformOrientForCamera.transformCoords(coordsToTransform);
+		this.transformPerspective.transformCoords(coordsToTransform);
+		this.transformViewCenter.transformCoords(coordsToTransform);
 		return coordsToTransform;
 	}
 }

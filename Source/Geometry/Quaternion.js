@@ -29,7 +29,7 @@ function Quaternion(w, x, y, z)
 
 	// instance methods
 
-	Quaternion.prototype.applyToCoordsAsRotation = function(coordsToRotate)
+	Quaternion.prototype.transformCoordsAsRotation = function(coordsToRotate)
 	{
 		var coordsToRotateAsQuaternion = new Quaternion
 		(
