@@ -55,6 +55,7 @@ function Orientation(forward, down)
 		this.forward.overwriteWith(other.forward);
 		this.right.overwriteWith(other.right);
 		this.down.overwriteWith(other.down);
+		return this;
 	}
 
 	Orientation.prototype.projectCoords = function(coords)

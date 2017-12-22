@@ -12,13 +12,17 @@ function Transform_MeshPoseWithSkeleton
 	this.skeletonPosed = skeletonPosed;
 	this.boneInfluences = boneInfluences;
 	this.boneInfluences.addLookups("boneName");
+
+	// Helper variables.
+	this._orientation = new Orientation(new Coords(), new Coords());
+	this._vertex = new Coords();
 }
 
 {
 	Transform_MeshPoseWithSkeleton.prototype.transformMesh = function(meshToPose)
 	{
-		var meshAtRestVertices = this.meshAtRest.geometry.vertices();
-		var meshToPoseVertices = meshToPose.geometry.vertices();
+		var meshAtRestVertices = this.meshAtRest.geometry.vertexOffsets;
+		var meshToPoseVertices = meshToPose.geometry.vertexOffsets;
 
 		var bonesAtRest = this.skeletonAtRest.bonesAll;
 		var bonesPosed = this.skeletonPosed.bonesAll;
@@ -32,7 +36,6 @@ function Transform_MeshPoseWithSkeleton
 			var bonePosed = bonesPosed[boneName];
 
 			var boneAtRestOrientation = boneAtRest.orientation;
-			var bonePosedOrientation = bonePosed.orientation;
 
 			var vertexIndicesControlled = boneInfluence.vertexIndicesControlled;
 			for (var vi = 0; vi < vertexIndicesControlled.length; vi++)
@@ -45,7 +48,10 @@ function Transform_MeshPoseWithSkeleton
 				var boneAtRestPos = boneAtRest.pos(bonesAtRest);
 				var bonePosedPos = bonePosed.pos(bonesPosed);
 
-				var vertexAtRestProjected = vertexAtRest.clone().subtract
+				var vertexAtRestProjected = this._vertex.overwriteWith
+				(
+					vertexAtRest
+				).subtract
 				(
 					boneAtRestPos
 				);
@@ -62,21 +68,26 @@ function Transform_MeshPoseWithSkeleton
 					bonePosedPos
 				);
 
+				var bonePosedOrientation = this._orientation.overwriteWith
+				(
+					bonePosed.orientation
+				);
+
 				vertexToPose.add
 				(
-					bonePosedOrientation.right.clone().multiplyScalar
+					bonePosedOrientation.right.multiplyScalar
 					(
 						vertexAtRestProjected.x
 					)
 				).add
 				(
-					bonePosedOrientation.down.clone().multiplyScalar
+					bonePosedOrientation.down.multiplyScalar
 					(
 						vertexAtRestProjected.y
 					)
 				).add
 				(
-					bonePosedOrientation.forward.clone().multiplyScalar
+					bonePosedOrientation.forward.multiplyScalar
 					(
 						vertexAtRestProjected.z
 					)
