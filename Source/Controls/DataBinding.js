@@ -6,7 +6,7 @@ function DataBinding(context, bindingExpression)
 }
 
 {
-	DataBinding.prototype.get = function()
+	DataBinding.prototype.get = function(universe)
 	{
 		var returnValue = this.context;
 
@@ -34,7 +34,7 @@ function DataBinding(context, bindingExpression)
 					}
 					else
 					{
-						returnValue = returnValue[bindingExpressionPart](this.context);
+						returnValue = returnValue[bindingExpressionPart](this.context, universe);
 					}
 				}
 				else
@@ -47,7 +47,7 @@ function DataBinding(context, bindingExpression)
 		return returnValue;
 	}
 
-	DataBinding.prototype.set = function(valueToSet)
+	DataBinding.prototype.set = function(valueToSet, universe)
 	{
 		var context = this.context;
 
@@ -72,7 +72,7 @@ function DataBinding(context, bindingExpression)
 				}
 				else
 				{
-					returnValue = context[bindingExpressionPart](this.context, valueToSet);
+					returnValue = context[bindingExpressionPart](this.context, universe, valueToSet);
 				}
 			}
 			else

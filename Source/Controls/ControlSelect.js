@@ -53,7 +53,7 @@ function ControlSelect
 		// This is somewhat counterintuitive.
 		if (actionNameToHandle == "ControlDecrement")
 		{
-			this.optionSelectedNextInDirection(1);
+			this.optionSelectedNextInDirection(1, universe);
 		}
 		else if
 		(
@@ -61,7 +61,7 @@ function ControlSelect
 			|| actionNameToHandle == "ControlConfirm"
 		)
 		{
-			this.optionSelectedNextInDirection(-1);
+			this.optionSelectedNextInDirection(-1, universe);
 		}
 	}
 
@@ -94,6 +94,7 @@ function ControlSelect
 				optionAsObject,
 				this.bindingExpressionForOptionValues
 			).get();
+
 			var optionText = new DataBinding
 			(
 				optionAsObject,
@@ -110,7 +111,7 @@ function ControlSelect
 		return returnValue;
 	}
 
-	ControlSelect.prototype.optionSelectedNextInDirection = function(direction)
+	ControlSelect.prototype.optionSelectedNextInDirection = function(direction, universe)
 	{
 		var options = this.options();
 
@@ -126,7 +127,7 @@ function ControlSelect
 
 		if (this._valueSelected != null && this._valueSelected.constructor.name == "DataBinding")
 		{
-			this._valueSelected.set(optionSelected.value);
+			this._valueSelected.set(optionSelected.value, universe);
 		}
 		else
 		{
@@ -141,7 +142,7 @@ function ControlSelect
 
 	ControlSelect.prototype.mouseClick = function(universe, clickPos)
 	{
-		this.optionSelectedNextInDirection(1);
+		this.optionSelectedNextInDirection(1, universe);
 	}
 
 	ControlSelect.prototype.style = function(universe)

@@ -25,7 +25,7 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
 	}
 
-	ControlTextBox.prototype.text = function(value)
+	ControlTextBox.prototype.text = function(value, universe)
 	{
 		if (value != null)
 		{
@@ -35,11 +35,11 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 			}
 			else
 			{
-				this._text.set(value);
+				this._text.set(value, universe);
 			}
 		}
 
-		return (this._text.get == null ? this._text : this._text.get() );
+		return (this._text.get == null ? this._text : this._text.get(universe) );
 	}
 
 	// events
