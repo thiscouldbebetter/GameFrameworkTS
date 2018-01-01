@@ -1,7 +1,7 @@
 
 function VisualText(text, colorFill, colorBorder)
 {
-	this.text = text;
+	this._text = text;
 	this.colorFill = colorFill;
 	this.colorBorder = colorBorder;
 }
@@ -9,9 +9,10 @@ function VisualText(text, colorFill, colorBorder)
 {
 	VisualText.prototype.draw = function(universe, world, display, drawable)
 	{
+		var text = this.text(universe);
 		display.drawText
 		(
-			this.text,
+			text,
 			display.fontHeightInPixels,
 			drawable.loc.pos,
 			this.colorFill, 
@@ -20,5 +21,10 @@ function VisualText(text, colorFill, colorBorder)
 			true, // isCentered
 			null // widthMaxInPixels
 		);
+	}
+
+	VisualText.prototype.text = function(universe)
+	{
+		return (this._text.get == null ? this._text : this._text.get(universe) );
 	}
 }
