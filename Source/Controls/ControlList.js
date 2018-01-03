@@ -32,16 +32,20 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 }
 
 {
-	ControlList.prototype.actionHandle = function(universe, actionNameToHandle)
+	ControlList.prototype.actionHandle = function(actionNameToHandle)
 	{
+		var wasActionHandled = false;
 		if (actionNameToHandle == "ControlIncrement")
 		{
 			this.itemSelectedNextInDirection(1);
+			wasActionHandled = true;
 		}
 		else if (actionNameToHandle == "ControlDecrement")
 		{
 			this.itemSelectedNextInDirection(-1);
+			wasActionHandled = true;
 		}
+		return wasActionHandled;
 	}
 
 	ControlList.prototype.focusGain = function()
@@ -176,7 +180,7 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 		return (this._items.get == null ? this._items : this._items.get());
 	}
 
-	ControlList.prototype.mouseClick = function(universe, clickPos)
+	ControlList.prototype.mouseClick = function(clickPos)
 	{
 		clickPos = this.mouseClickPos.overwriteWith(clickPos);
 

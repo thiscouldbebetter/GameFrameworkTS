@@ -17,12 +17,14 @@ function ControlDynamic(name, pos, size, binding)
 	this.mouseMovePos = new Coords();
 }
 {
-	ControlDynamic.prototype.actionHandle = function(universe, actionNameToHandle)
+	ControlDynamic.prototype.actionHandle = function(actionNameToHandle)
 	{
+		var wasActionHandled = false;
 		if (this.child != null)
 		{
-			this.child.actionHandle(universe, actionNameToHandle);
+			wasActionHandled = this.child.actionHandle(actionNameToHandle);
 		}
+		return wasActionHandled;
 	}
 
 	ControlDynamic.prototype.childWithFocus = function()
@@ -51,14 +53,14 @@ function ControlDynamic(name, pos, size, binding)
 		return true;
 	}
 
-	ControlDynamic.prototype.mouseClick = function(universe, mouseClickPos)
+	ControlDynamic.prototype.mouseClick = function(mouseClickPos)
 	{
 		var wasHandledByChild = false;
 		if (this.child != null && this.child.mouseClick != null)
 		{
 			mouseClickPos = this.mouseClickPos.overwriteWith(mouseClickPos).subtract(this.pos);
 
-			wasHandledByChild = this.child.mouseClick(universe, mouseClickPos);
+			wasHandledByChild = this.child.mouseClick(mouseClickPos);
 		}
 		return wasHandledByChild;
 	}

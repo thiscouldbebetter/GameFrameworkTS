@@ -24,7 +24,6 @@ function ControlContainer(name, pos, size, children)
 	this.drawLoc = new Location(this.drawPos);
 	this.mouseClickPos = new Coords();
 	this.mouseMovePos = new Coords();
-	this.mouseMovePosPrev = new Coords();
 }
 
 {
@@ -42,51 +41,16 @@ function ControlContainer(name, pos, size, children)
 
 	// actions
 
-	ControlContainer.prototype.actionHandle = function(universe, actionNameToHandle)
+	ControlContainer.prototype.actionHandle = function(actionNameToHandle)
 	{
+		var wasActionHandled = false;
+
 		var childWithFocus = this.childWithFocus();
 
-		if (actionNameToHandle.startsWith("Mouse") == true)
+		if (actionNameToHandle == "ControlPrev" || actionNameToHandle == "ControlNext")
 		{
-			var inputHelper = universe.inputHelper;
-			var scaleFactor = universe.display.scaleFactor;
-			if (actionNameToHandle == "MouseClick")
-			{
-				this.mouseClickPos.overwriteWith
-				(
-					inputHelper.mouseClickPos
-				).divide
-				(
-					scaleFactor
-				);
-				this.mouseClick(universe, this.mouseClickPos);
-				inputHelper.inputRemove(actionNameToHandle);
-			}
-			else if (actionNameToHandle == "MouseMove")
-			{
-				this.mouseMovePos.overwriteWith
-				(
-					inputHelper.mouseMovePos
-				).divide
-				(
-					scaleFactor
-				);
-				this.mouseMovePosPrev.overwriteWith
-				(
-					inputHelper.mouseMovePosPrev
-				).divide
-				(
-					scaleFactor
-				);
+			wasActionHandled = true;
 
-				this.mouseMove
-				(
-					this.mouseMovePos, this.mouseMovePosPrev
-				);
-			}
-		}
-		else if (actionNameToHandle == "ControlPrev" || actionNameToHandle == "ControlNext")
-		{
 			var direction = (actionNameToHandle == "ControlPrev" ? -1 : 1);
 
 			if (childWithFocus == null)
@@ -99,7 +63,7 @@ function ControlContainer(name, pos, size, children)
 			}
 			else if (childWithFocus.childWithFocus != null)
 			{
-				childWithFocus.actionHandle(universe, actionNameToHandle);
+				childWithFocus.actionHandle(actionNameToHandle);
 				if (childWithFocus.childWithFocus() == null)
 				{
 					childWithFocus = this.childWithFocusNextInDirection(direction);
@@ -123,9 +87,11 @@ function ControlContainer(name, pos, size, children)
 		{
 			if (childWithFocus.actionHandle != null)
 			{
-				childWithFocus.actionHandle(universe, actionNameToHandle);
+				wasActionHandled = childWithFocus.actionHandle(actionNameToHandle);
 			}
 		}
+
+		return wasActionHandled;
 	}
 
 	ControlContainer.prototype.childWithFocus = function()
@@ -236,7 +202,7 @@ function ControlContainer(name, pos, size, children)
 		}
 	}
 
-	ControlContainer.prototype.mouseClick = function(universe, mouseClickPos)
+	ControlContainer.prototype.mouseClick = function(mouseClickPos)
 	{
 		mouseClickPos = this.mouseClickPos.overwriteWith
 		(
@@ -253,14 +219,21 @@ function ControlContainer(name, pos, size, children)
 			true // addFirstChildOnly
 		);
 
+		var wasClickHandled = false;
 		if (childrenContainingPos.length > 0)
 		{
 			var child = childrenContainingPos[0];
 			if (child.mouseClick != null)
 			{
-				child.mouseClick(universe, mouseClickPos);
+				var wasClickHandledByChild = child.mouseClick(mouseClickPos);
+				if (wasClickHandledByChild == true)
+				{
+					wasClickHandled = true;
+				}
 			}
 		}
+
+		return wasClickHandled;
 	}
 
 	ControlContainer.prototype.mouseMove = function(mouseMovePos)

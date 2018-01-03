@@ -48,7 +48,7 @@ function ControlSelect
 }
 
 {
-	ControlSelect.prototype.actionHandle = function(universe, actionNameToHandle)
+	ControlSelect.prototype.actionHandle = function(actionNameToHandle)
 	{
 		// This is somewhat counterintuitive.
 		if (actionNameToHandle == "ControlDecrement")
@@ -94,6 +94,7 @@ function ControlSelect
 				optionAsObject,
 				this.bindingExpressionForOptionValues
 			).get();
+
 			var optionText = new DataBinding
 			(
 				optionAsObject,
@@ -139,9 +140,10 @@ function ControlSelect
 		return (this._options.get == null ? this._options : this._options.get() );
 	}
 
-	ControlSelect.prototype.mouseClick = function(universe, clickPos)
+	ControlSelect.prototype.mouseClick = function(clickPos)
 	{
 		this.optionSelectedNextInDirection(1);
+		return true; // wasClickHandled
 	}
 
 	ControlSelect.prototype.style = function(universe)

@@ -1,7 +1,7 @@
 
 function Serializer()
 {
-	// do nothing
+	// Do nothing.
 }
 {
 	Serializer.prototype.deserialize = function(stringToDeserialize)
@@ -14,7 +14,7 @@ function Serializer()
 		return returnValue;
 	}
 
-	Serializer.prototype.serialize = function(objectToSerialize)
+	Serializer.prototype.serialize = function(objectToSerialize, prettyPrint)
 	{
 		var nodeRoot = new SerializerNode(objectToSerialize);
 
@@ -24,7 +24,7 @@ function Serializer()
 		(
 			nodeRoot,
 			null, // ?
-			4 // pretty-print indent size
+			(prettyPrint == true ? 4 : null) // pretty-print indent size
 		);
 
 		return nodeRootSerialized;
@@ -33,11 +33,11 @@ function Serializer()
 
 function SerializerNode(objectWrapped)
 {
-	this.objectWrappedTypeName = null;
-	this.id = null;
-	this.isReference = null;
+	this.t = null; // objectWrappedTypeName
+	this.id = null; // id
+	this.r = null; // isReference
 
-	this.objectWrapped = objectWrapped;
+	this.o = objectWrapped;
 }
 {
 	SerializerNode.prototype.wrap = function
@@ -45,43 +45,45 @@ function SerializerNode(objectWrapped)
 		objectsAlreadyWrapped, objectIndexToNodeLookup
 	)
 	{
-		if (this.objectWrapped != null)
+		var objectWrapped = this.o;
+		if (objectWrapped != null)
 		{
-			var typeName = this.objectWrapped.constructor.name;
+			var typeName = objectWrapped.constructor.name;
 
 			var objectIndexExisting =
-				objectsAlreadyWrapped.indexOf(this.objectWrapped);
+				objectsAlreadyWrapped.indexOf(objectWrapped);
 
 			if (objectIndexExisting >= 0)
 			{
 				var nodeForObjectExisting = objectIndexToNodeLookup[objectIndexExisting];
 				this.id = nodeForObjectExisting.id;
-				this.isReference = true;
-				this.objectWrapped = null;
+				this.r = true; // isReference
+				this.o = null; // objectWrapped
 			}
 			else
 			{
-				this.isReference = false;
+				this.r = false; // isReference
 				var objectIndex = objectsAlreadyWrapped.length;
 				this.id = objectIndex;
-				objectsAlreadyWrapped.push(this.objectWrapped);
+				objectsAlreadyWrapped.push(objectWrapped);
 				objectIndexToNodeLookup[objectIndex] = this;
 
-				this.objectWrappedTypeName = typeName;
+				this.t = typeName;
 
 				if (typeName == "Function")
 				{
-					this.objectWrapped = this.objectWrapped.toString();
+					this.o = objectWrapped.toString();
 				}
 				else
 				{
-					this.children = {};
+					var children = {};
+					this.c = children;
 
-					for (var propertyName in this.objectWrapped)
+					for (var propertyName in objectWrapped)
 					{
-						if (this.objectWrapped.__proto__[propertyName] == null)
+						if (objectWrapped.__proto__[propertyName] == null)
 						{
-							var propertyValue = this.objectWrapped[propertyName];
+							var propertyValue = objectWrapped[propertyName];
 
 							if (propertyValue == null)
 							{
@@ -110,15 +112,15 @@ function SerializerNode(objectWrapped)
 
 							}
 
-							this.children[propertyName] = child;
+							children[propertyName] = child;
 						}
 					}
 
-					delete this.objectWrapped;
+					delete this.o;
 
-					for (var childName in this.children)
+					for (var childName in children)
 					{
-						var child = this.children[childName];
+						var child = children[childName];
 						if (child != null)
 						{
 							var childTypeName = child.constructor.name;
@@ -143,11 +145,12 @@ function SerializerNode(objectWrapped)
 
 	SerializerNode.prototype.prototypesAssign = function()
 	{
-		if (this.children != null)
+		var children = this.c;
+		if (children != null)
 		{
-			for (var childName in this.children)
+			for (var childName in children)
 			{
-				var child = this.children[childName];
+				var child = children[childName];
 				if (child != null)
 				{
 					var childTypeName = child.constructor.name;
@@ -163,26 +166,27 @@ function SerializerNode(objectWrapped)
 
 	SerializerNode.prototype.unwrap = function(nodesAlreadyProcessed)
 	{
-		if (this.isReference == true)
+		var isReference = this.r;
+		if (isReference == true)
 		{
 			var nodeExisting = nodesAlreadyProcessed[this.id];
-			this.objectWrapped = nodeExisting.objectWrapped;
+			this.o = nodeExisting.o; // objectWrapped
 		}
 		else
 		{
 			nodesAlreadyProcessed[this.id] = this;
-			var typeName = this.objectWrappedTypeName;
+			var typeName = this.t;
 			if (typeName == null)
 			{
 				// Value is null.  Do nothing.
 			}
 			else if (typeName == "Array")
 			{
-				this.objectWrapped = [];
+				this.o = [];
 			}
 			else if (typeName == "Function")
 			{
-				this.objectWrapped = eval("(" + this.objectWrapped + ")");
+				this.o = eval("(" + this.o + ")");
 			}
 			else if
 			(
@@ -195,16 +199,17 @@ function SerializerNode(objectWrapped)
 			}
 			else
 			{
-				this.objectWrapped = {};
+				this.o = {};
 				var objectWrappedType = eval("(" + typeName + ")");
-				this.objectWrapped.__proto__ = objectWrappedType.prototype;
+				this.o.__proto__ = objectWrappedType.prototype;
 			}
 
-			if (this.children != null)
+			var children = this.c;
+			if (children != null)
 			{
-				for (var childName in this.children)
+				for (var childName in children)
 				{
-					var child = this.children[childName];
+					var child = children[childName];
 
 					if (child != null)
 					{
@@ -217,12 +222,12 @@ function SerializerNode(objectWrapped)
 						}
 					}
 
-					this.objectWrapped[childName] = child;
+					this.o[childName] = child;
 				}
 			}
 
 		}
 
-		return this.objectWrapped;
+		return this.o; // objectWrapped
 	}
 }

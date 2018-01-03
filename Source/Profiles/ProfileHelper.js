@@ -79,11 +79,19 @@ function ProfileHelper(storageHelper)
 			);
 		}
 
-		this.storageHelper.save
-		(
-			this.propertyName,
-			profiles
-		);
+		try
+		{
+			this.storageHelper.save
+			(
+				this.propertyName,
+				profiles
+			);
+		}
+		catch (err)
+		{
+			var errorMessage = "Error attempting to save: " + err;
+			alert(errorMessage);
+		}
 	}
 
 	ProfileHelper.prototype.profiles = function()

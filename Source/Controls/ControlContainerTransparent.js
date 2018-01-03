@@ -30,37 +30,13 @@ function ControlContainerTransparent(containerInner)
 		);
 	}
 
-	ControlContainerTransparent.prototype.actionHandle = function(universe, actionNameToHandle)
+	ControlContainerTransparent.prototype.actionHandle = function(actionNameToHandle)
 	{
-		if (actionNameToHandle == "MouseClick")
-		{
-			var inputHelper = universe.inputHelper;
-
-			var mouseClickPos = this.containerInner.mouseClickPos.overwriteWith
-			(
-				inputHelper.mouseClickPos
-			).divide
-			(
-				universe.display.scaleFactor
-			);
-
-			this.mouseClick(universe, mouseClickPos);
-
-			if (this.containerInner.childrenContainingPos.length > 0)
-			{
-				inputHelper.inputRemove(actionNameToHandle);
-			}
-		}
-		else
-		{
-			this.containerInner.actionHandle(universe, actionNameToHandle);
-		}
+		return this.containerInner.actionHandle(actionNameToHandle);
 	}
 
-	ControlContainerTransparent.prototype.mouseClick = function(universe, mouseClickPos)
+	ControlContainerTransparent.prototype.mouseClick = function(mouseClickPos)
 	{
-		var inputHelper = universe.inputHelper;
-
 		var childrenContainingPos = this.containerInner.childrenAtPosAddToList
 		(
 			mouseClickPos,
@@ -68,14 +44,21 @@ function ControlContainerTransparent(containerInner)
 			true // addFirstChildOnly
 		);
 
+		var wasClickHandled = false;
 		if (childrenContainingPos.length > 0)
 		{
 			var child = childrenContainingPos[0];
 			if (child.mouseClick != null)
 			{
-				child.mouseClick(universe, mouseClickPos);
+				var wasClickHandledByChild = child.mouseClick(mouseClickPos);
+				if (wasClickHandledByChild == true)
+				{
+					wasClickHandled = true;
+				}
 			}
 		}
+
+		return wasClickHandled;
 	}
 
 	ControlContainerTransparent.prototype.mouseMove = function(mouseMovePos)

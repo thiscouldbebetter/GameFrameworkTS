@@ -3,7 +3,7 @@ function VisualPolygon(vertices, colorFill, colorBorder)
 {
 	this.vertices = vertices;
 	this.colorFill = colorFill;
-	this.colorBorder = colorBorder;	
+	this.colorBorder = colorBorder;
 
 	this.verticesTransformed = [];
 	for (var i = 0; i < this.vertices.length; i++)

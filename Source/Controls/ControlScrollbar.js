@@ -41,9 +41,9 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 }
 
 {
-	ControlScrollbar.prototype.actionHandle = function(universe, actionNameToHandle)
+	ControlScrollbar.prototype.actionHandle = function(actionNameToHandle)
 	{
-		// todo
+		return true;
 	}
 
 	ControlScrollbar.prototype.items = function()

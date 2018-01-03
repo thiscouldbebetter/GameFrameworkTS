@@ -44,7 +44,8 @@ function ControlBuilder(styles)
 						);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
-					}
+					},
+					universe // context
 				),
 
 				new ControlButton
@@ -64,7 +65,8 @@ function ControlBuilder(styles)
 						);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
-					}
+					},
+					universe // context
 				),
 
 				new ControlLabel
@@ -177,7 +179,8 @@ function ControlBuilder(styles)
 						);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
-					}
+					},
+					universe // context
 				),
 
 				new ControlButton
@@ -195,7 +198,8 @@ function ControlBuilder(styles)
 						var venueNext = new VenueWorld(world);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
-					}
+					},
+					universe // context
 				),
 
 				new ControlButton
@@ -238,7 +242,8 @@ function ControlBuilder(styles)
 						var venueNext = new VenueControls(controlConfirm);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
-					}
+					},
+					universe // context
 				),
 			]
 		);
@@ -281,7 +286,8 @@ function ControlBuilder(styles)
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
 					true, // isEnabled
-					confirm
+					confirm,
+					universe // context
 				),
 
 				new ControlButton
@@ -293,7 +299,8 @@ function ControlBuilder(styles)
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
 					true, // isEnabled
-					cancel
+					cancel,
+					universe // context
 				),
 			]
 		);
@@ -336,7 +343,8 @@ function ControlBuilder(styles)
 					this.fontHeightInPixelsBase * sizeMultiplier.y,
 					true, // hasBorder
 					true, // isEnabled
-					acknowledge
+					acknowledge, 
+					universe // context
 				),
 			]
 		);
@@ -422,7 +430,8 @@ function ControlBuilder(styles)
 						);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
-					}
+					},
+					universe // context
 				),
 
 				new ControlButton
@@ -464,7 +473,8 @@ function ControlBuilder(styles)
 							venueNext = new VenueFader(venueNext, universe.venueCurrent);
 							universe.venueNext = venueNext;
 						}
-					}
+					},
+					universe // context
 				),
 
 				new ControlButton
@@ -484,7 +494,8 @@ function ControlBuilder(styles)
 						);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
-					}
+					},
+					universe // context
 				),
 
 				new ControlButton
@@ -536,7 +547,8 @@ function ControlBuilder(styles)
 						var venueNext = new VenueControls(controlConfirm);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
-					}
+					},
+					universe // context
 				),
 			]
 		);
@@ -626,7 +638,8 @@ function ControlBuilder(styles)
 						);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
-					}
+					},
+					universe // context
 				),
 
 				new ControlButton
@@ -646,7 +659,8 @@ function ControlBuilder(styles)
 						);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
-					}
+					},
+					universe // context
 				),
 			]
 		);
@@ -711,7 +725,8 @@ function ControlBuilder(styles)
 						);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
-					}
+					},
+					universe // context
 				),
 
 				new ControlButton
@@ -750,7 +765,8 @@ function ControlBuilder(styles)
 						);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
-					}
+					},
+					universe // context
 				),
 
 				new ControlButton
@@ -774,7 +790,8 @@ function ControlBuilder(styles)
 						var venueNext = new VenueWorld(universe.world);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
-					}
+					},
+					universe // context
 				),
 
 				new ControlButton
@@ -794,7 +811,8 @@ function ControlBuilder(styles)
 						);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
-					}
+					},
+					universe // context
 				),
 
 				new ControlButton
@@ -839,7 +857,8 @@ function ControlBuilder(styles)
 						var venueNext = new VenueControls(controlConfirm);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
-					}
+					},
+					universe // context
 				),
 			]
 		);
@@ -888,7 +907,8 @@ function ControlBuilder(styles)
 						);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
-					}
+					},
+					universe // context
 				)
 			]
 		);
@@ -977,7 +997,8 @@ function ControlBuilder(styles)
 						}
 						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
-					}
+					},
+					universe // context
 				),
 
 				new ControlButton
@@ -997,7 +1018,8 @@ function ControlBuilder(styles)
 						);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
-					}
+					},
+					universe // context
 				),
 
 				new ControlButton
@@ -1057,7 +1079,8 @@ function ControlBuilder(styles)
 						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 
 						universe.venueNext = venueNext;
-					}
+					},
+					universe // context
 				),
 			]
 		);
@@ -1174,7 +1197,8 @@ function ControlBuilder(styles)
 						var venueNext = new VenueControls(controlConfirm);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
-					}
+					},
+					universe // context
 				),
 
 				new ControlButton
@@ -1252,7 +1276,8 @@ function ControlBuilder(styles)
 						venueFileUpload.venueNextIfCancelled = venueMessageCancelled;
 
 						universe.venueNext = venueFileUpload;
-					}
+					},
+					universe // context
 				),
 
 				new ControlButton
@@ -1272,7 +1297,8 @@ function ControlBuilder(styles)
 						);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
-					}
+					},
+					universe // context
 				),
 
 			]
@@ -1337,7 +1363,8 @@ function ControlBuilder(styles)
 						);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
-					}
+					},
+					universe // context
 				),
 
 				new ControlButton
@@ -1383,7 +1410,8 @@ function ControlBuilder(styles)
 						);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
-					}
+					},
+					universe // context
 				),
 
 				new ControlButton
@@ -1403,7 +1431,8 @@ function ControlBuilder(styles)
 						);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
-					}
+					},
+					universe // context
 				),
 			]
 		);

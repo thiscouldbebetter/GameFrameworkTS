@@ -1,5 +1,5 @@
 
-function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isEnabled, click)
+function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isEnabled, click, context, canBeHeldDown)
 {
 	this.name = name;
 	this.pos = pos;
@@ -9,6 +9,8 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 	this.hasBorder = hasBorder;
 	this._isEnabled = isEnabled;
 	this.click = click;
+	this.context = context;
+	this.canBeHeldDown = (canBeHeldDown == null ? false : canBeHeldDown);
 
 	this.isHighlighted = false;
 
@@ -19,12 +21,14 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 }
 
 {
-	ControlButton.prototype.actionHandle = function(universe, actionNameToHandle)
+	ControlButton.prototype.actionHandle = function(actionNameToHandle)
 	{
 		if (actionNameToHandle == "ControlConfirm")
 		{
-			this.click(universe);
+			this.click(this.context);
 		}
+
+		return (this.canBeHeldDown == false); // wasActionHandled
 	}
 
 	ControlButton.prototype.isEnabled = function()
@@ -44,12 +48,13 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 		this.isHighlighted = false;
 	}
 
-	ControlButton.prototype.mouseClick = function(universe, clickPos)
+	ControlButton.prototype.mouseClick = function(clickPos)
 	{
 		if (this.isEnabled() == true)
 		{
-			this.click(universe);
+			this.click(this.context);
 		}
+		return (this.canBeHeldDown == false); // wasClickHandled
 	}
 
 	ControlButton.prototype.mouseEnter = function()

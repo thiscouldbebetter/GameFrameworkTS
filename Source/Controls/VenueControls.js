@@ -35,6 +35,9 @@ function VenueControls(controlRoot)
 	// Helper variables.
 
 	this._drawLoc = new Location(new Coords());
+	this._mouseClickPos = new Coords();
+	this._mouseMovePos = new Coords();
+	this._mouseMovePosPrev = new Coords();
 }
 
 {
@@ -61,13 +64,61 @@ function VenueControls(controlRoot)
 				var mapping = this.inputToActionMappings[inputActive];
 				if (mapping == null)
 				{
-					// Pass the raw input, to allow for text entry and mouse clicks.
-					this.controlRoot.actionHandle(universe, inputActive);
+					if (inputActive.startsWith("Mouse") == true)
+					{
+						var scaleFactor = universe.display.scaleFactor;
+						if (inputActive == "MouseClick")
+						{
+							this._mouseClickPos.overwriteWith
+							(
+								inputHelper.mouseClickPos
+							).divide
+							(
+								scaleFactor
+							);
+							var wasClickHandled = this.controlRoot.mouseClick(this._mouseClickPos);
+							if (wasClickHandled == true)
+							{
+								inputHelper.inputRemove(inputActive);
+							}
+						}
+						else if (inputActive == "MouseMove")
+						{
+							this._mouseMovePos.overwriteWith
+							(
+								inputHelper.mouseMovePos
+							).divide
+							(
+								scaleFactor
+							);
+							this._mouseMovePosPrev.overwriteWith
+							(
+								inputHelper.mouseMovePosPrev
+							).divide
+							(
+								scaleFactor
+							);
+
+							this.controlRoot.mouseMove
+							(
+								this._mouseMovePos, this._mouseMovePosPrev
+							);
+						}
+					}
+					else
+					{
+						// Pass the raw input, to allow for text entry.
+						var wasActionHandled = this.controlRoot.actionHandle(inputActive);
+						if (wasActionHandled == true)
+						{
+							inputHelper.inputInactivate(inputActive);
+						}
+					}
 				}
 				else
 				{
 					var actionName = mapping.actionName;
-					this.controlRoot.actionHandle(universe, actionName);
+					this.controlRoot.actionHandle(actionName);
 					if (mapping.inactivateInputWhenActionPerformed == true)
 					{
 						inputHelper.inputInactivate(inputActive);

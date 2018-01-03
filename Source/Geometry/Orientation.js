@@ -42,6 +42,14 @@ function Orientation(forward, down)
 		return this.orthogonalize();
 	}
 
+	Orientation.prototype.forwardDownSet = function(forward, down)
+	{
+		this.forward.overwriteWith(forward);
+		this.down.overwriteWith(down);
+		return this.orthogonalize();
+	}
+
+
 	Orientation.prototype.orthogonalize = function(value)
 	{
 		this.forward.normalize();

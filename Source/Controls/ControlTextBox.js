@@ -25,7 +25,7 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
 	}
 
-	ControlTextBox.prototype.text = function(value)
+	ControlTextBox.prototype.text = function(value, universe)
 	{
 		if (value != null)
 		{
@@ -39,12 +39,12 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 			}
 		}
 
-		return (this._text.get == null ? this._text : this._text.get() );
+		return (this._text.get == null ? this._text : this._text.get(universe) );
 	}
 
 	// events
 
-	ControlTextBox.prototype.actionHandle = function(universe, actionNameToHandle)
+	ControlTextBox.prototype.actionHandle = function(actionNameToHandle)
 	{
 		var text = this.text();
 
@@ -118,9 +118,9 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 					0, text.length + 1
 				);
 			}
-
-			universe.inputHelper.inputInactivate(actionNameToHandle);
 		}
+
+		return true; // wasActionHandled
 	}
 
 	ControlTextBox.prototype.focusGain = function()
@@ -133,7 +133,7 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 		this.isHighlighted = false;
 	}
 
-	ControlTextBox.prototype.mouseClick = function(universe, mouseClickPos)
+	ControlTextBox.prototype.mouseClick = function(mouseClickPos)
 	{
 		var parent = this.parent;
 		parent.indexOfChildWithFocus = parent.children.indexOf(this);
