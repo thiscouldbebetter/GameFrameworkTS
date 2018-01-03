@@ -1,8 +1,9 @@
 
-function DataBinding(context, bindingExpression)
+function DataBinding(context, bindingExpression, argumentLookup)
 {
 	this.context = context;
 	this.bindingExpression = bindingExpression;
+	this.argumentLookup = argumentLookup;
 }
 
 {
@@ -22,19 +23,44 @@ function DataBinding(context, bindingExpression)
 				}
 
 				var bindingExpressionPart = bindingExpressionParts[i];
-				if (bindingExpressionPart.endsWith("()") == true)
+				var indexOfOpenParenthesis = bindingExpressionPart.indexOf("(");
+				if (indexOfOpenParenthesis != -1)
 				{
-					bindingExpressionPart = bindingExpressionPart.substr
+					var functionName = bindingExpressionPart.substr
 					(
-						0, bindingExpressionPart.length - "()".length
+						0, indexOfOpenParenthesis
 					);
-					if (returnValue[bindingExpressionPart] == null)
+
+					if (returnValue[functionName] == null)
 					{
 						returnValue = null;
 					}
 					else
 					{
-						returnValue = returnValue[bindingExpressionPart](this.context);
+						var indexOfCloseParenthesis = bindingExpressionPart.indexOf(")");
+						var argumentNamesAsString = bindingExpressionPart.substring // Not "substr".
+						(
+							indexOfOpenParenthesis + 1, indexOfCloseParenthesis
+						);
+
+						var argumentNames = 
+							argumentNamesAsString.split(" ").join("").split(",");
+						var argumentValues = [];
+
+						for (var a = 0; a < argumentNames.length; a++)
+						{
+							var argumentName = argumentNames[a];
+							if (argumentName.length > 0)
+							{
+								var argumentValue = this.argumentLookup[argumentName];
+								argumentValues.push(argumentValue);
+							}
+						}
+
+						returnValue = returnValue[functionName].apply
+						(
+							returnValue, argumentValues
+						);
 					}
 				}
 				else
