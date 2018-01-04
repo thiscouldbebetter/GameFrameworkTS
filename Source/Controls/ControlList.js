@@ -223,6 +223,8 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 				this.indexOfItemSelected(indexOfItemClicked);
 			}
 		}
+
+		return true; // wasActionHandled
 	}
 
 	ControlList.prototype.style = function(universe)
