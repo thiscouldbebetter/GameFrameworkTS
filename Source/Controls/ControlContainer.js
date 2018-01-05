@@ -19,11 +19,12 @@ function ControlContainer(name, pos, size, children)
 	this.childrenContainingPosPrev = [];
 
 	// Helper variables.
-	this.childMax = new Coords();
-	this.drawPos = new Coords();
-	this.drawLoc = new Location(this.drawPos);
-	this.mouseClickPos = new Coords();
-	this.mouseMovePos = new Coords();
+	this._childMax = new Coords();
+	this._drawPos = new Coords();
+	this._drawLoc = new Location(this._drawPos);
+	this._mouseClickPos = new Coords();
+	this._mouseMovePos = new Coords();
+	this._posToCheck = new Coords();
 }
 
 {
@@ -159,6 +160,8 @@ function ControlContainer(name, pos, size, children)
 		addFirstChildOnly
 	)
 	{
+		posToCheck = this._posToCheck.overwriteWith(posToCheck).clearZ();
+
 		for (var i = this.children.length - 1; i >= 0; i--)
 		{
 			var child = this.children[i];
@@ -166,7 +169,7 @@ function ControlContainer(name, pos, size, children)
 			var doesChildContainPos = posToCheck.isInRangeMinMax
 			(
 				child.pos,
-				this.childMax.overwriteWith(child.pos).add(child.size)
+				this._childMax.overwriteWith(child.pos).add(child.size)
 			);
 
 			if (doesChildContainPos == true)
@@ -204,7 +207,7 @@ function ControlContainer(name, pos, size, children)
 
 	ControlContainer.prototype.mouseClick = function(mouseClickPos)
 	{
-		mouseClickPos = this.mouseClickPos.overwriteWith
+		mouseClickPos = this._mouseClickPos.overwriteWith
 		(
 			mouseClickPos
 		).subtract
@@ -242,7 +245,7 @@ function ControlContainer(name, pos, size, children)
 		this.childrenContainingPosPrev = this.childrenContainingPos;
 		this.childrenContainingPos = temp;
 
-		mouseMovePos = this.mouseMovePos.overwriteWith(mouseMovePos).subtract(this.pos);
+		mouseMovePos = this._mouseMovePos.overwriteWith(mouseMovePos).subtract(this.pos);
 
 		var childrenContainingPos = this.childrenAtPosAddToList
 		(
@@ -285,8 +288,8 @@ function ControlContainer(name, pos, size, children)
 
 	ControlContainer.prototype.draw = function(universe, display, drawLoc)
 	{
-		drawLoc = this.drawLoc.overwriteWith(drawLoc);
-		var drawPos = this.drawPos.overwriteWith(drawLoc.pos).add(this.pos);
+		drawLoc = this._drawLoc.overwriteWith(drawLoc);
+		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 		var style = this.style(universe);
 
 		display.drawRectangle
@@ -299,8 +302,7 @@ function ControlContainer(name, pos, size, children)
 		for (var i = 0; i < children.length; i++)
 		{
 			var child = children[i];
-			child.drawLoc.overwriteWith(drawLoc);
-			child.draw(universe, display, child.drawLoc);
+			child.draw(universe, display, drawLoc);
 		}
 	}
 }

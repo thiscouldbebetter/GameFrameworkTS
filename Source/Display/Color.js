@@ -4,13 +4,6 @@ function Color(name, code, componentsRGBA)
 	this.name = name;
 	this.code = code;
 	this.componentsRGBA = componentsRGBA; 
-	this.systemColor = 
-		"rgba(" 
-		+ Math.floor(255 * this.componentsRGBA[0]) + ", " 
-		+ Math.floor(255 * this.componentsRGBA[1]) + ", " 
-		+ Math.floor(255 * this.componentsRGBA[2]) + ", " 
-		+ this.componentsRGBA[3]
-		+ ")";
 }
 
 {
@@ -19,6 +12,8 @@ function Color(name, code, componentsRGBA)
 	Color.NumberOfComponentsRGBA = 4;
 
 	// instances
+
+	Color.Instances = new Color_Instances();
 
 	function Color_Instances()
 	{
@@ -42,6 +37,7 @@ function Color(name, code, componentsRGBA)
 		this.Violet = new Color("Violet", "v", [1, 0, 1, 1] );
 		this.White = new Color("White", "w", [1, 1, 1, 1] );
 		this.Yellow = new Color("Yellow", "y", [1, 1, 0, 1] );
+		this.YellowDark = new Color("Yellow", "Y", [.5, .5, 0, 1] );
 
 		this._All = 
 		[
@@ -60,10 +56,47 @@ function Color(name, code, componentsRGBA)
 			this.Violet,
 			this.White,
 			this.Yellow,
+			this.YellowDark,
 		];
 
 		this._All.addLookups("code");
 	}
 
-	Color.Instances = new Color_Instances();
+	// methods
+
+	Color.prototype.alpha = function()
+	{
+		return this.componentsRGBA[3];
+	}
+
+	Color.prototype.alphaSet = function(valueToSet)
+	{
+		if (valueToSet != null)
+		{
+			this.componentsRGBA[3] = valueToSet;
+			this._systemColor = null;
+		}
+		return this;
+	}
+
+	Color.prototype.clone = function()
+	{
+		return new Color(this.name, this.code, this.componentsRGBA.slice());
+	}
+
+	Color.prototype.systemColor = function()
+	{
+		if (this._systemColor == null)
+		{
+			this._systemColor = 
+				"rgba(" 
+				+ Math.floor(255 * this.componentsRGBA[0]) + ", " 
+				+ Math.floor(255 * this.componentsRGBA[1]) + ", " 
+				+ Math.floor(255 * this.componentsRGBA[2]) + ", " 
+				+ this.componentsRGBA[3]
+				+ ")";
+		}
+
+		return this._systemColor;
+	}
 }

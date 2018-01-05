@@ -37,7 +37,7 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 	);
 
 	// Helper variables.
-	this.drawPos = new Coords();
+	this._drawPos = new Coords();
 }
 
 {
@@ -144,7 +144,7 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 			var colorFore = (this.isHighlighted == true ? style.colorFill : style.colorBorder);
 			var colorBack = (this.isHighlighted == true ? style.colorBorder : style.colorFill);
 
-			var drawPos = this.drawPos.overwriteWith(drawLoc.pos).add(this.pos);
+			var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 			display.drawRectangle(drawPos, this.size, colorFore, null);
 
 			drawLoc.pos.add(this.pos);

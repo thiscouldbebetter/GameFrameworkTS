@@ -164,25 +164,11 @@ function PlaceDemo(universe, size, playerPos)
 			var venueMessage = new VenueMessage
 			(
 				messageToDisplay,
-				null // acknowledge
+				new VenueControls(universe.controlBuilder.title(universe)), // venueNext
+				universe.venueCurrent, // venuePrev
+				universe.display.sizeDefault.clone().half()
 			);
-
-			var venueAfterMessageAcknowedged = new VenueFader
-			(
-				new VenueControls
-				(
-					universe.controlBuilder.title(universe)
-				),
-				venueMessage // venueToFadeFrom
-			);
-
-			venueMessage.acknowledge = function()
-			{
-				universe.venueNext = venueAfterMessageAcknowedged;
-			}
-
-			var venueNext = new VenueFader(venueMessage, universe.venueCurrent);
-			universe.venueNext = venueNext;
+			universe.venueNext = venueMessage;
 		}
 	}
 

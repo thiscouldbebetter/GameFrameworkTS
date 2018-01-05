@@ -3,20 +3,17 @@ function VenueFader
 (
 	venueToFadeTo,
 	venueToFadeFrom,
+	backgroundColor, 
 	millisecondsPerFade
 )
 {
-	this.millisecondsPerFade = millisecondsPerFade;
-	if (this.millisecondsPerFade == null)
-	{
-		this.millisecondsPerFade = 250;
-	}
-
 	this.venuesToFadeFromAndTo =
 	[
 		venueToFadeFrom,
 		venueToFadeTo
 	];
+
+	this.millisecondsPerFade = (millisecondsPerFade == null ? 250 : millisecondsPerFade);
 
 	if (venueToFadeFrom == venueToFadeTo)
 	{
@@ -27,6 +24,8 @@ function VenueFader
 	{
 		this.venueIndexCurrent = 0;
 	}
+
+	this.backgroundColor = (backgroundColor == null ? Color.Instances.Black : backgroundColor);
 }
 
 {
@@ -89,15 +88,14 @@ function VenueFader
 		}
 
 		alphaOfFadeColor *= alphaOfFadeColor;
+		var fadeColor = this.backgroundColor.clone().alphaSet(alphaOfFadeColor * this.backgroundColor.alpha());
 
 		var display = universe.display;
-
 		display.drawRectangle
 		(
 			new Coords(0, 0),
 			display.sizeDefault, // Scaled automatically.
-			"rgba(0, 0, 0, " + alphaOfFadeColor + ")", // colorFill
-			null // colorBorder
+			fadeColor.systemColor()
 		);
 	}
 

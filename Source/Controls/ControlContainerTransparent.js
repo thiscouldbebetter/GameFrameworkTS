@@ -70,8 +70,8 @@ function ControlContainerTransparent(containerInner)
 
 	ControlContainerTransparent.prototype.draw = function(universe, display, drawLoc)
 	{
-		drawLoc = this.containerInner.drawLoc.overwriteWith(drawLoc);
-		var drawPos = this.containerInner.drawPos.overwriteWith(drawLoc.pos).add
+		drawLoc = this.containerInner._drawLoc.overwriteWith(drawLoc);
+		var drawPos = this.containerInner._drawPos.overwriteWith(drawLoc.pos).add
 		(
 			this.containerInner.pos
 		);
@@ -87,8 +87,7 @@ function ControlContainerTransparent(containerInner)
 		for (var i = 0; i < children.length; i++)
 		{
 			var child = children[i];
-			child.drawLoc.overwriteWith(drawLoc);
-			child.draw(universe, display, child.drawLoc);
+			child.draw(universe, display, drawLoc);
 		}
 	}
 }

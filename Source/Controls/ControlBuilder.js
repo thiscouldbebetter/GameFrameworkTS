@@ -310,37 +310,54 @@ function ControlBuilder(styles)
 
 	ControlBuilder.prototype.message = function(universe, size, message, acknowledge)
 	{
+		var display = universe.display;
+		var displaySize = display.sizeDefault.clone().clearZ();
+
 		if (size == null)
 		{
-			size = universe.display.sizeDefault;
+			size = displaySize;
 		}
 
-		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
+		var sizeMultiplier = this.sizeMultiplier.overwriteWith(displaySize).divide(this.sizeBase);
+		var containerSizeScaled = size.clone().clearZ();
+		var containerPosScaled = displaySize.clone().subtract(containerSizeScaled).half();
+		var fontHeightInPixelsScaled = this.fontHeightInPixelsBase * sizeMultiplier.y;
+		var textAcknowledge = "Acknowledge";
+		var textWidth = display.textWidthForFontHeight(textAcknowledge, fontHeightInPixelsScaled);
+		var buttonSizeScaled = new Coords(textWidth * 1.25, fontHeightInPixelsScaled * 2);
+		var containerSizeHalfScaled = containerSizeScaled.clone().half();
+		var buttonPosScaled = containerSizeScaled.clone().subtract
+		(
+			buttonSizeScaled
+		).half().addDimensions
+		(
+			0, buttonSizeScaled.y / 2, 0
+		);
 
 		var returnValue = new ControlContainer
 		(
 			"containerConfirm",
-			new Coords(0, 0).multiply(sizeMultiplier), // pos
-			new Coords(200, 150).multiply(sizeMultiplier), // size
+			containerPosScaled,
+			containerSizeScaled,
 			// children
 			[
 				new ControlLabel
 				(
 					"labelMessage",
-					new Coords(100, 65).multiply(sizeMultiplier), // pos
-					new Coords(200, 25).multiply(sizeMultiplier), // size
+					containerSizeHalfScaled.addDimensions(0, -buttonSizeScaled.y / 2, 0), // pos
+					new Coords(containerSizeScaled.x, fontHeightInPixelsScaled), // size
 					true, // isTextCentered
 					message,
-					this.fontHeightInPixelsBase * sizeMultiplier.y
+					fontHeightInPixelsScaled
 				),
 
 				new ControlButton
 				(
 					"buttonAcknowledge",
-					new Coords(50, 100).multiply(sizeMultiplier), // pos
-					new Coords(100, 25).multiply(sizeMultiplier), // size
-					"Acknowledge",
-					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					buttonPosScaled,
+					buttonSizeScaled,
+					textAcknowledge,
+					fontHeightInPixelsScaled,
 					true, // hasBorder
 					true, // isEnabled
 					acknowledge, 
