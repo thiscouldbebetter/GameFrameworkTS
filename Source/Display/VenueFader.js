@@ -110,4 +110,9 @@ function VenueFader
 	{
 		return this.venuesToFadeFromAndTo[this.venueIndexCurrent];
 	}
+
+	VenueFader.prototype.draw = function(universe)
+	{
+		this.venueCurrent().draw(universe);
+	}
 }
