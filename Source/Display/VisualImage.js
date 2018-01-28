@@ -11,14 +11,14 @@ function VisualImage(imageName, sizeScaled)
 {
 	// static methods
 
-	VisualImage.manyFromImages = function(images)
+	VisualImage.manyFromImages = function(images, imageSizeScaled)
 	{
 		var returnValues = [];
 
 		for (var i = 0; i < images.length; i++)
 		{
 			var image = images[i];
-			var visual = new VisualImage(image.name);
+			var visual = new VisualImage(image.name, imageSizeScaled);
 			returnValues.push(visual);
 		}
 
