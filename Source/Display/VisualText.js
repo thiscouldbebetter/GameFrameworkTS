@@ -9,13 +9,13 @@ function VisualText(text, colorFill, colorBorder)
 {
 	VisualText.prototype.draw = function(universe, world, display, drawable)
 	{
-		var text = this.text();
+		var text = this.text(universe, world, display, drawable);
 		display.drawText
 		(
 			text,
 			display.fontHeightInPixels,
 			drawable.loc.pos,
-			this.colorFill, 
+			this.colorFill,
 			this.colorBorder,
 			false, // areColorsReversed
 			true, // isCentered
@@ -23,8 +23,8 @@ function VisualText(text, colorFill, colorBorder)
 		);
 	}
 
-	VisualText.prototype.text = function()
+	VisualText.prototype.text = function(universe, world, display, drawable)
 	{
-		return (this._text.get == null ? this._text : this._text.get() );
+		return (this._text.get == null ? this._text : this._text.get(universe, world, display, drawable) );
 	}
 }
