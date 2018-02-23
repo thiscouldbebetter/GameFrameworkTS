@@ -111,4 +111,15 @@ function ArrayExtensions()
 		this.splice(index, 1);
 		return this;
 	}
+
+	Array.prototype.sortByProperty = function(propertyName)
+	{
+		return this.sort
+		(
+			function (a, b)
+			{
+				return a[propertyName] - b[propertyName];
+			}
+		);
+	}
 }
