@@ -26,6 +26,8 @@ function CollisionHelper()
 				{
 					var collision = new Collision
 					(
+						null, // pos
+						null, // distanceToCollision
 						[collidableFromSet0, collidableFromSet1]
 					);
 					returnValues.push(collision);
@@ -129,6 +131,115 @@ function CollisionHelper()
 	// shapes
 
 	// collisions
+
+	CollisionHelper.prototype.collisionOfEdgeAndFace = function(edge, face)
+	{
+		var facePlane = face.plane();
+
+		var returnValue = this.collisionOfEdgeAndPlane(edge, facePlane);
+
+		if (returnValue != null)
+		{
+			var faceVertices = face.vertices;
+
+			var faceEdgeAsPlane = new Plane(new Coords());
+			var faceNormal = facePlane.normal;
+			var faceVertexPlusFaceNormal = new Coords();
+
+			var faceVertexPrev = faceVertices[faceVertices.length - 1];
+			for (var i = 0; i < faceVertices.length; i++)
+			{
+				var faceVertex = faceVertices[i];
+				faceVertexPlusFaceNormal.overwriteWith
+				(
+					faceVertex
+				).add
+				(
+					faceNormal
+				);
+				faceEdgeAsPlane.fromPoints
+				(
+					// Order matters!
+					faceVertex, faceVertexPrev, faceVertexPlusFaceNormal
+				);
+
+				var hemispace = new Hemispace(faceEdgeAsPlane);
+				var doEdgeAndHemispaceCollide = this.doEdgeAndHemispaceCollide(edge, hemispace);
+				if (doEdgeAndHemispaceCollide == false)
+				{
+					returnValue = null;
+					break;
+				}
+
+				faceVertexPrev = faceVertex;
+			}
+		}
+
+		if (returnValue != null)
+		{
+			returnValue.collider = face;
+		}
+
+		return returnValue;
+	}
+
+	CollisionHelper.prototype.collisionsOfEdgeAndMesh = function(edge, mesh, collisions, stopAfterFirst)
+	{
+		if (collisions == null)
+		{
+			collisions = [];
+		}
+
+		var meshFaces = mesh.faces();
+		for (var i = 0; i < meshFaces.length; i++)
+		{
+			var meshFace = meshFaces[i];
+			var collisionOfEdgeAndFace = this.collisionOfEdgeAndFace(edge, meshFace);
+			if (collisionOfEdgeAndFace != null)
+			{
+				collisions.push(collisionOfEdgeAndFace);
+				if (stopAfterFirst == true)
+				{
+					break;
+				}
+			}
+		}
+
+		return collisions;
+	}
+
+	CollisionHelper.prototype.collisionOfEdgeAndPlane = function(edge, plane)
+	{
+		var returnValue = null;
+
+		var edgeDirection = edge.direction();
+		var planeNormal = plane.normal;
+
+		var distanceToCollision =
+			(
+				plane.distanceFromOrigin
+				- planeNormal.dotProduct(edge.vertices[0])
+			)
+			/ planeNormal.dotProduct(edgeDirection);
+
+		if (distanceToCollision >= 0 && distanceToCollision <= edge.length())
+		{
+			var collisionPos = new Coords().overwriteWith
+			(
+				edgeDirection
+			).multiplyScalar
+			(
+				distanceToCollision
+			).add
+			(
+				edge.vertices[0]
+			);
+
+			returnValue = new Collision(collisionPos, distanceToCollision, plane);
+		}
+
+		return returnValue;
+	}
 
 	CollisionHelper.prototype.doBoundsAndBoundsCollide = function(bounds0, bounds1)
 	{
@@ -237,7 +348,7 @@ function CollisionHelper()
 		var doRadiiOverlap = (distance < sumOfRadii);
 		if (doRadiiOverlap == true)
 		{
-			var doLengthsOverlap = 
+			var doLengthsOverlap =
 			(
 				(
 					cylinder0.zMin > cylinder1.zMin
@@ -267,7 +378,49 @@ function CollisionHelper()
 		}
 
 		return returnValue;
+	}
 
+	CollisionHelper.prototype.doEdgeAndFaceCollide = function(edge, face)
+	{
+		return (this.collisionOfEdgeAndFace(edge, face) != null);
+	}
+
+	CollisionHelper.prototype.doEdgeAndHemispaceCollide = function(edge, hemispace)
+	{
+		var vertices = edge.vertices;
+		var returnValue = ( hemispace.containsPoint(vertices[0]) || hemispace.containsPoint(vertices[1]) );
+		return returnValue;
+	}
+
+	CollisionHelper.prototype.doEdgeAndMeshCollide = function(edge, mesh)
+	{
+		var returnValue = false;
+
+		var edgeDirection = edge.direction();
+		var meshFaces = mesh.faces();
+		for (var f = 0; f < meshFaces.length; f++)
+		{
+			var face = meshFaces[f];
+			var facePlane = face.plane();
+			var faceNormal = facePlane.normal;
+			var faceDotEdge = faceNormal.dotProduct(edgeDirection);
+
+			if (faceDotEdge < 0)
+			{
+				returnValue = this.doEdgeAndFaceCollide(edge, face);
+				if (returnValue == true)
+				{
+					break;
+				}
+			}
+		}
+
+		return returnValue;
+	}
+
+	CollisionHelper.prototype.doEdgeAndPlaneCollide = function(edge, plane)
+	{
+		return (this.collisionOfEdgeAndPlane() != null);
 	}
 
 	CollisionHelper.prototype.doHemispaceAndSphereCollide = function(hemispace, sphere)

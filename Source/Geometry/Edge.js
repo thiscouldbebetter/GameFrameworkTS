@@ -37,4 +37,11 @@ function Edge(vertices)
 	{
 		return this._transverse.overwriteWith(this.direction()).crossProduct(faceNormal);
 	}
+
+	// string
+
+	Edge.prototype.toString = function()
+	{
+		return this.vertices.toString();
+	}
 }

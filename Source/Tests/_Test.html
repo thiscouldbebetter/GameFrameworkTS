@@ -88,11 +88,15 @@
 <script type="text/javascript" src="../Utility/TimerHelper.js"></script>
 
 <script type="text/javascript" src="Test.js"></script>
-<script type="text/javascript" src="TestFixture.js"></script>
-<script type="text/javascript" src="tests.js"></script>
+<script type="text/javascript" src="Geometry/CameraTests.js"></script>
+<script type="text/javascript" src="Geometry/CollisionHelperTests.js"></script>
 
 <script type="text/javascript">
-test();
+Test.runTestsInFixtures
+([
+	new CameraTests(),
+	new CollisionHelperTests(),
+]);
 </script>
 
 </body>

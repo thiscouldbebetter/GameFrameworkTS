@@ -7,6 +7,15 @@ function Plane(normal, distanceFromOrigin)
 	this.displacementFromPoint0To2 = new Coords();
 }
 {
+	Plane.prototype.distanceToPointAlongNormal = function(point)
+	{
+		return point.dotProduct
+		(
+			this.normal
+		) - this.distanceFromOrigin;
+	}
+	
+	
 	Plane.prototype.equals = function(other)
 	{
 		return (this.normal.equals(other.normal) && this.distanceFromOrigin == other.distanceFromOrigin);
