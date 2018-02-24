@@ -72,7 +72,7 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 
 		var numberOfTrianglesSoFar = 0;
 		var faces = mesh.faces();
-		var textureUVsForFaceVertices = mesh.textureUVsForFaceVertices;
+		var faceTextures = mesh.faceTextures;
 
 		for (var f = 0; f < faces.length; f++)
 		{
@@ -130,11 +130,11 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 
 					var vertexTextureUV = 
 					(
-						textureUVsForFaceVertices == null 
+						faceTextures == null 
 						? new Coords(-1, -1)
-						: textureUVsForFaceVertices[f] == null
+						: faceTextures[f] == null
 						? new Coords(-1, -1)
-						: textureUVsForFaceVertices[f][vertexIndex]
+						: faceTextures[f][vertexIndex]
 					);
 
 					vertexTextureUVsAsFloatArray = vertexTextureUVsAsFloatArray.concat
