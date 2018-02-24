@@ -134,7 +134,7 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 						? new Coords(-1, -1)
 						: faceTextures[f] == null
 						? new Coords(-1, -1)
-						: faceTextures[f][vertexIndex]
+						: faceTextures[f].textureUVs[vertexIndex]
 					);
 
 					vertexTextureUVsAsFloatArray = vertexTextureUVsAsFloatArray.concat
