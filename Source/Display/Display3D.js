@@ -204,7 +204,7 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 			0
 		);
 
-		var texture = mesh.material.texture;
+		var texture = mesh.materials[0].texture;
 		if (texture != null)
 		{
 			var textureName = texture.name;
