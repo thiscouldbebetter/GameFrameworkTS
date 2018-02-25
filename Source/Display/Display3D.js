@@ -71,181 +71,192 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 		var vertexTextureUVsAsFloatArray = [];
 
 		var numberOfTrianglesSoFar = 0;
+		var materials = mesh.materials;
 		var faces = mesh.faces();
 		var faceTextures = mesh.faceTextures;
+		var faceIndicesByMaterial = mesh.faceIndicesByMaterial();
 
-		for (var f = 0; f < faces.length; f++)
+		for (var m = 0; m < materials.length; m++)
 		{
-			var face = faces[f];
-			var faceMaterial = face.material;
-			var faceGeometry = face.geometry;
-			var faceNormal = faceGeometry.plane().normal;
-			var vertexNormalsForFaceVertices = mesh.vertexNormalsForFaceVertices;
+			var material = materials[m];
+			var materialName = material.name;
+			var faceIndices = faceIndicesByMaterial[materialName];
 
-			var vertexIndicesForTriangles = 
-			[
-				[0, 1, 2]
-			];
-
-			var faceVertices = faceGeometry.vertices;
-			var numberOfVerticesInFace = faceVertices.length;
-
-			if (numberOfVerticesInFace == 4)
+			for (var fi = 0; fi < faceIndices.length; fi++)
 			{
-				vertexIndicesForTriangles.push([0, 2, 3]);
-			}
+				var f = faceIndices[fi];
+				var face = faces[f];
+				var faceMaterial = face.material;
+				var faceGeometry = face.geometry;
+				var faceNormal = faceGeometry.plane().normal;
+				var vertexNormalsForFaceVertices = mesh.vertexNormalsForFaceVertices;
 
-			for (var t = 0; t < vertexIndicesForTriangles.length; t++)
-			{
-				var vertexIndicesForTriangle = vertexIndicesForTriangles[t];
+				var vertexIndicesForTriangles = 
+				[
+					[0, 1, 2]
+				];
 
-				for (var vi = 0; vi < vertexIndicesForTriangle.length; vi++)
+				var faceVertices = faceGeometry.vertices;
+				var numberOfVerticesInFace = faceVertices.length;
+
+				if (numberOfVerticesInFace == 4)
 				{
-					var vertexIndex = vertexIndicesForTriangle[vi];
-					var vertex = faceVertices[vertexIndex];
-
-					vertexPositionsAsFloatArray = vertexPositionsAsFloatArray.concat
-					(
-						vertex.dimensions()
-					);
-
-					var vertexColor = faceMaterial.colorFill;
-
-					vertexColorsAsFloatArray = vertexColorsAsFloatArray.concat
-					(
-						vertexColor.componentsRGBA
-					);
-
-					var vertexNormal = 
-					(
-						vertexNormalsForFaceVertices == null 
-						? faceNormal
-						: vertexNormalsForFaceVertices[f][vertexIndex]
-					);
-
-					vertexNormalsAsFloatArray = vertexNormalsAsFloatArray.concat
-					(
-						vertexNormal.dimensions()
-					);
-
-					var vertexTextureUV = 
-					(
-						faceTextures == null 
-						? new Coords(-1, -1)
-						: faceTextures[f] == null
-						? new Coords(-1, -1)
-						: faceTextures[f].textureUVs[vertexIndex]
-					);
-
-					vertexTextureUVsAsFloatArray = vertexTextureUVsAsFloatArray.concat
-					(
-						[
-							vertexTextureUV.x,
-							vertexTextureUV.y
-						]
-					);
+					vertexIndicesForTriangles.push([0, 2, 3]);
 				}
+
+				for (var t = 0; t < vertexIndicesForTriangles.length; t++)
+				{
+					var vertexIndicesForTriangle = vertexIndicesForTriangles[t];
+
+					for (var vi = 0; vi < vertexIndicesForTriangle.length; vi++)
+					{
+						var vertexIndex = vertexIndicesForTriangle[vi];
+						var vertex = faceVertices[vertexIndex];
+
+						vertexPositionsAsFloatArray = vertexPositionsAsFloatArray.concat
+						(
+							vertex.dimensions()
+						);
+
+						var vertexColor = faceMaterial.colorFill;
+
+						vertexColorsAsFloatArray = vertexColorsAsFloatArray.concat
+						(
+							vertexColor.componentsRGBA
+						);
+
+						var vertexNormal = 
+						(
+							vertexNormalsForFaceVertices == null 
+							? faceNormal
+							: vertexNormalsForFaceVertices[f][vertexIndex]
+						);
+
+						vertexNormalsAsFloatArray = vertexNormalsAsFloatArray.concat
+						(
+							vertexNormal.dimensions()
+						);
+
+						var vertexTextureUV = 
+						(
+							faceTextures == null 
+							? new Coords(-1, -1)
+							: faceTextures[f] == null
+							? new Coords(-1, -1)
+							: faceTextures[f].textureUVs[vertexIndex]
+						);
+
+						vertexTextureUVsAsFloatArray = vertexTextureUVsAsFloatArray.concat
+						(
+							[
+								vertexTextureUV.x,
+								vertexTextureUV.y
+							]
+						);
+					}
+				}
+
+				numberOfTrianglesSoFar += vertexIndicesForTriangles.length;
 			}
+		
 
-			numberOfTrianglesSoFar += vertexIndicesForTriangles.length;
-		}
+			var colorBuffer = gl.createBuffer();
+			gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+			gl.bufferData
+			(
+				gl.ARRAY_BUFFER, 
+				new Float32Array(vertexColorsAsFloatArray), 
+				gl.STATIC_DRAW
+			);
+			gl.vertexAttribPointer
+			(
+				shaderProgram.vertexColorAttribute, 
+				Color.NumberOfComponentsRGBA, 
+				gl.FLOAT, 
+				false, 
+				0, 
+				0
+			);
 
-		var colorBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-		gl.bufferData
-		(
-			gl.ARRAY_BUFFER, 
-			new Float32Array(vertexColorsAsFloatArray), 
-			gl.STATIC_DRAW
-		);
-		gl.vertexAttribPointer
-		(
-			shaderProgram.vertexColorAttribute, 
-			Color.NumberOfComponentsRGBA, 
-			gl.FLOAT, 
-			false, 
-			0, 
-			0
-		);
+			var normalBuffer = gl.createBuffer();
+			gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+			gl.bufferData
+			(
+				gl.ARRAY_BUFFER, 
+				new Float32Array(vertexNormalsAsFloatArray), 
+				gl.STATIC_DRAW
+			);
+			gl.vertexAttribPointer
+			(
+				shaderProgram.vertexNormalAttribute, 
+				Coords.NumberOfDimensions, 
+				gl.FLOAT, 
+				false, 
+				0, 
+				0
+			);
 
-		var normalBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
-		gl.bufferData
-		(
-			gl.ARRAY_BUFFER, 
-			new Float32Array(vertexNormalsAsFloatArray), 
-			gl.STATIC_DRAW
-		);
-		gl.vertexAttribPointer
-		(
-			shaderProgram.vertexNormalAttribute, 
-			Coords.NumberOfDimensions, 
-			gl.FLOAT, 
-			false, 
-			0, 
-			0
-		);
+			var positionBuffer = gl.createBuffer();
+			gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+			gl.bufferData
+			(
+				gl.ARRAY_BUFFER, 
+				new Float32Array(vertexPositionsAsFloatArray), 
+				gl.STATIC_DRAW
+			);
+			gl.vertexAttribPointer
+			(
+				shaderProgram.vertexPositionAttribute, 
+				Coords.NumberOfDimensions, 
+				gl.FLOAT, 
+				false, 
+				0, 
+				0
+			);
 
-		var positionBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-		gl.bufferData
-		(
-			gl.ARRAY_BUFFER, 
-			new Float32Array(vertexPositionsAsFloatArray), 
-			gl.STATIC_DRAW
-		);
-		gl.vertexAttribPointer
-		(
-			shaderProgram.vertexPositionAttribute, 
-			Coords.NumberOfDimensions, 
-			gl.FLOAT, 
-			false, 
-			0, 
-			0
-		);
-
-		var texture = mesh.materials[0].texture;
-		if (texture != null)
-		{
-			var textureName = texture.name;
-
-			var textureRegistered = this.texturesRegistered[textureName];
-			if (textureRegistered == null)
+			var texture = material.texture;
+			if (texture != null)
 			{
-				texture.initializeForWebGLContext(this.webGLContext);
-				this.texturesRegistered[textureName] = texture;
+				var textureName = texture.name;
+
+				var textureRegistered = this.texturesRegistered[textureName];
+				if (textureRegistered == null)
+				{
+					texture.initializeForWebGLContext(this.webGLContext);
+					this.texturesRegistered[textureName] = texture;
+				}
+
+				gl.activeTexture(gl.TEXTURE0);
+				gl.bindTexture(gl.TEXTURE_2D, texture.systemTexture);
 			}
 
-			gl.activeTexture(gl.TEXTURE0);
-			gl.bindTexture(gl.TEXTURE_2D, texture.systemTexture);
-		}
+			gl.uniform1i(shaderProgram.samplerUniform, 0);
 
-		gl.uniform1i(shaderProgram.samplerUniform, 0);
+			var textureBuffer = gl.createBuffer();
+			gl.bindBuffer(gl.ARRAY_BUFFER, textureBuffer);
+			gl.bufferData
+			(
+				gl.ARRAY_BUFFER, 
+				new Float32Array(vertexTextureUVsAsFloatArray), 
+				gl.STATIC_DRAW
+			);
+			gl.vertexAttribPointer
+			(
+				shaderProgram.vertexTextureUVAttribute, 
+				2, 
+				gl.FLOAT, 
+				false, 
+				0, 
+				0
+			);
 
-		var textureBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, textureBuffer);
-		gl.bufferData
-		(
-			gl.ARRAY_BUFFER, 
-			new Float32Array(vertexTextureUVsAsFloatArray), 
-			gl.STATIC_DRAW
-		);
-		gl.vertexAttribPointer
-		(
-			shaderProgram.vertexTextureUVAttribute, 
-			2, 
-			gl.FLOAT, 
-			false, 
-			0, 
-			0
-		);
-
-		gl.drawArrays
-		(
-			gl.TRIANGLES,
-			0, 
-			numberOfTrianglesSoFar * Display3D.VerticesPerTriangle
-		);
+			gl.drawArrays
+			(
+				gl.TRIANGLES,
+				0, 
+				numberOfTrianglesSoFar * Display3D.VerticesPerTriangle
+			);
+		} // end for each material
 	}
 
 	Display3D.prototype.drawMeshWithOrientation = function(mesh, meshOrientation)
