@@ -6,6 +6,7 @@ function Sound(name, sourcePath, isRepeating)
 	this.isRepeating = isRepeating;
 
 	this.offsetInSeconds = 0;
+	this.isPlaying = false;
 }
 
 {
@@ -38,13 +39,18 @@ function Sound(name, sourcePath, isRepeating)
 
 	Sound.prototype.play = function(universe, volume)
 	{
-		this.domElementBuild(universe, volume);
-		this.domElement.currentTime = this.offsetInSeconds;
+		if (this.isPlaying == false)
+		{
+			this.isPlaying = true;
 
-		universe.platformHelper.domElementAdd
-		(
-			this.domElement
-		);
+			this.domElementBuild(universe, volume);
+			this.domElement.currentTime = this.offsetInSeconds;
+
+			universe.platformHelper.domElementAdd
+			(
+				this.domElement
+			);
+		}
 	}
 
 	Sound.prototype.reset = function()
@@ -54,9 +60,14 @@ function Sound(name, sourcePath, isRepeating)
 
 	Sound.prototype.stop = function(universe, event)
 	{
-		var domElement = (event == null ? this.domElement : event.srcElement);
-		universe.platformHelper.domElementRemove(domElement);
-		this.offsetInSeconds = 0;
+		if (this.isPlaying == true)
+		{
+			this.isPlaying = false;
+			var domElement = (event == null ? this.domElement : event.srcElement);
+			//domElement.stop();
+			universe.platformHelper.domElementRemove(domElement);
+			this.offsetInSeconds = 0;
+		}
 	}
 
 	Sound.prototype.stopOrRepeat = function(universe, event)

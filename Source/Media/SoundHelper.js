@@ -47,18 +47,22 @@ function SoundHelper(sounds)
 		this.sounds[soundName].play(universe, this.soundVolume);
 	}
 
-	SoundHelper.prototype.soundWithNamePlayAsMusic = function(universe, soundName)
+	SoundHelper.prototype.soundWithNamePlayAsMusic = function(universe, soundToPlayName)
 	{
-		if
-		(
-			this.soundForMusic != null
-			&& this.soundForMusic.name != soundName
-		)
+		var soundToPlay = this.sounds[soundToPlayName];
+
+		var soundAlreadyPlaying = this.soundForMusic;
+
+		if (soundAlreadyPlaying != null)
 		{
-			this.soundForMusic.stop(universe);
+			if (soundAlreadyPlaying.name != soundToPlayName)
+			{
+				soundAlreadyPlaying.stop(universe);
+			}
 		}
-		this.soundForMusic = this.sounds[soundName];
-		this.soundForMusic.play(universe, this.musicVolume);
+
+		soundToPlay.play(universe, this.musicVolume);
+		this.soundForMusic = soundToPlay;
 	}
 
 }
