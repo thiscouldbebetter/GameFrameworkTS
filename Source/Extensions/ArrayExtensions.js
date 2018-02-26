@@ -3,6 +3,22 @@ function ArrayExtensions()
 	// extension class
 }
 {
+	Array.prototype.add = function(element)
+	{
+		this.push(element);
+		return this;
+	}
+
+	Array.prototype.addMany = function(elements)
+	{
+		for (var i = 0; i < elements.length; i++)
+		{
+			var element = elements[i];
+			this.push(element);
+		}
+		return this;
+	}
+
 	Array.prototype.addLookups = function(keyName)
 	{
 		for (var i = 0; i < this.length; i++)
