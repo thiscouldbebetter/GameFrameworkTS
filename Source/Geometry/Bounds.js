@@ -77,13 +77,13 @@ function Bounds(center, size)
 	Bounds.prototype.overlapsWith = function(other)
 	{
 		var returnValue = false;
- 
-		var extremaThisAndOther = 
-		[ 
+
+		var extremaThisAndOther =
+		[
 			[ this.min().dimensions(), this.max().dimensions() ],
 			[ other.min().dimensions(), other.max().dimensions() ]
 		];
- 
+
 		for (var b = 0; b < extremaThisAndOther.length; b++)
 		{
 			var extremaThis = extremaThisAndOther[b];
@@ -94,12 +94,12 @@ function Bounds(center, size)
 
 			var minOtherDimensions = extremaOther[0];
 			var maxOtherDimensions = extremaOther[1];
- 
+
 			var doAllDimensionsOverlapSoFar = true;
- 
+
 			for (var d = 0; d < minThisDimensions.length; d++)
 			{
-				if 
+				if
 				(
 					maxThisDimensions[d] <= minOtherDimensions[d]
 					|| minThisDimensions[d] >= maxOtherDimensions[d]
@@ -109,14 +109,14 @@ function Bounds(center, size)
 					break;
 				}
 			}
- 
+
 			if (doAllDimensionsOverlapSoFar == true)
 			{
 				returnValue = true;
 				break;
 			}
 		}
- 
+
 		return returnValue;
 	}
 

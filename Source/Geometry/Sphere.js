@@ -5,12 +5,13 @@ function Sphere(center, radius)
 	this.radius = radius;
 
 	// Helper variables.
-	this.displacement = new Coords();
+	this._displacement = new Coords();
 }
 {
 	Sphere.prototype.containsOther = function(other)
 	{
-		var displacementOfOther = this.displacement.overwriteWith(other.center).subtract(this.center);
+		var displacementOfOther =
+			this._displacement.overwriteWith(other.center).subtract(this.center);
 		var distanceOfOther = displacementOfOther.magnitude();
 		var returnValue = (distanceOfOther + other.radius <= this.radius);
 		return returnValue;

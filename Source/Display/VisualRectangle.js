@@ -7,13 +7,13 @@ function VisualRectangle(size, colorFill, colorBorder)
 
 	this.sizeHalf = this.size.clone().half();
 
-	this.drawPos = new Coords();
+	this._drawPos = new Coords();
 }
 
 {
 	VisualRectangle.prototype.draw = function(universe, world,  display, drawable)
 	{
-		var drawPos = this.drawPos.overwriteWith
+		var drawPos = this._drawPos.overwriteWith
 		(
 			drawable.loc.pos
 		).subtract

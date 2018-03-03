@@ -103,7 +103,12 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			)
 		]
 	);
-	var visualRectangleSmall = new VisualRectangle(entitySize.clone().divideScalar(4), playerColor);
+
+	var visualRectangleSmall = new VisualRectangle
+	(
+		entitySize.clone().divideScalar(4), playerColor
+	);
+
 	var playerVisualMovementIndicator = new VisualDirectional
 	(
 		new VisualNone(),
@@ -221,7 +226,8 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 
 	// enemy
 
-	var enemyColor = "Red";
+	var damagerColor = "Red";
+	var enemyColor = damagerColor;
 	var enemyPos = this.size.clone().subtract(playerLoc.pos);
 	var enemyLoc = new Location(enemyPos);
 
@@ -280,6 +286,8 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 		]
 	);
 
+	var obstacleColor = damagerColor;
+
 	var obstacleMappedCellSize = new Coords(2, 2, 1);
 
 	var obstacleMappedMap = new Map
@@ -317,13 +325,13 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 		]
 	);
 
-	var obstacleMappedPos = 
+	var obstacleMappedPos =
 		playerLoc.pos.clone().addDimensions(playerLoc.pos.x, this.size.y / 2, 0);
 	var obstacleMappedLoc = new Location(obstacleMappedPos);
 
 	var obstacleMappedVisualLookup =
 	{
-		"Blocking" : new VisualRectangle(obstacleMappedCellSize, "Red"),
+		"Blocking" : new VisualRectangle(obstacleMappedCellSize, obstacleColor),
 		"Open" : new VisualNone()
 	};
 	var obstacleMappedEntity = new Entity
@@ -354,6 +362,49 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 		obstacleMappedEntity,
 	];
 
+	var numberOfWalls = 4;
+	var wallThickness = 5;
+
+	for (var i = 0; i < numberOfWalls; i++)
+	{
+		var obstacleWallSize;
+		if (i % 2 == 0)
+		{
+			obstacleWallSize = new Coords(size.x, wallThickness, 1);
+		}
+		else
+		{
+			obstacleWallSize = new Coords(wallThickness, size.y, 1);
+		}
+
+		var obstacleWallPos = obstacleWallSize.clone().half().clearZ();
+		if (i >= 2)
+		{
+			obstacleWallPos.invert().add(size);
+		}
+
+		var obstacleWallLoc = new Location(obstacleWallPos);
+		var obstacleCollider =
+			new Bounds(obstacleWallPos, obstacleWallSize);
+		var obstacleWallVisual = new VisualRectangle
+		(
+			obstacleWallSize, obstacleColor
+		);
+
+		var obstacleWallEntity = new Entity
+		(
+			"ObstacleWall" + i,
+			[
+				new Locatable(obstacleWallLoc),
+				new Collidable(obstacleCollider),
+				new Damager(),
+				new Drawable(obstacleWallVisual)
+			]
+		);
+
+		entities.push(obstacleWallEntity);
+	}
+
 	var itemColor = "Yellow";
 	var itemVisual = new VisualGroup
 	([
@@ -365,9 +416,12 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 		)
 	]);
 
+	var marginThickness = wallThickness * 3;
+	var sizeMinusMargins =
+		this.size.clone().subtract(new Coords(1, 1, 0).multiplyScalar(marginThickness));
 	for (var i = 0; i < numberOfKeysToUnlockGoal; i++)
 	{
-		var itemPos = new Coords().randomize().multiply(this.size);
+		var itemPos = new Coords().randomize().multiply(sizeMinusMargins);
 		var itemCollider = new Sphere(itemPos, entityDimension / 2);
 
 		var itemEntity = new Entity
@@ -423,12 +477,11 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 
 	entities.push(goalEntity);
 
-	// obstacle
+	// obstacleRing
 
 	var obstaclePos = goalEntity.locatable.loc.pos;
 	var obstacleLoc = new Location(obstaclePos);
 	obstacleLoc.spin.angleInTurnsRef.value = 0.002;
-	var obstacleColor = enemyColor;
 	var obstacleCollider = new Arc
 	(
 		new Shell

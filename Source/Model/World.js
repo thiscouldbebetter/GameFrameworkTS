@@ -26,12 +26,12 @@ function World(name, dateCreated, defns, place)
 		var place = new PlaceDemo
 		(
 			universe.display.sizeInPixels.clone(), // size
-			new Coords(10, 10), // playerPos
+			new Coords(15, 15), // playerPos
 			5 // numberOfItems
 		);
 		place.placeInner.entitiesSpawn();
 
-		var constraintDefns = 
+		var constraintDefns =
 		[
 			ConstraintDefn.Instances.Friction,
 			ConstraintDefn.Instances.SpeedMax,

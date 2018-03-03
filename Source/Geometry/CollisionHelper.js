@@ -305,30 +305,13 @@ function CollisionHelper()
 
 	CollisionHelper.prototype.doBoundsAndSphereCollide = function(bounds, sphere)
 	{
-		var displacementBetweenCenters = this.displacement.overwriteWith
+		// hack
+		var sphereBounds = new Bounds
 		(
-			bounds.center
-		).subtract
-		(
-			sphere.center
+			sphere.center, new Coords(1, 1, 1).multiplyScalar(sphere.radius)
 		);
 
-		var direction = displacementBetweenCenters.normalize();
-
-		var pointOnSphereClosestToBoundsCenter = direction.multiplyScalar
-		(
-			sphere.radius
-		).add
-		(
-			sphere.center
-		);
-
-		var isPointOnSphereWithinBounds = bounds.containsPoint
-		(
-			pointOnSphereClosestToBoundsCenter
-		);
-
-		return isPointOnSphereWithinBounds;
+		return this.doBoundsAndBoundsCollide(bounds, sphereBounds);
 	}
 
 	CollisionHelper.prototype.doCylinderAndCylinderCollide = function(cylinder0, cylinder1)
