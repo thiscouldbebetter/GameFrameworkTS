@@ -41,6 +41,22 @@ function ConstraintDefn(name, constrain)
 			}
 		);
 
+		this.Friction = new ConstraintDefn
+		(
+			"Friction",
+			function constrain(universe, world, place, entity, targetFrictionCoefficient)
+			{
+				var entityLoc = entity.locatable.loc;
+				var entityVel = entityLoc.vel;
+				var speed = entityVel.magnitude();
+				var friction = speed * targetFrictionCoefficient;
+				entityVel.add
+				(
+					entityVel.clone().multiplyScalar(-friction)
+				);
+			}
+		);
+
 		this.Offset = new ConstraintDefn
 		(
 			"Offset",

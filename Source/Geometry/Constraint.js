@@ -13,6 +13,6 @@ function Constraint(defnName, target)
 
 	Constraint.prototype.defn = function(world)
 	{
-		return world.constraintDefns[this.defnName];
+		return world.defns.constraintDefns[this.defnName];
 	}
 }
