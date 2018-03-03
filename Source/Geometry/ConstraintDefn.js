@@ -12,7 +12,7 @@ function ConstraintDefn(name, constrain)
 	{
 		this._None = new ConstraintDefn
 		(
-			"None", 
+			"None",
 			function constrain(universe, world, place, entity, target)
 			{
 				// Do nothing.
@@ -72,6 +72,21 @@ function ConstraintDefn(name, constrain)
 				).normalize();
 
 				constrainableOrientation.forwardSet(constrainableForward);
+			}
+		);
+
+		this.SpeedMax = new ConstraintDefn
+		(
+			"SpeedMax",
+			function constrain(universe, world, place, entity, targetSpeedMax)
+			{
+				var entityLoc = entity.locatable.loc;
+				var entityVel = entityLoc.vel;
+				var speed = entityVel.magnitude();
+				if (speed > targetSpeedMax)
+				{
+					entityVel.normalize().multiplyScalar(targetSpeedMax);
+				}
 			}
 		);
 	}

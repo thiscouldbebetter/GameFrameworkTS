@@ -23,6 +23,18 @@ function Place(entities)
 		for (var i = 0; i < this.entitiesToRemove.length; i++)
 		{
 			var entity = this.entitiesToRemove[i];
+			var entityProperties = entity.properties;
+			for (var p = 0; p < entityProperties.length; p++)
+			{
+				var property = entityProperties[p];
+				var propertyName = property.constructor.name;
+				propertyName =
+					propertyName.substr(0, 1).toLowerCase()
+					+ propertyName.substr(1);
+				var entitiesWithProperty =
+					this.entitiesByPropertyName[propertyName];
+				entitiesWithProperty.remove(entity);
+			}
 			this.entities.remove(entity);
 			delete this.entities[entity.name];
 		}
@@ -41,7 +53,11 @@ function Place(entities)
 			for (var p = 0; p < entityProperties.length; p++)
 			{
 				var property = entityProperties[p];
-				var propertyName = property.constructor.name.toLowerCase();
+				var propertyName = property.constructor.name;
+				propertyName =
+					propertyName.substr(0, 1).toLowerCase()
+					+ propertyName.substr(1);
+
 				var entitiesWithProperty = this.entitiesByPropertyName[propertyName];
 				if (entitiesWithProperty == null)
 				{
@@ -64,9 +80,10 @@ function Place(entities)
 	{
 		this.entitiesSpawn();
 
-		var propertyNamesToProcess = 
+		var propertyNamesToProcess =
 		[
 			"locatable",
+			"constrainable",
 			"collidable",
 			"actor",
 			"playable"

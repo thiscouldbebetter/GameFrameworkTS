@@ -1,5 +1,5 @@
 
-function PlaceDemo(universe, size, playerPos)
+function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 {
 	this.size = size;
 
@@ -24,7 +24,10 @@ function PlaceDemo(universe, size, playerPos)
 			"MoveDown",
 			function perform(universe, world, place, actor)
 			{
-				place.entityMoveInDirection(world, actor, Coords.Instances.ZeroOneZero);
+				place.entityAccelerateInDirection
+				(
+					world, actor, Coords.Instances.ZeroOneZero
+				);
 			}
 		),
 		new Action
@@ -32,7 +35,10 @@ function PlaceDemo(universe, size, playerPos)
 			"MoveLeft",
 			function perform(universe, world, place, actor)
 			{
-				place.entityMoveInDirection(world, actor, Coords.Instances.MinusOneZeroZero);
+				place.entityAccelerateInDirection
+				(
+					world, actor, Coords.Instances.MinusOneZeroZero
+				);
 			}
 		),
 		new Action
@@ -40,7 +46,10 @@ function PlaceDemo(universe, size, playerPos)
 			"MoveRight",
 			function perform(universe, world, place, actor)
 			{
-				place.entityMoveInDirection(world, actor, Coords.Instances.OneZeroZero);
+				place.entityAccelerateInDirection
+				(
+					world, actor, Coords.Instances.OneZeroZero
+				);
 			}
 		),
 		new Action
@@ -48,7 +57,10 @@ function PlaceDemo(universe, size, playerPos)
 			"MoveUp",
 			function perform(universe, world, place, actor)
 			{
-				place.entityMoveInDirection(world, actor, Coords.Instances.ZeroMinusOneZero);
+				place.entityAccelerateInDirection
+				(
+					world, actor, Coords.Instances.ZeroMinusOneZero
+				);
 			}
 		),
 	].addLookups("name");
@@ -142,21 +154,28 @@ function PlaceDemo(universe, size, playerPos)
 		playerVisualMovementIndicator,
 	]);
 
-	var playerCollide = function(universe, world, place, entityThis, entityOther)
+	var playerCollide = function(universe, world, place, entityPlayer, entityOther)
 	{
-		var entityOtherName = entityOther.name;
+		var messageToDisplay = null;
 
-		if 
-		(
-			entityOtherName.startsWith("Enemy") == true
-			|| entityOtherName.startsWith("Obstacle") == true
-		)
+		if (entityOther.damager != null)
 		{
 			messageToDisplay = "You lose!";
 		}
-		else if (entityOtherName == "Goal")
+		else if (entityOther.goal != null)
 		{
-			messageToDisplay = "You win!"
+			var keysRequired =
+				new Item("Key", entityOther.goal.numberOfKeysToUnlock);
+			if (entityPlayer.itemHolder.hasItems(keysRequired))
+			{
+				messageToDisplay = "You win!";
+			}
+		}
+		else if (entityOther.item != null)
+		{
+			var item = entityOther.item;
+			entityPlayer.itemHolder.itemAdd(item);
+			place.entitiesToRemove.push(entityOther);
 		}
 
 		if (messageToDisplay != null)
@@ -172,11 +191,14 @@ function PlaceDemo(universe, size, playerPos)
 		}
 	}
 
+	var constraintSpeedMax = new Constraint("SpeedMax", 5);
+
 	var playerEntity = new Entity
 	(
 		"Player",
 		[
 			new Locatable(playerLoc),
+			new Constrainable([constraintSpeedMax]),
 			new Collidable
 			(
 				playerCollider,
@@ -184,6 +206,7 @@ function PlaceDemo(universe, size, playerPos)
 				playerCollide
 			),
 			new Drawable(playerVisual),
+			new ItemHolder(),
 			new Playable(),
 		]
 	);
@@ -207,7 +230,7 @@ function PlaceDemo(universe, size, playerPos)
 		"Goal",
 		[
 			new Locatable(goalLoc),
-			new Collidable(new Bounds(goalPos, entitySize)), 
+			new Collidable(new Bounds(goalPos, entitySize)),
 			new Drawable
 			(
 				new VisualGroup
@@ -219,7 +242,8 @@ function PlaceDemo(universe, size, playerPos)
 						new Coords(0, entityDimension)
 					)
 				])
-			)
+			),
+			new Goal(numberOfKeysToUnlockGoal),
 		]
 	)
 
@@ -260,7 +284,9 @@ function PlaceDemo(universe, size, playerPos)
 		"Enemy",
 		[
 			new Locatable(enemyLoc),
+			new Constrainable([constraintSpeedMax]),
 			new Collidable(enemyCollider),
+			new Damager(),
 			new Drawable(enemyVisual),
 			new Actor
 			(
@@ -278,7 +304,7 @@ function PlaceDemo(universe, size, playerPos)
 						actorLoc.pos
 					).normalize();
 				}
-			)
+			),
 		]
 	);
 
@@ -297,7 +323,7 @@ function PlaceDemo(universe, size, playerPos)
 		),
 		new Wedge
 		(
-			obstaclePos, 
+			obstaclePos,
 			obstacleLoc.orientation.forward, //new Coords(1, 0, 0), // directionMin
 			.85 // angleSpannedInTurns
 		)
@@ -309,6 +335,7 @@ function PlaceDemo(universe, size, playerPos)
 		[
 			new Locatable(obstacleLoc),
 			new Collidable(obstacleCollider),
+			new Damager(),
 			new Drawable
 			(
 				new VisualArc
@@ -371,12 +398,13 @@ function PlaceDemo(universe, size, playerPos)
 		[
 			new Locatable(obstacle2Loc),
 			new Collidable(new MapLocated(obstacle2Map, obstacle2Loc)),
+			new Damager(),
 			new Drawable(new VisualMap(obstacle2Map, obstacle2VisualLookup))
 		]
 	);
 	this.camera = new Camera
 	(
-		universe.display.sizeInPixels.clone(),
+		this.size.clone(),
 		null, // focalLength
 		new Location
 		(
@@ -387,11 +415,33 @@ function PlaceDemo(universe, size, playerPos)
 
 	var entities =
 	[
-		goalEntity, 
-		playerEntity, 
-		enemyEntity, 
+		goalEntity,
+		playerEntity,
+		enemyEntity,
 		obstacleEntity, obstacle2Entity,
 	];
+
+	var itemColor = "Yellow";
+	var itemVisual = new VisualCircle(entityDimension / 2, itemColor);
+
+	for (var i = 0; i < numberOfKeysToUnlockGoal; i++)
+	{
+		var itemPos = new Coords().randomize().multiply(this.size);
+		var itemCollider = new Sphere(itemPos, entityDimension / 2);
+
+		var itemEntity = new Entity
+		(
+			"Item" + i,
+			[
+				new Item("Key", 1),
+				new Locatable( new Location(itemPos) ),
+				new Collidable(itemCollider),
+				new Drawable(itemVisual)
+			]
+		);
+
+		entities.push(itemEntity);
+	}
 
 	this.placeInner = new Place(entities);
 	this.placeInner.parent = this;
@@ -406,7 +456,7 @@ function PlaceDemo(universe, size, playerPos)
 	{
 		var display = universe.display;
 
-		display.drawBackground();
+		display.drawBackground("Gray", "Black");
 
 		var drawLoc = this.drawLoc;
 		var drawPos = drawLoc.pos;
@@ -427,7 +477,10 @@ function PlaceDemo(universe, size, playerPos)
 		this.placeInner.draw(universe, world);
 	}
 
-	PlaceDemo.prototype.entityMoveInDirection = function(world, entity, directionToMove)
+	PlaceDemo.prototype.entityAccelerateInDirection = function
+	(
+		world, entity, directionToMove
+	)
 	{
 		var entityLoc = entity.locatable.loc;
 
@@ -437,7 +490,10 @@ function PlaceDemo(universe, size, playerPos)
 		{
 			entityLoc.timeOffsetInTicks = world.timerTicksSoFar;
 		}
-		vel.overwriteWith(directionToMove);
+		entityLoc.accel.overwriteWith(directionToMove).multiplyScalar
+		(
+			.5 // hack
+		);
 	}
 
 	PlaceDemo.prototype.initialize = function(universe, world)

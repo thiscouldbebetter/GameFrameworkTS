@@ -1,0 +1,5 @@
+
+function Damager()
+{
+	// Do nothing.
+}

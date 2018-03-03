@@ -3,12 +3,14 @@
 // including the constructor, the draw() and update() methods,
 // and the World.new() method.
 
-function World(name, dateCreated, place)
+function World(name, dateCreated, constraintDefns, place)
 {
 	this.name = name;
 	this.dateCreated = dateCreated;
 
 	this.timerTicksSoFar = 0;
+
+	this.constraintDefns = constraintDefns.addLookups("name");
 
 	this.place = place;
 }
@@ -21,11 +23,16 @@ function World(name, dateCreated, place)
 		var now = DateTime.now();
 		var nowAsString = now.toStringMMDD_HHMM_SS();
 
+		var constraintDefns = 
+		[
+			ConstraintDefn.Instances.SpeedMax,
+		];
+
 		var place = new PlaceDemo
 		(
-			universe,
 			universe.display.sizeInPixels.clone(), // size
-			new Coords(10, 10) // playerPos
+			new Coords(10, 10), // playerPos
+			5 // numberOfItems
 		);
 		place.placeInner.entitiesSpawn();
 
@@ -33,6 +40,7 @@ function World(name, dateCreated, place)
 		(
 			"World-" + nowAsString,
 			now, // dateCreated
+			constraintDefns,
 			place
 		);
 		return returnValue;

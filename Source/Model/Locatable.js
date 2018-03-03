@@ -8,8 +8,9 @@ function Locatable(loc)
 	{
 		var loc = this.loc;
 
+		loc.vel.add(loc.accel);
+		loc.accel.clear();
 		loc.pos.add(loc.vel);
-		loc.vel.clear();
 
 		var spin = loc.spin;
 		if (spin.angleInTurns() != 0)
