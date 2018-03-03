@@ -15,9 +15,8 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 	this.isHighlighted = false;
 
 	// Helper variables.
-	this.drawPos = new Coords();
-	this.drawLoc = new Location(this.drawPos);
-	this.sizeHalf = this.size.clone().half();
+	this._drawLoc = new Location(new Coords());
+	this._sizeHalf = this.size.clone().half();
 }
 
 {
@@ -76,7 +75,7 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 
 	ControlButton.prototype.draw = function(universe, display, drawLoc)
 	{
-		var drawPos = this.drawLoc.overwriteWith(drawLoc).pos;
+		var drawPos = this._drawLoc.overwriteWith(drawLoc).pos;
 		drawPos.add(this.pos);
 
 		var isEnabled = this.isEnabled();
@@ -84,7 +83,7 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 
 		var style = this.style(universe);
 		var colorFill = style.colorFill;
-		var colorBorder = (isEnabled == true ? style.colorBorder : style.colorDisabled );
+		var colorBorder = style.colorBorder;
 
 		if (this.hasBorder == true)
 		{
@@ -96,14 +95,16 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 			);
 		}
 
-		drawPos.add(this.sizeHalf);
+		drawPos.add(this._sizeHalf);
+
+		var colorText = (isEnabled == true ? colorBorder : style.colorDisabled);
 
 		display.drawText
 		(
 			this.text,
 			this.fontHeightInPixels,
 			drawPos,
-			colorBorder,
+			colorText,
 			colorFill,
 			isHighlighted,
 			true, // isCentered
