@@ -86,6 +86,8 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 	var entityDimension = 10;
 	var entitySize = new Coords(1, 1, 1).multiplyScalar(entityDimension);
 
+	var entities = [];
+
 	// player
 
 	var playerLoc = new Location(playerPos);
@@ -224,6 +226,8 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 		]
 	);
 
+	entities.push(playerEntity);
+
 	// enemy
 
 	var damagerColor = "Red";
@@ -286,13 +290,37 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 		]
 	);
 
+	entities.push(enemyEntity);
+
 	var obstacleColor = damagerColor;
+
+	var obstacleMappedCellSource =
+	[
+		"....xxxx....",
+		".....xx.....",
+		".....xx....",
+		"....xxxx....",
+		"x..xx..xx..x",
+		"xxxx.xx.xxxx",
+		"xxxx.xx.xxxx",
+		"x..xx..xx..x",
+		"....xxxx....",
+		".....xx.....",
+		".....xx.....",
+		"....xxxx....",
+	];
+	var obstacleMappedSizeInCells = new Coords
+	(
+		obstacleMappedCellSource[0].length,
+		obstacleMappedCellSource.length,
+		1
+	);
 
 	var obstacleMappedCellSize = new Coords(2, 2, 1);
 
 	var obstacleMappedMap = new Map
 	(
-		new Coords(16, 16, 1), //sizeInCells,
+		obstacleMappedSizeInCells,
 		obstacleMappedCellSize,
 		new MapCell(), // cellPrototype
 		function cellAtPosInCells(map, cellPosInCells, cellToOverwrite)
@@ -304,46 +332,37 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			cellToOverwrite.isBlocking = cellIsBlocking;
 			return cellToOverwrite;
 		},
-		// cellSource
-		[
-			"xxxx............",
-			"x..x............",
-			"x..x............",
-			"x..x............",
-			"x..x............",
-			"x..x............",
-			"x..xxxxxxxxxxxxx",
-			"x..............x",
-			"x..............x",
-			"xxxxxxxxxxxxx..x",
-			"............x..x",
-			"............x..x",
-			"............x..x",
-			"............x..x",
-			"............x..x",
-			"............xxxx",
-		]
+		obstacleMappedCellSource
 	);
-
-	var obstacleMappedPos =
-		playerLoc.pos.clone().addDimensions(playerLoc.pos.x, this.size.y / 2, 0);
-	var obstacleMappedLoc = new Location(obstacleMappedPos);
 
 	var obstacleMappedVisualLookup =
 	{
 		"Blocking" : new VisualRectangle(obstacleMappedCellSize, obstacleColor),
 		"Open" : new VisualNone()
 	};
-	var obstacleMappedEntity = new Entity
-	(
-		"ObstacleMapped",
-		[
-			new Locatable(obstacleMappedLoc),
-			new Collidable(new MapLocated(obstacleMappedMap, obstacleMappedLoc)),
-			new Damager(),
-			new Drawable(new VisualMap(obstacleMappedMap, obstacleMappedVisualLookup))
-		]
-	);
+	var obstacleMappedVisual =
+		new VisualMap(obstacleMappedMap, obstacleMappedVisualLookup);
+
+	var numberOfMines = 3;
+	for (var i = 0; i < numberOfMines; i++)
+	{
+		var obstacleMappedPos = new Coords().randomize().multiply(size);
+		var obstacleMappedLoc = new Location(obstacleMappedPos);
+
+		var obstacleMappedEntity = new Entity
+		(
+			"ObstacleMapped",
+			[
+				new Locatable(obstacleMappedLoc),
+				new Collidable(new MapLocated(obstacleMappedMap, obstacleMappedLoc)),
+				new Damager(),
+				new Drawable(obstacleMappedVisual)
+			]
+		);
+
+		entities.push(obstacleMappedEntity);
+	}
+
 	this.camera = new Camera
 	(
 		this.size.clone(),
@@ -354,13 +373,6 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			Orientation.Instances.ForwardZDownY.clone()
 		)
 	);
-
-	var entities =
-	[
-		playerEntity,
-		enemyEntity,
-		obstacleMappedEntity,
-	];
 
 	var numberOfWalls = 4;
 	var wallThickness = 5;
