@@ -13,7 +13,7 @@ function ConstraintDefn(name, constrain)
 		this._None = new ConstraintDefn
 		(
 			"None",
-			function constrain(universe, world, place, entity, target)
+			function constrain(universe, world, place, entity, constraint)
 			{
 				// Do nothing.
 			}
@@ -22,8 +22,9 @@ function ConstraintDefn(name, constrain)
 		this.Attach = new ConstraintDefn
 		(
 			"Attach",
-			function constrain(universe, world, place, entity, targetBodyName)
+			function constrain(universe, world, place, entity, constraint)
 			{
+				var targetBodyName = constraint.target;
 				var target = context.bodies[targetBodyName];
 				entity.loc.pos.overwriteWith(target.loc.pos);
 			}
@@ -32,8 +33,9 @@ function ConstraintDefn(name, constrain)
 		this.ContainInBounds = new ConstraintDefn
 		(
 			"ContainInBounds",
-			function constrain(universe, world, place, entity, targetBodyName)
+			function constrain(universe, world, place, entity, constraint)
 			{
+				var targetBodyName = constraint.target;
 				var target = context.bodies[targetBodyName];
 				var targetBounds = target.collider().bounds(world);
 
@@ -44,8 +46,9 @@ function ConstraintDefn(name, constrain)
 		this.Friction = new ConstraintDefn
 		(
 			"Friction",
-			function constrain(universe, world, place, entity, targetFrictionCoefficient)
+			function constrain(universe, world, place, entity, constraint)
 			{
+				var targetFrictionCoefficient = constraint.target;
 				var entityLoc = entity.locatable.loc;
 				var entityVel = entityLoc.vel;
 				var speed = entityVel.magnitude();

@@ -7,6 +7,6 @@ function Item(defnName, quantity)
 {
 	Item.prototype.defn = function(world)
 	{
-		return world.itemDefns[this.defnName];
+		return world.defns.itemDefns[this.defnName];
 	}
 }

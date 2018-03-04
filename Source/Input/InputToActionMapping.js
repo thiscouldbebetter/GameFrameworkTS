@@ -8,6 +8,6 @@ function InputToActionMapping(inputName, actionName, inactivateInputWhenActionPe
 {
 	InputToActionMapping.prototype.action = function(universe)
 	{
-		return universe.world.actions[this.actionName];
+		return universe.world.defns.actions[this.actionName];
 	}
 }

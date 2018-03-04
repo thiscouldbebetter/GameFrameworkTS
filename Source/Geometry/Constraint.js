@@ -8,7 +8,7 @@ function Constraint(defnName, target)
 	Constraint.prototype.constrain = function(universe, world, place, entity)
 	{
 		var constraintDefn = this.defn(world);
-		constraintDefn.constrain(universe, world, place, entity, this.target);
+		constraintDefn.constrain(universe, world, place, entity, this);
 	}
 
 	Constraint.prototype.defn = function(world)
