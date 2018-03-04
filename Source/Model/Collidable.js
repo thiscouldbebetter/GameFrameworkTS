@@ -18,19 +18,22 @@ function Collidable(collider, entityPropertyNamesToCollideWith, collideEntities)
 		{
 			var entityPropertyName = this.entityPropertyNamesToCollideWith[p];
 			var entitiesWithProperty = place.entitiesByPropertyName[entityPropertyName];
-			for (var e = 0; e < entitiesWithProperty.length; e++)
+			if (entitiesWithProperty != null)
 			{
-				var entityOther = entitiesWithProperty[e];
-				if (entityOther != entity)
+				for (var e = 0; e < entitiesWithProperty.length; e++)
 				{
-					var colliderThis = entity.collidable.collider;
-					var colliderOther = entityOther.collidable.collider;
-
-					var collisionHelper = universe.collisionHelper;
-					var doEntitiesCollide = collisionHelper.doCollidersCollide(colliderThis, colliderOther);
-					if (doEntitiesCollide == true)
+					var entityOther = entitiesWithProperty[e];
+					if (entityOther != entity)
 					{
-						this.collideEntities(universe, world, place, entity, entityOther);
+						var colliderThis = entity.collidable.collider;
+						var colliderOther = entityOther.collidable.collider;
+
+						var collisionHelper = universe.collisionHelper;
+						var doEntitiesCollide = collisionHelper.doCollidersCollide(colliderThis, colliderOther);
+						if (doEntitiesCollide == true)
+						{
+							this.collideEntities(universe, world, place, entity, entityOther);
+						}
 					}
 				}
 			}

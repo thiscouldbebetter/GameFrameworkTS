@@ -12,11 +12,11 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 	this.cursorPos = this.text().length;
 
 	// Helper variables.
-	this.drawPos = new Coords();
-	this.drawPosText = new Coords();
-	this.drawLoc = new Location(this.drawPos);
-	this.textMargin = new Coords();
-	this.textSize = new Coords();
+	this._drawPos = new Coords();
+	this._drawPosText = new Coords();
+	this._drawLoc = new Location(this._drawPos);
+	this._textMargin = new Coords();
+	this._textSize = new Coords();
 }
 
 {
@@ -144,7 +144,7 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 
 	ControlTextBox.prototype.draw = function(universe, display, drawLoc)
 	{
-		var drawPos = this.drawPos.overwriteWith(drawLoc.pos).add(this.pos);
+		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 		var style = this.style(universe);
 
 		var text = this.text();
@@ -156,10 +156,15 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 			this.isHighlighted // areColorsReversed
 		);
 
-		var textWidth = display.textWidthForFontHeight(text, this.fontHeightInPixels);
-		var textSize = this.textSize.overwriteWithDimensions(textWidth, this.fontHeightInPixels, 0);
-		var textMargin = this.textMargin.overwriteWith(this.size).subtract(textSize).half();
-		var drawPosText = this.drawPosText.overwriteWith(drawPos).add(textMargin);
+		var textWidth = 
+			display.textWidthForFontHeight(text, this.fontHeightInPixels);
+		var textSize = 
+			this._textSize.overwriteWithDimensions(textWidth, this.fontHeightInPixels, 0);
+		var textMargin = 
+			this._textMargin.overwriteWith(this.size).subtract(textSize).half();
+		var drawPosText = 
+			this._drawPosText.overwriteWith(drawPos).add(textMargin);
+
 		display.drawText
 		(
 			text,

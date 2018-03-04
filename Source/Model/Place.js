@@ -86,18 +86,22 @@ function Place(entities)
 			"constrainable",
 			"collidable",
 			"actor",
-			"playable"
+			"playable",
+			"ephemeral",
 		];
 
 		for (var p = 0; p < propertyNamesToProcess.length; p++)
 		{
 			var propertyName = propertyNamesToProcess[p];
 			var entitiesWithProperty = this.entitiesByPropertyName[propertyName];
-			for (var i = 0; i < entitiesWithProperty.length; i++)
+			if (entitiesWithProperty != null)
 			{
-				var entity = entitiesWithProperty[i];
-				var entityProperty = entity[propertyName];
-				entityProperty.updateForTimerTick(universe, world, this, entity);
+				for (var i = 0; i < entitiesWithProperty.length; i++)
+				{
+					var entity = entitiesWithProperty[i];
+					var entityProperty = entity[propertyName];
+					entityProperty.updateForTimerTick(universe, world, this, entity);
+				}
 			}
 		}
 

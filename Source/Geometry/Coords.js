@@ -187,6 +187,11 @@ function Coords(x, y, z)
 		return this.x * other.x + this.y * other.y + this.z * other.z;
 	}
 
+	Coords.prototype.double = function()
+	{
+		return this.multiplyScalar(2);
+	}
+
 	Coords.prototype.equals = function(other)
 	{
 		return (this.x == other.x && this.y == other.y && this.z == other.z);

@@ -110,7 +110,11 @@ function ControlContainer(name, pos, size, children)
 			for (var i = iStart; i != iEnd; i += direction)
 			{
 				var child = this.children[i];
-				if (child.focusGain != null && child.isEnabled != null && child.isEnabled())
+				if 
+				(
+					child.focusGain != null 
+					&& ( child.isEnabled == null || child.isEnabled() )
+				)
 				{
 					this.indexOfChildWithFocus = i;
 					break;
@@ -138,7 +142,11 @@ function ControlContainer(name, pos, size, children)
 				else
 				{
 					var child = this.children[this.indexOfChildWithFocus];
-					if (child.focusGain != null && child.isEnabled != null && child.isEnabled())
+					if 
+					(
+						child.focusGain != null 
+						&& ( child.isEnabled == null || child.isEnabled() )
+					)
 					{
 						break;
 					}

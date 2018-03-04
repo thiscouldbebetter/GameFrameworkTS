@@ -63,6 +63,74 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 				);
 			}
 		),
+		new Action
+		(
+			"Fire",
+			function perform(universe, world, place, actor)
+			{
+				var itemWeapon = new Item("Weapon", 1);
+				var actorHasWeapon = actor.itemHolder.hasItems(itemWeapon);
+
+				if (actorHasWeapon == false) { return; }
+
+				var actorLoc = actor.locatable.loc;
+				var actorPos = actorLoc.pos;	
+				var actorVel = actorLoc.vel;
+				var actorSpeed = actorVel.magnitude();
+				if (actorSpeed == 0) { return; }
+
+				var itemProjectileColor = "Cyan";
+				var itemProjectileRadius = 3;
+				var itemProjectileVisual = new VisualGroup
+				([
+					new VisualCircle(itemProjectileRadius, itemProjectileColor),
+					new VisualOffset
+					(
+						new VisualText("Projectile", itemProjectileColor),
+						new Coords(0, itemProjectileRadius)
+					)
+				]);
+
+				var actorDirection = actorVel.clone().normalize();
+				var actorRadius = actor.collidable.collider.radius;
+				var itemProjectilePos = actorPos.clone().add
+				(
+					actorDirection.clone().multiplyScalar(actorRadius).double().double()
+				); 
+				var itemProjectileLoc = new Location(itemProjectilePos);
+				itemProjectileLoc.vel.overwriteWith(actorVel).double();
+
+				var itemProjectileCollider = 
+					new Sphere(itemProjectilePos, itemProjectileRadius);
+
+				var itemProjectileCollide = function(universe, world, place, entityPlayer, entityOther)
+				{
+					if (entityOther.killable != null)
+					{
+						place.entitiesToRemove.push(entityOther);
+					}
+				}
+
+				var itemProjectileEntity = new Entity
+				(
+					"Projectile",
+					[
+						new Damager(),
+						new Ephemeral(32),
+						new Locatable( itemProjectileLoc ),
+						new Collidable
+						(
+							itemProjectileCollider, 
+							[ "killable" ],
+							itemProjectileCollide
+						),
+						new Drawable(itemProjectileVisual)
+					]
+				);	
+
+				place.placeInner.entitiesToSpawn.push(itemProjectileEntity);
+			}
+		),
 	].addLookups("name");
 
 	this.inputToActionMappings =
@@ -73,11 +141,13 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 		new InputToActionMapping("ArrowLeft", "MoveLeft"),
 		new InputToActionMapping("ArrowRight", "MoveRight"),
 		new InputToActionMapping("ArrowUp", "MoveUp"),
+		new InputToActionMapping("Enter", "Fire"),
 
 		new InputToActionMapping("Gamepad0Down", "MoveDown"),
 		new InputToActionMapping("Gamepad0Left", "MoveLeft"),
 		new InputToActionMapping("Gamepad0Right", "MoveRight"),
 		new InputToActionMapping("Gamepad0Up", "MoveUp"),
+		new InputToActionMapping("Gamepad0Button0", "Fire"),
 
 	].addLookups("inputName");
 
@@ -246,6 +316,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 		enemyColliderAsFace,
 		1 // thickness
 	);
+
 	var enemyVisual = new VisualGroup
 	([
 		new VisualPolygon
@@ -269,6 +340,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			new Constrainable([constraintSpeedMax]),
 			new Collidable(enemyCollider),
 			new Damager(),
+			new Killable(),
 			new Drawable(enemyVisual),
 			new Actor
 			(
@@ -340,8 +412,15 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 		"Blocking" : new VisualRectangle(obstacleMappedCellSize, obstacleColor),
 		"Open" : new VisualNone()
 	};
-	var obstacleMappedVisual =
-		new VisualMap(obstacleMappedMap, obstacleMappedVisualLookup);
+	var obstacleMappedVisual = new VisualGroup
+	([
+		new VisualMap(obstacleMappedMap, obstacleMappedVisualLookup),
+		new VisualOffset
+		(
+			new VisualText("Mine", obstacleColor),
+			new Coords(0, entityDimension)
+		)
+	]);
 
 	var numberOfMines = 3;
 	for (var i = 0; i < numberOfMines; i++)
@@ -417,13 +496,13 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 		entities.push(obstacleWallEntity);
 	}
 
-	var itemColor = "Yellow";
-	var itemVisual = new VisualGroup
+	var itemKeyColor = "Yellow";
+	var itemKeyVisual = new VisualGroup
 	([
-		new VisualCircle(entityDimension / 2, itemColor),
+		new VisualCircle(entityDimension / 2, itemKeyColor),
 		new VisualOffset
 		(
-			new VisualText("Key", itemColor),
+			new VisualText("Key", itemKeyColor),
 			new Coords(0, entityDimension)
 		)
 	]);
@@ -431,24 +510,52 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 	var marginThickness = wallThickness * 3;
 	var sizeMinusMargins =
 		this.size.clone().subtract(new Coords(1, 1, 0).multiplyScalar(marginThickness));
+
 	for (var i = 0; i < numberOfKeysToUnlockGoal; i++)
 	{
-		var itemPos = new Coords().randomize().multiply(sizeMinusMargins);
-		var itemCollider = new Sphere(itemPos, entityDimension / 2);
+		var itemKeyPos = new Coords().randomize().multiply(sizeMinusMargins);
+		var itemKeyCollider = new Sphere(itemKeyPos, entityDimension / 2);
 
-		var itemEntity = new Entity
+		var itemKeyEntity = new Entity
 		(
-			"Item" + i,
+			"Key" + i,
 			[
 				new Item("Key", 1),
-				new Locatable( new Location(itemPos) ),
-				new Collidable(itemCollider),
-				new Drawable(itemVisual)
+				new Locatable( new Location(itemKeyPos) ),
+				new Collidable(itemKeyCollider),
+				new Drawable(itemKeyVisual)
 			]
 		);
 
-		entities.push(itemEntity);
+		entities.push(itemKeyEntity);
 	}
+
+	var itemWeaponColor = "Cyan";
+	var itemWeaponVisual = new VisualGroup
+	([
+		new VisualCircle(entityDimension / 2, itemWeaponColor),
+		new VisualOffset
+		(
+			new VisualText("Weapon", itemWeaponColor),
+			new Coords(0, entityDimension)
+		)
+	]);
+	
+	var itemWeaponPos = new Coords().randomize().multiply(sizeMinusMargins);
+	var itemWeaponCollider = new Sphere(itemWeaponPos, entityDimension / 2);
+
+	var itemWeaponEntity = new Entity
+	(
+		"Weapon",
+		[
+			new Item("Weapon", 1),
+			new Locatable( new Location(itemWeaponPos) ),
+			new Collidable(itemWeaponCollider),
+			new Drawable(itemWeaponVisual)
+		]
+	);	
+
+	entities.push(itemWeaponEntity);
 
 	// goal
 
@@ -475,7 +582,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 				new VisualGroup
 				([
 					new VisualRectangle(entitySize, goalColor),
-					new VisualText("" + numberOfKeysToUnlockGoal, itemColor),					
+					new VisualText("" + numberOfKeysToUnlockGoal, itemKeyColor),					
 					new VisualOffset
 					(
 						new VisualText("Exit", goalColor),
