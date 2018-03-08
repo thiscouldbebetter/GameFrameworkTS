@@ -41,6 +41,20 @@ function Polar(azimuthInTurns, radius, elevationInTurns)
 		return this;
 	}
 
+	Polar.prototype.overwriteWithAzimuthRadiusElevation = function
+	(
+		azimuthInTurns, radius, elevationInTurns
+	)
+	{
+		this.azimuthInTurns = azimuthInTurns;
+		this.radius = radius;
+		if (elevationInTurns != null)
+		{
+			this.elevationInTurns = elevationInTurns;
+		}
+		return this;
+	}
+
 	Polar.prototype.toCoords = function(coords)
 	{
 		var azimuthInRadians = this.azimuthInTurns * Polar.RadiansPerTurn;
