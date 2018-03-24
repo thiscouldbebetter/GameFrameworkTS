@@ -8,21 +8,21 @@ function Material(name, colorStroke, colorFill, texture)
 }
 
 {
-	function Material_Instances()
+	Material.Instances = function()
 	{
-		if (Material.Instances == null)
+		if (Material._Instances == null)
 		{
-			Material.Instances = this;
+			Material._Instances = this;
+
+			this.Default = new Material
+			(
+				"Default",
+				Color.Instances().Blue, // colorStroke
+				Color.Instances().Yellow, // colorFill
+				null // texture
+			);
 		}
 
-		this.Default = new Material
-		(
-			"Default",
-			Color.Instances.Blue, // colorStroke
-			Color.Instances.Yellow, // colorFill
-			null // texture
-		);
+		return Material._Instances;
 	}
-
-	Material.Instances = new Material_Instances();
 }

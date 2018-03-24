@@ -26,7 +26,7 @@ function WebGLContext(canvas)
 		gl.viewportWidth = canvas.width;
 		gl.viewportHeight = canvas.height;
 
-		var colorBackground = Color.Instances.Black;
+		var colorBackground = Color.Instances().Black;
 		var colorBackgroundComponentsRGBA = colorBackground.componentsRGBA;
 		gl.clearColor
 		(

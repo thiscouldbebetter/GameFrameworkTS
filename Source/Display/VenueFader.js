@@ -25,7 +25,8 @@ function VenueFader
 		this.venueIndexCurrent = 0;
 	}
 
-	this.backgroundColor = (backgroundColor == null ? Color.Instances.Black : backgroundColor);
+	this.backgroundColor = 
+		(backgroundColor == null ? Color.Instances().Black : backgroundColor);
 }
 
 {
