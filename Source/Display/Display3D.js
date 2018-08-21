@@ -158,7 +158,6 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 
 				numberOfTrianglesSoFar += vertexIndicesForTriangles.length;
 			}
-		
 
 			var colorBuffer = gl.createBuffer();
 			gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);

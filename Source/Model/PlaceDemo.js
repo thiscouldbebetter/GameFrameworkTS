@@ -74,7 +74,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 				if (actorHasWeapon == false) { return; }
 
 				var actorLoc = actor.locatable.loc;
-				var actorPos = actorLoc.pos;	
+				var actorPos = actorLoc.pos;
 				var actorVel = actorLoc.vel;
 				var actorSpeed = actorVel.magnitude();
 				if (actorSpeed == 0) { return; }
@@ -126,7 +126,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 						),
 						new Drawable(itemProjectileVisual)
 					]
-				);	
+				);
 
 				place.placeInner.entitiesToSpawn.push(itemProjectileEntity);
 			}
@@ -321,7 +321,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 	([
 		new VisualPolygon
 		(
-			enemyColliderAsFace.vertices,
+			new Path(enemyColliderAsFace.vertices),
 			enemyColor,
 			null // colorBorder
 		),
@@ -540,7 +540,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			new Coords(0, entityDimension)
 		)
 	]);
-	
+
 	var itemWeaponPos = new Coords().randomize().multiply(sizeMinusMargins);
 	var itemWeaponCollider = new Sphere(itemWeaponPos, entityDimension / 2);
 
@@ -553,7 +553,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			new Collidable(itemWeaponCollider),
 			new Drawable(itemWeaponVisual)
 		]
-	);	
+	);
 
 	entities.push(itemWeaponEntity);
 
@@ -582,7 +582,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 				new VisualGroup
 				([
 					new VisualRectangle(entitySize, goalColor),
-					new VisualText("" + numberOfKeysToUnlockGoal, itemKeyColor),					
+					new VisualText("" + numberOfKeysToUnlockGoal, itemKeyColor),
 					new VisualOffset
 					(
 						new VisualText("Exit", goalColor),

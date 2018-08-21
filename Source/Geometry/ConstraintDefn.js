@@ -108,5 +108,15 @@ function ConstraintDefn(name, constrain)
 				}
 			}
 		);
+
+		this.WrapToRange = new ConstraintDefn
+		(
+			"WrapToRange",
+			function constrain(universe, world, place, entity, targetRange)
+			{
+				var entityLoc = entity.locatable.loc;
+				entityLoc.pos.wrapToRangeMax(targetRange);
+			}
+		);
 	}
 }

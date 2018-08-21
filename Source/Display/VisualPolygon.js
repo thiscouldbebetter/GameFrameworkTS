@@ -1,33 +1,31 @@
 
-function VisualPolygon(vertices, colorFill, colorBorder)
+function VisualPolygon(verticesAsPath, colorFill, colorBorder)
 {
-	this.vertices = vertices;
+	this.verticesAsPath = verticesAsPath;
 	this.colorFill = colorFill;
 	this.colorBorder = colorBorder;
 
-	this.verticesTransformed = [];
-	for (var i = 0; i < this.vertices.length; i++)
-	{
-		this.verticesTransformed[i] = new Coords();
-	}
+	this.verticesAsPathTransformed = this.verticesAsPath.clone();
+	this.transformTranslate = new TransformTranslate(new Coords());
 }
 
 {
 	VisualPolygon.prototype.draw = function(universe, world, display, drawable)
 	{
 		var pos = drawable.loc.pos;
+		this.transformTranslate.offset.overwriteWith(drawable.loc.pos);
 
-		for (var i = 0; i < this.verticesTransformed.length; i++)
-		{
-			var vertexBase = this.vertices[i];
-			var vertexTransformed = this.verticesTransformed[i];
-
-			vertexTransformed.overwriteWith(vertexBase).add(pos);
-		}
+		this.verticesAsPathTransformed.overwriteWith
+		(
+			this.verticesAsPath
+		).transform
+		(
+			this.transformTranslate
+		);
 
 		display.drawPolygon
 		(
-			this.verticesTransformed, this.colorFill, this.colorBorder
+			this.verticesAsPathTransformed.points, this.colorFill, this.colorBorder
 		);
 	}
 }
