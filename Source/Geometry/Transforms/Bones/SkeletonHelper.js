@@ -19,20 +19,20 @@ function SkeletonHelper()
 
 		var legRight = new Bone
 		(
-			"Hip.R", 
-			heightOver12, 
+			"Hip.R",
+			heightOver12,
 			new Orientation(new Coords(-1, 0, 0), new Coords(0, 0, 1)),
 			[
 				new Bone
 				(
-					"Thigh.R", 
+					"Thigh.R",
 					heightOver4,
 					new Orientation(new Coords(0, 0, 1), new Coords(-1, 0, 0)),
 					[
 						new Bone
 						(
 							"Shin.R",
-							heightOver4, 
+							heightOver4,
 							new Orientation(new Coords(0, 0, 1), new Coords(1, 0, 0)),
 							[
 								new Bone("Foot.R", heightOver8, new Orientation(new Coords(0, 1, 0), new Coords(1, 0, 0)), [])
@@ -45,20 +45,20 @@ function SkeletonHelper()
 
 		var legLeft = new Bone
 		(
-			"Hip.L", 
-			heightOver12, 
+			"Hip.L",
+			heightOver12,
 			new Orientation(new Coords(1, 0, 0), new Coords(0, 0, 1)),
 			[
 				new Bone
 				(
-					"Thigh.L", 
+					"Thigh.L",
 					heightOver4,
 					new Orientation(new Coords(0, 0, 1), new Coords(-1, 0, 0)),
 					[
 						new Bone
 						(
 							"Shin.L",
-							heightOver4, 
+							heightOver4,
 							new Orientation(new Coords(0, 0, 1), new Coords(1, 0, 0)),
 							[
 								new Bone("Foot.L", heightOver8, new Orientation(new Coords(0, 1, 0), new Coords(1, 0, 0)), [])
@@ -72,42 +72,42 @@ function SkeletonHelper()
 		var upperEntity = new Bone
 		(
 			"Spine.1",
-			heightOfSpine, 
+			heightOfSpine,
 			new Orientation(new Coords(0, 0, -1), new Coords(0, -1, 0)),
 			[
 				new Bone
 				(
 					"Neck",
-					heightOver12, 
+					heightOver12,
 					new Orientation(new Coords(0, 0, -1), new Coords(0, 1, 0)),
 					[
 						new Bone
 						(
-							"Head.Back", 
-							heightOver18, 
+							"Head.Back",
+							heightOver18,
 							new Orientation(new Coords(0, 0, -1), new Coords(0, 1, 0)),
 							[
 								new Bone
 								(
-									"Head.Front", 
-									heightOver9, 
-									new Orientation(new Coords(0, 1, 0), new Coords(0, 0, 1)), 
+									"Head.Front",
+									heightOver9,
+									new Orientation(new Coords(0, 1, 0), new Coords(0, 0, 1)),
 									[]
 								),
-							] 
+							]
 						)
 					]
 				),
 				new Bone
 				(
 					"Shoulder.L",
-					heightOver6, 
+					heightOver6,
 					new Orientation(new Coords(1, 0, 0), new Coords(0, 0, 1)),
 					[
 						new Bone
 						(
 							"Bicep.L",
-							heightOver6, 
+							heightOver6,
 							new Orientation(new Coords(0, -.1, 1), new Coords(-1, 0, 0)),
 							[
 								new Bone("Forearm.L", heightOver6, new Orientation(new Coords(0, .1, 1), new Coords(-1, 0, 0)), [])
@@ -124,7 +124,7 @@ function SkeletonHelper()
 						new Bone
 						(
 							"Bicep.R",
-							heightOver6, 
+							heightOver6,
 							new Orientation(new Coords(0, -.1, 1), new Coords(-1, 0, 0)),
 							[
 								new Bone("Forearm.R", heightOver6, new Orientation(new Coords(0, .1, 1), new Coords(-1, 0, 0)), [])
@@ -140,12 +140,12 @@ function SkeletonHelper()
 			"Skeleton0",
 			new Bone
 			(
-				"Root", 
-				heightOver2, 
+				"Root",
+				heightOver2,
 				new Orientation(new Coords(0, 0, -1), new Coords(0, 1, 0)),
 				[
 					legRight,
-					legLeft, 
+					legLeft,
 					upperEntity,
 				],
 
@@ -195,7 +195,7 @@ function SkeletonHelper()
 			[
 				new AnimationKeyframe
 				(
-					0, 
+					0,
 					[
 						new Transform_BonePose("Forearm.L", 	[ .25 ]),
 						new Transform_BonePose("Bicep.L", 	[ .25, 0, -.25 ]),
@@ -207,7 +207,7 @@ function SkeletonHelper()
 				),
 				new AnimationKeyframe
 				(
-					1, 
+					1,
 					[
 						new Transform_BonePose("Forearm.L", 	[ .25 ]),
 						new Transform_BonePose("Bicep.L", 	[ .25, 0, .25 ]),
@@ -231,7 +231,7 @@ function SkeletonHelper()
 			[
 				new AnimationKeyframe
 				(
-					0, 
+					0,
 					[
 						new Transform_BonePose("Thigh.L", 	[ .25 ]),
 						new Transform_BonePose("Shin.L", 	[ .25 ]),
@@ -242,7 +242,7 @@ function SkeletonHelper()
 				),
 				new AnimationKeyframe
 				(
-					1, 
+					1,
 					[
 						new Transform_BonePose("Thigh.L", 	[ .25 ]),
 						new Transform_BonePose("Shin.L", 	[ .25 ]),
@@ -266,7 +266,7 @@ function SkeletonHelper()
 			[
 				new AnimationKeyframe
 				(
-					0, 
+					0,
 					[
 						new Transform_BonePose("Bicep.L", 	[ -.1 ]),
 						new Transform_BonePose("Forearm.L", 	[ 0 ]),
@@ -282,7 +282,7 @@ function SkeletonHelper()
 
 				new AnimationKeyframe
 				(
-					5, 
+					5,
 					[
 						new Transform_BonePose("Thigh.L", 	[ .1 ]),
 						new Transform_BonePose("Shin.L", 	[ .1 ]),
@@ -294,7 +294,7 @@ function SkeletonHelper()
 
 				new AnimationKeyframe
 				(
-					10, 
+					10,
 					[
 						new Transform_BonePose("Thigh.L", 	[ 0 ]),
 						new Transform_BonePose("Shin.L", 	[ 0 ]),
@@ -306,7 +306,7 @@ function SkeletonHelper()
 
 				new AnimationKeyframe
 				(
-					15, 
+					15,
 					[
 						new Transform_BonePose("Bicep.L", 	[ .1 ]),
 						new Transform_BonePose("Forearm.L", 	[ .1 ]),
@@ -321,7 +321,7 @@ function SkeletonHelper()
 
 				new AnimationKeyframe
 				(
-					20, 
+					20,
 					[
 						new Transform_BonePose("Thigh.L", 	[ -.1 ]),
 						new Transform_BonePose("Shin.L", 	[ 0 ]),
@@ -333,7 +333,7 @@ function SkeletonHelper()
 
 				new AnimationKeyframe
 				(
-					25, 
+					25,
 					[
 						new Transform_BonePose("Thigh.L", 	[ 0 ]),
 						new Transform_BonePose("Shin.L", 	[ .1 ]),
@@ -345,7 +345,7 @@ function SkeletonHelper()
 
 				new AnimationKeyframe
 				(
-					30, 
+					30,
 					[
 						new Transform_BonePose("Bicep.L", 	[ -.1 ]),
 						new Transform_BonePose("Forearm.L", 	[ 0 ]),
@@ -366,7 +366,7 @@ function SkeletonHelper()
 
 	SkeletonHelper.transformBuildForMeshAndSkeleton_Proximity = function
 	(
-		meshAtRest, 
+		meshAtRest,
 		skeletonAtRest,
 		skeletonPosed
 	)

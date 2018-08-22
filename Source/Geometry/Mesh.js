@@ -47,7 +47,7 @@ function Mesh(center, vertexOffsets, faceBuilders)
 			new Coords(min.x, max.y, max.z),
 		];
 
-		var faceBuilders = 
+		var faceBuilders =
 		[
 			new Mesh_FaceBuilder([0, 1, 5, 4]), // north
 			new Mesh_FaceBuilder([1, 2, 6, 5]), // east
@@ -94,7 +94,7 @@ function Mesh(center, vertexOffsets, faceBuilders)
 
 				if (z == 0)
 				{
-					var vertexIndexNext = 
+					var vertexIndexNext =
 					(
 						vertexIndex + 1
 					).wrapToRangeMinMax
@@ -104,7 +104,7 @@ function Mesh(center, vertexOffsets, faceBuilders)
 
 					var faceBuilderSide = new Mesh_FaceBuilder
 					([
-						vertexIndex, 
+						vertexIndex,
 						vertexIndexNext,
 						vertexIndexNext + numberOfFaceVertices, 
 						vertexIndex + numberOfFaceVertices

@@ -95,9 +95,9 @@ function Quaternion(w, x, y, z)
 	{
 		return Math.sqrt
 		(
-			this.w * this.w 
-			+ this.x * this.x 
-			+ this.y * this.y 
+			this.w * this.w
+			+ this.x * this.x
+			+ this.y * this.y
 			+ this.z * this.z
 		);
 	}

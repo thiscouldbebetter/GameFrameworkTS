@@ -13,7 +13,7 @@ function Camera(viewSize, focalLength, loc)
 	{
 		if (this._clipPlanes == null)
 		{
-			this._clipPlanes = 
+			this._clipPlanes =
 			[
 				new Plane(new Coords(0, 0, 0), 0),
 				new Plane(new Coords(0, 0, 0), 0),

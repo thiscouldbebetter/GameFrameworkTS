@@ -14,7 +14,7 @@ function Transform_BonePose(boneName, cyclesToRotateAroundAxesDownRightForward)
 	{
 		return new Transform_BonePose
 		(
-			this.boneName, 
+			this.boneName,
 			this.cyclesToRotateAroundAxesDownRightForward
 		);
 	}
@@ -25,7 +25,7 @@ function Transform_BonePose(boneName, cyclesToRotateAroundAxesDownRightForward)
 
 		for (var i = 0; i < this.cyclesToRotateAroundAxesDownRightForward.length; i++)
 		{
-			var cyclesToRotateInterpolated = 
+			var cyclesToRotateInterpolated =
 				(1 - fractionOfProgressTowardOther) * this.cyclesToRotateAroundAxesDownRightForward[i]
 				+ fractionOfProgressTowardOther * other.cyclesToRotateAroundAxesDownRightForward[i];
 
@@ -48,7 +48,7 @@ function Transform_BonePose(boneName, cyclesToRotateAroundAxesDownRightForward)
 		var boneToTransform = skeletonToTransform.bonesAll[this.boneName];
 		var boneOrientation = boneToTransform.orientation;
 
-		var axesToRotateAround = 
+		var axesToRotateAround =
 		[
 			boneOrientation.down,
 			boneOrientation.right,
@@ -66,7 +66,7 @@ function Transform_BonePose(boneName, cyclesToRotateAroundAxesDownRightForward)
 			{
 				var quaternionForRotation = Quaternion.fromAxisAndCyclesToRotate
 				(
-					axisToRotateAround, 
+					axisToRotateAround,
 					cyclesToRotateAroundAxis
 				);
 
