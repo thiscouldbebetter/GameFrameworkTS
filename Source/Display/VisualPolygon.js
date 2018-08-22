@@ -18,9 +18,12 @@ function VisualPolygon(verticesAsPath, colorFill, colorBorder)
 		this.verticesAsPathTransformed.overwriteWith
 		(
 			this.verticesAsPath
-		).transform
+		);
+
+		Transform.applyTransformToCoordsMany
 		(
-			this.transformTranslate
+			this.transformTranslate,
+			this.verticesAsPathTransformed.points
 		);
 
 		display.drawPolygon
