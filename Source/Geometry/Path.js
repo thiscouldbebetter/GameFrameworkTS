@@ -14,4 +14,10 @@ function Path(points)
 		this.points.overwriteWith(other.points);
 		return this;
 	}
+
+	Path.prototype.transform = function(transformToApply)
+	{
+		Transform.applyTransformToCoordsMany(transformToApply, this.points);
+		return this;
+	}
 }

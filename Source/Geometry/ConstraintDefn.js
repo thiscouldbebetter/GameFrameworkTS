@@ -63,8 +63,9 @@ function ConstraintDefn(name, constrain)
 		this.Offset = new ConstraintDefn
 		(
 			"Offset",
-			function constrain(universe, world, place, entity, targetOffset)
+			function constrain(universe, world, place, entity, constraint)
 			{
+				var targetOffset = constraint.target;
 				entity.loc.pos.add(targetOffset);
 			}
 		);
@@ -72,8 +73,10 @@ function ConstraintDefn(name, constrain)
 		this.OrientToward = new ConstraintDefn
 		(
 			"OrientToward",
-			function constrain(universe, world, place, entity, targetBodyName)
+			function constrain(universe, world, place, entity, constraint)
 			{
+				var targetBodyName = constraint.target;
+
 				var constrainableLoc = entity.loc;
 				var constrainablePos = constrainableLoc.pos;
 				var constrainableOrientation = constrainableLoc.orientation;
@@ -97,8 +100,9 @@ function ConstraintDefn(name, constrain)
 		this.SpeedMax = new ConstraintDefn
 		(
 			"SpeedMax",
-			function constrain(universe, world, place, entity, targetSpeedMax)
+			function constrain(universe, world, place, entity, constraint)
 			{
+				var targetSpeedMax = constraint.target;
 				var entityLoc = entity.locatable.loc;
 				var entityVel = entityLoc.vel;
 				var speed = entityVel.magnitude();
@@ -112,8 +116,9 @@ function ConstraintDefn(name, constrain)
 		this.WrapToRange = new ConstraintDefn
 		(
 			"WrapToRange",
-			function constrain(universe, world, place, entity, targetRange)
+			function constrain(universe, world, place, entity, constraint)
 			{
+				var targetRange = constraint.target;
 				var entityLoc = entity.locatable.loc;
 				entityLoc.pos.wrapToRangeMax(targetRange);
 			}
