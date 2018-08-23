@@ -128,7 +128,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 					]
 				);
 
-				place.placeInner.entitiesToSpawn.push(itemProjectileEntity);
+				place.entitiesToSpawn.push(itemProjectileEntity);
 			}
 		),
 	].addLookups("name");
@@ -636,8 +636,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 
 	entities.push(obstacleRingEntity);
 
-	this.placeInner = new Place(entities);
-	this.placeInner.parent = this;
+	Place.call(this, entities);
 
 	// Helper variables.
 
@@ -645,6 +644,10 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 	this.drawLoc = new Location(this.drawPos);
 }
 {
+	PlaceDemo.prototype = Object.create(Place.prototype);
+	PlaceDemo.prototype.constructor = PlaceDemo;
+
+	PlaceDemo.prototype.draw_FromSuperclass = PlaceDemo.prototype.draw;
 	PlaceDemo.prototype.draw = function(universe, world)
 	{
 		var display = universe.display;
@@ -654,7 +657,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 		var drawLoc = this.drawLoc;
 		var drawPos = drawLoc.pos;
 
-		var player = this.placeInner.entities["Player"];
+		var player = this.entities["Player"];
 		var playerLoc = player.locatable.loc;
 
 		var camera = this.camera;
@@ -667,7 +670,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			this.size.clone().subtract(camera.viewSizeHalf)
 		);
 
-		this.placeInner.draw(universe, world);
+		this.draw_FromSuperclass(universe, world);
 	}
 
 	PlaceDemo.prototype.entityAccelerateInDirection = function
@@ -687,15 +690,5 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 		(
 			.5 // hack
 		);
-	}
-
-	PlaceDemo.prototype.initialize = function(universe, world)
-	{
-		this.placeInner.initialize(universe, world);
-	}
-
-	PlaceDemo.prototype.updateForTimerTick = function(universe, world)
-	{
-		this.placeInner.updateForTimerTick(universe, world);
 	}
 }

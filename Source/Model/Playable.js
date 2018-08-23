@@ -6,9 +6,6 @@ function Playable()
 {
 	Playable.prototype.updateForTimerTick = function(universe, world, place, player)
 	{
-		// hack
-		var place = place.parent;
-
 		var size = place.size;
 		var inputToActionMappings = place.inputToActionMappings;
 		var actions = place.actions;
