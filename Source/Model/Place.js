@@ -70,7 +70,12 @@ function Place(entities)
 
 		this.entitiesToSpawn.clear();
 	}
-
+	
+	Place.prototype.finalize = function(universe, world)
+	{
+		// Do nothing.
+	}
+	
 	Place.prototype.initialize = function(universe, world)
 	{
 		// Do nothing.
