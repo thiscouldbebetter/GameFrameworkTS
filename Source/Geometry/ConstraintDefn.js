@@ -113,6 +113,17 @@ function ConstraintDefn(name, constrain)
 			}
 		);
 
+		this.TrimToRange = new ConstraintDefn
+		(
+			"TrimToRange",
+			function constrain(universe, world, place, entity, constraint)
+			{
+				var targetSize = constraint.target;
+				var entityLoc = entity.locatable.loc;
+				entityLoc.pos.trimToRangeMax(targetSize);
+			}
+		);
+
 		this.WrapToRange = new ConstraintDefn
 		(
 			"WrapToRange",

@@ -421,13 +421,16 @@ function Coords(x, y, z)
 			this.y -= max.y;
 		}
 
-		while (this.z < 0)
+		if (max.z > 0)
 		{
-			this.z += max.z;
-		}
-		while (this.z >= max.z)
-		{
-			this.z -= max.z;
+			while (this.z < 0)
+			{
+				this.z += max.z;
+			}
+			while (this.z >= max.z)
+			{
+				this.z -= max.z;
+			}
 		}
 
 		return this;
