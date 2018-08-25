@@ -1,10 +1,11 @@
 
-function MediaLibrary(images, sounds, videos, fonts)
+function MediaLibrary(images, sounds, videos, fonts, textStrings)
 {
 	this.images = images.addLookups("name");
 	this.sounds = sounds.addLookups("name");
 	this.videos = videos.addLookups("name");
 	this.fonts = fonts.addLookups("name");
+	this.textStrings = textStrings.addLookups("name");
 }
 
 {
@@ -36,6 +37,11 @@ function MediaLibrary(images, sounds, videos, fonts)
 	MediaLibrary.prototype.soundGetByName = function(name)
 	{
 		return this.sounds[name];
+	}
+
+	MediaLibrary.prototype.textStringGetByName = function(name)
+	{
+		return this.textStrings[name];
 	}
 
 	MediaLibrary.prototype.videoGetByName = function(name)

@@ -326,44 +326,62 @@ function ControlBuilder(styles)
 		var textWidth = display.textWidthForFontHeight(textAcknowledge, fontHeightInPixelsScaled);
 		var buttonSizeScaled = new Coords(textWidth * 1.25, fontHeightInPixelsScaled * 2);
 		var containerSizeHalfScaled = containerSizeScaled.clone().half();
-		var buttonPosScaled = containerSizeScaled.clone().subtract
+
+		var childControls = [];
+
+		var messageAsLines = message.split("\n");
+		var messageHeight = messageAsLines.length * fontHeightInPixelsScaled;
+		var ySpaceBetweenControls = (containerSizeScaled.y - messageHeight - buttonSizeScaled.y) / 3;
+
+		for (var i = 0; i < messageAsLines.length; i++)
+		{
+			var messageLine = messageAsLines[i];
+
+			var labelMessageLine = new ControlLabel
+			(
+				"labelMessageLine" + i,
+				new Coords
+				(
+					containerSizeHalfScaled.x,
+					ySpaceBetweenControls
+					+ fontHeightInPixelsScaled * (i + .5)
+				), // pos
+				new Coords(containerSizeScaled.x, fontHeightInPixelsScaled), // size
+				true, // isTextCentered
+				messageLine,
+				fontHeightInPixelsScaled
+			);
+
+			childControls.push(labelMessageLine);
+		}
+
+		var buttonPosScaled = new Coords
 		(
-			buttonSizeScaled
-		).half().addDimensions
-		(
-			0, buttonSizeScaled.y / 2, 0
+			(containerSizeScaled.x - buttonSizeScaled.x) / 2,
+			2 * ySpaceBetweenControls + messageHeight
 		);
+
+		var buttonAcknowledge = new ControlButton
+		(
+			"buttonAcknowledge",
+			buttonPosScaled,
+			buttonSizeScaled,
+			textAcknowledge,
+			fontHeightInPixelsScaled,
+			true, // hasBorder
+			true, // isEnabled
+			acknowledge,
+			universe // context
+		);
+
+		childControls.push(buttonAcknowledge);
 
 		var returnValue = new ControlContainer
 		(
 			"containerConfirm",
 			containerPosScaled,
 			containerSizeScaled,
-			// children
-			[
-				new ControlLabel
-				(
-					"labelMessage",
-					containerSizeHalfScaled.addDimensions(0, -buttonSizeScaled.y / 2, 0), // pos
-					new Coords(containerSizeScaled.x, fontHeightInPixelsScaled), // size
-					true, // isTextCentered
-					message,
-					fontHeightInPixelsScaled
-				),
-
-				new ControlButton
-				(
-					"buttonAcknowledge",
-					buttonPosScaled,
-					buttonSizeScaled,
-					textAcknowledge,
-					fontHeightInPixelsScaled,
-					true, // hasBorder
-					true, // isEnabled
-					acknowledge, 
-					universe // context
-				),
-			]
+			childControls
 		);
 
 		return returnValue;
@@ -1003,15 +1021,43 @@ function ControlBuilder(styles)
 					function click(universe)
 					{
 						var world = universe.world;
-						var venueNext = new VenueWorld(world);
-						if (world.dateSaved == null)
+						var venueWorld = new VenueWorld(world);
+						var venueNext;
+						if (world.dateSaved != null)
 						{
-							venueNext = new VenueVideo
+							venueNext = venueWorld;
+						}
+						else
+						{
+							var textInstructions =
+								universe.mediaLibrary.textStringGetByName("Instructions");
+							var instructions = textInstructions.value;
+							var controlInstructions = universe.controlBuilder.message
+							(
+								universe,
+								size,
+								instructions,
+								function acknowledge(universe)
+								{
+									universe.venueNext = new VenueFader
+									(
+										venueWorld, universe.venueCurrent
+									);
+								}
+							);
+
+							var venueInstructions =
+								new VenueControls(controlInstructions);
+
+							var venueMovie = new VenueVideo
 							(
 								"Movie", // videoName
-								venueNext
+								venueInstructions // fader implicit
 							);
+
+							venueNext = venueMovie;
 						}
+
 						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
 					},

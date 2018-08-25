@@ -3,7 +3,7 @@ function VenueFader
 (
 	venueToFadeTo,
 	venueToFadeFrom,
-	backgroundColor, 
+	backgroundColor,
 	millisecondsPerFade
 )
 {
@@ -25,7 +25,7 @@ function VenueFader
 		this.venueIndexCurrent = 0;
 	}
 
-	this.backgroundColor = 
+	this.backgroundColor =
 		(backgroundColor == null ? Color.Instances().Black : backgroundColor);
 }
 
@@ -41,9 +41,7 @@ function VenueFader
 
 	VenueFader.prototype.updateForTimerTick = function(universe)
 	{
-		var venueCurrent = this.venueCurrent();
-
-		venueCurrent.draw(universe);
+		this.draw(universe);
 
 		var now = new Date();
 
@@ -82,7 +80,7 @@ function VenueFader
 			if (fractionOfFadeCompleted > 1)
 			{
 				fractionOfFadeCompleted = 1;
-				universe.venueNext = venueCurrent;
+				universe.venueNext = this.venueCurrent();
 			}
 
 			alphaOfFadeColor = 1 - fractionOfFadeCompleted;
@@ -112,6 +110,10 @@ function VenueFader
 
 	VenueFader.prototype.draw = function(universe)
 	{
-		this.venueCurrent().draw(universe);
+		var venueCurrent = this.venueCurrent();
+		if (venueCurrent != null)
+		{
+			venueCurrent.draw(universe);
+		}
 	}
 }

@@ -6,20 +6,24 @@ function main()
 	(
 		// images
 		[
-			new Image("Title", "../Media/Title.png"),
+			new Image("Title", "../Content/Images/Title.png"),
 		],
 		// sounds
 		[
-			new Sound("Sound", "../Media/Sound.wav", false),
-			new Sound("Music", "../Media/Music.mp3", true),
+			new Sound("Sound", "../Content/Audio/Effects/Sound.wav", false),
+			new Sound("Music", "../Content/Audio/Music/Music.mp3", true),
 		],
 		// videos
 		[
-			new Video("Movie", "../Media/Movie.webm"),
+			new Video("Movie", "../Content/Video/Movie.webm"),
 		],
 		// fonts
 		[
-			new Font("Font", "../Media/Font.ttf")
+			new Font("Font", "../Content/Fonts/Font.ttf"),
+		],
+		// textStrings
+		[
+			new TextString("Instructions", "../Content/Text/Instructions.txt"),
 		]
 	);
 
