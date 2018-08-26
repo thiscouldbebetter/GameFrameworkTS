@@ -90,6 +90,7 @@ function Place(entities)
 			"locatable",
 			"constrainable",
 			"collidable",
+			"idleable",
 			"actor",
 			"playable",
 			"ephemeral",

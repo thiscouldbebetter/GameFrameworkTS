@@ -12,7 +12,6 @@ function Playable()
 		var camera = place.camera;
 
 		var playerLoc = player.locatable.loc;
-		playerLoc.orientation.forwardSet(Coords.Instances.Zeroes);
 
 		var inputHelper = universe.inputHelper;
 		if (inputHelper.isMouseClicked() == true)

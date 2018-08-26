@@ -293,6 +293,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			new Drawable(playerVisual),
 			new ItemHolder(),
 			new Playable(),
+			new Idleable(),
 		]
 	);
 

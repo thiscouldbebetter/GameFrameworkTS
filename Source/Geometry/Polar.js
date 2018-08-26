@@ -13,6 +13,12 @@ function Polar(azimuthInTurns, radius, elevationInTurns)
 
 	// instance methods
 
+	Polar.prototype.addToAzimuthInTurns = function(turnsToAdd)
+	{
+		this.azimuthInTurns += turnsToAdd;
+		return this;
+	}
+
 	Polar.prototype.fromCoords = function(coordsToConvert)
 	{
 		this.azimuthInTurns = 
@@ -70,5 +76,18 @@ function Polar(azimuthInTurns, radius, elevationInTurns)
 		).multiplyScalar(this.radius);
 
 		return coords;
+	}
+
+	Polar.prototype.wrap = function()
+	{
+		while (this.azimuthInTurns < 0)
+		{
+			this.azimuthInTurns++;
+		}
+		while (this.azimuthInTurns >= 1)
+		{
+			this.azimuthInTurns--;
+		}
+		return this;
 	}
 }
