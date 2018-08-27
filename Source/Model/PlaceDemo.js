@@ -96,11 +96,11 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 				var itemProjectilePos = actorPos.clone().add
 				(
 					actorDirection.clone().multiplyScalar(actorRadius).double().double()
-				); 
+				);
 				var itemProjectileLoc = new Location(itemProjectilePos);
 				itemProjectileLoc.vel.overwriteWith(actorVel).double();
 
-				var itemProjectileCollider = 
+				var itemProjectileCollider =
 					new Sphere(itemProjectilePos, itemProjectileRadius);
 
 				var itemProjectileCollide = function(universe, world, place, entityPlayer, entityOther)
@@ -120,7 +120,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 						new Locatable( itemProjectileLoc ),
 						new Collidable
 						(
-							itemProjectileCollider, 
+							itemProjectileCollider,
 							[ "killable" ],
 							itemProjectileCollide
 						),

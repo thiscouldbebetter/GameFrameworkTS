@@ -46,7 +46,7 @@ function Playable()
 			{
 				var actionName = mapping.actionName;
 				var action = actions[actionName];
-				action.perform(universe, world, place, player); 
+				action.perform(universe, world, place, player);
 			}
 		}
 	}

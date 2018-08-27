@@ -18,6 +18,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 	this.drawLoc = new Location(this.drawPos);
 	this.drawPos2 = new Coords();
 	this.drawPos3 = new Coords();
+	this.sizeHalf = new Coords();
 }
 
 {
@@ -307,6 +308,19 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 				size.x, size.y
 			);
 		}
+	}
+
+	Display.prototype.drawRectangleCentered = function
+	(
+		pos,
+		size,
+		colorFill,
+		colorBorder
+	)
+	{
+		var sizeHalf = this.sizeHalf.overwriteWith(size).half();
+		var posAdjusted = this.drawPos.overwriteWith(pos).subtract(sizeHalf);
+		this.drawRectangle(posAdjusted, size, colorFill, colorBorder);
 	}
 
 	Display.prototype.drawText = function

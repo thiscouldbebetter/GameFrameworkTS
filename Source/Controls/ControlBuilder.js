@@ -11,6 +11,67 @@ function ControlBuilder(styles)
 	this.sizeMultiplier = new Coords();
 }
 {
+	ControlBuilder.prototype.choice = function
+	(
+		universe, size, message, optionNames, optionFunctions
+	)
+	{
+		if (size == null)
+		{
+			size = universe.display.sizeDefault;
+		}
+
+		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
+
+		var returnValue = new ControlContainer
+		(
+			"containerConfirm",
+			new Coords(0, 0).multiply(sizeMultiplier), // pos
+			new Coords(200, 150).multiply(sizeMultiplier), // size
+			// children
+			[
+				new ControlLabel
+				(
+					"labelMessage",
+					new Coords(100, 65).multiply(sizeMultiplier), // pos
+					new Coords(200, 25).multiply(sizeMultiplier), // size
+					true, // isTextCentered
+					message,
+					this.fontHeightInPixelsBase * sizeMultiplier.y
+				),
+
+				new ControlButton
+				(
+					"buttonOption0",
+					new Coords(50, 100).multiply(sizeMultiplier), // pos
+					new Coords(45, 25).multiply(sizeMultiplier), // size
+					optionNames[0],
+					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					true, // hasBorder
+					true, // isEnabled
+					optionFunctions[0],
+					universe // context
+				),
+
+				new ControlButton
+				(
+					"buttonOption1",
+					new Coords(100, 100).multiply(sizeMultiplier), // pos
+					new Coords(45, 25).multiply(sizeMultiplier), // size
+					optionNames[1],
+					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					true, // hasBorder
+					true, // isEnabled
+					optionFunctions[1],
+					universe // context
+				),
+			]
+		);
+
+		return returnValue;
+
+	}
+
 	ControlBuilder.prototype.configure = function(universe, size)
 	{
 		if (size == null)
@@ -253,59 +314,10 @@ function ControlBuilder(styles)
 
 	ControlBuilder.prototype.confirm = function(universe, size, message, confirm, cancel)
 	{
-		if (size == null)
-		{
-			size = universe.display.sizeDefault;
-		}
-
-		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
-
-		var returnValue = new ControlContainer
+		return this.choice
 		(
-			"containerConfirm",
-			new Coords(0, 0).multiply(sizeMultiplier), // pos
-			new Coords(200, 150).multiply(sizeMultiplier), // size
-			// children
-			[
-				new ControlLabel
-				(
-					"labelMessage",
-					new Coords(100, 65).multiply(sizeMultiplier), // pos
-					new Coords(200, 25).multiply(sizeMultiplier), // size
-					true, // isTextCentered
-					message,
-					this.fontHeightInPixelsBase * sizeMultiplier.y
-				),
-
-				new ControlButton
-				(
-					"buttonConfirm",
-					new Coords(50, 100).multiply(sizeMultiplier), // pos
-					new Coords(45, 25).multiply(sizeMultiplier), // size
-					"Confirm",
-					this.fontHeightInPixelsBase * sizeMultiplier.y,
-					true, // hasBorder
-					true, // isEnabled
-					confirm,
-					universe // context
-				),
-
-				new ControlButton
-				(
-					"buttonCancel",
-					new Coords(100, 100).multiply(sizeMultiplier), // pos
-					new Coords(45, 25).multiply(sizeMultiplier), // size
-					"Cancel",
-					this.fontHeightInPixelsBase * sizeMultiplier.y,
-					true, // hasBorder
-					true, // isEnabled
-					cancel,
-					universe // context
-				),
-			]
+			universe, size, message, ["Confirm", "Cancel"], [confirm, cancel]
 		);
-
-		return returnValue;
 	}
 
 	ControlBuilder.prototype.message = function(universe, size, message, acknowledge)

@@ -7,6 +7,8 @@ function InputHelper()
 	this.mouseMovePos = new Coords(0, 0);
 	this.mouseMovePosPrev = new Coords(0, 0);
 	this.mouseMovePosNext = new Coords(0, 0);
+
+	this.keysToPreventDefaultsFor = [ "Tab" ];
 }
 
 {
@@ -68,6 +70,15 @@ function InputHelper()
 		{
 			delete this.inputsActive[inputReleased];
 			this.inputsActive.remove(inputReleased);
+		}
+	}
+
+	InputHelper.prototype.inputsRemoveAll = function()
+	{
+		for (var i = 0; i < this.inputsPressed.length; i++)
+		{
+			var input = this.inputsPressed[i];
+			this.inputRemove(input);
 		}
 	}
 
@@ -161,9 +172,13 @@ function InputHelper()
 
 	InputHelper.prototype.handleEventKeyDown = function(event)
 	{
-		//event.preventDefault();
-
 		var inputPressed = event.key;
+
+		if (this.keysToPreventDefaultsFor.contains(inputPressed) == true)
+		{
+			event.preventDefault();
+		}
+
 		if (inputPressed.length == 1)
 		{
 			inputPressed = "_" + inputPressed;

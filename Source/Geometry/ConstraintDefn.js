@@ -52,10 +52,27 @@ function ConstraintDefn(name, constrain)
 				var entityLoc = entity.locatable.loc;
 				var entityVel = entityLoc.vel;
 				var speed = entityVel.magnitude();
-				var friction = speed * targetFrictionCoefficient;
+				var frictionMagnitude = speed * targetFrictionCoefficient;
 				entityVel.add
 				(
-					entityVel.clone().multiplyScalar(-friction)
+					entityVel.clone().multiplyScalar(-frictionMagnitude)
+				);
+			}
+		);
+
+		this.FrictionDry = new ConstraintDefn
+		(
+			"FrictionDry",
+			function constrain(universe, world, place, entity, constraint)
+			{
+				var targetFrictionCoefficient = constraint.target;
+				var frictionMagnitude = targetFrictionCoefficient;
+				var entityLoc = entity.locatable.loc;
+				var entityVel = entityLoc.vel;
+				var entityDirection = entityVel.clone().normalize();
+				entityVel.add
+				(
+					entityDirection.multiplyScalar(-frictionMagnitude)
 				);
 			}
 		);
@@ -109,6 +126,22 @@ function ConstraintDefn(name, constrain)
 				if (speed > targetSpeedMax)
 				{
 					entityVel.normalize().multiplyScalar(targetSpeedMax);
+				}
+			}
+		);
+
+		this.StopBelowSpeedMin = new ConstraintDefn
+		(
+			"StopBelowSpeedMin",
+			function constrain(universe, world, place, entity, constraint)
+			{
+				var targetSpeedMin = constraint.target;
+				var entityLoc = entity.locatable.loc;
+				var entityVel = entityLoc.vel;
+				var speed = entityVel.magnitude();
+				if (speed < targetSpeedMin)
+				{
+					entityVel.clear();
 				}
 			}
 		);
