@@ -10,15 +10,15 @@ function CollisionHelperTests()
 		var meshCubeUnitCenteredAtOrigin = Mesh.cubeUnit();
 		var meshCubeUnitInPositiveOctant = Mesh.cubeUnit().transform
 		(
-			new TransformTranslate(new Coords(1, 1, 1))
+			new Transform_Translate(new Coords(1, 1, 1))
 		);
 		var meshCubeUnitInNegativeOctant = Mesh.cubeUnit().transform
 		(
-			new TransformTranslate(new Coords(-1, -1, -1))
+			new Transform_Translate(new Coords(-1, -1, -1))
 		);
 		var meshCubeUnitRotatedAtOrigin = Mesh.cubeUnit().transform
 		(
-			new TransformOrient
+			new Transform_Orient
 			(
 				new Orientation
 				(

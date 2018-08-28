@@ -1,6 +1,6 @@
 function main()
 {
-	//localStorage.clear();
+	localStorage.clear();
 
 	var mediaLibrary = new MediaLibrary
 	(

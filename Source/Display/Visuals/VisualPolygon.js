@@ -6,14 +6,14 @@ function VisualPolygon(verticesAsPath, colorFill, colorBorder)
 	this.colorBorder = colorBorder;
 
 	this.verticesAsPathTransformed = this.verticesAsPath.clone();
-	this.transformTranslate = new TransformTranslate(new Coords());
+	this.transformTranslate = new Transform_Translate(new Coords());
 }
 
 {
 	VisualPolygon.prototype.draw = function(universe, world, display, drawable)
 	{
 		var pos = drawable.loc.pos;
-		this.transformTranslate.offset.overwriteWith(drawable.loc.pos);
+		this.transformTranslate.displacement.overwriteWith(drawable.loc.pos);
 
 		this.verticesAsPathTransformed.overwriteWith
 		(
