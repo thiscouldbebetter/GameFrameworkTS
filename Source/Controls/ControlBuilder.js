@@ -23,49 +23,63 @@ function ControlBuilder(styles)
 
 		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
 
+		var labelMessage = new ControlLabel
+		(
+			"labelMessage",
+			new Coords(100, 65).multiply(sizeMultiplier), // pos
+			new Coords(200, 25).multiply(sizeMultiplier), // size
+			true, // isTextCentered
+			message,
+			this.fontHeightInPixelsBase * sizeMultiplier.y
+		);
+
+		var childControls = [ labelMessage ];
+
+		var numberOfOptions = optionNames.length;
+
+		var buttonWidth = 55;
+		var buttonSize = new Coords(buttonWidth, 25).multiply(sizeMultiplier);
+		var spaceBetweenButtons = 5;
+		var buttonMarginLeftRight =
+			(
+				this.sizeBase.x
+				- (buttonWidth * numberOfOptions)
+				- (spaceBetweenButtons * (numberOfOptions - 1))
+			) / 2;
+
+		for (var i = 0; i < numberOfOptions; i++)
+		{
+			var button = new ControlButton
+			(
+				"buttonOption" + i,
+				new Coords
+				(
+					buttonMarginLeftRight + i * (buttonWidth + spaceBetweenButtons),
+					100
+				).multiply(sizeMultiplier), // pos
+				buttonSize,
+				optionNames[i],
+				this.fontHeightInPixelsBase * sizeMultiplier.y,
+				true, // hasBorder
+				true, // isEnabled
+				optionFunctions[i],
+				universe // context
+			);
+
+			childControls.push(button);
+		}
+
+		var containerSizeScaled = size.clone().clearZ();
+		var display = universe.display;
+		var displaySize = display.sizeDefault.clone().clearZ();
+		var containerPosScaled = displaySize.clone().subtract(containerSizeScaled).half();
+
 		var returnValue = new ControlContainer
 		(
-			"containerConfirm",
-			new Coords(0, 0).multiply(sizeMultiplier), // pos
-			new Coords(200, 150).multiply(sizeMultiplier), // size
-			// children
-			[
-				new ControlLabel
-				(
-					"labelMessage",
-					new Coords(100, 65).multiply(sizeMultiplier), // pos
-					new Coords(200, 25).multiply(sizeMultiplier), // size
-					true, // isTextCentered
-					message,
-					this.fontHeightInPixelsBase * sizeMultiplier.y
-				),
-
-				new ControlButton
-				(
-					"buttonOption0",
-					new Coords(50, 100).multiply(sizeMultiplier), // pos
-					new Coords(45, 25).multiply(sizeMultiplier), // size
-					optionNames[0],
-					this.fontHeightInPixelsBase * sizeMultiplier.y,
-					true, // hasBorder
-					true, // isEnabled
-					optionFunctions[0],
-					universe // context
-				),
-
-				new ControlButton
-				(
-					"buttonOption1",
-					new Coords(100, 100).multiply(sizeMultiplier), // pos
-					new Coords(45, 25).multiply(sizeMultiplier), // size
-					optionNames[1],
-					this.fontHeightInPixelsBase * sizeMultiplier.y,
-					true, // hasBorder
-					true, // isEnabled
-					optionFunctions[1],
-					universe // context
-				),
-			]
+			"containerChoice",
+			containerPosScaled,
+			containerSizeScaled,
+			childControls
 		);
 
 		return returnValue;
@@ -322,6 +336,16 @@ function ControlBuilder(styles)
 
 	ControlBuilder.prototype.message = function(universe, size, message, acknowledge)
 	{
+		return this.choice
+		(
+			universe, size, message, ["Acknowledge"], [acknowledge]
+		);
+
+	}
+
+	/*
+	ControlBuilder.prototype.message = function(universe, size, message, acknowledge)
+	{
 		var display = universe.display;
 		var displaySize = display.sizeDefault.clone().clearZ();
 
@@ -398,6 +422,7 @@ function ControlBuilder(styles)
 
 		return returnValue;
 	}
+	*/
 
 	ControlBuilder.prototype.profileDetail = function(universe, size)
 	{
