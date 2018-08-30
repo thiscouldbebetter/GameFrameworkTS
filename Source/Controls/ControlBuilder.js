@@ -954,12 +954,12 @@ function ControlBuilder(styles)
 			new Coords(200, 150).multiply(sizeMultiplier), // size
 			// children
 			[
-				new ControlImage
+				new ControlVisual
 				(
 					"imageTitle",
 					new Coords(0, 0).multiply(sizeMultiplier),
 					new Coords(200, 150).multiply(sizeMultiplier), // size
-					universe.mediaLibrary.imageGetByName("Title")
+					new VisualImage("Title", size),
 				),
 
 				new ControlButton
