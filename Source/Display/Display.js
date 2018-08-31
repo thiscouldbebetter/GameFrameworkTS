@@ -180,7 +180,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		this.graphics.translate(center.x, center.y);
 
 		var rotationInRadians = rotationInTurns * Polar.RadiansPerTurn;
-		this.graphics.rotate(rotationInRadians); 
+		this.graphics.rotate(rotationInRadians);
 
 		var ratioOfHeightToWidth = semiminorAxis / semimajorAxis;
 		this.graphics.scale(1, ratioOfHeightToWidth);

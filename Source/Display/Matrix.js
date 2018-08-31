@@ -63,8 +63,8 @@ function Matrix(values)
 				{
 					// This appears backwards,
 					// but the other way doesn't work?
-					valueSoFar += 
-						other.values[y * 4 + i] 
+					valueSoFar +=
+						other.values[y * 4 + i]
 						* this.values[i * 4 + x];
 				}
 
@@ -167,7 +167,7 @@ function Matrix(values)
 		return this;
 	}
 
-	Matrix.prototype.overwriteWithPerspectiveForCamera = function(camera) 
+	Matrix.prototype.overwriteWithPerspectiveForCamera = function(camera)
 	{
 		var viewSize = camera.viewSize;
 		var clipDistanceNear = .001;//camera.focalLength;
@@ -186,12 +186,12 @@ function Matrix(values)
 		scaleFactorY *= scaleFactorMultiplier;
 
 		var clipRange = clipDistanceNear - clipDistanceFar;
-		var distanceFromFocusToClipPlaneFar = clipDistanceFar + clipDistanceNear;  
+		var distanceFromFocusToClipPlaneFar = clipDistanceFar + clipDistanceNear;
 		var clipDistanceSumOverDifference = distanceFromFocusToClipPlaneFar / clipRange;
-		var clipDistanceProductOverDifference = 
+		var clipDistanceProductOverDifference =
 		(
-			clipDistanceFar 
-			* 
+			clipDistanceFar
+			*
 			clipDistanceNear
 		) / clipRange;
 

@@ -42,7 +42,7 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 
 		gl.uniformMatrix4fv
 		(
-			shaderProgram.cameraMatrix, 
+			shaderProgram.cameraMatrix,
 			false, // transpose
 			matrixCamera.toWebGLArray()
 		);
@@ -91,7 +91,7 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 				var faceNormal = faceGeometry.plane().normal;
 				var vertexNormalsForFaceVertices = mesh.vertexNormalsForFaceVertices;
 
-				var vertexIndicesForTriangles = 
+				var vertexIndicesForTriangles =
 				[
 					[0, 1, 2]
 				];
@@ -125,9 +125,9 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 							vertexColor.componentsRGBA
 						);
 
-						var vertexNormal = 
+						var vertexNormal =
 						(
-							vertexNormalsForFaceVertices == null 
+							vertexNormalsForFaceVertices == null
 							? faceNormal
 							: vertexNormalsForFaceVertices[f][vertexIndex]
 						);
@@ -137,9 +137,9 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 							vertexNormal.dimensions()
 						);
 
-						var vertexTextureUV = 
+						var vertexTextureUV =
 						(
-							faceTextures == null 
+							faceTextures == null
 							? new Coords(-1, -1)
 							: faceTextures[f] == null
 							? new Coords(-1, -1)
@@ -163,17 +163,17 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 			gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
 			gl.bufferData
 			(
-				gl.ARRAY_BUFFER, 
-				new Float32Array(vertexColorsAsFloatArray), 
+				gl.ARRAY_BUFFER,
+				new Float32Array(vertexColorsAsFloatArray),
 				gl.STATIC_DRAW
 			);
 			gl.vertexAttribPointer
 			(
-				shaderProgram.vertexColorAttribute, 
-				Color.NumberOfComponentsRGBA, 
-				gl.FLOAT, 
-				false, 
-				0, 
+				shaderProgram.vertexColorAttribute,
+				Color.NumberOfComponentsRGBA,
+				gl.FLOAT,
+				false,
+				0,
 				0
 			);
 
@@ -181,17 +181,17 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 			gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
 			gl.bufferData
 			(
-				gl.ARRAY_BUFFER, 
-				new Float32Array(vertexNormalsAsFloatArray), 
+				gl.ARRAY_BUFFER,
+				new Float32Array(vertexNormalsAsFloatArray),
 				gl.STATIC_DRAW
 			);
 			gl.vertexAttribPointer
 			(
-				shaderProgram.vertexNormalAttribute, 
-				Coords.NumberOfDimensions, 
-				gl.FLOAT, 
-				false, 
-				0, 
+				shaderProgram.vertexNormalAttribute,
+				Coords.NumberOfDimensions,
+				gl.FLOAT,
+				false,
+				0,
 				0
 			);
 
@@ -199,17 +199,17 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 			gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 			gl.bufferData
 			(
-				gl.ARRAY_BUFFER, 
-				new Float32Array(vertexPositionsAsFloatArray), 
+				gl.ARRAY_BUFFER,
+				new Float32Array(vertexPositionsAsFloatArray),
 				gl.STATIC_DRAW
 			);
 			gl.vertexAttribPointer
 			(
-				shaderProgram.vertexPositionAttribute, 
-				Coords.NumberOfDimensions, 
-				gl.FLOAT, 
-				false, 
-				0, 
+				shaderProgram.vertexPositionAttribute,
+				Coords.NumberOfDimensions,
+				gl.FLOAT,
+				false,
+				0,
 				0
 			);
 
@@ -235,24 +235,24 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 			gl.bindBuffer(gl.ARRAY_BUFFER, textureBuffer);
 			gl.bufferData
 			(
-				gl.ARRAY_BUFFER, 
-				new Float32Array(vertexTextureUVsAsFloatArray), 
+				gl.ARRAY_BUFFER,
+				new Float32Array(vertexTextureUVsAsFloatArray),
 				gl.STATIC_DRAW
 			);
 			gl.vertexAttribPointer
 			(
-				shaderProgram.vertexTextureUVAttribute, 
-				2, 
-				gl.FLOAT, 
-				false, 
-				0, 
+				shaderProgram.vertexTextureUVAttribute,
+				2,
+				gl.FLOAT,
+				false,
+				0,
 				0
 			);
 
 			gl.drawArrays
 			(
 				gl.TRIANGLES,
-				0, 
+				0,
 				numberOfTrianglesSoFar * Display3D.VerticesPerTriangle
 			);
 		} // end for each material
@@ -279,14 +279,14 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 
 		gl.uniformMatrix4fv
 		(
-			shaderProgram.normalMatrix, 
+			shaderProgram.normalMatrix,
 			false, // transpose
 			matrixOrient.toWebGLArray()
 		);
 
 		gl.uniformMatrix4fv
 		(
-			shaderProgram.entityMatrix, 
+			shaderProgram.entityMatrix,
 			false, // transpose
 			matrixEntity.toWebGLArray()
 		);
@@ -353,7 +353,7 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 
 		gl.uniform3fv
 		(
-			shaderProgram.lightDirection, 
+			shaderProgram.lightDirection,
 			WebGLContext.coordsToWebGLArray(lighting.direction)
 		);
 

@@ -41,9 +41,9 @@ function MeshTextured(geometry, materials, faceTextures, vertexGroups)
 			(
 				materialName,
 				[
-					new Coords(0, 0), 
-					new Coords(1, 0), 
-					new Coords(1, 1), 
+					new Coords(0, 0),
+					new Coords(1, 0),
+					new Coords(1, 1),
 					new Coords(1, 0)
 				]
 			);
@@ -66,12 +66,12 @@ function MeshTextured(geometry, materials, faceTextures, vertexGroups)
 				var faceTexture = this.faceTextures[f];
 
 				var faceMaterialName = faceTexture.materialName;
-				var faceIndicesForMaterial = 
+				var faceIndicesForMaterial =
 					this._faceIndicesByMaterial[faceMaterialName];
 				if (faceIndicesForMaterial == null)
 				{
 					faceIndicesForMaterial = [];
-					this._faceIndicesByMaterial[faceMaterialName] = 
+					this._faceIndicesByMaterial[faceMaterialName] =
 						faceIndicesForMaterial;
 				}
 				faceIndicesForMaterial.push(f);

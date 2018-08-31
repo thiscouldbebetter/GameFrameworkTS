@@ -14,9 +14,9 @@ function VisualEllipse(semimajorAxis, semiminorAxis, rotationInTurns, colorFill,
 		var drawableLoc = drawable.loc;
 		display.drawEllipse
 		(
-			drawableLoc.pos, 
-			this.semimajorAxis, this.semiminorAxis, 
-			this.rotationInTurns, 
+			drawableLoc.pos,
+			this.semimajorAxis, this.semiminorAxis,
+			this.rotationInTurns,
 			this.colorFill, this.colorBorder
 		);
 	}

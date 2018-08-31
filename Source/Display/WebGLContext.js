@@ -30,9 +30,9 @@ function WebGLContext(canvas)
 		var colorBackgroundComponentsRGBA = colorBackground.componentsRGBA;
 		gl.clearColor
 		(
-			colorBackgroundComponentsRGBA[0], 
-			colorBackgroundComponentsRGBA[1], 
-			colorBackgroundComponentsRGBA[2], 
+			colorBackgroundComponentsRGBA[0],
+			colorBackgroundComponentsRGBA[1],
+			colorBackgroundComponentsRGBA[2],
 			colorBackgroundComponentsRGBA[3]
 		);
 
@@ -59,7 +59,7 @@ function WebGLContext(canvas)
 	WebGLContext.prototype.buildShaderProgram_FragmentShader = function(gl)
 	{
 		var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
-		var fragmentShaderCode = 
+		var fragmentShaderCode =
 			"precision mediump float;"
 			+ "uniform sampler2D uSampler;"
 			+ "varying vec4 vColor;"
@@ -83,7 +83,7 @@ function WebGLContext(canvas)
 	WebGLContext.prototype.buildShaderProgram_VertexShader = function(gl)
 	{
 		var vertexShader = gl.createShader(gl.VERTEX_SHADER);
-		var vertexShaderCode = 
+		var vertexShaderCode =
 			"attribute vec4 aVertexColor;"
 			+ "attribute vec3 aVertexNormal;"
 			+ "attribute vec3 aVertexPosition;"
@@ -166,13 +166,13 @@ function WebGLContext(canvas)
 
 		shaderProgram.entityMatrix = gl.getUniformLocation
 		(
-			shaderProgram, 
+			shaderProgram,
 			"uEntityMatrix"
 		);
 
 		shaderProgram.cameraMatrix = gl.getUniformLocation
 		(
-			shaderProgram, 
+			shaderProgram,
 			"uCameraMatrix"
 		);
 
@@ -184,7 +184,7 @@ function WebGLContext(canvas)
 
 		shaderProgram.lightDirection = gl.getUniformLocation
 		(
-			shaderProgram, 
+			shaderProgram,
 			"uLightDirection"
 		);
 
@@ -196,7 +196,7 @@ function WebGLContext(canvas)
 
 		shaderProgram.normalMatrix = gl.getUniformLocation
 		(
-			shaderProgram, 
+			shaderProgram,
 			"uNormalMatrix"
 		);
 	}
