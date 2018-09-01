@@ -45,56 +45,56 @@ function CollisionHelperTests()
 		var doCollide = collisionHelper.doCollidersCollide(collider0, collider1);
 		Test.assertExpectedEqualToActual(false, doCollide);
 	}
-	
+
 	CollisionHelperTests.prototype.edgesAndFaces = function()
 	{
 		var collisionHelper = this.collisionHelper;
-		
+
 		var edgeZAxisUnit = new Edge([new Coords(0, 0, -1), new Coords(0, 0, 1)]);
 		var edgeZAxisUnitReversed = new Edge([new Coords(0, 0, 1), new Coords(0, 0, -1)]);
 		var edgeZAxis0To1 = new Edge([new Coords(0, 0, 0), new Coords(0, 0, 1)]);
 		var edgeZAxis0To2 = new Edge([new Coords(0, 0, 0), new Coords(0, 0, 2)]);
 		var edgeZAxis1To2 = new Edge([new Coords(0, 0, 1), new Coords(0, 0, 2)]);
-		
+
 		var edgeZwardUnitAtX2 = new Edge([new Coords(2, 0, -1), new Coords(2, 0, 1)]);
-		
+
 		var faceSquareUnitZwardAtOrigin = new Face
 		([
 			new Coords(-1, -1, 0), new Coords(1, -1, 0), new Coords(1, 1, 0), new Coords(-1, 1, 0)
 		]);
-		
+
 		var faceSquareUnitZwardAtZ1 = new Face
 		([
 			new Coords(-1, -1, 1), new Coords(1, -1, 1), new Coords(1, 1, 1), new Coords(-1, 1, 1)
 		]);
-		
+
 		var doCollide = collisionHelper.doEdgeAndFaceCollide(edgeZAxisUnit, faceSquareUnitZwardAtOrigin)
 		Test.assertExpectedEqualToActual(true, doCollide);
-		
+
 		var doCollide = collisionHelper.doEdgeAndFaceCollide(edgeZAxisUnitReversed, faceSquareUnitZwardAtOrigin)
 		Test.assertExpectedEqualToActual(true, doCollide);
-				
+
 		var doCollide = collisionHelper.doEdgeAndFaceCollide(edgeZAxis0To1, faceSquareUnitZwardAtOrigin)
 		Test.assertExpectedEqualToActual(true, doCollide); // Touching.
-		
+
 		var doCollide = collisionHelper.doEdgeAndFaceCollide(edgeZAxis0To2, faceSquareUnitZwardAtOrigin)
 		Test.assertExpectedEqualToActual(true, doCollide); // Touching.
-		
+
 		var doCollide = collisionHelper.doEdgeAndFaceCollide(edgeZAxis0To2, faceSquareUnitZwardAtZ1)
 		Test.assertExpectedEqualToActual(true, doCollide);
-		
+
 		var doCollide = collisionHelper.doEdgeAndFaceCollide(edgeZAxis1To2, faceSquareUnitZwardAtOrigin)
-		Test.assertExpectedEqualToActual(false, doCollide);				
-		
+		Test.assertExpectedEqualToActual(false, doCollide);
+
 		var doCollide = collisionHelper.doEdgeAndFaceCollide(edgeZwardUnitAtX2, faceSquareUnitZwardAtOrigin)
-		Test.assertExpectedEqualToActual(false, doCollide);		
-		
+		Test.assertExpectedEqualToActual(false, doCollide);
+
 		var edgeFromWild = new Edge
 		([
 			new Coords(17, 164, -1),
 			new Coords(18, 169, -1),
 		]);
-		
+
 		var faceFromWild = new Face
 		([ 
 			new Coords(10, 165, -10),
@@ -102,27 +102,27 @@ function CollisionHelperTests()
 			new Coords(70, 165, 0),
 			new Coords(10, 165, 0),
 		]);
-		
+
 		var doCollide = collisionHelper.doEdgeAndFaceCollide(edgeFromWild, faceFromWild);
-		Test.assertExpectedEqualToActual(true, doCollide);				
-		
+		Test.assertExpectedEqualToActual(true, doCollide);
+
 		var edgeFromWild = new Edge
 		([
 			new Coords(0, 231, -1),
 			new Coords(0, 225.6, -1),
 		]);
-		
+
 		var faceFromWild = new Face
 		([ 
 			new Coords(10, 230, -10),
 			new Coords(-10, 230, -10),
 			new Coords(-10, 230, 0),
-			new Coords(10, 230, 0),	
+			new Coords(10, 230, 0),
 		]);
-		
+
 		var doCollide = collisionHelper.doEdgeAndFaceCollide(edgeFromWild, faceFromWild);
-		Test.assertExpectedEqualToActual(true, doCollide);				
-		
+		Test.assertExpectedEqualToActual(true, doCollide);
+
 	}
 
 	CollisionHelperTests.prototype.spheresAndShells = function()
