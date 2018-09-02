@@ -154,6 +154,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 	// entities
 
 	var entityDimension = 10;
+	var entityDimensionHalf = entityDimension / 2;
 	var entitySize = new Coords(1, 1, 1).multiplyScalar(entityDimension);
 
 	var entities = [];
@@ -161,9 +162,9 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 	// player
 
 	var playerLoc = new Location(playerPos);
-	var playerCollider = new Sphere(playerLoc.pos, entityDimension / 2);
+	var playerCollider = new Sphere(playerLoc.pos, entityDimensionHalf);
 	var playerColor = "Gray";
-	var playerVisualBody = new VisualCircle(entityDimension / 2, playerColor);
+	var playerVisualBody = new VisualCircle(entityDimensionHalf, playerColor);
 	var playerVisualDirectionalIndicator = new VisualDirectional
 	(
 		new VisualNone(),
@@ -187,6 +188,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 		[
 			new VisualAnimation
 			(
+				"MoveRight",
 				5, // ticksPerFrame
 				[
 					new VisualOffset(visualRectangleSmall, new Coords(1, 0).multiplyScalar(entityDimension)),
@@ -196,6 +198,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			),
 			new VisualAnimation
 			(
+				"MoveDown",			
 				5, // ticksPerFrame
 				[
 					new VisualOffset(visualRectangleSmall, new Coords(0, 1).multiplyScalar(entityDimension)),
@@ -205,6 +208,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			),
 			new VisualAnimation
 			(
+				"MoveLeft",
 				5, // ticksPerFrame
 				[
 					new VisualOffset(visualRectangleSmall, new Coords(-1, 0).multiplyScalar(entityDimension)),
@@ -214,6 +218,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			),
 			new VisualAnimation
 			(
+				"MoveUp", 
 				5, // ticksPerFrame
 				[
 					new VisualOffset(visualRectangleSmall, new Coords(0, -1).multiplyScalar(entityDimension)),
@@ -261,6 +266,20 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			entityPlayer.itemHolder.itemAdd(item);
 			place.entitiesToRemove.push(entityOther);
 		}
+		else if (entityOther.talker != null)
+		{
+			entityOther.collidable.ticksUntilCanCollide = 100;
+			entityOther.drawable.animationRuns["Friendly"].ticksSinceStarted = 0;
+			
+			var venueMessage = new VenueMessage
+			(
+				"todo - conversation",
+				universe.venueCurrent, // venueNext
+				universe.venueCurrent, // venuePrev
+				universe.display.sizeDefault.clone()
+			);
+			universe.venueNext = venueMessage;			
+		}
 
 		if (messageToDisplay != null)
 		{
@@ -298,7 +317,105 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 	);
 
 	entities.push(playerEntity);
+	
+	// friendly
+	
+	var friendlyColor = "Green";
+	var friendlyPos = new Coords().randomize().multiply(this.size);
+	var friendlyLoc = new Location(friendlyPos);
 
+	var friendlyCollider = new Sphere(friendlyLoc.pos, entityDimensionHalf);
+	
+	var friendlyVisualNormal = new VisualEllipse
+	(
+		entityDimensionHalf, // semimajorAxis
+		entityDimensionHalf * .8,
+		.125, // rotationInTurns
+		friendlyColor,
+		null // colorBorder
+	);
+
+	var friendlyVisual = new VisualGroup
+	([
+		new VisualAnimation
+		(
+			"Friendly", 
+			100, // ticksPerFrame
+			// children
+			[
+				new VisualAnimation
+				(
+					"Blinking",
+					3, // ticksPerFrame
+					[
+						new VisualNone(),
+						friendlyVisualNormal
+					]
+				),
+				
+				friendlyVisualNormal
+			],
+			false // isRepeating
+		),
+		new VisualOffset
+		(
+			new VisualText("Talker", friendlyColor),
+			new Coords(0, entityDimension)
+		)
+	]);
+	
+	var friendlyEntity = new Entity
+	(
+		"Friendly",
+		[
+			new Locatable(friendlyLoc),
+			new Constrainable([constraintSpeedMax]),
+			new Collidable(friendlyCollider),
+			new Drawable(friendlyVisual),
+			new Talker("AnEveningWithProfessorSurly"),
+			new Actor
+			(
+				function activity(universe, world, place, entityActor)
+				{
+					var actor = entityActor.actor;
+					var targetPos = actor.target;
+					if (targetPos == null)
+					{
+						targetPos = 
+							new Coords().randomize().multiply(place.size);
+						actor.target = targetPos;
+					}
+
+					var actorLoc = entityActor.locatable.loc;
+					var actorPos = actorLoc.pos;
+					
+					var distanceToTarget = targetPos.clone().subtract
+					(
+						actorPos
+					).magnitude();
+
+					if (distanceToTarget >= 2)
+					{
+						actorLoc.vel.overwriteWith
+						(
+							targetPos
+						).subtract
+						(
+							actorPos
+						).normalize();
+					}
+					else
+					{
+						actorPos.overwriteWith(targetPos);
+						actor.target = null;
+					}
+				}
+			),
+		]
+	);
+
+	entities.push(friendlyEntity);
+	
 	// enemy
 
 	var damagerColor = "Red";
@@ -500,7 +617,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 	var itemKeyColor = "Yellow";
 	var itemKeyVisual = new VisualGroup
 	([
-		new VisualCircle(entityDimension / 2, itemKeyColor),
+		new VisualCircle(entityDimensionHalf, itemKeyColor),
 		new VisualOffset
 		(
 			new VisualText("Key", itemKeyColor),
@@ -515,7 +632,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 	for (var i = 0; i < numberOfKeysToUnlockGoal; i++)
 	{
 		var itemKeyPos = new Coords().randomize().multiply(sizeMinusMargins);
-		var itemKeyCollider = new Sphere(itemKeyPos, entityDimension / 2);
+		var itemKeyCollider = new Sphere(itemKeyPos, entityDimensionHalf);
 
 		var itemKeyEntity = new Entity
 		(
@@ -534,7 +651,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 	var itemWeaponColor = "Cyan";
 	var itemWeaponVisual = new VisualGroup
 	([
-		new VisualCircle(entityDimension / 2, itemWeaponColor),
+		new VisualCircle(entityDimensionHalf, itemWeaponColor),
 		new VisualOffset
 		(
 			new VisualText("Weapon", itemWeaponColor),
@@ -543,7 +660,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 	]);
 
 	var itemWeaponPos = new Coords().randomize().multiply(sizeMinusMargins);
-	var itemWeaponCollider = new Sphere(itemWeaponPos, entityDimension / 2);
+	var itemWeaponCollider = new Sphere(itemWeaponPos, entityDimensionHalf);
 
 	var itemWeaponEntity = new Entity
 	(

@@ -33,14 +33,24 @@ function Collidable(collider, entityPropertyNamesToCollideWith, collideEntities)
 						var entityOther = entitiesWithProperty[e];
 						if (entityOther != entity)
 						{
-							var colliderThis = entity.collidable.collider;
-							var colliderOther = entityOther.collidable.collider;
-
-							var collisionHelper = universe.collisionHelper;
-							var doEntitiesCollide = collisionHelper.doCollidersCollide(colliderThis, colliderOther);
-							if (doEntitiesCollide == true)
+							var collidableOther = entityOther.collidable;
+							if (collidableOther.ticksUntilCanCollide == 0)
 							{
-								this.collideEntities(universe, world, place, entity, entityOther);
+								var colliderThis = entity.collidable.collider;
+								var colliderOther = collidableOther.collider;
+
+								var collisionHelper = universe.collisionHelper;
+								var doEntitiesCollide = collisionHelper.doCollidersCollide
+								(
+									colliderThis, colliderOther
+								);
+								if (doEntitiesCollide == true)
+								{
+									this.collideEntities
+									(
+										universe, world, place, entity, entityOther
+									);
+								}
 							}
 						}
 					}

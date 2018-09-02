@@ -9,6 +9,11 @@ function NumberExtensions()
 	{
 		return (this >= min && this <= max);
 	}
+	
+	Number.prototype.trimToRangeMax = function(max)
+	{
+		return this.trimToRangeMinMax(0, max);
+	}
 
 	Number.prototype.trimToRangeMinMax = function(min, max)
 	{
