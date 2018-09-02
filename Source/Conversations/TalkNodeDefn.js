@@ -21,38 +21,40 @@ function TalkNodeDefn(name, execute, activate)
 	{
 		this.Activate = new TalkNodeDefn
 		(
-			"Activate", 	
-			function execute(conversationRun, scope, talkNode) 
+			"Activate",
+			function execute(conversationRun, scope, talkNode)
 			{
 				var talkNodeToActivateName = talkNode.parameters[0];
 				var isActiveValueToSet = talkNode.parameters[1];
 
 				var conversationDefn = conversationRun.defn;
-				var talkNodeToActivate 
+				var talkNodeToActivate
 					= conversationDefn.talkNodes[talkNodeToActivateName];
 				talkNodeToActivate.isActive = isActiveValueToSet;
 				scope.talkNodeAdvance(conversationRun);
 				conversationRun.update();
 			}
 		);
-				
+
 		this.Display = new TalkNodeDefn
 		(
 			"Display",
 			// execute
-			function(conversationRun, scope, talkNode) 
-			{ 
+			function(conversationRun, scope, talkNode)
+			{
 				scope.displayTextCurrent = talkNode.parameters;
 				scope.talkNodeAdvance(conversationRun);
+
+				conversationRun.talkNodesForTranscript.push(talkNode);
 			}
 		);
 
 		this.Goto = new TalkNodeDefn
 		(
-			"Goto", 
+			"Goto",
 			// execute
-			function(conversationRun, scope, talkNode) 
-			{ 
+			function(conversationRun, scope, talkNode)
+			{
 				var talkNodeNameNext = talkNode.parameters;
 				scope.talkNodeCurrent = conversationRun.defn.talkNodeByName
 				(
@@ -64,9 +66,9 @@ function TalkNodeDefn(name, execute, activate)
 
 		this.Option = new TalkNodeDefn
 		(
-			"Option", 
-			function execute(conversationRun, scope, talkNode) 
-			{ 
+			"Option",
+			function execute(conversationRun, scope, talkNode)
+			{
 				var talkNodesForOptions = scope.talkNodesForOptions;
 				if (talkNodesForOptions.contains(talkNode) == false)
 				{
@@ -75,7 +77,7 @@ function TalkNodeDefn(name, execute, activate)
 				}
 				scope.talkNodeAdvance(conversationRun);
 				conversationRun.update();
-			},
+							},
 			function activate(conversationRun, scope, talkNode)
 			{
 				scope.isPromptingForResponse = false;
@@ -84,14 +86,16 @@ function TalkNodeDefn(name, execute, activate)
 				var nameOfTalkNodeNext = talkNode.parameters[0];
 				var talkNodeNext = conversationRun.defn.talkNodeByName(nameOfTalkNodeNext);
 				scope.talkNodeCurrent = talkNodeNext;
+
+				conversationRun.talkNodesForTranscript.push(talkNode);
 			}
 		);
 
 		this.Push = new TalkNodeDefn
 		(
-			"Push", 
-			function execute(conversationRun, scope, talkNode) 
-			{ 
+			"Push",
+			function execute(conversationRun, scope, talkNode)
+			{
 				var runDefn = conversationRun.defn;
 				var talkNodeIndex = runDefn.talkNodes.indexOf(talkNode);
 				var talkNodeNext = runDefn.talkNodes[talkNodeIndex + 1];
@@ -107,9 +111,9 @@ function TalkNodeDefn(name, execute, activate)
 
 		this.Pop = new TalkNodeDefn
 		(
-			"Pop", 	
-			function execute(conversationRun, scope, talkNode) 
-			{ 	
+			"Pop",
+			function execute(conversationRun, scope, talkNode)
+			{
 				var scope = scope.parent;
 				conversationRun.scopeCurrent = scope;
 				scope.talkNodeCurrent = conversationRun.defn.talkNodeByName
@@ -122,34 +126,34 @@ function TalkNodeDefn(name, execute, activate)
 
 		this.Prompt = new TalkNodeDefn
 		(
-			"Prompt", 	
-			function execute(conversationRun, scope, talkNode) 
+			"Prompt",
+			function execute(conversationRun, scope, talkNode)
 			{
 				scope.isPromptingForResponse = true;
 			}
 		);
-		
+
 		this.Script = new TalkNodeDefn
 		(
-			"Script", 	
-			function(conversationRun, scope, talkNode) 
-			{ 
+			"Script",
+			function(conversationRun, scope, talkNode)
+			{
 				var scriptToRunAsString = talkNode.parameters;
 				scriptToRunAsString(conversationRun);
-				scope.talkNodeAdvance(conversationRun);				
-			}	
+				scope.talkNodeAdvance(conversationRun);
+			}
 		);
-		
+
 		this.Quit = new TalkNodeDefn
 		(
-			"Quit", 	
-			function(conversationRun, scope, talkNode) 
-			{ 
+			"Quit",
+			function(conversationRun, scope, talkNode)
+			{
 				// todo
-			}	
+			}
 		);
-		
-		this._All = 
+
+		this._All =
 		[
 			this.Activate,
 			this.Display,

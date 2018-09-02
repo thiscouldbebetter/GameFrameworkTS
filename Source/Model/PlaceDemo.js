@@ -198,7 +198,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			),
 			new VisualAnimation
 			(
-				"MoveDown",			
+				"MoveDown",
 				5, // ticksPerFrame
 				[
 					new VisualOffset(visualRectangleSmall, new Coords(0, 1).multiplyScalar(entityDimension)),
@@ -218,7 +218,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			),
 			new VisualAnimation
 			(
-				"MoveUp", 
+				"MoveUp",
 				5, // ticksPerFrame
 				[
 					new VisualOffset(visualRectangleSmall, new Coords(0, -1).multiplyScalar(entityDimension)),
@@ -270,15 +270,18 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 		{
 			entityOther.collidable.ticksUntilCanCollide = 100;
 			entityOther.drawable.animationRuns["Friendly"].ticksSinceStarted = 0;
-			
-			var venueMessage = new VenueMessage
-			(
-				"todo - conversation",
-				universe.venueCurrent, // venueNext
-				universe.venueCurrent, // venuePrev
-				universe.display.sizeDefault.clone()
-			);
-			universe.venueNext = venueMessage;			
+
+			var conversationDefnAsJSON =
+				universe.mediaLibrary.textStringGetByName("Conversation").value;
+			var conversationDefn = ConversationDefn.deserialize(conversationDefnAsJSON);
+			var conversation = new ConversationRun(conversationDefn);
+			var conversationSize = universe.display.sizeDefault.clone();
+			var conversationAsControl =
+				conversation.toControl(conversationSize, universe);
+
+			var venueNext = new VenueControls(conversationAsControl);
+
+			universe.venueNext = venueNext;
 		}
 
 		if (messageToDisplay != null)
@@ -317,15 +320,15 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 	);
 
 	entities.push(playerEntity);
-	
+
 	// friendly
-	
+
 	var friendlyColor = "Green";
 	var friendlyPos = new Coords().randomize().multiply(this.size);
 	var friendlyLoc = new Location(friendlyPos);
 
 	var friendlyCollider = new Sphere(friendlyLoc.pos, entityDimensionHalf);
-	
+
 	var friendlyVisualNormal = new VisualEllipse
 	(
 		entityDimensionHalf, // semimajorAxis
@@ -339,7 +342,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 	([
 		new VisualAnimation
 		(
-			"Friendly", 
+			"Friendly",
 			100, // ticksPerFrame
 			// children
 			[
@@ -352,7 +355,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 						friendlyVisualNormal
 					]
 				),
-				
+
 				friendlyVisualNormal
 			],
 			false // isRepeating
@@ -363,7 +366,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			new Coords(0, entityDimension)
 		)
 	]);
-	
+
 	var friendlyEntity = new Entity
 	(
 		"Friendly",
@@ -381,14 +384,14 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 					var targetPos = actor.target;
 					if (targetPos == null)
 					{
-						targetPos = 
+						targetPos =
 							new Coords().randomize().multiply(place.size);
 						actor.target = targetPos;
 					}
 
 					var actorLoc = entityActor.locatable.loc;
 					var actorPos = actorLoc.pos;
-					
+
 					var distanceToTarget = targetPos.clone().subtract
 					(
 						actorPos
@@ -415,7 +418,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 	);
 
 	entities.push(friendlyEntity);
-	
+
 	// enemy
 
 	var damagerColor = "Red";

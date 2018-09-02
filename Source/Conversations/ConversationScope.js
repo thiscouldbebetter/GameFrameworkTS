@@ -6,7 +6,11 @@ function ConversationScope(parent, talkNodeCurrent, talkNodesForOptions)
 	this.isPromptingForResponse = false;
 	this.talkNodesForOptions = talkNodesForOptions;
 
-	this.displayTextCurrent = "[text]";
+	this.displayTextCurrent = "[conversation begins]";
+	this.talkNodeForOptionSelected = null;
+	this._talkNodesForOptionsActive = [];
+	this._emptyArray = [];
+	this.haveOptionsBeenUpdated = true;
 }
 
 {
@@ -19,8 +23,38 @@ function ConversationScope(parent, talkNodeCurrent, talkNodesForOptions)
 		this.talkNodeCurrent = talkNodeNext;
 	}
 
+	ConversationScope.prototype.talkNodesForOptionsActive = function()
+	{
+		if (this.isPromptingForResponse == false)
+		{
+			return this._emptyArray;
+		}
+		else
+		{
+			if (this.haveOptionsBeenUpdated == true)
+			{
+				this.haveOptionsBeenUpdated = false;
+				this._talkNodesForOptionsActive.length = 0;
+
+				for (var i = 0; i < this.talkNodesForOptions.length; i++)
+				{
+					var talkNode = this.talkNodesForOptions[i];
+					if (talkNode.isActive == true)
+					{
+						this._talkNodesForOptionsActive.push(talkNode);
+					}
+				}
+			}
+
+			returnValues = this._talkNodesForOptionsActive; 
+		}
+
+		return returnValues;
+	}
+
 	ConversationScope.prototype.update = function(conversationRun)
 	{
-		this.talkNodeCurrent.execute(conversationRun, this);	
+		this.haveOptionsBeenUpdated = true;
+		this.talkNodeCurrent.execute(conversationRun, this);
 	}
 }

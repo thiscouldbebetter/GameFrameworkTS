@@ -33,7 +33,7 @@ function ConversationDefn(name, talkNodeDefns, talkNodes)
 	ConversationDefn.deserialize = function(conversationDefnAsJSON)
 	{
 		var conversationDefn = JSON.parse(conversationDefnAsJSON);
-		
+
 		conversationDefn.__proto__ = ConversationDefn.prototype;
 
 		var talkNodes = conversationDefn.talkNodes;

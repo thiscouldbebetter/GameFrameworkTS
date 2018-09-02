@@ -23,6 +23,7 @@ function main()
 		],
 		// textStrings
 		[
+			new TextString("Conversation", "../Content/Text/Conversation.json"),
 			new TextString("Instructions", "../Content/Text/Instructions.txt"),
 		]
 	);

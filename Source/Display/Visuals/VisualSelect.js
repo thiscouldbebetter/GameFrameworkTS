@@ -4,7 +4,7 @@ function VisualSelect(name, childNames, children)
 	this.name = name;
 	this.childNames = childNames;
 	this.children = children;
-	
+
 	for (var i = 0; i < this.children.length; i++)
 	{
 		var childName = this.childNames[i];
