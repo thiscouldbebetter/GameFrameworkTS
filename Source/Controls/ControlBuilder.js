@@ -170,8 +170,8 @@ function ControlBuilder(styles)
 					// options
 					SoundHelper.controlSelectOptionsVolume(),
 
-					"value", // bindingExpressionForOptionValues,
-					"text", // bindingExpressionForOptionText
+					new DataBinding(null, "value"), // bindingForOptionValues,
+					new DataBinding(null, "text"), // bindingForOptionText
 					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 
@@ -201,8 +201,8 @@ function ControlBuilder(styles)
 					// options
 					SoundHelper.controlSelectOptionsVolume(),
 
-					"value", // bindingExpressionForOptionValues,
-					"text", // bindingExpressionForOptionText
+					new DataBinding(null, "value"), // bindingForOptionValues,
+					new DataBinding(null, "text"), // bindingForOptionText
 					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 
@@ -224,8 +224,8 @@ function ControlBuilder(styles)
 					universe.display.sizeInPixels, // valueSelected
 					// options
 					universe.display.sizesAvailable,
-					null, // bindingExpressionForOptionValues,
-					"toStringXY()", // bindingExpressionForOptionText
+					new DataBinding(), // bindingForOptionValues,
+					new DataBinding(null, "toStringXY()"), // bindingForOptionText
 					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 
@@ -470,7 +470,7 @@ function ControlBuilder(styles)
 						universe.profile.worlds,
 						null
 					),
-					"name",
+					new DataBinding(null, "name"), // bindingForOptionText
 					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 

@@ -21,7 +21,7 @@ function Polar(azimuthInTurns, radius, elevationInTurns)
 
 	Polar.prototype.fromCoords = function(coordsToConvert)
 	{
-		this.azimuthInTurns = 
+		this.azimuthInTurns =
 			Math.atan2(coordsToConvert.y, coordsToConvert.x)
 			/ Polar.RadiansPerTurn;
 
@@ -32,7 +32,7 @@ function Polar(azimuthInTurns, radius, elevationInTurns)
 
 		this.radius = coordsToConvert.magnitude();
 
-		this.elevationInTurns = 
+		this.elevationInTurns =
 			Math.asin(coordsToConvert.z / this.radius)
 			/ Polar.RadiansPerTurn;
 

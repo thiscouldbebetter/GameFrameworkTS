@@ -96,7 +96,7 @@ function CollisionHelperTests()
 		]);
 
 		var faceFromWild = new Face
-		([ 
+		([
 			new Coords(10, 165, -10),
 			new Coords(70, 165, -10),
 			new Coords(70, 165, 0),
@@ -113,7 +113,7 @@ function CollisionHelperTests()
 		]);
 
 		var faceFromWild = new Face
-		([ 
+		([
 			new Coords(10, 230, -10),
 			new Coords(-10, 230, -10),
 			new Coords(-10, 230, 0),

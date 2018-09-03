@@ -58,7 +58,7 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 
 	ControlScrollbar.prototype.scrollDown = function()
 	{
-		var sliderPosInItems = 
+		var sliderPosInItems =
 		(
 			this.sliderPosInItems() + 1
 		).trimToRangeMinMax
@@ -71,7 +71,7 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 
 	ControlScrollbar.prototype.scrollUp = function()
 	{
-		var sliderPosInItems = 
+		var sliderPosInItems =
 		(
 			this.sliderPosInItems() - 1
 		).trimToRangeMinMax

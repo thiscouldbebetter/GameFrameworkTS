@@ -40,16 +40,17 @@ function TalkNode(name, defnName, parameters, isActive)
 		defn.execute(conversationRun, scope, this);
 	}
 
-	TalkNode.prototype.text = function()
+	TalkNode.prototype.text = function(conversationDefn)
 	{
-		return this.parameters[1]; // hack
+		var defn = this.defn(conversationDefn);
+		var returnValue = defn.textForTalkNode(this);
+		return returnValue;
 	}
 
-	TalkNode.prototype.textForTranscript = function()
+	TalkNode.prototype.textForTranscript = function(conversationDefn)
 	{
-		// hack
 		var speakerName = (this.defnName == "Option" ? "YOU" : "THEY" );
-		var text = (this.defnName == "Option" ? this.parameters[1] : this.parameters );
+		var text = this.text(conversationDefn);
 		var returnValue = speakerName + ": " + text;
 		return returnValue;
 	}

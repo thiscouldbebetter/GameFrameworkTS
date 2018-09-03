@@ -75,6 +75,7 @@ function ConversationRun(defn)
 	ConversationRun.prototype.toControl = function(size, universe)
 	{
 		var conversationRun = this;
+		var conversationDefn = conversationRun.defn;
 
 		var venueToReturnTo = universe.venueCurrent;
 		var fontHeight = 20;
@@ -86,7 +87,7 @@ function ConversationRun(defn)
 		var listSize = new Coords
 		(
 			size.x / 2,
-			size.y - labelHeight - buttonHeight - marginSize.y * 4
+			size.y - labelHeight - buttonHeight - marginSize.y * 6 // hack - From 4.
 		);
 		var buttonSize = new Coords(listSize.x, buttonHeight);
 		var buttonTranscriptSize = new Coords(2, 1).multiplyScalar(buttonHeight); // size
@@ -149,7 +150,7 @@ function ConversationRun(defn)
 					new Coords
 					(
 						size.x / 2,
-						marginSize.y
+						size.y - marginSize.y * 3 - buttonSize.y - listSize.y - labelHeight
 					), // pos
 					size, // size
 					true, // isTextCentered
@@ -163,7 +164,7 @@ function ConversationRun(defn)
 					new Coords
 					(
 						(size.x - listSize.x) / 2,
-						marginSize.y * 2 + labelHeight
+						size.y - marginSize.y * 2 - buttonSize.y - listSize.y
 					),
 					listSize,
 					// items
@@ -172,7 +173,13 @@ function ConversationRun(defn)
 						conversationRun,
 						"scopeCurrent.talkNodesForOptionsActive()"
 					),
-					"text()", // bindingExpressionForItemText
+					// bindingForItemText
+					new DataBinding
+					(
+						null, // context
+						"text(conversationDefn)", // bindingExpression
+						{ "conversationDefn": conversationDefn } // argumentLookup
+					),
 					fontHeightShort,
 					new DataBinding
 					(
@@ -187,7 +194,7 @@ function ConversationRun(defn)
 					new Coords
 					(
 						(size.x - listSize.x) / 2,
-						marginSize.y * 3 + labelHeight + listSize.y
+						size.y - marginSize.y - buttonSize.y
 					), // pos
 					buttonSize,
 					"Next",
@@ -209,6 +216,7 @@ function ConversationRun(defn)
 	ConversationRun.prototype.toControlTranscript = function(size, universe, venueToReturnTo)
 	{
 		var conversationRun = this;
+		var conversationDefn = conversationRun.defn;
 
 		var venueToReturnTo = universe.venueCurrent;
 		var fontHeight = 20;
@@ -277,7 +285,12 @@ function ConversationRun(defn)
 						conversationRun,
 						"talkNodesForTranscript"
 					),
-					"textForTranscript()", // bindingExpressionForItemText
+					new DataBinding
+					(
+						null,
+						"textForTranscript(conversationDefn)",
+						{ "conversationDefn": conversationDefn }
+					), // bindingForItemText
 					fontHeightShort
 				),
 			]

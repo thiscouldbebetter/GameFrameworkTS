@@ -32,7 +32,7 @@ function Mesh(center, vertexOffsets, faceBuilders)
 		var min = new Coords(-sizeHalf.x, -sizeHalf.y, -sizeHalf.z);
 		var max = new Coords(sizeHalf.x, sizeHalf.y, sizeHalf.z);
 
-		var vertexOffsets = 
+		var vertexOffsets =
 		[
 			// top
 			new Coords(min.x, min.y, min.z),
@@ -106,7 +106,7 @@ function Mesh(center, vertexOffsets, faceBuilders)
 					([
 						vertexIndex,
 						vertexIndexNext,
-						vertexIndexNext + numberOfFaceVertices, 
+						vertexIndexNext + numberOfFaceVertices,
 						vertexIndex + numberOfFaceVertices
 					]);
 					faceBuilders.push(faceBuilderSide);
@@ -217,7 +217,7 @@ function Mesh(center, vertexOffsets, faceBuilders)
 		return new Mesh
 		(
 			this.center.clone(),
-			this.vertexOffsets.clone(), 
+			this.vertexOffsets.clone(),
 			this.faceBuilders.clone()
 		);
 	}

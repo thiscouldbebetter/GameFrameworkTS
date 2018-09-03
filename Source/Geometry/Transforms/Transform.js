@@ -4,7 +4,7 @@ function Transform()
 {
 	Transform.applyTransformToCoordsArrays = function
 	(
-		transformToApply, 
+		transformToApply,
 		coordsArraysToTransform
 	)
 	{

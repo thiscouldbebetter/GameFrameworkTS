@@ -52,7 +52,7 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 		{
 			this.text(text.substr(0, text.length - 1));
 
-			this.cursorPos = 
+			this.cursorPos =
 			(
 				this.cursorPos - 1
 			).wrapToRangeMinMax
@@ -62,7 +62,7 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 		}
 		else if (actionNameToHandle == "ControlConfirm")
 		{
-			this.cursorPos = 
+			this.cursorPos =
 			(
 				this.cursorPos + 1
 			).wrapToRangeMinMax(0, text.length + 1);
@@ -81,7 +81,7 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 				this.cursorPos < text.length ? text.charCodeAt(this.cursorPos) : "A".charCodeAt(0) - 1
 			);
 
-			charCodeAtCursor = 
+			charCodeAtCursor =
 			(
 				charCodeAtCursor + direction
 			).wrapToRangeMinMax
@@ -110,7 +110,7 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 					+ text.substr(this.cursorPos)
 				);
 
-				this.cursorPos = 
+				this.cursorPos =
 				(
 					this.cursorPos + 1
 				).wrapToRangeMinMax
@@ -156,13 +156,13 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 			this.isHighlighted // areColorsReversed
 		);
 
-		var textWidth = 
+		var textWidth =
 			display.textWidthForFontHeight(text, this.fontHeightInPixels);
-		var textSize = 
+		var textSize =
 			this._textSize.overwriteWithDimensions(textWidth, this.fontHeightInPixels, 0);
-		var textMargin = 
+		var textMargin =
 			this._textMargin.overwriteWith(this.size).subtract(textSize).half();
-		var drawPosText = 
+		var drawPosText =
 			this._drawPosText.overwriteWith(drawPos).add(textMargin);
 
 		display.drawText

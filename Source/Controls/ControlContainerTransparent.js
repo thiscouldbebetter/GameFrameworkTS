@@ -79,7 +79,7 @@ function ControlContainerTransparent(containerInner)
 		display.drawRectangle
 		(
 			drawPos, this.containerInner.size,
-			null, // display.colorBack, 
+			null, // display.colorBack,
 			display.colorFore
 		)
 

@@ -46,7 +46,7 @@ function ConversationScope(parent, talkNodeCurrent, talkNodesForOptions)
 				}
 			}
 
-			returnValues = this._talkNodesForOptionsActive; 
+			returnValues = this._talkNodesForOptionsActive;
 		}
 
 		return returnValues;

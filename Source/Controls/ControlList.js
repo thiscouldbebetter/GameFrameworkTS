@@ -1,14 +1,14 @@
 
-function ControlList(name, pos, size, items, bindingExpressionForItemText, fontHeightInPixels, bindingForItemSelected, bindingExpressionForItemValue)
+function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected, bindingForItemValue)
 {
 	this.name = name;
 	this.pos = pos;
 	this.size = size;
 	this._items = items;
-	this.bindingExpressionForItemText = bindingExpressionForItemText;
+	this.bindingForItemText = bindingForItemText;
 	this.fontHeightInPixels = fontHeightInPixels;
 	this.bindingForItemSelected = bindingForItemSelected;
-	this.bindingExpressionForItemValue = bindingExpressionForItemValue;
+	this.bindingForItemValue = bindingForItemValue;
 
 	this.itemSpacing = 1.2 * this.fontHeightInPixels; // hack
 
@@ -114,9 +114,9 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 
 			if (this.bindingForItemSelected != null)
 			{
-				var valueToSet = new DataBinding
+				var valueToSet = this.bindingForItemValue.contextSet
 				(
-					this._itemSelected, this.bindingExpressionForItemValue
+					this._itemSelected
 				).get();
 				this.bindingForItemSelected.set(valueToSet);
 			}
@@ -297,9 +297,9 @@ function ControlList(name, pos, size, items, bindingExpressionForItemText, fontH
 				)
 			}
 
-			var text = new DataBinding
+			var text = this.bindingForItemText.contextSet
 			(
-				item, this.bindingExpressionForItemText
+				item
 			).get();
 
 			var drawPos2 = new Coords(drawPos.x + textMarginLeft, itemPosY);

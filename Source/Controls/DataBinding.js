@@ -7,6 +7,12 @@ function DataBinding(context, bindingExpression, argumentLookup)
 }
 
 {
+	DataBinding.prototype.contextSet = function(value)
+	{
+		this.context = value;
+		return this;
+	}
+
 	DataBinding.prototype.get = function()
 	{
 		var returnValue = this.context;
@@ -43,7 +49,7 @@ function DataBinding(context, bindingExpression, argumentLookup)
 							indexOfOpenParenthesis + 1, indexOfCloseParenthesis
 						);
 
-						var argumentNames = 
+						var argumentNames =
 							argumentNamesAsString.split(" ").join("").split(",");
 						var argumentValues = [];
 
@@ -109,7 +115,7 @@ function DataBinding(context, bindingExpression, argumentLookup)
 							indexOfOpenParenthesis + 1, indexOfCloseParenthesis
 						);
 
-						var argumentNames = 
+						var argumentNames =
 							argumentNamesAsString.split(" ").join("").split(",");
 						var argumentValues = [];
 

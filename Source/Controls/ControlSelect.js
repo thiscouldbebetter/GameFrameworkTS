@@ -6,8 +6,8 @@ function ControlSelect
 	size,
 	valueSelected,
 	options,
-	bindingExpressionForOptionValues,
-	bindingExpressionForOptionText,
+	bindingForOptionValues,
+	bindingForOptionText,
 	fontHeightInPixels
 )
 {
@@ -16,8 +16,8 @@ function ControlSelect
 	this.size = size;
 	this._valueSelected = valueSelected;
 	this._options = options;
-	this.bindingExpressionForOptionValues = bindingExpressionForOptionValues;
-	this.bindingExpressionForOptionText = bindingExpressionForOptionText;
+	this.bindingForOptionValues = bindingForOptionValues;
+	this.bindingForOptionText = bindingForOptionText;
 	this.fontHeightInPixels = fontHeightInPixels;
 
 	this.indexOfOptionSelected = null;
@@ -26,10 +26,9 @@ function ControlSelect
 	for (var i = 0; i < options.length; i++)
 	{
 		var option = options[i];
-		var optionValue = new DataBinding
+		var optionValue = this.bindingForOptionValues.contextSet
 		(
-			option,
-			this.bindingExpressionForOptionValues
+			option
 		).get();
 
 		if (optionValue == valueSelected)
@@ -89,16 +88,14 @@ function ControlSelect
 		{
 			var optionAsObject = this.options()[this.indexOfOptionSelected];
 
-			var optionValue = new DataBinding
+			var optionValue = this.bindingForOptionValues.contextSet
 			(
-				optionAsObject,
-				this.bindingExpressionForOptionValues
+				optionAsObject
 			).get();
 
-			var optionText = new DataBinding
+			var optionText = this.bindingForOptionText.contextSet
 			(
-				optionAsObject,
-				this.bindingExpressionForOptionText
+				optionAsObject
 			).get();
 
 			returnValue = new ControlSelectOption
@@ -115,7 +112,7 @@ function ControlSelect
 	{
 		var options = this.options();
 
-		this.indexOfOptionSelected = 
+		this.indexOfOptionSelected =
 		(
 			this.indexOfOptionSelected + direction
 		).wrapToRangeMinMax

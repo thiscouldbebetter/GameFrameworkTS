@@ -1,9 +1,10 @@
 
-function TalkNodeDefn(name, execute, activate)
+function TalkNodeDefn(name, execute, activate, textForTalkNode)
 {
 	this.name = name;
 	this.execute = execute;
 	this.activate = activate;
+	this.textForTalkNode = textForTalkNode;
 }
 {
 	// instances
@@ -46,6 +47,11 @@ function TalkNodeDefn(name, execute, activate)
 				scope.talkNodeAdvance(conversationRun);
 
 				conversationRun.talkNodesForTranscript.push(talkNode);
+			},
+			null, // activate
+			function textForTalkNode(talkNode)
+			{
+				return talkNode.parameters;
 			}
 		);
 
@@ -77,7 +83,7 @@ function TalkNodeDefn(name, execute, activate)
 				}
 				scope.talkNodeAdvance(conversationRun);
 				conversationRun.update();
-							},
+			},
 			function activate(conversationRun, scope, talkNode)
 			{
 				scope.isPromptingForResponse = false;
@@ -88,6 +94,10 @@ function TalkNodeDefn(name, execute, activate)
 				scope.talkNodeCurrent = talkNodeNext;
 
 				conversationRun.talkNodesForTranscript.push(talkNode);
+			},
+			function textForTalkNode(talkNode)
+			{
+				return talkNode.parameters[1];
 			}
 		);
 
