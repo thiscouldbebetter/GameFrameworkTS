@@ -146,7 +146,7 @@ function TalkNodeDefn(name, execute, activate, textForTalkNode)
 		this.Script = new TalkNodeDefn
 		(
 			"Script",
-			function(conversationRun, scope, talkNode)
+			function execute(conversationRun, scope, talkNode)
 			{
 				var scriptToRunAsString = talkNode.parameters;
 				scriptToRunAsString(conversationRun);
@@ -157,9 +157,9 @@ function TalkNodeDefn(name, execute, activate, textForTalkNode)
 		this.Quit = new TalkNodeDefn
 		(
 			"Quit",
-			function(conversationRun, scope, talkNode)
+			function execute(conversationRun, scope, talkNode)
 			{
-				// todo
+				conversationRun.quit();
 			}
 		);
 

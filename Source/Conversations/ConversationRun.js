@@ -1,7 +1,8 @@
 
-function ConversationRun(defn)
+function ConversationRun(defn, quit)
 {
 	this.defn = defn;
+	this.quit = quit;
 
 	var talkNodeStart = this.defn.talkNodes[0];
 
