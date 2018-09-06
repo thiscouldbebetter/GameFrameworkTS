@@ -1,8 +1,9 @@
 
-function ConversationRun(defn, quit)
+function ConversationRun(defn, quit, universe)
 {
 	this.defn = defn;
 	this.quit = quit;
+	this.universe = universe; // hack
 
 	var talkNodeStart = this.defn.talkNodes[0];
 
@@ -15,6 +16,12 @@ function ConversationRun(defn, quit)
 	);
 
 	this.talkNodesForTranscript = [];
+
+	this.variableLookup = {};
+
+	// Abbreviate for scripts.
+	this.vars = this.variableLookup;
+	this.uni = this.universe;
 }
 
 {
@@ -34,41 +41,6 @@ function ConversationRun(defn, quit)
 	ConversationRun.prototype.update = function()
 	{
 		this.scopeCurrent.update(this);
-
-		//this.domElementUpdate();
-	}
-
-	// dom
-
-	ConversationRun.prototype.domElementUpdate = function()
-	{
-		var d = document;
-
-		var inputStatement = d.getElementById("inputStatement");
-		inputStatement.value = this.scopeCurrent.displayTextCurrent;
-
-		var selectResponses = d.getElementById("selectResponses");
-		selectResponses.innerHTML = "";
-		if (this.scopeCurrent.isPromptingForResponse == false)
-		{
-			d.getElementById("buttonNext").focus();
-		}
-		else
-		{
-			var talkNodesForOptions = this.scopeCurrent.talkNodesForOptions;
-			for (var i = 0; i < talkNodesForOptions.length; i++)
-			{
-				var talkNode = talkNodesForOptions[i];
-				if (talkNode.isActive == true)
-				{
-					var talkNodeAsOption = d.createElement("option");
-					talkNodeAsOption.innerHTML = talkNode.parameters[1];
-					talkNodeAsOption.value = talkNode.name;
-					selectResponses.appendChild(talkNodeAsOption);
-				}
-			}
-			selectResponses.focus();
-		}
 	}
 
 	// controls
