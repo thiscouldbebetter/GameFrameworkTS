@@ -49,13 +49,6 @@ function ConversationDefn(name, talkNodeDefns, talkNodes)
 			{
 				talkNode.isActive = true;
 			}
-			/*
-			if (talkNode.defnName == "Script")
-			{
-				var scriptAsString = "(" + talkNode.parameters + ")";
-				talkNode.parameters = eval(scriptAsString);
-			}
-			*/
 		}
 		talkNodes.addLookups("name");
 

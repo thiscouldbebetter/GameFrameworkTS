@@ -152,8 +152,7 @@ function ConversationRun(defn, quit, universe)
 					new DataBinding
 					(
 						null, // context
-						"text(conversationDefn)", // bindingExpression
-						{ "conversationDefn": conversationDefn } // argumentLookup
+						"text" // bindingExpression
 					),
 					fontHeightShort,
 					new DataBinding

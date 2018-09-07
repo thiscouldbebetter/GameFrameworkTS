@@ -1,9 +1,10 @@
 
-function TalkNode(name, defnName, parameters, isActive)
+function TalkNode(name, defnName, text, next, isActive)
 {
 	this.name = (name == null ? TalkNode.idNext() : name);
 	this.defnName = defnName;
-	this.parameters = parameters;
+	this.text = text;
+	this.next = next;
 	this.isActive = (isActive == null ? true : isActive);
 }
 
@@ -40,18 +41,10 @@ function TalkNode(name, defnName, parameters, isActive)
 		defn.execute(conversationRun, scope, this);
 	}
 
-	TalkNode.prototype.text = function(conversationDefn)
-	{
-		var defn = this.defn(conversationDefn);
-		var returnValue = defn.textForTalkNode(this);
-		return returnValue;
-	}
-
 	TalkNode.prototype.textForTranscript = function(conversationDefn)
 	{
 		var speakerName = (this.defnName == "Option" ? "YOU" : "THEY" );
-		var text = this.text(conversationDefn);
-		var returnValue = speakerName + ": " + text;
+		var returnValue = speakerName + ": " + this.text;
 		return returnValue;
 	}
 }

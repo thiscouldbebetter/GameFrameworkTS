@@ -1,10 +1,9 @@
 
-function TalkNodeDefn(name, execute, activate, textForTalkNode)
+function TalkNodeDefn(name, execute, activate)
 {
 	this.name = name;
 	this.execute = execute;
 	this.activate = activate;
-	this.textForTalkNode = textForTalkNode;
 }
 {
 	// instances
@@ -25,8 +24,8 @@ function TalkNodeDefn(name, execute, activate, textForTalkNode)
 			"Activate",
 			function execute(conversationRun, scope, talkNode)
 			{
-				var talkNodeToActivateName = talkNode.parameters[0];
-				var isActiveValueToSet = talkNode.parameters[1];
+				var talkNodeToActivateName = talkNode.next;
+				var isActiveValueToSet = talkNode.text;
 
 				var conversationDefn = conversationRun.defn;
 				var talkNodeToActivate
@@ -43,15 +42,10 @@ function TalkNodeDefn(name, execute, activate, textForTalkNode)
 			// execute
 			function(conversationRun, scope, talkNode)
 			{
-				scope.displayTextCurrent = talkNode.parameters;
+				scope.displayTextCurrent = talkNode.text;
 				scope.talkNodeAdvance(conversationRun);
 
 				conversationRun.talkNodesForTranscript.push(talkNode);
-			},
-			null, // activate
-			function textForTalkNode(talkNode)
-			{
-				return talkNode.parameters;
 			}
 		);
 
@@ -61,7 +55,7 @@ function TalkNodeDefn(name, execute, activate, textForTalkNode)
 			// execute
 			function(conversationRun, scope, talkNode)
 			{
-				var talkNodeNameNext = talkNode.parameters;
+				var talkNodeNameNext = talkNode.next;
 				scope.talkNodeCurrent = conversationRun.defn.talkNodeByName
 				(
 					talkNodeNameNext
@@ -76,8 +70,8 @@ function TalkNodeDefn(name, execute, activate, textForTalkNode)
 			// execute
 			function(conversationRun, scope, talkNode)
 			{
-				var variableName = talkNode.parameters[0];
-				var talkNodeNameToJumpTo = talkNode.parameters[1];
+				var variableName = talkNode.text;
+				var talkNodeNameToJumpTo = talkNode.next;
 				var variableValue = conversationRun.variableLookup[variableName];
 				if (variableValue == true)
 				{
@@ -101,8 +95,8 @@ function TalkNodeDefn(name, execute, activate, textForTalkNode)
 			// execute
 			function(conversationRun, scope, talkNode)
 			{
-				var variableName = talkNode.parameters[0];
-				var talkNodeNameToJumpTo = talkNode.parameters[1];
+				var variableName = talkNode.text;
+				var talkNodeNameToJumpTo = talkNode.next;
 				var variableValue = conversationRun.variableLookup[variableName];
 				if (variableValue == true)
 				{
@@ -139,15 +133,11 @@ function TalkNodeDefn(name, execute, activate, textForTalkNode)
 				scope.isPromptingForResponse = false;
 				//scope.talkNodesForOptions.length = 0;
 
-				var nameOfTalkNodeNext = talkNode.parameters[0];
+				var nameOfTalkNodeNext = talkNode.next;
 				var talkNodeNext = conversationRun.defn.talkNodeByName(nameOfTalkNodeNext);
 				scope.talkNodeCurrent = talkNodeNext;
 
 				conversationRun.talkNodesForTranscript.push(talkNode);
-			},
-			function textForTalkNode(talkNode)
-			{
-				return talkNode.parameters[1];
 			}
 		);
 
@@ -160,7 +150,7 @@ function TalkNodeDefn(name, execute, activate, textForTalkNode)
 				conversationRun.scopeCurrent = scope;
 				scope.talkNodeCurrent = conversationRun.defn.talkNodeByName
 				(
-					talkNode.parameters
+					talkNode.text
 				);
 				conversationRun.update();
 			}
@@ -175,7 +165,7 @@ function TalkNodeDefn(name, execute, activate, textForTalkNode)
 			},
 			function activate(conversationRun, scope, talkNode)
 			{
-				var shouldClearOptions = talkNode.parameters;
+				var shouldClearOptions = talkNode.text;
 				if (shouldClearOptions == true)
 				{
 					scope.talkNodesForOptions.length = 0;
@@ -206,7 +196,7 @@ function TalkNodeDefn(name, execute, activate, textForTalkNode)
 			"Script",
 			function execute(conversationRun, scope, talkNode)
 			{
-				var scriptToRunAsString = "(" + talkNode.parameters + ")";
+				var scriptToRunAsString = "(" + talkNode.text + ")";
 				var scriptToRun = eval(scriptToRunAsString);
 				scriptToRun(conversationRun);
 				scope.talkNodeAdvance(conversationRun);
