@@ -151,24 +151,6 @@ function TalkNodeDefn(name, execute, activate, textForTalkNode)
 			}
 		);
 
-		this.Push = new TalkNodeDefn
-		(
-			"Push",
-			function execute(conversationRun, scope, talkNode)
-			{
-				var runDefn = conversationRun.defn;
-				var talkNodeIndex = runDefn.talkNodes.indexOf(talkNode);
-				var talkNodeNext = runDefn.talkNodes[talkNodeIndex + 1];
-				conversationRun.scopeCurrent = new ConversationScope
-				(
-					scope, // parent
-					talkNodeNext,
-					[] // options
-				);
-				conversationRun.update();
-			}
-		);
-
 		this.Pop = new TalkNodeDefn
 		(
 			"Pop",
@@ -190,6 +172,32 @@ function TalkNodeDefn(name, execute, activate, textForTalkNode)
 			function execute(conversationRun, scope, talkNode)
 			{
 				scope.isPromptingForResponse = true;
+			},
+			function activate(conversationRun, scope, talkNode)
+			{
+				var shouldClearOptions = talkNode.parameters;
+				if (shouldClearOptions == true)
+				{
+					scope.talkNodesForOptions.length = 0;
+				}
+			}
+		);
+
+		this.Push = new TalkNodeDefn
+		(
+			"Push",
+			function execute(conversationRun, scope, talkNode)
+			{
+				var runDefn = conversationRun.defn;
+				var talkNodeIndex = runDefn.talkNodes.indexOf(talkNode);
+				var talkNodeNext = runDefn.talkNodes[talkNodeIndex + 1];
+				conversationRun.scopeCurrent = new ConversationScope
+				(
+					scope, // parent
+					talkNodeNext,
+					[] // options
+				);
+				conversationRun.update();
 			}
 		);
 
@@ -202,6 +210,7 @@ function TalkNodeDefn(name, execute, activate, textForTalkNode)
 				var scriptToRun = eval(scriptToRunAsString);
 				scriptToRun(conversationRun);
 				scope.talkNodeAdvance(conversationRun);
+				conversationRun.update(); // hack
 			}
 		);
 
@@ -222,8 +231,8 @@ function TalkNodeDefn(name, execute, activate, textForTalkNode)
 			this.JumpIfFalse,
 			this.JumpIfTrue,
 			this.Option,
-			this.Prompt,
 			this.Pop,
+			this.Prompt,
 			this.Push,
 			this.Script,
 			this.Quit,

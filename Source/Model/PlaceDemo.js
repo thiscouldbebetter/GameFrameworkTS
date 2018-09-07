@@ -274,7 +274,15 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			var conversationDefnAsJSON =
 				universe.mediaLibrary.textStringGetByName("Conversation").value;
 			var conversationDefn = ConversationDefn.deserialize(conversationDefnAsJSON);
-			var conversation = new ConversationRun(conversationDefn);
+			var venueToReturnTo = universe.venueCurrent;
+			var conversation = new ConversationRun
+			(
+				conversationDefn,
+				function quit(conversationRun)
+				{
+					universe.venueNext = venueToReturnTo;
+				}
+			);
 			var conversationSize = universe.display.sizeDefault.clone();
 			var conversationAsControl =
 				conversation.toControl(conversationSize, universe);

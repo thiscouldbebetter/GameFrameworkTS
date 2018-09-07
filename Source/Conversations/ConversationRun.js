@@ -32,6 +32,8 @@ function ConversationRun(defn, quit, universe)
 		var responseSelected = this.scopeCurrent.talkNodeForOptionSelected;
 		if (responseSelected != null)
 		{
+			var talkNodePrompt = this.scopeCurrent.talkNodeCurrent;
+			talkNodePrompt.activate(this, this.scopeCurrent);
 			responseSelected.activate(this, this.scopeCurrent);
 			this.scopeCurrent.talkNodeForOptionSelected = null;
 		}
@@ -158,7 +160,8 @@ function ConversationRun(defn, quit, universe)
 					(
 						conversationRun,
 						"scopeCurrent.talkNodeForOptionSelected"
-					) // bindingForItemSelected
+					), // bindingForItemSelected
+					new DataBinding() // bindingForItemValue
 				),
 
 				new ControlButton
