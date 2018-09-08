@@ -9,4 +9,9 @@ function Item(defnName, quantity)
 	{
 		return world.defns.itemDefns[this.defnName];
 	}
+
+	Item.prototype.toString = function()
+	{
+		return this.defnName + " (" + this.quantity + ")";
+	}
 }

@@ -28,6 +28,10 @@ function Universe(name, timerHelper, display, mediaLibrary, world)
 			]
 		);
 
+		var isDebuggingEnabledAsString =
+			URLParser.fromWindow().queryStringParameters["debug"];
+		returnValue.isDebuggingEnabled = (isDebuggingEnabledAsString == "true");
+
 		return returnValue;
 	}
 

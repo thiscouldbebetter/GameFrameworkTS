@@ -18,5 +18,6 @@ function Font(name, sourcePath)
 			+ "src: url('" + this.sourcePath + "');"; 
 			+ "}";
 		document.head.appendChild(fontAsStyleElement);
+		this.isLoaded = true;
 	}
 }

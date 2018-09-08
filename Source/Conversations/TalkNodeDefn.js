@@ -191,6 +191,15 @@ function TalkNodeDefn(name, execute, activate)
 			}
 		);
 
+		this.Quit = new TalkNodeDefn
+		(
+			"Quit",
+			function execute(conversationRun, scope, talkNode)
+			{
+				conversationRun.quit();
+			}
+		);
+
 		this.Script = new TalkNodeDefn
 		(
 			"Script",
@@ -204,12 +213,48 @@ function TalkNodeDefn(name, execute, activate)
 			}
 		);
 
-		this.Quit = new TalkNodeDefn
+		this.VariableLoad = new TalkNodeDefn
 		(
-			"Quit",
+			"VariableLoad",
 			function execute(conversationRun, scope, talkNode)
 			{
-				conversationRun.quit();
+				var variableName = talkNode.text;
+				var scriptExpression = talkNode.next;
+				var scriptToRunAsString = "( function(cr) { return " + scriptExpression + "; } )";
+				var scriptToRun = eval(scriptToRunAsString);
+				var scriptResult = scriptToRun(conversationRun);
+				conversationRun.variableLookup[variableName] = scriptResult;
+				scope.talkNodeAdvance(conversationRun);
+				conversationRun.update(); // hack
+			}
+		);
+
+		this.VariableSet = new TalkNodeDefn
+		(
+			"VariableSet",
+			function execute(conversationRun, scope, talkNode)
+			{
+				var variableName = talkNode.text;
+				var variableValue = talkNode.next;
+				conversationRun.variableLookup[variableName] = variableValue;
+				scope.talkNodeAdvance(conversationRun);
+				conversationRun.update(); // hack
+			}
+		);
+
+		this.VariableStore = new TalkNodeDefn
+		(
+			"VariableStore",
+			function execute(conversationRun, scope, talkNode)
+			{
+				var variableName = talkNode.text;
+				var variableValue = conversationRun.variableLookup[variableName];
+				var scriptExpression = talkNode.next;
+				var scriptToRunAsString = "( function(cr) { " + scriptExpression + " = " + variableValue + "; } )";
+				var scriptToRun = eval(scriptToRunAsString);
+				scriptToRun(conversationRun);
+				scope.talkNodeAdvance(conversationRun);
+				conversationRun.update(); // hack
 			}
 		);
 
@@ -224,8 +269,11 @@ function TalkNodeDefn(name, execute, activate)
 			this.Pop,
 			this.Prompt,
 			this.Push,
-			this.Script,
 			this.Quit,
+			this.Script,
+			this.VariableLoad,
+			this.VariableSet,
+			this.VariableStore,
 		].addLookups("name");
 	}
 }

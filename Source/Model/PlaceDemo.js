@@ -469,7 +469,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			new Constrainable([constraintSpeedMax]),
 			new Collidable(enemyCollider),
 			new Damager(),
-			new Killable(),
+			new Killable(1),
 			new Drawable(enemyVisual),
 			new Actor
 			(
