@@ -14,12 +14,12 @@
         {
             "defnName": "Option",
             "text": "Let's talk about math.",
-            "next": "Math"            
+            "next": "Math"
         },
         {
             "defnName": "Option",
             "text": "Let's talk about science.",
-            "next": "Science"            
+            "next": "Science"
         },
         {
             "name": "Subject.History",
@@ -37,7 +37,7 @@
         {
             "defnName": "Option",
             "next": "SQLInjection",
-            "text": "'; drop database conversation_topics;"        
+            "text": "'; drop database conversation_topics;"
         },
         {
             "defnName": "Option",
@@ -111,12 +111,12 @@
         {
             "defnName": "Activate",
             "next": "Subject.History",
-            "text": false          
+            "text": false
         },
         {
             "defnName": "Activate",
             "next": "Subject.Carol",
-			"text": true          
+			"text": true
         },
         {
             "defnName": "Pop",

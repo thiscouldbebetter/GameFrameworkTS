@@ -28,6 +28,17 @@ function ItemHolder(items)
 		}
 	}
 
+	ItemHolder.prototype.itemRemove = function(itemToRemove)
+	{
+		var itemDefnName = itemToRemove.defnName;
+		var itemExisting = this.items[itemDefnName];
+		if (itemExisting != null)
+		{
+			this.items.remove(itemExisting);
+			delete this.items[itemDefnName];
+		}
+	}
+
 	ItemHolder.prototype.itemSubtract = function(itemToSubtract)
 	{
 		var itemDefnName = itemToSubtract.defnName;
@@ -40,6 +51,16 @@ function ItemHolder(items)
 				this.items.remove(itemExisting);
 				delete this.items[itemDefnName];
 			}
+		}
+	}
+
+	ItemHolder.prototype.itemsTransferTo = function(other)
+	{
+		for (var i = 0; i < this.items.length; i++)
+		{
+			var item = this.items[i];
+			other.itemAdd(item);
+			this.itemRemove(item);
 		}
 	}
 }
