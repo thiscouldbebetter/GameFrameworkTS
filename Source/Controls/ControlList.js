@@ -218,7 +218,8 @@ function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPix
 					/ this.itemSpacing
 				);
 
-			if (indexOfItemClicked < this.items().length)
+			var items = this.items();
+			if (indexOfItemClicked < items.length)
 			{
 				this.indexOfItemSelected(indexOfItemClicked);
 			}

@@ -79,31 +79,31 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 				var actorSpeed = actorVel.magnitude();
 				if (actorSpeed == 0) { return; }
 
-				var itemProjectileColor = "Cyan";
-				var itemProjectileRadius = 3;
-				var itemProjectileVisual = new VisualGroup
+				var projectileColor = "Cyan";
+				var projectileRadius = 3;
+				var projectileVisual = new VisualGroup
 				([
-					new VisualCircle(itemProjectileRadius, itemProjectileColor),
+					new VisualCircle(projectileRadius, projectileColor),
 					new VisualOffset
 					(
-						new VisualText("Projectile", itemProjectileColor),
-						new Coords(0, itemProjectileRadius)
+						new VisualText("Projectile", projectileColor),
+						new Coords(0, projectileRadius)
 					)
 				]);
 
 				var actorDirection = actorVel.clone().normalize();
 				var actorRadius = actor.collidable.collider.radius;
-				var itemProjectilePos = actorPos.clone().add
+				var projectilePos = actorPos.clone().add
 				(
 					actorDirection.clone().multiplyScalar(actorRadius).double().double()
 				);
-				var itemProjectileLoc = new Location(itemProjectilePos);
-				itemProjectileLoc.vel.overwriteWith(actorVel).double();
+				var projectileLoc = new Location(projectilePos);
+				projectileLoc.vel.overwriteWith(actorVel).double();
 
-				var itemProjectileCollider =
-					new Sphere(itemProjectilePos, itemProjectileRadius);
+				var projectileCollider =
+					new Sphere(projectilePos, projectileRadius);
 
-				var itemProjectileCollide = function(universe, world, place, entityPlayer, entityOther)
+				var projectileCollide = function(universe, world, place, entityPlayer, entityOther)
 				{
 					if (entityOther.killable != null)
 					{
@@ -111,24 +111,24 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 					}
 				}
 
-				var itemProjectileEntity = new Entity
+				var projectileEntity = new Entity
 				(
 					"Projectile",
 					[
 						new Damager(),
 						new Ephemeral(32),
-						new Locatable( itemProjectileLoc ),
+						new Locatable( projectileLoc ),
 						new Collidable
 						(
-							itemProjectileCollider,
+							projectileCollider,
 							[ "killable" ],
-							itemProjectileCollide
+							projectileCollide
 						),
-						new Drawable(itemProjectileVisual)
+						new Drawable(projectileVisual)
 					]
 				);
 
-				place.entitiesToSpawn.push(itemProjectileEntity);
+				place.entitiesToSpawn.push(projectileEntity);
 			}
 		),
 	].addLookups("name");

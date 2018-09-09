@@ -83,6 +83,80 @@ function ControlBuilder(styles)
 		);
 
 		return returnValue;
+	}
+
+	ControlBuilder.prototype.choiceList = function
+	(
+		universe, size, message, options, bindingForOptionText, buttonSelectText, select
+	)
+	{
+		// todo - Variable sizes.
+
+		var marginWidth = 10;
+		var marginSize = new Coords(1, 1).multiplyScalar(marginWidth);
+		var fontHeight = 20;
+		var labelSize = new Coords(size.x - marginSize.x * 2, fontHeight);
+		var buttonSize = new Coords(labelSize.x, fontHeight * 2);
+		var listSize = new Coords
+		(
+			labelSize.x,
+			size.y - labelSize.y - buttonSize.y - marginSize.y * 4
+		);
+
+		var listOptions = new ControlList
+		(
+			"listOptions",
+			new Coords(marginSize.x, labelSize.y + marginSize.y * 2),
+			listSize,
+			options,
+			bindingForOptionText,
+			fontHeight,
+			null, // bindingForItemSelected
+			null // bindingForItemValue
+		);
+
+		var returnValue = new ControlContainer
+		(
+			"containerChoice",
+			Coords.Instances.Zeroes,
+			size,
+			[
+				new ControlLabel
+				(
+					"labelMessage",
+					new Coords(size.x / 2, marginSize.y + fontHeight / 2),
+					labelSize,
+					true, // isTextCentered
+					message,
+					fontHeight
+				),
+
+				listOptions,
+
+				new ControlButton
+				(
+					"buttonSelect",
+					new Coords(marginSize.x, size.y - marginSize.y - buttonSize.y),
+					buttonSize,
+					buttonSelectText,
+					fontHeight,
+					true, // hasBorder
+					true, // isEnabled,
+					function click(universe)
+					{
+						var itemSelected = listOptions.itemSelected();
+						if (itemSelected != null)
+						{
+							select(universe, itemSelected);
+						}
+					},
+					universe, // context
+					false // canBeHeldDown
+				),
+			]
+		);
+
+		return returnValue;
 
 	}
 
@@ -342,87 +416,6 @@ function ControlBuilder(styles)
 		);
 
 	}
-
-	/*
-	ControlBuilder.prototype.message = function(universe, size, message, acknowledge)
-	{
-		var display = universe.display;
-		var displaySize = display.sizeDefault.clone().clearZ();
-
-		if (size == null)
-		{
-			size = displaySize;
-		}
-
-		var sizeMultiplier = this.sizeMultiplier.overwriteWith(displaySize).divide(this.sizeBase);
-		var containerSizeScaled = size.clone().clearZ();
-		var containerPosScaled = displaySize.clone().subtract(containerSizeScaled).half();
-		var fontHeightInPixelsScaled = this.fontHeightInPixelsBase * sizeMultiplier.y;
-		var textAcknowledge = "Acknowledge";
-		var textWidth = display.textWidthForFontHeight(textAcknowledge, fontHeightInPixelsScaled);
-		var buttonSizeScaled = new Coords(textWidth * 1.25, fontHeightInPixelsScaled * 2);
-		var containerSizeHalfScaled = containerSizeScaled.clone().half();
-
-		var childControls = [];
-
-		var messageAsLines = message.split("\n");
-		var messageHeight = messageAsLines.length * fontHeightInPixelsScaled;
-		var ySpaceBetweenControls = (containerSizeScaled.y - messageHeight - buttonSizeScaled.y) / 3;
-
-		for (var i = 0; i < messageAsLines.length; i++)
-		{
-			var messageLine = messageAsLines[i];
-
-			var labelMessageLine = new ControlLabel
-			(
-				"labelMessageLine" + i,
-				new Coords
-				(
-					containerSizeHalfScaled.x,
-					ySpaceBetweenControls
-					+ fontHeightInPixelsScaled * (i + .5)
-				), // pos
-				new Coords(containerSizeScaled.x, fontHeightInPixelsScaled), // size
-				true, // isTextCentered
-				messageLine,
-				fontHeightInPixelsScaled
-			);
-
-			childControls.push(labelMessageLine);
-		}
-
-		var buttonPosScaled = new Coords
-		(
-			(containerSizeScaled.x - buttonSizeScaled.x) / 2,
-			2 * ySpaceBetweenControls + messageHeight
-		);
-
-		var buttonAcknowledge = new ControlButton
-		(
-			"buttonAcknowledge",
-			buttonPosScaled,
-			buttonSizeScaled,
-			textAcknowledge,
-			fontHeightInPixelsScaled,
-			true, // hasBorder
-			true, // isEnabled
-			acknowledge,
-			universe // context
-		);
-
-		childControls.push(buttonAcknowledge);
-
-		var returnValue = new ControlContainer
-		(
-			"containerConfirm",
-			containerPosScaled,
-			containerSizeScaled,
-			childControls
-		);
-
-		return returnValue;
-	}
-	*/
 
 	ControlBuilder.prototype.profileDetail = function(universe, size)
 	{
