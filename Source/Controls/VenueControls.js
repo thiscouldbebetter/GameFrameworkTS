@@ -54,77 +54,77 @@ function VenueControls(controlRoot)
 		this.draw(universe);
 
 		var inputHelper = universe.inputHelper;
-		if (inputHelper.inputsActive.length > 0)
+		var inputsActive = inputHelper.inputsActive;
+
+		for (var i = 0; i < inputsActive.length; i++)
 		{
-			var inputsActive = inputHelper.inputsActive;
-
-			for (var i = 0; i < inputsActive.length; i++)
+			var inputActive = inputsActive[i];
+			var mapping = this.inputToActionMappings[inputActive];
+			if (mapping == null)
 			{
-				var inputActive = inputsActive[i];
-				var mapping = this.inputToActionMappings[inputActive];
-				if (mapping == null)
+				if (inputActive.startsWith("Mouse") == true)
 				{
-					if (inputActive.startsWith("Mouse") == true)
+					var scaleFactor = universe.display.scaleFactor;
+					if (inputActive == "MouseClick")
 					{
-						var scaleFactor = universe.display.scaleFactor;
-						if (inputActive == "MouseClick")
+						this._mouseClickPos.overwriteWith
+						(
+							inputHelper.mouseClickPos
+						).divide
+						(
+							scaleFactor
+						);
+						var wasClickHandled = this.controlRoot.mouseClick(this._mouseClickPos);
+						if (wasClickHandled == true)
 						{
-							this._mouseClickPos.overwriteWith
-							(
-								inputHelper.mouseClickPos
-							).divide
-							(
-								scaleFactor
-							);
-							var wasClickHandled = this.controlRoot.mouseClick(this._mouseClickPos);
-							if (wasClickHandled == true)
-							{
-								inputHelper.inputRemove(inputActive);
-							}
-						}
-						else if (inputActive == "MouseMove")
-						{
-							this._mouseMovePos.overwriteWith
-							(
-								inputHelper.mouseMovePos
-							).divide
-							(
-								scaleFactor
-							);
-							this._mouseMovePosPrev.overwriteWith
-							(
-								inputHelper.mouseMovePosPrev
-							).divide
-							(
-								scaleFactor
-							);
-
-							this.controlRoot.mouseMove
-							(
-								this._mouseMovePos, this._mouseMovePosPrev
-							);
+							inputHelper.inputRemove(inputActive);
 						}
 					}
-					else
+					else if (inputActive == "MouseMove")
 					{
-						// Pass the raw input, to allow for text entry.
-						var wasActionHandled = this.controlRoot.actionHandle(inputActive);
-						if (wasActionHandled == true)
-						{
-							inputHelper.inputInactivate(inputActive);
-						}
+						this._mouseMovePos.overwriteWith
+						(
+							inputHelper.mouseMovePos
+						).divide
+						(
+							scaleFactor
+						);
+						this._mouseMovePosPrev.overwriteWith
+						(
+							inputHelper.mouseMovePosPrev
+						).divide
+						(
+							scaleFactor
+						);
+
+						this.controlRoot.mouseMove
+						(
+							this._mouseMovePos, this._mouseMovePosPrev
+						);
 					}
 				}
 				else
 				{
-					var actionName = mapping.actionName;
-					this.controlRoot.actionHandle(actionName);
-					if (mapping.inactivateInputWhenActionPerformed == true)
+					// Pass the raw input, to allow for text entry.
+					var wasActionHandled = this.controlRoot.actionHandle(inputActive);
+					if (wasActionHandled == true)
 					{
 						inputHelper.inputInactivate(inputActive);
 					}
 				}
 			}
-		}
-	}
-}
+			else
+			{
+				var actionName = mapping.actionName;
+				this.controlRoot.actionHandle(actionName);
+				if (mapping.inactivateInputWhenActionPerformed == true)
+				{
+					inputHelper.inputInactivate(inputActive);
+				}
+			}
+
+		} // end for
+
+	} // end method
+
+} // end class

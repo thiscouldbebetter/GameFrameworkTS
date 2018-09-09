@@ -28,9 +28,9 @@ function Universe(name, timerHelper, display, mediaLibrary, world)
 			]
 		);
 
-		var isDebuggingEnabledAsString =
+		var debuggingMode =
 			URLParser.fromWindow().queryStringParameters["debug"];
-		returnValue.isDebuggingEnabled = (isDebuggingEnabledAsString == "true");
+		returnValue.debuggingMode = debuggingMode;
 
 		return returnValue;
 	}
@@ -82,6 +82,8 @@ function Universe(name, timerHelper, display, mediaLibrary, world)
 
 	Universe.prototype.updateForTimerTick = function()
 	{
+		this.inputHelper.updateForTimerTick(this);
+
 		if (this.venueNext != null)
 		{
 			if

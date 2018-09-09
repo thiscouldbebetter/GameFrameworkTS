@@ -9,6 +9,7 @@ function InputHelper()
 	this.mouseMovePosNext = new Coords(0, 0);
 
 	this.keysToPreventDefaultsFor = [ "Tab" ];
+	this.inputsToInactivate = [];
 }
 
 {
@@ -53,8 +54,7 @@ function InputHelper()
 	{
 		if (this.inputsActive[inputToInactivate] != null)
 		{
-			delete this.inputsActive[inputToInactivate];
-			this.inputsActive.remove(inputToInactivate);
+			this.inputsToInactivate.push(inputToInactivate);
 		}
 	}
 
@@ -102,6 +102,22 @@ function InputHelper()
 	}
 
 	InputHelper.prototype.updateForTimerTick = function(universe)
+	{
+		this.updateForTimerTick_Gamepads(universe);
+
+		for (var i = 0; i < this.inputsToInactivate.length; i++)
+		{
+			var inputToInactivate = this.inputsToInactivate[i];
+			if (this.inputsActive[inputToInactivate] != null)
+			{
+				delete this.inputsActive[inputToInactivate];
+				this.inputsActive.remove(inputToInactivate);
+			}
+		}
+		this.inputsToInactivate.length = 0;
+	}
+
+	InputHelper.prototype.updateForTimerTick_Gamepads = function(universe)
 	{
 		var systemGamepads = this.systemGamepads();
 

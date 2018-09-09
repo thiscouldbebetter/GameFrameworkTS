@@ -251,6 +251,14 @@ function Coords(x, y, z)
 		return this;
 	}
 
+	Coords.prototype.multiplyDimensions = function(x, y, z)
+	{
+		this.x *= x;
+		this.y *= y;
+		this.z *= z;
+		return this;
+	}
+
 	Coords.prototype.multiplyScalar = function(scalar)
 	{
 		this.x *= scalar;

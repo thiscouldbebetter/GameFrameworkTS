@@ -19,7 +19,11 @@ function VisualDirectional(visualForNoDirection, visualsForDirections)
 		}
 		else
 		{
-			var direction = Math.round(headingInTurns * this.numberOfDirections - .5);
+			var direction =
+				Math.round
+				(
+					headingInTurns * this.numberOfDirections
+				).wrapToRangeMinMax(0, this.numberOfDirections);
 			visualForHeading = this.visualsForDirections[direction];
 		}
 
