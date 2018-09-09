@@ -4,6 +4,7 @@ function Image(name, sourcePath)
 	this.name = name;
 	this.sourcePath = sourcePath;
 
+	this.isLoaded = false;
 	this.load();
 }
 {
@@ -19,6 +20,7 @@ function Image(name, sourcePath)
 
 		returnValue.systemImage = systemImage;
 		returnValue.sizeInPixels = new Coords(systemImage.width, systemImage.height);
+		returnValue.isLoaded = true;
 
 		return returnValue;
 	}

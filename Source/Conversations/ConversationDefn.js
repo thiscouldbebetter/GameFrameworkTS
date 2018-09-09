@@ -1,9 +1,10 @@
 
 // classes
 
-function ConversationDefn(name, talkNodeDefns, talkNodes)
+function ConversationDefn(name, imageName, talkNodeDefns, talkNodes)
 {
 	this.name = name;
+	this.imageName = imageName;
 	this.talkNodeDefns = talkNodeDefns.addLookups("name");
 	this.talkNodes = talkNodes.addLookups("name");
 }
