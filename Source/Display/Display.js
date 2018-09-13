@@ -168,6 +168,19 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		}
 	}
 
+	Display.prototype.drawCrosshairs = function(center, radius, color)
+	{
+		var drawPos = this.drawPos.overwriteWith(center);
+		this.graphics.beginPath();
+		this.graphics.strokeStyle = color;
+		this.graphics.moveTo(drawPos.x - radius, drawPos.y);
+		this.graphics.lineTo(drawPos.x + radius, drawPos.y);
+		this.graphics.moveTo(drawPos.x, drawPos.y - radius);
+		this.graphics.lineTo(drawPos.x, drawPos.y + radius);
+		this.graphics.stroke();
+	}
+
+
 	Display.prototype.drawEllipse = function
 	(
 		center, semimajorAxis, semiminorAxis, rotationInTurns, colorFill, colorBorder
