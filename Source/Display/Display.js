@@ -251,6 +251,15 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		this.graphics.stroke();
 	}
 
+	Display.prototype.drawPixel = function(pos, color)
+	{
+		this.graphics.fillStyle = color;
+		this.graphics.fillRect
+		(
+			pos.x, pos.y, 1, 1
+		);
+	}
+
 	Display.prototype.drawPolygon = function(vertices, colorFill, colorBorder)
 	{
 		this.graphics.beginPath();
