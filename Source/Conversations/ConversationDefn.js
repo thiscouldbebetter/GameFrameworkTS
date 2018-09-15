@@ -1,10 +1,11 @@
 
 // classes
 
-function ConversationDefn(name, imageName, talkNodeDefns, talkNodes)
+function ConversationDefn(name, imageName, contentTextStringName, talkNodeDefns, talkNodes)
 {
 	this.name = name;
 	this.imageName = imageName;
+	this.contentTextStringName = contentTextStringName;
 	this.talkNodeDefns = talkNodeDefns.addLookups("name");
 	this.talkNodes = talkNodes.addLookups("name");
 }
@@ -27,6 +28,77 @@ function ConversationDefn(name, imageName, talkNodeDefns, talkNodes)
 		}
 
 		return returnNodes;
+	}
+
+	ConversationDefn.prototype.expandFromContentTextString = function(contentTextString)
+	{
+		var contentText = contentTextString.value;
+		var contentTextAsLines = contentText.split("\n");
+		var tagToTextLinesLookup = {};
+		var tagCurrent = null;
+		var linesForTagCurrent;
+		for (var i = 0; i < contentTextAsLines.length; i++)
+		{
+			var contentLine = contentTextAsLines[i];
+			if (contentLine.startsWith("#"))
+			{
+				if (tagCurrent != null)
+				{
+					tagToTextLinesLookup[tagCurrent] = linesForTagCurrent;
+				}
+				tagCurrent = contentLine.split("\t")[0];
+				linesForTagCurrent = [];
+			}
+			else
+			{
+				if (contentLine.length > 0)
+				{
+					linesForTagCurrent.push(contentLine);
+				}
+			}
+		}
+		tagToTextLinesLookup[tagCurrent] = linesForTagCurrent;
+
+		var talkNodeDefns = TalkNodeDefn.Instances();
+		var talkNodeDefnNamesToExpand =
+		[
+			talkNodeDefns["Display"].name,
+			talkNodeDefns["Option"].name,
+		];
+
+		var talkNodesExpanded = [];
+		for (var i = 0; i < this.talkNodes.length; i++)
+		{
+			var talkNodeToExpand = this.talkNodes[i];
+
+			var talkNodeToExpandDefnName = talkNodeToExpand.defnName;
+			var shouldTalkNodeBeExpanded =
+				talkNodeDefnNamesToExpand.contains(talkNodeToExpandDefnName);
+			if (shouldTalkNodeBeExpanded == false)
+			{
+				talkNodesExpanded.push(talkNodeToExpand);
+			}
+			else
+			{
+				var tag = talkNodeToExpand.text;
+				var textLinesForTag = tagToTextLinesLookup[tag];
+				for (var j = 0; j < textLinesForTag.length; j++)
+				{
+					var textLine = textLinesForTag[j];
+					var talkNodeExpanded = new TalkNode
+					(
+						talkNodeToExpand.name + "_" + j,
+						talkNodeToExpandDefnName,
+						textLine,
+						talkNodeToExpand.next,
+						talkNodeToExpand.isActive
+					)
+					talkNodesExpanded.push(talkNodeExpanded);
+				}
+			}
+		}
+
+		this.talkNodes = talkNodesExpanded.addLookups("name");
 	}
 
 	// serialization
