@@ -330,6 +330,14 @@ function Coords(x, y, z)
 		return this;
 	}
 
+	Coords.prototype.subtractWrappedToRangeMax = function(other, max)
+	{
+		this.x = this.x.subtractWrappedToRangeMax(other.x, max);
+		this.y = this.y.subtractWrappedToRangeMax(other.y, max);
+		this.z = this.z.subtractWrappedToRangeMax(other.z, max);
+		return this;
+	}
+
 	Coords.prototype.sumOfDimensions = function()
 	{
 		return this.x + this.y + this.z;

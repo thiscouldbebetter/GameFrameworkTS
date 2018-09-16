@@ -5,6 +5,27 @@ function NumberExtensions()
 }
 
 {
+	Number.prototype.subtractWrappedToRangeMax = function(subtrahend, max)
+	{
+		var differenceUnwrapped = this - subtrahend;
+		var differenceAbsolute = Math.abs(differenceUnwrapped);
+		var differenceAbsoluteLeastSoFar = differenceAbsolute;
+		var returnValue = differenceUnwrapped;
+
+		for (var i = -1; i <= 1; i += 2)
+		{
+			var differenceWrapped = differenceUnwrapped + max * i;
+			differenceAbsolute = Math.abs(differenceWrapped);
+			if (differenceAbsolute < differenceAbsoluteLeastSoFar)
+			{
+				differenceAbsoluteLeastSoFar = differenceAbsolute;
+				returnValue = differenceWrapped;
+			}
+		}
+
+		return returnValue;
+	}
+
 	Number.prototype.isInRangeMinMax = function(min, max)
 	{
 		return (this >= min && this <= max);
