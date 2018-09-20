@@ -113,6 +113,7 @@ function Place(entities)
 			"actor",
 			"playable",
 			"ephemeral",
+			"killable",
 		];
 
 		for (var p = 0; p < propertyNamesToProcess.length; p++)
