@@ -195,7 +195,11 @@ function InputHelper()
 			event.preventDefault();
 		}
 
-		if (inputPressed.length == 1)
+		if (inputPressed == " ")
+		{
+			inputPressed = "_";
+		}
+		else if (isNaN(inputPressed) == false)
 		{
 			inputPressed = "_" + inputPressed;
 		}
@@ -205,7 +209,11 @@ function InputHelper()
 	InputHelper.prototype.handleEventKeyUp = function(event)
 	{
 		var inputReleased = event.key;
-		if (inputReleased.length == 1)
+		if (inputReleased == " ")
+		{
+			inputReleased = "_";
+		}
+		else if (isNaN(inputReleased) == false)
 		{
 			inputReleased = "_" + inputReleased;
 		}

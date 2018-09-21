@@ -5,6 +5,18 @@ function Place(entities)
 	this._entitiesByPropertyName = {};
 	this.entitiesToSpawn = entities.slice();
 	this.entitiesToRemove = [];
+
+	this.propertyNamesToProcess =
+	[
+		"locatable",
+		"constrainable",
+		"collidable",
+		"idleable",
+		"actor",
+		"playable",
+		"ephemeral",
+		"killable",
+	];
 }
 {
 	Place.prototype.draw = function(universe, world)
@@ -104,21 +116,9 @@ function Place(entities)
 
 		this.entitiesSpawn();
 
-		var propertyNamesToProcess =
-		[
-			"locatable",
-			"constrainable",
-			"collidable",
-			"idleable",
-			"actor",
-			"playable",
-			"ephemeral",
-			"killable",
-		];
-
-		for (var p = 0; p < propertyNamesToProcess.length; p++)
+		for (var p = 0; p < this.propertyNamesToProcess.length; p++)
 		{
-			var propertyName = propertyNamesToProcess[p];
+			var propertyName = this.propertyNamesToProcess[p];
 			var entitiesWithProperty = this.entitiesByPropertyName(propertyName);
 			if (entitiesWithProperty != null)
 			{
