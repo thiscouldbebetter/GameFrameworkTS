@@ -7,7 +7,7 @@ function VisualCircle(radius, colorFill, colorBorder)
 }
 
 {
-	VisualCircle.prototype.draw = function(universe, world, display, drawable)
+	VisualCircle.prototype.draw = function(universe, world, display, drawable, entity)
 	{
 		display.drawCircle(drawable.loc.pos, this.radius, this.colorFill, this.colorBorder);
 	}

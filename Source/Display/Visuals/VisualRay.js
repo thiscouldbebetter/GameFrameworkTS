@@ -11,7 +11,7 @@ function VisualRay(length, color)
 }
 
 {
-	VisualRay.prototype.draw = function(universe, world, display, drawable)
+	VisualRay.prototype.draw = function(universe, world, display, drawable, entity)
 	{
 		var drawableLoc = drawable.loc;
 		var drawablePos = drawableLoc.pos;

@@ -12,7 +12,7 @@ function VisualAnimation(name, ticksPerFrame, frames, isRepeating)
 {
 	// visual
 
-	VisualAnimation.prototype.draw = function(universe, world, display, drawable)
+	VisualAnimation.prototype.draw = function(universe, world, display, drawable, entity)
 	{
 		if (drawable.animationRuns == null)
 		{

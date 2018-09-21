@@ -7,7 +7,7 @@ function VisualCircleGradient(radius, gradientFill, colorBorder)
 }
 
 {
-	VisualCircleGradient.prototype.draw = function(universe, world, display, drawable)
+	VisualCircleGradient.prototype.draw = function(universe, world, display, drawable, entity)
 	{
 		display.drawCircleWithGradient
 		(

@@ -7,7 +7,7 @@ function VisualDirectional(visualForNoDirection, visualsForDirections)
 }
 
 {
-	VisualDirectional.prototype.draw = function(universe, world, display, drawable)
+	VisualDirectional.prototype.draw = function(universe, world, display, drawable, entity)
 	{
 		var loc = drawable.loc;
 		var headingInTurns = loc.orientation.headingInTurns();

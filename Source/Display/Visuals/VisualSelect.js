@@ -25,9 +25,9 @@ function VisualSelect(name, childNames, children)
 		return this.children[childNameSelected];
 	}
 
-	VisualSelect.prototype.draw = function(universe, world, display, drawable)
+	VisualSelect.prototype.draw = function(universe, world, display, drawable, entity)
 	{
 		var childSelected = this.childSelected(drawable);
-		childSelected.draw(universe, world, display, drawable);
+		childSelected.draw(universe, world, display, drawable, entity);
 	}
 }

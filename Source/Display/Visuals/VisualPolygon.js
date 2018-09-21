@@ -10,7 +10,7 @@ function VisualPolygon(verticesAsPath, colorFill, colorBorder)
 }
 
 {
-	VisualPolygon.prototype.draw = function(universe, world, display, drawable)
+	VisualPolygon.prototype.draw = function(universe, world, display, drawable, entity)
 	{
 		var pos = drawable.loc.pos;
 		this.transformTranslate.displacement.overwriteWith(drawable.loc.pos);

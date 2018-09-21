@@ -39,7 +39,7 @@ function VisualImage(imageName, sizeScaled)
 
 	// visual
 
-	VisualImage.prototype.draw = function(universe, world, display, drawable)
+	VisualImage.prototype.draw = function(universe, world, display, drawable, entity)
 	{
 		var image = this.image(universe);
 		var imageSize = this.imageSizeScaled(universe);

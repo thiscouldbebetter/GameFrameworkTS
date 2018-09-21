@@ -5,7 +5,7 @@ function VisualNone()
 }
 
 {
-	VisualNone.prototype.draw = function(universe, world, display, drawable)
+	VisualNone.prototype.draw = function(universe, world, display, drawable, entity)
 	{
 		// do nothing
 	}

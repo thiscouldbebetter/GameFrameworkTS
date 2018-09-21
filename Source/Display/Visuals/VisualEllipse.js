@@ -9,7 +9,7 @@ function VisualEllipse(semimajorAxis, semiminorAxis, rotationInTurns, colorFill,
 }
 
 {
-	VisualEllipse.prototype.draw = function(universe, world, display, drawable)
+	VisualEllipse.prototype.draw = function(universe, world, display, drawable, entity)
 	{
 		var drawableLoc = drawable.loc;
 		display.drawEllipse

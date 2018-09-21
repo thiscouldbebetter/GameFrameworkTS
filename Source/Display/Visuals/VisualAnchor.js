@@ -9,12 +9,12 @@ function VisualAnchor(child, posToAnchorAt)
 }
 
 {
-	VisualAnchor.prototype.draw = function(universe, world, display, drawable)
+	VisualAnchor.prototype.draw = function(universe, world, display, drawable, entity)
 	{
 		var drawablePos = drawable.loc.pos;
 		this.posSaved.overwriteWith(drawablePos);
 		drawablePos.overwriteWith(this.posToAnchorAt);
-		this.child.draw(universe, world, display, drawable);
+		this.child.draw(universe, world, display, drawable, entity);
 		drawablePos.overwriteWith(this.posSaved);
 	}
 }
