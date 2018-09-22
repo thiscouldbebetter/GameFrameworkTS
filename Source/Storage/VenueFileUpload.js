@@ -68,18 +68,21 @@ function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 	VenueFileUpload.prototype.updateForTimerTick = function(universe)
 	{
 		var inputHelper = universe.inputHelper;
-		var inputsActive = inputHelper.inputsActive;
-		for (var i = 0; i < inputsActive.length; i++)
+		var inputsPressed = inputHelper.inputsPressed;
+		for (var i = 0; i < inputsPressed.length; i++)
 		{
-			var inputActive = inputsActive[i];
-			var inputToActionMapping = this.inputToActionMappings[inputActive];
-			if (inputToActionMapping != null)
+			var inputPressed = inputsPressed[i];
+			if (inputPressed.isActive == true)
 			{
-				inputHelper.inputInactivate(inputActive);
-				var actionName = inputToActionMapping.actionName;
-				if (actionName == "ControlCancel")
+				var inputToActionMapping = this.inputToActionMappings[inputPressed.name];
+				if (inputToActionMapping != null)
 				{
-					universe.venueNext = this.venueNextIfCancelled;
+					inputPressed.isActive = false;
+					var actionName = inputToActionMapping.actionName;
+					if (actionName == "ControlCancel")
+					{
+						universe.venueNext = this.venueNextIfCancelled;
+					}
 				}
 			}
 		}

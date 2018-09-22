@@ -37,19 +37,22 @@ function Playable()
 			universe.soundHelper.soundWithNamePlayAsEffect(universe, "Sound");
 		}
 
-		var inputsActive = inputHelper.inputsActive;
-		for (var i = 0; i < inputsActive.length; i++)
+		var inputsPressed = inputHelper.inputsPressed;
+		for (var i = 0; i < inputsPressed.length; i++)
 		{
-			var inputActive = inputsActive[i];
-			var mapping = inputToActionMappings[inputActive];
-			if (mapping != null)
+			var inputPressed = inputsPressed[i];
+			if (inputPressed.isActive == true)
 			{
-				var actionName = mapping.actionName;
-				var action = actions[actionName];
-				action.perform(universe, world, place, player);
-				if (mapping.inactivateInputWhenActionPerformed == true)
+				var mapping = inputToActionMappings[inputPressed.name];
+				if (mapping != null)
 				{
-					inputHelper.inputInactivate(inputActive);
+					var actionName = mapping.actionName;
+					var action = actions[actionName];
+					action.perform(universe, world, place, player);
+					if (mapping.inactivateInputWhenActionPerformed == true)
+					{
+						inputPressed.isActive = false;
+					}
 				}
 			}
 		}

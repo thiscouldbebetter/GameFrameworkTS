@@ -99,8 +99,20 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 				+ text.substr(this.cursorPos + 1)
 			);
 		}
-		else if (actionNameToHandle.length == 1) // printable character
+		else if (actionNameToHandle.length == 1 || actionNameToHandle.startsWith("_") ) // printable character
 		{
+			if (actionNameToHandle.startsWith("_"))
+			{
+				if (actionNameToHandle == "_")
+				{
+					actionNameToHandle = " ";
+				}
+				else
+				{
+					actionNameToHandle = actionNameToHandle.substr(1);
+				}
+			}
+
 			if (this.numberOfCharsMax == null || text.length < this.numberOfCharsMax)
 			{
 				text = this.text

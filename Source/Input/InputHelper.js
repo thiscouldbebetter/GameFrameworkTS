@@ -9,14 +9,12 @@ function InputHelper()
 	this.mouseMovePosNext = new Coords(0, 0);
 
 	this.keysToPreventDefaultsFor = [ "Tab" ];
-	this.inputsToInactivate = [];
 }
 
 {
 	InputHelper.prototype.initialize = function(universe)
 	{
 		this.inputsPressed = [];
-		this.inputsActive = [];
 		this.gamepadsConnected = [];
 
 		document.body.onkeydown = this.handleEventKeyDown.bind(this);
@@ -35,41 +33,23 @@ function InputHelper()
 		this.gamepadsCheck();
 	}
 
-	InputHelper.prototype.inputAdd = function(inputPressed)
+	InputHelper.prototype.inputAdd = function(inputPressedName)
 	{
-		if (this.inputsPressed[inputPressed] == null)
+		if (this.inputsPressed[inputPressedName] == null)
 		{
-			this.inputsPressed[inputPressed] = inputPressed;
+			var inputPressed = new Input(inputPressedName);
+			this.inputsPressed[inputPressedName] = inputPressed;
 			this.inputsPressed.push(inputPressed);
-
-			if (this.inputsActive[inputPressed] == null)
-			{
-				this.inputsActive[inputPressed] = inputPressed;
-				this.inputsActive.push(inputPressed);
-			}
 		}
 	}
 
-	InputHelper.prototype.inputInactivate = function(inputToInactivate)
+	InputHelper.prototype.inputRemove = function(inputReleasedName)
 	{
-		if (this.inputsActive[inputToInactivate] != null)
+		if (this.inputsPressed[inputReleasedName] != null)
 		{
-			this.inputsToInactivate.push(inputToInactivate);
-		}
-	}
-
-	InputHelper.prototype.inputRemove = function(inputReleased)
-	{
-		if (this.inputsPressed[inputReleased] != null)
-		{
-			delete this.inputsPressed[inputReleased];
+			var inputReleased = this.inputsPressed[inputReleasedName];
+			delete this.inputsPressed[inputReleasedName];
 			this.inputsPressed.remove(inputReleased);
-		}
-
-		if (this.inputsActive[inputReleased] != null)
-		{
-			delete this.inputsActive[inputReleased];
-			this.inputsActive.remove(inputReleased);
 		}
 	}
 
@@ -86,7 +66,8 @@ function InputHelper()
 	{
 		if (value == null)
 		{
-			return (this.inputsActive["MouseClick"] != null);
+			var inputPressed = this.inputsPressed["MouseClick"];
+			return (inputPressed != null && inputPressed.isActive == true);
 		}
 		else
 		{
@@ -104,17 +85,6 @@ function InputHelper()
 	InputHelper.prototype.updateForTimerTick = function(universe)
 	{
 		this.updateForTimerTick_Gamepads(universe);
-
-		for (var i = 0; i < this.inputsToInactivate.length; i++)
-		{
-			var inputToInactivate = this.inputsToInactivate[i];
-			if (this.inputsActive[inputToInactivate] != null)
-			{
-				delete this.inputsActive[inputToInactivate];
-				this.inputsActive.remove(inputToInactivate);
-			}
-		}
-		this.inputsToInactivate.length = 0;
 	}
 
 	InputHelper.prototype.updateForTimerTick_Gamepads = function(universe)
@@ -199,10 +169,15 @@ function InputHelper()
 		{
 			inputPressed = "_";
 		}
+		else if (inputPressed == "_")
+		{
+			inputPressed = "__";
+		}
 		else if (isNaN(inputPressed) == false)
 		{
 			inputPressed = "_" + inputPressed;
 		}
+
 		this.inputAdd(inputPressed);
 	}
 
@@ -212,6 +187,10 @@ function InputHelper()
 		if (inputReleased == " ")
 		{
 			inputReleased = "_";
+		}
+		else if (inputReleased == "_")
+		{
+			inputReleased = "__";
 		}
 		else if (isNaN(inputReleased) == false)
 		{
