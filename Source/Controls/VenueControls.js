@@ -64,22 +64,26 @@ function VenueControls(controlRoot)
 				var inputPressedName = inputPressed.name;
 
 				var mapping = this.inputToActionMappings[inputPressedName];
-				if (mapping == null)
+
+				if (inputPressedName.startsWith("Mouse") == false)
 				{
-					// Pass the raw input, to allow for text entry.
-					var wasActionHandled = this.controlRoot.actionHandle(inputPressedName);
-					if (wasActionHandled == true)
+					if (mapping == null)
 					{
-						inputPressed.isActive = false;
+						// Pass the raw input, to allow for text entry.
+						var wasActionHandled = this.controlRoot.actionHandle(inputPressedName);
+						if (wasActionHandled == true)
+						{
+							inputPressed.isActive = false;
+						}
 					}
-				}
-				else if (inputPressedName.startsWith("Mouse") == false)
-				{
-					var actionName = mapping.actionName;
-					this.controlRoot.actionHandle(actionName);
-					if (mapping.inactivateInputWhenActionPerformed == true)
+					else
 					{
-						inputPressed.isActive = false;
+						var actionName = mapping.actionName;
+						this.controlRoot.actionHandle(actionName);
+						if (mapping.inactivateInputWhenActionPerformed == true)
+						{
+							inputPressed.isActive = false;
+						}
 					}
 				}
 				else if (inputPressedName == "MouseClick")
