@@ -29,7 +29,7 @@ function World(name, dateCreated, defns, place)
 			new Coords(15, 15), // playerPos
 			5 // numberOfItems
 		);
-		place.entitiesSpawn();
+		place.entitiesSpawn(universe, null);
 
 		var constraintDefns =
 		[

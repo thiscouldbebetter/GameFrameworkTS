@@ -57,7 +57,7 @@ function Place(entities)
 		for (var i = 0; i < this.entitiesToSpawn.length; i++)
 		{
 			var entity = this.entitiesToSpawn[i];
-			this.entitySpawn(entity);
+			this.entitySpawn(universe, world, entity);
 		}
 
 		this.entitiesToSpawn.clear();
@@ -81,7 +81,7 @@ function Place(entities)
 		delete this.entities[entity.name];
 	}
 
-	Place.prototype.entitySpawn = function(entity)
+	Place.prototype.entitySpawn = function(universe, world, entity)
 	{
 		this.entities.push(entity);
 		this.entities[entity.name] = entity;
@@ -97,6 +97,11 @@ function Place(entities)
 
 			var entitiesWithProperty = this.entitiesByPropertyName(propertyName);
 			entitiesWithProperty.push(entity);
+
+			if (property.initialize != null)
+			{
+				property.initialize(universe, world, this, entity);
+			}
 		}
 	}
 
@@ -114,7 +119,7 @@ function Place(entities)
 	{
 		this.entitiesRemove();
 
-		this.entitiesSpawn();
+		this.entitiesSpawn(universe, world);
 
 		for (var p = 0; p < this.propertyNamesToProcess.length; p++)
 		{
