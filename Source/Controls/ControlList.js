@@ -1,5 +1,5 @@
 
-function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected, bindingForItemValue)
+function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected, bindingForItemValue, bindingForIsEnabled)
 {
 	this.name = name;
 	this.pos = pos;
@@ -9,6 +9,7 @@ function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPix
 	this.fontHeightInPixels = fontHeightInPixels;
 	this.bindingForItemSelected = bindingForItemSelected;
 	this.bindingForItemValue = bindingForItemValue;
+	this.bindingForIsEnabled = bindingForIsEnabled;
 
 	this.itemSpacing = 1.2 * this.fontHeightInPixels; // hack
 
@@ -90,7 +91,7 @@ function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPix
 
 	ControlList.prototype.isEnabled = function()
 	{
-		return true;
+		return (this.bindingForIsEnabled == null ? true : this.bindingForIsEnabled.get());
 	}
 
 	ControlList.prototype.itemSelected = function(itemToSet)

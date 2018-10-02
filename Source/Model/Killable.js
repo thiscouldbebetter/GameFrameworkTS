@@ -1,8 +1,8 @@
 
-function Killable(integrity, kill)
+function Killable(integrity, die)
 {
 	this.integrity = integrity;
-	this.kill = kill;
+	this.die = die;
 }
 {
 	Killable.prototype.updateForTimerTick = function(universe, world, place, entityKillable)
@@ -10,9 +10,9 @@ function Killable(integrity, kill)
 		if (this.integrity <= 0)
 		{
 			place.entitiesToRemove.push(entityKillable);
-			if (this.kill != null)
+			if (this.die != null)
 			{
-				this.kill(universe, world, place, entityKillable);
+				this.die(universe, world, place, entityKillable);
 			}
 		}
 	}
