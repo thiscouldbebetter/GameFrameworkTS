@@ -931,6 +931,83 @@ function ControlBuilder(styles)
 		return returnValue;
 	}
 
+	ControlBuilder.prototype.slideshow = function(universe, size, imageNamesAndMessagesForSlides, venueAfterSlideshow)
+	{
+		if (size == null)
+		{
+			size = universe.display.sizeDefault;
+		}
+
+		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
+
+		var controlsForSlides = [];
+
+		for (var i = 0; i < imageNamesAndMessagesForSlides.length; i++)
+		{
+			var imageNameAndMessage = imageNamesAndMessagesForSlides[i];
+			var imageName = imageNameAndMessage[0];
+			var message = imageNameAndMessage[1];
+
+			var containerSlide = new ControlContainer
+			(
+				"containerSlide_" + i,
+				new Coords(0, 0).multiply(sizeMultiplier), // pos
+				new Coords(200, 150).multiply(sizeMultiplier), // size
+				// children
+				[
+					new ControlVisual
+					(
+						"imageSlide",
+						new Coords(0, 0).multiply(sizeMultiplier),
+						new Coords(200, 150).multiply(sizeMultiplier), // size
+						new VisualImage(imageName, size),
+					),
+
+					new ControlLabel
+					(
+						"labelSlideText",
+						new Coords(100, this.fontHeightInPixelsBase * 2).multiply(sizeMultiplier), // pos
+						new Coords(200, 150).multiply(sizeMultiplier), // size
+						true, // isTextCentered,
+						message,
+						this.fontHeightInPixelsBase * 2
+					),
+
+					new ControlButton
+					(
+						"buttonNext",
+						new Coords(75, 120).multiply(sizeMultiplier), // pos
+						new Coords(50, 40).multiply(sizeMultiplier), // size
+						"Next",
+						this.fontHeightInPixelsBase,
+						false, // hasBorder
+						true, // isEnabled
+						function click(slideIndexNext, universe)
+						{
+							var venueNext;
+							if (slideIndexNext < controlsForSlides.length)
+							{
+								var controlForSlideNext = controlsForSlides[slideIndexNext];
+								venueNext = new VenueControls(controlForSlideNext);
+							}
+							else
+							{
+								venueNext = venueAfterSlideshow;
+							}
+							venueNext = new VenueFader(venueNext, universe.venueCurrent);
+							universe.venueNext = venueNext;
+						}.bind(this, i + 1),
+						universe // context
+					)
+				]
+			);
+
+			controlsForSlides.push(containerSlide);
+		}
+
+		return controlsForSlides[0];
+	}
+
 	ControlBuilder.prototype.title = function(universe, size)
 	{
 		if (size == null)
