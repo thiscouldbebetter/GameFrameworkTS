@@ -231,7 +231,14 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		}
 		else
 		{
-			this.graphics.drawImage(systemImage, pos.x, pos.y, size.x, size.y);
+			try
+			{
+				this.graphics.drawImage(systemImage, pos.x, pos.y, size.x, size.y);
+			}
+			catch (ex)
+			{
+				// Do nothing.
+			}
 		}
 	}
 
