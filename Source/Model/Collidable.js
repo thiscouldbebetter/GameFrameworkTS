@@ -11,6 +11,7 @@ function Collidable(collider, entityPropertyNamesToCollideWith, collideEntities)
 	}
 
 	this.ticksUntilCanCollide = 0;
+	this.entityAlreadyCollidedWith = null;
 }
 
 {
@@ -34,7 +35,8 @@ function Collidable(collider, entityPropertyNamesToCollideWith, collideEntities)
 						if (entityOther != entity)
 						{
 							var collidableOther = entityOther.collidable;
-							if (collidableOther.ticksUntilCanCollide == 0)
+							var canCollide = (collidableOther.ticksUntilCanCollide == 0);
+							if (canCollide)
 							{
 								var colliderThis = entity.collidable.collider;
 								var colliderOther = collidableOther.collider;
@@ -44,7 +46,20 @@ function Collidable(collider, entityPropertyNamesToCollideWith, collideEntities)
 								(
 									colliderThis, colliderOther
 								);
-								if (doEntitiesCollide == true)
+
+								if (entityOther == this.entityAlreadyCollidedWith)
+								{
+									if (doEntitiesCollide)
+									{
+										doEntitiesCollide = false;
+									}
+									else
+									{
+										this.entityAlreadyCollidedWith = null;
+									}
+								}
+
+								if (doEntitiesCollide)
 								{
 									this.collideEntities
 									(

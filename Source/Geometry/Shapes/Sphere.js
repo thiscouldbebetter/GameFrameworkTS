@@ -16,4 +16,9 @@ function Sphere(center, radius)
 		var returnValue = (distanceOfOther + other.radius <= this.radius);
 		return returnValue;
 	}
+
+	Sphere.prototype.pointRandom = function()
+	{
+		return new Polar(0, this.radius).random().toCoords(new Coords()).add(this.center);
+	}
 }

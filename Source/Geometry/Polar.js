@@ -61,6 +61,13 @@ function Polar(azimuthInTurns, radius, elevationInTurns)
 		return this;
 	}
 
+	Polar.prototype.random = function()
+	{
+		this.azimuthInTurns = Math.random();
+		this.elevationInTurns = Math.random();
+		return this;
+	}
+
 	Polar.prototype.toCoords = function(coords)
 	{
 		var azimuthInRadians = this.azimuthInTurns * Polar.RadiansPerTurn;

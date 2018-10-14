@@ -9,8 +9,8 @@ function ControlLabel(name, pos, size, isTextCentered, text, fontHeightInPixels)
 	this.fontHeightInPixels = fontHeightInPixels;
 
 	// Helper variables.
-	this.drawPos = new Coords();
-	this.drawLoc = new Location(this.drawPos);
+
+	this._drawPos = new Coords();
 }
 
 {
@@ -28,23 +28,30 @@ function ControlLabel(name, pos, size, isTextCentered, text, fontHeightInPixels)
 
 	ControlLabel.prototype.draw = function(universe, display, drawLoc)
 	{
-		var drawPos = this.drawPos.overwriteWith(drawLoc.pos).add(this.pos);
+		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 		var style = this.style(universe);
 		var text = this.text();
 
 		if (text != null)
 		{
-			display.drawText
-			(
-				text,
-				this.fontHeightInPixels,
-				drawPos,
-				style.colorBorder,
-				style.colorFill, // colorOutline
-				null, // areColorsReversed
-				this.isTextCentered,
-				this.size.x // widthMaxInPixels
-			);
+			var textAsLines = ("" + text).split("\n");
+			for (var i = 0; i < textAsLines.length; i++)
+			{
+				var textLine = textAsLines[i];
+				display.drawText
+				(
+					textLine,
+					this.fontHeightInPixels,
+					drawPos,
+					style.colorBorder,
+					style.colorFill, // colorOutline
+					null, // areColorsReversed
+					this.isTextCentered,
+					this.size.x // widthMaxInPixels
+				);
+
+				drawPos.y += this.fontHeightInPixels;
+			}
 		}
 	}
 }
