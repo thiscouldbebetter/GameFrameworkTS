@@ -386,7 +386,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			new Talker("AnEveningWithProfessorSurly"),
 			new Actor
 			(
-				function activity(universe, world, place, entityActor)
+				function activity(universe, world, place, entityActor, target)
 				{
 					var actor = entityActor.actor;
 					var targetPos = actor.target;
@@ -473,9 +473,8 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			new Drawable(enemyVisual),
 			new Actor
 			(
-				function activity(universe, world, place, actor)
+				function activity(universe, world, place, actor, entityToTargetName)
 				{
-					var entityToTargetName = "Player";
 					var target = place.entities[entityToTargetName];
 					var actorLoc = actor.locatable.loc;
 
@@ -486,7 +485,8 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 					(
 						actorLoc.pos
 					).normalize();
-				}
+				},
+				"Player"
 			),
 		]
 	);
