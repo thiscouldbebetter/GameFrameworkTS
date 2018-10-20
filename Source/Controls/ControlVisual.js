@@ -32,7 +32,7 @@ function ControlVisual(name, pos, size, visual)
 		);
 
 		var drawable = this._drawable;
-		drawable.loc.overwriteWith(drawLoc);
+		drawable.loc.pos.overwriteWith(drawPos);
 		drawPos.add(this._sizeHalf);
 		this.visual.draw(universe, universe.world, display, drawable);
 	}

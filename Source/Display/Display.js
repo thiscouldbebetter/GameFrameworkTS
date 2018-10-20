@@ -445,6 +445,13 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 			platformHelper.domElementRemove(this.canvas);
 		}
 
+		this.initializeCanvasAndGraphicsContext();
+
+		platformHelper.domElementAdd(this.canvas);
+	}
+
+	Display.prototype.initializeCanvasAndGraphicsContext = function()
+	{
 		this.canvas = document.createElement("canvas");
 		this.canvas.width = this.sizeInPixels.x;
 		this.canvas.height = this.sizeInPixels.y;
@@ -458,7 +465,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		this.scaleFactor = this.sizeInPixels.clone().divide(sizeBase);
 		this.graphics.scale(this.scaleFactor.x, this.scaleFactor.y);
 
-		platformHelper.domElementAdd(this.canvas);
+		return this;
 	}
 
 	Display.prototype.show = function(universe)
@@ -473,5 +480,10 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		var returnValue = this.graphics.measureText(textToMeasure).width;
 		this.graphics.font = fontToRestore;
 		return returnValue;
+	}
+
+	Display.prototype.toImage = function()
+	{
+		return Image.fromSystemImage("[fromDisplay]", this.canvas);
 	}
 }

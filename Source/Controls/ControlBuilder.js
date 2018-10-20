@@ -960,7 +960,7 @@ function ControlBuilder(styles)
 						"imageSlide",
 						new Coords(0, 0).multiply(sizeMultiplier),
 						new Coords(200, 150).multiply(sizeMultiplier), // size
-						new VisualImage(imageName, size),
+						new VisualImageFromLibrary(imageName, size),
 					),
 
 					new ControlLabel
@@ -1029,7 +1029,7 @@ function ControlBuilder(styles)
 					"imageTitle",
 					new Coords(0, 0).multiply(sizeMultiplier),
 					new Coords(200, 150).multiply(sizeMultiplier), // size
-					new VisualImage("Title", size),
+					new VisualImageFromLibrary("Title", size),
 				),
 
 				new ControlButton

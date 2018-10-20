@@ -1,5 +1,5 @@
 
-function VisualImage(imageName, sizeScaled)
+function VisualImageFromLibrary(imageName, sizeScaled)
 {
 	this.imageName = imageName;
 	this._sizeScaled = sizeScaled;
@@ -11,14 +11,14 @@ function VisualImage(imageName, sizeScaled)
 {
 	// static methods
 
-	VisualImage.manyFromImages = function(images, imageSizeScaled)
+	VisualImageFromLibrary.manyFromImages = function(images, imageSizeScaled)
 	{
 		var returnValues = [];
 
 		for (var i = 0; i < images.length; i++)
 		{
 			var image = images[i];
-			var visual = new VisualImage(image.name, imageSizeScaled);
+			var visual = new VisualImageFromLibrary(image.name, imageSizeScaled);
 			returnValues.push(visual);
 		}
 
@@ -27,19 +27,19 @@ function VisualImage(imageName, sizeScaled)
 
 	// instance methods
 
-	VisualImage.prototype.image = function(universe)
+	VisualImageFromLibrary.prototype.image = function(universe)
 	{
 		return universe.mediaLibrary.imageGetByName(this.imageName);
 	}
 
-	VisualImage.prototype.imageSizeScaled = function(universe)
+	VisualImageFromLibrary.prototype.imageSizeScaled = function(universe)
 	{
 		return (this._sizeScaled == null ? this.image(universe).sizeInPixels: this._sizeScaled);
 	}
 
 	// visual
 
-	VisualImage.prototype.draw = function(universe, world, display, drawable, entity)
+	VisualImageFromLibrary.prototype.draw = function(universe, world, display, drawable, entity)
 	{
 		var image = this.image(universe);
 		var imageSize = this.imageSizeScaled(universe);
