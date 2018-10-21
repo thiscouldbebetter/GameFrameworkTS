@@ -23,14 +23,29 @@ function ControlBuilder(styles)
 
 		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
 
+		var fontHeight = this.fontHeightInPixelsBase * sizeMultiplier.y;
+
+		var numberOfLinesInMessageMinusOne = message.split("\n").length - 1;
+		var labelSize = new Coords
+		(
+			200,
+			fontHeight * numberOfLinesInMessageMinusOne
+		).multiply(sizeMultiplier);
+
+		var labelPos = new Coords
+		(
+			100,
+			65 - fontHeight * (numberOfLinesInMessageMinusOne / 4),
+		).multiply(sizeMultiplier);
+
 		var labelMessage = new ControlLabel
 		(
 			"labelMessage",
-			new Coords(100, 65).multiply(sizeMultiplier), // pos
-			new Coords(200, 25).multiply(sizeMultiplier), // size
+			labelPos,
+			labelSize,
 			true, // isTextCentered
 			message,
-			this.fontHeightInPixelsBase * sizeMultiplier.y
+			fontHeight
 		);
 
 		var childControls = [ labelMessage ];
@@ -38,7 +53,7 @@ function ControlBuilder(styles)
 		var numberOfOptions = optionNames.length;
 
 		var buttonWidth = 55;
-		var buttonSize = new Coords(buttonWidth, 25).multiply(sizeMultiplier);
+		var buttonSize = new Coords(buttonWidth, fontHeight).multiply(sizeMultiplier);
 		var spaceBetweenButtons = 5;
 		var buttonMarginLeftRight =
 			(
