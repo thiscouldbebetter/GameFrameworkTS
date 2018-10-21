@@ -29,20 +29,23 @@ function Image(name, sourcePath)
 
 	Image.prototype.load = function()
 	{
-		var image = this;
-
-		var imgElement = document.createElement("img");
-		imgElement.onload = function(event)
+		if (this.sourcePath != null)
 		{
-			var imgLoaded = event.target;
-			image.isLoaded = true;
-			image.systemImage = imgLoaded;
-			image.sizeInPixels = new Coords
-			(
-				imgLoaded.width,
-				imgLoaded.height
-			);
+			var image = this;
+
+			var imgElement = document.createElement("img");
+			imgElement.onload = function(event)
+			{
+				var imgLoaded = event.target;
+				image.isLoaded = true;
+				image.systemImage = imgLoaded;
+				image.sizeInPixels = new Coords
+				(
+					imgLoaded.width,
+					imgLoaded.height
+				);
+			}
+			imgElement.src = this.sourcePath;
 		}
-		imgElement.src = this.sourcePath;
 	}
 }

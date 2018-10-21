@@ -1,17 +1,17 @@
 
-function Playable()
+function Playable(player)
 {
-	// Do nothing.
+	this.player = player;
 }
 {
-	Playable.prototype.updateForTimerTick = function(universe, world, place, player)
+	Playable.prototype.updateForTimerTick = function(universe, world, place, entityPlayer)
 	{
 		var size = place.size;
 		var inputToActionMappings = place.inputToActionMappings;
 		var actions = place.actions;
 		var camera = place.camera;
 
-		var playerLoc = player.locatable.loc;
+		var playerLoc = entityPlayer.locatable.loc;
 
 		var inputHelper = universe.inputHelper;
 		if (inputHelper.isMouseClicked() == true)
@@ -48,7 +48,7 @@ function Playable()
 				{
 					var actionName = mapping.actionName;
 					var action = actions[actionName];
-					action.perform(universe, world, place, player);
+					action.perform(universe, world, place, entityPlayer);
 					if (mapping.inactivateInputWhenActionPerformed == true)
 					{
 						inputPressed.isActive = false;
