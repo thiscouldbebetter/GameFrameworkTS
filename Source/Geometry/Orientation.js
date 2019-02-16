@@ -12,7 +12,14 @@ function Orientation(forward, down)
 {
 	// instances
 
-	Orientation.Instances = new Orientation_Instances();
+	Orientation.Instances = function()
+	{
+		if (Orientation._Instances == null)
+		{
+			Orientation._Instances = new Orientation_Instances();
+		}
+		return Orientation._Instances;
+	}
 
 	function Orientation_Instances()
 	{

@@ -33,8 +33,8 @@ function World(name, dateCreated, defns, place)
 
 		var constraintDefns =
 		[
-			ConstraintDefn.Instances.Friction,
-			ConstraintDefn.Instances.SpeedMax,
+			ConstraintDefn.Instances().Friction,
+			ConstraintDefn.Instances().SpeedMax,
 		];
 
 		var defns = new Defns(constraintDefns);

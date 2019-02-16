@@ -50,7 +50,7 @@ function Universe(name, timerHelper, display, mediaLibrary, world)
 		this.soundHelper = new SoundHelper(this.mediaLibrary.sounds);
 		this.videoHelper = new VideoHelper(this.mediaLibrary.videos);
 
-		this.controlBuilder = new ControlBuilder([ControlStyle.Instances.Default]);
+		this.controlBuilder = new ControlBuilder([ControlStyle.Instances().Default]);
 
 		var venueControlsTitle = new VenueControls
 		(

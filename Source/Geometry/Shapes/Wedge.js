@@ -60,7 +60,7 @@ function Wedge(vertex, directionMin, angleSpannedInTurns)
 		this.rayDirectionMaxAsPolar.azimuthInTurns = angleInTurnsMax;
 		this.rayDirectionMaxAsPolar.toCoords(this.rayDirectionMax);
 
-		var down = Coords.Instances.ZeroZeroOne;
+		var down = Coords.Instances().ZeroZeroOne;
 
 		this.downFromVertex.overwriteWith
 		(

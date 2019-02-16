@@ -5,7 +5,7 @@ function Location(pos, orientation, venue)
 
 	if (orientation == null)
 	{
-		orientation = Orientation.Instances.ForwardXDownZ.clone();
+		orientation = Orientation.Instances().ForwardXDownZ.clone();
 	}
 	this.orientation = orientation;
 

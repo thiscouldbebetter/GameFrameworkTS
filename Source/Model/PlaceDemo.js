@@ -5,7 +5,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 
 	this.actions =
 	[
-		Action.Instances.DoNothing,
+		Action.Instances().DoNothing,
 		new Action
 		(
 			"ShowMenu",
@@ -26,7 +26,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			{
 				place.entityAccelerateInDirection
 				(
-					world, actor, Coords.Instances.ZeroOneZero
+					world, actor, Coords.Instances().ZeroOneZero
 				);
 			}
 		),
@@ -37,7 +37,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			{
 				place.entityAccelerateInDirection
 				(
-					world, actor, Coords.Instances.MinusOneZeroZero
+					world, actor, Coords.Instances().MinusOneZeroZero
 				);
 			}
 		),
@@ -48,7 +48,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			{
 				place.entityAccelerateInDirection
 				(
-					world, actor, Coords.Instances.OneZeroZero
+					world, actor, Coords.Instances().OneZeroZero
 				);
 			}
 		),
@@ -59,7 +59,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			{
 				place.entityAccelerateInDirection
 				(
-					world, actor, Coords.Instances.ZeroMinusOneZero
+					world, actor, Coords.Instances().ZeroMinusOneZero
 				);
 			}
 		),
@@ -578,7 +578,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 		new Location
 		(
 			new Coords(0, 0, 0),
-			Orientation.Instances.ForwardZDownY.clone()
+			Orientation.Instances().ForwardZDownY.clone()
 		)
 	);
 

@@ -9,7 +9,14 @@ function ControlStyle(name, colorBackground, colorFill, colorBorder, colorDisabl
 }
 
 {
-	ControlStyle.Instances = new ControlStyle_Instances();
+	ControlStyle.Instances = function()
+	{
+		if (ControlStyle._Instances == null)
+		{
+			ControlStyle._Instances = new ControlStyle_Instances();
+		}
+		return ControlStyle._Instances;
+	}
 
 	function ControlStyle_Instances()
 	{

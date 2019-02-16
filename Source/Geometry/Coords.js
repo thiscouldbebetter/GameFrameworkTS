@@ -18,7 +18,14 @@ function Coords(x, y, z)
 
 	// instances
 
-	Coords.Instances = new Coords_Instances();
+	Coords.Instances = function()
+	{
+		if (Coords._Instances == null)
+		{
+			Coords._Instances = new Coords_Instances();
+		}
+		return Coords._Instances;
+	}
 
 	function Coords_Instances()
 	{
@@ -220,7 +227,7 @@ function Coords(x, y, z)
 
 	Coords.prototype.isInRangeMax = function(max)
 	{
-		return this.isInRangeMinMax(Coords.Instances.Zeroes, max);
+		return this.isInRangeMinMax(Coords.Instances().Zeroes, max);
 	}
 
 	Coords.prototype.isInRangeMinMax = function(min, max)

@@ -6,7 +6,14 @@ function ConstraintDefn(name, constrain)
 }
 
 {
-	ConstraintDefn.Instances = new ConstraintDefn_Instances();
+	ConstraintDefn.Instances = function()
+	{
+		if (ConstraintDefn._Instances == null)
+		{
+			ConstraintDefn._Instances = new ConstraintDefn_Instances();
+		}
+		return ConstraintDefn._Instances;
+	}
 
 	function ConstraintDefn_Instances()
 	{

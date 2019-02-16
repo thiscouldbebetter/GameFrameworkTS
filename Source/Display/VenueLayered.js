@@ -34,7 +34,7 @@ function VenueLayered(children, colorToOverlayBetweenChildren)
 				var display = universe.display;
 				display.drawRectangle
 				(
-					Coords.Instances.Zeroes, display.size,
+					Coords.Instances().Zeroes, display.size,
 					this.colorToOverlayBetweenChildren
 				);
 			}

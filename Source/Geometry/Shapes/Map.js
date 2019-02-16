@@ -9,7 +9,7 @@ function Map(sizeInCells, cellSize, cellPrototype, cellAtPosInCells, cellSource)
 
 	this.sizeInCellsMinusOnes = this.sizeInCells.clone().subtract
 	(
-		Coords.Instances.Ones
+		Coords.Instances().Ones
 	);
 	this.size = this.sizeInCells.clone().multiply(this.cellSize);
 	this.sizeHalf = this.size.clone().half();
