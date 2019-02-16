@@ -16,5 +16,5 @@ function Transform_DimensionsSwap(dimensionIndices)
 		coordsToTransform.dimension(dimensionIndex0, dimension1);
 		coordsToTransform.dimension(dimensionIndex1, dimension0);
 		return coordsToTransform;
-	}
+	};
 }

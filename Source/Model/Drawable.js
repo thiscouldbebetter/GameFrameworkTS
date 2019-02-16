@@ -8,5 +8,5 @@ function Drawable(visual)
 	{
 		this.loc = entity.locatable.loc;
 		this.visual.draw(universe, world, universe.display, this, entity);
-	}
+	};
 }

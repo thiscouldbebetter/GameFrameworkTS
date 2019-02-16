@@ -98,7 +98,7 @@ function ControlBuilder(styles)
 		);
 
 		return returnValue;
-	}
+	};
 
 	ControlBuilder.prototype.choiceList = function
 	(
@@ -173,7 +173,7 @@ function ControlBuilder(styles)
 
 		return returnValue;
 
-	}
+	};
 
 	ControlBuilder.prototype.configure = function(universe, size)
 	{
@@ -413,7 +413,7 @@ function ControlBuilder(styles)
 		);
 
 		return returnValue;
-	}
+	};
 
 	ControlBuilder.prototype.confirm = function(universe, size, message, confirm, cancel)
 	{
@@ -421,7 +421,7 @@ function ControlBuilder(styles)
 		(
 			universe, size, message, ["Confirm", "Cancel"], [confirm, cancel]
 		);
-	}
+	};
 
 	ControlBuilder.prototype.message = function(universe, size, message, acknowledge)
 	{
@@ -429,8 +429,7 @@ function ControlBuilder(styles)
 		(
 			universe, size, message, ["Acknowledge"], [acknowledge]
 		);
-
-	}
+	};
 
 	ControlBuilder.prototype.profileDetail = function(universe, size)
 	{
@@ -634,7 +633,7 @@ function ControlBuilder(styles)
 		);
 
 		return returnValue;
-	}
+	};
 
 	ControlBuilder.prototype.profileNew = function(universe, size)
 	{
@@ -744,7 +743,7 @@ function ControlBuilder(styles)
 				),
 			]
 		);
-	}
+	};
 
 	ControlBuilder.prototype.profileSelect = function(universe, size)
 	{
@@ -944,7 +943,7 @@ function ControlBuilder(styles)
 		);
 
 		return returnValue;
-	}
+	};
 
 	ControlBuilder.prototype.slideshow = function(universe, size, imageNamesAndMessagesForSlides, venueAfterSlideshow)
 	{
@@ -1021,7 +1020,7 @@ function ControlBuilder(styles)
 		}
 
 		return controlsForSlides[0];
-	}
+	};
 
 	ControlBuilder.prototype.title = function(universe, size)
 	{
@@ -1071,7 +1070,7 @@ function ControlBuilder(styles)
 		);
 
 		return returnValue;
-	}
+	};
 
 	ControlBuilder.prototype.worldDetail = function(universe, size)
 	{
@@ -1271,7 +1270,7 @@ function ControlBuilder(styles)
 		);
 
 		return returnValue;
-	}
+	};
 
 	ControlBuilder.prototype.worldLoad = function(universe, size)
 	{
@@ -1490,7 +1489,7 @@ function ControlBuilder(styles)
 		);
 
 		return returnValue;
-	}
+	};
 
 	ControlBuilder.prototype.worldSave = function(universe, size)
 	{
@@ -1623,5 +1622,5 @@ function ControlBuilder(styles)
 		);
 
 		return returnValue;
-	}
+	};
 }

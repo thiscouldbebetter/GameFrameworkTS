@@ -43,5 +43,5 @@ function VisualImageImmediate(image, sizeScaled)
 			drawable.loc.pos
 		);
 		display.drawImage(image, drawPos, imageSize);
-	}
+	};
 }

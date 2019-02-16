@@ -9,10 +9,10 @@ function Constraint(defnName, target)
 	{
 		var constraintDefn = this.defn(world);
 		constraintDefn.constrain(universe, world, place, entity, this);
-	}
+	};
 
 	Constraint.prototype.defn = function(world)
 	{
 		return world.defns.constraintDefns[this.defnName];
-	}
+	};
 }

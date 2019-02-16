@@ -30,5 +30,5 @@ function VisualPolygon(verticesAsPath, colorFill, colorBorder)
 		(
 			this.verticesAsPathTransformed.points, this.colorFill, this.colorBorder
 		);
-	}
+	};
 }

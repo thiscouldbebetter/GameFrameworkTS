@@ -47,7 +47,7 @@ function VenueControls(controlRoot)
 		var drawLoc = this._drawLoc;
 		drawLoc.pos.clear();
 		this.controlRoot.draw(universe, display, drawLoc);
-	}
+	};
 
 	VenueControls.prototype.updateForTimerTick = function(universe)
 	{
@@ -128,6 +128,6 @@ function VenueControls(controlRoot)
 
 		} // end for
 
-	} // end method
+	}; // end method
 
 } // end class

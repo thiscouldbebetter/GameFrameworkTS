@@ -1,4 +1,4 @@
-
+l
 function VisualSelect(name, childNames, children)
 {
 	this.name = name;
@@ -23,11 +23,11 @@ function VisualSelect(name, childNames, children)
 			drawable.visualNameSelected = childNameSelected;
 		}
 		return this.children[childNameSelected];
-	}
+	};
 
 	VisualSelect.prototype.draw = function(universe, world, display, drawable, entity)
 	{
 		var childSelected = this.childSelected(drawable);
 		childSelected.draw(universe, world, display, drawable, entity);
-	}
+	};
 }

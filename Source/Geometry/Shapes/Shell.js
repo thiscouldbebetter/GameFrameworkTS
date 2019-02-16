@@ -15,5 +15,5 @@ function Shell(sphereOuter, radiusInner)
 	Shell.prototype.collider = function()
 	{
 		return this._collider;
-	}
+	};
 }

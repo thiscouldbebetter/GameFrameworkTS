@@ -11,7 +11,7 @@ function ItemHolder(items)
 		var itemExistingQuantity = (itemExisting == null ? 0 : itemExisting.quantity);
 		var returnValue = (itemExistingQuantity >= itemToCheck.quantity);
 		return returnValue;
-	}
+	};
 
 	ItemHolder.prototype.itemAdd = function(itemToAdd)
 	{
@@ -26,7 +26,7 @@ function ItemHolder(items)
 		{
 			itemExisting.quantity += itemToAdd.quantity;
 		}
-	}
+	};
 
 	ItemHolder.prototype.itemRemove = function(itemToRemove)
 	{
@@ -37,7 +37,7 @@ function ItemHolder(items)
 			this.items.remove(itemExisting);
 			delete this.items[itemDefnName];
 		}
-	}
+	};
 
 	ItemHolder.prototype.itemSubtract = function(itemToSubtract)
 	{
@@ -52,7 +52,7 @@ function ItemHolder(items)
 				delete this.items[itemDefnName];
 			}
 		}
-	}
+	};
 
 	ItemHolder.prototype.itemsTransferTo = function(other)
 	{
@@ -62,5 +62,5 @@ function ItemHolder(items)
 			other.itemAdd(item);
 			this.itemRemove(item);
 		}
-	}
+	};
 }

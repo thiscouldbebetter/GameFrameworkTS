@@ -7,6 +7,6 @@ function Modellable(model)
 	Modellable.prototype.updateForTimerTick = function(universe, world, place, entity)
 	{
 		// Do nothing.
-	}
+	};
 }
 

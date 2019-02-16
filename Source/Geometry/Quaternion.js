@@ -24,8 +24,7 @@ function Quaternion(w, x, y, z)
 		var returnValue = new Quaternion(w, x, y, z).normalize();
 
 		return returnValue;
-	}
-
+	};
 
 	// instance methods
 
@@ -50,12 +49,12 @@ function Quaternion(w, x, y, z)
 		coordsToRotate.overwriteWith(result);
 
 		return coordsToRotate;
-	}
+	};
 
 	Quaternion.prototype.clone = function()
 	{
 		return new Quaternion(this.w, this.x, this.y, this.z);
-	}
+	};
 
 	Quaternion.prototype.divide = function(divisor)
 	{
@@ -65,7 +64,7 @@ function Quaternion(w, x, y, z)
 		this.z /= divisor;
 
 		return this;
-	}
+	};
 
 	Quaternion.prototype.invert = function()
 	{
@@ -78,7 +77,7 @@ function Quaternion(w, x, y, z)
 		this.z *= -1;
 
 		return this;
-	}
+	};
 
 	Quaternion.prototype.multiply = function(other)
 	{
@@ -89,7 +88,7 @@ function Quaternion(w, x, y, z)
 			this.w * other.y - this.x * other.z + this.y * other.w + this.z * other.x,
 			this.w * other.z + this.x * other.y - this.y * other.x + this.z * other.w
 		);
-	}
+	};
 
 	Quaternion.prototype.magnitude = function()
 	{
@@ -100,21 +99,21 @@ function Quaternion(w, x, y, z)
 			+ this.y * this.y
 			+ this.z * this.z
 		);
-	}
+	};
 
 	Quaternion.prototype.normalize = function()
 	{
 		return this.divide(this.magnitude());
-	}
+	};
 
 	Quaternion.prototype.overwriteWith = function(other)
 	{
 		this.overwriteWithWXYZ(other.w, other.x, other.y, other.z);
 
 		return this;
-	}
+	};
 
-	Quaternion.prototype.overwriteWithWXYZ = function(w,  x,  y,  z)
+	Quaternion.prototype.overwriteWithWXYZ = function(w, x, y, z)
 	{
 		this.w = w;
 		this.x = x;
@@ -122,5 +121,5 @@ function Quaternion(w, x, y, z)
 		this.z = z;
 
 		return this;
-	}
+	};
 }

@@ -16,6 +16,5 @@ function Ephemeral(ticksToLive, expire)
 				this.expire(universe, world, place, entityEphemeral);
 			}
 		}
-	}
-
+	};
 }

@@ -18,5 +18,5 @@ function TimerHelper(ticksPerSecond)
 			handleEventTimerTick,
 			this.millisecondsPerTick
 		);
-	}
+	};
 }

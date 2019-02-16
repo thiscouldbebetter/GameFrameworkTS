@@ -28,7 +28,7 @@ function Place(entities)
 			var drawable = entity.drawable;
 			drawable.updateForTimerTick(universe, world, this, entity);
 		}
-	}
+	};
 
 	Place.prototype.entitiesByPropertyName = function(propertyName)
 	{
@@ -40,7 +40,7 @@ function Place(entities)
 		}
 
 		return returnValues;
-	}
+	};
 
 	Place.prototype.entitiesRemove = function()
 	{
@@ -50,7 +50,7 @@ function Place(entities)
 			this.entityRemove(entity);
 		}
 		this.entitiesToRemove.clear();
-	}
+	};
 
 	Place.prototype.entitiesSpawn = function(universe, world)
 	{
@@ -61,7 +61,7 @@ function Place(entities)
 		}
 
 		this.entitiesToSpawn.clear();
-	}
+	};
 
 	Place.prototype.entityRemove = function(entity)
 	{
@@ -79,7 +79,7 @@ function Place(entities)
 		}
 		this.entities.remove(entity);
 		delete this.entities[entity.name];
-	}
+	};
 
 	Place.prototype.entitySpawn = function(universe, world, entity)
 	{
@@ -103,17 +103,17 @@ function Place(entities)
 				property.initialize(universe, world, this, entity);
 			}
 		}
-	}
+	};
 
 	Place.prototype.finalize = function(universe, world)
 	{
 		universe.inputHelper.inputsRemoveAll();
-	}
+	};
 
 	Place.prototype.initialize = function(universe, world)
 	{
 		// Do nothing.
-	}
+	};
 
 	Place.prototype.updateForTimerTick = function(universe, world)
 	{
@@ -135,5 +135,5 @@ function Place(entities)
 				}
 			}
 		}
-	}
+	};
 }

@@ -25,12 +25,12 @@ function DateTime(year, month, day, hours, minutes, seconds)
 		);
 
 		return returnValue;
-	}
+	};
 
 	DateTime.now = function()
 	{
 		return DateTime.fromSystemDate(new Date());
-	}
+	};
 
 	// instance methods
 
@@ -47,7 +47,7 @@ function DateTime(year, month, day, hours, minutes, seconds)
 		);
 
 		return returnValue;
-	}
+	};
 
 	DateTime.prototype.toStringMMDD_HHMM_SS = function()
 	{
@@ -62,7 +62,7 @@ function DateTime(year, month, day, hours, minutes, seconds)
 			+ ("" + this.seconds).padLeft(2, "0");
 
 		return returnValue;
-	}
+	};
 
 	DateTime.prototype.toStringTimestamp = function()
 	{
@@ -81,5 +81,5 @@ function DateTime(year, month, day, hours, minutes, seconds)
 			+ ("" + this.seconds).padLeft(2, "0");
 
 		return returnValue;
-	}
+	};
 }

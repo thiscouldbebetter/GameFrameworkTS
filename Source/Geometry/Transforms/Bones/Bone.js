@@ -43,8 +43,8 @@ function Bone(name, length, orientation, children, isVisible)
 
 	Bone.prototype.clone = function()
 	{
-// test
-var orientationCloned = this.orientation.clone();
+		// hack - test
+		var orientationCloned = this.orientation.clone();
 
 		var returnValue = new Bone
 		(
@@ -56,13 +56,13 @@ var orientationCloned = this.orientation.clone();
 		);
 
 		return returnValue;
-	}
+	};
 
 	Bone.prototype.overwriteWith = function(other)
 	{
 		this.orientation.overwriteWith(other.orientation);
 		this.children.overwriteWith(other.children);
-	}
+	};
 
 	// transformable
 
@@ -74,5 +74,5 @@ var orientationCloned = this.orientation.clone();
 			var axis = axes[i];
 			transformToApply.transformCoords(axis);
 		}
-	}
+	};
 }

@@ -47,22 +47,22 @@ function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPix
 			wasActionHandled = true;
 		}
 		return wasActionHandled;
-	}
+	};
 
 	ControlList.prototype.focusGain = function()
 	{
 		this.isHighlighted = true;
-	}
+	};
 
 	ControlList.prototype.focusLose = function()
 	{
 		this.isHighlighted = false;
-	}
+	};
 
 	ControlList.prototype.indexOfFirstItemVisible = function()
 	{
 		return this.scrollbar.sliderPosInItems();
-	}
+	};
 
 	ControlList.prototype.indexOfItemSelected = function(valueToSet)
 	{
@@ -82,17 +82,17 @@ function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPix
 			this.itemSelected(itemToSelect);
 		}
 		return returnValue;
-	}
+	};
 
 	ControlList.prototype.indexOfLastItemVisible = function()
 	{
 		return this.indexOfFirstItemVisible() + Math.floor(this.scrollbar.windowSizeInItems) - 1;
-	}
+	};
 
 	ControlList.prototype.isEnabled = function()
 	{
 		return (this.bindingForIsEnabled == null ? true : this.bindingForIsEnabled.get());
-	}
+	};
 
 	ControlList.prototype.itemSelected = function(itemToSet)
 	{
@@ -124,7 +124,7 @@ function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPix
 		}
 
 		return returnValue;
-	}
+	};
 
 	ControlList.prototype.itemSelectedNextInDirection = function(direction)
 	{
@@ -174,12 +174,12 @@ function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPix
 
 		var returnValue = this.itemSelected();
 		return returnValue;
-	}
+	};
 
 	ControlList.prototype.items = function()
 	{
 		return (this._items.get == null ? this._items : this._items.get());
-	}
+	};
 
 	ControlList.prototype.mouseClick = function(clickPos)
 	{
@@ -227,12 +227,12 @@ function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPix
 		}
 
 		return true; // wasActionHandled
-	}
+	};
 
 	ControlList.prototype.style = function(universe)
 	{
 		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
-	}
+	};
 
 	// drawable
 
@@ -322,5 +322,5 @@ function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPix
 		}
 
 		this.scrollbar.draw(universe, display, drawLoc);
-	}
+	};
 }

@@ -10,12 +10,12 @@ function ControlContainerTransparent(containerInner)
 	ControlContainerTransparent.prototype.childWithFocus = function()
 	{
 		return this.containerInner.childWithFocus();
-	}
+	};
 
 	ControlContainerTransparent.prototype.childWithFocusNextInDirection = function(direction)
 	{
 		return this.containerInner.childWithFocusNextInDirection(direction);
-	}
+	};
 
 	ControlContainerTransparent.prototype.childrenAtPosAddToList = function
 	(
@@ -28,12 +28,12 @@ function ControlContainerTransparent(containerInner)
 		(
 			posToCheck, listToAddTo, addFirstChildOnly
 		);
-	}
+	};
 
 	ControlContainerTransparent.prototype.actionHandle = function(actionNameToHandle)
 	{
 		return this.containerInner.actionHandle(actionNameToHandle);
-	}
+	};
 
 	ControlContainerTransparent.prototype.mouseClick = function(mouseClickPos)
 	{
@@ -59,12 +59,12 @@ function ControlContainerTransparent(containerInner)
 		}
 
 		return wasClickHandled;
-	}
+	};
 
 	ControlContainerTransparent.prototype.mouseMove = function(mouseMovePos)
 	{
 		this.containerInner.mouseMove(mouseMovePos);
-	}
+	};
 
 	// drawable
 
@@ -89,5 +89,5 @@ function ControlContainerTransparent(containerInner)
 			var child = children[i];
 			child.draw(universe, display, drawLoc);
 		}
-	}
+	};
 }

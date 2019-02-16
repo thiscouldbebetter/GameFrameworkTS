@@ -38,12 +38,12 @@ function ConversationRun(defn, quit, universe)
 			this.scopeCurrent.talkNodeForOptionSelected = null;
 		}
 		this.update();
-	}
+	};
 
 	ConversationRun.prototype.update = function()
 	{
 		this.scopeCurrent.update(this);
-	}
+	};
 
 	// controls
 
@@ -186,7 +186,7 @@ function ConversationRun(defn, quit, universe)
 		);
 
 		return returnValue;
-	}
+	};
 
 	ConversationRun.prototype.toControlTranscript = function(size, universe, venueToReturnTo)
 	{
@@ -272,5 +272,5 @@ function ConversationRun(defn, quit, universe)
 		);
 
 		return returnValue;
-	}
+	};
 }

@@ -36,7 +36,7 @@ function Location(pos, orientation, venue)
 		returnValue.timeOffsetInTicks = this.timeOffsetInTicks;
 
 		return returnValue;
-	}
+	};
 
 	Location.prototype.overwriteWith = function(other)
 	{
@@ -47,10 +47,10 @@ function Location(pos, orientation, venue)
 		this.accel.overwriteWith(other.accel);
 		this.force.overwriteWith(other.force);
 		return this;
-	}
+	};
 
 	Location.prototype.toString = function()
 	{
 		return this.pos.clone().round().toString();
-	}
+	};
 }

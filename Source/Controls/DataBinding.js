@@ -11,7 +11,7 @@ function DataBinding(context, bindingExpression, argumentLookup)
 	{
 		this.context = value;
 		return this;
-	}
+	};
 
 	DataBinding.prototype.get = function()
 	{
@@ -77,7 +77,7 @@ function DataBinding(context, bindingExpression, argumentLookup)
 		}
 
 		return returnValue;
-	}
+	};
 
 	DataBinding.prototype.set = function(valueToSet)
 	{
@@ -146,5 +146,5 @@ function DataBinding(context, bindingExpression, argumentLookup)
 		}
 
 		return valueToSet;
-	}
+	};
 }

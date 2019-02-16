@@ -26,7 +26,7 @@ function VisualAnimation(name, ticksPerFrame, frames, isRepeating)
 			drawable.animationRuns[this.name] = animationRun;
 		}
 		animationRun.update(universe, world, display, drawable);
-	}
+	};
 }
 
 function AnimationRun(defn)
@@ -40,18 +40,18 @@ function AnimationRun(defn)
 		var frameIndexCurrent = this.frameIndexCurrent();
 		var frameCurrent = this.defn.frames[frameIndexCurrent];
 		return frameCurrent;
-	}
+	};
 
 	AnimationRun.prototype.frameIndexCurrent = function()
 	{
 		return Math.floor(this.ticksSinceStarted / this.defn.ticksPerFrame);
-	}
+	};
 
 	AnimationRun.prototype.isComplete = function()
 	{
 		var returnValue = (this.ticksSinceStarted >= this.defn.ticksToComplete);
 		return returnValue;
-	}
+	};
 
 	AnimationRun.prototype.update = function(universe, world, display, drawable)
 	{
@@ -73,5 +73,5 @@ function AnimationRun(defn)
 					this.ticksSinceStarted.trimToRangeMax(this.defn.ticksToComplete - 1);
 			}
 		}
-	}
+	};
 }

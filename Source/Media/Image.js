@@ -47,5 +47,5 @@ function Image(name, sourcePath)
 			}
 			imgElement.src = this.sourcePath;
 		}
-	}
+	};
 }

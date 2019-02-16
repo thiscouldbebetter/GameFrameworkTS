@@ -48,7 +48,7 @@ function MediaLibrary(images, sounds, videos, fonts, textStrings)
 		}
 
 		return areAllItemsLoadedSoFar;
-	}
+	};
 
 	MediaLibrary.prototype.waitForItemToLoad = function(collectionName, itemName, callback)
 	{
@@ -58,7 +58,7 @@ function MediaLibrary(images, sounds, videos, fonts, textStrings)
 			this.waitForItemToLoad_TimerTick.bind(this, itemToLoad, callback),
 			100 // milliseconds
 		);
-	}
+	};
 
 	MediaLibrary.prototype.waitForItemToLoad_TimerTick = function(itemToLoad, callback)
 	{
@@ -67,7 +67,7 @@ function MediaLibrary(images, sounds, videos, fonts, textStrings)
 			clearInterval(this.timer);
 			callback.call();
 		}
-	}
+	};
 
 	MediaLibrary.prototype.waitForItemsAllToLoad = function(callback)
 	{
@@ -76,7 +76,7 @@ function MediaLibrary(images, sounds, videos, fonts, textStrings)
 			this.waitForItemsAllToLoad_TimerTick.bind(this, callback),
 			100 // milliseconds
 		);
-	}
+	};
 
 	MediaLibrary.prototype.waitForItemsAllToLoad_TimerTick = function(callback)
 	{
@@ -85,7 +85,7 @@ function MediaLibrary(images, sounds, videos, fonts, textStrings)
 			clearInterval(this.timer);
 			callback.call();
 		}
-	}
+	};
 
 	// accessors
 
@@ -100,30 +100,30 @@ function MediaLibrary(images, sounds, videos, fonts, textStrings)
 				this.images[image.name] = image;
 			}
 		}
-	}
+	};
 
 	MediaLibrary.prototype.fontGetByName = function(name)
 	{
 		return this.fonts[name];
-	}
+	};
 
 	MediaLibrary.prototype.imageGetByName = function(name)
 	{
 		return this.images[name];
-	}
+	};
 
 	MediaLibrary.prototype.soundGetByName = function(name)
 	{
 		return this.sounds[name];
-	}
+	};
 
 	MediaLibrary.prototype.textStringGetByName = function(name)
 	{
 		return this.textStrings[name];
-	}
+	};
 
 	MediaLibrary.prototype.videoGetByName = function(name)
 	{
 		return this.videos[name];
-	}
+	};
 }

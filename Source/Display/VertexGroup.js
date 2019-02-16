@@ -11,5 +11,5 @@ function VertexGroup(name, vertexIndices)
 	VertexGroup.prototype.clone = function()
 	{
 		return new VertexGroup(this.name, this.vertexIndices.slice());
-	}
+	};
 }

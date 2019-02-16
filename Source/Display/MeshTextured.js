@@ -26,7 +26,7 @@ function MeshTextured(geometry, materials, faceTextures, vertexGroups)
 		}
 
 		return this._faces;
-	}
+	};
 
 	MeshTextured.prototype.faceTexturesBuild = function()
 	{
@@ -53,7 +53,7 @@ function MeshTextured(geometry, materials, faceTextures, vertexGroups)
 		this.faceTextures = faceTextures;
 
 		return this;
-	}
+	};
 
 	MeshTextured.prototype.faceIndicesByMaterial = function()
 	{
@@ -79,14 +79,14 @@ function MeshTextured(geometry, materials, faceTextures, vertexGroups)
 		}
 
 		return this._faceIndicesByMaterial;
-	}
+	};
 
 	MeshTextured.prototype.transform = function(transformToApply)
 	{
 		this.geometry.transform(transformToApply);
 
 		return this;
-	}
+	};
 
 	MeshTextured.prototype.transformFaceTextures = function(transformToApply)
 	{
@@ -102,7 +102,7 @@ function MeshTextured(geometry, materials, faceTextures, vertexGroups)
 		}
 
 		return this;
-	}
+	};
 
 	// cloneable
 
@@ -115,14 +115,14 @@ function MeshTextured(geometry, materials, faceTextures, vertexGroups)
 			( this.faceTextures == null ? null : this.faceTextures.clone() ),
 			( this.vertexGroups == null ? null : this.vertexGroups.clone() )
 		);
-	}
+	};
 
 	MeshTextured.prototype.overwriteWith = function(other)
 	{
 		this.geometry.overwriteWith(other.geometry);
 		// todo
 		return this;
-	}
+	};
 }
 
 function MeshTexturedFaceTexture(materialName, textureUVs)
@@ -137,5 +137,5 @@ function MeshTexturedFaceTexture(materialName, textureUVs)
 		(
 			this.materialName, this.textureUVs.clone()
 		);
-	}
+	};
 }

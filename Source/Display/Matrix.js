@@ -34,7 +34,7 @@ function Matrix(values)
 		var returnValue = new Matrix(valuesCloned);
 
 		return returnValue;
-	}
+	};
 
 	Matrix.prototype.divideScalar = function(scalar)
 	{
@@ -44,7 +44,7 @@ function Matrix(values)
 		}
 
 		return this;
-	}
+	};
 
 	Matrix.prototype.multiply = function(other)
 	{
@@ -75,7 +75,7 @@ function Matrix(values)
 		this.overwriteWithValues(valuesMultiplied);
 
 		return this;
-	}
+	};
 
 	Matrix.prototype.multiplyScalar = function(scalar)
 	{
@@ -85,7 +85,7 @@ function Matrix(values)
 		}
 
 		return this;
-	}
+	};
 
 	Matrix.prototype.overwriteWith = function(other)
 	{
@@ -95,7 +95,7 @@ function Matrix(values)
 		}
 
 		return this;
-	}
+	};
 
 	Matrix.prototype.overwriteWithOrientationEntity = function(orientation)
 	{
@@ -123,7 +123,7 @@ function Matrix(values)
 
 
 		return this;
-	}
+	};
 
 	Matrix.prototype.overwriteWithOrientationCamera = function(orientation)
 	{
@@ -140,7 +140,7 @@ function Matrix(values)
 		]);
 
 		return this;
-	}
+	};
 
 	Matrix.prototype.overwriteWithOrientationMover = function(orientation)
 	{
@@ -165,7 +165,7 @@ function Matrix(values)
 		]);
 
 		return this;
-	}
+	};
 
 	Matrix.prototype.overwriteWithPerspectiveForCamera = function(camera)
 	{
@@ -204,7 +204,7 @@ function Matrix(values)
 		]);
 
 		return this;
-	}
+	};
 
 	Matrix.prototype.overwriteWithTranslate = function(displacement)
 	{
@@ -217,7 +217,7 @@ function Matrix(values)
 		]);
 
 		return this;
-	}
+	};
 
 	Matrix.prototype.overwriteWithValues = function(otherValues)
 	{
@@ -227,7 +227,7 @@ function Matrix(values)
 		}
 
 		return this;
-	}
+	};
 
 	Matrix.prototype.toWebGLArray = function()
 	{
@@ -244,5 +244,5 @@ function Matrix(values)
 		var returnValues = new Float32Array(returnValues);
 
 		return returnValues;
-	}
+	};
 }

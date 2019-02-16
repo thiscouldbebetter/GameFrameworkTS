@@ -95,5 +95,5 @@ function Transform_MeshPoseWithSkeleton
 			}
 
 		} // end for each boneInfluence
-	}
+	};
 }

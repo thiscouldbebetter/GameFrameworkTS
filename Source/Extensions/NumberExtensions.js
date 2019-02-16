@@ -8,13 +8,13 @@ function NumberExtensions()
 	Number.prototype.isInRangeMinMax = function(min, max)
 	{
 		return (this >= min && this <= max);
-	}
+	};
 
 	Number.prototype.roundToDecimalPlaces = function(numberOfPlaces)
 	{
 		var multiplier = Math.pow(10, numberOfPlaces);
 		return Math.round(this * multiplier) / multiplier;
-	}
+	};
 
 	Number.prototype.subtractWrappedToRangeMax = function(subtrahend, max)
 	{
@@ -35,12 +35,12 @@ function NumberExtensions()
 		}
 
 		return returnValue;
-	}
+	};
 
 	Number.prototype.trimToRangeMax = function(max)
 	{
 		return this.trimToRangeMinMax(0, max);
-	}
+	};
 
 	Number.prototype.trimToRangeMinMax = function(min, max)
 	{
@@ -56,7 +56,7 @@ function NumberExtensions()
 		}
 
 		return value;
-	}
+	};
 
 	Number.prototype.wrapToRangeMinMax = function(min, max)
 	{
@@ -82,5 +82,5 @@ function NumberExtensions()
 		}
 
 		return value;
-	}
+	};
 }

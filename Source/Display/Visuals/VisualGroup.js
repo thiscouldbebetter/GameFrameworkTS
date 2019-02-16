@@ -12,5 +12,5 @@ function VisualGroup(children)
 			var child = this.children[i];
 			child.draw(universe, world, display, drawable, entity);
 		}
-	}
+	};
 }

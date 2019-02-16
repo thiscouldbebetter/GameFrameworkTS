@@ -16,5 +16,5 @@ function VisualAnchor(child, posToAnchorAt)
 		drawablePos.overwriteWith(this.posToAnchorAt);
 		this.child.draw(universe, world, display, drawable, entity);
 		drawablePos.overwriteWith(this.posSaved);
-	}
+	};
 }

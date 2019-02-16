@@ -5,5 +5,5 @@ function MapCell()
 }
 
 {
-	MapCell.prototype.clone = function() { return new MapCell(); }
+	MapCell.prototype.clone = function() { return new MapCell(); };
 }

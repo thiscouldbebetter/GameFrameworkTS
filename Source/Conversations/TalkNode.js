@@ -17,7 +17,7 @@ function TalkNode(name, defnName, text, next, isActive)
 		var returnValue = "_" + TalkNode._idNext;
 		TalkNode._idNext++;
 		return returnValue;
-	}
+	};
 
 	// instance methods
 
@@ -28,23 +28,23 @@ function TalkNode(name, defnName, text, next, isActive)
 		{
 			defn.activate(conversationRun, scope, this);
 		}
-	}
+	};
 
 	TalkNode.prototype.defn = function(conversationDefn)
 	{
 		return conversationDefn.talkNodeDefns[this.defnName];
-	}
+	};
 
 	TalkNode.prototype.execute = function(conversationRun, scope)
 	{
 		var defn = this.defn(conversationRun.defn);
 		defn.execute(conversationRun, scope, this);
-	}
+	};
 
 	TalkNode.prototype.textForTranscript = function(conversationDefn)
 	{
 		var speakerName = (this.defnName == "Option" ? "YOU" : "THEY" );
 		var returnValue = speakerName + ": " + this.text;
 		return returnValue;
-	}
+	};
 }

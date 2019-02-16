@@ -9,12 +9,12 @@ function VenueWorld(world)
 	VenueWorld.prototype.draw = function(universe)
 	{
 		this.world.draw(universe);
-	}
+	};
 
 	VenueWorld.prototype.finalize = function(universe)
 	{
 		universe.soundHelper.soundForMusic.pause(universe);
-	}
+	};
 
 	VenueWorld.prototype.initialize = function(universe)
 	{
@@ -23,11 +23,11 @@ function VenueWorld(world)
 
 		var soundHelper = universe.soundHelper;
 		soundHelper.soundWithNamePlayAsMusic(universe, "Music");
-	}
+	};
 
 	VenueWorld.prototype.updateForTimerTick = function(universe)
 	{
 		this.world.updateForTimerTick(universe);
 		this.draw(universe);
-	}
+	};
 }

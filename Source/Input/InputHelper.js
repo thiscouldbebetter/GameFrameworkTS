@@ -31,7 +31,7 @@ function InputHelper()
 		}
 
 		this.gamepadsCheck();
-	}
+	};
 
 	InputHelper.prototype.inputAdd = function(inputPressedName)
 	{
@@ -41,7 +41,7 @@ function InputHelper()
 			this.inputsPressed[inputPressedName] = inputPressed;
 			this.inputsPressed.push(inputPressed);
 		}
-	}
+	};
 
 	InputHelper.prototype.inputRemove = function(inputReleasedName)
 	{
@@ -51,7 +51,7 @@ function InputHelper()
 			delete this.inputsPressed[inputReleasedName];
 			this.inputsPressed.remove(inputReleased);
 		}
-	}
+	};
 
 	InputHelper.prototype.inputsRemoveAll = function()
 	{
@@ -60,7 +60,7 @@ function InputHelper()
 			var input = this.inputsPressed[i];
 			this.inputRemove(input);
 		}
-	}
+	};
 
 	InputHelper.prototype.isMouseClicked = function(value)
 	{
@@ -80,12 +80,12 @@ function InputHelper()
 				this.inputRemove("MouseClick");
 			}
 		}
-	}
+	};
 
 	InputHelper.prototype.updateForTimerTick = function(universe)
 	{
 		this.updateForTimerTick_Gamepads(universe);
-	}
+	};
 
 	InputHelper.prototype.updateForTimerTick_Gamepads = function(universe)
 	{
@@ -150,7 +150,7 @@ function InputHelper()
 				}
 			}
 		}
-	}
+	};
 
 	// events
 
@@ -179,7 +179,7 @@ function InputHelper()
 		}
 
 		this.inputAdd(inputPressed);
-	}
+	};
 
 	InputHelper.prototype.handleEventKeyUp = function(event)
 	{
@@ -198,7 +198,7 @@ function InputHelper()
 		}
 
 		this.inputRemove(inputReleased);
-	}
+	};
 
 	// events - mouse
 
@@ -213,7 +213,7 @@ function InputHelper()
 			0
 		);
 		this.inputAdd("MouseClick");
-	}
+	};
 
 	InputHelper.prototype.handleEventMouseMove = function(event)
 	{
@@ -232,12 +232,12 @@ function InputHelper()
 			this.mouseMovePos.overwriteWith(this.mouseMovePosNext);
 			this.inputAdd("MouseMove");
 		}
-	}
+	};
 
 	InputHelper.prototype.handleEventMouseUp = function(event)
 	{
 		this.inputRemove("MouseClick");
-	}
+	};
 
 	// gamepads
 
@@ -253,12 +253,10 @@ function InputHelper()
 				this.gamepadsConnected.push(gamepad);
 			}
 		}
-	}
+	};
 
 	InputHelper.prototype.systemGamepads = function()
 	{
 		return navigator.getGamepads();
-	}
-
-
+	};
 }

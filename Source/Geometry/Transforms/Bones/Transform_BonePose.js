@@ -17,7 +17,7 @@ function Transform_BonePose(boneName, cyclesToRotateAroundAxesDownRightForward)
 			this.boneName,
 			this.cyclesToRotateAroundAxesDownRightForward
 		);
-	}
+	};
 
 	Transform_BonePose.prototype.interpolateWith = function(other, fractionOfProgressTowardOther)
 	{
@@ -39,7 +39,7 @@ function Transform_BonePose(boneName, cyclesToRotateAroundAxesDownRightForward)
 		);
 
 		return returnValue;
-	}
+	};
 
 	Transform_BonePose.prototype.transform = function(transformableToTransform)
 	{
@@ -75,7 +75,7 @@ function Transform_BonePose(boneName, cyclesToRotateAroundAxesDownRightForward)
 		}
 
 		this.transform_Bone(quaternionsForRotation, boneToTransform)
-	}
+	};
 
 	Transform_BonePose.prototype.transform_Bone = function(quaternionsForRotation, boneToTransform)
 	{
@@ -100,5 +100,5 @@ function Transform_BonePose(boneName, cyclesToRotateAroundAxesDownRightForward)
 			var childBone = boneToTransform.children[i];
 			this.transform_Bone(quaternionsForRotation, childBone);
 		}
-	}
+	};
 }

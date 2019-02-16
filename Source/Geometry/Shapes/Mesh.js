@@ -13,7 +13,7 @@ function Mesh(center, vertexOffsets, faceBuilders)
 		var bounds = new Bounds(center, size);
 		var returnValue = Mesh.fromBounds(bounds);
 		return returnValue;
-	}
+	};
 
 	Mesh.cubeUnit = function(center)
 	{
@@ -24,7 +24,7 @@ function Mesh(center, vertexOffsets, faceBuilders)
 		var size = new Coords(2, 2, 2);
 		var returnValue = Mesh.boxOfSize(center, size);
 		return returnValue;
-	}
+	};
 
 	Mesh.fromBounds = function(bounds)
 	{
@@ -65,7 +65,7 @@ function Mesh(center, vertexOffsets, faceBuilders)
 		);
 
 		return returnValue;
-	}
+	};
 
 	Mesh.fromFace = function(center, faceToExtrude, thickness)
 	{
@@ -141,7 +141,7 @@ function Mesh(center, vertexOffsets, faceBuilders)
 		);
 
 		return returnValue;
-	}
+	};
 
 	// instance methods
 
@@ -153,7 +153,7 @@ function Mesh(center, vertexOffsets, faceBuilders)
 		}
 		this._bounds.ofPoints(this.vertices());
 		return this._bounds;
-	}
+	};
 
 	Mesh.prototype.faces = function()
 	{
@@ -172,7 +172,7 @@ function Mesh(center, vertexOffsets, faceBuilders)
 		}
 
 		return this._faces;
-	}
+	};
 
 	Mesh.prototype.vertices = function()
 	{
@@ -193,7 +193,7 @@ function Mesh(center, vertexOffsets, faceBuilders)
 		}
 
 		return this._vertices;
-	}
+	};
 
 	// transformable
 
@@ -208,7 +208,7 @@ function Mesh(center, vertexOffsets, faceBuilders)
 		this.vertices(); // hack - Recalculate.
 
 		return this;
-	}
+	};
 
 	// clonable
 
@@ -220,14 +220,14 @@ function Mesh(center, vertexOffsets, faceBuilders)
 			this.vertexOffsets.clone(),
 			this.faceBuilders.clone()
 		);
-	}
+	};
 
 	Mesh.prototype.overwriteWith = function(other)
 	{
 		this.center.overwriteWith(other.center);
 		this.vertexOffsets.overwriteWith(other.vertexOffsets);
 		this.faceBuilders.overwriteWith(other.faceBuilders);
-	}
+	};
 }
 
 function Mesh_FaceBuilder(vertexIndices)
@@ -246,7 +246,7 @@ function Mesh_FaceBuilder(vertexIndices)
 		}
 		var returnValue = new Face(faceVertices);
 		return returnValue;
-	}
+	};
 
 	Mesh_FaceBuilder.prototype.vertexIndicesShift = function(offset)
 	{
@@ -256,18 +256,18 @@ function Mesh_FaceBuilder(vertexIndices)
 			vertexIndex += offset;
 			this.vertexIndices[i] = vertexIndex;
 		}
-	}
+	};
 
 	// clonable
 
 	Mesh_FaceBuilder.prototype.clone = function()
 	{
 		return new Mesh_FaceBuilder(this.vertexIndices.slice());
-	}
+	};
 
 	Mesh_FaceBuilder.prototype.overwriteWith = function(other)
 	{
 		this.vertexIndices.overwriteWith(other.vertexIndices);
-	}
+	};
 }
 

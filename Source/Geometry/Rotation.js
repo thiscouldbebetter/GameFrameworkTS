@@ -9,7 +9,7 @@ function Rotation(axis, angleInTurnsRef)
 	Rotation.prototype.angleInTurns = function()
 	{
 		return this.angleInTurnsRef.value;
-	}
+	};
 
 	Rotation.prototype.transformCoords = function(coordsToTransform)
 	{
@@ -22,10 +22,10 @@ function Rotation(axis, angleInTurnsRef)
 		).wrapToRangeMinMax(0, 1);
 
 		return polar.toCoords(coordsToTransform);
-	}
+	};
 
 	Rotation.prototype.transformOrientation = function(orientation)
 	{
 		orientation.forwardSet(this.transformCoords(orientation.forward));
-	}
+	};
 }

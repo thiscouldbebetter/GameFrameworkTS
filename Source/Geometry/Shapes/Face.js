@@ -12,7 +12,7 @@ function Face(vertices)
 		}
 		this._bounds.ofPoints(this.vertices);
 		return this._bounds;
-	}
+	};
 
 	Face.prototype.containsPoint = function(pointToCheck)
 	{
@@ -32,7 +32,7 @@ function Face(vertices)
 			}
 		}
 		return returnValue;
-	}
+	};
 
 	Face.prototype.edges = function()
 	{
@@ -53,7 +53,7 @@ function Face(vertices)
 		}
 
 		return this._edges;
-	}
+	};
 
 	Face.prototype.plane = function()
 	{
@@ -70,6 +70,5 @@ function Face(vertices)
 		);
 
 		return this._plane;
-	}
-
+	};
 }

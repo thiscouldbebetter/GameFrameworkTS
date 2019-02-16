@@ -7,7 +7,7 @@ function ArrayExtensions()
 	{
 		this.push(element);
 		return this;
-	}
+	};
 
 	Array.prototype.addMany = function(elements)
 	{
@@ -17,7 +17,7 @@ function ArrayExtensions()
 			this.push(element);
 		}
 		return this;
-	}
+	};
 
 	Array.prototype.addLookups = function(keyName)
 	{
@@ -28,7 +28,7 @@ function ArrayExtensions()
 			this[key] = element;
 		}
 		return this;
-	}
+	};
 
 	Array.prototype.append = function(other)
 	{
@@ -38,13 +38,13 @@ function ArrayExtensions()
 			this.push(element);
 		}
 		return this;
-	}
+	};
 
 	Array.prototype.clear = function()
 	{
 		this.length = 0;
 		return this;
-	}
+	};
 
 	Array.prototype.clone = function()
 	{
@@ -58,12 +58,12 @@ function ArrayExtensions()
 		}
 
 		return returnValue;
-	}
+	};
 
 	Array.prototype.contains = function(elementToFind)
 	{
 		return (this.indexOf(elementToFind) >= 0);
-	}
+	};
 
 	Array.prototype.elementProperties = function(propertyName)
 	{
@@ -75,13 +75,13 @@ function ArrayExtensions()
 			returnValues.push(elementProperty);
 		}
 		return returnValues;
-	}
+	};
 
 	Array.prototype.insertElementAt = function(element, index)
 	{
 		this.splice(index, 0, element);
 		return this;
-	}
+	};
 
 	Array.prototype.overwriteWith = function(other)
 	{
@@ -100,7 +100,7 @@ function ArrayExtensions()
 		}
 
 		return this;
-	}
+	};
 
 	Array.prototype.prepend = function(other)
 	{
@@ -110,12 +110,12 @@ function ArrayExtensions()
 			this.splice(0, 0, element);
 		}
 		return this;
-	}
+	};
 
 	Array.prototype.random = function()
 	{
 		return this[ Math.floor(Math.random() * this.length) ];
-	}
+	};
 
 	Array.prototype.remove = function(elementToRemove)
 	{
@@ -125,13 +125,13 @@ function ArrayExtensions()
 			this.splice(indexToRemoveAt, 1);
 		}
 		return this;
-	}
+	};
 
 	Array.prototype.removeAt = function(index)
 	{
 		this.splice(index, 1);
 		return this;
-	}
+	};
 
 	Array.prototype.sortByProperty = function(propertyName)
 	{
@@ -142,5 +142,5 @@ function ArrayExtensions()
 				return a[propertyName] - b[propertyName];
 			}
 		);
-	}
+	};
 }

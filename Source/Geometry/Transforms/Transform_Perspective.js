@@ -22,5 +22,5 @@ function Transform_Perspective(focalLength)
 			);
 		}
 		return coordsToTransform;
-	}
+	};
 }

@@ -6,12 +6,12 @@ function PlatformHelper()
 	PlatformHelper.prototype.domElementAdd = function(domElement)
 	{
 		this.divMain.appendChild(domElement);
-	}
+	};
 
 	PlatformHelper.prototype.domElementRemove = function(domElement)
 	{
 		this.divMain.removeChild(domElement);
-	}
+	};
 
 	PlatformHelper.prototype.initialize = function(universe)
 	{
@@ -29,5 +29,5 @@ function PlatformHelper()
 		var display = universe.display;
 		divMain.style.marginLeft = 0 - display.sizeInPixels.x / 2;
 		divMain.style.marginTop = 0 - display.sizeInPixels.y / 2;
-	}
+	};
 }

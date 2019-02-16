@@ -28,5 +28,5 @@ function VisualDirectional(visualForNoDirection, visualsForDirections)
 		}
 
 		visualForHeading.draw(universe, world, display, drawable);
-	}
+	};
 }

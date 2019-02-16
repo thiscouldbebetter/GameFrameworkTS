@@ -25,5 +25,5 @@ function VisualRectangle(size, colorFill, colorBorder)
 		(
 			drawPos, this.size, this.colorFill, this.colorBorder
 		);
-	}
+	};
 }

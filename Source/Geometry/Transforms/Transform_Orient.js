@@ -14,5 +14,5 @@ function Transform_Orient(orientation)
 			this.orientation.down.dotProduct(coordsToTransform)
 		);
 		return coordsToTransform;
-	}
+	};
 }

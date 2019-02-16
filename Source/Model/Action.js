@@ -12,7 +12,7 @@ function Action(name, perform)
 			Action._Instances = new Action_Instances();
 		}
 		return Action._Instances;
-	}
+	};
 	
 	function Action_Instances()
 	{

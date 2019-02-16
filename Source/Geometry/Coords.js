@@ -25,7 +25,7 @@ function Coords(x, y, z)
 			Coords._Instances = new Coords_Instances();
 		}
 		return Coords._Instances;
-	}
+	};
 
 	function Coords_Instances()
 	{
@@ -48,7 +48,7 @@ function Coords(x, y, z)
 		this.y = Math.abs(this.y);
 		this.z = Math.abs(this.z);
 		return this;
-	}
+	};
 
 	Coords.prototype.add = function(other)
 	{
@@ -56,7 +56,7 @@ function Coords(x, y, z)
 		this.y += other.y;
 		this.z += other.z;
 		return this;
-	}
+	};
 
 	Coords.prototype.addDimensions = function(x, y, z)
 	{
@@ -64,7 +64,7 @@ function Coords(x, y, z)
 		this.y += y;
 		this.z += z;
 		return this;
-	}
+	};
 
 	Coords.prototype.ceiling = function()
 	{
@@ -72,7 +72,7 @@ function Coords(x, y, z)
 		this.y = Math.ceil(this.y);
 		this.z = Math.ceil(this.z);
 		return this;
-	}
+	};
 
 	Coords.prototype.clear = function()
 	{
@@ -80,18 +80,18 @@ function Coords(x, y, z)
 		this.y = 0;
 		this.z = 0;
 		return this;
-	}
+	};
 
 	Coords.prototype.clearZ = function()
 	{
 		this.z = 0;
 		return this;
-	}
+	};
 
 	Coords.prototype.clone = function()
 	{
 		return new Coords(this.x, this.y, this.z);
-	}
+	};
 
 	Coords.prototype.crossProduct = function(other)
 	{
@@ -101,7 +101,7 @@ function Coords(x, y, z)
 			this.z * other.x - this.x * other.z,
 			this.x * other.y - this.y * other.x
 		);
-	}
+	};
 
 	Coords.prototype.dimension = function(dimensionIndex, valueToSet)
 	{
@@ -133,12 +133,12 @@ function Coords(x, y, z)
 		}
 
 		return returnValue;
-	}
+	};
 
 	Coords.prototype.dimensions = function()
 	{
 		return [ this.x, this.y, this.z ];
-	}
+	};
 
 	Coords.prototype.directions = function()
 	{
@@ -170,8 +170,7 @@ function Coords(x, y, z)
 		}
 
 		return this;
-
-	}
+	};
 
 	Coords.prototype.divide = function(other)
 	{
@@ -179,7 +178,7 @@ function Coords(x, y, z)
 		this.y /= other.y;
 		this.z /= other.z;
 		return this;
-	}
+	};
 
 	Coords.prototype.divideScalar = function(scalar)
 	{
@@ -187,22 +186,22 @@ function Coords(x, y, z)
 		this.y /= scalar;
 		this.z /= scalar;
 		return this;
-	}
+	};
 
 	Coords.prototype.dotProduct = function(other)
 	{
 		return this.x * other.x + this.y * other.y + this.z * other.z;
-	}
+	};
 
 	Coords.prototype.double = function()
 	{
 		return this.multiplyScalar(2);
-	}
+	};
 
 	Coords.prototype.equals = function(other)
 	{
 		return (this.x == other.x && this.y == other.y && this.z == other.z);
-	}
+	};
 
 	Coords.prototype.floor = function()
 	{
@@ -210,7 +209,7 @@ function Coords(x, y, z)
 		this.y = Math.floor(this.y);
 		this.z = Math.floor(this.z);
 		return this;
-	}
+	};
 
 	Coords.prototype.half = function()
 	{
@@ -223,12 +222,12 @@ function Coords(x, y, z)
 		this.y = 0 - this.y;
 		this.z = 0 - this.z;
 		return this;
-	}
+	};
 
 	Coords.prototype.isInRangeMax = function(max)
 	{
 		return this.isInRangeMinMax(Coords.Instances().Zeroes, max);
-	}
+	};
 
 	Coords.prototype.isInRangeMinMax = function(min, max)
 	{
@@ -243,12 +242,12 @@ function Coords(x, y, z)
 		);
 
 		return returnValue;
-	}
+	};
 
 	Coords.prototype.magnitude = function()
 	{
 		return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
-	}
+	};
 
 	Coords.prototype.multiply = function(other)
 	{
@@ -256,7 +255,7 @@ function Coords(x, y, z)
 		this.y *= other.y;
 		this.z *= other.z;
 		return this;
-	}
+	};
 
 	Coords.prototype.multiplyDimensions = function(x, y, z)
 	{
@@ -264,7 +263,7 @@ function Coords(x, y, z)
 		this.y *= y;
 		this.z *= z;
 		return this;
-	}
+	};
 
 	Coords.prototype.multiplyScalar = function(scalar)
 	{
@@ -272,7 +271,7 @@ function Coords(x, y, z)
 		this.y *= scalar;
 		this.z *= scalar;
 		return this;
-	}
+	};
 
 	Coords.prototype.normalize = function()
 	{
@@ -282,7 +281,7 @@ function Coords(x, y, z)
 			this.divideScalar(magnitude);
 		}
 		return this;
-	}
+	};
 
 	Coords.prototype.overwriteWith = function(other)
 	{
@@ -290,7 +289,7 @@ function Coords(x, y, z)
 		this.y = other.y;
 		this.z = other.z;
 		return this;
-	}
+	};
 
 	Coords.prototype.overwriteWithDimensions = function(x, y, z)
 	{
@@ -298,12 +297,12 @@ function Coords(x, y, z)
 		this.y = y;
 		this.z = z;
 		return this;
-	}
+	};
 
 	Coords.prototype.productOfDimensions = function()
 	{
 		return this.x * this.y * this.z;
-	}
+	};
 
 	Coords.prototype.randomize = function()
 	{
@@ -311,7 +310,7 @@ function Coords(x, y, z)
 		this.y = Math.random();
 		this.z = Math.random();
 		return this;
-	}
+	};
 
 	Coords.prototype.right = function()
 	{
@@ -319,7 +318,7 @@ function Coords(x, y, z)
 		this.y = this.x;
 		this.x = 0 - temp;
 		return this;
-	}
+	};
 
 	Coords.prototype.round = function()
 	{
@@ -327,7 +326,7 @@ function Coords(x, y, z)
 		this.y = Math.round(this.y);
 		this.z = Math.round(this.z);
 		return this;
-	}
+	};
 
 	Coords.prototype.subtract = function(other)
 	{
@@ -335,7 +334,7 @@ function Coords(x, y, z)
 		this.y -= other.y;
 		this.z -= other.z;
 		return this;
-	}
+	};
 
 	Coords.prototype.subtractWrappedToRangeMax = function(other, max)
 	{
@@ -343,12 +342,12 @@ function Coords(x, y, z)
 		this.y = this.y.subtractWrappedToRangeMax(other.y, max);
 		this.z = this.z.subtractWrappedToRangeMax(other.z, max);
 		return this;
-	}
+	};
 
 	Coords.prototype.sumOfDimensions = function()
 	{
 		return this.x + this.y + this.z;
-	}
+	};
 
 	Coords.prototype.trimToMagnitudeMax = function(magnitudeMax)
 	{
@@ -358,7 +357,7 @@ function Coords(x, y, z)
 			this.divideScalar(magnitude).multiplyScalar(magnitudeMax);
 		}
 		return this;
-	}
+	};
 
 	Coords.prototype.trimToRangeMax = function(max)
 	{
@@ -390,7 +389,7 @@ function Coords(x, y, z)
 		}
 
 		return this;
-	}
+	};
 
 	Coords.prototype.trimToRangeMinMax = function(min, max)
 	{
@@ -422,7 +421,7 @@ function Coords(x, y, z)
 		}
 
 		return this;
-	}
+	};
 
 	Coords.prototype.wrapToRangeMax = function(max)
 	{
@@ -457,17 +456,17 @@ function Coords(x, y, z)
 		}
 
 		return this;
-	}
+	};
 
 	// string
 
 	Coords.prototype.toString = function()
 	{
 		return this.x + "x" + this.y + "x" + this.z;
-	}
+	};
 
 	Coords.prototype.toStringXY = function()
 	{
 		return this.x + "x" + this.y;
-	}
+	};
 }

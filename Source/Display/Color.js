@@ -66,14 +66,14 @@ function Color(name, code, componentsRGBA)
 		}
 
 		return Color._Instances;
-	}
+	};
 
 	// methods
 
 	Color.prototype.alpha = function()
 	{
 		return this.componentsRGBA[3];
-	}
+	};
 
 	Color.prototype.alphaSet = function(valueToSet)
 	{
@@ -83,12 +83,12 @@ function Color(name, code, componentsRGBA)
 			this._systemColor = null;
 		}
 		return this;
-	}
+	};
 
 	Color.prototype.clone = function()
 	{
 		return new Color(this.name, this.code, this.componentsRGBA.slice());
-	}
+	};
 
 	Color.prototype.systemColor = function()
 	{
@@ -104,5 +104,5 @@ function Color(name, code, componentsRGBA)
 		}
 
 		return this._systemColor;
-	}
+	};
 }

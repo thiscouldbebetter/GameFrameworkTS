@@ -16,12 +16,12 @@ function VenueLayered(children, colorToOverlayBetweenChildren)
 				child.initialize(universe);
 			}
 		}
-	}
+	};
 
 	VenueLayered.prototype.updateForTimerTick = function(universe)
 	{
 		this.children[this.children.length - 1].updateForTimerTick(universe);
-	}
+	};
 
 	VenueLayered.prototype.draw = function(universe)
 	{
@@ -39,5 +39,5 @@ function VenueLayered(children, colorToOverlayBetweenChildren)
 				);
 			}
 		}
-	}
+	};
 }

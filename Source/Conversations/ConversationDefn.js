@@ -14,7 +14,7 @@ function ConversationDefn(name, imageName, contentTextStringName, talkNodeDefns,
 	ConversationDefn.prototype.talkNodeByName = function(nameOfTalkNodeToGet)
 	{
 		return this.talkNodes[nameOfTalkNodeToGet];
-	}
+	};
 
 	ConversationDefn.prototype.talkNodesByNames = function(namesOfTalkNodesToGet)
 	{
@@ -28,7 +28,7 @@ function ConversationDefn(name, imageName, contentTextStringName, talkNodeDefns,
 		}
 
 		return returnNodes;
-	}
+	};
 
 	ConversationDefn.prototype.expandFromContentTextString = function(contentTextString)
 	{
@@ -99,7 +99,7 @@ function ConversationDefn(name, imageName, contentTextStringName, talkNodeDefns,
 		}
 
 		this.talkNodes = talkNodesExpanded.addLookups("name");
-	}
+	};
 
 	// serialization
 
@@ -128,7 +128,7 @@ function ConversationDefn(name, imageName, contentTextStringName, talkNodeDefns,
 		conversationDefn.talkNodeDefns = TalkNodeDefn.Instances()._All;
 
 		return conversationDefn;
-	}
+	};
 
 	ConversationDefn.prototype.serialize = function()
 	{
@@ -139,5 +139,5 @@ function ConversationDefn(name, imageName, contentTextStringName, talkNodeDefns,
 
 		this.talkNodeDefns = talkNodeDefnsToRestore;
 		return returnValue;
-	}
+	};
 }

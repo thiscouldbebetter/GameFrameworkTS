@@ -12,22 +12,22 @@ function Bounds(center, size)
 	Bounds.prototype.containsOther = function(other)
 	{
 		return ( this.containsPoint(other.min()) && this.containsPoint(other.max()) );
-	}
+	};
 
 	Bounds.prototype.containsPoint = function(pointToCheck)
 	{
 		return pointToCheck.isInRangeMinMax(this.min(), this.max());
-	}
+	};
 
 	Bounds.prototype.max = function()
 	{
 		return this._max.overwriteWith(this.center).add(this.sizeHalf);
-	}
+	};
 
 	Bounds.prototype.min = function()
 	{
 		return this._min.overwriteWith(this.center).subtract(this.sizeHalf);
-	}
+	};
 
 	Bounds.prototype.ofPoints = function(points)
 	{
@@ -72,7 +72,7 @@ function Bounds(center, size)
 		this.sizeHalf.overwriteWith(this.size).half();
 
 		return this;
-	}
+	};
 
 	Bounds.prototype.overlapsWith = function(other)
 	{
@@ -118,17 +118,17 @@ function Bounds(center, size)
 		}
 
 		return returnValue;
-	}
+	};
 
 	Bounds.prototype.trimCoords = function(coordsToTrim)
 	{
 		return coordsToTrim.trimToRangeMinMax(this.min(), this.max());
-	}
+	};
 
 	// string
 
 	Bounds.prototype.toString = function()
 	{
 		return this.min().toString() + ":" + this.max().toString();
-	}
+	};
 }

@@ -55,5 +55,5 @@ function VisualMap(map, visualLookup)
 				drawablePos.overwriteWith(this.posSaved);
 			}
 		}
-	}
+	};
 }

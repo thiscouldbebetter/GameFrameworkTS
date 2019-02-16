@@ -16,5 +16,5 @@ function VisualOffset(child, offset)
 		drawablePos.add(this.offset);
 		this.child.draw(universe, world, display, drawable, entity);
 		drawablePos.overwriteWith(this.posSaved);
-	}
+	};
 }

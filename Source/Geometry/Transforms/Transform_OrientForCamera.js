@@ -14,5 +14,5 @@ function Transform_OrientForCamera(orientation)
 			this.orientation.forward.dotProduct(coordsToTransform)
 		);
 		return coordsToTransform;
-	}
+	};
 }

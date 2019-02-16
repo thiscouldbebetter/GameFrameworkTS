@@ -15,5 +15,5 @@ function Killable(integrity, die)
 				this.die(universe, world, place, entityKillable);
 			}
 		}
-	}
+	};
 }

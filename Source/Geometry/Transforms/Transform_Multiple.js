@@ -13,5 +13,5 @@ function Transform_Multiple(transforms)
 			transform.transformCoords(coordsToTransform);
 		}
 		return coordsToTransform;
-	}
+	};
 }

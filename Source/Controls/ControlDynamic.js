@@ -25,12 +25,12 @@ function ControlDynamic(name, pos, size, binding)
 			wasActionHandled = this.child.actionHandle(actionNameToHandle);
 		}
 		return wasActionHandled;
-	}
+	};
 
 	ControlDynamic.prototype.childWithFocus = function()
 	{
 		return (this.child == null ? null : this.child.childWithFocus());
-	}
+	};
 
 	ControlDynamic.prototype.focusGain = function()
 	{
@@ -38,7 +38,7 @@ function ControlDynamic(name, pos, size, binding)
 		{
 			this.child.focusGain();
 		}
-	}
+	};
 
 	ControlDynamic.prototype.focusLose = function()
 	{
@@ -46,12 +46,12 @@ function ControlDynamic(name, pos, size, binding)
 		{
 			this.child.focusLose();
 		}
-	}
+	};
 
 	ControlDynamic.prototype.isEnabled = function()
 	{
 		return true;
-	}
+	};
 
 	ControlDynamic.prototype.mouseClick = function(mouseClickPos)
 	{
@@ -63,7 +63,7 @@ function ControlDynamic(name, pos, size, binding)
 			wasHandledByChild = this.child.mouseClick(mouseClickPos);
 		}
 		return wasHandledByChild;
-	}
+	};
 
 	ControlDynamic.prototype.mouseEnter = function()
 	{
@@ -71,7 +71,7 @@ function ControlDynamic(name, pos, size, binding)
 		{
 			return this.child.mouseEnter();
 		}
-	}
+	};
 
 	ControlDynamic.prototype.mouseExit = function()
 	{
@@ -79,7 +79,7 @@ function ControlDynamic(name, pos, size, binding)
 		{
 			return this.child.mouseExit();
 		}
-	}
+	};
 
 	ControlDynamic.prototype.mouseMove = function(mouseMovePos)
 	{
@@ -88,7 +88,7 @@ function ControlDynamic(name, pos, size, binding)
 			mouseMovePos = this.mouseMovePos.overwriteWith(mouseMovePos).subtract(this.pos);
 			return this.child.mouseMove(mouseMovePos);
 		}
-	}
+	};
 
 	// drawable
 
@@ -114,5 +114,5 @@ function ControlDynamic(name, pos, size, binding)
 			drawLoc.pos.add(this.pos);
 			this.child.draw(universe, display, drawLoc);
 		}
-	}
+	};
 }

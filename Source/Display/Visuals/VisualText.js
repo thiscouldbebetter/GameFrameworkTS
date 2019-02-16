@@ -21,10 +21,10 @@ function VisualText(text, colorFill, colorBorder)
 			true, // isCentered
 			null // widthMaxInPixels
 		);
-	}
+	};
 
 	VisualText.prototype.text = function(universe, world, display, drawable)
 	{
 		return (this._text.get == null ? this._text : this._text.get(universe, world, display, drawable) );
-	}
+	};
 }

@@ -9,5 +9,5 @@ function Transform_Translate(displacement)
 	Transform_Translate.prototype.transformCoords = function(coordsToTransform)
 	{
 		return coordsToTransform.add(this.displacement);
-	}
+	};
 }

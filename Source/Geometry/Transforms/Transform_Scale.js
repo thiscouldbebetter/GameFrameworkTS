@@ -8,5 +8,5 @@ function Transform_Scale(scaleFactors)
 	Transform_Scale.prototype.transformCoords = function(coordsToTransform)
 	{
 		return coordsToTransform.multiply(this.scaleFactors);
-	}
+	};
 }

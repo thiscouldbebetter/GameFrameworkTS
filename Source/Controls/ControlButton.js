@@ -28,24 +28,24 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 		}
 
 		return (this.canBeHeldDown == false); // wasActionHandled
-	}
+	};
 
 	ControlButton.prototype.isEnabled = function()
 	{
 		return (this._isEnabled.get == null ? this._isEnabled : this._isEnabled.get() );
-	}
+	};
 
 	// events
 
 	ControlButton.prototype.focusGain = function()
 	{
 		this.isHighlighted = true;
-	}
+	};
 
 	ControlButton.prototype.focusLose = function()
 	{
 		this.isHighlighted = false;
-	}
+	};
 
 	ControlButton.prototype.mouseClick = function(clickPos)
 	{
@@ -54,22 +54,22 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 			this.click(this.context);
 		}
 		return (this.canBeHeldDown == false); // wasClickHandled
-	}
+	};
 
 	ControlButton.prototype.mouseEnter = function()
 	{
 		this.isHighlighted = true;
-	}
+	};
 
 	ControlButton.prototype.mouseExit = function()
 	{
 		this.isHighlighted = false;
-	}
+	};
 
 	ControlButton.prototype.style = function(universe)
 	{
 		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
-	}
+	};
 
 	// drawable
 
@@ -110,5 +110,5 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 			true, // isCentered
 			this.size.x // widthMaxInPixels
 		);
-	}
+	};
 }

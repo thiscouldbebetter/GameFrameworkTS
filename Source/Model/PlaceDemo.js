@@ -776,7 +776,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 	PlaceDemo.prototype = Object.create(Place.prototype);
 	PlaceDemo.prototype.constructor = PlaceDemo;
 
-	PlaceDemo.prototype.draw_FromSuperclass = PlaceDemo.prototype.draw;
+	PlaceDemo.prototype.draw_FromSuperclass = Place.prototype.draw;
 	PlaceDemo.prototype.draw = function(universe, world)
 	{
 		var display = universe.display;
@@ -800,7 +800,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 		);
 
 		this.draw_FromSuperclass(universe, world);
-	}
+	};
 
 	PlaceDemo.prototype.entityAccelerateInDirection = function
 	(
@@ -819,5 +819,5 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 		(
 			.5 // hack
 		);
-	}
+	};
 }

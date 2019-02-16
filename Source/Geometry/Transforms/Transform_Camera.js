@@ -29,5 +29,5 @@ function Transform_Camera(camera)
 		this.transformPerspective.transformCoords(coordsToTransform);
 		this.transformViewCenter.transformCoords(coordsToTransform);
 		return coordsToTransform;
-	}
+	};
 }

@@ -14,5 +14,5 @@ function Arc(shell, wedge)
 	Arc.prototype.collider = function()
 	{
 		return this._collider;
-	}
+	};
 }

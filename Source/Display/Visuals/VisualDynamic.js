@@ -9,5 +9,5 @@ function VisualDynamic(methodForVisual)
 	{
 		var visual = this.methodForVisual.call(this, universe, world, drawable, entity);
 		visual.draw(universe, world, display, drawable);
-	}
+	};
 }

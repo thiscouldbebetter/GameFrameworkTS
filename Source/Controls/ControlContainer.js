@@ -33,12 +33,12 @@ function ControlContainer(name, pos, size, children)
 	ControlContainer.prototype.isEnabled = function()
 	{
 		return true;
-	}
+	};
 
 	ControlContainer.prototype.style = function(universe)
 	{
 		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
-	}
+	};
 
 	// actions
 
@@ -93,12 +93,12 @@ function ControlContainer(name, pos, size, children)
 		}
 
 		return wasActionHandled;
-	}
+	};
 
 	ControlContainer.prototype.childWithFocus = function()
 	{
 		return (this.indexOfChildWithFocus == null ? null : this.children[this.indexOfChildWithFocus] );
-	}
+	};
 
 	ControlContainer.prototype.childWithFocusNextInDirection = function(direction)
 	{
@@ -159,7 +159,7 @@ function ControlContainer(name, pos, size, children)
 		var returnValue = this.childWithFocus();
 
 		return returnValue;
-	}
+	};
 
 	ControlContainer.prototype.childrenAtPosAddToList = function
 	(
@@ -191,7 +191,7 @@ function ControlContainer(name, pos, size, children)
 		}
 
 		return listToAddTo;
-	}
+	};
 
 	ControlContainer.prototype.focusGain = function()
 	{
@@ -201,7 +201,7 @@ function ControlContainer(name, pos, size, children)
 		{
 			childWithFocus.focusGain();
 		}
-	}
+	};
 
 	ControlContainer.prototype.focusLose = function()
 	{
@@ -211,7 +211,7 @@ function ControlContainer(name, pos, size, children)
 			childWithFocus.focusLose();
 			this.indexOfChildWithFocus = null;
 		}
-	}
+	};
 
 	ControlContainer.prototype.mouseClick = function(mouseClickPos)
 	{
@@ -245,7 +245,7 @@ function ControlContainer(name, pos, size, children)
 		}
 
 		return wasClickHandled;
-	}
+	};
 
 	ControlContainer.prototype.mouseMove = function(mouseMovePos)
 	{
@@ -290,7 +290,7 @@ function ControlContainer(name, pos, size, children)
 				}
 			}
 		}
-	}
+	};
 
 	// drawable
 
@@ -312,5 +312,5 @@ function ControlContainer(name, pos, size, children)
 			var child = children[i];
 			child.draw(universe, display, drawLoc);
 		}
-	}
+	};
 }

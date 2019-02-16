@@ -33,7 +33,7 @@ function Universe(name, timerHelper, display, mediaLibrary, world)
 		returnValue.debuggingMode = debuggingMode;
 
 		return returnValue;
-	}
+	};
 
 	// instance methods
 
@@ -72,13 +72,13 @@ function Universe(name, timerHelper, display, mediaLibrary, world)
 		this.inputHelper.initialize(this);
 
 		this.timerHelper.initialize(this.updateForTimerTick.bind(this));
-	}
+	};
 
 	Universe.prototype.reset = function()
 	{
 		// hack
 		this.soundHelper.reset();
-	}
+	};
 
 	Universe.prototype.updateForTimerTick = function()
 	{
@@ -104,5 +104,5 @@ function Universe(name, timerHelper, display, mediaLibrary, world)
 			}
 		}
 		this.venueCurrent.updateForTimerTick(this);
-	}
+	};
 }

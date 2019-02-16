@@ -12,22 +12,22 @@ function VenueMessage(messageToShow, venueNext, venuePrev, sizeInPixels)
 	VenueMessage.prototype.acknowledge = function(universe)
 	{
 		universe.venueNext = new VenueFader(this.venueNext, this.venueInner());
-	}
+	};
 
 	VenueMessage.prototype.draw = function(universe)
 	{
 		this.venueInner(universe).draw(universe);
-	}
+	};
 
 	VenueMessage.prototype.sizeInPixels = function(universe)
 	{
 		return (this._sizeInPixels == null ? universe.display.sizeInPixels : this._sizeInPixels);
-	}
+	};
 
 	VenueMessage.prototype.updateForTimerTick = function(universe)
 	{
 		this.venueInner(universe).updateForTimerTick(universe);
-	}
+	};
 
 	VenueMessage.prototype.venueInner = function(universe)
 	{
@@ -49,5 +49,5 @@ function VenueMessage(messageToShow, venueNext, venuePrev, sizeInPixels)
 			]);
 		}
 		return this._venueInner;
-	}
+	};
 }

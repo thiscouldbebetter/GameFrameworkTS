@@ -29,7 +29,7 @@ function Skeleton(name, boneRoot)
 		}
 
 		return returnValue;
-	}
+	};
 
 	// cloneable
 
@@ -40,7 +40,7 @@ function Skeleton(name, boneRoot)
 			this.name,
 			this.boneRoot.clone()
 		);
-	}
+	};
 
 	Skeleton.prototype.overwriteWith = function(other)
 	{
@@ -48,7 +48,7 @@ function Skeleton(name, boneRoot)
 		{
 			this.bonesAll[i].overwriteWith(other.bonesAll[i]);
 		}
-	}
+	};
 
 	// transformable
 
@@ -59,5 +59,5 @@ function Skeleton(name, boneRoot)
 			var bone = this.bonesAll[i];
 			bone.transform(transformToApply);
 		}
-	}
+	};
 }

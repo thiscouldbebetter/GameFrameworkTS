@@ -19,7 +19,7 @@ function Orientation(forward, down)
 			Orientation._Instances = new Orientation_Instances();
 		}
 		return Orientation._Instances;
-	}
+	};
 
 	function Orientation_Instances()
 	{
@@ -41,21 +41,20 @@ function Orientation(forward, down)
 	Orientation.prototype.clone = function()
 	{
 		return new Orientation(this.forward.clone(), this.down.clone());
-	}
+	};
 
 	Orientation.prototype.forwardSet = function(value)
 	{
 		this.forward.overwriteWith(value);
 		return this.orthogonalize();
-	}
+	};
 
 	Orientation.prototype.forwardDownSet = function(forward, down)
 	{
 		this.forward.overwriteWith(forward);
 		this.down.overwriteWith(down);
 		return this.orthogonalize();
-	}
-
+	};
 
 	Orientation.prototype.orthogonalize = function(value)
 	{
@@ -63,7 +62,7 @@ function Orientation(forward, down)
 		this.right.overwriteWith(this.down).crossProduct(this.forward).normalize();
 		this.down.overwriteWith(this.forward).crossProduct(this.right).normalize();
 		return this;
-	}
+	};
 
 	Orientation.prototype.overwriteWith = function(other)
 	{
@@ -71,7 +70,7 @@ function Orientation(forward, down)
 		this.right.overwriteWith(other.right);
 		this.down.overwriteWith(other.down);
 		return this;
-	}
+	};
 
 	Orientation.prototype.projectCoords = function(coords)
 	{
@@ -82,7 +81,7 @@ function Orientation(forward, down)
 			coords.dotProduct(this.down)
 		);
 		return coords;
-	}
+	};
 
 	Orientation.prototype.unprojectCoords = function(coords)
 	{
@@ -103,7 +102,7 @@ function Orientation(forward, down)
 		}
 
 		return coords.overwriteWith(returnValue);
-	}
+	};
 
 	Orientation.prototype.projectCoordsRDF = function(coords)
 	{
@@ -114,7 +113,7 @@ function Orientation(forward, down)
 			coords.dotProduct(this.forward)
 		);
 		return coords;
-	}
+	};
 
 	Orientation.prototype.unprojectCoordsRDF = function(coords)
 	{
@@ -135,7 +134,7 @@ function Orientation(forward, down)
 		}
 
 		return coords.overwriteWith(returnValue);
-	}
+	};
 
 	// heading
 
@@ -161,5 +160,5 @@ function Orientation(forward, down)
 		}
 
 		return returnValue;
-	}
+	};
 }

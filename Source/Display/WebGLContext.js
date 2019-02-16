@@ -40,7 +40,7 @@ function WebGLContext(canvas)
 		gl.enable(gl.DEPTH_TEST);
 
 		return gl;
-	}
+	};
 
 	WebGLContext.prototype.buildShaderProgram = function(gl)
 	{
@@ -54,7 +54,7 @@ function WebGLContext(canvas)
 		this.buildShaderProgram_SetUpInputVariables(gl, shaderProgram);
 
 		return shaderProgram;
-	}
+	};
 
 	WebGLContext.prototype.buildShaderProgram_FragmentShader = function(gl)
 	{
@@ -78,7 +78,7 @@ function WebGLContext(canvas)
 		gl.compileShader(fragmentShader);
 
 		return fragmentShader;
-	}
+	};
 
 	WebGLContext.prototype.buildShaderProgram_VertexShader = function(gl)
 	{
@@ -115,7 +115,7 @@ function WebGLContext(canvas)
 		gl.compileShader(vertexShader);
 
 		return vertexShader;
-	}
+	};
 
 	WebGLContext.prototype.buildShaderProgram_Compile = function
 	(
@@ -129,7 +129,7 @@ function WebGLContext(canvas)
 		gl.useProgram(shaderProgram);
 
 		return shaderProgram;
-	}
+	};
 
 	WebGLContext.prototype.buildShaderProgram_SetUpInputVariables = function
 	(
@@ -199,5 +199,5 @@ function WebGLContext(canvas)
 			shaderProgram,
 			"uNormalMatrix"
 		);
-	}
+	};
 }

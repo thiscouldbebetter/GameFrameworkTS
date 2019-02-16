@@ -15,5 +15,5 @@ function Transform_RotateRight(quarterTurnsToRotate)
 		}
 
 		return coordsToTransform;
-	}
+	};
 }

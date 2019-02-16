@@ -8,5 +8,5 @@ function Idleable()
 	{
 		var playerLoc = player.locatable.loc;
 		playerLoc.orientation.forwardSet(Coords.Instances().Zeroes);
-	}
+	};
 }

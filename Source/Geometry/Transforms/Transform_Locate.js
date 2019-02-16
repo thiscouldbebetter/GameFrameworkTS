@@ -17,5 +17,5 @@ function Transform_Locate(loc)
 		this.transformTranslate.transformCoords(coordsToTransform);
 
 		return coordsToTransform;
-	}
+	};
 }

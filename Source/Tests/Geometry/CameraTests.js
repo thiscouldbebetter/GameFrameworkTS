@@ -54,5 +54,5 @@ function CameraTests()
 				+ ", After:" + worldCoordsAfter.toString();
 			Test.assertExpectedEqualToActual(true, areBeforeAndAfterEqual, beforeAndAfterAsStrings);
 		}
-	}
+	};
 }

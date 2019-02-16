@@ -17,12 +17,12 @@ function ControlLabel(name, pos, size, isTextCentered, text, fontHeightInPixels)
 	ControlLabel.prototype.style = function(universe)
 	{
 		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
-	}
+	};
 
 	ControlLabel.prototype.text = function()
 	{
 		return (this._text.get == null ? this._text : this._text.get() );
-	}
+	};
 
 	// drawable
 
@@ -53,5 +53,5 @@ function ControlLabel(name, pos, size, isTextCentered, text, fontHeightInPixels)
 				drawPos.y += this.fontHeightInPixels;
 			}
 		}
-	}
+	};
 }

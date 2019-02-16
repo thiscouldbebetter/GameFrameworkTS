@@ -105,7 +105,7 @@ function Camera(viewSize, focalLength, loc)
 		}
 
 		return this._clipPlanes;
-	}
+	};
 
 	Camera.prototype.coordsTransformViewToWorld = function(viewCoords, ignoreZ)
 	{
@@ -129,7 +129,7 @@ function Camera(viewSize, focalLength, loc)
 		);
 
 		return worldCoords;
-	}
+	};
 
 	Camera.prototype.coordsTransformWorldToView = function(worldCoords)
 	{
@@ -150,5 +150,5 @@ function Camera(viewSize, focalLength, loc)
 		viewCoords.add(this.viewSizeHalf);
 
 		return viewCoords;
-	}
+	};
 }

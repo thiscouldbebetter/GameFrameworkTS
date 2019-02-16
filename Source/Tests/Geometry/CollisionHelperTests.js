@@ -44,7 +44,7 @@ function CollisionHelperTests()
 		var collider1 = sphereUnitInPositiveOctant;
 		var doCollide = collisionHelper.doCollidersCollide(collider0, collider1);
 		Test.assertExpectedEqualToActual(false, doCollide);
-	}
+	};
 
 	CollisionHelperTests.prototype.edgesAndFaces = function()
 	{
@@ -122,8 +122,7 @@ function CollisionHelperTests()
 
 		var doCollide = collisionHelper.doEdgeAndFaceCollide(edgeFromWild, faceFromWild);
 		Test.assertExpectedEqualToActual(true, doCollide);
-
-	}
+	};
 
 	CollisionHelperTests.prototype.spheresAndShells = function()
 	{
@@ -188,5 +187,5 @@ function CollisionHelperTests()
 
 		doCollide = collisionHelper.doCollidersCollide(sphereUnitAtX2, arc2To3HalfTurnSecondAtOrigin);
 		Test.assertExpectedEqualToActual(false, doCollide);
-	}
+	};
 }

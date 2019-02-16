@@ -13,10 +13,10 @@ function Constrainable(constraints)
 			var constraint = constraints[i];
 			constraint.constrain(universe, world, place, entity);
 		}
-	}
+	};
 
 	Constrainable.prototype.updateForTimerTick = function(universe, world, place, entity)
 	{
 		Constrainable.constrain(universe, world, place, entity);
-	}
+	};
 }

@@ -17,5 +17,5 @@ function Locatable(loc)
 		{
 			loc.spin.transformOrientation(loc.orientation);
 		}
-	}
+	};
 }

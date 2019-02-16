@@ -21,5 +21,5 @@ function PathBuilder()
 
 		var returnValue = new Path(vertices);
 		return returnValue;
-	}
+	};
 }

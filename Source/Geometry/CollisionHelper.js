@@ -36,7 +36,7 @@ function CollisionHelper()
 		}
 
 		return returnValues;
-	}
+	};
 
 	CollisionHelper.prototype.doCollidablesCollide = function(collidable0, collidable1)
 	{
@@ -46,7 +46,7 @@ function CollisionHelper()
 		var doCollidersCollide = this.doCollidersCollide(collider0, collider1);
 
 		return doCollidersCollide;
-	}
+	};
 
 	CollisionHelper.prototype.doCollidersCollide = function(collider0, collider1)
 	{
@@ -94,7 +94,7 @@ function CollisionHelper()
 		}
 
 		return returnValue;
-	}
+	};
 
 	CollisionHelper.prototype.doesColliderContainOther = function(collider0, collider1)
 	{
@@ -126,7 +126,7 @@ function CollisionHelper()
 		}
 
 		return returnValue;
-	}
+	};
 
 	// shapes
 
@@ -181,7 +181,7 @@ function CollisionHelper()
 		}
 
 		return returnValue;
-	}
+	};
 
 	CollisionHelper.prototype.collisionsOfEdgeAndMesh = function(edge, mesh, collisions, stopAfterFirst)
 	{
@@ -206,7 +206,7 @@ function CollisionHelper()
 		}
 
 		return collisions;
-	}
+	};
 
 	CollisionHelper.prototype.collisionOfEdgeAndPlane = function(edge, plane)
 	{
@@ -239,13 +239,13 @@ function CollisionHelper()
 		}
 
 		return returnValue;
-	}
+	};
 
 	CollisionHelper.prototype.doBoundsAndBoundsCollide = function(bounds0, bounds1)
 	{
 		var returnValue = bounds0.overlapsWith(bounds1);
 		return returnValue;
-	}
+	};
 
 	CollisionHelper.prototype.doBoundsAndCylinderCollide = function(bounds, cylinder)
 	{
@@ -284,7 +284,7 @@ function CollisionHelper()
 		}
 
 		return returnValue;
-	}
+	};
 
 	CollisionHelper.prototype.doBoundsAndHemispaceCollide = function(bounds, hemispace)
 	{
@@ -301,7 +301,7 @@ function CollisionHelper()
 			}
 		}
 		return returnValue;
-	}
+	};
 
 	CollisionHelper.prototype.doBoundsAndSphereCollide = function(bounds, sphere)
 	{
@@ -312,7 +312,7 @@ function CollisionHelper()
 		);
 
 		return this.doBoundsAndBoundsCollide(bounds, sphereBounds);
-	}
+	};
 
 	CollisionHelper.prototype.doCylinderAndCylinderCollide = function(cylinder0, cylinder1)
 	{
@@ -361,19 +361,19 @@ function CollisionHelper()
 		}
 
 		return returnValue;
-	}
+	};
 
 	CollisionHelper.prototype.doEdgeAndFaceCollide = function(edge, face)
 	{
 		return (this.collisionOfEdgeAndFace(edge, face) != null);
-	}
+	};
 
 	CollisionHelper.prototype.doEdgeAndHemispaceCollide = function(edge, hemispace)
 	{
 		var vertices = edge.vertices;
 		var returnValue = ( hemispace.containsPoint(vertices[0]) || hemispace.containsPoint(vertices[1]) );
 		return returnValue;
-	}
+	};
 
 	CollisionHelper.prototype.doEdgeAndMeshCollide = function(edge, mesh)
 	{
@@ -399,12 +399,12 @@ function CollisionHelper()
 		}
 
 		return returnValue;
-	}
+	};
 
 	CollisionHelper.prototype.doEdgeAndPlaneCollide = function(edge, plane)
 	{
 		return (this.collisionOfEdgeAndPlane() != null);
-	}
+	};
 
 	CollisionHelper.prototype.doHemispaceAndSphereCollide = function(hemispace, sphere)
 	{
@@ -416,7 +416,7 @@ function CollisionHelper()
 			- plane.distanceFromOrigin;
 		var returnValue = (distanceOfSphereCenterAbovePlane < sphere.radius);
 		return returnValue;
-	}
+	};
 
 	CollisionHelper.prototype.doMeshAndMeshCollide = function(mesh0, mesh1)
 	{
@@ -489,7 +489,7 @@ function CollisionHelper()
 		}
 
 		return returnValue;
-	}
+	};
 
 	CollisionHelper.prototype.doMapLocatedAndMapLocatedCollide = function(mapLocated0, mapLocated1)
 	{
@@ -600,7 +600,7 @@ function CollisionHelper()
 		}
 
 		return returnValue;
-	}
+	};
 
 	CollisionHelper.prototype.doMapLocatedAndSphereCollide = function(mapLocated, sphere)
 	{
@@ -650,7 +650,7 @@ function CollisionHelper()
 		}
 
 		return returnValue;
-	}
+	};
 
 	CollisionHelper.prototype.doMeshAndSphereCollide = function(mesh, sphere)
 	{
@@ -678,7 +678,7 @@ function CollisionHelper()
 		}
 
 		return returnValue;
-	}
+	};
 
 	CollisionHelper.prototype.doSphereAndSphereCollide = function(sphere0, sphere1)
 	{
@@ -694,7 +694,7 @@ function CollisionHelper()
 		var returnValue = (distance < sumOfRadii);
 
 		return returnValue;
-	}
+	};
 
 	// boolean combinations
 
@@ -715,7 +715,7 @@ function CollisionHelper()
 		}
 
 		return returnValue;
-	}
+	};
 
 	CollisionHelper.prototype.doShapeGroupAnyAndShapeCollide = function(groupAny, shapeOther)
 	{
@@ -734,59 +734,59 @@ function CollisionHelper()
 		}
 
 		return returnValue;
-	}
+	};
 
 	CollisionHelper.prototype.doShapeContainerAndShapeCollide = function(container, shapeOther)
 	{
 		return this.doesColliderContainOther(container.shape, shapeOther);
-	}
+	};
 
 	CollisionHelper.prototype.doShapeInverseAndShapeCollide = function(inverse, shapeOther)
 	{
 		return (this.doCollidersCollide(inverse.shape, shapeOther) == false);
-	}
+	};
 
 	CollisionHelper.prototype.doBoundsAndShapeGroupAllCollide = function(shape, group)
 	{
 		return this.doShapeGroupAllAndShapeCollide(group, shape);
-	}
+	};
 
 	CollisionHelper.prototype.doShapeGroupAllAndSphereCollide = function(group, shape)
 	{
 		return this.doShapeGroupAllAndShapeCollide(group, shape);
-	}
+	};
 
 	CollisionHelper.prototype.doBoundsAndShapeGroupAnyCollide = function(shape, group)
 	{
 		return this.doShapeGroupAnyAndShapeCollide(group, shape);
-	}
+	};
 
 	CollisionHelper.prototype.doShapeContainerAndSphereCollide = function(container, sphere)
 	{
 		return this.doShapeContainerAndShapeCollide(container, sphere);
-	}
+	};
 
 	CollisionHelper.prototype.doShapeGroupAnyAndSphereCollide = function(group, shape)
 	{
 		return this.doShapeGroupAnyAndShapeCollide(group, shape);
-	}
+	};
 
 	CollisionHelper.prototype.doShapeInverseAndSphereCollide = function(inverse, shape)
 	{
 		return this.doShapeInverseAndShapeCollide(inverse, shape);
-	}
+	};
 
 	// contains
 
 	CollisionHelper.prototype.doesBoundsContainBounds = function(bounds0, bounds1)
 	{
 		return bounds0.containsOther(bounds1);
-	}
+	};
 
 	CollisionHelper.prototype.doesBoundsContainHemispace = function(bounds, hemispace)
 	{
 		return false;
-	}
+	};
 
 	CollisionHelper.prototype.doesBoundsContainSphere = function(bounds, sphere)
 	{
@@ -798,7 +798,7 @@ function CollisionHelper()
 		var returnValue = bounds.containsOther(boundsForSphere);
 
 		return returnValue;
-	}
+	};
 
 	CollisionHelper.prototype.doesHemispaceContainBounds = function(hemispace, bounds)
 	{
@@ -815,7 +815,7 @@ function CollisionHelper()
 			}
 		}
 		return returnValue;
-	}
+	};
 
 	CollisionHelper.prototype.doesHemispaceContainSphere = function(hemispace, sphere)
 	{
@@ -825,23 +825,22 @@ function CollisionHelper()
 			- plane.distanceFromOrigin;
 		var returnValue = (distanceOfSphereCenterAbovePlane >= sphere.radius);
 		return returnValue;
-	}
+	};
 
 	CollisionHelper.prototype.doesSphereContainBounds = function(sphere, bounds)
 	{
 		var sphereCircumscribingBounds = new Sphere(bounds.center, bounds.max().magnitude());
 		var returnValue = sphere.containsOther(sphereCircumscribingBounds);
 		return returnValue;
-	}
+	};
 
 	CollisionHelper.prototype.doesSphereContainHemispace = function(sphere, hemispace)
 	{
 		return false;
-	}
+	};
 
 	CollisionHelper.prototype.doesSphereContainSphere = function(sphere0, sphere1)
 	{
 		return sphere0.containsOther(sphere1);
-	}
-
+	};
 }

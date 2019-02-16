@@ -24,10 +24,10 @@ function Map(sizeInCells, cellSize, cellPrototype, cellAtPosInCells, cellSource)
 	{
 		this.posInCells.overwriteWith(cellPos).divide(this.cellSize).floor();
 		return this.cellAtPosInCells(this.posInCells);
-	}
+	};
 
 	Map.prototype.numberOfCells = function()
 	{
 		return this.sizeInCells.x * this.sizeInCells.y;
-	}
+	};
 }

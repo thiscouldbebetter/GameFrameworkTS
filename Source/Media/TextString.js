@@ -19,7 +19,7 @@ function TextString(name, sourcePath)
 		returnValue.value = value;
 
 		return returnValue;
-	}
+	};
 
 	// instance methods
 
@@ -35,5 +35,5 @@ function TextString(name, sourcePath)
 			text.isLoaded = true;
 		}
 		xmlHttpRequest.send();
-	}
+	};
 }

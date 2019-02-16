@@ -11,5 +11,5 @@ function Hemispace(plane)
 			- this.plane.distanceFromOrigin;
 		var returnValue = (distanceOfPointAbovePlane > 0);
 		return returnValue;
-	}
+	};
 }

@@ -8,5 +8,5 @@ function Transform_TranslateInvert(displacement)
 	Transform_TranslateInvert.prototype.transformCoords = function(coordsToTransform)
 	{
 		return coordsToTransform.subtract(this.displacement);
-	}
+	};
 }

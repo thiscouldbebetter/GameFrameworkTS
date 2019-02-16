@@ -72,5 +72,5 @@ function Collidable(collider, entityPropertyNamesToCollideWith, collideEntities)
 				}
 			}
 		}
-	}
+	};
 }

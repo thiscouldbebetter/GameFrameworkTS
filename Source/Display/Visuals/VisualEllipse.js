@@ -19,5 +19,5 @@ function VisualEllipse(semimajorAxis, semiminorAxis, rotationInTurns, colorFill,
 			this.rotationInTurns,
 			this.colorFill, this.colorBorder
 		);
-	}
+	};
 }

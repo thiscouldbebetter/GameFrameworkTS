@@ -21,5 +21,5 @@ function Transform_Rotate2D(turnsToRotate)
 		);
 
 		return coordsToTransform;
-	}
+	};
 }

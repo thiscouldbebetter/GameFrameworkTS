@@ -62,23 +62,23 @@ function ControlSelect
 		{
 			this.optionSelectedNextInDirection(-1);
 		}
-	}
+	};
 
 	ControlSelect.prototype.focusGain = function()
 	{
 			this.isHighlighted = true;
-	}
+	};
 
 	ControlSelect.prototype.focusLose = function()
 	{
 			this.isHighlighted = false;
-	}
+	};
 
 	ControlSelect.prototype.isEnabled = function()
 	{
 		// todo
 		return true;
-	}
+	};
 
 	ControlSelect.prototype.optionSelected = function()
 	{
@@ -106,7 +106,7 @@ function ControlSelect
 		};
 
 		return returnValue;
-	}
+	};
 
 	ControlSelect.prototype.optionSelectedNextInDirection = function(direction)
 	{
@@ -130,28 +130,28 @@ function ControlSelect
 		{
 			this._valueSelected = optionSelected.value;
 		}
-	}
+	};
 
 	ControlSelect.prototype.options = function()
 	{
 		return (this._options.get == null ? this._options : this._options.get() );
-	}
+	};
 
 	ControlSelect.prototype.mouseClick = function(clickPos)
 	{
 		this.optionSelectedNextInDirection(1);
 		return true; // wasClickHandled
-	}
+	};
 
 	ControlSelect.prototype.style = function(universe)
 	{
 		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
-	}
+	};
 
 	ControlSelect.prototype.valueSelected = function()
 	{
 		return (this._valueSelected == null ? null : (this._valueSelected.get == null ? this._valueSelected : this._valueSelected.get() ) );
-	}
+	};
 
 	// drawable
 
@@ -184,6 +184,5 @@ function ControlSelect
 			true, // isCentered
 			this.size.x // widthMaxInPixels
 		);
-	}
-
+	};
 }

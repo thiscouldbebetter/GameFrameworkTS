@@ -46,7 +46,7 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 			false, // transpose
 			matrixCamera.toWebGLArray()
 		);
-	}
+	};
 
 	Display3D.prototype.clear = function()
 	{
@@ -56,7 +56,7 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 
 		gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-	}
+	};
 
 	Display3D.prototype.drawMesh = function(mesh)
 	{
@@ -256,7 +256,7 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 				numberOfTrianglesSoFar * Display3D.VerticesPerTriangle
 			);
 		} // end for each material
-	}
+	};
 
 	Display3D.prototype.drawMeshWithOrientation = function(mesh, meshOrientation)
 	{
@@ -292,7 +292,7 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 		);
 
 		this.drawMesh(mesh);
-	}
+	};
 
 	Display3D.prototype.initialize = function(universe)
 	{
@@ -335,7 +335,7 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 		this.tempCoords = new Coords(0, 0, 0);
 		this.tempMatrix0 = Matrix.buildZeroes();
 		this.tempMatrix1 = Matrix.buildZeroes();
-	}
+	};
 
 	Display3D.prototype.lightingSet = function(todo)
 	{
@@ -362,14 +362,14 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 			shaderProgram.lightDirectionalIntensity,
 			lighting.directionalIntensity
 		);
-	}
+	};
 
 	// Display2D overlay.
 
 	Display3D.prototype.clear = function()
 	{
 		this._display2DOverlay.clear();
-	}
+	};
 
 	Display3D.prototype.drawArc = function
 	(
@@ -377,37 +377,37 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 	)
 	{
 		this._display2DOverlay.drawArc(center, radiusInner, radiusOuter, angleStartInTurns, angleStopInTurns, colorFill, colorBorder);
-	}
+	};
 
 	Display3D.prototype.drawBackground = function()
 	{
 		this._display2DOverlay.drawBackground();
-	}
+	};
 
 	Display3D.prototype.drawCircle = function(center, radius, colorFill, colorBorder)
 	{
 		this._display2DOverlay.drawCircle(center, radius, colorFill, colorBorder);
-	}
+	};
 
 	Display3D.prototype.drawCircleWithGradient = function(center, radius, gradientFill, colorBorder)
 	{
 		this._display2DOverlay.drawCircleWithGradient(center, radius, gradientFill, colorBorder);
-	}
+	};
 
 	Display3D.prototype.drawImage = function(imageToDraw, pos, size)
 	{
 		this._display2DOverlay.drawImage(imageToDraw, pos, size);
-	}
+	};
 
 	Display3D.prototype.drawLine = function(fromPos, toPos, color)
 	{
 		this._display2DOverlay.drawLine(fromPos, toPos, color);
-	}
+	};
 
 	Display3D.prototype.drawPolygon = function(vertices, colorFill, colorBorder)
 	{
 		this._display2DOverlay.drawPolygon(vertices, colorFill, colorBorder);
-	}
+	};
 
 	Display3D.prototype.drawRectangle = function
 	(
@@ -422,7 +422,7 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 		(
 			pos, size, colorFill, colorBorder, areColorsReversed
 		);
-	}
+	};
 
 	Display3D.prototype.drawText = function
 	(
@@ -447,31 +447,30 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 			isCentered,
 			widthMaxInPixels
 		);
-	}
+	};
 
 	Display3D.prototype.fontSizeSet = function(fontHeightInPixels)
 	{
 		this._display2DOverlay.fontSizeSet(fontHeightInPixels);
-	}
+	};
 
 	Display3D.prototype.fontValidate = function(fontName)
 	{
 		this._display2DOverlay.fontValidate(fontName);
-	}
+	};
 
 	Display3D.prototype.hide = function(universe)
 	{
 		this._display2DOverlay.hide(universe);
-	}
+	};
 
 	Display3D.prototype.show = function(universe)
 	{
 		this._display2DOverlay.show(universe);
-	}
+	};
 
 	Display3D.prototype.textWidthForFontHeight = function(textToMeasure, fontHeightInPixels)
 	{
 		return this._display2DOverlay.textWidthForFontHeight(textToMeasure, fontHeightInPixels);
-	}
-
+	};
 }

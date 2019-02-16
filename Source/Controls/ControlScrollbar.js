@@ -44,17 +44,17 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 	ControlScrollbar.prototype.actionHandle = function(actionNameToHandle)
 	{
 		return true;
-	}
+	};
 
 	ControlScrollbar.prototype.items = function()
 	{
 		return (this._items.get == null ? this._items : this._items.get());
-	}
+	};
 
 	ControlScrollbar.prototype.mouseClick = function(universe, clickPos)
 	{
 		// todo
-	}
+	};
 
 	ControlScrollbar.prototype.scrollDown = function()
 	{
@@ -67,7 +67,7 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 		);
 
 		this._sliderPosInItems = sliderPosInItems;
-	}
+	};
 
 	ControlScrollbar.prototype.scrollUp = function()
 	{
@@ -80,7 +80,7 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 		);
 
 		this._sliderPosInItems = sliderPosInItems;
-	}
+	};
 
 	ControlScrollbar.prototype.slideSizeInPixels = function()
 	{
@@ -91,17 +91,17 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 		);
 
 		return slideSizeInPixels;
-	}
+	};
 
 	ControlScrollbar.prototype.sliderPosInItems = function()
 	{
 		return this._sliderPosInItems;
-	}
+	};
 
 	ControlScrollbar.prototype.sliderMaxInItems = function()
 	{
 		return this.items().length - Math.floor(this.windowSizeInItems);
-	}
+	};
 
 	ControlScrollbar.prototype.sliderPosInPixels = function()
 	{
@@ -115,7 +115,7 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 		);
 
 		return sliderPosInPixels;
-	}
+	};
 
 	ControlScrollbar.prototype.sliderSizeInPixels = function()
 	{
@@ -125,12 +125,12 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 		);
 
 		return sliderSizeInPixels;
-	}
+	};
 
 	ControlScrollbar.prototype.style = function(universe)
 	{
 		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
-	}
+	};
 
 	// drawable
 
@@ -162,5 +162,5 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 				colorFore
 			);
 		}
-	}
+	};
 }

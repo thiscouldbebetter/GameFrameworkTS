@@ -32,5 +32,5 @@ function VisualRay(length, color)
 			this.toPos,
 			this.color
 		);
-	}
+	};
 }

@@ -16,5 +16,5 @@ function VisualCamera(child, camera)
 		this.camera.coordsTransformWorldToView(drawablePos);
 		this.child.draw(universe, world, display, drawable, entity);
 		drawablePos.overwriteWith(this.posSaved);
-	}
+	};
 }

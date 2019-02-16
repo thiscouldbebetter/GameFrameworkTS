@@ -20,7 +20,7 @@ function Wedge(vertex, directionMin, angleSpannedInTurns)
 		);
 
 		return returnValue;
-	}
+	};
 
 	Wedge.prototype.angleInTurnsMin = function()
 	{
@@ -28,7 +28,7 @@ function Wedge(vertex, directionMin, angleSpannedInTurns)
 		(
 			this.directionMin
 		).azimuthInTurns;
-	}
+	};
 
 	Wedge.prototype.collider = function()
 	{
@@ -111,5 +111,5 @@ function Wedge(vertex, directionMin, angleSpannedInTurns)
 		}
 
 		return this._collider;
-	}
+	};
 }

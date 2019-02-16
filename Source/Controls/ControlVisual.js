@@ -16,7 +16,7 @@ function ControlVisual(name, pos, size, visual)
 	ControlVisual.prototype.style = function(universe)
 	{
 		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
-	}
+	};
 
 	// drawable
 
@@ -35,5 +35,5 @@ function ControlVisual(name, pos, size, visual)
 		drawable.loc.pos.overwriteWith(drawPos);
 		drawPos.add(this._sizeHalf);
 		this.visual.draw(universe, universe.world, display, drawable);
-	}
+	};
 }

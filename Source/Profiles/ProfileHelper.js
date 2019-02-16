@@ -15,7 +15,7 @@ function ProfileHelper(storageHelper)
 			this.propertyName,
 			profiles
 		);
-	}
+	};
 
 	ProfileHelper.prototype.profileDelete = function(profileToDelete)
 	{
@@ -34,7 +34,7 @@ function ProfileHelper(storageHelper)
 			this.propertyName,
 			profiles
 		);
-	}
+	};
 
 	ProfileHelper.prototype.profileIndexFindByName = function(profiles, profileNameToFind)
 	{
@@ -51,7 +51,7 @@ function ProfileHelper(storageHelper)
 		}
 
 		return returnValue;
-	}
+	};
 
 	ProfileHelper.prototype.profileSave = function(profileToSave)
 	{
@@ -92,7 +92,7 @@ function ProfileHelper(storageHelper)
 			var errorMessage = "Error attempting to save: " + err;
 			alert(errorMessage);
 		}
-	}
+	};
 
 	ProfileHelper.prototype.profiles = function()
 	{
@@ -112,7 +112,7 @@ function ProfileHelper(storageHelper)
 		}
 
 		return profiles;
-	}
+	};
 
 	ProfileHelper.prototype.profilesAllDelete = function(profileToDelete)
 	{
@@ -121,6 +121,5 @@ function ProfileHelper(storageHelper)
 			this.propertyName,
 			""
 		);
-	}
-
+	};
 }

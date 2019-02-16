@@ -37,5 +37,5 @@ function VisualLine(fromPos, toPos, color)
 			drawPosTo,
 			this.color
 		);
-	}
+	};
 }

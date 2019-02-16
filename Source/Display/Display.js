@@ -34,7 +34,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		(
 			0, 0, this.sizeInPixels.x, this.sizeInPixels.y
 		);
-	}
+	};
 
 	Display.prototype.drawArc = function
 	(
@@ -97,7 +97,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 			this.graphics.closePath();
 			this.graphics.stroke();
 		}
-	}
+	};
 
 	Display.prototype.drawBackground = function(colorBorder, colorBack)
 	{
@@ -108,7 +108,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 			(colorBack == null ? this.colorBack : colorBack),
 			(colorBorder == null ? this.colorFore : colorBorder)
 		);
-	}
+	};
 
 	Display.prototype.drawCircle = function(center, radius, colorFill, colorBorder)
 	{
@@ -133,7 +133,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 			this.graphics.strokeStyle = colorBorder;
 			this.graphics.stroke();
 		}
-	}
+	};
 
 	Display.prototype.drawCircleWithGradient = function(center, radius, gradientFill, colorBorder)
 	{
@@ -166,7 +166,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 			this.graphics.strokeStyle = colorBorder;
 			this.graphics.stroke();
 		}
-	}
+	};
 
 	Display.prototype.drawCrosshairs = function(center, radius, color)
 	{
@@ -178,8 +178,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		this.graphics.moveTo(drawPos.x, drawPos.y - radius);
 		this.graphics.lineTo(drawPos.x, drawPos.y + radius);
 		this.graphics.stroke();
-	}
-
+	};
 
 	Display.prototype.drawEllipse = function
 	(
@@ -219,7 +218,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		}
 
 		this.graphics.restore();
-	}
+	};
 
 	Display.prototype.drawImage = function(imageToDraw, pos, size)
 	{
@@ -240,7 +239,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 				// Do nothing.
 			}
 		}
-	}
+	};
 
 	Display.prototype.drawLine = function(fromPos, toPos, color)
 	{
@@ -256,7 +255,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		this.graphics.lineTo(drawPos.x, drawPos.y);
 
 		this.graphics.stroke();
-	}
+	};
 
 	Display.prototype.drawPixel = function(pos, color)
 	{
@@ -265,7 +264,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		(
 			pos.x, pos.y, 1, 1
 		);
-	}
+	};
 
 	Display.prototype.drawPolygon = function(vertices, colorFill, colorBorder)
 	{
@@ -300,7 +299,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 			this.graphics.strokeStyle = colorBorder;
 			this.graphics.stroke();
 		}
-	}
+	};
 
 	Display.prototype.drawRectangle = function
 	(
@@ -337,7 +336,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 				size.x, size.y
 			);
 		}
-	}
+	};
 
 	Display.prototype.drawRectangleCentered = function
 	(
@@ -350,7 +349,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		var sizeHalf = this.sizeHalf.overwriteWith(size).half();
 		var posAdjusted = this.drawPos.overwriteWith(pos).subtract(sizeHalf);
 		this.drawRectangle(posAdjusted, size, colorFill, colorBorder);
-	}
+	};
 
 	Display.prototype.drawText = function
 	(
@@ -413,14 +412,14 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		}
 
 		this.graphics.font = fontToRestore;
-	}
+	};
 
 	Display.prototype.fontSizeSet = function(fontHeightInPixels)
 	{
 		var isFontValid = this.fontValidate(this.fontName);
 		var fontNameToUse = (isFontValid == true ? this.fontName : "sans-serif");
 		this.graphics.font = fontHeightInPixels + "px " + fontNameToUse;
-	}
+	};
 
 	Display.prototype.fontValidate = function(fontName)
 	{
@@ -428,12 +427,12 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		var widthWithFontSpecified = this.graphics.measureText(this.testString).width;
 		var returnValue = (widthWithFontSpecified != this.widthWithFontFallthrough);
 		return returnValue;
-	}
+	};
 
 	Display.prototype.hide = function(universe)
 	{
 		universe.platformHelper.domElementRemove(this.canvas);
-	}
+	};
 
 	Display.prototype.initialize = function(universe)
 	{
@@ -448,7 +447,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		this.initializeCanvasAndGraphicsContext();
 
 		platformHelper.domElementAdd(this.canvas);
-	}
+	};
 
 	Display.prototype.initializeCanvasAndGraphicsContext = function()
 	{
@@ -466,12 +465,12 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		this.graphics.scale(this.scaleFactor.x, this.scaleFactor.y);
 
 		return this;
-	}
+	};
 
 	Display.prototype.show = function(universe)
 	{
 		universe.platformHelper.domElementAdd(this.canvas);
-	}
+	};
 
 	Display.prototype.textWidthForFontHeight = function(textToMeasure, fontHeightInPixels)
 	{
@@ -480,10 +479,10 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		var returnValue = this.graphics.measureText(textToMeasure).width;
 		this.graphics.font = fontToRestore;
 		return returnValue;
-	}
+	};
 
 	Display.prototype.toImage = function()
 	{
 		return Image.fromSystemImage("[fromDisplay]", this.canvas);
-	}
+	};
 }

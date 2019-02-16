@@ -13,7 +13,7 @@ function FileHelper()
         fileReader.contextForCallback = contextForCallback;
         fileReader.onload = this.loadFile_FileLoaded.bind(this);
         fileReader.readAsBinaryString(systemFileToLoad);
-    }
+    };
 
     FileHelper.prototype.loadFileAsText = function(systemFileToLoad, callback, contextForCallback)
     {
@@ -23,7 +23,7 @@ function FileHelper()
         fileReader.contextForCallback = contextForCallback;
         fileReader.onload = this.loadFile_FileLoaded.bind(this);
         fileReader.readAsText(systemFileToLoad);
-    }
+    };
 
     FileHelper.prototype.loadFile_FileLoaded = function(fileLoadedEvent)
     {
@@ -34,7 +34,7 @@ function FileHelper()
         var callback = fileReader.callback;
         var contextForCallback = fileReader.contextForCallback;
         callback.call(contextForCallback, contentsOfFileLoaded);
-    }
+    };
 
     FileHelper.prototype.saveBinaryStringToFileWithName = function(fileAsBinaryString, fileName)
     {
@@ -51,7 +51,7 @@ function FileHelper()
         link.href = window.URL.createObjectURL(fileAsBlob);
         link.download = fileName;
         link.click();
-    }
+    };
 
 	FileHelper.prototype.saveTextStringToFileWithName = function(textToSave, fileNameToSaveAs)
 	{
@@ -60,5 +60,5 @@ function FileHelper()
         link.href = window.URL.createObjectURL(textToSaveAsBlob);
         link.download = fileNameToSaveAs;
         link.click();
-	}
+	};
 }

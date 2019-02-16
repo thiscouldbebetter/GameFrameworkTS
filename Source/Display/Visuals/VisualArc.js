@@ -29,5 +29,5 @@ function VisualArc(arc, colorFill, colorBorder)
 			wedgeAngleMin, wedgeAngleMax,
 			this.colorFill, this.colorBorder
 		);
-	}
+	};
 }

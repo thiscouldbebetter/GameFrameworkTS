@@ -40,12 +40,12 @@ function SoundHelper(sounds)
 			var sound = this.sounds[i];
 			sound.offsetInSeconds = 0;
 		}
-	}
+	};
 
 	SoundHelper.prototype.soundWithNamePlayAsEffect = function(universe, soundName)
 	{
 		this.sounds[soundName].play(universe, this.soundVolume);
-	}
+	};
 
 	SoundHelper.prototype.soundWithNamePlayAsMusic = function(universe, soundToPlayName)
 	{
@@ -63,6 +63,5 @@ function SoundHelper(sounds)
 
 		soundToPlay.play(universe, this.musicVolume);
 		this.soundForMusic = soundToPlay;
-	}
-
+	};
 }

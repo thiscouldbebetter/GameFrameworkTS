@@ -23,19 +23,19 @@ function VisualImageFromLibrary(imageName, sizeScaled)
 		}
 
 		return returnValues;
-	}
+	};
 
 	// instance methods
 
 	VisualImageFromLibrary.prototype.image = function(universe)
 	{
 		return universe.mediaLibrary.imageGetByName(this.imageName);
-	}
+	};
 
 	VisualImageFromLibrary.prototype.imageSizeScaled = function(universe)
 	{
 		return (this._sizeScaled == null ? this.image(universe).sizeInPixels: this._sizeScaled);
-	}
+	};
 
 	// visual
 
@@ -48,5 +48,5 @@ function VisualImageFromLibrary(imageName, sizeScaled)
 			drawable.loc.pos
 		);
 		display.drawImage(image, drawPos, imageSize);
-	}
+	};
 }

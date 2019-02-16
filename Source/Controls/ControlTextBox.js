@@ -23,7 +23,7 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 	ControlTextBox.prototype.style = function(universe)
 	{
 		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
-	}
+	};
 
 	ControlTextBox.prototype.text = function(value, universe)
 	{
@@ -40,7 +40,7 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 		}
 
 		return (this._text.get == null ? this._text : this._text.get(universe) );
-	}
+	};
 
 	// events
 
@@ -133,24 +133,24 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 		}
 
 		return true; // wasActionHandled
-	}
+	};
 
 	ControlTextBox.prototype.focusGain = function()
 	{
 		this.isHighlighted = true;
-	}
+	};
 
 	ControlTextBox.prototype.focusLose = function()
 	{
 		this.isHighlighted = false;
-	}
+	};
 
 	ControlTextBox.prototype.mouseClick = function(mouseClickPos)
 	{
 		var parent = this.parent;
 		parent.indexOfChildWithFocus = parent.children.indexOf(this);
 		this.isHighlighted = true;
-	}
+	};
 
 	// drawable
 
@@ -222,6 +222,5 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 				this.size.x // widthMaxInPixels
 			);
 		}
-	}
-
+	};
 }

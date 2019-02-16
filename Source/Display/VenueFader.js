@@ -37,7 +37,7 @@ function VenueFader
 		{
 			venueToFadeTo.initialize(universe);
 		}
-	}
+	};
 
 	VenueFader.prototype.updateForTimerTick = function(universe)
 	{
@@ -96,17 +96,17 @@ function VenueFader
 			display.sizeDefault, // Scaled automatically.
 			fadeColor.systemColor()
 		);
-	}
+	};
 
 	VenueFader.prototype.venueToFadeTo = function()
 	{
 		return this.venuesToFadeFromAndTo[1];
-	}
+	};
 
 	VenueFader.prototype.venueCurrent = function()
 	{
 		return this.venuesToFadeFromAndTo[this.venueIndexCurrent];
-	}
+	};
 
 	VenueFader.prototype.draw = function(universe)
 	{
@@ -115,5 +115,5 @@ function VenueFader
 		{
 			venueCurrent.draw(universe);
 		}
-	}
+	};
 }

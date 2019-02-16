@@ -17,7 +17,7 @@ function Polar(azimuthInTurns, radius, elevationInTurns)
 	{
 		this.azimuthInTurns += turnsToAdd;
 		return this;
-	}
+	};
 
 	Polar.prototype.fromCoords = function(coordsToConvert)
 	{
@@ -37,7 +37,7 @@ function Polar(azimuthInTurns, radius, elevationInTurns)
 			/ Polar.RadiansPerTurn;
 
 		return this;
-	}
+	};
 
 	Polar.prototype.overwriteWith = function(other)
 	{
@@ -45,7 +45,7 @@ function Polar(azimuthInTurns, radius, elevationInTurns)
 		this.radius = other.radius;
 		this.elevationInTurns = other.elevationInTurns;
 		return this;
-	}
+	};
 
 	Polar.prototype.overwriteWithAzimuthRadiusElevation = function
 	(
@@ -59,14 +59,14 @@ function Polar(azimuthInTurns, radius, elevationInTurns)
 			this.elevationInTurns = elevationInTurns;
 		}
 		return this;
-	}
+	};
 
 	Polar.prototype.random = function()
 	{
 		this.azimuthInTurns = Math.random();
 		this.elevationInTurns = Math.random();
 		return this;
-	}
+	};
 
 	Polar.prototype.toCoords = function(coords)
 	{
@@ -83,7 +83,7 @@ function Polar(azimuthInTurns, radius, elevationInTurns)
 		).multiplyScalar(this.radius);
 
 		return coords;
-	}
+	};
 
 	Polar.prototype.wrap = function()
 	{
@@ -96,5 +96,5 @@ function Polar(azimuthInTurns, radius, elevationInTurns)
 			this.azimuthInTurns--;
 		}
 		return this;
-	}
+	};
 }

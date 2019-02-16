@@ -13,13 +13,12 @@ function Plane(normal, distanceFromOrigin)
 		(
 			this.normal
 		) - this.distanceFromOrigin;
-	}
-	
+	};	
 	
 	Plane.prototype.equals = function(other)
 	{
 		return (this.normal.equals(other.normal) && this.distanceFromOrigin == other.distanceFromOrigin);
-	}
+	};
 
 	Plane.prototype.fromPoints = function(point0, point1, point2)
 	{
@@ -43,5 +42,5 @@ function Plane(normal, distanceFromOrigin)
 		this.distanceFromOrigin = point0.dotProduct(this.normal);
 
 		return this;
-	}
+	};
 }

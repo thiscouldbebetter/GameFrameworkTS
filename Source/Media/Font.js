@@ -19,5 +19,5 @@ function Font(name, sourcePath)
 			+ "}";
 		document.head.appendChild(fontAsStyleElement);
 		this.isLoaded = true;
-	}
+	};
 }

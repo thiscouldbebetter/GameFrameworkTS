@@ -17,7 +17,7 @@ function VenueVideo(videoName, venueNext)
 	VenueVideo.prototype.draw = function()
 	{
 		// do nothing
-	}
+	};
 
 	VenueVideo.prototype.updateForTimerTick = function(universe)
 	{
@@ -73,5 +73,5 @@ function VenueVideo(videoName, venueNext)
 			display.show(universe);
 			universe.venueNext = new VenueFader(this.venueNext, this);
 		}
-	}
+	};
 }

@@ -28,14 +28,14 @@ function Sound(name, sourcePath, isRepeating)
 		);
 
 		return this.domElement;
-	}
+	};
 
 	Sound.prototype.pause = function(universe)
 	{
 		var offsetInSeconds = this.domElement.currentTime;
 		this.stop(universe);
 		this.offsetInSeconds = offsetInSeconds;
-	}
+	};
 
 	Sound.prototype.play = function(universe, volume)
 	{
@@ -51,12 +51,12 @@ function Sound(name, sourcePath, isRepeating)
 				this.domElement
 			);
 		}
-	}
+	};
 
 	Sound.prototype.reset = function()
 	{
 		this.offsetInSeconds = 0;
-	}
+	};
 
 	Sound.prototype.stop = function(universe, event)
 	{
@@ -68,7 +68,7 @@ function Sound(name, sourcePath, isRepeating)
 			universe.platformHelper.domElementRemove(domElement);
 			this.offsetInSeconds = 0;
 		}
-	}
+	};
 
 	Sound.prototype.stopOrRepeat = function(universe, event)
 	{
@@ -76,5 +76,5 @@ function Sound(name, sourcePath, isRepeating)
 		{
 			this.stop(universe, event);
 		}
-	}
+	};
 }
