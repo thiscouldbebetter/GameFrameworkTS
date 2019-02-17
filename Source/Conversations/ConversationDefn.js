@@ -92,7 +92,7 @@ function ConversationDefn(name, imageName, contentTextStringName, talkNodeDefns,
 						textLine,
 						talkNodeToExpand.next,
 						talkNodeToExpand.isActive
-					)
+					);
 					talkNodesExpanded.push(talkNodeExpanded);
 				}
 			}

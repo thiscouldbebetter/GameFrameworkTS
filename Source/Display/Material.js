@@ -24,5 +24,5 @@ function Material(name, colorStroke, colorFill, texture)
 		}
 
 		return Material._Instances;
-	}
+	};
 }

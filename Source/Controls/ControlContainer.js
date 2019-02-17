@@ -196,7 +196,7 @@ function ControlContainer(name, pos, size, children)
 	ControlContainer.prototype.focusGain = function()
 	{
 		this.indexOfChildWithFocus = null;
-		var childWithFocus = this.childWithFocusNextInDirection(1)
+		var childWithFocus = this.childWithFocusNextInDirection(1);
 		if (childWithFocus != null)
 		{
 			childWithFocus.focusGain();
@@ -304,7 +304,7 @@ function ControlContainer(name, pos, size, children)
 		(
 			drawPos, this.size,
 			style.colorBackground, style.colorBorder
-		)
+		);
 
 		var children = this.children;
 		for (var i = 0; i < children.length; i++)

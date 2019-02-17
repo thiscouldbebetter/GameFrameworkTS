@@ -166,7 +166,7 @@ function ControlSelect
 			drawPos, this.size,
 			style.colorFill, style.colorBorder,
 			this.isHighlighted // areColorsReversed
-		)
+		);
 
 		drawPos.add(this.sizeHalf);
 

@@ -172,7 +172,6 @@ function ControlBuilder(styles)
 		);
 
 		return returnValue;
-
 	};
 
 	ControlBuilder.prototype.configure = function(universe, size)

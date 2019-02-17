@@ -15,7 +15,7 @@ function TalkNodeDefn(name, execute, activate)
 			this._instances = new TalkNodeDefn_Instances();
 		}
 		return this._instances;
-	}
+	};
 
 	function TalkNodeDefn_Instances()
 	{

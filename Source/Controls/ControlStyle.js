@@ -16,7 +16,7 @@ function ControlStyle(name, colorBackground, colorFill, colorBorder, colorDisabl
 			ControlStyle._Instances = new ControlStyle_Instances();
 		}
 		return ControlStyle._Instances;
-	}
+	};
 
 	function ControlStyle_Instances()
 	{

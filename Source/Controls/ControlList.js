@@ -296,7 +296,7 @@ function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPix
 						itemSizeY
 					),
 					colorFore // colorFill
-				)
+				);
 			}
 
 			var text = this.bindingForItemText.contextSet

@@ -81,7 +81,7 @@ function ControlContainerTransparent(containerInner)
 			drawPos, this.containerInner.size,
 			null, // display.colorBack,
 			display.colorFore
-		)
+		);
 
 		var children = this.containerInner.children;
 		for (var i = 0; i < children.length; i++)

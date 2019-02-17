@@ -13,7 +13,7 @@ function ConstraintDefn(name, constrain)
 			ConstraintDefn._Instances = new ConstraintDefn_Instances();
 		}
 		return ConstraintDefn._Instances;
-	}
+	};
 
 	function ConstraintDefn_Instances()
 	{
