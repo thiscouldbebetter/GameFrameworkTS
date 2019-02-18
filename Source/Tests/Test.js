@@ -18,7 +18,7 @@ function Test()
 
 			throw message;
 		}
-	}
+	};
 
 	Test.runTestsInFixture = function(testFixture)
 	{
@@ -42,7 +42,7 @@ function Test()
 		}
 
 		console.log("All tests in test fixture " + testFixtureName + " passed.");
-	}
+	};
 
 	Test.runTestsInFixtures = function(testFixtures)
 	{
@@ -51,6 +51,5 @@ function Test()
 			var testFixture = testFixtures[i];
 			Test.runTestsInFixture(testFixture);
 		}
-	}
-
+	};
 }

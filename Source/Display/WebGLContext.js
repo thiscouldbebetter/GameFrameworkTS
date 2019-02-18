@@ -16,7 +16,7 @@ function WebGLContext(canvas)
 		var returnValues = new Float32Array(coordsToConvert.dimensions());
 
 		return returnValues;
-	}
+	};
 
 	// instance methods
 

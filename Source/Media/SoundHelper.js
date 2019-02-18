@@ -29,7 +29,7 @@ function SoundHelper(sounds)
 		];
 
 		return returnValue;
-	}
+	};
 
 	// instance methods
 

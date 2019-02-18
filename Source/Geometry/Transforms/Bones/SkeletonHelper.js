@@ -170,7 +170,7 @@ function SkeletonHelper()
 		);
 
 		return skeletonBiped;
-	}
+	};
 
 	SkeletonHelper.bipedAnimationDefnGroup = function()
 	{
@@ -185,7 +185,7 @@ function SkeletonHelper()
 		);
 
 		return returnValue;
-	}
+	};
 
 	SkeletonHelper.bipedAnimationDefnDoSomething = function()
 	{
@@ -221,7 +221,7 @@ function SkeletonHelper()
 		);
 
 		return returnValue;
-	}
+	};
 
 	SkeletonHelper.bipedAnimationDefnJump = function()
 	{
@@ -256,7 +256,7 @@ function SkeletonHelper()
 		);
 
 		return returnValue;
-	}
+	};
 
 	SkeletonHelper.bipedAnimationDefnWalk = function()
 	{
@@ -362,7 +362,7 @@ function SkeletonHelper()
 		);
 
 		return animationDefnBipedWalk;
-	}
+	};
 
 	SkeletonHelper.transformBuildForMeshAndSkeleton_Proximity = function
 	(
@@ -430,5 +430,5 @@ function SkeletonHelper()
 		);
 
 		return returnValue;
-	}
+	};
 }

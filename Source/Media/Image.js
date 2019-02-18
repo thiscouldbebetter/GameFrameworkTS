@@ -23,7 +23,7 @@ function Image(name, sourcePath)
 		returnValue.isLoaded = true;
 
 		return returnValue;
-	}
+	};
 
 	// instance methods
 

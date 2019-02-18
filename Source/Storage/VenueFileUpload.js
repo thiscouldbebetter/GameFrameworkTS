@@ -20,7 +20,7 @@ function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 		var display = universe.display;
 		display.drawBackground("Black", "Black");
 		display.show(universe);
-	}
+	};
 
 	VenueFileUpload.prototype.initialize = function(universe)
 	{
@@ -36,7 +36,7 @@ function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 		labelInstructions.innerHTML =
 			"Choose a file and click Load."
 			+ "  Due to web browser security features,"
-			+ " a mouse or keyboard will likely be necessary."
+			+ " a mouse or keyboard will likely be necessary.";
 		divFileUpload.appendChild(labelInstructions);
 
 		var inputFileUpload = document.createElement("input");
@@ -63,7 +63,7 @@ function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 		inputFileUpload.focus();
 
 		this.domElement = divFileUpload;
-	}
+	};
 
 	VenueFileUpload.prototype.updateForTimerTick = function(universe)
 	{
@@ -86,14 +86,14 @@ function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 				}
 			}
 		}
-	}
+	};
 
 	// events
 
 	VenueFileUpload.prototype.buttonCancel_Clicked = function(universe, event)
 	{
 		universe.venueNext = this.venueNextIfCancelled;
-	}
+	};
 
 	VenueFileUpload.prototype.buttonLoad_Clicked = function(universe, event)
 	{
@@ -103,5 +103,5 @@ function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 		{
 			universe.venueNext = this.venueNextIfFileSpecified;
 		}
-	}
+	};
 }

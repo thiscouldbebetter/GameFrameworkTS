@@ -578,7 +578,7 @@ function CollisionHelper()
 							var isCell1PosInBounds = cell1PosInCells.isInRangeMinMax
 							(
 								Coords.Instances().Zeroes, map1SizeInCellsMinusOnes
-							)
+							);
 							if (isCell1PosInBounds == true)
 							{
 								cell1 = map1.cellAtPosInCells(map1, cell1PosInCells, cell1);

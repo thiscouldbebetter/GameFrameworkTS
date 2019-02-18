@@ -109,7 +109,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 					{
 						place.entitiesToRemove.push(entityOther);
 					}
-				}
+				};
 
 				var projectileEntity = new Entity
 				(
@@ -303,7 +303,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			);
 			universe.venueNext = venueMessage;
 		}
-	}
+	};
 
 	var constraintSpeedMax = new Constraint("SpeedMax", 5);
 	var constraintFriction = new Constraint("Friction", .03);

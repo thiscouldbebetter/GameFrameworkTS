@@ -17,7 +17,7 @@ function MediaLibrary(images, sounds, videos, fonts, textStrings)
 	];
 
 	this.collectionsAll["Images"] = this.images;
-	this.collectionsAll["Sounds"] = this.sounds
+	this.collectionsAll["Sounds"] = this.sounds;
 	this.collectionsAll["Videos"] = this.videos;
 	this.collectionsAll["Fonts"] = this.fonts;
 	this.collectionsAll["TextStrings"] = this.textStrings;

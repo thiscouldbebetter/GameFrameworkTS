@@ -45,7 +45,7 @@ function CameraTests()
 			var worldCoordsAfter = camera.coordsTransformViewToWorld
 			(
 				viewCoords
-			)
+			);
 			worldCoordsAfter.round();
 
 			var areBeforeAndAfterEqual = worldCoordsAfter.equals(worldCoordsBefore);

@@ -214,7 +214,7 @@ function Coords(x, y, z)
 	Coords.prototype.half = function()
 	{
 		return this.divideScalar(2);
-	}
+	};
 
 	Coords.prototype.invert = function()
 	{

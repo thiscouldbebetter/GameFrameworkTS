@@ -47,7 +47,7 @@ function World(name, dateCreated, defns, place)
 			place
 		);
 		return returnValue;
-	}
+	};
 
 	// instance methods
 

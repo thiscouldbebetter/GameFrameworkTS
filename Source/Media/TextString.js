@@ -33,7 +33,7 @@ function TextString(name, sourcePath)
 		{
 			text.value = xmlHttpRequest.responseText;
 			text.isLoaded = true;
-		}
+		};
 		xmlHttpRequest.send();
 	};
 }

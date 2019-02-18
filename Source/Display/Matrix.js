@@ -18,7 +18,7 @@ function Matrix(values)
 		]);
 
 		return returnValue;
-	}
+	};
 
 	// instance methods
 

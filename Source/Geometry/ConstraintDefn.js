@@ -24,7 +24,7 @@ function ConstraintDefn(name, constrain)
 			{
 				// Do nothing.
 			}
-		)
+		);
 
 		this.Attach = new ConstraintDefn
 		(

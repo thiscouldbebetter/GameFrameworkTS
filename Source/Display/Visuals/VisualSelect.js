@@ -1,4 +1,4 @@
-l
+
 function VisualSelect(name, childNames, children)
 {
 	this.name = name;

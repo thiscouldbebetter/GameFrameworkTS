@@ -37,7 +37,7 @@ function Bone(name, length, orientation, children, isVisible)
 		}
 
 		return returnValue;
-	}
+	};
 
 	// cloneable
 

@@ -35,7 +35,7 @@ function StorageHelper(propertyNamePrefix, serializer)
 		}
 
 		return returnValue;
-	}
+	};
 
 	StorageHelper.prototype.save = function(propertyName, valueToSave)
 	{
@@ -52,5 +52,5 @@ function StorageHelper(propertyNamePrefix, serializer)
 			propertyNamePrefixed,
 			valueToSaveSerialized
 		);
-	}
+	};
 }

@@ -23,14 +23,14 @@ function VisualImageImmediate(image, sizeScaled)
 		}
 
 		return returnValues;
-	}
+	};
 
 	// instance methods
 
 	VisualImageImmediate.prototype.imageSizeScaled = function(universe)
 	{
 		return (this._sizeScaled == null ? this.image.sizeInPixels: this._sizeScaled);
-	}
+	};
 
 	// visual
 

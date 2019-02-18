@@ -12,7 +12,7 @@ function Serializer()
 		var returnValue = nodeRoot.unwrap([]);
 
 		return returnValue;
-	}
+	};
 
 	Serializer.prototype.serialize = function(objectToSerialize, prettyPrint)
 	{
@@ -28,7 +28,7 @@ function Serializer()
 		);
 
 		return nodeRootSerialized;
-	}
+	};
 }
 
 function SerializerNode(objectWrapped)
@@ -141,7 +141,7 @@ function SerializerNode(objectWrapped)
 
 		return this;
 
-	} // end method
+	}; // end method
 
 	SerializerNode.prototype.prototypesAssign = function()
 	{
@@ -162,7 +162,7 @@ function SerializerNode(objectWrapped)
 				}
 			}
 		}
-	}
+	};
 
 	SerializerNode.prototype.unwrap = function(nodesAlreadyProcessed)
 	{
@@ -229,5 +229,5 @@ function SerializerNode(objectWrapped)
 		}
 
 		return this.o; // objectWrapped
-	}
+	};
 }

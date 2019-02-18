@@ -18,7 +18,7 @@ function Transform()
 			var coordsArray = coordsArraysToTransform[i];
 			Transform.applyTransformToCoordsMany(transformToApply, coordsArray);
 		}
-	}
+	};
 
 	Transform.applyTransformToCoordsMany = function(transformToApply, coordsSetToTransform)
 	{
@@ -26,5 +26,5 @@ function Transform()
 		{
 			transformToApply.transformCoords(coordsSetToTransform[i]);
 		}
-	}
+	};
 }
