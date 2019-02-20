@@ -317,7 +317,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			new Collidable
 			(
 				playerCollider,
-				[ "Collidable" ], // entityPropertyNamesToCollideWith
+				[ Collidable.name ], // entityPropertyNamesToCollideWith
 				playerCollide
 			),
 			new Drawable(playerVisual),

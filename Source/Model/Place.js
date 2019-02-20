@@ -8,20 +8,20 @@ function Place(entities)
 
 	this.propertyNamesToProcess =
 	[
-		"Locatable",
-		"Constrainable",
-		"Collidable",
-		"Idleable",
-		"Actor",
-		"Playable",
-		"Ephemeral",
-		"Killable",
+		Locatable.name,
+		Constrainable.name,
+		Collidable.name,
+		Idleable.name,
+		Actor.name,
+		Playable.name,
+		Ephemeral.name,
+		Killable.name,
 	];
 }
 {
 	Place.prototype.draw = function(universe, world)
 	{
-		var entitiesDrawable = this.entitiesByPropertyName("Drawable");
+		var entitiesDrawable = this.entitiesByPropertyName(Drawable.name);
 		for (var i = 0; i < entitiesDrawable.length; i++)
 		{
 			var entity = entitiesDrawable[i];
