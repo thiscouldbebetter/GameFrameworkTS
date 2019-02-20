@@ -8,24 +8,24 @@ function Place(entities)
 
 	this.propertyNamesToProcess =
 	[
-		"locatable",
-		"constrainable",
-		"collidable",
-		"idleable",
-		"actor",
-		"playable",
-		"ephemeral",
-		"killable",
+		"Locatable",
+		"Constrainable",
+		"Collidable",
+		"Idleable",
+		"Actor",
+		"Playable",
+		"Ephemeral",
+		"Killable",
 	];
 }
 {
 	Place.prototype.draw = function(universe, world)
 	{
-		var entitiesDrawable = this.entitiesByPropertyName("drawable");
+		var entitiesDrawable = this.entitiesByPropertyName("Drawable");
 		for (var i = 0; i < entitiesDrawable.length; i++)
 		{
 			var entity = entitiesDrawable[i];
-			var drawable = entity.drawable;
+			var drawable = entity.Drawable;
 			drawable.updateForTimerTick(universe, world, this, entity);
 		}
 	};
@@ -70,9 +70,6 @@ function Place(entities)
 		{
 			var property = entityProperties[p];
 			var propertyName = property.constructor.name;
-			propertyName =
-				propertyName.substr(0, 1).toLowerCase()
-				+ propertyName.substr(1);
 			var entitiesWithProperty =
 				this.entitiesByPropertyName(propertyName);
 			entitiesWithProperty.remove(entity);
@@ -91,10 +88,6 @@ function Place(entities)
 		{
 			var property = entityProperties[p];
 			var propertyName = property.constructor.name;
-			propertyName =
-				propertyName.substr(0, 1).toLowerCase()
-				+ propertyName.substr(1);
-
 			var entitiesWithProperty = this.entitiesByPropertyName(propertyName);
 			entitiesWithProperty.push(entity);
 

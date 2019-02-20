@@ -8,7 +8,6 @@ function Entity(name, properties)
 	{
 		var property = this.properties[i];
 		var propertyName = property.constructor.name;
-		propertyName = propertyName.substr(0, 1).toLowerCase() + propertyName.substr(1);
 		this[propertyName] = property;
 	}
 }

@@ -34,11 +34,11 @@ function Collidable(collider, entityPropertyNamesToCollideWith, collideEntities)
 						var entityOther = entitiesWithProperty[e];
 						if (entityOther != entity)
 						{
-							var collidableOther = entityOther.collidable;
+							var collidableOther = entityOther.Collidable;
 							var canCollide = (collidableOther.ticksUntilCanCollide == 0);
 							if (canCollide)
 							{
-								var colliderThis = entity.collidable.collider;
+								var colliderThis = entity.Collidable.collider;
 								var colliderOther = collidableOther.collider;
 
 								var collisionHelper = universe.collisionHelper;

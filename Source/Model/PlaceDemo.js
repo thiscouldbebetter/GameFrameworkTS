@@ -69,11 +69,11 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			function perform(universe, world, place, actor)
 			{
 				var itemWeapon = new Item("Weapon", 1);
-				var actorHasWeapon = actor.itemHolder.hasItems(itemWeapon);
+				var actorHasWeapon = actor.ItemHolder.hasItems(itemWeapon);
 
 				if (actorHasWeapon == false) { return; }
 
-				var actorLoc = actor.locatable.loc;
+				var actorLoc = actor.Locatable.loc;
 				var actorPos = actorLoc.pos;
 				var actorVel = actorLoc.vel;
 				var actorSpeed = actorVel.magnitude();
@@ -92,7 +92,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 				]);
 
 				var actorDirection = actorVel.clone().normalize();
-				var actorRadius = actor.collidable.collider.radius;
+				var actorRadius = actor.Collidable.collider.radius;
 				var projectilePos = actorPos.clone().add
 				(
 					actorDirection.clone().multiplyScalar(actorRadius).double().double()
@@ -105,7 +105,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 
 				var projectileCollide = function(universe, world, place, entityPlayer, entityOther)
 				{
-					if (entityOther.killable != null)
+					if (entityOther.Killable != null)
 					{
 						place.entitiesToRemove.push(entityOther);
 					}
@@ -247,29 +247,29 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 	{
 		var messageToDisplay = null;
 
-		if (entityOther.damager != null)
+		if (entityOther.Damager != null)
 		{
 			messageToDisplay = "You lose!";
 		}
-		else if (entityOther.goal != null)
+		else if (entityOther.Goal != null)
 		{
 			var keysRequired =
-				new Item("Key", entityOther.goal.numberOfKeysToUnlock);
-			if (entityPlayer.itemHolder.hasItems(keysRequired))
+				new Item("Key", entityOther.Goal.numberOfKeysToUnlock);
+			if (entityPlayer.ItemHolder.hasItems(keysRequired))
 			{
 				messageToDisplay = "You win!";
 			}
 		}
-		else if (entityOther.item != null)
+		else if (entityOther.Item != null)
 		{
-			var item = entityOther.item;
-			entityPlayer.itemHolder.itemAdd(item);
+			var item = entityOther.Item;
+			entityPlayer.ItemHolder.itemAdd(item);
 			place.entitiesToRemove.push(entityOther);
 		}
-		else if (entityOther.talker != null)
+		else if (entityOther.Talker != null)
 		{
-			entityOther.collidable.ticksUntilCanCollide = 100;
-			entityOther.drawable.animationRuns["Friendly"].ticksSinceStarted = 0;
+			entityOther.Collidable.ticksUntilCanCollide = 100;
+			entityOther.Drawable.animationRuns["Friendly"].ticksSinceStarted = 0;
 
 			var conversationDefnAsJSON =
 				universe.mediaLibrary.textStringGetByName("Conversation").value;
@@ -317,7 +317,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			new Collidable
 			(
 				playerCollider,
-				[ "collidable" ], // entityPropertyNamesToCollideWith
+				[ "Collidable" ], // entityPropertyNamesToCollideWith
 				playerCollide
 			),
 			new Drawable(playerVisual),
@@ -388,7 +388,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			(
 				function activity(universe, world, place, entityActor, target)
 				{
-					var actor = entityActor.actor;
+					var actor = entityActor.Actor;
 					var targetPos = actor.target;
 					if (targetPos == null)
 					{
@@ -397,7 +397,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 						actor.target = targetPos;
 					}
 
-					var actorLoc = entityActor.locatable.loc;
+					var actorLoc = entityActor.Locatable.loc;
 					var actorPos = actorLoc.pos;
 
 					var distanceToTarget = targetPos.clone().subtract
@@ -476,11 +476,11 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 				function activity(universe, world, place, actor, entityToTargetName)
 				{
 					var target = place.entities[entityToTargetName];
-					var actorLoc = actor.locatable.loc;
+					var actorLoc = actor.Locatable.loc;
 
 					actorLoc.vel.overwriteWith
 					(
-						target.locatable.loc.pos
+						target.Locatable.loc.pos
 					).subtract
 					(
 						actorLoc.pos
@@ -727,7 +727,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 
 	// obstacleRing
 
-	var obstaclePos = goalEntity.locatable.loc.pos;
+	var obstaclePos = goalEntity.Locatable.loc.pos;
 	var obstacleLoc = new Location(obstaclePos);
 	obstacleLoc.spin.angleInTurnsRef.value = 0.002;
 	var obstacleCollider = new Arc
@@ -787,7 +787,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 		var drawPos = drawLoc.pos;
 
 		var player = this.entities["Player"];
-		var playerLoc = player.locatable.loc;
+		var playerLoc = player.Locatable.loc;
 
 		var camera = this.camera;
 		camera.loc.pos.overwriteWith
@@ -807,7 +807,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 		world, entity, directionToMove
 	)
 	{
-		var entityLoc = entity.locatable.loc;
+		var entityLoc = entity.Locatable.loc;
 
 		entityLoc.orientation.forwardSet(directionToMove);
 		var vel = entityLoc.vel;

@@ -11,7 +11,7 @@ function Playable(player)
 		var actions = place.actions;
 		var camera = place.camera;
 
-		var playerLoc = entityPlayer.locatable.loc;
+		var playerLoc = entityPlayer.Locatable.loc;
 
 		var inputHelper = universe.inputHelper;
 		if (inputHelper.isMouseClicked() == true)

@@ -56,7 +56,7 @@ function ConstraintDefn(name, constrain)
 			function constrain(universe, world, place, entity, constraint)
 			{
 				var targetFrictionCoefficient = constraint.target;
-				var entityLoc = entity.locatable.loc;
+				var entityLoc = entity.Locatable.loc;
 				var entityVel = entityLoc.vel;
 				var speed = entityVel.magnitude();
 				var frictionMagnitude = speed * targetFrictionCoefficient;
@@ -74,7 +74,7 @@ function ConstraintDefn(name, constrain)
 			{
 				var targetFrictionCoefficient = constraint.target;
 				var frictionMagnitude = targetFrictionCoefficient;
-				var entityLoc = entity.locatable.loc;
+				var entityLoc = entity.Locatable.loc;
 				var entityVel = entityLoc.vel;
 				var entitySpeed = entityVel.magnitude();
 				if (entitySpeed <= frictionMagnitude)
@@ -135,7 +135,7 @@ function ConstraintDefn(name, constrain)
 			function constrain(universe, world, place, entity, constraint)
 			{
 				var targetSpeedMax = constraint.target;
-				var entityLoc = entity.locatable.loc;
+				var entityLoc = entity.Locatable.loc;
 				var entityVel = entityLoc.vel;
 				var speed = entityVel.magnitude();
 				if (speed > targetSpeedMax)
@@ -151,7 +151,7 @@ function ConstraintDefn(name, constrain)
 			function constrain(universe, world, place, entity, constraint)
 			{
 				var targetSpeedMin = constraint.target;
-				var entityLoc = entity.locatable.loc;
+				var entityLoc = entity.Locatable.loc;
 				var entityVel = entityLoc.vel;
 				var speed = entityVel.magnitude();
 				if (speed < targetSpeedMin)
@@ -167,7 +167,7 @@ function ConstraintDefn(name, constrain)
 			function constrain(universe, world, place, entity, constraint)
 			{
 				var targetSize = constraint.target;
-				var entityLoc = entity.locatable.loc;
+				var entityLoc = entity.Locatable.loc;
 				entityLoc.pos.trimToRangeMax(targetSize);
 			}
 		);
@@ -178,7 +178,7 @@ function ConstraintDefn(name, constrain)
 			function constrain(universe, world, place, entity, constraint)
 			{
 				var targetRange = constraint.target;
-				var entityLoc = entity.locatable.loc;
+				var entityLoc = entity.Locatable.loc;
 				entityLoc.pos.wrapToRangeMax(targetRange);
 			}
 		);
@@ -188,7 +188,7 @@ function ConstraintDefn(name, constrain)
 			"WrapXTrimY",
 			function constrain(universe, world, place, entity, constraint)
 			{
-				var entityLoc = entity.locatable.loc;
+				var entityLoc = entity.Locatable.loc;
 				var entityPos = entityLoc.pos;
 				var max = constraint.target;
 
