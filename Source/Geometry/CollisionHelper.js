@@ -1,10 +1,100 @@
 
 function CollisionHelper()
 {
-	this.throwErrorIfCollidersCannotBeCollided = false;
+	this.throwErrorIfCollidersCannotBeCollided = true;
 
 	// Helper variables.
 	this.displacement = new Coords();
+
+	var lookupOfLookups = {};
+	var lookup;
+
+	// Bounds
+	lookup = {};
+	lookup[Bounds.name] = this.doBoundsAndBoundsCollide;
+	lookup[Cylinder.name] = this.doBoundsAndCylinderCollide;
+	lookup[Sphere.name] = this.doBoundsAndSphereCollide;
+	lookupOfLookups[Bounds.name] = lookup;
+
+	// Cylinder
+	lookup = {};
+	lookup[Cylinder.name] = this.doCylinderAndCylinderCollide;
+	lookupOfLookups[Cylinder.name] = lookup;
+
+	// Edge
+	lookup = {};
+	lookup[Face.name] = this.doEdgeAndFaceCollide;
+	lookup[Hemispace.name] = this.doEdgeAndHemispaceCollide;
+	lookup[Mesh.name] = this.doEdgeAndMeshCollide;
+	lookup[Plane.name] = this.doEdgeAndPlaneCollide;
+	lookupOfLookups[Edge.name] = lookup;
+
+	// Hemispace
+	lookup = {};
+	lookup[Sphere.name] = this.doHemispaceAndSphereCollide;
+	lookupOfLookups[Hemispace.name] = lookup;
+
+	// MapLocated
+	lookup = {};
+	lookup[MapLocated.name] = this.doMapLocatedAndMapLocatedCollide;
+	lookup[Sphere.name] = this.doMapLocatedAndSphereCollide;
+	lookupOfLookups[MapLocated.name] = lookup;
+
+	// Mesh
+	lookup = {};
+	lookup[Mesh.name] = this.doMeshAndMeshCollide;
+	lookup[Sphere.name] = this.doMeshAndSphereCollide;
+	lookupOfLookups[Mesh.name] = lookup;
+
+	// ShapeContainer
+	lookup = {};
+	lookup[ShapeContainer.name] = this.doShapeContainerAndShapeCollide;
+	lookup[ShapeGroupAll.name] = this.doShapeContainerAndShapeCollide;
+	lookup[ShapeGroupAny.name] = this.doShapeContainerAndShapeCollide;
+	lookup[ShapeInverse.name] = this.doShapeContainerAndShapeCollide;
+	lookup[Sphere.name] = this.doShapeContainerAndShapeCollide;
+	lookupOfLookups[ShapeContainer.name] = lookup;
+
+	// ShapeGroupAll
+	lookup = {};
+	lookup[ShapeContainer.name] = this.doShapeGroupAllAndShapeCollide;
+	lookup[ShapeGroupAll.name] = this.doShapeGroupAllAndShapeCollide;
+	lookup[ShapeGroupAny.name] = this.doShapeGroupAllAndShapeCollide;
+	lookup[ShapeInverse.name] = this.doShapeGroupAllAndShapeCollide;
+	lookup[Sphere.name] = this.doShapeGroupAllAndShapeCollide;
+	lookupOfLookups[ShapeGroupAll.name] = lookup;
+
+	// ShapeGroupAny
+	lookup = {};
+	lookup[ShapeContainer.name] = this.doShapeGroupAnyAndShapeCollide;
+	lookup[ShapeGroupAll.name] = this.doShapeGroupAnyAndShapeCollide;
+	lookup[ShapeGroupAny.name] = this.doShapeGroupAnyAndShapeCollide;
+	lookup[ShapeInverse.name] = this.doShapeGroupAnyAndShapeCollide;
+	lookup[Sphere.name] = this.doShapeGroupAnyAndShapeCollide;
+	lookupOfLookups[ShapeGroupAny.name] = lookup;
+
+	// ShapeInverse
+	lookup = {};
+	lookup[ShapeContainer.name] = this.doShapeInverseAndShapeCollide;
+	lookup[ShapeGroupAll.name] = this.doShapeInverseAndShapeCollide;
+	lookup[ShapeGroupAny.name] = this.doShapeInverseAndShapeCollide;
+	lookup[ShapeInverse.name] = this.doShapeInverseAndShapeCollide;
+	lookup[Sphere.name] = this.doShapeInverseAndShapeCollide;
+	lookupOfLookups[ShapeInverse.name] = lookup;
+
+	// Sphere
+	lookup = {};
+	lookup[Bounds.name] = this.doSphereAndBoundsCollide;
+	lookup[MapLocated.name] = this.doSphereAndMapLocatedCollide;
+	lookup[Mesh.name] = this.doSphereAndMeshCollide;
+	lookup[ShapeContainer.name] = this.doSphereAndShapeContainerCollide;
+	lookup[ShapeGroupAll.name] = this.doSphereAndShapeGroupAllCollide;
+	lookup[ShapeGroupAny.name] = this.doSphereAndShapeGroupAnyCollide;
+	lookup[ShapeInverse.name] = this.doSphereAndShapeInverseCollide;
+	lookup[Sphere.name] = this.doSphereAndSphereCollide;
+	lookupOfLookups[Sphere.name] = lookup;
+
+	this.colliderTypeNamesToDoCollideLookup = lookupOfLookups;
 }
 {
 	CollisionHelper.prototype.collisionsOfCollidablesInSets = function(collidableSet0, collidableSet1)
@@ -50,7 +140,7 @@ function CollisionHelper()
 
 	CollisionHelper.prototype.doCollidersCollide = function(collider0, collider1)
 	{
-		var returnValue;
+		var returnValue = false;
 
 		while (collider0.collider != null)
 		{
@@ -65,32 +155,32 @@ function CollisionHelper()
 		var collider0TypeName = collider0.constructor.name;
 		var collider1TypeName = collider1.constructor.name;
 
-		if (collider0TypeName <= collider1TypeName)
+		var doCollideLookup =
+			this.colliderTypeNamesToDoCollideLookup[collider0TypeName];
+		if (doCollideLookup == null)
 		{
-			collidersAlphabetized = [ collider0, collider1 ];
-		}
-		else
-		{
-			collidersAlphabetized = [ collider1, collider0 ];
-		}
-
-		var colliderTypeNamesConcatenated =
-			collidersAlphabetized[0].constructor.name
-			+ "And"
-			+ collidersAlphabetized[1].constructor.name;
-		var collisionMethodName = "do" + colliderTypeNamesConcatenated + "Collide";
-		var collisionMethod = this[collisionMethodName];
-
-		if (collisionMethod == null)
-		{
-			if (this.throwErrorIfCollidersCannotBeCollided == true)
+			if (this.throwErrorIfCollidersCannotBeCollided)
 			{
-				throw "Error - No collision method in CollisionHelper named " + collisionMethodName;
+				throw "Error!";
 			}
 		}
 		else
 		{
-			returnValue = collisionMethod.call(this, collidersAlphabetized[0], collidersAlphabetized[1]);
+			var collisionMethod = doCollideLookup[collider1TypeName];
+			if (collisionMethod == null)
+			{
+				if (this.throwErrorIfCollidersCannotBeCollided)
+				{
+					throw "Error!";
+				}
+			}
+			else
+			{
+				returnValue = collisionMethod.call
+				(
+					this, collider0, collider1
+				);
+			}
 		}
 
 		return returnValue;
@@ -679,6 +769,41 @@ function CollisionHelper()
 
 		return returnValue;
 	};
+
+	CollisionHelper.prototype.doSphereAndBoundsCollide = function(sphere, bounds)
+	{
+		return this.doBoundsAndSphereCollide(bounds, sphere);
+	}
+
+	CollisionHelper.prototype.doSphereAndMapLocatedCollide = function(sphere, mapLocated)
+	{
+		return this.doMapLocatedAndSphereCollide(mapLocated, sphere);
+	}
+
+	CollisionHelper.prototype.doSphereAndMeshCollide = function(sphere, mesh)
+	{
+		return this.doMeshAndSphereCollide(mesh, sphere);
+	}
+
+	CollisionHelper.prototype.doSphereAndShapeContainerCollide = function(sphere, shapeContainer)
+	{
+		return this.doShapeContainerAndShapeCollide(shapeContainer, sphere);
+	}
+
+	CollisionHelper.prototype.doSphereAndShapeGroupAllCollide = function(sphere, shapeGroupAll)
+	{
+		return this.doShapeGroupAllAndShapeCollide(shapeGroupAll, sphere);
+	}
+
+	CollisionHelper.prototype.doSphereAndShapeGroupAnyCollide = function(sphere, shapeGroupAny)
+	{
+		return this.doShapeGroupAnyAndShapeCollide(shapeGroupAny, sphere);
+	}
+
+	CollisionHelper.prototype.doSphereAndShapeInverseCollide = function(sphere, shapeInverse)
+	{
+		return this.doShapeInverseAndShapeCollide(shapeInverse, sphere);
+	}
 
 	CollisionHelper.prototype.doSphereAndSphereCollide = function(sphere0, sphere1)
 	{

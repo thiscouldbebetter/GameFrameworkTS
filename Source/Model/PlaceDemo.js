@@ -121,7 +121,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 						new Collidable
 						(
 							projectileCollider,
-							[ "killable" ],
+							[ Killable.name ],
 							projectileCollide
 						),
 						new Drawable(projectileVisual)
@@ -747,7 +747,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 
 	var obstacleRingEntity = new Entity
 	(
-		"Obstacle",
+		"ObstacleRing",
 		[
 			new Locatable(obstacleLoc),
 			new Collidable(obstacleCollider),

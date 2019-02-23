@@ -12,6 +12,7 @@ function VenueControls(controlRoot)
 		new InputToActionMapping("Backspace", "ControlCancel", true),
 		new InputToActionMapping("Enter", "ControlConfirm", true),
 		new InputToActionMapping("Escape", "ControlCancel", true),
+		new InputToActionMapping("Tab", "ControlNext", true),
 	];
 
 	var numberOfGamepadsPossible = 4;
