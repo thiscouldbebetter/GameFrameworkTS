@@ -95,6 +95,29 @@ function CollisionHelper()
 	lookupOfLookups[Sphere.name] = lookup;
 
 	this.colliderTypeNamesToDoCollideLookup = lookupOfLookups;
+
+	// contains
+	lookupOfLookups = {};
+
+	// Bounds
+	lookup = {};
+	lookup[Bounds.name] = this.doesBoundsContainBounds;
+	lookup[Sphere.name] = this.doesBoundsContainSphere;
+	lookupOfLookups[Bounds.name] = lookup;
+
+	// Hemispace
+	lookup = {};
+	lookup[Bounds.name] = this.doesHemispaceContainBounds;
+	lookup[Sphere.name] = this.doesHemispaceContainSphere;
+	lookupOfLookups[Hemispace.name] = lookup;
+
+	// Sphere
+	lookup = {};
+	lookup[Bounds.name] = this.doesSphereContainBounds;
+	lookup[Sphere.name] = this.doesSphereContainSphere;
+	lookupOfLookups[Sphere.name] = lookup;
+
+	this.colliderTypeNamesToDoesContainLookup = lookupOfLookups;
 }
 {
 	CollisionHelper.prototype.collisionsOfCollidablesInSets = function(collidableSet0, collidableSet1)
@@ -188,7 +211,7 @@ function CollisionHelper()
 
 	CollisionHelper.prototype.doesColliderContainOther = function(collider0, collider1)
 	{
-		var returnValue;
+		var returnValue = false;
 
 		while (collider0.collider != null)
 		{
@@ -203,16 +226,32 @@ function CollisionHelper()
 		var collider0TypeName = collider0.constructor.name;
 		var collider1TypeName = collider1.constructor.name;
 
-		var containsMethodName = "does" + collider0TypeName + "Contain" + collider1TypeName;
-		var containsMethod = this[containsMethodName];
-
-		if (containsMethod == null)
+		var doesContainLookup =
+			this.colliderTypeNamesToDoesContainLookup[collider0TypeName];
+		if (doesContainLookup == null)
 		{
-			throw "Error - No contains method in CollisionHelper named " + containsMethodName;
+			if (this.throwErrorIfCollidersCannotBeCollided)
+			{
+				throw "Error!";
+			}
 		}
 		else
 		{
-			returnValue = containsMethod.call(this, collider0, collider1);
+			var doesColliderContainOther = doesContainLookup[collider1TypeName];
+			if (doesColliderContainOther == null)
+			{
+				if (this.throwErrorIfCollidersCannotBeCollided)
+				{
+					throw "Error!";
+				}
+			}
+			else
+			{
+				returnValue = doesColliderContainOther.call
+				(
+					this, collider0, collider1
+				);
+			}
 		}
 
 		return returnValue;
