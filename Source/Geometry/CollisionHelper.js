@@ -812,37 +812,37 @@ function CollisionHelper()
 	CollisionHelper.prototype.doSphereAndBoundsCollide = function(sphere, bounds)
 	{
 		return this.doBoundsAndSphereCollide(bounds, sphere);
-	}
+	};
 
 	CollisionHelper.prototype.doSphereAndMapLocatedCollide = function(sphere, mapLocated)
 	{
 		return this.doMapLocatedAndSphereCollide(mapLocated, sphere);
-	}
+	};
 
 	CollisionHelper.prototype.doSphereAndMeshCollide = function(sphere, mesh)
 	{
 		return this.doMeshAndSphereCollide(mesh, sphere);
-	}
+	};
 
 	CollisionHelper.prototype.doSphereAndShapeContainerCollide = function(sphere, shapeContainer)
 	{
 		return this.doShapeContainerAndShapeCollide(shapeContainer, sphere);
-	}
+	};
 
 	CollisionHelper.prototype.doSphereAndShapeGroupAllCollide = function(sphere, shapeGroupAll)
 	{
 		return this.doShapeGroupAllAndShapeCollide(shapeGroupAll, sphere);
-	}
+	};
 
 	CollisionHelper.prototype.doSphereAndShapeGroupAnyCollide = function(sphere, shapeGroupAny)
 	{
 		return this.doShapeGroupAnyAndShapeCollide(shapeGroupAny, sphere);
-	}
+	};
 
 	CollisionHelper.prototype.doSphereAndShapeInverseCollide = function(sphere, shapeInverse)
 	{
 		return this.doShapeInverseAndShapeCollide(shapeInverse, sphere);
-	}
+	};
 
 	CollisionHelper.prototype.doSphereAndSphereCollide = function(sphere0, sphere1)
 	{
