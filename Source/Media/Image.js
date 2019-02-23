@@ -44,7 +44,7 @@ function Image(name, sourcePath)
 					imgLoaded.width,
 					imgLoaded.height
 				);
-			}
+			};
 			imgElement.src = this.sourcePath;
 		}
 	};
