@@ -143,8 +143,11 @@ function Camera(viewSize, focalLength, loc)
 		if (this.focalLength != null)
 		{
 			var viewCoordsZ = viewCoords.z;
-			viewCoords.multiplyScalar(this.focalLength).divideScalar(viewCoordsZ);
-			viewCoords.z = viewCoordsZ;
+			if (viewCoordsZ != 0)
+			{
+				viewCoords.multiplyScalar(this.focalLength).divideScalar(viewCoordsZ);
+				viewCoords.z = viewCoordsZ;
+			}
 		}
 
 		viewCoords.add(this.viewSizeHalf);

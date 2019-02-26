@@ -107,6 +107,23 @@ function ConversationDefn(name, imageName, contentTextStringName, talkNodeDefns,
 	{
 		var conversationDefn = JSON.parse(conversationDefnAsJSON);
 
+		// Additional processing to support minification.
+		conversationDefn.name = conversationDefn["name"];
+		conversationDefn.imageName = conversationDefn["imageName"];
+		conversationDefn.contentTextStringName =
+			conversationDefn["contentTextStringName"];
+
+		var talkNodes = conversationDefn["talkNodes"];
+		for (var i = 0; i < talkNodes.length; i++)
+		{
+			var talkNode = talkNodes[i];
+			talkNode.name = talkNode["name"];
+			talkNode.defnName = talkNode["defnName"];
+			talkNode.text = talkNode["text"];
+			talkNode.next = talkNode["next"];
+			talkNode.isActive = talkNode["isActive"];
+		}
+
 		conversationDefn.__proto__ = ConversationDefn.prototype;
 
 		var talkNodes = conversationDefn.talkNodes;

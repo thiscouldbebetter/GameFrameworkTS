@@ -173,7 +173,7 @@
         {
             "name": "Quit",
             "defnName": "Display",
-            "next": "Same to you, buddy."
+            "text": "Same to you, buddy."
         },
         {
             "name": "TalkOver",

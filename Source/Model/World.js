@@ -25,7 +25,7 @@ function World(name, dateCreated, defns, place)
 
 		var place = new PlaceDemo
 		(
-			universe.display.sizeInPixels.clone(), // size
+			universe.display.sizeInPixels.clone().double(), // size
 			new Coords(15, 15), // playerPos
 			5 // numberOfItems
 		);

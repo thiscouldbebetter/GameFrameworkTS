@@ -3,6 +3,21 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 {
 	this.size = size;
 
+	var cameraViewSize = this.size.clone().half();
+	var cameraFocalLength = cameraViewSize.x;
+	this.camera = new Camera
+	(
+		cameraViewSize,
+		cameraFocalLength, // focalLength
+		new Location
+		(
+			new Coords(0, 0, -cameraFocalLength),
+			Orientation.Instances().ForwardZDownY.clone()
+		)
+	);
+
+	var coordsInstances = Coords.Instances();
+
 	this.actions =
 	[
 		Action.Instances().DoNothing,
@@ -26,7 +41,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			{
 				place.entityAccelerateInDirection
 				(
-					world, actor, Coords.Instances().ZeroOneZero
+					world, actor, coordsInstances.ZeroOneZero
 				);
 			}
 		),
@@ -37,7 +52,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			{
 				place.entityAccelerateInDirection
 				(
-					world, actor, Coords.Instances().MinusOneZeroZero
+					world, actor, coordsInstances.MinusOneZeroZero
 				);
 			}
 		),
@@ -48,7 +63,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			{
 				place.entityAccelerateInDirection
 				(
-					world, actor, Coords.Instances().OneZeroZero
+					world, actor, coordsInstances.OneZeroZero
 				);
 			}
 		),
@@ -59,7 +74,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			{
 				place.entityAccelerateInDirection
 				(
-					world, actor, Coords.Instances().ZeroMinusOneZero
+					world, actor, coordsInstances.ZeroMinusOneZero
 				);
 			}
 		),
@@ -158,6 +173,54 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 	var entitySize = new Coords(1, 1, 1).multiplyScalar(entityDimension);
 
 	var entities = [];
+
+	// background
+	var visualBackgroundDimension = 100;
+
+	var visualBackgroundCellSize =
+		new Coords(.5, .5, .01).multiplyScalar(visualBackgroundDimension);
+	var visualBackgroundBottom = new VisualRepeating
+	(
+		visualBackgroundCellSize,
+		this.camera.viewSize.clone(), // viewSize
+		new VisualRectangle
+		(
+			visualBackgroundCellSize,
+			null, "rgba(255, 255, 255, 0.02)"
+		)
+	);
+	var entityBackgroundBottom = new Entity
+	(
+		"BackgroundBottom",
+		[
+			new Locatable(new Location(new Coords(0, 0, cameraFocalLength))),
+			new Drawable(visualBackgroundBottom)
+		]
+	);
+	entities.push(entityBackgroundBottom);
+
+	visualBackgroundCellSize =
+		new Coords(1, 1, .01).multiplyScalar(visualBackgroundDimension);
+	var visualBackgroundTop = new VisualRepeating
+	(
+		visualBackgroundCellSize, // cellSize
+		this.camera.viewSize.clone(), // viewSize
+		new VisualRectangle
+		(
+			visualBackgroundCellSize,
+			null, "rgba(255, 255, 255, 0.06)"
+		)
+	);
+	var entityBackgroundTop = new Entity
+	(
+		"BackgroundTop",
+		[
+			new Locatable(new Location(new Coords(0, 0, 0))),
+			new Drawable(visualBackgroundTop)
+		]
+	);
+	entities.push(entityBackgroundTop);
+
 
 	// player
 
@@ -495,6 +558,49 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 
 	var obstacleColor = damagerColor;
 
+	var numberOfWalls = 4;
+	var wallThickness = 5;
+
+	for (var i = 0; i < numberOfWalls; i++)
+	{
+		var obstacleWallSize;
+		if (i % 2 == 0)
+		{
+			obstacleWallSize = new Coords(size.x, wallThickness, 1);
+		}
+		else
+		{
+			obstacleWallSize = new Coords(wallThickness, size.y, 1);
+		}
+
+		var obstacleWallPos = obstacleWallSize.clone().half().clearZ();
+		if (i >= 2)
+		{
+			obstacleWallPos.invert().add(size);
+		}
+
+		var obstacleWallLoc = new Location(obstacleWallPos);
+		var obstacleCollider =
+			new Bounds(obstacleWallPos, obstacleWallSize);
+		var obstacleWallVisual = new VisualRectangle
+		(
+			obstacleWallSize, obstacleColor
+		);
+
+		var obstacleWallEntity = new Entity
+		(
+			"ObstacleWall" + i,
+			[
+				new Locatable(obstacleWallLoc),
+				new Collidable(obstacleCollider),
+				new Damager(),
+				new Drawable(obstacleWallVisual)
+			]
+		);
+
+		entities.push(obstacleWallEntity);
+	}
+
 	var obstacleMappedCellSource =
 	[
 		"....xxxx....",
@@ -551,10 +657,17 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 		)
 	]);
 
-	var numberOfMines = 3;
+	var marginThickness = wallThickness * 4;
+	var marginSize = new Coords(1, 1, 0).multiplyScalar(marginThickness);
+	var sizeMinusMargins =
+		this.size.clone().subtract(marginSize).subtract(marginSize);
+
+	var numberOfMines = 48;
+	var entitiesObstacles = [];
 	for (var i = 0; i < numberOfMines; i++)
 	{
-		var obstacleMappedPos = new Coords().randomize().multiply(size);
+		var obstacleMappedPos =
+			new Coords().randomize().multiply(sizeMinusMargins).add(marginSize);
 		var obstacleMappedLoc = new Location(obstacleMappedPos);
 
 		var obstacleMappedEntity = new Entity
@@ -568,61 +681,8 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			]
 		);
 
+		entitiesObstacles.push(obstacleMappedEntity);
 		entities.push(obstacleMappedEntity);
-	}
-
-	this.camera = new Camera
-	(
-		this.size.clone(),
-		null, // focalLength
-		new Location
-		(
-			new Coords(0, 0, 0),
-			Orientation.Instances().ForwardZDownY.clone()
-		)
-	);
-
-	var numberOfWalls = 4;
-	var wallThickness = 5;
-
-	for (var i = 0; i < numberOfWalls; i++)
-	{
-		var obstacleWallSize;
-		if (i % 2 == 0)
-		{
-			obstacleWallSize = new Coords(size.x, wallThickness, 1);
-		}
-		else
-		{
-			obstacleWallSize = new Coords(wallThickness, size.y, 1);
-		}
-
-		var obstacleWallPos = obstacleWallSize.clone().half().clearZ();
-		if (i >= 2)
-		{
-			obstacleWallPos.invert().add(size);
-		}
-
-		var obstacleWallLoc = new Location(obstacleWallPos);
-		var obstacleCollider =
-			new Bounds(obstacleWallPos, obstacleWallSize);
-		var obstacleWallVisual = new VisualRectangle
-		(
-			obstacleWallSize, obstacleColor
-		);
-
-		var obstacleWallEntity = new Entity
-		(
-			"ObstacleWall" + i,
-			[
-				new Locatable(obstacleWallLoc),
-				new Collidable(obstacleCollider),
-				new Damager(),
-				new Drawable(obstacleWallVisual)
-			]
-		);
-
-		entities.push(obstacleWallEntity);
 	}
 
 	var itemKeyColor = "Yellow";
@@ -636,13 +696,26 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 		)
 	]);
 
-	var marginThickness = wallThickness * 3;
-	var sizeMinusMargins =
-		this.size.clone().subtract(new Coords(1, 1, 0).multiplyScalar(marginThickness));
+	var obstacleExclusionRadius = 32;
+	var displacement = new Coords();
 
 	for (var i = 0; i < numberOfKeysToUnlockGoal; i++)
 	{
-		var itemKeyPos = new Coords().randomize().multiply(sizeMinusMargins);
+		var itemKeyPos =
+			new Coords().randomize().multiply(sizeMinusMargins).add(marginSize);
+
+		for (var j = 0; j < entitiesObstacles.length; j++)
+		{
+			var obstaclePos = entitiesObstacles[j].Locatable.loc.pos;
+			var distanceFromObstacle =
+				displacement.overwriteWith(obstaclePos).magnitude();
+			if (distanceFromObstacle < obstacleExclusionRadius)
+			{
+				displacement.normalize().multiplyScalar(obstacleExclusionRadius);
+				obstaclePos.add(displacement);
+			}
+		}
+
 		var itemKeyCollider = new Sphere(itemKeyPos, entityDimensionHalf);
 
 		var itemKeyEntity = new Entity
@@ -765,6 +838,18 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 
 	entities.push(obstacleRingEntity);
 
+	for (var i = 0; i < entities.length; i++)
+	{
+		var entity = entities[i];
+		var entityDrawable = entity.Drawable;
+		if (entityDrawable != null)
+		{
+			var entityVisual = entityDrawable.visual;
+			entityDrawable.visual =
+				new VisualCamera(entityVisual, this.camera);
+		}
+	}
+
 	Place.call(this, entities);
 
 	// Helper variables.
@@ -797,6 +882,9 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 		(
 			camera.viewSizeHalf,
 			this.size.clone().subtract(camera.viewSizeHalf)
+		).subtract
+		(
+			new Coords(0, 0, camera.focalLength)
 		);
 
 		this.draw_FromSuperclass(universe, world);
