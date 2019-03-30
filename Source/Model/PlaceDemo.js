@@ -84,66 +84,15 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			function perform(universe, world, place, actor)
 			{
 				var itemWeapon = new Item("Weapon", 1);
-				var actorHasWeapon = actor.ItemHolder.hasItems(itemWeapon);
+				var itemHolder = actor.ItemHolder;
+				var actorHasWeapon = itemHolder.hasItems(itemWeapon);
 
-				if (actorHasWeapon == false) { return; }
-
-				var actorLoc = actor.Locatable.loc;
-				var actorPos = actorLoc.pos;
-				var actorVel = actorLoc.vel;
-				var actorSpeed = actorVel.magnitude();
-				if (actorSpeed == 0) { return; }
-
-				var projectileColor = "Cyan";
-				var projectileRadius = 3;
-				var projectileVisual = new VisualGroup
-				([
-					new VisualCircle(projectileRadius, projectileColor),
-					new VisualOffset
-					(
-						new VisualText("Projectile", projectileColor),
-						new Coords(0, projectileRadius)
-					)
-				]);
-
-				var actorDirection = actorVel.clone().normalize();
-				var actorRadius = actor.Collidable.collider.radius;
-				var projectilePos = actorPos.clone().add
-				(
-					actorDirection.clone().multiplyScalar(actorRadius).double().double()
-				);
-				var projectileLoc = new Location(projectilePos);
-				projectileLoc.vel.overwriteWith(actorVel).double();
-
-				var projectileCollider =
-					new Sphere(projectilePos, projectileRadius);
-
-				var projectileCollide = function(universe, world, place, entityPlayer, entityOther)
+				if (actorHasWeapon)
 				{
-					if (entityOther.Killable != null)
-					{
-						place.entitiesToRemove.push(entityOther);
-					}
-				};
-
-				var projectileEntity = new Entity
-				(
-					"Projectile",
-					[
-						new Damager(),
-						new Ephemeral(32),
-						new Locatable( projectileLoc ),
-						new Collidable
-						(
-							projectileCollider,
-							[ Killable.name ],
-							projectileCollide
-						),
-						new Drawable(projectileVisual)
-					]
-				);
-
-				place.entitiesToSpawn.push(projectileEntity);
+					var entityWeapon = itemHolder.itemEntities["Weapon"];
+					var deviceWeapon = entityWeapon.Device;
+					deviceWeapon.use(universe, world, place, actor, deviceWeapon);
+				}
 			}
 		),
 	].addLookups("name");
@@ -325,8 +274,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 		}
 		else if (entityOther.Item != null)
 		{
-			var item = entityOther.Item;
-			entityPlayer.ItemHolder.itemAdd(item);
+			entityPlayer.ItemHolder.itemEntityAdd(entityOther);
 			place.entitiesToRemove.push(entityOther);
 		}
 		else if (entityOther.Talker != null)
@@ -743,8 +691,12 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 		)
 	]);
 
-	var itemWeaponPos = new Coords().randomize().multiply(sizeMinusMargins);
+	var itemWeaponPos =
+		//new Coords().randomize().multiply(sizeMinusMargins);
+		playerPos.clone().double();
 	var itemWeaponCollider = new Sphere(itemWeaponPos, entityDimensionHalf);
+
+	var itemWeaponDevice = Device.gun();
 
 	var itemWeaponEntity = new Entity
 	(
@@ -753,7 +705,8 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			new Item("Weapon", 1),
 			new Locatable( new Location(itemWeaponPos) ),
 			new Collidable(itemWeaponCollider),
-			new Drawable(itemWeaponVisual)
+			new Drawable(itemWeaponVisual),
+			itemWeaponDevice
 		]
 	);
 

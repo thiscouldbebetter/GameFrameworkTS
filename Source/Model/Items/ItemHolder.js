@@ -1,66 +1,72 @@
 
-function ItemHolder(items)
+function ItemHolder(itemEntities)
 {
-	this.items = items || [];
-	this.items.addLookups("name");
+	this.itemEntities = itemEntities || [];
+	for (var i = 0; i < this.itemEntities.length; i++)
+	{
+		var itemEntity = this.itemEntities[i];
+		this.itemEntityAdd(itemEntity);
+	}
 }
 {
 	ItemHolder.prototype.hasItems = function(itemToCheck)
 	{
-		var itemExisting = this.items[itemToCheck.defnName];
-		var itemExistingQuantity = (itemExisting == null ? 0 : itemExisting.quantity);
+		var itemEntityExisting = this.itemEntities[itemToCheck.defnName];
+		var itemExistingQuantity = (itemEntityExisting == null ? 0 : itemEntityExisting.Item.quantity);
 		var returnValue = (itemExistingQuantity >= itemToCheck.quantity);
 		return returnValue;
 	};
 
-	ItemHolder.prototype.itemAdd = function(itemToAdd)
+	ItemHolder.prototype.itemEntityAdd = function(itemEntityToAdd)
 	{
+		var itemToAdd = itemEntityToAdd.Item;
 		var itemDefnName = itemToAdd.defnName;
-		var itemExisting = this.items[itemDefnName];
-		if (itemExisting == null)
+		var itemEntityExisting = this.itemEntities[itemDefnName];
+		if (itemEntityExisting == null)
 		{
-			this.items.push(itemToAdd);
-			this.items[itemDefnName] = itemToAdd;
+			this.itemEntities.push(itemEntityToAdd);
+			this.itemEntities[itemDefnName] = itemEntityToAdd;
 		}
 		else
 		{
-			itemExisting.quantity += itemToAdd.quantity;
+			itemEntityExisting.Item.quantity += itemToAdd.quantity;
 		}
 	};
 
 	ItemHolder.prototype.itemRemove = function(itemToRemove)
 	{
 		var itemDefnName = itemToRemove.defnName;
-		var itemExisting = this.items[itemDefnName];
-		if (itemExisting != null)
+		var itemEntityExisting = this.itemEntities[itemDefnName];
+		if (itemEntityExisting != null)
 		{
-			this.items.remove(itemExisting);
-			delete this.items[itemDefnName];
+			this.itemEntities.remove(itemEntityExisting);
+			delete this.itemEntities[itemDefnName];
 		}
 	};
 
 	ItemHolder.prototype.itemSubtract = function(itemToSubtract)
 	{
 		var itemDefnName = itemToSubtract.defnName;
-		var itemExisting = this.items[itemDefnName];
-		if (itemExisting != null)
+		var itemEntityExisting = this.itemEntities[itemDefnName];
+		if (itemEntityExisting != null)
 		{
+			var itemExisting = itemEntityExisting.Item;
 			itemExisting.quantity -= itemToSubtract.quantity;
 			if (itemExisting.quantity <= 0)
 			{
-				this.items.remove(itemExisting);
-				delete this.items[itemDefnName];
+				this.itemEntities.remove(itemEntityExisting);
+				delete this.itemEntities[itemDefnName];
 			}
 		}
 	};
 
 	ItemHolder.prototype.itemsTransferTo = function(other)
 	{
-		for (var i = 0; i < this.items.length; i++)
+		for (var i = 0; i < this.itemEntities.length; i++)
 		{
-			var item = this.items[i];
-			other.itemAdd(item);
-			this.itemRemove(item);
+			var itemEntity = this.itemEntities[i];
+			other.itemEntityAdd(itemEntity);
+			this.itemRemove(itemEntity.Item);
 		}
 	};
 }
