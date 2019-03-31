@@ -43,4 +43,9 @@ function Plane(normal, distanceFromOrigin)
 
 		return this;
 	};
+	
+	Plane.prototype.pointClosestToOrigin = function(point)
+	{
+		return point.overwriteWith(this.normal).multiplyScalar(this.distanceFromOrigin);
+	}
 }

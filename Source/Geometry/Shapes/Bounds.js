@@ -120,6 +120,11 @@ function Bounds(center, size)
 		return returnValue;
 	};
 
+	Bounds.prototype.recalculate = function()
+	{
+		this.sizeHalf.overwriteWith(this.size).half();
+	}
+
 	Bounds.prototype.trimCoords = function(coordsToTrim)
 	{
 		return coordsToTrim.trimToRangeMinMax(this.min(), this.max());
