@@ -1,5 +1,5 @@
 
-function Damager()
+function Damager(damagePerHit)
 {
-	// Do nothing.
+	this.damagePerHit = damagePerHit;
 }

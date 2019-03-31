@@ -1,5 +1,5 @@
 
-function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
+function PlaceDemo(size, numberOfKeysToUnlockGoal)
 {
 	this.size = size;
 
@@ -173,6 +173,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 
 	// player
 
+	var playerPos = new Coords(30, 30);
 	var playerLoc = new Location(playerPos);
 	var playerCollider = new Sphere(playerLoc.pos, entityDimensionHalf);
 	var playerColor = "Gray";
@@ -261,7 +262,10 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 
 		if (entityOther.Damager != null)
 		{
-			messageToDisplay = "You lose!";
+			universe.collisionHelper.collideCollidables(entityPlayer, entityOther);
+
+			var playerAsKillable = entityPlayer.Killable;
+			playerAsKillable.integrity -= entityOther.Damager.damagePerHit;
 		}
 		else if (entityOther.Goal != null)
 		{
@@ -269,7 +273,14 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 				new Item("Key", entityOther.Goal.numberOfKeysToUnlock);
 			if (entityPlayer.ItemHolder.hasItems(keysRequired))
 			{
-				messageToDisplay = "You win!";
+				var venueMessage = new VenueMessage
+				(
+					"You win!",
+					new VenueControls(universe.controlBuilder.title(universe)), // venueNext
+					universe.venueCurrent, // venuePrev
+					universe.display.sizeDefault.clone().half()
+				);
+				universe.venueNext = venueMessage;
 			}
 		}
 		else if (entityOther.Item != null)
@@ -302,21 +313,9 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 
 			universe.venueNext = venueNext;
 		}
-
-		if (messageToDisplay != null)
-		{
-			var venueMessage = new VenueMessage
-			(
-				messageToDisplay,
-				new VenueControls(universe.controlBuilder.title(universe)), // venueNext
-				universe.venueCurrent, // venuePrev
-				universe.display.sizeDefault.clone().half()
-			);
-			universe.venueNext = venueMessage;
-		}
 	};
 
-	var constraintSpeedMax = new Constraint("SpeedMax", 5);
+	var constraintSpeedMax5 = new Constraint("SpeedMax", 5);
 	var constraintFriction = new Constraint("Friction", .03);
 
 	var playerEntity = new Entity
@@ -324,7 +323,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 		"Player",
 		[
 			new Locatable(playerLoc),
-			new Constrainable([constraintFriction, constraintSpeedMax]),
+			new Constrainable([constraintFriction, constraintSpeedMax5]),
 			new Collidable
 			(
 				playerCollider,
@@ -335,6 +334,21 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			new ItemHolder(),
 			new Playable(),
 			new Idleable(),
+			new Killable
+			(
+				3, // integrity
+				function die(universe, world, place, entityKillable)
+				{
+					var venueMessage = new VenueMessage
+					(
+						"You lose!",
+						new VenueControls(universe.controlBuilder.title(universe)), // venueNext
+						universe.venueCurrent, // venuePrev
+						universe.display.sizeDefault.clone().half()
+					);
+					universe.venueNext = venueMessage;
+				}
+			)
 		]
 	);
 
@@ -386,12 +400,14 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 		)
 	]);
 
+	var constraintSpeedMax1 = new Constraint("SpeedMax", 1);
+
 	var friendlyEntity = new Entity
 	(
 		"Friendly",
 		[
 			new Locatable(friendlyLoc),
-			new Constrainable([constraintSpeedMax]),
+			new Constrainable([constraintSpeedMax1]),
 			new Collidable(friendlyCollider),
 			new Drawable(friendlyVisual),
 			new Talker("AnEveningWithProfessorSurly"),
@@ -477,9 +493,9 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 		"Enemy",
 		[
 			new Locatable(enemyLoc),
-			new Constrainable([constraintSpeedMax]),
+			new Constrainable([constraintSpeedMax1]),
 			new Collidable(enemyCollider),
-			new Damager(),
+			new Damager(1),
 			new Killable(1),
 			new Drawable(enemyVisual),
 			new Actor
@@ -489,13 +505,13 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 					var target = place.entities[entityToTargetName];
 					var actorLoc = actor.Locatable.loc;
 
-					actorLoc.vel.overwriteWith
+					actorLoc.accel.overwriteWith
 					(
 						target.Locatable.loc.pos
 					).subtract
 					(
 						actorLoc.pos
-					).normalize();
+					).normalize().multiplyScalar(.1);
 				},
 				"Player"
 			),
@@ -541,7 +557,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			[
 				new Locatable(obstacleWallLoc),
 				new Collidable(obstacleCollider),
-				new Damager(),
+				new Damager(1),
 				new Drawable(obstacleWallVisual)
 			]
 		);
@@ -624,7 +640,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 			[
 				new Locatable(obstacleMappedLoc),
 				new Collidable(new MapLocated(obstacleMappedMap, obstacleMappedLoc)),
-				new Damager(),
+				new Damager(1),
 				new Drawable(obstacleMappedVisual)
 			]
 		);
@@ -777,7 +793,7 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 		[
 			new Locatable(obstacleLoc),
 			new Collidable(obstacleCollider),
-			new Damager(),
+			new Damager(1),
 			new Drawable
 			(
 				new VisualArc
@@ -802,6 +818,17 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 				new VisualCamera(entityVisual, this.camera);
 		}
 	}
+
+	var controlStatus = new ControlLabel
+	(
+		"labelHealth",
+		new Coords(8, 5), //pos,
+		new Coords(100, 0), //size,
+		false, // isTextCentered,
+		new DataBinding(playerEntity.Killable, "integrity"), // text,
+		10, // fontHeightInPixels
+	);
+	this.venueControls = new VenueControls(controlStatus);
 
 	Place.call(this, entities);
 
@@ -841,6 +868,9 @@ function PlaceDemo(size, playerPos, numberOfKeysToUnlockGoal)
 		);
 
 		this.draw_FromSuperclass(universe, world);
+
+		// todo
+		this.venueControls.draw(universe);
 	};
 
 	PlaceDemo.prototype.entityAccelerateInDirection = function

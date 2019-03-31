@@ -25,7 +25,7 @@ function Device(name, ticksToCharge, use)
 				}
 
 				device.tickLastUsedUpdate(world);
-				
+
 				var actorLoc = actor.Locatable.loc;
 				var actorPos = actorLoc.pos;
 				var actorVel = actorLoc.vel;
@@ -69,7 +69,7 @@ function Device(name, ticksToCharge, use)
 				(
 					"Projectile",
 					[
-						new Damager(),
+						new Damager(1),
 						new Ephemeral(32),
 						new Locatable( projectileLoc ),
 						new Collidable
@@ -88,21 +88,21 @@ function Device(name, ticksToCharge, use)
 
 		return returnValue;
 	};
-	
+
 	// instance methods
-	
+
 	Device.prototype.tickLastUsedUpdate = function(world)
 	{
 		this.tickLastUsed = world.timerTicksSoFar;
-	}
-	
+	};
+
 	Device.prototype.ticksSinceUsed = function(world)
 	{
 		return world.timerTicksSoFar - this.tickLastUsed;
-	}
-	
+	};
+
 	// clonable
-	
+
 	Device.prototype.clone = function()
 	{
 		return new Device(this.name, this.ticksToCharge, this.energyToUse, this.use);

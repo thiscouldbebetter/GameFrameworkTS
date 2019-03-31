@@ -118,8 +118,91 @@ function CollisionHelper()
 	lookupOfLookups[Sphere.name] = lookup;
 
 	this.colliderTypeNamesToDoesContainLookup = lookupOfLookups;
+
+	// collision response
+	var lookupOfLookups = {};
+
+	// Bounds
+	lookup = {};
+	lookup[Sphere.name] = this.collideCollidablesBoundsAndSphere;
+	lookupOfLookups[Bounds.name] = lookup;
+
+	// MapLocated
+	lookup = {};
+	lookup[Sphere.name] = this.collideCollidablesReverseVelocities;
+	lookupOfLookups[MapLocated.name] = lookup;
+
+	// Mesh
+	lookup = {};
+	lookup[MapLocated.name] = this.collideCollidablesReverseVelocities;
+	lookup[Mesh.name] = this.collideCollidablesReverseVelocities;
+	lookup[ShapeGroupAll.name] = this.collideCollidablesReverseVelocities;
+	lookup[Sphere.name] = this.collideCollidablesReverseVelocities;
+
+	// ShapeGroupAll
+	lookup = {};
+	lookup[Sphere.name] = this.collideCollidablesSphereAndShapeGroupAll;
+	lookupOfLookups[ShapeGroupAll.name] = lookup;
+
+	// Sphere
+	lookup = {};
+	lookup[Bounds.name] = this.collideCollidablesSphereAndBounds;
+	lookup[MapLocated.name] = this.collideCollidablesReverseVelocities;
+	lookup[Mesh.name] = this.collideCollidablesReverseVelocities;
+	lookup[ShapeGroupAll.name] = this.collideCollidablesReverseVelocities;
+	lookup[Sphere.name] = this.collideCollidablesSphereAndSphere;
+	lookupOfLookups[Sphere.name] = lookup;
+
+	this.colliderTypeNamesToCollideLookup = lookupOfLookups;
 }
 {
+	CollisionHelper.prototype.collideCollidables = function(entityColliding, entityCollidedWith)
+	{
+		var collider0 = entityColliding.Collidable.collider;
+		var collider1 = entityCollidedWith.Collidable.collider;
+
+		while (collider0.collider != null)
+		{
+			collider0 = collider0.collider();
+		}
+
+		while (collider1.collider != null)
+		{
+			collider1 = collider1.collider();
+		}
+
+		var collider0TypeName = collider0.constructor.name;
+		var collider1TypeName = collider1.constructor.name;
+
+		var collideLookup =
+			this.colliderTypeNamesToCollideLookup[collider0TypeName];
+		if (collideLookup == null)
+		{
+			if (this.throwErrorIfCollidersCannotBeCollided)
+			{
+				throw "Error!  Colliders of types cannot be collided: " + collider0TypeName + "," + collider1TypeName;
+			}
+		}
+		else
+		{
+			var collisionMethod = collideLookup[collider1TypeName];
+			if (collisionMethod == null)
+			{
+				if (this.throwErrorIfCollidersCannotBeCollided)
+				{
+					throw "Error!  Colliders of types cannot be collided: " + collider0TypeName + "," + collider1TypeName;
+				}
+			}
+			else
+			{
+				returnValue = collisionMethod.call
+				(
+					this, entityColliding, entityCollidedWith
+				);
+			}
+		}
+	}
+
 	CollisionHelper.prototype.collisionsOfCollidablesInSets = function(collidableSet0, collidableSet1)
 	{
 		var returnValues = [];
@@ -259,7 +342,77 @@ function CollisionHelper()
 
 	// shapes
 
-	// collisions
+	// collideCollidablesXAndY
+
+	CollisionHelper.prototype.collideCollidablesReverseVelocities = function(collidable0, collidable1)
+	{
+		// todo
+		// A simple collision response for shape pairs not yet implemented.
+
+		collidable0.Locatable.loc.vel.invert();
+		collidable1.Locatable.loc.vel.invert();
+	};
+
+	CollisionHelper.prototype.collideCollidablesSphereAndShapeGroupAll = function(entitySphere, entityShapeGroupAll)
+	{
+		// todo
+		this.collideCollidablesReverseVelocities(entitySphere, entityShapeGroupAll);
+	};
+
+	CollisionHelper.prototype.collideCollidablesBoundsAndSphere = function(entityBounds, entitySphere)
+	{
+		// todo
+		this.collideCollidablesReverseVelocities(entityBounds, entitySphere);
+	};
+
+	CollisionHelper.prototype.collideCollidablesSphereAndBounds = function(entitySphere, entityBounds)
+	{
+		this.collideCollidablesBoundsAndSphere(entityBounds, entitySphere);
+	};
+
+	CollisionHelper.prototype.collideCollidablesSphereAndSphere = function(entityColliding, entityCollidedWith)
+	{
+		var entityCollidingLoc = entityColliding.Locatable.loc;
+		var entityCollidedWithLoc = entityCollidedWith.Locatable.loc;
+
+		var entityCollidingPos = entityCollidingLoc.pos;
+		var entityCollidedWithPos = entityCollidedWithLoc.pos;
+
+		var displacement = this._displacement.overwriteWith
+		(
+			entityCollidedWithPos
+		).subtract
+		(
+			entityCollidingPos
+		);
+
+		var distance = displacement.magnitude();
+
+		var direction = displacement.divideScalar(distance);
+
+		var sumOfRadii =
+			entityColliding.Collidable.collider.radius
+			+ entityCollidedWith.Collidable.collider.radius;
+
+		entityCollidedWithPos.overwriteWith
+		(
+			direction
+		).multiplyScalar
+		(
+			sumOfRadii
+		).add
+		(
+			entityCollidingPos
+		);
+
+		var speedAlongRadius = entityCollidedWithLoc.vel.dotProduct(direction);
+
+		var accelOfReflection = direction.multiplyScalar(speedAlongRadius * 2);
+
+		entityCollidedWithLoc.accel.subtract(accelOfReflection);
+	};
+
+	// collisionOfXAndY
 
 	CollisionHelper.prototype.collisionOfEdgeAndFace = function(edge, face)
 	{
@@ -369,6 +522,8 @@ function CollisionHelper()
 
 		return returnValue;
 	};
+
+	// doXAndYCollide
 
 	CollisionHelper.prototype.doBoundsAndBoundsCollide = function(bounds0, bounds1)
 	{
