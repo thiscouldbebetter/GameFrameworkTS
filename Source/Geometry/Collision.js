@@ -13,4 +13,12 @@ function Collision(pos, distanceToCollision)
 	{
 		return new Collision(new Coords());
 	}
+
+	Collision.prototype.clear = function()
+	{
+		this.isActive = false;
+		this.collidables.clear();
+		this.colliders.clear();
+		return this;
+	}
 }

@@ -9,7 +9,9 @@ function CollisionHelper()
 
 	// Helper variables.
 	this._bounds = new Bounds(new Coords(), new Coords());
+	this._collision = new Collision(new Coords());
 	this._displacement = new Coords();
+	this._size = new Coords();
 	this._shapeGroupAllBoundsHemispaces = new ShapeGroupAll
 	([
 		new Hemispace(new Plane(new Coords(1, 0, 0))),
@@ -387,7 +389,7 @@ function CollisionHelper()
 	{
 		var bounds = entityBounds.Collidable.collider;
 		var sphere = entitySphere.Collidable.collider;
-		var collision = this.collisionOfBoundsAndSphere(bounds, sphere);
+		var collision = this.collisionOfBoundsAndSphere(bounds, sphere, this._collision);
 
 		var sphereLoc = entitySphere.Locatable.loc;
 		var boundsLoc = entityBounds.Locatable.loc;
@@ -464,6 +466,27 @@ function CollisionHelper()
 
 		if (doCollide)
 		{
+			var axisBetweenCenters = this._displacement.overwriteWith
+			(
+				sphere.center
+			).subtract
+			(
+				bounds.center
+			);
+			var distanceBetweenCenters = axisBetweenCenters.magnitude();
+			var directionBetweenCenters = axisBetweenCenters.divideScalar
+			(
+				distanceBetweenCenters
+			);
+			var diagonal = this._size.overwriteWith(bounds.sizeHalf);
+			var diagonalProjectedOntoAxis = Math.abs(diagonal.dotProduct(directionBetweenCenters));
+			var sum = diagonalProjectedOntoAxis + sphere.radius;
+			if (distanceBetweenCenters < sum)
+			{
+				collision.isActive = true;
+			}
+
+			/*
 			collision.isActive = true;
 
 			var hemispaces = this._shapeGroupAllBoundsHemispaces.shapes;
@@ -485,6 +508,7 @@ function CollisionHelper()
 					break;
 				}
 			}
+			*/
 		}
 
 		return collision;
@@ -694,7 +718,7 @@ function CollisionHelper()
 
 	CollisionHelper.prototype.doBoundsAndSphereCollide = function(bounds, sphere)
 	{
-		return this.collisionOfBoundsAndSphere(bounds, sphere).isActive;
+		return this.collisionOfBoundsAndSphere(bounds, sphere, this._collision.clear()).isActive;
 	}
 
 	CollisionHelper.prototype.doCylinderAndCylinderCollide = function(cylinder0, cylinder1)
@@ -786,12 +810,12 @@ function CollisionHelper()
 
 	CollisionHelper.prototype.doEdgeAndPlaneCollide = function(edge, plane)
 	{
-		return (this.collisionOfEdgeAndPlane() != null);
+		return (this.collisionOfEdgeAndPlane(edge, plane, this._collision.clear()) != null);
 	};
 
-	CollisionHelper.prototype.doHemispaceAndSphereCollide = function(hemispace, sphere, collision)
+	CollisionHelper.prototype.doHemispaceAndSphereCollide = function(hemispace, sphere)
 	{
-		collision = this.collisionOfHemispaceAndSphere(hemispace, sphere, collision);
+		var collision = this.collisionOfHemispaceAndSphere(hemispace, sphere, this._collision.clear());
 
 		return collision.isActive;
 	};

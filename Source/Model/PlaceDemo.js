@@ -336,7 +336,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 			new Idleable(),
 			new Killable
 			(
-				3, // integrity
+				5, // integrity
 				function die(universe, world, place, entityKillable)
 				{
 					var venueMessage = new VenueMessage
@@ -649,6 +649,45 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 		entities.push(obstacleMappedEntity);
 	}
 
+	// obstacleBar
+
+	var obstacleBarSize = new Coords(6, 2).multiplyScalar(entityDimension);
+	var obstaclePos = playerPos.clone().add(obstacleBarSize).add(obstacleBarSize);
+	var obstacleLoc = new Location(obstaclePos);
+	var obstacleCollider = new Bounds
+	(
+		obstaclePos,
+		obstacleBarSize
+	);
+
+	var obstacleBarEntity = new Entity
+	(
+		"ObstacleBar",
+		[
+			new Locatable(obstacleLoc),
+			new Collidable(obstacleCollider),
+			new Damager(1),
+			new Drawable
+			(
+				new VisualGroup
+				([
+					new VisualRectangle
+					(
+						obstacleCollider.size,
+						obstacleColor, obstacleColor
+					),
+					new VisualOffset
+					(
+						new VisualText("Bar", obstacleColor),
+						new Coords(0, obstacleCollider.size.y)
+					)
+				])
+			)
+		]
+	);
+
+	entities.push(obstacleBarEntity);
+
 	var itemKeyColor = "Yellow";
 	var itemKeyVisual = new VisualGroup
 	([
@@ -806,6 +845,8 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 	);
 
 	entities.push(obstacleRingEntity);
+	
+	// Add camera projection to all visuals.
 
 	for (var i = 0; i < entities.length; i++)
 	{
