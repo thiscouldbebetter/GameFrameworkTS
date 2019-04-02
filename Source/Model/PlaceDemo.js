@@ -845,7 +845,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 	);
 
 	entities.push(obstacleRingEntity);
-	
+
 	// Add camera projection to all visuals.
 
 	for (var i = 0; i < entities.length; i++)

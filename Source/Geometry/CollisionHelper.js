@@ -11,14 +11,10 @@ function CollisionHelper()
 	this._bounds = new Bounds(new Coords(), new Coords());
 	this._collision = new Collision(new Coords());
 	this._displacement = new Coords();
+	this._pos = new Coords();
+	this._range = new Range();
+	this._range2 = new Range();
 	this._size = new Coords();
-	this._shapeGroupAllBoundsHemispaces = new ShapeGroupAll
-	([
-		new Hemispace(new Plane(new Coords(1, 0, 0))),
-		new Hemispace(new Plane(new Coords(0, 1, 0))),
-		new Hemispace(new Plane(new Coords(-1, 0, 0))),
-		new Hemispace(new Plane(new Coords(0, -1, 0)))
-	]);
 }
 {
 	// constructor helpers
@@ -387,17 +383,29 @@ function CollisionHelper()
 
 	CollisionHelper.prototype.collideCollidablesBoundsAndSphere = function(entityBounds, entitySphere)
 	{
+		var sphereLoc = entitySphere.Locatable.loc;
+		var boundsLoc = entityBounds.Locatable.loc;
+
 		var bounds = entityBounds.Collidable.collider;
 		var sphere = entitySphere.Collidable.collider;
 		var collision = this.collisionOfBoundsAndSphere(bounds, sphere, this._collision);
 
-		var sphereLoc = entitySphere.Locatable.loc;
-		var boundsLoc = entityBounds.Locatable.loc;
+		var collisionRelativeToBounds = this._pos.overwriteWith(collision.pos).subtract
+		(
+			bounds.center
+		).divide
+		(
+			bounds.sizeHalf
+		);
 
-		// todo - Bounce off the plane collided with.
-		// Right now, just reversing vel.
-		sphereLoc.accel.overwriteWith(sphereLoc.vel).invert().double();
-		boundsLoc.accel.overwriteWith(boundsLoc.vel).invert().double();
+		if (Math.abs(collisionRelativeToBounds.x) >= Math.abs(collisionRelativeToBounds.y))
+		{
+			sphereLoc.vel.x *= -1;
+		}
+		else
+		{
+			sphereLoc.vel.y *= -1;
+		}
 	};
 
 	CollisionHelper.prototype.collideCollidablesSphereAndBounds = function(entitySphere, entityBounds)
@@ -456,59 +464,40 @@ function CollisionHelper()
 			collision = Collision.new();
 		}
 
-		collision.isActive = false;
+		collision.isActive = true;
 
-		var sphereBounds = this._bounds;
-		sphereBounds.center.overwriteWith(sphere.center);
-		sphereBounds.size.overwriteWith(Coords.Instances().Ones).multiplyScalar(sphere.radius);
-		sphereBounds.recalculate();
-		var doCollide = this.doBoundsAndBoundsCollide(bounds, sphereBounds);
+		var sphereCenter = sphere.center;
+		var sphereRadius = sphere.radius;
+		var boundsCenter = bounds.center;
+		var boundsSizeHalf = bounds.sizeHalf;
+		var sphereProjectedOntoAxis = this._range;
+		var boundsProjectedOntoAxis = this._range2;
 
-		if (doCollide)
+		for (var d = 0; d < 2; d++) // todo - Z?
 		{
-			var axisBetweenCenters = this._displacement.overwriteWith
-			(
-				sphere.center
-			).subtract
-			(
-				bounds.center
-			);
-			var distanceBetweenCenters = axisBetweenCenters.magnitude();
-			var directionBetweenCenters = axisBetweenCenters.divideScalar
-			(
-				distanceBetweenCenters
-			);
-			var diagonal = this._size.overwriteWith(bounds.sizeHalf);
-			var diagonalProjectedOntoAxis = Math.abs(diagonal.dotProduct(directionBetweenCenters));
-			var sum = diagonalProjectedOntoAxis + sphere.radius;
-			if (distanceBetweenCenters < sum)
+			var boundsCenterD = boundsCenter.dimension(d);
+			var boundsSizeHalfD = boundsSizeHalf.dimension(d);
+			boundsProjectedOntoAxis.min = boundsCenterD - boundsSizeHalfD;
+			boundsProjectedOntoAxis.max = boundsCenterD + boundsSizeHalfD;
+
+			var sphereCenterD = sphereCenter.dimension(d);
+			sphereProjectedOntoAxis.min = sphereCenterD - sphereRadius;
+			sphereProjectedOntoAxis.max = sphereCenterD + sphereRadius;
+
+			var doProjectionsOverlap =
+				boundsProjectedOntoAxis.overlapsWith(sphereProjectedOntoAxis);
+
+			if (doProjectionsOverlap == false)
 			{
-				collision.isActive = true;
+				collision.isActive = false;
+				break;
 			}
-
-			/*
-			collision.isActive = true;
-
-			var hemispaces = this._shapeGroupAllBoundsHemispaces.shapes;
-
-			for (var i = 0; i < hemispaces.length; i++)
+			else
 			{
-				var hemispace = hemispaces[i];
-				var hemispacePlaneNormal = hemispace.plane.normal;
-				hemispace.plane.distanceFromOrigin =
-					bounds.center.clone().add
-					(
-						bounds.sizeHalf.clone().multiply(hemispacePlaneNormal)
-					).dotProduct(hemispacePlaneNormal);
-				doCollide =
-					this.doHemispaceAndSphereCollide(hemispace, sphere);
-				if (doCollide == false)
-				{
-					collision.isActive = false;
-					break;
-				}
+				var intersectionOfProjections =
+					boundsProjectedOntoAxis.intersectWith(sphereProjectedOntoAxis);
+				collision.pos.dimension(d, intersectionOfProjections.midpoint());
 			}
-			*/
 		}
 
 		return collision;
