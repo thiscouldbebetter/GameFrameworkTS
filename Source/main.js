@@ -1,30 +1,39 @@
 function main()
 {
-	localStorage.clear();
+	//localStorage.clear();
+
+	var contentPath = "../Content/";
+	var imagePath = contentPath + "Images/";
+	var audioPath = contentPath + "Audio/";
+	var effectsPath = audioPath + "Effects/";
+	var musicPath = audioPath + "Music/";
+	var videoPath = contentPath + "Video/";
+	var fontsPath = contentPath + "Fonts/";
+	var textPath = contentPath + "Text/";
 
 	var mediaLibrary = new MediaLibrary
 	(
 		// images
 		[
-			new Image("Title", "../Content/Images/Title.png"),
+			new Image("Title", imagePath + "Title.png"),
 		],
 		// sounds
 		[
-			new Sound("Sound", "../Content/Audio/Effects/Sound.wav", false),
-			new Sound("Music", "../Content/Audio/Music/Music.mp3", true),
+			new Sound("Sound", effectsPath + "Sound.wav", false),
+			new Sound("Music", musicPath + "Music.mp3", true),
 		],
 		// videos
 		[
-			new Video("Movie", "../Content/Video/Movie.webm"),
+			new Video("Movie", videoPath + "Movie.webm"),
 		],
 		// fonts
 		[
-			new Font("Font", "../Content/Fonts/Font.ttf"),
+			new Font("Font", fontsPath + "Font.ttf"),
 		],
 		// textStrings
 		[
-			new TextString("Conversation", "../Content/Text/Conversation.json"),
-			new TextString("Instructions", "../Content/Text/Instructions.txt"),
+			new TextString("Conversation", textPath + "Conversation.json"),
+			new TextString("Instructions", textPath + "Instructions.txt"),
 		]
 	);
 
