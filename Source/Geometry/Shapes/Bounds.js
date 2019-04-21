@@ -123,7 +123,7 @@ function Bounds(center, size)
 	Bounds.prototype.recalculate = function()
 	{
 		this.sizeHalf.overwriteWith(this.size).half();
-	}
+	};
 
 	Bounds.prototype.trimCoords = function(coordsToTrim)
 	{

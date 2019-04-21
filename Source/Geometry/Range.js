@@ -8,19 +8,19 @@ function Range(min, max)
 	Range.prototype.clone = function()
 	{
 		return new Range(this.min, this.max);
-	}
+	};
 
 	Range.prototype.intersectWith = function(other)
 	{
 		this.min = (this.min >= other.min ? this.min : other.min);
 		this.max = (this.max <= other.max ? this.max : other.max);
 		return this;
-	}
+	};
 
 	Range.prototype.midpoint = function()
 	{
 		return (this.min + this.max) / 2;
-	}
+	};
 
 	Range.prototype.overlapsWith = function(other)
 	{
@@ -33,12 +33,12 @@ function Range(min, max)
 		);
 
 		return returnValue;
-	}
+	};
 
 	Range.prototype.overwriteWith = function(other)
 	{
 		this.min = min;
 		this.max = max;
 		return this;
-	}
+	};
 }

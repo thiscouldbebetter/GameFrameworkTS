@@ -12,7 +12,7 @@ function Collision(pos, distanceToCollision)
 	Collision.new = function()
 	{
 		return new Collision(new Coords());
-	}
+	};
 
 	Collision.prototype.clear = function()
 	{
@@ -20,5 +20,5 @@ function Collision(pos, distanceToCollision)
 		this.collidables.clear();
 		this.colliders.clear();
 		return this;
-	}
+	};
 }

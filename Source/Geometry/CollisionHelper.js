@@ -226,7 +226,7 @@ function CollisionHelper()
 				);
 			}
 		}
-	}
+	};
 
 	CollisionHelper.prototype.collisionsOfCollidablesInSets = function(collidableSet0, collidableSet1)
 	{
@@ -708,7 +708,7 @@ function CollisionHelper()
 	CollisionHelper.prototype.doBoundsAndSphereCollide = function(bounds, sphere)
 	{
 		return this.collisionOfBoundsAndSphere(bounds, sphere, this._collision.clear()).isActive;
-	}
+	};
 
 	CollisionHelper.prototype.doCylinderAndCylinderCollide = function(cylinder0, cylinder1)
 	{
