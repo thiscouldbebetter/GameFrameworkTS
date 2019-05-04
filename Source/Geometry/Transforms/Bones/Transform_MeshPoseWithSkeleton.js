@@ -11,7 +11,7 @@ function Transform_MeshPoseWithSkeleton
 	this.skeletonAtRest = skeletonAtRest;
 	this.skeletonPosed = skeletonPosed;
 	this.boneInfluences = boneInfluences;
-	this.boneInfluences.addLookups("boneName");
+	this.boneInfluences.addLookups( function(x) { return x.boneName; } );
 
 	// Helper variables.
 	this._orientation = new Orientation(new Coords(), new Coords());

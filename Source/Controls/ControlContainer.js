@@ -6,7 +6,7 @@ function ControlContainer(name, pos, size, children)
 	this.size = size;
 	this.children = children;
 
-	this.children.addLookups("name");
+	this.children.addLookupsByName();
 
 	for (var i = 0; i < this.children.length; i++)
 	{

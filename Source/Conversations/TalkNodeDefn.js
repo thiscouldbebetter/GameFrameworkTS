@@ -274,6 +274,6 @@ function TalkNodeDefn(name, execute, activate)
 			this.VariableLoad,
 			this.VariableSet,
 			this.VariableStore,
-		].addLookups("name");
+		].addLookupsByName();
 	}
 }

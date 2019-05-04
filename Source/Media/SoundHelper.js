@@ -2,7 +2,7 @@
 function SoundHelper(sounds)
 {
 	this.sounds = sounds;
-	this.sounds.addLookups("name");
+	this.sounds.addLookupsByName();
 
 	this.musicVolume = 1;
 	this.soundVolume = 1;

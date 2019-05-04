@@ -8,7 +8,10 @@ function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 	[
 		new InputToActionMapping("Escape", "ControlCancel", true),
 		new InputToActionMapping("Gamepad0Button0", "ControlCancel", true),
-	].addLookups("inputName");
+	].addLookups
+	(
+		function(x) { return x.inputName; }
+	);
 }
 
 {

@@ -1,7 +1,7 @@
 
 function ControlBuilder(styles)
 {
-	this.styles = styles.addLookups("name");
+	this.styles = styles.addLookupsByName();
 
 	this.fontHeightInPixelsBase = 10;
 	this.sizeBase = new Coords(200, 150, 1);

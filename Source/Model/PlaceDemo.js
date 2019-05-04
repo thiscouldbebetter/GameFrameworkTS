@@ -95,7 +95,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 				}
 			}
 		),
-	].addLookups("name");
+	].addLookupsByName();
 
 	this.inputToActionMappings =
 	[
@@ -113,7 +113,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 		new InputToActionMapping("Gamepad0Up", "MoveUp"),
 		new InputToActionMapping("Gamepad0Button0", "Fire"),
 
-	].addLookups("inputName");
+	].addLookups( function(x) { return x.inputName; } );
 
 	// entities
 

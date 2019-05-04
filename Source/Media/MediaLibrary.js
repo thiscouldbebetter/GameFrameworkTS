@@ -1,11 +1,11 @@
 
 function MediaLibrary(images, sounds, videos, fonts, textStrings)
 {
-	this.images = images.addLookups("name");
-	this.sounds = sounds.addLookups("name");
-	this.videos = videos.addLookups("name");
-	this.fonts = fonts.addLookups("name");
-	this.textStrings = textStrings.addLookups("name");
+	this.images = images.addLookupsByName();
+	this.sounds = sounds.addLookupsByName();
+	this.videos = videos.addLookupsByName();
+	this.fonts = fonts.addLookupsByName();
+	this.textStrings = textStrings.addLookupsByName();
 
 	this.collectionsAll =
 	[

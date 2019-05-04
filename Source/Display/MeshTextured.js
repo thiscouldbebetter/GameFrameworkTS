@@ -2,7 +2,7 @@
 function MeshTextured(geometry, materials, faceTextures, vertexGroups)
 {
 	this.geometry = geometry;
-	this.materials = materials.addLookups("name");
+	this.materials = materials.addLookupsByName();
 	this.faceTextures = faceTextures;
 	this.vertexGroups = vertexGroups;
 }

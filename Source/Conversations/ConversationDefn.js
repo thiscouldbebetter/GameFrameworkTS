@@ -6,8 +6,8 @@ function ConversationDefn(name, imageName, contentTextStringName, talkNodeDefns,
 	this.name = name;
 	this.imageName = imageName;
 	this.contentTextStringName = contentTextStringName;
-	this.talkNodeDefns = talkNodeDefns.addLookups("name");
-	this.talkNodes = talkNodes.addLookups("name");
+	this.talkNodeDefns = talkNodeDefns.addLookupsByName();
+	this.talkNodes = talkNodes.addLookupsByName();
 }
 
 {
@@ -98,7 +98,7 @@ function ConversationDefn(name, imageName, contentTextStringName, talkNodeDefns,
 			}
 		}
 
-		this.talkNodes = talkNodesExpanded.addLookups("name");
+		this.talkNodes = talkNodesExpanded.addLookupsByName();
 	};
 
 	// serialization
@@ -140,7 +140,7 @@ function ConversationDefn(name, imageName, contentTextStringName, talkNodeDefns,
 				talkNode.isActive = true;
 			}
 		}
-		talkNodes.addLookups("name");
+		talkNodes.addLookupsByName();
 
 		conversationDefn.talkNodeDefns = TalkNodeDefn.Instances()._All;
 

@@ -19,15 +19,20 @@ function ArrayExtensions()
 		return this;
 	};
 
-	Array.prototype.addLookups = function(keyName)
+	Array.prototype.addLookups = function(getKeyForElement)
 	{
 		for (var i = 0; i < this.length; i++)
 		{
 			var element = this[i];
-			var key = element[keyName];
+			var key = getKeyForElement(element);
 			this[key] = element;
 		}
 		return this;
+	};
+
+	Array.prototype.addLookupsByName = function()
+	{
+		return this.addLookups( function(x) { return x.name; } );
 	};
 
 	Array.prototype.append = function(other)
@@ -63,18 +68,6 @@ function ArrayExtensions()
 	Array.prototype.contains = function(elementToFind)
 	{
 		return (this.indexOf(elementToFind) >= 0);
-	};
-
-	Array.prototype.elementProperties = function(propertyName)
-	{
-		var returnValues = [];
-		for (var i = 0; i < this.length; i++)
-		{
-			var element = this[i];
-			var elementProperty = element[propertyName];
-			returnValues.push(elementProperty);
-		}
-		return returnValues;
 	};
 
 	Array.prototype.insertElementAt = function(element, index)
@@ -133,13 +126,25 @@ function ArrayExtensions()
 		return this;
 	};
 
-	Array.prototype.sortByProperty = function(propertyName)
+	Array.prototype.select = function(getPropertyForElement)
+	{
+		var returnValues = [];
+		for (var i = 0; i < this.length; i++)
+		{
+			var element = this[i];
+			var elementProperty = getPropertyForElement(element);
+			returnValues.push(elementProperty);
+		}
+		return returnValues;
+	};
+
+	Array.prototype.sortByProperty = function(getPropertyForElement)
 	{
 		return this.sort
 		(
 			function (a, b)
 			{
-				return a[propertyName] - b[propertyName];
+				return getPropertyForElement(a) - getPropertyForElement(b);
 			}
 		);
 	};

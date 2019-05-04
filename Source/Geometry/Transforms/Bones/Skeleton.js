@@ -9,7 +9,7 @@ function Skeleton(name, boneRoot)
 	(
 		this.boneRoot, []
 	);
-	this.bonesAll.addLookups("name");
+	this.bonesAll.addLookupsByName();
 }
 
 {

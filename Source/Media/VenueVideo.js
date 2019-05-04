@@ -10,7 +10,7 @@ function VenueVideo(videoName, venueNext)
 	[
 		new InputToActionMapping("Escape", "VideoSkip", true),
 		new InputToActionMapping("Gamepad0Button0", "VideoSkip", true),
-	].addLookups("inputName");
+	].addLookups( function (x) { return x.inputName; } );
 }
 
 {

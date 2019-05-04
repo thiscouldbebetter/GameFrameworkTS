@@ -31,7 +31,7 @@ function VenueControls(controlRoot)
 		]);
 	}
 
-	this.inputToActionMappings.addLookups("inputName");
+	this.inputToActionMappings.addLookups( function(x) { return x.inputName; } );
 
 	// Helper variables.
 
