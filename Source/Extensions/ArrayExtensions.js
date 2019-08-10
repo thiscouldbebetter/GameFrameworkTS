@@ -45,6 +45,19 @@ function ArrayExtensions()
 		return this;
 	};
 
+	Array.prototype.concatenateAll = function()
+	{
+		var childrenConcatenated = [];
+
+		for (var i = 0; i < this.length; i++)
+		{
+			var childArray = this[i];
+			childrenConcatenated = childrenConcatenated.concat(childArray);
+		}
+
+		return childrenConcatenated;
+	}
+
 	Array.prototype.clear = function()
 	{
 		this.length = 0;

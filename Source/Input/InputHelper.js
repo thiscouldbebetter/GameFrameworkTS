@@ -8,7 +8,10 @@ function InputHelper()
 	this.mouseMovePosPrev = new Coords(0, 0);
 	this.mouseMovePosNext = new Coords(0, 0);
 
-	this.keysToPreventDefaultsFor = [ "ArrowLeft", "ArrowRight", "Tab" ];
+	this.keysToPreventDefaultsFor =
+	[
+		"ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp", "Tab"
+	];
 }
 
 {
