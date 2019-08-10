@@ -9,6 +9,47 @@ function Bounds(center, size)
 	this._max = new Coords();
 }
 {
+	// Static methods.
+
+	Bounds.doBoundsInSetsOverlap = function(boundsSet0, boundsSet1)
+	{
+		var returnValue = false;
+
+		var numberOfBoundsInSet0 = ( boundsSet0 == null ? 0 : boundsSet0.length );
+		var numberOfBoundsInSet1 = ( boundsSet1 == null ? 0 : boundsSet1.length );
+
+		for (var i = 0; i < numberOfBoundsInSet0; i++)
+		{
+			var boundsFromSet0 = boundsSet0[i];
+
+			for (var j = 0; j < numberOfBoundsInSet1; j++)
+			{
+				var boundsFromSet1 = boundsSet1[j];
+
+				var doBoundsOverlap = boundsFromSet0.overlapsWith
+				(
+					boundsFromSet1
+				);
+
+				if (doBoundsOverlap)
+				{
+					returnValue = true;
+					break;
+				}
+			}
+		}
+
+		return returnValue;
+	};
+
+	Bounds.fromMinAndSize = function(min, size)
+	{
+		var center = size.clone().half().add(min);
+		return new Bounds(center, size);
+	}
+
+	// Instance methods.
+
 	Bounds.prototype.containsOther = function(other)
 	{
 		return ( this.containsPoint(other.min()) && this.containsPoint(other.max()) );
@@ -115,6 +156,37 @@ function Bounds(center, size)
 				returnValue = true;
 				break;
 			}
+		}
+
+		return returnValue;
+	};
+
+	Bounds.prototype.overlapsWithOtherInDimension = function(other, dimensionIndex)
+	{
+		var returnValue = false;
+
+		var extremaThisAndOther =
+		[
+			[ this.min().dimension(dimensionIndex), this.max().dimension(dimensionIndex) ],
+			[ other.min().dimension(dimensionIndex), other.max().dimension(dimensionIndex) ]
+		];
+
+		for (var b = 0; b < extremaThisAndOther.length; b++)
+		{
+			var extremaThis = extremaThisAndOther[b];
+			var extremaOther = extremaThisAndOther[1 - b];
+
+			var minThisDimension = extremaThis[0];
+			var maxThisDimension = extremaThis[1];
+
+			var minOtherDimension = extremaOther[0];
+			var maxOtherDimension = extremaOther[1];
+
+			var doDimensionsOverlap =
+			(
+				maxThisDimension <= minOtherDimension
+				|| minThisDimension >= maxOtherDimension
+			);
 		}
 
 		return returnValue;
