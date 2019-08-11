@@ -27,6 +27,19 @@ function Image(name, sourcePath)
 
 	// instance methods
 
+	Image.prototype.clone = function()
+	{
+		var returnValue = new Image();
+
+		returnValue.name = name;
+		returnValue.sourcePath = this.sourcePath;
+		returnValue.sizeInPixels = this.sizeInPixels.clone();
+		returnValue.systemImage = this.systemImage;
+		returnValue.isLoaded = this.isLoaded;
+
+		return returnValue;
+	}
+
 	Image.prototype.load = function()
 	{
 		if (this.sourcePath != null)

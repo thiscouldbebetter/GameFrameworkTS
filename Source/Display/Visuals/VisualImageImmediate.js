@@ -2,6 +2,7 @@
 function VisualImageImmediate(image, sizeScaled)
 {
 	this.image = image;
+	this.sizeScaled = sizeScaled;
 
 	// Helper variables.
 
@@ -31,6 +32,13 @@ function VisualImageImmediate(image, sizeScaled)
 	{
 		return (this._sizeScaled == null ? this.image.sizeInPixels: this._sizeScaled);
 	};
+
+	// clone
+
+	VisualImageImmediate.prototype.clone = function()
+	{
+		return this; // todo
+	}
 
 	// visual
 
