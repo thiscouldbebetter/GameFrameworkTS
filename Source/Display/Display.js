@@ -436,21 +436,11 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 
 	Display.prototype.initialize = function(universe)
 	{
-		var platformHelper = universe.platformHelper;
-
-		if (this.canvas != null)
+		if (this.canvas == null)
 		{
-			platformHelper.platformableRemove(this);
+			this.canvas = document.createElement("canvas");
 		}
 
-		this.initializeCanvasAndGraphicsContext();
-
-		platformHelper.platformableAdd(this);
-	};
-
-	Display.prototype.initializeCanvasAndGraphicsContext = function()
-	{
-		this.canvas = document.createElement("canvas");
 		this.canvas.width = this.sizeInPixels.x;
 		this.canvas.height = this.sizeInPixels.y;
 
@@ -464,11 +454,6 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		this.graphics.scale(this.scaleFactor.x, this.scaleFactor.y);
 
 		return this;
-	};
-
-	Display.prototype.show = function(universe)
-	{
-		universe.platformHelper.platformableAdd(this);
 	};
 
 	Display.prototype.textWidthForFontHeight = function(textToMeasure, fontHeightInPixels)

@@ -5,12 +5,22 @@ function PlatformHelper()
 {
 	PlatformHelper.prototype.platformableAdd = function(platformable)
 	{
-		this.divMain.appendChild(platformable.toDomElement());
+		this.divMain.appendChild(platformable.toDomElement(this));
+	};
+
+	PlatformHelper.prototype.platformableHide = function(platformable)
+	{
+		platformable.toDomElement(this).style.display = "none";
 	};
 
 	PlatformHelper.prototype.platformableRemove = function(platformable)
 	{
-		this.divMain.removeChild(platformable.toDomElement());
+		this.divMain.removeChild(platformable.toDomElement(this));
+	};
+
+	PlatformHelper.prototype.platformableShow = function(platformable)
+	{
+		platformable.toDomElement(this).style.display = null;
 	};
 
 	PlatformHelper.prototype.keyAndMouseEventHandlersSet = function

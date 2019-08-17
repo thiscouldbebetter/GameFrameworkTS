@@ -23,7 +23,7 @@ function VenueVideo(videoName, venueNext)
 	{
 		if (this.video == null)
 		{
-			universe.display.hide(universe);
+			universe.platformHelper.platformableHide(universe.display);
 			this.video = universe.videoHelper.videos[this.videoName];
 			this.video.play(universe);
 		}
@@ -62,7 +62,7 @@ function VenueVideo(videoName, venueNext)
 
 			if (shouldVideoBeStopped == true)
 			{
-				this.video.stop(universe);
+				this.video.stop(universe.platformHelper);
 			}
 		}
 
@@ -70,7 +70,7 @@ function VenueVideo(videoName, venueNext)
 		{
 			var display = universe.display;
 			display.drawBackground("Black", "Black");
-			display.show(universe);
+			universe.platformHelper.platformableShow(display);
 			universe.venueNext = new VenueFader(this.venueNext, this);
 		}
 	};

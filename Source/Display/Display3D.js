@@ -458,16 +458,6 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 		this._display2DOverlay.fontValidate(fontName);
 	};
 
-	Display3D.prototype.hide = function(universe)
-	{
-		this._display2DOverlay.hide(universe);
-	};
-
-	Display3D.prototype.show = function(universe)
-	{
-		this._display2DOverlay.show(universe);
-	};
-
 	Display3D.prototype.textWidthForFontHeight = function(textToMeasure, fontHeightInPixels)
 	{
 		return this._display2DOverlay.textWidthForFontHeight(textToMeasure, fontHeightInPixels);

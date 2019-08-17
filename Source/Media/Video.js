@@ -3,18 +3,24 @@ function Video(name, sourcePath)
 {
 	this.name = name;
 	this.sourcePath = sourcePath;
+
+	this._size = null;
 }
 
 {
-	Video.prototype.domElementBuild = function(universe)
+	Video.prototype.toDomElement = function(platformHelper)
 	{
-		this.domElement = document.createElement("video");
+		if (this.domElement == null)
+		{
+			this.domElement = document.createElement("video");
+		}
+
 		this.domElement.src = this.sourcePath;
 		this.domElement.video = this;
 		this.domElement.autoplay = true;
-		this.domElement.onended = this.stop.bind(this, universe);
+		this.domElement.onended = this.stop.bind(this, platformHelper);
 
-		var displaySize = universe.display.sizeInPixels;
+		var displaySize = this._size;
 		this.domElement.width = displaySize.x;
 		this.domElement.height = displaySize.y;
 
@@ -24,13 +30,13 @@ function Video(name, sourcePath)
 	Video.prototype.play = function(universe)
 	{
 		this.isFinished = false;
-		universe.platformHelper.domElementAdd(this.domElementBuild(universe));
+		this._size = universe.display.sizeInPixels;
+		universe.platformHelper.platformableAdd(this);
 	};
 
-	Video.prototype.stop = function(universe, event)
+	Video.prototype.stop = function(platformHelper)
 	{
-		var domElement = (event == null ? this.domElement : event.srcElement);
-		universe.platformHelper.domElementRemove(domElement);
+		platformHelper.platformableRemove(this);
 		this.isFinished = true;
 	};
 }

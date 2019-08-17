@@ -19,16 +19,16 @@ function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 
 	VenueFileUpload.prototype.finalize = function(universe)
 	{
-		universe.platformHelper.platformableRemove(this);
+		var platformHelper = universe.platformHelper;
+		plaformHelper.platformableRemove(this);
 		var display = universe.display;
 		display.drawBackground("Black", "Black");
-		display.show(universe);
+		platformHelper.platformableShow(display);
 	};
 
 	VenueFileUpload.prototype.initialize = function(universe)
 	{
-		var display = universe.display;
-		display.hide(universe);
+		universe.platformHelper.platformableHide(universe.display);
 
 		var divFileUpload = document.createElement("div");
 		divFileUpload.style =

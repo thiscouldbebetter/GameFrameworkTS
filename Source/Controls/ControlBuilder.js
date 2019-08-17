@@ -777,12 +777,8 @@ function ControlBuilder(styles)
 					"listProfiles",
 					new Coords(50, 50).multiply(sizeMultiplier), // pos
 					new Coords(100, 40).multiply(sizeMultiplier), // size
-					new DataBinding
-					(
-						profiles,
-						null
-					),
-					"name",
+					new DataBinding(profiles),
+					new DataBinding(null, "name"),
 					this.fontHeightInPixelsBase * sizeMultiplier.y
 				),
 
