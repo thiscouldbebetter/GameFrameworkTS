@@ -19,7 +19,7 @@ function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 
 	VenueFileUpload.prototype.finalize = function(universe)
 	{
-		universe.platformHelper.domElementRemove(this.domElement);
+		universe.platformHelper.platformableRemove(this);
 		var display = universe.display;
 		display.drawBackground("Black", "Black");
 		display.show(universe);
@@ -61,11 +61,11 @@ function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 		divButtons.appendChild(buttonCancel);
 		divFileUpload.appendChild(divButtons);
 
-		universe.platformHelper.domElementAdd(divFileUpload);
+		this.domElement = divFileUpload;
+
+		universe.platformHelper.platformableAdd(this);
 
 		inputFileUpload.focus();
-
-		this.domElement = divFileUpload;
 	};
 
 	VenueFileUpload.prototype.updateForTimerTick = function(universe)
@@ -106,5 +106,12 @@ function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 		{
 			universe.venueNext = this.venueNextIfFileSpecified;
 		}
+	};
+
+	// platformable
+
+	VenueFileUpload.prototype.toDomElement = function()
+	{
+		return this.domElement;
 	};
 }

@@ -46,10 +46,7 @@ function Sound(name, sourcePath, isRepeating)
 			this.domElementBuild(universe, volume);
 			this.domElement.currentTime = this.offsetInSeconds;
 
-			universe.platformHelper.domElementAdd
-			(
-				this.domElement
-			);
+			universe.platformHelper.platformableAdd(this);
 		}
 	};
 
@@ -63,9 +60,9 @@ function Sound(name, sourcePath, isRepeating)
 		if (this.isPlaying == true)
 		{
 			this.isPlaying = false;
-			var domElement = (event == null ? this.domElement : event.srcElement);
+			//var domElement = (event == null ? this.domElement : event.srcElement);
 			//domElement.stop();
-			universe.platformHelper.domElementRemove(domElement);
+			universe.platformHelper.platformableRemove(this);
 			this.offsetInSeconds = 0;
 		}
 	};
@@ -77,4 +74,11 @@ function Sound(name, sourcePath, isRepeating)
 			this.stop(universe, event);
 		}
 	};
+
+	// platformable
+
+	Sound.prototype.toDomElement = function()
+	{
+		return this.domElement;
+	}
 }

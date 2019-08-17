@@ -3,14 +3,26 @@ function PlatformHelper()
 	// do nothing
 }
 {
-	PlatformHelper.prototype.domElementAdd = function(domElement)
+	PlatformHelper.prototype.platformableAdd = function(platformable)
 	{
-		this.divMain.appendChild(domElement);
+		this.divMain.appendChild(platformable.toDomElement());
 	};
 
-	PlatformHelper.prototype.domElementRemove = function(domElement)
+	PlatformHelper.prototype.platformableRemove = function(platformable)
 	{
-		this.divMain.removeChild(domElement);
+		this.divMain.removeChild(platformable.toDomElement());
+	};
+
+	PlatformHelper.prototype.keyAndMouseEventHandlersSet = function
+	(
+		keyDown, keyUp, mouseDown, mouseUp, mouseMove
+	)
+	{
+		document.body.onkeydown = keyDown;
+		document.body.onkeyup = keyUp;
+		this.divMain.onmousedown = mouseDown;
+		this.divMain.onmouseup = mouseUp;
+		this.divMain.onmousemove = mouseMove;
 	};
 
 	PlatformHelper.prototype.initialize = function(universe)

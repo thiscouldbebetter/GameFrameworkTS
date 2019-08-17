@@ -297,18 +297,17 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 	Display3D.prototype.initialize = function(universe)
 	{
 		var platformHelper = universe.platformHelper;
-		platformHelper.initialize(universe);
 
 		if (this.canvas != null)
 		{
-			platformHelper.domElementRemove(this.canvas);
+			platformHelper.platformableRemove(this);
 		}
 
 		this.canvas = document.createElement("canvas");
 		this.canvas.style.position = "absolute";
 		this.canvas.width = this.sizeInPixels.x;
 		this.canvas.height = this.sizeInPixels.y;
-		divMain.appendChild(this.canvas);
+		platformHelper.platformableAdd(this);
 
 		this.webGLContext = new WebGLContext(this.canvas);
 

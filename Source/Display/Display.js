@@ -431,22 +431,21 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 
 	Display.prototype.hide = function(universe)
 	{
-		universe.platformHelper.domElementRemove(this.canvas);
+		universe.platformHelper.platformableRemove(this);
 	};
 
 	Display.prototype.initialize = function(universe)
 	{
 		var platformHelper = universe.platformHelper;
-		platformHelper.initialize(universe);
 
 		if (this.canvas != null)
 		{
-			platformHelper.domElementRemove(this.canvas);
+			platformHelper.platformableRemove(this);
 		}
 
 		this.initializeCanvasAndGraphicsContext();
 
-		platformHelper.domElementAdd(this.canvas);
+		platformHelper.platformableAdd(this);
 	};
 
 	Display.prototype.initializeCanvasAndGraphicsContext = function()
@@ -469,7 +468,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 
 	Display.prototype.show = function(universe)
 	{
-		universe.platformHelper.domElementAdd(this.canvas);
+		universe.platformHelper.platformableAdd(this);
 	};
 
 	Display.prototype.textWidthForFontHeight = function(textToMeasure, fontHeightInPixels)
@@ -484,5 +483,12 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 	Display.prototype.toImage = function()
 	{
 		return Image.fromSystemImage("[fromDisplay]", this.canvas);
+	};
+
+	// platformable
+
+	Display.prototype.toDomElement = function()
+	{
+		return this.canvas;
 	};
 }

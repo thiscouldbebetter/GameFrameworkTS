@@ -20,18 +20,16 @@ function InputHelper()
 		this.inputsPressed = [];
 		this.gamepadsConnected = [];
 
-		document.body.onkeydown = this.handleEventKeyDown.bind(this);
-		document.body.onkeyup = this.handleEventKeyUp.bind(this);
-
-		var divMain = universe.platformHelper.divMain;
-		divMain.onmousedown = this.handleEventMouseDown.bind(this);
-		divMain.onmouseup = this.handleEventMouseUp.bind(this);
-
 		this.isMouseMovementTracked = true; // hack
-		if (this.isMouseMovementTracked == true)
-		{
-			divMain.onmousemove = this.handleEventMouseMove.bind(this);
-		}
+
+		universe.platformHelper.keyAndMouseEventHandlersSet
+		(
+			this.handleEventKeyDown.bind(this),
+			this.handleEventKeyUp.bind(this),
+			this.handleEventMouseDown.bind(this),
+			this.handleEventMouseUp.bind(this),
+			(this.isMouseMovementTracked ? this.handleEventMouseMove.bind(this) : null)
+		);
 
 		this.gamepadsCheck();
 	};
