@@ -278,7 +278,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 					"You win!",
 					new VenueControls(universe.controlBuilder.title(universe)), // venueNext
 					universe.venueCurrent, // venuePrev
-					universe.display.sizeDefault.clone().half()
+					universe.display.sizeDefault().clone().half()
 				);
 				universe.venueNext = venueMessage;
 			}
@@ -305,7 +305,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 					universe.venueNext = venueToReturnTo;
 				}
 			);
-			var conversationSize = universe.display.sizeDefault.clone();
+			var conversationSize = universe.display.sizeDefault().clone();
 			var conversationAsControl =
 				conversation.toControl(conversationSize, universe);
 
@@ -344,7 +344,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 						"You lose!",
 						new VenueControls(universe.controlBuilder.title(universe)), // venueNext
 						universe.venueCurrent, // venuePrev
-						universe.display.sizeDefault.clone().half()
+						universe.display.sizeDefault().clone().half()
 					);
 					universe.venueNext = venueMessage;
 				}

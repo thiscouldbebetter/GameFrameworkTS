@@ -24,6 +24,62 @@ function MediaLibrary(images, sounds, videos, fonts, textStrings)
 }
 
 {
+	MediaLibrary.fromFileNames = function(
+		contentPath, imageFileNames, effectFileNames, musicFileNames, videoFileNames, fontFileNames, textStringFileNames
+	)
+	{
+		var mediaTypesPathsAndFileNames =
+		[
+			[ Image, "Images", imageFileNames ],
+			[ Sound, "Audio/Effects", effectFileNames ],
+			[ Sound, "Audio/Music", musicFileNames ],
+			[ Video, "Videos", videoFileNames ],
+			[ Font, "Fonts", fontFileNames ],
+			[ TextString, "Text", textStringFileNames ],
+		];
+
+		var mediaCollections = {};
+
+		for (var t = 0; t < mediaTypesPathsAndFileNames.length; t++)
+		{
+			var mediaTypePathAndFileNames = mediaTypesPathsAndFileNames[t];
+			var mediaType = mediaTypePathAndFileNames[0];
+			var mediaPath = mediaTypePathAndFileNames[1];
+			var mediaFileNames = mediaTypePathAndFileNames[2];
+			var mediaCollection = [];
+
+			var filePathRoot = contentPath + mediaPath + "/";
+			for (var i = 0; i < mediaFileNames.length; i++)
+			{
+				var fileName = mediaFileNames[i];
+				var id = fileName.substr(0, fileName.indexOf("."));
+				var filePath = filePathRoot + fileName;
+				var mediaObject = new mediaType(id, filePath);
+				mediaCollection.push(mediaObject);
+			}
+
+			mediaCollections[mediaPath] = mediaCollection;
+		}
+
+		var images = mediaCollections["Images"];
+		var soundEffects = mediaCollections["Audio/Effects"];
+		var soundMusics = mediaCollections["Audio/Music"];
+		var videos = mediaCollections["Videos"];
+		var fonts = mediaCollections["Fonts"];
+		var textStrings = mediaCollections["Text"];
+
+		var sounds = soundEffects.concat(soundMusics);
+
+		var returnValue = new MediaLibrary
+		(
+			images, sounds, videos, fonts, textStrings
+		);
+
+		return returnValue;
+	};
+
+	// Instance methods.
+
 	MediaLibrary.prototype.areAllItemsLoaded = function()
 	{
 		var areAllItemsLoadedSoFar = true;

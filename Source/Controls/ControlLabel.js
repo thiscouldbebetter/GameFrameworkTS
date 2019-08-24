@@ -14,6 +14,19 @@ function ControlLabel(name, pos, size, isTextCentered, text, fontHeightInPixels)
 }
 
 {
+	ControlLabel.fromPosAndText = function(pos, text)
+	{
+		return new ControlLabel
+		(
+			null, //name
+			pos,
+			null, // size
+			false, // isTextCentered
+			text,
+			10 // fontHeightInPixels
+		);
+	};
+
 	ControlLabel.prototype.style = function(universe)
 	{
 		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
@@ -35,6 +48,7 @@ function ControlLabel(name, pos, size, isTextCentered, text, fontHeightInPixels)
 		if (text != null)
 		{
 			var textAsLines = ("" + text).split("\n");
+			var widthMaxInPixels = (this.size == null ? null : this.size.x);
 			for (var i = 0; i < textAsLines.length; i++)
 			{
 				var textLine = textAsLines[i];
@@ -47,7 +61,7 @@ function ControlLabel(name, pos, size, isTextCentered, text, fontHeightInPixels)
 					style.colorFill, // colorOutline
 					null, // areColorsReversed
 					this.isTextCentered,
-					this.size.x // widthMaxInPixels
+					widthMaxInPixels
 				);
 
 				drawPos.y += this.fontHeightInPixels;

@@ -94,7 +94,7 @@ function VenueControls(controlRoot)
 						inputHelper.mouseClickPos
 					).divide
 					(
-						universe.display.scaleFactor
+						universe.display.scaleFactor()
 					);
 					var wasClickHandled = this.controlRoot.mouseClick(this._mouseClickPos);
 					if (wasClickHandled == true)
@@ -109,14 +109,14 @@ function VenueControls(controlRoot)
 						inputHelper.mouseMovePos
 					).divide
 					(
-						universe.display.scaleFactor
+						universe.display.scaleFactor()
 					);
 					this._mouseMovePosPrev.overwriteWith
 					(
 						inputHelper.mouseMovePosPrev
 					).divide
 					(
-						universe.display.scaleFactor
+						universe.display.scaleFactor()
 					);
 
 					this.controlRoot.mouseMove

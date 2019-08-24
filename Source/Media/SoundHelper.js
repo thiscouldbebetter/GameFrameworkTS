@@ -44,12 +44,16 @@ function SoundHelper(sounds)
 
 	SoundHelper.prototype.soundWithNamePlayAsEffect = function(universe, soundName)
 	{
-		this.sounds[soundName].play(universe, this.soundVolume);
+		var sound = this.sounds[soundName];
+		sound.isRepeating = false;
+		sound.play(universe, this.soundVolume);
 	};
 
 	SoundHelper.prototype.soundWithNamePlayAsMusic = function(universe, soundToPlayName)
 	{
 		var soundToPlay = this.sounds[soundToPlayName];
+
+		soundToPlay.isRepeating = true;
 
 		var soundAlreadyPlaying = this.soundForMusic;
 

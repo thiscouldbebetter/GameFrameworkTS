@@ -2,8 +2,8 @@
 function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorBack)
 {
 	this.sizesAvailable = sizesAvailable;
-	this.sizeDefault = this.sizesAvailable[0];
-	this.sizeInPixels = this.sizeDefault;
+	this._sizeDefault = this.sizesAvailable[0];
+	this.sizeInPixels = this._sizeDefault;
 	this.fontName = fontName;
 	this.fontHeightInPixels = fontHeightInPixels;
 	this.colorFore = colorFore;
@@ -104,7 +104,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		this.drawRectangle
 		(
 			new Coords(0, 0),
-			this.sizeDefault, // Automatic scaling.
+			this.sizeDefault(), // Automatic scaling.
 			(colorBack == null ? this.colorBack : colorBack),
 			(colorBorder == null ? this.colorFore : colorBorder)
 		);
@@ -220,25 +220,27 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		this.graphics.restore();
 	};
 
-	Display.prototype.drawImage = function(imageToDraw, pos, size)
+	Display.prototype.drawImage = function(imageToDraw, pos)
 	{
-		var systemImage = imageToDraw.systemImage;
+		this.graphics.drawImage(imageToDraw.systemImage, pos.x, pos.y);
+	};
 
-		if (size == null)
-		{
-			this.graphics.drawImage(systemImage, pos.x, pos.y);
-		}
-		else
-		{
-			try
-			{
-				this.graphics.drawImage(systemImage, pos.x, pos.y, size.x, size.y);
-			}
-			catch (ex)
-			{
-				// Do nothing.
-			}
-		}
+	Display.prototype.drawImagePartial = function(imageToDraw, pos, boundsToShow)
+	{
+		var sourcePos = boundsToShow.min();
+		var sourceSize = boundsToShow.size;
+
+		this.graphics.drawImage
+		(
+			imageToDraw.systemImage,
+			sourcePos.x, sourcePos.y, sourceSize.x, sourceSize.y,
+			pos.x, pos.y, sourceSize.x, sourceSize.y
+		);
+	};
+
+	Display.prototype.drawImageScaled = function(imageToDraw, pos, size)
+	{
+		this.graphics.drawImage(imageToDraw.systemImage, pos.x, pos.y, size.x, size.y);
 	};
 
 	Display.prototype.drawLine = function(fromPos, toPos, color)
@@ -416,12 +418,12 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 
 	Display.prototype.fontSizeSet = function(fontHeightInPixels)
 	{
-		var isFontValid = this.fontValidate(this.fontName);
+		var isFontValid = this.fontNameSet(this.fontName);
 		var fontNameToUse = (isFontValid == true ? this.fontName : "sans-serif");
 		this.graphics.font = fontHeightInPixels + "px " + fontNameToUse;
 	};
 
-	Display.prototype.fontValidate = function(fontName)
+	Display.prototype.fontNameSet = function(fontName)
 	{
 		this.graphics.font = "" + this.fontHeightInPixels + "px " + fontName;
 		var widthWithFontSpecified = this.graphics.measureText(this.testString).width;
@@ -446,15 +448,30 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 
 		this.graphics = this.canvas.getContext("2d");
 
-		this.graphics.font = "" + this.fontHeightInPixels + "px " + this.fontNameFallthrough;
+		this.fontSizeSet(this.fontHeightInPixels);
 		this.widthWithFontFallthrough = this.graphics.measureText(this.testString).width;
 
-		var sizeBase = this.sizesAvailable[0];
-		this.scaleFactor = this.sizeInPixels.clone().divide(sizeBase);
-		this.graphics.scale(this.scaleFactor.x, this.scaleFactor.y);
+		this._scaleFactor = null;
+		var scaleFactor = this.scaleFactor();
+		this.graphics.scale(scaleFactor.x, scaleFactor.y);
 
 		return this;
 	};
+
+	Display.prototype.sizeDefault = function()
+	{
+		return this._sizeDefault;
+	};
+
+	Display.prototype.scaleFactor = function()
+	{
+		if (this._scaleFactor == null)
+		{
+			var sizeBase = this.sizesAvailable[0];
+			this._scaleFactor = this.sizeInPixels.clone().divide(sizeBase);
+		}
+		return this._scaleFactor;
+	}
 
 	Display.prototype.textWidthForFontHeight = function(textToMeasure, fontHeightInPixels)
 	{

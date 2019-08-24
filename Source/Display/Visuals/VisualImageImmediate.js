@@ -1,7 +1,7 @@
 
 function VisualImageImmediate(image, sizeScaled)
 {
-	this.image = image;
+	this._image = image;
 	this.sizeScaled = sizeScaled;
 
 	// Helper variables.
@@ -28,10 +28,10 @@ function VisualImageImmediate(image, sizeScaled)
 
 	// instance methods
 
-	VisualImageImmediate.prototype.imageSizeScaled = function(universe)
+	VisualImageImmediate.prototype.image = function()
 	{
-		return (this._sizeScaled == null ? this.image.sizeInPixels: this._sizeScaled);
-	};
+		return this._image;
+	}
 
 	// clone
 
@@ -44,12 +44,12 @@ function VisualImageImmediate(image, sizeScaled)
 
 	VisualImageImmediate.prototype.draw = function(universe, world, display, drawable, entity)
 	{
-		var image = this.image;
-		var imageSize = this.imageSizeScaled(universe);
+		var image = this.image();
+		var imageSize = image.sizeInPixels;
 		var drawPos = this._drawPos.clear().subtract(imageSize).half().add
 		(
 			drawable.loc.pos
 		);
-		display.drawImage(image, drawPos, imageSize);
+		display.drawImageScaled(image, drawPos, imageSize);
 	};
 }

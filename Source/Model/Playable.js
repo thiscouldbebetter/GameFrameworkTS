@@ -22,7 +22,7 @@ function Playable(player)
 				inputHelper.mouseClickPos
 			).divide
 			(
-				universe.display.scaleFactor
+				universe.display.scaleFactor()
 			).add
 			(
 				camera.loc.pos

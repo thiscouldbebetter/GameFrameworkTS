@@ -1,9 +1,8 @@
 
-function Sound(name, sourcePath, isRepeating)
+function Sound(name, sourcePath)
 {
 	this.name = name;
 	this.sourcePath = sourcePath;
-	this.isRepeating = isRepeating;
 
 	this.offsetInSeconds = 0;
 	this.isPlaying = false;

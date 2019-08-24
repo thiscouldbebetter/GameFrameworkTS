@@ -18,7 +18,7 @@ function ControlBuilder(styles)
 	{
 		if (size == null)
 		{
-			size = universe.display.sizeDefault;
+			size = universe.display.sizeDefault();
 		}
 
 		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
@@ -86,7 +86,7 @@ function ControlBuilder(styles)
 
 		var containerSizeScaled = size.clone().clearZ();
 		var display = universe.display;
-		var displaySize = display.sizeDefault.clone().clearZ();
+		var displaySize = display.sizeDefault().clone().clearZ();
 		var containerPosScaled = displaySize.clone().subtract(containerSizeScaled).half();
 
 		var returnValue = new ControlContainer
@@ -178,7 +178,7 @@ function ControlBuilder(styles)
 	{
 		if (size == null)
 		{
-			size = universe.display.sizeDefault;
+			size = universe.display.sizeDefault();
 		}
 
 		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
@@ -247,17 +247,8 @@ function ControlBuilder(styles)
 					"selectMusicVolume",
 					new Coords(65, 45).multiply(sizeMultiplier), // pos
 					new Coords(30, 25).multiply(sizeMultiplier), // size
-
-					// valueSelected
-					new DataBinding
-					(
-						universe.soundHelper,
-						"musicVolume"
-					),
-
-					// options
-					SoundHelper.controlSelectOptionsVolume(),
-
+					new DataBinding(universe.soundHelper, "musicVolume"), // valueSelected
+					SoundHelper.controlSelectOptionsVolume(), // options
 					new DataBinding(null, "value"), // bindingForOptionValues,
 					new DataBinding(null, "text"), // bindingForOptionText
 					this.fontHeightInPixelsBase * sizeMultiplier.y
@@ -278,17 +269,8 @@ function ControlBuilder(styles)
 					"selectSoundVolume",
 					new Coords(140, 45).multiply(sizeMultiplier), // pos
 					new Coords(30, 25).multiply(sizeMultiplier), // size
-
-					// valueSelected
-					new DataBinding
-					(
-						universe.soundHelper,
-						"soundVolume"
-					),
-
-					// options
-					SoundHelper.controlSelectOptionsVolume(),
-
+					new DataBinding(universe.soundHelper, "soundVolume"), // valueSelected
+					SoundHelper.controlSelectOptionsVolume(), // options
 					new DataBinding(null, "value"), // bindingForOptionValues,
 					new DataBinding(null, "text"), // bindingForOptionText
 					this.fontHeightInPixelsBase * sizeMultiplier.y
@@ -434,7 +416,7 @@ function ControlBuilder(styles)
 	{
 		if (size == null)
 		{
-			size = universe.display.sizeDefault;
+			size = universe.display.sizeDefault();
 		}
 
 		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
@@ -638,7 +620,7 @@ function ControlBuilder(styles)
 	{
 		if (size == null)
 		{
-			size = universe.display.sizeDefault;
+			size = universe.display.sizeDefault();
 		}
 
 		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
@@ -748,7 +730,7 @@ function ControlBuilder(styles)
 	{
 		if (size == null)
 		{
-			size = universe.display.sizeDefault;
+			size = universe.display.sizeDefault();
 		}
 
 		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
@@ -944,7 +926,7 @@ function ControlBuilder(styles)
 	{
 		if (size == null)
 		{
-			size = universe.display.sizeDefault;
+			size = universe.display.sizeDefault();
 		}
 
 		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
@@ -1021,7 +1003,7 @@ function ControlBuilder(styles)
 	{
 		if (size == null)
 		{
-			size = universe.display.sizeDefault;
+			size = universe.display.sizeDefault();
 		}
 
 		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
@@ -1038,7 +1020,7 @@ function ControlBuilder(styles)
 					"imageTitle",
 					new Coords(0, 0).multiply(sizeMultiplier),
 					new Coords(200, 150).multiply(sizeMultiplier), // size
-					new VisualImageFromLibrary("Title", size),
+					new VisualImageScaled(new VisualImageFromLibrary("Title"), size)
 				),
 
 				new ControlButton
@@ -1071,7 +1053,7 @@ function ControlBuilder(styles)
 	{
 		if (size == null)
 		{
-			size = universe.display.sizeDefault;
+			size = universe.display.sizeDefault();
 		}
 
 		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
@@ -1271,7 +1253,7 @@ function ControlBuilder(styles)
 	{
 		if (size == null)
 		{
-			size = universe.display.sizeDefault;
+			size = universe.display.sizeDefault();
 		}
 
 		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
@@ -1490,7 +1472,7 @@ function ControlBuilder(styles)
 	{
 		if (size == null)
 		{
-			size = universe.display.sizeDefault;
+			size = universe.display.sizeDefault();
 		}
 
 		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);

@@ -2,39 +2,15 @@ function main()
 {
 	//localStorage.clear();
 
-	var contentPath = "../Content/";
-	var imagePath = contentPath + "Images/";
-	var audioPath = contentPath + "Audio/";
-	var effectsPath = audioPath + "Effects/";
-	var musicPath = audioPath + "Music/";
-	var videoPath = contentPath + "Video/";
-	var fontsPath = contentPath + "Fonts/";
-	var textPath = contentPath + "Text/";
-
-	var mediaLibrary = new MediaLibrary
+	var mediaLibrary = new MediaLibrary.fromFileNames
 	(
-		// images
-		[
-			new Image("Title", imagePath + "Title.png"),
-		],
-		// sounds
-		[
-			new Sound("Sound", effectsPath + "Sound.wav", false),
-			new Sound("Music", musicPath + "Music.mp3", true),
-		],
-		// videos
-		[
-			new Video("Movie", videoPath + "Movie.webm"),
-		],
-		// fonts
-		[
-			new Font("Font", fontsPath + "Font.ttf"),
-		],
-		// textStrings
-		[
-			new TextString("Conversation", textPath + "Conversation.json"),
-			new TextString("Instructions", textPath + "Instructions.txt"),
-		]
+		"../Content/",
+		[ "Title.png", ],
+		[ "Sound.wav" ],
+		[ "Music.mp3" ],
+		[ "Movie.webm" ],
+		[ "Font.ttf" ],
+		[ "Conversation.json", "Instructions.txt" ]
 	);
 
 	var displaySizeInPixelsDefault = new Coords(400, 300, 1);

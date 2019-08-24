@@ -93,7 +93,7 @@ function VenueFader
 		display.drawRectangle
 		(
 			new Coords(0, 0),
-			display.sizeDefault, // Scaled automatically.
+			display.sizeDefault(), // Scaled automatically.
 			fadeColor.systemColor()
 		);
 	};

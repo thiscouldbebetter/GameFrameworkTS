@@ -39,6 +39,14 @@ function Universe(name, timerHelper, display, mediaLibrary, world)
 
 	Universe.prototype.initialize = function()
 	{
+		this.mediaLibrary.waitForItemsAllToLoad
+		(
+			this.initialize_MediaLibraryLoaded.bind(this)
+		);
+	}
+
+	Universe.prototype.initialize_MediaLibraryLoaded = function()
+	{
 		this.collisionHelper = new CollisionHelper();
 		this.platformHelper = new PlatformHelper();
 		this.platformHelper.initialize(this);

@@ -3,8 +3,8 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 {
 	this.sizeInPixels = sizeInPixels;
 
-	this.sizeDefault = sizeInPixels;
-	this.scaleFactor = new Coords(1, 1, 1);
+	this._sizeDefault = sizeInPixels;
+	this._scaleFactor = new Coords(1, 1, 1);
 	this._display2DOverlay = new Display([sizeInPixels], fontName, fontHeightInPixels, colorFore, colorBack);
 }
 
@@ -393,7 +393,17 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 		this._display2DOverlay.drawCircleWithGradient(center, radius, gradientFill, colorBorder);
 	};
 
-	Display3D.prototype.drawImage = function(imageToDraw, pos, size)
+	Display3D.prototype.drawImage = function(imageToDraw, pos)
+	{
+		this._display2DOverlay.drawImage(imageToDraw, pos);
+	};
+
+	Display3D.prototype.drawImagePartial = function(imageToDraw, pos, boundsToShow)
+	{
+		this._display2DOverlay.drawImagePartial(imageToDraw, pos, boundsToShow);
+	};
+
+	Display3D.prototype.drawImageScaled = function(imageToDraw, pos, size)
 	{
 		this._display2DOverlay.drawImage(imageToDraw, pos, size);
 	};
@@ -453,9 +463,19 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 		this._display2DOverlay.fontSizeSet(fontHeightInPixels);
 	};
 
-	Display3D.prototype.fontValidate = function(fontName)
+	Display3D.prototype.fontNameSet = function(fontName)
 	{
-		this._display2DOverlay.fontValidate(fontName);
+		this._display2DOverlay.fontNameSet(fontName);
+	};
+
+	Display3D.prototype.scaleFactor = function()
+	{
+		return this._scaleFactor;
+	}
+
+	Display3D.prototype.sizeDefault = function()
+	{
+		return this._sizeDefault;
 	};
 
 	Display3D.prototype.textWidthForFontHeight = function(textToMeasure, fontHeightInPixels)

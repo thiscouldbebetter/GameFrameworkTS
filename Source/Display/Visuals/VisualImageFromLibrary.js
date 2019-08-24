@@ -1,24 +1,23 @@
 
-function VisualImageFromLibrary(imageName, sizeScaled)
+function VisualImageFromLibrary(imageName)
 {
 	this.imageName = imageName;
-	this._sizeScaled = sizeScaled;
 
 	// Helper variables.
-	this.drawPos = new Coords();
+	this._drawPos = new Coords();
 }
 
 {
 	// static methods
 
-	VisualImageFromLibrary.manyFromImages = function(images, imageSizeScaled)
+	VisualImageFromLibrary.manyFromImages = function(images)
 	{
 		var returnValues = [];
 
 		for (var i = 0; i < images.length; i++)
 		{
 			var image = images[i];
-			var visual = new VisualImageFromLibrary(image.name, imageSizeScaled);
+			var visual = new VisualImageFromLibrary(image.name);
 			returnValues.push(visual);
 		}
 
@@ -32,21 +31,16 @@ function VisualImageFromLibrary(imageName, sizeScaled)
 		return universe.mediaLibrary.imageGetByName(this.imageName);
 	};
 
-	VisualImageFromLibrary.prototype.imageSizeScaled = function(universe)
-	{
-		return (this._sizeScaled == null ? this.image(universe).sizeInPixels: this._sizeScaled);
-	};
-
 	// visual
 
 	VisualImageFromLibrary.prototype.draw = function(universe, world, display, drawable, entity)
 	{
 		var image = this.image(universe);
-		var imageSize = this.imageSizeScaled(universe);
-		var drawPos = this.drawPos.clear().subtract(imageSize).half().add
+		var imageSize = this.image(universe).sizeInPixels;
+		var drawPos = this._drawPos.clear().subtract(imageSize).half().add
 		(
 			drawable.loc.pos
 		);
-		display.drawImage(image, drawPos, imageSize);
+		display.drawImageScaled(image, drawPos, imageSize);
 	};
 }
