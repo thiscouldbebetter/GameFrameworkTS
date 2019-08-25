@@ -41,9 +41,8 @@ function ControlSelect
 	this.isHighlighted = false;
 
 	// Helper variables.
-	this.drawPos = new Coords();
-	this.drawLoc = new Location(this.drawPos);
-	this.sizeHalf = this.size.clone().half();
+	this._drawPos = new Coords();
+	this._sizeHalf = new Coords();
 }
 
 {
@@ -157,7 +156,7 @@ function ControlSelect
 
 	ControlSelect.prototype.draw = function(universe, display, drawLoc)
 	{
-		var drawPos = this.drawPos.overwriteWith(drawLoc.pos).add(this.pos);
+		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 
 		var style = this.style(universe);
 
@@ -168,7 +167,7 @@ function ControlSelect
 			this.isHighlighted // areColorsReversed
 		);
 
-		drawPos.add(this.sizeHalf);
+		drawPos.add(this._sizeHalf.overwriteWith(this.size).half());
 
 		var optionSelected = this.optionSelected();
 		var text = (optionSelected == null ? "-" : optionSelected.text);

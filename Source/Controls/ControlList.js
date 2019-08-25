@@ -21,7 +21,7 @@ function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPix
 		new Coords(this.size.x - scrollbarWidth, 0), // pos
 		new Coords(scrollbarWidth, this.size.y), // size
 		this.fontHeightInPixels,
-		this.itemSpacing,
+		this.itemSpacing, // itemHeight
 		this._items,
 		0 // value
 	);
@@ -227,6 +227,14 @@ function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPix
 		}
 
 		return true; // wasActionHandled
+	};
+
+	ControlList.prototype.scalePosAndSize = function(scaleFactor)
+	{
+		this.pos.multiply(scaleFactor);
+		this.size.multiply(scaleFactor);
+		this.fontHeightInPixels *= scaleFactor.y;
+		this.itemSpacing *= scaleFactor.y;
 	};
 
 	ControlList.prototype.style = function(universe)

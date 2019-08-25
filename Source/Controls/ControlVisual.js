@@ -9,7 +9,7 @@ function ControlVisual(name, pos, size, visual)
 	// Helper variables.
 	this._drawPos = new Coords();
 	this._drawable = new Locatable(new Location(this._drawPos));
-	this._sizeHalf = this.size.clone().half();
+	this._sizeHalf = new Coords();
 }
 
 {
@@ -33,7 +33,7 @@ function ControlVisual(name, pos, size, visual)
 
 		var drawable = this._drawable;
 		drawable.loc.pos.overwriteWith(drawPos);
-		drawPos.add(this._sizeHalf);
+		drawPos.add(this._sizeHalf.overwriteWith(this.size).half());
 		this.visual.draw(universe, universe.world, display, drawable);
 	};
 }

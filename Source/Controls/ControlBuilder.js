@@ -8,7 +8,8 @@ function ControlBuilder(styles)
 
 	// Helper variables.
 
-	this.sizeMultiplier = new Coords();
+	this._zeroes = new Coords(0, 0, 0);
+	this._scaleMultiplier = new Coords();
 }
 {
 	ControlBuilder.prototype.choice = function
@@ -21,22 +22,20 @@ function ControlBuilder(styles)
 			size = universe.display.sizeDefault();
 		}
 
-		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
-
-		var fontHeight = this.fontHeightInPixelsBase * sizeMultiplier.y;
+		var scaleMultiplier =
+			this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
+		var fontHeight = this.fontHeightInPixelsBase;
 
 		var numberOfLinesInMessageMinusOne = message.split("\n").length - 1;
 		var labelSize = new Coords
 		(
-			200,
-			fontHeight * numberOfLinesInMessageMinusOne
-		).multiply(sizeMultiplier);
+			200, fontHeight * numberOfLinesInMessageMinusOne
+		);
 
 		var labelPos = new Coords
 		(
-			100,
-			65 - fontHeight * (numberOfLinesInMessageMinusOne / 4),
-		).multiply(sizeMultiplier);
+			100, 65 - fontHeight * (numberOfLinesInMessageMinusOne / 4),
+		);
 
 		var labelMessage = new ControlLabel
 		(
@@ -53,7 +52,7 @@ function ControlBuilder(styles)
 		var numberOfOptions = optionNames.length;
 
 		var buttonWidth = 55;
-		var buttonSize = new Coords(buttonWidth, fontHeight).multiply(sizeMultiplier);
+		var buttonSize = new Coords(buttonWidth, fontHeight);
 		var spaceBetweenButtons = 5;
 		var buttonMarginLeftRight =
 			(
@@ -71,10 +70,10 @@ function ControlBuilder(styles)
 				(
 					buttonMarginLeftRight + i * (buttonWidth + spaceBetweenButtons),
 					100
-				).multiply(sizeMultiplier), // pos
-				buttonSize,
+				), // pos
+				buttonSize.clone(),
 				optionNames[i],
-				this.fontHeightInPixelsBase * sizeMultiplier.y,
+				fontHeight,
 				true, // hasBorder
 				true, // isEnabled
 				optionFunctions[i],
@@ -84,9 +83,9 @@ function ControlBuilder(styles)
 			childControls.push(button);
 		}
 
-		var containerSizeScaled = size.clone().clearZ();
+		var containerSizeScaled = size.clone().clearZ().divide(scaleMultiplier);
 		var display = universe.display;
-		var displaySize = display.sizeDefault().clone().clearZ();
+		var displaySize = display.sizeDefault().clone().clearZ().divide(scaleMultiplier);
 		var containerPosScaled = displaySize.clone().subtract(containerSizeScaled).half();
 
 		var returnValue = new ControlContainer
@@ -96,6 +95,8 @@ function ControlBuilder(styles)
 			containerSizeScaled,
 			childControls
 		);
+
+		returnValue.scalePosAndSize(scaleMultiplier);
 
 		return returnValue;
 	};
@@ -181,22 +182,25 @@ function ControlBuilder(styles)
 			size = universe.display.sizeDefault();
 		}
 
-		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
+		var scaleMultiplier =
+			this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
+
+		var fontHeight = this.fontHeightInPixelsBase;
 
 		var returnValue = new ControlContainer
 		(
 			"containerConfigure",
-			new Coords(0, 0).multiply(sizeMultiplier), // pos
-			new Coords(200, 150).multiply(sizeMultiplier), // size
+			this._zeroes, // pos
+			this.sizeBase.clone(),
 			// children
 			[
 				new ControlButton
 				(
 					"buttonSave",
-					new Coords(30, 15).multiply(sizeMultiplier), // pos
-					new Coords(65, 25).multiply(sizeMultiplier), // size
+					new Coords(30, 15), // pos
+					new Coords(65, 25), // size
 					"Save",
-					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
 					function click(universe)
@@ -214,10 +218,10 @@ function ControlBuilder(styles)
 				new ControlButton
 				(
 					"buttonLoad",
-					new Coords(105, 15).multiply(sizeMultiplier), // pos
-					new Coords(65, 25).multiply(sizeMultiplier), // size
+					new Coords(105, 15), // pos
+					new Coords(65, 25), // size
 					"Load",
-					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
 					function click(universe)
@@ -235,77 +239,77 @@ function ControlBuilder(styles)
 				new ControlLabel
 				(
 					"labelMusicVolume",
-					new Coords(30, 50).multiply(sizeMultiplier), // pos
-					new Coords(75, 25).multiply(sizeMultiplier), // size
+					new Coords(30, 50), // pos
+					new Coords(75, 25), // size
 					false, // isTextCentered
 					"Music:",
-					this.fontHeightInPixelsBase * sizeMultiplier.y
+					fontHeight
 				),
 
 				new ControlSelect
 				(
 					"selectMusicVolume",
-					new Coords(65, 45).multiply(sizeMultiplier), // pos
-					new Coords(30, 25).multiply(sizeMultiplier), // size
+					new Coords(65, 45), // pos
+					new Coords(30, 25), // size
 					new DataBinding(universe.soundHelper, "musicVolume"), // valueSelected
 					SoundHelper.controlSelectOptionsVolume(), // options
 					new DataBinding(null, "value"), // bindingForOptionValues,
 					new DataBinding(null, "text"), // bindingForOptionText
-					this.fontHeightInPixelsBase * sizeMultiplier.y
+					fontHeight
 				),
 
 				new ControlLabel
 				(
 					"labelSoundVolume",
-					new Coords(105, 50).multiply(sizeMultiplier), // pos
-					new Coords(75, 25).multiply(sizeMultiplier), // size
+					new Coords(105, 50), // pos
+					new Coords(75, 25), // size
 					false, // isTextCentered
 					"Sound:",
-					this.fontHeightInPixelsBase * sizeMultiplier.y
+					fontHeight
 				),
 
 				new ControlSelect
 				(
 					"selectSoundVolume",
-					new Coords(140, 45).multiply(sizeMultiplier), // pos
-					new Coords(30, 25).multiply(sizeMultiplier), // size
+					new Coords(140, 45), // pos
+					new Coords(30, 25), // size
 					new DataBinding(universe.soundHelper, "soundVolume"), // valueSelected
 					SoundHelper.controlSelectOptionsVolume(), // options
 					new DataBinding(null, "value"), // bindingForOptionValues,
 					new DataBinding(null, "text"), // bindingForOptionText
-					this.fontHeightInPixelsBase * sizeMultiplier.y
+					fontHeight
 				),
 
 				new ControlLabel
 				(
 					"labelDisplaySize",
-					new Coords(30, 80).multiply(sizeMultiplier), // pos
-					new Coords(75, 25).multiply(sizeMultiplier), // size
+					new Coords(30, 80), // pos
+					new Coords(75, 25), // size
 					false, // isTextCentered
 					"Display:",
-					this.fontHeightInPixelsBase * sizeMultiplier.y
+					fontHeight
 				),
 
 				new ControlSelect
 				(
 					"selectDisplaySize",
-					new Coords(70, 75).multiply(sizeMultiplier), // pos
-					new Coords(60, 25).multiply(sizeMultiplier), // size
+					new Coords(70, 75), // pos
+					new Coords(60, 25), // size
 					universe.display.sizeInPixels, // valueSelected
 					// options
 					universe.display.sizesAvailable,
 					new DataBinding(), // bindingForOptionValues,
 					new DataBinding(null, "toStringXY()"), // bindingForOptionText
-					this.fontHeightInPixelsBase * sizeMultiplier.y
+					fontHeight
 				),
 
 				new ControlButton
 				(
 					"buttonDisplaySizeChange",
-					new Coords(140, 75).multiply(sizeMultiplier), // pos
-					new Coords(30, 25).multiply(sizeMultiplier), // size
+					new Coords(140, 75), // pos
+					new Coords(30, 25), // size
 					"Change",
-					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
 					function click(universe)
@@ -317,6 +321,8 @@ function ControlBuilder(styles)
 						var display = universe.display;
 						display.sizeInPixels = displaySizeSpecified;
 						display.initialize(universe);
+
+						universe.platformHelper.initialize(universe);
 
 						var venueNext = new VenueControls
 						(
@@ -331,10 +337,10 @@ function ControlBuilder(styles)
 				new ControlButton
 				(
 					"buttonResume",
-					new Coords(30, 105).multiply(sizeMultiplier), // pos
-					new Coords(65, 25).multiply(sizeMultiplier), // size
+					new Coords(30, 105), // pos
+					new Coords(65, 25), // size
 					"Resume",
-					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
 					function click(universe)
@@ -350,10 +356,10 @@ function ControlBuilder(styles)
 				new ControlButton
 				(
 					"buttonQuit",
-					new Coords(105, 105).multiply(sizeMultiplier), // pos
-					new Coords(65, 25).multiply(sizeMultiplier), // size
+					new Coords(105, 105), // pos
+					new Coords(65, 25), // size
 					"Quit",
-					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
 					function click(universe)
@@ -393,6 +399,8 @@ function ControlBuilder(styles)
 			]
 		);
 
+		returnValue.scalePosAndSize(scaleMultiplier);
+
 		return returnValue;
 	};
 
@@ -419,56 +427,59 @@ function ControlBuilder(styles)
 			size = universe.display.sizeDefault();
 		}
 
-		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
+		var scaleMultiplier =
+			this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
+
+		var fontHeight = this.fontHeightInPixelsBase;
 
 		var returnValue = new ControlContainer
 		(
 			"containerProfileDetail",
-			new Coords(0, 0).multiply(sizeMultiplier), // pos
-			new Coords(200, 150).multiply(sizeMultiplier), // size
+			this._zeroes, // pos
+			this.sizeBase.clone(), // size
 			// children
 			[
 				new ControlLabel
 				(
 					"labelProfileName",
-					new Coords(100, 25).multiply(sizeMultiplier), // pos
-					new Coords(120, 25).multiply(sizeMultiplier), // size
+					new Coords(100, 25), // pos
+					new Coords(120, 25), // size
 					true, // isTextCentered
 					"Profile: " + universe.profile.name,
-					this.fontHeightInPixelsBase * sizeMultiplier.y
+					fontHeight
 				),
 
 				new ControlLabel
 				(
 					"labelSelectAWorld",
-					new Coords(100, 40).multiply(sizeMultiplier), // pos
-					new Coords(100, 25).multiply(sizeMultiplier), // size
+					new Coords(100, 40), // pos
+					new Coords(100, 25), // size
 					true, // isTextCentered
 					"Select a World:",
-					this.fontHeightInPixelsBase * sizeMultiplier.y
+					fontHeight
 				),
 
 				new ControlList
 				(
 					"listWorlds",
-					new Coords(25, 50).multiply(sizeMultiplier), // pos
-					new Coords(150, 50).multiply(sizeMultiplier), // size
+					new Coords(25, 50), // pos
+					new Coords(150, 50), // size
 					new DataBinding
 					(
 						universe.profile.worlds,
 						null
 					),
 					new DataBinding(null, "name"), // bindingForOptionText
-					this.fontHeightInPixelsBase * sizeMultiplier.y
+					fontHeight
 				),
 
 				new ControlButton
 				(
 					"buttonNew",
-					new Coords(50, 110).multiply(sizeMultiplier), // pos
-					new Coords(45, 25).multiply(sizeMultiplier), // size
+					new Coords(50, 110), // pos
+					new Coords(45, 25), // size
 					"New",
-					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
 					function click(universe)
@@ -497,10 +508,10 @@ function ControlBuilder(styles)
 				new ControlButton
 				(
 					"buttonSelect",
-					new Coords(105, 110).multiply(sizeMultiplier), // pos
-					new Coords(45, 25).multiply(sizeMultiplier), // size
+					new Coords(105, 110), // pos
+					new Coords(45, 25), // size
 					"Select",
-					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					fontHeight,
 					true, // hasBorder
 					// isEnabled
 					new DataBinding
@@ -540,10 +551,10 @@ function ControlBuilder(styles)
 				new ControlButton
 				(
 					"buttonBack",
-					new Coords(10, 10).multiply(sizeMultiplier), // pos
-					new Coords(15, 15).multiply(sizeMultiplier), // size
+					new Coords(10, 10), // pos
+					new Coords(15, 15), // size
 					"<",
-					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
 					function click(universe)
@@ -561,10 +572,10 @@ function ControlBuilder(styles)
 				new ControlButton
 				(
 					"buttonDelete",
-					new Coords(180, 10).multiply(sizeMultiplier), // pos
-					new Coords(15, 15).multiply(sizeMultiplier), // size
+					new Coords(180, 10), // pos
+					new Coords(15, 15), // size
 					"x",
-					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
 					function click(universe)
@@ -613,6 +624,8 @@ function ControlBuilder(styles)
 			]
 		);
 
+		returnValue.scalePosAndSize(scaleMultiplier);
+
 		return returnValue;
 	};
 
@@ -623,41 +636,44 @@ function ControlBuilder(styles)
 			size = universe.display.sizeDefault();
 		}
 
-		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
+		var scaleMultiplier =
+			this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
 
-		return new ControlContainer
+		var fontHeight = this.fontHeightInPixelsBase;
+
+		var returnValue = new ControlContainer
 		(
 			"containerProfileNew",
-			new Coords(0, 0).multiply(sizeMultiplier), // pos
-			new Coords(200, 150).multiply(sizeMultiplier), // size
+			this._zeroes, // pos
+			this.sizeBase.clone(), // size
 			// children
 			[
 				new ControlLabel
 				(
 					"labelName",
-					new Coords(100, 40).multiply(sizeMultiplier), // pos
-					new Coords(100, 25).multiply(sizeMultiplier), // size
+					new Coords(100, 40), // pos
+					new Coords(100, 25), // size
 					true, // isTextCentered
 					"Profile Name:",
-					this.fontHeightInPixelsBase * sizeMultiplier.y
+					fontHeight
 				),
 
 				new ControlTextBox
 				(
 					"textBoxName",
-					new Coords(50, 50).multiply(sizeMultiplier), // pos
-					new Coords(100, 25).multiply(sizeMultiplier), // size
+					new Coords(50, 50), // pos
+					new Coords(100, 25), // size
 					"", // text
-					this.fontHeightInPixelsBase * sizeMultiplier.y
+					fontHeight
 				),
 
 				new ControlButton
 				(
 					"buttonCreate",
-					new Coords(50, 80).multiply(sizeMultiplier), // pos
-					new Coords(45, 25).multiply(sizeMultiplier), // size
+					new Coords(50, 80), // pos
+					new Coords(45, 25), // size
 					"Create",
-					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					fontHeight,
 					true, // hasBorder
 					// isEnabled
 					new DataBinding
@@ -705,10 +721,10 @@ function ControlBuilder(styles)
 				new ControlButton
 				(
 					"buttonCancel",
-					new Coords(105, 80).multiply(sizeMultiplier), // pos
-					new Coords(45, 25).multiply(sizeMultiplier), // size
+					new Coords(105, 80), // pos
+					new Coords(45, 25), // size
 					"Cancel",
-					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
 					function click(universe)
@@ -724,6 +740,10 @@ function ControlBuilder(styles)
 				),
 			]
 		);
+
+		returnValue.scalePosAndSize(scaleMultiplier);
+
+		return returnValue;
 	};
 
 	ControlBuilder.prototype.profileSelect = function(universe, size)
@@ -733,44 +753,47 @@ function ControlBuilder(styles)
 			size = universe.display.sizeDefault();
 		}
 
-		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
+		var scaleMultiplier =
+			this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
+
+		var fontHeight = this.fontHeightInPixelsBase;
 
 		var profiles = universe.profileHelper.profiles();
 
 		var returnValue = new ControlContainer
 		(
 			"containerProfileSelect",
-			new Coords(0, 0).multiply(sizeMultiplier), // pos
-			new Coords(200, 150).multiply(sizeMultiplier), // size
+			this._zeroes, // pos
+			this.sizeBase.clone(), // size
 			// children
 			[
 				new ControlLabel
 				(
 					"labelSelectAProfile",
-					new Coords(100, 40).multiply(sizeMultiplier), // pos
-					new Coords(100, 25).multiply(sizeMultiplier), // size
+					new Coords(100, 40), // pos
+					new Coords(100, 25), // size
 					true, // isTextCentered
 					"Select a Profile:",
-					this.fontHeightInPixelsBase * sizeMultiplier.y
+					fontHeight
 				),
 
 				new ControlList
 				(
 					"listProfiles",
-					new Coords(50, 50).multiply(sizeMultiplier), // pos
-					new Coords(100, 40).multiply(sizeMultiplier), // size
+					new Coords(50, 50), // pos
+					new Coords(100, 40), // size
 					new DataBinding(profiles),
 					new DataBinding(null, "name"),
-					this.fontHeightInPixelsBase * sizeMultiplier.y
+					fontHeight
 				),
 
 				new ControlButton
 				(
 					"buttonNew",
-					new Coords(50, 95).multiply(sizeMultiplier), // pos
-					new Coords(30, 25).multiply(sizeMultiplier), // size
+					new Coords(50, 95), // pos
+					new Coords(30, 25), // size
 					"New",
-					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
 					function click(universe)
@@ -788,10 +811,10 @@ function ControlBuilder(styles)
 				new ControlButton
 				(
 					"buttonSelect",
-					new Coords(85, 95).multiply(sizeMultiplier), // pos
-					new Coords(30, 25).multiply(sizeMultiplier), // size
+					new Coords(85, 95), // pos
+					new Coords(30, 25), // size
 					"Select",
-					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					fontHeight,
 					true, // hasBorder
 					// isEnabled
 					new DataBinding
@@ -828,10 +851,10 @@ function ControlBuilder(styles)
 				new ControlButton
 				(
 					"buttonSkip",
-					new Coords(120, 95).multiply(sizeMultiplier), // pos
-					new Coords(30, 25).multiply(sizeMultiplier), // size
+					new Coords(120, 95), // pos
+					new Coords(30, 25), // size
 					"Skip",
-					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
 					function click(universe)
@@ -853,10 +876,10 @@ function ControlBuilder(styles)
 				new ControlButton
 				(
 					"buttonBack",
-					new Coords(10, 10).multiply(sizeMultiplier), // pos
-					new Coords(15, 15).multiply(sizeMultiplier), // size
+					new Coords(10, 10), // pos
+					new Coords(15, 15), // size
 					"<",
-					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
 					function click(universe)
@@ -874,10 +897,10 @@ function ControlBuilder(styles)
 				new ControlButton
 				(
 					"buttonDelete",
-					new Coords(180, 10).multiply(sizeMultiplier), // pos
-					new Coords(15, 15).multiply(sizeMultiplier), // size
+					new Coords(180, 10), // pos
+					new Coords(15, 15), // size
 					"x",
-					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
 					function click(universe)
@@ -919,6 +942,8 @@ function ControlBuilder(styles)
 			]
 		);
 
+		returnValue.scalePosAndSize(scaleMultiplier);
+
 		return returnValue;
 	};
 
@@ -929,7 +954,8 @@ function ControlBuilder(styles)
 			size = universe.display.sizeDefault();
 		}
 
-		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
+		var scaleMultiplier =
+			this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
 
 		var controlsForSlides = [];
 
@@ -942,23 +968,23 @@ function ControlBuilder(styles)
 			var containerSlide = new ControlContainer
 			(
 				"containerSlide_" + i,
-				new Coords(0, 0).multiply(sizeMultiplier), // pos
-				new Coords(200, 150).multiply(sizeMultiplier), // size
+				this._zeroes, // pos
+				this.sizeBase.clone(), // size
 				// children
 				[
 					new ControlVisual
 					(
 						"imageSlide",
-						new Coords(0, 0).multiply(sizeMultiplier),
-						new Coords(200, 150).multiply(sizeMultiplier), // size
+						this._zeroes,
+						this.sizeBase.clone(), // size
 						new VisualImageFromLibrary(imageName, size),
 					),
 
 					new ControlLabel
 					(
 						"labelSlideText",
-						new Coords(100, this.fontHeightInPixelsBase * 2).multiply(sizeMultiplier), // pos
-						new Coords(200, 150).multiply(sizeMultiplier), // size
+						new Coords(100, this.fontHeightInPixelsBase * 2), // pos
+						this.sizeBase.clone(), // size
 						true, // isTextCentered,
 						message,
 						this.fontHeightInPixelsBase * 2
@@ -967,8 +993,8 @@ function ControlBuilder(styles)
 					new ControlButton
 					(
 						"buttonNext",
-						new Coords(75, 120).multiply(sizeMultiplier), // pos
-						new Coords(50, 40).multiply(sizeMultiplier), // size
+						new Coords(75, 120), // pos
+						new Coords(50, 40), // size
 						"Next",
 						this.fontHeightInPixelsBase,
 						false, // hasBorder
@@ -993,6 +1019,8 @@ function ControlBuilder(styles)
 				]
 			);
 
+			containerSlide.scalePosAndSize(scaleMultiplier);
+
 			controlsForSlides.push(containerSlide);
 		}
 
@@ -1006,30 +1034,33 @@ function ControlBuilder(styles)
 			size = universe.display.sizeDefault();
 		}
 
-		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
+		var scaleMultiplier =
+			this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
+
+		var fontHeight = this.fontHeightInPixelsBase;
 
 		var returnValue = new ControlContainer
 		(
 			"containerTitle",
-			new Coords(0, 0).multiply(sizeMultiplier), // pos
-			new Coords(200, 150).multiply(sizeMultiplier), // size
+			this._zeroes, // pos
+			this.sizeBase.clone(), // size
 			// children
 			[
 				new ControlVisual
 				(
 					"imageTitle",
-					new Coords(0, 0).multiply(sizeMultiplier),
-					new Coords(200, 150).multiply(sizeMultiplier), // size
+					this._zeroes,
+					this.sizeBase.clone(), // size
 					new VisualImageScaled(new VisualImageFromLibrary("Title"), size)
 				),
 
 				new ControlButton
 				(
 					"buttonStart",
-					new Coords(75, 100).multiply(sizeMultiplier), // pos
-					new Coords(50, 40).multiply(sizeMultiplier), // size
+					new Coords(75, 100), // pos
+					new Coords(50, 40), // size
 					"Start",
-					this.fontHeightInPixelsBase * sizeMultiplier.y * 2,
+					fontHeight * 2,
 					false, // hasBorder
 					true, // isEnabled
 					function click(universe)
@@ -1046,6 +1077,8 @@ function ControlBuilder(styles)
 			]
 		);
 
+		returnValue.scalePosAndSize(scaleMultiplier);
+
 		return returnValue;
 	};
 
@@ -1056,7 +1089,10 @@ function ControlBuilder(styles)
 			size = universe.display.sizeDefault();
 		}
 
-		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
+		var scaleMultiplier =
+			this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
+
+		var fontHeight = this.fontHeightInPixelsBase;
 
 		var world = universe.world;
 
@@ -1066,54 +1102,54 @@ function ControlBuilder(styles)
 		var returnValue = new ControlContainer
 		(
 			"containerWorldDetail",
-			new Coords(0, 0).multiply(sizeMultiplier), // pos
-			new Coords(200, 150).multiply(sizeMultiplier), // size
+			this._zeroes, // pos
+			this.sizeBase.clone(), // size
 			// children
 			[
 				new ControlLabel
 				(
 					"labelProfileName",
-					new Coords(100, 40).multiply(sizeMultiplier), // pos
-					new Coords(100, 25).multiply(sizeMultiplier), // size
+					new Coords(100, 40), // pos
+					new Coords(100, 25), // size
 					true, // isTextCentered
 					"Profile: " + universe.profile.name,
-					this.fontHeightInPixelsBase * sizeMultiplier.y
+					fontHeight
 				),
 				new ControlLabel
 				(
 					"labelWorldName",
-					new Coords(100, 55).multiply(sizeMultiplier), // pos
-					new Coords(150, 25).multiply(sizeMultiplier), // size
+					new Coords(100, 55), // pos
+					new Coords(150, 25), // size
 					true, // isTextCentered
 					"World: " + world.name,
-					this.fontHeightInPixelsBase * sizeMultiplier.y
+					fontHeight
 				),
 				new ControlLabel
 				(
 					"labelStartDate",
-					new Coords(100, 70).multiply(sizeMultiplier), // pos
-					new Coords(150, 25).multiply(sizeMultiplier), // size
+					new Coords(100, 70), // pos
+					new Coords(150, 25), // size
 					true, // isTextCentered
 					"Started:" + dateCreated.toStringTimestamp(),
-					this.fontHeightInPixelsBase * sizeMultiplier.y
+					fontHeight
 				),
 				new ControlLabel
 				(
 					"labelSavedDate",
-					new Coords(100, 85).multiply(sizeMultiplier), // pos
-					new Coords(150, 25).multiply(sizeMultiplier), // size
+					new Coords(100, 85), // pos
+					new Coords(150, 25), // size
 					true, // isTextCentered
 					"Saved:" + (dateSaved == null ? "[never]" : dateSaved.toStringTimestamp()),
-					this.fontHeightInPixelsBase * sizeMultiplier.y
+					fontHeight
 				),
 
 				new ControlButton
 				(
 					"buttonStart",
-					new Coords(50, 100).multiply(sizeMultiplier), // pos
-					new Coords(100, 25).multiply(sizeMultiplier), // size
+					new Coords(50, 100), // pos
+					new Coords(100, 25), // size
 					"Start",
-					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
 					function click(universe)
@@ -1165,10 +1201,10 @@ function ControlBuilder(styles)
 				new ControlButton
 				(
 					"buttonBack",
-					new Coords(10, 10).multiply(sizeMultiplier), // pos
-					new Coords(15, 15).multiply(sizeMultiplier), // size
+					new Coords(10, 10), // pos
+					new Coords(15, 15), // size
 					"<",
-					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
 					function click(universe)
@@ -1186,10 +1222,10 @@ function ControlBuilder(styles)
 				new ControlButton
 				(
 					"buttonDelete",
-					new Coords(180, 10).multiply(sizeMultiplier), // pos
-					new Coords(15, 15).multiply(sizeMultiplier), // size
+					new Coords(180, 10), // pos
+					new Coords(15, 15), // size
 					"x",
-					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
 					function click(universe)
@@ -1246,6 +1282,8 @@ function ControlBuilder(styles)
 			]
 		);
 
+		returnValue.scalePosAndSize(scaleMultiplier);
+
 		return returnValue;
 	};
 
@@ -1256,22 +1294,25 @@ function ControlBuilder(styles)
 			size = universe.display.sizeDefault();
 		}
 
-		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
+		var scaleMultiplier =
+			this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
+
+		var fontHeight = this.fontHeightInPixelsBase;
 
 		var returnValue = new ControlContainer
 		(
 			"containerWorldLoad",
-			new Coords(0, 0).multiply(sizeMultiplier), // pos
-			new Coords(200, 150).multiply(sizeMultiplier), // size
+			this._zeroes, // pos
+			this.sizeBase.clone(), // size
 			// children
 			[
 				new ControlButton
 				(
 					"buttonLoadFromServer",
-					new Coords(30, 15).multiply(sizeMultiplier), // pos
-					new Coords(140, 25).multiply(sizeMultiplier), // size
+					new Coords(30, 15), // pos
+					new Coords(140, 25), // size
 					"Reload from Local Storage",
-					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
 					function click(universe)
@@ -1365,10 +1406,10 @@ function ControlBuilder(styles)
 				new ControlButton
 				(
 					"buttonLoadFromFile",
-					new Coords(30, 50).multiply(sizeMultiplier), // pos
-					new Coords(140, 25).multiply(sizeMultiplier), // size
+					new Coords(30, 50), // pos
+					new Coords(140, 25), // size
 					"Load from File",
-					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
 					function click(universe)
@@ -1444,10 +1485,10 @@ function ControlBuilder(styles)
 				new ControlButton
 				(
 					"buttonReturn",
-					new Coords(30, 105).multiply(sizeMultiplier), // pos
-					new Coords(140, 25).multiply(sizeMultiplier), // size
+					new Coords(30, 105), // pos
+					new Coords(140, 25), // size
 					"Return",
-					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
 					function click(universe)
@@ -1465,6 +1506,8 @@ function ControlBuilder(styles)
 			]
 		);
 
+		returnValue.scalePosAndSize(scaleMultiplier);
+
 		return returnValue;
 	};
 
@@ -1475,22 +1518,25 @@ function ControlBuilder(styles)
 			size = universe.display.sizeDefault();
 		}
 
-		var sizeMultiplier = this.sizeMultiplier.overwriteWith(size).divide(this.sizeBase);
+		var scaleMultiplier =
+			this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
+
+		var fontHeight = this.fontHeightInPixelsBase;
 
 		var returnValue = new ControlContainer
 		(
 			"containerSave",
-			new Coords(0, 0).multiply(sizeMultiplier), // pos
-			new Coords(200, 150).multiply(sizeMultiplier), // size
+			this._zeroes, // pos
+			this.sizeBase.clone(), // size
 			// children
 			[
 				new ControlButton
 				(
 					"buttonSaveToLocalStorage",
-					new Coords(30, 15).multiply(sizeMultiplier), // pos
-					new Coords(140, 25).multiply(sizeMultiplier), // size
+					new Coords(30, 15), // pos
+					new Coords(140, 25), // size
 					"Save to Local Storage",
-					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
 					function click(universe)
@@ -1531,10 +1577,10 @@ function ControlBuilder(styles)
 				new ControlButton
 				(
 					"buttonSaveToFile",
-					new Coords(30, 50).multiply(sizeMultiplier), // pos
-					new Coords(140, 25).multiply(sizeMultiplier), // size
+					new Coords(30, 50), // pos
+					new Coords(140, 25), // size
 					"Save to File",
-					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
 					function click(universe)
@@ -1578,10 +1624,10 @@ function ControlBuilder(styles)
 				new ControlButton
 				(
 					"buttonReturn",
-					new Coords(30, 105).multiply(sizeMultiplier), // pos
-					new Coords(140, 25).multiply(sizeMultiplier), // size
+					new Coords(30, 105), // pos
+					new Coords(140, 25), // size
 					"Return",
-					this.fontHeightInPixelsBase * sizeMultiplier.y,
+					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
 					function click(universe)
@@ -1597,6 +1643,8 @@ function ControlBuilder(styles)
 				),
 			]
 		);
+
+		returnValue.scalePosAndSize(scaleMultiplier);
 
 		return returnValue;
 	};

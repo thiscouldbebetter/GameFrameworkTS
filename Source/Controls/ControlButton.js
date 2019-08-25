@@ -16,7 +16,7 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 
 	// Helper variables.
 	this._drawLoc = new Location(new Coords());
-	this._sizeHalf = this.size.clone().half();
+	this._sizeHalf = new Coords();
 }
 
 {
@@ -95,7 +95,7 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 			);
 		}
 
-		drawPos.add(this._sizeHalf);
+		drawPos.add(this._sizeHalf.overwriteWith(this.size).half());
 
 		var colorText = (isEnabled == true ? colorBorder : style.colorDisabled);
 

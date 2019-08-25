@@ -33,7 +33,7 @@ function MediaLibrary(images, sounds, videos, fonts, textStrings)
 			[ Image, "Images", imageFileNames ],
 			[ Sound, "Audio/Effects", effectFileNames ],
 			[ Sound, "Audio/Music", musicFileNames ],
-			[ Video, "Videos", videoFileNames ],
+			[ Video, "Video", videoFileNames ],
 			[ Font, "Fonts", fontFileNames ],
 			[ TextString, "Text", textStringFileNames ],
 		];
@@ -64,7 +64,7 @@ function MediaLibrary(images, sounds, videos, fonts, textStrings)
 		var images = mediaCollections["Images"];
 		var soundEffects = mediaCollections["Audio/Effects"];
 		var soundMusics = mediaCollections["Audio/Music"];
-		var videos = mediaCollections["Videos"];
+		var videos = mediaCollections["Video"];
 		var fonts = mediaCollections["Fonts"];
 		var textStrings = mediaCollections["Text"];
 

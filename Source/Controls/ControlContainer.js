@@ -292,6 +292,30 @@ function ControlContainer(name, pos, size, children)
 		}
 	};
 
+	ControlContainer.prototype.scalePosAndSize = function(scaleFactor)
+	{
+		this.pos.multiply(scaleFactor);
+		this.size.multiply(scaleFactor);
+
+		for (var i = 0; i < this.children.length; i++)
+		{
+			var child = this.children[i];
+			if (child.scalePosAndSize == null)
+			{
+				child.pos.multiply(scaleFactor);
+				child.size.multiply(scaleFactor);
+				if (child.fontHeightInPixels != null)
+				{
+					child.fontHeightInPixels *= scaleFactor.y;
+				}
+			}
+			else
+			{
+				child.scalePosAndSize(scaleFactor);
+			}
+		}
+	}
+
 	// drawable
 
 	ControlContainer.prototype.draw = function(universe, display, drawLoc)
