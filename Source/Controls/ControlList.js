@@ -33,6 +33,24 @@ function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPix
 }
 
 {
+	ControlList.fromPosSizeAndItems = function(pos, size, items)
+	{
+		var returnValue = new ControlList
+		(
+			"", // name,
+			pos,
+			size,
+			items,
+			new DataBinding(), // bindingForItemText,
+			10, // fontHeightInPixels,
+			null, // bindingForItemSelected,
+			null, // bindingForItemValue,
+			true // bindingForIsEnabled
+		);
+
+		return returnValue;
+	};
+
 	ControlList.prototype.actionHandle = function(actionNameToHandle)
 	{
 		var wasActionHandled = false;
