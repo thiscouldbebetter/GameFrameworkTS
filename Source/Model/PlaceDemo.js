@@ -175,38 +175,41 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 
 	var playerPos = new Coords(30, 30);
 	var playerLoc = new Location(playerPos);
-	var playerCollider = new Sphere(playerLoc.pos, entityDimensionHalf);
+	var playerHeadRadius = entityDimension * .75;
+	var playerCollider = new Sphere(playerLoc.pos, playerHeadRadius);
 	var playerColor = "Gray";
-	var playerVisualBody = new VisualCircle(entityDimensionHalf, playerColor);
-	var playerVisualDirectionalIndicator = new VisualDirectional
-	(
-		new VisualNone(),
-		[
-			new VisualRay
-			(
-				entityDimension * 1.25, // length
-				playerColor
-			)
-		]
-	);
 
-	var visualRectangleSmall = new VisualRectangle
-	(
-		entitySize.clone().divideScalar(4), playerColor
-	);
+	var visualEyeRadius = playerHeadRadius / 2;
+	var visualPupilRadius = visualEyeRadius / 2;
 
-	var playerVisualMovementIndicator = new VisualDirectional
+	var visualEye = new VisualGroup
+	([
+		new VisualCircle(visualEyeRadius, "White"),
+		new VisualCircle(visualPupilRadius, "Black")
+	]);
+
+	var visualEyes = new VisualGroup
+	([
+		new VisualOffset
+		(
+			visualEye, new Coords(-visualEyeRadius, 0)
+		),
+		new VisualOffset
+		(
+			visualEye, new Coords(visualEyeRadius, 0)
+		)
+	]);
+
+	var visualEyesDirectional = new VisualDirectional
 	(
-		new VisualNone(),
+		visualEyes,
 		[
 			new VisualAnimation
 			(
 				"MoveRight",
 				5, // ticksPerFrame
 				[
-					new VisualOffset(visualRectangleSmall, new Coords(1, 0).multiplyScalar(entityDimension)),
-					new VisualOffset(visualRectangleSmall, new Coords(1.5, 0).multiplyScalar(entityDimension)),
-					new VisualOffset(visualRectangleSmall, new Coords(2, 0).multiplyScalar(entityDimension)),
+					new VisualOffset(visualEyes, new Coords(1, 0).multiplyScalar(visualEyeRadius)),
 				]
 			),
 			new VisualAnimation
@@ -214,9 +217,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 				"MoveDown",
 				5, // ticksPerFrame
 				[
-					new VisualOffset(visualRectangleSmall, new Coords(0, 1).multiplyScalar(entityDimension)),
-					new VisualOffset(visualRectangleSmall, new Coords(0, 1.5).multiplyScalar(entityDimension)),
-					new VisualOffset(visualRectangleSmall, new Coords(0, 2).multiplyScalar(entityDimension)),
+					new VisualOffset(visualEyes, new Coords(0, 1).multiplyScalar(visualEyeRadius)),
 				]
 			),
 			new VisualAnimation
@@ -224,9 +225,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 				"MoveLeft",
 				5, // ticksPerFrame
 				[
-					new VisualOffset(visualRectangleSmall, new Coords(-1, 0).multiplyScalar(entityDimension)),
-					new VisualOffset(visualRectangleSmall, new Coords(-1.5, 0).multiplyScalar(entityDimension)),
-					new VisualOffset(visualRectangleSmall, new Coords(-2, 0).multiplyScalar(entityDimension)),
+					new VisualOffset(visualEyes, new Coords(-1, 0).multiplyScalar(visualEyeRadius)),
 				]
 			),
 			new VisualAnimation
@@ -234,9 +233,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 				"MoveUp",
 				5, // ticksPerFrame
 				[
-					new VisualOffset(visualRectangleSmall, new Coords(0, -1).multiplyScalar(entityDimension)),
-					new VisualOffset(visualRectangleSmall, new Coords(0, -1.5).multiplyScalar(entityDimension)),
-					new VisualOffset(visualRectangleSmall, new Coords(0, -2).multiplyScalar(entityDimension)),
+					new VisualOffset(visualEyes, new Coords(0, -1).multiplyScalar(visualEyeRadius)),
 				]
 			),
 		]
@@ -245,15 +242,14 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 	var playerVisualName = new VisualOffset
 	(
 		new VisualText("Player", playerColor),
-		new Coords(0, entityDimension)
+		new Coords(0, playerHeadRadius * 2)
 	);
 
 	var playerVisual = new VisualGroup
 	([
-		playerVisualDirectionalIndicator,
-		playerVisualBody,
-		playerVisualName,
-		playerVisualMovementIndicator,
+		new VisualCircle(playerHeadRadius, playerColor),
+		visualEyesDirectional,
+		playerVisualName
 	]);
 
 	var playerCollide = function(universe, world, place, entityPlayer, entityOther)
@@ -460,11 +456,12 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 	var enemyColor = damagerColor;
 	var enemyPos = this.size.clone().subtract(playerLoc.pos);
 	var enemyLoc = new Location(enemyPos);
+	var enemyDimension = entityDimension * 2;
 
 	var enemyColliderAsFace = new Face([
-		new Coords(0, -entityDimension).half(),
-		new Coords(entityDimension, entityDimension).half(),
-		new Coords(-entityDimension, entityDimension).half(),
+		new Coords(0, -1).multiplyScalar(enemyDimension).half(),
+		new Coords(1, 1).multiplyScalar(enemyDimension).half(),
+		new Coords(-1, 1).multiplyScalar(enemyDimension).half(),
 	]);
 	var enemyCollider = Mesh.fromFace
 	(
@@ -475,16 +472,28 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 
 	var enemyVisual = new VisualGroup
 	([
+		new VisualDirectional
+		(
+			new VisualNone(),
+			[
+				new VisualRay
+				(
+					enemyDimension * 1.25, // length
+					enemyColor
+				)
+			]
+		),
 		new VisualPolygon
 		(
 			new Path(enemyColliderAsFace.vertices),
 			enemyColor,
 			null // colorBorder
 		),
+		visualEyesDirectional,
 		new VisualOffset
 		(
 			new VisualText("Chaser", enemyColor),
-			new Coords(0, entityDimension)
+			new Coords(0, enemyDimension)
 		)
 	]);
 
@@ -512,6 +521,8 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 					(
 						actorLoc.pos
 					).normalize().multiplyScalar(.1);
+
+					actorLoc.orientation.forwardSet(actorLoc.accel.clone().normalize());
 				},
 				"Player"
 			),
