@@ -83,4 +83,9 @@ function NumberExtensions()
 
 		return value;
 	};
+
+	Number.prototype.wrapToRangeZeroOne = function()
+	{
+		return this.wrapToRangeMinMax(0, 1);
+	}
 }

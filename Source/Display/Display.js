@@ -243,12 +243,18 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		this.graphics.drawImage(imageToDraw.systemImage, pos.x, pos.y, size.x, size.y);
 	};
 
-	Display.prototype.drawLine = function(fromPos, toPos, color)
+	Display.prototype.drawLine = function(fromPos, toPos, color, lineThickness)
 	{
 		var drawPos = this.drawPos;
 
 		this.graphics.strokeStyle = color;
-			this.graphics.beginPath();
+		var lineWidthToRestore = this.graphics.lineWidth;
+		if (lineThickness != null)
+		{
+			this.graphics.lineWidth = lineThickness;
+		}
+
+		this.graphics.beginPath();
 
 		drawPos.overwriteWith(fromPos);
 		this.graphics.moveTo(drawPos.x, drawPos.y);
@@ -257,6 +263,8 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		this.graphics.lineTo(drawPos.x, drawPos.y);
 
 		this.graphics.stroke();
+
+		this.graphics.lineWidth = lineWidthToRestore;
 	};
 
 	Display.prototype.drawPath = function(vertices, color, lineThickness)

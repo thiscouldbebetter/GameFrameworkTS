@@ -334,17 +334,46 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 	var friendlyColor = "Green";
 	var friendlyPos = new Coords().randomize().multiply(this.size);
 	var friendlyLoc = new Location(friendlyPos);
+	var friendlyDimension = entityDimension;
 
-	var friendlyCollider = new Sphere(friendlyLoc.pos, entityDimensionHalf);
+	var friendlyCollider = new Sphere(friendlyLoc.pos, friendlyDimension);
 
-	var friendlyVisualNormal = new VisualEllipse
-	(
-		entityDimensionHalf, // semimajorAxis
-		entityDimensionHalf * .8,
-		.125, // rotationInTurns
-		friendlyColor,
-		null // colorBorder
-	);
+	var friendlyVisualNormal = new VisualGroup
+	([
+		new VisualEllipse
+		(
+			friendlyDimension, // semimajorAxis
+			friendlyDimension * .8,
+			.25, // rotationInTurns
+			friendlyColor,
+			null // colorBorder
+		),
+
+		new VisualOffset(visualEyesBlinking, new Coords(0, -friendlyDimension / 3)),
+
+		new VisualOffset
+		(
+			new VisualArc
+			(
+				new Arc
+				(
+					new Shell
+					(
+						new Sphere(friendlyPos, friendlyDimension / 2), // sphereOuter
+						0 // radiusInner
+					),
+					new Wedge
+					(
+						friendlyPos,
+						new Coords(1, 0, 0), // directionMin
+						.5 // angleSpannedInTurns
+					)
+				),
+				"White"
+			),
+			new Coords(0, friendlyDimension / 3) // offset
+		)
+	]);
 
 	var friendlyVisual = new VisualGroup
 	([
@@ -371,7 +400,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 		new VisualOffset
 		(
 			new VisualText("Talker", friendlyColor),
-			new Coords(0, entityDimension)
+			new Coords(0, friendlyDimension * 2)
 		)
 	]);
 
@@ -450,10 +479,11 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 		1 // thickness
 	);
 
-	var enemyVisualArm = new VisualRay
+	var enemyVisualArm = new VisualPolars
 	(
-		enemyDimension, // length
-		enemyColor
+		[ new Polar(0, enemyDimension) ],
+		enemyColor,
+		2 // lineThickness
 	);
 
 	var visualEyesBlinkingWithBrows = new VisualGroup

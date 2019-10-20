@@ -408,9 +408,9 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 		this._display2DOverlay.drawImage(imageToDraw, pos, size);
 	};
 
-	Display3D.prototype.drawLine = function(fromPos, toPos, color)
+	Display3D.prototype.drawLine = function(fromPos, toPos, color, lineThickness)
 	{
-		this._display2DOverlay.drawLine(fromPos, toPos, color);
+		this._display2DOverlay.drawLine(fromPos, toPos, color, lineThickness);
 	};
 
 	Display3D.prototype.drawPath = function(vertices, color, lineThickness)
