@@ -1,12 +1,16 @@
 
-function VisualAnimation(name, ticksPerFrame, frames, isRepeating)
+function VisualAnimation(name, ticksToHoldFrames, frames, isRepeating)
 {
 	this.name = name;
-	this.ticksPerFrame = ticksPerFrame;
+	this.ticksToHoldFrames = ticksToHoldFrames;
 	this.frames = frames;
 	this.isRepeating = (isRepeating == null ? true : isRepeating);
 
-	this.ticksToComplete = this.frames.length * this.ticksPerFrame;
+	this.ticksToComplete = 0;
+	for (var f = 0; f < this.ticksToHoldFrames.length; f++)
+	{
+		this.ticksToComplete += this.ticksToHoldFrames[f];
+	}
 }
 
 {
@@ -32,7 +36,7 @@ function VisualAnimation(name, ticksPerFrame, frames, isRepeating)
 function AnimationRun(defn)
 {
 	this.defn = defn;
-	this.ticksSinceStarted = 0;
+	this.ticksSinceStarted = Math.floor(Math.random() * this.defn.ticksToComplete);
 }
 {
 	AnimationRun.prototype.frameCurrent = function()
@@ -44,7 +48,19 @@ function AnimationRun(defn)
 
 	AnimationRun.prototype.frameIndexCurrent = function()
 	{
-		return Math.floor(this.ticksSinceStarted / this.defn.ticksPerFrame);
+		var ticksForFramesSoFar = 0;
+		var f = 0;
+		var ticksToHoldFrames = this.defn.ticksToHoldFrames;
+		for (f = 0; f < ticksToHoldFrames.length; f++)
+		{
+			var ticksToHoldFrame = ticksToHoldFrames[f];
+			ticksForFramesSoFar += ticksToHoldFrame;
+			if (ticksForFramesSoFar >= this.ticksSinceStarted)
+			{
+				break;
+			}
+		}
+		return f;
 	};
 
 	AnimationRun.prototype.isComplete = function()

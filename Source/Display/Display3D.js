@@ -413,6 +413,11 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 		this._display2DOverlay.drawLine(fromPos, toPos, color);
 	};
 
+	Display3D.prototype.drawPath = function(vertices, color, lineThickness)
+	{
+		this._display2DOverlay.drawPath(vertices, color, lineThickness);
+	};
+
 	Display3D.prototype.drawPolygon = function(vertices, colorFill, colorBorder)
 	{
 		this._display2DOverlay.drawPolygon(vertices, colorFill, colorBorder);

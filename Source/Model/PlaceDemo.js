@@ -200,42 +200,21 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 		)
 	]);
 
+	var visualEyesBlinking = new VisualAnimation
+	(
+		"EyesBlinking",
+		[ 50, 5 ], // ticksToHoldFrames
+		[ visualEyes, new VisualNone() ],
+	);
+
 	var visualEyesDirectional = new VisualDirectional
 	(
-		visualEyes,
+		visualEyesBlinking, // visualForNoDirection
 		[
-			new VisualAnimation
-			(
-				"MoveRight",
-				5, // ticksPerFrame
-				[
-					new VisualOffset(visualEyes, new Coords(1, 0).multiplyScalar(visualEyeRadius)),
-				]
-			),
-			new VisualAnimation
-			(
-				"MoveDown",
-				5, // ticksPerFrame
-				[
-					new VisualOffset(visualEyes, new Coords(0, 1).multiplyScalar(visualEyeRadius)),
-				]
-			),
-			new VisualAnimation
-			(
-				"MoveLeft",
-				5, // ticksPerFrame
-				[
-					new VisualOffset(visualEyes, new Coords(-1, 0).multiplyScalar(visualEyeRadius)),
-				]
-			),
-			new VisualAnimation
-			(
-				"MoveUp",
-				5, // ticksPerFrame
-				[
-					new VisualOffset(visualEyes, new Coords(0, -1).multiplyScalar(visualEyeRadius)),
-				]
-			),
+			new VisualOffset(visualEyesBlinking, new Coords(1, 0).multiplyScalar(visualEyeRadius)),
+			new VisualOffset(visualEyesBlinking, new Coords(0, 1).multiplyScalar(visualEyeRadius)),
+			new VisualOffset(visualEyesBlinking, new Coords(-1, 0).multiplyScalar(visualEyeRadius)),
+			new VisualOffset(visualEyesBlinking, new Coords(0, -1).multiplyScalar(visualEyeRadius))
 		]
 	);
 
@@ -372,13 +351,13 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 		new VisualAnimation
 		(
 			"Friendly",
-			100, // ticksPerFrame
+			[ 100, 100 ], // ticksToHoldFrames
 			// children
 			[
 				new VisualAnimation
 				(
 					"Blinking",
-					3, // ticksPerFrame
+					[ 3, 3 ], // ticksToHoldFrames
 					[
 						new VisualNone(),
 						friendlyVisualNormal
@@ -459,7 +438,8 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 	var enemyDimension = entityDimension * 2;
 
 	var enemyColliderAsFace = new Face([
-		new Coords(0, -1).multiplyScalar(enemyDimension).half(),
+		new Coords(-.5, -1).multiplyScalar(enemyDimension).half(),
+		new Coords(.5, -1).multiplyScalar(enemyDimension).half(),
 		new Coords(1, 1).multiplyScalar(enemyDimension).half(),
 		new Coords(-1, 1).multiplyScalar(enemyDimension).half(),
 	]);
@@ -470,17 +450,51 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 		1 // thickness
 	);
 
+	var enemyVisualArm = new VisualRay
+	(
+		enemyDimension, // length
+		enemyColor
+	);
+
+	var visualEyesBlinkingWithBrows = new VisualGroup
+	([
+		visualEyes,
+		new VisualPath
+		(
+			new Path([new Coords(-8, -8), new Coords(0, 0), new Coords(8, -8)]),
+			"rgb(64, 64, 64)",
+			3 // lineThickness
+		),
+	]);
+
+	var visualEyesWithBrowsDirectional = new VisualDirectional
+	(
+		visualEyesBlinking, // visualForNoDirection
+		[
+			new VisualOffset(visualEyesBlinkingWithBrows, new Coords(1, 0).multiplyScalar(visualEyeRadius)),
+			new VisualOffset(visualEyesBlinkingWithBrows, new Coords(0, 1).multiplyScalar(visualEyeRadius)),
+			new VisualOffset(visualEyesBlinkingWithBrows, new Coords(-1, 0).multiplyScalar(visualEyeRadius)),
+			new VisualOffset(visualEyesBlinkingWithBrows, new Coords(0, -1).multiplyScalar(visualEyeRadius))
+		]
+	);
+
 	var enemyVisual = new VisualGroup
 	([
 		new VisualDirectional
 		(
 			new VisualNone(),
 			[
-				new VisualRay
-				(
-					enemyDimension * 1.25, // length
-					enemyColor
-				)
+				new VisualGroup
+				([
+					new VisualOffset
+					(
+						enemyVisualArm, new Coords(-enemyDimension / 4, 0)
+					),
+					new VisualOffset
+					(
+						enemyVisualArm, new Coords(enemyDimension / 4, 0)
+					)
+				])
 			]
 		),
 		new VisualPolygon
@@ -489,7 +503,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 			enemyColor,
 			null // colorBorder
 		),
-		visualEyesDirectional,
+		visualEyesWithBrowsDirectional,
 		new VisualOffset
 		(
 			new VisualText("Chaser", enemyColor),

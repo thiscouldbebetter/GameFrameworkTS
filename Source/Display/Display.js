@@ -259,6 +259,37 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		this.graphics.stroke();
 	};
 
+	Display.prototype.drawPath = function(vertices, color, lineThickness)
+	{
+		var lineWidthSaved = this.graphics.lineWidth;
+
+		this.graphics.lineWidth = (lineThickness == null ? 1 : lineThickness);
+
+		this.graphics.beginPath();
+
+		var drawPos = this.drawPos;
+
+		for (var i = 0; i < vertices.length; i++)
+		{
+			var vertex = vertices[i];
+			drawPos.overwriteWith(vertex);
+			if (i == 0)
+			{
+				this.graphics.moveTo(drawPos.x, drawPos.y);
+			}
+			else
+			{
+				this.graphics.lineTo(drawPos.x, drawPos.y);
+			}
+		}
+
+		this.graphics.strokeStyle = color;
+
+		this.graphics.stroke();
+
+		this.graphics.lineWidth = lineWidthSaved;
+	};
+
 	Display.prototype.drawPixel = function(pos, color)
 	{
 		this.graphics.fillStyle = color;
