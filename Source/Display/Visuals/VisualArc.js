@@ -1,31 +1,36 @@
 
-function VisualArc(arc, colorFill, colorBorder)
+function VisualArc(radiusOuter, radiusInner, directionMin, angleSpannedInTurns, colorFill, colorBorder)
 {
-	this.arc = arc;
+	this.radiusOuter = radiusOuter;
+	this.radiusInner = radiusInner;
+	this.directionMin = directionMin;
+	this.angleSpannedInTurns = angleSpannedInTurns;
 	this.colorFill = colorFill;
 	this.colorBorder = colorBorder;
 
 	// helper variables
-	this.drawPos = new Coords();
+	this._drawPos = new Coords();
+	this._polar = new Polar();
 }
 {
 	VisualArc.prototype.draw = function(universe, world, display, drawable, entity)
 	{
-		var arc = this.arc;
-		var shell = arc.shell;
-		var wedge = arc.wedge;
-		var wedgeAngleMin = wedge.angleInTurnsMin();
-		var wedgeAngleMax = wedge.angleInTurnsMax();
-
-		var drawPos = this.drawPos.overwriteWith
+		var drawableLoc = drawable.loc;
+		var drawPos = this._drawPos.overwriteWith
 		(
-			drawable.loc.pos
+			drawableLoc.pos
 		);
+
+		var drawableAngleInTurns = drawableLoc.orientation.headingInTurns();
+		var wedgeAngleMin =
+			drawableAngleInTurns
+			+ this._polar.fromCoords(this.directionMin).azimuthInTurns;
+		var wedgeAngleMax = wedgeAngleMin + this.angleSpannedInTurns;
 
 		display.drawArc
 		(
 			drawPos, // center
-			shell.sphereInner.radius, shell.sphereOuter.radius,
+			this.radiusInner, this.radiusOuter,
 			wedgeAngleMin, wedgeAngleMax,
 			this.colorFill, this.colorBorder
 		);

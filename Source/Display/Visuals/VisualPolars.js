@@ -34,6 +34,8 @@ function VisualPolars(polars, color, lineThickness)
 			(
 				fromPos, toPos, this.color, this.lineThickness
 			);
+
+			fromPos.overwriteWith(toPos);
 		}
 	};
 }

@@ -3,117 +3,9 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 {
 	this.size = size;
 
-	var cameraViewSize = this.size.clone().half();
-	var cameraFocalLength = cameraViewSize.x;
-	this.camera = new Camera
-	(
-		cameraViewSize,
-		cameraFocalLength, // focalLength
-		new Location
-		(
-			new Coords(0, 0, -cameraFocalLength),
-			Orientation.Instances().ForwardZDownY.clone()
-		)
-	);
+	this.cameraBuild();
 
-	var coordsInstances = Coords.Instances();
-
-	this.actions =
-	[
-		Action.Instances().DoNothing,
-		new Action
-		(
-			"ShowMenu",
-			function perform(universe, world, place, actor)
-			{
-				var venueNext = new VenueControls
-				(
-					universe.controlBuilder.configure(universe)
-				);
-				venueNext = new VenueFader(venueNext, universe.venueCurrent);
-				universe.venueNext = venueNext;
-			}
-		),
-		new Action
-		(
-			"MoveDown",
-			function perform(universe, world, place, actor)
-			{
-				place.entityAccelerateInDirection
-				(
-					world, actor, coordsInstances.ZeroOneZero
-				);
-			}
-		),
-		new Action
-		(
-			"MoveLeft",
-			function perform(universe, world, place, actor)
-			{
-				place.entityAccelerateInDirection
-				(
-					world, actor, coordsInstances.MinusOneZeroZero
-				);
-			}
-		),
-		new Action
-		(
-			"MoveRight",
-			function perform(universe, world, place, actor)
-			{
-				place.entityAccelerateInDirection
-				(
-					world, actor, coordsInstances.OneZeroZero
-				);
-			}
-		),
-		new Action
-		(
-			"MoveUp",
-			function perform(universe, world, place, actor)
-			{
-				place.entityAccelerateInDirection
-				(
-					world, actor, coordsInstances.ZeroMinusOneZero
-				);
-			}
-		),
-		new Action
-		(
-			"Fire",
-			function perform(universe, world, place, actor)
-			{
-				var itemWeapon = new Item("Weapon", 1);
-				var itemHolder = actor.ItemHolder;
-				var actorHasWeapon = itemHolder.hasItems(itemWeapon);
-
-				if (actorHasWeapon)
-				{
-					var entityWeapon = itemHolder.itemEntities["Weapon"];
-					var deviceWeapon = entityWeapon.Device;
-					deviceWeapon.use(universe, world, place, actor, deviceWeapon);
-				}
-			}
-		),
-	].addLookupsByName();
-
-	this.inputToActionMappings =
-	[
-		new InputToActionMapping("Escape", "ShowMenu"),
-
-		new InputToActionMapping("ArrowDown", "MoveDown"),
-		new InputToActionMapping("ArrowLeft", "MoveLeft"),
-		new InputToActionMapping("ArrowRight", "MoveRight"),
-		new InputToActionMapping("ArrowUp", "MoveUp"),
-		new InputToActionMapping("Enter", "Fire"),
-
-		new InputToActionMapping("Gamepad0Down", "MoveDown"),
-		new InputToActionMapping("Gamepad0Left", "MoveLeft"),
-		new InputToActionMapping("Gamepad0Right", "MoveRight"),
-		new InputToActionMapping("Gamepad0Up", "MoveUp"),
-		new InputToActionMapping("Gamepad0Button0", "Fire"),
-
-	].addLookups( function(x) { return x.inputName; } );
+	this.actionsAndInputMappingsBuild();
 
 	// entities
 
@@ -123,808 +15,50 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 
 	var entities = [];
 
-	// background
-	var visualBackgroundDimension = 100;
+	this.entityBuildBackground(entities);
 
-	var visualBackgroundCellSize =
-		new Coords(.5, .5, .01).multiplyScalar(visualBackgroundDimension);
-	var visualBackgroundBottom = new VisualRepeating
-	(
-		visualBackgroundCellSize,
-		this.camera.viewSize.clone(), // viewSize
-		new VisualRectangle
-		(
-			visualBackgroundCellSize,
-			null, "rgba(255, 255, 255, 0.02)"
-		)
-	);
-	var entityBackgroundBottom = new Entity
-	(
-		"BackgroundBottom",
-		[
-			new Locatable(new Location(new Coords(0, 0, cameraFocalLength))),
-			new Drawable(visualBackgroundBottom)
-		]
-	);
-	entities.push(entityBackgroundBottom);
+	var visualEyeRadius = entityDimension * .75 / 2;
+	var visualEyesBlinking = this.visualEyesBlinkingBuild(visualEyeRadius);
 
-	visualBackgroundCellSize =
-		new Coords(1, 1, .01).multiplyScalar(visualBackgroundDimension);
-	var visualBackgroundTop = new VisualRepeating
-	(
-		visualBackgroundCellSize, // cellSize
-		this.camera.viewSize.clone(), // viewSize
-		new VisualRectangle
-		(
-			visualBackgroundCellSize,
-			null, "rgba(255, 255, 255, 0.06)"
-		)
-	);
-	var entityBackgroundTop = new Entity
-	(
-		"BackgroundTop",
-		[
-			new Locatable(new Location(new Coords(0, 0, 0))),
-			new Drawable(visualBackgroundTop)
-		]
-	);
-	entities.push(entityBackgroundTop);
-
-
-	// player
-
-	var playerPos = new Coords(30, 30);
-	var playerLoc = new Location(playerPos);
-	var playerHeadRadius = entityDimension * .75;
-	var playerCollider = new Sphere(playerLoc.pos, playerHeadRadius);
-	var playerColor = "Gray";
-
-	var visualEyeRadius = playerHeadRadius / 2;
-	var visualPupilRadius = visualEyeRadius / 2;
-
-	var visualEye = new VisualGroup
-	([
-		new VisualCircle(visualEyeRadius, "White"),
-		new VisualCircle(visualPupilRadius, "Black")
-	]);
-
-	var visualEyes = new VisualGroup
-	([
-		new VisualOffset
-		(
-			visualEye, new Coords(-visualEyeRadius, 0)
-		),
-		new VisualOffset
-		(
-			visualEye, new Coords(visualEyeRadius, 0)
-		)
-	]);
-
-	var visualEyesBlinking = new VisualAnimation
-	(
-		"EyesBlinking",
-		[ 50, 5 ], // ticksToHoldFrames
-		[ visualEyes, new VisualNone() ],
-	);
-
-	var visualEyesDirectional = new VisualDirectional
-	(
-		visualEyesBlinking, // visualForNoDirection
-		[
-			new VisualOffset(visualEyesBlinking, new Coords(1, 0).multiplyScalar(visualEyeRadius)),
-			new VisualOffset(visualEyesBlinking, new Coords(0, 1).multiplyScalar(visualEyeRadius)),
-			new VisualOffset(visualEyesBlinking, new Coords(-1, 0).multiplyScalar(visualEyeRadius)),
-			new VisualOffset(visualEyesBlinking, new Coords(0, -1).multiplyScalar(visualEyeRadius))
-		]
-	);
-
-	var playerVisualName = new VisualOffset
-	(
-		new VisualText("Player", playerColor),
-		new Coords(0, playerHeadRadius * 2)
-	);
-
-	var playerVisual = new VisualGroup
-	([
-		new VisualCircle(playerHeadRadius, playerColor),
-		visualEyesDirectional,
-		playerVisualName
-	]);
-
-	var playerCollide = function(universe, world, place, entityPlayer, entityOther)
-	{
-		var messageToDisplay = null;
-
-		if (entityOther.Damager != null)
-		{
-			universe.collisionHelper.collideCollidables(entityPlayer, entityOther);
-
-			var playerAsKillable = entityPlayer.Killable;
-			playerAsKillable.integrity -= entityOther.Damager.damagePerHit;
-		}
-		else if (entityOther.Goal != null)
-		{
-			var keysRequired =
-				new Item("Key", entityOther.Goal.numberOfKeysToUnlock);
-			if (entityPlayer.ItemHolder.hasItems(keysRequired))
-			{
-				var venueMessage = new VenueMessage
-				(
-					"You win!",
-					new VenueControls(universe.controlBuilder.title(universe)), // venueNext
-					universe.venueCurrent, // venuePrev
-					universe.display.sizeDefault().clone().half()
-				);
-				universe.venueNext = venueMessage;
-			}
-		}
-		else if (entityOther.Item != null)
-		{
-			entityPlayer.ItemHolder.itemEntityAdd(entityOther);
-			place.entitiesToRemove.push(entityOther);
-		}
-		else if (entityOther.Talker != null)
-		{
-			entityOther.Collidable.ticksUntilCanCollide = 100;
-			entityOther.Drawable.animationRuns["Friendly"].ticksSinceStarted = 0;
-
-			var conversationDefnAsJSON =
-				universe.mediaLibrary.textStringGetByName("Conversation").value;
-			var conversationDefn = ConversationDefn.deserialize(conversationDefnAsJSON);
-			var venueToReturnTo = universe.venueCurrent;
-			var conversation = new ConversationRun
-			(
-				conversationDefn,
-				function quit(conversationRun)
-				{
-					universe.venueNext = venueToReturnTo;
-				}
-			);
-			var conversationSize = universe.display.sizeDefault().clone();
-			var conversationAsControl =
-				conversation.toControl(conversationSize, universe);
-
-			var venueNext = new VenueControls(conversationAsControl);
-
-			universe.venueNext = venueNext;
-		}
-	};
-
-	var constraintSpeedMax5 = new Constraint("SpeedMax", 5);
-	var constraintFriction = new Constraint("Friction", .03);
-
-	var playerEntity = new Entity
-	(
-		"Player",
-		[
-			new Locatable(playerLoc),
-			new Constrainable([constraintFriction, constraintSpeedMax5]),
-			new Collidable
-			(
-				playerCollider,
-				[ Collidable.name ], // entityPropertyNamesToCollideWith
-				playerCollide
-			),
-			new Drawable(playerVisual),
-			new ItemHolder(),
-			new Playable(),
-			new Idleable(),
-			new Killable
-			(
-				5, // integrity
-				function die(universe, world, place, entityKillable)
-				{
-					var venueMessage = new VenueMessage
-					(
-						"You lose!",
-						new VenueControls(universe.controlBuilder.title(universe)), // venueNext
-						universe.venueCurrent, // venuePrev
-						universe.display.sizeDefault().clone().half()
-					);
-					universe.venueNext = venueMessage;
-				}
-			)
-		]
-	);
-
-	entities.push(playerEntity);
-
-	// friendly
-
-	var friendlyColor = "Green";
-	var friendlyPos = new Coords().randomize().multiply(this.size);
-	var friendlyLoc = new Location(friendlyPos);
-	var friendlyDimension = entityDimension;
-
-	var friendlyCollider = new Sphere(friendlyLoc.pos, friendlyDimension);
-
-	var friendlyVisualNormal = new VisualGroup
-	([
-		new VisualEllipse
-		(
-			friendlyDimension, // semimajorAxis
-			friendlyDimension * .8,
-			.25, // rotationInTurns
-			friendlyColor,
-			null // colorBorder
-		),
-
-		new VisualOffset(visualEyesBlinking, new Coords(0, -friendlyDimension / 3)),
-
-		new VisualOffset
-		(
-			new VisualArc
-			(
-				new Arc
-				(
-					new Shell
-					(
-						new Sphere(friendlyPos, friendlyDimension / 2), // sphereOuter
-						0 // radiusInner
-					),
-					new Wedge
-					(
-						friendlyPos,
-						new Coords(1, 0, 0), // directionMin
-						.5 // angleSpannedInTurns
-					)
-				),
-				"White"
-			),
-			new Coords(0, friendlyDimension / 3) // offset
-		)
-	]);
-
-	var friendlyVisual = new VisualGroup
-	([
-		new VisualAnimation
-		(
-			"Friendly",
-			[ 100, 100 ], // ticksToHoldFrames
-			// children
-			[
-				new VisualAnimation
-				(
-					"Blinking",
-					[ 3, 3 ], // ticksToHoldFrames
-					[
-						new VisualNone(),
-						friendlyVisualNormal
-					]
-				),
-
-				friendlyVisualNormal
-			],
-			false // isRepeating
-		),
-		new VisualOffset
-		(
-			new VisualText("Talker", friendlyColor),
-			new Coords(0, friendlyDimension * 2)
-		)
-	]);
+	var playerEntity = this.entityBuildPlayer(entities, entityDimension, visualEyeRadius, visualEyesBlinking);
+	var playerPos = playerEntity.Locatable.loc.pos;
 
 	var constraintSpeedMax1 = new Constraint("SpeedMax", 1);
 
-	var friendlyEntity = new Entity
+	this.entityBuildFriendly(entities, entityDimension, constraintSpeedMax1, visualEyesBlinking);
+
+	var damagerColor = this.entityBuildEnemy
 	(
-		"Friendly",
-		[
-			new Locatable(friendlyLoc),
-			new Constrainable([constraintSpeedMax1]),
-			new Collidable(friendlyCollider),
-			new Drawable(friendlyVisual),
-			new Talker("AnEveningWithProfessorSurly"),
-			new Actor
-			(
-				function activity(universe, world, place, entityActor, target)
-				{
-					var actor = entityActor.Actor;
-					var targetPos = actor.target;
-					if (targetPos == null)
-					{
-						targetPos =
-							new Coords().randomize().multiply(place.size);
-						actor.target = targetPos;
-					}
-
-					var actorLoc = entityActor.Locatable.loc;
-					var actorPos = actorLoc.pos;
-
-					var distanceToTarget = targetPos.clone().subtract
-					(
-						actorPos
-					).magnitude();
-
-					if (distanceToTarget >= 2)
-					{
-						actorLoc.vel.overwriteWith
-						(
-							targetPos
-						).subtract
-						(
-							actorPos
-						).normalize();
-					}
-					else
-					{
-						actorPos.overwriteWith(targetPos);
-						actor.target = null;
-					}
-				}
-			),
-		]
+		entities, entityDimension, constraintSpeedMax1, playerPos, visualEyeRadius, visualEyesBlinking
 	);
-
-	entities.push(friendlyEntity);
-
-	// enemy
-
-	var damagerColor = "Red";
-	var enemyColor = damagerColor;
-	var enemyPos = this.size.clone().subtract(playerLoc.pos);
-	var enemyLoc = new Location(enemyPos);
-	var enemyDimension = entityDimension * 2;
-
-	var enemyColliderAsFace = new Face([
-		new Coords(-.5, -1).multiplyScalar(enemyDimension).half(),
-		new Coords(.5, -1).multiplyScalar(enemyDimension).half(),
-		new Coords(1, 1).multiplyScalar(enemyDimension).half(),
-		new Coords(-1, 1).multiplyScalar(enemyDimension).half(),
-	]);
-	var enemyCollider = Mesh.fromFace
-	(
-		enemyPos, // center
-		enemyColliderAsFace,
-		1 // thickness
-	);
-
-	var enemyVisualArm = new VisualPolars
-	(
-		[ new Polar(0, enemyDimension) ],
-		enemyColor,
-		2 // lineThickness
-	);
-
-	var visualEyesBlinkingWithBrows = new VisualGroup
-	([
-		visualEyes,
-		new VisualPath
-		(
-			new Path([new Coords(-8, -8), new Coords(0, 0), new Coords(8, -8)]),
-			"rgb(64, 64, 64)",
-			3 // lineThickness
-		),
-	]);
-
-	var visualEyesWithBrowsDirectional = new VisualDirectional
-	(
-		visualEyesBlinking, // visualForNoDirection
-		[
-			new VisualOffset(visualEyesBlinkingWithBrows, new Coords(1, 0).multiplyScalar(visualEyeRadius)),
-			new VisualOffset(visualEyesBlinkingWithBrows, new Coords(0, 1).multiplyScalar(visualEyeRadius)),
-			new VisualOffset(visualEyesBlinkingWithBrows, new Coords(-1, 0).multiplyScalar(visualEyeRadius)),
-			new VisualOffset(visualEyesBlinkingWithBrows, new Coords(0, -1).multiplyScalar(visualEyeRadius))
-		]
-	);
-
-	var enemyVisual = new VisualGroup
-	([
-		new VisualDirectional
-		(
-			new VisualNone(),
-			[
-				new VisualGroup
-				([
-					new VisualOffset
-					(
-						enemyVisualArm, new Coords(-enemyDimension / 4, 0)
-					),
-					new VisualOffset
-					(
-						enemyVisualArm, new Coords(enemyDimension / 4, 0)
-					)
-				])
-			]
-		),
-		new VisualPolygon
-		(
-			new Path(enemyColliderAsFace.vertices),
-			enemyColor,
-			null // colorBorder
-		),
-		visualEyesWithBrowsDirectional,
-		new VisualOffset
-		(
-			new VisualText("Chaser", enemyColor),
-			new Coords(0, enemyDimension)
-		)
-	]);
-
-	var enemyEntity = new Entity
-	(
-		"Enemy",
-		[
-			new Locatable(enemyLoc),
-			new Constrainable([constraintSpeedMax1]),
-			new Collidable(enemyCollider),
-			new Damager(1),
-			new Killable(1),
-			new Drawable(enemyVisual),
-			new Actor
-			(
-				function activity(universe, world, place, actor, entityToTargetName)
-				{
-					var target = place.entities[entityToTargetName];
-					var actorLoc = actor.Locatable.loc;
-
-					actorLoc.accel.overwriteWith
-					(
-						target.Locatable.loc.pos
-					).subtract
-					(
-						actorLoc.pos
-					).normalize().multiplyScalar(.1);
-
-					actorLoc.orientation.forwardSet(actorLoc.accel.clone().normalize());
-				},
-				"Player"
-			),
-		]
-	);
-
-	entities.push(enemyEntity);
 
 	var obstacleColor = damagerColor;
 
-	var numberOfWalls = 4;
-	var wallThickness = 5;
-
-	for (var i = 0; i < numberOfWalls; i++)
-	{
-		var obstacleWallSize;
-		if (i % 2 == 0)
-		{
-			obstacleWallSize = new Coords(size.x, wallThickness, 1);
-		}
-		else
-		{
-			obstacleWallSize = new Coords(wallThickness, size.y, 1);
-		}
-
-		var obstacleWallPos = obstacleWallSize.clone().half().clearZ();
-		if (i >= 2)
-		{
-			obstacleWallPos.invert().add(size);
-		}
-
-		var obstacleWallLoc = new Location(obstacleWallPos);
-		var obstacleCollider =
-			new Bounds(obstacleWallPos, obstacleWallSize);
-		var obstacleWallVisual = new VisualRectangle
-		(
-			obstacleWallSize, obstacleColor
-		);
-
-		var obstacleWallEntity = new Entity
-		(
-			"ObstacleWall" + i,
-			[
-				new Locatable(obstacleWallLoc),
-				new Collidable(obstacleCollider),
-				new Damager(1),
-				new Drawable(obstacleWallVisual)
-			]
-		);
-
-		entities.push(obstacleWallEntity);
-	}
-
-	var obstacleMappedCellSource =
-	[
-		"....xxxx....",
-		".....xx.....",
-		".....xx....",
-		"....xxxx....",
-		"x..xx..xx..x",
-		"xxxx.xx.xxxx",
-		"xxxx.xx.xxxx",
-		"x..xx..xx..x",
-		"....xxxx....",
-		".....xx.....",
-		".....xx.....",
-		"....xxxx....",
-	];
-	var obstacleMappedSizeInCells = new Coords
-	(
-		obstacleMappedCellSource[0].length,
-		obstacleMappedCellSource.length,
-		1
-	);
-
-	var obstacleMappedCellSize = new Coords(2, 2, 1);
-
-	var obstacleMappedMap = new Map
-	(
-		obstacleMappedSizeInCells,
-		obstacleMappedCellSize,
-		new MapCell(), // cellPrototype
-		function cellAtPosInCells(map, cellPosInCells, cellToOverwrite)
-		{
-			var cellCode = map.cellSource[cellPosInCells.y][cellPosInCells.x];
-			var cellVisualName = (cellCode == "x" ? "Blocking" : "Open");
-			var cellIsBlocking = (cellCode == "x");
-			cellToOverwrite.visualName = cellVisualName;
-			cellToOverwrite.isBlocking = cellIsBlocking;
-			return cellToOverwrite;
-		},
-		obstacleMappedCellSource
-	);
-
-	var obstacleMappedVisualLookup =
-	{
-		"Blocking" : new VisualRectangle(obstacleMappedCellSize, obstacleColor),
-		"Open" : new VisualNone()
-	};
-	var obstacleMappedVisual = new VisualGroup
-	([
-		new VisualMap(obstacleMappedMap, obstacleMappedVisualLookup),
-		new VisualOffset
-		(
-			new VisualText("Mine", obstacleColor),
-			new Coords(0, entityDimension)
-		)
-	]);
-
+	var wallThickness = this.entityBuildObstacleWalls(entities, obstacleColor);
 	var marginThickness = wallThickness * 4;
 	var marginSize = new Coords(1, 1, 0).multiplyScalar(marginThickness);
-	var sizeMinusMargins =
-		this.size.clone().subtract(marginSize).subtract(marginSize);
 
-	var numberOfMines = 48;
-	var entitiesObstacles = [];
-	for (var i = 0; i < numberOfMines; i++)
-	{
-		var obstacleMappedPos =
-			new Coords().randomize().multiply(sizeMinusMargins).add(marginSize);
-		var obstacleMappedLoc = new Location(obstacleMappedPos);
+	var entitiesObstacles = this.entityBuildObstacleMines(entities, entityDimension, obstacleColor, marginSize);
 
-		var obstacleMappedEntity = new Entity
-		(
-			"ObstacleMapped",
-			[
-				new Locatable(obstacleMappedLoc),
-				new Collidable(new MapLocated(obstacleMappedMap, obstacleMappedLoc)),
-				new Damager(1),
-				new Drawable(obstacleMappedVisual)
-			]
-		);
+	this.entityBuildObstacleBar(entities, entityDimension, obstacleColor, playerPos);
 
-		entitiesObstacles.push(obstacleMappedEntity);
-		entities.push(obstacleMappedEntity);
-	}
-
-	// obstacleBar
-
-	var obstacleBarSize = new Coords(6, 2).multiplyScalar(entityDimension);
-	var obstaclePos = playerPos.clone().add(obstacleBarSize).add(obstacleBarSize);
-	var obstacleLoc = new Location(obstaclePos);
-	var obstacleCollider = new Bounds
+	var itemKeyColor = this.entityBuildKeys
 	(
-		obstaclePos,
-		obstacleBarSize
+		entities, entityDimension, numberOfKeysToUnlockGoal, entitiesObstacles, marginSize
 	);
 
-	var obstacleBarEntity = new Entity
+	this.entityBuildWeapon(entities, entityDimension, playerPos);
+
+	var goalEntity = this.entityBuildGoal
 	(
-		"ObstacleBar",
-		[
-			new Locatable(obstacleLoc),
-			new Collidable(obstacleCollider),
-			new Damager(1),
-			new Drawable
-			(
-				new VisualGroup
-				([
-					new VisualRectangle
-					(
-						obstacleCollider.size,
-						obstacleColor, obstacleColor
-					),
-					new VisualOffset
-					(
-						new VisualText("Bar", obstacleColor),
-						new Coords(0, obstacleCollider.size.y)
-					)
-				])
-			)
-		]
+		entities, entityDimension, entitySize, numberOfKeysToUnlockGoal, itemKeyColor
 	);
 
-	entities.push(obstacleBarEntity);
+	this.entityBuildObstacleRing(entities, entityDimension, goalEntity, obstacleColor);
 
-	var itemKeyColor = "Yellow";
-	var itemKeyVisual = new VisualGroup
-	([
-		new VisualCircle(entityDimensionHalf, itemKeyColor),
-		new VisualOffset
-		(
-			new VisualText("Key", itemKeyColor),
-			new Coords(0, entityDimension)
-		)
-	]);
+	this.entitiesAllAddCameraProjection(entities);
 
-	var obstacleExclusionRadius = 32;
-	var displacement = new Coords();
-
-	for (var i = 0; i < numberOfKeysToUnlockGoal; i++)
-	{
-		var itemKeyPos =
-			new Coords().randomize().multiply(sizeMinusMargins).add(marginSize);
-
-		for (var j = 0; j < entitiesObstacles.length; j++)
-		{
-			var obstaclePos = entitiesObstacles[j].Locatable.loc.pos;
-			var distanceFromObstacle =
-				displacement.overwriteWith(obstaclePos).magnitude();
-			if (distanceFromObstacle < obstacleExclusionRadius)
-			{
-				displacement.normalize().multiplyScalar(obstacleExclusionRadius);
-				obstaclePos.add(displacement);
-			}
-		}
-
-		var itemKeyCollider = new Sphere(itemKeyPos, entityDimensionHalf);
-
-		var itemKeyEntity = new Entity
-		(
-			"Key" + i,
-			[
-				new Item("Key", 1),
-				new Locatable( new Location(itemKeyPos) ),
-				new Collidable(itemKeyCollider),
-				new Drawable(itemKeyVisual)
-			]
-		);
-
-		entities.push(itemKeyEntity);
-	}
-
-	var itemWeaponColor = "Cyan";
-	var itemWeaponVisual = new VisualGroup
-	([
-		new VisualCircle(entityDimensionHalf, itemWeaponColor),
-		new VisualOffset
-		(
-			new VisualText("Weapon", itemWeaponColor),
-			new Coords(0, entityDimension)
-		)
-	]);
-
-	var itemWeaponPos =
-		//new Coords().randomize().multiply(sizeMinusMargins);
-		playerPos.clone().double();
-	var itemWeaponCollider = new Sphere(itemWeaponPos, entityDimensionHalf);
-
-	var itemWeaponDevice = Device.gun();
-
-	var itemWeaponEntity = new Entity
-	(
-		"Weapon",
-		[
-			new Item("Weapon", 1),
-			new Locatable( new Location(itemWeaponPos) ),
-			new Collidable(itemWeaponCollider),
-			new Drawable(itemWeaponVisual),
-			itemWeaponDevice
-		]
-	);
-
-	entities.push(itemWeaponEntity);
-
-	// goal
-
-	var goalPos = new Coords().randomize().multiplyScalar
-	(
-		.5
-	).addDimensions
-	(
-		.25, .25, 0
-	).multiply
-	(
-		this.size
-	);
-	var goalLoc = new Location(goalPos);
-	var goalColor = "Green";
-	var goalEntity = new Entity
-	(
-		"Goal",
-		[
-			new Locatable(goalLoc),
-			new Collidable(new Bounds(goalPos, entitySize)),
-			new Drawable
-			(
-				new VisualGroup
-				([
-					new VisualRectangle(entitySize, goalColor),
-					new VisualText("" + numberOfKeysToUnlockGoal, itemKeyColor),
-					new VisualOffset
-					(
-						new VisualText("Exit", goalColor),
-						new Coords(0, entityDimension)
-					)
-				])
-			),
-			new Goal(numberOfKeysToUnlockGoal),
-		]
-	);
-
-	entities.push(goalEntity);
-
-	// obstacleRing
-
-	var obstaclePos = goalEntity.Locatable.loc.pos;
-	var obstacleLoc = new Location(obstaclePos);
-	obstacleLoc.spin.angleInTurnsRef.value = 0.002;
-	var obstacleCollider = new Arc
-	(
-		new Shell
-		(
-			new Sphere(obstaclePos, entityDimension * 3), // sphereOuter
-			entityDimension * 2 // radiusInner
-		),
-		new Wedge
-		(
-			obstaclePos,
-			obstacleLoc.orientation.forward, //new Coords(1, 0, 0), // directionMin
-			.85 // angleSpannedInTurns
-		)
-	);
-
-	var obstacleRingEntity = new Entity
-	(
-		"ObstacleRing",
-		[
-			new Locatable(obstacleLoc),
-			new Collidable(obstacleCollider),
-			new Damager(1),
-			new Drawable
-			(
-				new VisualArc
-				(
-					obstacleCollider,
-					obstacleColor, obstacleColor
-				)
-			)
-		]
-	);
-
-	entities.push(obstacleRingEntity);
-
-	// Add camera projection to all visuals.
-
-	for (var i = 0; i < entities.length; i++)
-	{
-		var entity = entities[i];
-		var entityDrawable = entity.Drawable;
-		if (entityDrawable != null)
-		{
-			var entityVisual = entityDrawable.visual;
-			entityDrawable.visual =
-				new VisualCamera(entityVisual, this.camera);
-		}
-	}
-
-	var controlStatus = new ControlLabel
-	(
-		"labelHealth",
-		new Coords(8, 5), //pos,
-		new Coords(100, 0), //size,
-		false, // isTextCentered,
-		new DataBinding(playerEntity.Killable, "integrity"), // text,
-		10, // fontHeightInPixels
-	);
-	this.venueControls = new VenueControls(controlStatus);
+	this.venueControlsBuild(playerEntity);
 
 	Place.call(this, entities);
 
@@ -936,6 +70,1016 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 {
 	PlaceDemo.prototype = Object.create(Place.prototype);
 	PlaceDemo.prototype.constructor = PlaceDemo;
+
+	PlaceDemo.prototype.entityAccelerateInDirection = function
+	(
+		world, entity, directionToMove
+	)
+	{
+		var entityLoc = entity.Locatable.loc;
+
+		entityLoc.orientation.forwardSet(directionToMove);
+		var vel = entityLoc.vel;
+		if (vel.equals(directionToMove) == false)
+		{
+			entityLoc.timeOffsetInTicks = world.timerTicksSoFar;
+		}
+		entityLoc.accel.overwriteWith(directionToMove).multiplyScalar
+		(
+			.5 // hack
+		);
+	};
+
+	// Constructor helpers.
+
+	PlaceDemo.prototype.actionsAndInputMappingsBuild = function()
+	{
+		var coordsInstances = Coords.Instances();
+
+		this.actions =
+		[
+			Action.Instances().DoNothing,
+			new Action
+			(
+				"ShowMenu",
+				function perform(universe, world, place, actor)
+				{
+					var venueNext = new VenueControls
+					(
+						universe.controlBuilder.configure(universe)
+					);
+					venueNext = new VenueFader(venueNext, universe.venueCurrent);
+					universe.venueNext = venueNext;
+				}
+			),
+			new Action
+			(
+				"MoveDown",
+				function perform(universe, world, place, actor)
+				{
+					place.entityAccelerateInDirection
+					(
+						world, actor, coordsInstances.ZeroOneZero
+					);
+				}
+			),
+			new Action
+			(
+				"MoveLeft",
+				function perform(universe, world, place, actor)
+				{
+					place.entityAccelerateInDirection
+					(
+						world, actor, coordsInstances.MinusOneZeroZero
+					);
+				}
+			),
+			new Action
+			(
+				"MoveRight",
+				function perform(universe, world, place, actor)
+				{
+					place.entityAccelerateInDirection
+					(
+						world, actor, coordsInstances.OneZeroZero
+					);
+				}
+			),
+			new Action
+			(
+				"MoveUp",
+				function perform(universe, world, place, actor)
+				{
+					place.entityAccelerateInDirection
+					(
+						world, actor, coordsInstances.ZeroMinusOneZero
+					);
+				}
+			),
+			new Action
+			(
+				"Fire",
+				function perform(universe, world, place, actor)
+				{
+					var itemWeapon = new Item("Weapon", 1);
+					var itemHolder = actor.ItemHolder;
+					var actorHasWeapon = itemHolder.hasItems(itemWeapon);
+
+					if (actorHasWeapon)
+					{
+						var entityWeapon = itemHolder.itemEntities["Weapon"];
+						var deviceWeapon = entityWeapon.Device;
+						deviceWeapon.use(universe, world, place, actor, deviceWeapon);
+					}
+				}
+			),
+		].addLookupsByName();
+
+		this.inputToActionMappings =
+		[
+			new InputToActionMapping("Escape", "ShowMenu"),
+
+			new InputToActionMapping("ArrowDown", "MoveDown"),
+			new InputToActionMapping("ArrowLeft", "MoveLeft"),
+			new InputToActionMapping("ArrowRight", "MoveRight"),
+			new InputToActionMapping("ArrowUp", "MoveUp"),
+			new InputToActionMapping("Enter", "Fire"),
+
+			new InputToActionMapping("Gamepad0Down", "MoveDown"),
+			new InputToActionMapping("Gamepad0Left", "MoveLeft"),
+			new InputToActionMapping("Gamepad0Right", "MoveRight"),
+			new InputToActionMapping("Gamepad0Up", "MoveUp"),
+			new InputToActionMapping("Gamepad0Button0", "Fire"),
+
+		].addLookups( function(x) { return x.inputName; } );
+	}
+
+	PlaceDemo.prototype.cameraBuild = function()
+	{
+		var cameraViewSize = this.size.clone().half();
+		var cameraFocalLength = cameraViewSize.x;
+		this.camera = new Camera
+		(
+			cameraViewSize,
+			cameraFocalLength, // focalLength
+			new Location
+			(
+				new Coords(0, 0, -cameraFocalLength),
+				Orientation.Instances().ForwardZDownY.clone()
+			)
+		);
+	}
+
+	PlaceDemo.prototype.entitiesAllAddCameraProjection = function(entities)
+	{
+		// Add camera projection to all visuals.
+
+		for (var i = 0; i < entities.length; i++)
+		{
+			var entity = entities[i];
+			var entityDrawable = entity.Drawable;
+			if (entityDrawable != null)
+			{
+				var entityVisual = entityDrawable.visual;
+				entityDrawable.visual =
+					new VisualCamera(entityVisual, this.camera);
+			}
+		}
+	}
+	
+	PlaceDemo.prototype.entityBuildBackground = function(entities)
+	{
+		// background
+		var visualBackgroundDimension = 100;
+
+		var visualBackgroundCellSize =
+			new Coords(.5, .5, .01).multiplyScalar(visualBackgroundDimension);
+		var visualBackgroundBottom = new VisualRepeating
+		(
+			visualBackgroundCellSize,
+			this.camera.viewSize.clone(), // viewSize
+			new VisualRectangle
+			(
+				visualBackgroundCellSize,
+				null, "rgba(255, 255, 255, 0.02)"
+			)
+		);
+		var entityBackgroundBottom = new Entity
+		(
+			"BackgroundBottom",
+			[
+				new Locatable(new Location(new Coords(0, 0, this.camera.focalLength))),
+				new Drawable(visualBackgroundBottom)
+			]
+		);
+		entities.push(entityBackgroundBottom);
+
+		visualBackgroundCellSize =
+			new Coords(1, 1, .01).multiplyScalar(visualBackgroundDimension);
+		var visualBackgroundTop = new VisualRepeating
+		(
+			visualBackgroundCellSize, // cellSize
+			this.camera.viewSize.clone(), // viewSize
+			new VisualRectangle
+			(
+				visualBackgroundCellSize,
+				null, "rgba(255, 255, 255, 0.06)"
+			)
+		);
+		var entityBackgroundTop = new Entity
+		(
+			"BackgroundTop",
+			[
+				new Locatable(new Location(new Coords(0, 0, 0))),
+				new Drawable(visualBackgroundTop)
+			]
+		);
+		entities.push(entityBackgroundTop);
+	}
+
+	PlaceDemo.prototype.entityBuildEnemy = function
+	(
+		entities, entityDimension, constraintSpeedMax1, playerPos, visualEyeRadius, visualEyesBlinking
+	)
+	{
+		var damagerColor = "Red";
+		var enemyColor = damagerColor;
+		var enemyPos = this.size.clone().subtract(playerPos);
+		var enemyLoc = new Location(enemyPos);
+		var enemyDimension = entityDimension * 2;
+
+		var enemyColliderAsFace = new Face([
+			new Coords(-.5, -1).multiplyScalar(enemyDimension).half(),
+			new Coords(.5, -1).multiplyScalar(enemyDimension).half(),
+			new Coords(1, 1).multiplyScalar(enemyDimension).half(),
+			new Coords(-1, 1).multiplyScalar(enemyDimension).half(),
+		]);
+		var enemyCollider = Mesh.fromFace
+		(
+			enemyPos, // center
+			enemyColliderAsFace,
+			1 // thickness
+		);
+
+		var enemyVisualArm = new VisualPolars
+		(
+			[ new Polar(0, enemyDimension) ],
+			enemyColor,
+			2 // lineThickness
+		);
+
+		var visualEyesBlinkingWithBrows = new VisualGroup
+		([
+			visualEyesBlinking,
+			new VisualPath
+			(
+				new Path([new Coords(-8, -8), new Coords(0, 0), new Coords(8, -8)]),
+				"rgb(64, 64, 64)",
+				3 // lineThickness
+			),
+		]);
+
+		var visualEyesWithBrowsDirectional = new VisualDirectional
+		(
+			visualEyesBlinking, // visualForNoDirection
+			[
+				new VisualOffset(visualEyesBlinkingWithBrows, new Coords(1, 0).multiplyScalar(visualEyeRadius)),
+				new VisualOffset(visualEyesBlinkingWithBrows, new Coords(0, 1).multiplyScalar(visualEyeRadius)),
+				new VisualOffset(visualEyesBlinkingWithBrows, new Coords(-1, 0).multiplyScalar(visualEyeRadius)),
+				new VisualOffset(visualEyesBlinkingWithBrows, new Coords(0, -1).multiplyScalar(visualEyeRadius))
+			]
+		);
+
+		var enemyVisual = new VisualGroup
+		([
+			new VisualDirectional
+			(
+				new VisualNone(),
+				[
+					new VisualGroup
+					([
+						new VisualOffset
+						(
+							enemyVisualArm, new Coords(-enemyDimension / 4, 0)
+						),
+						new VisualOffset
+						(
+							enemyVisualArm, new Coords(enemyDimension / 4, 0)
+						)
+					])
+				]
+			),
+			new VisualPolygon
+			(
+				new Path(enemyColliderAsFace.vertices),
+				enemyColor,
+				null // colorBorder
+			),
+			visualEyesWithBrowsDirectional,
+			new VisualOffset
+			(
+				new VisualText("Chaser", enemyColor),
+				new Coords(0, enemyDimension)
+			)
+		]);
+
+		var enemyEntity = new Entity
+		(
+			"Enemy",
+			[
+				new Locatable(enemyLoc),
+				new Constrainable([constraintSpeedMax1]),
+				new Collidable(enemyCollider),
+				new Damager(1),
+				new Killable(1),
+				new Drawable(enemyVisual),
+				new Actor
+				(
+					function activity(universe, world, place, actor, entityToTargetName)
+					{
+						var target = place.entities[entityToTargetName];
+						var actorLoc = actor.Locatable.loc;
+
+						actorLoc.accel.overwriteWith
+						(
+							target.Locatable.loc.pos
+						).subtract
+						(
+							actorLoc.pos
+						).normalize().multiplyScalar(.1);
+
+						actorLoc.orientation.forwardSet(actorLoc.accel.clone().normalize());
+					},
+					"Player"
+				),
+			]
+		);
+
+		entities.push(enemyEntity);
+
+		return damagerColor;
+	}
+
+	PlaceDemo.prototype.entityBuildFriendly = function(entities, entityDimension, constraintSpeedMax1, visualEyesBlinking)
+	{
+		var friendlyColor = "Green";
+		var friendlyPos = new Coords().randomize().multiply(this.size);
+		var friendlyLoc = new Location(friendlyPos);
+		var friendlyDimension = entityDimension;
+
+		var friendlyCollider = new Sphere(friendlyLoc.pos, friendlyDimension);
+
+		var friendlyVisualNormal = new VisualGroup
+		([
+			new VisualEllipse
+			(
+				friendlyDimension, // semimajorAxis
+				friendlyDimension * .8,
+				.25, // rotationInTurns
+				friendlyColor,
+				null // colorBorder
+			),
+
+			new VisualOffset(visualEyesBlinking, new Coords(0, -friendlyDimension / 3)),
+
+			new VisualOffset
+			(
+				new VisualArc
+				(
+					friendlyDimension / 2, // radiusOuter
+					0, // radiusInner
+					new Coords(1, 0, 0), // directionMin
+					.5, // angleSpannedInTurns
+					"White"
+				),
+				new Coords(0, friendlyDimension / 3) // offset
+			)
+		]);
+
+		var friendlyVisual = new VisualGroup
+		([
+			new VisualAnimation
+			(
+				"Friendly",
+				[ 100, 100 ], // ticksToHoldFrames
+				// children
+				[
+					new VisualAnimation
+					(
+						"Blinking",
+						[ 3, 3 ], // ticksToHoldFrames
+						[
+							new VisualNone(),
+							friendlyVisualNormal
+						]
+					),
+
+					friendlyVisualNormal
+				],
+				false // isRepeating
+			),
+			new VisualOffset
+			(
+				new VisualText("Talker", friendlyColor),
+				new Coords(0, friendlyDimension * 2)
+			)
+		]);
+
+		var friendlyEntity = new Entity
+		(
+			"Friendly",
+			[
+				new Locatable(friendlyLoc),
+				new Constrainable([constraintSpeedMax1]),
+				new Collidable(friendlyCollider),
+				new Drawable(friendlyVisual),
+				new Talker("AnEveningWithProfessorSurly"),
+				new Actor
+				(
+					function activity(universe, world, place, entityActor, target)
+					{
+						var actor = entityActor.Actor;
+						var targetPos = actor.target;
+						if (targetPos == null)
+						{
+							targetPos =
+								new Coords().randomize().multiply(place.size);
+							actor.target = targetPos;
+						}
+
+						var actorLoc = entityActor.Locatable.loc;
+						var actorPos = actorLoc.pos;
+
+						var distanceToTarget = targetPos.clone().subtract
+						(
+							actorPos
+						).magnitude();
+
+						if (distanceToTarget >= 2)
+						{
+							actorLoc.vel.overwriteWith
+							(
+								targetPos
+							).subtract
+							(
+								actorPos
+							).normalize();
+						}
+						else
+						{
+							actorPos.overwriteWith(targetPos);
+							actor.target = null;
+						}
+					}
+				),
+			]
+		);
+
+		entities.push(friendlyEntity);
+	}
+
+	PlaceDemo.prototype.entityBuildGoal = function
+	(
+		entities, entityDimension, entitySize, numberOfKeysToUnlockGoal, itemKeyColor
+	)
+	{
+		var goalPos = new Coords().randomize().multiplyScalar
+		(
+			.5
+		).addDimensions
+		(
+			.25, .25, 0
+		).multiply
+		(
+			this.size
+		);
+		var goalLoc = new Location(goalPos);
+		var goalColor = "Green";
+		var goalEntity = new Entity
+		(
+			"Goal",
+			[
+				new Locatable(goalLoc),
+				new Collidable(new Bounds(goalPos, entitySize)),
+				new Drawable
+				(
+					new VisualGroup
+					([
+						new VisualRectangle(entitySize, goalColor),
+						new VisualText("" + numberOfKeysToUnlockGoal, itemKeyColor),
+						new VisualOffset
+						(
+							new VisualText("Exit", goalColor),
+							new Coords(0, entityDimension)
+						)
+					])
+				),
+				new Goal(numberOfKeysToUnlockGoal),
+			]
+		);
+
+		entities.push(goalEntity);
+
+		return goalEntity;
+	}
+
+	PlaceDemo.prototype.entityBuildKeys = function
+	(
+		entities, entityDimension, numberOfKeysToUnlockGoal, entitiesObstacles, marginSize
+	)
+	{
+		var entityDimensionHalf = entityDimension / 2;
+		var sizeMinusMargins = marginSize.clone().double().invert().add(this.size);
+
+		var itemKeyColor = "Yellow";
+		var itemKeyVisual = new VisualGroup
+		([
+			new VisualArc
+			(
+				entityDimensionHalf, // radiusOuter
+				entityDimensionHalf / 2, // radiusInner
+				Coords.Instances().Ones, // directionMin
+				1, // angleSpannedInTurns
+				itemKeyColor
+			),
+			new VisualOffset
+			(
+				new VisualPolars
+				(
+					[
+						new Polar(0, entityDimensionHalf),
+						new Polar(.25, entityDimensionHalf / 2)
+					],
+					itemKeyColor,
+					entityDimensionHalf / 2 // lineThickness
+				),
+				new Coords(entityDimensionHalf, 0)
+			),
+			new VisualOffset
+			(
+				new VisualText("Key", itemKeyColor),
+				new Coords(0, entityDimension)
+			)
+		]);
+
+		var obstacleExclusionRadius = 32;
+		var displacement = new Coords();
+
+		for (var i = 0; i < numberOfKeysToUnlockGoal; i++)
+		{
+			var itemKeyPos =
+				new Coords().randomize().multiply(sizeMinusMargins).add(marginSize);
+
+			for (var j = 0; j < entitiesObstacles.length; j++)
+			{
+				var obstaclePos = entitiesObstacles[j].Locatable.loc.pos;
+				var distanceFromObstacle =
+					displacement.overwriteWith(obstaclePos).magnitude();
+				if (distanceFromObstacle < obstacleExclusionRadius)
+				{
+					displacement.normalize().multiplyScalar(obstacleExclusionRadius);
+					obstaclePos.add(displacement);
+				}
+			}
+
+			var itemKeyCollider = new Sphere(itemKeyPos, entityDimensionHalf);
+
+			var itemKeyEntity = new Entity
+			(
+				"Key" + i,
+				[
+					new Item("Key", 1),
+					new Locatable( new Location(itemKeyPos) ),
+					new Collidable(itemKeyCollider),
+					new Drawable(itemKeyVisual)
+				]
+			);
+
+			entities.push(itemKeyEntity);
+		}
+
+		return itemKeyColor;
+	}
+	
+	PlaceDemo.prototype.entityBuildObstacleBar = function(entities, entityDimension, obstacleColor, playerPos)
+	{
+		var entityDimensionHalf = entityDimension / 2;
+
+		var obstacleBarSize = new Coords(6, 2).multiplyScalar(entityDimension);
+		var obstaclePos = playerPos.clone().add(obstacleBarSize).add(obstacleBarSize);
+		var obstacleLoc = new Location(obstaclePos);
+		var obstacleCollider = new Bounds
+		(
+			obstaclePos,
+			obstacleBarSize
+		);
+
+		var obstacleBarEntity = new Entity
+		(
+			"ObstacleBar",
+			[
+				new Locatable(obstacleLoc),
+				new Collidable(obstacleCollider),
+				new Damager(1),
+				new Drawable
+				(
+					new VisualGroup
+					([
+						new VisualRectangle
+						(
+							obstacleCollider.size,
+							obstacleColor, obstacleColor
+						),
+						new VisualOffset
+						(
+							new VisualText("Bar", obstacleColor),
+							new Coords(0, obstacleCollider.size.y)
+						)
+					])
+				)
+			]
+		);
+
+		entities.push(obstacleBarEntity);
+	}
+	
+	PlaceDemo.prototype.entityBuildObstacleMines = function(entities, entityDimension, obstacleColor, marginSize)
+	{
+		var obstacleMappedCellSource =
+		[
+			"....xxxx....",
+			".....xx.....",
+			".....xx.....",
+			"....xxxx....",
+			"x..xx..xx..x",
+			"xxxx.xx.xxxx",
+			"xxxx.xx.xxxx",
+			"x..xx..xx..x",
+			"....xxxx....",
+			".....xx.....",
+			".....xx.....",
+			"....xxxx....",
+		];
+		var obstacleMappedSizeInCells = new Coords
+		(
+			obstacleMappedCellSource[0].length,
+			obstacleMappedCellSource.length,
+			1
+		);
+
+		var obstacleMappedCellSize = new Coords(2, 2, 1);
+
+		var obstacleMappedMap = new Map
+		(
+			obstacleMappedSizeInCells,
+			obstacleMappedCellSize,
+			new MapCell(), // cellPrototype
+			function cellAtPosInCells(map, cellPosInCells, cellToOverwrite)
+			{
+				var cellCode = map.cellSource[cellPosInCells.y][cellPosInCells.x];
+				var cellVisualName = (cellCode == "x" ? "Blocking" : "Open");
+				var cellIsBlocking = (cellCode == "x");
+				cellToOverwrite.visualName = cellVisualName;
+				cellToOverwrite.isBlocking = cellIsBlocking;
+				return cellToOverwrite;
+			},
+			obstacleMappedCellSource
+		);
+
+		var obstacleMappedVisualLookup =
+		{
+			"Blocking" : new VisualRectangle(obstacleMappedCellSize, obstacleColor),
+			"Open" : new VisualNone()
+		};
+		var obstacleMappedVisual = new VisualGroup
+		([
+			new VisualMap(obstacleMappedMap, obstacleMappedVisualLookup),
+			new VisualOffset
+			(
+				new VisualText("Mine", obstacleColor),
+				new Coords(0, entityDimension)
+			)
+		]);
+
+		var sizeMinusMargins =
+			this.size.clone().subtract(marginSize).subtract(marginSize);
+
+		var numberOfMines = 48;
+		var entitiesObstacles = [];
+		for (var i = 0; i < numberOfMines; i++)
+		{
+			var obstacleMappedPos =
+				new Coords().randomize().multiply(sizeMinusMargins).add(marginSize);
+			var obstacleMappedLoc = new Location(obstacleMappedPos);
+
+			var obstacleMappedEntity = new Entity
+			(
+				"ObstacleMapped",
+				[
+					new Locatable(obstacleMappedLoc),
+					new Collidable(new MapLocated(obstacleMappedMap, obstacleMappedLoc)),
+					new Damager(1),
+					new Drawable(obstacleMappedVisual)
+				]
+			);
+
+			entitiesObstacles.push(obstacleMappedEntity);
+			entities.push(obstacleMappedEntity);
+		}
+
+		return entitiesObstacles;
+	}
+
+	PlaceDemo.prototype.entityBuildObstacleRing = function(entities, entityDimension, goalEntity, obstacleColor)
+	{
+		// obstacleRing
+
+		var obstaclePos = goalEntity.Locatable.loc.pos;
+		var obstacleLoc = new Location(obstaclePos);
+		obstacleLoc.spin.angleInTurnsRef.value = 0.002;
+		var obstacleCollider = new Arc
+		(
+			new Shell
+			(
+				new Sphere(obstaclePos, entityDimension * 3), // sphereOuter
+				entityDimension * 2 // radiusInner
+			),
+			new Wedge
+			(
+				obstaclePos,
+				obstacleLoc.orientation.forward, //new Coords(1, 0, 0), // directionMin
+				.85 // angleSpannedInTurns
+			)
+		);
+
+		var obstacleRingVisual = new VisualArc
+		(
+			entityDimension * 3, // radiusOuter
+			entityDimension * 2, // radiusInner
+			new Coords(1, 0, 0), // directionMin
+			.85, // angleSpannedInTurns
+			obstacleColor
+		);
+
+		var obstacleRingEntity = new Entity
+		(
+			"ObstacleRing",
+			[
+				new Locatable(obstacleLoc),
+				new Collidable(obstacleCollider),
+				new Damager(1),
+				new Drawable(obstacleRingVisual)
+			]
+		);
+
+		entities.push(obstacleRingEntity);
+	}
+	
+	PlaceDemo.prototype.entityBuildObstacleWalls = function(entities, obstacleColor)
+	{
+		var numberOfWalls = 4;
+		var wallThickness = 5;
+
+		for (var i = 0; i < numberOfWalls; i++)
+		{
+			var obstacleWallSize;
+			if (i % 2 == 0)
+			{
+				obstacleWallSize = new Coords(this.size.x, wallThickness, 1);
+			}
+			else
+			{
+				obstacleWallSize = new Coords(wallThickness, this.size.y, 1);
+			}
+
+			var obstacleWallPos = obstacleWallSize.clone().half().clearZ();
+			if (i >= 2)
+			{
+				obstacleWallPos.invert().add(this.size);
+			}
+
+			var obstacleWallLoc = new Location(obstacleWallPos);
+			var obstacleCollider =
+				new Bounds(obstacleWallPos, obstacleWallSize);
+			var obstacleWallVisual = new VisualRectangle
+			(
+				obstacleWallSize, obstacleColor
+			);
+
+			var obstacleWallEntity = new Entity
+			(
+				"ObstacleWall" + i,
+				[
+					new Locatable(obstacleWallLoc),
+					new Collidable(obstacleCollider),
+					new Damager(1),
+					new Drawable(obstacleWallVisual)
+				]
+			);
+
+			entities.push(obstacleWallEntity);
+		}
+
+		return wallThickness;
+	}
+	
+	PlaceDemo.prototype.entityBuildPlayer = function(entities, entityDimension, visualEyeRadius, visualEyesBlinking)
+	{
+		var visualEyesDirectional = new VisualDirectional
+		(
+			visualEyesBlinking, // visualForNoDirection
+			[
+				new VisualOffset(visualEyesBlinking, new Coords(1, 0).multiplyScalar(visualEyeRadius)),
+				new VisualOffset(visualEyesBlinking, new Coords(0, 1).multiplyScalar(visualEyeRadius)),
+				new VisualOffset(visualEyesBlinking, new Coords(-1, 0).multiplyScalar(visualEyeRadius)),
+				new VisualOffset(visualEyesBlinking, new Coords(0, -1).multiplyScalar(visualEyeRadius))
+			]
+		);
+
+		var playerPos = new Coords(30, 30);
+		var playerLoc = new Location(playerPos);
+		var playerHeadRadius = entityDimension * .75;
+		var playerCollider = new Sphere(playerLoc.pos, playerHeadRadius);
+		var playerColor = "Gray";
+
+		var playerVisualName = new VisualOffset
+		(
+			new VisualText("Player", playerColor),
+			new Coords(0, playerHeadRadius * 2)
+		);
+
+		var playerVisual = new VisualGroup
+		([
+			new VisualCircle(playerHeadRadius, playerColor),
+			visualEyesDirectional,
+			playerVisualName
+		]);
+
+		var playerCollide = function(universe, world, place, entityPlayer, entityOther)
+		{
+			var messageToDisplay = null;
+
+			if (entityOther.Damager != null)
+			{
+				universe.collisionHelper.collideCollidables(entityPlayer, entityOther);
+
+				var playerAsKillable = entityPlayer.Killable;
+				playerAsKillable.integrity -= entityOther.Damager.damagePerHit;
+			}
+			else if (entityOther.Goal != null)
+			{
+				var keysRequired =
+					new Item("Key", entityOther.Goal.numberOfKeysToUnlock);
+				if (entityPlayer.ItemHolder.hasItems(keysRequired))
+				{
+					var venueMessage = new VenueMessage
+					(
+						"You win!",
+						new VenueControls(universe.controlBuilder.title(universe)), // venueNext
+						universe.venueCurrent, // venuePrev
+						universe.display.sizeDefault().clone().half()
+					);
+					universe.venueNext = venueMessage;
+				}
+			}
+			else if (entityOther.Item != null)
+			{
+				entityPlayer.ItemHolder.itemEntityAdd(entityOther);
+				place.entitiesToRemove.push(entityOther);
+			}
+			else if (entityOther.Talker != null)
+			{
+				entityOther.Collidable.ticksUntilCanCollide = 100;
+				entityOther.Drawable.animationRuns["Friendly"].ticksSinceStarted = 0;
+
+				var conversationDefnAsJSON =
+					universe.mediaLibrary.textStringGetByName("Conversation").value;
+				var conversationDefn = ConversationDefn.deserialize(conversationDefnAsJSON);
+				var venueToReturnTo = universe.venueCurrent;
+				var conversation = new ConversationRun
+				(
+					conversationDefn,
+					function quit(conversationRun)
+					{
+						universe.venueNext = venueToReturnTo;
+					}
+				);
+				var conversationSize = universe.display.sizeDefault().clone();
+				var conversationAsControl =
+					conversation.toControl(conversationSize, universe);
+
+				var venueNext = new VenueControls(conversationAsControl);
+
+				universe.venueNext = venueNext;
+			}
+		};
+
+		var constraintSpeedMax5 = new Constraint("SpeedMax", 5);
+		var constraintFriction = new Constraint("Friction", .03);
+
+		var playerEntity = new Entity
+		(
+			"Player",
+			[
+				new Locatable(playerLoc),
+				new Constrainable([constraintFriction, constraintSpeedMax5]),
+				new Collidable
+				(
+					playerCollider,
+					[ Collidable.name ], // entityPropertyNamesToCollideWith
+					playerCollide
+				),
+				new Drawable(playerVisual),
+				new ItemHolder(),
+				new Playable(),
+				new Idleable(),
+				new Killable
+				(
+					5, // integrity
+					function die(universe, world, place, entityKillable)
+					{
+						var venueMessage = new VenueMessage
+						(
+							"You lose!",
+							new VenueControls(universe.controlBuilder.title(universe)), // venueNext
+							universe.venueCurrent, // venuePrev
+							universe.display.sizeDefault().clone().half()
+						);
+						universe.venueNext = venueMessage;
+					}
+				)
+			]
+		);
+
+		entities.push(playerEntity);
+
+		return playerEntity;
+	}
+
+	PlaceDemo.prototype.entityBuildWeapon = function(entities, entityDimension, playerPos)
+	{
+		var entityDimensionHalf = entityDimension / 2;
+
+		var itemWeaponColor = "Cyan";
+		var itemWeaponVisual = new VisualGroup
+		([
+			new VisualCircle(entityDimensionHalf, itemWeaponColor),
+			new VisualOffset
+			(
+				new VisualText("Weapon", itemWeaponColor),
+				new Coords(0, entityDimension)
+			)
+		]);
+
+		var itemWeaponPos =
+			//new Coords().randomize().multiply(sizeMinusMargins);
+			playerPos.clone().double();
+		var itemWeaponCollider = new Sphere(itemWeaponPos, entityDimensionHalf);
+
+		var itemWeaponDevice = Device.gun();
+
+		var itemWeaponEntity = new Entity
+		(
+			"Weapon",
+			[
+				new Item("Weapon", 1),
+				new Locatable( new Location(itemWeaponPos) ),
+				new Collidable(itemWeaponCollider),
+				new Drawable(itemWeaponVisual),
+				itemWeaponDevice
+			]
+		);
+
+		entities.push(itemWeaponEntity);
+	}
+
+	PlaceDemo.prototype.venueControlsBuild = function(playerEntity)
+	{
+		var controlStatus = new ControlLabel
+		(
+			"labelHealth",
+			new Coords(8, 5), //pos,
+			new Coords(100, 0), //size,
+			false, // isTextCentered,
+			new DataBinding(playerEntity.Killable, "integrity"), // text,
+			10, // fontHeightInPixels
+		);
+		this.venueControls = new VenueControls(controlStatus);
+	};
+	
+	PlaceDemo.prototype.visualEyesBlinkingBuild = function(visualEyeRadius)
+	{
+		var visualPupilRadius = visualEyeRadius / 2;
+
+		var visualEye = new VisualGroup
+		([
+			new VisualCircle(visualEyeRadius, "White"),
+			new VisualCircle(visualPupilRadius, "Black")
+		]);
+
+		var visualEyes = new VisualGroup
+		([
+			new VisualOffset
+			(
+				visualEye, new Coords(-visualEyeRadius, 0)
+			),
+			new VisualOffset
+			(
+				visualEye, new Coords(visualEyeRadius, 0)
+			)
+		]);
+
+		var visualEyesBlinking = new VisualAnimation
+		(
+			"EyesBlinking",
+			[ 50, 5 ], // ticksToHoldFrames
+			[ visualEyes, new VisualNone() ],
+		);
+
+		return visualEyesBlinking;
+	}
+
+	// Place implementation.
 
 	PlaceDemo.prototype.draw_FromSuperclass = Place.prototype.draw;
 	PlaceDemo.prototype.draw = function(universe, world)
@@ -967,24 +1111,5 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 
 		// todo
 		this.venueControls.draw(universe);
-	};
-
-	PlaceDemo.prototype.entityAccelerateInDirection = function
-	(
-		world, entity, directionToMove
-	)
-	{
-		var entityLoc = entity.Locatable.loc;
-
-		entityLoc.orientation.forwardSet(directionToMove);
-		var vel = entityLoc.vel;
-		if (vel.equals(directionToMove) == false)
-		{
-			entityLoc.timeOffsetInTicks = world.timerTicksSoFar;
-		}
-		entityLoc.accel.overwriteWith(directionToMove).multiplyScalar
-		(
-			.5 // hack
-		);
 	};
 }
