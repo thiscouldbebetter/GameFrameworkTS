@@ -12,11 +12,13 @@ function VisualEllipse(semimajorAxis, semiminorAxis, rotationInTurns, colorFill,
 	VisualEllipse.prototype.draw = function(universe, world, display, drawable, entity)
 	{
 		var drawableLoc = drawable.loc;
+		var drawableOrientation = drawableLoc.orientation;
+		var drawableRotationInTurns = drawableOrientation.headingInTurns();
 		display.drawEllipse
 		(
 			drawableLoc.pos,
 			this.semimajorAxis, this.semiminorAxis,
-			this.rotationInTurns,
+			(this.rotationInTurns + drawableRotationInTurns).wrapToRangeZeroOne(),
 			this.colorFill, this.colorBorder
 		);
 	};

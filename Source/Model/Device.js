@@ -36,7 +36,13 @@ function Device(name, ticksToCharge, use)
 				var projectileRadius = 3;
 				var projectileVisual = new VisualGroup
 				([
-					new VisualCircle(projectileRadius, projectileColor),
+					new VisualEllipse
+					(
+						projectileRadius * 2, // semimajorAxis,
+						projectileRadius, // semiminorAxis,
+						0, // rotationInTurns,
+						projectileColor // colorFill
+					),
 					new VisualOffset
 					(
 						new VisualText("Projectile", projectileColor),
@@ -51,7 +57,11 @@ function Device(name, ticksToCharge, use)
 				(
 					actorDirection.clone().multiplyScalar(actorRadius).double().double()
 				);
-				var projectileLoc = new Location(projectilePos);
+				var projectileOri = new Orientation
+				(
+					actorVel.clone().normalize()
+				);
+				var projectileLoc = new Location(projectilePos, projectileOri);
 				projectileLoc.vel.overwriteWith(actorVel).double();
 
 				var projectileCollider =
