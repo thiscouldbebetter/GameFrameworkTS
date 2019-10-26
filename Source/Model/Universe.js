@@ -43,7 +43,7 @@ function Universe(name, timerHelper, display, mediaLibrary, world)
 		(
 			this.initialize_MediaLibraryLoaded.bind(this)
 		);
-	}
+	};
 
 	Universe.prototype.initialize_MediaLibraryLoaded = function()
 	{

@@ -187,6 +187,18 @@ function ControlBuilder(styles)
 
 		var fontHeight = this.fontHeightInPixelsBase;
 
+		var buttonHeight = 20;
+		var margin = 15;
+		var padding = 5;
+		var labelPadding = 3;
+
+		var rowHeight = buttonHeight + padding;
+		var row0PosY = margin;
+		var row1PosY = row0PosY + rowHeight;
+		var row2PosY = row1PosY + rowHeight;
+		var row3PosY = row2PosY + rowHeight;
+		var row4PosY = row3PosY + rowHeight;
+
 		var returnValue = new ControlContainer
 		(
 			"containerConfigure",
@@ -197,8 +209,8 @@ function ControlBuilder(styles)
 				new ControlButton
 				(
 					"buttonSave",
-					new Coords(30, 15), // pos
-					new Coords(65, 25), // size
+					new Coords(30, row0PosY), // pos
+					new Coords(65, buttonHeight), // size
 					"Save",
 					fontHeight,
 					true, // hasBorder
@@ -218,8 +230,8 @@ function ControlBuilder(styles)
 				new ControlButton
 				(
 					"buttonLoad",
-					new Coords(105, 15), // pos
-					new Coords(65, 25), // size
+					new Coords(105, row0PosY), // pos
+					new Coords(65, buttonHeight), // size
 					"Load",
 					fontHeight,
 					true, // hasBorder
@@ -239,8 +251,8 @@ function ControlBuilder(styles)
 				new ControlLabel
 				(
 					"labelMusicVolume",
-					new Coords(30, 50), // pos
-					new Coords(75, 25), // size
+					new Coords(30, row1PosY + labelPadding), // pos
+					new Coords(75, buttonHeight), // size
 					false, // isTextCentered
 					"Music:",
 					fontHeight
@@ -249,8 +261,8 @@ function ControlBuilder(styles)
 				new ControlSelect
 				(
 					"selectMusicVolume",
-					new Coords(65, 45), // pos
-					new Coords(30, 25), // size
+					new Coords(65, row1PosY), // pos
+					new Coords(30, buttonHeight), // size
 					new DataBinding(universe.soundHelper, "musicVolume"), // valueSelected
 					SoundHelper.controlSelectOptionsVolume(), // options
 					new DataBinding(null, "value"), // bindingForOptionValues,
@@ -261,8 +273,8 @@ function ControlBuilder(styles)
 				new ControlLabel
 				(
 					"labelSoundVolume",
-					new Coords(105, 50), // pos
-					new Coords(75, 25), // size
+					new Coords(105, row1PosY + labelPadding), // pos
+					new Coords(75, buttonHeight), // size
 					false, // isTextCentered
 					"Sound:",
 					fontHeight
@@ -271,8 +283,8 @@ function ControlBuilder(styles)
 				new ControlSelect
 				(
 					"selectSoundVolume",
-					new Coords(140, 45), // pos
-					new Coords(30, 25), // size
+					new Coords(140, row1PosY), // pos
+					new Coords(30, buttonHeight), // size
 					new DataBinding(universe.soundHelper, "soundVolume"), // valueSelected
 					SoundHelper.controlSelectOptionsVolume(), // options
 					new DataBinding(null, "value"), // bindingForOptionValues,
@@ -283,8 +295,8 @@ function ControlBuilder(styles)
 				new ControlLabel
 				(
 					"labelDisplaySize",
-					new Coords(30, 80), // pos
-					new Coords(75, 25), // size
+					new Coords(30, row2PosY + labelPadding), // pos
+					new Coords(75, buttonHeight), // size
 					false, // isTextCentered
 					"Display:",
 					fontHeight
@@ -293,8 +305,8 @@ function ControlBuilder(styles)
 				new ControlSelect
 				(
 					"selectDisplaySize",
-					new Coords(70, 75), // pos
-					new Coords(60, 25), // size
+					new Coords(70, row2PosY), // pos
+					new Coords(60, buttonHeight), // size
 					universe.display.sizeInPixels, // valueSelected
 					// options
 					universe.display.sizesAvailable,
@@ -306,8 +318,8 @@ function ControlBuilder(styles)
 				new ControlButton
 				(
 					"buttonDisplaySizeChange",
-					new Coords(140, 75), // pos
-					new Coords(30, 25), // size
+					new Coords(140, row2PosY), // pos
+					new Coords(30, buttonHeight), // size
 					"Change",
 					fontHeight,
 					true, // hasBorder
@@ -336,9 +348,54 @@ function ControlBuilder(styles)
 
 				new ControlButton
 				(
+					"buttonControls",
+					new Coords(30, row3PosY), // pos
+					new Coords(65, buttonHeight), // size
+					"Controls",
+					fontHeight,
+					true, // hasBorder
+					true, // isEnabled
+					function click(universe)
+					{
+						var venueCurrent = universe.venueCurrent;
+						var controlGameControls =
+							universe.controlBuilder.controls(universe, size, venueCurrent);
+						var venueNext = new VenueControls(controlGameControls);
+						venueNext = new VenueFader(venueNext, venueCurrent);
+						universe.venueNext = venueNext;
+					},
+					universe // context
+				),
+
+				new ControlButton
+				(
+					"buttonAbout",
+					new Coords(105, row3PosY), // pos
+					new Coords(65, buttonHeight), // size
+					"About",
+					fontHeight,
+					true, // hasBorder
+					true, // isEnabled
+					function click(universe)
+					{
+						var venueNext = new VenueMessage
+						(
+							"[about message]",
+							universe.venueCurrent, // venueNext
+							universe.venueCurrent, // venuePrev
+							size
+						);
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
+						universe.venueNext = venueNext;
+					},
+					universe // context
+				),
+
+				new ControlButton
+				(
 					"buttonResume",
-					new Coords(30, 105), // pos
-					new Coords(65, 25), // size
+					new Coords(30, row4PosY), // pos
+					new Coords(65, buttonHeight), // size
 					"Resume",
 					fontHeight,
 					true, // hasBorder
@@ -356,8 +413,8 @@ function ControlBuilder(styles)
 				new ControlButton
 				(
 					"buttonQuit",
-					new Coords(105, 105), // pos
-					new Coords(65, 25), // size
+					new Coords(105, row4PosY), // pos
+					new Coords(65, buttonHeight), // size
 					"Quit",
 					fontHeight,
 					true, // hasBorder
@@ -410,6 +467,132 @@ function ControlBuilder(styles)
 		(
 			universe, size, message, ["Confirm", "Cancel"], [confirm, cancel]
 		);
+	};
+
+	ControlBuilder.prototype.controls = function(universe, size, venuePrev)
+	{
+		if (size == null)
+		{
+			size = universe.display.sizeDefault();
+		}
+
+		var scaleMultiplier =
+			this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
+
+		var fontHeight = this.fontHeightInPixelsBase;
+
+		var profiles = universe.profileHelper.profiles();
+
+		var world = universe.world;
+		var placeCurrentDefnName = "Demo"; // hack
+		var placeDefn = world.defns.placeDefns[placeCurrentDefnName];
+		var inputToActionMappings = placeDefn.inputToActionMappings;
+
+		var returnValue = new ControlContainer
+		(
+			"containerGameControls",
+			this._zeroes, // pos
+			this.sizeBase.clone(), // size
+			// children
+			[
+				new ControlLabel
+				(
+					"labelControls",
+					new Coords(100, 40), // pos
+					new Coords(100, 25), // size
+					true, // isTextCentered
+					"Controls:",
+					fontHeight
+				),
+
+				new ControlList
+				(
+					"listControls",
+					new Coords(50, 50), // pos
+					new Coords(100, 40), // size
+					new DataBinding(inputToActionMappings), // items
+					new DataBinding(null, "actionName"), // bindingForItemText
+					fontHeight,
+					new DataBinding(placeDefn, "inputToActionMappingSelected"), // bindingForItemSelected
+					new DataBinding(), // bindingForItemValue
+				),
+
+				new ControlLabel
+				(
+					"labelInput",
+					new Coords(50, 95), // pos
+					new Coords(100, 15), // size
+					false, // isTextCentered
+					"Input:",
+					fontHeight
+				),
+
+				new ControlTextBox
+				(
+					"textBoxInput",
+					new Coords(80, 95), // pos
+					new Coords(70, 15), // size
+					new DataBinding(placeDefn, "_inputToActionMappingSelected.inputName"), // text
+					fontHeight
+				),
+
+				new ControlButton
+				(
+					"buttonRestoreDefaults",
+					new Coords(50, 115), // pos
+					new Coords(45, 15), // size
+					"Defaults",
+					fontHeight,
+					true, // hasBorder
+					true, // isEnabled
+					function click(universe)
+					{
+						placeDefn.inputToActionMappingsRestoreDefaults();
+					},
+					universe // context
+				),
+
+				new ControlButton
+				(
+					"buttonDone",
+					new Coords(105, 115), // pos
+					new Coords(45, 15), // size
+					"Done",
+					fontHeight,
+					true, // hasBorder
+					true, // isEnabled
+					function click(universe)
+					{
+						var venueNext = venuePrev;
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
+						universe.venueNext = venueNext;
+					},
+					universe // context
+				),
+
+				new ControlButton
+				(
+					"buttonBack",
+					new Coords(10, 10), // pos
+					new Coords(15, 15), // size
+					"<",
+					fontHeight,
+					true, // hasBorder
+					true, // isEnabled
+					function click(universe)
+					{
+						var venueNext = venuePrev;
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
+						universe.venueNext = venueNext;
+					},
+					universe // context
+				),
+			]
+		);
+
+		returnValue.scalePosAndSize(scaleMultiplier);
+
+		return returnValue;
 	};
 
 	ControlBuilder.prototype.message = function(universe, size, message, acknowledge)

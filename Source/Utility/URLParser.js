@@ -21,5 +21,5 @@ function URLParser(urlAsString)
 	URLParser.fromWindow = function()
 	{
 		return new URLParser(window.location);
-	}
+	};
 }

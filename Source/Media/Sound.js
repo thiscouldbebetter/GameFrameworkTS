@@ -79,5 +79,5 @@ function Sound(name, sourcePath)
 	Sound.prototype.toDomElement = function()
 	{
 		return this.domElement;
-	}
+	};
 }

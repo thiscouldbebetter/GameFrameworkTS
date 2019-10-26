@@ -1,6 +1,7 @@
 
-function Place(entities)
+function Place(defnName, entities)
 {
+	this.defnName = defnName;
 	this.entities = [];
 	this._entitiesByPropertyName = {};
 	this.entitiesToSpawn = entities.slice();
@@ -19,6 +20,11 @@ function Place(entities)
 	];
 }
 {
+	Place.prototype.defn = function(world)
+	{
+		return world.defns.placeDefns[this.defnName];
+	};
+
 	Place.prototype.draw = function(universe, world)
 	{
 		var entitiesDrawable = this.entitiesByPropertyName(Drawable.name);

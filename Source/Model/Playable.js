@@ -7,8 +7,9 @@ function Playable(player)
 	Playable.prototype.updateForTimerTick = function(universe, world, place, entityPlayer)
 	{
 		var size = place.size;
-		var inputToActionMappings = place.inputToActionMappings;
-		var actions = place.actions;
+		var placeDefn = place.defn(world);
+		var inputToActionMappings = placeDefn.inputToActionMappings;
+		var actions = placeDefn.actions;
 		var camera = place.camera;
 
 		var playerLoc = entityPlayer.Locatable.loc;

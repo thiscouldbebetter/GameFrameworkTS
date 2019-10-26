@@ -31,14 +31,14 @@ function VisualImageImmediate(image, sizeScaled)
 	VisualImageImmediate.prototype.image = function()
 	{
 		return this._image;
-	}
+	};
 
 	// clone
 
 	VisualImageImmediate.prototype.clone = function()
 	{
 		return this; // todo
-	}
+	};
 
 	// visual
 

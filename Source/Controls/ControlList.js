@@ -253,6 +253,7 @@ function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPix
 		this.size.multiply(scaleFactor);
 		this.fontHeightInPixels *= scaleFactor.y;
 		this.itemSpacing *= scaleFactor.y;
+		this.scrollbar.scalePosAndSize(scaleFactor);
 	};
 
 	ControlList.prototype.style = function(universe)

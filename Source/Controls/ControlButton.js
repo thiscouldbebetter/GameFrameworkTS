@@ -66,6 +66,13 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 		this.isHighlighted = false;
 	};
 
+	ControlButton.prototype.scalePosAndSize = function(scaleFactor)
+	{
+		this.pos.multiply(scaleFactor);
+		this.size.multiply(scaleFactor);
+		this.fontHeightInPixels *= scaleFactor.y;
+	};
+
 	ControlButton.prototype.style = function(universe)
 	{
 		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];

@@ -38,7 +38,7 @@ function Image(name, sourcePath)
 		returnValue.isLoaded = this.isLoaded;
 
 		return returnValue;
-	}
+	};
 
 	Image.prototype.load = function()
 	{

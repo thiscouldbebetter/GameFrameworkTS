@@ -476,7 +476,7 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 	Display3D.prototype.scaleFactor = function()
 	{
 		return this._scaleFactor;
-	}
+	};
 
 	Display3D.prototype.sizeDefault = function()
 	{

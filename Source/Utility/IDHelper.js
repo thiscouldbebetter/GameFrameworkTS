@@ -8,5 +8,5 @@ function IDHelper()
 		var returnValue = "_" + this._idNext;
 		this._idNext++;
 		return returnValue;
-	}
+	};
 }

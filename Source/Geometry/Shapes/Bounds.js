@@ -46,7 +46,7 @@ function Bounds(center, size)
 	{
 		var center = size.clone().half().add(min);
 		return new Bounds(center, size);
-	}
+	};
 
 	// Instance methods.
 

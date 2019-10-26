@@ -314,7 +314,7 @@ function ControlContainer(name, pos, size, children)
 				child.scalePosAndSize(scaleFactor);
 			}
 		}
-	}
+	};
 
 	// drawable
 

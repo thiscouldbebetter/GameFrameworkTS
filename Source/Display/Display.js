@@ -510,7 +510,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 			this._scaleFactor = this.sizeInPixels.clone().divide(sizeBase);
 		}
 		return this._scaleFactor;
-	}
+	};
 
 	Display.prototype.textWidthForFontHeight = function(textToMeasure, fontHeightInPixels)
 	{

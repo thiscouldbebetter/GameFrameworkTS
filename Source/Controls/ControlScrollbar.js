@@ -16,7 +16,7 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 	(
 		null, // name
 		new Coords(0, 0), // pos
-		this.handleSize, // size
+		this.handleSize.clone(), // size
 		"-", // text
 		this.fontHeightInPixels,
 		true, // hasBorder
@@ -28,7 +28,7 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 	(
 		null, // name
 		new Coords(0, this.size.y - this.handleSize.y), // pos
-		this.handleSize, // size
+		this.handleSize.clone(), // size
 		"+", // text
 		this.fontHeightInPixels,
 		true, // hasBorder
@@ -54,6 +54,16 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 	ControlScrollbar.prototype.mouseClick = function(universe, clickPos)
 	{
 		// todo
+	};
+
+	ControlScrollbar.prototype.scalePosAndSize = function(scaleFactor)
+	{
+		this.pos.multiply(scaleFactor);
+		this.size.multiply(scaleFactor);
+		this.handleSize.multiply(scaleFactor);
+		this.fontHeightInPixels *= scaleFactor.y;
+		this.buttonScrollUp.scalePosAndSize(scaleFactor);
+		this.buttonScrollDown.scalePosAndSize(scaleFactor);
 	};
 
 	ControlScrollbar.prototype.scrollDown = function()

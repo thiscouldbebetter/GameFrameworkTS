@@ -56,7 +56,7 @@ function ArrayExtensions()
 		}
 
 		return childrenConcatenated;
-	}
+	};
 
 	Array.prototype.clear = function()
 	{

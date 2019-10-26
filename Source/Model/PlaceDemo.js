@@ -5,8 +5,6 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 
 	this.cameraBuild();
 
-	this.actionsAndInputMappingsBuild();
-
 	// entities
 
 	var entityDimension = 10;
@@ -60,7 +58,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 
 	this.venueControlsBuild(playerEntity);
 
-	Place.call(this, entities);
+	Place.call(this, "Demo", entities);
 
 	// Helper variables.
 
@@ -92,108 +90,6 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 
 	// Constructor helpers.
 
-	PlaceDemo.prototype.actionsAndInputMappingsBuild = function()
-	{
-		var coordsInstances = Coords.Instances();
-
-		this.actions =
-		[
-			Action.Instances().DoNothing,
-			new Action
-			(
-				"ShowMenu",
-				function perform(universe, world, place, actor)
-				{
-					var venueNext = new VenueControls
-					(
-						universe.controlBuilder.configure(universe)
-					);
-					venueNext = new VenueFader(venueNext, universe.venueCurrent);
-					universe.venueNext = venueNext;
-				}
-			),
-			new Action
-			(
-				"MoveDown",
-				function perform(universe, world, place, actor)
-				{
-					place.entityAccelerateInDirection
-					(
-						world, actor, coordsInstances.ZeroOneZero
-					);
-				}
-			),
-			new Action
-			(
-				"MoveLeft",
-				function perform(universe, world, place, actor)
-				{
-					place.entityAccelerateInDirection
-					(
-						world, actor, coordsInstances.MinusOneZeroZero
-					);
-				}
-			),
-			new Action
-			(
-				"MoveRight",
-				function perform(universe, world, place, actor)
-				{
-					place.entityAccelerateInDirection
-					(
-						world, actor, coordsInstances.OneZeroZero
-					);
-				}
-			),
-			new Action
-			(
-				"MoveUp",
-				function perform(universe, world, place, actor)
-				{
-					place.entityAccelerateInDirection
-					(
-						world, actor, coordsInstances.ZeroMinusOneZero
-					);
-				}
-			),
-			new Action
-			(
-				"Fire",
-				function perform(universe, world, place, actor)
-				{
-					var itemWeapon = new Item("Weapon", 1);
-					var itemHolder = actor.ItemHolder;
-					var actorHasWeapon = itemHolder.hasItems(itemWeapon);
-
-					if (actorHasWeapon)
-					{
-						var entityWeapon = itemHolder.itemEntities["Weapon"];
-						var deviceWeapon = entityWeapon.Device;
-						deviceWeapon.use(universe, world, place, actor, deviceWeapon);
-					}
-				}
-			),
-		].addLookupsByName();
-
-		this.inputToActionMappings =
-		[
-			new InputToActionMapping("Escape", "ShowMenu"),
-
-			new InputToActionMapping("ArrowDown", "MoveDown"),
-			new InputToActionMapping("ArrowLeft", "MoveLeft"),
-			new InputToActionMapping("ArrowRight", "MoveRight"),
-			new InputToActionMapping("ArrowUp", "MoveUp"),
-			new InputToActionMapping("Enter", "Fire"),
-
-			new InputToActionMapping("Gamepad0Down", "MoveDown"),
-			new InputToActionMapping("Gamepad0Left", "MoveLeft"),
-			new InputToActionMapping("Gamepad0Right", "MoveRight"),
-			new InputToActionMapping("Gamepad0Up", "MoveUp"),
-			new InputToActionMapping("Gamepad0Button0", "Fire"),
-
-		].addLookups( function(x) { return x.inputName; } );
-	}
-
 	PlaceDemo.prototype.cameraBuild = function()
 	{
 		var cameraViewSize = this.size.clone().half();
@@ -208,7 +104,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 				Orientation.Instances().ForwardZDownY.clone()
 			)
 		);
-	}
+	};
 
 	PlaceDemo.prototype.entitiesAllAddCameraProjection = function(entities)
 	{
@@ -225,8 +121,8 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 					new VisualCamera(entityVisual, this.camera);
 			}
 		}
-	}
-	
+	};
+
 	PlaceDemo.prototype.entityBuildBackground = function(entities)
 	{
 		// background
@@ -275,7 +171,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 			]
 		);
 		entities.push(entityBackgroundTop);
-	}
+	};
 
 	PlaceDemo.prototype.entityBuildEnemy = function
 	(
@@ -398,7 +294,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 		entities.push(enemyEntity);
 
 		return damagerColor;
-	}
+	};
 
 	PlaceDemo.prototype.entityBuildFriendly = function(entities, entityDimension, constraintSpeedMax1, visualEyesBlinking)
 	{
@@ -516,7 +412,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 		);
 
 		entities.push(friendlyEntity);
-	}
+	};
 
 	PlaceDemo.prototype.entityBuildGoal = function
 	(
@@ -561,7 +457,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 		entities.push(goalEntity);
 
 		return goalEntity;
-	}
+	};
 
 	PlaceDemo.prototype.entityBuildKeys = function
 	(
@@ -639,8 +535,8 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 		}
 
 		return itemKeyColor;
-	}
-	
+	};
+
 	PlaceDemo.prototype.entityBuildObstacleBar = function(entities, entityDimension, obstacleColor, playerPos)
 	{
 		var entityDimensionHalf = entityDimension / 2;
@@ -681,8 +577,8 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 		);
 
 		entities.push(obstacleBarEntity);
-	}
-	
+	};
+
 	PlaceDemo.prototype.entityBuildObstacleMines = function(entities, entityDimension, obstacleColor, marginSize)
 	{
 		var obstacleMappedCellSource =
@@ -768,7 +664,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 		}
 
 		return entitiesObstacles;
-	}
+	};
 
 	PlaceDemo.prototype.entityBuildObstacleRing = function(entities, entityDimension, goalEntity, obstacleColor)
 	{
@@ -813,8 +709,8 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 		);
 
 		entities.push(obstacleRingEntity);
-	}
-	
+	};
+
 	PlaceDemo.prototype.entityBuildObstacleWalls = function(entities, obstacleColor)
 	{
 		var numberOfWalls = 4;
@@ -861,8 +757,8 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 		}
 
 		return wallThickness;
-	}
-	
+	};
+
 	PlaceDemo.prototype.entityBuildPlayer = function(entities, entityDimension, visualEyeRadius, visualEyesBlinking)
 	{
 		var visualEyesDirectional = new VisualDirectional
@@ -994,7 +890,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 		entities.push(playerEntity);
 
 		return playerEntity;
-	}
+	};
 
 	PlaceDemo.prototype.entityBuildWeapon = function(entities, entityDimension, playerPos)
 	{
@@ -1031,7 +927,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 		);
 
 		entities.push(itemWeaponEntity);
-	}
+	};
 
 	PlaceDemo.prototype.venueControlsBuild = function(playerEntity)
 	{
@@ -1046,7 +942,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 		);
 		this.venueControls = new VenueControls(controlStatus);
 	};
-	
+
 	PlaceDemo.prototype.visualEyesBlinkingBuild = function(visualEyeRadius)
 	{
 		var visualPupilRadius = visualEyeRadius / 2;
@@ -1077,7 +973,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 		);
 
 		return visualEyesBlinking;
-	}
+	};
 
 	// Place implementation.
 
