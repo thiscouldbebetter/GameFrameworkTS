@@ -574,7 +574,11 @@ function ControlBuilder(styles)
 					"Clear",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					new DataBinding
+					(
+						placeDefn,
+						function get(c) { return c.actionToInputsMappingSelected != null}
+					), // isEnabled
 					function click(universe)
 					{
 						var mappingSelected = placeDefn.actionToInputsMappingSelected;
@@ -594,14 +598,26 @@ function ControlBuilder(styles)
 					"Add",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					new DataBinding
+					(
+						placeDefn,
+						function get(c) { return c.actionToInputsMappingSelected != null}
+					), // isEnabled
 					function click(universe)
 					{
 						var mappingSelected = placeDefn.actionToInputsMappingSelected;
 						if (mappingSelected != null)
 						{
-							var inputName = "todo";
-							mappingSelected.inputNames.push(inputName);
+							var venueInputCapture = new VenueInputCapture
+							(
+								universe.venueCurrent,
+								function(inputCaptured)
+								{
+									var inputName = inputCaptured.name;
+									mappingSelected.inputNames.push(inputName);
+								}
+							);
+							universe.venueNext = venueInputCapture
 						}
 					},
 					universe // context
@@ -615,7 +631,11 @@ function ControlBuilder(styles)
 					"Default",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					new DataBinding
+					(
+						placeDefn,
+						function get(c) { return c.actionToInputsMappingSelected != null}
+					), // isEnabled
 					function click(universe)
 					{
 						var mappingSelected = placeDefn.actionToInputsMappingSelected;
@@ -633,7 +653,7 @@ function ControlBuilder(styles)
 
 				new ControlButton
 				(
-					"buttonDefaultAll",
+					"buttonRestoreDefaultsAll",
 					new Coords(50, 110), // pos
 					new Coords(100, 15), // size
 					"Default All",
@@ -695,30 +715,24 @@ function ControlBuilder(styles)
 					"Save",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					// isEnabled
+					new DataBinding
+					(
+						placeDefn,
+						function get(c)
+						{
+							var mappings = c.actionToInputsMappingsEdited;
+							var doAnyActionsLackInputs = mappings.some
+							(
+								function(x) { return x.inputNames.length == 0; }
+							);
+							return (doAnyActionsLackInputs == false);
+						}
+					),
 					function click(universe)
 					{
-						var mappings = placeDefn.actionToInputsMappingsEdited;
-						var doAnyActionsLackInputs = mappings.some
-						(
-							function(x) { return x.inputNames.length == 0; }
-						);
-						var venueNext;
-						if (doAnyActionsLackInputs)
-						{
-							venueNext = new VenueMessage
-							(
-								"Not all actions have inputs!",
-								universe.venueCurrent, // venueNext
-								universe.venueCurrent, // venuePrev
-								size
-							);
-						}
-						else
-						{
-							placeDefn.actionToInputsMappingsSave();
-							venueNext = venuePrev;
-						}
+						placeDefn.actionToInputsMappingsSave();
+						var venueNext = venuePrev;
 						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
 					},

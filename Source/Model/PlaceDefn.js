@@ -17,6 +17,8 @@ function PlaceDefn(name, actions, actionToInputsMappings)
 		(
 			this.actionToInputsMappings
 		).clearLookups();
+
+		this.actionToInputsMappingSelected = null;
 	}
 
 	PlaceDefn.prototype.actionToInputsMappingsRestoreDefaults = function()
