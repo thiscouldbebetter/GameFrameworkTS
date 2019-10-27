@@ -8,7 +8,7 @@ function Playable(player)
 	{
 		var size = place.size;
 		var placeDefn = place.defn(world);
-		var inputToActionMappings = placeDefn.inputToActionMappings;
+		var actionToInputsMappings = placeDefn.actionToInputsMappings;
 		var actions = placeDefn.actions;
 		var camera = place.camera;
 
@@ -44,7 +44,7 @@ function Playable(player)
 			var inputPressed = inputsPressed[i];
 			if (inputPressed.isActive == true)
 			{
-				var mapping = inputToActionMappings[inputPressed.name];
+				var mapping = actionToInputsMappings[inputPressed.name];
 				if (mapping != null)
 				{
 					var actionName = mapping.actionName;

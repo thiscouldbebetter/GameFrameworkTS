@@ -4,14 +4,12 @@ function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 	this.venueNextIfFileSpecified = venueNextIfFileSpecified;
 	this.venueNextIfCancelled = venueNextIfCancelled;
 
-	this.inputToActionMappings =
+	this.actionToInputsMappings =
 	[
-		new InputToActionMapping("Escape", "ControlCancel", true),
-		new InputToActionMapping("Gamepad0Button0", "ControlCancel", true),
-	].addLookups
-	(
-		function(x) { return x.inputName; }
-	);
+		new ActionToInputsMapping("ControlCancel", ["Escape", "Gamepad0Button0"], true),
+	];
+
+	ActionToInputsMapping.addLookupsByInputNames(this.actionToInputsMappings);
 }
 
 {
@@ -77,11 +75,11 @@ function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 			var inputPressed = inputsPressed[i];
 			if (inputPressed.isActive == true)
 			{
-				var inputToActionMapping = this.inputToActionMappings[inputPressed.name];
-				if (inputToActionMapping != null)
+				var actionToInputsMapping = this.actionToInputsMappings[inputPressed.name];
+				if (actionToInputsMapping != null)
 				{
 					inputPressed.isActive = false;
-					var actionName = inputToActionMapping.actionName;
+					var actionName = actionToInputsMapping.actionName;
 					if (actionName == "ControlCancel")
 					{
 						universe.venueNext = this.venueNextIfCancelled;

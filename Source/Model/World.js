@@ -119,29 +119,22 @@ function World(name, dateCreated, defns, place)
 			),
 		]
 
-		var inputToActionMappings =
+		var actionToInputsMappings =
 		[
-			new InputToActionMapping("Escape", "ShowMenu"),
+			new ActionToInputsMapping("ShowMenu", ["Escape"]),
 
-			new InputToActionMapping("ArrowDown", "MoveDown"),
-			new InputToActionMapping("ArrowLeft", "MoveLeft"),
-			new InputToActionMapping("ArrowRight", "MoveRight"),
-			new InputToActionMapping("ArrowUp", "MoveUp"),
-			new InputToActionMapping("Enter", "Fire"),
-
-			new InputToActionMapping("Gamepad0Down", "MoveDown"),
-			new InputToActionMapping("Gamepad0Left", "MoveLeft"),
-			new InputToActionMapping("Gamepad0Right", "MoveRight"),
-			new InputToActionMapping("Gamepad0Up", "MoveUp"),
-			new InputToActionMapping("Gamepad0Button0", "Fire"),
-
+			new ActionToInputsMapping("MoveDown", ["ArrowDown", "Gamepad0Down"]),
+			new ActionToInputsMapping("MoveLeft", ["ArrowLeft", "Gamepad0Left"]),
+			new ActionToInputsMapping("MoveRight", ["ArrowRight", "Gamepad0Right"]),
+			new ActionToInputsMapping("MoveUp", ["ArrowUp", "Gamepad0Up"]),
+			new ActionToInputsMapping("Fire", ["Enter", "Gamepad0Button0"]),
 		];
 
 		var placeDefnDemo = new PlaceDefn
 		(
 			"Demo",
 			actions,
-			inputToActionMappings
+			actionToInputsMappings
 		);
 
 		var placeDefns = [ placeDefnDemo ]; // todo

@@ -6,11 +6,12 @@ function VenueVideo(videoName, venueNext)
 
 	this.hasVideoBeenStarted = false;
 
-	this.inputToActionMappings =
+	this.actionToInputsMappings =
 	[
-		new InputToActionMapping("Escape", "VideoSkip", true),
-		new InputToActionMapping("Gamepad0Button0", "VideoSkip", true),
-	].addLookups( function (x) { return x.inputName; } );
+		new ActionToInputsMapping("VideoSkip", ["Escape", "Gamepad0Button0"], true),
+	];
+
+	ActionToInputsMapping.addLookupsByInputName(this.actionToInputsMappings);
 }
 
 {
@@ -46,11 +47,11 @@ function VenueVideo(videoName, venueNext)
 					var inputPressed = inputsPressed[i];
 					if (inputPressed.isActive == true)
 					{
-						var inputToActionMapping = this.inputToActionMappings[inputPressed.name];
-						if (inputToActionMapping != null)
+						var actionToInputsMapping = this.actionToInputsMappings[inputPressed.name];
+						if (actionToInputsMapping != null)
 						{
 							inputPressed.isActive = false;
-							var actionName = inputToActionMapping.actionName;
+							var actionName = actionToInputsMapping.actionName;
 							if (actionName == "VideoSkip")
 							{
 								shouldVideoBeStopped = true;

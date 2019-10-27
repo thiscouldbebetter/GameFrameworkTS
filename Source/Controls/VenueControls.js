@@ -3,35 +3,30 @@ function VenueControls(controlRoot)
 {
 	this.controlRoot = controlRoot;
 
-	this.inputToActionMappings =
-	[
-		new InputToActionMapping("ArrowDown", "ControlIncrement", true),
-		new InputToActionMapping("ArrowLeft", "ControlPrev", true),
-		new InputToActionMapping("ArrowRight", "ControlNext", true),
-		new InputToActionMapping("ArrowUp", "ControlDecrement", true),
-		new InputToActionMapping("Backspace", "ControlCancel", true),
-		new InputToActionMapping("Enter", "ControlConfirm", true),
-		new InputToActionMapping("Escape", "ControlCancel", true),
-		new InputToActionMapping("Tab", "ControlNext", true),
-	];
-
-	var numberOfGamepadsPossible = 4;
-	for (var i = 0; i < numberOfGamepadsPossible; i++)
+	function buildGamepadInputs(numberOfGamepads, inputName)
 	{
-		var gamepadID = "Gamepad" + i;
+		var returnValues = [];
 
-		this.inputToActionMappings.append
-		([
-			new InputToActionMapping(gamepadID + "MoveDown", "ControlIncrement", true),
-			new InputToActionMapping(gamepadID + "MoveLeft", "ControlPrev", true),
-			new InputToActionMapping(gamepadID + "MoveRight", "ControlNext", true),
-			new InputToActionMapping(gamepadID + "ArrowUp", "ControlDecrement", true),
-			new InputToActionMapping(gamepadID + "Button0", "ControlCancel", true),
-			new InputToActionMapping(gamepadID + "Button1", "ControlConfirm", true),
-		]);
+		for (var i = 0; i < numberOfGamepads; i++)
+		{
+			var inputNameForGamepad = "Gamepad" + i + inputName;
+			returnValues.push(inputNameForGamepad);
+		}
+
+		return returnValues;
 	}
 
-	this.inputToActionMappings.addLookups( function(x) { return x.inputName; } );
+	this.actionToInputsMappings =
+	[
+		new ActionToInputsMapping("ControlIncrement", ["ArrowDown"].addMany(buildGamepadInputs("MoveDown")), true),
+		new ActionToInputsMapping("ControlPrev", ["ArrowLeft"].addMany(buildGamepadInputs("MoveLeft")), true),
+		new ActionToInputsMapping("ControlNext", ["ArrowRight", "Tab"].addMany(buildGamepadInputs("MoveRight")), true),
+		new ActionToInputsMapping("ControlDecrement", ["ArrowUp"].addMany(buildGamepadInputs("MoveUp")), true),
+		new ActionToInputsMapping("ControlConfirm", ["Enter"].addMany(buildGamepadInputs("Button1")), true),
+		new ActionToInputsMapping("ControlCancel", ["Escape"].addMany(buildGamepadInputs("Button0")), true)
+	];
+
+	ActionToInputsMapping.addLookupsByInputNames(this.actionToInputsMappings);
 
 	// Helper variables.
 
@@ -64,7 +59,7 @@ function VenueControls(controlRoot)
 			{
 				var inputPressedName = inputPressed.name;
 
-				var mapping = this.inputToActionMappings[inputPressedName];
+				var mapping = this.actionToInputsMappings[inputPressedName];
 
 				if (inputPressedName.startsWith("Mouse") == false)
 				{

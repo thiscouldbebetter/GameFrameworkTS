@@ -52,7 +52,7 @@ function ControlBuilder(styles)
 		var numberOfOptions = optionNames.length;
 
 		var buttonWidth = 55;
-		var buttonSize = new Coords(buttonWidth, fontHeight);
+		var buttonSize = new Coords(buttonWidth, fontHeight * 2);
 		var spaceBetweenButtons = 5;
 		var buttonMarginLeftRight =
 			(
@@ -364,10 +364,10 @@ function ControlBuilder(styles)
 
 				new ControlButton
 				(
-					"buttonControls",
+					"buttonInputs",
 					new Coords(30, row3PosY), // pos
 					new Coords(65, buttonHeight), // size
-					"Controls",
+					"Inputs",
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
@@ -375,7 +375,7 @@ function ControlBuilder(styles)
 					{
 						var venueCurrent = universe.venueCurrent;
 						var controlGameControls =
-							universe.controlBuilder.controls(universe, size, venueCurrent);
+							universe.controlBuilder.inputs(universe, size, venueCurrent);
 						var venueNext = new VenueControls(controlGameControls);
 						venueNext = new VenueFader(venueNext, venueCurrent);
 						universe.venueNext = venueNext;
@@ -485,7 +485,7 @@ function ControlBuilder(styles)
 		);
 	};
 
-	ControlBuilder.prototype.controls = function(universe, size, venuePrev)
+	ControlBuilder.prototype.inputs = function(universe, size, venuePrev)
 	{
 		if (size == null)
 		{
@@ -502,7 +502,7 @@ function ControlBuilder(styles)
 		var world = universe.world;
 		var placeCurrentDefnName = "Demo"; // hack
 		var placeDefn = world.defns.placeDefns[placeCurrentDefnName];
-		var inputToActionMappings = placeDefn.inputToActionMappings;
+		placeDefn.actionToInputsMappingsEdit();
 
 		var returnValue = new ControlContainer
 		(
@@ -513,27 +513,27 @@ function ControlBuilder(styles)
 			[
 				new ControlLabel
 				(
-					"labelControls",
+					"labelActions",
 					new Coords(100, 15), // pos
 					new Coords(100, 25), // size
 					true, // isTextCentered
-					"Controls:",
+					"Actions:",
 					fontHeight
 				),
 
 				new ControlList
 				(
-					"listControls",
+					"listActions",
 					new Coords(50, 25), // pos
 					new Coords(100, 40), // size
-					new DataBinding(inputToActionMappings), // items
+					new DataBinding(placeDefn.actionToInputsMappingsEdited), // items
 					new DataBinding(null, function get(c) { return c.actionName; }), // bindingForItemText
 					fontHeight,
 					new DataBinding
 					(
 						placeDefn,
-						function get(c) { return c.inputToActionMappingSelected; },
-						function set(c, v) { c.inputToActionMappingSelected = v; }
+						function get(c) { return c.actionToInputsMappingSelected; },
+						function set(c, v) { c.actionToInputsMappingSelected = v; }
 					), // bindingForItemSelected
 					new DataBinding(null, function(c) { return c; } ), // bindingForItemValue
 				),
@@ -541,26 +541,26 @@ function ControlBuilder(styles)
 				new ControlLabel
 				(
 					"labelInput",
-					new Coords(50, 70), // pos
+					new Coords(100, 70), // pos
 					new Coords(100, 15), // size
-					false, // isTextCentered
-					"Input:",
+					true, // isTextCentered
+					"Inputs:",
 					fontHeight
 				),
 
 				new ControlLabel
 				(
 					"infoInput",
-					new Coords(80, 70), // pos
-					new Coords(70, 15), // size
-					false, // isTextCentered
+					new Coords(100, 80), // pos
+					new Coords(200, 15), // size
+					true, // isTextCentered
 					new DataBinding
 					(
 						placeDefn,
 						function get(c)
 						{
-							var i = c.inputToActionMappingSelected;
-							return (i == null ? "-" : i.inputName);
+							var i = c.actionToInputsMappingSelected;
+							return (i == null ? "-" : i.inputNames.join(", "));
 						}
 					), // text
 					fontHeight
@@ -569,7 +569,7 @@ function ControlBuilder(styles)
 				new ControlButton
 				(
 					"buttonClear",
-					new Coords(50, 90), // pos
+					new Coords(25, 90), // pos
 					new Coords(45, 15), // size
 					"Clear",
 					fontHeight,
@@ -577,8 +577,11 @@ function ControlBuilder(styles)
 					true, // isEnabled
 					function click(universe)
 					{
-						var mappingSelected = placeDefn.inputToActionMappingSelected;
-						mappingSelected.inputName = "-";
+						var mappingSelected = placeDefn.actionToInputsMappingSelected;
+						if (mappingSelected != null)
+						{
+							mappingSelected.inputNames.length = 0;
+						}
 					},
 					universe // context
 				),
@@ -586,7 +589,7 @@ function ControlBuilder(styles)
 				new ControlButton
 				(
 					"buttonAdd",
-					new Coords(105, 90), // pos
+					new Coords(80, 90), // pos
 					new Coords(45, 15), // size
 					"Add",
 					fontHeight,
@@ -594,35 +597,84 @@ function ControlBuilder(styles)
 					true, // isEnabled
 					function click(universe)
 					{
-						var mappingSelected = placeDefn.inputToActionMappingSelected;
-						mappingSelected.inputName = "todo";
+						var mappingSelected = placeDefn.actionToInputsMappingSelected;
+						if (mappingSelected != null)
+						{
+							var inputName = "todo";
+							mappingSelected.inputNames.push(inputName);
+						}
 					},
 					universe // context
 				),
 
-
 				new ControlButton
 				(
-					"buttonRestoreDefaults",
-					new Coords(50, 115), // pos
+					"buttonRestoreDefault",
+					new Coords(135, 90), // pos
 					new Coords(45, 15), // size
-					"Defaults",
+					"Default",
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
 					function click(universe)
 					{
-						placeDefn.inputToActionMappingsRestoreDefaults();
+						var mappingSelected = placeDefn.actionToInputsMappingSelected;
+						if (mappingSelected != null)
+						{
+							var mappingDefault = placeDefn.actionToInputsMappingsDefault.filter
+							(
+								function(x) { return x.actionName == mappingSelected.actionName }
+							)[0];
+							mappingSelected.inputNames = mappingDefault.inputNames.slice();
+						}
 					},
 					universe // context
 				),
 
 				new ControlButton
 				(
-					"buttonDone",
-					new Coords(105, 115), // pos
+					"buttonDefaultAll",
+					new Coords(50, 110), // pos
+					new Coords(100, 15), // size
+					"Default All",
+					fontHeight,
+					true, // hasBorder
+					true, // isEnabled
+					function click(universe)
+					{
+						var venueInputs = universe.venueCurrent;
+						var controlConfirm = universe.controlBuilder.confirm
+						(
+							universe,
+							size,
+							"Are you sure you want to restore defaults?",
+							function confirm(universe)
+							{
+								placeDefn.actionToInputsMappingsRestoreDefaults();
+								var venueNext = venueInputs;
+								venueNext = new VenueFader(venueNext, universe.venueCurrent);
+								universe.venueNext = venueNext;
+							},
+							function cancel(universe)
+							{
+								var venueNext = venueInputs;
+								venueNext = new VenueFader(venueNext, universe.venueCurrent);
+								universe.venueNext = venueNext;
+							}
+						);
+						var venueNext = new VenueControls(controlConfirm);
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
+						universe.venueNext = venueNext;
+					},
+					universe // context
+				),
+
+				new ControlButton
+				(
+					"buttonCancel",
+					new Coords(50, 130), // pos
 					new Coords(45, 15), // size
-					"Done",
+					"Cancel",
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
@@ -637,21 +689,41 @@ function ControlBuilder(styles)
 
 				new ControlButton
 				(
-					"buttonBack",
-					new Coords(10, 10), // pos
-					new Coords(15, 15), // size
-					"<",
+					"buttonSave",
+					new Coords(105, 130), // pos
+					new Coords(45, 15), // size
+					"Save",
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
 					function click(universe)
 					{
-						var venueNext = venuePrev;
+						var mappings = placeDefn.actionToInputsMappingsEdited;
+						var doAnyActionsLackInputs = mappings.some
+						(
+							function(x) { return x.inputNames.length == 0; }
+						);
+						var venueNext;
+						if (doAnyActionsLackInputs)
+						{
+							venueNext = new VenueMessage
+							(
+								"Not all actions have inputs!",
+								universe.venueCurrent, // venueNext
+								universe.venueCurrent, // venuePrev
+								size
+							);
+						}
+						else
+						{
+							placeDefn.actionToInputsMappingsSave();
+							venueNext = venuePrev;
+						}
 						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
 					},
 					universe // context
-				),
+				)
 			]
 		);
 
