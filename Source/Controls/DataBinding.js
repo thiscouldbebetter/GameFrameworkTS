@@ -1,9 +1,9 @@
 
-function DataBinding(context, bindingExpression, argumentLookup)
+function DataBinding(context, get, set)
 {
 	this.context = context;
-	this.bindingExpression = bindingExpression;
-	this.argumentLookup = argumentLookup;
+	this._get = get;
+	this._set = set;
 }
 
 {
@@ -15,136 +15,18 @@ function DataBinding(context, bindingExpression, argumentLookup)
 
 	DataBinding.prototype.get = function()
 	{
-		var returnValue = this.context;
-
-		if (this.bindingExpression != null)
-		{
-			var bindingExpressionParts = this.bindingExpression.split(".");
-			for (var i = 0; i < bindingExpressionParts.length; i++)
-			{
-				// hack
-				if (returnValue == null)
-				{
-					break;
-				}
-
-				var bindingExpressionPart = bindingExpressionParts[i];
-				var indexOfOpenParenthesis = bindingExpressionPart.indexOf("(");
-				if (indexOfOpenParenthesis != -1)
-				{
-					var functionName = bindingExpressionPart.substr
-					(
-						0, indexOfOpenParenthesis
-					);
-
-					if (returnValue[functionName] == null)
-					{
-						returnValue = null;
-					}
-					else
-					{
-						var indexOfCloseParenthesis = bindingExpressionPart.indexOf(")");
-						var argumentNamesAsString = bindingExpressionPart.substring // Not "substr".
-						(
-							indexOfOpenParenthesis + 1, indexOfCloseParenthesis
-						);
-
-						var argumentNames =
-							argumentNamesAsString.split(" ").join("").split(",");
-						var argumentValues = [];
-
-						for (var a = 0; a < argumentNames.length; a++)
-						{
-							var argumentName = argumentNames[a];
-							if (argumentName.length > 0)
-							{
-								var argumentValue = this.argumentLookup[argumentName];
-								argumentValues.push(argumentValue);
-							}
-						}
-
-						returnValue = returnValue[functionName].apply
-						(
-							returnValue, argumentValues
-						);
-					}
-				}
-				else
-				{
-					returnValue = returnValue[bindingExpressionPart];
-				}
-			}
-		}
-
-		return returnValue;
+		return (this._get == null ? this.context : this._get(this.context) );
 	};
 
-	DataBinding.prototype.set = function(valueToSet)
+	DataBinding.prototype.set = function(value)
 	{
-		var returnValue = this.context;
-
-		if (this.bindingExpression != null)
+		if (this._set == null)
 		{
-			var bindingExpressionParts = this.bindingExpression.split(".");
-			for (var i = 0; i < bindingExpressionParts.length - 1; i++)
-			{
-				// hack
-				if (returnValue == null)
-				{
-					break;
-				}
-
-				var bindingExpressionPart = bindingExpressionParts[i];
-				var indexOfOpenParenthesis = bindingExpressionPart.indexOf("(");
-				if (indexOfOpenParenthesis != -1)
-				{
-					var functionName = bindingExpressionPart.substr
-					(
-						0, indexOfOpenParenthesis
-					);
-
-					if (returnValue[functionName] == null)
-					{
-						returnValue = null;
-					}
-					else
-					{
-						var indexOfCloseParenthesis = bindingExpressionPart.indexOf(")");
-						var argumentNamesAsString = bindingExpressionPart.substring // Not "substr".
-						(
-							indexOfOpenParenthesis + 1, indexOfCloseParenthesis
-						);
-
-						var argumentNames =
-							argumentNamesAsString.split(" ").join("").split(",");
-						var argumentValues = [];
-
-						for (var a = 0; a < argumentNames.length; a++)
-						{
-							var argumentName = argumentNames[a];
-							if (argumentName.length > 0)
-							{
-								var argumentValue = this.argumentLookup[argumentName];
-								argumentValues.push(argumentValue);
-							}
-						}
-
-						returnValue = returnValue[functionName].apply
-						(
-							returnValue, argumentValues
-						);
-					}
-				}
-				else
-				{
-					returnValue = returnValue[bindingExpressionPart];
-				}
-			}
-
-			var bindingExpressionPartFinal = bindingExpressionParts[bindingExpressionParts.length - 1];
-			returnValue[bindingExpressionPartFinal] = valueToSet;
+			this.context = value;
 		}
-
-		return valueToSet;
+		else
+		{
+			this._set(this.context, value);
+		}
 	};
 }

@@ -18,7 +18,5 @@ function PlaceDefn(name, actions, inputToActionMappings)
 		(
 			function(x) { return x.inputName; }
 		);
-
-		this._inputToActionMappingSelected = this.inputToActionMappings[0];
 	};
 }

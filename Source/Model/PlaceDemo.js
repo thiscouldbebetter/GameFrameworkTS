@@ -937,7 +937,11 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 			new Coords(8, 5), //pos,
 			new Coords(100, 0), //size,
 			false, // isTextCentered,
-			new DataBinding(playerEntity.Killable, "integrity"), // text,
+			new DataBinding
+			(
+				playerEntity.Killable,
+				function get(c) { return c.integrity; }
+			), // text,
 			10, // fontHeightInPixels
 		);
 		this.venueControls = new VenueControls(controlStatus);

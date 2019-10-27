@@ -129,7 +129,11 @@ function ConversationRun(defn, quit, universe)
 					), // pos
 					size, // size
 					true, // isTextCentered
-					new DataBinding(conversationRun, "scopeCurrent.displayTextCurrent"),
+					new DataBinding
+					(
+						conversationRun,
+						function get(c) { return c.scopeCurrent.displayTextCurrent; }
+					),
 					fontHeight
 				),
 
@@ -146,19 +150,19 @@ function ConversationRun(defn, quit, universe)
 					new DataBinding
 					(
 						conversationRun,
-						"scopeCurrent.talkNodesForOptionsActive()"
+						function get(c) { return c.scopeCurrent.talkNodesForOptionsActive(); }
 					),
 					// bindingForItemText
 					new DataBinding
 					(
 						null, // context
-						"text" // bindingExpression
+						function get(c) { return c.text; }
 					),
 					fontHeightShort,
 					new DataBinding
 					(
 						conversationRun,
-						"scopeCurrent.talkNodeForOptionSelected"
+						function get(c) { return c.scopeCurrent.talkNodeForOptionSelected; }
 					), // bindingForItemSelected
 					new DataBinding() // bindingForItemValue
 				),
@@ -258,13 +262,12 @@ function ConversationRun(defn, quit, universe)
 					new DataBinding
 					(
 						conversationRun,
-						"talkNodesForTranscript"
+						function get(c) { return c.talkNodesForTranscript; }
 					),
 					new DataBinding
 					(
 						null,
-						"textForTranscript(conversationDefn)",
-						{ "conversationDefn": conversationDefn }
+						function get(c) { return c.textForTranscript(conversationDefn); }
 					), // bindingForItemText
 					fontHeightShort
 				),

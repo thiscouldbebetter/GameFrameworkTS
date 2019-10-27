@@ -263,10 +263,21 @@ function ControlBuilder(styles)
 					"selectMusicVolume",
 					new Coords(65, row1PosY), // pos
 					new Coords(30, buttonHeight), // size
-					new DataBinding(universe.soundHelper, "musicVolume"), // valueSelected
+					new DataBinding
+					(
+						universe.soundHelper,
+						function get(c) { return c.musicVolume; },
+						function set(c, v) { c.musicVolume = v; }
+					), // valueSelected
 					SoundHelper.controlSelectOptionsVolume(), // options
-					new DataBinding(null, "value"), // bindingForOptionValues,
-					new DataBinding(null, "text"), // bindingForOptionText
+					new DataBinding
+					(
+						null, function get(c) { return c.value; }
+					), // bindingForOptionValues,
+					new DataBinding
+					(
+						null, function get(c) { return c.text; }
+					), // bindingForOptionText
 					fontHeight
 				),
 
@@ -285,10 +296,15 @@ function ControlBuilder(styles)
 					"selectSoundVolume",
 					new Coords(140, row1PosY), // pos
 					new Coords(30, buttonHeight), // size
-					new DataBinding(universe.soundHelper, "soundVolume"), // valueSelected
+					new DataBinding
+					(
+						universe.soundHelper,
+						function get(c) { return c.soundVolume; },
+						function set(c, v) { c.soundVolume = v; }
+					), // valueSelected
 					SoundHelper.controlSelectOptionsVolume(), // options
-					new DataBinding(null, "value"), // bindingForOptionValues,
-					new DataBinding(null, "text"), // bindingForOptionText
+					new DataBinding(null, function get(c) { return c.value; } ), // bindingForOptionValues,
+					new DataBinding(null, function get(c) { return c.text; } ), // bindingForOptionText
 					fontHeight
 				),
 
@@ -310,8 +326,8 @@ function ControlBuilder(styles)
 					universe.display.sizeInPixels, // valueSelected
 					// options
 					universe.display.sizesAvailable,
-					new DataBinding(), // bindingForOptionValues,
-					new DataBinding(null, "toStringXY()"), // bindingForOptionText
+					new DataBinding(null, function get(c) { return c; } ), // bindingForOptionValues,
+					new DataBinding(null, function get(c) { return c.toStringXY(); } ), // bindingForOptionText
 					fontHeight
 				),
 
@@ -498,7 +514,7 @@ function ControlBuilder(styles)
 				new ControlLabel
 				(
 					"labelControls",
-					new Coords(100, 40), // pos
+					new Coords(100, 15), // pos
 					new Coords(100, 25), // size
 					true, // isTextCentered
 					"Controls:",
@@ -508,33 +524,82 @@ function ControlBuilder(styles)
 				new ControlList
 				(
 					"listControls",
-					new Coords(50, 50), // pos
+					new Coords(50, 25), // pos
 					new Coords(100, 40), // size
 					new DataBinding(inputToActionMappings), // items
-					new DataBinding(null, "actionName"), // bindingForItemText
+					new DataBinding(null, function get(c) { return c.actionName; }), // bindingForItemText
 					fontHeight,
-					new DataBinding(placeDefn, "inputToActionMappingSelected"), // bindingForItemSelected
-					new DataBinding(), // bindingForItemValue
+					new DataBinding
+					(
+						placeDefn,
+						function get(c) { return c.inputToActionMappingSelected; },
+						function set(c, v) { c.inputToActionMappingSelected = v; }
+					), // bindingForItemSelected
+					new DataBinding(null, function(c) { return c; } ), // bindingForItemValue
 				),
 
 				new ControlLabel
 				(
 					"labelInput",
-					new Coords(50, 95), // pos
+					new Coords(50, 70), // pos
 					new Coords(100, 15), // size
 					false, // isTextCentered
 					"Input:",
 					fontHeight
 				),
 
-				new ControlTextBox
+				new ControlLabel
 				(
-					"textBoxInput",
-					new Coords(80, 95), // pos
+					"infoInput",
+					new Coords(80, 70), // pos
 					new Coords(70, 15), // size
-					new DataBinding(placeDefn, "_inputToActionMappingSelected.inputName"), // text
+					false, // isTextCentered
+					new DataBinding
+					(
+						placeDefn,
+						function get(c)
+						{
+							var i = c.inputToActionMappingSelected;
+							return (i == null ? "-" : i.inputName);
+						}
+					), // text
 					fontHeight
 				),
+
+				new ControlButton
+				(
+					"buttonClear",
+					new Coords(50, 90), // pos
+					new Coords(45, 15), // size
+					"Clear",
+					fontHeight,
+					true, // hasBorder
+					true, // isEnabled
+					function click(universe)
+					{
+						var mappingSelected = placeDefn.inputToActionMappingSelected;
+						mappingSelected.inputName = "-";
+					},
+					universe // context
+				),
+
+				new ControlButton
+				(
+					"buttonAdd",
+					new Coords(105, 90), // pos
+					new Coords(45, 15), // size
+					"Add",
+					fontHeight,
+					true, // hasBorder
+					true, // isEnabled
+					function click(universe)
+					{
+						var mappingSelected = placeDefn.inputToActionMappingSelected;
+						mappingSelected.inputName = "todo";
+					},
+					universe // context
+				),
+
 
 				new ControlButton
 				(
@@ -650,10 +715,17 @@ function ControlBuilder(styles)
 					new DataBinding
 					(
 						universe.profile.worlds,
-						null
+						function get(c) { return c; }
 					),
-					new DataBinding(null, "name"), // bindingForOptionText
-					fontHeight
+					new DataBinding(null, function get(c) { return c.name; } ), // bindingForOptionText
+					fontHeight,
+					new DataBinding
+					(
+						universe,
+						function get(c) { return c.worldSelected; },
+						function set(c, v) { c.worldSelected = v; }
+					), // bindingForOptionSelected
+					new DataBinding(null, function get(c) { return c; }) // value
 				),
 
 				new ControlButton
@@ -699,19 +771,8 @@ function ControlBuilder(styles)
 					// isEnabled
 					new DataBinding
 					(
-						function()
-						{
-							var controlRoot = universe.venueCurrent.controlRoot;
-							if (controlRoot == null)
-							{
-								return false;
-							}
-							else
-							{
-								return controlRoot.children["listWorlds"].itemSelected() != null;
-							}
-						},
-						"call()"
+						universe,
+						function get(c) { return (c.worldSelected != null); }
 					),
 					function click(universe)
 					{
@@ -846,7 +907,12 @@ function ControlBuilder(styles)
 					"textBoxName",
 					new Coords(50, 50), // pos
 					new Coords(100, 25), // size
-					"", // text
+					new DataBinding
+					(
+						universe.profileSelected,
+						function get(c) { return c.name; },
+						function set(c, v) { c.name = v; },
+					), // text
 					fontHeight
 				),
 
@@ -861,19 +927,8 @@ function ControlBuilder(styles)
 					// isEnabled
 					new DataBinding
 					(
-						function()
-						{
-							var controlRoot = universe.venueCurrent.controlRoot;
-							if (controlRoot == null)
-							{
-								return false;
-							}
-							else
-							{
-								return controlRoot.children["textBoxName"].text().length > 0;
-							}
-						},
-						"call()"
+						universe,
+						function get(c) { return c.profileSelected.name.length > 0; }
 					),
 					function click(universe)
 					{
@@ -965,8 +1020,8 @@ function ControlBuilder(styles)
 					"listProfiles",
 					new Coords(50, 50), // pos
 					new Coords(100, 40), // size
-					new DataBinding(profiles),
-					new DataBinding(null, "name"),
+					new DataBinding(profiles, function get(c) { return c; } ),
+					new DataBinding(null, function get(c) { return c.name; } ),
 					fontHeight
 				),
 
@@ -981,6 +1036,7 @@ function ControlBuilder(styles)
 					true, // isEnabled
 					function click(universe)
 					{
+						universe.profileSelected = new Profile("");
 						var venueNext = new VenueControls
 						(
 							universe.controlBuilder.profileNew(universe)
@@ -1002,19 +1058,8 @@ function ControlBuilder(styles)
 					// isEnabled
 					new DataBinding
 					(
-						function()
-						{
-							var controlRoot = universe.venueCurrent.controlRoot;
-							if (controlRoot == null)
-							{
-								return false;
-							}
-							else
-							{
-								return controlRoot.children["listProfiles"].itemSelected() != null;
-							}
-						},
-						"call()"
+						universe,
+						function get(c) { return (c.profileSelected != null); }
 					),
 					function click(universe)
 					{
