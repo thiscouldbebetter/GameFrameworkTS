@@ -202,10 +202,31 @@ function Bounds(center, size)
 		return coordsToTrim.trimToRangeMinMax(this.min(), this.max());
 	};
 
+	// cloneable
+
+	Bounds.prototype.clone = function()
+	{
+		return new Bounds(this.center.clone(), this.size.clone());
+	}
+
+	Bounds.prototype.overwriteWith = function(other)
+	{
+		this.center.overwriteWith(other.center);
+		this.size.overwriteWith(other.size);
+		return this;
+	}
+
 	// string
 
 	Bounds.prototype.toString = function()
 	{
 		return this.min().toString() + ":" + this.max().toString();
 	};
+
+	// transformable
+
+	Bounds.prototype.coordsGroupToTranslate = function()
+	{
+		return [ this.center ];
+	}
 }

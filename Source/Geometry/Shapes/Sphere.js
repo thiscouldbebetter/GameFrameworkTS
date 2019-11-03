@@ -21,4 +21,25 @@ function Sphere(center, radius)
 	{
 		return new Polar(0, this.radius).random().toCoords(new Coords()).add(this.center);
 	};
+
+	// cloneable
+
+	Sphere.prototype.clone = function()
+	{
+		return new Sphere(this.center.clone(), this.radius);
+	};
+
+	Sphere.prototype.overwriteWith = function(other)
+	{
+		this.center.overwriteWith(other.center);
+		this.radius = other.radius;
+		return this;
+	};
+
+	// transformable
+
+	Sphere.prototype.coordsGroupToTranslate = function()
+	{
+		return [ this.center ];
+	}
 }

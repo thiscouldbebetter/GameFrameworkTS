@@ -16,4 +16,18 @@ function Shell(sphereOuter, radiusInner)
 	{
 		return this._collider;
 	};
+
+	// cloneable
+
+	Shell.prototype.clone = function()
+	{
+		return new Shell(this.sphereOuter.clone(), this.radiusInner);
+	};
+
+	Shell.prototype.overwriteWith = function(other)
+	{
+		this.sphereOuter.overwriteWith(other.sphereOuter);
+		this.radiusInner = other.radiusInner;
+		return this;
+	};
 }

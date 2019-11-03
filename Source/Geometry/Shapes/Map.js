@@ -30,4 +30,16 @@ function Map(sizeInCells, cellSize, cellPrototype, cellAtPosInCells, cellSource)
 	{
 		return this.sizeInCells.x * this.sizeInCells.y;
 	};
+
+	// cloneable
+
+	Map.prototype.clone = function()
+	{
+		return new Map(this.sizeInCells, this.cellSize, this.cellPrototype, this.cellAtPosInCells, this.cellSource);
+	};
+
+	Map.prototype.overwriteWith = function(other)
+	{
+		this.cellSource.overwriteWith(other.cellSource);
+	}
 }

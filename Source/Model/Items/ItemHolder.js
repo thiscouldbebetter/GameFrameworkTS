@@ -69,4 +69,146 @@ function ItemHolder(itemEntities)
 			this.itemRemove(itemEntity.Item);
 		}
 	};
+
+	// controls
+
+	ItemHolder.prototype.toControl = function(universe, size, entityItemHolder, venuePrev)
+	{
+		if (size == null)
+		{
+			size = universe.display.sizeDefault();
+		}
+
+		var sizeBase = new Coords(200, 150, 1);
+		var scaleMultiplier = size.clone().divide(sizeBase);
+
+		var fontHeight = 10;
+
+		var itemHolder = this;
+
+		var returnValue = new ControlContainer
+		(
+			"containerItems",
+			Coords.Instances().Zeroes, // pos
+			sizeBase.clone(), // size
+			// children
+			[
+				new ControlLabel
+				(
+					"labelItems",
+					new Coords(100, 15), // pos
+					new Coords(100, 25), // size
+					true, // isTextCentered
+					"Items:",
+					fontHeight
+				),
+
+				new ControlList
+				(
+					"listItems",
+					new Coords(50, 25), // pos
+					new Coords(100, 40), // size
+					new DataBinding(this.itemEntities), // items
+					new DataBinding
+					(
+						null,
+						function get(c) { return c.Item.toString(); }
+					), // bindingForItemText
+					fontHeight,
+					new DataBinding
+					(
+						this,
+						function get(c) { return c.itemEntitySelected; },
+						function set(c, v) { c.itemEntitySelected = v; }
+					), // bindingForItemSelected
+					new DataBinding(null, function(c) { return c; } ), // bindingForItemValue
+				),
+
+				new ControlLabel
+				(
+					"labelItemSelected",
+					new Coords(100, 70), // pos
+					new Coords(100, 15), // size
+					true, // isTextCentered
+					"Selected:",
+					fontHeight
+				),
+
+				new ControlLabel
+				(
+					"infoItemSelected",
+					new Coords(100, 80), // pos
+					new Coords(200, 15), // size
+					true, // isTextCentered
+					new DataBinding
+					(
+						this,
+						function get(c)
+						{
+							var i = c.itemEntitySelected;
+							return (i == null ? "-" : i.Item.toString());
+						}
+					), // text
+					fontHeight
+				),
+
+				new ControlButton
+				(
+					"buttonDrop",
+					new Coords(75, 90), // pos
+					new Coords(50, 15), // size
+					"Drop",
+					fontHeight,
+					true, // hasBorder
+					new DataBinding
+					(
+						this,
+						function get(c) { return c.itemEntitySelected != null}
+					), // isEnabled
+					function click(universe)
+					{
+						var world = universe.world;
+						var place = world.place;
+						var itemEntityToKeep = itemHolder.itemEntitySelected;
+						var itemEntityToDrop = itemEntityToKeep.clone();
+						var itemToDrop = itemEntityToDrop.Item;
+						itemToDrop.quantity = 1;
+						var posToDropAt = itemEntityToDrop.Locatable.loc.pos;
+						var holderPos = entityItemHolder.Locatable.loc.pos;
+						posToDropAt.overwriteWith(holderPos);
+						itemEntityToDrop.Collidable.ticksUntilCanCollide = 50;
+						place.entitySpawn(universe, world, itemEntityToDrop);
+						itemHolder.itemSubtract(itemToDrop);
+						if (itemEntityToKeep.Item.quantity == 0)
+						{
+							itemHolder.itemEntitySelected = null;
+						}
+					},
+					universe // context
+				),
+
+				new ControlButton
+				(
+					"buttonDone",
+					new Coords(75, 110), // pos
+					new Coords(50, 15), // size
+					"Done",
+					fontHeight,
+					true, // hasBorder
+					true, // isEnabled
+					function click(universe)
+					{
+						var venueNext = venuePrev;
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
+						universe.venueNext = venueNext;
+					},
+					universe // context
+				)
+			]
+		);
+
+		returnValue.scalePosAndSize(scaleMultiplier);
+
+		return returnValue;
+	};
 }

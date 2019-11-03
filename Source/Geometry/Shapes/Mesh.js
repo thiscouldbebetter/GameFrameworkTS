@@ -228,6 +228,13 @@ function Mesh(center, vertexOffsets, faceBuilders)
 		this.vertexOffsets.overwriteWith(other.vertexOffsets);
 		this.faceBuilders.overwriteWith(other.faceBuilders);
 	};
+
+	// transformable
+
+	Mesh.prototype.coordsGroupToTranslate = function()
+	{
+		return [ this.center ];
+	};
 }
 
 function Mesh_FaceBuilder(vertexIndices)
@@ -270,4 +277,3 @@ function Mesh_FaceBuilder(vertexIndices)
 		this.vertexIndices.overwriteWith(other.vertexIndices);
 	};
 }
-

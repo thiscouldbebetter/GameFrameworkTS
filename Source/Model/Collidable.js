@@ -1,9 +1,11 @@
 
-function Collidable(collider, entityPropertyNamesToCollideWith, collideEntities)
+function Collidable(colliderAtRest, entityPropertyNamesToCollideWith, collideEntities)
 {
-	this.collider = collider;
+	this.colliderAtRest = colliderAtRest;
 	this.entityPropertyNamesToCollideWith = entityPropertyNamesToCollideWith;
 	this.collideEntities = collideEntities;
+
+	this.collider = this.colliderAtRest.clone();
 
 	if (this.entityPropertyNamesToCollideWith == null)
 	{
@@ -12,6 +14,10 @@ function Collidable(collider, entityPropertyNamesToCollideWith, collideEntities)
 
 	this.ticksUntilCanCollide = 0;
 	this.entityAlreadyCollidedWith = null;
+
+	// Helper variables.
+
+	this._transformTranslate = new Transform_Translate(new Coords());
 }
 
 {
@@ -23,6 +29,17 @@ function Collidable(collider, entityPropertyNamesToCollideWith, collideEntities)
 		}
 		else
 		{
+			this.collider.overwriteWith(this.colliderAtRest);
+
+			Transform.applyTransformToCoordsArrays
+			(
+				this._transformTranslate.displacementSet
+				(
+					entity.Locatable.loc.pos
+				),
+				this.collider.coordsGroupToTranslate()
+			);
+
 			for (var p = 0; p < this.entityPropertyNamesToCollideWith.length; p++)
 			{
 				var entityPropertyName = this.entityPropertyNamesToCollideWith[p];
@@ -73,4 +90,16 @@ function Collidable(collider, entityPropertyNamesToCollideWith, collideEntities)
 			}
 		}
 	};
+
+	// cloneable
+
+	Collidable.prototype.clone = function()
+	{
+		return new Collidable
+		(
+			this.collider.clone(),
+			this.entityPropertyNamesToCollideWith,
+			this.collideEntities
+		);
+	}
 }

@@ -18,4 +18,11 @@ function Locatable(loc)
 			loc.spin.transformOrientation(loc.orientation);
 		}
 	};
+
+	// cloneable
+
+	Locatable.prototype.clone = function()
+	{
+		return new Locatable(this.loc.clone());
+	};
 }

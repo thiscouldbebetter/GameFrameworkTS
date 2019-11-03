@@ -14,4 +14,11 @@ function Item(defnName, quantity)
 	{
 		return this.defnName + " (" + this.quantity + ")";
 	};
+
+	// cloneable
+
+	Item.prototype.clone = function()
+	{
+		return new Item(this.defnName, this.quantity);
+	};
 }

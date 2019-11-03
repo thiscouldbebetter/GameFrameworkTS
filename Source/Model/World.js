@@ -58,6 +58,21 @@ function World(name, dateCreated, defns, place)
 			),
 			new Action
 			(
+				"ShowItems",
+				function perform(universe, world, place, actor)
+				{
+					var itemHolder = actor.ItemHolder;
+					var itemHolderAsControl = itemHolder.toControl
+					(
+						universe, universe.display.sizeInPixels, actor, universe.venueCurrent
+					);
+					var venueNext = new VenueControls(itemHolderAsControl);
+					venueNext = new VenueFader(venueNext, universe.venueCurrent);
+					universe.venueNext = venueNext;
+				}
+			),
+			new Action
+			(
 				"MoveDown",
 				function perform(universe, world, place, actor)
 				{
@@ -122,6 +137,7 @@ function World(name, dateCreated, defns, place)
 		var actionToInputsMappings =
 		[
 			new ActionToInputsMapping("ShowMenu", ["Escape"]),
+			new ActionToInputsMapping("ShowItems", ["Tab"]),
 
 			new ActionToInputsMapping("MoveDown", ["ArrowDown", "Gamepad0Down"]),
 			new ActionToInputsMapping("MoveLeft", ["ArrowLeft", "Gamepad0Left"]),

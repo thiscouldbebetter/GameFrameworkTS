@@ -653,7 +653,10 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 				"ObstacleMapped",
 				[
 					new Locatable(obstacleMappedLoc),
-					new Collidable(new MapLocated(obstacleMappedMap, obstacleMappedLoc)),
+					new Collidable
+					(
+						new MapLocated(obstacleMappedMap, obstacleMappedLoc)
+					),
 					new Damager(1),
 					new Drawable(obstacleMappedVisual)
 				]

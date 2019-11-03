@@ -112,4 +112,18 @@ function Wedge(vertex, directionMin, angleSpannedInTurns)
 
 		return this._collider;
 	};
+
+	// cloneable
+
+	Wedge.prototype.clone = function()
+	{
+		return new Wedge(this.vertex.clone(), this.directionMin.clone(), this.angleSpannedInTurns);
+	};
+
+	Wedge.prototype.overwriteWith = function(other)
+	{
+		this.vertex.overwriteWith(other.vertex);
+		this.directionMin.overwriteWith(other.directionMin);
+		this.angleSpannedInTurns = other.angleSpannedInTurns;
+	};
 }
