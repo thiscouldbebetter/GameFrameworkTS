@@ -30,8 +30,7 @@ function Collidable(colliderAtRest, entityPropertyNamesToCollideWith, collideEnt
 		else
 		{
 			this.collider.overwriteWith(this.colliderAtRest);
-
-			Transform.applyTransformToCoordsArrays
+			Transform.applyTransformToCoordsMany
 			(
 				this._transformTranslate.displacementSet
 				(
@@ -97,7 +96,7 @@ function Collidable(colliderAtRest, entityPropertyNamesToCollideWith, collideEnt
 	{
 		return new Collidable
 		(
-			this.collider.clone(),
+			this.colliderAtRest.clone(),
 			this.entityPropertyNamesToCollideWith,
 			this.collideEntities
 		);

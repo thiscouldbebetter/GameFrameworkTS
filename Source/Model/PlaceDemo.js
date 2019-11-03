@@ -192,7 +192,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 		]);
 		var enemyCollider = Mesh.fromFace
 		(
-			enemyPos, // center
+			new Coords(0, 0), // center
 			enemyColliderAsFace,
 			1 // thickness
 		);
@@ -303,7 +303,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 		var friendlyLoc = new Location(friendlyPos);
 		var friendlyDimension = entityDimension;
 
-		var friendlyCollider = new Sphere(friendlyLoc.pos, friendlyDimension);
+		var friendlyCollider = new Sphere(new Coords(0, 0), friendlyDimension);
 
 		var friendlyVisualNormal = new VisualGroup
 		([
@@ -436,7 +436,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 			"Goal",
 			[
 				new Locatable(goalLoc),
-				new Collidable(new Bounds(goalPos, entitySize)),
+				new Collidable(new Bounds(new Coords(0, 0), entitySize)),
 				new Drawable
 				(
 					new VisualGroup
@@ -518,7 +518,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 				}
 			}
 
-			var itemKeyCollider = new Sphere(itemKeyPos, entityDimensionHalf);
+			var itemKeyCollider = new Sphere(new Coords(0, 0), entityDimensionHalf);
 
 			var itemKeyEntity = new Entity
 			(
@@ -546,7 +546,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 		var obstacleLoc = new Location(obstaclePos);
 		var obstacleCollider = new Bounds
 		(
-			obstaclePos,
+			new Coords(0, 0),
 			obstacleBarSize
 		);
 
@@ -655,7 +655,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 					new Locatable(obstacleMappedLoc),
 					new Collidable
 					(
-						new MapLocated(obstacleMappedMap, obstacleMappedLoc)
+						new MapLocated(obstacleMappedMap, new Location(new Coords(0, 0)))
 					),
 					new Damager(1),
 					new Drawable(obstacleMappedVisual)
@@ -680,12 +680,12 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 		(
 			new Shell
 			(
-				new Sphere(obstaclePos, entityDimension * 3), // sphereOuter
+				new Sphere(new Coords(0, 0), entityDimension * 3), // sphereOuter
 				entityDimension * 2 // radiusInner
 			),
 			new Wedge
 			(
-				obstaclePos,
+				new Coords(0, 0), // vertex
 				obstacleLoc.orientation.forward, //new Coords(1, 0, 0), // directionMin
 				.85 // angleSpannedInTurns
 			)
@@ -739,7 +739,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 
 			var obstacleWallLoc = new Location(obstacleWallPos);
 			var obstacleCollider =
-				new Bounds(obstacleWallPos, obstacleWallSize);
+				new Bounds(new Coords(0, 0), obstacleWallSize);
 			var obstacleWallVisual = new VisualRectangle
 			(
 				obstacleWallSize, obstacleColor
@@ -778,7 +778,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 		var playerPos = new Coords(30, 30);
 		var playerLoc = new Location(playerPos);
 		var playerHeadRadius = entityDimension * .75;
-		var playerCollider = new Sphere(playerLoc.pos, playerHeadRadius);
+		var playerCollider = new Sphere(new Coords(0, 0), playerHeadRadius);
 		var playerColor = "Gray";
 
 		var playerVisualName = new VisualOffset
@@ -913,7 +913,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 		var itemWeaponPos =
 			//new Coords().randomize().multiply(sizeMinusMargins);
 			playerPos.clone().double();
-		var itemWeaponCollider = new Sphere(itemWeaponPos, entityDimensionHalf);
+		var itemWeaponCollider = new Sphere(new Coords(0, 0), entityDimensionHalf);
 
 		var itemWeaponDevice = Device.gun();
 
