@@ -1,0 +1,5 @@
+
+function ItemContainer()
+{
+	// Do nothing.
+}

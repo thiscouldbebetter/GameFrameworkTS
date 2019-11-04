@@ -33,7 +33,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 	var obstacleColor = damagerColor;
 
 	var wallThickness = this.entityBuildObstacleWalls(entities, obstacleColor);
-	var marginThickness = wallThickness * 4;
+	var marginThickness = wallThickness * 8;
 	var marginSize = new Coords(1, 1, 0).multiplyScalar(marginThickness);
 
 	var entitiesObstacles = this.entityBuildObstacleMines(entities, entityDimension, obstacleColor, marginSize);
@@ -45,6 +45,8 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 		entities, entityDimension, numberOfKeysToUnlockGoal, entitiesObstacles, marginSize
 	);
 
+	this.entityBuildCoins(entities, entityDimension, marginSize);
+
 	this.entityBuildWeapon(entities, entityDimension, playerPos);
 
 	var goalEntity = this.entityBuildGoal
@@ -53,6 +55,8 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 	);
 
 	this.entityBuildObstacleRing(entities, entityDimension, goalEntity, obstacleColor);
+
+	this.entityBuildContainer(entities, entityDimension, entitySize);
 
 	this.entitiesAllAddCameraProjection(entities);
 
@@ -171,6 +175,107 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 			]
 		);
 		entities.push(entityBackgroundTop);
+	};
+
+	PlaceDemo.prototype.entityBuildCoins = function
+	(
+		entities, entityDimension, marginSize
+	)
+	{
+		var entityDimensionHalf = entityDimension / 2;
+		var sizeMinusMargins = marginSize.clone().double().invert().add(this.size);
+
+		var itemCoinColor = "Yellow";
+		var itemCoinVisual = new VisualGroup
+		([
+			new VisualCircle
+			(
+				entityDimensionHalf, itemCoinColor
+			),
+			new VisualCircle
+			(
+				entityDimensionHalf * .75, null, "Gray"
+			),
+			new VisualOffset
+			(
+				new VisualText("Coin", itemCoinColor),
+				new Coords(0, entityDimension)
+			)
+		]);
+		var itemCoinCollider = new Sphere(new Coords(0, 0), entityDimensionHalf);
+
+		var displacement = new Coords();
+
+		var numberOfCoins = 10;
+		for (var i = 0; i < numberOfCoins; i++)
+		{
+			var itemCoinPos =
+				new Coords().randomize().multiply(sizeMinusMargins).add(marginSize);
+
+			var itemCoinEntity = new Entity
+			(
+				"Coin" + i,
+				[
+					new Item("Coin", 1),
+					new Locatable( new Location(itemCoinPos) ),
+					new Collidable(itemCoinCollider),
+					new Drawable(itemCoinVisual)
+				]
+			);
+
+			entities.push(itemCoinEntity);
+		}
+	};
+
+	PlaceDemo.prototype.entityBuildContainer = function
+	(
+		entities, entityDimension, entitySize
+	)
+	{
+		var containerPos = new Coords().randomize().multiplyScalar(.5).multiply
+		(
+			this.size
+		);
+		var containerLoc = new Location(containerPos);
+		var containerColor = "Orange";
+		var containerEntity = new Entity
+		(
+			"Container",
+			[
+				new Collidable(new Bounds(new Coords(0, 0), entitySize)),
+				new Drawable
+				(
+					new VisualGroup
+					([
+						new VisualRectangle
+						(
+							new Coords(1.5, 1).multiplyScalar(entityDimension),
+							containerColor
+						),
+						new VisualRectangle
+						(
+							new Coords(1.5 * entityDimension, 1), "Gray"
+						),
+						new VisualRectangle
+						(
+							new Coords(.5, .5).multiplyScalar(entityDimension), "Gray"
+						),
+						new VisualOffset
+						(
+							new VisualText("Container", containerColor),
+							new Coords(0, entityDimension)
+						)
+					])
+				),
+				new ItemContainer(),
+				new ItemHolder(),
+				new Locatable(containerLoc)
+			]
+		);
+
+		entities.push(containerEntity);
+
+		return containerEntity;
 	};
 
 	PlaceDemo.prototype.entityBuildEnemy = function
@@ -804,6 +909,22 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 
 				var playerAsKillable = entityPlayer.Killable;
 				playerAsKillable.integrity -= entityOther.Damager.damagePerHit;
+			}
+			else if (entityOther.ItemContainer != null)
+			{
+				entityOther.Collidable.ticksUntilCanCollide = 50; // hack
+				var tradeSession = new ItemTradeSession
+				(
+					[ entityPlayer, entityOther ],
+					universe.venueCurrent
+				);
+				var tradeSessionAsControl = tradeSession.toControl
+				(
+					universe, universe.display.sizeInPixels
+				);
+				var venueNext = new VenueControls(tradeSessionAsControl);
+				venueNext = new VenueFader(venueNext);
+				universe.venueNext = venueNext;
 			}
 			else if (entityOther.Goal != null)
 			{

@@ -60,14 +60,19 @@ function ItemHolder(itemEntities)
 		}
 	};
 
-	ItemHolder.prototype.itemsTransferTo = function(other)
+	ItemHolder.prototype.itemEntitiesTransferTo = function(other)
 	{
 		for (var i = 0; i < this.itemEntities.length; i++)
 		{
 			var itemEntity = this.itemEntities[i];
-			other.itemEntityAdd(itemEntity);
-			this.itemRemove(itemEntity.Item);
+			this.itemEntityTransferTo(itemEntity, other);
 		}
+	};
+
+	ItemHolder.prototype.itemEntityTransferTo = function(itemEntity, other)
+	{
+		other.itemEntityAdd(itemEntity);
+		this.itemRemove(itemEntity.Item);
 	};
 
 	// controls
