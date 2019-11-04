@@ -48,6 +48,7 @@ function Universe(name, timerHelper, display, mediaLibrary, world)
 	Universe.prototype.initialize_MediaLibraryLoaded = function()
 	{
 		this.collisionHelper = new CollisionHelper();
+		this.idHelper = new IDHelper();
 		this.platformHelper = new PlatformHelper();
 		this.platformHelper.initialize(this);
 		this.serializer = new Serializer();

@@ -908,7 +908,32 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal)
 				universe.collisionHelper.collideCollidables(entityPlayer, entityOther);
 
 				var playerAsKillable = entityPlayer.Killable;
-				playerAsKillable.integrity -= entityOther.Damager.damagePerHit;
+				var damagePerHit = entityOther.Damager.damagePerHit;
+				playerAsKillable.integrity -= damagePerHit;
+
+				var messageEntity = new Entity
+				(
+					"Message" + universe.idHelper.idNext(),
+					[
+						new Drawable
+						(
+							new VisualCamera
+							(
+								new VisualText("-" + damagePerHit, "Red"),
+								place.camera
+							)
+						),
+						new Ephemeral(20),
+						new Locatable
+						(
+							new Location(entityPlayer.Locatable.loc.pos.clone()).velSet
+							(
+								new Coords(0, -1)
+							)
+						),
+					]
+				);
+				place.entitySpawn(universe, world, messageEntity);
 			}
 			else if (entityOther.ItemContainer != null)
 			{

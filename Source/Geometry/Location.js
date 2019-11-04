@@ -21,6 +21,14 @@ function Location(pos, orientation, venue)
 }
 
 {
+	Location.prototype.velSet = function(value)
+	{
+		this.vel.overwriteWith(value);
+		return this;
+	}
+
+	// cloneable
+
 	Location.prototype.clone = function()
 	{
 		var returnValue = new Location
@@ -48,6 +56,8 @@ function Location(pos, orientation, venue)
 		this.force.overwriteWith(other.force);
 		return this;
 	};
+
+	// strings
 
 	Location.prototype.toString = function()
 	{
