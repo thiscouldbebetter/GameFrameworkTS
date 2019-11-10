@@ -26,7 +26,8 @@ function World(name, dateCreated, defns, place)
 		var place = new PlaceDemo
 		(
 			universe.display.sizeInPixels.clone().double(), // size
-			5 // numberOfItems
+			5, // numberOfKeysToUnlockGoal
+			48 // numberOfObstacles
 		);
 		place.entitiesSpawn(universe, null);
 

@@ -49,7 +49,11 @@ function Device(name, ticksToCharge, use)
 						new Coords(0, projectileRadius)
 					)
 				]);
-				projectileVisual = new VisualCamera(projectileVisual, place.camera);
+				projectileVisual = new VisualCamera
+				(
+					projectileVisual,
+					(universe, world) => world.place.camera
+				);
 
 				var actorDirection = actorVel.clone().normalize();
 				var actorRadius = actor.Collidable.collider.radius;
@@ -65,7 +69,7 @@ function Device(name, ticksToCharge, use)
 				projectileLoc.vel.overwriteWith(actorVel).double();
 
 				var projectileCollider =
-					new Sphere(projectilePos, projectileRadius);
+					new Sphere(new Coords(0, 0), projectileRadius);
 
 				var projectileCollide = function(universe, world, place, entityPlayer, entityOther)
 				{

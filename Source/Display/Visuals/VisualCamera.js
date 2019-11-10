@@ -1,8 +1,8 @@
 
-function VisualCamera(child, camera)
+function VisualCamera(child, cameraFactory)
 {
 	this.child = child;
-	this.camera = camera;
+	this.cameraFactory = cameraFactory;
 
 	// Helper variables.
 	this.posSaved = new Coords();
@@ -13,7 +13,7 @@ function VisualCamera(child, camera)
 	{
 		var drawablePos = drawable.loc.pos;
 		this.posSaved.overwriteWith(drawablePos);
-		this.camera.coordsTransformWorldToView(drawablePos);
+		this.cameraFactory(universe, world).coordsTransformWorldToView(drawablePos);
 		this.child.draw(universe, world, display, drawable, entity);
 		drawablePos.overwriteWith(this.posSaved);
 	};

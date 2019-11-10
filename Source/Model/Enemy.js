@@ -1,0 +1,5 @@
+
+function Enemy()
+{
+	// Do nothing.
+}
