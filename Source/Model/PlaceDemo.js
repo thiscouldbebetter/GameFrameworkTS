@@ -61,6 +61,8 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal, numberOfObstacles)
 
 	this.entityBuildContainer(entities, entityDimension, entitySize);
 
+	this.entityBuildStore(entities, entityDimension, entitySize);
+
 	this.entitiesAllAddCameraProjection(entities);
 
 	this.venueControlsBuild(playerEntity);
@@ -1097,11 +1099,54 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal, numberOfObstacles)
 		return playerEntity;
 	};
 
+	PlaceDemo.prototype.entityBuildStore = function
+	(
+		entities, entityDimension, entitySize
+	)
+	{
+		var storePos = new Coords().randomize().multiplyScalar(.5).multiply
+		(
+			this.size
+		);
+		var storeLoc = new Location(storePos);
+		var storeColor = "Brown";
+		var storeEntity = new Entity
+		(
+			"Store",
+			[
+				new Collidable(new Bounds(new Coords(0, 0), entitySize)),
+				new Drawable
+				(
+					new VisualGroup
+					([
+						new VisualRectangle
+						(
+							new Coords(1, 1.5).multiplyScalar(entityDimension),
+							storeColor
+						),
+						new VisualOffset
+						(
+							new VisualText("Store", storeColor),
+							new Coords(0, entityDimension)
+						)
+					])
+				),
+				new ItemContainer(),
+				new ItemHolder(),
+				new Locatable(storeLoc)
+			]
+		);
+
+		entities.push(storeEntity);
+
+		return storeEntity;
+	};
+
 	PlaceDemo.prototype.entityBuildWeapon = function(entities, entityDimension, playerPos)
 	{
 		var entityDimensionHalf = entityDimension / 2;
 
-		var itemWeaponColor = "Cyan";
+		var itemWeaponColor = "rgb(0, 128, 128)";
 		var itemWeaponVisual = new VisualGroup
 		([
 			new VisualCircle(entityDimensionHalf, itemWeaponColor),
@@ -1112,9 +1157,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal, numberOfObstacles)
 			)
 		]);
 
-		var itemWeaponPos =
-			//new Coords().randomize().multiply(sizeMinusMargins);
-			playerPos.clone().double();
+		var itemWeaponPos = playerPos.clone().double();
 		var itemWeaponCollider = new Sphere(new Coords(0, 0), entityDimensionHalf);
 
 		var itemWeaponDevice = Device.gun();
