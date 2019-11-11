@@ -706,11 +706,10 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal, numberOfObstacles)
 		var obstacleBarSize = new Coords(6, 2).multiplyScalar(entityDimension);
 		var obstaclePos = playerPos.clone().add(obstacleBarSize).add(obstacleBarSize);
 		var obstacleLoc = new Location(obstaclePos);
-		var obstacleCollider = new Bounds
-		(
-			new Coords(0, 0),
-			obstacleBarSize
-		);
+		var obstacleRotationInTurns = .0625;
+		var obstacleCollider =
+			//new Bounds(new Coords(0, 0), obstacleBarSize);
+			new RectangleRotated(new Coords(0, 0), obstacleBarSize, obstacleRotationInTurns);
 
 		var obstacleBarEntity = new Entity
 		(
@@ -721,19 +720,23 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal, numberOfObstacles)
 				new Damager(1),
 				new Drawable
 				(
-					new VisualGroup
-					([
-						new VisualRectangle
-						(
-							obstacleCollider.size,
-							obstacleColor, obstacleColor
-						),
-						new VisualOffset
-						(
-							new VisualText("Bar", obstacleColor),
-							new Coords(0, obstacleCollider.size.y)
-						)
-					])
+					new VisualRotate
+					(
+						obstacleRotationInTurns,
+						new VisualGroup
+						([
+							new VisualRectangle
+							(
+								obstacleCollider.size,
+								obstacleColor, obstacleColor
+							),
+							new VisualOffset
+							(
+								new VisualText("Bar", obstacleColor),
+								new Coords(0, obstacleCollider.size.y)
+							)
+						])
+					)
 				)
 			]
 		);

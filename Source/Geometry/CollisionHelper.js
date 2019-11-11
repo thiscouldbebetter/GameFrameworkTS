@@ -11,6 +11,7 @@ function CollisionHelper()
 	this._bounds = new Bounds(new Coords(), new Coords());
 	this._collision = new Collision(new Coords());
 	this._displacement = new Coords();
+	this._polar = new Polar();
 	this._pos = new Coords();
 	this._range = new Range();
 	this._range2 = new Range();
@@ -52,6 +53,7 @@ function CollisionHelper()
 		lookup[Bounds.name] = this.collideCollidablesSphereAndBounds;
 		lookup[MapLocated.name] = this.collideCollidablesReverseVelocities;
 		lookup[Mesh.name] = this.collideCollidablesReverseVelocities;
+		lookup[RectangleRotated.name] = this.collideCollidablesReverseVelocities;
 		lookup[ShapeGroupAll.name] = this.collideCollidablesReverseVelocities;
 		lookup[Sphere.name] = this.collideCollidablesSphereAndSphere;
 		lookupOfLookups[Sphere.name] = lookup;
@@ -142,6 +144,7 @@ function CollisionHelper()
 		lookup[Bounds.name] = this.doSphereAndBoundsCollide;
 		lookup[MapLocated.name] = this.doSphereAndMapLocatedCollide;
 		lookup[Mesh.name] = this.doSphereAndMeshCollide;
+		lookup[RectangleRotated.name] = this.doSphereAndRectangleRotatedCollide;
 		lookup[ShapeContainer.name] = this.doSphereAndShapeContainerCollide;
 		lookup[ShapeGroupAll.name] = this.doSphereAndShapeGroupAllCollide;
 		lookup[ShapeGroupAny.name] = this.doSphereAndShapeGroupAnyCollide;
@@ -1071,6 +1074,31 @@ function CollisionHelper()
 		return returnValue;
 	};
 
+	CollisionHelper.prototype.doRectangleRotatedAndSphereCollide = function(rectangleRotated, sphere)
+	{
+		var bounds = this._bounds;
+		var center = rectangleRotated.center;
+		bounds.center.overwriteWith(Coords.Instances().Zeroes);
+		bounds.size.overwriteWith(rectangleRotated.size);
+		bounds.recalculate();
+		var sphereCenter = sphere.center;
+		var sphereCenterToRestore = this._pos.overwriteWith(sphereCenter);
+		sphereCenter.subtract(center);
+		var polar = this._polar;
+		polar.azimuthInTurns = rectangleRotated.angleInTurns;
+		polar.radius = 1;
+		var rectangleAxisX = polar.toCoords(new Coords());
+		polar.azimuthInTurns += .25;
+		var rectangleAxisY = polar.toCoords(new Coords());
+		var x = sphereCenter.dotProduct(rectangleAxisX);
+		var y = sphereCenter.dotProduct(rectangleAxisY);
+		sphereCenter.x = x;
+		sphereCenter.y = y;
+		var returnValue = this.doBoundsAndSphereCollide(bounds, sphere);
+		sphereCenter.overwriteWith(sphereCenterToRestore);
+		return returnValue;
+	};
+
 	CollisionHelper.prototype.doSphereAndBoundsCollide = function(sphere, bounds)
 	{
 		return this.doBoundsAndSphereCollide(bounds, sphere);
@@ -1084,6 +1112,11 @@ function CollisionHelper()
 	CollisionHelper.prototype.doSphereAndMeshCollide = function(sphere, mesh)
 	{
 		return this.doMeshAndSphereCollide(mesh, sphere);
+	};
+
+	CollisionHelper.prototype.doSphereAndRectangleRotatedCollide = function(sphere, rectangleRotated)
+	{
+		return this.doRectangleRotatedAndSphereCollide(rectangleRotated, sphere);
 	};
 
 	CollisionHelper.prototype.doSphereAndShapeContainerCollide = function(sphere, shapeContainer)
