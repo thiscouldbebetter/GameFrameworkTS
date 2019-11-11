@@ -707,9 +707,10 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal, numberOfObstacles)
 		var obstaclePos = playerPos.clone().add(obstacleBarSize).add(obstacleBarSize);
 		var obstacleLoc = new Location(obstaclePos);
 		var obstacleRotationInTurns = .0625;
-		var obstacleCollider =
-			//new Bounds(new Coords(0, 0), obstacleBarSize);
-			new RectangleRotated(new Coords(0, 0), obstacleBarSize, obstacleRotationInTurns);
+		var obstacleCollider = new RectangleRotated
+		(
+			new Bounds(new Coords(0, 0), obstacleBarSize), obstacleRotationInTurns
+		);
 
 		var obstacleBarEntity = new Entity
 		(
@@ -727,13 +728,13 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal, numberOfObstacles)
 						([
 							new VisualRectangle
 							(
-								obstacleCollider.size,
+								obstacleCollider.bounds.size,
 								obstacleColor, obstacleColor
 							),
 							new VisualOffset
 							(
 								new VisualText("Bar", obstacleColor),
-								new Coords(0, obstacleCollider.size.y)
+								new Coords(0, obstacleCollider.bounds.size.y)
 							)
 						])
 					)

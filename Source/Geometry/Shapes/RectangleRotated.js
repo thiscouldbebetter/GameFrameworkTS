@@ -1,27 +1,25 @@
 
-function RectangleRotated(center, size, angleInTurns)
+function RectangleRotated(bounds, angleInTurns)
 {
-	this.center = center;
-	this.size = size;
+	this.bounds = bounds;
 	this.angleInTurns = angleInTurns;
 }
 {
 	RectangleRotated.prototype.coordsGroupToTranslate = function()
 	{
-		return [ this.center ];
+		return [ this.bounds.center ];
 	}
 
 	// cloneable
 
 	RectangleRotated.prototype.clone = function()
 	{
-		return new RectangleRotated(this.center.clone(), this.size.clone(), this.angleInTurns);
+		return new RectangleRotated(this.bounds.clone(), this.angleInTurns);
 	}
 
 	RectangleRotated.prototype.overwriteWith = function(other)
 	{
-		this.center.overwriteWith(other.center);
-		this.size.overwriteWith(other.size);
+		this.bounds.overwriteWith(other.bounds);
 		this.angleInTurns = other.angleInTurns;
 		return this;
 	}

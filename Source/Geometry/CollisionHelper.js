@@ -42,6 +42,12 @@ function CollisionHelper()
 		lookup[Mesh.name] = this.collideCollidablesReverseVelocities;
 		lookup[ShapeGroupAll.name] = this.collideCollidablesReverseVelocities;
 		lookup[Sphere.name] = this.collideCollidablesReverseVelocities;
+		lookupOfLookups[Mesh.name] = lookup;
+
+		// RectangleRotated
+		lookup = {};
+		lookup[Sphere.name] = this.collideCollidablesRectangleRotatedAndSphere;
+		lookupOfLookups[RectangleRotated.name] = lookup;
 
 		// ShapeGroupAll
 		lookup = {};
@@ -53,7 +59,7 @@ function CollisionHelper()
 		lookup[Bounds.name] = this.collideCollidablesSphereAndBounds;
 		lookup[MapLocated.name] = this.collideCollidablesReverseVelocities;
 		lookup[Mesh.name] = this.collideCollidablesReverseVelocities;
-		lookup[RectangleRotated.name] = this.collideCollidablesReverseVelocities;
+		lookup[RectangleRotated.name] = this.collideCollidablesSphereAndRectangleRotated;
 		lookup[ShapeGroupAll.name] = this.collideCollidablesReverseVelocities;
 		lookup[Sphere.name] = this.collideCollidablesSphereAndSphere;
 		lookupOfLookups[Sphere.name] = lookup;
@@ -378,12 +384,6 @@ function CollisionHelper()
 		collidable1.Locatable.loc.vel.invert();
 	};
 
-	CollisionHelper.prototype.collideCollidablesSphereAndShapeGroupAll = function(entitySphere, entityShapeGroupAll)
-	{
-		// todo
-		this.collideCollidablesReverseVelocities(entitySphere, entityShapeGroupAll);
-	};
-
 	CollisionHelper.prototype.collideCollidablesBoundsAndSphere = function(entityBounds, entitySphere)
 	{
 		var sphereLoc = entitySphere.Locatable.loc;
@@ -411,9 +411,37 @@ function CollisionHelper()
 		}
 	};
 
+	CollisionHelper.prototype.collideCollidablesRectangleRotatedAndSphere = function(entityRectangleRotated, entitySphere)
+	{
+		var sphereLoc = entitySphere.Locatable.loc;
+		var rectangleLoc = entityRectangleRotated.Locatable.loc;
+
+		var rectangle = entityRectangleRotated.Collidable.collider;
+		var sphere = entitySphere.Collidable.collider;
+		var collision = this.collisionOfRectangleRotatedAndSphere
+		(
+			rectangle, sphere, this._collision, true //shouldCalculatePos
+		);
+
+		// todo
+		sphereLoc.vel.invert();
+		rectangleLoc.vel.invert();
+	};
+
 	CollisionHelper.prototype.collideCollidablesSphereAndBounds = function(entitySphere, entityBounds)
 	{
 		this.collideCollidablesBoundsAndSphere(entityBounds, entitySphere);
+	};
+
+	CollisionHelper.prototype.collideCollidablesSphereAndRectangleRotated = function(entitySphere, entityRectangleRotated)
+	{
+		this.collideCollidablesRectangleRotatedAndSphere(entityRectangleRotated, entitySphere);
+	};
+
+	CollisionHelper.prototype.collideCollidablesSphereAndShapeGroupAll = function(entitySphere, entityShapeGroupAll)
+	{
+		// todo
+		this.collideCollidablesReverseVelocities(entitySphere, entityShapeGroupAll);
 	};
 
 	CollisionHelper.prototype.collideCollidablesSphereAndSphere = function(entityColliding, entityCollidedWith)
@@ -682,6 +710,13 @@ function CollisionHelper()
 
 		return returnValue;
 	};
+
+	CollisionHelper.prototype.collisionOfRectangleRotatedAndSphere = function(rectangleRotated, sphere, collision, shouldCalculatePos)
+	{
+		// todo
+		return this.collisionOfBoundsAndSphere(rectangleRotated.bounds, sphere, collision, shouldCalculatePos);
+	}
+
 
 	// doXAndYCollide
 
@@ -1115,10 +1150,8 @@ function CollisionHelper()
 
 	CollisionHelper.prototype.doRectangleRotatedAndSphereCollide = function(rectangleRotated, sphere)
 	{
-		var bounds = this._bounds;
-		var center = rectangleRotated.center;
-		bounds.center.overwriteWith(Coords.Instances().Zeroes);
-		bounds.sizeOverwriteWith(rectangleRotated.size);
+		var bounds = rectangleRotated.bounds;
+		var center = bounds.center;
 		var sphereCenter = sphere.center;
 		var sphereCenterToRestore = this._pos.overwriteWith(sphereCenter);
 		sphereCenter.subtract(center);
@@ -1132,6 +1165,7 @@ function CollisionHelper()
 		var y = sphereCenter.dotProduct(rectangleAxisY);
 		sphereCenter.x = x;
 		sphereCenter.y = y;
+		sphereCenter.add(bounds.center);
 		var returnValue = this.doBoundsAndSphereCollide(bounds, sphere);
 		sphereCenter.overwriteWith(sphereCenterToRestore);
 		return returnValue;
