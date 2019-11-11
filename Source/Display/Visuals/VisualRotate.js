@@ -18,7 +18,7 @@ function VisualRotate(rotationInTurns, child)
 		graphics.rotate(rotationInRadians);
 
 		graphics.translate(0 - centerOfRotation.x, 0 - centerOfRotation.y);
-		
+
 		this.child.draw(universe, world, display, drawable, entity);
 
 		graphics.restore();

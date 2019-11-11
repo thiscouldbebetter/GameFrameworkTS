@@ -60,6 +60,54 @@ function Bounds(center, size)
 		return pointToCheck.isInRangeMinMax(this.min(), this.max());
 	};
 
+	Bounds.prototype.intersectWith = function(other)
+	{
+		var thisMinDimensions = this.min().dimensions();
+		var thisMaxDimensions = this.max().dimensions();
+		var otherMinDimensions = other.min().dimensions();
+		var otherMaxDimensions = other.max().dimensions();
+
+		var rangesForDimensions = [ new Range(), new Range(), new Range() ];
+		var rangeOther = new Range();
+
+		var doAllDimensionOverlapSoFar = true;
+
+		for (var d = 0; d < rangesForDimensions.length; d++)
+		{
+			var rangeThis = rangesForDimensions[d];
+			rangeThis.overwriteWithMinAndMax(thisMinDimensions[d], thisMaxDimensions[d]);
+			rangeOther.overwriteWithMinAndMax(otherMinDimensions[d], otherMaxDimensions[d]);
+			var doesDimensionOverlap = rangeThis.overlapsWith(rangeOther);
+			if (doesDimensionOverlap)
+			{
+				rangeThis.intersectWith(rangeOther);
+			}
+			else
+			{
+				doAllDimensionsOverlapSoFar = false;
+				break;
+			}
+		}
+
+		var returnValue = null;
+
+		if (doAllDimensionsOverlapSoFar)
+		{
+			var center = new Coords();
+			var size = new Coords();
+			for (var d = 0; d < rangesForDimensions.length; d++)
+			{
+				var rangeForDimension = rangesForDimensions[d];
+				center.dimension(d, rangeForDimension.midpoint());
+				size.dimension(d, rangeForDimension.size());
+			}
+
+			returnValue = new Bounds(center, size);
+		}
+
+		return returnValue;
+	};
+
 	Bounds.prototype.max = function()
 	{
 		return this._max.overwriteWith(this.center).add(this.sizeHalf);
@@ -117,48 +165,7 @@ function Bounds(center, size)
 
 	Bounds.prototype.overlapsWith = function(other)
 	{
-		var returnValue = false;
-
-		var extremaThisAndOther =
-		[
-			[ this.min().dimensions(), this.max().dimensions() ],
-			[ other.min().dimensions(), other.max().dimensions() ]
-		];
-
-		for (var b = 0; b < extremaThisAndOther.length; b++)
-		{
-			var extremaThis = extremaThisAndOther[b];
-			var extremaOther = extremaThisAndOther[1 - b];
-
-			var minThisDimensions = extremaThis[0];
-			var maxThisDimensions = extremaThis[1];
-
-			var minOtherDimensions = extremaOther[0];
-			var maxOtherDimensions = extremaOther[1];
-
-			var doAllDimensionsOverlapSoFar = true;
-
-			for (var d = 0; d < minThisDimensions.length; d++)
-			{
-				if
-				(
-					maxThisDimensions[d] <= minOtherDimensions[d]
-					|| minThisDimensions[d] >= maxOtherDimensions[d]
-				)
-				{
-					doAllDimensionsOverlapSoFar = false;
-					break;
-				}
-			}
-
-			if (doAllDimensionsOverlapSoFar == true)
-			{
-				returnValue = true;
-				break;
-			}
-		}
-
-		return returnValue;
+		return (this.intersectWith(other) != null);
 	};
 
 	Bounds.prototype.overlapsWithOtherInDimension = function(other, dimensionIndex)
@@ -192,10 +199,12 @@ function Bounds(center, size)
 		return returnValue;
 	};
 
-	Bounds.prototype.recalculate = function()
+	Bounds.prototype.sizeOverwriteWith = function(sizeOther)
 	{
+		this.size.overwriteWith(sizeOther);
 		this.sizeHalf.overwriteWith(this.size).half();
-	};
+		return this;
+	}
 
 	Bounds.prototype.trimCoords = function(coordsToTrim)
 	{
@@ -213,6 +222,7 @@ function Bounds(center, size)
 	{
 		this.center.overwriteWith(other.center);
 		this.size.overwriteWith(other.size);
+		this.sizeHalf.overwriteWith(other.size).half();
 		return this;
 	}
 

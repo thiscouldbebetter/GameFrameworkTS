@@ -41,4 +41,16 @@ function Range(min, max)
 		this.max = max;
 		return this;
 	};
+
+	Range.prototype.overwriteWithMinAndMax = function(min, max)
+	{
+		this.min = min;
+		this.max = max;
+		return this;
+	};
+
+	Range.prototype.size = function()
+	{
+		return this.max - this.min;
+	};
 }

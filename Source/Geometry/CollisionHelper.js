@@ -460,47 +460,86 @@ function CollisionHelper()
 
 	// collisionOfXAndY
 
-	CollisionHelper.prototype.collisionOfBoundsAndSphere = function(bounds, sphere, collision)
+	CollisionHelper.prototype.collisionOfBoundsAndBounds = function(bounds1, bounds2, collision)
 	{
 		if (collision == null)
 		{
 			collision = Collision.new();
 		}
 
-		collision.isActive = true;
-
-		var sphereCenter = sphere.center;
-		var sphereRadius = sphere.radius;
-		var boundsCenter = bounds.center;
-		var boundsSizeHalf = bounds.sizeHalf;
-		var sphereProjectedOntoAxis = this._range;
-		var boundsProjectedOntoAxis = this._range2;
-
-		for (var d = 0; d < 2; d++) // todo - Z?
+		var boundsOfIntersection = bounds1.intersectWith(bounds2);
+		if (boundsOfIntersection != null)
 		{
-			var boundsCenterD = boundsCenter.dimension(d);
-			var boundsSizeHalfD = boundsSizeHalf.dimension(d);
-			boundsProjectedOntoAxis.min = boundsCenterD - boundsSizeHalfD;
-			boundsProjectedOntoAxis.max = boundsCenterD + boundsSizeHalfD;
+			collision.isActive = true;
+			collision.pos.overwriteWith(boundsOfIntersection.center)
+		}
 
-			var sphereCenterD = sphereCenter.dimension(d);
-			sphereProjectedOntoAxis.min = sphereCenterD - sphereRadius;
-			sphereProjectedOntoAxis.max = sphereCenterD + sphereRadius;
+		return collision;
+	}
 
-			var doProjectionsOverlap =
-				boundsProjectedOntoAxis.overlapsWith(sphereProjectedOntoAxis);
+	CollisionHelper.prototype.collisionOfBoundsAndSphere = function(bounds, sphere, collision, shouldCalculatePos)
+	{
+		var doCollide = false;
 
-			if (doProjectionsOverlap == false)
+		var displacementBetweenCenters = this._displacement.overwriteWith
+		(
+			sphere.center
+		).subtract
+		(
+			bounds.center
+		);
+
+		var displacementBetweenCentersAbsolute =
+			displacementBetweenCenters.absolute();
+
+		var boundsSizeHalf = bounds.sizeHalf;
+		var sphereRadius = sphere.radius;
+
+		var doXAndOrYExtentsCollide =
+		(
+			displacementBetweenCentersAbsolute.x <= boundsSizeHalf.x + sphereRadius
+			&& displacementBetweenCentersAbsolute.y <= boundsSizeHalf.y + sphereRadius
+		);
+
+		if (doXAndOrYExtentsCollide)
+		{
+			var isSphereNotAtCorner =
+			(
+				displacementBetweenCentersAbsolute.x < boundsSizeHalf.x
+				|| displacementBetweenCentersAbsolute.y < boundsSizeHalf.y
+			);
+
+			if (isSphereNotAtCorner)
 			{
-				collision.isActive = false;
-				break;
+				doCollide = true;
 			}
 			else
 			{
-				var intersectionOfProjections =
-					boundsProjectedOntoAxis.intersectWith(sphereProjectedOntoAxis);
-				collision.pos.dimension(d, intersectionOfProjections.midpoint());
+				var distanceBetweenCenters =
+					displacementBetweenCentersAbsolute.magnitude();
+				var boundsDiagonal = boundsSizeHalf.magnitude();
+
+				var doesCircleContainCornerOfBounds =
+				(
+					distanceBetweenCenters < (boundsDiagonal + sphereRadius)
+				);
+
+				doCollide = doesCircleContainCornerOfBounds;
 			}
+		}
+
+		if (collision == null)
+		{
+			collision = Collision.new();
+		}
+
+		collision.isActive = doCollide;
+
+		if (doCollide && shouldCalculatePos)
+		{
+			// todo - Fix this.
+			var boundsOfSphere = new Bounds(sphere.center, new Coords(1, 1).multiplyScalar(sphere.radius));
+			collision = this.collisionOfBoundsAndBounds(bounds, boundsOfSphere, collision);
 		}
 
 		return collision;
@@ -710,7 +749,7 @@ function CollisionHelper()
 
 	CollisionHelper.prototype.doBoundsAndSphereCollide = function(bounds, sphere)
 	{
-		return this.collisionOfBoundsAndSphere(bounds, sphere, this._collision.clear()).isActive;
+		return this.collisionOfBoundsAndSphere(bounds, sphere, this._collision, false).isActive;
 	};
 
 	CollisionHelper.prototype.doCylinderAndCylinderCollide = function(cylinder0, cylinder1)
@@ -1079,8 +1118,7 @@ function CollisionHelper()
 		var bounds = this._bounds;
 		var center = rectangleRotated.center;
 		bounds.center.overwriteWith(Coords.Instances().Zeroes);
-		bounds.size.overwriteWith(rectangleRotated.size);
-		bounds.recalculate();
+		bounds.sizeOverwriteWith(rectangleRotated.size);
 		var sphereCenter = sphere.center;
 		var sphereCenterToRestore = this._pos.overwriteWith(sphereCenter);
 		sphereCenter.subtract(center);

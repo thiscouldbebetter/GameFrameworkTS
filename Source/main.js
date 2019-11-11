@@ -34,7 +34,7 @@ function main()
 
 	var universe = Universe.new
 	(
-		"Cursor_Quest", timerHelper, display, mediaLibrary, null
+		"Game Framework Demo Game", "0.0.0-20191111-1730", timerHelper, display, mediaLibrary, null
 	);
 	universe.initialize();
 }

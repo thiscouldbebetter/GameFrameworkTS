@@ -1,7 +1,8 @@
 
-function Universe(name, timerHelper, display, mediaLibrary, world)
+function Universe(name, version, timerHelper, display, mediaLibrary, world)
 {
 	this.name = name;
+	this.version = version;
 	this.timerHelper = timerHelper;
 	this.display = display;
 	this.mediaLibrary = mediaLibrary;
@@ -13,11 +14,12 @@ function Universe(name, timerHelper, display, mediaLibrary, world)
 {
 	// static methods
 
-	Universe.new = function(name, timerHelper, display, mediaLibrary, world)
+	Universe.new = function(name, version, timerHelper, display, mediaLibrary, world)
 	{
 		var returnValue = new Universe
 		(
 			name,
+			version,
 			timerHelper,
 			display,
 			mediaLibrary,
@@ -52,7 +54,11 @@ function Universe(name, timerHelper, display, mediaLibrary, world)
 		this.platformHelper = new PlatformHelper();
 		this.platformHelper.initialize(this);
 		this.serializer = new Serializer();
-		this.storageHelper = new StorageHelper(this.name + "_", this.serializer);
+		this.storageHelper = new StorageHelper
+		(
+			this.name.replaceAll(" ", "_") + "_",
+			this.serializer
+		);
 		this.profileHelper = new ProfileHelper(this.storageHelper);
 
 		this.display.initialize();

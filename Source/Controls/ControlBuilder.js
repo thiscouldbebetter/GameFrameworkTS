@@ -396,7 +396,7 @@ function ControlBuilder(styles)
 					{
 						var venueNext = new VenueMessage
 						(
-							"[about message]",
+							universe.name + "\nv" + universe.version,
 							universe.venueCurrent, // venueNext
 							universe.venueCurrent, // venuePrev
 							size

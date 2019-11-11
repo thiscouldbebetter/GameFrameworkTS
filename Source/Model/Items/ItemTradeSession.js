@@ -82,7 +82,7 @@ function ItemTradeSession(entitiesForItemHolders, venuePrev)
 					new DataBinding
 					(
 						itemHolder1,
-						function get(c) { return c.itemEntities; } 
+						function get(c) { return c.itemEntities; }
 					), // items
 					new DataBinding
 					(
