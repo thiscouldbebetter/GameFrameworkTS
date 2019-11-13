@@ -204,7 +204,7 @@ function Bounds(center, size)
 		this.size.overwriteWith(sizeOther);
 		this.sizeHalf.overwriteWith(this.size).half();
 		return this;
-	}
+	};
 
 	Bounds.prototype.trimCoords = function(coordsToTrim)
 	{

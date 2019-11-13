@@ -4,7 +4,7 @@ function Plane(normal, distanceFromOrigin)
 	this.normal = normal;
 	this.distanceFromOrigin = distanceFromOrigin;
 
-	this.displacementFromPoint0To2 = new Coords();
+	this._displacementFromPoint0To2 = new Coords();
 }
 {
 	Plane.prototype.distanceToPointAlongNormal = function(point)
@@ -13,8 +13,8 @@ function Plane(normal, distanceFromOrigin)
 		(
 			this.normal
 		) - this.distanceFromOrigin;
-	};	
-	
+	};
+
 	Plane.prototype.equals = function(other)
 	{
 		return (this.normal.equals(other.normal) && this.distanceFromOrigin == other.distanceFromOrigin);
@@ -30,7 +30,7 @@ function Plane(normal, distanceFromOrigin)
 			point0
 		).crossProduct
 		(
-			this.displacementFromPoint0To2.overwriteWith
+			this._displacementFromPoint0To2.overwriteWith
 			(
 				point2
 			).subtract
@@ -47,5 +47,5 @@ function Plane(normal, distanceFromOrigin)
 	Plane.prototype.pointClosestToOrigin = function(point)
 	{
 		return point.overwriteWith(this.normal).multiplyScalar(this.distanceFromOrigin);
-	}
+	};
 }

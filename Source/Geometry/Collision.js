@@ -5,6 +5,7 @@ function Collision(pos, distanceToCollision)
 	this.distanceToCollision = distanceToCollision;
 	this.collidables = [];
 	this.colliders = [];
+	this.normals = [ new Coords(), new Coords() ];
 
 	this.isActive = false;
 }

@@ -413,9 +413,6 @@ function CollisionHelper()
 
 	CollisionHelper.prototype.collideCollidablesRectangleRotatedAndSphere = function(entityRectangleRotated, entitySphere)
 	{
-		var sphereLoc = entitySphere.Locatable.loc;
-		var rectangleLoc = entityRectangleRotated.Locatable.loc;
-
 		var rectangle = entityRectangleRotated.Collidable.collider;
 		var sphere = entitySphere.Collidable.collider;
 		var collision = this.collisionOfRectangleRotatedAndSphere
@@ -423,9 +420,27 @@ function CollisionHelper()
 			rectangle, sphere, this._collision, true //shouldCalculatePos
 		);
 
-		// todo
-		sphereLoc.vel.invert();
-		rectangleLoc.vel.invert();
+		var normal = collision.normals[0];
+
+		var sphereVel = entitySphere.Locatable.loc.vel;
+		sphereVel.add
+		(
+			normal.clone().multiplyScalar
+			(
+				sphereVel.dotProduct(normal) * -2
+			)
+		);
+
+		var rectangleVel = entityRectangleRotated.Locatable.loc.vel;
+		rectangleVel.add
+		(
+			normal.clone().multiplyScalar
+			(
+				rectangleVel.dotProduct(normal) * -2
+			)
+		);
+
+		var rectangleVel
 	};
 
 	CollisionHelper.prototype.collideCollidablesSphereAndBounds = function(entitySphere, entityBounds)
@@ -711,10 +726,61 @@ function CollisionHelper()
 		return returnValue;
 	};
 
-	CollisionHelper.prototype.collisionOfRectangleRotatedAndSphere = function(rectangleRotated, sphere, collision, shouldCalculatePos)
+	CollisionHelper.prototype.collisionOfRectangleRotatedAndSphere = function
+	(
+		rectangleRotated, sphere, collision, shouldCalculatePos
+	)
 	{
-		// todo
-		return this.collisionOfBoundsAndSphere(rectangleRotated.bounds, sphere, collision, shouldCalculatePos);
+		if (collision == null)
+		{
+			collision = Collision.new();
+		}
+
+		var doCollide = this.doRectangleRotatedAndSphereCollide
+		(
+			rectangleRotated, sphere
+		);
+
+		if (doCollide)
+		{
+			var collisionPos = collision.pos;
+			var rectangleCenter = rectangleRotated.bounds.center;
+			var displacementBetweenCenters = collisionPos.overwriteWith
+			(
+				sphere.center
+			).subtract
+			(
+				rectangleCenter
+			);
+
+			var distanceBetweenCenters = displacementBetweenCenters.magnitude();
+			var distanceFromRectangleCenterToSphere =
+				distanceBetweenCenters - sphere.radius;
+			var displacementToSphere = displacementBetweenCenters.divideScalar
+			(
+				distanceBetweenCenters
+			).multiplyScalar
+			(
+				distanceFromRectangleCenterToSphere
+			);
+
+			collisionPos = displacementToSphere.add(rectangleCenter);
+
+			var normals = collision.normals;
+			normals[0].overwriteWith
+			(
+				rectangleRotated.surfaceNormalNearPos(collision.pos)
+			);
+			normals[1].overwriteWith(normals[0]).invert();
+
+			var colliders = collision.colliders;
+			colliders[0] = rectangleRotated;
+			colliders[1] = sphere;
+
+			return collision;
+		}
+
+		return collision;
 	}
 
 
