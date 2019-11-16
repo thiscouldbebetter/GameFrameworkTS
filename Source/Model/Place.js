@@ -12,6 +12,7 @@ function Place(defnName, entities)
 		Locatable.name,
 		Constrainable.name,
 		Collidable.name,
+		CollisionTracker.name,
 		Idleable.name,
 		Actor.name,
 		Playable.name,

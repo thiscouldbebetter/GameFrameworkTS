@@ -50,38 +50,16 @@ function Collidable(colliderAtRest, entityPropertyNamesToCollideWith, collideEnt
 						var entityOther = entitiesWithProperty[e];
 						if (entityOther != entity)
 						{
-							var collidableOther = entityOther.Collidable;
-							var canCollide = (collidableOther.ticksUntilCanCollide == 0);
-							if (canCollide)
+							var doEntitiesCollide = this.doEntitiesCollide
+							(
+								universe.collisionHelper, entity, entityOther
+							);
+							if (doEntitiesCollide)
 							{
-								var colliderThis = entity.Collidable.collider;
-								var colliderOther = collidableOther.collider;
-
-								var collisionHelper = universe.collisionHelper;
-								var doEntitiesCollide = collisionHelper.doCollidersCollide
+								this.collideEntities
 								(
-									colliderThis, colliderOther
+									universe, world, place, entity, entityOther
 								);
-
-								if (entityOther == this.entityAlreadyCollidedWith)
-								{
-									if (doEntitiesCollide)
-									{
-										doEntitiesCollide = false;
-									}
-									else
-									{
-										this.entityAlreadyCollidedWith = null;
-									}
-								}
-
-								if (doEntitiesCollide)
-								{
-									this.collideEntities
-									(
-										universe, world, place, entity, entityOther
-									);
-								}
 							}
 						}
 					}
@@ -89,6 +67,38 @@ function Collidable(colliderAtRest, entityPropertyNamesToCollideWith, collideEnt
 			}
 		}
 	};
+
+	Collidable.prototype.doEntitiesCollide = function(collisionHelper, entity, entityOther)
+	{
+		var doCollide = false;
+
+		var collidableOther = entityOther.Collidable;
+		var canCollide = (collidableOther.ticksUntilCanCollide == 0);
+		if (canCollide)
+		{
+			var colliderThis = entity.Collidable.collider;
+			var colliderOther = collidableOther.collider;
+
+			var doCollide = collisionHelper.doCollidersCollide
+			(
+				colliderThis, colliderOther
+			);
+
+			if (entityOther == this.entityAlreadyCollidedWith)
+			{
+				if (doCollide)
+				{
+					doCollide = false;
+				}
+				else
+				{
+					this.entityAlreadyCollidedWith = null;
+				}
+			}
+		}
+
+		return doCollide;
+	}
 
 	// cloneable
 

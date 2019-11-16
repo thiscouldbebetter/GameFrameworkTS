@@ -18,7 +18,7 @@ function ItemStore(itemDefnNameCurrency)
 
 		var itemHolderCustomer = entityCustomer.ItemHolder;
 		var itemHolderStore = entityStore.ItemHolder;
-		
+
 		var itemDefnNameCurrency = this.itemDefnNameCurrency;
 
 		var returnValue = new ControlContainer
