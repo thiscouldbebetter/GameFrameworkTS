@@ -11,11 +11,18 @@ function ItemHolder(itemEntities)
 	}
 }
 {
-	ItemHolder.prototype.hasItems = function(itemToCheck)
+	ItemHolder.prototype.hasItem = function(itemToCheck)
 	{
 		var itemEntityExisting = this.itemEntities[itemToCheck.defnName];
 		var itemExistingQuantity = (itemEntityExisting == null ? 0 : itemEntityExisting.Item.quantity);
 		var returnValue = (itemExistingQuantity >= itemToCheck.quantity);
+		return returnValue;
+	};
+
+	ItemHolder.prototype.itemQuantityByDefnName = function(itemDefnName)
+	{
+		var itemEntity = this.itemEntities[itemDefnName];
+		var returnValue = (itemEntity == null ? 0 : itemEntity.Item.quantity);
 		return returnValue;
 	};
 

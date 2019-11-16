@@ -24,6 +24,16 @@ function Device(name, ticksToCharge, use)
 					return;
 				}
 
+				var actorAsItemHolder = actor.ItemHolder;
+				var itemAmmo1 = new Item("Ammo", 1);
+				var hasAmmo = actorAsItemHolder.hasItem(itemAmmo1);
+				if (hasAmmo == false)
+				{
+					return;
+				}
+
+				actorAsItemHolder.itemSubtract(itemAmmo1);
+
 				device.tickLastUsedUpdate(world);
 
 				var actorLoc = actor.Locatable.loc;

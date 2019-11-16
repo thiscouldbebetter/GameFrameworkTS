@@ -123,7 +123,7 @@ function World(name, dateCreated, defns, place)
 				{
 					var itemWeapon = new Item("Weapon", 1);
 					var itemHolder = actor.ItemHolder;
-					var actorHasWeapon = itemHolder.hasItems(itemWeapon);
+					var actorHasWeapon = itemHolder.hasItem(itemWeapon);
 
 					if (actorHasWeapon)
 					{

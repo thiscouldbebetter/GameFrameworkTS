@@ -51,6 +51,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal, numberOfObstacles)
 	this.entityBuildCoins(entities, entityDimension, marginSize);
 
 	this.entityBuildWeapon(entities, entityDimension, playerPos);
+	this.entityBuildWeaponAmmo(entities, entityDimension, size, 10, 5);
 
 	var goalEntity = this.entityBuildGoal
 	(
@@ -1027,7 +1028,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal, numberOfObstacles)
 			{
 				var keysRequired =
 					new Item("Key", entityOther.Goal.numberOfKeysToUnlock);
-				if (entityPlayer.ItemHolder.hasItems(keysRequired))
+				if (entityPlayer.ItemHolder.hasItem(keysRequired))
 				{
 					var venueMessage = new VenueMessage
 					(
@@ -1168,12 +1169,21 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal, numberOfObstacles)
 
 	PlaceDemo.prototype.entityBuildWeapon = function(entities, entityDimension, playerPos)
 	{
-		var entityDimensionHalf = entityDimension / 2;
+		entityDimension = entityDimension * 2;
 
 		var itemWeaponColor = "rgb(0, 128, 128)";
 		var itemWeaponVisual = new VisualGroup
 		([
-			new VisualCircle(entityDimensionHalf, itemWeaponColor),
+			new VisualPolygon
+			(
+				new Path
+				([
+					new Coords(0, 0.5).multiplyScalar(entityDimension),
+					new Coords(-.5, -0.5).multiplyScalar(entityDimension),
+					new Coords(.5, -0.5).multiplyScalar(entityDimension)
+				]),
+				itemWeaponColor
+			),
 			new VisualOffset
 			(
 				new VisualText("Weapon", itemWeaponColor),
@@ -1182,7 +1192,7 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal, numberOfObstacles)
 		]);
 
 		var itemWeaponPos = playerPos.clone().double();
-		var itemWeaponCollider = new Sphere(new Coords(0, 0), entityDimensionHalf);
+		var itemWeaponCollider = new Sphere(new Coords(0, 0), entityDimension / 2);
 
 		var itemWeaponDevice = Device.gun();
 
@@ -1201,21 +1211,74 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal, numberOfObstacles)
 		entities.push(itemWeaponEntity);
 	};
 
+	PlaceDemo.prototype.entityBuildWeaponAmmo = function(entities, entityDimension, size, numberOfPiles, roundsPerPile)
+	{
+		var entityDimensionHalf = entityDimension / 2;
+
+		var itemAmmoColor = "rgb(0, 128, 128)";
+		var itemAmmoVisual = new VisualGroup
+		([
+			//new VisualCircle(entityDimensionHalf, itemWeaponColor),
+			new VisualPolygon
+			(
+				new Path
+				([
+					new Coords(0, -0.5).multiplyScalar(entityDimension),
+					new Coords(.5, 0.5).multiplyScalar(entityDimension),
+					new Coords(-.5, 0.5).multiplyScalar(entityDimension)
+				]),
+				itemAmmoColor
+			),
+			new VisualOffset
+			(
+				new VisualText("Ammo", itemAmmoColor),
+				new Coords(0, entityDimension)
+			)
+		]);
+
+		var itemAmmoCollider = new Sphere(new Coords(0, 0), entityDimensionHalf);
+
+		for (var i = 0; i < numberOfPiles; i++)
+		{
+			var itemAmmoEntity = new Entity
+			(
+				"Ammo" + i,
+				[
+					new Item("Ammo", roundsPerPile),
+					new Locatable( new Location( new Coords().randomize().multiply(size) ) ),
+					new Collidable(itemAmmoCollider),
+					new Drawable(itemAmmoVisual)
+				]
+			);
+
+			entities.push(itemAmmoEntity);
+		}
+	};
+
 	PlaceDemo.prototype.venueControlsBuild = function(playerEntity)
 	{
 		var controlStatus = new ControlLabel
 		(
-			"labelHealth",
+			"infoStatus",
 			new Coords(8, 5), //pos,
 			new Coords(100, 0), //size,
 			false, // isTextCentered,
 			new DataBinding
 			(
-				playerEntity.Killable,
-				function get(c) { return c.integrity; }
+				playerEntity,
+				function get(c)
+				{
+					var itemHolder = c.ItemHolder;
+					var statusText = "H:" + c.Killable.integrity
+						+ "   A:" + itemHolder.itemQuantityByDefnName("Ammo")
+						+ "   K:" + itemHolder.itemQuantityByDefnName("Key")
+						+ "   $:" + itemHolder.itemQuantityByDefnName("Coin");
+					return statusText;
+				}
 			), // text,
-			10, // fontHeightInPixels
+			10 // fontHeightInPixels
 		);
+
 		this.venueControls = new VenueControls(controlStatus);
 	};
 
