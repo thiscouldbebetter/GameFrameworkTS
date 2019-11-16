@@ -1000,16 +1000,26 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal, numberOfObstacles)
 			else if (entityOther.ItemContainer != null)
 			{
 				entityOther.Collidable.ticksUntilCanCollide = 50; // hack
-				var tradeSession = new ItemTradeSession
+				var itemContainerAsControl = entityOther.ItemContainer.toControl
 				(
-					[ entityPlayer, entityOther ],
+					universe, universe.display.sizeInPixels,
+					entityPlayer, entityOther,
 					universe.venueCurrent
 				);
-				var tradeSessionAsControl = tradeSession.toControl
+				var venueNext = new VenueControls(itemContainerAsControl);
+				venueNext = new VenueFader(venueNext);
+				universe.venueNext = venueNext;
+			}
+			else if (entityOther.ItemStore != null)
+			{
+				entityOther.Collidable.ticksUntilCanCollide = 50; // hack
+				var storeAsControl = entityOther.ItemStore.toControl
 				(
-					universe, universe.display.sizeInPixels
+					universe, universe.display.sizeInPixels,
+					entityPlayer, entityOther,
+					universe.venueCurrent
 				);
-				var venueNext = new VenueControls(tradeSessionAsControl);
+				var venueNext = new VenueControls(storeAsControl);
 				venueNext = new VenueFader(venueNext);
 				universe.venueNext = venueNext;
 			}
@@ -1135,8 +1145,18 @@ function PlaceDemo(size, numberOfKeysToUnlockGoal, numberOfObstacles)
 						)
 					])
 				),
-				new ItemContainer(),
-				new ItemHolder(),
+				new ItemStore("Coin"),
+				new ItemHolder
+				(
+					[
+						new Item("Coin", 100),
+						new Item("Key", 10),
+						new Item("Weapon", 1)
+					].map
+					(
+						x => new Entity(x.defnName, [ x ])
+					)
+				),
 				new Locatable(storeLoc)
 			]
 		);

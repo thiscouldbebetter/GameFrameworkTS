@@ -5,6 +5,8 @@ function Item(defnName, quantity)
 	this.quantity = quantity;
 }
 {
+	// Instance methods.
+
 	Item.prototype.defn = function(world)
 	{
 		return world.defns.itemDefns[this.defnName];

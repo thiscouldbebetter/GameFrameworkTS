@@ -1,11 +1,10 @@
 
-function ItemTradeSession(entitiesForItemHolders, venuePrev)
+function ItemStore(itemDefnNameCurrency)
 {
-	this.entitiesForItemHolders = entitiesForItemHolders;
-	this.venuePrev = venuePrev;
+	this.itemDefnNameCurrency = itemDefnNameCurrency;
 }
 {
-	ItemTradeSession.prototype.toControl = function(universe, size)
+	ItemStore.prototype.toControl = function(universe, size, entityCustomer, entityStore, venuePrev)
 	{
 		if (size == null)
 		{
@@ -17,10 +16,10 @@ function ItemTradeSession(entitiesForItemHolders, venuePrev)
 
 		var fontHeight = 10;
 
-		var itemHolder0 = this.entitiesForItemHolders[0].ItemHolder;
-		var itemHolder1 = this.entitiesForItemHolders[1].ItemHolder;
-
-		var itemTradeSession = this;
+		var itemHolderCustomer = entityCustomer.ItemHolder;
+		var itemHolderStore = entityStore.ItemHolder;
+		
+		var itemDefnNameCurrency = this.itemDefnNameCurrency;
 
 		var returnValue = new ControlContainer
 		(
@@ -31,23 +30,26 @@ function ItemTradeSession(entitiesForItemHolders, venuePrev)
 			[
 				new ControlLabel
 				(
-					"labelHolder0Name",
+					"labelStoreName",
 					new Coords(52, 15), // pos
 					new Coords(85, 25), // size
 					true, // isTextCentered
-					this.entitiesForItemHolders[0].name + ":",
+					entityStore.name + ":",
 					fontHeight
 				),
 
 				new ControlList
 				(
-					"listHolder0Items",
+					"listStoreItems",
 					new Coords(10, 25), // pos
 					new Coords(85, 40), // size
 					new DataBinding
 					(
-						itemHolder0,
-						function get(c) { return c.itemEntities; }
+						itemHolderStore,
+						function get(c)
+						{
+							return c.itemEntities;//.filter(x => x.Item.defnName != itemDefnNameCurrency);
+						}
 					), // items
 					new DataBinding
 					(
@@ -57,7 +59,7 @@ function ItemTradeSession(entitiesForItemHolders, venuePrev)
 					fontHeight,
 					new DataBinding
 					(
-						itemHolder0,
+						itemHolderStore,
 						function get(c) { return c.itemEntitySelected; },
 						function set(c, v) { c.itemEntitySelected = v; }
 					), // bindingForItemSelected
@@ -66,23 +68,26 @@ function ItemTradeSession(entitiesForItemHolders, venuePrev)
 
 				new ControlLabel
 				(
-					"labelHolder1Name",
+					"labelCustomerName",
 					new Coords(147, 15), // pos
 					new Coords(85, 25), // size
 					true, // isTextCentered
-					this.entitiesForItemHolders[1].name + ":",
+					entityCustomer.name + ":",
 					fontHeight
 				),
 
 				new ControlList
 				(
-					"listHolder1Items",
+					"listCustomerItems",
 					new Coords(105, 25), // pos
 					new Coords(85, 40), // size
 					new DataBinding
 					(
-						itemHolder1,
-						function get(c) { return c.itemEntities; }
+						itemHolderCustomer,
+						function get(c)
+						{
+							return c.itemEntities;//.filter(x => x.Item.defnName != itemDefnNameCurrency);
+						}
 					), // items
 					new DataBinding
 					(
@@ -92,7 +97,7 @@ function ItemTradeSession(entitiesForItemHolders, venuePrev)
 					fontHeight,
 					new DataBinding
 					(
-						itemHolder1,
+						itemHolderCustomer,
 						function get(c) { return c.itemEntitySelected; },
 						function set(c, v) { c.itemEntitySelected = v; }
 					), // bindingForItemSelected
@@ -101,7 +106,7 @@ function ItemTradeSession(entitiesForItemHolders, venuePrev)
 
 				new ControlLabel
 				(
-					"labelItemSelected0",
+					"labelItemSelectedStore",
 					new Coords(50, 70), // pos
 					new Coords(100, 15), // size
 					true, // isTextCentered
@@ -111,13 +116,13 @@ function ItemTradeSession(entitiesForItemHolders, venuePrev)
 
 				new ControlLabel
 				(
-					"infoItemSelected0",
+					"infoItemSelectedStore",
 					new Coords(50, 80), // pos
 					new Coords(200, 15), // size
 					true, // isTextCentered
 					new DataBinding
 					(
-						itemHolder0,
+						itemHolderStore,
 						function get(c)
 						{
 							var i = c.itemEntitySelected;
@@ -129,7 +134,7 @@ function ItemTradeSession(entitiesForItemHolders, venuePrev)
 
 				new ControlLabel
 				(
-					"labelItemSelected1",
+					"labelItemSelectedCustomer",
 					new Coords(150, 70), // pos
 					new Coords(100, 15), // size
 					true, // isTextCentered
@@ -139,13 +144,13 @@ function ItemTradeSession(entitiesForItemHolders, venuePrev)
 
 				new ControlLabel
 				(
-					"infoItemSelected1",
+					"infoItemSelectedCustomer",
 					new Coords(150, 80), // pos
 					new Coords(200, 15), // size
 					true, // isTextCentered
 					new DataBinding
 					(
-						itemHolder1,
+						itemHolderCustomer,
 						function get(c)
 						{
 							var i = c.itemEntitySelected;
@@ -157,24 +162,24 @@ function ItemTradeSession(entitiesForItemHolders, venuePrev)
 
 				new ControlButton
 				(
-					"buttonTransferRight",
-					new Coords(80, 90), // pos
-					new Coords(15, 15), // size
-					">",
+					"buttonSell",
+					new Coords(105, 90), // pos
+					new Coords(30, 15), // size
+					"Sell",
 					fontHeight,
 					true, // hasBorder
 					new DataBinding
 					(
-						itemHolder0,
+						itemHolderCustomer,
 						function get(c) { return c.itemEntitySelected != null}
 					), // isEnabled
 					function click(universe)
 					{
-						var itemEntity = itemHolder0.itemEntitySelected;
+						var itemEntity = itemHolderCustomer.itemEntitySelected;
 						if (itemEntity != null)
 						{
-							itemHolder0.itemEntityTransferTo(itemEntity, itemHolder1);
-							itemHolder0.itemEntitySelected = null;
+							itemHolderCustomer.itemEntityTransferTo(itemEntity, itemHolderStore);
+							itemHolderCustomer.itemEntitySelected = null;
 						}
 					},
 					universe // context
@@ -182,24 +187,24 @@ function ItemTradeSession(entitiesForItemHolders, venuePrev)
 
 				new ControlButton
 				(
-					"buttonTransferLeft",
-					new Coords(105, 90), // pos
-					new Coords(15, 15), // size
-					"<",
+					"buttonBuy",
+					new Coords(65, 90), // pos
+					new Coords(30, 15), // size
+					"Buy",
 					fontHeight,
 					true, // hasBorder
 					new DataBinding
 					(
-						itemHolder1,
+						itemHolderStore,
 						function get(c) { return c.itemEntitySelected != null}
 					), // isEnabled
 					function click(universe)
 					{
-						var itemEntity = itemHolder1.itemEntitySelected;
+						var itemEntity = itemHolderStore.itemEntitySelected;
 						if (itemEntity != null)
 						{
-							itemHolder1.itemEntityTransferTo(itemEntity, itemHolder0);
-							itemHolder1.itemEntitySelected = null;
+							itemHolderStore.itemEntityTransferTo(itemEntity, itemHolderCustomer);
+							itemHolderStore.itemEntitySelected = null;
 						}
 					},
 					universe // context
@@ -216,7 +221,7 @@ function ItemTradeSession(entitiesForItemHolders, venuePrev)
 					true, // isEnabled
 					function click(universe)
 					{
-						var venueNext = itemTradeSession.venuePrev;
+						var venueNext = venuePrev;
 						venueNext = new VenueFader(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
 					},

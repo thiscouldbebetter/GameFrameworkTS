@@ -1,10 +1,12 @@
 
 function ItemHolder(itemEntities)
 {
-	this.itemEntities = itemEntities || [];
-	for (var i = 0; i < this.itemEntities.length; i++)
+	this.itemEntities = [];
+
+	itemEntities = itemEntities || [];
+	for (var i = 0; i < itemEntities.length; i++)
 	{
-		var itemEntity = this.itemEntities[i];
+		var itemEntity = itemEntities[i];
 		this.itemEntityAdd(itemEntity);
 	}
 }
