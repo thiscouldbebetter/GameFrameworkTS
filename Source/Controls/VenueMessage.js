@@ -1,18 +1,20 @@
 
-function VenueMessage(messageToShow, venueNext, venuePrev, sizeInPixels)
+function VenueMessage(messageToShow, venuePrev, sizeInPixels, acknowledge)
 {
 	this.messageToShow = messageToShow;
-	this.venueNext = venueNext;
 	this.venuePrev = venuePrev;
 	this._sizeInPixels = sizeInPixels;
+	this.acknowledge = acknowledge;
 }
 {
 	// instance methods
 
+	/*
 	VenueMessage.prototype.acknowledge = function(universe)
 	{
 		universe.venueNext = new VenueFader(this.venueNext, this.venueInner());
 	};
+	*/
 
 	VenueMessage.prototype.draw = function(universe)
 	{

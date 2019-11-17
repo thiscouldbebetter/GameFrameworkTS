@@ -182,7 +182,7 @@ function ItemHolder(itemEntities)
 					function click(universe)
 					{
 						var world = universe.world;
-						var place = world.place;
+						var place = world.placeCurrent;
 						var itemEntityToKeep = itemHolder.itemEntitySelected;
 						var itemEntityToDrop = itemEntityToKeep.clone();
 						var itemToDrop = itemEntityToDrop.Item;

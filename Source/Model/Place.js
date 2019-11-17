@@ -112,7 +112,7 @@ function Place(defnName, entities)
 
 	Place.prototype.initialize = function(universe, world)
 	{
-		// Do nothing.
+		this.entitiesSpawn(universe, world);
 	};
 
 	Place.prototype.updateForTimerTick = function(universe, world)

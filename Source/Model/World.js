@@ -3,7 +3,7 @@
 // including the constructor, the draw() and update() methods,
 // and the World.new() method.
 
-function World(name, dateCreated, defns, place)
+function World(name, dateCreated, defns, places)
 {
 	this.name = name;
 	this.dateCreated = dateCreated;
@@ -12,7 +12,8 @@ function World(name, dateCreated, defns, place)
 
 	this.defns = defns;
 
-	this.place = place;
+	this.places = places.addLookupsByName();
+	this.placeCurrent = this.places[0];
 }
 
 {
@@ -22,14 +23,6 @@ function World(name, dateCreated, defns, place)
 	{
 		var now = DateTime.now();
 		var nowAsString = now.toStringMMDD_HHMM_SS();
-
-		var place = new PlaceDemo
-		(
-			universe.display.sizeInPixels.clone().double(), // size
-			5, // numberOfKeysToUnlockGoal
-			48 // numberOfObstacles
-		);
-		place.entitiesSpawn(universe, null);
 
 		var constraintDefns =
 		[
@@ -158,12 +151,32 @@ function World(name, dateCreated, defns, place)
 
 		var defns = new Defns(constraintDefns, placeDefns);
 
+		var displaySize = universe.display.sizeInPixels;
+		var cameraViewSize = displaySize.clone();
+		var placeMain = new PlaceDemo
+		(
+			"Battlefield",
+			displaySize.clone().double(), // size
+			cameraViewSize,
+			null // placeNameToReturnTo
+		);
+
+		var placeBase = new PlaceDemo
+		(
+			"Base",
+			displaySize.clone(), // size
+			cameraViewSize,
+			placeMain.name // placeNameToReturnTo
+		);
+
+		var places = [ placeMain, placeBase ];
+
 		var returnValue = new World
 		(
 			"World-" + nowAsString,
 			now, // dateCreated
 			defns,
-			place
+			places
 		);
 		return returnValue;
 	};
@@ -172,17 +185,17 @@ function World(name, dateCreated, defns, place)
 
 	World.prototype.draw = function(universe)
 	{
-		this.place.draw(universe, this);
+		this.placeCurrent.draw(universe, this);
 	};
 
 	World.prototype.initialize = function(universe)
 	{
-		this.place.initialize(universe, this);
+		this.placeCurrent.initialize(universe, this);
 	};
 
 	World.prototype.updateForTimerTick = function(universe)
 	{
-		this.place.updateForTimerTick(universe, this);
+		this.placeCurrent.updateForTimerTick(universe, this);
 		this.timerTicksSoFar++;
 	};
 }

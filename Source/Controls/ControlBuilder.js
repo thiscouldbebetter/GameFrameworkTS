@@ -394,14 +394,18 @@ function ControlBuilder(styles)
 					true, // isEnabled
 					function click(universe)
 					{
+						var venueCurrent = universe.venueCurrent;
 						var venueNext = new VenueMessage
 						(
 							universe.name + "\nv" + universe.version,
-							universe.venueCurrent, // venueNext
 							universe.venueCurrent, // venuePrev
-							size
+							size,
+							function acknowledge(universe)
+							{
+								universe.venueNext = new VenueFader(venueCurrent);
+							}
 						);
-						venueNext = new VenueFader(venueNext, universe.venueCurrent);
+						venueNext = new VenueFader(venueNext, venueCurrent);
 						universe.venueNext = venueNext;
 					},
 					universe // context

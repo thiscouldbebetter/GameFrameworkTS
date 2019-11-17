@@ -62,7 +62,7 @@ function Device(name, ticksToCharge, use)
 				projectileVisual = new VisualCamera
 				(
 					projectileVisual,
-					(universe, world) => world.place.camera
+					(universe, world) => world.placeCurrent.camera
 				);
 
 				var actorDirection = actorVel.clone().normalize();
