@@ -162,7 +162,8 @@ function ConversationRun(defn, quit, universe)
 					new DataBinding
 					(
 						conversationRun,
-						function get(c) { return c.scopeCurrent.talkNodeForOptionSelected; }
+						function get(c) { return c.scopeCurrent.talkNodeForOptionSelected; },
+						function set(c, v) { c.scopeCurrent.talkNodeForOptionSelected = v; }
 					), // bindingForItemSelected
 					new DataBinding() // bindingForItemValue
 				),
