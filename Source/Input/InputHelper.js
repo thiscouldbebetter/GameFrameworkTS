@@ -79,6 +79,11 @@ function InputHelper()
 		}
 	};
 
+	InputHelper.prototype.inputsActive = function()
+	{
+		return this.inputsPressed.filter( (x) => x.isActive );
+	};
+
 	InputHelper.prototype.inputsRemoveAll = function()
 	{
 		for (var i = 0; i < this.inputsPressed.length; i++)
