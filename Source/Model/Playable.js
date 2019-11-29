@@ -15,7 +15,7 @@ function Playable(player)
 		var playerLoc = entityPlayer.Locatable.loc;
 
 		var inputHelper = universe.inputHelper;
-		if (inputHelper.isMouseClicked() == true)
+		if (inputHelper.isMouseClicked())
 		{
 			inputHelper.isMouseClicked(false);
 			playerLoc.pos.overwriteWith

@@ -49,7 +49,7 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 
 	ControlButton.prototype.mouseClick = function(clickPos)
 	{
-		if (this.isEnabled() == true)
+		if (this.isEnabled())
 		{
 			this.click(this.context);
 		}
@@ -92,7 +92,7 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 		var colorFill = style.colorFill;
 		var colorBorder = style.colorBorder;
 
-		if (this.hasBorder == true)
+		if (this.hasBorder)
 		{
 			display.drawRectangle
 			(
@@ -104,7 +104,7 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 
 		drawPos.add(this._sizeHalf.overwriteWith(this.size).half());
 
-		var colorText = (isEnabled == true ? colorBorder : style.colorDisabled);
+		var colorText = (isEnabled ? colorBorder : style.colorDisabled);
 
 		display.drawText
 		(

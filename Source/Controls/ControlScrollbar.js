@@ -151,8 +151,8 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 		if (this.windowSizeInItems < numberOfItems)
 		{
 			var style = this.style(universe);
-			var colorFore = (this.isHighlighted == true ? style.colorFill : style.colorBorder);
-			var colorBack = (this.isHighlighted == true ? style.colorBorder : style.colorFill);
+			var colorFore = (this.isHighlighted ? style.colorFill : style.colorBorder);
+			var colorBack = (this.isHighlighted ? style.colorBorder : style.colorFill);
 
 			var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 			display.drawRectangle(drawPos, this.size, colorFore, null);

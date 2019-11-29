@@ -51,11 +51,12 @@ function VenueControls(controlRoot)
 
 		var inputHelper = universe.inputHelper;
 		var inputsPressed = inputHelper.inputsPressed;
+		var inputNames = inputHelper.inputNames();
 
 		for (var i = 0; i < inputsPressed.length; i++)
 		{
 			var inputPressed = inputsPressed[i];
-			if (inputPressed.isActive == true)
+			if (inputPressed.isActive)
 			{
 				var inputPressedName = inputPressed.name;
 
@@ -67,7 +68,7 @@ function VenueControls(controlRoot)
 					{
 						// Pass the raw input, to allow for text entry.
 						var wasActionHandled = this.controlRoot.actionHandle(inputPressedName);
-						if (wasActionHandled == true)
+						if (wasActionHandled)
 						{
 							inputPressed.isActive = false;
 						}
@@ -76,13 +77,13 @@ function VenueControls(controlRoot)
 					{
 						var actionName = mapping.actionName;
 						this.controlRoot.actionHandle(actionName);
-						if (mapping.inactivateInputWhenActionPerformed == true)
+						if (mapping.inactivateInputWhenActionPerformed)
 						{
 							inputPressed.isActive = false;
 						}
 					}
 				}
-				else if (inputPressedName == "MouseClick")
+				else if (inputPressedName == inputNames.MouseClick)
 				{
 					this._mouseClickPos.overwriteWith
 					(
@@ -92,12 +93,13 @@ function VenueControls(controlRoot)
 						universe.display.scaleFactor()
 					);
 					var wasClickHandled = this.controlRoot.mouseClick(this._mouseClickPos);
-					if (wasClickHandled == true)
+					if (wasClickHandled)
 					{
-						inputHelper.inputRemove(inputPressed);
+						//inputHelper.inputRemove(inputPressed);
+						inputPressed.isActive = false;
 					}
 				}
-				else if (inputPressedName == "MouseMove")
+				else if (inputPressedName == inputNames.MouseMove)
 				{
 					this._mouseMovePos.overwriteWith
 					(

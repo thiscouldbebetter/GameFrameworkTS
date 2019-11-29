@@ -34,7 +34,7 @@ function VenueVideo(videoName, venueNext)
 			var shouldVideoBeStopped = false;
 
 			var inputHelper = universe.inputHelper;
-			if (inputHelper.isMouseClicked() == true)
+			if (inputHelper.isMouseClicked())
 			{
 				inputHelper.isMouseClicked(false);
 				shouldVideoBeStopped = true;
@@ -45,7 +45,7 @@ function VenueVideo(videoName, venueNext)
 				for (var i = 0; i < inputsPressed.length; i++)
 				{
 					var inputPressed = inputsPressed[i];
-					if (inputPressed.isActive == true)
+					if (inputPressed.isActive)
 					{
 						var actionToInputsMapping = this.actionToInputsMappings[inputPressed.name];
 						if (actionToInputsMapping != null)
@@ -61,13 +61,13 @@ function VenueVideo(videoName, venueNext)
 				}
 			}
 
-			if (shouldVideoBeStopped == true)
+			if (shouldVideoBeStopped)
 			{
 				this.video.stop(universe.platformHelper);
 			}
 		}
 
-		if (this.video.isFinished == true)
+		if (this.video.isFinished)
 		{
 			var display = universe.display;
 			display.drawBackground("Black", "Black");

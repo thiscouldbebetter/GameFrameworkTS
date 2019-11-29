@@ -189,7 +189,7 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 			this.size.x // widthMaxInPixels
 		);
 
-		if (this.isHighlighted == true)
+		if (this.isHighlighted)
 		{
 			var textBeforeCursor = text.substr(0, this.cursorPos);
 			var textAtCursor = text.substr(this.cursorPos, 1);

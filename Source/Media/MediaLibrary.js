@@ -118,7 +118,7 @@ function MediaLibrary(images, sounds, videos, fonts, textStrings)
 
 	MediaLibrary.prototype.waitForItemToLoad_TimerTick = function(itemToLoad, callback)
 	{
-		if (itemToLoad.isLoaded == true)
+		if (itemToLoad.isLoaded)
 		{
 			clearInterval(this.timer);
 			callback.call();
@@ -136,7 +136,7 @@ function MediaLibrary(images, sounds, videos, fonts, textStrings)
 
 	MediaLibrary.prototype.waitForItemsAllToLoad_TimerTick = function(callback)
 	{
-		if (this.areAllItemsLoaded() == true)
+		if (this.areAllItemsLoaded())
 		{
 			clearInterval(this.timer);
 			callback.call();

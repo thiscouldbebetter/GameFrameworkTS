@@ -31,7 +31,7 @@ function ConversationScope(parent, talkNodeCurrent, talkNodesForOptions)
 		}
 		else
 		{
-			if (this.haveOptionsBeenUpdated == true)
+			if (this.haveOptionsBeenUpdated)
 			{
 				this.haveOptionsBeenUpdated = false;
 				this._talkNodesForOptionsActive.length = 0;
@@ -39,7 +39,7 @@ function ConversationScope(parent, talkNodeCurrent, talkNodesForOptions)
 				for (var i = 0; i < this.talkNodesForOptions.length; i++)
 				{
 					var talkNode = this.talkNodesForOptions[i];
-					if (talkNode.isActive == true)
+					if (talkNode.isActive)
 					{
 						this._talkNodesForOptionsActive.push(talkNode);
 					}

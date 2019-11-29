@@ -8,13 +8,38 @@ function InputHelper()
 	this.mouseMovePosPrev = new Coords(0, 0);
 	this.mouseMovePosNext = new Coords(0, 0);
 
+	var inputNames = this.inputNames();
 	this.keysToPreventDefaultsFor =
 	[
-		"ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp", "Tab"
+		inputNames.ArrowDown, inputNames.ArrowLeft, inputNames.ArrowRight,
+		inputNames.ArrowUp, inputNames.Tab
 	];
 }
 
 {
+	InputHelper.prototype.inputNames = function()
+	{
+		if (this._inputNames == null)
+		{
+			function InputHelper_InputNames()
+			{
+				this.ArrowDown = "ArrowDown";
+				this.ArrowLeft = "ArrowLeft";
+				this.ArrowRight = "ArrowRight";
+				this.ArrowUp = "ArrowUp";
+				this.Enter = "Enter";
+				this.Escape = "Escape";
+				this.MouseClick = "MouseClick";
+				this.MouseMove = "MouseMove";
+				this.Tab = "Tab";
+			}
+
+			this._inputNames = new InputHelper_InputNames();
+		}
+
+		return this._inputNames;
+	};
+
 	InputHelper.prototype.initialize = function(universe)
 	{
 		this.inputsPressed = [];
@@ -65,20 +90,22 @@ function InputHelper()
 
 	InputHelper.prototype.isMouseClicked = function(value)
 	{
+		var inputNameMouseClick = this.inputNames().MouseClick;
 		if (value == null)
 		{
-			var inputPressed = this.inputsPressed["MouseClick"];
-			return (inputPressed != null && inputPressed.isActive == true);
+			var inputPressed = this.inputsPressed[inputNameMouseClick];
+			var returnValue = (inputPressed != null && inputPressed.isActive);
+			return returnValue;
 		}
 		else
 		{
 			if (value == true)
 			{
-				this.inputAdd("MouseClick");
+				this.inputAdd(inputNameMouseClick);
 			}
 			else
 			{
-				this.inputRemove("MouseClick");
+				this.inputRemove(inputNameMouseClick);
 			}
 		}
 	};
@@ -136,12 +163,12 @@ function InputHelper()
 			} // end for
 
 			var gamepadIDButton = gamepadID + "Button";
-			var buttonsPressed = gamepad.buttonsPressed;
-			for (var b = 0; b < buttonsPressed.length; b++)
+			var areButtonsPressed = gamepad.buttonsPressed;
+			for (var b = 0; b < areButtonsPressed.length; b++)
 			{
-				var buttonPressed = buttonsPressed[b];
+				var isButtonPressed = areButtonsPressed[b];
 
-				if (buttonPressed == true)
+				if (isButtonPressed)
 				{
 					this.inputAdd(gamepadIDButton + b);
 				}
@@ -161,7 +188,7 @@ function InputHelper()
 	{
 		var inputPressed = event.key;
 
-		if (this.keysToPreventDefaultsFor.contains(inputPressed) == true)
+		if (this.keysToPreventDefaultsFor.contains(inputPressed))
 		{
 			event.preventDefault();
 		}
@@ -213,7 +240,7 @@ function InputHelper()
 			event.clientY - canvasBounds.top,
 			0
 		);
-		this.inputAdd("MouseClick");
+		this.inputAdd(this.inputNames().MouseClick);
 	};
 
 	InputHelper.prototype.handleEventMouseMove = function(event)
@@ -231,13 +258,13 @@ function InputHelper()
 		{
 			this.mouseMovePosPrev.overwriteWith(this.mouseMovePos);
 			this.mouseMovePos.overwriteWith(this.mouseMovePosNext);
-			this.inputAdd("MouseMove");
+			this.inputAdd(this.inputNames().MouseMove);
 		}
 	};
 
 	InputHelper.prototype.handleEventMouseUp = function(event)
 	{
-		this.inputRemove("MouseClick");
+		this.inputRemove(this.inputNames().MouseClick);
 	};
 
 	// gamepads

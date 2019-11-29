@@ -126,18 +126,20 @@ function World(name, dateCreated, defns, places)
 					}
 				}
 			),
-		]
+		];
+
+		var inputNames = universe.inputHelper.inputNames();
 
 		var actionToInputsMappings =
 		[
-			new ActionToInputsMapping("ShowMenu", ["Escape"]),
-			new ActionToInputsMapping("ShowItems", ["Tab"]),
+			new ActionToInputsMapping("ShowMenu", [inputNames.Escape]),
+			new ActionToInputsMapping("ShowItems", [inputNames.Tab]),
 
-			new ActionToInputsMapping("MoveDown", ["ArrowDown", "Gamepad0Down"]),
-			new ActionToInputsMapping("MoveLeft", ["ArrowLeft", "Gamepad0Left"]),
-			new ActionToInputsMapping("MoveRight", ["ArrowRight", "Gamepad0Right"]),
-			new ActionToInputsMapping("MoveUp", ["ArrowUp", "Gamepad0Up"]),
-			new ActionToInputsMapping("Fire", ["Enter", "Gamepad0Button0"]),
+			new ActionToInputsMapping("MoveDown", [inputNames.ArrowDown, "Gamepad0Down"]),
+			new ActionToInputsMapping("MoveLeft", [inputNames.ArrowLeft, "Gamepad0Left"]),
+			new ActionToInputsMapping("MoveRight", [inputNames.ArrowRight, "Gamepad0Right"]),
+			new ActionToInputsMapping("MoveUp", [inputNames.ArrowUp, "Gamepad0Up"]),
+			new ActionToInputsMapping("Fire", [inputNames.Enter, "Gamepad0Button0"]),
 		];
 
 		var placeDefnDemo = new PlaceDefn

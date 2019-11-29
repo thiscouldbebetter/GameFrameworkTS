@@ -56,7 +56,7 @@ function Sound(name, sourcePath)
 
 	Sound.prototype.stop = function(universe, event)
 	{
-		if (this.isPlaying == true)
+		if (this.isPlaying)
 		{
 			this.isPlaying = false;
 			//var domElement = (event == null ? this.domElement : event.srcElement);

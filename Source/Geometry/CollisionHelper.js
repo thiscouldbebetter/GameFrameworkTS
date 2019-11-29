@@ -252,7 +252,7 @@ function CollisionHelper()
 			{
 				var collidableFromSet1 = collidableSet1[j];
 
-				if (this.doCollidablesCollide(collidableFromSet0, collidableFromSet1) == true)
+				if (this.doCollidablesCollide(collidableFromSet0, collidableFromSet1))
 				{
 					var collision = Collision.new();
 					collision.collidables.push(collidableFromSet0);
@@ -677,7 +677,7 @@ function CollisionHelper()
 			if (collisionOfEdgeAndFace != null)
 			{
 				collisions.push(collisionOfEdgeAndFace);
-				if (stopAfterFirst == true)
+				if (stopAfterFirst)
 				{
 					break;
 				}
@@ -839,7 +839,7 @@ function CollisionHelper()
 		for (var i = 0; i < vertices.length; i++)
 		{
 			var vertex = vertices[v];
-			if (hemispace.containsPoint(vertex) == true)
+			if (hemispace.containsPoint(vertex))
 			{
 				returnValue = true;
 				break;
@@ -868,7 +868,7 @@ function CollisionHelper()
 		var distance = displacement.magnitude();
 		var sumOfRadii = sphere0.radius + sphere1.radius;
 		var doRadiiOverlap = (distance < sumOfRadii);
-		if (doRadiiOverlap == true)
+		if (doRadiiOverlap)
 		{
 			var doLengthsOverlap =
 			(
@@ -893,7 +893,7 @@ function CollisionHelper()
 				)
 			);
 
-			if (doLengthsOverlap == true)
+			if (doLengthsOverlap)
 			{
 				returnValue = true;
 			}
@@ -1074,7 +1074,7 @@ function CollisionHelper()
 
 				cell0 = map0.cellAtPosInCells(map0, cell0PosInCells, cell0);
 
-				if (cell0.isBlocking == true)
+				if (cell0.isBlocking)
 				{
 					cell1PosInCellsMin.overwriteWith
 					(
@@ -1113,11 +1113,11 @@ function CollisionHelper()
 							(
 								Coords.Instances().Zeroes, map1SizeInCellsMinusOnes
 							);
-							if (isCell1PosInBounds == true)
+							if (isCell1PosInBounds)
 							{
 								cell1 = map1.cellAtPosInCells(map1, cell1PosInCells, cell1);
 
-								if (cell1.isBlocking == true)
+								if (cell1.isBlocking)
 								{
 									returnValue = true;
 
@@ -1170,11 +1170,11 @@ function CollisionHelper()
 
 				cell = map.cellAtPosInCells(map, cellPosInCells, cell);
 
-				if (cell.isBlocking == true)
+				if (cell.isBlocking)
 				{
 					cellAsBounds.center.overwriteWith(cellPosAbsolute);
 					var doCellAndSphereCollide = this.doBoundsAndSphereCollide(cellAsBounds, sphere);
-					if (doCellAndSphereCollide == true)
+					if (doCellAndSphereCollide)
 					{
 						returnValue = true;
 						break;
@@ -1323,7 +1323,7 @@ function CollisionHelper()
 		{
 			var shapeThis = shapesThis[i];
 			var doShapesCollide = this.doCollidersCollide(shapeThis, shapeOther);
-			if (doShapesCollide == true)
+			if (doShapesCollide)
 			{
 				returnValue = true;
 				break;

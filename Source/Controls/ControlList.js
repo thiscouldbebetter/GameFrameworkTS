@@ -269,8 +269,8 @@ function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPix
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 
 		var style = this.style(universe);
-		var colorFore = (this.isHighlighted == true ? style.colorFill : style.colorBorder);
-		var colorBack = (this.isHighlighted == true ? style.colorBorder : style.colorFill);
+		var colorFore = (this.isHighlighted ? style.colorFill : style.colorBorder);
+		var colorBack = (this.isHighlighted ? style.colorBorder : style.colorFill);
 
 		display.drawRectangle
 		(

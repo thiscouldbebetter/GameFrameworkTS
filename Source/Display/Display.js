@@ -351,7 +351,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		areColorsReversed
 	)
 	{
-		if (areColorsReversed == true)
+		if (areColorsReversed)
 		{
 			var temp = colorFill;
 			colorFill = colorBorder;
@@ -412,7 +412,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 
 		this.fontSizeSet(fontHeightInPixels);
 
-		if (areColorsReversed == true)
+		if (areColorsReversed)
 		{
 			var temp = colorFill;
 			colorFill = colorOutline;
@@ -430,7 +430,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 
 		var textWidthInPixels = this.textWidthForFontHeight(textTrimmed, fontHeightInPixels);
 		var drawPos = new Coords(pos.x, pos.y + fontHeightInPixels);
-		if (isCentered == true)
+		if (isCentered)
 		{
 			drawPos.addDimensions(0 - textWidthInPixels / 2, 0 - fontHeightInPixels / 2, 0);
 		}
@@ -458,7 +458,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 	Display.prototype.fontSizeSet = function(fontHeightInPixels)
 	{
 		var isFontValid = this.fontNameSet(this.fontName);
-		var fontNameToUse = (isFontValid == true ? this.fontName : "sans-serif");
+		var fontNameToUse = (isFontValid ? this.fontName : "sans-serif");
 		this.graphics.font = fontHeightInPixels + "px " + fontNameToUse;
 	};
 

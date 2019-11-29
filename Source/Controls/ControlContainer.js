@@ -180,10 +180,10 @@ function ControlContainer(name, pos, size, children)
 				this._childMax.overwriteWith(child.pos).add(child.size)
 			);
 
-			if (doesChildContainPos == true)
+			if (doesChildContainPos)
 			{
 				listToAddTo.push(child);
-				if (addFirstChildOnly == true)
+				if (addFirstChildOnly)
 				{
 					break;
 				}
@@ -237,7 +237,7 @@ function ControlContainer(name, pos, size, children)
 			if (child.mouseClick != null)
 			{
 				var wasClickHandledByChild = child.mouseClick(mouseClickPos);
-				if (wasClickHandledByChild == true)
+				if (wasClickHandledByChild)
 				{
 					wasClickHandled = true;
 				}

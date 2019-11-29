@@ -51,7 +51,7 @@ function ControlContainerTransparent(containerInner)
 			if (child.mouseClick != null)
 			{
 				var wasClickHandledByChild = child.mouseClick(mouseClickPos);
-				if (wasClickHandledByChild == true)
+				if (wasClickHandledByChild)
 				{
 					wasClickHandled = true;
 				}

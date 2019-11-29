@@ -111,7 +111,7 @@ function Camera(viewSize, focalLength, loc)
 	{
 		var cameraLoc = this.loc;
 
-		if (ignoreZ == true)
+		if (ignoreZ)
 		{
 			viewCoords.z = this.focalLength;
 		}

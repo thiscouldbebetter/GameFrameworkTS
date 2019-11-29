@@ -76,9 +76,9 @@ function AnimationRun(defn)
 
 		this.ticksSinceStarted++;
 
-		if (this.isComplete() == true)
+		if (this.isComplete())
 		{
-			if (this.defn.isRepeating == true)
+			if (this.defn.isRepeating)
 			{
 				this.ticksSinceStarted =
 					this.ticksSinceStarted.wrapToRangeMinMax(0, this.defn.ticksToComplete);
