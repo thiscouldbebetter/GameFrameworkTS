@@ -26,10 +26,8 @@ function Range(min, max)
 	{
 		var returnValue =
 		(
-			(this.min > other.min && this.min < other.max)
-			|| (this.max > other.min && this.max < other.max)
-			|| (other.min > this.min && other.min < this.max)
-			|| (other.max > this.min && other.max < this.max)
+			this.min < other.max
+			&& this.max > other.min
 		);
 
 		return returnValue;
@@ -49,8 +47,39 @@ function Range(min, max)
 		return this;
 	};
 
+	Range.prototype.random = function(randomizer)
+	{
+		return this.min + (this.max - this.min) * randomizer.getNextRandom();
+	};
+
 	Range.prototype.size = function()
 	{
 		return this.max - this.min;
+	};
+
+	Range.prototype.subtract = function(other)
+	{
+		var returnValues = [];
+
+		if (this.overlapsWith(other) == true)
+		{
+			if (this.min <= other.min)
+			{
+				var segment = new Range(this.min, other.min);
+				returnValues.push(segment);
+			}
+
+			if (this.max >= other.max)
+			{
+				var segment = new Range(other.max, this.max);
+				returnValues.push(segment);
+			}
+		}
+		else
+		{
+			returnValues.push(this);
+		}
+
+		return returnValues;
 	};
 }
