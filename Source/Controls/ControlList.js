@@ -51,6 +51,24 @@ function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPix
 		return returnValue;
 	};
 
+	ControlList.fromPosSizeItemsAndBindingForItemText = function(pos, size, items, bindingForItemText)
+	{
+		var returnValue = new ControlList
+		(
+			"", // name,
+			pos,
+			size,
+			items,
+			bindingForItemText,
+			10, // fontHeightInPixels,
+			null, // bindingForItemSelected,
+			null, // bindingForItemValue,
+			true // bindingForIsEnabled
+		);
+
+		return returnValue;
+	};
+
 	ControlList.prototype.actionHandle = function(actionNameToHandle)
 	{
 		var wasActionHandled = false;
