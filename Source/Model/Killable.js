@@ -27,4 +27,11 @@ function Killable(integrityMax, die)
 			}
 		}
 	};
+
+	// cloneable
+
+	Killable.prototype.clone = function()
+	{
+		return new Killable(this.integrityMax, this.die);
+	}
 }
