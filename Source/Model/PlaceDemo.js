@@ -1,8 +1,9 @@
 
-function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo)
+function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
 {
 	this.name = name;
 	this.size = size;
+	this.randomizer = (randomizer == null ? RandomizerLCG.default() : randomizer);
 
 	this.cameraBuild(cameraViewSize);
 
@@ -194,7 +195,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo)
 		entities, entityDimension, entitySize
 	)
 	{
-		var basePos = new Coords().randomize().multiplyScalar(.5).multiply
+		var basePos = new Coords().randomize(this.randomizer).multiplyScalar(.5).multiply
 		(
 			this.size
 		);
@@ -322,7 +323,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo)
 		for (var i = 0; i < numberOfCoins; i++)
 		{
 			var itemCoinPos =
-				new Coords().randomize().multiply(sizeMinusMargins).add(marginSize);
+				new Coords().randomize(this.randomizer).multiply(sizeMinusMargins).add(marginSize);
 
 			var itemCoinEntity = new Entity
 			(
@@ -344,7 +345,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo)
 		entities, entityDimension, entitySize
 	)
 	{
-		var containerPos = new Coords().randomize().multiplyScalar(.5).multiply
+		var containerPos = new Coords().randomize(this.randomizer).multiplyScalar(.5).multiply
 		(
 			this.size
 		);
@@ -524,7 +525,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo)
 				var enemyEntityToPlace = enemyEntityPrototype.clone(universe);
 
 				var placeSizeHalf = place.size.clone().half();
-				var directionFromCenter = new Polar(Math.random(), 1);
+				var directionFromCenter = new Polar(universe.randomizer.getNextRandom(), 1);
 				var offsetFromCenter =
 					directionFromCenter.toCoords(new Coords()).multiply
 					(
@@ -564,7 +565,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo)
 	PlaceDemo.prototype.entityBuildFriendly = function(entities, entityDimension, constraintSpeedMax1, visualEyesBlinking)
 	{
 		var friendlyColor = "Green";
-		var friendlyPos = new Coords().randomize().multiply(this.size);
+		var friendlyPos = new Coords().randomize(this.randomizer).multiply(this.size);
 		var friendlyLoc = new Location(friendlyPos);
 		var friendlyDimension = entityDimension;
 
@@ -644,7 +645,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo)
 						if (targetPos == null)
 						{
 							targetPos =
-								new Coords().randomize().multiply(place.size);
+								new Coords().randomize(this.randomizer).multiply(place.size);
 							actor.target = targetPos;
 						}
 
@@ -684,7 +685,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo)
 		entities, entityDimension, entitySize, numberOfKeysToUnlockGoal, itemKeyColor
 	)
 	{
-		var goalPos = new Coords().randomize().multiplyScalar
+		var goalPos = new Coords().randomize(this.randomizer).multiplyScalar
 		(
 			.5
 		).addDimensions
@@ -769,7 +770,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo)
 		for (var i = 0; i < numberOfKeysToUnlockGoal; i++)
 		{
 			var itemKeyPos =
-				new Coords().randomize().multiply(sizeMinusMargins).add(marginSize);
+				new Coords().randomize(this.randomizer).multiply(sizeMinusMargins).add(marginSize);
 
 			for (var j = 0; j < entitiesObstacles.length; j++)
 			{
@@ -915,7 +916,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo)
 		for (var i = 0; i < numberOfObstacles; i++)
 		{
 			var obstacleMappedPos =
-				new Coords().randomize().multiply(sizeMinusMargins).add(marginSize);
+				new Coords().randomize(this.randomizer).multiply(sizeMinusMargins).add(marginSize);
 			var obstacleMappedLoc = new Location(obstacleMappedPos);
 
 			var obstacleMappedEntity = new Entity
@@ -1253,7 +1254,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo)
 		entities, entityDimension, entitySize
 	)
 	{
-		var storePos = new Coords().randomize().multiplyScalar(.5).multiply
+		var storePos = new Coords().randomize(this.randomizer).multiplyScalar(.5).multiply
 		(
 			this.size
 		);
@@ -1379,7 +1380,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo)
 				"Ammo" + i,
 				[
 					new Item("Ammo", roundsPerPile),
-					new Locatable( new Location( new Coords().randomize().multiply(size) ) ),
+					new Locatable( new Location( new Coords().randomize(this.randomizer).multiply(size) ) ),
 					new Collidable(itemAmmoCollider),
 					new Drawable(itemAmmoVisual)
 				]

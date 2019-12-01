@@ -17,4 +17,11 @@ function Ephemeral(ticksToLive, expire)
 			}
 		}
 	};
+
+	// cloneable
+
+	Ephemeral.prototype.clone = function()
+	{
+		return new Ephemeral(this.ticksToLive, this.expire);
+	};
 }

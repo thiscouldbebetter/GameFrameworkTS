@@ -61,10 +61,15 @@ function Polar(azimuthInTurns, radius, elevationInTurns)
 		return this;
 	};
 
-	Polar.prototype.random = function()
+	Polar.prototype.random = function(randomizer)
 	{
-		this.azimuthInTurns = Math.random();
-		this.elevationInTurns = Math.random();
+		if (randomizer == null)
+		{
+			randomizer = new RandomizerSystem();
+		}
+
+		this.azimuthInTurns = randomizer.getNextRandom();
+		this.elevationInTurns = randomizer.getNextRandom();
 		return this;
 	};
 

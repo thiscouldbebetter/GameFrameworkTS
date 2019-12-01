@@ -8,6 +8,8 @@ function Universe(name, version, timerHelper, display, mediaLibrary, world)
 	this.mediaLibrary = mediaLibrary;
 	this.world = world;
 
+	this.randomizer = new RandomizerSystem();
+
 	this.venueNext = null;
 }
 

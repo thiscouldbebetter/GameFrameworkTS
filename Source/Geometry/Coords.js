@@ -304,11 +304,15 @@ function Coords(x, y, z)
 		return this.x * this.y * this.z;
 	};
 
-	Coords.prototype.randomize = function()
+	Coords.prototype.randomize = function(randomizer)
 	{
-		this.x = Math.random();
-		this.y = Math.random();
-		this.z = Math.random();
+		if (randomizer == null)
+		{
+			randomizer = new RandomizerSystem();
+		}
+		this.x = randomizer.getNextRandom();
+		this.y = randomizer.getNextRandom();
+		this.z = randomizer.getNextRandom();
 		return this;
 	};
 
