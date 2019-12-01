@@ -1,10 +1,21 @@
 
-function Killable(integrity, die)
+function Killable(integrityMax, die)
 {
-	this.integrity = integrity;
+	this.integrityMax = integrityMax;
 	this.die = die;
+
+	this.integrity = this.integrityMax;
 }
 {
+	Killable.prototype.integrityAdd = function(amountToAdd)
+	{
+		this.integrity += amountToAdd;
+		this.integrity = this.integrity.trimToRangeMax
+		(
+			this.integrityMax
+		);
+	};
+
 	Killable.prototype.updateForTimerTick = function(universe, world, place, entityKillable)
 	{
 		if (this.integrity <= 0)

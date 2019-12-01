@@ -34,37 +34,13 @@ function World(name, dateCreated, defns, places)
 
 		var coordsInstances = Coords.Instances();
 
+		var actions = Action.Instances();
+
 		var actions =
 		[
-			Action.Instances().DoNothing,
-			new Action
-			(
-				"ShowMenu",
-				function perform(universe, world, place, actor)
-				{
-					var venueNext = new VenueControls
-					(
-						universe.controlBuilder.configure(universe)
-					);
-					venueNext = new VenueFader(venueNext, universe.venueCurrent);
-					universe.venueNext = venueNext;
-				}
-			),
-			new Action
-			(
-				"ShowItems",
-				function perform(universe, world, place, actor)
-				{
-					var itemHolder = actor.ItemHolder;
-					var itemHolderAsControl = itemHolder.toControl
-					(
-						universe, universe.display.sizeInPixels, actor, universe.venueCurrent
-					);
-					var venueNext = new VenueControls(itemHolderAsControl);
-					venueNext = new VenueFader(venueNext, universe.venueCurrent);
-					universe.venueNext = venueNext;
-				}
-			),
+			actions.DoNothing,
+			actions.ShowItems,
+			actions.ShowMenu,
 			new Action
 			(
 				"MoveDown",
