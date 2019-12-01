@@ -203,6 +203,11 @@ function Coords(x, y, z)
 		return (this.x == other.x && this.y == other.y && this.z == other.z);
 	};
 
+	Coords.prototype.equalsXY = function(other)
+	{
+		return (this.x == other.x && this.y == other.y);
+	};
+
 	Coords.prototype.floor = function()
 	{
 		this.x = Math.floor(this.x);
@@ -296,6 +301,13 @@ function Coords(x, y, z)
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		return this;
+	};
+
+	Coords.prototype.overwriteWithXY = function(other)
+	{
+		this.x = other.x;
+		this.y = other.y;
 		return this;
 	};
 

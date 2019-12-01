@@ -241,20 +241,17 @@ function CollisionHelper()
 	{
 		var returnValues = [];
 
-		var numberOfCollidablesInSet0 = collidableSet0.length;
-		var numberOfCollidablesInSet1 = collidableSet1.length;
-
-		for (var i = 0; i < numberOfCollidablesInSet0; i++)
+		for (var i = 0; i < collidableSet0.length; i++)
 		{
 			var collidableFromSet0 = collidableSet0[i];
 
-			for (var j = 0; j < numberOfCollidablesInSet1; j++)
+			for (var j = 0; j < collidableSet1.length; j++)
 			{
 				var collidableFromSet1 = collidableSet1[j];
 
 				if (this.doCollidablesCollide(collidableFromSet0, collidableFromSet1))
 				{
-					var collision = Collision.new();
+					var collision = new Collision();
 					collision.collidables.push(collidableFromSet0);
 					collision.collidables.push(collidableFromSet1);
 					returnValues.push(collision);
@@ -507,7 +504,7 @@ function CollisionHelper()
 	{
 		if (collision == null)
 		{
-			collision = Collision.new();
+			collision = new Collision();
 		}
 
 		var boundsOfIntersection = bounds1.intersectWith(bounds2);
@@ -573,7 +570,7 @@ function CollisionHelper()
 
 		if (collision == null)
 		{
-			collision = Collision.new();
+			collision = new Collision();
 		}
 
 		collision.isActive = doCollide;
@@ -592,7 +589,7 @@ function CollisionHelper()
 	{
 		if (collision == null)
 		{
-			collision = Collision.new();
+			collision = new Collision();
 		}
 
 		var plane = hemispace.plane;
@@ -691,7 +688,7 @@ function CollisionHelper()
 	{
 		if (collision == null)
 		{
-			collision = Collision.new();
+			collision = new Collision();
 		}
 
 		var returnValue = null;
@@ -733,7 +730,7 @@ function CollisionHelper()
 	{
 		if (collision == null)
 		{
-			collision = Collision.new();
+			collision = new Collision();
 		}
 
 		var doCollide = this.doRectangleRotatedAndSphereCollide

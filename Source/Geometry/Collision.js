@@ -1,8 +1,8 @@
 
-function Collision(pos, distanceToCollision)
+function Collision(pos)
 {
-	this.pos = pos;
-	this.distanceToCollision = distanceToCollision;
+	this.pos = (pos == null ? new Coords() : pos);
+	this.distanceToCollision = null;
 	this.collidables = [];
 	this.colliders = [];
 	this.normals = [ new Coords(), new Coords() ];
@@ -10,11 +10,6 @@ function Collision(pos, distanceToCollision)
 	this.isActive = false;
 }
 {
-	Collision.new = function()
-	{
-		return new Collision(new Coords());
-	};
-
 	Collision.prototype.clear = function()
 	{
 		this.isActive = false;

@@ -225,4 +225,11 @@ function ItemHolder(itemEntities)
 
 		return returnValue;
 	};
+
+	// cloneable
+
+	ItemHolder.prototype.clone = function()
+	{
+		return new ItemHolder(this.itemEntities.clone());
+	};
 }
