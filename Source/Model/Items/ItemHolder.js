@@ -97,6 +97,7 @@ function ItemHolder(itemEntities)
 		var scaleMultiplier = size.clone().divide(sizeBase);
 
 		var fontHeight = 10;
+		var fontHeightHalf = fontHeight / 2;
 
 		var itemHolder = this;
 
@@ -128,7 +129,7 @@ function ItemHolder(itemEntities)
 						null,
 						function get(c) { return c.Item.toString(); }
 					), // bindingForItemText
-					fontHeight,
+					fontHeightHalf,
 					new DataBinding
 					(
 						this,
