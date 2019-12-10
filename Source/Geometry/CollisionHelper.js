@@ -691,7 +691,7 @@ function CollisionHelper()
 			collision = new Collision();
 		}
 
-		var returnValue = null;
+		var returnValue = collision;
 
 		var edgeDirection = edge.direction();
 		var planeNormal = plane.normal;

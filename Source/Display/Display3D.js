@@ -294,20 +294,14 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 		this.drawMesh(mesh);
 	};
 
-	Display3D.prototype.initialize = function(universe)
+	Display3D.prototype.initialize = function()
 	{
-		var platformHelper = universe.platformHelper;
-
-		if (this.canvas != null)
-		{
-			platformHelper.platformableRemove(this);
-		}
+		this._display2DOverlay.initialize();
 
 		this.canvas = document.createElement("canvas");
 		this.canvas.style.position = "absolute";
 		this.canvas.width = this.sizeInPixels.x;
 		this.canvas.height = this.sizeInPixels.y;
-		platformHelper.platformableAdd(this);
 
 		this.webGLContext = new WebGLContext(this.canvas);
 
@@ -321,8 +315,6 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 			new Coords(-1, -1, -1), // direction
 			.3 // directionalIntensity
 		);
-
-		this._display2DOverlay.initialize(universe);
 
 		// temps
 
@@ -405,7 +397,7 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 
 	Display3D.prototype.drawImageScaled = function(imageToDraw, pos, size)
 	{
-		this._display2DOverlay.drawImage(imageToDraw, pos, size);
+		this._display2DOverlay.drawImageScaled(imageToDraw, pos, size);
 	};
 
 	Display3D.prototype.drawLine = function(fromPos, toPos, color, lineThickness)
@@ -486,5 +478,16 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 	Display3D.prototype.textWidthForFontHeight = function(textToMeasure, fontHeightInPixels)
 	{
 		return this._display2DOverlay.textWidthForFontHeight(textToMeasure, fontHeightInPixels);
+	};
+
+	// platformable
+
+	Display3D.prototype.toDomElement = function()
+	{
+		var returnValue = document.createElement("div");
+		returnValue.appendChild(this.canvas);
+		var overlayAsDomElement = this._display2DOverlay.toDomElement();
+		returnValue.appendChild(overlayAsDomElement);
+		return returnValue;
 	};
 }
