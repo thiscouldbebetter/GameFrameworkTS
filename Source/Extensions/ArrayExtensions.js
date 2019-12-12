@@ -35,6 +35,21 @@ function ArrayExtensions()
 		return this.addLookups( function(x) { return x.name; } );
 	};
 
+	Array.prototype.addLookupsMultiple = function(getKeysForElement)
+	{
+		for (var i = 0; i < this.length; i++)
+		{
+			var element = this[i];
+			var keys = getKeysForElement(element);
+			for (var k = 0; k < keys.length; k++)
+			{
+				var key = keys[k];
+				this[key] = element;
+			}
+		}
+		return this;
+	};
+
 	Array.prototype.append = function(other)
 	{
 		for (var i = 0; i < other.length; i++)
