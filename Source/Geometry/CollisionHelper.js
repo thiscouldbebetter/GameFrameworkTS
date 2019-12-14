@@ -26,43 +26,62 @@ function CollisionHelper()
 		var lookupOfLookups = {};
 		var lookup;
 
-		// Bounds
-		lookup = {};
-		lookup[Sphere.name] = this.collideCollidablesBoundsAndSphere;
-		lookupOfLookups[Bounds.name] = lookup;
+		var boundsName = ( Bounds == null ? null : Bounds.name );
+		var mapLocatedName = ( MapLocated == null ? null : MapLocated.name );
+		var meshName = ( Mesh == null ? null : Mesh.name );
+		var rectangleRotatedName = ( RectangleRotated == null ? null : RectangleRotated.name );
+		var shapeGroupAllName = ( ShapeGroupAll == null ? null : ShapeGroupAll.name );
+		var sphereName = ( Sphere == null ? null : Sphere.name );
 
-		// MapLocated
-		lookup = {};
-		lookup[Sphere.name] = this.collideCollidablesReverseVelocities;
-		lookupOfLookups[MapLocated.name] = lookup;
+		if (boundsName != null)
+		{
+			lookup = {};
+			lookup[sphereName] = this.collideCollidablesBoundsAndSphere;
+			lookupOfLookups[boundsName] = lookup;
+		}
 
-		// Mesh
-		lookup = {};
-		lookup[MapLocated.name] = this.collideCollidablesReverseVelocities;
-		lookup[Mesh.name] = this.collideCollidablesReverseVelocities;
-		lookup[ShapeGroupAll.name] = this.collideCollidablesReverseVelocities;
-		lookup[Sphere.name] = this.collideCollidablesReverseVelocities;
-		lookupOfLookups[Mesh.name] = lookup;
+		if (mapLocatedName != null)
+		{
+			lookup = {};
+			lookup[sphereName] = this.collideCollidablesReverseVelocities;
+			lookupOfLookups[mapLocatedName] = lookup;
+		}
 
-		// RectangleRotated
-		lookup = {};
-		lookup[Sphere.name] = this.collideCollidablesRectangleRotatedAndSphere;
-		lookupOfLookups[RectangleRotated.name] = lookup;
+		if (meshName != null)
+		{
+			lookup = {};
+			lookup[mapLocatedName] = this.collideCollidablesReverseVelocities;
+			lookup[meshName] = this.collideCollidablesReverseVelocities;
+			lookup[shapeGroupAllName] = this.collideCollidablesReverseVelocities;
+			lookup[sphereName] = this.collideCollidablesReverseVelocities;
+			lookupOfLookups[meshName] = lookup;
+		}
 
-		// ShapeGroupAll
-		lookup = {};
-		lookup[Sphere.name] = this.collideCollidablesSphereAndShapeGroupAll;
-		lookupOfLookups[ShapeGroupAll.name] = lookup;
+		if (rectangleRotatedName != null)
+		{
+			lookup = {};
+			lookup[sphereName] = this.collideCollidablesRectangleRotatedAndSphere;
+			lookupOfLookups[rectangleRotatedName] = lookup;
+		}
 
-		// Sphere
-		lookup = {};
-		lookup[Bounds.name] = this.collideCollidablesSphereAndBounds;
-		lookup[MapLocated.name] = this.collideCollidablesReverseVelocities;
-		lookup[Mesh.name] = this.collideCollidablesReverseVelocities;
-		lookup[RectangleRotated.name] = this.collideCollidablesSphereAndRectangleRotated;
-		lookup[ShapeGroupAll.name] = this.collideCollidablesReverseVelocities;
-		lookup[Sphere.name] = this.collideCollidablesSphereAndSphere;
-		lookupOfLookups[Sphere.name] = lookup;
+		if (shapeGroupAllName != null)
+		{
+			lookup = {};
+			lookup[sphereName] = this.collideCollidablesSphereAndShapeGroupAll;
+			lookupOfLookups[shapeGroupAllName] = lookup;
+		}
+
+		if (sphereName != null)
+		{
+			lookup = {};
+			lookup[boundsName] = this.collideCollidablesSphereAndBounds;
+			lookup[mapLocatedName] = this.collideCollidablesReverseVelocities;
+			lookup[meshName] = this.collideCollidablesReverseVelocities;
+			lookup[rectangleRotatedName] = this.collideCollidablesSphereAndRectangleRotated;
+			lookup[shapeGroupAllName] = this.collideCollidablesReverseVelocities;
+			lookup[sphereName] = this.collideCollidablesSphereAndSphere;
+			lookupOfLookups[sphereName] = lookup;
+		}
 
 		return lookupOfLookups;
 	};
@@ -72,91 +91,128 @@ function CollisionHelper()
 		var lookupOfLookups = {};
 		var lookup;
 
-		// Bounds
-		lookup = {};
-		lookup[Bounds.name] = this.doBoundsAndBoundsCollide;
-		lookup[Cylinder.name] = this.doBoundsAndCylinderCollide;
-		lookup[Sphere.name] = this.doBoundsAndSphereCollide;
-		lookupOfLookups[Bounds.name] = lookup;
+		var boundsName = ( Bounds == null ? null : Bounds.name );
+		var cylinderName = ( Cylinder == null ? null : Cylinder.name );
+		var edgeName = ( Edge == null ? null : Edge.name );
+		var faceName = ( Face == null ? null : Face.name );
+		var hemispaceName = ( Hemispace == null ? null : Hemispace.name );
+		var mapLocatedName = ( MapLocated == null ? null : MapLocated.name );
+		var meshName = ( Mesh == null ? null : Mesh.name );
+		var planeName = ( Plane == null ? null : Plane.name );
+		var rectangleRotatedName = ( RectangleRotated == null ? null : RectangleRotated.name );
+		var shapeContainerName = ( ShapeContainer == null ? null : ShapeContainer.name );
+		var shapeInverseName = ( ShapeInverse == null ? null : ShapeInverse.name );
+		var shapeGroupAllName = ( ShapeGroupAll == null ? null : ShapeGroupAll.name );
+		var shapeGroupAnyName = ( ShapeGroupAny == null ? null : ShapeGroupAny.name );
+		var sphereName = ( Sphere == null ? null : Sphere.name );
 
-		// Cylinder
-		lookup = {};
-		lookup[Cylinder.name] = this.doCylinderAndCylinderCollide;
-		lookupOfLookups[Cylinder.name] = lookup;
+		if (boundsName != null)
+		{
+			lookup = {};
+			lookup[boundsName] = this.doBoundsAndBoundsCollide;
+			lookup[cylinderName] = this.doBoundsAndCylinderCollide;
+			lookup[sphereName] = this.doBoundsAndSphereCollide;
+			lookupOfLookups[boundsName] = lookup;
+		}
 
-		// Edge
-		lookup = {};
-		lookup[Face.name] = this.doEdgeAndFaceCollide;
-		lookup[Hemispace.name] = this.doEdgeAndHemispaceCollide;
-		lookup[Mesh.name] = this.doEdgeAndMeshCollide;
-		lookup[Plane.name] = this.doEdgeAndPlaneCollide;
-		lookupOfLookups[Edge.name] = lookup;
+		if (cylinderName != null)
+		{
+			lookup = {};
+			lookup[cylinderName] = this.doCylinderAndCylinderCollide;
+			lookupOfLookups[cylinderName] = lookup;
+		}
 
-		// Hemispace
-		lookup = {};
-		lookup[Sphere.name] = this.doHemispaceAndSphereCollide;
-		lookupOfLookups[Hemispace.name] = lookup;
+		if (edgeName != null)
+		{
+			lookup = {};
+			lookup[faceName] = this.doEdgeAndFaceCollide;
+			lookup[hemispaceName] = this.doEdgeAndHemispaceCollide;
+			lookup[meshName] = this.doEdgeAndMeshCollide;
+			lookup[planeName] = this.doEdgeAndPlaneCollide;
+			lookupOfLookups[edgeName] = lookup;
+		}
 
-		// MapLocated
-		lookup = {};
-		lookup[MapLocated.name] = this.doMapLocatedAndMapLocatedCollide;
-		lookup[Sphere.name] = this.doMapLocatedAndSphereCollide;
-		lookupOfLookups[MapLocated.name] = lookup;
+		if (hemispaceName != null)
+		{
+			lookup = {};
+			lookup[sphereName] = this.doHemispaceAndSphereCollide;
+			lookupOfLookups[hemispaceName] = lookup;
+		}
 
-		// Mesh
-		lookup = {};
-		lookup[Mesh.name] = this.doMeshAndMeshCollide;
-		lookup[Sphere.name] = this.doMeshAndSphereCollide;
-		lookupOfLookups[Mesh.name] = lookup;
+		if (mapLocatedName != null)
+		{
+			lookup = {};
+			lookup[mapLocatedName] = this.doMapLocatedAndMapLocatedCollide;
+			lookup[sphereName] = this.doMapLocatedAndSphereCollide;
+			lookupOfLookups[mapLocatedName] = lookup;
+		}
 
-		// ShapeContainer
-		lookup = {};
-		lookup[ShapeContainer.name] = this.doShapeContainerAndShapeCollide;
-		lookup[ShapeGroupAll.name] = this.doShapeContainerAndShapeCollide;
-		lookup[ShapeGroupAny.name] = this.doShapeContainerAndShapeCollide;
-		lookup[ShapeInverse.name] = this.doShapeContainerAndShapeCollide;
-		lookup[Sphere.name] = this.doShapeContainerAndShapeCollide;
-		lookupOfLookups[ShapeContainer.name] = lookup;
+		if (meshName != null)
+		{
+			lookup = {};
+			lookup[meshName] = this.doMeshAndMeshCollide;
+			lookup[sphereName] = this.doMeshAndSphereCollide;
+			lookupOfLookups[meshName] = lookup;
+		}
 
-		// ShapeGroupAll
-		lookup = {};
-		lookup[ShapeContainer.name] = this.doShapeGroupAllAndShapeCollide;
-		lookup[ShapeGroupAll.name] = this.doShapeGroupAllAndShapeCollide;
-		lookup[ShapeGroupAny.name] = this.doShapeGroupAllAndShapeCollide;
-		lookup[ShapeInverse.name] = this.doShapeGroupAllAndShapeCollide;
-		lookup[Sphere.name] = this.doShapeGroupAllAndShapeCollide;
-		lookupOfLookups[ShapeGroupAll.name] = lookup;
+		if (shapeContainerName != null)
+		{
+			lookup = {};
+			lookup[shapeContainerName] = this.doShapeContainerAndShapeCollide;
+			lookup[shapeGroupAllName] = this.doShapeContainerAndShapeCollide;
+			lookup[shapeGroupAnyName] = this.doShapeContainerAndShapeCollide;
+			lookup[shapeInverseName] = this.doShapeContainerAndShapeCollide;
+			lookup[sphereName] = this.doShapeContainerAndShapeCollide;
+			lookupOfLookups[shapeContainerName] = lookup;
+		}
 
-		// ShapeGroupAny
-		lookup = {};
-		lookup[ShapeContainer.name] = this.doShapeGroupAnyAndShapeCollide;
-		lookup[ShapeGroupAll.name] = this.doShapeGroupAnyAndShapeCollide;
-		lookup[ShapeGroupAny.name] = this.doShapeGroupAnyAndShapeCollide;
-		lookup[ShapeInverse.name] = this.doShapeGroupAnyAndShapeCollide;
-		lookup[Sphere.name] = this.doShapeGroupAnyAndShapeCollide;
-		lookupOfLookups[ShapeGroupAny.name] = lookup;
+		if (shapeGroupAllName != null)
+		{
+			lookup = {};
+			lookup[shapeContainerName] = this.doShapeGroupAllAndShapeCollide;
+			lookup[shapeGroupAllName] = this.doShapeGroupAllAndShapeCollide;
+			lookup[shapeGroupAnyName] = this.doShapeGroupAllAndShapeCollide;
+			lookup[shapeInverseName] = this.doShapeGroupAllAndShapeCollide;
+			lookup[sphereName] = this.doShapeGroupAllAndShapeCollide;
+			lookupOfLookups[shapeGroupAllName] = lookup;
+		}
 
-		// ShapeInverse
-		lookup = {};
-		lookup[ShapeContainer.name] = this.doShapeInverseAndShapeCollide;
-		lookup[ShapeGroupAll.name] = this.doShapeInverseAndShapeCollide;
-		lookup[ShapeGroupAny.name] = this.doShapeInverseAndShapeCollide;
-		lookup[ShapeInverse.name] = this.doShapeInverseAndShapeCollide;
-		lookup[Sphere.name] = this.doShapeInverseAndShapeCollide;
-		lookupOfLookups[ShapeInverse.name] = lookup;
+		if (shapeGroupAnyName != null)
+		{
+			lookup = {};
+			lookup[shapeContainerName] = this.doShapeGroupAnyAndShapeCollide;
+			lookup[shapeGroupAllName] = this.doShapeGroupAnyAndShapeCollide;
+			lookup[shapeGroupAnyName] = this.doShapeGroupAnyAndShapeCollide;
+			lookup[shapeInverseName] = this.doShapeGroupAnyAndShapeCollide;
+			lookup[sphereName] = this.doShapeGroupAnyAndShapeCollide;
+			lookupOfLookups[shapeGroupAnyName] = lookup;
+		}
 
-		// Sphere
-		lookup = {};
-		lookup[Bounds.name] = this.doSphereAndBoundsCollide;
-		lookup[MapLocated.name] = this.doSphereAndMapLocatedCollide;
-		lookup[Mesh.name] = this.doSphereAndMeshCollide;
-		lookup[RectangleRotated.name] = this.doSphereAndRectangleRotatedCollide;
-		lookup[ShapeContainer.name] = this.doSphereAndShapeContainerCollide;
-		lookup[ShapeGroupAll.name] = this.doSphereAndShapeGroupAllCollide;
-		lookup[ShapeGroupAny.name] = this.doSphereAndShapeGroupAnyCollide;
-		lookup[ShapeInverse.name] = this.doSphereAndShapeInverseCollide;
-		lookup[Sphere.name] = this.doSphereAndSphereCollide;
-		lookupOfLookups[Sphere.name] = lookup;
+		if (shapeInverseName != null)
+		{
+			lookup = {};
+			lookup[shapeContainerName] = this.doShapeInverseAndShapeCollide;
+			lookup[shapeGroupAllName] = this.doShapeInverseAndShapeCollide;
+			lookup[shapeGroupAnyName] = this.doShapeInverseAndShapeCollide;
+			lookup[shapeInverseName] = this.doShapeInverseAndShapeCollide;
+			lookup[sphereName] = this.doShapeInverseAndShapeCollide;
+			lookupOfLookups[shapeInverseName] = lookup;
+		}
+
+		if (sphereName != null)
+		{
+			lookup = {};
+			lookup[boundsName] = this.doSphereAndBoundsCollide;
+			lookup[mapLocatedName] = this.doSphereAndMapLocatedCollide;
+			lookup[meshName] = this.doSphereAndMeshCollide;
+			lookup[rectangleRotatedName] = this.doSphereAndRectangleRotatedCollide;
+			lookup[shapeContainerName] = this.doSphereAndShapeContainerCollide;
+			lookup[shapeGroupAllName] = this.doSphereAndShapeGroupAllCollide;
+			lookup[shapeGroupAnyName] = this.doSphereAndShapeGroupAnyCollide;
+			lookup[shapeInverseName] = this.doSphereAndShapeInverseCollide;
+			lookup[sphereName] = this.doSphereAndSphereCollide;
+			lookupOfLookups[sphereName] = lookup;
+		}
 
 		return lookupOfLookups;
 	};
@@ -167,23 +223,33 @@ function CollisionHelper()
 		var lookupOfLookups = {};
 		var lookup;
 
-		// Bounds
-		lookup = {};
-		lookup[Bounds.name] = this.doesBoundsContainBounds;
-		lookup[Sphere.name] = this.doesBoundsContainSphere;
-		lookupOfLookups[Bounds.name] = lookup;
+		var boundsName = ( Bounds == null ? null : Bounds.name );
+		var hemispaceName = ( Hemispace == null ? null : Hemispace.name );
+		var sphereName = ( Sphere == null ? null : Sphere.name );
 
-		// Hemispace
-		lookup = {};
-		lookup[Bounds.name] = this.doesHemispaceContainBounds;
-		lookup[Sphere.name] = this.doesHemispaceContainSphere;
-		lookupOfLookups[Hemispace.name] = lookup;
+		if (boundsName != null)
+		{
+			lookup = {};
+			lookup[boundsName] = this.doesBoundsContainBounds;
+			lookup[sphereName] = this.doesBoundsContainSphere;
+			lookupOfLookups[boundsName] = lookup;
+		}
 
-		// Sphere
-		lookup = {};
-		lookup[Bounds.name] = this.doesSphereContainBounds;
-		lookup[Sphere.name] = this.doesSphereContainSphere;
-		lookupOfLookups[Sphere.name] = lookup;
+		if (hemispaceName != null)
+		{
+			lookup = {};
+			lookup[boundsName] = this.doesHemispaceContainBounds;
+			lookup[sphereName] = this.doesHemispaceContainSphere;
+			lookupOfLookups[hemispaceName] = lookup;
+		}
+
+		if (sphereName != null)
+		{
+			lookup = {};
+			lookup[boundsName] = this.doesSphereContainBounds;
+			lookup[sphereName] = this.doesSphereContainSphere;
+			lookupOfLookups[sphereName] = lookup;
+		}
 
 		return lookupOfLookups;
 	};
