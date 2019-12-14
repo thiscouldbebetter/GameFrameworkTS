@@ -6,6 +6,24 @@ function VisualAnimation(name, ticksToHoldFrames, frames, isRepeating)
 	this.frames = frames;
 	this.isRepeating = (isRepeating == null ? true : isRepeating);
 
+	if (this.ticksToHoldFrames == null)
+	{
+		this.ticksToHoldFrames = [];
+		for (var f = 0; f < this.frames.length; f++)
+		{
+			this.ticksToHoldFrames.push(1);
+		}
+	}
+	else if (isNaN(this.ticksToHoldFrames) == false)
+	{
+		var ticksToHoldEachFrame = this.ticksToHoldFrames;
+		this.ticksToHoldFrames = [];
+		for (var f = 0; f < this.frames.length; f++)
+		{
+			this.ticksToHoldFrames.push(ticksToHoldEachFrame);
+		}
+	}
+
 	this.ticksToComplete = 0;
 	for (var f = 0; f < this.ticksToHoldFrames.length; f++)
 	{

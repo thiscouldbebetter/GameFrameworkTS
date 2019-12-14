@@ -1,8 +1,7 @@
 
-function VisualImageImmediate(image, sizeScaled)
+function VisualImageImmediate(image)
 {
 	this._image = image;
-	this.sizeScaled = sizeScaled;
 
 	// Helper variables.
 
@@ -12,14 +11,14 @@ function VisualImageImmediate(image, sizeScaled)
 {
 	// static methods
 
-	VisualImageImmediate.manyFromImages = function(images, imageSizeScaled)
+	VisualImageImmediate.manyFromImages = function(images)
 	{
 		var returnValues = [];
 
 		for (var i = 0; i < images.length; i++)
 		{
 			var image = images[i];
-			var visual = new VisualImageImmediate(image, imageSizeScaled);
+			var visual = new VisualImageImmediate(image);
 			returnValues.push(visual);
 		}
 

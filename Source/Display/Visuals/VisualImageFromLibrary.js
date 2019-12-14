@@ -10,14 +10,14 @@ function VisualImageFromLibrary(imageName)
 {
 	// static methods
 
-	VisualImageFromLibrary.manyFromImages = function(images)
+	VisualImageFromLibrary.manyFromImages = function(images, imageSizeScaled)
 	{
 		var returnValues = [];
 
 		for (var i = 0; i < images.length; i++)
 		{
 			var image = images[i];
-			var visual = new VisualImageFromLibrary(image.name);
+			var visual = new VisualImageFromLibrary(image.name, imageSizeScaled);
 			returnValues.push(visual);
 		}
 

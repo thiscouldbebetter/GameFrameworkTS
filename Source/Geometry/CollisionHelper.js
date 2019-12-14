@@ -26,12 +26,14 @@ function CollisionHelper()
 		var lookupOfLookups = {};
 		var lookup;
 
-		var boundsName = ( Bounds == null ? null : Bounds.name );
-		var mapLocatedName = ( MapLocated == null ? null : MapLocated.name );
-		var meshName = ( Mesh == null ? null : Mesh.name );
-		var rectangleRotatedName = ( RectangleRotated == null ? null : RectangleRotated.name );
-		var shapeGroupAllName = ( ShapeGroupAll == null ? null : ShapeGroupAll.name );
-		var sphereName = ( Sphere == null ? null : Sphere.name );
+		var notDefined = typeof NonexistentClass;
+
+		var boundsName = ( typeof Bounds == notDefined ? null : Bounds.name );
+		var mapLocatedName = ( typeof MapLocated == notDefined ? null : MapLocated.name );
+		var meshName = ( typeof Mesh == notDefined ? null : Mesh.name );
+		var rectangleRotatedName = ( typeof RectangleRotated == notDefined ? null : RectangleRotated.name );
+		var shapeGroupAllName = ( typeof ShapeGroupAll == notDefined ? null : ShapeGroupAll.name );
+		var sphereName = ( typeof Sphere == notDefined ? null : Sphere.name );
 
 		if (boundsName != null)
 		{
@@ -91,20 +93,22 @@ function CollisionHelper()
 		var lookupOfLookups = {};
 		var lookup;
 
-		var boundsName = ( Bounds == null ? null : Bounds.name );
-		var cylinderName = ( Cylinder == null ? null : Cylinder.name );
-		var edgeName = ( Edge == null ? null : Edge.name );
-		var faceName = ( Face == null ? null : Face.name );
-		var hemispaceName = ( Hemispace == null ? null : Hemispace.name );
-		var mapLocatedName = ( MapLocated == null ? null : MapLocated.name );
-		var meshName = ( Mesh == null ? null : Mesh.name );
-		var planeName = ( Plane == null ? null : Plane.name );
-		var rectangleRotatedName = ( RectangleRotated == null ? null : RectangleRotated.name );
-		var shapeContainerName = ( ShapeContainer == null ? null : ShapeContainer.name );
-		var shapeInverseName = ( ShapeInverse == null ? null : ShapeInverse.name );
-		var shapeGroupAllName = ( ShapeGroupAll == null ? null : ShapeGroupAll.name );
-		var shapeGroupAnyName = ( ShapeGroupAny == null ? null : ShapeGroupAny.name );
-		var sphereName = ( Sphere == null ? null : Sphere.name );
+		var notDefined = typeof NonexistentClass;
+
+		var boundsName = ( typeof Bounds == notDefined ? null : Bounds.name );
+		var cylinderName = ( typeof Cylinder == notDefined ? null : Cylinder.name );
+		var edgeName = ( typeof Edge == notDefined ? null : Edge.name );
+		var faceName = ( typeof Face == notDefined ? null : Face.name );
+		var hemispaceName = ( typeof Hemispace == notDefined ? null : Hemispace.name );
+		var mapLocatedName = ( typeof MapLocated == notDefined ? null : MapLocated.name );
+		var meshName = ( typeof Mesh == notDefined ? null : Mesh.name );
+		var planeName = ( typeof Plane == notDefined ? null : Plane.name );
+		var rectangleRotatedName = ( typeof RectangleRotated == notDefined ? null : RectangleRotated.name );
+		var shapeContainerName = ( typeof ShapeContainer == notDefined ? null : ShapeContainer.name );
+		var shapeInverseName = ( typeof ShapeInverse == notDefined ? null : ShapeInverse.name );
+		var shapeGroupAllName = ( typeof ShapeGroupAll == notDefined ? null : ShapeGroupAll.name );
+		var shapeGroupAnyName = ( typeof ShapeGroupAny == notDefined ? null : ShapeGroupAny.name );
+		var sphereName = ( typeof Sphere == notDefined ? null : Sphere.name );
 
 		if (boundsName != null)
 		{
@@ -223,9 +227,11 @@ function CollisionHelper()
 		var lookupOfLookups = {};
 		var lookup;
 
-		var boundsName = ( Bounds == null ? null : Bounds.name );
-		var hemispaceName = ( Hemispace == null ? null : Hemispace.name );
-		var sphereName = ( Sphere == null ? null : Sphere.name );
+		var notDefined = typeof NonexistentClass;
+
+		var boundsName = ( typeof Bounds == notDefined ? null : Bounds.name );
+		var hemispaceName = ( typeof Hemispace == notDefined ? null : Hemispace.name );
+		var sphereName = ( typeof Sphere == notDefined ? null : Sphere.name );
 
 		if (boundsName != null)
 		{

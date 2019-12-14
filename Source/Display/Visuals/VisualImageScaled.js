@@ -9,6 +9,18 @@ function VisualImageScaled(visualImage, sizeScaled)
 }
 
 {
+	VisualImageScaled.manyFromSizeAndVisuals = function(sizeScaled, visualsToScale)
+	{
+		var returnValues = [];
+		for (var i = 0; i < visualsToScale.length; i++)
+		{
+			var visualToScale = visualsToScale[i];
+			var visualScaled = new VisualImageScaled(visualToScale, sizeScaled);
+			returnValues.push(visualScaled);
+		}
+		return returnValues;
+	}
+
 	VisualImageScaled.prototype.draw = function(universe, world, display, drawable, entity)
 	{
 		var image = this.visualImage.image(universe);
