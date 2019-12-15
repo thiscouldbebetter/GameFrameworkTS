@@ -218,7 +218,8 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 				drawPosText,
 				style.colorBorder,
 				null, // colorBack
-				null, // isHighlighted
+				false, // isHighlighted
+				false, // isCentered
 				this.size.x // widthMaxInPixels
 			);
 		}
