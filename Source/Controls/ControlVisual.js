@@ -8,7 +8,8 @@ function ControlVisual(name, pos, size, visual)
 
 	// Helper variables.
 	this._drawPos = new Coords();
-	this._drawable = new Locatable(new Location(this._drawPos));
+	this._locatable = new Locatable(new Location(this._drawPos));
+	this._locatableEntity = new Entity("_drawableEntity", [ this._locatable ] );
 	this._sizeHalf = new Coords();
 }
 
@@ -31,9 +32,9 @@ function ControlVisual(name, pos, size, visual)
 			style.colorFill, style.colorBorder
 		);
 
-		var drawable = this._drawable;
-		drawable.loc.pos.overwriteWith(drawPos);
+		var locatableEntity = this._locatableEntity;
+		locatableEntity.Locatable.loc.pos.overwriteWith(drawPos);
 		drawPos.add(this._sizeHalf.overwriteWith(this.size).half());
-		this.visual.draw(universe, universe.world, display, drawable);
+		this.visual.draw(universe, universe.world, display, null, locatableEntity);
 	};
 }

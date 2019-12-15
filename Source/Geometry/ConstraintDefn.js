@@ -26,27 +26,24 @@ function ConstraintDefn(name, constrain)
 			}
 		);
 
-		this.Attach = new ConstraintDefn
+		this.AttachToEntityWithName = new ConstraintDefn
 		(
-			"Attach",
-			function constrain(universe, world, place, entity, constraint)
+			"AttachToEntityWithName",
+			function constrain(universe, world, place, entityToConstrain, constraint)
 			{
-				var targetBodyName = constraint.target;
-				var target = context.bodies[targetBodyName];
-				entity.loc.pos.overwriteWith(target.loc.pos);
+				var targetEntityName = constraint.target;
+				var targetEntity = place.entities[targetEntityName];
+				entityToConstrain.Locatable.loc.pos.overwriteWith(targetEntity.Locatable.loc.pos);
 			}
 		);
 
 		this.ContainInBounds = new ConstraintDefn
 		(
 			"ContainInBounds",
-			function constrain(universe, world, place, entity, constraint)
+			function constrain(universe, world, place, entityToConstrain, constraint)
 			{
-				var targetBodyName = constraint.target;
-				var target = context.bodies[targetBodyName];
-				var targetBounds = target.collider().bounds(world);
-
-				targetBounds.trimCoords(entity.loc.pos);
+				var targetBounds = constraint.target;
+				targetBounds.trimCoords(entityToConstrain.Locatable.loc.pos);
 			}
 		);
 
@@ -211,5 +208,14 @@ function ConstraintDefn(name, constrain)
 				}
 			}
 		);
+
+		this._All =
+		[
+			this.AttachToEntityWithName,
+			this.ContainInBounds,
+			this.Friction,
+			this.SpeedMax
+			// todo
+		];
 	}
 }

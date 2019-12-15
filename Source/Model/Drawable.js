@@ -9,7 +9,6 @@ function Drawable(visual, isVisible)
 	{
 		if (this.isVisible)
 		{
-			this.loc = entity.Locatable.loc;
 			this.visual.draw(universe, world, universe.display, this, entity);
 		}
 	};

@@ -47,7 +47,7 @@ function VisualAnimation(name, ticksToHoldFrames, frames, isRepeating)
 			animationRun = new AnimationRun(this);
 			drawable.animationRuns[this.name] = animationRun;
 		}
-		animationRun.update(universe, world, display, drawable);
+		animationRun.update(universe, world, display, drawable, entity);
 	};
 }
 
@@ -87,10 +87,10 @@ function AnimationRun(defn)
 		return returnValue;
 	};
 
-	AnimationRun.prototype.update = function(universe, world, display, drawable)
+	AnimationRun.prototype.update = function(universe, world, display, drawable, entity)
 	{
 		var frameCurrent = this.frameCurrent();
-		frameCurrent.draw(universe, world, display, drawable);
+		frameCurrent.draw(universe, world, display, drawable, entity);
 
 		this.ticksSinceStarted++;
 

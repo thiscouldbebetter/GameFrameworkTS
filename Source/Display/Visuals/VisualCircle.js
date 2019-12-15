@@ -9,6 +9,6 @@ function VisualCircle(radius, colorFill, colorBorder)
 {
 	VisualCircle.prototype.draw = function(universe, world, display, drawable, entity)
 	{
-		display.drawCircle(drawable.loc.pos, this.radius, this.colorFill, this.colorBorder);
+		display.drawCircle(entity.Locatable.loc.pos, this.radius, this.colorFill, this.colorBorder);
 	};
 }

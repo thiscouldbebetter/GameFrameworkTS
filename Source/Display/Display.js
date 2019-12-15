@@ -12,13 +12,11 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 	this.fontNameFallthrough = "serif";
 	this.testString = "ABCDEFGHIJKMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz 1234567890";
 
-	// helper variables
+	// Helper variables.
 
-	this.drawPos = new Coords();
-	this.drawLoc = new Location(this.drawPos);
-	this.drawPos2 = new Coords();
-	this.drawPos3 = new Coords();
-	this.sizeHalf = new Coords();
+	this._drawPos = new Coords();
+	this._sizeHalf = new Coords();
+	this._zeroes = Coords.Instances().Zeroes;
 }
 
 {
@@ -41,7 +39,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		center, radiusInner, radiusOuter, angleStartInTurns, angleStopInTurns, colorFill, colorBorder
 	)
 	{
-		var drawPos = this.drawPos.overwriteWith(center);
+		var drawPos = this._drawPos.overwriteWith(center);
 		var angleStartInRadians = angleStartInTurns * Display.RadiansPerTurn;
 		var angleStopInRadians = angleStopInTurns * Display.RadiansPerTurn;
 
@@ -99,20 +97,20 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		}
 	};
 
-	Display.prototype.drawBackground = function(colorBorder, colorBack)
+	Display.prototype.drawBackground = function(colorBack, colorBorder)
 	{
 		this.drawRectangle
 		(
-			new Coords(0, 0),
+			this._zeroes,
 			this.sizeDefault(), // Automatic scaling.
-			(colorBack == null ? this.colorBack : colorBack),
-			(colorBorder == null ? this.colorFore : colorBorder)
+			colorBack,
+			colorBorder
 		);
 	};
 
 	Display.prototype.drawCircle = function(center, radius, colorFill, colorBorder)
 	{
-		var drawPos = this.drawPos.overwriteWith(center);
+		var drawPos = this._drawPos.overwriteWith(center);
 
 		this.graphics.beginPath();
 		this.graphics.arc
@@ -170,7 +168,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 
 	Display.prototype.drawCrosshairs = function(center, radius, color)
 	{
-		var drawPos = this.drawPos.overwriteWith(center);
+		var drawPos = this._drawPos.overwriteWith(center);
 		this.graphics.beginPath();
 		this.graphics.strokeStyle = color;
 		this.graphics.moveTo(drawPos.x - radius, drawPos.y);
@@ -185,7 +183,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		center, semimajorAxis, semiminorAxis, rotationInTurns, colorFill, colorBorder
 	)
 	{
-		var drawPos = this.drawPos.overwriteWith(center);
+		var drawPos = this._drawPos.overwriteWith(center);
 
 		this.graphics.save();
 
@@ -245,7 +243,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 
 	Display.prototype.drawLine = function(fromPos, toPos, color, lineThickness)
 	{
-		var drawPos = this.drawPos;
+		var drawPos = this._drawPos;
 
 		this.graphics.strokeStyle = color;
 		var lineWidthToRestore = this.graphics.lineWidth;
@@ -275,7 +273,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 
 		this.graphics.beginPath();
 
-		var drawPos = this.drawPos;
+		var drawPos = this._drawPos;
 
 		for (var i = 0; i < vertices.length; i++)
 		{
@@ -311,7 +309,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 	{
 		this.graphics.beginPath();
 
-		var drawPos = this.drawPos;
+		var drawPos = this._drawPos;
 
 		for (var i = 0; i < vertices.length; i++)
 		{
@@ -387,8 +385,8 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		colorBorder
 	)
 	{
-		var sizeHalf = this.sizeHalf.overwriteWith(size).half();
-		var posAdjusted = this.drawPos.overwriteWith(pos).subtract(sizeHalf);
+		var sizeHalf = this._sizeHalf.overwriteWith(size).half();
+		var posAdjusted = this._drawPos.overwriteWith(pos).subtract(sizeHalf);
 		this.drawRectangle(posAdjusted, size, colorFill, colorBorder);
 	};
 

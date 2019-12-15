@@ -24,29 +24,44 @@ function World(name, dateCreated, defns, places)
 		var now = DateTime.now();
 		var nowAsString = now.toStringMMDD_HHMM_SS();
 
-		var constraintDefns =
-		[
-			ConstraintDefn.Instances().Friction,
-			ConstraintDefn.Instances().SpeedMax,
-		];
+		var constraintDefns = ConstraintDefn.Instances()._All;
 
 		// PlaceDefns.
 
 		var coordsInstances = Coords.Instances();
 
-		var actions = Action.Instances();
+		var actionsAll = Action.Instances();
+
+		var entityAccelerateInDirection = function
+		(
+			world, entity, directionToMove
+		)
+		{
+			var entityLoc = entity.Locatable.loc;
+
+			entityLoc.orientation.forwardSet(directionToMove);
+			var vel = entityLoc.vel;
+			if (vel.equals(directionToMove) == false)
+			{
+				entityLoc.timeOffsetInTicks = world.timerTicksSoFar;
+			}
+			entityLoc.accel.overwriteWith(directionToMove).multiplyScalar
+			(
+				.5 // hack
+			);
+		};
 
 		var actions =
 		[
-			actions.DoNothing,
-			actions.ShowItems,
-			actions.ShowMenu,
+			actionsAll.DoNothing,
+			actionsAll.ShowItems,
+			actionsAll.ShowMenu,
 			new Action
 			(
 				"MoveDown",
 				function perform(universe, world, place, actor)
 				{
-					place.entityAccelerateInDirection
+					entityAccelerateInDirection
 					(
 						world, actor, coordsInstances.ZeroOneZero
 					);
@@ -57,7 +72,7 @@ function World(name, dateCreated, defns, places)
 				"MoveLeft",
 				function perform(universe, world, place, actor)
 				{
-					place.entityAccelerateInDirection
+					entityAccelerateInDirection
 					(
 						world, actor, coordsInstances.MinusOneZeroZero
 					);
@@ -68,7 +83,7 @@ function World(name, dateCreated, defns, places)
 				"MoveRight",
 				function perform(universe, world, place, actor)
 				{
-					place.entityAccelerateInDirection
+					entityAccelerateInDirection
 					(
 						world, actor, coordsInstances.OneZeroZero
 					);
@@ -79,7 +94,7 @@ function World(name, dateCreated, defns, places)
 				"MoveUp",
 				function perform(universe, world, place, actor)
 				{
-					place.entityAccelerateInDirection
+					entityAccelerateInDirection
 					(
 						world, actor, coordsInstances.ZeroMinusOneZero
 					);
@@ -131,7 +146,9 @@ function World(name, dateCreated, defns, places)
 
 		var displaySize = universe.display.sizeInPixels;
 		var cameraViewSize = displaySize.clone();
-		var placeMain = new PlaceDemo
+		var placeBuilder = new PlaceBuilderDemo();
+
+		var placeMain = placeBuilder.build
 		(
 			"Battlefield",
 			displaySize.clone().double(), // size
@@ -139,7 +156,7 @@ function World(name, dateCreated, defns, places)
 			null // placeNameToReturnTo
 		);
 
-		var placeBase = new PlaceDemo
+		var placeBase = placeBuilder.build
 		(
 			"Base",
 			displaySize.clone(), // size

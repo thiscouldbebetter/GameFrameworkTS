@@ -1,126 +1,136 @@
 
-function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
+function PlaceBuilderDemo()
 {
-	this.name = name;
-	this.size = size;
-	this.randomizer = (randomizer == null ? RandomizerLCG.default() : randomizer);
-
-	this.cameraBuild(cameraViewSize);
-
-	// entities
-
-	var entityDimension = 10;
-	var entityDimensionHalf = entityDimension / 2;
-	var entitySize = new Coords(1, 1, 1).multiplyScalar(entityDimension);
-
-	var entities = [];
-
-	this.entityBuildBackground(entities);
-
-	var visualEyeRadius = entityDimension * .75 / 2;
-	var visualEyesBlinking = this.visualEyesBlinkingBuild(visualEyeRadius);
-
-	var playerEntity = this.entityBuildPlayer(entities, entityDimension, visualEyeRadius, visualEyesBlinking);
-	var playerPos = playerEntity.Locatable.loc.pos;
-	var damagerColor = "Red";
-	var obstacleColor = damagerColor;
-	var wallThickness = this.entityBuildObstacleWalls(entities, obstacleColor);
-
-	if (placeNameToReturnTo != null)
-	{
-		this.entityBuildBaseExit(entities, entityDimension, entitySize, placeNameToReturnTo);
-	}
-	else
-	{
-		var numberOfKeysToUnlockGoal = 5;
-		var numberOfObstacles = 48;
-
-		var constraintSpeedMax1 = new Constraint("SpeedMax", 1);
-		this.entityBuildFriendly
-		(
-			entities, entityDimension, constraintSpeedMax1, visualEyesBlinking
-		);
-		this.entityBuildEnemy
-		(
-			entities, entityDimension, constraintSpeedMax1, playerPos,
-			visualEyeRadius, visualEyesBlinking, damagerColor
-		);
-		var marginThickness = wallThickness * 8;
-		var marginSize = new Coords(1, 1, 0).multiplyScalar(marginThickness);
-		var entitiesObstacles = this.entityBuildObstacleMines
-		(
-			entities, entityDimension, numberOfObstacles, obstacleColor, marginSize
-		);
-		this.entityBuildObstacleBar(entities, entityDimension, obstacleColor, playerPos);
-		var itemKeyColor = this.entityBuildKeys
-		(
-			entities, entityDimension, numberOfKeysToUnlockGoal, entitiesObstacles, marginSize
-		);
-		this.entityBuildCoins(entities, entityDimension, marginSize);
-		this.entityBuildWeapon(entities, entityDimension, playerPos);
-		this.entityBuildWeaponAmmo(entities, entityDimension, size, 10, 5);
-		this.entityBuildContainer(entities, entityDimension, entitySize);
-		this.entityBuildBase(entities, entityDimension, entitySize);
-		this.entityBuildStore(entities, entityDimension, entitySize);
-		var goalEntity = this.entityBuildGoal
-		(
-			entities, entityDimension, entitySize, numberOfKeysToUnlockGoal, itemKeyColor
-		);
-		this.entityBuildObstacleRing(entities, entityDimension, goalEntity, obstacleColor);
-	}
-
-	this.entitiesAllAddCameraProjection(entities);
-
-	this.venueControlsBuild(playerEntity);
-
-	Place.call(this, "Demo", entities);
-
-	// Helper variables.
-
-	this.drawPos = new Coords();
-	this.drawLoc = new Location(this.drawPos);
+	// Do nothing.
 }
+
 {
-	PlaceDemo.prototype = Object.create(Place.prototype);
-	PlaceDemo.prototype.constructor = PlaceDemo;
-
-	PlaceDemo.prototype.entityAccelerateInDirection = function
-	(
-		world, entity, directionToMove
-	)
+	PlaceBuilderDemo.prototype.build = function(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
 	{
-		var entityLoc = entity.Locatable.loc;
+		this.name = name;
+		this.size = size;
+		this.randomizer = randomizer || RandomizerLCG.default();
 
-		entityLoc.orientation.forwardSet(directionToMove);
-		var vel = entityLoc.vel;
-		if (vel.equals(directionToMove) == false)
+		var entities = [];
+
+		var cameraEntity = this.entityBuildCamera(cameraViewSize);
+		entities.push(cameraEntity);
+
+		var camera = cameraEntity.Camera;
+		this.entityBuildBackground(entities, camera);
+
+		var entityDimension = 10;
+		var entityDimensionHalf = entityDimension / 2;
+		var entitySize = new Coords(1, 1, 1).multiplyScalar(entityDimension);
+
+		var visualEyeRadius = entityDimension * .75 / 2;
+		var visualEyesBlinking = this.visualEyesBlinkingBuild(visualEyeRadius);
+
+		var playerEntity = this.entityBuildPlayer(entities, entityDimension, visualEyeRadius, visualEyesBlinking);
+		var playerPos = playerEntity.Locatable.loc.pos;
+		var damagerColor = "Red";
+		var obstacleColor = damagerColor;
+		var wallThickness = this.entityBuildObstacleWalls(entities, obstacleColor);
+
+		if (placeNameToReturnTo != null)
 		{
-			entityLoc.timeOffsetInTicks = world.timerTicksSoFar;
+			this.entityBuildBaseExit(entities, entityDimension, entitySize, placeNameToReturnTo);
 		}
-		entityLoc.accel.overwriteWith(directionToMove).multiplyScalar
-		(
-			.5 // hack
-		);
-	};
+		else
+		{
+			var numberOfKeysToUnlockGoal = 5;
+			var numberOfObstacles = 48;
+
+			var constraintSpeedMax1 = new Constraint("SpeedMax", 1);
+			this.entityBuildFriendly
+			(
+				entities, entityDimension, constraintSpeedMax1, visualEyesBlinking
+			);
+			this.entityBuildEnemy
+			(
+				entities, entityDimension, constraintSpeedMax1, playerPos,
+				visualEyeRadius, visualEyesBlinking, damagerColor
+			);
+			var marginThickness = wallThickness * 8;
+			var marginSize = new Coords(1, 1, 0).multiplyScalar(marginThickness);
+			var entitiesObstacles = this.entityBuildObstacleMines
+			(
+				entities, entityDimension, numberOfObstacles, obstacleColor, marginSize
+			);
+			this.entityBuildObstacleBar(entities, entityDimension, obstacleColor, playerPos);
+			var itemKeyColor = this.entityBuildKeys
+			(
+				entities, entityDimension, numberOfKeysToUnlockGoal, entitiesObstacles, marginSize
+			);
+			this.entityBuildCoins(entities, entityDimension, marginSize);
+			this.entityBuildWeapon(entities, entityDimension, playerPos);
+			this.entityBuildWeaponAmmo(entities, entityDimension, size, 10, 5);
+			this.entityBuildContainer(entities, entityDimension, entitySize);
+			this.entityBuildBase(entities, entityDimension, entitySize, randomizer);
+			this.entityBuildStore(entities, entityDimension, entitySize);
+			var goalEntity = this.entityBuildGoal
+			(
+				entities, entityDimension, entitySize, numberOfKeysToUnlockGoal, itemKeyColor
+			);
+			this.entityBuildObstacleRing(entities, entityDimension, goalEntity, obstacleColor);
+		}
+
+		this.entitiesAllAddCameraProjection(entities);
+
+		var entityControls = this.entityControlsBuild(playerEntity);
+		entities.push(entityControls);
+
+		var place = new Place(name, "Demo", size, entities);
+		return place;
+	}
 
 	// Constructor helpers.
 
-	PlaceDemo.prototype.cameraBuild = function(cameraViewSize)
+	PlaceBuilderDemo.prototype.entityBuildCamera = function(cameraViewSize)
 	{
-		var cameraFocalLength = cameraViewSize.x;
-		this.camera = new Camera
+		var viewSizeHalf = cameraViewSize.clone().half();
+
+		var cameraPosBounds = Bounds.fromMinAndMax
+		(
+			viewSizeHalf.clone(),
+			this.size.clone().subtract(viewSizeHalf)
+		);
+
+		var cameraPos = viewSizeHalf.clone();
+		var cameraLoc = new Location
+		(
+			cameraPos,
+			Orientation.Instances().ForwardZDownY.clone()
+		);
+		var camera = new Camera
 		(
 			cameraViewSize,
-			cameraFocalLength, // focalLength
-			new Location
-			(
-				new Coords(0, 0, -cameraFocalLength),
-				Orientation.Instances().ForwardZDownY.clone()
-			)
+			null, // focalLength
+			cameraLoc
 		);
+
+		var constraintDefns = ConstraintDefn.Instances();
+
+		var cameraEntity = new Entity
+		(
+			Camera.name,
+			[
+				camera,
+				new Constrainable
+				([
+					new Constraint(constraintDefns.AttachToEntityWithName.name, "Player"),
+					new Constraint
+					(
+						constraintDefns.ContainInBounds.name, cameraPosBounds
+					)
+				]),
+				new Locatable(cameraLoc)
+			]
+		);
+		return cameraEntity;
 	};
 
-	PlaceDemo.prototype.entitiesAllAddCameraProjection = function(entities)
+	PlaceBuilderDemo.prototype.entitiesAllAddCameraProjection = function(entities)
 	{
 		// Add camera projection to all visuals.
 
@@ -134,15 +144,14 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
 				entityDrawable.visual = new VisualCamera
 				(
 					entityVisual,
-					(universe, world) => world.placeCurrent.camera
+					(universe, world) => world.placeCurrent.camera()
 				);
 			}
 		}
 	};
 
-	PlaceDemo.prototype.entityBuildBackground = function(entities)
+	PlaceBuilderDemo.prototype.entityBuildBackground = function(entities, camera)
 	{
-		// background
 		var visualBackgroundDimension = 100;
 
 		var visualBackgroundCellSize =
@@ -150,7 +159,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
 		var visualBackgroundBottom = new VisualRepeating
 		(
 			visualBackgroundCellSize,
-			this.camera.viewSize.clone(), // viewSize
+			camera.viewSize.clone(), // viewSize
 			new VisualRectangle
 			(
 				visualBackgroundCellSize,
@@ -161,7 +170,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
 		(
 			"BackgroundBottom",
 			[
-				new Locatable(new Location(new Coords(0, 0, this.camera.focalLength))),
+				new Locatable(new Location(new Coords(0, 0, camera.focalLength))),
 				new Drawable(visualBackgroundBottom)
 			]
 		);
@@ -172,7 +181,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
 		var visualBackgroundTop = new VisualRepeating
 		(
 			visualBackgroundCellSize, // cellSize
-			this.camera.viewSize.clone(), // viewSize
+			camera.viewSize.clone(), // viewSize
 			new VisualRectangle
 			(
 				visualBackgroundCellSize,
@@ -190,12 +199,12 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
 		entities.push(entityBackgroundTop);
 	};
 
-	PlaceDemo.prototype.entityBuildBase = function
+	PlaceBuilderDemo.prototype.entityBuildBase = function
 	(
-		entities, entityDimension, entitySize
+		entities, entityDimension, entitySize, randomizer
 	)
 	{
-		var basePos = new Coords().randomize(this.randomizer).multiplyScalar(.5).multiply
+		var basePos = new Coords().randomize(randomizer).multiplyScalar(.5).multiply
 		(
 			this.size
 		);
@@ -239,7 +248,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
 		return baseEntity;
 	};
 
-	PlaceDemo.prototype.entityBuildBaseExit = function
+	PlaceBuilderDemo.prototype.entityBuildBaseExit = function
 	(
 		entities, entityDimension, entitySize, placeNameToReturnTo
 	)
@@ -290,9 +299,9 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
 		return exitEntity;
 	};
 
-	PlaceDemo.prototype.entityBuildCoins = function
+	PlaceBuilderDemo.prototype.entityBuildCoins = function
 	(
-		entities, entityDimension, marginSize
+		entities, entityDimension, marginSize, randomizer
 	)
 	{
 		var entityDimensionHalf = entityDimension / 2;
@@ -340,7 +349,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
 		}
 	};
 
-	PlaceDemo.prototype.entityBuildContainer = function
+	PlaceBuilderDemo.prototype.entityBuildContainer = function
 	(
 		entities, entityDimension, entitySize
 	)
@@ -391,7 +400,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
 		return containerEntity;
 	};
 
-	PlaceDemo.prototype.entityBuildEnemy = function
+	PlaceBuilderDemo.prototype.entityBuildEnemy = function
 	(
 		entities, entityDimension, constraintSpeedMax1, playerPos, visualEyeRadius, visualEyesBlinking, damagerColor
 	)
@@ -477,7 +486,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
 		enemyVisual = new VisualCamera
 		(
 			enemyVisual,
-			(universe, world) => world.placeCurrent.camera
+			(universe, world) => world.placeCurrent.camera()
 		);
 
 		var enemyActivity = function (universe, world, place, actor, entityToTargetName)
@@ -518,7 +527,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
 
 		var generatorActivity = function(universe, world, place, actor, entityToTargetName)
 		{
-			var enemyCount = place.enemies().length;
+			var enemyCount = place.entitiesByPropertyName(Enemy.name).length;
 			var enemyCountMax = 3;
 			if (enemyCount < enemyCountMax)
 			{
@@ -562,7 +571,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
 		return damagerColor;
 	};
 
-	PlaceDemo.prototype.entityBuildFriendly = function(entities, entityDimension, constraintSpeedMax1, visualEyesBlinking)
+	PlaceBuilderDemo.prototype.entityBuildFriendly = function(entities, entityDimension, constraintSpeedMax1, visualEyesBlinking)
 	{
 		var friendlyColor = "Green";
 		var friendlyPos = new Coords().randomize(this.randomizer).multiply(this.size);
@@ -627,6 +636,8 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
 			)
 		]);
 
+		var randomizer = this.randomizer;
+
 		var friendlyEntity = new Entity
 		(
 			"Friendly",
@@ -645,7 +656,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
 						if (targetPos == null)
 						{
 							targetPos =
-								new Coords().randomize(this.randomizer).multiply(place.size);
+								new Coords().randomize(randomizer).multiply(place.size);
 							actor.target = targetPos;
 						}
 
@@ -680,7 +691,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
 		entities.push(friendlyEntity);
 	};
 
-	PlaceDemo.prototype.entityBuildGoal = function
+	PlaceBuilderDemo.prototype.entityBuildGoal = function
 	(
 		entities, entityDimension, entitySize, numberOfKeysToUnlockGoal, itemKeyColor
 	)
@@ -725,7 +736,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
 		return goalEntity;
 	};
 
-	PlaceDemo.prototype.entityBuildKeys = function
+	PlaceBuilderDemo.prototype.entityBuildKeys = function
 	(
 		entities, entityDimension, numberOfKeysToUnlockGoal, entitiesObstacles, marginSize
 	)
@@ -803,7 +814,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
 		return itemKeyColor;
 	};
 
-	PlaceDemo.prototype.entityBuildObstacleBar = function(entities, entityDimension, obstacleColor, playerPos)
+	PlaceBuilderDemo.prototype.entityBuildObstacleBar = function(entities, entityDimension, obstacleColor, playerPos)
 	{
 		var entityDimensionHalf = entityDimension / 2;
 
@@ -849,7 +860,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
 		entities.push(obstacleBarEntity);
 	};
 
-	PlaceDemo.prototype.entityBuildObstacleMines = function(
+	PlaceBuilderDemo.prototype.entityBuildObstacleMines = function(
 		entities, entityDimension, numberOfObstacles, obstacleColor, marginSize
 	)
 	{
@@ -940,7 +951,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
 		return entitiesObstacles;
 	};
 
-	PlaceDemo.prototype.entityBuildObstacleRing = function(entities, entityDimension, goalEntity, obstacleColor)
+	PlaceBuilderDemo.prototype.entityBuildObstacleRing = function(entities, entityDimension, goalEntity, obstacleColor)
 	{
 		// obstacleRing
 
@@ -985,7 +996,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
 		entities.push(obstacleRingEntity);
 	};
 
-	PlaceDemo.prototype.entityBuildObstacleWalls = function(entities, obstacleColor)
+	PlaceBuilderDemo.prototype.entityBuildObstacleWalls = function(entities, obstacleColor)
 	{
 		var numberOfWalls = 4;
 		var wallThickness = 5;
@@ -1033,7 +1044,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
 		return wallThickness;
 	};
 
-	PlaceDemo.prototype.entityBuildPlayer = function(entities, entityDimension, visualEyeRadius, visualEyesBlinking)
+	PlaceBuilderDemo.prototype.entityBuildPlayer = function(entities, entityDimension, visualEyeRadius, visualEyesBlinking)
 	{
 		var visualEyesDirectional = new VisualDirectional
 		(
@@ -1086,7 +1097,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
 							new VisualCamera
 							(
 								new VisualText("-" + damagePerHit, "Red"),
-								(universe, world) => world.placeCurrent.camera
+								(universe, world) => world.placeCurrent.camera()
 							)
 						),
 						new Ephemeral(20),
@@ -1249,7 +1260,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
 		return playerEntity;
 	};
 
-	PlaceDemo.prototype.entityBuildStore = function
+	PlaceBuilderDemo.prototype.entityBuildStore = function
 	(
 		entities, entityDimension, entitySize
 	)
@@ -1302,7 +1313,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
 		return storeEntity;
 	};
 
-	PlaceDemo.prototype.entityBuildWeapon = function(entities, entityDimension, playerPos)
+	PlaceBuilderDemo.prototype.entityBuildWeapon = function(entities, entityDimension, playerPos)
 	{
 		entityDimension = entityDimension * 2;
 
@@ -1346,7 +1357,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
 		entities.push(itemWeaponEntity);
 	};
 
-	PlaceDemo.prototype.entityBuildWeaponAmmo = function(entities, entityDimension, size, numberOfPiles, roundsPerPile)
+	PlaceBuilderDemo.prototype.entityBuildWeaponAmmo = function(entities, entityDimension, size, numberOfPiles, roundsPerPile)
 	{
 		var entityDimensionHalf = entityDimension / 2;
 
@@ -1390,7 +1401,7 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
 		}
 	};
 
-	PlaceDemo.prototype.venueControlsBuild = function(playerEntity)
+	PlaceBuilderDemo.prototype.entityControlsBuild = function(playerEntity)
 	{
 		var controlStatus = new ControlLabel
 		(
@@ -1414,10 +1425,12 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
 			10 // fontHeightInPixels
 		);
 
-		this.venueControls = new VenueControls(controlStatus);
+		var visualControl = new VisualControl(controlStatus);
+		var entityControls = new Entity("Controls", [ new Drawable(visualControl) ]);
+		return entityControls;
 	};
 
-	PlaceDemo.prototype.visualEyesBlinkingBuild = function(visualEyeRadius)
+	PlaceBuilderDemo.prototype.visualEyesBlinkingBuild = function(visualEyeRadius)
 	{
 		var visualPupilRadius = visualEyeRadius / 2;
 
@@ -1447,49 +1460,5 @@ function PlaceDemo(name, size, cameraViewSize, placeNameToReturnTo, randomizer)
 		);
 
 		return visualEyesBlinking;
-	};
-
-	Place.prototype.player = function()
-	{
-		return this.entitiesByPropertyName(Playable.name)[0];
-	}
-
-	Place.prototype.enemies = function()
-	{
-		return this.entitiesByPropertyName(Enemy.name);
-	}
-
-	// Place implementation.
-
-	PlaceDemo.prototype.draw_FromSuperclass = Place.prototype.draw;
-	PlaceDemo.prototype.draw = function(universe, world)
-	{
-		var display = universe.display;
-
-		display.drawBackground("Gray", "Black");
-
-		var drawLoc = this.drawLoc;
-		var drawPos = drawLoc.pos;
-
-		var player = this.player();
-		var playerLoc = player.Locatable.loc;
-
-		var camera = this.camera;
-		camera.loc.pos.overwriteWith
-		(
-			playerLoc.pos
-		).trimToRangeMinMax
-		(
-			camera.viewSizeHalf,
-			this.size.clone().subtract(camera.viewSizeHalf)
-		).subtract
-		(
-			new Coords(0, 0, camera.focalLength)
-		);
-
-		this.draw_FromSuperclass(universe, world);
-
-		// todo
-		this.venueControls.draw(universe);
 	};
 }

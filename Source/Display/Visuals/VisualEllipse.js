@@ -11,7 +11,7 @@ function VisualEllipse(semimajorAxis, semiminorAxis, rotationInTurns, colorFill,
 {
 	VisualEllipse.prototype.draw = function(universe, world, display, drawable, entity)
 	{
-		var drawableLoc = drawable.loc;
+		var drawableLoc = entity.Locatable.loc;
 		var drawableOrientation = drawableLoc.orientation;
 		var drawableRotationInTurns = drawableOrientation.headingInTurns();
 		display.drawEllipse

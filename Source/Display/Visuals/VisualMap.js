@@ -18,7 +18,7 @@ function VisualMap(map, visualLookup)
 		var mapSizeHalf = this.map.sizeHalf;
 		var cellPosInCells = this.cellPosInCells;
 		var cellSizeInPixels = this.map.cellSize;
-		var drawablePos = drawable.loc.pos;
+		var drawablePos = entity.Locatable.loc.pos;
 
 		for (var y = 0; y < mapSizeInCells.y; y++)
 		{

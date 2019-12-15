@@ -5,16 +5,17 @@ function VisualCamera(child, cameraFactory)
 	this.cameraFactory = cameraFactory;
 
 	// Helper variables.
-	this.posSaved = new Coords();
+	this._posSaved = new Coords();
 }
 
 {
 	VisualCamera.prototype.draw = function(universe, world, display, drawable, entity)
 	{
-		var drawablePos = drawable.loc.pos;
-		this.posSaved.overwriteWith(drawablePos);
-		this.cameraFactory(universe, world).coordsTransformWorldToView(drawablePos);
+		var drawablePos = entity.Locatable.loc.pos;
+		this._posSaved.overwriteWith(drawablePos);
+		var camera = this.cameraFactory(universe, world);
+		camera.coordsTransformWorldToView(drawablePos);
 		this.child.draw(universe, world, display, drawable, entity);
-		drawablePos.overwriteWith(this.posSaved);
+		drawablePos.overwriteWith(this._posSaved);
 	};
 }

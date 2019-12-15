@@ -20,7 +20,7 @@ function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 		var platformHelper = universe.platformHelper;
 		plaformHelper.platformableRemove(this);
 		var display = universe.display;
-		display.drawBackground("Black", "Black");
+		display.drawBackground("Black");
 		platformHelper.platformableShow(display);
 	};
 

@@ -1,7 +1,9 @@
 
-function Place(defnName, entities)
+function Place(name, defnName, size, entities)
 {
+	this.name = name;
 	this.defnName = defnName;
+	this.size = size;
 	this.entities = [];
 	this._entitiesByPropertyName = {};
 	this.entitiesToSpawn = entities.slice();
@@ -28,6 +30,7 @@ function Place(defnName, entities)
 
 	Place.prototype.draw = function(universe, world)
 	{
+		universe.display.drawBackground("Black", "Black");
 		var entitiesDrawable = this.entitiesByPropertyName(Drawable.name);
 		for (var i = 0; i < entitiesDrawable.length; i++)
 		{
@@ -135,5 +138,18 @@ function Place(defnName, entities)
 				}
 			}
 		}
+	};
+
+	// Entity convenience accessors.
+
+	Place.prototype.camera = function()
+	{
+		var cameraEntity = this.entitiesByPropertyName(Camera.name)[0];
+		return (cameraEntity == null ? null : cameraEntity.Camera);
+	};
+
+	Place.prototype.player = function()
+	{
+		return this.entitiesByPropertyName(Playable.name)[0];
 	};
 }

@@ -11,7 +11,7 @@ function VisualAnchor(child, posToAnchorAt)
 {
 	VisualAnchor.prototype.draw = function(universe, world, display, drawable, entity)
 	{
-		var drawablePos = drawable.loc.pos;
+		var drawablePos = entity.Locatable.loc.pos;
 		this.posSaved.overwriteWith(drawablePos);
 		drawablePos.overwriteWith(this.posToAnchorAt);
 		this.child.draw(universe, world, display, drawable, entity);

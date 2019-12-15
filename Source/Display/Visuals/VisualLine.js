@@ -14,7 +14,7 @@ function VisualLine(fromPos, toPos, color)
 {
 	VisualLine.prototype.draw = function(universe, world, display, drawable)
 	{
-		var pos = drawable.loc.pos;
+		var pos = entity.Locatable.loc.pos;
 		var drawPosFrom = this.drawPosFrom.overwriteWith
 		(
 			pos

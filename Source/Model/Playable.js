@@ -10,7 +10,7 @@ function Playable(player)
 		var placeDefn = place.defn(world);
 		var actionToInputsMappings = placeDefn.actionToInputsMappings;
 		var actions = placeDefn.actions;
-		var camera = place.camera;
+		var camera = place.camera();
 
 		var playerLoc = entityPlayer.Locatable.loc;
 

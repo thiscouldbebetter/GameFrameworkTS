@@ -12,8 +12,8 @@ function VisualPath(verticesAsPath, color, lineThickness)
 {
 	VisualPath.prototype.draw = function(universe, world, display, drawable, entity)
 	{
-		var pos = drawable.loc.pos;
-		this.transformTranslate.displacement.overwriteWith(drawable.loc.pos);
+		var drawablePos = entity.Locatable.loc.pos;
+		this.transformTranslate.displacement.overwriteWith(drawablePos);
 
 		this.verticesAsPathTransformed.overwriteWith
 		(

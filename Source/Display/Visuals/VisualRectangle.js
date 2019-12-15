@@ -15,7 +15,7 @@ function VisualRectangle(size, colorFill, colorBorder)
 	{
 		var drawPos = this._drawPos.overwriteWith
 		(
-			drawable.loc.pos
+			entity.Locatable.loc.pos
 		).subtract
 		(
 			this.sizeHalf

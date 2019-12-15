@@ -11,7 +11,7 @@ function VisualCircleGradient(radius, gradientFill, colorBorder)
 	{
 		display.drawCircleWithGradient
 		(
-			drawable.loc.pos, this.radius, this.gradientFill, this.colorBorder
+			entity.Locatable.loc.pos, this.radius, this.gradientFill, this.colorBorder
 		);
 	};
 }
