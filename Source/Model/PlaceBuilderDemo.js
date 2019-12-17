@@ -531,7 +531,7 @@ function PlaceBuilderDemo()
 			var enemyCountMax = 3;
 			if (enemyCount < enemyCountMax)
 			{
-				var enemyEntityToPlace = enemyEntityPrototype.clone(universe);
+				var enemyEntityToPlace = enemyEntityPrototype.clone();
 
 				var placeSizeHalf = place.size.clone().half();
 				var directionFromCenter = new Polar(universe.randomizer.getNextRandom(), 1);
