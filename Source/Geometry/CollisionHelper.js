@@ -309,19 +309,21 @@ function CollisionHelper()
 		}
 	};
 
-	CollisionHelper.prototype.collisionsOfCollidablesInSets = function(collidableSet0, collidableSet1)
+	CollisionHelper.prototype.collisionsOfEntitiesCollidableInSets = function(entitiesCollidable0, entitiesCollidable1)
 	{
 		var returnValues = [];
 
-		for (var i = 0; i < collidableSet0.length; i++)
+		for (var i = 0; i < entitiesCollidable0.length; i++)
 		{
-			var collidableFromSet0 = collidableSet0[i];
+			var entity0 = entitiesCollidable0[i];
+			var collidable0 = entity0.Collidable;
 
-			for (var j = 0; j < collidableSet1.length; j++)
+			for (var j = 0; j < entitiesCollidable1.length; j++)
 			{
-				var collidableFromSet1 = collidableSet1[j];
+				var entity1 = entitiesCollidable1[j];
+				var collidable1 = entity1.Collidable;
 
-				if (this.doCollidablesCollide(collidableFromSet0, collidableFromSet1))
+				if (this.doCollidablesCollide(collidable0, collidable1))
 				{
 					var collision = new Collision();
 					collision.collidables.push(collidableFromSet0);
