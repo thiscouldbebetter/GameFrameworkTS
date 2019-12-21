@@ -17,7 +17,7 @@ function Device(name, ticksToCharge, use)
 		(
 			"Gun",
 			10, // ticksToCharge
-			function use(universe, world, place, actor, device)
+			function use(universe, world, place, actor, entityDevice, device)
 			{
 				if (device.ticksSinceUsed(world) < device.ticksToCharge)
 				{
@@ -25,14 +25,13 @@ function Device(name, ticksToCharge, use)
 				}
 
 				var actorAsItemHolder = actor.ItemHolder;
-				var itemAmmo1 = new Item("Ammo".name, 1);
-				var hasAmmo = actorAsItemHolder.hasItem(itemAmmo1);
+				var hasAmmo = actorAsItemHolder.hasItemWithDefnNameAndQuantity("Ammo", 1);
 				if (hasAmmo == false)
 				{
 					return;
 				}
 
-				actorAsItemHolder.itemSubtract(itemAmmo1);
+				actorAsItemHolder.itemSubtractDefnNameAndQuantity("Ammo", 1);
 
 				device.tickLastUsedUpdate(world);
 

@@ -13,9 +13,14 @@ function ItemHolder(itemEntities)
 {
 	ItemHolder.prototype.hasItem = function(itemToCheck)
 	{
-		var itemEntityExisting = this.itemEntities[itemToCheck.defnName];
+		return this.hasItemWithDefnNameAndQuantity(itemToCheck.defnName, itemToCheck.quantity);
+	};
+
+	ItemHolder.prototype.hasItemWithDefnNameAndQuantity = function(defnName, quantityToCheck)
+	{
+		var itemEntityExisting = this.itemEntities[defnName];
 		var itemExistingQuantity = (itemEntityExisting == null ? 0 : itemEntityExisting.Item.quantity);
-		var returnValue = (itemExistingQuantity >= itemToCheck.quantity);
+		var returnValue = (itemExistingQuantity >= quantityToCheck);
 		return returnValue;
 	};
 

@@ -105,15 +105,14 @@ function World(name, dateCreated, defns, places)
 				"Fire",
 				function perform(universe, world, place, actor)
 				{
-					var itemWeapon = new Item("Weapon", 1);
 					var itemHolder = actor.ItemHolder;
-					var actorHasWeapon = itemHolder.hasItem(itemWeapon);
+					var actorHasWeapon = itemHolder.hasItemWithDefnNameAndQuantity("Weapon", 1);
 
 					if (actorHasWeapon)
 					{
 						var entityWeapon = itemHolder.itemEntities["Weapon"];
 						var deviceWeapon = entityWeapon.Device;
-						deviceWeapon.use(universe, world, place, actor, deviceWeapon);
+						deviceWeapon.use(universe, world, place, actor, entityWeapon, deviceWeapon);
 					}
 				}
 			),

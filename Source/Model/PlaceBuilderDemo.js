@@ -858,7 +858,7 @@ function PlaceBuilderDemo()
 
 		var displacement = new Coords();
 
-		var numberOfMedicines = 3;
+		var numberOfMedicines = 5;
 		for (var i = 0; i < numberOfMedicines; i++)
 		{
 			var itemMedicinePos =
