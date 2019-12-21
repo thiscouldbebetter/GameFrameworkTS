@@ -3,9 +3,9 @@ function ItemDefn(name, appearance, mass, stackSizeMax, relativeFrequency, categ
 {
 	this.name = name;
 
-	this.appearance = appearance;
-	this.mass = mass;
-	this.stackSizeMax = stackSizeMax;
+	this.appearance = appearance || name;
+	this.mass = mass || 1;
+	this.stackSizeMax = stackSizeMax || Number.POSITIVE_INFINITY;
 	this.relativeFrequency = relativeFrequency;
 	this.categoryNames = categoryNames;
 	this.initialize = initialize;

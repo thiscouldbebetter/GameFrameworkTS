@@ -100,6 +100,7 @@ function ItemHolder(itemEntities)
 		var fontHeightHalf = fontHeight / 2;
 
 		var itemHolder = this;
+		var world = universe.world;
 
 		var returnValue = new ControlContainer
 		(
@@ -127,7 +128,7 @@ function ItemHolder(itemEntities)
 					new DataBinding
 					(
 						null,
-						function get(c) { return c.Item.toString(); }
+						function get(c) { return c.Item.toString(world); }
 					), // bindingForItemText
 					fontHeightHalf,
 					new DataBinding
@@ -161,7 +162,7 @@ function ItemHolder(itemEntities)
 						function get(c)
 						{
 							var i = c.itemEntitySelected;
-							return (i == null ? "-" : i.Item.toString());
+							return (i == null ? "-" : i.Item.toString(world));
 						}
 					), // text
 					fontHeight
@@ -169,8 +170,35 @@ function ItemHolder(itemEntities)
 
 				new ControlButton
 				(
+					"buttonUse",
+					new Coords(45, 90), // pos
+					new Coords(50, 15), // size
+					"Use",
+					fontHeight,
+					true, // hasBorder
+					new DataBinding
+					(
+						this,
+						function get(c) { return c.itemEntitySelected != null}
+					), // isEnabled
+					function click(universe)
+					{
+						var world = universe.world;
+						var place = world.placeCurrent;
+						var itemEntityToUse = itemHolder.itemEntitySelected;
+						var itemToUse = itemEntityToDrop.Item;
+						if (itemToUse.use != null)
+						{
+							itemToUse.use(universe, world, place, itemEntityToUse);
+						}
+					},
+					universe // context
+				),
+
+				new ControlButton
+				(
 					"buttonDrop",
-					new Coords(75, 90), // pos
+					new Coords(105, 90), // pos
 					new Coords(50, 15), // size
 					"Drop",
 					fontHeight,

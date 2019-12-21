@@ -25,7 +25,7 @@ function Device(name, ticksToCharge, use)
 				}
 
 				var actorAsItemHolder = actor.ItemHolder;
-				var itemAmmo1 = new Item("Ammo", 1);
+				var itemAmmo1 = new Item("Ammo".name, 1);
 				var hasAmmo = actorAsItemHolder.hasItem(itemAmmo1);
 				if (hasAmmo == false)
 				{

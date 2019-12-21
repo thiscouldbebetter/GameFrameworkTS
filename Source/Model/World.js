@@ -142,18 +142,30 @@ function World(name, dateCreated, defns, places)
 
 		var placeDefns = [ placeDefnDemo ]; // todo
 
-		var defns = new Defns(constraintDefns, placeDefns);
+		var itemDefns =
+		[
+			new ItemDefn("Ammo"),
+			new ItemDefn("Coin"),
+			new ItemDefn("Key"),
+			new ItemDefn("Weapon")
+		];
+
+		var defns = new Defns(constraintDefns, itemDefns, placeDefns);
 
 		var displaySize = universe.display.sizeInPixels;
 		var cameraViewSize = displaySize.clone();
 		var placeBuilder = new PlaceBuilderDemo();
+
+		var randomizer = null; // Use default.
 
 		var placeMain = placeBuilder.build
 		(
 			"Battlefield",
 			displaySize.clone().double(), // size
 			cameraViewSize,
-			null // placeNameToReturnTo
+			null, // placeNameToReturnTo
+			randomizer,
+			itemDefns
 		);
 
 		var placeBase = placeBuilder.build
@@ -161,7 +173,9 @@ function World(name, dateCreated, defns, places)
 			"Base",
 			displaySize.clone(), // size
 			cameraViewSize,
-			placeMain.name // placeNameToReturnTo
+			placeMain.name, // placeNameToReturnTo
+			randomizer,
+			itemDefns
 		);
 
 		var places = [ placeMain, placeBase ];
