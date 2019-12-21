@@ -53,14 +53,19 @@ function ItemHolder(itemEntities)
 		}
 	};
 
+
 	ItemHolder.prototype.itemSubtract = function(itemToSubtract)
 	{
-		var itemDefnName = itemToSubtract.defnName;
+		this.itemSubtractDefnNameAndQuantity(itemToSubtract.defnName, itemToSubtract.quantity);
+	};
+
+	ItemHolder.prototype.itemSubtractDefnNameAndQuantity = function(itemDefnName, quantityToSubtract)
+	{
 		var itemEntityExisting = this.itemEntities[itemDefnName];
 		if (itemEntityExisting != null)
 		{
 			var itemExisting = itemEntityExisting.Item;
-			itemExisting.quantity -= itemToSubtract.quantity;
+			itemExisting.quantity -= quantityToSubtract;
 			if (itemExisting.quantity <= 0)
 			{
 				this.itemEntities.remove(itemEntityExisting);
@@ -179,17 +184,26 @@ function ItemHolder(itemEntities)
 					new DataBinding
 					(
 						this,
-						function get(c) { return c.itemEntitySelected != null}
+						function get(c)
+						{
+							var itemEntity = c.itemEntitySelected;
+							return (itemEntity != null && itemEntity.Item.isUsable(world));
+						}
 					), // isEnabled
 					function click(universe)
 					{
-						var world = universe.world;
-						var place = world.placeCurrent;
 						var itemEntityToUse = itemHolder.itemEntitySelected;
-						var itemToUse = itemEntityToDrop.Item;
+						var itemToUse = itemEntityToUse.Item;
 						if (itemToUse.use != null)
 						{
-							itemToUse.use(universe, world, place, itemEntityToUse);
+							var world = universe.world;
+							var place = world.placeCurrent;
+							var user = entityItemHolder;
+							itemToUse.use(universe, world, place, user, itemEntityToUse);
+							if (itemToUse.quantity <= 0)
+							{
+								itemHolder.itemEntitySelected = null;
+							}
 						}
 					},
 					universe // context

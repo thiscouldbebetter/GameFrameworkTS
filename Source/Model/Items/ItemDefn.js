@@ -11,3 +11,11 @@ function ItemDefn(name, appearance, mass, stackSizeMax, relativeFrequency, categ
 	this.initialize = initialize;
 	this.use = use;
 }
+{
+	ItemDefn.fromNameAndUse = function(name, use)
+	{
+		var returnValue = new ItemDefn(name);
+		returnValue.use = use;
+		return returnValue;
+	};
+}

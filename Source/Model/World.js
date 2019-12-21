@@ -147,6 +147,15 @@ function World(name, dateCreated, defns, places)
 			new ItemDefn("Ammo"),
 			new ItemDefn("Coin"),
 			new ItemDefn("Key"),
+			ItemDefn.fromNameAndUse
+			(
+				"Medicine",
+				function use(universe, world, place, entityUser, entityItem, item)
+				{
+					entityUser.Killable.integrityAdd(1);
+					entityUser.ItemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
+				}
+			),
 			new ItemDefn("Weapon")
 		];
 

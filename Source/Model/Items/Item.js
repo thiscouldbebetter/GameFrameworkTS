@@ -10,6 +10,11 @@ function Item(defnName, quantity)
 		return world.defns.itemDefns[this.defnName];
 	};
 
+	Item.prototype.isUsable = function(world)
+	{
+		return (this.defn(world).use != null);
+	};
+
 	Item.prototype.toString = function(world)
 	{
 		return this.defn(world).appearance + " (" + this.quantity + ")";

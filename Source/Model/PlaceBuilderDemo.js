@@ -62,6 +62,7 @@ function PlaceBuilderDemo()
 			(
 				entities, entityDimension, numberOfKeysToUnlockGoal, entitiesObstacles, marginSize, itemDefns
 			);
+			this.entityBuildMedicine(entities, entityDimension, marginSize, randomizer, itemDefns);
 			this.entityBuildCoins(entities, entityDimension, marginSize, randomizer, itemDefns);
 			this.entityBuildWeapon(entities, entityDimension, playerPos, itemDefns);
 			this.entityBuildWeaponAmmo(entities, entityDimension, size, itemDefns, 10, 5);
@@ -816,6 +817,68 @@ function PlaceBuilderDemo()
 		return itemKeyColor;
 	};
 
+	PlaceBuilderDemo.prototype.entityBuildMedicine = function
+	(
+		entities, entityDimension, marginSize, randomizer, itemDefns
+	)
+	{
+		var entityDimensionHalf = entityDimension / 2;
+		var sizeMinusMargins = marginSize.clone().double().invert().add(this.size);
+
+		var itemDefnMedicineName = itemDefns["Medicine"].name;
+		var itemMedicineColor = "Green";
+		var itemMedicineVisual = new VisualGroup
+		([
+			new VisualPolygon
+			(
+				new Path
+				([
+					new Coords(-0.5, -0.2).multiplyScalar(entityDimension),
+					new Coords(-0.2, -0.2).multiplyScalar(entityDimension),
+					new Coords(-0.2, -0.5).multiplyScalar(entityDimension),
+					new Coords(0.2, -0.5).multiplyScalar(entityDimension),
+					new Coords(0.2, -0.2).multiplyScalar(entityDimension),
+					new Coords(0.5, -0.2).multiplyScalar(entityDimension),
+					new Coords(0.5, 0.2).multiplyScalar(entityDimension),
+					new Coords(0.2, 0.2).multiplyScalar(entityDimension),
+					new Coords(0.2, 0.5).multiplyScalar(entityDimension),
+					new Coords(-0.2, 0.5).multiplyScalar(entityDimension),
+					new Coords(-0.2, 0.2).multiplyScalar(entityDimension),
+					new Coords(-0.5, 0.2).multiplyScalar(entityDimension),
+				]),
+				itemMedicineColor
+			),
+			new VisualOffset
+			(
+				new VisualText(itemDefnMedicineName, itemMedicineColor),
+				new Coords(0, entityDimension)
+			)
+		]);
+		var itemMedicineCollider = new Sphere(new Coords(0, 0), entityDimensionHalf);
+
+		var displacement = new Coords();
+
+		var numberOfMedicines = 3;
+		for (var i = 0; i < numberOfMedicines; i++)
+		{
+			var itemMedicinePos =
+				new Coords().randomize(this.randomizer).multiply(sizeMinusMargins).add(marginSize);
+
+			var itemMedicineEntity = new Entity
+			(
+				itemDefnMedicineName + i,
+				[
+					new Item(itemDefnMedicineName, 1),
+					new Locatable( new Location(itemMedicinePos) ),
+					new Collidable(itemMedicineCollider),
+					new Drawable(itemMedicineVisual)
+				]
+			);
+
+			entities.push(itemMedicineEntity);
+		}
+	};
+
 	PlaceBuilderDemo.prototype.entityBuildObstacleBar = function(entities, entityDimension, obstacleColor, playerPos)
 	{
 		var entityDimensionHalf = entityDimension / 2;
@@ -1300,6 +1363,7 @@ function PlaceBuilderDemo()
 					[
 						new Item(itemDefns["Coin"].name, 100),
 						new Item(itemDefns["Key"].name, 10),
+						new Item(itemDefns["Medicine"].name, 100),
 						new Item(itemDefns["Weapon"].name, 1)
 					].map
 					(
