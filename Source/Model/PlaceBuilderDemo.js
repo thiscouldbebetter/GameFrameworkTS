@@ -1279,13 +1279,47 @@ function PlaceBuilderDemo()
 
 		var constraintSpeedMax5 = new Constraint("SpeedMax", 5);
 		var constraintFriction = new Constraint("Friction", .03);
+		var constrainable = new Constrainable([constraintFriction, constraintSpeedMax5]);
+
+		var equipmentSocketDefnGroup = new EquipmentSocketDefnGroup
+		(
+			"Equippable",
+			[
+				new EquipmentSocketDefn( "Weapon", [ "Weapon" ] ),
+				new EquipmentSocketDefn( "Armor", [ "Armor" ] ),
+				new EquipmentSocketDefn( "Accessory", [ "Accessory" ] ),
+			]
+		);
+		var equippable = new Equippable(equipmentSocketDefnGroup);
+
+		var killable = new Killable
+		(
+			5, // integrity
+			function die(universe, world, place, entityKillable)
+			{
+				var venueMessage = new VenueMessage
+				(
+					"You lose!",
+					universe.venueCurrent, // venuePrev
+					universe.display.sizeDefault().clone().half(),
+					function acknowledge(universe)
+					{
+						universe.venueNext = new VenueFader
+						(
+							new VenueControls(universe.controlBuilder.title(universe))
+						);
+					}
+				);
+				universe.venueNext = venueMessage;
+			}
+		);
 
 		var playerEntity = new Entity
 		(
 			"Player",
 			[
 				new Locatable(playerLoc),
-				new Constrainable([constraintFriction, constraintSpeedMax5]),
+				constrainable,
 				new Collidable
 				(
 					playerCollider,
@@ -1293,30 +1327,11 @@ function PlaceBuilderDemo()
 					playerCollide
 				),
 				new Drawable(playerVisual),
-				new ItemHolder(),
-				new Playable(),
+				equippable,
 				new Idleable(),
-				new Killable
-				(
-					5, // integrity
-					function die(universe, world, place, entityKillable)
-					{
-						var venueMessage = new VenueMessage
-						(
-							"You lose!",
-							universe.venueCurrent, // venuePrev
-							universe.display.sizeDefault().clone().half(),
-							function acknowledge(universe)
-							{
-								universe.venueNext = new VenueFader
-								(
-									new VenueControls(universe.controlBuilder.title(universe))
-								);
-							}
-						);
-						universe.venueNext = venueMessage;
-					}
-				)
+				new ItemHolder(),
+				killable,
+				new Playable(),
 			]
 		);
 

@@ -25,6 +25,22 @@ function Action(name, perform)
 			}
 		);
 
+		this.ShowEquipment = new Action
+		(
+			"ShowEquipment",
+			function perform(universe, world, place, actor)
+			{
+				var equippable = actor.Equippable;
+				var equippableAsControl = equippable.toControl
+				(
+					universe, universe.display.sizeInPixels, actor, universe.venueCurrent
+				);
+				var venueNext = new VenueControls(equippableAsControl);
+				venueNext = new VenueFader(venueNext, universe.venueCurrent);
+				universe.venueNext = venueNext;
+			}
+		);
+
 		this.ShowItems = new Action
 		(
 			"ShowItems",

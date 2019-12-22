@@ -12,6 +12,14 @@ function ItemDefn(name, appearance, mass, stackSizeMax, relativeFrequency, categ
 	this.use = use;
 }
 {
+	ItemDefn.fromNameCategoryNameAndUse = function(name, categoryName, use)
+	{
+		var returnValue = new ItemDefn(name);
+		returnValue.categoryNames = [ categoryName ];
+		returnValue.use = use;
+		return returnValue;
+	};
+
 	ItemDefn.fromNameAndUse = function(name, use)
 	{
 		var returnValue = new ItemDefn(name);

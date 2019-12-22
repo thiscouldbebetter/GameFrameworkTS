@@ -54,6 +54,7 @@ function World(name, dateCreated, defns, places)
 		var actions =
 		[
 			actionsAll.DoNothing,
+			actionsAll.ShowEquipment,
 			actionsAll.ShowItems,
 			actionsAll.ShowMenu,
 			new Action
@@ -105,14 +106,14 @@ function World(name, dateCreated, defns, places)
 				"Fire",
 				function perform(universe, world, place, actor)
 				{
-					var itemHolder = actor.ItemHolder;
-					var actorHasWeapon = itemHolder.hasItemWithDefnNameAndQuantity("Weapon", 1);
+					var equippable = actor.Equippable;
+					var entityWeaponEquipped = equippable.socketGroup.sockets["Weapon"].itemEntityEquipped;
+					var actorHasWeaponEquipped = (entityWeaponEquipped != null);
 
-					if (actorHasWeapon)
+					if (actorHasWeaponEquipped)
 					{
-						var entityWeapon = itemHolder.itemEntities["Weapon"];
-						var deviceWeapon = entityWeapon.Device;
-						deviceWeapon.use(universe, world, place, actor, entityWeapon, deviceWeapon);
+						var deviceWeapon = entityWeaponEquipped.Device;
+						deviceWeapon.use(universe, world, place, actor, entityWeaponEquipped, deviceWeapon);
 					}
 				}
 			),
@@ -122,14 +123,15 @@ function World(name, dateCreated, defns, places)
 
 		var actionToInputsMappings =
 		[
-			new ActionToInputsMapping("ShowMenu", [inputNames.Escape]),
-			new ActionToInputsMapping("ShowItems", [inputNames.Tab]),
+			new ActionToInputsMapping("ShowMenu", [ inputNames.Escape ]),
+			new ActionToInputsMapping("ShowItems", [ inputNames.Tab ]),
+			new ActionToInputsMapping("ShowEquipment", [ "`" ]),
 
-			new ActionToInputsMapping("MoveDown", [inputNames.ArrowDown, "Gamepad0Down"]),
-			new ActionToInputsMapping("MoveLeft", [inputNames.ArrowLeft, "Gamepad0Left"]),
-			new ActionToInputsMapping("MoveRight", [inputNames.ArrowRight, "Gamepad0Right"]),
-			new ActionToInputsMapping("MoveUp", [inputNames.ArrowUp, "Gamepad0Up"]),
-			new ActionToInputsMapping("Fire", [inputNames.Enter, "Gamepad0Button0"]),
+			new ActionToInputsMapping("MoveDown", [ inputNames.ArrowDown, "Gamepad0Down" ]),
+			new ActionToInputsMapping("MoveLeft", [ inputNames.ArrowLeft, "Gamepad0Left" ]),
+			new ActionToInputsMapping("MoveRight", [ inputNames.ArrowRight, "Gamepad0Right" ]),
+			new ActionToInputsMapping("MoveUp", [ inputNames.ArrowUp, "Gamepad0Up" ]),
+			new ActionToInputsMapping("Fire", [ inputNames.Enter, "Gamepad0Button0" ]),
 		];
 
 		var placeDefnDemo = new PlaceDefn
@@ -155,7 +157,15 @@ function World(name, dateCreated, defns, places)
 					entityUser.ItemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
 				}
 			),
-			new ItemDefn("Weapon")
+			ItemDefn.fromNameCategoryNameAndUse
+			(
+				"Weapon",
+				"Weapon", // categoryName
+				function use(universe, world, place, entityUser, entityItem, item)
+				{
+					entityUser.Equippable.equipEntityWithItem(universe, world, place, entityUser, entityItem, item);
+				}
+			)
 		];
 
 		var defns = new Defns(constraintDefns, itemDefns, placeDefns);

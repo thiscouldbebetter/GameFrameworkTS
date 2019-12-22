@@ -108,6 +108,7 @@ function ItemHolder(itemEntities)
 
 		var fontHeight = 10;
 		var fontHeightHalf = fontHeight / 2;
+		var fontHeightLarge = fontHeight * 1.5;
 
 		var itemHolder = this;
 		var world = universe.world;
@@ -122,11 +123,11 @@ function ItemHolder(itemEntities)
 				new ControlLabel
 				(
 					"labelItems",
-					new Coords(100, 15), // pos
+					new Coords(100, 10), // pos
 					new Coords(100, 25), // size
 					true, // isTextCentered
-					"Items:",
-					fontHeight
+					"Items",
+					fontHeightLarge
 				),
 
 				new ControlList
