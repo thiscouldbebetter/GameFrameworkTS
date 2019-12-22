@@ -22,11 +22,13 @@ function Item(defnName, quantity)
 
 	Item.prototype.use = function(universe, world, place, userEntity, itemEntity)
 	{
+		var returnValue = null;
 		var defn = this.defn(world);
 		if (defn.use != null)
 		{
-			defn.use(universe, world, place, userEntity, itemEntity, this);
+			returnValue = defn.use(universe, world, place, userEntity, itemEntity, this);
 		}
+		return returnValue;
 	};
 
 	// cloneable

@@ -15,6 +15,7 @@ function ItemContainer()
 		var scaleMultiplier = size.clone().divide(sizeBase);
 
 		var fontHeight = 10;
+		var fontHeightSmall = fontHeight * .6;
 
 		var itemHolderTransferrer = entityTransferrer.ItemHolder;
 		var itemHolderContainer = entityContainer.ItemHolder;
@@ -53,7 +54,7 @@ function ItemContainer()
 						null,
 						function get(c) { return c.Item.toString(world); }
 					), // bindingForItemText
-					fontHeight,
+					fontHeightSmall,
 					new DataBinding
 					(
 						itemHolderContainer,
@@ -88,7 +89,7 @@ function ItemContainer()
 						null,
 						function get(c) { return c.Item.toString(world); }
 					), // bindingForItemText
-					fontHeight,
+					fontHeightSmall,
 					new DataBinding
 					(
 						itemHolderTransferrer,

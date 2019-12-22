@@ -143,9 +143,25 @@ function World(name, dateCreated, defns, places)
 
 		var placeDefns = [ placeDefnDemo ]; // todo
 
+		var itemUseEquip = function (universe, world, place, entityUser, entityItem, item)
+		{
+			var equippable = entityUser.Equippable;
+			var message = equippable.equipEntityWithItem
+			(
+				universe, world, place, entityUser, entityItem, item
+			);
+			return message;
+		};
+
 		var itemDefns =
 		[
 			new ItemDefn("Ammo"),
+			ItemDefn.fromNameCategoryNameAndUse
+			(
+				"Armor",
+				"Armor", // categoryName
+				itemUseEquip
+			),
 			new ItemDefn("Coin"),
 			new ItemDefn("Key"),
 			ItemDefn.fromNameAndUse
@@ -153,18 +169,24 @@ function World(name, dateCreated, defns, places)
 				"Medicine",
 				function use(universe, world, place, entityUser, entityItem, item)
 				{
-					entityUser.Killable.integrityAdd(1);
+					var integrityToRestore = 10;
+					entityUser.Killable.integrityAdd(integrityToRestore);
 					entityUser.ItemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
+					var message = "The medicine restores " + integrityToRestore + " points.";
+					return message;
 				}
+			),
+			ItemDefn.fromNameCategoryNameAndUse
+			(
+				"Speed Booster",
+				"Accessory", // categoryName
+				itemUseEquip
 			),
 			ItemDefn.fromNameCategoryNameAndUse
 			(
 				"Weapon",
 				"Weapon", // categoryName
-				function use(universe, world, place, entityUser, entityItem, item)
-				{
-					entityUser.Equippable.equipEntityWithItem(universe, world, place, entityUser, entityItem, item);
-				}
+				itemUseEquip
 			)
 		];
 

@@ -12,7 +12,7 @@ function EquipmentSocket(defnName, itemEntityEquipped)
 
 	EquipmentSocket.prototype.toString = function(world)
 	{
-		var itemEntityEquippedAsString = 
+		var itemEntityEquippedAsString =
 		(
 			this.itemEntityEquipped == null
 			? " [empty] "

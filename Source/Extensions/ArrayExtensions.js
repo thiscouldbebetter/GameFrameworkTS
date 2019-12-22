@@ -116,6 +116,20 @@ function ArrayExtensions()
 		return (this.indexOf(elementToFind) >= 0);
 	};
 
+	Array.prototype.insertElementAfterOther = function(elementToInsert, other)
+	{
+		var index = this.indexOf(other);
+		if (index >= 0)
+		{
+			this.splice(index + 1, 0, elementToInsert);
+		}
+		else
+		{
+			this.push(elementToInsert);
+		}
+		return this;
+	};
+
 	Array.prototype.insertElementAt = function(element, index)
 	{
 		this.splice(index, 0, element);
@@ -190,7 +204,18 @@ function ArrayExtensions()
 		(
 			function (a, b)
 			{
-				return getPropertyForElement(a) - getPropertyForElement(b);
+				var returnValue;
+				var propertyA = getPropertyForElement(a);
+				var propertyB = getPropertyForElement(b);
+				if (propertyA.constructor.name == "".constructor.name)
+				{
+					returnValue = propertyA.localeCompare(propertyB);
+				}
+				else if (isNaN(parseFloat(propertyA)) == false)
+				{
+					returnValue = propertyA - propertyB;
+				}
+				return returnValue;
 			}
 		);
 	};

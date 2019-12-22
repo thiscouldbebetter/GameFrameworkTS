@@ -9,6 +9,8 @@ function ItemHolder(itemEntities)
 		var itemEntity = itemEntities[i];
 		this.itemEntityAdd(itemEntity);
 	}
+
+	this.statusMessage = "-";
 }
 {
 	ItemHolder.prototype.hasItem = function(itemToCheck)
@@ -29,6 +31,21 @@ function ItemHolder(itemEntities)
 		var itemEntity = this.itemEntities[itemDefnName];
 		var returnValue = (itemEntity == null ? 0 : itemEntity.Item.quantity);
 		return returnValue;
+	};
+
+	ItemHolder.prototype.itemEntitiesWithDefnNameJoin = function(defnName)
+	{
+		var itemEntitiesMatching = this.itemEntities.filter(x => x.Item.defnName == defnName);
+		var itemEntityJoined = itemEntitiesMatching[0];
+		var itemJoined = itemEntityJoined.Item;
+		for (var i = 1; i < itemEntitiesMatching.length; i++)
+		{
+			var itemEntityToJoin = itemEntitiesMatching[i];
+			itemJoined.quantity += itemEntityToJoin.Item.quantity;
+			this.itemEntities.remove(itemEntityToJoin);
+		}
+		this.itemEntities[defnName] = itemEntityJoined;
+		return itemEntityJoined;
 	};
 
 	ItemHolder.prototype.itemEntityAdd = function(itemEntityToAdd)
@@ -107,7 +124,7 @@ function ItemHolder(itemEntities)
 		var scaleMultiplier = size.clone().divide(sizeBase);
 
 		var fontHeight = 10;
-		var fontHeightHalf = fontHeight / 2;
+		var fontHeightSmall = fontHeight * .6;
 		var fontHeightLarge = fontHeight * 1.5;
 
 		var itemHolder = this;
@@ -133,15 +150,15 @@ function ItemHolder(itemEntities)
 				new ControlList
 				(
 					"listItems",
-					new Coords(50, 25), // pos
-					new Coords(100, 40), // size
+					new Coords(10, 25), // pos
+					new Coords(70, 70), // size
 					new DataBinding(this.itemEntities), // items
 					new DataBinding
 					(
 						null,
 						function get(c) { return c.Item.toString(world); }
 					), // bindingForItemText
-					fontHeightHalf,
+					fontHeightSmall,
 					new DataBinding
 					(
 						this,
@@ -154,7 +171,7 @@ function ItemHolder(itemEntities)
 				new ControlLabel
 				(
 					"labelItemSelected",
-					new Coords(100, 70), // pos
+					new Coords(150, 25), // pos
 					new Coords(100, 15), // size
 					true, // isTextCentered
 					"Selected:",
@@ -164,7 +181,7 @@ function ItemHolder(itemEntities)
 				new ControlLabel
 				(
 					"infoItemSelected",
-					new Coords(100, 80), // pos
+					new Coords(150, 35), // pos
 					new Coords(200, 15), // size
 					true, // isTextCentered
 					new DataBinding
@@ -179,13 +196,210 @@ function ItemHolder(itemEntities)
 					fontHeight
 				),
 
+				new ControlLabel
+				(
+					"infoStatus",
+					new Coords(100, 105), // pos
+					new Coords(200, 15), // size
+					true, // isTextCentered
+					new DataBinding
+					(
+						this,
+						function get(c)
+						{
+							return c.statusMessage;
+						}
+					), // text
+					fontHeight
+				),
+
+				new ControlButton
+				(
+					"buttonUp",
+					new Coords(85, 25), // pos
+					new Coords(15, 10), // size
+					"Up",
+					fontHeightSmall,
+					true, // hasBorder
+					new DataBinding
+					(
+						this,
+						function get(c)
+						{
+							var returnValue =
+							(
+								c.itemEntitySelected != null
+								&& c.itemEntities.indexOf(c.itemEntitySelected) > 0
+							);
+							return returnValue;
+						}
+					), // isEnabled
+					function click(universe)
+					{
+						var itemEntityToMove = itemHolder.itemEntitySelected;
+						var itemEntitiesAll = itemHolder.itemEntities;
+						var index = itemEntitiesAll.indexOf(itemEntityToMove);
+						if (index > 0)
+						{
+							itemEntitiesAll.removeAt(index);
+							itemEntitiesAll.insertElementAt(itemEntityToMove, index - 1);
+						}
+					},
+					universe // context
+				),
+
+				new ControlButton
+				(
+					"buttonDown",
+					new Coords(85, 40), // pos
+					new Coords(15, 10), // size
+					"Down",
+					fontHeightSmall,
+					true, // hasBorder
+					new DataBinding
+					(
+						this,
+						function get(c)
+						{
+							var returnValue =
+							(
+								c.itemEntitySelected != null
+								&& c.itemEntities.indexOf(c.itemEntitySelected) < c.itemEntities.length - 1
+							);
+							return returnValue;
+						}
+					), // isEnabled
+					function click(universe)
+					{
+						var itemEntityToMove = itemHolder.itemEntitySelected;
+						var itemEntitiesAll = itemHolder.itemEntities;
+						var index = itemEntitiesAll.indexOf(itemEntityToMove);
+						if (index < itemEntitiesAll.length - 1)
+						{
+							itemEntitiesAll.removeAt(index);
+							itemEntitiesAll.insertElementAt(itemEntityToMove, index + 1);
+						}
+					},
+					universe // context
+				),
+
+				new ControlButton
+				(
+					"buttonSplit",
+					new Coords(85, 55), // pos
+					new Coords(15, 10), // size
+					"Split",
+					fontHeightSmall,
+					true, // hasBorder
+					new DataBinding
+					(
+						this,
+						function get(c)
+						{
+							var itemEntity = c.itemEntitySelected;
+							var returnValue =
+							(
+								itemEntity != null
+								&& (itemEntity.Item.quantity > 1)
+							);
+							return returnValue;
+						}
+					), // isEnabled
+					function click(universe)
+					{
+						var itemEntityToSplit = itemHolder.itemEntitySelected;
+						var itemToSplit = itemEntityToSplit.Item;
+						if (itemToSplit.quantity > 1)
+						{
+							var quantityToSplit = Math.floor(itemToSplit.quantity / 2);
+
+							itemToSplit.quantity -= quantityToSplit;
+
+							var itemEntitySplitted = itemEntityToSplit.clone();
+							itemEntitySplitted.Item.quantity = quantityToSplit;
+							// Add with no join.
+							var itemEntities = itemHolder.itemEntities;
+							itemEntities.insertElementAfterOther(itemEntitySplitted, itemEntityToSplit);
+							itemEntities[itemToSplit.defnName] = itemEntitySplitted;
+						}
+					},
+					universe // context
+				),
+
+				new ControlButton
+				(
+					"buttonJoin",
+					new Coords(85, 70), // pos
+					new Coords(15, 10), // size
+					"Join",
+					fontHeightSmall,
+					true, // hasBorder
+					new DataBinding
+					(
+						this,
+						function get(c)
+						{
+							var returnValue =
+							(
+								c.itemEntitySelected != null
+								&&
+								(
+									c.itemEntities.filter
+									(
+										x => x.Item.defnName == c.itemEntitySelected.Item.defnName
+									).length > 1
+								)
+							);
+							return returnValue;
+						}
+					), // isEnabled
+					function click(universe)
+					{
+						var itemEntityToJoin = itemHolder.itemEntitySelected;
+						var itemToJoin = itemEntityToJoin.Item;
+						var itemEntityJoined =
+							itemHolder.itemEntitiesWithDefnNameJoin(itemToJoin.defnName);
+						itemHolder.itemEntitySelected = itemEntityJoined;
+					},
+					universe // context
+				),
+
+				new ControlButton
+				(
+					"buttonSort",
+					new Coords(85, 85), // pos
+					new Coords(15, 10), // size
+					"Sort",
+					fontHeightSmall,
+					true, // hasBorder
+					new DataBinding
+					(
+						this,
+						function get(c)
+						{
+							return c.itemEntities.length > 1;
+						}
+					), // isEnabled
+					function click(universe)
+					{
+						itemHolder.itemEntities.sortByProperty
+						(
+							x => x.Item.defnName
+						).addLookups
+						(
+							y => y.Item.defnName
+						);
+					},
+					universe // context
+				),
+
 				new ControlButton
 				(
 					"buttonUse",
-					new Coords(45, 90), // pos
-					new Coords(50, 15), // size
+					new Coords(130, 85), // pos
+					new Coords(15, 10), // size
 					"Use",
-					fontHeight,
+					fontHeightSmall,
 					true, // hasBorder
 					new DataBinding
 					(
@@ -205,7 +419,8 @@ function ItemHolder(itemEntities)
 							var world = universe.world;
 							var place = world.placeCurrent;
 							var user = entityItemHolder;
-							itemToUse.use(universe, world, place, user, itemEntityToUse);
+							itemHolder.statusMessage =
+								itemToUse.use(universe, world, place, user, itemEntityToUse);
 							if (itemToUse.quantity <= 0)
 							{
 								itemHolder.itemEntitySelected = null;
@@ -218,10 +433,10 @@ function ItemHolder(itemEntities)
 				new ControlButton
 				(
 					"buttonDrop",
-					new Coords(105, 90), // pos
-					new Coords(50, 15), // size
+					new Coords(150, 85), // pos
+					new Coords(15, 10), // size
 					"Drop",
-					fontHeight,
+					fontHeightSmall,
 					true, // hasBorder
 					new DataBinding
 					(
@@ -253,7 +468,7 @@ function ItemHolder(itemEntities)
 				new ControlButton
 				(
 					"buttonDone",
-					new Coords(75, 110), // pos
+					new Coords(75, 130), // pos
 					new Coords(50, 15), // size
 					"Done",
 					fontHeight,

@@ -26,10 +26,25 @@ function Equippable(socketDefnGroup)
 				return isItemAllowedInSocket;
 			}
 		)[0];
-		if (socketFound != null)
+
+		var message = itemDefn.appearance;
+
+		if (socketFound == null)
+		{
+			message += " cannot be equipped."
+		}
+		else if (socketFound.itemEntityEquipped == itemEntityToEquip)
+		{
+			socketFound.itemEntityEquipped = null;
+			message += " unequipped."
+		}
+		else
 		{
 			socketFound.itemEntityEquipped = itemEntityToEquip;
-		} 
+			message += " equipped."
+		}
+
+		return message;
 	};
 
 	// control

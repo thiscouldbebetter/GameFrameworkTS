@@ -92,7 +92,7 @@ function Device(name, ticksToCharge, use)
 				(
 					"Projectile",
 					[
-						new Damager(1),
+						new Damager(10),
 						new Ephemeral(32),
 						new Locatable( projectileLoc ),
 						new Collidable
