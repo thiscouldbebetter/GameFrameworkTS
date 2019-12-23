@@ -80,13 +80,38 @@ function Device(name, ticksToCharge, use)
 				var projectileCollider =
 					new Sphere(new Coords(0, 0), projectileRadius);
 
-				var projectileCollide = function(universe, world, place, entityPlayer, entityOther)
+				var projectileCollide = function(universe, world, place, entityProjectile, entityOther)
 				{
-					if (entityOther.Killable != null)
+					var killable = entityOther.Killable;
+					if (killable != null)
 					{
-						place.entitiesToRemove.push(entityOther);
+						killable.damageApply(universe, world, place, entityProjectile, entityOther);
+						entityProjectile.Killable.integrity = 0;
 					}
 				};
+
+				var visualExplosion = new VisualCamera
+				(
+					new VisualCircle(8, "Red"),
+					(u, w) => w.placeCurrent.camera()
+				);
+				var killable = new Killable
+				(
+					1, // integrityMax
+					function die(universe, world, place, entityKillable)
+					{
+						var entityExplosion = new Entity
+						(
+							"Explosion",
+							[
+								new Ephemeral(8),
+								new Drawable(visualExplosion),
+								entityKillable.Locatable
+							]
+						);
+						place.entitiesToSpawn.push(entityExplosion);
+					}
+				);
 
 				var projectileEntity = new Entity
 				(
@@ -94,6 +119,7 @@ function Device(name, ticksToCharge, use)
 					[
 						new Damager(10),
 						new Ephemeral(32),
+						killable,
 						new Locatable( projectileLoc ),
 						new Collidable
 						(

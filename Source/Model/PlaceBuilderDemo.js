@@ -1270,9 +1270,7 @@ function PlaceBuilderDemo()
 			{
 				universe.collisionHelper.collideCollidables(entityPlayer, entityOther);
 
-				var playerAsKillable = entityPlayer.Killable;
-				var damagePerHit = entityOther.Damager.damagePerHit;
-				playerAsKillable.integrity -= damagePerHit;
+				var damage = entityPlayer.Killable.damageApply(universe, world, place, entityOther, entityPlayer);
 
 				var messageEntity = new Entity
 				(
@@ -1282,7 +1280,7 @@ function PlaceBuilderDemo()
 						(
 							new VisualCamera
 							(
-								new VisualText("-" + damagePerHit, "Red"),
+								new VisualText("-" + damage, "Red"),
 								(universe, world) => world.placeCurrent.camera()
 							)
 						),
@@ -1432,6 +1430,41 @@ function PlaceBuilderDemo()
 					}
 				);
 				universe.venueNext = venueMessage;
+			},
+			function damageApply(universe, world, place, entityDamager, entityKillable)
+			{
+				var damage = entityDamager.Damager.damagePerHit;
+				var armorEquipped = entityKillable.Equippable.socketGroup.sockets["Armor"].itemEntityEquipped;
+				if (armorEquipped != null)
+				{
+					damage /= 2; // todo
+				}
+				entityKillable.Killable.integrityAdd(0 - damage);
+				return damage;
+			}
+		);
+
+		var movable = new Movable
+		(
+			0.5, // accelerationPerTick
+			function accelerate(universe, world, place, entityMovable)
+			{
+				var accelerationToApply = entityMovable.Movable.accelerationPerTick;
+				var accessoryEquipped =
+					entityMovable.Equippable.socketGroup.sockets["Accessory"].itemEntityEquipped;
+				var isSpeedBoosterEquipped =
+				(
+					accessoryEquipped != null
+					&& accessoryEquipped.Item.defnName == "Speed Booster"
+				);
+				if (isSpeedBoosterEquipped)
+				{
+					accelerationToApply *= 2;
+				}
+				entityMovable.Movable.accelerateForward
+				(
+					universe, world, place, entityMovable, accelerationToApply
+				);
 			}
 		);
 
@@ -1452,6 +1485,7 @@ function PlaceBuilderDemo()
 				new Idleable(),
 				new ItemHolder(),
 				killable,
+				movable,
 				new Playable(),
 			]
 		);

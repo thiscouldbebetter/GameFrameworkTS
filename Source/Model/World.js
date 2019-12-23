@@ -34,21 +34,11 @@ function World(name, dateCreated, defns, places)
 
 		var entityAccelerateInDirection = function
 		(
-			world, entity, directionToMove
+			universe, world, place, entity, directionToMove
 		)
 		{
-			var entityLoc = entity.Locatable.loc;
-
-			entityLoc.orientation.forwardSet(directionToMove);
-			var vel = entityLoc.vel;
-			if (vel.equals(directionToMove) == false)
-			{
-				entityLoc.timeOffsetInTicks = world.timerTicksSoFar;
-			}
-			entityLoc.accel.overwriteWith(directionToMove).multiplyScalar
-			(
-				.5 // hack
-			);
+			entity.Locatable.loc.orientation.forwardSet(directionToMove);
+			entity.Movable.accelerate(universe, world, place, entity);
 		};
 
 		var actions =
@@ -64,7 +54,7 @@ function World(name, dateCreated, defns, places)
 				{
 					entityAccelerateInDirection
 					(
-						world, actor, coordsInstances.ZeroOneZero
+						universe, world, place, actor, coordsInstances.ZeroOneZero
 					);
 				}
 			),
@@ -75,7 +65,7 @@ function World(name, dateCreated, defns, places)
 				{
 					entityAccelerateInDirection
 					(
-						world, actor, coordsInstances.MinusOneZeroZero
+						universe, world, place, actor, coordsInstances.MinusOneZeroZero
 					);
 				}
 			),
@@ -86,7 +76,7 @@ function World(name, dateCreated, defns, places)
 				{
 					entityAccelerateInDirection
 					(
-						world, actor, coordsInstances.OneZeroZero
+						universe, world, place, actor, coordsInstances.OneZeroZero
 					);
 				}
 			),
@@ -97,7 +87,7 @@ function World(name, dateCreated, defns, places)
 				{
 					entityAccelerateInDirection
 					(
-						world, actor, coordsInstances.ZeroMinusOneZero
+						universe, world, place, actor, coordsInstances.ZeroMinusOneZero
 					);
 				}
 			),
