@@ -4,14 +4,14 @@ function Face(vertices)
 	this.vertices = vertices;
 }
 {
-	Face.prototype.bounds = function()
+	Face.prototype.box = function()
 	{
-		if (this._bounds == null)
+		if (this._box == null)
 		{
-			this._bounds = new Bounds(new Coords(0, 0, 0), new Coords(0, 0, 0));
+			this._box = new Box(new Coords(0, 0, 0), new Coords(0, 0, 0));
 		}
-		this._bounds.ofPoints(this.vertices);
-		return this._bounds;
+		this._box.ofPoints(this.vertices);
+		return this._box;
 	};
 
 	Face.prototype.containsPoint = function(pointToCheck)

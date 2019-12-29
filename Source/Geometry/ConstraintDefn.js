@@ -37,13 +37,13 @@ function ConstraintDefn(name, constrain)
 			}
 		);
 
-		this.ContainInBounds = new ConstraintDefn
+		this.ContainInBox = new ConstraintDefn
 		(
-			"ContainInBounds",
+			"ContainInBox",
 			function constrain(universe, world, place, entityToConstrain, constraint)
 			{
-				var targetBounds = constraint.target;
-				targetBounds.trimCoords(entityToConstrain.Locatable.loc.pos);
+				var targetBox = constraint.target;
+				targetBox.trimCoords(entityToConstrain.Locatable.loc.pos);
 			}
 		);
 
@@ -212,7 +212,7 @@ function ConstraintDefn(name, constrain)
 		this._All =
 		[
 			this.AttachToEntityWithName,
-			this.ContainInBounds,
+			this.ContainInBox,
 			this.Friction,
 			this.SpeedMax
 			// todo

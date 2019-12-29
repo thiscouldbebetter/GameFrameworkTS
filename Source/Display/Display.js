@@ -223,10 +223,10 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		this.graphics.drawImage(imageToDraw.systemImage, pos.x, pos.y);
 	};
 
-	Display.prototype.drawImagePartial = function(imageToDraw, pos, boundsToShow)
+	Display.prototype.drawImagePartial = function(imageToDraw, pos, boxToShow)
 	{
-		var sourcePos = boundsToShow.min();
-		var sourceSize = boundsToShow.size;
+		var sourcePos = boxToShow.min();
+		var sourceSize = boxToShow.size;
 
 		this.graphics.drawImage
 		(

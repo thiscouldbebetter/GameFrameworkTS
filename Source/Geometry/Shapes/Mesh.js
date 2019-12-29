@@ -10,8 +10,8 @@ function Mesh(center, vertexOffsets, faceBuilders)
 
 	Mesh.boxOfSize = function(center, size)
 	{
-		var bounds = new Bounds(center, size);
-		var returnValue = Mesh.fromBounds(bounds);
+		var box = new Box(center, size);
+		var returnValue = Mesh.fromBox(box);
 		return returnValue;
 	};
 
@@ -26,9 +26,9 @@ function Mesh(center, vertexOffsets, faceBuilders)
 		return returnValue;
 	};
 
-	Mesh.fromBounds = function(bounds)
+	Mesh.fromBox = function(box)
 	{
-		var sizeHalf = bounds.sizeHalf;
+		var sizeHalf = box.sizeHalf;
 		var min = new Coords(-sizeHalf.x, -sizeHalf.y, -sizeHalf.z);
 		var max = new Coords(sizeHalf.x, sizeHalf.y, sizeHalf.z);
 
@@ -61,7 +61,7 @@ function Mesh(center, vertexOffsets, faceBuilders)
 
 		var returnValue = new Mesh
 		(
-			bounds.center, vertexOffsets, faceBuilders
+			box.center, vertexOffsets, faceBuilders
 		);
 
 		return returnValue;
@@ -145,14 +145,14 @@ function Mesh(center, vertexOffsets, faceBuilders)
 
 	// instance methods
 
-	Mesh.prototype.bounds = function()
+	Mesh.prototype.box = function()
 	{
-		if (this._bounds == null)
+		if (this._box == null)
 		{
-			this._bounds = new Bounds(new Coords(), new Coords());
+			this._box = new Box(new Coords(), new Coords());
 		}
-		this._bounds.ofPoints(this.vertices());
-		return this._bounds;
+		this._box.ofPoints(this.vertices());
+		return this._box;
 	};
 
 	Mesh.prototype.faces = function()

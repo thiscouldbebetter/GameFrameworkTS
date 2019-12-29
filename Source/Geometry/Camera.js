@@ -6,6 +6,14 @@ function Camera(viewSize, focalLength, loc)
 	this.loc = loc;
 
 	this.viewSizeHalf = this.viewSize.clone().clearZ().half();
+
+	var viewColliderSize = this.viewSize.clone();
+	viewColliderSize.z = Number.POSITIVE_INFINITY;
+	this.viewCollider = new Box
+	(
+		this.loc.pos,
+		viewColliderSize
+	);
 }
 
 {

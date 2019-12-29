@@ -50,9 +50,9 @@ function Collidable(colliderAtRest, entityPropertyNamesToCollideWith, collideEnt
 						var entityOther = entitiesWithProperty[e];
 						if (entityOther != entity)
 						{
-							var doEntitiesCollide = this.doEntitiesCollide
+							var doEntitiesCollide = universe.collisionHelper.doEntitiesCollide
 							(
-								universe.collisionHelper, entity, entityOther
+								entity, entityOther
 							);
 							if (doEntitiesCollide)
 							{
@@ -67,38 +67,6 @@ function Collidable(colliderAtRest, entityPropertyNamesToCollideWith, collideEnt
 			}
 		}
 	};
-
-	Collidable.prototype.doEntitiesCollide = function(collisionHelper, entity, entityOther)
-	{
-		var doCollide = false;
-
-		var collidableOther = entityOther.Collidable;
-		var canCollide = (collidableOther.ticksUntilCanCollide == 0);
-		if (canCollide)
-		{
-			var colliderThis = entity.Collidable.collider;
-			var colliderOther = collidableOther.collider;
-
-			var doCollide = collisionHelper.doCollidersCollide
-			(
-				colliderThis, colliderOther
-			);
-
-			if (entityOther == this.entityAlreadyCollidedWith)
-			{
-				if (doCollide)
-				{
-					doCollide = false;
-				}
-				else
-				{
-					this.entityAlreadyCollidedWith = null;
-				}
-			}
-		}
-
-		return doCollide;
-	}
 
 	// cloneable
 

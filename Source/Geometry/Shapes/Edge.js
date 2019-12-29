@@ -8,14 +8,14 @@ function Edge(vertices)
 	this._transverse = new Coords();
 }
 {
-	Edge.prototype.bounds = function()
+	Edge.prototype.box = function()
 	{
-		if (this._bounds == null)
+		if (this._box == null)
 		{
-			this._bounds = new Bounds(new Coords(), new Coords());
+			this._box = new Box(new Coords(), new Coords());
 		}
-		this._bounds.ofPoints(this.vertices);
-		return this._bounds;
+		this._box.ofPoints(this.vertices);
+		return this._box;
 	};
 
 	Edge.prototype.direction = function()

@@ -1,8 +1,8 @@
 
-function Bounds(center, size)
+function Box(center, size)
 {
-	this.center = center;
-	this.size = size;
+	this.center = center || new Coords();
+	this.size = size || new Coords();
 
 	this.sizeHalf = this.size.clone().half();
 	this._min = new Coords();
@@ -13,59 +13,59 @@ function Bounds(center, size)
 {
 	// Static methods.
 
-	Bounds.doBoundsInSetsOverlap = function(boundsSet0, boundsSet1)
+	Box.doBoxesInSetsOverlap = function(boxSet0, boxSet1)
 	{
-		var doAnyBoundsOverlapSoFar = false;
+		var doAnyBoxOverlapSoFar = false;
 
-		for (var i = 0; i < boundsSet0.length; i++)
+		for (var i = 0; i < boxSet0.length; i++)
 		{
-			var boundsFromSet0 = boundsSet0[i];
+			var boxFromSet0 = boxSet0[i];
 
-			for (var j = 0; j < boundsSet1.length; j++)
+			for (var j = 0; j < boxSet1.length; j++)
 			{
-				var boundsFromSet1 = boundsSet1[j];
+				var boxFromSet1 = boxSet1[j];
 
-				doAnyBoundsOverlapSoFar = boundsFromSet0.overlapsWith
+				doAnyBoxOverlapSoFar = boxFromSet0.overlapsWith
 				(
-					boundsFromSet1
+					boxFromSet1
 				);
 
-				if (doAnyBoundsOverlapSoFar)
+				if (doAnyBoxOverlapSoFar)
 				{
 					break;
 				}
 			}
 		}
 
-		return doAnyBoundsOverlapSoFar;
+		return doAnyBoxOverlapSoFar;
 	};
 
-	Bounds.fromMinAndMax = function(min, max)
+	Box.fromMinAndMax = function(min, max)
 	{
 		var center = min.clone().add(max).half();
 		var size = max.clone().subtract(min);
-		return new Bounds(center, size);
+		return new Box(center, size);
 	};
 
-	Bounds.fromMinAndSize = function(min, size)
+	Box.fromMinAndSize = function(min, size)
 	{
 		var center = size.clone().half().add(min);
-		return new Bounds(center, size);
+		return new Box(center, size);
 	};
 
 	// Instance methods.
 
-	Bounds.prototype.containsOther = function(other)
+	Box.prototype.containsOther = function(other)
 	{
 		return ( this.containsPoint(other.min()) && this.containsPoint(other.max()) );
 	};
 
-	Bounds.prototype.containsPoint = function(pointToCheck)
+	Box.prototype.containsPoint = function(pointToCheck)
 	{
 		return pointToCheck.isInRangeMinMax(this.min(), this.max());
 	};
 
-	Bounds.prototype.intersectWith = function(other)
+	Box.prototype.intersectWith = function(other)
 	{
 		var thisMinDimensions = this.min().dimensions();
 		var thisMaxDimensions = this.max().dimensions();
@@ -107,23 +107,23 @@ function Bounds(center, size)
 				size.dimension(d, rangeForDimension.size());
 			}
 
-			returnValue = new Bounds(center, size);
+			returnValue = new Box(center, size);
 		}
 
 		return returnValue;
 	};
 
-	Bounds.prototype.max = function()
+	Box.prototype.max = function()
 	{
 		return this._max.overwriteWith(this.center).add(this.sizeHalf);
 	};
 
-	Bounds.prototype.min = function()
+	Box.prototype.min = function()
 	{
 		return this._min.overwriteWith(this.center).subtract(this.sizeHalf);
 	};
 
-	Bounds.prototype.ofPoints = function(points)
+	Box.prototype.ofPoints = function(points)
 	{
 		var point0 = points[0];
 		var minSoFar = this._min.overwriteWith(point0);
@@ -168,25 +168,28 @@ function Bounds(center, size)
 		return this;
 	};
 
-	Bounds.prototype.overlapsWith = function(other)
+	Box.prototype.overlapsWith = function(other)
 	{
-		var doAllDimensionsOverlapSoFar = true;
-		for (var d = 0; d < 3; d++)
-		{
-			var rangeForDimensionThis = this.rangeForDimension(d, this._range);
-			var rangeForDimensionOther = other.rangeForDimension(d, other._range);
-			var doDimensionsOverlap =
-				rangeForDimensionThis.overlapsWith(rangeForDimensionOther);
-			if (doDimensionsOverlap == false)
-			{
-				doAllDimensionsOverlapSoFar = false;
-				break;
-			}
-		}
-		return doAllDimensionsOverlapSoFar;
+		var returnValue =
+		(
+			this.overlapsWithOtherInDimension(other, 0)
+			&& this.overlapsWithOtherInDimension(other, 1)
+			&& this.overlapsWithOtherInDimension(other, 2)
+		);
+		return returnValue;
 	};
 
-	Bounds.prototype.overlapsWithOtherInDimension = function(other, dimensionIndex)
+	Box.prototype.overlapsWithXY = function(other)
+	{
+		var returnValue =
+		(
+			this.overlapsWithOtherInDimension(other, 0)
+			&& this.overlapsWithOtherInDimension(other, 1)
+		);
+		return returnValue;
+	};
+
+	Box.prototype.overlapsWithOtherInDimension = function(other, dimensionIndex)
 	{
 		var rangeThis = this.rangeForDimension(dimensionIndex, this._range);
 		var rangeOther = other.rangeForDimension(dimensionIndex, other._range);
@@ -194,33 +197,33 @@ function Bounds(center, size)
 		return returnValue;
 	};
 
-	Bounds.prototype.rangeForDimension = function(dimensionIndex, range)
+	Box.prototype.rangeForDimension = function(dimensionIndex, range)
 	{
 		range.min = this.min().dimension(dimensionIndex);
 		range.max = this.max().dimension(dimensionIndex);
 		return range;
 	};
 
-	Bounds.prototype.sizeOverwriteWith = function(sizeOther)
+	Box.prototype.sizeOverwriteWith = function(sizeOther)
 	{
 		this.size.overwriteWith(sizeOther);
 		this.sizeHalf.overwriteWith(this.size).half();
 		return this;
 	};
 
-	Bounds.prototype.trimCoords = function(coordsToTrim)
+	Box.prototype.trimCoords = function(coordsToTrim)
 	{
 		return coordsToTrim.trimToRangeMinMax(this.min(), this.max());
 	};
 
 	// cloneable
 
-	Bounds.prototype.clone = function()
+	Box.prototype.clone = function()
 	{
-		return new Bounds(this.center.clone(), this.size.clone());
+		return new Box(this.center.clone(), this.size.clone());
 	}
 
-	Bounds.prototype.overwriteWith = function(other)
+	Box.prototype.overwriteWith = function(other)
 	{
 		this.center.overwriteWith(other.center);
 		this.size.overwriteWith(other.size);
@@ -230,14 +233,14 @@ function Bounds(center, size)
 
 	// string
 
-	Bounds.prototype.toString = function()
+	Box.prototype.toString = function()
 	{
 		return this.min().toString() + ":" + this.max().toString();
 	};
 
 	// transformable
 
-	Bounds.prototype.coordsGroupToTranslate = function()
+	Box.prototype.coordsGroupToTranslate = function()
 	{
 		return [ this.center ];
 	}

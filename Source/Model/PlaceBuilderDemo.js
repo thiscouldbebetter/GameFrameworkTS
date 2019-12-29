@@ -8,7 +8,7 @@ function PlaceBuilderDemo()
 	PlaceBuilderDemo.prototype.build = function(name, size, cameraViewSize, placeNameToReturnTo, randomizer, itemDefns)
 	{
 		this.name = name;
-		this.size = size;
+		this.size = size.clearZ();
 		this.randomizer = randomizer || RandomizerLCG.default();
 
 		var entities = [];
@@ -93,7 +93,7 @@ function PlaceBuilderDemo()
 	{
 		var viewSizeHalf = cameraViewSize.clone().half();
 
-		var cameraPosBounds = Bounds.fromMinAndMax
+		var cameraPosBox = Box.fromMinAndMax
 		(
 			viewSizeHalf.clone(),
 			this.size.clone().subtract(viewSizeHalf)
@@ -124,7 +124,7 @@ function PlaceBuilderDemo()
 					new Constraint(constraintDefns.AttachToEntityWithName.name, "Player"),
 					new Constraint
 					(
-						constraintDefns.ContainInBounds.name, cameraPosBounds
+						constraintDefns.ContainInBox.name, cameraPosBox
 					)
 				]),
 				new Locatable(cameraLoc)
@@ -215,21 +215,22 @@ function PlaceBuilderDemo()
 
 		var itemDefnArmorName = itemDefns["Armor"].name;
 		var itemArmorColor = "Green";
+		var path = new Path
+		([
+			new Coords(0, 0.5),
+			new Coords(-.5, 0),
+			new Coords(-.5, -.5),
+			new Coords(.5, -.5),
+			new Coords(.5, 0),
+		]).transform
+		(
+			Transform_Scale.fromScalar(entityDimension)
+		);
 		var itemArmorVisual = new VisualGroup
 		([
 			new VisualPolygon
 			(
-				new Path
-				([
-					new Coords(0, 0.5),
-					new Coords(-.5, 0),
-					new Coords(-.5, -.5),
-					new Coords(.5, -.5),
-					new Coords(.5, 0),
-				]).transform
-				(
-					Transform_Scale.fromScalar(entityDimension)
-				),
+				path,
 				itemArmorColor
 			),
 			new VisualOffset
@@ -239,6 +240,10 @@ function PlaceBuilderDemo()
 			)
 		]);
 		var itemArmorCollider = new Sphere(new Coords(0, 0), entityDimensionHalf);
+		var collidable = new Collidable(itemArmorCollider);
+		var box = new Box().ofPoints(path.points);
+		box.center = collidable.collider.center;
+		var boundable = new Boundable(box);
 
 		var displacement = new Coords();
 
@@ -249,9 +254,10 @@ function PlaceBuilderDemo()
 		(
 			itemDefnArmorName,
 			[
+				boundable,
+				collidable,
 				new Item(itemDefnArmorName, 1),
 				new Locatable( new Location(itemArmorPos) ),
-				new Collidable(itemArmorCollider),
 				new Drawable(itemArmorVisual)
 			]
 		);
@@ -323,7 +329,7 @@ function PlaceBuilderDemo()
 		(
 			"Base",
 			[
-				new Collidable(new Bounds(new Coords(0, 0), entitySize)),
+				new Collidable(new Box(new Coords(0, 0), entitySize)),
 				new Drawable
 				(
 					new VisualGroup
@@ -378,7 +384,7 @@ function PlaceBuilderDemo()
 		(
 			"Exit",
 			[
-				new Collidable(new Bounds(new Coords(0, 0), entitySize)),
+				new Collidable(new Box(new Coords(0, 0), entitySize)),
 				new Drawable
 				(
 					new VisualGroup
@@ -480,7 +486,7 @@ function PlaceBuilderDemo()
 		(
 			"Container",
 			[
-				new Collidable(new Bounds(new Coords(0, 0), entitySize)),
+				new Collidable(new Box(new Coords(0, 0), entitySize)),
 				new Drawable
 				(
 					new VisualGroup
@@ -833,7 +839,7 @@ function PlaceBuilderDemo()
 			"Goal",
 			[
 				new Locatable(goalLoc),
-				new Collidable(new Bounds(new Coords(0, 0), entitySize)),
+				new Collidable(new Box(new Coords(0, 0), entitySize)),
 				new Drawable
 				(
 					new VisualGroup
@@ -1004,21 +1010,24 @@ function PlaceBuilderDemo()
 	{
 		var entityDimensionHalf = entityDimension / 2;
 
-		var obstacleBarSize = new Coords(6, 2).multiplyScalar(entityDimension);
+		var obstacleBarSize = new Coords(6, 2, 1).multiplyScalar(entityDimension);
 		var obstaclePos = playerPos.clone().add(obstacleBarSize).add(obstacleBarSize);
 		var obstacleLoc = new Location(obstaclePos);
 		var obstacleRotationInTurns = .0625;
-		var obstacleCollider = new RectangleRotated
+		var obstacleCollider = new BoxRotated
 		(
-			new Bounds(new Coords(0, 0), obstacleBarSize), obstacleRotationInTurns
+			new Box(new Coords(0, 0, 0), obstacleBarSize), obstacleRotationInTurns
 		);
+		var obstacleCollidable = new Collidable(obstacleCollider);
+		var obstacleBounds = obstacleCollidable.collider.sphereSwept();
+		var obstacleBoundable = new Boundable(obstacleBounds);
 
 		var obstacleBarEntity = new Entity
 		(
 			"ObstacleBar",
 			[
-				new Locatable(obstacleLoc),
-				new Collidable(obstacleCollider),
+				obstacleBoundable,
+				obstacleCollidable,
 				new Damager(10),
 				new Drawable
 				(
@@ -1029,17 +1038,18 @@ function PlaceBuilderDemo()
 						([
 							new VisualRectangle
 							(
-								obstacleCollider.bounds.size,
+								obstacleCollider.box.size,
 								obstacleColor, obstacleColor
 							),
 							new VisualOffset
 							(
 								new VisualText("Bar", obstacleColor),
-								new Coords(0, obstacleCollider.bounds.size.y)
+								new Coords(0, obstacleCollider.box.size.y)
 							)
 						])
 					)
-				)
+				),
+				new Locatable(obstacleLoc)
 			]
 		);
 
@@ -1073,6 +1083,8 @@ function PlaceBuilderDemo()
 		);
 
 		var obstacleMappedCellSize = new Coords(2, 2, 1);
+		var obstacleMappedSizeInPixels =
+			obstacleMappedSizeInCells.clone().multiply(obstacleMappedCellSize);
 
 		var obstacleMappedMap = new Map
 		(
@@ -1115,18 +1127,22 @@ function PlaceBuilderDemo()
 			var obstacleMappedPos =
 				new Coords().randomize(this.randomizer).multiply(sizeMinusMargins).add(marginSize);
 			var obstacleMappedLoc = new Location(obstacleMappedPos);
+			var obstacleCollidable = new Collidable
+			(
+				new MapLocated(obstacleMappedMap, new Location(new Coords(0, 0, 0)))
+			);
+			var obstacleBounds = new Box(obstacleCollidable.collider.loc.pos, obstacleMappedMap.size);
+			var obstacleBoundable = new Boundable(obstacleBounds);
 
 			var obstacleMappedEntity = new Entity
 			(
 				"ObstacleMapped",
 				[
-					new Locatable(obstacleMappedLoc),
-					new Collidable
-					(
-						new MapLocated(obstacleMappedMap, new Location(new Coords(0, 0)))
-					),
+					obstacleBoundable,
+					obstacleCollidable,
 					new Damager(10),
-					new Drawable(obstacleMappedVisual)
+					new Drawable(obstacleMappedVisual),
+					new Locatable(obstacleMappedLoc)
 				]
 			);
 
@@ -1207,7 +1223,7 @@ function PlaceBuilderDemo()
 
 			var obstacleWallLoc = new Location(obstacleWallPos);
 			var obstacleCollider =
-				new Bounds(new Coords(0, 0), obstacleWallSize);
+				new Box(new Coords(0, 0), obstacleWallSize);
 			var obstacleWallVisual = new VisualRectangle
 			(
 				obstacleWallSize, obstacleColor
@@ -1510,7 +1526,7 @@ function PlaceBuilderDemo()
 		(
 			"Store",
 			[
-				new Collidable(new Bounds(new Coords(0, 0), entitySize)),
+				new Collidable(new Box(new Coords(0, 0), entitySize)),
 				new Drawable
 				(
 					new VisualGroup
@@ -1602,25 +1618,28 @@ function PlaceBuilderDemo()
 		var entityDimensionHalf = entityDimension / 2;
 
 		var itemAmmoColor = "rgb(0, 128, 128)";
+		var path = new Path
+		([
+			new Coords(0, -0.5),
+			new Coords(.5, 0.5),
+			new Coords(-.5, 0.5)
+		]).transform
+		(
+			Transform_Scale.fromScalar(entityDimension)
+		);
+		var ammoSize = new Box().ofPoints(path.points).size;
+
+		var itemDefnAmmoName = itemDefns["Ammo"].name;
 		var itemAmmoVisual = new VisualGroup
 		([
-			//new VisualCircle(entityDimensionHalf, itemWeaponColor),
 			new VisualPolygon
 			(
-				new Path
-				([
-					new Coords(0, -0.5),
-					new Coords(.5, 0.5),
-					new Coords(-.5, 0.5)
-				]).transform
-				(
-					Transform_Scale.fromScalar(entityDimension)
-				),
+				path,
 				itemAmmoColor
 			),
 			new VisualOffset
 			(
-				new VisualText(itemDefns["Ammo"].name, itemAmmoColor),
+				new VisualText(itemDefnAmmoName, itemAmmoColor),
 				new Coords(0, entityDimension)
 			)
 		]);
@@ -1629,14 +1648,21 @@ function PlaceBuilderDemo()
 
 		for (var i = 0; i < numberOfPiles; i++)
 		{
+			var pos = new Coords().randomize(this.randomizer).multiply(size);
+
+			var collidable = new Collidable(itemAmmoCollider);
+			var bounds = new Box(collidable.collider.center, ammoSize);
+			var boundable = new Boundable(bounds);
+
 			var itemAmmoEntity = new Entity
 			(
-				itemDefns["Ammo"].name + i,
+				itemDefnAmmoName + i,
 				[
-					new Item(itemDefns["Ammo"].name, roundsPerPile),
-					new Locatable( new Location( new Coords().randomize(this.randomizer).multiply(size) ) ),
-					new Collidable(itemAmmoCollider),
-					new Drawable(itemAmmoVisual)
+					boundable,
+					collidable,
+					new Drawable(itemAmmoVisual),
+					new Item(itemDefnAmmoName, roundsPerPile),
+					new Locatable( new Location( pos ) ),
 				]
 			);
 

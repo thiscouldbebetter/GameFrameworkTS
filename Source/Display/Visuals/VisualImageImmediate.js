@@ -49,6 +49,7 @@ function VisualImageImmediate(image)
 		(
 			entity.Locatable.loc.pos
 		);
-		display.drawImageScaled(image, drawPos, imageSize);
+		//display.drawImageScaled(image, drawPos, imageSize);
+		display.drawImage(image, drawPos);
 	};
 }

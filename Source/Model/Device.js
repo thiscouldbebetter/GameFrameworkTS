@@ -85,7 +85,10 @@ function Device(name, ticksToCharge, use)
 					var killable = entityOther.Killable;
 					if (killable != null)
 					{
-						killable.damageApply(universe, world, place, entityProjectile, entityOther);
+						killable.damageApply
+						(
+							universe, world, place, entityProjectile, entityOther
+						);
 						entityProjectile.Killable.integrity = 0;
 					}
 				};

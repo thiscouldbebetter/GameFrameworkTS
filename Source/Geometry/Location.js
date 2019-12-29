@@ -1,5 +1,5 @@
 
-function Location(pos, orientation, venue)
+function Location(pos, orientation, placeName)
 {
 	this.pos = pos;
 
@@ -9,7 +9,7 @@ function Location(pos, orientation, venue)
 	}
 	this.orientation = orientation;
 
-	this.venue = venue;
+	this.placeName = placeName;
 
 	this.vel = new Coords(0, 0, 0);
 	this.accel = new Coords(0, 0, 0);
@@ -21,6 +21,11 @@ function Location(pos, orientation, venue)
 }
 
 {
+	Location.prototype.place = function(world)
+	{
+		return world.places[this.placeName];
+	}
+
 	Location.prototype.velSet = function(value)
 	{
 		this.vel.overwriteWith(value);
@@ -35,7 +40,7 @@ function Location(pos, orientation, venue)
 		(
 			this.pos.clone(),
 			this.orientation.clone(),
-			this.venue
+			this.placeName
 		);
 
 		returnValue.vel = this.vel.clone();
@@ -48,7 +53,7 @@ function Location(pos, orientation, venue)
 
 	Location.prototype.overwriteWith = function(other)
 	{
-		this.venue = other.venue;
+		this.placeName = other.placeName;
 		this.pos.overwriteWith(other.pos);
 		this.orientation.overwriteWith(other.orientation);
 		this.vel.overwriteWith(other.vel);

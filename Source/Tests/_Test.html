@@ -20,7 +20,7 @@
 <script type="text/javascript" src="../Geometry/Rotation.js"></script>
 
 <script type="text/javascript" src="../Geometry/Shapes/Arc.js"></script>
-<script type="text/javascript" src="../Geometry/Shapes/Bounds.js"></script>
+<script type="text/javascript" src="../Geometry/Shapes/Box.js"></script>
 <script type="text/javascript" src="../Geometry/Shapes/Cylinder.js"></script>
 <script type="text/javascript" src="../Geometry/Shapes/Edge.js"></script>
 <script type="text/javascript" src="../Geometry/Shapes/Face.js"></script>
@@ -28,7 +28,7 @@
 <script type="text/javascript" src="../Geometry/Shapes/MapLocated.js"></script>
 <script type="text/javascript" src="../Geometry/Shapes/Mesh.js"></script>
 <script type="text/javascript" src="../Geometry/Shapes/Plane.js"></script>
-<script type="text/javascript" src="../Geometry/Shapes/RectangleRotated.js"></script>
+<script type="text/javascript" src="../Geometry/Shapes/BoxRotated.js"></script>
 <script type="text/javascript" src="../Geometry/Shapes/ShapeContainer.js"></script>
 <script type="text/javascript" src="../Geometry/Shapes/ShapeGroupAll.js"></script>
 <script type="text/javascript" src="../Geometry/Shapes/ShapeGroupAny.js"></script>
@@ -68,14 +68,14 @@
 <script type="text/javascript" src="../Utility/TimerHelper.js"></script>
 
 <script type="text/javascript" src="Test.js"></script>
-<script type="text/javascript" src="Geometry/BoundsTests.js"></script>
+<script type="text/javascript" src="Geometry/BoxTests.js"></script>
 <script type="text/javascript" src="Geometry/CameraTests.js"></script>
 <script type="text/javascript" src="Geometry/CollisionHelperTests.js"></script>
 
 <script type="text/javascript">
 Test.runTestsInFixtures
 ([
-	new BoundsTests(),
+	new BoxTests(),
 	new CameraTests(),
 	new CollisionHelperTests(),
 ]);

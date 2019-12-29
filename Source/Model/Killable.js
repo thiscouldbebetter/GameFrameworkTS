@@ -8,17 +8,17 @@ function Killable(integrityMax, die, damageApply)
 	this.integrity = this.integrityMax;
 }
 {
-	Killable.prototype.damageApply = function(universe, world, place, entityDamager, entityKillable)
+	Killable.prototype.damageApply = function(universe, world, place, entityDamager, entityKillable, damageToApply)
 	{
 		var damageApplied;
 		if (this._damageApply == null)
 		{
-			damageApplied = entityDamager.Damager.damagePerHit;
+			damageApplied = (damageToApply == null ? entityDamager.Damager.damagePerHit : damageToApply);
 			entityKillable.Killable.integrityAdd(0 - damageApplied);
 		}
 		else
 		{
-			damageApplied = this._damageApply(universe, world, place, entityDamager, entityKillable);
+			damageApplied = this._damageApply(universe, world, place, entityDamager, entityKillable, damageToApply);
 		}
 		return damageApplied;
 	}
