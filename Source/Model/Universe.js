@@ -90,7 +90,7 @@ function Universe(name, version, timerHelper, display, mediaLibrary, world)
 		this.inputHelper = new InputHelper();
 		this.inputHelper.initialize(this);
 
-		callback();
+		callback(this);
 	};
 
 	Universe.prototype.reset = function()
