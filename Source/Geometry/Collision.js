@@ -1,10 +1,10 @@
 
-function Collision(pos)
+function Collision(pos, distanceToCollision, colliders)
 {
 	this.pos = (pos == null ? new Coords() : pos);
-	this.distanceToCollision = null;
+	this.distanceToCollision = distanceToCollision;
 	this.collidables = [];
-	this.colliders = [];
+	this.colliders = colliders || [];
 	this.normals = [ new Coords(), new Coords() ];
 
 	this.isActive = false;
@@ -16,5 +16,25 @@ function Collision(pos)
 		this.collidables.clear();
 		this.colliders.clear();
 		return this;
+	};
+
+	Collision.prototype.equals = function(other)
+	{
+		var returnValue =
+		(
+			this.isActive == other.isActive
+			&&
+			(
+				this.isActive == false
+				||
+				(
+					this.pos.equals(other.pos)
+					&& this.distanceToCollision == other.distanceToCollision
+					&& this.colliders.equals(other.colliders)
+				)
+			)
+		);
+
+		return returnValue;
 	};
 }

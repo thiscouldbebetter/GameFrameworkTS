@@ -219,6 +219,20 @@ function CollisionHelper()
 		}
 	};
 
+	CollisionHelper.prototype.collisionClosest = function(collisionsToCheck)
+	{
+		var returnValue = collisionsToCheck.filter
+		(
+			x => x.isActive
+		).sort
+		(
+			(x, y) => x.distanceToCollision < y.distanceToCollision
+		)[0];
+
+		return returnValue;
+	}
+
+
 	CollisionHelper.prototype.collisionsOfEntitiesCollidableInSets = function(entitiesCollidable0, entitiesCollidable1)
 	{
 		var returnValues = [];
@@ -645,55 +659,33 @@ function CollisionHelper()
 		return collision;
 	};
 
-	CollisionHelper.prototype.collisionOfEdgeAndFace = function(edge, face)
+	CollisionHelper.prototype.collisionOfEdgeAndFace = function(edge, face, collision)
 	{
 		var facePlane = face.plane();
 
-		var returnValue = this.collisionOfEdgeAndPlane(edge, facePlane);
+		collision = this.collisionOfEdgeAndPlane
+		(
+			edge, facePlane, collision
+		);
 
-		if (returnValue != null)
+		if (collision.isActive)
 		{
-			var faceVertices = face.vertices;
+			var isWithinFace = face.containsPoint
+			(
+				collision.pos
+			);
 
-			var faceEdgeAsPlane = new Plane(new Coords());
-			var faceNormal = facePlane.normal;
-			var faceVertexPlusFaceNormal = new Coords();
+			collision.isActive = isWithinFace;
 
-			var faceVertexPrev = faceVertices[faceVertices.length - 1];
-			for (var i = 0; i < faceVertices.length; i++)
+			if (isWithinFace)
 			{
-				var faceVertex = faceVertices[i];
-				faceVertexPlusFaceNormal.overwriteWith
-				(
-					faceVertex
-				).add
-				(
-					faceNormal
-				);
-				faceEdgeAsPlane.fromPoints
-				(
-					// Order matters!
-					faceVertex, faceVertexPrev, faceVertexPlusFaceNormal
-				);
-
-				var hemispace = new Hemispace(faceEdgeAsPlane);
-				var doEdgeAndHemispaceCollide = this.doEdgeAndHemispaceCollide(edge, hemispace);
-				if (doEdgeAndHemispaceCollide == false)
-				{
-					returnValue = null;
-					break;
-				}
-
-				faceVertexPrev = faceVertex;
+				var colliders = collision.colliders;
+				colliders.push(face);
+				colliders.Face = face;
 			}
 		}
 
-		if (returnValue != null)
-		{
-			returnValue.colliders.Face = face;
-		}
-
-		return returnValue;
+		return collision;
 	};
 
 	CollisionHelper.prototype.collisionsOfEdgeAndMesh = function(edge, mesh, collisions, stopAfterFirst)
@@ -730,18 +722,24 @@ function CollisionHelper()
 
 		var returnValue = collision;
 
+		var edgeVertex0 = edge.vertices[0];
 		var edgeDirection = edge.direction();
+
 		var planeNormal = plane.normal;
 
 		var distanceToCollision =
 			(
 				plane.distanceFromOrigin
-				- planeNormal.dotProduct(edge.vertices[0])
+				- planeNormal.dotProduct(edgeVertex0)
 			)
 			/ planeNormal.dotProduct(edgeDirection);
 
-		if (distanceToCollision >= 0 && distanceToCollision <= edge.length())
+		var edgeLength = edge.length();
+
+		if (distanceToCollision >= 0 && distanceToCollision <= edgeLength)
 		{
+			collision.isActive = true;
+
 			collision.pos.overwriteWith
 			(
 				edgeDirection
@@ -752,9 +750,15 @@ function CollisionHelper()
 			(
 				edge.vertices[0]
 			);
+
 			collision.distanceToCollision = distanceToCollision;
-			returnValue.colliders.length = 0;
-			returnValue.colliders.push(plane);
+
+			var colliders = returnValue.colliders;
+			colliders.length = 0;
+			colliders.push(edge);
+			colliders.Edge = edge;
+			colliders.push(plane);
+			colliders.Plane = plane;
 		}
 
 		return returnValue;
@@ -949,9 +953,9 @@ function CollisionHelper()
 		return returnValue;
 	};
 
-	CollisionHelper.prototype.doEdgeAndFaceCollide = function(edge, face)
+	CollisionHelper.prototype.doEdgeAndFaceCollide = function(edge, face, collision)
 	{
-		return (this.collisionOfEdgeAndFace(edge, face) != null);
+		return (this.collisionOfEdgeAndFace(edge, face, collision).isActive);
 	};
 
 	CollisionHelper.prototype.doEdgeAndHemispaceCollide = function(edge, hemispace)

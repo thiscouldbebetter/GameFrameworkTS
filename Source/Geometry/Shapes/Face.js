@@ -16,22 +16,44 @@ function Face(vertices)
 
 	Face.prototype.containsPoint = function(pointToCheck)
 	{
-		var returnValue = true;
+		var face = this;
 
-		var edges = this.edges();
-		var normal = this.plane.normal;
+		var faceNormal = face.plane().normal;
+
+		var displacementFromVertex0ToCollision = new Coords();
+
+		var isPosWithinAllEdgesOfFaceSoFar = true;
+
+		var edges = face.edges();
 		for (var e = 0; e < edges.length; e++)
 		{
-			var edge = edges[e];
-			var distanceAlongTransverse = edge.transverse(normal).dotProduct(pointToCheck);
-			var isPointWithinEdge = (distanceAlongTransverse > 0);
-			if (isPointWithinEdge == false)
+			var edgeFromFace = edges[e];
+			var edgeFromFaceVertex0 = edgeFromFace.vertices[0];
+
+			displacementFromVertex0ToCollision.overwriteWith
+			(
+				pointToCheck
+			).subtract
+			(
+				edgeFromFaceVertex0
+			);
+
+			var edgeFromFaceTransverse = edgeFromFace.transverse(faceNormal);
+
+			var displacementProjectedAlongEdgeTransverse =
+				displacementFromVertex0ToCollision.dotProduct
+				(
+					edgeFromFaceTransverse
+				);
+
+			if (displacementProjectedAlongEdgeTransverse > 0)
 			{
-				returnValue = false;
+				isPosWithinAllEdgesOfFaceSoFar = false;
 				break;
 			}
 		}
-		return returnValue;
+
+		return isPosWithinAllEdgesOfFaceSoFar;
 	};
 
 	Face.prototype.edges = function()
@@ -53,6 +75,11 @@ function Face(vertices)
 		}
 
 		return this._edges;
+	};
+
+	Face.prototype.equals = function(other)
+	{
+		return this.vertices.equals(other.vertices);
 	};
 
 	Face.prototype.plane = function()

@@ -116,6 +116,29 @@ function ArrayExtensions()
 		return (this.indexOf(elementToFind) >= 0);
 	};
 
+	Array.prototype.equals = function(other)
+	{
+		var areEqualSoFar;
+
+		if (this.length != other.length)
+		{
+			areEqualSoFar = false;
+		}
+		else
+		{
+			for (var i = 0; i < this.length; i++)
+			{
+				areEqualSoFar = this[i].equals(other[i]);
+				if (areEqualSoFar == false)
+				{
+					break;
+				}
+			}
+		}
+
+		return areEqualSoFar;
+	};
+
 	Array.prototype.insertElementAfterOther = function(elementToInsert, other)
 	{
 		var index = this.indexOf(other);

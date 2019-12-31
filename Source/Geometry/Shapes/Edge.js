@@ -23,6 +23,11 @@ function Edge(vertices)
 		return this._direction.overwriteWith(this.displacement()).normalize();
 	};
 
+	Edge.prototype.equals = function(other)
+	{
+		return this.vertices.equals(other.vertices);
+	};
+
 	Edge.prototype.displacement = function()
 	{
 		return this._displacement.overwriteWith(this.vertices[1]).subtract(this.vertices[0]);
