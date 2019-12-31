@@ -690,7 +690,7 @@ function CollisionHelper()
 
 		if (returnValue != null)
 		{
-			returnValue.collider = face;
+			returnValue.colliders.Face = face;
 		}
 
 		return returnValue;

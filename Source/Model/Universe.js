@@ -8,7 +8,12 @@ function Universe(name, version, timerHelper, display, mediaLibrary, world)
 	this.mediaLibrary = mediaLibrary;
 	this.world = world;
 
+	this.collisionHelper = new CollisionHelper();
+	this.controlBuilder = new ControlBuilder([ControlStyle.Instances().Default]);
+	this.idHelper = IDHelper.Instance();
+	this.platformHelper = new PlatformHelper();
 	this.randomizer = new RandomizerSystem();
+	this.serializer = new Serializer();
 
 	this.venueNext = null;
 }
@@ -51,12 +56,7 @@ function Universe(name, version, timerHelper, display, mediaLibrary, world)
 
 	Universe.prototype.initialize_MediaLibraryLoaded = function(callback)
 	{
-		this.collisionHelper = new CollisionHelper();
-		this.controlBuilder = new ControlBuilder([ControlStyle.Instances().Default]);
-		this.idHelper = IDHelper.Instance();
-		this.platformHelper = new PlatformHelper();
 		this.platformHelper.initialize(this);
-		this.serializer = new Serializer();
 		this.storageHelper = new StorageHelper
 		(
 			this.name.replaceAll(" ", "_") + "_",
