@@ -1,7 +1,6 @@
 
-function Defns(constraintDefns, itemDefns, placeDefns)
+function Defns(itemDefns, placeDefns)
 {
-	this.constraintDefns = constraintDefns.addLookupsByName();
 	this.itemDefns = itemDefns.addLookupsByName();
 	this.placeDefns = placeDefns.addLookupsByName();
 }

@@ -24,8 +24,6 @@ function World(name, dateCreated, defns, places)
 		var now = DateTime.now();
 		var nowAsString = now.toStringMMDD_HHMM_SS();
 
-		var constraintDefns = ConstraintDefn.Instances()._All;
-
 		// PlaceDefns.
 
 		var coordsInstances = Coords.Instances();
@@ -180,7 +178,7 @@ function World(name, dateCreated, defns, places)
 			)
 		];
 
-		var defns = new Defns(constraintDefns, itemDefns, placeDefns);
+		var defns = new Defns(itemDefns, placeDefns);
 
 		var displaySize = universe.display.sizeInPixels;
 		var cameraViewSize = displaySize.clone();

@@ -41,7 +41,7 @@ function PlaceBuilderDemo()
 			var numberOfKeysToUnlockGoal = 5;
 			var numberOfObstacles = 48;
 
-			var constraintSpeedMax1 = new Constraint("SpeedMax", 1);
+			var constraintSpeedMax1 = new Constraint_SpeedMax(1);
 			this.entityBuildFriendly
 			(
 				entities, entityDimension, constraintSpeedMax1, visualEyesBlinking
@@ -112,8 +112,6 @@ function PlaceBuilderDemo()
 			cameraLoc
 		);
 
-		var constraintDefns = ConstraintDefn.Instances();
-
 		var cameraEntity = new Entity
 		(
 			Camera.name,
@@ -121,11 +119,8 @@ function PlaceBuilderDemo()
 				camera,
 				new Constrainable
 				([
-					new Constraint(constraintDefns.AttachToEntityWithName.name, "Player"),
-					new Constraint
-					(
-						constraintDefns.ContainInBox.name, cameraPosBox
-					)
+					new Constraint_AttachToEntityWithName("Player"),
+					new Constraint_ContainInBox(cameraPosBox)
 				]),
 				new Locatable(cameraLoc)
 			]
@@ -1412,8 +1407,8 @@ function PlaceBuilderDemo()
 			}
 		};
 
-		var constraintSpeedMax5 = new Constraint("SpeedMax", 5);
-		var constraintFriction = new Constraint("Friction", .03);
+		var constraintSpeedMax5 = new Constraint_SpeedMax(5);
+		var constraintFriction = new Constraint_Friction(.03);
 		var constrainable = new Constrainable([constraintFriction, constraintSpeedMax5]);
 
 		var equipmentSocketDefnGroup = new EquipmentSocketDefnGroup
