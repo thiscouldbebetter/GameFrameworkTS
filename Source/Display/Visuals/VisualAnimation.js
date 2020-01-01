@@ -36,44 +36,26 @@ function VisualAnimation(name, ticksToHoldFrames, frames, isRepeating)
 
 	VisualAnimation.prototype.draw = function(universe, world, display, drawable, entity)
 	{
-		if (drawable.animationRuns == null)
-		{
-			drawable.animationRuns = {};
-		}
-
-		var animationRun = drawable.animationRuns[this.name];
-		if (animationRun == null)
-		{
-			animationRun = new AnimationRun(this);
-			drawable.animationRuns[this.name] = animationRun;
-		}
-		animationRun.update(universe, world, display, drawable, entity);
+		this.update(universe, world, display, drawable, entity);
 	};
-}
 
-function AnimationRun(defn)
-{
-	this.defn = defn;
-	this.ticksSinceStarted = Math.floor(Math.random() * this.defn.ticksToComplete);
-}
-{
-	AnimationRun.prototype.frameCurrent = function()
+	VisualAnimation.prototype.frameCurrent = function(drawable)
 	{
-		var frameIndexCurrent = this.frameIndexCurrent();
-		var frameCurrent = this.defn.frames[frameIndexCurrent];
+		var frameIndexCurrent = this.frameIndexCurrent(drawable);
+		var frameCurrent = this.frames[frameIndexCurrent];
 		return frameCurrent;
 	};
 
-	AnimationRun.prototype.frameIndexCurrent = function()
+	VisualAnimation.prototype.frameIndexCurrent = function(drawable)
 	{
 		var ticksForFramesSoFar = 0;
+		var ticksToHoldFrames = this.ticksToHoldFrames;
 		var f = 0;
-		var ticksToHoldFrames = this.defn.ticksToHoldFrames;
 		for (f = 0; f < ticksToHoldFrames.length; f++)
 		{
 			var ticksToHoldFrame = ticksToHoldFrames[f];
 			ticksForFramesSoFar += ticksToHoldFrame;
-			if (ticksForFramesSoFar >= this.ticksSinceStarted)
+			if (ticksForFramesSoFar >= drawable.ticksSinceStarted)
 			{
 				break;
 			}
@@ -81,31 +63,38 @@ function AnimationRun(defn)
 		return f;
 	};
 
-	AnimationRun.prototype.isComplete = function()
+	VisualAnimation.prototype.isComplete = function(drawable)
 	{
-		var returnValue = (this.ticksSinceStarted >= this.defn.ticksToComplete);
+		var returnValue = (drawable.ticksSinceStarted >= this.ticksToComplete);
 		return returnValue;
 	};
 
-	AnimationRun.prototype.update = function(universe, world, display, drawable, entity)
+	VisualAnimation.prototype.update = function(universe, world, display, drawable, entity)
 	{
-		var frameCurrent = this.frameCurrent();
-		frameCurrent.draw(universe, world, display, drawable, entity);
-
-		this.ticksSinceStarted++;
-
-		if (this.isComplete())
+		if (drawable.ticksSinceStarted == null)
 		{
-			if (this.defn.isRepeating)
+			drawable.ticksSinceStarted = Math.floor(Math.random() * this.ticksToComplete);
+		}
+		else
+		{
+			drawable.ticksSinceStarted++;
+		}
+
+		if (this.isComplete(drawable))
+		{
+			if (this.isRepeating)
 			{
-				this.ticksSinceStarted =
-					this.ticksSinceStarted.wrapToRangeMinMax(0, this.defn.ticksToComplete);
+				drawable.ticksSinceStarted =
+					drawable.ticksSinceStarted.wrapToRangeMinMax(0, this.ticksToComplete);
 			}
 			else
 			{
-				this.ticksSinceStarted =
-					this.ticksSinceStarted.trimToRangeMax(this.defn.ticksToComplete - 1);
+				drawable.ticksSinceStarted =
+					drawable.ticksSinceStarted.trimToRangeMax(this.ticksToComplete - 1);
 			}
 		}
+
+		var frameCurrent = this.frameCurrent(drawable);
+		frameCurrent.draw(universe, world, display, drawable, entity);
 	};
 }
