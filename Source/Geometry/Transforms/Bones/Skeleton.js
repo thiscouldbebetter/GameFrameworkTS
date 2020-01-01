@@ -33,7 +33,7 @@ function Skeleton(name, boneRoot)
 
 	// cloneable
 
-	Skeleton.prototype.clone = function(other)
+	Skeleton.prototype.clone = function()
 	{
 		return new Skeleton
 		(

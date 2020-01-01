@@ -9,9 +9,14 @@ function Transform_Translate(displacement)
 	{
 		this.displacement.overwriteWith(value);
 		return this;
-	}
+	};
 
 	// transform
+
+	Transform_Translate.prototype.transform = function(transformable)
+	{
+		return transformable.transform(this);
+	};
 
 	Transform_Translate.prototype.transformCoords = function(coordsToTransform)
 	{
