@@ -230,8 +230,7 @@ function CollisionHelper()
 		)[0];
 
 		return returnValue;
-	}
-
+	};
 
 	CollisionHelper.prototype.collisionsOfEntitiesCollidableInSets = function(entitiesCollidable0, entitiesCollidable1)
 	{
@@ -699,10 +698,12 @@ function CollisionHelper()
 		for (var i = 0; i < meshFaces.length; i++)
 		{
 			var meshFace = meshFaces[i];
-			var collisionOfEdgeAndFace = this.collisionOfEdgeAndFace(edge, meshFace);
-			if (collisionOfEdgeAndFace != null)
+			var collision = this.collisionOfEdgeAndFace(edge, meshFace);
+			if (collision != null && collision.isActive)
 			{
-				collisions.push(collisionOfEdgeAndFace);
+				collision.colliders.push(mesh);
+				collision.colliders.Mesh = mesh;
+				collisions.push(collision);
 				if (stopAfterFirst)
 				{
 					break;
@@ -727,38 +728,44 @@ function CollisionHelper()
 
 		var planeNormal = plane.normal;
 
-		var distanceToCollision =
-			(
-				plane.distanceFromOrigin
-				- planeNormal.dotProduct(edgeVertex0)
-			)
-			/ planeNormal.dotProduct(edgeDirection);
+		var edgeDirectionDotPlaneNormal = edgeDirection.dotProduct(planeNormal);
+		var doesEdgeGoTowardPlane = (edgeDirectionDotPlaneNormal < 0);
 
-		var edgeLength = edge.length();
-
-		if (distanceToCollision >= 0 && distanceToCollision <= edgeLength)
+		if (doesEdgeGoTowardPlane)
 		{
-			collision.isActive = true;
+			var distanceToCollision =
+				(
+					plane.distanceFromOrigin
+					- planeNormal.dotProduct(edgeVertex0)
+				)
+				/ planeNormal.dotProduct(edgeDirection);
 
-			collision.pos.overwriteWith
-			(
-				edgeDirection
-			).multiplyScalar
-			(
-				distanceToCollision
-			).add
-			(
-				edge.vertices[0]
-			);
+			var edgeLength = edge.length();
 
-			collision.distanceToCollision = distanceToCollision;
+			if (distanceToCollision >= 0 && distanceToCollision <= edgeLength)
+			{
+				collision.isActive = true;
 
-			var colliders = returnValue.colliders;
-			colliders.length = 0;
-			colliders.push(edge);
-			colliders.Edge = edge;
-			colliders.push(plane);
-			colliders.Plane = plane;
+				collision.pos.overwriteWith
+				(
+					edgeDirection
+				).multiplyScalar
+				(
+					distanceToCollision
+				).add
+				(
+					edge.vertices[0]
+				);
+
+				collision.distanceToCollision = distanceToCollision;
+
+				var colliders = returnValue.colliders;
+				colliders.length = 0;
+				colliders.push(edge);
+				colliders.Edge = edge;
+				colliders.push(plane);
+				colliders.Plane = plane;
+			}
 		}
 
 		return returnValue;
