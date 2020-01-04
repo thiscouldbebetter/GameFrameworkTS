@@ -98,4 +98,25 @@ function Face(vertices)
 
 		return this._plane;
 	};
+
+	// Cloneable.
+
+	Face.prototype.clone = function()
+	{
+		return new Face(this.vertices.clone());
+	};
+
+	Face.prototype.overwriteWith = function(other)
+	{
+		this.vertices.overwriteWith(other.vertices);
+		return this;
+	};
+
+	// Transformable.
+
+	Face.prototype.transform = function(transformToApply)
+	{
+		Transform.applyTransformToCoordsMany(transformToApply, this.vertices);
+		return this;
+	};
 }

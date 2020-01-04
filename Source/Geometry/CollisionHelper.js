@@ -658,6 +658,75 @@ function CollisionHelper()
 		return collision;
 	};
 
+	CollisionHelper.prototype.collisionOfEdgeAndEdge = function(edge0, edge1, collision)
+	{
+		// 2D
+
+		if (collision == null)
+		{
+			collision = new Collision();
+		}
+		collision.clear();
+
+		var edge0Bounds = edge0.box();
+		var edge1Bounds = edge1.box();
+
+		var doBoundsOverlap = edge0Bounds.overlapsWith(edge1Bounds);
+
+		if (doBoundsOverlap)
+		{
+			var edge0ProjectedOntoEdge1 = edge0.clone().projectOntoOther(edge1);
+			var edgeProjectedVertices = edge0ProjectedOntoEdge1.vertices;
+			var edgeProjectedVertex0 = edgeProjectedVertices[0];
+			var edgeProjectedVertex1 = edgeProjectedVertices[1];
+
+			var doesEdgeCrossLineOfOther =
+				(edgeProjectedVertex0.y > 0 && edgeProjectedVertex1.y <= 0)
+				|| (edgeProjectedVertex0.y <= 0 && edgeProjectedVertex1.y > 0);
+
+			if (doesEdgeCrossLineOfOther)
+			{
+				var edgeProjectedDirection = edge0ProjectedOntoEdge1.direction();
+
+				var distanceAlongEdge0ToLineOfEdge1 =
+					0
+					- edgeProjectedVertex0.y
+					/ edgeProjectedDirection.y;
+
+				var distanceAlongEdge1ToEdge0 =
+					edgeProjectedVertex0.x + edgeProjectedDirection.x * distanceAlongEdge0ToLineOfEdge1;
+
+				var doesEdgeCrossOtherWithinItsExtent =
+				(
+					distanceAlongEdge1ToEdge0 >= 0
+					&& distanceAlongEdge1ToEdge0 <= edge1.length()
+				);
+
+				if (doesEdgeCrossOtherWithinItsExtent)
+				{
+					collision.isActive = true;
+					collision.distanceToCollision = distanceAlongEdge0ToLineOfEdge1;
+					collision.pos.overwriteWith
+					(
+						edge0.direction()
+					).multiplyScalar
+					(
+						distanceAlongEdge0ToLineOfEdge1
+					).add
+					(
+						edge0.vertices[0]
+					);
+					collision.colliders.push(edge1);
+					collision.colliders.Edge = edge1;
+				}
+
+			} // end if (doesEdgeCrossLineOfOther)
+
+		} // end if (doBoundsOverlap)
+
+		return collision;
+	};
+
 	CollisionHelper.prototype.collisionOfEdgeAndFace = function(edge, face, collision)
 	{
 		var facePlane = face.plane();

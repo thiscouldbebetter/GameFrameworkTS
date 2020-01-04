@@ -38,6 +38,28 @@ function Edge(vertices)
 		return this.displacement().magnitude();
 	};
 
+	Edge.prototype.projectOntoOther = function(other)
+	{
+		var otherVertices = other.vertices;
+		var otherVertex0 = otherVertices[0];
+		var otherDirection = other.direction();
+		var otherTransverse = other.transverse(Coords.Instances().ZeroZeroOne);
+
+		for (var i = 0; i < this.vertices.length; i++)
+		{
+			var vertex = this.vertices[i];
+			vertex.subtract(otherVertex0);
+			vertex.overwriteWithDimensions
+			(
+				vertex.dotProduct(otherDirection),
+				vertex.dotProduct(otherTransverse),
+				0
+			);
+		}
+
+		return this;
+	};
+
 	Edge.prototype.transverse = function(faceNormal)
 	{
 		return this._transverse.overwriteWith(this.direction()).crossProduct(faceNormal);
@@ -48,5 +70,17 @@ function Edge(vertices)
 	Edge.prototype.toString = function()
 	{
 		return this.vertices.toString();
+	};
+
+	// Cloneable.
+
+	Edge.prototype.clone = function()
+	{
+		return new Edge(this.vertices.clone());
+	};
+
+	Edge.prototype.overwriteWith = function(other)
+	{
+		return this.vertices.overwriteWith(other.vertices);
 	};
 }
