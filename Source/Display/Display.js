@@ -5,7 +5,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 	this._sizeDefault = this.sizesAvailable[0];
 	this.sizeInPixels = this._sizeDefault;
 	this.fontName = fontName;
-	this.fontHeightInPixels = fontHeightInPixels;
+	this.fontHeightInPixels = fontHeightInPixels || 10;
 	this.colorFore = colorFore;
 	this.colorBack = colorBack;
 
@@ -439,16 +439,18 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 			this.graphics.strokeText(textTrimmed, drawPos.x, drawPos.y);
 		}
 
-		if (colorFill != null)
+		if (colorFill == null)
 		{
-			this.graphics.fillStyle = colorFill;
-			this.graphics.fillText
-			(
-				textTrimmed,
-				drawPos.x,
-				drawPos.y
-			);
+			colorFill = this.colorFore;
 		}
+
+		this.graphics.fillStyle = colorFill;
+		this.graphics.fillText
+		(
+			textTrimmed,
+			drawPos.x,
+			drawPos.y
+		);
 
 		this.graphics.font = fontToRestore;
 	};
