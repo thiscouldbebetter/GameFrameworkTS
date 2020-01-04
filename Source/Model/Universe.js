@@ -8,7 +8,12 @@ function Universe(name, version, timerHelper, display, mediaLibrary, world)
 	this.mediaLibrary = mediaLibrary;
 	this.world = world;
 
+	this.collisionHelper = new CollisionHelper();
+	this.controlBuilder = new ControlBuilder([ControlStyle.Instances().Default]);
+	this.idHelper = IDHelper.Instance();
+	this.platformHelper = new PlatformHelper();
 	this.randomizer = new RandomizerSystem();
+	this.serializer = new Serializer();
 
 	this.venueNext = null;
 }
@@ -41,28 +46,23 @@ function Universe(name, version, timerHelper, display, mediaLibrary, world)
 
 	// instance methods
 
-	Universe.prototype.initialize = function()
+	Universe.prototype.initialize = function(callback)
 	{
-		this.controlBuilder = new ControlBuilder([ControlStyle.Instances().Default]);
-
 		this.mediaLibrary.waitForItemsAllToLoad
 		(
-			this.initialize_MediaLibraryLoaded.bind(this)
+			this.initialize_MediaLibraryLoaded.bind(this, callback)
 		);
 	};
 
-	Universe.prototype.initialize_MediaLibraryLoaded = function()
+	Universe.prototype.initialize_MediaLibraryLoaded = function(callback)
 	{
-		this.collisionHelper = new CollisionHelper();
-		this.idHelper = new IDHelper();
-		this.platformHelper = new PlatformHelper();
 		this.platformHelper.initialize(this);
-		this.serializer = new Serializer();
 		this.storageHelper = new StorageHelper
 		(
 			this.name.replaceAll(" ", "_") + "_",
 			this.serializer
 		);
+
 		this.profileHelper = new ProfileHelper(this.storageHelper);
 
 		this.display.initialize();
@@ -90,13 +90,18 @@ function Universe(name, version, timerHelper, display, mediaLibrary, world)
 		this.inputHelper = new InputHelper();
 		this.inputHelper.initialize(this);
 
-		this.timerHelper.initialize(this.updateForTimerTick.bind(this));
+		callback(this);
 	};
 
 	Universe.prototype.reset = function()
 	{
 		// hack
 		this.soundHelper.reset();
+	};
+
+	Universe.prototype.start = function()
+	{
+		this.timerHelper.initialize(this.updateForTimerTick.bind(this));
 	};
 
 	Universe.prototype.updateForTimerTick = function()

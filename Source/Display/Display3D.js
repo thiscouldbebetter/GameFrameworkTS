@@ -370,9 +370,9 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 		this._display2DOverlay.drawArc(center, radiusInner, radiusOuter, angleStartInTurns, angleStopInTurns, colorFill, colorBorder);
 	};
 
-	Display3D.prototype.drawBackground = function()
+	Display3D.prototype.drawBackground = function(colorBack, colorBorder)
 	{
-		this._display2DOverlay.drawBackground();
+		this._display2DOverlay.drawBackground(colorBack, colorBorder);
 	};
 
 	Display3D.prototype.drawCircle = function(center, radius, colorFill, colorBorder)
@@ -390,9 +390,9 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 		this._display2DOverlay.drawImage(imageToDraw, pos);
 	};
 
-	Display3D.prototype.drawImagePartial = function(imageToDraw, pos, boundsToShow)
+	Display3D.prototype.drawImagePartial = function(imageToDraw, pos, boxToShow)
 	{
-		this._display2DOverlay.drawImagePartial(imageToDraw, pos, boundsToShow);
+		this._display2DOverlay.drawImagePartial(imageToDraw, pos, boxToShow);
 	};
 
 	Display3D.prototype.drawImageScaled = function(imageToDraw, pos, size)

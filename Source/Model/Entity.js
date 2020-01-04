@@ -13,7 +13,7 @@ function Entity(name, properties)
 }
 
 {
-	Entity.prototype.clone = function(universe)
+	Entity.prototype.clone = function()
 	{
 		var propertiesCloned = [];
 		for (var i = 0; i < this.properties.length; i++)
@@ -24,7 +24,7 @@ function Entity(name, properties)
 		}
 		var returnValue = new Entity
 		(
-			this.name + universe.idHelper.idNext(), propertiesCloned
+			this.name + IDHelper.Instance().idNext(), propertiesCloned
 		);
 		return returnValue;
 	};

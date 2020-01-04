@@ -41,5 +41,5 @@ function Sphere(center, radius)
 	Sphere.prototype.coordsGroupToTranslate = function()
 	{
 		return [ this.center ];
-	}
+	};
 }

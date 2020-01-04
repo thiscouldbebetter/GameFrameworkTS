@@ -1,19 +1,24 @@
 
-function RectangleRotated(bounds, angleInTurns)
+function BoxRotated(box, angleInTurns)
 {
-	this.bounds = bounds;
+	this.box = box;
 	this.angleInTurns = angleInTurns;
 }
 {
-	RectangleRotated.prototype.surfaceNormalNearPos = function(posToCheck)
+	BoxRotated.prototype.sphereSwept = function()
+	{
+		return new Sphere(this.box.center, this.box.sizeHalf.magnitude());
+	}
+
+	BoxRotated.prototype.surfaceNormalNearPos = function(posToCheck)
 	{
 		var returnValue = new Coords();
 
 		var plane = new Plane(new Coords(), 0);
 		var polar = new Polar(0, 1);
-		var bounds = this.bounds;
-		var center = bounds.center;
-		var sizeHalf = bounds.sizeHalf;
+		var box = this.box;
+		var center = box.center;
+		var sizeHalf = box.sizeHalf;
 		var displacementToSurface = new Coords();
 		var distanceMinSoFar = Number.POSITIVE_INFINITY;
 
@@ -55,22 +60,22 @@ function RectangleRotated(bounds, angleInTurns)
 
 	// cloneable
 
-	RectangleRotated.prototype.clone = function()
+	BoxRotated.prototype.clone = function()
 	{
-		return new RectangleRotated(this.bounds.clone(), this.angleInTurns);
+		return new BoxRotated(this.box.clone(), this.angleInTurns);
 	}
 
-	RectangleRotated.prototype.overwriteWith = function(other)
+	BoxRotated.prototype.overwriteWith = function(other)
 	{
-		this.bounds.overwriteWith(other.bounds);
+		this.box.overwriteWith(other.box);
 		this.angleInTurns = other.angleInTurns;
 		return this;
 	}
 
 	// transformable
 
-	RectangleRotated.prototype.coordsGroupToTranslate = function()
+	BoxRotated.prototype.coordsGroupToTranslate = function()
 	{
-		return [ this.bounds.center ];
+		return [ this.box.center ];
 	}
 }

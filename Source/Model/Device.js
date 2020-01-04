@@ -17,7 +17,7 @@ function Device(name, ticksToCharge, use)
 		(
 			"Gun",
 			10, // ticksToCharge
-			function use(universe, world, place, actor, device)
+			function use(universe, world, place, actor, entityDevice, device)
 			{
 				if (device.ticksSinceUsed(world) < device.ticksToCharge)
 				{
@@ -25,14 +25,13 @@ function Device(name, ticksToCharge, use)
 				}
 
 				var actorAsItemHolder = actor.ItemHolder;
-				var itemAmmo1 = new Item("Ammo", 1);
-				var hasAmmo = actorAsItemHolder.hasItem(itemAmmo1);
+				var hasAmmo = actorAsItemHolder.hasItemWithDefnNameAndQuantity("Ammo", 1);
 				if (hasAmmo == false)
 				{
 					return;
 				}
 
-				actorAsItemHolder.itemSubtract(itemAmmo1);
+				actorAsItemHolder.itemSubtractDefnNameAndQuantity("Ammo", 1);
 
 				device.tickLastUsedUpdate(world);
 
@@ -81,20 +80,49 @@ function Device(name, ticksToCharge, use)
 				var projectileCollider =
 					new Sphere(new Coords(0, 0), projectileRadius);
 
-				var projectileCollide = function(universe, world, place, entityPlayer, entityOther)
+				var projectileCollide = function(universe, world, place, entityProjectile, entityOther)
 				{
-					if (entityOther.Killable != null)
+					var killable = entityOther.Killable;
+					if (killable != null)
 					{
-						place.entitiesToRemove.push(entityOther);
+						killable.damageApply
+						(
+							universe, world, place, entityProjectile, entityOther
+						);
+						entityProjectile.Killable.integrity = 0;
 					}
 				};
+
+				var visualExplosion = new VisualCamera
+				(
+					new VisualCircle(8, "Red"),
+					(u, w) => w.placeCurrent.camera()
+				);
+				var killable = new Killable
+				(
+					1, // integrityMax
+					function die(universe, world, place, entityKillable)
+					{
+						var entityExplosion = new Entity
+						(
+							"Explosion",
+							[
+								new Ephemeral(8),
+								new Drawable(visualExplosion),
+								entityKillable.Locatable
+							]
+						);
+						place.entitiesToSpawn.push(entityExplosion);
+					}
+				);
 
 				var projectileEntity = new Entity
 				(
 					"Projectile",
 					[
-						new Damager(1),
+						new Damager(10),
 						new Ephemeral(32),
+						killable,
 						new Locatable( projectileLoc ),
 						new Collidable
 						(

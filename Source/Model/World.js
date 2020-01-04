@@ -24,8 +24,6 @@ function World(name, dateCreated, defns, places)
 		var now = DateTime.now();
 		var nowAsString = now.toStringMMDD_HHMM_SS();
 
-		var constraintDefns = ConstraintDefn.Instances()._All;
-
 		// PlaceDefns.
 
 		var coordsInstances = Coords.Instances();
@@ -34,26 +32,17 @@ function World(name, dateCreated, defns, places)
 
 		var entityAccelerateInDirection = function
 		(
-			world, entity, directionToMove
+			universe, world, place, entity, directionToMove
 		)
 		{
-			var entityLoc = entity.Locatable.loc;
-
-			entityLoc.orientation.forwardSet(directionToMove);
-			var vel = entityLoc.vel;
-			if (vel.equals(directionToMove) == false)
-			{
-				entityLoc.timeOffsetInTicks = world.timerTicksSoFar;
-			}
-			entityLoc.accel.overwriteWith(directionToMove).multiplyScalar
-			(
-				.5 // hack
-			);
+			entity.Locatable.loc.orientation.forwardSet(directionToMove);
+			entity.Movable.accelerate(universe, world, place, entity);
 		};
 
 		var actions =
 		[
 			actionsAll.DoNothing,
+			actionsAll.ShowEquipment,
 			actionsAll.ShowItems,
 			actionsAll.ShowMenu,
 			new Action
@@ -63,7 +52,7 @@ function World(name, dateCreated, defns, places)
 				{
 					entityAccelerateInDirection
 					(
-						world, actor, coordsInstances.ZeroOneZero
+						universe, world, place, actor, coordsInstances.ZeroOneZero
 					);
 				}
 			),
@@ -74,7 +63,7 @@ function World(name, dateCreated, defns, places)
 				{
 					entityAccelerateInDirection
 					(
-						world, actor, coordsInstances.MinusOneZeroZero
+						universe, world, place, actor, coordsInstances.MinusOneZeroZero
 					);
 				}
 			),
@@ -85,7 +74,7 @@ function World(name, dateCreated, defns, places)
 				{
 					entityAccelerateInDirection
 					(
-						world, actor, coordsInstances.OneZeroZero
+						universe, world, place, actor, coordsInstances.OneZeroZero
 					);
 				}
 			),
@@ -96,7 +85,7 @@ function World(name, dateCreated, defns, places)
 				{
 					entityAccelerateInDirection
 					(
-						world, actor, coordsInstances.ZeroMinusOneZero
+						universe, world, place, actor, coordsInstances.ZeroMinusOneZero
 					);
 				}
 			),
@@ -105,15 +94,14 @@ function World(name, dateCreated, defns, places)
 				"Fire",
 				function perform(universe, world, place, actor)
 				{
-					var itemWeapon = new Item("Weapon", 1);
-					var itemHolder = actor.ItemHolder;
-					var actorHasWeapon = itemHolder.hasItem(itemWeapon);
+					var equippable = actor.Equippable;
+					var entityWeaponEquipped = equippable.socketGroup.sockets["Weapon"].itemEntityEquipped;
+					var actorHasWeaponEquipped = (entityWeaponEquipped != null);
 
-					if (actorHasWeapon)
+					if (actorHasWeaponEquipped)
 					{
-						var entityWeapon = itemHolder.itemEntities["Weapon"];
-						var deviceWeapon = entityWeapon.Device;
-						deviceWeapon.use(universe, world, place, actor, deviceWeapon);
+						var deviceWeapon = entityWeaponEquipped.Device;
+						deviceWeapon.use(universe, world, place, actor, entityWeaponEquipped, deviceWeapon);
 					}
 				}
 			),
@@ -123,14 +111,15 @@ function World(name, dateCreated, defns, places)
 
 		var actionToInputsMappings =
 		[
-			new ActionToInputsMapping("ShowMenu", [inputNames.Escape]),
-			new ActionToInputsMapping("ShowItems", [inputNames.Tab]),
+			new ActionToInputsMapping("ShowMenu", [ inputNames.Escape ]),
+			new ActionToInputsMapping("ShowItems", [ inputNames.Tab ]),
+			new ActionToInputsMapping("ShowEquipment", [ "`" ]),
 
-			new ActionToInputsMapping("MoveDown", [inputNames.ArrowDown, "Gamepad0Down"]),
-			new ActionToInputsMapping("MoveLeft", [inputNames.ArrowLeft, "Gamepad0Left"]),
-			new ActionToInputsMapping("MoveRight", [inputNames.ArrowRight, "Gamepad0Right"]),
-			new ActionToInputsMapping("MoveUp", [inputNames.ArrowUp, "Gamepad0Up"]),
-			new ActionToInputsMapping("Fire", [inputNames.Enter, "Gamepad0Button0"]),
+			new ActionToInputsMapping("MoveDown", [ inputNames.ArrowDown, "Gamepad0Down" ]),
+			new ActionToInputsMapping("MoveLeft", [ inputNames.ArrowLeft, "Gamepad0Left" ]),
+			new ActionToInputsMapping("MoveRight", [ inputNames.ArrowRight, "Gamepad0Right" ]),
+			new ActionToInputsMapping("MoveUp", [ inputNames.ArrowUp, "Gamepad0Up" ]),
+			new ActionToInputsMapping("Fire", [ inputNames.Enter, "Gamepad0Button0" ]),
 		];
 
 		var placeDefnDemo = new PlaceDefn
@@ -142,18 +131,69 @@ function World(name, dateCreated, defns, places)
 
 		var placeDefns = [ placeDefnDemo ]; // todo
 
-		var defns = new Defns(constraintDefns, placeDefns);
+		var itemUseEquip = function (universe, world, place, entityUser, entityItem, item)
+		{
+			var equippable = entityUser.Equippable;
+			var message = equippable.equipEntityWithItem
+			(
+				universe, world, place, entityUser, entityItem, item
+			);
+			return message;
+		};
+
+		var itemDefns =
+		[
+			new ItemDefn("Ammo"),
+			ItemDefn.fromNameCategoryNameAndUse
+			(
+				"Armor",
+				"Armor", // categoryName
+				itemUseEquip
+			),
+			new ItemDefn("Coin"),
+			new ItemDefn("Key"),
+			ItemDefn.fromNameAndUse
+			(
+				"Medicine",
+				function use(universe, world, place, entityUser, entityItem, item)
+				{
+					var integrityToRestore = 10;
+					entityUser.Killable.integrityAdd(integrityToRestore);
+					entityUser.ItemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
+					var message = "The medicine restores " + integrityToRestore + " points.";
+					return message;
+				}
+			),
+			ItemDefn.fromNameCategoryNameAndUse
+			(
+				"Speed Booster",
+				"Accessory", // categoryName
+				itemUseEquip
+			),
+			ItemDefn.fromNameCategoryNameAndUse
+			(
+				"Weapon",
+				"Weapon", // categoryName
+				itemUseEquip
+			)
+		];
+
+		var defns = new Defns(itemDefns, placeDefns);
 
 		var displaySize = universe.display.sizeInPixels;
 		var cameraViewSize = displaySize.clone();
 		var placeBuilder = new PlaceBuilderDemo();
+
+		var randomizer = null; // Use default.
 
 		var placeMain = placeBuilder.build
 		(
 			"Battlefield",
 			displaySize.clone().double(), // size
 			cameraViewSize,
-			null // placeNameToReturnTo
+			null, // placeNameToReturnTo
+			randomizer,
+			itemDefns
 		);
 
 		var placeBase = placeBuilder.build
@@ -161,7 +201,9 @@ function World(name, dateCreated, defns, places)
 			"Base",
 			displaySize.clone(), // size
 			cameraViewSize,
-			placeMain.name // placeNameToReturnTo
+			placeMain.name, // placeNameToReturnTo
+			randomizer,
+			itemDefns
 		);
 
 		var places = [ placeMain, placeBase ];

@@ -5,6 +5,11 @@ function Transform_Orient(orientation)
 }
 
 {
+	Transform_Orient.prototype.transform = function(transformable)
+	{
+		return transformable.transform(this);
+	};
+
 	Transform_Orient.prototype.transformCoords = function(coordsToTransform)
 	{
 		coordsToTransform.overwriteWithDimensions

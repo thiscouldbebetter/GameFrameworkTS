@@ -4,34 +4,56 @@ function Face(vertices)
 	this.vertices = vertices;
 }
 {
-	Face.prototype.bounds = function()
+	Face.prototype.box = function()
 	{
-		if (this._bounds == null)
+		if (this._box == null)
 		{
-			this._bounds = new Bounds(new Coords(0, 0, 0), new Coords(0, 0, 0));
+			this._box = new Box(new Coords(0, 0, 0), new Coords(0, 0, 0));
 		}
-		this._bounds.ofPoints(this.vertices);
-		return this._bounds;
+		this._box.ofPoints(this.vertices);
+		return this._box;
 	};
 
 	Face.prototype.containsPoint = function(pointToCheck)
 	{
-		var returnValue = true;
+		var face = this;
 
-		var edges = this.edges();
-		var normal = this.plane.normal;
+		var faceNormal = face.plane().normal;
+
+		var displacementFromVertex0ToCollision = new Coords();
+
+		var isPosWithinAllEdgesOfFaceSoFar = true;
+
+		var edges = face.edges();
 		for (var e = 0; e < edges.length; e++)
 		{
-			var edge = edges[e];
-			var distanceAlongTransverse = edge.transverse(normal).dotProduct(pointToCheck);
-			var isPointWithinEdge = (distanceAlongTransverse > 0);
-			if (isPointWithinEdge == false)
+			var edgeFromFace = edges[e];
+			var edgeFromFaceVertex0 = edgeFromFace.vertices[0];
+
+			displacementFromVertex0ToCollision.overwriteWith
+			(
+				pointToCheck
+			).subtract
+			(
+				edgeFromFaceVertex0
+			);
+
+			var edgeFromFaceTransverse = edgeFromFace.transverse(faceNormal);
+
+			var displacementProjectedAlongEdgeTransverse =
+				displacementFromVertex0ToCollision.dotProduct
+				(
+					edgeFromFaceTransverse
+				);
+
+			if (displacementProjectedAlongEdgeTransverse > 0)
 			{
-				returnValue = false;
+				isPosWithinAllEdgesOfFaceSoFar = false;
 				break;
 			}
 		}
-		return returnValue;
+
+		return isPosWithinAllEdgesOfFaceSoFar;
 	};
 
 	Face.prototype.edges = function()
@@ -55,6 +77,11 @@ function Face(vertices)
 		return this._edges;
 	};
 
+	Face.prototype.equals = function(other)
+	{
+		return this.vertices.equals(other.vertices);
+	};
+
 	Face.prototype.plane = function()
 	{
 		if (this._plane == null)
@@ -70,5 +97,26 @@ function Face(vertices)
 		);
 
 		return this._plane;
+	};
+
+	// Cloneable.
+
+	Face.prototype.clone = function()
+	{
+		return new Face(this.vertices.clone());
+	};
+
+	Face.prototype.overwriteWith = function(other)
+	{
+		this.vertices.overwriteWith(other.vertices);
+		return this;
+	};
+
+	// Transformable.
+
+	Face.prototype.transform = function(transformToApply)
+	{
+		Transform.applyTransformToCoordsMany(transformToApply, this.vertices);
+		return this;
 	};
 }

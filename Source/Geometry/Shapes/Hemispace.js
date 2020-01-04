@@ -9,7 +9,7 @@ function Hemispace(plane)
 		var distanceOfPointAbovePlane = 
 			pointToCheck.dotProduct(this.plane.normal) 
 			- this.plane.distanceFromOrigin;
-		var returnValue = (distanceOfPointAbovePlane > 0);
+		var returnValue = (distanceOfPointAbovePlane >= 0);
 		return returnValue;
 	};
 }

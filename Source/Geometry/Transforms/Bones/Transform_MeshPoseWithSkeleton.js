@@ -3,15 +3,15 @@ function Transform_MeshPoseWithSkeleton
 (
 	meshAtRest,
 	skeletonAtRest,
-	skeletonPosed,
-	boneInfluences
+	boneInfluences,
+	skeletonPosed
 )
 {
 	this.meshAtRest = meshAtRest;
 	this.skeletonAtRest = skeletonAtRest;
-	this.skeletonPosed = skeletonPosed;
+	this.skeletonPosed = skeletonPosed || this.skeletonAtRest.clone();
 	this.boneInfluences = boneInfluences;
-	this.boneInfluences.addLookups( function(x) { return x.boneName; } );
+	this.boneInfluences.addLookups( x => x.boneName );
 
 	// Helper variables.
 	this._orientation = new Orientation(new Coords(), new Coords());
@@ -19,6 +19,11 @@ function Transform_MeshPoseWithSkeleton
 }
 
 {
+	Transform_MeshPoseWithSkeleton.prototype.transform = function(transformable)
+	{
+		return this.transformMesh(transformable);
+	};
+
 	Transform_MeshPoseWithSkeleton.prototype.transformMesh = function(meshToPose)
 	{
 		var meshAtRestVertices = this.meshAtRest.geometry.vertexOffsets;

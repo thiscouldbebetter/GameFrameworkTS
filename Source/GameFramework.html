@@ -62,7 +62,6 @@
 <script type="text/javascript" src="Geometry/CollisionHelper.js"></script>
 <script type="text/javascript" src="Geometry/CollisionTracker.js"></script>
 <script type="text/javascript" src="Geometry/Constraint.js"></script>
-<script type="text/javascript" src="Geometry/ConstraintDefn.js"></script>
 <script type="text/javascript" src="Geometry/Coords.js"></script>
 <script type="text/javascript" src="Geometry/Location.js"></script>
 <script type="text/javascript" src="Geometry/Orientation.js"></script>
@@ -72,7 +71,8 @@
 <script type="text/javascript" src="Geometry/Rotation.js"></script>
 
 <script type="text/javascript" src="Geometry/Shapes/Arc.js"></script>
-<script type="text/javascript" src="Geometry/Shapes/Bounds.js"></script>
+<script type="text/javascript" src="Geometry/Shapes/Box.js"></script>
+<script type="text/javascript" src="Geometry/Shapes/BoxRotated.js"></script>
 <script type="text/javascript" src="Geometry/Shapes/Cylinder.js"></script>
 <script type="text/javascript" src="Geometry/Shapes/Edge.js"></script>
 <script type="text/javascript" src="Geometry/Shapes/Face.js"></script>
@@ -80,11 +80,9 @@
 <script type="text/javascript" src="Geometry/Shapes/Map.js"></script>
 <script type="text/javascript" src="Geometry/Shapes/MapCell.js"></script>
 <script type="text/javascript" src="Geometry/Shapes/MapLocated.js"></script>
-<script type="text/javascript" src="Geometry/Shapes/Mesh.js"></script>
 <script type="text/javascript" src="Geometry/Shapes/Path.js"></script>
 <script type="text/javascript" src="Geometry/Shapes/Plane.js"></script>
 <script type="text/javascript" src="Geometry/Shapes/Ray.js"></script>
-<script type="text/javascript" src="Geometry/Shapes/RectangleRotated.js"></script>
 <script type="text/javascript" src="Geometry/Shapes/ShapeContainer.js"></script>
 <script type="text/javascript" src="Geometry/Shapes/ShapeGroupAll.js"></script>
 <script type="text/javascript" src="Geometry/Shapes/ShapeGroupAny.js"></script>
@@ -93,8 +91,12 @@
 <script type="text/javascript" src="Geometry/Shapes/Sphere.js"></script>
 <script type="text/javascript" src="Geometry/Shapes/Wedge.js"></script>
 
+<script type="text/javascript" src="Geometry/Shapes/Meshes/Mesh.js"></script>
+<script type="text/javascript" src="Geometry/Shapes/Meshes/MeshBuilder.js"></script>
+
 <script type="text/javascript" src="Geometry/Transforms/Transform.js"></script>
 <script type="text/javascript" src="Geometry/Transforms/Transform_OrientRDF.js"></script>
+<script type="text/javascript" src="Geometry/Transforms/Transform_Scale.js"></script>
 <script type="text/javascript" src="Geometry/Transforms/Transform_Translate.js"></script>
 
 <script type="text/javascript" src="Input/ActionToInputsMapping.js"></script>
@@ -114,6 +116,7 @@
 
 <script type="text/javascript" src="Model/Action.js"></script>
 <script type="text/javascript" src="Model/Actor.js"></script>
+<script type="text/javascript" src="Model/Boundable.js"></script>
 <script type="text/javascript" src="Model/Collidable.js"></script>
 <script type="text/javascript" src="Model/Constrainable.js"></script>
 <script type="text/javascript" src="Model/Damager.js"></script>
@@ -127,6 +130,7 @@
 <script type="text/javascript" src="Model/Idleable.js"></script>
 <script type="text/javascript" src="Model/Killable.js"></script>
 <script type="text/javascript" src="Model/Locatable.js"></script>
+<script type="text/javascript" src="Model/Movable.js"></script>
 <script type="text/javascript" src="Model/Place.js"></script>
 <script type="text/javascript" src="Model/PlaceBuilderDemo.js"></script>
 <script type="text/javascript" src="Model/PlaceDefn.js"></script>
@@ -142,6 +146,13 @@
 <script type="text/javascript" src="Model/Items/ItemDefn.js"></script>
 <script type="text/javascript" src="Model/Items/ItemHolder.js"></script>
 <script type="text/javascript" src="Model/Items/ItemStore.js"></script>
+
+<script type="text/javascript" src="Model/Items/Equipment/EquipmentSocket.js"></script>
+<script type="text/javascript" src="Model/Items/Equipment/EquipmentSocketDefn.js"></script>
+<script type="text/javascript" src="Model/Items/Equipment/EquipmentSocketDefnGroup.js"></script>
+<script type="text/javascript" src="Model/Items/Equipment/EquipmentSocketGroup.js"></script>
+<script type="text/javascript" src="Model/Items/Equipment/Equippable.js"></script>
+<script type="text/javascript" src="Model/Items/Equipment/ItemCategory.js"></script>
 
 <script type="text/javascript" src="Profiles/Profile.js"></script>
 <script type="text/javascript" src="Profiles/ProfileHelper.js"></script>

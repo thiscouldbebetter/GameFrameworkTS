@@ -238,11 +238,11 @@ function InputHelper()
 	InputHelper.prototype.handleEventMouseDown = function(event)
 	{
 		var canvas = event.target;
-		var canvasBounds = canvas.getBoundingClientRect();
+		var canvasBox = canvas.getBoundingClientRect();
 		this.mouseClickPos.overwriteWithDimensions
 		(
-			event.clientX - canvasBounds.left,
-			event.clientY - canvasBounds.top,
+			event.clientX - canvasBox.left,
+			event.clientY - canvasBox.top,
 			0
 		);
 		this.inputAdd(this.inputNames().MouseClick);
@@ -251,11 +251,11 @@ function InputHelper()
 	InputHelper.prototype.handleEventMouseMove = function(event)
 	{
 		var canvas = event.target;
-		var canvasBounds = canvas.getBoundingClientRect();
+		var canvasBox = canvas.getBoundingClientRect();
 		this.mouseMovePosNext.overwriteWithDimensions
 		(
-			event.clientX - canvasBounds.left,
-			event.clientY - canvasBounds.top,
+			event.clientX - canvasBox.left,
+			event.clientY - canvasBox.top,
 			0
 		);
 
