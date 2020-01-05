@@ -20,7 +20,7 @@ function ActionToInputsMapping(actionName, inputNames, inactivateInputWhenAction
 		}
 
 		return mappings;
-	}
+	};
 
 	ActionToInputsMapping.prototype.action = function(universe)
 	{

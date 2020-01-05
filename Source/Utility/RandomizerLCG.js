@@ -35,5 +35,5 @@ function RandomizerLCG(multiplier, addend, modulus, firstRandom)
 		/ this.modulus;
 
 		return this.currentRandom;
-	}
+	};
 }

@@ -565,7 +565,7 @@ function CollisionHelper()
 		}
 
 		return collision;
-	}
+	};
 
 	CollisionHelper.prototype.collisionOfBoxAndSphere = function(box, sphere, collision, shouldCalculatePos)
 	{
@@ -895,8 +895,7 @@ function CollisionHelper()
 		}
 
 		return collision;
-	}
-
+	};
 
 	// doXAndYCollide
 

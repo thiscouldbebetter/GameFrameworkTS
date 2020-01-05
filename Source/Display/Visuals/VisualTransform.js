@@ -23,7 +23,7 @@ function VisualTransform(transformToApply, child)
 	VisualTransform.prototype.transform = function(transformToApply)
 	{
 		return this.child.transform(transformToApply);
-	}
+	};
 
 	// Visual.
 

@@ -24,13 +24,13 @@ function Location(pos, orientation, placeName)
 	Location.prototype.place = function(world)
 	{
 		return world.places[this.placeName];
-	}
+	};
 
 	Location.prototype.velSet = function(value)
 	{
 		this.vel.overwriteWith(value);
 		return this;
-	}
+	};
 
 	// cloneable
 

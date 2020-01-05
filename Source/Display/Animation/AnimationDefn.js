@@ -89,5 +89,5 @@ function AnimationDefn(name, keyframes)
 				}
 			}
 		}
-	}
+	};
 }

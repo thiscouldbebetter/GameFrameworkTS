@@ -19,7 +19,7 @@ function VisualImageScaled(visualImage, sizeScaled)
 			returnValues.push(visualScaled);
 		}
 		return returnValues;
-	}
+	};
 
 	VisualImageScaled.prototype.draw = function(universe, world, display, drawable, entity)
 	{

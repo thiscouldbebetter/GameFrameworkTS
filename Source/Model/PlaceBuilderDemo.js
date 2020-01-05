@@ -85,7 +85,7 @@ function PlaceBuilderDemo()
 
 		var place = new Place(name, "Demo", size, entities);
 		return place;
-	}
+	};
 
 	// Constructor helpers.
 

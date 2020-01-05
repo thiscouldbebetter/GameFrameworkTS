@@ -19,7 +19,7 @@ function PlaceDefn(name, actions, actionToInputsMappings)
 		).clearLookups();
 
 		this.actionToInputsMappingSelected = null;
-	}
+	};
 
 	PlaceDefn.prototype.actionToInputsMappingsRestoreDefaults = function()
 	{
@@ -35,6 +35,5 @@ function PlaceDefn(name, actions, actionToInputsMappings)
 		(
 			this.actionToInputsMappingsEdited.clone()
 		);
-	}
-
+	};
 }
