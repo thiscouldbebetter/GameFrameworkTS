@@ -1,11 +1,15 @@
 function PlatformHelper()
 {
-	// do nothing
+	// This class is meant to encapsulate interactions with the DOM ("Domain Object Model").
 }
 {
 	PlatformHelper.prototype.platformableAdd = function(platformable)
 	{
-		this.divMain.appendChild(platformable.toDomElement(this));
+		var platformableAsDomElement = platformable.toDomElement(this);
+		if (platformableAsDomElement != null)
+		{
+			this.divMain.appendChild(platformableAsDomElement);
+		}
 	};
 
 	PlatformHelper.prototype.platformableHide = function(platformable)
@@ -21,18 +25,6 @@ function PlatformHelper()
 	PlatformHelper.prototype.platformableShow = function(platformable)
 	{
 		platformable.toDomElement(this).style.display = null;
-	};
-
-	PlatformHelper.prototype.keyAndMouseEventHandlersSet = function
-	(
-		keyDown, keyUp, mouseDown, mouseUp, mouseMove
-	)
-	{
-		document.body.onkeydown = keyDown;
-		document.body.onkeyup = keyUp;
-		this.divMain.onmousedown = mouseDown;
-		this.divMain.onmouseup = mouseUp;
-		this.divMain.onmousemove = mouseMove;
 	};
 
 	PlatformHelper.prototype.initialize = function(universe)

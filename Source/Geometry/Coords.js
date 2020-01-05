@@ -29,6 +29,8 @@ function Coords(x, y, z)
 
 	function Coords_Instances()
 	{
+		this.HalfHalfZero = new Coords(.5, .5, 0);
+		this.Halves = new Coords(.5, .5, .5);
 		this.MinusOneZeroZero = new Coords(-1, 0, 0);
 		this.Ones = new Coords(1, 1, 1);
 		this.OneOneZero = new Coords(1, 1, 0);

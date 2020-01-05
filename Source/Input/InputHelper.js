@@ -17,6 +17,33 @@ function InputHelper()
 }
 
 {
+	InputHelper.prototype.actionsFromInput = function(actions, actionToInputsMappings)
+	{
+		var returnValues = [];
+
+		var inputsPressed = this.inputsPressed;
+		for (var i = 0; i < inputsPressed.length; i++)
+		{
+			var inputPressed = inputsPressed[i];
+			if (inputPressed.isActive)
+			{
+				var mapping = actionToInputsMappings[inputPressed.name];
+				if (mapping != null)
+				{
+					var actionName = mapping.actionName;
+					var action = actions[actionName];
+					returnValues.push(action);
+					if (mapping.inactivateInputWhenActionPerformed)
+					{
+						inputPressed.isActive = false;
+					}
+				}
+			}
+		}
+
+		return returnValues;
+	};
+
 	InputHelper.prototype.inputNames = function()
 	{
 		if (this._inputNames == null)
@@ -47,14 +74,16 @@ function InputHelper()
 
 		this.isMouseMovementTracked = true; // hack
 
-		universe.platformHelper.keyAndMouseEventHandlersSet
-		(
-			this.handleEventKeyDown.bind(this),
-			this.handleEventKeyUp.bind(this),
-			this.handleEventMouseDown.bind(this),
-			this.handleEventMouseUp.bind(this),
-			(this.isMouseMovementTracked ? this.handleEventMouseMove.bind(this) : null)
-		);
+		if (universe == null)
+		{
+			// hack - Allows use of this class
+			// without including PlatformHelper or Universe.
+			this.toDomElement();
+		}
+		else
+		{
+			universe.platformHelper.platformableAdd(this);
+		}
 
 		this.gamepadsCheck();
 	};
@@ -292,4 +321,17 @@ function InputHelper()
 	{
 		return navigator.getGamepads();
 	};
+
+	// Platformable.
+
+	InputHelper.prototype.toDomElement = function(platformHelper)
+	{
+		document.body.onkeydown = this.handleEventKeyDown.bind(this);
+		document.body.onkeyup = this.handleEventKeyUp.bind(this);
+		var divMain = (platformHelper == null ? document.getElementById("divMain") : platformHelper.divMain);
+		divMain.onmousedown = this.handleEventMouseDown.bind(this);
+		divMain.onmouseup = this.handleEventMouseUp.bind(this);
+		divMain.onmousemove = (this.isMouseMovementTracked ? this.handleEventMouseMove.bind(this) : null);
+	};
+
 }
