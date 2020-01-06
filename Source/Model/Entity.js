@@ -1,18 +1,26 @@
 
 function Entity(name, properties)
 {
-	this.name = name;
-	this.properties = properties;
-
-	for (var i = 0; i < this.properties.length; i++)
-	{
-		var property = this.properties[i];
-		var propertyName = property.constructor.name;
-		this[propertyName] = property;
-	}
+	this.properties = [];
+	this.nameAndPropertiesAdd(name, properties);
 }
 
 {
+	Entity.prototype.nameAndPropertiesAdd = function(name, propertiesToAdd)
+	{
+		this.name = name;
+		for (var i = 0; i < propertiesToAdd.length; i++)
+		{
+			var property = propertiesToAdd[i];
+			this.properties.push(property);
+			var propertyName = property.constructor.name;
+			this[propertyName] = property;
+		}
+		return this;
+	};
+
+	// Cloneable.
+
 	Entity.prototype.clone = function()
 	{
 		var propertiesCloned = [];

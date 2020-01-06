@@ -9,7 +9,7 @@ function VisualText(text, colorFill, colorBorder)
 {
 	VisualText.prototype.draw = function(universe, world, display, drawable, entity)
 	{
-		var text = this.text(universe, world, display, drawable);
+		var text = this.text(universe, world, display, entity);
 		display.drawText
 		(
 			text,
@@ -23,8 +23,8 @@ function VisualText(text, colorFill, colorBorder)
 		);
 	};
 
-	VisualText.prototype.text = function(universe, world, display, drawable)
+	VisualText.prototype.text = function(universe, world, display, entity)
 	{
-		return (this._text.get == null ? this._text : this._text.get(universe, world, display, drawable) );
+		return (this._text.get == null ? this._text : this._text.get(universe, world, display, entity) );
 	};
 }

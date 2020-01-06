@@ -69,8 +69,9 @@ function VisualAnimation(name, ticksToHoldFrames, frames, isRepeating)
 		return returnValue;
 	};
 
-	VisualAnimation.prototype.update = function(universe, world, display, drawable, entity)
+	VisualAnimation.prototype.update = function(universe, world, display, drawableIgnored, entity)
 	{
+		var drawable = entity.Drawable;
 		if (drawable.ticksSinceStarted == null)
 		{
 			drawable.ticksSinceStarted = Math.floor(Math.random() * this.ticksToComplete);

@@ -244,4 +244,10 @@ function Box(center, size)
 	{
 		return [ this.center ];
 	};
+
+	Box.prototype.transform = function(transformToApply)
+	{
+		Transform.applyTransformToCoordsMany(transformToApply, this.coordsGroupToTranslate());
+		return this;
+	};
 }
