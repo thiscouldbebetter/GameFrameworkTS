@@ -12,6 +12,10 @@ function Transform_Orient(orientation)
 
 	Transform_Orient.prototype.transformCoords = function(coordsToTransform)
 	{
+		// todo
+		// Compare to Transform_OrientRDF.transformCoords().
+		// Should this be doing the same thing?
+
 		coordsToTransform.overwriteWithDimensions
 		(
 			this.orientation.forward.dotProduct(coordsToTransform),

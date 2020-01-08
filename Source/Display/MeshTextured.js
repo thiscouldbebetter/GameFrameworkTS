@@ -93,12 +93,7 @@ function MeshTextured(geometry, materials, faceTextures, vertexGroups)
 		for (var i = 0; i < this.faceTextures.length; i++)
 		{
 			var faceTexture = this.faceTextures[i];
-
-			Transform.applyTransformToCoordsMany
-			(
-				transformToApply,
-				faceTexture.textureUVs
-			);
+			faceTexture.transform(transformToApply);
 		}
 
 		return this;
@@ -137,5 +132,15 @@ function MeshTexturedFaceTexture(materialName, textureUVs)
 		(
 			this.materialName, this.textureUVs.clone()
 		);
+	};
+
+	MeshTexturedFaceTexture.prototype.transform = function(transformToApply)
+	{
+		for (var i = 0; i < this.textureUVs.length; i++)
+		{
+			var textureUV = this.textureUVs[i];
+			transformToApply.transformCoords(textureUV);
+		}
+		return this;
 	};
 }

@@ -185,9 +185,12 @@ function MeshBuilder()
 
 	MeshBuilder.prototype.room = function
 	(
-		roomSize, neighborOffsets, connectedToNeighbors, materialWall, materialFloor
+		roomSize, neighborOffsets, connectedToNeighbors, materialWall, materialFloor, doorwayWidthScaleFactor, wallThickness
 	)
 	{
+		doorwayWidthScaleFactor = doorwayWidthScaleFactor || 1;
+		wallThickness = wallThickness || 0;
+
 		var wallNormals = neighborOffsets;
 
 		if (connectedToNeighbors == null)
@@ -204,47 +207,29 @@ function MeshBuilder()
 			var wallNormal = wallNormals[i];
 
 			var meshForWall;
+			var wallDisplacement;
 
-			if (connectedToNeighbors[i] == true)
+			var connectedToNeighbor = connectedToNeighbors[i];
+			if (connectedToNeighbor)
 			{
-				meshForWall = this.room_WallWithDoorway(materialWall);
+				meshForWall = this.room_WallWithDoorway(materialWall, doorwayWidthScaleFactor, wallThickness);
+				wallDisplacement = wallNormal.clone().multiplyScalar(1 - wallThickness);
 			}
 			else
 			{
 				meshForWall = this.room_Wall(materialWall);
+				wallDisplacement = wallNormal.clone();
 			}
 
-			wallOrientation = new Orientation
-			(
-				wallNormal,
-				down
-			);
+			wallOrientation = new Orientation(wallNormal.clone(), down.clone());
 
 			meshForWall.transform
 			(
-				new Transform_Orient
-				(
-					wallOrientation
-				)
+				new Transform_OrientRDF(wallOrientation)
 			).transform
 			(
-				new Transform_Translate
-				(
-					wallNormal
-				)
+				new Transform_Translate(wallDisplacement)
 			);
-
-			// hack
-			if (wallNormal.y != 0)
-			{
-				meshForWall.transform
-				(
-					new Transform_Scale
-					(
-						new Coords(-1, 1, 1)
-					)
-				);
-			}
 
 			meshesForRoom.push
 			(
@@ -265,24 +250,11 @@ function MeshBuilder()
 			var face = mesh.geometry.faces()[0];
 			var faceNormal = face.plane().normal;
 
-			var faceOrientation;
-
-			if (faceNormal.z == 0)
-			{
-				faceOrientation = new Orientation
-				(
-					faceNormal,
-					down
-				);
-			}
-			else
-			{
-				faceOrientation = new Orientation
-				(
-					faceNormal,
-					new Coords(1, 0, 0)
-				);
-			}
+			var faceOrientationDown = ( faceNormal.z == 0 ? down : new Coords(1, 0, 0) );
+			var faceOrientation = new Orientation
+			(
+				faceNormal, faceOrientationDown
+			);
 
 			var faceTangent = faceOrientation.right;
 			var faceDown = faceOrientation.down;
@@ -295,15 +267,15 @@ function MeshBuilder()
 					(
 						faceTangent.dotProduct(roomSize),
 						faceDown.dotProduct(roomSize)
-					).absolute()
+					).absolute().multiplyScalar
+					(
+						.2
+					)
 				)
 			)
 		}
 
-		var returnMesh = this.mergeMeshes
-		(
-			meshesForRoom
-		);
+		var returnMesh = this.mergeMeshes(meshesForRoom);
 
 		returnMesh.transform
 		(
@@ -313,9 +285,8 @@ function MeshBuilder()
 			new Transform_Translate(new Coords(0, 0, -roomSize.z))
 		);
 
-
 		return returnMesh;
-	}
+	};
 
 	MeshBuilder.prototype.room_Ceiling = function(material)
 	{
@@ -340,7 +311,7 @@ function MeshBuilder()
 		);
 
 		return returnMesh;
-	}
+	};
 
 	MeshBuilder.prototype.room_Floor = function(material)
 	{
@@ -355,7 +326,7 @@ function MeshBuilder()
 			)
 		).transformFaceTextures
 		(
-			new Transform_Scale(new Coords(1, 1, 1).multiplyScalar(1))
+			new Transform_Scale(new Coords(1, 1, 1).multiplyScalar(9))
 		);
 
 		return returnMesh;
@@ -369,15 +340,14 @@ function MeshBuilder()
 			// vertices
 			[
 				// wall
-				new Coords(0, 1, -1),
-				new Coords(0, -1, -1),
-				new Coords(0, -1, 1),
-				new Coords(0, 1, 1),
+				new Coords(1, -1),
+				new Coords(-1, -1),
+				new Coords(-1, 1),
+				new Coords(1, 1),
 
 			],
-			// vertexIndicesForFaces
+			// faces
 			[
-				//[ 3, 2, 1, 0 ],
 				new Mesh_FaceBuilder([0, 1, 2, 3]),
 			]
 		);
@@ -391,10 +361,10 @@ function MeshBuilder()
 				(
 					material.name,
 					[
-						new Coords(.2, 0),
+						new Coords(1, 0),
 						new Coords(0, 0),
-						new Coords(0, .2),
-						new Coords(.2, .2),
+						new Coords(0, 1),
+						new Coords(1, 1),
 					]
 				),
 			]
@@ -403,80 +373,142 @@ function MeshBuilder()
 		return returnMesh;
 	}
 
-	MeshBuilder.prototype.room_WallWithDoorway = function(material)
+	MeshBuilder.prototype.room_WallWithDoorway = function(material, doorwayWidthScaleFactor, wallThickness)
 	{
-		var doorwayHeightOverWallHeight = 0.5;
-		var doorwayWidthOverWallHeight = doorwayHeightOverWallHeight / 2;
+		var doorwayHeight = 0.5;
+		var doorwayWidthHalf = doorwayHeight * doorwayWidthScaleFactor / 2;
+
+		var wt = wallThickness;
 
 		var returnMesh = new Mesh
 		(
 			new Coords(0, 0, 0), // center
 			// vertices
 			[
+				// wall
+
+				// b = bottom, t = top, l = left, r = right.
 				// top
-				new Coords(0, -doorwayWidthOverWallHeight, -1),
-				new Coords(0, doorwayWidthOverWallHeight, -1),
-				new Coords(0, doorwayWidthOverWallHeight, -doorwayHeightOverWallHeight),
-				new Coords(0, -doorwayWidthOverWallHeight, -doorwayHeightOverWallHeight),
+				new Coords(-doorwayWidthHalf, -doorwayHeight), // bl - 0
+				new Coords(doorwayWidthHalf, -doorwayHeight), // br - 1
+				new Coords(doorwayWidthHalf, -1), // tr - 2
+				new Coords(-doorwayWidthHalf, -1), // tl - 3
 
 				// left
-				new Coords(0, -1, -1),
-				new Coords(0, -doorwayWidthOverWallHeight, -1),
-				new Coords(0, -doorwayWidthOverWallHeight, 1),
-				new Coords(0, -1, 1),
+				new Coords(-1, 1), // bl - 4
+				new Coords(-doorwayWidthHalf, 1), // br - 5
+				new Coords(-doorwayWidthHalf, -1), // tr - 6
+				new Coords(-1, -1), // tl - 7
 
 				// right
-				new Coords(0, 1, -1),
-				new Coords(0, 1, 1),
-				new Coords(0, doorwayWidthOverWallHeight, 1),
-				new Coords(0, doorwayWidthOverWallHeight, -1),
+				new Coords(doorwayWidthHalf, 1), // bl - 8
+				new Coords(1, 1), // br - 9
+				new Coords(1, -1), // tr - 10
+				new Coords(doorwayWidthHalf, -1), // tl - 11
+
+				// doorframe
+				new Coords(-doorwayWidthHalf, 1, wt), // bl - 12
+				new Coords(doorwayWidthHalf, 1, wt), // br - 13
+				new Coords(doorwayWidthHalf, -doorwayHeight, wt), // tr - 14
+				new Coords(-doorwayWidthHalf, -doorwayHeight, wt), // tl - 15
 			],
 			// vertexIndicesForFaces
 			[
-				// top, left, right
-				new Mesh_FaceBuilder([ 3, 2, 1, 0 ]),
-				new Mesh_FaceBuilder([ 7, 6, 5, 4 ]),
-				new Mesh_FaceBuilder([ 11, 10, 9, 8 ]),
+				// wall
+				new Mesh_FaceBuilder([ 0, 1, 2, 3]), // top
+				new Mesh_FaceBuilder([ 4, 5, 6, 7 ]), // left
+				new Mesh_FaceBuilder([ 8, 9, 10, 11 ]), // right
+
+				// doorframe
+				new Mesh_FaceBuilder([ 5, 12, 15, 0  ]), // left
+				new Mesh_FaceBuilder([ 1, 14, 13, 8 ]), // right
+
+				// todo - top - Hard to see currently.
 			]
+		);
+
+		var doorwayWidth = doorwayWidthHalf * 2;
+		var doorwayWidthReversed = 1 - doorwayWidth;
+		var doorwayWidthReversedHalf = doorwayWidthReversed / 2;
+		var doorwayHeightReversed = 1 - doorwayHeight;
+
+		var transformScaleSides = new Transform_Scale
+		(
+			new Coords(doorwayWidthReversedHalf, .5)
+		);
+
+		var transformScaleTop = new Transform_Scale
+		(
+			new Coords(doorwayWidthHalf, doorwayHeightReversed)
+		);
+
+		var transformScaleSidesDoorframe = new Transform_Scale
+		(
+			new Coords(wallThickness, doorwayHeight)
 		);
 
 		var materialName = material.name;
 
 		var faceTextures =
 		[
+			// wall
 			// top
 			new MeshTexturedFaceTexture
 			(
 				materialName,
 				[
-					new Coords(0, .05),
-					new Coords(.05, .05),
-					new Coords(.05, 0),
+					new Coords(0, 1),
+					new Coords(1, 1),
+					new Coords(1, 0),
 					new Coords(0, 0),
 				]
-			),
+			).transform(transformScaleTop),
 			// left
 			new MeshTexturedFaceTexture
 			(
 				materialName,
 				[
-					new Coords(0, .2),
-					new Coords(.05, .2),
-					new Coords(.05, 0),
+					new Coords(0, 1),
+					new Coords(1, 1),
+					new Coords(1, 0),
 					new Coords(0, 0),
 				]
-			),
+			).transform(transformScaleSides),
 			// right
 			new MeshTexturedFaceTexture
 			(
 				materialName,
 				[
+					new Coords(0, 1),
+					new Coords(1, 1),
+					new Coords(1, 0),
 					new Coords(0, 0),
-					new Coords(0, .2),
-					new Coords(.05, .2),
-					new Coords(.05, 0),
 				]
-			),
+			).transform(transformScaleSides),
+			// doorframe
+			// left
+			new MeshTexturedFaceTexture
+			(
+				materialName,
+				[
+					new Coords(0, 1),
+					new Coords(1, 1),
+					new Coords(1, 0),
+					new Coords(0, 0),
+				]
+			).transform(transformScaleSidesDoorframe),
+			// right
+			new MeshTexturedFaceTexture
+			(
+				materialName,
+				[
+					new Coords(0, 1),
+					new Coords(1, 1),
+					new Coords(1, 0),
+					new Coords(0, 0),
+				]
+			).transform(transformScaleSidesDoorframe),
+			// todo - top
 		];
 
 		returnMesh = new MeshTextured
@@ -484,7 +516,10 @@ function MeshBuilder()
 			returnMesh,
 			[ material ],
 			faceTextures
-		);
+		).transformFaceTextures
+		(
+			new Transform_Scale( new Coords(1, 1, 1).multiplyScalar(2) )
+		);;
 
 		return returnMesh;
 	}

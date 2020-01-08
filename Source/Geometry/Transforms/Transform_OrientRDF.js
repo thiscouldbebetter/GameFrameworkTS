@@ -1,17 +1,34 @@
 
-function TransformOrient(orientation)
+function Transform_OrientRDF(orientation)
 {
 	this.orientation = orientation;
+
+	// Helper variables.
+	this._components = [ new Coords(), new Coords(), new Coords() ];
 }
 
 {
-	TransformOrient.prototype.transformCoords = function(coordsToTransform)
+	Transform_OrientRDF.prototype.transform = function(transformable)
 	{
-		coordsToTransform.overwriteWithDimensions
+		return transformable.transform(this);
+	};
+
+	Transform_OrientRDF.prototype.transformCoords = function(coordsToTransform)
+	{
+		var components = this._components;
+		var ori = this.orientation;
+
+		coordsToTransform.overwriteWith
 		(
-			coordsToTransform.dotProduct(this.orientation.right),
-			coordsToTransform.dotProduct(this.orientation.down),
-			coordsToTransform.dotProduct(this.orientation.forward)
+			components[0].overwriteWith(ori.right).multiplyScalar(coordsToTransform.x).add
+			(
+				components[1].overwriteWith(ori.down).multiplyScalar(coordsToTransform.y).add
+				(
+					components[2].overwriteWith(ori.forward).multiplyScalar(coordsToTransform.z)
+				)
+			)
 		);
+
+		return coordsToTransform;
 	};
 }
