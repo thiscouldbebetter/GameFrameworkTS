@@ -164,7 +164,7 @@ function MeshBuilder()
 		//this.meshVerticesMergeIfWithinDistance(returnValue, 3);
 
 		return returnValue;
-	}
+	};
 
 	MeshBuilder.prototype.box = function(material, size, pos)
 	{
@@ -181,7 +181,7 @@ function MeshBuilder()
 		);
 
 		return returnMesh;
-	}
+	};
 
 	MeshBuilder.prototype.room = function
 	(
@@ -330,7 +330,7 @@ function MeshBuilder()
 		);
 
 		return returnMesh;
-	}
+	};
 
 	MeshBuilder.prototype.room_Wall = function(material)
 	{
@@ -371,7 +371,7 @@ function MeshBuilder()
 		);
 
 		return returnMesh;
-	}
+	};
 
 	MeshBuilder.prototype.room_WallWithDoorway = function(material, doorwayWidthScaleFactor, wallThickness)
 	{
@@ -522,7 +522,7 @@ function MeshBuilder()
 		);;
 
 		return returnMesh;
-	}
+	};
 
 	MeshBuilder.prototype.unitCube = function(material)
 	{
@@ -559,7 +559,7 @@ function MeshBuilder()
 		returnMesh = new MeshTextured(returnMesh, [ material ]);
 
 		return returnMesh;
-	}
+	};
 
 	MeshBuilder.prototype.unitRing = function(material, numberOfVertices)
 	{
@@ -588,7 +588,7 @@ function MeshBuilder()
 		returnMesh = new MeshTextured(returnMesh, [ material ]);
 
 		return returnMesh;
-	}
+	};
 
 	MeshBuilder.prototype.unitSquare = function(material)
 	{
@@ -629,7 +629,7 @@ function MeshBuilder()
 		);
 
 		return returnMesh;
-	}
+	};
 
 	MeshBuilder.prototype.clipFaceAgainstPlanes = function(faceToClip, planesToClipAgainst)
 	{
@@ -650,7 +650,7 @@ function MeshBuilder()
 		}
 
 		return faceToClip;
-	}
+	};
 
 	MeshBuilder.prototype.mergeMeshes = function(meshesToMerge, vertexGroupNames)
 	{
@@ -743,7 +743,7 @@ function MeshBuilder()
 		);
 
 		return returnMesh;
-	}
+	};
 
 	MeshBuilder.prototype.splitFaceByPlaneFrontAndBack = function(faceToDivide, planeToDivideOn)
 	{
@@ -857,5 +857,5 @@ function MeshBuilder()
 		}
 
 		return returnValues;
-	}
+	};
 }

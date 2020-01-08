@@ -13,7 +13,7 @@ function ConstraintInstances()
 		Constraint_None.prototype.constrain = function(universe, world, place, entity)
 		{
 			// Do nothing.
-		}
+		};
 	}
 
 	function Constraint_AttachToEntityWithName(target)
@@ -26,7 +26,7 @@ function ConstraintInstances()
 			var targetEntityName = this.target;
 			var targetEntity = place.entities[targetEntityName];
 			entityToConstrain.Locatable.loc.pos.overwriteWith(targetEntity.Locatable.loc.pos);
-		}
+		};
 	}
 
 	function Constraint_ContainInBox(target)
@@ -38,7 +38,7 @@ function ConstraintInstances()
 		{
 			var targetBox = this.target;
 			targetBox.trimCoords(entityToConstrain.Locatable.loc.pos);
-		}
+		};
 	}
 
 	function Constraint_Friction(target)
@@ -57,7 +57,7 @@ function ConstraintInstances()
 			(
 				entityVel.clone().multiplyScalar(-frictionMagnitude)
 			);
-		}
+		};
 	}
 
 	function Constraint_FrictionDry(target)
@@ -84,7 +84,7 @@ function ConstraintInstances()
 					entityDirection.multiplyScalar(-frictionMagnitude)
 				);
 			}
-		}
+		};
 	}
 
 	function Constraint_Offset(target)
@@ -96,7 +96,7 @@ function ConstraintInstances()
 		{
 			var targetOffset = this.target;
 			entity.loc.pos.add(targetOffset);
-		}
+		};
 	}
 
 	function Constraint_OrientToward(target)
@@ -125,7 +125,7 @@ function ConstraintInstances()
 			).normalize();
 
 			constrainableOrientation.forwardSet(constrainableForward);
-		}
+		};
 	}
 
 	function Constraint_SpeedMax(target)
@@ -143,7 +143,7 @@ function ConstraintInstances()
 			{
 				entityVel.normalize().multiplyScalar(targetSpeedMax);
 			}
-		}
+		};
 	}
 
 	function Constraint_StopBelowSpeedMin(target)
@@ -161,7 +161,7 @@ function ConstraintInstances()
 			{
 				entityVel.clear();
 			}
-		}
+		};
 	}
 
 	function Constraint_TrimToRange(target)
@@ -174,7 +174,7 @@ function ConstraintInstances()
 			var targetSize = this.target;
 			var entityLoc = entity.Locatable.loc;
 			entityLoc.pos.trimToRangeMax(targetSize);
-		}
+		};
 	}
 
 	function Constraint_WrapToRange(target)
@@ -187,7 +187,7 @@ function ConstraintInstances()
 			var targetRange = this.target;
 			var entityLoc = entity.Locatable.loc;
 			entityLoc.pos.wrapToRangeMax(targetRange);
-		}
+		};
 	}
 
 	function Constraint_WrapXTrimY(target)
@@ -218,6 +218,6 @@ function ConstraintInstances()
 			{
 				entityPos.y = max.y;
 			}
-		}
+		};
 	}
 }

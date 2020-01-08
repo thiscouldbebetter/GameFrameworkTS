@@ -6,19 +6,15 @@ function Playable(player)
 {
 	Playable.prototype.updateForTimerTick = function(universe, world, place, entityPlayer)
 	{
-		var size = place.size;
-		var placeDefn = place.defn(world);
-		var actionToInputsMappings = placeDefn.actionToInputsMappings;
-		var actions = placeDefn.actions;
-		var camera = place.camera();
-
-		var playerLoc = entityPlayer.Locatable.loc;
-
 		var inputHelper = universe.inputHelper;
 		if (inputHelper.isMouseClicked())
 		{
 			inputHelper.isMouseClicked(false);
-			playerLoc.pos.overwriteWith
+
+			var playerPos = entityPlayer.Locatable.loc.pos;
+			var camera = place.camera();
+
+			playerPos.overwriteWith
 			(
 				inputHelper.mouseClickPos
 			).divide
@@ -32,30 +28,20 @@ function Playable(player)
 				camera.viewSizeHalf
 			).trimToRangeMax
 			(
-				size
+				place.size
 			);
 
 			universe.soundHelper.soundWithNamePlayAsEffect(universe, "Sound");
 		}
 
-		var inputsPressed = inputHelper.inputsPressed;
-		for (var i = 0; i < inputsPressed.length; i++)
+		var placeDefn = place.defn(world);
+		var actions = placeDefn.actions;
+		var actionToInputsMappings = placeDefn.actionToInputsMappings;
+		var actionsToPerform = inputHelper.actionsFromInput(actions, actionToInputsMappings);
+		for (var i = 0; i < actionsToPerform.length; i++)
 		{
-			var inputPressed = inputsPressed[i];
-			if (inputPressed.isActive == true)
-			{
-				var mapping = actionToInputsMappings[inputPressed.name];
-				if (mapping != null)
-				{
-					var actionName = mapping.actionName;
-					var action = actions[actionName];
-					action.perform(universe, world, place, entityPlayer);
-					if (mapping.inactivateInputWhenActionPerformed == true)
-					{
-						inputPressed.isActive = false;
-					}
-				}
-			}
+			var action = actionsToPerform[i];
+			action.perform(universe, world, place, entityPlayer);
 		}
 	};
 }

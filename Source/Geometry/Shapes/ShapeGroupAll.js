@@ -13,5 +13,5 @@ function ShapeGroupAll(shapes)
 	{
 		this.shapes.overwriteWith(other.shapes);
 		return this;
-	}
+	};
 }

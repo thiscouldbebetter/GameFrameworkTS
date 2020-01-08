@@ -12,7 +12,7 @@ function ImageBuilder(colors)
 		(
 			name, Coords.Instances().Ones, stringsForPixels
 		);
-	}
+	};
 
 	ImageBuilder.prototype.buildImagesFromStringArrays = function(name, stringArraysForImagePixels)
 	{
@@ -26,7 +26,7 @@ function ImageBuilder(colors)
 		}
 
 		return returnValue;
-	}
+	};
 
 	ImageBuilder.prototype.buildImageFromStringsScaled = function(name, scaleFactor, stringsForPixels)
 	{
@@ -82,7 +82,7 @@ function ImageBuilder(colors)
 		);
 
 		return returnValue;
-	}
+	};
 
 	ImageBuilder.prototype.copyRegionFromImage = function(imageToCopyFrom, regionPos, regionSize)
 	{
@@ -118,7 +118,7 @@ function ImageBuilder(colors)
 		);
 
 		return returnValue;
-	}
+	};
 
 	ImageBuilder.prototype.sliceImageIntoTiles = function(imageToSlice, sizeInTiles)
 	{
@@ -184,5 +184,5 @@ function ImageBuilder(colors)
 		}
 
 		return returnImages;
-	}
+	};
 }

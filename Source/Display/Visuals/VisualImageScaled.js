@@ -5,7 +5,7 @@ function VisualImageScaled(visualImage, sizeScaled)
 	this.sizeScaled = sizeScaled;
 
 	// Helper variables.
-	this._imageSizeInPixelsOriginal = new Coords();
+	this._drawPos = new Coords();
 }
 
 {
@@ -19,18 +19,18 @@ function VisualImageScaled(visualImage, sizeScaled)
 			returnValues.push(visualScaled);
 		}
 		return returnValues;
-	}
+	};
 
 	VisualImageScaled.prototype.draw = function(universe, world, display, drawable, entity)
 	{
 		var image = this.visualImage.image(universe);
 
-		this._imageSizeInPixelsOriginal.overwriteWith(image.sizeInPixels);
-
-		image.sizeInPixels.overwriteWith(this.sizeScaled);
-
-		this.visualImage.draw(universe, world, display, drawable, entity);
-
-		image.sizeInPixels.overwriteWith(this._imageSizeInPixelsOriginal);
+		var image = this.visualImage.image(universe);
+		var imageSize = this.sizeScaled;
+		var drawPos = this._drawPos.clear().subtract(imageSize).half().add
+		(
+			entity.Locatable.loc.pos
+		);
+		display.drawImageScaled(image, drawPos, imageSize);
 	};
 }

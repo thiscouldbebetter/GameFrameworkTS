@@ -21,7 +21,7 @@ function Killable(integrityMax, die, damageApply)
 			damageApplied = this._damageApply(universe, world, place, entityDamager, entityKillable, damageToApply);
 		}
 		return damageApplied;
-	}
+	};
 
 	Killable.prototype.integrityAdd = function(amountToAdd)
 	{
@@ -49,5 +49,5 @@ function Killable(integrityMax, die, damageApply)
 	Killable.prototype.clone = function()
 	{
 		return new Killable(this.integrityMax, this.die, this._damageApply);
-	}
+	};
 }

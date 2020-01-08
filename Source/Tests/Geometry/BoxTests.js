@@ -12,5 +12,5 @@ function BoxTests()
 		{
 			throw "Failed!";
 		}
-	}
+	};
 }

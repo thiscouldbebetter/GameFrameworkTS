@@ -5,7 +5,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 	this._sizeDefault = this.sizesAvailable[0];
 	this.sizeInPixels = this._sizeDefault;
 	this.fontName = fontName;
-	this.fontHeightInPixels = fontHeightInPixels;
+	this.fontHeightInPixels = fontHeightInPixels || 10;
 	this.colorFore = colorFore;
 	this.colorBack = colorBack;
 
@@ -265,7 +265,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		this.graphics.lineWidth = lineWidthToRestore;
 	};
 
-	Display.prototype.drawPath = function(vertices, color, lineThickness)
+	Display.prototype.drawPath = function(vertices, color, lineThickness, isClosed)
 	{
 		var lineWidthSaved = this.graphics.lineWidth;
 
@@ -287,6 +287,11 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 			{
 				this.graphics.lineTo(drawPos.x, drawPos.y);
 			}
+		}
+
+		if (isClosed)
+		{
+			this.graphics.closePath();
 		}
 
 		this.graphics.strokeStyle = color;
@@ -439,16 +444,18 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 			this.graphics.strokeText(textTrimmed, drawPos.x, drawPos.y);
 		}
 
-		if (colorFill != null)
+		if (colorFill == null)
 		{
-			this.graphics.fillStyle = colorFill;
-			this.graphics.fillText
-			(
-				textTrimmed,
-				drawPos.x,
-				drawPos.y
-			);
+			colorFill = this.colorFore;
 		}
+
+		this.graphics.fillStyle = colorFill;
+		this.graphics.fillText
+		(
+			textTrimmed,
+			drawPos.x,
+			drawPos.y
+		);
 
 		this.graphics.font = fontToRestore;
 	};
@@ -475,22 +482,18 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 
 	Display.prototype.initialize = function(universe)
 	{
-		if (this.canvas == null)
+		if (universe == null)
 		{
-			this.canvas = document.createElement("canvas");
+			// hack - Allows use of this class
+			// without including PlatformHelper or Universe.
+			var domElement = this.toDomElement();
+			var divMain = document.getElementById("divMain");
+			divMain.appendChild(domElement);
 		}
-
-		this.canvas.width = this.sizeInPixels.x;
-		this.canvas.height = this.sizeInPixels.y;
-
-		this.graphics = this.canvas.getContext("2d");
-
-		this.fontSizeSet(this.fontHeightInPixels);
-		this.widthWithFontFallthrough = this.graphics.measureText(this.testString).width;
-
-		this._scaleFactor = null;
-		var scaleFactor = this.scaleFactor();
-		this.graphics.scale(scaleFactor.x, scaleFactor.y);
+		else
+		{
+			universe.platformHelper.platformableAdd(this);
+		}
 
 		return this;
 	};
@@ -528,6 +531,23 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 
 	Display.prototype.toDomElement = function()
 	{
+		if (this.canvas == null)
+		{
+			this.canvas = document.createElement("canvas");
+
+			this.canvas.width = this.sizeInPixels.x;
+			this.canvas.height = this.sizeInPixels.y;
+
+			this.graphics = this.canvas.getContext("2d");
+
+			this.fontSizeSet(this.fontHeightInPixels);
+			this.widthWithFontFallthrough = this.graphics.measureText(this.testString).width;
+
+			this._scaleFactor = null;
+			var scaleFactor = this.scaleFactor();
+			this.graphics.scale(scaleFactor.x, scaleFactor.y);
+		}
+
 		return this.canvas;
 	};
 }

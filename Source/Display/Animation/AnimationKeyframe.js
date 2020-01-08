@@ -32,5 +32,5 @@ function AnimationKeyframe(frameIndex, transforms)
 		);
 
 		return returnValue;
-	}
+	};
 }

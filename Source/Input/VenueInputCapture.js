@@ -10,7 +10,7 @@ function VenueInputCapture(venueToReturnTo, functionToPassInputCapturedTo)
 	VenueInputCapture.prototype.draw = function(universe)
 	{
 		// Do nothing.
-	}
+	};
 
 	VenueInputCapture.prototype.updateForTimerTick = function(universe)
 	{
@@ -37,5 +37,5 @@ function VenueInputCapture(venueToReturnTo, functionToPassInputCapturedTo)
 				}
 			}
 		}
-	}
+	};
 }

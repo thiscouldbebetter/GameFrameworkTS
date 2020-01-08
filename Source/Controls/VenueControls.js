@@ -14,7 +14,7 @@ function VenueControls(controlRoot)
 		}
 
 		return returnValues;
-	}
+	};
 
 	this.actionToInputsMappings =
 	[

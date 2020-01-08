@@ -221,7 +221,7 @@ function Box(center, size)
 	Box.prototype.clone = function()
 	{
 		return new Box(this.center.clone(), this.size.clone());
-	}
+	};
 
 	Box.prototype.overwriteWith = function(other)
 	{
@@ -229,7 +229,7 @@ function Box(center, size)
 		this.size.overwriteWith(other.size);
 		this.sizeHalf.overwriteWith(other.size).half();
 		return this;
-	}
+	};
 
 	// string
 
@@ -243,5 +243,11 @@ function Box(center, size)
 	Box.prototype.coordsGroupToTranslate = function()
 	{
 		return [ this.center ];
-	}
+	};
+
+	Box.prototype.transform = function(transformToApply)
+	{
+		Transform.applyTransformToCoordsMany(transformToApply, this.coordsGroupToTranslate());
+		return this;
+	};
 }

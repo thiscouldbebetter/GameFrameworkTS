@@ -8,7 +8,7 @@ function BoxRotated(box, angleInTurns)
 	BoxRotated.prototype.sphereSwept = function()
 	{
 		return new Sphere(this.box.center, this.box.sizeHalf.magnitude());
-	}
+	};
 
 	BoxRotated.prototype.surfaceNormalNearPos = function(posToCheck)
 	{
@@ -63,19 +63,19 @@ function BoxRotated(box, angleInTurns)
 	BoxRotated.prototype.clone = function()
 	{
 		return new BoxRotated(this.box.clone(), this.angleInTurns);
-	}
+	};
 
 	BoxRotated.prototype.overwriteWith = function(other)
 	{
 		this.box.overwriteWith(other.box);
 		this.angleInTurns = other.angleInTurns;
 		return this;
-	}
+	};
 
 	// transformable
 
 	BoxRotated.prototype.coordsGroupToTranslate = function()
 	{
 		return [ this.box.center ];
-	}
+	};
 }
