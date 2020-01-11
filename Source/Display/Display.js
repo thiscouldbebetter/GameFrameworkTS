@@ -1,5 +1,5 @@
 
-function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorBack)
+function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorBack, isInvisible)
 {
 	this.sizesAvailable = sizesAvailable;
 	this._sizeDefault = this.sizesAvailable[0];
@@ -8,6 +8,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 	this.fontHeightInPixels = fontHeightInPixels || 10;
 	this.colorFore = colorFore;
 	this.colorBack = colorBack;
+	this.isInvisible = isInvisible || false;
 
 	this.fontNameFallthrough = "serif";
 	this.testString = "ABCDEFGHIJKMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz 1234567890";
@@ -482,7 +483,11 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 
 	Display.prototype.initialize = function(universe)
 	{
-		if (universe == null)
+		if (this.isInvisible)
+		{
+			this.toDomElement();
+		}
+		else if (universe == null)
 		{
 			// hack - Allows use of this class
 			// without including PlatformHelper or Universe.

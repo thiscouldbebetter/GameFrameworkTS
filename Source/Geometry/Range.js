@@ -26,8 +26,8 @@ function Range(min, max)
 	{
 		var returnValue =
 		(
-			this.min <= other.max
-			&& this.max >= other.min
+			this.min < other.max
+			&& this.max > other.min
 		);
 
 		return returnValue;
@@ -81,5 +81,16 @@ function Range(min, max)
 		}
 
 		return returnValues;
+	};
+
+	Range.prototype.touches = function(other)
+	{
+		var returnValue =
+		(
+			this.min <= other.max
+			&& this.max >= other.min
+		);
+
+		return returnValue;
 	};
 }

@@ -188,9 +188,9 @@ function ArrayExtensions()
 		return this;
 	};
 
-	Array.prototype.random = function()
+	Array.prototype.random = function(randomizer)
 	{
-		return this[ Math.floor(Math.random() * this.length) ];
+		return this[ Math.floor(randomizer.getNextRandom() * this.length) ];
 	};
 
 	Array.prototype.remove = function(elementToRemove)

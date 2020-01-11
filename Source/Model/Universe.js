@@ -65,7 +65,7 @@ function Universe(name, version, timerHelper, display, mediaLibrary, world)
 
 		this.profileHelper = new ProfileHelper(this.storageHelper);
 
-		this.display.initialize();
+		this.display.initialize(this);
 		this.platformHelper.platformableAdd(this.display);
 
 		this.soundHelper = new SoundHelper(this.mediaLibrary.sounds);

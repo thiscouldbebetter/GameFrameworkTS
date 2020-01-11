@@ -211,6 +211,35 @@ function Box(center, size)
 		return this;
 	};
 
+	Box.prototype.touches = function(other)
+	{
+		var returnValue =
+		(
+			this.touchesOtherInDimension(other, 0)
+			&& this.touchesOtherInDimension(other, 1)
+			&& this.touchesOtherInDimension(other, 2)
+		);
+		return returnValue;
+	};
+
+	Box.prototype.touchesXY = function(other)
+	{
+		var returnValue =
+		(
+			this.touchesOtherInDimension(other, 0)
+			&& this.touchesOtherInDimension(other, 1)
+		);
+		return returnValue;
+	};
+
+	Box.prototype.touchesOtherInDimension = function(other, dimensionIndex)
+	{
+		var rangeThis = this.rangeForDimension(dimensionIndex, this._range);
+		var rangeOther = other.rangeForDimension(dimensionIndex, other._range);
+		var returnValue = rangeThis.touches(rangeOther);
+		return returnValue;
+	};
+
 	Box.prototype.trimCoords = function(coordsToTrim)
 	{
 		return coordsToTrim.trimToRangeMinMax(this.min(), this.max());
