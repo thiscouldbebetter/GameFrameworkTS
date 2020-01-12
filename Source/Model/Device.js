@@ -1,11 +1,10 @@
 
-function Device(name, ticksToCharge, use)
+function Device(name, initialize, update, use)
 {
 	this.name = name;
-	this.ticksToCharge = ticksToCharge;
+	this.initialize = initialize;
+	this.update = update;
 	this.use = use;
-
-	this.tickLastUsed = 0;
 }
 
 {
@@ -16,10 +15,22 @@ function Device(name, ticksToCharge, use)
 		var returnValue = new Device
 		(
 			"Gun",
-			10, // ticksToCharge
-			function use(universe, world, place, actor, entityDevice, device)
+			function initialize(u, w, p, entity)
 			{
-				if (device.ticksSinceUsed(world) < device.ticksToCharge)
+				var device = entity.Device;
+				device.ticksToCharge = 10;
+				device.tickLastUsed = 0;
+			},
+			function update(u, w, p, e)
+			{
+				// todo
+			},
+			function use(universe, world, place, entityDevice, deviceIgnored, actor)
+			{
+				var device = entityDevice.Device;
+				var tickCurrent = world.timerTicksSoFar;
+				var ticksSinceUsed = tickCurrent - this.tickLastUsed; 
+				if (ticksSinceUsed < device.ticksToCharge)
 				{
 					return;
 				}
@@ -33,7 +44,7 @@ function Device(name, ticksToCharge, use)
 
 				actorAsItemHolder.itemSubtractDefnNameAndQuantity("Ammo", 1);
 
-				device.tickLastUsedUpdate(world);
+				device.tickLastUsed = tickCurrent;
 
 				var actorLoc = actor.Locatable.loc;
 				var actorPos = actorLoc.pos;
@@ -139,18 +150,6 @@ function Device(name, ticksToCharge, use)
 		);
 
 		return returnValue;
-	};
-
-	// instance methods
-
-	Device.prototype.tickLastUsedUpdate = function(world)
-	{
-		this.tickLastUsed = world.timerTicksSoFar;
-	};
-
-	Device.prototype.ticksSinceUsed = function(world)
-	{
-		return world.timerTicksSoFar - this.tickLastUsed;
 	};
 
 	// clonable

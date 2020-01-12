@@ -736,12 +736,13 @@ function PlaceBuilderDemo()
 				[ 100, 100 ], // ticksToHoldFrames
 				// children
 				[
+					// todo - Fix blinking.
 					new VisualAnimation
 					(
 						"Blinking",
-						[ 3, 3 ], // ticksToHoldFrames
+						[ 5 ],// , 5 ], // ticksToHoldFrames
 						[
-							new VisualNone(),
+							//new VisualNone(),
 							friendlyVisualNormal
 						]
 					),

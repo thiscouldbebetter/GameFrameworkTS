@@ -101,7 +101,7 @@ function World(name, dateCreated, defns, places)
 					if (actorHasWeaponEquipped)
 					{
 						var deviceWeapon = entityWeaponEquipped.Device;
-						deviceWeapon.use(universe, world, place, actor, entityWeaponEquipped, deviceWeapon);
+						deviceWeapon.use(universe, world, place, entityWeaponEquipped, deviceWeapon, actor);
 					}
 				}
 			),
