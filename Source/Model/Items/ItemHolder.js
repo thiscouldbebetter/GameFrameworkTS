@@ -9,8 +9,6 @@ function ItemHolder(itemEntities)
 		var itemEntity = itemEntities[i];
 		this.itemEntityAdd(itemEntity);
 	}
-
-	this.statusMessage = "-";
 }
 {
 	ItemHolder.prototype.hasItem = function(itemToCheck)
@@ -64,6 +62,21 @@ function ItemHolder(itemEntities)
 		}
 	};
 
+	ItemHolder.prototype.itemEntityRemove = function(itemEntityToRemove)
+	{
+		var doesExist = this.itemEntities.contains(itemEntityToRemove);
+		if (doesExist)
+		{
+			this.itemEntities.remove(itemEntityToRemove);
+			var defnName = itemEntityToRemove.Item.defnName;
+			var areOtherItemsOfSameType = this.itemEntities.some(x => x.Item.defnName == defnName);
+			if (areOtherItemsOfSameType == false)
+			{
+				delete this.itemEntities[itemDefnName];
+			}
+		}
+	};
+
 	ItemHolder.prototype.itemRemove = function(itemToRemove)
 	{
 		var itemDefnName = itemToRemove.defnName;
@@ -74,7 +87,6 @@ function ItemHolder(itemEntities)
 			delete this.itemEntities[itemDefnName];
 		}
 	};
-
 
 	ItemHolder.prototype.itemSubtract = function(itemToSubtract)
 	{
@@ -115,6 +127,8 @@ function ItemHolder(itemEntities)
 
 	ItemHolder.prototype.toControl = function(universe, size, entityItemHolder, venuePrev)
 	{
+		this.statusMessage = "-";
+
 		if (size == null)
 		{
 			size = universe.display.sizeDefault();

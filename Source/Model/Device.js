@@ -25,7 +25,7 @@ function Device(name, initialize, update, use)
 			{
 				// todo
 			},
-			function use(universe, world, place, entityDevice, deviceIgnored, actor)
+			function use(universe, world, place, entityUser, entityDevice)
 			{
 				var device = entityDevice.Device;
 				var tickCurrent = world.timerTicksSoFar;
@@ -35,22 +35,22 @@ function Device(name, initialize, update, use)
 					return;
 				}
 
-				var actorAsItemHolder = actor.ItemHolder;
-				var hasAmmo = actorAsItemHolder.hasItemWithDefnNameAndQuantity("Ammo", 1);
+				var userAsItemHolder = entityUser.ItemHolder;
+				var hasAmmo = userAsItemHolder.hasItemWithDefnNameAndQuantity("Ammo", 1);
 				if (hasAmmo == false)
 				{
 					return;
 				}
 
-				actorAsItemHolder.itemSubtractDefnNameAndQuantity("Ammo", 1);
+				userAsItemHolder.itemSubtractDefnNameAndQuantity("Ammo", 1);
 
 				device.tickLastUsed = tickCurrent;
 
-				var actorLoc = actor.Locatable.loc;
-				var actorPos = actorLoc.pos;
-				var actorVel = actorLoc.vel;
-				var actorSpeed = actorVel.magnitude();
-				if (actorSpeed == 0) { return; }
+				var userLoc = entityUser.Locatable.loc;
+				var userPos = userLoc.pos;
+				var userVel = userLoc.vel;
+				var userSpeed = userVel.magnitude();
+				if (userSpeed == 0) { return; }
 
 				var projectileColor = "Cyan";
 				var projectileRadius = 3;
@@ -75,18 +75,18 @@ function Device(name, initialize, update, use)
 					(universe, world) => world.placeCurrent.camera()
 				);
 
-				var actorDirection = actorVel.clone().normalize();
-				var actorRadius = actor.Collidable.collider.radius;
-				var projectilePos = actorPos.clone().add
+				var userDirection = userVel.clone().normalize();
+				var userRadius = entityUser.Collidable.collider.radius;
+				var projectilePos = userPos.clone().add
 				(
-					actorDirection.clone().multiplyScalar(actorRadius).double().double()
+					userDirection.clone().multiplyScalar(userRadius).double().double()
 				);
 				var projectileOri = new Orientation
 				(
-					actorVel.clone().normalize()
+					userVel.clone().normalize()
 				);
 				var projectileLoc = new Location(projectilePos, projectileOri);
-				projectileLoc.vel.overwriteWith(actorVel).double();
+				projectileLoc.vel.overwriteWith(userVel).double();
 
 				var projectileCollider =
 					new Sphere(new Coords(0, 0), projectileRadius);
@@ -156,6 +156,6 @@ function Device(name, initialize, update, use)
 
 	Device.prototype.clone = function()
 	{
-		return new Device(this.name, this.ticksToCharge, this.energyToUse, this.use);
+		return new Device(this.name, this.initialize, this.update, this.use);
 	};
 }
