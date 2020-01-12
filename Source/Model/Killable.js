@@ -32,9 +32,14 @@ function Killable(integrityMax, die, damageApply)
 		);
 	};
 
+	Killable.prototype.isAlive = function()
+	{
+		return (this.integrity > 0);
+	};
+
 	Killable.prototype.updateForTimerTick = function(universe, world, place, entityKillable)
 	{
-		if (this.integrity <= 0)
+		if (this.isAlive() == false)
 		{
 			place.entitiesToRemove.push(entityKillable);
 			if (this.die != null)
