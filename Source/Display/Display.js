@@ -104,8 +104,8 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		(
 			this._zeroes,
 			this.sizeDefault(), // Automatic scaling.
-			colorBack,
-			colorBorder
+			colorBack || this.colorBack,
+			colorBorder || this.colorBorder
 		);
 	};
 
