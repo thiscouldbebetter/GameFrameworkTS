@@ -9,12 +9,12 @@ function VisualOffset(child, offset)
 }
 
 {
-	VisualOffset.prototype.draw = function(universe, world, display, drawable, entity)
+	VisualOffset.prototype.draw = function(universe, world, display, entity)
 	{
 		var drawablePos = entity.Locatable.loc.pos;
 		this._posSaved.overwriteWith(drawablePos);
 		drawablePos.add(this.offset);
-		this.child.draw(universe, world, display, drawable, entity);
+		this.child.draw(universe, world, display, entity);
 		drawablePos.overwriteWith(this._posSaved);
 	};
 }

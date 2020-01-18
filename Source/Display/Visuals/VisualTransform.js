@@ -27,9 +27,9 @@ function VisualTransform(transformToApply, child)
 
 	// Visual.
 
-	VisualTransform.prototype.draw = function(universe, world, display, drawable, entity)
+	VisualTransform.prototype.draw = function(universe, world, display, entity)
 	{
 		this.child.transform(this.transformToApply);
-		this.child.draw(universe, world, display, drawable, entity);
+		this.child.draw(universe, world, display, entity);
 	};
 }

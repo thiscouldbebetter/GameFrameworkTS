@@ -6,7 +6,7 @@ function VisualRotate(rotationInTurns, child)
 }
 
 {
-	VisualRotate.prototype.draw = function(universe, world, display, drawable, entity)
+	VisualRotate.prototype.draw = function(universe, world, display, entity)
 	{
 		var graphics = display.graphics;
 		graphics.save();
@@ -19,7 +19,7 @@ function VisualRotate(rotationInTurns, child)
 
 		graphics.translate(0 - centerOfRotation.x, 0 - centerOfRotation.y);
 
-		this.child.draw(universe, world, display, drawable, entity);
+		this.child.draw(universe, world, display, entity);
 
 		graphics.restore();
 	};

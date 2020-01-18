@@ -12,7 +12,7 @@ function VisualMap(map, visualLookup)
 }
 
 {
-	VisualMap.prototype.draw = function(universe, world, display, drawable, entity)
+	VisualMap.prototype.draw = function(universe, world, display, entity)
 	{
 		var mapSizeInCells = this.map.sizeInCells;
 		var mapSizeHalf = this.map.sizeHalf;
@@ -51,7 +51,7 @@ function VisualMap(map, visualLookup)
 
 				this.posSaved.overwriteWith(drawablePos);
 				drawablePos.overwriteWith(drawPos);
-				cellVisual.draw(universe, world, display, drawable, entity);
+				cellVisual.draw(universe, world, display, entity);
 				drawablePos.overwriteWith(this.posSaved);
 			}
 		}

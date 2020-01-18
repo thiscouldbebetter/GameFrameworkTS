@@ -8,7 +8,7 @@ function VisualControl(controlRoot)
 }
 
 {
-	VisualControl.prototype.draw = function(universe, world, display, drawable, entity)
+	VisualControl.prototype.draw = function(universe, world, display, entity)
 	{
 		var display = universe.display;
 		var drawLoc = this._drawLoc;

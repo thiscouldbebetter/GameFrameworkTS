@@ -9,7 +9,7 @@ function VisualCamera(child, cameraFactory)
 }
 
 {
-	VisualCamera.prototype.draw = function(universe, world, display, drawable, entity)
+	VisualCamera.prototype.draw = function(universe, world, display, entity)
 	{
 		var drawablePos = entity.Locatable.loc.pos;
 		this._posSaved.overwriteWith(drawablePos);
@@ -18,7 +18,7 @@ function VisualCamera(child, cameraFactory)
 		camera.coordsTransformWorldToView(drawablePos);
 		if (entity.Boundable == null) // todo
 		{
-			this.child.draw(universe, world, display, drawable, entity);
+			this.child.draw(universe, world, display, entity);
 		}
 		else
 		{
@@ -28,7 +28,7 @@ function VisualCamera(child, cameraFactory)
 				universe.collisionHelper.doCollidersCollide(drawableCollider, cameraViewCollider);
 			if (isInCameraBox)
 			{
-				this.child.draw(universe, world, display, drawable, entity);
+				this.child.draw(universe, world, display, entity);
 			}
 		}
 

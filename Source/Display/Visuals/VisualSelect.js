@@ -14,10 +14,10 @@ function VisualSelect(selectChildName, childNames, children)
 }
 
 {
-	VisualSelect.prototype.draw = function(universe, world, display, drawable, entity)
+	VisualSelect.prototype.draw = function(universe, world, display, entity)
 	{
-		var childToSelectName = this.selectChildName(universe, world, display, drawable, entity, this);
+		var childToSelectName = this.selectChildName(universe, world, display, entity, this);
 		var childSelected = this.children[childToSelectName];
-		childSelected.draw(universe, world, display, drawable, entity);
+		childSelected.draw(universe, world, display, entity);
 	};
 }

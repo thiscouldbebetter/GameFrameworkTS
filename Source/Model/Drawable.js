@@ -9,7 +9,7 @@ function Drawable(visual, isVisible)
 	{
 		if (this.isVisible)
 		{
-			this.visual.draw(universe, world, universe.display, this, entity);
+			this.visual.draw(universe, world, universe.display, entity);
 		}
 	};
 

@@ -83,6 +83,8 @@ function PlaceBuilderDemo()
 		var entityControls = this.entityControlsBuild(playerEntity, itemDefns);
 		entities.push(entityControls);
 
+		entities.forEach(x => { if (x.Locatable != null) { x.Locatable.loc.pos.z = 0; } })
+
 		var place = new Place(name, "Demo", size, entities);
 		return place;
 	};
@@ -93,7 +95,7 @@ function PlaceBuilderDemo()
 	{
 		var viewSizeHalf = cameraViewSize.clone().half();
 
-		var cameraPosBox = Box.fromMinAndMax
+		var cameraPosBox = new Box().fromMinAndMax
 		(
 			viewSizeHalf.clone(),
 			this.size.clone().subtract(viewSizeHalf)
