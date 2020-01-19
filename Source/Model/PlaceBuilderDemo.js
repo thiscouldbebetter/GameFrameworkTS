@@ -1343,15 +1343,15 @@ function PlaceBuilderDemo()
 					var venueMessage = new VenueMessage
 					(
 						"You win!",
-						universe.venueCurrent, // venuePrev
-						universe.display.sizeDefault().clone().half(),
 						function acknowledge(universe)
 						{
 							universe.venueNext = new VenueFader
 							(
 								new VenueControls(universe.controlBuilder.title(universe))
 							);
-						}
+						},
+						universe.venueCurrent, // venuePrev
+						universe.display.sizeDefault().clone().half()
 					);
 					universe.venueNext = venueMessage;
 				}
@@ -1369,15 +1369,15 @@ function PlaceBuilderDemo()
 				var venueMessage = new VenueMessage
 				(
 					"Portal to: " + portal.destinationPlaceName,
-					venueCurrent, // venuePrev
-					universe.display.sizeDefault().clone().half(),
 					function acknowledge(universe)
 					{
 						var world = universe.world;
 						world.placeCurrent = world.places[portal.destinationPlaceName];
 						entityPlayer.Locatable.loc.pos.overwriteWith(portal.destinationPos);
 						universe.venueNext = new VenueFader(venueCurrent); // todo
-					}
+					},
+					venueCurrent, // venuePrev
+					universe.display.sizeDefault().clone().half()
 				);
 				universe.venueNext = venueMessage;
 			}
@@ -1431,15 +1431,15 @@ function PlaceBuilderDemo()
 				var venueMessage = new VenueMessage
 				(
 					"You lose!",
-					universe.venueCurrent, // venuePrev
-					universe.display.sizeDefault().clone().half(),
 					function acknowledge(universe)
 					{
 						universe.venueNext = new VenueFader
 						(
 							new VenueControls(universe.controlBuilder.title(universe))
 						);
-					}
+					},
+					universe.venueCurrent, // venuePrev
+					universe.display.sizeDefault().clone().half()
 				);
 				universe.venueNext = venueMessage;
 			},

@@ -398,12 +398,12 @@ function ControlBuilder(styles)
 						var venueNext = new VenueMessage
 						(
 							universe.name + "\nv" + universe.version,
-							universe.venueCurrent, // venuePrev
-							size,
 							function acknowledge(universe)
 							{
 								universe.venueNext = new VenueFader(venueCurrent);
-							}
+							},
+							universe.venueCurrent, // venuePrev
+							size
 						);
 						venueNext = new VenueFader(venueNext, venueCurrent);
 						universe.venueNext = venueNext;
@@ -752,9 +752,18 @@ function ControlBuilder(styles)
 
 	ControlBuilder.prototype.message = function(universe, size, message, acknowledge)
 	{
+		var optionNames = [];
+		var optionFunctions = [];
+
+		if (acknowledge != null)
+		{
+			optionNames.push("Acknowledge");
+			optionFunctions.push(acknowledge);
+		}
+
 		return this.choice
 		(
-			universe, size, message, ["Acknowledge"], [acknowledge]
+			universe, size, message, optionNames, optionFunctions
 		);
 	};
 
@@ -1175,20 +1184,38 @@ function ControlBuilder(styles)
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click(universe)
+					function click()
 					{
-						var world = World.new(universe);
-						var now = DateTime.now();
-						var nowAsString = now.toStringMMDD_HHMM_SS();
-						var profileName = "Anon-" + nowAsString;
-						var profile = new Profile(profileName, [ world ]);
-						universe.profile = profile;
-						universe.world = world;
-						var venueNext = new VenueWorld(universe.world);
+						var venueNext = new VenueMessage("Working...");
+
+						venueNext = new VenueTask
+						(
+							venueNext,
+							function perform()
+							{
+								return World.new(universe);
+							},
+							function done(universe, world)
+							{
+								universe.world = world;
+
+								var now = DateTime.now();
+								var nowAsString = now.toStringMMDD_HHMM_SS();
+								var profileName = "Anon-" + nowAsString;
+								var profile = new Profile(profileName, [ world ]);
+								universe.profile = profile;
+
+								var venueNext = new VenueWorld(universe.world);
+								venueNext = new VenueFader(venueNext, universe.venueCurrent);
+								universe.venueNext = venueNext;
+							}
+						);
+
 						venueNext = new VenueFader(venueNext, universe.venueCurrent);
+
 						universe.venueNext = venueNext;
-					},
-					universe // context
+
+					} // end click
 				),
 
 				new ControlButton

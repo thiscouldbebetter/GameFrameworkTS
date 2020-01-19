@@ -1,20 +1,13 @@
 
-function VenueMessage(messageToShow, venuePrev, sizeInPixels, acknowledge)
+function VenueMessage(messageToShow, acknowledge, venuePrev, sizeInPixels)
 {
 	this.messageToShow = messageToShow;
+	this.acknowledge = acknowledge;
 	this.venuePrev = venuePrev;
 	this._sizeInPixels = sizeInPixels;
-	this.acknowledge = acknowledge;
 }
 {
 	// instance methods
-
-	/*
-	VenueMessage.prototype.acknowledge = function(universe)
-	{
-		universe.venueNext = new VenueFader(this.venueNext, this.venueInner());
-	};
-	*/
 
 	VenueMessage.prototype.draw = function(universe)
 	{
@@ -35,21 +28,27 @@ function VenueMessage(messageToShow, venuePrev, sizeInPixels, acknowledge)
 	{
 		if (this._venueInner == null)
 		{
-			this._venueInner = new VenueLayered
-			([
-				this.venuePrev,
-				new VenueControls
-				(
-					universe.controlBuilder.message
-					(
-						universe,
-						this.sizeInPixels(universe),
-						this.messageToShow,
-						this.acknowledge.bind(this, universe)
-					)
-				)
-			]);
+			var controlMessage = universe.controlBuilder.message
+			(
+				universe,
+				this.sizeInPixels(universe),
+				this.messageToShow,
+				this.acknowledge //.bind(this, universe)
+			);
+
+			var venuesToLayer =
+			[
+				new VenueControls(controlMessage)
+			];
+
+			if (this.venuePrev != null)
+			{
+				venuesToLayer.insertElementAt(this.venuePrev, 0);
+			}
+
+			this._venueInner = new VenueLayered(venuesToLayer);
 		}
+
 		return this._venueInner;
 	};
 }

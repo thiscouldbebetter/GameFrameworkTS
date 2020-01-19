@@ -29,7 +29,7 @@ function Device(name, initialize, update, use)
 			{
 				var device = entityDevice.Device;
 				var tickCurrent = world.timerTicksSoFar;
-				var ticksSinceUsed = tickCurrent - this.tickLastUsed; 
+				var ticksSinceUsed = tickCurrent - this.tickLastUsed;
 				if (ticksSinceUsed < device.ticksToCharge)
 				{
 					return;
