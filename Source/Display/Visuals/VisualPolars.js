@@ -13,7 +13,7 @@ function VisualPolars(polars, color, lineThickness)
 }
 
 {
-	VisualPolars.prototype.draw = function(universe, world, display, drawable, entity)
+	VisualPolars.prototype.draw = function(universe, world, display, entity)
 	{
 		var drawableLoc = entity.Locatable.loc;
 		var drawablePos = drawableLoc.pos;

@@ -13,7 +13,7 @@ function VisualArc(radiusOuter, radiusInner, directionMin, angleSpannedInTurns, 
 	this._polar = new Polar();
 }
 {
-	VisualArc.prototype.draw = function(universe, world, display, drawable, entity)
+	VisualArc.prototype.draw = function(universe, world, display, entity)
 	{
 		var drawableLoc = entity.Locatable.loc;
 		var drawPos = this._drawPos.overwriteWith

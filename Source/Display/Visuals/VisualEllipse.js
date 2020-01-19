@@ -9,7 +9,7 @@ function VisualEllipse(semimajorAxis, semiminorAxis, rotationInTurns, colorFill,
 }
 
 {
-	VisualEllipse.prototype.draw = function(universe, world, display, drawable, entity)
+	VisualEllipse.prototype.draw = function(universe, world, display, entity)
 	{
 		var drawableLoc = entity.Locatable.loc;
 		var drawableOrientation = drawableLoc.orientation;

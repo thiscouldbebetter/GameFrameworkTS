@@ -40,19 +40,6 @@ function Box(center, size)
 		return doAnyBoxOverlapSoFar;
 	};
 
-	Box.fromMinAndMax = function(min, max)
-	{
-		var center = min.clone().add(max).half();
-		var size = max.clone().subtract(min);
-		return new Box(center, size);
-	};
-
-	Box.fromMinAndSize = function(min, size)
-	{
-		var center = size.clone().half().add(min);
-		return new Box(center, size);
-	};
-
 	// Instance methods.
 
 	Box.prototype.containsOther = function(other)
@@ -63,6 +50,19 @@ function Box(center, size)
 	Box.prototype.containsPoint = function(pointToCheck)
 	{
 		return pointToCheck.isInRangeMinMax(this.min(), this.max());
+	};
+
+	Box.prototype.fromMinAndMax = function(min, max)
+	{
+		var center = min.clone().add(max).half();
+		var size = max.clone().subtract(min);
+		return new Box(center, size);
+	};
+
+	Box.prototype.fromMinAndSize = function(min, size)
+	{
+		var center = size.clone().half().add(min);
+		return new Box(center, size);
 	};
 
 	Box.prototype.intersectWith = function(other)

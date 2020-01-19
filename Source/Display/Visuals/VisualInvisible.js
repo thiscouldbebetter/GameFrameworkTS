@@ -21,13 +21,12 @@ function VisualInvisible(child)
 
 	VisualInvisible.prototype.transform = function(transformToApply)
 	{
-		//return this.child.transform(transformToApply);
 		return transformToApply.transform(this.child);
 	};
 
 	// Visual.
 
-	VisualInvisible.prototype.draw = function(universe, world, display, drawable, entity)
+	VisualInvisible.prototype.draw = function(universe, world, display, entity)
 	{
 		// Do nothing.
 	};

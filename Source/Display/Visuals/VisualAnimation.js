@@ -34,9 +34,9 @@ function VisualAnimation(name, ticksToHoldFrames, frames, isRepeating)
 {
 	// visual
 
-	VisualAnimation.prototype.draw = function(universe, world, display, drawable, entity)
+	VisualAnimation.prototype.draw = function(universe, world, display, entity)
 	{
-		this.update(universe, world, display, drawable, entity);
+		this.update(universe, world, display, entity);
 	};
 
 	VisualAnimation.prototype.frameCurrent = function(drawable)
@@ -69,7 +69,7 @@ function VisualAnimation(name, ticksToHoldFrames, frames, isRepeating)
 		return returnValue;
 	};
 
-	VisualAnimation.prototype.update = function(universe, world, display, drawableIgnored, entity)
+	VisualAnimation.prototype.update = function(universe, world, display, entity)
 	{
 		var drawable = entity.Drawable;
 		if (drawable.ticksSinceStarted == null)
@@ -96,6 +96,6 @@ function VisualAnimation(name, ticksToHoldFrames, frames, isRepeating)
 		}
 
 		var frameCurrent = this.frameCurrent(drawable);
-		frameCurrent.draw(universe, world, display, drawable, entity);
+		frameCurrent.draw(universe, world, display, entity);
 	};
 }

@@ -21,7 +21,7 @@ function VisualImageScaled(visualImage, sizeScaled)
 		return returnValues;
 	};
 
-	VisualImageScaled.prototype.draw = function(universe, world, display, drawable, entity)
+	VisualImageScaled.prototype.draw = function(universe, world, display, entity)
 	{
 		var image = this.visualImage.image(universe);
 

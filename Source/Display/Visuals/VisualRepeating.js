@@ -21,7 +21,7 @@ function VisualRepeating(cellSize, viewSize, child)
 	this._drawablePosToRestore = new Coords();
 }
 {
-	VisualRepeating.prototype.draw = function(universe, world, display, drawable, entity)
+	VisualRepeating.prototype.draw = function(universe, world, display, entity)
 	{
 		var drawPos = entity.Locatable.loc.pos;
 
@@ -54,7 +54,7 @@ function VisualRepeating(cellSize, viewSize, child)
 					drawPosWrapped
 				);
 
-				this.child.draw(universe, world, display, drawable, entity);
+				this.child.draw(universe, world, display, entity);
 			}
 		}
 

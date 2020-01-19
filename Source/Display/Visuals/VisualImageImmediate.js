@@ -41,7 +41,7 @@ function VisualImageImmediate(image)
 
 	// visual
 
-	VisualImageImmediate.prototype.draw = function(universe, world, display, drawable, entity)
+	VisualImageImmediate.prototype.draw = function(universe, world, display, entity)
 	{
 		var image = this.image();
 		var imageSize = image.sizeInPixels;

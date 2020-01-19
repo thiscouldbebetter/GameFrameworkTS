@@ -7,7 +7,7 @@ function VisualText(text, colorFill, colorBorder)
 }
 
 {
-	VisualText.prototype.draw = function(universe, world, display, drawable, entity)
+	VisualText.prototype.draw = function(universe, world, display, entity)
 	{
 		var text = this.text(universe, world, display, entity);
 		display.drawText

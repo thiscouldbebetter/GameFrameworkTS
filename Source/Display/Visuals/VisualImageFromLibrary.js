@@ -33,7 +33,7 @@ function VisualImageFromLibrary(imageName)
 
 	// visual
 
-	VisualImageFromLibrary.prototype.draw = function(universe, world, display, drawable, entity)
+	VisualImageFromLibrary.prototype.draw = function(universe, world, display, entity)
 	{
 		var image = this.image(universe);
 		var imageSize = this.image(universe).sizeInPixels;

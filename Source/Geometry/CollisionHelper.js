@@ -585,18 +585,20 @@ function CollisionHelper()
 		var boxSizeHalf = box.sizeHalf;
 		var sphereRadius = sphere.radius;
 
-		var doXAndOrYExtentsCollide =
+		var doExtentsCollide =
 		(
 			displacementBetweenCentersAbsolute.x <= boxSizeHalf.x + sphereRadius
 			&& displacementBetweenCentersAbsolute.y <= boxSizeHalf.y + sphereRadius
+			&& displacementBetweenCentersAbsolute.z <= boxSizeHalf.z + sphereRadius
 		);
 
-		if (doXAndOrYExtentsCollide)
+		if (doExtentsCollide)
 		{
 			var isSphereNotAtCorner =
 			(
 				displacementBetweenCentersAbsolute.x < boxSizeHalf.x
 				|| displacementBetweenCentersAbsolute.y < boxSizeHalf.y
+				|| displacementBetweenCentersAbsolute.z < boxSizeHalf.z
 			);
 
 			if (isSphereNotAtCorner)
@@ -609,12 +611,12 @@ function CollisionHelper()
 					displacementBetweenCentersAbsolute.magnitude();
 				var boxDiagonal = boxSizeHalf.magnitude();
 
-				var doesCircleContainCornerOfBox =
+				var doesSphereContainCornerOfBox =
 				(
 					distanceBetweenCenters < (boxDiagonal + sphereRadius)
 				);
 
-				doCollide = doesCircleContainCornerOfBox;
+				doCollide = doesSphereContainCornerOfBox;
 			}
 		}
 
@@ -628,8 +630,8 @@ function CollisionHelper()
 		if (doCollide && shouldCalculatePos)
 		{
 			// todo - Fix this.
-			var boxOfSphere = new Box(sphere.center, new Coords(1, 1).multiplyScalar(sphere.radius));
-			collision = this.collisionOfBoxAndBox(box, boxOfSphere, collision);
+			var boxCircumscribedAroundSphere = new Box(sphere.center, new Coords(1, 1, 1).multiplyScalar(sphere.radius));
+			collision = this.collisionOfBoxAndBox(box, boxCircumscribedAroundSphere, collision);
 		}
 
 		return collision;
