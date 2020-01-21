@@ -1,5 +1,5 @@
 
-function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected, bindingForItemValue, bindingForIsEnabled)
+function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected, bindingForItemValue, bindingForIsEnabled, confirm)
 {
 	this.name = name;
 	this.pos = pos;
@@ -10,6 +10,7 @@ function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPix
 	this.bindingForItemSelected = bindingForItemSelected;
 	this.bindingForItemValue = bindingForItemValue;
 	this.bindingForIsEnabled = bindingForIsEnabled;
+	this.confirm = confirm;
 
 	this.itemSpacing = 1.2 * this.fontHeightInPixels; // hack
 
@@ -72,15 +73,24 @@ function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPix
 	ControlList.prototype.actionHandle = function(actionNameToHandle)
 	{
 		var wasActionHandled = false;
-		if (actionNameToHandle == "ControlIncrement")
+		var controlActionNames = ControlActionNames.Instances();
+		if (actionNameToHandle == controlActionNames.ControlIncrement)
 		{
 			this.itemSelectedNextInDirection(1);
 			wasActionHandled = true;
 		}
-		else if (actionNameToHandle == "ControlDecrement")
+		else if (actionNameToHandle == controlActionNames.ControlDecrement)
 		{
 			this.itemSelectedNextInDirection(-1);
 			wasActionHandled = true;
+		}
+		else if (actionNameToHandle == controlActionNames.ControlConfirm)
+		{
+			if (this.confirm != null)
+			{
+				this.confirm();
+				wasActionHandled = true;
+			}
 		}
 		return wasActionHandled;
 	};

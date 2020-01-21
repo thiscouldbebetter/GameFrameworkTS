@@ -48,11 +48,16 @@ function ControlContainer(name, pos, size, children)
 
 		var childWithFocus = this.childWithFocus();
 
-		if (actionNameToHandle == "ControlPrev" || actionNameToHandle == "ControlNext")
+		var controlActionNames = ControlActionNames.Instances();
+		if
+		(
+			actionNameToHandle == controlActionNames.ControlPrev
+			|| actionNameToHandle == controlActionNames.ControlNext
+		)
 		{
 			wasActionHandled = true;
 
-			var direction = (actionNameToHandle == "ControlPrev" ? -1 : 1);
+			var direction = (actionNameToHandle == controlActionNames.ControlPrev ? -1 : 1);
 
 			if (childWithFocus == null)
 			{

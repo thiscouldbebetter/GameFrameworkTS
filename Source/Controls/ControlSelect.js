@@ -49,14 +49,15 @@ function ControlSelect
 	ControlSelect.prototype.actionHandle = function(actionNameToHandle)
 	{
 		// This is somewhat counterintuitive.
-		if (actionNameToHandle == "ControlDecrement")
+		var controlActionNames = ControlActionNames.Instances();
+		if (actionNameToHandle == controlActionNames.ControlDecrement)
 		{
 			this.optionSelectedNextInDirection(1);
 		}
 		else if
 		(
-			actionNameToHandle == "ControlIncrement"
-			|| actionNameToHandle == "ControlConfirm"
+			actionNameToHandle == controlActionNames.ControlIncrement
+			|| actionNameToHandle == controlActionNames.ControlConfirm
 		)
 		{
 			this.optionSelectedNextInDirection(-1);

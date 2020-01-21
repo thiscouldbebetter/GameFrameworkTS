@@ -22,7 +22,7 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 {
 	ControlButton.prototype.actionHandle = function(actionNameToHandle)
 	{
-		if (actionNameToHandle == "ControlConfirm")
+		if (actionNameToHandle == ControlActionNames.Instances().ControlConfirm)
 		{
 			this.click(this.context);
 		}

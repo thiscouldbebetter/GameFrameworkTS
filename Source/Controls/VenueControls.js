@@ -16,14 +16,16 @@ function VenueControls(controlRoot)
 		return returnValues;
 	};
 
+	var controlActionNames = ControlActionNames.Instances();
+
 	this.actionToInputsMappings =
 	[
-		new ActionToInputsMapping("ControlIncrement", ["ArrowDown"].addMany(buildGamepadInputs("MoveDown")), true),
-		new ActionToInputsMapping("ControlPrev", ["ArrowLeft"].addMany(buildGamepadInputs("MoveLeft")), true),
-		new ActionToInputsMapping("ControlNext", ["ArrowRight", "Tab"].addMany(buildGamepadInputs("MoveRight")), true),
-		new ActionToInputsMapping("ControlDecrement", ["ArrowUp"].addMany(buildGamepadInputs("MoveUp")), true),
-		new ActionToInputsMapping("ControlConfirm", ["Enter"].addMany(buildGamepadInputs("Button1")), true),
-		new ActionToInputsMapping("ControlCancel", ["Escape"].addMany(buildGamepadInputs("Button0")), true)
+		new ActionToInputsMapping(controlActionNames.ControlIncrement, ["ArrowDown"].addMany(buildGamepadInputs("MoveDown")), true),
+		new ActionToInputsMapping(controlActionNames.ControlPrev, ["ArrowLeft"].addMany(buildGamepadInputs("MoveLeft")), true),
+		new ActionToInputsMapping(controlActionNames.ControlNext, ["ArrowRight", "Tab"].addMany(buildGamepadInputs("MoveRight")), true),
+		new ActionToInputsMapping(controlActionNames.ControlDecrement, ["ArrowUp"].addMany(buildGamepadInputs("MoveUp")), true),
+		new ActionToInputsMapping(controlActionNames.ControlConfirm, ["Enter"].addMany(buildGamepadInputs("Button1")), true),
+		new ActionToInputsMapping(controlActionNames.ControlCancel, ["Escape"].addMany(buildGamepadInputs("Button0")), true)
 	];
 
 	ActionToInputsMapping.addLookupsByInputNames(this.actionToInputsMappings);

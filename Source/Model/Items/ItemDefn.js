@@ -8,7 +8,7 @@ function ItemDefn(name, appearance, description, mass, stackSizeMax, relativeFre
 	this.mass = mass || 1;
 	this.stackSizeMax = stackSizeMax || Number.POSITIVE_INFINITY;
 	this.relativeFrequency = relativeFrequency;
-	this.categoryNames = categoryNames;
+	this.categoryNames = categoryNames || [];
 	this.initialize = initialize;
 	this.use = use;
 }

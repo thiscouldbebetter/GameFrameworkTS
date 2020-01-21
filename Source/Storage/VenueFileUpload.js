@@ -80,7 +80,7 @@ function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 				{
 					inputPressed.isActive = false;
 					var actionName = actionToInputsMapping.actionName;
-					if (actionName == "ControlCancel")
+					if (actionName == ControlActionNames.Instances().ControlCancel)
 					{
 						universe.venueNext = this.venueNextIfCancelled;
 					}

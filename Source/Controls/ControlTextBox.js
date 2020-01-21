@@ -48,7 +48,8 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 	{
 		var text = this.text();
 
-		if (actionNameToHandle == "ControlCancel")
+		var controlActionNames = ControlActionNames.Instances();
+		if (actionNameToHandle == controlActionNames.ControlCancel)
 		{
 			this.text(text.substr(0, text.length - 1));
 
@@ -60,7 +61,7 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 				0, text.length + 1
 			);
 		}
-		else if (actionNameToHandle == "ControlConfirm")
+		else if (actionNameToHandle == controlActionNames.ControlConfirm)
 		{
 			this.cursorPos =
 			(
@@ -69,12 +70,12 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 		}
 		else if
 		(
-			actionNameToHandle == "ControlIncrement"
-			|| actionNameToHandle == "ControlDecrement"
+			actionNameToHandle == controlActionNames.ControlIncrement
+			|| actionNameToHandle == controlActionNames.ControlDecrement
 		)
 		{
 			// This is a bit counterintuitive.
-			var direction = (actionNameToHandle == "ControlIncrement" ? -1 : 1);
+			var direction = (actionNameToHandle == controlActionNames.ControlIncrement ? -1 : 1);
 
 			var charCodeAtCursor =
 			(
