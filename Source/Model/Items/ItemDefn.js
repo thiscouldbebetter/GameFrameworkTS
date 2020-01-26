@@ -1,5 +1,5 @@
 
-function ItemDefn(name, appearance, description, mass, stackSizeMax, relativeFrequency, categoryNames, initialize, use)
+function ItemDefn(name, appearance, description, mass, stackSizeMax, categoryNames, initialize, use)
 {
 	this.name = name;
 
@@ -7,7 +7,6 @@ function ItemDefn(name, appearance, description, mass, stackSizeMax, relativeFre
 	this.description = description;
 	this.mass = mass || 1;
 	this.stackSizeMax = stackSizeMax || Number.POSITIVE_INFINITY;
-	this.relativeFrequency = relativeFrequency;
 	this.categoryNames = categoryNames || [];
 	this.initialize = initialize;
 	this.use = use;
