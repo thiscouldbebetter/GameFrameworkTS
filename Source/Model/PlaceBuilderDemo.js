@@ -1428,6 +1428,17 @@ function PlaceBuilderDemo()
 		var killable = new Killable
 		(
 			50, // integrity
+			function damageApply(universe, world, place, entityDamager, entityKillable)
+			{
+				var damage = entityDamager.Damager.damagePerHit;
+				var armorEquipped = entityKillable.Equippable.socketGroup.sockets["Armor"].itemEntityEquipped;
+				if (armorEquipped != null)
+				{
+					damage /= 2; // todo
+				}
+				entityKillable.Killable.integrityAdd(0 - damage);
+				return damage;
+			},
 			function die(universe, world, place, entityKillable)
 			{
 				var venueMessage = new VenueMessage
@@ -1444,17 +1455,6 @@ function PlaceBuilderDemo()
 					universe.display.sizeDefault().clone().half()
 				);
 				universe.venueNext = venueMessage;
-			},
-			function damageApply(universe, world, place, entityDamager, entityKillable)
-			{
-				var damage = entityDamager.Damager.damagePerHit;
-				var armorEquipped = entityKillable.Equippable.socketGroup.sockets["Armor"].itemEntityEquipped;
-				if (armorEquipped != null)
-				{
-					damage /= 2; // todo
-				}
-				entityKillable.Killable.integrityAdd(0 - damage);
-				return damage;
 			}
 		);
 

@@ -112,6 +112,7 @@ function Device(name, initialize, update, use)
 				var killable = new Killable
 				(
 					1, // integrityMax
+					null, // damageApply
 					function die(universe, world, place, entityKillable)
 					{
 						var entityExplosion = new Entity

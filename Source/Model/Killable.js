@@ -1,9 +1,10 @@
 
-function Killable(integrityMax, die, damageApply)
+function Killable(integrityMax, damageApply, die, itemDefnCorpse)
 {
 	this.integrityMax = integrityMax;
-	this.die = die;
 	this._damageApply = damageApply;
+	this.die = die;
+	this.itemDefnCorpse = itemDefnCorpse;
 
 	this.integrity = this.integrityMax;
 }
@@ -53,6 +54,6 @@ function Killable(integrityMax, die, damageApply)
 
 	Killable.prototype.clone = function()
 	{
-		return new Killable(this.integrityMax, this.die, this._damageApply);
+		return new Killable(this.integrityMax, this._damageApply, this.die, this.itemDefnCorpse);
 	};
 }
