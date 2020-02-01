@@ -6,9 +6,10 @@ function VenueVideo(videoName, venueNext)
 
 	this.hasVideoBeenStarted = false;
 
+	var inputNames = Input.Names();
 	this.actionToInputsMappings =
 	[
-		new ActionToInputsMapping("VideoSkip", ["Escape", "Gamepad0Button0"], true),
+		new ActionToInputsMapping("VideoSkip", [ inputNames.Escape, inputNames.GamepadButton0 + "0"], true),
 	];
 
 	ActionToInputsMapping.addLookupsByInputName(this.actionToInputsMappings);

@@ -144,6 +144,107 @@ function ItemHolder(itemEntities)
 		var itemHolder = this;
 		var world = universe.world;
 
+		var drop = function()
+		{
+			var world = universe.world;
+			var place = world.placeCurrent;
+			var itemEntityToKeep = itemHolder.itemEntitySelected;
+			var itemEntityToDrop = itemEntityToKeep.clone();
+			var itemToDrop = itemEntityToDrop.item;
+			itemToDrop.quantity = 1;
+			var posToDropAt = itemEntityToDrop.locatable.loc.pos;
+			var holderPos = entityItemHolder.locatable.loc.pos;
+			posToDropAt.overwriteWith(holderPos);
+			itemEntityToDrop.collidable.ticksUntilCanCollide = 50;
+			place.entitySpawn(universe, world, itemEntityToDrop);
+			itemHolder.itemSubtract(itemToDrop);
+			if (itemEntityToKeep.item.quantity == 0)
+			{
+				itemHolder.itemEntitySelected = null;
+			}
+		};
+
+		var use = function()
+		{
+			var itemEntityToUse = itemHolder.itemEntitySelected;
+			var itemToUse = itemEntityToUse.item;
+			if (itemToUse.use != null)
+			{
+				var world = universe.world;
+				var place = world.placeCurrent;
+				var user = entityItemHolder;
+				itemHolder.statusMessage =
+					itemToUse.use(universe, world, place, user, itemEntityToUse);
+				if (itemToUse.quantity <= 0)
+				{
+					itemHolder.itemEntitySelected = null;
+				}
+			}
+		};
+
+		var up = function()
+		{
+			var itemEntityToMove = itemHolder.itemEntitySelected;
+			var itemEntitiesAll = itemHolder.itemEntities;
+			var index = itemEntitiesAll.indexOf(itemEntityToMove);
+			if (index > 0)
+			{
+				itemEntitiesAll.removeAt(index);
+				itemEntitiesAll.insertElementAt(itemEntityToMove, index - 1);
+			}
+		};
+
+		var down = function()
+		{
+			var itemEntityToMove = itemHolder.itemEntitySelected;
+			var itemEntitiesAll = itemHolder.itemEntities;
+			var index = itemEntitiesAll.indexOf(itemEntityToMove);
+			if (index < itemEntitiesAll.length - 1)
+			{
+				itemEntitiesAll.removeAt(index);
+				itemEntitiesAll.insertElementAt(itemEntityToMove, index + 1);
+			}
+		};
+
+		var split = function(universe)
+		{
+			var itemEntityToSplit = itemHolder.itemEntitySelected;
+			var itemToSplit = itemEntityToSplit.item;
+			if (itemToSplit.quantity > 1)
+			{
+				var quantityToSplit = Math.floor(itemToSplit.quantity / 2);
+
+				itemToSplit.quantity -= quantityToSplit;
+
+				var itemEntitySplitted = itemEntityToSplit.clone();
+				itemEntitySplitted.item.quantity = quantityToSplit;
+				// Add with no join.
+				var itemEntities = itemHolder.itemEntities;
+				itemEntities.insertElementAfterOther(itemEntitySplitted, itemEntityToSplit);
+				itemEntities[itemToSplit.defnName] = itemEntitySplitted;
+			}
+		};
+
+		var join = function()
+		{
+			var itemEntityToJoin = itemHolder.itemEntitySelected;
+			var itemToJoin = itemEntityToJoin.item;
+			var itemEntityJoined =
+				itemHolder.itemEntitiesWithDefnNameJoin(itemToJoin.defnName);
+			itemHolder.itemEntitySelected = itemEntityJoined;
+		};
+
+		var sort = function()
+		{
+			itemHolder.itemEntities.sortByProperty
+			(
+				x => x.item.defnName
+			).addLookups
+			(
+				y => y.item.defnName
+			);
+		};
+
 		var returnValue = new ControlContainer
 		(
 			"containerItems",
@@ -248,18 +349,7 @@ function ItemHolder(itemEntities)
 							return returnValue;
 						}
 					), // isEnabled
-					function click(universe)
-					{
-						var itemEntityToMove = itemHolder.itemEntitySelected;
-						var itemEntitiesAll = itemHolder.itemEntities;
-						var index = itemEntitiesAll.indexOf(itemEntityToMove);
-						if (index > 0)
-						{
-							itemEntitiesAll.removeAt(index);
-							itemEntitiesAll.insertElementAt(itemEntityToMove, index - 1);
-						}
-					},
-					universe // context
+					up // click
 				),
 
 				new ControlButton
@@ -283,18 +373,7 @@ function ItemHolder(itemEntities)
 							return returnValue;
 						}
 					), // isEnabled
-					function click(universe)
-					{
-						var itemEntityToMove = itemHolder.itemEntitySelected;
-						var itemEntitiesAll = itemHolder.itemEntities;
-						var index = itemEntitiesAll.indexOf(itemEntityToMove);
-						if (index < itemEntitiesAll.length - 1)
-						{
-							itemEntitiesAll.removeAt(index);
-							itemEntitiesAll.insertElementAt(itemEntityToMove, index + 1);
-						}
-					},
-					universe // context
+					down
 				),
 
 				new ControlButton
@@ -319,25 +398,7 @@ function ItemHolder(itemEntities)
 							return returnValue;
 						}
 					), // isEnabled
-					function click(universe)
-					{
-						var itemEntityToSplit = itemHolder.itemEntitySelected;
-						var itemToSplit = itemEntityToSplit.item;
-						if (itemToSplit.quantity > 1)
-						{
-							var quantityToSplit = Math.floor(itemToSplit.quantity / 2);
-
-							itemToSplit.quantity -= quantityToSplit;
-
-							var itemEntitySplitted = itemEntityToSplit.clone();
-							itemEntitySplitted.item.quantity = quantityToSplit;
-							// Add with no join.
-							var itemEntities = itemHolder.itemEntities;
-							itemEntities.insertElementAfterOther(itemEntitySplitted, itemEntityToSplit);
-							itemEntities[itemToSplit.defnName] = itemEntitySplitted;
-						}
-					},
-					universe // context
+					split
 				),
 
 				new ControlButton
@@ -367,15 +428,7 @@ function ItemHolder(itemEntities)
 							return returnValue;
 						}
 					), // isEnabled
-					function click(universe)
-					{
-						var itemEntityToJoin = itemHolder.itemEntitySelected;
-						var itemToJoin = itemEntityToJoin.item;
-						var itemEntityJoined =
-							itemHolder.itemEntitiesWithDefnNameJoin(itemToJoin.defnName);
-						itemHolder.itemEntitySelected = itemEntityJoined;
-					},
-					universe // context
+					join
 				),
 
 				new ControlButton
@@ -394,17 +447,7 @@ function ItemHolder(itemEntities)
 							return c.itemEntities.length > 1;
 						}
 					), // isEnabled
-					function click(universe)
-					{
-						itemHolder.itemEntities.sortByProperty
-						(
-							x => x.item.defnName
-						).addLookups
-						(
-							y => y.item.defnName
-						);
-					},
-					universe // context
+					sort
 				),
 
 				new ControlButton
@@ -426,20 +469,7 @@ function ItemHolder(itemEntities)
 					), // isEnabled
 					function click(universe)
 					{
-						var itemEntityToUse = itemHolder.itemEntitySelected;
-						var itemToUse = itemEntityToUse.item;
-						if (itemToUse.use != null)
-						{
-							var world = universe.world;
-							var place = world.placeCurrent;
-							var user = entityItemHolder;
-							itemHolder.statusMessage =
-								itemToUse.use(universe, world, place, user, itemEntityToUse);
-							if (itemToUse.quantity <= 0)
-							{
-								itemHolder.itemEntitySelected = null;
-							}
-						}
+						use();
 					},
 					universe // context
 				),
@@ -459,22 +489,7 @@ function ItemHolder(itemEntities)
 					), // isEnabled
 					function click(universe)
 					{
-						var world = universe.world;
-						var place = world.placeCurrent;
-						var itemEntityToKeep = itemHolder.itemEntitySelected;
-						var itemEntityToDrop = itemEntityToKeep.clone();
-						var itemToDrop = itemEntityToDrop.item;
-						itemToDrop.quantity = 1;
-						var posToDropAt = itemEntityToDrop.locatable.loc.pos;
-						var holderPos = entityItemHolder.locatable.loc.pos;
-						posToDropAt.overwriteWith(holderPos);
-						itemEntityToDrop.collidable.ticksUntilCanCollide = 50;
-						place.entitySpawn(universe, world, itemEntityToDrop);
-						itemHolder.itemSubtract(itemToDrop);
-						if (itemEntityToKeep.item.quantity == 0)
-						{
-							itemHolder.itemEntitySelected = null;
-						}
+						drop();
 					},
 					universe // context
 				),
@@ -496,6 +511,26 @@ function ItemHolder(itemEntities)
 					},
 					universe // context
 				)
+			], // end children
+
+			[
+				new Action("Up", up),
+				new Action("Down", down),
+				new Action("Split", split),
+				new Action("Join", join),
+				new Action("Sort", sort),
+				new Action("Drop", drop),
+				new Action("Use", use),
+			],
+
+			[
+				new ActionToInputsMapping( "Up", [ "[" ], true ),
+				new ActionToInputsMapping( "Down", [ "]" ], true ),
+				new ActionToInputsMapping( "Sort", [ "\\" ], true ),
+				new ActionToInputsMapping( "Split", [ "/" ], true ),
+				new ActionToInputsMapping( "Join", [ "=" ], true ),
+				new ActionToInputsMapping( "Drop", [ "d" ], true ),
+				new ActionToInputsMapping( "Use", [ "u" ], true )
 			]
 		);
 

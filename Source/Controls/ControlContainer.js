@@ -1,12 +1,12 @@
 
-function ControlContainer(name, pos, size, children)
+function ControlContainer(name, pos, size, children, actions, actionToInputsMappings)
 {
 	this.name = name;
 	this.pos = pos;
 	this.size = size;
-	this.children = children;
-
-	this.children.addLookupsByName();
+	this.children = children.addLookupsByName();
+	this.actions = (actions || []).addLookupsByName();
+	this.actionToInputsMappings = actionToInputsMappings || [];
 
 	for (var i = 0; i < this.children.length; i++)
 	{
@@ -88,6 +88,12 @@ function ControlContainer(name, pos, size, children)
 					childWithFocus.focusGain();
 				}
 			}
+		}
+		else if (this.actions[actionNameToHandle] != null)
+		{
+			var action = this.actions[actionNameToHandle];
+			action.perform(); // todo
+			wasActionHandled = true;
 		}
 		else if (childWithFocus != null)
 		{

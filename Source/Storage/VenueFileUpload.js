@@ -4,12 +4,13 @@ function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 	this.venueNextIfFileSpecified = venueNextIfFileSpecified;
 	this.venueNextIfCancelled = venueNextIfCancelled;
 
+	var inputNames = Input.Names();
 	this.actionToInputsMappings =
 	[
-		new ActionToInputsMapping("ControlCancel", ["Escape", "Gamepad0Button0"], true),
+		new ActionToInputsMapping(ControlActionNames.ControlCancel, [ inputNames.Escape, inputNames.GamepadButton0 + "0"], true),
 	];
 
-	ActionToInputsMapping.addLookupsByInputNames(this.actionToInputsMappings);
+	this.actionToInputsMappings.addLookupsMultiple(x => x.inputNames);
 }
 
 {

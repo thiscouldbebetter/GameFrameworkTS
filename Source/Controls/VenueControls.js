@@ -9,7 +9,7 @@ function VenueControls(controlRoot)
 
 		for (var i = 0; i < numberOfGamepads; i++)
 		{
-			var inputNameForGamepad = "Gamepad" + i + inputName;
+			var inputNameForGamepad = inputName + i;
 			returnValues.push(inputNameForGamepad);
 		}
 
@@ -17,18 +17,22 @@ function VenueControls(controlRoot)
 	};
 
 	var controlActionNames = ControlActionNames.Instances();
+	var inputNames = Input.Names();
 
+	var inactivate = true;
 	this.actionToInputsMappings =
 	[
-		new ActionToInputsMapping(controlActionNames.ControlIncrement, ["ArrowDown"].addMany(buildGamepadInputs("MoveDown")), true),
-		new ActionToInputsMapping(controlActionNames.ControlPrev, ["ArrowLeft"].addMany(buildGamepadInputs("MoveLeft")), true),
-		new ActionToInputsMapping(controlActionNames.ControlNext, ["ArrowRight", "Tab"].addMany(buildGamepadInputs("MoveRight")), true),
-		new ActionToInputsMapping(controlActionNames.ControlDecrement, ["ArrowUp"].addMany(buildGamepadInputs("MoveUp")), true),
-		new ActionToInputsMapping(controlActionNames.ControlConfirm, ["Enter"].addMany(buildGamepadInputs("Button1")), true),
-		new ActionToInputsMapping(controlActionNames.ControlCancel, ["Escape"].addMany(buildGamepadInputs("Button0")), true)
+		new ActionToInputsMapping(controlActionNames.ControlIncrement, 	[inputNames.ArrowDown].addMany(buildGamepadInputs(inputNames.MoveDown)), inactivate),
+		new ActionToInputsMapping(controlActionNames.ControlPrev, 		[inputNames.ArrowLeft].addMany(buildGamepadInputs(inputNames.MoveLeft)), inactivate),
+		new ActionToInputsMapping(controlActionNames.ControlNext, 		[inputNames.ArrowRight, inputNames.Tab].addMany(buildGamepadInputs(inputNames.MoveRight)), inactivate),
+		new ActionToInputsMapping(controlActionNames.ControlDecrement, 	[inputNames.ArrowUp].addMany(buildGamepadInputs(inputNames.MoveUp)), inactivate),
+		new ActionToInputsMapping(controlActionNames.ControlConfirm, 	[inputNames.Enter].addMany(buildGamepadInputs(inputNames.Button1)), inactivate),
+		new ActionToInputsMapping(controlActionNames.ControlCancel, 	[inputNames.Escape].addMany(buildGamepadInputs(inputNames.Button0)), inactivate)
 	];
 
-	ActionToInputsMapping.addLookupsByInputNames(this.actionToInputsMappings);
+	this.actionToInputsMappings.addMany(this.controlRoot.actionToInputsMappings);
+
+	this.actionToInputsMappings.addLookupsMultiple(x => x.inputNames);
 
 	// Helper variables.
 
@@ -53,7 +57,7 @@ function VenueControls(controlRoot)
 
 		var inputHelper = universe.inputHelper;
 		var inputsPressed = inputHelper.inputsPressed;
-		var inputNames = inputHelper.inputNames();
+		var inputNames = Input.Names();
 
 		for (var i = 0; i < inputsPressed.length; i++)
 		{

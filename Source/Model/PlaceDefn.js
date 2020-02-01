@@ -7,7 +7,7 @@ function PlaceDefn(name, actions, actionToInputsMappings)
 	this.actionToInputsMappings = this.actionToInputsMappingsDefault.clone();
 	this.actionToInputsMappingsEdited = this.actionToInputsMappings.clone();
 
-	ActionToInputsMapping.addLookupsByInputNames(this.actionToInputsMappings);
+	this.actionToInputsMappings.addLookupsMultiple(x => x.inputNames);
 }
 
 {
@@ -31,9 +31,10 @@ function PlaceDefn(name, actions, actionToInputsMappings)
 
 	PlaceDefn.prototype.actionToInputsMappingsSave = function()
 	{
-		this.actionToInputsMappings = ActionToInputsMapping.addLookupsByInputNames
-		(
-			this.actionToInputsMappingsEdited.clone()
-		);
+		this.actionToInputsMappings =
+			this.actionToInputsMappingsEdited.clone().addLookupsMultiple
+			(
+				x => x.inputNames
+			);
 	};
 }

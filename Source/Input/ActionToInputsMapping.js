@@ -6,22 +6,6 @@ function ActionToInputsMapping(actionName, inputNames, inactivateInputWhenAction
 	this.inactivateInputWhenActionPerformed = inactivateInputWhenActionPerformed;
 }
 {
-	ActionToInputsMapping.addLookupsByInputNames = function(mappings)
-	{
-		for (var m = 0; m < mappings.length; m++)
-		{
-			var mapping = mappings[m];
-			var inputNames = mapping.inputNames;
-			for (var i = 0; i < inputNames.length; i++)
-			{
-				var inputName = inputNames[i];
-				mappings[inputName] = mapping;
-			}
-		}
-
-		return mappings;
-	};
-
 	ActionToInputsMapping.prototype.action = function(universe)
 	{
 		return universe.world.defns.actions[this.actionName];

@@ -1,7 +1,8 @@
 
-function ControlContainerTransparent(containerInner)
+function ControlContainerTransparent(containerInner, actionToInputsMappings)
 {
 	this.containerInner = containerInner;
+	this.actionToInputsMappings = actionToInputsMappings || [];
 }
 
 {

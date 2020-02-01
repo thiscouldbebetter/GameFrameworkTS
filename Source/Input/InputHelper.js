@@ -8,7 +8,8 @@ function InputHelper()
 	this.mouseMovePosPrev = new Coords(0, 0);
 	this.mouseMovePosNext = new Coords(0, 0);
 
-	var inputNames = this.inputNames();
+	var inputNames = Input.Names();
+	this.inputNames = inputNames;
 	this.keysToPreventDefaultsFor =
 	[
 		inputNames.ArrowDown, inputNames.ArrowLeft, inputNames.ArrowRight,
@@ -42,29 +43,6 @@ function InputHelper()
 		}
 
 		return returnValues;
-	};
-
-	InputHelper.prototype.inputNames = function()
-	{
-		if (this._inputNames == null)
-		{
-			function InputHelper_InputNames()
-			{
-				this.ArrowDown = "ArrowDown";
-				this.ArrowLeft = "ArrowLeft";
-				this.ArrowRight = "ArrowRight";
-				this.ArrowUp = "ArrowUp";
-				this.Enter = "Enter";
-				this.Escape = "Escape";
-				this.MouseClick = "MouseClick";
-				this.MouseMove = "MouseMove";
-				this.Tab = "Tab";
-			}
-
-			this._inputNames = new InputHelper_InputNames();
-		}
-
-		return this._inputNames;
 	};
 
 	InputHelper.prototype.initialize = function(universe)
@@ -124,7 +102,7 @@ function InputHelper()
 
 	InputHelper.prototype.isMouseClicked = function(value)
 	{
-		var inputNameMouseClick = this.inputNames().MouseClick;
+		var inputNameMouseClick = this.inputNames.MouseClick;
 		if (value == null)
 		{
 			var inputPressed = this.inputsPressed[inputNameMouseClick];
@@ -152,6 +130,7 @@ function InputHelper()
 	InputHelper.prototype.updateForTimerTick_Gamepads = function(universe)
 	{
 		var systemGamepads = this.systemGamepads();
+		var inputNames = this.inputNames;
 
 		for (var i = 0; i < this.gamepadsConnected.length; i++)
 		{
@@ -159,25 +138,21 @@ function InputHelper()
 			var systemGamepad = systemGamepads[gamepad.index];
 			gamepad.updateFromSystemGamepad(systemGamepad);
 
-			var gamepadID = "Gamepad" + i;
-
 			var axisDisplacements = gamepad.axisDisplacements;
 			for (var a = 0; a < axisDisplacements.length; a++)
 			{
-				var gamepadIDMove = gamepadID + "Move";
-
 				var axisDisplacement = axisDisplacements[a];
 				if (axisDisplacement == 0)
 				{
 					if (a == 0)
 					{
-						this.inputRemove(gamepadIDMove + "Left");
-						this.inputRemove(gamepadIDMove + "Right");
+						this.inputRemove(inputNames.gamepadMoveLeft + i);
+						this.inputRemove(inputNames.gamepadMoveRight + i);
 					}
 					else
 					{
-						this.inputRemove(gamepadIDMove + "Up");
-						this.inputRemove(gamepadIDMove + "Down");
+						this.inputRemove(inputNames.gamepadMoveUp + i);
+						this.inputRemove(inputNames.gamepadMoveDown + i);
 					}
 				}
 				else
@@ -274,7 +249,7 @@ function InputHelper()
 			event.clientY - canvasBox.top,
 			0
 		);
-		this.inputAdd(this.inputNames().MouseClick);
+		this.inputAdd(this.inputNames.MouseClick);
 	};
 
 	InputHelper.prototype.handleEventMouseMove = function(event)
@@ -292,13 +267,13 @@ function InputHelper()
 		{
 			this.mouseMovePosPrev.overwriteWith(this.mouseMovePos);
 			this.mouseMovePos.overwriteWith(this.mouseMovePosNext);
-			this.inputAdd(this.inputNames().MouseMove);
+			this.inputAdd(this.inputNames.MouseMove);
 		}
 	};
 
 	InputHelper.prototype.handleEventMouseUp = function(event)
 	{
-		this.inputRemove(this.inputNames().MouseClick);
+		this.inputRemove(this.inputNames.MouseClick);
 	};
 
 	// gamepads

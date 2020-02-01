@@ -62,7 +62,7 @@ function Color(name, code, componentsRGBA)
 				this.YellowDark,
 			];
 
-			this._All.addLookups( function(x) { return x.code; } );
+			this._All.addLookups( x => x.code );
 		}
 
 		return Color._Instances;
