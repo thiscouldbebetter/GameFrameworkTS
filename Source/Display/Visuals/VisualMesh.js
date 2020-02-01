@@ -26,6 +26,6 @@ function VisualMesh(mesh)
 
 	VisualMesh.prototype.draw = function(universe, world, display, entity)
 	{
-		display.drawMeshWithOrientation(this.mesh, entity.Locatable.loc.orientation);
+		display.drawMeshWithOrientation(this.mesh, entity.locatable.loc.orientation);
 	};
 }

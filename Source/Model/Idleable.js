@@ -6,7 +6,7 @@ function Idleable()
 {
 	Idleable.prototype.updateForTimerTick = function(universe, world, place, player)
 	{
-		var playerLoc = player.Locatable.loc;
+		var playerLoc = player.locatable.loc;
 		playerLoc.orientation.forwardSet(Coords.Instances().Zeroes);
 	};
 }

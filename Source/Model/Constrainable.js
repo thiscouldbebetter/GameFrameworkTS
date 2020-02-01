@@ -6,7 +6,7 @@ function Constrainable(constraints)
 {
 	Constrainable.constrain = function(universe, world, place, entity)
 	{
-		var constrainable = entity.Constrainable;
+		var constrainable = entity.constrainable;
 		var constraints = constrainable.constraints;
 		for (var i = 0; i < constraints.length; i++)
 		{

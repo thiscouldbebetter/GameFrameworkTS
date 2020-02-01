@@ -11,7 +11,7 @@ function VisualRotate(rotationInTurns, child)
 		var graphics = display.graphics;
 		graphics.save();
 
-		var centerOfRotation = entity.Locatable.loc.pos;
+		var centerOfRotation = entity.locatable.loc.pos;
 		graphics.translate(centerOfRotation.x, centerOfRotation.y);
 
 		var rotationInRadians = this.rotationInTurns * Polar.RadiansPerTurn;

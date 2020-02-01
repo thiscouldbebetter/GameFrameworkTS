@@ -15,7 +15,7 @@ function VisualPolars(polars, color, lineThickness)
 {
 	VisualPolars.prototype.draw = function(universe, world, display, entity)
 	{
-		var drawableLoc = entity.Locatable.loc;
+		var drawableLoc = entity.locatable.loc;
 		var drawablePos = drawableLoc.pos;
 		var drawableHeadingInTurns = drawableLoc.orientation.headingInTurns();
 

@@ -47,7 +47,7 @@ function VisualImageImmediate(image)
 		var imageSize = image.sizeInPixels;
 		var drawPos = this._drawPos.clear().subtract(imageSize).half().add
 		(
-			entity.Locatable.loc.pos
+			entity.locatable.loc.pos
 		);
 		//display.drawImageScaled(image, drawPos, imageSize);
 		display.drawImage(image, drawPos);

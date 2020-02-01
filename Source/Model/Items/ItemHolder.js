@@ -19,7 +19,7 @@ function ItemHolder(itemEntities)
 	ItemHolder.prototype.hasItemWithDefnNameAndQuantity = function(defnName, quantityToCheck)
 	{
 		var itemEntityExisting = this.itemEntities[defnName];
-		var itemExistingQuantity = (itemEntityExisting == null ? 0 : itemEntityExisting.Item.quantity);
+		var itemExistingQuantity = (itemEntityExisting == null ? 0 : itemEntityExisting.item.quantity);
 		var returnValue = (itemExistingQuantity >= quantityToCheck);
 		return returnValue;
 	};
@@ -27,19 +27,19 @@ function ItemHolder(itemEntities)
 	ItemHolder.prototype.itemQuantityByDefnName = function(itemDefnName)
 	{
 		var itemEntity = this.itemEntities[itemDefnName];
-		var returnValue = (itemEntity == null ? 0 : itemEntity.Item.quantity);
+		var returnValue = (itemEntity == null ? 0 : itemEntity.item.quantity);
 		return returnValue;
 	};
 
 	ItemHolder.prototype.itemEntitiesWithDefnNameJoin = function(defnName)
 	{
-		var itemEntitiesMatching = this.itemEntities.filter(x => x.Item.defnName == defnName);
+		var itemEntitiesMatching = this.itemEntities.filter(x => x.item.defnName == defnName);
 		var itemEntityJoined = itemEntitiesMatching[0];
-		var itemJoined = itemEntityJoined.Item;
+		var itemJoined = itemEntityJoined.item;
 		for (var i = 1; i < itemEntitiesMatching.length; i++)
 		{
 			var itemEntityToJoin = itemEntitiesMatching[i];
-			itemJoined.quantity += itemEntityToJoin.Item.quantity;
+			itemJoined.quantity += itemEntityToJoin.item.quantity;
 			this.itemEntities.remove(itemEntityToJoin);
 		}
 		this.itemEntities[defnName] = itemEntityJoined;
@@ -48,7 +48,7 @@ function ItemHolder(itemEntities)
 
 	ItemHolder.prototype.itemEntityAdd = function(itemEntityToAdd)
 	{
-		var itemToAdd = itemEntityToAdd.Item;
+		var itemToAdd = itemEntityToAdd.item;
 		var itemDefnName = itemToAdd.defnName;
 		var itemEntityExisting = this.itemEntities[itemDefnName];
 		if (itemEntityExisting == null)
@@ -58,7 +58,7 @@ function ItemHolder(itemEntities)
 		}
 		else
 		{
-			itemEntityExisting.Item.quantity += itemToAdd.quantity;
+			itemEntityExisting.item.quantity += itemToAdd.quantity;
 		}
 	};
 
@@ -68,8 +68,8 @@ function ItemHolder(itemEntities)
 		if (doesExist)
 		{
 			this.itemEntities.remove(itemEntityToRemove);
-			var defnName = itemEntityToRemove.Item.defnName;
-			var areOtherItemsOfSameType = this.itemEntities.some(x => x.Item.defnName == defnName);
+			var defnName = itemEntityToRemove.item.defnName;
+			var areOtherItemsOfSameType = this.itemEntities.some(x => x.item.defnName == defnName);
 			if (areOtherItemsOfSameType == false)
 			{
 				delete this.itemEntities[itemDefnName];
@@ -98,7 +98,7 @@ function ItemHolder(itemEntities)
 		var itemEntityExisting = this.itemEntities[itemDefnName];
 		if (itemEntityExisting != null)
 		{
-			var itemExisting = itemEntityExisting.Item;
+			var itemExisting = itemEntityExisting.item;
 			itemExisting.quantity -= quantityToSubtract;
 			if (itemExisting.quantity <= 0)
 			{
@@ -120,7 +120,7 @@ function ItemHolder(itemEntities)
 	ItemHolder.prototype.itemEntityTransferTo = function(itemEntity, other)
 	{
 		other.itemEntityAdd(itemEntity);
-		this.itemRemove(itemEntity.Item);
+		this.itemRemove(itemEntity.item);
 	};
 
 	// controls
@@ -170,7 +170,7 @@ function ItemHolder(itemEntities)
 					new DataBinding
 					(
 						null,
-						function get(c) { return c.Item.toString(world); }
+						function get(c) { return c.item.toString(world); }
 					), // bindingForItemText
 					fontHeightSmall,
 					new DataBinding
@@ -204,7 +204,7 @@ function ItemHolder(itemEntities)
 						function get(c)
 						{
 							var i = c.itemEntitySelected;
-							return (i == null ? "-" : i.Item.toString(world));
+							return (i == null ? "-" : i.item.toString(world));
 						}
 					), // text
 					fontHeight
@@ -314,7 +314,7 @@ function ItemHolder(itemEntities)
 							var returnValue =
 							(
 								itemEntity != null
-								&& (itemEntity.Item.quantity > 1)
+								&& (itemEntity.item.quantity > 1)
 							);
 							return returnValue;
 						}
@@ -322,7 +322,7 @@ function ItemHolder(itemEntities)
 					function click(universe)
 					{
 						var itemEntityToSplit = itemHolder.itemEntitySelected;
-						var itemToSplit = itemEntityToSplit.Item;
+						var itemToSplit = itemEntityToSplit.item;
 						if (itemToSplit.quantity > 1)
 						{
 							var quantityToSplit = Math.floor(itemToSplit.quantity / 2);
@@ -330,7 +330,7 @@ function ItemHolder(itemEntities)
 							itemToSplit.quantity -= quantityToSplit;
 
 							var itemEntitySplitted = itemEntityToSplit.clone();
-							itemEntitySplitted.Item.quantity = quantityToSplit;
+							itemEntitySplitted.item.quantity = quantityToSplit;
 							// Add with no join.
 							var itemEntities = itemHolder.itemEntities;
 							itemEntities.insertElementAfterOther(itemEntitySplitted, itemEntityToSplit);
@@ -360,7 +360,7 @@ function ItemHolder(itemEntities)
 								(
 									c.itemEntities.filter
 									(
-										x => x.Item.defnName == c.itemEntitySelected.Item.defnName
+										x => x.item.defnName == c.itemEntitySelected.item.defnName
 									).length > 1
 								)
 							);
@@ -370,7 +370,7 @@ function ItemHolder(itemEntities)
 					function click(universe)
 					{
 						var itemEntityToJoin = itemHolder.itemEntitySelected;
-						var itemToJoin = itemEntityToJoin.Item;
+						var itemToJoin = itemEntityToJoin.item;
 						var itemEntityJoined =
 							itemHolder.itemEntitiesWithDefnNameJoin(itemToJoin.defnName);
 						itemHolder.itemEntitySelected = itemEntityJoined;
@@ -398,10 +398,10 @@ function ItemHolder(itemEntities)
 					{
 						itemHolder.itemEntities.sortByProperty
 						(
-							x => x.Item.defnName
+							x => x.item.defnName
 						).addLookups
 						(
-							y => y.Item.defnName
+							y => y.item.defnName
 						);
 					},
 					universe // context
@@ -421,13 +421,13 @@ function ItemHolder(itemEntities)
 						function get(c)
 						{
 							var itemEntity = c.itemEntitySelected;
-							return (itemEntity != null && itemEntity.Item.isUsable(world));
+							return (itemEntity != null && itemEntity.item.isUsable(world));
 						}
 					), // isEnabled
 					function click(universe)
 					{
 						var itemEntityToUse = itemHolder.itemEntitySelected;
-						var itemToUse = itemEntityToUse.Item;
+						var itemToUse = itemEntityToUse.item;
 						if (itemToUse.use != null)
 						{
 							var world = universe.world;
@@ -463,15 +463,15 @@ function ItemHolder(itemEntities)
 						var place = world.placeCurrent;
 						var itemEntityToKeep = itemHolder.itemEntitySelected;
 						var itemEntityToDrop = itemEntityToKeep.clone();
-						var itemToDrop = itemEntityToDrop.Item;
+						var itemToDrop = itemEntityToDrop.item;
 						itemToDrop.quantity = 1;
-						var posToDropAt = itemEntityToDrop.Locatable.loc.pos;
-						var holderPos = entityItemHolder.Locatable.loc.pos;
+						var posToDropAt = itemEntityToDrop.locatable.loc.pos;
+						var holderPos = entityItemHolder.locatable.loc.pos;
 						posToDropAt.overwriteWith(holderPos);
-						itemEntityToDrop.Collidable.ticksUntilCanCollide = 50;
+						itemEntityToDrop.collidable.ticksUntilCanCollide = 50;
 						place.entitySpawn(universe, world, itemEntityToDrop);
 						itemHolder.itemSubtract(itemToDrop);
-						if (itemEntityToKeep.Item.quantity == 0)
+						if (itemEntityToKeep.item.quantity == 0)
 						{
 							itemHolder.itemEntitySelected = null;
 						}

@@ -15,7 +15,7 @@ function VisualArc(radiusOuter, radiusInner, directionMin, angleSpannedInTurns, 
 {
 	VisualArc.prototype.draw = function(universe, world, display, entity)
 	{
-		var drawableLoc = entity.Locatable.loc;
+		var drawableLoc = entity.locatable.loc;
 		var drawPos = this._drawPos.overwriteWith
 		(
 			drawableLoc.pos

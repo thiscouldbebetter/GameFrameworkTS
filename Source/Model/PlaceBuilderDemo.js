@@ -16,7 +16,7 @@ function PlaceBuilderDemo()
 		var cameraEntity = this.entityBuildCamera(cameraViewSize);
 		entities.push(cameraEntity);
 
-		var camera = cameraEntity.Camera;
+		var camera = cameraEntity.camera;
 		this.entityBuildBackground(entities, camera);
 
 		var entityDimension = 10;
@@ -27,7 +27,7 @@ function PlaceBuilderDemo()
 		var visualEyesBlinking = this.visualEyesBlinkingBuild(visualEyeRadius);
 
 		var playerEntity = this.entityBuildPlayer(entities, entityDimension, visualEyeRadius, visualEyesBlinking);
-		var playerPos = playerEntity.Locatable.loc.pos;
+		var playerPos = playerEntity.locatable.loc.pos;
 		var damagerColor = "Red";
 		var obstacleColor = damagerColor;
 		var wallThickness = this.entityBuildObstacleWalls(entities, obstacleColor);
@@ -83,7 +83,7 @@ function PlaceBuilderDemo()
 		var entityControls = this.entityControlsBuild(playerEntity, itemDefns);
 		entities.push(entityControls);
 
-		entities.forEach(x => { if (x.Locatable != null) { x.Locatable.loc.pos.z = 0; } })
+		entities.forEach(x => { if (x.locatable != null) { x.locatable.loc.pos.z = 0; } })
 
 		var place = new Place(name, "Demo", size, entities);
 		return place;
@@ -137,7 +137,7 @@ function PlaceBuilderDemo()
 		for (var i = 0; i < entities.length; i++)
 		{
 			var entity = entities[i];
-			var entityDrawable = entity.Drawable;
+			var entityDrawable = entity.drawable;
 			if (entityDrawable != null)
 			{
 				var entityVisual = entityDrawable.visual;
@@ -620,11 +620,11 @@ function PlaceBuilderDemo()
 				return;
 			}
 
-			var actorLoc = actor.Locatable.loc;
+			var actorLoc = actor.locatable.loc;
 
 			actorLoc.accel.overwriteWith
 			(
-				target.Locatable.loc.pos
+				target.locatable.loc.pos
 			).subtract
 			(
 				actorLoc.pos
@@ -675,7 +675,7 @@ function PlaceBuilderDemo()
 
 				enemyPosToStartAt.add(placeSizeHalf);
 
-				enemyEntityToPlace.Locatable.loc.pos.overwriteWith(enemyPosToStartAt);
+				enemyEntityToPlace.locatable.loc.pos.overwriteWith(enemyPosToStartAt);
 
 				place.entitiesToSpawn.push(enemyEntityToPlace);
 			}
@@ -775,7 +775,7 @@ function PlaceBuilderDemo()
 				(
 					function activity(universe, world, place, entityActor, target)
 					{
-						var actor = entityActor.Actor;
+						var actor = entityActor.actor;
 						var targetPos = actor.target;
 						if (targetPos == null)
 						{
@@ -784,7 +784,7 @@ function PlaceBuilderDemo()
 							actor.target = targetPos;
 						}
 
-						var actorLoc = entityActor.Locatable.loc;
+						var actorLoc = entityActor.locatable.loc;
 						var actorPos = actorLoc.pos;
 
 						var distanceToTarget = targetPos.clone().subtract
@@ -910,7 +910,7 @@ function PlaceBuilderDemo()
 
 			for (var j = 0; j < entitiesObstacles.length; j++)
 			{
-				var obstaclePos = entitiesObstacles[j].Locatable.loc.pos;
+				var obstaclePos = entitiesObstacles[j].locatable.loc.pos;
 				var distanceFromObstacle =
 					displacement.overwriteWith(obstaclePos).magnitude();
 				if (distanceFromObstacle < obstacleExclusionRadius)
@@ -1155,7 +1155,7 @@ function PlaceBuilderDemo()
 	{
 		// obstacleRing
 
-		var obstaclePos = goalEntity.Locatable.loc.pos;
+		var obstaclePos = goalEntity.locatable.loc.pos;
 		var obstacleLoc = new Location(obstaclePos);
 		obstacleLoc.spin.angleInTurnsRef.value = 0.002;
 		var obstacleCollider = new Arc
@@ -1280,11 +1280,11 @@ function PlaceBuilderDemo()
 		{
 			var messageToDisplay = null;
 
-			if (entityOther.Damager != null)
+			if (entityOther.damager != null)
 			{
 				universe.collisionHelper.collideCollidables(entityPlayer, entityOther);
 
-				var damage = entityPlayer.Killable.damageApply(universe, world, place, entityOther, entityPlayer);
+				var damage = entityPlayer.killable.damageApply(universe, world, place, entityOther, entityPlayer);
 
 				var messageEntity = new Entity
 				(
@@ -1301,7 +1301,7 @@ function PlaceBuilderDemo()
 						new Ephemeral(20),
 						new Locatable
 						(
-							new Location(entityPlayer.Locatable.loc.pos.clone()).velSet
+							new Location(entityPlayer.locatable.loc.pos.clone()).velSet
 							(
 								new Coords(0, -1)
 							)
@@ -1310,10 +1310,10 @@ function PlaceBuilderDemo()
 				);
 				place.entitySpawn(universe, world, messageEntity);
 			}
-			else if (entityOther.ItemContainer != null)
+			else if (entityOther.itemContainer != null)
 			{
-				entityOther.Collidable.ticksUntilCanCollide = 50; // hack
-				var itemContainerAsControl = entityOther.ItemContainer.toControl
+				entityOther.collidable.ticksUntilCanCollide = 50; // hack
+				var itemContainerAsControl = entityOther.itemContainer.toControl
 				(
 					universe, universe.display.sizeInPixels,
 					entityPlayer, entityOther,
@@ -1323,10 +1323,10 @@ function PlaceBuilderDemo()
 				venueNext = new VenueFader(venueNext);
 				universe.venueNext = venueNext;
 			}
-			else if (entityOther.ItemStore != null)
+			else if (entityOther.itemStore != null)
 			{
-				entityOther.Collidable.ticksUntilCanCollide = 50; // hack
-				var storeAsControl = entityOther.ItemStore.toControl
+				entityOther.collidable.ticksUntilCanCollide = 50; // hack
+				var storeAsControl = entityOther.itemStore.toControl
 				(
 					universe, universe.display.sizeInPixels,
 					entityPlayer, entityOther,
@@ -1336,11 +1336,11 @@ function PlaceBuilderDemo()
 				venueNext = new VenueFader(venueNext);
 				universe.venueNext = venueNext;
 			}
-			else if (entityOther.Goal != null)
+			else if (entityOther.goal != null)
 			{
 				var keysRequired =
-					new Item(itemDefnKeyName, entityOther.Goal.numberOfKeysToUnlock);
-				if (entityPlayer.ItemHolder.hasItem(keysRequired))
+					new Item(itemDefnKeyName, entityOther.goal.numberOfKeysToUnlock);
+				if (entityPlayer.itemHolder.hasItem(keysRequired))
 				{
 					var venueMessage = new VenueMessage
 					(
@@ -1358,15 +1358,15 @@ function PlaceBuilderDemo()
 					universe.venueNext = venueMessage;
 				}
 			}
-			else if (entityOther.Item != null)
+			else if (entityOther.item != null)
 			{
-				entityPlayer.ItemHolder.itemEntityAdd(entityOther);
+				entityPlayer.itemHolder.itemEntityAdd(entityOther);
 				place.entitiesToRemove.push(entityOther);
 			}
-			else if (entityOther.Portal != null)
+			else if (entityOther.portal != null)
 			{
-				entityOther.Collidable.ticksUntilCanCollide = 50; // hack
-				var portal = entityOther.Portal;
+				entityOther.collidable.ticksUntilCanCollide = 50; // hack
+				var portal = entityOther.portal;
 				var venueCurrent = universe.venueCurrent;
 				var venueMessage = new VenueMessage
 				(
@@ -1375,7 +1375,7 @@ function PlaceBuilderDemo()
 					{
 						var world = universe.world;
 						world.placeCurrent = world.places[portal.destinationPlaceName];
-						entityPlayer.Locatable.loc.pos.overwriteWith(portal.destinationPos);
+						entityPlayer.locatable.loc.pos.overwriteWith(portal.destinationPos);
 						universe.venueNext = new VenueFader(venueCurrent); // todo
 					},
 					venueCurrent, // venuePrev
@@ -1383,10 +1383,10 @@ function PlaceBuilderDemo()
 				);
 				universe.venueNext = venueMessage;
 			}
-			else if (entityOther.Talker != null)
+			else if (entityOther.talker != null)
 			{
-				entityOther.Collidable.ticksUntilCanCollide = 100;
-				entityOther.Drawable.animationRuns["Friendly"].ticksSinceStarted = 0;
+				entityOther.collidable.ticksUntilCanCollide = 100;
+				entityOther.drawable.animationRuns["Friendly"].ticksSinceStarted = 0;
 
 				var conversationDefnAsJSON =
 					universe.mediaLibrary.textStringGetByName("Conversation").value;
@@ -1430,14 +1430,14 @@ function PlaceBuilderDemo()
 			50, // integrity
 			function damageApply(universe, world, place, entityDamager, entityKillable)
 			{
-				var damage = entityDamager.Damager.damagePerHit;
-				var equipmentUser = entityKillable.EquipmentUser;
+				var damage = entityDamager.damager.damagePerHit;
+				var equipmentUser = entityKillable.equipmentUser;
 				var armorEquipped = equipmentUser.itemEntityInSocketWithName("Armor");
 				if (armorEquipped != null)
 				{
 					damage /= 2; // todo
 				}
-				entityKillable.Killable.integrityAdd(0 - damage);
+				entityKillable.killable.integrityAdd(0 - damage);
 				return damage;
 			},
 			function die(universe, world, place, entityKillable)
@@ -1464,20 +1464,20 @@ function PlaceBuilderDemo()
 			0.5, // accelerationPerTick
 			function accelerate(universe, world, place, entityMovable)
 			{
-				var accelerationToApply = entityMovable.Movable.accelerationPerTick;
-				var equipmentUser = entityMovable.EquipmentUser;
+				var accelerationToApply = entityMovable.movable.accelerationPerTick;
+				var equipmentUser = entityMovable.equipmentUser;
 				var accessoryEquipped =
 					equipmentUser.itemEntityInSocketWithName("Accessory");
 				var isSpeedBoosterEquipped =
 				(
 					accessoryEquipped != null
-					&& accessoryEquipped.Item.defnName == "Speed Booster"
+					&& accessoryEquipped.item.defnName == "Speed Booster"
 				);
 				if (isSpeedBoosterEquipped)
 				{
 					accelerationToApply *= 2;
 				}
-				entityMovable.Movable.accelerateForward
+				entityMovable.movable.accelerateForward
 				(
 					universe, world, place, entityMovable, accelerationToApply
 				);
@@ -1683,8 +1683,8 @@ function PlaceBuilderDemo()
 				playerEntity,
 				function get(c)
 				{
-					var itemHolder = c.ItemHolder;
-					var statusText = "H:" + c.Killable.integrity
+					var itemHolder = c.itemHolder;
+					var statusText = "H:" + c.killable.integrity
 						+ "   A:" + itemHolder.itemQuantityByDefnName(itemDefns["Ammo"].name)
 						+ "   K:" + itemHolder.itemQuantityByDefnName(itemDefns["Key"].name)
 						+ "   $:" + itemHolder.itemQuantityByDefnName(itemDefns["Coin"].name);

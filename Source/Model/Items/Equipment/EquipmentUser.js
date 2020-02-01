@@ -12,7 +12,7 @@ function EquipmentUser(socketDefnGroup)
 	{
 		var sockets = this.socketGroup.sockets;
 		var socketDefnGroup = this.socketGroup.defnGroup;
-		var itemToEquip = itemEntityToEquip.Item;
+		var itemToEquip = itemEntityToEquip.item;
 		var itemDefn = itemToEquip.defn(world);
 
 		var socketFound = sockets.filter
@@ -73,7 +73,7 @@ function EquipmentUser(socketDefnGroup)
 			else
 			{
 				socketToUnequipFrom.itemEntityEquipped = null;
-				var itemToUnequip = itemEntityToUnequip.Item;
+				var itemToUnequip = itemEntityToUnequip.item;
 				var itemDefn = itemToUnequip.defn(world);
 				message = itemDefn.appearance + " unequipped."
 			}
@@ -99,7 +99,7 @@ function EquipmentUser(socketDefnGroup)
 		var fontHeightSmall = fontHeight * .6;
 		var fontHeightLarge = fontHeight * 1.5;
 
-		var itemHolder = entityEquipmentUser.ItemHolder;
+		var itemHolder = entityEquipmentUser.itemHolder;
 		var equipmentUser = this;
 		var sockets = this.socketGroup.sockets;
 		var socketDefnGroup = this.socketGroup.defnGroup;
@@ -134,7 +134,7 @@ function EquipmentUser(socketDefnGroup)
 			new DataBinding
 			(
 				null,
-				function get(c) { return c.Item.toString(world); }
+				function get(c) { return c.item.toString(world); }
 			), // bindingForItemText
 			fontHeightSmall,
 			new DataBinding
@@ -148,7 +148,7 @@ function EquipmentUser(socketDefnGroup)
 			function confirm()
 			{
 				var itemEntityToEquip = equipmentUser.itemEntitySelected;
-				var itemToEquip = itemEntityToEquip.Item;
+				var itemToEquip = itemEntityToEquip.item;
 				var itemToEquipName = itemToEquip.appearance;
 
 				var message = equipmentUser.equipEntityWithItem

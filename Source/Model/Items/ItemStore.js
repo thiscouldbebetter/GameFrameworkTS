@@ -16,8 +16,8 @@ function ItemStore(itemDefnNameCurrency)
 
 		var fontHeight = 10;
 
-		var itemHolderCustomer = entityCustomer.ItemHolder;
-		var itemHolderStore = entityStore.ItemHolder;
+		var itemHolderCustomer = entityCustomer.itemHolder;
+		var itemHolderStore = entityStore.itemHolder;
 
 		var itemDefnNameCurrency = this.itemDefnNameCurrency;
 
@@ -50,13 +50,13 @@ function ItemStore(itemDefnNameCurrency)
 						itemHolderStore,
 						function get(c)
 						{
-							return c.itemEntities;//.filter(x => x.Item.defnName != itemDefnNameCurrency);
+							return c.itemEntities;//.filter(x => x.item.defnName != itemDefnNameCurrency);
 						}
 					), // items
 					new DataBinding
 					(
 						null,
-						function get(c) { return c.Item.toString(world); }
+						function get(c) { return c.item.toString(world); }
 					), // bindingForItemText
 					fontHeight,
 					new DataBinding
@@ -88,13 +88,13 @@ function ItemStore(itemDefnNameCurrency)
 						itemHolderCustomer,
 						function get(c)
 						{
-							return c.itemEntities;//.filter(x => x.Item.defnName != itemDefnNameCurrency);
+							return c.itemEntities;//.filter(x => x.item.defnName != itemDefnNameCurrency);
 						}
 					), // items
 					new DataBinding
 					(
 						null,
-						function get(c) { return c.Item.toString(world); }
+						function get(c) { return c.item.toString(world); }
 					), // bindingForItemText
 					fontHeight,
 					new DataBinding
@@ -128,7 +128,7 @@ function ItemStore(itemDefnNameCurrency)
 						function get(c)
 						{
 							var i = c.itemEntitySelected;
-							return (i == null ? "-" : i.Item.toString(world));
+							return (i == null ? "-" : i.item.toString(world));
 						}
 					), // text
 					fontHeight
@@ -156,7 +156,7 @@ function ItemStore(itemDefnNameCurrency)
 						function get(c)
 						{
 							var i = c.itemEntitySelected;
-							return (i == null ? "-" : i.Item.toString(world));
+							return (i == null ? "-" : i.item.toString(world));
 						}
 					), // text
 					fontHeight

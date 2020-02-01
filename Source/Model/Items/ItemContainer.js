@@ -17,8 +17,8 @@ function ItemContainer()
 		var fontHeight = 10;
 		var fontHeightSmall = fontHeight * .6;
 
-		var itemHolderTransferrer = entityTransferrer.ItemHolder;
-		var itemHolderContainer = entityContainer.ItemHolder;
+		var itemHolderTransferrer = entityTransferrer.itemHolder;
+		var itemHolderContainer = entityContainer.itemHolder;
 
 		var world = universe.world;
 
@@ -52,7 +52,7 @@ function ItemContainer()
 					new DataBinding
 					(
 						null,
-						function get(c) { return c.Item.toString(world); }
+						function get(c) { return c.item.toString(world); }
 					), // bindingForItemText
 					fontHeightSmall,
 					new DataBinding
@@ -87,7 +87,7 @@ function ItemContainer()
 					new DataBinding
 					(
 						null,
-						function get(c) { return c.Item.toString(world); }
+						function get(c) { return c.item.toString(world); }
 					), // bindingForItemText
 					fontHeightSmall,
 					new DataBinding
@@ -121,7 +121,7 @@ function ItemContainer()
 						function get(c)
 						{
 							var i = c.itemEntitySelected;
-							return (i == null ? "-" : i.Item.toString(world));
+							return (i == null ? "-" : i.item.toString(world));
 						}
 					), // text
 					fontHeight
@@ -149,7 +149,7 @@ function ItemContainer()
 						function get(c)
 						{
 							var i = c.itemEntitySelected;
-							return (i == null ? "-" : i.Item.toString(world));
+							return (i == null ? "-" : i.item.toString(world));
 						}
 					), // text
 					fontHeight

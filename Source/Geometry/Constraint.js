@@ -25,7 +25,7 @@ function ConstraintInstances()
 		{
 			var targetEntityName = this.target;
 			var targetEntity = place.entities[targetEntityName];
-			entityToConstrain.Locatable.loc.pos.overwriteWith(targetEntity.Locatable.loc.pos);
+			entityToConstrain.locatable.loc.pos.overwriteWith(targetEntity.locatable.loc.pos);
 		};
 	}
 
@@ -37,7 +37,7 @@ function ConstraintInstances()
 		Constraint_ContainInBox.prototype.constrain = function(universe, world, place, entityToConstrain, constraint)
 		{
 			var targetBox = this.target;
-			targetBox.trimCoords(entityToConstrain.Locatable.loc.pos);
+			targetBox.trimCoords(entityToConstrain.locatable.loc.pos);
 		};
 	}
 
@@ -49,7 +49,7 @@ function ConstraintInstances()
 		Constraint_Friction.prototype.constrain = function(universe, world, place, entity)
 		{
 			var targetFrictionCoefficient = this.target;
-			var entityLoc = entity.Locatable.loc;
+			var entityLoc = entity.locatable.loc;
 			var entityVel = entityLoc.vel;
 			var speed = entityVel.magnitude();
 			var frictionMagnitude = speed * targetFrictionCoefficient;
@@ -69,7 +69,7 @@ function ConstraintInstances()
 		{
 			var targetFrictionCoefficient = this.target;
 			var frictionMagnitude = targetFrictionCoefficient;
-			var entityLoc = entity.Locatable.loc;
+			var entityLoc = entity.locatable.loc;
 			var entityVel = entityLoc.vel;
 			var entitySpeed = entityVel.magnitude();
 			if (entitySpeed <= frictionMagnitude)
@@ -136,7 +136,7 @@ function ConstraintInstances()
 		Constraint_SpeedMax.prototype.constrain = function(universe, world, place, entity)
 		{
 			var targetSpeedMax = this.target;
-			var entityLoc = entity.Locatable.loc;
+			var entityLoc = entity.locatable.loc;
 			var entityVel = entityLoc.vel;
 			var speed = entityVel.magnitude();
 			if (speed > targetSpeedMax)
@@ -154,7 +154,7 @@ function ConstraintInstances()
 		Constraint_StopBelowSpeedMin.prototype.constrain = function(universe, world, place, entity)
 		{
 			var targetSpeedMin = this.target;
-			var entityLoc = entity.Locatable.loc;
+			var entityLoc = entity.locatable.loc;
 			var entityVel = entityLoc.vel;
 			var speed = entityVel.magnitude();
 			if (speed < targetSpeedMin)
@@ -172,7 +172,7 @@ function ConstraintInstances()
 		Constraint_TrimToRange.prototype.constrain = function(universe, world, place, entity)
 		{
 			var targetSize = this.target;
-			var entityLoc = entity.Locatable.loc;
+			var entityLoc = entity.locatable.loc;
 			entityLoc.pos.trimToRangeMax(targetSize);
 		};
 	}
@@ -185,7 +185,7 @@ function ConstraintInstances()
 		Constraint_WrapToRange.prototype.constrain = function(universe, world, place, entity)
 		{
 			var targetRange = this.target;
-			var entityLoc = entity.Locatable.loc;
+			var entityLoc = entity.locatable.loc;
 			entityLoc.pos.wrapToRangeMax(targetRange);
 		};
 	}
@@ -197,7 +197,7 @@ function ConstraintInstances()
 	{
 		Constraint_WrapXTrimY.prototype.constrain = function(universe, world, place, entity)
 		{
-			var entityLoc = entity.Locatable.loc;
+			var entityLoc = entity.locatable.loc;
 			var entityPos = entityLoc.pos;
 			var max = this.target;
 

@@ -30,7 +30,7 @@ function Action(name, perform)
 			"ShowEquipment",
 			function perform(universe, world, place, actor)
 			{
-				var equipmentUser = actor.EquipmentUser;
+				var equipmentUser = actor.equipmentUser;
 				var equipmentUserAsControl = equipmentUser.toControl
 				(
 					universe, universe.display.sizeInPixels, actor, universe.venueCurrent
@@ -46,7 +46,7 @@ function Action(name, perform)
 			"ShowItems",
 			function perform(universe, world, place, actor)
 			{
-				var itemHolder = actor.ItemHolder;
+				var itemHolder = actor.itemHolder;
 				var itemHolderAsControl = itemHolder.toControl
 				(
 					universe, universe.display.sizeInPixels, actor, universe.venueCurrent

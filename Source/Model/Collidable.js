@@ -34,7 +34,7 @@ function Collidable(colliderAtRest, entityPropertyNamesToCollideWith, collideEnt
 			(
 				this._transformTranslate.displacementSet
 				(
-					entity.Locatable.loc.pos
+					entity.locatable.loc.pos
 				),
 				this.collider.coordsGroupToTranslate()
 			);

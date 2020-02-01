@@ -29,7 +29,7 @@ function VisualImageScaled(visualImage, sizeScaled)
 		var imageSize = this.sizeScaled;
 		var drawPos = this._drawPos.clear().subtract(imageSize).half().add
 		(
-			entity.Locatable.loc.pos
+			entity.locatable.loc.pos
 		);
 		display.drawImageScaled(image, drawPos, imageSize);
 	};

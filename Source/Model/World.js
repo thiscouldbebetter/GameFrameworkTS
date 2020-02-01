@@ -35,8 +35,8 @@ function World(name, dateCreated, defns, places)
 			universe, world, place, entity, directionToMove
 		)
 		{
-			entity.Locatable.loc.orientation.forwardSet(directionToMove);
-			entity.Movable.accelerate(universe, world, place, entity);
+			entity.locatable.loc.orientation.forwardSet(directionToMove);
+			entity.movable.accelerate(universe, world, place, entity);
 		};
 
 		var actions =
@@ -94,13 +94,13 @@ function World(name, dateCreated, defns, places)
 				"Fire",
 				function perform(universe, world, place, actor)
 				{
-					var equipmentUser = actor.EquipmentUser;
+					var equipmentUser = actor.equipmentUser;
 					var entityWeaponEquipped = equipmentUser.itemEntityInSocketWithName("Weapon");
 					var actorHasWeaponEquipped = (entityWeaponEquipped != null);
 
 					if (actorHasWeaponEquipped)
 					{
-						var deviceWeapon = entityWeaponEquipped.Device;
+						var deviceWeapon = entityWeaponEquipped.device;
 						deviceWeapon.use(universe, world, place, actor, entityWeaponEquipped);
 					}
 				}
@@ -133,7 +133,7 @@ function World(name, dateCreated, defns, places)
 
 		var itemUseEquip = function (universe, world, place, entityUser, entityItem, item)
 		{
-			var equipmentUser = entityUser.EquipmentUser;
+			var equipmentUser = entityUser.equipmentUser;
 			var message = equipmentUser.equipEntityWithItem
 			(
 				universe, world, place, entityUser, entityItem, item
@@ -158,8 +158,8 @@ function World(name, dateCreated, defns, places)
 				function use(universe, world, place, entityUser, entityItem, item)
 				{
 					var integrityToRestore = 10;
-					entityUser.Killable.integrityAdd(integrityToRestore);
-					entityUser.ItemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
+					entityUser.killable.integrityAdd(integrityToRestore);
+					entityUser.itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
 					var message = "The medicine restores " + integrityToRestore + " points.";
 					return message;
 				}

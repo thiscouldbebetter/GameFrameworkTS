@@ -5,11 +5,7 @@ function StringExtensions()
 }
 
 {
-	String.prototype.padLeft = function
-	(
-		lengthAfterPadding,
-		characterToPadWith
-	)
+	String.prototype.padLeft = function(lengthAfterPadding, characterToPadWith)
 	{
 		var stringToPad = this;
 
@@ -19,6 +15,11 @@ function StringExtensions()
 		}
 
 		return stringToPad;
+	};
+
+	String.prototype.lowercaseFirstCharacter = function()
+	{
+		return this.substr(0, 1).toLowerCase() + this.substr(1);
 	};
 
 	String.prototype.replaceAll = function(stringToBeReplaced, stringToReplaceWith)

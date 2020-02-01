@@ -13,7 +13,7 @@ function Entity(name, properties)
 		{
 			var property = propertiesToAdd[i];
 			this.properties.push(property);
-			var propertyName = property.constructor.name;
+			var propertyName = property.constructor.name.lowercaseFirstCharacter();
 			this[propertyName] = property;
 		}
 		return this;

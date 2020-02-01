@@ -174,8 +174,8 @@ function CollisionHelper()
 
 	CollisionHelper.prototype.collideCollidables = function(entityColliding, entityCollidedWith)
 	{
-		var collider0 = entityColliding.Collidable.collider;
-		var collider1 = entityCollidedWith.Collidable.collider;
+		var collider0 = entityColliding.collidable.collider;
+		var collider1 = entityCollidedWith.collidable.collider;
 
 		while (collider0.collider != null)
 		{
@@ -261,8 +261,8 @@ function CollisionHelper()
 
 	CollisionHelper.prototype.doEntitiesCollide = function(entity0, entity1)
 	{
-		var collidable0 = entity0.Collidable;
-		var collidable1 = entity1.Collidable;
+		var collidable0 = entity0.collidable;
+		var collidable1 = entity1.collidable;
 
 		var doCollide = this.doCollidablesCollide
 		(
@@ -427,17 +427,17 @@ function CollisionHelper()
 		// todo
 		// A simple collision response for shape pairs not yet implemented.
 
-		collidable0.Locatable.loc.vel.invert();
-		collidable1.Locatable.loc.vel.invert();
+		collidable0.locatable.loc.vel.invert();
+		collidable1.locatable.loc.vel.invert();
 	};
 
 	CollisionHelper.prototype.collideCollidablesBoxAndSphere = function(entityBox, entitySphere)
 	{
-		var sphereLoc = entitySphere.Locatable.loc;
-		var boxLoc = entityBox.Locatable.loc;
+		var sphereLoc = entitySphere.locatable.loc;
+		var boxLoc = entityBox.locatable.loc;
 
-		var box = entityBox.Collidable.collider;
-		var sphere = entitySphere.Collidable.collider;
+		var box = entityBox.collidable.collider;
+		var sphere = entitySphere.collidable.collider;
 		var collision = this.collisionOfBoxAndSphere(box, sphere, this._collision);
 
 		var collisionRelativeToBox = this._pos.overwriteWith(collision.pos).subtract
@@ -460,8 +460,8 @@ function CollisionHelper()
 
 	CollisionHelper.prototype.collideCollidablesBoxRotatedAndSphere = function(entityBoxRotated, entitySphere)
 	{
-		var rectangle = entityBoxRotated.Collidable.collider;
-		var sphere = entitySphere.Collidable.collider;
+		var rectangle = entityBoxRotated.collidable.collider;
+		var sphere = entitySphere.collidable.collider;
 		var collision = this.collisionOfBoxRotatedAndSphere
 		(
 			rectangle, sphere, this._collision, true //shouldCalculatePos
@@ -469,7 +469,7 @@ function CollisionHelper()
 
 		var normal = collision.normals[0];
 
-		var sphereVel = entitySphere.Locatable.loc.vel;
+		var sphereVel = entitySphere.locatable.loc.vel;
 		sphereVel.add
 		(
 			normal.clone().multiplyScalar
@@ -478,7 +478,7 @@ function CollisionHelper()
 			)
 		);
 
-		var rectangleVel = entityBoxRotated.Locatable.loc.vel;
+		var rectangleVel = entityBoxRotated.locatable.loc.vel;
 		rectangleVel.add
 		(
 			normal.clone().multiplyScalar
@@ -508,8 +508,8 @@ function CollisionHelper()
 
 	CollisionHelper.prototype.collideCollidablesSphereAndSphere = function(entityColliding, entityCollidedWith)
 	{
-		var entityCollidingLoc = entityColliding.Locatable.loc;
-		var entityCollidedWithLoc = entityCollidedWith.Locatable.loc;
+		var entityCollidingLoc = entityColliding.locatable.loc;
+		var entityCollidedWithLoc = entityCollidedWith.locatable.loc;
 
 		var entityCollidingPos = entityCollidingLoc.pos;
 		var entityCollidedWithPos = entityCollidedWithLoc.pos;
@@ -527,8 +527,8 @@ function CollisionHelper()
 		var direction = displacement.divideScalar(distance);
 
 		var sumOfRadii =
-			entityColliding.Collidable.collider.radius
-			+ entityCollidedWith.Collidable.collider.radius;
+			entityColliding.collidable.collider.radius
+			+ entityCollidedWith.collidable.collider.radius;
 
 		entityCollidedWithPos.overwriteWith
 		(

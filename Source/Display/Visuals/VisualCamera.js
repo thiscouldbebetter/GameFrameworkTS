@@ -11,7 +11,7 @@ function VisualCamera(child, cameraFactory)
 {
 	VisualCamera.prototype.draw = function(universe, world, display, entity)
 	{
-		var drawablePos = entity.Locatable.loc.pos;
+		var drawablePos = entity.locatable.loc.pos;
 		this._posSaved.overwriteWith(drawablePos);
 
 		var camera = this.cameraFactory(universe, world);

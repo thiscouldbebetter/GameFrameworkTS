@@ -11,7 +11,7 @@ function Movable(accelerationPerTick, accelerate)
 		{
 			this.accelerateForward
 			(
-				universe, world, place, entityMovable, entityMovable.Movable.accelerationPerTick
+				universe, world, place, entityMovable, entityMovable.movable.accelerationPerTick
 			);
 		}
 		else
@@ -22,7 +22,7 @@ function Movable(accelerationPerTick, accelerate)
 
 	Movable.prototype.accelerateForward = function(universe, world, place, entityMovable, acceleration)
 	{
-		var entityLoc = entityMovable.Locatable.loc;
+		var entityLoc = entityMovable.locatable.loc;
 		entityLoc.accel.overwriteWith
 		(
 			entityLoc.orientation.forward

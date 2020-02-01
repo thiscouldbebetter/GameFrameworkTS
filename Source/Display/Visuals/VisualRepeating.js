@@ -23,7 +23,7 @@ function VisualRepeating(cellSize, viewSize, child)
 {
 	VisualRepeating.prototype.draw = function(universe, world, display, entity)
 	{
-		var drawPos = entity.Locatable.loc.pos;
+		var drawPos = entity.locatable.loc.pos;
 
 		this._drawablePosToRestore.overwriteWith(drawPos);
 

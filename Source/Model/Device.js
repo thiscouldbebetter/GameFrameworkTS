@@ -17,7 +17,7 @@ function Device(name, initialize, update, use)
 			"Gun",
 			function initialize(u, w, p, entity)
 			{
-				var device = entity.Device;
+				var device = entity.device;
 				device.ticksToCharge = 10;
 				device.tickLastUsed = 0;
 			},
@@ -27,7 +27,7 @@ function Device(name, initialize, update, use)
 			},
 			function use(universe, world, place, entityUser, entityDevice)
 			{
-				var device = entityDevice.Device;
+				var device = entityDevice.device;
 				var tickCurrent = world.timerTicksSoFar;
 				var ticksSinceUsed = tickCurrent - this.tickLastUsed;
 				if (ticksSinceUsed < device.ticksToCharge)
@@ -35,7 +35,7 @@ function Device(name, initialize, update, use)
 					return;
 				}
 
-				var userAsItemHolder = entityUser.ItemHolder;
+				var userAsItemHolder = entityUser.itemHolder;
 				var hasAmmo = userAsItemHolder.hasItemWithDefnNameAndQuantity("Ammo", 1);
 				if (hasAmmo == false)
 				{
@@ -46,7 +46,7 @@ function Device(name, initialize, update, use)
 
 				device.tickLastUsed = tickCurrent;
 
-				var userLoc = entityUser.Locatable.loc;
+				var userLoc = entityUser.locatable.loc;
 				var userPos = userLoc.pos;
 				var userVel = userLoc.vel;
 				var userSpeed = userVel.magnitude();
@@ -76,7 +76,7 @@ function Device(name, initialize, update, use)
 				);
 
 				var userDirection = userVel.clone().normalize();
-				var userRadius = entityUser.Collidable.collider.radius;
+				var userRadius = entityUser.collidable.collider.radius;
 				var projectilePos = userPos.clone().add
 				(
 					userDirection.clone().multiplyScalar(userRadius).double().double()
@@ -93,14 +93,14 @@ function Device(name, initialize, update, use)
 
 				var projectileCollide = function(universe, world, place, entityProjectile, entityOther)
 				{
-					var killable = entityOther.Killable;
+					var killable = entityOther.killable;
 					if (killable != null)
 					{
 						killable.damageApply
 						(
 							universe, world, place, entityProjectile, entityOther
 						);
-						entityProjectile.Killable.integrity = 0;
+						entityProjectile.killable.integrity = 0;
 					}
 				};
 
@@ -121,7 +121,7 @@ function Device(name, initialize, update, use)
 							[
 								new Ephemeral(8),
 								new Drawable(visualExplosion),
-								entityKillable.Locatable
+								entityKillable.locatable
 							]
 						);
 						place.entitiesToSpawn.push(entityExplosion);

@@ -11,7 +11,7 @@ function Playable(player)
 		{
 			inputHelper.isMouseClicked(false);
 
-			var playerPos = entityPlayer.Locatable.loc.pos;
+			var playerPos = entityPlayer.locatable.loc.pos;
 			var camera = place.camera();
 
 			playerPos.overwriteWith

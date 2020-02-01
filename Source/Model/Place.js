@@ -35,7 +35,7 @@ function Place(name, defnName, size, entities)
 		for (var i = 0; i < entitiesDrawable.length; i++)
 		{
 			var entity = entitiesDrawable[i];
-			var drawable = entity.Drawable;
+			var drawable = entity.drawable;
 			drawable.updateForTimerTick(universe, world, this, entity);
 		}
 	};
@@ -128,6 +128,8 @@ function Place(name, defnName, size, entities)
 		{
 			var propertyName = this.propertyNamesToProcess[p];
 			var entitiesWithProperty = this.entitiesByPropertyName(propertyName);
+
+			propertyName = propertyName.lowercaseFirstCharacter();
 			if (entitiesWithProperty != null)
 			{
 				for (var i = 0; i < entitiesWithProperty.length; i++)
@@ -145,7 +147,7 @@ function Place(name, defnName, size, entities)
 	Place.prototype.camera = function()
 	{
 		var cameraEntity = this.entitiesByPropertyName(Camera.name)[0];
-		return (cameraEntity == null ? null : cameraEntity.Camera);
+		return (cameraEntity == null ? null : cameraEntity.camera);
 	};
 
 	Place.prototype.player = function()

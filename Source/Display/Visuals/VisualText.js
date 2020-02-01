@@ -14,7 +14,7 @@ function VisualText(text, colorFill, colorBorder)
 		(
 			text,
 			display.fontHeightInPixels,
-			entity.Locatable.loc.pos,
+			entity.locatable.loc.pos,
 			this.colorFill,
 			this.colorBorder,
 			false, // areColorsReversed

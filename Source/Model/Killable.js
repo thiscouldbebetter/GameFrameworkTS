@@ -14,8 +14,8 @@ function Killable(integrityMax, damageApply, die, itemDefnCorpse)
 		var damageApplied;
 		if (this._damageApply == null)
 		{
-			damageApplied = (damageToApply == null ? entityDamager.Damager.damagePerHit : damageToApply);
-			entityKillable.Killable.integrityAdd(0 - damageApplied);
+			damageApplied = (damageToApply == null ? entityDamager.damager.damagePerHit : damageToApply);
+			entityKillable.killable.integrityAdd(0 - damageApplied);
 		}
 		else
 		{

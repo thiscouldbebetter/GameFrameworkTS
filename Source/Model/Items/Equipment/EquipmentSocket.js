@@ -16,7 +16,7 @@ function EquipmentSocket(defnName, itemEntityEquipped)
 		(
 			this.itemEntityEquipped == null
 			? " [empty] "
-			: this.itemEntityEquipped.Item.toString(world)
+			: this.itemEntityEquipped.item.toString(world)
 		);
 		var returnValue = this.defnName + ": " + itemEntityEquippedAsString;
 		return returnValue;

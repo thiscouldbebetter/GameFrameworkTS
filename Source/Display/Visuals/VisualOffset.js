@@ -11,7 +11,7 @@ function VisualOffset(child, offset)
 {
 	VisualOffset.prototype.draw = function(universe, world, display, entity)
 	{
-		var drawablePos = entity.Locatable.loc.pos;
+		var drawablePos = entity.locatable.loc.pos;
 		this._posSaved.overwriteWith(drawablePos);
 		drawablePos.add(this.offset);
 		this.child.draw(universe, world, display, entity);
