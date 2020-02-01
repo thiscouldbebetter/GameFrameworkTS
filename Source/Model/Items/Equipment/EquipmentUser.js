@@ -1,13 +1,13 @@
 
-function Equippable(socketDefnGroup)
+function EquipmentUser(socketDefnGroup)
 {
 	this.socketGroup = new EquipmentSocketGroup(socketDefnGroup);
 }
 
 {
-	Equippable.prototype.equipEntityWithItem = function
+	EquipmentUser.prototype.equipEntityWithItem = function
 	(
-		universe, world, place, entityEquippable, itemEntityToEquip
+		universe, world, place, entityEquipmentUser, itemEntityToEquip
 	)
 	{
 		var sockets = this.socketGroup.sockets;
@@ -48,9 +48,14 @@ function Equippable(socketDefnGroup)
 		return message;
 	};
 
-	Equippable.prototype.unequipItemFromSocket = function
+	EquipmentUser.prototype.itemEntityInSocketWithName = function(socketName)
+	{
+		return this.socketGroup.sockets[socketName].itemEntityEquipped;
+	};
+
+	EquipmentUser.prototype.unequipItemFromSocket = function
 	(
-		universe, world, place, entityEquippable, socketToUnequipFrom
+		universe, world, place, entityEquipmentUser, socketToUnequipFrom
 	)
 	{
 		var message;
@@ -78,7 +83,7 @@ function Equippable(socketDefnGroup)
 
 	// control
 
-	Equippable.prototype.toControl = function(universe, size, entityEquippable, venuePrev)
+	EquipmentUser.prototype.toControl = function(universe, size, entityEquipmentUser, venuePrev)
 	{
 		this.statusMessage = "-";
 
@@ -94,8 +99,8 @@ function Equippable(socketDefnGroup)
 		var fontHeightSmall = fontHeight * .6;
 		var fontHeightLarge = fontHeight * 1.5;
 
-		var itemHolder = entityEquippable.ItemHolder;
-		var equippable = this;
+		var itemHolder = entityEquipmentUser.ItemHolder;
+		var equipmentUser = this;
 		var sockets = this.socketGroup.sockets;
 		var socketDefnGroup = this.socketGroup.defnGroup;
 
@@ -142,15 +147,15 @@ function Equippable(socketDefnGroup)
 			null, // bindingForIsEnabled
 			function confirm()
 			{
-				var itemEntityToEquip = equippable.itemEntitySelected;
+				var itemEntityToEquip = equipmentUser.itemEntitySelected;
 				var itemToEquip = itemEntityToEquip.Item;
 				var itemToEquipName = itemToEquip.appearance;
 
-				var message = equippable.equipEntityWithItem
+				var message = equipmentUser.equipEntityWithItem
 				(
-					universe, world, place, entityEquippable, itemEntityToEquip
+					universe, world, place, entityEquipmentUser, itemEntityToEquip
 				);
-				equippable.statusMessage = message;
+				equipmentUser.statusMessage = message;
 			}
 		);
 
@@ -176,13 +181,13 @@ function Equippable(socketDefnGroup)
 			null, // bindingForIsEnabled
 			function confirm()
 			{
-				var socketToUnequipFrom = equippable.socketSelected;
+				var socketToUnequipFrom = equipmentUser.socketSelected;
 
-				var message = equippable.unequipItemFromSocket
+				var message = equipmentUser.unequipItemFromSocket
 				(
-					universe, world, place, entityEquippable, socketToUnequipFrom
+					universe, world, place, entityEquipmentUser, socketToUnequipFrom
 				);
-				equippable.statusMessage = message;
+				equipmentUser.statusMessage = message;
 			}
 		);
 

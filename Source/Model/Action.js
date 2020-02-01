@@ -30,12 +30,12 @@ function Action(name, perform)
 			"ShowEquipment",
 			function perform(universe, world, place, actor)
 			{
-				var equippable = actor.Equippable;
-				var equippableAsControl = equippable.toControl
+				var equipmentUser = actor.EquipmentUser;
+				var equipmentUserAsControl = equipmentUser.toControl
 				(
 					universe, universe.display.sizeInPixels, actor, universe.venueCurrent
 				);
-				var venueNext = new VenueControls(equippableAsControl);
+				var venueNext = new VenueControls(equipmentUserAsControl);
 				venueNext = new VenueFader(venueNext, universe.venueCurrent);
 				universe.venueNext = venueNext;
 			}

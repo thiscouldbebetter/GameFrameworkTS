@@ -94,8 +94,8 @@ function World(name, dateCreated, defns, places)
 				"Fire",
 				function perform(universe, world, place, actor)
 				{
-					var equippable = actor.Equippable;
-					var entityWeaponEquipped = equippable.socketGroup.sockets["Weapon"].itemEntityEquipped;
+					var equipmentUser = actor.EquipmentUser;
+					var entityWeaponEquipped = equipmentUser.itemEntityInSocketWithName("Weapon");
 					var actorHasWeaponEquipped = (entityWeaponEquipped != null);
 
 					if (actorHasWeaponEquipped)
@@ -133,8 +133,8 @@ function World(name, dateCreated, defns, places)
 
 		var itemUseEquip = function (universe, world, place, entityUser, entityItem, item)
 		{
-			var equippable = entityUser.Equippable;
-			var message = equippable.equipEntityWithItem
+			var equipmentUser = entityUser.EquipmentUser;
+			var message = equipmentUser.equipEntityWithItem
 			(
 				universe, world, place, entityUser, entityItem, item
 			);

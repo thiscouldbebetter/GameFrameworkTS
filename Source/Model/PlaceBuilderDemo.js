@@ -1423,7 +1423,7 @@ function PlaceBuilderDemo()
 				new EquipmentSocketDefn( "Accessory", [ "Accessory" ] ),
 			]
 		);
-		var equippable = new Equippable(equipmentSocketDefnGroup);
+		var equipmentUser = new EquipmentUser(equipmentSocketDefnGroup);
 
 		var killable = new Killable
 		(
@@ -1431,7 +1431,8 @@ function PlaceBuilderDemo()
 			function damageApply(universe, world, place, entityDamager, entityKillable)
 			{
 				var damage = entityDamager.Damager.damagePerHit;
-				var armorEquipped = entityKillable.Equippable.socketGroup.sockets["Armor"].itemEntityEquipped;
+				var equipmentUser = entityKillable.EquipmentUser;
+				var armorEquipped = equipmentUser.itemEntityInSocketWithName("Armor");
 				if (armorEquipped != null)
 				{
 					damage /= 2; // todo
@@ -1464,8 +1465,9 @@ function PlaceBuilderDemo()
 			function accelerate(universe, world, place, entityMovable)
 			{
 				var accelerationToApply = entityMovable.Movable.accelerationPerTick;
+				var equipmentUser = entityMovable.EquipmentUser;
 				var accessoryEquipped =
-					entityMovable.Equippable.socketGroup.sockets["Accessory"].itemEntityEquipped;
+					equipmentUser.itemEntityInSocketWithName("Accessory");
 				var isSpeedBoosterEquipped =
 				(
 					accessoryEquipped != null
@@ -1495,7 +1497,7 @@ function PlaceBuilderDemo()
 					playerCollide
 				),
 				new Drawable(playerVisual),
-				equippable,
+				equipmentUser,
 				new Idleable(),
 				new ItemHolder(),
 				killable,
