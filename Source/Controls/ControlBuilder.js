@@ -199,6 +199,13 @@ function ControlBuilder(styles)
 		var row3PosY = row2PosY + rowHeight;
 		var row4PosY = row3PosY + rowHeight;
 
+		var back = function()
+		{
+			var venueNext = new VenueWorld(universe.world);
+			venueNext = new VenueFader(venueNext, universe.venueCurrent);
+			universe.venueNext = venueNext;
+		};
+
 		var returnValue = new ControlContainer
 		(
 			"containerConfigure",
@@ -420,14 +427,7 @@ function ControlBuilder(styles)
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click(universe)
-					{
-						var world = universe.world;
-						var venueNext = new VenueWorld(world);
-						venueNext = new VenueFader(venueNext, universe.venueCurrent);
-						universe.venueNext = venueNext;
-					},
-					universe // context
+					back,
 				),
 
 				new ControlButton
@@ -473,7 +473,12 @@ function ControlBuilder(styles)
 					},
 					universe // context
 				),
-			]
+			],
+
+			[ new Action("Back", back) ],
+
+			[ new ActionToInputsMapping( "Back", [ universe.inputHelper.inputNames.Escape ], true ) ],
+
 		);
 
 		returnValue.scalePosAndSize(scaleMultiplier);

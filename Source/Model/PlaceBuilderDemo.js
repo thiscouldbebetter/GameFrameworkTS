@@ -1414,6 +1414,11 @@ function PlaceBuilderDemo()
 		var constraintFriction = new Constraint_Friction(.03);
 		var constrainable = new Constrainable([constraintFriction, constraintSpeedMax5]);
 
+		var itemCategoriesForQuickSlots =
+		[
+			"Consumable"
+		];
+
 		var equipmentSocketDefnGroup = new EquipmentSocketDefnGroup
 		(
 			"Equippable",
@@ -1421,6 +1426,18 @@ function PlaceBuilderDemo()
 				new EquipmentSocketDefn( "Weapon", [ "Weapon" ] ),
 				new EquipmentSocketDefn( "Armor", [ "Armor" ] ),
 				new EquipmentSocketDefn( "Accessory", [ "Accessory" ] ),
+
+				new EquipmentSocketDefn( "Item0", itemCategoriesForQuickSlots ),
+				new EquipmentSocketDefn( "Item1", itemCategoriesForQuickSlots ),
+				new EquipmentSocketDefn( "Item2", itemCategoriesForQuickSlots ),
+				new EquipmentSocketDefn( "Item3", itemCategoriesForQuickSlots ),
+				new EquipmentSocketDefn( "Item4", itemCategoriesForQuickSlots ),
+				new EquipmentSocketDefn( "Item5", itemCategoriesForQuickSlots ),
+				new EquipmentSocketDefn( "Item6", itemCategoriesForQuickSlots ),
+				new EquipmentSocketDefn( "Item7", itemCategoriesForQuickSlots ),
+				new EquipmentSocketDefn( "Item8", itemCategoriesForQuickSlots ),
+				new EquipmentSocketDefn( "Item9", itemCategoriesForQuickSlots ),
+
 			]
 		);
 		var equipmentUser = new EquipmentUser(equipmentSocketDefnGroup);

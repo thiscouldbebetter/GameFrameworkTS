@@ -28,21 +28,46 @@ function EquipmentUser(socketDefnGroup)
 			}
 		)[0];
 
+		var socketFoundName = socketFound.defnName;
+
+		var message = this.equipItemEntityInSocketWithName
+		(
+			universe, world, place, itemEntityToEquip, socketFoundName, false
+		);
+
+		return message;
+	};
+
+	EquipmentUser.prototype.equipItemEntityInSocketWithName = function
+	(
+		universe, world, place, itemEntityToEquip, socketName, includeSocketNameInMessage
+	)
+	{
+		var itemToEquip = itemEntityToEquip.item;
+		var itemDefn = itemToEquip.defn(world);
+
 		var message = itemDefn.appearance;
 
-		if (socketFound == null)
+		var socket = this.socketGroup.sockets[socketName];
+
+		if (socket == null)
 		{
 			message += " cannot be equipped."
 		}
-		else if (socketFound.itemEntityEquipped == itemEntityToEquip)
+		else if (socket.itemEntityEquipped == itemEntityToEquip)
 		{
-			socketFound.itemEntityEquipped = null;
+			socket.itemEntityEquipped = null;
 			message += " unequipped."
 		}
 		else
 		{
-			socketFound.itemEntityEquipped = itemEntityToEquip;
-			message += " equipped."
+			socket.itemEntityEquipped = itemEntityToEquip;
+			message += " equipped";
+			if (includeSocketNameInMessage)
+			{
+				message += " as " + socket.defnName
+			}
+			message += ".";
 		}
 
 		return message;
@@ -191,6 +216,13 @@ function EquipmentUser(socketDefnGroup)
 			}
 		);
 
+		var back = function()
+		{
+			var venueNext = venuePrev;
+			venueNext = new VenueFader(venueNext, universe.venueCurrent);
+			universe.venueNext = venueNext;
+		};
+
 		var returnValue = new ControlContainer
 		(
 			"containerItems",
@@ -258,15 +290,14 @@ function EquipmentUser(socketDefnGroup)
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click(universe)
-					{
-						var venueNext = venuePrev;
-						venueNext = new VenueFader(venueNext, universe.venueCurrent);
-						universe.venueNext = venueNext;
-					},
-					universe // context
+					back
 				)
-			]
+			],
+
+			[ new Action("Back", back) ],
+
+			[ new ActionToInputsMapping( "Back", [ universe.inputHelper.inputNames.Escape ], true ) ],
+
 		);
 
 		returnValue.scalePosAndSize(scaleMultiplier);

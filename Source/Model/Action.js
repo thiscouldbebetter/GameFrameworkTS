@@ -13,12 +13,12 @@ function Action(name, perform)
 		}
 		return Action._Instances;
 	};
-	
+
 	function Action_Instances()
 	{
 		this.DoNothing = new Action
 		(
-			"DoNothing", 
+			"DoNothing",
 			function(actor)
 			{
 				// Do nothing.

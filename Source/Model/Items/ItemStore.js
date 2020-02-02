@@ -23,6 +23,13 @@ function ItemStore(itemDefnNameCurrency)
 
 		var world = universe.world;
 
+		var back = function()
+		{
+			var venueNext = venuePrev;
+			venueNext = new VenueFader(venueNext, universe.venueCurrent);
+			universe.venueNext = venueNext;
+		};
+
 		var returnValue = new ControlContainer
 		(
 			"containerTransfer",
@@ -221,15 +228,14 @@ function ItemStore(itemDefnNameCurrency)
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click(universe)
-					{
-						var venueNext = venuePrev;
-						venueNext = new VenueFader(venueNext, universe.venueCurrent);
-						universe.venueNext = venueNext;
-					},
-					universe // context
+					back // click
 				)
-			]
+			],
+
+			[ new Action("Back", back) ],
+
+			[ new ActionToInputsMapping( "Back", [ universe.inputHelper.inputNames.Escape ], true ) ],
+
 		);
 
 		returnValue.scalePosAndSize(scaleMultiplier);

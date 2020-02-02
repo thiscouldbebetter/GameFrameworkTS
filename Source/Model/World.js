@@ -39,6 +39,18 @@ function World(name, dateCreated, defns, places)
 			entity.movable.accelerate(universe, world, place, entity);
 		};
 
+		var useItemInSocketNumbered = function(universe, world, place, actor, socketNumber)
+		{
+			var equipmentUser = actor.equipmentUser;
+			var socketName = "Item" + socketNumber;
+			var entityItemEquipped = equipmentUser.itemEntityInSocketWithName(socketName);
+			if (entityItemEquipped != null)
+			{
+				var itemEquipped = entityItemEquipped.item;
+				itemEquipped.use(universe, world, place, actor, entityItemEquipped);
+			}
+		};
+
 		var actions =
 		[
 			actionsAll.DoNothing,
@@ -105,6 +117,18 @@ function World(name, dateCreated, defns, places)
 					}
 				}
 			),
+
+			new Action("Item0", (u, w, p, e) => useItemInSocketNumbered(u, w, p, e, 0)),
+			new Action("Item1", (u, w, p, e) => useItemInSocketNumbered(u, w, p, e, 1)),
+			new Action("Item2", (u, w, p, e) => useItemInSocketNumbered(u, w, p, e, 2)),
+			new Action("Item3", (u, w, p, e) => useItemInSocketNumbered(u, w, p, e, 3)),
+			new Action("Item4", (u, w, p, e) => useItemInSocketNumbered(u, w, p, e, 4)),
+			new Action("Item5", (u, w, p, e) => useItemInSocketNumbered(u, w, p, e, 5)),
+			new Action("Item6", (u, w, p, e) => useItemInSocketNumbered(u, w, p, e, 6)),
+			new Action("Item7", (u, w, p, e) => useItemInSocketNumbered(u, w, p, e, 7)),
+			new Action("Item8", (u, w, p, e) => useItemInSocketNumbered(u, w, p, e, 8)),
+			new Action("Item9", (u, w, p, e) => useItemInSocketNumbered(u, w, p, e, 0)),
+
 		];
 
 		var inputNames = Input.Names();
@@ -120,6 +144,18 @@ function World(name, dateCreated, defns, places)
 			new ActionToInputsMapping("MoveRight", 	[ inputNames.ArrowRight, inputNames.GamepadMoveRight + "0" ]),
 			new ActionToInputsMapping("MoveUp", 	[ inputNames.ArrowUp, inputNames.GamepadMoveUp + "0" ]),
 			new ActionToInputsMapping("Fire", 		[ inputNames.Enter, inputNames.GamepadButton0 + "0" ]),
+
+			new ActionToInputsMapping("Item0", 	[ "_0" ]),
+			new ActionToInputsMapping("Item1", 	[ "_1" ]),
+			new ActionToInputsMapping("Item2", 	[ "_2" ]),
+			new ActionToInputsMapping("Item3", 	[ "_3" ]),
+			new ActionToInputsMapping("Item4", 	[ "_4" ]),
+			new ActionToInputsMapping("Item5", 	[ "_5" ]),
+			new ActionToInputsMapping("Item6", 	[ "_6" ]),
+			new ActionToInputsMapping("Item7", 	[ "_7" ]),
+			new ActionToInputsMapping("Item8", 	[ "_8" ]),
+			new ActionToInputsMapping("Item9", 	[ "_9" ]),
+
 		];
 
 		var placeDefnDemo = new PlaceDefn
@@ -152,9 +188,10 @@ function World(name, dateCreated, defns, places)
 			),
 			new ItemDefn("Coin"),
 			new ItemDefn("Key"),
-			ItemDefn.fromNameAndUse
+			ItemDefn.fromNameCategoryNameAndUse
 			(
 				"Medicine",
+				"Consumable", // categoryName
 				function use(universe, world, place, entityUser, entityItem, item)
 				{
 					var integrityToRestore = 10;

@@ -144,23 +144,35 @@ function ItemHolder(itemEntities)
 		var itemHolder = this;
 		var world = universe.world;
 
+		var back = function()
+		{
+			var venueNext = venuePrev;
+			venueNext = new VenueFader(venueNext, universe.venueCurrent);
+			universe.venueNext = venueNext;
+		};
+
 		var drop = function()
 		{
-			var world = universe.world;
-			var place = world.placeCurrent;
 			var itemEntityToKeep = itemHolder.itemEntitySelected;
-			var itemEntityToDrop = itemEntityToKeep.clone();
-			var itemToDrop = itemEntityToDrop.item;
-			itemToDrop.quantity = 1;
-			var posToDropAt = itemEntityToDrop.locatable.loc.pos;
-			var holderPos = entityItemHolder.locatable.loc.pos;
-			posToDropAt.overwriteWith(holderPos);
-			itemEntityToDrop.collidable.ticksUntilCanCollide = 50;
-			place.entitySpawn(universe, world, itemEntityToDrop);
-			itemHolder.itemSubtract(itemToDrop);
-			if (itemEntityToKeep.item.quantity == 0)
+			if (itemEntityToKeep != null)
 			{
-				itemHolder.itemEntitySelected = null;
+				var world = universe.world;
+				var place = world.placeCurrent;
+				var itemEntityToDrop = itemEntityToKeep.clone();
+				var itemToDrop = itemEntityToDrop.item;
+				itemToDrop.quantity = 1;
+				var posToDropAt = itemEntityToDrop.locatable.loc.pos;
+				var holderPos = entityItemHolder.locatable.loc.pos;
+				posToDropAt.overwriteWith(holderPos);
+				itemEntityToDrop.collidable.ticksUntilCanCollide = 50;
+				place.entitySpawn(universe, world, itemEntityToDrop);
+				itemHolder.itemSubtract(itemToDrop);
+				if (itemEntityToKeep.item.quantity == 0)
+				{
+					itemHolder.itemEntitySelected = null;
+				}
+				var itemToDropDefn = itemToDrop.defn(world);
+				itemHolder.statusMessage = itemToDropDefn.appearance + " dropped."
 			}
 		};
 
@@ -245,6 +257,25 @@ function ItemHolder(itemEntities)
 			);
 		};
 
+		var equipItemInNumberedSlot = function(slotNumber)
+		{
+			var entityItemToEquip = itemHolder.itemEntitySelected;
+			if (entityItemToEquip != null)
+			{
+				var world = universe.world;
+				var place = world.placeCurrent;
+				var equipmentUser = entityItemHolder.equipmentUser;
+				var socketName = "Item" + slotNumber;
+				var includeSocketNameInMessage = true;
+				var message = equipmentUser.equipItemEntityInSocketWithName
+				(
+					universe, world, place, entityItemToEquip,
+					socketName, includeSocketNameInMessage
+				);
+				itemHolder.statusMessage = message;
+			}
+		};
+
 		var returnValue = new ControlContainer
 		(
 			"containerItems",
@@ -266,7 +297,7 @@ function ItemHolder(itemEntities)
 				(
 					"listItems",
 					new Coords(10, 25), // pos
-					new Coords(70, 70), // size
+					new Coords(70, 110), // size
 					new DataBinding(this.itemEntities), // items
 					new DataBinding
 					(
@@ -308,13 +339,13 @@ function ItemHolder(itemEntities)
 							return (i == null ? "-" : i.item.toString(world));
 						}
 					), // text
-					fontHeight
+					fontHeightSmall
 				),
 
 				new ControlLabel
 				(
 					"infoStatus",
-					new Coords(100, 105), // pos
+					new Coords(150, 105), // pos
 					new Coords(200, 15), // size
 					true, // isTextCentered
 					new DataBinding
@@ -325,7 +356,7 @@ function ItemHolder(itemEntities)
 							return c.statusMessage;
 						}
 					), // text
-					fontHeight
+					fontHeightSmall
 				),
 
 				new ControlButton
@@ -497,23 +528,19 @@ function ItemHolder(itemEntities)
 				new ControlButton
 				(
 					"buttonDone",
-					new Coords(75, 130), // pos
-					new Coords(50, 15), // size
+					new Coords(160, 120), // pos
+					new Coords(30, 15), // size
 					"Done",
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click(universe)
-					{
-						var venueNext = venuePrev;
-						venueNext = new VenueFader(venueNext, universe.venueCurrent);
-						universe.venueNext = venueNext;
-					},
-					universe // context
+					back
 				)
 			], // end children
 
 			[
+				new Action("Back", back),
+
 				new Action("Up", up),
 				new Action("Down", down),
 				new Action("Split", split),
@@ -521,16 +548,41 @@ function ItemHolder(itemEntities)
 				new Action("Sort", sort),
 				new Action("Drop", drop),
 				new Action("Use", use),
+
+				new Action("Item0", function perform() { equipItemInNumberedSlot(0) } ),
+				new Action("Item1", function perform() { equipItemInNumberedSlot(1) } ),
+				new Action("Item2", function perform() { equipItemInNumberedSlot(2) } ),
+				new Action("Item3", function perform() { equipItemInNumberedSlot(3) } ),
+				new Action("Item4", function perform() { equipItemInNumberedSlot(4) } ),
+				new Action("Item5", function perform() { equipItemInNumberedSlot(5) } ),
+				new Action("Item6", function perform() { equipItemInNumberedSlot(6) } ),
+				new Action("Item7", function perform() { equipItemInNumberedSlot(7) } ),
+				new Action("Item8", function perform() { equipItemInNumberedSlot(8) } ),
+				new Action("Item9", function perform() { equipItemInNumberedSlot(9) } ),
 			],
 
 			[
+				new ActionToInputsMapping( "Back", [ universe.inputHelper.inputNames.Escape ], true ),
+
 				new ActionToInputsMapping( "Up", [ "[" ], true ),
 				new ActionToInputsMapping( "Down", [ "]" ], true ),
 				new ActionToInputsMapping( "Sort", [ "\\" ], true ),
 				new ActionToInputsMapping( "Split", [ "/" ], true ),
 				new ActionToInputsMapping( "Join", [ "=" ], true ),
 				new ActionToInputsMapping( "Drop", [ "d" ], true ),
-				new ActionToInputsMapping( "Use", [ "u" ], true )
+				new ActionToInputsMapping( "Use", [ "u" ], true ),
+
+				new ActionToInputsMapping( "Item0", [ "_0" ], true ),
+				new ActionToInputsMapping( "Item1", [ "_1" ], true ),
+				new ActionToInputsMapping( "Item2", [ "_2" ], true ),
+				new ActionToInputsMapping( "Item3", [ "_3" ], true ),
+				new ActionToInputsMapping( "Item4", [ "_4" ], true ),
+				new ActionToInputsMapping( "Item5", [ "_5" ], true ),
+				new ActionToInputsMapping( "Item6", [ "_6" ], true ),
+				new ActionToInputsMapping( "Item7", [ "_7" ], true ),
+				new ActionToInputsMapping( "Item8", [ "_8" ], true ),
+				new ActionToInputsMapping( "Item9", [ "_9" ], true ),
+
 			]
 		);
 
