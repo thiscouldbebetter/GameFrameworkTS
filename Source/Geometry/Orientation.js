@@ -1,8 +1,9 @@
 
 function Orientation(forward, down)
 {
-	this.forward = forward.clone().normalize();
-	down = (down != null ? down : new Coords(0, 0, 1));
+	this.forward = forward || new Coords(1, 0, 0);
+	this.forward = this.forward.clone().normalize();
+	down = down || new Coords(0, 0, 1);
 	this.right = down.clone().crossProduct(this.forward).normalize();
 	this.down = this.forward.clone().crossProduct(this.right).normalize();
 
