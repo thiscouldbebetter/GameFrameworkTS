@@ -15,16 +15,20 @@ function main()
 		[ "Conversation.json", "Instructions.txt" ]
 	);
 
-	var displaySizeInPixelsDefault = new Coords(400, 300, 1);
+	var displaySizesAvailable =
+	[
+		new Coords(400, 300, 1),
+		new Coords(640, 480, 1),
+		new Coords(800, 600, 1),
+		new Coords(1200, 900, 1),
+		// Wrap.
+		new Coords(200, 150, 1),
+	];
+
 
 	var display = new Display
 	(
-		// sizesAvailable
-		[
-			displaySizeInPixelsDefault,
-			displaySizeInPixelsDefault.clone().half(),
-			displaySizeInPixelsDefault.clone().multiplyScalar(2),
-		],
+		displaySizesAvailable,
 		"Font", // fontName
 		10, // fontHeightInPixels
 		"Gray", "White" // colorFore, colorBack

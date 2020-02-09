@@ -25,6 +25,22 @@ function Action(name, perform)
 			}
 		);
 
+		this.ShowCrafting = new Action
+		(
+			"ShowCrafting",
+			function perform(universe, world, place, actor)
+			{
+				var crafter = actor.itemCrafter;
+				var crafterAsControl = crafter.toControl
+				(
+					universe, universe.display.sizeInPixels, actor, universe.venueCurrent
+				);
+				var venueNext = new VenueControls(crafterAsControl);
+				venueNext = new VenueFader(venueNext, universe.venueCurrent);
+				universe.venueNext = venueNext;
+			}
+		);
+
 		this.ShowEquipment = new Action
 		(
 			"ShowEquipment",

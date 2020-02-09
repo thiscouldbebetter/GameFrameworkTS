@@ -351,13 +351,15 @@ function ControlBuilder(styles)
 					{
 						var controlRoot = universe.venueCurrent.controlRoot;
 						var selectDisplaySize = controlRoot.children["selectDisplaySize"];
-						var displaySizeSpecified = selectDisplaySize.optionSelected().value;
+						var displaySizeSpecified = selectDisplaySize.optionSelected();
 
 						var display = universe.display;
+						var platformHelper = universe.platformHelper;
+						platformHelper.platformableRemove(display);
 						display.sizeInPixels = displaySizeSpecified;
+						display.canvas = null; // hack
 						display.initialize(universe);
-
-						universe.platformHelper.initialize(universe);
+						platformHelper.initialize(universe);
 
 						var venueNext = new VenueControls
 						(

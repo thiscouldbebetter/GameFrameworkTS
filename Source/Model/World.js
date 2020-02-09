@@ -54,6 +54,7 @@ function World(name, dateCreated, defns, places)
 		var actions =
 		[
 			actionsAll.DoNothing,
+			actionsAll.ShowCrafting,
 			actionsAll.ShowEquipment,
 			actionsAll.ShowItems,
 			actionsAll.ShowMenu,
@@ -138,6 +139,7 @@ function World(name, dateCreated, defns, places)
 			new ActionToInputsMapping("ShowMenu", [ inputNames.Escape ]),
 			new ActionToInputsMapping("ShowItems", [ inputNames.Tab ]),
 			new ActionToInputsMapping("ShowEquipment", [ "`" ]),
+			new ActionToInputsMapping("ShowCrafting", [ "~" ]),
 
 			new ActionToInputsMapping("MoveDown", 	[ inputNames.ArrowDown, inputNames.GamepadMoveDown + "0" ]),
 			new ActionToInputsMapping("MoveLeft", 	[ inputNames.ArrowLeft, inputNames.GamepadMoveLeft + "0" ]),
@@ -187,7 +189,14 @@ function World(name, dateCreated, defns, places)
 				itemUseEquip
 			),
 			new ItemDefn("Coin"),
+			ItemDefn.fromNameCategoryNameAndUse
+			(
+				"Enhanced Armor",
+				"Armor", // categoryName
+				itemUseEquip
+			),
 			new ItemDefn("Key"),
+			new ItemDefn("Material"),
 			ItemDefn.fromNameCategoryNameAndUse
 			(
 				"Medicine",
@@ -207,6 +216,7 @@ function World(name, dateCreated, defns, places)
 				"Accessory", // categoryName
 				itemUseEquip
 			),
+			new ItemDefn("Toolset"),
 			ItemDefn.fromNameCategoryNameAndUse
 			(
 				"Weapon",

@@ -65,7 +65,9 @@ function PlaceBuilderDemo()
 			(
 				entities, entityDimension, numberOfKeysToUnlockGoal, entitiesObstacles, marginSize, itemDefns
 			);
+			this.entityBuildMaterial(entities, entityDimension, marginSize, randomizer, itemDefns);
 			this.entityBuildMedicine(entities, entityDimension, marginSize, randomizer, itemDefns);
+			this.entityBuildToolset(entities, entityDimension, playerPos, itemDefns);
 			this.entityBuildWeapon(entities, entityDimension, playerPos, itemDefns);
 			this.entityBuildWeaponAmmo(entities, entityDimension, size, itemDefns, 10, 5);
 			this.entityBuildContainer(entities, entityDimension, entitySize);
@@ -251,6 +253,7 @@ function PlaceBuilderDemo()
 		(
 			itemDefnArmorName,
 			[
+				new Armor(.5),
 				boundable,
 				collidable,
 				new Item(itemDefnArmorName, 1),
@@ -939,6 +942,63 @@ function PlaceBuilderDemo()
 		return itemKeyColor;
 	};
 
+	PlaceBuilderDemo.prototype.entityBuildMaterial = function
+	(
+		entities, entityDimension, marginSize, randomizer, itemDefns
+	)
+	{
+		var entityDimensionHalf = entityDimension / 2;
+		var sizeMinusMargins = marginSize.clone().double().invert().add(this.size);
+
+		var itemDefnMaterialName = itemDefns["Material"].name;
+		var itemMaterialColor = "Gray";
+		var itemMaterialVisual = new VisualGroup
+		([
+			new VisualPolygon
+			(
+				new Path
+				([
+					new Coords(-0.5, 0.5),
+					new Coords(0.5, 0.5),
+					new Coords(0.2, -0.5),
+					new Coords(-0.2, -0.5),
+				]).transform
+				(
+					Transform_Scale.fromScalar(entityDimension)
+				),
+				itemMaterialColor
+			),
+			new VisualOffset
+			(
+				new VisualText(itemDefnMaterialName, itemMaterialColor),
+				new Coords(0, entityDimension)
+			)
+		]);
+		var itemMaterialCollider = new Sphere(new Coords(0, 0), entityDimensionHalf);
+
+		var displacement = new Coords();
+
+		var numberOfMaterials = 5;
+		for (var i = 0; i < numberOfMaterials; i++)
+		{
+			var itemMaterialPos =
+				new Coords().randomize(this.randomizer).multiply(sizeMinusMargins).add(marginSize);
+
+			var itemMaterialEntity = new Entity
+			(
+				itemDefnMaterialName + i,
+				[
+					new Item(itemDefnMaterialName, 1),
+					new Locatable( new Location(itemMaterialPos) ),
+					new Collidable(itemMaterialCollider),
+					new Drawable(itemMaterialVisual)
+				]
+			);
+
+			entities.push(itemMaterialEntity);
+		}
+	};
+
 	PlaceBuilderDemo.prototype.entityBuildMedicine = function
 	(
 		entities, entityDimension, marginSize, randomizer, itemDefns
@@ -1452,7 +1512,8 @@ function PlaceBuilderDemo()
 				var armorEquipped = equipmentUser.itemEntityInSocketWithName("Armor");
 				if (armorEquipped != null)
 				{
-					damage /= 2; // todo
+					var armor = armorEquipped.armor;
+					damage *= armor.damageMultiplier;
 				}
 				entityKillable.killable.integrityAdd(0 - damage);
 				return damage;
@@ -1501,6 +1562,36 @@ function PlaceBuilderDemo()
 			}
 		);
 
+		var itemCrafter = new ItemCrafter
+		([
+			new CraftingRecipe
+			(
+				"Enhanced Armor",
+				[
+					new Item("Armor", 1),
+					new Item("Material", 1),
+					new Item("Toolset", 1)
+				],
+				[
+					new Entity
+					(
+						"", // name
+						[
+							new Item("Enhanced Armor", 1),
+							new Armor(.3)
+						]
+					),
+					new Entity
+					(
+						"", // name
+						[
+							new Item("Toolset", 1)
+						]
+					)
+				]
+			)
+		]);
+
 		var playerEntity = new Entity
 		(
 			"Player",
@@ -1516,6 +1607,7 @@ function PlaceBuilderDemo()
 				new Drawable(playerVisual),
 				equipmentUser,
 				new Idleable(),
+				itemCrafter,
 				new ItemHolder(),
 				killable,
 				movable,
@@ -1580,6 +1672,51 @@ function PlaceBuilderDemo()
 		entities.push(storeEntity);
 
 		return storeEntity;
+	};
+
+	PlaceBuilderDemo.prototype.entityBuildToolset = function(entities, entityDimension, playerPos, itemDefns)
+	{
+		entityDimension = entityDimension;
+
+		var itemDefnName = itemDefns["Toolset"].name;
+
+		var itemToolsetColor = "Gray";
+		var itemToolsetVisual = new VisualGroup
+		([
+			new VisualOffset
+			(
+				new VisualRectangle
+				(
+					new Coords(entityDimension / 4, entityDimension), "Brown"
+				),
+				new Coords(0, entityDimension / 2)
+			),
+			new VisualRectangle
+			(
+				new Coords(entityDimension, entityDimension / 2), itemToolsetColor
+			),
+			new VisualOffset
+			(
+				new VisualText(itemDefnName, itemToolsetColor),
+				new Coords(0, entityDimension)
+			)
+		]);
+
+		var itemToolsetPos = playerPos.clone().double().double();
+		var itemToolsetCollider = new Sphere(new Coords(0, 0), entityDimension / 2);
+
+		var itemToolsetEntity = new Entity
+		(
+			itemDefnName,
+			[
+				new Item(itemDefnName, 1),
+				new Locatable( new Location(itemToolsetPos) ),
+				new Collidable(itemToolsetCollider),
+				new Drawable(itemToolsetVisual),
+			]
+		);
+
+		entities.push(itemToolsetEntity);
 	};
 
 	PlaceBuilderDemo.prototype.entityBuildWeapon = function(entities, entityDimension, playerPos, itemDefns)

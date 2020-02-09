@@ -48,11 +48,10 @@ function ControlSelect
 {
 	ControlSelect.prototype.actionHandle = function(actionNameToHandle)
 	{
-		// This is somewhat counterintuitive.
 		var controlActionNames = ControlActionNames.Instances();
 		if (actionNameToHandle == controlActionNames.ControlDecrement)
 		{
-			this.optionSelectedNextInDirection(1);
+			this.optionSelectedNextInDirection(-1);
 		}
 		else if
 		(
@@ -60,7 +59,7 @@ function ControlSelect
 			|| actionNameToHandle == controlActionNames.ControlConfirm
 		)
 		{
-			this.optionSelectedNextInDirection(-1);
+			this.optionSelectedNextInDirection(1);
 		}
 	};
 
@@ -82,30 +81,13 @@ function ControlSelect
 
 	ControlSelect.prototype.optionSelected = function()
 	{
-		var returnValue = null;
-
-		if (this.indexOfOptionSelected != null)
-		{
-			var optionAsObject = this.options()[this.indexOfOptionSelected];
-
-			var optionValue = this.bindingForOptionValues.contextSet
-			(
-				optionAsObject
-			).get();
-
-			var optionText = this.bindingForOptionText.contextSet
-			(
-				optionAsObject
-			).get();
-
-			returnValue = new ControlSelectOption
-			(
-				optionValue,
-				optionText
-			);
-		};
-
-		return returnValue;
+		var optionSelected =
+		(
+			this.indexOfOptionSelected == null
+			? null
+			: this.options()[this.indexOfOptionSelected]
+		);
+		return optionSelected;
 	};
 
 	ControlSelect.prototype.optionSelectedNextInDirection = function(direction)
@@ -121,14 +103,20 @@ function ControlSelect
 		);
 
 		var optionSelected = this.optionSelected();
+		var valueToSelect =
+		(
+			optionSelected == null
+			? null
+			: this.bindingForOptionValues.contextSet(optionSelected).get()
+		);
 
-		if (this._valueSelected != null && this._valueSelected.constructor.name == "DataBinding")
+		if (this._valueSelected != null && this._valueSelected.constructor.name == DataBinding.name)
 		{
-			this._valueSelected.set(optionSelected.value);
+			this._valueSelected.set(valueToSelect);
 		}
 		else
 		{
-			this._valueSelected = optionSelected.value;
+			this._valueSelected = valueToSelect;
 		}
 	};
 
@@ -171,7 +159,12 @@ function ControlSelect
 		drawPos.add(this._sizeHalf.overwriteWith(this.size).half());
 
 		var optionSelected = this.optionSelected();
-		var text = (optionSelected == null ? "-" : optionSelected.text);
+		var text =
+		(
+			optionSelected == null
+			? "-"
+			: this.bindingForOptionText.contextSet(optionSelected).get()
+		);
 
 		display.drawText
 		(
