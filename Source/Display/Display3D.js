@@ -455,14 +455,9 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 		);
 	};
 
-	Display3D.prototype.fontSizeSet = function(fontHeightInPixels)
+	Display3D.prototype.fontSet = function(fontName, fontHeightInPixels)
 	{
-		this._display2DOverlay.fontSizeSet(fontHeightInPixels);
-	};
-
-	Display3D.prototype.fontNameSet = function(fontName)
-	{
-		this._display2DOverlay.fontNameSet(fontName);
+		this._display2DOverlay.fontSet(fontName, fontHeightInPixels);
 	};
 
 	Display3D.prototype.scaleFactor = function()

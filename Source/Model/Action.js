@@ -80,7 +80,7 @@ function Action(name, perform)
 			{
 				var venueNext = new VenueControls
 				(
-					universe.controlBuilder.configure(universe)
+					universe.controlBuilder.gameAndSettings(universe)
 				);
 				venueNext = new VenueFader(venueNext, universe.venueCurrent);
 				universe.venueNext = venueNext;

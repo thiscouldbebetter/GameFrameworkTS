@@ -10,9 +10,6 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 	this.colorBack = colorBack;
 	this.isInvisible = isInvisible || false;
 
-	this.fontNameFallthrough = "serif";
-	this.testString = "ABCDEFGHIJKMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz 1234567890";
-
 	// Helper variables.
 
 	this._drawPos = new Coords();
@@ -414,7 +411,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 			fontHeightInPixels = this.fontHeightInPixels;
 		}
 
-		this.fontSizeSet(fontHeightInPixels);
+		this.fontSet(null, fontHeightInPixels);
 
 		if (areColorsReversed)
 		{
@@ -461,19 +458,14 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		this.graphics.font = fontToRestore;
 	};
 
-	Display.prototype.fontSizeSet = function(fontHeightInPixels)
+	Display.prototype.fontSet = function(fontName, fontHeightInPixels)
 	{
-		var isFontValid = this.fontNameSet(this.fontName);
-		var fontNameToUse = (isFontValid ? this.fontName : "sans-serif");
-		this.graphics.font = fontHeightInPixels + "px " + fontNameToUse;
-	};
-
-	Display.prototype.fontNameSet = function(fontName)
-	{
-		this.graphics.font = "" + this.fontHeightInPixels + "px " + fontName;
-		var widthWithFontSpecified = this.graphics.measureText(this.testString).width;
-		var returnValue = (widthWithFontSpecified != this.widthWithFontFallthrough);
-		return returnValue;
+		if (fontName != this.fontName || fontHeightInPixels != this.fontHeightInPixels)
+		{
+			this.fontName = fontName || this.fontName;
+			this.fontHeightInPixels = fontHeightInPixels || this.fontHeightInPixels;
+			this.graphics.font = this.fontHeightInPixels + "px " + this.fontName;
+		}
 	};
 
 	Display.prototype.hide = function(universe)
@@ -521,7 +513,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 	Display.prototype.textWidthForFontHeight = function(textToMeasure, fontHeightInPixels)
 	{
 		var fontToRestore = this.graphics.font;
-		this.fontSizeSet(fontHeightInPixels);
+		this.fontSet(null, fontHeightInPixels);
 		var returnValue = this.graphics.measureText(textToMeasure).width;
 		this.graphics.font = fontToRestore;
 		return returnValue;
@@ -545,7 +537,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 
 			this.graphics = this.canvas.getContext("2d");
 
-			this.fontSizeSet(this.fontHeightInPixels);
+			this.fontSet(null, this.fontHeightInPixels);
 			this.widthWithFontFallthrough = this.graphics.measureText(this.testString).width;
 
 			this._scaleFactor = null;
