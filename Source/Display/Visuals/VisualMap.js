@@ -5,55 +5,67 @@ function VisualMap(map, visualLookup)
 	this.visualLookup = visualLookup;
 
 	// Helper variables.
-	this.cell = this.map.cellPrototype.clone();
-	this.cellPosInCells = new Coords();
-	this.drawPos = new Coords();
-	this.posSaved = new Coords();
+	this._cell = this.map.cellPrototype.clone();
+	this._cellPosInCells = new Coords();
+	this._drawPos = new Coords();
+	this._posSaved = new Coords();
 }
 
 {
 	VisualMap.prototype.draw = function(universe, world, display, entity)
 	{
-		var mapSizeInCells = this.map.sizeInCells;
-		var mapSizeHalf = this.map.sizeHalf;
-		var cellPosInCells = this.cellPosInCells;
-		var cellSizeInPixels = this.map.cellSize;
-		var drawablePos = entity.locatable.loc.pos;
-
-		for (var y = 0; y < mapSizeInCells.y; y++)
+		if (this.visualImage == null)
 		{
-			cellPosInCells.y = y;
+			var sizeInPixels = this.map.size;
+			var displayForImage = new Display([sizeInPixels]);
+			displayForImage.toDomElement();
 
-			for (var x = 0; x < mapSizeInCells.x; x++)
+			var mapSizeInCells = this.map.sizeInCells;
+			var mapSizeHalf = this.map.sizeHalf;
+			var cellPosInCells = this._cellPosInCells;
+			var cellSizeInPixels = this.map.cellSize;
+			var drawablePos = entity.locatable.loc.pos;
+			this._posSaved.overwriteWith(drawablePos);
+
+			for (var y = 0; y < mapSizeInCells.y; y++)
 			{
-				cellPosInCells.x = x;
+				cellPosInCells.y = y;
 
-				var cell = this.map.cellAtPosInCells
-				(
-					this.map, cellPosInCells, this.cell
-				);
-				var cellVisualName = cell.visualName;
-				var cellVisual = this.visualLookup[cellVisualName];
+				for (var x = 0; x < mapSizeInCells.x; x++)
+				{
+					cellPosInCells.x = x;
 
-				var drawPos = this.drawPos.overwriteWith
-				(
-					cellPosInCells
-				).multiply
-				(
-					cellSizeInPixels
-				).subtract
-				(
-					mapSizeHalf
-				).add
-				(
-					drawablePos
-				);
+					var cell = this.map.cellAtPosInCells
+					(
+						this.map, cellPosInCells, this._cell
+					);
+					var cellVisualName = cell.visualName;
+					var cellVisual = this.visualLookup[cellVisualName];
 
-				this.posSaved.overwriteWith(drawablePos);
-				drawablePos.overwriteWith(drawPos);
-				cellVisual.draw(universe, world, display, entity);
-				drawablePos.overwriteWith(this.posSaved);
+					var drawPos = this._drawPos.overwriteWith
+					(
+						cellPosInCells
+					).multiply
+					(
+						cellSizeInPixels
+					);
+
+					drawablePos.overwriteWith(drawPos);
+
+					cellVisual.draw(universe, world, displayForImage, entity);
+				}
 			}
-		}
+
+			var image = Image.fromSystemImage
+			(
+				"Map", displayForImage.canvas
+			);
+			this.visualImage = new VisualImageImmediate(image);
+
+			drawablePos.overwriteWith(this._posSaved);
+
+		} // end if (visualImage == null)
+
+		this.visualImage.draw(universe, world, display, entity);
 	};
 }
