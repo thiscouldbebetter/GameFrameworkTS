@@ -494,6 +494,12 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 			// without including PlatformHelper or Universe.
 			var domElement = this.toDomElement();
 			var divMain = document.getElementById("divMain");
+			if (divMain == null)
+			{
+				divMain = document.createElement("div");
+				divMain.id = "divMain";
+				document.body.appendChild(divMain);
+			}
 			divMain.appendChild(domElement);
 		}
 		else

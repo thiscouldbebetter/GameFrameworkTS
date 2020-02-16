@@ -81,6 +81,7 @@ function Edge(vertices)
 
 	Edge.prototype.overwriteWith = function(other)
 	{
-		return this.vertices.overwriteWith(other.vertices);
+		this.vertices.overwriteWith(other.vertices);
+		return this;
 	};
 }

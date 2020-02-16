@@ -9,6 +9,7 @@ function Polar(azimuthInTurns, radius, elevationInTurns)
 {
 	// constants
 
+	Polar.DegreesPerTurn = 360;
 	Polar.RadiansPerTurn = Math.PI * 2;
 
 	// instance methods
