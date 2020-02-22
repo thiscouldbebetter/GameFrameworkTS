@@ -5,7 +5,10 @@ function PlaceBuilderDemo()
 }
 
 {
-	PlaceBuilderDemo.prototype.build = function(name, size, cameraViewSize, placeNameToReturnTo, randomizer, itemDefns)
+	PlaceBuilderDemo.prototype.build = function
+	(
+		name, size, cameraViewSize, placeNameToReturnTo, randomizer, itemDefns
+	)
 	{
 		this.name = name;
 		this.size = size.clearZ();
@@ -24,9 +27,13 @@ function PlaceBuilderDemo()
 		var entitySize = new Coords(1, 1, 1).multiplyScalar(entityDimension);
 
 		var visualEyeRadius = entityDimension * .75 / 2;
-		var visualEyesBlinking = this.visualEyesBlinkingBuild(visualEyeRadius);
+		var visualBuilder = new VisualBuilder();
+		var visualEyesBlinking = visualBuilder.eyesBlinking(visualEyeRadius);
 
-		var playerEntity = this.entityBuildPlayer(entities, entityDimension, visualEyeRadius, visualEyesBlinking);
+		var playerEntity = this.entityBuildPlayer
+		(
+			entities, entityDimension, visualEyeRadius, visualEyesBlinking
+		);
 		var playerPos = playerEntity.locatable.loc.pos;
 		var damagerColor = "Red";
 		var obstacleColor = damagerColor;
@@ -1304,25 +1311,21 @@ function PlaceBuilderDemo()
 		return wallThickness;
 	};
 
-	PlaceBuilderDemo.prototype.entityBuildPlayer = function(entities, entityDimension, visualEyeRadius, visualEyesBlinking)
+	PlaceBuilderDemo.prototype.entityBuildPlayer = function
+	(
+		entities, entityDimension, visualEyeRadius, visualEyesBlinking
+	)
 	{
-		var visualEyesDirectional = new VisualDirectional
-		(
-			visualEyesBlinking, // visualForNoDirection
-			[
-				new VisualOffset(visualEyesBlinking, new Coords(1, 0).multiplyScalar(visualEyeRadius)),
-				new VisualOffset(visualEyesBlinking, new Coords(0, 1).multiplyScalar(visualEyeRadius)),
-				new VisualOffset(visualEyesBlinking, new Coords(-1, 0).multiplyScalar(visualEyeRadius)),
-				new VisualOffset(visualEyesBlinking, new Coords(0, -1).multiplyScalar(visualEyeRadius))
-			]
-		);
-
 		var playerPos = new Coords(30, 30);
 		var playerLoc = new Location(playerPos);
 		var playerHeadRadius = entityDimension * .75;
 		var playerCollider = new Sphere(new Coords(0, 0), playerHeadRadius);
 		var playerColor = "Gray";
 
+		var playerVisualBody = new VisualBuilder().circleWithEyes
+		(
+			playerHeadRadius, playerColor, visualEyeRadius, visualEyesBlinking
+		);
 		var playerVisualName = new VisualOffset
 		(
 			new VisualText("Player", playerColor),
@@ -1331,9 +1334,7 @@ function PlaceBuilderDemo()
 
 		var playerVisual = new VisualGroup
 		([
-			new VisualCircle(playerHeadRadius, playerColor),
-			visualEyesDirectional,
-			playerVisualName
+			playerVisualBody, playerVisualName
 		]);
 
 		var playerCollide = function(universe, world, place, entityPlayer, entityOther)
@@ -1851,37 +1852,5 @@ function PlaceBuilderDemo()
 		var visualControl = new VisualControl(controlStatus);
 		var entityControls = new Entity("Controls", [ new Drawable(visualControl) ]);
 		return entityControls;
-	};
-
-	PlaceBuilderDemo.prototype.visualEyesBlinkingBuild = function(visualEyeRadius)
-	{
-		var visualPupilRadius = visualEyeRadius / 2;
-
-		var visualEye = new VisualGroup
-		([
-			new VisualCircle(visualEyeRadius, "White"),
-			new VisualCircle(visualPupilRadius, "Black")
-		]);
-
-		var visualEyes = new VisualGroup
-		([
-			new VisualOffset
-			(
-				visualEye, new Coords(-visualEyeRadius, 0)
-			),
-			new VisualOffset
-			(
-				visualEye, new Coords(visualEyeRadius, 0)
-			)
-		]);
-
-		var visualEyesBlinking = new VisualAnimation
-		(
-			"EyesBlinking",
-			[ 50, 5 ], // ticksToHoldFrames
-			[ visualEyes, new VisualNone() ],
-		);
-
-		return visualEyesBlinking;
 	};
 }
