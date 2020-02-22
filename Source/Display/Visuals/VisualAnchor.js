@@ -9,7 +9,7 @@ function VisualAnchor(child, posToAnchorAt)
 }
 
 {
-	VisualAnchor.prototype.draw = function(universe, world, entity)
+	VisualAnchor.prototype.draw = function(universe, world, display, entity)
 	{
 		var drawablePos = entity.locatable.loc.pos;
 		this.posSaved.overwriteWith(drawablePos);

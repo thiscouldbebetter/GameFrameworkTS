@@ -1,22 +1,10 @@
 
 function StringExtensions()
 {
-	// extension class
+	// Extension class.
 }
 
 {
-	String.prototype.padLeft = function(lengthAfterPadding, characterToPadWith)
-	{
-		var stringToPad = this;
-
-		while (stringToPad.length < lengthAfterPadding)
-		{
-			stringToPad = characterToPadWith + stringToPad;
-		}
-
-		return stringToPad;
-	};
-
 	String.prototype.lowercaseFirstCharacter = function()
 	{
 		return this.substr(0, 1).toLowerCase() + this.substr(1);

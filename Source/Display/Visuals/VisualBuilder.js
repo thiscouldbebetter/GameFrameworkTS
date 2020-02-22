@@ -4,11 +4,22 @@ function VisualBuilder()
 	// Do nothing.
 }
 {
+	VisualBuilder.Instance = function()
+	{
+		if (VisualBuilder._instance == null)
+		{
+			VisualBuilder._instance = new VisualBuilder();
+		}
+		return VisualBuilder._instance;
+	};
+
 	VisualBuilder.prototype.circleWithEyes = function
 	(
 		circleRadius, circleColor, eyeRadius, visualEyes
 	)
 	{
+		visualEyes = visualEyes || this.eyesBlinking(eyeRadius);
+
 		var visualEyesDirectional = new VisualDirectional
 		(
 			visualEyes, // visualForNoDirection
