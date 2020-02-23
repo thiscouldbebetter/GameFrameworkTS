@@ -526,6 +526,13 @@ function MeshBuilder()
 
 	MeshBuilder.prototype.unitCube = function(material)
 	{
+		var returnMesh = this.unitCube_Geometry();
+		returnMesh = new MeshTextured(returnMesh, [ material ]);
+		return returnMesh;
+	};
+
+	MeshBuilder.prototype.unitCube_Geometry = function(material)
+	{
 		var returnMesh = new Mesh
 		(
 			new Coords(0, 0, 0), // center
@@ -555,8 +562,6 @@ function MeshBuilder()
 				new Mesh_FaceBuilder([5, 6, 7, 4]), // bottom
 			]
 		);
-
-		returnMesh = new MeshTextured(returnMesh, [ material ]);
 
 		return returnMesh;
 	};
