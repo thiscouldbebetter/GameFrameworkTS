@@ -53,13 +53,13 @@ function DateTime(year, month, day, hours, minutes, seconds)
 	{
 		var returnValue =
 			""
-			+ ("" + this.month).padLeft(2, "0")
-			+ ("" + this.day).padLeft(2, "0")
+			+ ("" + this.month).padStart(2, "0")
+			+ ("" + this.day).padStart(2, "0")
 			+ "-"
-			+ ("" + this.hours).padLeft(2, "0")
-			+ ("" + this.minutes).padLeft(2, "0")
+			+ ("" + this.hours).padStart(2, "0")
+			+ ("" + this.minutes).padStart(2, "0")
 			+ "-"
-			+ ("" + this.seconds).padLeft(2, "0");
+			+ ("" + this.seconds).padStart(2, "0");
 
 		return returnValue;
 	};
@@ -70,15 +70,15 @@ function DateTime(year, month, day, hours, minutes, seconds)
 			""
 			+ this.year
 			+ "/"
-			+ ("" + this.month).padLeft(2, "0")
+			+ ("" + this.month).padStart(2, "0")
 			+ "/"
-			+ ("" + this.day).padLeft(2, "0")
+			+ ("" + this.day).padStart(2, "0")
 			+ "-"
-			+ ("" + this.hours).padLeft(2, "0")
+			+ ("" + this.hours).padStart(2, "0")
 			+ ":"
-			+ ("" + this.minutes).padLeft(2, "0")
+			+ ("" + this.minutes).padStart(2, "0")
 			+ ":"
-			+ ("" + this.seconds).padLeft(2, "0");
+			+ ("" + this.seconds).padStart(2, "0");
 
 		return returnValue;
 	};
