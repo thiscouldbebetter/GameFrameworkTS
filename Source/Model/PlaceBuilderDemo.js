@@ -32,9 +32,11 @@ function PlaceBuilderDemo()
 
 		var playerEntity = this.entityBuildPlayer
 		(
-			entities, entityDimension, visualEyeRadius, visualEyesBlinking
+			entityDimension, visualEyeRadius, visualEyesBlinking
 		);
+		entities.push(playerEntity);
 		var playerPos = playerEntity.locatable.loc.pos;
+
 		var damagerColor = "Red";
 		var obstacleColor = damagerColor;
 		var wallThickness = this.entityBuildObstacleWalls(entities, obstacleColor);
@@ -48,7 +50,7 @@ function PlaceBuilderDemo()
 			var numberOfKeysToUnlockGoal = 5;
 			var numberOfObstacles = 48;
 
-			var constraintSpeedMax1 = new Constraint_SpeedMax(1);
+			var constraintSpeedMax1 = new Constraint_SpeedMaxXY(1);
 			this.entityBuildFriendly
 			(
 				entities, entityDimension, constraintSpeedMax1, visualEyesBlinking
@@ -1313,7 +1315,7 @@ function PlaceBuilderDemo()
 
 	PlaceBuilderDemo.prototype.entityBuildPlayer = function
 	(
-		entities, entityDimension, visualEyeRadius, visualEyesBlinking
+		entityDimension, visualEyeRadius, visualEyesBlinking
 	)
 	{
 		var playerPos = new Coords(30, 30);
@@ -1326,6 +1328,11 @@ function PlaceBuilderDemo()
 		(
 			playerHeadRadius, playerColor, visualEyeRadius, visualEyesBlinking
 		);
+		var playerVisualBodyJumpable = new VisualJump2D
+		(
+			playerVisualBody,
+			new VisualEllipse(playerHeadRadius, playerHeadRadius / 2, 0, "DarkGray", "Black")
+		);
 		var playerVisualName = new VisualOffset
 		(
 			new VisualText("Player", playerColor),
@@ -1334,7 +1341,7 @@ function PlaceBuilderDemo()
 
 		var playerVisual = new VisualGroup
 		([
-			playerVisualBody, playerVisualName
+			playerVisualBodyJumpable, playerVisualName
 		]);
 
 		var playerCollide = function(universe, world, place, entityPlayer, entityOther)
@@ -1471,9 +1478,17 @@ function PlaceBuilderDemo()
 			}
 		};
 
-		var constraintSpeedMax5 = new Constraint_SpeedMax(5);
-		var constraintFriction = new Constraint_Friction(.03);
-		var constrainable = new Constrainable([constraintFriction, constraintSpeedMax5]);
+		var constrainable = new Constrainable
+		([
+			new Constraint_Gravity(new Coords(0, 0, 1)),
+			new Constraint_ContainInHemispace(new Hemispace(new Plane(new Coords(0, 0, 1), 0))),
+			new Constraint_SpeedMaxXY(5),
+			new Constraint_Conditional
+			(
+				(u, w, p, entity) => ( entity.locatable.loc.pos.z >= 0 ),
+				new Constraint_FrictionXY(.03)
+			),
+		]);
 
 		var itemCategoriesForQuickSlots =
 		[
@@ -1615,8 +1630,6 @@ function PlaceBuilderDemo()
 				new Playable(),
 			]
 		);
-
-		entities.push(playerEntity);
 
 		return playerEntity;
 	};
@@ -1831,7 +1844,7 @@ function PlaceBuilderDemo()
 		(
 			"infoStatus",
 			new Coords(8, 5), //pos,
-			new Coords(100, 0), //size,
+			new Coords(150, 0), //size,
 			false, // isTextCentered,
 			new DataBinding
 			(

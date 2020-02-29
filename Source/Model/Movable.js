@@ -2,25 +2,10 @@
 function Movable(accelerationPerTick, accelerate)
 {
 	this.accelerationPerTick = accelerationPerTick;
-	this._accelerate = accelerate;
+	this.accelerate = accelerate || this.accelerateForward;
 }
 {
-	Movable.prototype.accelerate = function(universe, world, place, entityMovable)
-	{
-		if (this._accelerate == null)
-		{
-			this.accelerateForward
-			(
-				universe, world, place, entityMovable, entityMovable.movable.accelerationPerTick
-			);
-		}
-		else
-		{
-			this._accelerate(universe, world, place, entityMovable);
-		}
-	};
-
-	Movable.prototype.accelerateForward = function(universe, world, place, entityMovable, acceleration)
+	Movable.prototype.accelerateForward = function(universe, world, place, entityMovable)
 	{
 		var entityLoc = entityMovable.locatable.loc;
 		entityLoc.accel.overwriteWith
@@ -28,7 +13,7 @@ function Movable(accelerationPerTick, accelerate)
 			entityLoc.orientation.forward
 		).multiplyScalar
 		(
-			acceleration
+			entityMovable.movable.accelerationPerTick
 		);
 	};
 

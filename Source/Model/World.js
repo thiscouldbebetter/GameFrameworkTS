@@ -35,8 +35,14 @@ function World(name, dateCreated, defns, places)
 			universe, world, place, entity, directionToMove
 		)
 		{
-			entity.locatable.loc.orientation.forwardSet(directionToMove);
-			entity.movable.accelerate(universe, world, place, entity);
+			var entityLoc = entity.locatable.loc;
+			var isEntityStandingOnGround =
+				(entityLoc.pos.z >= 0 && entityLoc.vel.z >= 0);
+			if (isEntityStandingOnGround)
+			{
+				entityLoc.orientation.forwardSet(directionToMove);
+				entity.movable.accelerate(universe, world, place, entity);
+			}
 		};
 
 		var useItemInSocketNumbered = function(universe, world, place, actor, socketNumber)
@@ -118,7 +124,22 @@ function World(name, dateCreated, defns, places)
 					}
 				}
 			),
-
+			new Action
+			(
+				"Jump",
+				function perform(universe, world, place, actor)
+				{
+					var loc = actor.locatable.loc;
+					var isNotAlreadyJumping = (loc.pos.z >= 0);
+					if (isNotAlreadyJumping)
+					{
+						// For unknown reasons, setting accel instead of vel
+						// results in nondeterministic jump height,
+						// or often no visible jump at all.
+						loc.vel.z = -10;
+					}
+				}
+			),
 			new Action("Item0", (u, w, p, e) => useItemInSocketNumbered(u, w, p, e, 0)),
 			new Action("Item1", (u, w, p, e) => useItemInSocketNumbered(u, w, p, e, 1)),
 			new Action("Item2", (u, w, p, e) => useItemInSocketNumbered(u, w, p, e, 2)),
@@ -146,6 +167,7 @@ function World(name, dateCreated, defns, places)
 			new ActionToInputsMapping("MoveRight", 	[ inputNames.ArrowRight, inputNames.GamepadMoveRight + "0" ]),
 			new ActionToInputsMapping("MoveUp", 	[ inputNames.ArrowUp, inputNames.GamepadMoveUp + "0" ]),
 			new ActionToInputsMapping("Fire", 		[ inputNames.Enter, inputNames.GamepadButton0 + "0" ]),
+			new ActionToInputsMapping("Jump", 		[ inputNames.Space, inputNames.GamepadButton0 + "1" ]),
 
 			new ActionToInputsMapping("Item0", 	[ "_0" ]),
 			new ActionToInputsMapping("Item1", 	[ "_1" ]),

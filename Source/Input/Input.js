@@ -27,6 +27,7 @@ function Input(name)
 				this.GamepadMoveUp = "GamepadMoveUp_";
 				this.MouseClick = "MouseClick";
 				this.MouseMove = "MouseMove";
+				this.Space = "_";
 				this.Tab = "Tab";
 			}
 

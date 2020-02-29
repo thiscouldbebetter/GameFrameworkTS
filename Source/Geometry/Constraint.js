@@ -29,34 +29,63 @@ function ConstraintInstances()
 		};
 	}
 
-	function Constraint_ContainInBox(target)
+	function Constraint_Conditional(shouldChildApply, child)
 	{
-		this.target = target;
+		this.shouldChildApply = shouldChildApply;
+		this.child = child;
 	}
 	{
-		Constraint_ContainInBox.prototype.constrain = function(universe, world, place, entityToConstrain, constraint)
+		Constraint_Conditional.prototype.constrain = function(universe, world, place, entity)
 		{
-			var targetBox = this.target;
-			targetBox.trimCoords(entityToConstrain.locatable.loc.pos);
+			var willChildApply = this.shouldChildApply(universe, world, place, entity);
+			if (willChildApply)
+			{
+				this.child.constrain(universe, world, place, entity);
+			}
 		};
 	}
 
-	function Constraint_Friction(target)
+	function Constraint_ContainInBox(boxToContainWithin)
+	{
+		this.boxToContainWithin = boxToContainWithin;
+	}
+	{
+		Constraint_ContainInBox.prototype.constrain = function(universe, world, place, entity)
+		{
+			this.boxToContainWithin.trimCoords(entity.locatable.loc.pos);
+		};
+	}
+
+	function Constraint_ContainInHemispace(hemispaceToContainWithin)
+	{
+		this.hemispaceToContainWithin = hemispaceToContainWithin;
+	}
+	{
+		Constraint_ContainInHemispace.prototype.constrain = function(universe, world, place, entity)
+		{
+			this.hemispaceToContainWithin.trimCoords(entity.locatable.loc.pos);
+		};
+	}
+
+	function Constraint_FrictionXY(target)
 	{
 		this.target = target;
 	}
 	{
-		Constraint_Friction.prototype.constrain = function(universe, world, place, entity)
+		Constraint_FrictionXY.prototype.constrain = function(universe, world, place, entity)
 		{
 			var targetFrictionCoefficient = this.target;
 			var entityLoc = entity.locatable.loc;
 			var entityVel = entityLoc.vel;
+			var entityVelZSaved = entityVel.z;
+			entityVel.z = 0;
 			var speed = entityVel.magnitude();
 			var frictionMagnitude = speed * targetFrictionCoefficient;
 			entityVel.add
 			(
 				entityVel.clone().multiplyScalar(-frictionMagnitude)
 			);
+			entityVel.z = entityVelZSaved;
 		};
 	}
 
@@ -85,6 +114,17 @@ function ConstraintInstances()
 				);
 			}
 		};
+	}
+
+	function Constraint_Gravity(accelerationPerTick)
+	{
+		this.accelerationPerTick = accelerationPerTick;
+	}
+	{
+		Constraint_Gravity.prototype.constrain = function(universe, world, place, entity)
+		{
+			entity.locatable.loc.accel.add(this.accelerationPerTick);
+		}
 	}
 
 	function Constraint_Offset(target)
@@ -128,21 +168,24 @@ function ConstraintInstances()
 		};
 	}
 
-	function Constraint_SpeedMax(target)
+	function Constraint_SpeedMaxXY(target)
 	{
 		this.target = target;
 	}
 	{
-		Constraint_SpeedMax.prototype.constrain = function(universe, world, place, entity)
+		Constraint_SpeedMaxXY.prototype.constrain = function(universe, world, place, entity)
 		{
 			var targetSpeedMax = this.target;
 			var entityLoc = entity.locatable.loc;
 			var entityVel = entityLoc.vel;
+			var zSaved = entityVel.z;
+			entityVel.z = 0;
 			var speed = entityVel.magnitude();
 			if (speed > targetSpeedMax)
 			{
 				entityVel.normalize().multiplyScalar(targetSpeedMax);
 			}
+			entityVel.z = zSaved;
 		};
 	}
 
