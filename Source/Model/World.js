@@ -127,6 +127,29 @@ function World(name, dateCreated, defns, places)
 			),
 			new Action
 			(
+				"Hide",
+				function perform(universe, world, place, actor)
+				{
+					var learner = actor.skillLearner;
+					var knowsHowToHide = learner.skillsKnownNames.contains("Hiding");
+					//knowsHowToHide = true; // debug
+					if (knowsHowToHide)
+					{
+						var perceptible = actor.playable; // hack
+						var isAlreadyHiding = perceptible.isHiding; 
+						if (isAlreadyHiding)
+						{
+							perceptible.isHiding = false;
+						}
+						else
+						{
+							perceptible.isHiding = true;
+						}
+					}
+				}
+			),
+			new Action
+			(
 				"Jump",
 				function perform(universe, world, place, actor)
 				{
@@ -142,6 +165,32 @@ function World(name, dateCreated, defns, places)
 							// results in nondeterministic jump height,
 							// or often no visible jump at all.
 							loc.vel.z = -10;
+						}
+					}
+				}
+			),
+			new Action
+			(
+				"Run",
+				function perform(universe, world, place, actor)
+				{
+					var learner = actor.skillLearner;
+					var knowsHowToRun = learner.skillsKnownNames.contains("Running");
+					// knowsHowToRun = true; // debug
+					if (knowsHowToRun)
+					{
+						var loc = actor.locatable.loc;
+						var isOnGround = (loc.pos.z >= 0);
+						if (isOnGround)
+						{
+							var vel = loc.vel;
+							var speedRunning = 16;
+							var speedCurrent = vel.magnitude();
+							if (speedCurrent > 0 && speedCurrent < speedRunning)
+							{
+								var direction = vel.normalize();
+								vel.multiplyScalar(speedRunning);
+							}
 						}
 					}
 				}
@@ -173,8 +222,11 @@ function World(name, dateCreated, defns, places)
 			new ActionToInputsMapping("MoveLeft", 	[ inputNames.ArrowLeft, inputNames.GamepadMoveLeft + "0" ]),
 			new ActionToInputsMapping("MoveRight", 	[ inputNames.ArrowRight, inputNames.GamepadMoveRight + "0" ]),
 			new ActionToInputsMapping("MoveUp", 	[ inputNames.ArrowUp, inputNames.GamepadMoveUp + "0" ]),
+
 			new ActionToInputsMapping("Fire", 		[ inputNames.Enter, inputNames.GamepadButton0 + "0" ]),
 			new ActionToInputsMapping("Jump", 		[ inputNames.Space, inputNames.GamepadButton0 + "1" ]),
+			new ActionToInputsMapping("Run", 		[ inputNames.Shift, inputNames.GamepadButton0 + "2" ]),
+			new ActionToInputsMapping("Hide", 		[ "h", inputNames.GamepadButton0 + "3" ]),
 
 			new ActionToInputsMapping("Item0", 	[ "_0" ]),
 			new ActionToInputsMapping("Item1", 	[ "_1" ]),

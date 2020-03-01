@@ -16,6 +16,7 @@ function VisualCamera(child, cameraFactory)
 
 		var camera = this.cameraFactory(universe, world);
 		camera.coordsTransformWorldToView(drawablePos);
+
 		if (entity.Boundable == null) // todo
 		{
 			this.child.draw(universe, world, display, entity);

@@ -13,7 +13,6 @@ function Skill(name, learningRequired, namesOfPrerequisiteSkills
 		[
 			// Skill(name, cost, prerequisites)
 
-
 			new Skill("Jumping", 4, []),
 			new Skill("Running", 4, []),
 			new Skill("Strafing", 4, []),

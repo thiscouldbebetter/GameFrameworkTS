@@ -7,14 +7,6 @@ function SkillLearner(skillBeingLearnedName, learningAccumulated, skillsKnownNam
 }
 
 {
-	SkillLearner.prototype.updateForTimerTick = function(universe, world, place, entityPlayer)
-	{
-		if (this.skillBeingLearnedName == null)
-		{
-			this.learnCheapestSkillAvailable(world.defns.skills);
-		}
-	};
-
 	SkillLearner.prototype.isLearningInProgress = function()
 	{
 		return (this.learningAccumulated > 0);
@@ -25,8 +17,10 @@ function SkillLearner(skillBeingLearnedName, learningAccumulated, skillsKnownNam
 		return (this.skillBeingLearnedName != null);
 	};
 
-	SkillLearner.prototype.learnCheapestSkillAvailable = function(skillsAll)
+	SkillLearner.prototype.skillCheapestAvailable = function(skillsAll)
 	{
+		var returnValue = null;
+
 		var skillsAvailable = this.skillsAvailableToLearn(skillsAll);
 		if (skillsAvailable.length > 0)
 		{
@@ -34,13 +28,27 @@ function SkillLearner(skillBeingLearnedName, learningAccumulated, skillsKnownNam
 			(
 				(x, y) => x - y
 			)[0];
-			this.skillBeingLearnedName = skillCheapest.name;
+			returnValue = skillCheapest;
 		}
+		return skillCheapest;
 	};
 
-	SkillLearner.prototype.learningAccumulatedIncrement = function(skillsAll, amountToIncrement)
+	SkillLearner.prototype.learningIncrement = function(skillsAll, amountToIncrement)
 	{
+		var message = null;
+
 		var skillBeingLearned = this.skillBeingLearned(skillsAll);
+
+		if (skillBeingLearned == null)
+		{
+			var skillCheapest = this.skillCheapestAvailable(skillsAll);
+			if (skillCheapest != null)
+			{
+				skillBeingLearned = skillCheapest;
+				this.skillBeingLearnedName = skillCheapest.name;
+				message = "Now learning '" + this.skillBeingLearnedName + "'."
+			}
+		}
 
 		if (skillBeingLearned != null)
 		{
@@ -49,6 +57,7 @@ function SkillLearner(skillBeingLearnedName, learningAccumulated, skillsKnownNam
 			var learningRequired = skillBeingLearned.learningRequired;
 			if (this.learningAccumulated >= learningRequired)
 			{
+				message = "Learned skill '" + this.skillBeingLearnedName + "'.";
 				this.skillsKnownNames.push
 				(
 					this.skillBeingLearnedName
@@ -57,6 +66,8 @@ function SkillLearner(skillBeingLearnedName, learningAccumulated, skillsKnownNam
 				this.learningAccumulated = 0;
 			}
 		}
+
+		return message;
 	};
 
 	SkillLearner.prototype.learningAccumulatedOverRequired = function(skillsAll)
@@ -155,6 +166,13 @@ function SkillLearner(skillBeingLearnedName, learningAccumulated, skillsKnownNam
 
 		return returnValue;
 	};
+
+	// entity
+
+	SkillLearner.prototype.updateForTimerTick = function(universe, world, place, entity)
+	{
+		// Do nothing.
+	}
 
 	// controls
 

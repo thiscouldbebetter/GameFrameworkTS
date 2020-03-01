@@ -10,6 +10,7 @@ function Universe(name, version, timerHelper, display, mediaLibrary, world)
 
 	this.collisionHelper = new CollisionHelper();
 	this.controlBuilder = new ControlBuilder([ControlStyle.Instances().Default]);
+	this.entityBuilder = new EntityBuilder();
 	this.idHelper = IDHelper.Instance();
 	this.platformHelper = new PlatformHelper();
 	this.randomizer = new RandomizerSystem();

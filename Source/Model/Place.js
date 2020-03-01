@@ -91,8 +91,19 @@ function Place(name, defnName, size, entities)
 
 	Place.prototype.entitySpawn = function(universe, world, entity)
 	{
+		var entityName = entity.name;
+		if (entityName == null)
+		{
+			entityName = "Entity";
+		}
+
+		if (this.entities[entityName] != null)
+		{
+			entityName += universe.idHelper.idNext();
+		}
+
 		this.entities.push(entity);
-		this.entities[entity.name] = entity;
+		this.entities[entityName] = entity;
 
 		var entityProperties = entity.properties;
 		for (var p = 0; p < entityProperties.length; p++)

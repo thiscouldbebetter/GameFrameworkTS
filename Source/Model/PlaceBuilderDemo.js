@@ -668,7 +668,21 @@ function PlaceBuilderDemo()
 					null, // damageApply
 					function die(u, w, p, e)
 					{
-						p.player().skillLearner.learningAccumulatedIncrement(w.defns.skills, 1);
+						var entityPlayer = p.player();
+						var learner = entityPlayer.skillLearner;
+						var learningMessage =
+							learner.learningIncrement(w.defns.skills, 1);
+						if (learningMessage != null)
+						{
+							p.entitySpawn
+							(
+								u, w,
+								u.entityBuilder.messageFloater
+								(
+									learningMessage, entityPlayer.locatable.loc.pos
+								)
+							);
+						}
 					}
 				),
 				new Locatable(new Location(new Coords())),
@@ -1342,13 +1356,26 @@ function PlaceBuilderDemo()
 		var playerCollider = new Sphere(new Coords(0, 0), playerHeadRadius);
 		var playerColor = "Gray";
 
-		var playerVisualBody = new VisualBuilder().circleWithEyes
+		var playerVisualBodyNormal = new VisualBuilder().circleWithEyes
 		(
 			playerHeadRadius, playerColor, visualEyeRadius, visualEyesBlinking
 		);
+		var playerVisualBodyHidden = new VisualBuilder().circleWithEyes
+		(
+			playerHeadRadius, "Black", visualEyeRadius, visualEyesBlinking
+		);
+		var playerVisualBodyHidable = new VisualSelect
+		(
+			function selectChildName(u, w, display, e)
+			{
+				return (e.playable.isHiding ? "Hidden" : "Normal");
+			},
+			[ "Normal", "Hidden" ],
+			[ playerVisualBodyNormal, playerVisualBodyHidden ]
+		);
 		var playerVisualBodyJumpable = new VisualJump2D
 		(
-			playerVisualBody,
+			playerVisualBodyHidable,
 			new VisualEllipse(playerHeadRadius, playerHeadRadius / 2, 0, "DarkGray", "Black")
 		);
 		var playerVisualName = new VisualOffset
@@ -1372,28 +1399,12 @@ function PlaceBuilderDemo()
 
 				var damage = entityPlayer.killable.damageApply(universe, world, place, entityOther, entityPlayer);
 
-				var messageEntity = new Entity
+				var messageEntity = universe.entityBuilder.messageFloater
 				(
-					"Message" + universe.idHelper.idNext(),
-					[
-						new Drawable
-						(
-							new VisualCamera
-							(
-								new VisualText("-" + damage, "Red"),
-								(universe, world) => world.placeCurrent.camera()
-							)
-						),
-						new Ephemeral(20),
-						new Locatable
-						(
-							new Location(entityPlayer.locatable.loc.pos.clone()).velSet
-							(
-								new Coords(0, -1)
-							)
-						),
-					]
+					"-" + damage,
+					entityPlayer.locatable.loc.pos
 				);
+
 				place.entitySpawn(universe, world, messageEntity);
 			}
 			else if (entityOther.itemContainer != null)
