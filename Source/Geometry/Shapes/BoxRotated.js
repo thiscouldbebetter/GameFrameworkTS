@@ -25,7 +25,7 @@ function BoxRotated(box, angleInTurns)
 		for (var d = 0; d < 2; d++)
 		{
 			polar.azimuthInTurns = this.angleInTurns + (d * .25);
-			var dimensionHalf = sizeHalf.dimension(d);
+			var dimensionHalf = sizeHalf.dimensionGet(d);
 
 			for (var m = 0; m < 2; m++)
 			{

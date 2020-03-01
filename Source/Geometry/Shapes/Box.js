@@ -103,8 +103,8 @@ function Box(center, size)
 			for (var d = 0; d < rangesForDimensions.length; d++)
 			{
 				var rangeForDimension = rangesForDimensions[d];
-				center.dimension(d, rangeForDimension.midpoint());
-				size.dimension(d, rangeForDimension.size());
+				center.dimensionSet(d, rangeForDimension.midpoint());
+				size.dimensionSet(d, rangeForDimension.size());
 			}
 
 			returnValue = new Box(center, size);
@@ -199,8 +199,8 @@ function Box(center, size)
 
 	Box.prototype.rangeForDimension = function(dimensionIndex, range)
 	{
-		range.min = this.min().dimension(dimensionIndex);
-		range.max = this.max().dimension(dimensionIndex);
+		range.min = this.min().dimensionGet(dimensionIndex);
+		range.max = this.max().dimensionGet(dimensionIndex);
 		return range;
 	};
 

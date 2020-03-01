@@ -105,36 +105,42 @@ function Coords(x, y, z)
 		);
 	};
 
-	Coords.prototype.dimension = function(dimensionIndex, valueToSet)
+	Coords.prototype.dimensionGet = function(dimensionIndex)
 	{
 		var returnValue;
 
 		if (dimensionIndex == 0)
 		{
-			if (valueToSet != null)
-			{
-				this.x = valueToSet;
-			}
 			returnValue = this.x;
 		}
 		else if (dimensionIndex == 1)
 		{
-			if (valueToSet != null)
-			{
-				this.y = valueToSet;
-			}
 			returnValue = this.y;
 		}
 		else if (dimensionIndex == 2)
 		{
-			if (valueToSet != null)
-			{
-				this.z = valueToSet;
-			}
 			returnValue = this.z;
 		}
 
 		return returnValue;
+	};
+
+	Coords.prototype.dimensionSet = function(dimensionIndex, valueToSet)
+	{
+		if (dimensionIndex == 0)
+		{
+			this.x = valueToSet;
+		}
+		else if (dimensionIndex == 1)
+		{
+			this.y = valueToSet;
+		}
+		else if (dimensionIndex == 2)
+		{
+			this.z = valueToSet;
+		}
+
+		return this;
 	};
 
 	Coords.prototype.dimensions = function()
@@ -473,6 +479,24 @@ function Coords(x, y, z)
 			}
 		}
 
+		return this;
+	};
+
+	Coords.prototype.xSet = function(value)
+	{
+		this.x = value;
+		return this;
+	};
+
+	Coords.prototype.ySet = function(value)
+	{
+		this.y = value;
+		return this;
+	};
+
+	Coords.prototype.zSet = function(value)
+	{
+		this.z = value;
 		return this;
 	};
 

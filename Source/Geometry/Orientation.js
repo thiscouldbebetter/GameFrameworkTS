@@ -97,7 +97,7 @@ function Orientation(forward, down)
 
 			axisScaled.overwriteWith(axis).multiplyScalar
 			(
-				coords.dimension(i)
+				coords.dimensionGet(i)
 			);
 
 			returnValue.add(axisScaled);
@@ -129,7 +129,7 @@ function Orientation(forward, down)
 
 			axisScaled.overwriteWith(axis).multiplyScalar
 			(
-				coords.dimension(i)
+				coords.dimensionGet(i)
 			);
 
 			returnValue.add(axisScaled);

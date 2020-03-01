@@ -19,9 +19,6 @@ function PlaceBuilderDemo()
 		var cameraEntity = this.entityBuildCamera(cameraViewSize);
 		entities.push(cameraEntity);
 
-		var camera = cameraEntity.camera;
-		this.entityBuildBackground(entities, camera);
-
 		var entityDimension = 10;
 		var entityDimensionHalf = entityDimension / 2;
 		var entitySize = new Coords(1, 1, 1).multiplyScalar(entityDimension);
@@ -89,12 +86,15 @@ function PlaceBuilderDemo()
 			this.entityBuildObstacleRing(entities, entityDimension, goalEntity, obstacleColor);
 		}
 
+		entities.forEach(x => { if (x.locatable != null) { x.locatable.loc.pos.z = 0; } })
+
+		var camera = cameraEntity.camera;
+		entities.splice(0, 0, ...this.entityBuildBackground(camera));
+
 		this.entitiesAllAddCameraProjection(entities);
 
 		var entityControls = this.entityControlsBuild(playerEntity, itemDefns);
 		entities.push(entityControls);
-
-		entities.forEach(x => { if (x.locatable != null) { x.locatable.loc.pos.z = 0; } })
 
 		var place = new Place(name, "Demo", size, entities);
 		return place;
@@ -106,10 +106,13 @@ function PlaceBuilderDemo()
 	{
 		var viewSizeHalf = cameraViewSize.clone().half();
 
+		var cameraHeightAbovePlayfield = cameraViewSize.x;
+		var cameraZ = 0 - cameraHeightAbovePlayfield;
+
 		var cameraPosBox = new Box().fromMinAndMax
 		(
-			viewSizeHalf.clone(),
-			this.size.clone().subtract(viewSizeHalf)
+			viewSizeHalf.clone().zSet(cameraZ),
+			this.size.clone().subtract(viewSizeHalf).zSet(cameraZ)
 		);
 
 		var cameraPos = viewSizeHalf.clone();
@@ -121,7 +124,7 @@ function PlaceBuilderDemo()
 		var camera = new Camera
 		(
 			cameraViewSize,
-			null, // focalLength
+			cameraHeightAbovePlayfield, // focalLength
 			cameraLoc
 		);
 
@@ -274,8 +277,10 @@ function PlaceBuilderDemo()
 		entities.push(itemArmorEntity);
 	};
 
-	PlaceBuilderDemo.prototype.entityBuildBackground = function(entities, camera)
+	PlaceBuilderDemo.prototype.entityBuildBackground = function(camera)
 	{
+		var returnValues = [];
+
 		var visualBackgroundDimension = 100;
 
 		var visualBackgroundCellSize =
@@ -298,7 +303,7 @@ function PlaceBuilderDemo()
 				new Drawable(visualBackgroundBottom)
 			]
 		);
-		entities.push(entityBackgroundBottom);
+		returnValues.push(entityBackgroundBottom);
 
 		visualBackgroundCellSize =
 			new Coords(1, 1, .01).multiplyScalar(visualBackgroundDimension);
@@ -320,7 +325,9 @@ function PlaceBuilderDemo()
 				new Drawable(visualBackgroundTop)
 			]
 		);
-		entities.push(entityBackgroundTop);
+		returnValues.push(entityBackgroundTop);
+
+		return returnValues;
 	};
 
 	PlaceBuilderDemo.prototype.entityBuildBase = function
