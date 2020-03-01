@@ -18,6 +18,7 @@ function Place(name, defnName, size, entities)
 		Idleable.name,
 		Actor.name,
 		Playable.name,
+		SkillLearner.name,
 		Ephemeral.name,
 		Killable.name,
 	];

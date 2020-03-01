@@ -18,8 +18,7 @@ function Hemispace(plane)
 	Hemispace.prototype.trimCoords = function(coordsToTrim)
 	{
 		var distanceOfPointAbovePlane =
-			coordsToTrim.dotProduct(this.plane.normal)
-			- this.plane.distanceFromOrigin;
+			this.plane.distanceToPointAlongNormal(coordsToTrim);
 		var areCoordsOutsideHemispace = (distanceOfPointAbovePlane > 0);
 		if (areCoordsOutsideHemispace)
 		{

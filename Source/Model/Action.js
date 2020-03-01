@@ -87,5 +87,20 @@ function Action(name, perform)
 			}
 		);
 
+		this.ShowSkills = new Action
+		(
+			"ShowSkills",
+			function perform(universe, world, place, actor)
+			{
+				var learner = actor.skillLearner;
+				var learnerAsControl = learner.toControl
+				(
+					universe, universe.display.sizeInPixels, actor, universe.venueCurrent
+				);
+				var venueNext = new VenueControls(learnerAsControl);
+				venueNext = new VenueFader(venueNext, universe.venueCurrent);
+				universe.venueNext = venueNext;
+			}
+		);
 	}
 }

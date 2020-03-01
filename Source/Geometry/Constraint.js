@@ -59,11 +59,68 @@ function ConstraintInstances()
 	function Constraint_ContainInHemispace(hemispaceToContainWithin)
 	{
 		this.hemispaceToContainWithin = hemispaceToContainWithin;
+
+		this._coordsTemp = new Coords();
 	}
 	{
 		Constraint_ContainInHemispace.prototype.constrain = function(universe, world, place, entity)
 		{
-			this.hemispaceToContainWithin.trimCoords(entity.locatable.loc.pos);
+			var hemispace = this.hemispaceToContainWithin;
+			var plane = hemispace.plane;
+			var loc = entity.locatable.loc;
+			var pos = loc.pos;
+
+			// Can't use Hemispace.trimCoords(),
+			// because we also need to trim velocity and acceleration.
+			var distanceOfPointAbovePlane =
+				plane.distanceToPointAlongNormal(pos);
+			var areCoordsOutsideHemispace = (distanceOfPointAbovePlane > 0);
+			if (areCoordsOutsideHemispace)
+			{
+				var planeNormal = plane.normal;
+				pos.subtract
+				(
+					this._coordsTemp.overwriteWith
+					(
+						planeNormal
+					).multiplyScalar
+					(
+						distanceOfPointAbovePlane
+					)
+				);
+
+				var vel = loc.vel;
+				var speedAlongNormal = vel.dotProduct(planeNormal);
+				if (speedAlongNormal > 0)
+				{
+					vel.subtract
+					(
+						this._coordsTemp.overwriteWith
+						(
+							planeNormal
+						).multiplyScalar
+						(
+							speedAlongNormal
+						)
+					);
+				}
+
+				var accel = loc.accel;
+				var accelerationAlongNormal = accel.dotProduct(planeNormal);
+				if (accelerationAlongNormal > 0)
+				{
+					accel.subtract
+					(
+						this._coordsTemp.overwriteWith
+						(
+							planeNormal
+						).multiplyScalar
+						(
+							accelerationAlongNormal
+						)
+					);
+				}
+			}
 		};
 	}
 
@@ -123,7 +180,11 @@ function ConstraintInstances()
 	{
 		Constraint_Gravity.prototype.constrain = function(universe, world, place, entity)
 		{
-			entity.locatable.loc.accel.add(this.accelerationPerTick);
+			var loc = entity.locatable.loc;
+			if (loc.pos.z < 0) // hack
+			{
+				loc.accel.add(this.accelerationPerTick);
+			}
 		}
 	}
 

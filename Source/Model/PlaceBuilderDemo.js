@@ -640,7 +640,7 @@ function PlaceBuilderDemo()
 			).subtract
 			(
 				actorLoc.pos
-			).normalize().multiplyScalar(.1);
+			).normalize().multiplyScalar(.1).clearZ();
 
 			actorLoc.orientation.forwardSet(actorLoc.accel.clone().normalize());
 		};
@@ -655,7 +655,15 @@ function PlaceBuilderDemo()
 				new Damager(10),
 				new Drawable(enemyVisual),
 				new Enemy(),
-				new Killable(10),
+				new Killable
+				(
+					10,
+					null, // damageApply
+					function die(u, w, p, e)
+					{
+						p.player().skillLearner.learningAccumulatedIncrement(w.defns.skills, 1);
+					}
+				),
 				new Locatable(new Location(new Coords())),
 			]
 		);
@@ -1628,6 +1636,7 @@ function PlaceBuilderDemo()
 				killable,
 				movable,
 				new Playable(),
+				new SkillLearner()
 			]
 		);
 
@@ -1855,7 +1864,8 @@ function PlaceBuilderDemo()
 					var statusText = "H:" + c.killable.integrity
 						+ "   A:" + itemHolder.itemQuantityByDefnName(itemDefns["Ammo"].name)
 						+ "   K:" + itemHolder.itemQuantityByDefnName(itemDefns["Key"].name)
-						+ "   $:" + itemHolder.itemQuantityByDefnName(itemDefns["Coin"].name);
+						+ "   $:" + itemHolder.itemQuantityByDefnName(itemDefns["Coin"].name)
+						+ "   X:" + c.skillLearner.learningAccumulated;
 					return statusText;
 				}
 			), // text,

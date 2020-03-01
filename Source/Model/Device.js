@@ -53,20 +53,20 @@ function Device(name, initialize, update, use)
 				if (userSpeed == 0) { return; }
 
 				var projectileColor = "Cyan";
-				var projectileRadius = 3;
+				var projectileDimension = 1.5;
 				var projectileVisual = new VisualGroup
 				([
 					new VisualEllipse
 					(
-						projectileRadius * 2, // semimajorAxis,
-						projectileRadius, // semiminorAxis,
+						projectileDimension * 2, // semimajorAxis,
+						projectileDimension, // semiminorAxis,
 						0, // rotationInTurns,
 						projectileColor // colorFill
 					),
 					new VisualOffset
 					(
 						new VisualText("Projectile", projectileColor),
-						new Coords(0, projectileRadius)
+						new Coords(0, projectileDimension * 2)
 					)
 				]);
 				projectileVisual = new VisualCamera
@@ -79,17 +79,17 @@ function Device(name, initialize, update, use)
 				var userRadius = entityUser.collidable.collider.radius;
 				var projectilePos = userPos.clone().add
 				(
-					userDirection.clone().multiplyScalar(userRadius).double().double()
+					userDirection.clone().multiplyScalar(userRadius + projectileDimension).double()
 				);
 				var projectileOri = new Orientation
 				(
 					userVel.clone().normalize()
 				);
 				var projectileLoc = new Location(projectilePos, projectileOri);
-				projectileLoc.vel.overwriteWith(userVel).double();
+				projectileLoc.vel.overwriteWith(userVel).clearZ().double();
 
 				var projectileCollider =
-					new Sphere(new Coords(0, 0), projectileRadius);
+					new Sphere(new Coords(0, 0), projectileDimension);
 
 				var projectileCollide = function(universe, world, place, entityProjectile, entityOther)
 				{

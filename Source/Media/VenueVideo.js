@@ -12,7 +12,7 @@ function VenueVideo(videoName, venueNext)
 		new ActionToInputsMapping("VideoSkip", [ inputNames.Escape, inputNames.GamepadButton0 + "0"], true),
 	];
 
-	ActionToInputsMapping.addLookupsByInputName(this.actionToInputsMappings);
+	this.actionToInputsMappings.addLookupsMultiple(x => x.inputNames);
 }
 
 {

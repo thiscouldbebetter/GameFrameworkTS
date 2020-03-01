@@ -64,6 +64,7 @@ function World(name, dateCreated, defns, places)
 			actionsAll.ShowEquipment,
 			actionsAll.ShowItems,
 			actionsAll.ShowMenu,
+			actionsAll.ShowSkills,
 			new Action
 			(
 				"MoveDown",
@@ -129,14 +130,19 @@ function World(name, dateCreated, defns, places)
 				"Jump",
 				function perform(universe, world, place, actor)
 				{
-					var loc = actor.locatable.loc;
-					var isNotAlreadyJumping = (loc.pos.z >= 0);
-					if (isNotAlreadyJumping)
+					var learner = actor.skillLearner;
+					var canJump = learner.skillsKnownNames.contains("Jumping");
+					if (canJump)
 					{
-						// For unknown reasons, setting accel instead of vel
-						// results in nondeterministic jump height,
-						// or often no visible jump at all.
-						loc.vel.z = -10;
+						var loc = actor.locatable.loc;
+						var isNotAlreadyJumping = (loc.pos.z >= 0);
+						if (isNotAlreadyJumping)
+						{
+							// For unknown reasons, setting accel instead of vel
+							// results in nondeterministic jump height,
+							// or often no visible jump at all.
+							loc.vel.z = -10;
+						}
 					}
 				}
 			),
@@ -161,6 +167,7 @@ function World(name, dateCreated, defns, places)
 			new ActionToInputsMapping("ShowItems", [ inputNames.Tab ]),
 			new ActionToInputsMapping("ShowEquipment", [ "`" ]),
 			new ActionToInputsMapping("ShowCrafting", [ "~" ]),
+			new ActionToInputsMapping("ShowSkills", [ "=" ]),
 
 			new ActionToInputsMapping("MoveDown", 	[ inputNames.ArrowDown, inputNames.GamepadMoveDown + "0" ]),
 			new ActionToInputsMapping("MoveLeft", 	[ inputNames.ArrowLeft, inputNames.GamepadMoveLeft + "0" ]),
@@ -247,7 +254,9 @@ function World(name, dateCreated, defns, places)
 			)
 		];
 
-		var defns = new Defns(itemDefns, placeDefns);
+		var skills = Skill.skillsDemo();
+
+		var defns = new Defns([itemDefns, placeDefns, skills]);
 
 		var displaySize = universe.display.sizeInPixels;
 		var cameraViewSize = displaySize.clone();

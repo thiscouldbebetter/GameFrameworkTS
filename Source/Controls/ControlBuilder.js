@@ -1096,18 +1096,25 @@ function ControlBuilder(styles)
 				new ControlList
 				(
 					"listProfiles",
-					new Coords(50, 50), // pos
-					new Coords(100, 40), // size
-					new DataBinding(profiles, function get(c) { return c; } ),
-					new DataBinding(null, function get(c) { return c.name; } ),
-					fontHeight
+					new Coords(35, 50), // pos
+					new Coords(130, 40), // size
+					new DataBinding(profiles, function get(c) { return c; } ), // items
+					new DataBinding(null, function get(c) { return c.name; } ), // bindingForItemText
+					fontHeight,
+					new DataBinding
+					(
+						universe,
+						function get(c) { return c.profileSelected; },
+						function set(c, v) { c.profileSelected = v; }
+					), // bindingForOptionSelected
+					new DataBinding(null, function get(c) { return c; }) // value
 				),
 
 				new ControlButton
 				(
 					"buttonNew",
-					new Coords(50, 95), // pos
-					new Coords(30, 25), // size
+					new Coords(35, 95), // pos
+					new Coords(40, 25), // size
 					"New",
 					fontHeight,
 					true, // hasBorder
@@ -1128,8 +1135,8 @@ function ControlBuilder(styles)
 				new ControlButton
 				(
 					"buttonSelect",
-					new Coords(85, 95), // pos
-					new Coords(30, 25), // size
+					new Coords(80, 95), // pos
+					new Coords(40, 25), // size
 					"Select",
 					fontHeight,
 					true, // hasBorder
@@ -1157,8 +1164,8 @@ function ControlBuilder(styles)
 				new ControlButton
 				(
 					"buttonSkip",
-					new Coords(120, 95), // pos
-					new Coords(30, 25), // size
+					new Coords(125, 95), // pos
+					new Coords(40, 25), // size
 					"Skip",
 					fontHeight,
 					true, // hasBorder
