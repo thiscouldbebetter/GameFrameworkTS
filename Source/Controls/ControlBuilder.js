@@ -14,7 +14,7 @@ function ControlBuilder(styles)
 {
 	ControlBuilder.prototype.choice = function
 	(
-		universe, size, message, optionNames, optionFunctions
+		universe, size, message, optionNames, optionFunctions, showMessageOnly
 	)
 	{
 		if (size == null)
@@ -32,9 +32,18 @@ function ControlBuilder(styles)
 			200, fontHeight * numberOfLinesInMessageMinusOne
 		);
 
+		var numberOfOptions = optionNames.length;
+
+		if (showMessageOnly && numberOfOptions == 1)
+		{
+			numberOfOptions = 0; // Is a single option really an option?
+		}
+
+		var labelPosYBase = (numberOfOptions > 0 ? 65 : 75); // hack
+
 		var labelPos = new Coords
 		(
-			100, 65 - fontHeight * (numberOfLinesInMessageMinusOne / 4),
+			100, labelPosYBase - fontHeight * (numberOfLinesInMessageMinusOne / 4),
 		);
 
 		var labelMessage = new ControlLabel
@@ -49,54 +58,72 @@ function ControlBuilder(styles)
 
 		var childControls = [ labelMessage ];
 
-		var numberOfOptions = optionNames.length;
-
-		var buttonWidth = 55;
-		var buttonSize = new Coords(buttonWidth, fontHeight * 2);
-		var spaceBetweenButtons = 5;
-		var buttonMarginLeftRight =
-			(
-				this.sizeBase.x
-				- (buttonWidth * numberOfOptions)
-				- (spaceBetweenButtons * (numberOfOptions - 1))
-			) / 2;
-
-		for (var i = 0; i < numberOfOptions; i++)
+		if (showMessageOnly == false)
 		{
-			var button = new ControlButton
-			(
-				"buttonOption" + i,
-				new Coords
+			var buttonWidth = 55;
+			var buttonSize = new Coords(buttonWidth, fontHeight * 2);
+			var spaceBetweenButtons = 5;
+			var buttonMarginLeftRight =
 				(
-					buttonMarginLeftRight + i * (buttonWidth + spaceBetweenButtons),
-					100
-				), // pos
-				buttonSize.clone(),
-				optionNames[i],
-				fontHeight,
-				true, // hasBorder
-				true, // isEnabled
-				optionFunctions[i],
-				universe // context
-			);
+					this.sizeBase.x
+					- (buttonWidth * numberOfOptions)
+					- (spaceBetweenButtons * (numberOfOptions - 1))
+				) / 2;
 
-			childControls.push(button);
+			for (var i = 0; i < numberOfOptions; i++)
+			{
+				var button = new ControlButton
+				(
+					"buttonOption" + i,
+					new Coords
+					(
+						buttonMarginLeftRight + i * (buttonWidth + spaceBetweenButtons),
+						100
+					), // pos
+					buttonSize.clone(),
+					optionNames[i],
+					fontHeight,
+					true, // hasBorder
+					true, // isEnabled
+					optionFunctions[i],
+					universe // context
+				);
+
+				childControls.push(button);
+			}
 		}
 
 		var containerSizeScaled = size.clone().clearZ().divide(scaleMultiplier);
 		var display = universe.display;
 		var displaySize = display.sizeDefault().clone().clearZ().divide(scaleMultiplier);
 		var containerPosScaled = displaySize.clone().subtract(containerSizeScaled).half();
+		var actions = null;
+		if (numberOfOptions == 0)
+		{
+			var acknowledge = optionFunctions[0];
+			var controlActionNames = ControlActionNames.Instances();
+			actions =
+			[
+				new Action( controlActionNames.ControlCancel, acknowledge ),
+				new Action( controlActionNames.ControlConfirm, acknowledge ),
+			];
+		}
 
 		var returnValue = new ControlContainer
 		(
 			"containerChoice",
 			containerPosScaled,
 			containerSizeScaled,
-			childControls
+			childControls,
+			actions
 		);
 
 		returnValue.scalePosAndSize(scaleMultiplier);
+
+		if (showMessageOnly)
+		{
+			returnValue = new ControlContainerTransparent(returnValue);
+		}
 
 		return returnValue;
 	};
@@ -729,7 +756,7 @@ function ControlBuilder(styles)
 		return returnValue;
 	};
 
-	ControlBuilder.prototype.message = function(universe, size, message, acknowledge)
+	ControlBuilder.prototype.message = function(universe, size, message, acknowledge, showMessageOnly)
 	{
 		var optionNames = [];
 		var optionFunctions = [];
@@ -742,7 +769,7 @@ function ControlBuilder(styles)
 
 		return this.choice
 		(
-			universe, size, message, optionNames, optionFunctions
+			universe, size, message, optionNames, optionFunctions, showMessageOnly
 		);
 	};
 

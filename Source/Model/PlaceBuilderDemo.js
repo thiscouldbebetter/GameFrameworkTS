@@ -1242,27 +1242,30 @@ function PlaceBuilderDemo()
 		var obstaclePos = goalEntity.locatable.loc.pos;
 		var obstacleLoc = new Location(obstaclePos);
 		obstacleLoc.spin.angleInTurnsRef.value = 0.002;
+		var obstacleRadiusOuter = entityDimension * 3.5;
+		var obstacleRadiusInner = obstacleRadiusOuter - entityDimension;
+		var obstacleAngleSpannedInTurns = .85;
 		var obstacleCollider = new Arc
 		(
 			new Shell
 			(
-				new Sphere(new Coords(0, 0), entityDimension * 3), // sphereOuter
-				entityDimension * 2 // radiusInner
+				new Sphere(new Coords(0, 0), obstacleRadiusOuter), // sphereOuter
+				obstacleRadiusInner
 			),
 			new Wedge
 			(
 				new Coords(0, 0), // vertex
 				obstacleLoc.orientation.forward, //new Coords(1, 0, 0), // directionMin
-				.85 // angleSpannedInTurns
+				obstacleAngleSpannedInTurns
 			)
 		);
 
 		var obstacleRingVisual = new VisualArc
 		(
-			entityDimension * 3, // radiusOuter
-			entityDimension * 2, // radiusInner
+			obstacleRadiusOuter,
+			obstacleRadiusInner,
 			new Coords(1, 0, 0), // directionMin
-			.85, // angleSpannedInTurns
+			obstacleAngleSpannedInTurns,
 			obstacleColor
 		);
 
@@ -1421,6 +1424,7 @@ function PlaceBuilderDemo()
 			}
 			else if (entityOther.goal != null)
 			{
+				var itemDefnKeyName = "Key";
 				var keysRequired =
 					new Item(itemDefnKeyName, entityOther.goal.numberOfKeysToUnlock);
 				if (entityPlayer.itemHolder.hasItem(keysRequired))
@@ -1436,7 +1440,8 @@ function PlaceBuilderDemo()
 							);
 						},
 						universe.venueCurrent, // venuePrev
-						universe.display.sizeDefault().clone().half()
+						universe.display.sizeDefault().clone(),//.half(),
+						true // showMessageOnly
 					);
 					universe.venueNext = venueMessage;
 				}
@@ -1562,7 +1567,8 @@ function PlaceBuilderDemo()
 						);
 					},
 					universe.venueCurrent, // venuePrev
-					universe.display.sizeDefault().clone().half()
+					universe.display.sizeDefault().clone(),//.half(),
+					true // showMessageOnly
 				);
 				universe.venueNext = venueMessage;
 			}

@@ -1,12 +1,16 @@
 
-function ControlContainerTransparent(containerInner, actionToInputsMappings)
+function ControlContainerTransparent(containerInner)
 {
 	this.containerInner = containerInner;
-	this.actionToInputsMappings = actionToInputsMappings || [];
 }
 
 {
 	// instance methods
+
+	ControlContainerTransparent.prototype.actionToInputsMappings = function()
+	{
+		return this.containerInner.actionToInputsMappings();
+	};
 
 	ControlContainerTransparent.prototype.childWithFocus = function()
 	{
@@ -20,9 +24,7 @@ function ControlContainerTransparent(containerInner, actionToInputsMappings)
 
 	ControlContainerTransparent.prototype.childrenAtPosAddToList = function
 	(
-		posToCheck,
-		listToAddTo,
-		addFirstChildOnly
+		posToCheck, listToAddTo, addFirstChildOnly
 	)
 	{
 		return this.containerInner.childrenAtPosAddToList
@@ -31,9 +33,9 @@ function ControlContainerTransparent(containerInner, actionToInputsMappings)
 		);
 	};
 
-	ControlContainerTransparent.prototype.actionHandle = function(actionNameToHandle)
+	ControlContainerTransparent.prototype.actionHandle = function(actionNameToHandle, universe)
 	{
-		return this.containerInner.actionHandle(actionNameToHandle);
+		return this.containerInner.actionHandle(actionNameToHandle, universe);
 	};
 
 	ControlContainerTransparent.prototype.mouseClick = function(mouseClickPos)
@@ -65,6 +67,11 @@ function ControlContainerTransparent(containerInner, actionToInputsMappings)
 	ControlContainerTransparent.prototype.mouseMove = function(mouseMovePos)
 	{
 		this.containerInner.mouseMove(mouseMovePos);
+	};
+
+	ControlContainerTransparent.prototype.scalePosAndSize = function(scaleFactor)
+	{
+		return this.containerInner.scalePosAndSize(scaleFactor);
 	};
 
 	// drawable

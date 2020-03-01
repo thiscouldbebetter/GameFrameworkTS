@@ -6,7 +6,7 @@ function ControlContainer(name, pos, size, children, actions, actionToInputsMapp
 	this.size = size;
 	this.children = children.addLookupsByName();
 	this.actions = (actions || []).addLookupsByName();
-	this.actionToInputsMappings = actionToInputsMappings || [];
+	this._actionToInputsMappings = actionToInputsMappings || [];
 
 	for (var i = 0; i < this.children.length; i++)
 	{
@@ -42,7 +42,7 @@ function ControlContainer(name, pos, size, children, actions, actionToInputsMapp
 
 	// actions
 
-	ControlContainer.prototype.actionHandle = function(actionNameToHandle)
+	ControlContainer.prototype.actionHandle = function(actionNameToHandle, universe)
 	{
 		var wasActionHandled = false;
 
@@ -69,7 +69,7 @@ function ControlContainer(name, pos, size, children, actions, actionToInputsMapp
 			}
 			else if (childWithFocus.childWithFocus != null)
 			{
-				childWithFocus.actionHandle(actionNameToHandle);
+				childWithFocus.actionHandle(actionNameToHandle, universe);
 				if (childWithFocus.childWithFocus() == null)
 				{
 					childWithFocus = this.childWithFocusNextInDirection(direction);
@@ -92,18 +92,23 @@ function ControlContainer(name, pos, size, children, actions, actionToInputsMapp
 		else if (this.actions[actionNameToHandle] != null)
 		{
 			var action = this.actions[actionNameToHandle];
-			action.perform(); // todo
+			action.perform(universe); // todo
 			wasActionHandled = true;
 		}
 		else if (childWithFocus != null)
 		{
 			if (childWithFocus.actionHandle != null)
 			{
-				wasActionHandled = childWithFocus.actionHandle(actionNameToHandle);
+				wasActionHandled = childWithFocus.actionHandle(actionNameToHandle, universe);
 			}
 		}
 
 		return wasActionHandled;
+	};
+
+	ControlContainer.prototype.actionToInputsMappings = function()
+	{
+		return this._actionToInputsMappings;
 	};
 
 	ControlContainer.prototype.childWithFocus = function()
@@ -325,6 +330,8 @@ function ControlContainer(name, pos, size, children, actions, actionToInputsMapp
 				child.scalePosAndSize(scaleFactor);
 			}
 		}
+
+		return this;
 	};
 
 	// drawable

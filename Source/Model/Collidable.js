@@ -21,6 +21,24 @@ function Collidable(colliderAtRest, entityPropertyNamesToCollideWith, collideEnt
 }
 
 {
+	Collidable.prototype.colliderLocateForEntity = function(entity)
+	{
+		this.collider.overwriteWith(this.colliderAtRest);
+		Transform.applyTransformToCoordsMany
+		(
+			this._transformTranslate.displacementSet
+			(
+				entity.locatable.loc.pos
+			),
+			this.collider.coordsGroupToTranslate()
+		);
+	};
+
+	Collidable.prototype.initialize = function(universe, world, place, entity)
+	{
+		this.colliderLocateForEntity(entity);
+	};
+
 	Collidable.prototype.updateForTimerTick = function(universe, world, place, entity)
 	{
 		if (this.ticksUntilCanCollide > 0)
@@ -29,15 +47,7 @@ function Collidable(colliderAtRest, entityPropertyNamesToCollideWith, collideEnt
 		}
 		else
 		{
-			this.collider.overwriteWith(this.colliderAtRest);
-			Transform.applyTransformToCoordsMany
-			(
-				this._transformTranslate.displacementSet
-				(
-					entity.locatable.loc.pos
-				),
-				this.collider.coordsGroupToTranslate()
-			);
+			this.colliderLocateForEntity(entity);
 
 			for (var p = 0; p < this.entityPropertyNamesToCollideWith.length; p++)
 			{

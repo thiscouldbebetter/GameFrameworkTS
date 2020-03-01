@@ -1,10 +1,11 @@
 
-function VenueMessage(messageToShow, acknowledge, venuePrev, sizeInPixels)
+function VenueMessage(messageToShow, acknowledge, venuePrev, sizeInPixels, showMessageOnly)
 {
 	this.messageToShow = messageToShow;
 	this.acknowledge = acknowledge;
 	this.venuePrev = venuePrev;
 	this._sizeInPixels = sizeInPixels;
+	this.showMessageOnly = showMessageOnly;
 }
 {
 	// instance methods
@@ -28,23 +29,25 @@ function VenueMessage(messageToShow, acknowledge, venuePrev, sizeInPixels)
 	{
 		if (this._venueInner == null)
 		{
+			var sizeInPixels = this.sizeInPixels(universe);
+
 			var controlMessage = universe.controlBuilder.message
 			(
 				universe,
-				this.sizeInPixels(universe),
+				sizeInPixels,
 				this.messageToShow,
-				this.acknowledge //.bind(this, universe)
+				this.acknowledge,
+				this.showMessageOnly
 			);
 
-			var venuesToLayer =
-			[
-				new VenueControls(controlMessage)
-			];
+			var venuesToLayer = [];
 
 			if (this.venuePrev != null)
 			{
-				venuesToLayer.insertElementAt(this.venuePrev, 0);
+				venuesToLayer.push(this.venuePrev);
 			}
+
+			venuesToLayer.push(new VenueControls(controlMessage));
 
 			this._venueInner = new VenueLayered(venuesToLayer);
 		}

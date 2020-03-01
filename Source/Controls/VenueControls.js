@@ -30,7 +30,10 @@ function VenueControls(controlRoot)
 		new ActionToInputsMapping(controlActionNames.ControlCancel, 	[inputNames.Escape].addMany(buildGamepadInputs(inputNames.Button0)), inactivate)
 	];
 
-	this.actionToInputsMappings.addMany(this.controlRoot.actionToInputsMappings);
+	if (this.controlRoot.actionToInputsMappings != null)
+	{
+		this.actionToInputsMappings.addMany(this.controlRoot.actionToInputsMappings());
+	}
 
 	this.actionToInputsMappings.addLookupsMultiple(x => x.inputNames);
 
@@ -73,7 +76,7 @@ function VenueControls(controlRoot)
 					if (mapping == null)
 					{
 						// Pass the raw input, to allow for text entry.
-						var wasActionHandled = this.controlRoot.actionHandle(inputPressedName);
+						var wasActionHandled = this.controlRoot.actionHandle(inputPressedName, universe);
 						if (wasActionHandled)
 						{
 							inputPressed.isActive = false;
@@ -82,7 +85,7 @@ function VenueControls(controlRoot)
 					else
 					{
 						var actionName = mapping.actionName;
-						this.controlRoot.actionHandle(actionName);
+						this.controlRoot.actionHandle(actionName, universe);
 						if (mapping.inactivateInputWhenActionPerformed)
 						{
 							inputPressed.isActive = false;
