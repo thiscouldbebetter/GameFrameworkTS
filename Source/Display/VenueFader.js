@@ -1,16 +1,9 @@
 
-function VenueFader
-(
-	venueToFadeTo,
-	venueToFadeFrom,
-	backgroundColor,
-	millisecondsPerFade
-)
+function VenueFader(venueToFadeTo, venueToFadeFrom, backgroundColor, millisecondsPerFade)
 {
 	this.venuesToFadeFromAndTo =
 	[
-		venueToFadeFrom,
-		venueToFadeTo
+		venueToFadeFrom, venueToFadeTo
 	];
 
 	this.millisecondsPerFade = (millisecondsPerFade == null ? 250 : millisecondsPerFade);

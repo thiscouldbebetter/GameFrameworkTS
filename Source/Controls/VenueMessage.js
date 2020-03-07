@@ -5,7 +5,7 @@ function VenueMessage(messageToShow, acknowledge, venuePrev, sizeInPixels, showM
 	this.acknowledge = acknowledge;
 	this.venuePrev = venuePrev;
 	this._sizeInPixels = sizeInPixels;
-	this.showMessageOnly = showMessageOnly;
+	this.showMessageOnly = showMessageOnly || false;
 }
 {
 	// instance methods

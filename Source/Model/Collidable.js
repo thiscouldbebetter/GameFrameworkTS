@@ -13,7 +13,7 @@ function Collidable(colliderAtRest, entityPropertyNamesToCollideWith, collideEnt
 	}
 
 	this.ticksUntilCanCollide = 0;
-	this.entityAlreadyCollidedWith = null;
+	this.entitiesAlreadyCollidedWith = [];
 
 	// Helper variables.
 

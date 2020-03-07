@@ -7,7 +7,7 @@ function PlaceBuilderDemo()
 {
 	PlaceBuilderDemo.prototype.build = function
 	(
-		name, size, cameraViewSize, placeNameToReturnTo, randomizer, itemDefns
+		name, size, cameraViewSize, placeNameToReturnTo, randomizer, itemDefns, shouldBuildPlayer
 	)
 	{
 		this.name = name;
@@ -31,8 +31,12 @@ function PlaceBuilderDemo()
 		(
 			entityDimension, visualEyeRadius, visualEyesBlinking
 		);
-		entities.push(playerEntity);
 		var playerPos = playerEntity.locatable.loc.pos;
+		if (shouldBuildPlayer) // hack
+		{
+			entities.push(playerEntity);
+		}
+
 
 		var damagerColor = "Red";
 		var obstacleColor = damagerColor;
@@ -373,7 +377,7 @@ function PlaceBuilderDemo()
 					])
 				),
 				new Locatable(baseLoc),
-				new Portal( "Base", new Coords(.5, .5).multiply(this.size.clone()) )
+				new Portal( "Base", "Exit" )
 			]
 		);
 
@@ -394,7 +398,7 @@ function PlaceBuilderDemo()
 		var exitLoc = new Location(exitPos);
 		var exitColor = "Brown";
 
-		var exitPortal = new Portal( placeNameToReturnTo, this.size.clone().half() ); // todo
+		var exitPortal = new Portal( placeNameToReturnTo, "Base" );
 
 		var exitEntity = new Entity
 		(
@@ -1467,18 +1471,21 @@ function PlaceBuilderDemo()
 				entityOther.collidable.ticksUntilCanCollide = 50; // hack
 				var portal = entityOther.portal;
 				var venueCurrent = universe.venueCurrent;
+				var messageBoxSize = universe.display.sizeDefault();
 				var venueMessage = new VenueMessage
 				(
 					"Portal to: " + portal.destinationPlaceName,
 					function acknowledge(universe)
 					{
-						var world = universe.world;
-						world.placeCurrent = world.places[portal.destinationPlaceName];
-						entityPlayer.locatable.loc.pos.overwriteWith(portal.destinationPos);
-						universe.venueNext = new VenueFader(venueCurrent); // todo
+						portal.use
+						(
+							universe, universe.world, universe.world.placeCurrent, entityPlayer
+						);
+						universe.venueNext = new VenueFader(venueCurrent);
 					},
 					venueCurrent, // venuePrev
-					universe.display.sizeDefault().clone().half()
+					messageBoxSize,
+					true // showMessageOnly
 				);
 				universe.venueNext = venueMessage;
 			}

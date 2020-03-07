@@ -268,23 +268,30 @@ function CollisionHelper()
 		(
 			collidable0, collidable1
 		);
+		var wereEntitiesAlreadyColliding =
+		(
+			collidable0.entitiesAlreadyCollidedWith.contains(entity1)
+			|| collidable1.entitiesAlreadyCollidedWith.contains(entity0)
+		);
 
 		if (doCollide)
 		{
-			if
-			(
-				collidable0.entityAlreadyCollidedWith == entity1
-				|| collidable1.entityAlreadyCollidedWith == entity0
-			)
+			if (wereEntitiesAlreadyColliding)
 			{
 				doCollide = false;
-				entity0.entityAlreadyCollidedWith = null;
-				entity1.entityAlreadyCollidedWith = null;
 			}
 			else
 			{
-				entity0.entityAlreadyCollidedWith = entity1;
-				entity1.entityAlreadyCollidedWith = entity0;
+				collidable0.entitiesAlreadyCollidedWith.push(entity1);
+				collidable1.entitiesAlreadyCollidedWith.push(entity0);
+			}
+		}
+		else
+		{
+			if (wereEntitiesAlreadyColliding)
+			{
+				collidable0.entitiesAlreadyCollidedWith.remove(entity1);
+				collidable1.entitiesAlreadyCollidedWith.remove(entity0);
 			}
 		}
 
@@ -303,14 +310,14 @@ function CollisionHelper()
 
 		if (canCollidablesCollideYet)
 		{
-			var doBoxCollide =
+			var doBoxesCollide =
 			(
 				collidable0.Boundable == null
 				|| collidable1.Boundable == null
 				|| this.doCollidersCollide(collidable0.Boundable.bounds, collidable0.Boundable.bounds)
 			);
 
-			if (doBoxCollide)
+			if (doBoxesCollide)
 			{
 				var collider0 = collidable0.collider;
 				var collider1 = collidable1.collider;
@@ -1162,10 +1169,10 @@ function CollisionHelper()
 	{
 		var returnValue = false;
 
-		var doBoxCollide =
+		var doBoundsCollide =
 			this.doBoxAndBoxCollide(mapLocated0.box, mapLocated1.box);
 
-		if (doBoxCollide == false)
+		if (doBoundsCollide == false)
 		{
 			return false;
 		}
@@ -1273,10 +1280,10 @@ function CollisionHelper()
 	{
 		var returnValue = false;
 
-		var doBoxCollide =
+		var doBoundsCollide =
 			this.doBoxAndSphereCollide(mapLocated.box, sphere);
 
-		if (doBoxCollide == false)
+		if (doBoundsCollide == false)
 		{
 			return false;
 		}

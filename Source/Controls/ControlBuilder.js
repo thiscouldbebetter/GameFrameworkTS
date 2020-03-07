@@ -98,7 +98,7 @@ function ControlBuilder(styles)
 		var displaySize = display.sizeDefault().clone().clearZ().divide(scaleMultiplier);
 		var containerPosScaled = displaySize.clone().subtract(containerSizeScaled).half();
 		var actions = null;
-		if (numberOfOptions == 0)
+		if (numberOfOptions <= 1)
 		{
 			var acknowledge = optionFunctions[0];
 			var controlActionNames = ControlActionNames.Instances();
@@ -1597,6 +1597,16 @@ function ControlBuilder(styles)
 
 		var fontHeight = this.fontHeightInPixelsBase;
 
+		var start = function()
+		{
+			var venueNext = new VenueControls
+			(
+				universe.controlBuilder.profileSelect(universe)
+			);
+			venueNext = new VenueFader(venueNext, universe.venueCurrent);
+			universe.venueNext = venueNext;
+		};
+
 		var returnValue = new ControlContainer
 		(
 			"containerTitle",
@@ -1621,17 +1631,13 @@ function ControlBuilder(styles)
 					fontHeight * 2,
 					false, // hasBorder
 					true, // isEnabled
-					function click(universe)
-					{
-						var venueNext = new VenueControls
-						(
-							universe.controlBuilder.profileSelect(universe)
-						);
-						venueNext = new VenueFader(venueNext, universe.venueCurrent);
-						universe.venueNext = venueNext;
-					},
-					universe // context
+					start
 				)
+			], // end children
+
+			[
+				new Action( ControlActionNames.Instances().ControlCancel, start ),
+				new Action( ControlActionNames.Instances().ControlConfirm, start )
 			]
 		);
 
@@ -2199,7 +2205,7 @@ function ControlBuilder(styles)
 					},
 					universe // context
 				),
-			]
+			] // end children
 		);
 
 		returnValue.scalePosAndSize(scaleMultiplier);

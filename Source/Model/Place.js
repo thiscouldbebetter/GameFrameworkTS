@@ -122,6 +122,7 @@ function Place(name, defnName, size, entities)
 
 	Place.prototype.finalize = function(universe, world)
 	{
+		this.entitiesRemove(universe, world);
 		universe.inputHelper.inputsRemoveAll();
 	};
 

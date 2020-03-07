@@ -297,7 +297,7 @@ function ItemHolder(itemEntities)
 				(
 					"listItems",
 					new Coords(10, 25), // pos
-					new Coords(70, 110), // size
+					new Coords(70, 115), // size
 					new DataBinding(this.itemEntities), // items
 					new DataBinding
 					(
@@ -312,6 +312,11 @@ function ItemHolder(itemEntities)
 						function set(c, v) { c.itemEntitySelected = v; }
 					), // bindingForItemSelected
 					new DataBinding(null, function(c) { return c; } ), // bindingForItemValue
+					true, // isEnabled
+					function confirm(context, universe)
+					{
+						use();
+					}
 				),
 
 				new ControlLabel
@@ -528,10 +533,10 @@ function ItemHolder(itemEntities)
 				new ControlButton
 				(
 					"buttonDone",
-					new Coords(160, 120), // pos
-					new Coords(30, 15), // size
+					new Coords(175, 130), // pos
+					new Coords(15, 10), // size
 					"Done",
-					fontHeight,
+					fontHeightSmall,
 					true, // hasBorder
 					true, // isEnabled
 					back

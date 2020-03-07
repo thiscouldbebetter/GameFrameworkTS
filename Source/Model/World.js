@@ -13,7 +13,7 @@ function World(name, dateCreated, defns, places)
 	this.defns = defns;
 
 	this.places = places.addLookupsByName();
-	this.placeCurrent = this.places[0];
+	this.placeNext = this.places[0];
 }
 
 {
@@ -323,7 +323,8 @@ function World(name, dateCreated, defns, places)
 			cameraViewSize,
 			null, // placeNameToReturnTo
 			randomizer,
-			itemDefns
+			itemDefns,
+			true // shouldBuildPlayer
 		);
 
 		var placeBase = placeBuilder.build
@@ -333,7 +334,8 @@ function World(name, dateCreated, defns, places)
 			cameraViewSize,
 			placeMain.name, // placeNameToReturnTo
 			randomizer,
-			itemDefns
+			itemDefns,
+			false // shouldBuildPlayer
 		);
 
 		var places = [ placeMain, placeBase ];
@@ -352,16 +354,42 @@ function World(name, dateCreated, defns, places)
 
 	World.prototype.draw = function(universe)
 	{
-		this.placeCurrent.draw(universe, this);
+		if (this.placeCurrent != null)
+		{
+			this.placeCurrent.draw(universe, this);
+		}
 	};
 
 	World.prototype.initialize = function(universe)
 	{
-		this.placeCurrent.initialize(universe, this);
+		if (this.placeNext != null)
+		{
+			if (this.placeCurrent != null)
+			{
+				this.placeCurrent.finalize(universe, this);
+			}
+			this.placeCurrent = this.placeNext;
+			this.placeNext = null;
+		}
+
+		if (this.placeCurrent != null)
+		{
+			this.placeCurrent.initialize(universe, this);
+		}
 	};
 
 	World.prototype.updateForTimerTick = function(universe)
 	{
+		if (this.placeNext != null)
+		{
+			if (this.placeCurrent != null)
+			{
+				this.placeCurrent.finalize(universe, this);
+			}
+			this.placeCurrent = this.placeNext;
+			this.placeNext = null;
+			this.placeCurrent.initialize(universe, this);
+		}
 		this.placeCurrent.updateForTimerTick(universe, this);
 		this.timerTicksSoFar++;
 	};
