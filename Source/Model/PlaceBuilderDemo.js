@@ -33,6 +33,7 @@ function PlaceBuilderDemo()
 		(
 			entities, obstacleColor, areNeighborsConnectedNESW, namePrefix, placePos
 		);
+		var constraintSpeedMax1 = new Constraint_SpeedMaxXY(1);
 
 		if (placeNameToReturnTo != null)
 		{
@@ -43,17 +44,16 @@ function PlaceBuilderDemo()
 			entities.push(playerEntity);
 
 			this.entityBuildBaseExit(entities, entityDimension, entitySize, placeNameToReturnTo);
+			this.entityBuildFriendly
+			(
+				entities, entityDimension, constraintSpeedMax1, visualEyesBlinking
+			);
 		}
 		else
 		{
 			var numberOfKeysToUnlockGoal = 5;
 			var numberOfObstacles = 48;
 
-			var constraintSpeedMax1 = new Constraint_SpeedMaxXY(1);
-			this.entityBuildFriendly
-			(
-				entities, entityDimension, constraintSpeedMax1, visualEyesBlinking
-			);
 			this.entityBuildEnemy
 			(
 				entities, entityDimension, constraintSpeedMax1,
@@ -1564,7 +1564,7 @@ function PlaceBuilderDemo()
 			else if (entityOther.talker != null)
 			{
 				entityOther.collidable.ticksUntilCanCollide = 100;
-				entityOther.drawable.animationRuns["Friendly"].ticksSinceStarted = 0;
+				//entityOther.drawable.animationRuns["Friendly"].ticksSinceStarted = 0;
 
 				var conversationDefnAsJSON =
 					universe.mediaLibrary.textStringGetByName("Conversation").value;

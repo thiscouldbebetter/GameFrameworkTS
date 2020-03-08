@@ -67,6 +67,30 @@ function ConversationRun(defn, quit, universe)
 		var buttonSize = new Coords(listSize.x, buttonHeight);
 		var buttonTranscriptSize = new Coords(2, 1).multiplyScalar(buttonHeight); // size
 
+		var next = function()
+		{
+			conversationRun.next();
+		};
+
+		var back = function()
+		{
+			var venueNext = venueToReturnTo;
+			venueNext = new VenueFader(venueNext, universe.venueCurrent);
+			universe.venueNext = venueNext;
+		};
+
+		var viewLog = function()
+		{
+			var venueCurrent = universe.venueCurrent;
+			var transcriptAsControl = conversationRun.toControlTranscript
+			(
+				size, universe, venueCurrent
+			);
+			var venueNext = new VenueControls(transcriptAsControl);
+			venueNext = new VenueFader(venueNext, universe.venueCurrent);
+			universe.venueNext = venueNext;
+		};
+
 		var returnValue = new ControlContainer
 		(
 			"containerConversation",
@@ -83,13 +107,7 @@ function ConversationRun(defn, quit, universe)
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click(universe)
-					{
-						var venueNext = venueToReturnTo;
-						venueNext = new VenueFader(venueNext, universe.venueCurrent);
-						universe.venueNext = venueNext;
-					},
-					universe // context
+					back
 				),
 
 				new ControlButton
@@ -105,18 +123,7 @@ function ConversationRun(defn, quit, universe)
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click(universe)
-					{
-						var venueCurrent = universe.venueCurrent;
-						var transcriptAsControl = conversationRun.toControlTranscript
-						(
-							size, universe, venueCurrent
-						);
-						var venueNext = new VenueControls(transcriptAsControl);
-						venueNext = new VenueFader(venueNext, universe.venueCurrent);
-						universe.venueNext = venueNext;
-					},
-					universe // context
+					viewLog
 				),
 
 				new ControlLabel
@@ -165,7 +172,12 @@ function ConversationRun(defn, quit, universe)
 						function get(c) { return c.scopeCurrent.talkNodeForOptionSelected; },
 						function set(c, v) { c.scopeCurrent.talkNodeForOptionSelected = v; }
 					), // bindingForItemSelected
-					new DataBinding() // bindingForItemValue
+					new DataBinding(), // bindingForItemValue
+					true, // isEnabled
+					function confirm(context, universe)
+					{
+						next();
+					}
 				),
 
 				new ControlButton
@@ -181,12 +193,18 @@ function ConversationRun(defn, quit, universe)
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click(universe)
-					{
-						conversationRun.next();
-					},
-					universe // context
+					next
 				),
+			], // children
+
+			[
+				new Action("Back", back),
+				new Action("viewLog", viewLog)
+			],
+
+			[
+				new ActionToInputsMapping( "Back", [ universe.inputHelper.inputNames.Escape ], true ),
+				new ActionToInputsMapping( "ViewLog", [ Input.Names().Space ], true )
 			]
 		);
 

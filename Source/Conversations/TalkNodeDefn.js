@@ -150,7 +150,7 @@ function TalkNodeDefn(name, execute, activate)
 				conversationRun.scopeCurrent = scope;
 				scope.talkNodeCurrent = conversationRun.defn.talkNodeByName
 				(
-					talkNode.text
+					talkNode.next
 				);
 				conversationRun.update();
 			}

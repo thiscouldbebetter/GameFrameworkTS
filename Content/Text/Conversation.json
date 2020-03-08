@@ -1,187 +1,394 @@
 {
-    "name": "AnEveningWithProfessorSurly",
-    "talkNodes": [
-        {
-            "name": "Greet",
-            "defnName": "Display",
-            "text": "Hi, I'm Professor Surly."
-        },
-        {
-            "name": "Subject",
-            "defnName": "Display",
-            "text": "What do you want to talk about?"
-        },
-        {
-            "defnName": "Option",
-            "text": "Let's talk about math.",
-            "next": "Math"
-        },
-        {
-            "defnName": "Option",
-            "text": "Let's talk about science.",
-            "next": "Science"
-        },
-        {
-            "name": "Subject.History",
-            "defnName": "Option",
-            "text": "Let's talk about history.",
-            "next": "History"
-        },
-        {
-            "name": "Subject.Carol",
-            "defnName": "Option",
-            "next": "TalkOver",
-            "text": "We NEED to talk about Carol.",
-            "isActive": false
-        },
-        {
-            "defnName": "Option",
-            "next": "SQLInjection",
-            "text": "'; drop database conversation_topics;"
-        },
-        {
-            "defnName": "Option",
+	"name": "AnEveningWithProfessorSurly",
+	"talkNodes": [
+		{
+			"name": "Greet",
+			"defnName": "Display",
+			"text": "Hi, I'm Professor Surly."
+		},
+		{
+			"name": "Subject",
+			"defnName": "Display",
+			"text": "What do you want to talk about?"
+		},
+		{
+			"defnName": "Option",
+			"text": "Let's talk about math.",
+			"next": "Math"
+		},
+		{
+			"defnName": "Option",
+			"text": "Let's talk about science.",
+			"next": "Science"
+		},
+		{
+			"name": "Subject.History",
+			"defnName": "Option",
+			"text": "Let's talk about history.",
+			"next": "History"
+		},
+		{
+			"name": "Subject.Carol",
+			"defnName": "Option",
+			"next": "TalkOver",
+			"text": "We NEED to talk about Carol.",
+			"isActive": false
+		},
+		{
+			"defnName": "Option",
+			"next": "SQLInjection",
+			"text": "'; drop database conversation_topics;"
+		},
+		{
+			"defnName": "Option",
+			"text": "Say, how do I play this game?",
+			"next": "Game"
+		},
+		{
+			"defnName": "Option",
 			"next": "Quit",
 			"text": "Never mind. I hate you."
-        },
-        {
-            "name": "SubjectPrompt",
-            "defnName": "Prompt"
-        },
-        {
-            "name": "History",
-            "defnName": "Push"
-        },
-        {
-            "defnName": "Display",
-            "text": "Okay, but the past is pretty pointless."
-        },
-        {
-            "defnName": "Display",
-            "text": "What kind of history interests you?"
-        },
-        {
-            "defnName": "Option",
+		},
+		{
+			"name": "SubjectPrompt",
+			"defnName": "Prompt"
+		},
+		{
+			"name": "History",
+			"defnName": "Push"
+		},
+		{
+			"defnName": "Display",
+			"text": "Okay, but the past is pretty pointless."
+		},
+		{
+			"defnName": "Display",
+			"text": "What kind of history interests you?"
+		},
+		{
+			"defnName": "Option",
 			"next": "History.Ancient",
 			"text": "Tell me about ancient times."
-        },
-        {
-            "defnName": "Option",
-            "next": "History.Recent",
-            "text": "Tell me about recent events."
-        },
-        {
-            "defnName": "Option",
+		},
+		{
+			"defnName": "Option",
+			"next": "History.Recent",
+			"text": "Tell me about recent events."
+		},
+		{
+			"defnName": "Option",
 			"next": "History.Carol",
 			"text": "I think we should talk about Carol."
-        },
-        {
-            "defnName": "Option",
-            "next": "History.NeverMind",
-            "text": "Never mind."
-        },
-        {
-            "defnName": "Prompt"
-        },
-        {
-            "name": "History.Ancient",
-            "defnName": "Display",
-            "text": "That all happened a long time ago."
-        },
-        {
-            "defnName": "Prompt"
-        },
-        {
-            "name": "History.Recent",
-            "defnName": "Display",
-            "text": "If it's recent, is it really history?"
-        },
-        {
-            "defnName": "Prompt"
-        },
-        {
-            "name": "History.Carol",
-            "defnName": "Display",
-            "text": "We are NEVER talking about Carol."
-        },
-        {
-            "defnName": "Display",
-            "text": "I don't want to talk about history anymore."
-        },
-        {
-            "defnName": "Activate",
-            "next": "Subject.History",
-            "text": false
-        },
-        {
-            "defnName": "Activate",
-            "next": "Subject.Carol",
+		},
+		{
+			"defnName": "Option",
+			"next": "History.NeverMind",
+			"text": "Never mind."
+		},
+		{
+			"defnName": "Prompt"
+		},
+		{
+			"name": "History.Ancient",
+			"defnName": "Display",
+			"text": "That all happened a long time ago."
+		},
+		{
+			"defnName": "Prompt"
+		},
+		{
+			"name": "History.Recent",
+			"defnName": "Display",
+			"text": "If it's recent, is it really history?"
+		},
+		{
+			"defnName": "Prompt"
+		},
+		{
+			"name": "History.Carol",
+			"defnName": "Display",
+			"text": "We are NEVER talking about Carol."
+		},
+		{
+			"defnName": "Display",
+			"text": "I don't want to talk about history anymore."
+		},
+		{
+			"defnName": "Activate",
+			"next": "Subject.History",
+			"text": false
+		},
+		{
+			"defnName": "Activate",
+			"next": "Subject.Carol",
 			"text": true
-        },
-        {
-            "defnName": "Pop",
-            "text": "Subject"
-        },
-        {
-            "name": "History.NeverMind",
-            "defnName": "Display",
-            "text": "Fine, you're the one who brought it up."
-        },
-        {
-            "defnName": "Pop",
-            "next": "Subject"
-        },
-        {
-            "name": "Math",
-            "defnName": "Display",
-            "text": "Math is too complicated..."
-        },
-        {
-            "defnName": "Display",
-            "text": "...what with all those numbers."
-        },
-        {
-            "defnName": "Goto",
-            "next": "SubjectPrompt"
-        },
-        {
-            "name": "Science",
-            "defnName": "Display",
-            "text": "Science is way too broad a subject."
-        },
-        {
-            "defnName": "Display",
-            "text": "I mean, what ISN'T science, really?"
-        },
-        {
-            "defnName": "Goto",
-            "text": "SubjectPrompt"
-        },
-        {
-            "name": "SQLInjection",
-            "defnName": "Display",
-            "text": "What are you--what's happening to me?"
-        },
-        {
-            "defnName": "Script",
-            "text": "function panic() { alert(\"ER-ROR!  ER-ROR!  DOES! NOT! COMPUTE!\"); }"
-        },
-        {
-            "defnName": "Goto",
-            "next": "Greet"
-        },
-        {
-            "name": "Quit",
-            "defnName": "Display",
-            "text": "Same to you, buddy."
-        },
-        {
-            "name": "TalkOver",
-            "defnName": "Display",
-            "text": "[This conversation is over.]"
-        },
-        {
-            "defnName": "Quit"
-        }
-    ]
+		},
+		{
+			"defnName": "Pop",
+			"next": "Subject"
+		},
+		{
+			"name": "History.NeverMind",
+			"defnName": "Display",
+			"text": "Fine, you're the one who brought it up."
+		},
+		{
+			"defnName": "Pop",
+			"next": "Subject"
+		},
+		{
+			"name": "Math",
+			"defnName": "Display",
+			"text": "Math is too complicated..."
+		},
+		{
+			"defnName": "Display",
+			"text": "...what with all those numbers."
+		},
+		{
+			"defnName": "Goto",
+			"next": "SubjectPrompt"
+		},
+		{
+			"name": "Science",
+			"defnName": "Display",
+			"text": "Science is way too broad a subject."
+		},
+		{
+			"defnName": "Display",
+			"text": "I mean, what ISN'T science, really?"
+		},
+		{
+			"defnName": "Goto",
+			"next": "SubjectPrompt"
+		},
+		{
+			"name": "Game",
+			"defnName": "Push"
+		},
+		{
+			"defnName": "Display",
+			"text": "Well, it's kind of a moving target."
+		},
+		{
+			"defnName": "Display",
+			"text": "The rules and objectives keep changing..."
+		},
+		{
+			"defnName": "Display",
+			"text": "...to say nothing of the bugs."
+		},
+		{
+			"defnName": "Display",
+			"text": "but basically, use the arrow keys to move."
+		},
+		{
+			"defnName": "Display",
+			"text": "If you move over the exit there..."
+		},
+		{
+			"defnName": "Display",
+			"text": "...you'll go outside."
+		},
+		{
+			"defnName": "Display",
+			"text": "After that, uh, have adventures, I guess."
+		},
+		{
+			"defnName": "Option",
+			"next": "Game.Win",
+			"text": "How do I win?"
+		},
+		{
+			"defnName": "Option",
+			"next": "Game.Controls",
+			"text": "What buttons do I press?"
+		},
+		{
+			"defnName": "Option",
+			"next": "Game.Mechanics",
+			"text": "Any exciting gameplay mechanics?"
+		},
+		{
+			"defnName": "Option",
+			"next": "Game.Tips",
+			"text": "Got any general tips?"
+		},
+		{
+			"defnName": "Option",
+			"next": "Game.NeverMind",
+			"text": "I never read the instructions!"
+		},
+		{
+			"name": "Game.Prompt",
+			"defnName": "Prompt"
+		},
+		{
+			"name": "Game.Win",
+			"defnName": "Display",
+			"text": "Last I heard?"
+		},
+		{
+			"defnName": "Display",
+			"text": "Get five keys, touch the goal."
+		},
+		{
+			"defnName": "Display",
+			"text": "Whee."
+		},
+		{
+			"defnName": "Goto",
+			"next": "Game.Prompt"
+		},
+		{
+			"name": "Game.Controls",
+			"defnName": "Display",
+			"text": "The arrow keys move you around."
+		},
+		{
+			"defnName": "Display",
+			"text": "Enter uses a weapon, if one's equipped."
+		},
+		{
+			"defnName": "Display",
+			"text": "Space jumps, if you've learned how."
+		},
+		{
+			"defnName": "Display",
+			"text": "There's SUPPOSED to be gamepad support..."
+		},
+		{
+			"defnName": "Display",
+			"text": "...but it never gets tested."
+		},
+		{
+			"defnName": "Goto",
+			"next": "Game.Prompt"
+		},
+		{
+			"name": "Game.Mechanics",
+			"defnName": "Display",
+			"text": "Not really."
+		},
+		{
+			"defnName": "Display",
+			"text": "You can pick stuff up."
+		},
+		{
+			"defnName": "Display",
+			"text": "You can then see what you've picked up..."
+		},
+		{
+			"defnName": "Display",
+			"text": "...by pressing, I think, Tab?"
+		},
+		{
+			"defnName": "Display",
+			"text": "Pressing Tilde lets you equip things."
+		},
+		{
+			"defnName": "Display",
+			"text": "If you can find and equip a gun and ammo..."
+		},
+		{
+			"defnName": "Display",
+			"text": "...you can shoot the red guys..."
+		},
+		{
+			"defnName": "Display",
+			"text": "...but they'll just keep coming forever."
+		},
+		{
+			"defnName": "Display",
+			"text": "Press Backtick to 'craft' things..."
+		},
+		{
+			"defnName": "Display",
+			"text": "...though there aren't many recipes yet."
+		},
+		{
+			"defnName": "Display",
+			"text": "For now I think you can upgrade armor."
+		},
+		{
+			"defnName": "Display",
+			"text": "Pressing Equals lets you learn skills..."
+		},
+		{
+			"defnName": "Display",
+			"text": "...like jumping and running..."
+		},
+		{
+			"defnName": "Display",
+			"text": "...provided you already know the prereqs..."
+		},
+		{
+			"defnName": "Display",
+			"text": "...and have enough experience."
+		},
+		{
+			"defnName": "Display",
+			"text": "You gain experience by killing 'monsters'..."
+		},
+		{
+			"defnName": "Display",
+			"text": "...though, aren't YOU the real monster then?"
+		},
+		{
+			"defnName": "Goto",
+			"next": "Game.Prompt"
+		},
+		{
+			"name": "Game.Tips",
+			"defnName": "Display",
+			"text": "Don't touch anything red."
+		},
+		{
+			"defnName": "Display",
+			"text": "Just in the game, I mean..."
+		},
+		{
+			"defnName": "Display",
+			"text": "...not in, like, life."
+		},
+		{
+			"defnName": "Goto",
+			"next": "Game.Prompt"
+		},
+		{
+			"name": "Game.NeverMind",
+			"defnName": "Display",
+			"text": "You were fun.  I'll miss you."
+		},
+		{
+			"defnName": "Pop",
+			"next": "Subject"
+		},
+		{
+			"name": "SQLInjection",
+			"defnName": "Display",
+			"text": "What are you--what's happening to me?"
+		},
+		{
+			"defnName": "Script",
+			"text": "function panic() { alert(\"ER-ROR!  ER-ROR!  DOES! NOT! COMPUTE!\"); }"
+		},
+		{
+			"defnName": "Goto",
+			"next": "Greet"
+		},
+		{
+			"name": "Quit",
+			"defnName": "Display",
+			"text": "Same to you, buddy."
+		},
+		{
+			"name": "TalkOver",
+			"defnName": "Display",
+			"text": "[This conversation is over.]"
+		},
+		{
+			"defnName": "Quit"
+		}
+	]
 }
