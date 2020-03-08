@@ -53,6 +53,17 @@ function Place(name, defnName, size, entities)
 		return returnValues;
 	};
 
+	Place.prototype.entitiesInitialize = function(universe, world)
+	{
+		for (var i = 0; i < this.entities.length; i++)
+		{
+			var entity = this.entities[i];
+			entity.initialize(universe, world, this);
+		}
+
+		this.entitiesToSpawn.clear();
+	};
+
 	Place.prototype.entitiesRemove = function()
 	{
 		for (var i = 0; i < this.entitiesToRemove.length; i++)
@@ -106,18 +117,15 @@ function Place(name, defnName, size, entities)
 		this.entities[entityName] = entity;
 
 		var entityProperties = entity.properties;
-		for (var p = 0; p < entityProperties.length; p++)
+		for (var i = 0; i < entityProperties.length; i++)
 		{
-			var property = entityProperties[p];
+			var property = entityProperties[i];
 			var propertyName = property.constructor.name;
 			var entitiesWithProperty = this.entitiesByPropertyName(propertyName);
 			entitiesWithProperty.push(entity);
-
-			if (property.initialize != null)
-			{
-				property.initialize(universe, world, this, entity);
-			}
 		}
+
+		entity.initialize(universe, world, this, entity);
 	};
 
 	Place.prototype.finalize = function(universe, world)
@@ -129,6 +137,7 @@ function Place(name, defnName, size, entities)
 	Place.prototype.initialize = function(universe, world)
 	{
 		this.entitiesSpawn(universe, world);
+		this.entitiesInitialize(universe, world);
 	};
 
 	Place.prototype.updateForTimerTick = function(universe, world)

@@ -15,6 +15,11 @@ function Constrainable(constraints)
 		}
 	};
 
+	Constrainable.prototype.initialize = function(universe, world, place, entity)
+	{
+		this.updateForTimerTick(universe, world, place, entity);
+	};
+
 	Constrainable.prototype.updateForTimerTick = function(universe, world, place, entity)
 	{
 		Constrainable.constrain(universe, world, place, entity);

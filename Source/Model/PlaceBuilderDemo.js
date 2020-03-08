@@ -7,7 +7,8 @@ function PlaceBuilderDemo()
 {
 	PlaceBuilderDemo.prototype.build = function
 	(
-		namePrefix, size, cameraViewSize, placeNameToReturnTo, randomizer, itemDefns, placePos, areNeighborsConnectedNESW
+		namePrefix, size, cameraViewSize, placeNameToReturnTo, randomizer,
+		itemDefns, placePos, areNeighborsConnectedESWN, isGoal
 	)
 	{
 		var name = namePrefix + (placePos == null ? "" : placePos.toStringXY());
@@ -31,7 +32,7 @@ function PlaceBuilderDemo()
 		var obstacleColor = damagerColor;
 		var wallThickness = this.entityBuildObstacleWalls
 		(
-			entities, obstacleColor, areNeighborsConnectedNESW, namePrefix, placePos
+			entities, obstacleColor, areNeighborsConnectedESWN, namePrefix, placePos
 		);
 		var constraintSpeedMax1 = new Constraint_SpeedMaxXY(1);
 
@@ -69,10 +70,6 @@ function PlaceBuilderDemo()
 			this.entityBuildAccessory(entities, entityDimension, marginSize, randomizer, itemDefns);
 			this.entityBuildArmor(entities, entityDimension, marginSize, randomizer, itemDefns);
 			this.entityBuildCoins(entities, entityDimension, marginSize, randomizer, itemDefns);
-			var itemKeyColor = this.entityBuildKeys
-			(
-				entities, entityDimension, numberOfKeysToUnlockGoal, entitiesObstacles, marginSize, itemDefns
-			);
 			this.entityBuildMaterial(entities, entityDimension, marginSize, randomizer, itemDefns);
 			this.entityBuildMedicine(entities, entityDimension, marginSize, randomizer, itemDefns);
 			this.entityBuildToolset(entities, entityDimension, marginSize, itemDefns);
@@ -85,11 +82,20 @@ function PlaceBuilderDemo()
 				this.entityBuildBase(entities, entityDimension, entitySize, randomizer);
 			}
 			this.entityBuildStore(entities, entityDimension, entitySize, itemDefns);
-			var goalEntity = this.entityBuildGoal
-			(
-				entities, entityDimension, entitySize, numberOfKeysToUnlockGoal, itemKeyColor
-			);
-			this.entityBuildObstacleRing(entities, entityDimension, goalEntity, obstacleColor);
+
+			if (isGoal)
+			{
+				this.entityBuildKeys
+				(
+					entities, entityDimension, numberOfKeysToUnlockGoal,
+					entitiesObstacles, marginSize, itemDefns
+				);
+				var goalEntity = this.entityBuildGoal
+				(
+					entities, entityDimension, entitySize, numberOfKeysToUnlockGoal
+				);
+				this.entityBuildObstacleRing(entities, entityDimension, goalEntity, obstacleColor);
+			}
 		}
 
 		entities.forEach(x => { if (x.locatable != null) { x.locatable.loc.pos.z = 0; } })
@@ -861,9 +867,10 @@ function PlaceBuilderDemo()
 
 	PlaceBuilderDemo.prototype.entityBuildGoal = function
 	(
-		entities, entityDimension, entitySize, numberOfKeysToUnlockGoal, itemKeyColor
+		entities, entityDimension, entitySize, numberOfKeysToUnlockGoal
 	)
 	{
+		var itemKeyColor = "Yellow";
 		var goalPos = new Coords().randomize(this.randomizer).multiplyScalar
 		(
 			.5
@@ -979,8 +986,6 @@ function PlaceBuilderDemo()
 
 			entities.push(itemKeyEntity);
 		}
-
-		return itemKeyColor;
 	};
 
 	PlaceBuilderDemo.prototype.entityBuildMaterial = function
@@ -1302,7 +1307,7 @@ function PlaceBuilderDemo()
 
 	PlaceBuilderDemo.prototype.entityBuildObstacleWalls = function
 	(
-		entities, wallColor, areNeighborsConnectedNESW, placeNamePrefix, placePos
+		entities, wallColor, areNeighborsConnectedESWN, placeNamePrefix, placePos
 	)
 	{
 		var numberOfWalls = 4;
@@ -1312,13 +1317,13 @@ function PlaceBuilderDemo()
 
 		var neighborOffsets =
 		[
-			new Coords(0, -1), new Coords(1, 0), new Coords(0, 1), new Coords(-1, 0)
+			new Coords(1, 0), new Coords(0, 1), new Coords(-1, 0), new Coords(0, -1)
 		];
 
 		for (var i = 0; i < numberOfWalls; i++)
 		{
 			var wallSize;
-			var isNorthOrSouthWall = (i % 2 == 0);
+			var isNorthOrSouthWall = (i % 2 == 1);
 			if (isNorthOrSouthWall)
 			{
 				wallSize = new Coords(this.size.x, wallThickness, 1);
@@ -1329,13 +1334,13 @@ function PlaceBuilderDemo()
 			}
 
 			var wallPos = wallSize.clone().half().clearZ();
-			var isNorthOrEastWall = (i < 2);
-			if (isNorthOrEastWall)
+			var isEastOrSouthWall = (i < 2);
+			if (isEastOrSouthWall)
 			{
 				wallPos.invert().add(this.size);
 			}
 
-			var isNeighborConnected = areNeighborsConnectedNESW[i];
+			var isNeighborConnected = areNeighborsConnectedESWN[i];
 
 			if (isNeighborConnected)
 			{

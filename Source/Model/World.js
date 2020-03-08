@@ -318,36 +318,40 @@ function World(name, dateCreated, defns, places)
 
 		var places = [];
 
-		var battlefieldSizeInRooms = new Coords(2, 1);
-		var battlefieldPos = new Coords();
-		var battlefieldSize = displaySize.clone().double();
+		var worldSizeInRooms = new Coords(2, 2);
+		var roomPos = new Coords();
+		var roomSize = displaySize.clone().double();
+		var goalPos = new Coords().randomize().multiply(worldSizeInRooms).floor();
 
-		for (var y = 0; y < battlefieldSizeInRooms.y; y++)
+		for (var y = 0; y < worldSizeInRooms.y; y++)
 		{
-			battlefieldPos.y = y;
+			roomPos.y = y;
 
-			for (var x = 0; x < battlefieldSizeInRooms.x; x++)
+			for (var x = 0; x < worldSizeInRooms.x; x++)
 			{
-				battlefieldPos.x = x;
+				roomPos.x = x;
 
-				var areNeighborsConnectedNESW =
+				var areNeighborsConnectedESWN =
 				[
-					(y > 0),
-					(x < battlefieldSizeInRooms.x - 1),
-					(y < battlefieldSizeInRooms.y - 1),
-					(x > 0)
+					(x < worldSizeInRooms.x - 1),
+					(y < worldSizeInRooms.y - 1),
+					(x > 0),
+					(y > 0)
 				];
+
+				var isGoal = (roomPos.equals(goalPos));
 
 				var placeBattlefield = placeBuilder.build
 				(
 					"Battlefield",
-					battlefieldSize, // size
+					roomSize, // size
 					cameraViewSize,
 					null, // placeNameToReturnTo
 					randomizer,
 					itemDefns,
-					battlefieldPos,
-					areNeighborsConnectedNESW
+					roomPos,
+					areNeighborsConnectedESWN,
+					isGoal
 				);
 
 				places.push(placeBattlefield);
@@ -363,7 +367,7 @@ function World(name, dateCreated, defns, places)
 			randomizer,
 			itemDefns,
 			null, // pos
-			[false, false, false, false] // areNeighborsConnectedNESW
+			[false, false, false, false] // areNeighborsConnectedESWN
 		);
 
 		places.insertElementAt(placeBase, 0);

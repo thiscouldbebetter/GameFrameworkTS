@@ -6,6 +6,20 @@ function Entity(name, properties)
 }
 
 {
+	Entity.prototype.initialize = function(universe, world, place)
+	{
+		var entityProperties = this.properties;
+		for (var p = 0; p < entityProperties.length; p++)
+		{
+			var property = entityProperties[p];
+			var propertyName = property.constructor.name;
+			if (property.initialize != null)
+			{
+				property.initialize(universe, world, place, this);
+			}
+		}
+	};
+
 	Entity.prototype.nameAndPropertiesAdd = function(name, propertiesToAdd)
 	{
 		this.name = name;

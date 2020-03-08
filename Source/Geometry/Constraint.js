@@ -21,11 +21,18 @@ function ConstraintInstances()
 		this.target = target;
 	}
 	{
-		Constraint_AttachToEntityWithName.prototype.constrain = function(universe, world, place, entityToConstrain, constraint)
+		Constraint_AttachToEntityWithName.prototype.constrain = function
+		(
+			universe, world, place, entityToConstrain, constraint
+		)
 		{
 			var targetEntityName = this.target;
 			var targetEntity = place.entities[targetEntityName];
-			entityToConstrain.locatable.loc.pos.overwriteWith(targetEntity.locatable.loc.pos);
+			if (targetEntity != null)
+			{
+				var targetPos = targetEntity.locatable.loc.pos;
+				entityToConstrain.locatable.loc.pos.overwriteWith(targetPos);
+			}
 		};
 	}
 

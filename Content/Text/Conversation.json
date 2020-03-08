@@ -237,6 +237,14 @@
 			"text": "Whee."
 		},
 		{
+			"defnName": "Display",
+			"text": "Oh, and since the latest updates..."
+		},
+		{
+			"defnName": "Display",
+			"text": "...you'll have to FIND the goal first."
+		},
+		{
 			"defnName": "Goto",
 			"next": "Game.Prompt"
 		},
