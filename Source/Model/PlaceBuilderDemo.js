@@ -53,7 +53,6 @@ function PlaceBuilderDemo()
 		else
 		{
 			var numberOfKeysToUnlockGoal = 5;
-			var numberOfObstacles = 48;
 
 			this.entityBuildEnemy
 			(
@@ -62,6 +61,8 @@ function PlaceBuilderDemo()
 			);
 			var marginThickness = wallThickness * 8;
 			var marginSize = new Coords(1, 1, 0).multiplyScalar(marginThickness);
+
+			var numberOfObstacles = 48;
 			var entitiesObstacles = this.entityBuildObstacleMines
 			(
 				entities, entityDimension, numberOfObstacles, obstacleColor, marginSize
@@ -79,17 +80,12 @@ function PlaceBuilderDemo()
 			var shouldIncludeBase = (placePos.x == 0 && placePos.y == 0);
 			if (shouldIncludeBase)
 			{
-				this.entityBuildBase(entities, entityDimension, entitySize, randomizer);
+				this.entityBuildBase(entities, entityDimension, entitySize, randomizer, marginSize);
 			}
 			this.entityBuildStore(entities, entityDimension, entitySize, itemDefns);
 
 			if (isGoal)
 			{
-				this.entityBuildKeys
-				(
-					entities, entityDimension, numberOfKeysToUnlockGoal,
-					entitiesObstacles, marginSize, itemDefns
-				);
 				var goalEntity = this.entityBuildGoal
 				(
 					entities, entityDimension, entitySize, numberOfKeysToUnlockGoal
@@ -206,8 +202,6 @@ function PlaceBuilderDemo()
 		]);
 		var itemAccessoryCollider = new Sphere(new Coords(0, 0), entityDimensionHalf);
 
-		var displacement = new Coords();
-
 		var itemAccessoryPos =
 			new Coords().randomize(this.randomizer).multiply(sizeMinusMargins).half().add(marginSize);
 
@@ -264,8 +258,6 @@ function PlaceBuilderDemo()
 		var box = new Box().ofPoints(path.points);
 		box.center = collidable.collider.center;
 		var boundable = new Boundable(box);
-
-		var displacement = new Coords();
 
 		var itemArmorPos =
 			new Coords().randomize(this.randomizer).multiply(sizeMinusMargins).half().add(marginSize);
@@ -341,12 +333,15 @@ function PlaceBuilderDemo()
 
 	PlaceBuilderDemo.prototype.entityBuildBase = function
 	(
-		entities, entityDimension, entitySize, randomizer
+		entities, entityDimension, entitySize, randomizer, marginSize
 	)
 	{
-		var basePos = new Coords().randomize(randomizer).multiplyScalar(.5).multiply
+		var basePos = new Coords().randomize(randomizer).multiply
 		(
-			this.size
+			this.size.clone().subtract(marginSize).subtract(marginSize)
+		).add
+		(
+			marginSize
 		);
 		var baseLoc = new Location(basePos);
 		var baseColor = "Brown";
@@ -472,8 +467,6 @@ function PlaceBuilderDemo()
 			)
 		]);
 		var itemCoinCollider = new Sphere(new Coords(0, 0), entityDimensionHalf);
-
-		var displacement = new Coords();
 
 		var numberOfCoins = 10;
 		for (var i = 0; i < numberOfCoins; i++)
@@ -913,13 +906,13 @@ function PlaceBuilderDemo()
 
 	PlaceBuilderDemo.prototype.entityBuildKeys = function
 	(
-		entities, entityDimension, numberOfKeysToUnlockGoal, entitiesObstacles, marginSize, itemDefns
+		places, entityDimension, numberOfKeysToUnlockGoal, marginSize
 	)
 	{
 		var entityDimensionHalf = entityDimension / 2;
 		var sizeMinusMargins = marginSize.clone().double().invert().add(this.size);
 
-		var itemDefnKeyName = itemDefns["Key"].name;
+		var itemDefnKeyName = "Key";
 		var itemKeyColor = "Yellow";
 		var itemKeyVisual = new VisualGroup
 		([
@@ -951,25 +944,15 @@ function PlaceBuilderDemo()
 			)
 		]);
 
-		var obstacleExclusionRadius = 32;
-		var displacement = new Coords();
+		itemKeyVisual = new VisualCamera
+		(
+			itemKeyVisual, (universe, world) => world.placeCurrent.camera()
+		);
 
 		for (var i = 0; i < numberOfKeysToUnlockGoal; i++)
 		{
 			var itemKeyPos =
 				new Coords().randomize(this.randomizer).multiply(sizeMinusMargins).add(marginSize);
-
-			for (var j = 0; j < entitiesObstacles.length; j++)
-			{
-				var obstaclePos = entitiesObstacles[j].locatable.loc.pos;
-				var distanceFromObstacle =
-					displacement.overwriteWith(obstaclePos).magnitude();
-				if (distanceFromObstacle < obstacleExclusionRadius)
-				{
-					displacement.normalize().multiplyScalar(obstacleExclusionRadius);
-					obstaclePos.add(displacement);
-				}
-			}
 
 			var itemKeyCollider = new Sphere(new Coords(0, 0), entityDimensionHalf);
 
@@ -984,7 +967,9 @@ function PlaceBuilderDemo()
 				]
 			);
 
-			entities.push(itemKeyEntity);
+			var place = places.random(this.randomizer);
+
+			place.entitiesToSpawn.push(itemKeyEntity);
 		}
 	};
 
@@ -1021,8 +1006,6 @@ function PlaceBuilderDemo()
 			)
 		]);
 		var itemMaterialCollider = new Sphere(new Coords(0, 0), entityDimensionHalf);
-
-		var displacement = new Coords();
 
 		var numberOfMaterials = 5;
 		for (var i = 0; i < numberOfMaterials; i++)
@@ -1086,8 +1069,6 @@ function PlaceBuilderDemo()
 			)
 		]);
 		var itemMedicineCollider = new Sphere(new Coords(0, 0), entityDimensionHalf);
-
-		var displacement = new Coords();
 
 		var numberOfMedicines = 5;
 		for (var i = 0; i < numberOfMedicines; i++)

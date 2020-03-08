@@ -27,7 +27,7 @@ function Test()
 		for (var testName in testFixture)
 		{
 			var testToRun = testFixture[testName];
-			if (testToRun.constructor.name == "Function")
+			if (testToRun.constructor.name == Function.name)
 			{
 				try
 				{

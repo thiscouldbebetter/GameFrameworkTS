@@ -70,7 +70,7 @@ function SerializerNode(objectWrapped)
 
 				this.t = typeName;
 
-				if (typeName == "Function")
+				if (typeName == Function.name)
 				{
 					this.o = objectWrapped.toString();
 				}
@@ -95,9 +95,9 @@ function SerializerNode(objectWrapped)
 
 								if
 								(
-									propertyValueTypeName == "Boolean"
-									|| propertyValueTypeName == "Number"
-									|| propertyValueTypeName == "String"
+									propertyValueTypeName == Boolean.name
+									|| propertyValueTypeName == Number.name
+									|| propertyValueTypeName == String.name
 								)
 								{
 									child = propertyValue;
@@ -180,19 +180,19 @@ function SerializerNode(objectWrapped)
 			{
 				// Value is null.  Do nothing.
 			}
-			else if (typeName == "Array")
+			else if (typeName == Array.name)
 			{
 				this.o = [];
 			}
-			else if (typeName == "Function")
+			else if (typeName == Function.name)
 			{
 				this.o = eval("(" + this.o + ")");
 			}
 			else if
 			(
-				typeName == "Boolean"
-				|| typeName == "Number"
-				|| typeName == "String"
+				typeName == Boolean.name
+				|| typeName == Number.name
+				|| typeName == String.name
 			)
 			{
 				// Primitive types. Do nothing.

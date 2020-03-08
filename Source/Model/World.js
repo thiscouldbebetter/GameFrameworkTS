@@ -26,8 +26,152 @@ function World(name, dateCreated, defns, places)
 
 		// PlaceDefns.
 
-		var coordsInstances = Coords.Instances();
+		var actions = World.actionsBuild();
+		var actionToInputsMappings = World.actionToInputsMappingsBuild();
 
+		var placeDefnDemo = new PlaceDefn
+		(
+			"Demo",
+			actions,
+			actionToInputsMappings
+		);
+
+		var placeDefns = [ placeDefnDemo ]; // todo
+
+		var itemDefns = World.itemDefnsBuild();
+
+		var skills = Skill.skillsDemo();
+
+		var defns = new Defns([itemDefns, placeDefns, skills]);
+
+		var displaySize = universe.display.sizeInPixels;
+		var cameraViewSize = displaySize.clone();
+		var placeBuilder = new PlaceBuilderDemo();
+
+		var randomizer = null; // Use default.
+
+		var places = [];
+
+		var worldSizeInRooms = new Coords(2, 2);
+		var roomPos = new Coords();
+		var roomSize = displaySize.clone().double();
+		var goalPos = new Coords().randomize().multiply(worldSizeInRooms).floor();
+
+		for (var y = 0; y < worldSizeInRooms.y; y++)
+		{
+			roomPos.y = y;
+
+			for (var x = 0; x < worldSizeInRooms.x; x++)
+			{
+				roomPos.x = x;
+
+				var areNeighborsConnectedESWN =
+				[
+					(x < worldSizeInRooms.x - 1),
+					(y < worldSizeInRooms.y - 1),
+					(x > 0),
+					(y > 0)
+				];
+
+				var isGoal = (roomPos.equals(goalPos));
+
+				var placeBattlefield = placeBuilder.build
+				(
+					"Battlefield",
+					roomSize, // size
+					cameraViewSize,
+					null, // placeNameToReturnTo
+					randomizer,
+					itemDefns,
+					roomPos,
+					areNeighborsConnectedESWN,
+					isGoal
+				);
+
+				places.push(placeBattlefield);
+			}
+		}
+
+		placeBuilder.entityBuildKeys
+		(
+			places,
+			10, //entityDimension,
+			5, //numberOfKeysToUnlockGoal,
+			new Coords(20, 20) //marginSize
+		);
+
+		var placeBase = placeBuilder.build
+		(
+			"Base",
+			displaySize.clone(), // size
+			cameraViewSize,
+			places[0].name, // placeNameToReturnTo
+			randomizer,
+			itemDefns,
+			null, // pos
+			[false, false, false, false] // areNeighborsConnectedESWN
+		);
+
+		places.insertElementAt(placeBase, 0);
+
+		var returnValue = new World
+		(
+			"World-" + nowAsString,
+			now, // dateCreated
+			defns,
+			places
+		);
+		return returnValue;
+	};
+
+	// instance methods
+
+	World.prototype.draw = function(universe)
+	{
+		if (this.placeCurrent != null)
+		{
+			this.placeCurrent.draw(universe, this);
+		}
+	};
+
+	World.prototype.initialize = function(universe)
+	{
+		if (this.placeNext != null)
+		{
+			if (this.placeCurrent != null)
+			{
+				this.placeCurrent.finalize(universe, this);
+			}
+			this.placeCurrent = this.placeNext;
+			this.placeNext = null;
+		}
+
+		if (this.placeCurrent != null)
+		{
+			this.placeCurrent.initialize(universe, this);
+		}
+	};
+
+	World.prototype.updateForTimerTick = function(universe)
+	{
+		if (this.placeNext != null)
+		{
+			if (this.placeCurrent != null)
+			{
+				this.placeCurrent.finalize(universe, this);
+			}
+			this.placeCurrent = this.placeNext;
+			this.placeNext = null;
+			this.placeCurrent.initialize(universe, this);
+		}
+		this.placeCurrent.updateForTimerTick(universe, this);
+		this.timerTicksSoFar++;
+	};
+
+	// Build helpers.
+
+	World.actionsBuild = function()
+	{
 		var actionsAll = Action.Instances();
 
 		var entityAccelerateInDirection = function
@@ -44,6 +188,8 @@ function World(name, dateCreated, defns, places)
 				entity.movable.accelerate(universe, world, place, entity);
 			}
 		};
+
+		var coordsInstances = Coords.Instances();
 
 		var useItemInSocketNumbered = function(universe, world, place, actor, socketNumber)
 		{
@@ -205,9 +351,13 @@ function World(name, dateCreated, defns, places)
 			new Action("Item7", (u, w, p, e) => useItemInSocketNumbered(u, w, p, e, 7)),
 			new Action("Item8", (u, w, p, e) => useItemInSocketNumbered(u, w, p, e, 8)),
 			new Action("Item9", (u, w, p, e) => useItemInSocketNumbered(u, w, p, e, 0)),
-
 		];
 
+		return actions;
+	};
+
+	World.actionToInputsMappingsBuild = function()
+	{
 		var inputNames = Input.Names();
 
 		var actionToInputsMappings =
@@ -238,18 +388,13 @@ function World(name, dateCreated, defns, places)
 			new ActionToInputsMapping("Item7", 	[ "_7" ]),
 			new ActionToInputsMapping("Item8", 	[ "_8" ]),
 			new ActionToInputsMapping("Item9", 	[ "_9" ]),
-
 		];
 
-		var placeDefnDemo = new PlaceDefn
-		(
-			"Demo",
-			actions,
-			actionToInputsMappings
-		);
+		return actionToInputsMappings;
+	};
 
-		var placeDefns = [ placeDefnDemo ]; // todo
-
+	World.itemDefnsBuild = function()
+	{
 		var itemUseEquip = function (universe, world, place, entityUser, entityItem, item)
 		{
 			var equipmentUser = entityUser.equipmentUser;
@@ -306,123 +451,6 @@ function World(name, dateCreated, defns, places)
 			)
 		];
 
-		var skills = Skill.skillsDemo();
-
-		var defns = new Defns([itemDefns, placeDefns, skills]);
-
-		var displaySize = universe.display.sizeInPixels;
-		var cameraViewSize = displaySize.clone();
-		var placeBuilder = new PlaceBuilderDemo();
-
-		var randomizer = null; // Use default.
-
-		var places = [];
-
-		var worldSizeInRooms = new Coords(2, 2);
-		var roomPos = new Coords();
-		var roomSize = displaySize.clone().double();
-		var goalPos = new Coords().randomize().multiply(worldSizeInRooms).floor();
-
-		for (var y = 0; y < worldSizeInRooms.y; y++)
-		{
-			roomPos.y = y;
-
-			for (var x = 0; x < worldSizeInRooms.x; x++)
-			{
-				roomPos.x = x;
-
-				var areNeighborsConnectedESWN =
-				[
-					(x < worldSizeInRooms.x - 1),
-					(y < worldSizeInRooms.y - 1),
-					(x > 0),
-					(y > 0)
-				];
-
-				var isGoal = (roomPos.equals(goalPos));
-
-				var placeBattlefield = placeBuilder.build
-				(
-					"Battlefield",
-					roomSize, // size
-					cameraViewSize,
-					null, // placeNameToReturnTo
-					randomizer,
-					itemDefns,
-					roomPos,
-					areNeighborsConnectedESWN,
-					isGoal
-				);
-
-				places.push(placeBattlefield);
-			}
-		}
-
-		var placeBase = placeBuilder.build
-		(
-			"Base",
-			displaySize.clone(), // size
-			cameraViewSize,
-			places[0].name, // placeNameToReturnTo
-			randomizer,
-			itemDefns,
-			null, // pos
-			[false, false, false, false] // areNeighborsConnectedESWN
-		);
-
-		places.insertElementAt(placeBase, 0);
-
-		var returnValue = new World
-		(
-			"World-" + nowAsString,
-			now, // dateCreated
-			defns,
-			places
-		);
-		return returnValue;
-	};
-
-	// instance methods
-
-	World.prototype.draw = function(universe)
-	{
-		if (this.placeCurrent != null)
-		{
-			this.placeCurrent.draw(universe, this);
-		}
-	};
-
-	World.prototype.initialize = function(universe)
-	{
-		if (this.placeNext != null)
-		{
-			if (this.placeCurrent != null)
-			{
-				this.placeCurrent.finalize(universe, this);
-			}
-			this.placeCurrent = this.placeNext;
-			this.placeNext = null;
-		}
-
-		if (this.placeCurrent != null)
-		{
-			this.placeCurrent.initialize(universe, this);
-		}
-	};
-
-	World.prototype.updateForTimerTick = function(universe)
-	{
-		if (this.placeNext != null)
-		{
-			if (this.placeCurrent != null)
-			{
-				this.placeCurrent.finalize(universe, this);
-			}
-			this.placeCurrent = this.placeNext;
-			this.placeNext = null;
-			this.placeCurrent.initialize(universe, this);
-		}
-		this.placeCurrent.updateForTimerTick(universe, this);
-		this.timerTicksSoFar++;
+		return itemDefns;
 	};
 }

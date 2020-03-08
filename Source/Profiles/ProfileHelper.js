@@ -21,77 +21,51 @@ function ProfileHelper(storageHelper)
 	{
 		var profiles = this.profiles();
 
-		var profileIndex = this.profileIndexFindByName
+		var profileExisting = this.profiles.filter
 		(
-			profiles,
-			profileToDelete.name
-		);
+			x => x.name == profileToDelete.name
+		)[0];
 
-		profiles.removeAt(profileIndex);
-
-		this.storageHelper.save
-		(
-			this.propertyName,
-			profiles
-		);
-	};
-
-	ProfileHelper.prototype.profileIndexFindByName = function(profiles, profileNameToFind)
-	{
-		var returnValue = null;
-
-		for (var i = 0; i < profiles.length; i++)
+		if (profileExisting != null)
 		{
-			var profile = profiles[i];
-			if (profile.name == profileNameToFind)
-			{
-				returnValue = i;
-				break;
-			}
+			profiles.remove(profileExisting);
 		}
 
-		return returnValue;
+		this.storageHelper.save(this.propertyName, profiles);
 	};
 
 	ProfileHelper.prototype.profileSave = function(profileToSave)
 	{
-		var profiles = this.profiles();
-
-		var profileIndex = this.profileIndexFindByName
-		(
-			profiles,
-			profileToSave.name
-		);
-
-		if (profileIndex == null)
-		{
-			profiles.push(profileToSave);
-		}
-		else
-		{
-			profiles.removeAt
-			(
-				profileIndex
-			).insertElementAt
-			(
-				profileToSave,
-				profileIndex
-			);
-		}
+		var wasSaveSuccessful;
 
 		try
 		{
+			var profiles = this.profiles();
+			var profileExisting = profiles.filter
+			(
+				x => x.name == profileToSave.name
+			)[0];
+
+			if (profileExisting != null)
+			{
+				profiles.remove(profileExisting);
+			}
+			profiles.push(profileToSave);
+
 			this.storageHelper.save
 			(
 				this.propertyName,
 				profiles
 			);
+			wasSaveSuccessful = true;
 		}
 		catch (err)
 		{
-			var errorMessage = "Error attempting to save: " + err;
-			alert(errorMessage);
+			console.log("Error attempting save:" + err);
+			wasSaveSuccessful = false;
 		}
+
+		return wasSaveSuccessful;
 	};
 
 	ProfileHelper.prototype.profiles = function()

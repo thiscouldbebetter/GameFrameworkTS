@@ -2088,6 +2088,44 @@ function ControlBuilder(styles)
 
 		var fontHeight = this.fontHeightInPixelsBase;
 
+		var saveToLocalStorage = function()
+		{
+			var profile = universe.profile;
+			var world = universe.world;
+
+			world.dateSaved = DateTime.now();
+			var wasSaveSuccessful = universe.profileHelper.profileSave
+			(
+				profile
+			);
+
+			var message =
+			(
+				wasSaveSuccessful ? "Profile saved to local storage." : "Save failed due to errors."
+			);
+
+			var venueNext = new VenueControls
+			(
+				universe.controlBuilder.message
+				(
+					universe,
+					size,
+					message,
+					function acknowledge(universe)
+					{
+						var venueNext = new VenueControls
+						(
+							universe.controlBuilder.game(universe)
+						);
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
+						universe.venueNext = venueNext;
+					}
+				)
+			);
+			venueNext = new VenueFader(venueNext, universe.venueCurrent);
+			universe.venueNext = venueNext;
+		};
+
 		var returnValue = new ControlContainer
 		(
 			"containerSave",
@@ -2104,39 +2142,7 @@ function ControlBuilder(styles)
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click(universe)
-					{
-						var profile = universe.profile;
-						var world = universe.world;
-
-						world.dateSaved = DateTime.now();
-						universe.profileHelper.profileSave
-						(
-							profile
-						);
-
-						var venueNext = new VenueControls
-						(
-							universe.controlBuilder.message
-							(
-								universe,
-								size,
-								"Profile saved to local storage.",
-								function acknowledge(universe)
-								{
-									var venueNext = new VenueControls
-									(
-										universe.controlBuilder.game(universe)
-									);
-									venueNext = new VenueFader(venueNext, universe.venueCurrent);
-									universe.venueNext = venueNext;
-								}
-							)
-						);
-						venueNext = new VenueFader(venueNext, universe.venueCurrent);
-						universe.venueNext = venueNext;
-					},
-					universe // context
+					saveToLocalStorage
 				),
 
 				new ControlButton
