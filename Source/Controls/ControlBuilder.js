@@ -17,10 +17,8 @@ function ControlBuilder(styles)
 		universe, size, message, optionNames, optionFunctions, showMessageOnly
 	)
 	{
-		if (size == null)
-		{
-			size = universe.display.sizeDefault();
-		}
+		size = size || universe.display.sizeDefault();
+		showMessageOnly = showMessageOnly || false;
 
 		var scaleMultiplier =
 			this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
@@ -1863,6 +1861,79 @@ function ControlBuilder(styles)
 
 		var fontHeight = this.fontHeightInPixelsBase;
 
+		var confirm = function(universe)
+		{
+			var profileOld = universe.profile;
+			var profilesReloaded = universe.profileHelper.profiles();
+			for (var i = 0; i < profilesReloaded.length; i++)
+			{
+				var profileReloaded = profilesReloaded[i];
+				if (profileReloaded.name == profileOld.name)
+				{
+					universe.profile = profileReloaded;
+					break;
+				}
+			}
+
+			var worldOld = universe.world;
+			var worldsReloaded = universe.profile.worlds;
+			var worldToReload = null;
+			for (var i = 0; i < worldsReloaded.length; i++)
+			{
+				var worldReloaded = worldsReloaded[i];
+				if (worldReloaded.name == worldOld.name)
+				{
+					worldToReload = worldReloaded;
+					break;
+				}
+			}
+
+			var venueNext = new VenueControls
+			(
+				universe.controlBuilder.worldLoad(universe)
+			);
+			venueNext = new VenueFader(venueNext, universe.venueCurrent);
+			universe.venueNext = venueNext;
+
+			if (worldToReload == null)
+			{
+				venueNext = new VenueControls
+				(
+					universe.controlBuilder.message
+					(
+						universe,
+						size,
+						"No save exists to reload!",
+						function acknowledge(universe)
+						{
+							var venueNext = new VenueControls
+							(
+								universe.controlBuilder.worldLoad(universe)
+							);
+							venueNext = new VenueFader(venueNext, universe.venueCurrent);
+							universe.venueNext = venueNext;
+						}
+					)
+				);
+				venueNext = new VenueFader(venueNext, universe.venueCurrent);
+				universe.venueNext = venueNext;
+			}
+			else
+			{
+				universe.world = worldReloaded;
+			}
+		};
+
+		var cancel = function(universe)
+		{
+			var venueNext = new VenueControls
+			(
+				universe.controlBuilder.worldLoad(universe)
+			);
+			venueNext = new VenueFader(venueNext, universe.venueCurrent);
+			universe.venueNext = venueNext;
+		};
+
 		var returnValue = new ControlContainer
 		(
 			"containerWorldLoad",
@@ -1886,78 +1957,8 @@ function ControlBuilder(styles)
 							universe,
 							size,
 							"Abandon the current game?",
-							function confirm(universe)
-							{
-								var profileOld = universe.profile;
-								var profilesReloaded = universe.profileHelper.profiles();
-								for (var i = 0; i < profilesReloaded.length; i++)
-								{
-									var profileReloaded = profilesReloaded[i];
-									if (profileReloaded.name == profileOld.name)
-									{
-										universe.profile = profileReloaded;
-										break;
-									}
-								}
-
-								var worldOld = universe.world;
-								var worldsReloaded = universe.profile.worlds;
-								var worldToReload = null;
-								for (var i = 0; i < worldsReloaded.length; i++)
-								{
-									var worldReloaded = worldsReloaded[i];
-									if (worldReloaded.name == worldOld.name)
-									{
-										worldToReload = worldReloaded;
-										break;
-									}
-								}
-
-								var venueNext = new VenueControls
-								(
-									universe.controlBuilder.worldLoad(universe)
-								);
-								venueNext = new VenueFader(venueNext, universe.venueCurrent);
-								universe.venueNext = venueNext;
-
-								if (worldToReload == null)
-								{
-									venueNext = new VenueControls
-									(
-										universe.controlBuilder.message
-										(
-											universe,
-											size,
-											"No save exists to reload!",
-											function acknowledge(universe)
-											{
-												var venueNext = new VenueControls
-												(
-													universe.controlBuilder.worldLoad(universe)
-												);
-												venueNext = new VenueFader(venueNext, universe.venueCurrent);
-												universe.venueNext = venueNext;
-											}
-										)
-									);
-									venueNext = new VenueFader(venueNext, universe.venueCurrent);
-									universe.venueNext = venueNext;
-								}
-								else
-								{
-									universe.world = worldReloaded;
-								}
-
-							},
-							function cancel(universe)
-							{
-								var venueNext = new VenueControls
-								(
-									universe.controlBuilder.worldLoad(universe)
-								);
-								venueNext = new VenueFader(venueNext, universe.venueCurrent);
-								universe.venueNext = venueNext;
-							}
+							confirm,
+							cancel
 						);
 
 						var venueNext = new VenueControls(controlConfirm);

@@ -316,29 +316,57 @@ function World(name, dateCreated, defns, places)
 
 		var randomizer = null; // Use default.
 
-		var placeMain = placeBuilder.build
-		(
-			"Battlefield",
-			displaySize.clone().double(), // size
-			cameraViewSize,
-			null, // placeNameToReturnTo
-			randomizer,
-			itemDefns,
-			true // shouldBuildPlayer
-		);
+		var places = [];
+
+		var battlefieldSizeInRooms = new Coords(2, 1);
+		var battlefieldPos = new Coords();
+		var battlefieldSize = displaySize.clone().double();
+
+		for (var y = 0; y < battlefieldSizeInRooms.y; y++)
+		{
+			battlefieldPos.y = y;
+
+			for (var x = 0; x < battlefieldSizeInRooms.x; x++)
+			{
+				battlefieldPos.x = x;
+
+				var areNeighborsConnectedNESW =
+				[
+					(y > 0),
+					(x < battlefieldSizeInRooms.x - 1),
+					(y < battlefieldSizeInRooms.y - 1),
+					(x > 0)
+				];
+
+				var placeBattlefield = placeBuilder.build
+				(
+					"Battlefield",
+					battlefieldSize, // size
+					cameraViewSize,
+					null, // placeNameToReturnTo
+					randomizer,
+					itemDefns,
+					battlefieldPos,
+					areNeighborsConnectedNESW
+				);
+
+				places.push(placeBattlefield);
+			}
+		}
 
 		var placeBase = placeBuilder.build
 		(
 			"Base",
 			displaySize.clone(), // size
 			cameraViewSize,
-			placeMain.name, // placeNameToReturnTo
+			places[0].name, // placeNameToReturnTo
 			randomizer,
 			itemDefns,
-			false // shouldBuildPlayer
+			null, // pos
+			[false, false, false, false] // areNeighborsConnectedNESW
 		);
 
-		var places = [ placeMain, placeBase ];
+		places.insertElementAt(placeBase, 0);
 
 		var returnValue = new World
 		(
