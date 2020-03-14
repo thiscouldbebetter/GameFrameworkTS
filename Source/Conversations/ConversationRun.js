@@ -19,6 +19,8 @@ function ConversationRun(defn, quit, universe)
 
 	this.variableLookup = {};
 
+	this.next();
+
 	// Abbreviate for scripts.
 	this.vars = this.variableLookup;
 	this.uni = this.universe;
@@ -61,8 +63,8 @@ function ConversationRun(defn, quit, universe)
 		var marginSize = new Coords(1, 1).multiplyScalar(marginWidth);
 		var listSize = new Coords
 		(
-			size.x / 2,
-			size.y - labelHeight - buttonHeight - marginSize.y * 6 // hack - From 4.
+			size.x * .6,
+			size.y - buttonHeight - labelHeight - marginSize.y * 4
 		);
 		var buttonSize = new Coords(listSize.x, buttonHeight);
 		var buttonTranscriptSize = new Coords(2, 1).multiplyScalar(buttonHeight); // size
@@ -98,41 +100,13 @@ function ConversationRun(defn, quit, universe)
 			size,
 			// children
 			[
-				new ControlButton
-				(
-					"buttonBack",
-					marginSize, // pos
-					new Coords(1, 1).multiplyScalar(buttonHeight), // size
-					"<",
-					fontHeight,
-					true, // hasBorder
-					true, // isEnabled
-					back
-				),
-
-				new ControlButton
-				(
-					"buttonTranscript",
-					new Coords
-					(
-						size.x - marginSize.x - buttonTranscriptSize.x,
-						marginSize.y
-					),
-					buttonTranscriptSize,
-					"Log",
-					fontHeight,
-					true, // hasBorder
-					true, // isEnabled
-					viewLog
-				),
-
 				new ControlLabel
 				(
 					"labelSpeaker",
 					new Coords
 					(
 						size.x / 2,
-						size.y - marginSize.y * 3 - buttonSize.y - listSize.y - labelHeight
+						marginSize.y * 2 + buttonSize.y
 					), // pos
 					size, // size
 					true, // isTextCentered
@@ -150,7 +124,7 @@ function ConversationRun(defn, quit, universe)
 					new Coords
 					(
 						(size.x - listSize.x) / 2,
-						size.y - marginSize.y * 2 - buttonSize.y - listSize.y
+						marginSize.y * 3 + buttonSize.y + labelHeight
 					),
 					listSize,
 					// items
@@ -182,24 +156,37 @@ function ConversationRun(defn, quit, universe)
 
 				new ControlButton
 				(
-					"buttonNext",
+					"buttonTranscript",
 					new Coords
 					(
-						(size.x - listSize.x) / 2,
-						size.y - marginSize.y - buttonSize.y
-					), // pos
-					buttonSize,
-					"Next",
+						size.x - marginSize.x - buttonTranscriptSize.x,
+						marginSize.y
+					),
+					buttonTranscriptSize,
+					"Log",
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					next
+					viewLog
 				),
+
+				new ControlButton
+				(
+					"buttonBack",
+					marginSize, // pos
+					new Coords(1, 1).multiplyScalar(buttonHeight), // size
+					"<",
+					fontHeight,
+					true, // hasBorder
+					true, // isEnabled
+					back
+				),
+
 			], // children
 
 			[
 				new Action("Back", back),
-				new Action("viewLog", viewLog)
+				new Action("ViewLog", viewLog)
 			],
 
 			[
@@ -207,6 +194,8 @@ function ConversationRun(defn, quit, universe)
 				new ActionToInputsMapping( "ViewLog", [ Input.Names().Space ], true )
 			]
 		);
+
+		returnValue.focusGain();
 
 		return returnValue;
 	};

@@ -21,6 +21,7 @@ function ConversationScope(parent, talkNodeCurrent, talkNodesForOptions)
 		var talkNodeIndex = defnTalkNodes.indexOf(this.talkNodeCurrent);
 		var talkNodeNext = defnTalkNodes[talkNodeIndex + 1];
 		this.talkNodeCurrent = talkNodeNext;
+		return this;
 	};
 
 	ConversationScope.prototype.talkNodesForOptionsActive = function()
