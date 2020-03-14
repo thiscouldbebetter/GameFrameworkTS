@@ -15,6 +15,12 @@ function Item(defnName, quantity)
 		return (this.defn(world).use != null);
 	};
 
+	Item.prototype.toEntity = function()
+	{
+		// todo
+		return new Entity(this.defnName, [ this ]);
+	};
+
 	Item.prototype.toString = function(world)
 	{
 		return this.defn(world).appearance + " (" + this.quantity + ")";

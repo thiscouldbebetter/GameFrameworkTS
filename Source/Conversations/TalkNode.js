@@ -35,10 +35,10 @@ function TalkNode(name, defnName, text, next, isActive)
 		return conversationDefn.talkNodeDefns[this.defnName];
 	};
 
-	TalkNode.prototype.execute = function(conversationRun, scope)
+	TalkNode.prototype.execute = function(universe, conversationRun, scope)
 	{
 		var defn = this.defn(conversationRun.defn);
-		defn.execute(conversationRun, scope, this);
+		defn.execute(universe, conversationRun, scope, this);
 	};
 
 	TalkNode.prototype.textForTranscript = function(conversationDefn)

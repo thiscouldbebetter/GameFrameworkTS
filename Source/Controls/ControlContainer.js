@@ -334,6 +334,11 @@ function ControlContainer(name, pos, size, children, actions, actionToInputsMapp
 		return this;
 	};
 
+	ControlContainer.prototype.toVenue = function()
+	{
+		return new VenueFader(new VenueControls(this));
+	};
+
 	// drawable
 
 	ControlContainer.prototype.draw = function(universe, display, drawLoc)

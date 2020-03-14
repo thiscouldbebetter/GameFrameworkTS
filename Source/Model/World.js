@@ -407,26 +407,21 @@ function World(name, dateCreated, defns, places)
 
 		var itemDefns =
 		[
+			// 			name, 				appr, desc, mass, 	val,stax, categoryNames, use
 			new ItemDefn("Ammo"),
-			ItemDefn.fromNameCategoryNameAndUse
+			new ItemDefn("Armor", 			null, null, 50, 	30, null, [ "Armor" ], itemUseEquip),
+			new ItemDefn("Coin", 			null, null, .01, 	1),
+			new ItemDefn("Enhanced Armor",	null, null, 60, 	60, null, [ "Armor" ], itemUseEquip),
+			new ItemDefn("Key", 			null, null, .1, 	5),
+			new ItemDefn("Material", 		null, null, 10, 	3),
+			new ItemDefn("Speed Booster", 	null, null, 10, 	30, null, [ "Accessory" ], itemUseEquip),
+			new ItemDefn("Toolset", 		null, null, 1, 		30),
+			new ItemDefn("Weapon",			null, null, 5, 		100, null, [ "Weapon" ], itemUseEquip),
+
+			new ItemDefn
 			(
-				"Armor",
-				"Armor", // categoryName
-				itemUseEquip
-			),
-			new ItemDefn("Coin"),
-			ItemDefn.fromNameCategoryNameAndUse
-			(
-				"Enhanced Armor",
-				"Armor", // categoryName
-				itemUseEquip
-			),
-			new ItemDefn("Key"),
-			new ItemDefn("Material"),
-			ItemDefn.fromNameCategoryNameAndUse
-			(
-				"Medicine",
-				"Consumable", // categoryName
+				"Medicine", null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize
+				[ "Consumable" ], // categoryNames
 				function use(universe, world, place, entityUser, entityItem, item)
 				{
 					var integrityToRestore = 10;
@@ -436,19 +431,6 @@ function World(name, dateCreated, defns, places)
 					return message;
 				}
 			),
-			ItemDefn.fromNameCategoryNameAndUse
-			(
-				"Speed Booster",
-				"Accessory", // categoryName
-				itemUseEquip
-			),
-			new ItemDefn("Toolset"),
-			ItemDefn.fromNameCategoryNameAndUse
-			(
-				"Weapon",
-				"Weapon", // categoryName
-				itemUseEquip
-			)
 		];
 
 		return itemDefns;

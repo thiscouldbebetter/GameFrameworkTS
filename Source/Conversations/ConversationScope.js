@@ -53,9 +53,9 @@ function ConversationScope(parent, talkNodeCurrent, talkNodesForOptions)
 		return returnValues;
 	};
 
-	ConversationScope.prototype.update = function(conversationRun)
+	ConversationScope.prototype.update = function(universe, conversationRun)
 	{
 		this.haveOptionsBeenUpdated = true;
-		this.talkNodeCurrent.execute(conversationRun, this);
+		this.talkNodeCurrent.execute(universe, conversationRun, this);
 	};
 }

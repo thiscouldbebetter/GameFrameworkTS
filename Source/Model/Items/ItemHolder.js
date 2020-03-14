@@ -11,6 +11,16 @@ function ItemHolder(itemEntities)
 	}
 }
 {
+	// Static methods.
+
+	ItemHolder.fromItems = function(items)
+	{
+		var itemEntities = items.map(x => x.toEntity());
+		return new ItemHolder(itemEntities);
+	};
+
+	// Instance methods.
+
 	ItemHolder.prototype.hasItem = function(itemToCheck)
 	{
 		return this.hasItemWithDefnNameAndQuantity(itemToCheck.defnName, itemToCheck.quantity);
@@ -108,19 +118,62 @@ function ItemHolder(itemEntities)
 		}
 	};
 
-	ItemHolder.prototype.itemEntitiesTransferTo = function(other)
+	ItemHolder.prototype.itemEntitiesAllTransferTo = function(other)
 	{
-		for (var i = 0; i < this.itemEntities.length; i++)
+		this.itemEntitiesTransferTo(this.itemEntities, other);
+	};
+
+	ItemHolder.prototype.itemEntitiesTransferTo = function(itemEntitiesToTransfer, other)
+	{
+		for (var i = 0; i < itemEntitiesToTransfer.length; i++)
 		{
-			var itemEntity = this.itemEntities[i];
+			var itemEntity = itemEntitiesToTransfer[i];
 			this.itemEntityTransferTo(itemEntity, other);
 		}
+	};
+
+	ItemHolder.prototype.itemEntitySplit = function(itemEntityToSplit, quantityToSplit)
+	{
+		var itemEntitySplitted = null;
+
+		var itemToSplit = itemEntityToSplit.item;
+		if (itemToSplit.quantity <= 1)
+		{
+			itemEntitySplitted = itemEntityToSplit;
+		}
+		else
+		{
+			quantityToSplit = quantityToSplit || Math.floor(itemToSplit.quantity / 2);
+			if (quantityToSplit >= itemEntityToSplit.quantity)
+			{
+				itemEntitySplitted = itemEntityToSplit;
+			}
+			else
+			{
+				itemToSplit.quantity -= quantityToSplit;
+
+				itemEntitySplitted = itemEntityToSplit.clone();
+				itemEntitySplitted.item.quantity = quantityToSplit;
+				// Add with no join.
+				this.itemEntities.insertElementAfterOther(itemEntitySplitted, itemEntityToSplit);
+			}
+		}
+
+		this.itemEntities[itemToSplit.defnName] = itemEntitySplitted;
+
+		return itemEntitySplitted;
 	};
 
 	ItemHolder.prototype.itemEntityTransferTo = function(itemEntity, other)
 	{
 		other.itemEntityAdd(itemEntity);
 		this.itemRemove(itemEntity.item);
+	};
+
+	ItemHolder.prototype.itemEntityTransferSingleTo = function(itemEntity, other)
+	{
+		var itemEntitySingle = this.itemEntitySplit(itemEntity, 1);
+		this.itemEntityTransferTo(itemEntitySingle, other);
 	};
 
 	// controls
@@ -220,21 +273,7 @@ function ItemHolder(itemEntities)
 
 		var split = function(universe)
 		{
-			var itemEntityToSplit = itemHolder.itemEntitySelected;
-			var itemToSplit = itemEntityToSplit.item;
-			if (itemToSplit.quantity > 1)
-			{
-				var quantityToSplit = Math.floor(itemToSplit.quantity / 2);
-
-				itemToSplit.quantity -= quantityToSplit;
-
-				var itemEntitySplitted = itemEntityToSplit.clone();
-				itemEntitySplitted.item.quantity = quantityToSplit;
-				// Add with no join.
-				var itemEntities = itemHolder.itemEntities;
-				itemEntities.insertElementAfterOther(itemEntitySplitted, itemEntityToSplit);
-				itemEntities[itemToSplit.defnName] = itemEntitySplitted;
-			}
+			itemHolder.itemEntitySplit(itemHolder.itemEntitySelected);
 		};
 
 		var join = function()

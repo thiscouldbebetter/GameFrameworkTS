@@ -1,9 +1,10 @@
 
-function ConversationRun(defn, quit, universe)
+function ConversationRun(defn, quit, entityPlayer, entityTalker)
 {
 	this.defn = defn;
 	this.quit = quit;
-	this.universe = universe; // hack
+	this.entityPlayer = entityPlayer;
+	this.entityTalker = entityTalker;
 
 	var talkNodeStart = this.defn.talkNodes[0];
 
@@ -22,14 +23,15 @@ function ConversationRun(defn, quit, universe)
 	this.next();
 
 	// Abbreviate for scripts.
+	this.p = this.entityPlayer;
+	this.t = this.entityTalker;
 	this.vars = this.variableLookup;
-	this.uni = this.universe;
 }
 
 {
 	// instance methods
 
-	ConversationRun.prototype.next = function()
+	ConversationRun.prototype.next = function(universe)
 	{
 		var responseSelected = this.scopeCurrent.talkNodeForOptionSelected;
 		if (responseSelected != null)
@@ -39,12 +41,12 @@ function ConversationRun(defn, quit, universe)
 			responseSelected.activate(this, this.scopeCurrent);
 			this.scopeCurrent.talkNodeForOptionSelected = null;
 		}
-		this.update();
+		this.update(universe);
 	};
 
-	ConversationRun.prototype.update = function()
+	ConversationRun.prototype.update = function(universe)
 	{
-		this.scopeCurrent.update(this);
+		this.scopeCurrent.update(universe, this);
 	};
 
 	// controls
@@ -71,7 +73,7 @@ function ConversationRun(defn, quit, universe)
 
 		var next = function()
 		{
-			conversationRun.next();
+			conversationRun.next(universe);
 		};
 
 		var back = function()

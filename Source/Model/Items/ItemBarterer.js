@@ -1,0 +1,323 @@
+
+function ItemBarterer()
+{
+	this.itemHolderCustomerOffer = new ItemHolder();
+	this.itemHolderStoreOffer = new ItemHolder();
+}
+{
+	ItemBarterer.prototype.isAnythingBeingOffered = function()
+	{
+		var returnValue =
+		(
+			this.itemHolderCustomerOffer.itemEntities.length > 0
+			|| this.itemHolderStoreOffer.itemEntities.length > 0
+		);
+		return returnValue;
+	};
+	
+	ItemBarterer.prototype.reset = function(entityCustomer, entityStore)
+	{
+		itemBarterer.itemHolderCustomerOffer.itemEntitiesAllTransferTo(entityCustomer.itemHolder);
+		itemBarterer.itemHolderStoreOffer.itemEntitiesAllTransferTo(entityStore.itemHolder);
+	};
+
+	ItemBarterer.prototype.trade = function(entityCustomer, entityStore)
+	{
+		var itemHoldersForOfferers =
+		[
+			entityCustomer.itemHolder,
+			entityStore.itemHolder
+		];
+
+		var itemHoldersForOffers =
+		[
+			this.itemHolderCustomerOffer,
+			this.itemHolderStoreOffer
+		];
+
+		for (var e = 0; e < itemHoldersForOffers.length; e++)
+		{
+			var itemHolderFrom = itemHoldersForOffers[e];
+			var itemHolderTo = itemHoldersForOfferers[1 - e];
+
+			itemHolderFrom.itemEntitiesAllTransferTo(itemHolderTo);
+		}
+	};
+
+	// Controls.
+
+	ItemBarterer.prototype.toControl = function(universe, size, entityCustomer, entityStore, venuePrev)
+	{
+		if (size == null)
+		{
+			size = universe.display.sizeDefault();
+		}
+
+		var fontHeight = 10;
+		var margin = fontHeight * 1.5;
+		var buttonSize = new Coords(4, 2).multiplyScalar(fontHeight);
+		var listSize = new Coords((size.x - margin * 3) / 2, 100);
+
+		var itemBarterer = this;
+		var itemHolderCustomer = entityCustomer.itemHolder;
+		var itemHolderStore = entityStore.itemHolder;
+
+		var itemDefnNameCurrency = this.itemDefnNameCurrency;
+
+		var world = universe.world;
+
+		var back = function()
+		{
+			itemBarterer.reset(entityCustomer, entityStore);
+			var venueNext = venuePrev;
+			venueNext = new VenueFader(venueNext, universe.venueCurrent);
+			universe.venueNext = venueNext;
+		};
+
+		var returnValue = new ControlContainer
+		(
+			"containerTransfer",
+			Coords.Instances().Zeroes, // pos
+			size.clone(),
+			// children
+			[
+				new ControlLabel
+				(
+					"labelStoreName",
+					new Coords(margin, margin), // pos
+					new Coords(listSize.x, 25), // size
+					false, // isTextCentered
+					entityStore.name + ":",
+					fontHeight
+				),
+
+				new ControlList
+				(
+					"listStoreItems",
+					new Coords(margin, margin + fontHeight), // pos
+					listSize.clone(),
+					new DataBinding
+					(
+						itemHolderStore,
+						function get(c)
+						{
+							return c.itemEntities;//.filter(x => x.item.defnName != itemDefnNameCurrency);
+						}
+					), // items
+					new DataBinding
+					(
+						null,
+						function get(c) { return c.item.toString(world); }
+					), // bindingForItemText
+					fontHeight,
+					new DataBinding
+					(
+						itemHolderStore,
+						function get(c) { return c.itemEntityToOffer; },
+						function set(c, v) { c.itemEntityToOffer = v; }
+					), // bindingForItemSelected
+					new DataBinding(null, function(c) { return c; } ), // bindingForItemValue
+					true, // isEnabled
+					function confirm()
+					{
+						var offer = itemBarterer.itemHolderStoreOffer;
+						itemHolderStore.itemEntityTransferSingleTo(itemHolderStore.itemEntityToOffer, offer);
+					}
+				),
+
+				new ControlLabel
+				(
+					"labelCustomerName",
+					new Coords(size.x - margin - listSize.x, margin), // pos
+					new Coords(85, 25), // size
+					false, // isTextCentered
+					entityCustomer.name + ":",
+					fontHeight
+				),
+
+				new ControlList
+				(
+					"listCustomerItems",
+					new Coords(size.x - margin - listSize.x, margin + fontHeight), // pos
+					listSize.clone(),
+					new DataBinding
+					(
+						itemHolderCustomer,
+						function get(c)
+						{
+							return c.itemEntities;//.filter(x => x.item.defnName != itemDefnNameCurrency);
+						}
+					), // items
+					new DataBinding
+					(
+						null,
+						function get(c) { return c.item.toString(world); }
+					), // bindingForItemText
+					fontHeight,
+					new DataBinding
+					(
+						itemHolderCustomer,
+						function get(c) { return c.itemEntityToOffer; },
+						function set(c, v) { c.itemEntityToOffer = v; }
+					), // bindingForItemSelected
+					new DataBinding(null, function(c) { return c; } ), // bindingForItemValue
+					true, // isEnabled
+					function confirm()
+					{
+						var offer = itemBarterer.itemHolderCustomerOffer;
+						itemHolderCustomer.itemEntityTransferSingleTo(itemHolderCustomer.itemEntityToOffer, offer);
+					}
+				),
+
+				new ControlLabel
+				(
+					"labelItemsOfferedStore",
+					new Coords(margin, margin * 2 + listSize.y), // pos
+					new Coords(100, 15), // size
+					false, // isTextCentered
+					"Offered:",
+					fontHeight
+				),
+
+				new ControlList
+				(
+					"listItemsOfferedByStore",
+					new Coords(margin, margin * 3 + listSize.y), // pos
+					listSize.clone(),
+					new DataBinding
+					(
+						this,
+						function get(c)
+						{
+							return c.itemHolderStoreOffer.itemEntities;
+						}
+					), // items
+					new DataBinding
+					(
+						null,
+						function get(c) { return c.item.toString(world); }
+					), // bindingForItemText
+					fontHeight,
+					new DataBinding
+					(
+						itemHolderStore,
+						function get(c) { return c.itemEntityToWithdraw; },
+						function set(c, v) { c.itemEntityToWithdraw = v; }
+					), // bindingForItemSelected
+					new DataBinding(null, function(c) { return c; } ), // bindingForItemValue
+					true, // isEnabled
+					function confirm()
+					{
+						var offer = itemBarterer.itemHolderStoreOffer;
+						offer.itemEntityTransferSingleTo(itemHolderStore.itemEntityToWithdraw, itemHolderStore);
+					}
+				),
+
+				new ControlLabel
+				(
+					"labelItemsOfferedCustomer",
+					new Coords(size.x - margin - listSize.x, margin * 2 + listSize.y), // pos
+					new Coords(100, 15), // size
+					false, // isTextCentered
+					"Offered:",
+					fontHeight
+				),
+
+				new ControlList
+				(
+					"listItemsOfferedByCustomer",
+					new Coords(size.x - margin - listSize.x, margin * 3 + listSize.y), // pos
+					listSize.clone(),
+					new DataBinding
+					(
+						this,
+						function get(c)
+						{
+							return c.itemHolderCustomerOffer.itemEntities;
+						}
+					), // items
+					new DataBinding
+					(
+						null,
+						function get(c) { return c.item.toString(world); }
+					), // bindingForItemText
+					fontHeight,
+					new DataBinding
+					(
+						itemHolderCustomer,
+						function get(c) { return c.itemEntityToWithdraw; },
+						function set(c, v) { c.itemEntityToWithdraw = v; }
+					), // bindingForItemSelected
+					new DataBinding(null, function(c) { return c; } ), // bindingForItemValue
+					true, // isEnabled
+					function confirm()
+					{
+						var offer = itemBarterer.itemHolderCustomerOffer;
+						offer.itemEntityTransferSingleTo(itemHolderCustomer.itemEntityToWithdraw, itemHolderCustomer);
+					}
+				),
+
+				new ControlButton
+				(
+					"buttonReset",
+					new Coords(margin, size.y - margin - buttonSize.y), // pos
+					buttonSize.clone(),
+					"Reset",
+					fontHeight,
+					true, // hasBorder
+					new DataBinding
+					(
+						this,
+						function get(c) { return c.isAnythingBeingOffered(); }
+					), // isEnabled
+					function click()
+					{
+						itemBarterer.reset();
+					}
+				),
+
+				new ControlButton
+				(
+					"buttonOffer",
+					new Coords((size.x - buttonSize.x)/ 2, size.y - margin - buttonSize.y), // pos
+					buttonSize.clone(),
+					"Offer",
+					fontHeight,
+					true, // hasBorder
+					new DataBinding
+					(
+						this,
+						function get(c) { return c.isAnythingBeingOffered(); }
+					), // isEnabled
+					function click()
+					{
+						var isOfferAccepted = true; // todo
+						if (isOfferAccepted)
+						{
+							itemBarterer.trade(entityCustomer, entityStore);
+						}
+					}
+				),
+
+				new ControlButton
+				(
+					"buttonDone",
+					new Coords(size.x - margin - buttonSize.x, size.y - margin - buttonSize.y), // pos
+					buttonSize.clone(),
+					"Done",
+					fontHeight,
+					true, // hasBorder
+					true, // isEnabled
+					back // click
+				)
+			],
+
+			[ new Action("Back", back) ],
+
+			[ new ActionToInputsMapping( "Back", [ universe.inputHelper.inputNames.Escape ], true ) ],
+
+		);
+
+		return returnValue;
+	};
+}

@@ -46,12 +46,43 @@
 		},
 		{
 			"defnName": "Option",
+			"text": "Do you want to trade items?",
+			"next": "Trade"
+		},
+		{
+			"defnName": "Option",
 			"next": "Quit",
 			"text": "Never mind. I hate you."
 		},
 		{
 			"name": "SubjectPrompt",
 			"defnName": "Prompt"
+		},
+		{
+			"name": "Math",
+			"defnName": "Display",
+			"text": "Math is too complicated..."
+		},
+		{
+			"defnName": "Display",
+			"text": "...what with all those numbers."
+		},
+		{
+			"defnName": "Goto",
+			"next": "SubjectPrompt"
+		},
+		{
+			"name": "Science",
+			"defnName": "Display",
+			"text": "Science is way too broad a subject."
+		},
+		{
+			"defnName": "Display",
+			"text": "I mean, what ISN'T science, really?"
+		},
+		{
+			"defnName": "Goto",
+			"next": "SubjectPrompt"
 		},
 		{
 			"name": "History",
@@ -137,30 +168,17 @@
 			"next": "Subject"
 		},
 		{
-			"name": "Math",
+			"name": "SQLInjection",
 			"defnName": "Display",
-			"text": "Math is too complicated..."
+			"text": "What are you--what's happening to me?"
 		},
 		{
-			"defnName": "Display",
-			"text": "...what with all those numbers."
+			"defnName": "Script",
+			"text": "function panic() { alert(\"ER-ROR!  ER-ROR!  DOES! NOT! COMPUTE!\"); }"
 		},
 		{
 			"defnName": "Goto",
-			"next": "SubjectPrompt"
-		},
-		{
-			"name": "Science",
-			"defnName": "Display",
-			"text": "Science is way too broad a subject."
-		},
-		{
-			"defnName": "Display",
-			"text": "I mean, what ISN'T science, really?"
-		},
-		{
-			"defnName": "Goto",
-			"next": "SubjectPrompt"
+			"next": "Greet"
 		},
 		{
 			"name": "Game",
@@ -373,17 +391,21 @@
 			"next": "Subject"
 		},
 		{
-			"name": "SQLInjection",
+			"name": "Trade",
 			"defnName": "Display",
-			"text": "What are you--what's happening to me?"
+			"text": "I guess so.  Got anything good?"
 		},
 		{
 			"defnName": "Script",
-			"text": "function panic() { alert(\"ER-ROR!  ER-ROR!  DOES! NOT! COMPUTE!\"); }"
+			"text": "function(u, cr) { u.venueNext = new ItemBarterer().toControl(u, u.display.sizeInPixels, cr.p, cr.t, u.venueCurrent).toVenue(); }"
+		},
+		{
+			"defnName": "Display",
+			"text": "Well, that was mutually enriching."
 		},
 		{
 			"defnName": "Goto",
-			"next": "Greet"
+			"next": "Subject"
 		},
 		{
 			"name": "Quit",

@@ -852,6 +852,15 @@ function PlaceBuilderDemo()
 						}
 					}
 				),
+				ItemHolder.fromItems
+				([
+					new Item("Ammo", 5),
+					new Item("Coin", 200),
+					new Item("Key", 1),
+					new Item("Material", 3),
+					new Item("Medicine", 4),
+					new Item("Weapon", 1),
+				]),
 			]
 		);
 
@@ -1562,7 +1571,9 @@ function PlaceBuilderDemo()
 					function quit(conversationRun)
 					{
 						universe.venueNext = venueToReturnTo;
-					}
+					}, 
+					entityPlayer,
+					entityOther // entityTalker
 				);
 				var conversationSize = universe.display.sizeDefault().clone();
 				var conversationAsControl =
@@ -1721,7 +1732,10 @@ function PlaceBuilderDemo()
 				equipmentUser,
 				new Idleable(),
 				itemCrafter,
-				new ItemHolder(),
+				ItemHolder.fromItems
+				([
+					new Item(itemDefns["Coin"].name, 100), 
+				]),
 				killable,
 				movable,
 				new Playable(),
@@ -1791,18 +1805,13 @@ function PlaceBuilderDemo()
 					])
 				),
 				new ItemStore(itemDefns["Coin"].name),
-				new ItemHolder
-				(
-					[
-						new Item(itemDefns["Coin"].name, 100),
-						new Item(itemDefns["Key"].name, 10),
-						new Item(itemDefns["Medicine"].name, 100),
-						new Item(itemDefns["Weapon"].name, 1)
-					].map
-					(
-						x => new Entity(x.defnName, [ x ])
-					)
-				),
+				ItemHolder.fromItems
+				([
+					new Item(itemDefns["Coin"].name, 100),
+					new Item(itemDefns["Key"].name, 10),
+					new Item(itemDefns["Medicine"].name, 100),
+					new Item(itemDefns["Weapon"].name, 1)
+				]),
 				new Locatable(storeLoc)
 			]
 		);
