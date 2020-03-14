@@ -176,6 +176,19 @@ function ItemHolder(itemEntities)
 		this.itemEntityTransferTo(itemEntitySingle, other);
 	};
 
+	ItemHolder.prototype.tradeValueOfAllItems = function(world)
+	{
+		var items = this.itemEntities.map(x => x.item);
+
+		var tradeValueTotal = items.reduce
+		(
+			(sumSoFar, item) => sumSoFar + item.tradeValue(world),
+			0 // sumSoFar
+		);
+
+		return tradeValueTotal;
+	};
+
 	// controls
 
 	ItemHolder.prototype.toControl = function(universe, size, entityItemHolder, venuePrev)

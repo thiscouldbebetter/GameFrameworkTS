@@ -26,6 +26,11 @@ function Item(defnName, quantity)
 		return this.defn(world).appearance + " (" + this.quantity + ")";
 	};
 
+	Item.prototype.tradeValue = function(world)
+	{
+		return this.quantity * this.defn(world).tradeValue;
+	};
+
 	Item.prototype.use = function(universe, world, place, userEntity, itemEntity)
 	{
 		var returnValue = null;

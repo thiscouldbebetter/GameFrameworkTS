@@ -3,6 +3,10 @@ function ItemBarterer()
 {
 	this.itemHolderCustomerOffer = new ItemHolder();
 	this.itemHolderStoreOffer = new ItemHolder();
+	this.statusMessage = "Choose items to trade and click the 'Offer' button.";
+	this.patience = 10;
+
+	this.patienceMax = 10;
 }
 {
 	ItemBarterer.prototype.isAnythingBeingOffered = function()
@@ -14,11 +18,35 @@ function ItemBarterer()
 		);
 		return returnValue;
 	};
-	
+
+	ItemBarterer.prototype.isOfferProfitableEnough = function(world)
+	{
+		var profitMarginForStore = this.profitMarginOfOfferForStore(world);
+
+		var isOfferProfitableToStore = (profitMarginForStore > 1);
+
+		return isOfferProfitableToStore;
+	};
+
+	ItemBarterer.prototype.profitMarginOfOfferForStore = function(world)
+	{
+		var valueOfferedByCustomer = this.itemHolderCustomerOffer.tradeValueOfAllItems(world);
+		var valueOfferedByStore = this.itemHolderStoreOffer.tradeValueOfAllItems(world);
+
+		var profitMarginForStore = valueOfferedByCustomer / valueOfferedByStore;
+
+		return profitMarginForStore;
+	};
+
+	ItemBarterer.prototype.patienceAdd = function(patienceToAdd)
+	{
+		this.patience = (this.patience + patienceToAdd).trimToRangeMax(this.patienceMax);
+	};
+
 	ItemBarterer.prototype.reset = function(entityCustomer, entityStore)
 	{
-		itemBarterer.itemHolderCustomerOffer.itemEntitiesAllTransferTo(entityCustomer.itemHolder);
-		itemBarterer.itemHolderStoreOffer.itemEntitiesAllTransferTo(entityStore.itemHolder);
+		this.itemHolderCustomerOffer.itemEntitiesAllTransferTo(entityCustomer.itemHolder);
+		this.itemHolderStoreOffer.itemEntitiesAllTransferTo(entityStore.itemHolder);
 	};
 
 	ItemBarterer.prototype.trade = function(entityCustomer, entityStore)
@@ -56,7 +84,7 @@ function ItemBarterer()
 		var fontHeight = 10;
 		var margin = fontHeight * 1.5;
 		var buttonSize = new Coords(4, 2).multiplyScalar(fontHeight);
-		var listSize = new Coords((size.x - margin * 3) / 2, 100);
+		var listSize = new Coords((size.x - margin * 3) / 2, 90);
 
 		var itemBarterer = this;
 		var itemHolderCustomer = entityCustomer.itemHolder;
@@ -120,8 +148,11 @@ function ItemBarterer()
 					true, // isEnabled
 					function confirm()
 					{
-						var offer = itemBarterer.itemHolderStoreOffer;
-						itemHolderStore.itemEntityTransferSingleTo(itemHolderStore.itemEntityToOffer, offer);
+						if (itemHolderStore.itemEntityToOffer != null)
+						{
+							var offer = itemBarterer.itemHolderStoreOffer;
+							itemHolderStore.itemEntityTransferSingleTo(itemHolderStore.itemEntityToOffer, offer);
+						}
 					}
 				),
 
@@ -164,8 +195,11 @@ function ItemBarterer()
 					true, // isEnabled
 					function confirm()
 					{
-						var offer = itemBarterer.itemHolderCustomerOffer;
-						itemHolderCustomer.itemEntityTransferSingleTo(itemHolderCustomer.itemEntityToOffer, offer);
+						if (itemHolderCustomer.itemEntityToOffer != null)
+						{
+							var offer = itemBarterer.itemHolderCustomerOffer;
+							itemHolderCustomer.itemEntityTransferSingleTo(itemHolderCustomer.itemEntityToOffer, offer);
+						}
 					}
 				),
 
@@ -208,8 +242,11 @@ function ItemBarterer()
 					true, // isEnabled
 					function confirm()
 					{
-						var offer = itemBarterer.itemHolderStoreOffer;
-						offer.itemEntityTransferSingleTo(itemHolderStore.itemEntityToWithdraw, itemHolderStore);
+						if (itemHolderStore.itemEntityToWithdraw != null)
+						{
+							var offer = itemBarterer.itemHolderStoreOffer;
+							offer.itemEntityTransferSingleTo(itemHolderStore.itemEntityToWithdraw, itemHolderStore);
+						}
 					}
 				),
 
@@ -252,8 +289,11 @@ function ItemBarterer()
 					true, // isEnabled
 					function confirm()
 					{
-						var offer = itemBarterer.itemHolderCustomerOffer;
-						offer.itemEntityTransferSingleTo(itemHolderCustomer.itemEntityToWithdraw, itemHolderCustomer);
+						if (itemHolderCustomer.itemEntityToWithdraw != null)
+						{
+							var offer = itemBarterer.itemHolderCustomerOffer;
+							offer.itemEntityTransferSingleTo(itemHolderCustomer.itemEntityToWithdraw, itemHolderCustomer);
+						}
 					}
 				),
 
@@ -272,8 +312,18 @@ function ItemBarterer()
 					), // isEnabled
 					function click()
 					{
-						itemBarterer.reset();
+						itemBarterer.reset(entityCustomer, entityStore);
 					}
+				),
+
+				new ControlLabel
+				(
+					"infoStatus",
+					new Coords(size.x / 2, size.y - margin * 2 - buttonSize.y - fontHeight), // pos
+					new Coords(size.x, fontHeight), // size
+					true, // isTextCentered
+					new DataBinding(this, c => c.statusMessage),
+					fontHeight
 				),
 
 				new ControlButton
@@ -291,10 +341,35 @@ function ItemBarterer()
 					), // isEnabled
 					function click()
 					{
-						var isOfferAccepted = true; // todo
-						if (isOfferAccepted)
+						if (itemBarterer.patience <= 0)
 						{
-							itemBarterer.trade(entityCustomer, entityStore);
+							var profitMargin = itemBarterer.profitMarginOfOfferForStore(world);
+							var isCustomerDonatingToStore = (profitMargin == Number.POSITIVE_INFINITY);
+							if (isCustomerDonatingToStore)
+							{
+								itemBarterer.statusMessage = "Very well, I accept your gift.";
+								itemBarterer.trade(entityCustomer, entityStore);
+								itemBarterer.patienceAdd(1);
+							}
+							else
+							{
+								itemBarterer.statusMessage = "No.  I'm sick of your nonsense.";
+							}
+						}
+						else
+						{
+							var isOfferAccepted = itemBarterer.isOfferProfitableEnough(world);
+							if (isOfferAccepted)
+							{
+								itemBarterer.statusMessage = "It's a deal!";
+								itemBarterer.trade(entityCustomer, entityStore);
+								itemBarterer.patienceAdd(1);
+							}
+							else
+							{
+								itemBarterer.statusMessage = "This deal is not acceptable.";
+								itemBarterer.patienceAdd(-1);
+							}
 						}
 					}
 				),
