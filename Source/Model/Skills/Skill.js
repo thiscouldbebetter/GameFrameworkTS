@@ -9,7 +9,7 @@ function Skill(name, learningRequired, namesOfPrerequisiteSkills
 {
 	Skill.skillsDemo = function()
 	{
-		var returnValues = 
+		var returnValues =
 		[
 			// Skill(name, cost, prerequisites)
 

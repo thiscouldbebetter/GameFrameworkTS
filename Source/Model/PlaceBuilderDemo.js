@@ -44,6 +44,7 @@ function PlaceBuilderDemo()
 			);
 			entities.push(playerEntity);
 
+			this.entityBuildBook(entities, entityDimension, itemDefns);
 			this.entityBuildBaseExit(entities, entityDimension, entitySize, placeNameToReturnTo);
 			this.entityBuildFriendly
 			(
@@ -439,6 +440,50 @@ function PlaceBuilderDemo()
 
 		return exitEntity;
 	};
+
+	PlaceBuilderDemo.prototype.entityBuildBook = function(entities, entityDimension, itemDefns)
+	{
+		var entityDimensionHalf = entityDimension / 2;
+
+		var itemDefnBookName = itemDefns["Book"].name;
+		var itemBookColor = "Blue";
+		var itemBookVisual = new VisualGroup
+		([
+			new VisualRectangle
+			(
+				new Coords(1, 1.25).multiplyScalar(entityDimension), itemBookColor
+			),
+			new VisualOffset
+			(
+				new VisualRectangle
+				(
+					new Coords(.1, 1.1).multiplyScalar(entityDimension), "White"
+				),
+				new Coords(.4, 0).multiplyScalar(entityDimension)
+			),
+			new VisualOffset
+			(
+				new VisualText(itemDefnBookName, itemBookColor),
+				new Coords(0, entityDimension)
+			)
+		]);
+		var itemBookCollider = new Sphere(new Coords(0, 0), entityDimensionHalf);
+
+		var itemBookPos = new Coords(40, 40);
+
+		var itemBookEntity = new Entity
+		(
+			itemDefnBookName,
+			[
+				new Item(itemDefnBookName, 1),
+				new Locatable( new Location(itemBookPos) ),
+				new Collidable(itemBookCollider),
+				new Drawable(itemBookVisual)
+			]
+		);
+
+		entities.push(itemBookEntity);
+	}
 
 	PlaceBuilderDemo.prototype.entityBuildCoins = function
 	(
@@ -1571,7 +1616,7 @@ function PlaceBuilderDemo()
 					function quit(conversationRun)
 					{
 						universe.venueNext = venueToReturnTo;
-					}, 
+					},
 					entityPlayer,
 					entityOther // entityTalker
 				);
@@ -1734,7 +1779,7 @@ function PlaceBuilderDemo()
 				itemCrafter,
 				ItemHolder.fromItems
 				([
-					new Item(itemDefns["Coin"].name, 100), 
+					new Item(itemDefns["Coin"].name, 100),
 				]),
 				killable,
 				movable,

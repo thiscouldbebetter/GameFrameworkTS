@@ -282,7 +282,7 @@ function World(name, dateCreated, defns, places)
 					if (knowsHowToHide)
 					{
 						var perceptible = actor.playable; // hack
-						var isAlreadyHiding = perceptible.isHiding; 
+						var isAlreadyHiding = perceptible.isHiding;
 						if (isAlreadyHiding)
 						{
 							perceptible.isHiding = false;
@@ -417,6 +417,59 @@ function World(name, dateCreated, defns, places)
 			new ItemDefn("Speed Booster", 	null, null, 10, 	30, null, [ "Accessory" ], itemUseEquip),
 			new ItemDefn("Toolset", 		null, null, 1, 		30),
 			new ItemDefn("Weapon",			null, null, 5, 		100, null, [ "Weapon" ], itemUseEquip),
+
+			new ItemDefn
+			(
+				"Book", null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize
+				null, // categoryNames
+				function use(universe, world, place, entityUser, entityItem, item)
+				{
+					var venuePrev = universe.venueCurrent;
+					var back = function()
+					{
+						var venueNext = venuePrev;
+						venueNext = new VenueFader(venueNext, universe.venueCurrent);
+						universe.venueNext = venueNext;
+					};
+
+					var text =
+						"Fourscore and seven years ago, our fathers brought forth upon this continent "
+						+ "a new nation, conceived in liberty, and dedicated to the proposition that "
+						+ " all men are created equal. ";
+					var size = universe.display.sizeInPixels.clone();
+					var fontHeight = 10;
+					var textarea = new ControlTextarea
+					(
+						"textareaContents", size.clone().half().half(), size.clone().half(), text, fontHeight, false // isEnabled
+					);
+					var button = new ControlButton
+					(
+						"buttonDone",
+						new Coords(size.x / 4, 3 * size.y / 4 + fontHeight),
+						new Coords(size.x / 2, fontHeight * 2),
+						"Done",
+						fontHeight,
+						true, // hasBorder
+						true, // isEnabled
+						back // click
+					);
+					var container = new ControlContainer
+					(
+						"containerBook",
+						new Coords(0, 0),
+						size.clone(),
+						[ textarea, button ], // children
+						[
+							new Action( ControlActionNames.Instances().ControlCancel, back ),
+							new Action( ControlActionNames.Instances().ControlConfirm, back )
+						]
+					);
+
+					var venueNext = new VenueControls(container);
+					venueNext = new VenueFader(venueNext);
+					universe.venueNext = venueNext;
+				}
+			),
 
 			new ItemDefn
 			(
