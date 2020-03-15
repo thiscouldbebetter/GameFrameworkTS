@@ -1,6 +1,7 @@
 
-function Map(sizeInCells, cellSize, cellPrototype, cellAtPosInCells, cellSource)
+function Map(name, sizeInCells, cellSize, cellPrototype, cellAtPosInCells, cellSource)
 {
+	this.name = name;
 	this.sizeInCells = sizeInCells;
 	this.cellSize = cellSize;
 	this.cellPrototype = cellPrototype;
@@ -17,13 +18,13 @@ function Map(sizeInCells, cellSize, cellPrototype, cellAtPosInCells, cellSource)
 
 	// Helper variables.
 
-	this.posInCells = new Coords();
+	this._posInCells = new Coords();
 }
 {
-	Map.prototype.cellAtPos = function(cellPos, cellToOverwrite)
+	Map.prototype.cellAtPos = function(pos)
 	{
-		this.posInCells.overwriteWith(cellPos).divide(this.cellSize).floor();
-		return this.cellAtPosInCells(this.posInCells);
+		this._posInCells.overwriteWith(pos).divide(this.cellSize).floor();
+		return this.cellAtPosInCells(this._posInCells);
 	};
 
 	Map.prototype.numberOfCells = function()
