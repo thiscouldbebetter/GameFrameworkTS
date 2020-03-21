@@ -53,8 +53,11 @@ function PlaceBuilderDemo()
 
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Armor"], 1));
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Coin"], 10));
+			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Crystal"], 3));
+			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Flower"], 3));
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Material"], 5));
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Medicine"], 5));
+			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Mushroom"], 3));
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Speed Booster"], 1));
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Toolset"], 1));
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Weapon"], 1));
@@ -788,6 +791,65 @@ function PlaceBuilderDemo()
 		return containerEntityDefn;
 	};
 
+	PlaceBuilderDemo.prototype.entityDefnBuildCrystal = function(entityDimension)
+	{
+		var entityDimensionHalf = entityDimension / 2;
+
+		var itemDefnCrystalName = "Crystal";
+		var itemCrystalColor = "Cyan";
+		var itemCrystalVisual = new VisualGroup
+		([
+			new VisualPolygon
+			(
+				new Path
+				([
+					new Coords(1, 0), new Coords(0, 1), new Coords(-1, 0), new Coords(0, -1)
+				]).transform
+				(
+					new Transform_Scale
+					(
+						new Coords(1, 1, 1).multiplyScalar(entityDimension / 2)
+					)
+				),
+				itemCrystalColor,
+				"White"
+			),
+			new VisualPolygon
+			(
+				new Path
+				([
+					new Coords(1, 0), new Coords(0, 1), new Coords(-1, 0), new Coords(0, -1)
+				]).transform
+				(
+					new Transform_Scale
+					(
+						new Coords(1, 1, 1).multiplyScalar(entityDimension / 4)
+					)
+				),
+				"White"
+			),
+			new VisualOffset
+			(
+				new VisualText(itemDefnCrystalName, itemCrystalColor),
+				new Coords(0, entityDimension)
+			)
+		]);
+		var itemCrystalCollider = new Sphere(new Coords(0, 0), entityDimensionHalf);
+
+		var itemCrystalEntityDefn = new Entity
+		(
+			itemDefnCrystalName,
+			[
+				new Item(itemDefnCrystalName, 1),
+				new Locatable( new Location(new Coords()) ),
+				new Collidable(itemCrystalCollider),
+				new Drawable(itemCrystalVisual)
+			]
+		);
+
+		return itemCrystalEntityDefn;
+	};
+
 	PlaceBuilderDemo.prototype.entityDefnBuildExit = function(entityDimension)
 	{
 		var exitColor = "Brown";
@@ -1033,6 +1095,57 @@ function PlaceBuilderDemo()
 		return enemyGeneratorEntityDefn;
 	};
 
+	PlaceBuilderDemo.prototype.entityDefnBuildFlower = function(entityDimension)
+	{
+		entityDimension *= .5;
+		var itemDefnName = "Flower";
+		var color = "Pink";
+		var visual = new VisualGroup
+		([
+			new VisualPolygon
+			(
+				new Path
+				([
+					new Coords(1, 0),
+					new Coords(.3, .3),
+					new Coords(0, 1),
+					new Coords(-.3, .3),
+					new Coords(-1, 0),
+					new Coords(-.3, -.3),
+					new Coords(0, -1),
+					new Coords(.3, -.3)
+				]).transform
+				(
+					new Transform_Scale
+					(
+						new Coords(1, 1, 1).multiplyScalar(entityDimension)
+					)
+				),
+				color,
+				"Red"
+			),
+			new VisualOffset
+			(
+				new VisualText(itemDefnName, color),
+				new Coords(0, entityDimension)
+			)
+		]);
+		var collider = new Sphere(new Coords(0, 0), entityDimension);
+
+		var entityDefn = new Entity
+		(
+			itemDefnName,
+			[
+				new Item(itemDefnName, 1),
+				new Locatable( new Location(new Coords()) ),
+				new Collidable(collider),
+				new Drawable(visual)
+			]
+		);
+
+		return entityDefn;
+	};
+
 	PlaceBuilderDemo.prototype.entityDefnBuildFriendly = function(entityDimension)
 	{
 		var friendlyColor = "Green";
@@ -1261,6 +1374,58 @@ function PlaceBuilderDemo()
 		);
 
 		return itemMedicineEntityDefn;
+	};
+
+	PlaceBuilderDemo.prototype.entityDefnBuildMushroom = function(entityDimension)
+	{
+		entityDimension /= 2;
+		var itemDefnName = "Mushroom";
+
+		var colorStem = "Gray";
+		var colorCap = "Purple";
+		var itemMushroomVisual = new VisualGroup
+		([
+			new VisualOffset
+			(
+				new VisualArc
+				(
+					entityDimension, // radiusOuter
+					0, // radiusInner
+					new Coords(-1, 0), // directionMin
+					.5, // angleSpannedInTurns
+					colorCap
+				),
+				new Coords(0, 0)
+			),
+			new VisualOffset
+			(
+				new VisualRectangle
+				(
+					new Coords(entityDimension / 2, entityDimension), colorStem
+				),
+				new Coords(0, entityDimension / 2)
+			),
+			new VisualOffset
+			(
+				new VisualText(itemDefnName, colorCap),
+				new Coords(0, entityDimension)
+			)
+		]);
+
+		var itemMushroomCollider = new Sphere(new Coords(0, 0), entityDimension / 2);
+
+		var itemMushroomEntityDefn = new Entity
+		(
+			itemDefnName,
+			[
+				new Item(itemDefnName, 1),
+				new Locatable( new Location(new Coords()) ),
+				new Collidable(itemMushroomCollider),
+				new Drawable(itemMushroomVisual),
+			]
+		);
+
+		return itemMushroomEntityDefn;
 	};
 
 	PlaceBuilderDemo.prototype.entityDefnBuildObstacleBar = function(entityDimension)
@@ -1736,6 +1901,24 @@ function PlaceBuilderDemo()
 						]
 					)
 				]
+			),
+			new CraftingRecipe
+			(
+				"Potion",
+				[
+					new Item("Crystal", 1),
+					new Item("Flower", 1),
+					new Item("Mushroom", 1)
+				],
+				[
+					new Entity
+					(
+						"Potion", // name
+						[
+							new Item("Potion", 1),
+						]
+					)
+				]
 			)
 		]);
 
@@ -1793,6 +1976,53 @@ function PlaceBuilderDemo()
 		playerVisual.children.push(playerVisualStatus);
 
 		return playerEntityDefn;
+	};
+
+	PlaceBuilderDemo.prototype.entityDefnBuildPotion = function(entityDimension)
+	{
+		var entityDimensionHalf = entityDimension / 2;
+
+		var itemDefnPotionName = "Potion";
+		var itemPotionColor = "Blue";
+		var itemPotionVisual = new VisualGroup
+		([
+			new VisualPolygon
+			(
+				new Path
+				([
+					new Coords(1, 1),
+					new Coords(-1, 1),
+					new Coords(-.2, 0),
+					new Coords(-.2, -.5),
+					new Coords(.2, -.5),
+					new Coords(.2, 0)
+				]).transform
+				(
+					Transform_Scale.fromScalar(entityDimension)
+				),
+				itemPotionColor,
+				"White"
+			),
+			new VisualOffset
+			(
+				new VisualText(itemDefnPotionName, itemPotionColor),
+				new Coords(0, entityDimension)
+			)
+		]);
+		var itemPotionCollider = new Sphere(new Coords(0, 0), entityDimensionHalf);
+
+		var itemPotionEntityDefn = new Entity
+		(
+			itemDefnPotionName,
+			[
+				new Item(itemDefnPotionName, 1),
+				new Locatable( new Location(new Coords()) ),
+				new Collidable(itemPotionCollider),
+				new Drawable(itemPotionVisual)
+			]
+		);
+
+		return itemPotionEntityDefn;
 	};
 
 	PlaceBuilderDemo.prototype.entityDefnBuildToolset = function(entityDimension)
@@ -1949,15 +2179,19 @@ function PlaceBuilderDemo()
 			this.entityDefnBuildBook(entityDimension),
 			this.entityDefnBuildCoin(entityDimension),
 			this.entityDefnBuildContainer(entityDimension),
+			this.entityDefnBuildCrystal(entityDimension),
 			this.entityDefnBuildEnemyGenerator(entityDimension),
 			this.entityDefnBuildExit(entityDimension),
+			this.entityDefnBuildFlower(entityDimension),
 			this.entityDefnBuildFriendly(entityDimension),
 			this.entityDefnBuildMaterial(entityDimension),
 			this.entityDefnBuildMedicine(entityDimension),
+			this.entityDefnBuildMushroom(entityDimension),
 			this.entityDefnBuildObstacleBar(entityDimension),
 			this.entityDefnBuildObstacleMine(entityDimension),
 			this.entityDefnBuildObstacleRing(entityDimension),
 			this.entityDefnBuildPlayer(entityDimension),
+			this.entityDefnBuildPotion(entityDimension),
 			this.entityDefnBuildStore(entityDimension),
 			this.entityDefnBuildToolset(entityDimension),
 			this.entityDefnBuildWeapon(entityDimension),

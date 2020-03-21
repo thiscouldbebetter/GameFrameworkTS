@@ -414,9 +414,12 @@ function World(name, dateCreated, defns, places)
 			new ItemDefn("Ammo"),
 			new ItemDefn("Armor", 			null, null, 50, 	30, null, [ "Armor" ], itemUseEquip),
 			new ItemDefn("Coin", 			null, null, .01, 	1),
+			new ItemDefn("Crystal", 		null, null, .1, 	1),
 			new ItemDefn("Enhanced Armor",	null, null, 60, 	60, null, [ "Armor" ], itemUseEquip),
+			new ItemDefn("Flower", 			null, null, .01, 	1),
 			new ItemDefn("Key", 			null, null, .1, 	5),
 			new ItemDefn("Material", 		null, null, 10, 	3),
+			new ItemDefn("Mushroom", 		null, null, .01, 	1),
 			new ItemDefn("Speed Booster", 	null, null, 10, 	30, null, [ "Accessory" ], itemUseEquip),
 			new ItemDefn("Toolset", 		null, null, 1, 		30),
 			new ItemDefn("Weapon",			null, null, 5, 		100, null, [ "Weapon" ], itemUseEquip),
@@ -487,6 +490,22 @@ function World(name, dateCreated, defns, places)
 					return message;
 				}
 			),
+
+			new ItemDefn
+			(
+				"Potion", null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize
+				[ "Consumable" ], // categoryNames
+				function use(universe, world, place, entityUser, entityItem, item)
+				{
+					// Same as medicine, for now.
+					var integrityToRestore = 10;
+					entityUser.killable.integrityAdd(integrityToRestore);
+					entityUser.itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
+					var message = "The potion restores " + integrityToRestore + " points.";
+					return message;
+				}
+			),
+
 		];
 
 		return itemDefns;
