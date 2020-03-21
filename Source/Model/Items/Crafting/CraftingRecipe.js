@@ -36,7 +36,7 @@ function CraftingRecipe(name, itemsIn, itemEntitiesOut)
 	{
 		return new CraftingRecipe
 		(
-			this.name, this.itemsIn.clone(), this.itemsEntitiesOut.clone()
+			this.name, this.itemsIn.clone(), this.itemEntitiesOut.clone()
 		);
 	}
 }

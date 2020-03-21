@@ -1,7 +1,7 @@
 
 function Locatable(loc)
 {
-	this.loc = loc;
+	this.loc = loc || new Location();
 }
 {
 	Locatable.prototype.updateForTimerTick = function(universe, world, place, entity)

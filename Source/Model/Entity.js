@@ -44,9 +44,10 @@ function Entity(name, properties)
 			var propertyCloned = (property.clone == null ? property : property.clone());
 			propertiesCloned.add(propertyCloned);
 		}
+		var nameCloned = this.name; // + IDHelper.Instance().idNext();
 		var returnValue = new Entity
 		(
-			this.name + IDHelper.Instance().idNext(), propertiesCloned
+			nameCloned, propertiesCloned
 		);
 		return returnValue;
 	};

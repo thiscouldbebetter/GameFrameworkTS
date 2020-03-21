@@ -1,7 +1,7 @@
 
 function Location(pos, orientation, placeName)
 {
-	this.pos = pos;
+	this.pos = pos || new Coords();
 
 	if (orientation == null)
 	{
