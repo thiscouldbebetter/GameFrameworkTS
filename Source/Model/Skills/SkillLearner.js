@@ -196,6 +196,13 @@ function SkillLearner(skillBeingLearnedName, learningAccumulated, skillsKnownNam
 
 		var skillsAll = universe.world.defns.skills;
 
+		var back = function()
+		{
+			var venueNext = venueToReturnTo;
+			venueNext = new VenueFader(venueNext, universe.venueCurrent);
+			universe.venueNext = venueNext;
+		};
+
 		this._control = new ControlContainer
 		(
 			"containerLearningSession", // name,
@@ -366,12 +373,7 @@ function SkillLearner(skillBeingLearnedName, learningAccumulated, skillsKnownNam
 					labelHeight, // fontHeightInPixels,
 					true, // hasBorder
 					true, // isEnabled
-					function click()
-					{
-						var venueNext = new VenueWorld(universe.world);
-						venueNext = new VenueFader(venueNext, venueToReturnTo);
-						universe.venueNext = venueNext;
-					}
+					back
 				)
 			]
 		);

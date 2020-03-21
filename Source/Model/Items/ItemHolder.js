@@ -209,6 +209,7 @@ function ItemHolder(itemEntities)
 
 		var itemHolder = this;
 		var world = universe.world;
+		var place = world.placeCurrent;
 
 		var back = function()
 		{
@@ -328,273 +329,341 @@ function ItemHolder(itemEntities)
 			}
 		};
 
+		var actionsAll = Action.Instances();
+
+		var equip = () => actionsAll.ShowEquipment.perform(universe, world, place, entityItemHolder);
+
+		var craft = () => actionsAll.ShowCrafting.perform(universe, world, place, entityItemHolder);
+
+		var skillsLearn = () => actionsAll.ShowSkills.perform(universe, world, place, entityItemHolder);
+
+		var childControls =
+		[
+			new ControlLabel
+			(
+				"labelItems",
+				new Coords(100, 10), // pos
+				new Coords(100, 25), // size
+				true, // isTextCentered
+				"Items",
+				fontHeightLarge
+			),
+
+			new ControlList
+			(
+				"listItems",
+				new Coords(10, 25), // pos
+				new Coords(70, 115), // size
+				new DataBinding(this.itemEntities), // items
+				new DataBinding
+				(
+					null,
+					function get(c) { return c.item.toString(world); }
+				), // bindingForItemText
+				fontHeightSmall,
+				new DataBinding
+				(
+					this,
+					function get(c) { return c.itemEntitySelected; },
+					function set(c, v) { c.itemEntitySelected = v; }
+				), // bindingForItemSelected
+				new DataBinding(null, function(c) { return c; } ), // bindingForItemValue
+				true, // isEnabled
+				function confirm(context, universe)
+				{
+					use();
+				}
+			),
+
+			new ControlLabel
+			(
+				"labelItemSelected",
+				new Coords(150, 25), // pos
+				new Coords(100, 15), // size
+				true, // isTextCentered
+				"Selected:",
+				fontHeight
+			),
+
+			new ControlLabel
+			(
+				"infoItemSelected",
+				new Coords(150, 35), // pos
+				new Coords(200, 15), // size
+				true, // isTextCentered
+				new DataBinding
+				(
+					this,
+					function get(c)
+					{
+						var i = c.itemEntitySelected;
+						return (i == null ? "-" : i.item.toString(world));
+					}
+				), // text
+				fontHeightSmall
+			),
+
+			new ControlLabel
+			(
+				"infoStatus",
+				new Coords(150, 105), // pos
+				new Coords(200, 15), // size
+				true, // isTextCentered
+				new DataBinding
+				(
+					this,
+					function get(c)
+					{
+						return c.statusMessage;
+					}
+				), // text
+				fontHeightSmall
+			),
+
+			new ControlButton
+			(
+				"buttonUp",
+				new Coords(85, 25), // pos
+				new Coords(15, 10), // size
+				"Up",
+				fontHeightSmall,
+				true, // hasBorder
+				new DataBinding
+				(
+					this,
+					function get(c)
+					{
+						var returnValue =
+						(
+							c.itemEntitySelected != null
+							&& c.itemEntities.indexOf(c.itemEntitySelected) > 0
+						);
+						return returnValue;
+					}
+				), // isEnabled
+				up // click
+			),
+
+			new ControlButton
+			(
+				"buttonDown",
+				new Coords(85, 40), // pos
+				new Coords(15, 10), // size
+				"Down",
+				fontHeightSmall,
+				true, // hasBorder
+				new DataBinding
+				(
+					this,
+					function get(c)
+					{
+						var returnValue =
+						(
+							c.itemEntitySelected != null
+							&& c.itemEntities.indexOf(c.itemEntitySelected) < c.itemEntities.length - 1
+						);
+						return returnValue;
+					}
+				), // isEnabled
+				down
+			),
+
+			new ControlButton
+			(
+				"buttonSplit",
+				new Coords(85, 55), // pos
+				new Coords(15, 10), // size
+				"Split",
+				fontHeightSmall,
+				true, // hasBorder
+				new DataBinding
+				(
+					this,
+					function get(c)
+					{
+						var itemEntity = c.itemEntitySelected;
+						var returnValue =
+						(
+							itemEntity != null
+							&& (itemEntity.item.quantity > 1)
+						);
+						return returnValue;
+					}
+				), // isEnabled
+				split
+			),
+
+			new ControlButton
+			(
+				"buttonJoin",
+				new Coords(85, 70), // pos
+				new Coords(15, 10), // size
+				"Join",
+				fontHeightSmall,
+				true, // hasBorder
+				new DataBinding
+				(
+					this,
+					function get(c)
+					{
+						var returnValue =
+						(
+							c.itemEntitySelected != null
+							&&
+							(
+								c.itemEntities.filter
+								(
+									x => x.item.defnName == c.itemEntitySelected.item.defnName
+								).length > 1
+							)
+						);
+						return returnValue;
+					}
+				), // isEnabled
+				join
+			),
+
+			new ControlButton
+			(
+				"buttonSort",
+				new Coords(85, 85), // pos
+				new Coords(15, 10), // size
+				"Sort",
+				fontHeightSmall,
+				true, // hasBorder
+				new DataBinding
+				(
+					this,
+					function get(c)
+					{
+						return c.itemEntities.length > 1;
+					}
+				), // isEnabled
+				sort
+			),
+
+			new ControlButton
+			(
+				"buttonUse",
+				new Coords(130, 85), // pos
+				new Coords(15, 10), // size
+				"Use",
+				fontHeightSmall,
+				true, // hasBorder
+				new DataBinding
+				(
+					this,
+					function get(c)
+					{
+						var itemEntity = c.itemEntitySelected;
+						return (itemEntity != null && itemEntity.item.isUsable(world));
+					}
+				), // isEnabled
+				function click(universe)
+				{
+					use();
+				},
+				universe // context
+			),
+
+			new ControlButton
+			(
+				"buttonDrop",
+				new Coords(150, 85), // pos
+				new Coords(15, 10), // size
+				"Drop",
+				fontHeightSmall,
+				true, // hasBorder
+				new DataBinding
+				(
+					this,
+					function get(c) { return c.itemEntitySelected != null}
+				), // isEnabled
+				function click(universe)
+				{
+					drop();
+				},
+				universe // context
+			)
+		];
+
+		var buttonSize = new Coords(20, 10);
+
+		if (entityItemHolder.equipmentUser != null)
+		{
+			childControls.push
+			(
+				new ControlButton
+				(
+					"buttonEquip",
+					new Coords(95, 130), // pos
+					buttonSize.clone(),
+					"Equip",
+					fontHeightSmall,
+					true, // hasBorder
+					true, // isEnabled
+					equip
+				)
+			);
+		}
+
+		if (entityItemHolder.itemCrafter != null)
+		{
+			childControls.push
+			(
+				new ControlButton
+				(
+					"buttonCrafting",
+					new Coords(120, 130), // pos
+					buttonSize.clone(),
+					"Craft",
+					fontHeightSmall,
+					true, // hasBorder
+					true, // isEnabled
+					craft
+				)
+			);
+		}
+
+		if (entityItemHolder.skillLearner != null)
+		{
+			childControls.push
+			(
+				new ControlButton
+				(
+					"buttonSkills",
+					new Coords(145, 130), // pos
+					buttonSize.clone(),
+					"Skills",
+					fontHeightSmall,
+					true, // hasBorder
+					true, // isEnabled
+					skillsLearn
+				)
+			);
+		}
+
+		childControls.push
+		(
+			new ControlButton
+			(
+				"buttonDone",
+				new Coords(170, 130), // pos
+				buttonSize.clone(),
+				"Done",
+				fontHeightSmall,
+				true, // hasBorder
+				true, // isEnabled
+				back
+			)
+		);
+
 		var returnValue = new ControlContainer
 		(
 			"containerItems",
 			Coords.Instances().Zeroes, // pos
 			sizeBase.clone(), // size
-			// children
-			[
-				new ControlLabel
-				(
-					"labelItems",
-					new Coords(100, 10), // pos
-					new Coords(100, 25), // size
-					true, // isTextCentered
-					"Items",
-					fontHeightLarge
-				),
-
-				new ControlList
-				(
-					"listItems",
-					new Coords(10, 25), // pos
-					new Coords(70, 115), // size
-					new DataBinding(this.itemEntities), // items
-					new DataBinding
-					(
-						null,
-						function get(c) { return c.item.toString(world); }
-					), // bindingForItemText
-					fontHeightSmall,
-					new DataBinding
-					(
-						this,
-						function get(c) { return c.itemEntitySelected; },
-						function set(c, v) { c.itemEntitySelected = v; }
-					), // bindingForItemSelected
-					new DataBinding(null, function(c) { return c; } ), // bindingForItemValue
-					true, // isEnabled
-					function confirm(context, universe)
-					{
-						use();
-					}
-				),
-
-				new ControlLabel
-				(
-					"labelItemSelected",
-					new Coords(150, 25), // pos
-					new Coords(100, 15), // size
-					true, // isTextCentered
-					"Selected:",
-					fontHeight
-				),
-
-				new ControlLabel
-				(
-					"infoItemSelected",
-					new Coords(150, 35), // pos
-					new Coords(200, 15), // size
-					true, // isTextCentered
-					new DataBinding
-					(
-						this,
-						function get(c)
-						{
-							var i = c.itemEntitySelected;
-							return (i == null ? "-" : i.item.toString(world));
-						}
-					), // text
-					fontHeightSmall
-				),
-
-				new ControlLabel
-				(
-					"infoStatus",
-					new Coords(150, 105), // pos
-					new Coords(200, 15), // size
-					true, // isTextCentered
-					new DataBinding
-					(
-						this,
-						function get(c)
-						{
-							return c.statusMessage;
-						}
-					), // text
-					fontHeightSmall
-				),
-
-				new ControlButton
-				(
-					"buttonUp",
-					new Coords(85, 25), // pos
-					new Coords(15, 10), // size
-					"Up",
-					fontHeightSmall,
-					true, // hasBorder
-					new DataBinding
-					(
-						this,
-						function get(c)
-						{
-							var returnValue =
-							(
-								c.itemEntitySelected != null
-								&& c.itemEntities.indexOf(c.itemEntitySelected) > 0
-							);
-							return returnValue;
-						}
-					), // isEnabled
-					up // click
-				),
-
-				new ControlButton
-				(
-					"buttonDown",
-					new Coords(85, 40), // pos
-					new Coords(15, 10), // size
-					"Down",
-					fontHeightSmall,
-					true, // hasBorder
-					new DataBinding
-					(
-						this,
-						function get(c)
-						{
-							var returnValue =
-							(
-								c.itemEntitySelected != null
-								&& c.itemEntities.indexOf(c.itemEntitySelected) < c.itemEntities.length - 1
-							);
-							return returnValue;
-						}
-					), // isEnabled
-					down
-				),
-
-				new ControlButton
-				(
-					"buttonSplit",
-					new Coords(85, 55), // pos
-					new Coords(15, 10), // size
-					"Split",
-					fontHeightSmall,
-					true, // hasBorder
-					new DataBinding
-					(
-						this,
-						function get(c)
-						{
-							var itemEntity = c.itemEntitySelected;
-							var returnValue =
-							(
-								itemEntity != null
-								&& (itemEntity.item.quantity > 1)
-							);
-							return returnValue;
-						}
-					), // isEnabled
-					split
-				),
-
-				new ControlButton
-				(
-					"buttonJoin",
-					new Coords(85, 70), // pos
-					new Coords(15, 10), // size
-					"Join",
-					fontHeightSmall,
-					true, // hasBorder
-					new DataBinding
-					(
-						this,
-						function get(c)
-						{
-							var returnValue =
-							(
-								c.itemEntitySelected != null
-								&&
-								(
-									c.itemEntities.filter
-									(
-										x => x.item.defnName == c.itemEntitySelected.item.defnName
-									).length > 1
-								)
-							);
-							return returnValue;
-						}
-					), // isEnabled
-					join
-				),
-
-				new ControlButton
-				(
-					"buttonSort",
-					new Coords(85, 85), // pos
-					new Coords(15, 10), // size
-					"Sort",
-					fontHeightSmall,
-					true, // hasBorder
-					new DataBinding
-					(
-						this,
-						function get(c)
-						{
-							return c.itemEntities.length > 1;
-						}
-					), // isEnabled
-					sort
-				),
-
-				new ControlButton
-				(
-					"buttonUse",
-					new Coords(130, 85), // pos
-					new Coords(15, 10), // size
-					"Use",
-					fontHeightSmall,
-					true, // hasBorder
-					new DataBinding
-					(
-						this,
-						function get(c)
-						{
-							var itemEntity = c.itemEntitySelected;
-							return (itemEntity != null && itemEntity.item.isUsable(world));
-						}
-					), // isEnabled
-					function click(universe)
-					{
-						use();
-					},
-					universe // context
-				),
-
-				new ControlButton
-				(
-					"buttonDrop",
-					new Coords(150, 85), // pos
-					new Coords(15, 10), // size
-					"Drop",
-					fontHeightSmall,
-					true, // hasBorder
-					new DataBinding
-					(
-						this,
-						function get(c) { return c.itemEntitySelected != null}
-					), // isEnabled
-					function click(universe)
-					{
-						drop();
-					},
-					universe // context
-				),
-
-				new ControlButton
-				(
-					"buttonDone",
-					new Coords(175, 130), // pos
-					new Coords(15, 10), // size
-					"Done",
-					fontHeightSmall,
-					true, // hasBorder
-					true, // isEnabled
-					back
-				)
-			], // end children
-
+			childControls,
 			[
 				new Action("Back", back),
 

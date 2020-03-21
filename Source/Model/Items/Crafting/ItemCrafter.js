@@ -131,6 +131,11 @@ function ItemCrafter(recipes)
 						function set(c, v) { c.itemEntitySelected = v; }
 					), // bindingForItemSelected
 					new DataBinding(null, function(c) { return c; } ), // bindingForItemValue
+					true, // isEnabled
+					function confirm(context, universe)
+					{
+						stage();
+					}
 				),
 
 				new ControlButton
