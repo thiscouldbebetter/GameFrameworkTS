@@ -358,15 +358,20 @@ function PlaceBuilderDemo()
 						(
 							new Path
 							([
-								new Coords(0.5, 0.5),
-								new Coords(-0.5, 0.5),
-								new Coords(-0.5, -0.5),
-								new Coords(0.5, -0.5)
+								new Coords(0.5, 0.75),
+								new Coords(-0.5, 0.75),
+								new Coords(-0.5, -0.75),
+								new Coords(0.5, -0.75)
 							]).transform
 							(
 								Transform_Scale.fromScalar(entityDimension)
 							),
 							exitColor
+						),
+						new VisualOffset
+						(
+							new VisualCircle(entityDimension / 8, "Yellow"),
+							new Coords(entityDimension / 4, 0)
 						),
 						new VisualOffset
 						(
@@ -1034,6 +1039,7 @@ function PlaceBuilderDemo()
 
 		var obstacleMappedMap = new Map
 		(
+			"Mine",
 			obstacleMappedSizeInCells,
 			obstacleMappedCellSize,
 			new MapCell(), // cellPrototype
