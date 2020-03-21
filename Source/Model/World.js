@@ -29,6 +29,12 @@ function World(name, dateCreated, defns, places)
 		var actions = World.actionsBuild();
 		var actionToInputsMappings = World.actionToInputsMappingsBuild();
 
+		var placeBuilder = new PlaceBuilderDemo();
+
+		var entityDefns = placeBuilder.entityDefnsBuild();
+
+		var itemDefns = World.itemDefnsBuild();
+
 		var placeDefnDemo = new PlaceDefn
 		(
 			"Demo",
@@ -38,15 +44,12 @@ function World(name, dateCreated, defns, places)
 
 		var placeDefns = [ placeDefnDemo ]; // todo
 
-		var itemDefns = World.itemDefnsBuild();
-
 		var skills = Skill.skillsDemo();
 
-		var defns = new Defns([itemDefns, placeDefns, skills]);
+		var defns = new Defns([entityDefns, itemDefns, placeDefns, skills]);
 
 		var displaySize = universe.display.sizeInPixels;
 		var cameraViewSize = displaySize.clone();
-		var placeBuilder = new PlaceBuilderDemo();
 
 		var randomizer = null; // Use default.
 
