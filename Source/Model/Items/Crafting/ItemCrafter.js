@@ -23,7 +23,7 @@ function ItemCrafter(recipes)
 
 	ItemCrafter.prototype.toControl = function(universe, size, entityItemHolder, venuePrev, includeTitle)
 	{
-		this.statusMessage = "-";
+		this.statusMessage = "1. Select recipe.\n2. Stage materials.\n3.Click Combine.";
 
 		if (size == null)
 		{
@@ -102,11 +102,21 @@ function ItemCrafter(recipes)
 			sizeBase.clone(), // size
 			// children
 			[
+				new ControlLabel
+				(
+					"labelMaterials",
+					new Coords(10, 20), // pos
+					new Coords(70, 25), // size
+					false, // isTextCentered
+					"Materials Held:",
+					fontHeightSmall
+				),
+
 				new ControlList
 				(
 					"listItemsHeld",
-					new Coords(10, 25), // pos
-					new Coords(80, 115), // size
+					new Coords(10, 30), // pos
+					new Coords(80, 110), // size
 					new DataBinding(itemEntities), // items
 					new DataBinding
 					(
@@ -131,7 +141,7 @@ function ItemCrafter(recipes)
 				new ControlButton
 				(
 					"buttonStage",
-					new Coords(95, 75), // pos
+					new Coords(95, 80), // pos
 					new Coords(10, 10), // size
 					">",
 					fontHeightSmall,
@@ -156,7 +166,7 @@ function ItemCrafter(recipes)
 				new ControlButton
 				(
 					"buttonUnstage",
-					new Coords(95, 90), // pos
+					new Coords(95, 95), // pos
 					new Coords(10, 10), // size
 					"<",
 					fontHeightSmall,
@@ -173,10 +183,20 @@ function ItemCrafter(recipes)
 					universe // context
 				),
 
+				new ControlLabel
+				(
+					"labelRecipe",
+					new Coords(110, 20), // pos
+					new Coords(70, 25), // size
+					false, // isTextCentered
+					"Recipe:",
+					fontHeightSmall
+				),
+
 				new ControlSelect
 				(
 					"selectRecipe",
-					new Coords(110, 25), // pos
+					new Coords(110, 30), // pos
 					new Coords(80, 10), // size
 					new DataBinding
 					(
@@ -219,10 +239,29 @@ function ItemCrafter(recipes)
 					new DataBinding(null, function(c) { return c; } ), // bindingForItemValue
 				),
 
+				new ControlButton
+				(
+					"buttonCombine",
+					new Coords(110, 70), // pos
+					new Coords(30, 10), // size
+					"Combine:",
+					fontHeightSmall,
+					true, // hasBorder
+					new DataBinding
+					(
+						this,
+						function get(c)
+						{
+							return (c.isRecipeSelectedFulfilled());
+						}
+					), // isEnabled
+					combine // click
+				),
+
 				new ControlList
 				(
 					"listItemsStaged",
-					new Coords(110, 70), // pos
+					new Coords(110, 80), // pos
 					new Coords(80, 25), // size
 					new DataBinding
 					(
@@ -247,29 +286,10 @@ function ItemCrafter(recipes)
 					new DataBinding(null, function(c) { return c; } ), // bindingForItemValue
 				),
 
-				new ControlButton
-				(
-					"buttonCombine",
-					new Coords(135, 100), // pos
-					new Coords(30, 10), // size
-					"Combine",
-					fontHeightSmall,
-					true, // hasBorder
-					new DataBinding
-					(
-						this,
-						function get(c)
-						{
-							return (c.isRecipeSelectedFulfilled());
-						}
-					), // isEnabled
-					combine // click
-				),
-
 				new ControlLabel
 				(
 					"infoStatus",
-					new Coords(150, 115), // pos
+					new Coords(150, 110), // pos
 					new Coords(200, 15), // size
 					true, // isTextCentered
 					new DataBinding
@@ -286,8 +306,8 @@ function ItemCrafter(recipes)
 				new ControlButton
 				(
 					"buttonDone",
-					new Coords(160, 130), // pos
-					new Coords(30, 10), // size
+					new Coords(170, 130), // pos
+					new Coords(20, 10), // size
 					"Done",
 					fontHeightSmall,
 					true, // hasBorder

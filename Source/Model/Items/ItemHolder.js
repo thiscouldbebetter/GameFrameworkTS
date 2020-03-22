@@ -193,7 +193,7 @@ function ItemHolder(itemEntities)
 
 	ItemHolder.prototype.toControl = function(universe, size, entityItemHolder, venuePrev, includeTitle)
 	{
-		this.statusMessage = "-";
+		this.statusMessage = "Use, drop, and sort items.";
 
 		if (size == null)
 		{
@@ -333,11 +333,21 @@ function ItemHolder(itemEntities)
 
 		var childControls =
 		[
+			new ControlLabel
+			(
+				"labelEquippable",
+				new Coords(10, 20), // pos
+				new Coords(70, 25), // size
+				false, // isTextCentered
+				"Items Held:",
+				fontHeightSmall
+			),
+
 			new ControlList
 			(
 				"listItems",
-				new Coords(10, 25), // pos
-				new Coords(70, 115), // size
+				new Coords(10, 30), // pos
+				new Coords(70, 110), // size
 				new DataBinding(this.itemEntities), // items
 				new DataBinding
 				(
@@ -365,8 +375,8 @@ function ItemHolder(itemEntities)
 				new Coords(150, 25), // pos
 				new Coords(100, 15), // size
 				true, // isTextCentered
-				"Selected:",
-				fontHeight
+				"Item Selected:",
+				fontHeightSmall
 			),
 
 			new ControlLabel
@@ -390,7 +400,7 @@ function ItemHolder(itemEntities)
 			new ControlLabel
 			(
 				"infoStatus",
-				new Coords(150, 105), // pos
+				new Coords(150, 110), // pos
 				new Coords(200, 15), // size
 				true, // isTextCentered
 				new DataBinding
@@ -407,7 +417,7 @@ function ItemHolder(itemEntities)
 			new ControlButton
 			(
 				"buttonUp",
-				new Coords(85, 25), // pos
+				new Coords(85, 30), // pos
 				new Coords(15, 10), // size
 				"Up",
 				fontHeightSmall,
@@ -431,7 +441,7 @@ function ItemHolder(itemEntities)
 			new ControlButton
 			(
 				"buttonDown",
-				new Coords(85, 40), // pos
+				new Coords(85, 45), // pos
 				new Coords(15, 10), // size
 				"Down",
 				fontHeightSmall,
@@ -455,7 +465,7 @@ function ItemHolder(itemEntities)
 			new ControlButton
 			(
 				"buttonSplit",
-				new Coords(85, 55), // pos
+				new Coords(85, 60), // pos
 				new Coords(15, 10), // size
 				"Split",
 				fontHeightSmall,
@@ -480,7 +490,7 @@ function ItemHolder(itemEntities)
 			new ControlButton
 			(
 				"buttonJoin",
-				new Coords(85, 70), // pos
+				new Coords(85, 75), // pos
 				new Coords(15, 10), // size
 				"Join",
 				fontHeightSmall,
@@ -510,7 +520,7 @@ function ItemHolder(itemEntities)
 			new ControlButton
 			(
 				"buttonSort",
-				new Coords(85, 85), // pos
+				new Coords(85, 90), // pos
 				new Coords(15, 10), // size
 				"Sort",
 				fontHeightSmall,
@@ -529,7 +539,7 @@ function ItemHolder(itemEntities)
 			new ControlButton
 			(
 				"buttonUse",
-				new Coords(130, 85), // pos
+				new Coords(130, 90), // pos
 				new Coords(15, 10), // size
 				"Use",
 				fontHeightSmall,
@@ -553,7 +563,7 @@ function ItemHolder(itemEntities)
 			new ControlButton
 			(
 				"buttonDrop",
-				new Coords(150, 85), // pos
+				new Coords(150, 90), // pos
 				new Coords(15, 10), // size
 				"Drop",
 				fontHeightSmall,

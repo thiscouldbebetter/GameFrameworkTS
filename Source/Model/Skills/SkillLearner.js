@@ -178,17 +178,14 @@ function SkillLearner(skillBeingLearnedName, learningAccumulated, skillsKnownNam
 
 	SkillLearner.prototype.toControl = function(universe, sizeIgnored, entity, venueToReturnTo, includeTitle)
 	{
-		if (this._control != null)
-		{
-			return this._control;
-		}
-
 		var display = universe.display;
 		var size = display.sizeInPixels.clone();
-		var margin = display.fontHeightInPixels;
-		var labelHeight = display.fontHeightInPixels * 1.5;
+		var labelHeight = display.fontHeightInPixels * 1.2;
+		var margin = 20;
 		var labelHeightLarge = labelHeight * 2;
-		var buttonHeight = labelHeight * 2;
+		var buttonHeight = labelHeight;
+		var buttonSize = new Coords(2, 1).multiplyScalar(margin);
+
 		var listSize = new Coords(
 			(size.x - margin * 3) / 2,
 			150
@@ -207,7 +204,7 @@ function SkillLearner(skillBeingLearnedName, learningAccumulated, skillsKnownNam
 		(
 			"Skills", // name,
 			new Coords(0, 0), // pos,
-			size,
+			size.clone(),
 			// children
 			[
 				new ControlLabel
@@ -355,10 +352,10 @@ function SkillLearner(skillBeingLearnedName, learningAccumulated, skillsKnownNam
 					"buttonBack", //name,
 					new Coords
 					(
-						size.x - margin - buttonHeight,
-						size.y - margin - buttonHeight
+						size.x - margin - buttonSize.x,
+						size.y - margin - buttonSize.y
 					), //pos,
-					new Coords(buttonHeight, buttonHeight), // size,
+					buttonSize.clone(), // size,
 					"Done", // text,
 					labelHeight, // fontHeightInPixels,
 					true, // hasBorder
@@ -386,13 +383,11 @@ function SkillLearner(skillBeingLearnedName, learningAccumulated, skillsKnownNam
 		}
 		else
 		{
-			var titleHeightInverted = new Coords(0, -15);
+			var titleHeightInverted = new Coords(0, -30);
 			returnValue.size.add(titleHeightInverted);
 			returnValue.shiftChildPositions(titleHeightInverted);
 		}
 
-		this._control = returnValue;
-
-		return this._control;
+		return returnValue;
 	};
 }

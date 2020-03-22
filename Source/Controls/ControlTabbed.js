@@ -128,17 +128,15 @@ function ControlTabbed(name, pos, size, children, fontHeightInPixels)
 			{
 				this.childSelectedIndex = this.childSelectedIndex.wrapToRangeMax(this.children.length);
 			}
-			else
+
+			var child = this.children[this.childSelectedIndex];
+			if
+			(
+				child.focusGain != null
+				&& ( child.isEnabled == null || child.isEnabled() )
+			)
 			{
-				var child = this.children[this.childSelectedIndex];
-				if
-				(
-					child.focusGain != null
-					&& ( child.isEnabled == null || child.isEnabled() )
-				)
-				{
-					break;
-				}
+				break;
 			}
 
 		} // end while (true)

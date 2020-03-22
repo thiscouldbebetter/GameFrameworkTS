@@ -110,7 +110,7 @@ function EquipmentUser(socketDefnGroup)
 
 	EquipmentUser.prototype.toControl = function(universe, size, entityEquipmentUser, venuePrev, includeTitle)
 	{
-		this.statusMessage = "-";
+		this.statusMessage = "Equip items in available slots.";
 
 		if (size == null)
 		{
@@ -150,11 +150,13 @@ function EquipmentUser(socketDefnGroup)
 		var world = universe.world;
 		var place = world.placeCurrent;
 
+		var listHeight = 90;
+
 		var listEquippables = new ControlList
 		(
 			"listEquippables",
 			new Coords(10, 30), // pos
-			new Coords(70, 80), // size
+			new Coords(70, listHeight), // size
 			new DataBinding(itemEntitiesEquippable), // items
 			new DataBinding
 			(
@@ -188,7 +190,7 @@ function EquipmentUser(socketDefnGroup)
 		(
 			"listEquipped",
 			new Coords(90, 30), // pos
-			new Coords(100, 80), // size
+			new Coords(100, listHeight), // size
 			new DataBinding(sockets), // items
 			new DataBinding
 			(
@@ -257,9 +259,9 @@ function EquipmentUser(socketDefnGroup)
 				new ControlLabel
 				(
 					"infoStatus",
-					new Coords(100, 120), // pos
-					new Coords(200, 15), // size
-					true, // isTextCentered
+					new Coords(10, 130), // pos
+					new Coords(160, 15), // size
+					false, // isTextCentered
 					new DataBinding
 					(
 						this,
@@ -268,16 +270,16 @@ function EquipmentUser(socketDefnGroup)
 							return c.statusMessage;
 						}
 					), // text
-					fontHeight
+					fontHeightSmall
 				),
 
 				new ControlButton
 				(
 					"buttonDone",
-					new Coords(75, 130), // pos
-					new Coords(50, 15), // size
+					new Coords(170, 130), // pos
+					new Coords(20, 10), // size
 					"Done",
-					fontHeight,
+					fontHeightSmall,
 					true, // hasBorder
 					true, // isEnabled
 					back
