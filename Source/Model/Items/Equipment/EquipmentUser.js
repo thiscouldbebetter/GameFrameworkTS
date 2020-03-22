@@ -108,13 +108,13 @@ function EquipmentUser(socketDefnGroup)
 
 	// control
 
-	EquipmentUser.prototype.toControl = function(universe, size, entityEquipmentUser, venuePrev)
+	EquipmentUser.prototype.toControl = function(universe, size, entityEquipmentUser, venuePrev, includeTitle)
 	{
 		this.statusMessage = "-";
 
 		if (size == null)
 		{
-			size = universe.display.sizeDefault();
+			size = universe.display.sizeDefault().clone();
 		}
 
 		var sizeBase = new Coords(200, 150, 1);
@@ -225,21 +225,11 @@ function EquipmentUser(socketDefnGroup)
 
 		var returnValue = new ControlContainer
 		(
-			"containerItems",
-			Coords.Instances().Zeroes, // pos
+			"Equipment",
+			new Coords(0, 0), // pos
 			sizeBase.clone(), // size
 			// children
 			[
-				new ControlLabel
-				(
-					"labelEquipment",
-					new Coords(100, 10), // pos
-					new Coords(100, 25), // size
-					true, // isTextCentered
-					"Equipment",
-					fontHeightLarge
-				),
-
 				new ControlLabel
 				(
 					"labelEquippable",
@@ -299,6 +289,29 @@ function EquipmentUser(socketDefnGroup)
 			[ new ActionToInputsMapping( "Back", [ universe.inputHelper.inputNames.Escape ], true ) ],
 
 		);
+
+		if (includeTitle)
+		{
+			childControls.insertElementAt
+			(
+				new ControlLabel
+				(
+					"labelEquipment",
+					new Coords(100, 10), // pos
+					new Coords(100, 25), // size
+					true, // isTextCentered
+					"Equipment",
+					fontHeightLarge
+				),
+				0 // indexToInsertAt
+			);
+		}
+		else
+		{
+			var titleHeightInverted = new Coords(0, -15);
+			returnValue.size.add(titleHeightInverted);
+			returnValue.shiftChildPositions(titleHeightInverted);
+		}
 
 		returnValue.scalePosAndSize(scaleMultiplier);
 

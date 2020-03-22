@@ -33,7 +33,7 @@ function ItemStore(itemDefnNameCurrency)
 		var returnValue = new ControlContainer
 		(
 			"containerTransfer",
-			Coords.Instances().Zeroes, // pos
+			new Coords(0, 0), // pos
 			sizeBase.clone(), // size
 			// children
 			[

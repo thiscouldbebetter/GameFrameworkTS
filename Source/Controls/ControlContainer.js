@@ -334,6 +334,15 @@ function ControlContainer(name, pos, size, children, actions, actionToInputsMapp
 		return this;
 	};
 
+	ControlContainer.prototype.shiftChildPositions = function(displacement)
+	{
+		for (var i = 0; i < this.children.length; i++)
+		{
+			var child = this.children[i];
+			child.pos.add(displacement);
+		}
+	};
+
 	ControlContainer.prototype.toVenue = function()
 	{
 		return new VenueFader(new VenueControls(this));

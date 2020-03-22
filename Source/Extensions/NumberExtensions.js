@@ -58,6 +58,11 @@ function NumberExtensions()
 		return value;
 	};
 
+	Number.prototype.wrapToRangeMax = function(max)
+	{
+		return this.wrapToRangeMinMax(0, max);
+	};
+
 	Number.prototype.wrapToRangeMinMax = function(min, max)
 	{
 		var value = this;

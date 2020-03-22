@@ -1922,18 +1922,59 @@ function PlaceBuilderDemo()
 			)
 		]);
 
+		var controllable = new Controllable
+		(
+			function toControl(universe, size, entity, venuePrev)
+			{
+				var itemHolderAsControl = entity.itemHolder.toControl
+				(
+					universe, size, entity, venuePrev, false // includeTitle
+				);
+
+				var equipmentUserAsControl = entity.equipmentUser.toControl
+				(
+					universe, size, entity, venuePrev, false // includeTitle
+				);
+
+				var crafterAsControl = entity.itemCrafter.toControl
+				(
+					universe, size, entity, venuePrev, false // includeTitle
+				);
+
+				var skillLearnerAsControl = entity.skillLearner.toControl
+				(
+					universe, size, entity, venuePrev, false // includeTitle
+				);
+
+				var returnValue = new ControlTabbed
+				(
+					"tabbedItems",
+					new Coords(0, 0), // pos
+					size,
+					[
+						itemHolderAsControl,
+						equipmentUserAsControl,
+						crafterAsControl,
+						skillLearnerAsControl
+					]
+				);
+				return returnValue;
+			}
+		);
+
 		var playerEntityDefn = new Entity
 		(
 			"Player",
 			[
 				new Locatable(),
-				constrainable,
 				new Collidable
 				(
 					playerCollider,
 					[ Collidable.name ], // entityPropertyNamesToCollideWith
 					playerCollide
 				),
+				constrainable,
+				controllable,
 				new Drawable(playerVisual),
 				equipmentUser,
 				new Idleable(),

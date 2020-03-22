@@ -191,13 +191,13 @@ function ItemHolder(itemEntities)
 
 	// controls
 
-	ItemHolder.prototype.toControl = function(universe, size, entityItemHolder, venuePrev)
+	ItemHolder.prototype.toControl = function(universe, size, entityItemHolder, venuePrev, includeTitle)
 	{
 		this.statusMessage = "-";
 
 		if (size == null)
 		{
-			size = universe.display.sizeDefault();
+			size = universe.display.sizeDefault().clone();
 		}
 
 		var sizeBase = new Coords(200, 150, 1);
@@ -329,26 +329,10 @@ function ItemHolder(itemEntities)
 			}
 		};
 
-		var actionsAll = Action.Instances();
-
-		var equip = () => actionsAll.ShowEquipment.perform(universe, world, place, entityItemHolder);
-
-		var craft = () => actionsAll.ShowCrafting.perform(universe, world, place, entityItemHolder);
-
-		var skillsLearn = () => actionsAll.ShowSkills.perform(universe, world, place, entityItemHolder);
+		var buttonSize = new Coords(20, 10);
 
 		var childControls =
 		[
-			new ControlLabel
-			(
-				"labelItems",
-				new Coords(100, 10), // pos
-				new Coords(100, 25), // size
-				true, // isTextCentered
-				"Items",
-				fontHeightLarge
-			),
-
 			new ControlList
 			(
 				"listItems",
@@ -582,69 +566,9 @@ function ItemHolder(itemEntities)
 				function click(universe)
 				{
 					drop();
-				},
-				universe // context
-			)
-		];
+				}
+			),
 
-		var buttonSize = new Coords(20, 10);
-
-		if (entityItemHolder.equipmentUser != null)
-		{
-			childControls.push
-			(
-				new ControlButton
-				(
-					"buttonEquip",
-					new Coords(95, 130), // pos
-					buttonSize.clone(),
-					"Equip",
-					fontHeightSmall,
-					true, // hasBorder
-					true, // isEnabled
-					equip
-				)
-			);
-		}
-
-		if (entityItemHolder.itemCrafter != null)
-		{
-			childControls.push
-			(
-				new ControlButton
-				(
-					"buttonCrafting",
-					new Coords(120, 130), // pos
-					buttonSize.clone(),
-					"Craft",
-					fontHeightSmall,
-					true, // hasBorder
-					true, // isEnabled
-					craft
-				)
-			);
-		}
-
-		if (entityItemHolder.skillLearner != null)
-		{
-			childControls.push
-			(
-				new ControlButton
-				(
-					"buttonSkills",
-					new Coords(145, 130), // pos
-					buttonSize.clone(),
-					"Skills",
-					fontHeightSmall,
-					true, // hasBorder
-					true, // isEnabled
-					skillsLearn
-				)
-			);
-		}
-
-		childControls.push
-		(
 			new ControlButton
 			(
 				"buttonDone",
@@ -656,12 +580,12 @@ function ItemHolder(itemEntities)
 				true, // isEnabled
 				back
 			)
-		);
+		];
 
 		var returnValue = new ControlContainer
 		(
-			"containerItems",
-			Coords.Instances().Zeroes, // pos
+			"Items",
+			new Coords(0, 0), // pos
 			sizeBase.clone(), // size
 			childControls,
 			[
@@ -711,6 +635,29 @@ function ItemHolder(itemEntities)
 
 			]
 		);
+
+		if (includeTitle)
+		{
+			childControls.insertElementAt
+			(
+				new ControlLabel
+				(
+					"labelItems",
+					new Coords(100, 10), // pos
+					new Coords(100, 25), // size
+					true, // isTextCentered
+					"Items",
+					fontHeightLarge
+				),
+				0 // indexToInsertAt
+			);
+		}
+		else
+		{
+			var titleHeightInverted = new Coords(0, -15);
+			returnValue.size.add(titleHeightInverted);
+			returnValue.shiftChildPositions(titleHeightInverted);
+		}
 
 		returnValue.scalePosAndSize(scaleMultiplier);
 

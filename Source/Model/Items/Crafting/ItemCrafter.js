@@ -21,13 +21,13 @@ function ItemCrafter(recipes)
 
 	// controls
 
-	ItemCrafter.prototype.toControl = function(universe, size, entityItemHolder, venuePrev)
+	ItemCrafter.prototype.toControl = function(universe, size, entityItemHolder, venuePrev, includeTitle)
 	{
 		this.statusMessage = "-";
 
 		if (size == null)
 		{
-			size = universe.display.sizeDefault();
+			size = universe.display.sizeDefault().clone();
 		}
 
 		var sizeBase = new Coords(200, 150, 1);
@@ -97,21 +97,11 @@ function ItemCrafter(recipes)
 
 		var returnValue = new ControlContainer
 		(
-			"containerCrafter",
-			Coords.Instances().Zeroes, // pos
+			"Crafting",
+			new Coords(0, 0), // pos
 			sizeBase.clone(), // size
 			// children
 			[
-				new ControlLabel
-				(
-					"labelCrafting",
-					new Coords(100, 10), // pos
-					new Coords(100, 25), // size
-					true, // isTextCentered
-					"Crafting",
-					fontHeightLarge
-				),
-
 				new ControlList
 				(
 					"listItemsHeld",
@@ -314,6 +304,29 @@ function ItemCrafter(recipes)
 				new ActionToInputsMapping("Back", [ universe.inputHelper.inputNames.Escape ], true ),
 			]
 		);
+
+		if (includeTitle)
+		{
+			returnValue.children.insertElementAt
+			(
+				new ControlLabel
+				(
+					"labelCrafting",
+					new Coords(100, 10), // pos
+					new Coords(100, 25), // size
+					true, // isTextCentered
+					"Crafting",
+					fontHeightLarge
+				),
+				0 // indexToInsertAt
+			);
+		}
+		else
+		{
+			var titleHeightInverted = new Coords(0, -15);
+			returnValue.size.add(titleHeightInverted);
+			returnValue.shiftChildPositions(titleHeightInverted);
+		}
 
 		returnValue.scalePosAndSize(scaleMultiplier);
 

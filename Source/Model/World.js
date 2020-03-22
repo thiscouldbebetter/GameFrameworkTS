@@ -209,11 +209,8 @@ function World(name, dateCreated, defns, places)
 		var actions =
 		[
 			actionsAll.DoNothing,
-			actionsAll.ShowCrafting,
-			actionsAll.ShowEquipment,
 			actionsAll.ShowItems,
 			actionsAll.ShowMenu,
-			actionsAll.ShowSkills,
 			new Action
 			(
 				"MoveDown",
@@ -367,9 +364,6 @@ function World(name, dateCreated, defns, places)
 		[
 			new ActionToInputsMapping("ShowMenu", [ inputNames.Escape ]),
 			new ActionToInputsMapping("ShowItems", [ inputNames.Tab ]),
-			new ActionToInputsMapping("ShowEquipment", [ "`" ]),
-			new ActionToInputsMapping("ShowCrafting", [ "~" ]),
-			new ActionToInputsMapping("ShowSkills", [ "=" ]),
 
 			new ActionToInputsMapping("MoveDown", 	[ inputNames.ArrowDown, inputNames.GamepadMoveDown + "0" ]),
 			new ActionToInputsMapping("MoveLeft", 	[ inputNames.ArrowLeft, inputNames.GamepadMoveLeft + "0" ]),

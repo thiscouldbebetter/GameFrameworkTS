@@ -176,7 +176,7 @@ function SkillLearner(skillBeingLearnedName, learningAccumulated, skillsKnownNam
 
 	// controls
 
-	SkillLearner.prototype.toControl = function(universe, sizeIgnored, entity, venueToReturnTo)
+	SkillLearner.prototype.toControl = function(universe, sizeIgnored, entity, venueToReturnTo, includeTitle)
 	{
 		if (this._control != null)
 		{
@@ -184,7 +184,7 @@ function SkillLearner(skillBeingLearnedName, learningAccumulated, skillsKnownNam
 		}
 
 		var display = universe.display;
-		var size = display.sizeInPixels;
+		var size = display.sizeInPixels.clone();
 		var margin = display.fontHeightInPixels;
 		var labelHeight = display.fontHeightInPixels * 1.5;
 		var labelHeightLarge = labelHeight * 2;
@@ -203,23 +203,13 @@ function SkillLearner(skillBeingLearnedName, learningAccumulated, skillsKnownNam
 			universe.venueNext = venueNext;
 		};
 
-		this._control = new ControlContainer
+		var returnValue = new ControlContainer
 		(
-			"containerLearningSession", // name,
+			"Skills", // name,
 			new Coords(0, 0), // pos,
 			size,
 			// children
 			[
-				new ControlLabel
-				(
-					"labelSkills",
-					new Coords(200, 20), // pos
-					new Coords(120, 25), // size
-					true, // isTextCentered
-					"Skills",
-					labelHeightLarge
-				),
-
 				new ControlLabel
 				(
 					"labelSkillsKnown", // name,
@@ -377,6 +367,31 @@ function SkillLearner(skillBeingLearnedName, learningAccumulated, skillsKnownNam
 				)
 			]
 		);
+
+		if (includeTitle)
+		{
+			returnValue.children.insertElementAt
+			(
+				new ControlLabel
+				(
+					"labelSkills",
+					new Coords(200, 20), // pos
+					new Coords(120, 25), // size
+					true, // isTextCentered
+					"Skills",
+					labelHeightLarge
+				),
+				0 // indexToInsertAt
+			);
+		}
+		else
+		{
+			var titleHeightInverted = new Coords(0, -15);
+			returnValue.size.add(titleHeightInverted);
+			returnValue.shiftChildPositions(titleHeightInverted);
+		}
+
+		this._control = returnValue;
 
 		return this._control;
 	};

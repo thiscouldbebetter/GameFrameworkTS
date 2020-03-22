@@ -159,7 +159,7 @@ function ControlBuilder(styles)
 		var returnValue = new ControlContainer
 		(
 			"containerChoice",
-			Coords.Instances().Zeroes,
+			new Coords(0, 0),
 			size,
 			[
 				new ControlLabel
