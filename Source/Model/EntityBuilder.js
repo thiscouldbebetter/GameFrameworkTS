@@ -9,19 +9,14 @@ function EntityBuilder()
 		var color = "Red";
 		var ticksToLive = 20;
 		var riseSpeed = -1;
+		var visual = new VisualText(text, color);
 
 		var messageEntity = new Entity
 		(
 			"Message" + text, // name
 			[
-				new Drawable
-				(
-					new VisualCamera
-					(
-						new VisualText(text, color),
-						(universe, world) => world.placeCurrent.camera()
-					)
-				),
+				new Drawable(visual),
+				new DrawableCamera(),
 				new Ephemeral(ticksToLive),
 				new Locatable
 				(

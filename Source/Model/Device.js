@@ -69,11 +69,6 @@ function Device(name, initialize, update, use)
 						new Coords(0, projectileDimension * 2)
 					)
 				]);
-				projectileVisual = new VisualCamera
-				(
-					projectileVisual,
-					(universe, world) => world.placeCurrent.camera()
-				);
 
 				var userDirection = userVel.clone().normalize();
 				var userRadius = entityUser.collidable.collider.radius;
@@ -104,11 +99,7 @@ function Device(name, initialize, update, use)
 					}
 				};
 
-				var visualExplosion = new VisualCamera
-				(
-					new VisualCircle(8, "Red"),
-					(u, w) => w.placeCurrent.camera()
-				);
+				var visualExplosion = new VisualCircle(8, "Red");
 				var killable = new Killable
 				(
 					1, // integrityMax
@@ -121,6 +112,7 @@ function Device(name, initialize, update, use)
 							[
 								new Ephemeral(8),
 								new Drawable(visualExplosion),
+								new DrawableCamera(),
 								entityKillable.locatable
 							]
 						);
@@ -142,7 +134,8 @@ function Device(name, initialize, update, use)
 							[ Killable.name ],
 							projectileCollide
 						),
-						new Drawable(projectileVisual)
+						new Drawable(projectileVisual),
+						new DrawableCamera()
 					]
 				);
 

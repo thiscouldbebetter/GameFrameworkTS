@@ -19,7 +19,7 @@ function PlaceBuilderDemo()
 
 		var entityDimension = 10;
 
-		var entityDefns = this.entityDefnsBuild(entityDimension);
+		var entityDefns = this.entityDefnsBuild();
 
 		var entitySize = new Coords(1, 1, 1).multiplyScalar(entityDimension);
 
@@ -52,7 +52,7 @@ function PlaceBuilderDemo()
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Mine"], 48));
 
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Armor"], 1));
-			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Coin"], 10));
+			//entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Coin"], 10));
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Crystal"], 3));
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Flower"], 3));
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Material"], 5));
@@ -94,7 +94,7 @@ function PlaceBuilderDemo()
 		var camera = cameraEntity.camera;
 		entities.splice(0, 0, ...this.entityBuildBackground(camera));
 
-		this.entitiesAllAddCameraProjection(entities);
+		//this.entitiesAllAddCameraProjection(entities);
 
 		var place = new Place(name, "Demo", size, entities);
 		return place;
@@ -144,26 +144,6 @@ function PlaceBuilderDemo()
 		return cameraEntity;
 	};
 
-	PlaceBuilderDemo.prototype.entitiesAllAddCameraProjection = function(entities)
-	{
-		// Add camera projection to all visuals.
-
-		for (var i = 0; i < entities.length; i++)
-		{
-			var entity = entities[i];
-			var entityDrawable = entity.drawable;
-			if (entityDrawable != null)
-			{
-				var entityVisual = entityDrawable.visual;
-				entityDrawable.visual = new VisualCamera
-				(
-					entityVisual,
-					(universe, world) => world.placeCurrent.camera()
-				);
-			}
-		}
-	};
-
 	PlaceBuilderDemo.prototype.entityBuildBackground = function(camera)
 	{
 		var returnValues = [];
@@ -187,7 +167,8 @@ function PlaceBuilderDemo()
 			"BackgroundBottom",
 			[
 				new Locatable(new Location(new Coords(0, 0, camera.focalLength))),
-				new Drawable(visualBackgroundBottom)
+				new Drawable(visualBackgroundBottom),
+				new DrawableCamera()
 			]
 		);
 		returnValues.push(entityBackgroundBottom);
@@ -209,7 +190,8 @@ function PlaceBuilderDemo()
 			"BackgroundTop",
 			[
 				new Locatable(new Location(new Coords(0, 0, 0))),
-				new Drawable(visualBackgroundTop)
+				new Drawable(visualBackgroundTop),
+				new DrawableCamera()
 			]
 		);
 		returnValues.push(entityBackgroundTop);
@@ -293,6 +275,7 @@ function PlaceBuilderDemo()
 						)
 					])
 				),
+				new DrawableCamera(),
 				new Goal(numberOfKeysToUnlockGoal),
 			]
 		);
@@ -342,11 +325,6 @@ function PlaceBuilderDemo()
 			)
 		]);
 
-		itemKeyVisual = new VisualCamera
-		(
-			itemKeyVisual, (universe, world) => world.placeCurrent.camera()
-		);
-
 		for (var i = 0; i < numberOfKeysToUnlockGoal; i++)
 		{
 			var itemKeyPos =
@@ -361,7 +339,8 @@ function PlaceBuilderDemo()
 					new Item(itemDefnKeyName, 1),
 					new Locatable( new Location(itemKeyPos) ),
 					new Collidable(itemKeyCollider),
-					new Drawable(itemKeyVisual)
+					new Drawable(itemKeyVisual),
+					new DrawableCamera()
 				]
 			);
 
@@ -458,7 +437,8 @@ function PlaceBuilderDemo()
 						new Locatable(wallPartLoc),
 						new Collidable(wallCollider),
 						new Damager(10),
-						new Drawable(wallVisual)
+						new Drawable(wallVisual),
+						new DrawableCamera()
 					]
 				);
 
@@ -480,7 +460,8 @@ function PlaceBuilderDemo()
 						new Collidable(new Box(new Coords(0, 0), portalSize)),
 						new Locatable(new Location(portalPos)),
 						new Portal(neighborName, "PortalToNeighbor" + ((i + 2) % 4), false),
-						new Drawable(new VisualRectangle(portalSize, "Violet"))
+						new Drawable(new VisualRectangle(portalSize, "Violet")),
+						new DrawableCamera()
 					]
 				);
 
@@ -517,6 +498,7 @@ function PlaceBuilderDemo()
 						)
 					])
 				),
+				new DrawableCamera(),
 				new ItemStore("Coin"),
 				ItemHolder.fromItems
 				([
@@ -570,7 +552,8 @@ function PlaceBuilderDemo()
 				new Item(itemDefnAccessoryName, 1),
 				new Locatable(),
 				new Collidable(itemAccessoryCollider),
-				new Drawable(itemAccessoryVisual)
+				new Drawable(itemAccessoryVisual),
+				new DrawableCamera()
 			]
 		);
 
@@ -620,7 +603,8 @@ function PlaceBuilderDemo()
 				collidable,
 				new Item(itemDefnArmorName, 1),
 				new Locatable( new Location( new Coords() ) ),
-				new Drawable(itemArmorVisual)
+				new Drawable(itemArmorVisual),
+				new DrawableCamera()
 			]
 		);
 
@@ -663,6 +647,7 @@ function PlaceBuilderDemo()
 			[
 				new Collidable(new Box(new Coords(0, 0), entitySize)),
 				new Drawable(visual),
+				new DrawableCamera(),
 				new Locatable(),
 				new Portal( "Base", "Exit" )
 			]
@@ -706,7 +691,8 @@ function PlaceBuilderDemo()
 				new Item(itemDefnBookName, 1),
 				new Locatable(),
 				new Collidable(itemBookCollider),
-				new Drawable(itemBookVisual)
+				new Drawable(itemBookVisual),
+				new DrawableCamera()
 			]
 		);
 
@@ -744,7 +730,8 @@ function PlaceBuilderDemo()
 				new Item(itemDefnCoinName, 1),
 				new Locatable( new Location(new Coords()) ),
 				new Collidable(itemCoinCollider),
-				new Drawable(itemCoinVisual)
+				new Drawable(itemCoinVisual),
+				new DrawableCamera()
 			]
 		);
 
@@ -782,6 +769,7 @@ function PlaceBuilderDemo()
 			[
 				new Collidable(new Box(new Coords(0, 0), entitySize)),
 				new Drawable(visual),
+				new DrawableCamera(),
 				new ItemContainer(),
 				new ItemHolder(),
 				new Locatable()
@@ -840,10 +828,11 @@ function PlaceBuilderDemo()
 		(
 			itemDefnCrystalName,
 			[
-				new Item(itemDefnCrystalName, 1),
-				new Locatable( new Location(new Coords()) ),
 				new Collidable(itemCrystalCollider),
-				new Drawable(itemCrystalVisual)
+				new Drawable(itemCrystalVisual),
+				new DrawableCamera(),
+				new Item(itemDefnCrystalName, 1),
+				new Locatable( new Location(new Coords()) )
 			]
 		);
 
@@ -889,6 +878,7 @@ function PlaceBuilderDemo()
 			[
 				new Collidable(new Box(new Coords(0, 0), entitySize)),
 				new Drawable(visual),
+				new DrawableCamera(),
 				new Locatable(),
 				new Portal() // Must be set ouside this method.
 			]
@@ -987,12 +977,6 @@ function PlaceBuilderDemo()
 			)
 		]);
 
-		enemyVisual = new VisualCamera
-		(
-			enemyVisual,
-			(universe, world) => world.placeCurrent.camera()
-		);
-
 		var enemyActivity = function (universe, world, place, actor, entityToTargetName)
 		{
 			var target = place.entities[entityToTargetName];
@@ -1014,6 +998,43 @@ function PlaceBuilderDemo()
 			actorLoc.orientation.forwardSet(actorLoc.accel.clone().normalize());
 		};
 
+		var enemyKillable = new Killable
+		(
+			10,
+			null, // damageApply
+			function die(universe, world, place, entityDying)
+			{
+				var chanceOfDroppingCoin = 1;
+				var doesDropCoin = (Math.random() < chanceOfDroppingCoin);
+				if (doesDropCoin)
+				{
+					var entityDefns = world.defns.entitys;
+					var entityDefnCoin = entityDefns["Coin"];
+					var entityCoin = entityDefnCoin.clone();
+					entityCoin.locatable = entityDying.locatable.clone();
+					entityCoin.locatable.loc.vel.clear();
+					place.entitySpawn(universe, world, entityCoin);
+				}
+
+				var entityPlayer = place.player();
+				var learner = entityPlayer.skillLearner;
+				var learningMessage =
+					learner.learningIncrement(world.defns.skills, 1);
+				if (learningMessage != null)
+				{
+					place.entitySpawn
+					(
+						universe, world,
+						universe.entityBuilder.messageFloater
+						(
+							learningMessage, entityPlayer.locatable.loc.pos
+						)
+					);
+				}
+			}
+		);
+
+
 		var enemyEntityPrototype = new Entity
 		(
 			"Enemy",
@@ -1023,30 +1044,9 @@ function PlaceBuilderDemo()
 				new Collidable(enemyCollider),
 				new Damager(10),
 				new Drawable(enemyVisual),
+				new DrawableCamera(),
 				new Enemy(),
-				new Killable
-				(
-					10,
-					null, // damageApply
-					function die(u, w, p, e)
-					{
-						var entityPlayer = p.player();
-						var learner = entityPlayer.skillLearner;
-						var learningMessage =
-							learner.learningIncrement(w.defns.skills, 1);
-						if (learningMessage != null)
-						{
-							p.entitySpawn
-							(
-								u, w,
-								u.entityBuilder.messageFloater
-								(
-									learningMessage, entityPlayer.locatable.loc.pos
-								)
-							);
-						}
-					}
-				),
+				enemyKillable,
 				new Locatable(new Location(new Coords())),
 			]
 		);
@@ -1139,7 +1139,8 @@ function PlaceBuilderDemo()
 				new Item(itemDefnName, 1),
 				new Locatable( new Location(new Coords()) ),
 				new Collidable(collider),
-				new Drawable(visual)
+				new Drawable(visual),
+				new DrawableCamera()
 			]
 		);
 
@@ -1226,6 +1227,7 @@ function PlaceBuilderDemo()
 				new Constrainable([constraintSpeedMax1]),
 				new Collidable(friendlyCollider),
 				new Drawable(friendlyVisual),
+				new DrawableCamera(),
 				new Talker("AnEveningWithProfessorSurly"),
 				new Actor
 				(
@@ -1317,7 +1319,8 @@ function PlaceBuilderDemo()
 				new Item(itemDefnMaterialName, 1),
 				new Locatable( new Location(new Coords()) ),
 				new Collidable(itemMaterialCollider),
-				new Drawable(itemMaterialVisual)
+				new Drawable(itemMaterialVisual),
+				new DrawableCamera()
 			]
 		);
 
@@ -1369,7 +1372,8 @@ function PlaceBuilderDemo()
 				new Item(itemDefnMedicineName, 1),
 				new Locatable( new Location(new Coords()) ),
 				new Collidable(itemMedicineCollider),
-				new Drawable(itemMedicineVisual)
+				new Drawable(itemMedicineVisual),
+				new DrawableCamera()
 			]
 		);
 
@@ -1422,6 +1426,7 @@ function PlaceBuilderDemo()
 				new Locatable( new Location(new Coords()) ),
 				new Collidable(itemMushroomCollider),
 				new Drawable(itemMushroomVisual),
+				new DrawableCamera()
 			]
 		);
 
@@ -1469,6 +1474,7 @@ function PlaceBuilderDemo()
 				obstacleCollidable,
 				new Damager(10),
 				new Drawable(visual),
+				new DrawableCamera(),
 				new Locatable()
 			]
 		);
@@ -1553,6 +1559,7 @@ function PlaceBuilderDemo()
 				obstacleCollidable,
 				new Damager(10),
 				new Drawable(obstacleMappedVisual),
+				new DrawableCamera(),
 				new Locatable(new Location(new Coords()))
 			]
 		);
@@ -1598,7 +1605,8 @@ function PlaceBuilderDemo()
 				new Locatable(obstacleLoc),
 				new Collidable(obstacleCollider),
 				new Damager(10),
-				new Drawable(obstacleRingVisual)
+				new Drawable(obstacleRingVisual),
+				new DrawableCamera()
 			]
 		);
 
@@ -1976,6 +1984,7 @@ function PlaceBuilderDemo()
 				constrainable,
 				controllable,
 				new Drawable(playerVisual),
+				new DrawableCamera(),
 				equipmentUser,
 				new Idleable(),
 				itemCrafter,
@@ -2059,7 +2068,8 @@ function PlaceBuilderDemo()
 				new Item(itemDefnPotionName, 1),
 				new Locatable( new Location(new Coords()) ),
 				new Collidable(itemPotionCollider),
-				new Drawable(itemPotionVisual)
+				new Drawable(itemPotionVisual),
+				new DrawableCamera()
 			]
 		);
 
@@ -2102,6 +2112,7 @@ function PlaceBuilderDemo()
 				new Locatable( new Location(new Coords()) ),
 				new Collidable(itemToolsetCollider),
 				new Drawable(itemToolsetVisual),
+				new DrawableCamera()
 			]
 		);
 
@@ -2149,6 +2160,7 @@ function PlaceBuilderDemo()
 				new Locatable( new Location(new Coords()) ),
 				new Collidable(itemWeaponCollider),
 				new Drawable(itemWeaponVisual),
+				new DrawableCamera(),
 				itemWeaponDevice
 			]
 		);
@@ -2202,6 +2214,7 @@ function PlaceBuilderDemo()
 				boundable,
 				collidable,
 				new Drawable(itemAmmoVisual),
+				new DrawableCamera(),
 				new Item(itemDefnAmmoName, roundsPerPile),
 				new Locatable( new Location( new Coords() ) ),
 			]
@@ -2210,8 +2223,9 @@ function PlaceBuilderDemo()
 		return itemAmmoEntityDefn;
 	};
 
-	PlaceBuilderDemo.prototype.entityDefnsBuild = function(entityDimension)
+	PlaceBuilderDemo.prototype.entityDefnsBuild = function()
 	{
+		var entityDimension = 10;
 		var entityDefns =
 		[
 			this.entityDefnBuildAccessory(entityDimension),

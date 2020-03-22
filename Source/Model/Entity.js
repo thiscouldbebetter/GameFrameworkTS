@@ -1,8 +1,15 @@
 
 function Entity(name, properties)
 {
-	this.properties = [];
-	this.nameAndPropertiesAdd(name, properties);
+	this.name = name;
+	this.properties = properties;
+
+	for (var i = 0; i < this.properties.length; i++)
+	{
+		var property = this.properties[i];
+		var propertyName = property.constructor.name.lowercaseFirstCharacter();
+		this[propertyName] = property;
+	}
 }
 
 {
@@ -20,23 +27,11 @@ function Entity(name, properties)
 		}
 	};
 
-	Entity.prototype.nameAndPropertiesAdd = function(name, propertiesToAdd)
-	{
-		this.name = name;
-		for (var i = 0; i < propertiesToAdd.length; i++)
-		{
-			var property = propertiesToAdd[i];
-			this.properties.push(property);
-			var propertyName = property.constructor.name.lowercaseFirstCharacter();
-			this[propertyName] = property;
-		}
-		return this;
-	};
-
 	// Cloneable.
 
 	Entity.prototype.clone = function()
 	{
+		var nameCloned = this.name; // + IDHelper.Instance().idNext();
 		var propertiesCloned = [];
 		for (var i = 0; i < this.properties.length; i++)
 		{
@@ -44,7 +39,6 @@ function Entity(name, properties)
 			var propertyCloned = (property.clone == null ? property : property.clone());
 			propertiesCloned.add(propertyCloned);
 		}
-		var nameCloned = this.name; // + IDHelper.Instance().idNext();
 		var returnValue = new Entity
 		(
 			nameCloned, propertiesCloned
