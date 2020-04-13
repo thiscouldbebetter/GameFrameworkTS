@@ -1,11 +1,7 @@
 
-function MeshBuilder()
+class MeshBuilder
 {
-	// do nothing
-}
-
-{
-	MeshBuilder.prototype.biped = function(material, heightInPixels)
+	biped(material, heightInPixels)
 	{
 		var heightOver2 = heightInPixels / 2;
 		var heightOver3 = heightInPixels / 3;
@@ -166,7 +162,7 @@ function MeshBuilder()
 		return returnValue;
 	};
 
-	MeshBuilder.prototype.box = function(material, size, pos)
+	box(material, size, pos)
 	{
 		var returnMesh = this.unitCube(material);
 
@@ -183,7 +179,7 @@ function MeshBuilder()
 		return returnMesh;
 	};
 
-	MeshBuilder.prototype.room = function
+	room
 	(
 		roomSize, neighborOffsets, connectedToNeighbors, materialWall, materialFloor, doorwayWidthScaleFactor, wallThickness
 	)
@@ -288,7 +284,7 @@ function MeshBuilder()
 		return returnMesh;
 	};
 
-	MeshBuilder.prototype.room_Ceiling = function(material)
+	room_Ceiling(material)
 	{
 		var returnMesh = this.unitSquare
 		(
@@ -313,7 +309,7 @@ function MeshBuilder()
 		return returnMesh;
 	};
 
-	MeshBuilder.prototype.room_Floor = function(material)
+	room_Floor(material)
 	{
 		var returnMesh = this.unitSquare
 		(
@@ -332,7 +328,7 @@ function MeshBuilder()
 		return returnMesh;
 	};
 
-	MeshBuilder.prototype.room_Wall = function(material)
+	room_Wall(material)
 	{
 		var returnMesh = new Mesh
 		(
@@ -373,7 +369,7 @@ function MeshBuilder()
 		return returnMesh;
 	};
 
-	MeshBuilder.prototype.room_WallWithDoorway = function(material, doorwayWidthScaleFactor, wallThickness)
+	room_WallWithDoorway(material, doorwayWidthScaleFactor, wallThickness)
 	{
 		var doorwayHeight = 0.5;
 		var doorwayWidthHalf = doorwayHeight * doorwayWidthScaleFactor / 2;
@@ -524,14 +520,14 @@ function MeshBuilder()
 		return returnMesh;
 	};
 
-	MeshBuilder.prototype.unitCube = function(material)
+	unitCube(material)
 	{
 		var returnMesh = this.unitCube_Geometry();
 		returnMesh = new MeshTextured(returnMesh, [ material ]);
 		return returnMesh;
 	};
 
-	MeshBuilder.prototype.unitCube_Geometry = function(material)
+	unitCube_Geometry(material)
 	{
 		var returnMesh = new Mesh
 		(
@@ -566,7 +562,7 @@ function MeshBuilder()
 		return returnMesh;
 	};
 
-	MeshBuilder.prototype.unitRing = function(material, numberOfVertices)
+	unitRing(material, numberOfVertices)
 	{
 		var vertices = [];
 		var vertexIndicesForFace = [];
@@ -595,7 +591,7 @@ function MeshBuilder()
 		return returnMesh;
 	};
 
-	MeshBuilder.prototype.unitSquare = function(material)
+	unitSquare(material)
 	{
 		var returnMesh = new Mesh
 		(
@@ -636,7 +632,7 @@ function MeshBuilder()
 		return returnMesh;
 	};
 
-	MeshBuilder.prototype.clipFaceAgainstPlanes = function(faceToClip, planesToClipAgainst)
+	clipFaceAgainstPlanes(faceToClip, planesToClipAgainst)
 	{
 		var returnValue = faceToClip;
 
@@ -657,7 +653,7 @@ function MeshBuilder()
 		return faceToClip;
 	};
 
-	MeshBuilder.prototype.mergeMeshes = function(meshesToMerge, vertexGroupNames)
+	mergeMeshes(meshesToMerge, vertexGroupNames)
 	{
 		var verticesMerged = [];
 		var faceBuildersMerged = [];
@@ -750,7 +746,7 @@ function MeshBuilder()
 		return returnMesh;
 	};
 
-	MeshBuilder.prototype.splitFaceByPlaneFrontAndBack = function(faceToDivide, planeToDivideOn)
+	splitFaceByPlaneFrontAndBack(faceToDivide, planeToDivideOn)
 	{
 		var returnValues = [];
 

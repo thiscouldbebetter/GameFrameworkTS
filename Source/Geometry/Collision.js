@@ -1,16 +1,18 @@
 
-function Collision(pos, distanceToCollision, colliders)
+class Collision
 {
-	this.pos = (pos == null ? new Coords() : pos);
-	this.distanceToCollision = distanceToCollision;
-	this.collidables = [];
-	this.colliders = colliders || [];
-	this.normals = [ new Coords(), new Coords() ];
+	constructor(pos, distanceToCollision, colliders)
+	{
+		this.pos = (pos == null ? new Coords() : pos);
+		this.distanceToCollision = distanceToCollision;
+		this.collidables = [];
+		this.colliders = colliders || [];
+		this.normals = [ new Coords(), new Coords() ];
 
-	this.isActive = false;
-}
-{
-	Collision.prototype.clear = function()
+		this.isActive = false;
+	}
+
+	clear()
 	{
 		this.isActive = false;
 		this.collidables.clear();
@@ -18,7 +20,7 @@ function Collision(pos, distanceToCollision, colliders)
 		return this;
 	};
 
-	Collision.prototype.equals = function(other)
+	equals(other)
 	{
 		var returnValue =
 		(

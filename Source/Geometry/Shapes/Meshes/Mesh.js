@@ -1,21 +1,23 @@
 
-function Mesh(center, vertexOffsets, faceBuilders)
+class Mesh
 {
-	this.center = center;
-	this.vertexOffsets = vertexOffsets;
-	this.faceBuilders = faceBuilders;
-}
-{
+	constructor(center, vertexOffsets, faceBuilders)
+	{
+		this.center = center;
+		this.vertexOffsets = vertexOffsets;
+		this.faceBuilders = faceBuilders;
+	}
+
 	// static methods
 
-	Mesh.boxOfSize = function(center, size)
+	static boxOfSize(center, size)
 	{
 		var box = new Box(center, size);
 		var returnValue = Mesh.fromBox(box);
 		return returnValue;
 	};
 
-	Mesh.cubeUnit = function(center)
+	static cubeUnit(center)
 	{
 		if (center == null)
 		{
@@ -26,7 +28,7 @@ function Mesh(center, vertexOffsets, faceBuilders)
 		return returnValue;
 	};
 
-	Mesh.fromBox = function(box)
+	static fromBox(box)
 	{
 		var sizeHalf = box.sizeHalf;
 		var min = new Coords(-sizeHalf.x, -sizeHalf.y, -sizeHalf.z);
@@ -67,7 +69,7 @@ function Mesh(center, vertexOffsets, faceBuilders)
 		return returnValue;
 	};
 
-	Mesh.fromFace = function(center, faceToExtrude, thickness)
+	static fromFace(center, faceToExtrude, thickness)
 	{
 		var faceVertices = faceToExtrude.vertices;
 		var numberOfFaceVertices = faceVertices.length;
@@ -145,7 +147,7 @@ function Mesh(center, vertexOffsets, faceBuilders)
 
 	// instance methods
 
-	Mesh.prototype.box = function()
+	box()
 	{
 		if (this._box == null)
 		{
@@ -155,7 +157,7 @@ function Mesh(center, vertexOffsets, faceBuilders)
 		return this._box;
 	};
 
-	Mesh.prototype.faces = function()
+	faces()
 	{
 		var vertices = this.vertices();
 
@@ -174,7 +176,7 @@ function Mesh(center, vertexOffsets, faceBuilders)
 		return this._faces;
 	};
 
-	Mesh.prototype.vertices = function()
+	vertices()
 	{
 		if (this._vertices == null)
 		{
@@ -197,7 +199,7 @@ function Mesh(center, vertexOffsets, faceBuilders)
 
 	// transformable
 
-	Mesh.prototype.transform = function(transformToApply)
+	transform(transformToApply)
 	{
 		for (var v = 0; v < this.vertexOffsets.length; v++)
 		{
@@ -212,7 +214,7 @@ function Mesh(center, vertexOffsets, faceBuilders)
 
 	// clonable
 
-	Mesh.prototype.clone = function()
+	clone()
 	{
 		return new Mesh
 		(
@@ -222,7 +224,7 @@ function Mesh(center, vertexOffsets, faceBuilders)
 		);
 	};
 
-	Mesh.prototype.overwriteWith = function(other)
+	overwriteWith(other)
 	{
 		this.center.overwriteWith(other.center);
 		this.vertexOffsets.overwriteWith(other.vertexOffsets);
@@ -231,18 +233,20 @@ function Mesh(center, vertexOffsets, faceBuilders)
 
 	// transformable
 
-	Mesh.prototype.coordsGroupToTranslate = function()
+	coordsGroupToTranslate()
 	{
 		return [ this.center ];
 	};
 }
 
-function Mesh_FaceBuilder(vertexIndices)
+class Mesh_FaceBuilder
 {
-	this.vertexIndices = vertexIndices;
-}
-{
-	Mesh_FaceBuilder.prototype.toFace = function(meshVertices)
+	constructor(vertexIndices)
+	{
+		this.vertexIndices = vertexIndices;
+	}
+
+	toFace(meshVertices)
 	{
 		var faceVertices = [];
 		for (var vi = 0; vi < this.vertexIndices.length; vi++)
@@ -255,7 +259,7 @@ function Mesh_FaceBuilder(vertexIndices)
 		return returnValue;
 	};
 
-	Mesh_FaceBuilder.prototype.vertexIndicesShift = function(offset)
+	vertexIndicesShift(offset)
 	{
 		for (var i = 0; i < this.vertexIndices.length; i++)
 		{
@@ -267,12 +271,12 @@ function Mesh_FaceBuilder(vertexIndices)
 
 	// clonable
 
-	Mesh_FaceBuilder.prototype.clone = function()
+	clone()
 	{
 		return new Mesh_FaceBuilder(this.vertexIndices.slice());
 	};
 
-	Mesh_FaceBuilder.prototype.overwriteWith = function(other)
+	overwriteWith(other)
 	{
 		this.vertexIndices.overwriteWith(other.vertexIndices);
 	};

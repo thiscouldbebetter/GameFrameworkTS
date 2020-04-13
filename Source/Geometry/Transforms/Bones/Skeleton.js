@@ -1,19 +1,20 @@
 
-function Skeleton(name, boneRoot)
+class Skeleton
 {
-	this.name = name;
-	this.boneRoot = boneRoot;
+	constructor(name, boneRoot)
+	{
+		this.name = name;
+		this.boneRoot = boneRoot;
 
-	this.bonesAll = [];
-	this.bonesAll = TreeHelper.addNodeAndAllDescendantsToList
-	(
-		this.boneRoot, []
-	);
-	this.bonesAll.addLookupsByName();
-}
+		this.bonesAll = [];
+		this.bonesAll = TreeHelper.addNodeAndAllDescendantsToList
+		(
+			this.boneRoot, []
+		);
+		this.bonesAll.addLookupsByName();
+	}
 
-{
-	Skeleton.prototype.equals = function(other)
+	equals(other)
 	{
 		var returnValue = true;
 
@@ -33,7 +34,7 @@ function Skeleton(name, boneRoot)
 
 	// cloneable
 
-	Skeleton.prototype.clone = function()
+	clone()
 	{
 		return new Skeleton
 		(
@@ -42,7 +43,7 @@ function Skeleton(name, boneRoot)
 		);
 	};
 
-	Skeleton.prototype.overwriteWith = function(other)
+	overwriteWith(other)
 	{
 		for (var i = 0; i < this.bonesAll.length; i++)
 		{
@@ -52,7 +53,7 @@ function Skeleton(name, boneRoot)
 
 	// transformable
 
-	Skeleton.prototype.transform = function(transformToApply)
+	transform(transformToApply)
 	{
 		for (var i = 0; i < this.bonesAll.length; i++)
 		{
