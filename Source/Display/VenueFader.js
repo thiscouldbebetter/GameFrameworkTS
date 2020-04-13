@@ -1,29 +1,30 @@
 
-function VenueFader(venueToFadeTo, venueToFadeFrom, backgroundColor, millisecondsPerFade)
+class VenueFader
 {
-	this.venuesToFadeFromAndTo =
-	[
-		venueToFadeFrom, venueToFadeTo
-	];
-
-	this.millisecondsPerFade = (millisecondsPerFade == null ? 250 : millisecondsPerFade);
-
-	if (venueToFadeFrom == venueToFadeTo)
+	constructor(venueToFadeTo, venueToFadeFrom, backgroundColor, millisecondsPerFade)
 	{
-		this.venueIndexCurrent = 1;
-		this.millisecondsPerFade *= 2;
-	}
-	else
-	{
-		this.venueIndexCurrent = 0;
+		this.venuesToFadeFromAndTo =
+		[
+			venueToFadeFrom, venueToFadeTo
+		];
+
+		this.millisecondsPerFade = (millisecondsPerFade == null ? 250 : millisecondsPerFade);
+
+		if (venueToFadeFrom == venueToFadeTo)
+		{
+			this.venueIndexCurrent = 1;
+			this.millisecondsPerFade *= 2;
+		}
+		else
+		{
+			this.venueIndexCurrent = 0;
+		}
+
+		this.backgroundColor =
+			(backgroundColor == null ? Color.Instances().Black : backgroundColor);
 	}
 
-	this.backgroundColor =
-		(backgroundColor == null ? Color.Instances().Black : backgroundColor);
-}
-
-{
-	VenueFader.prototype.initialize = function(universe)
+	initialize(universe)
 	{
 		var venueToFadeTo = this.venueToFadeTo();
 		if (venueToFadeTo.initialize != null)
@@ -32,7 +33,7 @@ function VenueFader(venueToFadeTo, venueToFadeFrom, backgroundColor, millisecond
 		}
 	};
 
-	VenueFader.prototype.updateForTimerTick = function(universe)
+	updateForTimerTick(universe)
 	{
 		this.draw(universe);
 
@@ -91,17 +92,17 @@ function VenueFader(venueToFadeTo, venueToFadeFrom, backgroundColor, millisecond
 		);
 	};
 
-	VenueFader.prototype.venueToFadeTo = function()
+	venueToFadeTo()
 	{
 		return this.venuesToFadeFromAndTo[1];
 	};
 
-	VenueFader.prototype.venueCurrent = function()
+	venueCurrent()
 	{
 		return this.venuesToFadeFromAndTo[this.venueIndexCurrent];
 	};
 
-	VenueFader.prototype.draw = function(universe)
+	draw(universe)
 	{
 		var venueCurrent = this.venueCurrent();
 		if (venueCurrent != null)

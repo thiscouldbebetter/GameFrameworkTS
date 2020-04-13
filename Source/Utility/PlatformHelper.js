@@ -1,9 +1,8 @@
-function PlatformHelper()
+class PlatformHelper
 {
 	// This class is meant to encapsulate interactions with the DOM ("Domain Object Model").
-}
-{
-	PlatformHelper.prototype.platformableAdd = function(platformable)
+
+	platformableAdd(platformable)
 	{
 		var platformableAsDomElement = platformable.toDomElement(this);
 		if (platformableAsDomElement != null)
@@ -12,22 +11,22 @@ function PlatformHelper()
 		}
 	};
 
-	PlatformHelper.prototype.platformableHide = function(platformable)
+	platformableHide(platformable)
 	{
 		platformable.toDomElement(this).style.display = "none";
 	};
 
-	PlatformHelper.prototype.platformableRemove = function(platformable)
+	platformableRemove(platformable)
 	{
 		this.divMain.removeChild(platformable.toDomElement(this));
 	};
 
-	PlatformHelper.prototype.platformableShow = function(platformable)
+	platformableShow(platformable)
 	{
 		platformable.toDomElement(this).style.display = null;
 	};
 
-	PlatformHelper.prototype.initialize = function(universe)
+	initialize(universe)
 	{
 		var divMain = this.divMain;
 		if (divMain == null)

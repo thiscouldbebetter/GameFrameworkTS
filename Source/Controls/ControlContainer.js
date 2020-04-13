@@ -1,48 +1,49 @@
 
-function ControlContainer(name, pos, size, children, actions, actionToInputsMappings)
+class ControlContainer
 {
-	this.name = name;
-	this.pos = pos;
-	this.size = size;
-	this.children = children.addLookupsByName();
-	this.actions = (actions || []).addLookupsByName();
-	this._actionToInputsMappings = actionToInputsMappings || [];
-
-	for (var i = 0; i < this.children.length; i++)
+	constructor(name, pos, size, children, actions, actionToInputsMappings)
 	{
-		var child = this.children[i];
-		child.parent = this;
+		this.name = name;
+		this.pos = pos;
+		this.size = size;
+		this.children = children.addLookupsByName();
+		this.actions = (actions || []).addLookupsByName();
+		this._actionToInputsMappings = actionToInputsMappings || [];
+
+		for (var i = 0; i < this.children.length; i++)
+		{
+			var child = this.children[i];
+			child.parent = this;
+		}
+
+		this.indexOfChildWithFocus = null;
+		this.childrenContainingPos = [];
+		this.childrenContainingPosPrev = [];
+
+		// Helper variables.
+		this._childMax = new Coords();
+		this._drawPos = new Coords();
+		this._drawLoc = new Location(this._drawPos);
+		this._mouseClickPos = new Coords();
+		this._mouseMovePos = new Coords();
+		this._posToCheck = new Coords();
 	}
 
-	this.indexOfChildWithFocus = null;
-	this.childrenContainingPos = [];
-	this.childrenContainingPosPrev = [];
-
-	// Helper variables.
-	this._childMax = new Coords();
-	this._drawPos = new Coords();
-	this._drawLoc = new Location(this._drawPos);
-	this._mouseClickPos = new Coords();
-	this._mouseMovePos = new Coords();
-	this._posToCheck = new Coords();
-}
-
-{
 	// instance methods
 
-	ControlContainer.prototype.isEnabled = function()
+	isEnabled()
 	{
 		return true;
 	};
 
-	ControlContainer.prototype.style = function(universe)
+	style(universe)
 	{
 		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
 	};
 
 	// actions
 
-	ControlContainer.prototype.actionHandle = function(actionNameToHandle, universe)
+	actionHandle(actionNameToHandle, universe)
 	{
 		var wasActionHandled = false;
 
@@ -106,17 +107,17 @@ function ControlContainer(name, pos, size, children, actions, actionToInputsMapp
 		return wasActionHandled;
 	};
 
-	ControlContainer.prototype.actionToInputsMappings = function()
+	actionToInputsMappings()
 	{
 		return this._actionToInputsMappings;
 	};
 
-	ControlContainer.prototype.childWithFocus = function()
+	childWithFocus()
 	{
 		return (this.indexOfChildWithFocus == null ? null : this.children[this.indexOfChildWithFocus] );
 	};
 
-	ControlContainer.prototype.childWithFocusNextInDirection = function(direction)
+	childWithFocusNextInDirection(direction)
 	{
 		if (this.indexOfChildWithFocus == null)
 		{
@@ -177,7 +178,7 @@ function ControlContainer(name, pos, size, children, actions, actionToInputsMapp
 		return returnValue;
 	};
 
-	ControlContainer.prototype.childrenAtPosAddToList = function
+	childrenAtPosAddToList
 	(
 		posToCheck,
 		listToAddTo,
@@ -209,7 +210,7 @@ function ControlContainer(name, pos, size, children, actions, actionToInputsMapp
 		return listToAddTo;
 	};
 
-	ControlContainer.prototype.focusGain = function()
+	focusGain()
 	{
 		this.indexOfChildWithFocus = null;
 		var childWithFocus = this.childWithFocusNextInDirection(1);
@@ -219,7 +220,7 @@ function ControlContainer(name, pos, size, children, actions, actionToInputsMapp
 		}
 	};
 
-	ControlContainer.prototype.focusLose = function()
+	focusLose()
 	{
 		var childWithFocus = this.childWithFocus();
 		if (childWithFocus != null)
@@ -229,7 +230,7 @@ function ControlContainer(name, pos, size, children, actions, actionToInputsMapp
 		}
 	};
 
-	ControlContainer.prototype.mouseClick = function(mouseClickPos)
+	mouseClick(mouseClickPos)
 	{
 		mouseClickPos = this._mouseClickPos.overwriteWith
 		(
@@ -263,7 +264,7 @@ function ControlContainer(name, pos, size, children, actions, actionToInputsMapp
 		return wasClickHandled;
 	};
 
-	ControlContainer.prototype.mouseMove = function(mouseMovePos)
+	mouseMove(mouseMovePos)
 	{
 		var temp = this.childrenContainingPosPrev;
 		this.childrenContainingPosPrev = this.childrenContainingPos;
@@ -308,7 +309,7 @@ function ControlContainer(name, pos, size, children, actions, actionToInputsMapp
 		}
 	};
 
-	ControlContainer.prototype.scalePosAndSize = function(scaleFactor)
+	scalePosAndSize(scaleFactor)
 	{
 		this.pos.multiply(scaleFactor);
 		this.size.multiply(scaleFactor);
@@ -334,7 +335,7 @@ function ControlContainer(name, pos, size, children, actions, actionToInputsMapp
 		return this;
 	};
 
-	ControlContainer.prototype.shiftChildPositions = function(displacement)
+	shiftChildPositions(displacement)
 	{
 		for (var i = 0; i < this.children.length; i++)
 		{
@@ -343,14 +344,14 @@ function ControlContainer(name, pos, size, children, actions, actionToInputsMapp
 		}
 	};
 
-	ControlContainer.prototype.toVenue = function()
+	toVenue()
 	{
 		return new VenueFader(new VenueControls(this));
 	};
 
 	// drawable
 
-	ControlContainer.prototype.draw = function(universe, display, drawLoc)
+	draw(universe, display, drawLoc)
 	{
 		drawLoc = this._drawLoc.overwriteWith(drawLoc);
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);

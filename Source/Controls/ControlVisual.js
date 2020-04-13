@@ -1,27 +1,28 @@
 
-function ControlVisual(name, pos, size, visual)
+class ControlVisual
 {
-	this.name = name;
-	this.pos = pos;
-	this.size = size;
-	this.visual = visual;
+	constructor(name, pos, size, visual)
+	{
+		this.name = name;
+		this.pos = pos;
+		this.size = size;
+		this.visual = visual;
 
-	// Helper variables.
-	this._drawPos = new Coords();
-	this._locatable = new Locatable(new Location(this._drawPos));
-	this._locatableEntity = new Entity("_drawableEntity", [ this._locatable ] );
-	this._sizeHalf = new Coords();
-}
+		// Helper variables.
+		this._drawPos = new Coords();
+		this._locatable = new Locatable(new Location(this._drawPos));
+		this._locatableEntity = new Entity("_drawableEntity", [ this._locatable ] );
+		this._sizeHalf = new Coords();
+	}
 
-{
-	ControlVisual.prototype.style = function(universe)
+	style(universe)
 	{
 		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
 	};
 
 	// drawable
 
-	ControlVisual.prototype.draw = function(universe, display, drawLoc)
+	draw(universe, display, drawLoc)
 	{
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 		var style = this.style(universe);

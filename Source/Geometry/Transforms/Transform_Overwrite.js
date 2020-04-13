@@ -1,10 +1,12 @@
 
-function Transform_Overwrite(transformableToOverwriteWith)
+class Transform_Overwrite
 {
-	this.transformableToOverwriteWith = transformableToOverwriteWith;
-}
-{
-	Transform_Overwrite.prototype.transform = function(transformable)
+	constructor(transformableToOverwriteWith)
+	{
+		this.transformableToOverwriteWith = transformableToOverwriteWith;
+	}
+
+	transform(transformable)
 	{
 		return transformable.overwriteWith(this.transformableToOverwriteWith);
 	};

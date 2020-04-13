@@ -1,5 +1,8 @@
 
-function Armor(damageMultiplier)
+class Armor
 {
-	this.damageMultiplier = damageMultiplier;
+	constructor(damageMultiplier)
+	{
+		this.damageMultiplier = damageMultiplier;
+	}
 }

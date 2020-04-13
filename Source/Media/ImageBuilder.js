@@ -1,12 +1,14 @@
 
-function ImageBuilder(colors)
+class ImageBuilder
 {
-	this.colors = colors;
-}
-{
+	constructor(colors)
+	{
+		this.colors = colors;
+	}
+
 	// static methods
 
-	ImageBuilder.prototype.buildImageFromStrings = function(name, stringsForPixels)
+	buildImageFromStrings(name, stringsForPixels)
 	{
 		return this.buildImageFromStringsScaled
 		(
@@ -14,7 +16,7 @@ function ImageBuilder(colors)
 		);
 	};
 
-	ImageBuilder.prototype.buildImagesFromStringArrays = function(name, stringArraysForImagePixels)
+	buildImagesFromStringArrays(name, stringArraysForImagePixels)
 	{
 		var returnValue = [];
 
@@ -28,7 +30,7 @@ function ImageBuilder(colors)
 		return returnValue;
 	};
 
-	ImageBuilder.prototype.buildImageFromStringsScaled = function(name, scaleFactor, stringsForPixels)
+	buildImageFromStringsScaled(name, scaleFactor, stringsForPixels)
 	{
 		var sizeInPixels = new Coords
 		(
@@ -84,7 +86,7 @@ function ImageBuilder(colors)
 		return returnValue;
 	};
 
-	ImageBuilder.prototype.copyRegionFromImage = function(imageToCopyFrom, regionPos, regionSize)
+	copyRegionFromImage(imageToCopyFrom, regionPos, regionSize)
 	{
 		var canvas = document.createElement("canvas");
 		canvas.id = "region_" + regionPos.x + "_" + regionPos.y;
@@ -120,7 +122,7 @@ function ImageBuilder(colors)
 		return returnValue;
 	};
 
-	ImageBuilder.prototype.sliceImageIntoTiles = function(imageToSlice, sizeInTiles)
+	sliceImageIntoTiles(imageToSlice, sizeInTiles)
 	{
 		var returnImages = [];
 

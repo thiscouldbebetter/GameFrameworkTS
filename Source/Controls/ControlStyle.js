@@ -1,13 +1,15 @@
 
-function ControlStyle(name, colorBackground, colorFill, colorBorder, colorDisabled)
+class ControlStyle
 {
-	this.name = name;
-	this.colorBackground = colorBackground;
-	this.colorFill = colorFill;
-	this.colorBorder = colorBorder;
-	this.colorDisabled = colorDisabled;
+	constructor(name, colorBackground, colorFill, colorBorder, colorDisabled)
+	{
+		this.name = name;
+		this.colorBackground = colorBackground;
+		this.colorFill = colorFill;
+		this.colorBorder = colorBorder;
+		this.colorDisabled = colorDisabled;
+	}
 }
-
 {
 	ControlStyle.Instances = function()
 	{

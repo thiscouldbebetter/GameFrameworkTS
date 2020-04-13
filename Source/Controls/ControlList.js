@@ -1,40 +1,41 @@
 
-function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected, bindingForItemValue, bindingForIsEnabled, confirm)
+class ControlList
 {
-	this.name = name;
-	this.pos = pos;
-	this.size = size;
-	this._items = items;
-	this.bindingForItemText = bindingForItemText;
-	this.fontHeightInPixels = fontHeightInPixels;
-	this.bindingForItemSelected = bindingForItemSelected;
-	this.bindingForItemValue = bindingForItemValue;
-	this.bindingForIsEnabled = bindingForIsEnabled;
-	this.confirm = confirm;
+	constructor(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected, bindingForItemValue, bindingForIsEnabled, confirm)
+	{
+		this.name = name;
+		this.pos = pos;
+		this.size = size;
+		this._items = items;
+		this.bindingForItemText = bindingForItemText;
+		this.fontHeightInPixels = fontHeightInPixels;
+		this.bindingForItemSelected = bindingForItemSelected;
+		this.bindingForItemValue = bindingForItemValue;
+		this.bindingForIsEnabled = bindingForIsEnabled;
+		this.confirm = confirm;
 
-	this.itemSpacing = 1.2 * this.fontHeightInPixels; // hack
+		this.itemSpacing = 1.2 * this.fontHeightInPixels; // hack
 
-	this.isHighlighted = false;
+		this.isHighlighted = false;
 
-	var scrollbarWidth = this.itemSpacing;
-	this.scrollbar = new ControlScrollbar
-	(
-		new Coords(this.size.x - scrollbarWidth, 0), // pos
-		new Coords(scrollbarWidth, this.size.y), // size
-		this.fontHeightInPixels,
-		this.itemSpacing, // itemHeight
-		this._items,
-		0 // value
-	);
+		var scrollbarWidth = this.itemSpacing;
+		this.scrollbar = new ControlScrollbar
+		(
+			new Coords(this.size.x - scrollbarWidth, 0), // pos
+			new Coords(scrollbarWidth, this.size.y), // size
+			this.fontHeightInPixels,
+			this.itemSpacing, // itemHeight
+			this._items,
+			0 // value
+		);
 
-	// Helper variables.
-	this._drawPos = new Coords();
-	this._drawLoc = new Location(this._drawPos);
-	this._mouseClickPos = new Coords();
-}
+		// Helper variables.
+		this._drawPos = new Coords();
+		this._drawLoc = new Location(this._drawPos);
+		this._mouseClickPos = new Coords();
+	}
 
-{
-	ControlList.fromPosSizeAndItems = function(pos, size, items)
+	static fromPosSizeAndItems(pos, size, items)
 	{
 		var returnValue = new ControlList
 		(
@@ -52,7 +53,7 @@ function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPix
 		return returnValue;
 	};
 
-	ControlList.fromPosSizeItemsAndBindingForItemText = function(pos, size, items, bindingForItemText)
+	static fromPosSizeItemsAndBindingForItemText(pos, size, items, bindingForItemText)
 	{
 		var returnValue = new ControlList
 		(
@@ -70,7 +71,7 @@ function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPix
 		return returnValue;
 	};
 
-	ControlList.prototype.actionHandle = function(actionNameToHandle)
+	actionHandle(actionNameToHandle)
 	{
 		var wasActionHandled = false;
 		var controlActionNames = ControlActionNames.Instances();
@@ -95,22 +96,22 @@ function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPix
 		return wasActionHandled;
 	};
 
-	ControlList.prototype.focusGain = function()
+	focusGain()
 	{
 		this.isHighlighted = true;
 	};
 
-	ControlList.prototype.focusLose = function()
+	focusLose()
 	{
 		this.isHighlighted = false;
 	};
 
-	ControlList.prototype.indexOfFirstItemVisible = function()
+	indexOfFirstItemVisible()
 	{
 		return this.scrollbar.sliderPosInItems();
 	};
 
-	ControlList.prototype.indexOfItemSelected = function(valueToSet)
+	indexOfItemSelected(valueToSet)
 	{
 		var returnValue = valueToSet;
 		var items = this.items();
@@ -130,17 +131,17 @@ function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPix
 		return returnValue;
 	};
 
-	ControlList.prototype.indexOfLastItemVisible = function()
+	indexOfLastItemVisible()
 	{
 		return this.indexOfFirstItemVisible() + Math.floor(this.scrollbar.windowSizeInItems) - 1;
 	};
 
-	ControlList.prototype.isEnabled = function()
+	isEnabled()
 	{
 		return (this.bindingForIsEnabled == null ? true : this.bindingForIsEnabled.get());
 	};
 
-	ControlList.prototype.itemSelected = function(itemToSet)
+	itemSelected(itemToSet)
 	{
 		var returnValue = itemToSet;
 
@@ -172,7 +173,7 @@ function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPix
 		return returnValue;
 	};
 
-	ControlList.prototype.itemSelectedNextInDirection = function(direction)
+	itemSelectedNextInDirection(direction)
 	{
 		var items = this.items();
 		var numberOfItems = items.length;
@@ -222,12 +223,12 @@ function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPix
 		return returnValue;
 	};
 
-	ControlList.prototype.items = function()
+	items()
 	{
 		return (this._items.get == null ? this._items : this._items.get());
 	};
 
-	ControlList.prototype.mouseClick = function(clickPos)
+	mouseClick(clickPos)
 	{
 		clickPos = this._mouseClickPos.overwriteWith(clickPos);
 
@@ -275,7 +276,7 @@ function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPix
 		return true; // wasActionHandled
 	};
 
-	ControlList.prototype.scalePosAndSize = function(scaleFactor)
+	scalePosAndSize(scaleFactor)
 	{
 		this.pos.multiply(scaleFactor);
 		this.size.multiply(scaleFactor);
@@ -284,14 +285,14 @@ function ControlList(name, pos, size, items, bindingForItemText, fontHeightInPix
 		this.scrollbar.scalePosAndSize(scaleFactor);
 	};
 
-	ControlList.prototype.style = function(universe)
+	style(universe)
 	{
 		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
 	};
 
 	// drawable
 
-	ControlList.prototype.draw = function(universe, display, drawLoc)
+	draw(universe, display, drawLoc)
 	{
 		drawLoc = this._drawLoc.overwriteWith(drawLoc);
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);

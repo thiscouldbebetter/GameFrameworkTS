@@ -1,9 +1,12 @@
 
-function TalkNodeDefn(name, execute, activate)
+class TalkNodeDefn
 {
-	this.name = name;
-	this.execute = execute;
-	this.activate = activate;
+	constructor(name, execute, activate)
+	{
+		this.name = name;
+		this.execute = execute;
+		this.activate = activate;
+	}
 }
 {
 	// instances

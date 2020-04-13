@@ -1,11 +1,12 @@
 
-function Transform_Multiple(transforms)
+class Transform_Multiple
 {
-	this.transforms = transforms;
-}
+	constructor(transforms)
+	{
+		this.transforms = transforms;
+	}
 
-{
-	Transform_Multiple.prototype.transform = function(transformable)
+	transform(transformable)
 	{
 		for (var i = 0; i < this.transforms.length; i++)
 		{
@@ -15,7 +16,7 @@ function Transform_Multiple(transforms)
 		return transformable;
 	};
 
-	Transform_Multiple.prototype.transformCoords = function(coordsToTransform)
+	transformCoords(coordsToTransform)
 	{
 		for (var i = 0; i < this.transforms.length; i++)
 		{

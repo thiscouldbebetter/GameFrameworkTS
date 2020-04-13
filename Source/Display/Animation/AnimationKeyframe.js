@@ -1,13 +1,14 @@
 
-function AnimationKeyframe(frameIndex, transforms)
+class AnimationKeyframe
 {
-	this.frameIndex = frameIndex;
-	this.transforms = transforms;
-	this.transforms.addLookups( x => x.propertyName );
-}
+	constructor(frameIndex, transforms)
+	{
+		this.frameIndex = frameIndex;
+		this.transforms = transforms;
+		this.transforms.addLookups( x => x.propertyName );
+	}
 
-{
-	AnimationKeyframe.prototype.interpolateWith = function(other, fractionOfProgressTowardOther)
+	interpolateWith(other, fractionOfProgressTowardOther)
 	{
 		var transformsInterpolated = [];
 

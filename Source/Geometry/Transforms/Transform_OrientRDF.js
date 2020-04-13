@@ -1,19 +1,20 @@
 
-function Transform_OrientRDF(orientation)
+class Transform_OrientRDF
 {
-	this.orientation = orientation;
+	constructor(orientation)
+	{
+		this.orientation = orientation;
 
-	// Helper variables.
-	this._components = [ new Coords(), new Coords(), new Coords() ];
-}
+		// Helper variables.
+		this._components = [ new Coords(), new Coords(), new Coords() ];
+	}
 
-{
-	Transform_OrientRDF.prototype.transform = function(transformable)
+	transform(transformable)
 	{
 		return transformable.transform(this);
 	};
 
-	Transform_OrientRDF.prototype.transformCoords = function(coordsToTransform)
+	transformCoords(coordsToTransform)
 	{
 		var components = this._components;
 		var ori = this.orientation;

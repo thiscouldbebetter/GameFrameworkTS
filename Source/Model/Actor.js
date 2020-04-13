@@ -1,12 +1,14 @@
 
-function Actor(activity, target)
+class Actor
 {
-	this.activity = activity;
-	this.target = target;
-	this.actions = [];
-}
-{
-	Actor.prototype.updateForTimerTick = function(universe, world, place, entity)
+	constructor(activity, target)
+	{
+		this.activity = activity;
+		this.target = target;
+		this.actions = [];
+	}
+
+	updateForTimerTick(universe, world, place, entity)
 	{
 		this.activity(universe, world, place, entity, this.target);
 	}

@@ -1,10 +1,12 @@
 
-function ItemStore(itemDefnNameCurrency)
+class ItemStore
 {
-	this.itemDefnNameCurrency = itemDefnNameCurrency;
-}
-{
-	ItemStore.prototype.toControl = function(universe, size, entityCustomer, entityStore, venuePrev)
+	constructor(itemDefnNameCurrency)
+	{
+		this.itemDefnNameCurrency = itemDefnNameCurrency;
+	}
+
+	toControl(universe, size, entityCustomer, entityStore, venuePrev)
 	{
 		if (size == null)
 		{

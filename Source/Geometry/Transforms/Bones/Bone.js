@@ -1,23 +1,24 @@
 
-function Bone(name, length, orientation, children, isVisible)
+class Bone
 {
-	this.name = name;
-	this.length = length;
-	this.orientation = orientation;
-	this.children = children;
-	this.isVisible = (isVisible == null ? true : isVisible);
-
-	for (var i = 0; i < this.children.length; i++)
+	constructor(name, length, orientation, children, isVisible)
 	{
-		var child = this.children[i];
-		child.parentName = this.name;
-	}
-}
+		this.name = name;
+		this.length = length;
+		this.orientation = orientation;
+		this.children = children;
+		this.isVisible = (isVisible == null ? true : isVisible);
 
-{
+		for (var i = 0; i < this.children.length; i++)
+		{
+			var child = this.children[i];
+			child.parentName = this.name;
+		}
+	}
+
 	// instance methods
 
-	Bone.prototype.pos = function(bonesAll)
+	pos(bonesAll)
 	{
 		var returnValue = new Coords(0, 0, 0);
 
@@ -41,7 +42,7 @@ function Bone(name, length, orientation, children, isVisible)
 
 	// cloneable
 
-	Bone.prototype.clone = function()
+	clone()
 	{
 		// hack - test
 		var orientationCloned = this.orientation.clone();
@@ -58,7 +59,7 @@ function Bone(name, length, orientation, children, isVisible)
 		return returnValue;
 	};
 
-	Bone.prototype.overwriteWith = function(other)
+	overwriteWith(other)
 	{
 		this.orientation.overwriteWith(other.orientation);
 		this.children.overwriteWith(other.children);
@@ -66,7 +67,7 @@ function Bone(name, length, orientation, children, isVisible)
 
 	// transformable
 
-	Bone.prototype.transform = function(transformToApply)
+	transform(transformToApply)
 	{
 		var axes = this.orientation.axes;
 		for (var i = 0; i < axes.length; i++)

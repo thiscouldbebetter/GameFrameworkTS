@@ -1,11 +1,7 @@
 
-function PlaceBuilderDemo()
+class PlaceBuilderDemo
 {
-	// Do nothing.
-}
-
-{
-	PlaceBuilderDemo.prototype.build = function
+	build
 	(
 		namePrefix, size, cameraViewSize, placeNameToReturnTo, randomizer,
 		itemDefns, placePos, areNeighborsConnectedESWN, isGoal
@@ -102,7 +98,7 @@ function PlaceBuilderDemo()
 
 	// Constructor helpers.
 
-	PlaceBuilderDemo.prototype.entityBuildCamera = function(cameraViewSize)
+	entityBuildCamera(cameraViewSize)
 	{
 		var viewSizeHalf = cameraViewSize.clone().half();
 
@@ -144,7 +140,7 @@ function PlaceBuilderDemo()
 		return cameraEntity;
 	};
 
-	PlaceBuilderDemo.prototype.entityBuildBackground = function(camera)
+	entityBuildBackground(camera)
 	{
 		var returnValues = [];
 
@@ -199,7 +195,7 @@ function PlaceBuilderDemo()
 		return returnValues;
 	};
 
-	PlaceBuilderDemo.prototype.entitiesBuildFromDefnAndCount = function
+	entitiesBuildFromDefnAndCount
 	(
 		entityDefn, entityCount
 	)
@@ -215,7 +211,7 @@ function PlaceBuilderDemo()
 		return returnEntities;
 	};
 
-	PlaceBuilderDemo.prototype.entityBuildFromDefn = function(entityDefn)
+	entityBuildFromDefn(entityDefn)
 	{
 		var entity = entityDefn.clone();
 		if (entity.locatable != null)
@@ -238,7 +234,7 @@ function PlaceBuilderDemo()
 		return entity;
 	};
 
-	PlaceBuilderDemo.prototype.entityBuildGoal = function
+	entityBuildGoal
 	(
 		entities, entityDimension, entitySize, numberOfKeysToUnlockGoal
 	)
@@ -285,7 +281,7 @@ function PlaceBuilderDemo()
 		return goalEntity;
 	};
 
-	PlaceBuilderDemo.prototype.entityBuildKeys = function
+	entityBuildKeys
 	(
 		places, entityDimension, numberOfKeysToUnlockGoal, marginSize
 	)
@@ -350,7 +346,7 @@ function PlaceBuilderDemo()
 		}
 	};
 
-	PlaceBuilderDemo.prototype.entityBuildObstacleWalls = function
+	entityBuildObstacleWalls
 	(
 		entities, wallColor, areNeighborsConnectedESWN, placeNamePrefix, placePos
 	)
@@ -473,7 +469,7 @@ function PlaceBuilderDemo()
 		return wallThickness;
 	};
 
-	PlaceBuilderDemo.prototype.entityDefnBuildStore = function(entityDimension)
+	entityDefnBuildStore(entityDimension)
 	{
 		var storeColor = "Brown";
 		var entitySize = new Coords(1, 1, 1).multiplyScalar(entityDimension);
@@ -516,7 +512,7 @@ function PlaceBuilderDemo()
 
 	// Entity definitions.
 
-	PlaceBuilderDemo.prototype.entityDefnBuildAccessory = function(entityDimension)
+	entityDefnBuildAccessory(entityDimension)
 	{
 		var entityDimensionHalf = entityDimension / 2;
 
@@ -560,7 +556,7 @@ function PlaceBuilderDemo()
 		return itemAccessoryEntityDefn;
 	};
 
-	PlaceBuilderDemo.prototype.entityDefnBuildArmor = function(entityDimension)
+	entityDefnBuildArmor(entityDimension)
 	{
 		var itemDefnArmorName = "Armor";
 		var itemArmorColor = "Green";
@@ -611,7 +607,7 @@ function PlaceBuilderDemo()
 		return itemArmorEntityDefn;
 	};
 
-	PlaceBuilderDemo.prototype.entityDefnBuildBase = function(entityDimension)
+	entityDefnBuildBase(entityDimension)
 	{
 		var baseColor = "Brown";
 
@@ -656,7 +652,7 @@ function PlaceBuilderDemo()
 		return baseEntityDefn;
 	};
 
-	PlaceBuilderDemo.prototype.entityDefnBuildBook = function(entityDimension)
+	entityDefnBuildBook(entityDimension)
 	{
 		var entityDimensionHalf = entityDimension / 2;
 
@@ -699,7 +695,7 @@ function PlaceBuilderDemo()
 		return itemBookEntityDefn;
 	}
 
-	PlaceBuilderDemo.prototype.entityDefnBuildCoin = function(entityDimension)
+	entityDefnBuildCoin(entityDimension)
 	{
 		var entityDimensionHalf = entityDimension / 2;
 
@@ -738,7 +734,7 @@ function PlaceBuilderDemo()
 		return itemCoinEntityDefn;
 	};
 
-	PlaceBuilderDemo.prototype.entityDefnBuildContainer = function(entityDimension, entitySize)
+	entityDefnBuildContainer(entityDimension, entitySize)
 	{
 		var containerColor = "Orange";
 		var visual = new VisualGroup
@@ -779,7 +775,7 @@ function PlaceBuilderDemo()
 		return containerEntityDefn;
 	};
 
-	PlaceBuilderDemo.prototype.entityDefnBuildCrystal = function(entityDimension)
+	entityDefnBuildCrystal(entityDimension)
 	{
 		var entityDimensionHalf = entityDimension / 2;
 
@@ -839,7 +835,7 @@ function PlaceBuilderDemo()
 		return itemCrystalEntityDefn;
 	};
 
-	PlaceBuilderDemo.prototype.entityDefnBuildExit = function(entityDimension)
+	entityDefnBuildExit(entityDimension)
 	{
 		var exitColor = "Brown";
 		var entitySize = new Coords(1, 1, 1).multiplyScalar(entityDimension);
@@ -887,7 +883,7 @@ function PlaceBuilderDemo()
 		return exitEntityDefn;
 	};
 
-	PlaceBuilderDemo.prototype.entityDefnBuildEnemyGenerator = function(entityDimension)
+	entityDefnBuildEnemyGenerator(entityDimension)
 	{
 		var enemyColor = "Red";
 		var visualEyeRadius = entityDimension * .75 / 2;
@@ -977,7 +973,7 @@ function PlaceBuilderDemo()
 			)
 		]);
 
-		var enemyActivity = function (universe, world, place, actor, entityToTargetName)
+		var enemyActivity = function(universe, world, place, actor, entityToTargetName)
 		{
 			var target = place.entities[entityToTargetName];
 			if (target == null)
@@ -1095,7 +1091,7 @@ function PlaceBuilderDemo()
 		return enemyGeneratorEntityDefn;
 	};
 
-	PlaceBuilderDemo.prototype.entityDefnBuildFlower = function(entityDimension)
+	entityDefnBuildFlower(entityDimension)
 	{
 		entityDimension *= .5;
 		var itemDefnName = "Flower";
@@ -1147,7 +1143,7 @@ function PlaceBuilderDemo()
 		return entityDefn;
 	};
 
-	PlaceBuilderDemo.prototype.entityDefnBuildFriendly = function(entityDimension)
+	entityDefnBuildFriendly(entityDimension)
 	{
 		var friendlyColor = "Green";
 		var friendlyDimension = entityDimension;
@@ -1282,7 +1278,7 @@ function PlaceBuilderDemo()
 		return friendlyEntityDefn;
 	};
 
-	PlaceBuilderDemo.prototype.entityDefnBuildMaterial = function(entityDimension)
+	entityDefnBuildMaterial(entityDimension)
 	{
 		var entityDimensionHalf = entityDimension / 2;
 
@@ -1327,7 +1323,7 @@ function PlaceBuilderDemo()
 		return itemMaterialEntityDefn;
 	};
 
-	PlaceBuilderDemo.prototype.entityDefnBuildMedicine = function(entityDimension)
+	entityDefnBuildMedicine(entityDimension)
 	{
 		var entityDimensionHalf = entityDimension / 2;
 
@@ -1380,7 +1376,7 @@ function PlaceBuilderDemo()
 		return itemMedicineEntityDefn;
 	};
 
-	PlaceBuilderDemo.prototype.entityDefnBuildMushroom = function(entityDimension)
+	entityDefnBuildMushroom(entityDimension)
 	{
 		entityDimension /= 2;
 		var itemDefnName = "Mushroom";
@@ -1433,7 +1429,7 @@ function PlaceBuilderDemo()
 		return itemMushroomEntityDefn;
 	};
 
-	PlaceBuilderDemo.prototype.entityDefnBuildObstacleBar = function(entityDimension)
+	entityDefnBuildObstacleBar(entityDimension)
 	{
 		var obstacleColor = "Red";
 		var entityDimensionHalf = entityDimension / 2;
@@ -1482,7 +1478,7 @@ function PlaceBuilderDemo()
 		return obstacleBarEntityDefn;
 	};
 
-	PlaceBuilderDemo.prototype.entityDefnBuildObstacleMine = function(entityDimension)
+	entityDefnBuildObstacleMine(entityDimension)
 	{
 		var obstacleColor = "Red";
 		var obstacleMappedCellSource =
@@ -1567,7 +1563,7 @@ function PlaceBuilderDemo()
 		return obstacleMappedEntityDefn;
 	};
 
-	PlaceBuilderDemo.prototype.entityDefnBuildObstacleRing = function(entityDimension)
+	entityDefnBuildObstacleRing(entityDimension)
 	{
 		var obstacleColor = "Red";
 		var obstacleRadiusOuter = entityDimension * 3.5;
@@ -1613,7 +1609,7 @@ function PlaceBuilderDemo()
 		return obstacleRingEntityDefn;
 	};
 
-	PlaceBuilderDemo.prototype.entityDefnBuildPlayer = function(entityDimension)
+	entityDefnBuildPlayer(entityDimension)
 	{
 		var visualEyeRadius = entityDimension * .75 / 2;
 		var visualBuilder = new VisualBuilder();
@@ -2028,7 +2024,7 @@ function PlaceBuilderDemo()
 		return playerEntityDefn;
 	};
 
-	PlaceBuilderDemo.prototype.entityDefnBuildPotion = function(entityDimension)
+	entityDefnBuildPotion(entityDimension)
 	{
 		var entityDimensionHalf = entityDimension / 2;
 
@@ -2076,7 +2072,7 @@ function PlaceBuilderDemo()
 		return itemPotionEntityDefn;
 	};
 
-	PlaceBuilderDemo.prototype.entityDefnBuildToolset = function(entityDimension)
+	entityDefnBuildToolset(entityDimension)
 	{
 		var itemDefnName = "Toolset";
 
@@ -2119,7 +2115,7 @@ function PlaceBuilderDemo()
 		return itemToolsetEntityDefn;
 	};
 
-	PlaceBuilderDemo.prototype.entityDefnBuildWeapon = function(entityDimension)
+	entityDefnBuildWeapon(entityDimension)
 	{
 		entityDimension = entityDimension * 2;
 		var itemDefnName = "Weapon";
@@ -2168,7 +2164,7 @@ function PlaceBuilderDemo()
 		return itemWeaponEntityDefn;
 	};
 
-	PlaceBuilderDemo.prototype.entityDefnBuildWeaponAmmo = function(entityDimension)
+	entityDefnBuildWeaponAmmo(entityDimension)
 	{
 		var entityDimensionHalf = entityDimension / 2;
 
@@ -2223,7 +2219,7 @@ function PlaceBuilderDemo()
 		return itemAmmoEntityDefn;
 	};
 
-	PlaceBuilderDemo.prototype.entityDefnsBuild = function()
+	entityDefnsBuild()
 	{
 		var entityDimension = 10;
 		var entityDefns =

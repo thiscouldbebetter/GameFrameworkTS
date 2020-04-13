@@ -1,10 +1,12 @@
 
-function DrawableCamera()
+class DrawableCamera
 {
-	// Do nothing.
-}
-{
-	DrawableCamera.prototype.initialize = function(universe, world, place, entity)
+	function()
+	{
+		// Do nothing.
+	}
+
+	initialize(universe, world, place, entity)
 	{
 		var drawable = entity.drawable;
 		var visual = drawable.visual;
@@ -20,7 +22,7 @@ function DrawableCamera()
 
 	// cloneable
 
-	DrawableCamera.prototype.clone = function()
+	clone()
 	{
 		return this;
 	}

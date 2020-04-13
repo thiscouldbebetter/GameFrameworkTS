@@ -1,28 +1,29 @@
 
-function ControlContainerTransparent(containerInner)
+class ControlContainerTransparent
 {
-	this.containerInner = containerInner;
-}
+	constructor(containerInner)
+	{
+		this.containerInner = containerInner;
+	}
 
-{
 	// instance methods
 
-	ControlContainerTransparent.prototype.actionToInputsMappings = function()
+	actionToInputsMappings()
 	{
 		return this.containerInner.actionToInputsMappings();
 	};
 
-	ControlContainerTransparent.prototype.childWithFocus = function()
+	childWithFocus()
 	{
 		return this.containerInner.childWithFocus();
 	};
 
-	ControlContainerTransparent.prototype.childWithFocusNextInDirection = function(direction)
+	childWithFocusNextInDirection(direction)
 	{
 		return this.containerInner.childWithFocusNextInDirection(direction);
 	};
 
-	ControlContainerTransparent.prototype.childrenAtPosAddToList = function
+	childrenAtPosAddToList
 	(
 		posToCheck, listToAddTo, addFirstChildOnly
 	)
@@ -33,12 +34,12 @@ function ControlContainerTransparent(containerInner)
 		);
 	};
 
-	ControlContainerTransparent.prototype.actionHandle = function(actionNameToHandle, universe)
+	actionHandle(actionNameToHandle, universe)
 	{
 		return this.containerInner.actionHandle(actionNameToHandle, universe);
 	};
 
-	ControlContainerTransparent.prototype.mouseClick = function(mouseClickPos)
+	mouseClick(mouseClickPos)
 	{
 		var childrenContainingPos = this.containerInner.childrenAtPosAddToList
 		(
@@ -64,19 +65,19 @@ function ControlContainerTransparent(containerInner)
 		return wasClickHandled;
 	};
 
-	ControlContainerTransparent.prototype.mouseMove = function(mouseMovePos)
+	mouseMove(mouseMovePos)
 	{
 		this.containerInner.mouseMove(mouseMovePos);
 	};
 
-	ControlContainerTransparent.prototype.scalePosAndSize = function(scaleFactor)
+	scalePosAndSize(scaleFactor)
 	{
 		return this.containerInner.scalePosAndSize(scaleFactor);
 	};
 
 	// drawable
 
-	ControlContainerTransparent.prototype.draw = function(universe, display, drawLoc)
+	draw(universe, display, drawLoc)
 	{
 		drawLoc = this.containerInner._drawLoc.overwriteWith(drawLoc);
 		var drawPos = this.containerInner._drawPos.overwriteWith(drawLoc.pos).add

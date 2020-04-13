@@ -1,18 +1,18 @@
 
-function TalkNode(name, defnName, text, next, isActive)
+class TalkNode
 {
-	this.name = (name == null ? TalkNode.idNext() : name);
-	this.defnName = defnName;
-	this.text = text;
-	this.next = next;
-	this.isActive = (isActive == null ? true : isActive);
-}
-
-{
+	constructor(name, defnName, text, next, isActive)
+	{
+		this.name = (name == null ? TalkNode.idNext() : name);
+		this.defnName = defnName;
+		this.text = text;
+		this.next = next;
+		this.isActive = (isActive == null ? true : isActive);
+	}
 	// static methods
 
-	TalkNode._idNext = 0;
-	TalkNode.idNext = function()
+	static _idNext = 0;
+	static idNext()
 	{
 		var returnValue = "_" + TalkNode._idNext;
 		TalkNode._idNext++;
@@ -21,7 +21,7 @@ function TalkNode(name, defnName, text, next, isActive)
 
 	// instance methods
 
-	TalkNode.prototype.activate = function(conversationRun, scope)
+	activate(conversationRun, scope)
 	{
 		var defn = this.defn(conversationRun.defn);
 		if (defn.activate != null)
@@ -30,18 +30,18 @@ function TalkNode(name, defnName, text, next, isActive)
 		}
 	};
 
-	TalkNode.prototype.defn = function(conversationDefn)
+	defn(conversationDefn)
 	{
 		return conversationDefn.talkNodeDefns[this.defnName];
 	};
 
-	TalkNode.prototype.execute = function(universe, conversationRun, scope)
+	execute(universe, conversationRun, scope)
 	{
 		var defn = this.defn(conversationRun.defn);
 		defn.execute(universe, conversationRun, scope, this);
 	};
 
-	TalkNode.prototype.textForTranscript = function(conversationDefn)
+	textForTranscript(conversationDefn)
 	{
 		var speakerName = (this.defnName == "Option" ? "YOU" : "THEY" );
 		var returnValue = speakerName + ": " + this.text;

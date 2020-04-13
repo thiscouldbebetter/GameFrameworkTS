@@ -1,20 +1,21 @@
 
-function Orientation(forward, down)
+class Orientation
 {
-	this.forward = forward || new Coords(1, 0, 0);
-	this.forward = this.forward.clone().normalize();
-	down = down || new Coords(0, 0, 1);
-	this.right = down.clone().crossProduct(this.forward).normalize();
-	this.down = this.forward.clone().crossProduct(this.right).normalize();
+	constructor(forward, down)
+	{
+		this.forward = forward || new Coords(1, 0, 0);
+		this.forward = this.forward.clone().normalize();
+		down = down || new Coords(0, 0, 1);
+		this.right = down.clone().crossProduct(this.forward).normalize();
+		this.down = this.forward.clone().crossProduct(this.right).normalize();
 
-	this.axes = [ this.forward, this.right, this.down ];
-	this.axesRDF = [ this.right, this.down, this.forward ];
-}
+		this.axes = [ this.forward, this.right, this.down ];
+		this.axesRDF = [ this.right, this.down, this.forward ];
+	}
 
-{
 	// instances
 
-	Orientation.Instances = function()
+	static Instances()
 	{
 		if (Orientation._Instances == null)
 		{
@@ -23,42 +24,28 @@ function Orientation(forward, down)
 		return Orientation._Instances;
 	};
 
-	function Orientation_Instances()
-	{
-		this.ForwardXDownZ = new Orientation
-		(
-			new Coords(1, 0, 0), // forward
-			new Coords(0, 0, 1) // down
-		);
-
-		this.ForwardZDownY = new Orientation
-		(
-			new Coords(0, 0, 1), // forward
-			new Coords(0, 1, 0) // down
-		);
-	}
 
 	// methods
 
-	Orientation.prototype.clone = function()
+	clone()
 	{
 		return new Orientation(this.forward.clone(), this.down.clone());
 	};
 
-	Orientation.prototype.forwardSet = function(value)
+	forwardSet(value)
 	{
 		this.forward.overwriteWith(value);
 		return this.orthogonalize();
 	};
 
-	Orientation.prototype.forwardDownSet = function(forward, down)
+	forwardDownSet(forward, down)
 	{
 		this.forward.overwriteWith(forward);
 		this.down.overwriteWith(down);
 		return this.orthogonalize();
 	};
 
-	Orientation.prototype.orthogonalize = function(value)
+	orthogonalize(value)
 	{
 		this.forward.normalize();
 		this.right.overwriteWith(this.down).crossProduct(this.forward).normalize();
@@ -66,7 +53,7 @@ function Orientation(forward, down)
 		return this;
 	};
 
-	Orientation.prototype.overwriteWith = function(other)
+	overwriteWith(other)
 	{
 		this.forward.overwriteWith(other.forward);
 		this.right.overwriteWith(other.right);
@@ -74,7 +61,7 @@ function Orientation(forward, down)
 		return this;
 	};
 
-	Orientation.prototype.projectCoords = function(coords)
+	projectCoords(coords)
 	{
 		coords.overwriteWithDimensions
 		(
@@ -85,7 +72,7 @@ function Orientation(forward, down)
 		return coords;
 	};
 
-	Orientation.prototype.unprojectCoords = function(coords)
+	unprojectCoords(coords)
 	{
 		var returnValue = new Coords(0, 0, 0);
 
@@ -106,7 +93,7 @@ function Orientation(forward, down)
 		return coords.overwriteWith(returnValue);
 	};
 
-	Orientation.prototype.projectCoordsRDF = function(coords)
+	projectCoordsRDF(coords)
 	{
 		coords.overwriteWithDimensions
 		(
@@ -117,7 +104,7 @@ function Orientation(forward, down)
 		return coords;
 	};
 
-	Orientation.prototype.unprojectCoordsRDF = function(coords)
+	unprojectCoordsRDF(coords)
 	{
 		var returnValue = new Coords(0, 0, 0);
 
@@ -140,7 +127,7 @@ function Orientation(forward, down)
 
 	// heading
 
-	Orientation.prototype.headingInTurns = function()
+	headingInTurns()
 	{
 		var returnValue;
 
@@ -163,4 +150,22 @@ function Orientation(forward, down)
 
 		return returnValue;
 	};
+}
+
+class Orientation_Instances
+{
+	constructor()
+	{
+		this.ForwardXDownZ = new Orientation
+		(
+			new Coords(1, 0, 0), // forward
+			new Coords(0, 0, 1) // down
+		);
+
+		this.ForwardZDownY = new Orientation
+		(
+			new Coords(0, 0, 1), // forward
+			new Coords(0, 1, 0) // down
+		);
+	}
 }

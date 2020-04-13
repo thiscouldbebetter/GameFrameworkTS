@@ -1,24 +1,25 @@
 
-function Coords(x, y, z)
+class Coords
 {
-	this.x = x;
-	this.y = y;
-	this.z = z;
-
-	if (this.z == null)
+	constructor(x, y, z)
 	{
-		this.z = 0;
-	}
-}
+		this.x = x;
+		this.y = y;
+		this.z = z;
 
-{
+		if (this.z == null)
+		{
+			this.z = 0;
+		}
+	}
+
 	// constants
 
-	Coords.NumberOfDimensions = 3;
+	static NumberOfDimensions = 3;
 
 	// instances
 
-	Coords.Instances = function()
+	static Instances()
 	{
 		if (Coords._Instances == null)
 		{
@@ -27,24 +28,9 @@ function Coords(x, y, z)
 		return Coords._Instances;
 	};
 
-	function Coords_Instances()
-	{
-		this.HalfHalfZero = new Coords(.5, .5, 0);
-		this.Halves = new Coords(.5, .5, .5);
-		this.MinusOneZeroZero = new Coords(-1, 0, 0);
-		this.Ones = new Coords(1, 1, 1);
-		this.OneOneZero = new Coords(1, 1, 0);
-		this.OneZeroZero = new Coords(1, 0, 0);
-		this.TwoTwoZero = new Coords(2, 2, 0);
-		this.ZeroZeroOne = new Coords(0, 0, 1);
-		this.ZeroMinusOneZero = new Coords(0, -1, 0);
-		this.ZeroOneZero = new Coords(0, 1, 0);
-		this.Zeroes = new Coords(0, 0, 0);
-	}
-
 	// methods
 
-	Coords.prototype.absolute = function()
+	absolute()
 	{
 		this.x = Math.abs(this.x);
 		this.y = Math.abs(this.y);
@@ -52,7 +38,7 @@ function Coords(x, y, z)
 		return this;
 	};
 
-	Coords.prototype.add = function(other)
+	add(other)
 	{
 		this.x += other.x;
 		this.y += other.y;
@@ -60,7 +46,7 @@ function Coords(x, y, z)
 		return this;
 	};
 
-	Coords.prototype.addDimensions = function(x, y, z)
+	addDimensions(x, y, z)
 	{
 		this.x += x;
 		this.y += y;
@@ -68,7 +54,7 @@ function Coords(x, y, z)
 		return this;
 	};
 
-	Coords.prototype.ceiling = function()
+	ceiling()
 	{
 		this.x = Math.ceil(this.x);
 		this.y = Math.ceil(this.y);
@@ -76,7 +62,7 @@ function Coords(x, y, z)
 		return this;
 	};
 
-	Coords.prototype.clear = function()
+	clear()
 	{
 		this.x = 0;
 		this.y = 0;
@@ -84,18 +70,18 @@ function Coords(x, y, z)
 		return this;
 	};
 
-	Coords.prototype.clearZ = function()
+	clearZ()
 	{
 		this.z = 0;
 		return this;
 	};
 
-	Coords.prototype.clone = function()
+	clone()
 	{
 		return new Coords(this.x, this.y, this.z);
 	};
 
-	Coords.prototype.crossProduct = function(other)
+	crossProduct(other)
 	{
 		return this.overwriteWithDimensions
 		(
@@ -105,7 +91,7 @@ function Coords(x, y, z)
 		);
 	};
 
-	Coords.prototype.dimensionGet = function(dimensionIndex)
+	dimensionGet(dimensionIndex)
 	{
 		var returnValue;
 
@@ -125,7 +111,7 @@ function Coords(x, y, z)
 		return returnValue;
 	};
 
-	Coords.prototype.dimensionSet = function(dimensionIndex, valueToSet)
+	dimensionSet(dimensionIndex, valueToSet)
 	{
 		if (dimensionIndex == 0)
 		{
@@ -143,12 +129,12 @@ function Coords(x, y, z)
 		return this;
 	};
 
-	Coords.prototype.dimensions = function()
+	dimensions()
 	{
 		return [ this.x, this.y, this.z ];
 	};
 
-	Coords.prototype.directions = function()
+	directions()
 	{
 		if (this.x < 0)
 		{
@@ -180,7 +166,7 @@ function Coords(x, y, z)
 		return this;
 	};
 
-	Coords.prototype.divide = function(other)
+	divide(other)
 	{
 		this.x /= other.x;
 		this.y /= other.y;
@@ -188,7 +174,7 @@ function Coords(x, y, z)
 		return this;
 	};
 
-	Coords.prototype.divideScalar = function(scalar)
+	divideScalar(scalar)
 	{
 		this.x /= scalar;
 		this.y /= scalar;
@@ -196,27 +182,27 @@ function Coords(x, y, z)
 		return this;
 	};
 
-	Coords.prototype.dotProduct = function(other)
+	dotProduct(other)
 	{
 		return this.x * other.x + this.y * other.y + this.z * other.z;
 	};
 
-	Coords.prototype.double = function()
+	double()
 	{
 		return this.multiplyScalar(2);
 	};
 
-	Coords.prototype.equals = function(other)
+	equals(other)
 	{
 		return (this.x == other.x && this.y == other.y && this.z == other.z);
 	};
 
-	Coords.prototype.equalsXY = function(other)
+	equalsXY(other)
 	{
 		return (this.x == other.x && this.y == other.y);
 	};
 
-	Coords.prototype.floor = function()
+	floor()
 	{
 		this.x = Math.floor(this.x);
 		this.y = Math.floor(this.y);
@@ -224,12 +210,12 @@ function Coords(x, y, z)
 		return this;
 	};
 
-	Coords.prototype.half = function()
+	half()
 	{
 		return this.divideScalar(2);
 	};
 
-	Coords.prototype.invert = function()
+	invert()
 	{
 		this.x = 0 - this.x;
 		this.y = 0 - this.y;
@@ -237,12 +223,12 @@ function Coords(x, y, z)
 		return this;
 	};
 
-	Coords.prototype.isInRangeMax = function(max)
+	isInRangeMax(max)
 	{
 		return this.isInRangeMinMax(Coords.Instances().Zeroes, max);
 	};
 
-	Coords.prototype.isInRangeMinMax = function(min, max)
+	isInRangeMinMax(min, max)
 	{
 		var returnValue =
 		(
@@ -257,12 +243,12 @@ function Coords(x, y, z)
 		return returnValue;
 	};
 
-	Coords.prototype.magnitude = function()
+	magnitude()
 	{
 		return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
 	};
 
-	Coords.prototype.multiply = function(other)
+	multiply(other)
 	{
 		this.x *= other.x;
 		this.y *= other.y;
@@ -270,7 +256,7 @@ function Coords(x, y, z)
 		return this;
 	};
 
-	Coords.prototype.multiplyDimensions = function(x, y, z)
+	multiplyDimensions(x, y, z)
 	{
 		this.x *= x;
 		this.y *= y;
@@ -278,7 +264,7 @@ function Coords(x, y, z)
 		return this;
 	};
 
-	Coords.prototype.multiplyScalar = function(scalar)
+	multiplyScalar(scalar)
 	{
 		this.x *= scalar;
 		this.y *= scalar;
@@ -286,7 +272,7 @@ function Coords(x, y, z)
 		return this;
 	};
 
-	Coords.prototype.normalize = function()
+	normalize()
 	{
 		var magnitude = this.magnitude();
 		if (magnitude > 0)
@@ -296,7 +282,7 @@ function Coords(x, y, z)
 		return this;
 	};
 
-	Coords.prototype.overwriteWith = function(other)
+	overwriteWith(other)
 	{
 		this.x = other.x;
 		this.y = other.y;
@@ -304,7 +290,7 @@ function Coords(x, y, z)
 		return this;
 	};
 
-	Coords.prototype.overwriteWithDimensions = function(x, y, z)
+	overwriteWithDimensions(x, y, z)
 	{
 		this.x = x;
 		this.y = y;
@@ -312,19 +298,19 @@ function Coords(x, y, z)
 		return this;
 	};
 
-	Coords.prototype.overwriteWithXY = function(other)
+	overwriteWithXY(other)
 	{
 		this.x = other.x;
 		this.y = other.y;
 		return this;
 	};
 
-	Coords.prototype.productOfDimensions = function()
+	productOfDimensions()
 	{
 		return this.x * this.y * this.z;
 	};
 
-	Coords.prototype.randomize = function(randomizer)
+	randomize(randomizer)
 	{
 		if (randomizer == null)
 		{
@@ -336,7 +322,7 @@ function Coords(x, y, z)
 		return this;
 	};
 
-	Coords.prototype.right = function()
+	right()
 	{
 		var temp = this.y;
 		this.y = this.x;
@@ -344,7 +330,7 @@ function Coords(x, y, z)
 		return this;
 	};
 
-	Coords.prototype.round = function()
+	round()
 	{
 		this.x = Math.round(this.x);
 		this.y = Math.round(this.y);
@@ -352,7 +338,7 @@ function Coords(x, y, z)
 		return this;
 	};
 
-	Coords.prototype.subtract = function(other)
+	subtract(other)
 	{
 		this.x -= other.x;
 		this.y -= other.y;
@@ -360,7 +346,7 @@ function Coords(x, y, z)
 		return this;
 	};
 
-	Coords.prototype.subtractWrappedToRangeMax = function(other, max)
+	subtractWrappedToRangeMax(other, max)
 	{
 		this.x = this.x.subtractWrappedToRangeMax(other.x, max);
 		this.y = this.y.subtractWrappedToRangeMax(other.y, max);
@@ -368,12 +354,12 @@ function Coords(x, y, z)
 		return this;
 	};
 
-	Coords.prototype.sumOfDimensions = function()
+	sumOfDimensions()
 	{
 		return this.x + this.y + this.z;
 	};
 
-	Coords.prototype.trimToMagnitudeMax = function(magnitudeMax)
+	trimToMagnitudeMax(magnitudeMax)
 	{
 		var magnitude = this.magnitude();
 		if (magnitude > magnitudeMax)
@@ -383,7 +369,7 @@ function Coords(x, y, z)
 		return this;
 	};
 
-	Coords.prototype.trimToRangeMax = function(max)
+	trimToRangeMax(max)
 	{
 		if (this.x < 0)
 		{
@@ -415,7 +401,7 @@ function Coords(x, y, z)
 		return this;
 	};
 
-	Coords.prototype.trimToRangeMinMax = function(min, max)
+	trimToRangeMinMax(min, max)
 	{
 		if (this.x < min.x)
 		{
@@ -447,7 +433,7 @@ function Coords(x, y, z)
 		return this;
 	};
 
-	Coords.prototype.wrapToRangeMax = function(max)
+	wrapToRangeMax(max)
 	{
 		while (this.x < 0)
 		{
@@ -482,19 +468,19 @@ function Coords(x, y, z)
 		return this;
 	};
 
-	Coords.prototype.xSet = function(value)
+	xSet(value)
 	{
 		this.x = value;
 		return this;
 	};
 
-	Coords.prototype.ySet = function(value)
+	ySet(value)
 	{
 		this.y = value;
 		return this;
 	};
 
-	Coords.prototype.zSet = function(value)
+	zSet(value)
 	{
 		this.z = value;
 		return this;
@@ -502,13 +488,31 @@ function Coords(x, y, z)
 
 	// string
 
-	Coords.prototype.toString = function()
+	toString()
 	{
 		return this.x + "x" + this.y + "x" + this.z;
 	};
 
-	Coords.prototype.toStringXY = function()
+	toStringXY()
 	{
 		return this.x + "x" + this.y;
 	};
+}
+
+class Coords_Instances
+{
+	constructor()
+	{
+		this.HalfHalfZero = new Coords(.5, .5, 0);
+		this.Halves = new Coords(.5, .5, .5);
+		this.MinusOneZeroZero = new Coords(-1, 0, 0);
+		this.Ones = new Coords(1, 1, 1);
+		this.OneOneZero = new Coords(1, 1, 0);
+		this.OneZeroZero = new Coords(1, 0, 0);
+		this.TwoTwoZero = new Coords(2, 2, 0);
+		this.ZeroZeroOne = new Coords(0, 0, 1);
+		this.ZeroMinusOneZero = new Coords(0, -1, 0);
+		this.ZeroOneZero = new Coords(0, 1, 0);
+		this.Zeroes = new Coords(0, 0, 0);
+	}
 }

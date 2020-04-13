@@ -1,19 +1,21 @@
 
-function ItemHolder(itemEntities)
+class ItemHolder
 {
-	this.itemEntities = [];
-
-	itemEntities = itemEntities || [];
-	for (var i = 0; i < itemEntities.length; i++)
+	constructor(itemEntities)
 	{
-		var itemEntity = itemEntities[i];
-		this.itemEntityAdd(itemEntity);
+		this.itemEntities = [];
+
+		itemEntities = itemEntities || [];
+		for (var i = 0; i < itemEntities.length; i++)
+		{
+			var itemEntity = itemEntities[i];
+			this.itemEntityAdd(itemEntity);
+		}
 	}
-}
-{
+
 	// Static methods.
 
-	ItemHolder.fromItems = function(items)
+	static fromItems(items)
 	{
 		var itemEntities = items.map(x => x.toEntity());
 		return new ItemHolder(itemEntities);
@@ -21,12 +23,12 @@ function ItemHolder(itemEntities)
 
 	// Instance methods.
 
-	ItemHolder.prototype.hasItem = function(itemToCheck)
+	hasItem(itemToCheck)
 	{
 		return this.hasItemWithDefnNameAndQuantity(itemToCheck.defnName, itemToCheck.quantity);
 	};
 
-	ItemHolder.prototype.hasItemWithDefnNameAndQuantity = function(defnName, quantityToCheck)
+	hasItemWithDefnNameAndQuantity(defnName, quantityToCheck)
 	{
 		var itemEntityExisting = this.itemEntities[defnName];
 		var itemExistingQuantity = (itemEntityExisting == null ? 0 : itemEntityExisting.item.quantity);
@@ -34,14 +36,14 @@ function ItemHolder(itemEntities)
 		return returnValue;
 	};
 
-	ItemHolder.prototype.itemQuantityByDefnName = function(itemDefnName)
+	itemQuantityByDefnName(itemDefnName)
 	{
 		var itemEntity = this.itemEntities[itemDefnName];
 		var returnValue = (itemEntity == null ? 0 : itemEntity.item.quantity);
 		return returnValue;
 	};
 
-	ItemHolder.prototype.itemEntitiesWithDefnNameJoin = function(defnName)
+	itemEntitiesWithDefnNameJoin(defnName)
 	{
 		var itemEntitiesMatching = this.itemEntities.filter(x => x.item.defnName == defnName);
 		var itemEntityJoined = itemEntitiesMatching[0];
@@ -56,7 +58,7 @@ function ItemHolder(itemEntities)
 		return itemEntityJoined;
 	};
 
-	ItemHolder.prototype.itemEntityAdd = function(itemEntityToAdd)
+	itemEntityAdd(itemEntityToAdd)
 	{
 		var itemToAdd = itemEntityToAdd.item;
 		var itemDefnName = itemToAdd.defnName;
@@ -72,7 +74,7 @@ function ItemHolder(itemEntities)
 		}
 	};
 
-	ItemHolder.prototype.itemEntityRemove = function(itemEntityToRemove)
+	itemEntityRemove(itemEntityToRemove)
 	{
 		var doesExist = this.itemEntities.contains(itemEntityToRemove);
 		if (doesExist)
@@ -87,7 +89,7 @@ function ItemHolder(itemEntities)
 		}
 	};
 
-	ItemHolder.prototype.itemRemove = function(itemToRemove)
+	itemRemove(itemToRemove)
 	{
 		var itemDefnName = itemToRemove.defnName;
 		var itemEntityExisting = this.itemEntities[itemDefnName];
@@ -98,12 +100,12 @@ function ItemHolder(itemEntities)
 		}
 	};
 
-	ItemHolder.prototype.itemSubtract = function(itemToSubtract)
+	itemSubtract(itemToSubtract)
 	{
 		this.itemSubtractDefnNameAndQuantity(itemToSubtract.defnName, itemToSubtract.quantity);
 	};
 
-	ItemHolder.prototype.itemSubtractDefnNameAndQuantity = function(itemDefnName, quantityToSubtract)
+	itemSubtractDefnNameAndQuantity(itemDefnName, quantityToSubtract)
 	{
 		var itemEntityExisting = this.itemEntities[itemDefnName];
 		if (itemEntityExisting != null)
@@ -118,12 +120,12 @@ function ItemHolder(itemEntities)
 		}
 	};
 
-	ItemHolder.prototype.itemEntitiesAllTransferTo = function(other)
+	itemEntitiesAllTransferTo(other)
 	{
 		this.itemEntitiesTransferTo(this.itemEntities, other);
 	};
 
-	ItemHolder.prototype.itemEntitiesTransferTo = function(itemEntitiesToTransfer, other)
+	itemEntitiesTransferTo(itemEntitiesToTransfer, other)
 	{
 		for (var i = 0; i < itemEntitiesToTransfer.length; i++)
 		{
@@ -132,7 +134,7 @@ function ItemHolder(itemEntities)
 		}
 	};
 
-	ItemHolder.prototype.itemEntitySplit = function(itemEntityToSplit, quantityToSplit)
+	itemEntitySplit(itemEntityToSplit, quantityToSplit)
 	{
 		var itemEntitySplitted = null;
 
@@ -164,19 +166,19 @@ function ItemHolder(itemEntities)
 		return itemEntitySplitted;
 	};
 
-	ItemHolder.prototype.itemEntityTransferTo = function(itemEntity, other)
+	itemEntityTransferTo(itemEntity, other)
 	{
 		other.itemEntityAdd(itemEntity);
 		this.itemRemove(itemEntity.item);
 	};
 
-	ItemHolder.prototype.itemEntityTransferSingleTo = function(itemEntity, other)
+	itemEntityTransferSingleTo(itemEntity, other)
 	{
 		var itemEntitySingle = this.itemEntitySplit(itemEntity, 1);
 		this.itemEntityTransferTo(itemEntitySingle, other);
 	};
 
-	ItemHolder.prototype.tradeValueOfAllItems = function(world)
+	tradeValueOfAllItems(world)
 	{
 		var items = this.itemEntities.map(x => x.item);
 
@@ -191,7 +193,7 @@ function ItemHolder(itemEntities)
 
 	// controls
 
-	ItemHolder.prototype.toControl = function(universe, size, entityItemHolder, venuePrev, includeTitle)
+	toControl(universe, size, entityItemHolder, venuePrev, includeTitle)
 	{
 		this.statusMessage = "Use, drop, and sort items.";
 
@@ -676,7 +678,7 @@ function ItemHolder(itemEntities)
 
 	// cloneable
 
-	ItemHolder.prototype.clone = function()
+	clone()
 	{
 		return new ItemHolder(this.itemEntities.clone());
 	};

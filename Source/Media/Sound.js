@@ -1,15 +1,16 @@
 
-function Sound(name, sourcePath)
+class Sound
 {
-	this.name = name;
-	this.sourcePath = sourcePath;
+	constructor(name, sourcePath)
+	{
+		this.name = name;
+		this.sourcePath = sourcePath;
 
-	this.offsetInSeconds = 0;
-	this.isPlaying = false;
-}
+		this.offsetInSeconds = 0;
+		this.isPlaying = false;
+	}
 
-{
-	Sound.prototype.domElementBuild = function(universe, volume)
+	domElementBuild(universe, volume)
 	{
 		this.domElement = document.createElement("audio");
 		this.domElement.sound = this;
@@ -29,14 +30,14 @@ function Sound(name, sourcePath)
 		return this.domElement;
 	};
 
-	Sound.prototype.pause = function(universe)
+	pause(universe)
 	{
 		var offsetInSeconds = this.domElement.currentTime;
 		this.stop(universe);
 		this.offsetInSeconds = offsetInSeconds;
 	};
 
-	Sound.prototype.play = function(universe, volume)
+	play(universe, volume)
 	{
 		if (this.isPlaying == false)
 		{
@@ -49,12 +50,12 @@ function Sound(name, sourcePath)
 		}
 	};
 
-	Sound.prototype.reset = function()
+	reset()
 	{
 		this.offsetInSeconds = 0;
 	};
 
-	Sound.prototype.stop = function(universe, event)
+	stop(universe, event)
 	{
 		if (this.isPlaying)
 		{
@@ -66,7 +67,7 @@ function Sound(name, sourcePath)
 		}
 	};
 
-	Sound.prototype.stopOrRepeat = function(universe, event)
+	stopOrRepeat(universe, event)
 	{
 		if (this.isRepeating == false)
 		{
@@ -76,7 +77,7 @@ function Sound(name, sourcePath)
 
 	// platformable
 
-	Sound.prototype.toDomElement = function()
+	toDomElement()
 	{
 		return this.domElement;
 	};

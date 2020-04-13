@@ -1,6 +1,9 @@
 
-function FaceTextured(geometry, material)
+class FaceTextured
 {
-	this.geometry = geometry;
-	this.material = material;
+	constructor(geometry, material)
+	{
+		this.geometry = geometry;
+		this.material = material;
+	}
 }

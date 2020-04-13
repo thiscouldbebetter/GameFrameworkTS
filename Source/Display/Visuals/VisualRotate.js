@@ -1,12 +1,13 @@
 
-function VisualRotate(rotationInTurns, child)
+class VisualRotate
 {
-	this.rotationInTurns = rotationInTurns;
-	this.child = child;
-}
+	constructor(rotationInTurns, child)
+	{
+		this.rotationInTurns = rotationInTurns;
+		this.child = child;
+	}
 
-{
-	VisualRotate.prototype.draw = function(universe, world, display, entity)
+	draw(universe, world, display, entity)
 	{
 		var graphics = display.graphics;
 		graphics.save();

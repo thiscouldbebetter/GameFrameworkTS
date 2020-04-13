@@ -1,17 +1,18 @@
 
-function PlaceDefn(name, actions, actionToInputsMappings)
+class PlaceDefn
 {
-	this.name = name;
-	this.actions = actions.addLookupsByName();
-	this.actionToInputsMappingsDefault = actionToInputsMappings;
-	this.actionToInputsMappings = this.actionToInputsMappingsDefault.clone();
-	this.actionToInputsMappingsEdited = this.actionToInputsMappings.clone();
+	constructor(name, actions, actionToInputsMappings)
+	{
+		this.name = name;
+		this.actions = actions.addLookupsByName();
+		this.actionToInputsMappingsDefault = actionToInputsMappings;
+		this.actionToInputsMappings = this.actionToInputsMappingsDefault.clone();
+		this.actionToInputsMappingsEdited = this.actionToInputsMappings.clone();
 
-	this.actionToInputsMappings.addLookupsMultiple(x => x.inputNames);
-}
+		this.actionToInputsMappings.addLookupsMultiple(x => x.inputNames);
+	}
 
-{
-	PlaceDefn.prototype.actionToInputsMappingsEdit = function()
+	actionToInputsMappingsEdit()
 	{
 		this.actionToInputsMappingsEdited.overwriteWith
 		(
@@ -21,7 +22,7 @@ function PlaceDefn(name, actions, actionToInputsMappings)
 		this.actionToInputsMappingSelected = null;
 	};
 
-	PlaceDefn.prototype.actionToInputsMappingsRestoreDefaults = function()
+	actionToInputsMappingsRestoreDefaults()
 	{
 		this.actionToInputsMappingsEdited.overwriteWith
 		(
@@ -29,7 +30,7 @@ function PlaceDefn(name, actions, actionToInputsMappings)
 		);
 	};
 
-	PlaceDefn.prototype.actionToInputsMappingsSave = function()
+	actionToInputsMappingsSave()
 	{
 		this.actionToInputsMappings =
 			this.actionToInputsMappingsEdited.clone().addLookupsMultiple

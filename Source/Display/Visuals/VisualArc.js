@@ -1,19 +1,21 @@
 
-function VisualArc(radiusOuter, radiusInner, directionMin, angleSpannedInTurns, colorFill, colorBorder)
+class VisualArc
 {
-	this.radiusOuter = radiusOuter;
-	this.radiusInner = radiusInner;
-	this.directionMin = directionMin;
-	this.angleSpannedInTurns = angleSpannedInTurns;
-	this.colorFill = colorFill;
-	this.colorBorder = colorBorder;
+	constructor(radiusOuter, radiusInner, directionMin, angleSpannedInTurns, colorFill, colorBorder)
+	{
+		this.radiusOuter = radiusOuter;
+		this.radiusInner = radiusInner;
+		this.directionMin = directionMin;
+		this.angleSpannedInTurns = angleSpannedInTurns;
+		this.colorFill = colorFill;
+		this.colorBorder = colorBorder;
 
-	// helper variables
-	this._drawPos = new Coords();
-	this._polar = new Polar();
-}
-{
-	VisualArc.prototype.draw = function(universe, world, display, entity)
+		// helper variables
+		this._drawPos = new Coords();
+		this._polar = new Polar();
+	}
+
+	draw(universe, world, display, entity)
 	{
 		var drawableLoc = entity.locatable.loc;
 		var drawPos = this._drawPos.overwriteWith

@@ -1,22 +1,23 @@
 
-function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
+class VenueFileUpload
 {
-	this.venueNextIfFileSpecified = venueNextIfFileSpecified;
-	this.venueNextIfCancelled = venueNextIfCancelled;
+	constructor(venueNextIfFileSpecified, venueNextIfCancelled)
+	{
+		this.venueNextIfFileSpecified = venueNextIfFileSpecified;
+		this.venueNextIfCancelled = venueNextIfCancelled;
 
-	var inputNames = Input.Names();
-	this.actionToInputsMappings =
-	[
-		new ActionToInputsMapping(ControlActionNames.ControlCancel, [ inputNames.Escape, inputNames.GamepadButton0 + "0"], true),
-	];
+		var inputNames = Input.Names();
+		this.actionToInputsMappings =
+		[
+			new ActionToInputsMapping(ControlActionNames.ControlCancel, [ inputNames.Escape, inputNames.GamepadButton0 + "0"], true),
+		];
 
-	this.actionToInputsMappings.addLookupsMultiple(x => x.inputNames);
-}
+		this.actionToInputsMappings.addLookupsMultiple(x => x.inputNames);
+	}
 
-{
 	// venue
 
-	VenueFileUpload.prototype.finalize = function(universe)
+	finalize(universe)
 	{
 		var platformHelper = universe.platformHelper;
 		platformHelper.platformableRemove(this);
@@ -25,7 +26,7 @@ function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 		platformHelper.platformableShow(display);
 	};
 
-	VenueFileUpload.prototype.initialize = function(universe)
+	initialize(universe)
 	{
 		var display = universe.display;
 
@@ -69,7 +70,7 @@ function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 		inputFileUpload.focus();
 	};
 
-	VenueFileUpload.prototype.updateForTimerTick = function(universe)
+	updateForTimerTick(universe)
 	{
 		var inputHelper = universe.inputHelper;
 		var inputsPressed = inputHelper.inputsPressed;
@@ -94,12 +95,12 @@ function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 
 	// events
 
-	VenueFileUpload.prototype.buttonCancel_Clicked = function(universe, event)
+	buttonCancel_Clicked(universe, event)
 	{
 		universe.venueNext = this.venueNextIfCancelled;
 	};
 
-	VenueFileUpload.prototype.buttonLoad_Clicked = function(universe, event)
+	buttonLoad_Clicked(universe, event)
 	{
 		var inputFileUpload = this.domElement.getElementsByTagName("input")[0];
 		var fileToLoad = inputFileUpload.files[0];
@@ -111,7 +112,7 @@ function VenueFileUpload(venueNextIfFileSpecified, venueNextIfCancelled)
 
 	// platformable
 
-	VenueFileUpload.prototype.toDomElement = function()
+	toDomElement()
 	{
 		return this.domElement;
 	};

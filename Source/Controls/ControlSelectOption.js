@@ -1,6 +1,9 @@
 
-function ControlSelectOption(value, text)
+class ControlSelectOption
 {
-	this.value = value;
-	this.text = text;
+	constructor(value, text)
+	{
+		this.value = value;
+		this.text = text;
+	}
 }

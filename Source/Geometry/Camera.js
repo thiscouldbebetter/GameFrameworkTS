@@ -1,23 +1,24 @@
 
-function Camera(viewSize, focalLength, loc)
+class Camera
 {
-	this.viewSize = viewSize;
-	this.focalLength = focalLength;
-	this.loc = loc;
+	constructor(viewSize, focalLength, loc)
+	{
+		this.viewSize = viewSize;
+		this.focalLength = focalLength;
+		this.loc = loc;
 
-	this.viewSizeHalf = this.viewSize.clone().clearZ().half();
+		this.viewSizeHalf = this.viewSize.clone().clearZ().half();
 
-	var viewColliderSize = this.viewSize.clone();
-	viewColliderSize.z = Number.POSITIVE_INFINITY;
-	this.viewCollider = new Box
-	(
-		this.loc.pos,
-		viewColliderSize
-	);
-}
+		var viewColliderSize = this.viewSize.clone();
+		viewColliderSize.z = Number.POSITIVE_INFINITY;
+		this.viewCollider = new Box
+		(
+			this.loc.pos,
+			viewColliderSize
+		);
+	}
 
-{
-	Camera.prototype.clipPlanes = function()
+	clipPlanes()
 	{
 		if (this._clipPlanes == null)
 		{
@@ -115,7 +116,7 @@ function Camera(viewSize, focalLength, loc)
 		return this._clipPlanes;
 	};
 
-	Camera.prototype.coordsTransformViewToWorld = function(viewCoords, ignoreZ)
+	coordsTransformViewToWorld(viewCoords, ignoreZ)
 	{
 		var cameraLoc = this.loc;
 
@@ -139,7 +140,7 @@ function Camera(viewSize, focalLength, loc)
 		return worldCoords;
 	};
 
-	Camera.prototype.coordsTransformWorldToView = function(worldCoords)
+	coordsTransformWorldToView(worldCoords)
 	{
 		var cameraPos = this.loc.pos;
 		var cameraOrientation = this.loc.orientation;

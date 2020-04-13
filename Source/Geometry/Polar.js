@@ -1,26 +1,27 @@
 
-function Polar(azimuthInTurns, radius, elevationInTurns)
+class Polar
 {
-	this.azimuthInTurns = azimuthInTurns;
-	this.radius = radius;
-	this.elevationInTurns = (elevationInTurns == null ? 0 : elevationInTurns);
-}
+	constructor(azimuthInTurns, radius, elevationInTurns)
+	{
+		this.azimuthInTurns = azimuthInTurns;
+		this.radius = radius;
+		this.elevationInTurns = (elevationInTurns == null ? 0 : elevationInTurns);
+	}
 
-{
 	// constants
 
-	Polar.DegreesPerTurn = 360;
-	Polar.RadiansPerTurn = Math.PI * 2;
+	static DegreesPerTurn = 360;
+	static RadiansPerTurn = Math.PI * 2;
 
 	// instance methods
 
-	Polar.prototype.addToAzimuthInTurns = function(turnsToAdd)
+	addToAzimuthInTurns(turnsToAdd)
 	{
 		this.azimuthInTurns += turnsToAdd;
 		return this;
 	};
 
-	Polar.prototype.fromCoords = function(coordsToConvert)
+	fromCoords(coordsToConvert)
 	{
 		this.azimuthInTurns =
 			Math.atan2(coordsToConvert.y, coordsToConvert.x)
@@ -40,7 +41,7 @@ function Polar(azimuthInTurns, radius, elevationInTurns)
 		return this;
 	};
 
-	Polar.prototype.overwriteWith = function(other)
+	overwriteWith(other)
 	{
 		this.azimuthInTurns = other.azimuthInTurns;
 		this.radius = other.radius;
@@ -48,7 +49,7 @@ function Polar(azimuthInTurns, radius, elevationInTurns)
 		return this;
 	};
 
-	Polar.prototype.overwriteWithAzimuthRadiusElevation = function
+	overwriteWithAzimuthRadiusElevation
 	(
 		azimuthInTurns, radius, elevationInTurns
 	)
@@ -62,7 +63,7 @@ function Polar(azimuthInTurns, radius, elevationInTurns)
 		return this;
 	};
 
-	Polar.prototype.random = function(randomizer)
+	random(randomizer)
 	{
 		if (randomizer == null)
 		{
@@ -74,7 +75,7 @@ function Polar(azimuthInTurns, radius, elevationInTurns)
 		return this;
 	};
 
-	Polar.prototype.toCoords = function(coords)
+	toCoords(coords)
 	{
 		var azimuthInRadians = this.azimuthInTurns * Polar.RadiansPerTurn;
 		var elevationInRadians = this.elevationInTurns * Polar.RadiansPerTurn;
@@ -91,7 +92,7 @@ function Polar(azimuthInTurns, radius, elevationInTurns)
 		return coords;
 	};
 
-	Polar.prototype.wrap = function()
+	wrap()
 	{
 		while (this.azimuthInTurns < 0)
 		{

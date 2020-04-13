@@ -1,22 +1,23 @@
 
 // classes
 
-function ConversationDefn(name, imageName, contentTextStringName, talkNodeDefns, talkNodes)
+class ConversationDefn
 {
-	this.name = name;
-	this.imageName = imageName;
-	this.contentTextStringName = contentTextStringName;
-	this.talkNodeDefns = talkNodeDefns.addLookupsByName();
-	this.talkNodes = talkNodes.addLookupsByName();
-}
+	constructor(name, imageName, contentTextStringName, talkNodeDefns, talkNodes)
+	{
+		this.name = name;
+		this.imageName = imageName;
+		this.contentTextStringName = contentTextStringName;
+		this.talkNodeDefns = talkNodeDefns.addLookupsByName();
+		this.talkNodes = talkNodes.addLookupsByName();
+	}
 
-{
-	ConversationDefn.prototype.talkNodeByName = function(nameOfTalkNodeToGet)
+	talkNodeByName(nameOfTalkNodeToGet)
 	{
 		return this.talkNodes[nameOfTalkNodeToGet];
 	};
 
-	ConversationDefn.prototype.talkNodesByNames = function(namesOfTalkNodesToGet)
+	talkNodesByNames(namesOfTalkNodesToGet)
 	{
 		var returnNodes = [];
 
@@ -30,7 +31,7 @@ function ConversationDefn(name, imageName, contentTextStringName, talkNodeDefns,
 		return returnNodes;
 	};
 
-	ConversationDefn.prototype.expandFromContentTextString = function(contentTextString)
+	expandFromContentTextString(contentTextString)
 	{
 		var contentText = contentTextString.value;
 		var contentTextAsLines = contentText.split("\n");
@@ -103,7 +104,7 @@ function ConversationDefn(name, imageName, contentTextStringName, talkNodeDefns,
 
 	// serialization
 
-	ConversationDefn.deserialize = function(conversationDefnAsJSON)
+	static deserialize(conversationDefnAsJSON)
 	{
 		var conversationDefn = JSON.parse(conversationDefnAsJSON);
 
@@ -147,7 +148,7 @@ function ConversationDefn(name, imageName, contentTextStringName, talkNodeDefns,
 		return conversationDefn;
 	};
 
-	ConversationDefn.prototype.serialize = function()
+	serialize()
 	{
 		var talkNodeDefnsToRestore = this.talkNodeDefns;
 		delete this.talkNodeDefns;

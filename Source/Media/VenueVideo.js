@@ -1,27 +1,28 @@
 
-function VenueVideo(videoName, venueNext)
+class VenueVideo
 {
-	this.videoName = videoName;
-	this.venueNext = venueNext;
+	constructor(videoName, venueNext)
+	{
+		this.videoName = videoName;
+		this.venueNext = venueNext;
 
-	this.hasVideoBeenStarted = false;
+		this.hasVideoBeenStarted = false;
 
-	var inputNames = Input.Names();
-	this.actionToInputsMappings =
-	[
-		new ActionToInputsMapping("VideoSkip", [ inputNames.Escape, inputNames.GamepadButton0 + "0"], true),
-	];
+		var inputNames = Input.Names();
+		this.actionToInputsMappings =
+		[
+			new ActionToInputsMapping("VideoSkip", [ inputNames.Escape, inputNames.GamepadButton0 + "0"], true),
+		];
 
-	this.actionToInputsMappings.addLookupsMultiple(x => x.inputNames);
-}
+		this.actionToInputsMappings.addLookupsMultiple(x => x.inputNames);
+	}
 
-{
-	VenueVideo.prototype.draw = function()
+	draw()
 	{
 		// do nothing
 	};
 
-	VenueVideo.prototype.updateForTimerTick = function(universe)
+	updateForTimerTick(universe)
 	{
 		if (this.video == null)
 		{

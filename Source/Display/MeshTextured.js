@@ -1,14 +1,15 @@
 
-function MeshTextured(geometry, materials, faceTextures, vertexGroups)
+class MeshTextured
 {
-	this.geometry = geometry;
-	this.materials = materials.addLookupsByName();
-	this.faceTextures = faceTextures;
-	this.vertexGroups = vertexGroups;
-}
+	constructor(geometry, materials, faceTextures, vertexGroups)
+	{
+		this.geometry = geometry;
+		this.materials = materials.addLookupsByName();
+		this.faceTextures = faceTextures;
+		this.vertexGroups = vertexGroups;
+	}
 
-{
-	MeshTextured.prototype.faces = function()
+	faces()
 	{
 		if (this._faces == null)
 		{
@@ -28,7 +29,7 @@ function MeshTextured(geometry, materials, faceTextures, vertexGroups)
 		return this._faces;
 	};
 
-	MeshTextured.prototype.faceTexturesBuild = function()
+	faceTexturesBuild()
 	{
 		var materialName = this.materials[0].name;
 
@@ -55,7 +56,7 @@ function MeshTextured(geometry, materials, faceTextures, vertexGroups)
 		return this;
 	};
 
-	MeshTextured.prototype.faceIndicesByMaterial = function()
+	faceIndicesByMaterial()
 	{
 		if (this._faceIndicesByMaterial == null)
 		{
@@ -81,14 +82,14 @@ function MeshTextured(geometry, materials, faceTextures, vertexGroups)
 		return this._faceIndicesByMaterial;
 	};
 
-	MeshTextured.prototype.transform = function(transformToApply)
+	transform(transformToApply)
 	{
 		this.geometry.transform(transformToApply);
 
 		return this;
 	};
 
-	MeshTextured.prototype.transformFaceTextures = function(transformToApply)
+	transformFaceTextures(transformToApply)
 	{
 		for (var i = 0; i < this.faceTextures.length; i++)
 		{
@@ -101,7 +102,7 @@ function MeshTextured(geometry, materials, faceTextures, vertexGroups)
 
 	// cloneable
 
-	MeshTextured.prototype.clone = function()
+	clone()
 	{
 		return new MeshTextured
 		(
@@ -112,7 +113,7 @@ function MeshTextured(geometry, materials, faceTextures, vertexGroups)
 		);
 	};
 
-	MeshTextured.prototype.overwriteWith = function(other)
+	overwriteWith(other)
 	{
 		this.geometry.overwriteWith(other.geometry);
 		// todo
@@ -120,13 +121,15 @@ function MeshTextured(geometry, materials, faceTextures, vertexGroups)
 	};
 }
 
-function MeshTexturedFaceTexture(materialName, textureUVs)
+class MeshTexturedFaceTexture
 {
-	this.materialName = materialName;
-	this.textureUVs = textureUVs;
-}
-{
-	MeshTexturedFaceTexture.prototype.clone = function()
+	constructor(materialName, textureUVs)
+	{
+		this.materialName = materialName;
+		this.textureUVs = textureUVs;
+	}
+
+	clone()
 	{
 		return new MeshTexturedFaceTexture
 		(
@@ -134,7 +137,7 @@ function MeshTexturedFaceTexture(materialName, textureUVs)
 		);
 	};
 
-	MeshTexturedFaceTexture.prototype.transform = function(transformToApply)
+	transform(transformToApply)
 	{
 		for (var i = 0; i < this.textureUVs.length; i++)
 		{

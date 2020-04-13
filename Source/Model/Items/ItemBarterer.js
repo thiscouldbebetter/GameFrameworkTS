@@ -1,15 +1,17 @@
 
-function ItemBarterer()
+class ItemBarterer
 {
-	this.itemHolderCustomerOffer = new ItemHolder();
-	this.itemHolderStoreOffer = new ItemHolder();
-	this.statusMessage = "Choose items to trade and click the 'Offer' button.";
-	this.patience = 10;
+	constructor()
+	{
+		this.itemHolderCustomerOffer = new ItemHolder();
+		this.itemHolderStoreOffer = new ItemHolder();
+		this.statusMessage = "Choose items to trade and click the 'Offer' button.";
+		this.patience = 10;
 
-	this.patienceMax = 10;
-}
-{
-	ItemBarterer.prototype.isAnythingBeingOffered = function()
+		this.patienceMax = 10;
+	}
+
+	isAnythingBeingOffered()
 	{
 		var returnValue =
 		(
@@ -19,7 +21,7 @@ function ItemBarterer()
 		return returnValue;
 	};
 
-	ItemBarterer.prototype.isOfferProfitableEnough = function(world)
+	isOfferProfitableEnough(world)
 	{
 		var profitMarginForStore = this.profitMarginOfOfferForStore(world);
 
@@ -28,7 +30,7 @@ function ItemBarterer()
 		return isOfferProfitableToStore;
 	};
 
-	ItemBarterer.prototype.profitMarginOfOfferForStore = function(world)
+	profitMarginOfOfferForStore(world)
 	{
 		var valueOfferedByCustomer = this.itemHolderCustomerOffer.tradeValueOfAllItems(world);
 		var valueOfferedByStore = this.itemHolderStoreOffer.tradeValueOfAllItems(world);
@@ -38,18 +40,18 @@ function ItemBarterer()
 		return profitMarginForStore;
 	};
 
-	ItemBarterer.prototype.patienceAdd = function(patienceToAdd)
+	patienceAdd(patienceToAdd)
 	{
 		this.patience = (this.patience + patienceToAdd).trimToRangeMax(this.patienceMax);
 	};
 
-	ItemBarterer.prototype.reset = function(entityCustomer, entityStore)
+	reset(entityCustomer, entityStore)
 	{
 		this.itemHolderCustomerOffer.itemEntitiesAllTransferTo(entityCustomer.itemHolder);
 		this.itemHolderStoreOffer.itemEntitiesAllTransferTo(entityStore.itemHolder);
 	};
 
-	ItemBarterer.prototype.trade = function(entityCustomer, entityStore)
+	trade(entityCustomer, entityStore)
 	{
 		var itemHoldersForOfferers =
 		[
@@ -74,7 +76,7 @@ function ItemBarterer()
 
 	// Controls.
 
-	ItemBarterer.prototype.toControl = function(universe, size, entityCustomer, entityStore, venuePrev)
+	toControl(universe, size, entityCustomer, entityStore, venuePrev)
 	{
 		if (size == null)
 		{

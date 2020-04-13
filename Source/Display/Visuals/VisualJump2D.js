@@ -1,16 +1,17 @@
 
-function VisualJump2D(visualJumper, visualShadow, cameraFactory)
+class VisualJump2D
 {
-	this.visualJumper = visualJumper;
-	this.visualShadow = visualShadow;
+	constructor(visualJumper, visualShadow, cameraFactory)
+	{
+		this.visualJumper = visualJumper;
+		this.visualShadow = visualShadow;
 
-	this._posSaved = new Coords();
-}
+		this._posSaved = new Coords();
+	}
 
-{
 	// Cloneable.
 
-	VisualJump2D.prototype.clone = function()
+	clone()
 	{
 		return new VisualJump2D
 		(
@@ -18,7 +19,7 @@ function VisualJump2D(visualJumper, visualShadow, cameraFactory)
 		);
 	};
 
-	VisualJump2D.prototype.overwriteWith = function(other)
+	overwriteWith(other)
 	{
 		this.visualJumper.overwriteWith(other.visualJumper);
 		this.visualShadow.overwriteWith(other.visualShadow);
@@ -26,7 +27,7 @@ function VisualJump2D(visualJumper, visualShadow, cameraFactory)
 
 	// Transformable.
 
-	VisualJump2D.prototype.transform = function(transformToApply)
+	transform(transformToApply)
 	{
 		transformToApply.transform(this.visualJumper);
 		transformToApply.transform(this.visualShadow);
@@ -35,7 +36,7 @@ function VisualJump2D(visualJumper, visualShadow, cameraFactory)
 
 	// Visual.
 
-	VisualJump2D.prototype.draw = function(universe, world, display, entity)
+	draw(universe, world, display, entity)
 	{
 		var entityPos = entity.locatable.loc.pos;
 		var entityPosZ = entityPos.z;

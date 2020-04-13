@@ -1,7 +1,10 @@
 
-function Lighting(ambientIntensity, direction, directionalIntensity)
+class Lighting
 {
-	this.ambientIntensity = ambientIntensity;
-	this.direction = direction.clone().normalize();
-	this.directionalIntensity = directionalIntensity;
+	constructor(ambientIntensity, direction, directionalIntensity)
+	{
+		this.ambientIntensity = ambientIntensity;
+		this.direction = direction.clone().normalize();
+		this.directionalIntensity = directionalIntensity;
+	}
 }

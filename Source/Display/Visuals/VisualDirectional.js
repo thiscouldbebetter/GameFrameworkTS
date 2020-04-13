@@ -1,13 +1,14 @@
 
-function VisualDirectional(visualForNoDirection, visualsForDirections)
+class VisualDirectional
 {
-	this.visualForNoDirection = visualForNoDirection;
-	this.visualsForDirections = visualsForDirections;
-	this.numberOfDirections = this.visualsForDirections.length;
-}
+	constructor(visualForNoDirection, visualsForDirections)
+	{
+		this.visualForNoDirection = visualForNoDirection;
+		this.visualsForDirections = visualsForDirections;
+		this.numberOfDirections = this.visualsForDirections.length;
+	}
 
-{
-	VisualDirectional.prototype.draw = function(universe, world, display, entity)
+	draw(universe, world, display, entity)
 	{
 		var loc = entity.locatable.loc;
 		var headingInTurns = loc.orientation.headingInTurns();

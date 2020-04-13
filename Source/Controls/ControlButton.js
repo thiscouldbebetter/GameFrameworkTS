@@ -1,26 +1,27 @@
 
-function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isEnabled, click, context, canBeHeldDown)
+class ControlButton
 {
-	this.name = name;
-	this.pos = pos;
-	this.size = size;
-	this.text = text;
-	this.fontHeightInPixels = fontHeightInPixels;
-	this.hasBorder = hasBorder;
-	this._isEnabled = isEnabled;
-	this.click = click;
-	this.context = context;
-	this.canBeHeldDown = (canBeHeldDown == null ? false : canBeHeldDown);
+	constructor(name, pos, size, text, fontHeightInPixels, hasBorder, isEnabled, click, context, canBeHeldDown)
+	{
+		this.name = name;
+		this.pos = pos;
+		this.size = size;
+		this.text = text;
+		this.fontHeightInPixels = fontHeightInPixels;
+		this.hasBorder = hasBorder;
+		this._isEnabled = isEnabled;
+		this.click = click;
+		this.context = context;
+		this.canBeHeldDown = (canBeHeldDown == null ? false : canBeHeldDown);
 
-	this.isHighlighted = false;
+		this.isHighlighted = false;
 
-	// Helper variables.
-	this._drawLoc = new Location(new Coords());
-	this._sizeHalf = new Coords();
-}
+		// Helper variables.
+		this._drawLoc = new Location(new Coords());
+		this._sizeHalf = new Coords();
+	}
 
-{
-	ControlButton.prototype.actionHandle = function(actionNameToHandle)
+	actionHandle(actionNameToHandle)
 	{
 		if (actionNameToHandle == ControlActionNames.Instances().ControlConfirm)
 		{
@@ -30,24 +31,24 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 		return (this.canBeHeldDown == false); // wasActionHandled
 	};
 
-	ControlButton.prototype.isEnabled = function()
+	isEnabled()
 	{
 		return (this._isEnabled.get == null ? this._isEnabled : this._isEnabled.get() );
 	};
 
 	// events
 
-	ControlButton.prototype.focusGain = function()
+	focusGain()
 	{
 		this.isHighlighted = true;
 	};
 
-	ControlButton.prototype.focusLose = function()
+	focusLose()
 	{
 		this.isHighlighted = false;
 	};
 
-	ControlButton.prototype.mouseClick = function(clickPos)
+	mouseClick(clickPos)
 	{
 		if (this.isEnabled())
 		{
@@ -56,31 +57,31 @@ function ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isE
 		return (this.canBeHeldDown == false); // wasClickHandled
 	};
 
-	ControlButton.prototype.mouseEnter = function()
+	mouseEnter()
 	{
 		this.isHighlighted = true;
 	};
 
-	ControlButton.prototype.mouseExit = function()
+	mouseExit()
 	{
 		this.isHighlighted = false;
 	};
 
-	ControlButton.prototype.scalePosAndSize = function(scaleFactor)
+	scalePosAndSize(scaleFactor)
 	{
 		this.pos.multiply(scaleFactor);
 		this.size.multiply(scaleFactor);
 		this.fontHeightInPixels *= scaleFactor.y;
 	};
 
-	ControlButton.prototype.style = function(universe)
+	style(universe)
 	{
 		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
 	};
 
 	// drawable
 
-	ControlButton.prototype.draw = function(universe, display, drawLoc)
+	draw(universe, display, drawLoc)
 	{
 		var drawPos = this._drawLoc.overwriteWith(drawLoc).pos;
 		drawPos.add(this.pos);

@@ -1,14 +1,15 @@
 
-function Texture(name, image)
+class Texture
 {
-	this.name = name;
-	this.image = image;
-}
+	constructor(name, image)
+	{
+		this.name = name;
+		this.image = image;
+	}
 
-{
 	// methods
 
-	Texture.prototype.initializeForWebGLContext = function(webGLContext)
+	initializeForWebGLContext(webGLContext)
 	{
 		var gl = webGLContext.gl;
 

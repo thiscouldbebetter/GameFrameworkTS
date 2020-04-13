@@ -1,17 +1,18 @@
 
-function VisualImageImmediate(image)
+class VisualImageImmediate
 {
-	this._image = image;
+	constructor(image)
+	{
+		this._image = image;
 
-	// Helper variables.
+		// Helper variables.
 
-	this._drawPos = new Coords();
-}
+		this._drawPos = new Coords();
+	}
 
-{
 	// static methods
 
-	VisualImageImmediate.manyFromImages = function(images)
+	static manyFromImages(images)
 	{
 		var returnValues = [];
 
@@ -27,21 +28,21 @@ function VisualImageImmediate(image)
 
 	// instance methods
 
-	VisualImageImmediate.prototype.image = function()
+	image()
 	{
 		return this._image;
 	};
 
 	// clone
 
-	VisualImageImmediate.prototype.clone = function()
+	clone()
 	{
 		return this; // todo
 	};
 
 	// visual
 
-	VisualImageImmediate.prototype.draw = function(universe, world, display, entity)
+	draw(universe, world, display, entity)
 	{
 		var image = this.image();
 		var imageSize = image.sizeInPixels;

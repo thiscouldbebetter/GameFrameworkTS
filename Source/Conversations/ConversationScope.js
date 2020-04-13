@@ -1,20 +1,21 @@
 
-function ConversationScope(parent, talkNodeCurrent, talkNodesForOptions)
+class ConversationScope
 {
-	this.parent = parent;
-	this.talkNodeCurrent = talkNodeCurrent;
-	this.isPromptingForResponse = false;
-	this.talkNodesForOptions = talkNodesForOptions;
+	constructor(parent, talkNodeCurrent, talkNodesForOptions)
+	{
+		this.parent = parent;
+		this.talkNodeCurrent = talkNodeCurrent;
+		this.isPromptingForResponse = false;
+		this.talkNodesForOptions = talkNodesForOptions;
 
-	this.displayTextCurrent = "[conversation begins]";
-	this.talkNodeForOptionSelected = null;
-	this._talkNodesForOptionsActive = [];
-	this._emptyArray = [];
-	this.haveOptionsBeenUpdated = true;
-}
+		this.displayTextCurrent = "[conversation begins]";
+		this.talkNodeForOptionSelected = null;
+		this._talkNodesForOptionsActive = [];
+		this._emptyArray = [];
+		this.haveOptionsBeenUpdated = true;
+	}
 
-{
-	ConversationScope.prototype.talkNodeAdvance = function(conversationRun)
+	talkNodeAdvance(conversationRun)
 	{
 		var conversationDefn = conversationRun.defn;
 		var defnTalkNodes = conversationDefn.talkNodes;
@@ -24,11 +25,12 @@ function ConversationScope(parent, talkNodeCurrent, talkNodesForOptions)
 		return this;
 	};
 
-	ConversationScope.prototype.talkNodesForOptionsActive = function()
+	talkNodesForOptionsActive()
 	{
+		var returnValues;
 		if (this.isPromptingForResponse == false)
 		{
-			return this._emptyArray;
+			returnValues = this._emptyArray;
 		}
 		else
 		{
@@ -53,7 +55,7 @@ function ConversationScope(parent, talkNodeCurrent, talkNodesForOptions)
 		return returnValues;
 	};
 
-	ConversationScope.prototype.update = function(universe, conversationRun)
+	update(universe, conversationRun)
 	{
 		this.haveOptionsBeenUpdated = true;
 		this.talkNodeCurrent.execute(universe, conversationRun, this);

@@ -1,5 +1,8 @@
 
-function Damager(damagePerHit)
+class Damager
 {
-	this.damagePerHit = damagePerHit;
+	constructor(damagePerHit)
+	{
+		this.damagePerHit = damagePerHit;
+	}
 }

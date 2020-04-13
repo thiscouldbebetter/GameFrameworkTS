@@ -1,12 +1,14 @@
 
-function Hemispace(plane)
+class Hemispace
 {
-	this.plane = plane;
+	constructor(plane)
+	{
+		this.plane = plane;
 
-	this._displacement = new Coords();
-}
-{
-	Hemispace.prototype.containsPoint = function(pointToCheck)
+		this._displacement = new Coords();
+	}
+
+	containsPoint(pointToCheck)
 	{
 		var distanceOfPointAbovePlane =
 			pointToCheck.dotProduct(this.plane.normal)
@@ -15,7 +17,7 @@ function Hemispace(plane)
 		return returnValue;
 	};
 
-	Hemispace.prototype.trimCoords = function(coordsToTrim)
+	trimCoords(coordsToTrim)
 	{
 		var distanceOfPointAbovePlane =
 			this.plane.distanceToPointAlongNormal(coordsToTrim);

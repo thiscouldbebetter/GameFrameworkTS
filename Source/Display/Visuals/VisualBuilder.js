@@ -1,10 +1,7 @@
 
-function VisualBuilder()
+class VisualBuilder
 {
-	// Do nothing.
-}
-{
-	VisualBuilder.Instance = function()
+	static Instance()
 	{
 		if (VisualBuilder._instance == null)
 		{
@@ -13,7 +10,7 @@ function VisualBuilder()
 		return VisualBuilder._instance;
 	};
 
-	VisualBuilder.prototype.circleWithEyes = function
+	circleWithEyes
 	(
 		circleRadius, circleColor, eyeRadius, visualEyes
 	)
@@ -40,7 +37,7 @@ function VisualBuilder()
 		return circleWithEyes;
 	};
 
-	VisualBuilder.prototype.eyesBlinking = function(visualEyeRadius)
+	eyesBlinking(visualEyeRadius)
 	{
 		var visualPupilRadius = visualEyeRadius / 2;
 

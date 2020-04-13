@@ -1,18 +1,19 @@
 
-function AnimationDefn(name, keyframes)
+class AnimationDefn
 {
-	this.name = name;
-	this.keyframes = keyframes;
+	constructor(name, keyframes)
+	{
+		this.name = name;
+		this.keyframes = keyframes;
 
-	this.numberOfFramesTotal =
-		this.keyframes[this.keyframes.length - 1].frameIndex
-		- this.keyframes[0].frameIndex;
+		this.numberOfFramesTotal =
+			this.keyframes[this.keyframes.length - 1].frameIndex
+			- this.keyframes[0].frameIndex;
 
-	this.propagateTransformsToAllKeyframes();
-}
+		this.propagateTransformsToAllKeyframes();
+	}
 
-{
-	AnimationDefn.prototype.propagateTransformsToAllKeyframes = function()
+	propagateTransformsToAllKeyframes()
 	{
 		var propertyNamesAll = [];
 

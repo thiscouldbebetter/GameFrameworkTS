@@ -1,16 +1,17 @@
 
-function VisualImageFromLibrary(imageName)
+class VisualImageFromLibrary
 {
-	this.imageName = imageName;
+	constructor(imageName)
+	{
+		this.imageName = imageName;
 
-	// Helper variables.
-	this._drawPos = new Coords();
-}
+		// Helper variables.
+		this._drawPos = new Coords();
+	}
 
-{
 	// static methods
 
-	VisualImageFromLibrary.manyFromImages = function(images, imageSizeScaled)
+	static manyFromImages(images, imageSizeScaled)
 	{
 		var returnValues = [];
 
@@ -26,14 +27,14 @@ function VisualImageFromLibrary(imageName)
 
 	// instance methods
 
-	VisualImageFromLibrary.prototype.image = function(universe)
+	image(universe)
 	{
 		return universe.mediaLibrary.imageGetByName(this.imageName);
 	};
 
 	// visual
 
-	VisualImageFromLibrary.prototype.draw = function(universe, world, display, entity)
+	draw(universe, world, display, entity)
 	{
 		var image = this.image(universe);
 		var imageSize = this.image(universe).sizeInPixels;

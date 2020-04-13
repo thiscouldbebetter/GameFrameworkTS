@@ -1,21 +1,22 @@
 
-function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorBack)
+class Display3D
 {
-	this.sizeInPixels = sizeInPixels;
+	constructor(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorBack)
+	{
+		this.sizeInPixels = sizeInPixels;
 
-	this._sizeDefault = sizeInPixels;
-	this._scaleFactor = new Coords(1, 1, 1);
-	this._display2DOverlay = new Display([sizeInPixels], fontName, fontHeightInPixels, colorFore, colorBack);
-}
+		this._sizeDefault = sizeInPixels;
+		this._scaleFactor = new Coords(1, 1, 1);
+		this._display2DOverlay = new Display([sizeInPixels], fontName, fontHeightInPixels, colorFore, colorBack);
+	}
 
-{
 	// constants
 
-	Display3D.VerticesPerTriangle = 3;
+	static VerticesPerTriangle = 3;
 
 	// methods
 
-	Display3D.prototype.cameraSet = function(camera)
+	cameraSet(camera)
 	{
 		var cameraLoc = camera.loc;
 
@@ -48,7 +49,7 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 		);
 	};
 
-	Display3D.prototype.clear = function()
+	clear()
 	{
 		var webGLContext = this.webGLContext;
 		var gl = webGLContext.gl;
@@ -58,7 +59,7 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	};
 
-	Display3D.prototype.drawMesh = function(mesh)
+	drawMesh(mesh)
 	{
 		var webGLContext = this.webGLContext;
 		var gl = webGLContext.gl;
@@ -258,7 +259,7 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 		} // end for each material
 	};
 
-	Display3D.prototype.drawMeshWithOrientation = function(mesh, meshOrientation)
+	drawMeshWithOrientation(mesh, meshOrientation)
 	{
 		var matrixOrient = this.matrixOrient;
 
@@ -294,7 +295,7 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 		this.drawMesh(mesh);
 	};
 
-	Display3D.prototype.initialize = function()
+	initialize()
 	{
 		this._display2DOverlay.initialize();
 
@@ -328,7 +329,7 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 		this.tempMatrix1 = Matrix.buildZeroes();
 	};
 
-	Display3D.prototype.lightingSet = function(todo)
+	lightingSet(todo)
 	{
 		var webGLContext = this.webGLContext;
 		var gl = webGLContext.gl;
@@ -357,12 +358,12 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 
 	// Display2D overlay.
 
-	Display3D.prototype.clear = function()
+	clear()
 	{
 		this._display2DOverlay.clear();
 	};
 
-	Display3D.prototype.drawArc = function
+	drawArc
 	(
 		center, radiusInner, radiusOuter, angleStartInTurns, angleStopInTurns, colorFill, colorBorder
 	)
@@ -370,52 +371,52 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 		this._display2DOverlay.drawArc(center, radiusInner, radiusOuter, angleStartInTurns, angleStopInTurns, colorFill, colorBorder);
 	};
 
-	Display3D.prototype.drawBackground = function(colorBack, colorBorder)
+	drawBackground(colorBack, colorBorder)
 	{
 		this._display2DOverlay.drawBackground(colorBack, colorBorder);
 	};
 
-	Display3D.prototype.drawCircle = function(center, radius, colorFill, colorBorder)
+	drawCircle(center, radius, colorFill, colorBorder)
 	{
 		this._display2DOverlay.drawCircle(center, radius, colorFill, colorBorder);
 	};
 
-	Display3D.prototype.drawCircleWithGradient = function(center, radius, gradientFill, colorBorder)
+	drawCircleWithGradient(center, radius, gradientFill, colorBorder)
 	{
 		this._display2DOverlay.drawCircleWithGradient(center, radius, gradientFill, colorBorder);
 	};
 
-	Display3D.prototype.drawImage = function(imageToDraw, pos)
+	drawImage(imageToDraw, pos)
 	{
 		this._display2DOverlay.drawImage(imageToDraw, pos);
 	};
 
-	Display3D.prototype.drawImagePartial = function(imageToDraw, pos, boxToShow)
+	drawImagePartial(imageToDraw, pos, boxToShow)
 	{
 		this._display2DOverlay.drawImagePartial(imageToDraw, pos, boxToShow);
 	};
 
-	Display3D.prototype.drawImageScaled = function(imageToDraw, pos, size)
+	drawImageScaled(imageToDraw, pos, size)
 	{
 		this._display2DOverlay.drawImageScaled(imageToDraw, pos, size);
 	};
 
-	Display3D.prototype.drawLine = function(fromPos, toPos, color, lineThickness)
+	drawLine(fromPos, toPos, color, lineThickness)
 	{
 		this._display2DOverlay.drawLine(fromPos, toPos, color, lineThickness);
 	};
 
-	Display3D.prototype.drawPath = function(vertices, color, lineThickness)
+	drawPath(vertices, color, lineThickness)
 	{
 		this._display2DOverlay.drawPath(vertices, color, lineThickness);
 	};
 
-	Display3D.prototype.drawPolygon = function(vertices, colorFill, colorBorder)
+	drawPolygon(vertices, colorFill, colorBorder)
 	{
 		this._display2DOverlay.drawPolygon(vertices, colorFill, colorBorder);
 	};
 
-	Display3D.prototype.drawRectangle = function
+	drawRectangle
 	(
 		pos,
 		size,
@@ -430,7 +431,7 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 		);
 	};
 
-	Display3D.prototype.drawText = function
+	drawText
 	(
 		text,
 		fontHeightInPixels,
@@ -455,29 +456,29 @@ function Display3D(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorB
 		);
 	};
 
-	Display3D.prototype.fontSet = function(fontName, fontHeightInPixels)
+	fontSet(fontName, fontHeightInPixels)
 	{
 		this._display2DOverlay.fontSet(fontName, fontHeightInPixels);
 	};
 
-	Display3D.prototype.scaleFactor = function()
+	scaleFactor()
 	{
 		return this._scaleFactor;
 	};
 
-	Display3D.prototype.sizeDefault = function()
+	sizeDefault()
 	{
 		return this._sizeDefault;
 	};
 
-	Display3D.prototype.textWidthForFontHeight = function(textToMeasure, fontHeightInPixels)
+	textWidthForFontHeight(textToMeasure, fontHeightInPixels)
 	{
 		return this._display2DOverlay.textWidthForFontHeight(textToMeasure, fontHeightInPixels);
 	};
 
 	// platformable
 
-	Display3D.prototype.toDomElement = function()
+	toDomElement()
 	{
 		var returnValue = document.createElement("div");
 		returnValue.appendChild(this.canvas);

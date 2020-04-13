@@ -1,23 +1,24 @@
 
-function SkillLearner(skillBeingLearnedName, learningAccumulated, skillsKnownNames)
+class SkillLearner
 {
-	this.skillBeingLearnedName = skillBeingLearnedName;
-	this.learningAccumulated = learningAccumulated || 0;
-	this.skillsKnownNames = skillsKnownNames || [];
-}
+	constructor(skillBeingLearnedName, learningAccumulated, skillsKnownNames)
+	{
+		this.skillBeingLearnedName = skillBeingLearnedName;
+		this.learningAccumulated = learningAccumulated || 0;
+		this.skillsKnownNames = skillsKnownNames || [];
+	}
 
-{
-	SkillLearner.prototype.isLearningInProgress = function()
+	isLearningInProgress()
 	{
 		return (this.learningAccumulated > 0);
 	};
 
-	SkillLearner.prototype.isSkillBeingLearned = function()
+	isSkillBeingLearned()
 	{
 		return (this.skillBeingLearnedName != null);
 	};
 
-	SkillLearner.prototype.skillCheapestAvailable = function(skillsAll)
+	skillCheapestAvailable(skillsAll)
 	{
 		var returnValue = null;
 
@@ -33,7 +34,7 @@ function SkillLearner(skillBeingLearnedName, learningAccumulated, skillsKnownNam
 		return skillCheapest;
 	};
 
-	SkillLearner.prototype.learningIncrement = function(skillsAll, amountToIncrement)
+	learningIncrement(skillsAll, amountToIncrement)
 	{
 		var message = null;
 
@@ -70,12 +71,12 @@ function SkillLearner(skillBeingLearnedName, learningAccumulated, skillsKnownNam
 		return message;
 	};
 
-	SkillLearner.prototype.learningAccumulatedOverRequired = function(skillsAll)
+	learningAccumulatedOverRequired(skillsAll)
 	{
 		return this.learningAccumulated + "/" + this.learningRequired(skillsAll);
 	};
 
-	SkillLearner.prototype.learningRequired = function(skillsAllByName)
+	learningRequired(skillsAllByName)
 	{
 		var skillBeingLearned = this.skillBeingLearned(skillsAllByName);
 		var returnValue =
@@ -87,12 +88,12 @@ function SkillLearner(skillBeingLearnedName, learningAccumulated, skillsKnownNam
 		return returnValue;
 	};
 
-	SkillLearner.prototype.skillSelected = function(skillsAll)
+	skillSelected(skillsAll)
 	{
 		return (this.skillSelectedName == null ? null : skillsAll(this.skillSelectedName));
 	};
 
-	SkillLearner.prototype.skillsAvailableToLearn = function(skillsAll)
+	skillsAvailableToLearn(skillsAll)
 	{
 		var skillsUnknown = [];
 
@@ -146,7 +147,7 @@ function SkillLearner(skillBeingLearnedName, learningAccumulated, skillsKnownNam
 		return skillsUnknownWithKnownPrerequisites;
 	};
 
-	SkillLearner.prototype.skillsKnown = function(skillsAllByName)
+	skillsKnown(skillsAllByName)
 	{
 		var returnValues = [];
 
@@ -160,7 +161,7 @@ function SkillLearner(skillBeingLearnedName, learningAccumulated, skillsKnownNam
 		return returnValues;
 	};
 
-	SkillLearner.prototype.skillBeingLearned = function(skillsAllByName)
+	skillBeingLearned(skillsAllByName)
 	{
 		var returnValue = skillsAllByName[this.skillBeingLearnedName];
 
@@ -169,14 +170,14 @@ function SkillLearner(skillBeingLearnedName, learningAccumulated, skillsKnownNam
 
 	// entity
 
-	SkillLearner.prototype.updateForTimerTick = function(universe, world, place, entity)
+	updateForTimerTick(universe, world, place, entity)
 	{
 		// Do nothing.
 	}
 
 	// controls
 
-	SkillLearner.prototype.toControl = function(universe, sizeIgnored, entity, venueToReturnTo, includeTitle)
+	toControl(universe, sizeIgnored, entity, venueToReturnTo, includeTitle)
 	{
 		var display = universe.display;
 		var size = display.sizeInPixels.clone();

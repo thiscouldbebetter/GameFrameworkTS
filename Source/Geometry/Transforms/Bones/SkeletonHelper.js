@@ -1,11 +1,7 @@
 
-function SkeletonHelper()
+clas SkeletonHelper()
 {
-	// static class
-}
-
-{
-	SkeletonHelper.biped = function(heightInPixels)
+	static biped(heightInPixels)
 	{
 		var heightOver2 = heightInPixels / 2;
 		var heightOfSpine = heightInPixels / 2.4;
@@ -172,7 +168,7 @@ function SkeletonHelper()
 		return skeletonBiped;
 	};
 
-	SkeletonHelper.bipedAnimationDefnGroup = function()
+	static bipedAnimationDefnGroup()
 	{
 		var returnValue = new AnimationDefnGroup
 		(
@@ -187,7 +183,7 @@ function SkeletonHelper()
 		return returnValue;
 	};
 
-	SkeletonHelper.bipedAnimationDefnDoSomething = function()
+	static bipedAnimationDefnDoSomething()
 	{
 		var returnValue = new AnimationDefn
 		(
@@ -223,7 +219,7 @@ function SkeletonHelper()
 		return returnValue;
 	};
 
-	SkeletonHelper.bipedAnimationDefnJump = function()
+	static bipedAnimationDefnJump()
 	{
 		var returnValue = new AnimationDefn
 		(
@@ -258,7 +254,7 @@ function SkeletonHelper()
 		return returnValue;
 	};
 
-	SkeletonHelper.bipedAnimationDefnWalk = function()
+	static bipedAnimationDefnWalk()
 	{
 		var animationDefnBipedWalk = new AnimationDefn
 		(
@@ -364,7 +360,7 @@ function SkeletonHelper()
 		return animationDefnBipedWalk;
 	};
 
-	SkeletonHelper.transformBuildForMeshAndSkeleton_Proximity = function
+	static transformBuildForMeshAndSkeleton_Proximity
 	(
 		meshAtRest,
 		skeletonAtRest,

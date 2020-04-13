@@ -1,16 +1,18 @@
 
-function EquipmentSocket(defnName, itemEntityEquipped)
+class EquipmentSocket
 {
-	this.defnName = defnName;
-	this.itemEntityEquipped = itemEntityEquipped;
-}
-{
-	EquipmentSocket.prototype.defn = function(defnGroup)
+	constructor(defnName, itemEntityEquipped)
+	{
+		this.defnName = defnName;
+		this.itemEntityEquipped = itemEntityEquipped;
+	}
+
+	defn(defnGroup)
 	{
 		return defnGroup.socketDefns[this.defnName];
 	};
 
-	EquipmentSocket.prototype.toString = function(world)
+	toString(world)
 	{
 		var itemEntityEquippedAsString =
 		(

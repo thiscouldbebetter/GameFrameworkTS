@@ -1,17 +1,17 @@
 
-function WebGLContext(canvas)
+class WebGLContext
 {
-	this.gl = this.initGL(canvas);
-	this.shaderProgram = this.buildShaderProgram(this.gl);
+	constructor(canvas)
+	{
+		this.gl = this.initGL(canvas);
+		this.shaderProgram = this.buildShaderProgram(this.gl);
+	}
 
-}
-
-{
 	// methods
 
 	// static methods
 
-	WebGLContext.coordsToWebGLArray = function(coordsToConvert)
+	static coordsToWebGLArray(coordsToConvert)
 	{
 		var returnValues = new Float32Array(coordsToConvert.dimensions());
 
@@ -20,7 +20,7 @@ function WebGLContext(canvas)
 
 	// instance methods
 
-	WebGLContext.prototype.initGL = function(canvas)
+	initGL(canvas)
 	{
 		var gl = canvas.getContext("experimental-webgl");
 		gl.viewportWidth = canvas.width;
@@ -42,7 +42,7 @@ function WebGLContext(canvas)
 		return gl;
 	};
 
-	WebGLContext.prototype.buildShaderProgram = function(gl)
+	buildShaderProgram(gl)
 	{
 		var shaderProgram = this.buildShaderProgram_Compile
 		(
@@ -56,7 +56,7 @@ function WebGLContext(canvas)
 		return shaderProgram;
 	};
 
-	WebGLContext.prototype.buildShaderProgram_FragmentShader = function(gl)
+	buildShaderProgram_FragmentShader(gl)
 	{
 		var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
 		var fragmentShaderCode =
@@ -80,7 +80,7 @@ function WebGLContext(canvas)
 		return fragmentShader;
 	};
 
-	WebGLContext.prototype.buildShaderProgram_VertexShader = function(gl)
+	buildShaderProgram_VertexShader(gl)
 	{
 		var vertexShader = gl.createShader(gl.VERTEX_SHADER);
 		var vertexShaderCode =
@@ -117,7 +117,7 @@ function WebGLContext(canvas)
 		return vertexShader;
 	};
 
-	WebGLContext.prototype.buildShaderProgram_Compile = function
+	buildShaderProgram_Compile
 	(
 		gl, fragmentShader, vertexShader
 	)
@@ -131,7 +131,7 @@ function WebGLContext(canvas)
 		return shaderProgram;
 	};
 
-	WebGLContext.prototype.buildShaderProgram_SetUpInputVariables = function
+	buildShaderProgram_SetUpInputVariables
 	(
 		gl, shaderProgram
 	)

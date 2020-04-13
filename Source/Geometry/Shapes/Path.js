@@ -1,21 +1,23 @@
 
-function Path(points)
+class Path
 {
-	this.points = points;
-}
-{
-	Path.prototype.clone = function()
+	constructor(points)
+	{
+		this.points = points;
+	}
+
+	clone()
 	{
 		return new Path(this.points.clone());
 	};
 
-	Path.prototype.overwriteWith = function(other)
+	overwriteWith(other)
 	{
 		this.points.overwriteWith(other.points);
 		return this;
 	};
 
-	Path.prototype.transform = function(transformToApply)
+	transform(transformToApply)
 	{
 		Transform.applyTransformToCoordsMany(transformToApply, this.points);
 		return this;

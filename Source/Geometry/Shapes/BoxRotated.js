@@ -1,16 +1,18 @@
 
-function BoxRotated(box, angleInTurns)
+class BoxRotated
 {
-	this.box = box;
-	this.angleInTurns = angleInTurns;
-}
-{
-	BoxRotated.prototype.sphereSwept = function()
+	constructor(box, angleInTurns)
+	{
+		this.box = box;
+		this.angleInTurns = angleInTurns;
+	}
+
+	sphereSwept()
 	{
 		return new Sphere(this.box.center, this.box.sizeHalf.magnitude());
 	};
 
-	BoxRotated.prototype.surfaceNormalNearPos = function(posToCheck)
+	surfaceNormalNearPos(posToCheck)
 	{
 		var returnValue = new Coords();
 
@@ -60,12 +62,12 @@ function BoxRotated(box, angleInTurns)
 
 	// cloneable
 
-	BoxRotated.prototype.clone = function()
+	clone()
 	{
 		return new BoxRotated(this.box.clone(), this.angleInTurns);
 	};
 
-	BoxRotated.prototype.overwriteWith = function(other)
+	overwriteWith(other)
 	{
 		this.box.overwriteWith(other.box);
 		this.angleInTurns = other.angleInTurns;
@@ -74,7 +76,7 @@ function BoxRotated(box, angleInTurns)
 
 	// transformable
 
-	BoxRotated.prototype.coordsGroupToTranslate = function()
+	coordsGroupToTranslate()
 	{
 		return [ this.box.center ];
 	};

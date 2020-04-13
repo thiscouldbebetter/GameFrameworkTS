@@ -1,10 +1,12 @@
 
-function Locatable(loc)
+class Locatable
 {
-	this.loc = loc || new Location();
-}
-{
-	Locatable.prototype.updateForTimerTick = function(universe, world, place, entity)
+	constructor(loc)
+	{
+		this.loc = loc || new Location();
+	}
+
+	updateForTimerTick(universe, world, place, entity)
 	{
 		var loc = this.loc;
 
@@ -21,7 +23,7 @@ function Locatable(loc)
 
 	// cloneable
 
-	Locatable.prototype.clone = function()
+	clone()
 	{
 		return new Locatable(this.loc.clone());
 	};

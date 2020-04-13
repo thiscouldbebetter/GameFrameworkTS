@@ -1,14 +1,15 @@
 
-function VisualControl(controlRoot)
+class VisualControl
 {
-	this.controlRoot = controlRoot;
+	constructor(controlRoot)
+	{
+		this.controlRoot = controlRoot;
 
-	// Helper variables.
-	this._drawLoc = new Location(new Coords());
-}
+		// Helper variables.
+		this._drawLoc = new Location(new Coords());
+	}
 
-{
-	VisualControl.prototype.draw = function(universe, world, display, entity)
+	draw(universe, world, display, entity)
 	{
 		var display = universe.display;
 		var drawLoc = this._drawLoc;

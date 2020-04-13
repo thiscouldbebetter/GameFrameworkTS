@@ -1,19 +1,21 @@
 
-function Box(center, size)
+class Box
 {
-	this.center = center || new Coords();
-	this.size = size || new Coords();
+	constructor(center, size)
+	{
+		this.center = center || new Coords();
+		this.size = size || new Coords();
 
-	this.sizeHalf = this.size.clone().half();
-	this._min = new Coords();
-	this._max = new Coords();
+		this.sizeHalf = this.size.clone().half();
+		this._min = new Coords();
+		this._max = new Coords();
 
-	this._range = new Range();
-}
-{
+		this._range = new Range();
+	}
+
 	// Static methods.
 
-	Box.doBoxesInSetsOverlap = function(boxSet0, boxSet1)
+	static doBoxesInSetsOverlap(boxSet0, boxSet1)
 	{
 		var doAnyBoxOverlapSoFar = false;
 
@@ -42,30 +44,30 @@ function Box(center, size)
 
 	// Instance methods.
 
-	Box.prototype.containsOther = function(other)
+	containsOther(other)
 	{
 		return ( this.containsPoint(other.min()) && this.containsPoint(other.max()) );
 	};
 
-	Box.prototype.containsPoint = function(pointToCheck)
+	containsPoint(pointToCheck)
 	{
 		return pointToCheck.isInRangeMinMax(this.min(), this.max());
 	};
 
-	Box.prototype.fromMinAndMax = function(min, max)
+	fromMinAndMax(min, max)
 	{
 		var center = min.clone().add(max).half();
 		var size = max.clone().subtract(min);
 		return new Box(center, size);
 	};
 
-	Box.prototype.fromMinAndSize = function(min, size)
+	fromMinAndSize(min, size)
 	{
 		var center = size.clone().half().add(min);
 		return new Box(center, size);
 	};
 
-	Box.prototype.intersectWith = function(other)
+	intersectWith(other)
 	{
 		var thisMinDimensions = this.min().dimensions();
 		var thisMaxDimensions = this.max().dimensions();
@@ -113,17 +115,17 @@ function Box(center, size)
 		return returnValue;
 	};
 
-	Box.prototype.max = function()
+	max()
 	{
 		return this._max.overwriteWith(this.center).add(this.sizeHalf);
 	};
 
-	Box.prototype.min = function()
+	min()
 	{
 		return this._min.overwriteWith(this.center).subtract(this.sizeHalf);
 	};
 
-	Box.prototype.ofPoints = function(points)
+	ofPoints(points)
 	{
 		var point0 = points[0];
 		var minSoFar = this._min.overwriteWith(point0);
@@ -168,7 +170,7 @@ function Box(center, size)
 		return this;
 	};
 
-	Box.prototype.overlapsWith = function(other)
+	overlapsWith(other)
 	{
 		var returnValue =
 		(
@@ -179,7 +181,7 @@ function Box(center, size)
 		return returnValue;
 	};
 
-	Box.prototype.overlapsWithXY = function(other)
+	overlapsWithXY(other)
 	{
 		var returnValue =
 		(
@@ -189,7 +191,7 @@ function Box(center, size)
 		return returnValue;
 	};
 
-	Box.prototype.overlapsWithOtherInDimension = function(other, dimensionIndex)
+	overlapsWithOtherInDimension(other, dimensionIndex)
 	{
 		var rangeThis = this.rangeForDimension(dimensionIndex, this._range);
 		var rangeOther = other.rangeForDimension(dimensionIndex, other._range);
@@ -197,21 +199,21 @@ function Box(center, size)
 		return returnValue;
 	};
 
-	Box.prototype.rangeForDimension = function(dimensionIndex, range)
+	rangeForDimension(dimensionIndex, range)
 	{
 		range.min = this.min().dimensionGet(dimensionIndex);
 		range.max = this.max().dimensionGet(dimensionIndex);
 		return range;
 	};
 
-	Box.prototype.sizeOverwriteWith = function(sizeOther)
+	sizeOverwriteWith(sizeOther)
 	{
 		this.size.overwriteWith(sizeOther);
 		this.sizeHalf.overwriteWith(this.size).half();
 		return this;
 	};
 
-	Box.prototype.touches = function(other)
+	touches(other)
 	{
 		var returnValue =
 		(
@@ -222,7 +224,7 @@ function Box(center, size)
 		return returnValue;
 	};
 
-	Box.prototype.touchesXY = function(other)
+	touchesXY(other)
 	{
 		var returnValue =
 		(
@@ -232,7 +234,7 @@ function Box(center, size)
 		return returnValue;
 	};
 
-	Box.prototype.touchesOtherInDimension = function(other, dimensionIndex)
+	touchesOtherInDimension(other, dimensionIndex)
 	{
 		var rangeThis = this.rangeForDimension(dimensionIndex, this._range);
 		var rangeOther = other.rangeForDimension(dimensionIndex, other._range);
@@ -240,19 +242,19 @@ function Box(center, size)
 		return returnValue;
 	};
 
-	Box.prototype.trimCoords = function(coordsToTrim)
+	trimCoords(coordsToTrim)
 	{
 		return coordsToTrim.trimToRangeMinMax(this.min(), this.max());
 	};
 
 	// cloneable
 
-	Box.prototype.clone = function()
+	clone()
 	{
 		return new Box(this.center.clone(), this.size.clone());
 	};
 
-	Box.prototype.overwriteWith = function(other)
+	overwriteWith(other)
 	{
 		this.center.overwriteWith(other.center);
 		this.size.overwriteWith(other.size);
@@ -262,19 +264,19 @@ function Box(center, size)
 
 	// string
 
-	Box.prototype.toString = function()
+	toString()
 	{
 		return this.min().toString() + ":" + this.max().toString();
 	};
 
 	// transformable
 
-	Box.prototype.coordsGroupToTranslate = function()
+	coordsGroupToTranslate()
 	{
 		return [ this.center ];
 	};
 
-	Box.prototype.transform = function(transformToApply)
+	transform(transformToApply)
 	{
 		Transform.applyTransformToCoordsMany(transformToApply, this.coordsGroupToTranslate());
 		return this;

@@ -1,14 +1,15 @@
 
-function VertexGroup(name, vertexIndices)
+class VertexGroup
 {
-	this.name = name;
-	this.vertexIndices = vertexIndices;
-}
+	constructor(name, vertexIndices)
+	{
+		this.name = name;
+		this.vertexIndices = vertexIndices;
+	}
 
-{
 	// cloneable
 
-	VertexGroup.prototype.clone = function()
+	clone()
 	{
 		return new VertexGroup(this.name, this.vertexIndices.slice());
 	};

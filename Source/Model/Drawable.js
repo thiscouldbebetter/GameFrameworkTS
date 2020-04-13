@@ -1,11 +1,13 @@
 
-function Drawable(visual, isVisible)
+class Drawable
 {
-	this.visual = visual;
-	this.isVisible = (isVisible == null ? true : isVisible);
-}
-{
-	Drawable.prototype.updateForTimerTick = function(universe, world, place, entity)
+	constructor(visual, isVisible)
+	{
+		this.visual = visual;
+		this.isVisible = (isVisible == null ? true : isVisible);
+	}
+
+	updateForTimerTick(universe, world, place, entity)
 	{
 		if (this.isVisible)
 		{
@@ -15,7 +17,7 @@ function Drawable(visual, isVisible)
 
 	// cloneable
 
-	Drawable.prototype.clone = function()
+	clone()
 	{
 		return new Drawable(this.visual, this.isVisible);
 	}

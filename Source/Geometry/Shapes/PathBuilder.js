@@ -1,10 +1,7 @@
 
-function PathBuilder()
+class PathBuilder
 {
-	// Do nothing.
-}
-{
-	PathBuilder.prototype.star = function(numberOfPoints, ratioOfInnerRadiusToOuter)
+	star(numberOfPoints, ratioOfInnerRadiusToOuter)
 	{
 		var numberOfVertices = numberOfPoints * 2;
 		var turnsPerVertex = 1 / numberOfVertices;

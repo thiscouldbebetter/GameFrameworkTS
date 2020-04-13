@@ -1,10 +1,12 @@
 
-function Modellable(model)
+class Modellable
 {
-	this.model = model;
-}
-{
-	Modellable.prototype.updateForTimerTick = function(universe, world, place, entity)
+	constructor(model)
+	{
+		this.model = model;
+	}
+
+	updateForTimerTick(universe, world, place, entity)
 	{
 		// Do nothing.
 	};

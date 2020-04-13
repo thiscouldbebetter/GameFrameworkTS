@@ -1,16 +1,17 @@
 
-function Quaternion(w, x, y, z)
+class Quaternion
 {
-	this.w = w;
-	this.x = x;
-	this.y = y;
-	this.z = z;
-}
+	constructor(w, x, y, z)
+	{
+		this.w = w;
+		this.x = x;
+		this.y = y;
+		this.z = z;
+	}
 
-{
 	// static methods
 
-	Quaternion.fromAxisAndCyclesToRotate = function(axisToRotateAround, cyclesToRotate)
+	static fromAxisAndCyclesToRotate(axisToRotateAround, cyclesToRotate)
 	{
 		var radiansToRotateHalf = cyclesToRotate * Math.PI;
 
@@ -28,7 +29,7 @@ function Quaternion(w, x, y, z)
 
 	// instance methods
 
-	Quaternion.prototype.transformCoordsAsRotation = function(coordsToRotate)
+	transformCoordsAsRotation(coordsToRotate)
 	{
 		var coordsToRotateAsQuaternion = new Quaternion
 		(
@@ -51,12 +52,12 @@ function Quaternion(w, x, y, z)
 		return coordsToRotate;
 	};
 
-	Quaternion.prototype.clone = function()
+	clone()
 	{
 		return new Quaternion(this.w, this.x, this.y, this.z);
 	};
 
-	Quaternion.prototype.divide = function(divisor)
+	divide(divisor)
 	{
 		this.w /= divisor;
 		this.x /= divisor;
@@ -66,7 +67,7 @@ function Quaternion(w, x, y, z)
 		return this;
 	};
 
-	Quaternion.prototype.invert = function()
+	invert()
 	{
 		var magnitude = this.magnitude();
 
@@ -79,7 +80,7 @@ function Quaternion(w, x, y, z)
 		return this;
 	};
 
-	Quaternion.prototype.multiply = function(other)
+	multiply(other)
 	{
 		return this.overwriteWithWXYZ
 		(
@@ -90,7 +91,7 @@ function Quaternion(w, x, y, z)
 		);
 	};
 
-	Quaternion.prototype.magnitude = function()
+	magnitude()
 	{
 		return Math.sqrt
 		(
@@ -101,19 +102,19 @@ function Quaternion(w, x, y, z)
 		);
 	};
 
-	Quaternion.prototype.normalize = function()
+	normalize()
 	{
 		return this.divide(this.magnitude());
 	};
 
-	Quaternion.prototype.overwriteWith = function(other)
+	overwriteWith(other)
 	{
 		this.overwriteWithWXYZ(other.w, other.x, other.y, other.z);
 
 		return this;
 	};
 
-	Quaternion.prototype.overwriteWithWXYZ = function(w, x, y, z)
+	overwriteWithWXYZ(w, x, y, z)
 	{
 		this.w = w;
 		this.x = x;

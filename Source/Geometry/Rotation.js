@@ -1,17 +1,18 @@
 
-function Rotation(axis, angleInTurnsRef)
+class Rotation
 {
-	this.axis = axis;
-	this.angleInTurnsRef = angleInTurnsRef;
-}
+	constructor(axis, angleInTurnsRef)
+	{
+		this.axis = axis;
+		this.angleInTurnsRef = angleInTurnsRef;
+	}
 
-{
-	Rotation.prototype.angleInTurns = function()
+	angleInTurns()
 	{
 		return this.angleInTurnsRef.value;
 	};
 
-	Rotation.prototype.transformCoords = function(coordsToTransform)
+	transformCoords(coordsToTransform)
 	{
 		// hack - Assume axis is (0, 0, 1).
 		var polar = new Polar().fromCoords(coordsToTransform);
@@ -24,7 +25,7 @@ function Rotation(axis, angleInTurnsRef)
 		return polar.toCoords(coordsToTransform);
 	};
 
-	Rotation.prototype.transformOrientation = function(orientation)
+	transformOrientation(orientation)
 	{
 		orientation.forwardSet(this.transformCoords(orientation.forward));
 	};

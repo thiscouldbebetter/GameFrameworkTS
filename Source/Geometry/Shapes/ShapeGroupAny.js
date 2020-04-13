@@ -1,5 +1,8 @@
 
-function ShapeGroupAny(shapes)
+class ShapeGroupAny
 {
-	this.shapes = shapes;
+	constructor(shapes)
+	{
+		this.shapes = shapes;
+	}
 }

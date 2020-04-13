@@ -1,17 +1,18 @@
 
-function SoundHelper(sounds)
+class SoundHelper
 {
-	this.sounds = sounds;
-	this.sounds.addLookupsByName();
+	constructor(sounds)
+	{
+		this.sounds = sounds;
+		this.sounds.addLookupsByName();
 
-	this.musicVolume = 1;
-	this.soundVolume = 1;
+		this.musicVolume = 1;
+		this.soundVolume = 1;
 
-	this.soundForMusic = null;
-}
+		this.soundForMusic = null;
+	}
 
-{
-	SoundHelper.controlSelectOptionsVolume = function()
+	static controlSelectOptionsVolume()
 	{
 		var returnValue =
 		[
@@ -33,7 +34,7 @@ function SoundHelper(sounds)
 
 	// instance methods
 
-	SoundHelper.prototype.reset = function()
+	reset()
 	{
 		for (var i = 0; i < this.sounds.length; i++)
 		{
@@ -42,14 +43,14 @@ function SoundHelper(sounds)
 		}
 	};
 
-	SoundHelper.prototype.soundWithNamePlayAsEffect = function(universe, soundName)
+	soundWithNamePlayAsEffect(universe, soundName)
 	{
 		var sound = this.sounds[soundName];
 		sound.isRepeating = false;
 		sound.play(universe, this.soundVolume);
 	};
 
-	SoundHelper.prototype.soundWithNamePlayAsMusic = function(universe, soundToPlayName)
+	soundWithNamePlayAsMusic(universe, soundToPlayName)
 	{
 		var soundToPlay = this.sounds[soundToPlayName];
 

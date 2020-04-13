@@ -1,16 +1,17 @@
 
-function RandomizerLCG(multiplier, addend, modulus, firstRandom)
+class RandomizerLCG
 {
 	// "LCG" = "Linear Congruential Generator"
 
-	this.multiplier = multiplier;
-	this.addend = addend;
-	this.modulus = modulus;
-	this.currentRandom = firstRandom;
-}
+	constructor(multiplier, addend, modulus, firstRandom)
+	{
+		this.multiplier = multiplier;
+		this.addend = addend;
+		this.modulus = modulus;
+		this.currentRandom = firstRandom;
+	}
 
-{
-	RandomizerLCG.default = function()
+	static default()
 	{
 		return new RandomizerLCG
 		(
@@ -21,7 +22,7 @@ function RandomizerLCG(multiplier, addend, modulus, firstRandom)
 		);
 	};
 
-	RandomizerLCG.prototype.getNextRandom = function()
+	getNextRandom()
 	{
 		this.currentRandom =
 		(

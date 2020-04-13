@@ -1,24 +1,25 @@
 
-function InputHelper()
+class InputHelper
 {
-	// Helper variables.
+	constructor()
+	{
+		// Helper variables.
 
-	this.mouseClickPos = new Coords();
-	this.mouseMovePos = new Coords(0, 0);
-	this.mouseMovePosPrev = new Coords(0, 0);
-	this.mouseMovePosNext = new Coords(0, 0);
+		this.mouseClickPos = new Coords();
+		this.mouseMovePos = new Coords(0, 0);
+		this.mouseMovePosPrev = new Coords(0, 0);
+		this.mouseMovePosNext = new Coords(0, 0);
 
-	var inputNames = Input.Names();
-	this.inputNames = inputNames;
-	this.keysToPreventDefaultsFor =
-	[
-		inputNames.ArrowDown, inputNames.ArrowLeft, inputNames.ArrowRight,
-		inputNames.ArrowUp, inputNames.Tab
-	];
-}
+		var inputNames = Input.Names();
+		this.inputNames = inputNames;
+		this.keysToPreventDefaultsFor =
+		[
+			inputNames.ArrowDown, inputNames.ArrowLeft, inputNames.ArrowRight,
+			inputNames.ArrowUp, inputNames.Tab
+		];
+	}
 
-{
-	InputHelper.prototype.actionsFromInput = function(actions, actionToInputsMappings)
+	actionsFromInput(actions, actionToInputsMappings)
 	{
 		var returnValues = [];
 
@@ -45,7 +46,7 @@ function InputHelper()
 		return returnValues;
 	};
 
-	InputHelper.prototype.initialize = function(universe)
+	initialize(universe)
 	{
 		this.inputsPressed = [];
 		this.gamepadsConnected = [];
@@ -66,7 +67,7 @@ function InputHelper()
 		this.gamepadsCheck();
 	};
 
-	InputHelper.prototype.inputAdd = function(inputPressedName)
+	inputAdd(inputPressedName)
 	{
 		if (this.inputsPressed[inputPressedName] == null)
 		{
@@ -76,7 +77,7 @@ function InputHelper()
 		}
 	};
 
-	InputHelper.prototype.inputRemove = function(inputReleasedName)
+	inputRemove(inputReleasedName)
 	{
 		if (this.inputsPressed[inputReleasedName] != null)
 		{
@@ -86,12 +87,12 @@ function InputHelper()
 		}
 	};
 
-	InputHelper.prototype.inputsActive = function()
+	inputsActive()
 	{
 		return this.inputsPressed.filter( (x) => x.isActive );
 	};
 
-	InputHelper.prototype.inputsRemoveAll = function()
+	inputsRemoveAll()
 	{
 		for (var i = 0; i < this.inputsPressed.length; i++)
 		{
@@ -100,7 +101,7 @@ function InputHelper()
 		}
 	};
 
-	InputHelper.prototype.isMouseClicked = function(value)
+	isMouseClicked(value)
 	{
 		var inputNameMouseClick = this.inputNames.MouseClick;
 		if (value == null)
@@ -122,12 +123,12 @@ function InputHelper()
 		}
 	};
 
-	InputHelper.prototype.updateForTimerTick = function(universe)
+	updateForTimerTick(universe)
 	{
 		this.updateForTimerTick_Gamepads(universe);
 	};
 
-	InputHelper.prototype.updateForTimerTick_Gamepads = function(universe)
+	updateForTimerTick_Gamepads(universe)
 	{
 		var systemGamepads = this.systemGamepads();
 		var inputNames = this.inputNames;
@@ -193,7 +194,7 @@ function InputHelper()
 
 	// events - keyboard
 
-	InputHelper.prototype.handleEventKeyDown = function(event)
+	handleEventKeyDown(event)
 	{
 		var inputPressed = event.key;
 
@@ -218,7 +219,7 @@ function InputHelper()
 		this.inputAdd(inputPressed);
 	};
 
-	InputHelper.prototype.handleEventKeyUp = function(event)
+	handleEventKeyUp(event)
 	{
 		var inputReleased = event.key;
 		if (inputReleased == " ")
@@ -239,7 +240,7 @@ function InputHelper()
 
 	// events - mouse
 
-	InputHelper.prototype.handleEventMouseDown = function(event)
+	handleEventMouseDown(event)
 	{
 		var canvas = event.target;
 		var canvasBox = canvas.getBoundingClientRect();
@@ -252,7 +253,7 @@ function InputHelper()
 		this.inputAdd(this.inputNames.MouseClick);
 	};
 
-	InputHelper.prototype.handleEventMouseMove = function(event)
+	handleEventMouseMove(event)
 	{
 		var canvas = event.target;
 		var canvasBox = canvas.getBoundingClientRect();
@@ -271,14 +272,14 @@ function InputHelper()
 		}
 	};
 
-	InputHelper.prototype.handleEventMouseUp = function(event)
+	handleEventMouseUp(event)
 	{
 		this.inputRemove(this.inputNames.MouseClick);
 	};
 
 	// gamepads
 
-	InputHelper.prototype.gamepadsCheck = function()
+	gamepadsCheck()
 	{
 		var systemGamepads = this.systemGamepads();
 		for (var i = 0; i < systemGamepads.length; i++)
@@ -292,14 +293,14 @@ function InputHelper()
 		}
 	};
 
-	InputHelper.prototype.systemGamepads = function()
+	systemGamepads()
 	{
 		return navigator.getGamepads();
 	};
 
 	// Platformable.
 
-	InputHelper.prototype.toDomElement = function(platformHelper)
+	toDomElement(platformHelper)
 	{
 		document.body.onkeydown = this.handleEventKeyDown.bind(this);
 		document.body.onkeyup = this.handleEventKeyUp.bind(this);

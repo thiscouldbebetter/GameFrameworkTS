@@ -1,37 +1,38 @@
 
-function ConversationRun(defn, quit, entityPlayer, entityTalker)
+class ConversationRun
 {
-	this.defn = defn;
-	this.quit = quit;
-	this.entityPlayer = entityPlayer;
-	this.entityTalker = entityTalker;
+	constructor(defn, quit, entityPlayer, entityTalker)
+	{
+		this.defn = defn;
+		this.quit = quit;
+		this.entityPlayer = entityPlayer;
+		this.entityTalker = entityTalker;
 
-	var talkNodeStart = this.defn.talkNodes[0];
+		var talkNodeStart = this.defn.talkNodes[0];
 
-	this.scopeCurrent = new ConversationScope
-	(
-		null, // parent
-		talkNodeStart,
-		// talkNodesForOptions
-		[]
-	);
+		this.scopeCurrent = new ConversationScope
+		(
+			null, // parent
+			talkNodeStart,
+			// talkNodesForOptions
+			[]
+		);
 
-	this.talkNodesForTranscript = [];
+		this.talkNodesForTranscript = [];
 
-	this.variableLookup = {};
+		this.variableLookup = {};
 
-	this.next();
+		this.next();
 
-	// Abbreviate for scripts.
-	this.p = this.entityPlayer;
-	this.t = this.entityTalker;
-	this.vars = this.variableLookup;
-}
+		// Abbreviate for scripts.
+		this.p = this.entityPlayer;
+		this.t = this.entityTalker;
+		this.vars = this.variableLookup;
+	}
 
-{
 	// instance methods
 
-	ConversationRun.prototype.next = function(universe)
+	next(universe)
 	{
 		var responseSelected = this.scopeCurrent.talkNodeForOptionSelected;
 		if (responseSelected != null)
@@ -44,14 +45,14 @@ function ConversationRun(defn, quit, entityPlayer, entityTalker)
 		this.update(universe);
 	};
 
-	ConversationRun.prototype.update = function(universe)
+	update(universe)
 	{
 		this.scopeCurrent.update(universe, this);
 	};
 
 	// controls
 
-	ConversationRun.prototype.toControl = function(size, universe)
+	toControl(size, universe)
 	{
 		var conversationRun = this;
 		var conversationDefn = conversationRun.defn;
@@ -202,7 +203,7 @@ function ConversationRun(defn, quit, entityPlayer, entityTalker)
 		return returnValue;
 	};
 
-	ConversationRun.prototype.toControlTranscript = function(size, universe, venueToReturnTo)
+	toControlTranscript(size, universe, venueToReturnTo)
 	{
 		var conversationRun = this;
 		var conversationDefn = conversationRun.defn;

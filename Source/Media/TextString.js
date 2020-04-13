@@ -1,15 +1,17 @@
 
-function TextString(name, sourcePath)
+class TextString
 {
-	this.name = name;
-	this.sourcePath = sourcePath;
+	constructor(name, sourcePath)
+	{
+		this.name = name;
+		this.sourcePath = sourcePath;
 
-	this.load();
-}
-{
+		this.load();
+	}
+
 	// static methods
 
-	TextString.fromString = function(name, value)
+	static fromString(name, value)
 	{
 		var returnValue = new
 		(
@@ -23,7 +25,7 @@ function TextString(name, sourcePath)
 
 	// instance methods
 
-	TextString.prototype.load = function()
+	load()
 	{
 		var text = this;
 

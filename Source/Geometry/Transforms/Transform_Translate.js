@@ -1,11 +1,12 @@
 
-function Transform_Translate(displacement)
+class Transform_Translate
 {
-	this.displacement = displacement;
-}
+	constructor(displacement)
+	{
+		this.displacement = displacement;
+	}
 
-{
-	Transform_Translate.prototype.displacementSet = function(value)
+	displacementSet(value)
 	{
 		this.displacement.overwriteWith(value);
 		return this;
@@ -13,12 +14,12 @@ function Transform_Translate(displacement)
 
 	// transform
 
-	Transform_Translate.prototype.transform = function(transformable)
+	transform(transformable)
 	{
 		return transformable.transform(this);
 	};
 
-	Transform_Translate.prototype.transformCoords = function(coordsToTransform)
+	transformCoords(coordsToTransform)
 	{
 		return coordsToTransform.add(this.displacement);
 	};

@@ -1,62 +1,63 @@
 
-function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, sliderPosInItems)
+class ControlScrollbar
 {
-	this.pos = pos;
-	this.size = size;
-	this.fontHeightInPixels = fontHeightInPixels;
-	this.itemHeight = itemHeight;
-	this._items = items;
-	this._sliderPosInItems = sliderPosInItems;
+	constructor(pos, size, fontHeightInPixels, itemHeight, items, sliderPosInItems)
+	{
+		this.pos = pos;
+		this.size = size;
+		this.fontHeightInPixels = fontHeightInPixels;
+		this.itemHeight = itemHeight;
+		this._items = items;
+		this._sliderPosInItems = sliderPosInItems;
 
-	this.windowSizeInItems = Math.floor(this.size.y / itemHeight);
+		this.windowSizeInItems = Math.floor(this.size.y / itemHeight);
 
-	this.handleSize = new Coords(this.size.x, this.size.x);
+		this.handleSize = new Coords(this.size.x, this.size.x);
 
-	this.buttonScrollUp = new ControlButton
-	(
-		null, // name
-		new Coords(0, 0), // pos
-		this.handleSize.clone(), // size
-		"-", // text
-		this.fontHeightInPixels,
-		true, // hasBorder
-		true, // isEnabled
-		this.scrollUp // click
-	);
+		this.buttonScrollUp = new ControlButton
+		(
+			null, // name
+			new Coords(0, 0), // pos
+			this.handleSize.clone(), // size
+			"-", // text
+			this.fontHeightInPixels,
+			true, // hasBorder
+			true, // isEnabled
+			this.scrollUp // click
+		);
 
-	this.buttonScrollDown = new ControlButton
-	(
-		null, // name
-		new Coords(0, this.size.y - this.handleSize.y), // pos
-		this.handleSize.clone(), // size
-		"+", // text
-		this.fontHeightInPixels,
-		true, // hasBorder
-		true, // isEnabled
-		this.scrollDown // click
-	);
+		this.buttonScrollDown = new ControlButton
+		(
+			null, // name
+			new Coords(0, this.size.y - this.handleSize.y), // pos
+			this.handleSize.clone(), // size
+			"+", // text
+			this.fontHeightInPixels,
+			true, // hasBorder
+			true, // isEnabled
+			this.scrollDown // click
+		);
 
-	// Helper variables.
-	this._drawPos = new Coords();
-}
+		// Helper variables.
+		this._drawPos = new Coords();
+	}
 
-{
-	ControlScrollbar.prototype.actionHandle = function(actionNameToHandle)
+	actionHandle(actionNameToHandle)
 	{
 		return true;
 	};
 
-	ControlScrollbar.prototype.items = function()
+	items()
 	{
 		return (this._items.get == null ? this._items : this._items.get());
 	};
 
-	ControlScrollbar.prototype.mouseClick = function(universe, clickPos)
+	mouseClick(universe, clickPos)
 	{
 		// todo
 	};
 
-	ControlScrollbar.prototype.scalePosAndSize = function(scaleFactor)
+	scalePosAndSize(scaleFactor)
 	{
 		this.pos.multiply(scaleFactor);
 		this.size.multiply(scaleFactor);
@@ -66,7 +67,7 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 		this.buttonScrollDown.scalePosAndSize(scaleFactor);
 	};
 
-	ControlScrollbar.prototype.scrollDown = function()
+	scrollDown()
 	{
 		var sliderPosInItems =
 		(
@@ -79,7 +80,7 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 		this._sliderPosInItems = sliderPosInItems;
 	};
 
-	ControlScrollbar.prototype.scrollUp = function()
+	scrollUp()
 	{
 		var sliderPosInItems =
 		(
@@ -92,7 +93,7 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 		this._sliderPosInItems = sliderPosInItems;
 	};
 
-	ControlScrollbar.prototype.slideSizeInPixels = function()
+	slideSizeInPixels()
 	{
 		var slideSizeInPixels = new Coords
 		(
@@ -103,17 +104,17 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 		return slideSizeInPixels;
 	};
 
-	ControlScrollbar.prototype.sliderPosInItems = function()
+	sliderPosInItems()
 	{
 		return this._sliderPosInItems;
 	};
 
-	ControlScrollbar.prototype.sliderMaxInItems = function()
+	sliderMaxInItems()
 	{
 		return this.items().length - Math.floor(this.windowSizeInItems);
 	};
 
-	ControlScrollbar.prototype.sliderPosInPixels = function()
+	sliderPosInPixels()
 	{
 		var sliderPosInPixels = new Coords
 		(
@@ -127,7 +128,7 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 		return sliderPosInPixels;
 	};
 
-	ControlScrollbar.prototype.sliderSizeInPixels = function()
+	sliderSizeInPixels()
 	{
 		var sliderSizeInPixels = this.slideSizeInPixels().multiply
 		(
@@ -137,14 +138,14 @@ function ControlScrollbar(pos, size, fontHeightInPixels, itemHeight, items, slid
 		return sliderSizeInPixels;
 	};
 
-	ControlScrollbar.prototype.style = function(universe)
+	style(universe)
 	{
 		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
 	};
 
 	// drawable
 
-	ControlScrollbar.prototype.draw = function(universe, display, drawLoc)
+	draw(universe, display, drawLoc)
 	{
 		var numberOfItems = this.items().length;
 

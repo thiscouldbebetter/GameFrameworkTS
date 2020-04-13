@@ -1,14 +1,16 @@
 
-function Edge(vertices)
+class Edge
 {
-	this.vertices = vertices;
+	constructor(vertices)
+	{
+		this.vertices = vertices;
 
-	this._direction = new Coords();
-	this._displacement = new Coords();
-	this._transverse = new Coords();
-}
-{
-	Edge.prototype.box = function()
+		this._direction = new Coords();
+		this._displacement = new Coords();
+		this._transverse = new Coords();
+	}
+
+	box()
 	{
 		if (this._box == null)
 		{
@@ -18,27 +20,27 @@ function Edge(vertices)
 		return this._box;
 	};
 
-	Edge.prototype.direction = function()
+	direction()
 	{
 		return this._direction.overwriteWith(this.displacement()).normalize();
 	};
 
-	Edge.prototype.equals = function(other)
+	equals(other)
 	{
 		return this.vertices.equals(other.vertices);
 	};
 
-	Edge.prototype.displacement = function()
+	displacement()
 	{
 		return this._displacement.overwriteWith(this.vertices[1]).subtract(this.vertices[0]);
 	};
 
-	Edge.prototype.length = function()
+	length()
 	{
 		return this.displacement().magnitude();
 	};
 
-	Edge.prototype.projectOntoOther = function(other)
+	projectOntoOther(other)
 	{
 		var otherVertices = other.vertices;
 		var otherVertex0 = otherVertices[0];
@@ -60,26 +62,26 @@ function Edge(vertices)
 		return this;
 	};
 
-	Edge.prototype.transverse = function(faceNormal)
+	transverse(faceNormal)
 	{
 		return this._transverse.overwriteWith(this.direction()).crossProduct(faceNormal);
 	};
 
 	// string
 
-	Edge.prototype.toString = function()
+	toString()
 	{
 		return this.vertices.toString();
 	};
 
 	// Cloneable.
 
-	Edge.prototype.clone = function()
+	clone()
 	{
 		return new Edge(this.vertices.clone());
 	};
 
-	Edge.prototype.overwriteWith = function(other)
+	overwriteWith(other)
 	{
 		this.vertices.overwriteWith(other.vertices);
 		return this;

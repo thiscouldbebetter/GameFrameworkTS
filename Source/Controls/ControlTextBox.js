@@ -1,31 +1,32 @@
 
-function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfCharsMax)
+class ControlTextBox
 {
-	this.name = name;
-	this.pos = pos;
-	this.size = size;
-	this._text = text;
-	this.fontHeightInPixels = fontHeightInPixels;
-	this.numberOfCharsMax = numberOfCharsMax;
+	constructor(name, pos, size, text, fontHeightInPixels, numberOfCharsMax)
+	{
+		this.name = name;
+		this.pos = pos;
+		this.size = size;
+		this._text = text;
+		this.fontHeightInPixels = fontHeightInPixels;
+		this.numberOfCharsMax = numberOfCharsMax;
 
-	this.isHighlighted = false;
-	this.cursorPos = this.text().length;
+		this.isHighlighted = false;
+		this.cursorPos = this.text().length;
 
-	// Helper variables.
-	this._drawPos = new Coords();
-	this._drawPosText = new Coords();
-	this._drawLoc = new Location(this._drawPos);
-	this._textMargin = new Coords();
-	this._textSize = new Coords();
-}
+		// Helper variables.
+		this._drawPos = new Coords();
+		this._drawPosText = new Coords();
+		this._drawLoc = new Location(this._drawPos);
+		this._textMargin = new Coords();
+		this._textSize = new Coords();
+	}
 
-{
-	ControlTextBox.prototype.style = function(universe)
+	style(universe)
 	{
 		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
 	};
 
-	ControlTextBox.prototype.text = function(value, universe)
+	text(value, universe)
 	{
 		if (value != null)
 		{
@@ -44,7 +45,7 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 
 	// events
 
-	ControlTextBox.prototype.actionHandle = function(actionNameToHandle)
+	actionHandle(actionNameToHandle)
 	{
 		var text = this.text();
 
@@ -136,17 +137,17 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 		return true; // wasActionHandled
 	};
 
-	ControlTextBox.prototype.focusGain = function()
+	focusGain()
 	{
 		this.isHighlighted = true;
 	};
 
-	ControlTextBox.prototype.focusLose = function()
+	focusLose()
 	{
 		this.isHighlighted = false;
 	};
 
-	ControlTextBox.prototype.mouseClick = function(mouseClickPos)
+	mouseClick(mouseClickPos)
 	{
 		var parent = this.parent;
 		parent.indexOfChildWithFocus = parent.children.indexOf(this);
@@ -155,7 +156,7 @@ function ControlTextBox(name, pos, size, text, fontHeightInPixels, numberOfChars
 
 	// drawable
 
-	ControlTextBox.prototype.draw = function(universe, display, drawLoc)
+	draw(universe, display, drawLoc)
 	{
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 		var style = this.style(universe);

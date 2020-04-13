@@ -1,5 +1,8 @@
 
-function ShapeContainer(shape)
+class ShapeContainer
 {
-	this.shape = shape;
+	constructor(shape)
+	{
+		this.shape = shape;
+	}
 }

@@ -1,6 +1,9 @@
 
-function EquipmentSocketDefn(name, categoriesAllowedNames)
+class EquipmentSocketDefn
 {
-	this.name = name;
-	this.categoriesAllowedNames = categoriesAllowedNames;
+	constructor(name, categoriesAllowedNames)
+	{
+		this.name = name;
+		this.categoriesAllowedNames = categoriesAllowedNames;
+	}
 }

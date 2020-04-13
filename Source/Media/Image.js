@@ -1,16 +1,18 @@
 
-function Image(name, sourcePath)
+class Image
 {
-	this.name = name;
-	this.sourcePath = sourcePath;
+	constructor(name, sourcePath)
+	{
+		this.name = name;
+		this.sourcePath = sourcePath;
 
-	this.isLoaded = false;
-	this.load();
-}
-{
+		this.isLoaded = false;
+		this.load();
+	}
+
 	// static methods
 
-	Image.fromSystemImage = function(name, systemImage)
+	static fromSystemImage(name, systemImage)
 	{
 		var returnValue = new Image
 		(
@@ -27,7 +29,7 @@ function Image(name, sourcePath)
 
 	// instance methods
 
-	Image.prototype.clone = function()
+	clone()
 	{
 		var returnValue = new Image();
 
@@ -40,7 +42,7 @@ function Image(name, sourcePath)
 		return returnValue;
 	};
 
-	Image.prototype.load = function()
+	load()
 	{
 		if (this.sourcePath != null)
 		{

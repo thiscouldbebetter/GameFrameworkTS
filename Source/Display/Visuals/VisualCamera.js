@@ -1,15 +1,16 @@
 
-function VisualCamera(child, cameraFactory)
+class VisualCamera
 {
-	this.child = child;
-	this.cameraFactory = cameraFactory;
+	constructor(child, cameraFactory)
+	{
+		this.child = child;
+		this.cameraFactory = cameraFactory;
 
-	// Helper variables.
-	this._posSaved = new Coords();
-}
+		// Helper variables.
+		this._posSaved = new Coords();
+	}
 
-{
-	VisualCamera.prototype.draw = function(universe, world, display, entity)
+	draw(universe, world, display, entity)
 	{
 		var drawablePos = entity.locatable.loc.pos;
 		this._posSaved.overwriteWith(drawablePos);

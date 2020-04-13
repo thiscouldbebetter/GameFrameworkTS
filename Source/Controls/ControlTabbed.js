@@ -1,67 +1,68 @@
 
-function ControlTabbed(name, pos, size, children, fontHeightInPixels)
+class ControlTabbed
 {
-	this.name = name;
-	this.pos = pos;
-	this.size = size;
-	this.children = children.addLookupsByName();
-
-	this.childSelectedIndex = 0;
-	this.isChildSelectedActive = false;
-
-	fontHeightInPixels = fontHeightInPixels || 10;
-	var marginSize = fontHeightInPixels;
-	var buttonSize = new Coords(50, fontHeightInPixels * 2);
-	var buttonsForChildren = [];
-
-	for (var i = 0; i < this.children.length; i++)
+	constructor(name, pos, size, children, fontHeightInPixels)
 	{
-		var child = this.children[i];
+		this.name = name;
+		this.pos = pos;
+		this.size = size;
+		this.children = children.addLookupsByName();
 
-		child.pos.y += marginSize + buttonSize.y;
+		this.childSelectedIndex = 0;
+		this.isChildSelectedActive = false;
 
-		var childName = child.name;
-		var button = new ControlButton
-		(
-			"button" + childName,
-			new Coords(marginSize + buttonSize.x * i, marginSize), // pos
-			buttonSize.clone(),
-			childName, // text
-			fontHeightInPixels,
-			true, // hasBorder
-			true, // isEnabled
-			function click()
-			{
-				alert("todo");
-			}
-		);
-		buttonsForChildren.push(button);
+		fontHeightInPixels = fontHeightInPixels || 10;
+		var marginSize = fontHeightInPixels;
+		var buttonSize = new Coords(50, fontHeightInPixels * 2);
+		var buttonsForChildren = [];
+
+		for (var i = 0; i < this.children.length; i++)
+		{
+			var child = this.children[i];
+
+			child.pos.y += marginSize + buttonSize.y;
+
+			var childName = child.name;
+			var button = new ControlButton
+			(
+				"button" + childName,
+				new Coords(marginSize + buttonSize.x * i, marginSize), // pos
+				buttonSize.clone(),
+				childName, // text
+				fontHeightInPixels,
+				true, // hasBorder
+				true, // isEnabled
+				function click()
+				{
+					alert("todo");
+				}
+			);
+			buttonsForChildren.push(button);
+		}
+		this.buttonsForChildren = buttonsForChildren;
+
+		// Temporary variables.
+		this._drawPos = new Coords();
+		this._drawLoc = new Location(this._drawPos);
+		this._mouseClickPos = new Coords();
+		this._mouseMovePos = new Coords();
 	}
-	this.buttonsForChildren = buttonsForChildren;
 
-	// Temporary variables.
-	this._drawPos = new Coords();
-	this._drawLoc = new Location(this._drawPos);
-	this._mouseClickPos = new Coords();
-	this._mouseMovePos = new Coords();
-}
-
-{
 	// instance methods
 
-	ControlTabbed.prototype.isEnabled = function()
+	isEnabled()
 	{
 		return true;
 	};
 
-	ControlTabbed.prototype.style = function(universe)
+	style(universe)
 	{
 		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
 	};
 
 	// actions
 
-	ControlTabbed.prototype.actionHandle = function(actionNameToHandle, universe)
+	actionHandle(actionNameToHandle, universe)
 	{
 		var wasActionHandled = false;
 
@@ -106,12 +107,12 @@ function ControlTabbed(name, pos, size, children, fontHeightInPixels)
 		return wasActionHandled;
 	};
 
-	ControlTabbed.prototype.childSelected = function()
+	childSelected()
 	{
 		return (this.childSelectedIndex == null ? null : this.children[this.childSelectedIndex] );
 	};
 
-	ControlTabbed.prototype.childSelectNextInDirection = function(direction)
+	childSelectNextInDirection(direction)
 	{
 		var childIndexOriginal = this.childSelectedIndex;
 
@@ -146,7 +147,7 @@ function ControlTabbed(name, pos, size, children, fontHeightInPixels)
 		return returnValue;
 	};
 
-	ControlTabbed.prototype.childrenAtPosAddToList = function
+	childrenAtPosAddToList
 	(
 		posToCheck,
 		listToAddTo,
@@ -178,7 +179,7 @@ function ControlTabbed(name, pos, size, children, fontHeightInPixels)
 		return listToAddTo;
 	};
 
-	ControlTabbed.prototype.focusGain = function()
+	focusGain()
 	{
 		this.childSelectedIndex = null;
 		var childSelected = this.childSelectNextInDirection(1);
@@ -188,7 +189,7 @@ function ControlTabbed(name, pos, size, children, fontHeightInPixels)
 		}
 	};
 
-	ControlTabbed.prototype.focusLose = function()
+	focusLose()
 	{
 		var childSelected = this.childSelected();
 		if (childSelected != null)
@@ -198,7 +199,7 @@ function ControlTabbed(name, pos, size, children, fontHeightInPixels)
 		}
 	};
 
-	ControlTabbed.prototype.mouseClick = function(mouseClickPos)
+	mouseClick(mouseClickPos)
 	{
 		var mouseClickPos = this._mouseClickPos.overwriteWith
 		(
@@ -222,7 +223,7 @@ function ControlTabbed(name, pos, size, children, fontHeightInPixels)
 		return wasClickHandled;
 	};
 
-	ControlTabbed.prototype.mouseMove = function(mouseMovePos)
+	mouseMove(mouseMovePos)
 	{
 		var mouseMovePos = this._mouseMovePos.overwriteWith
 		(
@@ -246,7 +247,7 @@ function ControlTabbed(name, pos, size, children, fontHeightInPixels)
 		return wasMoveHandled;
 	};
 
-	ControlTabbed.prototype.scalePosAndSize = function(scaleFactor)
+	scalePosAndSize(scaleFactor)
 	{
 		this.pos.multiply(scaleFactor);
 		this.size.multiply(scaleFactor);
@@ -272,14 +273,14 @@ function ControlTabbed(name, pos, size, children, fontHeightInPixels)
 		return this;
 	};
 
-	ControlTabbed.prototype.toVenue = function()
+	toVenue()
 	{
 		return new VenueFader(new VenueControls(this));
 	};
 
 	// drawable
 
-	ControlTabbed.prototype.draw = function(universe, display, drawLoc)
+	draw(universe, display, drawLoc)
 	{
 		drawLoc = this._drawLoc.overwriteWith(drawLoc);
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);

@@ -1,32 +1,33 @@
 
-function VisualInvisible(child)
+class VisualInvisible
 {
-	this.child = child;
-}
+	constructor(child)
+	{
+		this.child = child;
+	}
 
-{
 	// Cloneable.
 
-	VisualInvisible.prototype.clone = function()
+	clone()
 	{
 		return new VisualInvisible(this.child.clone());
 	};
 
-	VisualInvisible.prototype.overwriteWith = function(other)
+	overwriteWith(other)
 	{
 		this.child.overwriteWith(other.child);
 	};
 
 	// Transformable.
 
-	VisualInvisible.prototype.transform = function(transformToApply)
+	transform(transformToApply)
 	{
 		return transformToApply.transform(this.child);
 	};
 
 	// Visual.
 
-	VisualInvisible.prototype.draw = function(universe, world, display, entity)
+	draw(universe, world, display, entity)
 	{
 		// Do nothing.
 	};

@@ -1,13 +1,14 @@
 
-function VisualText(text, colorFill, colorBorder)
+class VisualText
 {
-	this._text = text;
-	this.colorFill = colorFill;
-	this.colorBorder = colorBorder;
-}
+	constructor(text, colorFill, colorBorder)
+	{
+		this._text = text;
+		this.colorFill = colorFill;
+		this.colorBorder = colorBorder;
+	}
 
-{
-	VisualText.prototype.draw = function(universe, world, display, entity)
+	draw(universe, world, display, entity)
 	{
 		var text = this.text(universe, world, display, entity);
 		display.drawText
@@ -23,7 +24,7 @@ function VisualText(text, colorFill, colorBorder)
 		);
 	};
 
-	VisualText.prototype.text = function(universe, world, display, entity)
+	text(universe, world, display, entity)
 	{
 		return (this._text.get == null ? this._text : this._text.get(universe, world, display, entity) );
 	};

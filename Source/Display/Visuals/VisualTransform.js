@@ -1,18 +1,20 @@
 
-function VisualTransform(transformToApply, child)
+class VisualTransform
 {
-	this.transformToApply = transformToApply;
-	this.child = child;
-}
-{
+	constructor(transformToApply, child)
+	{
+		this.transformToApply = transformToApply;
+		this.child = child;
+	}
+
 	// Cloneable.
 
-	VisualTransform.prototype.clone = function()
+	clone()
 	{
 		return new VisualTransform(this.transformToApply, this.child.clone());
 	};
 
-	VisualTransform.prototype.overwriteWith = function(other)
+	overwriteWith(other)
 	{
 		this.child.overwriteWith(other.child);
 		return this;
@@ -20,14 +22,14 @@ function VisualTransform(transformToApply, child)
 
 	// Transformable.
 
-	VisualTransform.prototype.transform = function(transformToApply)
+	transform(transformToApply)
 	{
 		return this.child.transform(transformToApply);
 	};
 
 	// Visual.
 
-	VisualTransform.prototype.draw = function(universe, world, display, entity)
+	draw(universe, world, display, entity)
 	{
 		this.child.transform(this.transformToApply);
 		this.child.draw(universe, world, display, entity);

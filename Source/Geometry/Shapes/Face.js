@@ -1,10 +1,12 @@
 
-function Face(vertices)
+class Face
 {
-	this.vertices = vertices;
-}
-{
-	Face.prototype.box = function()
+	constructor(vertices)
+	{
+		this.vertices = vertices;
+	}
+
+	box()
 	{
 		if (this._box == null)
 		{
@@ -14,7 +16,7 @@ function Face(vertices)
 		return this._box;
 	};
 
-	Face.prototype.containsPoint = function(pointToCheck)
+	containsPoint(pointToCheck)
 	{
 		var face = this;
 
@@ -56,7 +58,7 @@ function Face(vertices)
 		return isPosWithinAllEdgesOfFaceSoFar;
 	};
 
-	Face.prototype.edges = function()
+	edges()
 	{
 		if (this._edges == null)
 		{
@@ -77,12 +79,12 @@ function Face(vertices)
 		return this._edges;
 	};
 
-	Face.prototype.equals = function(other)
+	equals(other)
 	{
 		return this.vertices.equals(other.vertices);
 	};
 
-	Face.prototype.plane = function()
+	plane()
 	{
 		if (this._plane == null)
 		{
@@ -101,12 +103,12 @@ function Face(vertices)
 
 	// Cloneable.
 
-	Face.prototype.clone = function()
+	clone()
 	{
 		return new Face(this.vertices.clone());
 	};
 
-	Face.prototype.overwriteWith = function(other)
+	overwriteWith(other)
 	{
 		this.vertices.overwriteWith(other.vertices);
 		return this;
@@ -114,7 +116,7 @@ function Face(vertices)
 
 	// Transformable.
 
-	Face.prototype.transform = function(transformToApply)
+	transform(transformToApply)
 	{
 		Transform.applyTransformToCoordsMany(transformToApply, this.vertices);
 		return this;

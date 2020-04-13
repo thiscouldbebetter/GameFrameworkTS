@@ -1,10 +1,12 @@
 
-function Playable(player)
+class Playable
 {
-	this.player = player;
-}
-{
-	Playable.prototype.updateForTimerTick = function(universe, world, place, entityPlayer)
+	constructor(player)
+	{
+		this.player = player;
+	}
+
+	updateForTimerTick(universe, world, place, entityPlayer)
 	{
 		var inputHelper = universe.inputHelper;
 		if (inputHelper.isMouseClicked())

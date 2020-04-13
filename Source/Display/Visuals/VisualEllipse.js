@@ -1,15 +1,16 @@
 
-function VisualEllipse(semimajorAxis, semiminorAxis, rotationInTurns, colorFill, colorBorder)
+class VisualEllipse
 {
-	this.semimajorAxis = semimajorAxis;
-	this.semiminorAxis = semiminorAxis;
-	this.rotationInTurns = rotationInTurns;
-	this.colorFill = colorFill;
-	this.colorBorder = colorBorder;
-}
+	constructor(semimajorAxis, semiminorAxis, rotationInTurns, colorFill, colorBorder)
+	{
+		this.semimajorAxis = semimajorAxis;
+		this.semiminorAxis = semiminorAxis;
+		this.rotationInTurns = rotationInTurns;
+		this.colorFill = colorFill;
+		this.colorBorder = colorBorder;
+	}
 
-{
-	VisualEllipse.prototype.draw = function(universe, world, display, entity)
+	draw(universe, world, display, entity)
 	{
 		var drawableLoc = entity.locatable.loc;
 		var drawableOrientation = drawableLoc.orientation;

@@ -1,13 +1,14 @@
 
-function VisualCircleGradient(radius, gradientFill, colorBorder)
+class VisualCircleGradient
 {
-	this.radius = radius;
-	this.gradientFill = gradientFill;
-	this.colorBorder = colorBorder;
-}
+	constructor(radius, gradientFill, colorBorder)
+	{
+		this.radius = radius;
+		this.gradientFill = gradientFill;
+		this.colorBorder = colorBorder;
+	}
 
-{
-	VisualCircleGradient.prototype.draw = function(universe, world, display, entity)
+	draw(universe, world, display, entity)
 	{
 		display.drawCircleWithGradient
 		(

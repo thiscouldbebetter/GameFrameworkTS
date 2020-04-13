@@ -1,15 +1,16 @@
 
-function MazeCellNetwork()
+class MazeCellNetwork
 {
-	this.networkID = MazeCellNetwork.MaxIDSoFar;
-	MazeCellNetwork.MaxIDSoFar++;
-	this.cells = [];
-}
+	constructor()
+	{
+		this.networkID = MazeCellNetwork.MaxIDSoFar;
+		MazeCellNetwork.MaxIDSoFar++;
+		this.cells = [];
+	}
 
-{
-	MazeCellNetwork.MaxIDSoFar = 0;
+	static MaxIDSoFar = 0;
 
-	MazeCellNetwork.mergeNetworks = function(network0, network1)
+	static mergeNetworks = function(network0, network1)
 	{
 		var networkMerged = new MazeCellNetwork();
 

@@ -1,13 +1,15 @@
 
-function Plane(normal, distanceFromOrigin)
+class Plane
 {
-	this.normal = normal;
-	this.distanceFromOrigin = distanceFromOrigin;
+	constructor(normal, distanceFromOrigin)
+	{
+		this.normal = normal;
+		this.distanceFromOrigin = distanceFromOrigin;
 
-	this._displacementFromPoint0To2 = new Coords();
-}
-{
-	Plane.prototype.distanceToPointAlongNormal = function(point)
+		this._displacementFromPoint0To2 = new Coords();
+	}
+
+	distanceToPointAlongNormal(point)
 	{
 		return point.dotProduct
 		(
@@ -15,12 +17,12 @@ function Plane(normal, distanceFromOrigin)
 		) - this.distanceFromOrigin;
 	};
 
-	Plane.prototype.equals = function(other)
+	equals(other)
 	{
 		return (this.normal.equals(other.normal) && this.distanceFromOrigin == other.distanceFromOrigin);
 	};
 
-	Plane.prototype.fromPoints = function(point0, point1, point2)
+	fromPoints(point0, point1, point2)
 	{
 		this.normal.overwriteWith
 		(
@@ -43,8 +45,8 @@ function Plane(normal, distanceFromOrigin)
 
 		return this;
 	};
-	
-	Plane.prototype.pointClosestToOrigin = function(point)
+
+	pointClosestToOrigin(point)
 	{
 		return point.overwriteWith(this.normal).multiplyScalar(this.distanceFromOrigin);
 	};

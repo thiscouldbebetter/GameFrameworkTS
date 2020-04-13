@@ -1,5 +1,8 @@
 
-function Controllable(toControl)
+class Controllable
 {
-	this.toControl = toControl;
+	constructor(toControl)
+	{
+		this.toControl = toControl;
+	}
 }

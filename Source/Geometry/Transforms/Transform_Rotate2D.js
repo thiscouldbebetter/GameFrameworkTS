@@ -1,13 +1,14 @@
 
-function Transform_Rotate2D(turnsToRotate)
+class Transform_Rotate2D
 {
-	this.turnsToRotate = turnsToRotate;
+	constructor(turnsToRotate)
+	{
+		this.turnsToRotate = turnsToRotate;
 
-	this._polar = new Polar(0, 1);
-}
+		this._polar = new Polar(0, 1);
+	}
 
-{
-	Transform_Rotate2D.prototype.transformCoords = function(coordsToTransform)
+	transformCoords(coordsToTransform)
 	{
 		this._polar.fromCoords
 		(

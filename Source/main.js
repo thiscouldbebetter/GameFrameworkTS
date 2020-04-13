@@ -4,7 +4,7 @@ function main()
 	// deserialization of existing saved items after the schema changes.
 	// localStorage.clear();
 
-	var mediaLibrary = new MediaLibrary.fromFileNames
+	var mediaLibrary = MediaLibrary.fromFileNames
 	(
 		"../Content/",
 		[ "Title.png", ],

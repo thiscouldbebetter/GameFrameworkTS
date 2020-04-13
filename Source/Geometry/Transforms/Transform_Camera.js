@@ -1,28 +1,29 @@
 
-function Transform_Camera(camera)
+class Transform_Camera
 {
-	this.camera = camera;
+	constructor(camera)
+	{
+		this.camera = camera;
 
-	this.transformTranslateInvert = new Transform_TranslateInvert
-	(
-		this.camera.loc.pos
-	);
-	this.transformOrientForCamera = new Transform_OrientForCamera
-	(
-		this.camera.loc.orientation
-	);
-	this.transformPerspective = new Transform_Perspective
-	(
-		this.camera.focalLength
-	);
-	this.transformViewCenter = new Transform_Translate
-	(
-		this.camera.viewSizeHalf
-	);
-}
+		this.transformTranslateInvert = new Transform_TranslateInvert
+		(
+			this.camera.loc.pos
+		);
+		this.transformOrientForCamera = new Transform_OrientForCamera
+		(
+			this.camera.loc.orientation
+		);
+		this.transformPerspective = new Transform_Perspective
+		(
+			this.camera.focalLength
+		);
+		this.transformViewCenter = new Transform_Translate
+		(
+			this.camera.viewSizeHalf
+		);
+	}
 
-{
-	Transform_Camera.prototype.transformCoords = function(coordsToTransform)
+	transformCoords(coordsToTransform)
 	{
 		this.transformTranslateInvert.transformCoords(coordsToTransform);
 		this.transformOrientForCamera.transformCoords(coordsToTransform);

@@ -1,22 +1,23 @@
 
-function VenueWorld(world)
+class VenueWorld
 {
-	this.name = "World";
-	this.world = world;
-}
+	constructor(world)
+	{
+		this.name = "World";
+		this.world = world;
+	}
 
-{
-	VenueWorld.prototype.draw = function(universe)
+	draw(universe)
 	{
 		this.world.draw(universe);
 	};
 
-	VenueWorld.prototype.finalize = function(universe)
+	finalize(universe)
 	{
 		universe.soundHelper.soundForMusic.pause(universe);
 	};
 
-	VenueWorld.prototype.initialize = function(universe)
+	initialize(universe)
 	{
 		universe.world = this.world;
 		this.world.initialize(universe);
@@ -25,7 +26,7 @@ function VenueWorld(world)
 		soundHelper.soundWithNamePlayAsMusic(universe, "Music");
 	};
 
-	VenueWorld.prototype.updateForTimerTick = function(universe)
+	updateForTimerTick(universe)
 	{
 		this.world.updateForTimerTick(universe);
 		this.draw(universe);

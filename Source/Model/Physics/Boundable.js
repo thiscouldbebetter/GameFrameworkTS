@@ -1,5 +1,8 @@
 
-function Boundable(bounds)
+class Boundable
 {
-	this.bounds = bounds;
+	constructor(bounds)
+	{
+		this.bounds = bounds;
+	}
 }

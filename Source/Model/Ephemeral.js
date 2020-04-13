@@ -1,11 +1,13 @@
 
-function Ephemeral(ticksToLive, expire)
+class Ephemeral
 {
-	this.ticksToLive = ticksToLive;
-	this.expire = expire;
-}
-{
-	Ephemeral.prototype.updateForTimerTick = function(universe, world, place, entityEphemeral)
+	constructor(ticksToLive, expire)
+	{
+		this.ticksToLive = ticksToLive;
+		this.expire = expire;
+	}
+
+	updateForTimerTick(universe, world, place, entityEphemeral)
 	{
 		this.ticksToLive--;
 		if (this.ticksToLive <= 0)
@@ -20,7 +22,7 @@ function Ephemeral(ticksToLive, expire)
 
 	// cloneable
 
-	Ephemeral.prototype.clone = function()
+	clone()
 	{
 		return new Ephemeral(this.ticksToLive, this.expire);
 	};

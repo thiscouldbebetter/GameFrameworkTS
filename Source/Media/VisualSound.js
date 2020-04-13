@@ -1,10 +1,12 @@
 
-function VisualSound(soundNameToPlay)
+class VisualSound
 {
-	this.soundNameToPlay = soundNameToPlay;
-}
-{
-	VisualSound.prototype.draw = function(universe, world, display, entity)
+	constructor(soundNameToPlay)
+	{
+		this.soundNameToPlay = soundNameToPlay;
+	}
+
+	draw(universe, world, display, entity)
 	{
 		universe.soundHelper.soundWithNamePlayAsEffect(universe, this.soundNameToPlay);
 	};

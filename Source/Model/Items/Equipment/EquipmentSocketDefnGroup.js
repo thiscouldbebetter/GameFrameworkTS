@@ -1,6 +1,9 @@
 
-function EquipmentSocketDefnGroup(name, socketDefns)
+class EquipmentSocketDefnGroup
 {
-	this.name = name;
-	this.socketDefns = socketDefns.addLookupsByName();
+	constructor(name, socketDefns)
+	{
+		this.name = name;
+		this.socketDefns = socketDefns.addLookupsByName();
+	}
 }

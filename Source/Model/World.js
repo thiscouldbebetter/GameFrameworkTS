@@ -1,25 +1,26 @@
 // This class, as implemented, is only a demonstration.
 // Its code is expected to be modified heavily in actual applications,
 // including the constructor, the draw() and update() methods,
-// and the World.new() method.
+// and the static new() method.
 
-function World(name, dateCreated, defns, places)
+class World
 {
-	this.name = name;
-	this.dateCreated = dateCreated;
+	constructor(name, dateCreated, defns, places)
+	{
+		this.name = name;
+		this.dateCreated = dateCreated;
 
-	this.timerTicksSoFar = 0;
+		this.timerTicksSoFar = 0;
 
-	this.defns = defns;
+		this.defns = defns;
 
-	this.places = places.addLookupsByName();
-	this.placeNext = this.places[0];
-}
+		this.places = places.addLookupsByName();
+		this.placeNext = this.places[0];
+	}
 
-{
 	// static methods
 
-	World.new = function(universe)
+	static new(universe)
 	{
 		var now = DateTime.now();
 		var nowAsString = now.toStringMMDD_HHMM_SS();
@@ -129,7 +130,7 @@ function World(name, dateCreated, defns, places)
 
 	// instance methods
 
-	World.prototype.draw = function(universe)
+	draw(universe)
 	{
 		if (this.placeCurrent != null)
 		{
@@ -137,7 +138,7 @@ function World(name, dateCreated, defns, places)
 		}
 	};
 
-	World.prototype.initialize = function(universe)
+	initialize(universe)
 	{
 		if (this.placeNext != null)
 		{
@@ -155,7 +156,7 @@ function World(name, dateCreated, defns, places)
 		}
 	};
 
-	World.prototype.updateForTimerTick = function(universe)
+	updateForTimerTick(universe)
 	{
 		if (this.placeNext != null)
 		{
@@ -173,7 +174,7 @@ function World(name, dateCreated, defns, places)
 
 	// Build helpers.
 
-	World.actionsBuild = function()
+	static actionsBuild()
 	{
 		var actionsAll = Action.Instances();
 
@@ -356,7 +357,7 @@ function World(name, dateCreated, defns, places)
 		return actions;
 	};
 
-	World.actionToInputsMappingsBuild = function()
+	static actionToInputsMappingsBuild()
 	{
 		var inputNames = Input.Names();
 
@@ -390,9 +391,9 @@ function World(name, dateCreated, defns, places)
 		return actionToInputsMappings;
 	};
 
-	World.itemDefnsBuild = function()
+	static itemDefnsBuild()
 	{
-		var itemUseEquip = function (universe, world, place, entityUser, entityItem, item)
+		var itemUseEquip = function(universe, world, place, entityUser, entityItem, item)
 		{
 			var equipmentUser = entityUser.equipmentUser;
 			var message = equipmentUser.equipEntityWithItem

@@ -1,22 +1,23 @@
 
-function VisualMap(map, visualLookup, cameraGet)
+class VisualMap
 {
-	this.map = map;
-	this.visualLookup = visualLookup;
-	this.cameraGet = cameraGet;
+	constructor(map, visualLookup, cameraGet)
+	{
+		this.map = map;
+		this.visualLookup = visualLookup;
+		this.cameraGet = cameraGet;
 
-	// Helper variables.
-	this._cameraPos = new Coords();
-	this._cell = this.map.cellPrototype.clone();
-	this._cellPosEnd = new Coords();
-	this._cellPosInCells = new Coords();
-	this._cellPosStart = new Coords();
-	this._drawPos = new Coords();
-	this._posSaved = new Coords();
-}
+		// Helper variables.
+		this._cameraPos = new Coords();
+		this._cell = this.map.cellPrototype.clone();
+		this._cellPosEnd = new Coords();
+		this._cellPosInCells = new Coords();
+		this._cellPosStart = new Coords();
+		this._drawPos = new Coords();
+		this._posSaved = new Coords();
+	}
 
-{
-	VisualMap.prototype.draw = function(universe, world, display, entity)
+	draw(universe, world, display, entity)
 	{
 		if (this.visualImage == null)
 		{

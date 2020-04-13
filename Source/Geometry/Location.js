@@ -1,32 +1,33 @@
 
-function Location(pos, orientation, placeName)
+class Location
 {
-	this.pos = pos || new Coords();
-
-	if (orientation == null)
+	constructor(pos, orientation, placeName)
 	{
-		orientation = Orientation.Instances().ForwardXDownZ.clone();
+		this.pos = pos || new Coords();
+
+		if (orientation == null)
+		{
+			orientation = Orientation.Instances().ForwardXDownZ.clone();
+		}
+		this.orientation = orientation;
+
+		this.placeName = placeName;
+
+		this.vel = new Coords(0, 0, 0);
+		this.accel = new Coords(0, 0, 0);
+		this.force = new Coords(0, 0, 0);
+
+		this.spin = new Rotation(this.orientation.down, new Reference(0));
+
+		this.timeOffsetInTicks = 0;
 	}
-	this.orientation = orientation;
 
-	this.placeName = placeName;
-
-	this.vel = new Coords(0, 0, 0);
-	this.accel = new Coords(0, 0, 0);
-	this.force = new Coords(0, 0, 0);
-
-	this.spin = new Rotation(this.orientation.down, new Reference(0));
-
-	this.timeOffsetInTicks = 0;
-}
-
-{
-	Location.prototype.place = function(world)
+	place(world)
 	{
 		return world.places[this.placeName];
 	};
 
-	Location.prototype.velSet = function(value)
+	velSet(value)
 	{
 		this.vel.overwriteWith(value);
 		return this;
@@ -34,7 +35,7 @@ function Location(pos, orientation, placeName)
 
 	// cloneable
 
-	Location.prototype.clone = function()
+	clone()
 	{
 		var returnValue = new Location
 		(
@@ -51,7 +52,7 @@ function Location(pos, orientation, placeName)
 		return returnValue;
 	};
 
-	Location.prototype.overwriteWith = function(other)
+	overwriteWith(other)
 	{
 		this.placeName = other.placeName;
 		this.pos.overwriteWith(other.pos);
@@ -64,7 +65,7 @@ function Location(pos, orientation, placeName)
 
 	// strings
 
-	Location.prototype.toString = function()
+	toString()
 	{
 		return this.pos.clone().round().toString();
 	};

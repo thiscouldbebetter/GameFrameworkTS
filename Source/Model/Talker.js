@@ -1,5 +1,8 @@
 
-function Talker(conversationDefnName)
+class Talker
 {
-	this.conversationDefnName = conversationDefnName;
+	constructor(conversationDefnName)
+	{
+		this.conversationDefnName = conversationDefnName;
+	}
 }

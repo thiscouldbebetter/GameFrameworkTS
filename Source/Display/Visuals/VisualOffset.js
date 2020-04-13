@@ -1,15 +1,16 @@
 
-function VisualOffset(child, offset)
+class VisualOffset
 {
-	this.child = child;
-	this.offset = offset;
+	constructor(child, offset)
+	{
+		this.child = child;
+		this.offset = offset;
 
-	// Helper variables.
-	this._posSaved = new Coords();
-}
+		// Helper variables.
+		this._posSaved = new Coords();
+	}
 
-{
-	VisualOffset.prototype.draw = function(universe, world, display, entity)
+	draw(universe, world, display, entity)
 	{
 		var drawablePos = entity.locatable.loc.pos;
 		this._posSaved.overwriteWith(drawablePos);

@@ -1,16 +1,17 @@
 
-function Transform_Orient(orientation)
+class Transform_Orient
 {
-	this.orientation = orientation;
-}
+	constructor(orientation)
+	{
+		this.orientation = orientation;
+	}
 
-{
-	Transform_Orient.prototype.transform = function(transformable)
+	transform(transformable)
 	{
 		return transformable.transform(this);
 	};
 
-	Transform_Orient.prototype.transformCoords = function(coordsToTransform)
+	transformCoords(coordsToTransform)
 	{
 		// todo
 		// Compare to Transform_OrientRDF.transformCoords().

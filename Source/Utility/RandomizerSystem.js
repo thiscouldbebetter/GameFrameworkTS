@@ -1,11 +1,9 @@
 
-function RandomizerSystem()
+class RandomizerSystem
 {
 	// Uses the built-in JavaScript randomizer.
-}
 
-{
-	RandomizerSystem.prototype.getNextRandom = function()
+	getNextRandom()
 	{
 		return Math.random();
 	};

@@ -1,15 +1,17 @@
 
-function ShapeGroupAll(shapes)
+class ShapeGroupAll
 {
-	this.shapes = shapes;
-}
-{
-	ShapeGroupAll.prototype.clone = function()
+	constructor(shapes)
+	{
+		this.shapes = shapes;
+	}
+
+	clone()
 	{
 		return new ShapeGroupAll(this.shapes.clone());
 	};
 
-	ShapeGroupAll.prototype.overwriteWith = function(other)
+	overwriteWith(other)
 	{
 		this.shapes.overwriteWith(other.shapes);
 		return this;

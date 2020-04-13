@@ -1,15 +1,16 @@
 
-function VisualImageScaled(visualImage, sizeScaled)
+class VisualImageScaled
 {
-	this.visualImage = visualImage;
-	this.sizeScaled = sizeScaled;
+	constructor(visualImage, sizeScaled)
+	{
+		this.visualImage = visualImage;
+		this.sizeScaled = sizeScaled;
 
-	// Helper variables.
-	this._drawPos = new Coords();
-}
+		// Helper variables.
+		this._drawPos = new Coords();
+	}
 
-{
-	VisualImageScaled.manyFromSizeAndVisuals = function(sizeScaled, visualsToScale)
+	static manyFromSizeAndVisuals(sizeScaled, visualsToScale)
 	{
 		var returnValues = [];
 		for (var i = 0; i < visualsToScale.length; i++)
@@ -21,7 +22,7 @@ function VisualImageScaled(visualImage, sizeScaled)
 		return returnValues;
 	};
 
-	VisualImageScaled.prototype.draw = function(universe, world, display, entity)
+	draw(universe, world, display, entity)
 	{
 		var image = this.visualImage.image(universe);
 

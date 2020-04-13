@@ -1,11 +1,12 @@
 
-function EquipmentUser(socketDefnGroup)
+class EquipmentUser
 {
-	this.socketGroup = new EquipmentSocketGroup(socketDefnGroup);
-}
+	constructor(socketDefnGroup)
+	{
+		this.socketGroup = new EquipmentSocketGroup(socketDefnGroup);
+	}
 
-{
-	EquipmentUser.prototype.equipEntityWithItem = function
+	equipEntityWithItem
 	(
 		universe, world, place, entityEquipmentUser, itemEntityToEquip
 	)
@@ -38,7 +39,7 @@ function EquipmentUser(socketDefnGroup)
 		return message;
 	};
 
-	EquipmentUser.prototype.equipItemEntityInSocketWithName = function
+	equipItemEntityInSocketWithName
 	(
 		universe, world, place, itemEntityToEquip, socketName, includeSocketNameInMessage
 	)
@@ -73,12 +74,12 @@ function EquipmentUser(socketDefnGroup)
 		return message;
 	};
 
-	EquipmentUser.prototype.itemEntityInSocketWithName = function(socketName)
+	itemEntityInSocketWithName(socketName)
 	{
 		return this.socketGroup.sockets[socketName].itemEntityEquipped;
 	};
 
-	EquipmentUser.prototype.unequipItemFromSocket = function
+	unequipItemFromSocket
 	(
 		universe, world, place, entityEquipmentUser, socketToUnequipFrom
 	)
@@ -108,7 +109,7 @@ function EquipmentUser(socketDefnGroup)
 
 	// control
 
-	EquipmentUser.prototype.toControl = function(universe, size, entityEquipmentUser, venuePrev, includeTitle)
+	toControl(universe, size, entityEquipmentUser, venuePrev, includeTitle)
 	{
 		this.statusMessage = "Equip items in available slots.";
 

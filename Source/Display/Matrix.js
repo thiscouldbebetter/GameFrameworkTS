@@ -1,13 +1,14 @@
 
-function Matrix(values)
+class Matrix
 {
-	this.values = values;
-}
+	constructor(values)
+	{
+		this.values = values;
+	}
 
-{
 	// static methods
 
-	Matrix.buildZeroes = function()
+	static buildZeroes()
 	{
 		var returnValue = new Matrix
 		([
@@ -22,7 +23,7 @@ function Matrix(values)
 
 	// instance methods
 
-	Matrix.prototype.clone = function()
+	clone()
 	{
 		var valuesCloned = [];
 
@@ -36,7 +37,7 @@ function Matrix(values)
 		return returnValue;
 	};
 
-	Matrix.prototype.divideScalar = function(scalar)
+	divideScalar(scalar)
 	{
 		for (var i = 0; i < this.values.length; i++)
 		{
@@ -46,7 +47,7 @@ function Matrix(values)
 		return this;
 	};
 
-	Matrix.prototype.multiply = function(other)
+	multiply(other)
 	{
 		// hack
 		// Instantiates a new matrix.
@@ -77,7 +78,7 @@ function Matrix(values)
 		return this;
 	};
 
-	Matrix.prototype.multiplyScalar = function(scalar)
+	multiplyScalar(scalar)
 	{
 		for (var i = 0; i < this.values.length; i++)
 		{
@@ -87,7 +88,7 @@ function Matrix(values)
 		return this;
 	};
 
-	Matrix.prototype.overwriteWith = function(other)
+	overwriteWith(other)
 	{
 		for (var i = 0; i < this.values.length; i++)
 		{
@@ -97,7 +98,7 @@ function Matrix(values)
 		return this;
 	};
 
-	Matrix.prototype.overwriteWithOrientationEntity = function(orientation)
+	overwriteWithOrientationEntity(orientation)
 	{
 		var forward = orientation.forward.clone().multiplyScalar(1);
 		var right = orientation.right.clone().multiplyScalar(1);
@@ -125,7 +126,7 @@ function Matrix(values)
 		return this;
 	};
 
-	Matrix.prototype.overwriteWithOrientationCamera = function(orientation)
+	overwriteWithOrientationCamera(orientation)
 	{
 		var forward = orientation.forward.clone().multiplyScalar(1);
 		var right = orientation.right.clone().multiplyScalar(1);
@@ -142,7 +143,7 @@ function Matrix(values)
 		return this;
 	};
 
-	Matrix.prototype.overwriteWithOrientationMover = function(orientation)
+	overwriteWithOrientationMover(orientation)
 	{
 		// hack
 		// This function shouldn't even exist!
@@ -167,7 +168,7 @@ function Matrix(values)
 		return this;
 	};
 
-	Matrix.prototype.overwriteWithPerspectiveForCamera = function(camera)
+	overwriteWithPerspectiveForCamera(camera)
 	{
 		var viewSize = camera.viewSize;
 		var clipDistanceNear = .001;//camera.focalLength;
@@ -206,7 +207,7 @@ function Matrix(values)
 		return this;
 	};
 
-	Matrix.prototype.overwriteWithTranslate = function(displacement)
+	overwriteWithTranslate(displacement)
 	{
 		this.overwriteWithValues
 		([
@@ -219,7 +220,7 @@ function Matrix(values)
 		return this;
 	};
 
-	Matrix.prototype.overwriteWithValues = function(otherValues)
+	overwriteWithValues(otherValues)
 	{
 		for (var i = 0; i < this.values.length; i++)
 		{
@@ -229,7 +230,7 @@ function Matrix(values)
 		return this;
 	};
 
-	Matrix.prototype.toWebGLArray = function()
+	toWebGLArray()
 	{
 		var returnValues = [];
 

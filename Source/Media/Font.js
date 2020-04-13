@@ -1,15 +1,16 @@
 
-function Font(name, sourcePath)
+class Font
 {
-	this.name = name;
-	this.sourcePath = sourcePath;
+	constructor(name, sourcePath)
+	{
+		this.name = name;
+		this.sourcePath = sourcePath;
 
-	this.isLoaded = false;
-	this.load();
-}
+		this.isLoaded = false;
+		this.load();
+	}
 
-{
-	Font.prototype.load = function()
+	load()
 	{
 		var fontAsStyleElement = document.createElement("style");
 		fontAsStyleElement.innerHTML = 

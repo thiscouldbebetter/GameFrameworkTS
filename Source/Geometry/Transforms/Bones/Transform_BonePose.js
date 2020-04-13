@@ -1,16 +1,17 @@
 
-function Transform_BonePose(boneName, cyclesToRotateAroundAxesDownRightForward)
+class Transform_BonePose
 {
-	this.boneName = boneName;
-	this.cyclesToRotateAroundAxesDownRightForward = cyclesToRotateAroundAxesDownRightForward;
+	constructor(boneName, cyclesToRotateAroundAxesDownRightForward)
+	{
+		this.boneName = boneName;
+		this.cyclesToRotateAroundAxesDownRightForward = cyclesToRotateAroundAxesDownRightForward;
 
-	this.propertyName = this.boneName;
-}
+		this.propertyName = this.boneName;
+	}
 
-{
 	// instance methods
 
-	Transform_BonePose.prototype.clone = function()
+	clone()
 	{
 		return new Transform_BonePose
 		(
@@ -19,7 +20,7 @@ function Transform_BonePose(boneName, cyclesToRotateAroundAxesDownRightForward)
 		);
 	};
 
-	Transform_BonePose.prototype.interpolateWith = function(other, fractionOfProgressTowardOther)
+	interpolateWith(other, fractionOfProgressTowardOther)
 	{
 		var cyclesToRotateAroundAxesDownRightForwardInterpolated = [];
 
@@ -41,7 +42,7 @@ function Transform_BonePose(boneName, cyclesToRotateAroundAxesDownRightForward)
 		return returnValue;
 	};
 
-	Transform_BonePose.prototype.transform = function(transformableToTransform)
+	transform(transformableToTransform)
 	{
 		var skeletonToTransform = transformableToTransform;
 
@@ -77,7 +78,7 @@ function Transform_BonePose(boneName, cyclesToRotateAroundAxesDownRightForward)
 		this.transform_Bone(quaternionsForRotation, boneToTransform)
 	};
 
-	Transform_BonePose.prototype.transform_Bone = function(quaternionsForRotation, boneToTransform)
+	transform_Bone(quaternionsForRotation, boneToTransform)
 	{
 		var axesToTransform = boneToTransform.orientation.axes;
 

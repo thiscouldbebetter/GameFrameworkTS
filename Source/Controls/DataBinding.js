@@ -1,24 +1,25 @@
 
-function DataBinding(context, get, set)
+class DataBinding
 {
-	this.context = context;
-	this._get = get;
-	this._set = set;
-}
+	constructor(context, get, set)
+	{
+		this.context = context;
+		this._get = get;
+		this._set = set;
+	}
 
-{
-	DataBinding.prototype.contextSet = function(value)
+	contextSet(value)
 	{
 		this.context = value;
 		return this;
 	};
 
-	DataBinding.prototype.get = function()
+	get()
 	{
 		return (this._get == null ? this.context : this._get(this.context) );
 	};
 
-	DataBinding.prototype.set = function(value)
+	set(value)
 	{
 		if (this._set == null)
 		{

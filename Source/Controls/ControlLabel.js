@@ -1,20 +1,21 @@
 
-function ControlLabel(name, pos, size, isTextCentered, text, fontHeightInPixels)
+class ControlLabel
 {
-	this.name = name;
-	this.pos = pos;
-	this.size = size;
-	this.isTextCentered = isTextCentered;
-	this._text = text;
-	this.fontHeightInPixels = fontHeightInPixels;
+	constructor(name, pos, size, isTextCentered, text, fontHeightInPixels)
+	{
+		this.name = name;
+		this.pos = pos;
+		this.size = size;
+		this.isTextCentered = isTextCentered;
+		this._text = text;
+		this.fontHeightInPixels = fontHeightInPixels;
 
-	// Helper variables.
+		// Helper variables.
 
-	this._drawPos = new Coords();
-}
+		this._drawPos = new Coords();
+	}
 
-{
-	ControlLabel.fromPosAndText = function(pos, text)
+	static fromPosAndText(pos, text)
 	{
 		return new ControlLabel
 		(
@@ -27,19 +28,19 @@ function ControlLabel(name, pos, size, isTextCentered, text, fontHeightInPixels)
 		);
 	};
 
-	ControlLabel.prototype.style = function(universe)
+	style(universe)
 	{
 		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
 	};
 
-	ControlLabel.prototype.text = function()
+	text()
 	{
 		return (this._text.get == null ? this._text : this._text.get() );
 	};
 
 	// drawable
 
-	ControlLabel.prototype.draw = function(universe, display, drawLoc)
+	draw(universe, display, drawLoc)
 	{
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 		var style = this.style(universe);

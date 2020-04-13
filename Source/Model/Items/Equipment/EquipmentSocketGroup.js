@@ -1,19 +1,22 @@
 
-function EquipmentSocketGroup(defnGroup)
+class EquipmentSocketGroup
 {
-	this.defnGroup = defnGroup;
-	this.sockets = [];
-
-	var socketDefns = this.defnGroup.socketDefns;
-
-	for (var i = 0; i < socketDefns.length; i++)
+	constructor(defnGroup)
 	{
-		var socketDefn = socketDefns[i];
+		this.defnGroup = defnGroup;
+		this.sockets = [];
 
-		var socket = new EquipmentSocket(socketDefn.name, null);
+		var socketDefns = this.defnGroup.socketDefns;
 
-		this.sockets.push(socket);
-	};
+		for (var i = 0; i < socketDefns.length; i++)
+		{
+			var socketDefn = socketDefns[i];
 
-	this.sockets.addLookups(x => x.defnName);
+			var socket = new EquipmentSocket(socketDefn.name, null);
+
+			this.sockets.push(socket);
+		};
+
+		this.sockets.addLookups(x => x.defnName);
+	}
 }

@@ -1,11 +1,12 @@
 
-function Transform_Perspective(focalLength)
+class Transform_Perspective
 {
-	this.focalLength = focalLength;
-}
+	constructor(focalLength)
+	{
+		this.focalLength = focalLength;
+	}
 
-{
-	Transform_Perspective.prototype.transformCoords = function(coordsToTransform)
+	transformCoords(coordsToTransform)
 	{
 		var distanceAlongCameraForward = coordsToTransform.z;
 

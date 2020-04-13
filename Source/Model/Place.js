@@ -1,35 +1,37 @@
 
-function Place(name, defnName, size, entities)
+class Place
 {
-	this.name = name;
-	this.defnName = defnName;
-	this.size = size;
-	this.entities = [];
-	this._entitiesByPropertyName = {};
-	this.entitiesToSpawn = entities.slice();
-	this.entitiesToRemove = [];
+	constructor(name, defnName, size, entities)
+	{
+		this.name = name;
+		this.defnName = defnName;
+		this.size = size;
+		this.entities = [];
+		this._entitiesByPropertyName = {};
+		this.entitiesToSpawn = entities.slice();
+		this.entitiesToRemove = [];
 
-	this.propertyNamesToProcess =
-	[
-		Locatable.name,
-		Constrainable.name,
-		Collidable.name,
-		CollisionTracker.name,
-		Idleable.name,
-		Actor.name,
-		Playable.name,
-		SkillLearner.name,
-		Ephemeral.name,
-		Killable.name,
-	];
-}
-{
-	Place.prototype.defn = function(world)
+		this.propertyNamesToProcess =
+		[
+			Locatable.name,
+			Constrainable.name,
+			Collidable.name,
+			CollisionTracker.name,
+			Idleable.name,
+			Actor.name,
+			Playable.name,
+			SkillLearner.name,
+			Ephemeral.name,
+			Killable.name,
+		];
+	}
+
+	defn(world)
 	{
 		return world.defns.placeDefns[this.defnName];
 	};
 
-	Place.prototype.draw = function(universe, world)
+	draw(universe, world)
 	{
 		universe.display.drawBackground("Black", "Black");
 		var entitiesDrawable = this.entitiesByPropertyName(Drawable.name);
@@ -41,7 +43,7 @@ function Place(name, defnName, size, entities)
 		}
 	};
 
-	Place.prototype.entitiesByPropertyName = function(propertyName)
+	entitiesByPropertyName(propertyName)
 	{
 		var returnValues = this._entitiesByPropertyName[propertyName];
 		if (returnValues == null)
@@ -53,7 +55,7 @@ function Place(name, defnName, size, entities)
 		return returnValues;
 	};
 
-	Place.prototype.entitiesInitialize = function(universe, world)
+	entitiesInitialize(universe, world)
 	{
 		for (var i = 0; i < this.entities.length; i++)
 		{
@@ -64,7 +66,7 @@ function Place(name, defnName, size, entities)
 		this.entitiesToSpawn.clear();
 	};
 
-	Place.prototype.entitiesRemove = function()
+	entitiesRemove()
 	{
 		for (var i = 0; i < this.entitiesToRemove.length; i++)
 		{
@@ -74,7 +76,7 @@ function Place(name, defnName, size, entities)
 		this.entitiesToRemove.clear();
 	};
 
-	Place.prototype.entitiesSpawn = function(universe, world)
+	entitiesSpawn(universe, world)
 	{
 		for (var i = 0; i < this.entitiesToSpawn.length; i++)
 		{
@@ -85,7 +87,7 @@ function Place(name, defnName, size, entities)
 		this.entitiesToSpawn.clear();
 	};
 
-	Place.prototype.entityRemove = function(entity)
+	entityRemove(entity)
 	{
 		var entityProperties = entity.properties;
 		for (var p = 0; p < entityProperties.length; p++)
@@ -100,7 +102,7 @@ function Place(name, defnName, size, entities)
 		delete this.entities[entity.name];
 	};
 
-	Place.prototype.entitySpawn = function(universe, world, entity)
+	entitySpawn(universe, world, entity)
 	{
 		var entityName = entity.name;
 		if (entityName == null)
@@ -128,19 +130,19 @@ function Place(name, defnName, size, entities)
 		entity.initialize(universe, world, this, entity);
 	};
 
-	Place.prototype.finalize = function(universe, world)
+	finalize(universe, world)
 	{
 		this.entitiesRemove(universe, world);
 		universe.inputHelper.inputsRemoveAll();
 	};
 
-	Place.prototype.initialize = function(universe, world)
+	initialize(universe, world)
 	{
 		this.entitiesSpawn(universe, world);
 		this.entitiesInitialize(universe, world);
 	};
 
-	Place.prototype.updateForTimerTick = function(universe, world)
+	updateForTimerTick(universe, world)
 	{
 		this.entitiesRemove();
 
@@ -166,13 +168,13 @@ function Place(name, defnName, size, entities)
 
 	// Entity convenience accessors.
 
-	Place.prototype.camera = function()
+	camera()
 	{
 		var cameraEntity = this.entitiesByPropertyName(Camera.name)[0];
 		return (cameraEntity == null ? null : cameraEntity.camera);
 	};
 
-	Place.prototype.player = function()
+	player()
 	{
 		return this.entitiesByPropertyName(Playable.name)[0];
 	};

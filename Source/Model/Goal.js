@@ -1,5 +1,8 @@
 
-function Goal(numberOfKeysToUnlock)
+class Goal
 {
-	this.numberOfKeysToUnlock = numberOfKeysToUnlock;
+	constructor(numberOfKeysToUnlock)
+	{
+		this.numberOfKeysToUnlock = numberOfKeysToUnlock;
+	}
 }

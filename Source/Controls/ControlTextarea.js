@@ -1,36 +1,37 @@
 
-function ControlTextarea(name, pos, size, text, fontHeightInPixels, isEnabled)
+class ControlTextarea
 {
-	this.name = name;
-	this.pos = pos;
-	this.size = size;
-	this.text = text;
-	this.fontHeightInPixels = fontHeightInPixels;
-	this._isEnabled = isEnabled;
+	constructor(name, pos, size, text, fontHeightInPixels, isEnabled)
+	{
+		this.name = name;
+		this.pos = pos;
+		this.size = size;
+		this.text = text;
+		this.fontHeightInPixels = fontHeightInPixels;
+		this._isEnabled = isEnabled;
 
-	this.lineSpacing = 1.2 * this.fontHeightInPixels; // hack
+		this.lineSpacing = 1.2 * this.fontHeightInPixels; // hack
 
-	this.isHighlighted = false;
+		this.isHighlighted = false;
 
-	var scrollbarWidth = this.lineSpacing;
-	this.scrollbar = new ControlScrollbar
-	(
-		new Coords(this.size.x - scrollbarWidth, 0), // pos
-		new Coords(scrollbarWidth, this.size.y), // size
-		this.fontHeightInPixels,
-		this.lineSpacing, // itemHeight
-		new DataBinding(this, (c) => c.textAsLines()),
-		0 // sliderPosInItems
-	);
+		var scrollbarWidth = this.lineSpacing;
+		this.scrollbar = new ControlScrollbar
+		(
+			new Coords(this.size.x - scrollbarWidth, 0), // pos
+			new Coords(scrollbarWidth, this.size.y), // size
+			this.fontHeightInPixels,
+			this.lineSpacing, // itemHeight
+			new DataBinding(this, (c) => c.textAsLines()),
+			0 // sliderPosInItems
+		);
 
-	// Helper variables.
-	this._drawPos = new Coords();
-	this._drawLoc = new Location(this._drawPos);
-	this._mouseClickPos = new Coords();
-}
+		// Helper variables.
+		this._drawPos = new Coords();
+		this._drawLoc = new Location(this._drawPos);
+		this._mouseClickPos = new Coords();
+	}
 
-{
-	ControlTextarea.prototype.actionHandle = function(actionNameToHandle)
+	actionHandle(actionNameToHandle)
 	{
 		var wasActionHandled = false;
 		var controlActionNames = ControlActionNames.Instances();
@@ -55,27 +56,27 @@ function ControlTextarea(name, pos, size, text, fontHeightInPixels, isEnabled)
 		return wasActionHandled;
 	};
 
-	ControlTextarea.prototype.focusGain = function()
+	focusGain()
 	{
 		this.isHighlighted = true;
 	};
 
-	ControlTextarea.prototype.focusLose = function()
+	focusLose()
 	{
 		this.isHighlighted = false;
 	};
 
-	ControlTextarea.prototype.indexOfFirstLineVisible = function()
+	indexOfFirstLineVisible()
 	{
 		return this.scrollbar.sliderPosInItems();
 	};
 
-	ControlTextarea.prototype.indexOfLastLineVisible = function()
+	indexOfLastLineVisible()
 	{
 		return this.indexOfFirstLineVisible() + Math.floor(this.scrollbar.windowSizeInItems) - 1;
 	};
 
-	ControlList.prototype.indexOfLineSelected = function(valueToSet)
+	indexOfLineSelected(valueToSet)
 	{
 		var returnValue = valueToSet;
 		var lines = this.textAsLines();
@@ -90,12 +91,12 @@ function ControlTextarea(name, pos, size, text, fontHeightInPixels, isEnabled)
 		return returnValue;
 	};
 
-	ControlTextarea.prototype.isEnabled = function()
+	isEnabled()
 	{
 		return (this._isEnabled.get());
 	};
 
-	ControlTextarea.prototype.textAsLines = function(display)
+	textAsLines(display)
 	{
 		if (this._textAsLines == null)
 		{
@@ -117,7 +118,7 @@ function ControlTextarea(name, pos, size, text, fontHeightInPixels, isEnabled)
 		return this._textAsLines;
 	};
 
-	ControlTextarea.prototype.mouseClick = function(clickPos)
+	mouseClick(clickPos)
 	{
 		clickPos = this._mouseClickPos.overwriteWith(clickPos);
 
@@ -165,12 +166,12 @@ function ControlTextarea(name, pos, size, text, fontHeightInPixels, isEnabled)
 		return true; // wasActionHandled
 	};
 
-	ControlTextarea.prototype.mouseMove = function(movePos)
+	mouseMove(movePos)
 	{
 		// Do nothing.
 	};
 
-	ControlTextarea.prototype.scalePosAndSize = function(scaleFactor)
+	scalePosAndSize(scaleFactor)
 	{
 		this.pos.multiply(scaleFactor);
 		this.size.multiply(scaleFactor);
@@ -179,14 +180,14 @@ function ControlTextarea(name, pos, size, text, fontHeightInPixels, isEnabled)
 		this.scrollbar.scalePosAndSize(scaleFactor);
 	};
 
-	ControlTextarea.prototype.style = function(universe)
+	style(universe)
 	{
 		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
 	};
 
 	// drawable
 
-	ControlTextarea.prototype.draw = function(universe, display, drawLoc)
+	draw(universe, display, drawLoc)
 	{
 		drawLoc = this._drawLoc.overwriteWith(drawLoc);
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);

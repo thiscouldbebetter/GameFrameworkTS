@@ -1,17 +1,18 @@
 
-function VisualRectangle(size, colorFill, colorBorder)
+class VisualRectangle
 {
-	this.size = size;
-	this.colorFill = colorFill;
-	this.colorBorder = colorBorder;
+	constructor(size, colorFill, colorBorder)
+	{
+		this.size = size;
+		this.colorFill = colorFill;
+		this.colorBorder = colorBorder;
 
-	this.sizeHalf = this.size.clone().half();
+		this.sizeHalf = this.size.clone().half();
 
-	this._drawPos = new Coords();
-}
+		this._drawPos = new Coords();
+	}
 
-{
-	VisualRectangle.prototype.draw = function(universe, world,  display, entity)
+	draw(universe, world,  display, entity)
 	{
 		var drawPos = this._drawPos.overwriteWith
 		(

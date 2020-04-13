@@ -1,13 +1,15 @@
 
-function ItemCrafter(recipes)
+class ItemCrafter
 {
-	this.recipes = recipes || [];
+	constructor(recipes)
+	{
+		this.recipes = recipes || [];
 
-	this.recipeSelected = null;
-	this.itemEntitiesStaged = [];
-}
-{
-	ItemCrafter.prototype.isRecipeSelectedFulfilled = function()
+		this.recipeSelected = null;
+		this.itemEntitiesStaged = [];
+	}
+
+	isRecipeSelectedFulfilled()
 	{
 		var returnValue =
 		(
@@ -21,7 +23,7 @@ function ItemCrafter(recipes)
 
 	// controls
 
-	ItemCrafter.prototype.toControl = function(universe, size, entityItemHolder, venuePrev, includeTitle)
+	toControl(universe, size, entityItemHolder, venuePrev, includeTitle)
 	{
 		this.statusMessage = "1. Select recipe.\n2. Stage materials.\n3.Click Combine.";
 
@@ -355,7 +357,7 @@ function ItemCrafter(recipes)
 
 	// cloneable
 
-	ItemCrafter.prototype.clone = function()
+	clone()
 	{
 		return new ItemCrafter(this.recipes.clone());
 	};

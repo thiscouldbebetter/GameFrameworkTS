@@ -1,13 +1,15 @@
 
-function Input(name)
+class Input
 {
-	this.name = name;
+	constructor(name)
+	{
+		this.name = name;
 
-	this.isActive = true;
-	this.ticksActive = 0;
-}
-{
-	Input.Names = function()
+		this.isActive = true;
+		this.ticksActive = 0;
+	}
+
+	static Names()
 	{
 		if (Input._names == null)
 		{

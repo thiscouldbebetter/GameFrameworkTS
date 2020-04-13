@@ -1,18 +1,20 @@
 
-function ControlBuilder(styles)
+class ControlBuilder
 {
-	this.styles = styles.addLookupsByName();
+	constructor(styles)
+	{
+		this.styles = styles.addLookupsByName();
 
-	this.fontHeightInPixelsBase = 10;
-	this.sizeBase = new Coords(200, 150, 1);
+		this.fontHeightInPixelsBase = 10;
+		this.sizeBase = new Coords(200, 150, 1);
 
-	// Helper variables.
+		// Helper variables.
 
-	this._zeroes = new Coords(0, 0, 0);
-	this._scaleMultiplier = new Coords();
-}
-{
-	ControlBuilder.prototype.choice = function
+		this._zeroes = new Coords(0, 0, 0);
+		this._scaleMultiplier = new Coords();
+	}
+
+	choice
 	(
 		universe, size, message, optionNames, optionFunctions, showMessageOnly
 	)
@@ -126,7 +128,7 @@ function ControlBuilder(styles)
 		return returnValue;
 	};
 
-	ControlBuilder.prototype.choiceList = function
+	choiceList
 	(
 		universe, size, message, options, bindingForOptionText, buttonSelectText, select
 	)
@@ -200,7 +202,7 @@ function ControlBuilder(styles)
 		return returnValue;
 	};
 
-	ControlBuilder.prototype.confirm = function(universe, size, message, confirm, cancel)
+	confirm(universe, size, message, confirm, cancel)
 	{
 		return this.choice
 		(
@@ -208,7 +210,7 @@ function ControlBuilder(styles)
 		);
 	};
 
-	ControlBuilder.prototype.game = function(universe, size)
+	game(universe, size)
 	{
 		if (size == null)
 		{
@@ -389,7 +391,7 @@ function ControlBuilder(styles)
 		return returnValue;
 	};
 
-	ControlBuilder.prototype.gameAndSettings = function(universe, size)
+	gameAndSettings(universe, size)
 	{
 		if (size == null)
 		{
@@ -493,7 +495,7 @@ function ControlBuilder(styles)
 		return returnValue;
 	};
 
-	ControlBuilder.prototype.inputs = function(universe, size, venuePrev)
+	inputs (universe, size, venuePrev)
 	{
 		if (size == null)
 		{
@@ -754,7 +756,7 @@ function ControlBuilder(styles)
 		return returnValue;
 	};
 
-	ControlBuilder.prototype.message = function(universe, size, message, acknowledge, showMessageOnly)
+	message (universe, size, message, acknowledge, showMessageOnly)
 	{
 		var optionNames = [];
 		var optionFunctions = [];
@@ -771,7 +773,7 @@ function ControlBuilder(styles)
 		);
 	};
 
-	ControlBuilder.prototype.profileDetail = function(universe, size)
+	profileDetail (universe, size)
 	{
 		if (size == null)
 		{
@@ -976,7 +978,7 @@ function ControlBuilder(styles)
 		return returnValue;
 	};
 
-	ControlBuilder.prototype.profileNew = function(universe, size)
+	profileNew (universe, size)
 	{
 		if (size == null)
 		{
@@ -1087,7 +1089,7 @@ function ControlBuilder(styles)
 		return returnValue;
 	};
 
-	ControlBuilder.prototype.profileSelect = function(universe, size)
+	profileSelect (universe, size)
 	{
 		if (size == null)
 		{
@@ -1303,7 +1305,7 @@ function ControlBuilder(styles)
 		return returnValue;
 	};
 
-	ControlBuilder.prototype.settings = function(universe, size)
+	settings (universe, size)
 	{
 		if (size == null)
 		{
@@ -1503,7 +1505,7 @@ function ControlBuilder(styles)
 		return returnValue;
 	};
 
-	ControlBuilder.prototype.slideshow = function(universe, size, imageNamesAndMessagesForSlides, venueAfterSlideshow)
+	slideshow (universe, size, imageNamesAndMessagesForSlides, venueAfterSlideshow)
 	{
 		if (size == null)
 		{
@@ -1583,7 +1585,7 @@ function ControlBuilder(styles)
 		return controlsForSlides[0];
 	};
 
-	ControlBuilder.prototype.title = function(universe, size)
+	title (universe, size)
 	{
 		if (size == null)
 		{
@@ -1644,7 +1646,7 @@ function ControlBuilder(styles)
 		return returnValue;
 	};
 
-	ControlBuilder.prototype.worldDetail = function(universe, size)
+	worldDetail (universe, size)
 	{
 		if (size == null)
 		{
@@ -1849,7 +1851,7 @@ function ControlBuilder(styles)
 		return returnValue;
 	};
 
-	ControlBuilder.prototype.worldLoad = function(universe, size)
+	worldLoad (universe, size)
 	{
 		if (size == null)
 		{
@@ -2076,7 +2078,7 @@ function ControlBuilder(styles)
 		return returnValue;
 	};
 
-	ControlBuilder.prototype.worldSave = function(universe, size)
+	worldSave(universe, size)
 	{
 		if (size == null)
 		{

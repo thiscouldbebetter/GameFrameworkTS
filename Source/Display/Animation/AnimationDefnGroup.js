@@ -1,7 +1,10 @@
 
-function AnimationDefnGroup(name, animationDefns)
+class AnimationDefnGroup
 {
-	this.name = name;
-	this.animationDefns = animationDefns;
-	this.animationDefns.addLookupsByName();
+	constructor(name, animationDefns)
+	{
+		this.name = name;
+		this.animationDefns = animationDefns;
+		this.animationDefns.addLookupsByName();
+	}
 }

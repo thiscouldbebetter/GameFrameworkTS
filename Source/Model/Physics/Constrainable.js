@@ -1,10 +1,12 @@
 
-function Constrainable(constraints)
+class Constrainable
 {
-	this.constraints = constraints;
-}
-{
-	Constrainable.constrain = function(universe, world, place, entity)
+	constructor(constraints)
+	{
+		this.constraints = constraints;
+	}
+
+	static constrain(universe, world, place, entity)
 	{
 		var constrainable = entity.constrainable;
 		var constraints = constrainable.constraints;
@@ -15,12 +17,12 @@ function Constrainable(constraints)
 		}
 	};
 
-	Constrainable.prototype.initialize = function(universe, world, place, entity)
+	initialize(universe, world, place, entity)
 	{
 		this.updateForTimerTick(universe, world, place, entity);
 	};
 
-	Constrainable.prototype.updateForTimerTick = function(universe, world, place, entity)
+	updateForTimerTick(universe, world, place, entity)
 	{
 		Constrainable.constrain(universe, world, place, entity);
 	};

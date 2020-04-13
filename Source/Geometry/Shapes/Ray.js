@@ -1,6 +1,9 @@
 
-function Ray(vertex, direction)
+class Ray
 {
-	this.vertex = vertex;
-	this.direction = direction;
+	constructor(vertex, direction)
+	{
+		this.vertex = vertex;
+		this.direction = direction;
+	}
 }

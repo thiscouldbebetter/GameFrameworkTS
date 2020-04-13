@@ -1,16 +1,18 @@
 
-function StorageHelper(propertyNamePrefix, serializer)
+class StorageHelper
 {
-	this.propertyNamePrefix = propertyNamePrefix;
-	if (this.propertyNamePrefix == null)
+	constructor(propertyNamePrefix, serializer)
 	{
-		this.propertyNamePrefix = "";
+		this.propertyNamePrefix = propertyNamePrefix;
+		if (this.propertyNamePrefix == null)
+		{
+			this.propertyNamePrefix = "";
+		}
+
+		this.serializer = serializer;
 	}
 
-	this.serializer = serializer;
-}
-{
-	StorageHelper.prototype.load = function(propertyName)
+	load(propertyName)
 	{
 		var returnValue;
 
@@ -37,7 +39,7 @@ function StorageHelper(propertyNamePrefix, serializer)
 		return returnValue;
 	};
 
-	StorageHelper.prototype.save = function(propertyName, valueToSave)
+	save(propertyName, valueToSave)
 	{
 		var valueToSaveSerialized = this.serializer.serialize
 		(

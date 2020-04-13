@@ -1,18 +1,19 @@
 
-function VisualLine(fromPos, toPos, color)
+class VisualLine
 {
-	this.fromPos = fromPos;
-	this.toPos = toPos;
-	this.color = color;
+	constructor(fromPos, toPos, color)
+	{
+		this.fromPos = fromPos;
+		this.toPos = toPos;
+		this.color = color;
 
-	// Helper variables.
+		// Helper variables.
 
-	this.drawPosFrom = new Coords();
-	this.drawPosTo = new Coords();
-}
+		this.drawPosFrom = new Coords();
+		this.drawPosTo = new Coords();
+	}
 
-{
-	VisualLine.prototype.draw = function(universe, world, drawable)
+	draw(universe, world, drawable)
 	{
 		var pos = entity.locatable.loc.pos;
 		var drawPosFrom = this.drawPosFrom.overwriteWith

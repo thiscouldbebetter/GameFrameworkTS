@@ -1,9 +1,12 @@
 
-function Cylinder(center, radius, length)
+class Cylinder
 {
-	this.center = center;
-	this.radius = radius;
-	this.length = length;
+	constructor(center, radius, length)
+	{
+		this.center = center;
+		this.radius = radius;
+		this.length = length;
 
-	this.lengthHalf = this.length / 2;
+		this.lengthHalf = this.length / 2;
+	}
 }

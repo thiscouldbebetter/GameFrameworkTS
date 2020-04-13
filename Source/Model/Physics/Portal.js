@@ -1,12 +1,14 @@
 
-function Portal(destinationPlaceName, destinationEntityName, clearsVelocity)
+class Portal
 {
-	this.destinationPlaceName = destinationPlaceName;
-	this.destinationEntityName = destinationEntityName;
-	this.clearsVelocity = clearsVelocity || true;
-}
-{
-	Portal.prototype.use = function(universe, world, placeToDepart, entityToTransport)
+	constructor(destinationPlaceName, destinationEntityName, clearsVelocity)
+	{
+		this.destinationPlaceName = destinationPlaceName;
+		this.destinationEntityName = destinationEntityName;
+		this.clearsVelocity = clearsVelocity || true;
+	}
+
+	use(universe, world, placeToDepart, entityToTransport)
 	{
 		var destinationPlace = world.places[this.destinationPlaceName];
 		destinationPlace.initialize(universe, world);

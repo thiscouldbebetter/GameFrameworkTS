@@ -1,30 +1,32 @@
-function VisualMesh(mesh)
+class VisualMesh
 {
-	this.mesh = mesh;
-}
-{
+	constructor(mesh)
+	{
+		this.mesh = mesh;
+	}
+
 	// Cloneable.
 
-	VisualMesh.prototype.clone = function()
+	clone()
 	{
 		return new VisualMesh(this.mesh.clone());
 	};
 
-	VisualMesh.prototype.overwriteWith = function(other)
+	overwriteWith(other)
 	{
 		this.mesh.overwriteWith(other.mesh);
 	};
 
 	// Transformable.
 
-	VisualMesh.prototype.transform = function(transformToApply)
+	transform(transformToApply)
 	{
 		transformToApply.transform(this.mesh);
 	};
 
 	// Visual.
 
-	VisualMesh.prototype.draw = function(universe, world, display, entity)
+	draw(universe, world, display, entity)
 	{
 		display.drawMeshWithOrientation(this.mesh, entity.locatable.loc.orientation);
 	};

@@ -1,10 +1,7 @@
 
-function ItemContainer()
+class ItemContainer
 {
-	// Do nothing.
-}
-{
-	ItemContainer.prototype.toControl = function(universe, size, entityTransferrer, entityContainer, venuePrev)
+	toControl(universe, size, entityTransferrer, entityContainer, venuePrev)
 	{
 		if (size == null)
 		{

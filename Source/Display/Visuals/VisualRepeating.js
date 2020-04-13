@@ -1,27 +1,29 @@
 
-function VisualRepeating(cellSize, viewSize, child)
+class VisualRepeating
 {
-	this.cellSize = cellSize;
-	this.viewSize = viewSize;
-	this.child = child;
-
-	if (this.cellSize.z == 0)
+	constructor(cellSize, viewSize, child)
 	{
-		throw "Invalid argument: cellSize.z must not be 0.";
+		this.cellSize = cellSize;
+		this.viewSize = viewSize;
+		this.child = child;
+
+		if (this.cellSize.z == 0)
+		{
+			throw "Invalid argument: cellSize.z must not be 0.";
+		}
+
+		this.viewSizeInCells = this.viewSize.clone().divide
+		(
+			this.cellSize
+		);
+
+		this._cellPos = new Coords();
+		this._drawOffset = new Coords();
+		this._drawPosWrapped = new Coords();
+		this._drawablePosToRestore = new Coords();
 	}
 
-	this.viewSizeInCells = this.viewSize.clone().divide
-	(
-		this.cellSize
-	);
-
-	this._cellPos = new Coords();
-	this._drawOffset = new Coords();
-	this._drawPosWrapped = new Coords();
-	this._drawablePosToRestore = new Coords();
-}
-{
-	VisualRepeating.prototype.draw = function(universe, world, display, entity)
+	draw(universe, world, display, entity)
 	{
 		var drawPos = entity.locatable.loc.pos;
 

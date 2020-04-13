@@ -1,12 +1,14 @@
 
-function CraftingRecipe(name, itemsIn, itemEntitiesOut)
+class CraftingRecipe
 {
-	this.name = name;
-	this.itemsIn = itemsIn;
-	this.itemEntitiesOut = itemEntitiesOut;
-}
-{
-	CraftingRecipe.prototype.isFulfilledByItemEntities = function(itemEntitiesStaged)
+	constructor(name, itemsIn, itemEntitiesOut)
+	{
+		this.name = name;
+		this.itemsIn = itemsIn;
+		this.itemEntitiesOut = itemEntitiesOut;
+	}
+
+	isFulfilledByItemEntities(itemEntitiesStaged)
 	{
 		var areAllRequirementsFulfilledSoFar = true;
 
@@ -32,7 +34,7 @@ function CraftingRecipe(name, itemsIn, itemEntitiesOut)
 
 	// Cloneable.
 
-	CraftingRecipe.prototype.clone = function()
+	clone()
 	{
 		return new CraftingRecipe
 		(

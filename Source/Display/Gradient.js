@@ -1,11 +1,17 @@
 
-function Gradient(stops)
+class Gradient
 {
-	this.stops = stops;
+	constructor(stops)
+	{
+		this.stops = stops;
+	}
 }
 
-function GradientStop(position, color)
+class GradientStop
 {
-	this.position = position;
-	this.color = color;
+	constructor(position, color)
+	{
+		this.position = position;
+		this.color = color;
+	}
 }

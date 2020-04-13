@@ -1,12 +1,13 @@
 
-function Transform_Animate(animationDefnGroup)
+class Transform_Animate
 {
-	this.animationDefnGroup = animationDefnGroup;
-	this.animatable = new Animatable(); // hack
-}
+	constructor(animationDefnGroup)
+	{
+		this.animationDefnGroup = animationDefnGroup;
+		this.animatable = new Animatable(); // hack
+	}
 
-{
-	Transform_Animate.prototype.animationDefnCurrent = function()
+	animationDefnCurrent()
 	{
 		var returnValue = null;
 
@@ -19,7 +20,7 @@ function Transform_Animate(animationDefnGroup)
 		return returnValue;
 	};
 
-	Transform_Animate.prototype.frameCurrent = function(animatable)//world)
+	frameCurrent(animatable)//world)
 	{
 		var returnValue = null;
 
@@ -58,7 +59,7 @@ function Transform_Animate(animationDefnGroup)
 		return returnValue;
 	};
 
-	Transform_Animate.prototype.transform = function(transformable)
+	transform(transformable)
 	{
 		if (this.animatable.animationDefnNameCurrent != null)
 		{

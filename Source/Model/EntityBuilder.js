@@ -1,10 +1,7 @@
 
-function EntityBuilder()
+class EntityBuilder
 {
-	// Do nothing.
-}
-{
-	EntityBuilder.prototype.messageFloater = function(text, pos)
+	messageFloater(text, pos)
 	{
 		var color = "Red";
 		var ticksToLive = 20;

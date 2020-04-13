@@ -1,28 +1,29 @@
 
-function MapLocated(map, loc)
+class MapLocated
 {
-	this.map = map;
-	this.loc = loc;
+	constructor(map, loc)
+	{
+		this.map = map;
+		this.loc = loc;
 
-	this.box = new Box(this.loc.pos, this.map.size);
-}
+		this.box = new Box(this.loc.pos, this.map.size);
+	}
 
-{
 	// cloneable
 
-	MapLocated.prototype.clone = function()
+	clone()
 	{
 		return new MapLocated(this.map, this.loc.clone());
 	};
 
-	MapLocated.prototype.overwriteWith = function(other)
+	overwriteWith(other)
 	{
 		this.loc.overwriteWith(other.loc);
 	};
 
 	// translatable
 
-	MapLocated.prototype.coordsGroupToTranslate = function()
+	coordsGroupToTranslate()
 	{
 		return [ this.loc.pos ];
 	};

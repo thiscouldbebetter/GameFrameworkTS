@@ -1,13 +1,14 @@
 
-function Skill(name, learningRequired, namesOfPrerequisiteSkills
-)
+class Skill
 {
-	this.name = name;
-	this.learningRequired = learningRequired;
-	this.namesOfPrerequisiteSkills = namesOfPrerequisiteSkills;
-}
-{
-	Skill.skillsDemo = function()
+	constructor(name, learningRequired, namesOfPrerequisiteSkills)
+	{
+		this.name = name;
+		this.learningRequired = learningRequired;
+		this.namesOfPrerequisiteSkills = namesOfPrerequisiteSkills;
+	}
+
+	static skillsDemo()
 	{
 		var returnValues =
 		[

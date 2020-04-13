@@ -1,11 +1,12 @@
 
-function Transform_TranslateInvert(displacement)
+class Transform_TranslateInvert
 {
-	this.displacement = displacement;
-}
+	constructor(displacement)
+	{
+		this.displacement = displacement;
+	}
 
-{
-	Transform_TranslateInvert.prototype.transformCoords = function(coordsToTransform)
+	transformCoords(coordsToTransform)
 	{
 		return coordsToTransform.subtract(this.displacement);
 	};

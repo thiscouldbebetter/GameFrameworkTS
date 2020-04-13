@@ -1,19 +1,20 @@
 
-function Color(name, code, componentsRGBA)
+class Color
 {
-	this.name = name;
-	this.code = code;
-	this.componentsRGBA = componentsRGBA;
-}
+	constructor(name, code, componentsRGBA)
+	{
+		this.name = name;
+		this.code = code;
+		this.componentsRGBA = componentsRGBA;
+	}
 
-{
-	// contants
+	// constants
 
-	Color.NumberOfComponentsRGBA = 4;
+	static NumberOfComponentsRGBA = 4;
 
 	// instances
 
-	Color.Instances = function()
+	static Instances()
 	{
 		if (Color._Instances == null)
 		{
@@ -70,12 +71,12 @@ function Color(name, code, componentsRGBA)
 
 	// methods
 
-	Color.prototype.alpha = function()
+	alpha()
 	{
 		return this.componentsRGBA[3];
 	};
 
-	Color.prototype.alphaSet = function(valueToSet)
+	alphaSet(valueToSet)
 	{
 		if (valueToSet != null)
 		{
@@ -85,12 +86,12 @@ function Color(name, code, componentsRGBA)
 		return this;
 	};
 
-	Color.prototype.clone = function()
+	clone()
 	{
 		return new Color(this.name, this.code, this.componentsRGBA.slice());
 	};
 
-	Color.prototype.systemColor = function()
+	systemColor()
 	{
 		if (this._systemColor == null)
 		{

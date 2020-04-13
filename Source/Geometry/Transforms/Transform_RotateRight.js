@@ -1,11 +1,12 @@
 
-function Transform_RotateRight(quarterTurnsToRotate)
+class Transform_RotateRight
 {
-	this.quarterTurnsToRotate = quarterTurnsToRotate;
-}
+	constructor(quarterTurnsToRotate)
+	{
+		this.quarterTurnsToRotate = quarterTurnsToRotate;
+	}
 
-{
-	Transform_RotateRight.prototype.transformCoords = function(coordsToTransform)
+	transformCoords(coordsToTransform)
 	{
 		for (var i = 0; i < this.quarterTurnsToRotate; i++)
 		{

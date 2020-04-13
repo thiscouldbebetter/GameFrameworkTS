@@ -1,27 +1,28 @@
 
-function Collidable(colliderAtRest, entityPropertyNamesToCollideWith, collideEntities)
+class Collidable
 {
-	this.colliderAtRest = colliderAtRest;
-	this.entityPropertyNamesToCollideWith = entityPropertyNamesToCollideWith;
-	this.collideEntities = collideEntities;
-
-	this.collider = this.colliderAtRest.clone();
-
-	if (this.entityPropertyNamesToCollideWith == null)
+	constructor(colliderAtRest, entityPropertyNamesToCollideWith, collideEntities)
 	{
-		this.entityPropertyNamesToCollideWith = [];
+		this.colliderAtRest = colliderAtRest;
+		this.entityPropertyNamesToCollideWith = entityPropertyNamesToCollideWith;
+		this.collideEntities = collideEntities;
+
+		this.collider = this.colliderAtRest.clone();
+
+		if (this.entityPropertyNamesToCollideWith == null)
+		{
+			this.entityPropertyNamesToCollideWith = [];
+		}
+
+		this.ticksUntilCanCollide = 0;
+		this.entitiesAlreadyCollidedWith = [];
+
+		// Helper variables.
+
+		this._transformTranslate = new Transform_Translate(new Coords());
 	}
 
-	this.ticksUntilCanCollide = 0;
-	this.entitiesAlreadyCollidedWith = [];
-
-	// Helper variables.
-
-	this._transformTranslate = new Transform_Translate(new Coords());
-}
-
-{
-	Collidable.prototype.colliderLocateForEntity = function(entity)
+	colliderLocateForEntity(entity)
 	{
 		this.collider.overwriteWith(this.colliderAtRest);
 		Transform.applyTransformToCoordsMany
@@ -34,12 +35,12 @@ function Collidable(colliderAtRest, entityPropertyNamesToCollideWith, collideEnt
 		);
 	};
 
-	Collidable.prototype.initialize = function(universe, world, place, entity)
+	initialize(universe, world, place, entity)
 	{
 		this.colliderLocateForEntity(entity);
 	};
 
-	Collidable.prototype.updateForTimerTick = function(universe, world, place, entity)
+	updateForTimerTick(universe, world, place, entity)
 	{
 		if (this.ticksUntilCanCollide > 0)
 		{
@@ -80,7 +81,7 @@ function Collidable(colliderAtRest, entityPropertyNamesToCollideWith, collideEnt
 
 	// cloneable
 
-	Collidable.prototype.clone = function()
+	clone()
 	{
 		return new Collidable
 		(

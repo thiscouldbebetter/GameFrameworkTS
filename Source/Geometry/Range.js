@@ -1,28 +1,30 @@
 
-function Range(min, max)
+class Range
 {
-	this.min = min;
-	this.max = max;
-}
-{
-	Range.prototype.clone = function()
+	constructor(min, max)
+	{
+		this.min = min;
+		this.max = max;
+	}
+
+	clone()
 	{
 		return new Range(this.min, this.max);
 	};
 
-	Range.prototype.intersectWith = function(other)
+	intersectWith(other)
 	{
 		this.min = (this.min >= other.min ? this.min : other.min);
 		this.max = (this.max <= other.max ? this.max : other.max);
 		return this;
 	};
 
-	Range.prototype.midpoint = function()
+	midpoint()
 	{
 		return (this.min + this.max) / 2;
 	};
 
-	Range.prototype.overlapsWith = function(other)
+	overlapsWith(other)
 	{
 		var returnValue =
 		(
@@ -33,31 +35,31 @@ function Range(min, max)
 		return returnValue;
 	};
 
-	Range.prototype.overwriteWith = function(other)
+	overwriteWith(other)
 	{
 		this.min = min;
 		this.max = max;
 		return this;
 	};
 
-	Range.prototype.overwriteWithMinAndMax = function(min, max)
+	overwriteWithMinAndMax(min, max)
 	{
 		this.min = min;
 		this.max = max;
 		return this;
 	};
 
-	Range.prototype.random = function(randomizer)
+	random(randomizer)
 	{
 		return this.min + (this.max - this.min) * randomizer.getNextRandom();
 	};
 
-	Range.prototype.size = function()
+	size()
 	{
 		return this.max - this.min;
 	};
 
-	Range.prototype.subtract = function(other)
+	subtract(other)
 	{
 		var returnValues = [];
 
@@ -83,7 +85,7 @@ function Range(min, max)
 		return returnValues;
 	};
 
-	Range.prototype.touches = function(other)
+	touches(other)
 	{
 		var returnValue =
 		(

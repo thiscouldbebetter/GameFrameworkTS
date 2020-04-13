@@ -1,52 +1,53 @@
 
-function VisualAnimation(name, ticksToHoldFrames, frames, isRepeating)
+class VisualAnimation
 {
-	this.name = name;
-	this.ticksToHoldFrames = ticksToHoldFrames;
-	this.frames = frames;
-	this.isRepeating = (isRepeating == null ? true : isRepeating);
-
-	if (this.ticksToHoldFrames == null)
+	constructor(name, ticksToHoldFrames, frames, isRepeating)
 	{
-		this.ticksToHoldFrames = [];
-		for (var f = 0; f < this.frames.length; f++)
+		this.name = name;
+		this.ticksToHoldFrames = ticksToHoldFrames;
+		this.frames = frames;
+		this.isRepeating = (isRepeating == null ? true : isRepeating);
+
+		if (this.ticksToHoldFrames == null)
 		{
-			this.ticksToHoldFrames.push(1);
+			this.ticksToHoldFrames = [];
+			for (var f = 0; f < this.frames.length; f++)
+			{
+				this.ticksToHoldFrames.push(1);
+			}
+		}
+		else if (isNaN(this.ticksToHoldFrames) == false)
+		{
+			var ticksToHoldEachFrame = this.ticksToHoldFrames;
+			this.ticksToHoldFrames = [];
+			for (var f = 0; f < this.frames.length; f++)
+			{
+				this.ticksToHoldFrames.push(ticksToHoldEachFrame);
+			}
+		}
+
+		this.ticksToComplete = 0;
+		for (var f = 0; f < this.ticksToHoldFrames.length; f++)
+		{
+			this.ticksToComplete += this.ticksToHoldFrames[f];
 		}
 	}
-	else if (isNaN(this.ticksToHoldFrames) == false)
-	{
-		var ticksToHoldEachFrame = this.ticksToHoldFrames;
-		this.ticksToHoldFrames = [];
-		for (var f = 0; f < this.frames.length; f++)
-		{
-			this.ticksToHoldFrames.push(ticksToHoldEachFrame);
-		}
-	}
 
-	this.ticksToComplete = 0;
-	for (var f = 0; f < this.ticksToHoldFrames.length; f++)
-	{
-		this.ticksToComplete += this.ticksToHoldFrames[f];
-	}
-}
-
-{
 	// visual
 
-	VisualAnimation.prototype.draw = function(universe, world, display, entity)
+	draw(universe, world, display, entity)
 	{
 		this.update(universe, world, display, entity);
 	};
 
-	VisualAnimation.prototype.frameCurrent = function(drawable)
+	frameCurrent(drawable)
 	{
 		var frameIndexCurrent = this.frameIndexCurrent(drawable);
 		var frameCurrent = this.frames[frameIndexCurrent];
 		return frameCurrent;
 	};
 
-	VisualAnimation.prototype.frameIndexCurrent = function(drawable)
+	frameIndexCurrent(drawable)
 	{
 		var ticksForFramesSoFar = 0;
 		var ticksToHoldFrames = this.ticksToHoldFrames;
@@ -63,13 +64,13 @@ function VisualAnimation(name, ticksToHoldFrames, frames, isRepeating)
 		return f;
 	};
 
-	VisualAnimation.prototype.isComplete = function(drawable)
+	isComplete(drawable)
 	{
 		var returnValue = (drawable.ticksSinceStarted >= this.ticksToComplete);
 		return returnValue;
 	};
 
-	VisualAnimation.prototype.update = function(universe, world, display, entity)
+	update(universe, world, display, entity)
 	{
 		var drawable = entity.drawable;
 		if (drawable.ticksSinceStarted == null)

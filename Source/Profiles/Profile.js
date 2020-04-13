@@ -1,6 +1,9 @@
 
-function Profile(name, worlds)
+class Profile
 {
-	this.name = name;
-	this.worlds = worlds;
+	constructor(name, worlds)
+	{
+		this.name = name;
+		this.worlds = worlds;
+	}
 }

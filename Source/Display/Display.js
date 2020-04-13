@@ -1,30 +1,31 @@
 
-function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorBack, isInvisible)
+class Display
 {
-	this.sizesAvailable = sizesAvailable;
-	this._sizeDefault = this.sizesAvailable[0];
-	this.sizeInPixels = this._sizeDefault;
-	this.fontName = fontName;
-	this.fontHeightInPixels = fontHeightInPixels || 10;
-	this.colorFore = colorFore;
-	this.colorBack = colorBack;
-	this.isInvisible = isInvisible || false;
+	constructor(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorBack, isInvisible)
+	{
+		this.sizesAvailable = sizesAvailable;
+		this._sizeDefault = this.sizesAvailable[0];
+		this.sizeInPixels = this._sizeDefault;
+		this.fontName = fontName;
+		this.fontHeightInPixels = fontHeightInPixels || 10;
+		this.colorFore = colorFore;
+		this.colorBack = colorBack;
+		this.isInvisible = isInvisible || false;
 
-	// Helper variables.
+		// Helper variables.
 
-	this._drawPos = new Coords();
-	this._sizeHalf = new Coords();
-	this._zeroes = Coords.Instances().Zeroes;
-}
+		this._drawPos = new Coords();
+		this._sizeHalf = new Coords();
+		this._zeroes = Coords.Instances().Zeroes;
+	}
 
-{
 	// constants
 
-	Display.RadiansPerTurn = Math.PI * 2.0;
+	static RadiansPerTurn = Math.PI * 2.0;
 
 	// methods
 
-	Display.prototype.clear = function()
+	clear()
 	{
 		this.graphics.clearRect
 		(
@@ -32,7 +33,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		);
 	};
 
-	Display.prototype.drawArc = function
+	drawArc
 	(
 		center, radiusInner, radiusOuter, angleStartInTurns, angleStopInTurns, colorFill, colorBorder
 	)
@@ -95,7 +96,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		}
 	};
 
-	Display.prototype.drawBackground = function(colorBack, colorBorder)
+	drawBackground(colorBack, colorBorder)
 	{
 		this.drawRectangle
 		(
@@ -106,7 +107,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		);
 	};
 
-	Display.prototype.drawCircle = function(center, radius, colorFill, colorBorder)
+	drawCircle(center, radius, colorFill, colorBorder)
 	{
 		var drawPos = this._drawPos.overwriteWith(center);
 
@@ -131,7 +132,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		}
 	};
 
-	Display.prototype.drawCircleWithGradient = function(center, radius, gradientFill, colorBorder)
+	drawCircleWithGradient(center, radius, gradientFill, colorBorder)
 	{
 		this.graphics.beginPath();
 		this.graphics.arc
@@ -164,7 +165,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		}
 	};
 
-	Display.prototype.drawCrosshairs = function(center, radius, color)
+	drawCrosshairs(center, radius, color)
 	{
 		var drawPos = this._drawPos.overwriteWith(center);
 		this.graphics.beginPath();
@@ -176,7 +177,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		this.graphics.stroke();
 	};
 
-	Display.prototype.drawEllipse = function
+	drawEllipse
 	(
 		center, semimajorAxis, semiminorAxis, rotationInTurns, colorFill, colorBorder
 	)
@@ -216,12 +217,12 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		this.graphics.restore();
 	};
 
-	Display.prototype.drawImage = function(imageToDraw, pos)
+	drawImage(imageToDraw, pos)
 	{
 		this.graphics.drawImage(imageToDraw.systemImage, pos.x, pos.y);
 	};
 
-	Display.prototype.drawImagePartial = function(imageToDraw, pos, boxToShow)
+	drawImagePartial(imageToDraw, pos, boxToShow)
 	{
 		var sourcePos = boxToShow.min();
 		var sourceSize = boxToShow.size;
@@ -234,12 +235,12 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		);
 	};
 
-	Display.prototype.drawImageScaled = function(imageToDraw, pos, size)
+	drawImageScaled(imageToDraw, pos, size)
 	{
 		this.graphics.drawImage(imageToDraw.systemImage, pos.x, pos.y, size.x, size.y);
 	};
 
-	Display.prototype.drawLine = function(fromPos, toPos, color, lineThickness)
+	drawLine(fromPos, toPos, color, lineThickness)
 	{
 		var drawPos = this._drawPos;
 
@@ -263,7 +264,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		this.graphics.lineWidth = lineWidthToRestore;
 	};
 
-	Display.prototype.drawPath = function(vertices, color, lineThickness, isClosed)
+	drawPath(vertices, color, lineThickness, isClosed)
 	{
 		var lineWidthSaved = this.graphics.lineWidth;
 
@@ -299,7 +300,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		this.graphics.lineWidth = lineWidthSaved;
 	};
 
-	Display.prototype.drawPixel = function(pos, color)
+	drawPixel(pos, color)
 	{
 		this.graphics.fillStyle = color;
 		this.graphics.fillRect
@@ -308,7 +309,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		);
 	};
 
-	Display.prototype.drawPolygon = function(vertices, colorFill, colorBorder)
+	drawPolygon(vertices, colorFill, colorBorder)
 	{
 		this.graphics.beginPath();
 
@@ -343,7 +344,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		}
 	};
 
-	Display.prototype.drawRectangle = function
+	drawRectangle
 	(
 		pos,
 		size,
@@ -380,7 +381,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		}
 	};
 
-	Display.prototype.drawRectangleCentered = function
+	drawRectangleCentered
 	(
 		pos,
 		size,
@@ -393,7 +394,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		this.drawRectangle(posAdjusted, size, colorFill, colorBorder);
 	};
 
-	Display.prototype.drawText = function
+	drawText
 	(
 		text,
 		fontHeightInPixels,
@@ -467,7 +468,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		this.graphics.font = fontToRestore;
 	};
 
-	Display.prototype.fontSet = function(fontName, fontHeightInPixels)
+	fontSet(fontName, fontHeightInPixels)
 	{
 		if (fontName != this.fontName || fontHeightInPixels != this.fontHeightInPixels)
 		{
@@ -477,12 +478,12 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		}
 	};
 
-	Display.prototype.hide = function(universe)
+	hide(universe)
 	{
 		universe.platformHelper.platformableRemove(this);
 	};
 
-	Display.prototype.initialize = function(universe)
+	initialize(universe)
 	{
 		if (this.isInvisible)
 		{
@@ -510,12 +511,12 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		return this;
 	};
 
-	Display.prototype.sizeDefault = function()
+	sizeDefault()
 	{
 		return this._sizeDefault;
 	};
 
-	Display.prototype.scaleFactor = function()
+	scaleFactor()
 	{
 		if (this._scaleFactor == null)
 		{
@@ -525,7 +526,7 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		return this._scaleFactor;
 	};
 
-	Display.prototype.textWidthForFontHeight = function(textToMeasure, fontHeightInPixels)
+	textWidthForFontHeight(textToMeasure, fontHeightInPixels)
 	{
 		var fontToRestore = this.graphics.font;
 		this.fontSet(null, fontHeightInPixels);
@@ -534,14 +535,14 @@ function Display(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorB
 		return returnValue;
 	};
 
-	Display.prototype.toImage = function()
+	toImage()
 	{
 		return Image.fromSystemImage("[fromDisplay]", this.canvas);
 	};
 
 	// platformable
 
-	Display.prototype.toDomElement = function()
+	toDomElement()
 	{
 		if (this.canvas == null)
 		{

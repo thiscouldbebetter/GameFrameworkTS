@@ -1,9 +1,5 @@
 
-function MapCell()
+class MapCell
 {
-	// Do nothing.
-}
-
-{
-	MapCell.prototype.clone = function() { return new MapCell(); };
+	clone() { return new MapCell(); };
 }

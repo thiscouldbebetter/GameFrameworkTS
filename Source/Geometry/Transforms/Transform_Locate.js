@@ -1,14 +1,15 @@
 
-function Transform_Locate(loc)
+class Transform_Locate
 {
-	this.loc = loc;
+	constructor(loc)
+	{
+		this.loc = loc;
 
-	this.transformOrient = new Transform_Orient();
-	this.transformTranslate = new Transform_Translate();
-}
+		this.transformOrient = new Transform_Orient();
+		this.transformTranslate = new Transform_Translate();
+	}
 
-{
-	Transform_Locate.prototype.transformCoords = function(coordsToTransform)
+	transformCoords(coordsToTransform)
 	{
 		this.transformOrient.orientation = this.loc.orientation;
 		this.transformOrient.transformCoords(coordsToTransform);

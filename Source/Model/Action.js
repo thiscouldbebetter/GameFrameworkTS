@@ -1,11 +1,13 @@
 
-function Action(name, perform)
+class Action
 {
-	this.name = name;
-	this.perform = perform;
-}
-{
-	Action.Instances = function()
+	constructor(name, perform)
+	{
+		this.name = name;
+		this.perform = perform;
+	}
+
+	static Instances()
 	{
 		if (Action._Instances == null)
 		{
@@ -14,7 +16,11 @@ function Action(name, perform)
 		return Action._Instances;
 	};
 
-	function Action_Instances()
+}
+
+class Action_Instances
+{
+	constructor()
 	{
 		this.DoNothing = new Action
 		(
@@ -55,3 +61,4 @@ function Action(name, perform)
 		);
 	}
 }
+

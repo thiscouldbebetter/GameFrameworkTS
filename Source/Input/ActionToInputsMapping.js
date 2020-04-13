@@ -1,19 +1,21 @@
 
-function ActionToInputsMapping(actionName, inputNames, inactivateInputWhenActionPerformed)
+class ActionToInputsMapping
 {
-	this.actionName = actionName;
-	this.inputNames = inputNames;
-	this.inactivateInputWhenActionPerformed = inactivateInputWhenActionPerformed;
-}
-{
-	ActionToInputsMapping.prototype.action = function(universe)
+	constructor(actionName, inputNames, inactivateInputWhenActionPerformed)
+	{
+		this.actionName = actionName;
+		this.inputNames = inputNames;
+		this.inactivateInputWhenActionPerformed = inactivateInputWhenActionPerformed;
+	}
+
+	action(universe)
 	{
 		return universe.world.defns.actions[this.actionName];
 	};
 
 	// Cloneable implementation.
 
-	ActionToInputsMapping.prototype.clone = function()
+	clone()
 	{
 		return new ActionToInputsMapping
 		(
@@ -21,7 +23,7 @@ function ActionToInputsMapping(actionName, inputNames, inactivateInputWhenAction
 		);
 	};
 
-	ActionToInputsMapping.prototype.overwriteWith = function(other)
+	overwriteWith(other)
 	{
 		this.actionName = other.actionName;
 		this.inputNames = other.inputNames.slice();

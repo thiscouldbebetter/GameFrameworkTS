@@ -1,11 +1,12 @@
 
-function Transform_OrientForCamera(orientation)
+class Transform_OrientForCamera
 {
-	this.orientation = orientation;
-}
+	constructor(orientation)
+	{
+		this.orientation = orientation;
+	}
 
-{
-	Transform_OrientForCamera.prototype.transformCoords = function(coordsToTransform)
+	transformCoords(coordsToTransform)
 	{
 		coordsToTransform.overwriteWithDimensions
 		(

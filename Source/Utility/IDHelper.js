@@ -1,9 +1,11 @@
-function IDHelper()
+class IDHelper
 {
-	this._idNext = 0;
-}
-{
-	IDHelper.Instance = function()
+	constructor()
+	{
+		this._idNext = 0;
+	}
+
+	static Instance()
 	{
 		if (IDHelper._instance == null)
 		{
@@ -12,7 +14,7 @@ function IDHelper()
 		return IDHelper._instance;
 	};
 
-	IDHelper.prototype.idNext = function()
+	idNext()
 	{
 		var returnValue = "_" + this._idNext;
 		this._idNext++;

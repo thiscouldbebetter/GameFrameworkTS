@@ -1,11 +1,12 @@
 
-function Transform_DimensionsSwap(dimensionIndices)
+class Transform_DimensionsSwap
 {
-	this.dimensionIndices = dimensionIndices;
-}
+	constructor(dimensionIndices)
+	{
+		this.dimensionIndices = dimensionIndices;
+	}
 
-{
-	Transform_DimensionsSwap.prototype.transformCoords = function(coordsToTransform)
+	transformCoords(coordsToTransform)
 	{
 		var dimensionIndex0 = this.dimensionIndices[0];
 		var dimensionIndex1 = this.dimensionIndices[1];

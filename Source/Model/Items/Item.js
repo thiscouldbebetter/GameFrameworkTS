@@ -1,37 +1,39 @@
 
-function Item(defnName, quantity)
+class Item
 {
-	this.defnName = defnName;
-	this.quantity = quantity;
-}
-{
-	Item.prototype.defn = function(world)
+	constructor(defnName, quantity)
+	{
+		this.defnName = defnName;
+		this.quantity = quantity;
+	}
+
+	defn(world)
 	{
 		return world.defns.itemDefns[this.defnName];
 	};
 
-	Item.prototype.isUsable = function(world)
+	isUsable(world)
 	{
 		return (this.defn(world).use != null);
 	};
 
-	Item.prototype.toEntity = function()
+	toEntity()
 	{
 		// todo
 		return new Entity(this.defnName, [ this ]);
 	};
 
-	Item.prototype.toString = function(world)
+	toString(world)
 	{
 		return this.defn(world).appearance + " (" + this.quantity + ")";
 	};
 
-	Item.prototype.tradeValue = function(world)
+	tradeValue(world)
 	{
 		return this.quantity * this.defn(world).tradeValue;
 	};
 
-	Item.prototype.use = function(universe, world, place, userEntity, itemEntity)
+	use(universe, world, place, userEntity, itemEntity)
 	{
 		var returnValue = null;
 		var defn = this.defn(world);
@@ -44,7 +46,7 @@ function Item(defnName, quantity)
 
 	// cloneable
 
-	Item.prototype.clone = function()
+	clone()
 	{
 		return new Item(this.defnName, this.quantity);
 	};

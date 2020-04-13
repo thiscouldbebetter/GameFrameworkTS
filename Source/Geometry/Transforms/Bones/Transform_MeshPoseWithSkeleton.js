@@ -1,30 +1,31 @@
 
-function Transform_MeshPoseWithSkeleton
-(
-	meshAtRest,
-	skeletonAtRest,
-	boneInfluences,
-	skeletonPosed
-)
+class Transform_MeshPoseWithSkeleton
 {
-	this.meshAtRest = meshAtRest;
-	this.skeletonAtRest = skeletonAtRest;
-	this.skeletonPosed = skeletonPosed || this.skeletonAtRest.clone();
-	this.boneInfluences = boneInfluences;
-	this.boneInfluences.addLookups( x => x.boneName );
+	constructor
+	(
+		meshAtRest,
+		skeletonAtRest,
+		boneInfluences,
+		skeletonPosed
+	)
+	{
+		this.meshAtRest = meshAtRest;
+		this.skeletonAtRest = skeletonAtRest;
+		this.skeletonPosed = skeletonPosed || this.skeletonAtRest.clone();
+		this.boneInfluences = boneInfluences;
+		this.boneInfluences.addLookups( x => x.boneName );
 
-	// Helper variables.
-	this._orientation = new Orientation(new Coords(), new Coords());
-	this._vertex = new Coords();
-}
+		// Helper variables.
+		this._orientation = new Orientation(new Coords(), new Coords());
+		this._vertex = new Coords();
+	}
 
-{
-	Transform_MeshPoseWithSkeleton.prototype.transform = function(transformable)
+	transform(transformable)
 	{
 		return this.transformMesh(transformable);
 	};
 
-	Transform_MeshPoseWithSkeleton.prototype.transformMesh = function(meshToPose)
+	transformMesh(meshToPose)
 	{
 		var meshAtRestVertices = this.meshAtRest.geometry.vertexOffsets;
 		var meshToPoseVertices = meshToPose.geometry.vertexOffsets;

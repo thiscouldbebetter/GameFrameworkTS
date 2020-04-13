@@ -1,8 +1,7 @@
 
-function Transform()
-{}
+class Transform
 {
-	Transform.applyTransformToCoordsArrays = function
+	static applyTransformToCoordsArrays
 	(
 		transformToApply,
 		coordsArraysToTransform
@@ -20,7 +19,7 @@ function Transform()
 		}
 	};
 
-	Transform.applyTransformToCoordsMany = function(transformToApply, coordsSetToTransform)
+	static applyTransformToCoordsMany(transformToApply, coordsSetToTransform)
 	{
 		for (var i = 0; i < coordsSetToTransform.length; i++)
 		{

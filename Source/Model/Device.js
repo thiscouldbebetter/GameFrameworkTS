@@ -1,16 +1,17 @@
 
-function Device(name, initialize, update, use)
+class Device
 {
-	this.name = name;
-	this.initialize = initialize;
-	this.update = update;
-	this.use = use;
-}
+	constructor(name, initialize, update, use)
+	{
+		this.name = name;
+		this.initialize = initialize;
+		this.update = update;
+		this.use = use;
+	}
 
-{
 	// static methods
 
-	Device.gun = function()
+	static gun()
 	{
 		var returnValue = new Device
 		(
@@ -148,7 +149,7 @@ function Device(name, initialize, update, use)
 
 	// clonable
 
-	Device.prototype.clone = function()
+	clone()
 	{
 		return new Device(this.name, this.initialize, this.update, this.use);
 	};

@@ -1,21 +1,23 @@
 
-function VenueTask(venueInner, perform, done)
+class VenueTask
 {
-	this.venueInner = venueInner;
-	this.perform = perform;
-	this.done = done;
+	constructor(venueInner, perform, done)
+	{
+		this.venueInner = venueInner;
+		this.perform = perform;
+		this.done = done;
 
-	this.isStarted = false;
-}
-{
+		this.isStarted = false;
+	}
+
 	// instance methods
 
-	VenueTask.prototype.draw = function(universe)
+	draw(universe)
 	{
 		this.venueInner.draw(universe);
 	};
 
-	VenueTask.prototype.updateForTimerTick = function(universe)
+	updateForTimerTick(universe)
 	{
 		this.venueInner.updateForTimerTick(universe);
 

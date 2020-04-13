@@ -1,34 +1,35 @@
 
-function Maze(cellSizeInPixels, sizeInCells, neighborOffsets)
+class Maze
 {
-	this.cellSizeInPixels = cellSizeInPixels;
-	this.sizeInCells = sizeInCells;
-	this.neighborOffsets = neighborOffsets;
-
-	this.sizeInPixels = this.sizeInCells.clone().multiply(this.cellSizeInPixels);
-
-	var numberOfNeighbors = this.neighborOffsets.length;
-
-	var numberOfCellsInMaze = this.sizeInCells.productOfDimensions();
-
-	this.cells = [];
-
-	for (var i = 0; i < numberOfCellsInMaze; i++)
+	constructor(cellSizeInPixels, sizeInCells, neighborOffsets)
 	{
-		var cell = new MazeCell(numberOfNeighbors);
-		this.cells.push(cell);
+		this.cellSizeInPixels = cellSizeInPixels;
+		this.sizeInCells = sizeInCells;
+		this.neighborOffsets = neighborOffsets;
+
+		this.sizeInPixels = this.sizeInCells.clone().multiply(this.cellSizeInPixels);
+
+		var numberOfNeighbors = this.neighborOffsets.length;
+
+		var numberOfCellsInMaze = this.sizeInCells.productOfDimensions();
+
+		this.cells = [];
+
+		for (var i = 0; i < numberOfCellsInMaze; i++)
+		{
+			var cell = new MazeCell(numberOfNeighbors);
+			this.cells.push(cell);
+		}
+
+		this.sizeInCellsMinusOnes = sizeInCells.clone().subtract
+		(
+			new Coords(1, 1, 1)
+		);
 	}
 
-	this.sizeInCellsMinusOnes = sizeInCells.clone().subtract
-	(
-		new Coords(1, 1, 1)
-	);
-}
-
-{
 	// static methods
 
-	Maze.prototype.generateRandom = function(randomizer)
+	static generateRandom(randomizer)
 	{
 		var cells = this.cells;
 		var sizeInCells = this.sizeInCells;
@@ -70,7 +71,7 @@ function Maze(cellSizeInPixels, sizeInCells, neighborOffsets)
 		return this;
 	};
 
-	Maze.prototype.generateRandom_ConnectCellToRandomNeighbor = function
+	generateRandom_ConnectCellToRandomNeighbor
 	(
 		randomizer,
 		cellPos,
@@ -135,13 +136,13 @@ function Maze(cellSizeInPixels, sizeInCells, neighborOffsets)
 
 	// instance methods
 
-	Maze.prototype.cellAtPos = function(cellPos)
+	cellAtPos(cellPos)
 	{
 		var cellIndex = this.indexOfCellAtPos(cellPos);
 		return this.cells[cellIndex];
 	};
 
-	Maze.prototype.indexOfCellAtPos = function(cellPos)
+	indexOfCellAtPos(cellPos)
 	{
 		var cellIndex = cellPos.y * this.sizeInCells.x + cellPos.x;
 

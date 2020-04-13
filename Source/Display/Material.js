@@ -1,14 +1,15 @@
 
-function Material(name, colorStroke, colorFill, texture)
+class Material
 {
-	this.name = name;
-	this.colorStroke = colorStroke;
-	this.colorFill = colorFill;
-	this.texture = texture;
-}
+	constructor(name, colorStroke, colorFill, texture)
+	{
+		this.name = name;
+		this.colorStroke = colorStroke;
+		this.colorFill = colorFill;
+		this.texture = texture;
+	}
 
-{
-	Material.Instances = function()
+	static Instances()
 	{
 		if (Material._Instances == null)
 		{

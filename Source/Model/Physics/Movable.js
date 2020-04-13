@@ -1,11 +1,13 @@
 
-function Movable(accelerationPerTick, accelerate)
+class Movable
 {
-	this.accelerationPerTick = accelerationPerTick;
-	this.accelerate = accelerate || this.accelerateForward;
-}
-{
-	Movable.prototype.accelerateForward = function(universe, world, place, entityMovable)
+	constructor(accelerationPerTick, accelerate)
+	{
+		this.accelerationPerTick = accelerationPerTick;
+		this.accelerate = accelerate || this.accelerateForward;
+	}
+
+	accelerateForward(universe, world, place, entityMovable)
 	{
 		var entityLoc = entityMovable.locatable.loc;
 		entityLoc.accel.overwriteWith
@@ -19,7 +21,7 @@ function Movable(accelerationPerTick, accelerate)
 
 	// cloneable
 
-	Movable.prototype.clone = function()
+	clone = function()
 	{
 		return this;
 	};

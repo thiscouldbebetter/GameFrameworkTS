@@ -1,12 +1,13 @@
 
-function VenueLayered(children, colorToOverlayBetweenChildren)
+class VenueLayered
 {
-	this.children = children;
-	this.colorToOverlayBetweenChildren = colorToOverlayBetweenChildren;
-}
+	constructor(children, colorToOverlayBetweenChildren)
+	{
+		this.children = children;
+		this.colorToOverlayBetweenChildren = colorToOverlayBetweenChildren;
+	}
 
-{
-	VenueLayered.prototype.initialize = function(universe)
+	initialize(universe)
 	{
 		for (var i = 0; i < this.children.length; i++)
 		{
@@ -18,12 +19,12 @@ function VenueLayered(children, colorToOverlayBetweenChildren)
 		}
 	};
 
-	VenueLayered.prototype.updateForTimerTick = function(universe)
+	updateForTimerTick(universe)
 	{
 		this.children[this.children.length - 1].updateForTimerTick(universe);
 	};
 
-	VenueLayered.prototype.draw = function(universe)
+	draw(universe)
 	{
 		for (var i = 0; i < this.children.length; i++)
 		{

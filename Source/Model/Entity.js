@@ -1,19 +1,20 @@
 
-function Entity(name, properties)
+class Entity
 {
-	this.name = name;
-	this.properties = properties;
-
-	for (var i = 0; i < this.properties.length; i++)
+	constructor(name, properties)
 	{
-		var property = this.properties[i];
-		var propertyName = property.constructor.name.lowercaseFirstCharacter();
-		this[propertyName] = property;
-	}
-}
+		this.name = name;
+		this.properties = properties;
 
-{
-	Entity.prototype.initialize = function(universe, world, place)
+		for (var i = 0; i < this.properties.length; i++)
+		{
+			var property = this.properties[i];
+			var propertyName = property.constructor.name.lowercaseFirstCharacter();
+			this[propertyName] = property;
+		}
+	}
+
+	initialize(universe, world, place)
 	{
 		var entityProperties = this.properties;
 		for (var p = 0; p < entityProperties.length; p++)
@@ -29,7 +30,7 @@ function Entity(name, properties)
 
 	// Cloneable.
 
-	Entity.prototype.clone = function()
+	clone()
 	{
 		var nameCloned = this.name; // + IDHelper.Instance().idNext();
 		var propertiesCloned = [];

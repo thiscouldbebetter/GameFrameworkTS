@@ -1,23 +1,25 @@
 
-function Stopwatch(name)
+class Stopwatch
 {
-	this.name = name;
-	this.timeElapsedLastRun = 0;
-	this.timeElapsedTotal = 0;
-}
-{
-	Stopwatch.prototype.log = function()
+	constructor(name)
+	{
+		this.name = name;
+		this.timeElapsedLastRun = 0;
+		this.timeElapsedTotal = 0;
+	}
+
+	log()
 	{
 		console.log(this.name + ": " + this.timeElapsedLastRun);
 	};
 
-	Stopwatch.prototype.start = function()
+	start()
 	{
 		this.timeStarted = new Date();
 		return this;
 	};
 
-	Stopwatch.prototype.stop = function()
+	stop()
 	{
 		this.timeStopped = new Date();
 		this.timeElapsedLastRun = this.timeStopped - this.timeStarted;

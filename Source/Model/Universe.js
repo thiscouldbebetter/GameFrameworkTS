@@ -1,28 +1,29 @@
 
-function Universe(name, version, timerHelper, display, mediaLibrary, world)
+class Universe
 {
-	this.name = name;
-	this.version = version;
-	this.timerHelper = timerHelper;
-	this.display = display;
-	this.mediaLibrary = mediaLibrary;
-	this.world = world;
+	constructor(name, version, timerHelper, display, mediaLibrary, world)
+	{
+		this.name = name;
+		this.version = version;
+		this.timerHelper = timerHelper;
+		this.display = display;
+		this.mediaLibrary = mediaLibrary;
+		this.world = world;
 
-	this.collisionHelper = new CollisionHelper();
-	this.controlBuilder = new ControlBuilder([ControlStyle.Instances().Default]);
-	this.entityBuilder = new EntityBuilder();
-	this.idHelper = IDHelper.Instance();
-	this.platformHelper = new PlatformHelper();
-	this.randomizer = new RandomizerSystem();
-	this.serializer = new Serializer();
+		this.collisionHelper = new CollisionHelper();
+		this.controlBuilder = new ControlBuilder([ControlStyle.Instances().Default]);
+		this.entityBuilder = new EntityBuilder();
+		this.idHelper = IDHelper.Instance();
+		this.platformHelper = new PlatformHelper();
+		this.randomizer = new RandomizerSystem();
+		this.serializer = new Serializer();
 
-	this.venueNext = null;
-}
+		this.venueNext = null;
+	}
 
-{
 	// static methods
 
-	Universe.new = function(name, version, timerHelper, display, mediaLibrary, world)
+	static new(name, version, timerHelper, display, mediaLibrary, world)
 	{
 		var returnValue = new Universe
 		(
@@ -47,7 +48,7 @@ function Universe(name, version, timerHelper, display, mediaLibrary, world)
 
 	// instance methods
 
-	Universe.prototype.initialize = function(callback)
+	initialize(callback)
 	{
 		this.mediaLibrary.waitForItemsAllToLoad
 		(
@@ -55,7 +56,7 @@ function Universe(name, version, timerHelper, display, mediaLibrary, world)
 		);
 	};
 
-	Universe.prototype.initialize_MediaLibraryLoaded = function(callback)
+	initialize_MediaLibraryLoaded(callback)
 	{
 		this.platformHelper.initialize(this);
 		this.storageHelper = new StorageHelper
@@ -94,18 +95,18 @@ function Universe(name, version, timerHelper, display, mediaLibrary, world)
 		callback(this);
 	};
 
-	Universe.prototype.reset = function()
+	reset()
 	{
 		// hack
 		this.soundHelper.reset();
 	};
 
-	Universe.prototype.start = function()
+	start()
 	{
 		this.timerHelper.initialize(this.updateForTimerTick.bind(this));
 	};
 
-	Universe.prototype.updateForTimerTick = function()
+	updateForTimerTick()
 	{
 		this.inputHelper.updateForTimerTick(this);
 

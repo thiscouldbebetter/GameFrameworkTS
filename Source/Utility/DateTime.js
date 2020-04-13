@@ -1,18 +1,19 @@
 
-function DateTime(year, month, day, hours, minutes, seconds)
+class DateTime
 {
-	this.year = year;
-	this.month = month;
-	this.day = day;
-	this.hours = hours;
-	this.minutes = minutes;
-	this.seconds = seconds;
-}
+	constructor(year, month, day, hours, minutes, seconds)
+	{
+		this.year = year;
+		this.month = month;
+		this.day = day;
+		this.hours = hours;
+		this.minutes = minutes;
+		this.seconds = seconds;
+	}
 
-{
 	// static methods
 
-	DateTime.fromSystemDate = function(systemDate)
+	static fromSystemDate(systemDate)
 	{
 		var returnValue = new DateTime
 		(
@@ -27,14 +28,14 @@ function DateTime(year, month, day, hours, minutes, seconds)
 		return returnValue;
 	};
 
-	DateTime.now = function()
+	static now()
 	{
 		return DateTime.fromSystemDate(new Date());
 	};
 
 	// instance methods
 
-	DateTime.prototype.equals = function(other)
+	equals(other)
 	{
 		var returnValue =
 		(
@@ -49,7 +50,7 @@ function DateTime(year, month, day, hours, minutes, seconds)
 		return returnValue;
 	};
 
-	DateTime.prototype.toStringMMDD_HHMM_SS = function()
+	toStringMMDD_HHMM_SS()
 	{
 		var returnValue =
 			""
@@ -64,7 +65,7 @@ function DateTime(year, month, day, hours, minutes, seconds)
 		return returnValue;
 	};
 
-	DateTime.prototype.toStringTimestamp = function()
+	toStringTimestamp()
 	{
 		var returnValue =
 			""

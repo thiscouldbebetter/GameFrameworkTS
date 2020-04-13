@@ -1,52 +1,53 @@
 
-function ControlSelect
-(
-	name,
-	pos,
-	size,
-	valueSelected,
-	options,
-	bindingForOptionValues,
-	bindingForOptionText,
-	fontHeightInPixels
-)
+class ControlSelect
 {
-	this.name = name;
-	this.pos = pos;
-	this.size = size;
-	this._valueSelected = valueSelected;
-	this._options = options;
-	this.bindingForOptionValues = bindingForOptionValues;
-	this.bindingForOptionText = bindingForOptionText;
-	this.fontHeightInPixels = fontHeightInPixels;
-
-	this.indexOfOptionSelected = null;
-	var valueSelected = this.valueSelected();
-	var options = this.options();
-	for (var i = 0; i < options.length; i++)
+	constructor
+	(
+		name,
+		pos,
+		size,
+		valueSelected,
+		options,
+		bindingForOptionValues,
+		bindingForOptionText,
+		fontHeightInPixels
+	)
 	{
-		var option = options[i];
-		var optionValue = this.bindingForOptionValues.contextSet
-		(
-			option
-		).get();
+		this.name = name;
+		this.pos = pos;
+		this.size = size;
+		this._valueSelected = valueSelected;
+		this._options = options;
+		this.bindingForOptionValues = bindingForOptionValues;
+		this.bindingForOptionText = bindingForOptionText;
+		this.fontHeightInPixels = fontHeightInPixels;
 
-		if (optionValue == valueSelected)
+		this.indexOfOptionSelected = null;
+		var valueSelected = this.valueSelected();
+		var options = this.options();
+		for (var i = 0; i < options.length; i++)
 		{
-			this.indexOfOptionSelected = i;
-			break;
+			var option = options[i];
+			var optionValue = this.bindingForOptionValues.contextSet
+			(
+				option
+			).get();
+
+			if (optionValue == valueSelected)
+			{
+				this.indexOfOptionSelected = i;
+				break;
+			}
 		}
+
+		this.isHighlighted = false;
+
+		// Helper variables.
+		this._drawPos = new Coords();
+		this._sizeHalf = new Coords();
 	}
 
-	this.isHighlighted = false;
-
-	// Helper variables.
-	this._drawPos = new Coords();
-	this._sizeHalf = new Coords();
-}
-
-{
-	ControlSelect.prototype.actionHandle = function(actionNameToHandle)
+	actionHandle(actionNameToHandle)
 	{
 		var controlActionNames = ControlActionNames.Instances();
 		if (actionNameToHandle == controlActionNames.ControlDecrement)
@@ -63,23 +64,23 @@ function ControlSelect
 		}
 	};
 
-	ControlSelect.prototype.focusGain = function()
+	focusGain()
 	{
 			this.isHighlighted = true;
 	};
 
-	ControlSelect.prototype.focusLose = function()
+	focusLose()
 	{
 			this.isHighlighted = false;
 	};
 
-	ControlSelect.prototype.isEnabled = function()
+	isEnabled()
 	{
 		// todo
 		return true;
 	};
 
-	ControlSelect.prototype.optionSelected = function()
+	optionSelected()
 	{
 		var optionSelected =
 		(
@@ -90,7 +91,7 @@ function ControlSelect
 		return optionSelected;
 	};
 
-	ControlSelect.prototype.optionSelectedNextInDirection = function(direction)
+	optionSelectedNextInDirection(direction)
 	{
 		var options = this.options();
 
@@ -120,30 +121,30 @@ function ControlSelect
 		}
 	};
 
-	ControlSelect.prototype.options = function()
+	options()
 	{
 		return (this._options.get == null ? this._options : this._options.get() );
 	};
 
-	ControlSelect.prototype.mouseClick = function(clickPos)
+	mouseClick(clickPos)
 	{
 		this.optionSelectedNextInDirection(1);
 		return true; // wasClickHandled
 	};
 
-	ControlSelect.prototype.style = function(universe)
+	style(universe)
 	{
 		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
 	};
 
-	ControlSelect.prototype.valueSelected = function()
+	valueSelected()
 	{
 		return (this._valueSelected == null ? null : (this._valueSelected.get == null ? this._valueSelected : this._valueSelected.get() ) );
 	};
 
 	// drawable
 
-	ControlSelect.prototype.draw = function(universe, display, drawLoc)
+	draw(universe, display, drawLoc)
 	{
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 

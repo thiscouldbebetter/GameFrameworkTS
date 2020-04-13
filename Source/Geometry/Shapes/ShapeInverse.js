@@ -1,5 +1,8 @@
 
-function ShapeInverse(shape)
+class ShapeInverse
 {
-	this.shape = shape;
+	constructor(shape)
+	{
+		this.shape = shape;
+	}
 }

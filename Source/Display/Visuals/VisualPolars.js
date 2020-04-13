@@ -1,19 +1,20 @@
 
-function VisualPolars(polars, color, lineThickness)
+class VisualPolars
 {
-	this.polars = polars;
-	this.color = color;
-	this.lineThickness = (lineThickness == null ? 1 : lineThickness);
+	constructor(polars, color, lineThickness)
+	{
+		this.polars = polars;
+		this.color = color;
+		this.lineThickness = (lineThickness == null ? 1 : lineThickness);
 
-	// temps
+		// temps
 
-	this._polar = new Polar();
-	this._fromPos = new Coords();
-	this._toPos = new Coords();
-}
+		this._polar = new Polar();
+		this._fromPos = new Coords();
+		this._toPos = new Coords();
+	}
 
-{
-	VisualPolars.prototype.draw = function(universe, world, display, entity)
+	draw(universe, world, display, entity)
 	{
 		var drawableLoc = entity.locatable.loc;
 		var drawablePos = drawableLoc.pos;

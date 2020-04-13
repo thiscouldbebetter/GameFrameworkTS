@@ -1,15 +1,17 @@
 
-function Reference(value)
+class Reference
 {
-	this.value = value;
-}
-{
-	Reference.prototype.get = function()
+	constructor(value)
+	{
+		this.value = value;
+	}
+
+	get()
 	{
 		return this.value;
 	};
 
-	Reference.prototype.set = function(valueToSet)
+	set(valueToSet)
 	{
 		this.value = valueToSet;
 		return this.value;

@@ -1,12 +1,14 @@
 
-function ProfileHelper(storageHelper)
+class ProfileHelper
 {
-	this.storageHelper = storageHelper;
+	constructor(storageHelper)
+	{
+		this.storageHelper = storageHelper;
 
-	this.propertyName = "Profiles";
-}
-{
-	ProfileHelper.prototype.profileAdd = function(profile)
+		this.propertyName = "Profiles";
+	}
+
+	profileAdd(profile)
 	{
 		var profiles = this.profiles();
 		profiles.push(profile);
@@ -17,7 +19,7 @@ function ProfileHelper(storageHelper)
 		);
 	};
 
-	ProfileHelper.prototype.profileDelete = function(profileToDelete)
+	profileDelete(profileToDelete)
 	{
 		var profiles = this.profiles();
 
@@ -34,7 +36,7 @@ function ProfileHelper(storageHelper)
 		this.storageHelper.save(this.propertyName, profiles);
 	};
 
-	ProfileHelper.prototype.profileSave = function(profileToSave)
+	profileSave(profileToSave)
 	{
 		var wasSaveSuccessful;
 
@@ -68,7 +70,7 @@ function ProfileHelper(storageHelper)
 		return wasSaveSuccessful;
 	};
 
-	ProfileHelper.prototype.profiles = function()
+	profiles()
 	{
 		var profiles = this.storageHelper.load
 		(
@@ -88,7 +90,7 @@ function ProfileHelper(storageHelper)
 		return profiles;
 	};
 
-	ProfileHelper.prototype.profilesAllDelete = function(profileToDelete)
+	profilesAllDelete(profileToDelete)
 	{
 		this.storageHelper.save
 		(

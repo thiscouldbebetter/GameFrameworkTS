@@ -1,15 +1,17 @@
 
-function Wedge(vertex, directionMin, angleSpannedInTurns)
+class Wedge
 {
-	this.vertex = vertex;
-	this.directionMin = directionMin;
-	this.angleSpannedInTurns = angleSpannedInTurns;
+	constructor(vertex, directionMin, angleSpannedInTurns)
+	{
+		this.vertex = vertex;
+		this.directionMin = directionMin;
+		this.angleSpannedInTurns = angleSpannedInTurns;
 
-	// Helper variable.
-	this.rayDirectionMinAsPolar = new Polar(0, 1);
-}
-{
-	Wedge.prototype.angleInTurnsMax = function()
+		// Helper variable.
+		this.rayDirectionMinAsPolar = new Polar(0, 1);
+	}
+
+	angleInTurnsMax()
 	{
 		var returnValue = 
 		(
@@ -22,7 +24,7 @@ function Wedge(vertex, directionMin, angleSpannedInTurns)
 		return returnValue;
 	};
 
-	Wedge.prototype.angleInTurnsMin = function()
+	angleInTurnsMin()
 	{
 		return this.rayDirectionMinAsPolar.fromCoords
 		(
@@ -30,7 +32,7 @@ function Wedge(vertex, directionMin, angleSpannedInTurns)
 		).azimuthInTurns;
 	};
 
-	Wedge.prototype.collider = function()
+	collider()
 	{
 		if (this._collider == null)
 		{
@@ -115,12 +117,12 @@ function Wedge(vertex, directionMin, angleSpannedInTurns)
 
 	// cloneable
 
-	Wedge.prototype.clone = function()
+	clone()
 	{
 		return new Wedge(this.vertex.clone(), this.directionMin.clone(), this.angleSpannedInTurns);
 	};
 
-	Wedge.prototype.overwriteWith = function(other)
+	overwriteWith(other)
 	{
 		this.vertex.overwriteWith(other.vertex);
 		this.directionMin.overwriteWith(other.directionMin);

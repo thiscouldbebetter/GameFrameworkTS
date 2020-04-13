@@ -1,14 +1,15 @@
 
-function Video(name, sourcePath)
+class Video
 {
-	this.name = name;
-	this.sourcePath = sourcePath;
+	constructor(name, sourcePath)
+	{
+		this.name = name;
+		this.sourcePath = sourcePath;
 
-	this._size = null;
-}
+		this._size = null;
+	}
 
-{
-	Video.prototype.toDomElement = function(platformHelper)
+	toDomElement(platformHelper)
 	{
 		if (this.domElement == null)
 		{
@@ -27,14 +28,14 @@ function Video(name, sourcePath)
 		return this.domElement;
 	};
 
-	Video.prototype.play = function(universe)
+	play(universe)
 	{
 		this.isFinished = false;
 		this._size = universe.display.sizeInPixels;
 		universe.platformHelper.platformableAdd(this);
 	};
 
-	Video.prototype.stop = function(platformHelper)
+	stop(platformHelper)
 	{
 		platformHelper.platformableRemove(this);
 		this.isFinished = true;

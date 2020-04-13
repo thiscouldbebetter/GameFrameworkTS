@@ -1,11 +1,7 @@
 
-function VisualNone()
+class VisualNone
 {
-	// do nothing
-}
-
-{
-	VisualNone.prototype.draw = function(universe, world, display, entity)
+	draw(universe, world, display, entity)
 	{
 		// do nothing
 	};

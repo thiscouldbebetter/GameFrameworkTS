@@ -1,6 +1,9 @@
 
-function VideoHelper(videos)
+class VideoHelper
 {
-	this.videos = videos;
-	this.videos.addLookupsByName();
+	constructor(videos)
+	{
+		this.videos = videos;
+		this.videos.addLookupsByName();
+	}
 }

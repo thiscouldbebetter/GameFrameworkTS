@@ -1,11 +1,7 @@
 
-function FileHelper()
+class FileHelper
 {
-	// do nothing
-}
-
-{
-	FileHelper.prototype.loadFileAsBinaryString = function(systemFileToLoad, callback, contextForCallback)
+	loadFileAsBinaryString(systemFileToLoad, callback, contextForCallback)
 	{
 		var fileReader = new FileReader();
 		fileReader.systemFile = systemFileToLoad;
@@ -15,7 +11,7 @@ function FileHelper()
 		fileReader.readAsBinaryString(systemFileToLoad);
 	};
 
-	FileHelper.prototype.loadFileAsText = function(systemFileToLoad, callback, contextForCallback)
+	loadFileAsText(systemFileToLoad, callback, contextForCallback)
 	{
 		var fileReader = new FileReader();
 		fileReader.systemFile = systemFileToLoad;
@@ -25,7 +21,7 @@ function FileHelper()
 		fileReader.readAsText(systemFileToLoad);
 	};
 
-	FileHelper.prototype.loadFile_FileLoaded = function(fileLoadedEvent)
+	loadFile_FileLoaded(fileLoadedEvent)
 	{
 		var fileReader = fileLoadedEvent.target;
 		var contentsOfFileLoaded = fileReader.result;
@@ -36,7 +32,7 @@ function FileHelper()
 		callback.call(contextForCallback, contentsOfFileLoaded);
 	};
 
-	FileHelper.prototype.saveBinaryStringToFileWithName = function(fileAsBinaryString, fileName)
+	saveBinaryStringToFileWithName(fileAsBinaryString, fileName)
 	{
 		var fileAsArrayBuffer = new ArrayBuffer(fileAsBinaryString.length);
 		var fileAsArrayUnsigned = new Uint8Array(fileAsArrayBuffer);
@@ -53,7 +49,7 @@ function FileHelper()
 		link.click();
 	};
 
-	FileHelper.prototype.saveTextStringToFileWithName = function(textToSave, fileNameToSaveAs)
+	saveTextStringToFileWithName(textToSave, fileNameToSaveAs)
 	{
 		var textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"});
 		var link = document.createElement("a");

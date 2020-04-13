@@ -1,52 +1,53 @@
 
-function VenueControls(controlRoot)
+class VenueControls
 {
-	this.controlRoot = controlRoot;
-
-	function buildGamepadInputs(numberOfGamepads, inputName)
+	constructor(controlRoot)
 	{
-		var returnValues = [];
+		this.controlRoot = controlRoot;
 
-		for (var i = 0; i < numberOfGamepads; i++)
+		function buildGamepadInputs(numberOfGamepads, inputName)
 		{
-			var inputNameForGamepad = inputName + i;
-			returnValues.push(inputNameForGamepad);
+			var returnValues = [];
+
+			for (var i = 0; i < numberOfGamepads; i++)
+			{
+				var inputNameForGamepad = inputName + i;
+				returnValues.push(inputNameForGamepad);
+			}
+
+			return returnValues;
+		};
+
+		var controlActionNames = ControlActionNames.Instances();
+		var inputNames = Input.Names();
+
+		var inactivate = true;
+		this.actionToInputsMappings =
+		[
+			new ActionToInputsMapping(controlActionNames.ControlIncrement, 	[inputNames.ArrowDown].addMany(buildGamepadInputs(inputNames.MoveDown)), inactivate),
+			new ActionToInputsMapping(controlActionNames.ControlPrev, 		[inputNames.ArrowLeft].addMany(buildGamepadInputs(inputNames.MoveLeft)), inactivate),
+			new ActionToInputsMapping(controlActionNames.ControlNext, 		[inputNames.ArrowRight, inputNames.Tab].addMany(buildGamepadInputs(inputNames.MoveRight)), inactivate),
+			new ActionToInputsMapping(controlActionNames.ControlDecrement, 	[inputNames.ArrowUp].addMany(buildGamepadInputs(inputNames.MoveUp)), inactivate),
+			new ActionToInputsMapping(controlActionNames.ControlConfirm, 	[inputNames.Enter].addMany(buildGamepadInputs(inputNames.Button1)), inactivate),
+			new ActionToInputsMapping(controlActionNames.ControlCancel, 	[inputNames.Escape].addMany(buildGamepadInputs(inputNames.Button0)), inactivate)
+		];
+
+		if (this.controlRoot.actionToInputsMappings != null)
+		{
+			this.actionToInputsMappings.addMany(this.controlRoot.actionToInputsMappings());
 		}
 
-		return returnValues;
-	};
+		this.actionToInputsMappings.addLookupsMultiple(x => x.inputNames);
 
-	var controlActionNames = ControlActionNames.Instances();
-	var inputNames = Input.Names();
+		// Helper variables.
 
-	var inactivate = true;
-	this.actionToInputsMappings =
-	[
-		new ActionToInputsMapping(controlActionNames.ControlIncrement, 	[inputNames.ArrowDown].addMany(buildGamepadInputs(inputNames.MoveDown)), inactivate),
-		new ActionToInputsMapping(controlActionNames.ControlPrev, 		[inputNames.ArrowLeft].addMany(buildGamepadInputs(inputNames.MoveLeft)), inactivate),
-		new ActionToInputsMapping(controlActionNames.ControlNext, 		[inputNames.ArrowRight, inputNames.Tab].addMany(buildGamepadInputs(inputNames.MoveRight)), inactivate),
-		new ActionToInputsMapping(controlActionNames.ControlDecrement, 	[inputNames.ArrowUp].addMany(buildGamepadInputs(inputNames.MoveUp)), inactivate),
-		new ActionToInputsMapping(controlActionNames.ControlConfirm, 	[inputNames.Enter].addMany(buildGamepadInputs(inputNames.Button1)), inactivate),
-		new ActionToInputsMapping(controlActionNames.ControlCancel, 	[inputNames.Escape].addMany(buildGamepadInputs(inputNames.Button0)), inactivate)
-	];
-
-	if (this.controlRoot.actionToInputsMappings != null)
-	{
-		this.actionToInputsMappings.addMany(this.controlRoot.actionToInputsMappings());
+		this._drawLoc = new Location(new Coords());
+		this._mouseClickPos = new Coords();
+		this._mouseMovePos = new Coords();
+		this._mouseMovePosPrev = new Coords();
 	}
 
-	this.actionToInputsMappings.addLookupsMultiple(x => x.inputNames);
-
-	// Helper variables.
-
-	this._drawLoc = new Location(new Coords());
-	this._mouseClickPos = new Coords();
-	this._mouseMovePos = new Coords();
-	this._mouseMovePosPrev = new Coords();
-}
-
-{
-	VenueControls.prototype.draw = function(universe)
+	draw(universe)
 	{
 		var display = universe.display;
 		var drawLoc = this._drawLoc;
@@ -54,7 +55,7 @@ function VenueControls(controlRoot)
 		this.controlRoot.draw(universe, display, drawLoc);
 	};
 
-	VenueControls.prototype.updateForTimerTick = function(universe)
+	updateForTimerTick(universe)
 	{
 		this.draw(universe);
 

@@ -1,15 +1,17 @@
 
-function Killable(integrityMax, damageApply, die, itemDefnCorpse)
+class Killable
 {
-	this.integrityMax = integrityMax;
-	this._damageApply = damageApply;
-	this.die = die;
-	this.itemDefnCorpse = itemDefnCorpse;
+	constructor(integrityMax, damageApply, die, itemDefnCorpse)
+	{
+		this.integrityMax = integrityMax;
+		this._damageApply = damageApply;
+		this.die = die;
+		this.itemDefnCorpse = itemDefnCorpse;
 
-	this.integrity = this.integrityMax;
-}
-{
-	Killable.prototype.damageApply = function(universe, world, place, entityDamager, entityKillable, damageToApply)
+		this.integrity = this.integrityMax;
+	}
+
+	damageApply(universe, world, place, entityDamager, entityKillable, damageToApply)
 	{
 		var damageApplied;
 		if (this._damageApply == null)
@@ -24,7 +26,7 @@ function Killable(integrityMax, damageApply, die, itemDefnCorpse)
 		return damageApplied;
 	};
 
-	Killable.prototype.integrityAdd = function(amountToAdd)
+	integrityAdd(amountToAdd)
 	{
 		this.integrity += amountToAdd;
 		this.integrity = this.integrity.trimToRangeMax
@@ -33,12 +35,12 @@ function Killable(integrityMax, damageApply, die, itemDefnCorpse)
 		);
 	};
 
-	Killable.prototype.isAlive = function()
+	isAlive()
 	{
 		return (this.integrity > 0);
 	};
 
-	Killable.prototype.updateForTimerTick = function(universe, world, place, entityKillable)
+	updateForTimerTick(universe, world, place, entityKillable)
 	{
 		if (this.isAlive() == false)
 		{
@@ -52,7 +54,7 @@ function Killable(integrityMax, damageApply, die, itemDefnCorpse)
 
 	// cloneable
 
-	Killable.prototype.clone = function()
+	clone()
 	{
 		return new Killable(this.integrityMax, this._damageApply, this.die, this.itemDefnCorpse);
 	};

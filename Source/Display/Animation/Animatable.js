@@ -1,11 +1,13 @@
 
-function Animatable()
+class Animatable
 {
-	this.animationDefnNameCurrent = null;
-	this.timerTicksSoFar = 0;
-}
-{
-	Animatable.prototype.animationStart = function(defnName)
+	constructor()
+	{
+		this.animationDefnNameCurrent = null;
+		this.timerTicksSoFar = 0;
+	}
+
+	animationStart(defnName)
 	{
 		if (this.animationDefnNameCurrent != defnName)
 		{
@@ -14,7 +16,7 @@ function Animatable()
 		}
 	};
 
-	Animatable.prototype.updateForTimerTick = function(universe, world, place, entity)
+	updateForTimerTick(universe, world, place, entity)
 	{
 		this.timerTicksSoFar++;
 	};

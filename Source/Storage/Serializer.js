@@ -1,10 +1,7 @@
 
-function Serializer()
+class Serializer
 {
-	// Do nothing.
-}
-{
-	Serializer.prototype.deserialize = function(stringToDeserialize)
+	deserialize(stringToDeserialize)
 	{
 		var nodeRoot = JSON.parse(stringToDeserialize);
 		nodeRoot.__proto__ = SerializerNode.prototype;
@@ -14,7 +11,7 @@ function Serializer()
 		return returnValue;
 	};
 
-	Serializer.prototype.serialize = function(objectToSerialize, prettyPrint)
+	serialize(objectToSerialize, prettyPrint)
 	{
 		var nodeRoot = new SerializerNode(objectToSerialize);
 
@@ -31,16 +28,18 @@ function Serializer()
 	};
 }
 
-function SerializerNode(objectWrapped)
+class SerializerNode
 {
-	this.t = null; // objectWrappedTypeName
-	this.id = null; // id
-	this.r = null; // isReference
+	constructor(objectWrapped)
+	{
+		this.t = null; // objectWrappedTypeName
+		this.id = null; // id
+		this.r = null; // isReference
 
-	this.o = objectWrapped;
-}
-{
-	SerializerNode.prototype.wrap = function
+		this.o = objectWrapped;
+	}
+
+	wrap
 	(
 		objectsAlreadyWrapped, objectIndexToNodeLookup
 	)
@@ -143,7 +142,7 @@ function SerializerNode(objectWrapped)
 
 	}; // end method
 
-	SerializerNode.prototype.prototypesAssign = function()
+	prototypesAssign()
 	{
 		var children = this.c;
 		if (children != null)
@@ -164,7 +163,7 @@ function SerializerNode(objectWrapped)
 		}
 	};
 
-	SerializerNode.prototype.unwrap = function(nodesAlreadyProcessed)
+	unwrap(nodesAlreadyProcessed)
 	{
 		var isReference = this.r;
 		if (isReference == true)

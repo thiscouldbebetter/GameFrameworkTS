@@ -1,30 +1,31 @@
 
-function MediaLibrary(images, sounds, videos, fonts, textStrings)
+class MediaLibrary
 {
-	this.images = images.addLookupsByName();
-	this.sounds = sounds.addLookupsByName();
-	this.videos = videos.addLookupsByName();
-	this.fonts = fonts.addLookupsByName();
-	this.textStrings = textStrings.addLookupsByName();
+	constructor(images, sounds, videos, fonts, textStrings)
+	{
+		this.images = images.addLookupsByName();
+		this.sounds = sounds.addLookupsByName();
+		this.videos = videos.addLookupsByName();
+		this.fonts = fonts.addLookupsByName();
+		this.textStrings = textStrings.addLookupsByName();
 
-	this.collectionsAll =
-	[
-		this.images,
-		this.sounds,
-		this.videos,
-		this.fonts,
-		this.textStrings
-	];
+		this.collectionsAll =
+		[
+			this.images,
+			this.sounds,
+			this.videos,
+			this.fonts,
+			this.textStrings
+		];
 
-	this.collectionsAll["Images"] = this.images;
-	this.collectionsAll["Sounds"] = this.sounds;
-	this.collectionsAll["Videos"] = this.videos;
-	this.collectionsAll["Fonts"] = this.fonts;
-	this.collectionsAll["TextStrings"] = this.textStrings;
-}
+		this.collectionsAll["Images"] = this.images;
+		this.collectionsAll["Sounds"] = this.sounds;
+		this.collectionsAll["Videos"] = this.videos;
+		this.collectionsAll["Fonts"] = this.fonts;
+		this.collectionsAll["TextStrings"] = this.textStrings;
+	}
 
-{
-	MediaLibrary.fromFileNames = function(
+	static fromFileNames(
 		contentPath, imageFileNames, effectFileNames, musicFileNames, videoFileNames, fontFileNames, textStringFileNames
 	)
 	{
@@ -80,7 +81,7 @@ function MediaLibrary(images, sounds, videos, fonts, textStrings)
 
 	// Instance methods.
 
-	MediaLibrary.prototype.areAllItemsLoaded = function()
+	areAllItemsLoaded()
 	{
 		var areAllItemsLoadedSoFar = true;
 
@@ -106,7 +107,7 @@ function MediaLibrary(images, sounds, videos, fonts, textStrings)
 		return areAllItemsLoadedSoFar;
 	};
 
-	MediaLibrary.prototype.waitForItemToLoad = function(collectionName, itemName, callback)
+	waitForItemToLoad(collectionName, itemName, callback)
 	{
 		var itemToLoad = this.collections[collectionName][itemName];
 		this.timer = setInterval
@@ -116,7 +117,7 @@ function MediaLibrary(images, sounds, videos, fonts, textStrings)
 		);
 	};
 
-	MediaLibrary.prototype.waitForItemToLoad_TimerTick = function(itemToLoad, callback)
+	waitForItemToLoad_TimerTick(itemToLoad, callback)
 	{
 		if (itemToLoad.isLoaded)
 		{
@@ -125,7 +126,7 @@ function MediaLibrary(images, sounds, videos, fonts, textStrings)
 		}
 	};
 
-	MediaLibrary.prototype.waitForItemsAllToLoad = function(callback)
+	waitForItemsAllToLoad(callback)
 	{
 		this.timer = setInterval
 		(
@@ -134,7 +135,7 @@ function MediaLibrary(images, sounds, videos, fonts, textStrings)
 		);
 	};
 
-	MediaLibrary.prototype.waitForItemsAllToLoad_TimerTick = function(callback)
+	waitForItemsAllToLoad_TimerTick(callback)
 	{
 		if (this.areAllItemsLoaded())
 		{
@@ -145,7 +146,7 @@ function MediaLibrary(images, sounds, videos, fonts, textStrings)
 
 	// accessors
 
-	MediaLibrary.prototype.imagesAdd = function(images)
+	imagesAdd(images)
 	{
 		for (var i = 0; i < images.length; i++)
 		{
@@ -158,27 +159,27 @@ function MediaLibrary(images, sounds, videos, fonts, textStrings)
 		}
 	};
 
-	MediaLibrary.prototype.fontGetByName = function(name)
+	fontGetByName(name)
 	{
 		return this.fonts[name];
 	};
 
-	MediaLibrary.prototype.imageGetByName = function(name)
+	imageGetByName(name)
 	{
 		return this.images[name];
 	};
 
-	MediaLibrary.prototype.soundGetByName = function(name)
+	soundGetByName(name)
 	{
 		return this.sounds[name];
 	};
 
-	MediaLibrary.prototype.textStringGetByName = function(name)
+	textStringGetByName(name)
 	{
 		return this.textStrings[name];
 	};
 
-	MediaLibrary.prototype.videoGetByName = function(name)
+	videoGetByName(name)
 	{
 		return this.videos[name];
 	};

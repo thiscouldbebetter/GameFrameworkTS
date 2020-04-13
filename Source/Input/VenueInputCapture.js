@@ -1,18 +1,20 @@
 
-function VenueInputCapture(venueToReturnTo, functionToPassInputCapturedTo)
+class VenueInputCapture
 {
-	this.venueToReturnTo = venueToReturnTo;
-	this.functionToPassInputCapturedTo = functionToPassInputCapturedTo;
+	constructor(venueToReturnTo, functionToPassInputCapturedTo)
+	{
+		this.venueToReturnTo = venueToReturnTo;
+		this.functionToPassInputCapturedToToPassInputCapturedTo;
 
-	this.isFirstTime = true;
-}
-{
-	VenueInputCapture.prototype.draw = function(universe)
+		this.isFirstTime = true;
+	}
+
+	draw(universe)
 	{
 		// Do nothing.
 	};
 
-	VenueInputCapture.prototype.updateForTimerTick = function(universe)
+	updateForTimerTick(universe)
 	{
 		var inputHelper = universe.inputHelper;
 
