@@ -229,6 +229,11 @@
 		},
 		{
 			"defnName": "Option",
+			"next": "Game.GoWithMe",
+			"text": "Will you go with me, to help?"
+		},
+		{
+			"defnName": "Option",
 			"next": "Game.Tips",
 			"text": "Got any general tips?"
 		},
@@ -359,6 +364,27 @@
 		{
 			"defnName": "Display",
 			"text": "...though, aren't YOU the real monster then?"
+		},
+		{
+			"defnName": "Goto",
+			"next": "Game.Prompt"
+		},
+		{
+			"name": "Game.GoWithMe",
+			"defnName": "Display",
+			"text": "No, I'm pretty comfortable here."
+		},
+		{
+			"defnName": "Display",
+			"text": "But I'll give you a walkie-talkie..."
+		},
+		{
+			"defnName": "Display",
+			"text": "...so I can provide valuable insights."
+		},
+		{
+			"defnName": "Script",
+			"text": "(u) => { u.world.placeCurrent.player().itemHolder.itemEntityAdd( new Entity(null, [ new Item(\"Walkie-Talkie\", 1) ] ) ); }"
 		},
 		{
 			"defnName": "Goto",

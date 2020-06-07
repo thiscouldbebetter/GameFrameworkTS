@@ -501,6 +501,16 @@ class World
 				}
 			),
 
+			new ItemDefn
+			(
+				"Walkie-Talkie", null, null, 2, 10, null,
+				[], // categoryNames
+				function use(universe, world, place, entityUser, entityItem, item)
+				{
+					return "There is no response but static.";
+				}
+			),
+
 		];
 
 		return itemDefns;
