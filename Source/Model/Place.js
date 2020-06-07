@@ -22,6 +22,7 @@ class Place
 			Playable.name,
 			SkillLearner.name,
 			Ephemeral.name,
+			Recurrent.name,
 			Killable.name,
 		];
 	}

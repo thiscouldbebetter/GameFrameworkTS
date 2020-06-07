@@ -59,7 +59,9 @@ class PlaceBuilderDemo
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Weapon"], 1));
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Ammo"], 10));
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Container"], 1));
-			
+
+			entities.push(this.entityBuildRadioMessage("This is " + name + "."));
+
 			var shouldIncludeBase = (placePos.x == 0 && placePos.y == 0);
 			if (shouldIncludeBase)
 			{
@@ -467,6 +469,49 @@ class PlaceBuilderDemo
 		}
 
 		return wallThickness;
+	};
+
+	entityBuildRadioMessage(message)
+	{
+		return new Entity
+		(
+			"RadioMessage",
+			[
+				new Recurrent
+				(
+					20, // ticksPerRecurrence
+					1, // timesToRecur
+					// recur
+					(u, w, p, e) =>
+					{
+						var player = p.player();
+						var playerItemHolder = player.itemHolder;
+						var itemRadio = new Item("Walkie-Talkie", 1);
+						var doesPlayerHaveRadio = playerItemHolder.hasItem(itemRadio);
+						if (doesPlayerHaveRadio == false)
+						{
+							e.recurrent.timesRecurredSoFar = 0;
+						}
+						else
+						{
+							var wordBubble = new WordBubble
+							(
+								new VisualNone(), // visualForPortrait
+								[
+									message
+								]
+							);
+							var wordBubbleAsControl = wordBubble.toControl(u);
+							u.venueNext = new VenueLayered
+							([
+								u.venueCurrent,
+								new VenueControls(wordBubbleAsControl)
+							]);
+						}
+					}
+				)
+			]
+		);
 	};
 
 	entityDefnBuildStore(entityDimension)

@@ -32,10 +32,7 @@ class ControlTabbed
 				fontHeightInPixels,
 				true, // hasBorder
 				true, // isEnabled
-				function click()
-				{
-					alert("todo");
-				}
+				() => alert("todo")
 			);
 			buttonsForChildren.push(button);
 		}
