@@ -109,7 +109,7 @@ class EquipmentUser
 
 	// control
 
-	toControl(universe, size, entityEquipmentUser, venuePrev, includeTitle)
+	toControl(universe, size, entityEquipmentUser, venuePrev, includeTitleAndDoneButton)
 	{
 		this.statusMessage = "Equip items in available slots.";
 
@@ -272,18 +272,6 @@ class EquipmentUser
 						}
 					), // text
 					fontHeightSmall
-				),
-
-				new ControlButton
-				(
-					"buttonDone",
-					new Coords(170, 130), // pos
-					new Coords(20, 10), // size
-					"Done",
-					fontHeightSmall,
-					true, // hasBorder
-					true, // isEnabled
-					back
 				)
 			],
 
@@ -293,7 +281,7 @@ class EquipmentUser
 
 		);
 
-		if (includeTitle)
+		if (includeTitleAndDoneButton)
 		{
 			childControls.insertElementAt
 			(
@@ -307,6 +295,20 @@ class EquipmentUser
 					fontHeightLarge
 				),
 				0 // indexToInsertAt
+			);
+			childControls.push
+			(
+				new ControlButton
+				(
+					"buttonDone",
+					new Coords(170, 130), // pos
+					new Coords(20, 10), // size
+					"Done",
+					fontHeightSmall,
+					true, // hasBorder
+					true, // isEnabled
+					back
+				)
 			);
 		}
 		else

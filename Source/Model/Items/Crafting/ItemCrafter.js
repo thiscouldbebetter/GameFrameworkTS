@@ -23,7 +23,7 @@ class ItemCrafter
 
 	// controls
 
-	toControl(universe, size, entityItemHolder, venuePrev, includeTitle)
+	toControl(universe, size, entityItemHolder, venuePrev, includeTitleAndDoneButton)
 	{
 		this.statusMessage = "1. Select recipe.\n2. Stage materials.\n3.Click Combine.";
 
@@ -303,19 +303,8 @@ class ItemCrafter
 						}
 					), // text
 					fontHeightSmall
-				),
-
-				new ControlButton
-				(
-					"buttonDone",
-					new Coords(170, 130), // pos
-					new Coords(20, 10), // size
-					"Done",
-					fontHeightSmall,
-					true, // hasBorder
-					true, // isEnabled
-					back
 				)
+
 			], // end children
 
 			[
@@ -327,7 +316,7 @@ class ItemCrafter
 			]
 		);
 
-		if (includeTitle)
+		if (includeTitleAndDoneButton)
 		{
 			returnValue.children.insertElementAt
 			(
@@ -341,6 +330,21 @@ class ItemCrafter
 					fontHeightLarge
 				),
 				0 // indexToInsertAt
+			);
+
+			returnValue.children.push
+			(
+				new ControlButton
+				(
+					"buttonDone",
+					new Coords(170, 130), // pos
+					new Coords(20, 10), // size
+					"Done",
+					fontHeightSmall,
+					true, // hasBorder
+					true, // isEnabled
+					back
+				)
 			);
 		}
 		else

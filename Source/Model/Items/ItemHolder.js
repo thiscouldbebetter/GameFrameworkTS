@@ -193,7 +193,7 @@ class ItemHolder
 
 	// controls
 
-	toControl(universe, size, entityItemHolder, venuePrev, includeTitle)
+	toControl(universe, size, entityItemHolder, venuePrev, includeTitleAndDoneButton)
 	{
 		this.statusMessage = "Use, drop, and sort items.";
 
@@ -579,18 +579,6 @@ class ItemHolder
 				{
 					drop();
 				}
-			),
-
-			new ControlButton
-			(
-				"buttonDone",
-				new Coords(170, 130), // pos
-				buttonSize.clone(),
-				"Done",
-				fontHeightSmall,
-				true, // hasBorder
-				true, // isEnabled
-				back
 			)
 		];
 
@@ -648,7 +636,7 @@ class ItemHolder
 			]
 		);
 
-		if (includeTitle)
+		if (includeTitleAndDoneButton)
 		{
 			childControls.insertElementAt
 			(
@@ -662,6 +650,20 @@ class ItemHolder
 					fontHeightLarge
 				),
 				0 // indexToInsertAt
+			);
+			childControls.push
+			(
+				new ControlButton
+				(
+					"buttonDone",
+					new Coords(170, 130), // pos
+					buttonSize.clone(),
+					"Done",
+					fontHeightSmall,
+					true, // hasBorder
+					true, // isEnabled
+					back
+				)
 			);
 		}
 		else

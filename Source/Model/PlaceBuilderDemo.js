@@ -1979,23 +1979,30 @@ class PlaceBuilderDemo
 			{
 				var itemHolderAsControl = entity.itemHolder.toControl
 				(
-					universe, size, entity, venuePrev, false // includeTitle
+					universe, size, entity, venuePrev, false // includeTitleAndDoneButton
 				);
 
 				var equipmentUserAsControl = entity.equipmentUser.toControl
 				(
-					universe, size, entity, venuePrev, false // includeTitle
+					universe, size, entity, venuePrev, false // includeTitleAndDoneButton
 				);
 
 				var crafterAsControl = entity.itemCrafter.toControl
 				(
-					universe, size, entity, venuePrev, false // includeTitle
+					universe, size, entity, venuePrev, false // includeTitleAndDoneButton
 				);
 
 				var skillLearnerAsControl = entity.skillLearner.toControl
 				(
-					universe, size, entity, venuePrev, false // includeTitle
+					universe, size, entity, venuePrev, false // includeTitleAndDoneButton
 				);
+
+				var back = function()
+				{
+					var venueNext = venuePrev;
+					venueNext = new VenueFader(venueNext, universe.venueCurrent);
+					universe.venueNext = venueNext;
+				};
 
 				var returnValue = new ControlTabbed
 				(
@@ -2007,7 +2014,9 @@ class PlaceBuilderDemo
 						equipmentUserAsControl,
 						crafterAsControl,
 						skillLearnerAsControl
-					]
+					],
+					null, // fontHeightInPixels
+					back
 				);
 				return returnValue;
 			}
