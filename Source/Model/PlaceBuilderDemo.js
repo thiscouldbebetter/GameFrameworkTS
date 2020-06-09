@@ -1977,6 +1977,39 @@ class PlaceBuilderDemo
 		(
 			function toControl(universe, size, entity, venuePrev)
 			{
+				var fontHeight = 12;
+				var labelSize = new Coords(150, fontHeight * 1.25);
+
+				var statusAsControl = new ControlContainer
+				(
+					"Status",
+					new Coords(0, 0), // pos
+					size.clone().addDimensions(0, -15, 0), // size
+					// children
+					[
+						new ControlLabel
+						(
+							"labelStatus",
+							new Coords(10, labelSize.y), // pos
+							labelSize.clone(),
+							false, // isTextCentered
+							"Health:" + entity.killable.integrity,
+							fontHeight
+						),
+
+						new ControlLabel
+						(
+							"labelExperience",
+							new Coords(10, labelSize.y * 2), // pos
+							labelSize.clone(),
+							false, // isTextCentered
+							"Experience:" + entity.skillLearner.learningAccumulated,
+							fontHeight
+						),
+
+					]
+				);
+
 				var itemHolderAsControl = entity.itemHolder.toControl
 				(
 					universe, size, entity, venuePrev, false // includeTitleAndDoneButton
@@ -2010,6 +2043,7 @@ class PlaceBuilderDemo
 					new Coords(0, 0), // pos
 					size,
 					[
+						statusAsControl,
 						itemHolderAsControl,
 						equipmentUserAsControl,
 						crafterAsControl,
