@@ -28,6 +28,8 @@ class PlaceBuilderDemo
 		var marginSize = new Coords(1, 1, 0).multiplyScalar(marginThickness);
 		this.marginSize = marginSize;
 
+		var entityDefnFriendly = entityDefns["Friendly"];
+
 		if (placeNameToReturnTo != null)
 		{
 			entities.push(this.entityBuildFromDefn(entityDefns["Player"]));
@@ -39,7 +41,7 @@ class PlaceBuilderDemo
 			exit.portal.destinationEntityName = "Base";
 			entities.push(exit);
 
-			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Friendly"], 1));
+			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefnFriendly, 1));
 		}
 		else
 		{
@@ -60,7 +62,7 @@ class PlaceBuilderDemo
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Ammo"], 10));
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Container"], 1));
 
-			entities.push(this.entityBuildRadioMessage("This is " + name + "."));
+			entities.push(this.entityBuildRadioMessage(entityDefnFriendly.drawable.visual, "This is " + name + "."));
 
 			var shouldIncludeBase = (placePos.x == 0 && placePos.y == 0);
 			if (shouldIncludeBase)
@@ -471,7 +473,7 @@ class PlaceBuilderDemo
 		return wallThickness;
 	};
 
-	entityBuildRadioMessage(message)
+	entityBuildRadioMessage(visualForPortrait, message)
 	{
 		return new Entity
 		(
@@ -496,7 +498,7 @@ class PlaceBuilderDemo
 						{
 							var wordBubble = new WordBubble
 							(
-								new VisualNone(), // visualForPortrait
+								visualForPortrait,
 								[
 									message
 								]

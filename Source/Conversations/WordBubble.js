@@ -73,7 +73,8 @@ class WordBubble
 					"visualPortrait",
 					marginSize,
 					portraitSize, // size
-					this.visualForPortrait
+					this.visualForPortrait,
+					"Black" // colorBackground
 				),
 
 				new ControlLabel

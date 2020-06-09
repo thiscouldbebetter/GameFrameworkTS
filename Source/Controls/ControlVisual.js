@@ -1,17 +1,25 @@
 
 class ControlVisual
 {
-	constructor(name, pos, size, visual)
+	constructor(name, pos, size, visual, colorBackground)
 	{
 		this.name = name;
 		this.pos = pos;
 		this.size = size;
 		this.visual = visual;
+		this.colorBackground = colorBackground;
 
 		// Helper variables.
 		this._drawPos = new Coords();
 		this._locatable = new Locatable(new Location(this._drawPos));
-		this._locatableEntity = new Entity("_drawableEntity", [ this._locatable ] );
+		this._locatableEntity = new Entity
+		(
+			"_drawableEntity",
+			[
+				this._locatable,
+				new Drawable()
+			]
+		);
 		this._sizeHalf = new Coords();
 	}
 
@@ -27,10 +35,11 @@ class ControlVisual
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 		var style = this.style(universe);
 
+		var colorFill = this.colorBackground || style.colorFill;
 		display.drawRectangle
 		(
 			drawPos, this.size,
-			style.colorFill, style.colorBorder
+			colorFill, style.colorBorder
 		);
 
 		var locatableEntity = this._locatableEntity;
