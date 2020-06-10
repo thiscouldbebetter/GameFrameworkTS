@@ -3,10 +3,10 @@
 
 class ConversationDefn
 {
-	constructor(name, imageName, contentTextStringName, talkNodeDefns, talkNodes)
+	constructor(name, visualPortrait, contentTextStringName, talkNodeDefns, talkNodes)
 	{
 		this.name = name;
-		this.imageName = imageName;
+		this.visualPortrait = visualPortrait;
 		this.contentTextStringName = contentTextStringName;
 		this.talkNodeDefns = talkNodeDefns.addLookupsByName();
 		this.talkNodes = talkNodes.addLookupsByName();
@@ -110,7 +110,8 @@ class ConversationDefn
 
 		// Additional processing to support minification.
 		conversationDefn.name = conversationDefn["name"];
-		conversationDefn.imageName = conversationDefn["imageName"];
+		var imagePortraitName = conversationDefn["imagePortraitName"];
+		conversationDefn.visualPortrait = new VisualImageFromLibrary(imagePortraitName);
 		conversationDefn.contentTextStringName =
 			conversationDefn["contentTextStringName"];
 

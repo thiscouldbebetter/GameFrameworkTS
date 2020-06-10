@@ -1,5 +1,6 @@
 {
 	"name": "AnEveningWithProfessorSurly",
+	"imagePortraitName": "Friendly",
 	"talkNodes": [
 		{
 			"name": "Greet",
@@ -228,6 +229,7 @@
 			"text": "Any exciting gameplay mechanics?"
 		},
 		{
+			"name": "Game.GoWithMe.Option",
 			"defnName": "Option",
 			"next": "Game.GoWithMe",
 			"text": "Will you go with me, to help?"
@@ -311,11 +313,15 @@
 		},
 		{
 			"defnName": "Display",
+			"text": "...by going to the status screen..."
+		},
+		{
+			"defnName": "Display",
 			"text": "...by pressing, I think, Tab?"
 		},
 		{
 			"defnName": "Display",
-			"text": "Pressing Tilde lets you equip things."
+			"text": "You can also equip things from there."
 		},
 		{
 			"defnName": "Display",
@@ -331,7 +337,7 @@
 		},
 		{
 			"defnName": "Display",
-			"text": "Press Backtick to 'craft' things..."
+			"text": "The status screen also has a 'craft' tab..."
 		},
 		{
 			"defnName": "Display",
@@ -343,11 +349,15 @@
 		},
 		{
 			"defnName": "Display",
-			"text": "Pressing Equals lets you learn skills..."
+			"text": "Finally, there's a tab for skills..."
 		},
 		{
 			"defnName": "Display",
 			"text": "...like jumping and running..."
+		},
+		{
+			"defnName": "Display",
+			"text": "...which are available to learn..."
 		},
 		{
 			"defnName": "Display",
@@ -363,7 +373,7 @@
 		},
 		{
 			"defnName": "Display",
-			"text": "...though, aren't YOU the real monster then?"
+			"text": "...that makes YOU the real monster, though."
 		},
 		{
 			"defnName": "Goto",
@@ -385,6 +395,15 @@
 		{
 			"defnName": "Script",
 			"text": "(u) => { u.world.placeCurrent.player().itemHolder.itemEntityAdd( new Entity(null, [ new Item(\"Walkie-Talkie\", 1) ] ) ); }"
+		},
+		{
+			"defnName": "Display",
+			"text": "[You have received a walkie-talkie.]"
+		},
+		{
+			"defnName": "Activate",
+			"next": "Game.GoWithMe.Option",
+			"text": false
 		},
 		{
 			"defnName": "Goto",

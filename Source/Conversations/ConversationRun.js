@@ -58,19 +58,20 @@ class ConversationRun
 		var conversationDefn = conversationRun.defn;
 
 		var venueToReturnTo = universe.venueCurrent;
-		var fontHeight = 20;
-		var fontHeightShort = fontHeight * .6;
-		var marginWidth = 25;
+		
+		var fontHeight = 15;
+		var fontHeightShort = fontHeight; // todo
+		var marginWidth = 15;
 		var labelHeight = fontHeight;
-		var buttonHeight = 25;
+		var buttonHeight = 20;
 		var marginSize = new Coords(1, 1).multiplyScalar(marginWidth);
+		var buttonSize = new Coords(2, 1).multiplyScalar(buttonHeight);
+		var portraitSize = new Coords(4, 4).multiplyScalar(buttonHeight);
 		var listSize = new Coords
 		(
-			size.x * .6,
-			size.y - buttonHeight - labelHeight - marginSize.y * 4
+			size.x - marginSize.x * 3 - buttonSize.x,
+			size.y - portraitSize.y - marginSize.y * 4
 		);
-		var buttonSize = new Coords(listSize.x, buttonHeight);
-		var buttonTranscriptSize = new Coords(2, 1).multiplyScalar(buttonHeight); // size
 
 		var next = function()
 		{
@@ -103,16 +104,25 @@ class ConversationRun
 			size,
 			// children
 			[
+				new ControlVisual
+				(
+					"visualPortrait",
+					marginSize.clone(),
+					portraitSize, // size
+					conversationDefn.visualPortrait,
+					"Black" // colorBackground
+				),
+
 				new ControlLabel
 				(
 					"labelSpeaker",
 					new Coords
 					(
-						size.x / 2,
-						marginSize.y * 2 + buttonSize.y
+						marginSize.x * 2 + portraitSize.x,
+						marginSize.y + portraitSize.y / 2 - labelHeight / 2
 					), // pos
 					size, // size
-					true, // isTextCentered
+					false, // isTextCentered
 					new DataBinding
 					(
 						conversationRun,
@@ -121,13 +131,27 @@ class ConversationRun
 					fontHeight
 				),
 
+				new ControlLabel
+				(
+					"labelResponse",
+					new Coords
+					(
+						marginSize.x,
+						marginSize.y * 2 + portraitSize.y - fontHeight / 2
+					),
+					size, // size
+					false, // isTextCentered
+					"Response:",
+					fontHeight
+				),
+
 				new ControlList
 				(
 					"listResponses",
 					new Coords
 					(
-						(size.x - listSize.x) / 2,
-						marginSize.y * 3 + buttonSize.y + labelHeight
+						marginSize.x,
+						marginSize.y * 3 + portraitSize.y
 					),
 					listSize,
 					// items
@@ -162,10 +186,10 @@ class ConversationRun
 					"buttonTranscript",
 					new Coords
 					(
-						size.x - marginSize.x - buttonTranscriptSize.x,
-						marginSize.y
+						size.x - marginSize.x - buttonSize.x,
+						size.y - marginSize.y * 2 - buttonSize.y * 2
 					),
-					buttonTranscriptSize,
+					buttonSize.clone(),
 					"Log",
 					fontHeight,
 					true, // hasBorder
@@ -175,10 +199,14 @@ class ConversationRun
 
 				new ControlButton
 				(
-					"buttonBack",
-					marginSize, // pos
-					new Coords(1, 1).multiplyScalar(buttonHeight), // size
-					"<",
+					"buttonDone",
+					new Coords
+					(
+						size.x - marginSize.x - buttonSize.x,
+						size.y - marginSize.y - buttonSize.y
+					),
+					buttonSize.clone(),
+					"Done",
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
