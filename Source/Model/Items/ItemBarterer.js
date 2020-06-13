@@ -124,7 +124,7 @@ class ItemBarterer
 				new ControlList
 				(
 					"listStoreItems",
-					new Coords(margin, margin + fontHeight), // pos
+					new Coords(margin, margin * 2 + fontHeight), // pos
 					listSize.clone(),
 					new DataBinding
 					(
@@ -171,7 +171,7 @@ class ItemBarterer
 				new ControlList
 				(
 					"listCustomerItems",
-					new Coords(size.x - margin - listSize.x, margin + fontHeight), // pos
+					new Coords(size.x - margin - listSize.x, margin * 2 + fontHeight), // pos
 					listSize.clone(),
 					new DataBinding
 					(
@@ -208,7 +208,7 @@ class ItemBarterer
 				new ControlLabel
 				(
 					"labelItemsOfferedStore",
-					new Coords(margin, margin * 2 + listSize.y), // pos
+					new Coords(margin, margin * 3 + listSize.y), // pos
 					new Coords(100, 15), // size
 					false, // isTextCentered
 					"Offered:",
@@ -218,7 +218,7 @@ class ItemBarterer
 				new ControlList
 				(
 					"listItemsOfferedByStore",
-					new Coords(margin, margin * 3 + listSize.y), // pos
+					new Coords(margin, margin * 4 + listSize.y), // pos
 					listSize.clone(),
 					new DataBinding
 					(
@@ -255,7 +255,7 @@ class ItemBarterer
 				new ControlLabel
 				(
 					"labelItemsOfferedCustomer",
-					new Coords(size.x - margin - listSize.x, margin * 2 + listSize.y), // pos
+					new Coords(size.x - margin - listSize.x, margin * 3 + listSize.y), // pos
 					new Coords(100, 15), // size
 					false, // isTextCentered
 					"Offered:",
@@ -265,7 +265,7 @@ class ItemBarterer
 				new ControlList
 				(
 					"listItemsOfferedByCustomer",
-					new Coords(size.x - margin - listSize.x, margin * 3 + listSize.y), // pos
+					new Coords(size.x - margin - listSize.x, margin * 4 + listSize.y), // pos
 					listSize.clone(),
 					new DataBinding
 					(
@@ -299,6 +299,16 @@ class ItemBarterer
 					}
 				),
 
+				new ControlLabel
+				(
+					"infoStatus",
+					new Coords(size.x / 2, size.y - margin * 2 - buttonSize.y), // pos
+					new Coords(size.x, fontHeight), // size
+					true, // isTextCentered
+					new DataBinding(this, c => c.statusMessage),
+					fontHeight
+				),
+
 				new ControlButton
 				(
 					"buttonReset",
@@ -316,16 +326,6 @@ class ItemBarterer
 					{
 						itemBarterer.reset(entityCustomer, entityStore);
 					}
-				),
-
-				new ControlLabel
-				(
-					"infoStatus",
-					new Coords(size.x / 2, size.y - margin * 2 - buttonSize.y - fontHeight), // pos
-					new Coords(size.x, fontHeight), // size
-					true, // isTextCentered
-					new DataBinding(this, c => c.statusMessage),
-					fontHeight
 				),
 
 				new ControlButton

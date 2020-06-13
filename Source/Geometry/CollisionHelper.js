@@ -925,6 +925,13 @@ class CollisionHelper
 		return returnValue;
 	};
 
+	doBoxAndBoxRotatedCollide(box, boxRotated)
+	{
+		// todo
+		var boxRotatedAsSphere = boxRotated.sphereSwept();
+		return this.doBoxAndSphereCollide(box, boxRotatedAsSphere);
+	};
+
 	doBoxAndCylinderCollide(box, cylinder)
 	{
 		var returnValue = false;
@@ -964,12 +971,6 @@ class CollisionHelper
 		return returnValue;
 	};
 
-	doBoxAndMapLocatedCollide(box, mapLocated)
-	{
-		// todo
-		return this.doBoxAndBoxCollide(box, mapLocated.box);
-	};
-
 	doBoxAndHemispaceCollide(box, hemispace)
 	{
 		var returnValue = false;
@@ -987,11 +988,21 @@ class CollisionHelper
 		return returnValue;
 	};
 
-	doBoxAndBoxRotatedCollide(box, boxRotated)
+	doBoxAndMapLocatedCollide(box, mapLocated)
 	{
 		// todo
-		var boxRotatedAsSphere = boxRotated.sphereSwept();
-		return this.doBoxAndSphereCollide(box, boxRotatedAsSphere);
+		return this.doBoxAndBoxCollide(box, mapLocated.box);
+	};
+
+	doBoxAndMeshCollide(box, mesh)
+	{
+		// todo
+		return this.doBoxAndBoxCollide(box, mesh.box() );
+	};
+
+	doBoxAndShapeGroupAllCollide(box, shapeGroupAll)
+	{
+		return this.doShapeGroupAllAndShapeCollide(shapeGroupAll, box);
 	};
 
 	doBoxAndSphereCollide(box, sphere)
@@ -1450,6 +1461,11 @@ class CollisionHelper
 	};
 
 	// boolean combinations
+
+	doShapeGroupAllAndBoxCollide(groupAll, shapeOther)
+	{
+		return this.doShapeGroupAllAndShapeCollide(groupAll, shapeOther);
+	}
 
 	doShapeGroupAllAndShapeCollide(groupAll, shapeOther)
 	{

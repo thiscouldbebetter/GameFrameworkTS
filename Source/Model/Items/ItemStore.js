@@ -6,6 +6,42 @@ class ItemStore
 		this.itemDefnNameCurrency = itemDefnNameCurrency;
 	}
 
+	transfer(world, entityFrom, entityTo, messagePrefix)
+	{
+		var itemHolderFrom = entityFrom.itemHolder;
+		var itemHolderTo = entityTo.itemHolder;
+
+		if (itemHolderFrom.itemEntityToOffer != null)
+		{
+			var itemEntityToTransfer = itemHolderFrom.itemEntityToOffer;
+			var itemToTransfer = itemEntityToTransfer.item;
+			var tradeValue = itemToTransfer.defn(world).tradeValue;
+			var itemCurrencyNeeded = new Item(this.itemDefnNameCurrency);
+			var itemDefnCurrency = itemCurrencyNeeded.defn(world);
+			itemCurrencyNeeded.quantity = Math.ceil(tradeValue / itemDefnCurrency.tradeValue);
+			if (itemHolderTo.hasItem(itemCurrencyNeeded))
+			{
+				itemHolderFrom.itemEntityTransferSingleTo
+				(
+					itemEntityToTransfer, itemHolderTo
+				);
+
+				itemHolderTo.itemTransferTo
+				(
+					itemCurrencyNeeded, itemHolderFrom
+				);
+				this.statusMessage =
+					messagePrefix
+					+ " " + itemToTransfer.defnName
+					+ " for " + itemCurrencyNeeded.quantity + ".";
+			}
+			else
+			{
+				this.statusMessage = "Not enough currency!";
+			}
+		}
+	};
+
 	toControl(universe, size, entityCustomer, entityStore, venuePrev)
 	{
 		if (size == null)
@@ -13,11 +49,16 @@ class ItemStore
 			size = universe.display.sizeDefault();
 		}
 
-		var sizeBase = new Coords(200, 150, 1);
-		var scaleMultiplier = size.clone().divide(sizeBase);
-
 		var fontHeight = 10;
+		var margin = fontHeight * 1.5;
+		var buttonSize = new Coords(4, 2).multiplyScalar(fontHeight);
+		var listSize = new Coords
+		(
+			(size.x - margin * 3) / 2,
+			size.y - margin * 4 - buttonSize.y - fontHeight
+		);
 
+		var itemBarterer = this;
 		var itemHolderCustomer = entityCustomer.itemHolder;
 		var itemHolderStore = entityStore.itemHolder;
 
@@ -32,19 +73,29 @@ class ItemStore
 			universe.venueNext = venueNext;
 		};
 
+		var buy = () =>
+		{
+			itemBarterer.transfer(world, entityStore, entityCustomer, "Purchased");
+		};
+
+		var sell = () => 
+		{
+			itemBarterer.transfer(world, entityCustomer, entityStore, "Sold");
+		};
+
 		var returnValue = new ControlContainer
 		(
 			"containerTransfer",
 			new Coords(0, 0), // pos
-			sizeBase.clone(), // size
+			size.clone(),
 			// children
 			[
 				new ControlLabel
 				(
 					"labelStoreName",
-					new Coords(52, 15), // pos
-					new Coords(85, 25), // size
-					true, // isTextCentered
+					new Coords(margin, margin), // pos
+					new Coords(listSize.x, 25), // size
+					false, // isTextCentered
 					entityStore.name + ":",
 					fontHeight
 				),
@@ -52,8 +103,8 @@ class ItemStore
 				new ControlList
 				(
 					"listStoreItems",
-					new Coords(10, 25), // pos
-					new Coords(85, 40), // size
+					new Coords(margin, margin * 2), // pos
+					listSize.clone(),
 					new DataBinding
 					(
 						itemHolderStore,
@@ -71,27 +122,41 @@ class ItemStore
 					new DataBinding
 					(
 						itemHolderStore,
-						function get(c) { return c.itemEntitySelected; },
-						function set(c, v) { c.itemEntitySelected = v; }
+						function get(c) { return c.itemEntityToOffer; },
+						function set(c, v) { c.itemEntityToOffer = v; }
 					), // bindingForItemSelected
 					new DataBinding(null, function(c) { return c; } ), // bindingForItemValue
+					true, // isEnabled
+					buy // confirm
 				),
 
 				new ControlLabel
 				(
 					"labelCustomerName",
-					new Coords(147, 15), // pos
+					new Coords(size.x - margin - listSize.x, margin), // pos
 					new Coords(85, 25), // size
-					true, // isTextCentered
+					false, // isTextCentered
 					entityCustomer.name + ":",
 					fontHeight
+				),
+
+				new ControlButton
+				(
+					"buttonBuy",
+					new Coords(size.x / 2 - buttonSize.x - margin / 2, size.y - margin - buttonSize.y), // pos
+					buttonSize.clone(),
+					"Buy",
+					fontHeight,
+					true, // hasBorder
+					new DataBinding(true), // isEnabled
+					buy
 				),
 
 				new ControlList
 				(
 					"listCustomerItems",
-					new Coords(105, 25), // pos
-					new Coords(85, 40), // size
+					new Coords(size.x - margin - listSize.x, margin * 2), // pos
+					listSize.clone(),
 					new DataBinding
 					(
 						itemHolderCustomer,
@@ -109,123 +174,41 @@ class ItemStore
 					new DataBinding
 					(
 						itemHolderCustomer,
-						function get(c) { return c.itemEntitySelected; },
-						function set(c, v) { c.itemEntitySelected = v; }
+						function get(c) { return c.itemEntityToOffer; },
+						function set(c, v) { c.itemEntityToOffer = v; }
 					), // bindingForItemSelected
 					new DataBinding(null, function(c) { return c; } ), // bindingForItemValue
-				),
-
-				new ControlLabel
-				(
-					"labelItemSelectedStore",
-					new Coords(50, 70), // pos
-					new Coords(100, 15), // size
-					true, // isTextCentered
-					"Selected:",
-					fontHeight
-				),
-
-				new ControlLabel
-				(
-					"infoItemSelectedStore",
-					new Coords(50, 80), // pos
-					new Coords(200, 15), // size
-					true, // isTextCentered
-					new DataBinding
-					(
-						itemHolderStore,
-						function get(c)
-						{
-							var i = c.itemEntitySelected;
-							return (i == null ? "-" : i.item.toString(world));
-						}
-					), // text
-					fontHeight
-				),
-
-				new ControlLabel
-				(
-					"labelItemSelectedCustomer",
-					new Coords(150, 70), // pos
-					new Coords(100, 15), // size
-					true, // isTextCentered
-					"Selected:",
-					fontHeight
-				),
-
-				new ControlLabel
-				(
-					"infoItemSelectedCustomer",
-					new Coords(150, 80), // pos
-					new Coords(200, 15), // size
-					true, // isTextCentered
-					new DataBinding
-					(
-						itemHolderCustomer,
-						function get(c)
-						{
-							var i = c.itemEntitySelected;
-							return (i == null ? "-" : i.item.toString(world));
-						}
-					), // text
-					fontHeight
+					true, // isEnabled
+					sell // confirm
 				),
 
 				new ControlButton
 				(
 					"buttonSell",
-					new Coords(105, 90), // pos
-					new Coords(30, 15), // size
+					new Coords(size.x / 2 + margin / 2, size.y - margin - buttonSize.y), // pos
+					buttonSize.clone(),
 					"Sell",
 					fontHeight,
 					true, // hasBorder
-					new DataBinding
-					(
-						itemHolderCustomer,
-						function get(c) { return c.itemEntitySelected != null}
-					), // isEnabled
-					function click(universe)
-					{
-						var itemEntity = itemHolderCustomer.itemEntitySelected;
-						if (itemEntity != null)
-						{
-							itemHolderCustomer.itemEntityTransferTo(itemEntity, itemHolderStore);
-							itemHolderCustomer.itemEntitySelected = null;
-						}
-					},
-					universe // context
+					new DataBinding(true), // isEnabled
+					sell
 				),
 
-				new ControlButton
+				new ControlLabel
 				(
-					"buttonBuy",
-					new Coords(65, 90), // pos
-					new Coords(30, 15), // size
-					"Buy",
-					fontHeight,
-					true, // hasBorder
-					new DataBinding
-					(
-						itemHolderStore,
-						function get(c) { return c.itemEntitySelected != null}
-					), // isEnabled
-					function click(universe)
-					{
-						var itemEntity = itemHolderStore.itemEntitySelected;
-						if (itemEntity != null)
-						{
-							itemHolderStore.itemEntityTransferTo(itemEntity, itemHolderCustomer);
-							itemHolderStore.itemEntitySelected = null;
-						}
-					},
-					universe // context
+					"infoStatus",
+					new Coords(size.x / 2, size.y - margin * 2 - buttonSize.y), // pos
+					new Coords(size.x, fontHeight), // size
+					true, // isTextCentered
+					new DataBinding(this, c => c.statusMessage),
+					fontHeight
 				),
 
 				new ControlButton
 				(
 					"buttonDone",
-					new Coords(75, 110), // pos
-					new Coords(50, 15), // size
+					new Coords(size.x - margin - buttonSize.x, size.y - margin - buttonSize.y), // pos
+					buttonSize.clone(),
 					"Done",
 					fontHeight,
 					true, // hasBorder
@@ -239,8 +222,6 @@ class ItemStore
 			[ new ActionToInputsMapping( "Back", [ universe.inputHelper.inputNames.Escape ], true ) ],
 
 		);
-
-		returnValue.scalePosAndSize(scaleMultiplier);
 
 		return returnValue;
 	};
