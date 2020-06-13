@@ -468,6 +468,59 @@ class Display
 		this.graphics.font = fontToRestore;
 	};
 
+	drawWedge
+	(
+		center, radius, angleStartInTurns, angleStopInTurns, colorFill, colorBorder
+	)
+	{
+		var drawPos = this._drawPos.overwriteWith(center);
+		var angleStartInRadians = angleStartInTurns * Display.RadiansPerTurn;
+		var angleStopInRadians = angleStopInTurns * Display.RadiansPerTurn;
+
+		if (colorFill != null)
+		{
+			this.graphics.fillStyle = colorFill;
+
+			this.graphics.beginPath();
+			this.graphics.moveTo(center.x, center.y);
+			drawPos.overwriteWith(center).add
+			(
+				new Polar(angleStopInTurns, radius).toCoords( new Coords() )
+			);
+			this.graphics.lineTo(drawPos.x, drawPos.y);
+			this.graphics.arc
+			(
+				center.x, center.y,
+				radius,
+				angleStopInRadians, angleStartInRadians,
+				true // counterclockwise
+			);
+			this.graphics.closePath();
+			this.graphics.fill();
+		}
+
+		if (colorBorder != null)
+		{
+			this.graphics.strokeStyle = colorBorder;
+			this.graphics.beginPath();
+			this.graphics.moveTo(center.x, center.y);
+			drawPos.overwriteWith(center).add
+			(
+				new Polar(angleStopInTurns, radius).toCoords( new Coords() )
+			);
+			this.graphics.lineTo(drawPos.x, drawPos.y);
+			this.graphics.arc
+			(
+				center.x, center.y,
+				radius,
+				angleStopInRadians, angleStartInRadians,
+				true // counterclockwise
+			);
+			this.graphics.closePath();
+			this.graphics.stroke();
+		}
+	};
+
 	fontSet(fontName, fontHeightInPixels)
 	{
 		if (fontName != this.fontName || fontHeightInPixels != this.fontHeightInPixels)

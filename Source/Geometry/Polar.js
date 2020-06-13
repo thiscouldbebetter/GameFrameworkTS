@@ -104,4 +104,11 @@ class Polar
 		}
 		return this;
 	};
+
+	// Clonable.
+
+	clone()
+	{
+		return new Polar(this.azimuthInTurns, this.radius, this.elevationInTurns);
+	};
 }
