@@ -16,6 +16,7 @@ class Camera
 			this.loc.pos,
 			viewColliderSize
 		);
+		this.entitiesInView = [];
 	}
 
 	clipPlanes()
@@ -162,5 +163,20 @@ class Camera
 		viewCoords.add(this.viewSizeHalf);
 
 		return viewCoords;
+	};
+
+	drawEntitiesInViewThenClear(universe, world, display)
+	{
+		display.drawBackground("Black", "Black");
+		this.entitiesInView.sort( (a, b) => a.locatable.loc.pos.y - b.locatable.loc.pos.y);
+		this.entitiesInView.forEach(entity =>
+			entity.drawable.visual.drawImmediate(universe, world, display, entity)
+		);
+		this.entitiesInView.length = 0;
+	};
+
+	updateForTimerTick()
+	{
+		// Do nothing.  Rendering is done in Place.draw().
 	};
 }

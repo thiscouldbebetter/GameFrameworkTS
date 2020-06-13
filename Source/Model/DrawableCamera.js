@@ -11,9 +11,9 @@ class DrawableCamera
 		var drawable = entity.drawable;
 		var visual = drawable.visual;
 		var visualTypeName = visual.constructor.name;
-		if (visualTypeName != VisualCamera.name)
+		if (visualTypeName != VisualCameraProjection.name)
 		{
-			drawable.visual = new VisualCamera
+			drawable.visual = new VisualCameraProjection
 			(
 				visual, (u, w) => w.placeCurrent.camera() 
 			)

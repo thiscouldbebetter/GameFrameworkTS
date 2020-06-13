@@ -71,6 +71,16 @@ class Collidable
 								(
 									universe, world, place, entity, entityOther
 								);
+
+								var collidableOtherCollideEntities = 
+									entityOther.collidable.collideEntities;
+								if (collidableOtherCollideEntities != null)
+								{
+									collidableOtherCollideEntities
+									(
+										universe, world, place, entityOther, entity
+									);
+								}
 							}
 						}
 					}

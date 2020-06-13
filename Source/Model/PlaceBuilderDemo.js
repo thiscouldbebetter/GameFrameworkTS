@@ -35,6 +35,7 @@ class PlaceBuilderDemo
 			entities.push(this.entityBuildFromDefn(entityDefns["Player"]));
 
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Book"], 1));
+			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Tree"], 1));
 
 			var exit = this.entityBuildFromDefn(entityDefns["Exit"]);
 			exit.portal.destinationPlaceName = placeNameToReturnTo;
@@ -49,8 +50,11 @@ class PlaceBuilderDemo
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Bar"], 1));
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Mine"], 48));
 
+			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Container"], 1));
+			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Tree"], 10));
+
+			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Ammo"], 10));
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Armor"], 1));
-			//entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Coin"], 10));
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Crystal"], 3));
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Flower"], 3));
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Material"], 5));
@@ -58,9 +62,7 @@ class PlaceBuilderDemo
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Mushroom"], 3));
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Speed Booster"], 1));
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Toolset"], 1));
-			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Weapon"], 1));
-			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Ammo"], 10));
-			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Container"], 1));
+			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Flower"], 3));
 
 			entities.push(this.entityBuildRadioMessage(entityDefnFriendly.drawable.visual, "This is " + name + "."));
 
@@ -2205,6 +2207,64 @@ class PlaceBuilderDemo
 		return itemToolsetEntityDefn;
 	};
 
+	entityDefnBuildTree(entityDimension)
+	{
+		var entityName = "Tree";
+		entityDimension *= 1.5;
+		var color = "Green";
+		var visual = new VisualGroup
+		([
+			new VisualRectangle
+			(
+				new Coords(1, 2).multiplyScalar(entityDimension * 0.5),
+				"Brown"
+			),
+			new VisualOffset
+			(
+				new VisualEllipse
+				(
+					entityDimension, // semimajorAxis
+					entityDimension * .8,
+					0, // rotationInTurns
+					color,
+					null // colorBorder
+				),
+				new Coords(0, -entityDimension)
+			),
+			new VisualOffset
+			(
+				new VisualText(entityName, color),
+				new Coords(0, entityDimension)
+			)
+		]);
+		//visual = new VisualOffset(visual, new Coords(0, entityDimension ) );
+		var collider = new Box
+		(
+			new Coords(0, 0, 0),
+			new Coords(1, .1, 1).multiplyScalar(entityDimension * .25)
+		);
+		var collidable = new Collidable
+		(
+			collider,
+			[ Collidable.name ], // entityPropertyNamesToCollideWith,
+			// collideEntities
+			(u, w, p, e, e2) => { u.collisionHelper.collideCollidablesReverseVelocities(e, e2); }
+		)
+
+		var entityDefn = new Entity
+		(
+			entityName,
+			[
+				new Locatable( new Location(new Coords()) ),
+				collidable,
+				new Drawable(visual),
+				new DrawableCamera()
+			]
+		);
+
+		return entityDefn;
+	};
+
 	entityDefnBuildWeapon(entityDimension)
 	{
 		entityDimension = entityDimension * 2;
@@ -2335,6 +2395,7 @@ class PlaceBuilderDemo
 			this.entityDefnBuildPotion(entityDimension),
 			this.entityDefnBuildStore(entityDimension),
 			this.entityDefnBuildToolset(entityDimension),
+			this.entityDefnBuildTree(entityDimension),
 			this.entityDefnBuildWeapon(entityDimension),
 			this.entityDefnBuildWeaponAmmo(entityDimension)
 		].addLookupsByName();

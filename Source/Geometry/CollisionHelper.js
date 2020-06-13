@@ -265,14 +265,17 @@ class CollisionHelper
 		var collidable0 = entity0.collidable;
 		var collidable1 = entity1.collidable;
 
+		var collidable0EntitiesAlreadyCollidedWith = collidable0.entitiesAlreadyCollidedWith;
+		var collidable1EntitiesAlreadyCollidedWith = collidable1.entitiesAlreadyCollidedWith;
+
 		var doCollide = this.doCollidablesCollide
 		(
 			collidable0, collidable1
 		);
 		var wereEntitiesAlreadyColliding =
 		(
-			collidable0.entitiesAlreadyCollidedWith.contains(entity1)
-			|| collidable1.entitiesAlreadyCollidedWith.contains(entity0)
+			collidable0EntitiesAlreadyCollidedWith.contains(entity1)
+			|| collidable1EntitiesAlreadyCollidedWith.contains(entity0)
 		);
 
 		if (doCollide)
@@ -283,16 +286,16 @@ class CollisionHelper
 			}
 			else
 			{
-				collidable0.entitiesAlreadyCollidedWith.push(entity1);
-				collidable1.entitiesAlreadyCollidedWith.push(entity0);
+				collidable0EntitiesAlreadyCollidedWith.push(entity1);
+				collidable1EntitiesAlreadyCollidedWith.push(entity0);
 			}
 		}
 		else
 		{
 			if (wereEntitiesAlreadyColliding)
 			{
-				collidable0.entitiesAlreadyCollidedWith.remove(entity1);
-				collidable1.entitiesAlreadyCollidedWith.remove(entity0);
+				collidable0EntitiesAlreadyCollidedWith.remove(entity1);
+				collidable1EntitiesAlreadyCollidedWith.remove(entity0);
 			}
 		}
 
@@ -446,7 +449,10 @@ class CollisionHelper
 
 		var box = entityBox.collidable.collider;
 		var sphere = entitySphere.collidable.collider;
-		var collision = this.collisionOfBoxAndSphere(box, sphere, this._collision);
+		var collision = this.collisionOfBoxAndSphere
+		(
+			box, sphere, this._collision, true // shouldCalculatePos
+		);
 
 		var collisionRelativeToBox = this._pos.overwriteWith(collision.pos).subtract
 		(
@@ -638,7 +644,11 @@ class CollisionHelper
 		if (doCollide && shouldCalculatePos)
 		{
 			// todo - Fix this.
-			var boxCircumscribedAroundSphere = new Box(sphere.center, new Coords(1, 1, 1).multiplyScalar(sphere.radius));
+			var boxCircumscribedAroundSphere = new Box
+			(
+				sphere.center,
+				new Coords(1, 1, 1).multiplyScalar(sphere.radius * 2)
+			);
 			collision = this.collisionOfBoxAndBox(box, boxCircumscribedAroundSphere, collision);
 		}
 

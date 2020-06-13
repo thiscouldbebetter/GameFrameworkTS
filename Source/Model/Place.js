@@ -24,6 +24,7 @@ class Place
 			Ephemeral.name,
 			Recurrent.name,
 			Killable.name,
+			Camera.name
 		];
 	}
 
@@ -34,7 +35,6 @@ class Place
 
 	draw(universe, world)
 	{
-		universe.display.drawBackground("Black", "Black");
 		var entitiesDrawable = this.entitiesByPropertyName(Drawable.name);
 		for (var i = 0; i < entitiesDrawable.length; i++)
 		{
@@ -42,6 +42,7 @@ class Place
 			var drawable = entity.drawable;
 			drawable.updateForTimerTick(universe, world, this, entity);
 		}
+		this.camera().drawEntitiesInViewThenClear(universe, world, universe.display);
 	};
 
 	entitiesByPropertyName(propertyName)
