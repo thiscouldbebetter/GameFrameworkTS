@@ -347,22 +347,6 @@ class SkillLearner
 						}
 					) // text
 				),
-
-				new ControlButton
-				(
-					"buttonBack", //name,
-					new Coords
-					(
-						size.x - margin - buttonSize.x,
-						size.y - margin - buttonSize.y
-					), //pos,
-					buttonSize.clone(), // size,
-					"Done", // text,
-					labelHeight, // fontHeightInPixels,
-					true, // hasBorder
-					true, // isEnabled
-					back
-				)
 			]
 		);
 

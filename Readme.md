@@ -9,10 +9,14 @@ Some homemade media files are included in the Content directory for testing purp
 ![Title](/Screenshots/Screenshot-Title.png?raw=true "Title")
 ![Profile_Select](/Screenshots/Screenshot-Profile_Select.png?raw=true "Profile Select")
 ![Configuration](/Screenshots/Screenshot-Configuration.png?raw=true "Configuration")
+![Status](/Screenshots/Screenshot-Status.png?raw=true "Status")
 ![Inventory](/Screenshots/Screenshot-Inventory.png?raw=true "Inventory")
-![Container](/Screenshots/Screenshot-Container.png?raw=true "Container")
-![Store](/Screenshots/Screenshot-Store.png?raw=true "Store")
+![Equipment](/Screenshots/Screenshot-Skills.png?raw=true "Equipment")
+![Skills](/Screenshots/Screenshot-Skills.png?raw=true "Skills")
 ![Conversation](/Screenshots/Screenshot-Conversation.png?raw=true "Conversation")
+![Container](/Screenshots/Screenshot-Container.png?raw=true "Container")
+![Bartering](/Screenshots/Screenshot-Bartering.png?raw=true "Bartering")
+![Store](/Screenshots/Screenshot-Store.png?raw=true "Store")
 
 
 

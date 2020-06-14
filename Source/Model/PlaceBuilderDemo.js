@@ -35,7 +35,7 @@ class PlaceBuilderDemo
 			entities.push(this.entityBuildFromDefn(entityDefns["Player"]));
 
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Book"], 1));
-			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Tree"], 1));
+			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Container"], 1));
 
 			var exit = this.entityBuildFromDefn(entityDefns["Exit"]);
 			exit.portal.destinationPlaceName = placeNameToReturnTo;
@@ -50,7 +50,6 @@ class PlaceBuilderDemo
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Bar"], 1));
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Mine"], 48));
 
-			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Container"], 1));
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Tree"], 10));
 
 			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Ammo"], 10));
@@ -783,14 +782,15 @@ class PlaceBuilderDemo
 		return itemCoinEntityDefn;
 	};
 
-	entityDefnBuildContainer(entityDimension, entitySize)
+	entityDefnBuildContainer(entityDimension)
 	{
 		var containerColor = "Orange";
+		var entitySize = new Coords(1.5, 1).multiplyScalar(entityDimension);
 		var visual = new VisualGroup
 		([
 			new VisualRectangle
 			(
-				new Coords(1.5, 1).multiplyScalar(entityDimension),
+				entitySize,
 				containerColor
 			),
 			new VisualRectangle
@@ -1986,7 +1986,7 @@ class PlaceBuilderDemo
 				(
 					"Status",
 					new Coords(0, 0), // pos
-					size.clone().addDimensions(0, -15, 0), // size
+					size.clone().addDimensions(0, -30, 0), // size
 					// children
 					[
 						new ControlLabel

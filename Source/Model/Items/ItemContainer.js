@@ -1,20 +1,51 @@
 
 class ItemContainer
 {
-	toControl(universe, size, entityTransferrer, entityContainer, venuePrev)
+	transfer(world, entityFrom, entityTo, messagePrefix)
+	{
+		var itemHolderFrom = entityFrom.itemHolder;
+		var itemHolderTo = entityTo.itemHolder;
+
+		if (itemHolderFrom.itemEntityToTransfer != null)
+		{
+			var itemEntityToTransfer = itemHolderFrom.itemEntityToTransfer;
+			var itemToTransfer = itemEntityToTransfer.item;
+			itemHolderFrom.itemEntityTransferSingleTo
+			(
+				itemEntityToTransfer, itemHolderTo
+			);
+			if (itemHolderFrom.itemQuantityByDefnName(itemToTransfer.defnName) <= 0)
+			{
+				itemHolderFrom.itemEntityToTransfer = null;
+			}
+
+			this.statusMessage =
+				messagePrefix
+				+ " " + itemToTransfer.defnName
+				+ " for " + itemCurrencyNeeded.quantity + ".";
+		}
+	};
+
+	// Controllable.
+
+	toControl(universe, size, entityGetterPutter, entityContainer, venuePrev)
 	{
 		if (size == null)
 		{
 			size = universe.display.sizeDefault();
 		}
 
-		var sizeBase = new Coords(200, 150, 1);
-		var scaleMultiplier = size.clone().divide(sizeBase);
-
 		var fontHeight = 10;
-		var fontHeightSmall = fontHeight * .6;
+		var margin = fontHeight * 1.5;
+		var buttonSize = new Coords(4, 2).multiplyScalar(fontHeight);
+		var listSize = new Coords
+		(
+			(size.x - margin * 3) / 2,
+			size.y - margin * 4 - buttonSize.y - fontHeight
+		);
 
-		var itemHolderTransferrer = entityTransferrer.itemHolder;
+		var itemContainer = this;
+		var itemHolderGetterPutter = entityGetterPutter.itemHolder;
 		var itemHolderContainer = entityContainer.itemHolder;
 
 		var world = universe.world;
@@ -26,194 +57,142 @@ class ItemContainer
 			universe.venueNext = venueNext;
 		};
 
+		var get = () =>
+		{
+			itemContainer.transfer(world, entityContainer, entityGetterPutter, "Took");
+		};
+
+		var put = () => 
+		{
+			itemContainer.transfer(world, entityGetterPutter, entityContainer, "Put");
+		};
+
 		var returnValue = new ControlContainer
 		(
 			"containerTransfer",
 			new Coords(0, 0), // pos
-			sizeBase.clone(), // size
+			size.clone(),
 			// children
 			[
 				new ControlLabel
 				(
-					"labelContainerName",
-					new Coords(52, 15), // pos
-					new Coords(85, 25), // size
-					true, // isTextCentered
+					"labelStoreName",
+					new Coords(margin, margin), // pos
+					new Coords(listSize.x, 25), // size
+					false, // isTextCentered
 					entityContainer.name + ":",
 					fontHeight
 				),
 
 				new ControlList
 				(
-					"listContainerItems",
-					new Coords(10, 25), // pos
-					new Coords(85, 40), // size
+					"listStoreItems",
+					new Coords(margin, margin * 2), // pos
+					listSize.clone(),
 					new DataBinding
 					(
 						itemHolderContainer,
-						function get(c) { return c.itemEntities; }
+						function get(c)
+						{
+							return c.itemEntities;//.filter(x => x.item.defnName != itemDefnNameCurrency);
+						}
 					), // items
 					new DataBinding
 					(
 						null,
 						function get(c) { return c.item.toString(world); }
 					), // bindingForItemText
-					fontHeightSmall,
+					fontHeight,
 					new DataBinding
 					(
 						itemHolderContainer,
-						function get(c) { return c.itemEntitySelected; },
-						function set(c, v) { c.itemEntitySelected = v; }
+						function get(c) { return c.itemEntityToTransfer; },
+						function set(c, v) { c.itemEntityToTransfer = v; }
 					), // bindingForItemSelected
 					new DataBinding(null, function(c) { return c; } ), // bindingForItemValue
+					true, // isEnabled
+					get // confirm
 				),
 
 				new ControlLabel
 				(
-					"labelHolderTransferrerName",
-					new Coords(147, 15), // pos
+					"labelCustomerName",
+					new Coords(size.x - margin - listSize.x, margin), // pos
 					new Coords(85, 25), // size
-					true, // isTextCentered
-					entityTransferrer.name + ":",
+					false, // isTextCentered
+					entityGetterPutter.name + ":",
 					fontHeight
+				),
+
+				new ControlButton
+				(
+					"buttonGet",
+					new Coords(size.x / 2 - buttonSize.x - margin / 2, size.y - margin - buttonSize.y), // pos
+					buttonSize.clone(),
+					">",
+					fontHeight,
+					true, // hasBorder
+					new DataBinding(true), // isEnabled
+					get
 				),
 
 				new ControlList
 				(
-					"listHolder1Items",
-					new Coords(105, 25), // pos
-					new Coords(85, 40), // size
+					"listOtherItems",
+					new Coords(size.x - margin - listSize.x, margin * 2), // pos
+					listSize.clone(),
 					new DataBinding
 					(
-						itemHolderTransferrer,
-						function get(c) { return c.itemEntities; }
+						itemHolderGetterPutter,
+						function get(c)
+						{
+							return c.itemEntities;//.filter(x => x.item.defnName != itemDefnNameCurrency);
+						}
 					), // items
 					new DataBinding
 					(
 						null,
 						function get(c) { return c.item.toString(world); }
 					), // bindingForItemText
-					fontHeightSmall,
+					fontHeight,
 					new DataBinding
 					(
-						itemHolderTransferrer,
-						function get(c) { return c.itemEntitySelected; },
-						function set(c, v) { c.itemEntitySelected = v; }
+						itemHolderGetterPutter,
+						function get(c) { return c.itemEntityToTransfer; },
+						function set(c, v) { c.itemEntityToTransfer = v; }
 					), // bindingForItemSelected
 					new DataBinding(null, function(c) { return c; } ), // bindingForItemValue
-				),
-
-				new ControlLabel
-				(
-					"labelItemSelected0",
-					new Coords(50, 70), // pos
-					new Coords(100, 15), // size
-					true, // isTextCentered
-					"Selected:",
-					fontHeight
-				),
-
-				new ControlLabel
-				(
-					"infoItemSelected0",
-					new Coords(50, 80), // pos
-					new Coords(200, 15), // size
-					true, // isTextCentered
-					new DataBinding
-					(
-						itemHolderContainer,
-						function get(c)
-						{
-							var i = c.itemEntitySelected;
-							return (i == null ? "-" : i.item.toString(world));
-						}
-					), // text
-					fontHeight
-				),
-
-				new ControlLabel
-				(
-					"labelItemSelected1",
-					new Coords(150, 70), // pos
-					new Coords(100, 15), // size
-					true, // isTextCentered
-					"Selected:",
-					fontHeight
-				),
-
-				new ControlLabel
-				(
-					"infoItemSelected1",
-					new Coords(150, 80), // pos
-					new Coords(200, 15), // size
-					true, // isTextCentered
-					new DataBinding
-					(
-						itemHolderTransferrer,
-						function get(c)
-						{
-							var i = c.itemEntitySelected;
-							return (i == null ? "-" : i.item.toString(world));
-						}
-					), // text
-					fontHeight
+					true, // isEnabled
+					put // confirm
 				),
 
 				new ControlButton
 				(
-					"buttonTransferFromContainer",
-					new Coords(80, 90), // pos
-					new Coords(15, 15), // size
-					">",
-					fontHeight,
-					true, // hasBorder
-					new DataBinding
-					(
-						itemHolderContainer,
-						function get(c) { return c.itemEntitySelected != null}
-					), // isEnabled
-					function click(universe)
-					{
-						var itemEntity = itemHolderContainer.itemEntitySelected;
-						if (itemEntity != null)
-						{
-							itemHolderContainer.itemEntityTransferTo(itemEntity, itemHolderTransferrer);
-							itemHolderContainer.itemEntitySelected = null;
-						}
-					},
-					universe // context
-				),
-
-				new ControlButton
-				(
-					"buttonTransferToContainer",
-					new Coords(105, 90), // pos
-					new Coords(15, 15), // size
+					"buttonPut",
+					new Coords(size.x / 2 + margin / 2, size.y - margin - buttonSize.y), // pos
+					buttonSize.clone(),
 					"<",
 					fontHeight,
 					true, // hasBorder
-					new DataBinding
-					(
-						itemHolderTransferrer,
-						function get(c) { return c.itemEntitySelected != null}
-					), // isEnabled
-					function click(universe)
-					{
-						var itemEntity = itemHolderTransferrer.itemEntitySelected;
-						if (itemEntity != null)
-						{
-							itemHolderTransferrer.itemEntityTransferTo(itemEntity, itemHolderContainer);
-							itemHolderTransferrer.itemEntitySelected = null;
-						}
-					},
-					universe // context
+					new DataBinding(true), // isEnabled
+					put
+				),
+
+				new ControlLabel
+				(
+					"infoStatus",
+					new Coords(size.x / 2, size.y - margin * 2 - buttonSize.y), // pos
+					new Coords(size.x, fontHeight), // size
+					true, // isTextCentered
+					new DataBinding(this, c => c.statusMessage),
+					fontHeight
 				),
 
 				new ControlButton
 				(
 					"buttonDone",
-					new Coords(75, 110), // pos
-					new Coords(50, 15), // size
+					new Coords(size.x - margin - buttonSize.x, size.y - margin - buttonSize.y), // pos
+					buttonSize.clone(),
 					"Done",
 					fontHeight,
 					true, // hasBorder
@@ -227,8 +206,6 @@ class ItemContainer
 			[ new ActionToInputsMapping( "Back", [ universe.inputHelper.inputNames.Escape ], true ) ],
 
 		);
-
-		returnValue.scalePosAndSize(scaleMultiplier);
 
 		return returnValue;
 	};
