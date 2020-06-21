@@ -29,5 +29,15 @@ class Portal
 
 		placeToDepart.entitiesToRemove.push(entityToTransport);
 		destinationPlace.entitiesToSpawn.push(entityToTransport);
-	};
+	}
+
+	clone()
+	{
+		return new Portal
+		(
+			this.destinationPlaceName,
+			this.destinationEntityName,
+			this.clearsVelocity
+		);
+	}
 }

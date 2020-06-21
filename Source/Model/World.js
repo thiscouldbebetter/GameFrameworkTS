@@ -30,35 +30,34 @@ class World
 		var actions = World.actionsBuild();
 		var actionToInputsMappings = World.actionToInputsMappingsBuild();
 
-		var placeBuilder = new PlaceBuilderDemo();
-
-		var entityDefns = placeBuilder.entityDefnsBuild();
-
 		var itemDefns = World.itemDefnsBuild();
+
+		var randomizer = null; // Use default.
+		var displaySize = universe.display.sizeInPixels;
+		var cameraViewSize = displaySize.clone();
+		var placeBuilder = new PlaceBuilderDemo
+		(
+			randomizer, cameraViewSize, itemDefns
+		);
+
+		var entityDefns = placeBuilder.entityDefns;
 
 		var placeDefnDemo = new PlaceDefn
 		(
-			"Demo",
-			actions,
-			actionToInputsMappings
+			"Demo", actions, actionToInputsMappings
 		);
-
 		var placeDefns = [ placeDefnDemo ]; // todo
 
 		var skills = Skill.skillsDemo();
 
 		var defns = new Defns([entityDefns, itemDefns, placeDefns, skills]);
 
-		var displaySize = universe.display.sizeInPixels;
-		var cameraViewSize = displaySize.clone();
-
-		var randomizer = null; // Use default.
-
 		var places = [];
 
 		var worldSizeInRooms = new Coords(2, 2);
 		var roomPos = new Coords();
 		var roomSize = displaySize.clone().double();
+		var startPos = new Coords(0, 0);
 		var goalPos = new Coords().randomize().multiply(worldSizeInRooms).floor();
 
 		for (var y = 0; y < worldSizeInRooms.y; y++)
@@ -77,19 +76,19 @@ class World
 					(y > 0)
 				];
 
+				var isStart = (roomPos.equals(startPos));
 				var isGoal = (roomPos.equals(goalPos));
 
-				var placeBattlefield = placeBuilder.build
+				var placeNamesToIncludePortalsTo = [];
+				if (isStart)
+				{
+					placeNamesToIncludePortalsTo = [ "Base", "Terrarium" ];
+				}
+
+				var placeBattlefield = placeBuilder.buildBattlefield
 				(
-					"Battlefield",
-					roomSize, // size
-					cameraViewSize,
-					null, // placeNameToReturnTo
-					randomizer,
-					itemDefns,
-					roomPos,
-					areNeighborsConnectedESWN,
-					isGoal
+					roomSize, roomPos, areNeighborsConnectedESWN, isGoal,
+					placeNamesToIncludePortalsTo
 				);
 
 				places.push(placeBattlefield);
@@ -104,19 +103,21 @@ class World
 			new Coords(20, 20) //marginSize
 		);
 
-		var placeBase = placeBuilder.build
-		(
-			"Base",
-			displaySize.clone(), // size
-			cameraViewSize,
-			places[0].name, // placeNameToReturnTo
-			randomizer,
-			itemDefns,
-			null, // pos
-			[false, false, false, false] // areNeighborsConnectedESWN
-		);
+		var placeBattlefield0 = places[0];
 
+		var placeBase = placeBuilder.buildBase
+		(
+			displaySize.clone(), // size
+			placeBattlefield0.name // placeNameToReturnTo
+		);
 		places.insertElementAt(placeBase, 0);
+
+		var placeBase = placeBuilder.buildTerrarium
+		(
+			displaySize.clone(), // size
+			placeBattlefield0.name // placeNameToReturnTo
+		);
+		places.push(placeBase);
 
 		var returnValue = new World
 		(

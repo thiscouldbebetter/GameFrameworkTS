@@ -1,105 +1,154 @@
 
 class PlaceBuilderDemo
 {
-	build
-	(
-		namePrefix, size, cameraViewSize, placeNameToReturnTo, randomizer,
-		itemDefns, placePos, areNeighborsConnectedESWN, isGoal
-	)
+	constructor(randomizer, cameraViewSize, itemDefns)
 	{
-		var name = namePrefix + (placePos == null ? "" : placePos.toStringXY());
-		this.size = size.clearZ();
 		this.randomizer = randomizer || RandomizerLCG.default();
+		this.cameraViewSize = cameraViewSize;
+		this.itemDefns = itemDefns;
+		this.entityDefns = this.entityDefnsBuild();
+	}
 
-		var entities = [];
+	buildBase(size, placeNameToReturnTo)
+	{
+		this.build_Interior("Base", size, placeNameToReturnTo);
 
-		var entityDimension = 10;
+		this.entities.push(this.entityBuildFromDefn(this.entityDefns["Player"]));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefns["Book"], 1));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefns["Container"], 1));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefns["Friendly"], 1));
 
-		var entityDefns = this.entityDefnsBuild();
+		var place = new Place(this.name, "Demo", size, this.entities);
+
+		return place;
+	}
+
+	buildBattlefield(size, placePos, areNeighborsConnectedESWN, isGoal, placeNamesToIncludePortalsTo)
+	{
+		this.name = "Battlefield" + placePos.toStringXY();
+		this.size = size;
+		this.entities = [];
+
+		this.build_SizeWallsAndMargins(this.name, placePos, areNeighborsConnectedESWN);
+		this.build_Exterior(placePos, placeNamesToIncludePortalsTo);
+		if (isGoal)
+		{
+			var entityDimension = 10;
+			this.build_Goal(entityDimension);
+		}
+		this.entitiesAllGround();
+		this.build_Camera(this.cameraViewSize);
+		var place = new Place(this.name, "Demo", size, this.entities);
+		return place;
+	}
+
+	buildTerrarium(size, placeNameToReturnTo)
+	{
+		this.build_Interior("Terrarium", size, placeNameToReturnTo);
+
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefns["Flower"], 1));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefns["Mushroom"], 1));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefns["Tree"], 1));
+
+		var place = new Place(this.name, "Demo", size, this.entities);
+		return place;
+	}
+
+	build_Camera(cameraViewSize)
+	{
+		var cameraEntity = this.entityBuildCamera(cameraViewSize);
+		this.entities.push(cameraEntity);
+		var camera = cameraEntity.camera;
+		this.entities.splice(0, 0, ...this.entityBuildBackground(camera));
+	};
+
+	build_Exterior(placePos, placeNamesToIncludePortalsTo)
+	{
+		var entityDefns = this.entityDefns;
+		var entities = this.entities;
+
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["EnemyGenerator"], 1));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Bar"], 1));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Mine"], 48));
+
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Tree"], 10));
+
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Ammo"], 10));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Armor"], 1));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Crystal"], 3));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Flower"], 3));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Material"], 5));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Medicine"], 5));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Mushroom"], 3));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Speed Booster"], 1));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Toolset"], 1));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Flower"], 3));
+
+		var entityRadioMessage =
+			this.entityBuildRadioMessage(entityDefns["Friendly"].drawable.visual, "This is " + this.name + ".");
+		entities.push(entityRadioMessage);
+
+		placeNamesToIncludePortalsTo.forEach(placeName => 
+		{
+			var entityDefnPortal = this.entityDefns["Portal"];
+			var entityPortal = this.entityBuildFromDefn(entityDefnPortal);
+			entityPortal.name = placeName;
+			entityPortal.portal.destinationPlaceName = placeName;
+			entities.push(entityPortal);
+		});
+		entities.push(this.entityBuildFromDefn(entityDefns["Store"]));
+	}
+
+	build_Goal(entityDimension)
+	{
+		var entityDefns = this.entityDefns;
+		var entities = this.entities;
+
+		var entityDefns = this.entityDefns;
+		var entities = this.entities;
 
 		var entitySize = new Coords(1, 1, 1).multiplyScalar(entityDimension);
+		var numberOfKeysToUnlockGoal = 5;
+		var goalEntity = this.entityBuildGoal
+		(
+			entities, entityDimension, entitySize, numberOfKeysToUnlockGoal
+		);
+		var entityRing = this.entityBuildFromDefn(entityDefns["Ring"]);
+		var ringLoc = entityRing.locatable.loc;
+		ringLoc.pos.overwriteWith(goalEntity.locatable.loc.pos);
+		ringLoc.spin.angleInTurnsRef.value = .001;
+
+		entities.push(entityRing);
+	}
+
+	build_Interior(name, size, placeNameToReturnTo)
+	{
+		this.name = name;
+		this.size = size;
+
+		this.entities = [];
+
+		this.build_SizeWallsAndMargins(this.name, null);
+
+		this.entityBuildExit(placeNameToReturnTo);
+
+		this.entitiesAllGround();
+		this.build_Camera(this.cameraViewSize);
+	}
+
+	build_SizeWallsAndMargins(namePrefix, placePos, areNeighborsConnectedESWN)
+	{
+		this.size = this.size.clearZ();
 
 		var wallThickness = this.entityBuildObstacleWalls
 		(
-			entities, "Red", areNeighborsConnectedESWN, namePrefix, placePos
+			"Red", areNeighborsConnectedESWN, namePrefix, placePos
 		);
 
 		var marginThickness = wallThickness * 8;
 		var marginSize = new Coords(1, 1, 0).multiplyScalar(marginThickness);
 		this.marginSize = marginSize;
-
-		var entityDefnFriendly = entityDefns["Friendly"];
-
-		if (placeNameToReturnTo != null)
-		{
-			entities.push(this.entityBuildFromDefn(entityDefns["Player"]));
-
-			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Book"], 1));
-			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Container"], 1));
-
-			var exit = this.entityBuildFromDefn(entityDefns["Exit"]);
-			exit.portal.destinationPlaceName = placeNameToReturnTo;
-			exit.portal.destinationEntityName = "Base";
-			entities.push(exit);
-
-			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefnFriendly, 1));
-		}
-		else
-		{
-			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["EnemyGenerator"], 1));
-			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Bar"], 1));
-			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Mine"], 48));
-
-			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Tree"], 10));
-
-			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Ammo"], 10));
-			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Armor"], 1));
-			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Crystal"], 3));
-			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Flower"], 3));
-			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Material"], 5));
-			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Medicine"], 5));
-			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Mushroom"], 3));
-			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Speed Booster"], 1));
-			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Toolset"], 1));
-			entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Flower"], 3));
-
-			entities.push(this.entityBuildRadioMessage(entityDefnFriendly.drawable.visual, "This is " + name + "."));
-
-			var shouldIncludeBase = (placePos.x == 0 && placePos.y == 0);
-			if (shouldIncludeBase)
-			{
-				entities.push(this.entityBuildFromDefn(entityDefns["Base"]));
-			}
-			entities.push(this.entityBuildFromDefn(entityDefns["Store"]));
-
-			if (isGoal)
-			{
-				var numberOfKeysToUnlockGoal = 5;
-				var goalEntity = this.entityBuildGoal
-				(
-					entities, entityDimension, entitySize, numberOfKeysToUnlockGoal
-				);
-				var entityRing = this.entityBuildFromDefn(entityDefns["Ring"]);
-				var ringLoc = entityRing.locatable.loc;
-				ringLoc.pos.overwriteWith(goalEntity.locatable.loc.pos);
-				ringLoc.spin.angleInTurnsRef.value = .001;
-
-				entities.push(entityRing);
-			}
-		}
-
-		entities.forEach(x => { if (x.locatable != null) { x.locatable.loc.pos.z = 0; } })
-
-		var cameraEntity = this.entityBuildCamera(cameraViewSize);
-		entities.push(cameraEntity);
-		var camera = cameraEntity.camera;
-		entities.splice(0, 0, ...this.entityBuildBackground(camera));
-
-		//this.entitiesAllAddCameraProjection(entities);
-
-		var place = new Place(name, "Demo", size, entities);
-		return place;
-	};
+	}
 
 	// Constructor helpers.
 
@@ -199,6 +248,22 @@ class PlaceBuilderDemo
 
 		return returnValues;
 	};
+
+	entityBuildExit(placeNameToReturnTo)
+	{
+		var exit = this.entityBuildFromDefn(this.entityDefns["Exit"]);
+		exit.portal.destinationPlaceName = placeNameToReturnTo;
+		exit.portal.destinationEntityName = this.name;
+		this.entities.push(exit);
+	}
+
+	entitiesAllGround()
+	{
+		this.entities.forEach
+		(
+			x => { if (x.locatable != null) { x.locatable.loc.pos.z = 0; } }
+		);
+	}
 
 	entitiesBuildFromDefnAndCount
 	(
@@ -353,9 +418,11 @@ class PlaceBuilderDemo
 
 	entityBuildObstacleWalls
 	(
-		entities, wallColor, areNeighborsConnectedESWN, placeNamePrefix, placePos
+		wallColor, areNeighborsConnectedESWN, placeNamePrefix, placePos
 	)
 	{
+		areNeighborsConnectedESWN = areNeighborsConnectedESWN || [ false, false, false, false ];
+		var entities = this.entities;
 		var numberOfWalls = 4;
 		var wallThickness = 5;
 		var doorwayWidthHalf = wallThickness * 4;
@@ -537,6 +604,15 @@ class PlaceBuilderDemo
 						),
 						new VisualOffset
 						(
+							new VisualRectangle
+							(
+								new Coords(1.1, .2).multiplyScalar(entityDimension),
+								"Gray"
+							),
+							new Coords(0, -.75).multiplyScalar(entityDimension)
+						),
+						new VisualOffset
+						(
 							new VisualText("Store", storeColor),
 							new Coords(0, entityDimension)
 						)
@@ -653,51 +729,6 @@ class PlaceBuilderDemo
 		);
 
 		return itemArmorEntityDefn;
-	};
-
-	entityDefnBuildBase(entityDimension)
-	{
-		var baseColor = "Brown";
-
-		var entitySize = new Coords(1, 1, 1).multiplyScalar(entityDimension);
-
-		var visual = new VisualGroup
-		([
-			new VisualPolygon
-			(
-				new Path
-				([
-					new Coords(0.5, 0.5),
-					new Coords(-0.5, 0.5),
-					new Coords(-0.5, -0.5),
-					new Coords(0, -1),
-					new Coords(0.5, -0.5)
-				]).transform
-				(
-					Transform_Scale.fromScalar(entityDimension)
-				),
-				baseColor
-			),
-			new VisualOffset
-			(
-				new VisualText("Base", baseColor),
-				new Coords(0, entityDimension)
-			)
-		]);
-
-		var baseEntityDefn = new Entity
-		(
-			"Base",
-			[
-				new Collidable(new Box(new Coords(0, 0), entitySize)),
-				new Drawable(visual),
-				new DrawableCamera(),
-				new Locatable(),
-				new Portal( "Base", "Exit" )
-			]
-		);
-
-		return baseEntityDefn;
 	};
 
 	entityDefnBuildBook(entityDimension)
@@ -2116,6 +2147,54 @@ class PlaceBuilderDemo
 		return playerEntityDefn;
 	};
 
+	entityDefnBuildPortal(entityDimension)
+	{
+		var baseColor = "Brown";
+
+		var entitySize = new Coords(1, 1, 1).multiplyScalar(entityDimension);
+
+		var visual = new VisualGroup
+		([
+			new VisualPolygon
+			(
+				new Path
+				([
+					new Coords(0.5, 0.5),
+					new Coords(-0.5, 0.5),
+					new Coords(-0.5, -0.5),
+					new Coords(0, -1),
+					new Coords(0.5, -0.5)
+				]).transform
+				(
+					Transform_Scale.fromScalar(entityDimension)
+				),
+				baseColor
+			),
+			new VisualOffset
+			(
+				new VisualDynamic
+				(
+					(u, w, d, e) => new VisualText(e.portal.destinationPlaceName, baseColor)
+				),
+				new Coords(0, entityDimension)
+			)
+		]);
+
+		var portalEntity = new Entity
+		(
+			"Portal",
+			[
+				new Collidable(new Box(new Coords(0, 0), entitySize)),
+				new Drawable(visual),
+				new DrawableCamera(),
+				new Locatable(),
+				new Portal( null, "Exit" )
+			]
+		);
+
+		return portalEntity;
+	};
+
 	entityDefnBuildPotion(entityDimension)
 	{
 		var entityDimensionHalf = entityDimension / 2;
@@ -2322,8 +2401,10 @@ class PlaceBuilderDemo
 		var path = new Path
 		([
 			new Coords(0, -0.5),
-			new Coords(.5, 0.5),
-			new Coords(-.5, 0.5)
+			new Coords(.25, 0),
+			new Coords(.25, 0.5),
+			new Coords(-.25, 0.5),
+			new Coords(-.25, 0),
 		]).transform
 		(
 			Transform_Scale.fromScalar(entityDimension)
@@ -2376,7 +2457,6 @@ class PlaceBuilderDemo
 		[
 			this.entityDefnBuildAccessory(entityDimension),
 			this.entityDefnBuildArmor(entityDimension),
-			this.entityDefnBuildBase(entityDimension),
 			this.entityDefnBuildBook(entityDimension),
 			this.entityDefnBuildCoin(entityDimension),
 			this.entityDefnBuildContainer(entityDimension),
@@ -2392,6 +2472,7 @@ class PlaceBuilderDemo
 			this.entityDefnBuildObstacleMine(entityDimension),
 			this.entityDefnBuildObstacleRing(entityDimension),
 			this.entityDefnBuildPlayer(entityDimension),
+			this.entityDefnBuildPortal(entityDimension),
 			this.entityDefnBuildPotion(entityDimension),
 			this.entityDefnBuildStore(entityDimension),
 			this.entityDefnBuildToolset(entityDimension),
