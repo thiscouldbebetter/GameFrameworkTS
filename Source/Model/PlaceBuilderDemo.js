@@ -17,6 +17,7 @@ class PlaceBuilderDemo
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefns["Book"], 1));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefns["Container"], 1));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefns["Friendly"], 1));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefns["Sword"], 1));
 
 		var place = new Place(this.name, "Demo", size, this.entities);
 
@@ -210,7 +211,8 @@ class PlaceBuilderDemo
 			(
 				visualBackgroundCellSize,
 				null, "rgba(255, 255, 255, 0.02)"
-			)
+			),
+			true // expandViewStartAndEndByCell
 		);
 		var entityBackgroundBottom = new Entity
 		(
@@ -233,7 +235,8 @@ class PlaceBuilderDemo
 			(
 				visualBackgroundCellSize,
 				null, "rgba(255, 255, 255, 0.06)"
-			)
+			),
+			true // expandViewStartAndEndByCell
 		);
 		var entityBackgroundTop = new Entity
 		(
@@ -623,9 +626,9 @@ class PlaceBuilderDemo
 				ItemHolder.fromItems
 				([
 					new Item("Coin", 100),
+					new Item("Gun", 1),
 					new Item("Key", 10),
-					new Item("Medicine", 100),
-					new Item("Weapon", 1)
+					new Item("Medicine", 100)
 				]),
 				new Locatable()
 			]
@@ -1347,15 +1350,121 @@ class PlaceBuilderDemo
 				([
 					new Item("Ammo", 5),
 					new Item("Coin", 200),
+					new Item("Gun", 1),
 					new Item("Key", 1),
 					new Item("Material", 3),
 					new Item("Medicine", 4),
-					new Item("Weapon", 1),
 				]),
 			]
 		);
 
 		return friendlyEntityDefn;
+	};
+
+	entityDefnBuildGun(entityDimension)
+	{
+		entityDimension = entityDimension * 2;
+		var itemDefnName = "Gun";
+
+		var itemWeaponColor = "rgb(0, 128, 128)";
+		var itemWeaponVisual = new VisualGroup
+		([
+			new VisualPath
+			(
+				new Path
+				([
+					new Coords(-0.3, 0.2),
+					new Coords(-0.3, -0.2),
+					new Coords(0.3, -0.2)
+				]).transform
+				(
+					Transform_Scale.fromScalar(entityDimension)
+				),
+				itemWeaponColor,
+				5 // lineThickness
+			),
+			new VisualOffset
+			(
+				new VisualText(itemDefnName, itemWeaponColor),
+				new Coords(0, entityDimension)
+			)
+		]);
+
+		var itemWeaponCollider = new Sphere(new Coords(0, 0), entityDimension / 2);
+
+		var itemWeaponDevice = Device.gun();
+
+		var itemWeaponEntityDefn = new Entity
+		(
+			itemDefnName,
+			[
+				new Item(itemDefnName, 1),
+				new Locatable( new Location(new Coords()) ),
+				new Collidable(itemWeaponCollider),
+				new Drawable(itemWeaponVisual),
+				new DrawableCamera(),
+				itemWeaponDevice
+			]
+		);
+
+		return itemWeaponEntityDefn;
+	};
+
+	entityDefnBuildGunAmmo(entityDimension)
+	{
+		var entityDimensionHalf = entityDimension / 2;
+
+		var itemAmmoColor = "rgb(0, 128, 128)";
+		var path = new Path
+		([
+			new Coords(0, -0.5),
+			new Coords(.25, 0),
+			new Coords(.25, 0.5),
+			new Coords(-.25, 0.5),
+			new Coords(-.25, 0),
+		]).transform
+		(
+			Transform_Scale.fromScalar(entityDimension)
+		);
+		var ammoSize = new Box().ofPoints(path.points).size;
+
+		var itemDefnAmmoName = "Ammo";
+		var itemAmmoVisual = new VisualGroup
+		([
+			new VisualPolygon
+			(
+				path,
+				itemAmmoColor
+			),
+			new VisualOffset
+			(
+				new VisualText(itemDefnAmmoName, itemAmmoColor),
+				new Coords(0, entityDimension)
+			)
+		]);
+
+		var itemAmmoCollider = new Sphere(new Coords(0, 0), entityDimensionHalf);
+
+		var collidable = new Collidable(itemAmmoCollider);
+		var bounds = new Box(collidable.collider.center, ammoSize);
+		var boundable = new Boundable(bounds);
+
+		var roundsPerPile = 5;
+
+		var itemAmmoEntityDefn = new Entity
+		(
+			itemDefnAmmoName,
+			[
+				boundable,
+				collidable,
+				new Drawable(itemAmmoVisual),
+				new DrawableCamera(),
+				new Item(itemDefnAmmoName, roundsPerPile),
+				new Locatable( new Location( new Coords() ) ),
+			]
+		);
+
+		return itemAmmoEntityDefn;
 	};
 
 	entityDefnBuildMaterial(entityDimension)
@@ -2243,6 +2352,65 @@ class PlaceBuilderDemo
 		return itemPotionEntityDefn;
 	};
 
+	entityDefnBuildSword(entityDimension)
+	{
+		entityDimension = entityDimension;
+		var itemDefnName = "Sword";
+
+		var itemWeaponColor = "rgb(0, 128, 128)";
+		var itemWeaponVisual = new VisualGroup
+		([
+			new VisualPolygonLocated
+			(
+				new Path
+				([
+					new Coords(0.2, 0.5),
+					new Coords(0.2, 0.2),
+					new Coords(2, 0.2),
+					new Coords(2.3, 0),
+					new Coords(2, -0.2),
+					new Coords(0.2, -0.2),
+					new Coords(0.2, -0.5),
+					new Coords(-0.2, -0.5),
+					new Coords(-0.2, -0.2),
+					new Coords(-0.5, -0.2),
+					new Coords(-0.5, 0.2),
+					new Coords(-0.2, 0.2),
+					new Coords(-0.2, 0.5)
+				]).transform
+				(
+					Transform_Scale.fromScalar(entityDimension)
+				),
+				itemWeaponColor,
+				itemWeaponColor
+			),
+			new VisualOffset
+			(
+				new VisualText(itemDefnName, itemWeaponColor),
+				new Coords(0, entityDimension)
+			)
+		]);
+
+		var itemWeaponCollider = new Sphere(new Coords(0, 0), entityDimension / 2);
+
+		var itemWeaponDevice = Device.sword();
+
+		var itemWeaponEntityDefn = new Entity
+		(
+			itemDefnName,
+			[
+				new Item(itemDefnName, 1),
+				new Locatable( new Location(new Coords()) ),
+				new Collidable(itemWeaponCollider),
+				new Drawable(itemWeaponVisual),
+				new DrawableCamera(),
+				itemWeaponDevice
+			]
+		);
+
+		return itemWeaponEntityDefn;
+	};
+
 	entityDefnBuildToolset(entityDimension)
 	{
 		var itemDefnName = "Toolset";
@@ -2344,112 +2512,6 @@ class PlaceBuilderDemo
 		return entityDefn;
 	};
 
-	entityDefnBuildWeapon(entityDimension)
-	{
-		entityDimension = entityDimension * 2;
-		var itemDefnName = "Weapon";
-
-		var itemWeaponColor = "rgb(0, 128, 128)";
-		var itemWeaponVisual = new VisualGroup
-		([
-			new VisualPath
-			(
-				new Path
-				([
-					new Coords(-0.3, 0.2),
-					new Coords(-0.3, -0.2),
-					new Coords(0.3, -0.2)
-				]).transform
-				(
-					Transform_Scale.fromScalar(entityDimension)
-				),
-				itemWeaponColor,
-				5 // lineThickness
-			),
-			new VisualOffset
-			(
-				new VisualText(itemDefnName, itemWeaponColor),
-				new Coords(0, entityDimension)
-			)
-		]);
-
-		var itemWeaponCollider = new Sphere(new Coords(0, 0), entityDimension / 2);
-
-		var itemWeaponDevice = Device.gun();
-
-		var itemWeaponEntityDefn = new Entity
-		(
-			itemDefnName,
-			[
-				new Item(itemDefnName, 1),
-				new Locatable( new Location(new Coords()) ),
-				new Collidable(itemWeaponCollider),
-				new Drawable(itemWeaponVisual),
-				new DrawableCamera(),
-				itemWeaponDevice
-			]
-		);
-
-		return itemWeaponEntityDefn;
-	};
-
-	entityDefnBuildWeaponAmmo(entityDimension)
-	{
-		var entityDimensionHalf = entityDimension / 2;
-
-		var itemAmmoColor = "rgb(0, 128, 128)";
-		var path = new Path
-		([
-			new Coords(0, -0.5),
-			new Coords(.25, 0),
-			new Coords(.25, 0.5),
-			new Coords(-.25, 0.5),
-			new Coords(-.25, 0),
-		]).transform
-		(
-			Transform_Scale.fromScalar(entityDimension)
-		);
-		var ammoSize = new Box().ofPoints(path.points).size;
-
-		var itemDefnAmmoName = "Ammo";
-		var itemAmmoVisual = new VisualGroup
-		([
-			new VisualPolygon
-			(
-				path,
-				itemAmmoColor
-			),
-			new VisualOffset
-			(
-				new VisualText(itemDefnAmmoName, itemAmmoColor),
-				new Coords(0, entityDimension)
-			)
-		]);
-
-		var itemAmmoCollider = new Sphere(new Coords(0, 0), entityDimensionHalf);
-
-		var collidable = new Collidable(itemAmmoCollider);
-		var bounds = new Box(collidable.collider.center, ammoSize);
-		var boundable = new Boundable(bounds);
-
-		var roundsPerPile = 5;
-
-		var itemAmmoEntityDefn = new Entity
-		(
-			itemDefnAmmoName,
-			[
-				boundable,
-				collidable,
-				new Drawable(itemAmmoVisual),
-				new DrawableCamera(),
-				new Item(itemDefnAmmoName, roundsPerPile),
-				new Locatable( new Location( new Coords() ) ),
-			]
-		);
-
-		return itemAmmoEntityDefn;
-	};
-
 	entityDefnsBuild()
 	{
 		var entityDimension = 10;
@@ -2465,6 +2527,8 @@ class PlaceBuilderDemo
 			this.entityDefnBuildExit(entityDimension),
 			this.entityDefnBuildFlower(entityDimension),
 			this.entityDefnBuildFriendly(entityDimension),
+			this.entityDefnBuildGun(entityDimension),
+			this.entityDefnBuildGunAmmo(entityDimension),
 			this.entityDefnBuildMaterial(entityDimension),
 			this.entityDefnBuildMedicine(entityDimension),
 			this.entityDefnBuildMushroom(entityDimension),
@@ -2475,10 +2539,9 @@ class PlaceBuilderDemo
 			this.entityDefnBuildPortal(entityDimension),
 			this.entityDefnBuildPotion(entityDimension),
 			this.entityDefnBuildStore(entityDimension),
+			this.entityDefnBuildSword(entityDimension),
 			this.entityDefnBuildToolset(entityDimension),
-			this.entityDefnBuildTree(entityDimension),
-			this.entityDefnBuildWeapon(entityDimension),
-			this.entityDefnBuildWeaponAmmo(entityDimension)
+			this.entityDefnBuildTree(entityDimension)
 		].addLookupsByName();
 		return entityDefns;
 	};

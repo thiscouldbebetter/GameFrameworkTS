@@ -145,7 +145,122 @@ class Device
 		);
 
 		return returnValue;
-	};
+	}
+
+	static sword()
+	{
+		var returnValue = new Device
+		(
+			"Sword",
+			function initialize(u, w, p, entity)
+			{
+				var device = entity.device;
+				device.ticksToCharge = 10;
+				device.tickLastUsed = 0;
+			},
+			function update(u, w, p, e)
+			{
+				// todo
+			},
+			function use(universe, world, place, entityUser, entityDevice)
+			{
+				var device = entityDevice.device;
+				var tickCurrent = world.timerTicksSoFar;
+				var ticksSinceUsed = tickCurrent - this.tickLastUsed;
+				if (ticksSinceUsed < device.ticksToCharge)
+				{
+					return;
+				}
+
+				var userAsItemHolder = entityUser.itemHolder;
+
+				device.tickLastUsed = tickCurrent;
+
+				var userLoc = entityUser.locatable.loc;
+				var userPos = userLoc.pos;
+				var userVel = userLoc.vel;
+				var userSpeed = userVel.magnitude();
+				if (userSpeed == 0) { return; }
+
+				var projectileDimension = 1.5;
+
+				var projectileVisual = entityDevice.drawable.visual;
+
+				var userDirection = userVel.clone().normalize();
+				var userRadius = entityUser.collidable.collider.radius;
+				var projectilePos = userPos.clone().add
+				(
+					userDirection.clone().multiplyScalar(userRadius + projectileDimension).double()
+				);
+				var projectileOri = new Orientation
+				(
+					userVel.clone().normalize()
+				);
+				var projectileLoc = new Location(projectilePos, projectileOri);
+				projectileLoc.vel.overwriteWith(userVel).clearZ().double();
+
+				var projectileCollider =
+					new Sphere(new Coords(0, 0), projectileDimension);
+
+				var projectileCollide = function(universe, world, place, entityProjectile, entityOther)
+				{
+					var killable = entityOther.killable;
+					if (killable != null)
+					{
+						killable.damageApply
+						(
+							universe, world, place, entityProjectile, entityOther
+						);
+						entityProjectile.killable.integrity = 0;
+					}
+				};
+
+				var visualExplosion = new VisualCircle(8, "Red");
+				var killable = new Killable
+				(
+					1, // integrityMax
+					null, // damageApply
+					function die(universe, world, place, entityKillable)
+					{
+						var entityExplosion = new Entity
+						(
+							"Explosion",
+							[
+								new Ephemeral(8),
+								new Drawable(visualExplosion),
+								new DrawableCamera(),
+								entityKillable.locatable
+							]
+						);
+						place.entitiesToSpawn.push(entityExplosion);
+					}
+				);
+
+				var projectileEntity = new Entity
+				(
+					"Projectile",
+					[
+						new Damager(10),
+						new Ephemeral(4),
+						killable,
+						new Locatable( projectileLoc ),
+						new Collidable
+						(
+							projectileCollider,
+							[ Killable.name ],
+							projectileCollide
+						),
+						new Drawable(projectileVisual),
+						new DrawableCamera()
+					]
+				);
+
+				place.entitiesToSpawn.push(projectileEntity);
+			}
+		);
+
+		return returnValue;
+	}
 
 	// clonable
 

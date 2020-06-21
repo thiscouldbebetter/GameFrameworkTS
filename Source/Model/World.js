@@ -413,12 +413,13 @@ class World
 			new ItemDefn("Crystal", 		null, null, .1, 	1),
 			new ItemDefn("Enhanced Armor",	null, null, 60, 	60, null, [ "Armor" ], itemUseEquip),
 			new ItemDefn("Flower", 			null, null, .01, 	1),
+			new ItemDefn("Gun",				null, null, 5, 		100, null, [ "Weapon" ], itemUseEquip),
 			new ItemDefn("Key", 			null, null, .1, 	5),
 			new ItemDefn("Material", 		null, null, 10, 	3),
 			new ItemDefn("Mushroom", 		null, null, .01, 	1),
 			new ItemDefn("Speed Booster", 	null, null, 10, 	30, null, [ "Accessory" ], itemUseEquip),
+			new ItemDefn("Sword",			null, null, 10, 	100, null, [ "Weapon" ], itemUseEquip),
 			new ItemDefn("Toolset", 		null, null, 1, 		30),
-			new ItemDefn("Weapon",			null, null, 5, 		100, null, [ "Weapon" ], itemUseEquip),
 
 			new ItemDefn
 			(
