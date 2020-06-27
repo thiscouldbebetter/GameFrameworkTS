@@ -51,20 +51,42 @@ class PlaceBuilderDemo
 
 		// todo
 
+		var terrainNamesByCodeChar = 
+		{
+			"~" : "Water",
+			"." : "Sand",
+			":" : "Grass",
+			"Q" : "Trees",
+			"A" : "Rock",
+			"*" : "Snow"
+		};
+
 		var mapCellSource =
 		[
-			"x...xxxx........",
-			".....xx.........",
-			".....xx.........",
-			"....xxxx........",
-			"x..xx..xx..x....",
-			"xxxx.xx.xxxx....",
-			"xxxx.xx.xxxx....",
-			"x..xx..xx..x....",
-			"....xxxx...x....",
-			".....xx....x....",
-			".....xx....x....",
-			"....xxxxxxxx....",
+			"~~~~~~~~~~~~~~~~....::::QQAA****",
+			"~~~~~~~~~~~~~~~~.....:::QQAAA***",
+			"~~........~~~~.....:QQQQQQAAAAAA",
+			"~~........~~~~....::QQQQQQAAAAAA",
+			"~~......~~~~~~....::QQQQQQQQQQQQ",
+			"~~......~~~~~~.....:QQQQQQQQQQQQ",
+			"~~~~~~..~~~~~~~~....:::::::QQQ::",
+			"~~~~~~..~~~~~~~~....:..::::::Q::",
+			"~~~~~~~~~~~~~~~~~~......::::::::",
+			"~~~~~~~~~~~~~~~~~~......::::::::",
+			"~~~~~~~~~~~~~~..............::::",
+			"~~~~~~~~~~~~~~..............::::",
+			"~~~~~~~~~~~~~~~~~~..............",
+			"~~~~~~~~~~~~~~~~~~...........:::",
+			"~~~~~~~~~~~~~~~~~~~~~~~~...~~~~~",
+			"~~~~~~~~~~~~~~~~~~~.....~~~...::",
+			"~~~~~~~~~~~~~~~~................",
+			"~~~~~~~~~~~~~~~~................",
+			"~~~~~~~~~~~~~~..........::::::::",
+			"~~~~~~~~~~~~~~..........::::::::",
+			"~~~~~~~~~~~~~~.......:::::::::::",
+			"~~~~~~~~~~~~~~........::::::::::",
+			"~~~~~~~~~~~~........::::::::::::",
+			"~~~~~~~~~~~~.......:::::::::::::",
 		];
 		var mapSizeInCells = new Coords
 		(
@@ -76,6 +98,16 @@ class PlaceBuilderDemo
 		var mapSizeInPixels =
 			mapSizeInCells.clone().multiply(mapCellSize);
 
+		var mapVisualLookup =
+		{
+			"Water" : new VisualRectangle(mapCellSize, "Blue", null, false), // isCentered
+			"Sand" : new VisualRectangle(mapCellSize, "Tan", null, false),
+			"Grass" : new VisualRectangle(mapCellSize, "Green", null, false),
+			"Trees" : new VisualRectangle(mapCellSize, "DarkGreen", null, false),
+			"Rock" : new VisualRectangle(mapCellSize, "Gray", null, false),
+			"Snow" : new VisualRectangle(mapCellSize, "White", null, false),
+		};
+
 		var map = new Map
 		(
 			"Map",
@@ -85,38 +117,14 @@ class PlaceBuilderDemo
 			(map, cellPosInCells, cellToOverwrite) => // cellAtPosInCells
 			{
 				var cellCode = map.cellSource[cellPosInCells.y][cellPosInCells.x];
-				var cellVisualName = (cellCode == "x" ? "Water" : "Land");
-				var cellIsBlocking = (cellCode == "x");
+				var cellVisualName = terrainNamesByCodeChar[cellCode] || "Water";
+				var cellIsBlocking = (cellCode == "~");
 				cellToOverwrite.visualName = cellVisualName;
 				cellToOverwrite.isBlocking = cellIsBlocking;
 				return cellToOverwrite;
 			},
 			mapCellSource
 		);
-
-		var mapVisualLookup =
-		{
-			"Water" : new VisualRectangle(mapCellSize, "Blue", null, false), // isCentered
-			"Land" : new VisualRectangle(mapCellSize, "DarkGreen", null, false),
-		};
-
-		/*
-		var mapVisual = new VisualGroup
-		([
-			new VisualMap(map, mapVisualLookup, null, false) // shouldConvertToImage
-		]);
-
-		var entityMap = new Entity
-		(
-			"Map",
-			[
-				new Drawable(mapVisual),
-				new DrawableCamera(),
-				new Locatable(new Location(new Coords(100, 100)))
-			]
-		);
-		this.entities.push(entityMap);
-		*/
 
 		var cellAndPosToEntity = (cell, cellPosInCells, cellPosInPixels) =>
 		{
@@ -1018,10 +1026,10 @@ class PlaceBuilderDemo
 			(
 				new Path
 				([
-					new Coords(0.5, 0.75),
-					new Coords(-0.5, 0.75),
-					new Coords(-0.5, -0.75),
-					new Coords(0.5, -0.75)
+					new Coords(0.5, 0),
+					new Coords(-0.5, 0),
+					new Coords(-0.5, -1.5),
+					new Coords(0.5, -1.5)
 				]).transform
 				(
 					Transform_Scale.fromScalar(entityDimension)
@@ -1031,12 +1039,12 @@ class PlaceBuilderDemo
 			new VisualOffset
 			(
 				new VisualCircle(entityDimension / 8, "Yellow"),
-				new Coords(entityDimension / 4, 0)
+				new Coords(entityDimension / 4, 0 - entityDimension / 2)
 			),
 			new VisualOffset
 			(
 				new VisualText("Exit", exitColor),
-				new Coords(0, 0 - entityDimension * 2)
+				new Coords(0, 0 - entityDimension * 2.5)
 			)
 		]);
 
@@ -1270,6 +1278,18 @@ class PlaceBuilderDemo
 		var color = "Pink";
 		var visual = new VisualGroup
 		([
+			new VisualOffset
+			(
+				new VisualArc
+				(
+					entityDimension * 2, // radiusOuter
+					entityDimension * 2 - 2, // radiusInner
+					new Coords(-1, 1).normalize(), // directionMin
+					.25, // angleSpannedInTurns
+					"Green"
+				),
+				new Coords(.5, 1.75).multiplyScalar(entityDimension)
+			),
 			new VisualPolygon
 			(
 				new Path
@@ -1673,7 +1693,7 @@ class PlaceBuilderDemo
 					.5, // angleSpannedInTurns
 					colorCap
 				),
-				new Coords(0, 0)
+				new Coords(0, -entityDimension / 2)
 			),
 			new VisualOffset
 			(
@@ -1681,12 +1701,12 @@ class PlaceBuilderDemo
 				(
 					new Coords(entityDimension / 2, entityDimension), colorStem
 				),
-				new Coords(0, entityDimension / 2)
+				new Coords(0, 0)
 			),
 			new VisualOffset
 			(
 				new VisualText(itemDefnName, colorCap),
-				new Coords(0, 0 - entityDimension * 2)
+				new Coords(0, 0 - entityDimension * 3)
 			)
 		]);
 
