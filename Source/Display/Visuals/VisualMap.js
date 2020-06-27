@@ -1,11 +1,13 @@
 
 class VisualMap
 {
-	constructor(map, visualLookup, cameraGet)
+	constructor(map, visualLookup, cameraGet, shouldConvertToImage)
 	{
 		this.map = map;
 		this.visualLookup = visualLookup;
 		this.cameraGet = cameraGet;
+		this.shouldConvertToImage =
+			(shouldConvertToImage == null ? true : shouldConvertToImage);
 
 		// Helper variables.
 		this._cameraPos = new Coords();
@@ -19,12 +21,24 @@ class VisualMap
 
 	draw(universe, world, display, entity)
 	{
-		if (this.visualImage == null)
+		if (this.shouldConvertToImage)
 		{
-			this.draw_ConvertToImage(universe, world, display, entity);
-		}
+			if (this.visualImage == null)
+			{
+				this.draw_ConvertToImage(universe, world, display, entity);
+			}
 
-		this.visualImage.draw(universe, world, display, entity);
+			this.visualImage.draw(universe, world, display, entity);
+		}
+		else
+		{
+			var cellPosStart = this._cellPosStart.clear();
+			var cellPosEnd = this._cellPosEnd.overwriteWith(this.map.sizeInCells);
+			this.draw_ConvertToImage_Cells
+			(
+				universe, world, display, entity, cellPosStart, cellPosEnd, display
+			);
+		}
 	}
 
 	draw_ConvertToImage(universe, world, display, entity)
@@ -51,8 +65,10 @@ class VisualMap
 			cellPosEnd.overwriteWith(boundsVisible.max()).trimToRangeMax(this.sizeInCells);
 		}
 
-		var displayForImage =
-			this.draw_ConvertToImage_Cells(universe, world, display, entity, cellPosStart, cellPosEnd);
+		var displayForImage = new Display([this.map.size]);
+		displayForImage.toDomElement();
+
+		this.draw_ConvertToImage_Cells(universe, world, display, entity, cellPosStart, cellPosEnd, displayForImage);
 
 		var image = Image.fromSystemImage
 		(
@@ -63,13 +79,10 @@ class VisualMap
 		drawablePos.overwriteWith(this._posSaved);
 	}
 
-	draw_ConvertToImage_Cells(universe, world, display, entity, cellPosStart, cellPosEnd)
+	draw_ConvertToImage_Cells(universe, world, display, entity, cellPosStart, cellPosEnd, displayForImage)
 	{
 		var drawPos = this._drawPos;
 		var drawablePos = entity.locatable.loc.pos;
-		var sizeInPixels = this.map.size;
-		var displayForImage = new Display([sizeInPixels]);
-		displayForImage.toDomElement();
 		var cellPosInCells = this._cellPosInCells;
 		var cellSizeInPixels = this.map.cellSize;
 

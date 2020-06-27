@@ -168,7 +168,25 @@ class Camera
 	drawEntitiesInViewThenClear(universe, world, display)
 	{
 		display.drawBackground("Black", "Black");
-		this.entitiesInView.sort( (a, b) => a.locatable.loc.pos.y - b.locatable.loc.pos.y);
+		this.entitiesInView.sort
+		(
+			(a, b) => 
+			{
+				var aPos = a.locatable.loc.pos;
+				var bPos = b.locatable.loc.pos;
+				var returnValue;
+				if (aPos.z != bPos.z)
+				{
+					returnValue = (aPos.z > bPos.z ? 1 : -1)
+				}
+				else
+				{
+					returnValue = (aPos.y > bPos.y ? 1 : -1)
+				}
+
+				return returnValue;
+			}
+		);
 		this.entitiesInView.forEach(entity =>
 			entity.drawable.visual.drawImmediate(universe, world, display, entity)
 		);

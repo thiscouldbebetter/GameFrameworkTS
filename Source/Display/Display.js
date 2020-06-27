@@ -346,11 +346,7 @@ class Display
 
 	drawRectangle
 	(
-		pos,
-		size,
-		colorFill,
-		colorBorder,
-		areColorsReversed
+		pos, size, colorFill, colorBorder, areColorsReversed
 	)
 	{
 		if (areColorsReversed)
@@ -383,10 +379,7 @@ class Display
 
 	drawRectangleCentered
 	(
-		pos,
-		size,
-		colorFill,
-		colorBorder
+		pos, size, colorFill, colorBorder
 	)
 	{
 		var sizeHalf = this._sizeHalf.overwriteWith(size).half();

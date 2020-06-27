@@ -208,38 +208,4 @@ function ArrayExtensions()
 		this.splice(index, 1);
 		return this;
 	};
-
-	Array.prototype.select = function(getPropertyForElement)
-	{
-		var returnValues = [];
-		for (var i = 0; i < this.length; i++)
-		{
-			var element = this[i];
-			var elementProperty = getPropertyForElement(element);
-			returnValues.push(elementProperty);
-		}
-		return returnValues;
-	};
-
-	Array.prototype.sortByProperty = function(getPropertyForElement)
-	{
-		return this.sort
-		(
-			function (a, b)
-			{
-				var returnValue;
-				var propertyA = getPropertyForElement(a);
-				var propertyB = getPropertyForElement(b);
-				if (propertyA.constructor.name == "".constructor.name)
-				{
-					returnValue = propertyA.localeCompare(propertyB);
-				}
-				else if (isNaN(parseFloat(propertyA)) == false)
-				{
-					returnValue = propertyA - propertyB;
-				}
-				return returnValue;
-			}
-		);
-	};
 }

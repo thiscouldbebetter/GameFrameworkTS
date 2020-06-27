@@ -34,7 +34,9 @@ class VisualBuilder
 			visualEyesDirectional
 		]);
 
-		return circleWithEyes;
+		var returnValue = new VisualOffset(circleWithEyes, new Coords(0, -circleRadius));
+
+		return returnValue;
 	};
 
 	eyesBlinking(visualEyeRadius)

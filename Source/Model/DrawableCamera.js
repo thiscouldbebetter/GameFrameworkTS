@@ -1,7 +1,7 @@
 
 class DrawableCamera
 {
-	function()
+	constructor()
 	{
 		// Do nothing.
 	}

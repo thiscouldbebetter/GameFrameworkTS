@@ -315,9 +315,9 @@ class ItemHolder
 
 		var sort = function()
 		{
-			itemHolder.itemEntities.sortByProperty
+			itemHolder.itemEntities.sort
 			(
-				x => x.item.defnName
+				(x, y) => (x.item.defnName > y.item.defnName ? 1 : -1)
 			).addLookups
 			(
 				y => y.item.defnName

@@ -67,7 +67,7 @@ class Device
 					new VisualOffset
 					(
 						new VisualText("Projectile", projectileColor),
-						new Coords(0, projectileDimension * 2)
+						new Coords(0, 0 - projectileDimension * 3)
 					)
 				]);
 

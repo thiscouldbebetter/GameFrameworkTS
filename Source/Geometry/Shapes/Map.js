@@ -34,6 +34,43 @@ class Map
 		return this.sizeInCells.x * this.sizeInCells.y;
 	};
 
+	cellsAsEntities(cellAndPosToEntity)
+	{
+		var returnValues = [];
+
+		var cellPosInCells = new Coords();
+		var cellPosStart = new Coords(0, 0);
+		var cellPosEnd = this.sizeInCells;
+
+		// todo
+		var cellSizeInPixels = this.cellSize;
+		var cellVisual = new VisualRectangle(cellSizeInPixels, "Blue", null, false); // isCentered
+		var _cell = this.cellPrototype.clone();
+
+		for (var y = cellPosStart.y; y < cellPosEnd.y; y++)
+		{
+			cellPosInCells.y = y;
+
+			for (var x = cellPosStart.x; x < cellPosEnd.x; x++)
+			{
+				cellPosInCells.x = x;
+
+				var cell = this.cellAtPosInCells
+				(
+					this, cellPosInCells, _cell
+				);
+
+				var cellPosInPixels = cellPosInCells.clone().multiply(cellSizeInPixels);
+
+				var cellAsEntity = cellAndPosToEntity(cell, cellPosInCells, cellPosInPixels);
+
+				returnValues.push(cellAsEntity);
+			}
+		}
+
+		return returnValues;
+	}
+
 	// cloneable
 
 	clone()

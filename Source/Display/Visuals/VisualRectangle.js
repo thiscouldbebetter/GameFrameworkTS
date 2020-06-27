@@ -1,11 +1,12 @@
 
 class VisualRectangle
 {
-	constructor(size, colorFill, colorBorder)
+	constructor(size, colorFill, colorBorder, isCentered)
 	{
 		this.size = size;
 		this.colorFill = colorFill;
 		this.colorBorder = colorBorder;
+		this.isCentered = (isCentered == null ? true : isCentered);
 
 		this.sizeHalf = this.size.clone().half();
 
@@ -17,10 +18,15 @@ class VisualRectangle
 		var drawPos = this._drawPos.overwriteWith
 		(
 			entity.locatable.loc.pos
-		).subtract
-		(
-			this.sizeHalf
-		);
+		)
+		
+		if (this.isCentered)
+		{
+			drawPos.subtract
+			(
+				this.sizeHalf
+			);
+		}
 
 		display.drawRectangle
 		(
