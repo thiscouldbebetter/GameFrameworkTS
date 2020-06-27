@@ -170,7 +170,7 @@ class Camera
 		display.drawBackground("Black", "Black");
 		this.entitiesInView.sort
 		(
-			(a, b) => 
+			(a, b) =>
 			{
 				var aPos = a.locatable.loc.pos;
 				var bPos = b.locatable.loc.pos;

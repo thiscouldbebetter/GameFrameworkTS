@@ -62,7 +62,7 @@ class ItemContainer
 			itemContainer.transfer(world, entityContainer, entityGetterPutter, "Took");
 		};
 
-		var put = () => 
+		var put = () =>
 		{
 			itemContainer.transfer(world, entityGetterPutter, entityContainer, "Put");
 		};

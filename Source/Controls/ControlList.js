@@ -1,7 +1,7 @@
 
 class ControlList
 {
-	constructor(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected, bindingForItemValue, bindingForIsEnabled, confirm)
+	constructor(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected, bindingForItemValue, bindingForIsEnabled, confirm, widthInItems)
 	{
 		this.name = name;
 		this.pos = pos;
@@ -11,20 +11,27 @@ class ControlList
 		this.fontHeightInPixels = fontHeightInPixels;
 		this.bindingForItemSelected = bindingForItemSelected;
 		this.bindingForItemValue = bindingForItemValue;
-		this.bindingForIsEnabled = bindingForIsEnabled;
+		this.bindingForIsEnabled = bindingForIsEnabled || true;
 		this.confirm = confirm;
+		this.widthInItems = widthInItems || 1;
 
-		this.itemSpacing = 1.2 * this.fontHeightInPixels; // hack
+		var itemSpacingY = 1.2 * this.fontHeightInPixels; // hack
+		var scrollbarWidth = itemSpacingY;
+
+		this.itemSpacing = new Coords
+		(
+			(this.size.x - scrollbarWidth) / this.widthInItems,
+			itemSpacingY
+		);
 
 		this.isHighlighted = false;
 
-		var scrollbarWidth = this.itemSpacing;
 		this.scrollbar = new ControlScrollbar
 		(
 			new Coords(this.size.x - scrollbarWidth, 0), // pos
 			new Coords(scrollbarWidth, this.size.y), // size
 			this.fontHeightInPixels,
-			this.itemSpacing, // itemHeight
+			this.itemSpacing.y, // itemHeight
 			this._items,
 			0 // value
 		);
@@ -108,6 +115,11 @@ class ControlList
 
 	indexOfFirstItemVisible()
 	{
+		return this.indexOfFirstRowVisible() * this.widthInItems;
+	};
+
+	indexOfFirstRowVisible()
+	{
 		return this.scrollbar.sliderPosInItems();
 	};
 
@@ -133,7 +145,14 @@ class ControlList
 
 	indexOfLastItemVisible()
 	{
-		return this.indexOfFirstItemVisible() + Math.floor(this.scrollbar.windowSizeInItems) - 1;
+		return this.indexOfLastRowVisible() * this.widthInItems;
+	};
+
+	indexOfLastRowVisible()
+	{
+		var rowCountVisible = Math.floor(this.scrollbar.windowSizeInItems) - 1;
+		var returnValue = this.indexOfFirstRowVisible() + rowCountVisible;
+		return returnValue;
 	};
 
 	isEnabled()
@@ -257,14 +276,12 @@ class ControlList
 		}
 		else
 		{
-			var offsetOfItemClicked = clickPos.y - this.pos.y;
+			var clickOffsetInPixels = clickPos.clone().subtract(this.pos);
+			var clickOffsetInItems = clickOffsetInPixels.clone().divide(this.itemSpacing).floor();
+			var rowOfItemClicked =
+				this.indexOfFirstRowVisible() + clickOffsetInItems.y;
 			var indexOfItemClicked =
-				this.indexOfFirstItemVisible()
-				+ Math.floor
-				(
-					offsetOfItemClicked
-					/ this.itemSpacing
-				);
+				rowOfItemClicked * this.widthInItems + clickOffsetInItems.x;
 
 			var items = this.items();
 			if (indexOfItemClicked < items.length)
@@ -281,7 +298,7 @@ class ControlList
 		this.pos.multiply(scaleFactor);
 		this.size.multiply(scaleFactor);
 		this.fontHeightInPixels *= scaleFactor.y;
-		this.itemSpacing *= scaleFactor.y;
+		this.itemSpacing.multiplyScalar(scaleFactor);
 		this.scrollbar.scalePosAndSize(scaleFactor);
 	};
 
@@ -310,9 +327,7 @@ class ControlList
 			false // areColorsReversed
 		);
 
-		var itemSizeY = this.itemSpacing;
 		var textMarginLeft = 2;
-		var itemPosY = drawPos.y;
 
 		var items = this.items();
 
@@ -321,9 +336,9 @@ class ControlList
 			return;
 		}
 
-		var numberOfItemsVisible = Math.floor(this.size.y / itemSizeY);
+		var numberOfItemsVisible = Math.floor(this.size.y / this.itemSpacing.y);
 		var indexStart = this.indexOfFirstItemVisible();
-		var indexEnd = indexStart + numberOfItemsVisible - 1;
+		var indexEnd = this.indexOfLastItemVisible();
 		if (indexEnd >= items.length)
 		{
 			indexEnd = items.length - 1;
@@ -331,26 +346,39 @@ class ControlList
 
 		var itemSelected = this.itemSelected();
 
+		var drawPos2 = new Coords();
+
 		for (var i = indexStart; i <= indexEnd; i++)
 		{
 			var item = items[i];
+
+			var iOffset = i - indexStart;
+			var offsetInItems = new Coords
+			(
+				iOffset % this.widthInItems,
+				Math.floor(iOffset / this.widthInItems)
+			);
+
+			drawPos2.overwriteWith
+			(
+				this.itemSpacing
+			).multiply
+			(
+				offsetInItems
+			).add
+			(
+				drawPos
+			).addDimensions
+			(
+				textMarginLeft, 0
+			);
 
 			if (item == itemSelected)
 			{
 				display.drawRectangle
 				(
-					// pos
-					new Coords
-					(
-						drawPos.x,
-						itemPosY
-					),
-					// size
-					new Coords
-					(
-						this.size.x,
-						itemSizeY
-					),
+					drawPos2,
+					this.itemSpacing,
 					colorFore // colorFill
 				);
 			}
@@ -359,8 +387,6 @@ class ControlList
 			(
 				item
 			).get();
-
-			var drawPos2 = new Coords(drawPos.x + textMarginLeft, itemPosY);
 
 			display.drawText
 			(
@@ -373,8 +399,6 @@ class ControlList
 				false, // isCentered
 				this.size.x // widthMaxInPixels
 			);
-
-			itemPosY += itemSizeY;
 		}
 
 		this.scrollbar.draw(universe, display, drawLoc);

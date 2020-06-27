@@ -72,7 +72,7 @@ class Collidable
 									universe, world, place, entity, entityOther
 								);
 
-								var collidableOtherCollideEntities = 
+								var collidableOtherCollideEntities =
 									entityOther.collidable.collideEntities;
 								if (collidableOtherCollideEntities != null)
 								{

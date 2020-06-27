@@ -58,7 +58,7 @@ class ConversationRun
 		var conversationDefn = conversationRun.defn;
 
 		var venueToReturnTo = universe.venueCurrent;
-		
+
 		var fontHeight = 15;
 		var fontHeightShort = fontHeight; // todo
 		var marginWidth = 15;

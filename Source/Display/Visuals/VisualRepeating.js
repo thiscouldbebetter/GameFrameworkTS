@@ -27,7 +27,7 @@ class VisualRepeating
 		if (expandViewStartAndEndByCell)
 		{
 			this._startPosInCells.addDimensions(-1, -1, 0);
-			this._endPosInCells.addDimensions(1, 1, 0); 
+			this._endPosInCells.addDimensions(1, 1, 0);
 		}
 	}
 

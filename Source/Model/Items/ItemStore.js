@@ -78,7 +78,7 @@ class ItemStore
 			itemBarterer.transfer(world, entityStore, entityCustomer, "Purchased");
 		};
 
-		var sell = () => 
+		var sell = () =>
 		{
 			itemBarterer.transfer(world, entityCustomer, entityStore, "Sold");
 		};

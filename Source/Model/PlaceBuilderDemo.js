@@ -51,7 +51,7 @@ class PlaceBuilderDemo
 
 		// todo
 
-		var terrainNamesByCodeChar = 
+		var terrainNamesByCodeChar =
 		{
 			"~" : "Water",
 			"." : "Sand",
@@ -177,7 +177,7 @@ class PlaceBuilderDemo
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Material"], 5));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Medicine"], 5));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Mushroom"], 3));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Speed Booster"], 1));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Speed Boots"], 1));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Toolset"], 1));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Flower"], 3));
 
@@ -185,7 +185,7 @@ class PlaceBuilderDemo
 			this.entityBuildRadioMessage(entityDefns["Friendly"].drawable.visual, "This is " + this.name + ".");
 		entities.push(entityRadioMessage);
 
-		placeNamesToIncludePortalsTo.forEach(placeName => 
+		placeNamesToIncludePortalsTo.forEach(placeName =>
 		{
 			var entityDefnPortal = this.entityDefns["Portal"];
 			var entityPortal = this.entityBuildFromDefn(entityDefnPortal);
@@ -740,17 +740,19 @@ class PlaceBuilderDemo
 	{
 		var entityDimensionHalf = entityDimension / 2;
 
-		var itemDefnAccessoryName = "Speed Booster";
-		var itemAccessoryColor = "Green";
+		var itemDefnAccessoryName = "Speed Boots";
+		var itemAccessoryColor = "Orange";
 		var itemAccessoryVisual = new VisualGroup
 		([
 			new VisualPolygon
 			(
 				new Path
 				([
-					new Coords(.5, 0),
-					new Coords(-.5, .5),
-					new Coords(-.5, -.5),
+					new Coords(0, 0),
+					new Coords(1, 0),
+					new Coords(.5, -.5),
+					new Coords(.5, -1),
+					new Coords(0, -1),
 				]).transform
 				(
 					Transform_Scale.fromScalar(entityDimension)
@@ -760,7 +762,7 @@ class PlaceBuilderDemo
 			new VisualOffset
 			(
 				new VisualText(itemDefnAccessoryName, itemAccessoryColor),
-				new Coords(0, 0 - entityDimension)
+				new Coords(0, 0 - entityDimension * 2)
 			)
 		]);
 		var itemAccessoryCollider = new Sphere(new Coords(0, 0), entityDimensionHalf);
@@ -2160,12 +2162,12 @@ class PlaceBuilderDemo
 				var equipmentUser = entityMovable.equipmentUser;
 				var accessoryEquipped =
 					equipmentUser.itemEntityInSocketWithName("Accessory");
-				var isSpeedBoosterEquipped =
+				var areSpeedBootsEquipped =
 				(
 					accessoryEquipped != null
-					&& accessoryEquipped.item.defnName == "Speed Booster"
+					&& accessoryEquipped.item.defnName == "Speed Boots"
 				);
-				if (isSpeedBoosterEquipped)
+				if (areSpeedBootsEquipped)
 				{
 					accelerationToApply *= 2;
 				}
@@ -2349,13 +2351,11 @@ class PlaceBuilderDemo
 				{
 					var player = c;
 					var itemHolder = player.itemHolder;
-					/*
 					var statusText = "H:" + player.killable.integrity
 						+ "   A:" + itemHolder.itemQuantityByDefnName("Ammo")
 						+ "   K:" + itemHolder.itemQuantityByDefnName("Key")
 						+ "   $:" + itemHolder.itemQuantityByDefnName("Coin")
 						+ "   X:" + player.skillLearner.learningAccumulated;
-					*/
 					var statusText = "";
 					return statusText;
 				}

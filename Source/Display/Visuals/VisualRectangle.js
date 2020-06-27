@@ -19,7 +19,7 @@ class VisualRectangle
 		(
 			entity.locatable.loc.pos
 		)
-		
+
 		if (this.isCentered)
 		{
 			drawPos.subtract
