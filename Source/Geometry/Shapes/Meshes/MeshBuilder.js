@@ -179,6 +179,94 @@ class MeshBuilder
 		return returnMesh;
 	};
 
+	grid(sizeInCells, cellSize, material)
+	{
+		var vertexPositions = [];
+		var vertexPosInCells = new Coords();
+		for (var y = 0; y <= sizeInCells.y; y++)
+		{
+			vertexPosInCells.y = y;
+
+			for (var x = 0; x <= sizeInCells.x; x++)
+			{
+				vertexPosInCells.x = x;
+
+				vertexPos.overwriteWith
+				(
+					vertexPosInCells
+				).multiply
+				(
+					cellSize
+				);
+
+				vertexPositions.push(vertexPos.clone());
+			}
+		}
+
+		var faces = [];
+
+		for (var y = 0; y < sizeInCells.y; y++)
+		{
+			for (var x = 0; x < sizeInCells.x; x++)
+			{
+				var vertexIndex = y * (sizeInCells.x + 1) + x;
+				var faceVertexIndices =
+				[
+					vertexIndex,
+					vertexIndex + 1,
+					vertexIndex + (sizeInCells.x + 1) + 1,
+					vertexIndex + (sizeInCells.x + 1),
+				];
+
+				var face = new Mesh_FaceBuilder(faceVertexIndices);
+
+				faces.push(face);
+			}
+		}
+
+		var returnMesh = new Mesh
+		(
+			new Coords(0, 0, 0), // center
+			vertexPositions,
+			faces // faceBuilders
+		);
+
+		if (material != null)
+		{
+			var faceTextures = [];
+
+			var textureUVs =
+			[
+				new Coords(0, 0),
+				new Coords(1, 0),
+				new Coords(1, 1),
+				new Coords(0, 1),
+			];
+
+			for (var y = 0; y < sizeInCells.y; y++)
+			{
+				for (var x = 0; x < sizeInCells.x; x++)
+				{
+					var faceTexture = new MeshTexturedFaceTexture
+					(
+						material.name, textureUVs
+					);
+
+					faceTextures.push(faceTexture);
+				}
+			}
+
+			returnMesh = new MeshTextured
+			(
+				returnMesh, // geometry
+				[ material ],
+				faceTextures
+			);
+		}
+
+		return returnMesh;
+	};
+
 	room
 	(
 		roomSize, neighborOffsets, connectedToNeighbors, materialWall, materialFloor, doorwayWidthScaleFactor, wallThickness

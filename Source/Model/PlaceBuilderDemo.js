@@ -46,20 +46,10 @@ class PlaceBuilderDemo
 
 	buildTerrarium(size, placeNameToReturnTo)
 	{
-		size = size.clone().multiplyScalar(1);
+		size = size.clone().multiplyScalar(2);
 		this.build_Interior("Terrarium", size, placeNameToReturnTo);
 
 		// todo
-
-		var terrainNamesByCodeChar =
-		{
-			"~" : "Water",
-			"." : "Sand",
-			":" : "Grass",
-			"Q" : "Trees",
-			"A" : "Rock",
-			"*" : "Snow"
-		};
 
 		var mapCellSource =
 		[
@@ -94,19 +84,56 @@ class PlaceBuilderDemo
 			mapCellSource.length,
 			1
 		);
-		var mapCellSize = size.clone().divide(mapSizeInCells);
+		var mapCellSize = size.clone().divide(mapSizeInCells).ceiling();
 		var mapSizeInPixels =
 			mapSizeInCells.clone().multiply(mapCellSize);
 
-		var mapVisualLookup =
+		var terrainNamesByCodeChar =
 		{
-			"Water" : new VisualRectangle(mapCellSize, "Blue", null, false), // isCentered
-			"Sand" : new VisualRectangle(mapCellSize, "Tan", null, false),
-			"Grass" : new VisualRectangle(mapCellSize, "Green", null, false),
-			"Trees" : new VisualRectangle(mapCellSize, "DarkGreen", null, false),
-			"Rock" : new VisualRectangle(mapCellSize, "Gray", null, false),
-			"Snow" : new VisualRectangle(mapCellSize, "White", null, false),
+			"~" : "Water",
+			"." : "Sand",
+			":" : "Grass",
+			"Q" : "Trees",
+			"A" : "Rock",
+			"*" : "Snow"
 		};
+
+		var colorToTerrainVisual = (color) =>
+		{
+			var borderWidthAsFraction = .25;
+			var borderSizeCorner = mapCellSize.clone().multiplyScalar(borderWidthAsFraction);
+			var borderSizeVertical = mapCellSize.clone().multiply(new Coords(borderWidthAsFraction, 1));
+			var borderSizeHorizontal = mapCellSize.clone().multiply(new Coords(1, borderWidthAsFraction));
+
+			var isCenteredFalse = false;
+			var visualAtRest = new VisualRectangle(mapCellSize, color, null, isCenteredFalse);
+			return new VisualDirectional
+			(
+				visualAtRest,
+				// visualsForDirections
+				[
+					new VisualOffset(new VisualRectangle(borderSizeVertical, color, null, isCenteredFalse), new Coords(0, 0)),
+					new VisualOffset(new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse), new Coords()),
+					new VisualOffset(new VisualRectangle(borderSizeHorizontal, color, null, isCenteredFalse), new Coords()),
+					new VisualOffset(new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse), new Coords()),
+					new VisualOffset(new VisualRectangle(borderSizeVertical, color, null, isCenteredFalse), new Coords()),
+					new VisualOffset(new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse), new Coords()),
+					new VisualOffset(new VisualRectangle(borderSizeHorizontal, color, null, isCenteredFalse), new Coords()),
+					new VisualOffset(new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse), new Coords())
+				]
+			)
+		};
+
+		var terrains =
+		[
+						//name, codeChar, level, isBlocking, visual
+			new Terrain("Water", 	"~", 0, true, colorToTerrainVisual("Blue")),
+			new Terrain("Sand", 	".", 1, false, colorToTerrainVisual("Tan")),
+			new Terrain("Grass", 	":", 2, false, colorToTerrainVisual("Green")),
+			new Terrain("Trees", 	"Q", 3, false, colorToTerrainVisual("DarkGreen")),
+			new Terrain("Rock", 	"A", 4, false, colorToTerrainVisual("Gray")),
+			new Terrain("Snow", 	"*", 5, false, colorToTerrainVisual("White")),
+		].addLookupsByName().addLookups(x => x.codeChar);
 
 		var map = new Map
 		(
@@ -117,8 +144,9 @@ class PlaceBuilderDemo
 			(map, cellPosInCells, cellToOverwrite) => // cellAtPosInCells
 			{
 				var cellCode = map.cellSource[cellPosInCells.y][cellPosInCells.x];
-				var cellVisualName = terrainNamesByCodeChar[cellCode] || "Water";
-				var cellIsBlocking = (cellCode == "~");
+				var cellTerrain = (terrains[cellCode] || terrains[0]);
+				var cellVisualName = cellTerrain.name;
+				var cellIsBlocking = cellTerrain.isBlocking;
 				cellToOverwrite.visualName = cellVisualName;
 				cellToOverwrite.isBlocking = cellIsBlocking;
 				return cellToOverwrite;
@@ -126,16 +154,17 @@ class PlaceBuilderDemo
 			mapCellSource
 		);
 
+		var orientation = new Orientation(new Coords(0, 0));
 		var cellAndPosToEntity = (cell, cellPosInCells, cellPosInPixels) =>
 		{
-			var cellVisual = mapVisualLookup[cell.visualName];
+			var cellVisual = terrains[cell.visualName].visual;
 			var cellAsEntity = new Entity
 			(
 				this.name + cellPosInCells.toString(),
 				[
 					new Drawable(cellVisual),
 					new DrawableCamera(),
-					new Locatable(new Location(cellPosInPixels))
+					new Locatable(new Location(cellPosInPixels, orientation))
 				]
 			);
 			return cellAsEntity;

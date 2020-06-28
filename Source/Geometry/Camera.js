@@ -167,6 +167,8 @@ class Camera
 
 	drawEntitiesInViewThenClear(universe, world, display)
 	{
+		this.loc.pos.round(); // hack - To prevent lines between map tiles.
+
 		display.drawBackground("Black", "Black");
 		this.entitiesInView.sort
 		(
