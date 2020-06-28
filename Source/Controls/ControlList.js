@@ -298,7 +298,7 @@ class ControlList
 		this.pos.multiply(scaleFactor);
 		this.size.multiply(scaleFactor);
 		this.fontHeightInPixels *= scaleFactor.y;
-		this.itemSpacing.multiplyScalar(scaleFactor);
+		this.itemSpacing.multiply(scaleFactor);
 		this.scrollbar.scalePosAndSize(scaleFactor);
 	};
 
