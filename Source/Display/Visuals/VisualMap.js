@@ -96,7 +96,7 @@ class VisualMap
 
 				var cell = this.map.cellAtPosInCells
 				(
-					this.map, cellPosInCells, this._cell
+					cellPosInCells
 				);
 				var cellVisualName = cell.visualName;
 				var cellVisual = this.visualLookup[cellVisualName];

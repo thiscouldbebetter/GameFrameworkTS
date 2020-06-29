@@ -7,7 +7,7 @@ class Map
 		this.sizeInCells = sizeInCells;
 		this.cellSize = cellSize;
 		this.cellPrototype = cellPrototype;
-		this.cellAtPosInCells = cellAtPosInCells; // Note: Calling bind() here breaks serialization!
+		this._cellAtPosInCells = cellAtPosInCells;
 		this.cellSource = cellSource;
 
 		this.sizeInCellsMinusOnes = this.sizeInCells.clone().subtract
@@ -19,7 +19,7 @@ class Map
 		this.cellSizeHalf = this.cellSize.clone().half();
 
 		// Helper variables.
-
+		this._cell = this.cellPrototype.clone();
 		this._posInCells = new Coords();
 	}
 
@@ -29,12 +29,17 @@ class Map
 		return this.cellAtPosInCells(this._posInCells);
 	};
 
+	cellAtPosInCells(cellPosInCells)
+	{
+		return this._cellAtPosInCells(this, cellPosInCells, this._cell);
+	}
+
 	numberOfCells()
 	{
 		return this.sizeInCells.x * this.sizeInCells.y;
 	};
 
-	cellsAsEntities(cellAndPosToEntity)
+	cellsAsEntities(mapAndCellPosToEntity)
 	{
 		var returnValues = [];
 
@@ -45,7 +50,6 @@ class Map
 		// todo
 		var cellSizeInPixels = this.cellSize;
 		var cellVisual = new VisualRectangle(cellSizeInPixels, "Blue", null, false); // isCentered
-		var _cell = this.cellPrototype.clone();
 
 		for (var y = cellPosStart.y; y < cellPosEnd.y; y++)
 		{
@@ -55,14 +59,7 @@ class Map
 			{
 				cellPosInCells.x = x;
 
-				var cell = this.cellAtPosInCells
-				(
-					this, cellPosInCells, _cell
-				);
-
-				var cellPosInPixels = cellPosInCells.clone().multiply(cellSizeInPixels);
-
-				var cellAsEntity = cellAndPosToEntity(cell, cellPosInCells, cellPosInPixels);
+				var cellAsEntity = mapAndCellPosToEntity(this, cellPosInCells);
 
 				returnValues.push(cellAsEntity);
 			}

@@ -63,9 +63,9 @@ class PlaceBuilderDemo
 			"~~~~~~..~~~~~~~~....:..::::::Q::",
 			"~~~~~~~~~~~~~~~~~~......::::::::",
 			"~~~~~~~~~~~~~~~~~~......::::::::",
-			"~~~~~~~~~~~~~~..............::::",
-			"~~~~~~~~~~~~~~..............::::",
-			"~~~~~~~~~~~~~~~~~~..............",
+			"~~~~~...~~~~~~..............::::",
+			"~~~~~.~.~~~~~~..............::::",
+			"~~~~~...~~~~~~~~~~..............",
 			"~~~~~~~~~~~~~~~~~~...........:::",
 			"~~~~~~~~~~~~~~~~~~~~~~~~...~~~~~",
 			"~~~~~~~~~~~~~~~~~~~.....~~~...::",
@@ -98,79 +98,341 @@ class PlaceBuilderDemo
 			"*" : "Snow"
 		};
 
-		var colorToTerrainVisual = (color) =>
+		var neighborOffsets =
+		[
+			// e, se, s, sw, w, nw, n, ne
+			new Coords(1, 0), new Coords(1, 1), new Coords(0, 1),
+			new Coords(-1, 1), new Coords(-1, 0), new Coords(-1, -1),
+			new Coords(0, -1), new Coords(1, -1)
+		];
+
+		var colorToTerrainVisualsByName = (color) =>
 		{
 			var borderWidthAsFraction = .25;
-			var borderSizeCorner = mapCellSize.clone().multiplyScalar(borderWidthAsFraction);
-			var borderSizeVertical = mapCellSize.clone().multiply(new Coords(borderWidthAsFraction, 1));
-			var borderSizeHorizontal = mapCellSize.clone().multiply(new Coords(1, borderWidthAsFraction));
+			var borderSizeCorner = mapCellSize.clone().multiplyScalar
+			(
+				borderWidthAsFraction
+			).ceiling();
+			var borderSizeVerticalHalf = mapCellSize.clone().multiply
+			(
+				new Coords(borderWidthAsFraction, .5)
+			).ceiling();
+			var borderSizeHorizontalHalf = mapCellSize.clone().multiply
+			(
+				new Coords(.5, borderWidthAsFraction)
+			).ceiling();
 
 			var isCenteredFalse = false;
-			var visualAtRest = new VisualRectangle(mapCellSize, color, null, isCenteredFalse);
-			return new VisualDirectional
-			(
-				visualAtRest,
-				// visualsForDirections
-				[
-					new VisualOffset(new VisualRectangle(borderSizeVertical, color, null, isCenteredFalse), new Coords(0, 0)),
-					new VisualOffset(new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse), new Coords()),
-					new VisualOffset(new VisualRectangle(borderSizeHorizontal, color, null, isCenteredFalse), new Coords()),
-					new VisualOffset(new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse), new Coords()),
-					new VisualOffset(new VisualRectangle(borderSizeVertical, color, null, isCenteredFalse), new Coords()),
-					new VisualOffset(new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse), new Coords()),
-					new VisualOffset(new VisualRectangle(borderSizeHorizontal, color, null, isCenteredFalse), new Coords()),
-					new VisualOffset(new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse), new Coords())
-				]
-			)
+
+			var visualsByName =
+			{
+				"Center" : new VisualRectangle(mapCellSize, color, null, isCenteredFalse),
+
+				"InsideSE" : new VisualGroup
+				([
+					// s
+					new VisualOffset
+					(
+						new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
+						new Coords(mapCellSize.x / 2, mapCellSize.y - borderSizeCorner.y)
+					),
+					// e
+					new VisualOffset
+					(
+						new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
+						new Coords(mapCellSize.x - borderSizeCorner.x, mapCellSize.y / 2)
+					)
+				]),
+				"InsideSW" : new VisualGroup
+				([
+					// s
+					new VisualOffset
+					(
+						new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
+						new Coords(0, mapCellSize.y - borderSizeCorner.y)
+					),
+					// w
+					new VisualOffset
+					(
+						new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
+						new Coords(0, mapCellSize.y / 2)
+					)
+				]),
+				"InsideNW" : new VisualGroup
+				([
+					// n
+					new VisualOffset
+					(
+						new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
+						new Coords(0, 0)
+					),
+					// w
+					new VisualOffset
+					(
+						new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
+						new Coords(0, 0)
+					)
+				]),
+				"InsideNE" : new VisualGroup
+				([
+					// n
+					new VisualOffset
+					(
+						new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
+						new Coords(mapCellSize.x / 2, 0)
+					),
+					// e
+					new VisualOffset
+					(
+						new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
+						new Coords(mapCellSize.x - borderSizeCorner.x, 0)
+					),
+				]),
+
+				"OutsideSE" : new VisualOffset
+				(
+					new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse),
+					new Coords(0, 0)
+				),
+				"OutsideSW" : new VisualOffset
+				(
+					new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse),
+					new Coords(mapCellSize.x - borderSizeCorner.x, 0)
+				),
+				"OutsideNW" : new VisualOffset
+				(
+					new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse),
+					new Coords(mapCellSize.x - borderSizeCorner.x, mapCellSize.y - borderSizeCorner.y)
+				),
+				"OutsideNE" : new VisualOffset
+				(
+					new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse),
+					new Coords(0, mapCellSize.y - borderSizeCorner.y)
+				),
+
+				"ETop" : new VisualOffset
+				(
+					new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
+					new Coords(mapCellSize.x - borderSizeCorner.x, 0)
+				),
+				"EBottom" : new VisualOffset
+				(
+					new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
+					new Coords(mapCellSize.x - borderSizeCorner.x, mapCellSize.y / 2)
+				),
+
+				"SRight" : new VisualOffset
+				(
+					new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
+					new Coords(mapCellSize.x / 2, mapCellSize.y - borderSizeCorner.y)
+				),
+				"SLeft" : new VisualOffset
+				(
+					new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
+					new Coords(0, mapCellSize.y - borderSizeCorner.y)
+				),
+
+				"WBottom" : new VisualOffset
+				(
+					new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
+					new Coords(0, mapCellSize.y / 2)
+				),
+				"WTop" : new VisualOffset
+				(
+					new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
+					new Coords(0, 0)
+				),
+
+				"NLeft" : new VisualOffset
+				(
+					new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
+					new Coords(0, 0)
+				),
+				"NRight" : new VisualOffset
+				(
+					new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
+					new Coords(mapCellSize.x / 2, 0)
+				)
+			};
+
+			var visualNamesInOrder =
+			[
+				"Center",
+				// se
+				"EBottom",
+				"InsideSE",
+				"OutsideNW",
+				"SRight",
+				// sw
+				"SLeft",
+				"InsideSW",
+				"OutsideNE",
+				"WBottom",
+				// nw
+				"WTop",
+				"InsideNW",
+				"OutsideSE",
+				"NLeft",
+				// ne
+				"NRight",
+				"InsideNE",
+				"OutsideSW",
+				"ETop"
+			];
+
+			var visualsInOrder = visualNamesInOrder.map(x => visualsByName[x]);
+
+			return visualsInOrder;
 		};
 
 		var terrains =
 		[
 						//name, codeChar, level, isBlocking, visual
-			new Terrain("Water", 	"~", 0, true, colorToTerrainVisual("Blue")),
-			new Terrain("Sand", 	".", 1, false, colorToTerrainVisual("Tan")),
-			new Terrain("Grass", 	":", 2, false, colorToTerrainVisual("Green")),
-			new Terrain("Trees", 	"Q", 3, false, colorToTerrainVisual("DarkGreen")),
-			new Terrain("Rock", 	"A", 4, false, colorToTerrainVisual("Gray")),
-			new Terrain("Snow", 	"*", 5, false, colorToTerrainVisual("White")),
+			new Terrain("Water", 	"~", 0, true, colorToTerrainVisualsByName("Blue")),
+			new Terrain("Sand", 	".", 1, false, colorToTerrainVisualsByName("Tan")),
+			new Terrain("Grass", 	":", 2, false, colorToTerrainVisualsByName("Green")),
+			new Terrain("Trees", 	"Q", 3, false, colorToTerrainVisualsByName("DarkGreen")),
+			new Terrain("Rock", 	"A", 4, false, colorToTerrainVisualsByName("Gray")),
+			new Terrain("Snow", 	"*", 5, false, colorToTerrainVisualsByName("White")),
 		].addLookupsByName().addLookups(x => x.codeChar);
 
 		var map = new Map
 		(
-			"Map",
+			"Terrarium",
 			mapSizeInCells,
 			mapCellSize,
 			new MapCell(), // cellPrototype
 			(map, cellPosInCells, cellToOverwrite) => // cellAtPosInCells
 			{
-				var cellCode = map.cellSource[cellPosInCells.y][cellPosInCells.x];
-				var cellTerrain = (terrains[cellCode] || terrains[0]);
-				var cellVisualName = cellTerrain.name;
-				var cellIsBlocking = cellTerrain.isBlocking;
-				cellToOverwrite.visualName = cellVisualName;
-				cellToOverwrite.isBlocking = cellIsBlocking;
+				if (cellPosInCells.isInRangeMax(map.sizeInCellsMinusOnes))
+				{
+					var cellCode = map.cellSource[cellPosInCells.y][cellPosInCells.x];
+					var cellTerrain = (terrains[cellCode] || terrains[0]);
+					var cellVisualName = cellTerrain.name;
+					var cellIsBlocking = cellTerrain.isBlocking;
+					cellToOverwrite.visualName = cellVisualName;
+					cellToOverwrite.isBlocking = cellIsBlocking;
+				}
+				else
+				{
+					cellToOverwrite = null;
+				}
 				return cellToOverwrite;
 			},
 			mapCellSource
 		);
 
-		var orientation = new Orientation(new Coords(0, 0));
-		var cellAndPosToEntity = (cell, cellPosInCells, cellPosInPixels) =>
+		var mapAndCellPosToEntity = (map, cellPosInCells) =>
 		{
-			var cellVisual = terrains[cell.visualName].visual;
+			var cellVisuals = [];
+
+			var cell = map.cellAtPosInCells(cellPosInCells);
+			var cellTerrain = terrains[cell.visualName];
+			var cellTerrainVisuals = cellTerrain.visuals;
+			cellVisuals.push(cellTerrainVisuals[0]);
+
+			var cellPosInPixels = cellPosInCells.clone().multiply(map.cellSize);
+
+			var neighborTerrains = [];
+			var neighborPos = new Coords();
+			for (var n = 0; n < neighborOffsets.length; n++)
+			{
+				var neighborOffset = neighborOffsets[n];
+				neighborPos.overwriteWith(cellPosInCells).add(neighborOffset);
+				var cellNeighbor = map.cellAtPosInCells(neighborPos);
+				var cellNeighborTerrain;
+				if (cellNeighbor == null)
+				{
+					cellNeighborTerrain = cellTerrain;
+				}
+				else
+				{
+					cellNeighborTerrain = terrains[cellNeighbor.visualName];
+				}
+				neighborTerrains.push(cellNeighborTerrain);
+			}
+
+			var borderTypeCount = 4; // straight0, inside corner, outside corner, straight1
+
+			for (var n = 1; n < neighborTerrains.length; n += 2) // corners
+			{
+				var nPrev = (n - 1).wrapToRangeMax(neighborTerrains.length);
+				var nNext = (n + 1).wrapToRangeMax(neighborTerrains.length);
+
+				var neighborPrevTerrain = neighborTerrains[nPrev];
+				var neighborCurrentTerrain = neighborTerrains[n];
+				var neighborNextTerrain = neighborTerrains[nNext];
+
+				var borderTypeIndex = null;
+				if (neighborCurrentTerrain.level > cellTerrain.level)
+				{
+					var neighborIndexToUse = n;
+					if (neighborPrevTerrain == neighborCurrentTerrain)
+					{
+						if (neighborNextTerrain == neighborCurrentTerrain)
+						{
+							borderTypeIndex = 1; // inside corner
+						}
+						else
+						{
+							borderTypeIndex = 0; // straight0
+						}
+					}
+					else
+					{
+						if (neighborNextTerrain == neighborCurrentTerrain)
+						{
+							borderTypeIndex = 3; // straight1
+						}
+						else
+						{
+							borderTypeIndex = 2; // outside corner
+						}
+					}
+				}
+				else if (neighborPrevTerrain.level > cellTerrain.level)
+				{
+					neighborIndexToUse = nPrev;
+					if (neighborNextTerrain != neighborPrevTerrain)
+					{
+						borderTypeIndex = 0; // straight0
+					}
+				}
+				else if (neighborNextTerrain.level > cellTerrain.level)
+				{
+					neighborIndexToUse = nNext;
+					if (neighborNextTerrain != neighborPrevTerrain)
+					{
+						borderTypeIndex = 3; // straight0
+					}
+				}
+
+
+				if (borderTypeIndex != null)
+				{
+					var neighborTerrainToUse = neighborTerrains[neighborIndexToUse];
+					var borderVisualIndex =
+						1 + ( (n - 1) / 2) * borderTypeCount + borderTypeIndex;
+					var visualForBorder = neighborTerrainToUse.visuals[borderVisualIndex];
+					cellVisuals.push(visualForBorder);
+				}
+			}
+
+			var cellVisual = new VisualGroup(cellVisuals);
+
 			var cellAsEntity = new Entity
 			(
 				this.name + cellPosInCells.toString(),
 				[
 					new Drawable(cellVisual),
 					new DrawableCamera(),
-					new Locatable(new Location(cellPosInPixels, orientation))
+					new Locatable(new Location(cellPosInPixels))
 				]
 			);
 			return cellAsEntity;
 		};
 
-		var mapCellsAsEntities = map.cellsAsEntities(cellAndPosToEntity);
+		var mapCellsAsEntities = map.cellsAsEntities(mapAndCellPosToEntity);
 		this.entities.push(...mapCellsAsEntities);
 
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefns["Flower"], 1));
@@ -2114,7 +2376,7 @@ class PlaceBuilderDemo
 			new Constraint_Conditional
 			(
 				(u, w, p, entity) => ( entity.locatable.loc.pos.z >= 0 ),
-				new Constraint_FrictionXY(.03)
+				new Constraint_FrictionXY(.03, .5)
 			),
 		]);
 

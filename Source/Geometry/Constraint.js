@@ -131,9 +131,10 @@ function ConstraintInstances()
 		};
 	}
 
-	function Constraint_FrictionXY(target)
+	function Constraint_FrictionXY(target, speedMin)
 	{
 		this.target = target;
+		this.speedMin = speedMin || 0;
 	}
 	{
 		Constraint_FrictionXY.prototype.constrain = function(universe, world, place, entity)
@@ -144,11 +145,18 @@ function ConstraintInstances()
 			var entityVelZSaved = entityVel.z;
 			entityVel.z = 0;
 			var speed = entityVel.magnitude();
-			var frictionMagnitude = speed * targetFrictionCoefficient;
-			entityVel.add
-			(
-				entityVel.clone().multiplyScalar(-frictionMagnitude)
-			);
+			if (speed < this.speedMin)
+			{
+				entityVel.clear();
+			}
+			else
+			{
+				var frictionMagnitude = speed * targetFrictionCoefficient;
+				entityVel.add
+				(
+					entityVel.clone().multiplyScalar(-frictionMagnitude)
+				);
+			}
 			entityVel.z = entityVelZSaved;
 		};
 	}
