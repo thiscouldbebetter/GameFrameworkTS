@@ -1,5 +1,13 @@
 class LandscapeMap
 {
+	name: string;
+	depthMax: number;
+	terrainSet: any;
+
+	sizeInCells: Coords;
+	sizeInCellsMinusOnes: Coords;
+	cellAltitudes: any;
+
 	constructor(name, depthMax, terrainSet)
 	{
 		this.name = name;
@@ -7,10 +15,10 @@ class LandscapeMap
 		this.terrainSet = terrainSet;
 
 		var dimensionInCells = Math.pow(2, this.depthMax) + 1;
-		this.sizeInCells = new Coords(dimensionInCells, dimensionInCells);
+		this.sizeInCells = new Coords(dimensionInCells, dimensionInCells, 0);
 		this.sizeInCellsMinusOnes = this.sizeInCells.clone().add
 		(
-			new Coords(-1, -1)
+			new Coords(-1, -1, 0)
 		)
 
 		this.cellAltitudes = [];
@@ -25,10 +33,10 @@ class LandscapeMap
 	{
 		var cornerCellPositions =
 		[
-			new Coords(0, 0), // nw
-			new Coords(this.sizeInCellsMinusOnes.x, 0), // ne
-			new Coords(this.sizeInCellsMinusOnes.x, this.sizeInCellsMinusOnes.y), // se
-			new Coords(0, this.sizeInCellsMinusOnes.y), // sw
+			new Coords(0, 0, 0), // nw
+			new Coords(this.sizeInCellsMinusOnes.x, 0, 0), // ne
+			new Coords(this.sizeInCellsMinusOnes.x, this.sizeInCellsMinusOnes.y, 0), // se
+			new Coords(0, this.sizeInCellsMinusOnes.y, 0), // sw
 		];
 
 		for (var i = 0; i < cornerCellPositions.length; i++)
@@ -38,15 +46,15 @@ class LandscapeMap
 			this.cellAltitudes[cellIndex] = 0;
 		}
 
-		var parentPos = new Coords(0, 0);
-		var childPos = new Coords(0, 0);
+		var parentPos = new Coords(0, 0, 0);
+		var childPos = new Coords(0, 0, 0);
 
 		var neighborDatas =
 		[
 			// directionToNeighbor, neighborIndicesContributing, altitudeVariationMultiplier
-			new NeighborData(new Coords(1, 0), [0], 1),
-			new NeighborData(new Coords(0, 1), [1], 1),
-			new NeighborData(new Coords(1, 1), [0, 1, 2], Math.sqrt(2)),
+			new NeighborData(new Coords(1, 0, 0), [0], 1),
+			new NeighborData(new Coords(0, 1, 0), [1], 1),
+			new NeighborData(new Coords(1, 1, 0), [0, 1, 2], Math.sqrt(2)),
 		];
 
 		for (var d = 0; d < this.depthMax; d++)
@@ -186,7 +194,7 @@ class LandscapeMap
 
 		var graphics = canvas.getContext("2d");
 
-		var cellPos = new Coords(0, 0);
+		var cellPos = new Coords(0, 0, 0);
 
 		for (var y = 0; y < this.sizeInCells.y; y++)
 		{
@@ -231,6 +239,12 @@ class LandscapeMap
 
 class NeighborData
 {
+	directionToNeighbor: Coords;
+	neighborIndicesContributing: number[];
+	altitudeVariationMultiplier: number;
+
+	pos: Coords;
+
 	constructor
 	(
 		directionToNeighbor, neighborIndicesContributing,
@@ -241,30 +255,16 @@ class NeighborData
 		this.neighborIndicesContributing = neighborIndicesContributing;
 		this.altitudeVariationMultiplier = altitudeVariationMultiplier;
 
-		this.pos = new Coords(0, 0);
-	}
-}
-
-class NumberHelper
-{
-	static reflectNumberOffRange(numberToReflect, rangeMin, rangeMax)
-	{
-		while (numberToReflect < rangeMin)
-		{
-			numberToReflect = rangeMin + rangeMin - numberToReflect;
-		}
-
-		while (numberToReflect > rangeMax)
-		{
-			numberToReflect = rangeMax - (numberToReflect - rangeMax);
-		}
-
-		return numberToReflect.trimToRangeMinMax(rangeMin, rangeMax);
+		this.pos = new Coords(0, 0, 0);
 	}
 }
 
 class LandscapeTerrain
 {
+	name: string;
+	color: any;
+	altitudeStart: number;
+
 	constructor(name, color, altitudeStart)
 	{
 		this.name = name;
@@ -275,6 +275,9 @@ class LandscapeTerrain
 
 class LandscapeTerrainSet
 {
+	name: string;
+	terrains: any;
+
 	constructor(name, terrains)
 	{
 		this.name = name;

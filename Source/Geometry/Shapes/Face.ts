@@ -1,6 +1,12 @@
 
 class Face
 {
+	vertices: Coords[];
+
+	_box: Box;
+	_edges: Edge[];
+	_plane: Plane;
+
 	constructor(vertices)
 	{
 		this.vertices = vertices;
@@ -22,7 +28,7 @@ class Face
 
 		var faceNormal = face.plane().normal;
 
-		var displacementFromVertex0ToCollision = new Coords();
+		var displacementFromVertex0ToCollision = new Coords(0, 0, 0);
 
 		var isPosWithinAllEdgesOfFaceSoFar = true;
 
@@ -66,7 +72,10 @@ class Face
 
 			for (var v = 0; v < this.vertices.length; v++)
 			{
-				var vNext = (v + 1).wrapToRangeMinMax(0, this.vertices.length);
+				var vNext = NumberHelper.wrapToRangeMinMax
+				(
+					v + 1, 0, this.vertices.length
+				);
 				var vertex = this.vertices[v];
 				var vertexNext = this.vertices[vNext];
 
@@ -81,14 +90,14 @@ class Face
 
 	equals(other)
 	{
-		return this.vertices.equals(other.vertices);
+		return ArrayHelper.equals(this.vertices, other.vertices);
 	};
 
 	plane()
 	{
 		if (this._plane == null)
 		{
-			this._plane = new Plane(new Coords(), 0);
+			this._plane = new Plane(new Coords(0, 0, 0), 0);
 		}
 
 		this._plane.fromPoints
@@ -105,12 +114,12 @@ class Face
 
 	clone()
 	{
-		return new Face(this.vertices.clone());
+		return new Face(ArrayHelper.clone(this.vertices));
 	};
 
 	overwriteWith(other)
 	{
-		this.vertices.overwriteWith(other.vertices);
+		ArrayHelper.overwriteWith(this.vertices, other.vertices);
 		return this;
 	};
 

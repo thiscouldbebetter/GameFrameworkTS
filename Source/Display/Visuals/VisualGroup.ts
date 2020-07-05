@@ -1,6 +1,8 @@
 
 class VisualGroup
 {
+	children: any;
+
 	constructor(children)
 	{
 		this.children = children;

@@ -1,6 +1,13 @@
 
 class Shell
 {
+	sphereOuter: Sphere;
+	radiusInner: number;
+
+	sphereInner: Sphere;
+
+	_collider: ShapeGroupAll;
+
 	constructor(sphereOuter, radiusInner)
 	{
 		this.sphereOuter = sphereOuter;

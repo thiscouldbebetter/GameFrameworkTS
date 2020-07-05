@@ -1,6 +1,10 @@
 
 class AnimationDefn
 {
+	name: string;
+	keyframes: any;
+	numberOfFramesTotal: number;
+
 	constructor(name, keyframes)
 	{
 		this.name = name;

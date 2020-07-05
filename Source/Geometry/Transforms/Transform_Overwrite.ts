@@ -1,6 +1,8 @@
 
 class Transform_Overwrite
 {
+	transformableToOverwriteWith: any;
+
 	constructor(transformableToOverwriteWith)
 	{
 		this.transformableToOverwriteWith = transformableToOverwriteWith;

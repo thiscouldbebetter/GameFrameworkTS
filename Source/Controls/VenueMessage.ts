@@ -1,6 +1,14 @@
 
 class VenueMessage
 {
+	messageToShow: string;
+	acknowledge: any;
+	venuePrev: any;
+	_sizeInPixels: Coords;
+	showMessageOnly: boolean;
+
+	_venueInner: any;
+
 	constructor(messageToShow, acknowledge, venuePrev, sizeInPixels, showMessageOnly)
 	{
 		this.messageToShow = messageToShow;
@@ -51,7 +59,7 @@ class VenueMessage
 
 			venuesToLayer.push(new VenueControls(controlMessage));
 
-			this._venueInner = new VenueLayered(venuesToLayer);
+			this._venueInner = new VenueLayered(venuesToLayer, null);
 		}
 
 		return this._venueInner;

@@ -1,12 +1,34 @@
 
 class ControlTabbed
 {
+	name: string;
+	pos: Coords;
+	size: Coords;
+	children: any;
+	childrenByName: any;
+	fontHeightInPixels: number;
+	cancel: any;
+
+	buttonsForChildren: any;
+	childSelectedIndex: number;
+	isChildSelectedActive: boolean;
+	styleName: string;
+
+	_childMax: Coords;
+	_childrenContainingPos: any;
+	_drawPos: Coords;
+	_drawLoc: Disposition;
+	_mouseClickPos: Coords;
+	_mouseMovePos: Coords;
+	_posToCheck: Coords;
+
 	constructor(name, pos, size, children, fontHeightInPixels, cancel)
 	{
 		this.name = name;
 		this.pos = pos;
 		this.size = size;
-		this.children = children.addLookupsByName();
+		this.children = children;
+		this.childrenByName = ArrayHelper.addLookupsByName(this.children);
 		this.cancel = cancel;
 
 		this.childSelectedIndex = 0;
@@ -15,7 +37,7 @@ class ControlTabbed
 		fontHeightInPixels = fontHeightInPixels || 10;
 
 		var marginSize = fontHeightInPixels;
-		var buttonSize = new Coords(50, fontHeightInPixels * 2);
+		var buttonSize = new Coords(50, fontHeightInPixels * 2, 0);
 		var buttonsForChildren = [];
 
 		for (var i = 0; i < this.children.length; i++)
@@ -28,13 +50,14 @@ class ControlTabbed
 			var button = new ControlButton
 			(
 				"button" + childName,
-				new Coords(marginSize + buttonSize.x * i, marginSize), // pos
+				new Coords(marginSize + buttonSize.x * i, marginSize, 0), // pos
 				buttonSize.clone(),
 				childName, // text
 				fontHeightInPixels,
 				true, // hasBorder
 				true, // isEnabled
-				(b) => this.childSelectedIndex = this.buttonsForChildren.indexOf(b) // hack
+				(b) => this.childSelectedIndex = buttonsForChildren.indexOf(b), // hack
+				null, null
 			);
 			button.context = button; // hack
 			buttonsForChildren.push(button);
@@ -46,13 +69,14 @@ class ControlTabbed
 			var button = new ControlButton
 			(
 				"buttonCancel",
-				new Coords(this.size.x - marginSize - buttonSize.x, marginSize), // pos
+				new Coords(this.size.x - marginSize - buttonSize.x, marginSize, 0), // pos
 				buttonSize.clone(),
 				"Done", // text
 				fontHeightInPixels,
 				true, // hasBorder
 				true, // isEnabled
-				this.cancel // click
+				this.cancel, // click
+				null, null
 			);
 			buttonsForChildren.push(button);
 		}
@@ -60,13 +84,13 @@ class ControlTabbed
 		this.buttonsForChildren = buttonsForChildren;
 
 		// Temporary variables.
-		this._childMax = new Coords();
+		this._childMax = new Coords(0, 0, 0);
 		this._childrenContainingPos = [];
-		this._drawPos = new Coords();
-		this._drawLoc = new Location(this._drawPos);
-		this._mouseClickPos = new Coords();
-		this._mouseMovePos = new Coords();
-		this._posToCheck = new Coords();
+		this._drawPos = new Coords(0, 0, 0);
+		this._drawLoc = new Disposition(this._drawPos, null, null);
+		this._mouseClickPos = new Coords(0, 0, 0);
+		this._mouseMovePos = new Coords(0, 0, 0);
+		this._posToCheck = new Coords(0, 0, 0);
 	}
 
 	// instance methods
@@ -78,7 +102,7 @@ class ControlTabbed
 
 	style(universe)
 	{
-		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
+		return universe.controlBuilder.stylesByName[this.styleName == null ? "Default" : this.styleName];
 	};
 
 	// actions
@@ -158,14 +182,18 @@ class ControlTabbed
 		{
 			this.childSelectedIndex += direction;
 
-			var isChildNextInRange = this.childSelectedIndex.isInRangeMinMax
+			var isChildNextInRange = NumberHelper.isInRangeMinMax
 			(
-				0, this.children.length - 1
+				this.childSelectedIndex, 0, this.children.length - 1
 			);
 
 			if (isChildNextInRange == false)
 			{
-				this.childSelectedIndex = this.childSelectedIndex.wrapToRangeMax(this.children.length);
+				this.childSelectedIndex = NumberHelper.wrapToRangeMax
+				(
+					this.childSelectedIndex,
+					this.children.length
+				);
 			}
 
 			var child = this.children[this.childSelectedIndex];
@@ -249,7 +277,7 @@ class ControlTabbed
 		}
 	};
 
-	mouseClick(mouseClickPos)
+	mouseClick(mouseClickPos: Coords)
 	{
 		var mouseClickPos = this._mouseClickPos.overwriteWith
 		(
@@ -278,7 +306,7 @@ class ControlTabbed
 			var childrenContainingPos = this.childrenAtPosAddToList
 			(
 				mouseClickPos,
-				this._childrenContainingPos.clear(),
+				ArrayHelper.clear(this._childrenContainingPos),
 				true // addFirstChildOnly
 			);
 			var child = childrenContainingPos[0];
@@ -298,7 +326,7 @@ class ControlTabbed
 		return wasClickHandled;
 	};
 
-	mouseMove(mouseMovePos)
+	mouseMove(mouseMovePos: Coords)
 	{
 		var mouseMovePos = this._mouseMovePos.overwriteWith
 		(
@@ -353,7 +381,7 @@ class ControlTabbed
 
 	toVenue()
 	{
-		return new VenueFader(new VenueControls(this));
+		return new VenueFader(new VenueControls(this), null, null, null);
 	};
 
 	// drawable

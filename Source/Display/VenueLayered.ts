@@ -1,6 +1,9 @@
 
 class VenueLayered
 {
+	children: any;
+	colorToOverlayBetweenChildren: any;
+
 	constructor(children, colorToOverlayBetweenChildren)
 	{
 		this.children = children;

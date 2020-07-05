@@ -1,13 +1,18 @@
 
 class Sphere
 {
+	center: Coords;
+	radius: number;
+
+	_displacement: Coords;
+
 	constructor(center, radius)
 	{
 		this.center = center;
 		this.radius = radius;
 
 		// Helper variables.
-		this._displacement = new Coords();
+		this._displacement = new Coords(0, 0, 0);
 	}
 
 	containsOther(other)
@@ -21,7 +26,7 @@ class Sphere
 
 	pointRandom()
 	{
-		return new Polar(0, this.radius).random().toCoords(new Coords()).add(this.center);
+		return new Polar(0, this.radius, 0).random(null).toCoords(new Coords(0, 0, 0)).add(this.center);
 	};
 
 	// cloneable

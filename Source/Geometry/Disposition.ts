@@ -1,9 +1,19 @@
 
-class Location
+class Disposition
 {
+	pos: Coords;
+	orientation: Orientation;
+	placeName: string;
+
+	vel: Coords;
+	accel: Coords;
+	force: Coords;
+	spin: Rotation;
+	timeOffsetInTicks: number;
+
 	constructor(pos, orientation, placeName)
 	{
-		this.pos = pos || new Coords();
+		this.pos = pos || new Coords(0, 0, 0);
 
 		if (orientation == null)
 		{
@@ -24,7 +34,7 @@ class Location
 
 	place(world)
 	{
-		return world.places[this.placeName];
+		return world.placesByName[this.placeName];
 	};
 
 	velSet(value)
@@ -37,7 +47,7 @@ class Location
 
 	clone()
 	{
-		var returnValue = new Location
+		var returnValue = new Disposition
 		(
 			this.pos.clone(),
 			this.orientation.clone(),

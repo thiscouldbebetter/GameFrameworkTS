@@ -1,6 +1,10 @@
 
 class CraftingRecipe
 {
+	name: string;
+	itemsIn: Item[];
+	itemEntitiesOut: Entity[];
+
 	constructor(name, itemsIn, itemEntitiesOut)
 	{
 		this.name = name;
@@ -17,10 +21,10 @@ class CraftingRecipe
 			var itemRequired = this.itemsIn[i];
 			var itemEntityStaged = itemEntitiesStaged.filter
 			(
-				x => x.item.defnName == itemRequired.defnName
+				x => x.item().defnName == itemRequired.defnName
 			)[0];
 			var isRequirementFulfilled =
-				(itemEntityStaged != null && itemEntityStaged.item.quantity >= itemRequired.quantity);
+				(itemEntityStaged != null && itemEntityStaged.item().quantity >= itemRequired.quantity);
 
 			if (isRequirementFulfilled == false)
 			{
@@ -38,7 +42,7 @@ class CraftingRecipe
 	{
 		return new CraftingRecipe
 		(
-			this.name, this.itemsIn.clone(), this.itemEntitiesOut.clone()
+			this.name, ArrayHelper.clone(this.itemsIn), ArrayHelper.clone(this.itemEntitiesOut)
 		);
 	}
 }

@@ -1,10 +1,18 @@
 
 class ItemBarterer
 {
+	itemHolderCustomerOffer: ItemHolder;
+	itemHolderStoreOffer: ItemHolder;
+	statusMessage: string;
+	patience: number;
+	patienceMax: number;
+
+	itemDefnNameCurrency: string;
+
 	constructor()
 	{
-		this.itemHolderCustomerOffer = new ItemHolder();
-		this.itemHolderStoreOffer = new ItemHolder();
+		this.itemHolderCustomerOffer = new ItemHolder(null);
+		this.itemHolderStoreOffer = new ItemHolder(null);
 		this.statusMessage = "Choose items to trade and click the 'Offer' button.";
 		this.patience = 10;
 
@@ -85,12 +93,12 @@ class ItemBarterer
 
 		var fontHeight = 10;
 		var margin = fontHeight * 1.5;
-		var buttonSize = new Coords(4, 2).multiplyScalar(fontHeight);
-		var listSize = new Coords((size.x - margin * 3) / 2, 90);
+		var buttonSize = new Coords(4, 2, 0).multiplyScalar(fontHeight);
+		var listSize = new Coords((size.x - margin * 3) / 2, 90, 0);
 
 		var itemBarterer = this;
-		var itemHolderCustomer = entityCustomer.itemHolder;
-		var itemHolderStore = entityStore.itemHolder;
+		var itemHolderCustomer = entityCustomer.itemHolder();
+		var itemHolderStore = entityStore.itemHolder();
 
 		var itemDefnNameCurrency = this.itemDefnNameCurrency;
 
@@ -100,22 +108,22 @@ class ItemBarterer
 		{
 			itemBarterer.reset(entityCustomer, entityStore);
 			var venueNext = venuePrev;
-			venueNext = new VenueFader(venueNext, universe.venueCurrent);
+			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 			universe.venueNext = venueNext;
 		};
 
 		var returnValue = new ControlContainer
 		(
 			"containerTransfer",
-			new Coords(0, 0), // pos
+			new Coords(0, 0, 0), // pos
 			size.clone(),
 			// children
 			[
 				new ControlLabel
 				(
 					"labelStoreName",
-					new Coords(margin, margin), // pos
-					new Coords(listSize.x, 25), // size
+					new Coords(margin, margin, 0), // pos
+					new Coords(listSize.x, 25, 0), // size
 					false, // isTextCentered
 					entityStore.name + ":",
 					fontHeight
@@ -124,20 +132,22 @@ class ItemBarterer
 				new ControlList
 				(
 					"listStoreItems",
-					new Coords(margin, margin * 2 + fontHeight), // pos
+					new Coords(margin, margin * 2 + fontHeight, 0), // pos
 					listSize.clone(),
 					new DataBinding
 					(
 						itemHolderStore,
 						function get(c)
 						{
-							return c.itemEntities;//.filter(x => x.item.defnName != itemDefnNameCurrency);
-						}
+							return c.itemEntities;//.filter(x => x.item().defnName != itemDefnNameCurrency);
+						},
+						null
 					), // items
 					new DataBinding
 					(
 						null,
-						function get(c) { return c.item.toString(world); }
+						function get(c) { return c.item().toString(world); },
+						null
 					), // bindingForItemText
 					fontHeight,
 					new DataBinding
@@ -146,7 +156,7 @@ class ItemBarterer
 						function get(c) { return c.itemEntityToOffer; },
 						function set(c, v) { c.itemEntityToOffer = v; }
 					), // bindingForItemSelected
-					new DataBinding(null, function(c) { return c; } ), // bindingForItemValue
+					new DataBinding(null, function(c) { return c; }, null ), // bindingForItemValue
 					true, // isEnabled
 					function confirm()
 					{
@@ -155,14 +165,15 @@ class ItemBarterer
 							var offer = itemBarterer.itemHolderStoreOffer;
 							itemHolderStore.itemEntityTransferSingleTo(itemHolderStore.itemEntityToOffer, offer);
 						}
-					}
+					},
+					null
 				),
 
 				new ControlLabel
 				(
 					"labelCustomerName",
-					new Coords(size.x - margin - listSize.x, margin), // pos
-					new Coords(85, 25), // size
+					new Coords(size.x - margin - listSize.x, margin, 0), // pos
+					new Coords(85, 25, 0), // size
 					false, // isTextCentered
 					entityCustomer.name + ":",
 					fontHeight
@@ -171,20 +182,22 @@ class ItemBarterer
 				new ControlList
 				(
 					"listCustomerItems",
-					new Coords(size.x - margin - listSize.x, margin * 2 + fontHeight), // pos
+					new Coords(size.x - margin - listSize.x, margin * 2 + fontHeight, 0), // pos
 					listSize.clone(),
 					new DataBinding
 					(
 						itemHolderCustomer,
 						function get(c)
 						{
-							return c.itemEntities;//.filter(x => x.item.defnName != itemDefnNameCurrency);
-						}
+							return c.itemEntities;//.filter(x => x.item().defnName != itemDefnNameCurrency);
+						},
+						null
 					), // items
 					new DataBinding
 					(
 						null,
-						function get(c) { return c.item.toString(world); }
+						function get(c) { return c.item().toString(world); },
+						null
 					), // bindingForItemText
 					fontHeight,
 					new DataBinding
@@ -193,23 +206,27 @@ class ItemBarterer
 						function get(c) { return c.itemEntityToOffer; },
 						function set(c, v) { c.itemEntityToOffer = v; }
 					), // bindingForItemSelected
-					new DataBinding(null, function(c) { return c; } ), // bindingForItemValue
+					new DataBinding(null, function(c) { return c; }, null ), // bindingForItemValue
 					true, // isEnabled
 					function confirm()
 					{
 						if (itemHolderCustomer.itemEntityToOffer != null)
 						{
 							var offer = itemBarterer.itemHolderCustomerOffer;
-							itemHolderCustomer.itemEntityTransferSingleTo(itemHolderCustomer.itemEntityToOffer, offer);
+							itemHolderCustomer.itemEntityTransferSingleTo
+							(
+								itemHolderCustomer.itemEntityToOffer, offer
+							);
 						}
-					}
+					},
+					null
 				),
 
 				new ControlLabel
 				(
 					"labelItemsOfferedStore",
-					new Coords(margin, margin * 3 + listSize.y), // pos
-					new Coords(100, 15), // size
+					new Coords(margin, margin * 3 + listSize.y, 0), // pos
+					new Coords(100, 15, 0), // size
 					false, // isTextCentered
 					"Offered:",
 					fontHeight
@@ -218,7 +235,7 @@ class ItemBarterer
 				new ControlList
 				(
 					"listItemsOfferedByStore",
-					new Coords(margin, margin * 4 + listSize.y), // pos
+					new Coords(margin, margin * 4 + listSize.y, 0), // pos
 					listSize.clone(),
 					new DataBinding
 					(
@@ -226,12 +243,14 @@ class ItemBarterer
 						function get(c)
 						{
 							return c.itemHolderStoreOffer.itemEntities;
-						}
+						},
+						null
 					), // items
 					new DataBinding
 					(
 						null,
-						function get(c) { return c.item.toString(world); }
+						function get(c) { return c.item().toString(world); },
+						null
 					), // bindingForItemText
 					fontHeight,
 					new DataBinding
@@ -240,7 +259,7 @@ class ItemBarterer
 						function get(c) { return c.itemEntityToWithdraw; },
 						function set(c, v) { c.itemEntityToWithdraw = v; }
 					), // bindingForItemSelected
-					new DataBinding(null, function(c) { return c; } ), // bindingForItemValue
+					new DataBinding(null, function(c) { return c; }, null ), // bindingForItemValue
 					true, // isEnabled
 					function confirm()
 					{
@@ -249,14 +268,15 @@ class ItemBarterer
 							var offer = itemBarterer.itemHolderStoreOffer;
 							offer.itemEntityTransferSingleTo(itemHolderStore.itemEntityToWithdraw, itemHolderStore);
 						}
-					}
+					},
+					null
 				),
 
 				new ControlLabel
 				(
 					"labelItemsOfferedCustomer",
-					new Coords(size.x - margin - listSize.x, margin * 3 + listSize.y), // pos
-					new Coords(100, 15), // size
+					new Coords(size.x - margin - listSize.x, margin * 3 + listSize.y, null), // pos
+					new Coords(100, 15, null), // size
 					false, // isTextCentered
 					"Offered:",
 					fontHeight
@@ -265,7 +285,7 @@ class ItemBarterer
 				new ControlList
 				(
 					"listItemsOfferedByCustomer",
-					new Coords(size.x - margin - listSize.x, margin * 4 + listSize.y), // pos
+					new Coords(size.x - margin - listSize.x, margin * 4 + listSize.y, 0), // pos
 					listSize.clone(),
 					new DataBinding
 					(
@@ -273,12 +293,14 @@ class ItemBarterer
 						function get(c)
 						{
 							return c.itemHolderCustomerOffer.itemEntities;
-						}
+						},
+						null
 					), // items
 					new DataBinding
 					(
 						null,
-						function get(c) { return c.item.toString(world); }
+						function get(c) { return c.item().toString(world); },
+						null
 					), // bindingForItemText
 					fontHeight,
 					new DataBinding
@@ -287,7 +309,7 @@ class ItemBarterer
 						function get(c) { return c.itemEntityToWithdraw; },
 						function set(c, v) { c.itemEntityToWithdraw = v; }
 					), // bindingForItemSelected
-					new DataBinding(null, function(c) { return c; } ), // bindingForItemValue
+					new DataBinding(null, function(c) { return c; }, null ), // bindingForItemValue
 					true, // isEnabled
 					function confirm()
 					{
@@ -296,23 +318,24 @@ class ItemBarterer
 							var offer = itemBarterer.itemHolderCustomerOffer;
 							offer.itemEntityTransferSingleTo(itemHolderCustomer.itemEntityToWithdraw, itemHolderCustomer);
 						}
-					}
+					},
+					null
 				),
 
 				new ControlLabel
 				(
 					"infoStatus",
-					new Coords(size.x / 2, size.y - margin * 2 - buttonSize.y), // pos
-					new Coords(size.x, fontHeight), // size
+					new Coords(size.x / 2, size.y - margin * 2 - buttonSize.y, 0), // pos
+					new Coords(size.x, fontHeight, 0), // size
 					true, // isTextCentered
-					new DataBinding(this, c => c.statusMessage),
+					new DataBinding(this, c => c.statusMessage, null),
 					fontHeight
 				),
 
 				new ControlButton
 				(
 					"buttonReset",
-					new Coords(margin, size.y - margin - buttonSize.y), // pos
+					new Coords(margin, size.y - margin - buttonSize.y, 0), // pos
 					buttonSize.clone(),
 					"Reset",
 					fontHeight,
@@ -320,18 +343,25 @@ class ItemBarterer
 					new DataBinding
 					(
 						this,
-						function get(c) { return c.isAnythingBeingOffered(); }
+						function get(c) { return c.isAnythingBeingOffered(); },
+						null
 					), // isEnabled
 					function click()
 					{
 						itemBarterer.reset(entityCustomer, entityStore);
-					}
+					},
+					null, null
 				),
 
 				new ControlButton
 				(
 					"buttonOffer",
-					new Coords((size.x - buttonSize.x)/ 2, size.y - margin - buttonSize.y), // pos
+					new Coords
+					(
+						(size.x - buttonSize.x) / 2,
+						size.y - margin - buttonSize.y,
+						0
+					), // pos
 					buttonSize.clone(),
 					"Offer",
 					fontHeight,
@@ -339,7 +369,8 @@ class ItemBarterer
 					new DataBinding
 					(
 						this,
-						function get(c) { return c.isAnythingBeingOffered(); }
+						function get(c) { return c.isAnythingBeingOffered(); },
+						null
 					), // isEnabled
 					function click()
 					{
@@ -373,19 +404,26 @@ class ItemBarterer
 								itemBarterer.patienceAdd(-1);
 							}
 						}
-					}
+					},
+					null, null
 				),
 
 				new ControlButton
 				(
 					"buttonDone",
-					new Coords(size.x - margin - buttonSize.x, size.y - margin - buttonSize.y), // pos
+					new Coords
+					(
+						size.x - margin - buttonSize.x,
+						size.y - margin - buttonSize.y,
+						null
+					), // pos
 					buttonSize.clone(),
 					"Done",
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					back // click
+					back, // click
+					null, null
 				)
 			],
 

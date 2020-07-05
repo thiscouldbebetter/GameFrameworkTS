@@ -1,6 +1,16 @@
 
 class Camera
 {
+	viewSize: Coords;
+	focalLength: number;
+	loc: Disposition;
+
+	viewSizeHalf: Coords;
+	viewCollider: Box;
+	entitiesInView: Entity[];
+
+	_clipPlanes: any;
+
 	constructor(viewSize, focalLength, loc)
 	{
 		this.viewSize = viewSize;
@@ -174,8 +184,8 @@ class Camera
 		(
 			(a, b) =>
 			{
-				var aPos = a.locatable.loc.pos;
-				var bPos = b.locatable.loc.pos;
+				var aPos = a.locatable().loc.pos;
+				var bPos = b.locatable().loc.pos;
 				var returnValue;
 				if (aPos.z != bPos.z)
 				{
@@ -190,7 +200,7 @@ class Camera
 			}
 		);
 		this.entitiesInView.forEach(entity =>
-			entity.drawable.visual.drawImmediate(universe, world, display, entity)
+			entity.drawable().visual.drawImmediate(universe, world, display, entity)
 		);
 		this.entitiesInView.length = 0;
 	};

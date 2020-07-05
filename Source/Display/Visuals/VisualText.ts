@@ -1,6 +1,10 @@
 
 class VisualText
 {
+	_text: any;
+	colorFill: any;
+	colorBorder: any;
+
 	constructor(text, colorFill, colorBorder)
 	{
 		this._text = text;
@@ -15,7 +19,7 @@ class VisualText
 		(
 			text,
 			display.fontHeightInPixels,
-			entity.locatable.loc.pos,
+			entity.locatable().loc.pos,
 			this.colorFill,
 			this.colorBorder,
 			false, // areColorsReversed

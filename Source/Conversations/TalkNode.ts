@@ -1,6 +1,12 @@
 
 class TalkNode
 {
+	name: string;
+	defnName: string;
+	text: string;
+	next: any;
+	isActive: boolean;
+
 	constructor(name, defnName, text, next, isActive)
 	{
 		this.name = (name == null ? TalkNode.idNext() : name);
@@ -32,7 +38,7 @@ class TalkNode
 
 	defn(conversationDefn)
 	{
-		return conversationDefn.talkNodeDefns[this.defnName];
+		return conversationDefn.talkNodeDefnsByName[this.defnName];
 	};
 
 	execute(universe, conversationRun, scope)

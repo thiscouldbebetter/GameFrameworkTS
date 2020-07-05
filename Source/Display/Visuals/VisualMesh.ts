@@ -1,5 +1,7 @@
 class VisualMesh
 {
+	mesh: any;
+
 	constructor(mesh)
 	{
 		this.mesh = mesh;
@@ -28,6 +30,6 @@ class VisualMesh
 
 	draw(universe, world, display, entity)
 	{
-		display.drawMeshWithOrientation(this.mesh, entity.locatable.loc.orientation);
+		display.drawMeshWithOrientation(this.mesh, entity.locatable().loc.orientation);
 	};
 }

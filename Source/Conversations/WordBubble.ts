@@ -1,6 +1,11 @@
 
 class WordBubble
 {
+	visualForPortrait: any;
+	statements: any;
+
+	statementIndexCurrent: number;
+
 	constructor(visualForPortrait, statements)
 	{
 		this.visualForPortrait = visualForPortrait;
@@ -33,14 +38,15 @@ class WordBubble
 		var controlsForSlides = [];
 
 		var margin = 8;
-		var marginSize = new Coords(1, 1).multiplyScalar(margin);
+		var marginSize = new Coords(1, 1, 0).multiplyScalar(margin);
 		var containerSize = new Coords
 		(
 			sizeBase.x - margin * 2,
-			(sizeBase.y - margin * 4) / 3
+			(sizeBase.y - margin * 4) / 3,
+			0
 		);
 
-		var portraitSize = new Coords(1, 1).multiplyScalar
+		var portraitSize = new Coords(1, 1, 0).multiplyScalar
 		(
 			containerSize.y - margin * 2
 		);
@@ -48,12 +54,13 @@ class WordBubble
 		var wordPaneSize = new Coords
 		(
 			containerSize.x - portraitSize.x - margin * 3,
-			portraitSize.y
+			portraitSize.y,
+			0
 		);
 
 		var fontHeight = margin;
 
-		var buttonSize = new Coords(3, 1.2).multiplyScalar(fontHeight);
+		var buttonSize = new Coords(3, 1.2, 0).multiplyScalar(fontHeight);
 
 		var wordBubble = this;
 
@@ -63,7 +70,8 @@ class WordBubble
 			new Coords
 			(
 				margin,
-				sizeBase.y - margin - containerSize.y
+				sizeBase.y - margin - containerSize.y,
+				0
 			), // pos
 			containerSize,
 			// children
@@ -82,7 +90,7 @@ class WordBubble
 					"labelSlideText",
 					new Coords
 					(
-						portraitSize.x + margin, 0
+						portraitSize.x + margin, 0, 0
 					).add
 					(
 						marginSize
@@ -92,7 +100,8 @@ class WordBubble
 					new DataBinding
 					(
 						this,
-						(c) => c.statementCurrent()
+						(c) => c.statementCurrent(),
+						null
 					),
 					fontHeight
 				),
@@ -103,16 +112,19 @@ class WordBubble
 					new Coords
 					(
 						containerSize.x - marginSize.x - buttonSize.x,
-						containerSize.y - marginSize.y - buttonSize.y
+						containerSize.y - marginSize.y - buttonSize.y,
+						0
 					),
 					buttonSize,
 					"Next",
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					() => wordBubble.statementAdvance(universe)
+					() => wordBubble.statementAdvance(universe),
+					null, null
 				)
-			]
+			],
+			null, null
 		);
 
 		return containerWordBubble;

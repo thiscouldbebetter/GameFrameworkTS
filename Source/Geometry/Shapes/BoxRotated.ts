@@ -1,6 +1,9 @@
 
 class BoxRotated
 {
+	box: Box;
+	angleInTurns: number;
+
 	constructor(box, angleInTurns)
 	{
 		this.box = box;
@@ -14,14 +17,14 @@ class BoxRotated
 
 	surfaceNormalNearPos(posToCheck)
 	{
-		var returnValue = new Coords();
+		var returnValue = new Coords(0, 0, 0);
 
-		var plane = new Plane(new Coords(), 0);
-		var polar = new Polar(0, 1);
+		var plane = new Plane(new Coords(0, 0, 0), 0);
+		var polar = new Polar(0, 1, 0);
 		var box = this.box;
 		var center = box.center;
 		var sizeHalf = box.sizeHalf;
-		var displacementToSurface = new Coords();
+		var displacementToSurface = new Coords(0, 0, 0);
 		var distanceMinSoFar = Number.POSITIVE_INFINITY;
 
 		for (var d = 0; d < 2; d++)
@@ -53,7 +56,7 @@ class BoxRotated
 				}
 
 				polar.azimuthInTurns += .5;
-				polar.azimuthInTurns.wrapToRangeZeroOne();
+				polar.azimuthInTurns = NumberHelper.wrapToRangeZeroOne(polar.azimuthInTurns);
 			}
 		}
 

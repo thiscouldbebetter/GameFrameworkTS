@@ -1,6 +1,9 @@
 
 class Rotation
 {
+	axis: Coords;
+	angleInTurnsRef: Reference;
+
 	constructor(axis, angleInTurnsRef)
 	{
 		this.axis = axis;
@@ -15,12 +18,12 @@ class Rotation
 	transformCoords(coordsToTransform)
 	{
 		// hack - Assume axis is (0, 0, 1).
-		var polar = new Polar().fromCoords(coordsToTransform);
+		var polar = new Polar(0, 0, 0).fromCoords(coordsToTransform);
 
-		polar.azimuthInTurns =
+		polar.azimuthInTurns = NumberHelper.wrapToRangeMinMax
 		(
-			polar.azimuthInTurns + this.angleInTurns()
-		).wrapToRangeMinMax(0, 1);
+			polar.azimuthInTurns + this.angleInTurns(), 0, 1
+		);
 
 		return polar.toCoords(coordsToTransform);
 	};

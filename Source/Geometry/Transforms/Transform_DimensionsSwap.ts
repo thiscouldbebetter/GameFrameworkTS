@@ -1,6 +1,8 @@
 
 class Transform_DimensionsSwap
 {
+	dimensionIndices: number[];
+
 	constructor(dimensionIndices)
 	{
 		this.dimensionIndices = dimensionIndices;

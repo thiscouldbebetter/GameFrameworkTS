@@ -1,9 +1,12 @@
 
 class VideoHelper
 {
+	videos: Video[];
+	videosByName: any;
+
 	constructor(videos)
 	{
 		this.videos = videos;
-		this.videos.addLookupsByName();
+		this.videosByName = ArrayHelper.addLookupsByName(this.videos);
 	}
 }

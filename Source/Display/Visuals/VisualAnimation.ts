@@ -1,6 +1,13 @@
 
 class VisualAnimation
 {
+	name: string;
+	ticksToHoldFrames: any;
+	frames: any;
+	isRepeating: boolean;
+
+	ticksToComplete: number;
+
 	constructor(name, ticksToHoldFrames, frames, isRepeating)
 	{
 		this.name = name;
@@ -72,7 +79,7 @@ class VisualAnimation
 
 	update(universe, world, display, entity)
 	{
-		var drawable = entity.drawable;
+		var drawable = entity.drawable();
 		if (drawable.ticksSinceStarted == null)
 		{
 			drawable.ticksSinceStarted = Math.floor(Math.random() * this.ticksToComplete);
@@ -87,12 +94,12 @@ class VisualAnimation
 			if (this.isRepeating)
 			{
 				drawable.ticksSinceStarted =
-					drawable.ticksSinceStarted.wrapToRangeMinMax(0, this.ticksToComplete);
+					NumberHelper.wrapToRangeMinMax(drawable.ticksSinceStarted, 0, this.ticksToComplete);
 			}
 			else
 			{
 				drawable.ticksSinceStarted =
-					drawable.ticksSinceStarted.trimToRangeMax(this.ticksToComplete - 1);
+					NumberHelper.trimToRangeMax(drawable.ticksSinceStarted, this.ticksToComplete - 1);
 			}
 		}
 

@@ -1,11 +1,15 @@
 
 class Transform_Rotate2D
 {
+	turnsToRotate: number;
+
+	_polar: Polar;
+
 	constructor(turnsToRotate)
 	{
 		this.turnsToRotate = turnsToRotate;
 
-		this._polar = new Polar(0, 1);
+		this._polar = new Polar(0, 1, 0);
 	}
 
 	transformCoords(coordsToTransform)

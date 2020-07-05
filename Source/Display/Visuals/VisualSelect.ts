@@ -1,6 +1,10 @@
 
 class VisualSelect
 {
+	selectChildName: any;
+	childNames: any;
+	children: any;
+
 	constructor(selectChildName, childNames, children)
 	{
 		this.selectChildName = selectChildName;

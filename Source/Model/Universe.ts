@@ -1,6 +1,31 @@
 
 class Universe
 {
+	name: string;
+	version: string;
+	timerHelper: TimerHelper;
+	display: Display;
+	mediaLibrary: MediaLibrary;
+	world: World;
+
+	collisionHelper: CollisionHelper;
+	controlBuilder: ControlBuilder;
+	entityBuilder: EntityBuilder;
+	idHelper: IDHelper;
+	inputHelper: InputHelper;
+	platformHelper: PlatformHelper;
+	profileHelper: ProfileHelper;
+	randomizer: RandomizerSystem;
+	serializer: Serializer;
+	soundHelper: SoundHelper;
+	storageHelper: StorageHelper;
+	videoHelper: VideoHelper;
+
+	debuggingMode: boolean;
+	profile: Profile;
+	venueNext: any;
+	venueCurrent: any;
+
 	constructor(name, version, timerHelper, display, mediaLibrary, world)
 	{
 		this.name = name;
@@ -32,11 +57,7 @@ class Universe
 			timerHelper,
 			display,
 			mediaLibrary,
-			world,
-			// venues
-			[
-				// none
-			]
+			world
 		);
 
 		var debuggingMode =
@@ -61,7 +82,7 @@ class Universe
 		this.platformHelper.initialize(this);
 		this.storageHelper = new StorageHelper
 		(
-			this.name.replaceAll(" ", "_") + "_",
+			StringHelper.replaceAll(this.name, " ", "_") + "_",
 			this.serializer
 		);
 
@@ -73,7 +94,7 @@ class Universe
 		this.soundHelper = new SoundHelper(this.mediaLibrary.sounds);
 		this.videoHelper = new VideoHelper(this.mediaLibrary.videos);
 
-		var venueControlsTitle = new VenueControls
+		var venueControlsTitle: any = new VenueControls
 		(
 			this.controlBuilder.title
 			(
@@ -84,7 +105,7 @@ class Universe
 
 		venueControlsTitle = new VenueFader
 		(
-			venueControlsTitle, venueControlsTitle
+			venueControlsTitle, venueControlsTitle, null, null
 		);
 
 		this.venueNext = venueControlsTitle;

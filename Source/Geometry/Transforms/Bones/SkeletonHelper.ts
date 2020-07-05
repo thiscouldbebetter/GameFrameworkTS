@@ -1,5 +1,5 @@
 
-clas SkeletonHelper()
+class SkeletonHelper
 {
 	static biped(heightInPixels)
 	{
@@ -12,6 +12,8 @@ clas SkeletonHelper()
 		var heightOver9 = heightInPixels / 9;
 		var heightOver12 = heightInPixels / 12;
 		var heightOver18 = heightInPixels / 18;
+
+		var isVisibleTrue = true;
 
 		var legRight = new Bone
 		(
@@ -31,12 +33,15 @@ clas SkeletonHelper()
 							heightOver4,
 							new Orientation(new Coords(0, 0, 1), new Coords(1, 0, 0)),
 							[
-								new Bone("Foot.R", heightOver8, new Orientation(new Coords(0, 1, 0), new Coords(1, 0, 0)), [])
-							]
+								new Bone("Foot.R", heightOver8, new Orientation(new Coords(0, 1, 0), new Coords(1, 0, 0)), [], isVisibleTrue)
+							],
+							isVisibleTrue
 						),
-					]
+					],
+					isVisibleTrue
 				)
-			]
+			],
+			isVisibleTrue
 		);
 
 		var legLeft = new Bone
@@ -57,12 +62,15 @@ clas SkeletonHelper()
 							heightOver4,
 							new Orientation(new Coords(0, 0, 1), new Coords(1, 0, 0)),
 							[
-								new Bone("Foot.L", heightOver8, new Orientation(new Coords(0, 1, 0), new Coords(1, 0, 0)), [])
-							]
+								new Bone("Foot.L", heightOver8, new Orientation(new Coords(0, 1, 0), new Coords(1, 0, 0)), [], isVisibleTrue)
+							],
+							isVisibleTrue
 						),
-					]
+					],
+					isVisibleTrue
 				)
-			]
+			],
+			isVisibleTrue
 		);
 
 		var upperEntity = new Bone
@@ -88,11 +96,14 @@ clas SkeletonHelper()
 									"Head.Front",
 									heightOver9,
 									new Orientation(new Coords(0, 1, 0), new Coords(0, 0, 1)),
-									[]
+									[],
+									isVisibleTrue
 								),
-							]
+							],
+							isVisibleTrue
 						)
-					]
+					],
+					isVisibleTrue
 				),
 				new Bone
 				(
@@ -106,10 +117,12 @@ clas SkeletonHelper()
 							heightOver6,
 							new Orientation(new Coords(0, -.1, 1), new Coords(-1, 0, 0)),
 							[
-								new Bone("Forearm.L", heightOver6, new Orientation(new Coords(0, .1, 1), new Coords(-1, 0, 0)), [])
-							]
+								new Bone("Forearm.L", heightOver6, new Orientation(new Coords(0, .1, 1), new Coords(-1, 0, 0)), [], isVisibleTrue)
+							],
+							isVisibleTrue
 						)
-					]
+					],
+					isVisibleTrue
 				),
 				new Bone
 				(
@@ -123,12 +136,15 @@ clas SkeletonHelper()
 							heightOver6,
 							new Orientation(new Coords(0, -.1, 1), new Coords(-1, 0, 0)),
 							[
-								new Bone("Forearm.R", heightOver6, new Orientation(new Coords(0, .1, 1), new Coords(-1, 0, 0)), [])
-							]
+								new Bone("Forearm.R", heightOver6, new Orientation(new Coords(0, .1, 1), new Coords(-1, 0, 0)), [], isVisibleTrue)
+							],
+							isVisibleTrue
 						)
-					]
+					],
+					isVisibleTrue
 				)
-			]
+			],
+			isVisibleTrue
 		); // end spine
 
 		var skeletonBiped = new Skeleton
@@ -144,7 +160,6 @@ clas SkeletonHelper()
 					legLeft,
 					upperEntity,
 				],
-
 				false // isVisible - hide the root bone
 			)
 		);
@@ -417,7 +432,7 @@ clas SkeletonHelper()
 			boneInfluence.vertexIndicesControlled.push(v);
 		}
 
-		var returnValue = new TransformMeshPoseWithSkeleton
+		var returnValue = new Transform_MeshPoseWithSkeleton
 		(
 			meshAtRest,
 			skeletonAtRest,

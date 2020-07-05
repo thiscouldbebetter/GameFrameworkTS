@@ -1,6 +1,17 @@
 
 class ControlLabel
 {
+	name: string;
+	pos: Coords;
+	size: Coords;
+	isTextCentered: boolean;
+	_text: any;
+	fontHeightInPixels: number;
+
+	styleName: string;
+
+	_drawPos: Coords;
+
 	constructor(name, pos, size, isTextCentered, text, fontHeightInPixels)
 	{
 		this.name = name;
@@ -12,7 +23,7 @@ class ControlLabel
 
 		// Helper variables.
 
-		this._drawPos = new Coords();
+		this._drawPos = new Coords(0, 0, 0);
 	}
 
 	static fromPosAndText(pos, text)
@@ -30,7 +41,7 @@ class ControlLabel
 
 	style(universe)
 	{
-		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
+		return universe.controlBuilder.stylesByName[this.styleName == null ? "Default" : this.styleName];
 	};
 
 	text()

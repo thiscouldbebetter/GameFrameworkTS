@@ -1,10 +1,15 @@
 
 class VenueInputCapture
 {
+	venueToReturnTo: any;
+	functionToPassInputCapturedTo: any;
+
+	isFirstTime: boolean;
+
 	constructor(venueToReturnTo, functionToPassInputCapturedTo)
 	{
 		this.venueToReturnTo = venueToReturnTo;
-		this.functionToPassInputCapturedToToPassInputCapturedTo;
+		this.functionToPassInputCapturedTo = functionToPassInputCapturedTo;
 
 		this.isFirstTime = true;
 	}

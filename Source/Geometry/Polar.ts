@@ -1,6 +1,10 @@
 
 class Polar
 {
+	azimuthInTurns: number;
+	radius: number;
+	elevationInTurns: number;
+
 	constructor(azimuthInTurns, radius, elevationInTurns)
 	{
 		this.azimuthInTurns = azimuthInTurns;

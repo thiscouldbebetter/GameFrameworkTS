@@ -1,6 +1,14 @@
 
 class Mesh
 {
+	center: Coords;
+	vertexOffsets: Coords[];
+	faceBuilders: Mesh_FaceBuilder[];
+
+	_box: Box;
+	_faces: Face[];
+	_vertices: Coords[];
+
 	constructor(center, vertexOffsets, faceBuilders)
 	{
 		this.center = center;
@@ -96,11 +104,9 @@ class Mesh
 
 				if (z == 0)
 				{
-					var vertexIndexNext =
+					var vertexIndexNext = NumberHelper.wrapToRangeMinMax
 					(
-						vertexIndex + 1
-					).wrapToRangeMinMax
-					(
+						vertexIndex + 1,
 						0, numberOfFaceVertices
 					);
 
@@ -117,7 +123,7 @@ class Mesh
 				}
 				else
 				{
-					vertexIndicesTopOrBottom.insertElementAt(vertexIndex, 0);
+					vertexIndicesTopOrBottom.splice(0, 0, vertexIndex);
 				}
 
 				var vertex = faceVertices[v].clone().add
@@ -151,7 +157,7 @@ class Mesh
 	{
 		if (this._box == null)
 		{
-			this._box = new Box(new Coords(), new Coords());
+			this._box = new Box(new Coords(0, 0, 0), new Coords(0, 0, 0));
 		}
 		this._box.ofPoints(this.vertices());
 		return this._box;
@@ -183,7 +189,7 @@ class Mesh
 			this._vertices = [];
 			for (var v = 0; v < this.vertexOffsets.length; v++)
 			{
-				this._vertices.push(new Coords());
+				this._vertices.push(new Coords(0, 0, 0));
 			}
 		}
 
@@ -219,16 +225,16 @@ class Mesh
 		return new Mesh
 		(
 			this.center.clone(),
-			this.vertexOffsets.clone(),
-			this.faceBuilders.clone()
+			ArrayHelper.clone(this.vertexOffsets),
+			ArrayHelper.clone(this.faceBuilders)
 		);
 	};
 
 	overwriteWith(other)
 	{
 		this.center.overwriteWith(other.center);
-		this.vertexOffsets.overwriteWith(other.vertexOffsets);
-		this.faceBuilders.overwriteWith(other.faceBuilders);
+		ArrayHelper.overwriteWith(this.vertexOffsets, other.vertexOffsets);
+		ArrayHelper.overwriteWith(this.faceBuilders, other.faceBuilders);
 	};
 
 	// transformable
@@ -241,6 +247,8 @@ class Mesh
 
 class Mesh_FaceBuilder
 {
+	vertexIndices: number[];
+
 	constructor(vertexIndices)
 	{
 		this.vertexIndices = vertexIndices;
@@ -278,6 +286,6 @@ class Mesh_FaceBuilder
 
 	overwriteWith(other)
 	{
-		this.vertexIndices.overwriteWith(other.vertexIndices);
+		ArrayHelper.overwriteWith(this.vertexIndices, other.vertexIndices);
 	};
 }

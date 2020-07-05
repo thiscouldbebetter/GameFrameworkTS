@@ -1,6 +1,14 @@
 
 class Bone
 {
+	name: string;
+	length: number;
+	orientation: Orientation;
+	children: Bone[];
+	isVisible: boolean;
+
+	parentName: string;
+
 	constructor(name, length, orientation, children, isVisible)
 	{
 		this.name = name;
@@ -52,7 +60,7 @@ class Bone
 			this.name,
 			this.length,
 			orientationCloned,
-			this.children.clone(),
+			ArrayHelper.clone(this.children),
 			this.isVisible
 		);
 
@@ -61,8 +69,8 @@ class Bone
 
 	overwriteWith(other)
 	{
-		this.orientation.overwriteWith(other.orientation);
-		this.children.overwriteWith(other.children);
+		ArrayHelper.overwriteWith(this.orientation, other.orientation);
+		ArrayHelper.overwriteWith(this.children, other.children);
 	};
 
 	// transformable

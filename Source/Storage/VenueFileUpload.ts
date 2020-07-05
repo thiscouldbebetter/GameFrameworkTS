@@ -1,18 +1,31 @@
 
 class VenueFileUpload
 {
+	venueNextIfFileSpecified: any;
+	venueNextIfCancelled: any;
+	actionToInputsMappings: any;
+	actionToInputsMappingsByInputName: any;
+
+	domElement: any;
+
 	constructor(venueNextIfFileSpecified, venueNextIfCancelled)
 	{
 		this.venueNextIfFileSpecified = venueNextIfFileSpecified;
 		this.venueNextIfCancelled = venueNextIfCancelled;
 
 		var inputNames = Input.Names();
+		var controlActionNames = ControlActionNames.Instances();
+
 		this.actionToInputsMappings =
 		[
-			new ActionToInputsMapping(ControlActionNames.ControlCancel, [ inputNames.Escape, inputNames.GamepadButton0 + "0"], true),
+			new ActionToInputsMapping(controlActionNames.ControlCancel, [ inputNames.Escape, inputNames.GamepadButton0 + "0"], true),
 		];
 
-		this.actionToInputsMappings.addLookupsMultiple(x => x.inputNames);
+		this.actionToInputsMappingsByInputName = ArrayHelper.addLookupsMultiple
+		(
+			this.actionToInputsMappings,
+			x => x.inputNames
+		);
 	}
 
 	// venue
@@ -33,9 +46,13 @@ class VenueFileUpload
 		universe.platformHelper.platformableHide(display);
 
 		var divFileUpload = document.createElement("div");
+
+		/*
+		// todo - Style is read-only?
 		divFileUpload.style =
 			"border:1px solid;width:" + display.sizeInPixels.x
 			+ ";height:" + display.sizeInPixels.y;
+		*/
 
 		var labelInstructions = document.createElement("label");
 		labelInstructions.innerHTML =

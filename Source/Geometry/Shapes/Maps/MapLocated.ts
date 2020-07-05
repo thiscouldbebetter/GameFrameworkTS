@@ -1,6 +1,11 @@
 
 class MapLocated
 {
+	map: MapOfCells;
+	loc: Disposition;
+
+	box: Box;
+
 	constructor(map, loc)
 	{
 		this.map = map;

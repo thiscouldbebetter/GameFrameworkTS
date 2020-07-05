@@ -1,6 +1,11 @@
 
 class Arc
 {
+	shell: Shell;
+	wedge: Wedge;
+
+	_collider: ShapeGroupAll;
+
 	constructor(shell, wedge)
 	{
 		this.shell = shell;

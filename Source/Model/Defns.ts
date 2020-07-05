@@ -1,18 +1,22 @@
 
 class Defns
 {
+	defnArraysByTypeName: any;
+	defnsByNameByTypeName: any;
+
 	constructor(defnArrays)
 	{
+		this.defnArraysByTypeName = {};
+		this.defnsByNameByTypeName = {};
+
 		for (var i = 0; i < defnArrays.length; i++)
 		{
-			var defns = defnArrays[i];
-			defns.addLookupsByName();
-
-			var itemFirst = defns[0];
+			var defnsOfType = defnArrays[i];
+			var defnsByName = ArrayHelper.addLookupsByName(defnsOfType);
+			var itemFirst = defnsOfType[0];
 			var itemTypeName = itemFirst.constructor.name;
-			itemTypeName = itemTypeName.lowercaseFirstCharacter();
-			var collectionName = itemTypeName + "s";
-			this[collectionName] = defns;
+			this.defnArraysByTypeName[itemTypeName] = defnsOfType;
+			this.defnsByNameByTypeName[itemTypeName] = defnsByName;
 		}
 	}
 }

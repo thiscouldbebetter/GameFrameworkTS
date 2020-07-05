@@ -1,6 +1,19 @@
 
 class ConversationRun
 {
+	defn: any;
+	quit: any;
+	entityPlayer: Entity;
+	entityTalker: Entity;
+ 
+	scopeCurrent: ConversationScope;
+	talkNodesForTranscript: any;
+	variableLookup: any;
+
+	p: Entity;
+	t: Entity;
+	vars: any;
+
 	constructor(defn, quit, entityPlayer, entityTalker)
 	{
 		this.defn = defn;
@@ -22,7 +35,7 @@ class ConversationRun
 
 		this.variableLookup = {};
 
-		this.next();
+		this.next(null);
 
 		// Abbreviate for scripts.
 		this.p = this.entityPlayer;
@@ -64,13 +77,14 @@ class ConversationRun
 		var marginWidth = 15;
 		var labelHeight = fontHeight;
 		var buttonHeight = 20;
-		var marginSize = new Coords(1, 1).multiplyScalar(marginWidth);
-		var buttonSize = new Coords(2, 1).multiplyScalar(buttonHeight);
-		var portraitSize = new Coords(4, 4).multiplyScalar(buttonHeight);
+		var marginSize = new Coords(1, 1, 0).multiplyScalar(marginWidth);
+		var buttonSize = new Coords(2, 1, 0).multiplyScalar(buttonHeight);
+		var portraitSize = new Coords(4, 4, 0).multiplyScalar(buttonHeight);
 		var listSize = new Coords
 		(
 			size.x - marginSize.x * 3 - buttonSize.x,
-			size.y - portraitSize.y - marginSize.y * 4
+			size.y - portraitSize.y - marginSize.y * 4,
+			0
 		);
 
 		var next = function()
@@ -81,7 +95,7 @@ class ConversationRun
 		var back = function()
 		{
 			var venueNext = venueToReturnTo;
-			venueNext = new VenueFader(venueNext, universe.venueCurrent);
+			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 			universe.venueNext = venueNext;
 		};
 
@@ -92,15 +106,15 @@ class ConversationRun
 			(
 				size, universe, venueCurrent
 			);
-			var venueNext = new VenueControls(transcriptAsControl);
-			venueNext = new VenueFader(venueNext, universe.venueCurrent);
+			var venueNext: any = new VenueControls(transcriptAsControl);
+			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 			universe.venueNext = venueNext;
 		};
 
 		var returnValue = new ControlContainer
 		(
 			"containerConversation",
-			new Coords(0, 0), // pos
+			new Coords(0, 0, 0), // pos
 			size,
 			// children
 			[
@@ -119,14 +133,16 @@ class ConversationRun
 					new Coords
 					(
 						marginSize.x * 2 + portraitSize.x,
-						marginSize.y + portraitSize.y / 2 - labelHeight / 2
+						marginSize.y + portraitSize.y / 2 - labelHeight / 2,
+						0
 					), // pos
 					size, // size
 					false, // isTextCentered
 					new DataBinding
 					(
 						conversationRun,
-						function get(c) { return c.scopeCurrent.displayTextCurrent; }
+						function get(c) { return c.scopeCurrent.displayTextCurrent; },
+						null
 					),
 					fontHeight
 				),
@@ -137,7 +153,8 @@ class ConversationRun
 					new Coords
 					(
 						marginSize.x,
-						marginSize.y * 2 + portraitSize.y - fontHeight / 2
+						marginSize.y * 2 + portraitSize.y - fontHeight / 2,
+						0
 					),
 					size, // size
 					false, // isTextCentered
@@ -151,20 +168,23 @@ class ConversationRun
 					new Coords
 					(
 						marginSize.x,
-						marginSize.y * 3 + portraitSize.y
+						marginSize.y * 3 + portraitSize.y,
+						0
 					),
 					listSize,
 					// items
 					new DataBinding
 					(
 						conversationRun,
-						function get(c) { return c.scopeCurrent.talkNodesForOptionsActive(); }
+						function get(c) { return c.scopeCurrent.talkNodesForOptionsActive(); },
+						null
 					),
 					// bindingForItemText
 					new DataBinding
 					(
 						null, // context
-						function get(c) { return c.text; }
+						function get(c) { return c.text; },
+						null
 					),
 					fontHeightShort,
 					new DataBinding
@@ -173,12 +193,13 @@ class ConversationRun
 						function get(c) { return c.scopeCurrent.talkNodeForOptionSelected; },
 						function set(c, v) { c.scopeCurrent.talkNodeForOptionSelected = v; }
 					), // bindingForItemSelected
-					new DataBinding(), // bindingForItemValue
-					true, // isEnabled
+					new DataBinding(null, null, null), // bindingForItemValue
+					new DataBinding(true, null, null), // isEnabled
 					function confirm(context, universe)
 					{
 						next();
-					}
+					},
+					null
 				),
 
 				new ControlButton
@@ -187,14 +208,16 @@ class ConversationRun
 					new Coords
 					(
 						size.x - marginSize.x - buttonSize.x,
-						size.y - marginSize.y * 2 - buttonSize.y * 2
+						size.y - marginSize.y * 2 - buttonSize.y * 2,
+						0
 					),
 					buttonSize.clone(),
 					"Log",
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					viewLog
+					viewLog, // click
+					null, null
 				),
 
 				new ControlButton
@@ -203,14 +226,16 @@ class ConversationRun
 					new Coords
 					(
 						size.x - marginSize.x - buttonSize.x,
-						size.y - marginSize.y - buttonSize.y
+						size.y - marginSize.y - buttonSize.y,
+						0
 					),
 					buttonSize.clone(),
 					"Done",
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					back
+					back, // click
+					null, null
 				),
 
 			], // children
@@ -242,17 +267,18 @@ class ConversationRun
 		var marginWidth = 25;
 		var labelHeight = fontHeight;
 		var buttonHeight = 25;
-		var marginSize = new Coords(1, 1).multiplyScalar(marginWidth);
+		var marginSize = new Coords(1, 1, 0).multiplyScalar(marginWidth);
 		var listSize = new Coords
 		(
 			size.x * .75,
-			size.y - labelHeight - marginSize.y * 3
+			size.y - labelHeight - marginSize.y * 3,
+			0
 		);
 
 		var returnValue = new ControlContainer
 		(
 			"containerConversation",
-			new Coords(0, 0), // pos
+			new Coords(0, 0, 0), // pos
 			size,
 			// children
 			[
@@ -260,18 +286,18 @@ class ConversationRun
 				(
 					"buttonBack",
 					marginSize, // pos
-					new Coords(1, 1).multiplyScalar(buttonHeight), // size
+					new Coords(1, 1, 0).multiplyScalar(buttonHeight), // size
 					"<",
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click(universe)
+					(universe) => // click
 					{
 						var venueNext = venueToReturnTo;
-						venueNext = new VenueFader(venueNext, universe.venueCurrent);
+						venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 						universe.venueNext = venueNext;
 					},
-					universe // context
+					null, null
 				),
 
 				new ControlLabel
@@ -279,8 +305,7 @@ class ConversationRun
 					"labelTranscript",
 					new Coords
 					(
-						size.x / 2,
-						marginSize.y
+						size.x / 2, marginSize.y, 0
 					), // pos
 					size, // size
 					true, // isTextCentered
@@ -294,23 +319,28 @@ class ConversationRun
 					new Coords
 					(
 						(size.x - listSize.x) / 2,
-						marginSize.y * 2 + labelHeight
+						marginSize.y * 2 + labelHeight,
+						0
 					),
 					listSize,
 					// items
 					new DataBinding
 					(
 						conversationRun,
-						function get(c) { return c.talkNodesForTranscript; }
+						function get(c) { return c.talkNodesForTranscript; },
+						null
 					),
 					new DataBinding
 					(
 						null,
-						function get(c) { return c.textForTranscript(conversationDefn); }
+						function get(c) { return c.textForTranscript(conversationDefn); },
+						null
 					), // bindingForItemText
-					fontHeightShort
+					fontHeightShort,
+					null, null, null, null, null
 				),
-			]
+			],
+			null, null
 		);
 
 		return returnValue;

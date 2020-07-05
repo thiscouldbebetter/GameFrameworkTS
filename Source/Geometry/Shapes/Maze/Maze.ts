@@ -1,6 +1,14 @@
 
 class Maze
 {
+	cellSizeInPixels: Coords;
+	sizeInCells: Coords;
+	neighborOffsets: Coords[];
+
+	sizeInCellsMinusOnes: Coords;
+	sizeInPixels: Coords;
+	cells: MazeCell[];
+
 	constructor(cellSizeInPixels, sizeInCells, neighborOffsets)
 	{
 		this.cellSizeInPixels = cellSizeInPixels;
@@ -29,7 +37,7 @@ class Maze
 
 	// static methods
 
-	static generateRandom(randomizer)
+	generateRandom(randomizer)
 	{
 		var cells = this.cells;
 		var sizeInCells = this.sizeInCells;

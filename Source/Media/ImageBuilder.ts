@@ -1,6 +1,8 @@
 
 class ImageBuilder
 {
+	colors: Color[];
+
 	constructor(colors)
 	{
 		this.colors = colors;
@@ -34,8 +36,7 @@ class ImageBuilder
 	{
 		var sizeInPixels = new Coords
 		(
-			stringsForPixels[0].length,
-			stringsForPixels.length
+			stringsForPixels[0].length, stringsForPixels.length, 0
 		);
 
 		var canvas = document.createElement("canvas");
@@ -44,7 +45,7 @@ class ImageBuilder
 
 		var graphics = canvas.getContext("2d");
 
-		var pixelPos = new Coords(0, 0);
+		var pixelPos = new Coords(0, 0, 0);
 		var colorForPixel;
 		var colors = this.colors;
 
@@ -77,7 +78,7 @@ class ImageBuilder
 		htmlImageFromCanvas.height = canvas.height;
 		htmlImageFromCanvas.src = imageFromCanvasURL;
 
-		var returnValue = Image.fromSystemImage
+		var returnValue = Image2.fromSystemImage
 		(
 			name,
 			htmlImageFromCanvas
@@ -113,7 +114,7 @@ class ImageBuilder
 		htmlImageFromCanvas.style.position = "absolute";
 		htmlImageFromCanvas.src = imageFromCanvasURL;
 
-		var returnValue = Image.fromSystemImage
+		var returnValue = Image2.fromSystemImage
 		(
 			imageToCopyFrom.name,
 			htmlImageFromCanvas
@@ -132,8 +133,8 @@ class ImageBuilder
 		var imageToSliceSize = imageToSlice.sizeInPixels;
 		var tileSize = imageToSliceSize.clone().divide(sizeInTiles);
 
-		var tilePos = new Coords(0, 0);
-		var sourcePos = new Coords(0, 0);
+		var tilePos = new Coords(0, 0, 0);
+		var sourcePos = new Coords(0, 0, 0);
 
 		for (var y = 0; y < sizeInTiles.y; y++)
 		{
@@ -173,7 +174,7 @@ class ImageBuilder
 				htmlImageFromCanvas.style.position = "absolute";
 				htmlImageFromCanvas.src = imageFromCanvasURL;
 
-				imageFromCanvas = Image.fromSystemImage
+				var imageFromCanvas = Image2.fromSystemImage
 				(
 					imageToSlice.name + tilePos.toString(),
 					htmlImageFromCanvas

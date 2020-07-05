@@ -1,6 +1,10 @@
 
 class TimerHelper
 {
+	ticksPerSecond: number;
+	millisecondsPerTick: number;
+	timer: any;
+
 	constructor(ticksPerSecond)
 	{
 		this.ticksPerSecond = ticksPerSecond;

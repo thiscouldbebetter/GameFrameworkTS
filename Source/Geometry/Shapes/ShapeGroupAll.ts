@@ -1,6 +1,8 @@
 
 class ShapeGroupAll
 {
+	shapes: any[];
+
 	constructor(shapes)
 	{
 		this.shapes = shapes;
@@ -8,12 +10,12 @@ class ShapeGroupAll
 
 	clone()
 	{
-		return new ShapeGroupAll(this.shapes.clone());
+		return new ShapeGroupAll(ArrayHelper.clone(this.shapes));
 	};
 
 	overwriteWith(other)
 	{
-		this.shapes.overwriteWith(other.shapes);
+		ArrayHelper.overwriteWith(this.shapes, other.shapes);
 		return this;
 	};
 }

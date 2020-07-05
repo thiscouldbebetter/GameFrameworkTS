@@ -1,6 +1,18 @@
 
 class ConversationScope
 {
+	parent: ConversationScope;
+	talkNodeCurrent: TalkNode;
+	talkNodesForOptions: any;
+
+	displayTextCurrent: string;
+	haveOptionsBeenUpdated: boolean;
+	isPromptingForResponse: boolean;
+	talkNodeForOptionSelected: TalkNode;
+
+	_talkNodesForOptionsActive: any;
+	_emptyArray: any;
+
 	constructor(parent, talkNodeCurrent, talkNodesForOptions)
 	{
 		this.parent = parent;

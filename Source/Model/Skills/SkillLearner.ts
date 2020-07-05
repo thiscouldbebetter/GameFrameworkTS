@@ -1,6 +1,12 @@
 
 class SkillLearner
 {
+	skillBeingLearnedName: string;
+	learningAccumulated: number;
+	skillsKnownNames: string[];
+
+	skillSelectedName: string;
+
 	constructor(skillBeingLearnedName, learningAccumulated, skillsKnownNames)
 	{
 		this.skillBeingLearnedName = skillBeingLearnedName;
@@ -103,7 +109,7 @@ class SkillLearner
 			var skillName = skill.name;
 
 			var isAlreadyKnown =
-				this.skillsKnownNames.contains(skillName);
+				this.skillsKnownNames.some(x => x == skillName);
 
 			if (isAlreadyKnown == false)
 			{
@@ -125,7 +131,7 @@ class SkillLearner
 				var prerequisite = prerequisites[p];
 				var isPrerequisiteKnown =
 				(
-					this.skillsKnownNames.contains(prerequisite)
+					this.skillsKnownNames.some(x => x == prerequisite)
 				);
 
 				if (isPrerequisiteKnown == false)
@@ -185,34 +191,35 @@ class SkillLearner
 		var margin = 20;
 		var labelHeightLarge = labelHeight * 2;
 		var buttonHeight = labelHeight;
-		var buttonSize = new Coords(2, 1).multiplyScalar(margin);
+		var buttonSize = new Coords(2, 1, 0).multiplyScalar(margin);
 
 		var listSize = new Coords(
 			(size.x - margin * 3) / 2,
-			150
+			150,
+			0
 		); // size
 
-		var skillsAll = universe.world.defns.skills;
+		var skillsAll = universe.world.defns.defnArraysByTypeName[Skill.name];
 
 		var back = function()
 		{
 			var venueNext = venueToReturnTo;
-			venueNext = new VenueFader(venueNext, universe.venueCurrent);
+			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 			universe.venueNext = venueNext;
 		};
 
 		var returnValue = new ControlContainer
 		(
 			"Skills", // name,
-			new Coords(0, 0), // pos,
+			new Coords(0, 0, 0), // pos,
 			size.clone(),
 			// children
 			[
 				new ControlLabel
 				(
 					"labelSkillsKnown", // name,
-					new Coords(margin, 40), // pos,
-					new Coords(size.x - margin * 2, labelHeight), // size,
+					new Coords(margin, 40, 0), // pos,
+					new Coords(size.x - margin * 2, labelHeight, 0), // size,
 					false, // isTextCentered,
 					"Skills Known:", //text
 					labelHeight // fontHeightInPixels
@@ -221,31 +228,32 @@ class SkillLearner
 				new ControlList
 				(
 					"listSkillsKnown",
-					new Coords(margin, 60), // pos
+					new Coords(margin, 60, 0), // pos
 					listSize,
 					// items
 					new DataBinding
 					(
-						this.skillsKnownNames
+						this.skillsKnownNames, null, null
 					),
-					new DataBinding(), // bindingForItemText
-					labelHeight // fontHeightInPixels
+					new DataBinding(null, null, null), // bindingForItemText
+					labelHeight, // fontHeightInPixels
+					null, null, null, null, null
 				),
 
 				new ControlLabel
 				(
 					"labelSkillsAvailable", // name,
-					new Coords(size.x - margin - listSize.x, 40), // pos,
-					new Coords(size.x - margin * 2, labelHeight), // size,
+					new Coords(size.x - margin - listSize.x, 40, 0), // pos,
+					new Coords(size.x - margin * 2, labelHeight, 0), // size,
 					false, // isTextCentered,
-					new DataBinding("Skills Available:"), // text
+					new DataBinding("Skills Available:", null, null), // text
 					labelHeight // fontHeightInPixels
 				),
 
 				new ControlList
 				(
 					"listSkillsAvailable", // name,
-					new Coords(size.x - margin - listSize.x, 60), // pos,
+					new Coords(size.x - margin - listSize.x, 60, 0), // pos,
 					listSize,
 					// items,
 					new DataBinding
@@ -254,11 +262,12 @@ class SkillLearner
 						function get(c)
 						{
 							return c.skillsAvailableToLearn(skillsAll);
-						}
+						},
+						null
 					),
 					new DataBinding
 					(
-						null, function get(c) { return c.name; }
+						null, function get(c) { return c.name; }, null
 					), // bindingForItemText
 					labelHeight, // fontHeightInPixels
 					new DataBinding
@@ -273,45 +282,49 @@ class SkillLearner
 					), // bindingForItemSelected
 					new DataBinding
 					(
-						null, function get(c) { return c.name; }
-					) // bindingForItemValue
+						null, function get(c) { return c.name; }, null
+					), // bindingForItemValue
+					null, null, null
 				),
 
 				new ControlLabel
 				(
 					"labelSkillSelected", // name,
-					new Coords(margin, 220), // pos,
-					new Coords(size.x - margin * 2, labelHeight), // size,
+					new Coords(margin, 220, 0), // pos,
+					new Coords(size.x - margin * 2, labelHeight, 0), // size,
 					false, // isTextCentered,
-					"Selected:" // text
+					"Selected:", // text
+					null
 				),
 
 				new ControlLabel
 				(
 					"labelSkillSelected", // name,
-					new Coords(80, 220), // pos,
-					new Coords(size.x - margin * 2, labelHeight), // size,
+					new Coords(80, 220, 0), // pos,
+					new Coords(size.x - margin * 2, labelHeight, 0), // size,
 					false, // isTextCentered,
 					new DataBinding
 					(
-						this, (c) => (c.skillSelectedName || "-")
-					)
+						this, (c) => (c.skillSelectedName || "-"), null
+					),
+					null
 				),
 
 				new ControlLabel
 				(
 					"labelSkillBeingLearned", // name,
-					new Coords(margin, size.y - margin - labelHeight * 2), // pos,
-					new Coords(size.x - margin * 2, labelHeight), // size,
+					new Coords(margin, size.y - margin - labelHeight * 2, 0), // pos,
+					new Coords(size.x - margin * 2, labelHeight, 0), // size,
 					false, // isTextCentered,
-					"Skill Being Learned:" // text
+					"Skill Being Learned:", // text
+					null
 				),
 
 				new ControlLabel
 				(
 					"textSkillBeingLearned", // name,
-					new Coords(155, size.y - margin - labelHeight * 2), // pos,
-					new Coords(size.x - margin * 2, labelHeight), // size,
+					new Coords(155, size.y - margin - labelHeight * 2, 0), // pos,
+					new Coords(size.x - margin * 2, labelHeight, 0), // size,
 					false, // isTextCentered,
 					new DataBinding
 					(
@@ -319,24 +332,27 @@ class SkillLearner
 						function get(c)
 						{
 							return (c.skillBeingLearnedName || "-");
-						}
-					)
+						},
+						null
+					),
+					null
 				),
 
 				new ControlLabel
 				(
 					"labelLearningAccumulated", // name,
-					new Coords(margin, size.y - margin - labelHeight), // pos,
-					new Coords(size.x - margin * 2, labelHeight), // size,
+					new Coords(margin, size.y - margin - labelHeight, 0), // pos,
+					new Coords(size.x - margin * 2, labelHeight, 0), // size,
 					false, // isTextCentered,
-					"Learning Accumulated:" // text
+					"Learning Accumulated:", // text
+					null
 				),
 
 				new ControlLabel
 				(
 					"textLearningAccumulated", // name,
-					new Coords(160, size.y - margin - labelHeight), // pos,
-					new Coords(30, labelHeight), // size,
+					new Coords(160, size.y - margin - labelHeight, 0), // pos,
+					new Coords(30, labelHeight, 0), // size,
 					false, // isTextCentered,
 					new DataBinding
 					(
@@ -344,31 +360,34 @@ class SkillLearner
 						function get(c)
 						{
 							return c.learningAccumulatedOverRequired(skillsAll);
-						}
-					) // text
+						},
+						null
+					), // text
+					null
 				),
-			]
+			],
+			null, null
 		);
 
 		if (includeTitle)
 		{
-			returnValue.children.insertElementAt
+			returnValue.children.splice
 			(
+				0, 0,
 				new ControlLabel
 				(
 					"labelSkills",
-					new Coords(200, 20), // pos
-					new Coords(120, 25), // size
+					new Coords(200, 20, 0), // pos
+					new Coords(120, 25, 0), // size
 					true, // isTextCentered
 					"Skills",
 					labelHeightLarge
-				),
-				0 // indexToInsertAt
+				)
 			);
 		}
 		else
 		{
-			var titleHeightInverted = new Coords(0, -30);
+			var titleHeightInverted = new Coords(0, -30, 0);
 			returnValue.size.add(titleHeightInverted);
 			returnValue.shiftChildPositions(titleHeightInverted);
 		}

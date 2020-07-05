@@ -1,6 +1,11 @@
 
 class MazeCell
 {
+	numberOfNeighbors: number;
+
+	connectedToNeighbors: boolean[];
+	network: MazeCellNetwork;
+
 	constructor(numberOfNeighbors)
 	{
 		this.connectedToNeighbors = [];

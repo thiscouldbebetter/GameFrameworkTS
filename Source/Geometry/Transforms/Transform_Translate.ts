@@ -1,6 +1,8 @@
 
 class Transform_Translate
 {
+	displacement: Coords;
+
 	constructor(displacement)
 	{
 		this.displacement = displacement;

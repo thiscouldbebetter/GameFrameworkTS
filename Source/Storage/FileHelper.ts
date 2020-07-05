@@ -4,31 +4,28 @@ class FileHelper
 	loadFileAsBinaryString(systemFileToLoad, callback, contextForCallback)
 	{
 		var fileReader = new FileReader();
-		fileReader.systemFile = systemFileToLoad;
-		fileReader.callback = callback;
-		fileReader.contextForCallback = contextForCallback;
-		fileReader.onload = this.loadFile_FileLoaded.bind(this);
+		fileReader.onload = (event) =>
+		{
+			this.loadFile_FileLoaded(event, callback, contextForCallback, systemFileToLoad.name);
+		}
 		fileReader.readAsBinaryString(systemFileToLoad);
 	};
 
 	loadFileAsText(systemFileToLoad, callback, contextForCallback)
 	{
 		var fileReader = new FileReader();
-		fileReader.systemFile = systemFileToLoad;
-		fileReader.callback = callback;
-		fileReader.contextForCallback = contextForCallback;
-		fileReader.onload = this.loadFile_FileLoaded.bind(this);
+		fileReader.onload = (event) =>
+		{
+			this.loadFile_FileLoaded(event, callback, contextForCallback, systemFileToLoad.name);
+		}
 		fileReader.readAsText(systemFileToLoad);
 	};
 
-	loadFile_FileLoaded(fileLoadedEvent)
+	loadFile_FileLoaded(fileLoadedEvent, callback, contextForCallback, fileName)
 	{
 		var fileReader = fileLoadedEvent.target;
 		var contentsOfFileLoaded = fileReader.result;
-		var fileName = fileReader.systemFile.name;
 
-		var callback = fileReader.callback;
-		var contextForCallback = fileReader.contextForCallback;
 		callback.call(contextForCallback, contentsOfFileLoaded);
 	};
 

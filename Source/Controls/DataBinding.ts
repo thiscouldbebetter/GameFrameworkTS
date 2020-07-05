@@ -1,6 +1,10 @@
 
 class DataBinding
 {
+	context: any;
+	_get: any;
+	_set: any;
+
 	constructor(context, get, set)
 	{
 		this.context = context;

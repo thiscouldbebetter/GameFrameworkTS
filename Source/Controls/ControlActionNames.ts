@@ -1,10 +1,14 @@
 
-class ControlActionNames
+class ControlActionNames_Instances
 {
-	// Do nothing.
-}
-{
-	function ControlActionNames_Instances()
+	ControlCancel: string;
+	ControlConfirm: string;
+	ControlDecrement: string;
+	ControlIncrement: string;
+	ControlNext: string;
+	ControlPrev: string;
+
+	constructor()
 	{
 		this.ControlCancel = "ControlCancel";
 		this.ControlConfirm = "ControlConfirm";
@@ -13,8 +17,13 @@ class ControlActionNames
 		this.ControlNext = "ControlNext";
 		this.ControlPrev = "ControlPrev";
 	}
+}
 
-	ControlActionNames.Instances = function()
+class ControlActionNames
+{
+	static _instances: ControlActionNames_Instances;
+
+	static Instances()
 	{
 		if (ControlActionNames._instances == null)
 		{

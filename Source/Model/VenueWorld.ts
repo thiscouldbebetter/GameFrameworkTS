@@ -1,6 +1,9 @@
 
 class VenueWorld
 {
+	name: string;
+	world: World;
+
 	constructor(world)
 	{
 		this.name = "World";

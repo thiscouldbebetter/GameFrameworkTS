@@ -1,6 +1,13 @@
 
 class Killable
 {
+	integrityMax: number;
+	_damageApply: any;
+	die: any;
+	itemDefnCorpse: ItemDefn;
+
+	integrity: number;
+
 	constructor(integrityMax, damageApply, die, itemDefnCorpse)
 	{
 		this.integrityMax = integrityMax;
@@ -16,7 +23,7 @@ class Killable
 		var damageApplied;
 		if (this._damageApply == null)
 		{
-			damageApplied = (damageToApply == null ? entityDamager.damager.damagePerHit : damageToApply);
+			damageApplied = (damageToApply == null ? entityDamager.damager().damagePerHit : damageToApply);
 			entityKillable.killable.integrityAdd(0 - damageApplied);
 		}
 		else
@@ -29,8 +36,9 @@ class Killable
 	integrityAdd(amountToAdd)
 	{
 		this.integrity += amountToAdd;
-		this.integrity = this.integrity.trimToRangeMax
+		this.integrity = NumberHelper.trimToRangeMax
 		(
+			this.integrity,
 			this.integrityMax
 		);
 	};

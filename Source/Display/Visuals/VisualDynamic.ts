@@ -1,6 +1,8 @@
 
 class VisualDynamic
 {
+	methodForVisual: any;
+
 	constructor(methodForVisual)
 	{
 		this.methodForVisual = methodForVisual;

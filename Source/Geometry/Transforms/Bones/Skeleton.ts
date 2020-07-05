@@ -1,6 +1,12 @@
 
 class Skeleton
 {
+	name: string;
+	boneRoot: Bone;
+
+	bonesAll: Bone[];
+	bonesAllByName: any;
+
 	constructor(name, boneRoot)
 	{
 		this.name = name;
@@ -11,7 +17,7 @@ class Skeleton
 		(
 			this.boneRoot, []
 		);
-		this.bonesAll.addLookupsByName();
+		this.bonesAllByName = ArrayHelper.addLookupsByName(this.bonesAll);
 	}
 
 	equals(other)

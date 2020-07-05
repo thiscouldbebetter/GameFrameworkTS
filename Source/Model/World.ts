@@ -5,6 +5,17 @@
 
 class World
 {
+	name: string;
+	dateCreated: DateTime;
+	defns: Defns;
+	places: Place[];
+	placesByName: any;
+
+	dateSaved: DateTime;
+	timerTicksSoFar: number;
+	placeCurrent: Place;
+	placeNext: Place;
+
 	constructor(name, dateCreated, defns, places)
 	{
 		this.name = name;
@@ -14,7 +25,8 @@ class World
 
 		this.defns = defns;
 
-		this.places = places.addLookupsByName();
+		this.places = places;
+		this.placesByName = ArrayHelper.addLookupsByName(this.places);
 		this.placeNext = this.places[0];
 	}
 
@@ -54,11 +66,11 @@ class World
 
 		var places = [];
 
-		var worldSizeInRooms = new Coords(2, 2);
-		var roomPos = new Coords();
+		var worldSizeInRooms = new Coords(2, 2, 1);
+		var roomPos = new Coords(0, 0, 0);
 		var roomSize = displaySize.clone().double();
-		var startPos = new Coords(0, 0);
-		var goalPos = new Coords().randomize().multiply(worldSizeInRooms).floor();
+		var startPos = new Coords(0, 0, 0);
+		var goalPos = new Coords(0, 0, 0).randomize(null).multiply(worldSizeInRooms).floor();
 
 		for (var y = 0; y < worldSizeInRooms.y; y++)
 		{
@@ -100,7 +112,7 @@ class World
 			places,
 			10, //entityDimension,
 			5, //numberOfKeysToUnlockGoal,
-			new Coords(20, 20) //marginSize
+			new Coords(20, 20, 0) // marginSize
 		);
 
 		var placeBattlefield0 = places[0];
@@ -110,7 +122,7 @@ class World
 			displaySize.clone(), // size
 			placeBattlefield0.name // placeNameToReturnTo
 		);
-		places.insertElementAt(placeBase, 0);
+		places.splice(0, 0, placeBase);
 
 		var placeBase = placeBuilder.buildTerrarium
 		(
@@ -184,13 +196,13 @@ class World
 			universe, world, place, entity, directionToMove
 		)
 		{
-			var entityLoc = entity.locatable.loc;
+			var entityLoc = entity.locatable().loc;
 			var isEntityStandingOnGround =
 				(entityLoc.pos.z >= 0 && entityLoc.vel.z >= 0);
 			if (isEntityStandingOnGround)
 			{
 				entityLoc.orientation.forwardSet(directionToMove);
-				entity.movable.accelerate(universe, world, place, entity);
+				entity.movable().accelerate(universe, world, place, entity);
 			}
 		};
 
@@ -198,12 +210,12 @@ class World
 
 		var useItemInSocketNumbered = function(universe, world, place, actor, socketNumber)
 		{
-			var equipmentUser = actor.equipmentUser;
+			var equipmentUser = actor.equipmentUser();
 			var socketName = "Item" + socketNumber;
 			var entityItemEquipped = equipmentUser.itemEntityInSocketWithName(socketName);
 			if (entityItemEquipped != null)
 			{
-				var itemEquipped = entityItemEquipped.item;
+				var itemEquipped = entityItemEquipped.item();
 				itemEquipped.use(universe, world, place, actor, entityItemEquipped);
 			}
 		};
@@ -262,13 +274,13 @@ class World
 				"Fire",
 				function perform(universe, world, place, actor)
 				{
-					var equipmentUser = actor.equipmentUser;
+					var equipmentUser = actor.equipmentUser();
 					var entityWeaponEquipped = equipmentUser.itemEntityInSocketWithName("Weapon");
 					var actorHasWeaponEquipped = (entityWeaponEquipped != null);
 
 					if (actorHasWeaponEquipped)
 					{
-						var deviceWeapon = entityWeaponEquipped.device;
+						var deviceWeapon = entityWeaponEquipped.device();
 						deviceWeapon.use(universe, world, place, actor, entityWeaponEquipped);
 					}
 				}
@@ -278,8 +290,8 @@ class World
 				"Hide",
 				function perform(universe, world, place, actor)
 				{
-					var learner = actor.skillLearner;
-					var knowsHowToHide = learner.skillsKnownNames.contains("Hiding");
+					var learner = actor.skillLearner();
+					var knowsHowToHide = learner.skillsKnownNames.indexOf("Hiding") >= 0;
 					//knowsHowToHide = true; // debug
 					if (knowsHowToHide)
 					{
@@ -301,11 +313,11 @@ class World
 				"Jump",
 				function perform(universe, world, place, actor)
 				{
-					var learner = actor.skillLearner;
-					var canJump = learner.skillsKnownNames.contains("Jumping");
+					var learner = actor.skillLearner();
+					var canJump = learner.skillsKnownNames.indexOf("Jumping") >= 0;
 					if (canJump)
 					{
-						var loc = actor.locatable.loc;
+						var loc = actor.locatable().loc;
 						var isNotAlreadyJumping = (loc.pos.z >= 0);
 						if (isNotAlreadyJumping)
 						{
@@ -322,12 +334,12 @@ class World
 				"Run",
 				function perform(universe, world, place, actor)
 				{
-					var learner = actor.skillLearner;
-					var knowsHowToRun = learner.skillsKnownNames.contains("Running");
+					var learner = actor.skillLearner();
+					var knowsHowToRun = learner.skillsKnownNames.indexOf("Running") >= 0;
 					// knowsHowToRun = true; // debug
 					if (knowsHowToRun)
 					{
-						var loc = actor.locatable.loc;
+						var loc = actor.locatable().loc;
 						var isOnGround = (loc.pos.z >= 0);
 						if (isOnGround)
 						{
@@ -362,31 +374,33 @@ class World
 	{
 		var inputNames = Input.Names();
 
+		var inactivateFalse = false;
+
 		var actionToInputsMappings =
 		[
-			new ActionToInputsMapping("ShowMenu", [ inputNames.Escape ]),
-			new ActionToInputsMapping("ShowItems", [ inputNames.Tab ]),
+			new ActionToInputsMapping("ShowMenu", [ inputNames.Escape ], inactivateFalse),
+			new ActionToInputsMapping("ShowItems", [ inputNames.Tab ], inactivateFalse),
 
-			new ActionToInputsMapping("MoveDown", 	[ inputNames.ArrowDown, inputNames.GamepadMoveDown + "0" ]),
-			new ActionToInputsMapping("MoveLeft", 	[ inputNames.ArrowLeft, inputNames.GamepadMoveLeft + "0" ]),
-			new ActionToInputsMapping("MoveRight", 	[ inputNames.ArrowRight, inputNames.GamepadMoveRight + "0" ]),
-			new ActionToInputsMapping("MoveUp", 	[ inputNames.ArrowUp, inputNames.GamepadMoveUp + "0" ]),
+			new ActionToInputsMapping("MoveDown", 	[ inputNames.ArrowDown, inputNames.GamepadMoveDown + "0" ], inactivateFalse),
+			new ActionToInputsMapping("MoveLeft", 	[ inputNames.ArrowLeft, inputNames.GamepadMoveLeft + "0" ], inactivateFalse),
+			new ActionToInputsMapping("MoveRight", 	[ inputNames.ArrowRight, inputNames.GamepadMoveRight + "0" ], inactivateFalse),
+			new ActionToInputsMapping("MoveUp", 	[ inputNames.ArrowUp, inputNames.GamepadMoveUp + "0" ], inactivateFalse),
 
-			new ActionToInputsMapping("Fire", 		[ inputNames.Enter, inputNames.GamepadButton0 + "0" ]),
-			new ActionToInputsMapping("Jump", 		[ inputNames.Space, inputNames.GamepadButton0 + "1" ]),
-			new ActionToInputsMapping("Run", 		[ inputNames.Shift, inputNames.GamepadButton0 + "2" ]),
-			new ActionToInputsMapping("Hide", 		[ "h", inputNames.GamepadButton0 + "3" ]),
+			new ActionToInputsMapping("Fire", 		[ inputNames.Enter, inputNames.GamepadButton0 + "0" ], inactivateFalse),
+			new ActionToInputsMapping("Jump", 		[ inputNames.Space, inputNames.GamepadButton0 + "1" ], inactivateFalse),
+			new ActionToInputsMapping("Run", 		[ inputNames.Shift, inputNames.GamepadButton0 + "2" ], inactivateFalse),
+			new ActionToInputsMapping("Hide", 		[ "h", inputNames.GamepadButton0 + "3" ], inactivateFalse),
 
-			new ActionToInputsMapping("Item0", 	[ "_0" ]),
-			new ActionToInputsMapping("Item1", 	[ "_1" ]),
-			new ActionToInputsMapping("Item2", 	[ "_2" ]),
-			new ActionToInputsMapping("Item3", 	[ "_3" ]),
-			new ActionToInputsMapping("Item4", 	[ "_4" ]),
-			new ActionToInputsMapping("Item5", 	[ "_5" ]),
-			new ActionToInputsMapping("Item6", 	[ "_6" ]),
-			new ActionToInputsMapping("Item7", 	[ "_7" ]),
-			new ActionToInputsMapping("Item8", 	[ "_8" ]),
-			new ActionToInputsMapping("Item9", 	[ "_9" ]),
+			new ActionToInputsMapping("Item0", 	[ "_0" ], inactivateFalse),
+			new ActionToInputsMapping("Item1", 	[ "_1" ], inactivateFalse),
+			new ActionToInputsMapping("Item2", 	[ "_2" ], inactivateFalse),
+			new ActionToInputsMapping("Item3", 	[ "_3" ], inactivateFalse),
+			new ActionToInputsMapping("Item4", 	[ "_4" ], inactivateFalse),
+			new ActionToInputsMapping("Item5", 	[ "_5" ], inactivateFalse),
+			new ActionToInputsMapping("Item6", 	[ "_6" ], inactivateFalse),
+			new ActionToInputsMapping("Item7", 	[ "_7" ], inactivateFalse),
+			new ActionToInputsMapping("Item8", 	[ "_8" ], inactivateFalse),
+			new ActionToInputsMapping("Item9", 	[ "_9" ], inactivateFalse),
 		];
 
 		return actionToInputsMappings;
@@ -396,7 +410,7 @@ class World
 	{
 		var itemUseEquip = function(universe, world, place, entityUser, entityItem, item)
 		{
-			var equipmentUser = entityUser.equipmentUser;
+			var equipmentUser = entityUser.equipmentUser();
 			var message = equipmentUser.equipEntityWithItem
 			(
 				universe, world, place, entityUser, entityItem, item
@@ -407,19 +421,19 @@ class World
 		var itemDefns =
 		[
 			// 			name, 				appr, desc, mass, 	val,stax, categoryNames, use
-			new ItemDefn("Ammo"),
+			new ItemDefn("Ammo", 			null, null, null, 	null, null, null, null),
 			new ItemDefn("Armor", 			null, null, 50, 	30, null, [ "Armor" ], itemUseEquip),
-			new ItemDefn("Coin", 			null, null, .01, 	1),
-			new ItemDefn("Crystal", 		null, null, .1, 	1),
+			new ItemDefn("Coin", 			null, null, .01, 	1, null, null, null),
+			new ItemDefn("Crystal", 		null, null, .1, 	1, null, null, null),
 			new ItemDefn("Enhanced Armor",	null, null, 60, 	60, null, [ "Armor" ], itemUseEquip),
-			new ItemDefn("Flower", 			null, null, .01, 	1),
+			new ItemDefn("Flower", 			null, null, .01, 	1, null, null, null),
 			new ItemDefn("Gun",				null, null, 5, 		100, null, [ "Weapon" ], itemUseEquip),
-			new ItemDefn("Key", 			null, null, .1, 	5),
-			new ItemDefn("Material", 		null, null, 10, 	3),
-			new ItemDefn("Mushroom", 		null, null, .01, 	1),
+			new ItemDefn("Key", 			null, null, .1, 	5, null, null, null),
+			new ItemDefn("Material", 		null, null, 10, 	3, null, null, null),
+			new ItemDefn("Mushroom", 		null, null, .01, 	1, null, null, null),
 			new ItemDefn("Speed Boots", 	null, null, 10, 	30, null, [ "Accessory" ], itemUseEquip),
 			new ItemDefn("Sword",			null, null, 10, 	100, null, [ "Weapon" ], itemUseEquip),
-			new ItemDefn("Toolset", 		null, null, 1, 		30),
+			new ItemDefn("Toolset", 		null, null, 1, 		30, null, null, null),
 
 			new ItemDefn
 			(
@@ -431,7 +445,7 @@ class World
 					var back = function()
 					{
 						var venueNext = venuePrev;
-						venueNext = new VenueFader(venueNext, universe.venueCurrent);
+						venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 						universe.venueNext = venueNext;
 					};
 
@@ -443,33 +457,40 @@ class World
 					var fontHeight = 10;
 					var textarea = new ControlTextarea
 					(
-						"textareaContents", size.clone().half().half(), size.clone().half(), text, fontHeight, false // isEnabled
+						"textareaContents",
+						size.clone().half().half(),
+						size.clone().half(),
+						text,
+						fontHeight,
+						new DataBinding(false, null, null) // isEnabled
 					);
 					var button = new ControlButton
 					(
 						"buttonDone",
-						new Coords(size.x / 4, 3 * size.y / 4 + fontHeight),
-						new Coords(size.x / 2, fontHeight * 2),
+						new Coords(size.x / 4, 3 * size.y / 4 + fontHeight, 1),
+						new Coords(size.x / 2, fontHeight * 2, 1),
 						"Done",
 						fontHeight,
 						true, // hasBorder
 						true, // isEnabled
-						back // click
+						back, // click
+						null, null
 					);
 					var container = new ControlContainer
 					(
 						"containerBook",
-						new Coords(0, 0),
+						new Coords(0, 0, 0),
 						size.clone(),
 						[ textarea, button ], // children
 						[
 							new Action( ControlActionNames.Instances().ControlCancel, back ),
 							new Action( ControlActionNames.Instances().ControlConfirm, back )
-						]
+						],
+						null
 					);
 
-					var venueNext = new VenueControls(container);
-					venueNext = new VenueFader(venueNext);
+					var venueNext: any = new VenueControls(container);
+					venueNext = new VenueFader(venueNext, null, null, null);
 					universe.venueNext = venueNext;
 				}
 			),
@@ -481,8 +502,8 @@ class World
 				function use(universe, world, place, entityUser, entityItem, item)
 				{
 					var integrityToRestore = 10;
-					entityUser.killable.integrityAdd(integrityToRestore);
-					entityUser.itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
+					entityUser.killable().integrityAdd(integrityToRestore);
+					entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
 					var message = "The medicine restores " + integrityToRestore + " points.";
 					return message;
 				}
@@ -496,8 +517,8 @@ class World
 				{
 					// Same as medicine, for now.
 					var integrityToRestore = 10;
-					entityUser.killable.integrityAdd(integrityToRestore);
-					entityUser.itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
+					entityUser.killable().integrityAdd(integrityToRestore);
+					entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
 					var message = "The potion restores " + integrityToRestore + " points.";
 					return message;
 				}

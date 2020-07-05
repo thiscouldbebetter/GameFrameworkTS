@@ -1,13 +1,35 @@
 
 class MediaLibrary
 {
+	images: Image2[];
+	sounds: Sound[];
+	videos: Video[];
+	fonts: Font[];
+	textStrings: TextString[];
+
+	imagesByName: any;
+	soundsByName: any;
+	videosByName: any;
+	fontsByName: any;
+	textStringsByName: any;
+
+	collectionsAll: any;
+	collectionsByName: any;
+
+	timer: any;
+
 	constructor(images, sounds, videos, fonts, textStrings)
 	{
-		this.images = images.addLookupsByName();
-		this.sounds = sounds.addLookupsByName();
-		this.videos = videos.addLookupsByName();
-		this.fonts = fonts.addLookupsByName();
-		this.textStrings = textStrings.addLookupsByName();
+		this.images = images;
+		this.imagesByName = ArrayHelper.addLookupsByName(this.images);
+		this.sounds = sounds;
+		this.soundsByName = ArrayHelper.addLookupsByName(this.sounds);
+		this.videos = videos;
+		this.videosByName = ArrayHelper.addLookupsByName(this.videos);
+		this.fonts = fonts;
+		this.fontsByName = ArrayHelper.addLookupsByName(this.fonts);
+		this.textStrings = textStrings;
+		this.textStringsByName = ArrayHelper.addLookupsByName(this.textStrings);
 
 		this.collectionsAll =
 		[
@@ -18,11 +40,12 @@ class MediaLibrary
 			this.textStrings
 		];
 
-		this.collectionsAll["Images"] = this.images;
-		this.collectionsAll["Sounds"] = this.sounds;
-		this.collectionsAll["Videos"] = this.videos;
-		this.collectionsAll["Fonts"] = this.fonts;
-		this.collectionsAll["TextStrings"] = this.textStrings;
+		this.collectionsByName = {};
+		this.collectionsByName["Images"] = this.images;
+		this.collectionsByName["Sounds"] = this.sounds;
+		this.collectionsByName["Videos"] = this.videos;
+		this.collectionsByName["Fonts"] = this.fonts;
+		this.collectionsByName["TextStrings"] = this.textStrings;
 	}
 
 	static fromFileNames(
@@ -31,7 +54,7 @@ class MediaLibrary
 	{
 		var mediaTypesPathsAndFileNames =
 		[
-			[ Image, "Images", imageFileNames ],
+			[ Image2, "Images", imageFileNames ],
 			[ Sound, "Audio/Effects", effectFileNames ],
 			[ Sound, "Audio/Music", musicFileNames ],
 			[ Video, "Video", videoFileNames ],
@@ -109,7 +132,7 @@ class MediaLibrary
 
 	waitForItemToLoad(collectionName, itemName, callback)
 	{
-		var itemToLoad = this.collections[collectionName][itemName];
+		var itemToLoad = this.collectionsByName[collectionName][itemName];
 		this.timer = setInterval
 		(
 			this.waitForItemToLoad_TimerTick.bind(this, itemToLoad, callback),
@@ -154,33 +177,33 @@ class MediaLibrary
 			if (this.images[image.name] == null)
 			{
 				this.images.push(image);
-				this.images[image.name] = image;
+				this.imagesByName[image.name] = image;
 			}
 		}
 	};
 
 	fontGetByName(name)
 	{
-		return this.fonts[name];
+		return this.fontsByName[name];
 	};
 
 	imageGetByName(name)
 	{
-		return this.images[name];
+		return this.imagesByName[name];
 	};
 
 	soundGetByName(name)
 	{
-		return this.sounds[name];
+		return this.soundsByName[name];
 	};
 
 	textStringGetByName(name)
 	{
-		return this.textStrings[name];
+		return this.textStringsByName[name];
 	};
 
 	videoGetByName(name)
 	{
-		return this.videos[name];
+		return this.videosByName[name];
 	};
 }

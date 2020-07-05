@@ -1,6 +1,28 @@
 
 class ControlList
 {
+	name: string;
+	pos: Coords;
+	size: Coords;
+	_items: any;
+	bindingForItemText: DataBinding;
+	fontHeightInPixels: number;
+	bindingForItemSelected: DataBinding;
+	bindingForItemValue: DataBinding;
+	bindingForIsEnabled: DataBinding;
+	confirm: any;
+	widthInItems: number;
+
+	isHighlighted: boolean;
+	itemSpacing: Coords;
+	scrollbar: ControlScrollbar;
+	styleName: string;
+
+	_drawLoc: Disposition;
+	_drawPos: Coords;
+	_itemSelected: any;
+	_mouseClickPos: Coords;
+
 	constructor(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected, bindingForItemValue, bindingForIsEnabled, confirm, widthInItems)
 	{
 		this.name = name;
@@ -11,7 +33,7 @@ class ControlList
 		this.fontHeightInPixels = fontHeightInPixels;
 		this.bindingForItemSelected = bindingForItemSelected;
 		this.bindingForItemValue = bindingForItemValue;
-		this.bindingForIsEnabled = bindingForIsEnabled || true;
+		this.bindingForIsEnabled = bindingForIsEnabled || new DataBinding(true, null, null);
 		this.confirm = confirm;
 		this.widthInItems = widthInItems || 1;
 
@@ -21,15 +43,15 @@ class ControlList
 		this.itemSpacing = new Coords
 		(
 			(this.size.x - scrollbarWidth) / this.widthInItems,
-			itemSpacingY
+			itemSpacingY, 0
 		);
 
 		this.isHighlighted = false;
 
 		this.scrollbar = new ControlScrollbar
 		(
-			new Coords(this.size.x - scrollbarWidth, 0), // pos
-			new Coords(scrollbarWidth, this.size.y), // size
+			new Coords(this.size.x - scrollbarWidth, 0, 0), // pos
+			new Coords(scrollbarWidth, this.size.y, 0), // size
 			this.fontHeightInPixels,
 			this.itemSpacing.y, // itemHeight
 			this._items,
@@ -37,9 +59,9 @@ class ControlList
 		);
 
 		// Helper variables.
-		this._drawPos = new Coords();
-		this._drawLoc = new Location(this._drawPos);
-		this._mouseClickPos = new Coords();
+		this._drawPos = new Coords(0, 0, 0);
+		this._drawLoc = new Disposition(this._drawPos, null, null);
+		this._mouseClickPos = new Coords(0, 0, 0);
 	}
 
 	static fromPosSizeAndItems(pos, size, items)
@@ -50,11 +72,12 @@ class ControlList
 			pos,
 			size,
 			items,
-			new DataBinding(), // bindingForItemText,
+			new DataBinding(null, null, null), // bindingForItemText,
 			10, // fontHeightInPixels,
 			null, // bindingForItemSelected,
 			null, // bindingForItemValue,
-			true // bindingForIsEnabled
+			true, // bindingForIsEnabled
+			null, null
 		);
 
 		return returnValue;
@@ -72,7 +95,8 @@ class ControlList
 			10, // fontHeightInPixels,
 			null, // bindingForItemSelected,
 			null, // bindingForItemValue,
-			true // bindingForIsEnabled
+			true, // bindingForIsEnabled
+			null, null
 		);
 
 		return returnValue;
@@ -129,7 +153,7 @@ class ControlList
 		var items = this.items();
 		if (valueToSet == null)
 		{
-			returnValue = items.indexOf(this.itemSelected());
+			returnValue = items.indexOf(this.itemSelected(null));
 			if (returnValue == -1)
 			{
 				returnValue = null;
@@ -166,7 +190,7 @@ class ControlList
 
 		if (itemToSet == null)
 		{
-			if (this._bindingForItemSelected == null)
+			if (this.bindingForItemSelected == null)
 			{
 				returnValue = this._itemSelected;
 			}
@@ -197,8 +221,8 @@ class ControlList
 		var items = this.items();
 		var numberOfItems = items.length;
 
-		var itemSelected = this.itemSelected();
-		var indexOfItemSelected = this.indexOfItemSelected();
+		var itemSelected = this.itemSelected(null);
+		var indexOfItemSelected = this.indexOfItemSelected(null);
 
 		if (indexOfItemSelected == null)
 		{
@@ -216,10 +240,10 @@ class ControlList
 		}
 		else
 		{
-			indexOfItemSelected =
+			indexOfItemSelected = NumberHelper.trimToRangeMinMax
 			(
-				indexOfItemSelected + direction
-			).trimToRangeMinMax(0, numberOfItems - 1);
+				indexOfItemSelected + direction, 0, numberOfItems - 1
+			);
 		}
 
 		var itemToSelect = (indexOfItemSelected == null ? null : items[indexOfItemSelected]);
@@ -228,7 +252,7 @@ class ControlList
 		var indexOfFirstItemVisible = this.indexOfFirstItemVisible();
 		var indexOfLastItemVisible = this.indexOfLastItemVisible();
 
-		var indexOfItemSelected = this.indexOfItemSelected();
+		var indexOfItemSelected = this.indexOfItemSelected(null);
 		if (indexOfItemSelected < indexOfFirstItemVisible)
 		{
 			this.scrollbar.scrollUp();
@@ -238,7 +262,7 @@ class ControlList
 			this.scrollbar.scrollDown();
 		}
 
-		var returnValue = this.itemSelected();
+		var returnValue = this.itemSelected(null);
 		return returnValue;
 	};
 
@@ -268,7 +292,7 @@ class ControlList
 					this.scrollbar.pos
 				).subtract
 				(
-					new Coords(0, this.scrollbar.handleSize.y)
+					new Coords(0, this.scrollbar.handleSize.y, 0)
 				);
 
 				// todo
@@ -304,7 +328,7 @@ class ControlList
 
 	style(universe)
 	{
-		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
+		return universe.controlBuilder.stylesByName[this.styleName == null ? "Default" : this.styleName];
 	};
 
 	// drawable
@@ -344,9 +368,9 @@ class ControlList
 			indexEnd = items.length - 1;
 		}
 
-		var itemSelected = this.itemSelected();
+		var itemSelected = this.itemSelected(null);
 
-		var drawPos2 = new Coords();
+		var drawPos2 = new Coords(0, 0, 0);
 
 		for (var i = indexStart; i <= indexEnd; i++)
 		{
@@ -356,7 +380,8 @@ class ControlList
 			var offsetInItems = new Coords
 			(
 				iOffset % this.widthInItems,
-				Math.floor(iOffset / this.widthInItems)
+				Math.floor(iOffset / this.widthInItems),
+				0
 			);
 
 			drawPos2.overwriteWith
@@ -370,7 +395,7 @@ class ControlList
 				drawPos
 			).addDimensions
 			(
-				textMarginLeft, 0
+				textMarginLeft, 0, 0
 			);
 
 			if (item == itemSelected)
@@ -395,7 +420,7 @@ class ControlList
 				drawPos2,
 				colorFore,
 				colorBack,
-				(i == this.indexOfItemSelected()), // areColorsReversed
+				(i == this.indexOfItemSelected(null)), // areColorsReversed
 				false, // isCentered
 				this.size.x // widthMaxInPixels
 			);

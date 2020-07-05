@@ -1,6 +1,8 @@
 
 class Transform_Perspective
 {
+	focalLength: number;
+
 	constructor(focalLength)
 	{
 		this.focalLength = focalLength;

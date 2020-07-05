@@ -1,6 +1,9 @@
 
 class Transform_Animate
 {
+	animationDefnGroup: any;
+	animatable: any;
+
 	constructor(animationDefnGroup)
 	{
 		this.animationDefnGroup = animationDefnGroup;
@@ -20,7 +23,7 @@ class Transform_Animate
 		return returnValue;
 	};
 
-	frameCurrent(animatable)//world)
+	frameCurrent()
 	{
 		var returnValue = null;
 

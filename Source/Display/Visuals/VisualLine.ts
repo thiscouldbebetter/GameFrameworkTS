@@ -1,6 +1,13 @@
 
 class VisualLine
 {
+	fromPos: Coords;
+	toPos: Coords;
+	color: any;
+
+	drawPosFrom: Coords;
+	drawPosTo: Coords;
+
 	constructor(fromPos, toPos, color)
 	{
 		this.fromPos = fromPos;
@@ -9,13 +16,13 @@ class VisualLine
 
 		// Helper variables.
 
-		this.drawPosFrom = new Coords();
-		this.drawPosTo = new Coords();
+		this.drawPosFrom = new Coords(0, 0, 0);
+		this.drawPosTo = new Coords(0, 0, 0);
 	}
 
-	draw(universe, world, drawable)
+	draw(universe, world, display, entity)
 	{
-		var pos = entity.locatable.loc.pos;
+		var pos = entity.locatable().loc.pos;
 		var drawPosFrom = this.drawPosFrom.overwriteWith
 		(
 			pos

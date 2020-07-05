@@ -1,6 +1,9 @@
 
 class MazeCellNetwork
 {
+	networkID: number;
+	cells: any;
+
 	constructor()
 	{
 		this.networkID = MazeCellNetwork.MaxIDSoFar;

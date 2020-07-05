@@ -1,6 +1,16 @@
 
 class Collidable
 {
+	colliderAtRest: any;
+	entityPropertyNamesToCollideWith: string[];
+	collideEntities: any;
+
+	collider: any;
+	ticksUntilCanCollide: number;
+	entitiesAlreadyCollidedWith: Entity[];
+
+	_transformTranslate: any;
+
 	constructor(colliderAtRest, entityPropertyNamesToCollideWith, collideEntities)
 	{
 		this.colliderAtRest = colliderAtRest;
@@ -19,7 +29,7 @@ class Collidable
 
 		// Helper variables.
 
-		this._transformTranslate = new Transform_Translate(new Coords());
+		this._transformTranslate = new Transform_Translate(new Coords(0, 0, 0));
 	}
 
 	colliderLocateForEntity(entity)
@@ -29,7 +39,7 @@ class Collidable
 		(
 			this._transformTranslate.displacementSet
 			(
-				entity.locatable.loc.pos
+				entity.locatable().loc.pos
 			),
 			this.collider.coordsGroupToTranslate()
 		);
@@ -73,7 +83,7 @@ class Collidable
 								);
 
 								var collidableOtherCollideEntities =
-									entityOther.collidable.collideEntities;
+									entityOther.collidable().collideEntities;
 								if (collidableOtherCollideEntities != null)
 								{
 									collidableOtherCollideEntities

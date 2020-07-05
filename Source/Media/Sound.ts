@@ -1,6 +1,15 @@
 
 class Sound
 {
+	name: string;
+	sourcePath: string;
+
+	offsetInSeconds: number;
+	isPlaying: boolean;
+	isRepeating: boolean;
+
+	domElement: any;
+
 	constructor(name, sourcePath)
 	{
 		this.name = name;
@@ -55,23 +64,21 @@ class Sound
 		this.offsetInSeconds = 0;
 	};
 
-	stop(universe, event)
+	stop(universe)
 	{
 		if (this.isPlaying)
 		{
 			this.isPlaying = false;
-			//var domElement = (event == null ? this.domElement : event.srcElement);
-			//domElement.stop();
 			universe.platformHelper.platformableRemove(this);
 			this.offsetInSeconds = 0;
 		}
 	};
 
-	stopOrRepeat(universe, event)
+	stopOrRepeat(universe)
 	{
 		if (this.isRepeating == false)
 		{
-			this.stop(universe, event);
+			this.stop(universe);
 		}
 	};
 

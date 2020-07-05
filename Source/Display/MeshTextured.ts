@@ -1,10 +1,20 @@
 
 class MeshTextured
 {
+	geometry: Mesh;
+	materials: any;
+	materialsByName: any;
+	faceTextures: any;
+	vertexGroups: any;
+
+	_faceIndicesByMaterial: any;
+	_faces: any;
+
 	constructor(geometry, materials, faceTextures, vertexGroups)
 	{
 		this.geometry = geometry;
-		this.materials = materials.addLookupsByName();
+		this.materials = materials;
+		this.materialsByName = ArrayHelper.addLookupsByName(this.materials);
 		this.faceTextures = faceTextures;
 		this.vertexGroups = vertexGroups;
 	}
@@ -20,7 +30,7 @@ class MeshTextured
 				var geometryFace = geometryFaces[i];
 				var faceTexture = this.faceTextures[i];
 				var faceMaterialName = faceTexture.materialName;
-				var faceMaterial = this.materials[faceMaterialName];
+				var faceMaterial = this.materialsByName[faceMaterialName];
 				var face = new FaceTextured(geometryFace, faceMaterial);
 				this._faces.push(face);
 			}
@@ -42,10 +52,10 @@ class MeshTextured
 			(
 				materialName,
 				[
-					new Coords(0, 0),
-					new Coords(1, 0),
-					new Coords(1, 1),
-					new Coords(1, 0)
+					new Coords(0, 0, 0),
+					new Coords(1, 0, 0),
+					new Coords(1, 1, 0),
+					new Coords(1, 0, 0)
 				]
 			);
 			faceTextures.push(faceTexture);
@@ -123,6 +133,9 @@ class MeshTextured
 
 class MeshTexturedFaceTexture
 {
+	materialName: string;
+	textureUVs: Coords[];
+
 	constructor(materialName, textureUVs)
 	{
 		this.materialName = materialName;
@@ -133,7 +146,7 @@ class MeshTexturedFaceTexture
 	{
 		return new MeshTexturedFaceTexture
 		(
-			this.materialName, this.textureUVs.clone()
+			this.materialName, ArrayHelper.clone(this.textureUVs)
 		);
 	};
 

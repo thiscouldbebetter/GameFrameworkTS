@@ -1,5 +1,9 @@
 class IDHelper
 {
+	_idNext: number;
+
+	static _instance: IDHelper;
+
 	constructor()
 	{
 		this._idNext = 0;

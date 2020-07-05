@@ -1,6 +1,8 @@
 
 class ControlContainerTransparent
 {
+	containerInner: ControlContainer;
+
 	constructor(containerInner)
 	{
 		this.containerInner = containerInner;
@@ -44,7 +46,7 @@ class ControlContainerTransparent
 		var childrenContainingPos = this.containerInner.childrenAtPosAddToList
 		(
 			mouseClickPos,
-			this.containerInner.childrenContainingPos.clear(),
+			ArrayHelper.clear(this.containerInner.childrenContainingPos),
 			true // addFirstChildOnly
 		);
 

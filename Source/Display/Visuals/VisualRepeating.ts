@@ -1,6 +1,20 @@
 
 class VisualRepeating
 {
+	cellSize: Coords;
+	viewSize: Coords;
+	child: any;
+	expandViewStartAndEndByCell: boolean;
+
+	viewSizeInCells: Coords;
+
+	_cellPos: Coords;
+	_drawOffset: Coords;
+	_drawPosWrapped: Coords;
+	_drawablePosToRestore: Coords;
+	_endPosInCells: Coords;
+	_startPosInCells: Coords;
+
 	constructor(cellSize, viewSize, child, expandViewStartAndEndByCell)
 	{
 		this.cellSize = cellSize;
@@ -17,12 +31,12 @@ class VisualRepeating
 			this.cellSize
 		);
 
-		this._cellPos = new Coords();
-		this._drawOffset = new Coords();
-		this._drawPosWrapped = new Coords();
-		this._drawablePosToRestore = new Coords();
+		this._cellPos = new Coords(0, 0, 0);
+		this._drawOffset = new Coords(0, 0, 0);
+		this._drawPosWrapped = new Coords(0, 0, 0);
+		this._drawablePosToRestore = new Coords(0, 0, 0);
 		this._endPosInCells = this.viewSizeInCells.clone();
-		this._startPosInCells = new Coords(0, 0);
+		this._startPosInCells = new Coords(0, 0, 0);
 
 		if (expandViewStartAndEndByCell)
 		{
@@ -33,7 +47,7 @@ class VisualRepeating
 
 	draw(universe, world, display, entity)
 	{
-		var drawPos = entity.locatable.loc.pos;
+		var drawPos = entity.locatable().loc.pos;
 
 		this._drawablePosToRestore.overwriteWith(drawPos);
 

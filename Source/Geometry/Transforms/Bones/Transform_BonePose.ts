@@ -1,6 +1,11 @@
 
 class Transform_BonePose
 {
+	boneName: string;
+	cyclesToRotateAroundAxesDownRightForward: any;
+
+	propertyName: string;
+
 	constructor(boneName, cyclesToRotateAroundAxesDownRightForward)
 	{
 		this.boneName = boneName;

@@ -1,13 +1,17 @@
 
 class VisualImageImmediate
 {
+	_image: Image2;
+
+	_drawPos: Coords;
+
 	constructor(image)
 	{
 		this._image = image;
 
 		// Helper variables.
 
-		this._drawPos = new Coords();
+		this._drawPos = new Coords(0, 0, 0);
 	}
 
 	// static methods
@@ -48,7 +52,7 @@ class VisualImageImmediate
 		var imageSize = image.sizeInPixels;
 		var drawPos = this._drawPos.clear().subtract(imageSize).half().add
 		(
-			entity.locatable.loc.pos
+			entity.locatable().loc.pos
 		);
 		//display.drawImageScaled(image, drawPos, imageSize);
 		display.drawImage(image, drawPos);

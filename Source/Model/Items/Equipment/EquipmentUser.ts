@@ -1,6 +1,13 @@
 
 class EquipmentUser
 {
+	socketGroup: EquipmentSocketGroup;
+	socketDefnGroup: EquipmentSocketDefnGroup;
+
+	itemEntitySelected: Entity;
+	socketSelected: EquipmentSocket;
+	statusMessage: string;
+
 	constructor(socketDefnGroup)
 	{
 		this.socketGroup = new EquipmentSocketGroup(socketDefnGroup);
@@ -13,7 +20,7 @@ class EquipmentUser
 	{
 		var sockets = this.socketGroup.sockets;
 		var socketDefnGroup = this.socketGroup.defnGroup;
-		var itemToEquip = itemEntityToEquip.item;
+		var itemToEquip = itemEntityToEquip.item();
 		var itemDefn = itemToEquip.defn(world);
 
 		var socketFound = sockets.filter
@@ -23,18 +30,26 @@ class EquipmentUser
 				var socketDefn = socket.defn(socketDefnGroup);
 				var isItemAllowedInSocket = socketDefn.categoriesAllowedNames.some
 				(
-					y => itemDefn.categoryNames.contains(y)
+					y => itemDefn.categoryNames.indexOf(y) >= 0
 				);
 				return isItemAllowedInSocket;
 			}
 		)[0];
 
-		var socketFoundName = socketFound.defnName;
+		var message = "";
+		if (socketFound == null)
+		{
+			message = "Can't equip " + itemDefn.name + ".";
+		}
+		else
+		{
+			var socketFoundName = socketFound.defnName;
 
-		var message = this.equipItemEntityInSocketWithName
-		(
-			universe, world, place, itemEntityToEquip, socketFoundName, false
-		);
+			message = this.equipItemEntityInSocketWithName
+			(
+				universe, world, place, itemEntityToEquip, socketFoundName, false
+			);
+		}
 
 		return message;
 	};
@@ -44,12 +59,12 @@ class EquipmentUser
 		universe, world, place, itemEntityToEquip, socketName, includeSocketNameInMessage
 	)
 	{
-		var itemToEquip = itemEntityToEquip.item;
+		var itemToEquip = itemEntityToEquip.item();
 		var itemDefn = itemToEquip.defn(world);
 
 		var message = itemDefn.appearance;
 
-		var socket = this.socketGroup.sockets[socketName];
+		var socket = this.socketGroup.socketsByDefnName[socketName];
 
 		if (socket == null)
 		{
@@ -76,7 +91,7 @@ class EquipmentUser
 
 	itemEntityInSocketWithName(socketName)
 	{
-		return this.socketGroup.sockets[socketName].itemEntityEquipped;
+		return this.socketGroup.socketsByDefnName[socketName].itemEntityEquipped;
 	};
 
 	unequipItemFromSocket
@@ -99,7 +114,7 @@ class EquipmentUser
 			else
 			{
 				socketToUnequipFrom.itemEntityEquipped = null;
-				var itemToUnequip = itemEntityToUnequip.item;
+				var itemToUnequip = itemEntityToUnequip.item();
 				var itemDefn = itemToUnequip.defn(world);
 				message = itemDefn.appearance + " unequipped."
 			}
@@ -125,7 +140,7 @@ class EquipmentUser
 		var fontHeightSmall = fontHeight * .6;
 		var fontHeightLarge = fontHeight * 1.5;
 
-		var itemHolder = entityEquipmentUser.itemHolder;
+		var itemHolder = entityEquipmentUser.itemHolder();
 		var equipmentUser = this;
 		var sockets = this.socketGroup.sockets;
 		var socketDefnGroup = this.socketGroup.defnGroup;
@@ -139,7 +154,7 @@ class EquipmentUser
 			for (var j = 0; j < socketCategoryNames.length; j++)
 			{
 				var categoryName = socketCategoryNames[j];
-				if (itemCategoriesForAllSockets.contains(categoryName) == false)
+				if (itemCategoriesForAllSockets.indexOf(categoryName) == -1)
 				{
 					itemCategoriesForAllSockets.push(categoryName);
 				}
@@ -156,13 +171,14 @@ class EquipmentUser
 		var listEquippables = new ControlList
 		(
 			"listEquippables",
-			new Coords(10, 30), // pos
-			new Coords(70, listHeight), // size
-			new DataBinding(itemEntitiesEquippable), // items
+			new Coords(10, 30, 0), // pos
+			new Coords(70, listHeight, 0), // size
+			new DataBinding(itemEntitiesEquippable, null, null), // items
 			new DataBinding
 			(
 				null,
-				function get(c) { return c.item.toString(world); }
+				function get(c) { return c.item().toString(world); },
+				null
 			), // bindingForItemText
 			fontHeightSmall,
 			new DataBinding
@@ -171,12 +187,12 @@ class EquipmentUser
 				function get(c) { return c.itemEntitySelected; },
 				function set(c, v) { c.itemEntitySelected = v; }
 			), // bindingForItemSelected
-			new DataBinding(null, function(c) { return c; } ), // bindingForItemValue
+			new DataBinding(null, function(c) { return c; }, null ), // bindingForItemValue
 			null, // bindingForIsEnabled
 			function confirm()
 			{
 				var itemEntityToEquip = equipmentUser.itemEntitySelected;
-				var itemToEquip = itemEntityToEquip.item;
+				var itemToEquip = itemEntityToEquip.item();
 				var itemToEquipName = itemToEquip.appearance;
 
 				var message = equipmentUser.equipEntityWithItem
@@ -184,19 +200,21 @@ class EquipmentUser
 					universe, world, place, entityEquipmentUser, itemEntityToEquip
 				);
 				equipmentUser.statusMessage = message;
-			}
+			},
+			null
 		);
 
 		var listEquipped = new ControlList
 		(
 			"listEquipped",
-			new Coords(90, 30), // pos
-			new Coords(100, listHeight), // size
-			new DataBinding(sockets), // items
+			new Coords(90, 30, 0), // pos
+			new Coords(100, listHeight, 0), // size
+			new DataBinding(sockets, null, null), // items
 			new DataBinding
 			(
 				null,
-				function get(c) { return c.toString(world); }
+				function get(c) { return c.toString(world); },
+				null
 			), // bindingForItemText
 			fontHeightSmall,
 			new DataBinding
@@ -205,7 +223,7 @@ class EquipmentUser
 				function get(c) { return c.socketSelected; },
 				function set(c, v) { c.socketSelected = v; }
 			), // bindingForItemSelected
-			new DataBinding(null, function(c) { return c; } ), // bindingForItemValue
+			new DataBinding(null, function(c) { return c; }, null ), // bindingForItemValue
 			null, // bindingForIsEnabled
 			function confirm()
 			{
@@ -216,28 +234,29 @@ class EquipmentUser
 					universe, world, place, entityEquipmentUser, socketToUnequipFrom
 				);
 				equipmentUser.statusMessage = message;
-			}
+			},
+			null
 		);
 
 		var back = function()
 		{
 			var venueNext = venuePrev;
-			venueNext = new VenueFader(venueNext, universe.venueCurrent);
+			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 			universe.venueNext = venueNext;
 		};
 
 		var returnValue = new ControlContainer
 		(
 			"Equipment",
-			new Coords(0, 0), // pos
+			new Coords(0, 0, 0), // pos
 			sizeBase.clone(), // size
 			// children
 			[
 				new ControlLabel
 				(
 					"labelEquippable",
-					new Coords(10, 20), // pos
-					new Coords(70, 25), // size
+					new Coords(10, 20, 0), // pos
+					new Coords(70, 25, 0), // size
 					false, // isTextCentered
 					"Equippable:",
 					fontHeightSmall
@@ -248,8 +267,8 @@ class EquipmentUser
 				new ControlLabel
 				(
 					"labelEquipped",
-					new Coords(90, 20), // pos
-					new Coords(100, 25), // size
+					new Coords(90, 20, 0), // pos
+					new Coords(100, 25, 0), // size
 					false, // isTextCentered
 					"Equipped:",
 					fontHeightSmall
@@ -260,8 +279,8 @@ class EquipmentUser
 				new ControlLabel
 				(
 					"infoStatus",
-					new Coords(10, 130), // pos
-					new Coords(160, 15), // size
+					new Coords(10, 130, 0), // pos
+					new Coords(160, 15, 0), // size
 					false, // isTextCentered
 					new DataBinding
 					(
@@ -269,7 +288,8 @@ class EquipmentUser
 						function get(c)
 						{
 							return c.statusMessage;
-						}
+						},
+						null
 					), // text
 					fontHeightSmall
 				)
@@ -283,37 +303,40 @@ class EquipmentUser
 
 		if (includeTitleAndDoneButton)
 		{
+			var childControls = returnValue.children;
+
 			childControls.insertElementAt
 			(
+				0, 0,
 				new ControlLabel
 				(
 					"labelEquipment",
-					new Coords(100, 10), // pos
-					new Coords(100, 25), // size
+					new Coords(100, 10, 0), // pos
+					new Coords(100, 25, 0), // size
 					true, // isTextCentered
 					"Equipment",
 					fontHeightLarge
-				),
-				0 // indexToInsertAt
+				)
 			);
 			childControls.push
 			(
 				new ControlButton
 				(
 					"buttonDone",
-					new Coords(170, 130), // pos
-					new Coords(20, 10), // size
+					new Coords(170, 130, 0), // pos
+					new Coords(20, 10, 0), // size
 					"Done",
 					fontHeightSmall,
 					true, // hasBorder
 					true, // isEnabled
-					back
+					back, // click
+					null, null
 				)
 			);
 		}
 		else
 		{
-			var titleHeightInverted = new Coords(0, -15);
+			var titleHeightInverted = new Coords(0, -15, 0);
 			returnValue.size.add(titleHeightInverted);
 			returnValue.shiftChildPositions(titleHeightInverted);
 		}

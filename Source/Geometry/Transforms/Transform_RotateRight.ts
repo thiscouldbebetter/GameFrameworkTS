@@ -1,6 +1,8 @@
 
 class Transform_RotateRight
 {
+	quarterTurnsToRotate: number;
+
 	constructor(quarterTurnsToRotate)
 	{
 		this.quarterTurnsToRotate = quarterTurnsToRotate;

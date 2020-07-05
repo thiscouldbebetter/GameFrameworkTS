@@ -1,6 +1,9 @@
 
 class VisualTransform
 {
+	transformToApply: any;
+	child: any;
+
 	constructor(transformToApply, child)
 	{
 		this.transformToApply = transformToApply;

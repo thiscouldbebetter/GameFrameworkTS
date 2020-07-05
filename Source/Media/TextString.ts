@@ -1,6 +1,12 @@
 
 class TextString
 {
+	name: string;
+	sourcePath: string;
+
+	value: string;
+	isLoaded: boolean;
+
 	constructor(name, sourcePath)
 	{
 		this.name = name;
@@ -13,7 +19,7 @@ class TextString
 
 	static fromString(name, value)
 	{
-		var returnValue = new
+		var returnValue = new TextString
 		(
 			name, null // sourcePath
 		);

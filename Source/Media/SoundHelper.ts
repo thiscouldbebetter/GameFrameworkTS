@@ -1,10 +1,17 @@
 
 class SoundHelper
 {
+	sounds: Sound[];
+
+	soundsByName: any;
+	musicVolume: number;
+	soundVolume: number;
+	soundForMusic: Sound;
+
 	constructor(sounds)
 	{
 		this.sounds = sounds;
-		this.sounds.addLookupsByName();
+		this.soundsByName = ArrayHelper.addLookupsByName(this.sounds);
 
 		this.musicVolume = 1;
 		this.soundVolume = 1;
@@ -45,14 +52,14 @@ class SoundHelper
 
 	soundWithNamePlayAsEffect(universe, soundName)
 	{
-		var sound = this.sounds[soundName];
+		var sound = this.soundsByName[soundName];
 		sound.isRepeating = false;
 		sound.play(universe, this.soundVolume);
 	};
 
 	soundWithNamePlayAsMusic(universe, soundToPlayName)
 	{
-		var soundToPlay = this.sounds[soundToPlayName];
+		var soundToPlay = this.soundsByName[soundToPlayName];
 
 		soundToPlay.isRepeating = true;
 

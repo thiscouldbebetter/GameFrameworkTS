@@ -1,12 +1,16 @@
 
 class VisualImageFromLibrary
 {
+	imageName: string;
+
+	_drawPos: Coords;
+
 	constructor(imageName)
 	{
 		this.imageName = imageName;
 
 		// Helper variables.
-		this._drawPos = new Coords();
+		this._drawPos = new Coords(0, 0, 0);
 	}
 
 	// static methods
@@ -18,7 +22,7 @@ class VisualImageFromLibrary
 		for (var i = 0; i < images.length; i++)
 		{
 			var image = images[i];
-			var visual = new VisualImageFromLibrary(image.name, imageSizeScaled);
+			var visual = new VisualImageFromLibrary(image.name);
 			returnValues.push(visual);
 		}
 
@@ -40,7 +44,7 @@ class VisualImageFromLibrary
 		var imageSize = this.image(universe).sizeInPixels;
 		var drawPos = this._drawPos.clear().subtract(imageSize).half().add
 		(
-			entity.locatable.loc.pos
+			entity.locatable().loc.pos
 		);
 		display.drawImageScaled(image, drawPos, imageSize);
 	};

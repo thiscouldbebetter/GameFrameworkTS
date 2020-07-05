@@ -30,6 +30,12 @@ class Serializer
 
 class SerializerNode
 {
+	t: string;
+	id: number;
+	r: boolean;
+	o: any;
+	c: any;
+
 	constructor(objectWrapped)
 	{
 		this.t = null; // objectWrappedTypeName
@@ -94,9 +100,9 @@ class SerializerNode
 
 								if
 								(
-									propertyValueTypeName == Boolean.name
-									|| propertyValueTypeName == Number.name
-									|| propertyValueTypeName == String.name
+									propertyValueTypeName == "Boolean"
+									|| propertyValueTypeName == "Number"
+									|| propertyValueTypeName == "String"
 								)
 								{
 									child = propertyValue;

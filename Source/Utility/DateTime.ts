@@ -1,6 +1,13 @@
 
 class DateTime
 {
+	year: number;
+	month: number;
+	day: number;
+	hours: number;
+	minutes: number;
+	seconds: number;
+
 	constructor(year, month, day, hours, minutes, seconds)
 	{
 		this.year = year;
@@ -54,13 +61,13 @@ class DateTime
 	{
 		var returnValue =
 			""
-			+ ("" + this.month).padStart(2, "0")
-			+ ("" + this.day).padStart(2, "0")
+			+ StringHelper.padStart("" + this.month, 2, "0")
+			+ StringHelper.padStart("" + this.day, 2, "0")
 			+ "-"
-			+ ("" + this.hours).padStart(2, "0")
-			+ ("" + this.minutes).padStart(2, "0")
+			+ StringHelper.padStart("" + this.hours, 2, "0")
+			+ StringHelper.padStart("" + this.minutes, 2, "0")
 			+ "-"
-			+ ("" + this.seconds).padStart(2, "0");
+			+ StringHelper.padStart("" + this.seconds, 2, "0");
 
 		return returnValue;
 	};
@@ -71,15 +78,15 @@ class DateTime
 			""
 			+ this.year
 			+ "/"
-			+ ("" + this.month).padStart(2, "0")
+			+ StringHelper.padStart("" + this.month, 2, "0")
 			+ "/"
-			+ ("" + this.day).padStart(2, "0")
+			+ StringHelper.padStart("" + this.day, 2, "0")
 			+ "-"
-			+ ("" + this.hours).padStart(2, "0")
+			+ StringHelper.padStart("" + this.hours, 2, "0")
 			+ ":"
-			+ ("" + this.minutes).padStart(2, "0")
+			+ StringHelper.padStart("" + this.minutes, 2, "0")
 			+ ":"
-			+ ("" + this.seconds).padStart(2, "0");
+			+ StringHelper.padStart("" + this.seconds, 2, "0");
 
 		return returnValue;
 	};

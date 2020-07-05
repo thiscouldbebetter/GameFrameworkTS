@@ -1,13 +1,21 @@
 
 class Collision
 {
+	pos: Coords;
+	distanceToCollision: number;
+	colliders: any;
+
+	collidables: any;
+	normals: any;
+	isActive: boolean;
+
 	constructor(pos, distanceToCollision, colliders)
 	{
-		this.pos = (pos == null ? new Coords() : pos);
+		this.pos = (pos == null ? new Coords(0, 0, 0) : pos);
 		this.distanceToCollision = distanceToCollision;
 		this.collidables = [];
 		this.colliders = colliders || [];
-		this.normals = [ new Coords(), new Coords() ];
+		this.normals = [ new Coords(0, 0, 0), new Coords(0, 0, 0) ];
 
 		this.isActive = false;
 	}
@@ -15,8 +23,8 @@ class Collision
 	clear()
 	{
 		this.isActive = false;
-		this.collidables.clear();
-		this.colliders.clear();
+		ArrayHelper.clear(this.collidables);
+		ArrayHelper.clear(this.colliders);
 		return this;
 	};
 

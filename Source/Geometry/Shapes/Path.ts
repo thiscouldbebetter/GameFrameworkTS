@@ -1,6 +1,8 @@
 
 class Path
 {
+	points: Coords[];
+
 	constructor(points)
 	{
 		this.points = points;
@@ -8,12 +10,12 @@ class Path
 
 	clone()
 	{
-		return new Path(this.points.clone());
+		return new Path(ArrayHelper.clone(this.points) );
 	};
 
 	overwriteWith(other)
 	{
-		this.points.overwriteWith(other.points);
+		ArrayHelper.overwriteWith(this.points, other.points);
 		return this;
 	};
 

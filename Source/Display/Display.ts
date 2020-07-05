@@ -1,6 +1,23 @@
 
 class Display
 {
+	sizesAvailable: any;
+	fontName: string;
+	fontHeightInPixels: number
+	colorFore: string;
+	colorBack: string;
+	isInvisible: boolean
+
+	canvas: any;
+	sizeInPixels: any;
+	graphics: any;
+
+	_drawPos: Coords;
+	_scaleFactor: Coords;
+	_sizeDefault: Coords;
+	_sizeHalf: Coords;
+	_zeroes: Coords;
+
 	constructor(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorBack, isInvisible)
 	{
 		this.sizesAvailable = sizesAvailable;
@@ -14,8 +31,8 @@ class Display
 
 		// Helper variables.
 
-		this._drawPos = new Coords();
-		this._sizeHalf = new Coords();
+		this._drawPos = new Coords(0, 0, 0);
+		this._sizeHalf = new Coords(0, 0, 0);
 		this._zeroes = Coords.Instances().Zeroes;
 	}
 
@@ -55,7 +72,7 @@ class Display
 			);
 			drawPos.overwriteWith(center).add
 			(
-				new Polar(angleStopInTurns, radiusOuter).toCoords( new Coords() )
+				new Polar(angleStopInTurns, radiusOuter, 0).toCoords( new Coords(0, 0, 0) )
 			);
 			this.graphics.lineTo(drawPos.x, drawPos.y);
 			this.graphics.arc
@@ -81,7 +98,7 @@ class Display
 			);
 			drawPos.overwriteWith(center).add
 			(
-				new Polar(angleStopInTurns, radiusOuter).toCoords( new Coords() )
+				new Polar(angleStopInTurns, radiusOuter, 0).toCoords( new Coords(0, 0, 0) )
 			);
 			this.graphics.lineTo(drawPos.x, drawPos.y);
 			this.graphics.arc
@@ -103,7 +120,8 @@ class Display
 			this._zeroes,
 			this.sizeDefault(), // Automatic scaling.
 			colorBack || this.colorBack,
-			colorBorder || this.colorBorder
+			colorBorder || this.colorFore,
+			null
 		);
 	};
 
@@ -384,7 +402,7 @@ class Display
 	{
 		var sizeHalf = this._sizeHalf.overwriteWith(size).half();
 		var posAdjusted = this._drawPos.overwriteWith(pos).subtract(sizeHalf);
-		this.drawRectangle(posAdjusted, size, colorFill, colorBorder);
+		this.drawRectangle(posAdjusted, size, colorFill, colorBorder, null);
 	};
 
 	drawText
@@ -421,7 +439,7 @@ class Display
 
 		this.graphics.fillStyle = colorFill;
 
-		var drawPos = new Coords(pos.x, pos.y + fontHeightInPixels);
+		var drawPos = new Coords(pos.x, pos.y + fontHeightInPixels, 0);
 
 		var textAsLines = text.split("\n");
 		for (var i = 0; i < textAsLines.length; i++)
@@ -478,7 +496,7 @@ class Display
 			this.graphics.moveTo(center.x, center.y);
 			drawPos.overwriteWith(center).add
 			(
-				new Polar(angleStopInTurns, radius).toCoords( new Coords() )
+				new Polar(angleStopInTurns, radius, 0).toCoords( new Coords(0, 0, 0) )
 			);
 			this.graphics.lineTo(drawPos.x, drawPos.y);
 			this.graphics.arc
@@ -499,7 +517,7 @@ class Display
 			this.graphics.moveTo(center.x, center.y);
 			drawPos.overwriteWith(center).add
 			(
-				new Polar(angleStopInTurns, radius).toCoords( new Coords() )
+				new Polar(angleStopInTurns, radius, 0).toCoords( new Coords(0, 0, 0) )
 			);
 			this.graphics.lineTo(drawPos.x, drawPos.y);
 			this.graphics.arc
@@ -583,7 +601,7 @@ class Display
 
 	toImage()
 	{
-		return Image.fromSystemImage("[fromDisplay]", this.canvas);
+		return Image2.fromSystemImage("[fromDisplay]", this.canvas);
 	};
 
 	// platformable
@@ -600,7 +618,8 @@ class Display
 			this.graphics = this.canvas.getContext("2d");
 
 			this.fontSet(null, this.fontHeightInPixels);
-			this.widthWithFontFallthrough = this.graphics.measureText(this.testString).width;
+			var testString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; // todo
+			var widthWithFontFallthrough = this.graphics.measureText(testString).width; // todo
 
 			this._scaleFactor = null;
 			var scaleFactor = this.scaleFactor();

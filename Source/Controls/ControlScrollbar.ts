@@ -1,6 +1,22 @@
 
 class ControlScrollbar
 {
+	pos: Coords;
+	size: Coords;
+	fontHeightInPixels: number;
+	itemHeight: number;
+	_items: any;
+	_sliderPosInItems: number;
+
+	buttonScrollDown: ControlButton;
+	buttonScrollUp: ControlButton;
+	handleSize: Coords;
+	isHighlighted: boolean;
+	styleName: string;
+	windowSizeInItems: number;
+
+	_drawPos: Coords;
+
 	constructor(pos, size, fontHeightInPixels, itemHeight, items, sliderPosInItems)
 	{
 		this.pos = pos;
@@ -12,34 +28,36 @@ class ControlScrollbar
 
 		this.windowSizeInItems = Math.floor(this.size.y / itemHeight);
 
-		this.handleSize = new Coords(this.size.x, this.size.x);
+		this.handleSize = new Coords(this.size.x, this.size.x, 0);
 
 		this.buttonScrollUp = new ControlButton
 		(
 			null, // name
-			new Coords(0, 0), // pos
+			new Coords(0, 0, 0), // pos
 			this.handleSize.clone(), // size
 			"-", // text
 			this.fontHeightInPixels,
 			true, // hasBorder
 			true, // isEnabled
-			this.scrollUp // click
+			this.scrollUp, // click
+			null, null
 		);
 
 		this.buttonScrollDown = new ControlButton
 		(
 			null, // name
-			new Coords(0, this.size.y - this.handleSize.y), // pos
+			new Coords(0, this.size.y - this.handleSize.y, 0), // pos
 			this.handleSize.clone(), // size
 			"+", // text
 			this.fontHeightInPixels,
 			true, // hasBorder
 			true, // isEnabled
-			this.scrollDown // click
+			this.scrollDown, // click
+			null, null
 		);
 
 		// Helper variables.
-		this._drawPos = new Coords();
+		this._drawPos = new Coords(0, 0, 0);
 	}
 
 	actionHandle(actionNameToHandle)
@@ -69,12 +87,9 @@ class ControlScrollbar
 
 	scrollDown()
 	{
-		var sliderPosInItems =
+		var sliderPosInItems = NumberHelper.trimToRangeMinMax
 		(
-			this.sliderPosInItems() + 1
-		).trimToRangeMinMax
-		(
-			0, this.sliderMaxInItems()
+			this.sliderPosInItems() + 1, 0, this.sliderMaxInItems()
 		);
 
 		this._sliderPosInItems = sliderPosInItems;
@@ -82,12 +97,9 @@ class ControlScrollbar
 
 	scrollUp()
 	{
-		var sliderPosInItems =
+		var sliderPosInItems = NumberHelper.trimToRangeMinMax
 		(
-			this.sliderPosInItems() - 1
-		).trimToRangeMinMax
-		(
-			0, this.sliderMaxInItems()
+			this.sliderPosInItems() - 1, 0, this.sliderMaxInItems()
 		);
 
 		this._sliderPosInItems = sliderPosInItems;
@@ -98,7 +110,8 @@ class ControlScrollbar
 		var slideSizeInPixels = new Coords
 		(
 			this.handleSize.x,
-			this.size.y - 2 * this.handleSize.y
+			this.size.y - 2 * this.handleSize.y,
+			0
 		);
 
 		return slideSizeInPixels;
@@ -122,7 +135,8 @@ class ControlScrollbar
 			this.handleSize.y
 				+ this.sliderPosInItems()
 				* this.slideSizeInPixels().y
-				/ this.items().length
+				/ this.items().length,
+			0
 		);
 
 		return sliderPosInPixels;
@@ -132,7 +146,7 @@ class ControlScrollbar
 	{
 		var sliderSizeInPixels = this.slideSizeInPixels().multiply
 		(
-			new Coords(1, this.windowSizeInItems / this.items().length)
+			new Coords(1, this.windowSizeInItems / this.items().length, 0)
 		);
 
 		return sliderSizeInPixels;
@@ -140,7 +154,7 @@ class ControlScrollbar
 
 	style(universe)
 	{
-		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
+		return universe.controlBuilder.stylesByName[this.styleName == null ? "Default" : this.styleName];
 	};
 
 	// drawable

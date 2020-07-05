@@ -1,6 +1,8 @@
 
 class Playable
 {
+	player: any;
+
 	constructor(player)
 	{
 		this.player = player;
@@ -13,7 +15,7 @@ class Playable
 		{
 			inputHelper.isMouseClicked(false);
 
-			var playerPos = entityPlayer.locatable.loc.pos;
+			var playerPos = entityPlayer.locatable().loc.pos;
 			var camera = place.camera();
 
 			playerPos.overwriteWith
@@ -37,9 +39,12 @@ class Playable
 		}
 
 		var placeDefn = place.defn(world);
-		var actions = placeDefn.actions;
-		var actionToInputsMappings = placeDefn.actionToInputsMappings;
-		var actionsToPerform = inputHelper.actionsFromInput(actions, actionToInputsMappings);
+		var actionsByName = placeDefn.actionsByName;
+		var actionToInputsMappingsByInputName = placeDefn.actionToInputsMappingsByInputName;
+		var actionsToPerform = inputHelper.actionsFromInput
+		(
+			actionsByName, actionToInputsMappingsByInputName
+		);
 		for (var i = 0; i < actionsToPerform.length; i++)
 		{
 			var action = actionsToPerform[i];

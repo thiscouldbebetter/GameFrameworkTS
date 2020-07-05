@@ -1,13 +1,43 @@
 
 class Display3D
 {
+	sizeInPixels: Coords;
+	fontName: string;
+	fontHeightInPixels: number;
+	colorFore: string;
+	colorBack: string;
+
+	canvas: any;
+	lighting: any;
+	matrixCamera: any;
+	matrixEntity: any;
+	matrixOrient: any;
+	matrixPerspective: any;
+	matrixTranslate: any;
+	tempCoords: Coords;
+	tempMatrix0: any;
+	tempMatrix1: any;
+	texturesRegistered: any;
+	webGLContext: any;
+
+	_sizeDefault: Coords;
+	_scaleFactor: Coords;
+	_display2DOverlay: Display;
+
 	constructor(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorBack)
 	{
 		this.sizeInPixels = sizeInPixels;
+		this.fontName = fontName;
+		this.fontHeightInPixels = fontHeightInPixels;
+		this.colorFore = colorFore;
+		this.colorBack = colorBack;
 
 		this._sizeDefault = sizeInPixels;
 		this._scaleFactor = new Coords(1, 1, 1);
-		this._display2DOverlay = new Display([sizeInPixels], fontName, fontHeightInPixels, colorFore, colorBack);
+		this._display2DOverlay = new Display
+		(
+			[sizeInPixels], fontName, fontHeightInPixels, colorFore, colorBack, null
+		);
 	}
 
 	// constants
@@ -57,6 +87,8 @@ class Display3D
 
 		gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+		this._display2DOverlay.clear();
 	};
 
 	drawMesh(mesh)
@@ -141,9 +173,9 @@ class Display3D
 						var vertexTextureUV =
 						(
 							faceTextures == null
-							? new Coords(-1, -1)
+							? new Coords(-1, -1, 0)
 							: faceTextures[f] == null
-							? new Coords(-1, -1)
+							? new Coords(-1, -1, 0)
 							: faceTextures[f].textureUVs[vertexIndex]
 						);
 
@@ -295,9 +327,9 @@ class Display3D
 		this.drawMesh(mesh);
 	};
 
-	initialize()
+	initialize(universe)
 	{
-		this._display2DOverlay.initialize();
+		this._display2DOverlay.initialize(universe);
 
 		this.canvas = document.createElement("canvas");
 		this.canvas.style.position = "absolute";
@@ -358,11 +390,6 @@ class Display3D
 
 	// Display2D overlay.
 
-	clear()
-	{
-		this._display2DOverlay.clear();
-	};
-
 	drawArc
 	(
 		center, radiusInner, radiusOuter, angleStartInTurns, angleStopInTurns, colorFill, colorBorder
@@ -406,9 +433,9 @@ class Display3D
 		this._display2DOverlay.drawLine(fromPos, toPos, color, lineThickness);
 	};
 
-	drawPath(vertices, color, lineThickness)
+	drawPath(vertices, color, lineThickness, isClosed)
 	{
-		this._display2DOverlay.drawPath(vertices, color, lineThickness);
+		this._display2DOverlay.drawPath(vertices, color, lineThickness, isClosed);
 	};
 
 	drawPolygon(vertices, colorFill, colorBorder)

@@ -1,9 +1,11 @@
 
 class Locatable
 {
+	loc: Disposition;
+
 	constructor(loc)
 	{
-		this.loc = loc || new Location();
+		this.loc = loc || new Disposition(null, null, null);
 	}
 
 	updateForTimerTick(universe, world, place, entity)

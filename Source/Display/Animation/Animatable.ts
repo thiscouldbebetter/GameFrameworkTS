@@ -1,6 +1,9 @@
 
 class Animatable
 {
+	animationDefnNameCurrent: string;
+	timerTicksSoFar: number;
+
 	constructor()
 	{
 		this.animationDefnNameCurrent = null;

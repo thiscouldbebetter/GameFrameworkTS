@@ -1,6 +1,9 @@
 
 class Drawable
 {
+	visual: any;
+	isVisible: boolean;
+
 	constructor(visual, isVisible)
 	{
 		this.visual = visual;

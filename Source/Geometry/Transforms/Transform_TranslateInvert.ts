@@ -1,6 +1,8 @@
 
 class Transform_TranslateInvert
 {
+	displacement: Coords;
+
 	constructor(displacement)
 	{
 		this.displacement = displacement;

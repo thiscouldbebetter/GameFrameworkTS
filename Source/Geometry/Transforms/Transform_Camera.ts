@@ -1,6 +1,13 @@
 
 class Transform_Camera
 {
+	camera: Camera;
+
+	transformTranslateInvert: Transform_TranslateInvert;
+	transformOrientForCamera: Transform_OrientForCamera;
+	transformPerspective: Transform_Perspective;
+	transformViewCenter: Transform_Translate;
+
 	constructor(camera)
 	{
 		this.camera = camera;

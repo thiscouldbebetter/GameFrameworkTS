@@ -1,6 +1,13 @@
 
 class Recurrent
 {
+	ticksPerRecurrence: number;
+	timesToRecur: number;
+	recur: any;
+
+	timesRecurredSoFar: number;
+	ticksUntilRecurrence: number;
+
 	constructor(ticksPerRecurrence, timesToRecur, recur)
 	{
 		this.ticksPerRecurrence = ticksPerRecurrence;

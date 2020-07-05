@@ -1,6 +1,22 @@
 
 class ControlSelect
 {
+	name: string;
+	pos: Coords;
+	size: Coords;
+	_valueSelected: any;
+	_options; any;
+	bindingForOptionValues: DataBinding;
+	bindingForOptionText: DataBinding;
+	fontHeightInPixels: number;
+
+	indexOfOptionSelected: number;
+	isHighlighted: boolean;
+	styleName: string;
+
+	_drawPos: Coords;
+	_sizeHalf: Coords;
+
 	constructor
 	(
 		name,
@@ -43,8 +59,8 @@ class ControlSelect
 		this.isHighlighted = false;
 
 		// Helper variables.
-		this._drawPos = new Coords();
-		this._sizeHalf = new Coords();
+		this._drawPos = new Coords(0, 0, 0);
+		this._sizeHalf = new Coords(0, 0, 0);
 	}
 
 	actionHandle(actionNameToHandle)
@@ -95,12 +111,9 @@ class ControlSelect
 	{
 		var options = this.options();
 
-		this.indexOfOptionSelected =
+		this.indexOfOptionSelected = NumberHelper.wrapToRangeMinMax
 		(
-			this.indexOfOptionSelected + direction
-		).wrapToRangeMinMax
-		(
-			0, options.length
+			this.indexOfOptionSelected + direction, 0, options.length
 		);
 
 		var optionSelected = this.optionSelected();
@@ -134,7 +147,7 @@ class ControlSelect
 
 	style(universe)
 	{
-		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
+		return universe.controlBuilder.stylesByName[this.styleName == null ? "Default" : this.styleName];
 	};
 
 	valueSelected()

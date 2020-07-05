@@ -1,6 +1,9 @@
 
 class StorageHelper
 {
+	propertyNamePrefix: string;
+	serializer: Serializer;
+
 	constructor(propertyNamePrefix, serializer)
 	{
 		this.propertyNamePrefix = propertyNamePrefix;
@@ -43,7 +46,7 @@ class StorageHelper
 	{
 		var valueToSaveSerialized = this.serializer.serialize
 		(
-			valueToSave
+			valueToSave, false // pretty-print
 		);
 
 		var propertyNamePrefixed =

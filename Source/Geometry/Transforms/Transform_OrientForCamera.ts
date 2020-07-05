@@ -1,6 +1,8 @@
 
 class Transform_OrientForCamera
 {
+	orientation: Orientation;
+
 	constructor(orientation)
 	{
 		this.orientation = orientation;

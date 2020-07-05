@@ -1,6 +1,9 @@
 
 class VisualRotate
 {
+	rotationInTurns: number;
+	child: any;
+
 	constructor(rotationInTurns, child)
 	{
 		this.rotationInTurns = rotationInTurns;
@@ -12,7 +15,7 @@ class VisualRotate
 		var graphics = display.graphics;
 		graphics.save();
 
-		var centerOfRotation = entity.locatable.loc.pos;
+		var centerOfRotation = entity.locatable().loc.pos;
 		graphics.translate(centerOfRotation.x, centerOfRotation.y);
 
 		var rotationInRadians = this.rotationInTurns * Polar.RadiansPerTurn;

@@ -1,6 +1,10 @@
 
 class VisualCircleGradient
 {
+	radius: number;
+	gradientFill: Gradient;
+	colorBorder: any;
+
 	constructor(radius, gradientFill, colorBorder)
 	{
 		this.radius = radius;
@@ -12,7 +16,7 @@ class VisualCircleGradient
 	{
 		display.drawCircleWithGradient
 		(
-			entity.locatable.loc.pos, this.radius, this.gradientFill, this.colorBorder
+			entity.locatable().loc.pos, this.radius, this.gradientFill, this.colorBorder
 		);
 	};
 }

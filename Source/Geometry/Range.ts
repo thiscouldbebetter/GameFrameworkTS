@@ -1,6 +1,9 @@
 
-class Range
+class RangeExtent
 {
+	min: number;
+	max: number;
+
 	constructor(min, max)
 	{
 		this.min = min;
@@ -9,7 +12,7 @@ class Range
 
 	clone()
 	{
-		return new Range(this.min, this.max);
+		return new RangeExtent(this.min, this.max);
 	};
 
 	intersectWith(other)
@@ -37,8 +40,8 @@ class Range
 
 	overwriteWith(other)
 	{
-		this.min = min;
-		this.max = max;
+		this.min = other.min;
+		this.max = other.max;
 		return this;
 	};
 
@@ -63,17 +66,17 @@ class Range
 	{
 		var returnValues = [];
 
-		if (this.overlapsWith(other) == true)
+		if (this.overlapsWith(other))
 		{
 			if (this.min <= other.min)
 			{
-				var segment = new Range(this.min, other.min);
+				var segment = new RangeExtent(this.min, other.min);
 				returnValues.push(segment);
 			}
 
 			if (this.max >= other.max)
 			{
-				var segment = new Range(other.max, this.max);
+				var segment = new RangeExtent(other.max, this.max);
 				returnValues.push(segment);
 			}
 		}

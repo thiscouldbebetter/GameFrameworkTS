@@ -6,20 +6,20 @@ class EntityBuilder
 		var color = "Red";
 		var ticksToLive = 20;
 		var riseSpeed = -1;
-		var visual = new VisualText(text, color);
+		var visual = new VisualText(text, color, null);
 
 		var messageEntity = new Entity
 		(
 			"Message" + text, // name
 			[
-				new Drawable(visual),
+				new Drawable(visual, null),
 				new DrawableCamera(),
-				new Ephemeral(ticksToLive),
+				new Ephemeral(ticksToLive, null),
 				new Locatable
 				(
-					new Location(pos.clone()).velSet
+					new Disposition(pos.clone(), null, null).velSet
 					(
-						new Coords(0, riseSpeed)
+						new Coords(0, riseSpeed, 0)
 					)
 				),
 			]

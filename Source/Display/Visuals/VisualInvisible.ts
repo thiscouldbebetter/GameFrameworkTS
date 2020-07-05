@@ -1,6 +1,8 @@
 
 class VisualInvisible
 {
+	child: any;
+
 	constructor(child)
 	{
 		this.child = child;

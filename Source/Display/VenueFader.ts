@@ -1,6 +1,13 @@
 
 class VenueFader
 {
+	venuesToFadeFromAndTo: any;
+	backgroundColor: Color;
+	millisecondsPerFade: number;
+
+	timeFadeStarted: Date;
+	venueIndexCurrent: number;
+
 	constructor(venueToFadeTo, venueToFadeFrom, backgroundColor, millisecondsPerFade)
 	{
 		this.venuesToFadeFromAndTo =
@@ -44,7 +51,8 @@ class VenueFader
 			this.timeFadeStarted = now;
 		}
 
-		var millisecondsSinceFadeStarted = now - this.timeFadeStarted;
+		var millisecondsSinceFadeStarted =
+			now.getTime() - this.timeFadeStarted.getTime();
 
 		var fractionOfFadeCompleted =
 			millisecondsSinceFadeStarted
@@ -86,7 +94,7 @@ class VenueFader
 		var display = universe.display;
 		display.drawRectangle
 		(
-			new Coords(0, 0),
+			new Coords(0, 0, 0),
 			display.sizeDefault(), // Scaled automatically.
 			fadeColor.systemColor()
 		);

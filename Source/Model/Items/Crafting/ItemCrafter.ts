@@ -1,12 +1,21 @@
 
 class ItemCrafter
 {
+	recipes: CraftingRecipe[];
+
+	recipeSelected: CraftingRecipe;
+	itemEntitiesStaged: Entity[];
+	itemEntitySelected: Entity;
+	itemEntityStagedSelected: Entity;
+	statusMessage: string;
+
 	constructor(recipes)
 	{
 		this.recipes = recipes || [];
 
 		this.recipeSelected = null;
 		this.itemEntitiesStaged = [];
+		this.statusMessage = "-";
 	}
 
 	isRecipeSelectedFulfilled()
@@ -39,7 +48,7 @@ class ItemCrafter
 		var fontHeightSmall = fontHeight * .6;
 		var fontHeightLarge = fontHeight * 1.5;
 
-		var itemHolder = entityItemHolder.itemHolder;
+		var itemHolder = entityItemHolder.itemHolder();
 		var itemEntities = itemHolder.itemEntities;
 		var crafter = this;
 		var world = universe.world;
@@ -47,7 +56,7 @@ class ItemCrafter
 		var back = function()
 		{
 			var venueNext = venuePrev;
-			venueNext = new VenueFader(venueNext, universe.venueCurrent);
+			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 			universe.venueNext = venueNext;
 		};
 
@@ -57,7 +66,7 @@ class ItemCrafter
 			if (itemEntityToStage != null)
 			{
 				var itemEntitiesStaged = crafter.itemEntitiesStaged;
-				if (itemEntitiesStaged.contains(itemEntityToStage) == false)
+				if (itemEntitiesStaged.indexOf(itemEntityToStage) == -1)
 				{
 					itemEntitiesStaged.push(itemEntityToStage);
 				}
@@ -70,9 +79,9 @@ class ItemCrafter
 			if (itemEntityToUnstage != null)
 			{
 				var itemEntitiesStaged = crafter.itemEntitiesStaged;
-				if (itemEntitiesStaged.contains(itemEntityToUnstage))
+				if (itemEntitiesStaged.some(x => x == itemEntityToUnstage))
 				{
-					itemEntitiesStaged.remove(itemEntityToUnstage);
+					ArrayHelper.remove(itemEntitiesStaged, itemEntityToUnstage);
 				}
 			}
 		};
@@ -94,21 +103,21 @@ class ItemCrafter
 				var itemEntityOut = itemEntitiesOut[i];
 				itemHolder.itemEntityAdd(itemEntityOut);
 			}
-			crafter.itemEntitiesStaged.clear();
+			crafter.itemEntitiesStaged.length = 0;
 		};
 
 		var returnValue = new ControlContainer
 		(
 			"Crafting",
-			new Coords(0, 0), // pos
+			new Coords(0, 0, 0), // pos
 			sizeBase.clone(), // size
 			// children
 			[
 				new ControlLabel
 				(
 					"labelMaterials",
-					new Coords(10, 20), // pos
-					new Coords(70, 25), // size
+					new Coords(10, 20, 0), // pos
+					new Coords(70, 25, 0), // size
 					false, // isTextCentered
 					"Materials Held:",
 					fontHeightSmall
@@ -117,13 +126,14 @@ class ItemCrafter
 				new ControlList
 				(
 					"listItemsHeld",
-					new Coords(10, 30), // pos
-					new Coords(80, 110), // size
-					new DataBinding(itemEntities), // items
+					new Coords(10, 30, 0), // pos
+					new Coords(80, 110, 0), // size
+					new DataBinding(itemEntities, null, null), // items
 					new DataBinding
 					(
 						null,
-						function get(c) { return c.item.toString(world); }
+						function get(c) { return c.item().toString(world); },
+						null
 					), // bindingForItemText
 					fontHeightSmall,
 					new DataBinding
@@ -132,19 +142,20 @@ class ItemCrafter
 						function get(c) { return c.itemEntitySelected; },
 						function set(c, v) { c.itemEntitySelected = v; }
 					), // bindingForItemSelected
-					new DataBinding(null, function(c) { return c; } ), // bindingForItemValue
-					true, // isEnabled
+					new DataBinding(null, function(c) { return c; }, null ), // bindingForItemValue
+					new DataBinding(true, null, null), // isEnabled
 					function confirm(context, universe)
 					{
 						stage();
-					}
+					},
+					null
 				),
 
 				new ControlButton
 				(
 					"buttonStage",
-					new Coords(95, 80), // pos
-					new Coords(10, 10), // size
+					new Coords(95, 80, 0), // pos
+					new Coords(10, 10, 0), // size
 					">",
 					fontHeightSmall,
 					true, // hasBorder
@@ -156,20 +167,21 @@ class ItemCrafter
 							var returnValue =
 							(
 								c.itemEntitySelected != null
-								&& c.itemEntitiesStaged.contains(c.itemEntitySelected) == false
+								&& c.itemEntitiesStaged.indexOf(c.itemEntitySelected) == -1
 							);
 							return returnValue;
-						}
+						},
+						null
 					), // isEnabled
 					stage, // click
-					universe // context
+					null, null
 				),
 
 				new ControlButton
 				(
 					"buttonUnstage",
-					new Coords(95, 95), // pos
-					new Coords(10, 10), // size
+					new Coords(95, 95, 0), // pos
+					new Coords(10, 10, 0), // size
 					"<",
 					fontHeightSmall,
 					true, // hasBorder
@@ -179,17 +191,18 @@ class ItemCrafter
 						function get(c)
 						{
 							return (c.itemEntityStagedSelected != null);
-						}
+						},
+						null
 					), // isEnabled
 					unstage, // click
-					universe // context
+					null, null
 				),
 
 				new ControlLabel
 				(
 					"labelRecipe",
-					new Coords(110, 20), // pos
-					new Coords(70, 25), // size
+					new Coords(110, 20, 0), // pos
+					new Coords(70, 25, 0), // size
 					false, // isTextCentered
 					"Recipe:",
 					fontHeightSmall
@@ -198,8 +211,8 @@ class ItemCrafter
 				new ControlSelect
 				(
 					"selectRecipe",
-					new Coords(110, 30), // pos
-					new Coords(80, 10), // size
+					new Coords(110, 30, 0), // pos
+					new Coords(80, 10, 0), // size
 					new DataBinding
 					(
 						this,
@@ -209,11 +222,11 @@ class ItemCrafter
 					this.recipes, // options
 					new DataBinding
 					(
-						null, function get(c) { return c; } // hack
+						null, function get(c) { return c; }, null
 					), // bindingForOptionValues
 					new DataBinding
 					(
-						null, function get(c) { return c.name; }
+						null, function get(c) { return c.name; }, null
 					), // bindingForOptionText
 					fontHeightSmall
 				),
@@ -221,31 +234,34 @@ class ItemCrafter
 				new ControlList
 				(
 					"listItemsInRecipe",
-					new Coords(110, 40), // pos
-					new Coords(80, 25), // size
+					new Coords(110, 40, 0), // pos
+					new Coords(80, 25, 0), // size
 					new DataBinding
 					(
 						this,
 						function get(c)
 						{
 							return (c.recipeSelected == null ? [] : c.recipeSelected.itemsIn);
-						}
+						},
+						null
 					), // items
 					new DataBinding
 					(
 						null,
-						function get(c) { return c.toString(world); }
+						function get(c) { return c.toString(world); },
+						null
 					), // bindingForItemText
 					fontHeightSmall,
 					null, // bindingForItemSelected
-					new DataBinding(null, function(c) { return c; } ), // bindingForItemValue
+					new DataBinding(null, function(c) { return c; }, null ), // bindingForItemValue
+					null, null, null
 				),
 
 				new ControlButton
 				(
 					"buttonCombine",
-					new Coords(110, 70), // pos
-					new Coords(30, 10), // size
+					new Coords(110, 70, 0), // pos
+					new Coords(30, 10, 0), // size
 					"Combine:",
 					fontHeightSmall,
 					true, // hasBorder
@@ -255,28 +271,32 @@ class ItemCrafter
 						function get(c)
 						{
 							return (c.isRecipeSelectedFulfilled());
-						}
+						},
+						null
 					), // isEnabled
-					combine // click
+					combine, // click
+					null, null
 				),
 
 				new ControlList
 				(
 					"listItemsStaged",
-					new Coords(110, 80), // pos
-					new Coords(80, 25), // size
+					new Coords(110, 80, 0), // pos
+					new Coords(80, 25, 0), // size
 					new DataBinding
 					(
 						this,
-						function get(c) { return c.itemEntitiesStaged; }
+						function get(c) { return c.itemEntitiesStaged; },
+						null
 					), // items
 					new DataBinding
 					(
 						null,
 						function get(c)
 						{
-							return c.item.toString(world);
-						}
+							return c.item().toString(world);
+						},
+						null
 					), // bindingForItemText
 					fontHeightSmall,
 					new DataBinding
@@ -285,14 +305,15 @@ class ItemCrafter
 						function get(c) { return c.itemEntityStagedSelected; },
 						function set(c, v) { c.itemEntityStagedSelected = v; }
 					), // bindingForItemSelected
-					new DataBinding(null, function(c) { return c; } ), // bindingForItemValue
+					new DataBinding(null, function(c) { return c; }, null ), // bindingForItemValue
+					null, null, null
 				),
 
 				new ControlLabel
 				(
 					"infoStatus",
-					new Coords(150, 110), // pos
-					new Coords(200, 15), // size
+					new Coords(150, 110, 0), // pos
+					new Coords(200, 15, 0), // size
 					true, // isTextCentered
 					new DataBinding
 					(
@@ -300,7 +321,8 @@ class ItemCrafter
 						function get(c)
 						{
 							return c.statusMessage;
-						}
+						},
+						null
 					), // text
 					fontHeightSmall
 				)
@@ -318,18 +340,18 @@ class ItemCrafter
 
 		if (includeTitleAndDoneButton)
 		{
-			returnValue.children.insertElementAt
+			returnValue.children.splice
 			(
+				0, 0,
 				new ControlLabel
 				(
 					"labelCrafting",
-					new Coords(100, 10), // pos
-					new Coords(100, 25), // size
+					new Coords(100, 10, 0), // pos
+					new Coords(100, 25, 0), // size
 					true, // isTextCentered
 					"Crafting",
 					fontHeightLarge
-				),
-				0 // indexToInsertAt
+				)
 			);
 
 			returnValue.children.push
@@ -337,19 +359,20 @@ class ItemCrafter
 				new ControlButton
 				(
 					"buttonDone",
-					new Coords(170, 130), // pos
-					new Coords(20, 10), // size
+					new Coords(170, 130, 0), // pos
+					new Coords(20, 10, 0), // size
 					"Done",
 					fontHeightSmall,
 					true, // hasBorder
 					true, // isEnabled
-					back
+					back, // click
+					null, null
 				)
 			);
 		}
 		else
 		{
-			var titleHeightInverted = new Coords(0, -15);
+			var titleHeightInverted = new Coords(0, -15, 0);
 			returnValue.size.add(titleHeightInverted);
 			returnValue.shiftChildPositions(titleHeightInverted);
 		}
@@ -363,6 +386,6 @@ class ItemCrafter
 
 	clone()
 	{
-		return new ItemCrafter(this.recipes.clone());
+		return new ItemCrafter(ArrayHelper.clone(this.recipes) );
 	};
 }

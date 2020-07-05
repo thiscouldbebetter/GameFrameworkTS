@@ -1,6 +1,15 @@
 
 class Transform_MeshPoseWithSkeleton
 {
+	meshAtRest: MeshTextured;
+	skeletonAtRest: Skeleton;
+	boneInfluences: BoneInfluence[];
+	boneInfluencesByName: any;
+	skeletonPosed: Skeleton;
+
+	_orientation: Orientation;
+	_vertex: Coords;
+
 	constructor
 	(
 		meshAtRest,
@@ -13,11 +22,11 @@ class Transform_MeshPoseWithSkeleton
 		this.skeletonAtRest = skeletonAtRest;
 		this.skeletonPosed = skeletonPosed || this.skeletonAtRest.clone();
 		this.boneInfluences = boneInfluences;
-		this.boneInfluences.addLookups( x => x.boneName );
+		this.boneInfluencesByName = ArrayHelper.addLookups( this.boneInfluences, x => x.boneName );
 
 		// Helper variables.
-		this._orientation = new Orientation(new Coords(), new Coords());
-		this._vertex = new Coords();
+		this._orientation = new Orientation(new Coords(0, 0, 0), new Coords(0, 0, 0));
+		this._vertex = new Coords(0, 0, 0);
 	}
 
 	transform(transformable)

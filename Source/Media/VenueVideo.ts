@@ -1,6 +1,14 @@
 
 class VenueVideo
 {
+	videoName: string;
+	venueNext: any;
+
+	actionToInputsMappings: ActionToInputsMapping[];
+	actionToInputsMappingsByInputName: any;
+	hasVideoBeenStarted: boolean;
+	video: Video;
+
 	constructor(videoName, venueNext)
 	{
 		this.videoName = videoName;
@@ -14,7 +22,10 @@ class VenueVideo
 			new ActionToInputsMapping("VideoSkip", [ inputNames.Escape, inputNames.GamepadButton0 + "0"], true),
 		];
 
-		this.actionToInputsMappings.addLookupsMultiple(x => x.inputNames);
+		this.actionToInputsMappingsByInputName = ArrayHelper.addLookupsMultiple
+		(
+			this.actionToInputsMappings, x => x.inputNames
+		);
 	}
 
 	draw()
@@ -74,7 +85,7 @@ class VenueVideo
 			var display = universe.display;
 			display.drawBackground("Black", "Black");
 			universe.platformHelper.platformableShow(display);
-			universe.venueNext = new VenueFader(this.venueNext, this);
+			universe.venueNext = new VenueFader(this.venueNext, this, null, null);
 		}
 	};
 }

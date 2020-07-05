@@ -8,7 +8,7 @@ class DrawableCamera
 
 	initialize(universe, world, place, entity)
 	{
-		var drawable = entity.drawable;
+		var drawable = entity.drawable();
 		var visual = drawable.visual;
 		var visualTypeName = visual.constructor.name;
 		if (visualTypeName != VisualCameraProjection.name)

@@ -1,13 +1,18 @@
 
 class VisualImageScaled
 {
+	visualImage: any;
+	sizeScaled: Coords;
+
+	_drawPos: Coords;
+
 	constructor(visualImage, sizeScaled)
 	{
 		this.visualImage = visualImage;
 		this.sizeScaled = sizeScaled;
 
 		// Helper variables.
-		this._drawPos = new Coords();
+		this._drawPos = new Coords(0, 0, 0);
 	}
 
 	static manyFromSizeAndVisuals(sizeScaled, visualsToScale)
@@ -25,12 +30,10 @@ class VisualImageScaled
 	draw(universe, world, display, entity)
 	{
 		var image = this.visualImage.image(universe);
-
-		var image = this.visualImage.image(universe);
 		var imageSize = this.sizeScaled;
 		var drawPos = this._drawPos.clear().subtract(imageSize).half().add
 		(
-			entity.locatable.loc.pos
+			entity.locatable().loc.pos
 		);
 		display.drawImageScaled(image, drawPos, imageSize);
 	};

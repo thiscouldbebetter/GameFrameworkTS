@@ -1,5 +1,5 @@
 
-function ConstraintInstances()
+function Constraint_Instances()
 {
 	// Instance class.
 }
@@ -27,11 +27,11 @@ function ConstraintInstances()
 		)
 		{
 			var targetEntityName = this.target;
-			var targetEntity = place.entities[targetEntityName];
+			var targetEntity = place.entitiesByName[targetEntityName];
 			if (targetEntity != null)
 			{
-				var targetPos = targetEntity.locatable.loc.pos;
-				entityToConstrain.locatable.loc.pos.overwriteWith(targetPos);
+				var targetPos = targetEntity.locatable().loc.pos;
+				entityToConstrain.locatable().loc.pos.overwriteWith(targetPos);
 			}
 		};
 	}
@@ -59,7 +59,7 @@ function ConstraintInstances()
 	{
 		Constraint_ContainInBox.prototype.constrain = function(universe, world, place, entity)
 		{
-			this.boxToContainWithin.trimCoords(entity.locatable.loc.pos);
+			this.boxToContainWithin.trimCoords(entity.locatable().loc.pos);
 		};
 	}
 
@@ -67,14 +67,14 @@ function ConstraintInstances()
 	{
 		this.hemispaceToContainWithin = hemispaceToContainWithin;
 
-		this._coordsTemp = new Coords();
+		this._coordsTemp = new Coords(0, 0, 0);
 	}
 	{
 		Constraint_ContainInHemispace.prototype.constrain = function(universe, world, place, entity)
 		{
 			var hemispace = this.hemispaceToContainWithin;
 			var plane = hemispace.plane;
-			var loc = entity.locatable.loc;
+			var loc = entity.locatable().loc;
 			var pos = loc.pos;
 
 			// Can't use Hemispace.trimCoords(),
@@ -140,7 +140,7 @@ function ConstraintInstances()
 		Constraint_FrictionXY.prototype.constrain = function(universe, world, place, entity)
 		{
 			var targetFrictionCoefficient = this.target;
-			var entityLoc = entity.locatable.loc;
+			var entityLoc = entity.locatable().loc;
 			var entityVel = entityLoc.vel;
 			var entityVelZSaved = entityVel.z;
 			entityVel.z = 0;
@@ -170,7 +170,7 @@ function ConstraintInstances()
 		{
 			var targetFrictionCoefficient = this.target;
 			var frictionMagnitude = targetFrictionCoefficient;
-			var entityLoc = entity.locatable.loc;
+			var entityLoc = entity.locatable().loc;
 			var entityVel = entityLoc.vel;
 			var entitySpeed = entityVel.magnitude();
 			if (entitySpeed <= frictionMagnitude)
@@ -195,7 +195,7 @@ function ConstraintInstances()
 	{
 		Constraint_Gravity.prototype.constrain = function(universe, world, place, entity)
 		{
-			var loc = entity.locatable.loc;
+			var loc = entity.locatable().loc;
 			if (loc.pos.z < 0) // hack
 			{
 				loc.accel.add(this.accelerationPerTick);
@@ -222,15 +222,15 @@ function ConstraintInstances()
 	{
 		Constraint_OrientToward.prototype.constrain = function(universe, world, place, entity)
 		{
-			var targetBodyName = this.target;
+			var targetEntityName = this.target;
 
 			var constrainableLoc = entity.loc;
 			var constrainablePos = constrainableLoc.pos;
 			var constrainableOrientation = constrainableLoc.orientation;
 			var constrainableForward = constrainableOrientation.forward;
 
-			var target = context.bodies[targetBodyName];
-			var targetPos = target.loc.pos;
+			var target = place.entitiesByName[targetEntityName];
+			var targetPos = target.locatable().loc.pos;
 
 			constrainableForward.overwriteWith
 			(
@@ -252,7 +252,7 @@ function ConstraintInstances()
 		Constraint_SpeedMaxXY.prototype.constrain = function(universe, world, place, entity)
 		{
 			var targetSpeedMax = this.target;
-			var entityLoc = entity.locatable.loc;
+			var entityLoc = entity.locatable().loc;
 			var entityVel = entityLoc.vel;
 			var zSaved = entityVel.z;
 			entityVel.z = 0;
@@ -273,7 +273,7 @@ function ConstraintInstances()
 		Constraint_StopBelowSpeedMin.prototype.constrain = function(universe, world, place, entity)
 		{
 			var targetSpeedMin = this.target;
-			var entityLoc = entity.locatable.loc;
+			var entityLoc = entity.locatable().loc;
 			var entityVel = entityLoc.vel;
 			var speed = entityVel.magnitude();
 			if (speed < targetSpeedMin)
@@ -291,7 +291,7 @@ function ConstraintInstances()
 		Constraint_TrimToRange.prototype.constrain = function(universe, world, place, entity)
 		{
 			var targetSize = this.target;
-			var entityLoc = entity.locatable.loc;
+			var entityLoc = entity.locatable().loc;
 			entityLoc.pos.trimToRangeMax(targetSize);
 		};
 	}
@@ -304,7 +304,7 @@ function ConstraintInstances()
 		Constraint_WrapToRange.prototype.constrain = function(universe, world, place, entity)
 		{
 			var targetRange = this.target;
-			var entityLoc = entity.locatable.loc;
+			var entityLoc = entity.locatable().loc;
 			entityLoc.pos.wrapToRangeMax(targetRange);
 		};
 	}
@@ -316,7 +316,7 @@ function ConstraintInstances()
 	{
 		Constraint_WrapXTrimY.prototype.constrain = function(universe, world, place, entity)
 		{
-			var entityLoc = entity.locatable.loc;
+			var entityLoc = entity.locatable().loc;
 			var entityPos = entityLoc.pos;
 			var max = this.target;
 

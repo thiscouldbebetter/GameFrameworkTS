@@ -1,6 +1,15 @@
 
 class ItemDefn
 {
+	name: string;
+	appearance: string;
+	description: string;
+	mass: number;
+	tradeValue: number;
+	stackSizeMax: number;
+	categoryNames: any;
+	use: any;
+
 	constructor(name, appearance, description, mass, tradeValue, stackSizeMax, categoryNames, use)
 	{
 		this.name = name;
@@ -14,9 +23,14 @@ class ItemDefn
 		this.use = use;
 	}
 
+	static new1(name)
+	{
+		return new ItemDefn(name, null, null, null, null, null, null, null);
+	};
+
 	static fromNameCategoryNameAndUse(name, categoryName, use)
 	{
-		var returnValue = new ItemDefn(name);
+		var returnValue = ItemDefn.new1(name);
 		returnValue.categoryNames = [ categoryName ];
 		returnValue.use = use;
 		return returnValue;
@@ -24,7 +38,7 @@ class ItemDefn
 
 	static fromNameAndUse(name, use)
 	{
-		var returnValue = new ItemDefn(name);
+		var returnValue = ItemDefn.new1(name);
 		returnValue.use = use;
 		return returnValue;
 	};

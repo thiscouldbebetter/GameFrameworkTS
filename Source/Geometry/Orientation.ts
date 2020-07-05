@@ -1,6 +1,13 @@
 
 class Orientation
 {
+	forward: Coords;
+	down: Coords;
+	right: Coords;
+
+	axes: Coords[];
+	axesRDF: Coords[];
+
 	constructor(forward, down)
 	{
 		this.forward = forward || new Coords(1, 0, 0);
@@ -13,15 +20,21 @@ class Orientation
 		this.axesRDF = [ this.right, this.down, this.forward ];
 	}
 
+	static default()
+	{
+		return new Orientation(null, null);
+	}
+
 	// instances
 
+	static _instances: Orientation_Instances;
 	static Instances()
 	{
-		if (Orientation._Instances == null)
+		if (Orientation._instances == null)
 		{
-			Orientation._Instances = new Orientation_Instances();
+			Orientation._instances = new Orientation_Instances();
 		}
-		return Orientation._Instances;
+		return Orientation._instances;
 	};
 
 
@@ -31,6 +44,15 @@ class Orientation
 	{
 		return new Orientation(this.forward.clone(), this.down.clone());
 	};
+
+	equals(other)
+	{
+		var returnValue =
+			this.forward.equals(other.forward)
+			&& this.right.equals(other.right)
+			&& this.down.equals(other.down);
+		return returnValue;
+	}
 
 	forwardSet(value)
 	{
@@ -45,7 +67,7 @@ class Orientation
 		return this.orthogonalize();
 	};
 
-	orthogonalize(value)
+	orthogonalize()
 	{
 		this.forward.normalize();
 		this.right.overwriteWith(this.down).crossProduct(this.forward).normalize();
@@ -76,7 +98,7 @@ class Orientation
 	{
 		var returnValue = new Coords(0, 0, 0);
 
-		var axisScaled = new Coords();
+		var axisScaled = new Coords(0, 0, 0);
 
 		for (var i = 0; i < this.axes.length; i++)
 		{
@@ -108,7 +130,7 @@ class Orientation
 	{
 		var returnValue = new Coords(0, 0, 0);
 
-		var axisScaled = new Coords();
+		var axisScaled = new Coords(0, 0, 0);
 
 		for (var i = 0; i < this.axesRDF.length; i++)
 		{
@@ -145,7 +167,7 @@ class Orientation
 				returnValue += 1;
 			}
 
-			returnValue = returnValue.wrapToRangeMinMax(0, 1);
+			returnValue = NumberHelper.wrapToRangeMinMax(returnValue, 0, 1);
 		}
 
 		return returnValue;
@@ -154,6 +176,9 @@ class Orientation
 
 class Orientation_Instances
 {
+	ForwardXDownZ: Orientation;
+	ForwardZDownY: Orientation;
+
 	constructor()
 	{
 		this.ForwardXDownZ = new Orientation

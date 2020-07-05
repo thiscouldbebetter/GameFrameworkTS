@@ -1,6 +1,8 @@
 
 class VisualSound
 {
+	soundNameToPlay: string;
+
 	constructor(soundNameToPlay)
 	{
 		this.soundNameToPlay = soundNameToPlay;

@@ -1,16 +1,24 @@
 
 class Box
 {
+	center: Coords;
+	size: Coords;
+	sizeHalf: Coords;
+
+	_min: Coords;
+	_max: Coords;
+	_range: RangeExtent;
+
 	constructor(center, size)
 	{
-		this.center = center || new Coords();
-		this.size = size || new Coords();
+		this.center = center || new Coords(0, 0, 0);
+		this.size = size || new Coords(0, 0, 0);
 
 		this.sizeHalf = this.size.clone().half();
-		this._min = new Coords();
-		this._max = new Coords();
+		this._min = new Coords(0, 0, 0);
+		this._max = new Coords(0, 0, 0);
 
-		this._range = new Range();
+		this._range = new RangeExtent(0, 0);
 	}
 
 	// Static methods.
@@ -74,8 +82,8 @@ class Box
 		var otherMinDimensions = other.min().dimensions();
 		var otherMaxDimensions = other.max().dimensions();
 
-		var rangesForDimensions = [ new Range(), new Range(), new Range() ];
-		var rangeOther = new Range();
+		var rangesForDimensions = [ new RangeExtent(0, 0), new RangeExtent(0, 0), new RangeExtent(0, 0) ];
+		var rangeOther = new RangeExtent(0, 0);
 
 		var doAllDimensionsOverlapSoFar = true;
 
@@ -100,8 +108,8 @@ class Box
 
 		if (doAllDimensionsOverlapSoFar)
 		{
-			var center = new Coords();
-			var size = new Coords();
+			var center = new Coords(0, 0, 0);
+			var size = new Coords(0, 0, 0);
 			for (var d = 0; d < rangesForDimensions.length; d++)
 			{
 				var rangeForDimension = rangesForDimensions[d];

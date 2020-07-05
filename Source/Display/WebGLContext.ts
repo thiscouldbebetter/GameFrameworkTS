@@ -1,6 +1,9 @@
 
 class WebGLContext
 {
+	gl: any;
+	shaderProgram: any;
+
 	constructor(canvas)
 	{
 		this.gl = this.initGL(canvas);

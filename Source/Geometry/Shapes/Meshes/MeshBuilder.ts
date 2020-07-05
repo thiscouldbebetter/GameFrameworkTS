@@ -182,7 +182,9 @@ class MeshBuilder
 	grid(sizeInCells, cellSize, material)
 	{
 		var vertexPositions = [];
-		var vertexPosInCells = new Coords();
+		var vertexPosInCells = new Coords(0, 0, 0);
+		var vertexPos = new Coords(0, 0, 0);
+
 		for (var y = 0; y <= sizeInCells.y; y++)
 		{
 			vertexPosInCells.y = y;
@@ -237,10 +239,10 @@ class MeshBuilder
 
 			var textureUVs =
 			[
-				new Coords(0, 0),
-				new Coords(1, 0),
-				new Coords(1, 1),
-				new Coords(0, 1),
+				new Coords(0, 0, 0),
+				new Coords(1, 0, 0),
+				new Coords(1, 1, 0),
+				new Coords(0, 1, 0),
 			];
 
 			for (var y = 0; y < sizeInCells.y; y++)
@@ -256,15 +258,16 @@ class MeshBuilder
 				}
 			}
 
-			returnMesh = new MeshTextured
+			var returnMeshTextured = new MeshTextured
 			(
 				returnMesh, // geometry
 				[ material ],
-				faceTextures
+				faceTextures,
+				null
 			);
 		}
 
-		return returnMesh;
+		return returnMeshTextured;
 	};
 
 	room
@@ -305,7 +308,7 @@ class MeshBuilder
 				wallDisplacement = wallNormal.clone();
 			}
 
-			wallOrientation = new Orientation(wallNormal.clone(), down.clone());
+			var wallOrientation = new Orientation(wallNormal.clone(), down.clone());
 
 			meshForWall.transform
 			(
@@ -350,7 +353,8 @@ class MeshBuilder
 					new Coords
 					(
 						faceTangent.dotProduct(roomSize),
-						faceDown.dotProduct(roomSize)
+						faceDown.dotProduct(roomSize),
+						0
 					).absolute().multiplyScalar
 					(
 						.2
@@ -359,7 +363,7 @@ class MeshBuilder
 			)
 		}
 
-		var returnMesh = this.mergeMeshes(meshesForRoom);
+		var returnMesh = this.mergeMeshes(meshesForRoom, null);
 
 		returnMesh.transform
 		(
@@ -424,10 +428,10 @@ class MeshBuilder
 			// vertices
 			[
 				// wall
-				new Coords(1, -1),
-				new Coords(-1, -1),
-				new Coords(-1, 1),
-				new Coords(1, 1),
+				new Coords(1, -1, 0),
+				new Coords(-1, -1, 0),
+				new Coords(-1, 1, 0),
+				new Coords(1, 1, 0),
 
 			],
 			// faces
@@ -436,7 +440,7 @@ class MeshBuilder
 			]
 		);
 
-		returnMesh = new MeshTextured
+		var returnMeshTextured = new MeshTextured
 		(
 			returnMesh,
 			[ material ],
@@ -445,16 +449,17 @@ class MeshBuilder
 				(
 					material.name,
 					[
-						new Coords(1, 0),
-						new Coords(0, 0),
-						new Coords(0, 1),
-						new Coords(1, 1),
+						new Coords(1, 0, 0),
+						new Coords(0, 0, 0),
+						new Coords(0, 1, 0),
+						new Coords(1, 1, 0),
 					]
 				),
-			]
+			],
+			null
 		);
 
-		return returnMesh;
+		return returnMeshTextured;
 	};
 
 	room_WallWithDoorway(material, doorwayWidthScaleFactor, wallThickness)
@@ -473,22 +478,22 @@ class MeshBuilder
 
 				// b = bottom, t = top, l = left, r = right.
 				// top
-				new Coords(-doorwayWidthHalf, -doorwayHeight), // bl - 0
-				new Coords(doorwayWidthHalf, -doorwayHeight), // br - 1
-				new Coords(doorwayWidthHalf, -1), // tr - 2
-				new Coords(-doorwayWidthHalf, -1), // tl - 3
+				new Coords(-doorwayWidthHalf, -doorwayHeight, 0), // bl - 0
+				new Coords(doorwayWidthHalf, -doorwayHeight, 0), // br - 1
+				new Coords(doorwayWidthHalf, -1, 0), // tr - 2
+				new Coords(-doorwayWidthHalf, -1, 0), // tl - 3
 
 				// left
-				new Coords(-1, 1), // bl - 4
-				new Coords(-doorwayWidthHalf, 1), // br - 5
-				new Coords(-doorwayWidthHalf, -1), // tr - 6
-				new Coords(-1, -1), // tl - 7
+				new Coords(-1, 1, 0), // bl - 4
+				new Coords(-doorwayWidthHalf, 1, 0), // br - 5
+				new Coords(-doorwayWidthHalf, -1, 0), // tr - 6
+				new Coords(-1, -1, 0), // tl - 7
 
 				// right
-				new Coords(doorwayWidthHalf, 1), // bl - 8
-				new Coords(1, 1), // br - 9
-				new Coords(1, -1), // tr - 10
-				new Coords(doorwayWidthHalf, -1), // tl - 11
+				new Coords(doorwayWidthHalf, 1, 0), // bl - 8
+				new Coords(1, 1, 0), // br - 9
+				new Coords(1, -1, 0), // tr - 10
+				new Coords(doorwayWidthHalf, -1, 0), // tl - 11
 
 				// doorframe
 				new Coords(-doorwayWidthHalf, 1, wt), // bl - 12
@@ -518,17 +523,17 @@ class MeshBuilder
 
 		var transformScaleSides = new Transform_Scale
 		(
-			new Coords(doorwayWidthReversedHalf, .5)
+			new Coords(doorwayWidthReversedHalf, .5, 0)
 		);
 
 		var transformScaleTop = new Transform_Scale
 		(
-			new Coords(doorwayWidthHalf, doorwayHeightReversed)
+			new Coords(doorwayWidthHalf, doorwayHeightReversed, 0)
 		);
 
 		var transformScaleSidesDoorframe = new Transform_Scale
 		(
-			new Coords(wallThickness, doorwayHeight)
+			new Coords(wallThickness, doorwayHeight, 0)
 		);
 
 		var materialName = material.name;
@@ -541,10 +546,10 @@ class MeshBuilder
 			(
 				materialName,
 				[
-					new Coords(0, 1),
-					new Coords(1, 1),
-					new Coords(1, 0),
-					new Coords(0, 0),
+					new Coords(0, 1, 0),
+					new Coords(1, 1, 0),
+					new Coords(1, 0, 0),
+					new Coords(0, 0, 0),
 				]
 			).transform(transformScaleTop),
 			// left
@@ -552,10 +557,10 @@ class MeshBuilder
 			(
 				materialName,
 				[
-					new Coords(0, 1),
-					new Coords(1, 1),
-					new Coords(1, 0),
-					new Coords(0, 0),
+					new Coords(0, 1, 0),
+					new Coords(1, 1, 0),
+					new Coords(1, 0, 0),
+					new Coords(0, 0, 0),
 				]
 			).transform(transformScaleSides),
 			// right
@@ -563,10 +568,10 @@ class MeshBuilder
 			(
 				materialName,
 				[
-					new Coords(0, 1),
-					new Coords(1, 1),
-					new Coords(1, 0),
-					new Coords(0, 0),
+					new Coords(0, 1, 0),
+					new Coords(1, 1, 0),
+					new Coords(1, 0, 0),
+					new Coords(0, 0, 0),
 				]
 			).transform(transformScaleSides),
 			// doorframe
@@ -575,10 +580,10 @@ class MeshBuilder
 			(
 				materialName,
 				[
-					new Coords(0, 1),
-					new Coords(1, 1),
-					new Coords(1, 0),
-					new Coords(0, 0),
+					new Coords(0, 1, 0),
+					new Coords(1, 1, 0),
+					new Coords(1, 0, 0),
+					new Coords(0, 0, 0),
 				]
 			).transform(transformScaleSidesDoorframe),
 			// right
@@ -586,36 +591,37 @@ class MeshBuilder
 			(
 				materialName,
 				[
-					new Coords(0, 1),
-					new Coords(1, 1),
-					new Coords(1, 0),
-					new Coords(0, 0),
+					new Coords(0, 1, 0),
+					new Coords(1, 1, 0),
+					new Coords(1, 0, 0),
+					new Coords(0, 0, 0),
 				]
 			).transform(transformScaleSidesDoorframe),
 			// todo - top
 		];
 
-		returnMesh = new MeshTextured
+		var returnMeshTextured = new MeshTextured
 		(
 			returnMesh,
 			[ material ],
-			faceTextures
+			faceTextures,
+			null
 		).transformFaceTextures
 		(
 			new Transform_Scale( new Coords(1, 1, 1).multiplyScalar(2) )
 		);;
 
-		return returnMesh;
+		return returnMeshTextured;
 	};
 
 	unitCube(material)
 	{
 		var returnMesh = this.unitCube_Geometry();
-		returnMesh = new MeshTextured(returnMesh, [ material ]);
-		return returnMesh;
+		var returnMeshTextured = new MeshTextured(returnMesh, [ material ], null, null);
+		return returnMeshTextured;
 	};
 
-	unitCube_Geometry(material)
+	unitCube_Geometry()
 	{
 		var returnMesh = new Mesh
 		(
@@ -659,8 +665,8 @@ class MeshBuilder
 		{
 			var vertexAngleInTurns = i / numberOfVertices;
 
-			var vertexPolar = new Polar(vertexAngleInTurns, 1);
-			var vertex = vertexPolar.toCoords();
+			var vertexPolar = new Polar(vertexAngleInTurns, 1, 0);
+			var vertex = vertexPolar.toCoords(new Coords(0, 0, 0));
 
 			vertices.push(vertex);
 
@@ -674,9 +680,9 @@ class MeshBuilder
 			[ new Mesh_FaceBuilder(vertexIndicesForFace) ]
 		);
 
-		returnMesh = new MeshTextured(returnMesh, [ material ]);
+		var returnMeshTextured = new MeshTextured(returnMesh, [ material ], null, null);
 
-		return returnMesh;
+		return returnMeshTextured;
 	};
 
 	unitSquare(material)
@@ -699,7 +705,7 @@ class MeshBuilder
 			]
 		);
 
-		returnMesh = new MeshTextured
+		var returnMeshTextured = new MeshTextured
 		(
 			returnMesh,
 			[ material ],
@@ -708,16 +714,17 @@ class MeshBuilder
 				(
 					material.name,
 					[
-						new Coords(0, 0),
-						new Coords(1, 0),
-						new Coords(1, 1),
-						new Coords(0, 1),
+						new Coords(0, 0, 0),
+						new Coords(1, 0, 0),
+						new Coords(1, 1, 0),
+						new Coords(0, 1, 0),
 					]
 				)
-			]
+			],
+			null
 		);
 
-		return returnMesh;
+		return returnMeshTextured;
 	};
 
 	clipFaceAgainstPlanes(faceToClip, planesToClipAgainst)
@@ -726,7 +733,7 @@ class MeshBuilder
 
 		for (var p = 0; p < planesToClipAgainst.length; p++)
 		{
-			faceToClip = MeshBuilder.splitFaceByPlaneFrontAndBack
+			faceToClip = this.splitFaceByPlaneFrontAndBack
 			(
 				faceToClip,
 				planesToClipAgainst[p]
@@ -823,7 +830,7 @@ class MeshBuilder
 			}
 		}
 
-		returnMesh = new MeshTextured
+		var returnMeshTextured = new MeshTextured
 		(
 			returnMesh,
 			materialsMerged,
@@ -831,7 +838,7 @@ class MeshBuilder
 			vertexGroups
 		);
 
-		return returnMesh;
+		return returnMeshTextured;
 	};
 
 	splitFaceByPlaneFrontAndBack(faceToDivide, planeToDivideOn)
@@ -851,7 +858,7 @@ class MeshBuilder
 		{
 			var vertex = faceToDivideVertices[v];
 
-			var distanceOfVertexAbovePlane = planeToDivideOn.distanceToPointAlongNormal
+			distanceOfVertexAbovePlane = planeToDivideOn.distanceToPointAlongNormal
 			(
 				vertex
 			);
@@ -895,8 +902,7 @@ class MeshBuilder
 			{
 				var collision = collisionHelper.collisionOfEdgeAndPlane
 				(
-					edge,
-					planeToDivideOn
+					edge, planeToDivideOn, null
 				);
 
 				if (collision != null)

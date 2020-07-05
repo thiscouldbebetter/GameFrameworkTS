@@ -1,41 +1,60 @@
 
 class PlaceDefn
 {
+	name: string;
+	actions: Action[];
+	actionsByName: any;
+	actionToInputsMappings: ActionToInputsMapping[];
+	actionToInputsMappingsByInputName: any;
+
+	actionToInputsMappingSelected: ActionToInputsMapping;
+	actionToInputsMappingsDefault: ActionToInputsMapping[];
+	actionToInputsMappingsEdited: ActionToInputsMapping[];
+
 	constructor(name, actions, actionToInputsMappings)
 	{
 		this.name = name;
-		this.actions = actions.addLookupsByName();
+		this.actions = actions;
+		this.actionsByName = ArrayHelper.addLookupsByName(this.actions);
 		this.actionToInputsMappingsDefault = actionToInputsMappings;
-		this.actionToInputsMappings = this.actionToInputsMappingsDefault.clone();
-		this.actionToInputsMappingsEdited = this.actionToInputsMappings.clone();
+		this.actionToInputsMappings = ArrayHelper.clone(this.actionToInputsMappingsDefault);
+		this.actionToInputsMappingsEdited = ArrayHelper.clone(this.actionToInputsMappings);
 
-		this.actionToInputsMappings.addLookupsMultiple(x => x.inputNames);
+		this.actionToInputsMappingsByInputName = ArrayHelper.addLookupsMultiple
+		(
+			this.actionToInputsMappings, x => x.inputNames
+		);
 	}
 
 	actionToInputsMappingsEdit()
 	{
-		this.actionToInputsMappingsEdited.overwriteWith
+		ArrayHelper.overwriteWith
 		(
+			this.actionToInputsMappingsEdited,
 			this.actionToInputsMappings
-		).clearLookups();
+		);
 
 		this.actionToInputsMappingSelected = null;
 	};
 
 	actionToInputsMappingsRestoreDefaults()
 	{
-		this.actionToInputsMappingsEdited.overwriteWith
+		ArrayHelper.overwriteWith
 		(
+			this.actionToInputsMappingsEdited,
 			this.actionToInputsMappingsDefault
 		);
 	};
 
 	actionToInputsMappingsSave()
 	{
-		this.actionToInputsMappings =
-			this.actionToInputsMappingsEdited.clone().addLookupsMultiple
-			(
-				x => x.inputNames
-			);
+		this.actionToInputsMappings = ArrayHelper.clone
+		(
+			this.actionToInputsMappingsEdited
+		);
+		this.actionToInputsMappingsByInputName = ArrayHelper.addLookupsMultiple
+		(
+			this.actionToInputsMappings, x => x.inputNames
+		);
 	};
 }

@@ -1,6 +1,24 @@
 
 class ControlTextBox
 {
+	name: string;
+	pos: Coords;
+	size: Coords;
+	_text: any;
+	fontHeightInPixels: number;
+	numberOfCharsMax: number;
+
+	cursorPos: number;
+	isHighlighted: boolean;
+	parent: any;
+	styleName: string;
+
+	_drawPos: Coords;
+	_drawPosText: Coords;
+	_drawLoc: Disposition;
+	_textMargin: Coords;
+	_textSize: Coords;
+
 	constructor(name, pos, size, text, fontHeightInPixels, numberOfCharsMax)
 	{
 		this.name = name;
@@ -11,19 +29,19 @@ class ControlTextBox
 		this.numberOfCharsMax = numberOfCharsMax;
 
 		this.isHighlighted = false;
-		this.cursorPos = this.text().length;
+		this.cursorPos = this.text(null, null).length;
 
 		// Helper variables.
-		this._drawPos = new Coords();
-		this._drawPosText = new Coords();
-		this._drawLoc = new Location(this._drawPos);
-		this._textMargin = new Coords();
-		this._textSize = new Coords();
+		this._drawPos = new Coords(0, 0, 0);
+		this._drawPosText = new Coords(0, 0, 0);
+		this._drawLoc = new Disposition(this._drawPos, null, null);
+		this._textMargin = new Coords(0, 0, 0);
+		this._textSize = new Coords(0, 0, 0);
 	}
 
 	style(universe)
 	{
-		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
+		return universe.controlBuilder.stylesByName[this.styleName == null ? "Default" : this.styleName];
 	};
 
 	text(value, universe)
@@ -47,27 +65,21 @@ class ControlTextBox
 
 	actionHandle(actionNameToHandle)
 	{
-		var text = this.text();
+		var text = this.text(null, null);
 
 		var controlActionNames = ControlActionNames.Instances();
 		if (actionNameToHandle == controlActionNames.ControlCancel)
 		{
-			this.text(text.substr(0, text.length - 1));
+			this.text(text.substr(0, text.length - 1), null);
 
-			this.cursorPos =
+			this.cursorPos = NumberHelper.wrapToRangeMinMax
 			(
-				this.cursorPos - 1
-			).wrapToRangeMinMax
-			(
-				0, text.length + 1
+				this.cursorPos - 1, 0, text.length + 1
 			);
 		}
 		else if (actionNameToHandle == controlActionNames.ControlConfirm)
 		{
-			this.cursorPos =
-			(
-				this.cursorPos + 1
-			).wrapToRangeMinMax(0, text.length + 1);
+			this.cursorPos = NumberHelper.wrapToRangeMinMax(this.cursorPos + 1, 0, text.length + 1);
 		}
 		else if
 		(
@@ -83,11 +95,9 @@ class ControlTextBox
 				this.cursorPos < text.length ? text.charCodeAt(this.cursorPos) : "A".charCodeAt(0) - 1
 			);
 
-			charCodeAtCursor =
+			charCodeAtCursor = NumberHelper.wrapToRangeMinMax
 			(
-				charCodeAtCursor + direction
-			).wrapToRangeMinMax
-			(
+				charCodeAtCursor + direction,
 				"A".charCodeAt(0),
 				"Z".charCodeAt(0) + 1
 			);
@@ -97,8 +107,9 @@ class ControlTextBox
 			this.text
 			(
 				text.substr(0, this.cursorPos)
-				+ charAtCursor
-				+ text.substr(this.cursorPos + 1)
+					+ charAtCursor
+					+ text.substr(this.cursorPos + 1),
+				null
 			);
 		}
 		else if (actionNameToHandle.length == 1 || actionNameToHandle.startsWith("_") ) // printable character
@@ -120,16 +131,14 @@ class ControlTextBox
 				text = this.text
 				(
 					text.substr(0, this.cursorPos)
-					+ actionNameToHandle
-					+ text.substr(this.cursorPos)
+						+ actionNameToHandle
+						+ text.substr(this.cursorPos),
+					null
 				);
 
-				this.cursorPos =
+				this.cursorPos = NumberHelper.wrapToRangeMinMax
 				(
-					this.cursorPos + 1
-				).wrapToRangeMinMax
-				(
-					0, text.length + 1
+					this.cursorPos + 1, 0, text.length + 1
 				);
 			}
 		}
@@ -161,7 +170,7 @@ class ControlTextBox
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 		var style = this.style(universe);
 
-		var text = this.text();
+		var text = this.text(null, null);
 
 		display.drawRectangle
 		(
@@ -208,7 +217,7 @@ class ControlTextBox
 			display.drawRectangle
 			(
 				drawPosText,
-				new Coords(cursorWidth, this.fontHeightInPixels), // size
+				new Coords(cursorWidth, this.fontHeightInPixels, 0), // size
 				style.colorFill,
 				style.colorFill
 			);

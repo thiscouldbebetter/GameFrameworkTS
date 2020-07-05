@@ -1,6 +1,8 @@
 
 class Transform_Scale
 {
+	scaleFactors: Coords;
+
 	constructor(scaleFactors)
 	{
 		this.scaleFactors = scaleFactors;

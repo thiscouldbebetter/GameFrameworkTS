@@ -1,20 +1,27 @@
 
 class Edge
 {
+	vertices: Coords[];
+
+	_box: Box;
+	_direction: Coords;
+	_displacement: Coords;
+	_transverse: Coords;
+
 	constructor(vertices)
 	{
 		this.vertices = vertices;
 
-		this._direction = new Coords();
-		this._displacement = new Coords();
-		this._transverse = new Coords();
+		this._direction = new Coords(0, 0, 0);
+		this._displacement = new Coords(0, 0, 0);
+		this._transverse = new Coords(0, 0, 0);
 	}
 
 	box()
 	{
 		if (this._box == null)
 		{
-			this._box = new Box(new Coords(), new Coords());
+			this._box = new Box(new Coords(0, 0, 0), new Coords(0, 0, 0));
 		}
 		this._box.ofPoints(this.vertices);
 		return this._box;
@@ -27,7 +34,7 @@ class Edge
 
 	equals(other)
 	{
-		return this.vertices.equals(other.vertices);
+		return ArrayHelper.equals(this.vertices, other.vertices);
 	};
 
 	displacement()
@@ -78,12 +85,12 @@ class Edge
 
 	clone()
 	{
-		return new Edge(this.vertices.clone());
+		return new Edge(ArrayHelper.clone(this.vertices));
 	};
 
 	overwriteWith(other)
 	{
-		this.vertices.overwriteWith(other.vertices);
+		ArrayHelper.overwriteWith(this.vertices, other.vertices);
 		return this;
 	};
 }

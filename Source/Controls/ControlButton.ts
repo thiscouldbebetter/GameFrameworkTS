@@ -1,6 +1,23 @@
 
 class ControlButton
 {
+	name: string;
+	pos: Coords;
+	size: Coords;
+	text: string;
+	fontHeightInPixels: number;
+	hasBorder: boolean;
+	_isEnabled: any;
+	click: any;
+	context: any;
+	canBeHeldDown: boolean;
+
+	isHighlighted: boolean;
+	styleName: string;
+
+	_drawLoc: Disposition;
+	_sizeHalf: Coords;
+
 	constructor(name, pos, size, text, fontHeightInPixels, hasBorder, isEnabled, click, context, canBeHeldDown)
 	{
 		this.name = name;
@@ -17,8 +34,8 @@ class ControlButton
 		this.isHighlighted = false;
 
 		// Helper variables.
-		this._drawLoc = new Location(new Coords());
-		this._sizeHalf = new Coords();
+		this._drawLoc = new Disposition(new Coords(0, 0, 0), Orientation.default(), null);
+		this._sizeHalf = new Coords(0, 0, 0);
 	}
 
 	actionHandle(actionNameToHandle)
@@ -76,7 +93,7 @@ class ControlButton
 
 	style(universe)
 	{
-		return universe.controlBuilder.styles[this.styleName == null ? "Default" : this.styleName];
+		return universe.controlBuilder.stylesByName[this.styleName == null ? "Default" : this.styleName];
 	};
 
 	// drawable

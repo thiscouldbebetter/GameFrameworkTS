@@ -1,18 +1,18 @@
 
-function BoneInfluence
-(
-	boneName,
-	vertexIndicesControlled
-)
+class BoneInfluence
 {
-	this.boneName = boneName;
-	this.vertexIndicesControlled = vertexIndicesControlled;
-}
+	boneName: string;
+	vertexIndicesControlled: number[];
 
-{
+	constructor(boneName, vertexIndicesControlled)
+	{
+		this.boneName = boneName;
+		this.vertexIndicesControlled = vertexIndicesControlled;
+	}
+
 	// static methods
 
-	BoneInfluence.buildManyForBonesAndVertexGroups = function(bones, vertexGroups)
+	static buildManyForBonesAndVertexGroups(bones, vertexGroups)
 	{
 		var boneInfluences = [];
 

@@ -1,6 +1,10 @@
 
 class ActionToInputsMapping
 {
+	actionName: string;
+	inputNames: string[];
+	inactivateInputWhenActionPerformed: boolean;
+
 	constructor(actionName, inputNames, inactivateInputWhenActionPerformed)
 	{
 		this.actionName = actionName;
@@ -10,7 +14,7 @@ class ActionToInputsMapping
 
 	action(universe)
 	{
-		return universe.world.defns.actions[this.actionName];
+		return universe.world.defns.defnsByNameByTypeName[Action.name][this.actionName];
 	};
 
 	// Cloneable implementation.

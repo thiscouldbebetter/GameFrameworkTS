@@ -1,6 +1,9 @@
 
 class AnimationKeyframe
 {
+	frameIndex: number;
+	transforms: any;
+
 	constructor(frameIndex, transforms)
 	{
 		this.frameIndex = frameIndex;

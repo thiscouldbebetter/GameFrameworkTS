@@ -1,25 +1,33 @@
 
 class Action
 {
+	name: string;
+	perform: any;
+
 	constructor(name, perform)
 	{
 		this.name = name;
 		this.perform = perform;
 	}
 
+	static _instances: Action_Instances;
 	static Instances()
 	{
-		if (Action._Instances == null)
+		if (Action._instances == null)
 		{
-			Action._Instances = new Action_Instances();
+			Action._instances = new Action_Instances();
 		}
-		return Action._Instances;
+		return Action._instances;
 	};
 
 }
 
 class Action_Instances
 {
+	DoNothing: Action;
+	ShowItems: Action;
+	ShowMenu: Action;
+
 	constructor()
 	{
 		this.DoNothing = new Action
@@ -36,12 +44,12 @@ class Action_Instances
 			"ShowItems",
 			function perform(universe, world, place, actor)
 			{
-				var control = actor.controllable.toControl
+				var control = actor.controllable().toControl
 				(
 					universe, universe.display.sizeInPixels, actor, universe.venueCurrent
 				);
-				var venueNext = new VenueControls(control);
-				venueNext = new VenueFader(venueNext, universe.venueCurrent);
+				var venueNext: any = new VenueControls(control);
+				venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 				universe.venueNext = venueNext;
 			}
 		);
@@ -51,11 +59,11 @@ class Action_Instances
 			"ShowMenu",
 			function perform(universe, world, place, actor)
 			{
-				var venueNext = new VenueControls
+				var venueNext: any = new VenueControls
 				(
 					universe.controlBuilder.gameAndSettings(universe)
 				);
-				venueNext = new VenueFader(venueNext, universe.venueCurrent);
+				venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 				universe.venueNext = venueNext;
 			}
 		);

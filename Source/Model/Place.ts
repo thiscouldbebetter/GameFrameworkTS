@@ -1,12 +1,25 @@
 
 class Place
 {
+	name: string;
+	defnName: string;
+	size: Coords;
+	entities: Entity[];
+	entitiesByName: any;
+
+	_entitiesByPropertyName: any;
+	entitiesToSpawn: Entity[];
+	entitiesToRemove: Entity[];
+	propertyNamesToProcess: string[];
+
 	constructor(name, defnName, size, entities)
 	{
 		this.name = name;
 		this.defnName = defnName;
 		this.size = size;
 		this.entities = [];
+		this.entitiesByName = {};
+
 		this._entitiesByPropertyName = {};
 		this.entitiesToSpawn = entities.slice();
 		this.entitiesToRemove = [];
@@ -30,7 +43,7 @@ class Place
 
 	defn(world)
 	{
-		return world.defns.placeDefns[this.defnName];
+		return world.defns.defnsByNameByTypeName[PlaceDefn.name][this.defnName];
 	};
 
 	draw(universe, world)
@@ -39,7 +52,7 @@ class Place
 		for (var i = 0; i < entitiesDrawable.length; i++)
 		{
 			var entity = entitiesDrawable[i];
-			var drawable = entity.drawable;
+			var drawable = entity.drawable();
 			drawable.updateForTimerTick(universe, world, this, entity);
 		}
 		this.camera().drawEntitiesInViewThenClear(universe, world, universe.display);
@@ -65,7 +78,7 @@ class Place
 			entity.initialize(universe, world, this);
 		}
 
-		this.entitiesToSpawn.clear();
+		this.entitiesToSpawn.length = 0;
 	};
 
 	entitiesRemove()
@@ -75,7 +88,7 @@ class Place
 			var entity = this.entitiesToRemove[i];
 			this.entityRemove(entity);
 		}
-		this.entitiesToRemove.clear();
+		this.entitiesToRemove.length = 0;
 	};
 
 	entitiesSpawn(universe, world)
@@ -86,7 +99,7 @@ class Place
 			this.entitySpawn(universe, world, entity);
 		}
 
-		this.entitiesToSpawn.clear();
+		this.entitiesToSpawn.length = 0;
 	};
 
 	entityRemove(entity)
@@ -98,10 +111,10 @@ class Place
 			var propertyName = property.constructor.name;
 			var entitiesWithProperty =
 				this.entitiesByPropertyName(propertyName);
-			entitiesWithProperty.remove(entity);
+			ArrayHelper.remove(entitiesWithProperty, entity);
 		}
-		this.entities.remove(entity);
-		delete this.entities[entity.name];
+		ArrayHelper.remove(this.entities, entity);
+		delete this.entitiesByName[entity.name];
 	};
 
 	entitySpawn(universe, world, entity)
@@ -112,13 +125,13 @@ class Place
 			entityName = "Entity";
 		}
 
-		if (this.entities[entityName] != null)
+		if (this.entitiesByName[entityName] != null)
 		{
 			entityName += universe.idHelper.idNext();
 		}
 
 		this.entities.push(entity);
-		this.entities[entityName] = entity;
+		this.entitiesByName[entityName] = entity;
 
 		var entityProperties = entity.properties;
 		for (var i = 0; i < entityProperties.length; i++)
@@ -134,7 +147,7 @@ class Place
 
 	finalize(universe, world)
 	{
-		this.entitiesRemove(universe, world);
+		this.entitiesRemove();
 		universe.inputHelper.inputsRemoveAll();
 	};
 
@@ -154,14 +167,12 @@ class Place
 		{
 			var propertyName = this.propertyNamesToProcess[p];
 			var entitiesWithProperty = this.entitiesByPropertyName(propertyName);
-
-			propertyName = propertyName.lowercaseFirstCharacter();
 			if (entitiesWithProperty != null)
 			{
 				for (var i = 0; i < entitiesWithProperty.length; i++)
 				{
 					var entity = entitiesWithProperty[i];
-					var entityProperty = entity[propertyName];
+					var entityProperty = entity.propertiesByName[propertyName];
 					entityProperty.updateForTimerTick(universe, world, this, entity);
 				}
 			}
@@ -173,7 +184,7 @@ class Place
 	camera()
 	{
 		var cameraEntity = this.entitiesByPropertyName(Camera.name)[0];
-		return (cameraEntity == null ? null : cameraEntity.camera);
+		return (cameraEntity == null ? null : cameraEntity.camera());
 	};
 
 	player()

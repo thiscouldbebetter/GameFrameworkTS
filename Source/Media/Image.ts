@@ -1,6 +1,13 @@
 
-class Image
+class Image2
 {
+	name: string;
+	sourcePath: string;
+	isLoaded: boolean;
+
+	sizeInPixels: Coords;
+	systemImage: any;
+
 	constructor(name, sourcePath)
 	{
 		this.name = name;
@@ -14,14 +21,14 @@ class Image
 
 	static fromSystemImage(name, systemImage)
 	{
-		var returnValue = new Image
+		var returnValue = new Image2
 		(
 			name,
 			systemImage.src
 		);
 
 		returnValue.systemImage = systemImage;
-		returnValue.sizeInPixels = new Coords(systemImage.width, systemImage.height);
+		returnValue.sizeInPixels = new Coords(systemImage.width, systemImage.height, 0);
 		returnValue.isLoaded = true;
 
 		return returnValue;
@@ -31,7 +38,7 @@ class Image
 
 	clone()
 	{
-		var returnValue = new Image();
+		var returnValue = new Image2(null, null);
 
 		returnValue.name = name;
 		returnValue.sourcePath = this.sourcePath;
@@ -51,13 +58,12 @@ class Image
 			var imgElement = document.createElement("img");
 			imgElement.onload = function(event)
 			{
-				var imgLoaded = event.target;
+				var imgLoaded: any = event.target;
 				image.isLoaded = true;
 				image.systemImage = imgLoaded;
 				image.sizeInPixels = new Coords
 				(
-					imgLoaded.width,
-					imgLoaded.height
+					imgLoaded.width, imgLoaded.height, 0
 				);
 			};
 			imgElement.src = this.sourcePath;

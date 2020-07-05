@@ -1,6 +1,14 @@
 
 class Video
 {
+	name: string;
+	sourcePath: string;
+
+	domElement: any;
+	isFinished: boolean;
+
+	_size: Coords;
+
 	constructor(name, sourcePath)
 	{
 		this.name = name;

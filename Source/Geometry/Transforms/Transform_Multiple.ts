@@ -1,6 +1,8 @@
 
 class Transform_Multiple
 {
+	transforms: any;
+
 	constructor(transforms)
 	{
 		this.transforms = transforms;

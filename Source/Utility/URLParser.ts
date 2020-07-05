@@ -1,13 +1,17 @@
 
 class URLParser
 {
+	urlAsString: string;
+	queryStringParameters: any;
+
 	constructor(urlAsString)
 	{
 		this.urlAsString = urlAsString;
 
 		this.queryStringParameters = [];
 
-		var parametersAsString = this.urlAsString.search.substring(1);
+		// todo - Make sure regex converts to string correctly.
+		var parametersAsString = this.urlAsString.search.toString().substr(1);
 		var parametersAsStrings = parametersAsString.split("&");
 		for (var i = 0; i < parametersAsStrings.length; i++)
 		{

@@ -1,6 +1,10 @@
 
 class Portal
 {
+	destinationPlaceName: string;
+	destinationEntityName; string;
+	clearsVelocity: boolean;
+
 	constructor(destinationPlaceName, destinationEntityName, clearsVelocity)
 	{
 		this.destinationPlaceName = destinationPlaceName;
@@ -10,17 +14,17 @@ class Portal
 
 	use(universe, world, placeToDepart, entityToTransport)
 	{
-		var destinationPlace = world.places[this.destinationPlaceName];
+		var destinationPlace = world.placesByName[this.destinationPlaceName];
 		destinationPlace.initialize(universe, world);
-		var destinationEntity = destinationPlace.entities[this.destinationEntityName];
-		var destinationPos = destinationEntity.locatable.loc.pos;
+		var destinationEntity = destinationPlace.entitiesByName[this.destinationEntityName];
+		var destinationPos = destinationEntity.locatable().loc.pos;
 
-		var entityToTransportLoc = entityToTransport.locatable.loc;
+		var entityToTransportLoc = entityToTransport.locatable().loc;
 		var entityToTransportPos = entityToTransportLoc.pos;
 
 		world.placeNext = destinationPlace;
 		entityToTransportPos.overwriteWith(destinationPos);
-		entityToTransport.collidable.entitiesAlreadyCollidedWith.push(destinationEntity);
+		entityToTransport.collidable().entitiesAlreadyCollidedWith.push(destinationEntity);
 
 		if (this.clearsVelocity)
 		{

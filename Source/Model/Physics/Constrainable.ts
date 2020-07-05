@@ -1,6 +1,8 @@
 
 class Constrainable
 {
+	constraints: any[];
+
 	constructor(constraints)
 	{
 		this.constraints = constraints;
@@ -8,7 +10,7 @@ class Constrainable
 
 	static constrain(universe, world, place, entity)
 	{
-		var constrainable = entity.constrainable;
+		var constrainable = entity.constrainable();
 		var constraints = constrainable.constraints;
 		for (var i = 0; i < constraints.length; i++)
 		{

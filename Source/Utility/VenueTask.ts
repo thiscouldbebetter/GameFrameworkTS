@@ -1,6 +1,12 @@
 
 class VenueTask
 {
+	venueInner: any;
+	perform: any;
+	done: any;
+
+	isStarted: boolean;
+
 	constructor(venueInner, perform, done)
 	{
 		this.venueInner = venueInner;
