@@ -198,8 +198,6 @@ class EquipmentUser
 			function confirm()
 			{
 				var itemEntityToEquip = equipmentUser.itemEntitySelected;
-				var itemToEquip = itemEntityToEquip.item();
-				var itemToEquipName = itemToEquip.appearance;
 
 				var message = equipmentUser.equipEntityWithItem
 				(

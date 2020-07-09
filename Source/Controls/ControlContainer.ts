@@ -166,8 +166,6 @@ class ControlContainer implements Control
 		}
 		else
 		{
-			var childIndexOriginal = this.indexOfChildWithFocus;
-
 			while (true)
 			{
 				this.indexOfChildWithFocus += direction;

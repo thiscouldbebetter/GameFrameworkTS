@@ -101,18 +101,6 @@ class PlaceBuilderDemo
 			1
 		);
 		var mapCellSize = size.clone().divide(mapSizeInCells).ceiling();
-		var mapSizeInPixels =
-			mapSizeInCells.clone().multiply(mapCellSize);
-
-		var terrainNamesByCodeChar =
-		{
-			"~" : "Water",
-			"." : "Sand",
-			":" : "Grass",
-			"Q" : "Trees",
-			"A" : "Rock",
-			"*" : "Snow"
-		};
 
 		var neighborOffsets =
 		[
@@ -584,8 +572,7 @@ class PlaceBuilderDemo
 		this.entityBuildExit(placeNameToReturnTo);
 
 		this.entitiesAllGround();
-		var camera = this.build_Camera(this.cameraViewSize);
-		//this.entities.splice(0, 0, ...this.entityBuildBackground(camera));
+		this.build_Camera(this.cameraViewSize);
 	}
 
 	build_SizeWallsAndMargins(namePrefix: string, placePos: Coords, areNeighborsConnectedESWN: boolean[])
@@ -2134,7 +2121,6 @@ class PlaceBuilderDemo
 	entityDefnBuildObstacleBar(entityDimension: number): Entity
 	{
 		var obstacleColor = "Red";
-		var entityDimensionHalf = entityDimension / 2;
 
 		var obstacleBarSize = new Coords(6, 2, 1).multiplyScalar(entityDimension);
 		var obstacleRotationInTurns = .0625;
@@ -2206,8 +2192,6 @@ class PlaceBuilderDemo
 		);
 
 		var obstacleMappedCellSize = new Coords(2, 2, 1);
-		var obstacleMappedSizeInPixels =
-			obstacleMappedSizeInCells.clone().multiply(obstacleMappedCellSize);
 
 		var obstacleMappedMap = new MapOfCells
 		(
@@ -2363,8 +2347,6 @@ class PlaceBuilderDemo
 
 		var playerCollide = (universe: Universe, world: World, place: Place, entityPlayer: Entity, entityOther: Entity) =>
 		{
-			var messageToDisplay = null;
-
 			if (entityOther.damager() != null)
 			{
 				universe.collisionHelper.collideCollidables(entityPlayer, entityOther);

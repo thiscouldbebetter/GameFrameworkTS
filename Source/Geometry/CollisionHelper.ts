@@ -467,7 +467,6 @@ class CollisionHelper
 	collideCollidablesBoxAndSphere(entityBox: Entity, entitySphere: Entity)
 	{
 		var sphereLoc = entitySphere.locatable().loc;
-		var boxLoc = entityBox.locatable().loc;
 
 		var box = entityBox.collidable().collider;
 		var sphere = entitySphere.collidable().collider;
@@ -1238,7 +1237,6 @@ class CollisionHelper
 		var cell1PosInCellsMax = new Coords(0, 0, 0);
 
 		var map0SizeInCells = map0.sizeInCells;
-		var map1SizeInCells = map1.sizeInCells;
 
 		var map1SizeInCellsMinusOnes = map1.sizeInCellsMinusOnes;
 

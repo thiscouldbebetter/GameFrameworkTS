@@ -240,7 +240,6 @@ class ControlBuilder
 		var buttonSize = new Coords(60, buttonHeight, 0);
 		var margin = 15;
 		var padding = 5;
-		var labelPadding = 3;
 
 		var posX = 70;
 		var rowHeight = buttonHeight + padding;
@@ -422,14 +421,12 @@ class ControlBuilder
 		var buttonHeight = 20;
 		var margin = 15;
 		var padding = 5;
-		var labelPadding = 3;
 
 		var rowHeight = buttonHeight + padding;
 		var row0PosY = margin;
 		var row1PosY = row0PosY + rowHeight;
 		var row2PosY = row1PosY + rowHeight;
 		var row3PosY = row2PosY + rowHeight;
-		var row4PosY = row3PosY + rowHeight;
 
 		var back = function()
 		{
@@ -523,8 +520,6 @@ class ControlBuilder
 			this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
 
 		var fontHeight = this.fontHeightInPixelsBase;
-
-		var profiles = universe.profileHelper.profiles();
 
 		var world = universe.world;
 		var placeCurrentDefnName = "Demo"; // hack
@@ -1300,8 +1295,6 @@ class ControlBuilder
 					true, // isEnabled
 					() => // click
 					{
-						var profile = universe.profile;
-
 						var controlConfirm = universe.controlBuilder.confirm
 						(
 							universe,
@@ -1841,7 +1834,6 @@ class ControlBuilder
 					true, // isEnabled
 					() => // click
 					{
-						var profile = universe.profile;
 						var world = universe.world;
 
 						var controlConfirm = universe.controlBuilder.confirm
@@ -2030,9 +2022,6 @@ class ControlBuilder
 					true, // isEnabled
 					() => // click
 					{
-						var profile = universe.profile;
-						var world = universe.world;
-
 						var venueFileUpload = new VenueFileUpload(null, null);
 
 						var venueMessageReadyToLoad = new VenueControls
@@ -2210,7 +2199,6 @@ class ControlBuilder
 					true, // isEnabled
 					() => // click
 					{
-						var profile = universe.profile;
 						var world = universe.world;
 
 						world.dateSaved = DateTime.now();

@@ -243,7 +243,6 @@ class ControlList implements Control
 		var items = this.items();
 		var numberOfItems = items.length;
 
-		var itemSelected = this.itemSelected(null);
 		var indexOfItemSelected = this.indexOfItemSelected(null);
 
 		if (indexOfItemSelected == null)
@@ -309,6 +308,9 @@ class ControlList implements Control
 			}
 			else
 			{
+				// todo
+
+				/*
 				var clickPosRelativeToSlideInPixels = clickPos.subtract
 				(
 					this.scrollbar.pos
@@ -316,8 +318,7 @@ class ControlList implements Control
 				(
 					new Coords(0, this.scrollbar.handleSize.y, 0)
 				);
-
-				// todo
+				*/
 			}
 		}
 		else
@@ -388,7 +389,6 @@ class ControlList implements Control
 			return;
 		}
 
-		var numberOfItemsVisible = Math.floor(this.size.y / this.itemSpacing.y);
 		var indexStart = this.indexOfFirstItemVisible();
 		var indexEnd = this.indexOfLastItemVisible();
 		if (indexEnd >= items.length)

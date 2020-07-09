@@ -5,7 +5,6 @@ class SkeletonHelper
 	{
 		var heightOver2 = heightInPixels / 2;
 		var heightOfSpine = heightInPixels / 2.4;
-		var heightOver3 = heightInPixels / 3;
 		var heightOver4 = heightInPixels / 4;
 		var heightOver6 = heightInPixels / 6;
 		var heightOver8 = heightInPixels / 8;

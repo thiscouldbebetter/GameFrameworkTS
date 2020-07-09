@@ -24,7 +24,7 @@ class Movable
 
 	// cloneable
 
-	clone = function()
+	clone(): Movable
 	{
 		return this;
 	};

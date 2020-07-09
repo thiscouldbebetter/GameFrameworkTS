@@ -60,7 +60,6 @@ class VisualMap implements Visual
 	draw_ConvertToImage(universe: Universe, world: World, display: Display, entity: Entity)
 	{
 		var mapSizeInCells = this.map.sizeInCells;
-		var mapSizeHalf = this.map.sizeHalf;
 		var drawablePos = entity.locatable().loc.pos;
 		this._posSaved.overwriteWith(drawablePos);
 

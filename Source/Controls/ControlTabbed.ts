@@ -182,8 +182,6 @@ class ControlTabbed implements Control
 
 	childSelectNextInDirection(direction: number)
 	{
-		var childIndexOriginal = this.childSelectedIndex;
-
 		while (true)
 		{
 			this.childSelectedIndex += direction;

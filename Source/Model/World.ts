@@ -348,7 +348,6 @@ class World
 							var speedCurrent = vel.magnitude();
 							if (speedCurrent > 0 && speedCurrent < speedRunning)
 							{
-								var direction = vel.normalize();
 								vel.multiplyScalar(speedRunning);
 							}
 						}

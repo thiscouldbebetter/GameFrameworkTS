@@ -68,8 +68,6 @@ class ItemStore
 		var itemHolderCustomer = entityCustomer.itemHolder();
 		var itemHolderStore = entityStore.itemHolder();
 
-		var itemDefnNameCurrency = this.itemDefnNameCurrency;
-
 		var world = universe.world;
 
 		var back = function()

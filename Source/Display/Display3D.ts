@@ -86,7 +86,7 @@ class Display3D implements Display
 	{
 		var webGLContext = this.webGLContext;
 		var gl = webGLContext.gl;
-		var shaderProgram = webGLContext.shaderProgram;
+		// var shaderProgram = webGLContext.shaderProgram;
 
 		gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -147,7 +147,9 @@ class Display3D implements Display
 				var faceMaterial = face.material;
 				var faceGeometry = face.geometry;
 				var faceNormal = faceGeometry.plane().normal;
-				var vertexNormalsForFaceVertices = null; // todo - mesh.vertexNormalsForFaceVertices;
+
+				// todo
+				// var vertexNormalsForFaceVertices = mesh.vertexNormalsForFaceVertices;
 
 				var vertexIndicesForTriangles: number[][] =
 				[

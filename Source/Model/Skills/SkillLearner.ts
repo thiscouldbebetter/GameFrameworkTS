@@ -24,18 +24,17 @@ class SkillLearner
 		return (this.skillBeingLearnedName != null);
 	};
 
-	skillCheapestAvailable(skillsAll: any)
+	skillCheapestAvailable(skillsAll: any): Skill
 	{
-		var returnValue = null;
+		var skillCheapest: Skill = null;
 
 		var skillsAvailable = this.skillsAvailableToLearn(skillsAll);
 		if (skillsAvailable.length > 0)
 		{
-			var skillCheapest = skillsAvailable.sort
+			skillCheapest = skillsAvailable.sort
 			(
 				(x, y) => x - y
 			)[0];
-			returnValue = skillCheapest;
 		}
 		return skillCheapest;
 	};
@@ -190,8 +189,6 @@ class SkillLearner
 		var labelHeight = display.fontHeightInPixels * 1.2;
 		var margin = 20;
 		var labelHeightLarge = labelHeight * 2;
-		var buttonHeight = labelHeight;
-		var buttonSize = new Coords(2, 1, 0).multiplyScalar(margin);
 
 		var listSize = new Coords(
 			(size.x - margin * 3) / 2,
@@ -200,13 +197,6 @@ class SkillLearner
 		); // size
 
 		var skillsAll = universe.world.defns.defnArraysByTypeName[Skill.name];
-
-		var back = function()
-		{
-			var venueNext = venueToReturnTo;
-			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
-			universe.venueNext = venueNext;
-		};
 
 		var returnValue = new ControlContainer
 		(

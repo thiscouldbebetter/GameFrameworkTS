@@ -8,7 +8,6 @@ class MeshBuilder
 		var heightOver4 = heightInPixels / 4;
 		var heightOver6 = heightInPixels / 6;
 		var heightOver8 = heightInPixels / 8;
-		var heightOver9 = heightInPixels / 9;
 		var heightOver12 = heightInPixels / 12;
 		var heightOver18 = heightInPixels / 18;
 		var heightOver24 = heightInPixels / 24;
@@ -731,8 +730,6 @@ class MeshBuilder
 
 	clipFaceAgainstPlanes(faceToClip: FaceTextured, planesToClipAgainst: Plane[])
 	{
-		var returnValue = faceToClip;
-
 		for (var p = 0; p < planesToClipAgainst.length; p++)
 		{
 			faceToClip = this.splitFaceByPlaneFrontAndBack

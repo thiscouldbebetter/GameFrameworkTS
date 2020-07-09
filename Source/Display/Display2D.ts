@@ -212,8 +212,6 @@ class Display2D implements Display
 		rotationInTurns: number, colorFill: string, colorBorder: string
 	)
 	{
-		var drawPos = this._drawPos.overwriteWith(center);
-
 		this.graphics.save();
 
 		this.graphics.translate(center.x, center.y);
@@ -658,8 +656,10 @@ class Display2D implements Display
 			this.graphics = this.canvas.getContext("2d");
 
 			this.fontSet(null, this.fontHeightInPixels);
-			var testString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; // todo
-			var widthWithFontFallthrough = this.graphics.measureText(testString).width; // todo
+
+			// todo
+			// var testString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+			// var widthWithFontFallthrough = this.graphics.measureText(testString).width;
 
 			this._scaleFactor = null;
 			var scaleFactor = this.scaleFactor();

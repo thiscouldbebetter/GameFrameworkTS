@@ -114,7 +114,6 @@ class ControlTextarea implements Control
 	indexOfLineSelected(valueToSet: number)
 	{
 		var returnValue = valueToSet;
-		var lines = this.textAsLines();
 		if (valueToSet == null)
 		{
 			returnValue = this._indexOfLineSelected;
@@ -169,6 +168,9 @@ class ControlTextarea implements Control
 			}
 			else
 			{
+				// todo
+
+				/*
 				var clickPosRelativeToSlideInPixels = clickPos.subtract
 				(
 					this.scrollbar.pos
@@ -176,8 +178,7 @@ class ControlTextarea implements Control
 				(
 					new Coords(0, this.scrollbar.handleSize.y, 0)
 				);
-
-				// todo
+				*/
 			}
 		}
 		else

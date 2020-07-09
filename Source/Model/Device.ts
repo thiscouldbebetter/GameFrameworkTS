@@ -183,8 +183,6 @@ class Device
 					return;
 				}
 
-				var userAsItemHolder = entityUser.itemHolder();
-
 				device.tickLastUsed = tickCurrent;
 
 				var userLoc = entityUser.locatable().loc;

@@ -230,7 +230,6 @@ class ItemHolder
 
 		var itemHolder = this;
 		var world = universe.world;
-		var place = world.placeCurrent;
 
 		var back = function()
 		{

@@ -36,8 +36,6 @@ class WordBubble
 		var size = universe.display.sizeInPixels;
 		var sizeBase = size.clone();
 
-		var controlsForSlides = [];
-
 		var margin = 8;
 		var marginSize = new Coords(1, 1, 0).multiplyScalar(margin);
 		var containerSize = new Coords
