@@ -5,7 +5,7 @@ class Entity
 	properties: any;
 	propertiesByName: any;
 
-	constructor(name, properties)
+	constructor(name: string, properties: any)
 	{
 		this.name = name;
 		this.properties = properties;
@@ -19,7 +19,7 @@ class Entity
 		}
 	}
 
-	initialize(universe, world, place)
+	initialize(universe: Universe, world: World, place: Place)
 	{
 		var entityProperties = this.properties;
 		for (var p = 0; p < entityProperties.length; p++)
@@ -56,6 +56,8 @@ class Entity
 
 	actor() { return this.propertiesByName[Actor.name]; }
 
+	boundable() { return this.propertiesByName[Boundable.name]; }
+
 	camera() { return this.propertiesByName[Camera.name]; }
 
 	collidable() { return this.propertiesByName[Collidable.name]; }
@@ -89,6 +91,8 @@ class Entity
 	locatable() { return this.propertiesByName[Locatable.name]; }
 
 	movable() { return this.propertiesByName[Movable.name]; }
+
+	recurrent() { return this.propertiesByName[Recurrent.name]; }
 
 	playable() { return this.propertiesByName[Playable.name]; }
 

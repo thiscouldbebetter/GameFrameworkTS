@@ -13,7 +13,7 @@ class VisualBuilder
 
 	circleWithEyes
 	(
-		circleRadius, circleColor, eyeRadius, visualEyes
+		circleRadius: number, circleColor: string, eyeRadius: number, visualEyes: Visual
 	)
 	{
 		visualEyes = visualEyes || this.eyesBlinking(eyeRadius);
@@ -40,7 +40,7 @@ class VisualBuilder
 		return returnValue;
 	};
 
-	eyesBlinking(visualEyeRadius)
+	eyesBlinking(visualEyeRadius: number)
 	{
 		var visualPupilRadius = visualEyeRadius / 2;
 

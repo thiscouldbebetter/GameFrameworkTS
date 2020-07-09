@@ -1,10 +1,10 @@
 
 class FaceTextured
 {
-	geometry: Mesh;
+	geometry: Face;
 	material: Material;
 
-	constructor(geometry, material)
+	constructor(geometry: Face, material: Material)
 	{
 		this.geometry = geometry;
 		this.material = material;

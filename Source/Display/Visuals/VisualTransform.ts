@@ -1,10 +1,10 @@
 
-class VisualTransform
+class VisualTransform implements Visual
 {
-	transformToApply: any;
-	child: any;
+	transformToApply: Transform;
+	child: Visual;
 
-	constructor(transformToApply, child)
+	constructor(transformToApply: Transform, child: Visual)
 	{
 		this.transformToApply = transformToApply;
 		this.child = child;
@@ -12,27 +12,28 @@ class VisualTransform
 
 	// Cloneable.
 
-	clone()
+	clone(): Visual
 	{
 		return new VisualTransform(this.transformToApply, this.child.clone());
 	};
 
-	overwriteWith(other)
+	overwriteWith(other: Visual): Visual
 	{
-		this.child.overwriteWith(other.child);
+		var otherAsVisualTransform = other as VisualTransform;
+		this.child.overwriteWith(otherAsVisualTransform.child);
 		return this;
 	};
 
 	// Transformable.
 
-	transform(transformToApply)
+	transform(transformToApply: Transform)
 	{
 		return this.child.transform(transformToApply);
 	};
 
 	// Visual.
 
-	draw(universe, world, display, entity)
+	draw(universe: Universe, world: World, display: Display, entity: Entity)
 	{
 		this.child.transform(this.transformToApply);
 		this.child.draw(universe, world, display, entity);

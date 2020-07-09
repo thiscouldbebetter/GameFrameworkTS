@@ -11,7 +11,7 @@ class PlaceDefn
 	actionToInputsMappingsDefault: ActionToInputsMapping[];
 	actionToInputsMappingsEdited: ActionToInputsMapping[];
 
-	constructor(name, actions, actionToInputsMappings)
+	constructor(name: string, actions: Action[], actionToInputsMappings: ActionToInputsMapping[])
 	{
 		this.name = name;
 		this.actions = actions;
@@ -22,7 +22,7 @@ class PlaceDefn
 
 		this.actionToInputsMappingsByInputName = ArrayHelper.addLookupsMultiple
 		(
-			this.actionToInputsMappings, x => x.inputNames
+			this.actionToInputsMappings, (x: ActionToInputsMapping) => x.inputNames
 		);
 	}
 
@@ -54,7 +54,7 @@ class PlaceDefn
 		);
 		this.actionToInputsMappingsByInputName = ArrayHelper.addLookupsMultiple
 		(
-			this.actionToInputsMappings, x => x.inputNames
+			this.actionToInputsMappings, (x: ActionToInputsMapping) => x.inputNames
 		);
 	};
 }

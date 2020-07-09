@@ -4,7 +4,7 @@ class URLParser
 	urlAsString: string;
 	queryStringParameters: any;
 
-	constructor(urlAsString)
+	constructor(urlAsString: string)
 	{
 		this.urlAsString = urlAsString;
 
@@ -26,6 +26,6 @@ class URLParser
 
 	static fromWindow()
 	{
-		return new URLParser(window.location);
+		return new URLParser(window.location.toString());
 	};
 }

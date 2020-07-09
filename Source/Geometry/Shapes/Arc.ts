@@ -6,7 +6,7 @@ class Arc
 
 	_collider: ShapeGroupAll;
 
-	constructor(shell, wedge)
+	constructor(shell: Shell, wedge: Wedge)
 	{
 		this.shell = shell;
 		this.wedge = wedge;
@@ -30,7 +30,7 @@ class Arc
 		return new Arc(this.shell.clone(), this.wedge.clone());
 	};
 
-	overwriteWith(other)
+	overwriteWith(other: Arc)
 	{
 		this.shell.overwriteWith(other.shell);
 		this.wedge.overwriteWith(other.wedge);

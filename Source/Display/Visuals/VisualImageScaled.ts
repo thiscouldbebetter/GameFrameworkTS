@@ -1,12 +1,12 @@
 
-class VisualImageScaled
+class VisualImageScaled implements VisualImage
 {
-	visualImage: any;
-	sizeScaled: Coords;
+	private visualImage: VisualImage;
+	private sizeScaled: Coords;
 
-	_drawPos: Coords;
+	private _drawPos: Coords;
 
-	constructor(visualImage, sizeScaled)
+	constructor(visualImage: VisualImage, sizeScaled: Coords)
 	{
 		this.visualImage = visualImage;
 		this.sizeScaled = sizeScaled;
@@ -15,7 +15,7 @@ class VisualImageScaled
 		this._drawPos = new Coords(0, 0, 0);
 	}
 
-	static manyFromSizeAndVisuals(sizeScaled, visualsToScale)
+	static manyFromSizeAndVisuals(sizeScaled: Coords, visualsToScale: VisualImage[])
 	{
 		var returnValues = [];
 		for (var i = 0; i < visualsToScale.length; i++)
@@ -27,7 +27,7 @@ class VisualImageScaled
 		return returnValues;
 	};
 
-	draw(universe, world, display, entity)
+	draw(universe: Universe, world: World, display: Display, entity: Entity)
 	{
 		var image = this.visualImage.image(universe);
 		var imageSize = this.sizeScaled;
@@ -37,4 +37,28 @@ class VisualImageScaled
 		);
 		display.drawImageScaled(image, drawPos, imageSize);
 	};
+
+	image(universe: Universe): Image2
+	{
+		return this.visualImage.image(universe);
+	}
+
+	// Clonable.
+
+	clone(): Visual
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: Visual): Visual
+	{
+		return this; // todo
+	}
+
+	// Transformable.
+
+	transform(transformToApply: Transform): Transformable
+	{
+		return this; // todo
+	}
 }

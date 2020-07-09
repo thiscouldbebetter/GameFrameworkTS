@@ -1,12 +1,12 @@
 
-class VisualCameraProjection
+class VisualCameraProjection implements Visual
 {
-	child: any;
-	cameraFactory: any;
+	child: Visual;
+	cameraFactory: (u: Universe, w: World) => Camera;
 
 	_posSaved: Coords;
 
-	constructor(child, cameraFactory)
+	constructor(child: Visual, cameraFactory: (u: Universe, w: World) => Camera)
 	{
 		this.child = child;
 		this.cameraFactory = cameraFactory;
@@ -15,7 +15,7 @@ class VisualCameraProjection
 		this._posSaved = new Coords(0, 0, 0);
 	}
 
-	draw(universe, world, display, entity)
+	draw(universe: Universe, world: World, display: Display, entity: Entity)
 	{
 		var drawablePos = entity.locatable().loc.pos;
 		this._posSaved.overwriteWith(drawablePos);
@@ -24,15 +24,17 @@ class VisualCameraProjection
 		camera.coordsTransformWorldToView(drawablePos);
 
 		var isEntityInView = false;
-		if (entity.Boundable == null) // todo
+		var boundable = entity.boundable();
+		if (boundable == null) // todo
 		{
 			isEntityInView = true;
 		}
 		else
 		{
-			var drawableCollider = entity.Boundable.bounds;
+			var drawableCollider = boundable.bounds;
 			var cameraViewCollider = camera.viewCollider;
-			isEntityInView = universe.collisionHelper.doCollidersCollide
+			var collisionHelper = universe.collisionHelper;
+			isEntityInView = collisionHelper.doCollidersCollide
 			(
 				drawableCollider, cameraViewCollider
 			);
@@ -46,7 +48,7 @@ class VisualCameraProjection
 		drawablePos.overwriteWith(this._posSaved);
 	};
 
-	drawImmediate(universe, world, display, entity)
+	drawImmediate(universe: Universe, world: World, display: Display, entity: Entity)
 	{
 		var drawablePos = entity.locatable().loc.pos;
 		this._posSaved.overwriteWith(drawablePos);
@@ -58,4 +60,23 @@ class VisualCameraProjection
 
 		drawablePos.overwriteWith(this._posSaved);
 	};
+
+	// Clonable.
+
+	clone(): Visual
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: Visual): Visual
+	{
+		return this; // todo
+	}
+
+	// Transformable.
+
+	transform(transformToApply: Transform): Transformable
+	{
+		return this; // todo
+	}
 }

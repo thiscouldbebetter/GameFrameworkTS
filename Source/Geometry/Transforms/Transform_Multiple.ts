@@ -1,14 +1,19 @@
 
-class Transform_Multiple
+class Transform_Multiple implements Transform
 {
-	transforms: any;
+	transforms: Transform[];
 
-	constructor(transforms)
+	constructor(transforms: Transform[])
 	{
 		this.transforms = transforms;
 	}
 
-	transform(transformable)
+	overwriteWith(other: Transform)
+	{
+		return this; // todo
+	}
+
+	transform(transformable: Transformable): Transformable
 	{
 		for (var i = 0; i < this.transforms.length; i++)
 		{
@@ -18,7 +23,7 @@ class Transform_Multiple
 		return transformable;
 	};
 
-	transformCoords(coordsToTransform)
+	transformCoords(coordsToTransform: Coords): Coords
 	{
 		for (var i = 0; i < this.transforms.length; i++)
 		{

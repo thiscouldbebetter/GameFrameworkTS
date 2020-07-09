@@ -1,12 +1,12 @@
 
-class Transform_BonePose
+class Transform_BonePose implements Transform_Interpolatable
 {
 	boneName: string;
-	cyclesToRotateAroundAxesDownRightForward: any;
+	cyclesToRotateAroundAxesDownRightForward: number[];
 
 	propertyName: string;
 
-	constructor(boneName, cyclesToRotateAroundAxesDownRightForward)
+	constructor(boneName: string, cyclesToRotateAroundAxesDownRightForward: number[])
 	{
 		this.boneName = boneName;
 		this.cyclesToRotateAroundAxesDownRightForward = cyclesToRotateAroundAxesDownRightForward;
@@ -25,15 +25,18 @@ class Transform_BonePose
 		);
 	};
 
-	interpolateWith(other, fractionOfProgressTowardOther)
+	interpolateWith(other: Transform_Interpolatable, fractionOfProgressTowardOther: number): Transform_Interpolatable
 	{
+		var otherAsBonePose = other as Transform_BonePose;
 		var cyclesToRotateAroundAxesDownRightForwardInterpolated = [];
 
 		for (var i = 0; i < this.cyclesToRotateAroundAxesDownRightForward.length; i++)
 		{
 			var cyclesToRotateInterpolated =
-				(1 - fractionOfProgressTowardOther) * this.cyclesToRotateAroundAxesDownRightForward[i]
-				+ fractionOfProgressTowardOther * other.cyclesToRotateAroundAxesDownRightForward[i];
+				(1 - fractionOfProgressTowardOther)
+				* this.cyclesToRotateAroundAxesDownRightForward[i]
+				+ fractionOfProgressTowardOther
+				* otherAsBonePose.cyclesToRotateAroundAxesDownRightForward[i];
 
 			cyclesToRotateAroundAxesDownRightForwardInterpolated[i] = cyclesToRotateInterpolated;
 		}
@@ -47,11 +50,16 @@ class Transform_BonePose
 		return returnValue;
 	};
 
-	transform(transformableToTransform)
+	overwriteWith(other: Transform)
 	{
-		var skeletonToTransform = transformableToTransform;
+		return this; // todo
+	}
 
-		var boneToTransform = skeletonToTransform.bonesAll[this.boneName];
+	transform(transformableToTransform: Transformable): Transformable
+	{
+		var skeletonToTransform: any = transformableToTransform;
+
+		var boneToTransform = skeletonToTransform.bonesAllByName[this.boneName];
 		var boneOrientation = boneToTransform.orientation;
 
 		var axesToRotateAround =
@@ -80,10 +88,12 @@ class Transform_BonePose
 			}
 		}
 
-		this.transform_Bone(quaternionsForRotation, boneToTransform)
+		this.transform_Bone(quaternionsForRotation, boneToTransform);
+
+		return transformableToTransform;
 	};
 
-	transform_Bone(quaternionsForRotation, boneToTransform)
+	transform_Bone(quaternionsForRotation: Quaternion[], boneToTransform: Bone)
 	{
 		var axesToTransform = boneToTransform.orientation.axes;
 
@@ -107,4 +117,9 @@ class Transform_BonePose
 			this.transform_Bone(quaternionsForRotation, childBone);
 		}
 	};
+
+	transformCoords(coordsToTransform: Coords): Coords
+	{
+		return null; // todo
+	}
 }

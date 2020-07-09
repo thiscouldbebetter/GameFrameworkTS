@@ -9,7 +9,7 @@ class Mesh
 	_faces: Face[];
 	_vertices: Coords[];
 
-	constructor(center, vertexOffsets, faceBuilders)
+	constructor(center: Coords, vertexOffsets: Coords[], faceBuilders: Mesh_FaceBuilder[])
 	{
 		this.center = center;
 		this.vertexOffsets = vertexOffsets;
@@ -18,14 +18,14 @@ class Mesh
 
 	// static methods
 
-	static boxOfSize(center, size)
+	static boxOfSize(center: Coords, size: Coords)
 	{
 		var box = new Box(center, size);
 		var returnValue = Mesh.fromBox(box);
 		return returnValue;
 	};
 
-	static cubeUnit(center)
+	static cubeUnit(center: Coords)
 	{
 		if (center == null)
 		{
@@ -36,7 +36,7 @@ class Mesh
 		return returnValue;
 	};
 
-	static fromBox(box)
+	static fromBox(box: Box)
 	{
 		var sizeHalf = box.sizeHalf;
 		var min = new Coords(-sizeHalf.x, -sizeHalf.y, -sizeHalf.z);
@@ -77,7 +77,7 @@ class Mesh
 		return returnValue;
 	};
 
-	static fromFace(center, faceToExtrude, thickness)
+	static fromFace(center: Coords, faceToExtrude: Face, thickness: number)
 	{
 		var faceVertices = faceToExtrude.vertices;
 		var numberOfFaceVertices = faceVertices.length;
@@ -163,6 +163,11 @@ class Mesh
 		return this._box;
 	};
 
+	edges(): Edge[]
+	{
+		return null; // todo
+	};
+
 	faces()
 	{
 		var vertices = this.vertices();
@@ -182,7 +187,7 @@ class Mesh
 		return this._faces;
 	};
 
-	vertices()
+	vertices(): Coords[]
 	{
 		if (this._vertices == null)
 		{
@@ -205,7 +210,7 @@ class Mesh
 
 	// transformable
 
-	transform(transformToApply)
+	transform(transformToApply: Transform): Transformable
 	{
 		for (var v = 0; v < this.vertexOffsets.length; v++)
 		{
@@ -230,7 +235,7 @@ class Mesh
 		);
 	};
 
-	overwriteWith(other)
+	overwriteWith(other: Mesh)
 	{
 		this.center.overwriteWith(other.center);
 		ArrayHelper.overwriteWith(this.vertexOffsets, other.vertexOffsets);
@@ -249,14 +254,14 @@ class Mesh_FaceBuilder
 {
 	vertexIndices: number[];
 
-	constructor(vertexIndices)
+	constructor(vertexIndices: number[])
 	{
 		this.vertexIndices = vertexIndices;
 	}
 
-	toFace(meshVertices)
+	toFace(meshVertices: Coords[])
 	{
-		var faceVertices = [];
+		var faceVertices: Coords[] = [];
 		for (var vi = 0; vi < this.vertexIndices.length; vi++)
 		{
 			var vertexIndex = this.vertexIndices[vi];
@@ -267,7 +272,7 @@ class Mesh_FaceBuilder
 		return returnValue;
 	};
 
-	vertexIndicesShift(offset)
+	vertexIndicesShift(offset: number)
 	{
 		for (var i = 0; i < this.vertexIndices.length; i++)
 		{
@@ -284,7 +289,7 @@ class Mesh_FaceBuilder
 		return new Mesh_FaceBuilder(this.vertexIndices.slice());
 	};
 
-	overwriteWith(other)
+	overwriteWith(other: Mesh_FaceBuilder)
 	{
 		ArrayHelper.overwriteWith(this.vertexIndices, other.vertexIndices);
 	};

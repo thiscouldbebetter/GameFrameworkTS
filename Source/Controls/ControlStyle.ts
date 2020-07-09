@@ -7,7 +7,7 @@ class ControlStyle
 	colorBorder: string;
 	colorDisabled: string;
 
-	constructor(name, colorBackground, colorFill, colorBorder, colorDisabled)
+	constructor(name: string, colorBackground: string, colorFill: string, colorBorder: string, colorDisabled: string)
 	{
 		this.name = name;
 		this.colorBackground = colorBackground;

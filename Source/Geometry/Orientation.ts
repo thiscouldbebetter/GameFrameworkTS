@@ -8,7 +8,7 @@ class Orientation
 	axes: Coords[];
 	axesRDF: Coords[];
 
-	constructor(forward, down)
+	constructor(forward: Coords, down: Coords)
 	{
 		this.forward = forward || new Coords(1, 0, 0);
 		this.forward = this.forward.clone().normalize();
@@ -45,7 +45,7 @@ class Orientation
 		return new Orientation(this.forward.clone(), this.down.clone());
 	};
 
-	equals(other)
+	equals(other: Orientation)
 	{
 		var returnValue =
 			this.forward.equals(other.forward)
@@ -54,13 +54,13 @@ class Orientation
 		return returnValue;
 	}
 
-	forwardSet(value)
+	forwardSet(value: Coords)
 	{
 		this.forward.overwriteWith(value);
 		return this.orthogonalize();
 	};
 
-	forwardDownSet(forward, down)
+	forwardDownSet(forward: Coords, down: Coords)
 	{
 		this.forward.overwriteWith(forward);
 		this.down.overwriteWith(down);
@@ -75,7 +75,7 @@ class Orientation
 		return this;
 	};
 
-	overwriteWith(other)
+	overwriteWith(other: Orientation)
 	{
 		this.forward.overwriteWith(other.forward);
 		this.right.overwriteWith(other.right);
@@ -83,18 +83,18 @@ class Orientation
 		return this;
 	};
 
-	projectCoords(coords)
+	projectCoords(coordsToProject: Coords)
 	{
-		coords.overwriteWithDimensions
+		coordsToProject.overwriteWithDimensions
 		(
-			coords.dotProduct(this.forward),
-			coords.dotProduct(this.right),
-			coords.dotProduct(this.down)
+			coordsToProject.dotProduct(this.forward),
+			coordsToProject.dotProduct(this.right),
+			coordsToProject.dotProduct(this.down)
 		);
-		return coords;
+		return coordsToProject;
 	};
 
-	unprojectCoords(coords)
+	unprojectCoords(coordsToUnproject: Coords)
 	{
 		var returnValue = new Coords(0, 0, 0);
 
@@ -106,27 +106,27 @@ class Orientation
 
 			axisScaled.overwriteWith(axis).multiplyScalar
 			(
-				coords.dimensionGet(i)
+				coordsToUnproject.dimensionGet(i)
 			);
 
 			returnValue.add(axisScaled);
 		}
 
-		return coords.overwriteWith(returnValue);
+		return coordsToUnproject.overwriteWith(returnValue);
 	};
 
-	projectCoordsRDF(coords)
+	projectCoordsRDF(coordsToProject: Coords)
 	{
-		coords.overwriteWithDimensions
+		coordsToProject.overwriteWithDimensions
 		(
-			coords.dotProduct(this.right),
-			coords.dotProduct(this.down),
-			coords.dotProduct(this.forward)
+			coordsToProject.dotProduct(this.right),
+			coordsToProject.dotProduct(this.down),
+			coordsToProject.dotProduct(this.forward)
 		);
-		return coords;
+		return coordsToProject;
 	};
 
-	unprojectCoordsRDF(coords)
+	unprojectCoordsRDF(coordsToUnproject: Coords)
 	{
 		var returnValue = new Coords(0, 0, 0);
 
@@ -138,13 +138,13 @@ class Orientation
 
 			axisScaled.overwriteWith(axis).multiplyScalar
 			(
-				coords.dimensionGet(i)
+				coordsToUnproject.dimensionGet(i)
 			);
 
 			returnValue.add(axisScaled);
 		}
 
-		return coords.overwriteWith(returnValue);
+		return coordsToUnproject.overwriteWith(returnValue);
 	};
 
 	// heading

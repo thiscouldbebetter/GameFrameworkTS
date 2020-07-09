@@ -4,7 +4,7 @@ class RangeExtent
 	min: number;
 	max: number;
 
-	constructor(min, max)
+	constructor(min: number, max: number)
 	{
 		this.min = min;
 		this.max = max;
@@ -15,7 +15,7 @@ class RangeExtent
 		return new RangeExtent(this.min, this.max);
 	};
 
-	intersectWith(other)
+	intersectWith(other: RangeExtent)
 	{
 		this.min = (this.min >= other.min ? this.min : other.min);
 		this.max = (this.max <= other.max ? this.max : other.max);
@@ -27,7 +27,7 @@ class RangeExtent
 		return (this.min + this.max) / 2;
 	};
 
-	overlapsWith(other)
+	overlapsWith(other: RangeExtent)
 	{
 		var returnValue =
 		(
@@ -38,21 +38,21 @@ class RangeExtent
 		return returnValue;
 	};
 
-	overwriteWith(other)
+	overwriteWith(other: RangeExtent)
 	{
 		this.min = other.min;
 		this.max = other.max;
 		return this;
 	};
 
-	overwriteWithMinAndMax(min, max)
+	overwriteWithMinAndMax(min: number, max: number)
 	{
 		this.min = min;
 		this.max = max;
 		return this;
 	};
 
-	random(randomizer)
+	random(randomizer: Randomizer)
 	{
 		return this.min + (this.max - this.min) * randomizer.getNextRandom();
 	};
@@ -62,7 +62,7 @@ class RangeExtent
 		return this.max - this.min;
 	};
 
-	subtract(other)
+	subtract(other: RangeExtent)
 	{
 		var returnValues = [];
 
@@ -88,7 +88,7 @@ class RangeExtent
 		return returnValues;
 	};
 
-	touches(other)
+	touches(other: RangeExtent)
 	{
 		var returnValue =
 		(

@@ -1,9 +1,9 @@
 
-class VisualRepeating
+class VisualRepeating implements Visual
 {
 	cellSize: Coords;
 	viewSize: Coords;
-	child: any;
+	child: Visual;
 	expandViewStartAndEndByCell: boolean;
 
 	viewSizeInCells: Coords;
@@ -15,7 +15,7 @@ class VisualRepeating
 	_endPosInCells: Coords;
 	_startPosInCells: Coords;
 
-	constructor(cellSize, viewSize, child, expandViewStartAndEndByCell)
+	constructor(cellSize: Coords, viewSize: Coords, child: Visual, expandViewStartAndEndByCell: boolean)
 	{
 		this.cellSize = cellSize;
 		this.viewSize = viewSize;
@@ -45,7 +45,7 @@ class VisualRepeating
 		}
 	}
 
-	draw(universe, world, display, entity)
+	draw(universe: Universe, world: World, display: Display, entity: Entity)
 	{
 		var drawPos = entity.locatable().loc.pos;
 
@@ -83,4 +83,23 @@ class VisualRepeating
 
 		drawPos.overwriteWith(this._drawablePosToRestore);
 	};
+
+	// Clonable.
+
+	clone(): Visual
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: Visual): Visual
+	{
+		return this; // todo
+	}
+
+	// Transformable.
+
+	transform(transformToApply: Transform): Transformable
+	{
+		return this; // todo
+	}
 }

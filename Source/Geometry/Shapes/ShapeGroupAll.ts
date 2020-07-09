@@ -3,7 +3,7 @@ class ShapeGroupAll
 {
 	shapes: any[];
 
-	constructor(shapes)
+	constructor(shapes: any[])
 	{
 		this.shapes = shapes;
 	}
@@ -13,7 +13,7 @@ class ShapeGroupAll
 		return new ShapeGroupAll(ArrayHelper.clone(this.shapes));
 	};
 
-	overwriteWith(other)
+	overwriteWith(other: ShapeGroupAll)
 	{
 		ArrayHelper.overwriteWith(this.shapes, other.shapes);
 		return this;

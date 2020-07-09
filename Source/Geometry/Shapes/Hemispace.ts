@@ -5,14 +5,14 @@ class Hemispace
 
 	_displacement: Coords;
 
-	constructor(plane)
+	constructor(plane: Plane)
 	{
 		this.plane = plane;
 
 		this._displacement = new Coords(0, 0, 0);
 	}
 
-	containsPoint(pointToCheck)
+	containsPoint(pointToCheck: Coords)
 	{
 		var distanceOfPointAbovePlane =
 			pointToCheck.dotProduct(this.plane.normal)
@@ -21,7 +21,7 @@ class Hemispace
 		return returnValue;
 	};
 
-	trimCoords(coordsToTrim)
+	trimCoords(coordsToTrim: Coords)
 	{
 		var distanceOfPointAbovePlane =
 			this.plane.distanceToPointAlongNormal(coordsToTrim);

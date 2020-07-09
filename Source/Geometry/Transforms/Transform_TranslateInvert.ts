@@ -1,14 +1,24 @@
 
-class Transform_TranslateInvert
+class Transform_TranslateInvert implements Transform
 {
 	displacement: Coords;
 
-	constructor(displacement)
+	constructor(displacement: Coords)
 	{
 		this.displacement = displacement;
 	}
 
-	transformCoords(coordsToTransform)
+	overwriteWith(other: Transform)
+	{
+		return this; // todo
+	}
+
+	transform(transformable: Transformable): Transformable
+	{
+		return transformable; // todo
+	}
+
+	transformCoords(coordsToTransform: Coords)
 	{
 		return coordsToTransform.subtract(this.displacement);
 	};

@@ -1,7 +1,7 @@
 
-class VenueControls
+class VenueControls implements Venue
 {
-	controlRoot: any;
+	controlRoot: Control;
 	actionToInputsMappings: ActionToInputsMapping[];
 	actionToInputsMappingsByInputName: any;
 
@@ -10,11 +10,11 @@ class VenueControls
 	_mouseMovePos: Coords;
 	_mouseMovePosPrev: Coords;
 
-	constructor(controlRoot)
+	constructor(controlRoot: Control)
 	{
 		this.controlRoot = controlRoot;
 
-		function buildGamepadInputs(inputName)
+		function buildGamepadInputs(inputName: string)
 		{
 			var numberOfGamepads = 1; // todo
 
@@ -77,15 +77,16 @@ class VenueControls
 			)
 		];
 
-		if (this.controlRoot.actionToInputsMappings != null)
+		var mappings = this.controlRoot.actionToInputsMappings;
+		if (mappings != null)
 		{
-			ArrayHelper.addMany(this.actionToInputsMappings, this.controlRoot.actionToInputsMappings());
+			ArrayHelper.addMany(this.actionToInputsMappings, mappings);
 		}
 
 		this.actionToInputsMappingsByInputName = ArrayHelper.addLookupsMultiple
 		(
 			this.actionToInputsMappings,
-			x => x.inputNames
+			(x: ActionToInputsMapping) => x.inputNames
 		);
 
 		// Helper variables.
@@ -96,7 +97,7 @@ class VenueControls
 		this._mouseMovePosPrev = new Coords(0, 0, 0);
 	}
 
-	draw(universe)
+	draw(universe: Universe)
 	{
 		var display = universe.display;
 		var drawLoc = this._drawLoc;
@@ -104,7 +105,11 @@ class VenueControls
 		this.controlRoot.draw(universe, display, drawLoc);
 	};
 
-	updateForTimerTick(universe)
+	finalize(universe: Universe) {}
+
+	initialize(universe: Universe) {}
+
+	updateForTimerTick(universe: Universe)
 	{
 		this.draw(universe);
 
@@ -177,7 +182,7 @@ class VenueControls
 
 					this.controlRoot.mouseMove
 					(
-						this._mouseMovePos, this._mouseMovePosPrev
+						this._mouseMovePos //, this._mouseMovePosPrev
 					);
 				}
 

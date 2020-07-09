@@ -1,17 +1,18 @@
 
-class ControlSelect
+class ControlSelect implements Control
 {
 	name: string;
 	pos: Coords;
 	size: Coords;
 	_valueSelected: any;
-	_options; any;
+	_options: any;
 	bindingForOptionValues: DataBinding;
 	bindingForOptionText: DataBinding;
 	fontHeightInPixels: number;
 
 	indexOfOptionSelected: number;
 	isHighlighted: boolean;
+	parent: Control;
 	styleName: string;
 
 	_drawPos: Coords;
@@ -19,14 +20,14 @@ class ControlSelect
 
 	constructor
 	(
-		name,
-		pos,
-		size,
-		valueSelected,
-		options,
-		bindingForOptionValues,
-		bindingForOptionText,
-		fontHeightInPixels
+		name: string,
+		pos: Coords,
+		size: Coords,
+		valueSelected: any,
+		options: any,
+		bindingForOptionValues: DataBinding,
+		bindingForOptionText: DataBinding,
+		fontHeightInPixels: number
 	)
 	{
 		this.name = name;
@@ -63,7 +64,7 @@ class ControlSelect
 		this._sizeHalf = new Coords(0, 0, 0);
 	}
 
-	actionHandle(actionNameToHandle)
+	actionHandle(actionNameToHandle: string, universe: Universe)
 	{
 		var controlActionNames = ControlActionNames.Instances();
 		if (actionNameToHandle == controlActionNames.ControlDecrement)
@@ -78,7 +79,18 @@ class ControlSelect
 		{
 			this.optionSelectedNextInDirection(1);
 		}
+		return true; // wasActionHandled
 	};
+
+	actionToInputsMappings() : ActionToInputsMapping[]
+	{
+		return null;
+	}
+
+	childWithFocus(): Control
+	{
+		return null;
+	}
 
 	focusGain()
 	{
@@ -96,6 +108,18 @@ class ControlSelect
 		return true;
 	};
 
+	mouseClick(clickPos: Coords)
+	{
+		this.optionSelectedNextInDirection(1);
+		return true; // wasClickHandled
+	};
+
+	mouseEnter() {}
+
+	mouseExit() {}
+
+	mouseMove(pos: Coords) {}
+
 	optionSelected()
 	{
 		var optionSelected =
@@ -107,7 +131,7 @@ class ControlSelect
 		return optionSelected;
 	};
 
-	optionSelectedNextInDirection(direction)
+	optionSelectedNextInDirection(direction: number)
 	{
 		var options = this.options();
 
@@ -139,13 +163,14 @@ class ControlSelect
 		return (this._options.get == null ? this._options : this._options.get() );
 	};
 
-	mouseClick(clickPos)
+	scalePosAndSize(scaleFactor: Coords)
 	{
-		this.optionSelectedNextInDirection(1);
-		return true; // wasClickHandled
+		this.pos.multiply(scaleFactor);
+		this.size.multiply(scaleFactor);
+		this.fontHeightInPixels *= scaleFactor.y;
 	};
 
-	style(universe)
+	style(universe: Universe)
 	{
 		return universe.controlBuilder.stylesByName[this.styleName == null ? "Default" : this.styleName];
 	};
@@ -157,7 +182,7 @@ class ControlSelect
 
 	// drawable
 
-	draw(universe, display, drawLoc)
+	draw(universe: Universe, display: Display, drawLoc: Disposition)
 	{
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 

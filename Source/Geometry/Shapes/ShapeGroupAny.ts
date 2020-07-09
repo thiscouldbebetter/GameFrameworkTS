@@ -3,7 +3,7 @@ class ShapeGroupAny
 {
 	shapes: any[];
 
-	constructor(shapes)
+	constructor(shapes: any[])
 	{
 		this.shapes = shapes;
 	}

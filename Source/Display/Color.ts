@@ -7,7 +7,7 @@ class Color
 
 	_systemColor: string;
 
-	constructor(name, code, componentsRGBA)
+	constructor(name: string, code: string, componentsRGBA: number[])
 	{
 		this.name = name;
 		this.code = code;
@@ -39,7 +39,7 @@ class Color
 		return this.componentsRGBA[3];
 	};
 
-	alphaSet(valueToSet)
+	alphaSet(valueToSet: number)
 	{
 		if (valueToSet != null)
 		{
@@ -140,6 +140,6 @@ class Color_Instances
 			this.YellowDark,
 		];
 
-		this._AllByCode = ArrayHelper.addLookups(this._All, x => x.code);
+		this._AllByCode = ArrayHelper.addLookups(this._All, (x: Color) => x.code);
 	}
 }

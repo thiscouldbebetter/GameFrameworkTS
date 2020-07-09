@@ -4,7 +4,7 @@ class Rotation
 	axis: Coords;
 	angleInTurnsRef: Reference;
 
-	constructor(axis, angleInTurnsRef)
+	constructor(axis: Coords, angleInTurnsRef: Reference)
 	{
 		this.axis = axis;
 		this.angleInTurnsRef = angleInTurnsRef;
@@ -15,7 +15,7 @@ class Rotation
 		return this.angleInTurnsRef.value;
 	};
 
-	transformCoords(coordsToTransform)
+	transformCoords(coordsToTransform: Coords)
 	{
 		// hack - Assume axis is (0, 0, 1).
 		var polar = new Polar(0, 0, 0).fromCoords(coordsToTransform);
@@ -28,7 +28,7 @@ class Rotation
 		return polar.toCoords(coordsToTransform);
 	};
 
-	transformOrientation(orientation)
+	transformOrientation(orientation: Orientation)
 	{
 		orientation.forwardSet(this.transformCoords(orientation.forward));
 	};

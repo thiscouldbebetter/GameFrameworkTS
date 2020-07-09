@@ -9,7 +9,7 @@ class Video
 
 	_size: Coords;
 
-	constructor(name, sourcePath)
+	constructor(name: string, sourcePath: string)
 	{
 		this.name = name;
 		this.sourcePath = sourcePath;
@@ -17,7 +17,7 @@ class Video
 		this._size = null;
 	}
 
-	toDomElement(platformHelper)
+	toDomElement(platformHelper: PlatformHelper)
 	{
 		if (this.domElement == null)
 		{
@@ -36,14 +36,14 @@ class Video
 		return this.domElement;
 	};
 
-	play(universe)
+	play(universe: Universe)
 	{
 		this.isFinished = false;
 		this._size = universe.display.sizeInPixels;
 		universe.platformHelper.platformableAdd(this);
 	};
 
-	stop(platformHelper)
+	stop(platformHelper: PlatformHelper)
 	{
 		platformHelper.platformableRemove(this);
 		this.isFinished = true;

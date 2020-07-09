@@ -198,7 +198,7 @@ class ControlBuilder
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled,
-					function click()
+					() => // click
 					{
 						var itemSelected = listOptions.itemSelected(null);
 						if (itemSelected != null)
@@ -276,7 +276,7 @@ class ControlBuilder
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click()
+					() => // click
 					{
 						var venueNext: any = new VenueControls
 						(
@@ -297,7 +297,7 @@ class ControlBuilder
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click()
+					() => // click
 					{
 						var venueNext: any = new VenueControls
 						(
@@ -318,7 +318,7 @@ class ControlBuilder
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click()
+					() => // click
 					{
 						var venueCurrent = universe.venueCurrent;
 						var venueNext: any = new VenueMessage
@@ -347,7 +347,7 @@ class ControlBuilder
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click()
+					() => // click
 					{
 						var controlConfirm = universe.controlBuilder.confirm
 						(
@@ -454,7 +454,7 @@ class ControlBuilder
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click()
+					() => // click
 					{
 						var venueNext: any = new VenueControls
 						(
@@ -475,7 +475,7 @@ class ControlBuilder
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click()
+					() => // click
 					{
 						var venueNext: any = new VenueControls
 						(
@@ -554,15 +554,15 @@ class ControlBuilder
 					new Coords(50, 25, 0), // pos
 					new Coords(100, 40, 0), // size
 					new DataBinding(placeDefn.actionToInputsMappingsEdited, null, null), // items
-					new DataBinding(null, function get(c: any) { return c.actionName; }, null ), // bindingForItemText
+					new DataBinding(null, (c: any) => { return c.actionName; }, null ), // bindingForItemText
 					fontHeight,
 					new DataBinding
 					(
 						placeDefn,
-						function get(c: any) { return c.actionToInputsMappingSelected; },
-						function set(c, v) { c.actionToInputsMappingSelected = v; }
+						(c: any) => c.actionToInputsMappingSelected,
+						function set(c: any, v: any) { c.actionToInputsMappingSelected = v; }
 					), // bindingForItemSelected
-					new DataBinding(null, function(c: any) { return c; }, null ), // bindingForItemValue
+					new DataBinding(null, (c: any) => c, null ), // bindingForItemValue
 					null, null, null
 				),
 
@@ -585,7 +585,7 @@ class ControlBuilder
 					new DataBinding
 					(
 						placeDefn,
-						function get(c: any)
+						(c: any) => 
 						{
 							var i = c.actionToInputsMappingSelected;
 							return (i == null ? "-" : i.inputNames.join(", "));
@@ -606,10 +606,10 @@ class ControlBuilder
 					new DataBinding
 					(
 						placeDefn,
-						function get(c: any) { return c.actionToInputsMappingSelected != null},
+						(c: any) => { return c.actionToInputsMappingSelected != null},
 						null
 					), // isEnabled
-					function click()
+					() => // click
 					{
 						var mappingSelected = placeDefn.actionToInputsMappingSelected;
 						if (mappingSelected != null)
@@ -631,10 +631,10 @@ class ControlBuilder
 					new DataBinding
 					(
 						placeDefn,
-						function get(c: any) { return c.actionToInputsMappingSelected != null},
+						(c: any) => { return c.actionToInputsMappingSelected != null},
 						null
 					), // isEnabled
-					function click()
+					() => // click
 					{
 						var mappingSelected = placeDefn.actionToInputsMappingSelected;
 						if (mappingSelected != null)
@@ -642,7 +642,7 @@ class ControlBuilder
 							var venueInputCapture = new VenueInputCapture
 							(
 								universe.venueCurrent,
-								function(inputCaptured)
+								(inputCaptured: any) =>
 								{
 									var inputName = inputCaptured.name;
 									mappingSelected.inputNames.push(inputName);
@@ -665,17 +665,17 @@ class ControlBuilder
 					new DataBinding
 					(
 						placeDefn,
-						function get(c: any) { return c.actionToInputsMappingSelected != null},
+						(c: any) => { return c.actionToInputsMappingSelected != null},
 						null
 					), // isEnabled
-					function click()
+					() => // click
 					{
 						var mappingSelected = placeDefn.actionToInputsMappingSelected;
 						if (mappingSelected != null)
 						{
 							var mappingDefault = placeDefn.actionToInputsMappingsDefault.filter
 							(
-								function(x) { return x.actionName == mappingSelected.actionName }
+								(x: ActionToInputsMapping) => { return x.actionName == mappingSelected.actionName }
 							)[0];
 							mappingSelected.inputNames = mappingDefault.inputNames.slice();
 						}
@@ -692,7 +692,7 @@ class ControlBuilder
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click()
+					() =>
 					{
 						var venueInputs = universe.venueCurrent;
 						var controlConfirm = universe.controlBuilder.confirm
@@ -730,7 +730,7 @@ class ControlBuilder
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click()
+					() => // click
 					{
 						var venueNext: any = venuePrev;
 						venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
@@ -751,18 +751,18 @@ class ControlBuilder
 					new DataBinding
 					(
 						placeDefn,
-						function get(c: any)
+						(c: any) => 
 						{
 							var mappings = c.actionToInputsMappingsEdited;
 							var doAnyActionsLackInputs = mappings.some
 							(
-								function(x) { return x.inputNames.length == 0; }
+								function(x: ActionToInputsMapping) { return x.inputNames.length == 0; }
 							);
 							return (doAnyActionsLackInputs == false);
 						},
 						null
 					),
-					function click()
+					() => // click
 					{
 						placeDefn.actionToInputsMappingsSave();
 						var venueNext: any = venuePrev;
@@ -797,7 +797,7 @@ class ControlBuilder
 		);
 	};
 
-	profileDetail (universe, size)
+	profileDetail (universe: Universe, size: Coords)
 	{
 		if (size == null)
 		{
@@ -844,18 +844,18 @@ class ControlBuilder
 					new DataBinding
 					(
 						universe.profile.worlds,
-						function get(c: any) { return c; },
+						(c: any) => c,
 						null
 					),
-					new DataBinding(null, function get(c: any) { return c.name; }, null), // bindingForOptionText
+					new DataBinding(null, (c: any) => { return c.name; }, null), // bindingForOptionText
 					fontHeight,
 					new DataBinding
 					(
 						universe,
-						function get(c: any) { return c.worldSelected; },
-						function set(c, v) { c.worldSelected = v; }
+						(c: any) => { return c.worldSelected; },
+						function set(c: any, v: any) { c.worldSelected = v; }
 					), // bindingForOptionSelected
-					new DataBinding(null, function get(c: any) { return c; }, null), // value
+					new DataBinding(null, (c: any) => c, null), // value
 					null, null, null
 				),
 
@@ -868,7 +868,7 @@ class ControlBuilder
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click()
+					() => // click
 					{
 						var world = World.new(universe);
 
@@ -883,7 +883,7 @@ class ControlBuilder
 						universe.world = world;
 						var venueNext: any = new VenueControls
 						(
-							universe.controlBuilder.worldDetail(universe)
+							universe.controlBuilder.worldDetail(universe, size)
 						);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 						universe.venueNext = venueNext;
@@ -903,19 +903,18 @@ class ControlBuilder
 					new DataBinding
 					(
 						universe,
-						function get(c: any) { return (c.worldSelected != null); },
+						(c: any) => { return (c.worldSelected != null); },
 						null
 					),
-					function click()
+					() => // click
 					{
-						var listWorlds = this.parent.children["listWorlds"];
-						var worldSelected = listWorlds.itemSelected();
+						var worldSelected = universe.profile.worldSelected;
 						if (worldSelected != null)
 						{
 							universe.world = worldSelected;
 							var venueNext: any = new VenueControls
 							(
-								universe.controlBuilder.worldDetail(universe)
+								universe.controlBuilder.worldDetail(universe, size)
 							);
 							venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 							universe.venueNext = venueNext;
@@ -933,11 +932,11 @@ class ControlBuilder
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click()
+					() => // click
 					{
 						var venueNext: any = new VenueControls
 						(
-							universe.controlBuilder.profileSelect(universe)
+							universe.controlBuilder.profileSelect(universe, size)
 						);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 						universe.venueNext = venueNext;
@@ -954,7 +953,7 @@ class ControlBuilder
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click()
+					() => // click
 					{
 						var profile = universe.profile;
 
@@ -984,7 +983,7 @@ class ControlBuilder
 							{
 								var venueNext: any = new VenueControls
 								(
-									universe.controlBuilder.profileDetail(universe)
+									universe.controlBuilder.profileDetail(universe, size)
 								);
 								venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 								universe.venueNext = venueNext;
@@ -1043,8 +1042,8 @@ class ControlBuilder
 					new DataBinding
 					(
 						universe.profile,
-						function get(c: any) { return c.name; },
-						function set(c, v) { c.name = v; },
+						(c: any) => { return c.name; },
+						(c: any, v: any) => { c.name = v; },
 					), // text
 					fontHeight,
 					null
@@ -1062,13 +1061,15 @@ class ControlBuilder
 					new DataBinding
 					(
 						universe,
-						function get(c: any) { return c.profile.name.length > 0; },
+						(c: any) => { return c.profile.name.length > 0; },
 						null
 					),
-					function click()
+					() => // click
 					{
-						var textBoxName = this.parent.children["textBoxName"];
-						var profileName = textBoxName.text();
+						var venueControls = universe.venueCurrent as VenueControls;
+						var controlRootAsContainer = venueControls.controlRoot as ControlContainer;
+						var textBoxName = controlRootAsContainer.childrenByName["textBoxName"] as ControlTextBox;
+						var profileName = textBoxName.text(null, universe);
 						if (profileName == "")
 						{
 							return;
@@ -1100,7 +1101,7 @@ class ControlBuilder
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click()
+					() => // click
 					{
 						var venueNext: any = new VenueControls
 						(
@@ -1156,16 +1157,16 @@ class ControlBuilder
 					"listProfiles",
 					new Coords(35, 50, 0), // pos
 					new Coords(130, 40, 0), // size
-					new DataBinding(profiles, function get(c: any) { return c; }, null ), // items
-					new DataBinding(null, function get(c: any) { return c.name; }, null ), // bindingForItemText
+					new DataBinding(profiles, (c: any) => c, null ), // items
+					new DataBinding(null, (c: any) => { return c.name; }, null ), // bindingForItemText
 					fontHeight,
 					new DataBinding
 					(
 						universe,
-						function get(c: any) { return c.profile; },
-						function set(c, v) { c.profile = v; }
+						(c: any) => { return c.profile; },
+						function set(c: any, v: any) { c.profile = v; }
 					), // bindingForOptionSelected
-					new DataBinding(null, function get(c: any) { return c; }, null), // value
+					new DataBinding(null, (c: any) => c, null), // value
 					null, null, null
 				),
 
@@ -1178,7 +1179,7 @@ class ControlBuilder
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click()
+					() => // click
 					{
 						universe.profile = new Profile("", null);
 						var venueNext: any = new VenueControls
@@ -1203,12 +1204,14 @@ class ControlBuilder
 					new DataBinding
 					(
 						universe,
-						function get(c: any) { return (c.profile != null); },
+						(c: any) => { return (c.profile != null); },
 						null
 					),
-					function click()
+					() => // click
 					{
-						var listProfiles = this.parent.children["listProfiles"];
+						var venueControls = universe.venueCurrent as VenueControls;
+						var controlRootAsContainer = venueControls.controlRoot as ControlContainer;
+						var listProfiles = controlRootAsContainer.childrenByName["listProfiles"];
 						var profileSelected = listProfiles.itemSelected();
 						universe.profile = profileSelected;
 						var venueNext: any = new VenueControls
@@ -1230,7 +1233,7 @@ class ControlBuilder
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click()
+					() => // click
 					{
 						var venueNext: any = new VenueMessage("Working...", null, null, null, null);
 
@@ -1241,7 +1244,7 @@ class ControlBuilder
 							{
 								return World.new(universe);
 							},
-							function done(universe, world)
+							(universe: Universe, world: World) => // done
 							{
 								universe.world = world;
 
@@ -1274,7 +1277,7 @@ class ControlBuilder
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click()
+					() => // click
 					{
 						var venueNext: any = new VenueControls
 						(
@@ -1295,7 +1298,7 @@ class ControlBuilder
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click()
+					() => // click
 					{
 						var profile = universe.profile;
 
@@ -1397,17 +1400,17 @@ class ControlBuilder
 					new DataBinding
 					(
 						universe.soundHelper,
-						function get(c: any) { return c.musicVolume; },
-						function set(c, v) { c.musicVolume = v; }
+						(c: any) => { return c.musicVolume; },
+						(c: any, v: any) => { c.musicVolume = v; }
 					), // valueSelected
 					SoundHelper.controlSelectOptionsVolume(), // options
 					new DataBinding
 					(
-						null, function get(c: any) { return c.value; }, null
+						null, (c: any) => c.value, null
 					), // bindingForOptionValues,
 					new DataBinding
 					(
-						null, function get(c: any) { return c.text; }, null
+						null, (c: any) => { return c.text; }, null
 					), // bindingForOptionText
 					fontHeight
 				),
@@ -1430,12 +1433,12 @@ class ControlBuilder
 					new DataBinding
 					(
 						universe.soundHelper,
-						function get(c: any) { return c.soundVolume; },
-						function set(c, v) { c.soundVolume = v; }
+						(c: any) => { return c.soundVolume; },
+					(c: any, v: any) => { c.soundVolume = v; }
 					), // valueSelected
 					SoundHelper.controlSelectOptionsVolume(), // options
-					new DataBinding(null, function get(c: any) { return c.value; }, null ), // bindingForOptionValues,
-					new DataBinding(null, function get(c: any) { return c.text; }, null ), // bindingForOptionText
+					new DataBinding(null, (c: any) => c.value, null ), // bindingForOptionValues,
+					new DataBinding(null, (c: any) => { return c.text; }, null ), // bindingForOptionText
 					fontHeight
 				),
 
@@ -1457,8 +1460,8 @@ class ControlBuilder
 					universe.display.sizeInPixels, // valueSelected
 					// options
 					universe.display.sizesAvailable,
-					new DataBinding(null, function get(c: any) { return c; }, null ), // bindingForOptionValues,
-					new DataBinding(null, function get(c: any) { return c.toStringXY(); }, null ), // bindingForOptionText
+					new DataBinding(null, (c: any) => c, null ), // bindingForOptionValues,
+					new DataBinding(null, (c: any) => { return c.toStringXY(); }, null ), // bindingForOptionText
 					fontHeight
 				),
 
@@ -1471,13 +1474,14 @@ class ControlBuilder
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click()
+					() => // click
 					{
-						var controlRoot = universe.venueCurrent.controlRoot;
-						var selectDisplaySize = controlRoot.children["selectDisplaySize"];
+						var venueControls = universe.venueCurrent as VenueControls;
+						var controlRootAsContainer = venueControls.controlRoot as ControlContainer;
+						var selectDisplaySize = controlRootAsContainer.childrenByName["selectDisplaySize"] as ControlSelect;
 						var displaySizeSpecified = selectDisplaySize.optionSelected();
 
-						var display = universe.display;
+						var display = universe.display as Display2D;
 						var platformHelper = universe.platformHelper;
 						platformHelper.platformableRemove(display);
 						display.sizeInPixels = displaySizeSpecified;
@@ -1504,7 +1508,7 @@ class ControlBuilder
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click()
+					() => // click
 					{
 						var venueCurrent = universe.venueCurrent;
 						var controlGameControls =
@@ -1758,7 +1762,7 @@ class ControlBuilder
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click()
+					() => // click
 					{
 						var world = universe.world;
 						var venueWorld = new VenueWorld(world);
@@ -1814,7 +1818,7 @@ class ControlBuilder
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click()
+					() => // click
 					{
 						var venueNext: any = new VenueControls
 						(
@@ -1835,7 +1839,7 @@ class ControlBuilder
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click()
+					() => // click
 					{
 						var profile = universe.profile;
 						var world = universe.world;
@@ -1997,7 +2001,7 @@ class ControlBuilder
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click()
+					() => // click
 					{
 						var controlConfirm = universe.controlBuilder.confirm
 						(
@@ -2024,7 +2028,7 @@ class ControlBuilder
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click()
+					() => // click
 					{
 						var profile = universe.profile;
 						var world = universe.world;
@@ -2104,7 +2108,7 @@ class ControlBuilder
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click()
+					() => // click
 					{
 						var venueNext: any = new VenueControls
 						(
@@ -2204,7 +2208,7 @@ class ControlBuilder
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click()
+					() => // click
 					{
 						var profile = universe.profile;
 						var world = universe.world;
@@ -2252,7 +2256,7 @@ class ControlBuilder
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					function click()
+					() => // click
 					{
 						var venueNext: any = new VenueControls
 						(

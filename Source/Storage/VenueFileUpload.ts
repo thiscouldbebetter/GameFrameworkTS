@@ -1,14 +1,14 @@
 
-class VenueFileUpload
+class VenueFileUpload implements Venue
 {
-	venueNextIfFileSpecified: any;
-	venueNextIfCancelled: any;
-	actionToInputsMappings: any;
+	venueNextIfFileSpecified: Venue;
+	venueNextIfCancelled: Venue;
+	actionToInputsMappings: ActionToInputsMapping[];
 	actionToInputsMappingsByInputName: any;
 
 	domElement: any;
 
-	constructor(venueNextIfFileSpecified, venueNextIfCancelled)
+	constructor(venueNextIfFileSpecified: Venue, venueNextIfCancelled: Venue)
 	{
 		this.venueNextIfFileSpecified = venueNextIfFileSpecified;
 		this.venueNextIfCancelled = venueNextIfCancelled;
@@ -24,22 +24,24 @@ class VenueFileUpload
 		this.actionToInputsMappingsByInputName = ArrayHelper.addLookupsMultiple
 		(
 			this.actionToInputsMappings,
-			x => x.inputNames
+			(x: ActionToInputsMapping) => x.inputNames
 		);
 	}
 
 	// venue
 
-	finalize(universe)
+	draw(universe: Universe) {}
+
+	finalize(universe: Universe)
 	{
 		var platformHelper = universe.platformHelper;
 		platformHelper.platformableRemove(this);
 		var display = universe.display;
-		display.drawBackground("Black");
+		display.drawBackground("Black", null);
 		platformHelper.platformableShow(display);
 	};
 
-	initialize(universe)
+	initialize(universe: Universe)
 	{
 		var display = universe.display;
 
@@ -87,7 +89,7 @@ class VenueFileUpload
 		inputFileUpload.focus();
 	};
 
-	updateForTimerTick(universe)
+	updateForTimerTick(universe: Universe)
 	{
 		var inputHelper = universe.inputHelper;
 		var inputsPressed = inputHelper.inputsPressed;
@@ -96,7 +98,8 @@ class VenueFileUpload
 			var inputPressed = inputsPressed[i];
 			if (inputPressed.isActive == true)
 			{
-				var actionToInputsMapping = this.actionToInputsMappings[inputPressed.name];
+				var actionToInputsMapping =
+					this.actionToInputsMappingsByInputName[inputPressed.name];
 				if (actionToInputsMapping != null)
 				{
 					inputPressed.isActive = false;
@@ -112,12 +115,12 @@ class VenueFileUpload
 
 	// events
 
-	buttonCancel_Clicked(universe, event)
+	buttonCancel_Clicked(universe: Universe, event: any)
 	{
 		universe.venueNext = this.venueNextIfCancelled;
 	};
 
-	buttonLoad_Clicked(universe, event)
+	buttonLoad_Clicked(universe: Universe, event: any)
 	{
 		var inputFileUpload = this.domElement.getElementsByTagName("input")[0];
 		var fileToLoad = inputFileUpload.files[0];

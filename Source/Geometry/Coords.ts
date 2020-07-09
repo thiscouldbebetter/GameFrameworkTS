@@ -5,7 +5,7 @@ class Coords
 	y: number;
 	z: number;
 
-	constructor(x, y, z)
+	constructor(x: number, y: number, z: number)
 	{
 		this.x = x;
 		this.y = y;
@@ -35,7 +35,7 @@ class Coords
 
 	// methods
 
-	absolute()
+	absolute(): Coords
 	{
 		this.x = Math.abs(this.x);
 		this.y = Math.abs(this.y);
@@ -43,7 +43,7 @@ class Coords
 		return this;
 	};
 
-	add(other)
+	add(other: Coords): Coords
 	{
 		this.x += other.x;
 		this.y += other.y;
@@ -51,7 +51,7 @@ class Coords
 		return this;
 	};
 
-	addDimensions(x, y, z)
+	addDimensions(x: number, y: number, z: number): Coords
 	{
 		this.x += x;
 		this.y += y;
@@ -59,7 +59,7 @@ class Coords
 		return this;
 	};
 
-	ceiling()
+	ceiling(): Coords
 	{
 		this.x = Math.ceil(this.x);
 		this.y = Math.ceil(this.y);
@@ -67,7 +67,7 @@ class Coords
 		return this;
 	};
 
-	clear()
+	clear(): Coords
 	{
 		this.x = 0;
 		this.y = 0;
@@ -75,18 +75,18 @@ class Coords
 		return this;
 	};
 
-	clearZ()
+	clearZ(): Coords
 	{
 		this.z = 0;
 		return this;
 	};
 
-	clone()
+	clone(): Coords
 	{
 		return new Coords(this.x, this.y, this.z);
 	};
 
-	crossProduct(other)
+	crossProduct(other: Coords): Coords
 	{
 		return this.overwriteWithDimensions
 		(
@@ -96,7 +96,7 @@ class Coords
 		);
 	};
 
-	dimensionGet(dimensionIndex)
+	dimensionGet(dimensionIndex: number): number
 	{
 		var returnValue;
 
@@ -116,7 +116,7 @@ class Coords
 		return returnValue;
 	};
 
-	dimensionSet(dimensionIndex, valueToSet)
+	dimensionSet(dimensionIndex: number, valueToSet: number): Coords
 	{
 		if (dimensionIndex == 0)
 		{
@@ -134,12 +134,12 @@ class Coords
 		return this;
 	};
 
-	dimensions()
+	dimensions(): number[]
 	{
 		return [ this.x, this.y, this.z ];
 	};
 
-	directions()
+	directions(): Coords
 	{
 		if (this.x < 0)
 		{
@@ -171,7 +171,7 @@ class Coords
 		return this;
 	};
 
-	divide(other)
+	divide(other: Coords): Coords
 	{
 		this.x /= other.x;
 		this.y /= other.y;
@@ -179,7 +179,7 @@ class Coords
 		return this;
 	};
 
-	divideScalar(scalar)
+	divideScalar(scalar: number): Coords
 	{
 		this.x /= scalar;
 		this.y /= scalar;
@@ -187,27 +187,27 @@ class Coords
 		return this;
 	};
 
-	dotProduct(other)
+	dotProduct(other: Coords): number
 	{
 		return this.x * other.x + this.y * other.y + this.z * other.z;
 	};
 
-	double()
+	double(): Coords
 	{
 		return this.multiplyScalar(2);
 	};
 
-	equals(other)
+	equals(other: Coords): boolean
 	{
 		return (this.x == other.x && this.y == other.y && this.z == other.z);
 	};
 
-	equalsXY(other)
+	equalsXY(other: Coords): boolean
 	{
 		return (this.x == other.x && this.y == other.y);
 	};
 
-	floor()
+	floor(): Coords
 	{
 		this.x = Math.floor(this.x);
 		this.y = Math.floor(this.y);
@@ -215,12 +215,12 @@ class Coords
 		return this;
 	};
 
-	half()
+	half(): Coords
 	{
 		return this.divideScalar(2);
 	};
 
-	invert()
+	invert(): Coords
 	{
 		this.x = 0 - this.x;
 		this.y = 0 - this.y;
@@ -228,12 +228,12 @@ class Coords
 		return this;
 	};
 
-	isInRangeMax(max)
+	isInRangeMax(max: Coords)
 	{
 		return this.isInRangeMinMax(Coords.Instances().Zeroes, max);
 	};
 
-	isInRangeMinMax(min, max)
+	isInRangeMinMax(min: Coords, max: Coords): boolean
 	{
 		var returnValue =
 		(
@@ -248,12 +248,12 @@ class Coords
 		return returnValue;
 	};
 
-	magnitude()
+	magnitude(): number
 	{
 		return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
 	};
 
-	multiply(other)
+	multiply(other: Coords): Coords
 	{
 		this.x *= other.x;
 		this.y *= other.y;
@@ -261,7 +261,7 @@ class Coords
 		return this;
 	};
 
-	multiplyDimensions(x, y, z)
+	multiplyDimensions(x: number, y: number, z: number): Coords
 	{
 		this.x *= x;
 		this.y *= y;
@@ -269,7 +269,7 @@ class Coords
 		return this;
 	};
 
-	multiplyScalar(scalar)
+	multiplyScalar(scalar: number): Coords
 	{
 		this.x *= scalar;
 		this.y *= scalar;
@@ -277,7 +277,7 @@ class Coords
 		return this;
 	};
 
-	normalize()
+	normalize(): Coords
 	{
 		var magnitude = this.magnitude();
 		if (magnitude > 0)
@@ -287,7 +287,7 @@ class Coords
 		return this;
 	};
 
-	overwriteWith(other)
+	overwriteWith(other: Coords): Coords
 	{
 		this.x = other.x;
 		this.y = other.y;
@@ -295,7 +295,7 @@ class Coords
 		return this;
 	};
 
-	overwriteWithDimensions(x, y, z)
+	overwriteWithDimensions(x: number, y: number, z: number): Coords
 	{
 		this.x = x;
 		this.y = y;
@@ -303,19 +303,19 @@ class Coords
 		return this;
 	};
 
-	overwriteWithXY(other)
+	overwriteWithXY(other: Coords): Coords
 	{
 		this.x = other.x;
 		this.y = other.y;
 		return this;
 	};
 
-	productOfDimensions()
+	productOfDimensions(): number
 	{
 		return this.x * this.y * this.z;
 	};
 
-	randomize(randomizer)
+	randomize(randomizer: Randomizer): Coords
 	{
 		if (randomizer == null)
 		{
@@ -327,7 +327,7 @@ class Coords
 		return this;
 	};
 
-	right()
+	right(): Coords
 	{
 		var temp = this.y;
 		this.y = this.x;
@@ -335,7 +335,7 @@ class Coords
 		return this;
 	};
 
-	round()
+	round(): Coords
 	{
 		this.x = Math.round(this.x);
 		this.y = Math.round(this.y);
@@ -343,7 +343,7 @@ class Coords
 		return this;
 	};
 
-	subtract(other)
+	subtract(other: Coords): Coords
 	{
 		this.x -= other.x;
 		this.y -= other.y;
@@ -351,20 +351,20 @@ class Coords
 		return this;
 	};
 
-	subtractWrappedToRangeMax(other, max)
+	subtractWrappedToRangeMax(other: Coords, max: Coords): Coords
 	{
-		this.x = NumberHelper.subtractWrappedToRangeMax(this.x, other.x, max);
-		this.y = NumberHelper.subtractWrappedToRangeMax(this.y, other.y, max);
-		this.z = NumberHelper.subtractWrappedToRangeMax(this.z, other.z, max);
+		this.x = NumberHelper.subtractWrappedToRangeMax(this.x, other.x, max.x);
+		this.y = NumberHelper.subtractWrappedToRangeMax(this.y, other.y, max.y);
+		this.z = NumberHelper.subtractWrappedToRangeMax(this.z, other.z, max.z);
 		return this;
 	};
 
-	sumOfDimensions()
+	sumOfDimensions(): number
 	{
 		return this.x + this.y + this.z;
 	};
 
-	trimToMagnitudeMax(magnitudeMax)
+	trimToMagnitudeMax(magnitudeMax: number): Coords
 	{
 		var magnitude = this.magnitude();
 		if (magnitude > magnitudeMax)
@@ -374,7 +374,7 @@ class Coords
 		return this;
 	};
 
-	trimToRangeMax(max)
+	trimToRangeMax(max: Coords): Coords
 	{
 		if (this.x < 0)
 		{
@@ -406,7 +406,7 @@ class Coords
 		return this;
 	};
 
-	trimToRangeMinMax(min, max)
+	trimToRangeMinMax(min: Coords, max: Coords): Coords
 	{
 		if (this.x < min.x)
 		{
@@ -438,7 +438,7 @@ class Coords
 		return this;
 	};
 
-	wrapToRangeMax(max)
+	wrapToRangeMax(max: Coords): Coords
 	{
 		while (this.x < 0)
 		{
@@ -473,19 +473,19 @@ class Coords
 		return this;
 	};
 
-	xSet(value)
+	xSet(value: number): Coords
 	{
 		this.x = value;
 		return this;
 	};
 
-	ySet(value)
+	ySet(value: number): Coords
 	{
 		this.y = value;
 		return this;
 	};
 
-	zSet(value)
+	zSet(value: number): Coords
 	{
 		this.z = value;
 		return this;

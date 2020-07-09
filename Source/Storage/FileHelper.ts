@@ -1,7 +1,7 @@
 
 class FileHelper
 {
-	loadFileAsBinaryString(systemFileToLoad, callback, contextForCallback)
+	loadFileAsBinaryString(systemFileToLoad: any, callback: any, contextForCallback: any)
 	{
 		var fileReader = new FileReader();
 		fileReader.onload = (event) =>
@@ -11,7 +11,7 @@ class FileHelper
 		fileReader.readAsBinaryString(systemFileToLoad);
 	};
 
-	loadFileAsText(systemFileToLoad, callback, contextForCallback)
+	loadFileAsText(systemFileToLoad: any, callback: any, contextForCallback: any)
 	{
 		var fileReader = new FileReader();
 		fileReader.onload = (event) =>
@@ -21,7 +21,7 @@ class FileHelper
 		fileReader.readAsText(systemFileToLoad);
 	};
 
-	loadFile_FileLoaded(fileLoadedEvent, callback, contextForCallback, fileName)
+	loadFile_FileLoaded(fileLoadedEvent: any, callback: any, contextForCallback: any, fileName: string)
 	{
 		var fileReader = fileLoadedEvent.target;
 		var contentsOfFileLoaded = fileReader.result;
@@ -29,7 +29,7 @@ class FileHelper
 		callback.call(contextForCallback, contentsOfFileLoaded);
 	};
 
-	saveBinaryStringToFileWithName(fileAsBinaryString, fileName)
+	saveBinaryStringToFileWithName(fileAsBinaryString: string, fileName: string)
 	{
 		var fileAsArrayBuffer = new ArrayBuffer(fileAsBinaryString.length);
 		var fileAsArrayUnsigned = new Uint8Array(fileAsArrayBuffer);
@@ -46,7 +46,7 @@ class FileHelper
 		link.click();
 	};
 
-	saveTextStringToFileWithName(textToSave, fileNameToSaveAs)
+	saveTextStringToFileWithName(textToSave: string, fileNameToSaveAs: string)
 	{
 		var textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"});
 		var link = document.createElement("a");

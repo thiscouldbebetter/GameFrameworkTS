@@ -5,7 +5,7 @@ class EquipmentSocketDefnGroup
 	socketDefns: EquipmentSocketDefn[];
 	socketDefnsByName: any;
 
-	constructor(name, socketDefns)
+	constructor(name: string, socketDefns: EquipmentSocketDefn[])
 	{
 		this.name = name;
 		this.socketDefns = socketDefns;

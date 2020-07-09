@@ -1,10 +1,17 @@
 
-class ControlContainerTransparent
+class ControlContainerTransparent implements Control
 {
+	name: string;
 	containerInner: ControlContainer;
 
-	constructor(containerInner)
+	fontHeightInPixels: number;
+	parent: Control;
+	pos: Coords;
+	size: Coords;
+
+	constructor(containerInner: ControlContainer)
 	{
+		this.name = containerInner.name;
 		this.containerInner = containerInner;
 	}
 
@@ -20,14 +27,14 @@ class ControlContainerTransparent
 		return this.containerInner.childWithFocus();
 	};
 
-	childWithFocusNextInDirection(direction)
+	childWithFocusNextInDirection(direction: number)
 	{
 		return this.containerInner.childWithFocusNextInDirection(direction);
 	};
 
 	childrenAtPosAddToList
 	(
-		posToCheck, listToAddTo, addFirstChildOnly
+		posToCheck: Coords, listToAddTo: Control[], addFirstChildOnly: boolean
 	)
 	{
 		return this.containerInner.childrenAtPosAddToList
@@ -36,12 +43,21 @@ class ControlContainerTransparent
 		);
 	};
 
-	actionHandle(actionNameToHandle, universe)
+	actionHandle(actionNameToHandle: string, universe: Universe)
 	{
 		return this.containerInner.actionHandle(actionNameToHandle, universe);
 	};
 
-	mouseClick(mouseClickPos)
+	focusGain() {}
+
+	focusLose() {}
+
+	isEnabled()
+	{
+		return true; // todo
+	}
+
+	mouseClick(mouseClickPos: Coords)
 	{
 		var childrenContainingPos = this.containerInner.childrenAtPosAddToList
 		(
@@ -67,19 +83,23 @@ class ControlContainerTransparent
 		return wasClickHandled;
 	};
 
-	mouseMove(mouseMovePos)
+	mouseEnter() {}
+
+	mouseExit() {}
+
+	mouseMove(mouseMovePos: Coords)
 	{
 		this.containerInner.mouseMove(mouseMovePos);
 	};
 
-	scalePosAndSize(scaleFactor)
+	scalePosAndSize(scaleFactor: Coords)
 	{
 		return this.containerInner.scalePosAndSize(scaleFactor);
 	};
 
 	// drawable
 
-	draw(universe, display, drawLoc)
+	draw(universe: Universe, display: Display, drawLoc: Disposition)
 	{
 		drawLoc = this.containerInner._drawLoc.overwriteWith(drawLoc);
 		var drawPos = this.containerInner._drawPos.overwriteWith(drawLoc.pos).add
@@ -91,7 +111,7 @@ class ControlContainerTransparent
 		(
 			drawPos, this.containerInner.size,
 			null, // display.colorBack,
-			display.colorFore
+			display.colorFore, null
 		);
 
 		var children = this.containerInner.children;

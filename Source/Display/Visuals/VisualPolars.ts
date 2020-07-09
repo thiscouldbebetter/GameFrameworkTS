@@ -1,15 +1,15 @@
 
-class VisualPolars
+class VisualPolars implements Visual
 {
 	polars: Polar[];
-	color: any;
+	color: string;
 	lineThickness: number;
 
 	_polar: Polar;
 	_fromPos: Coords;
 	_toPos: Coords;
 
-	constructor(polars, color, lineThickness)
+	constructor(polars: Polar[], color: string, lineThickness: number)
 	{
 		this.polars = polars;
 		this.color = color;
@@ -22,7 +22,7 @@ class VisualPolars
 		this._toPos = new Coords(0, 0, 0);
 	}
 
-	draw(universe, world, display, entity)
+	draw(universe: Universe, world: World, display: Display, entity: Entity)
 	{
 		var drawableLoc = entity.locatable().loc;
 		var drawablePos = drawableLoc.pos;
@@ -47,4 +47,23 @@ class VisualPolars
 			fromPos.overwriteWith(toPos);
 		}
 	};
+
+	// Clonable.
+
+	clone(): Visual
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: Visual): Visual
+	{
+		return this; // todo
+	}
+
+	// Transformable.
+
+	transform(transformToApply: Transform): Transformable
+	{
+		return this; // todo
+	}
 }

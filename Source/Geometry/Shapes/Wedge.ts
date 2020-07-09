@@ -20,7 +20,7 @@ class Wedge
 
 	_collider: any;
 
-	constructor(vertex, directionMin, angleSpannedInTurns)
+	constructor(vertex: Coords, directionMin: Coords, angleSpannedInTurns: number)
 	{
 		this.vertex = vertex;
 		this.directionMin = directionMin;
@@ -139,7 +139,7 @@ class Wedge
 		return new Wedge(this.vertex.clone(), this.directionMin.clone(), this.angleSpannedInTurns);
 	};
 
-	overwriteWith(other)
+	overwriteWith(other: Wedge)
 	{
 		this.vertex.overwriteWith(other.vertex);
 		this.directionMin.overwriteWith(other.directionMin);

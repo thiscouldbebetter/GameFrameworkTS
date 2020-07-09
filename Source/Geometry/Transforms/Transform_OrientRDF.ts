@@ -1,11 +1,11 @@
 
-class Transform_OrientRDF
+class Transform_OrientRDF implements Transform
 {
 	orientation: Orientation;
 
 	_components: Coords[];
 
-	constructor(orientation)
+	constructor(orientation: Orientation)
 	{
 		this.orientation = orientation;
 
@@ -13,12 +13,17 @@ class Transform_OrientRDF
 		this._components = [ new Coords(0, 0, 0), new Coords(0, 0, 0), new Coords(0, 0, 0) ];
 	}
 
-	transform(transformable)
+	overwriteWith(other: Transform)
+	{
+		return this; // todo
+	}
+
+	transform(transformable: Transformable): Transformable
 	{
 		return transformable.transform(this);
 	};
 
-	transformCoords(coordsToTransform)
+	transformCoords(coordsToTransform: Coords)
 	{
 		var components = this._components;
 		var ori = this.orientation;

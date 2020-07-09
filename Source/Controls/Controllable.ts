@@ -3,7 +3,7 @@ class Controllable
 {
 	toControl: any;
 
-	constructor(toControl)
+	constructor(toControl: any)
 	{
 		this.toControl = toControl;
 	}

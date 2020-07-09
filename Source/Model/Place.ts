@@ -12,7 +12,7 @@ class Place
 	entitiesToRemove: Entity[];
 	propertyNamesToProcess: string[];
 
-	constructor(name, defnName, size, entities)
+	constructor(name: string, defnName: string, size: Coords, entities: Entity[])
 	{
 		this.name = name;
 		this.defnName = defnName;
@@ -27,6 +27,7 @@ class Place
 		this.propertyNamesToProcess =
 		[
 			Locatable.name,
+			Boundable.name,
 			Constrainable.name,
 			Collidable.name,
 			CollisionTracker.name,
@@ -41,12 +42,12 @@ class Place
 		];
 	}
 
-	defn(world)
+	defn(world: World)
 	{
 		return world.defns.defnsByNameByTypeName[PlaceDefn.name][this.defnName];
 	};
 
-	draw(universe, world)
+	draw(universe: Universe, world: World)
 	{
 		var entitiesDrawable = this.entitiesByPropertyName(Drawable.name);
 		for (var i = 0; i < entitiesDrawable.length; i++)
@@ -58,7 +59,7 @@ class Place
 		this.camera().drawEntitiesInViewThenClear(universe, world, universe.display);
 	};
 
-	entitiesByPropertyName(propertyName)
+	entitiesByPropertyName(propertyName: string)
 	{
 		var returnValues = this._entitiesByPropertyName[propertyName];
 		if (returnValues == null)
@@ -70,7 +71,7 @@ class Place
 		return returnValues;
 	};
 
-	entitiesInitialize(universe, world)
+	entitiesInitialize(universe: Universe, world: World)
 	{
 		for (var i = 0; i < this.entities.length; i++)
 		{
@@ -91,7 +92,7 @@ class Place
 		this.entitiesToRemove.length = 0;
 	};
 
-	entitiesSpawn(universe, world)
+	entitiesSpawn(universe: Universe, world: World)
 	{
 		for (var i = 0; i < this.entitiesToSpawn.length; i++)
 		{
@@ -102,7 +103,7 @@ class Place
 		this.entitiesToSpawn.length = 0;
 	};
 
-	entityRemove(entity)
+	entityRemove(entity: Entity)
 	{
 		var entityProperties = entity.properties;
 		for (var p = 0; p < entityProperties.length; p++)
@@ -117,7 +118,7 @@ class Place
 		delete this.entitiesByName[entity.name];
 	};
 
-	entitySpawn(universe, world, entity)
+	entitySpawn(universe: Universe, world: World, entity: Entity)
 	{
 		var entityName = entity.name;
 		if (entityName == null)
@@ -142,22 +143,22 @@ class Place
 			entitiesWithProperty.push(entity);
 		}
 
-		entity.initialize(universe, world, this, entity);
+		entity.initialize(universe, world, this);
 	};
 
-	finalize(universe, world)
+	finalize(universe: Universe, world: World)
 	{
 		this.entitiesRemove();
 		universe.inputHelper.inputsRemoveAll();
 	};
 
-	initialize(universe, world)
+	initialize(universe: Universe, world: World)
 	{
 		this.entitiesSpawn(universe, world);
 		this.entitiesInitialize(universe, world);
 	};
 
-	updateForTimerTick(universe, world)
+	updateForTimerTick(universe: Universe, world: World)
 	{
 		this.entitiesRemove();
 

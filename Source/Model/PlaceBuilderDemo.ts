@@ -12,7 +12,7 @@ class PlaceBuilderDemo
 	size: Coords;
 	marginSize: Coords;
 
-	constructor(randomizer, cameraViewSize, itemDefns)
+	constructor(randomizer: any, cameraViewSize: Coords, itemDefns: ItemDefn[])
 	{
 		this.randomizer = randomizer || RandomizerLCG.default();
 		this.cameraViewSize = cameraViewSize;
@@ -21,7 +21,7 @@ class PlaceBuilderDemo
 		this.entityDefnsByName = ArrayHelper.addLookupsByName(this.entityDefns);
 	}
 
-	buildBase(size, placeNameToReturnTo)
+	buildBase(size: Coords, placeNameToReturnTo: string)
 	{
 		this.build_Interior("Base", size, placeNameToReturnTo);
 
@@ -36,7 +36,11 @@ class PlaceBuilderDemo
 		return place;
 	}
 
-	buildBattlefield(size, placePos, areNeighborsConnectedESWN, isGoal, placeNamesToIncludePortalsTo)
+	buildBattlefield
+	(
+		size: Coords, placePos: Coords, areNeighborsConnectedESWN: boolean[],
+		isGoal: boolean, placeNamesToIncludePortalsTo: string[]
+	)
 	{
 		this.name = "Battlefield" + placePos.toStringXY();
 		this.size = size;
@@ -56,7 +60,7 @@ class PlaceBuilderDemo
 		return place;
 	}
 
-	buildTerrarium(size, placeNameToReturnTo)
+	buildTerrarium(size: Coords, placeNameToReturnTo: string)
 	{
 		size = size.clone().multiplyScalar(2);
 		this.build_Interior("Terrarium", size, placeNameToReturnTo);
@@ -118,7 +122,7 @@ class PlaceBuilderDemo
 			new Coords(0, -1, 0), new Coords(1, -1, 0)
 		];
 
-		var colorToTerrainVisualsByName = (color) =>
+		var colorToTerrainVisualsByName = (color: string) =>
 		{
 			var borderWidthAsFraction = .25;
 			var borderSizeCorner = mapCellSize.clone().multiplyScalar
@@ -136,136 +140,180 @@ class PlaceBuilderDemo
 
 			var isCenteredFalse = false;
 
-			var visualsByName =
-			{
-				"Center" : new VisualRectangle(mapCellSize, color, null, isCenteredFalse),
+			var visualsByName = new Map<string,Visual>
+			([
+				[ "Center", new VisualRectangle(mapCellSize, color, null, isCenteredFalse) ],
 
-				"InsideSE" : new VisualGroup
-				([
-					// s
+				[
+					"InsideSE",
+					new VisualGroup
+					([
+						// s
+						new VisualOffset
+						(
+							new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
+							new Coords(mapCellSize.x / 2, mapCellSize.y - borderSizeCorner.y, 0)
+						),
+						// e
+						new VisualOffset
+						(
+							new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
+							new Coords(mapCellSize.x - borderSizeCorner.x, mapCellSize.y / 2, 0)
+						)
+					])
+				],
+				[
+					"InsideSW",
+					new VisualGroup
+					([
+						// s
+						new VisualOffset
+						(
+							new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
+							new Coords(0, mapCellSize.y - borderSizeCorner.y, 0)
+						),
+						// w
+						new VisualOffset
+						(
+							new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
+							new Coords(0, mapCellSize.y / 2, 0)
+						)
+					])
+				],
+				[
+					"InsideNW",
+					new VisualGroup
+					([
+						// n
+						new VisualOffset
+						(
+							new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
+							new Coords(0, 0, 0)
+						),
+						// w
+						new VisualOffset
+						(
+							new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
+							new Coords(0, 0, 0)
+						)
+					])
+				],
+				[
+					"InsideNE",
+					new VisualGroup
+					([
+						// n
+						new VisualOffset
+						(
+							new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
+							new Coords(mapCellSize.x / 2, 0, 0)
+						),
+						// e
+						new VisualOffset
+						(
+							new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
+							new Coords(mapCellSize.x - borderSizeCorner.x, 0, 0)
+						),
+					])
+				],
+				[
+					"OutsideSE",
 					new VisualOffset
 					(
-						new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
-						new Coords(mapCellSize.x / 2, mapCellSize.y - borderSizeCorner.y, 0)
-					),
-					// e
+						new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse),
+						new Coords(0, 0, 0)
+					)
+				],
+				[
+					"OutsideSW",
+					new VisualOffset
+					(
+						new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse),
+						new Coords(mapCellSize.x - borderSizeCorner.x, 0, 0)
+					)
+				],
+				[
+					"OutsideNW",
+					new VisualOffset
+					(
+						new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse),
+						new Coords(mapCellSize.x - borderSizeCorner.x, mapCellSize.y - borderSizeCorner.y, 0)
+					)
+				],
+				[
+					"OutsideNE",
+					new VisualOffset
+					(
+						new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse),
+						new Coords(0, mapCellSize.y - borderSizeCorner.y, 0)
+					)
+				],
+
+				[
+					"ETop",
+					new VisualOffset
+					(
+						new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
+						new Coords(mapCellSize.x - borderSizeCorner.x, 0, 0)
+					)
+				],
+				[
+					"EBottom",
 					new VisualOffset
 					(
 						new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
 						new Coords(mapCellSize.x - borderSizeCorner.x, mapCellSize.y / 2, 0)
 					)
-				]),
-				"InsideSW" : new VisualGroup
-				([
-					// s
+				],
+				[
+					"SRight",
+					new VisualOffset
+					(
+						new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
+						new Coords(mapCellSize.x / 2, mapCellSize.y - borderSizeCorner.y, 0)
+					)
+				],
+				[
+					"SLeft",
 					new VisualOffset
 					(
 						new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
 						new Coords(0, mapCellSize.y - borderSizeCorner.y, 0)
-					),
-					// w
+					)
+				],
+				[
+					"WBottom",
 					new VisualOffset
 					(
 						new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
 						new Coords(0, mapCellSize.y / 2, 0)
 					)
-				]),
-				"InsideNW" : new VisualGroup
-				([
-					// n
-					new VisualOffset
-					(
-						new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
-						new Coords(0, 0, 0)
-					),
-					// w
+				],
+				[
+					"WTop",
 					new VisualOffset
 					(
 						new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
 						new Coords(0, 0, 0)
 					)
-				]),
-				"InsideNE" : new VisualGroup
-				([
-					// n
+				],
+				[
+					"NLeft",
+					new VisualOffset
+					(
+						new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
+						new Coords(0, 0, 0)
+					)
+				],
+				[
+					"NRight",
 					new VisualOffset
 					(
 						new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
 						new Coords(mapCellSize.x / 2, 0, 0)
-					),
-					// e
-					new VisualOffset
-					(
-						new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
-						new Coords(mapCellSize.x - borderSizeCorner.x, 0, 0)
-					),
-				]),
-
-				"OutsideSE" : new VisualOffset
-				(
-					new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse),
-					new Coords(0, 0, 0)
-				),
-				"OutsideSW" : new VisualOffset
-				(
-					new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse),
-					new Coords(mapCellSize.x - borderSizeCorner.x, 0, 0)
-				),
-				"OutsideNW" : new VisualOffset
-				(
-					new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse),
-					new Coords(mapCellSize.x - borderSizeCorner.x, mapCellSize.y - borderSizeCorner.y, 0)
-				),
-				"OutsideNE" : new VisualOffset
-				(
-					new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse),
-					new Coords(0, mapCellSize.y - borderSizeCorner.y, 0)
-				),
-
-				"ETop" : new VisualOffset
-				(
-					new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
-					new Coords(mapCellSize.x - borderSizeCorner.x, 0, 0)
-				),
-				"EBottom" : new VisualOffset
-				(
-					new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
-					new Coords(mapCellSize.x - borderSizeCorner.x, mapCellSize.y / 2, 0)
-				),
-
-				"SRight" : new VisualOffset
-				(
-					new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
-					new Coords(mapCellSize.x / 2, mapCellSize.y - borderSizeCorner.y, 0)
-				),
-				"SLeft" : new VisualOffset
-				(
-					new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
-					new Coords(0, mapCellSize.y - borderSizeCorner.y, 0)
-				),
-
-				"WBottom" : new VisualOffset
-				(
-					new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
-					new Coords(0, mapCellSize.y / 2, 0)
-				),
-				"WTop" : new VisualOffset
-				(
-					new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
-					new Coords(0, 0, 0)
-				),
-
-				"NLeft" : new VisualOffset
-				(
-					new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
-					new Coords(0, 0, 0)
-				),
-				"NRight" : new VisualOffset
-				(
-					new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
-					new Coords(mapCellSize.x / 2, 0, 0)
-				)
-			};
+					)
+				]
+			]);
 
 			var visualNamesInOrder =
 			[
@@ -292,7 +340,7 @@ class PlaceBuilderDemo
 				"ETop"
 			];
 
-			var visualsInOrder = visualNamesInOrder.map(x => visualsByName[x]);
+			var visualsInOrder = visualNamesInOrder.map( (x: string) => visualsByName.get(x));
 
 			return visualsInOrder;
 		};
@@ -308,7 +356,7 @@ class PlaceBuilderDemo
 			new Terrain("Snow", 	"*", 5, false, colorToTerrainVisualsByName("White")),
 		]
 		var terrainsByName = ArrayHelper.addLookupsByName(terrains);
-		var terrainsByCodeChar = ArrayHelper.addLookups(terrains, x => x.codeChar);
+		var terrainsByCodeChar: any = ArrayHelper.addLookups(terrains, (x: Terrain) => x.codeChar);
 
 		var map = new MapOfCells
 		(
@@ -316,7 +364,7 @@ class PlaceBuilderDemo
 			mapSizeInCells,
 			mapCellSize,
 			new MapCell(), // cellPrototype
-			(map, cellPosInCells, cellToOverwrite) => // cellAtPosInCells
+			(map: MapOfCells, cellPosInCells: any, cellToOverwrite: MapCell) => // cellAtPosInCells
 			{
 				if (cellPosInCells.isInRangeMax(map.sizeInCellsMinusOnes))
 				{
@@ -324,8 +372,9 @@ class PlaceBuilderDemo
 					var cellTerrain = (terrainsByCodeChar[cellCode] || terrains[0]);
 					var cellVisualName = cellTerrain.name;
 					var cellIsBlocking = cellTerrain.isBlocking;
-					cellToOverwrite.visualName = cellVisualName;
-					cellToOverwrite.isBlocking = cellIsBlocking;
+					var cellToOverwriteAsAny: any = cellToOverwrite;
+					cellToOverwriteAsAny.visualName = cellVisualName;
+					cellToOverwriteAsAny.isBlocking = cellIsBlocking;
 				}
 				else
 				{
@@ -336,7 +385,7 @@ class PlaceBuilderDemo
 			mapCellSource
 		);
 
-		var mapAndCellPosToEntity = (map, cellPosInCells) =>
+		var mapAndCellPosToEntity = (map: MapOfCells, cellPosInCells: any) =>
 		{
 			var cellVisuals = [];
 
@@ -457,14 +506,14 @@ class PlaceBuilderDemo
 		return place;
 	}
 
-	build_Camera(cameraViewSize)
+	build_Camera(cameraViewSize: Coords): Camera
 	{
 		var cameraEntity = this.entityBuildCamera(cameraViewSize);
 		this.entities.push(cameraEntity);
 		return cameraEntity.camera();
 	};
 
-	build_Exterior(placePos, placeNamesToIncludePortalsTo)
+	build_Exterior(placePos: Coords, placeNamesToIncludePortalsTo: string[])
 	{
 		var entityDefns = this.entityDefnsByName;
 		var entities = this.entities;
@@ -501,7 +550,7 @@ class PlaceBuilderDemo
 		entities.push(this.entityBuildFromDefn(entityDefns["Store"]));
 	}
 
-	build_Goal(entityDimension)
+	build_Goal(entityDimension: number)
 	{
 		var entityDefns = this.entityDefnsByName;
 		var entities = this.entities;
@@ -523,7 +572,7 @@ class PlaceBuilderDemo
 		entities.push(entityRing);
 	}
 
-	build_Interior(name, size, placeNameToReturnTo)
+	build_Interior(name: string, size: Coords, placeNameToReturnTo: string)
 	{
 		this.name = name;
 		this.size = size;
@@ -539,7 +588,7 @@ class PlaceBuilderDemo
 		//this.entities.splice(0, 0, ...this.entityBuildBackground(camera));
 	}
 
-	build_SizeWallsAndMargins(namePrefix, placePos, areNeighborsConnectedESWN)
+	build_SizeWallsAndMargins(namePrefix: string, placePos: Coords, areNeighborsConnectedESWN: boolean[])
 	{
 		this.size = this.size.clearZ();
 
@@ -555,7 +604,7 @@ class PlaceBuilderDemo
 
 	// Constructor helpers.
 
-	entityBuildCamera(cameraViewSize)
+	entityBuildCamera(cameraViewSize: Coords)
 	{
 		var viewSizeHalf = cameraViewSize.clone().half();
 
@@ -600,7 +649,7 @@ class PlaceBuilderDemo
 		return cameraEntity;
 	};
 
-	entityBuildBackground(camera)
+	entityBuildBackground(camera: Camera)
 	{
 		var returnValues = [];
 
@@ -657,7 +706,7 @@ class PlaceBuilderDemo
 		return returnValues;
 	};
 
-	entityBuildExit(placeNameToReturnTo)
+	entityBuildExit(placeNameToReturnTo: string)
 	{
 		var exit = this.entityBuildFromDefn(this.entityDefnsByName["Exit"]);
 		exit.portal().destinationPlaceName = placeNameToReturnTo;
@@ -669,14 +718,11 @@ class PlaceBuilderDemo
 	{
 		this.entities.forEach
 		(
-			x => { if (x.locatable() != null) { x.locatable().loc.pos.z = 0; } }
+			(x: Entity) => { if (x.locatable() != null) { x.locatable().loc.pos.z = 0; } }
 		);
 	}
 
-	entitiesBuildFromDefnAndCount
-	(
-		entityDefn, entityCount
-	)
+	entitiesBuildFromDefnAndCount(entityDefn: Entity, entityCount: number)
 	{
 		var returnEntities = [];
 
@@ -689,7 +735,7 @@ class PlaceBuilderDemo
 		return returnEntities;
 	};
 
-	entityBuildFromDefn(entityDefn)
+	entityBuildFromDefn(entityDefn: Entity): Entity
 	{
 		var entity = entityDefn.clone();
 		if (entity.locatable() != null)
@@ -714,7 +760,7 @@ class PlaceBuilderDemo
 
 	entityBuildGoal
 	(
-		entities, entityDimension, entitySize, numberOfKeysToUnlockGoal
+		entities: Entity[], entityDimension: number, entitySize: Coords, numberOfKeysToUnlockGoal: number
 	)
 	{
 		var itemKeyColor = "Yellow";
@@ -741,10 +787,14 @@ class PlaceBuilderDemo
 					new VisualGroup
 					([
 						new VisualRectangle(entitySize, goalColor, null, null),
-						new VisualText("" + numberOfKeysToUnlockGoal, itemKeyColor, null),
+						new VisualText
+						(
+							new DataBinding("" + numberOfKeysToUnlockGoal, null, null),
+							itemKeyColor, null
+						),
 						new VisualOffset
 						(
-							new VisualText("Exit", goalColor, null),
+							new VisualText(new DataBinding("Exit", null, null), goalColor, null),
 							new Coords(0, 0 - entityDimension * 2, 0)
 						)
 					]),
@@ -762,7 +812,7 @@ class PlaceBuilderDemo
 
 	entityBuildKeys
 	(
-		places, entityDimension, numberOfKeysToUnlockGoal, marginSize
+		places: Place[], entityDimension: number, numberOfKeysToUnlockGoal: number, marginSize: Coords
 	)
 	{
 		var entityDimensionHalf = entityDimension / 2;
@@ -796,7 +846,7 @@ class PlaceBuilderDemo
 			),
 			new VisualOffset
 			(
-				new VisualText(itemDefnKeyName, itemKeyColor, null),
+				new VisualText(new DataBinding(itemDefnKeyName, null, null), itemKeyColor, null),
 				new Coords(0, 0 - entityDimension * 2, 0)
 			)
 		]);
@@ -828,7 +878,7 @@ class PlaceBuilderDemo
 
 	entityBuildObstacleWalls
 	(
-		wallColor, areNeighborsConnectedESWN, placeNamePrefix, placePos
+		wallColor: string, areNeighborsConnectedESWN: boolean[], placeNamePrefix: string, placePos: Coords
 	)
 	{
 		areNeighborsConnectedESWN = areNeighborsConnectedESWN || [ false, false, false, false ];
@@ -958,7 +1008,7 @@ class PlaceBuilderDemo
 		return wallThickness;
 	};
 
-	entityBuildRadioMessage(visualForPortrait, message)
+	entityBuildRadioMessage(visualForPortrait: Visual, message: string)
 	{
 		return new Entity
 		(
@@ -969,7 +1019,7 @@ class PlaceBuilderDemo
 					20, // ticksPerRecurrence
 					1, // timesToRecur
 					// recur
-					(u, w, p, e) =>
+					(u: Universe, w: World, p: Place, e: Entity) =>
 					{
 						var player = p.player();
 						var playerItemHolder = player.itemHolder();
@@ -977,7 +1027,7 @@ class PlaceBuilderDemo
 						var doesPlayerHaveRadio = playerItemHolder.hasItem(itemRadio);
 						if (doesPlayerHaveRadio == false)
 						{
-							e.recurrent.timesRecurredSoFar = 0;
+							e.recurrent().timesRecurredSoFar = 0;
 						}
 						else
 						{
@@ -989,12 +1039,15 @@ class PlaceBuilderDemo
 								]
 							);
 							var wordBubbleAsControl = wordBubble.toControl(u);
+							var venuesForLayers: Venue[] =
+							[
+								u.venueCurrent,
+								new VenueControls(wordBubbleAsControl)
+							];
+
 							u.venueNext = new VenueLayered
 							(
-								[
-									u.venueCurrent,
-									new VenueControls(wordBubbleAsControl)
-								],
+								venuesForLayers,
 								null
 							);
 						}
@@ -1004,7 +1057,7 @@ class PlaceBuilderDemo
 		);
 	};
 
-	entityDefnBuildStore(entityDimension)
+	entityDefnBuildStore(entityDimension: number): Entity
 	{
 		var storeColor = "Brown";
 		var entitySize = new Coords(1, 1, 1).multiplyScalar(entityDimension);
@@ -1033,7 +1086,7 @@ class PlaceBuilderDemo
 						),
 						new VisualOffset
 						(
-							new VisualText("Store", storeColor, null),
+							new VisualText(new DataBinding("Store", null, null), storeColor, null),
 							new Coords(0, 0 - entityDimension * 2, 0)
 						)
 					]),
@@ -1057,7 +1110,7 @@ class PlaceBuilderDemo
 
 	// Entity definitions.
 
-	entityDefnBuildAccessory(entityDimension)
+	entityDefnBuildAccessory(entityDimension: number): Entity
 	{
 		var entityDimensionHalf = entityDimension / 2;
 
@@ -1083,7 +1136,7 @@ class PlaceBuilderDemo
 			),
 			new VisualOffset
 			(
-				new VisualText(itemDefnAccessoryName, itemAccessoryColor, null),
+				new VisualText(new DataBinding(itemDefnAccessoryName, null, null), itemAccessoryColor, null),
 				new Coords(0, 0 - entityDimension * 2, 0)
 			)
 		]);
@@ -1104,7 +1157,7 @@ class PlaceBuilderDemo
 		return itemAccessoryEntityDefn;
 	};
 
-	entityDefnBuildArmor(entityDimension)
+	entityDefnBuildArmor(entityDimension: number): Entity
 	{
 		var itemDefnArmorName = "Armor";
 		var itemArmorColor = "Green";
@@ -1124,7 +1177,7 @@ class PlaceBuilderDemo
 			new VisualPolygon(path, itemArmorColor, null),
 			new VisualOffset
 			(
-				new VisualText(itemDefnArmorName, itemArmorColor, null),
+				new VisualText(new DataBinding(itemDefnArmorName, null, null), itemArmorColor, null),
 				new Coords(0, 0 - entityDimension, 0)
 			)
 		]);
@@ -1151,7 +1204,7 @@ class PlaceBuilderDemo
 		return itemArmorEntityDefn;
 	};
 
-	entityDefnBuildBook(entityDimension)
+	entityDefnBuildBook(entityDimension: number): Entity
 	{
 		var entityDimensionHalf = entityDimension / 2;
 
@@ -1175,7 +1228,7 @@ class PlaceBuilderDemo
 			),
 			new VisualOffset
 			(
-				new VisualText(itemDefnBookName, itemBookColor, null),
+				new VisualText(new DataBinding(itemDefnBookName, null, null), itemBookColor, null),
 				new Coords(0, 0 - entityDimension * 1.5, 0)
 			)
 		]);
@@ -1196,7 +1249,7 @@ class PlaceBuilderDemo
 		return itemBookEntityDefn;
 	}
 
-	entityDefnBuildCoin(entityDimension)
+	entityDefnBuildCoin(entityDimension: number): Entity
 	{
 		var entityDimensionHalf = entityDimension / 2;
 
@@ -1214,7 +1267,7 @@ class PlaceBuilderDemo
 			),
 			new VisualOffset
 			(
-				new VisualText(itemDefnCoinName, itemCoinColor, null),
+				new VisualText(new DataBinding(itemDefnCoinName, null, null), itemCoinColor, null),
 				new Coords(0, 0 - entityDimension, 0)
 			)
 		]);
@@ -1235,7 +1288,7 @@ class PlaceBuilderDemo
 		return itemCoinEntityDefn;
 	};
 
-	entityDefnBuildContainer(entityDimension)
+	entityDefnBuildContainer(entityDimension: number): Entity
 	{
 		var containerColor = "Orange";
 		var entitySize = new Coords(1.5, 1, 0).multiplyScalar(entityDimension);
@@ -1256,7 +1309,7 @@ class PlaceBuilderDemo
 			),
 			new VisualOffset
 			(
-				new VisualText("Container", containerColor, null),
+				new VisualText(new DataBinding("Container", null, null), containerColor, null),
 				new Coords(0, 0 - entityDimension, 0)
 			)
 		]);
@@ -1277,7 +1330,7 @@ class PlaceBuilderDemo
 		return containerEntityDefn;
 	};
 
-	entityDefnBuildCrystal(entityDimension)
+	entityDefnBuildCrystal(entityDimension: number): Entity
 	{
 		var entityDimensionHalf = entityDimension / 2;
 
@@ -1323,7 +1376,7 @@ class PlaceBuilderDemo
 			),
 			new VisualOffset
 			(
-				new VisualText(itemDefnCrystalName, itemCrystalColor, null),
+				new VisualText(new DataBinding(itemDefnCrystalName, null, null), itemCrystalColor, null),
 				new Coords(0, 0 - entityDimension, 0)
 			)
 		]);
@@ -1344,7 +1397,7 @@ class PlaceBuilderDemo
 		return itemCrystalEntityDefn;
 	};
 
-	entityDefnBuildExit(entityDimension)
+	entityDefnBuildExit(entityDimension: number): Entity
 	{
 		var exitColor = "Brown";
 		var entitySize = new Coords(1, 1, 1).multiplyScalar(entityDimension);
@@ -1373,7 +1426,7 @@ class PlaceBuilderDemo
 			),
 			new VisualOffset
 			(
-				new VisualText("Exit", exitColor, null),
+				new VisualText(new DataBinding("Exit", null, null), exitColor, null),
 				new Coords(0, 0 - entityDimension * 2.5, 0)
 			)
 		]);
@@ -1393,7 +1446,7 @@ class PlaceBuilderDemo
 		return exitEntityDefn;
 	};
 
-	entityDefnBuildEnemyGenerator(entityDimension)
+	entityDefnBuildEnemyGenerator(entityDimension: number): Entity
 	{
 		var enemyColor = "Red";
 		var visualEyeRadius = entityDimension * .75 / 2;
@@ -1479,12 +1532,12 @@ class PlaceBuilderDemo
 			visualEyesWithBrowsDirectional,
 			new VisualOffset
 			(
-				new VisualText("Chaser", enemyColor, null),
+				new VisualText(new DataBinding("Chaser", null, null), enemyColor, null),
 				new Coords(0, 0 - enemyDimension, 0)
 			)
 		]);
 
-		var enemyActivity = function(universe, world, place, actor, entityToTargetName)
+		var enemyActivity = (universe: Universe, world: World, place: Place, actor: Entity, entityToTargetName: string) =>
 		{
 			var target = place.entitiesByName[entityToTargetName];
 			if (target == null)
@@ -1509,7 +1562,7 @@ class PlaceBuilderDemo
 		(
 			10,
 			null, // damageApply
-			function die(universe, world, place, entityDying)
+			(universe: Universe, world: World, place: Place, entityDying: Entity) => // die
 			{
 				var chanceOfDroppingCoin = 1;
 				var doesDropCoin = (Math.random() < chanceOfDroppingCoin);
@@ -1559,7 +1612,7 @@ class PlaceBuilderDemo
 			]
 		);
 
-		var generatorActivity = function(universe, world, place, actor, entityToTargetName)
+		var generatorActivity = (universe: Universe, world: World, place: Place, actor: Entity, entityToTargetName: string) => 
 		{
 			var enemyCount = place.entitiesByPropertyName(Enemy.name).length;
 			var enemyCountMax = 3;
@@ -1579,9 +1632,8 @@ class PlaceBuilderDemo
 					).double();
 
 				var enemyPosToStartAt =
-					NumberHelper.trimToRangeMinMax
+					offsetFromCenter.trimToRangeMinMax
 					(
-						offsetFromCenter,
 						placeSizeHalf.clone().invert(),
 						placeSizeHalf
 					);
@@ -1607,7 +1659,7 @@ class PlaceBuilderDemo
 		return enemyGeneratorEntityDefn;
 	};
 
-	entityDefnBuildFlower(entityDimension)
+	entityDefnBuildFlower(entityDimension: number): Entity
 	{
 		entityDimension *= .5;
 		var itemDefnName = "Flower";
@@ -1651,7 +1703,7 @@ class PlaceBuilderDemo
 			),
 			new VisualOffset
 			(
-				new VisualText(itemDefnName, color, null),
+				new VisualText(new DataBinding(itemDefnName, null, null), color, null),
 				new Coords(0, 0 - entityDimension * 2, 0)
 			)
 		]);
@@ -1672,7 +1724,7 @@ class PlaceBuilderDemo
 		return entityDefn;
 	};
 
-	entityDefnBuildFriendly(entityDimension)
+	entityDefnBuildFriendly(entityDimension: number): Entity
 	{
 		var friendlyColor = "Green";
 		var friendlyDimension = entityDimension;
@@ -1711,7 +1763,7 @@ class PlaceBuilderDemo
 					new Coords(1, 0, 0), // directionMin
 					.5, // angleSpannedInTurns
 					"White",
-					0
+					null // todo
 				),
 				new Coords(0, friendlyDimension / 3, 0) // offset
 			)
@@ -1730,10 +1782,11 @@ class PlaceBuilderDemo
 					(
 						"Blinking",
 						[ 5 ],// , 5 ], // ticksToHoldFrames
-						[
+						new Array<Visual>
+						(
 							//new VisualNone(),
 							friendlyVisualNormal
-						],
+						),
 						null
 					),
 
@@ -1743,7 +1796,7 @@ class PlaceBuilderDemo
 			),
 			new VisualOffset
 			(
-				new VisualText("Talker", friendlyColor, null),
+				new VisualText(new DataBinding("Talker", null, null), friendlyColor, null),
 				new Coords(0, 0 - friendlyDimension * 2, 0)
 			)
 		]);
@@ -1762,9 +1815,9 @@ class PlaceBuilderDemo
 				new Talker("AnEveningWithProfessorSurly"),
 				new Actor
 				(
-					function activity(universe, world, place, entityActor, target)
+					(universe: Universe, world: World, place: Place, entityActor: Entity, target: any) => // activity
 					{
-						var actor = entityActor.actor;
+						var actor = entityActor.actor();
 						var targetPos = actor.target;
 						if (targetPos == null)
 						{
@@ -1814,7 +1867,7 @@ class PlaceBuilderDemo
 		return friendlyEntityDefn;
 	};
 
-	entityDefnBuildGun(entityDimension)
+	entityDefnBuildGun(entityDimension: number): Entity
 	{
 		entityDimension = entityDimension * 2;
 		var itemDefnName = "Gun";
@@ -1839,7 +1892,7 @@ class PlaceBuilderDemo
 			),
 			new VisualOffset
 			(
-				new VisualText(itemDefnName, itemWeaponColor, null),
+				new VisualText(new DataBinding(itemDefnName, null, null), itemWeaponColor, null),
 				new Coords(0, 0 - entityDimension, 0)
 			)
 		]);
@@ -1864,7 +1917,7 @@ class PlaceBuilderDemo
 		return itemWeaponEntityDefn;
 	};
 
-	entityDefnBuildGunAmmo(entityDimension)
+	entityDefnBuildGunAmmo(entityDimension: number): Entity
 	{
 		var entityDimensionHalf = entityDimension / 2;
 
@@ -1894,7 +1947,7 @@ class PlaceBuilderDemo
 			),
 			new VisualOffset
 			(
-				new VisualText(itemDefnAmmoName, itemAmmoColor, null),
+				new VisualText(new DataBinding(itemDefnAmmoName, null, null), itemAmmoColor, null),
 				new Coords(0, 0 - entityDimension, 0)
 			)
 		]);
@@ -1923,7 +1976,7 @@ class PlaceBuilderDemo
 		return itemAmmoEntityDefn;
 	};
 
-	entityDefnBuildMaterial(entityDimension)
+	entityDefnBuildMaterial(entityDimension: number): Entity
 	{
 		var entityDimensionHalf = entityDimension / 2;
 
@@ -1948,7 +2001,7 @@ class PlaceBuilderDemo
 			),
 			new VisualOffset
 			(
-				new VisualText(itemDefnMaterialName, itemMaterialColor, null),
+				new VisualText(new DataBinding(itemDefnMaterialName, null, null), itemMaterialColor, null),
 				new Coords(0, 0 - entityDimension, 0)
 			)
 		]);
@@ -1969,7 +2022,7 @@ class PlaceBuilderDemo
 		return itemMaterialEntityDefn;
 	};
 
-	entityDefnBuildMedicine(entityDimension)
+	entityDefnBuildMedicine(entityDimension: number): Entity
 	{
 		var entityDimensionHalf = entityDimension / 2;
 
@@ -2002,7 +2055,7 @@ class PlaceBuilderDemo
 			),
 			new VisualOffset
 			(
-				new VisualText(itemDefnMedicineName, itemMedicineColor, null),
+				new VisualText(new DataBinding(itemDefnMedicineName, null, null), itemMedicineColor, null),
 				new Coords(0, 0 - entityDimension, 0)
 			)
 		]);
@@ -2023,7 +2076,7 @@ class PlaceBuilderDemo
 		return itemMedicineEntityDefn;
 	};
 
-	entityDefnBuildMushroom(entityDimension)
+	entityDefnBuildMushroom(entityDimension: number): Entity
 	{
 		entityDimension /= 2;
 		var itemDefnName = "Mushroom";
@@ -2056,7 +2109,7 @@ class PlaceBuilderDemo
 			),
 			new VisualOffset
 			(
-				new VisualText(itemDefnName, colorCap, null),
+				new VisualText(new DataBinding(itemDefnName, null, null), colorCap, null),
 				new Coords(0, 0 - entityDimension * 3, 0)
 			)
 		]);
@@ -2078,7 +2131,7 @@ class PlaceBuilderDemo
 		return itemMushroomEntityDefn;
 	};
 
-	entityDefnBuildObstacleBar(entityDimension)
+	entityDefnBuildObstacleBar(entityDimension: number): Entity
 	{
 		var obstacleColor = "Red";
 		var entityDimensionHalf = entityDimension / 2;
@@ -2105,7 +2158,7 @@ class PlaceBuilderDemo
 				),
 				new VisualOffset
 				(
-					new VisualText("Bar", obstacleColor, null),
+					new VisualText(new DataBinding("Bar", null, null), obstacleColor, null),
 					new Coords(0, 0 - obstacleCollider.box.size.y, 0)
 				)
 			])
@@ -2127,7 +2180,7 @@ class PlaceBuilderDemo
 		return obstacleBarEntityDefn;
 	};
 
-	entityDefnBuildObstacleMine(entityDimension)
+	entityDefnBuildObstacleMine(entityDimension: number): Entity
 	{
 		var obstacleColor = "Red";
 		var obstacleMappedCellSource =
@@ -2162,7 +2215,7 @@ class PlaceBuilderDemo
 			obstacleMappedSizeInCells,
 			obstacleMappedCellSize,
 			new MapCell(), // cellPrototype
-			function cellAtPosInCells(map, cellPosInCells, cellToOverwrite)
+			(map: MapOfCells, cellPosInCells: any, cellToOverwrite: any) => // cellAtPosInCells
 			{
 				var cellCode = map.cellSource[cellPosInCells.y][cellPosInCells.x];
 				var cellVisualName = (cellCode == "x" ? "Blocking" : "Open");
@@ -2184,7 +2237,7 @@ class PlaceBuilderDemo
 			new VisualMap(obstacleMappedMap, obstacleMappedVisualLookup, null, null),
 			new VisualOffset
 			(
-				new VisualText("Mine", obstacleColor, null),
+				new VisualText(new DataBinding("Mine", null, null), obstacleColor, null),
 				new Coords(0, 0 - entityDimension * 2, 0)
 			)
 		]);
@@ -2217,7 +2270,7 @@ class PlaceBuilderDemo
 		return obstacleMappedEntityDefn;
 	};
 
-	entityDefnBuildObstacleRing(entityDimension)
+	entityDefnBuildObstacleRing(entityDimension: number): Entity
 	{
 		var obstacleColor = "Red";
 		var obstacleRadiusOuter = entityDimension * 3.5;
@@ -2264,7 +2317,7 @@ class PlaceBuilderDemo
 		return obstacleRingEntityDefn;
 	};
 
-	entityDefnBuildPlayer(entityDimension)
+	entityDefnBuildPlayer(entityDimension: number): Entity
 	{
 		var visualEyeRadius = entityDimension * .75 / 2;
 		var visualBuilder = new VisualBuilder();
@@ -2284,7 +2337,7 @@ class PlaceBuilderDemo
 		);
 		var playerVisualBodyHidable = new VisualSelect
 		(
-			function selectChildName(u, w, display, e)
+			function selectChildName(u: Universe, w: World, d: Display, e: Entity)
 			{
 				return (e.playable().isHiding ? "Hidden" : "Normal");
 			},
@@ -2299,7 +2352,7 @@ class PlaceBuilderDemo
 		);
 		var playerVisualName = new VisualOffset
 		(
-			new VisualText("Player", playerColor, null),
+			new VisualText(new DataBinding("Player", null, null), playerColor, null),
 			new Coords(0, 0 - playerHeadRadius * 3, 0)
 		);
 
@@ -2308,7 +2361,7 @@ class PlaceBuilderDemo
 			playerVisualBodyJumpable, playerVisualName
 		]);
 
-		var playerCollide = function(universe, world, place, entityPlayer, entityOther)
+		var playerCollide = (universe: Universe, world: World, place: Place, entityPlayer: Entity, entityOther: Entity) =>
 		{
 			var messageToDisplay = null;
 
@@ -2362,11 +2415,11 @@ class PlaceBuilderDemo
 					var venueMessage = new VenueMessage
 					(
 						"You win!",
-						function acknowledge(universe)
+						(universe: Universe) => // acknowledge
 						{
 							universe.venueNext = new VenueFader
 							(
-								new VenueControls(universe.controlBuilder.title(universe)),
+								new VenueControls(universe.controlBuilder.title(universe, null)),
 								null, null, null
 							);
 						},
@@ -2374,7 +2427,7 @@ class PlaceBuilderDemo
 						universe.display.sizeDefault().clone(),//.half(),
 						true // showMessageOnly
 					);
-					universe.venueNext = venueMessage;
+					universe.venueNext = venueMessage as Venue;
 				}
 			}
 			else if (entityOther.item() != null)
@@ -2391,19 +2444,19 @@ class PlaceBuilderDemo
 				var venueMessage = new VenueMessage
 				(
 					"Portal to: " + portal.destinationPlaceName,
-					function acknowledge(universe)
+					(universe: Universe) => // acknowledge
 					{
 						portal.use
 						(
 							universe, universe.world, universe.world.placeCurrent, entityPlayer
 						);
-						universe.venueNext = new VenueFader(venueCurrent, null, null, null);
+						universe.venueNext = new VenueFader(venueCurrent, null, null, null) as Venue;
 					},
 					venueCurrent, // venuePrev
 					messageBoxSize,
 					true // showMessageOnly
 				);
-				universe.venueNext = venueMessage;
+				universe.venueNext = venueMessage as Venue;
 			}
 			else if (entityOther.talker() != null)
 			{
@@ -2417,7 +2470,7 @@ class PlaceBuilderDemo
 				var conversation = new ConversationRun
 				(
 					conversationDefn,
-					function quit(conversationRun)
+					() => // quit
 					{
 						universe.venueNext = venueToReturnTo;
 					},
@@ -2441,7 +2494,7 @@ class PlaceBuilderDemo
 			new Constraint_SpeedMaxXY(5),
 			new Constraint_Conditional
 			(
-				(u, w, p, entity) => ( entity.locatable().loc.pos.z >= 0 ),
+				(u: Universe, w: World, p: Place, e: Entity) => ( e.locatable().loc.pos.z >= 0 ),
 				new Constraint_FrictionXY(.03, .5)
 			),
 		]);
@@ -2477,7 +2530,7 @@ class PlaceBuilderDemo
 		var killable = new Killable
 		(
 			50, // integrity
-			function damageApply(universe, world, place, entityDamager, entityKillable)
+			(universe: Universe, world: World, place: Place, entityDamager: Entity, entityKillable: Entity) => // damageApply
 			{
 				var damage = entityDamager.damager().damagePerHit;
 				var equipmentUser = entityKillable.equipmentUser();
@@ -2490,16 +2543,16 @@ class PlaceBuilderDemo
 				entityKillable.killable().integrityAdd(0 - damage);
 				return damage;
 			},
-			function die(universe, world, place, entityKillable)
+			(universe: Universe, world: World, place: Place, entityKillable: Entity) => // die
 			{
 				var venueMessage = new VenueMessage
 				(
 					"You lose!",
-					function acknowledge(universe)
+					(universe: Universe) => // acknowledge
 					{
 						universe.venueNext = new VenueFader
 						(
-							new VenueControls(universe.controlBuilder.title(universe)), null, null, null
+							new VenueControls(universe.controlBuilder.title(universe, null) ), null, null, null
 						);
 					},
 					universe.venueCurrent, // venuePrev
@@ -2514,7 +2567,7 @@ class PlaceBuilderDemo
 		var movable = new Movable
 		(
 			0.5, // accelerationPerTick
-			function accelerate(universe, world, place, entityMovable)
+			(universe: Universe, world: World, place: Place, entityMovable: Entity) => // accelerate
 			{
 				var accelerationToApply = entityMovable.movable().accelerationPerTick;
 				var equipmentUser = entityMovable.equipmentUser();
@@ -2586,7 +2639,7 @@ class PlaceBuilderDemo
 
 		var controllable = new Controllable
 		(
-			function toControl(universe, size, entity, venuePrev)
+			(universe: Universe, size: Coords, entity: Entity, venuePrev: Venue) => // toControl
 			{
 				var fontHeight = 12;
 				var labelSize = new Coords(150, fontHeight * 1.25, 0);
@@ -2643,7 +2696,7 @@ class PlaceBuilderDemo
 
 				var back = function()
 				{
-					var venueNext = venuePrev;
+					var venueNext: Venue = venuePrev;
 					venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 					universe.venueNext = venueNext;
 				};
@@ -2727,7 +2780,7 @@ class PlaceBuilderDemo
 		return playerEntityDefn;
 	};
 
-	entityDefnBuildPortal(entityDimension)
+	entityDefnBuildPortal(entityDimension: number): Entity
 	{
 		var baseColor = "Brown";
 
@@ -2755,7 +2808,13 @@ class PlaceBuilderDemo
 			(
 				new VisualDynamic
 				(
-					(u, w, d, e) => new VisualText(e.portal().destinationPlaceName, baseColor, null)
+					(u: Universe, w: World, d: Display, e: Entity) =>
+						new VisualText
+						(
+							new DataBinding(e.portal().destinationPlaceName, null, null),
+							baseColor,
+							null
+						)
 				),
 				new Coords(0, entityDimension, 0)
 			)
@@ -2776,7 +2835,7 @@ class PlaceBuilderDemo
 		return portalEntity;
 	};
 
-	entityDefnBuildPotion(entityDimension)
+	entityDefnBuildPotion(entityDimension: number): Entity
 	{
 		var entityDimensionHalf = entityDimension / 2;
 
@@ -2803,7 +2862,7 @@ class PlaceBuilderDemo
 			),
 			new VisualOffset
 			(
-				new VisualText(itemDefnPotionName, itemPotionColor, null),
+				new VisualText(new DataBinding(itemDefnPotionName, null, null), itemPotionColor, null),
 				new Coords(0, 0 - entityDimension, 0)
 			)
 		]);
@@ -2824,7 +2883,7 @@ class PlaceBuilderDemo
 		return itemPotionEntityDefn;
 	};
 
-	entityDefnBuildSword(entityDimension)
+	entityDefnBuildSword(entityDimension: number): Entity
 	{
 		entityDimension = entityDimension;
 		var itemDefnName = "Sword";
@@ -2858,7 +2917,7 @@ class PlaceBuilderDemo
 			),
 			new VisualOffset
 			(
-				new VisualText(itemDefnName, itemWeaponColor, null),
+				new VisualText(new DataBinding(itemDefnName, null, null), itemWeaponColor, null),
 				new Coords(0, 0 - entityDimension, 0)
 			)
 		]);
@@ -2883,7 +2942,7 @@ class PlaceBuilderDemo
 		return itemWeaponEntityDefn;
 	};
 
-	entityDefnBuildToolset(entityDimension)
+	entityDefnBuildToolset(entityDimension: number)
 	{
 		var itemDefnName = "Toolset";
 
@@ -2906,7 +2965,7 @@ class PlaceBuilderDemo
 			),
 			new VisualOffset
 			(
-				new VisualText(itemDefnName, itemToolsetColor, null),
+				new VisualText(new DataBinding(itemDefnName, null, null), itemToolsetColor, null),
 				new Coords(0, 0 - entityDimension, 0)
 			)
 		]);
@@ -2928,7 +2987,7 @@ class PlaceBuilderDemo
 		return itemToolsetEntityDefn;
 	};
 
-	entityDefnBuildTree(entityDimension)
+	entityDefnBuildTree(entityDimension: number): Entity
 	{
 		var entityName = "Tree";
 		entityDimension *= 1.5;
@@ -2954,7 +3013,7 @@ class PlaceBuilderDemo
 			),
 			new VisualOffset
 			(
-				new VisualText(entityName, color, null),
+				new VisualText(new DataBinding(entityName, null, null), color, null),
 				new Coords(0, 0 - entityDimension * 2, 0)
 			)
 		]);
@@ -2969,7 +3028,7 @@ class PlaceBuilderDemo
 			collider,
 			[ Collidable.name ], // entityPropertyNamesToCollideWith,
 			// collideEntities
-			(u, w, p, e, e2) => { u.collisionHelper.collideCollidablesReverseVelocities(e, e2); }
+			(u: Universe, w: World, p: Place, e: Entity, e2: Entity) => { u.collisionHelper.collideCollidablesReverseVelocities(e, e2); }
 		)
 
 		var entityDefn = new Entity
@@ -2986,7 +3045,7 @@ class PlaceBuilderDemo
 		return entityDefn;
 	};
 
-	entityDefnsBuild()
+	entityDefnsBuild(): Entity[]
 	{
 		var entityDimension = 10;
 		var entityDefns =
@@ -3019,5 +3078,4 @@ class PlaceBuilderDemo
 		];
 		return entityDefns;
 	};
-
 }

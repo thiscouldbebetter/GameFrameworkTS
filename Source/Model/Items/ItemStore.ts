@@ -5,12 +5,13 @@ class ItemStore
 
 	statusMessage: string;
 
-	constructor(itemDefnNameCurrency)
+	constructor(itemDefnNameCurrency: string)
 	{
 		this.itemDefnNameCurrency = itemDefnNameCurrency;
+		this.statusMessage = "-";
 	}
 
-	transfer(world, entityFrom, entityTo, messagePrefix)
+	transfer(world: World, entityFrom: Entity, entityTo: Entity, messagePrefix: string)
 	{
 		var itemHolderFrom = entityFrom.itemHolder();
 		var itemHolderTo = entityTo.itemHolder();
@@ -46,7 +47,7 @@ class ItemStore
 		}
 	};
 
-	toControl(universe, size, entityCustomer, entityStore, venuePrev)
+	toControl(universe: Universe, size: Coords, entityCustomer: Entity, entityStore: Entity, venuePrev: Venue)
 	{
 		if (size == null)
 		{
@@ -74,7 +75,7 @@ class ItemStore
 		var back = function()
 		{
 			var venueNext = venuePrev;
-			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
+			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null) as Venue;
 			universe.venueNext = venueNext;
 		};
 
@@ -122,18 +123,18 @@ class ItemStore
 					new DataBinding
 					(
 						null,
-						function get(c) { return c.item().toString(world); },
+						(c: any) => { return c.item().toString(world); },
 						null
 					), // bindingForItemText
 					fontHeight,
 					new DataBinding
 					(
 						itemHolderStore,
-						function get(c) { return c.itemEntityToOffer; },
-						function set(c, v) { c.itemEntityToOffer = v; }
+						(c: any) => { return c.itemEntityToOffer; },
+						(c: any, v: any) => { c.itemEntityToOffer = v; }
 					), // bindingForItemSelected
 					new DataBinding(null, function(c) { return c; }, null), // bindingForItemValue
-					true, // isEnabled
+					new DataBinding(true, null, null), // isEnabled
 					buy, // confirm
 					null
 				),
@@ -178,18 +179,18 @@ class ItemStore
 					new DataBinding
 					(
 						null,
-						function get(c) { return c.item().toString(world); },
+						(c: any) => { return c.item().toString(world); },
 						null
 					), // bindingForItemText
 					fontHeight,
 					new DataBinding
 					(
 						itemHolderCustomer,
-						function get(c) { return c.itemEntityToOffer; },
-						function set(c, v) { c.itemEntityToOffer = v; }
+						(c: any) => { return c.itemEntityToOffer; },
+						(c: any, v: any) => { c.itemEntityToOffer = v; }
 					), // bindingForItemSelected
 					new DataBinding(null, function(c) { return c; }, null ), // bindingForItemValue
-					true, // isEnabled
+					new DataBinding(true, null, null), // isEnabled
 					sell, // confirm
 					null
 				),

@@ -8,7 +8,7 @@ class Killable
 
 	integrity: number;
 
-	constructor(integrityMax, damageApply, die, itemDefnCorpse)
+	constructor(integrityMax: number, damageApply: any, die: any, itemDefnCorpse: ItemDefn)
 	{
 		this.integrityMax = integrityMax;
 		this._damageApply = damageApply;
@@ -18,13 +18,13 @@ class Killable
 		this.integrity = this.integrityMax;
 	}
 
-	damageApply(universe, world, place, entityDamager, entityKillable, damageToApply)
+	damageApply(universe: Universe, world: World, place: Place, entityDamager: Entity, entityKillable: Entity, damageToApply: number)
 	{
 		var damageApplied;
 		if (this._damageApply == null)
 		{
 			damageApplied = (damageToApply == null ? entityDamager.damager().damagePerHit : damageToApply);
-			entityKillable.killable.integrityAdd(0 - damageApplied);
+			entityKillable.killable().integrityAdd(0 - damageApplied);
 		}
 		else
 		{
@@ -33,7 +33,7 @@ class Killable
 		return damageApplied;
 	};
 
-	integrityAdd(amountToAdd)
+	integrityAdd(amountToAdd: number)
 	{
 		this.integrity += amountToAdd;
 		this.integrity = NumberHelper.trimToRangeMax
@@ -48,7 +48,7 @@ class Killable
 		return (this.integrity > 0);
 	};
 
-	updateForTimerTick(universe, world, place, entityKillable)
+	updateForTimerTick(universe: Universe, world: World, place: Place, entityKillable: Entity)
 	{
 		if (this.isAlive() == false)
 		{

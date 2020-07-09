@@ -1,17 +1,17 @@
 
-class VisualArc
+class VisualArc implements Visual
 {
 	radiusOuter: number;
 	radiusInner: number;
 	directionMin: Coords;
 	angleSpannedInTurns: number;
-	colorFill: any;
-	colorBorder: any;
+	colorFill: string;
+	colorBorder: string;
 
 	_drawPos: Coords;
 	_polar: Polar;
 
-	constructor(radiusOuter, radiusInner, directionMin, angleSpannedInTurns, colorFill, colorBorder)
+	constructor(radiusOuter: number, radiusInner: number, directionMin: Coords, angleSpannedInTurns: number, colorFill: string, colorBorder: string)
 	{
 		this.radiusOuter = radiusOuter;
 		this.radiusInner = radiusInner;
@@ -25,7 +25,7 @@ class VisualArc
 		this._polar = new Polar(0, 0, 0);
 	}
 
-	draw(universe, world, display, entity)
+	draw(universe: Universe, world: World, display: Display, entity: Entity)
 	{
 		var drawableLoc = entity.locatable().loc;
 		var drawPos = this._drawPos.overwriteWith
@@ -47,4 +47,23 @@ class VisualArc
 			this.colorFill, this.colorBorder
 		);
 	};
+
+	// Clonable.
+
+	clone(): Visual
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: Visual): Visual
+	{
+		return this; // todo
+	}
+
+	// Transformable.
+
+	transform(transformToApply: Transform): Transformable
+	{
+		return this; // todo
+	}
 }

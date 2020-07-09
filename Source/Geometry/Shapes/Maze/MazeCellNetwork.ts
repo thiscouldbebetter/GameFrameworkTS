@@ -13,7 +13,7 @@ class MazeCellNetwork
 
 	static MaxIDSoFar = 0;
 
-	static mergeNetworks = function(network0, network1)
+	static mergeNetworks(network0: MazeCellNetwork, network1: MazeCellNetwork)
 	{
 		var networkMerged = new MazeCellNetwork();
 

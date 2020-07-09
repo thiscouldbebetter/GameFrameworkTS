@@ -1,30 +1,42 @@
 
-class VisualRotate
+class VisualRotate implements Visual
 {
 	rotationInTurns: number;
-	child: any;
+	child: Visual;
 
-	constructor(rotationInTurns, child)
+	constructor(rotationInTurns: number, child: Visual)
 	{
 		this.rotationInTurns = rotationInTurns;
 		this.child = child;
 	}
 
-	draw(universe, world, display, entity)
+	draw(universe: Universe, world: World, display: Display, entity: Entity)
 	{
-		var graphics = display.graphics;
-		graphics.save();
+		display.stateSave();
 
-		var centerOfRotation = entity.locatable().loc.pos;
-		graphics.translate(centerOfRotation.x, centerOfRotation.y);
-
-		var rotationInRadians = this.rotationInTurns * Polar.RadiansPerTurn;
-		graphics.rotate(rotationInRadians);
-
-		graphics.translate(0 - centerOfRotation.x, 0 - centerOfRotation.y);
+		display.rotateTurnsAroundCenter(this.rotationInTurns, entity.locatable().loc.pos);
 
 		this.child.draw(universe, world, display, entity);
 
-		graphics.restore();
+		display.stateRestore();
 	};
+
+	// Clonable.
+
+	clone(): Visual
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: Visual): Visual
+	{
+		return this; // todo
+	}
+
+	// Transformable.
+
+	transform(transformToApply: Transform): Transformable
+	{
+		return this; // todo
+	}
 }

@@ -5,7 +5,7 @@ class Lighting
 	direction: Coords;
 	directionalIntensity: number;
 
-	constructor(ambientIntensity, direction, directionalIntensity)
+	constructor(ambientIntensity: number, direction: Coords, directionalIntensity: number)
 	{
 		this.ambientIntensity = ambientIntensity;
 		this.direction = direction.clone().normalize();

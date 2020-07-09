@@ -1,5 +1,5 @@
 
-class InputHelper
+class InputHelper implements Platformable
 {
 	mouseClickPos: Coords;
 	mouseMovePos: Coords;
@@ -10,6 +10,7 @@ class InputHelper
 	gamepadsConnected: any;
 	inputNames: any;
 	inputsPressed: Input[];
+	inputsPressedByName: any;
 	keysToPreventDefaultsFor: string[];
 
 	isMouseMovementTracked: boolean;
@@ -30,9 +31,12 @@ class InputHelper
 			inputNames.ArrowDown, inputNames.ArrowLeft, inputNames.ArrowRight,
 			inputNames.ArrowUp, inputNames.Tab
 		];
+
+		this.inputsPressed = [];
+		this.inputsPressedByName = {};
 	}
 
-	actionsFromInput(actionsByName, actionToInputsMappingsByInputName)
+	actionsFromInput(actionsByName: any, actionToInputsMappingsByInputName: any)
 	{
 		var returnValues = [];
 
@@ -59,7 +63,7 @@ class InputHelper
 		return returnValues;
 	};
 
-	initialize(universe)
+	initialize(universe: Universe)
 	{
 		this.inputsPressed = [];
 		this.gamepadsConnected = [];
@@ -80,22 +84,22 @@ class InputHelper
 		this.gamepadsCheck();
 	};
 
-	inputAdd(inputPressedName)
+	inputAdd(inputPressedName: string)
 	{
-		if (this.inputsPressed[inputPressedName] == null)
+		if (this.inputsPressedByName[inputPressedName] == null)
 		{
 			var inputPressed = new Input(inputPressedName);
-			this.inputsPressed[inputPressedName] = inputPressed;
+			this.inputsPressedByName[inputPressedName] = inputPressed;
 			this.inputsPressed.push(inputPressed);
 		}
 	};
 
-	inputRemove(inputReleasedName)
+	inputRemove(inputReleasedName: string)
 	{
-		if (this.inputsPressed[inputReleasedName] != null)
+		if (this.inputsPressedByName[inputReleasedName] != null)
 		{
-			var inputReleased = this.inputsPressed[inputReleasedName];
-			delete this.inputsPressed[inputReleasedName];
+			var inputReleased = this.inputsPressedByName[inputReleasedName];
+			delete this.inputsPressedByName[inputReleasedName];
 			ArrayHelper.remove(this.inputsPressed, inputReleased);
 		}
 	};
@@ -110,16 +114,16 @@ class InputHelper
 		for (var i = 0; i < this.inputsPressed.length; i++)
 		{
 			var input = this.inputsPressed[i];
-			this.inputRemove(input);
+			this.inputRemove(input.name);
 		}
 	};
 
-	isMouseClicked(value)
+	isMouseClicked(value: boolean)
 	{
 		var inputNameMouseClick = this.inputNames["MouseClick"];
 		if (value == null)
 		{
-			var inputPressed = this.inputsPressed[inputNameMouseClick];
+			var inputPressed = this.inputsPressedByName[inputNameMouseClick];
 			var returnValue = (inputPressed != null && inputPressed.isActive);
 			return returnValue;
 		}
@@ -136,12 +140,12 @@ class InputHelper
 		}
 	};
 
-	updateForTimerTick(universe)
+	updateForTimerTick(universe: Universe)
 	{
 		this.updateForTimerTick_Gamepads(universe);
 	};
 
-	updateForTimerTick_Gamepads(universe)
+	updateForTimerTick_Gamepads(universe: Universe)
 	{
 		var systemGamepads = this.systemGamepads();
 		var inputNames = this.inputNames;
@@ -209,7 +213,7 @@ class InputHelper
 
 	// events - keyboard
 
-	handleEventKeyDown(event)
+	handleEventKeyDown(event: any)
 	{
 		var inputPressed = event.key;
 
@@ -234,7 +238,7 @@ class InputHelper
 		this.inputAdd(inputPressed);
 	};
 
-	handleEventKeyUp(event)
+	handleEventKeyUp(event: any)
 	{
 		var inputReleased = event.key;
 		if (inputReleased == " ")
@@ -255,7 +259,7 @@ class InputHelper
 
 	// events - mouse
 
-	handleEventMouseDown(event)
+	handleEventMouseDown(event: any)
 	{
 		var canvas = event.target;
 		var canvasBox = canvas.getBoundingClientRect();
@@ -268,7 +272,7 @@ class InputHelper
 		this.inputAdd(this.inputNames.MouseClick);
 	};
 
-	handleEventMouseMove(event)
+	handleEventMouseMove(event: any)
 	{
 		var canvas = event.target;
 		var canvasBox = canvas.getBoundingClientRect();
@@ -287,7 +291,7 @@ class InputHelper
 		}
 	};
 
-	handleEventMouseUp(event)
+	handleEventMouseUp(event: any)
 	{
 		this.inputRemove(this.inputNames.MouseClick);
 	};
@@ -315,7 +319,7 @@ class InputHelper
 
 	// Platformable.
 
-	toDomElement(platformHelper)
+	toDomElement(platformHelper: PlatformHelper): any
 	{
 		document.body.onkeydown = this.handleEventKeyDown.bind(this);
 		document.body.onkeyup = this.handleEventKeyUp.bind(this);
@@ -323,6 +327,7 @@ class InputHelper
 		divMain.onmousedown = this.handleEventMouseDown.bind(this);
 		divMain.onmouseup = this.handleEventMouseUp.bind(this);
 		divMain.onmousemove = (this.isMouseMovementTracked ? this.handleEventMouseMove.bind(this) : null);
+		return null;
 	};
 
 }

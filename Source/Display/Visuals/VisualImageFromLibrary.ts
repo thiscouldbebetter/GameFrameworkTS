@@ -1,11 +1,11 @@
 
-class VisualImageFromLibrary
+class VisualImageFromLibrary implements VisualImage
 {
 	imageName: string;
 
 	_drawPos: Coords;
 
-	constructor(imageName)
+	constructor(imageName: string)
 	{
 		this.imageName = imageName;
 
@@ -15,7 +15,7 @@ class VisualImageFromLibrary
 
 	// static methods
 
-	static manyFromImages(images, imageSizeScaled)
+	static manyFromImages(images: Image2[], imageSizeScaled: Coords)
 	{
 		var returnValues = [];
 
@@ -31,14 +31,14 @@ class VisualImageFromLibrary
 
 	// instance methods
 
-	image(universe)
+	image(universe: Universe): Image2
 	{
 		return universe.mediaLibrary.imageGetByName(this.imageName);
 	};
 
 	// visual
 
-	draw(universe, world, display, entity)
+	draw(universe: Universe, world: World, display: Display, entity: Entity)
 	{
 		var image = this.image(universe);
 		var imageSize = this.image(universe).sizeInPixels;
@@ -48,4 +48,23 @@ class VisualImageFromLibrary
 		);
 		display.drawImageScaled(image, drawPos, imageSize);
 	};
+
+	// Clonable.
+
+	clone(): Visual
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: Visual): Visual
+	{
+		return this; // todo
+	}
+
+	// Transformable.
+
+	transform(transformToApply: Transform): Transformable
+	{
+		return this; // todo
+	}
 }

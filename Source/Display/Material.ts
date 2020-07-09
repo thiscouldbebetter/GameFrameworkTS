@@ -6,7 +6,7 @@ class Material
 	colorFill: Color;
 	texture: any;
 
-	constructor(name, colorStroke, colorFill, texture)
+	constructor(name: string, colorStroke: Color, colorFill: Color, texture: Texture)
 	{
 		this.name = name;
 		this.colorStroke = colorStroke;

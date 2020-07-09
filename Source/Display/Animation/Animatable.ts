@@ -10,7 +10,7 @@ class Animatable
 		this.timerTicksSoFar = 0;
 	}
 
-	animationStart(defnName)
+	animationStart(defnName: string)
 	{
 		if (this.animationDefnNameCurrent != defnName)
 		{
@@ -19,7 +19,7 @@ class Animatable
 		}
 	};
 
-	updateForTimerTick(universe, world, place, entity)
+	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity)
 	{
 		this.timerTicksSoFar++;
 	};

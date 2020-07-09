@@ -9,7 +9,7 @@ class Box
 	_max: Coords;
 	_range: RangeExtent;
 
-	constructor(center, size)
+	constructor(center: Coords, size: Coords)
 	{
 		this.center = center || new Coords(0, 0, 0);
 		this.size = size || new Coords(0, 0, 0);
@@ -23,7 +23,7 @@ class Box
 
 	// Static methods.
 
-	static doBoxesInSetsOverlap(boxSet0, boxSet1)
+	static doBoxesInSetsOverlap(boxSet0: Box[], boxSet1: Box[])
 	{
 		var doAnyBoxOverlapSoFar = false;
 
@@ -52,30 +52,30 @@ class Box
 
 	// Instance methods.
 
-	containsOther(other)
+	containsOther(other: Box)
 	{
 		return ( this.containsPoint(other.min()) && this.containsPoint(other.max()) );
 	};
 
-	containsPoint(pointToCheck)
+	containsPoint(pointToCheck: Coords)
 	{
 		return pointToCheck.isInRangeMinMax(this.min(), this.max());
 	};
 
-	fromMinAndMax(min, max)
+	fromMinAndMax(min: Coords, max: Coords)
 	{
 		var center = min.clone().add(max).half();
 		var size = max.clone().subtract(min);
 		return new Box(center, size);
 	};
 
-	fromMinAndSize(min, size)
+	fromMinAndSize(min: Coords, size: Coords)
 	{
 		var center = size.clone().half().add(min);
 		return new Box(center, size);
 	};
 
-	intersectWith(other)
+	intersectWith(other: Box)
 	{
 		var thisMinDimensions = this.min().dimensions();
 		var thisMaxDimensions = this.max().dimensions();
@@ -133,7 +133,7 @@ class Box
 		return this._min.overwriteWith(this.center).subtract(this.sizeHalf);
 	};
 
-	ofPoints(points)
+	ofPoints(points: Coords[])
 	{
 		var point0 = points[0];
 		var minSoFar = this._min.overwriteWith(point0);
@@ -178,7 +178,7 @@ class Box
 		return this;
 	};
 
-	overlapsWith(other)
+	overlapsWith(other: Box)
 	{
 		var returnValue =
 		(
@@ -189,7 +189,7 @@ class Box
 		return returnValue;
 	};
 
-	overlapsWithXY(other)
+	overlapsWithXY(other: Box)
 	{
 		var returnValue =
 		(
@@ -199,7 +199,7 @@ class Box
 		return returnValue;
 	};
 
-	overlapsWithOtherInDimension(other, dimensionIndex)
+	overlapsWithOtherInDimension(other: Box, dimensionIndex: number)
 	{
 		var rangeThis = this.rangeForDimension(dimensionIndex, this._range);
 		var rangeOther = other.rangeForDimension(dimensionIndex, other._range);
@@ -207,21 +207,21 @@ class Box
 		return returnValue;
 	};
 
-	rangeForDimension(dimensionIndex, range)
+	rangeForDimension(dimensionIndex: number, range: RangeExtent)
 	{
 		range.min = this.min().dimensionGet(dimensionIndex);
 		range.max = this.max().dimensionGet(dimensionIndex);
 		return range;
 	};
 
-	sizeOverwriteWith(sizeOther)
+	sizeOverwriteWith(sizeOther: Coords)
 	{
 		this.size.overwriteWith(sizeOther);
 		this.sizeHalf.overwriteWith(this.size).half();
 		return this;
 	};
 
-	touches(other)
+	touches(other: Box)
 	{
 		var returnValue =
 		(
@@ -232,7 +232,7 @@ class Box
 		return returnValue;
 	};
 
-	touchesXY(other)
+	touchesXY(other: Box)
 	{
 		var returnValue =
 		(
@@ -242,7 +242,7 @@ class Box
 		return returnValue;
 	};
 
-	touchesOtherInDimension(other, dimensionIndex)
+	touchesOtherInDimension(other: Box, dimensionIndex: number)
 	{
 		var rangeThis = this.rangeForDimension(dimensionIndex, this._range);
 		var rangeOther = other.rangeForDimension(dimensionIndex, other._range);
@@ -250,7 +250,7 @@ class Box
 		return returnValue;
 	};
 
-	trimCoords(coordsToTrim)
+	trimCoords(coordsToTrim: Coords)
 	{
 		return coordsToTrim.trimToRangeMinMax(this.min(), this.max());
 	};
@@ -262,7 +262,7 @@ class Box
 		return new Box(this.center.clone(), this.size.clone());
 	};
 
-	overwriteWith(other)
+	overwriteWith(other: Box)
 	{
 		this.center.overwriteWith(other.center);
 		this.size.overwriteWith(other.size);
@@ -284,9 +284,9 @@ class Box
 		return [ this.center ];
 	};
 
-	transform(transformToApply)
+	transform(transformToApply: Transform)
 	{
-		Transform.applyTransformToCoordsMany(transformToApply, this.coordsGroupToTranslate());
+		Transforms.applyTransformToCoordsMany(transformToApply, this.coordsGroupToTranslate());
 		return this;
 	};
 }

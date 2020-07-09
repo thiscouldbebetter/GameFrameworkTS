@@ -1,16 +1,16 @@
 
-class MeshTextured
+class MeshTextured implements Transformable
 {
 	geometry: Mesh;
-	materials: any;
+	materials: Material[];
 	materialsByName: any;
-	faceTextures: any;
-	vertexGroups: any;
+	faceTextures: MeshTexturedFaceTexture[];
+	vertexGroups: VertexGroup[];
 
 	_faceIndicesByMaterial: any;
-	_faces: any;
+	_faces: FaceTextured[];
 
-	constructor(geometry, materials, faceTextures, vertexGroups)
+	constructor(geometry: Mesh, materials: Material[], faceTextures: MeshTexturedFaceTexture[], vertexGroups: VertexGroup[])
 	{
 		this.geometry = geometry;
 		this.materials = materials;
@@ -19,7 +19,7 @@ class MeshTextured
 		this.vertexGroups = vertexGroups;
 	}
 
-	faces()
+	faces(): FaceTextured[]
 	{
 		if (this._faces == null)
 		{
@@ -92,14 +92,14 @@ class MeshTextured
 		return this._faceIndicesByMaterial;
 	};
 
-	transform(transformToApply)
+	transform(transformToApply: Transform)
 	{
 		this.geometry.transform(transformToApply);
 
 		return this;
 	};
 
-	transformFaceTextures(transformToApply)
+	transformFaceTextures(transformToApply: Transform)
 	{
 		for (var i = 0; i < this.faceTextures.length; i++)
 		{
@@ -118,12 +118,12 @@ class MeshTextured
 		(
 			this.geometry.clone(),
 			this.materials,
-			( this.faceTextures == null ? null : this.faceTextures.clone() ),
-			( this.vertexGroups == null ? null : this.vertexGroups.clone() )
+			( this.faceTextures == null ? null : ArrayHelper.clone(this.faceTextures) ),
+			( this.vertexGroups == null ? null : ArrayHelper.clone(this.vertexGroups) )
 		);
 	};
 
-	overwriteWith(other)
+	overwriteWith(other: MeshTextured)
 	{
 		this.geometry.overwriteWith(other.geometry);
 		// todo
@@ -136,7 +136,7 @@ class MeshTexturedFaceTexture
 	materialName: string;
 	textureUVs: Coords[];
 
-	constructor(materialName, textureUVs)
+	constructor(materialName: string, textureUVs: Coords[])
 	{
 		this.materialName = materialName;
 		this.textureUVs = textureUVs;
@@ -150,7 +150,9 @@ class MeshTexturedFaceTexture
 		);
 	};
 
-	transform(transformToApply)
+	// Transformable.
+
+	transform(transformToApply: Transform)
 	{
 		for (var i = 0; i < this.textureUVs.length; i++)
 		{

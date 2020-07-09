@@ -4,7 +4,7 @@ class PlatformHelper
 
 	divMain: any;
 
-	platformableAdd(platformable)
+	platformableAdd(platformable: Platformable)
 	{
 		var platformableAsDomElement = platformable.toDomElement(this);
 		if (platformableAsDomElement != null)
@@ -13,22 +13,22 @@ class PlatformHelper
 		}
 	};
 
-	platformableHide(platformable)
+	platformableHide(platformable: Platformable)
 	{
 		platformable.toDomElement(this).style.display = "none";
 	};
 
-	platformableRemove(platformable)
+	platformableRemove(platformable: Platformable)
 	{
 		this.divMain.removeChild(platformable.toDomElement(this));
 	};
 
-	platformableShow(platformable)
+	platformableShow(platformable: Platformable)
 	{
 		platformable.toDomElement(this).style.display = null;
 	};
 
-	initialize(universe)
+	initialize(universe: Universe)
 	{
 		var divMain = this.divMain;
 		if (divMain == null)
@@ -45,4 +45,9 @@ class PlatformHelper
 		divMain.style.marginLeft = 0 - display.sizeInPixels.x / 2;
 		divMain.style.marginTop = 0 - display.sizeInPixels.y / 2;
 	};
+}
+
+interface Platformable
+{
+	toDomElement: (ph: PlatformHelper) => any;
 }

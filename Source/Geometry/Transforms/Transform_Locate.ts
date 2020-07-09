@@ -1,12 +1,12 @@
 
-class Transform_Locate
+class Transform_Locate implements Transform
 {
 	loc: Disposition;
 
 	transformOrient: Transform_Orient;
 	transformTranslate: Transform_Translate;
 
-	constructor(loc)
+	constructor(loc: Disposition)
 	{
 		this.loc = loc;
 
@@ -14,7 +14,17 @@ class Transform_Locate
 		this.transformTranslate = new Transform_Translate(null);
 	}
 
-	transformCoords(coordsToTransform)
+	overwriteWith(other: Transform)
+	{
+		return this; // todo
+	}
+
+	transform(transformable: Transformable): Transformable
+	{
+		return transformable; // todo
+	}
+
+	transformCoords(coordsToTransform: Coords)
 	{
 		this.transformOrient.orientation = this.loc.orientation;
 		this.transformOrient.transformCoords(coordsToTransform);

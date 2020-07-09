@@ -6,7 +6,7 @@ class Texture
 
 	systemTexture: any;
 
-	constructor(name, image)
+	constructor(name: string, image: Image2)
 	{
 		this.name = name;
 		this.image = image;
@@ -14,7 +14,7 @@ class Texture
 
 	// methods
 
-	initializeForWebGLContext(webGLContext)
+	initializeForWebGLContext(webGLContext: any)
 	{
 		var gl = webGLContext.gl;
 

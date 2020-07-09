@@ -1,16 +1,18 @@
 
 class Drawable
 {
-	visual: any;
+	visual: Visual;
 	isVisible: boolean;
 
-	constructor(visual, isVisible)
+	ticksSinceStarted: number; // hack
+
+	constructor(visual: Visual, isVisible: boolean)
 	{
 		this.visual = visual;
 		this.isVisible = (isVisible == null ? true : isVisible);
 	}
 
-	updateForTimerTick(universe, world, place, entity)
+	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity)
 	{
 		if (this.isVisible)
 		{

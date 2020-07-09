@@ -6,7 +6,7 @@ class Plane
 
 	_displacementFromPoint0To2: Coords;
 
-	constructor(normal, distanceFromOrigin)
+	constructor(normal: Coords, distanceFromOrigin: number)
 	{
 		this.normal = normal;
 		this.distanceFromOrigin = distanceFromOrigin;
@@ -14,7 +14,7 @@ class Plane
 		this._displacementFromPoint0To2 = new Coords(0, 0, 0);
 	}
 
-	distanceToPointAlongNormal(point)
+	distanceToPointAlongNormal(point: Coords)
 	{
 		return point.dotProduct
 		(
@@ -22,12 +22,12 @@ class Plane
 		) - this.distanceFromOrigin;
 	};
 
-	equals(other)
+	equals(other: Plane)
 	{
 		return (this.normal.equals(other.normal) && this.distanceFromOrigin == other.distanceFromOrigin);
 	};
 
-	fromPoints(point0, point1, point2)
+	fromPoints(point0: Coords, point1: Coords, point2: Coords)
 	{
 		this.normal.overwriteWith
 		(
@@ -51,7 +51,7 @@ class Plane
 		return this;
 	};
 
-	pointClosestToOrigin(point)
+	pointClosestToOrigin(point: Coords)
 	{
 		return point.overwriteWith(this.normal).multiplyScalar(this.distanceFromOrigin);
 	};

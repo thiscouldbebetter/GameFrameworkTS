@@ -5,14 +5,14 @@ class CraftingRecipe
 	itemsIn: Item[];
 	itemEntitiesOut: Entity[];
 
-	constructor(name, itemsIn, itemEntitiesOut)
+	constructor(name: string, itemsIn: Item[], itemEntitiesOut: Entity[])
 	{
 		this.name = name;
 		this.itemsIn = itemsIn;
 		this.itemEntitiesOut = itemEntitiesOut;
 	}
 
-	isFulfilledByItemEntities(itemEntitiesStaged)
+	isFulfilledByItemEntities(itemEntitiesStaged: Entity[])
 	{
 		var areAllRequirementsFulfilledSoFar = true;
 

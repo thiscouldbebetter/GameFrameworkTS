@@ -9,7 +9,7 @@ class ItemCrafter
 	itemEntityStagedSelected: Entity;
 	statusMessage: string;
 
-	constructor(recipes)
+	constructor(recipes: CraftingRecipe[])
 	{
 		this.recipes = recipes || [];
 
@@ -32,7 +32,7 @@ class ItemCrafter
 
 	// controls
 
-	toControl(universe, size, entityItemHolder, venuePrev, includeTitleAndDoneButton)
+	toControl(universe: Universe, size: Coords, entityItemHolder: Entity, venuePrev: Venue, includeTitleAndDoneButton: boolean)
 	{
 		this.statusMessage = "1. Select recipe.\n2. Stage materials.\n3.Click Combine.";
 
@@ -144,7 +144,7 @@ class ItemCrafter
 					), // bindingForItemSelected
 					new DataBinding(null, function(c) { return c; }, null ), // bindingForItemValue
 					new DataBinding(true, null, null), // isEnabled
-					function confirm(context, universe)
+					(universe: Universe) =>
 					{
 						stage();
 					},

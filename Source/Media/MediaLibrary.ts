@@ -18,7 +18,7 @@ class MediaLibrary
 
 	timer: any;
 
-	constructor(images, sounds, videos, fonts, textStrings)
+	constructor(images: Image2[], sounds: Sound[], videos: Video[], fonts: Font[], textStrings: TextString[])
 	{
 		this.images = images;
 		this.imagesByName = ArrayHelper.addLookupsByName(this.images);
@@ -48,8 +48,11 @@ class MediaLibrary
 		this.collectionsByName["TextStrings"] = this.textStrings;
 	}
 
-	static fromFileNames(
-		contentPath, imageFileNames, effectFileNames, musicFileNames, videoFileNames, fontFileNames, textStringFileNames
+	static fromFileNames
+	(
+		contentPath: string, imageFileNames: string[], effectFileNames: string[],
+		musicFileNames: string[], videoFileNames: string[], fontFileNames: string[],
+		textStringFileNames: string[]
 	)
 	{
 		var mediaTypesPathsAndFileNames =
@@ -62,35 +65,35 @@ class MediaLibrary
 			[ TextString, "Text", textStringFileNames ],
 		];
 
-		var mediaCollections = {};
+		var mediaCollectionsByPath = new Map<string, any>();
 
 		for (var t = 0; t < mediaTypesPathsAndFileNames.length; t++)
 		{
-			var mediaTypePathAndFileNames = mediaTypesPathsAndFileNames[t];
-			var mediaType = mediaTypePathAndFileNames[0];
-			var mediaPath = mediaTypePathAndFileNames[1];
-			var mediaFileNames = mediaTypePathAndFileNames[2];
-			var mediaCollection = [];
+			var mediaTypePathAndFileNames: any = mediaTypesPathsAndFileNames[t];
+			var mediaType: any = mediaTypePathAndFileNames[0];
+			var mediaPath: string = mediaTypePathAndFileNames[1];
+			var mediaFileNames: string[] = mediaTypePathAndFileNames[2];
+			var mediaCollection: any = [];
 
 			var filePathRoot = contentPath + mediaPath + "/";
 			for (var i = 0; i < mediaFileNames.length; i++)
 			{
-				var fileName = mediaFileNames[i];
+				var fileName: string = mediaFileNames[i];
 				var id = fileName.substr(0, fileName.indexOf("."));
 				var filePath = filePathRoot + fileName;
 				var mediaObject = new mediaType(id, filePath);
 				mediaCollection.push(mediaObject);
 			}
 
-			mediaCollections[mediaPath] = mediaCollection;
+			mediaCollectionsByPath.set(mediaPath, mediaCollection);
 		}
 
-		var images = mediaCollections["Images"];
-		var soundEffects = mediaCollections["Audio/Effects"];
-		var soundMusics = mediaCollections["Audio/Music"];
-		var videos = mediaCollections["Video"];
-		var fonts = mediaCollections["Fonts"];
-		var textStrings = mediaCollections["Text"];
+		var images: any = mediaCollectionsByPath.get("Images");
+		var soundEffects: any = mediaCollectionsByPath.get("Audio/Effects");
+		var soundMusics: any = mediaCollectionsByPath.get("Audio/Music");
+		var videos: any = mediaCollectionsByPath.get("Video");
+		var fonts: any = mediaCollectionsByPath.get("Fonts");
+		var textStrings: any = mediaCollectionsByPath.get("Text");
 
 		var sounds = soundEffects.concat(soundMusics);
 
@@ -130,7 +133,7 @@ class MediaLibrary
 		return areAllItemsLoadedSoFar;
 	};
 
-	waitForItemToLoad(collectionName, itemName, callback)
+	waitForItemToLoad(collectionName: string, itemName: string, callback: any)
 	{
 		var itemToLoad = this.collectionsByName[collectionName][itemName];
 		this.timer = setInterval
@@ -140,7 +143,7 @@ class MediaLibrary
 		);
 	};
 
-	waitForItemToLoad_TimerTick(itemToLoad, callback)
+	waitForItemToLoad_TimerTick(itemToLoad: any, callback: any)
 	{
 		if (itemToLoad.isLoaded)
 		{
@@ -149,7 +152,7 @@ class MediaLibrary
 		}
 	};
 
-	waitForItemsAllToLoad(callback)
+	waitForItemsAllToLoad(callback: any)
 	{
 		this.timer = setInterval
 		(
@@ -158,7 +161,7 @@ class MediaLibrary
 		);
 	};
 
-	waitForItemsAllToLoad_TimerTick(callback)
+	waitForItemsAllToLoad_TimerTick(callback: any)
 	{
 		if (this.areAllItemsLoaded())
 		{
@@ -169,12 +172,12 @@ class MediaLibrary
 
 	// accessors
 
-	imagesAdd(images)
+	imagesAdd(images: Image2[])
 	{
 		for (var i = 0; i < images.length; i++)
 		{
 			var image = images[i];
-			if (this.images[image.name] == null)
+			if (this.imagesByName[image.name] == null)
 			{
 				this.images.push(image);
 				this.imagesByName[image.name] = image;
@@ -182,27 +185,27 @@ class MediaLibrary
 		}
 	};
 
-	fontGetByName(name)
+	fontGetByName(name: string)
 	{
 		return this.fontsByName[name];
 	};
 
-	imageGetByName(name)
+	imageGetByName(name: string)
 	{
 		return this.imagesByName[name];
 	};
 
-	soundGetByName(name)
+	soundGetByName(name: string)
 	{
 		return this.soundsByName[name];
 	};
 
-	textStringGetByName(name)
+	textStringGetByName(name: string)
 	{
 		return this.textStringsByName[name];
 	};
 
-	videoGetByName(name)
+	videoGetByName(name: string)
 	{
 		return this.videosByName[name];
 	};

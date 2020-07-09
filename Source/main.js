@@ -26,7 +26,7 @@ function main()
 	];
 
 
-	var display = new Display
+	var display = new Display2D
 	(
 		displaySizesAvailable,
 		"Font", // fontName

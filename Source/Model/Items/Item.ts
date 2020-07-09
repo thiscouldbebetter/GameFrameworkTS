@@ -4,18 +4,18 @@ class Item
 	defnName: string;
 	quantity: number;
 
-	constructor(defnName, quantity)
+	constructor(defnName: string, quantity: number)
 	{
 		this.defnName = defnName;
 		this.quantity = quantity;
 	}
 
-	defn(world)
+	defn(world: World)
 	{
 		return world.defns.defnsByNameByTypeName[ItemDefn.name][this.defnName];
 	};
 
-	isUsable(world)
+	isUsable(world: World)
 	{
 		return (this.defn(world).use != null);
 	};
@@ -26,17 +26,17 @@ class Item
 		return new Entity(this.defnName, [ this ]);
 	};
 
-	toString(world)
+	toString(world: World)
 	{
 		return this.defn(world).appearance + " (" + this.quantity + ")";
 	};
 
-	tradeValue(world)
+	tradeValue(world: World)
 	{
 		return this.quantity * this.defn(world).tradeValue;
 	};
 
-	use(universe, world, place, userEntity, itemEntity)
+	use(universe: Universe, world: World, place: Place, userEntity: Entity, itemEntity: Entity)
 	{
 		var returnValue = null;
 		var defn = this.defn(world);

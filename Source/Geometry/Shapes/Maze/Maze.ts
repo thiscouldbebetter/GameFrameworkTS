@@ -9,7 +9,7 @@ class Maze
 	sizeInPixels: Coords;
 	cells: MazeCell[];
 
-	constructor(cellSizeInPixels, sizeInCells, neighborOffsets)
+	constructor(cellSizeInPixels: Coords, sizeInCells: Coords, neighborOffsets: Coords[])
 	{
 		this.cellSizeInPixels = cellSizeInPixels;
 		this.sizeInCells = sizeInCells;
@@ -37,7 +37,7 @@ class Maze
 
 	// static methods
 
-	generateRandom(randomizer)
+	generateRandom(randomizer: Randomizer)
 	{
 		var cells = this.cells;
 		var sizeInCells = this.sizeInCells;
@@ -81,9 +81,9 @@ class Maze
 
 	generateRandom_ConnectCellToRandomNeighbor
 	(
-		randomizer,
-		cellPos,
-		cellPosNeighbor
+		randomizer: Randomizer,
+		cellPos: Coords,
+		cellPosNeighbor: Coords
 	)
 	{
 		var cells = this.cells;
@@ -144,13 +144,13 @@ class Maze
 
 	// instance methods
 
-	cellAtPos(cellPos)
+	cellAtPos(cellPos: Coords)
 	{
 		var cellIndex = this.indexOfCellAtPos(cellPos);
 		return this.cells[cellIndex];
 	};
 
-	indexOfCellAtPos(cellPos)
+	indexOfCellAtPos(cellPos: Coords)
 	{
 		var cellIndex = cellPos.y * this.sizeInCells.x + cellPos.x;
 

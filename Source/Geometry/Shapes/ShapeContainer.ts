@@ -3,7 +3,7 @@ class ShapeContainer
 {
 	shape: any;
 
-	constructor(shape)
+	constructor(shape: any)
 	{
 		this.shape = shape;
 	}

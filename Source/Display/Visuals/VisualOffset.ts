@@ -1,12 +1,12 @@
 
-class VisualOffset
+class VisualOffset implements Visual
 {
-	child: any;
+	child: Visual;
 	offset: Coords;
 
 	_posSaved: Coords;
 
-	constructor(child, offset)
+	constructor(child: Visual, offset: Coords)
 	{
 		this.child = child;
 		this.offset = offset;
@@ -15,7 +15,7 @@ class VisualOffset
 		this._posSaved = new Coords(0, 0, 0);
 	}
 
-	draw(universe, world, display, entity)
+	draw(universe: Universe, world: World, display: Display, entity: Entity)
 	{
 		var drawablePos = entity.locatable().loc.pos;
 		this._posSaved.overwriteWith(drawablePos);
@@ -23,4 +23,23 @@ class VisualOffset
 		this.child.draw(universe, world, display, entity);
 		drawablePos.overwriteWith(this._posSaved);
 	};
+
+	// Clonable.
+
+	clone(): Visual
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: Visual): Visual
+	{
+		return this; // todo
+	}
+
+	// Transformable.
+
+	transform(transformToApply: Transform): Transformable
+	{
+		return this; // todo
+	}
 }

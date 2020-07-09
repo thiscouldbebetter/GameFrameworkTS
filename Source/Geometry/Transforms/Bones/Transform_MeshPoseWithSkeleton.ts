@@ -1,5 +1,5 @@
 
-class Transform_MeshPoseWithSkeleton
+class Transform_MeshPoseWithSkeleton implements Transform
 {
 	meshAtRest: MeshTextured;
 	skeletonAtRest: Skeleton;
@@ -12,35 +12,46 @@ class Transform_MeshPoseWithSkeleton
 
 	constructor
 	(
-		meshAtRest,
-		skeletonAtRest,
-		boneInfluences,
-		skeletonPosed
+		meshAtRest: MeshTextured,
+		skeletonAtRest: Skeleton,
+		boneInfluences: BoneInfluence[],
+		skeletonPosed: Skeleton
 	)
 	{
 		this.meshAtRest = meshAtRest;
 		this.skeletonAtRest = skeletonAtRest;
 		this.skeletonPosed = skeletonPosed || this.skeletonAtRest.clone();
 		this.boneInfluences = boneInfluences;
-		this.boneInfluencesByName = ArrayHelper.addLookups( this.boneInfluences, x => x.boneName );
+		this.boneInfluencesByName = ArrayHelper.addLookups( this.boneInfluences, (x: BoneInfluence) => x.boneName );
 
 		// Helper variables.
 		this._orientation = new Orientation(new Coords(0, 0, 0), new Coords(0, 0, 0));
 		this._vertex = new Coords(0, 0, 0);
 	}
 
-	transform(transformable)
+	overwriteWith(other: Transform): Transform
 	{
-		return this.transformMesh(transformable);
+		return this; // todo
+	}
+
+	transform(transformable: Transformable): Transformable
+	{
+		this.transformMesh(transformable as MeshTextured);
+		return transformable;
 	};
 
-	transformMesh(meshToPose)
+	transformCoords(coordsToTransform: Coords): Coords
+	{
+		return coordsToTransform;
+	}
+
+	transformMesh(meshToPose: MeshTextured)
 	{
 		var meshAtRestVertices = this.meshAtRest.geometry.vertexOffsets;
 		var meshToPoseVertices = meshToPose.geometry.vertexOffsets;
 
-		var bonesAtRest = this.skeletonAtRest.bonesAll;
-		var bonesPosed = this.skeletonPosed.bonesAll;
+		var bonesAtRest = this.skeletonAtRest.bonesAllByName;
+		var bonesPosed = this.skeletonPosed.bonesAllByName;
 
 		for (var i = 0; i < this.boneInfluences.length; i++)
 		{
@@ -111,4 +122,5 @@ class Transform_MeshPoseWithSkeleton
 
 		} // end for each boneInfluence
 	};
+
 }

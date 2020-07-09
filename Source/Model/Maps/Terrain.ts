@@ -5,9 +5,9 @@ class Terrain
 	codeChar: string;
 	level: number;
 	isBlocking: boolean;
-	visuals: any;
+	visuals: Visual[];
 
-	constructor(name, codeChar, level, isBlocking, visuals)
+	constructor(name: string, codeChar: string, level: number, isBlocking: boolean, visuals: Visual[])
 	{
 		this.name = name;
 		this.codeChar = codeChar;

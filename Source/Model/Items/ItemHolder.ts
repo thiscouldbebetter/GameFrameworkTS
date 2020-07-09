@@ -6,7 +6,7 @@ class ItemHolder
 	itemEntitySelected: Entity;
 	statusMessage: string;
 
-	constructor(itemEntities)
+	constructor(itemEntities: Entity[])
 	{
 		this.itemEntities = [];
 
@@ -21,7 +21,7 @@ class ItemHolder
 
 	// Static methods.
 
-	static fromItems(items)
+	static fromItems(items: Item[])
 	{
 		var itemEntities = items.map(x => x.toEntity());
 		return new ItemHolder(itemEntities);
@@ -29,19 +29,19 @@ class ItemHolder
 
 	// Instance methods.
 
-	hasItem(itemToCheck)
+	hasItem(itemToCheck: Item)
 	{
 		return this.hasItemWithDefnNameAndQuantity(itemToCheck.defnName, itemToCheck.quantity);
 	};
 
-	hasItemWithDefnNameAndQuantity(defnName, quantityToCheck)
+	hasItemWithDefnNameAndQuantity(defnName: string, quantityToCheck: number)
 	{
 		var itemExistingQuantity = this.itemQuantityByDefnName(defnName);
 		var returnValue = (itemExistingQuantity >= quantityToCheck);
 		return returnValue;
 	};
 
-	itemEntitiesWithDefnNameJoin(defnName)
+	itemEntitiesWithDefnNameJoin(defnName: string)
 	{
 		var itemEntitiesMatching = this.itemEntities.filter(x => x.item().defnName == defnName);
 		var itemEntityJoined = itemEntitiesMatching[0];
@@ -58,7 +58,7 @@ class ItemHolder
 		return itemEntityJoined;
 	};
 
-	itemEntityAdd(itemEntityToAdd)
+	itemEntityAdd(itemEntityToAdd: Entity)
 	{
 		var itemToAdd = itemEntityToAdd.item();
 		var itemDefnName = itemToAdd.defnName;
@@ -73,7 +73,7 @@ class ItemHolder
 		}
 	};
 
-	itemEntityRemove(itemEntityToRemove)
+	itemEntityRemove(itemEntityToRemove: Entity)
 	{
 		var doesExist = this.itemEntities.indexOf(itemEntityToRemove) >= 0;
 		if (doesExist)
@@ -82,12 +82,12 @@ class ItemHolder
 		}
 	};
 
-	itemSubtract(itemToSubtract)
+	itemSubtract(itemToSubtract: Item)
 	{
 		this.itemSubtractDefnNameAndQuantity(itemToSubtract.defnName, itemToSubtract.quantity);
 	};
 
-	itemSubtractDefnNameAndQuantity(itemDefnName, quantityToSubtract)
+	itemSubtractDefnNameAndQuantity(itemDefnName: string, quantityToSubtract: number)
 	{
 		this.itemEntitiesWithDefnNameJoin(itemDefnName);
 		var itemExisting = this.itemsByDefnName(itemDefnName)[0];
@@ -102,12 +102,12 @@ class ItemHolder
 		}
 	};
 
-	itemEntitiesAllTransferTo(other)
+	itemEntitiesAllTransferTo(other: ItemHolder)
 	{
 		this.itemEntitiesTransferTo(this.itemEntities, other);
 	};
 
-	itemEntitiesTransferTo(itemEntitiesToTransfer, other)
+	itemEntitiesTransferTo(itemEntitiesToTransfer: Entity[], other: ItemHolder)
 	{
 		for (var i = 0; i < itemEntitiesToTransfer.length; i++)
 		{
@@ -116,7 +116,7 @@ class ItemHolder
 		}
 	};
 
-	itemEntitySplit(itemEntityToSplit, quantityToSplit)
+	itemEntitySplit(itemEntityToSplit: Entity, quantityToSplit: number)
 	{
 		var itemEntitySplitted = null;
 
@@ -128,7 +128,7 @@ class ItemHolder
 		else
 		{
 			quantityToSplit = quantityToSplit || Math.floor(itemToSplit.quantity / 2);
-			if (quantityToSplit >= itemEntityToSplit.quantity)
+			if (quantityToSplit >= itemToSplit.quantity)
 			{
 				itemEntitySplitted = itemEntityToSplit;
 			}
@@ -149,19 +149,19 @@ class ItemHolder
 		return itemEntitySplitted;
 	};
 
-	itemEntityTransferTo(itemEntity, other)
+	itemEntityTransferTo(itemEntity: Entity, other: ItemHolder)
 	{
 		other.itemEntityAdd(itemEntity);
 		ArrayHelper.remove(this.itemEntities, itemEntity);
 	};
 
-	itemEntityTransferSingleTo(itemEntity, other)
+	itemEntityTransferSingleTo(itemEntity: Entity, other: ItemHolder)
 	{
 		var itemEntitySingle = this.itemEntitySplit(itemEntity, 1);
 		this.itemEntityTransferTo(itemEntitySingle, other);
 	};
 
-	itemTransferTo(itemToTransfer, other)
+	itemTransferTo(itemToTransfer: Item, other: ItemHolder)
 	{
 		var itemDefnName = itemToTransfer.defnName;
 		this.itemEntitiesWithDefnNameJoin(itemDefnName);
@@ -175,7 +175,7 @@ class ItemHolder
 		}
 	};
 
-	itemEntitiesByDefnName(defnName)
+	itemEntitiesByDefnName(defnName: string)
 	{
 		return this.itemEntities.filter
 		(
@@ -183,7 +183,7 @@ class ItemHolder
 		);
 	};
 
-	itemQuantityByDefnName(defnName)
+	itemQuantityByDefnName(defnName: string)
 	{
 		return this.itemsByDefnName(defnName).map
 		(
@@ -194,12 +194,12 @@ class ItemHolder
 		);
 	};
 
-	itemsByDefnName(defnName)
+	itemsByDefnName(defnName: string)
 	{
 		return this.itemEntitiesByDefnName(defnName).map(x => x.item());
 	};
 
-	tradeValueOfAllItems(world)
+	tradeValueOfAllItems(world: World)
 	{
 		var tradeValueTotal = this.itemEntities.reduce
 		(
@@ -212,7 +212,7 @@ class ItemHolder
 
 	// controls
 
-	toControl(universe, size, entityItemHolder, venuePrev, includeTitleAndDoneButton)
+	toControl(universe: Universe, size: Coords, entityItemHolder: Entity, venuePrev: Venue, includeTitleAndDoneButton: boolean)
 	{
 		this.statusMessage = "Use, drop, and sort items.";
 
@@ -235,7 +235,7 @@ class ItemHolder
 		var back = function()
 		{
 			var venueNext = venuePrev;
-			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
+			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null) as Venue;
 			universe.venueNext = venueNext;
 		};
 
@@ -306,7 +306,7 @@ class ItemHolder
 			}
 		};
 
-		var split = function(universe)
+		var split = function(universe: Universe)
 		{
 			itemHolder.itemEntitySplit(itemHolder.itemEntitySelected, null);
 		};
@@ -328,7 +328,7 @@ class ItemHolder
 			);
 		};
 
-		var equipItemInNumberedSlot = function(slotNumber)
+		var equipItemInNumberedSlot = (slotNumber: number) =>
 		{
 			var entityItemToEquip = itemHolder.itemEntitySelected;
 			if (entityItemToEquip != null)
@@ -382,7 +382,7 @@ class ItemHolder
 				), // bindingForItemSelected
 				new DataBinding(null, function(c) { return c; }, null ), // bindingForItemValue
 				new DataBinding(true, null, null), // isEnabled
-				function confirm(context, universe)
+				(universe: Universe) => // confirm
 				{
 					use();
 				},
@@ -535,7 +535,7 @@ class ItemHolder
 							(
 								c.itemEntities.filter
 								(
-									x => x.item().defnName == c.itemEntitySelected.item().defnName
+									(x: Entity) => x.item().defnName == c.itemEntitySelected.item().defnName
 								).length > 1
 							)
 						);
@@ -586,7 +586,7 @@ class ItemHolder
 					},
 					null
 				), // isEnabled
-				function click(universe)
+				(universe: Universe) => 
 				{
 					use();
 				},
@@ -607,7 +607,7 @@ class ItemHolder
 					function get(c) { return c.itemEntitySelected != null},
 					null
 				), // isEnabled
-				function click(universe)
+				(universe: Universe) => // click
 				{
 					drop();
 				},

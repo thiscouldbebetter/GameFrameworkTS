@@ -7,7 +7,7 @@ class TextString
 	value: string;
 	isLoaded: boolean;
 
-	constructor(name, sourcePath)
+	constructor(name: string, sourcePath: string)
 	{
 		this.name = name;
 		this.sourcePath = sourcePath;
@@ -17,7 +17,7 @@ class TextString
 
 	// static methods
 
-	static fromString(name, value)
+	static fromString(name: string, value: string)
 	{
 		var returnValue = new TextString
 		(

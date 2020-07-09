@@ -4,7 +4,9 @@ class ControlSelectOption
 	value: any;
 	text: any;
 
-	constructor(value, text)
+	fontHeightInPixels: number;
+
+	constructor(value: any, text: any)
 	{
 		this.value = value;
 		this.text = text;

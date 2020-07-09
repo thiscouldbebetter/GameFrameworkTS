@@ -2,10 +2,10 @@
 class TalkNodeDefn
 {
 	name: string;
-	execute: any;
+	execute: (u: Universe, r: ConversationRun, s: ConversationScope, n: TalkNode) => void;
 	activate: any;
 
-	constructor(name, execute, activate)
+	constructor(name: string, execute: any, activate: any)
 	{
 		this.name = name;
 		this.execute = execute;
@@ -50,7 +50,7 @@ class TalkNodeDefn_Instances
 		this.Activate = new TalkNodeDefn
 		(
 			"Activate",
-			(universe, conversationRun, scope, talkNode) => // execute
+			(universe: Universe, conversationRun: ConversationRun, scope: ConversationScope, talkNode: TalkNode) => // execute
 			{
 				var talkNodeToActivateName = talkNode.next;
 				var isActiveValueToSet = talkNode.text;
@@ -60,7 +60,7 @@ class TalkNodeDefn_Instances
 					= conversationDefn.talkNodesByName[talkNodeToActivateName];
 				talkNodeToActivate.isActive = isActiveValueToSet;
 				scope.talkNodeAdvance(conversationRun);
-				conversationRun.update();
+				conversationRun.update(universe);
 			},
 			null // activate
 		);
@@ -68,7 +68,7 @@ class TalkNodeDefn_Instances
 		this.Display = new TalkNodeDefn
 		(
 			"Display",
-			(universe, conversationRun, scope, talkNode) => // execute
+			(universe: Universe, conversationRun: ConversationRun, scope: ConversationScope, talkNode: TalkNode) => // execute
 			{
 				scope.displayTextCurrent = talkNode.text;
 				scope.talkNodeAdvance(conversationRun);
@@ -81,14 +81,14 @@ class TalkNodeDefn_Instances
 		this.Goto = new TalkNodeDefn
 		(
 			"Goto",
-			(universe, conversationRun, scope, talkNode) => // execute
+			(universe: Universe, conversationRun: ConversationRun, scope: ConversationScope, talkNode: TalkNode) => // execute
 			{
 				var talkNodeNameNext = talkNode.next;
 				scope.talkNodeCurrent = conversationRun.defn.talkNodeByName
 				(
 					talkNodeNameNext
 				);
-				conversationRun.update();
+				conversationRun.update(universe);
 			},
 			null // activate
 		);
@@ -96,7 +96,7 @@ class TalkNodeDefn_Instances
 		this.JumpIfFalse = new TalkNodeDefn
 		(
 			"JumpIfFalse",
-			(universe, conversationRun, scope, talkNode) => // execute
+			(universe: Universe, conversationRun: ConversationRun, scope: ConversationScope, talkNode: TalkNode) => // execute
 			{
 				var variableName = talkNode.text;
 				var talkNodeNameToJumpTo = talkNode.next;
@@ -113,7 +113,7 @@ class TalkNodeDefn_Instances
 					);
 				}
 
-				conversationRun.update();
+				conversationRun.update(universe);
 			},
 			null // activate
 		);
@@ -121,7 +121,7 @@ class TalkNodeDefn_Instances
 		this.JumpIfTrue = new TalkNodeDefn
 		(
 			"JumpIfTrue",
-			(universe, conversationRun, scope, talkNode) => // execute
+			(universe: Universe, conversationRun: ConversationRun, scope: ConversationScope, talkNode: TalkNode) => // execute
 			{
 				var variableName = talkNode.text;
 				var talkNodeNameToJumpTo = talkNode.next;
@@ -138,7 +138,7 @@ class TalkNodeDefn_Instances
 					scope.talkNodeAdvance(conversationRun);
 				}
 
-				conversationRun.update();
+				conversationRun.update(universe);
 			},
 			null // activate
 		);
@@ -146,7 +146,7 @@ class TalkNodeDefn_Instances
 		this.Option = new TalkNodeDefn
 		(
 			"Option",
-			(universe, conversationRun, scope, talkNode) => // execute
+			(universe: Universe, conversationRun: ConversationRun, scope: ConversationScope, talkNode: TalkNode) => // execute
 			{
 				var talkNodesForOptions = scope.talkNodesForOptions;
 				if (talkNodesForOptions.indexOf(talkNode) == -1)
@@ -155,9 +155,9 @@ class TalkNodeDefn_Instances
 					talkNodesForOptions[talkNode.name] = talkNode;
 				}
 				scope.talkNodeAdvance(conversationRun);
-				conversationRun.update();
+				conversationRun.update(universe);
 			},
-			function activate(conversationRun, scope, talkNode)
+			(conversationRun: ConversationRun, scope: ConversationScope, talkNode: TalkNode) => // activate
 			{
 				scope.isPromptingForResponse = false;
 				//scope.talkNodesForOptions.length = 0;
@@ -173,7 +173,7 @@ class TalkNodeDefn_Instances
 		this.Pop = new TalkNodeDefn
 		(
 			"Pop",
-			(universe, conversationRun, scope, talkNode) => // execute
+			(universe: Universe, conversationRun: ConversationRun, scope: ConversationScope, talkNode: TalkNode) => // execute
 			{
 				var scope = scope.parent;
 				conversationRun.scopeCurrent = scope;
@@ -181,7 +181,7 @@ class TalkNodeDefn_Instances
 				(
 					talkNode.next
 				);
-				conversationRun.update();
+				conversationRun.update(universe);
 			},
 			null // activate
 		);
@@ -189,14 +189,14 @@ class TalkNodeDefn_Instances
 		this.Prompt = new TalkNodeDefn
 		(
 			"Prompt",
-			(universe, conversationRun, scope, talkNode) => // execute
+			(universe: Universe, conversationRun: ConversationRun, scope: ConversationScope, talkNode: TalkNode) => // execute
 			{
 				scope.isPromptingForResponse = true;
 			},
-			function activate(conversationRun, scope, talkNode)
+			(conversationRun: ConversationRun, scope: ConversationScope, talkNode: TalkNode) => // activate
 			{
 				var shouldClearOptions = talkNode.text;
-				if (shouldClearOptions == true)
+				if (shouldClearOptions == "true")
 				{
 					scope.talkNodesForOptions.length = 0;
 				}
@@ -206,7 +206,7 @@ class TalkNodeDefn_Instances
 		this.Push = new TalkNodeDefn
 		(
 			"Push",
-			(universe, conversationRun, scope, talkNode) => // execute
+			(universe: Universe, conversationRun: ConversationRun, scope: ConversationScope, talkNode: TalkNode) => // execute
 			{
 				var runDefn = conversationRun.defn;
 				var talkNodeIndex = runDefn.talkNodes.indexOf(talkNode);
@@ -225,7 +225,7 @@ class TalkNodeDefn_Instances
 		this.Quit = new TalkNodeDefn
 		(
 			"Quit",
-			(universe, conversationRun, scope, talkNode) => // execute
+			(universe: Universe, conversationRun: ConversationRun, scope: ConversationScope, talkNode: TalkNode) => // execute
 			{
 				conversationRun.quit();
 			},
@@ -235,13 +235,13 @@ class TalkNodeDefn_Instances
 		this.Script = new TalkNodeDefn
 		(
 			"Script",
-			(universe, conversationRun, scope, talkNode) => // execute
+			(universe: Universe, conversationRun: ConversationRun, scope: ConversationScope, talkNode: TalkNode) => // execute
 			{
 				var scriptToRunAsString = "(" + talkNode.text + ")";
 				var scriptToRun = eval(scriptToRunAsString);
 				scriptToRun(universe, conversationRun);
 				scope.talkNodeAdvance(conversationRun);
-				conversationRun.update(); // hack
+				conversationRun.update(universe); // hack
 			},
 			null // activate
 		);
@@ -249,7 +249,7 @@ class TalkNodeDefn_Instances
 		this.VariableLoad = new TalkNodeDefn
 		(
 			"VariableLoad",
-			(universe, conversationRun, scope, talkNode) => // execute
+			(universe: Universe, conversationRun: ConversationRun, scope: ConversationScope, talkNode: TalkNode) => // execute
 			{
 				var variableName = talkNode.text;
 				var scriptExpression = talkNode.next;
@@ -266,7 +266,7 @@ class TalkNodeDefn_Instances
 		this.VariableSet = new TalkNodeDefn
 		(
 			"VariableSet",
-			(universe, conversationRun, scope, talkNode) => // execute
+			(universe: Universe, conversationRun: ConversationRun, scope: ConversationScope, talkNode: TalkNode) => // execute
 			{
 				var variableName = talkNode.text;
 				var variableValue = talkNode.next;
@@ -280,7 +280,7 @@ class TalkNodeDefn_Instances
 		this.VariableStore = new TalkNodeDefn
 		(
 			"VariableStore",
-			(universe, conversationRun, scope, talkNode) => // execute
+			(universe: Universe, conversationRun: ConversationRun, scope: ConversationScope, talkNode: TalkNode) => // execute
 			{
 				var variableName = talkNode.text;
 				var variableValue = conversationRun.variableLookup[variableName];

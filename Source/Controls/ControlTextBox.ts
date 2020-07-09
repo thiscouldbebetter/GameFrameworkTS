@@ -1,5 +1,5 @@
 
-class ControlTextBox
+class ControlTextBox implements Control
 {
 	name: string;
 	pos: Coords;
@@ -19,7 +19,7 @@ class ControlTextBox
 	_textMargin: Coords;
 	_textSize: Coords;
 
-	constructor(name, pos, size, text, fontHeightInPixels, numberOfCharsMax)
+	constructor(name: string, pos: Coords, size: Coords, text: any, fontHeightInPixels: number, numberOfCharsMax: number)
 	{
 		this.name = name;
 		this.pos = pos;
@@ -39,12 +39,12 @@ class ControlTextBox
 		this._textSize = new Coords(0, 0, 0);
 	}
 
-	style(universe)
+	style(universe: Universe)
 	{
 		return universe.controlBuilder.stylesByName[this.styleName == null ? "Default" : this.styleName];
 	};
 
-	text(value, universe)
+	text(value: any, universe: Universe)
 	{
 		if (value != null)
 		{
@@ -63,7 +63,7 @@ class ControlTextBox
 
 	// events
 
-	actionHandle(actionNameToHandle)
+	actionHandle(actionNameToHandle: string, universe: Universe): boolean
 	{
 		var text = this.text(null, null);
 
@@ -146,6 +146,16 @@ class ControlTextBox
 		return true; // wasActionHandled
 	};
 
+	actionToInputsMappings(): ActionToInputsMapping[]
+	{
+		return null; // todo
+	}
+
+	childWithFocus(): Control
+	{
+		return null; // todo
+	}
+
 	focusGain()
 	{
 		this.isHighlighted = true;
@@ -156,16 +166,36 @@ class ControlTextBox
 		this.isHighlighted = false;
 	};
 
-	mouseClick(mouseClickPos)
+	isEnabled()
+	{
+		return true; // todo
+	}
+
+	mouseClick(mouseClickPos: Coords)
 	{
 		var parent = this.parent;
 		parent.indexOfChildWithFocus = parent.children.indexOf(this);
 		this.isHighlighted = true;
+		return true;
+	};
+
+	mouseEnter() {}
+
+	mouseExit() {}
+
+	mouseMove(mouseMovePos: Coords) {}
+
+	scalePosAndSize(scaleFactor: Coords)
+	{
+		this.pos.multiply(scaleFactor);
+		this.size.multiply(scaleFactor);
+		// todo
+		return this;
 	};
 
 	// drawable
 
-	draw(universe, display, drawLoc)
+	draw(universe: Universe, display: Display, drawLoc: Disposition)
 	{
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 		var style = this.style(universe);
@@ -219,7 +249,8 @@ class ControlTextBox
 				drawPosText,
 				new Coords(cursorWidth, this.fontHeightInPixels, 0), // size
 				style.colorFill,
-				style.colorFill
+				style.colorFill,
+				null
 			);
 
 			display.drawText

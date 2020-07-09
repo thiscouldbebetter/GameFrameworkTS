@@ -1,12 +1,12 @@
 
-class VenueInputCapture
+class VenueInputCapture implements Venue
 {
 	venueToReturnTo: any;
 	functionToPassInputCapturedTo: any;
 
 	isFirstTime: boolean;
 
-	constructor(venueToReturnTo, functionToPassInputCapturedTo)
+	constructor(venueToReturnTo: Venue, functionToPassInputCapturedTo: any)
 	{
 		this.venueToReturnTo = venueToReturnTo;
 		this.functionToPassInputCapturedTo = functionToPassInputCapturedTo;
@@ -14,12 +14,16 @@ class VenueInputCapture
 		this.isFirstTime = true;
 	}
 
-	draw(universe)
+	draw(universe: Universe)
 	{
 		// Do nothing.
 	};
 
-	updateForTimerTick(universe)
+	finalize(universe: Universe) {}
+
+	initialize(universe: Universe) {}
+
+	updateForTimerTick(universe: Universe)
 	{
 		var inputHelper = universe.inputHelper;
 

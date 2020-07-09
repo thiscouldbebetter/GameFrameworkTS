@@ -7,10 +7,13 @@ class ItemDefn
 	mass: number;
 	tradeValue: number;
 	stackSizeMax: number;
-	categoryNames: any;
+	categoryNames: string[];
 	use: any;
 
-	constructor(name, appearance, description, mass, tradeValue, stackSizeMax, categoryNames, use)
+	constructor
+	(
+		name: string, appearance: string, description: string, mass: number,
+		tradeValue: number, stackSizeMax: number, categoryNames: string[], use: any)
 	{
 		this.name = name;
 
@@ -23,12 +26,12 @@ class ItemDefn
 		this.use = use;
 	}
 
-	static new1(name)
+	static new1(name: string)
 	{
 		return new ItemDefn(name, null, null, null, null, null, null, null);
 	};
 
-	static fromNameCategoryNameAndUse(name, categoryName, use)
+	static fromNameCategoryNameAndUse(name: string, categoryName: string, use: any)
 	{
 		var returnValue = ItemDefn.new1(name);
 		returnValue.categoryNames = [ categoryName ];
@@ -36,7 +39,7 @@ class ItemDefn
 		return returnValue;
 	};
 
-	static fromNameAndUse(name, use)
+	static fromNameAndUse(name: string, use: any)
 	{
 		var returnValue = ItemDefn.new1(name);
 		returnValue.use = use;

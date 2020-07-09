@@ -1,15 +1,15 @@
 
-class VisualPath
+class VisualPath implements Visual
 {
 	verticesAsPath: Path;
-	color: any;
+	color: string;
 	lineThickness: number;
 	isClosed: boolean;
 
 	verticesAsPathTransformed: Path;
 	transformTranslate: Transform_Translate;
 
-	constructor(verticesAsPath, color, lineThickness, isClosed)
+	constructor(verticesAsPath: Path, color: string, lineThickness: number, isClosed: boolean)
 	{
 		this.verticesAsPath = verticesAsPath;
 		this.color = color;
@@ -20,7 +20,7 @@ class VisualPath
 		this.transformTranslate = new Transform_Translate(new Coords(0, 0, 0));
 	}
 
-	draw(universe, world, display, entity)
+	draw(universe: Universe, world: World, display: Display, entity: Entity)
 	{
 		var drawablePos = entity.locatable().loc.pos;
 		this.transformTranslate.displacement.overwriteWith(drawablePos);
@@ -30,7 +30,7 @@ class VisualPath
 			this.verticesAsPath
 		);
 
-		Transform.applyTransformToCoordsMany
+		Transforms.applyTransformToCoordsMany
 		(
 			this.transformTranslate,
 			this.verticesAsPathTransformed.points
@@ -44,4 +44,23 @@ class VisualPath
 			this.isClosed
 		);
 	};
+
+	// Clonable.
+
+	clone(): Visual
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: Visual): Visual
+	{
+		return this; // todo
+	}
+
+	// Transformable.
+
+	transform(transformToApply: Transform): Transformable
+	{
+		return this; // todo
+	}
 }

@@ -1,7 +1,7 @@
 
 class MeshBuilder
 {
-	biped(material, heightInPixels)
+	biped(material: Material, heightInPixels: number)
 	{
 		var heightOver2 = heightInPixels / 2;
 		var heightOver3 = heightInPixels / 3;
@@ -162,7 +162,7 @@ class MeshBuilder
 		return returnValue;
 	};
 
-	box(material, size, pos)
+	box(material: Material, size: Coords, pos: Coords)
 	{
 		var returnMesh = this.unitCube(material);
 
@@ -179,7 +179,7 @@ class MeshBuilder
 		return returnMesh;
 	};
 
-	grid(sizeInCells, cellSize, material)
+	grid(sizeInCells: Coords, cellSize: Coords, material: Material)
 	{
 		var vertexPositions = [];
 		var vertexPosInCells = new Coords(0, 0, 0);
@@ -272,7 +272,9 @@ class MeshBuilder
 
 	room
 	(
-		roomSize, neighborOffsets, connectedToNeighbors, materialWall, materialFloor, doorwayWidthScaleFactor, wallThickness
+		roomSize: Coords, neighborOffsets: Coords[], connectedToNeighbors: boolean[],
+		materialWall: Material, materialFloor: Material, doorwayWidthScaleFactor: number,
+		wallThickness: number
 	)
 	{
 		doorwayWidthScaleFactor = doorwayWidthScaleFactor || 1;
@@ -367,7 +369,7 @@ class MeshBuilder
 
 		returnMesh.transform
 		(
-			new Transform_Scale(roomSize)
+			new Transform_Scale(roomSize) as Transform
 		).transform
 		(
 			new Transform_Translate(new Coords(0, 0, -roomSize.z))
@@ -376,7 +378,7 @@ class MeshBuilder
 		return returnMesh;
 	};
 
-	room_Ceiling(material)
+	room_Ceiling(material: Material)
 	{
 		var returnMesh = this.unitSquare
 		(
@@ -401,7 +403,7 @@ class MeshBuilder
 		return returnMesh;
 	};
 
-	room_Floor(material)
+	room_Floor(material: Material)
 	{
 		var returnMesh = this.unitSquare
 		(
@@ -420,7 +422,7 @@ class MeshBuilder
 		return returnMesh;
 	};
 
-	room_Wall(material)
+	room_Wall(material: Material)
 	{
 		var returnMesh = new Mesh
 		(
@@ -462,7 +464,7 @@ class MeshBuilder
 		return returnMeshTextured;
 	};
 
-	room_WallWithDoorway(material, doorwayWidthScaleFactor, wallThickness)
+	room_WallWithDoorway(material: Material, doorwayWidthScaleFactor: number, wallThickness: number)
 	{
 		var doorwayHeight = 0.5;
 		var doorwayWidthHalf = doorwayHeight * doorwayWidthScaleFactor / 2;
@@ -524,17 +526,17 @@ class MeshBuilder
 		var transformScaleSides = new Transform_Scale
 		(
 			new Coords(doorwayWidthReversedHalf, .5, 0)
-		);
+		) as Transform;
 
 		var transformScaleTop = new Transform_Scale
 		(
 			new Coords(doorwayWidthHalf, doorwayHeightReversed, 0)
-		);
+		) as Transform;
 
 		var transformScaleSidesDoorframe = new Transform_Scale
 		(
 			new Coords(wallThickness, doorwayHeight, 0)
-		);
+		) as Transform;
 
 		var materialName = material.name;
 
@@ -609,12 +611,12 @@ class MeshBuilder
 		).transformFaceTextures
 		(
 			new Transform_Scale( new Coords(1, 1, 1).multiplyScalar(2) )
-		);;
+		);
 
 		return returnMeshTextured;
 	};
 
-	unitCube(material)
+	unitCube(material: Material)
 	{
 		var returnMesh = this.unitCube_Geometry();
 		var returnMeshTextured = new MeshTextured(returnMesh, [ material ], null, null);
@@ -656,10 +658,10 @@ class MeshBuilder
 		return returnMesh;
 	};
 
-	unitRing(material, numberOfVertices)
+	unitRing(material: Material, numberOfVertices: number)
 	{
-		var vertices = [];
-		var vertexIndicesForFace = [];
+		var vertices: Coords[] = [];
+		var vertexIndicesForFace: number[] = [];
 
 		for (var i = 0; i < numberOfVertices; i++)
 		{
@@ -685,7 +687,7 @@ class MeshBuilder
 		return returnMeshTextured;
 	};
 
-	unitSquare(material)
+	unitSquare(material: Material)
 	{
 		var returnMesh = new Mesh
 		(
@@ -727,7 +729,7 @@ class MeshBuilder
 		return returnMeshTextured;
 	};
 
-	clipFaceAgainstPlanes(faceToClip, planesToClipAgainst)
+	clipFaceAgainstPlanes(faceToClip: FaceTextured, planesToClipAgainst: Plane[])
 	{
 		var returnValue = faceToClip;
 
@@ -748,12 +750,12 @@ class MeshBuilder
 		return faceToClip;
 	};
 
-	mergeMeshes(meshesToMerge, vertexGroupNames)
+	mergeMeshes(meshesToMerge: MeshTextured[], vertexGroupNames: string[])
 	{
-		var verticesMerged = [];
-		var faceBuildersMerged = [];
-		var faceTexturesMerged = [];
-		var vertexGroups = [];
+		var verticesMerged: Coords[] = [];
+		var faceBuildersMerged: Mesh_FaceBuilder[] = [];
+		var faceTexturesMerged: MeshTexturedFaceTexture[] = [];
+		var vertexGroups: VertexGroup[] = [];
 
 		var numberOfVerticesSoFar = 0;
 
@@ -815,6 +817,8 @@ class MeshBuilder
 		);
 
 		var materialsMerged = [];
+		var materialsMergedByName = new Map<string, Material>();
+
 		for (var i = 0; i < meshesToMerge.length; i++)
 		{
 			var meshToMergeMaterials = meshesToMerge[i].materials;
@@ -822,10 +826,10 @@ class MeshBuilder
 			{
 				var material = meshToMergeMaterials[m];
 				var materialName = material.name;
-				if (materialsMerged[materialName] == null)
+				if (materialsMergedByName.get(materialName) == null)
 				{
 					materialsMerged.push(material);
-					materialsMerged[materialName] = material;
+					materialsMergedByName.set(materialName, material);
 				}
 			}
 		}
@@ -841,14 +845,14 @@ class MeshBuilder
 		return returnMeshTextured;
 	};
 
-	splitFaceByPlaneFrontAndBack(faceToDivide, planeToDivideOn)
+	splitFaceByPlaneFrontAndBack(faceToDivide: FaceTextured, planeToDivideOn: Plane): FaceTextured[]
 	{
-		var returnValues = [];
+		var returnValues = new Array<FaceTextured>();
 
 		var verticesInFacesDivided =
 		[
-			[], // front
-			[], // back
+			new Array<Coords>(), // front
+			new Array<Coords>() // back
 		];
 
 		var distanceOfVertexAbovePlane = 0;
@@ -935,14 +939,10 @@ class MeshBuilder
 				{
 					var faceDivided = new FaceTextured
 					(
-						new Face(verticesInFace),
-						faceToDivide.material
-					)
-
-					returnValues.push
-					(
-						faceDivided
+						new Face(verticesInFace), faceToDivide.material
 					);
+
+					returnValues.push(faceDivided);
 				}
 			}
 		}

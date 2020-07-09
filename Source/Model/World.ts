@@ -16,7 +16,7 @@ class World
 	placeCurrent: Place;
 	placeNext: Place;
 
-	constructor(name, dateCreated, defns, places)
+	constructor(name: string, dateCreated: DateTime, defns: Defns, places: Place[])
 	{
 		this.name = name;
 		this.dateCreated = dateCreated;
@@ -32,7 +32,7 @@ class World
 
 	// static methods
 
-	static new(universe)
+	static new(universe: Universe)
 	{
 		var now = DateTime.now();
 		var nowAsString = now.toStringMMDD_HHMM_SS();
@@ -91,7 +91,7 @@ class World
 				var isStart = (roomPos.equals(startPos));
 				var isGoal = (roomPos.equals(goalPos));
 
-				var placeNamesToIncludePortalsTo = [];
+				var placeNamesToIncludePortalsTo: string[] = [];
 				if (isStart)
 				{
 					placeNamesToIncludePortalsTo = [ "Base", "Terrarium" ];
@@ -143,7 +143,7 @@ class World
 
 	// instance methods
 
-	draw(universe)
+	draw(universe: Universe)
 	{
 		if (this.placeCurrent != null)
 		{
@@ -151,7 +151,7 @@ class World
 		}
 	};
 
-	initialize(universe)
+	initialize(universe: Universe)
 	{
 		if (this.placeNext != null)
 		{
@@ -169,7 +169,7 @@ class World
 		}
 	};
 
-	updateForTimerTick(universe)
+	updateForTimerTick(universe: Universe)
 	{
 		if (this.placeNext != null)
 		{
@@ -191,10 +191,10 @@ class World
 	{
 		var actionsAll = Action.Instances();
 
-		var entityAccelerateInDirection = function
+		var entityAccelerateInDirection = 
 		(
-			universe, world, place, entity, directionToMove
-		)
+			universe: Universe, world: World, place: Place, entity: Entity, directionToMove: Coords
+		) =>
 		{
 			var entityLoc = entity.locatable().loc;
 			var isEntityStandingOnGround =
@@ -208,7 +208,7 @@ class World
 
 		var coordsInstances = Coords.Instances();
 
-		var useItemInSocketNumbered = function(universe, world, place, actor, socketNumber)
+		var useItemInSocketNumbered = (universe: Universe, world: World, place: Place, actor: Entity, socketNumber: number) =>
 		{
 			var equipmentUser = actor.equipmentUser();
 			var socketName = "Item" + socketNumber;
@@ -228,7 +228,7 @@ class World
 			new Action
 			(
 				"MoveDown",
-				function perform(universe, world, place, actor)
+				(universe: Universe, world: World, place: Place, actor: Entity) => // perform
 				{
 					entityAccelerateInDirection
 					(
@@ -239,7 +239,7 @@ class World
 			new Action
 			(
 				"MoveLeft",
-				function perform(universe, world, place, actor)
+				(universe: Universe, world: World, place: Place, actor: Entity) => // perform
 				{
 					entityAccelerateInDirection
 					(
@@ -250,7 +250,7 @@ class World
 			new Action
 			(
 				"MoveRight",
-				function perform(universe, world, place, actor)
+				(universe: Universe, world: World, place: Place, actor: Entity) => // perform
 				{
 					entityAccelerateInDirection
 					(
@@ -261,7 +261,7 @@ class World
 			new Action
 			(
 				"MoveUp",
-				function perform(universe, world, place, actor)
+				(universe: Universe, world: World, place: Place, actor: Entity) => // perform
 				{
 					entityAccelerateInDirection
 					(
@@ -272,7 +272,7 @@ class World
 			new Action
 			(
 				"Fire",
-				function perform(universe, world, place, actor)
+				(universe: Universe, world: World, place: Place, actor: Entity) => // perform
 				{
 					var equipmentUser = actor.equipmentUser();
 					var entityWeaponEquipped = equipmentUser.itemEntityInSocketWithName("Weapon");
@@ -288,14 +288,14 @@ class World
 			new Action
 			(
 				"Hide",
-				function perform(universe, world, place, actor)
+				(universe: Universe, world: World, place: Place, actor: Entity) => // perform
 				{
 					var learner = actor.skillLearner();
 					var knowsHowToHide = learner.skillsKnownNames.indexOf("Hiding") >= 0;
 					//knowsHowToHide = true; // debug
 					if (knowsHowToHide)
 					{
-						var perceptible = actor.playable; // hack
+						var perceptible = actor.playable(); // hack
 						var isAlreadyHiding = perceptible.isHiding;
 						if (isAlreadyHiding)
 						{
@@ -311,7 +311,7 @@ class World
 			new Action
 			(
 				"Jump",
-				function perform(universe, world, place, actor)
+				(universe: Universe, world: World, place: Place, actor: Entity) => // perform
 				{
 					var learner = actor.skillLearner();
 					var canJump = learner.skillsKnownNames.indexOf("Jumping") >= 0;
@@ -332,7 +332,7 @@ class World
 			new Action
 			(
 				"Run",
-				function perform(universe, world, place, actor)
+				(universe: Universe, world: World, place: Place, actor: Entity) => // perform
 				{
 					var learner = actor.skillLearner();
 					var knowsHowToRun = learner.skillsKnownNames.indexOf("Running") >= 0;
@@ -355,16 +355,16 @@ class World
 					}
 				}
 			),
-			new Action("Item0", (u, w, p, e) => useItemInSocketNumbered(u, w, p, e, 0)),
-			new Action("Item1", (u, w, p, e) => useItemInSocketNumbered(u, w, p, e, 1)),
-			new Action("Item2", (u, w, p, e) => useItemInSocketNumbered(u, w, p, e, 2)),
-			new Action("Item3", (u, w, p, e) => useItemInSocketNumbered(u, w, p, e, 3)),
-			new Action("Item4", (u, w, p, e) => useItemInSocketNumbered(u, w, p, e, 4)),
-			new Action("Item5", (u, w, p, e) => useItemInSocketNumbered(u, w, p, e, 5)),
-			new Action("Item6", (u, w, p, e) => useItemInSocketNumbered(u, w, p, e, 6)),
-			new Action("Item7", (u, w, p, e) => useItemInSocketNumbered(u, w, p, e, 7)),
-			new Action("Item8", (u, w, p, e) => useItemInSocketNumbered(u, w, p, e, 8)),
-			new Action("Item9", (u, w, p, e) => useItemInSocketNumbered(u, w, p, e, 0)),
+			new Action("Item0", (u: Universe, w: World, p: Place, e: Entity) => useItemInSocketNumbered(u, w, p, e, 0)),
+			new Action("Item1", (u: Universe, w: World, p: Place, e: Entity) => useItemInSocketNumbered(u, w, p, e, 1)),
+			new Action("Item2", (u: Universe, w: World, p: Place, e: Entity) => useItemInSocketNumbered(u, w, p, e, 2)),
+			new Action("Item3", (u: Universe, w: World, p: Place, e: Entity) => useItemInSocketNumbered(u, w, p, e, 3)),
+			new Action("Item4", (u: Universe, w: World, p: Place, e: Entity) => useItemInSocketNumbered(u, w, p, e, 4)),
+			new Action("Item5", (u: Universe, w: World, p: Place, e: Entity) => useItemInSocketNumbered(u, w, p, e, 5)),
+			new Action("Item6", (u: Universe, w: World, p: Place, e: Entity) => useItemInSocketNumbered(u, w, p, e, 6)),
+			new Action("Item7", (u: Universe, w: World, p: Place, e: Entity) => useItemInSocketNumbered(u, w, p, e, 7)),
+			new Action("Item8", (u: Universe, w: World, p: Place, e: Entity) => useItemInSocketNumbered(u, w, p, e, 8)),
+			new Action("Item9", (u: Universe, w: World, p: Place, e: Entity) => useItemInSocketNumbered(u, w, p, e, 0)),
 		];
 
 		return actions;
@@ -408,7 +408,7 @@ class World
 
 	static itemDefnsBuild()
 	{
-		var itemUseEquip = function(universe, world, place, entityUser, entityItem, item)
+		var itemUseEquip = (universe: Universe, world: World, place: Place, entityUser: Entity, entityItem: Entity, item: Item) =>
 		{
 			var equipmentUser = entityUser.equipmentUser();
 			var message = equipmentUser.equipEntityWithItem
@@ -439,7 +439,7 @@ class World
 			(
 				"Book", null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize
 				null, // categoryNames
-				function use(universe, world, place, entityUser, entityItem, item)
+				(universe: Universe, world: World, place: Place, entityUser: Entity, entityItem: Entity, item: Item) => // use
 				{
 					var venuePrev = universe.venueCurrent;
 					var back = function()
@@ -499,7 +499,7 @@ class World
 			(
 				"Medicine", null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize
 				[ "Consumable" ], // categoryNames
-				function use(universe, world, place, entityUser, entityItem, item)
+				(universe: Universe, world: World, place: Place, entityUser: Entity, entityItem: Entity, item: Item) => // use
 				{
 					var integrityToRestore = 10;
 					entityUser.killable().integrityAdd(integrityToRestore);
@@ -513,7 +513,7 @@ class World
 			(
 				"Potion", null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize
 				[ "Consumable" ], // categoryNames
-				function use(universe, world, place, entityUser, entityItem, item)
+				(universe: Universe, world: World, place: Place, entityUser: Entity, entityItem: Entity, item: Item) => // use
 				{
 					// Same as medicine, for now.
 					var integrityToRestore = 10;
@@ -528,7 +528,7 @@ class World
 			(
 				"Walkie-Talkie", null, null, 2, 10, null,
 				[], // categoryNames
-				function use(universe, world, place, entityUser, entityItem, item)
+				(universe: Universe, world: World, place: Place, entityUser: Entity, entityItem: Entity, item: Item) => // use
 				{
 					return "There is no response but static.";
 				}

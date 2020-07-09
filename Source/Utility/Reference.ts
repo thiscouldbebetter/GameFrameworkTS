@@ -3,7 +3,7 @@ class Reference
 {
 	value: any;
 
-	constructor(value)
+	constructor(value: any)
 	{
 		this.value = value;
 	}
@@ -13,7 +13,7 @@ class Reference
 		return this.value;
 	};
 
-	set(valueToSet)
+	set(valueToSet: any)
 	{
 		this.value = valueToSet;
 		return this.value;

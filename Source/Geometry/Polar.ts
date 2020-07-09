@@ -5,7 +5,7 @@ class Polar
 	radius: number;
 	elevationInTurns: number;
 
-	constructor(azimuthInTurns, radius, elevationInTurns)
+	constructor(azimuthInTurns: number, radius: number, elevationInTurns: number)
 	{
 		this.azimuthInTurns = azimuthInTurns;
 		this.radius = radius;
@@ -19,13 +19,13 @@ class Polar
 
 	// instance methods
 
-	addToAzimuthInTurns(turnsToAdd)
+	addToAzimuthInTurns(turnsToAdd: number)
 	{
 		this.azimuthInTurns += turnsToAdd;
 		return this;
 	};
 
-	fromCoords(coordsToConvert)
+	fromCoords(coordsToConvert: Coords)
 	{
 		this.azimuthInTurns =
 			Math.atan2(coordsToConvert.y, coordsToConvert.x)
@@ -45,7 +45,7 @@ class Polar
 		return this;
 	};
 
-	overwriteWith(other)
+	overwriteWith(other: Polar)
 	{
 		this.azimuthInTurns = other.azimuthInTurns;
 		this.radius = other.radius;
@@ -55,7 +55,7 @@ class Polar
 
 	overwriteWithAzimuthRadiusElevation
 	(
-		azimuthInTurns, radius, elevationInTurns
+		azimuthInTurns: number, radius: number, elevationInTurns: number
 	)
 	{
 		this.azimuthInTurns = azimuthInTurns;
@@ -67,7 +67,7 @@ class Polar
 		return this;
 	};
 
-	random(randomizer)
+	random(randomizer: Randomizer)
 	{
 		if (randomizer == null)
 		{
@@ -79,7 +79,7 @@ class Polar
 		return this;
 	};
 
-	toCoords(coords)
+	toCoords(coords: Coords)
 	{
 		var azimuthInRadians = this.azimuthInTurns * Polar.RadiansPerTurn;
 		var elevationInRadians = this.elevationInTurns * Polar.RadiansPerTurn;

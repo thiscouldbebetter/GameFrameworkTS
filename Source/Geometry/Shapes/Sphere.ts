@@ -6,7 +6,7 @@ class Sphere
 
 	_displacement: Coords;
 
-	constructor(center, radius)
+	constructor(center: Coords, radius: number)
 	{
 		this.center = center;
 		this.radius = radius;
@@ -15,7 +15,7 @@ class Sphere
 		this._displacement = new Coords(0, 0, 0);
 	}
 
-	containsOther(other)
+	containsOther(other: Sphere)
 	{
 		var displacementOfOther =
 			this._displacement.overwriteWith(other.center).subtract(this.center);
@@ -36,7 +36,7 @@ class Sphere
 		return new Sphere(this.center.clone(), this.radius);
 	};
 
-	overwriteWith(other)
+	overwriteWith(other: Sphere)
 	{
 		this.center.overwriteWith(other.center);
 		this.radius = other.radius;

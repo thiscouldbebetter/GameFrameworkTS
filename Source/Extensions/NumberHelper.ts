@@ -3,12 +3,12 @@ class NumberHelper
 {
 	// static class
 
-	static isInRangeMinMax(number, min, max)
+	static isInRangeMinMax(n: number, min: number, max: number)
 	{
-		return (number >= min && number <= max);
+		return (n >= min && n <= max);
 	}
 
-	static reflectNumberOffRange(numberToReflect, rangeMin, rangeMax)
+	static reflectNumberOffRange(numberToReflect: number, rangeMin: number, rangeMax: number)
 	{
 		while (numberToReflect < rangeMin)
 		{
@@ -23,15 +23,15 @@ class NumberHelper
 		return NumberHelper.trimToRangeMinMax(numberToReflect, rangeMin, rangeMax);
 	}
 
-	static roundToDecimalPlaces(number, numberOfPlaces)
+	static roundToDecimalPlaces(n: number, numberOfPlaces: number)
 	{
 		var multiplier = Math.pow(10, numberOfPlaces);
-		return Math.round(number * multiplier) / multiplier;
+		return Math.round(n * multiplier) / multiplier;
 	}
 
-	static subtractWrappedToRangeMax(number, subtrahend, max)
+	static subtractWrappedToRangeMax(n: number, subtrahend: number, max: number)
 	{
-		var differenceUnwrapped = number - subtrahend;
+		var differenceUnwrapped = n - subtrahend;
 		var differenceAbsolute = Math.abs(differenceUnwrapped);
 		var differenceAbsoluteLeastSoFar = differenceAbsolute;
 		var returnValue = differenceUnwrapped;
@@ -50,14 +50,14 @@ class NumberHelper
 		return returnValue;
 	}
 
-	static trimToRangeMax(number, max)
+	static trimToRangeMax(n: number, max: number)
 	{
-		return NumberHelper.trimToRangeMinMax(number, 0, max);
+		return NumberHelper.trimToRangeMinMax(n, 0, max);
 	};
 
-	static trimToRangeMinMax(number, min, max)
+	static trimToRangeMinMax(n: number, min: number, max: number)
 	{
-		var value = number;
+		var value = n;
 
 		if (value < min)
 		{
@@ -71,14 +71,14 @@ class NumberHelper
 		return value;
 	}
 
-	static wrapToRangeMax(number, max)
+	static wrapToRangeMax(n: number, max: number)
 	{
-		return NumberHelper.wrapToRangeMinMax(number, 0, max);
+		return NumberHelper.wrapToRangeMinMax(n, 0, max);
 	}
 
-	static wrapToRangeMinMax(number, min, max)
+	static wrapToRangeMinMax(n: number, min: number, max: number)
 	{
-		var value = number;
+		var value = n;
 
 		var rangeSize = max - min;
 
@@ -102,8 +102,8 @@ class NumberHelper
 		return value;
 	}
 
-	static wrapToRangeZeroOne(number)
+	static wrapToRangeZeroOne(n: number)
 	{
-		return NumberHelper.wrapToRangeMinMax(number, 0, 1);
+		return NumberHelper.wrapToRangeMinMax(n, 0, 1);
 	}
 }

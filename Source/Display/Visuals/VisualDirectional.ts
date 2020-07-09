@@ -1,12 +1,12 @@
 
-class VisualDirectional
+class VisualDirectional implements Visual
 {
-	visualForNoDirection: any;
-	visualsForDirections: any;
+	visualForNoDirection: Visual;
+	visualsForDirections: Visual[];
 
 	numberOfDirections: number;
 
-	constructor(visualForNoDirection, visualsForDirections)
+	constructor(visualForNoDirection: Visual, visualsForDirections: Visual[])
 	{
 		this.visualForNoDirection = visualForNoDirection;
 		this.visualsForDirections = visualsForDirections;
@@ -14,7 +14,7 @@ class VisualDirectional
 		this.numberOfDirections = this.visualsForDirections.length;
 	}
 
-	draw(universe, world, display, entity)
+	draw(universe: Universe, world: World, display: Display, entity: Entity)
 	{
 		var loc = entity.locatable().loc;
 		var headingInTurns = loc.orientation.headingInTurns();
@@ -39,4 +39,23 @@ class VisualDirectional
 
 		visualForHeading.draw(universe, world, display, entity);
 	};
+
+	// Clonable.
+
+	clone(): Visual
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: Visual): Visual
+	{
+		return this; // todo
+	}
+
+	// Transformable.
+
+	transform(transformToApply: Transform): Transformable
+	{
+		return this; // todo
+	}
 }

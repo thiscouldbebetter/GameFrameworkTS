@@ -8,7 +8,7 @@ class Edge
 	_displacement: Coords;
 	_transverse: Coords;
 
-	constructor(vertices)
+	constructor(vertices: Coords[])
 	{
 		this.vertices = vertices;
 
@@ -32,7 +32,7 @@ class Edge
 		return this._direction.overwriteWith(this.displacement()).normalize();
 	};
 
-	equals(other)
+	equals(other: Edge)
 	{
 		return ArrayHelper.equals(this.vertices, other.vertices);
 	};
@@ -47,7 +47,7 @@ class Edge
 		return this.displacement().magnitude();
 	};
 
-	projectOntoOther(other)
+	projectOntoOther(other: Edge)
 	{
 		var otherVertices = other.vertices;
 		var otherVertex0 = otherVertices[0];
@@ -69,7 +69,7 @@ class Edge
 		return this;
 	};
 
-	transverse(faceNormal)
+	transverse(faceNormal: Coords)
 	{
 		return this._transverse.overwriteWith(this.direction()).crossProduct(faceNormal);
 	};
@@ -88,7 +88,7 @@ class Edge
 		return new Edge(ArrayHelper.clone(this.vertices));
 	};
 
-	overwriteWith(other)
+	overwriteWith(other: Edge)
 	{
 		ArrayHelper.overwriteWith(this.vertices, other.vertices);
 		return this;

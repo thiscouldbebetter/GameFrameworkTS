@@ -1,20 +1,20 @@
 
 class ConversationRun
 {
-	defn: any;
-	quit: any;
+	defn: ConversationDefn;
+	quit: () => void;
 	entityPlayer: Entity;
 	entityTalker: Entity;
  
 	scopeCurrent: ConversationScope;
-	talkNodesForTranscript: any;
+	talkNodesForTranscript: TalkNode[];
 	variableLookup: any;
 
 	p: Entity;
 	t: Entity;
 	vars: any;
 
-	constructor(defn, quit, entityPlayer, entityTalker)
+	constructor(defn: ConversationDefn, quit: () => void, entityPlayer: Entity, entityTalker: Entity)
 	{
 		this.defn = defn;
 		this.quit = quit;
@@ -45,7 +45,7 @@ class ConversationRun
 
 	// instance methods
 
-	next(universe)
+	next(universe: Universe)
 	{
 		var responseSelected = this.scopeCurrent.talkNodeForOptionSelected;
 		if (responseSelected != null)
@@ -58,14 +58,14 @@ class ConversationRun
 		this.update(universe);
 	};
 
-	update(universe)
+	update(universe: Universe)
 	{
 		this.scopeCurrent.update(universe, this);
 	};
 
 	// controls
 
-	toControl(size, universe)
+	toControl(size: Coords, universe: Universe)
 	{
 		var conversationRun = this;
 		var conversationDefn = conversationRun.defn;
@@ -87,19 +87,19 @@ class ConversationRun
 			0
 		);
 
-		var next = function()
+		var next = () =>
 		{
 			conversationRun.next(universe);
 		};
 
-		var back = function()
+		var back = () =>
 		{
 			var venueNext = venueToReturnTo;
 			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 			universe.venueNext = venueNext;
 		};
 
-		var viewLog = function()
+		var viewLog = () =>
 		{
 			var venueCurrent = universe.venueCurrent;
 			var transcriptAsControl = conversationRun.toControlTranscript
@@ -141,7 +141,7 @@ class ConversationRun
 					new DataBinding
 					(
 						conversationRun,
-						function get(c) { return c.scopeCurrent.displayTextCurrent; },
+						(c: any) => { return c.scopeCurrent.displayTextCurrent; },
 						null
 					),
 					fontHeight
@@ -176,26 +176,26 @@ class ConversationRun
 					new DataBinding
 					(
 						conversationRun,
-						function get(c) { return c.scopeCurrent.talkNodesForOptionsActive(); },
+						(c: any) => { return c.scopeCurrent.talkNodesForOptionsActive(); },
 						null
 					),
 					// bindingForItemText
 					new DataBinding
 					(
 						null, // context
-						function get(c) { return c.text; },
+						(c: any) => { return c.text; },
 						null
 					),
 					fontHeightShort,
 					new DataBinding
 					(
 						conversationRun,
-						function get(c) { return c.scopeCurrent.talkNodeForOptionSelected; },
-						function set(c, v) { c.scopeCurrent.talkNodeForOptionSelected = v; }
+						(c: any) => c.scopeCurrent.talkNodeForOptionSelected,
+						(c: any, v: any) => { c.scopeCurrent.talkNodeForOptionSelected = v; }
 					), // bindingForItemSelected
 					new DataBinding(null, null, null), // bindingForItemValue
 					new DataBinding(true, null, null), // isEnabled
-					function confirm(context, universe)
+					(universe: Universe) => // confirm
 					{
 						next();
 					},
@@ -256,12 +256,12 @@ class ConversationRun
 		return returnValue;
 	};
 
-	toControlTranscript(size, universe, venueToReturnTo)
+	toControlTranscript(size: Coords, universe: Universe, venueToReturnTo: Venue)
 	{
 		var conversationRun = this;
 		var conversationDefn = conversationRun.defn;
 
-		var venueToReturnTo = universe.venueCurrent;
+		venueToReturnTo = universe.venueCurrent;
 		var fontHeight = 20;
 		var fontHeightShort = fontHeight * .6;
 		var marginWidth = 25;
@@ -291,7 +291,7 @@ class ConversationRun
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					(universe) => // click
+					(universe: Universe) => // click
 					{
 						var venueNext = venueToReturnTo;
 						venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
@@ -327,13 +327,13 @@ class ConversationRun
 					new DataBinding
 					(
 						conversationRun,
-						function get(c) { return c.talkNodesForTranscript; },
+						(c: any) => { return c.talkNodesForTranscript; },
 						null
 					),
 					new DataBinding
 					(
 						null,
-						function get(c) { return c.textForTranscript(conversationDefn); },
+						(c: any) => { return c.textForTranscript(conversationDefn); },
 						null
 					), // bindingForItemText
 					fontHeightShort,

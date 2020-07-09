@@ -1,34 +1,38 @@
-class VisualMesh
-{
-	mesh: any;
 
-	constructor(mesh)
+class VisualMesh implements Visual
+{
+	private mesh: MeshTextured;
+
+	constructor(mesh: MeshTextured)
 	{
 		this.mesh = mesh;
 	}
 
 	// Cloneable.
 
-	clone()
+	clone(): Visual
 	{
 		return new VisualMesh(this.mesh.clone());
 	};
 
-	overwriteWith(other)
+	overwriteWith(other: Visual): Visual
 	{
-		this.mesh.overwriteWith(other.mesh);
+		var otherAsVisualMesh = other as VisualMesh;
+		this.mesh.overwriteWith(otherAsVisualMesh.mesh);
+		return this;
 	};
 
 	// Transformable.
 
-	transform(transformToApply)
+	transform(transformToApply: Transform)
 	{
 		transformToApply.transform(this.mesh);
+		return this;
 	};
 
 	// Visual.
 
-	draw(universe, world, display, entity)
+	draw(universe: Universe, world: World, display: Display, entity: Entity)
 	{
 		display.drawMeshWithOrientation(this.mesh, entity.locatable().loc.orientation);
 	};

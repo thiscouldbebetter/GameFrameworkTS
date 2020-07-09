@@ -11,7 +11,7 @@ class Collidable
 
 	_transformTranslate: any;
 
-	constructor(colliderAtRest, entityPropertyNamesToCollideWith, collideEntities)
+	constructor(colliderAtRest: any, entityPropertyNamesToCollideWith: string[], collideEntities: any)
 	{
 		this.colliderAtRest = colliderAtRest;
 		this.entityPropertyNamesToCollideWith = entityPropertyNamesToCollideWith;
@@ -32,10 +32,10 @@ class Collidable
 		this._transformTranslate = new Transform_Translate(new Coords(0, 0, 0));
 	}
 
-	colliderLocateForEntity(entity)
+	colliderLocateForEntity(entity: Entity)
 	{
 		this.collider.overwriteWith(this.colliderAtRest);
-		Transform.applyTransformToCoordsMany
+		Transforms.applyTransformToCoordsMany
 		(
 			this._transformTranslate.displacementSet
 			(
@@ -45,12 +45,12 @@ class Collidable
 		);
 	};
 
-	initialize(universe, world, place, entity)
+	initialize(universe: Universe, world: World, place: Place, entity: Entity)
 	{
 		this.colliderLocateForEntity(entity);
 	};
 
-	updateForTimerTick(universe, world, place, entity)
+	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity)
 	{
 		if (this.ticksUntilCanCollide > 0)
 		{

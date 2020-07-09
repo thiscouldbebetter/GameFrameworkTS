@@ -1,7 +1,7 @@
 
 class PathBuilder
 {
-	star(numberOfPoints, ratioOfInnerRadiusToOuter)
+	star(numberOfPoints: number, ratioOfInnerRadiusToOuter: number)
 	{
 		var numberOfVertices = numberOfPoints * 2;
 		var turnsPerVertex = 1 / numberOfVertices;

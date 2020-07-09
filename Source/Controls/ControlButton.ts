@@ -1,5 +1,5 @@
 
-class ControlButton
+class ControlButton implements Control
 {
 	name: string;
 	pos: Coords;
@@ -13,12 +13,17 @@ class ControlButton
 	canBeHeldDown: boolean;
 
 	isHighlighted: boolean;
+	parent: Control;
 	styleName: string;
 
 	_drawLoc: Disposition;
 	_sizeHalf: Coords;
 
-	constructor(name, pos, size, text, fontHeightInPixels, hasBorder, isEnabled, click, context, canBeHeldDown)
+	constructor
+	(
+		name: string, pos: Coords, size: Coords, text: string,
+		fontHeightInPixels: number, hasBorder: boolean, isEnabled: any,
+		click: any, context: any, canBeHeldDown: boolean)
 	{
 		this.name = name;
 		this.pos = pos;
@@ -38,7 +43,7 @@ class ControlButton
 		this._sizeHalf = new Coords(0, 0, 0);
 	}
 
-	actionHandle(actionNameToHandle)
+	actionHandle(actionNameToHandle: string, universe: Universe)
 	{
 		if (actionNameToHandle == ControlActionNames.Instances().ControlConfirm)
 		{
@@ -47,6 +52,16 @@ class ControlButton
 
 		return (this.canBeHeldDown == false); // wasActionHandled
 	};
+
+	actionToInputsMappings(): ActionToInputsMapping[]
+	{
+		return null; // todo
+	}
+
+	childWithFocus(): Control
+	{
+		return null;
+	}
 
 	isEnabled()
 	{
@@ -65,7 +80,7 @@ class ControlButton
 		this.isHighlighted = false;
 	};
 
-	mouseClick(clickPos)
+	mouseClick(clickPos: Coords)
 	{
 		if (this.isEnabled())
 		{
@@ -84,21 +99,23 @@ class ControlButton
 		this.isHighlighted = false;
 	};
 
-	scalePosAndSize(scaleFactor)
+	mouseMove(movePos: Coords) {}
+
+	scalePosAndSize(scaleFactor: Coords)
 	{
 		this.pos.multiply(scaleFactor);
 		this.size.multiply(scaleFactor);
 		this.fontHeightInPixels *= scaleFactor.y;
 	};
 
-	style(universe)
+	style(universe: Universe)
 	{
 		return universe.controlBuilder.stylesByName[this.styleName == null ? "Default" : this.styleName];
 	};
 
 	// drawable
 
-	draw(universe, display, drawLoc)
+	draw(universe: Universe, display: Display, drawLoc: Disposition)
 	{
 		var drawPos = this._drawLoc.overwriteWith(drawLoc).pos;
 		drawPos.add(this.pos);

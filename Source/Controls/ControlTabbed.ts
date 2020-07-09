@@ -1,17 +1,18 @@
 
-class ControlTabbed
+class ControlTabbed implements Control
 {
 	name: string;
 	pos: Coords;
 	size: Coords;
-	children: any;
+	children: Control[];
 	childrenByName: any;
 	fontHeightInPixels: number;
-	cancel: any;
+	cancel: (u: Universe) => void;
 
 	buttonsForChildren: any;
 	childSelectedIndex: number;
 	isChildSelectedActive: boolean;
+	parent: Control;
 	styleName: string;
 
 	_childMax: Coords;
@@ -22,7 +23,7 @@ class ControlTabbed
 	_mouseMovePos: Coords;
 	_posToCheck: Coords;
 
-	constructor(name, pos, size, children, fontHeightInPixels, cancel)
+	constructor(name: string, pos: Coords, size: Coords, children: Control[], fontHeightInPixels: number, cancel: (u: Universe) => void )
 	{
 		this.name = name;
 		this.pos = pos;
@@ -38,7 +39,7 @@ class ControlTabbed
 
 		var marginSize = fontHeightInPixels;
 		var buttonSize = new Coords(50, fontHeightInPixels * 2, 0);
-		var buttonsForChildren = [];
+		var buttonsForChildren: Control[] = [];
 
 		for (var i = 0; i < this.children.length; i++)
 		{
@@ -56,7 +57,7 @@ class ControlTabbed
 				fontHeightInPixels,
 				true, // hasBorder
 				true, // isEnabled
-				(b) => this.childSelectedIndex = buttonsForChildren.indexOf(b), // hack
+				(b: any) => this.childSelectedIndex = buttonsForChildren.indexOf(b), // hack
 				null, null
 			);
 			button.context = button; // hack
@@ -100,14 +101,19 @@ class ControlTabbed
 		return true;
 	};
 
-	style(universe)
+	style(universe: Universe)
 	{
 		return universe.controlBuilder.stylesByName[this.styleName == null ? "Default" : this.styleName];
 	};
 
 	// actions
 
-	actionHandle(actionNameToHandle, universe)
+	actionToInputsMappings(): ActionToInputsMapping[]
+	{
+		return null;
+	}
+
+	actionHandle(actionNameToHandle: string, universe: Universe)
 	{
 		var wasActionHandled = false;
 
@@ -136,7 +142,7 @@ class ControlTabbed
 			{
 				if (childSelected == null)
 				{
-					this.cancel();
+					this.cancel(universe);
 				}
 				else
 				{
@@ -161,7 +167,7 @@ class ControlTabbed
 			{
 				if (this.cancel != null)
 				{
-					this.cancel();
+					this.cancel(universe);
 				}
 			}
 		}
@@ -174,7 +180,7 @@ class ControlTabbed
 		return (this.childSelectedIndex == null ? null : this.children[this.childSelectedIndex] );
 	};
 
-	childSelectNextInDirection(direction)
+	childSelectNextInDirection(direction: number)
 	{
 		var childIndexOriginal = this.childSelectedIndex;
 
@@ -203,8 +209,7 @@ class ControlTabbed
 			}
 			else if
 			(
-				child.focusGain != null
-				&& ( child.isEnabled == null || child.isEnabled() )
+				child.focusGain != null && child.isEnabled()
 			)
 			{
 				break;
@@ -217,11 +222,14 @@ class ControlTabbed
 		return returnValue;
 	};
 
+	childWithFocus()
+	{
+		return this.childSelected();
+	}
+
 	childrenAtPosAddToList
 	(
-		posToCheck,
-		listToAddTo,
-		addFirstChildOnly
+		posToCheck: Coords, listToAddTo: Control[], addFirstChildOnly: boolean
 	)
 	{
 		posToCheck = this._posToCheck.overwriteWith(posToCheck).clearZ();
@@ -326,6 +334,9 @@ class ControlTabbed
 		return wasClickHandled;
 	};
 
+	mouseEnter() {}
+	mouseExit() {}
+
 	mouseMove(mouseMovePos: Coords)
 	{
 		var mouseMovePos = this._mouseMovePos.overwriteWith
@@ -353,7 +364,7 @@ class ControlTabbed
 		return wasMoveHandled;
 	};
 
-	scalePosAndSize(scaleFactor)
+	scalePosAndSize(scaleFactor: Coords)
 	{
 		this.pos.multiply(scaleFactor);
 		this.size.multiply(scaleFactor);
@@ -386,7 +397,7 @@ class ControlTabbed
 
 	// drawable
 
-	draw(universe, display, drawLoc)
+	draw(universe: Universe, display: Display, drawLoc: Disposition)
 	{
 		drawLoc = this._drawLoc.overwriteWith(drawLoc);
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
@@ -395,7 +406,7 @@ class ControlTabbed
 		display.drawRectangle
 		(
 			drawPos, this.size,
-			style.colorBackground, style.colorBorder
+			style.colorBackground, style.colorBorder, null
 		);
 
 		var buttons = this.buttonsForChildren;

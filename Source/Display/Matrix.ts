@@ -1,9 +1,11 @@
 
 class Matrix
 {
+	// A 4x4 matrix for interacting with WebGL.
+
 	values: number[];
 
-	constructor(values)
+	constructor(values: number[])
 	{
 		this.values = values;
 	}
@@ -39,7 +41,7 @@ class Matrix
 		return returnValue;
 	};
 
-	divideScalar(scalar)
+	divideScalar(scalar: number)
 	{
 		for (var i = 0; i < this.values.length; i++)
 		{
@@ -49,7 +51,7 @@ class Matrix
 		return this;
 	};
 
-	multiply(other)
+	multiply(other: Matrix)
 	{
 		// hack
 		// Instantiates a new matrix.
@@ -80,7 +82,7 @@ class Matrix
 		return this;
 	};
 
-	multiplyScalar(scalar)
+	multiplyScalar(scalar: number)
 	{
 		for (var i = 0; i < this.values.length; i++)
 		{
@@ -90,7 +92,7 @@ class Matrix
 		return this;
 	};
 
-	overwriteWith(other)
+	overwriteWith(other: Matrix)
 	{
 		for (var i = 0; i < this.values.length; i++)
 		{
@@ -100,7 +102,7 @@ class Matrix
 		return this;
 	};
 
-	overwriteWithOrientationEntity(orientation)
+	overwriteWithOrientationEntity(orientation: Orientation)
 	{
 		var forward = orientation.forward.clone().multiplyScalar(1);
 		var right = orientation.right.clone().multiplyScalar(1);
@@ -128,7 +130,7 @@ class Matrix
 		return this;
 	};
 
-	overwriteWithOrientationCamera(orientation)
+	overwriteWithOrientationCamera(orientation: Orientation)
 	{
 		var forward = orientation.forward.clone().multiplyScalar(1);
 		var right = orientation.right.clone().multiplyScalar(1);
@@ -145,7 +147,7 @@ class Matrix
 		return this;
 	};
 
-	overwriteWithOrientationMover(orientation)
+	overwriteWithOrientationMover(orientation: Orientation)
 	{
 		// hack
 		// This function shouldn't even exist!
@@ -170,7 +172,7 @@ class Matrix
 		return this;
 	};
 
-	overwriteWithPerspectiveForCamera(camera)
+	overwriteWithPerspectiveForCamera(camera: Camera)
 	{
 		var viewSize = camera.viewSize;
 		var clipDistanceNear = .001;//camera.focalLength;
@@ -209,7 +211,7 @@ class Matrix
 		return this;
 	};
 
-	overwriteWithTranslate(displacement)
+	overwriteWithTranslate(displacement: Coords)
 	{
 		this.overwriteWithValues
 		([
@@ -222,7 +224,7 @@ class Matrix
 		return this;
 	};
 
-	overwriteWithValues(otherValues)
+	overwriteWithValues(otherValues: number[])
 	{
 		for (var i = 0; i < this.values.length; i++)
 		{

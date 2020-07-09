@@ -11,7 +11,7 @@ class Camera
 
 	_clipPlanes: any;
 
-	constructor(viewSize, focalLength, loc)
+	constructor(viewSize: Coords, focalLength: number, loc: Disposition)
 	{
 		this.viewSize = viewSize;
 		this.focalLength = focalLength;
@@ -127,7 +127,7 @@ class Camera
 		return this._clipPlanes;
 	};
 
-	coordsTransformViewToWorld(viewCoords, ignoreZ)
+	coordsTransformViewToWorld(viewCoords: Coords, ignoreZ: boolean)
 	{
 		var cameraLoc = this.loc;
 
@@ -151,7 +151,7 @@ class Camera
 		return worldCoords;
 	};
 
-	coordsTransformWorldToView(worldCoords)
+	coordsTransformWorldToView(worldCoords: Coords)
 	{
 		var cameraPos = this.loc.pos;
 		var cameraOrientation = this.loc.orientation;
@@ -175,7 +175,7 @@ class Camera
 		return viewCoords;
 	};
 
-	drawEntitiesInViewThenClear(universe, world, display)
+	drawEntitiesInViewThenClear(universe: Universe, world: World, display: Display)
 	{
 		this.loc.pos.round(); // hack - To prevent lines between map tiles.
 
@@ -199,9 +199,14 @@ class Camera
 				return returnValue;
 			}
 		);
-		this.entitiesInView.forEach(entity =>
-			entity.drawable().visual.drawImmediate(universe, world, display, entity)
-		);
+
+		for (var i = 0; i < this.entitiesInView.length; i++)
+		{
+			var entity = this.entitiesInView[i];
+			var visual = entity.drawable().visual;
+			visual.drawImmediate(universe, world, display, entity)
+		}
+
 		this.entitiesInView.length = 0;
 	};
 

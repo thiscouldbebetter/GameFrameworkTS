@@ -1,7 +1,7 @@
 
 class CollisionTracker
 {
-	updateForTimerTick(universe, world, place, entity)
+	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity)
 	{
 		var collidables = place.entitiesByPropertyName(Collidable.name);
 

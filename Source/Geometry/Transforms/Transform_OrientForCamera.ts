@@ -1,14 +1,24 @@
 
-class Transform_OrientForCamera
+class Transform_OrientForCamera implements Transform
 {
 	orientation: Orientation;
 
-	constructor(orientation)
+	constructor(orientation: Orientation)
 	{
 		this.orientation = orientation;
 	}
 
-	transformCoords(coordsToTransform)
+	overwriteWith(other: Transform)
+	{
+		return this; // todo
+	}
+
+	transform(transformable: Transformable): Transformable
+	{
+		return transformable; // todo
+	}
+
+	transformCoords(coordsToTransform: Coords)
 	{
 		coordsToTransform.overwriteWithDimensions
 		(

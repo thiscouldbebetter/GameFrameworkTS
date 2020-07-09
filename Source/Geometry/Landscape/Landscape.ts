@@ -8,7 +8,7 @@ class LandscapeMap
 	sizeInCellsMinusOnes: Coords;
 	cellAltitudes: any;
 
-	constructor(name, depthMax, terrainSet)
+	constructor(name: string, depthMax: number, terrainSet: any)
 	{
 		this.name = name;
 		this.depthMax = depthMax;
@@ -24,7 +24,7 @@ class LandscapeMap
 		this.cellAltitudes = [];
 	}
 
-	indexOfCellAtPos(cellPos)
+	indexOfCellAtPos(cellPos: Coords)
 	{
 		return cellPos.y * this.sizeInCells.x + cellPos.x;
 	}
@@ -71,10 +71,10 @@ class LandscapeMap
 
 	generateRandom_1
 	(
-		parentPos,
-		childPos,
-		neighborDatas,
-		d
+		parentPos: Coords,
+		childPos: Coords,
+		neighborDatas: NeighborData[],
+		d: number
 	)
 	{
 		var stepSizeInCells = Math.pow(2, this.depthMax - d);
@@ -106,8 +106,8 @@ class LandscapeMap
 
 	generateRandom_2
 	(
-		parentPos, childPos, neighborDatas, stepSizeInCells,
-		stepSizeInCellsHalf, altitudeVariationRange
+		parentPos: Coords, childPos: Coords, neighborDatas: NeighborData[],
+		stepSizeInCells: number, stepSizeInCellsHalf: number, altitudeVariationRange: any
 	)
 	{
 		var parentIndex = this.indexOfCellAtPos(parentPos);
@@ -130,9 +130,9 @@ class LandscapeMap
 				parentPos
 			);
 
-			if (neighborPos.isWithinRange(this.sizeInCellsMinusOnes) == false)
+			if (neighborPos.isInRangeMax(this.sizeInCellsMinusOnes) == false)
 			{
-				neighborPos.wrapToRange(this.sizeInCellsMinusOnes);
+				neighborPos.wrapToRangeMax(this.sizeInCellsMinusOnes);
 			}
 		}
 
@@ -151,7 +151,7 @@ class LandscapeMap
 				parentPos
 			);
 
-			if (childPos.isWithinRange(this.sizeInCellsMinusOnes))
+			if (childPos.isInRangeMax(this.sizeInCellsMinusOnes))
 			{
 				var childIndex = this.indexOfCellAtPos(childPos);
 
@@ -247,8 +247,8 @@ class NeighborData
 
 	constructor
 	(
-		directionToNeighbor, neighborIndicesContributing,
-		altitudeVariationMultiplier
+		directionToNeighbor: Coords, neighborIndicesContributing: number[],
+		altitudeVariationMultiplier: number
 	)
 	{
 		this.directionToNeighbor = directionToNeighbor;
@@ -265,7 +265,7 @@ class LandscapeTerrain
 	color: any;
 	altitudeStart: number;
 
-	constructor(name, color, altitudeStart)
+	constructor(name: string, color: any, altitudeStart: number)
 	{
 		this.name = name;
 		this.color = color;
@@ -278,13 +278,13 @@ class LandscapeTerrainSet
 	name: string;
 	terrains: any;
 
-	constructor(name, terrains)
+	constructor(name: string, terrains: any)
 	{
 		this.name = name;
 		this.terrains = terrains;
 	}
 
-	getTerrainForAltitude(altitudeToGet)
+	getTerrainForAltitude(altitudeToGet: number)
 	{
 		var returnValue = null;
 

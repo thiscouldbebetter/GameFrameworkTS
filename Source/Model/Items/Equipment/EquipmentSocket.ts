@@ -4,18 +4,18 @@ class EquipmentSocket
 	defnName: string;
 	itemEntityEquipped: Entity;
 
-	constructor(defnName, itemEntityEquipped)
+	constructor(defnName: string, itemEntityEquipped: Entity)
 	{
 		this.defnName = defnName;
 		this.itemEntityEquipped = itemEntityEquipped;
 	}
 
-	defn(defnGroup)
+	defn(defnGroup: EquipmentSocketDefnGroup)
 	{
 		return defnGroup.socketDefnsByName[this.defnName];
 	};
 
-	toString(world)
+	toString(world: World)
 	{
 		var itemEntityEquippedAsString =
 		(

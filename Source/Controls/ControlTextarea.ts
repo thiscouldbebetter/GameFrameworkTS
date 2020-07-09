@@ -1,17 +1,18 @@
 
-class ControlTextarea
+class ControlTextarea implements Control
 {
 	name: string;
 	pos: Coords;
 	size: Coords;
 	text: any;
 	fontHeightInPixels: number
-	_isEnabled: any;
+	_isEnabled: DataBinding;
 
 	isHighlighted: boolean;
 	lineSpacing: number;
+	parent: Control;
 	scrollbar: ControlScrollbar;
-	styleName; string;
+	styleName: string;
 
 	_drawPos: Coords;
 	_drawLoc: Disposition;
@@ -19,7 +20,7 @@ class ControlTextarea
 	_mouseClickPos: Coords;
 	_textAsLines: any;
 
-	constructor(name, pos, size, text, fontHeightInPixels, isEnabled)
+	constructor(name: string, pos: Coords, size: Coords, text: any, fontHeightInPixels: number, isEnabled: DataBinding)
 	{
 		this.name = name;
 		this.pos = pos;
@@ -49,7 +50,7 @@ class ControlTextarea
 		this._mouseClickPos = new Coords(0, 0, 0);
 	}
 
-	actionHandle(actionNameToHandle)
+	actionHandle(actionNameToHandle: string, universe: Universe)
 	{
 		var wasActionHandled = false;
 		var controlActionNames = ControlActionNames.Instances();
@@ -80,6 +81,16 @@ class ControlTextarea
 		return wasActionHandled;
 	};
 
+	actionToInputsMappings(): ActionToInputsMapping[]
+	{
+		return null; // todo
+	}
+
+	childWithFocus(): Control
+	{
+		return null;
+	}
+
 	focusGain()
 	{
 		this.isHighlighted = true;
@@ -100,7 +111,7 @@ class ControlTextarea
 		return this.indexOfFirstLineVisible() + Math.floor(this.scrollbar.windowSizeInItems) - 1;
 	};
 
-	indexOfLineSelected(valueToSet)
+	indexOfLineSelected(valueToSet: number)
 	{
 		var returnValue = valueToSet;
 		var lines = this.textAsLines();
@@ -142,7 +153,7 @@ class ControlTextarea
 		return this._textAsLines;
 	};
 
-	mouseClick(clickPos)
+	mouseClick(clickPos: Coords)
 	{
 		clickPos = this._mouseClickPos.overwriteWith(clickPos);
 
@@ -190,12 +201,16 @@ class ControlTextarea
 		return true; // wasActionHandled
 	};
 
-	mouseMove(movePos)
+	mouseEnter() {}
+
+	mouseExit() {}
+
+	mouseMove(movePos: Coords)
 	{
 		// Do nothing.
 	};
 
-	scalePosAndSize(scaleFactor)
+	scalePosAndSize(scaleFactor: Coords)
 	{
 		this.pos.multiply(scaleFactor);
 		this.size.multiply(scaleFactor);
@@ -204,14 +219,14 @@ class ControlTextarea
 		this.scrollbar.scalePosAndSize(scaleFactor);
 	};
 
-	style(universe)
+	style(universe: Universe)
 	{
 		return universe.controlBuilder.stylesByName[this.styleName == null ? "Default" : this.styleName];
 	};
 
 	// drawable
 
-	draw(universe, display, drawLoc)
+	draw(universe: Universe, display: Display, drawLoc: Disposition)
 	{
 		drawLoc = this._drawLoc.overwriteWith(drawLoc);
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);

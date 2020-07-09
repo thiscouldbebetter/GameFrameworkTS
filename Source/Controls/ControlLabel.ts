@@ -1,5 +1,5 @@
 
-class ControlLabel
+class ControlLabel implements Control
 {
 	name: string;
 	pos: Coords;
@@ -8,11 +8,16 @@ class ControlLabel
 	_text: any;
 	fontHeightInPixels: number;
 
+	parent: Control;
 	styleName: string;
 
 	_drawPos: Coords;
 
-	constructor(name, pos, size, isTextCentered, text, fontHeightInPixels)
+	constructor
+	(
+		name: string, pos: Coords, size: Coords, isTextCentered: boolean,
+		text: any, fontHeightInPixels: number
+	)
 	{
 		this.name = name;
 		this.pos = pos;
@@ -26,7 +31,7 @@ class ControlLabel
 		this._drawPos = new Coords(0, 0, 0);
 	}
 
-	static fromPosAndText(pos, text)
+	static fromPosAndText(pos: Coords, text: any)
 	{
 		return new ControlLabel
 		(
@@ -39,7 +44,49 @@ class ControlLabel
 		);
 	};
 
-	style(universe)
+	actionHandle(actionName: string)
+	{
+		return false; // wasActionHandled
+	}
+
+	actionToInputsMappings(): ActionToInputsMapping[]
+	{
+		return null; // todo
+	}
+
+	childWithFocus(): Control
+	{
+		return null; // todo
+	}
+
+	focusGain() {}
+
+	focusLose() {}
+
+	isEnabled()
+	{
+		return false;
+	}
+
+	mouseClick(pos: Coords): boolean
+	{
+		return false;
+	}
+
+	mouseEnter() {}
+
+	mouseExit() {}
+
+	mouseMove(pos: Coords) {}
+
+	scalePosAndSize(scaleFactor: Coords)
+	{
+		this.pos.multiply(scaleFactor);
+		this.size.multiply(scaleFactor);
+		this.fontHeightInPixels *= scaleFactor.y;
+	};
+
+	style(universe: Universe)
 	{
 		return universe.controlBuilder.stylesByName[this.styleName == null ? "Default" : this.styleName];
 	};
@@ -51,7 +98,7 @@ class ControlLabel
 
 	// drawable
 
-	draw(universe, display, drawLoc)
+	draw(universe: Universe, display: Display, drawLoc: Disposition)
 	{
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 		var style = this.style(universe);

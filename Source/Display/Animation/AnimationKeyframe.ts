@@ -2,23 +2,24 @@
 class AnimationKeyframe
 {
 	frameIndex: number;
-	transforms: any;
+	transforms: Transform_Interpolatable[];
+	transformsByPropertyName: any;
 
-	constructor(frameIndex, transforms)
+	constructor(frameIndex: number, transforms: Transform_Interpolatable[])
 	{
 		this.frameIndex = frameIndex;
 		this.transforms = transforms;
-		this.transforms.addLookups( x => x.propertyName );
+		this.transformsByPropertyName = ArrayHelper.addLookups(this.transforms, (x: Transform_Interpolatable) => x.propertyName );
 	}
 
-	interpolateWith(other, fractionOfProgressTowardOther)
+	interpolateWith(other: AnimationKeyframe, fractionOfProgressTowardOther: number)
 	{
 		var transformsInterpolated = [];
 
 		for (var i = 0; i < this.transforms.length; i++)
 		{
 			var transformThis = this.transforms[i];
-			var transformOther = other.transforms[transformThis.propertyName];
+			var transformOther = other.transformsByPropertyName[transformThis.propertyName];
 
 			var transformInterpolated = transformThis.interpolateWith
 			(

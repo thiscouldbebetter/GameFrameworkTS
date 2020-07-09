@@ -3,15 +3,15 @@ class Playable
 {
 	player: any;
 
-	constructor(player)
+	constructor(player: any)
 	{
 		this.player = player;
 	}
 
-	updateForTimerTick(universe, world, place, entityPlayer)
+	updateForTimerTick(universe: Universe, world: World, place: Place, entityPlayer: Entity)
 	{
 		var inputHelper = universe.inputHelper;
-		if (inputHelper.isMouseClicked())
+		if (inputHelper.isMouseClicked(null))
 		{
 			inputHelper.isMouseClicked(false);
 

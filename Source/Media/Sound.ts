@@ -10,7 +10,7 @@ class Sound
 
 	domElement: any;
 
-	constructor(name, sourcePath)
+	constructor(name: string, sourcePath: string)
 	{
 		this.name = name;
 		this.sourcePath = sourcePath;
@@ -19,7 +19,7 @@ class Sound
 		this.isPlaying = false;
 	}
 
-	domElementBuild(universe, volume)
+	domElementBuild(universe: Universe, volume: number)
 	{
 		this.domElement = document.createElement("audio");
 		this.domElement.sound = this;
@@ -39,14 +39,14 @@ class Sound
 		return this.domElement;
 	};
 
-	pause(universe)
+	pause(universe: Universe)
 	{
 		var offsetInSeconds = this.domElement.currentTime;
 		this.stop(universe);
 		this.offsetInSeconds = offsetInSeconds;
 	};
 
-	play(universe, volume)
+	play(universe: Universe, volume: number)
 	{
 		if (this.isPlaying == false)
 		{
@@ -64,7 +64,7 @@ class Sound
 		this.offsetInSeconds = 0;
 	};
 
-	stop(universe)
+	stop(universe: Universe)
 	{
 		if (this.isPlaying)
 		{
@@ -74,7 +74,7 @@ class Sound
 		}
 	};
 
-	stopOrRepeat(universe)
+	stopOrRepeat(universe: Universe)
 	{
 		if (this.isRepeating == false)
 		{

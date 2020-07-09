@@ -1,13 +1,17 @@
 
-class VisualEllipse
+class VisualEllipse implements Visual
 {
 	semimajorAxis: number;
 	semiminorAxis: number;
 	rotationInTurns: number;
-	colorFill: any;
-	colorBorder: any;
+	colorFill: string;
+	colorBorder: string;
 
-	constructor(semimajorAxis, semiminorAxis, rotationInTurns, colorFill, colorBorder)
+	constructor
+	(
+		semimajorAxis: number, semiminorAxis: number, rotationInTurns: number,
+		colorFill: string, colorBorder: string
+	)
 	{
 		this.semimajorAxis = semimajorAxis;
 		this.semiminorAxis = semiminorAxis;
@@ -16,7 +20,7 @@ class VisualEllipse
 		this.colorBorder = colorBorder;
 	}
 
-	draw(universe, world, display, entity)
+	draw(universe: Universe, world: World, display: Display, entity: Entity)
 	{
 		var drawableLoc = entity.locatable().loc;
 		var drawableOrientation = drawableLoc.orientation;
@@ -29,4 +33,23 @@ class VisualEllipse
 			this.colorFill, this.colorBorder
 		);
 	};
+
+	// Clonable.
+
+	clone(): Visual
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: Visual): Visual
+	{
+		return this; // todo
+	}
+
+	// Transformable.
+
+	transform(transformToApply: Transform): Transformable
+	{
+		return this; // todo
+	}
 }

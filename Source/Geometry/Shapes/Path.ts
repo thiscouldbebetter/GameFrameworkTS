@@ -3,7 +3,7 @@ class Path
 {
 	points: Coords[];
 
-	constructor(points)
+	constructor(points: Coords[])
 	{
 		this.points = points;
 	}
@@ -13,15 +13,15 @@ class Path
 		return new Path(ArrayHelper.clone(this.points) );
 	};
 
-	overwriteWith(other)
+	overwriteWith(other: Path)
 	{
 		ArrayHelper.overwriteWith(this.points, other.points);
 		return this;
 	};
 
-	transform(transformToApply)
+	transform(transformToApply: Transform)
 	{
-		Transform.applyTransformToCoordsMany(transformToApply, this.points);
+		Transforms.applyTransformToCoordsMany(transformToApply, this.points);
 		return this;
 	};
 }

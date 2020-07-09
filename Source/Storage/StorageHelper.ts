@@ -4,7 +4,7 @@ class StorageHelper
 	propertyNamePrefix: string;
 	serializer: Serializer;
 
-	constructor(propertyNamePrefix, serializer)
+	constructor(propertyNamePrefix: string, serializer: Serializer)
 	{
 		this.propertyNamePrefix = propertyNamePrefix;
 		if (this.propertyNamePrefix == null)
@@ -15,7 +15,7 @@ class StorageHelper
 		this.serializer = serializer;
 	}
 
-	load(propertyName)
+	load(propertyName: string)
 	{
 		var returnValue;
 
@@ -42,7 +42,7 @@ class StorageHelper
 		return returnValue;
 	};
 
-	save(propertyName, valueToSave)
+	save(propertyName: string, valueToSave: any)
 	{
 		var valueToSaveSerialized = this.serializer.serialize
 		(

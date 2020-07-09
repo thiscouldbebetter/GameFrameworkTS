@@ -1,19 +1,24 @@
 
-class Transform_Orient
+class Transform_Orient implements Transform
 {
 	orientation: Orientation;
 
-	constructor(orientation)
+	constructor(orientation: Orientation)
 	{
 		this.orientation = orientation;
 	}
 
-	transform(transformable)
+	overwriteWith(other: Transform)
+	{
+		return this; // todo
+	}
+
+	transform(transformable: Transformable): Transformable
 	{
 		return transformable.transform(this);
 	};
 
-	transformCoords(coordsToTransform)
+	transformCoords(coordsToTransform: Coords)
 	{
 		// todo
 		// Compare to Transform_OrientRDF.transformCoords().

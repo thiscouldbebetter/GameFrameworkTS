@@ -4,7 +4,7 @@ class Ray
 	vertex: Coords;
 	direction: Coords;
 
-	constructor(vertex, direction)
+	constructor(vertex: Coords, direction: Coords)
 	{
 		this.vertex = vertex;
 		this.direction = direction;

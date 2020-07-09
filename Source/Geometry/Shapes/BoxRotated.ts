@@ -4,7 +4,7 @@ class BoxRotated
 	box: Box;
 	angleInTurns: number;
 
-	constructor(box, angleInTurns)
+	constructor(box: Box, angleInTurns: number)
 	{
 		this.box = box;
 		this.angleInTurns = angleInTurns;
@@ -15,7 +15,7 @@ class BoxRotated
 		return new Sphere(this.box.center, this.box.sizeHalf.magnitude());
 	};
 
-	surfaceNormalNearPos(posToCheck)
+	surfaceNormalNearPos(posToCheck: Coords)
 	{
 		var returnValue = new Coords(0, 0, 0);
 
@@ -70,7 +70,7 @@ class BoxRotated
 		return new BoxRotated(this.box.clone(), this.angleInTurns);
 	};
 
-	overwriteWith(other)
+	overwriteWith(other: BoxRotated)
 	{
 		this.box.overwriteWith(other.box);
 		this.angleInTurns = other.angleInTurns;

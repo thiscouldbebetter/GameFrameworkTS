@@ -5,7 +5,7 @@ class AnimationDefnGroup
 	animationDefns: AnimationDefn[];
 	animationDefnsByName: any;
 
-	constructor(name, animationDefns)
+	constructor(name: string, animationDefns: AnimationDefn[])
 	{
 		this.name = name;
 		this.animationDefns = animationDefns;

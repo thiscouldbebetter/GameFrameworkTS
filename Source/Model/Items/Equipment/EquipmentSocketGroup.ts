@@ -5,7 +5,7 @@ class EquipmentSocketGroup
 	sockets: EquipmentSocket[];
 	socketsByDefnName: any;
 
-	constructor(defnGroup)
+	constructor(defnGroup: EquipmentSocketDefnGroup)
 	{
 		this.defnGroup = defnGroup;
 		this.sockets = [];
@@ -21,6 +21,6 @@ class EquipmentSocketGroup
 			this.sockets.push(socket);
 		};
 
-		this.socketsByDefnName = ArrayHelper.addLookups(this.sockets, x => x.defnName);
+		this.socketsByDefnName = ArrayHelper.addLookups(this.sockets, (x: EquipmentSocket) => x.defnName);
 	}
 }

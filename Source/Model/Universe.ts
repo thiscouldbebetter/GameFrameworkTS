@@ -23,10 +23,10 @@ class Universe
 
 	debuggingMode: boolean;
 	profile: Profile;
-	venueNext: any;
-	venueCurrent: any;
+	venueNext: Venue;
+	venueCurrent: Venue;
 
-	constructor(name, version, timerHelper, display, mediaLibrary, world)
+	constructor(name: string, version: string, timerHelper: TimerHelper, display: Display, mediaLibrary: MediaLibrary, world: World)
 	{
 		this.name = name;
 		this.version = version;
@@ -48,7 +48,7 @@ class Universe
 
 	// static methods
 
-	static new(name, version, timerHelper, display, mediaLibrary, world)
+	static new(name: string, version: string, timerHelper: TimerHelper, display: Display, mediaLibrary: MediaLibrary, world: World)
 	{
 		var returnValue = new Universe
 		(
@@ -69,7 +69,7 @@ class Universe
 
 	// instance methods
 
-	initialize(callback)
+	initialize(callback: any)
 	{
 		this.mediaLibrary.waitForItemsAllToLoad
 		(
@@ -77,7 +77,7 @@ class Universe
 		);
 	};
 
-	initialize_MediaLibraryLoaded(callback)
+	initialize_MediaLibraryLoaded(callback: (u: Universe) => void)
 	{
 		this.platformHelper.initialize(this);
 		this.storageHelper = new StorageHelper

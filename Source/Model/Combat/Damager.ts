@@ -3,7 +3,7 @@ class Damager
 {
 	damagePerHit: number;
 
-	constructor(damagePerHit)
+	constructor(damagePerHit: number)
 	{
 		this.damagePerHit = damagePerHit;
 	}

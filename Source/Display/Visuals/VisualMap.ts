@@ -1,9 +1,9 @@
 
-class VisualMap
+class VisualMap implements Visual
 {
 	map: MapOfCells;
 	visualLookup: any;
-	cameraGet: any;
+	cameraGet: (universe: Universe, world: World, display: Display, entity: Entity) => Camera;
 	shouldConvertToImage: boolean;
 
 	visualImage: any;
@@ -17,7 +17,7 @@ class VisualMap
 	_drawPos: Coords;
 	_posSaved: Coords;
 
-	constructor(map, visualLookup, cameraGet, shouldConvertToImage)
+	constructor(map: MapOfCells, visualLookup: any, cameraGet: () => Camera, shouldConvertToImage: boolean)
 	{
 		this.map = map;
 		this.visualLookup = visualLookup;
@@ -35,7 +35,7 @@ class VisualMap
 		this._posSaved = new Coords(0, 0, 0);
 	}
 
-	draw(universe, world, display, entity)
+	draw(universe: Universe, world: World, display: Display, entity: Entity)
 	{
 		if (this.shouldConvertToImage)
 		{
@@ -57,7 +57,7 @@ class VisualMap
 		}
 	}
 
-	draw_ConvertToImage(universe, world, display, entity)
+	draw_ConvertToImage(universe: Universe, world: World, display: Display, entity: Entity)
 	{
 		var mapSizeInCells = this.map.sizeInCells;
 		var mapSizeHalf = this.map.sizeHalf;
@@ -81,7 +81,7 @@ class VisualMap
 			cellPosEnd.overwriteWith(boundsVisible.max()).trimToRangeMax(this.sizeInCells);
 		}
 
-		var displayForImage = new Display([this.map.size], null, null, null, null, null);
+		var displayForImage = new Display2D([this.map.size], null, null, null, null, null);
 		displayForImage.toDomElement();
 
 		this.draw_ConvertToImage_Cells(universe, world, display, entity, cellPosStart, cellPosEnd, displayForImage);
@@ -95,7 +95,10 @@ class VisualMap
 		drawablePos.overwriteWith(this._posSaved);
 	}
 
-	draw_ConvertToImage_Cells(universe, world, display, entity, cellPosStart, cellPosEnd, displayForImage)
+	draw_ConvertToImage_Cells
+	(
+		universe: Universe, world: World, display: Display, entity: Entity,
+		cellPosStart: Coords, cellPosEnd: Coords, displayForImage: Display)
 	{
 		var drawPos = this._drawPos;
 		var drawablePos = entity.locatable().loc.pos;
@@ -150,5 +153,24 @@ class VisualMap
 		}
 
 		return displayForImage;
+	}
+
+	// Clonable.
+
+	clone(): Visual
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: Visual): Visual
+	{
+		return this; // todo
+	}
+
+	// Transformable.
+
+	transform(transformToApply: Transform): Transformable
+	{
+		return this; // todo
 	}
 }

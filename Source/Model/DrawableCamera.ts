@@ -6,7 +6,7 @@ class DrawableCamera
 		// Do nothing.
 	}
 
-	initialize(universe, world, place, entity)
+	initialize(universe: Universe, world: World, place: Place, entity: Entity)
 	{
 		var drawable = entity.drawable();
 		var visual = drawable.visual;
@@ -15,7 +15,7 @@ class DrawableCamera
 		{
 			drawable.visual = new VisualCameraProjection
 			(
-				visual, (u, w) => w.placeCurrent.camera() 
+				visual, (u: Universe, w: World) => w.placeCurrent.camera() 
 			)
 		}
 	};

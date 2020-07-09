@@ -6,14 +6,14 @@ class Actor
 
 	actions: Action[];
 
-	constructor(activity, target)
+	constructor(activity: any, target: any)
 	{
 		this.activity = activity;
 		this.target = target;
 		this.actions = [];
 	}
 
-	updateForTimerTick(universe, world, place, entity)
+	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity)
 	{
 		this.activity(universe, world, place, entity, this.target);
 	}

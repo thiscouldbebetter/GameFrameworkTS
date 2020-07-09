@@ -2,11 +2,12 @@
 class Device
 {
 	name: string;
-	initialize: any;
-	update: any;
-	use: any;
+	initialize: (u: Universe, w: World, p: Place, e: Entity) => void;
+	update: (u: Universe, w: World, p: Place, e: Entity) => void;
+	use: (u: Universe, w: World, p: Place, eUser: Entity, eDevice: Entity) => void;
+	tickLastUsed: number;
 
-	constructor(name, initialize, update, use)
+	constructor(name: any, initialize: any, update: any, use:any)
 	{
 		this.name = name;
 		this.initialize = initialize;
@@ -21,21 +22,21 @@ class Device
 		var returnValue = new Device
 		(
 			"Gun",
-			function initialize(u, w, p, entity)
+			(u: Universe, w: World, p: Place, entity: Entity) => // initialize
 			{
 				var device = entity.device();
 				device.ticksToCharge = 10;
 				device.tickLastUsed = 0;
 			},
-			function update(u, w, p, e)
+			(u: Universe, w: World, p: Place, e: Entity) => // update
 			{
 				// todo
 			},
-			function use(universe, world, place, entityUser, entityDevice)
+			(u: Universe, world: World, p: Place, entityUser: Entity, entityDevice: Entity) => // use
 			{
 				var device = entityDevice.device();
 				var tickCurrent = world.timerTicksSoFar;
-				var ticksSinceUsed = tickCurrent - this.tickLastUsed;
+				var ticksSinceUsed = tickCurrent - device.tickLastUsed;
 				if (ticksSinceUsed < device.ticksToCharge)
 				{
 					return;
@@ -61,21 +62,24 @@ class Device
 				var projectileColor = "Cyan";
 				var projectileDimension = 1.5;
 				var projectileVisual = new VisualGroup
-				([
-					new VisualEllipse
+				(
+					new Array<Visual>
 					(
-						projectileDimension * 2, // semimajorAxis,
-						projectileDimension, // semiminorAxis,
-						0, // rotationInTurns,
-						projectileColor, // colorFill
-						null
-					),
-					new VisualOffset
-					(
-						new VisualText("Projectile", projectileColor, null),
-						new Coords(0, 0 - projectileDimension * 3, 0)
+						new VisualEllipse
+						(
+							projectileDimension * 2, // semimajorAxis,
+							projectileDimension, // semiminorAxis,
+							0, // rotationInTurns,
+							projectileColor, // colorFill
+							null
+						),
+						new VisualOffset
+						(
+							new VisualText(new DataBinding("Projectile", null, null), projectileColor, null),
+							new Coords(0, 0 - projectileDimension * 3, 0)
+						)
 					)
-				]);
+				);
 
 				var userDirection = userVel.clone().normalize();
 				var userRadius = entityUser.collidable().collider.radius;
@@ -93,7 +97,7 @@ class Device
 				var projectileCollider =
 					new Sphere(new Coords(0, 0, 0), projectileDimension);
 
-				var projectileCollide = function(universe, world, place, entityProjectile, entityOther)
+				var projectileCollide = (universe: Universe, world: World, place: Place, entityProjectile: Entity, entityOther: Entity) =>
 				{
 					var killable = entityOther.killable();
 					if (killable != null)
@@ -111,7 +115,7 @@ class Device
 				(
 					1, // integrityMax
 					null, // damageApply
-					function die(universe, world, place, entityKillable)
+					(universe: Universe, world: World, place: Place, entityKillable: Entity) => // die
 					{
 						var entityExplosion = new Entity
 						(
@@ -147,7 +151,7 @@ class Device
 					]
 				);
 
-				place.entitiesToSpawn.push(projectileEntity);
+				p.entitiesToSpawn.push(projectileEntity);
 			}
 		);
 
@@ -159,21 +163,21 @@ class Device
 		var returnValue = new Device
 		(
 			"Sword",
-			function initialize(u, w, p, entity)
+			(u: Universe, w: World, p: Place, entity: Entity) => // initialize
 			{
 				var device = entity.device();
 				device.ticksToCharge = 10;
 				device.tickLastUsed = 0;
 			},
-			function update(u, w, p, e)
+			(u: Universe, w: World, p: Place, e: Entity) => // update
 			{
 				// todo
 			},
-			function use(universe, world, place, entityUser, entityDevice)
+			(universe: Universe, world: World, place: Place, entityUser: Entity, entityDevice: Entity) => // use
 			{
 				var device = entityDevice.device();
 				var tickCurrent = world.timerTicksSoFar;
-				var ticksSinceUsed = tickCurrent - this.tickLastUsed;
+				var ticksSinceUsed = tickCurrent - device.tickLastUsed;
 				if (ticksSinceUsed < device.ticksToCharge)
 				{
 					return;
@@ -209,7 +213,7 @@ class Device
 				var projectileCollider =
 					new Sphere(new Coords(0, 0, 0), projectileDimension);
 
-				var projectileCollide = function(universe, world, place, entityProjectile, entityOther)
+				var projectileCollide = (universe: Universe, world: World, place: Place, entityProjectile: Entity, entityOther: Entity) =>
 				{
 					var killable = entityOther.killable();
 					if (killable != null)
@@ -227,7 +231,7 @@ class Device
 				(
 					1, // integrityMax
 					null, // damageApply
-					function die(universe, world, place, entityKillable)
+					(universe: Universe, world: World, place: Place, entityKillable: Entity) => // die
 					{
 						var entityExplosion = new Entity
 						(

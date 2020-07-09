@@ -6,7 +6,7 @@ class Input
 	isActive: boolean;
 	ticksActive: number;
 
-	constructor(name)
+	constructor(name: string)
 	{
 		this.name = name;
 
@@ -90,7 +90,7 @@ class Input_Names
 			this.Tab
 		];
 
-		this._AllByName = ArrayHelper.addLookups(this._All, x => x);
+		this._AllByName = ArrayHelper.addLookups(this._All, (x: string) => x);
 	}
 }
 

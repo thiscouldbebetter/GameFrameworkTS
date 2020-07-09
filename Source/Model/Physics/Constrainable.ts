@@ -1,14 +1,14 @@
 
 class Constrainable
 {
-	constraints: any[];
+	constraints: Constraint[];
 
-	constructor(constraints)
+	constructor(constraints: Constraint[])
 	{
 		this.constraints = constraints;
 	}
 
-	static constrain(universe, world, place, entity)
+	static constrain(universe: Universe, world: World, place: Place, entity: Entity)
 	{
 		var constrainable = entity.constrainable();
 		var constraints = constrainable.constraints;
@@ -19,12 +19,12 @@ class Constrainable
 		}
 	};
 
-	initialize(universe, world, place, entity)
+	initialize(universe: Universe, world: World, place: Place, entity: Entity)
 	{
 		this.updateForTimerTick(universe, world, place, entity);
 	};
 
-	updateForTimerTick(universe, world, place, entity)
+	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity)
 	{
 		Constrainable.constrain(universe, world, place, entity);
 	};

@@ -7,7 +7,7 @@ class Cylinder
 
 	lengthHalf: number;
 
-	constructor(center, radius, length)
+	constructor(center: Coords, radius: number, length: number)
 	{
 		this.center = center;
 		this.radius = radius;

@@ -1,29 +1,7 @@
 
-class Transform
+interface Transform
 {
-	static applyTransformToCoordsArrays
-	(
-		transformToApply,
-		coordsArraysToTransform
-	)
-	{
-		if (coordsArraysToTransform == null)
-		{
-			return;
-		}
-
-		for (var i = 0; i < coordsArraysToTransform.length; i++)
-		{
-			var coordsArray = coordsArraysToTransform[i];
-			Transform.applyTransformToCoordsMany(transformToApply, coordsArray);
-		}
-	};
-
-	static applyTransformToCoordsMany(transformToApply, coordsSetToTransform)
-	{
-		for (var i = 0; i < coordsSetToTransform.length; i++)
-		{
-			transformToApply.transformCoords(coordsSetToTransform[i]);
-		}
-	};
+	overwriteWith(x: Transform): Transform;
+	transform(x: Transformable): Transformable;
+	transformCoords(x: Coords): Coords;
 }

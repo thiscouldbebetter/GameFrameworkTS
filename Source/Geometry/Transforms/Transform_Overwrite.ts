@@ -1,15 +1,25 @@
 
-class Transform_Overwrite
+class Transform_Overwrite implements Transform
 {
-	transformableToOverwriteWith: any;
+	transformableToOverwriteWith: Transformable;
 
-	constructor(transformableToOverwriteWith)
+	constructor(transformableToOverwriteWith: Transformable)
 	{
 		this.transformableToOverwriteWith = transformableToOverwriteWith;
 	}
 
-	transform(transformable)
+	overwriteWith(other: Transform): Transform
 	{
-		return transformable.overwriteWith(this.transformableToOverwriteWith);
+		return this; // todo
+	}
+
+	transform(transformable: Transformable): Transformable
+	{
+		return transformable; // todo
 	};
+
+	transformCoords(coordsToTransform: Coords): Coords
+	{
+		return coordsToTransform;
+	}
 }

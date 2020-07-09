@@ -7,7 +7,7 @@ class Face
 	_edges: Edge[];
 	_plane: Plane;
 
-	constructor(vertices)
+	constructor(vertices: Coords[])
 	{
 		this.vertices = vertices;
 	}
@@ -22,7 +22,7 @@ class Face
 		return this._box;
 	};
 
-	containsPoint(pointToCheck)
+	containsPoint(pointToCheck: Coords)
 	{
 		var face = this;
 
@@ -88,7 +88,7 @@ class Face
 		return this._edges;
 	};
 
-	equals(other)
+	equals(other: Face)
 	{
 		return ArrayHelper.equals(this.vertices, other.vertices);
 	};
@@ -117,7 +117,7 @@ class Face
 		return new Face(ArrayHelper.clone(this.vertices));
 	};
 
-	overwriteWith(other)
+	overwriteWith(other: Face)
 	{
 		ArrayHelper.overwriteWith(this.vertices, other.vertices);
 		return this;
@@ -125,9 +125,9 @@ class Face
 
 	// Transformable.
 
-	transform(transformToApply)
+	transform(transformToApply: Transform)
 	{
-		Transform.applyTransformToCoordsMany(transformToApply, this.vertices);
+		Transforms.applyTransformToCoordsMany(transformToApply, this.vertices);
 		return this;
 	};
 }

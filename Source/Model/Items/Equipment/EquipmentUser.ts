@@ -8,14 +8,14 @@ class EquipmentUser
 	socketSelected: EquipmentSocket;
 	statusMessage: string;
 
-	constructor(socketDefnGroup)
+	constructor(socketDefnGroup: EquipmentSocketDefnGroup)
 	{
 		this.socketGroup = new EquipmentSocketGroup(socketDefnGroup);
 	}
 
 	equipEntityWithItem
 	(
-		universe, world, place, entityEquipmentUser, itemEntityToEquip
+		universe: Universe, world: World, place: Place, entityEquipmentUser: Entity, itemEntityToEquip: Entity
 	)
 	{
 		var sockets = this.socketGroup.sockets;
@@ -25,12 +25,12 @@ class EquipmentUser
 
 		var socketFound = sockets.filter
 		(
-			function(socket)
+			(socket: EquipmentSocket) => 
 			{
 				var socketDefn = socket.defn(socketDefnGroup);
 				var isItemAllowedInSocket = socketDefn.categoriesAllowedNames.some
 				(
-					y => itemDefn.categoryNames.indexOf(y) >= 0
+					(y: string) => itemDefn.categoryNames.indexOf(y) >= 0
 				);
 				return isItemAllowedInSocket;
 			}
@@ -56,7 +56,8 @@ class EquipmentUser
 
 	equipItemEntityInSocketWithName
 	(
-		universe, world, place, itemEntityToEquip, socketName, includeSocketNameInMessage
+		universe: Universe, world: World, place: Place, itemEntityToEquip: Entity,
+		socketName: string, includeSocketNameInMessage: boolean
 	)
 	{
 		var itemToEquip = itemEntityToEquip.item();
@@ -89,14 +90,15 @@ class EquipmentUser
 		return message;
 	};
 
-	itemEntityInSocketWithName(socketName)
+	itemEntityInSocketWithName(socketName: string)
 	{
 		return this.socketGroup.socketsByDefnName[socketName].itemEntityEquipped;
 	};
 
 	unequipItemFromSocket
 	(
-		universe, world, place, entityEquipmentUser, socketToUnequipFrom
+		universe: Universe, world: World, place: Place, entityEquipmentUser: Entity,
+		socketToUnequipFrom: EquipmentSocket
 	)
 	{
 		var message;
@@ -124,7 +126,11 @@ class EquipmentUser
 
 	// control
 
-	toControl(universe, size, entityEquipmentUser, venuePrev, includeTitleAndDoneButton)
+	toControl
+	(
+		universe: Universe, size: Coords, entityEquipmentUser: Entity,
+		venuePrev: Venue, includeTitleAndDoneButton: boolean
+	)
 	{
 		this.statusMessage = "Equip items in available slots.";
 
@@ -177,17 +183,17 @@ class EquipmentUser
 			new DataBinding
 			(
 				null,
-				function get(c) { return c.item().toString(world); },
+				(c: any) => { return c.item().toString(world); },
 				null
 			), // bindingForItemText
 			fontHeightSmall,
 			new DataBinding
 			(
 				this,
-				function get(c) { return c.itemEntitySelected; },
-				function set(c, v) { c.itemEntitySelected = v; }
+				(c: any) => { return c.itemEntitySelected; },
+				(c: any, v: any) => { c.itemEntitySelected = v; }
 			), // bindingForItemSelected
-			new DataBinding(null, function(c) { return c; }, null ), // bindingForItemValue
+			new DataBinding(null, (c: any) => { return c; }, null ), // bindingForItemValue
 			null, // bindingForIsEnabled
 			function confirm()
 			{
@@ -213,17 +219,17 @@ class EquipmentUser
 			new DataBinding
 			(
 				null,
-				function get(c) { return c.toString(world); },
+				(c: any) => { return c.toString(world); },
 				null
 			), // bindingForItemText
 			fontHeightSmall,
 			new DataBinding
 			(
 				this,
-				function get(c) { return c.socketSelected; },
-				function set(c, v) { c.socketSelected = v; }
+				(c: any) => c.socketSelected,
+				(c: any, v: any) => { c.socketSelected = v; }
 			), // bindingForItemSelected
-			new DataBinding(null, function(c) { return c; }, null ), // bindingForItemValue
+			new DataBinding(null, (c: any) => { return c; }, null ), // bindingForItemValue
 			null, // bindingForIsEnabled
 			function confirm()
 			{
@@ -305,7 +311,7 @@ class EquipmentUser
 		{
 			var childControls = returnValue.children;
 
-			childControls.insertElementAt
+			childControls.splice
 			(
 				0, 0,
 				new ControlLabel

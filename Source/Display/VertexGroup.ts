@@ -4,7 +4,7 @@ class VertexGroup
 	name: string;
 	vertexIndices: number[];
 
-	constructor(name, vertexIndices)
+	constructor(name: string, vertexIndices: number[])
 	{
 		this.name = name;
 		this.vertexIndices = vertexIndices;

@@ -2,17 +2,17 @@
 class Portal
 {
 	destinationPlaceName: string;
-	destinationEntityName; string;
+	destinationEntityName: string;
 	clearsVelocity: boolean;
 
-	constructor(destinationPlaceName, destinationEntityName, clearsVelocity)
+	constructor(destinationPlaceName: string, destinationEntityName: string, clearsVelocity: boolean)
 	{
 		this.destinationPlaceName = destinationPlaceName;
 		this.destinationEntityName = destinationEntityName;
 		this.clearsVelocity = clearsVelocity || true;
 	}
 
-	use(universe, world, placeToDepart, entityToTransport)
+	use(universe: Universe, world: World, placeToDepart: Place, entityToTransport: Entity)
 	{
 		var destinationPlace = world.placesByName[this.destinationPlaceName];
 		destinationPlace.initialize(universe, world);

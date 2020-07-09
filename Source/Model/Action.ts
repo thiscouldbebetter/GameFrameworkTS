@@ -4,7 +4,7 @@ class Action
 	name: string;
 	perform: any;
 
-	constructor(name, perform)
+	constructor(name: string, perform: any)
 	{
 		this.name = name;
 		this.perform = perform;
@@ -33,7 +33,7 @@ class Action_Instances
 		this.DoNothing = new Action
 		(
 			"DoNothing",
-			function(actor)
+			(u: Universe, w: World, p: Place, e: Entity) => 
 			{
 				// Do nothing.
 			}
@@ -42,7 +42,7 @@ class Action_Instances
 		this.ShowItems = new Action
 		(
 			"ShowItems",
-			function perform(universe, world, place, actor)
+			(universe: Universe, world: World, place: Place, actor: Entity) => // perform
 			{
 				var control = actor.controllable().toControl
 				(
@@ -57,11 +57,11 @@ class Action_Instances
 		this.ShowMenu = new Action
 		(
 			"ShowMenu",
-			function perform(universe, world, place, actor)
+			(universe: Universe, world: World, place: Place, actor: Entity) => // perform
 			{
 				var venueNext: any = new VenueControls
 				(
-					universe.controlBuilder.gameAndSettings(universe)
+					universe.controlBuilder.gameAndSettings(universe, null)
 				);
 				venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 				universe.venueNext = venueNext;

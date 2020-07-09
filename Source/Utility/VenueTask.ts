@@ -1,5 +1,5 @@
 
-class VenueTask
+class VenueTask implements Venue
 {
 	venueInner: any;
 	perform: any;
@@ -7,7 +7,7 @@ class VenueTask
 
 	isStarted: boolean;
 
-	constructor(venueInner, perform, done)
+	constructor(venueInner: any, perform: any, done: any)
 	{
 		this.venueInner = venueInner;
 		this.perform = perform;
@@ -18,12 +18,16 @@ class VenueTask
 
 	// instance methods
 
-	draw(universe)
+	draw(universe: Universe)
 	{
 		this.venueInner.draw(universe);
 	};
 
-	updateForTimerTick(universe)
+	finalize(universe: Universe) {}
+
+	initialize(universe: Universe) {}
+
+	updateForTimerTick(universe: Universe)
 	{
 		this.venueInner.updateForTimerTick(universe);
 

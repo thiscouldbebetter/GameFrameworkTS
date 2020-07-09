@@ -1,14 +1,14 @@
 
-class VisualPolygonLocated
+class VisualPolygonLocated implements Visual
 {
 	verticesAsPath: Path;
-	colorFill: any;
-	colorBorder: any;
+	colorFill: string;
+	colorBorder: string;
 
 	verticesAsPathTransformed: Path;
 	transformLocate: Transform_Locate;
 
-	constructor(verticesAsPath, colorFill, colorBorder)
+	constructor(verticesAsPath: Path, colorFill: string, colorBorder: string)
 	{
 		this.verticesAsPath = verticesAsPath;
 		this.colorFill = colorFill;
@@ -18,7 +18,7 @@ class VisualPolygonLocated
 		this.transformLocate = new Transform_Locate(new Disposition(new Coords(0, 0, 0), null, null));
 	}
 
-	draw(universe, world, display, entity)
+	draw(universe: Universe, world: World, display: Display, entity: Entity)
 	{
 		var drawableLoc = entity.locatable().loc;
 		var loc = this.transformLocate.loc;
@@ -29,7 +29,7 @@ class VisualPolygonLocated
 			this.verticesAsPath
 		);
 
-		Transform.applyTransformToCoordsMany
+		Transforms.applyTransformToCoordsMany
 		(
 			this.transformLocate,
 			this.verticesAsPathTransformed.points
@@ -41,4 +41,23 @@ class VisualPolygonLocated
 			this.colorFill, this.colorBorder
 		);
 	};
+
+	// Clonable.
+
+	clone(): Visual
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: Visual): Visual
+	{
+		return this; // todo
+	}
+
+	// Transformable.
+
+	transform(transformToApply: Transform): Transformable
+	{
+		return this; // todo
+	}
 }

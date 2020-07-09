@@ -1,0 +1,4 @@
+interface Randomizer
+{
+	getNextRandom(): number;
+}

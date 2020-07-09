@@ -4,14 +4,14 @@ class ProfileHelper
 	storageHelper: StorageHelper;
 	propertyName: string;
 
-	constructor(storageHelper)
+	constructor(storageHelper: StorageHelper)
 	{
 		this.storageHelper = storageHelper;
 
 		this.propertyName = "Profiles";
 	}
 
-	profileAdd(profile)
+	profileAdd(profile: Profile)
 	{
 		var profiles = this.profiles();
 		profiles.push(profile);
@@ -22,7 +22,7 @@ class ProfileHelper
 		);
 	};
 
-	profileDelete(profileToDelete)
+	profileDelete(profileToDelete: Profile)
 	{
 		var profiles = this.profiles();
 
@@ -39,7 +39,7 @@ class ProfileHelper
 		this.storageHelper.save(this.propertyName, profiles);
 	};
 
-	profileSave(profileToSave)
+	profileSave(profileToSave: Profile)
 	{
 		var wasSaveSuccessful;
 
@@ -93,7 +93,7 @@ class ProfileHelper
 		return profiles;
 	};
 
-	profilesAllDelete(profileToDelete)
+	profilesAllDelete(profileToDelete: Profile)
 	{
 		this.storageHelper.save
 		(

@@ -8,7 +8,7 @@ class DateTime
 	minutes: number;
 	seconds: number;
 
-	constructor(year, month, day, hours, minutes, seconds)
+	constructor(year: number, month: number, day: number, hours: number, minutes: number, seconds: number)
 	{
 		this.year = year;
 		this.month = month;
@@ -20,7 +20,7 @@ class DateTime
 
 	// static methods
 
-	static fromSystemDate(systemDate)
+	static fromSystemDate(systemDate: Date)
 	{
 		var returnValue = new DateTime
 		(
@@ -42,7 +42,7 @@ class DateTime
 
 	// instance methods
 
-	equals(other)
+	equals(other: DateTime)
 	{
 		var returnValue =
 		(

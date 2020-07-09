@@ -6,7 +6,7 @@ class MapLocated
 
 	box: Box;
 
-	constructor(map, loc)
+	constructor(map: MapOfCells, loc: Disposition)
 	{
 		this.map = map;
 		this.loc = loc;
@@ -21,7 +21,7 @@ class MapLocated
 		return new MapLocated(this.map, this.loc.clone());
 	};
 
-	overwriteWith(other)
+	overwriteWith(other: MapLocated)
 	{
 		this.loc.overwriteWith(other.loc);
 	};

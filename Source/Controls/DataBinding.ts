@@ -2,17 +2,17 @@
 class DataBinding
 {
 	context: any;
-	_get: any;
-	_set: any;
+	_get: (context: any)=>any;
+	_set: (context: any, value: any)=>any;
 
-	constructor(context, get, set)
+	constructor(context: any, get: (context: any)=>any, set: (context: any, value: any)=>any)
 	{
 		this.context = context;
 		this._get = get;
 		this._set = set;
 	}
 
-	contextSet(value)
+	contextSet(value: any)
 	{
 		this.context = value;
 		return this;
@@ -23,7 +23,7 @@ class DataBinding
 		return (this._get == null ? this.context : this._get(this.context) );
 	};
 
-	set(value)
+	set(value: any)
 	{
 		if (this._set == null)
 		{

@@ -3,7 +3,7 @@ class Goal
 {
 	numberOfKeysToUnlock: number;
 
-	constructor(numberOfKeysToUnlock)
+	constructor(numberOfKeysToUnlock: number)
 	{
 		this.numberOfKeysToUnlock = numberOfKeysToUnlock;
 	}

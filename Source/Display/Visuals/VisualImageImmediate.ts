@@ -1,11 +1,11 @@
 
-class VisualImageImmediate
+class VisualImageImmediate implements VisualImage
 {
 	_image: Image2;
 
 	_drawPos: Coords;
 
-	constructor(image)
+	constructor(image: Image2)
 	{
 		this._image = image;
 
@@ -16,7 +16,7 @@ class VisualImageImmediate
 
 	// static methods
 
-	static manyFromImages(images)
+	static manyFromImages(images: Image2[])
 	{
 		var returnValues = [];
 
@@ -32,23 +32,16 @@ class VisualImageImmediate
 
 	// instance methods
 
-	image()
+	image(universe: Universe): Image2
 	{
 		return this._image;
 	};
 
-	// clone
-
-	clone()
-	{
-		return this; // todo
-	};
-
 	// visual
 
-	draw(universe, world, display, entity)
+	draw(universe: Universe, world: World, display: Display, entity: Entity)
 	{
-		var image = this.image();
+		var image = this.image(universe);
 		var imageSize = image.sizeInPixels;
 		var drawPos = this._drawPos.clear().subtract(imageSize).half().add
 		(
@@ -57,4 +50,23 @@ class VisualImageImmediate
 		//display.drawImageScaled(image, drawPos, imageSize);
 		display.drawImage(image, drawPos);
 	};
+
+	// Clonable.
+
+	clone(): Visual
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: Visual): Visual
+	{
+		return this; // todo
+	}
+
+	// Transformable.
+
+	transform(transformToApply: Transform): Transformable
+	{
+		return this; // todo
+	}
 }

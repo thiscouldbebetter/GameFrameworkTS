@@ -1,5 +1,5 @@
 
-class RandomizerLCG
+class RandomizerLCG implements Randomizer
 {
 	// "LCG" = "Linear Congruential Generator"
 
@@ -8,7 +8,7 @@ class RandomizerLCG
 	modulus: number;
 	currentRandom: number;
 
-	constructor(multiplier, addend, modulus, firstRandom)
+	constructor(multiplier: number, addend: number, modulus: number, firstRandom: number)
 	{
 		this.multiplier = multiplier;
 		this.addend = addend;

@@ -1,9 +1,9 @@
 
 class Idleable
 {
-	updateForTimerTick(universe, world, place, player)
+	updateForTimerTick(universe: Universe, world: World, place: Place, entityPlayer: Entity)
 	{
-		var playerLoc = player.locatable().loc;
+		var playerLoc = entityPlayer.locatable().loc;
 		playerLoc.orientation.forwardSet(Coords.Instances().Zeroes);
 	};
 }

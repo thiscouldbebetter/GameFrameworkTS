@@ -1,5 +1,5 @@
 
-class VenueVideo
+class VenueVideo implements Venue
 {
 	videoName: string;
 	venueNext: any;
@@ -9,7 +9,7 @@ class VenueVideo
 	hasVideoBeenStarted: boolean;
 	video: Video;
 
-	constructor(videoName, venueNext)
+	constructor(videoName: string, venueNext: Venue)
 	{
 		this.videoName = videoName;
 		this.venueNext = venueNext;
@@ -24,7 +24,7 @@ class VenueVideo
 
 		this.actionToInputsMappingsByInputName = ArrayHelper.addLookupsMultiple
 		(
-			this.actionToInputsMappings, x => x.inputNames
+			this.actionToInputsMappings, (x: ActionToInputsMapping) => x.inputNames
 		);
 	}
 
@@ -33,12 +33,15 @@ class VenueVideo
 		// do nothing
 	};
 
-	updateForTimerTick(universe)
+	finalize(universe: Universe) {}
+	initialize(universe: Universe) {}
+
+	updateForTimerTick(universe: Universe)
 	{
 		if (this.video == null)
 		{
 			universe.platformHelper.platformableHide(universe.display);
-			this.video = universe.videoHelper.videos[this.videoName];
+			this.video = universe.videoHelper.videosByName[this.videoName];
 			this.video.play(universe);
 		}
 
@@ -47,7 +50,7 @@ class VenueVideo
 			var shouldVideoBeStopped = false;
 
 			var inputHelper = universe.inputHelper;
-			if (inputHelper.isMouseClicked())
+			if (inputHelper.isMouseClicked(null))
 			{
 				inputHelper.isMouseClicked(false);
 				shouldVideoBeStopped = true;
@@ -60,7 +63,7 @@ class VenueVideo
 					var inputPressed = inputsPressed[i];
 					if (inputPressed.isActive)
 					{
-						var actionToInputsMapping = this.actionToInputsMappings[inputPressed.name];
+						var actionToInputsMapping = this.actionToInputsMappingsByInputName[inputPressed.name];
 						if (actionToInputsMapping != null)
 						{
 							inputPressed.isActive = false;

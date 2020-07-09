@@ -5,14 +5,14 @@ class ActionToInputsMapping
 	inputNames: string[];
 	inactivateInputWhenActionPerformed: boolean;
 
-	constructor(actionName, inputNames, inactivateInputWhenActionPerformed)
+	constructor(actionName: string, inputNames: string[], inactivateInputWhenActionPerformed: boolean)
 	{
 		this.actionName = actionName;
 		this.inputNames = inputNames;
 		this.inactivateInputWhenActionPerformed = inactivateInputWhenActionPerformed;
 	}
 
-	action(universe)
+	action(universe: Universe)
 	{
 		return universe.world.defns.defnsByNameByTypeName[Action.name][this.actionName];
 	};
@@ -27,7 +27,7 @@ class ActionToInputsMapping
 		);
 	};
 
-	overwriteWith(other)
+	overwriteWith(other: ActionToInputsMapping)
 	{
 		this.actionName = other.actionName;
 		this.inputNames = other.inputNames.slice();

@@ -5,7 +5,7 @@ class Font
 	sourcePath: string;
 	isLoaded: boolean;
 
-	constructor(name, sourcePath)
+	constructor(name: string, sourcePath: string)
 	{
 		this.name = name;
 		this.sourcePath = sourcePath;

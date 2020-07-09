@@ -1,7 +1,7 @@
 
 class Serializer
 {
-	deserialize(stringToDeserialize)
+	deserialize(stringToDeserialize: string)
 	{
 		var nodeRoot = JSON.parse(stringToDeserialize);
 		nodeRoot.__proto__ = SerializerNode.prototype;
@@ -11,7 +11,7 @@ class Serializer
 		return returnValue;
 	};
 
-	serialize(objectToSerialize, prettyPrint)
+	serialize(objectToSerialize: any, prettyPrint: boolean)
 	{
 		var nodeRoot = new SerializerNode(objectToSerialize);
 
@@ -36,7 +36,7 @@ class SerializerNode
 	o: any;
 	c: any;
 
-	constructor(objectWrapped)
+	constructor(objectWrapped: any)
 	{
 		this.t = null; // objectWrappedTypeName
 		this.id = null; // id
@@ -47,7 +47,7 @@ class SerializerNode
 
 	wrap
 	(
-		objectsAlreadyWrapped, objectIndexToNodeLookup
+		objectsAlreadyWrapped: any, objectIndexToNodeLookup: any
 	)
 	{
 		var objectWrapped = this.o;
@@ -81,7 +81,7 @@ class SerializerNode
 				}
 				else
 				{
-					var children = {};
+					var children: any = {};
 					this.c = children;
 
 					for (var propertyName in objectWrapped)
@@ -169,7 +169,7 @@ class SerializerNode
 		}
 	};
 
-	unwrap(nodesAlreadyProcessed)
+	unwrap(nodesAlreadyProcessed: any)
 	{
 		var isReference = this.r;
 		if (isReference == true)

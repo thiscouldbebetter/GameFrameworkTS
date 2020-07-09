@@ -1,14 +1,14 @@
 
-class VisualAnimation
+class VisualAnimation implements Visual
 {
 	name: string;
-	ticksToHoldFrames: any;
-	frames: any;
+	ticksToHoldFrames: number[];
+	frames: Visual[];
 	isRepeating: boolean;
 
 	ticksToComplete: number;
 
-	constructor(name, ticksToHoldFrames, frames, isRepeating)
+	constructor(name: string, ticksToHoldFrames: number[], frames: Visual[], isRepeating: boolean)
 	{
 		this.name = name;
 		this.ticksToHoldFrames = ticksToHoldFrames;
@@ -23,15 +23,6 @@ class VisualAnimation
 				this.ticksToHoldFrames.push(1);
 			}
 		}
-		else if (isNaN(this.ticksToHoldFrames) == false)
-		{
-			var ticksToHoldEachFrame = this.ticksToHoldFrames;
-			this.ticksToHoldFrames = [];
-			for (var f = 0; f < this.frames.length; f++)
-			{
-				this.ticksToHoldFrames.push(ticksToHoldEachFrame);
-			}
-		}
 
 		this.ticksToComplete = 0;
 		for (var f = 0; f < this.ticksToHoldFrames.length; f++)
@@ -42,19 +33,19 @@ class VisualAnimation
 
 	// visual
 
-	draw(universe, world, display, entity)
+	draw(universe: Universe, world: World, display: Display, entity: Entity)
 	{
 		this.update(universe, world, display, entity);
 	};
 
-	frameCurrent(drawable)
+	frameCurrent(drawable: Drawable)
 	{
 		var frameIndexCurrent = this.frameIndexCurrent(drawable);
 		var frameCurrent = this.frames[frameIndexCurrent];
 		return frameCurrent;
 	};
 
-	frameIndexCurrent(drawable)
+	frameIndexCurrent(drawable: Drawable)
 	{
 		var ticksForFramesSoFar = 0;
 		var ticksToHoldFrames = this.ticksToHoldFrames;
@@ -71,13 +62,13 @@ class VisualAnimation
 		return f;
 	};
 
-	isComplete(drawable)
+	isComplete(drawable: Drawable)
 	{
 		var returnValue = (drawable.ticksSinceStarted >= this.ticksToComplete);
 		return returnValue;
 	};
 
-	update(universe, world, display, entity)
+	update(universe: Universe, world: World, display: Display, entity: Entity)
 	{
 		var drawable = entity.drawable();
 		if (drawable.ticksSinceStarted == null)
@@ -106,4 +97,24 @@ class VisualAnimation
 		var frameCurrent = this.frameCurrent(drawable);
 		frameCurrent.draw(universe, world, display, entity);
 	};
+
+	// Clonable.
+
+	clone()
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: Visual): Visual
+	{
+		return this; // todo
+	}
+
+	// Transformable.
+
+	transform(transformToApply: Transform): Transformable
+	{
+		return this; // todo
+	}
+
 }

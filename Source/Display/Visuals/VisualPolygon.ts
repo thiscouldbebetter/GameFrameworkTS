@@ -1,14 +1,14 @@
 
-class VisualPolygon
+class VisualPolygon implements Visual
 {
 	verticesAsPath: Path;
-	colorFill: any;
-	colorBorder: any;
+	colorFill: string;
+	colorBorder: string;
 
 	verticesAsPathTransformed: Path;
 	transformTranslate: Transform_Translate;
 
-	constructor(verticesAsPath, colorFill, colorBorder)
+	constructor(verticesAsPath: Path, colorFill: string, colorBorder: string)
 	{
 		this.verticesAsPath = verticesAsPath;
 		this.colorFill = colorFill;
@@ -18,7 +18,7 @@ class VisualPolygon
 		this.transformTranslate = new Transform_Translate(new Coords(0, 0, 0));
 	}
 
-	draw(universe, world, display, entity)
+	draw(universe: Universe, world: World, display: Display, entity: Entity)
 	{
 		var drawablePos = entity.locatable().loc.pos;
 		this.transformTranslate.displacement.overwriteWith(drawablePos);
@@ -28,7 +28,7 @@ class VisualPolygon
 			this.verticesAsPath
 		);
 
-		Transform.applyTransformToCoordsMany
+		Transforms.applyTransformToCoordsMany
 		(
 			this.transformTranslate,
 			this.verticesAsPathTransformed.points
@@ -40,4 +40,23 @@ class VisualPolygon
 			this.colorFill, this.colorBorder
 		);
 	};
+
+	// Clonable.
+
+	clone(): Visual
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: Visual): Visual
+	{
+		return this; // todo
+	}
+
+	// Transformable.
+
+	transform(transformToApply: Transform): Transformable
+	{
+		return this; // todo
+	}
 }

@@ -1,14 +1,24 @@
 
-class Transform_RotateRight
+class Transform_RotateRight implements Transform
 {
 	quarterTurnsToRotate: number;
 
-	constructor(quarterTurnsToRotate)
+	constructor(quarterTurnsToRotate: number)
 	{
 		this.quarterTurnsToRotate = quarterTurnsToRotate;
 	}
 
-	transformCoords(coordsToTransform)
+	overwriteWith(other: Transform)
+	{
+		return this; // todo
+	}
+
+	transform(transformable: Transformable): Transformable
+	{
+		return transformable; // todo
+	}
+
+	transformCoords(coordsToTransform: Coords)
 	{
 		for (var i = 0; i < this.quarterTurnsToRotate; i++)
 		{

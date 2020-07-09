@@ -1,26 +1,26 @@
 
-class VenueWorld
+class VenueWorld implements Venue
 {
 	name: string;
 	world: World;
 
-	constructor(world)
+	constructor(world: World)
 	{
 		this.name = "World";
 		this.world = world;
 	}
 
-	draw(universe)
+	draw(universe: Universe)
 	{
 		this.world.draw(universe);
 	};
 
-	finalize(universe)
+	finalize(universe: Universe)
 	{
 		universe.soundHelper.soundForMusic.pause(universe);
 	};
 
-	initialize(universe)
+	initialize(universe: Universe)
 	{
 		universe.world = this.world;
 		this.world.initialize(universe);
@@ -29,7 +29,7 @@ class VenueWorld
 		soundHelper.soundWithNamePlayAsMusic(universe, "Music");
 	};
 
-	updateForTimerTick(universe)
+	updateForTimerTick(universe: Universe)
 	{
 		this.world.updateForTimerTick(universe);
 		this.draw(universe);

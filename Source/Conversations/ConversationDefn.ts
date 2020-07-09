@@ -11,7 +11,7 @@ class ConversationDefn
 	talkNodes: TalkNode[];
 	talkNodesByName: any;
 
-	constructor(name, visualPortrait, contentTextStringName, talkNodeDefns, talkNodes)
+	constructor(name: string, visualPortrait: Visual, contentTextStringName: string, talkNodeDefns: TalkNodeDefn[], talkNodes: TalkNode[])
 	{
 		this.name = name;
 		this.visualPortrait = visualPortrait;
@@ -22,12 +22,12 @@ class ConversationDefn
 		this.talkNodesByName = ArrayHelper.addLookupsByName(this.talkNodes);
 	}
 
-	talkNodeByName(nameOfTalkNodeToGet)
+	talkNodeByName(nameOfTalkNodeToGet: string)
 	{
 		return this.talkNodesByName[nameOfTalkNodeToGet];
 	};
 
-	talkNodesByNames(namesOfTalkNodesToGet)
+	talkNodesByNames(namesOfTalkNodesToGet: string[])
 	{
 		var returnNodes = [];
 
@@ -41,13 +41,13 @@ class ConversationDefn
 		return returnNodes;
 	};
 
-	expandFromContentTextString(contentTextString)
+	expandFromContentTextString(contentTextString: TextString)
 	{
 		var contentText = contentTextString.value;
 		var contentTextAsLines = contentText.split("\n");
-		var tagToTextLinesLookup = {};
-		var tagCurrent = null;
-		var linesForTagCurrent;
+		var tagToTextLinesLookup = new Map<string,string[]>([]);
+		var tagCurrent: string = null;
+		var linesForTagCurrent: string[];
 		for (var i = 0; i < contentTextAsLines.length; i++)
 		{
 			var contentLine = contentTextAsLines[i];
@@ -55,7 +55,7 @@ class ConversationDefn
 			{
 				if (tagCurrent != null)
 				{
-					tagToTextLinesLookup[tagCurrent] = linesForTagCurrent;
+					tagToTextLinesLookup.set(tagCurrent, linesForTagCurrent);
 				}
 				tagCurrent = contentLine.split("\t")[0];
 				linesForTagCurrent = [];
@@ -68,7 +68,7 @@ class ConversationDefn
 				}
 			}
 		}
-		tagToTextLinesLookup[tagCurrent] = linesForTagCurrent;
+		tagToTextLinesLookup.set(tagCurrent, linesForTagCurrent);
 
 		var talkNodeDefns = TalkNodeDefn.Instances()._AllByName;
 		var talkNodeDefnNamesToExpand =
@@ -92,7 +92,7 @@ class ConversationDefn
 			else
 			{
 				var tag = talkNodeToExpand.text;
-				var textLinesForTag = tagToTextLinesLookup[tag];
+				var textLinesForTag = tagToTextLinesLookup.get(tag);
 				for (var j = 0; j < textLinesForTag.length; j++)
 				{
 					var textLine = textLinesForTag[j];
@@ -115,7 +115,7 @@ class ConversationDefn
 
 	// serialization
 
-	static deserialize(conversationDefnAsJSON)
+	static deserialize(conversationDefnAsJSON: string)
 	{
 		var conversationDefn = JSON.parse(conversationDefnAsJSON);
 

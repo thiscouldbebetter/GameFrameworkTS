@@ -1,7 +1,8 @@
 
-class Display3D
+class Display3D implements Display
 {
 	sizeInPixels: Coords;
+	sizesAvailable: Coords[];
 	fontName: string;
 	fontHeightInPixels: number;
 	colorFore: string;
@@ -14,6 +15,7 @@ class Display3D
 	matrixOrient: any;
 	matrixPerspective: any;
 	matrixTranslate: any;
+	sizeInPixelsHalf: Coords;
 	tempCoords: Coords;
 	tempMatrix0: any;
 	tempMatrix1: any;
@@ -24,9 +26,10 @@ class Display3D
 	_scaleFactor: Coords;
 	_display2DOverlay: Display;
 
-	constructor(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorBack)
+	constructor(sizeInPixels: Coords, fontName: string, fontHeightInPixels: number, colorFore: string, colorBack: string)
 	{
 		this.sizeInPixels = sizeInPixels;
+		this.sizesAvailable = [ this.sizeInPixels ];
 		this.fontName = fontName;
 		this.fontHeightInPixels = fontHeightInPixels;
 		this.colorFore = colorFore;
@@ -34,9 +37,9 @@ class Display3D
 
 		this._sizeDefault = sizeInPixels;
 		this._scaleFactor = new Coords(1, 1, 1);
-		this._display2DOverlay = new Display
+		this._display2DOverlay = new Display2D
 		(
-			[sizeInPixels], fontName, fontHeightInPixels, colorFore, colorBack, null
+			this.sizesAvailable, fontName, fontHeightInPixels, colorFore, colorBack, null
 		);
 	}
 
@@ -46,7 +49,7 @@ class Display3D
 
 	// methods
 
-	cameraSet(camera)
+	cameraSet(camera: Camera)
 	{
 		var cameraLoc = camera.loc;
 
@@ -91,17 +94,39 @@ class Display3D
 		this._display2DOverlay.clear();
 	};
 
-	drawMesh(mesh)
+	displayToUse(): Display
+	{
+		return this;
+	};
+
+	drawCrosshairs(center: Coords, radius: number, color: string)
+	{
+		this._display2DOverlay.drawCrosshairs(center, radius, color);
+	}
+
+	drawEllipse
+	(
+		center: Coords, semimajorAxis: number, semiminorAxis: number,
+		rotationInTurns: number, colorFill: string, colorBorder: string
+	)
+	{
+		this._display2DOverlay.drawEllipse
+		(
+			center, semimajorAxis, semiminorAxis, rotationInTurns, colorFill, colorBorder
+		);
+	}
+
+	drawMesh(mesh: MeshTextured)
 	{
 		var webGLContext = this.webGLContext;
 		var gl = webGLContext.gl;
 
 		var shaderProgram = webGLContext.shaderProgram;
 
-		var vertexPositionsAsFloatArray = [];
-		var vertexColorsAsFloatArray = [];
-		var vertexNormalsAsFloatArray = [];
-		var vertexTextureUVsAsFloatArray = [];
+		var vertexPositionsAsFloatArray: number[] = [];
+		var vertexColorsAsFloatArray: number[] = [];
+		var vertexNormalsAsFloatArray: number[] = [];
+		var vertexTextureUVsAsFloatArray: number[] = [];
 
 		var numberOfTrianglesSoFar = 0;
 		var materials = mesh.materials;
@@ -122,9 +147,9 @@ class Display3D
 				var faceMaterial = face.material;
 				var faceGeometry = face.geometry;
 				var faceNormal = faceGeometry.plane().normal;
-				var vertexNormalsForFaceVertices = mesh.vertexNormalsForFaceVertices;
+				var vertexNormalsForFaceVertices = null; // todo - mesh.vertexNormalsForFaceVertices;
 
-				var vertexIndicesForTriangles =
+				var vertexIndicesForTriangles: number[][] =
 				[
 					[0, 1, 2]
 				];
@@ -158,12 +183,15 @@ class Display3D
 							vertexColor.componentsRGBA
 						);
 
-						var vertexNormal =
+						var vertexNormal = faceNormal;
+						/*
+						// todo
 						(
 							vertexNormalsForFaceVertices == null
 							? faceNormal
 							: vertexNormalsForFaceVertices[f][vertexIndex]
 						);
+						*/
 
 						vertexNormalsAsFloatArray = vertexNormalsAsFloatArray.concat
 						(
@@ -291,7 +319,7 @@ class Display3D
 		} // end for each material
 	};
 
-	drawMeshWithOrientation(mesh, meshOrientation)
+	drawMeshWithOrientation(mesh: MeshTextured, meshOrientation: Orientation)
 	{
 		var matrixOrient = this.matrixOrient;
 
@@ -327,7 +355,12 @@ class Display3D
 		this.drawMesh(mesh);
 	};
 
-	initialize(universe)
+	drawPixel(pos: Coords, color: string): void
+	{
+		this._display2DOverlay.drawPixel(pos, color);
+	}
+
+	initialize(universe: Universe)
 	{
 		this._display2DOverlay.initialize(universe);
 
@@ -361,7 +394,7 @@ class Display3D
 		this.tempMatrix1 = Matrix.buildZeroes();
 	};
 
-	lightingSet(todo)
+	lightingSet(todo: any)
 	{
 		var webGLContext = this.webGLContext;
 		var gl = webGLContext.gl;
@@ -392,64 +425,66 @@ class Display3D
 
 	drawArc
 	(
-		center, radiusInner, radiusOuter, angleStartInTurns, angleStopInTurns, colorFill, colorBorder
+		center: Coords, radiusInner: number, radiusOuter: number,
+		angleStartInTurns: number, angleStopInTurns: number, colorFill: string,
+		colorBorder: string
 	)
 	{
 		this._display2DOverlay.drawArc(center, radiusInner, radiusOuter, angleStartInTurns, angleStopInTurns, colorFill, colorBorder);
 	};
 
-	drawBackground(colorBack, colorBorder)
+	drawBackground(colorBack: string, colorBorder: string)
 	{
 		this._display2DOverlay.drawBackground(colorBack, colorBorder);
 	};
 
-	drawCircle(center, radius, colorFill, colorBorder)
+	drawCircle(center: Coords, radius: number, colorFill: string, colorBorder: string)
 	{
 		this._display2DOverlay.drawCircle(center, radius, colorFill, colorBorder);
 	};
 
-	drawCircleWithGradient(center, radius, gradientFill, colorBorder)
+	drawCircleWithGradient(center: Coords, radius: number, gradientFill: Gradient, colorBorder: string)
 	{
 		this._display2DOverlay.drawCircleWithGradient(center, radius, gradientFill, colorBorder);
 	};
 
-	drawImage(imageToDraw, pos)
+	drawImage(imageToDraw: Image2, pos: Coords)
 	{
 		this._display2DOverlay.drawImage(imageToDraw, pos);
 	};
 
-	drawImagePartial(imageToDraw, pos, boxToShow)
+	drawImagePartial(imageToDraw: Image2, pos: Coords, boxToShow: Box)
 	{
 		this._display2DOverlay.drawImagePartial(imageToDraw, pos, boxToShow);
 	};
 
-	drawImageScaled(imageToDraw, pos, size)
+	drawImageScaled(imageToDraw: Image2, pos: Coords, size: Coords)
 	{
 		this._display2DOverlay.drawImageScaled(imageToDraw, pos, size);
 	};
 
-	drawLine(fromPos, toPos, color, lineThickness)
+	drawLine(fromPos: Coords, toPos: Coords, color: string, lineThickness: number)
 	{
 		this._display2DOverlay.drawLine(fromPos, toPos, color, lineThickness);
 	};
 
-	drawPath(vertices, color, lineThickness, isClosed)
+	drawPath(vertices: Coords[], color: string, lineThickness: number, isClosed: boolean)
 	{
 		this._display2DOverlay.drawPath(vertices, color, lineThickness, isClosed);
 	};
 
-	drawPolygon(vertices, colorFill, colorBorder)
+	drawPolygon(vertices: Coords[], colorFill: string, colorBorder: string)
 	{
 		this._display2DOverlay.drawPolygon(vertices, colorFill, colorBorder);
 	};
 
 	drawRectangle
 	(
-		pos,
-		size,
-		colorFill,
-		colorBorder,
-		areColorsReversed
+		pos: Coords,
+		size : Coords,
+		colorFill: string,
+		colorBorder: string,
+		areColorsReversed: boolean
 	)
 	{
 		this._display2DOverlay.drawRectangle
@@ -458,16 +493,24 @@ class Display3D
 		);
 	};
 
+	drawRectangleCentered
+	(
+		pos: Coords, size: Coords, colorFill: string, colorBorder: string
+	)
+	{
+		this._display2DOverlay.drawRectangleCentered(pos, size, colorFill, colorBorder);
+	}
+
 	drawText
 	(
-		text,
-		fontHeightInPixels,
-		pos,
-		colorFill,
-		colorOutline,
-		areColorsReversed,
-		isCentered,
-		widthMaxInPixels
+		text: string,
+		fontHeightInPixels: number,
+		pos: Coords,
+		colorFill: string,
+		colorOutline: string,
+		areColorsReversed: boolean,
+		isCentered: boolean,
+		widthMaxInPixels: number
 	)
 	{
 		this._display2DOverlay.drawText
@@ -483,25 +526,61 @@ class Display3D
 		);
 	};
 
-	fontSet(fontName, fontHeightInPixels)
+	drawWedge
+	(
+		center: Coords, radius: number, angleStartInTurns: number,
+		angleStopInTurns: number, colorFill: string, colorBorder: string
+	)
+	{
+		this._display2DOverlay.drawWedge
+		(
+			center, radius, angleStartInTurns, angleStopInTurns, colorFill, colorBorder
+		);
+	}
+
+	fontSet(fontName: string, fontHeightInPixels: number)
 	{
 		this._display2DOverlay.fontSet(fontName, fontHeightInPixels);
 	};
+
+	hide() {}
+
+	rotateTurnsAroundCenter(turnsToRotate: number, centerOfRotation: Coords)
+	{
+		this._display2DOverlay.rotateTurnsAroundCenter(turnsToRotate, centerOfRotation);
+	}
 
 	scaleFactor()
 	{
 		return this._scaleFactor;
 	};
 
+	show(): void {}
+
 	sizeDefault()
 	{
 		return this._sizeDefault;
 	};
 
-	textWidthForFontHeight(textToMeasure, fontHeightInPixels)
+	stateRestore()
+	{
+		this._display2DOverlay.stateRestore();
+	}
+
+	stateSave()
+	{
+		this._display2DOverlay.stateSave();
+	}
+
+	textWidthForFontHeight(textToMeasure: string, fontHeightInPixels: number): number
 	{
 		return this._display2DOverlay.textWidthForFontHeight(textToMeasure, fontHeightInPixels);
 	};
+
+	toImage(): Image2
+	{
+		return null;
+	}
 
 	// platformable
 

@@ -1,14 +1,14 @@
 
-class VenueFader
+class VenueFader implements Venue
 {
-	venuesToFadeFromAndTo: any;
+	venuesToFadeFromAndTo: Venue[];
 	backgroundColor: Color;
 	millisecondsPerFade: number;
 
 	timeFadeStarted: Date;
 	venueIndexCurrent: number;
 
-	constructor(venueToFadeTo, venueToFadeFrom, backgroundColor, millisecondsPerFade)
+	constructor(venueToFadeTo: Venue, venueToFadeFrom: Venue, backgroundColor: Color, millisecondsPerFade: number)
 	{
 		this.venuesToFadeFromAndTo =
 		[
@@ -31,16 +31,15 @@ class VenueFader
 			(backgroundColor == null ? Color.Instances().Black : backgroundColor);
 	}
 
-	initialize(universe)
+	finalize(universe: Universe) {}
+
+	initialize(universe: Universe)
 	{
 		var venueToFadeTo = this.venueToFadeTo();
-		if (venueToFadeTo.initialize != null)
-		{
-			venueToFadeTo.initialize(universe);
-		}
+		venueToFadeTo.initialize(universe);
 	};
 
-	updateForTimerTick(universe)
+	updateForTimerTick(universe: Universe)
 	{
 		this.draw(universe);
 
@@ -96,7 +95,8 @@ class VenueFader
 		(
 			new Coords(0, 0, 0),
 			display.sizeDefault(), // Scaled automatically.
-			fadeColor.systemColor()
+			fadeColor.systemColor(),
+			null, null
 		);
 	};
 
@@ -110,7 +110,7 @@ class VenueFader
 		return this.venuesToFadeFromAndTo[this.venueIndexCurrent];
 	};
 
-	draw(universe)
+	draw(universe: Universe)
 	{
 		var venueCurrent = this.venueCurrent();
 		if (venueCurrent != null)

@@ -8,7 +8,7 @@ class Stopwatch
 	timeStarted: Date;
 	timeStopped: Date;
 
-	constructor(name)
+	constructor(name: string)
 	{
 		this.name = name;
 		this.timeElapsedLastRun = 0;

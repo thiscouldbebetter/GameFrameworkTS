@@ -3,7 +3,7 @@ class Armor
 {
 	damageMultiplier: number;
 
-	constructor(damageMultiplier)
+	constructor(damageMultiplier: number)
 	{
 		this.damageMultiplier = damageMultiplier;
 	}

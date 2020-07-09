@@ -1,5 +1,5 @@
 
-class VenueMessage
+class VenueMessage implements Venue
 {
 	messageToShow: string;
 	acknowledge: any;
@@ -9,7 +9,11 @@ class VenueMessage
 
 	_venueInner: any;
 
-	constructor(messageToShow, acknowledge, venuePrev, sizeInPixels, showMessageOnly)
+	constructor
+	(
+		messageToShow: string, acknowledge: any, venuePrev: Venue,
+		sizeInPixels: Coords, showMessageOnly: boolean
+	)
 	{
 		this.messageToShow = messageToShow;
 		this.acknowledge = acknowledge;
@@ -20,22 +24,26 @@ class VenueMessage
 
 	// instance methods
 
-	draw(universe)
+	draw(universe: Universe)
 	{
 		this.venueInner(universe).draw(universe);
 	};
 
-	sizeInPixels(universe)
-	{
-		return (this._sizeInPixels == null ? universe.display.sizeInPixels : this._sizeInPixels);
-	};
+	finalize(universe: Universe) {}
 
-	updateForTimerTick(universe)
+	initialize(universe: Universe) {}
+
+	updateForTimerTick(universe: Universe)
 	{
 		this.venueInner(universe).updateForTimerTick(universe);
 	};
 
-	venueInner(universe)
+	sizeInPixels(universe: Universe)
+	{
+		return (this._sizeInPixels == null ? universe.display.sizeInPixels : this._sizeInPixels);
+	};
+
+	venueInner(universe: Universe)
 	{
 		if (this._venueInner == null)
 		{

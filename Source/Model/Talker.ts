@@ -3,7 +3,7 @@ class Talker
 {
 	conversationDefnName: string;
 
-	constructor(conversationDefnName)
+	constructor(conversationDefnName: string)
 	{
 		this.conversationDefnName = conversationDefnName;
 	}

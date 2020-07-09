@@ -4,7 +4,7 @@ class Defns
 	defnArraysByTypeName: any;
 	defnsByNameByTypeName: any;
 
-	constructor(defnArrays)
+	constructor(defnArrays: any)
 	{
 		this.defnArraysByTypeName = {};
 		this.defnsByNameByTypeName = {};

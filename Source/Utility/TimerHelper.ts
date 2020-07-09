@@ -5,7 +5,7 @@ class TimerHelper
 	millisecondsPerTick: number;
 	timer: any;
 
-	constructor(ticksPerSecond)
+	constructor(ticksPerSecond: number)
 	{
 		this.ticksPerSecond = ticksPerSecond;
 
@@ -16,7 +16,7 @@ class TimerHelper
 		);
 	}
 
-	initialize(handleEventTimerTick)
+	initialize(handleEventTimerTick: any)
 	{
 		this.timer = setInterval
 		(

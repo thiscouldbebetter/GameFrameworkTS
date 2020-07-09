@@ -1,35 +1,37 @@
 
-class VisualInvisible
+class VisualInvisible implements Visual
 {
-	child: any;
+	private child: Visual;
 
-	constructor(child)
+	constructor(child: Visual)
 	{
 		this.child = child;
 	}
 
 	// Cloneable.
 
-	clone()
+	clone(): Visual
 	{
 		return new VisualInvisible(this.child.clone());
 	};
 
-	overwriteWith(other)
+	overwriteWith(other: Visual): Visual
 	{
-		this.child.overwriteWith(other.child);
+		var otherAsVisualInvisible = other as VisualInvisible;
+		this.child.overwriteWith(otherAsVisualInvisible.child);
+		return this;
 	};
 
 	// Transformable.
 
-	transform(transformToApply)
+	transform(transformToApply: Transform)
 	{
 		return transformToApply.transform(this.child);
 	};
 
 	// Visual.
 
-	draw(universe, world, display, entity)
+	draw(universe: Universe, world: World, display: Display, entity: Entity)
 	{
 		// Do nothing.
 	};

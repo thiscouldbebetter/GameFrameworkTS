@@ -1,14 +1,14 @@
 
-class Transform_Translate
+class Transform_Translate implements Transform
 {
 	displacement: Coords;
 
-	constructor(displacement)
+	constructor(displacement: Coords)
 	{
 		this.displacement = displacement;
 	}
 
-	displacementSet(value)
+	displacementSet(value: Coords)
 	{
 		this.displacement.overwriteWith(value);
 		return this;
@@ -16,12 +16,17 @@ class Transform_Translate
 
 	// transform
 
-	transform(transformable)
+	overwriteWith(other: Transform)
+	{
+		return this; // todo
+	}
+
+	transform(transformable: Transformable): Transformable
 	{
 		return transformable.transform(this);
 	};
 
-	transformCoords(coordsToTransform)
+	transformCoords(coordsToTransform: Coords)
 	{
 		return coordsToTransform.add(this.displacement);
 	};

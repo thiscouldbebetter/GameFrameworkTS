@@ -1,19 +1,22 @@
 
-class ControlContainer
+class ControlContainer implements Control
 {
 	name: string;
 	pos: Coords;
 	size: Coords;
-	children: any;
+	children: Control[];
 	childrenByName: any;
-	actions: any;
+	actions: Action[];
 	actionsByName: any;
-	_actionToInputsMappings: any;
+	_actionToInputsMappings: ActionToInputsMapping[];
 
-	childrenContainingPos: any;
-	childrenContainingPosPrev: any;
+	childrenContainingPos: Control[];
+	childrenContainingPosPrev: Control[];
 	indexOfChildWithFocus: number;
 	styleName: string;
+
+	fontHeightInPixels: number;
+	parent: Control;
 
 	_childMax: Coords;
 	_drawPos: Coords;
@@ -22,7 +25,7 @@ class ControlContainer
 	_mouseMovePos: Coords;
 	_posToCheck: Coords;
 
-	constructor(name, pos, size, children, actions, actionToInputsMappings)
+	constructor(name: string, pos: Coords, size: Coords, children: any, actions: Action[], actionToInputsMappings: ActionToInputsMapping[])
 	{
 		this.name = name;
 		this.pos = pos;
@@ -59,14 +62,14 @@ class ControlContainer
 		return true;
 	};
 
-	style(universe)
+	style(universe: Universe)
 	{
 		return universe.controlBuilder.stylesByName[this.styleName == null ? "Default" : this.styleName];
 	};
 
 	// actions
 
-	actionHandle(actionNameToHandle, universe)
+	actionHandle(actionNameToHandle: string, universe: Universe)
 	{
 		var wasActionHandled = false;
 
@@ -91,7 +94,7 @@ class ControlContainer
 					childWithFocus.focusGain();
 				}
 			}
-			else if (childWithFocus.childWithFocus != null)
+			else if (childWithFocus.childWithFocus() != null)
 			{
 				childWithFocus.actionHandle(actionNameToHandle, universe);
 				if (childWithFocus.childWithFocus() == null)
@@ -140,7 +143,7 @@ class ControlContainer
 		return (this.indexOfChildWithFocus == null ? null : this.children[this.indexOfChildWithFocus] );
 	};
 
-	childWithFocusNextInDirection(direction)
+	childWithFocusNextInDirection(direction: number)
 	{
 		if (this.indexOfChildWithFocus == null)
 		{
@@ -153,7 +156,7 @@ class ControlContainer
 				if
 				(
 					child.focusGain != null
-					&& ( child.isEnabled == null || child.isEnabled() )
+					&& ( child.isEnabled() )
 				)
 				{
 					this.indexOfChildWithFocus = i;
@@ -203,9 +206,7 @@ class ControlContainer
 
 	childrenAtPosAddToList
 	(
-		posToCheck,
-		listToAddTo,
-		addFirstChildOnly
+		posToCheck: Coords, listToAddTo: Control[], addFirstChildOnly: boolean
 	)
 	{
 		posToCheck = this._posToCheck.overwriteWith(posToCheck).clearZ();
@@ -253,7 +254,7 @@ class ControlContainer
 		}
 	};
 
-	mouseClick(mouseClickPos)
+	mouseClick(mouseClickPos: Coords)
 	{
 		mouseClickPos = this._mouseClickPos.overwriteWith
 		(
@@ -287,7 +288,17 @@ class ControlContainer
 		return wasClickHandled;
 	};
 
-	mouseMove(mouseMovePos)
+	mouseEnter()
+	{
+		// Do nothing.
+	};
+
+	mouseExit()
+	{
+		// Do nothing.
+	};
+
+	mouseMove(mouseMovePos: Coords)
 	{
 		var temp = this.childrenContainingPosPrev;
 		this.childrenContainingPosPrev = this.childrenContainingPos;
@@ -332,7 +343,7 @@ class ControlContainer
 		}
 	};
 
-	scalePosAndSize(scaleFactor)
+	scalePosAndSize(scaleFactor: Coords)
 	{
 		this.pos.multiply(scaleFactor);
 		this.size.multiply(scaleFactor);
@@ -358,7 +369,7 @@ class ControlContainer
 		return this;
 	};
 
-	shiftChildPositions(displacement)
+	shiftChildPositions(displacement: Coords)
 	{
 		for (var i = 0; i < this.children.length; i++)
 		{
@@ -374,7 +385,7 @@ class ControlContainer
 
 	// drawable
 
-	draw(universe, display, drawLoc)
+	draw(universe: Universe, display: Display, drawLoc: Disposition)
 	{
 		drawLoc = this._drawLoc.overwriteWith(drawLoc);
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
@@ -383,7 +394,7 @@ class ControlContainer
 		display.drawRectangle
 		(
 			drawPos, this.size,
-			style.colorBackground, style.colorBorder
+			style.colorBackground, style.colorBorder, null
 		);
 
 		var children = this.children;

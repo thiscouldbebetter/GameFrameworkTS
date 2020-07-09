@@ -1,12 +1,12 @@
 class ArrayHelper
 {
-	static add(array, element)
+	static add(array: any, element: any)
 	{
 		array.push(element);
 		return array;
 	};
 
-	static addMany(array, elements)
+	static addMany(array: any, elements: any)
 	{
 		for (var i = 0; i < elements.length; i++)
 		{
@@ -16,9 +16,9 @@ class ArrayHelper
 		return array;
 	};
 
-	static addLookups(array, getKeyForElement)
+	static addLookups(array: any, getKeyForElement: any)
 	{
-		var returnLookup = {};
+		var returnLookup: any = {};
 		for (var i = 0; i < array.length; i++)
 		{
 			var element = array[i];
@@ -28,14 +28,14 @@ class ArrayHelper
 		return returnLookup;
 	};
 
-	static addLookupsByName(array)
+	static addLookupsByName(array: any)
 	{
-		return ArrayHelper.addLookups(array, x => x.name);
+		return ArrayHelper.addLookups(array, (x:any) => x.name);
 	};
 
-	static addLookupsMultiple(array, getKeysForElement)
+	static addLookupsMultiple(array: any, getKeysForElement: any)
 	{
-		var returnLookup = {};
+		var returnLookup: any = {};
 		for (var i = 0; i < array.length; i++)
 		{
 			var element = array[i];
@@ -49,7 +49,7 @@ class ArrayHelper
 		return returnLookup;
 	};
 
-	static append(array, other)
+	static append(array: any, other: any)
 	{
 		for (var i = 0; i < other.length; i++)
 		{
@@ -59,31 +59,13 @@ class ArrayHelper
 		return array;
 	};
 
-	static clear(array)
+	static clear(array: any)
 	{
 		array.length = 0;
 		return array;
 	};
 
-	static clearLookups(array)
-	{
-		var arrayWithNoLookups = [];
-		for (var fieldName in array)
-		{
-			var shouldDelete =
-				isNaN(parseFloat(fieldName))
-				&& (arrayWithNoLookups[fieldName] == null)
-				&& (arrayWithNoLookups.hasOwnProperty(fieldName) == false);
-
-			if (shouldDelete)
-			{
-				delete array[fieldName];
-			}
-		}
-		return array;
-	};
-
-	static clone(array)
+	static clone(array: any)
 	{
 		var returnValue = [];
 
@@ -97,9 +79,9 @@ class ArrayHelper
 		return returnValue;
 	};
 
-	static concatenateAll(arrays)
+	static concatenateAll(arrays: any)
 	{
-		var childrenConcatenated = [];
+		var childrenConcatenated: any = [];
 
 		for (var i = 0; i < arrays.length; i++)
 		{
@@ -110,12 +92,12 @@ class ArrayHelper
 		return childrenConcatenated;
 	};
 
-	static contains(array, elementToFind)
+	static contains(array: any, elementToFind: any)
 	{
 		return (array.indexOf(elementToFind) >= 0);
 	};
 
-	static equals(array, other)
+	static equals(array: any, other: any)
 	{
 		var areEqualSoFar;
 
@@ -138,7 +120,7 @@ class ArrayHelper
 		return areEqualSoFar;
 	};
 
-	static insertElementAfterOther(array, elementToInsert, other)
+	static insertElementAfterOther(array: any, elementToInsert: any, other: any)
 	{
 		var index = array.indexOf(other);
 		if (index >= 0)
@@ -152,13 +134,13 @@ class ArrayHelper
 		return array;
 	};
 
-	static insertElementAt(array, element, index)
+	static insertElementAt(array: any, element: any, index: number)
 	{
 		array.splice(index, 0, element);
 		return array;
 	};
 
-	static overwriteWith(array, other)
+	static overwriteWith(array: any, other: any)
 	{
 		for (var i = 0; i < array.length; i++)
 		{
@@ -177,7 +159,7 @@ class ArrayHelper
 		return array;
 	};
 
-	static prepend(array, other)
+	static prepend(array: any, other: any)
 	{
 		for (var i = 0; i < other.length; i++)
 		{
@@ -187,12 +169,12 @@ class ArrayHelper
 		return array;
 	};
 
-	static random(array, randomizer)
+	static random(array: any, randomizer: Randomizer)
 	{
 		return array[ Math.floor(randomizer.getNextRandom() * array.length) ];
 	};
 
-	static remove(array, elementToRemove)
+	static remove(array: any, elementToRemove: any)
 	{
 		var indexToRemoveAt = array.indexOf(elementToRemove);
 		if (indexToRemoveAt >= 0)
@@ -202,7 +184,7 @@ class ArrayHelper
 		return array;
 	};
 
-	static removeAt(array, index)
+	static removeAt(array: any, index: number)
 	{
 		array.splice(index, 1);
 		return array;

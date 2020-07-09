@@ -8,7 +8,7 @@ class Image2
 	sizeInPixels: Coords;
 	systemImage: any;
 
-	constructor(name, sourcePath)
+	constructor(name: string, sourcePath: string)
 	{
 		this.name = name;
 		this.sourcePath = sourcePath;
@@ -19,7 +19,7 @@ class Image2
 
 	// static methods
 
-	static fromSystemImage(name, systemImage)
+	static fromSystemImage(name: string, systemImage: any)
 	{
 		var returnValue = new Image2
 		(

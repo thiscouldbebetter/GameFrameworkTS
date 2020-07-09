@@ -1,12 +1,14 @@
 
-class ControlVisual
+class ControlVisual implements Control
 {
-	name: Coords;
+	name: string;
 	pos: Coords;
 	size: Coords;
 	visual: any;
 	colorBackground: string;
 
+	fontHeightInPixels: number;
+	parent: Control;
 	styleName: string;
 
 	_drawPos: Coords;
@@ -14,7 +16,7 @@ class ControlVisual
 	_locatableEntity: Entity;
 	_sizeHalf: Coords;
 
-	constructor(name, pos, size, visual, colorBackground)
+	constructor(name: string, pos: Coords, size: Coords, visual: Visual, colorBackground: string)
 	{
 		this.name = name;
 		this.pos = pos;
@@ -36,14 +38,56 @@ class ControlVisual
 		this._sizeHalf = new Coords(0, 0, 0);
 	}
 
-	style(universe)
+	style(universe: Universe)
 	{
 		return universe.controlBuilder.stylesByName[this.styleName == null ? "Default" : this.styleName];
 	};
 
+	actionHandle(actionName: string, universe: Universe): boolean
+	{
+		return false;
+	}
+
+	actionToInputsMappings(): ActionToInputsMapping[]
+	{
+		return null;
+	}
+
+	childWithFocus(): Control
+	{
+		return null;
+	}
+
+	focusGain() {}
+	focusLose() {}
+
+	isEnabled()
+	{
+		return true;
+	}
+
+	mouseClick(x: Coords): boolean
+	{
+		return false;
+	}
+
+	mouseEnter() {}
+
+	mouseExit() {}
+
+	mouseMove(x: Coords) {}
+
+	scalePosAndSize(scaleFactors: Coords)
+	{
+		this.pos.multiply(scaleFactors);
+		this.size.multiply(scaleFactors);
+		this._sizeHalf.multiply(scaleFactors);
+		return this;
+	}
+
 	// drawable
 
-	draw(universe, display, drawLoc)
+	draw(universe: Universe, display: Display, drawLoc: Disposition)
 	{
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 		var style = this.style(universe);
@@ -52,7 +96,7 @@ class ControlVisual
 		display.drawRectangle
 		(
 			drawPos, this.size,
-			colorFill, style.colorBorder
+			colorFill, style.colorBorder, null
 		);
 
 		var locatableEntity = this._locatableEntity;

@@ -1,10 +1,10 @@
 
-class Transform_Animate
+class Transform_Animate implements Transform
 {
-	animationDefnGroup: any;
-	animatable: any;
+	animationDefnGroup: AnimationDefnGroup;
+	animatable: Animatable;
 
-	constructor(animationDefnGroup)
+	constructor(animationDefnGroup: AnimationDefnGroup)
 	{
 		this.animationDefnGroup = animationDefnGroup;
 		this.animatable = new Animatable(); // hack
@@ -16,7 +16,7 @@ class Transform_Animate
 
 		if (this.animatable.animationDefnNameCurrent != null)
 		{
-			var animationDefns = this.animationDefnGroup.animationDefns;
+			var animationDefns = this.animationDefnGroup.animationDefnsByName;
 			returnValue = animationDefns[this.animatable.animationDefnNameCurrent];
 		}
 
@@ -62,7 +62,12 @@ class Transform_Animate
 		return returnValue;
 	};
 
-	transform(transformable)
+	overwriteWith(other: Transform): Transform
+	{
+		return this; // todo
+	}
+
+	transform(transformable: Transformable): Transformable
 	{
 		if (this.animatable.animationDefnNameCurrent != null)
 		{
@@ -76,5 +81,12 @@ class Transform_Animate
 				transformToApply.transform(transformable);
 			}
 		}
+
+		return transformable;
 	};
+
+	transformCoords(coordsToTransform: Coords): Coords
+	{
+		return coordsToTransform;
+	}
 }

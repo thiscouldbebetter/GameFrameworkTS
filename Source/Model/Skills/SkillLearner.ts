@@ -7,7 +7,7 @@ class SkillLearner
 
 	skillSelectedName: string;
 
-	constructor(skillBeingLearnedName, learningAccumulated, skillsKnownNames)
+	constructor(skillBeingLearnedName: string, learningAccumulated: number, skillsKnownNames: string[])
 	{
 		this.skillBeingLearnedName = skillBeingLearnedName;
 		this.learningAccumulated = learningAccumulated || 0;
@@ -24,7 +24,7 @@ class SkillLearner
 		return (this.skillBeingLearnedName != null);
 	};
 
-	skillCheapestAvailable(skillsAll)
+	skillCheapestAvailable(skillsAll: any)
 	{
 		var returnValue = null;
 
@@ -40,7 +40,7 @@ class SkillLearner
 		return skillCheapest;
 	};
 
-	learningIncrement(skillsAll, amountToIncrement)
+	learningIncrement(skillsAll: any, amountToIncrement: number)
 	{
 		var message = null;
 
@@ -77,12 +77,12 @@ class SkillLearner
 		return message;
 	};
 
-	learningAccumulatedOverRequired(skillsAll)
+	learningAccumulatedOverRequired(skillsAll: any)
 	{
 		return this.learningAccumulated + "/" + this.learningRequired(skillsAll);
 	};
 
-	learningRequired(skillsAllByName)
+	learningRequired(skillsAllByName: any)
 	{
 		var skillBeingLearned = this.skillBeingLearned(skillsAllByName);
 		var returnValue =
@@ -94,12 +94,12 @@ class SkillLearner
 		return returnValue;
 	};
 
-	skillSelected(skillsAll)
+	skillSelected(skillsAll: any)
 	{
 		return (this.skillSelectedName == null ? null : skillsAll(this.skillSelectedName));
 	};
 
-	skillsAvailableToLearn(skillsAll)
+	skillsAvailableToLearn(skillsAll: any)
 	{
 		var skillsUnknown = [];
 
@@ -153,7 +153,7 @@ class SkillLearner
 		return skillsUnknownWithKnownPrerequisites;
 	};
 
-	skillsKnown(skillsAllByName)
+	skillsKnown(skillsAllByName: any)
 	{
 		var returnValues = [];
 
@@ -167,7 +167,7 @@ class SkillLearner
 		return returnValues;
 	};
 
-	skillBeingLearned(skillsAllByName)
+	skillBeingLearned(skillsAllByName: any)
 	{
 		var returnValue = skillsAllByName[this.skillBeingLearnedName];
 
@@ -176,14 +176,14 @@ class SkillLearner
 
 	// entity
 
-	updateForTimerTick(universe, world, place, entity)
+	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity)
 	{
 		// Do nothing.
 	}
 
 	// controls
 
-	toControl(universe, sizeIgnored, entity, venueToReturnTo, includeTitle)
+	toControl(universe: Universe, sizeIgnored: Coords, entity: Entity, venueToReturnTo: Venue, includeTitle: boolean)
 	{
 		var display = universe.display;
 		var size = display.sizeInPixels.clone();
@@ -259,7 +259,7 @@ class SkillLearner
 					new DataBinding
 					(
 						this,
-						function get(c)
+						function get(c: any)
 						{
 							return c.skillsAvailableToLearn(skillsAll);
 						},
@@ -273,8 +273,8 @@ class SkillLearner
 					new DataBinding
 					(
 						this,
-						function get(c) { return c.skillBeingLearned(skillsAll); },
-						function set(c, v)
+						function get(c: any) { return c.skillBeingLearned(skillsAll); },
+						function set(c: any, v: any)
 						{
 							c.skillBeingLearnedName = v;
 							c.skillSelectedName = v;
@@ -282,7 +282,7 @@ class SkillLearner
 					), // bindingForItemSelected
 					new DataBinding
 					(
-						null, function get(c) { return c.name; }, null
+						null, function get(c: any) { return c.name; }, null
 					), // bindingForItemValue
 					null, null, null
 				),
@@ -305,7 +305,7 @@ class SkillLearner
 					false, // isTextCentered,
 					new DataBinding
 					(
-						this, (c) => (c.skillSelectedName || "-"), null
+						this, (c: any) => (c.skillSelectedName || "-"), null
 					),
 					null
 				),

@@ -1,12 +1,12 @@
 
 class WordBubble
 {
-	visualForPortrait: any;
-	statements: any;
+	visualForPortrait: Visual;
+	statements: string[];
 
 	statementIndexCurrent: number;
 
-	constructor(visualForPortrait, statements)
+	constructor(visualForPortrait: Visual, statements: string[])
 	{
 		this.visualForPortrait = visualForPortrait;
 		this.statements = statements;
@@ -19,18 +19,19 @@ class WordBubble
 		return this.statements[this.statementIndexCurrent];
 	}
 
-	statementAdvance(universe)
+	statementAdvance(universe: Universe)
 	{
 		this.statementIndexCurrent++;
 		if (this.statementIndexCurrent >= this.statements.length)
 		{
-			universe.venueNext = universe.venueCurrent.children[0];
+			var venue: any = universe.venueCurrent; // todo - Cast appropriately.
+			universe.venueNext = venue.children[0];
 		}
 	}
 
 	// Controllable.
 
-	toControl(universe)
+	toControl(universe: Universe)
 	{
 		var size = universe.display.sizeInPixels;
 		var sizeBase = size.clone();

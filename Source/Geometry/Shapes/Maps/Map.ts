@@ -16,7 +16,7 @@ class MapOfCells
 	_cell: MapCell;
 	_posInCells: Coords;
 
-	constructor(name, sizeInCells, cellSize, cellPrototype, cellAtPosInCells, cellSource)
+	constructor(name: string, sizeInCells: Coords, cellSize: Coords, cellPrototype: MapCell, cellAtPosInCells: any, cellSource: any)
 	{
 		this.name = name;
 		this.sizeInCells = sizeInCells;
@@ -38,13 +38,13 @@ class MapOfCells
 		this._posInCells = new Coords(0, 0, 0);
 	}
 
-	cellAtPos(pos)
+	cellAtPos(pos: Coords)
 	{
 		this._posInCells.overwriteWith(pos).divide(this.cellSize).floor();
 		return this.cellAtPosInCells(this._posInCells);
 	};
 
-	cellAtPosInCells(cellPosInCells)
+	cellAtPosInCells(cellPosInCells: Coords)
 	{
 		return this._cellAtPosInCells(this, cellPosInCells, this._cell);
 	}
@@ -54,7 +54,7 @@ class MapOfCells
 		return this.sizeInCells.x * this.sizeInCells.y;
 	};
 
-	cellsAsEntities(mapAndCellPosToEntity)
+	cellsAsEntities(mapAndCellPosToEntity: any)
 	{
 		var returnValues = [];
 
@@ -94,7 +94,7 @@ class MapOfCells
 		);
 	};
 
-	overwriteWith(other)
+	overwriteWith(other: MapOfCells)
 	{
 		this.cellSource.overwriteWith(other.cellSource);
 	}

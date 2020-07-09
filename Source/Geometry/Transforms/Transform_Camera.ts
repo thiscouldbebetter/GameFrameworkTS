@@ -1,5 +1,5 @@
 
-class Transform_Camera
+class Transform_Camera implements Transform
 {
 	camera: Camera;
 
@@ -8,7 +8,7 @@ class Transform_Camera
 	transformPerspective: Transform_Perspective;
 	transformViewCenter: Transform_Translate;
 
-	constructor(camera)
+	constructor(camera: Camera)
 	{
 		this.camera = camera;
 
@@ -30,7 +30,17 @@ class Transform_Camera
 		);
 	}
 
-	transformCoords(coordsToTransform)
+	overwriteWith(other: Transform)
+	{
+		return this; // todo
+	}
+
+	transform(transformable: Transformable): Transformable
+	{
+		return transformable; // todo
+	}
+
+	transformCoords(coordsToTransform: Coords)
 	{
 		this.transformTranslateInvert.transformCoords(coordsToTransform);
 		this.transformOrientForCamera.transformCoords(coordsToTransform);

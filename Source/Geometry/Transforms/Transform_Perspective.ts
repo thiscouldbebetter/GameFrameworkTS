@@ -1,14 +1,24 @@
 
-class Transform_Perspective
+class Transform_Perspective implements Transform
 {
 	focalLength: number;
 
-	constructor(focalLength)
+	constructor(focalLength: number)
 	{
 		this.focalLength = focalLength;
 	}
 
-	transformCoords(coordsToTransform)
+	overwriteWith(other: Transform)
+	{
+		return this; // todo
+	}
+
+	transform(transformable: Transformable): Transformable
+	{
+		return transformable; // todo
+	}
+
+	transformCoords(coordsToTransform: Coords)
 	{
 		var distanceAlongCameraForward = coordsToTransform.z;
 

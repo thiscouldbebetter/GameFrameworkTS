@@ -7,7 +7,7 @@ class TalkNode
 	next: any;
 	isActive: boolean;
 
-	constructor(name, defnName, text, next, isActive)
+	constructor(name: string, defnName: string, text: string, next: any, isActive: boolean)
 	{
 		this.name = (name == null ? TalkNode.idNext() : name);
 		this.defnName = defnName;
@@ -27,7 +27,7 @@ class TalkNode
 
 	// instance methods
 
-	activate(conversationRun, scope)
+	activate(conversationRun: ConversationRun, scope: ConversationScope)
 	{
 		var defn = this.defn(conversationRun.defn);
 		if (defn.activate != null)
@@ -36,18 +36,18 @@ class TalkNode
 		}
 	};
 
-	defn(conversationDefn)
+	defn(conversationDefn: ConversationDefn)
 	{
 		return conversationDefn.talkNodeDefnsByName[this.defnName];
 	};
 
-	execute(universe, conversationRun, scope)
+	execute(universe: Universe, conversationRun: ConversationRun, scope: ConversationScope)
 	{
 		var defn = this.defn(conversationRun.defn);
 		defn.execute(universe, conversationRun, scope, this);
 	};
 
-	textForTranscript(conversationDefn)
+	textForTranscript(conversationDefn: ConversationDefn)
 	{
 		var speakerName = (this.defnName == "Option" ? "YOU" : "THEY" );
 		var returnValue = speakerName + ": " + this.text;

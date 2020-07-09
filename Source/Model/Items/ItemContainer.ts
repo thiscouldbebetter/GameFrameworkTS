@@ -3,7 +3,7 @@ class ItemContainer
 {
 	statusMessage: string;
 
-	transfer(world, entityFrom, entityTo, messagePrefix)
+	transfer(world: World, entityFrom: Entity, entityTo: Entity, messagePrefix: string)
 	{
 		var itemHolderFrom = entityFrom.itemHolder();
 		var itemHolderTo = entityTo.itemHolder();
@@ -29,7 +29,11 @@ class ItemContainer
 
 	// Controllable.
 
-	toControl(universe, size, entityGetterPutter, entityContainer, venuePrev)
+	toControl
+	(
+		universe: Universe, size: Coords,
+		entityGetterPutter: Entity, entityContainer: Entity, venuePrev: Venue
+	)
 	{
 		if (size == null)
 		{
@@ -55,7 +59,7 @@ class ItemContainer
 		var back = function()
 		{
 			var venueNext = venuePrev;
-			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
+			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null) as Venue;
 			universe.venueNext = venueNext;
 		};
 

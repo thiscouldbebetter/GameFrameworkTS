@@ -5,7 +5,7 @@ class Skill
 	learningRequired: number;
 	namesOfPrerequisiteSkills: string[];
 
-	constructor(name, learningRequired, namesOfPrerequisiteSkills)
+	constructor(name: string, learningRequired: number, namesOfPrerequisiteSkills: string[])
 	{
 		this.name = name;
 		this.learningRequired = learningRequired;

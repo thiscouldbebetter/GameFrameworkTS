@@ -1,7 +1,7 @@
 
 class SkeletonHelper
 {
-	static biped(heightInPixels)
+	static biped(heightInPixels: number)
 	{
 		var heightOver2 = heightInPixels / 2;
 		var heightOfSpine = heightInPixels / 2.4;
@@ -207,26 +207,26 @@ class SkeletonHelper
 				new AnimationKeyframe
 				(
 					0,
-					[
+					new Array<Transform_Interpolatable>
+					(
 						new Transform_BonePose("Forearm.L", 	[ .25 ]),
 						new Transform_BonePose("Bicep.L", 	[ .25, 0, -.25 ]),
 
 						new Transform_BonePose("Forearm.R", 	[ .25 ]),
 						new Transform_BonePose("Bicep.R", 	[ .25, 0, .25 ]),
-
-					]
+					)
 				),
 				new AnimationKeyframe
 				(
 					1,
-					[
+					new Array<Transform_Interpolatable>
+					(
 						new Transform_BonePose("Forearm.L", 	[ .25 ]),
 						new Transform_BonePose("Bicep.L", 	[ .25, 0, .25 ]),
 
 						new Transform_BonePose("Forearm.R", 	[ .25 ]),
 						new Transform_BonePose("Bicep.R", 	[ .25, 0, -.25 ]),
-
-					]
+					)
 				),
 			]
 		);
@@ -243,24 +243,26 @@ class SkeletonHelper
 				new AnimationKeyframe
 				(
 					0,
-					[
+					new Array<Transform_Interpolatable>
+					(
 						new Transform_BonePose("Thigh.L", 	[ .25 ]),
 						new Transform_BonePose("Shin.L", 	[ .25 ]),
 
 						new Transform_BonePose("Thigh.R", 	[ .25 ]),
 						new Transform_BonePose("Shin.R", 	[ .25 ]),
-					]
+					)
 				),
 				new AnimationKeyframe
 				(
 					1,
-					[
+					new Array<Transform_Interpolatable>
+					(
 						new Transform_BonePose("Thigh.L", 	[ .25 ]),
 						new Transform_BonePose("Shin.L", 	[ .25 ]),
 
 						new Transform_BonePose("Thigh.R", 	[ .25 ]),
 						new Transform_BonePose("Shin.R", 	[ .25 ]),
-					]
+					)
 				),
 
 			]
@@ -278,7 +280,8 @@ class SkeletonHelper
 				new AnimationKeyframe
 				(
 					0,
-					[
+					new Array<Transform_Interpolatable>
+					(
 						new Transform_BonePose("Bicep.L", 	[ -.1 ]),
 						new Transform_BonePose("Forearm.L", 	[ 0 ]),
 						new Transform_BonePose("Thigh.L", 	[ .1 ]),
@@ -288,37 +291,40 @@ class SkeletonHelper
 						new Transform_BonePose("Forearm.R", 	[ .1 ]),
 						new Transform_BonePose("Thigh.R", 	[ -.05 ]),
 						new Transform_BonePose("Shin.R", 	[ 0 ]),
-					]
+					)
 				),
 
 				new AnimationKeyframe
 				(
 					5,
-					[
+					new Array<Transform_Interpolatable>
+					(
 						new Transform_BonePose("Thigh.L", 	[ .1 ]),
 						new Transform_BonePose("Shin.L", 	[ .1 ]),
 
 						new Transform_BonePose("Thigh.R", 	[ -.1 ]),
 						new Transform_BonePose("Shin.R", 	[ 0 ]),
-					]
+					)
 				),
 
 				new AnimationKeyframe
 				(
 					10,
-					[
+					new Array<Transform_Interpolatable>
+					(
 						new Transform_BonePose("Thigh.L", 	[ 0 ]),
 						new Transform_BonePose("Shin.L", 	[ 0 ]),
 
 						new Transform_BonePose("Thigh.R", 	[ 0 ]),
 						new Transform_BonePose("Shin.R", 	[ .1 ]),
-					]
+					)
 				),
 
 				new AnimationKeyframe
 				(
 					15,
-					[
+					new Array<Transform_Interpolatable>
+					(
 						new Transform_BonePose("Bicep.L", 	[ .1 ]),
 						new Transform_BonePose("Forearm.L", 	[ .1 ]),
 						new Transform_BonePose("Thigh.L", 	[ -.05 ]),
@@ -327,37 +333,40 @@ class SkeletonHelper
 						new Transform_BonePose("Forearm.R", 	[ 0 ]),
 						new Transform_BonePose("Thigh.R", 	[ .1 ]),
 						new Transform_BonePose("Shin.R", 	[ 0 ]),
-					]
+					)
 				),
 
 				new AnimationKeyframe
 				(
 					20,
-					[
+					new Array<Transform_Interpolatable>
+					(
 						new Transform_BonePose("Thigh.L", 	[ -.1 ]),
 						new Transform_BonePose("Shin.L", 	[ 0 ]),
 
 						new Transform_BonePose("Thigh.R", 	[ .1 ]),
 						new Transform_BonePose("Shin.R", 	[ .1 ]),
-					]
+					)
 				),
 
 				new AnimationKeyframe
 				(
 					25,
-					[
+					new Array<Transform_Interpolatable>
+					(
 						new Transform_BonePose("Thigh.L", 	[ 0 ]),
 						new Transform_BonePose("Shin.L", 	[ .1 ]),
 
 						new Transform_BonePose("Thigh.R", 	[ 0 ]),
 						new Transform_BonePose("Shin.R", 	[ 0 ]),
-					]
+					)
 				),
 
 				new AnimationKeyframe
 				(
 					30,
-					[
+					new Array<Transform_Interpolatable>
+					(
 						new Transform_BonePose("Bicep.L", 	[ -.1 ]),
 						new Transform_BonePose("Forearm.L", 	[ 0 ]),
 						new Transform_BonePose("Thigh.L", 	[ .1 ]),
@@ -367,7 +376,7 @@ class SkeletonHelper
 						new Transform_BonePose("Forearm.R", 	[ .1 ]),
 						new Transform_BonePose("Thigh.R", 	[ -.05 ]),
 						new Transform_BonePose("Shin.R", 	[ 0 ]),
-					]
+					)
 				),
 			]
 		);
@@ -377,15 +386,16 @@ class SkeletonHelper
 
 	static transformBuildForMeshAndSkeleton_Proximity
 	(
-		meshAtRest,
-		skeletonAtRest,
-		skeletonPosed
+		meshAtRest: MeshTextured,
+		skeletonAtRest: Skeleton,
+		skeletonPosed: Skeleton
 	)
 	{
-		var vertices = meshAtRest.vertices;
+		var vertices = meshAtRest.geometry.vertices();
 		var bones = skeletonAtRest.bonesAll;
 
-		var boneNameToInfluenceLookup = [];
+		var boneInfluences = new Array<BoneInfluence>();
+		var boneNameToInfluenceLookup: any = {};
 
 		for (var v = 0; v < vertices.length; v++)
 		{
@@ -424,9 +434,9 @@ class SkeletonHelper
 			var boneInfluence = boneNameToInfluenceLookup[boneClosestName];
 			if (boneInfluence == null)
 			{
-				boneInfluence = new BoneInfluence(boneClosestName, []);
+				boneInfluence = new BoneInfluence(boneClosestName, new Array<number>());
 				boneNameToInfluenceLookup[boneClosestName] = boneInfluence;
-				boneNameToInfluenceLookup.push(boneInfluence);
+				boneInfluences.push(boneInfluence);
 			}
 
 			boneInfluence.vertexIndicesControlled.push(v);
@@ -436,8 +446,8 @@ class SkeletonHelper
 		(
 			meshAtRest,
 			skeletonAtRest,
+			boneInfluences,
 			skeletonPosed,
-			boneNameToInfluenceLookup
 		);
 
 		return returnValue;

@@ -1,16 +1,16 @@
 
-class VisualRectangle
+class VisualRectangle implements Visual
 {
 	size: Coords;
-	colorFill: any;
-	colorBorder: any;
+	colorFill: string;
+	colorBorder: string;
 	isCentered: boolean;
 
 	sizeHalf: Coords;
 
 	_drawPos: Coords;
 
-	constructor(size, colorFill, colorBorder, isCentered)
+	constructor(size: Coords, colorFill: string, colorBorder: string, isCentered: boolean)
 	{
 		this.size = size;
 		this.colorFill = colorFill;
@@ -22,7 +22,7 @@ class VisualRectangle
 		this._drawPos = new Coords(0, 0, 0);
 	}
 
-	draw(universe, world,  display, entity)
+	draw(universe: Universe, world: World, display: Display, entity: Entity)
 	{
 		var drawPos = this._drawPos.overwriteWith
 		(
@@ -39,7 +39,26 @@ class VisualRectangle
 
 		display.drawRectangle
 		(
-			drawPos, this.size, this.colorFill, this.colorBorder
+			drawPos, this.size, this.colorFill, this.colorBorder, null
 		);
 	};
+
+	// Clonable.
+
+	clone(): Visual
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: Visual): Visual
+	{
+		return this; // todo
+	}
+
+	// Transformable.
+
+	transform(transformToApply: Transform): Transformable
+	{
+		return this; // todo
+	}
 }

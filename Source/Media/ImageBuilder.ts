@@ -2,15 +2,17 @@
 class ImageBuilder
 {
 	colors: Color[];
+	colorsByCodeChar: any;
 
-	constructor(colors)
+	constructor(colors: Color[])
 	{
 		this.colors = colors;
+		this.colorsByCodeChar = {};
 	}
 
 	// static methods
 
-	buildImageFromStrings(name, stringsForPixels)
+	buildImageFromStrings(name: string, stringsForPixels: string[])
 	{
 		return this.buildImageFromStringsScaled
 		(
@@ -18,7 +20,7 @@ class ImageBuilder
 		);
 	};
 
-	buildImagesFromStringArrays(name, stringArraysForImagePixels)
+	buildImagesFromStringArrays(name: string, stringArraysForImagePixels: string[][])
 	{
 		var returnValue = [];
 
@@ -32,7 +34,7 @@ class ImageBuilder
 		return returnValue;
 	};
 
-	buildImageFromStringsScaled(name, scaleFactor, stringsForPixels)
+	buildImageFromStringsScaled(name: string, scaleFactor: Coords, stringsForPixels: string[])
 	{
 		var sizeInPixels = new Coords
 		(
@@ -47,7 +49,7 @@ class ImageBuilder
 
 		var pixelPos = new Coords(0, 0, 0);
 		var colorForPixel;
-		var colors = this.colors;
+		var colors = this.colorsByCodeChar;
 
 		for (var y = 0; y < sizeInPixels.y; y++)
 		{
@@ -87,7 +89,7 @@ class ImageBuilder
 		return returnValue;
 	};
 
-	copyRegionFromImage(imageToCopyFrom, regionPos, regionSize)
+	copyRegionFromImage(imageToCopyFrom: Image2, regionPos: Coords, regionSize: Coords)
 	{
 		var canvas = document.createElement("canvas");
 		canvas.id = "region_" + regionPos.x + "_" + regionPos.y;
@@ -123,7 +125,7 @@ class ImageBuilder
 		return returnValue;
 	};
 
-	sliceImageIntoTiles(imageToSlice, sizeInTiles)
+	sliceImageIntoTiles(imageToSlice: Image2, sizeInTiles: Coords)
 	{
 		var returnImages = [];
 

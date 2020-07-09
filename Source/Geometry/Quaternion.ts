@@ -6,7 +6,7 @@ class Quaternion
 	y: number;
 	z: number;
 
-	constructor(w, x, y, z)
+	constructor(w: number, x: number, y: number, z: number)
 	{
 		this.w = w;
 		this.x = x;
@@ -16,7 +16,7 @@ class Quaternion
 
 	// static methods
 
-	static fromAxisAndCyclesToRotate(axisToRotateAround, cyclesToRotate)
+	static fromAxisAndCyclesToRotate(axisToRotateAround: Coords, cyclesToRotate: number)
 	{
 		var radiansToRotateHalf = cyclesToRotate * Math.PI;
 
@@ -34,7 +34,7 @@ class Quaternion
 
 	// instance methods
 
-	transformCoordsAsRotation(coordsToRotate)
+	transformCoordsAsRotation(coordsToRotate: Coords)
 	{
 		var coordsToRotateAsQuaternion = new Quaternion
 		(
@@ -44,15 +44,16 @@ class Quaternion
 			coordsToRotate.z
 		);
 
-		var result = this.clone().multiply
+		this.clone().multiply
 		(
 			coordsToRotateAsQuaternion
 		).multiply
 		(
 			this.clone().invert()
+		).toCoords
+		(
+			coordsToRotate
 		);
-
-		coordsToRotate.overwriteWith(result);
 
 		return coordsToRotate;
 	};
@@ -62,7 +63,7 @@ class Quaternion
 		return new Quaternion(this.w, this.x, this.y, this.z);
 	};
 
-	divide(divisor)
+	divide(divisor: number)
 	{
 		this.w /= divisor;
 		this.x /= divisor;
@@ -85,7 +86,7 @@ class Quaternion
 		return this;
 	};
 
-	multiply(other)
+	multiply(other: Quaternion)
 	{
 		return this.overwriteWithWXYZ
 		(
@@ -112,14 +113,14 @@ class Quaternion
 		return this.divide(this.magnitude());
 	};
 
-	overwriteWith(other)
+	overwriteWith(other: Quaternion)
 	{
 		this.overwriteWithWXYZ(other.w, other.x, other.y, other.z);
 
 		return this;
 	};
 
-	overwriteWithWXYZ(w, x, y, z)
+	overwriteWithWXYZ(w: number, x: number, y: number, z: number)
 	{
 		this.w = w;
 		this.x = x;
@@ -128,4 +129,12 @@ class Quaternion
 
 		return this;
 	};
+
+	toCoords(coordsToOverwrite: Coords): Coords
+	{
+		coordsToOverwrite.x = this.x;
+		coordsToOverwrite.y = this.y;
+		coordsToOverwrite.z = this.z;
+		return coordsToOverwrite;
+	}
 }

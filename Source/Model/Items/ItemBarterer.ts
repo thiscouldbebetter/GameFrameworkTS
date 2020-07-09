@@ -29,7 +29,7 @@ class ItemBarterer
 		return returnValue;
 	};
 
-	isOfferProfitableEnough(world)
+	isOfferProfitableEnough(world: World)
 	{
 		var profitMarginForStore = this.profitMarginOfOfferForStore(world);
 
@@ -38,7 +38,7 @@ class ItemBarterer
 		return isOfferProfitableToStore;
 	};
 
-	profitMarginOfOfferForStore(world)
+	profitMarginOfOfferForStore(world: World)
 	{
 		var valueOfferedByCustomer = this.itemHolderCustomerOffer.tradeValueOfAllItems(world);
 		var valueOfferedByStore = this.itemHolderStoreOffer.tradeValueOfAllItems(world);
@@ -48,23 +48,23 @@ class ItemBarterer
 		return profitMarginForStore;
 	};
 
-	patienceAdd(patienceToAdd)
+	patienceAdd(patienceToAdd: number)
 	{
-		this.patience = (this.patience + patienceToAdd).trimToRangeMax(this.patienceMax);
+		this.patience = NumberHelper.trimToRangeMax(this.patience + patienceToAdd, this.patienceMax);
 	};
 
-	reset(entityCustomer, entityStore)
+	reset(entityCustomer: Entity, entityStore: Entity)
 	{
-		this.itemHolderCustomerOffer.itemEntitiesAllTransferTo(entityCustomer.itemHolder);
-		this.itemHolderStoreOffer.itemEntitiesAllTransferTo(entityStore.itemHolder);
+		this.itemHolderCustomerOffer.itemEntitiesAllTransferTo(entityCustomer.itemHolder() );
+		this.itemHolderStoreOffer.itemEntitiesAllTransferTo(entityStore.itemHolder() );
 	};
 
-	trade(entityCustomer, entityStore)
+	trade(entityCustomer: Entity, entityStore: Entity)
 	{
 		var itemHoldersForOfferers =
 		[
-			entityCustomer.itemHolder,
-			entityStore.itemHolder
+			entityCustomer.itemHolder(),
+			entityStore.itemHolder()
 		];
 
 		var itemHoldersForOffers =
@@ -84,7 +84,7 @@ class ItemBarterer
 
 	// Controls.
 
-	toControl(universe, size, entityCustomer, entityStore, venuePrev)
+	toControl(universe: Universe, size: Coords, entityCustomer: Entity, entityStore: Entity, venuePrev: Venue)
 	{
 		if (size == null)
 		{
@@ -108,7 +108,7 @@ class ItemBarterer
 		{
 			itemBarterer.reset(entityCustomer, entityStore);
 			var venueNext = venuePrev;
-			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
+			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null) as Venue;
 			universe.venueNext = venueNext;
 		};
 
@@ -146,18 +146,18 @@ class ItemBarterer
 					new DataBinding
 					(
 						null,
-						function get(c) { return c.item().toString(world); },
+						(c:any) => { return c.item().toString(world); },
 						null
 					), // bindingForItemText
 					fontHeight,
 					new DataBinding
 					(
 						itemHolderStore,
-						function get(c) { return c.itemEntityToOffer; },
-						function set(c, v) { c.itemEntityToOffer = v; }
+						(c:any) => { return c.itemEntityToOffer; },
+						(c:any, v:any) => { c.itemEntityToOffer = v; }
 					), // bindingForItemSelected
-					new DataBinding(null, function(c) { return c; }, null ), // bindingForItemValue
-					true, // isEnabled
+					new DataBinding(null, (c: any) => c, null ), // bindingForItemValue
+					new DataBinding(true, null, null), // isEnabled
 					function confirm()
 					{
 						if (itemHolderStore.itemEntityToOffer != null)
@@ -196,18 +196,18 @@ class ItemBarterer
 					new DataBinding
 					(
 						null,
-						function get(c) { return c.item().toString(world); },
+						(c:any) => { return c.item().toString(world); },
 						null
 					), // bindingForItemText
 					fontHeight,
 					new DataBinding
 					(
 						itemHolderCustomer,
-						function get(c) { return c.itemEntityToOffer; },
-						function set(c, v) { c.itemEntityToOffer = v; }
+						(c:any) => { return c.itemEntityToOffer; },
+						(c:any, v:any) => { c.itemEntityToOffer = v; }
 					), // bindingForItemSelected
 					new DataBinding(null, function(c) { return c; }, null ), // bindingForItemValue
-					true, // isEnabled
+					new DataBinding(true, null, null), // isEnabled
 					function confirm()
 					{
 						if (itemHolderCustomer.itemEntityToOffer != null)
@@ -249,18 +249,18 @@ class ItemBarterer
 					new DataBinding
 					(
 						null,
-						function get(c) { return c.item().toString(world); },
+						(c:any) => { return c.item().toString(world); },
 						null
 					), // bindingForItemText
 					fontHeight,
 					new DataBinding
 					(
 						itemHolderStore,
-						function get(c) { return c.itemEntityToWithdraw; },
-						function set(c, v) { c.itemEntityToWithdraw = v; }
+						(c:any) => { return c.itemEntityToWithdraw; },
+						(c:any, v:any) => { c.itemEntityToWithdraw = v; }
 					), // bindingForItemSelected
-					new DataBinding(null, function(c) { return c; }, null ), // bindingForItemValue
-					true, // isEnabled
+					new DataBinding(null, (c:any) => c, null ), // bindingForItemValue
+					new DataBinding(true, null, null), // isEnabled
 					function confirm()
 					{
 						if (itemHolderStore.itemEntityToWithdraw != null)
@@ -290,27 +290,24 @@ class ItemBarterer
 					new DataBinding
 					(
 						this,
-						function get(c)
-						{
-							return c.itemHolderCustomerOffer.itemEntities;
-						},
+						(c: any) => c.itemHolderCustomerOffer.itemEntities,
 						null
 					), // items
 					new DataBinding
 					(
 						null,
-						function get(c) { return c.item().toString(world); },
+						(c: any) => c.item().toString(world),
 						null
 					), // bindingForItemText
 					fontHeight,
 					new DataBinding
 					(
 						itemHolderCustomer,
-						function get(c) { return c.itemEntityToWithdraw; },
-						function set(c, v) { c.itemEntityToWithdraw = v; }
+						(c:any) => { return c.itemEntityToWithdraw; },
+						(c:any, v:any) => { c.itemEntityToWithdraw = v; }
 					), // bindingForItemSelected
-					new DataBinding(null, function(c) { return c; }, null ), // bindingForItemValue
-					true, // isEnabled
+					new DataBinding(null, (c: any) => c, null ), // bindingForItemValue
+					new DataBinding(true, null, null), // isEnabled
 					function confirm()
 					{
 						if (itemHolderCustomer.itemEntityToWithdraw != null)
@@ -343,10 +340,10 @@ class ItemBarterer
 					new DataBinding
 					(
 						this,
-						function get(c) { return c.isAnythingBeingOffered(); },
+						(c: any) => c.isAnythingBeingOffered(),
 						null
 					), // isEnabled
-					function click()
+					() => // click
 					{
 						itemBarterer.reset(entityCustomer, entityStore);
 					},
@@ -369,7 +366,7 @@ class ItemBarterer
 					new DataBinding
 					(
 						this,
-						function get(c) { return c.isAnythingBeingOffered(); },
+						(c:any) => { return c.isAnythingBeingOffered(); },
 						null
 					), // isEnabled
 					function click()

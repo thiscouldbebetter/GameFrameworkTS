@@ -4,13 +4,13 @@ class Ephemeral
 	ticksToLive: number;
 	expire: any;
 
-	constructor(ticksToLive, expire)
+	constructor(ticksToLive: number, expire: any)
 	{
 		this.ticksToLive = ticksToLive;
 		this.expire = expire;
 	}
 
-	updateForTimerTick(universe, world, place, entityEphemeral)
+	updateForTimerTick(universe: Universe, world: World, place: Place, entityEphemeral: Entity)
 	{
 		this.ticksToLive--;
 		if (this.ticksToLive <= 0)

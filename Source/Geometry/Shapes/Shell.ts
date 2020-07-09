@@ -8,7 +8,7 @@ class Shell
 
 	_collider: ShapeGroupAll;
 
-	constructor(sphereOuter, radiusInner)
+	constructor(sphereOuter: Sphere, radiusInner: number)
 	{
 		this.sphereOuter = sphereOuter;
 		this.radiusInner = radiusInner;
@@ -33,7 +33,7 @@ class Shell
 		return new Shell(this.sphereOuter.clone(), this.radiusInner);
 	};
 
-	overwriteWith(other)
+	overwriteWith(other: Shell)
 	{
 		this.sphereOuter.overwriteWith(other.sphereOuter);
 		this.radiusInner = other.radiusInner;

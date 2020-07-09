@@ -13,7 +13,7 @@ class ConversationScope
 	_talkNodesForOptionsActive: any;
 	_emptyArray: any;
 
-	constructor(parent, talkNodeCurrent, talkNodesForOptions)
+	constructor(parent: ConversationScope, talkNodeCurrent: TalkNode, talkNodesForOptions: TalkNode[])
 	{
 		this.parent = parent;
 		this.talkNodeCurrent = talkNodeCurrent;
@@ -27,7 +27,7 @@ class ConversationScope
 		this.haveOptionsBeenUpdated = true;
 	}
 
-	talkNodeAdvance(conversationRun)
+	talkNodeAdvance(conversationRun: ConversationRun)
 	{
 		var conversationDefn = conversationRun.defn;
 		var defnTalkNodes = conversationDefn.talkNodes;
@@ -67,7 +67,7 @@ class ConversationScope
 		return returnValues;
 	};
 
-	update(universe, conversationRun)
+	update(universe: Universe, conversationRun: ConversationRun)
 	{
 		this.haveOptionsBeenUpdated = true;
 		this.talkNodeCurrent.execute(universe, conversationRun, this);

@@ -11,7 +11,7 @@ class Disposition
 	spin: Rotation;
 	timeOffsetInTicks: number;
 
-	constructor(pos, orientation, placeName)
+	constructor(pos: Coords, orientation: Orientation, placeName: string)
 	{
 		this.pos = pos || new Coords(0, 0, 0);
 
@@ -32,12 +32,12 @@ class Disposition
 		this.timeOffsetInTicks = 0;
 	}
 
-	place(world)
+	place(world: World)
 	{
 		return world.placesByName[this.placeName];
 	};
 
-	velSet(value)
+	velSet(value: Coords)
 	{
 		this.vel.overwriteWith(value);
 		return this;
@@ -62,7 +62,7 @@ class Disposition
 		return returnValue;
 	};
 
-	overwriteWith(other)
+	overwriteWith(other: Disposition)
 	{
 		this.placeName = other.placeName;
 		this.pos.overwriteWith(other.pos);

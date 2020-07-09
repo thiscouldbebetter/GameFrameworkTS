@@ -9,7 +9,7 @@ class Collision
 	normals: any;
 	isActive: boolean;
 
-	constructor(pos, distanceToCollision, colliders)
+	constructor(pos: Coords, distanceToCollision: number, colliders: any)
 	{
 		this.pos = (pos == null ? new Coords(0, 0, 0) : pos);
 		this.distanceToCollision = distanceToCollision;
@@ -28,7 +28,7 @@ class Collision
 		return this;
 	};
 
-	equals(other)
+	equals(other: Collision)
 	{
 		var returnValue =
 		(

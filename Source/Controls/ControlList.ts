@@ -1,5 +1,5 @@
 
-class ControlList
+class ControlList implements Control
 {
 	name: string;
 	pos: Coords;
@@ -10,11 +10,12 @@ class ControlList
 	bindingForItemSelected: DataBinding;
 	bindingForItemValue: DataBinding;
 	bindingForIsEnabled: DataBinding;
-	confirm: any;
+	confirm: (u: Universe) => void;
 	widthInItems: number;
 
 	isHighlighted: boolean;
 	itemSpacing: Coords;
+	parent: Control;
 	scrollbar: ControlScrollbar;
 	styleName: string;
 
@@ -23,7 +24,14 @@ class ControlList
 	_itemSelected: any;
 	_mouseClickPos: Coords;
 
-	constructor(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected, bindingForItemValue, bindingForIsEnabled, confirm, widthInItems)
+	constructor
+	(
+		name: string, pos: Coords, size: Coords, items: DataBinding,
+		bindingForItemText: DataBinding, fontHeightInPixels: number,
+		bindingForItemSelected: DataBinding, bindingForItemValue: DataBinding,
+		bindingForIsEnabled: DataBinding, confirm: (u: Universe) => void,
+		widthInItems: number
+	)
 	{
 		this.name = name;
 		this.pos = pos;
@@ -64,7 +72,7 @@ class ControlList
 		this._mouseClickPos = new Coords(0, 0, 0);
 	}
 
-	static fromPosSizeAndItems(pos, size, items)
+	static fromPosSizeAndItems(pos: Coords, size: Coords, items: DataBinding)
 	{
 		var returnValue = new ControlList
 		(
@@ -76,14 +84,18 @@ class ControlList
 			10, // fontHeightInPixels,
 			null, // bindingForItemSelected,
 			null, // bindingForItemValue,
-			true, // bindingForIsEnabled
+			new DataBinding(true, null, null), // bindingForIsEnabled
 			null, null
 		);
 
 		return returnValue;
 	};
 
-	static fromPosSizeItemsAndBindingForItemText(pos, size, items, bindingForItemText)
+	static fromPosSizeItemsAndBindingForItemText
+	(
+		pos: Coords, size: Coords, items: DataBinding,
+		bindingForItemText: DataBinding
+	)
 	{
 		var returnValue = new ControlList
 		(
@@ -95,14 +107,14 @@ class ControlList
 			10, // fontHeightInPixels,
 			null, // bindingForItemSelected,
 			null, // bindingForItemValue,
-			true, // bindingForIsEnabled
+			new DataBinding(true, null, null), // bindingForIsEnabled
 			null, null
 		);
 
 		return returnValue;
 	};
 
-	actionHandle(actionNameToHandle)
+	actionHandle(actionNameToHandle: string, universe: Universe)
 	{
 		var wasActionHandled = false;
 		var controlActionNames = ControlActionNames.Instances();
@@ -120,12 +132,22 @@ class ControlList
 		{
 			if (this.confirm != null)
 			{
-				this.confirm();
+				this.confirm(universe);
 				wasActionHandled = true;
 			}
 		}
 		return wasActionHandled;
 	};
+
+	actionToInputsMappings(): ActionToInputsMapping[]
+	{
+		return null; // todo
+	}
+
+	childWithFocus(): Control
+	{
+		return null; // todo
+	}
 
 	focusGain()
 	{
@@ -147,7 +169,7 @@ class ControlList
 		return this.scrollbar.sliderPosInItems();
 	};
 
-	indexOfItemSelected(valueToSet)
+	indexOfItemSelected(valueToSet: number)
 	{
 		var returnValue = valueToSet;
 		var items = this.items();
@@ -184,7 +206,7 @@ class ControlList
 		return (this.bindingForIsEnabled == null ? true : this.bindingForIsEnabled.get());
 	};
 
-	itemSelected(itemToSet)
+	itemSelected(itemToSet: any)
 	{
 		var returnValue = itemToSet;
 
@@ -216,7 +238,7 @@ class ControlList
 		return returnValue;
 	};
 
-	itemSelectedNextInDirection(direction)
+	itemSelectedNextInDirection(direction: number)
 	{
 		var items = this.items();
 		var numberOfItems = items.length;
@@ -271,7 +293,7 @@ class ControlList
 		return (this._items.get == null ? this._items : this._items.get());
 	};
 
-	mouseClick(clickPos)
+	mouseClick(clickPos: Coords)
 	{
 		clickPos = this._mouseClickPos.overwriteWith(clickPos);
 
@@ -317,7 +339,13 @@ class ControlList
 		return true; // wasActionHandled
 	};
 
-	scalePosAndSize(scaleFactor)
+	mouseEnter() {}
+
+	mouseExit() {}
+
+	mouseMove(movePos: Coords) {}
+
+	scalePosAndSize(scaleFactor: Coords)
 	{
 		this.pos.multiply(scaleFactor);
 		this.size.multiply(scaleFactor);
@@ -326,14 +354,14 @@ class ControlList
 		this.scrollbar.scalePosAndSize(scaleFactor);
 	};
 
-	style(universe)
+	style(universe: Universe)
 	{
 		return universe.controlBuilder.stylesByName[this.styleName == null ? "Default" : this.styleName];
 	};
 
 	// drawable
 
-	draw(universe, display, drawLoc)
+	draw(universe: Universe, display: Display, drawLoc: Disposition)
 	{
 		drawLoc = this._drawLoc.overwriteWith(drawLoc);
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
@@ -404,7 +432,8 @@ class ControlList
 				(
 					drawPos2,
 					this.itemSpacing,
-					colorFore // colorFill
+					colorFore, // colorFill
+					null, null
 				);
 			}
 

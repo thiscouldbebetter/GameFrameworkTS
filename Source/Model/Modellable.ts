@@ -3,12 +3,12 @@ class Modellable
 {
 	model: any;
 
-	constructor(model)
+	constructor(model: any)
 	{
 		this.model = model;
 	}
 
-	updateForTimerTick(universe, world, place, entity)
+	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity)
 	{
 		// Do nothing.
 	};

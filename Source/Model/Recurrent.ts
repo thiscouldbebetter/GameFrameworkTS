@@ -8,7 +8,7 @@ class Recurrent
 	timesRecurredSoFar: number;
 	ticksUntilRecurrence: number;
 
-	constructor(ticksPerRecurrence, timesToRecur, recur)
+	constructor(ticksPerRecurrence: number, timesToRecur: number, recur: any)
 	{
 		this.ticksPerRecurrence = ticksPerRecurrence;
 		this.timesToRecur = timesToRecur;
@@ -18,7 +18,7 @@ class Recurrent
 		this.ticksUntilRecurrence = this.ticksPerRecurrence;
 	}
 
-	updateForTimerTick(universe, world, place, entity)
+	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity)
 	{
 		if (this.timesRecurredSoFar < this.timesToRecur)
 		{

@@ -1,5 +1,5 @@
 
-class RandomizerSystem
+class RandomizerSystem implements Randomizer
 {
 	// Uses the built-in JavaScript randomizer.
 

@@ -4,7 +4,7 @@ class BoneInfluence
 	boneName: string;
 	vertexIndicesControlled: number[];
 
-	constructor(boneName, vertexIndicesControlled)
+	constructor(boneName: string, vertexIndicesControlled: number[])
 	{
 		this.boneName = boneName;
 		this.vertexIndicesControlled = vertexIndicesControlled;
@@ -12,16 +12,18 @@ class BoneInfluence
 
 	// static methods
 
-	static buildManyForBonesAndVertexGroups(bones, vertexGroups)
+	static buildManyForBonesAndVertexGroups(bones: Bone[], vertexGroups: VertexGroup[])
 	{
 		var boneInfluences = [];
+
+		var bonesByName = ArrayHelper.addLookupsByName(bones);
 
 		for (var i = 0; i < vertexGroups.length; i++)
 		{
 			var vertexGroup = vertexGroups[i];
 			var boneName = vertexGroup.name;
 
-			var bone = bones[boneName];
+			var bone = bonesByName[boneName];
 
 			if (bone != null)
 			{

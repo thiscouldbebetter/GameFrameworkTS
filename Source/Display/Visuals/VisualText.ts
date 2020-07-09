@@ -1,18 +1,18 @@
 
-class VisualText
+class VisualText implements Visual
 {
-	_text: any;
-	colorFill: any;
-	colorBorder: any;
+	_text: DataBinding;
+	colorFill: string;
+	colorBorder: string;
 
-	constructor(text, colorFill, colorBorder)
+	constructor(text: DataBinding, colorFill: string, colorBorder: string)
 	{
 		this._text = text;
 		this.colorFill = colorFill;
 		this.colorBorder = colorBorder;
 	}
 
-	draw(universe, world, display, entity)
+	draw(universe: Universe, world: World, display: Display, entity: Entity)
 	{
 		var text = this.text(universe, world, display, entity);
 		display.drawText
@@ -28,8 +28,27 @@ class VisualText
 		);
 	};
 
-	text(universe, world, display, entity)
+	text(universe: Universe, world: World, display: Display, entity: Entity)
 	{
-		return (this._text.get == null ? this._text : this._text.get(universe, world, display, entity) );
+		return this._text.get();
 	};
+
+	// Clonable.
+
+	clone(): Visual
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: Visual): Visual
+	{
+		return this; // todo
+	}
+
+	// transformable
+
+	transform(transformToApply: Transform): Transformable
+	{
+		return this; // todo
+	}
 }

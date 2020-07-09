@@ -7,7 +7,7 @@ class Skeleton
 	bonesAll: Bone[];
 	bonesAllByName: any;
 
-	constructor(name, boneRoot)
+	constructor(name: string, boneRoot: Bone)
 	{
 		this.name = name;
 		this.boneRoot = boneRoot;
@@ -20,7 +20,7 @@ class Skeleton
 		this.bonesAllByName = ArrayHelper.addLookupsByName(this.bonesAll);
 	}
 
-	equals(other)
+	equals(other: Skeleton)
 	{
 		var returnValue = true;
 
@@ -49,7 +49,7 @@ class Skeleton
 		);
 	};
 
-	overwriteWith(other)
+	overwriteWith(other: Skeleton)
 	{
 		for (var i = 0; i < this.bonesAll.length; i++)
 		{
@@ -59,7 +59,7 @@ class Skeleton
 
 	// transformable
 
-	transform(transformToApply)
+	transform(transformToApply: Transform)
 	{
 		for (var i = 0; i < this.bonesAll.length; i++)
 		{

@@ -3,7 +3,7 @@ class TreeHelper
 {
 	// Static class.
 
-	static addNodeAndAllDescendantsToList(node, listToAddTo)
+	static addNodeAndAllDescendantsToList(node: any, listToAddTo: any[])
 	{
 		listToAddTo.push(node);
 		for (var i = 0; i < node.children.length; i++)
