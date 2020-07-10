@@ -8,9 +8,9 @@ class ItemContainer
 		var itemHolderFrom = entityFrom.itemHolder();
 		var itemHolderTo = entityTo.itemHolder();
 
-		if (itemHolderFrom.itemEntityToTransfer != null)
+		if (itemHolderFrom.itemEntitySelected != null)
 		{
-			var itemEntityToTransfer = itemHolderFrom.itemEntityToTransfer;
+			var itemEntityToTransfer = itemHolderFrom.itemEntitySelected;
 			var itemToTransfer = itemEntityToTransfer.item();
 			itemHolderFrom.itemEntityTransferSingleTo
 			(
@@ -18,7 +18,7 @@ class ItemContainer
 			);
 			if (itemHolderFrom.itemQuantityByDefnName(itemToTransfer.defnName) <= 0)
 			{
-				itemHolderFrom.itemEntityToTransfer = null;
+				itemHolderFrom.itemEntitySelected = null;
 			}
 
 			this.statusMessage =
@@ -98,7 +98,7 @@ class ItemContainer
 					new DataBinding
 					(
 						itemHolderContainer,
-						function get(c)
+						(c: ItemHolder) =>
 						{
 							return c.itemEntities;//.filter(x => x.item().defnName != itemDefnNameCurrency);
 						},
@@ -107,17 +107,17 @@ class ItemContainer
 					new DataBinding
 					(
 						null,
-						function get(c) { return c.item().toString(world); },
+						(c: Entity) => c.item().toString(world),
 						null
 					), // bindingForItemText
 					fontHeight,
 					new DataBinding
 					(
 						itemHolderContainer,
-						function get(c) { return c.itemEntityToTransfer; },
-						function set(c, v) { c.itemEntityToTransfer = v; }
+						(c: ItemHolder) => c.itemEntitySelected,
+						(c: ItemHolder, v: Entity) => { c.itemEntitySelected = v; }
 					), // bindingForItemSelected
-					new DataBinding(null, function(c) { return c; }, null ), // bindingForItemValue
+					new DataBinding(null, (c: Entity) => c, null ), // bindingForItemValue
 					new DataBinding(true, null, null), // isEnabled
 					get, // confirm
 					null
@@ -159,7 +159,7 @@ class ItemContainer
 					new DataBinding
 					(
 						itemHolderGetterPutter,
-						function get(c)
+						(c: ItemHolder) =>
 						{
 							return c.itemEntities;//.filter(x => x.item().defnName != itemDefnNameCurrency);
 						},
@@ -168,17 +168,17 @@ class ItemContainer
 					new DataBinding
 					(
 						null,
-						function get(c) { return c.item().toString(world); },
+						(c: Entity) => c.item().toString(world),
 						null
 					), // bindingForItemText
 					fontHeight,
 					new DataBinding
 					(
 						itemHolderGetterPutter,
-						function get(c) { return c.itemEntityToTransfer; },
-						function set(c, v) { c.itemEntityToTransfer = v; }
+						(c: ItemHolder) => c.itemEntitySelected,
+						(c: ItemHolder, v: Entity) => { c.itemEntitySelected = v; }
 					), // bindingForItemSelected
-					new DataBinding(null, function(c) { return c; }, null ), // bindingForItemValue
+					new DataBinding(null, (c: Entity) => c, null ), // bindingForItemValue
 					new DataBinding(true, null, null), // isEnabled
 					put, // confirm
 					null
@@ -223,7 +223,7 @@ class ItemContainer
 
 			[ new Action("Back", back) ],
 
-			[ new ActionToInputsMapping( "Back", [ universe.inputHelper.inputNames.Escape ], true ) ],
+			[ new ActionToInputsMapping( "Back", [ Input.Names().Escape ], true ) ],
 
 		);
 

@@ -16,24 +16,24 @@ class ArrayHelper
 		return array;
 	};
 
-	static addLookups(array: any, getKeyForElement: any)
+	static addLookups<K, E>(array: E[], getKeyForElement: (e: E) => K ): Map<K, E>
 	{
-		var returnLookup: any = {};
+		var returnLookup = new Map<K, E>();
 		for (var i = 0; i < array.length; i++)
 		{
 			var element = array[i];
 			var key = getKeyForElement(element);
-			returnLookup[key] = element;
+			returnLookup.set(key, element);
 		}
 		return returnLookup;
 	};
 
-	static addLookupsByName(array: any)
+	static addLookupsByName<E extends Namable>(array: E[]): Map<string,E>
 	{
-		return ArrayHelper.addLookups(array, (x:any) => x.name);
+		return ArrayHelper.addLookups(array, (element: E) => element.name);
 	};
 
-	static addLookupsMultiple(array: any, getKeysForElement: any)
+	static addLookupsMultiple<K, E>(array: any, getKeysForElement: (e:E) => Array<K> ): Map<K, E>
 	{
 		var returnLookup: any = {};
 		for (var i = 0; i < array.length; i++)

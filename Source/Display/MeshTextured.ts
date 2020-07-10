@@ -3,11 +3,11 @@ class MeshTextured implements Transformable
 {
 	geometry: Mesh;
 	materials: Material[];
-	materialsByName: any;
+	materialsByName: Map<string, Material>;
 	faceTextures: MeshTexturedFaceTexture[];
 	vertexGroups: VertexGroup[];
 
-	_faceIndicesByMaterial: any;
+	_faceIndicesByMaterialName: Map<string, number[]>;
 	_faces: FaceTextured[];
 
 	constructor(geometry: Mesh, materials: Material[], faceTextures: MeshTexturedFaceTexture[], vertexGroups: VertexGroup[])
@@ -30,7 +30,7 @@ class MeshTextured implements Transformable
 				var geometryFace = geometryFaces[i];
 				var faceTexture = this.faceTextures[i];
 				var faceMaterialName = faceTexture.materialName;
-				var faceMaterial = this.materialsByName[faceMaterialName];
+				var faceMaterial = this.materialsByName.get(faceMaterialName);
 				var face = new FaceTextured(geometryFace, faceMaterial);
 				this._faces.push(face);
 			}
@@ -66,11 +66,11 @@ class MeshTextured implements Transformable
 		return this;
 	};
 
-	faceIndicesByMaterial()
+	faceIndicesByMaterialName()
 	{
-		if (this._faceIndicesByMaterial == null)
+		if (this._faceIndicesByMaterialName == null)
 		{
-			this._faceIndicesByMaterial = [];
+			this._faceIndicesByMaterialName = new Map<string, number[]>();
 
 			for (var f = 0; f < this.faceTextures.length; f++)
 			{
@@ -78,18 +78,21 @@ class MeshTextured implements Transformable
 
 				var faceMaterialName = faceTexture.materialName;
 				var faceIndicesForMaterial =
-					this._faceIndicesByMaterial[faceMaterialName];
+					this._faceIndicesByMaterialName.get(faceMaterialName);
 				if (faceIndicesForMaterial == null)
 				{
 					faceIndicesForMaterial = [];
-					this._faceIndicesByMaterial[faceMaterialName] =
-						faceIndicesForMaterial;
+					this._faceIndicesByMaterialName.set
+					(
+						faceMaterialName,
+						faceIndicesForMaterial
+					);
 				}
 				faceIndicesForMaterial.push(f);
 			}
 		}
 
-		return this._faceIndicesByMaterial;
+		return this._faceIndicesByMaterialName;
 	};
 
 	transform(transformToApply: Transform)

@@ -24,7 +24,7 @@ class WordBubble
 		this.statementIndexCurrent++;
 		if (this.statementIndexCurrent >= this.statements.length)
 		{
-			var venue: any = universe.venueCurrent; // todo - Cast appropriately.
+			var venue = universe.venueCurrent as VenueLayered; // ?
 			universe.venueNext = venue.children[0];
 		}
 	}
@@ -99,7 +99,7 @@ class WordBubble
 					new DataBinding
 					(
 						this,
-						(c) => c.statementCurrent(),
+						(c: WordBubble) => c.statementCurrent(),
 						null
 					),
 					fontHeight

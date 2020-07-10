@@ -3,7 +3,7 @@ class VisualCircleGradient implements Visual
 {
 	radius: number;
 	gradientFill: Gradient;
-	colorBorder: any;
+	colorBorder: string;
 
 	constructor(radius: number, gradientFill: Gradient, colorBorder: string)
 	{

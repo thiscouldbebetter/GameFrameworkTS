@@ -12,7 +12,7 @@ class EquipmentSocket
 
 	defn(defnGroup: EquipmentSocketDefnGroup)
 	{
-		return defnGroup.socketDefnsByName[this.defnName];
+		return defnGroup.socketDefnsByName.get(this.defnName);
 	};
 
 	toString(world: World)

@@ -4,7 +4,7 @@ class Material
 	name: string;
 	colorStroke: Color;
 	colorFill: Color;
-	texture: any;
+	texture: Texture;
 
 	constructor(name: string, colorStroke: Color, colorFill: Color, texture: Texture)
 	{

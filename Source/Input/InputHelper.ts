@@ -8,9 +8,9 @@ class InputHelper implements Platformable
 	mouseMovePosPrev: Coords;
 
 	gamepadsConnected: any;
-	inputNames: any;
+	inputNamesLookup: string[];
 	inputsPressed: Input[];
-	inputsPressedByName: any;
+	inputsPressedByName: Map<string, Input>;
 	keysToPreventDefaultsFor: string[];
 
 	isMouseMovementTracked: boolean;
@@ -24,8 +24,8 @@ class InputHelper implements Platformable
 		this.mouseMovePosPrev = new Coords(0, 0, 0);
 		this.mouseMovePosNext = new Coords(0, 0, 0);
 
-		var inputNames = Input.Names()._AllByName;
-		this.inputNames = inputNames;
+		var inputNames = Input.Names();
+		this.inputNamesLookup = inputNames._AllByName;
 		this.keysToPreventDefaultsFor =
 		[
 			inputNames.ArrowDown, inputNames.ArrowLeft, inputNames.ArrowRight,
@@ -33,7 +33,7 @@ class InputHelper implements Platformable
 		];
 
 		this.inputsPressed = [];
-		this.inputsPressedByName = {};
+		this.inputsPressedByName = new Map<string, Input>();
 	}
 
 	actionsFromInput(actionsByName: any, actionToInputsMappingsByInputName: any)
@@ -50,7 +50,7 @@ class InputHelper implements Platformable
 				if (mapping != null)
 				{
 					var actionName = mapping.actionName;
-					var action = actionsByName[actionName];
+					var action = actionsByName.get(actionName);
 					returnValues.push(action);
 					if (mapping.inactivateInputWhenActionPerformed)
 					{
@@ -86,20 +86,20 @@ class InputHelper implements Platformable
 
 	inputAdd(inputPressedName: string)
 	{
-		if (this.inputsPressedByName[inputPressedName] == null)
+		if (this.inputsPressedByName.get(inputPressedName) == null)
 		{
 			var inputPressed = new Input(inputPressedName);
-			this.inputsPressedByName[inputPressedName] = inputPressed;
+			this.inputsPressedByName.set(inputPressedName, inputPressed);
 			this.inputsPressed.push(inputPressed);
 		}
 	};
 
 	inputRemove(inputReleasedName: string)
 	{
-		if (this.inputsPressedByName[inputReleasedName] != null)
+		if (this.inputsPressedByName.has(inputReleasedName))
 		{
-			var inputReleased = this.inputsPressedByName[inputReleasedName];
-			delete this.inputsPressedByName[inputReleasedName];
+			var inputReleased = this.inputsPressedByName.get(inputReleasedName);
+			this.inputsPressedByName.delete(inputReleasedName);
 			ArrayHelper.remove(this.inputsPressed, inputReleased);
 		}
 	};
@@ -120,12 +120,14 @@ class InputHelper implements Platformable
 
 	isMouseClicked(value: boolean)
 	{
-		var inputNameMouseClick = this.inputNames["MouseClick"];
+		var returnValue = false;
+
+		var inputNameMouseClick = Input.Names().MouseClick;
+
 		if (value == null)
 		{
-			var inputPressed = this.inputsPressedByName[inputNameMouseClick];
-			var returnValue = (inputPressed != null && inputPressed.isActive);
-			return returnValue;
+			var inputPressed = this.inputsPressedByName.get(inputNameMouseClick);
+			returnValue = (inputPressed != null && inputPressed.isActive);
 		}
 		else
 		{
@@ -138,6 +140,8 @@ class InputHelper implements Platformable
 				this.inputRemove(inputNameMouseClick);
 			}
 		}
+
+		return returnValue;
 	};
 
 	updateForTimerTick(universe: Universe)
@@ -148,7 +152,7 @@ class InputHelper implements Platformable
 	updateForTimerTick_Gamepads(universe: Universe)
 	{
 		var systemGamepads = this.systemGamepads();
-		var inputNames = this.inputNames;
+		var inputNames = Input.Names();
 
 		for (var i = 0; i < this.gamepadsConnected.length; i++)
 		{
@@ -269,7 +273,7 @@ class InputHelper implements Platformable
 			event.clientY - canvasBox.top,
 			0
 		);
-		this.inputAdd(this.inputNames.MouseClick);
+		this.inputAdd(Input.Names().MouseClick);
 	};
 
 	handleEventMouseMove(event: any)
@@ -287,13 +291,13 @@ class InputHelper implements Platformable
 		{
 			this.mouseMovePosPrev.overwriteWith(this.mouseMovePos);
 			this.mouseMovePos.overwriteWith(this.mouseMovePosNext);
-			this.inputAdd(this.inputNames.MouseMove);
+			this.inputAdd(Input.Names().MouseMove);
 		}
 	};
 
 	handleEventMouseUp(event: any)
 	{
-		this.inputRemove(this.inputNames.MouseClick);
+		this.inputRemove(Input.Names().MouseClick);
 	};
 
 	// gamepads

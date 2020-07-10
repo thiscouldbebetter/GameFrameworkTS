@@ -23,7 +23,7 @@ class BoneInfluence
 			var vertexGroup = vertexGroups[i];
 			var boneName = vertexGroup.name;
 
-			var bone = bonesByName[boneName];
+			var bone = bonesByName.get(boneName);
 
 			if (bone != null)
 			{

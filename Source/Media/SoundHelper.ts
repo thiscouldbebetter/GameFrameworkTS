@@ -3,7 +3,7 @@ class SoundHelper
 {
 	sounds: Sound[];
 
-	soundsByName: any;
+	soundsByName: Map<string, Sound>;
 	musicVolume: number;
 	soundVolume: number;
 	soundForMusic: Sound;
@@ -52,14 +52,14 @@ class SoundHelper
 
 	soundWithNamePlayAsEffect(universe: Universe, soundName: string)
 	{
-		var sound = this.soundsByName[soundName];
+		var sound = this.soundsByName.get(soundName);
 		sound.isRepeating = false;
 		sound.play(universe, this.soundVolume);
 	};
 
 	soundWithNamePlayAsMusic(universe: Universe, soundToPlayName: string)
 	{
-		var soundToPlay = this.soundsByName[soundToPlayName];
+		var soundToPlay = this.soundsByName.get(soundToPlayName);
 
 		soundToPlay.isRepeating = true;
 

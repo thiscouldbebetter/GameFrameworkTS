@@ -3,15 +3,16 @@ class ConversationScope
 {
 	parent: ConversationScope;
 	talkNodeCurrent: TalkNode;
-	talkNodesForOptions: any;
+	talkNodesForOptions: TalkNode[];
+	talkNodesForOptionsByName: Map<string, TalkNode>;
 
 	displayTextCurrent: string;
 	haveOptionsBeenUpdated: boolean;
 	isPromptingForResponse: boolean;
 	talkNodeForOptionSelected: TalkNode;
 
-	_talkNodesForOptionsActive: any;
-	_emptyArray: any;
+	_talkNodesForOptionsActive: TalkNode[];
+	_emptyArray: any[];
 
 	constructor(parent: ConversationScope, talkNodeCurrent: TalkNode, talkNodesForOptions: TalkNode[])
 	{
@@ -19,6 +20,7 @@ class ConversationScope
 		this.talkNodeCurrent = talkNodeCurrent;
 		this.isPromptingForResponse = false;
 		this.talkNodesForOptions = talkNodesForOptions;
+		this.talkNodesForOptionsByName = ArrayHelper.addLookupsByName(this.talkNodesForOptions);
 
 		this.displayTextCurrent = "[conversation begins]";
 		this.talkNodeForOptionSelected = null;

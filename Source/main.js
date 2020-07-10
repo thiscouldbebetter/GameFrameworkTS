@@ -38,7 +38,7 @@ function main()
 
 	var universe = Universe.new
 	(
-		"Game Framework Demo Game", "0.0.0-20200209-1750", timerHelper, display, mediaLibrary, null
+		"Game Framework Demo Game", "0.0.0-20200709-1935", timerHelper, display, mediaLibrary, null
 	);
 	universe.initialize
 	(

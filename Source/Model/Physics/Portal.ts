@@ -14,9 +14,9 @@ class Portal
 
 	use(universe: Universe, world: World, placeToDepart: Place, entityToTransport: Entity)
 	{
-		var destinationPlace = world.placesByName[this.destinationPlaceName];
+		var destinationPlace = world.placesByName.get(this.destinationPlaceName);
 		destinationPlace.initialize(universe, world);
-		var destinationEntity = destinationPlace.entitiesByName[this.destinationEntityName];
+		var destinationEntity = destinationPlace.entitiesByName.get(this.destinationEntityName);
 		var destinationPos = destinationEntity.locatable().loc.pos;
 
 		var entityToTransportLoc = entityToTransport.locatable().loc;

@@ -7,7 +7,7 @@ class Device
 	use: (u: Universe, w: World, p: Place, eUser: Entity, eDevice: Entity) => void;
 	tickLastUsed: number;
 
-	constructor(name: any, initialize: any, update: any, use:any)
+	constructor(name: any, initialize: any, update: any, use: any)
 	{
 		this.name = name;
 		this.initialize = initialize;

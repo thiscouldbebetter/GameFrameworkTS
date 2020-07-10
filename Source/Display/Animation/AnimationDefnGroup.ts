@@ -3,7 +3,7 @@ class AnimationDefnGroup
 {
 	name: string;
 	animationDefns: AnimationDefn[];
-	animationDefnsByName: any;
+	animationDefnsByName: Map<string, AnimationDefn>;
 
 	constructor(name: string, animationDefns: AnimationDefn[])
 	{

@@ -3,7 +3,7 @@ class AnimationKeyframe
 {
 	frameIndex: number;
 	transforms: Transform_Interpolatable[];
-	transformsByPropertyName: any;
+	transformsByPropertyName: Map<string, Transform_Interpolatable>;
 
 	constructor(frameIndex: number, transforms: Transform_Interpolatable[])
 	{
@@ -19,7 +19,10 @@ class AnimationKeyframe
 		for (var i = 0; i < this.transforms.length; i++)
 		{
 			var transformThis = this.transforms[i];
-			var transformOther = other.transformsByPropertyName[transformThis.propertyName];
+			var transformOther = other.transformsByPropertyName.get
+			(
+				transformThis.propertyName
+			);
 
 			var transformInterpolated = transformThis.interpolateWith
 			(

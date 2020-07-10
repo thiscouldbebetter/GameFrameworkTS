@@ -7,14 +7,14 @@ class MediaLibrary
 	fonts: Font[];
 	textStrings: TextString[];
 
-	imagesByName: any;
-	soundsByName: any;
-	videosByName: any;
-	fontsByName: any;
-	textStringsByName: any;
+	imagesByName: Map<string, Image2>;
+	soundsByName: Map<string, Sound>;
+	videosByName: Map<string, Video>;
+	fontsByName: Map<string, Font>;
+	textStringsByName: Map<string, TextString>;
 
-	collectionsAll: any;
-	collectionsByName: any;
+	collectionsAll: any[];
+	collectionsByName: Map<string, Map<string, any>>;
 
 	timer: any;
 
@@ -40,12 +40,12 @@ class MediaLibrary
 			this.textStrings
 		];
 
-		this.collectionsByName = {};
-		this.collectionsByName["Images"] = this.images;
-		this.collectionsByName["Sounds"] = this.sounds;
-		this.collectionsByName["Videos"] = this.videos;
-		this.collectionsByName["Fonts"] = this.fonts;
-		this.collectionsByName["TextStrings"] = this.textStrings;
+		this.collectionsByName = new Map<string, Map<string, any> >();
+		this.collectionsByName.set("Images", this.imagesByName);
+		this.collectionsByName.set("Sounds", this.soundsByName);
+		this.collectionsByName.set("Videos", this.videosByName);
+		this.collectionsByName.set("Fonts", this.fontsByName);
+		this.collectionsByName.set("TextStrings", this.textStringsByName);
 	}
 
 	static fromFileNames
@@ -135,7 +135,7 @@ class MediaLibrary
 
 	waitForItemToLoad(collectionName: string, itemName: string, callback: any)
 	{
-		var itemToLoad = this.collectionsByName[collectionName][itemName];
+		var itemToLoad = this.collectionsByName.get(collectionName).get(itemName);
 		this.timer = setInterval
 		(
 			this.waitForItemToLoad_TimerTick.bind(this, itemToLoad, callback),
@@ -177,36 +177,36 @@ class MediaLibrary
 		for (var i = 0; i < images.length; i++)
 		{
 			var image = images[i];
-			if (this.imagesByName[image.name] == null)
+			if (this.imagesByName.get(image.name) == null)
 			{
 				this.images.push(image);
-				this.imagesByName[image.name] = image;
+				this.imagesByName.set(image.name, image);
 			}
 		}
 	};
 
 	fontGetByName(name: string)
 	{
-		return this.fontsByName[name];
+		return this.fontsByName.get(name);
 	};
 
 	imageGetByName(name: string)
 	{
-		return this.imagesByName[name];
+		return this.imagesByName.get(name);
 	};
 
 	soundGetByName(name: string)
 	{
-		return this.soundsByName[name];
+		return this.soundsByName.get(name);
 	};
 
 	textStringGetByName(name: string)
 	{
-		return this.textStringsByName[name];
+		return this.textStringsByName.get(name);
 	};
 
 	videoGetByName(name: string)
 	{
-		return this.videosByName[name];
+		return this.videosByName.get(name);
 	};
 }

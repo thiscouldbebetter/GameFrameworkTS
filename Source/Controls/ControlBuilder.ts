@@ -1,8 +1,8 @@
 
 class ControlBuilder
 {
-	styles: Array<ControlStyle>;
-	stylesByName: any;
+	styles: ControlStyle[];
+	stylesByName: Map<string,ControlStyle>;
 	fontHeightInPixelsBase: number;
 	sizeBase: Coords;
 
@@ -141,7 +141,9 @@ class ControlBuilder
 
 	choiceList
 	(
-		universe: Universe, size: Coords, message: string, options: any, bindingForOptionText: DataBinding, buttonSelectText: string, select: any
+		universe: Universe, size: Coords, message: string,
+		options: any, bindingForOptionText: DataBinding<any,any>,
+		buttonSelectText: string, select: any
 	)
 	{
 		// todo - Variable sizes.
@@ -216,7 +218,7 @@ class ControlBuilder
 		return returnValue;
 	};
 
-	confirm(universe: Universe, size: Coords, message: string, confirm: any, cancel: any)
+	confirm(universe: Universe, size: Coords, message: string, confirm: () => void, cancel: () => void)
 	{
 		return this.choice
 		(
@@ -277,7 +279,7 @@ class ControlBuilder
 					true, // isEnabled
 					() => // click
 					{
-						var venueNext: any = new VenueControls
+						var venueNext: Venue = new VenueControls
 						(
 							universe.controlBuilder.worldSave(universe, null)
 						);
@@ -323,7 +325,7 @@ class ControlBuilder
 						var venueNext: any = new VenueMessage
 						(
 							universe.name + "\nv" + universe.version,
-							function acknowledge(universe: Universe)
+							() => // acknowledge
 							{
 								universe.venueNext = new VenueFader(venueCurrent, null, null, null);
 							},
@@ -353,7 +355,7 @@ class ControlBuilder
 							universe,
 							size,
 							"Are you sure you want to quit?",
-							function confirm(universe: Universe)
+							() => // confirm
 							{
 								universe.reset();
 								var venueNext: any = new VenueControls
@@ -363,7 +365,7 @@ class ControlBuilder
 								venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 								universe.venueNext = venueNext;
 							},
-							function cancel(universe: Universe)
+							() => // cancel
 							{
 								var venueNext: any = new VenueControls
 								(
@@ -523,7 +525,7 @@ class ControlBuilder
 
 		var world = universe.world;
 		var placeCurrentDefnName = "Demo"; // hack
-		var placeDefn = world.defns.defnsByNameByTypeName[PlaceDefn.name][placeCurrentDefnName];
+		var placeDefn = world.defns.defnsByNameByTypeName.get(PlaceDefn.name).get(placeCurrentDefnName);
 		placeDefn.actionToInputsMappingsEdit();
 
 		var returnValue = new ControlContainer
@@ -549,15 +551,20 @@ class ControlBuilder
 					new Coords(50, 25, 0), // pos
 					new Coords(100, 40, 0), // size
 					new DataBinding(placeDefn.actionToInputsMappingsEdited, null, null), // items
-					new DataBinding(null, (c: any) => { return c.actionName; }, null ), // bindingForItemText
+					new DataBinding
+					(
+						null,
+						(c: ActionToInputsMapping) => { return c.actionName; },
+						null
+					), // bindingForItemText
 					fontHeight,
 					new DataBinding
 					(
 						placeDefn,
-						(c: any) => c.actionToInputsMappingSelected,
-						function set(c: any, v: any) { c.actionToInputsMappingSelected = v; }
+						(c: PlaceDefn) => c.actionToInputsMappingSelected,
+						(c: PlaceDefn, v: ActionToInputsMapping) => { c.actionToInputsMappingSelected = v; }
 					), // bindingForItemSelected
-					new DataBinding(null, (c: any) => c, null ), // bindingForItemValue
+					new DataBinding(null, (c: ActionToInputsMapping) => c, null ), // bindingForItemValue
 					null, null, null
 				),
 
@@ -580,7 +587,7 @@ class ControlBuilder
 					new DataBinding
 					(
 						placeDefn,
-						(c: any) => 
+						(c: PlaceDefn) => 
 						{
 							var i = c.actionToInputsMappingSelected;
 							return (i == null ? "-" : i.inputNames.join(", "));
@@ -601,7 +608,7 @@ class ControlBuilder
 					new DataBinding
 					(
 						placeDefn,
-						(c: any) => { return c.actionToInputsMappingSelected != null},
+						(c: PlaceDefn) => { return c.actionToInputsMappingSelected != null},
 						null
 					), // isEnabled
 					() => // click
@@ -626,7 +633,7 @@ class ControlBuilder
 					new DataBinding
 					(
 						placeDefn,
-						(c: any) => { return c.actionToInputsMappingSelected != null},
+						(c: PlaceDefn) => { return c.actionToInputsMappingSelected != null},
 						null
 					), // isEnabled
 					() => // click
@@ -660,7 +667,7 @@ class ControlBuilder
 					new DataBinding
 					(
 						placeDefn,
-						(c: any) => { return c.actionToInputsMappingSelected != null},
+						(c: PlaceDefn) => { return c.actionToInputsMappingSelected != null},
 						null
 					), // isEnabled
 					() => // click
@@ -695,14 +702,14 @@ class ControlBuilder
 							universe,
 							size,
 							"Are you sure you want to restore defaults?",
-							function confirm(universe: Universe)
+							() => // confirm
 							{
 								placeDefn.actionToInputsMappingsRestoreDefaults();
 								var venueNext: any = venueInputs;
 								venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 								universe.venueNext = venueNext;
 							},
-							function cancel(universe: Universe)
+							() => // cancel
 							{
 								var venueNext: any = venueInputs;
 								venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
@@ -746,7 +753,7 @@ class ControlBuilder
 					new DataBinding
 					(
 						placeDefn,
-						(c: any) => 
+						(c: PlaceDefn) => 
 						{
 							var mappings = c.actionToInputsMappingsEdited;
 							var doAnyActionsLackInputs = mappings.some
@@ -775,7 +782,7 @@ class ControlBuilder
 		return returnValue;
 	};
 
-	message(universe: Universe, size: Coords, message: string, acknowledge: any, showMessageOnly: boolean)
+	message(universe: Universe, size: Coords, message: string, acknowledge: () => void, showMessageOnly: boolean)
 	{
 		var optionNames = [];
 		var optionFunctions = [];
@@ -838,19 +845,19 @@ class ControlBuilder
 					new Coords(150, 50, 0), // size
 					new DataBinding
 					(
-						universe.profile.worlds,
-						(c: any) => c,
+						universe.profile,
+						(c: Profile) => c.worlds,
 						null
 					),
-					new DataBinding(null, (c: any) => { return c.name; }, null), // bindingForOptionText
+					new DataBinding(null, (c: World) => { return c.name; }, null), // bindingForOptionText
 					fontHeight,
 					new DataBinding
 					(
-						universe,
-						(c: any) => { return c.worldSelected; },
-						function set(c: any, v: any) { c.worldSelected = v; }
+						universe.profile,
+						(c: Profile) => { return c.worldSelected; },
+						(c: Profile, v: World) => { c.worldSelected = v; }
 					), // bindingForOptionSelected
-					new DataBinding(null, (c: any) => c, null), // value
+					new DataBinding(null, (c: World) => c, null), // value
 					null, null, null
 				),
 
@@ -897,8 +904,8 @@ class ControlBuilder
 					// isEnabled
 					new DataBinding
 					(
-						universe,
-						(c: any) => { return (c.worldSelected != null); },
+						universe.profile,
+						(c: Profile) => (c.worldSelected != null),
 						null
 					),
 					() => // click
@@ -907,7 +914,7 @@ class ControlBuilder
 						if (worldSelected != null)
 						{
 							universe.world = worldSelected;
-							var venueNext: any = new VenueControls
+							var venueNext: Venue = new VenueControls
 							(
 								universe.controlBuilder.worldDetail(universe, size)
 							);
@@ -959,7 +966,7 @@ class ControlBuilder
 							"Delete profile \""
 								+ profile.name
 								+ "\"?",
-							function confirm(universe: Universe)
+							() => // confirm
 							{
 								var profile = universe.profile;
 								universe.profileHelper.profileDelete
@@ -974,7 +981,7 @@ class ControlBuilder
 								venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 								universe.venueNext = venueNext;
 							},
-							function cancel()
+							() => // cancel
 							{
 								var venueNext: any = new VenueControls
 								(
@@ -1037,8 +1044,8 @@ class ControlBuilder
 					new DataBinding
 					(
 						universe.profile,
-						(c: any) => { return c.name; },
-						(c: any, v: any) => { c.name = v; },
+						(c: Profile) => { return c.name; },
+						(c: Profile, v: string) => { c.name = v; },
 					), // text
 					fontHeight,
 					null
@@ -1055,15 +1062,15 @@ class ControlBuilder
 					// isEnabled
 					new DataBinding
 					(
-						universe,
-						(c: any) => { return c.profile.name.length > 0; },
+						universe.profile,
+						(c: Profile) => { return c.name.length > 0; },
 						null
 					),
 					() => // click
 					{
 						var venueControls = universe.venueCurrent as VenueControls;
 						var controlRootAsContainer = venueControls.controlRoot as ControlContainer;
-						var textBoxName = controlRootAsContainer.childrenByName["textBoxName"] as ControlTextBox;
+						var textBoxName = controlRootAsContainer.childrenByName.get("textBoxName") as ControlTextBox;
 						var profileName = textBoxName.text(null, universe);
 						if (profileName == "")
 						{
@@ -1152,16 +1159,16 @@ class ControlBuilder
 					"listProfiles",
 					new Coords(35, 50, 0), // pos
 					new Coords(130, 40, 0), // size
-					new DataBinding(profiles, (c: any) => c, null ), // items
-					new DataBinding(null, (c: any) => { return c.name; }, null ), // bindingForItemText
+					new DataBinding(profiles, (c: Profile[]) => c, null ), // items
+					new DataBinding(null, (c: Profile) => c.name, null ), // bindingForItemText
 					fontHeight,
 					new DataBinding
 					(
 						universe,
-						(c: any) => { return c.profile; },
-						function set(c: any, v: any) { c.profile = v; }
+						(c: Universe) => { return c.profile; },
+						(c: Universe, v: Profile) => { c.profile = v; }
 					), // bindingForOptionSelected
-					new DataBinding(null, (c: any) => c, null), // value
+					new DataBinding(null, (c: Profile) => c, null), // value
 					null, null, null
 				),
 
@@ -1199,15 +1206,16 @@ class ControlBuilder
 					new DataBinding
 					(
 						universe,
-						(c: any) => { return (c.profile != null); },
+						(c: Universe) => { return (c.profile != null); },
 						null
 					),
 					() => // click
 					{
 						var venueControls = universe.venueCurrent as VenueControls;
 						var controlRootAsContainer = venueControls.controlRoot as ControlContainer;
-						var listProfiles = controlRootAsContainer.childrenByName["listProfiles"];
-						var profileSelected = listProfiles.itemSelected();
+						var listProfiles =
+							controlRootAsContainer.childrenByName.get("listProfiles") as ControlList;
+						var profileSelected = listProfiles.itemSelected(null);
 						universe.profile = profileSelected;
 						var venueNext: any = new VenueControls
 						(
@@ -1235,7 +1243,7 @@ class ControlBuilder
 						venueNext = new VenueTask
 						(
 							venueNext,
-							function perform()
+							() => //perform
 							{
 								return World.new(universe);
 							},
@@ -1300,7 +1308,7 @@ class ControlBuilder
 							universe,
 							size,
 							"Delete all profiles?",
-							function confirm(universe: Universe)
+							() => // confirm
 							{
 								universe.profileHelper.profilesAllDelete(null);
 								var venueNext: any = new VenueControls
@@ -1310,7 +1318,7 @@ class ControlBuilder
 								venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 								universe.venueNext = venueNext;
 							},
-							function cancel(universe: Universe)
+							() => // cancel
 							{
 								var venueNext: any = new VenueControls
 								(
@@ -1393,8 +1401,8 @@ class ControlBuilder
 					new DataBinding
 					(
 						universe.soundHelper,
-						(c: any) => { return c.musicVolume; },
-						(c: any, v: any) => { c.musicVolume = v; }
+						(c: SoundHelper) => { return c.musicVolume; },
+						(c: SoundHelper, v: number) => { c.musicVolume = v; }
 					), // valueSelected
 					SoundHelper.controlSelectOptionsVolume(), // options
 					new DataBinding
@@ -1426,12 +1434,12 @@ class ControlBuilder
 					new DataBinding
 					(
 						universe.soundHelper,
-						(c: any) => { return c.soundVolume; },
-					(c: any, v: any) => { c.soundVolume = v; }
+						(c: SoundHelper) => c.soundVolume,
+						(c: SoundHelper, v: number) => { c.soundVolume = v; }
 					), // valueSelected
 					SoundHelper.controlSelectOptionsVolume(), // options
-					new DataBinding(null, (c: any) => c.value, null ), // bindingForOptionValues,
-					new DataBinding(null, (c: any) => { return c.text; }, null ), // bindingForOptionText
+					new DataBinding(null, (c: ControlSelectOption) => c.value, null ), // bindingForOptionValues,
+					new DataBinding(null, (c: ControlSelectOption) => { return c.text; }, null ), // bindingForOptionText
 					fontHeight
 				),
 
@@ -1453,8 +1461,8 @@ class ControlBuilder
 					universe.display.sizeInPixels, // valueSelected
 					// options
 					universe.display.sizesAvailable,
-					new DataBinding(null, (c: any) => c, null ), // bindingForOptionValues,
-					new DataBinding(null, (c: any) => { return c.toStringXY(); }, null ), // bindingForOptionText
+					new DataBinding(null, (c: Coords) => c, null ), // bindingForOptionValues,
+					new DataBinding(null, (c: Coords) => { return c.toStringXY(); }, null ), // bindingForOptionText
 					fontHeight
 				),
 
@@ -1471,7 +1479,8 @@ class ControlBuilder
 					{
 						var venueControls = universe.venueCurrent as VenueControls;
 						var controlRootAsContainer = venueControls.controlRoot as ControlContainer;
-						var selectDisplaySize = controlRootAsContainer.childrenByName["selectDisplaySize"] as ControlSelect;
+						var selectDisplaySize =
+							controlRootAsContainer.childrenByName.get("selectDisplaySize") as ControlSelect;
 						var displaySizeSpecified = selectDisplaySize.optionSelected();
 
 						var display = universe.display as Display2D;
@@ -1774,7 +1783,7 @@ class ControlBuilder
 								universe,
 								size,
 								instructions,
-								function acknowledge(universe: Universe)
+								() => // acknowledge
 								{
 									universe.venueNext = new VenueFader
 									(
@@ -1843,7 +1852,7 @@ class ControlBuilder
 							"Delete world \""
 								+ world.name
 								+ "\"?",
-							function confirm(universe: Universe)
+							() => // confirm
 							{
 								var profile = universe.profile;
 								var world = universe.world;
@@ -1864,7 +1873,7 @@ class ControlBuilder
 								venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 								universe.venueNext = venueNext;
 							},
-							function cancel(universe: Universe)
+							() => // cancel
 							{
 								var venueNext: any = new VenueControls
 								(
@@ -1903,7 +1912,7 @@ class ControlBuilder
 
 		var fontHeight = this.fontHeightInPixelsBase;
 
-		var confirm = function()
+		var confirm = () =>
 		{
 			var profileOld = universe.profile;
 			var profilesReloaded = universe.profileHelper.profiles();
@@ -1946,7 +1955,7 @@ class ControlBuilder
 						universe,
 						size,
 						"No save exists to reload!",
-						function acknowledge(universe: Universe)
+						() => // acknowledge
 						{
 							var venueNext: any = new VenueControls
 							(
@@ -1967,7 +1976,7 @@ class ControlBuilder
 			}
 		};
 
-		var cancel = function(universe: Universe)
+		var cancel = () =>
 		{
 			var venueNext: any = new VenueControls
 			(
@@ -2031,7 +2040,7 @@ class ControlBuilder
 								universe,
 								size,
 								"Ready to load from file...",
-								function acknowledge()
+								() => // acknowledge
 								{
 									function callback(fileContentsAsString: string)
 									{
@@ -2067,7 +2076,7 @@ class ControlBuilder
 								universe,
 								size,
 								"No file specified.",
-								function acknowledge(universe: Universe)
+								() => // acknowlege
 								{
 									var venueNext: any = new VenueControls
 									(
@@ -2129,7 +2138,7 @@ class ControlBuilder
 
 		var fontHeight = this.fontHeightInPixelsBase;
 
-		var saveToLocalStorage = function()
+		var saveToLocalStorage = () =>
 		{
 			var profile = universe.profile;
 			var world = universe.world;
@@ -2145,16 +2154,16 @@ class ControlBuilder
 				wasSaveSuccessful ? "Profile saved to local storage." : "Save failed due to errors."
 			);
 
-			var venueNext: any = new VenueControls
+			var venueNext: Venue = new VenueControls
 			(
 				universe.controlBuilder.message
 				(
 					universe,
 					size,
 					message,
-					function acknowledge(universe: Universe)
+					() => // acknowledge
 					{
-						var venueNext: any = new VenueControls
+						var venueNext: Venue = new VenueControls
 						(
 							universe.controlBuilder.game(universe, null)
 						);
@@ -2217,9 +2226,9 @@ class ControlBuilder
 								universe,
 								size,
 								"Save must be completed manually.",
-								function acknowledge()
+								() => // acknowledge
 								{
-									var venueNext: any = new VenueControls
+									var venueNext: Venue = new VenueControls
 									(
 										universe.controlBuilder.game(universe, null)
 									);

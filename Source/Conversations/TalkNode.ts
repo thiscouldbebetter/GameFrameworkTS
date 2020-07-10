@@ -4,10 +4,10 @@ class TalkNode
 	name: string;
 	defnName: string;
 	text: string;
-	next: any;
+	next: string;
 	isActive: boolean;
 
-	constructor(name: string, defnName: string, text: string, next: any, isActive: boolean)
+	constructor(name: string, defnName: string, text: string, next: string, isActive: boolean)
 	{
 		this.name = (name == null ? TalkNode.idNext() : name);
 		this.defnName = defnName;
@@ -38,7 +38,7 @@ class TalkNode
 
 	defn(conversationDefn: ConversationDefn)
 	{
-		return conversationDefn.talkNodeDefnsByName[this.defnName];
+		return conversationDefn.talkNodeDefnsByName.get(this.defnName);
 	};
 
 	execute(universe: Universe, conversationRun: ConversationRun, scope: ConversationScope)

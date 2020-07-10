@@ -369,17 +369,17 @@ class ItemHolder
 				new DataBinding
 				(
 					null,
-					function get(c) { return c.item().toString(world); },
+					(c: Entity) => c.item().toString(world),
 					null
 				), // bindingForItemText
 				fontHeightSmall,
 				new DataBinding
 				(
 					this,
-					function get(c) { return c.itemEntitySelected; },
-					function set(c, v) { c.itemEntitySelected = v; }
+					(c: ItemHolder) => c.itemEntitySelected,
+					(c: ItemHolder, v: Entity) => { c.itemEntitySelected = v; }
 				), // bindingForItemSelected
-				new DataBinding(null, function(c) { return c; }, null ), // bindingForItemValue
+				new DataBinding(null, (c: Entity) => c, null ), // bindingForItemValue
 				new DataBinding(true, null, null), // isEnabled
 				(universe: Universe) => // confirm
 				{
@@ -407,7 +407,7 @@ class ItemHolder
 				new DataBinding
 				(
 					this,
-					function get(c)
+					(c: ItemHolder) =>
 					{
 						var i = c.itemEntitySelected;
 						return (i == null ? "-" : i.item().toString(world));
@@ -426,7 +426,7 @@ class ItemHolder
 				new DataBinding
 				(
 					this,
-					function get(c)
+					(c: ItemHolder) =>
 					{
 						return c.statusMessage;
 					},
@@ -446,7 +446,7 @@ class ItemHolder
 				new DataBinding
 				(
 					this,
-					function get(c)
+					(c: ItemHolder) =>
 					{
 						var returnValue =
 						(
@@ -472,7 +472,7 @@ class ItemHolder
 				new DataBinding
 				(
 					this,
-					function get(c)
+					(c: ItemHolder) =>
 					{
 						var returnValue =
 						(
@@ -498,7 +498,7 @@ class ItemHolder
 				new DataBinding
 				(
 					this,
-					function get(c)
+					(c: ItemHolder) =>
 					{
 						var itemEntity = c.itemEntitySelected;
 						var returnValue =
@@ -525,7 +525,7 @@ class ItemHolder
 				new DataBinding
 				(
 					this,
-					function get(c)
+					(c: ItemHolder) => 
 					{
 						var returnValue =
 						(
@@ -557,10 +557,7 @@ class ItemHolder
 				new DataBinding
 				(
 					this,
-					function get(c)
-					{
-						return c.itemEntities.length > 1;
-					},
+					(c: ItemHolder) => (c.itemEntities.length > 1),
 					null
 				), // isEnabled
 				sort,
@@ -578,7 +575,7 @@ class ItemHolder
 				new DataBinding
 				(
 					this,
-					function get(c)
+					(c: ItemHolder) =>
 					{
 						var itemEntity = c.itemEntitySelected;
 						return (itemEntity != null && itemEntity.item().isUsable(world));
@@ -603,7 +600,7 @@ class ItemHolder
 				new DataBinding
 				(
 					this,
-					function get(c) { return c.itemEntitySelected != null},
+					(c: ItemHolder) => (c.itemEntitySelected != null),
 					null
 				), // isEnabled
 				(universe: Universe) => // click
@@ -644,7 +641,7 @@ class ItemHolder
 			],
 
 			[
-				new ActionToInputsMapping( "Back", [ universe.inputHelper.inputNames.Escape ], true ),
+				new ActionToInputsMapping( "Back", [ Input.Names().Escape ], true ),
 
 				new ActionToInputsMapping( "Up", [ "[" ], true ),
 				new ActionToInputsMapping( "Down", [ "]" ], true ),

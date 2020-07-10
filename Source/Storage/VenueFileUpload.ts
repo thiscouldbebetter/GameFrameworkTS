@@ -4,9 +4,9 @@ class VenueFileUpload implements Venue
 	venueNextIfFileSpecified: Venue;
 	venueNextIfCancelled: Venue;
 	actionToInputsMappings: ActionToInputsMapping[];
-	actionToInputsMappingsByInputName: any;
+	actionToInputsMappingsByInputName: Map<string, ActionToInputsMapping>;
 
-	domElement: any;
+	domElement: HTMLElement;
 
 	constructor(venueNextIfFileSpecified: Venue, venueNextIfCancelled: Venue)
 	{
@@ -99,7 +99,7 @@ class VenueFileUpload implements Venue
 			if (inputPressed.isActive == true)
 			{
 				var actionToInputsMapping =
-					this.actionToInputsMappingsByInputName[inputPressed.name];
+					this.actionToInputsMappingsByInputName.get(inputPressed.name);
 				if (actionToInputsMapping != null)
 				{
 					inputPressed.isActive = false;

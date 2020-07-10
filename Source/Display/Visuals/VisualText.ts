@@ -1,11 +1,11 @@
 
 class VisualText implements Visual
 {
-	_text: DataBinding;
+	_text: DataBinding<any, string>;
 	colorFill: string;
 	colorBorder: string;
 
-	constructor(text: DataBinding, colorFill: string, colorBorder: string)
+	constructor(text: DataBinding<any, string>, colorFill: string, colorBorder: string)
 	{
 		this._text = text;
 		this.colorFill = colorFill;

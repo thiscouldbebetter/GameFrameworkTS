@@ -59,7 +59,7 @@ class Transform_BonePose implements Transform_Interpolatable
 	{
 		var skeletonToTransform: any = transformableToTransform;
 
-		var boneToTransform = skeletonToTransform.bonesAllByName[this.boneName];
+		var boneToTransform = skeletonToTransform.bonesAllByName.get(this.boneName);
 		var boneOrientation = boneToTransform.orientation;
 
 		var axesToRotateAround =

@@ -2,20 +2,20 @@
 class Entity
 {
 	name: string;
-	properties: any;
-	propertiesByName: any;
+	properties: any[];
+	propertiesByName: Map<string, any>;
 
-	constructor(name: string, properties: any)
+	constructor(name: string, properties: any[])
 	{
 		this.name = name;
 		this.properties = properties;
 
-		this.propertiesByName = {};
+		this.propertiesByName = new Map<string, any>();
 		for (var i = 0; i < this.properties.length; i++)
 		{
 			var property = this.properties[i];
 			var propertyName = property.constructor.name;
-			this.propertiesByName[propertyName] = property;
+			this.propertiesByName.set(propertyName, property);
 		}
 	}
 
@@ -53,51 +53,51 @@ class Entity
 
 	// Convenience methods for properties.
 
-	actor() { return this.propertiesByName[Actor.name]; }
+	actor() { return this.propertiesByName.get(Actor.name); }
 
-	boundable() { return this.propertiesByName[Boundable.name]; }
+	boundable() { return this.propertiesByName.get(Boundable.name); }
 
-	camera() { return this.propertiesByName[Camera.name]; }
+	camera() { return this.propertiesByName.get(Camera.name); }
 
-	collidable() { return this.propertiesByName[Collidable.name]; }
+	collidable() { return this.propertiesByName.get(Collidable.name); }
 
-	constrainable() { return this.propertiesByName[Constrainable.name]; }
+	constrainable() { return this.propertiesByName.get(Constrainable.name); }
 
-	controllable() { return this.propertiesByName[Controllable.name]; }
+	controllable() { return this.propertiesByName.get(Controllable.name); }
 
-	damager() { return this.propertiesByName[Damager.name]; }
+	damager() { return this.propertiesByName.get(Damager.name); }
 
-	device() { return this.propertiesByName[Device.name]; }
+	device() { return this.propertiesByName.get(Device.name); }
 
-	drawable() { return this.propertiesByName[Drawable.name]; }
+	drawable() { return this.propertiesByName.get(Drawable.name); }
 
-	ephemeral() { return this.propertiesByName[Ephemeral.name]; }
+	ephemeral() { return this.propertiesByName.get(Ephemeral.name); }
 
-	equipmentUser() { return this.propertiesByName[EquipmentUser.name]; }
+	equipmentUser() { return this.propertiesByName.get(EquipmentUser.name); }
 
-	item() { return this.propertiesByName[Item.name]; }
+	item() { return this.propertiesByName.get(Item.name); }
 
-	itemContainer() { return this.propertiesByName[ItemContainer.name]; }
+	itemContainer() { return this.propertiesByName.get(ItemContainer.name); }
 
-	itemCrafter() { return this.propertiesByName[ItemCrafter.name]; }
+	itemCrafter() { return this.propertiesByName.get(ItemCrafter.name); }
 
-	itemHolder() { return this.propertiesByName[ItemHolder.name]; }
+	itemHolder() { return this.propertiesByName.get(ItemHolder.name); }
 
-	itemStore() { return this.propertiesByName[ItemStore.name]; }
+	itemStore() { return this.propertiesByName.get(ItemStore.name); }
 
-	killable() { return this.propertiesByName[Killable.name]; }
+	killable() { return this.propertiesByName.get(Killable.name); }
 
-	locatable() { return this.propertiesByName[Locatable.name]; }
+	locatable() { return this.propertiesByName.get(Locatable.name); }
 
-	movable() { return this.propertiesByName[Movable.name]; }
+	movable() { return this.propertiesByName.get(Movable.name); }
 
-	recurrent() { return this.propertiesByName[Recurrent.name]; }
+	recurrent() { return this.propertiesByName.get(Recurrent.name); }
 
-	playable() { return this.propertiesByName[Playable.name]; }
+	playable() { return this.propertiesByName.get(Playable.name); }
 
-	portal() { return this.propertiesByName[Portal.name]; }
+	portal() { return this.propertiesByName.get(Portal.name); }
 
-	skillLearner() { return this.propertiesByName[SkillLearner.name]; }
+	skillLearner() { return this.propertiesByName.get(SkillLearner.name); }
 
-	talker() { return this.propertiesByName[Talker.name]; }
+	talker() { return this.propertiesByName.get(Talker.name); }
 }

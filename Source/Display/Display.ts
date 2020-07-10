@@ -63,5 +63,5 @@ interface Display
 	stateSave(): void;
 	textWidthForFontHeight(textToMeasure: string, fontHeightInPixels: number): number;
 	toImage(): Image2;
-	toDomElement(): any;
+	toDomElement(): HTMLElement;
 }

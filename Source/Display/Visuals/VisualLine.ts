@@ -3,7 +3,7 @@ class VisualLine implements Visual
 {
 	fromPos: Coords;
 	toPos: Coords;
-	color: any;
+	color: string;
 
 	drawPosFrom: Coords;
 	drawPosTo: Coords;

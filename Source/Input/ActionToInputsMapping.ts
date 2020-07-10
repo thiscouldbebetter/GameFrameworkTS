@@ -14,7 +14,7 @@ class ActionToInputsMapping
 
 	action(universe: Universe)
 	{
-		return universe.world.defns.defnsByNameByTypeName[Action.name][this.actionName];
+		return universe.world.defns.defnsByNameByTypeName.get(Action.name).get(this.actionName);
 	};
 
 	// Cloneable implementation.

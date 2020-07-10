@@ -5,11 +5,11 @@ class ControlList implements Control
 	pos: Coords;
 	size: Coords;
 	_items: any;
-	bindingForItemText: DataBinding;
+	bindingForItemText: DataBinding<any, string>;
 	fontHeightInPixels: number;
-	bindingForItemSelected: DataBinding;
-	bindingForItemValue: DataBinding;
-	bindingForIsEnabled: DataBinding;
+	bindingForItemSelected: DataBinding<any, any>;
+	bindingForItemValue: DataBinding<any, any>;
+	bindingForIsEnabled: DataBinding<any, boolean>;
 	confirm: (u: Universe) => void;
 	widthInItems: number;
 
@@ -26,10 +26,10 @@ class ControlList implements Control
 
 	constructor
 	(
-		name: string, pos: Coords, size: Coords, items: DataBinding,
-		bindingForItemText: DataBinding, fontHeightInPixels: number,
-		bindingForItemSelected: DataBinding, bindingForItemValue: DataBinding,
-		bindingForIsEnabled: DataBinding, confirm: (u: Universe) => void,
+		name: string, pos: Coords, size: Coords, items: DataBinding<any, any[]>,
+		bindingForItemText: DataBinding<any, string>, fontHeightInPixels: number,
+		bindingForItemSelected: DataBinding<any, any>, bindingForItemValue: DataBinding<any, any>,
+		bindingForIsEnabled: DataBinding<any, boolean>, confirm: (u: Universe) => void,
 		widthInItems: number
 	)
 	{
@@ -72,7 +72,7 @@ class ControlList implements Control
 		this._mouseClickPos = new Coords(0, 0, 0);
 	}
 
-	static fromPosSizeAndItems(pos: Coords, size: Coords, items: DataBinding)
+	static fromPosSizeAndItems(pos: Coords, size: Coords, items: DataBinding<any, any[]>)
 	{
 		var returnValue = new ControlList
 		(
@@ -93,8 +93,8 @@ class ControlList implements Control
 
 	static fromPosSizeItemsAndBindingForItemText
 	(
-		pos: Coords, size: Coords, items: DataBinding,
-		bindingForItemText: DataBinding
+		pos: Coords, size: Coords, items: DataBinding<any, any[]>,
+		bindingForItemText: DataBinding<any, string>
 	)
 	{
 		var returnValue = new ControlList
@@ -357,7 +357,7 @@ class ControlList implements Control
 
 	style(universe: Universe)
 	{
-		return universe.controlBuilder.stylesByName[this.styleName == null ? "Default" : this.styleName];
+		return universe.controlBuilder.stylesByName.get(this.styleName == null ? "Default" : this.styleName);
 	};
 
 	// drawable

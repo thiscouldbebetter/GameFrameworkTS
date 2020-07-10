@@ -8,11 +8,11 @@ class ConversationRun
  
 	scopeCurrent: ConversationScope;
 	talkNodesForTranscript: TalkNode[];
-	variableLookup: any;
+	variableLookup: Map<string, any>;
 
 	p: Entity;
 	t: Entity;
-	vars: any;
+	vars: Map<string, any>;
 
 	constructor(defn: ConversationDefn, quit: () => void, entityPlayer: Entity, entityTalker: Entity)
 	{
@@ -33,7 +33,7 @@ class ConversationRun
 
 		this.talkNodesForTranscript = [];
 
-		this.variableLookup = {};
+		this.variableLookup = new Map<string, any>();
 
 		this.next(null);
 
@@ -106,7 +106,7 @@ class ConversationRun
 			(
 				size, universe, venueCurrent
 			);
-			var venueNext: any = new VenueControls(transcriptAsControl);
+			var venueNext: Venue = new VenueControls(transcriptAsControl);
 			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 			universe.venueNext = venueNext;
 		};
@@ -141,7 +141,7 @@ class ConversationRun
 					new DataBinding
 					(
 						conversationRun,
-						(c: any) => { return c.scopeCurrent.displayTextCurrent; },
+						(c: ConversationRun) => { return c.scopeCurrent.displayTextCurrent; },
 						null
 					),
 					fontHeight
@@ -176,22 +176,22 @@ class ConversationRun
 					new DataBinding
 					(
 						conversationRun,
-						(c: any) => { return c.scopeCurrent.talkNodesForOptionsActive(); },
+						(c: ConversationRun) => { return c.scopeCurrent.talkNodesForOptionsActive(); },
 						null
 					),
 					// bindingForItemText
 					new DataBinding
 					(
 						null, // context
-						(c: any) => { return c.text; },
+						(c: TalkNode) => { return c.text; },
 						null
 					),
 					fontHeightShort,
 					new DataBinding
 					(
 						conversationRun,
-						(c: any) => c.scopeCurrent.talkNodeForOptionSelected,
-						(c: any, v: any) => { c.scopeCurrent.talkNodeForOptionSelected = v; }
+						(c: ConversationRun) => c.scopeCurrent.talkNodeForOptionSelected,
+						(c: ConversationRun, v: TalkNode) => { c.scopeCurrent.talkNodeForOptionSelected = v; }
 					), // bindingForItemSelected
 					new DataBinding(null, null, null), // bindingForItemValue
 					new DataBinding(true, null, null), // isEnabled
@@ -246,7 +246,7 @@ class ConversationRun
 			],
 
 			[
-				new ActionToInputsMapping( "Back", [ universe.inputHelper.inputNames.Escape ], true ),
+				new ActionToInputsMapping( "Back", [ Input.Names().Escape ], true ),
 				new ActionToInputsMapping( "ViewLog", [ Input.Names().Space ], true )
 			]
 		);
@@ -327,13 +327,13 @@ class ConversationRun
 					new DataBinding
 					(
 						conversationRun,
-						(c: any) => { return c.talkNodesForTranscript; },
+						(c: ConversationRun) => { return c.talkNodesForTranscript; },
 						null
 					),
 					new DataBinding
 					(
 						null,
-						(c: any) => { return c.textForTranscript(conversationDefn); },
+						(c: TalkNode) => { return c.textForTranscript(conversationDefn); },
 						null
 					), // bindingForItemText
 					fontHeightShort,

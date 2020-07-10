@@ -16,9 +16,9 @@ class ItemStore
 		var itemHolderFrom = entityFrom.itemHolder();
 		var itemHolderTo = entityTo.itemHolder();
 
-		if (itemHolderFrom.itemEntityToOffer != null)
+		if (itemHolderFrom.itemEntitySelected != null)
 		{
-			var itemEntityToTransfer = itemHolderFrom.itemEntityToOffer;
+			var itemEntityToTransfer = itemHolderFrom.itemEntitySelected;
 			var itemToTransfer = itemEntityToTransfer.item();
 			var tradeValue = itemToTransfer.defn(world).tradeValue;
 			var itemCurrencyNeeded = new Item(this.itemDefnNameCurrency, 0);
@@ -112,7 +112,7 @@ class ItemStore
 					new DataBinding
 					(
 						itemHolderStore,
-						function get(c)
+						(c: ItemHolder) =>
 						{
 							return c.itemEntities;//.filter(x => x.item().defnName != itemDefnNameCurrency);
 						},
@@ -121,17 +121,17 @@ class ItemStore
 					new DataBinding
 					(
 						null,
-						(c: any) => { return c.item().toString(world); },
+						(c: Entity) => { return c.item().toString(world); },
 						null
 					), // bindingForItemText
 					fontHeight,
 					new DataBinding
 					(
 						itemHolderStore,
-						(c: any) => { return c.itemEntityToOffer; },
-						(c: any, v: any) => { c.itemEntityToOffer = v; }
+						(c: ItemHolder) => { return c.itemEntitySelected; },
+						(c: ItemHolder, v: Entity) => { c.itemEntitySelected = v; }
 					), // bindingForItemSelected
-					new DataBinding(null, function(c) { return c; }, null), // bindingForItemValue
+					new DataBinding(null, (c: Entity) => c, null), // bindingForItemValue
 					new DataBinding(true, null, null), // isEnabled
 					buy, // confirm
 					null
@@ -168,7 +168,7 @@ class ItemStore
 					new DataBinding
 					(
 						itemHolderCustomer,
-						function get(c)
+						(c: ItemHolder) => 
 						{
 							return c.itemEntities;//.filter(x => x.item().defnName != itemDefnNameCurrency);
 						},
@@ -177,17 +177,17 @@ class ItemStore
 					new DataBinding
 					(
 						null,
-						(c: any) => { return c.item().toString(world); },
+						(c: Entity) => { return c.item().toString(world); },
 						null
 					), // bindingForItemText
 					fontHeight,
 					new DataBinding
 					(
 						itemHolderCustomer,
-						(c: any) => { return c.itemEntityToOffer; },
-						(c: any, v: any) => { c.itemEntityToOffer = v; }
+						(c: ItemHolder) => { return c.itemEntitySelected; },
+						(c: ItemHolder, v: Entity) => { c.itemEntitySelected = v; }
 					), // bindingForItemSelected
-					new DataBinding(null, function(c) { return c; }, null ), // bindingForItemValue
+					new DataBinding(null, (c: Entity) => c, null ), // bindingForItemValue
 					new DataBinding(true, null, null), // isEnabled
 					sell, // confirm
 					null
@@ -237,7 +237,7 @@ class ItemStore
 
 			[ new Action("Back", back) ],
 
-			[ new ActionToInputsMapping( "Back", [ universe.inputHelper.inputNames.Escape ], true ) ],
+			[ new ActionToInputsMapping( "Back", [ Input.Names().Escape ], true ) ],
 
 		);
 

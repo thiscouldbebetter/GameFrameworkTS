@@ -24,7 +24,7 @@ class SkillLearner
 		return (this.skillBeingLearnedName != null);
 	};
 
-	skillCheapestAvailable(skillsAll: any): Skill
+	skillCheapestAvailable(skillsAll: Skill[]): Skill
 	{
 		var skillCheapest: Skill = null;
 
@@ -33,17 +33,17 @@ class SkillLearner
 		{
 			skillCheapest = skillsAvailable.sort
 			(
-				(x, y) => x - y
+				(x: Skill, y: Skill) => x.learningRequired - y.learningRequired
 			)[0];
 		}
 		return skillCheapest;
 	};
 
-	learningIncrement(skillsAll: any, amountToIncrement: number)
+	learningIncrement(skillsAll: Skill[], skillsByName: Map<string, Skill>, amountToIncrement: number)
 	{
 		var message = null;
 
-		var skillBeingLearned = this.skillBeingLearned(skillsAll);
+		var skillBeingLearned = this.skillBeingLearned(skillsByName);
 
 		if (skillBeingLearned == null)
 		{
@@ -76,12 +76,12 @@ class SkillLearner
 		return message;
 	};
 
-	learningAccumulatedOverRequired(skillsAll: any)
+	learningAccumulatedOverRequired(skillsAllByName: Map<string,Skill>)
 	{
-		return this.learningAccumulated + "/" + this.learningRequired(skillsAll);
+		return this.learningAccumulated + "/" + this.learningRequired(skillsAllByName);
 	};
 
-	learningRequired(skillsAllByName: any)
+	learningRequired(skillsAllByName: Map<string, Skill>)
 	{
 		var skillBeingLearned = this.skillBeingLearned(skillsAllByName);
 		var returnValue =
@@ -93,12 +93,12 @@ class SkillLearner
 		return returnValue;
 	};
 
-	skillSelected(skillsAll: any)
+	skillSelected(skillsAllByName: Map<string, Skill>)
 	{
-		return (this.skillSelectedName == null ? null : skillsAll(this.skillSelectedName));
+		return (this.skillSelectedName == null ? null : skillsAllByName.get(this.skillSelectedName));
 	};
 
-	skillsAvailableToLearn(skillsAll: any)
+	skillsAvailableToLearn(skillsAll: Skill[])
 	{
 		var skillsUnknown = [];
 
@@ -152,23 +152,23 @@ class SkillLearner
 		return skillsUnknownWithKnownPrerequisites;
 	};
 
-	skillsKnown(skillsAllByName: any)
+	skillsKnown(skillsAllByName: Map<string, Skill>)
 	{
 		var returnValues = [];
 
 		for (var i = 0; i < this.skillsKnownNames.length; i++)
 		{
 			var skillName = this.skillsKnownNames[i];
-			var skill = skillsAllByName[skillName];
+			var skill = skillsAllByName.get(skillName);
 			returnValues.push(skill);
 		}
 
 		return returnValues;
 	};
 
-	skillBeingLearned(skillsAllByName: any)
+	skillBeingLearned(skillsAllByName: Map<string, Skill>)
 	{
-		var returnValue = skillsAllByName[this.skillBeingLearnedName];
+		var returnValue = skillsAllByName.get(this.skillBeingLearnedName);
 
 		return returnValue;
 	};
@@ -196,7 +196,9 @@ class SkillLearner
 			0
 		); // size
 
-		var skillsAll = universe.world.defns.defnArraysByTypeName[Skill.name];
+		var defns = universe.world.defns;
+		var skillsAll = defns.defnArraysByTypeName.get(Skill.name);
+		var skillsAllByName = defns.defnsByNameByTypeName.get(Skill.name);
 
 		var returnValue = new ControlContainer
 		(
@@ -249,7 +251,7 @@ class SkillLearner
 					new DataBinding
 					(
 						this,
-						function get(c: any)
+						(c: SkillLearner) =>
 						{
 							return c.skillsAvailableToLearn(skillsAll);
 						},
@@ -257,22 +259,23 @@ class SkillLearner
 					),
 					new DataBinding
 					(
-						null, function get(c) { return c.name; }, null
+						null, (c: Skill) => c.name, null
 					), // bindingForItemText
 					labelHeight, // fontHeightInPixels
 					new DataBinding
 					(
 						this,
-						function get(c: any) { return c.skillBeingLearned(skillsAll); },
-						function set(c: any, v: any)
+						(c: SkillLearner) => { return c.skillBeingLearned(skillsAllByName); },
+						(c: SkillLearner, v: Skill) =>
 						{
-							c.skillBeingLearnedName = v;
-							c.skillSelectedName = v;
+							var skillName = v.name;
+							c.skillBeingLearnedName = skillName;
+							c.skillSelectedName = skillName;
 						}
 					), // bindingForItemSelected
 					new DataBinding
 					(
-						null, function get(c: any) { return c.name; }, null
+						null, (c: Skill) => c.name, null
 					), // bindingForItemValue
 					null, null, null
 				),
@@ -295,7 +298,7 @@ class SkillLearner
 					false, // isTextCentered,
 					new DataBinding
 					(
-						this, (c: any) => (c.skillSelectedName || "-"), null
+						this, (c: SkillLearner) => (c.skillSelectedName || "-"), null
 					),
 					null
 				),
@@ -319,7 +322,7 @@ class SkillLearner
 					new DataBinding
 					(
 						this,
-						function get(c)
+						(c: SkillLearner) =>
 						{
 							return (c.skillBeingLearnedName || "-");
 						},
@@ -347,10 +350,7 @@ class SkillLearner
 					new DataBinding
 					(
 						this,
-						function get(c)
-						{
-							return c.learningAccumulatedOverRequired(skillsAll);
-						},
+						(c: SkillLearner) => c.learningAccumulatedOverRequired(skillsAllByName),
 						null
 					), // text
 					null

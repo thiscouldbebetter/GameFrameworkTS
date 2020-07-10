@@ -6,8 +6,8 @@ class ControlSelect implements Control
 	size: Coords;
 	_valueSelected: any;
 	_options: any;
-	bindingForOptionValues: DataBinding;
-	bindingForOptionText: DataBinding;
+	bindingForOptionValues: DataBinding<any, any>;
+	bindingForOptionText: DataBinding<any, string>;
 	fontHeightInPixels: number;
 
 	indexOfOptionSelected: number;
@@ -25,8 +25,8 @@ class ControlSelect implements Control
 		size: Coords,
 		valueSelected: any,
 		options: any,
-		bindingForOptionValues: DataBinding,
-		bindingForOptionText: DataBinding,
+		bindingForOptionValues: DataBinding<any, any>,
+		bindingForOptionText: DataBinding<any, string>,
 		fontHeightInPixels: number
 	)
 	{
@@ -172,7 +172,7 @@ class ControlSelect implements Control
 
 	style(universe: Universe)
 	{
-		return universe.controlBuilder.stylesByName[this.styleName == null ? "Default" : this.styleName];
+		return universe.controlBuilder.stylesByName.get(this.styleName == null ? "Default" : this.styleName);
 	};
 
 	valueSelected()

@@ -14,7 +14,7 @@ class Texture
 
 	// methods
 
-	initializeForWebGLContext(webGLContext: any)
+	initializeForWebGLContext(webGLContext: WebGLContext)
 	{
 		var gl = webGLContext.gl;
 

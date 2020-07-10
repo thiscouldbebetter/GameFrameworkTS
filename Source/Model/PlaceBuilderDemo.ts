@@ -25,11 +25,11 @@ class PlaceBuilderDemo
 	{
 		this.build_Interior("Base", size, placeNameToReturnTo);
 
-		this.entities.push(this.entityBuildFromDefn(this.entityDefnsByName["Player"]));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName["Book"], 1));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName["Container"], 1));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName["Friendly"], 1));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName["Sword"], 1));
+		this.entities.push(this.entityBuildFromDefn(this.entityDefnsByName.get("Player")));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Book"), 1));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Container"), 1));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Friendly"), 1));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Sword"), 1));
 
 		var place = new Place(this.name, "Demo", size, this.entities);
 
@@ -42,11 +42,12 @@ class PlaceBuilderDemo
 		isGoal: boolean, placeNamesToIncludePortalsTo: string[]
 	)
 	{
-		this.name = "Battlefield" + placePos.toStringXY();
+		var namePrefix = "Battlefield";
+		this.name = namePrefix + placePos.toStringXY();
 		this.size = size;
 		this.entities = [];
 
-		this.build_SizeWallsAndMargins(this.name, placePos, areNeighborsConnectedESWN);
+		this.build_SizeWallsAndMargins(namePrefix, placePos, areNeighborsConnectedESWN);
 		this.build_Exterior(placePos, placeNamesToIncludePortalsTo);
 		if (isGoal)
 		{
@@ -378,7 +379,7 @@ class PlaceBuilderDemo
 			var cellVisuals = [];
 
 			var cell = map.cellAtPosInCells(cellPosInCells);
-			var cellTerrain = terrainsByName[cell.visualName];
+			var cellTerrain = terrainsByName.get(cell.visualName);
 			var cellTerrainVisuals = cellTerrain.visuals;
 			cellVisuals.push(cellTerrainVisuals[0]);
 
@@ -398,7 +399,7 @@ class PlaceBuilderDemo
 				}
 				else
 				{
-					cellNeighborTerrain = terrainsByName[cellNeighbor.visualName];
+					cellNeighborTerrain = terrainsByName.get(cellNeighbor.visualName);
 				}
 				neighborTerrains.push(cellNeighborTerrain);
 			}
@@ -486,9 +487,9 @@ class PlaceBuilderDemo
 		var mapCellsAsEntities = map.cellsAsEntities(mapAndCellPosToEntity);
 		this.entities.push(...mapCellsAsEntities);
 
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName["Flower"], 1));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName["Mushroom"], 1));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName["Tree"], 1));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Flower"), 1));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Mushroom"), 1));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Tree"), 1));
 
 		var place = new Place(this.name, "Demo", size, this.entities);
 		return place;
@@ -506,36 +507,36 @@ class PlaceBuilderDemo
 		var entityDefns = this.entityDefnsByName;
 		var entities = this.entities;
 
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["EnemyGenerator"], 1));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Bar"], 1));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Mine"], 48));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("EnemyGenerator"), 1));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Bar"), 1));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Mine"), 48));
 
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Tree"], 10));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Tree"), 10));
 
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Ammo"], 10));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Armor"], 1));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Crystal"], 3));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Flower"], 3));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Material"], 5));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Medicine"], 5));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Mushroom"], 3));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Speed Boots"], 1));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Toolset"], 1));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns["Flower"], 3));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Ammo"), 10));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Armor"), 1));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Crystal"), 3));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Flower"), 3));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Material"), 5));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Medicine"), 5));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Mushroom"), 3));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Speed Boots"), 1));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Toolset"), 1));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Flower"), 3));
 
 		var entityRadioMessage =
-			this.entityBuildRadioMessage(entityDefns["Friendly"].drawable().visual, "This is " + this.name + ".");
+			this.entityBuildRadioMessage(entityDefns.get("Friendly").drawable().visual, "This is " + this.name + ".");
 		entities.push(entityRadioMessage);
 
 		placeNamesToIncludePortalsTo.forEach(placeName =>
 		{
-			var entityDefnPortal = this.entityDefnsByName["Portal"];
+			var entityDefnPortal = this.entityDefnsByName.get("Portal");
 			var entityPortal = this.entityBuildFromDefn(entityDefnPortal);
 			entityPortal.name = placeName;
 			entityPortal.portal().destinationPlaceName = placeName;
 			entities.push(entityPortal);
 		});
-		entities.push(this.entityBuildFromDefn(entityDefns["Store"]));
+		entities.push( this.entityBuildFromDefn( entityDefns.get("Store") ) );
 	}
 
 	build_Goal(entityDimension: number)
@@ -552,7 +553,7 @@ class PlaceBuilderDemo
 		(
 			entities, entityDimension, entitySize, numberOfKeysToUnlockGoal
 		);
-		var entityRing = this.entityBuildFromDefn(entityDefns["Ring"]);
+		var entityRing = this.entityBuildFromDefn(entityDefns.get("Ring"));
 		var ringLoc = entityRing.locatable().loc;
 		ringLoc.pos.overwriteWith(goalEntity.locatable().loc.pos);
 		ringLoc.spin.angleInTurnsRef.value = .001;
@@ -695,7 +696,7 @@ class PlaceBuilderDemo
 
 	entityBuildExit(placeNameToReturnTo: string)
 	{
-		var exit = this.entityBuildFromDefn(this.entityDefnsByName["Exit"]);
+		var exit = this.entityBuildFromDefn(this.entityDefnsByName.get("Exit"));
 		exit.portal().destinationPlaceName = placeNameToReturnTo;
 		exit.portal().destinationEntityName = this.name;
 		this.entities.push(exit);
@@ -1526,7 +1527,7 @@ class PlaceBuilderDemo
 
 		var enemyActivity = (universe: Universe, world: World, place: Place, actor: Entity, entityToTargetName: string) =>
 		{
-			var target = place.entitiesByName[entityToTargetName];
+			var target = place.entitiesByName.get(entityToTargetName);
 			if (target == null)
 			{
 				return;
@@ -1555,8 +1556,8 @@ class PlaceBuilderDemo
 				var doesDropCoin = (Math.random() < chanceOfDroppingCoin);
 				if (doesDropCoin)
 				{
-					var entityDefns = world.defns.defnsByNameByTypeName[Entity.name];
-					var entityDefnCoin = entityDefns["Coin"];
+					var entityDefns = world.defns.defnsByNameByTypeName.get(Entity.name);
+					var entityDefnCoin = entityDefns.get("Coin");
 					var entityCoin = entityDefnCoin.clone();
 					entityCoin.locatable().overwriteWith(entityDying.locatable());
 					entityCoin.locatable().loc.vel.clear();
@@ -1565,8 +1566,13 @@ class PlaceBuilderDemo
 
 				var entityPlayer = place.player();
 				var learner = entityPlayer.skillLearner();
-				var learningMessage =
-					learner.learningIncrement(world.defns.defnsByNameByTypeName[Skill.name], 1);
+				var defns = world.defns;
+				var skillsAll = defns.defnArraysByTypeName.get(Skill.name);
+				var skillsByName = defns.defnsByNameByTypeName.get(Skill.name);
+				var learningMessage = learner.learningIncrement
+				(
+					skillsAll, skillsByName, 1
+				);
 				if (learningMessage != null)
 				{
 					place.entitySpawn
@@ -2211,11 +2217,11 @@ class PlaceBuilderDemo
 			obstacleMappedCellSource
 		);
 
-		var obstacleMappedVisualLookup =
-		{
-			"Blocking" : new VisualRectangle(obstacleMappedCellSize, obstacleColor, null, false), // isCentered
-			"Open" : new VisualNone()
-		};
+		var obstacleMappedVisualLookup = new Map<string, Visual>
+		([
+			[ "Blocking", new VisualRectangle(obstacleMappedCellSize, obstacleColor, null, false) ], // isCentered
+			[ "Open", new VisualNone() ]
+		]);
 		var obstacleMappedVisual = new VisualGroup
 		([
 			new VisualMap(obstacleMappedMap, obstacleMappedVisualLookup, null, null),
@@ -2387,11 +2393,11 @@ class PlaceBuilderDemo
 				venueNext = new VenueFader(venueNext, null, null, null);
 				universe.venueNext = venueNext;
 			}
-			else if (entityOther.propertiesByName[Goal.name] != null)
+			else if (entityOther.propertiesByName.get(Goal.name) != null)
 			{
 				var itemDefnKeyName = "Key";
 				var keysRequired =
-					new Item(itemDefnKeyName, entityOther.propertiesByName[Goal.name].numberOfKeysToUnlock);
+					new Item(itemDefnKeyName, entityOther.propertiesByName.get(Goal.name).numberOfKeysToUnlock);
 				if (entityPlayer.itemHolder().hasItem(keysRequired))
 				{
 					var venueMessage = new VenueMessage
@@ -2740,7 +2746,7 @@ class PlaceBuilderDemo
 			new DataBinding
 			(
 				playerEntityDefn,
-				function get(c)
+				(c: Entity) => 
 				{
 					var player = c;
 					var itemHolder = player.itemHolder();

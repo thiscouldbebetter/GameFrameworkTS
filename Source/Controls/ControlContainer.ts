@@ -5,9 +5,9 @@ class ControlContainer implements Control
 	pos: Coords;
 	size: Coords;
 	children: Control[];
-	childrenByName: any;
+	childrenByName: Map<string, Control>;
 	actions: Action[];
-	actionsByName: any;
+	actionsByName: Map<string, Action>;
 	_actionToInputsMappings: ActionToInputsMapping[];
 
 	childrenContainingPos: Control[];
@@ -64,7 +64,7 @@ class ControlContainer implements Control
 
 	style(universe: Universe)
 	{
-		return universe.controlBuilder.stylesByName[this.styleName == null ? "Default" : this.styleName];
+		return universe.controlBuilder.stylesByName.get(this.styleName == null ? "Default" : this.styleName);
 	};
 
 	// actions
@@ -116,10 +116,10 @@ class ControlContainer implements Control
 				}
 			}
 		}
-		else if (this.actionsByName[actionNameToHandle] != null)
+		else if (this.actionsByName.get(actionNameToHandle) != null)
 		{
-			var action = this.actionsByName[actionNameToHandle];
-			action.perform(universe); // todo
+			var action = this.actionsByName.get(actionNameToHandle);
+			action.perform(universe, null, null, null);
 			wasActionHandled = true;
 		}
 		else if (childWithFocus != null)

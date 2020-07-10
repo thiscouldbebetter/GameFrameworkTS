@@ -1,18 +1,18 @@
 
-class DataBinding
+class DataBinding<C, V>
 {
-	context: any;
-	_get: (context: any)=>any;
-	_set: (context: any, value: any)=>any;
+	context: C;
+	_get: (context: C) => V;
+	_set: (context: C, value: V) => void;
 
-	constructor(context: any, get: (context: any)=>any, set: (context: any, value: any)=>any)
+	constructor(context: C, get: (context: C) => V, set: (context: C, value: V) => void)
 	{
 		this.context = context;
 		this._get = get;
 		this._set = set;
 	}
 
-	contextSet(value: any)
+	contextSet(value: C)
 	{
 		this.context = value;
 		return this;
@@ -23,11 +23,11 @@ class DataBinding
 		return (this._get == null ? this.context : this._get(this.context) );
 	};
 
-	set(value: any)
+	set(value: V)
 	{
 		if (this._set == null)
 		{
-			this.context = value;
+			this.context = (value as any) as C;
 		}
 		else
 		{

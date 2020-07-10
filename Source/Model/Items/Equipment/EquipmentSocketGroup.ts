@@ -3,7 +3,7 @@ class EquipmentSocketGroup
 {
 	defnGroup: EquipmentSocketDefnGroup;
 	sockets: EquipmentSocket[];
-	socketsByDefnName: any;
+	socketsByDefnName: Map<string, EquipmentSocket>;
 
 	constructor(defnGroup: EquipmentSocketDefnGroup)
 	{

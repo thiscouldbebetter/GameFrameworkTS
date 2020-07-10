@@ -135,7 +135,7 @@ class ItemBarterer
 					new DataBinding
 					(
 						itemHolderStore,
-						function get(c)
+						(c: ItemHolder) =>
 						{
 							return c.itemEntities;//.filter(x => x.item().defnName != itemDefnNameCurrency);
 						},
@@ -144,24 +144,24 @@ class ItemBarterer
 					new DataBinding
 					(
 						null,
-						(c:any) => { return c.item().toString(world); },
+						(c: Entity) => { return c.item().toString(world); },
 						null
 					), // bindingForItemText
 					fontHeight,
 					new DataBinding
 					(
 						itemHolderStore,
-						(c:any) => { return c.itemEntityToOffer; },
-						(c:any, v:any) => { c.itemEntityToOffer = v; }
+						(c: ItemHolder) => { return c.itemEntitySelected; },
+						(c: ItemHolder, v: Entity) => { c.itemEntitySelected = v; }
 					), // bindingForItemSelected
-					new DataBinding(null, (c: any) => c, null ), // bindingForItemValue
+					new DataBinding(null, (c: Entity) => c, null ), // bindingForItemValue
 					new DataBinding(true, null, null), // isEnabled
 					function confirm()
 					{
-						if (itemHolderStore.itemEntityToOffer != null)
+						if (itemHolderStore.itemEntitySelected != null)
 						{
 							var offer = itemBarterer.itemHolderStoreOffer;
-							itemHolderStore.itemEntityTransferSingleTo(itemHolderStore.itemEntityToOffer, offer);
+							itemHolderStore.itemEntityTransferSingleTo(itemHolderStore.itemEntitySelected, offer);
 						}
 					},
 					null
@@ -185,7 +185,7 @@ class ItemBarterer
 					new DataBinding
 					(
 						itemHolderCustomer,
-						function get(c)
+						(c: ItemHolder) =>
 						{
 							return c.itemEntities;//.filter(x => x.item().defnName != itemDefnNameCurrency);
 						},
@@ -194,26 +194,26 @@ class ItemBarterer
 					new DataBinding
 					(
 						null,
-						(c:any) => { return c.item().toString(world); },
+						(c: Entity) => { return c.item().toString(world); },
 						null
 					), // bindingForItemText
 					fontHeight,
 					new DataBinding
 					(
 						itemHolderCustomer,
-						(c:any) => { return c.itemEntityToOffer; },
-						(c:any, v:any) => { c.itemEntityToOffer = v; }
+						(c: ItemHolder) => { return c.itemEntitySelected; },
+						(c: ItemHolder, v: Entity) => { c.itemEntitySelected = v; }
 					), // bindingForItemSelected
-					new DataBinding(null, function(c) { return c; }, null ), // bindingForItemValue
+					new DataBinding(null, (c: Entity) => c, null ), // bindingForItemValue
 					new DataBinding(true, null, null), // isEnabled
 					function confirm()
 					{
-						if (itemHolderCustomer.itemEntityToOffer != null)
+						if (itemHolderCustomer.itemEntitySelected != null)
 						{
 							var offer = itemBarterer.itemHolderCustomerOffer;
 							itemHolderCustomer.itemEntityTransferSingleTo
 							(
-								itemHolderCustomer.itemEntityToOffer, offer
+								itemHolderCustomer.itemEntitySelected, offer
 							);
 						}
 					},
@@ -238,7 +238,7 @@ class ItemBarterer
 					new DataBinding
 					(
 						this,
-						function get(c)
+						(c: ItemBarterer) =>
 						{
 							return c.itemHolderStoreOffer.itemEntities;
 						},
@@ -247,24 +247,24 @@ class ItemBarterer
 					new DataBinding
 					(
 						null,
-						(c:any) => { return c.item().toString(world); },
+						(c: Entity) => { return c.item().toString(world); },
 						null
 					), // bindingForItemText
 					fontHeight,
 					new DataBinding
 					(
 						itemHolderStore,
-						(c:any) => { return c.itemEntityToWithdraw; },
-						(c:any, v:any) => { c.itemEntityToWithdraw = v; }
+						(c: ItemHolder) => { return c.itemEntitySelected; },
+						(c: ItemHolder, v: Entity) => { c.itemEntitySelected = v; }
 					), // bindingForItemSelected
-					new DataBinding(null, (c:any) => c, null ), // bindingForItemValue
+					new DataBinding(null, (c: Entity) => c, null ), // bindingForItemValue
 					new DataBinding(true, null, null), // isEnabled
 					function confirm()
 					{
-						if (itemHolderStore.itemEntityToWithdraw != null)
+						if (itemHolderStore.itemEntitySelected != null)
 						{
 							var offer = itemBarterer.itemHolderStoreOffer;
-							offer.itemEntityTransferSingleTo(itemHolderStore.itemEntityToWithdraw, itemHolderStore);
+							offer.itemEntityTransferSingleTo(itemHolderStore.itemEntitySelected, itemHolderStore);
 						}
 					},
 					null
@@ -288,30 +288,30 @@ class ItemBarterer
 					new DataBinding
 					(
 						this,
-						(c: any) => c.itemHolderCustomerOffer.itemEntities,
+						(c: ItemBarterer) => c.itemHolderCustomerOffer.itemEntities,
 						null
 					), // items
 					new DataBinding
 					(
 						null,
-						(c: any) => c.item().toString(world),
+						(c: Entity) => c.item().toString(world),
 						null
 					), // bindingForItemText
 					fontHeight,
 					new DataBinding
 					(
 						itemHolderCustomer,
-						(c:any) => { return c.itemEntityToWithdraw; },
-						(c:any, v:any) => { c.itemEntityToWithdraw = v; }
+						(c: ItemHolder) => { return c.itemEntitySelected; },
+						(c: ItemHolder, v: Entity) => { c.itemEntitySelected = v; }
 					), // bindingForItemSelected
-					new DataBinding(null, (c: any) => c, null ), // bindingForItemValue
+					new DataBinding(null, (c: Entity) => c, null ), // bindingForItemValue
 					new DataBinding(true, null, null), // isEnabled
 					function confirm()
 					{
-						if (itemHolderCustomer.itemEntityToWithdraw != null)
+						if (itemHolderCustomer.itemEntitySelected != null)
 						{
 							var offer = itemBarterer.itemHolderCustomerOffer;
-							offer.itemEntityTransferSingleTo(itemHolderCustomer.itemEntityToWithdraw, itemHolderCustomer);
+							offer.itemEntityTransferSingleTo(itemHolderCustomer.itemEntitySelected, itemHolderCustomer);
 						}
 					},
 					null
@@ -338,7 +338,7 @@ class ItemBarterer
 					new DataBinding
 					(
 						this,
-						(c: any) => c.isAnythingBeingOffered(),
+						(c: ItemBarterer) => c.isAnythingBeingOffered(),
 						null
 					), // isEnabled
 					() => // click
@@ -364,7 +364,7 @@ class ItemBarterer
 					new DataBinding
 					(
 						this,
-						(c:any) => { return c.isAnythingBeingOffered(); },
+						(c: ItemBarterer) => { return c.isAnythingBeingOffered(); },
 						null
 					), // isEnabled
 					function click()
@@ -424,7 +424,7 @@ class ItemBarterer
 
 			[ new Action("Back", back) ],
 
-			[ new ActionToInputsMapping( "Back", [ universe.inputHelper.inputNames.Escape ], true ) ],
+			[ new ActionToInputsMapping( "Back", [ Input.Names().Escape ], true ) ],
 
 		);
 

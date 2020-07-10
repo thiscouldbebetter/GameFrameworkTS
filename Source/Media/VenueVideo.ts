@@ -41,7 +41,7 @@ class VenueVideo implements Venue
 		if (this.video == null)
 		{
 			universe.platformHelper.platformableHide(universe.display);
-			this.video = universe.videoHelper.videosByName[this.videoName];
+			this.video = universe.videoHelper.videosByName.get(this.videoName);
 			this.video.play(universe);
 		}
 

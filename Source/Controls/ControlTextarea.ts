@@ -6,7 +6,7 @@ class ControlTextarea implements Control
 	size: Coords;
 	text: any;
 	fontHeightInPixels: number
-	_isEnabled: DataBinding;
+	_isEnabled: DataBinding<any, string>;
 
 	isHighlighted: boolean;
 	lineSpacing: number;
@@ -20,7 +20,7 @@ class ControlTextarea implements Control
 	_mouseClickPos: Coords;
 	_textAsLines: any;
 
-	constructor(name: string, pos: Coords, size: Coords, text: any, fontHeightInPixels: number, isEnabled: DataBinding)
+	constructor(name: string, pos: Coords, size: Coords, text: any, fontHeightInPixels: number, isEnabled: DataBinding<any, string>)
 	{
 		this.name = name;
 		this.pos = pos;
@@ -40,7 +40,7 @@ class ControlTextarea implements Control
 			new Coords(scrollbarWidth, this.size.y, 0), // size
 			this.fontHeightInPixels,
 			this.lineSpacing, // itemHeight
-			new DataBinding(this, (c) => c.textAsLines(), null),
+			new DataBinding(this, (c: ControlTextarea) => c.textAsLines(), null),
 			0 // sliderPosInItems
 		);
 
@@ -222,7 +222,7 @@ class ControlTextarea implements Control
 
 	style(universe: Universe)
 	{
-		return universe.controlBuilder.stylesByName[this.styleName == null ? "Default" : this.styleName];
+		return universe.controlBuilder.stylesByName.get(this.styleName == null ? "Default" : this.styleName);
 	};
 
 	// drawable

@@ -2,11 +2,11 @@
 class VisualMap implements Visual
 {
 	map: MapOfCells;
-	visualLookup: any;
+	visualLookup: Map<string, Visual>;
 	cameraGet: (universe: Universe, world: World, display: Display, entity: Entity) => Camera;
 	shouldConvertToImage: boolean;
 
-	visualImage: any;
+	visualImage: VisualImage;
 	sizeInCells: Coords;
 
 	_cameraPos: Coords;
@@ -17,7 +17,7 @@ class VisualMap implements Visual
 	_drawPos: Coords;
 	_posSaved: Coords;
 
-	constructor(map: MapOfCells, visualLookup: any, cameraGet: () => Camera, shouldConvertToImage: boolean)
+	constructor(map: MapOfCells, visualLookup: Map<string, Visual>, cameraGet: () => Camera, shouldConvertToImage: boolean)
 	{
 		this.map = map;
 		this.visualLookup = visualLookup;
@@ -117,7 +117,7 @@ class VisualMap implements Visual
 					cellPosInCells
 				);
 				var cellVisualName = cell.visualName;
-				var cellVisual = this.visualLookup[cellVisualName];
+				var cellVisual = this.visualLookup.get(cellVisualName);
 
 				drawPos.overwriteWith
 				(

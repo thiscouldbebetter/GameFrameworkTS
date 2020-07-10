@@ -34,7 +34,7 @@ class Disposition
 
 	place(world: World)
 	{
-		return world.placesByName[this.placeName];
+		return world.placesByName.get(this.placeName);
 	};
 
 	velSet(value: Coords)

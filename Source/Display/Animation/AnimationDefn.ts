@@ -52,14 +52,14 @@ class AnimationDefn
 			for (var p = 0; p < propertyNamesAll.length; p++)
 			{
 				var propertyName = propertyNamesAll[p];
-				if (transformsByPropertyName[propertyName] == null)
+				if (transformsByPropertyName.get(propertyName) == null)
 				{
 					var keyframeNext = null;
 
 					for (var g = f + 1; g < this.keyframes.length; g++)
 					{
 						var keyframeFuture = this.keyframes[g];
-						var transformFuture = keyframeFuture.transformsByPropertyName[propertyName];
+						var transformFuture = keyframeFuture.transformsByPropertyName.get(propertyName);
 						if (transformFuture != null)
 						{
 							keyframeNext = keyframeFuture;
@@ -69,8 +69,8 @@ class AnimationDefn
 
 					if (keyframePrev != null && keyframeNext != null)
 					{
-						var transformPrev = keyframePrev.transformsByPropertyName[propertyName];
-						var transformNext = keyframeNext.transformsByPropertyName[propertyName];
+						var transformPrev = keyframePrev.transformsByPropertyName.get(propertyName);
+						var transformNext = keyframeNext.transformsByPropertyName.get(propertyName);
 
 						var numberOfFramesFromPrevToNext =
 							keyframeNext.frameIndex
@@ -89,7 +89,7 @@ class AnimationDefn
 							transformNext,
 							fractionOfProgressFromPrevToNext
 						);
-						transformsByPropertyName[propertyName] = transformNew;
+						transformsByPropertyName.set(propertyName, transformNew);
 						keyframe.transforms.push(transformNew);
 					}
 				}

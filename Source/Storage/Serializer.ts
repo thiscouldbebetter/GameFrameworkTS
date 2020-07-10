@@ -34,7 +34,7 @@ class SerializerNode
 	id: number;
 	r: boolean;
 	o: any;
-	c: any;
+	c: any; // todo - Map<string, any> - Tricky.
 
 	constructor(objectWrapped: any)
 	{
@@ -45,10 +45,7 @@ class SerializerNode
 		this.o = objectWrapped;
 	}
 
-	wrap
-	(
-		objectsAlreadyWrapped: any, objectIndexToNodeLookup: any
-	)
+	wrap(objectsAlreadyWrapped: any, objectIndexToNodeLookup: any)
 	{
 		var objectWrapped = this.o;
 		if (objectWrapped != null)
@@ -81,8 +78,21 @@ class SerializerNode
 				}
 				else
 				{
-					var children: any = {};
+					var children: any = {}; // new Map<string, any>();
 					this.c = children;
+
+					if (typeName == Map.name)
+					{
+						// Maps don't serialize well with JSON.stringify(),
+						// so convert it to a generic object.
+						var objectWrappedAsObject = {};
+						for (var key of objectWrapped.keys())
+						{
+							var value = objectWrapped.get(key);
+							objectWrappedAsObject[key] = value;
+						}
+						objectWrapped = objectWrappedAsObject;
+					}
 
 					for (var propertyName in objectWrapped)
 					{
@@ -100,9 +110,9 @@ class SerializerNode
 
 								if
 								(
-									propertyValueTypeName == "Boolean"
-									|| propertyValueTypeName == "Number"
-									|| propertyValueTypeName == "String"
+									propertyValueTypeName == Boolean.name
+									|| propertyValueTypeName == Number.name
+									|| propertyValueTypeName == String.name
 								)
 								{
 									child = propertyValue;
@@ -129,7 +139,7 @@ class SerializerNode
 						if (child != null)
 						{
 							var childTypeName = child.constructor.name;
-							if (childTypeName == "SerializerNode")
+							if (childTypeName == SerializerNode.name)
 							{
 								child.wrap
 								(
@@ -159,9 +169,9 @@ class SerializerNode
 				if (child != null)
 				{
 					var childTypeName = child.constructor.name;
-					if (childTypeName == "Object")
+					if (childTypeName == Object.name)
 					{
-						child.__proto__ = SerializerNode.prototype;
+						Object.setPrototypeOf(child, SerializerNode.prototype);
 						child.prototypesAssign();
 					}
 				}
@@ -193,6 +203,10 @@ class SerializerNode
 			{
 				this.o = eval("(" + this.o + ")");
 			}
+			else if (typeName == Map.name)
+			{
+				this.o = new Map();
+			}
 			else if
 			(
 				typeName == Boolean.name
@@ -218,7 +232,7 @@ class SerializerNode
 
 					if (child != null)
 					{
-						if (child.constructor.name == "SerializerNode")
+						if (child.constructor.name == SerializerNode.name)
 						{
 							child = child.unwrap
 							(

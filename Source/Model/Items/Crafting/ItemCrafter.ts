@@ -132,17 +132,17 @@ class ItemCrafter
 					new DataBinding
 					(
 						null,
-						function get(c) { return c.item().toString(world); },
+						(c: Entity) => c.item().toString(world),
 						null
 					), // bindingForItemText
 					fontHeightSmall,
 					new DataBinding
 					(
 						this,
-						function get(c) { return c.itemEntitySelected; },
-						function set(c, v) { c.itemEntitySelected = v; }
+						(c: ItemCrafter) => c.itemEntitySelected,
+						(c: ItemCrafter, v: Entity) => c.itemEntitySelected = v
 					), // bindingForItemSelected
-					new DataBinding(null, function(c) { return c; }, null ), // bindingForItemValue
+					new DataBinding(null, (c: Entity) => c, null ), // bindingForItemValue
 					new DataBinding(true, null, null), // isEnabled
 					(universe: Universe) =>
 					{
@@ -162,7 +162,7 @@ class ItemCrafter
 					new DataBinding
 					(
 						this,
-						function get(c)
+						(c: ItemCrafter) =>
 						{
 							var returnValue =
 							(
@@ -188,7 +188,7 @@ class ItemCrafter
 					new DataBinding
 					(
 						this,
-						function get(c)
+						(c: ItemCrafter) =>
 						{
 							return (c.itemEntityStagedSelected != null);
 						},
@@ -216,17 +216,17 @@ class ItemCrafter
 					new DataBinding
 					(
 						this,
-						function get(c) { return c.recipeSelected; },
-						function set(c, v) { c.recipeSelected = v; }
+						(c: ItemCrafter) => c.recipeSelected,
+						(c: ItemCrafter, v: CraftingRecipe) => { c.recipeSelected = v; }
 					), // valueSelected
 					this.recipes, // options
 					new DataBinding
 					(
-						null, function get(c) { return c; }, null
+						null, (c: CraftingRecipe) => c, null
 					), // bindingForOptionValues
 					new DataBinding
 					(
-						null, function get(c) { return c.name; }, null
+						null, (c: CraftingRecipe) => c.name, null
 					), // bindingForOptionText
 					fontHeightSmall
 				),
@@ -239,7 +239,7 @@ class ItemCrafter
 					new DataBinding
 					(
 						this,
-						function get(c)
+						(c: ItemCrafter) =>
 						{
 							return (c.recipeSelected == null ? [] : c.recipeSelected.itemsIn);
 						},
@@ -248,12 +248,12 @@ class ItemCrafter
 					new DataBinding
 					(
 						null,
-						function get(c) { return c.toString(world); },
+						(c: ItemCrafter) => c.toString(),
 						null
 					), // bindingForItemText
 					fontHeightSmall,
 					null, // bindingForItemSelected
-					new DataBinding(null, function(c) { return c; }, null ), // bindingForItemValue
+					new DataBinding(null, (c: Entity) => c, null ), // bindingForItemValue
 					null, null, null
 				),
 
@@ -268,10 +268,7 @@ class ItemCrafter
 					new DataBinding
 					(
 						this,
-						function get(c)
-						{
-							return (c.isRecipeSelectedFulfilled());
-						},
+						(c: ItemCrafter) => c.isRecipeSelectedFulfilled(),
 						null
 					), // isEnabled
 					combine, // click
@@ -286,26 +283,23 @@ class ItemCrafter
 					new DataBinding
 					(
 						this,
-						function get(c) { return c.itemEntitiesStaged; },
+						(c: ItemCrafter) => c.itemEntitiesStaged,
 						null
 					), // items
 					new DataBinding
 					(
 						null,
-						function get(c)
-						{
-							return c.item().toString(world);
-						},
+						(c: Entity) => c.item().toString(world),
 						null
 					), // bindingForItemText
 					fontHeightSmall,
 					new DataBinding
 					(
 						this,
-						function get(c) { return c.itemEntityStagedSelected; },
-						function set(c, v) { c.itemEntityStagedSelected = v; }
+						(c: ItemCrafter) => c.itemEntityStagedSelected,
+						(c: ItemCrafter, v: Entity) => { c.itemEntityStagedSelected = v; }
 					), // bindingForItemSelected
-					new DataBinding(null, function(c) { return c; }, null ), // bindingForItemValue
+					new DataBinding(null, (c: Entity) => c, null ), // bindingForItemValue
 					null, null, null
 				),
 
@@ -318,10 +312,7 @@ class ItemCrafter
 					new DataBinding
 					(
 						this,
-						function get(c)
-						{
-							return c.statusMessage;
-						},
+						(c: ItemCrafter) => c.statusMessage,
 						null
 					), // text
 					fontHeightSmall
@@ -334,7 +325,7 @@ class ItemCrafter
 			],
 
 			[
-				new ActionToInputsMapping("Back", [ universe.inputHelper.inputNames.Escape ], true ),
+				new ActionToInputsMapping("Back", [ Input.Names().Escape ], true ),
 			]
 		);
 

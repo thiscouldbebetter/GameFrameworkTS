@@ -4,12 +4,12 @@
 class ConversationDefn
 {
 	name: string;
-	visualPortrait: any;
+	visualPortrait: Visual;
 	contentTextStringName: string;
 	talkNodeDefns: TalkNodeDefn[];
-	talkNodeDefnsByName: any;
+	talkNodeDefnsByName: Map<string, TalkNodeDefn>;
 	talkNodes: TalkNode[];
-	talkNodesByName: any;
+	talkNodesByName: Map<string, TalkNode>;
 
 	constructor(name: string, visualPortrait: Visual, contentTextStringName: string, talkNodeDefns: TalkNodeDefn[], talkNodes: TalkNode[])
 	{
@@ -24,7 +24,7 @@ class ConversationDefn
 
 	talkNodeByName(nameOfTalkNodeToGet: string)
 	{
-		return this.talkNodesByName[nameOfTalkNodeToGet];
+		return this.talkNodesByName.get(nameOfTalkNodeToGet);
 	};
 
 	talkNodesByNames(namesOfTalkNodesToGet: string[])
@@ -73,8 +73,8 @@ class ConversationDefn
 		var talkNodeDefns = TalkNodeDefn.Instances()._AllByName;
 		var talkNodeDefnNamesToExpand =
 		[
-			talkNodeDefns["Display"].name,
-			talkNodeDefns["Option"].name,
+			talkNodeDefns.get("Display").name,
+			talkNodeDefns.get("Option").name,
 		];
 
 		var talkNodesExpanded = [];

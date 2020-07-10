@@ -5,9 +5,9 @@ class Place
 	defnName: string;
 	size: Coords;
 	entities: Entity[];
-	entitiesByName: any;
+	entitiesByName: Map<string, Entity>;
 
-	_entitiesByPropertyName: any;
+	_entitiesByPropertyName: Map<string, Entity[]>;
 	entitiesToSpawn: Entity[];
 	entitiesToRemove: Entity[];
 	propertyNamesToProcess: string[];
@@ -18,9 +18,9 @@ class Place
 		this.defnName = defnName;
 		this.size = size;
 		this.entities = [];
-		this.entitiesByName = {};
+		this.entitiesByName = new Map<string, Entity>();
 
-		this._entitiesByPropertyName = {};
+		this._entitiesByPropertyName = new Map<string, Entity[]>();
 		this.entitiesToSpawn = entities.slice();
 		this.entitiesToRemove = [];
 
@@ -44,7 +44,7 @@ class Place
 
 	defn(world: World)
 	{
-		return world.defns.defnsByNameByTypeName[PlaceDefn.name][this.defnName];
+		return world.defns.defnsByNameByTypeName.get(PlaceDefn.name).get(this.defnName);
 	};
 
 	draw(universe: Universe, world: World)
@@ -61,11 +61,11 @@ class Place
 
 	entitiesByPropertyName(propertyName: string)
 	{
-		var returnValues = this._entitiesByPropertyName[propertyName];
+		var returnValues = this._entitiesByPropertyName.get(propertyName);
 		if (returnValues == null)
 		{
 			returnValues = [];
-			this._entitiesByPropertyName[propertyName] = returnValues;
+			this._entitiesByPropertyName.set(propertyName, returnValues);
 		}
 
 		return returnValues;
@@ -115,7 +115,7 @@ class Place
 			ArrayHelper.remove(entitiesWithProperty, entity);
 		}
 		ArrayHelper.remove(this.entities, entity);
-		delete this.entitiesByName[entity.name];
+		this.entitiesByName.delete(entity.name);
 	};
 
 	entitySpawn(universe: Universe, world: World, entity: Entity)
@@ -126,13 +126,13 @@ class Place
 			entityName = "Entity";
 		}
 
-		if (this.entitiesByName[entityName] != null)
+		if (this.entitiesByName.get(entityName) != null)
 		{
 			entityName += universe.idHelper.idNext();
 		}
 
 		this.entities.push(entity);
-		this.entitiesByName[entityName] = entity;
+		this.entitiesByName.set(entityName, entity);
 
 		var entityProperties = entity.properties;
 		for (var i = 0; i < entityProperties.length; i++)
@@ -173,7 +173,7 @@ class Place
 				for (var i = 0; i < entitiesWithProperty.length; i++)
 				{
 					var entity = entitiesWithProperty[i];
-					var entityProperty = entity.propertiesByName[propertyName];
+					var entityProperty = entity.propertiesByName.get(propertyName);
 					entityProperty.updateForTimerTick(universe, world, this, entity);
 				}
 			}

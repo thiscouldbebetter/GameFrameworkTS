@@ -1,13 +1,13 @@
 
 class Defns
 {
-	defnArraysByTypeName: any;
-	defnsByNameByTypeName: any;
+	defnArraysByTypeName: Map<string, any[]>;
+	defnsByNameByTypeName: Map<string, Map<string, any>>;
 
-	constructor(defnArrays: any)
+	constructor(defnArrays: any[])
 	{
-		this.defnArraysByTypeName = {};
-		this.defnsByNameByTypeName = {};
+		this.defnArraysByTypeName = new Map<string, any[]>();
+		this.defnsByNameByTypeName = new Map<string, Map<string, any>>();
 
 		for (var i = 0; i < defnArrays.length; i++)
 		{
@@ -15,8 +15,8 @@ class Defns
 			var defnsByName = ArrayHelper.addLookupsByName(defnsOfType);
 			var itemFirst = defnsOfType[0];
 			var itemTypeName = itemFirst.constructor.name;
-			this.defnArraysByTypeName[itemTypeName] = defnsOfType;
-			this.defnsByNameByTypeName[itemTypeName] = defnsByName;
+			this.defnArraysByTypeName.set(itemTypeName, defnsOfType);
+			this.defnsByNameByTypeName.set(itemTypeName, defnsByName);
 		}
 	}
 }

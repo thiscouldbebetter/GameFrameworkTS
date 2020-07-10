@@ -25,7 +25,7 @@ class Constraint_AttachToEntityWithName implements Constraint
 	constrain(universe: Universe, world: World, place: Place, entityToConstrain: Entity)
 	{
 		var targetEntityName = this.targetEntityName;
-		var targetEntity = place.entitiesByName[targetEntityName];
+		var targetEntity = place.entitiesByName.get(targetEntityName);
 		if (targetEntity != null)
 		{
 			var targetPos = targetEntity.locatable().loc.pos;
@@ -262,7 +262,7 @@ class Constraint_OrientToward implements Constraint
 		var constrainableOrientation = constrainableLoc.orientation;
 		var constrainableForward = constrainableOrientation.forward;
 
-		var target = place.entitiesByName[targetEntityName];
+		var target = place.entitiesByName.get(targetEntityName);
 		var targetPos = target.locatable().loc.pos;
 
 		constrainableForward.overwriteWith

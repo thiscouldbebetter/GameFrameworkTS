@@ -3,9 +3,14 @@ class TalkNodeDefn
 {
 	name: string;
 	execute: (u: Universe, r: ConversationRun, s: ConversationScope, n: TalkNode) => void;
-	activate: any;
+	activate: (r: ConversationRun, s: ConversationScope, n: TalkNode) => void;
 
-	constructor(name: string, execute: any, activate: any)
+	constructor
+	(
+		name: string,
+		execute: (u: Universe, r: ConversationRun, s: ConversationScope, n: TalkNode) => void,
+		activate: (r: ConversationRun, s: ConversationScope, n: TalkNode) => void
+	)
 	{
 		this.name = name;
 		this.execute = execute;
@@ -14,7 +19,7 @@ class TalkNodeDefn
 
 	// instances
 
-	static _instances: any;
+	static _instances: TalkNodeDefn_Instances;
 	static Instances()
 	{
 		if (TalkNodeDefn._instances == null)
@@ -42,8 +47,8 @@ class TalkNodeDefn_Instances
 	VariableSet: TalkNodeDefn;
 	VariableStore: TalkNodeDefn;
 
-	_All: any;
-	_AllByName: any;
+	_All: TalkNodeDefn[];
+	_AllByName: Map<string, TalkNodeDefn>;
 
 	constructor()
 	{
@@ -53,11 +58,11 @@ class TalkNodeDefn_Instances
 			(universe: Universe, conversationRun: ConversationRun, scope: ConversationScope, talkNode: TalkNode) => // execute
 			{
 				var talkNodeToActivateName = talkNode.next;
-				var isActiveValueToSet = talkNode.text;
+				var isActiveValueToSet = (talkNode.text == "true");
 
 				var conversationDefn = conversationRun.defn;
 				var talkNodeToActivate
-					= conversationDefn.talkNodesByName[talkNodeToActivateName];
+					= conversationDefn.talkNodesByName.get(talkNodeToActivateName);
 				talkNodeToActivate.isActive = isActiveValueToSet;
 				scope.talkNodeAdvance(conversationRun);
 				conversationRun.update(universe);
@@ -100,7 +105,7 @@ class TalkNodeDefn_Instances
 			{
 				var variableName = talkNode.text;
 				var talkNodeNameToJumpTo = talkNode.next;
-				var variableValue = conversationRun.variableLookup[variableName];
+				var variableValue = conversationRun.variableLookup.get(variableName);
 				if (variableValue == true)
 				{
 					scope.talkNodeAdvance(conversationRun);
@@ -125,7 +130,7 @@ class TalkNodeDefn_Instances
 			{
 				var variableName = talkNode.text;
 				var talkNodeNameToJumpTo = talkNode.next;
-				var variableValue = conversationRun.variableLookup[variableName];
+				var variableValue = conversationRun.variableLookup.get(variableName);
 				if (variableValue == true)
 				{
 					scope.talkNodeCurrent = conversationRun.defn.talkNodeByName
@@ -152,7 +157,7 @@ class TalkNodeDefn_Instances
 				if (talkNodesForOptions.indexOf(talkNode) == -1)
 				{
 					talkNodesForOptions.push(talkNode);
-					talkNodesForOptions[talkNode.name] = talkNode;
+					scope.talkNodesForOptionsByName.set(talkNode.name, talkNode);
 				}
 				scope.talkNodeAdvance(conversationRun);
 				conversationRun.update(universe);
@@ -256,7 +261,7 @@ class TalkNodeDefn_Instances
 				var scriptToRunAsString = "( function(u, cr) { return " + scriptExpression + "; } )";
 				var scriptToRun = eval(scriptToRunAsString);
 				var scriptResult = scriptToRun(conversationRun);
-				conversationRun.variableLookup[variableName] = scriptResult;
+				conversationRun.variableLookup.set(variableName, scriptResult);
 				scope.talkNodeAdvance(conversationRun);
 				conversationRun.update(universe); // hack
 			},
@@ -270,7 +275,7 @@ class TalkNodeDefn_Instances
 			{
 				var variableName = talkNode.text;
 				var variableValue = talkNode.next;
-				conversationRun.variableLookup[variableName] = variableValue;
+				conversationRun.variableLookup.set(variableName, variableValue);
 				scope.talkNodeAdvance(conversationRun);
 				conversationRun.update(universe); // hack
 			},
@@ -283,7 +288,7 @@ class TalkNodeDefn_Instances
 			(universe: Universe, conversationRun: ConversationRun, scope: ConversationScope, talkNode: TalkNode) => // execute
 			{
 				var variableName = talkNode.text;
-				var variableValue = conversationRun.variableLookup[variableName];
+				var variableValue = conversationRun.variableLookup.get(variableName);
 				var scriptExpression = talkNode.next;
 				var scriptToRunAsString = "( function(u, cr) { " + scriptExpression + " = " + variableValue + "; } )";
 				var scriptToRun = eval(scriptToRunAsString);

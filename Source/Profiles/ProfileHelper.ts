@@ -59,8 +59,7 @@ class ProfileHelper
 
 			this.storageHelper.save
 			(
-				this.propertyName,
-				profiles
+				this.propertyName, profiles
 			);
 			wasSaveSuccessful = true;
 		}
@@ -75,18 +74,25 @@ class ProfileHelper
 
 	profiles() : Profile[]
 	{
-		var profiles = this.storageHelper.load
-		(
-			this.propertyName
-		);
+		var profiles: Profile[] = null;
+		try
+		{
+			profiles = this.storageHelper.load
+			(
+				this.propertyName
+			);
+		}
+		catch (ex)
+		{
+			console.log("Deserialization of previously saved profiles failed, so they will be abandoned.");
+		}
 
 		if (profiles == null)
 		{
 			profiles = [];
 			this.storageHelper.save
 			(
-				this.propertyName,
-				profiles
+				this.propertyName, profiles
 			);
 		}
 

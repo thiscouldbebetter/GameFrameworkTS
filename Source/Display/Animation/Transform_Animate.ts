@@ -17,7 +17,7 @@ class Transform_Animate implements Transform
 		if (this.animatable.animationDefnNameCurrent != null)
 		{
 			var animationDefns = this.animationDefnGroup.animationDefnsByName;
-			returnValue = animationDefns[this.animatable.animationDefnNameCurrent];
+			returnValue = animationDefns.get(this.animatable.animationDefnNameCurrent);
 		}
 
 		return returnValue;

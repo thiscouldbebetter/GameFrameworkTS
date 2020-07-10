@@ -2,9 +2,9 @@
 class Action
 {
 	name: string;
-	perform: any;
+	perform: (u: Universe, w: World, p: Place, e: Entity) => void;
 
-	constructor(name: string, perform: any)
+	constructor(name: string, perform: (u: Universe, w: World, p: Place, e: Entity) => void)
 	{
 		this.name = name;
 		this.perform = perform;

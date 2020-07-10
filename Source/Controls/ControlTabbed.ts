@@ -103,7 +103,7 @@ class ControlTabbed implements Control
 
 	style(universe: Universe)
 	{
-		return universe.controlBuilder.stylesByName[this.styleName == null ? "Default" : this.styleName];
+		return universe.controlBuilder.stylesByName.get(this.styleName == null ? "Default" : this.styleName);
 	};
 
 	// actions

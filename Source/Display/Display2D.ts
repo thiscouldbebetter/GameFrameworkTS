@@ -8,10 +8,10 @@ class Display2D implements Display
 	colorBack: string;
 	isInvisible: boolean
 
-	canvas: any;
-	sizeInPixels: any;
+	canvas: HTMLCanvasElement;
+	sizeInPixels: Coords;
 	sizeInPixelsHalf: Coords;
-	graphics: any;
+	graphics: CanvasRenderingContext2D;
 
 	_drawPos: Coords;
 	_scaleFactor: Coords;
@@ -181,7 +181,7 @@ class Display2D implements Display
 		for (var i = 0; i < gradientStops.length; i++)
 		{
 			var stop = gradientStops[i];
-			systemGradient.addColorStop(stop.position, stop.color);
+			systemGradient.addColorStop(stop.position, stop.color.systemColor());
 		}
 
 		this.graphics.fillStyle = systemGradient;

@@ -20,7 +20,7 @@ class Color
 
 	// instances
 
-	static _instances: any;
+	static _instances: Color_Instances;
 
 	static Instances()
 	{
@@ -93,7 +93,7 @@ class Color_Instances
 	YellowDark: Color;
 
 	_All: Color[];
-	_AllByCode: any;
+	_AllByCode: Map<string, Color>;
 
 	constructor()
 	{

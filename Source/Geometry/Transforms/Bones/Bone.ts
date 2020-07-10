@@ -30,7 +30,7 @@ class Bone
 	{
 		var returnValue = new Coords(0, 0, 0);
 
-		var bone = bonesByName[this.parentName];
+		var bone = bonesByName.get(this.parentName);
 
 		while (bone != null)
 		{
@@ -42,7 +42,7 @@ class Bone
 				)
 			);
 
-			bone = bonesByName[bone.parentName];
+			bone = bonesByName.get(bone.parentName);
 		}
 
 		return returnValue;

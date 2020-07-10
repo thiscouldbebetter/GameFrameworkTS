@@ -65,7 +65,7 @@ class EquipmentUser
 
 		var message = itemDefn.appearance;
 
-		var socket = this.socketGroup.socketsByDefnName[socketName];
+		var socket = this.socketGroup.socketsByDefnName.get(socketName);
 
 		if (socket == null)
 		{
@@ -92,7 +92,7 @@ class EquipmentUser
 
 	itemEntityInSocketWithName(socketName: string)
 	{
-		return this.socketGroup.socketsByDefnName[socketName].itemEntityEquipped;
+		return this.socketGroup.socketsByDefnName.get(socketName).itemEntityEquipped;
 	};
 
 	unequipItemFromSocket
@@ -183,17 +183,17 @@ class EquipmentUser
 			new DataBinding
 			(
 				null,
-				(c: any) => { return c.item().toString(world); },
+				(c: Entity) => { return c.item().toString(world); },
 				null
 			), // bindingForItemText
 			fontHeightSmall,
 			new DataBinding
 			(
 				this,
-				(c: any) => { return c.itemEntitySelected; },
-				(c: any, v: any) => { c.itemEntitySelected = v; }
+				(c: EquipmentUser) => { return c.itemEntitySelected; },
+				(c: EquipmentUser, v: Entity) => { c.itemEntitySelected = v; }
 			), // bindingForItemSelected
-			new DataBinding(null, (c: any) => { return c; }, null ), // bindingForItemValue
+			new DataBinding(null, (c: Entity) => c, null ), // bindingForItemValue
 			null, // bindingForIsEnabled
 			function confirm()
 			{
@@ -217,17 +217,17 @@ class EquipmentUser
 			new DataBinding
 			(
 				null,
-				(c: any) => { return c.toString(world); },
+				(c: EquipmentSocket) => c.toString(world),
 				null
 			), // bindingForItemText
 			fontHeightSmall,
 			new DataBinding
 			(
 				this,
-				(c: any) => c.socketSelected,
-				(c: any, v: any) => { c.socketSelected = v; }
+				(c: EquipmentUser) => c.socketSelected,
+				(c: EquipmentUser, v: EquipmentSocket) => { c.socketSelected = v; }
 			), // bindingForItemSelected
-			new DataBinding(null, (c: any) => { return c; }, null ), // bindingForItemValue
+			new DataBinding(null, (c: EquipmentSocket) => c, null ), // bindingForItemValue
 			null, // bindingForIsEnabled
 			function confirm()
 			{
@@ -289,10 +289,7 @@ class EquipmentUser
 					new DataBinding
 					(
 						this,
-						function get(c)
-						{
-							return c.statusMessage;
-						},
+						(c: EquipmentUser) => c.statusMessage,
 						null
 					), // text
 					fontHeightSmall
@@ -301,7 +298,7 @@ class EquipmentUser
 
 			[ new Action("Back", back) ],
 
-			[ new ActionToInputsMapping( "Back", [ universe.inputHelper.inputNames.Escape ], true ) ],
+			[ new ActionToInputsMapping( "Back", [ Input.Names().Escape ], true ) ],
 
 		);
 

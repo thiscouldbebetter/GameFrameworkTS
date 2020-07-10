@@ -8,19 +8,19 @@ class Display3D implements Display
 	colorFore: string;
 	colorBack: string;
 
-	canvas: any;
-	lighting: any;
-	matrixCamera: any;
-	matrixEntity: any;
-	matrixOrient: any;
-	matrixPerspective: any;
-	matrixTranslate: any;
+	canvas: HTMLCanvasElement;
+	lighting: Lighting;
+	matrixCamera: Matrix;
+	matrixEntity: Matrix;
+	matrixOrient: Matrix;
+	matrixPerspective: Matrix;
+	matrixTranslate: Matrix;
 	sizeInPixelsHalf: Coords;
 	tempCoords: Coords;
-	tempMatrix0: any;
-	tempMatrix1: any;
-	texturesRegistered: any;
-	webGLContext: any;
+	tempMatrix0: Matrix;
+	tempMatrix1: Matrix;
+	texturesRegisteredByName: Map<string, Texture>;
+	webGLContext: WebGLContext;
 
 	_sizeDefault: Coords;
 	_scaleFactor: Coords;
@@ -88,7 +88,8 @@ class Display3D implements Display
 		var gl = webGLContext.gl;
 		// var shaderProgram = webGLContext.shaderProgram;
 
-		gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+		var viewportDimensionsAsIntegers = gl.getParameter(gl.VIEWPORT);
+		gl.viewport(0, 0, viewportDimensionsAsIntegers[2], viewportDimensionsAsIntegers[3]);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 		this._display2DOverlay.clear();
@@ -132,13 +133,13 @@ class Display3D implements Display
 		var materials = mesh.materials;
 		var faces = mesh.faces();
 		var faceTextures = mesh.faceTextures;
-		var faceIndicesByMaterial = mesh.faceIndicesByMaterial();
+		var faceIndicesByMaterialName = mesh.faceIndicesByMaterialName();
 
 		for (var m = 0; m < materials.length; m++)
 		{
 			var material = materials[m];
 			var materialName = material.name;
-			var faceIndices = faceIndicesByMaterial[materialName];
+			var faceIndices = faceIndicesByMaterialName.get(materialName);
 
 			for (var fi = 0; fi < faceIndices.length; fi++)
 			{
@@ -281,11 +282,11 @@ class Display3D implements Display
 			{
 				var textureName = texture.name;
 
-				var textureRegistered = this.texturesRegistered[textureName];
+				var textureRegistered = this.texturesRegisteredByName.get(textureName);
 				if (textureRegistered == null)
 				{
 					texture.initializeForWebGLContext(this.webGLContext);
-					this.texturesRegistered[textureName] = texture;
+					this.texturesRegisteredByName.set(textureName, texture);
 				}
 
 				gl.activeTexture(gl.TEXTURE0);
@@ -373,7 +374,7 @@ class Display3D implements Display
 
 		this.webGLContext = new WebGLContext(this.canvas);
 
-		this.texturesRegistered = [];
+		this.texturesRegisteredByName = new Map<string, Texture>();
 
 		// hack
 
@@ -396,7 +397,7 @@ class Display3D implements Display
 		this.tempMatrix1 = Matrix.buildZeroes();
 	};
 
-	lightingSet(todo: any)
+	lightingSet(todo: Lighting)
 	{
 		var webGLContext = this.webGLContext;
 		var gl = webGLContext.gl;

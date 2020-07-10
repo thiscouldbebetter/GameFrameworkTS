@@ -1,10 +1,10 @@
 
 class WebGLContext
 {
-	gl: any;
+	gl: WebGLRenderingContext;
 	shaderProgram: any;
 
-	constructor(canvas: any)
+	constructor(canvas: HTMLCanvasElement)
 	{
 		this.gl = this.initGL(canvas);
 		this.shaderProgram = this.buildShaderProgram(this.gl);
@@ -23,11 +23,14 @@ class WebGLContext
 
 	// instance methods
 
-	initGL(canvas: any)
+	initGL(canvas: HTMLCanvasElement)
 	{
 		var gl = canvas.getContext("experimental-webgl");
+		/*
 		gl.viewportWidth = canvas.width;
 		gl.viewportHeight = canvas.height;
+		*/
+		gl.viewport(0, 0, canvas.width, canvas.height);
 
 		var colorBackground = Color.Instances().Black;
 		var colorBackgroundComponentsRGBA = colorBackground.componentsRGBA;
@@ -45,7 +48,7 @@ class WebGLContext
 		return gl;
 	};
 
-	buildShaderProgram(gl: any)
+	buildShaderProgram(gl: WebGLRenderingContext)
 	{
 		var shaderProgram = this.buildShaderProgram_Compile
 		(
@@ -59,7 +62,7 @@ class WebGLContext
 		return shaderProgram;
 	};
 
-	buildShaderProgram_FragmentShader(gl: any)
+	buildShaderProgram_FragmentShader(gl: WebGLRenderingContext)
 	{
 		var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
 		var fragmentShaderCode =
@@ -83,7 +86,7 @@ class WebGLContext
 		return fragmentShader;
 	};
 
-	buildShaderProgram_VertexShader(gl: any)
+	buildShaderProgram_VertexShader(gl: WebGLRenderingContext)
 	{
 		var vertexShader = gl.createShader(gl.VERTEX_SHADER);
 		var vertexShaderCode =
@@ -122,7 +125,7 @@ class WebGLContext
 
 	buildShaderProgram_Compile
 	(
-		gl: any, fragmentShader: any, vertexShader: any
+		gl: WebGLRenderingContext, fragmentShader: any, vertexShader: any
 	)
 	{
 		var shaderProgram = gl.createProgram();
@@ -136,7 +139,7 @@ class WebGLContext
 
 	buildShaderProgram_SetUpInputVariables
 	(
-		gl: any, shaderProgram: any
+		gl: WebGLRenderingContext, shaderProgram: any
 	)
 	{
 		shaderProgram.vertexColorAttribute = gl.getAttribLocation
