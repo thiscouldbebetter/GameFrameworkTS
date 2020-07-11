@@ -488,7 +488,7 @@ class PlaceBuilderDemo
 		this.entities.push(...mapCellsAsEntities);
 
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Flower"), 1));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Mushroom"), 1));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("MushroomGenerator"), 1));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Tree"), 1));
 
 		var place = new Place(this.name, "Demo", size, this.entities);
@@ -519,7 +519,7 @@ class PlaceBuilderDemo
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Flower"), 3));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Material"), 5));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Medicine"), 5));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Mushroom"), 3));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("MushroomGenerator"), 3));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Speed Boots"), 1));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Toolset"), 1));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Flower"), 3));
@@ -1860,6 +1860,27 @@ class PlaceBuilderDemo
 		return friendlyEntityDefn;
 	};
 
+	entityDefnBuildGenerator(entityDefnToGenerate: Entity): Entity
+	{
+		var generator = new Generator
+		(
+			entityDefnToGenerate,
+			1000, // ticksToGenerate
+			1 // entitiesGeneratedMax
+		);
+
+		var entityDefnGenerator = new Entity
+		(
+			entityDefnToGenerate.name + "Generator",
+			[
+				generator,
+				new Locatable(null)
+			]
+		);
+
+		return entityDefnGenerator;
+	};
+
 	entityDefnBuildGun(entityDimension: number): Entity
 	{
 		entityDimension = entityDimension * 2;
@@ -2122,7 +2143,7 @@ class PlaceBuilderDemo
 		);
 
 		return itemMushroomEntityDefn;
-	};
+	}
 
 	entityDefnBuildObstacleBar(entityDimension: number): Entity
 	{
@@ -3036,6 +3057,10 @@ class PlaceBuilderDemo
 	entityDefnsBuild(): Entity[]
 	{
 		var entityDimension = 10;
+
+		var entityDefnFlower = this.entityDefnBuildFlower(entityDimension);
+		var entityDefnMushroom = this.entityDefnBuildMushroom(entityDimension);
+
 		var entityDefns =
 		[
 			this.entityDefnBuildAccessory(entityDimension),
@@ -3046,13 +3071,15 @@ class PlaceBuilderDemo
 			this.entityDefnBuildCrystal(entityDimension),
 			this.entityDefnBuildEnemyGenerator(entityDimension),
 			this.entityDefnBuildExit(entityDimension),
-			this.entityDefnBuildFlower(entityDimension),
+			entityDefnFlower,
+			this.entityDefnBuildGenerator(entityDefnFlower),
 			this.entityDefnBuildFriendly(entityDimension),
 			this.entityDefnBuildGun(entityDimension),
 			this.entityDefnBuildGunAmmo(entityDimension),
 			this.entityDefnBuildMaterial(entityDimension),
 			this.entityDefnBuildMedicine(entityDimension),
-			this.entityDefnBuildMushroom(entityDimension),
+			entityDefnMushroom,
+			this.entityDefnBuildGenerator(entityDefnMushroom),
 			this.entityDefnBuildObstacleBar(entityDimension),
 			this.entityDefnBuildObstacleMine(entityDimension),
 			this.entityDefnBuildObstacleRing(entityDimension),

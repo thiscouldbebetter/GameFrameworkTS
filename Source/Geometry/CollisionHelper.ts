@@ -1021,6 +1021,11 @@ class CollisionHelper
 		return this.doBoxAndBoxCollide(box, mesh.box() );
 	};
 
+	doBoxAndShapeInverseCollide(box: Box, shapeInverse: ShapeInverse)
+	{
+		return this.doShapeInverseAndShapeCollide(shapeInverse, box);
+	}
+
 	doBoxAndShapeGroupAllCollide(box: Box, shapeGroupAll: ShapeGroupAll)
 	{
 		return this.doShapeGroupAllAndShapeCollide(shapeGroupAll, box);
