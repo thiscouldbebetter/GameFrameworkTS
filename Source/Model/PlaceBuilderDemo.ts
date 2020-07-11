@@ -358,7 +358,7 @@ class PlaceBuilderDemo
 				if (cellPosInCells.isInRangeMax(map.sizeInCellsMinusOnes))
 				{
 					var cellCode = map.cellSource[cellPosInCells.y][cellPosInCells.x];
-					var cellTerrain = (terrainsByCodeChar[cellCode] || terrains[0]);
+					var cellTerrain = (terrainsByCodeChar.get(cellCode) || terrains[0]);
 					var cellVisualName = cellTerrain.name;
 					var cellIsBlocking = cellTerrain.isBlocking;
 					var cellToOverwriteAsAny: any = cellToOverwrite;
