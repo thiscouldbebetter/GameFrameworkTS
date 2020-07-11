@@ -4,18 +4,22 @@ class Serializer
 	deserialize(stringToDeserialize: string)
 	{
 		var nodeRoot = JSON.parse(stringToDeserialize);
+		var typeNames = nodeRoot["typeNames"];
 		nodeRoot.__proto__ = SerializerNode.prototype;
 		nodeRoot.prototypesAssign();
-		var returnValue = nodeRoot.unwrap([]);
+		var returnValue = nodeRoot.unwrap(typeNames, []);
 
 		return returnValue;
 	};
 
 	serialize(objectToSerialize: any, prettyPrint: boolean)
 	{
-		var nodeRoot = new SerializerNode(objectToSerialize);
+		var nodeRoot: any = new SerializerNode(objectToSerialize);
 
-		nodeRoot.wrap([], []);
+		var typeNames = new Array<string>();
+		nodeRoot.wrap(typeNames, new Map<string, number>(), [], []);
+
+		nodeRoot["typeNames"] = typeNames; 
 
 		var nodeRootSerialized = JSON.stringify
 		(
@@ -30,27 +34,31 @@ class Serializer
 
 class SerializerNode
 {
-	t: string;
-	id: number;
-	r: boolean;
+	t: number;
+	i: number;
+	r: number;
 	o: any;
 	c: any; // todo - Map<string, any> - Tricky.
 
 	constructor(objectWrapped: any)
 	{
-		this.t = null; // objectWrappedTypeName
-		this.id = null; // id
-		this.r = null; // isReference
-
 		this.o = objectWrapped;
 	}
 
-	wrap(objectsAlreadyWrapped: any, objectIndexToNodeLookup: any)
+	wrap(typeNamesSoFar: string[], typeIdsByName: Map<string, number>, objectsAlreadyWrapped: any, objectIndexToNodeLookup: any)
 	{
 		var objectWrapped = this.o;
 		if (objectWrapped != null)
 		{
 			var typeName = objectWrapped.constructor.name;
+
+			if (typeIdsByName.has(typeName) == false)
+			{
+				typeIdsByName.set(typeName, typeNamesSoFar.length);
+				typeNamesSoFar.push(typeName);
+			}
+
+			var typeId = typeIdsByName.get(typeName);
 
 			var objectIndexExisting =
 				objectsAlreadyWrapped.indexOf(objectWrapped);
@@ -58,19 +66,19 @@ class SerializerNode
 			if (objectIndexExisting >= 0)
 			{
 				var nodeForObjectExisting = objectIndexToNodeLookup[objectIndexExisting];
-				this.id = nodeForObjectExisting.id;
-				this.r = true; // isReference
-				this.o = null; // objectWrapped
+				this.i = nodeForObjectExisting.i;
+				this.r = 1; // isReference
+				delete this.o; // objectWrapped
 			}
 			else
 			{
-				this.r = false; // isReference
+				// this.r = 0; // isReference
 				var objectIndex = objectsAlreadyWrapped.length;
-				this.id = objectIndex;
+				this.i = objectIndex;
 				objectsAlreadyWrapped.push(objectWrapped);
 				objectIndexToNodeLookup[objectIndex] = this;
 
-				this.t = typeName;
+				this.t = typeId;
 
 				if (typeName == Function.name)
 				{
@@ -85,7 +93,7 @@ class SerializerNode
 					{
 						// Maps don't serialize well with JSON.stringify(),
 						// so convert it to a generic object.
-						var objectWrappedAsObject = {};
+						var objectWrappedAsObject: any = {};
 						for (var key of objectWrapped.keys())
 						{
 							var value = objectWrapped.get(key);
@@ -143,6 +151,8 @@ class SerializerNode
 							{
 								child.wrap
 								(
+									typeNamesSoFar,
+									typeIdsByName,
 									objectsAlreadyWrapped,
 									objectIndexToNodeLookup
 								);
@@ -179,18 +189,19 @@ class SerializerNode
 		}
 	};
 
-	unwrap(nodesAlreadyProcessed: any)
+	unwrap(typeNames: string[], nodesAlreadyProcessed: any)
 	{
-		var isReference = this.r;
-		if (isReference == true)
+		var isReference = (this.r == 1);
+		if (isReference)
 		{
-			var nodeExisting = nodesAlreadyProcessed[this.id];
+			var nodeExisting = nodesAlreadyProcessed[this.i];
 			this.o = nodeExisting.o; // objectWrapped
 		}
 		else
 		{
-			nodesAlreadyProcessed[this.id] = this;
-			var typeName = this.t;
+			nodesAlreadyProcessed[this.i] = this;
+			var typeId = this.t;
+			var typeName = typeNames[typeId];
 			if (typeName == null)
 			{
 				// Value is null.  Do nothing.
@@ -236,7 +247,7 @@ class SerializerNode
 						{
 							child = child.unwrap
 							(
-								nodesAlreadyProcessed
+								typeNames, nodesAlreadyProcessed
 							);
 						}
 					}
