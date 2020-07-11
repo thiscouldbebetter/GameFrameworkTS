@@ -1,7 +1,7 @@
 
 class VenueMessage implements Venue
 {
-	messageToShow: string;
+	messageToShow: DataBinding<any, string>;
 	acknowledge: any;
 	venuePrev: any;
 	_sizeInPixels: Coords;
@@ -11,7 +11,7 @@ class VenueMessage implements Venue
 
 	constructor
 	(
-		messageToShow: string, acknowledge: any, venuePrev: Venue,
+		messageToShow: DataBinding<any, string>, acknowledge: any, venuePrev: Venue,
 		sizeInPixels: Coords, showMessageOnly: boolean
 	)
 	{
@@ -20,6 +20,11 @@ class VenueMessage implements Venue
 		this.venuePrev = venuePrev;
 		this._sizeInPixels = sizeInPixels;
 		this.showMessageOnly = showMessageOnly || false;
+	}
+
+	static fromText(message: string)
+	{
+		return new VenueMessage(new DataBinding(message, null, null), null, null, null, null);
 	}
 
 	// instance methods

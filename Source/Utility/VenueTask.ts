@@ -5,7 +5,7 @@ class VenueTask implements Venue
 	perform: any;
 	done: any;
 
-	isStarted: boolean;
+	timeStarted: Date;
 
 	constructor(venueInner: any, perform: any, done: any)
 	{
@@ -13,10 +13,22 @@ class VenueTask implements Venue
 		this.perform = perform;
 		this.done = done;
 
-		this.isStarted = false;
+		this.timeStarted = null;
 	}
 
-	// instance methods
+	secondsSinceStarted()
+	{
+		var returnValue = 0
+		if (this.timeStarted != null)
+		{
+			var now = new Date();
+			var millisecondsSinceStarted = now.getTime() - this.timeStarted.getTime();
+			returnValue = Math.floor(millisecondsSinceStarted / 1000);
+		}
+		return returnValue;
+	}
+
+	// Venue implementation.
 
 	draw(universe: Universe)
 	{
@@ -31,7 +43,17 @@ class VenueTask implements Venue
 	{
 		this.venueInner.updateForTimerTick(universe);
 
+		this.timeStarted = new Date();
+
+		var timer = setInterval
+		(
+			() => { this.draw(universe), 1000 }
+		)
+
+		// todo - Make this asynchronous.
 		var result = this.perform(universe);
+
+		clearInterval(timer);
 
 		this.done(universe, result);
 	};

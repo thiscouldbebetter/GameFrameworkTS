@@ -25,7 +25,9 @@ class ControlBuilder
 
 	choice
 	(
-		universe:Universe, size:Coords, message:string, optionNames:Array<string>, optionFunctions:Array<any>, showMessageOnly:boolean
+		universe: Universe, size: Coords, message: DataBinding<any, string>,
+		optionNames: Array<string>, optionFunctions: Array<any>,
+		showMessageOnly: boolean
 	)
 	{
 		size = size || universe.display.sizeDefault();
@@ -35,7 +37,7 @@ class ControlBuilder
 			this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
 		var fontHeight = this.fontHeightInPixelsBase;
 
-		var numberOfLinesInMessageMinusOne = message.split("\n").length - 1;
+		var numberOfLinesInMessageMinusOne = message.get().split("\n").length - 1;
 		var labelSize = new Coords
 		(
 			200, fontHeight * numberOfLinesInMessageMinusOne, 0
@@ -222,7 +224,7 @@ class ControlBuilder
 	{
 		return this.choice
 		(
-			universe, size, message, ["Confirm", "Cancel"], [confirm, cancel], null
+			universe, size, new DataBinding(message, null, null), ["Confirm", "Cancel"], [confirm, cancel], null
 		);
 	};
 
@@ -324,7 +326,7 @@ class ControlBuilder
 						var venueCurrent = universe.venueCurrent;
 						var venueNext: any = new VenueMessage
 						(
-							universe.name + "\nv" + universe.version,
+							new DataBinding(universe.name + "\nv" + universe.version, null, null),
 							() => // acknowledge
 							{
 								universe.venueNext = new VenueFader(venueCurrent, null, null, null);
@@ -782,7 +784,7 @@ class ControlBuilder
 		return returnValue;
 	};
 
-	message(universe: Universe, size: Coords, message: string, acknowledge: () => void, showMessageOnly: boolean)
+	message(universe: Universe, size: Coords, message: DataBinding<any, string>, acknowledge: () => void, showMessageOnly: boolean)
 	{
 		var optionNames = [];
 		var optionFunctions = [];
@@ -1238,11 +1240,21 @@ class ControlBuilder
 					true, // isEnabled
 					() => // click
 					{
-						var venueNext: any = new VenueMessage("Working...", null, null, null, null);
-
-						venueNext = new VenueTask
+						var messageAsDataBinding = new DataBinding
 						(
-							venueNext,
+							null, // Will be set below.
+							(c: VenueTask) => "Generating world...",
+							null
+						);
+
+						var venueMessage = new VenueMessage
+						(
+							messageAsDataBinding, null, null, null, null
+						);
+
+						var venueTask = new VenueTask
+						(
+							venueMessage,
 							() => //perform
 							{
 								return World.new(universe);
@@ -1263,9 +1275,9 @@ class ControlBuilder
 							}
 						);
 
-						venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
+						messageAsDataBinding.contextSet(venueTask);
 
-						universe.venueNext = venueNext;
+						universe.venueNext = new VenueFader(venueTask, universe.venueCurrent, null, null)
 
 					}, // end click
 					null, null
@@ -1643,12 +1655,27 @@ class ControlBuilder
 
 		var start = function()
 		{
-			var venueNext: any = new VenueControls
+			var venueMessage = VenueMessage.fromText("Loading profiles...");
+
+			var venueTask = new VenueTask
 			(
-				universe.controlBuilder.profileSelect(universe, null)
+				venueMessage,
+				() => // perform
+				{
+					var result = universe.controlBuilder.profileSelect(universe, null);
+					return result;
+				},
+				(universe: Universe, result: any) => // done
+				{
+					var venueProfileSelect = new VenueControls(result);
+
+					universe.venueNext =
+						new VenueFader(venueProfileSelect, universe.venueCurrent, null, null);
+				}
 			);
-			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
-			universe.venueNext = venueNext;
+
+			universe.venueNext =
+				new VenueFader(venueTask, universe.venueCurrent, null, null);
 		};
 
 		var returnValue = new ControlContainer
@@ -1782,7 +1809,7 @@ class ControlBuilder
 							(
 								universe,
 								size,
-								instructions,
+								new DataBinding(instructions, null, null),
 								() => // acknowledge
 								{
 									universe.venueNext = new VenueFader
@@ -1954,7 +1981,7 @@ class ControlBuilder
 					(
 						universe,
 						size,
-						"No save exists to reload!",
+						new DataBinding("No save exists to reload!", null, null),
 						() => // acknowledge
 						{
 							var venueNext: any = new VenueControls
@@ -2013,9 +2040,8 @@ class ControlBuilder
 							cancel
 						);
 
-						var venueNext: any = new VenueControls(controlConfirm);
-						venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
-						universe.venueNext = venueNext;
+						var venueConfirm = new VenueControls(controlConfirm);
+						universe.venueNext = new VenueFader(venueConfirm, universe.venueCurrent, null, null);
 					},
 					null, null
 				),
@@ -2039,7 +2065,7 @@ class ControlBuilder
 							(
 								universe,
 								size,
-								"Ready to load from file...",
+								new DataBinding("Ready to load from file...", null, null),
 								() => // acknowledge
 								{
 									function callback(fileContentsAsString: string)
@@ -2075,7 +2101,7 @@ class ControlBuilder
 							(
 								universe,
 								size,
-								"No file specified.",
+								new DataBinding("No file specified.", null, null),
 								() => // acknowlege
 								{
 									var venueNext: any = new VenueControls
@@ -2108,12 +2134,11 @@ class ControlBuilder
 					true, // isEnabled
 					() => // click
 					{
-						var venueNext: any = new VenueControls
+						var venueGame = new VenueControls
 						(
 							universe.controlBuilder.game(universe, size)
 						);
-						venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
-						universe.venueNext = venueNext;
+						universe.venueNext = new VenueFader(venueGame, universe.venueCurrent, null, null);
 					},
 					null, null
 				),
@@ -2138,20 +2163,11 @@ class ControlBuilder
 
 		var fontHeight = this.fontHeightInPixelsBase;
 
-		var saveToLocalStorage = () =>
+		var handleSaveToLocalStorage = (wasSaveSuccessful: boolean) =>
 		{
-			var profile = universe.profile;
-			var world = universe.world;
-
-			world.dateSaved = DateTime.now();
-			var wasSaveSuccessful = universe.profileHelper.profileSave
-			(
-				profile
-			);
-
 			var message =
 			(
-				wasSaveSuccessful ? "Profile saved to local storage." : "Save failed due to errors."
+				wasSaveSuccessful ? "Profile saved successfully." : "Save failed due to errors."
 			);
 
 			var venueNext: Venue = new VenueControls
@@ -2160,7 +2176,7 @@ class ControlBuilder
 				(
 					universe,
 					size,
-					message,
+					new DataBinding(message, null, null),
 					() => // acknowledge
 					{
 						var venueNext: Venue = new VenueControls
@@ -2175,7 +2191,106 @@ class ControlBuilder
 			);
 			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 			universe.venueNext = venueNext;
+		}
+
+		var saveToLocalStorage = () =>
+		{
+			var messageAsDataBinding = new DataBinding
+			(
+				null, // context - Set below.
+				(c: VenueTask) => "Building record of game...",
+				null
+			);
+
+			var venueMessage = new VenueMessage
+			(
+				messageAsDataBinding,
+				null, null, null, null
+			);
+
+			var wasSaveSuccessful = false;
+
+			var venueTask = new VenueTask
+			(
+				venueMessage,
+				() => // perform
+				{
+					var profile = universe.profile;
+					var world = universe.world;
+
+					world.dateSaved = DateTime.now();
+					wasSaveSuccessful = universe.profileHelper.profileSave
+					(
+						profile
+					);
+
+					return wasSaveSuccessful;
+				},
+				(universe: Universe, result: any) => // done
+				{
+					handleSaveToLocalStorage(result);
+				}
+			);
+			messageAsDataBinding.contextSet(venueTask);
+
+			universe.venueNext = new VenueFader(venueTask, universe.venueCurrent, null, null);
 		};
+
+		var saveToFilesystem = () =>
+		{
+			var venueMessage = VenueMessage.fromText("Building record of game...");
+
+			var venueTask = new VenueTask
+			(
+				venueMessage,
+				() => // perform
+				{
+					var world = universe.world;
+
+					world.dateSaved = DateTime.now();
+					var worldSerialized = universe.serializer.serialize(world, null);
+
+					return worldSerialized;
+				},
+				(universe: Universe, worldSerialized: any) => // done
+				{
+					var wasSaveSuccessful = (worldSerialized != null);
+					var message =
+					(
+						wasSaveSuccessful ? "Save ready: choose location on dialog." : "Save failed due to errors."
+					);
+
+					new FileHelper().saveTextStringToFileWithName
+					(
+						worldSerialized, universe.world.name + ".json"
+					);
+
+					var venueMessage = new VenueControls
+					(
+						universe.controlBuilder.message
+						(
+							universe,
+							size,
+							new DataBinding(message, null, null),
+							() => // acknowledge
+							{
+								var venueNext: Venue = new VenueControls
+								(
+									universe.controlBuilder.game(universe, null)
+								);
+								venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
+								universe.venueNext = venueNext;
+							},
+							null
+						)
+					);
+					universe.venueNext = new VenueFader(venueMessage, universe.venueCurrent, null, null);
+				}
+			);
+
+			universe.venueNext = new VenueFader(venueTask, universe.venueCurrent, null, null);
+		};
+
 
 		var returnValue = new ControlContainer
 		(
@@ -2206,41 +2321,7 @@ class ControlBuilder
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					() => // click
-					{
-						var world = universe.world;
-
-						world.dateSaved = DateTime.now();
-						var worldSerialized = universe.serializer.serialize(world, null);
-
-						new FileHelper().saveTextStringToFileWithName
-						(
-							worldSerialized,
-							world.name + ".json"
-						);
-
-						var venueNext: any = new VenueControls
-						(
-							universe.controlBuilder.message
-							(
-								universe,
-								size,
-								"Save must be completed manually.",
-								() => // acknowledge
-								{
-									var venueNext: Venue = new VenueControls
-									(
-										universe.controlBuilder.game(universe, null)
-									);
-									venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
-									universe.venueNext = venueNext;
-								},
-								null
-							)
-						);
-						venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
-						universe.venueNext = venueNext;
-					},
+					saveToFilesystem, // click
 					null, null
 				),
 

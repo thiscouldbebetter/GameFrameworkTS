@@ -2402,7 +2402,7 @@ class PlaceBuilderDemo
 				{
 					var venueMessage = new VenueMessage
 					(
-						"You win!",
+						new DataBinding("You win!", null, null),
 						(universe: Universe) => // acknowledge
 						{
 							universe.venueNext = new VenueFader
@@ -2431,7 +2431,7 @@ class PlaceBuilderDemo
 				var messageBoxSize = universe.display.sizeDefault();
 				var venueMessage = new VenueMessage
 				(
-					"Portal to: " + portal.destinationPlaceName,
+					new DataBinding("Portal to: " + portal.destinationPlaceName, null, null),
 					(universe: Universe) => // acknowledge
 					{
 						portal.use
@@ -2535,7 +2535,7 @@ class PlaceBuilderDemo
 			{
 				var venueMessage = new VenueMessage
 				(
-					"You lose!",
+					new DataBinding("You lose!", null, null),
 					(universe: Universe) => // acknowledge
 					{
 						universe.venueNext = new VenueFader
