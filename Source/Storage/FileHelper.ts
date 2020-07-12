@@ -38,7 +38,9 @@ class FileHelper
 			fileAsArrayUnsigned[i] = fileAsBinaryString.charCodeAt(i);
 		}
 
-		var fileAsBlob = new Blob([fileAsArrayBuffer], {type:'unknown/unknown'});
+		var blobTypeAsLookup: any = {};
+		blobTypeAsLookup["type"] = "unknown/unknown";
+		var fileAsBlob = new Blob([fileAsArrayBuffer], blobTypeAsLookup);
 
 		var link = document.createElement("a");
 		link.href = window.URL.createObjectURL(fileAsBlob);
@@ -48,7 +50,9 @@ class FileHelper
 
 	saveTextStringToFileWithName(textToSave: string, fileNameToSaveAs: string)
 	{
-		var textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"});
+		var blobTypeAsLookup: any = {};
+		blobTypeAsLookup["type"] = "text/plain";
+		var textToSaveAsBlob = new Blob([textToSave], blobTypeAsLookup);
 		var link = document.createElement("a");
 		link.href = window.URL.createObjectURL(textToSaveAsBlob);
 		link.download = fileNameToSaveAs;

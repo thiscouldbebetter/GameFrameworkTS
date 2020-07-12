@@ -63,7 +63,7 @@ class ControlVisual implements Control
 
 	isEnabled()
 	{
-		return true;
+		return false;
 	}
 
 	mouseClick(x: Coords): boolean
