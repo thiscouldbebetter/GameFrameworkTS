@@ -45,7 +45,7 @@ class Place
 
 	defn(world: World)
 	{
-		return world.defns.defnsByNameByTypeName.get(PlaceDefn.name).get(this.defnName);
+		return world.defn.placeDefnsByName().get(this.defnName);
 	};
 
 	draw(universe: Universe, world: World)

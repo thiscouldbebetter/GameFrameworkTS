@@ -1556,7 +1556,7 @@ class PlaceBuilderDemo
 				var doesDropCoin = (Math.random() < chanceOfDroppingCoin);
 				if (doesDropCoin)
 				{
-					var entityDefns = world.defns.defnsByNameByTypeName.get(Entity.name);
+					var entityDefns = world.defn.entityDefnsByName();
 					var entityDefnCoin = entityDefns.get("Coin");
 					var entityCoin = entityDefnCoin.clone();
 					entityCoin.locatable().overwriteWith(entityDying.locatable());
@@ -1566,8 +1566,8 @@ class PlaceBuilderDemo
 
 				var entityPlayer = place.player();
 				var learner = entityPlayer.skillLearner();
-				var defns = world.defns;
-				var skillsAll = defns.defnArraysByTypeName.get(Skill.name);
+				var defns = world.defn;
+				var skillsAll = defns.defnArraysByTypeName.get(Skill.name); // todo - Just use the "-ByName" lookup.
 				var skillsByName = defns.defnsByNameByTypeName.get(Skill.name);
 				var learningMessage = learner.learningIncrement
 				(

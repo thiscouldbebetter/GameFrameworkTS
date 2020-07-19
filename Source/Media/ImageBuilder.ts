@@ -7,7 +7,8 @@ class ImageBuilder
 	constructor(colors: Color[])
 	{
 		this.colors = colors;
-		this.colorsByCodeChar = {};
+		this.colorsByCodeChar =
+			ArrayHelper.addLookups(this.colors, x => x.code);
 	}
 
 	// static methods
@@ -61,7 +62,7 @@ class ImageBuilder
 				var charForPixel = stringForPixelRow[x];
 				pixelPos.x = x * scaleFactor.x;
 
-				colorForPixel = colors[charForPixel];
+				colorForPixel = colors.get(charForPixel);
 
 				graphics.fillStyle = colorForPixel.systemColor();
 				graphics.fillRect

@@ -1,5 +1,5 @@
 
-class Defns
+class WorldDefn
 {
 	defnArraysByTypeName: Map<string, any[]>;
 	defnsByNameByTypeName: Map<string, Map<string, any>>;
@@ -19,4 +19,27 @@ class Defns
 			this.defnsByNameByTypeName.set(itemTypeName, defnsByName);
 		}
 	}
+
+	// Convenience methods.
+
+	actionDefnsByName()
+	{
+		return this.defnsByNameByTypeName.get(Action.name);
+	}
+
+	entityDefnsByName()
+	{
+		return this.defnsByNameByTypeName.get(Entity.name);
+	}
+
+	itemDefnsByName()
+	{
+		return this.defnsByNameByTypeName.get(ItemDefn.name);
+	}
+
+	placeDefnsByName()
+	{
+		return this.defnsByNameByTypeName.get(PlaceDefn.name);
+	}
+
 }

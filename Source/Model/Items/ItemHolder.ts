@@ -251,7 +251,11 @@ class ItemHolder
 				var posToDropAt = itemEntityToDrop.locatable().loc.pos;
 				var holderPos = entityItemHolder.locatable().loc.pos;
 				posToDropAt.overwriteWith(holderPos);
-				itemEntityToDrop.collidable().ticksUntilCanCollide = 50;
+				var collidable = itemEntityToDrop.collidable();
+				if (collidable != null)
+				{
+					collidable.ticksUntilCanCollide = 50;
+				}
 				place.entitySpawn(universe, world, itemEntityToDrop);
 				itemHolder.itemSubtract(itemToDrop);
 				if (itemEntityToKeep.item().quantity == 0)

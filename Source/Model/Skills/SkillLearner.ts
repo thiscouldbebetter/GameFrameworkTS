@@ -196,8 +196,8 @@ class SkillLearner
 			0
 		); // size
 
-		var defns = universe.world.defns;
-		var skillsAll = defns.defnArraysByTypeName.get(Skill.name);
+		var defns = universe.world.defn;
+		var skillsAll = defns.defnArraysByTypeName.get(Skill.name); // todo - Just use the -ByName lookup.
 		var skillsAllByName = defns.defnsByNameByTypeName.get(Skill.name);
 
 		var returnValue = new ControlContainer

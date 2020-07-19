@@ -527,7 +527,7 @@ class ControlBuilder
 
 		var world = universe.world;
 		var placeCurrentDefnName = "Demo"; // hack
-		var placeDefn = world.defns.defnsByNameByTypeName.get(PlaceDefn.name).get(placeCurrentDefnName);
+		var placeDefn = world.defn.placeDefnsByName().get(placeCurrentDefnName);
 		placeDefn.actionToInputsMappingsEdit();
 
 		var returnValue = new ControlContainer

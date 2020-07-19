@@ -7,7 +7,7 @@ class World
 {
 	name: string;
 	dateCreated: DateTime;
-	defns: Defns;
+	defn: WorldDefn;
 	places: Place[];
 	placesByName: any;
 
@@ -16,14 +16,14 @@ class World
 	placeCurrent: Place;
 	placeNext: Place;
 
-	constructor(name: string, dateCreated: DateTime, defns: Defns, places: Place[])
+	constructor(name: string, dateCreated: DateTime, defn: WorldDefn, places: Place[])
 	{
 		this.name = name;
 		this.dateCreated = dateCreated;
 
 		this.timerTicksSoFar = 0;
 
-		this.defns = defns;
+		this.defn = defn;
 
 		this.places = places;
 		this.placesByName = ArrayHelper.addLookupsByName(this.places);
@@ -62,7 +62,7 @@ class World
 
 		var skills = Skill.skillsDemo();
 
-		var defns = new Defns([entityDefns, itemDefns, placeDefns, skills]);
+		var defns = new WorldDefn([entityDefns, itemDefns, placeDefns, skills]);
 
 		var places = [];
 
