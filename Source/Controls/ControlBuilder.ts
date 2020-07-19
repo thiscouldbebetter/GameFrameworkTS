@@ -874,7 +874,7 @@ class ControlBuilder
 					true, // isEnabled
 					() => // click
 					{
-						var world = World.new(universe);
+						var world = World.create(universe);
 
 						var profile = universe.profile;
 						profile.worlds.push(world);
@@ -1257,7 +1257,7 @@ class ControlBuilder
 							venueMessage,
 							() => //perform
 							{
-								return World.new(universe);
+								return World.create(universe);
 							},
 							(universe: Universe, world: World) => // done
 							{

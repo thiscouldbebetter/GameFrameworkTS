@@ -1,7 +1,7 @@
 // This class, as implemented, is only a demonstration.
 // Its code is expected to be modified heavily in actual applications,
 // including the constructor, the draw() and update() methods,
-// and the static new() method.
+// and the static create() method.
 
 class World
 {
@@ -32,7 +32,7 @@ class World
 
 	// static methods
 
-	static new(universe: Universe)
+	static create(universe: Universe)
 	{
 		var now = DateTime.now();
 		var nowAsString = now.toStringMMDD_HHMM_SS();
