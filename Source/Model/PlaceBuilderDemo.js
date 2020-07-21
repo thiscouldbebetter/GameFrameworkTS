@@ -1286,7 +1286,8 @@ class PlaceBuilderDemo {
         var playerCollide = (universe, world, place, entityPlayer, entityOther) => {
             if (entityOther.damager() != null) {
                 universe.collisionHelper.collideCollidables(entityPlayer, entityOther);
-                var damage = entityPlayer.killable().damageApply(universe, world, place, entityOther, entityPlayer);
+                var damage = entityPlayer.killable().damageApply(universe, world, place, entityOther, entityPlayer, null // todo
+                );
                 var messageEntity = universe.entityBuilder.messageFloater("-" + damage, entityPlayer.locatable().loc.pos);
                 place.entitySpawn(universe, world, messageEntity);
             }
@@ -1385,7 +1386,7 @@ class PlaceBuilderDemo {
             var equipmentUser = entityKillable.equipmentUser();
             var armorEquipped = equipmentUser.itemEntityInSocketWithName("Armor");
             if (armorEquipped != null) {
-                var armor = armorEquipped.armor;
+                var armor = armorEquipped.propertiesByName.get(Armor.name);
                 damage *= armor.damageMultiplier;
             }
             entityKillable.killable().integrityAdd(0 - damage);
@@ -1404,15 +1405,13 @@ class PlaceBuilderDemo {
         var movable = new Movable(0.5, // accelerationPerTick
         (universe, world, place, entityMovable) => // accelerate
          {
-            var accelerationToApply = entityMovable.movable().accelerationPerTick;
             var equipmentUser = entityMovable.equipmentUser();
             var accessoryEquipped = equipmentUser.itemEntityInSocketWithName("Accessory");
             var areSpeedBootsEquipped = (accessoryEquipped != null
                 && accessoryEquipped.item().defnName == "Speed Boots");
-            if (areSpeedBootsEquipped) {
-                accelerationToApply *= 2;
-            }
-            entityMovable.movable().accelerateForward(universe, world, place, entityMovable, accelerationToApply);
+            entityMovable.movable().accelerateForward(universe, world, place, entityMovable);
+            var accelerationMultiplier = (areSpeedBootsEquipped ? 2 : 1);
+            entityMovable.locatable().loc.accel.multiplyScalar(accelerationMultiplier);
         });
         var itemCrafter = new ItemCrafter([
             new CraftingRecipe("Enhanced Armor", [

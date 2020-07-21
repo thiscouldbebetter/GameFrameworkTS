@@ -48,7 +48,7 @@ class Universe
 
 	// static methods
 
-	static new(name: string, version: string, timerHelper: TimerHelper, display: Display, mediaLibrary: MediaLibrary, world: World)
+	static create(name: string, version: string, timerHelper: TimerHelper, display: Display, mediaLibrary: MediaLibrary, world: World)
 	{
 		var returnValue = new Universe
 		(

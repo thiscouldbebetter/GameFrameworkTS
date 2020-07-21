@@ -250,9 +250,9 @@ class World {
     }
     ;
     static itemDefnsBuild() {
-        var itemUseEquip = (universe, world, place, entityUser, entityItem, item) => {
+        var itemUseEquip = (universe, world, place, entityUser, entityItem) => {
             var equipmentUser = entityUser.equipmentUser();
-            var message = equipmentUser.equipEntityWithItem(universe, world, place, entityUser, entityItem, item);
+            var message = equipmentUser.equipEntityWithItem(universe, world, place, entityUser, entityItem);
             return message;
         };
         var itemDefns = [
@@ -272,7 +272,7 @@ class World {
             new ItemDefn("Toolset", null, null, 1, 30, null, null, null),
             new ItemDefn("Book", null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize
             null, // categoryNames
-            (universe, world, place, entityUser, entityItem, item) => // use
+            (universe, world, place, entityUser, entityItem) => // use
              {
                 var venuePrev = universe.venueCurrent;
                 var back = function () {
@@ -299,30 +299,33 @@ class World {
                 var venueNext = new VenueControls(container);
                 venueNext = new VenueFader(venueNext, null, null, null);
                 universe.venueNext = venueNext;
+                return "";
             }),
             new ItemDefn("Medicine", null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize
             ["Consumable"], // categoryNames
-            (universe, world, place, entityUser, entityItem, item) => // use
+            (universe, world, place, entityUser, entityItem) => // use
              {
                 var integrityToRestore = 10;
                 entityUser.killable().integrityAdd(integrityToRestore);
+                var item = entityItem.item();
                 entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
                 var message = "The medicine restores " + integrityToRestore + " points.";
                 return message;
             }),
             new ItemDefn("Potion", null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize
             ["Consumable"], // categoryNames
-            (universe, world, place, entityUser, entityItem, item) => // use
+            (universe, world, place, entityUser, entityItem) => // use
              {
                 // Same as medicine, for now.
                 var integrityToRestore = 10;
                 entityUser.killable().integrityAdd(integrityToRestore);
+                var item = entityItem.item();
                 entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
                 var message = "The potion restores " + integrityToRestore + " points.";
                 return message;
             }),
             new ItemDefn("Walkie-Talkie", null, null, 2, 10, null, [], // categoryNames
-            (universe, world, place, entityUser, entityItem, item) => // use
+            (universe, world, place, entityUser, entityItem) => // use
              {
                 return "There is no response but static.";
             }),

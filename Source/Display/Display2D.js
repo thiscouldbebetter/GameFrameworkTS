@@ -303,6 +303,7 @@ class Display2D {
         }
     }
     ;
+    flush() { }
     hide(universe) {
         universe.platformHelper.platformableRemove(this);
     }

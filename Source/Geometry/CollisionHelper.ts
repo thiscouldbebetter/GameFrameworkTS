@@ -521,8 +521,6 @@ class CollisionHelper
 				rectangleVel.dotProduct(normal) * -2
 			)
 		);
-
-		var rectangleVel
 	};
 
 	collideCollidablesSphereAndBox(entitySphere: Entity, entityBox: Entity)

@@ -558,6 +558,8 @@ class Display2D implements Display
 		}
 	};
 
+	flush() {}
+
 	hide(universe: Universe)
 	{
 		universe.platformHelper.platformableRemove(this);

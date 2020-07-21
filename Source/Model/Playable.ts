@@ -3,6 +3,8 @@ class Playable
 {
 	player: any;
 
+	isHiding: boolean; // hack
+
 	constructor(player: any)
 	{
 		this.player = player;

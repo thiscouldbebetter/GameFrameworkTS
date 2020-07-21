@@ -2,15 +2,24 @@
 class Movable
 {
 	accelerationPerTick: number;
-	accelerate: any;
+	_accelerate: (u: Universe, w: World, p: Place, e: Entity, a: number) => void;
 
-	constructor(accelerationPerTick: number, accelerate: any)
+	constructor
+	(
+		accelerationPerTick: number,
+		accelerate: (u: Universe, w: World, p: Place, e: Entity, a: number) => void
+	)
 	{
 		this.accelerationPerTick = accelerationPerTick;
-		this.accelerate = accelerate || this.accelerateForward;
+		this._accelerate = accelerate || this.accelerateForward;
 	}
 
-	accelerateForward(universe: Universe, world: World, place: Place, entityMovable: Entity)
+	accelerate(universe: Universe, world: World, place: Place, entityMovable: Entity)
+	{
+		this._accelerate(universe, world, place, entityMovable, this.accelerationPerTick);
+	}
+
+	accelerateForward(universe: Universe, world: World, place: Place, entityMovable: Entity, accelerationPertick: number)
 	{
 		var entityLoc = entityMovable.locatable().loc;
 		entityLoc.accel.overwriteWith

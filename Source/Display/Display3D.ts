@@ -546,6 +546,8 @@ class Display3D implements Display
 		this._display2DOverlay.fontSet(fontName, fontHeightInPixels);
 	};
 
+	flush() {}
+
 	hide() {}
 
 	rotateTurnsAroundCenter(turnsToRotate: number, centerOfRotation: Coords)

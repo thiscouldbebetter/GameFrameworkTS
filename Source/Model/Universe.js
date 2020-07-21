@@ -17,7 +17,7 @@ class Universe {
         this.venueNext = null;
     }
     // static methods
-    static new(name, version, timerHelper, display, mediaLibrary, world) {
+    static create(name, version, timerHelper, display, mediaLibrary, world) {
         var returnValue = new Universe(name, version, timerHelper, display, mediaLibrary, world);
         var debuggingMode = URLParser.fromWindow().queryStringParameters["debug"];
         returnValue.debuggingMode = debuggingMode;

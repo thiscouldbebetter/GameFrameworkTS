@@ -8,7 +8,7 @@ class ItemDefn {
         this.tradeValue = tradeValue;
         this.stackSizeMax = stackSizeMax || Number.POSITIVE_INFINITY;
         this.categoryNames = categoryNames || [];
-        this.use = use;
+        this._use = use;
     }
     static new1(name) {
         return new ItemDefn(name, null, null, null, null, null, null, null);
@@ -25,6 +25,10 @@ class ItemDefn {
         var returnValue = ItemDefn.new1(name);
         returnValue.use = use;
         return returnValue;
+    }
+    ;
+    use(u, w, p, eUsing, eUsed) {
+        return this._use(u, w, p, eUsing, eUsed);
     }
     ;
 }

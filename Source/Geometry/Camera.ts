@@ -203,7 +203,7 @@ class Camera
 		for (var i = 0; i < this.entitiesInView.length; i++)
 		{
 			var entity = this.entitiesInView[i];
-			var visual = entity.drawable().visual;
+			var visual = entity.drawable().visual as VisualCameraProjection;
 			visual.drawImmediate(universe, world, display, entity)
 		}
 

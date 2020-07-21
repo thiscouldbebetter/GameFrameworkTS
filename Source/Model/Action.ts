@@ -19,7 +19,6 @@ class Action
 		}
 		return Action._instances;
 	};
-
 }
 
 class Action_Instances

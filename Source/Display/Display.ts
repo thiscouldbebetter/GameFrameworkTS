@@ -54,6 +54,7 @@ interface Display
 		angleStopInTurns: number, colorFill: string, colorBorder: string
 	): void;
 	fontSet(fontName: string, fontHeightInPixels: number): void;
+	flush(): void;
 	hide(universe: Universe): void;
 	initialize(universe: Universe): void;
 	rotateTurnsAroundCenter(turnsToRotate: number, centerOfRotation: Coords): void;

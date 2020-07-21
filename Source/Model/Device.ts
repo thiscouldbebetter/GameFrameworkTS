@@ -5,7 +5,9 @@ class Device
 	initialize: (u: Universe, w: World, p: Place, e: Entity) => void;
 	update: (u: Universe, w: World, p: Place, e: Entity) => void;
 	use: (u: Universe, w: World, p: Place, eUser: Entity, eDevice: Entity) => void;
+
 	tickLastUsed: number;
+	ticksToCharge: number;
 
 	constructor(name: any, initialize: any, update: any, use: any)
 	{
@@ -104,7 +106,7 @@ class Device
 					{
 						killable.damageApply
 						(
-							universe, world, place, entityProjectile, entityOther
+							universe, world, place, entityProjectile, entityOther, null
 						);
 						entityProjectile.killable().integrity = 0;
 					}
@@ -218,7 +220,7 @@ class Device
 					{
 						killable.damageApply
 						(
-							universe, world, place, entityProjectile, entityOther
+							universe, world, place, entityProjectile, entityOther, null
 						);
 						entityProjectile.killable().integrity = 0;
 					}

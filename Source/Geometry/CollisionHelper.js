@@ -313,7 +313,6 @@ class CollisionHelper {
         sphereVel.add(normal.clone().multiplyScalar(sphereVel.dotProduct(normal) * -2));
         var rectangleVel = entityBoxRotated.locatable().loc.vel;
         rectangleVel.add(normal.clone().multiplyScalar(rectangleVel.dotProduct(normal) * -2));
-        var rectangleVel;
     }
     ;
     collideCollidablesSphereAndBox(entitySphere, entityBox) {

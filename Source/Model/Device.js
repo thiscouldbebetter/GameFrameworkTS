@@ -55,7 +55,7 @@ class Device {
             var projectileCollide = (universe, world, place, entityProjectile, entityOther) => {
                 var killable = entityOther.killable();
                 if (killable != null) {
-                    killable.damageApply(universe, world, place, entityProjectile, entityOther);
+                    killable.damageApply(universe, world, place, entityProjectile, entityOther, null);
                     entityProjectile.killable().integrity = 0;
                 }
             };
@@ -122,7 +122,7 @@ class Device {
             var projectileCollide = (universe, world, place, entityProjectile, entityOther) => {
                 var killable = entityOther.killable();
                 if (killable != null) {
-                    killable.damageApply(universe, world, place, entityProjectile, entityOther);
+                    killable.damageApply(universe, world, place, entityProjectile, entityOther, null);
                     entityProjectile.killable().integrity = 0;
                 }
             };

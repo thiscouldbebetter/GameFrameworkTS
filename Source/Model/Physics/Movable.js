@@ -2,9 +2,12 @@
 class Movable {
     constructor(accelerationPerTick, accelerate) {
         this.accelerationPerTick = accelerationPerTick;
-        this.accelerate = accelerate || this.accelerateForward;
+        this._accelerate = accelerate || this.accelerateForward;
     }
-    accelerateForward(universe, world, place, entityMovable) {
+    accelerate(universe, world, place, entityMovable) {
+        this._accelerate(universe, world, place, entityMovable, this.accelerationPerTick);
+    }
+    accelerateForward(universe, world, place, entityMovable, accelerationPertick) {
         var entityLoc = entityMovable.locatable().loc;
         entityLoc.accel.overwriteWith(entityLoc.orientation.forward).multiplyScalar(entityMovable.movable().accelerationPerTick);
     }

@@ -247,6 +247,7 @@ class Display3D {
         this._display2DOverlay.fontSet(fontName, fontHeightInPixels);
     }
     ;
+    flush() { }
     hide() { }
     rotateTurnsAroundCenter(turnsToRotate, centerOfRotation) {
         this._display2DOverlay.rotateTurnsAroundCenter(turnsToRotate, centerOfRotation);
