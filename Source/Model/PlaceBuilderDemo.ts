@@ -488,6 +488,7 @@ class PlaceBuilderDemo
 		this.entities.push(...mapCellsAsEntities);
 
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Flower"), 1));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Grazer"), 1));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("MushroomGenerator"), 1));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Tree"), 1));
 
@@ -516,13 +517,13 @@ class PlaceBuilderDemo
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Ammo"), 10));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Armor"), 1));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Crystal"), 3));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Flower"), 3));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Flower"), 6));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Grazer"), 1));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Material"), 5));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Medicine"), 5));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("MushroomGenerator"), 3));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Speed Boots"), 1));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Toolset"), 1));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Flower"), 3));
 
 		var entityRadioMessage =
 			this.entityBuildRadioMessage(entityDefns.get("Friendly").drawable().visual, "This is " + this.name + ".");
@@ -1931,6 +1932,142 @@ class PlaceBuilderDemo
 		return itemWeaponEntityDefn;
 	};
 
+	entityDefnBuildGrazer(entityDimension: number): Entity
+	{
+		var grazerColor = "Brown";
+		var grazerDimension = entityDimension;
+
+		var constraintSpeedMax1 = new Constraint_SpeedMaxXY(1);
+
+		var grazerCollider = new Sphere(new Coords(0, 0, 0), grazerDimension);
+
+		var visualEyeRadius = entityDimension * .75 / 2;
+		var visualBuilder = new VisualBuilder();
+		var visualEyes = visualBuilder.eyesBlinking(visualEyeRadius);
+
+		var visualEyesDirectional = new VisualDirectional
+		(
+			visualEyes, // visualForNoDirection
+			[
+				new VisualOffset(visualEyes, new Coords(1, 0, 0).multiplyScalar(visualEyeRadius)),
+				new VisualOffset(visualEyes, new Coords(0, 1, 0).multiplyScalar(visualEyeRadius)),
+				new VisualOffset(visualEyes, new Coords(-1, 0, 0).multiplyScalar(visualEyeRadius)),
+				new VisualOffset(visualEyes, new Coords(0, -1, 0).multiplyScalar(visualEyeRadius))
+			]
+		);
+
+		var grazerVisualNormal = new VisualGroup
+		([
+			new VisualEllipse
+			(
+				grazerDimension, // semimajorAxis
+				grazerDimension * .8,
+				0, // rotationInTurns
+				grazerColor,
+				null // colorBorder
+			),
+
+			new VisualOffset
+			(
+				visualEyesDirectional,
+				new Coords(0, 0, 0)
+			),
+		]);
+
+		var grazerVisual = new VisualGroup
+		([
+			new VisualAnimation
+			(
+				"Grazer",
+				[ 100, 100 ], // ticksToHoldFrames
+				// children
+				[
+					// todo - Fix blinking.
+					new VisualAnimation
+					(
+						"Blinking",
+						[ 5 ],// , 5 ], // ticksToHoldFrames
+						new Array<Visual>
+						(
+							//new VisualNone(),
+							grazerVisualNormal
+						),
+						null
+					),
+
+					grazerVisualNormal
+				],
+				false // isRepeating
+			),
+			new VisualOffset
+			(
+				new VisualText(new DataBinding("Grazer", null, null), grazerColor, null),
+				new Coords(0, 0 - grazerDimension * 2, 0)
+			)
+		]);
+
+		var randomizer = this.randomizer;
+
+		var grazerEntityDefn = new Entity
+		(
+			"Grazer",
+			[
+				new Locatable(new Disposition(new Coords(0, 0, 0), null, null) ),
+				new Constrainable([constraintSpeedMax1]),
+				new Collidable(grazerCollider, null, null),
+				new Drawable(grazerVisual, null),
+				new DrawableCamera(),
+				new Actor
+				(
+					(universe: Universe, world: World, place: Place, entityActor: Entity, target: any) => // activity
+					{
+						var actor = entityActor.actor();
+						var targetPos = actor.target;
+						if (targetPos == null)
+						{
+							targetPos =
+								new Coords(0, 0, 0).randomize(randomizer).multiply(place.size);
+							actor.target = targetPos;
+						}
+
+						var actorLoc = entityActor.locatable().loc;
+						var actorPos = actorLoc.pos;
+
+						var distanceToTarget = targetPos.clone().subtract
+						(
+							actorPos
+						).magnitude();
+
+						if (distanceToTarget >= 2)
+						{
+							actorLoc.vel.overwriteWith
+							(
+								targetPos
+							).subtract
+							(
+								actorPos
+							).normalize();
+
+							actorLoc.orientation.forward.overwriteWith(actorLoc.vel).normalize();
+						}
+						else
+						{
+							actorPos.overwriteWith(targetPos);
+							actor.target = null;
+						}
+					},
+					null
+				),
+				ItemHolder.fromItems
+				([
+					new Item("Meat", 3),
+				]),
+			]
+		);
+
+		return grazerEntityDefn;
+	};
+
 	entityDefnBuildGunAmmo(entityDimension: number): Entity
 	{
 		var entityDimensionHalf = entityDimension / 2;
@@ -2034,6 +2171,45 @@ class PlaceBuilderDemo
 		);
 
 		return itemMaterialEntityDefn;
+	};
+
+	entityDefnBuildMeat(entityDimension: number): Entity
+	{
+		var entityDimensionHalf = entityDimension / 2;
+
+		var itemDefnMeatName = "Meat";
+		var itemMeatColor = "Red";
+		var itemMeatVisual = new VisualGroup
+		([
+			new VisualCircle
+			(
+				entityDimensionHalf, itemMeatColor, null
+			),
+			new VisualCircle
+			(
+				entityDimensionHalf * .75, null, "Gray"
+			),
+			new VisualOffset
+			(
+				new VisualText(new DataBinding(itemDefnMeatName, null, null), itemMeatColor, null),
+				new Coords(0, 0 - entityDimension, 0)
+			)
+		]);
+		var itemMeatCollider = new Sphere(new Coords(0, 0, 0), entityDimensionHalf);
+
+		var itemMeatEntityDefn = new Entity
+		(
+			itemDefnMeatName,
+			[
+				new Item(itemDefnMeatName, 1),
+				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
+				new Collidable(itemMeatCollider, null, null),
+				new Drawable(itemMeatVisual, null),
+				new DrawableCamera()
+			]
+		);
+
+		return itemMeatEntityDefn;
 	};
 
 	entityDefnBuildMedicine(entityDimension: number): Entity
@@ -2590,7 +2766,7 @@ class PlaceBuilderDemo
 				);
 				entityMovable.movable().accelerateForward
 				(
-					universe, world, place, entityMovable
+					universe, world, place, entityMovable, null
 				);
 				var accelerationMultiplier = (areSpeedBootsEquipped ? 2 : 1);
 				entityMovable.locatable().loc.accel.multiplyScalar(accelerationMultiplier);
@@ -3073,10 +3249,12 @@ class PlaceBuilderDemo
 			entityDefnFlower,
 			this.entityDefnBuildGenerator(entityDefnFlower),
 			this.entityDefnBuildFriendly(entityDimension),
+			this.entityDefnBuildGrazer(entityDimension),
 			this.entityDefnBuildGun(entityDimension),
 			this.entityDefnBuildGunAmmo(entityDimension),
 			this.entityDefnBuildMaterial(entityDimension),
 			this.entityDefnBuildMedicine(entityDimension),
+			this.entityDefnBuildMeat(entityDimension),
 			entityDefnMushroom,
 			this.entityDefnBuildGenerator(entityDefnMushroom),
 			this.entityDefnBuildObstacleBar(entityDimension),

@@ -266,6 +266,7 @@ class World {
             new ItemDefn("Gun", null, null, 5, 100, null, ["Weapon"], itemUseEquip),
             new ItemDefn("Key", null, null, .1, 5, null, null, null),
             new ItemDefn("Material", null, null, 10, 3, null, null, null),
+            new ItemDefn("Meat", null, null, 10, 3, null, null, null),
             new ItemDefn("Mushroom", null, null, .01, 1, null, null, null),
             new ItemDefn("Speed Boots", null, null, 10, 30, null, ["Accessory"], itemUseEquip),
             new ItemDefn("Sword", null, null, 10, 100, null, ["Weapon"], itemUseEquip),
