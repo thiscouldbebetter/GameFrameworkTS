@@ -324,6 +324,7 @@ class PlaceBuilderDemo {
         entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Boulder"), 3));
         entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Crystal"), 2));
         entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Flower"), 6));
+        entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("GrassGenerator"), 3));
         entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Grazer"), 1));
         entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Material"), 2));
         entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Medicine"), 2));
@@ -911,6 +912,24 @@ class PlaceBuilderDemo {
         return itemGunEntityDefn;
     }
     ;
+    entityDefnBuildGrass(entityDimension) {
+        entityDimension /= 2;
+        var itemDefnName = "Grass";
+        var itemGrassVisual = new VisualGroup([
+            new VisualImageScaled(new VisualImageFromLibrary("Grass"), new Coords(1, 1, 0).multiplyScalar(entityDimension * 4) // sizeScaled
+            ),
+            new VisualOffset(new VisualText(new DataBinding(itemDefnName, null, null), "Green", null), new Coords(0, 0 - entityDimension * 3, 0))
+        ]);
+        var itemGrassCollider = new Sphere(new Coords(0, 0, 0), entityDimension / 2);
+        var itemGrassEntityDefn = new Entity(itemDefnName, [
+            new Item(itemDefnName, 1),
+            new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
+            new Collidable(itemGrassCollider, null, null),
+            new Drawable(itemGrassVisual, null),
+            new DrawableCamera()
+        ]);
+        return itemGrassEntityDefn;
+    }
     entityDefnBuildGunAmmo(entityDimension) {
         var entityDimensionHalf = entityDimension / 2;
         var itemAmmoColor = "rgb(0, 128, 128)";
@@ -1237,6 +1256,7 @@ class PlaceBuilderDemo {
     entityDefnsBuild() {
         var entityDimension = 10;
         var entityDefnFlower = this.entityDefnBuildFlower(entityDimension);
+        var entityDefnGrass = this.entityDefnBuildGrass(entityDimension);
         var entityDefnMushroom = this.entityDefnBuildMushroom(entityDimension);
         var entityDefns = [
             this.emplacements.entityDefnBuildBoulder(entityDimension),
@@ -1265,6 +1285,8 @@ class PlaceBuilderDemo {
             this.entityDefnBuildMeat(entityDimension),
             entityDefnMushroom,
             this.entityDefnBuildGenerator(entityDefnMushroom),
+            entityDefnGrass,
+            this.entityDefnBuildGenerator(entityDefnGrass),
             this.entityDefnBuildOre(entityDimension),
             this.entityDefnBuildPick(entityDimension),
             this.entityDefnBuildPotion(entityDimension),

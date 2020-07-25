@@ -7,7 +7,11 @@ function main()
 	var mediaLibrary = MediaLibrary.fromFileNames
 	(
 		"../Content/",
-		[ "Friendly.png", "Title.png", ],
+		[
+			"Friendly.png",
+			"Grass.svg",
+			"Title.png"
+		],
 		[ "Sound.wav" ],
 		[ "Music.mp3" ],
 		[ "Movie.webm" ],

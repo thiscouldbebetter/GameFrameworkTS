@@ -3,6 +3,9 @@ class Locatable {
     constructor(loc) {
         this.loc = loc || new Disposition(null, null, null);
     }
+    distanceFromEntity(entity) {
+        return this.loc.pos.clone().subtract(entity.locatable().loc.pos).magnitude();
+    }
     updateForTimerTick(universe, world, place, entity) {
         var loc = this.loc;
         loc.vel.add(loc.accel);

@@ -225,33 +225,47 @@ class PlaceBuilderDemo_Movers {
             new VisualOffset(new VisualText(new DataBinding("Grazer", null, null), grazerColor, null), new Coords(0, 0 - grazerDimension * 2, 0))
         ]);
         var randomizer = this.parent.randomizer;
+        var grazerActivity = (universe, world, place, entityActor, target) => {
+            var actor = entityActor.actor();
+            var targetPos = actor.target;
+            if (targetPos == null) {
+                var itemsInPlace = place.items();
+                var itemsGrassInPlace = itemsInPlace.filter(x => x.item().defnName == "Grass");
+                if (itemsGrassInPlace.length == 0) {
+                    targetPos =
+                        new Coords(0, 0, 0).randomize(randomizer).multiply(place.size);
+                }
+                else {
+                    targetPos = itemsGrassInPlace[0].locatable().loc.pos;
+                }
+                actor.target = targetPos;
+            }
+            var actorLoc = entityActor.locatable().loc;
+            var actorPos = actorLoc.pos;
+            var distanceToTarget = targetPos.clone().subtract(actorPos).magnitude();
+            if (distanceToTarget >= 2) {
+                actorLoc.vel.overwriteWith(targetPos).subtract(actorPos).normalize();
+                actorLoc.orientation.forward.overwriteWith(actorLoc.vel).normalize();
+            }
+            else {
+                actorPos.overwriteWith(targetPos);
+                var itemsInPlace = place.items();
+                var itemsGrassInPlace = itemsInPlace.filter(x => x.item().defnName == "Grass");
+                var reachDistance = 32; // todo
+                var itemGrassInReach = itemsGrassInPlace.filter(x => entityActor.locatable().distanceFromEntity(x) < reachDistance)[0];
+                if (itemGrassInReach != null) {
+                    place.entitiesToRemove.push(itemGrassInReach);
+                }
+                actor.target = null;
+            }
+        };
         var grazerEntityDefn = new Entity("Grazer", [
             new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
             new Constrainable([constraintSpeedMax1]),
             new Collidable(grazerCollider, null, null),
             new Drawable(grazerVisual, null),
             new DrawableCamera(),
-            new Actor((universe, world, place, entityActor, target) => // activity
-             {
-                var actor = entityActor.actor();
-                var targetPos = actor.target;
-                if (targetPos == null) {
-                    targetPos =
-                        new Coords(0, 0, 0).randomize(randomizer).multiply(place.size);
-                    actor.target = targetPos;
-                }
-                var actorLoc = entityActor.locatable().loc;
-                var actorPos = actorLoc.pos;
-                var distanceToTarget = targetPos.clone().subtract(actorPos).magnitude();
-                if (distanceToTarget >= 2) {
-                    actorLoc.vel.overwriteWith(targetPos).subtract(actorPos).normalize();
-                    actorLoc.orientation.forward.overwriteWith(actorLoc.vel).normalize();
-                }
-                else {
-                    actorPos.overwriteWith(targetPos);
-                    actor.target = null;
-                }
-            }, null),
+            new Actor(grazerActivity, null),
             ItemHolder.fromItems([
                 new Item("Meat", 3),
             ]),
@@ -312,10 +326,6 @@ class PlaceBuilderDemo_Movers {
                     );
                     universe.venueNext = venueMessage;
                 }
-            }
-            else if (entityOther.item() != null) {
-                entityPlayer.itemHolder().itemEntityAdd(entityOther);
-                place.entitiesToRemove.push(entityOther);
             }
             else if (entityOther.portal() != null) {
                 entityOther.collidable().ticksUntilCanCollide = 50; // hack

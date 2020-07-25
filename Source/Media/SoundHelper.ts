@@ -7,6 +7,7 @@ class SoundHelper
 	musicVolume: number;
 	soundVolume: number;
 	soundForMusic: Sound;
+	_audioContext: AudioContext;
 
 	constructor(sounds: Sound[])
 	{
@@ -40,6 +41,16 @@ class SoundHelper
 	};
 
 	// instance methods
+
+	audioContext()
+	{
+		if (this._audioContext == null)
+		{
+			this._audioContext = new AudioContext();
+		}
+
+		return this._audioContext;
+	}
 
 	reset()
 	{

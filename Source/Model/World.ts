@@ -331,6 +331,26 @@ class World
 			),
 			new Action
 			(
+				"PickUp",
+				(universe: Universe, world: World, place: Place, actor: Entity) => // perform
+				{
+					var entityItemsInPlace = place.items();
+					var actorPos = actor.locatable().loc.pos;
+					var radiusOfReach = 32; // todo
+					var entityItemsWithinReach = entityItemsInPlace.filter
+					(
+						x => x.locatable().loc.pos.clone().subtract(actorPos).magnitude() < radiusOfReach
+					);
+					if (entityItemsWithinReach.length > 0)
+					{
+						var entityToPickUp = entityItemsWithinReach[0];
+						actor.itemHolder().itemEntityAdd(entityToPickUp);
+						place.entitiesToRemove.push(entityToPickUp);
+					}
+				}
+			),
+			new Action
+			(
 				"Run",
 				(universe: Universe, world: World, place: Place, actor: Entity) => // perform
 				{
@@ -387,6 +407,7 @@ class World
 
 			new ActionToInputsMapping("Fire", 		[ inputNames.Enter, inputNames.GamepadButton0 + "0" ], inactivateFalse),
 			new ActionToInputsMapping("Jump", 		[ inputNames.Space, inputNames.GamepadButton0 + "1" ], inactivateFalse),
+			new ActionToInputsMapping("PickUp", 	[ "g", inputNames.GamepadButton0 + "4" ], inactivateFalse),
 			new ActionToInputsMapping("Run", 		[ inputNames.Shift, inputNames.GamepadButton0 + "2" ], inactivateFalse),
 			new ActionToInputsMapping("Hide", 		[ "h", inputNames.GamepadButton0 + "3" ], inactivateFalse),
 
@@ -426,6 +447,7 @@ class World
 			new ItemDefn("Crystal", 		null, null, .1, 	1, null, null, null),
 			new ItemDefn("Enhanced Armor",	null, null, 60, 	60, null, [ "Armor" ], itemUseEquip),
 			new ItemDefn("Flower", 			null, null, .01, 	1, null, null, null),
+			new ItemDefn("Grass", 			null, null, .01, 	1, null, null, null),
 			new ItemDefn("Gun",				null, null, 5, 		100, null, [ "Weapon" ], itemUseEquip),
 			new ItemDefn("Key", 			null, null, .1, 	5, null, null, null),
 			new ItemDefn("Material", 		null, null, 10, 	3, null, null, null),

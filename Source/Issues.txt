@@ -9,9 +9,7 @@ Crafting - Queue and Durations
 Crafting - Uncarryable Tools in Environment
 Crafting - Facilities - Crafter + Container
 Selected Item Box
-Grass Item and Generator
 Grazers Drop Meat
-Grazers Eat Grass
 Carnivores, Who Eat Grazers
 Animal Procreation and Aging
 Unloading World Before Save, Reloading After
@@ -24,7 +22,7 @@ Sound - Shooting Gun
 Sound - Bullet Hits
 Sound - Swinging Sword
 Sound - Sword Hits
-Sound - Effects from Builtin JS Synthesis
+Sound - Effects from Builtin JS AudioContext
 Food, Eating, and Hunger
 Map Tiles as Obstacles
 Map Tiles from Images

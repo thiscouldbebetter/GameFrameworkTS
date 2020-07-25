@@ -25,6 +25,12 @@ class SoundHelper {
     }
     ;
     // instance methods
+    audioContext() {
+        if (this._audioContext == null) {
+            this._audioContext = new AudioContext();
+        }
+        return this._audioContext;
+    }
     reset() {
         for (var i = 0; i < this.sounds.length; i++) {
             var sound = this.sounds[i];

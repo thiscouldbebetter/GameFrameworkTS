@@ -8,6 +8,11 @@ class Locatable
 		this.loc = loc || new Disposition(null, null, null);
 	}
 
+	distanceFromEntity(entity: Entity)
+	{
+		return this.loc.pos.clone().subtract(entity.locatable().loc.pos).magnitude();
+	}
+
 	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity)
 	{
 		var loc = this.loc;

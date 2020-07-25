@@ -137,9 +137,10 @@ class Place {
         var cameraEntity = this.entitiesByPropertyName(Camera.name)[0];
         return (cameraEntity == null ? null : cameraEntity.camera());
     }
-    ;
+    items() {
+        return this.entitiesByPropertyName(Item.name);
+    }
     player() {
         return this.entitiesByPropertyName(Playable.name)[0];
     }
-    ;
 }
