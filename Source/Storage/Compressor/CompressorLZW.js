@@ -1,8 +1,7 @@
 "use strict";
 class CompressorLZW {
     // instance methods
-    compressBytes(bytesToCompress) {
-        var bitStream = new BitStream(null);
+    compressByteStreamToBitStream(byteStreamToCompress, bitStream) {
         // Adapted from pseudocode found at the URL:
         // http://oldwww.rasip.fer.hr/research/compress/algorithms/fund/lz/lzw.html
         var symbolsByPattern = this.initializeSymbolsByPattern();
@@ -10,14 +9,13 @@ class CompressorLZW {
         var symbolForBitWidthIncrease = CompressorLZW.SymbolForBitWidthIncrease;
         var symbolWidthInBitsCurrent = Math.ceil(Math.log(symbolForBitWidthIncrease + 1)
             / BitStream.NaturalLogarithmOf2);
-        for (var i = 0; i < bytesToCompress.length; i++) {
-            var byteToCompress = bytesToCompress[i];
+        while (byteStreamToCompress.hasMoreBytes()) {
+            var byteToCompress = byteStreamToCompress.readByte();
             var character = String.fromCharCode(byteToCompress);
             var patternPlusCharacter = pattern + character;
             if (symbolsByPattern.has(patternPlusCharacter) == false) {
-                var symbolNext = symbolsByPattern.size;
+                var symbolNext = symbolsByPattern.size + CompressorLZW.ControlSymbolCount;
                 symbolsByPattern.set(patternPlusCharacter, symbolNext);
-                //patternsBySymbol[symbolNext] = patternPlusCharacter;
                 var patternEncoded = symbolsByPattern.get(pattern);
                 var numberOfBitsRequired = Math.ceil(Math.log(patternEncoded + 1)
                     / BitStream.NaturalLogarithmOf2);
@@ -36,15 +34,34 @@ class CompressorLZW {
         bitStream.writeNumber(patternEncoded, symbolWidthInBitsCurrent);
         bitStream.writeNumber(CompressorLZW.SymbolForBitStreamEnd, symbolWidthInBitsCurrent);
         bitStream.close();
-        return bitStream.bytes;
+        return bitStream;
     }
-    decompressBytes(bytesToDecode) {
-        var bytesDecompressed = [];
+    compressBytes(bytesToCompress) {
+        var byteStreamCompressed = new ByteStreamFromBytes([]);
+        var bitStreamCompressed = new BitStream(byteStreamCompressed);
+        this.compressByteStreamToBitStream(new ByteStreamFromBytes(bytesToCompress), bitStreamCompressed);
+        return byteStreamCompressed.bytes;
+    }
+    compressString(stringToCompress) {
+        var bitStream = new BitStream(new ByteStreamFromString(""));
+        this.compressByteStreamToBitStream(new ByteStreamFromString(stringToCompress), bitStream);
+        var byteStream = bitStream.byteStream;
+        var returnValue = byteStream.bytesAsString;
+        return returnValue;
+    }
+    compressStringToBytes(stringToCompress) {
+        var bitStream = new BitStream(new ByteStreamFromBytes([]));
+        this.compressByteStreamToBitStream(new ByteStreamFromString(stringToCompress), bitStream);
+        var byteStream = bitStream.byteStream;
+        var returnValues = byteStream.bytes;
+        return returnValues;
+    }
+    decompressByteStream(byteStreamToDecode, byteStreamDecompressed) {
         // Adapted from pseudocode found at the URL:
         // http://oldwww.rasip.fer.hr/research/compress/algorithms/fund/lz/lzw.html
         var patternsBySymbol = this.initializePatternsBySymbol();
         var symbolsByPattern = this.initializeSymbolsByPattern();
-        var bitStream = new BitStream(bytesToDecode);
+        var bitStream = new BitStream(byteStreamToDecode);
         var symbolForBitStreamEnd = CompressorLZW.SymbolForBitStreamEnd;
         var symbolForBitWidthIncrease = CompressorLZW.SymbolForBitWidthIncrease;
         var symbolWidthInBitsCurrent = Math.ceil(Math.log(symbolForBitWidthIncrease + 1)
@@ -52,7 +69,8 @@ class CompressorLZW {
         var symbolToDecode = bitStream.readNumber(symbolWidthInBitsCurrent);
         var symbolDecoded = patternsBySymbol[symbolToDecode];
         for (var i = 0; i < symbolDecoded.length; i++) {
-            bytesDecompressed.push(symbolDecoded.charCodeAt(i));
+            var byteToWrite = symbolDecoded.charCodeAt(i);
+            byteStreamDecompressed.writeByte(byteToWrite);
         }
         var pattern;
         var character;
@@ -73,22 +91,38 @@ class CompressorLZW {
                     character = pattern[0];
                     patternPlusCharacter = pattern + character;
                     for (var i = 0; i < patternPlusCharacter.length; i++) {
-                        bytesDecompressed.push(patternPlusCharacter.charCodeAt(i));
+                        var byteToWrite = patternPlusCharacter.charCodeAt(i);
+                        byteStreamDecompressed.writeByte(byteToWrite);
                     }
                 }
                 else {
                     for (var i = 0; i < symbolDecoded.length; i++) {
-                        bytesDecompressed.push(symbolDecoded.charCodeAt(i));
+                        var byteToWrite = symbolDecoded.charCodeAt(i);
+                        byteStreamDecompressed.writeByte(byteToWrite);
                     }
                     character = symbolDecoded[0];
                     patternPlusCharacter = pattern + character;
                 }
-                var symbolNext = symbolsByPattern.size;
+                var symbolNext = symbolsByPattern.size + CompressorLZW.ControlSymbolCount;
                 symbolsByPattern.set(patternPlusCharacter, symbolNext);
                 patternsBySymbol[symbolNext] = patternPlusCharacter;
             }
         }
+        return byteStreamDecompressed;
+    }
+    decompressBytes(bytesToDecode) {
+        var byteStreamToDecode = new ByteStreamFromBytes(bytesToDecode);
+        var byteStreamDecompressed = new ByteStreamFromBytes([]);
+        this.decompressByteStream(byteStreamToDecode, byteStreamDecompressed);
+        var bytesDecompressed = byteStreamDecompressed.bytes;
         return bytesDecompressed;
+    }
+    decompressString(stringToDecode) {
+        var byteStreamToDecode = new ByteStreamFromString(stringToDecode);
+        var byteStreamDecompressed = new ByteStreamFromString("");
+        this.decompressByteStream(byteStreamToDecode, byteStreamDecompressed);
+        var stringDecompressed = byteStreamDecompressed.bytesAsString;
+        return stringDecompressed;
     }
     initializePatternsBySymbol() {
         var patternsBySymbol = [];
@@ -111,80 +145,6 @@ class CompressorLZW {
         return symbolsByPattern;
     }
 }
-// constants
+CompressorLZW.ControlSymbolCount = 2;
 CompressorLZW.SymbolForBitWidthIncrease = 256;
 CompressorLZW.SymbolForBitStreamEnd = CompressorLZW.SymbolForBitWidthIncrease + 1;
-class BitStream {
-    constructor(bytes) {
-        if (bytes == null) {
-            bytes = [];
-        }
-        this.bytes = bytes;
-        this.byteOffset = 0;
-        this.bitOffsetWithinByteCurrent = 0;
-        this.byteCurrent = 0;
-    }
-    // static methods
-    static convertNumberToBitString(numberToConvert) {
-        var returnValue = "";
-        var numberOfBitsNeeded = Math.ceil(Math.log(numberToConvert + 1)
-            / BitStream.NaturalLogarithmOf2);
-        if (numberOfBitsNeeded == 0) {
-            numberOfBitsNeeded = 1;
-        }
-        for (var b = 0; b < numberOfBitsNeeded; b++) {
-            var bitValue = (numberToConvert >> b) & 1;
-            returnValue = "" + bitValue + returnValue;
-        }
-        return returnValue;
-    }
-    // instance methods
-    close() {
-        if (this.bitOffsetWithinByteCurrent > 0) {
-            this.bytes.push(this.byteCurrent);
-        }
-    }
-    readBit() {
-        this.byteCurrent = this.bytes[this.byteOffset];
-        var returnValue = (this.byteCurrent >> this.bitOffsetWithinByteCurrent) & 1;
-        this.bitOffsetWithinByteCurrent++;
-        if (this.bitOffsetWithinByteCurrent >= BitStream.BitsPerByte) {
-            this.byteOffset++;
-            this.bitOffsetWithinByteCurrent = 0;
-            if (this.byteOffset < this.bytes.length) {
-                this.byteCurrent = this.bytes[this.byteOffset];
-            }
-            else {
-                this.hasMoreBits = false;
-            }
-        }
-        return returnValue;
-    }
-    readNumber(numberOfBitsInNumber) {
-        var returnValue = 0;
-        for (var i = 0; i < numberOfBitsInNumber; i++) {
-            var bitRead = this.readBit();
-            returnValue |= (bitRead << i);
-        }
-        return returnValue;
-    }
-    writeBit(bitToWrite) {
-        this.byteCurrent |= (bitToWrite << this.bitOffsetWithinByteCurrent);
-        this.bitOffsetWithinByteCurrent++;
-        if (this.bitOffsetWithinByteCurrent >= BitStream.BitsPerByte) {
-            this.bytes.push(this.byteCurrent);
-            this.byteOffset++;
-            this.bitOffsetWithinByteCurrent = 0;
-            this.byteCurrent = 0;
-        }
-    }
-    writeNumber(numberToWrite, numberOfBitsToUse) {
-        for (var b = 0; b < numberOfBitsToUse; b++) {
-            var bitValue = (numberToWrite >> b) & 1;
-            this.writeBit(bitValue);
-        }
-    }
-}
-// constants
-BitStream.BitsPerByte = 8;
-BitStream.NaturalLogarithmOf2 = Math.log(2);

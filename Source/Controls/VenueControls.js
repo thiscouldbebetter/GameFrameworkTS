@@ -24,8 +24,9 @@ class VenueControls {
                 new ActionToInputsMapping(controlActionNames.ControlConfirm, ArrayHelper.addMany([inputNames.Enter], buildGamepadInputs(inputNames.GamepadButton1)), inactivate),
                 new ActionToInputsMapping(controlActionNames.ControlCancel, ArrayHelper.addMany([inputNames.Escape], buildGamepadInputs(inputNames.GamepadButton0)), inactivate)
             ];
-        var mappings = this.controlRoot.actionToInputsMappings;
-        if (mappings != null) {
+        var mappingsGet = this.controlRoot.actionToInputsMappings;
+        if (mappingsGet != null) {
+            var mappings = mappingsGet.call(this.controlRoot);
             ArrayHelper.addMany(this.actionToInputsMappings, mappings);
         }
         this.actionToInputsMappingsByInputName = ArrayHelper.addLookupsMultiple(this.actionToInputsMappings, (x) => x.inputNames);
@@ -53,7 +54,7 @@ class VenueControls {
             var inputPressed = inputsPressed[i];
             if (inputPressed.isActive) {
                 var inputPressedName = inputPressed.name;
-                var mapping = this.actionToInputsMappingsByInputName[inputPressedName];
+                var mapping = this.actionToInputsMappingsByInputName.get(inputPressedName);
                 if (inputPressedName.startsWith("Mouse") == false) {
                     if (mapping == null) {
                         // Pass the raw input, to allow for text entry.

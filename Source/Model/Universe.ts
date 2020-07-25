@@ -83,7 +83,8 @@ class Universe
 		this.storageHelper = new StorageHelper
 		(
 			StringHelper.replaceAll(this.name, " ", "_") + "_",
-			this.serializer
+			this.serializer,
+			new CompressorLZW()
 		);
 
 		this.profileHelper = new ProfileHelper(this.storageHelper);

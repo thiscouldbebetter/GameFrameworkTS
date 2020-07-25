@@ -48,6 +48,25 @@ class FileHelper
 		link.click();
 	};
 
+	saveBytesToFileWithName(fileAsBytes: number[], fileName: string)
+	{
+		var fileAsArrayBuffer = new ArrayBuffer(fileAsBytes.length);
+		var fileAsArrayUnsigned = new Uint8Array(fileAsArrayBuffer);
+		for (var i = 0; i < fileAsBytes.length; i++)
+		{
+			fileAsArrayUnsigned[i] = fileAsBytes[i];
+		}
+
+		var blobTypeAsLookup: any = {};
+		blobTypeAsLookup["type"] = "unknown/unknown";
+		var fileAsBlob = new Blob([fileAsArrayBuffer], blobTypeAsLookup);
+
+		var link = document.createElement("a");
+		link.href = window.URL.createObjectURL(fileAsBlob);
+		link.download = fileName;
+		link.click();
+	};
+
 	saveTextStringToFileWithName(textToSave: string, fileNameToSaveAs: string)
 	{
 		var blobTypeAsLookup: any = {};

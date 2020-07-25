@@ -3,8 +3,9 @@ class StorageHelper
 {
 	propertyNamePrefix: string;
 	serializer: Serializer;
+	compressor: CompressorLZW;
 
-	constructor(propertyNamePrefix: string, serializer: Serializer)
+	constructor(propertyNamePrefix: string, serializer: Serializer, compressor: CompressorLZW)
 	{
 		this.propertyNamePrefix = propertyNamePrefix;
 		if (this.propertyNamePrefix == null)
@@ -13,6 +14,7 @@ class StorageHelper
 		}
 
 		this.serializer = serializer;
+		this.compressor = compressor;
 	}
 
 	load(propertyName: string)
@@ -22,20 +24,24 @@ class StorageHelper
 		var propertyNamePrefixed =
 			this.propertyNamePrefix + propertyName;
 
-		var returnValueAsString = localStorage.getItem
+		var returnValueAsStringCompressed = localStorage.getItem
 		(
 			propertyNamePrefixed
 		);
 
-		if (returnValueAsString == null)
+		if (returnValueAsStringCompressed == null)
 		{
 			returnValue = null;
 		}
 		else
 		{
+			var returnValueDecompressed = this.compressor.decompressString
+			(
+				returnValueAsStringCompressed
+			);
 			returnValue = this.serializer.deserialize
 			(
-				returnValueAsString
+				returnValueDecompressed
 			);
 		}
 
@@ -48,6 +54,11 @@ class StorageHelper
 		(
 			valueToSave, false // pretty-print
 		);
+		
+		var valueToSaveCompressed = this.compressor.compressString
+		(
+			valueToSaveSerialized
+		);
 
 		var propertyNamePrefixed =
 			this.propertyNamePrefix + propertyName;
@@ -55,7 +66,7 @@ class StorageHelper
 		localStorage.setItem
 		(
 			propertyNamePrefixed,
-			valueToSaveSerialized
+			valueToSaveCompressed
 		);
 	};
 }

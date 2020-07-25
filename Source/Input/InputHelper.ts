@@ -36,7 +36,11 @@ class InputHelper implements Platformable
 		this.inputsPressedByName = new Map<string, Input>();
 	}
 
-	actionsFromInput(actionsByName: any, actionToInputsMappingsByInputName: any)
+	actionsFromInput
+	(
+		actionsByName: Map<string, Action>,
+		actionToInputsMappingsByInputName: Map<string, ActionToInputsMapping>
+	)
 	{
 		var returnValues = [];
 
@@ -46,7 +50,7 @@ class InputHelper implements Platformable
 			var inputPressed = inputsPressed[i];
 			if (inputPressed.isActive)
 			{
-				var mapping = actionToInputsMappingsByInputName[inputPressed.name];
+				var mapping = actionToInputsMappingsByInputName.get(inputPressed.name);
 				if (mapping != null)
 				{
 					var actionName = mapping.actionName;

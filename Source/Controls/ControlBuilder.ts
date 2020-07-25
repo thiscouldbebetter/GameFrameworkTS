@@ -2070,8 +2070,10 @@ class ControlBuilder
 								{
 									function callback(fileContentsAsString: string)
 									{
-										var worldAsJSON = fileContentsAsString;
-										var worldDeserialized = universe.serializer.deserialize(worldAsJSON);
+										var worldAsStringCompressed = fileContentsAsString;
+										var compressor = universe.storageHelper.compressor;
+										var worldSerialized = compressor.decompressString(worldAsStringCompressed);
+										var worldDeserialized = universe.serializer.deserialize(worldSerialized);
 										universe.world = worldDeserialized;
 
 										var venueNext: any = new VenueControls
@@ -2084,7 +2086,7 @@ class ControlBuilder
 
 									var inputFile = venueFileUpload.toDomElement().getElementsByTagName("input")[0];
 									var fileToLoad = inputFile.files[0];
-									new FileHelper().loadFileAsText
+									new FileHelper().loadFileAsBinaryString
 									(
 										fileToLoad,
 										callback,
@@ -2250,19 +2252,22 @@ class ControlBuilder
 					world.dateSaved = DateTime.now();
 					var worldSerialized = universe.serializer.serialize(world, null);
 
-					return worldSerialized;
+					var compressor = universe.storageHelper.compressor;
+					var worldCompressedAsBytes = compressor.compressStringToBytes(worldSerialized);
+
+					return worldCompressedAsBytes;
 				},
-				(universe: Universe, worldSerialized: any) => // done
+				(universe: Universe, worldCompressedAsBytes: number[]) => // done
 				{
-					var wasSaveSuccessful = (worldSerialized != null);
+					var wasSaveSuccessful = (worldCompressedAsBytes != null);
 					var message =
 					(
 						wasSaveSuccessful ? "Save ready: choose location on dialog." : "Save failed due to errors."
 					);
 
-					new FileHelper().saveTextStringToFileWithName
+					new FileHelper().saveBytesToFileWithName
 					(
-						worldSerialized, universe.world.name + ".json"
+						worldCompressedAsBytes, universe.world.name + ".json.lzw"
 					);
 
 					var venueMessage = new VenueControls

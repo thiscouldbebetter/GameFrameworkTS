@@ -31,7 +31,7 @@ class Universe {
     ;
     initialize_MediaLibraryLoaded(callback) {
         this.platformHelper.initialize(this);
-        this.storageHelper = new StorageHelper(StringHelper.replaceAll(this.name, " ", "_") + "_", this.serializer);
+        this.storageHelper = new StorageHelper(StringHelper.replaceAll(this.name, " ", "_") + "_", this.serializer, new CompressorLZW());
         this.profileHelper = new ProfileHelper(this.storageHelper);
         this.display.initialize(this);
         this.platformHelper.platformableAdd(this.display);

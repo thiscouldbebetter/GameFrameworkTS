@@ -22,7 +22,7 @@ class InputHelper {
         for (var i = 0; i < inputsPressed.length; i++) {
             var inputPressed = inputsPressed[i];
             if (inputPressed.isActive) {
-                var mapping = actionToInputsMappingsByInputName[inputPressed.name];
+                var mapping = actionToInputsMappingsByInputName.get(inputPressed.name);
                 if (mapping != null) {
                     var actionName = mapping.actionName;
                     var action = actionsByName.get(actionName);

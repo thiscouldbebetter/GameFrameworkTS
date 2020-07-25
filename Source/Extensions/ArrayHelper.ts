@@ -1,12 +1,12 @@
 class ArrayHelper
 {
-	static add(array: any, element: any)
+	static add(array: any[], element: any)
 	{
 		array.push(element);
 		return array;
 	};
 
-	static addMany(array: any, elements: any)
+	static addMany(array: any[], elements: any[])
 	{
 		for (var i = 0; i < elements.length; i++)
 		{
@@ -35,7 +35,7 @@ class ArrayHelper
 
 	static addLookupsMultiple<K, E>(array: any, getKeysForElement: (e:E) => Array<K> ): Map<K, E>
 	{
-		var returnLookup: any = {};
+		var returnLookup = new Map<K, E>();
 		for (var i = 0; i < array.length; i++)
 		{
 			var element = array[i];
@@ -43,7 +43,7 @@ class ArrayHelper
 			for (var k = 0; k < keys.length; k++)
 			{
 				var key = keys[k];
-				returnLookup[key] = element;
+				returnLookup.set(key, element);
 			}
 		}
 		return returnLookup;

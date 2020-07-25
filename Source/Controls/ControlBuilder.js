@@ -1000,8 +1000,10 @@ class ControlBuilder {
                 var venueMessageReadyToLoad = new VenueControls(universe.controlBuilder.message(universe, size, new DataBinding("Ready to load from file...", null, null), () => // acknowledge
                  {
                     function callback(fileContentsAsString) {
-                        var worldAsJSON = fileContentsAsString;
-                        var worldDeserialized = universe.serializer.deserialize(worldAsJSON);
+                        var worldAsStringCompressed = fileContentsAsString;
+                        var compressor = universe.storageHelper.compressor;
+                        var worldSerialized = compressor.decompressString(worldAsStringCompressed);
+                        var worldDeserialized = universe.serializer.deserialize(worldSerialized);
                         universe.world = worldDeserialized;
                         var venueNext = new VenueControls(universe.controlBuilder.game(universe, size));
                         venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
@@ -1009,7 +1011,7 @@ class ControlBuilder {
                     }
                     var inputFile = venueFileUpload.toDomElement().getElementsByTagName("input")[0];
                     var fileToLoad = inputFile.files[0];
-                    new FileHelper().loadFileAsText(fileToLoad, callback, null // contextForCallback
+                    new FileHelper().loadFileAsBinaryString(fileToLoad, callback, null // contextForCallback
                     );
                 }, null));
                 var venueMessageCancelled = new VenueControls(universe.controlBuilder.message(universe, size, new DataBinding("No file specified.", null, null), () => // acknowlege
@@ -1080,12 +1082,14 @@ class ControlBuilder {
                 var world = universe.world;
                 world.dateSaved = DateTime.now();
                 var worldSerialized = universe.serializer.serialize(world, null);
-                return worldSerialized;
-            }, (universe, worldSerialized) => // done
+                var compressor = universe.storageHelper.compressor;
+                var worldCompressedAsBytes = compressor.compressStringToBytes(worldSerialized);
+                return worldCompressedAsBytes;
+            }, (universe, worldCompressedAsBytes) => // done
              {
-                var wasSaveSuccessful = (worldSerialized != null);
+                var wasSaveSuccessful = (worldCompressedAsBytes != null);
                 var message = (wasSaveSuccessful ? "Save ready: choose location on dialog." : "Save failed due to errors.");
-                new FileHelper().saveTextStringToFileWithName(worldSerialized, universe.world.name + ".json");
+                new FileHelper().saveBytesToFileWithName(worldCompressedAsBytes, universe.world.name + ".json.lzw");
                 var venueMessage = new VenueControls(universe.controlBuilder.message(universe, size, new DataBinding(message, null, null), () => // acknowledge
                  {
                     var venueNext = new VenueControls(universe.controlBuilder.game(universe, null));

@@ -3,7 +3,7 @@ class VenueControls implements Venue
 {
 	controlRoot: Control;
 	actionToInputsMappings: ActionToInputsMapping[];
-	actionToInputsMappingsByInputName: any;
+	actionToInputsMappingsByInputName: Map<string, ActionToInputsMapping>;
 
 	_drawLoc: Disposition;
 	_mouseClickPos: Coords;
@@ -77,9 +77,10 @@ class VenueControls implements Venue
 			)
 		];
 
-		var mappings = this.controlRoot.actionToInputsMappings;
-		if (mappings != null)
+		var mappingsGet = this.controlRoot.actionToInputsMappings;
+		if (mappingsGet != null)
 		{
+			var mappings = mappingsGet.call(this.controlRoot);
 			ArrayHelper.addMany(this.actionToInputsMappings, mappings);
 		}
 
@@ -124,7 +125,7 @@ class VenueControls implements Venue
 			{
 				var inputPressedName = inputPressed.name;
 
-				var mapping = this.actionToInputsMappingsByInputName[inputPressedName];
+				var mapping = this.actionToInputsMappingsByInputName.get(inputPressedName);
 
 				if (inputPressedName.startsWith("Mouse") == false)
 				{

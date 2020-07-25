@@ -28,13 +28,13 @@ class ArrayHelper {
     }
     ;
     static addLookupsMultiple(array, getKeysForElement) {
-        var returnLookup = {};
+        var returnLookup = new Map();
         for (var i = 0; i < array.length; i++) {
             var element = array[i];
             var keys = getKeysForElement(element);
             for (var k = 0; k < keys.length; k++) {
                 var key = keys[k];
-                returnLookup[key] = element;
+                returnLookup.set(key, element);
             }
         }
         return returnLookup;
