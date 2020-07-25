@@ -154,8 +154,8 @@ class ItemBarterer
 						(c: ItemHolder) => { return c.itemEntitySelected; },
 						(c: ItemHolder, v: Entity) => { c.itemEntitySelected = v; }
 					), // bindingForItemSelected
-					new DataBinding(null, (c: Entity) => c, null ), // bindingForItemValue
-					new DataBinding(true, null, null), // isEnabled
+					DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
+					DataBinding.fromContext(true), // isEnabled
 					function confirm()
 					{
 						if (itemHolderStore.itemEntitySelected != null)
@@ -204,8 +204,8 @@ class ItemBarterer
 						(c: ItemHolder) => { return c.itemEntitySelected; },
 						(c: ItemHolder, v: Entity) => { c.itemEntitySelected = v; }
 					), // bindingForItemSelected
-					new DataBinding(null, (c: Entity) => c, null ), // bindingForItemValue
-					new DataBinding(true, null, null), // isEnabled
+					DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
+					DataBinding.fromContext(true), // isEnabled
 					function confirm()
 					{
 						if (itemHolderCustomer.itemEntitySelected != null)
@@ -257,8 +257,8 @@ class ItemBarterer
 						(c: ItemHolder) => { return c.itemEntitySelected; },
 						(c: ItemHolder, v: Entity) => { c.itemEntitySelected = v; }
 					), // bindingForItemSelected
-					new DataBinding(null, (c: Entity) => c, null ), // bindingForItemValue
-					new DataBinding(true, null, null), // isEnabled
+					DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
+					DataBinding.fromContext(true), // isEnabled
 					function confirm()
 					{
 						if (itemHolderStore.itemEntitySelected != null)
@@ -304,8 +304,8 @@ class ItemBarterer
 						(c: ItemHolder) => { return c.itemEntitySelected; },
 						(c: ItemHolder, v: Entity) => { c.itemEntitySelected = v; }
 					), // bindingForItemSelected
-					new DataBinding(null, (c: Entity) => c, null ), // bindingForItemValue
-					new DataBinding(true, null, null), // isEnabled
+					DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
+					DataBinding.fromContext(true), // isEnabled
 					function confirm()
 					{
 						if (itemHolderCustomer.itemEntitySelected != null)

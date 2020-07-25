@@ -131,8 +131,8 @@ class ItemStore
 						(c: ItemHolder) => { return c.itemEntitySelected; },
 						(c: ItemHolder, v: Entity) => { c.itemEntitySelected = v; }
 					), // bindingForItemSelected
-					new DataBinding(null, (c: Entity) => c, null), // bindingForItemValue
-					new DataBinding(true, null, null), // isEnabled
+					DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
+					DataBinding.fromContext(true), // isEnabled
 					buy, // confirm
 					null
 				),
@@ -155,7 +155,7 @@ class ItemStore
 					"Buy",
 					fontHeight,
 					true, // hasBorder
-					new DataBinding(true, null, null), // isEnabled
+					DataBinding.fromContext(true), // isEnabled
 					buy, // click
 					null, null
 				),
@@ -187,8 +187,8 @@ class ItemStore
 						(c: ItemHolder) => { return c.itemEntitySelected; },
 						(c: ItemHolder, v: Entity) => { c.itemEntitySelected = v; }
 					), // bindingForItemSelected
-					new DataBinding(null, (c: Entity) => c, null ), // bindingForItemValue
-					new DataBinding(true, null, null), // isEnabled
+					DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
+					DataBinding.fromContext(true), // isEnabled
 					sell, // confirm
 					null
 				),
@@ -206,7 +206,7 @@ class ItemStore
 					"Sell",
 					fontHeight,
 					true, // hasBorder
-					new DataBinding(true, null, null), // isEnabled
+					DataBinding.fromContext(true), // isEnabled
 					sell, // click
 					null, null
 				),

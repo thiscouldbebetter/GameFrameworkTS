@@ -108,7 +108,7 @@ class EquipmentUser {
         new DataBinding(itemEntitiesEquippable, null, null), // items
         new DataBinding(null, (c) => { return c.item().toString(world); }, null), // bindingForItemText
         fontHeightSmall, new DataBinding(this, (c) => { return c.itemEntitySelected; }, (c, v) => { c.itemEntitySelected = v; }), // bindingForItemSelected
-        new DataBinding(null, (c) => c, null), // bindingForItemValue
+        DataBinding.fromGet((c) => c), // bindingForItemValue
         null, // bindingForIsEnabled
         function confirm() {
             var itemEntityToEquip = equipmentUser.itemEntitySelected;
@@ -120,7 +120,7 @@ class EquipmentUser {
         new DataBinding(sockets, null, null), // items
         new DataBinding(null, (c) => c.toString(world), null), // bindingForItemText
         fontHeightSmall, new DataBinding(this, (c) => c.socketSelected, (c, v) => { c.socketSelected = v; }), // bindingForItemSelected
-        new DataBinding(null, (c) => c, null), // bindingForItemValue
+        DataBinding.fromGet((c) => c), // bindingForItemValue
         null, // bindingForIsEnabled
         function confirm() {
             var socketToUnequipFrom = equipmentUser.socketSelected;

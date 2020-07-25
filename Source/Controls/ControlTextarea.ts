@@ -6,7 +6,7 @@ class ControlTextarea implements Control
 	size: Coords;
 	text: any;
 	fontHeightInPixels: number
-	_isEnabled: DataBinding<any, string>;
+	_isEnabled: DataBinding<any, boolean>;
 
 	isHighlighted: boolean;
 	lineSpacing: number;
@@ -20,7 +20,7 @@ class ControlTextarea implements Control
 	_mouseClickPos: Coords;
 	_textAsLines: any;
 
-	constructor(name: string, pos: Coords, size: Coords, text: any, fontHeightInPixels: number, isEnabled: DataBinding<any, string>)
+	constructor(name: string, pos: Coords, size: Coords, text: any, fontHeightInPixels: number, isEnabled: DataBinding<any, boolean>)
 	{
 		this.name = name;
 		this.pos = pos;

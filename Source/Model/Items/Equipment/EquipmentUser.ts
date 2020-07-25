@@ -193,7 +193,7 @@ class EquipmentUser
 				(c: EquipmentUser) => { return c.itemEntitySelected; },
 				(c: EquipmentUser, v: Entity) => { c.itemEntitySelected = v; }
 			), // bindingForItemSelected
-			new DataBinding(null, (c: Entity) => c, null ), // bindingForItemValue
+			DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
 			null, // bindingForIsEnabled
 			function confirm()
 			{
@@ -227,7 +227,7 @@ class EquipmentUser
 				(c: EquipmentUser) => c.socketSelected,
 				(c: EquipmentUser, v: EquipmentSocket) => { c.socketSelected = v; }
 			), // bindingForItemSelected
-			new DataBinding(null, (c: EquipmentSocket) => c, null ), // bindingForItemValue
+			DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
 			null, // bindingForIsEnabled
 			function confirm()
 			{

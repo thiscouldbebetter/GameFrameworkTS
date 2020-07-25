@@ -255,8 +255,8 @@ class ItemHolder {
             new DataBinding(this.itemEntities, null, null), // items
             new DataBinding(null, (c) => c.item().toString(world), null), // bindingForItemText
             fontHeightSmall, new DataBinding(this, (c) => c.itemEntitySelected, (c, v) => { c.itemEntitySelected = v; }), // bindingForItemSelected
-            new DataBinding(null, (c) => c, null), // bindingForItemValue
-            new DataBinding(true, null, null), // isEnabled
+            DataBinding.fromGet((c) => c), // bindingForItemValue
+            DataBinding.fromContext(true), // isEnabled
             (universe) => // confirm
              {
                 use();

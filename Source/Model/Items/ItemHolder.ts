@@ -383,8 +383,8 @@ class ItemHolder
 					(c: ItemHolder) => c.itemEntitySelected,
 					(c: ItemHolder, v: Entity) => { c.itemEntitySelected = v; }
 				), // bindingForItemSelected
-				new DataBinding(null, (c: Entity) => c, null ), // bindingForItemValue
-				new DataBinding(true, null, null), // isEnabled
+				DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
+				DataBinding.fromContext(true), // isEnabled
 				(universe: Universe) => // confirm
 				{
 					use();

@@ -142,8 +142,8 @@ class ItemCrafter
 						(c: ItemCrafter) => c.itemEntitySelected,
 						(c: ItemCrafter, v: Entity) => c.itemEntitySelected = v
 					), // bindingForItemSelected
-					new DataBinding(null, (c: Entity) => c, null ), // bindingForItemValue
-					new DataBinding(true, null, null), // isEnabled
+					DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
+					DataBinding.fromContext(true), // isEnabled
 					(universe: Universe) =>
 					{
 						stage();
@@ -253,7 +253,7 @@ class ItemCrafter
 					), // bindingForItemText
 					fontHeightSmall,
 					null, // bindingForItemSelected
-					new DataBinding(null, (c: Entity) => c, null ), // bindingForItemValue
+					DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
 					null, null, null
 				),
 
@@ -299,7 +299,7 @@ class ItemCrafter
 						(c: ItemCrafter) => c.itemEntityStagedSelected,
 						(c: ItemCrafter, v: Entity) => { c.itemEntityStagedSelected = v; }
 					), // bindingForItemSelected
-					new DataBinding(null, (c: Entity) => c, null ), // bindingForItemValue
+					DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
 					null, null, null
 				),
 

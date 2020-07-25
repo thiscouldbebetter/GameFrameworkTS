@@ -46,7 +46,7 @@ class PlaceBuilderDemo_Movers {
             new VisualPolygon(new Path(enemyColliderAsFace.vertices), enemyColor, null // colorBorder
             ),
             visualEyesWithBrowsDirectional,
-            new VisualOffset(new VisualText(new DataBinding("Chaser", null, null), enemyColor, null), new Coords(0, 0 - enemyDimension, 0))
+            new VisualOffset(new VisualText(DataBinding.fromContext("Chaser"), enemyColor, null), new Coords(0, 0 - enemyDimension, 0))
         ]);
         var enemyActivity = (universe, world, place, actor, entityToTargetName) => {
             var target = place.entitiesByName.get(entityToTargetName);
@@ -273,8 +273,9 @@ class PlaceBuilderDemo_Movers {
         }, ["Normal", "Hidden"], [playerVisualBodyNormal, playerVisualBodyHidden]);
         var playerVisualBodyJumpable = new VisualJump2D(playerVisualBodyHidable, new VisualEllipse(playerHeadRadius, playerHeadRadius / 2, 0, "DarkGray", "Black"), null);
         var playerVisualName = new VisualOffset(new VisualText(new DataBinding("Player", null, null), playerColor, null), new Coords(0, 0 - playerHeadRadius * 3, 0));
+        var playerVisualHealthBar = new VisualOffset(new VisualBar(new Coords(entityDimension * 3, entityDimension * .8, 0), Color.Instances().Red, DataBinding.fromGet((c) => c.killable().integrity), DataBinding.fromGet((c) => c.killable().integrityMax)), new Coords(0, 0 - entityDimension * 3, 0));
         var playerVisual = new VisualGroup([
-            playerVisualBodyJumpable, playerVisualName
+            playerVisualBodyJumpable, playerVisualName, playerVisualHealthBar
         ]);
         var playerCollide = (universe, world, place, entityPlayer, entityOther) => {
             if (entityOther.damager() != null) {

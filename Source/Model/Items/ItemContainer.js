@@ -54,8 +54,8 @@ class ItemContainer {
             }, null), // items
             new DataBinding(null, (c) => c.item().toString(world), null), // bindingForItemText
             fontHeight, new DataBinding(itemHolderContainer, (c) => c.itemEntitySelected, (c, v) => { c.itemEntitySelected = v; }), // bindingForItemSelected
-            new DataBinding(null, (c) => c, null), // bindingForItemValue
-            new DataBinding(true, null, null), // isEnabled
+            DataBinding.fromGet((c) => c), // bindingForItemValue
+            DataBinding.fromContext(true), // isEnabled
             get, // confirm
             null),
             new ControlLabel("labelCustomerName", new Coords(size.x - margin - listSize.x, margin, 0), // pos
@@ -64,7 +64,7 @@ class ItemContainer {
             entityGetterPutter.name + ":", fontHeight),
             new ControlButton("buttonGet", new Coords(size.x / 2 - buttonSize.x - margin / 2, size.y - margin - buttonSize.y, 0), // pos
             buttonSize.clone(), ">", fontHeight, true, // hasBorder
-            new DataBinding(true, null, null), // isEnabled
+            DataBinding.fromContext(true), // isEnabled
             get, // click
             null, null),
             new ControlList("listOtherItems", new Coords(size.x - margin - listSize.x, margin * 2, 0), // pos
@@ -73,13 +73,13 @@ class ItemContainer {
             }, null), // items
             new DataBinding(null, (c) => c.item().toString(world), null), // bindingForItemText
             fontHeight, new DataBinding(itemHolderGetterPutter, (c) => c.itemEntitySelected, (c, v) => { c.itemEntitySelected = v; }), // bindingForItemSelected
-            new DataBinding(null, (c) => c, null), // bindingForItemValue
-            new DataBinding(true, null, null), // isEnabled
+            DataBinding.fromGet((c) => c), // bindingForItemValue
+            DataBinding.fromContext(true), // isEnabled
             put, // confirm
             null),
             new ControlButton("buttonPut", new Coords(size.x / 2 + margin / 2, size.y - margin - buttonSize.y, 0), // pos
             buttonSize.clone(), "<", fontHeight, true, // hasBorder
-            new DataBinding(true, null, null), // isEnabled
+            DataBinding.fromContext(true), // isEnabled
             put, // click
             null, null),
             new ControlLabel("infoStatus", new Coords(size.x / 2, size.y - margin * 2 - buttonSize.y, 0), // pos

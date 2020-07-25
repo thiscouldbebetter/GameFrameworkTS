@@ -1,0 +1,53 @@
+GameFrameworkTS - Issues
+========================
+
+Features
+--------
+
+Crafting - Automatic Stage Button
+Crafting - Queue and Durations
+Crafting - Uncarryable Tools in Environment
+Crafting - Facilities - Crafter + Container
+Selected Item Box
+Grass Item and Generator
+Grazers Drop Meat
+Grazers Eat Grass
+Carnivores, Who Eat Grazers
+Animal Procreation and Aging
+Unloading World Before Save, Reloading After
+Storage - Separate Profiles and Worlds
+Images in Lists and Grids
+Move Esc Menu into Tab of Tab Menu
+Controls - Decorations
+Sound - Hitting Obstacle
+Sound - Shooting Gun
+Sound - Bullet Hits
+Sound - Swinging Sword
+Sound - Sword Hits
+Sound - Effects from Builtin JS Synthesis
+Food, Eating, and Hunger
+Map Tiles as Obstacles
+Map Tiles from Images
+Vector Images
+Vehicles
+Damage Types
+Pick Damages Boulders
+Boulders Drop Ore On Destruction
+Shovel, Which Digs Holes
+Agriculture - Seeds, Planting, Watering, Harvesting
+Generated Map Tiles
+Load/Unload Zones in Terrarium
+Legs/Arms on Player
+Generated Devices with Varying Specs
+Explosives
+Smoke
+Journal and Quests
+Auto-Map
+Player Notes
+
+
+Fixes
+-----
+Load World From File
+ControlList Highlight Size
+Sword Swing Direction

@@ -12,7 +12,17 @@ class DataBinding<C, V>
 		this._set = set;
 	}
 
-	contextSet(value: C)
+	static fromContext<C>(context: C): DataBinding<C, C>
+	{
+		return new DataBinding(context, null, null);
+	}
+
+	static fromGet<C, V>(get: (context: C) => V)
+	{
+		return new DataBinding(null, get, null);
+	}
+
+	contextSet(value: C): DataBinding<C, V>
 	{
 		this.context = value;
 		return this;

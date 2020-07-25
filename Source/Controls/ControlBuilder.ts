@@ -566,7 +566,7 @@ class ControlBuilder
 						(c: PlaceDefn) => c.actionToInputsMappingSelected,
 						(c: PlaceDefn, v: ActionToInputsMapping) => { c.actionToInputsMappingSelected = v; }
 					), // bindingForItemSelected
-					new DataBinding(null, (c: ActionToInputsMapping) => c, null ), // bindingForItemValue
+					DataBinding.fromGet( (c: ActionToInputsMapping) => c ), // bindingForItemValue
 					null, null, null
 				),
 
@@ -851,7 +851,7 @@ class ControlBuilder
 						(c: Profile) => c.worlds,
 						null
 					),
-					new DataBinding(null, (c: World) => { return c.name; }, null), // bindingForOptionText
+					DataBinding.fromGet( (c: World) => c.name ), // bindingForOptionText
 					fontHeight,
 					new DataBinding
 					(
@@ -859,7 +859,7 @@ class ControlBuilder
 						(c: Profile) => { return c.worldSelected; },
 						(c: Profile, v: World) => { c.worldSelected = v; }
 					), // bindingForOptionSelected
-					new DataBinding(null, (c: World) => c, null), // value
+					DataBinding.fromGet( (c: World) => c ), // value
 					null, null, null
 				),
 
@@ -1162,7 +1162,7 @@ class ControlBuilder
 					new Coords(35, 50, 0), // pos
 					new Coords(130, 40, 0), // size
 					new DataBinding(profiles, (c: Profile[]) => c, null ), // items
-					new DataBinding(null, (c: Profile) => c.name, null ), // bindingForItemText
+					DataBinding.fromGet( (c: Profile) => c.name ), // bindingForItemText
 					fontHeight,
 					new DataBinding
 					(
@@ -1170,7 +1170,7 @@ class ControlBuilder
 						(c: Universe) => { return c.profile; },
 						(c: Universe, v: Profile) => { c.profile = v; }
 					), // bindingForOptionSelected
-					new DataBinding(null, (c: Profile) => c, null), // value
+					DataBinding.fromGet( (c: Profile) => c ), // value
 					null, null, null
 				),
 
@@ -1450,8 +1450,8 @@ class ControlBuilder
 						(c: SoundHelper, v: number) => { c.soundVolume = v; }
 					), // valueSelected
 					SoundHelper.controlSelectOptionsVolume(), // options
-					new DataBinding(null, (c: ControlSelectOption) => c.value, null ), // bindingForOptionValues,
-					new DataBinding(null, (c: ControlSelectOption) => { return c.text; }, null ), // bindingForOptionText
+					DataBinding.fromGet( (c: ControlSelectOption) => c.value ), // bindingForOptionValues,
+					DataBinding.fromGet( (c: ControlSelectOption) => c.text ), // bindingForOptionText
 					fontHeight
 				),
 
@@ -1473,8 +1473,8 @@ class ControlBuilder
 					universe.display.sizeInPixels, // valueSelected
 					// options
 					universe.display.sizesAvailable,
-					new DataBinding(null, (c: Coords) => c, null ), // bindingForOptionValues,
-					new DataBinding(null, (c: Coords) => { return c.toStringXY(); }, null ), // bindingForOptionText
+					DataBinding.fromGet( (c: Coords) => c ), // bindingForOptionValues,
+					DataBinding.fromGet( (c: Coords) => c.toStringXY() ), // bindingForOptionText
 					fontHeight
 				),
 

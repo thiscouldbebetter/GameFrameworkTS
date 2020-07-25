@@ -93,7 +93,7 @@ class PlaceBuilderDemo_Movers
 			visualEyesWithBrowsDirectional,
 			new VisualOffset
 			(
-				new VisualText(new DataBinding("Chaser", null, null), enemyColor, null),
+				new VisualText(DataBinding.fromContext("Chaser"), enemyColor, null),
 				new Coords(0, 0 - enemyDimension, 0)
 			)
 		]);
@@ -541,10 +541,21 @@ class PlaceBuilderDemo_Movers
 			new VisualText(new DataBinding("Player", null, null), playerColor, null),
 			new Coords(0, 0 - playerHeadRadius * 3, 0)
 		);
+		var playerVisualHealthBar = new VisualOffset
+		(
+			new VisualBar
+			(
+				new Coords(entityDimension * 3, entityDimension * .8, 0),
+				Color.Instances().Red,
+				DataBinding.fromGet( (c: Entity) => c.killable().integrity ),
+				DataBinding.fromGet( (c: Entity) => c.killable().integrityMax ),
+			),
+			new Coords(0, 0 - entityDimension * 3, 0)
+		);
 
 		var playerVisual = new VisualGroup
 		([
-			playerVisualBodyJumpable, playerVisualName
+			playerVisualBodyJumpable, playerVisualName, playerVisualHealthBar
 		]);
 
 		var playerCollide = (universe: Universe, world: World, place: Place, entityPlayer: Entity, entityOther: Entity) =>

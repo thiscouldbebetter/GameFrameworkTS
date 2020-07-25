@@ -194,7 +194,7 @@ class ConversationRun
 						(c: ConversationRun, v: TalkNode) => { c.scopeCurrent.talkNodeForOptionSelected = v; }
 					), // bindingForItemSelected
 					new DataBinding(null, null, null), // bindingForItemValue
-					new DataBinding(true, null, null), // isEnabled
+					DataBinding.fromContext(true), // isEnabled
 					(universe: Universe) => // confirm
 					{
 						next();

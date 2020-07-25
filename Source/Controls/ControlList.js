@@ -9,7 +9,7 @@ class ControlList {
         this.fontHeightInPixels = fontHeightInPixels;
         this.bindingForItemSelected = bindingForItemSelected;
         this.bindingForItemValue = bindingForItemValue;
-        this.bindingForIsEnabled = bindingForIsEnabled || new DataBinding(true, null, null);
+        this.bindingForIsEnabled = bindingForIsEnabled || DataBinding.fromContext(true);
         this.confirm = confirm;
         this.widthInItems = widthInItems || 1;
         var itemSpacingY = 1.2 * this.fontHeightInPixels; // hack
@@ -32,7 +32,7 @@ class ControlList {
         10, // fontHeightInPixels,
         null, // bindingForItemSelected,
         null, // bindingForItemValue,
-        new DataBinding(true, null, null), // bindingForIsEnabled
+        DataBinding.fromContext(true), // isEnabled
         null, null);
         return returnValue;
     }
@@ -42,7 +42,7 @@ class ControlList {
         pos, size, items, bindingForItemText, 10, // fontHeightInPixels,
         null, // bindingForItemSelected,
         null, // bindingForItemValue,
-        new DataBinding(true, null, null), // bindingForIsEnabled
+        DataBinding.fromContext(true), // isEnabled
         null, null);
         return returnValue;
     }

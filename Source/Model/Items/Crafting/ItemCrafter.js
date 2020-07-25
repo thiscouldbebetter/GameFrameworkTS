@@ -78,8 +78,8 @@ class ItemCrafter {
             new DataBinding(itemEntities, null, null), // items
             new DataBinding(null, (c) => c.item().toString(world), null), // bindingForItemText
             fontHeightSmall, new DataBinding(this, (c) => c.itemEntitySelected, (c, v) => c.itemEntitySelected = v), // bindingForItemSelected
-            new DataBinding(null, (c) => c, null), // bindingForItemValue
-            new DataBinding(true, null, null), // isEnabled
+            DataBinding.fromGet((c) => c), // bindingForItemValue
+            DataBinding.fromContext(true), // isEnabled
             (universe) => {
                 stage();
             }, null),
@@ -119,7 +119,7 @@ class ItemCrafter {
             }, null), // items
             new DataBinding(null, (c) => c.toString(world), null), // bindingForItemText
             fontHeightSmall, null, // bindingForItemSelected
-            new DataBinding(null, (c) => c, null), // bindingForItemValue
+            DataBinding.fromGet((c) => c), // bindingForItemValue
             null, null, null),
             new ControlButton("buttonCombine", new Coords(110, 70, 0), // pos
             new Coords(30, 10, 0), // size
@@ -132,7 +132,7 @@ class ItemCrafter {
             new DataBinding(this, (c) => c.itemEntitiesStaged, null), // items
             new DataBinding(null, (c) => c.item().toString(world), null), // bindingForItemText
             fontHeightSmall, new DataBinding(this, (c) => c.itemEntityStagedSelected, (c, v) => { c.itemEntityStagedSelected = v; }), // bindingForItemSelected
-            new DataBinding(null, (c) => c, null), // bindingForItemValue
+            DataBinding.fromGet((c) => c), // bindingForItemValue
             null, null, null),
             new ControlLabel("infoStatus", new Coords(150, 110, 0), // pos
             new Coords(200, 15, 0), // size

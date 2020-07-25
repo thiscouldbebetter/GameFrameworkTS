@@ -84,7 +84,7 @@ class ConversationRun {
             new DataBinding(null, // context
             (c) => { return c.text; }, null), fontHeightShort, new DataBinding(conversationRun, (c) => c.scopeCurrent.talkNodeForOptionSelected, (c, v) => { c.scopeCurrent.talkNodeForOptionSelected = v; }), // bindingForItemSelected
             new DataBinding(null, null, null), // bindingForItemValue
-            new DataBinding(true, null, null), // isEnabled
+            DataBinding.fromContext(true), // isEnabled
             (universe) => // confirm
              {
                 next();
