@@ -110,7 +110,7 @@ class ControlTabbed implements Control
 
 	actionToInputsMappings(): ActionToInputsMapping[]
 	{
-		return null;
+		return [];
 	}
 
 	actionHandle(actionNameToHandle: string, universe: Universe)

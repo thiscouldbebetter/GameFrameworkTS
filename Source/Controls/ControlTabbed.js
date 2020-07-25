@@ -57,7 +57,7 @@ class ControlTabbed {
     ;
     // actions
     actionToInputsMappings() {
-        return null;
+        return [];
     }
     actionHandle(actionNameToHandle, universe) {
         var wasActionHandled = false;

@@ -8,6 +8,7 @@ class Box
 	_min: Coords;
 	_max: Coords;
 	_range: RangeExtent;
+	_vertices: Coords[];
 
 	constructor(center: Coords, size: Coords)
 	{
@@ -254,6 +255,16 @@ class Box
 	{
 		return coordsToTrim.trimToRangeMinMax(this.min(), this.max());
 	};
+
+	vertices()
+	{
+		if (this._vertices == null)
+		{
+			this._vertices = [];
+			// todo
+		}
+		return this._vertices;
+	}
 
 	// cloneable
 

@@ -117,7 +117,7 @@ class ItemCrafter {
             new DataBinding(this, (c) => {
                 return (c.recipeSelected == null ? [] : c.recipeSelected.itemsIn);
             }, null), // items
-            new DataBinding(null, (c) => c.toString(), null), // bindingForItemText
+            new DataBinding(null, (c) => c.toString(world), null), // bindingForItemText
             fontHeightSmall, null, // bindingForItemSelected
             new DataBinding(null, (c) => c, null), // bindingForItemValue
             null, null, null),

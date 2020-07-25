@@ -174,6 +174,13 @@ class Box {
         return coordsToTrim.trimToRangeMinMax(this.min(), this.max());
     }
     ;
+    vertices() {
+        if (this._vertices == null) {
+            this._vertices = [];
+            // todo
+        }
+        return this._vertices;
+    }
     // cloneable
     clone() {
         return new Box(this.center.clone(), this.size.clone());

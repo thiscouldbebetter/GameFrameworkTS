@@ -674,6 +674,36 @@ class CollisionHelper
 		return collision;
 	};
 
+	collisionOfHemispaceAndBox(hemispace: Hemispace, box: Box, collision: Collision)
+	{
+		if (collision == null)
+		{
+			collision = new Collision(null, null, null);
+		}
+
+		var plane = hemispace.plane;
+		var boxVertices = box.vertices();
+		for (var i = 0; i < boxVertices.length; i++)
+		{
+			var vertex = boxVertices[i];
+			var distanceOfVertexFromOriginAlongNormal =
+				vertex.dotProduct(plane.normal);
+			var distanceOfVertexAbovePlane =
+				distanceOfVertexFromOriginAlongNormal
+				- plane.distanceFromOrigin;
+			if (distanceOfVertexAbovePlane < 0)
+			{
+				collision.isActive = true;
+				plane.pointClosestToOrigin(collision.pos);
+				collision.colliders.length = 0;
+				collision.colliders.push(hemispace);
+				break;
+			}
+		}
+
+		return collision;
+	};
+
 	collisionOfHemispaceAndSphere(hemispace: Hemispace, sphere: Sphere, collision: Collision)
 	{
 		if (collision == null)
@@ -1128,6 +1158,13 @@ class CollisionHelper
 		return (this.collisionOfEdgeAndPlane(edge, plane, this._collision.clear()) != null);
 	};
 
+	doHemispaceAndBoxCollide(hemispace: Hemispace, box: Box)
+	{
+		var collision = this.collisionOfHemispaceAndBox(hemispace, box, this._collision.clear());
+
+		return collision.isActive;
+	};
+
 	doHemispaceAndSphereCollide(hemispace: Hemispace, sphere: Sphere)
 	{
 		var collision = this.collisionOfHemispaceAndSphere(hemispace, sphere, this._collision.clear());
@@ -1511,6 +1548,11 @@ class CollisionHelper
 		return returnValue;
 	};
 
+	doShapeGroupAnyAndBoxCollide(groupAny: ShapeGroupAny, box: Box)
+	{
+		return this.doShapeGroupAnyAndShapeCollide(groupAny, box);
+	}
+
 	doShapeGroupAnyAndShapeCollide(groupAny: ShapeGroupAny, shapeOther: any)
 	{
 		var returnValue = false;
@@ -1533,6 +1575,11 @@ class CollisionHelper
 	doShapeContainerAndShapeCollide(container: ShapeContainer, shapeOther: any)
 	{
 		return this.doesColliderContainOther(container.shape, shapeOther);
+	};
+
+	doShapeContainerAndBoxCollide(container: ShapeContainer, box: Box)
+	{
+		return this.doShapeContainerAndShapeCollide(container, box);
 	};
 
 	doShapeInverseAndShapeCollide(inverse: ShapeInverse, shapeOther: any)
@@ -1558,6 +1605,11 @@ class CollisionHelper
 	doShapeGroupAnyAndSphereCollide(group: ShapeGroupAny, sphere: Sphere)
 	{
 		return this.doShapeGroupAnyAndShapeCollide(group, sphere);
+	};
+
+	doShapeInverseAndBoxCollide(inverse: ShapeInverse, box: Box)
+	{
+		return this.doShapeInverseAndShapeCollide(inverse, box);
 	};
 
 	doShapeInverseAndSphereCollide(inverse: ShapeInverse, sphere: Sphere)

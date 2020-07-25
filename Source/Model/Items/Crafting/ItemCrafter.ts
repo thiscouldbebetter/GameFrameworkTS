@@ -248,7 +248,7 @@ class ItemCrafter
 					new DataBinding
 					(
 						null,
-						(c: ItemCrafter) => c.toString(),
+						(c: Item) => c.toString(world),
 						null
 					), // bindingForItemText
 					fontHeightSmall,
