@@ -333,6 +333,7 @@ class PlaceBuilderDemo {
         entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("MushroomGenerator"), 3));
         entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Ore"), 1));
         entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Pick"), 1));
+        entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Shovel"), 1));
         entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Speed Boots"), 1));
         entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Toolset"), 1));
         var entityRadioMessage = this.entityBuildRadioMessage(entityDefns.get("Friendly").drawable().visual, "This is " + this.name + ".");
@@ -992,6 +993,27 @@ class PlaceBuilderDemo {
         return itemPotionEntityDefn;
     }
     ;
+    entityDefnBuildShovel(entityDimension) {
+        var itemDefnName = "Shovel";
+        var itemShovelVisual = this.itemDefnsByName.get(itemDefnName).visual;
+        var itemShovelCollider = new Sphere(new Coords(0, 0, 0), entityDimension / 2);
+        var itemShovelDevice = new Device("Shovel", null, // initialize: (u: Universe, w: World, p: Place, e: Entity) => void,
+        null, // update: (u: Universe, w: World, p: Place, e: Entity) => void,
+        (u, w, p, eUser, eDevice) => // use
+         {
+            eUser.locatable().entitySpawnWithDefnName(u, w, p, eUser, "Hole");
+        });
+        var itemShovelEntityDefn = new Entity(itemDefnName, [
+            new Item(itemDefnName, 1),
+            new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
+            new Collidable(itemShovelCollider, null, null),
+            itemShovelDevice,
+            new Drawable(itemShovelVisual, null),
+            new DrawableCamera()
+        ]);
+        return itemShovelEntityDefn;
+    }
+    ;
     entityDefnBuildSword(entityDimension) {
         var itemDefnName = "Sword";
         var itemSwordCollider = new Sphere(new Coords(0, 0, 0), entityDimension / 2);
@@ -1093,6 +1115,7 @@ class PlaceBuilderDemo {
             this.emplacements.entityDefnBuildBoulder(entityDimension),
             this.emplacements.entityDefnBuildContainer(entityDimension),
             this.emplacements.entityDefnBuildExit(entityDimension),
+            this.emplacements.entityDefnBuildHole(entityDimension),
             this.emplacements.entityDefnBuildPortal(entityDimension),
             this.emplacements.entityDefnBuildObstacleBar(entityDimension),
             this.emplacements.entityDefnBuildObstacleMine(entityDimension),
@@ -1121,6 +1144,7 @@ class PlaceBuilderDemo {
             this.entityDefnBuildOre(entityDimension),
             this.entityDefnBuildPick(entityDimension),
             this.entityDefnBuildPotion(entityDimension),
+            this.entityDefnBuildShovel(entityDimension),
             this.entityDefnBuildStore(entityDimension),
             this.entityDefnBuildSword(entityDimension),
             this.entityDefnBuildToolset(entityDimension),
@@ -1333,6 +1357,19 @@ class PlaceBuilderDemo {
             ]).transform(Transform_Scale.fromScalar(entityDimension)), itemPickColor, null),
             new VisualOffset(new VisualText(DataBinding.fromContext(itemPickName), itemPickColor, null), new Coords(0, 0 - entityDimension * 2, 0))
         ]);
+        // shovel
+        var itemShovelName = "Shovel";
+        var itemShovelColor = "Gray";
+        var itemShovelVisual = new VisualGroup([
+            new VisualOffset(new VisualRectangle(new Coords(entityDimension / 4, entityDimension, 0), "Brown", null, null), new Coords(0, 0 + entityDimension / 2, 0)),
+            new VisualPolygon(new Path([
+                new Coords(0.25, 1.5, 0),
+                new Coords(-0.25, 1.5, 0),
+                new Coords(-0.5, 1.0, 0),
+                new Coords(0.5, 1.0, 0)
+            ]).transform(Transform_Scale.fromScalar(entityDimension)), itemShovelColor, null),
+            new VisualOffset(new VisualText(DataBinding.fromContext(itemShovelName), itemShovelColor, null), new Coords(0, 0 - entityDimension * 2, 0))
+        ]);
         // speed boots
         var itemSpeedBootsName = "Speed Boots";
         var itemAccessoryColor = "Orange";
@@ -1394,6 +1431,7 @@ class PlaceBuilderDemo {
             new ItemDefn("Mushroom", null, null, .01, 1, null, null, null, itemMushroomVisual),
             new ItemDefn("Ore", null, null, 10, 1, null, null, null, itemOreVisual),
             new ItemDefn("Pick", null, null, 1, 30, null, ["Wieldable"], itemUseEquip, itemPickVisual),
+            new ItemDefn("Shovel", null, null, 1, 30, null, ["Wieldable"], itemUseEquip, itemShovelVisual),
             new ItemDefn("Speed Boots", null, null, 10, 30, null, ["Accessory"], itemUseEquip, itemSpeedBootsVisual),
             new ItemDefn("Sword", null, null, 10, 100, null, ["Wieldable"], itemUseEquip, itemSwordVisual),
             new ItemDefn("Toolset", null, null, 1, 30, null, null, null, itemToolsetVisual),

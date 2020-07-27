@@ -164,6 +164,49 @@ class PlaceBuilderDemo_Emplacements
 		return exitEntityDefn;
 	};
 
+	entityDefnBuildHole(entityDimension: number): Entity
+	{
+		var entityName = "Hole";
+		entityDimension *= 1.5;
+		var itemHoleColor = "Brown";
+		var itemHoleVisual = new VisualGroup
+		([
+			new VisualPolygon
+			(
+				new Path
+				([
+					new Coords(-0.5, 0.0, 0),
+					new Coords(0.5, 0.0, 0),
+					new Coords(0.4, -0.2, 0),
+					new Coords(-0.4, -0.2, 0),
+				]).transform
+				(
+					Transform_Scale.fromScalar(entityDimension)
+				),
+				itemHoleColor,
+				null
+			),
+			new VisualOffset
+			(
+				new VisualText(new DataBinding(entityName, null, null), itemHoleColor, null),
+				new Coords(0, 0 - entityDimension, 0)
+			)
+		]);
+
+		var entityDefn = new Entity
+		(
+			entityName,
+			[
+				new Ephemeral(500, null),
+				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
+				new Drawable(itemHoleVisual, null),
+				new DrawableCamera()
+			]
+		);
+
+		return entityDefn;
+	};
+
 	entityDefnBuildObstacleBar(entityDimension: number): Entity
 	{
 		var obstacleColor = "Red";
