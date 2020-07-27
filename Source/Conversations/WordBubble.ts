@@ -80,7 +80,7 @@ class WordBubble
 					"visualPortrait",
 					marginSize,
 					portraitSize, // size
-					this.visualForPortrait,
+					DataBinding.fromContext(this.visualForPortrait),
 					"Black" // colorBackground
 				),
 

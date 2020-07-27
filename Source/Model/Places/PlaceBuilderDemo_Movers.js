@@ -63,12 +63,7 @@ class PlaceBuilderDemo_Movers {
             var chanceOfDroppingCoin = 1;
             var doesDropCoin = (Math.random() < chanceOfDroppingCoin);
             if (doesDropCoin) {
-                var entityDefns = world.defn.entityDefnsByName();
-                var entityDefnCoin = entityDefns.get("Coin");
-                var entityCoin = entityDefnCoin.clone();
-                entityCoin.locatable().overwriteWith(entityDying.locatable());
-                entityCoin.locatable().loc.vel.clear();
-                place.entitySpawn(universe, world, entityCoin);
+                entityDying.locatable().entitySpawnWithDefnName(universe, world, place, entityDying, "Coin");
             }
             var entityPlayer = place.player();
             var learner = entityPlayer.skillLearner();
@@ -79,7 +74,7 @@ class PlaceBuilderDemo_Movers {
             if (learningMessage != null) {
                 place.entitySpawn(universe, world, universe.entityBuilder.messageFloater(learningMessage, entityPlayer.locatable().loc.pos));
             }
-        }, null);
+        });
         var enemyEntityPrototype = new Entity("Enemy", [
             new Actor(enemyActivity, "Player"),
             new Constrainable([constraintSpeedMax1]),
@@ -286,10 +281,31 @@ class PlaceBuilderDemo_Movers {
             return (e.playable().isHiding ? "Hidden" : "Normal");
         }, ["Normal", "Hidden"], [playerVisualBodyNormal, playerVisualBodyHidden]);
         var playerVisualBodyJumpable = new VisualJump2D(playerVisualBodyHidable, new VisualEllipse(playerHeadRadius, playerHeadRadius / 2, 0, "DarkGray", "Black"), null);
+        // wielding
+        var visualNone = new VisualNone();
+        var playerVisualWieldable = new VisualDynamic((u, w, d, e) => {
+            var equipmentUser = e.equipmentUser();
+            var entityWieldableEquipped = equipmentUser.itemEntityInSocketWithName("Wielding");
+            var itemVisual = entityWieldableEquipped.item().defn(w).visual;
+            return itemVisual;
+        });
+        playerVisualWieldable = new VisualGroup([
+            new VisualOffset(new VisualGroup([
+                // arm
+                new VisualLine(new Coords(0, 0, 0), new Coords(playerHeadRadius * 2, 0, 0), playerColor, 2 // lineThickness
+                ),
+                // wieldable
+                new VisualOffset(playerVisualWieldable, new Coords(playerHeadRadius * 2, 0, 0))
+            ]), new Coords(0, 0 - playerHeadRadius, 0))
+        ]);
+        var playerVisualWielding = new VisualSelect((u, w, d, e) => // selectChildName
+         {
+            return (e.equipmentUser().itemEntityInSocketWithName("Wielding") == null ? "Hidden" : "Visible");
+        }, ["Visible", "Hidden"], [playerVisualWieldable, visualNone]);
         var playerVisualName = new VisualOffset(new VisualText(new DataBinding("Player", null, null), playerColor, null), new Coords(0, 0 - playerHeadRadius * 3, 0));
         var playerVisualHealthBar = new VisualOffset(new VisualBar(new Coords(entityDimension * 3, entityDimension * .8, 0), Color.Instances().Red, DataBinding.fromGet((c) => c.killable().integrity), DataBinding.fromGet((c) => c.killable().integrityMax)), new Coords(0, 0 - entityDimension * 3, 0));
         var playerVisual = new VisualGroup([
-            playerVisualBodyJumpable, playerVisualName, playerVisualHealthBar
+            playerVisualWielding, playerVisualBodyJumpable, playerVisualName, playerVisualHealthBar
         ]);
         var playerCollide = (universe, world, place, entityPlayer, entityOther) => {
             if (entityOther.damager() != null) {
@@ -368,7 +384,7 @@ class PlaceBuilderDemo_Movers {
             "Consumable"
         ];
         var equipmentSocketDefnGroup = new EquipmentSocketDefnGroup("Equippable", [
-            new EquipmentSocketDefn("Weapon", ["Weapon"]),
+            new EquipmentSocketDefn("Wielding", ["Wieldable"]),
             new EquipmentSocketDefn("Armor", ["Armor"]),
             new EquipmentSocketDefn("Accessory", ["Accessory"]),
             new EquipmentSocketDefn("Item0", itemCategoriesForQuickSlots),
@@ -405,7 +421,7 @@ class PlaceBuilderDemo_Movers {
             true // showMessageOnly
             );
             universe.venueNext = venueMessage;
-        }, null);
+        });
         var movable = new Movable(0.5, // accelerationPerTick
         (universe, world, place, entityMovable) => // accelerate
          {

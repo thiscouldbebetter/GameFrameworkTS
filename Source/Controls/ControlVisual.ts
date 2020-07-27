@@ -4,7 +4,7 @@ class ControlVisual implements Control
 	name: string;
 	pos: Coords;
 	size: Coords;
-	visual: any;
+	visual: DataBinding<any,Visual>;
 	colorBackground: string;
 
 	fontHeightInPixels: number;
@@ -16,7 +16,7 @@ class ControlVisual implements Control
 	_locatableEntity: Entity;
 	_sizeHalf: Coords;
 
-	constructor(name: string, pos: Coords, size: Coords, visual: Visual, colorBackground: string)
+	constructor(name: string, pos: Coords, size: Coords, visual: DataBinding<any,Visual>, colorBackground: string)
 	{
 		this.name = name;
 		this.pos = pos;
@@ -102,6 +102,7 @@ class ControlVisual implements Control
 		var locatableEntity = this._locatableEntity;
 		locatableEntity.locatable().loc.pos.overwriteWith(drawPos);
 		drawPos.add(this._sizeHalf.overwriteWith(this.size).half());
-		this.visual.draw(universe, universe.world, display, locatableEntity);
+		var visualToDraw = this.visual.get();
+		visualToDraw.draw(universe, universe.world, display, locatableEntity);
 	};
 }

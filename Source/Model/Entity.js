@@ -20,6 +20,11 @@ class Entity {
         }
     }
     ;
+    propertyAdd(propertyToAdd) {
+        this.properties.push(propertyToAdd);
+        this.propertiesByName.set(propertyToAdd.constructor.name, propertyToAdd);
+    }
+    ;
     // Cloneable.
     clone() {
         var nameCloned = this.name; // + IDHelper.Instance().idNext();

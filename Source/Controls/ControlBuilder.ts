@@ -1589,7 +1589,11 @@ class ControlBuilder
 						"imageSlide",
 						this._zeroes,
 						this.sizeBase.clone(), // size
-						new VisualImageFromLibrary(imageName),
+						new DataBinding<any, Visual>
+						(
+							new VisualImageFromLibrary(imageName),
+							null, null
+						),
 						null
 					),
 
@@ -1690,7 +1694,11 @@ class ControlBuilder
 					"imageTitle",
 					this._zeroes,
 					this.sizeBase.clone(), // size
-					new VisualImageScaled(new VisualImageFromLibrary("Title"), size),
+					new DataBinding
+					(
+						new VisualImageScaled(new VisualImageFromLibrary("Title"), size),
+						null, null
+					),
 					null //?
 				),
 

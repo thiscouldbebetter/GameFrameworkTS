@@ -123,7 +123,7 @@ class ConversationRun
 					"visualPortrait",
 					marginSize.clone(),
 					portraitSize, // size
-					conversationDefn.visualPortrait,
+					DataBinding.fromContext(conversationDefn.visualPortrait),
 					"Black" // colorBackground
 				),
 
@@ -200,6 +200,24 @@ class ConversationRun
 						next();
 					},
 					null
+				),
+
+				new ControlButton
+				(
+					"buttonNext",
+					new Coords
+					(
+						size.x - marginSize.x - buttonSize.x,
+						size.y - marginSize.y * 3 - buttonSize.y * 3,
+						0
+					),
+					buttonSize.clone(),
+					"Next",
+					fontHeight,
+					true, // hasBorder
+					true, // isEnabled
+					next, // click
+					null, null
 				),
 
 				new ControlButton

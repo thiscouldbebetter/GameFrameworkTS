@@ -44,6 +44,20 @@ class PlaceBuilderDemo_Emplacements
 			(u: Universe, w: World, p: Place, e: Entity, e2: Entity) => { u.collisionHelper.collideCollidablesReverseVelocities(e, e2); }
 		);
 
+		var killable = new Killable
+		(
+			1, // integrityMax
+			null, // damageApply
+			(u: Universe, w: World, p: Place, entityDying: Entity) =>
+			{
+				var entityDropped = entityDying.locatable().entitySpawnWithDefnName
+				(
+					u, w, p, entityDying, "Ore"
+				);
+				entityDropped.item().quantity = DiceRoll.roll("1d3", null);
+			}
+		);
+
 		var itemBoulderEntityDefn = new Entity
 		(
 			itemDefnName,
@@ -51,7 +65,8 @@ class PlaceBuilderDemo_Emplacements
 				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
 				collidable,
 				new Drawable(itemBoulderVisual, null),
-				new DrawableCamera()
+				new DrawableCamera(),
+				killable
 			]
 		);
 

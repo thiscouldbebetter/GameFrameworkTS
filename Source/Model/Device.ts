@@ -9,7 +9,12 @@ class Device
 	tickLastUsed: number;
 	ticksToCharge: number;
 
-	constructor(name: any, initialize: any, update: any, use: any)
+	constructor
+	(
+		name: string,
+		initialize: (u: Universe, w: World, p: Place, e: Entity) => void,
+		update: (u: Universe, w: World, p: Place, e: Entity) => void,
+		use: (u: Universe, w: World, p: Place, eUser: Entity, eDevice: Entity) => void)
 	{
 		this.name = name;
 		this.initialize = initialize;

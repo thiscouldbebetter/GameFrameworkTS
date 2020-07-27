@@ -14,7 +14,7 @@ class ControlList implements Control
 	widthInItems: number;
 
 	isHighlighted: boolean;
-	itemSpacing: Coords;
+	_itemSpacing: Coords;
 	parent: Control;
 	scrollbar: ControlScrollbar;
 	styleName: string;
@@ -46,13 +46,8 @@ class ControlList implements Control
 		this.widthInItems = widthInItems || 1;
 
 		var itemSpacingY = 1.2 * this.fontHeightInPixels; // hack
+		this._itemSpacing = new Coords(0, itemSpacingY, 0);
 		var scrollbarWidth = itemSpacingY;
-
-		this.itemSpacing = new Coords
-		(
-			(this.size.x - scrollbarWidth) / this.widthInItems,
-			itemSpacingY, 0
-		);
 
 		this.isHighlighted = false;
 
@@ -61,7 +56,7 @@ class ControlList implements Control
 			new Coords(this.size.x - scrollbarWidth, 0, 0), // pos
 			new Coords(scrollbarWidth, this.size.y, 0), // size
 			this.fontHeightInPixels,
-			this.itemSpacing.y, // itemHeight
+			itemSpacingY, // itemHeight
 			this._items,
 			0 // value
 		);
@@ -287,6 +282,17 @@ class ControlList implements Control
 		return returnValue;
 	};
 
+	itemSpacing()
+	{
+		var scrollbarWidthVisible = (this.scrollbar.isVisible() ? this.scrollbar.size.x : 0);
+		return this._itemSpacing.overwriteWithDimensions
+		(
+			(this.size.x - scrollbarWidthVisible) / this.widthInItems,
+			this._itemSpacing.y,
+			0
+		);
+	};
+
 	items()
 	{
 		return (this._items.get == null ? this._items : this._items.get());
@@ -324,7 +330,7 @@ class ControlList implements Control
 		else
 		{
 			var clickOffsetInPixels = clickPos.clone().subtract(this.pos);
-			var clickOffsetInItems = clickOffsetInPixels.clone().divide(this.itemSpacing).floor();
+			var clickOffsetInItems = clickOffsetInPixels.clone().divide(this.itemSpacing()).floor();
 			var rowOfItemClicked =
 				this.indexOfFirstRowVisible() + clickOffsetInItems.y;
 			var indexOfItemClicked =
@@ -351,7 +357,7 @@ class ControlList implements Control
 		this.pos.multiply(scaleFactor);
 		this.size.multiply(scaleFactor);
 		this.fontHeightInPixels *= scaleFactor.y;
-		this.itemSpacing.multiply(scaleFactor);
+		this._itemSpacing.multiply(scaleFactor);
 		this.scrollbar.scalePosAndSize(scaleFactor);
 	};
 
@@ -414,24 +420,21 @@ class ControlList implements Control
 
 			drawPos2.overwriteWith
 			(
-				this.itemSpacing
+				this.itemSpacing()
 			).multiply
 			(
 				offsetInItems
 			).add
 			(
 				drawPos
-			).addDimensions
-			(
-				textMarginLeft, 0, 0
-			);
+			)
 
 			if (item == itemSelected)
 			{
 				display.drawRectangle
 				(
 					drawPos2,
-					this.itemSpacing,
+					this.itemSpacing(),
 					colorFore, // colorFill
 					null, null
 				);
@@ -441,6 +444,11 @@ class ControlList implements Control
 			(
 				item
 			).get();
+
+			drawPos2.addDimensions
+			(
+				textMarginLeft, 0, 0
+			);
 
 			display.drawText
 			(

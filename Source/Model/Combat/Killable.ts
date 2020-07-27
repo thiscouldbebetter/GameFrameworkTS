@@ -2,18 +2,21 @@
 class Killable
 {
 	integrityMax: number;
-	_damageApply: any;
-	die: any;
-	itemDefnCorpse: ItemDefn;
+	_damageApply: (u: Universe, w: World, p: Place, eDamager: Entity, eKillable: Entity, damageToApply: number) => void;
+	_die: (u: Universe, w: World, p: Place, e: Entity) => void;
 
 	integrity: number;
 
-	constructor(integrityMax: number, damageApply: any, die: any, itemDefnCorpse: ItemDefn)
+	constructor
+	(
+		integrityMax: number,
+		damageApply: (u: Universe, w: World, p: Place, eDamager: Entity, eKillable: Entity, damageToApply: number) => void,
+		die: (u: Universe, w: World, p: Place, e: Entity) => void
+	)
 	{
 		this.integrityMax = integrityMax;
 		this._damageApply = damageApply;
-		this.die = die;
-		this.itemDefnCorpse = itemDefnCorpse;
+		this._die = die;
 
 		this.integrity = this.integrityMax;
 	}
@@ -32,6 +35,14 @@ class Killable
 		}
 		return damageApplied;
 	};
+
+	die(u: Universe, w: World, p: Place, e: Entity)
+	{
+		if (this._die != null)
+		{
+			this._die(u, w, p, e);
+		}
+	}
 
 	integrityAdd(amountToAdd: number)
 	{
@@ -53,10 +64,7 @@ class Killable
 		if (this.isAlive() == false)
 		{
 			place.entitiesToRemove.push(entityKillable);
-			if (this.die != null)
-			{
-				this.die(universe, world, place, entityKillable);
-			}
+			this.die(universe, world, place, entityKillable);
 		}
 	};
 
@@ -64,6 +72,6 @@ class Killable
 
 	clone()
 	{
-		return new Killable(this.integrityMax, this._damageApply, this.die, this.itemDefnCorpse);
+		return new Killable(this.integrityMax, this._damageApply, this._die);
 	};
 }

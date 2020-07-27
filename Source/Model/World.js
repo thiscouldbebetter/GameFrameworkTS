@@ -20,11 +20,11 @@ class World {
         // PlaceDefns.
         var actions = World.actionsBuild();
         var actionToInputsMappings = World.actionToInputsMappingsBuild();
-        var itemDefns = World.itemDefnsBuild();
         var randomizer = null; // Use default.
         var displaySize = universe.display.sizeInPixels;
         var cameraViewSize = displaySize.clone();
-        var placeBuilder = new PlaceBuilderDemo(randomizer, cameraViewSize, itemDefns);
+        var placeBuilder = new PlaceBuilderDemo(randomizer, cameraViewSize);
+        var itemDefns = placeBuilder.itemDefns;
         var entityDefns = placeBuilder.entityDefns;
         var placeDefnDemo = new PlaceDefn("Demo", actions, actionToInputsMappings);
         var placeDefns = [placeDefnDemo]; // todo
@@ -151,11 +151,11 @@ class World {
             new Action("Fire", (universe, world, place, actor) => // perform
              {
                 var equipmentUser = actor.equipmentUser();
-                var entityWeaponEquipped = equipmentUser.itemEntityInSocketWithName("Weapon");
-                var actorHasWeaponEquipped = (entityWeaponEquipped != null);
-                if (actorHasWeaponEquipped) {
-                    var deviceWeapon = entityWeaponEquipped.device();
-                    deviceWeapon.use(universe, world, place, actor, entityWeaponEquipped);
+                var entityWieldableEquipped = equipmentUser.itemEntityInSocketWithName("Wielding");
+                var actorHasWieldableEquipped = (entityWieldableEquipped != null);
+                if (actorHasWieldableEquipped) {
+                    var deviceWieldable = entityWieldableEquipped.device();
+                    deviceWieldable.use(universe, world, place, actor, entityWieldableEquipped);
                 }
             }),
             new Action("Hide", (universe, world, place, actor) => // perform
@@ -260,94 +260,6 @@ class World {
             new ActionToInputsMapping("Item9", ["_9"], inactivateFalse),
         ];
         return actionToInputsMappings;
-    }
-    ;
-    static itemDefnsBuild() {
-        var itemUseEquip = (universe, world, place, entityUser, entityItem) => {
-            var equipmentUser = entityUser.equipmentUser();
-            var message = equipmentUser.equipEntityWithItem(universe, world, place, entityUser, entityItem);
-            return message;
-        };
-        var itemDefns = [
-            // 			name, 				appr, desc, mass, 	val,stax, categoryNames, use
-            new ItemDefn("Ammo", null, null, null, null, null, null, null),
-            new ItemDefn("Armor", null, null, 50, 30, null, ["Armor"], itemUseEquip),
-            new ItemDefn("Coin", null, null, .01, 1, null, null, null),
-            new ItemDefn("Crystal", null, null, .1, 1, null, null, null),
-            new ItemDefn("Enhanced Armor", null, null, 60, 60, null, ["Armor"], itemUseEquip),
-            new ItemDefn("Flower", null, null, .01, 1, null, null, null),
-            new ItemDefn("Grass", null, null, .01, 1, null, null, null),
-            new ItemDefn("Gun", null, null, 5, 100, null, ["Weapon"], itemUseEquip),
-            new ItemDefn("Key", null, null, .1, 5, null, null, null),
-            new ItemDefn("Material", null, null, 10, 3, null, null, null),
-            new ItemDefn("Meat", null, null, 10, 3, null, null, null),
-            new ItemDefn("Mushroom", null, null, .01, 1, null, null, null),
-            new ItemDefn("Ore", null, null, 10, 1, null, null, null),
-            new ItemDefn("Pick", null, null, 1, 30, null, ["Weapon"], itemUseEquip),
-            new ItemDefn("Speed Boots", null, null, 10, 30, null, ["Accessory"], itemUseEquip),
-            new ItemDefn("Sword", null, null, 10, 100, null, ["Weapon"], itemUseEquip),
-            new ItemDefn("Toolset", null, null, 1, 30, null, null, null),
-            new ItemDefn("Book", null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize
-            null, // categoryNames
-            (universe, world, place, entityUser, entityItem) => // use
-             {
-                var venuePrev = universe.venueCurrent;
-                var back = function () {
-                    var venueNext = venuePrev;
-                    venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
-                    universe.venueNext = venueNext;
-                };
-                var text = "Fourscore and seven years ago, our fathers brought forth upon this continent "
-                    + "a new nation, conceived in liberty, and dedicated to the proposition that "
-                    + " all men are created equal. ";
-                var size = universe.display.sizeInPixels.clone();
-                var fontHeight = 10;
-                var textarea = new ControlTextarea("textareaContents", size.clone().half().half(), size.clone().half(), text, fontHeight, new DataBinding(false, null, null) // isEnabled
-                );
-                var button = new ControlButton("buttonDone", new Coords(size.x / 4, 3 * size.y / 4 + fontHeight, 1), new Coords(size.x / 2, fontHeight * 2, 1), "Done", fontHeight, true, // hasBorder
-                true, // isEnabled
-                back, // click
-                null, null);
-                var container = new ControlContainer("containerBook", new Coords(0, 0, 0), size.clone(), [textarea, button], // children
-                [
-                    new Action(ControlActionNames.Instances().ControlCancel, back),
-                    new Action(ControlActionNames.Instances().ControlConfirm, back)
-                ], null);
-                var venueNext = new VenueControls(container);
-                venueNext = new VenueFader(venueNext, null, null, null);
-                universe.venueNext = venueNext;
-                return "";
-            }),
-            new ItemDefn("Medicine", null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize
-            ["Consumable"], // categoryNames
-            (universe, world, place, entityUser, entityItem) => // use
-             {
-                var integrityToRestore = 10;
-                entityUser.killable().integrityAdd(integrityToRestore);
-                var item = entityItem.item();
-                entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
-                var message = "The medicine restores " + integrityToRestore + " points.";
-                return message;
-            }),
-            new ItemDefn("Potion", null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize
-            ["Consumable"], // categoryNames
-            (universe, world, place, entityUser, entityItem) => // use
-             {
-                // Same as medicine, for now.
-                var integrityToRestore = 10;
-                entityUser.killable().integrityAdd(integrityToRestore);
-                var item = entityItem.item();
-                entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
-                var message = "The potion restores " + integrityToRestore + " points.";
-                return message;
-            }),
-            new ItemDefn("Walkie-Talkie", null, null, 2, 10, null, [], // categoryNames
-            (universe, world, place, entityUser, entityItem) => // use
-             {
-                return "There is no response but static.";
-            }),
-        ];
-        return itemDefns;
     }
     ;
 }

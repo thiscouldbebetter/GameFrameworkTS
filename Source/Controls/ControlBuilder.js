@@ -754,7 +754,7 @@ class ControlBuilder {
             // children
             [
                 new ControlVisual("imageSlide", this._zeroes, this.sizeBase.clone(), // size
-                new VisualImageFromLibrary(imageName), null),
+                new DataBinding(new VisualImageFromLibrary(imageName), null, null), null),
                 new ControlLabel("labelSlideText", new Coords(100, this.fontHeightInPixelsBase * 2, 0), // pos
                 this.sizeBase.clone(), // size
                 true, // isTextCentered,
@@ -808,7 +808,7 @@ class ControlBuilder {
         // children
         [
             new ControlVisual("imageTitle", this._zeroes, this.sizeBase.clone(), // size
-            new VisualImageScaled(new VisualImageFromLibrary("Title"), size), null //?
+            new DataBinding(new VisualImageScaled(new VisualImageFromLibrary("Title"), size), null, null), null //?
             ),
             new ControlButton("buttonStart", new Coords(75, 100, 0), // pos
             new Coords(50, 40, 0), // size

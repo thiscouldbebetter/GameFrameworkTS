@@ -231,14 +231,14 @@ class ItemHolder
 		var itemHolder = this;
 		var world = universe.world;
 
-		var back = function()
+		var back = () =>
 		{
 			var venueNext = venuePrev;
 			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null) as Venue;
 			universe.venueNext = venueNext;
 		};
 
-		var drop = function()
+		var drop = () =>
 		{
 			var itemEntityToKeep = itemHolder.itemEntitySelected;
 			if (itemEntityToKeep != null)
@@ -248,7 +248,16 @@ class ItemHolder
 				var itemEntityToDrop = itemEntityToKeep.clone();
 				var itemToDrop = itemEntityToDrop.item();
 				itemToDrop.quantity = 1;
-				var posToDropAt = itemEntityToDrop.locatable().loc.pos;
+				var itemToDropDefn = itemToDrop.defn(world);
+				var itemLocatable = itemEntityToDrop.locatable();
+				if (itemLocatable == null)
+				{
+					itemLocatable = new Locatable(null);
+					itemEntityToDrop.propertyAdd(itemLocatable);
+					itemEntityToDrop.propertyAdd(new Drawable(itemToDropDefn.visual, null));
+					// todo - Other properties: Collidable, etc.
+				}
+				var posToDropAt = itemLocatable.loc.pos;
 				var holderPos = entityItemHolder.locatable().loc.pos;
 				posToDropAt.overwriteWith(holderPos);
 				var collidable = itemEntityToDrop.collidable();
@@ -262,30 +271,37 @@ class ItemHolder
 				{
 					itemHolder.itemEntitySelected = null;
 				}
-				var itemToDropDefn = itemToDrop.defn(world);
 				itemHolder.statusMessage = itemToDropDefn.appearance + " dropped."
-			}
-		};
-
-		var use = function()
-		{
-			var itemEntityToUse = itemHolder.itemEntitySelected;
-			var itemToUse = itemEntityToUse.item();
-			if (itemToUse.use != null)
-			{
-				var world = universe.world;
-				var place = world.placeCurrent;
-				var user = entityItemHolder;
-				itemHolder.statusMessage =
-					itemToUse.use(universe, world, place, user, itemEntityToUse);
-				if (itemToUse.quantity <= 0)
+				var equipmentUser = entityItemHolder.equipmentUser();
+				if (equipmentUser != null)
 				{
-					itemHolder.itemEntitySelected = null;
+					equipmentUser.unequipItemEntity(itemEntityToKeep);
 				}
 			}
 		};
 
-		var up = function()
+		var use = () =>
+		{
+			var itemEntityToUse = itemHolder.itemEntitySelected;
+			if (itemEntityToUse != null)
+			{
+				var itemToUse = itemEntityToUse.item();
+				if (itemToUse.use != null)
+				{
+					var world = universe.world;
+					var place = world.placeCurrent;
+					var user = entityItemHolder;
+					itemHolder.statusMessage =
+						itemToUse.use(universe, world, place, user, itemEntityToUse);
+					if (itemToUse.quantity <= 0)
+					{
+						itemHolder.itemEntitySelected = null;
+					}
+				}
+			}
+		};
+
+		var up = () =>
 		{
 			var itemEntityToMove = itemHolder.itemEntitySelected;
 			var itemEntitiesAll = itemHolder.itemEntities;
@@ -297,7 +313,7 @@ class ItemHolder
 			}
 		};
 
-		var down = function()
+		var down = () =>
 		{
 			var itemEntityToMove = itemHolder.itemEntitySelected;
 			var itemEntitiesAll = itemHolder.itemEntities;
@@ -309,12 +325,12 @@ class ItemHolder
 			}
 		};
 
-		var split = function(universe: Universe)
+		var split = (universe: Universe) =>
 		{
 			itemHolder.itemEntitySplit(itemHolder.itemEntitySelected, null);
 		};
 
-		var join = function()
+		var join = () =>
 		{
 			var itemEntityToJoin = itemHolder.itemEntitySelected;
 			var itemToJoin = itemEntityToJoin.item();
@@ -323,7 +339,7 @@ class ItemHolder
 			itemHolder.itemEntitySelected = itemEntityJoined;
 		};
 
-		var sort = function()
+		var sort = () =>
 		{
 			itemHolder.itemEntities.sort
 			(
@@ -351,6 +367,7 @@ class ItemHolder
 		};
 
 		var buttonSize = new Coords(20, 10, 0);
+		var visualNone = new VisualNone();
 
 		var childControls =
 		[
@@ -390,53 +407,6 @@ class ItemHolder
 					use();
 				},
 				null
-			),
-
-			new ControlLabel
-			(
-				"labelItemSelected",
-				new Coords(150, 25, 0), // pos
-				new Coords(100, 15, 0), // size
-				true, // isTextCentered
-				"Item Selected:",
-				fontHeightSmall
-			),
-
-			new ControlLabel
-			(
-				"infoItemSelected",
-				new Coords(150, 35, 0), // pos
-				new Coords(200, 15, 0), // size
-				true, // isTextCentered
-				new DataBinding
-				(
-					this,
-					(c: ItemHolder) =>
-					{
-						var i = c.itemEntitySelected;
-						return (i == null ? "-" : i.item().toString(world));
-					},
-					null
-				), // text
-				fontHeightSmall
-			),
-
-			new ControlLabel
-			(
-				"infoStatus",
-				new Coords(150, 110, 0), // pos
-				new Coords(200, 15, 0), // size
-				true, // isTextCentered
-				new DataBinding
-				(
-					this,
-					(c: ItemHolder) =>
-					{
-						return c.statusMessage;
-					},
-					null
-				), // text
-				fontHeightSmall
 			),
 
 			new ControlButton
@@ -568,10 +538,75 @@ class ItemHolder
 				null, null
 			),
 
+			new ControlLabel
+			(
+				"labelItemSelected",
+				new Coords(150, 25, 0), // pos
+				new Coords(100, 15, 0), // size
+				true, // isTextCentered
+				"Item Selected:",
+				fontHeightSmall
+			),
+
+			new ControlLabel
+			(
+				"infoItemSelected",
+				new Coords(150, 35, 0), // pos
+				new Coords(200, 15, 0), // size
+				true, // isTextCentered
+				new DataBinding
+				(
+					this,
+					(c: ItemHolder) =>
+					{
+						var i = c.itemEntitySelected;
+						return (i == null ? "-" : i.item().toString(world));
+					},
+					null
+				), // text
+				fontHeightSmall
+			),
+
+			new ControlVisual
+			(
+				"visualImage",
+				new Coords(125, 40, 0), // pos
+				new Coords(50, 50, 0), // size
+				new DataBinding
+				(
+					this,
+					(c: ItemHolder) =>
+					{
+						var i = c.itemEntitySelected;
+						return (i == null ? visualNone : i.item().defn(world).visual);
+					},
+					null
+				),
+				"Black" // colorBackground
+			),
+
+			new ControlLabel
+			(
+				"infoStatus",
+				new Coords(150, 130, 0), // pos
+				new Coords(200, 15, 0), // size
+				true, // isTextCentered
+				new DataBinding
+				(
+					this,
+					(c: ItemHolder) =>
+					{
+						return c.statusMessage;
+					},
+					null
+				), // text
+				fontHeightSmall
+			),
+
 			new ControlButton
 			(
 				"buttonUse",
-				new Coords(130, 90, 0), // pos
+				new Coords(135, 110, 0), // pos
 				new Coords(15, 10, 0), // size
 				"Use",
 				fontHeightSmall,
@@ -596,7 +631,7 @@ class ItemHolder
 			new ControlButton
 			(
 				"buttonDrop",
-				new Coords(150, 90, 0), // pos
+				new Coords(155, 110, 0), // pos
 				new Coords(15, 10, 0), // size
 				"Drop",
 				fontHeightSmall,

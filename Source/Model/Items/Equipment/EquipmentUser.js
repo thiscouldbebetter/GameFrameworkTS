@@ -71,6 +71,12 @@ class EquipmentUser {
         return message;
     }
     ;
+    unequipItemEntity(itemEntityToUnequip) {
+        var socket = this.socketGroup.sockets.filter(x => x.itemEntityEquipped == itemEntityToUnequip)[0];
+        if (socket != null) {
+            socket.itemEntityEquipped = null;
+        }
+    }
     // control
     toControl(universe, size, entityEquipmentUser, venuePrev, includeTitleAndDoneButton) {
         this.statusMessage = "Equip items in available slots.";

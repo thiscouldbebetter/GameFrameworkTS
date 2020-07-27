@@ -9,12 +9,14 @@ class ItemDefn
 	stackSizeMax: number;
 	categoryNames: string[];
 	_use: (u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) => string;
+	visual: Visual;
 
 	constructor
 	(
 		name: string, appearance: string, description: string, mass: number,
 		tradeValue: number, stackSizeMax: number, categoryNames: string[],
-		use: (u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) => string
+		use: (u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) => string,
+		visual: Visual
 	)
 	{
 		this.name = name;
@@ -26,11 +28,12 @@ class ItemDefn
 		this.stackSizeMax = stackSizeMax || Number.POSITIVE_INFINITY;
 		this.categoryNames = categoryNames || [];
 		this._use = use;
+		this.visual = visual;
 	}
 
 	static new1(name: string)
 	{
-		return new ItemDefn(name, null, null, null, null, null, null, null);
+		return new ItemDefn(name, null, null, null, null, null, null, null, null);
 	};
 
 	static fromNameCategoryNameAndUse(name: string, categoryName: string, use: any)

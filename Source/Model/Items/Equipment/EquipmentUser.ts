@@ -124,6 +124,18 @@ class EquipmentUser
 		return message;
 	};
 
+	unequipItemEntity(itemEntityToUnequip: Entity)
+	{
+		var socket = this.socketGroup.sockets.filter
+		(
+			x => x.itemEntityEquipped == itemEntityToUnequip
+		)[0];
+		if (socket != null)
+		{
+			socket.itemEntityEquipped = null;
+		}
+	}
+
 	// control
 
 	toControl

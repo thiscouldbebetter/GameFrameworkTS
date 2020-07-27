@@ -4,26 +4,28 @@ class VisualLine implements Visual
 	fromPos: Coords;
 	toPos: Coords;
 	color: string;
+	lineThickness: number;
 
-	drawPosFrom: Coords;
-	drawPosTo: Coords;
+	_drawPosFrom: Coords;
+	_drawPosTo: Coords;
 
-	constructor(fromPos: Coords, toPos: Coords, color: string)
+	constructor(fromPos: Coords, toPos: Coords, color: string, lineThickness: number)
 	{
 		this.fromPos = fromPos;
 		this.toPos = toPos;
 		this.color = color;
+		this.lineThickness = lineThickness || 1;
 
 		// Helper variables.
 
-		this.drawPosFrom = new Coords(0, 0, 0);
-		this.drawPosTo = new Coords(0, 0, 0);
+		this._drawPosFrom = new Coords(0, 0, 0);
+		this._drawPosTo = new Coords(0, 0, 0);
 	}
 
 	draw(universe: Universe, world: World, display: Display, entity: Entity)
 	{
 		var pos = entity.locatable().loc.pos;
-		var drawPosFrom = this.drawPosFrom.overwriteWith
+		var drawPosFrom = this._drawPosFrom.overwriteWith
 		(
 			pos
 		).add
@@ -31,7 +33,7 @@ class VisualLine implements Visual
 			this.fromPos
 		);
 
-		var drawPosTo = this.drawPosTo.overwriteWith
+		var drawPosTo = this._drawPosTo.overwriteWith
 		(
 			pos
 		).add
@@ -39,7 +41,7 @@ class VisualLine implements Visual
 			this.toPos
 		);
 
-		display.drawLine(drawPosFrom, drawPosTo, this.color, null);
+		display.drawLine(drawPosFrom, drawPosTo, this.color, this.lineThickness);
 	};
 
 	// Clonable.

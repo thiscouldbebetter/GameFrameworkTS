@@ -43,6 +43,9 @@ class ControlScrollbar {
     isEnabled() {
         return true;
     }
+    isVisible() {
+        return this.windowSizeInItems < this.items().length;
+    }
     items() {
         return (this._items.get == null ? this._items : this._items.get());
     }
@@ -104,8 +107,7 @@ class ControlScrollbar {
     ;
     // drawable
     draw(universe, display, drawLoc) {
-        var numberOfItems = this.items().length;
-        if (this.windowSizeInItems < numberOfItems) {
+        if (this.isVisible()) {
             var style = this.style(universe);
             var colorFore = (this.isHighlighted ? style.colorFill : style.colorBorder);
             var colorBack = (this.isHighlighted ? style.colorBorder : style.colorFill);

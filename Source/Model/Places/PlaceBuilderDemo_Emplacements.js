@@ -19,11 +19,18 @@ class PlaceBuilderDemo_Emplacements {
         var collidable = new Collidable(collider, [Collidable.name], // entityPropertyNamesToCollideWith,
         // collideEntities
         (u, w, p, e, e2) => { u.collisionHelper.collideCollidablesReverseVelocities(e, e2); });
+        var killable = new Killable(1, // integrityMax
+        null, // damageApply
+        (u, w, p, entityDying) => {
+            var entityDropped = entityDying.locatable().entitySpawnWithDefnName(u, w, p, entityDying, "Ore");
+            entityDropped.item().quantity = DiceRoll.roll("1d3", null);
+        });
         var itemBoulderEntityDefn = new Entity(itemDefnName, [
             new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
             collidable,
             new Drawable(itemBoulderVisual, null),
-            new DrawableCamera()
+            new DrawableCamera(),
+            killable
         ]);
         return itemBoulderEntityDefn;
     }

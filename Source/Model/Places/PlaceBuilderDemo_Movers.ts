@@ -129,12 +129,10 @@ class PlaceBuilderDemo_Movers
 				var doesDropCoin = (Math.random() < chanceOfDroppingCoin);
 				if (doesDropCoin)
 				{
-					var entityDefns = world.defn.entityDefnsByName();
-					var entityDefnCoin = entityDefns.get("Coin");
-					var entityCoin = entityDefnCoin.clone();
-					entityCoin.locatable().overwriteWith(entityDying.locatable());
-					entityCoin.locatable().loc.vel.clear();
-					place.entitySpawn(universe, world, entityCoin);
+					entityDying.locatable().entitySpawnWithDefnName
+					(
+						universe, world, place, entityDying, "Coin"
+					);
 				}
 
 				var entityPlayer = place.player();
@@ -157,8 +155,7 @@ class PlaceBuilderDemo_Movers
 						)
 					);
 				}
-			},
-			null
+			}
 		);
 
 		var enemyEntityPrototype = new Entity
@@ -554,6 +551,55 @@ class PlaceBuilderDemo_Movers
 			new VisualEllipse(playerHeadRadius, playerHeadRadius / 2, 0, "DarkGray", "Black"),
 			null
 		);
+
+		// wielding
+
+		var visualNone = new VisualNone();
+		var playerVisualWieldable: Visual = new VisualDynamic
+		(
+			(u: Universe, w: World, d: Display, e: Entity) => 
+			{
+				var equipmentUser = e.equipmentUser();
+				var entityWieldableEquipped =
+					equipmentUser.itemEntityInSocketWithName("Wielding");
+				var itemVisual = entityWieldableEquipped.item().defn(w).visual;
+				return itemVisual;
+			}
+		);
+		playerVisualWieldable = new VisualGroup
+		([
+			new VisualOffset
+			(
+				new VisualGroup
+				([
+					// arm
+					new VisualLine
+					(
+						new Coords(0, 0, 0),
+						new Coords(playerHeadRadius * 2, 0, 0),
+						playerColor,
+						2 // lineThickness
+					),
+					// wieldable
+					new VisualOffset
+					(
+						playerVisualWieldable,
+						new Coords(playerHeadRadius * 2, 0, 0)
+					)
+				]),
+				new Coords(0, 0 - playerHeadRadius, 0)
+			)
+		]);
+		var playerVisualWielding = new VisualSelect
+		(
+			(u: Universe, w: World, d: Display, e: Entity) => // selectChildName
+			{
+				return (e.equipmentUser().itemEntityInSocketWithName("Wielding") == null ? "Hidden" : "Visible");
+			},
+			[ "Visible", "Hidden" ],
+			[ playerVisualWieldable, visualNone ]
+		);
+
 		var playerVisualName = new VisualOffset
 		(
 			new VisualText(new DataBinding("Player", null, null), playerColor, null),
@@ -573,7 +619,7 @@ class PlaceBuilderDemo_Movers
 
 		var playerVisual = new VisualGroup
 		([
-			playerVisualBodyJumpable, playerVisualName, playerVisualHealthBar
+			playerVisualWielding, playerVisualBodyJumpable, playerVisualName, playerVisualHealthBar
 		]);
 
 		var playerCollide = (universe: Universe, world: World, place: Place, entityPlayer: Entity, entityOther: Entity) =>
@@ -718,7 +764,7 @@ class PlaceBuilderDemo_Movers
 		(
 			"Equippable",
 			[
-				new EquipmentSocketDefn( "Weapon", [ "Weapon" ] ),
+				new EquipmentSocketDefn( "Wielding", [ "Wieldable" ] ),
 				new EquipmentSocketDefn( "Armor", [ "Armor" ] ),
 				new EquipmentSocketDefn( "Accessory", [ "Accessory" ] ),
 
@@ -770,8 +816,7 @@ class PlaceBuilderDemo_Movers
 					true // showMessageOnly
 				);
 				universe.venueNext = venueMessage;
-			},
-			null
+			}
 		);
 
 		var movable = new Movable

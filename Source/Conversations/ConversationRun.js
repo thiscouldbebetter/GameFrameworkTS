@@ -68,7 +68,7 @@ class ConversationRun {
         // children
         [
             new ControlVisual("visualPortrait", marginSize.clone(), portraitSize, // size
-            conversationDefn.visualPortrait, "Black" // colorBackground
+            DataBinding.fromContext(conversationDefn.visualPortrait), "Black" // colorBackground
             ),
             new ControlLabel("labelSpeaker", new Coords(marginSize.x * 2 + portraitSize.x, marginSize.y + portraitSize.y / 2 - labelHeight / 2, 0), // pos
             size, // size
@@ -89,6 +89,10 @@ class ConversationRun {
              {
                 next();
             }, null),
+            new ControlButton("buttonNext", new Coords(size.x - marginSize.x - buttonSize.x, size.y - marginSize.y * 3 - buttonSize.y * 3, 0), buttonSize.clone(), "Next", fontHeight, true, // hasBorder
+            true, // isEnabled
+            next, // click
+            null, null),
             new ControlButton("buttonTranscript", new Coords(size.x - marginSize.x - buttonSize.x, size.y - marginSize.y * 2 - buttonSize.y * 2, 0), buttonSize.clone(), "Log", fontHeight, true, // hasBorder
             true, // isEnabled
             viewLog, // click

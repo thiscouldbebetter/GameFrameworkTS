@@ -90,6 +90,11 @@ class ControlScrollbar implements Control
 		return true;
 	}
 
+	isVisible()
+	{
+		return this.windowSizeInItems < this.items().length
+	}
+
 	items()
 	{
 		return (this._items.get == null ? this._items : this._items.get());
@@ -192,9 +197,7 @@ class ControlScrollbar implements Control
 
 	draw(universe: Universe, display: Display, drawLoc: Disposition)
 	{
-		var numberOfItems = this.items().length;
-
-		if (this.windowSizeInItems < numberOfItems)
+		if (this.isVisible())
 		{
 			var style = this.style(universe);
 			var colorFore = (this.isHighlighted ? style.colorFill : style.colorBorder);

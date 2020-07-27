@@ -32,6 +32,12 @@ class Entity
 		}
 	};
 
+	propertyAdd(propertyToAdd: any)
+	{
+		this.properties.push(propertyToAdd);
+		this.propertiesByName.set(propertyToAdd.constructor.name, propertyToAdd);
+	};
+
 	// Cloneable.
 
 	clone()

@@ -1,6 +1,6 @@
 "use strict";
 class ItemDefn {
-    constructor(name, appearance, description, mass, tradeValue, stackSizeMax, categoryNames, use) {
+    constructor(name, appearance, description, mass, tradeValue, stackSizeMax, categoryNames, use, visual) {
         this.name = name;
         this.appearance = appearance || name;
         this.description = description;
@@ -9,9 +9,10 @@ class ItemDefn {
         this.stackSizeMax = stackSizeMax || Number.POSITIVE_INFINITY;
         this.categoryNames = categoryNames || [];
         this._use = use;
+        this.visual = visual;
     }
     static new1(name) {
-        return new ItemDefn(name, null, null, null, null, null, null, null);
+        return new ItemDefn(name, null, null, null, null, null, null, null, null);
     }
     ;
     static fromNameCategoryNameAndUse(name, categoryName, use) {

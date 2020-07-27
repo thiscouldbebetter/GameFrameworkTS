@@ -280,6 +280,10 @@
 		},
 		{
 			"defnName": "Display",
+			"text": "The G key picks up any nearby items."
+		},
+		{
+			"defnName": "Display",
 			"text": "Enter uses a weapon, if one's equipped."
 		},
 		{
