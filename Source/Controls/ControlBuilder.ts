@@ -241,21 +241,24 @@ class ControlBuilder
 		var fontHeight = this.fontHeightInPixelsBase;
 
 		var buttonHeight = 20;
-		var buttonSize = new Coords(60, buttonHeight, 0);
-		var margin = 15;
 		var padding = 5;
-
-		var posX = 70;
 		var rowHeight = buttonHeight + padding;
+		var rowCount = 5;
+		var buttonsAllHeight = rowCount * buttonHeight + (rowCount - 1) * padding;
+		var margin = (this.sizeBase.y - buttonsAllHeight) / 2;
+
+		var buttonSize = new Coords(60, buttonHeight, 0);
+		var posX = (this.sizeBase.x - buttonSize.x) / 2;
+
 		var row0PosY = margin;
 		var row1PosY = row0PosY + rowHeight;
 		var row2PosY = row1PosY + rowHeight;
 		var row3PosY = row2PosY + rowHeight;
 		var row4PosY = row3PosY + rowHeight;
 
-		var back = function()
+		var back = () =>
 		{
-			var venueNext: any = new VenueControls
+			var venueNext: Venue = new VenueControls
 			(
 				universe.controlBuilder.gameAndSettings(universe, size)
 			);
@@ -423,16 +426,17 @@ class ControlBuilder
 		var fontHeight = this.fontHeightInPixelsBase;
 
 		var buttonHeight = 20;
-		var margin = 15;
 		var padding = 5;
-
+		var rowCount = 3;
 		var rowHeight = buttonHeight + padding;
+		var buttonsAllHeight = rowCount * buttonHeight + (rowCount - 1) * padding;
+		var margin = (this.sizeBase.y - buttonsAllHeight) / 2;
+
 		var row0PosY = margin;
 		var row1PosY = row0PosY + rowHeight;
 		var row2PosY = row1PosY + rowHeight;
-		var row3PosY = row2PosY + rowHeight;
 
-		var back = function()
+		var back = () =>
 		{
 			var venueNext: any = new VenueWorld(universe.world);
 			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
@@ -441,7 +445,7 @@ class ControlBuilder
 
 		var returnValue = new ControlContainer
 		(
-			"containerGameAndSettings",
+			"Game",
 			this._zeroes, // pos
 			this.sizeBase.clone(),
 			// children
@@ -449,7 +453,7 @@ class ControlBuilder
 				new ControlButton
 				(
 					"buttonGame",
-					new Coords(70, row1PosY, 0), // pos
+					new Coords(70, row0PosY, 0), // pos
 					new Coords(60, buttonHeight, 0), // size
 					"Game",
 					fontHeight,
@@ -470,7 +474,7 @@ class ControlBuilder
 				new ControlButton
 				(
 					"buttonSettings",
-					new Coords(70, row2PosY, 0), // pos
+					new Coords(70, row1PosY, 0), // pos
 					new Coords(60, buttonHeight, 0), // size
 					"Settings",
 					fontHeight,
@@ -491,7 +495,7 @@ class ControlBuilder
 				new ControlButton
 				(
 					"buttonResume",
-					new Coords(70, row3PosY, 0), // pos
+					new Coords(70, row2PosY, 0), // pos
 					new Coords(60, buttonHeight, 0), // size
 					"Resume",
 					fontHeight,
@@ -848,18 +852,18 @@ class ControlBuilder
 					new DataBinding
 					(
 						universe.profile,
-						(c: Profile) => c.worlds,
+						(c: Profile) => c.worldNames,
 						null
-					),
-					DataBinding.fromGet( (c: World) => c.name ), // bindingForOptionText
+					), // items
+					DataBinding.fromGet( (c: string) => c ), // bindingForOptionText
 					fontHeight,
 					new DataBinding
 					(
 						universe.profile,
-						(c: Profile) => { return c.worldSelected; },
-						(c: Profile, v: World) => { c.worldSelected = v; }
+						(c: Profile) => c.worldNameSelected,
+						(c: Profile, v: string) => { c.worldNameSelected = v; }
 					), // bindingForOptionSelected
-					DataBinding.fromGet( (c: World) => c ), // value
+					DataBinding.fromGet( (c: string) => c ), // value
 					null, null, null
 				),
 
@@ -875,17 +879,8 @@ class ControlBuilder
 					() => // click
 					{
 						var world = World.create(universe);
-
-						var profile = universe.profile;
-						profile.worlds.push(world);
-
-						universe.profileHelper.profileSave
-						(
-							profile
-						);
-
 						universe.world = world;
-						var venueNext: any = new VenueControls
+						var venueNext: Venue = new VenueControls
 						(
 							universe.controlBuilder.worldDetail(universe, size)
 						);
@@ -907,21 +902,48 @@ class ControlBuilder
 					new DataBinding
 					(
 						universe.profile,
-						(c: Profile) => (c.worldSelected != null),
+						(c: Profile) => (c.worldNameSelected != null),
 						null
 					),
 					() => // click
 					{
-						var worldSelected = universe.profile.worldSelected;
-						if (worldSelected != null)
+						var worldNameSelected = universe.profile.worldNameSelected;
+						if (worldNameSelected != null)
 						{
-							universe.world = worldSelected;
-							var venueNext: Venue = new VenueControls
+							var messageAsDataBinding = new DataBinding
 							(
-								universe.controlBuilder.worldDetail(universe, size)
+								null, // Will be set below.
+								(c: VenueTask) => "Loading game...",
+								null
 							);
-							venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
-							universe.venueNext = venueNext;
+
+							var venueMessage = new VenueMessage
+							(
+								messageAsDataBinding, null, null, null, null
+							);
+
+							var venueTask = new VenueTask
+							(
+								venueMessage,
+								() => //perform
+								{
+									return universe.storageHelper.load(worldNameSelected);
+								},
+								(universe: Universe, worldSelected: World) => // done
+								{
+									universe.world = worldSelected;
+									var venueNext: Venue = new VenueControls
+									(
+										universe.controlBuilder.worldDetail(universe, size)
+									);
+									venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
+									universe.venueNext = venueNext;
+								}
+							);
+
+							messageAsDataBinding.contextSet(venueTask);
+
+							universe.venueNext = new VenueFader(venueTask, universe.venueCurrent, null, null)
 						}
 					},
 					null, null
@@ -970,13 +992,21 @@ class ControlBuilder
 								+ "\"?",
 							() => // confirm
 							{
-								var profile = universe.profile;
-								universe.profileHelper.profileDelete
-								(
-									profile
-								);
+								var storageHelper = universe.storageHelper;
+								storageHelper.delete(profile.name);
 
-								var venueNext: any = new VenueControls
+								var profileNames = storageHelper.load("ProfileNames");
+								if (profileNames != null)
+								{
+									var profileIndex = profileNames.indexOf(profile.name);
+									if (profileIndex >= 0)
+									{
+										profileNames.splice(profileIndex, 1);
+									}
+									storageHelper.save("ProfileNames", profileNames);
+								}
+
+								var venueNext: Venue = new VenueControls
 								(
 									universe.controlBuilder.profileSelect(universe, null)
 								);
@@ -1079,11 +1109,17 @@ class ControlBuilder
 							return;
 						}
 
+						var storageHelper = universe.storageHelper;
+
 						var profile = new Profile(profileName, []);
-						universe.profileHelper.profileAdd
-						(
-							profile
-						);
+						var profileNames = storageHelper.load("ProfileNames");
+						if (profileNames == null)
+						{
+							profileNames = [];
+						}
+						profileNames.push(profileName);
+						storageHelper.save("ProfileNames", profileNames);
+						storageHelper.save(profileName, profile); 
 
 						universe.profile = profile;
 						var venueNext: any = new VenueControls
@@ -1137,7 +1173,14 @@ class ControlBuilder
 
 		var fontHeight = this.fontHeightInPixelsBase;
 
-		var profiles = universe.profileHelper.profiles();
+		var storageHelper = universe.storageHelper;
+		var profileNames = storageHelper.load("ProfileNames") as Array<string>;
+		if (profileNames == null)
+		{
+			profileNames = [];
+			storageHelper.save("ProfileNames", profileNames);
+		}
+		var profiles = profileNames.map(x => storageHelper.load(x));
 
 		var returnValue = new ControlContainer
 		(
@@ -1161,7 +1204,7 @@ class ControlBuilder
 					"listProfiles",
 					new Coords(35, 50, 0), // pos
 					new Coords(130, 40, 0), // size
-					new DataBinding(profiles, (c: Profile[]) => c, null ), // items
+					DataBinding.fromContext(profiles), // items
 					DataBinding.fromGet( (c: Profile) => c.name ), // bindingForItemText
 					fontHeight,
 					new DataBinding
@@ -1266,7 +1309,7 @@ class ControlBuilder
 								var now = DateTime.now();
 								var nowAsString = now.toStringMMDD_HHMM_SS();
 								var profileName = "Anon-" + nowAsString;
-								var profile = new Profile(profileName, [ world ]);
+								var profile = new Profile(profileName, []);
 								universe.profile = profile;
 
 								var venueNext: any = new VenueWorld(universe.world);
@@ -1319,11 +1362,22 @@ class ControlBuilder
 						(
 							universe,
 							size,
-							"Delete all profiles?",
+							"Delete all profiles and saves?",
 							() => // confirm
 							{
-								universe.profileHelper.profilesAllDelete(null);
-								var venueNext: any = new VenueControls
+								var storageHelper = universe.storageHelper;
+								var profileNames = storageHelper.load("ProfileNames");
+								if (profileNames != null)
+								{
+									for (var i = 0; i < profileNames.length; i++)
+									{
+										var profileName = profileNames[i];
+										storageHelper.delete(profileName);
+									}
+								}
+								storageHelper.deleteAll();
+
+								var venueNext: Venue = new VenueControls
 								(
 									universe.controlBuilder.profileSelect(universe, null)
 								);
@@ -1889,17 +1943,17 @@ class ControlBuilder
 								+ "\"?",
 							() => // confirm
 							{
+								var storageHelper = universe.storageHelper;
+
 								var profile = universe.profile;
 								var world = universe.world;
-								var worlds = profile.worlds;
 
-								ArrayHelper.remove(worlds, world);
+								var worldNames = profile.worldNames;
+								ArrayHelper.remove(worldNames, world.name);
+								storageHelper.save(profile.name, profile);
+
 								universe.world = null;
-
-								universe.profileHelper.profileSave
-								(
-									profile
-								);
+								storageHelper.delete(world.name);
 
 								var venueNext: any = new VenueControls
 								(
@@ -1949,66 +2003,46 @@ class ControlBuilder
 
 		var confirm = () =>
 		{
-			var profileOld = universe.profile;
-			var profilesReloaded = universe.profileHelper.profiles();
-			for (var i = 0; i < profilesReloaded.length; i++)
-			{
-				var profileReloaded = profilesReloaded[i];
-				if (profileReloaded.name == profileOld.name)
-				{
-					universe.profile = profileReloaded;
-					break;
-				}
-			}
+			var storageHelper = universe.storageHelper;
 
 			var worldOld = universe.world;
-			var worldsReloaded = universe.profile.worlds;
-			var worldToReload = null;
-			for (var i = 0; i < worldsReloaded.length; i++)
-			{
-				var worldReloaded = worldsReloaded[i];
-				if (worldReloaded.name == worldOld.name)
-				{
-					worldToReload = worldReloaded;
-					break;
-				}
-			}
 
-			var venueNext: any = new VenueControls
+
+
+			var messageAsDataBinding = new DataBinding
 			(
-				universe.controlBuilder.worldLoad(universe, null)
+				null, // Will be set below.
+				(c: VenueTask) => "Loading game...",
+				null
 			);
-			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
-			universe.venueNext = venueNext;
 
-			if (worldToReload == null)
-			{
-				venueNext = new VenueControls
-				(
-					universe.controlBuilder.message
+			var venueMessage = new VenueMessage
+			(
+				messageAsDataBinding, null, null, null, null
+			);
+
+			var venueTask = new VenueTask
+			(
+				venueMessage,
+				() => //perform
+				{
+					return storageHelper.load(worldOld.name);
+				},
+				(universe: Universe, worldReloaded: World) => // done
+				{
+					universe.world = worldReloaded;
+					var venueNext: any = new VenueControls
 					(
-						universe,
-						size,
-						new DataBinding("No save exists to reload!", null, null),
-						() => // acknowledge
-						{
-							var venueNext: any = new VenueControls
-							(
-								universe.controlBuilder.worldLoad(universe, null)
-							);
-							venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
-							universe.venueNext = venueNext;
-						},
-						false
-					)
-				);
-				venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
-				universe.venueNext = venueNext;
-			}
-			else
-			{
-				universe.world = worldReloaded;
-			}
+						universe.controlBuilder.worldLoad(universe, null)
+					);
+					venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
+					universe.venueNext = venueNext;
+				}
+			);
+
+			messageAsDataBinding.contextSet(venueTask);
+
+			universe.venueNext = new VenueFader(venueTask, universe.venueCurrent, null, null)
 		};
 
 		var cancel = () =>
@@ -2177,7 +2211,7 @@ class ControlBuilder
 		{
 			var message =
 			(
-				wasSaveSuccessful ? "Profile saved successfully." : "Save failed due to errors."
+				wasSaveSuccessful ? "Game saved successfully." : "Save failed due to errors."
 			);
 
 			var venueNext: Venue = new VenueControls
@@ -2208,7 +2242,7 @@ class ControlBuilder
 			var messageAsDataBinding = new DataBinding
 			(
 				null, // context - Set below.
-				(c: VenueTask) => "Building record of game...",
+				(c: VenueTask) => "Saving game...",
 				null
 			);
 
@@ -2218,8 +2252,6 @@ class ControlBuilder
 				null, null, null, null
 			);
 
-			var wasSaveSuccessful = false;
-
 			var venueTask = new VenueTask
 			(
 				venueMessage,
@@ -2228,11 +2260,24 @@ class ControlBuilder
 					var profile = universe.profile;
 					var world = universe.world;
 
-					world.dateSaved = DateTime.now();
-					wasSaveSuccessful = universe.profileHelper.profileSave
-					(
-						profile
-					);
+					var storageHelper = universe.storageHelper;
+
+					var wasSaveSuccessful;
+					try
+					{
+						var worldName = world.name;
+						storageHelper.save(worldName, world);
+						if (profile.worldNames.indexOf(worldName) == -1)
+						{
+							profile.worldNames.push(world.name);
+							storageHelper.save(profile.name, profile);
+						}
+						wasSaveSuccessful = true;
+					}
+					catch (ex)
+					{
+						wasSaveSuccessful = false;
+					}
 
 					return wasSaveSuccessful;
 				},
@@ -2248,7 +2293,7 @@ class ControlBuilder
 
 		var saveToFilesystem = () =>
 		{
-			var venueMessage = VenueMessage.fromText("Building record of game...");
+			var venueMessage = VenueMessage.fromText("Saving game...");
 
 			var venueTask = new VenueTask
 			(

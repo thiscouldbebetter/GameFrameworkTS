@@ -2,15 +2,13 @@
 class Profile
 {
 	name: string;
-	worlds: World[];
+	worldNames: string[];
+	worldNameSelected: string;
 
-	worldSelected: World;
-
-	constructor(name: string, worlds: World[])
+	constructor(name: string, worldNames: string[])
 	{
 		this.name = name;
-		this.worlds = worlds;
-
-		this.worldSelected = null;
+		this.worldNames = worldNames;
+		this.worldNameSelected = null;
 	}
 }

@@ -221,8 +221,7 @@ class ItemHolder
 			size = universe.display.sizeDefault().clone();
 		}
 
-		var sizeBase = new Coords(200, 150, 1);
-		var scaleMultiplier = size.clone().divide(sizeBase);
+		var sizeBase = new Coords(200, 135, 1);
 
 		var fontHeight = 10;
 		var fontHeightSmall = fontHeight * .6;
@@ -374,7 +373,7 @@ class ItemHolder
 			new ControlLabel
 			(
 				"labelItemsHeld",
-				new Coords(10, 20, 0), // pos
+				new Coords(10, 5, 0), // pos
 				new Coords(70, 25, 0), // size
 				false, // isTextCentered
 				"Items Held:",
@@ -384,7 +383,7 @@ class ItemHolder
 			new ControlList
 			(
 				"listItems",
-				new Coords(10, 30, 0), // pos
+				new Coords(10, 15, 0), // pos
 				new Coords(70, 110, 0), // size
 				new DataBinding(this.itemEntities, null, null), // items
 				new DataBinding
@@ -412,7 +411,7 @@ class ItemHolder
 			new ControlButton
 			(
 				"buttonUp",
-				new Coords(85, 30, 0), // pos
+				new Coords(85, 15, 0), // pos
 				new Coords(15, 10, 0), // size
 				"Up",
 				fontHeightSmall,
@@ -438,7 +437,7 @@ class ItemHolder
 			new ControlButton
 			(
 				"buttonDown",
-				new Coords(85, 45, 0), // pos
+				new Coords(85, 30, 0), // pos
 				new Coords(15, 10, 0), // size
 				"Down",
 				fontHeightSmall,
@@ -464,7 +463,7 @@ class ItemHolder
 			new ControlButton
 			(
 				"buttonSplit",
-				new Coords(85, 60, 0), // pos
+				new Coords(85, 45, 0), // pos
 				new Coords(15, 10, 0), // size
 				"Split",
 				fontHeightSmall,
@@ -491,7 +490,7 @@ class ItemHolder
 			new ControlButton
 			(
 				"buttonJoin",
-				new Coords(85, 75, 0), // pos
+				new Coords(85, 60, 0), // pos
 				new Coords(15, 10, 0), // size
 				"Join",
 				fontHeightSmall,
@@ -523,7 +522,7 @@ class ItemHolder
 			new ControlButton
 			(
 				"buttonSort",
-				new Coords(85, 90, 0), // pos
+				new Coords(85, 75, 0), // pos
 				new Coords(15, 10, 0), // size
 				"Sort",
 				fontHeightSmall,
@@ -541,7 +540,7 @@ class ItemHolder
 			new ControlLabel
 			(
 				"labelItemSelected",
-				new Coords(150, 25, 0), // pos
+				new Coords(150, 10, 0), // pos
 				new Coords(100, 15, 0), // size
 				true, // isTextCentered
 				"Item Selected:",
@@ -551,7 +550,7 @@ class ItemHolder
 			new ControlLabel
 			(
 				"infoItemSelected",
-				new Coords(150, 35, 0), // pos
+				new Coords(150, 20, 0), // pos
 				new Coords(200, 15, 0), // size
 				true, // isTextCentered
 				new DataBinding
@@ -570,7 +569,7 @@ class ItemHolder
 			new ControlVisual
 			(
 				"visualImage",
-				new Coords(125, 40, 0), // pos
+				new Coords(125, 25, 0), // pos
 				new Coords(50, 50, 0), // size
 				new DataBinding
 				(
@@ -588,7 +587,7 @@ class ItemHolder
 			new ControlLabel
 			(
 				"infoStatus",
-				new Coords(150, 130, 0), // pos
+				new Coords(150, 115, 0), // pos
 				new Coords(200, 15, 0), // size
 				true, // isTextCentered
 				new DataBinding
@@ -606,7 +605,7 @@ class ItemHolder
 			new ControlButton
 			(
 				"buttonUse",
-				new Coords(135, 110, 0), // pos
+				new Coords(135, 95, 0), // pos
 				new Coords(15, 10, 0), // size
 				"Use",
 				fontHeightSmall,
@@ -631,7 +630,7 @@ class ItemHolder
 			new ControlButton
 			(
 				"buttonDrop",
-				new Coords(155, 110, 0), // pos
+				new Coords(155, 95, 0), // pos
 				new Coords(15, 10, 0), // size
 				"Drop",
 				fontHeightSmall,
@@ -713,7 +712,7 @@ class ItemHolder
 				new ControlLabel
 				(
 					"labelItems",
-					new Coords(100, 10, 0), // pos
+					new Coords(100, -5, 0), // pos
 					new Coords(100, 25, 0), // size
 					true, // isTextCentered
 					"Items",
@@ -725,7 +724,7 @@ class ItemHolder
 				new ControlButton
 				(
 					"buttonDone",
-					new Coords(170, 130, 0), // pos
+					new Coords(170, 115, 0), // pos
 					buttonSize.clone(),
 					"Done",
 					fontHeightSmall,
@@ -735,14 +734,13 @@ class ItemHolder
 					null, null
 				)
 			);
-		}
-		else
-		{
-			var titleHeightInverted = new Coords(0, -15, 0);
-			returnValue.size.add(titleHeightInverted);
-			returnValue.shiftChildPositions(titleHeightInverted);
+			var titleHeight = new Coords(0, 15, 0);
+			sizeBase.add(titleHeight);
+			returnValue.size.add(titleHeight);
+			returnValue.shiftChildPositions(titleHeight);
 		}
 
+		var scaleMultiplier = size.clone().divide(sizeBase);
 		returnValue.scalePosAndSize(scaleMultiplier);
 
 		return returnValue;

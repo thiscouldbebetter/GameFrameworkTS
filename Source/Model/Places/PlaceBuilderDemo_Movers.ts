@@ -298,8 +298,6 @@ class PlaceBuilderDemo_Movers
 			)
 		]);
 
-		var randomizer = this.parent.randomizer;
-
 		var friendlyEntityDefn = new Entity
 		(
 			"Friendly",
@@ -318,6 +316,7 @@ class PlaceBuilderDemo_Movers
 						var targetPos = actor.target;
 						if (targetPos == null)
 						{
+							var randomizer = universe.randomizer;
 							targetPos =
 								new Coords(0, 0, 0).randomize(randomizer).multiply(place.size);
 							actor.target = targetPos;
@@ -438,8 +437,6 @@ class PlaceBuilderDemo_Movers
 			)
 		]);
 
-		var randomizer = this.parent.randomizer;
-
 		var grazerActivity = (universe: Universe, world: World, place: Place, entityActor: Entity, target: any) =>
 		{
 			var actor = entityActor.actor();
@@ -450,6 +447,7 @@ class PlaceBuilderDemo_Movers
 				var itemsGrassInPlace = itemsInPlace.filter(x => x.item().defnName == "Grass");
 				if (itemsGrassInPlace.length == 0)
 				{
+					var randomizer = universe.randomizer;
 					targetPos =
 						new Coords(0, 0, 0).randomize(randomizer).multiply(place.size);
 				}
@@ -913,6 +911,20 @@ class PlaceBuilderDemo_Movers
 			{
 				var fontHeight = 12;
 				var labelSize = new Coords(150, fontHeight * 1.25, 0);
+				var marginX = fontHeight;
+
+				var secondsPlayingTotal = Math.floor
+				(
+					universe.world.timerTicksSoFar
+					/ universe.timerHelper.ticksPerSecond
+				);
+				var minutesPlayingTotal = Math.floor(secondsPlayingTotal / 60);
+				var hoursPlayingTotal = Math.floor(minutesPlayingTotal / 60);
+
+				var timePlayingAsString =
+					hoursPlayingTotal + "hours "
+					+ (minutesPlayingTotal % 60) + "minutes "
+					+ (secondsPlayingTotal % 60) + "seconds";
 
 				var statusAsControl = new ControlContainer
 				(
@@ -923,45 +935,68 @@ class PlaceBuilderDemo_Movers
 					[
 						new ControlLabel
 						(
-							"labelStatus",
-							new Coords(10, labelSize.y, 0), // pos
+							"labelProfile",
+							new Coords(marginX, labelSize.y, 0), // pos
 							labelSize.clone(),
 							false, // isTextCentered
-							"Health:" + entity.killable().integrity,
+							"Profile: " + universe.profile.name,
+							fontHeight
+						),
+
+						new ControlLabel
+						(
+							"labelTimePlaying",
+							new Coords(marginX, labelSize.y * 2, 0), // pos
+							labelSize.clone(),
+							false, // isTextCentered
+							"Time Playing: " + timePlayingAsString,
+							fontHeight
+						),
+
+						new ControlLabel
+						(
+							"labelHealth",
+							new Coords(marginX, labelSize.y * 3, 0), // pos
+							labelSize.clone(),
+							false, // isTextCentered
+							"Health: " + entity.killable().integrity + "/" + entity.killable().integrityMax,
 							fontHeight
 						),
 
 						new ControlLabel
 						(
 							"labelExperience",
-							new Coords(10, labelSize.y * 2, 0), // pos
+							new Coords(marginX, labelSize.y * 4, 0), // pos
 							labelSize.clone(),
 							false, // isTextCentered
-							"Experience:" + entity.skillLearner().learningAccumulated,
+							"Experience: " + entity.skillLearner().learningAccumulated,
 							fontHeight
 						),
 					],
 					null, null
 				);
 
+				var tabButtonSize = new Coords(40, 20, 0);
+				var tabPageSize = size.clone().subtract(new Coords(0, tabButtonSize.y + 10, 0));
+
 				var itemHolderAsControl = entity.itemHolder().toControl
 				(
-					universe, size, entity, venuePrev, false // includeTitleAndDoneButton
+					universe, tabPageSize, entity, venuePrev, false // includeTitleAndDoneButton
 				);
 
 				var equipmentUserAsControl = entity.equipmentUser().toControl
 				(
-					universe, size, entity, venuePrev, false // includeTitleAndDoneButton
+					universe, tabPageSize, entity, venuePrev, false // includeTitleAndDoneButton
 				);
 
 				var crafterAsControl = entity.itemCrafter().toControl
 				(
-					universe, size, entity, venuePrev, false // includeTitleAndDoneButton
+					universe, tabPageSize, entity, venuePrev, false // includeTitleAndDoneButton
 				);
 
 				var skillLearnerAsControl = entity.skillLearner().toControl
 				(
-					universe, size, entity, venuePrev, false // includeTitleAndDoneButton
+					universe, tabPageSize, entity, venuePrev, false // includeTitleAndDoneButton
 				);
 
 				var back = function()
@@ -976,6 +1011,7 @@ class PlaceBuilderDemo_Movers
 					"tabbedItems",
 					new Coords(0, 0, 0), // pos
 					size,
+					tabButtonSize,
 					[
 						statusAsControl,
 						itemHolderAsControl,

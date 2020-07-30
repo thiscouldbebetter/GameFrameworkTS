@@ -419,12 +419,15 @@ class PlaceBuilderDemo_Emplacements
 				new VisualDynamic
 				(
 					(u: Universe, w: World, d: Display, e: Entity) =>
-						new VisualText
+					{
+						var baseColor = "Brown";
+						return new VisualText
 						(
 							new DataBinding(e.portal().destinationPlaceName, null, null),
 							baseColor,
 							null
 						)
+					}
 				),
 				new Coords(0, entityDimension, 0)
 			)

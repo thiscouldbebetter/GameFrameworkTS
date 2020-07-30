@@ -189,7 +189,7 @@ class ControlTextBox implements Control
 	{
 		this.pos.multiply(scaleFactor);
 		this.size.multiply(scaleFactor);
-		// todo
+		this.fontHeightInPixels *= scaleFactor.y;
 		return this;
 	};
 

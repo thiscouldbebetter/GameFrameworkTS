@@ -20,7 +20,6 @@ class ItemCrafter {
             size = universe.display.sizeDefault().clone();
         }
         var sizeBase = new Coords(200, 150, 1);
-        var scaleMultiplier = size.clone().divide(sizeBase);
         var fontHeight = 10;
         var fontHeightSmall = fontHeight * .6;
         var fontHeightLarge = fontHeight * 1.5;
@@ -28,12 +27,12 @@ class ItemCrafter {
         var itemEntities = itemHolder.itemEntities;
         var crafter = this;
         var world = universe.world;
-        var back = function () {
+        var back = () => {
             var venueNext = venuePrev;
             venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
             universe.venueNext = venueNext;
         };
-        var stage = function () {
+        var stage = () => {
             var itemEntityToStage = crafter.itemEntitySelected;
             if (itemEntityToStage != null) {
                 var itemEntitiesStaged = crafter.itemEntitiesStaged;
@@ -42,7 +41,7 @@ class ItemCrafter {
                 }
             }
         };
-        var unstage = function () {
+        var unstage = () => {
             var itemEntityToUnstage = crafter.itemEntityStagedSelected;
             if (itemEntityToUnstage != null) {
                 var itemEntitiesStaged = crafter.itemEntitiesStaged;
@@ -51,7 +50,7 @@ class ItemCrafter {
                 }
             }
         };
-        var combine = function () {
+        var combine = () => {
             var recipe = crafter.recipeSelected;
             var itemsIn = recipe.itemsIn;
             for (var i = 0; i < itemsIn.length; i++) {
@@ -65,15 +64,15 @@ class ItemCrafter {
             }
             crafter.itemEntitiesStaged.length = 0;
         };
-        var returnValue = new ControlContainer("Crafting", new Coords(0, 0, 0), // pos
+        var returnValue = new ControlContainer("Craft", new Coords(0, 0, 0), // pos
         sizeBase.clone(), // size
         // children
         [
-            new ControlLabel("labelMaterials", new Coords(10, 20, 0), // pos
+            new ControlLabel("labelMaterials", new Coords(10, 5, 0), // pos
             new Coords(70, 25, 0), // size
             false, // isTextCentered
             "Materials Held:", fontHeightSmall),
-            new ControlList("listItemsHeld", new Coords(10, 30, 0), // pos
+            new ControlList("listItemsHeld", new Coords(10, 15, 0), // pos
             new Coords(80, 110, 0), // size
             new DataBinding(itemEntities, null, null), // items
             new DataBinding(null, (c) => c.item().toString(world), null), // bindingForItemText
@@ -83,7 +82,7 @@ class ItemCrafter {
             (universe) => {
                 stage();
             }, null),
-            new ControlButton("buttonStage", new Coords(95, 80, 0), // pos
+            new ControlButton("buttonStage", new Coords(95, 65, 0), // pos
             new Coords(10, 10, 0), // size
             ">", fontHeightSmall, true, // hasBorder
             new DataBinding(this, (c) => {
@@ -93,7 +92,7 @@ class ItemCrafter {
             }, null), // isEnabled
             stage, // click
             null, null),
-            new ControlButton("buttonUnstage", new Coords(95, 95, 0), // pos
+            new ControlButton("buttonUnstage", new Coords(95, 80, 0), // pos
             new Coords(10, 10, 0), // size
             "<", fontHeightSmall, true, // hasBorder
             new DataBinding(this, (c) => {
@@ -101,18 +100,18 @@ class ItemCrafter {
             }, null), // isEnabled
             unstage, // click
             null, null),
-            new ControlLabel("labelRecipe", new Coords(110, 20, 0), // pos
+            new ControlLabel("labelRecipe", new Coords(110, 5, 0), // pos
             new Coords(70, 25, 0), // size
             false, // isTextCentered
             "Recipe:", fontHeightSmall),
-            new ControlSelect("selectRecipe", new Coords(110, 30, 0), // pos
+            new ControlSelect("selectRecipe", new Coords(110, 15, 0), // pos
             new Coords(80, 10, 0), // size
             new DataBinding(this, (c) => c.recipeSelected, (c, v) => { c.recipeSelected = v; }), // valueSelected
             this.recipes, // options
             new DataBinding(null, (c) => c, null), // bindingForOptionValues
             new DataBinding(null, (c) => c.name, null), // bindingForOptionText
             fontHeightSmall),
-            new ControlList("listItemsInRecipe", new Coords(110, 40, 0), // pos
+            new ControlList("listItemsInRecipe", new Coords(110, 25, 0), // pos
             new Coords(80, 25, 0), // size
             new DataBinding(this, (c) => {
                 return (c.recipeSelected == null ? [] : c.recipeSelected.itemsIn);
@@ -121,20 +120,20 @@ class ItemCrafter {
             fontHeightSmall, null, // bindingForItemSelected
             DataBinding.fromGet((c) => c), // bindingForItemValue
             null, null, null),
-            new ControlButton("buttonCombine", new Coords(110, 70, 0), // pos
+            new ControlButton("buttonCombine", new Coords(110, 55, 0), // pos
             new Coords(30, 10, 0), // size
             "Combine:", fontHeightSmall, true, // hasBorder
             new DataBinding(this, (c) => c.isRecipeSelectedFulfilled(), null), // isEnabled
             combine, // click
             null, null),
-            new ControlList("listItemsStaged", new Coords(110, 80, 0), // pos
+            new ControlList("listItemsStaged", new Coords(110, 65, 0), // pos
             new Coords(80, 25, 0), // size
             new DataBinding(this, (c) => c.itemEntitiesStaged, null), // items
             new DataBinding(null, (c) => c.item().toString(world), null), // bindingForItemText
             fontHeightSmall, new DataBinding(this, (c) => c.itemEntityStagedSelected, (c, v) => { c.itemEntityStagedSelected = v; }), // bindingForItemSelected
             DataBinding.fromGet((c) => c), // bindingForItemValue
             null, null, null),
-            new ControlLabel("infoStatus", new Coords(150, 110, 0), // pos
+            new ControlLabel("infoStatus", new Coords(150, 95, 0), // pos
             new Coords(200, 15, 0), // size
             true, // isTextCentered
             new DataBinding(this, (c) => c.statusMessage, null), // text
@@ -146,22 +145,22 @@ class ItemCrafter {
             new ActionToInputsMapping("Back", [Input.Names().Escape], true),
         ]);
         if (includeTitleAndDoneButton) {
-            returnValue.children.splice(0, 0, new ControlLabel("labelCrafting", new Coords(100, 10, 0), // pos
+            returnValue.children.splice(0, 0, new ControlLabel("labelCrafting", new Coords(100, -5, 0), // pos
             new Coords(100, 25, 0), // size
             true, // isTextCentered
             "Crafting", fontHeightLarge));
-            returnValue.children.push(new ControlButton("buttonDone", new Coords(170, 130, 0), // pos
+            returnValue.children.push(new ControlButton("buttonDone", new Coords(170, 115, 0), // pos
             new Coords(20, 10, 0), // size
             "Done", fontHeightSmall, true, // hasBorder
             true, // isEnabled
             back, // click
             null, null));
+            var titleHeight = new Coords(0, 15, 0);
+            sizeBase.add(titleHeight);
+            returnValue.size.add(titleHeight);
+            returnValue.shiftChildPositions(titleHeight);
         }
-        else {
-            var titleHeightInverted = new Coords(0, -15, 0);
-            returnValue.size.add(titleHeightInverted);
-            returnValue.shiftChildPositions(titleHeightInverted);
-        }
+        var scaleMultiplier = size.clone().divide(sizeBase);
         returnValue.scalePosAndSize(scaleMultiplier);
         return returnValue;
     }

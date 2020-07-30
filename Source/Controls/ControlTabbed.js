@@ -1,9 +1,10 @@
 "use strict";
 class ControlTabbed {
-    constructor(name, pos, size, children, fontHeightInPixels, cancel) {
+    constructor(name, pos, size, tabButtonSize, children, fontHeightInPixels, cancel) {
         this.name = name;
         this.pos = pos;
         this.size = size;
+        this.tabButtonSize = tabButtonSize;
         this.children = children;
         this.childrenByName = ArrayHelper.addLookupsByName(this.children);
         this.cancel = cancel;
@@ -11,14 +12,14 @@ class ControlTabbed {
         this.isChildSelectedActive = false;
         fontHeightInPixels = fontHeightInPixels || 10;
         var marginSize = fontHeightInPixels;
-        var buttonSize = new Coords(50, fontHeightInPixels * 2, 0);
+        var tabPaneHeight = marginSize + this.tabButtonSize.y;
         var buttonsForChildren = [];
         for (var i = 0; i < this.children.length; i++) {
             var child = this.children[i];
-            child.pos.y += marginSize + buttonSize.y;
+            child.pos.y += tabPaneHeight;
             var childName = child.name;
-            var button = new ControlButton("button" + childName, new Coords(marginSize + buttonSize.x * i, marginSize, 0), // pos
-            buttonSize.clone(), childName, // text
+            var button = new ControlButton("button" + childName, new Coords(marginSize + this.tabButtonSize.x * i, marginSize, 0), // pos
+            this.tabButtonSize.clone(), childName, // text
             fontHeightInPixels, true, // hasBorder
             true, // isEnabled
             (b) => this.childSelectedIndex = buttonsForChildren.indexOf(b), // hack
@@ -28,8 +29,8 @@ class ControlTabbed {
         }
         if (this.cancel != null) {
             this.children.push(null);
-            var button = new ControlButton("buttonCancel", new Coords(this.size.x - marginSize - buttonSize.x, marginSize, 0), // pos
-            buttonSize.clone(), "Done", // text
+            var button = new ControlButton("buttonCancel", new Coords(this.size.x - marginSize - this.tabButtonSize.x, marginSize, 0), // pos
+            this.tabButtonSize.clone(), "Done", // text
             fontHeightInPixels, true, // hasBorder
             true, // isEnabled
             this.cancel, // click

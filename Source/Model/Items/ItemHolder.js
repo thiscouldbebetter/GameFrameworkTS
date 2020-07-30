@@ -152,8 +152,7 @@ class ItemHolder {
         if (size == null) {
             size = universe.display.sizeDefault().clone();
         }
-        var sizeBase = new Coords(200, 150, 1);
-        var scaleMultiplier = size.clone().divide(sizeBase);
+        var sizeBase = new Coords(200, 135, 1);
         var fontHeight = 10;
         var fontHeightSmall = fontHeight * .6;
         var fontHeightLarge = fontHeight * 1.5;
@@ -260,11 +259,11 @@ class ItemHolder {
         var buttonSize = new Coords(20, 10, 0);
         var visualNone = new VisualNone();
         var childControls = [
-            new ControlLabel("labelItemsHeld", new Coords(10, 20, 0), // pos
+            new ControlLabel("labelItemsHeld", new Coords(10, 5, 0), // pos
             new Coords(70, 25, 0), // size
             false, // isTextCentered
             "Items Held:", fontHeightSmall),
-            new ControlList("listItems", new Coords(10, 30, 0), // pos
+            new ControlList("listItems", new Coords(10, 15, 0), // pos
             new Coords(70, 110, 0), // size
             new DataBinding(this.itemEntities, null, null), // items
             new DataBinding(null, (c) => c.item().toString(world), null), // bindingForItemText
@@ -275,7 +274,7 @@ class ItemHolder {
              {
                 use();
             }, null),
-            new ControlButton("buttonUp", new Coords(85, 30, 0), // pos
+            new ControlButton("buttonUp", new Coords(85, 15, 0), // pos
             new Coords(15, 10, 0), // size
             "Up", fontHeightSmall, true, // hasBorder
             new DataBinding(this, (c) => {
@@ -285,7 +284,7 @@ class ItemHolder {
             }, null), // isEnabled
             up, // click
             null, null),
-            new ControlButton("buttonDown", new Coords(85, 45, 0), // pos
+            new ControlButton("buttonDown", new Coords(85, 30, 0), // pos
             new Coords(15, 10, 0), // size
             "Down", fontHeightSmall, true, // hasBorder
             new DataBinding(this, (c) => {
@@ -294,7 +293,7 @@ class ItemHolder {
                 return returnValue;
             }, null), // isEnabled
             down, null, null),
-            new ControlButton("buttonSplit", new Coords(85, 60, 0), // pos
+            new ControlButton("buttonSplit", new Coords(85, 45, 0), // pos
             new Coords(15, 10, 0), // size
             "Split", fontHeightSmall, true, // hasBorder
             new DataBinding(this, (c) => {
@@ -304,7 +303,7 @@ class ItemHolder {
                 return returnValue;
             }, null), // isEnabled
             split, null, null),
-            new ControlButton("buttonJoin", new Coords(85, 75, 0), // pos
+            new ControlButton("buttonJoin", new Coords(85, 60, 0), // pos
             new Coords(15, 10, 0), // size
             "Join", fontHeightSmall, true, // hasBorder
             new DataBinding(this, (c) => {
@@ -314,16 +313,16 @@ class ItemHolder {
                 return returnValue;
             }, null), // isEnabled
             join, null, null),
-            new ControlButton("buttonSort", new Coords(85, 90, 0), // pos
+            new ControlButton("buttonSort", new Coords(85, 75, 0), // pos
             new Coords(15, 10, 0), // size
             "Sort", fontHeightSmall, true, // hasBorder
             new DataBinding(this, (c) => (c.itemEntities.length > 1), null), // isEnabled
             sort, null, null),
-            new ControlLabel("labelItemSelected", new Coords(150, 25, 0), // pos
+            new ControlLabel("labelItemSelected", new Coords(150, 10, 0), // pos
             new Coords(100, 15, 0), // size
             true, // isTextCentered
             "Item Selected:", fontHeightSmall),
-            new ControlLabel("infoItemSelected", new Coords(150, 35, 0), // pos
+            new ControlLabel("infoItemSelected", new Coords(150, 20, 0), // pos
             new Coords(200, 15, 0), // size
             true, // isTextCentered
             new DataBinding(this, (c) => {
@@ -331,21 +330,21 @@ class ItemHolder {
                 return (i == null ? "-" : i.item().toString(world));
             }, null), // text
             fontHeightSmall),
-            new ControlVisual("visualImage", new Coords(125, 40, 0), // pos
+            new ControlVisual("visualImage", new Coords(125, 25, 0), // pos
             new Coords(50, 50, 0), // size
             new DataBinding(this, (c) => {
                 var i = c.itemEntitySelected;
                 return (i == null ? visualNone : i.item().defn(world).visual);
             }, null), "Black" // colorBackground
             ),
-            new ControlLabel("infoStatus", new Coords(150, 130, 0), // pos
+            new ControlLabel("infoStatus", new Coords(150, 115, 0), // pos
             new Coords(200, 15, 0), // size
             true, // isTextCentered
             new DataBinding(this, (c) => {
                 return c.statusMessage;
             }, null), // text
             fontHeightSmall),
-            new ControlButton("buttonUse", new Coords(135, 110, 0), // pos
+            new ControlButton("buttonUse", new Coords(135, 95, 0), // pos
             new Coords(15, 10, 0), // size
             "Use", fontHeightSmall, true, // hasBorder
             new DataBinding(this, (c) => {
@@ -355,7 +354,7 @@ class ItemHolder {
             (universe) => {
                 use();
             }, null, null),
-            new ControlButton("buttonDrop", new Coords(155, 110, 0), // pos
+            new ControlButton("buttonDrop", new Coords(155, 95, 0), // pos
             new Coords(15, 10, 0), // size
             "Drop", fontHeightSmall, true, // hasBorder
             new DataBinding(this, (c) => (c.itemEntitySelected != null), null), // isEnabled
@@ -407,21 +406,21 @@ class ItemHolder {
         ]);
         if (includeTitleAndDoneButton) {
             childControls.splice(0, // indexToInsertAt
-            0, new ControlLabel("labelItems", new Coords(100, 10, 0), // pos
+            0, new ControlLabel("labelItems", new Coords(100, -5, 0), // pos
             new Coords(100, 25, 0), // size
             true, // isTextCentered
             "Items", fontHeightLarge));
-            childControls.push(new ControlButton("buttonDone", new Coords(170, 130, 0), // pos
+            childControls.push(new ControlButton("buttonDone", new Coords(170, 115, 0), // pos
             buttonSize.clone(), "Done", fontHeightSmall, true, // hasBorder
             true, // isEnabled
             back, // click
             null, null));
+            var titleHeight = new Coords(0, 15, 0);
+            sizeBase.add(titleHeight);
+            returnValue.size.add(titleHeight);
+            returnValue.shiftChildPositions(titleHeight);
         }
-        else {
-            var titleHeightInverted = new Coords(0, -15, 0);
-            returnValue.size.add(titleHeightInverted);
-            returnValue.shiftChildPositions(titleHeightInverted);
-        }
+        var scaleMultiplier = size.clone().divide(sizeBase);
         returnValue.scalePosAndSize(scaleMultiplier);
         return returnValue;
     }

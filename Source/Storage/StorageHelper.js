@@ -8,6 +8,20 @@ class StorageHelper {
         this.serializer = serializer;
         this.compressor = compressor;
     }
+    delete(propertyName) {
+        var propertyNamePrefixed = this.propertyNamePrefix + propertyName;
+        localStorage.removeItem(propertyNamePrefixed);
+    }
+    ;
+    deleteAll() {
+        var keysAll = Object.keys(localStorage);
+        var keysWithPrefix = keysAll.filter(x => x.startsWith(this.propertyNamePrefix));
+        for (var key in keysWithPrefix) {
+            var itemToDelete = localStorage.getItem(key);
+            localStorage.removeItem(itemToDelete);
+        }
+    }
+    ;
     load(propertyName) {
         var returnValue;
         var propertyNamePrefixed = this.propertyNamePrefix + propertyName;

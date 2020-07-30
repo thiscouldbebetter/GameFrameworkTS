@@ -1,8 +1,8 @@
 "use strict";
 class Profile {
-    constructor(name, worlds) {
+    constructor(name, worldNames) {
         this.name = name;
-        this.worlds = worlds;
-        this.worldSelected = null;
+        this.worldNames = worldNames;
+        this.worldNameSelected = null;
     }
 }

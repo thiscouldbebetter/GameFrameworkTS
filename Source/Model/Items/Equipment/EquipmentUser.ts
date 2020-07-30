@@ -136,6 +136,18 @@ class EquipmentUser
 		}
 	}
 
+	useItemInSocketNumbered(universe: Universe, world: World, place: Place, actor: Entity, socketNumber: number)
+	{
+		var equipmentUser = actor.equipmentUser();
+		var socketName = "Item" + socketNumber;
+		var entityItemEquipped = equipmentUser.itemEntityInSocketWithName(socketName);
+		if (entityItemEquipped != null)
+		{
+			var itemEquipped = entityItemEquipped.item();
+			itemEquipped.use(universe, world, place, actor, entityItemEquipped);
+		}
+	}
+
 	// control
 
 	toControl
@@ -151,8 +163,7 @@ class EquipmentUser
 			size = universe.display.sizeDefault().clone();
 		}
 
-		var sizeBase = new Coords(200, 150, 1);
-		var scaleMultiplier = size.clone().divide(sizeBase);
+		var sizeBase = new Coords(200, 135, 1);
 
 		var fontHeight = 10;
 		var fontHeightSmall = fontHeight * .6;
@@ -189,7 +200,7 @@ class EquipmentUser
 		var listEquippables = new ControlList
 		(
 			"listEquippables",
-			new Coords(10, 30, 0), // pos
+			new Coords(10, 15, 0), // pos
 			new Coords(70, listHeight, 0), // size
 			new DataBinding(itemEntitiesEquippable, null, null), // items
 			new DataBinding
@@ -223,7 +234,7 @@ class EquipmentUser
 		var listEquipped = new ControlList
 		(
 			"listEquipped",
-			new Coords(90, 30, 0), // pos
+			new Coords(90, 15, 0), // pos
 			new Coords(100, listHeight, 0), // size
 			new DataBinding(sockets, null, null), // items
 			new DataBinding
@@ -263,7 +274,7 @@ class EquipmentUser
 
 		var returnValue = new ControlContainer
 		(
-			"Equipment",
+			"Equip",
 			new Coords(0, 0, 0), // pos
 			sizeBase.clone(), // size
 			// children
@@ -271,7 +282,7 @@ class EquipmentUser
 				new ControlLabel
 				(
 					"labelEquippable",
-					new Coords(10, 20, 0), // pos
+					new Coords(10, 5, 0), // pos
 					new Coords(70, 25, 0), // size
 					false, // isTextCentered
 					"Equippable:",
@@ -283,7 +294,7 @@ class EquipmentUser
 				new ControlLabel
 				(
 					"labelEquipped",
-					new Coords(90, 20, 0), // pos
+					new Coords(90, 5, 0), // pos
 					new Coords(100, 25, 0), // size
 					false, // isTextCentered
 					"Equipped:",
@@ -295,7 +306,7 @@ class EquipmentUser
 				new ControlLabel
 				(
 					"infoStatus",
-					new Coords(10, 130, 0), // pos
+					new Coords(10, 115, 0), // pos
 					new Coords(160, 15, 0), // size
 					false, // isTextCentered
 					new DataBinding
@@ -324,7 +335,7 @@ class EquipmentUser
 				new ControlLabel
 				(
 					"labelEquipment",
-					new Coords(100, 10, 0), // pos
+					new Coords(100, -5, 0), // pos
 					new Coords(100, 25, 0), // size
 					true, // isTextCentered
 					"Equipment",
@@ -336,7 +347,7 @@ class EquipmentUser
 				new ControlButton
 				(
 					"buttonDone",
-					new Coords(170, 130, 0), // pos
+					new Coords(170, 115, 0), // pos
 					new Coords(20, 10, 0), // size
 					"Done",
 					fontHeightSmall,
@@ -346,14 +357,14 @@ class EquipmentUser
 					null, null
 				)
 			);
-		}
-		else
-		{
-			var titleHeightInverted = new Coords(0, -15, 0);
-			returnValue.size.add(titleHeightInverted);
-			returnValue.shiftChildPositions(titleHeightInverted);
+
+			var titleHeight = new Coords(0, 15, 0);
+			sizeBase.add(titleHeight);
+			returnValue.size.add(titleHeight);
+			returnValue.shiftChildPositions(titleHeight);
 		}
 
+		var scaleMultiplier = size.clone().divide(sizeBase);
 		returnValue.scalePosAndSize(scaleMultiplier);
 
 		return returnValue;

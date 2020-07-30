@@ -19,7 +19,7 @@ class Movable
 		this._accelerate(universe, world, place, entityMovable, this.accelerationPerTick);
 	}
 
-	accelerateForward(universe: Universe, world: World, place: Place, entityMovable: Entity, accelerationPertick: number)
+	accelerateForward(universe: Universe, world: World, place: Place, entityMovable: Entity, accelerationPerTick: number)
 	{
 		var entityLoc = entityMovable.locatable().loc;
 		entityLoc.accel.overwriteWith
@@ -30,6 +30,21 @@ class Movable
 			entityMovable.movable().accelerationPerTick
 		);
 	};
+
+	accelerateInDirection
+	(
+		universe: Universe, world: World, place: Place, entity: Entity, directionToMove: Coords
+	)
+	{
+		var entityLoc = entity.locatable().loc;
+		var isEntityStandingOnGround =
+			(entityLoc.pos.z >= 0 && entityLoc.vel.z >= 0);
+		if (isEntityStandingOnGround)
+		{
+			entityLoc.orientation.forwardSet(directionToMove);
+			entity.movable().accelerate(universe, world, place, entity);
+		}
+	}
 
 	// cloneable
 

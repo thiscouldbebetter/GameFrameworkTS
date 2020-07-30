@@ -4,6 +4,7 @@ class ControlTabbed implements Control
 	name: string;
 	pos: Coords;
 	size: Coords;
+	tabButtonSize: Coords;
 	children: Control[];
 	childrenByName: any;
 	fontHeightInPixels: number;
@@ -23,11 +24,17 @@ class ControlTabbed implements Control
 	_mouseMovePos: Coords;
 	_posToCheck: Coords;
 
-	constructor(name: string, pos: Coords, size: Coords, children: Control[], fontHeightInPixels: number, cancel: (u: Universe) => void )
+	constructor
+	(
+		name: string, pos: Coords, size: Coords, tabButtonSize: Coords,
+		children: Control[], fontHeightInPixels: number,
+		cancel: (u: Universe) => void
+	)
 	{
 		this.name = name;
 		this.pos = pos;
 		this.size = size;
+		this.tabButtonSize = tabButtonSize;
 		this.children = children;
 		this.childrenByName = ArrayHelper.addLookupsByName(this.children);
 		this.cancel = cancel;
@@ -38,21 +45,21 @@ class ControlTabbed implements Control
 		fontHeightInPixels = fontHeightInPixels || 10;
 
 		var marginSize = fontHeightInPixels;
-		var buttonSize = new Coords(50, fontHeightInPixels * 2, 0);
+		var tabPaneHeight = marginSize + this.tabButtonSize.y;
 		var buttonsForChildren: Control[] = [];
 
 		for (var i = 0; i < this.children.length; i++)
 		{
 			var child = this.children[i];
 
-			child.pos.y += marginSize + buttonSize.y;
+			child.pos.y += tabPaneHeight;
 
 			var childName = child.name;
 			var button = new ControlButton
 			(
 				"button" + childName,
-				new Coords(marginSize + buttonSize.x * i, marginSize, 0), // pos
-				buttonSize.clone(),
+				new Coords(marginSize + this.tabButtonSize.x * i, marginSize, 0), // pos
+				this.tabButtonSize.clone(),
 				childName, // text
 				fontHeightInPixels,
 				true, // hasBorder
@@ -70,8 +77,8 @@ class ControlTabbed implements Control
 			var button = new ControlButton
 			(
 				"buttonCancel",
-				new Coords(this.size.x - marginSize - buttonSize.x, marginSize, 0), // pos
-				buttonSize.clone(),
+				new Coords(this.size.x - marginSize - this.tabButtonSize.x, marginSize, 0), // pos
+				this.tabButtonSize.clone(),
 				"Done", // text
 				fontHeightInPixels,
 				true, // hasBorder

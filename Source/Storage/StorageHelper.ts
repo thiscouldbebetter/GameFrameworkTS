@@ -17,6 +17,25 @@ class StorageHelper
 		this.compressor = compressor;
 	}
 
+	delete(propertyName: string)
+	{
+		var propertyNamePrefixed =
+			this.propertyNamePrefix + propertyName;
+
+		localStorage.removeItem(propertyNamePrefixed);
+	};
+
+	deleteAll()
+	{
+		var keysAll = Object.keys(localStorage);
+		var keysWithPrefix = keysAll.filter(x => x.startsWith(this.propertyNamePrefix));
+		for (var key in keysWithPrefix)
+		{
+			var itemToDelete = localStorage.getItem(key);
+			localStorage.removeItem(itemToDelete);
+		}
+	};
+
 	load(propertyName: string)
 	{
 		var returnValue;

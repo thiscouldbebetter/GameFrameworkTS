@@ -252,7 +252,14 @@ class SerializerNode
 						}
 					}
 
-					this.o[childName] = child;
+					if (this.o.constructor.name == Map.name)
+					{
+						this.o.set(childName, child);
+					}
+					else
+					{
+						this.o[childName] = child;
+					}
 				}
 			}
 

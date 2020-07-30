@@ -14,7 +14,6 @@ class Universe
 	idHelper: IDHelper;
 	inputHelper: InputHelper;
 	platformHelper: PlatformHelper;
-	profileHelper: ProfileHelper;
 	randomizer: RandomizerSystem;
 	serializer: Serializer;
 	soundHelper: SoundHelper;
@@ -86,8 +85,6 @@ class Universe
 			this.serializer,
 			new CompressorLZW()
 		);
-
-		this.profileHelper = new ProfileHelper(this.storageHelper);
 
 		this.display.initialize(this);
 		this.platformHelper.platformableAdd(this.display);

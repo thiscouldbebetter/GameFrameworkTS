@@ -205,7 +205,10 @@ class PlaceBuilderDemo_Emplacements {
                 new Coords(0, -1, 0),
                 new Coords(0.5, -0.5, 0)
             ]).transform(Transform_Scale.fromScalar(entityDimension)), baseColor, null),
-            new VisualOffset(new VisualDynamic((u, w, d, e) => new VisualText(new DataBinding(e.portal().destinationPlaceName, null, null), baseColor, null)), new Coords(0, entityDimension, 0))
+            new VisualOffset(new VisualDynamic((u, w, d, e) => {
+                var baseColor = "Brown";
+                return new VisualText(new DataBinding(e.portal().destinationPlaceName, null, null), baseColor, null);
+            }), new Coords(0, entityDimension, 0))
         ]);
         var portalEntity = new Entity("Portal", [
             new Collidable(new Box(new Coords(0, 0, 0), entitySize), null, null),
