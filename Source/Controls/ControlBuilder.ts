@@ -836,23 +836,23 @@ class ControlBuilder
 
 				new ControlLabel
 				(
-					"labelSelectAWorld",
+					"labelSelectASave",
 					new Coords(100, 40, 0), // pos
 					new Coords(100, 25, 0), // size
 					true, // isTextCentered
-					"Select a World:",
+					"Select a Save:",
 					fontHeight
 				),
 
 				new ControlList
 				(
-					"listWorlds",
+					"listSaveStates",
 					new Coords(25, 50, 0), // pos
 					new Coords(150, 50, 0), // size
 					new DataBinding
 					(
 						universe.profile,
-						(c: Profile) => c.worldNames,
+						(c: Profile) => c.saveStateNames,
 						null
 					), // items
 					DataBinding.fromGet( (c: string) => c ), // bindingForOptionText
@@ -860,8 +860,8 @@ class ControlBuilder
 					new DataBinding
 					(
 						universe.profile,
-						(c: Profile) => c.worldNameSelected,
-						(c: Profile, v: string) => { c.worldNameSelected = v; }
+						(c: Profile) => c.saveStateNameSelected,
+						(c: Profile, v: string) => { c.saveStateNameSelected = v; }
 					), // bindingForOptionSelected
 					DataBinding.fromGet( (c: string) => c ), // value
 					null, null, null
@@ -902,13 +902,13 @@ class ControlBuilder
 					new DataBinding
 					(
 						universe.profile,
-						(c: Profile) => (c.worldNameSelected != null),
+						(c: Profile) => (c.saveStateNameSelected != null),
 						null
 					),
 					() => // click
 					{
-						var worldNameSelected = universe.profile.worldNameSelected;
-						if (worldNameSelected != null)
+						var saveStateNameSelected = universe.profile.saveStateNameSelected;
+						if (saveStateNameSelected != null)
 						{
 							var messageAsDataBinding = new DataBinding
 							(
@@ -927,10 +927,11 @@ class ControlBuilder
 								venueMessage,
 								() => //perform
 								{
-									return universe.storageHelper.load(worldNameSelected);
+									return universe.storageHelper.load(saveStateNameSelected);
 								},
-								(universe: Universe, worldSelected: World) => // done
+								(universe: Universe, saveStateSelected: SaveState) => // done
 								{
+									var worldSelected = saveStateSelected.world;
 									universe.world = worldSelected;
 									var venueNext: Venue = new VenueControls
 									(
@@ -1932,28 +1933,27 @@ class ControlBuilder
 					true, // isEnabled
 					() => // click
 					{
-						var world = universe.world;
+						var saveStateName = universe.profile.saveStateNameSelected;
 
 						var controlConfirm = universe.controlBuilder.confirm
 						(
 							universe,
 							size,
-							"Delete world \""
-								+ world.name
+							"Delete save \""
+								+ saveStateName
 								+ "\"?",
 							() => // confirm
 							{
 								var storageHelper = universe.storageHelper;
 
 								var profile = universe.profile;
-								var world = universe.world;
 
-								var worldNames = profile.worldNames;
-								ArrayHelper.remove(worldNames, world.name);
+								var saveStateNames = profile.saveStateNames;
+								ArrayHelper.remove(saveStateNames, saveStateName);
 								storageHelper.save(profile.name, profile);
 
 								universe.world = null;
-								storageHelper.delete(world.name);
+								storageHelper.delete(saveStateName);
 
 								var venueNext: any = new VenueControls
 								(
@@ -2005,10 +2005,6 @@ class ControlBuilder
 		{
 			var storageHelper = universe.storageHelper;
 
-			var worldOld = universe.world;
-
-
-
 			var messageAsDataBinding = new DataBinding
 			(
 				null, // Will be set below.
@@ -2026,11 +2022,13 @@ class ControlBuilder
 				venueMessage,
 				() => //perform
 				{
-					return storageHelper.load(worldOld.name);
+					var profile = universe.profile;
+					var saveStateNameSelected = profile.saveStateNameSelected;
+					return storageHelper.load(saveStateNameSelected);
 				},
-				(universe: Universe, worldReloaded: World) => // done
+				(universe: Universe, saveStateReloaded: SaveState) => // done
 				{
-					universe.world = worldReloaded;
+					universe.world = saveStateReloaded.world;
 					var venueNext: any = new VenueControls
 					(
 						universe.controlBuilder.worldLoad(universe, null)
@@ -2062,26 +2060,65 @@ class ControlBuilder
 			this.sizeBase.clone(), // size
 			// children
 			[
+				new ControlLabel
+				(
+					"labelProfileName",
+					new Coords(100, 25, 0), // pos
+					new Coords(120, 25, 0), // size
+					true, // isTextCentered
+					"Profile: " + universe.profile.name,
+					fontHeight
+				),
+
+				new ControlLabel
+				(
+					"labelSelectASave",
+					new Coords(100, 40, 0), // pos
+					new Coords(100, 25, 0), // size
+					true, // isTextCentered
+					"Select a Save:",
+					fontHeight
+				),
+
+				new ControlList
+				(
+					"listSaveStates",
+					new Coords(30, 50, 0), // pos
+					new Coords(140, 50, 0), // size
+					new DataBinding
+					(
+						universe.profile,
+						(c: Profile) => c.saveStateNames,
+						null
+					), // items
+					DataBinding.fromGet( (c: string) => c ), // bindingForOptionText
+					fontHeight,
+					new DataBinding
+					(
+						universe.profile,
+						(c: Profile) => c.saveStateNameSelected,
+						(c: Profile, v: string) => { c.saveStateNameSelected = v; }
+					), // bindingForOptionSelected
+					DataBinding.fromGet( (c: string) => c ), // value
+					null, null, null
+				),
+
 				new ControlButton
 				(
 					"buttonLoadFromServer",
-					new Coords(30, 15, 0), // pos
-					new Coords(140, 25, 0), // size
-					"Reload from Local Storage",
+					new Coords(30, 105, 0), // pos
+					new Coords(40, 20, 0), // size
+					"Load",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					new DataBinding(true, null, null), // isEnabled
 					() => // click
 					{
 						var controlConfirm = universe.controlBuilder.confirm
 						(
-							universe,
-							size,
-							"Abandon the current game?",
-							confirm,
-							cancel
+							universe, size, "Abandon the current game?", 
+							confirm, cancel
 						);
-
 						var venueConfirm = new VenueControls(controlConfirm);
 						universe.venueNext = new VenueFader(venueConfirm, universe.venueCurrent, null, null);
 					},
@@ -2091,9 +2128,9 @@ class ControlBuilder
 				new ControlButton
 				(
 					"buttonLoadFromFile",
-					new Coords(30, 50, 0), // pos
-					new Coords(140, 25, 0), // size
-					"Load from File",
+					new Coords(80, 105, 0), // pos
+					new Coords(40, 20, 0), // size
+					"Load File",
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
@@ -2170,8 +2207,8 @@ class ControlBuilder
 				new ControlButton
 				(
 					"buttonReturn",
-					new Coords(30, 105, 0), // pos
-					new Coords(140, 25, 0), // size
+					new Coords(130, 105, 0), // pos
+					new Coords(40, 20, 0), // size
 					"Return",
 					fontHeight,
 					true, // hasBorder
@@ -2259,19 +2296,31 @@ class ControlBuilder
 				{
 					var profile = universe.profile;
 					var world = universe.world;
+					var now = DateTime.now();
+					world.dateSaved = now;
+
+					var nowAsString = now.toStringMMDD_HHMM_SS();
+					var saveStateName = "Save-" + nowAsString;
+					var saveState = new SaveState(saveStateName, world);
 
 					var storageHelper = universe.storageHelper;
 
 					var wasSaveSuccessful;
 					try
 					{
-						var worldName = world.name;
-						storageHelper.save(worldName, world);
-						if (profile.worldNames.indexOf(worldName) == -1)
+						storageHelper.save(saveStateName, saveState);
+						if (profile.saveStateNames.indexOf(saveStateName) == -1)
 						{
-							profile.worldNames.push(world.name);
+							profile.saveStateNames.push(saveStateName);
 							storageHelper.save(profile.name, profile);
 						}
+						var profileNames = storageHelper.load("ProfileNames");
+						if (profileNames.indexOf(profile.name) == -1)
+						{
+							profileNames.push(profile.name);
+							storageHelper.save("ProfileNames", profileNames);
+						}
+
 						wasSaveSuccessful = true;
 					}
 					catch (ex)
@@ -2348,7 +2397,6 @@ class ControlBuilder
 
 			universe.venueNext = new VenueFader(venueTask, universe.venueCurrent, null, null);
 		};
-
 
 		var returnValue = new ControlContainer
 		(

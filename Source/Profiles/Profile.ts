@@ -2,13 +2,13 @@
 class Profile
 {
 	name: string;
-	worldNames: string[];
-	worldNameSelected: string;
+	saveStateNames: string[];
+	saveStateNameSelected: string;
 
-	constructor(name: string, worldNames: string[])
+	constructor(name: string, saveStateNames: string[])
 	{
 		this.name = name;
-		this.worldNames = worldNames;
-		this.worldNameSelected = null;
+		this.saveStateNames = saveStateNames;
+		this.saveStateNameSelected = null;
 	}
 }

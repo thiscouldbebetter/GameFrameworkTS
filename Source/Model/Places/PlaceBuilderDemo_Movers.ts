@@ -518,6 +518,7 @@ class PlaceBuilderDemo_Movers
 
 	entityDefnBuildPlayer(entityDimension: number): Entity
 	{
+		var entityDefnNamePlayer = "Player";
 		var visualEyeRadius = entityDimension * .75 / 2;
 		var visualBuilder = new VisualBuilder();
 		var visualEyesBlinking = visualBuilder.eyesBlinking(visualEyeRadius);
@@ -526,11 +527,11 @@ class PlaceBuilderDemo_Movers
 		var playerCollider = new Sphere(new Coords(0, 0, 0), playerHeadRadius);
 		var playerColor = "Gray";
 
-		var playerVisualBodyNormal = visualBuilder.circleWithEyes
+		var playerVisualBodyNormal: Visual = visualBuilder.circleWithEyesAndLegs
 		(
 			playerHeadRadius, playerColor, visualEyeRadius, visualEyesBlinking
 		);
-		var playerVisualBodyHidden = visualBuilder.circleWithEyes
+		var playerVisualBodyHidden = visualBuilder.circleWithEyesAndLegs
 		(
 			playerHeadRadius, "Black", visualEyeRadius, visualEyesBlinking
 		);
@@ -600,7 +601,7 @@ class PlaceBuilderDemo_Movers
 
 		var playerVisualName = new VisualOffset
 		(
-			new VisualText(new DataBinding("Player", null, null), playerColor, null),
+			new VisualText(new DataBinding(entityDefnNamePlayer, null, null), playerColor, null),
 			new Coords(0, 0 - playerHeadRadius * 3, 0)
 		);
 		var playerVisualHealthBar = new VisualOffset
@@ -910,7 +911,7 @@ class PlaceBuilderDemo_Movers
 			(universe: Universe, size: Coords, entity: Entity, venuePrev: Venue) => // toControl
 			{
 				var fontHeight = 12;
-				var labelSize = new Coords(150, fontHeight * 1.25, 0);
+				var labelSize = new Coords(300, fontHeight * 1.25, 0);
 				var marginX = fontHeight;
 
 				var secondsPlayingTotal = Math.floor
@@ -922,9 +923,9 @@ class PlaceBuilderDemo_Movers
 				var hoursPlayingTotal = Math.floor(minutesPlayingTotal / 60);
 
 				var timePlayingAsString =
-					hoursPlayingTotal + "hours "
-					+ (minutesPlayingTotal % 60) + "minutes "
-					+ (secondsPlayingTotal % 60) + "seconds";
+					hoursPlayingTotal + " hours "
+					+ (minutesPlayingTotal % 60) + " minutes "
+					+ (secondsPlayingTotal % 60) + " seconds";
 
 				var statusAsControl = new ControlContainer
 				(
@@ -1028,7 +1029,7 @@ class PlaceBuilderDemo_Movers
 
 		var playerEntityDefn = new Entity
 		(
-			"Player",
+			entityDefnNamePlayer,
 			[
 				new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
 				new Collidable

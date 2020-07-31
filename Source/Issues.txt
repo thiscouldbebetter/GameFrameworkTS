@@ -11,7 +11,8 @@ Crafting - Facilities - Crafter + Container
 Clickable Quick Slots
 Grazers Drop Meat
 Carnivores, Who Eat Grazers
-Animal Procreation and Aging
+Animal Aging and Natural Death
+Animal Procreation
 Unloading World Before Save, Reloading After
 Storage - Separate Profiles and Worlds
 Images in Lists and Grids
@@ -28,7 +29,6 @@ Map Tiles as Obstacles
 Map Tiles from Images
 Vehicles
 Damage Types
-Shovel, Which Digs Holes
 Agriculture - Seeds, Planting, Watering, Harvesting
 Generated Map Tiles
 Load/Unload Zones in Terrarium
@@ -39,9 +39,13 @@ Smoke
 Journal and Quests
 Auto-Map
 Player Notes
-
+Saves - Fix Spacing on Load Screen
+Saves - Move DateSave from World to Save
+Saves - Add Description
+Saves - Add Snapshot
 
 Fixes
 -----
 Load World From File
-Sword Swing Direction
+Sword Swing Direction is Wrong
+Barter - Trade Coins and Sword for Gun, Still Have Sword

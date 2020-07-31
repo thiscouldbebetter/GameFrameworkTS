@@ -38,63 +38,67 @@ class VisualAnimation implements Visual
 		this.update(universe, world, display, entity);
 	};
 
-	frameCurrent(drawable: Drawable)
+	frameCurrent(world: World, drawable: Drawable)
 	{
-		var frameIndexCurrent = this.frameIndexCurrent(drawable);
+		var frameIndexCurrent = this.frameIndexCurrent(world, drawable);
 		var frameCurrent = this.frames[frameIndexCurrent];
 		return frameCurrent;
 	};
 
-	frameIndexCurrent(drawable: Drawable)
+	frameIndexCurrent(world: World, drawable: Drawable)
 	{
-		var ticksForFramesSoFar = 0;
-		var ticksToHoldFrames = this.ticksToHoldFrames;
-		var f = 0;
-		for (f = 0; f < ticksToHoldFrames.length; f++)
+		var returnValue = -1;
+
+		var ticksSinceStarted = world.timerTicksSoFar - drawable.tickStarted;
+
+		if (ticksSinceStarted >= this.ticksToComplete)
 		{
-			var ticksToHoldFrame = ticksToHoldFrames[f];
-			ticksForFramesSoFar += ticksToHoldFrame;
-			if (ticksForFramesSoFar >= drawable.ticksSinceStarted)
+			if (this.isRepeating)
 			{
-				break;
+				ticksSinceStarted = ticksSinceStarted % this.ticksToComplete;
+			}
+			else
+			{
+				returnValue = this.frames.length - 1;
 			}
 		}
-		return f;
+
+		if (returnValue < 0)
+		{
+			var ticksForFramesSoFar = 0;
+			var f = 0;
+			for (f = 0; f < this.ticksToHoldFrames.length; f++)
+			{
+				var ticksToHoldFrame = this.ticksToHoldFrames[f];
+				ticksForFramesSoFar += ticksToHoldFrame;
+				if (ticksForFramesSoFar >= ticksSinceStarted)
+				{
+					break;
+				}
+			}
+			returnValue = f;
+		}
+
+		return returnValue;
 	};
 
-	isComplete(drawable: Drawable)
+	isComplete(world: World, drawable: Drawable)
 	{
-		var returnValue = (drawable.ticksSinceStarted >= this.ticksToComplete);
+		var ticksSinceStarted = world.timerTicksSoFar - drawable.tickStarted;
+		var returnValue = (ticksSinceStarted >= this.ticksToComplete);
 		return returnValue;
 	};
 
 	update(universe: Universe, world: World, display: Display, entity: Entity)
 	{
 		var drawable = entity.drawable();
-		if (drawable.ticksSinceStarted == null)
+
+		if (drawable.tickStarted == null)
 		{
-			drawable.ticksSinceStarted = Math.floor(Math.random() * this.ticksToComplete);
-		}
-		else
-		{
-			drawable.ticksSinceStarted++;
+			drawable.tickStarted = world.timerTicksSoFar;
 		}
 
-		if (this.isComplete(drawable))
-		{
-			if (this.isRepeating)
-			{
-				drawable.ticksSinceStarted =
-					NumberHelper.wrapToRangeMinMax(drawable.ticksSinceStarted, 0, this.ticksToComplete);
-			}
-			else
-			{
-				drawable.ticksSinceStarted =
-					NumberHelper.trimToRangeMax(drawable.ticksSinceStarted, this.ticksToComplete - 1);
-			}
-		}
-
-		var frameCurrent = this.frameCurrent(drawable);
+		var frameCurrent = this.frameCurrent(world, drawable);
 		frameCurrent.draw(universe, world, display, entity);
 	};
 

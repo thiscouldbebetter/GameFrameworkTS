@@ -4,7 +4,7 @@ class Drawable
 	visual: Visual;
 	isVisible: boolean;
 
-	ticksSinceStarted: number; // hack
+	tickStarted: number; // hack - Move to Animatable?
 
 	constructor(visual: Visual, isVisible: boolean)
 	{

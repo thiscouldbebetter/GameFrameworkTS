@@ -21,50 +21,50 @@ class VisualAnimation {
         this.update(universe, world, display, entity);
     }
     ;
-    frameCurrent(drawable) {
-        var frameIndexCurrent = this.frameIndexCurrent(drawable);
+    frameCurrent(world, drawable) {
+        var frameIndexCurrent = this.frameIndexCurrent(world, drawable);
         var frameCurrent = this.frames[frameIndexCurrent];
         return frameCurrent;
     }
     ;
-    frameIndexCurrent(drawable) {
-        var ticksForFramesSoFar = 0;
-        var ticksToHoldFrames = this.ticksToHoldFrames;
-        var f = 0;
-        for (f = 0; f < ticksToHoldFrames.length; f++) {
-            var ticksToHoldFrame = ticksToHoldFrames[f];
-            ticksForFramesSoFar += ticksToHoldFrame;
-            if (ticksForFramesSoFar >= drawable.ticksSinceStarted) {
-                break;
+    frameIndexCurrent(world, drawable) {
+        var returnValue = -1;
+        var ticksSinceStarted = world.timerTicksSoFar - drawable.tickStarted;
+        if (ticksSinceStarted >= this.ticksToComplete) {
+            if (this.isRepeating) {
+                ticksSinceStarted = ticksSinceStarted % this.ticksToComplete;
+            }
+            else {
+                returnValue = this.frames.length - 1;
             }
         }
-        return f;
+        if (returnValue < 0) {
+            var ticksForFramesSoFar = 0;
+            var f = 0;
+            for (f = 0; f < this.ticksToHoldFrames.length; f++) {
+                var ticksToHoldFrame = this.ticksToHoldFrames[f];
+                ticksForFramesSoFar += ticksToHoldFrame;
+                if (ticksForFramesSoFar >= ticksSinceStarted) {
+                    break;
+                }
+            }
+            returnValue = f;
+        }
+        return returnValue;
     }
     ;
-    isComplete(drawable) {
-        var returnValue = (drawable.ticksSinceStarted >= this.ticksToComplete);
+    isComplete(world, drawable) {
+        var ticksSinceStarted = world.timerTicksSoFar - drawable.tickStarted;
+        var returnValue = (ticksSinceStarted >= this.ticksToComplete);
         return returnValue;
     }
     ;
     update(universe, world, display, entity) {
         var drawable = entity.drawable();
-        if (drawable.ticksSinceStarted == null) {
-            drawable.ticksSinceStarted = Math.floor(Math.random() * this.ticksToComplete);
+        if (drawable.tickStarted == null) {
+            drawable.tickStarted = world.timerTicksSoFar;
         }
-        else {
-            drawable.ticksSinceStarted++;
-        }
-        if (this.isComplete(drawable)) {
-            if (this.isRepeating) {
-                drawable.ticksSinceStarted =
-                    NumberHelper.wrapToRangeMinMax(drawable.ticksSinceStarted, 0, this.ticksToComplete);
-            }
-            else {
-                drawable.ticksSinceStarted =
-                    NumberHelper.trimToRangeMax(drawable.ticksSinceStarted, this.ticksToComplete - 1);
-            }
-        }
-        var frameCurrent = this.frameCurrent(drawable);
+        var frameCurrent = this.frameCurrent(world, drawable);
         frameCurrent.draw(universe, world, display, entity);
     }
     ;
