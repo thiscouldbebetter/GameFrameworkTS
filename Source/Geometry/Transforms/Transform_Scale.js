@@ -8,10 +8,12 @@ class Transform_Scale {
     }
     ;
     overwriteWith(other) {
-        return this; // todo
+        var otherAsScale = other;
+        this.scaleFactors.overwriteWith(otherAsScale.scaleFactors);
+        return this;
     }
     transform(transformable) {
-        return transformable; // todo
+        return transformable.transform(this);
     }
     transformCoords(coordsToTransform) {
         return coordsToTransform.multiply(this.scaleFactors);

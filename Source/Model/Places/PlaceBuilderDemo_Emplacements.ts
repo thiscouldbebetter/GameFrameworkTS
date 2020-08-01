@@ -108,7 +108,24 @@ class PlaceBuilderDemo_Emplacements
 				new DrawableCamera(),
 				new ItemContainer(),
 				new ItemHolder([]),
-				new Locatable(new Disposition(new Coords(0, 0, 0), null, null) )
+				new Locatable(null),
+				new Usable
+				(
+					(universe: Universe, w: World, p: Place, entityUsing: Entity, entityOther: Entity) =>
+					{
+						entityOther.collidable().ticksUntilCanCollide = 50; // hack
+						var itemContainerAsControl = entityOther.itemContainer().toControl
+						(
+							universe, universe.display.sizeInPixels,
+							entityUsing, entityOther,
+							universe.venueCurrent
+						);
+						var venueNext: any = new VenueControls(itemContainerAsControl);
+						venueNext = new VenueFader(venueNext, null, null, null);
+						universe.venueNext = venueNext;
+						return null;
+					}
+				)
 			]
 		);
 
@@ -157,7 +174,15 @@ class PlaceBuilderDemo_Emplacements
 				new Drawable(visual, null),
 				new DrawableCamera(),
 				new Locatable(new Disposition(new Coords(0, 0, 0), null, null) ),
-				new Portal(null, null, null) // Must be set ouside this method.
+				new Portal(null, null, true), // Destination must be set ouside this method.
+				new Usable
+				(
+					(u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) => 
+					{
+						eUsed.portal().use(u, w, p, eUsing, eUsed);
+						return null;
+					}
+				)
 			]
 		);
 
@@ -441,7 +466,15 @@ class PlaceBuilderDemo_Emplacements
 				new Drawable(visual, null),
 				new DrawableCamera(),
 				new Locatable(new Disposition(new Coords(0, 0, 0), null, null) ),
-				new Portal( null, "Exit", null )
+				new Portal(null, "Exit", true),
+				new Usable
+				(
+					(u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) =>
+					{
+						eUsed.portal().use(u, w, p, eUsing, eUsed);
+						return null;
+					}
+				)
 			]
 		);
 

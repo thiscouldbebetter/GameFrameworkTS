@@ -27,7 +27,14 @@ class ItemStore {
             }
         }
     }
-    ;
+    use(universe, world, place, entityUsing, entityUsed) {
+        entityUsed.collidable().ticksUntilCanCollide = 50; // hack
+        var storeAsControl = entityUsed.itemStore().toControl(universe, universe.display.sizeInPixels, entityUsing, entityUsed, universe.venueCurrent);
+        var venueNext = new VenueControls(storeAsControl);
+        venueNext = new VenueFader(venueNext, null, null, null);
+        universe.venueNext = venueNext;
+    }
+    // Controllable.
     toControl(universe, size, entityCustomer, entityStore, venuePrev) {
         if (size == null) {
             size = universe.display.sizeDefault();

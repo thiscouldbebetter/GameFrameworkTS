@@ -5,14 +5,43 @@ class Portal
 	destinationEntityName: string;
 	clearsVelocity: boolean;
 
-	constructor(destinationPlaceName: string, destinationEntityName: string, clearsVelocity: boolean)
+	constructor
+	(
+		destinationPlaceName: string, destinationEntityName: string,
+		clearsVelocity: boolean
+	)
 	{
 		this.destinationPlaceName = destinationPlaceName;
 		this.destinationEntityName = destinationEntityName;
 		this.clearsVelocity = clearsVelocity || true;
 	}
 
-	use(universe: Universe, world: World, placeToDepart: Place, entityToTransport: Entity)
+	use(universe: Universe, world: World, placeToDepart: Place, entityToTransport: Entity, entityPortal: Entity)
+	{
+		entityPortal.collidable().ticksUntilCanCollide = 50; // hack
+		var portal = entityPortal.portal();
+		var venueCurrent = universe.venueCurrent;
+		var messageBoxSize = universe.display.sizeDefault();
+		var venueMessage = new VenueMessage
+		(
+			new DataBinding("Portal to:" + portal.destinationPlaceName, null, null),
+			(universe: Universe) => // acknowledge
+			{
+				portal.transport
+				(
+					universe, universe.world, universe.world.placeCurrent,
+					entityToTransport, entityPortal
+				);
+				universe.venueNext = new VenueFader(venueCurrent, null, null, null);
+			},
+			venueCurrent, // venuePrev
+			messageBoxSize,
+			true // showMessageOnly
+		);
+		universe.venueNext = venueMessage;
+	}
+
+	transport(universe: Universe, world: World, placeToDepart: Place, entityToTransport: Entity, entityPortal: Entity)
 	{
 		var destinationPlace = world.placesByName.get(this.destinationPlaceName);
 		destinationPlace.initialize(universe, world);

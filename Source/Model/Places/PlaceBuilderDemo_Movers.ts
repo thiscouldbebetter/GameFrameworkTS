@@ -521,7 +521,7 @@ class PlaceBuilderDemo_Movers
 				actorPos.overwriteWith(targetPos);
 				var itemsInPlace = place.items();
 				var itemsGrassInPlace = itemsInPlace.filter(x => x.item().defnName == "Grass");
-				var reachDistance = 32; // todo
+				var reachDistance = 20; // todo
 				var itemGrassInReach = itemsGrassInPlace.filter
 				(
 					x => entityActor.locatable().distanceFromEntity(x) < reachDistance
@@ -682,32 +682,6 @@ class PlaceBuilderDemo_Movers
 
 				place.entitySpawn(universe, world, messageEntity);
 			}
-			else if (entityOther.itemContainer() != null)
-			{
-				entityOther.collidable().ticksUntilCanCollide = 50; // hack
-				var itemContainerAsControl = entityOther.itemContainer().toControl
-				(
-					universe, universe.display.sizeInPixels,
-					entityPlayer, entityOther,
-					universe.venueCurrent
-				);
-				var venueNext: any = new VenueControls(itemContainerAsControl);
-				venueNext = new VenueFader(venueNext, null, null, null);
-				universe.venueNext = venueNext;
-			}
-			else if (entityOther.itemStore() != null)
-			{
-				entityOther.collidable().ticksUntilCanCollide = 50; // hack
-				var storeAsControl = entityOther.itemStore().toControl
-				(
-					universe, universe.display.sizeInPixels,
-					entityPlayer, entityOther,
-					universe.venueCurrent
-				);
-				var venueNext: any = new VenueControls(storeAsControl);
-				venueNext = new VenueFader(venueNext, null, null, null);
-				universe.venueNext = venueNext;
-			}
 			else if (entityOther.propertiesByName.get(Goal.name) != null)
 			{
 				var itemDefnKeyName = "Key";
@@ -735,26 +709,12 @@ class PlaceBuilderDemo_Movers
 			}
 			else if (entityOther.portal() != null)
 			{
-				entityOther.collidable().ticksUntilCanCollide = 50; // hack
-				var portal = entityOther.portal();
-				var venueCurrent = universe.venueCurrent;
-				var messageBoxSize = universe.display.sizeDefault();
-				var venueMessage = new VenueMessage
-				(
-					new DataBinding("Portal to: " + portal.destinationPlaceName, null, null),
-					(universe: Universe) => // acknowledge
-					{
-						portal.use
-						(
-							universe, universe.world, universe.world.placeCurrent, entityPlayer
-						);
-						universe.venueNext = new VenueFader(venueCurrent, null, null, null) as Venue;
-					},
-					venueCurrent, // venuePrev
-					messageBoxSize,
-					true // showMessageOnly
-				);
-				universe.venueNext = venueMessage as Venue;
+				var usable = entityOther.usable();
+				if (usable == null)
+				{
+					var portal = entityOther.portal();
+					portal.use(universe, world, place, entityPlayer, entityOther);
+				}
 			}
 			else if (entityOther.talker() != null)
 			{
@@ -779,7 +739,7 @@ class PlaceBuilderDemo_Movers
 				var conversationAsControl =
 					conversation.toControl(conversationSize, universe);
 
-				venueNext = new VenueControls(conversationAsControl);
+				var venueNext = new VenueControls(conversationAsControl);
 
 				universe.venueNext = venueNext;
 			}

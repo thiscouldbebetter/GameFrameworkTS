@@ -15,12 +15,14 @@ class Transform_Scale implements Transform
 
 	overwriteWith(other: Transform)
 	{
-		return this; // todo
+		var otherAsScale = other as Transform_Scale;
+		this.scaleFactors.overwriteWith(otherAsScale.scaleFactors);
+		return this;
 	}
 
 	transform(transformable: Transformable): Transformable
 	{
-		return transformable; // todo
+		return transformable.transform(this);
 	}
 
 	transformCoords(coordsToTransform: Coords)

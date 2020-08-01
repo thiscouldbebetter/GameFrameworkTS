@@ -49,7 +49,15 @@ class PlaceBuilderDemo_Emplacements {
             new DrawableCamera(),
             new ItemContainer(),
             new ItemHolder([]),
-            new Locatable(new Disposition(new Coords(0, 0, 0), null, null))
+            new Locatable(null),
+            new Usable((universe, w, p, entityUsing, entityOther) => {
+                entityOther.collidable().ticksUntilCanCollide = 50; // hack
+                var itemContainerAsControl = entityOther.itemContainer().toControl(universe, universe.display.sizeInPixels, entityUsing, entityOther, universe.venueCurrent);
+                var venueNext = new VenueControls(itemContainerAsControl);
+                venueNext = new VenueFader(venueNext, null, null, null);
+                universe.venueNext = venueNext;
+                return null;
+            })
         ]);
         return containerEntityDefn;
     }
@@ -72,7 +80,11 @@ class PlaceBuilderDemo_Emplacements {
             new Drawable(visual, null),
             new DrawableCamera(),
             new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
-            new Portal(null, null, null) // Must be set ouside this method.
+            new Portal(null, null, true),
+            new Usable((u, w, p, eUsing, eUsed) => {
+                eUsed.portal().use(u, w, p, eUsing, eUsed);
+                return null;
+            })
         ]);
         return exitEntityDefn;
     }
@@ -215,7 +227,11 @@ class PlaceBuilderDemo_Emplacements {
             new Drawable(visual, null),
             new DrawableCamera(),
             new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
-            new Portal(null, "Exit", null)
+            new Portal(null, "Exit", true),
+            new Usable((u, w, p, eUsing, eUsed) => {
+                eUsed.portal().use(u, w, p, eUsing, eUsed);
+                return null;
+            })
         ]);
         return portalEntity;
     }

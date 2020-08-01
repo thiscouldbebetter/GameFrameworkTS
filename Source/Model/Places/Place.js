@@ -143,4 +143,7 @@ class Place {
     player() {
         return this.entitiesByPropertyName(Playable.name)[0];
     }
+    usables() {
+        return this.entitiesByPropertyName(Usable.name);
+    }
 }

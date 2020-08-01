@@ -45,7 +45,24 @@ class ItemStore
 				this.statusMessage = "Not enough currency!";
 			}
 		}
-	};
+	}
+
+	use(universe: Universe, world: World, place: Place, entityUsing: Entity, entityUsed: Entity)
+	{
+		entityUsed.collidable().ticksUntilCanCollide = 50; // hack
+		var storeAsControl = entityUsed.itemStore().toControl
+		(
+			universe, universe.display.sizeInPixels,
+			entityUsing, entityUsed,
+			universe.venueCurrent
+		);
+		var venueNext: Venue = new VenueControls(storeAsControl);
+		venueNext = new VenueFader(venueNext, null, null, null);
+		universe.venueNext = venueNext;
+	}
+
+
+	// Controllable.
 
 	toControl(universe: Universe, size: Coords, entityCustomer: Entity, entityStore: Entity, venuePrev: Venue)
 	{

@@ -27,7 +27,6 @@ Food, Eating, and Hunger
 Map Tiles as Obstacles
 Map Tiles from Images
 Vehicles
-Damage Types
 Agriculture - Seeds, Planting, Watering, Harvesting
 Generated Map Tiles
 Load/Unload Zones in Terrarium

@@ -1087,7 +1087,15 @@ class PlaceBuilderDemo
 					new Item("Key", 10),
 					new Item("Medicine", 100)
 				]),
-				new Locatable(new Disposition(new Coords(0, 0, 0), null, null))
+				new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
+				new Usable
+				(
+					(u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) =>
+					{
+						eUsed.itemStore().use(u, w, p, eUsing, eUsed);
+						return null;
+					}
+				)
 			]
 		);
 
@@ -1242,7 +1250,7 @@ class PlaceBuilderDemo
 		var ticksPerFrame = 3;
 		var flameVisual = new VisualAnimation
 		(
-			null, // name
+			"Flame", // name
 			[ ticksPerFrame, ticksPerFrame, ticksPerFrame, ticksPerFrame ],
 			[
 				flameVisualStaticSmall,
@@ -1750,7 +1758,7 @@ class PlaceBuilderDemo
 			(u: Universe, w: World, p: Place, eUser: Entity, eDevice: Entity) => // use
 			{
 				var bouldersInPlace = p.entities.filter(x => x.name.startsWith("Boulder"));
-				var rangeMax = 32; // todo
+				var rangeMax = 20; // todo
 				var boulderInRange = bouldersInPlace.filter
 				(
 					x => x.locatable().distanceFromEntity(eUser) < rangeMax
@@ -3019,7 +3027,7 @@ class PlaceBuilderDemo
 				{
 					var entityItemsInPlace = place.items();
 					var actorPos = actor.locatable().loc.pos;
-					var radiusOfReach = 32; // todo
+					var radiusOfReach = 20; // todo
 					var entityItemsWithinReach = entityItemsInPlace.filter
 					(
 						x => x.locatable().loc.pos.clone().subtract(actorPos).magnitude() < radiusOfReach
@@ -3057,6 +3065,25 @@ class PlaceBuilderDemo
 					}
 				}
 			),
+			new Action
+			(
+				"Use",
+				(universe: Universe, world: World, place: Place, actor: Entity) => // perform
+				{
+					var entityUsablesInPlace = place.usables();
+					var actorPos = actor.locatable().loc.pos;
+					var radiusOfReach = 20; // todo
+					var entityUsablesWithinReach = entityUsablesInPlace.filter
+					(
+						x => x.locatable().loc.pos.clone().subtract(actorPos).magnitude() < radiusOfReach
+					);
+					if (entityUsablesWithinReach.length > 0)
+					{
+						var entityToUse = entityUsablesWithinReach[0];
+						entityToUse.usable().use(universe, world, place, actor, entityToUse);
+					}
+				}
+			),
 			new Action("Item0", (u: Universe, w: World, p: Place, e: Entity) => e.equipmentUser().useItemInSocketNumbered(u, w, p, e, 0)),
 			new Action("Item1", (u: Universe, w: World, p: Place, e: Entity) => e.equipmentUser().useItemInSocketNumbered(u, w, p, e, 1)),
 			new Action("Item2", (u: Universe, w: World, p: Place, e: Entity) => e.equipmentUser().useItemInSocketNumbered(u, w, p, e, 2)),
@@ -3077,6 +3104,7 @@ class PlaceBuilderDemo
 		var inputNames = Input.Names();
 
 		var inactivateFalse = false;
+		var inactivateTrue = true;
 
 		var actionToInputsMappings =
 		[
@@ -3088,11 +3116,12 @@ class PlaceBuilderDemo
 			new ActionToInputsMapping("MoveRight", 	[ inputNames.ArrowRight, inputNames.GamepadMoveRight + "0" ], inactivateFalse),
 			new ActionToInputsMapping("MoveUp", 	[ inputNames.ArrowUp, inputNames.GamepadMoveUp + "0" ], inactivateFalse),
 
-			new ActionToInputsMapping("Fire", 		[ "f", inputNames.Enter, inputNames.GamepadButton0 + "0" ], inactivateFalse),
-			new ActionToInputsMapping("Jump", 		[ inputNames.Space, inputNames.GamepadButton0 + "1" ], inactivateFalse),
-			new ActionToInputsMapping("PickUp", 	[ "g", inputNames.GamepadButton0 + "4" ], inactivateFalse),
-			new ActionToInputsMapping("Run", 		[ inputNames.Shift, inputNames.GamepadButton0 + "2" ], inactivateFalse),
+			new ActionToInputsMapping("Fire", 		[ "f", inputNames.Enter, inputNames.GamepadButton0 + "0" ], inactivateTrue),
 			new ActionToInputsMapping("Hide", 		[ "h", inputNames.GamepadButton0 + "3" ], inactivateFalse),
+			new ActionToInputsMapping("Jump", 		[ inputNames.Space, inputNames.GamepadButton0 + "1" ], inactivateTrue),
+			new ActionToInputsMapping("PickUp", 	[ "g", inputNames.GamepadButton0 + "4" ], inactivateTrue),
+			new ActionToInputsMapping("Run", 		[ inputNames.Shift, inputNames.GamepadButton0 + "2" ], inactivateFalse),
+			new ActionToInputsMapping("Use", 		[ "u", inputNames.GamepadButton0 + "5" ], inactivateTrue),
 
 			new ActionToInputsMapping("Item0", 	[ "_0" ], inactivateFalse),
 			new ActionToInputsMapping("Item1", 	[ "_1" ], inactivateFalse),

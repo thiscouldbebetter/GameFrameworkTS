@@ -64,4 +64,5 @@ class Entity {
     portal() { return this.propertiesByName.get(Portal.name); }
     skillLearner() { return this.propertiesByName.get(SkillLearner.name); }
     talker() { return this.propertiesByName.get(Talker.name); }
+    usable() { return this.propertiesByName.get(Usable.name); }
 }
