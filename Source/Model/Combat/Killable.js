@@ -9,8 +9,8 @@ class Killable {
     damageApply(universe, world, place, entityDamager, entityKillable, damageToApply) {
         var damageApplied;
         if (this._damageApply == null) {
-            damageApplied = (damageToApply == null ? entityDamager.damager().damagePerHit : damageToApply);
-            entityKillable.killable().integrityAdd(0 - damageApplied);
+            damageApplied = (damageToApply == null ? entityDamager.damager().damagePerHit.amount : damageToApply.amount);
+            entityKillable.killable().integritySubtract(damageApplied);
         }
         else {
             damageApplied = this._damageApply(universe, world, place, entityDamager, entityKillable, damageToApply);
@@ -27,7 +27,9 @@ class Killable {
         this.integrity += amountToAdd;
         this.integrity = NumberHelper.trimToRangeMax(this.integrity, this.integrityMax);
     }
-    ;
+    integritySubtract(amountToSubtract) {
+        this.integrityAdd(0 - amountToSubtract);
+    }
     isAlive() {
         return (this.integrity > 0);
     }

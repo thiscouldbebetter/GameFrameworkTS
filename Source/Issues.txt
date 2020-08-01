@@ -9,9 +9,8 @@ Crafting - Queue and Durations
 Crafting - Uncarryable Tools in Environment
 Crafting - Facilities - Crafter + Container
 Clickable Quick Slots
-Grazers Drop Meat
 Carnivores, Who Eat Grazers
-Animal Aging and Natural Death
+Animal Growth, Aging and Natural Death
 Animal Procreation
 Unloading World Before Save, Reloading After
 Storage - Separate Profiles and Worlds
@@ -32,10 +31,8 @@ Damage Types
 Agriculture - Seeds, Planting, Watering, Harvesting
 Generated Map Tiles
 Load/Unload Zones in Terrarium
-Legs on Player
 Generated Devices with Varying Specs
 Explosives
-Smoke
 Journal and Quests
 Auto-Map
 Player Notes
@@ -43,9 +40,16 @@ Saves - Fix Spacing on Load Screen
 Saves - Move DateSave from World to Save
 Saves - Add Description
 Saves - Add Snapshot
+Emplacements - Interact via Action not Collision
+Enemies - Bombers
+Enemies - Hiders
+Enemies - Shooters
+Enemies - Runners
+Enemies - Tanks
 
 Fixes
 -----
 Load World From File
 Sword Swing Direction is Wrong
 Barter - Trade Coins and Sword for Gun, Still Have Sword
+Portals Between Rooms Start Player Outside

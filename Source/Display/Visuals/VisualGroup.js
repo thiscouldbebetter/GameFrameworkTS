@@ -12,13 +12,16 @@ class VisualGroup {
     ;
     // Clonable.
     clone() {
-        return this; // todo
+        return new VisualGroup(ArrayHelper.clone(this.children));
     }
     overwriteWith(other) {
-        return this; // todo
+        var otherAsVisualGroup = other;
+        ArrayHelper.overwriteWith(this.children, otherAsVisualGroup.children);
+        return this;
     }
     // Transformable.
     transform(transformToApply) {
-        return this; // todo
+        this.children.forEach(x => transformToApply.transform(x));
+        return this;
     }
 }

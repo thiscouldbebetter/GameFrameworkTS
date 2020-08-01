@@ -303,7 +303,7 @@ class VisualBuilder
 
 		var circleWithEyes: Visual = new VisualGroup
 		([
-			new VisualCircle(circleRadius, circleColor, null),
+			new VisualCircle(circleRadius, Color.byName(circleColor), null),
 			visualEyesDirectional
 		]);
 
@@ -324,8 +324,8 @@ class VisualBuilder
 
 		var visualEye = new VisualGroup
 		([
-			new VisualCircle(visualEyeRadius, "White", null),
-			new VisualCircle(visualPupilRadius, "Black", null)
+			new VisualCircle(visualEyeRadius, Color.byName("White"), null),
+			new VisualCircle(visualPupilRadius, Color.byName("Black"), null)
 		]);
 
 		var visualEyes = new VisualGroup

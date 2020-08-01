@@ -52,7 +52,8 @@ class VenueFader {
             alphaOfFadeColor = 1 - fractionOfFadeCompleted;
         }
         alphaOfFadeColor *= alphaOfFadeColor;
-        var fadeColor = this.backgroundColor.clone().alphaSet(alphaOfFadeColor * this.backgroundColor.alpha());
+        var fadeColor = this.backgroundColor.clone();
+        fadeColor.alpha(alphaOfFadeColor * this.backgroundColor.alpha(null));
         var display = universe.display;
         display.drawRectangle(new Coords(0, 0, 0), display.sizeDefault(), // Scaled automatically.
         fadeColor.systemColor(), null, null);

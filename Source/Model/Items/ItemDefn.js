@@ -29,7 +29,14 @@ class ItemDefn {
     }
     ;
     use(u, w, p, eUsing, eUsed) {
-        return this._use(u, w, p, eUsing, eUsed);
+        var returnValue;
+        if (this._use == null) {
+            returnValue = "Can't use " + this.name + ".";
+        }
+        else {
+            returnValue = this._use(u, w, p, eUsing, eUsed);
+        }
+        return returnValue;
     }
     ;
 }

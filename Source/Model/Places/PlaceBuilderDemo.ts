@@ -44,9 +44,12 @@ class PlaceBuilderDemo
 
 		this.entities.push(this.entityBuildFromDefn(this.entityDefnsByName.get("Player")));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Book"), 1));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Campfire"), 1));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Container"), 1));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Friendly"), 1));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Sword"), 1));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("SwordCold"), 1));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("SwordHeat"), 1));
 
 		var place = new Place(this.name, "Demo", size, this.entities);
 
@@ -525,7 +528,9 @@ class PlaceBuilderDemo
 		var entityDefns = this.entityDefnsByName;
 		var entities = this.entities;
 
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("EnemyGenerator"), 1));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("EnemyGeneratorChaserNormal"), 1));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("EnemyGeneratorChaserCold"), 1));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("EnemyGeneratorChaserHeat"), 1));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Bar"), 1));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Mine"), 48));
 
@@ -948,7 +953,7 @@ class PlaceBuilderDemo
 					[
 						new Locatable(wallPartLoc),
 						new Collidable(wallCollider, null, null),
-						new Damager(10),
+						new Damager(new Damage(10, null)),
 						new Drawable(wallVisual, null),
 						new DrawableCamera()
 					]
@@ -1166,6 +1171,120 @@ class PlaceBuilderDemo
 		return itemBookEntityDefn;
 	}
 
+	entityDefnBuildCampfire(entityDimension: number): Entity
+	{
+		var entityDimensionHalf = entityDimension / 2;
+
+		var campfireName = "Campfire";
+
+		var campfireColor = "Orange";
+		var flameVisualStatic = new VisualGroup
+		([
+			new VisualPolygon
+			(
+				new Path
+				([
+					new Coords(0, -entityDimension * 2, 0),
+					new Coords(entityDimension, 0, 0),
+					new Coords(-entityDimension, 0, 0),
+				]),
+				Color.byName(campfireColor),
+				null
+			),
+			new VisualPolygon
+			(
+				new Path
+				([
+					new Coords(0, -entityDimension, 0),
+					new Coords(entityDimensionHalf, 0, 0),
+					new Coords(-entityDimensionHalf, 0, 0),
+				]),
+				Color.byName("Yellow"),
+				null
+			)
+		]);
+
+		var flameVisualStaticSmall = flameVisualStatic.clone().transform
+		(
+			new Transform_Scale(new Coords(1, .8, 1))
+		) as VisualGroup;
+
+		var flameVisualStaticLarge = flameVisualStatic.clone().transform
+		(
+			new Transform_Scale(new Coords(1, 1.2, 1))
+		) as VisualGroup;
+
+		var smokePuffVisual = new VisualCircle(entityDimensionHalf, Color.byName("GrayLight"), null);
+		var smokePuffVel = new Coords(.33, -1.5, 0);
+		var smokeVisual = new VisualParticles
+		(
+			"Smoke",
+			null, // ticksToGenerate
+			1 / 3, // particlesPerTick
+			() => 50, // particleTicksToLiveGet
+			// particleVelocityGet
+			() => smokePuffVel.clone().add(new Coords(Math.random() - 0.5, 0, 0) ),
+			new Transform_Dynamic
+			(
+				(transformable: Transformable) =>
+				{
+					var transformableAsVisualCircle = transformable as VisualCircle;
+					transformableAsVisualCircle.radius *= 1.02;
+					var color = transformableAsVisualCircle.colorFill.clone();
+					color.alpha(color.alpha(null) * .95);
+					transformableAsVisualCircle.colorFill = color;
+					return transformable;
+				}
+			),
+			smokePuffVisual
+		);
+
+		var ticksPerFrame = 3;
+		var flameVisual = new VisualAnimation
+		(
+			null, // name
+			[ ticksPerFrame, ticksPerFrame, ticksPerFrame, ticksPerFrame ],
+			[
+				flameVisualStaticSmall,
+				flameVisualStatic,
+				flameVisualStaticLarge,
+				flameVisualStatic
+			],
+			true // isRepeating
+		);
+
+		var itemLogVisual = this.itemDefnsByName.get("Log").visual;
+		var itemLogVisualMinusText = itemLogVisual.clone() as VisualGroup;
+		itemLogVisualMinusText.children.length--;
+
+		var campfireVisual = new VisualGroup
+		([
+			smokeVisual,
+			itemLogVisualMinusText,
+			flameVisual,
+			new VisualOffset
+			(
+				new VisualText(new DataBinding(campfireName, null, null), campfireColor, null),
+				new Coords(0, 0 - entityDimension * 2, 0)
+			)
+		]);
+
+		var campfireCollider = new Sphere(new Coords(0, 0, 0), entityDimensionHalf);
+
+		var campfireEntityDefn = new Entity
+		(
+			campfireName,
+			[
+				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
+				new Collidable(campfireCollider, null, null),
+				new Drawable(campfireVisual, null),
+				new DrawableCamera()
+			]
+		);
+
+		return campfireEntityDefn;
+	};
+
 	entityDefnBuildCoin(entityDimension: number): Entity
 	{
 		var entityDimensionHalf = entityDimension / 2;
@@ -1355,7 +1474,7 @@ class PlaceBuilderDemo
 					}
 				};
 
-				var visualExplosion = new VisualCircle(8, "Red", null);
+				var visualExplosion = new VisualCircle(8, Color.byName("Red"), null);
 				var killable = new Killable
 				(
 					1, // integrityMax
@@ -1380,7 +1499,7 @@ class PlaceBuilderDemo
 				(
 					"Projectile",
 					[
-						new Damager(10),
+						new Damager(new Damage(10, null)),
 						new Ephemeral(32, null),
 						killable,
 						new Locatable( projectileLoc ),
@@ -1475,6 +1594,29 @@ class PlaceBuilderDemo
 		);
 
 		return itemAmmoEntityDefn;
+	};
+
+	entityDefnBuildLog(entityDimension: number): Entity
+	{
+		var entityDimensionHalf = entityDimension / 2;
+
+		var itemDefnLogName = "Log";
+		var itemLogVisual = this.itemDefnsByName.get(itemDefnLogName).visual;
+		var itemLogCollider = new Sphere(new Coords(0, 0, 0), entityDimensionHalf);
+
+		var itemLogEntityDefn = new Entity
+		(
+			itemDefnLogName,
+			[
+				new Item(itemDefnLogName, 1),
+				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
+				new Collidable(itemLogCollider, null, null),
+				new Drawable(itemLogVisual, null),
+				new DrawableCamera()
+			]
+		);
+
+		return itemLogEntityDefn;
 	};
 
 	entityDefnBuildMaterial(entityDimension: number): Entity
@@ -1658,8 +1800,8 @@ class PlaceBuilderDemo
 				(
 					Transform_Scale.fromScalar(entityDimension)
 				),
-				itemPotionColor,
-				"White"
+				Color.byName(itemPotionColor),
+				Color.byName("White")
 			),
 			new VisualOffset
 			(
@@ -1718,15 +1860,28 @@ class PlaceBuilderDemo
 		return itemShovelEntityDefn;
 	};
 
-	entityDefnBuildSword(entityDimension: number): Entity
+	entityDefnBuildSword(entityDimension: number, damageTypeName: string): Entity
 	{
 		var itemDefnName = "Sword";
+
+		if (damageTypeName == null)
+		{
+			// todo
+		}
+		else if (damageTypeName == "Cold")
+		{
+			itemDefnName += damageTypeName;
+		}
+		else if (damageTypeName == "Heat")
+		{
+			itemDefnName += damageTypeName;
+		}
 
 		var itemSwordCollider = new Sphere(new Coords(0, 0, 0), entityDimension / 2);
 
 		var itemSwordDevice = new Device
 		(
-			"Sword",
+			itemDefnName,
 			(u: Universe, w: World, p: Place, entity: Entity) => // initialize
 			{
 				var device = entity.device();
@@ -1780,15 +1935,24 @@ class PlaceBuilderDemo
 					var killable = entityOther.killable();
 					if (killable != null)
 					{
-						killable.damageApply
+						var damageToApply = entityProjectile.damager().damagePerHit;
+						var damageApplied = killable.damageApply
 						(
-							universe, world, place, entityProjectile, entityOther, null
+							universe, world, place, entityProjectile, entityOther, damageToApply
+						);
+						place.entitySpawn
+						(
+							universe, world,
+							universe.entityBuilder.messageFloater
+							(
+								"" + damageApplied, entityOther.locatable().loc.pos
+							)
 						);
 						entityProjectile.killable().integrity = 0;
 					}
 				};
 
-				var visualExplosion = new VisualCircle(8, "Red", null);
+				var visualExplosion = new VisualCircle(8, Color.byName("Red"), null);
 				var killable = new Killable
 				(
 					1, // integrityMax
@@ -1813,8 +1977,8 @@ class PlaceBuilderDemo
 				(
 					"Projectile",
 					[
-						new Damager(10),
-						new Ephemeral(4, null),
+						new Damager(new Damage(10, damageTypeName)),
+						new Ephemeral(8, null),
 						killable,
 						new Locatable( projectileLoc ),
 						new Collidable
@@ -1891,7 +2055,9 @@ class PlaceBuilderDemo
 			this.emplacements.entityDefnBuildObstacleRing(entityDimension),
 			this.emplacements.entityDefnBuildTree(entityDimension),
 
-			this.movers.entityDefnBuildEnemyGenerator(entityDimension),
+			this.movers.entityDefnBuildEnemyGeneratorChaser(entityDimension, null),
+			this.movers.entityDefnBuildEnemyGeneratorChaser(entityDimension, "Cold"),
+			this.movers.entityDefnBuildEnemyGeneratorChaser(entityDimension, "Heat"),
 			this.movers.entityDefnBuildFriendly(entityDimension),
 			this.movers.entityDefnBuildGrazer(entityDimension),
 			this.movers.entityDefnBuildPlayer(entityDimension),
@@ -1899,12 +2065,14 @@ class PlaceBuilderDemo
 			this.entityDefnBuildAccessory(entityDimension),
 			this.entityDefnBuildArmor(entityDimension),
 			this.entityDefnBuildBook(entityDimension),
+			this.entityDefnBuildCampfire(entityDimension),
 			this.entityDefnBuildCoin(entityDimension),
 			this.entityDefnBuildCrystal(entityDimension),
 			entityDefnFlower,
 			this.entityDefnBuildGenerator(entityDefnFlower),
 			this.entityDefnBuildGun(entityDimension),
 			this.entityDefnBuildGunAmmo(entityDimension),
+			this.entityDefnBuildLog(entityDimension),
 			this.entityDefnBuildMaterial(entityDimension),
 			this.entityDefnBuildMedicine(entityDimension),
 			this.entityDefnBuildMeat(entityDimension),
@@ -1917,7 +2085,9 @@ class PlaceBuilderDemo
 			this.entityDefnBuildPotion(entityDimension),
 			this.entityDefnBuildShovel(entityDimension),
 			this.entityDefnBuildStore(entityDimension),
-			this.entityDefnBuildSword(entityDimension),
+			this.entityDefnBuildSword(entityDimension, null),
+			this.entityDefnBuildSword(entityDimension, "Cold"),
+			this.entityDefnBuildSword(entityDimension, "Heat"),
 			this.entityDefnBuildToolset(entityDimension),
 		];
 		return entityDefns;
@@ -1959,7 +2129,7 @@ class PlaceBuilderDemo
 		([
 			new VisualPolygon
 			(
-				path, itemAmmoColor, null
+				path, Color.fromSystemColor(itemAmmoColor), null
 			),
 			new VisualOffset
 			(
@@ -1985,7 +2155,7 @@ class PlaceBuilderDemo
 		);
 		var itemArmorVisual = new VisualGroup
 		([
-			new VisualPolygon(path, itemArmorColor, null),
+			new VisualPolygon(path, Color.byName(itemArmorColor), null),
 			new VisualOffset
 			(
 				new VisualText(new DataBinding(itemDefnArmorName, null, null), itemArmorColor, null),
@@ -2028,11 +2198,11 @@ class PlaceBuilderDemo
 		([
 			new VisualCircle
 			(
-				entityDimensionHalf, itemCoinColor, null
+				entityDimensionHalf, Color.byName(itemCoinColor), null
 			),
 			new VisualCircle
 			(
-				entityDimensionHalf * .75, null, "Gray"
+				entityDimensionHalf * .75, null, Color.byName("Gray")
 			),
 			new VisualOffset
 			(
@@ -2062,8 +2232,8 @@ class PlaceBuilderDemo
 						new Coords(1, 1, 1).multiplyScalar(entityDimension / 2)
 					)
 				),
-				itemCrystalColor,
-				"White"
+				Color.byName(itemCrystalColor),
+				Color.byName("White")
 			),
 			new VisualPolygon
 			(
@@ -2080,7 +2250,7 @@ class PlaceBuilderDemo
 						new Coords(1, 1, 1).multiplyScalar(entityDimension / 4)
 					)
 				),
-				"White",
+				Color.byName("White"),
 				null
 			),
 			new VisualOffset
@@ -2128,8 +2298,8 @@ class PlaceBuilderDemo
 						new Coords(1, 1, 1).multiplyScalar(entityDimensionHalf)
 					)
 				),
-				colorFlower,
-				"Red"
+				Color.byName(colorFlower),
+				Color.byName("Red")
 			),
 			new VisualOffset
 			(
@@ -2218,6 +2388,40 @@ class PlaceBuilderDemo
 			)
 		]);
 
+		// log
+
+		var itemLogName = "Log";
+		var itemLogColor = "Brown";
+		var itemLogVisual = new VisualGroup
+		([
+			new VisualOffset
+			(
+				new VisualCircle
+				(
+					entityDimensionHalf, Color.byName(itemLogColor), null
+				),
+				new Coords(entityDimension, 0, 0)
+			),
+			new VisualRectangle
+			(
+				new Coords(entityDimension * 2, entityDimension, 0),
+				itemLogColor, null, null
+			),
+			new VisualOffset
+			(
+				new VisualCircle
+				(
+					entityDimensionHalf, Color.byName("Tan"), null
+				),
+				new Coords(-entityDimension, 0, 0)
+			),
+			new VisualOffset
+			(
+				new VisualText(new DataBinding(itemLogName, null, null), itemLogColor, null),
+				new Coords(0, 0 - entityDimension, 0)
+			)
+		]);
+
 		// material
 
 		var itemMaterialName = "Material";
@@ -2236,7 +2440,7 @@ class PlaceBuilderDemo
 				(
 					Transform_Scale.fromScalar(entityDimension)
 				),
-				itemMaterialColor,
+				Color.byName(itemMaterialColor),
 				null
 			),
 			new VisualOffset
@@ -2254,11 +2458,11 @@ class PlaceBuilderDemo
 		([
 			new VisualCircle
 			(
-				entityDimensionHalf, itemMeatColor, null
+				entityDimensionHalf, Color.byName(itemMeatColor), null
 			),
 			new VisualCircle
 			(
-				entityDimensionHalf * .75, null, "Gray"
+				entityDimensionHalf * .75, null, Color.byName("Gray")
 			),
 			new VisualOffset
 			(
@@ -2298,7 +2502,7 @@ class PlaceBuilderDemo
 				(
 					Transform_Scale.fromScalar(entityDimension)
 				),
-				itemMedicineColor,
+				Color.byName(itemMedicineColor),
 				null
 			),
 			new VisualOffset
@@ -2393,7 +2597,7 @@ class PlaceBuilderDemo
 				(
 					Transform_Scale.fromScalar(entityDimension)
 				),
-				itemPickColor,
+				Color.byName(itemPickColor),
 				null
 			),
 			new VisualOffset
@@ -2434,7 +2638,7 @@ class PlaceBuilderDemo
 				(
 					Transform_Scale.fromScalar(entityDimension)
 				),
-				itemShovelColor,
+				Color.byName(itemShovelColor),
 				null
 			),
 			new VisualOffset
@@ -2467,7 +2671,7 @@ class PlaceBuilderDemo
 				(
 					Transform_Scale.fromScalar(entityDimension)
 				),
-				itemAccessoryColor,
+				Color.byName(itemAccessoryColor),
 				null
 			),
 			new VisualOffset
@@ -2479,7 +2683,7 @@ class PlaceBuilderDemo
 
 		// sword
 
-		var itemSwordColor = "rgb(0, 128, 128)";
+		var itemSwordColor = Color.fromRGB(0, .5, .5);
 		var itemSwordVisual = new VisualGroup
 		([
 			new VisualPolygon //Located
@@ -2510,14 +2714,24 @@ class PlaceBuilderDemo
 					new Transform_RotateRight(3) // quarter-turns
 				),
 				itemSwordColor,
-				itemSwordColor
+				null // colorBorder
 			),
 			new VisualOffset
 			(
-				new VisualText(DataBinding.fromContext("Sword"), itemSwordColor, null),
+				new VisualText(DataBinding.fromContext("Sword"), itemSwordColor.systemColor(), null),
 				new Coords(0, 0 - entityDimension * 2.5, 0)
 			)
 		]);
+
+		var itemSwordColdVisual = new VisualTransform
+		(
+			new Transform_Colorize(Color.byName("Cyan"), null), itemSwordVisual
+		);
+
+		var itemSwordHeatVisual = new VisualTransform
+		(
+			new Transform_Colorize(Color.byName("Yellow"), null), itemSwordVisual, 
+		);
 
 		// toolset
 
@@ -2558,6 +2772,7 @@ class PlaceBuilderDemo
 			new ItemDefn("Grass", 			null, null, .01, 	1, null, null, null, itemGrassVisual),
 			new ItemDefn("Gun",				null, null, 5, 		100, null, [ "Wieldable" ], itemUseEquip, itemGunVisual),
 			new ItemDefn("Key", 			null, null, .1, 	5, null, null, null, itemKeyVisual),
+			new ItemDefn("Log", 			null, null, 10, 	1, null, null, null, itemLogVisual),
 			new ItemDefn("Material", 		null, null, 10, 	3, null, null, null, itemMaterialVisual),
 			new ItemDefn("Meat", 			null, null, 10, 	3, null, null, null, itemMeatVisual),
 			new ItemDefn("Mushroom", 		null, null, .01, 	1, null, null, null, itemMushroomVisual),
@@ -2566,6 +2781,8 @@ class PlaceBuilderDemo
 			new ItemDefn("Shovel", 			null, null, 1, 		30, null, [ "Wieldable" ], itemUseEquip, itemShovelVisual),
 			new ItemDefn("Speed Boots", 	null, null, 10, 	30, null, [ "Accessory" ], itemUseEquip, itemSpeedBootsVisual),
 			new ItemDefn("Sword",			null, null, 10, 	100, null, [ "Wieldable" ], itemUseEquip, itemSwordVisual),
+			new ItemDefn("SwordCold",		null, null, 10, 	100, null, [ "Wieldable" ], itemUseEquip, itemSwordColdVisual),
+			new ItemDefn("SwordHeat",		null, null, 10, 	100, null, [ "Wieldable" ], itemUseEquip, itemSwordHeatVisual),
 			new ItemDefn("Toolset", 		null, null, 1, 		30, null, null, null, itemToolsetVisual),
 
 			new ItemDefn
@@ -2871,7 +3088,7 @@ class PlaceBuilderDemo
 			new ActionToInputsMapping("MoveRight", 	[ inputNames.ArrowRight, inputNames.GamepadMoveRight + "0" ], inactivateFalse),
 			new ActionToInputsMapping("MoveUp", 	[ inputNames.ArrowUp, inputNames.GamepadMoveUp + "0" ], inactivateFalse),
 
-			new ActionToInputsMapping("Fire", 		[ inputNames.Enter, inputNames.GamepadButton0 + "0" ], inactivateFalse),
+			new ActionToInputsMapping("Fire", 		[ "f", inputNames.Enter, inputNames.GamepadButton0 + "0" ], inactivateFalse),
 			new ActionToInputsMapping("Jump", 		[ inputNames.Space, inputNames.GamepadButton0 + "1" ], inactivateFalse),
 			new ActionToInputsMapping("PickUp", 	[ "g", inputNames.GamepadButton0 + "4" ], inactivateFalse),
 			new ActionToInputsMapping("Run", 		[ inputNames.Shift, inputNames.GamepadButton0 + "2" ], inactivateFalse),

@@ -134,12 +134,12 @@ class PlaceBuilderDemo_Emplacements
 				(
 					Transform_Scale.fromScalar(entityDimension)
 				),
-				exitColor,
+				Color.byName(exitColor),
 				null
 			),
 			new VisualOffset
 			(
-				new VisualCircle(entityDimension / 8, "Yellow", null),
+				new VisualCircle(entityDimension / 8, Color.byName("Yellow"), null),
 				new Coords(entityDimension / 4, 0 - entityDimension / 2, 0)
 			),
 			new VisualOffset
@@ -183,7 +183,7 @@ class PlaceBuilderDemo_Emplacements
 				(
 					Transform_Scale.fromScalar(entityDimension)
 				),
-				itemHoleColor,
+				Color.byName(itemHoleColor),
 				null
 			),
 			new VisualOffset
@@ -245,7 +245,7 @@ class PlaceBuilderDemo_Emplacements
 			[
 				obstacleBoundable,
 				obstacleCollidable,
-				new Damager(10),
+				new Damager(new Damage(10, null)),
 				new Drawable(visual, null),
 				new DrawableCamera(),
 				new Locatable(new Disposition(new Coords(0, 0, 0), null, null) )
@@ -333,7 +333,7 @@ class PlaceBuilderDemo_Emplacements
 			[
 				obstacleBoundable,
 				obstacleCollidable,
-				new Damager(10),
+				new Damager(new Damage(10, null)),
 				new Drawable(obstacleMappedVisual, null),
 				new DrawableCamera(),
 				new Locatable(new Disposition(new Coords(0, 0, 0), null, null) )
@@ -381,7 +381,7 @@ class PlaceBuilderDemo_Emplacements
 			[
 				new Locatable(obstacleLoc),
 				new Collidable(obstacleCollider, null, null),
-				new Damager(10),
+				new Damager(new Damage(10, null)),
 				new Drawable(obstacleRingVisual, null),
 				new DrawableCamera()
 			]
@@ -411,7 +411,7 @@ class PlaceBuilderDemo_Emplacements
 				(
 					Transform_Scale.fromScalar(entityDimension)
 				),
-				baseColor,
+				Color.byName(baseColor),
 				null
 			),
 			new VisualOffset

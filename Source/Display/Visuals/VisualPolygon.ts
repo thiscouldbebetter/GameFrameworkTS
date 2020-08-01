@@ -2,13 +2,13 @@
 class VisualPolygon implements Visual
 {
 	verticesAsPath: Path;
-	colorFill: string;
-	colorBorder: string;
+	colorFill: Color;
+	colorBorder: Color;
 
 	verticesAsPathTransformed: Path;
 	transformTranslate: Transform_Translate;
 
-	constructor(verticesAsPath: Path, colorFill: string, colorBorder: string)
+	constructor(verticesAsPath: Path, colorFill: Color, colorBorder: Color)
 	{
 		this.verticesAsPath = verticesAsPath;
 		this.colorFill = colorFill;
@@ -37,7 +37,8 @@ class VisualPolygon implements Visual
 		display.drawPolygon
 		(
 			this.verticesAsPathTransformed.points,
-			this.colorFill, this.colorBorder
+			(this.colorFill == null ? null: this.colorFill.systemColor()),
+			(this.colorBorder == null ? null : this.colorBorder.systemColor())
 		);
 	};
 
@@ -45,18 +46,34 @@ class VisualPolygon implements Visual
 
 	clone(): Visual
 	{
-		return this; // todo
+		return new VisualPolygon
+		(
+			this.verticesAsPath.clone(),
+			this.colorFill == null ? null : this.colorFill.clone(),
+			this.colorBorder == null ? null: this.colorBorder.clone()
+		);
 	}
 
 	overwriteWith(other: Visual): Visual
 	{
-		return this; // todo
+		var otherAsVisualPolygon = other as VisualPolygon
+		ArrayHelper.overwriteWith(this.verticesAsPath, otherAsVisualPolygon.verticesAsPath);
+		if (this.colorFill != null)
+		{
+			this.colorFill.overwriteWith(otherAsVisualPolygon.colorFill);
+		}
+		if (this.colorBorder != null)
+		{
+			this.colorBorder.overwriteWith(otherAsVisualPolygon.colorBorder);
+		}
+		return this;
 	}
 
 	// Transformable.
 
 	transform(transformToApply: Transform): Transformable
 	{
-		return this; // todo
+		this.verticesAsPath.transform(transformToApply);
+		return this;
 	}
 }

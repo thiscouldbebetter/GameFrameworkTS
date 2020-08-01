@@ -122,7 +122,7 @@ class VisualBuilder {
             visualLegsFacingUpWalking
         ]);
         var circleWithEyes = new VisualGroup([
-            new VisualCircle(circleRadius, circleColor, null),
+            new VisualCircle(circleRadius, Color.byName(circleColor), null),
             visualEyesDirectional
         ]);
         circleWithEyes = new VisualOffset(circleWithEyes, new Coords(0, -circleRadius, 0));
@@ -136,8 +136,8 @@ class VisualBuilder {
     eyesBlinking(visualEyeRadius) {
         var visualPupilRadius = visualEyeRadius / 2;
         var visualEye = new VisualGroup([
-            new VisualCircle(visualEyeRadius, "White", null),
-            new VisualCircle(visualPupilRadius, "Black", null)
+            new VisualCircle(visualEyeRadius, Color.byName("White"), null),
+            new VisualCircle(visualPupilRadius, Color.byName("Black"), null)
         ]);
         var visualEyes = new VisualGroup([
             new VisualOffset(visualEye, new Coords(-visualEyeRadius, 0, 0)),

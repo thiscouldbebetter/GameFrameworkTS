@@ -1,9 +1,9 @@
 
 class Damager
 {
-	damagePerHit: number;
+	damagePerHit: Damage;
 
-	constructor(damagePerHit: number)
+	constructor(damagePerHit: Damage)
 	{
 		this.damagePerHit = damagePerHit;
 	}

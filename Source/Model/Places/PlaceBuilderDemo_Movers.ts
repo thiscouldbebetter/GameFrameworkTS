@@ -7,9 +7,22 @@ class PlaceBuilderDemo_Movers
 		this.parent = parent;
 	}
 
-	entityDefnBuildEnemyGenerator(entityDimension: number): Entity
+	entityDefnBuildEnemyGeneratorChaser(entityDimension: number, damageTypeName: string): Entity
 	{
-		var enemyColor = "Red";
+		var enemyColor: string;
+		var damageTypes = DamageType.Instances();
+		if (damageTypeName == null)
+		{
+			enemyColor = "Red";
+		}
+		else if (damageTypeName == damageTypes.Cold.name)
+		{
+			enemyColor = "Cyan";
+		}
+		else if (damageTypeName == damageTypes.Heat.name)
+		{
+			enemyColor = "Yellow";
+		}
 		var visualEyeRadius = entityDimension * .75 / 2;
 		var visualBuilder = new VisualBuilder();
 		var visualEyesBlinking = visualBuilder.eyesBlinking(visualEyeRadius);
@@ -87,8 +100,8 @@ class PlaceBuilderDemo_Movers
 			new VisualPolygon
 			(
 				new Path(enemyColliderAsFace.vertices),
-				enemyColor,
-				null // colorBorder
+				Color.byName(enemyColor),
+				Color.byName("Red") // colorBorder
 			),
 			visualEyesWithBrowsDirectional,
 			new VisualOffset
@@ -119,10 +132,31 @@ class PlaceBuilderDemo_Movers
 			actorLoc.orientation.forwardSet(actorLoc.accel.clone().normalize());
 		};
 
+		var enemyDamageApply = (u: Universe, w: World, p: Place, eDamager: Entity, eKillable: Entity, damageToApply: Damage) =>
+		{
+			var damageToApplyTypeName = damageToApply.typeName;
+			var damageInflictedByTargetTypeName = eKillable.damager().damagePerHit.typeName;
+			var damageMultiplier = 1;
+			if (damageInflictedByTargetTypeName != null)
+			{
+				if (damageInflictedByTargetTypeName == damageToApplyTypeName)
+				{
+					damageMultiplier = 0;
+				}
+				else
+				{
+					damageMultiplier = 2;
+				}
+			}
+			var damageApplied = new Damage(damageToApply.amount * damageMultiplier, damageToApplyTypeName);
+			eKillable.killable().integritySubtract(damageToApply.amount * damageMultiplier);
+			return damageApplied.amount;
+		};
+
 		var enemyKillable = new Killable
 		(
-			10,
-			null, // damageApply
+			20, // integrityMax
+			enemyDamageApply,
 			(universe: Universe, world: World, place: Place, entityDying: Entity) => // die
 			{
 				var chanceOfDroppingCoin = 1;
@@ -158,14 +192,15 @@ class PlaceBuilderDemo_Movers
 			}
 		);
 
+		// todo - Remove closures.
 		var enemyEntityPrototype = new Entity
 		(
-			"Enemy",
+			"Chaser" + (damageTypeName || "Normal"),
 			[
 				new Actor(enemyActivity, "Player"),
 				new Constrainable([constraintSpeedMax1]),
 				new Collidable(enemyCollider, null, null),
-				new Damager(10),
+				new Damager(new Damage(10, damageTypeName)),
 				new Drawable(enemyVisual, null),
 				new DrawableCamera(),
 				new Enemy(),
@@ -176,8 +211,11 @@ class PlaceBuilderDemo_Movers
 
 		var generatorActivity = (universe: Universe, world: World, place: Place, actor: Entity, entityToTargetName: string) => 
 		{
-			var enemyCount = place.entitiesByPropertyName(Enemy.name).length;
-			var enemyCountMax = 3;
+			var enemyCount = place.entitiesByPropertyName(Enemy.name).filter
+			(
+				x => x.name.startsWith(enemyEntityPrototype.name)
+			).length;
+			var enemyCountMax = 1;
 			if (enemyCount < enemyCountMax)
 			{
 				var enemyEntityToPlace = enemyEntityPrototype.clone();
@@ -212,7 +250,7 @@ class PlaceBuilderDemo_Movers
 
 		var enemyGeneratorEntityDefn = new Entity
 		(
-			"EnemyGenerator",
+			"EnemyGenerator" + enemyEntityPrototype.name,
 			[
 				new Actor(generatorActivity, null)
 			]
@@ -495,21 +533,26 @@ class PlaceBuilderDemo_Movers
 				actor.target = null;
 			}
 		};
+		
+		var grazerDie = (universe: Universe, world: World, place: Place, entityDying: Entity) => // die
+		{
+			entityDying.locatable().entitySpawnWithDefnName
+			(
+				universe, world, place, entityDying, "Meat"
+			);
+		};
 
 		var grazerEntityDefn = new Entity
 		(
 			"Grazer",
 			[
-				new Locatable(new Disposition(new Coords(0, 0, 0), null, null) ),
-				new Constrainable([constraintSpeedMax1]),
+				new Actor(grazerActivity, null),
 				new Collidable(grazerCollider, null, null),
+				new Constrainable([constraintSpeedMax1]),
 				new Drawable(grazerVisual, null),
 				new DrawableCamera(),
-				new Actor(grazerActivity, null),
-				ItemHolder.fromItems
-				([
-					new Item("Meat", 3),
-				]),
+				new Killable(10, null, grazerDie),
+				new Locatable(new Disposition(new Coords(0, 0, 0), null, null) )
 			]
 		);
 
@@ -787,7 +830,7 @@ class PlaceBuilderDemo_Movers
 			50, // integrity
 			(universe: Universe, world: World, place: Place, entityDamager: Entity, entityKillable: Entity) => // damageApply
 			{
-				var damage = entityDamager.damager().damagePerHit;
+				var damage = entityDamager.damager().damagePerHit.amount;
 				var equipmentUser = entityKillable.equipmentUser();
 				var armorEquipped = equipmentUser.itemEntityInSocketWithName("Armor");
 				if (armorEquipped != null)
@@ -795,7 +838,7 @@ class PlaceBuilderDemo_Movers
 					var armor = armorEquipped.propertiesByName.get(Armor.name);
 					damage *= armor.damageMultiplier;
 				}
-				entityKillable.killable().integrityAdd(0 - damage);
+				entityKillable.killable().integritySubtract(damage);
 				return damage;
 			},
 			(universe: Universe, world: World, place: Place, entityKillable: Entity) => // die

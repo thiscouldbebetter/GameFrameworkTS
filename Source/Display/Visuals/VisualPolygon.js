@@ -12,18 +12,27 @@ class VisualPolygon {
         this.transformTranslate.displacement.overwriteWith(drawablePos);
         this.verticesAsPathTransformed.overwriteWith(this.verticesAsPath);
         Transforms.applyTransformToCoordsMany(this.transformTranslate, this.verticesAsPathTransformed.points);
-        display.drawPolygon(this.verticesAsPathTransformed.points, this.colorFill, this.colorBorder);
+        display.drawPolygon(this.verticesAsPathTransformed.points, (this.colorFill == null ? null : this.colorFill.systemColor()), (this.colorBorder == null ? null : this.colorBorder.systemColor()));
     }
     ;
     // Clonable.
     clone() {
-        return this; // todo
+        return new VisualPolygon(this.verticesAsPath.clone(), this.colorFill == null ? null : this.colorFill.clone(), this.colorBorder == null ? null : this.colorBorder.clone());
     }
     overwriteWith(other) {
-        return this; // todo
+        var otherAsVisualPolygon = other;
+        ArrayHelper.overwriteWith(this.verticesAsPath, otherAsVisualPolygon.verticesAsPath);
+        if (this.colorFill != null) {
+            this.colorFill.overwriteWith(otherAsVisualPolygon.colorFill);
+        }
+        if (this.colorBorder != null) {
+            this.colorBorder.overwriteWith(otherAsVisualPolygon.colorBorder);
+        }
+        return this;
     }
     // Transformable.
     transform(transformToApply) {
-        return this; // todo
+        this.verticesAsPath.transform(transformToApply);
+        return this;
     }
 }

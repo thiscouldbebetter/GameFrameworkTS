@@ -2,7 +2,7 @@
 class Killable
 {
 	integrityMax: number;
-	_damageApply: (u: Universe, w: World, p: Place, eDamager: Entity, eKillable: Entity, damageToApply: number) => void;
+	_damageApply: (u: Universe, w: World, p: Place, eDamager: Entity, eKillable: Entity, damageToApply: Damage) => number;
 	_die: (u: Universe, w: World, p: Place, e: Entity) => void;
 
 	integrity: number;
@@ -10,7 +10,7 @@ class Killable
 	constructor
 	(
 		integrityMax: number,
-		damageApply: (u: Universe, w: World, p: Place, eDamager: Entity, eKillable: Entity, damageToApply: number) => void,
+		damageApply: (u: Universe, w: World, p: Place, eDamager: Entity, eKillable: Entity, damageToApply: Damage) => number,
 		die: (u: Universe, w: World, p: Place, e: Entity) => void
 	)
 	{
@@ -21,13 +21,13 @@ class Killable
 		this.integrity = this.integrityMax;
 	}
 
-	damageApply(universe: Universe, world: World, place: Place, entityDamager: Entity, entityKillable: Entity, damageToApply: number)
+	damageApply(universe: Universe, world: World, place: Place, entityDamager: Entity, entityKillable: Entity, damageToApply: Damage): number
 	{
 		var damageApplied;
 		if (this._damageApply == null)
 		{
-			damageApplied = (damageToApply == null ? entityDamager.damager().damagePerHit : damageToApply);
-			entityKillable.killable().integrityAdd(0 - damageApplied);
+			damageApplied = (damageToApply == null ? entityDamager.damager().damagePerHit.amount : damageToApply.amount);
+			entityKillable.killable().integritySubtract(damageApplied);
 		}
 		else
 		{
@@ -52,7 +52,12 @@ class Killable
 			this.integrity,
 			this.integrityMax
 		);
-	};
+	}
+
+	integritySubtract(amountToSubtract: number)
+	{
+		this.integrityAdd(0 - amountToSubtract);
+	}
 
 	isAlive()
 	{

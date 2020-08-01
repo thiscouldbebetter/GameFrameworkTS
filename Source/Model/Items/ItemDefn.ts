@@ -53,6 +53,15 @@ class ItemDefn
 
 	use(u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity)
 	{
-		return this._use(u, w, p, eUsing, eUsed);
+		var returnValue;
+		if (this._use == null)
+		{
+			returnValue = "Can't use " + this.name + ".";
+		}
+		else
+		{
+			returnValue = this._use(u, w, p, eUsing, eUsed);
+		}
+		return returnValue;
 	};
 }

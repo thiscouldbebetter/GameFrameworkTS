@@ -63,8 +63,8 @@ class PlaceBuilderDemo_Emplacements {
                 new Coords(-0.5, 0, 0),
                 new Coords(-0.5, -1.5, 0),
                 new Coords(0.5, -1.5, 0)
-            ]).transform(Transform_Scale.fromScalar(entityDimension)), exitColor, null),
-            new VisualOffset(new VisualCircle(entityDimension / 8, "Yellow", null), new Coords(entityDimension / 4, 0 - entityDimension / 2, 0)),
+            ]).transform(Transform_Scale.fromScalar(entityDimension)), Color.byName(exitColor), null),
+            new VisualOffset(new VisualCircle(entityDimension / 8, Color.byName("Yellow"), null), new Coords(entityDimension / 4, 0 - entityDimension / 2, 0)),
             new VisualOffset(new VisualText(new DataBinding("Exit", null, null), exitColor, null), new Coords(0, 0 - entityDimension * 2.5, 0))
         ]);
         var exitEntityDefn = new Entity("Exit", [
@@ -87,7 +87,7 @@ class PlaceBuilderDemo_Emplacements {
                 new Coords(0.5, 0.0, 0),
                 new Coords(0.4, -0.2, 0),
                 new Coords(-0.4, -0.2, 0),
-            ]).transform(Transform_Scale.fromScalar(entityDimension)), itemHoleColor, null),
+            ]).transform(Transform_Scale.fromScalar(entityDimension)), Color.byName(itemHoleColor), null),
             new VisualOffset(new VisualText(new DataBinding(entityName, null, null), itemHoleColor, null), new Coords(0, 0 - entityDimension, 0))
         ]);
         var entityDefn = new Entity(entityName, [
@@ -114,7 +114,7 @@ class PlaceBuilderDemo_Emplacements {
         var obstacleBarEntityDefn = new Entity("Bar", [
             obstacleBoundable,
             obstacleCollidable,
-            new Damager(10),
+            new Damager(new Damage(10, null)),
             new Drawable(visual, null),
             new DrawableCamera(),
             new Locatable(new Disposition(new Coords(0, 0, 0), null, null))
@@ -164,7 +164,7 @@ class PlaceBuilderDemo_Emplacements {
         var obstacleMappedEntityDefn = new Entity("Mine", [
             obstacleBoundable,
             obstacleCollidable,
-            new Damager(10),
+            new Damager(new Damage(10, null)),
             new Drawable(obstacleMappedVisual, null),
             new DrawableCamera(),
             new Locatable(new Disposition(new Coords(0, 0, 0), null, null))
@@ -187,7 +187,7 @@ class PlaceBuilderDemo_Emplacements {
         var obstacleRingEntityDefn = new Entity("Ring", [
             new Locatable(obstacleLoc),
             new Collidable(obstacleCollider, null, null),
-            new Damager(10),
+            new Damager(new Damage(10, null)),
             new Drawable(obstacleRingVisual, null),
             new DrawableCamera()
         ]);
@@ -204,7 +204,7 @@ class PlaceBuilderDemo_Emplacements {
                 new Coords(-0.5, -0.5, 0),
                 new Coords(0, -1, 0),
                 new Coords(0.5, -0.5, 0)
-            ]).transform(Transform_Scale.fromScalar(entityDimension)), baseColor, null),
+            ]).transform(Transform_Scale.fromScalar(entityDimension)), Color.byName(baseColor), null),
             new VisualOffset(new VisualDynamic((u, w, d, e) => {
                 var baseColor = "Brown";
                 return new VisualText(new DataBinding(e.portal().destinationPlaceName, null, null), baseColor, null);

@@ -21,18 +21,21 @@ class VisualGroup implements Visual
 
 	clone(): Visual
 	{
-		return this; // todo
+		return new VisualGroup(ArrayHelper.clone(this.children) );
 	}
 
 	overwriteWith(other: Visual): Visual
 	{
-		return this; // todo
+		var otherAsVisualGroup = other as VisualGroup;
+		ArrayHelper.overwriteWith(this.children, otherAsVisualGroup.children);
+		return this;
 	}
 
 	// Transformable.
 
 	transform(transformToApply: Transform): Transformable
 	{
-		return this; // todo
+		this.children.forEach(x => transformToApply.transform(x));
+		return this;
 	}
 }

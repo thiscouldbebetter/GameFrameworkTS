@@ -88,7 +88,11 @@ class VenueFader implements Venue
 		}
 
 		alphaOfFadeColor *= alphaOfFadeColor;
-		var fadeColor = this.backgroundColor.clone().alphaSet(alphaOfFadeColor * this.backgroundColor.alpha());
+		var fadeColor = this.backgroundColor.clone();
+		fadeColor.alpha
+		(
+			alphaOfFadeColor * this.backgroundColor.alpha(null)
+		);
 
 		var display = universe.display;
 		display.drawRectangle

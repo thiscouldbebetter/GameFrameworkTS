@@ -14,6 +14,23 @@ class Color
 		this.componentsRGBA = componentsRGBA;
 	}
 
+	static byName(colorName: string)
+	{
+		return Color.Instances()._AllByName.get(colorName);
+	}
+
+	static fromRGB(red: number, green: number, blue: number)
+	{
+		return new Color(null, null, [red, green, blue, 1]);
+	}
+
+	static fromSystemColor(systemColor: string)
+	{
+		var returnValue = new Color(systemColor, null, null);
+		returnValue._systemColor = systemColor;
+		return returnValue;
+	}
+
 	// constants
 
 	static NumberOfComponentsRGBA = 4;
@@ -34,24 +51,23 @@ class Color
 
 	// methods
 
-	alpha()
-	{
-		return this.componentsRGBA[3];
-	};
-
-	alphaSet(valueToSet: number)
+	alpha(valueToSet: number)
 	{
 		if (valueToSet != null)
 		{
 			this.componentsRGBA[3] = valueToSet;
 			this._systemColor = null;
 		}
-		return this;
+		return this.componentsRGBA[3];
 	};
 
-	clone()
+	multiplyRGBScalar(scalar: number)
 	{
-		return new Color(this.name, this.code, this.componentsRGBA.slice());
+		for (var i = 0; i < 3; i++)
+		{
+			this.componentsRGBA[i] *= scalar;
+		}
+		return this;
 	};
 
 	systemColor()
@@ -69,6 +85,22 @@ class Color
 
 		return this._systemColor;
 	};
+
+	// Clonable.
+
+	clone()
+	{
+		return new Color(this.name, this.code, this.componentsRGBA.slice());
+	}
+
+	overwriteWith(other: Color)
+	{
+		this.name = other.name;
+		this.code = other.code;
+		ArrayHelper.overwriteWith(this.componentsRGBA, other.componentsRGBA);
+		this._systemColor = null;
+		return this;
+	}
 }
 
 class Color_Instances
@@ -85,8 +117,10 @@ class Color_Instances
 	Green: Color;
 	GreenDark: Color;
 	Orange: Color;
+	Pink: Color;
 	Red: Color;
 	RedDark: Color;
+	Tan: Color;
 	Violet: Color;
 	White: Color;
 	Yellow: Color;
@@ -94,6 +128,7 @@ class Color_Instances
 
 	_All: Color[];
 	_AllByCode: Map<string, Color>;
+	_AllByName: Map<string, Color>;
 
 	constructor()
 	{
@@ -110,12 +145,14 @@ class Color_Instances
 		this.Green = new Color("Green",	"g", [0, 1, 0, 1] );
 		this.GreenDark = new Color("GreenDark", "G", [0, .5, 0, 1] );
 		this.Orange = new Color("Orange", "o", [1, 0.5, 0, 1] );
+		this.Pink = new Color("Pink", "p", [1, 0.5, 0.5, 1] );
 		this.Red = new Color("Red", "r", [1, 0, 0, 1] );
 		this.RedDark = new Color("RedDark", "R", [.5, 0, 0, 1] );
+		this.Tan = Color.fromSystemColor("Tan");
 		this.Violet = new Color("Violet", "v", [1, 0, 1, 1] );
 		this.White = new Color("White", "w", [1, 1, 1, 1] );
 		this.Yellow = new Color("Yellow", "y", [1, 1, 0, 1] );
-		this.YellowDark = new Color("Yellow", "Y", [.5, .5, 0, 1] );
+		this.YellowDark = new Color("YellowDark", "Y", [.5, .5, 0, 1] );
 
 		this._All =
 		[
@@ -132,8 +169,10 @@ class Color_Instances
 			this.Green,
 			this.GreenDark,
 			this.Orange,
+			this.Pink,
 			this.Red,
 			this.RedDark,
+			this.Tan,
 			this.Violet,
 			this.White,
 			this.Yellow,
@@ -141,5 +180,6 @@ class Color_Instances
 		];
 
 		this._AllByCode = ArrayHelper.addLookups(this._All, (x: Color) => x.code);
+		this._AllByName = ArrayHelper.addLookupsByName(this._All);
 	}
 }
