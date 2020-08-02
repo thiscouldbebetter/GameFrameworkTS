@@ -2,15 +2,15 @@
 class VisualRectangle implements Visual
 {
 	size: Coords;
-	colorFill: string;
-	colorBorder: string;
+	colorFill: Color;
+	colorBorder: Color;
 	isCentered: boolean;
 
 	sizeHalf: Coords;
 
 	_drawPos: Coords;
 
-	constructor(size: Coords, colorFill: string, colorBorder: string, isCentered: boolean)
+	constructor(size: Coords, colorFill: Color, colorBorder: Color, isCentered: boolean)
 	{
 		this.size = size;
 		this.colorFill = colorFill;
@@ -39,7 +39,10 @@ class VisualRectangle implements Visual
 
 		display.drawRectangle
 		(
-			drawPos, this.size, this.colorFill, this.colorBorder, null
+			drawPos, this.size,
+			(this.colorFill == null ? null : this.colorFill.systemColor() ),
+			(this.colorBorder == null ? null : this.colorBorder.systemColor() ),
+			null
 		);
 	};
 

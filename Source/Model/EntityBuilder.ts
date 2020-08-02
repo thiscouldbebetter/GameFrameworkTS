@@ -3,7 +3,7 @@ class EntityBuilder
 {
 	messageFloater(text: string, pos: Coords)
 	{
-		var color = "Red";
+		var color = Color.byName("Red");
 		var ticksToLive = 20;
 		var riseSpeed = -1;
 		var visual = new VisualText(new DataBinding(text, null, null), color, null);

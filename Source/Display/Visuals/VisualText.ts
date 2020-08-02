@@ -2,10 +2,10 @@
 class VisualText implements Visual
 {
 	_text: DataBinding<any, string>;
-	colorFill: string;
-	colorBorder: string;
+	colorFill: Color;
+	colorBorder: Color;
 
-	constructor(text: DataBinding<any, string>, colorFill: string, colorBorder: string)
+	constructor(text: DataBinding<any, string>, colorFill: Color, colorBorder: Color)
 	{
 		this._text = text;
 		this.colorFill = colorFill;
@@ -20,8 +20,8 @@ class VisualText implements Visual
 			text,
 			display.fontHeightInPixels,
 			entity.locatable().loc.pos,
-			this.colorFill,
-			this.colorBorder,
+			(this.colorFill == null ? null : this.colorFill.systemColor() ),
+			(this.colorBorder == null ? null : this.colorBorder.systemColor() ),
 			false, // areColorsReversed
 			true, // isCentered
 			null // widthMaxInPixels

@@ -13,7 +13,7 @@ class VisualRectangle {
         if (this.isCentered) {
             drawPos.subtract(this.sizeHalf);
         }
-        display.drawRectangle(drawPos, this.size, this.colorFill, this.colorBorder, null);
+        display.drawRectangle(drawPos, this.size, (this.colorFill == null ? null : this.colorFill.systemColor()), (this.colorBorder == null ? null : this.colorBorder.systemColor()), null);
     }
     ;
     // Clonable.

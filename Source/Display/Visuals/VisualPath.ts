@@ -2,14 +2,14 @@
 class VisualPath implements Visual
 {
 	verticesAsPath: Path;
-	color: string;
+	color: Color;
 	lineThickness: number;
 	isClosed: boolean;
 
 	verticesAsPathTransformed: Path;
 	transformTranslate: Transform_Translate;
 
-	constructor(verticesAsPath: Path, color: string, lineThickness: number, isClosed: boolean)
+	constructor(verticesAsPath: Path, color: Color, lineThickness: number, isClosed: boolean)
 	{
 		this.verticesAsPath = verticesAsPath;
 		this.color = color;
@@ -39,7 +39,7 @@ class VisualPath implements Visual
 		display.drawPath
 		(
 			this.verticesAsPathTransformed.points,
-			this.color,
+			this.color.systemColor(),
 			this.lineThickness,
 			this.isClosed
 		);

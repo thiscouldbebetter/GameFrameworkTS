@@ -122,7 +122,7 @@ class VisualBuilder {
             visualLegsFacingUpWalking
         ]);
         var circleWithEyes = new VisualGroup([
-            new VisualCircle(circleRadius, Color.byName(circleColor), null),
+            new VisualCircle(circleRadius, circleColor, null),
             visualEyesDirectional
         ]);
         circleWithEyes = new VisualOffset(circleWithEyes, new Coords(0, -circleRadius, 0));

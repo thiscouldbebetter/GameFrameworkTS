@@ -2,16 +2,18 @@
 class Collidable {
     constructor(colliderAtRest, entityPropertyNamesToCollideWith, collideEntities) {
         this.colliderAtRest = colliderAtRest;
-        this.entityPropertyNamesToCollideWith = entityPropertyNamesToCollideWith;
-        this.collideEntities = collideEntities;
+        this.entityPropertyNamesToCollideWith = entityPropertyNamesToCollideWith || [];
+        this._collideEntities = collideEntities;
         this.collider = this.colliderAtRest.clone();
-        if (this.entityPropertyNamesToCollideWith == null) {
-            this.entityPropertyNamesToCollideWith = [];
-        }
         this.ticksUntilCanCollide = 0;
         this.entitiesAlreadyCollidedWith = [];
         // Helper variables.
         this._transformTranslate = new Transform_Translate(new Coords(0, 0, 0));
+    }
+    collideEntities(u, w, p, e0, e1) {
+        if (this._collideEntities != null) {
+            this._collideEntities(u, w, p, e0, e1);
+        }
     }
     colliderLocateForEntity(entity) {
         this.collider.overwriteWith(this.colliderAtRest);
@@ -38,10 +40,7 @@ class Collidable {
                             var doEntitiesCollide = universe.collisionHelper.doEntitiesCollide(entity, entityOther);
                             if (doEntitiesCollide) {
                                 this.collideEntities(universe, world, place, entity, entityOther);
-                                var collidableOtherCollideEntities = entityOther.collidable().collideEntities;
-                                if (collidableOtherCollideEntities != null) {
-                                    collidableOtherCollideEntities(universe, world, place, entityOther, entity);
-                                }
+                                entityOther.collidable().collideEntities(universe, world, place, entityOther, entity);
                             }
                         }
                     }
@@ -52,7 +51,7 @@ class Collidable {
     ;
     // cloneable
     clone() {
-        return new Collidable(this.colliderAtRest.clone(), this.entityPropertyNamesToCollideWith, this.collideEntities);
+        return new Collidable(this.colliderAtRest.clone(), this.entityPropertyNamesToCollideWith, this._collideEntities);
     }
     ;
 }

@@ -5,13 +5,13 @@ class VisualArc implements Visual
 	radiusInner: number;
 	directionMin: Coords;
 	angleSpannedInTurns: number;
-	colorFill: string;
-	colorBorder: string;
+	colorFill: Color;
+	colorBorder: Color;
 
 	_drawPos: Coords;
 	_polar: Polar;
 
-	constructor(radiusOuter: number, radiusInner: number, directionMin: Coords, angleSpannedInTurns: number, colorFill: string, colorBorder: string)
+	constructor(radiusOuter: number, radiusInner: number, directionMin: Coords, angleSpannedInTurns: number, colorFill: Color, colorBorder: Color)
 	{
 		this.radiusOuter = radiusOuter;
 		this.radiusInner = radiusInner;
@@ -44,7 +44,8 @@ class VisualArc implements Visual
 			drawPos, // center
 			this.radiusInner, this.radiusOuter,
 			wedgeAngleMin, wedgeAngleMax,
-			this.colorFill, this.colorBorder
+			(this.colorFill == null ? null : this.colorFill.systemColor() ),
+			(this.colorBorder == null ? null : this.colorBorder.systemColor() )
 		);
 	};
 

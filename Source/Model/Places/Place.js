@@ -140,6 +140,9 @@ class Place {
     items() {
         return this.entitiesByPropertyName(Item.name);
     }
+    movables() {
+        return this.entitiesByPropertyName(Movable.name);
+    }
     player() {
         return this.entitiesByPropertyName(Playable.name)[0];
     }

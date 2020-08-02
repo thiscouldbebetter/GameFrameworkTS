@@ -7,21 +7,193 @@ class PlaceBuilderDemo_Movers
 		this.parent = parent;
 	}
 
+	entityDefnBuildCarnivore(entityDimension: number): Entity
+	{
+		var carnivoreColor = Color.byName("GrayDark");
+		var carnivoreDimension = entityDimension;
+
+		var constraintSpeedMax1 = new Constraint_SpeedMaxXY(1);
+
+		var carnivoreCollider = new Sphere(new Coords(0, 0, 0), carnivoreDimension);
+
+		var visualEyeRadius = entityDimension * .75 / 2;
+		var visualBuilder = new VisualBuilder();
+		var visualEyes = visualBuilder.eyesBlinking(visualEyeRadius);
+
+		var visualEyesDirectional = new VisualDirectional
+		(
+			visualEyes, // visualForNoDirection
+			[
+				new VisualOffset(visualEyes, new Coords(1, 0, 0).multiplyScalar(visualEyeRadius)),
+				new VisualOffset(visualEyes, new Coords(0, 1, 0).multiplyScalar(visualEyeRadius)),
+				new VisualOffset(visualEyes, new Coords(-1, 0, 0).multiplyScalar(visualEyeRadius)),
+				new VisualOffset(visualEyes, new Coords(0, -1, 0).multiplyScalar(visualEyeRadius))
+			]
+		);
+
+		var carnivoreVisualNormal = new VisualGroup
+		([
+			new VisualPolygon
+			(
+				new Path
+				([
+					new Coords(-2, -1, 0),
+					new Coords(-0.5, 0, 0),
+					new Coords(0.5, 0, 0),
+					new Coords(2, -1, 0),
+					new Coords(0, 2, 0),
+				]).transform
+				(
+					new Transform_Multiple
+					([
+						new Transform_Translate(new Coords(0, -0.5, 0)),
+						new Transform_Scale
+						(
+							new Coords(1, 1, 1).multiplyScalar(entityDimension)
+						)
+					])
+				),
+				carnivoreColor,
+				null // colorBorder
+			),
+			new VisualOffset
+			(
+				visualEyesDirectional,
+				new Coords(0, 0, 0)
+			),
+		]);
+
+		var carnivoreVisual = new VisualGroup
+		([
+			new VisualAnimation
+			(
+				"Carnivore",
+				[ 100, 100 ], // ticksToHoldFrames
+				// children
+				[
+					// todo - Fix blinking.
+					new VisualAnimation
+					(
+						"Blinking",
+						[ 5 ],// , 5 ], // ticksToHoldFrames
+						new Array<Visual>
+						(
+							//new VisualNone(),
+							carnivoreVisualNormal
+						),
+						null
+					),
+
+					carnivoreVisualNormal
+				],
+				false // isRepeating
+			),
+			new VisualOffset
+			(
+				new VisualText(new DataBinding("Carnivore", null, null), carnivoreColor, null),
+				new Coords(0, 0 - carnivoreDimension * 2, 0)
+			)
+		]);
+
+		var carnivoreActivity = (universe: Universe, world: World, place: Place, entityActor: Entity, target: any) =>
+		{
+			var actor = entityActor.actor();
+			var targetPos = actor.target;
+			if (targetPos == null)
+			{
+				var moversInPlace = place.movables();
+				var grazersInPlace = moversInPlace.filter(x => x.name.startsWith("Grazer"));
+				if (grazersInPlace.length == 0)
+				{
+					var randomizer = universe.randomizer;
+					targetPos =
+						new Coords(0, 0, 0).randomize(randomizer).multiply(place.size);
+				}
+				else
+				{
+					targetPos = grazersInPlace[0].locatable().loc.pos;
+				}
+				actor.target = targetPos;
+			}
+
+			var actorLoc = entityActor.locatable().loc;
+			var actorPos = actorLoc.pos;
+
+			var distanceToTarget = targetPos.clone().subtract
+			(
+				actorPos
+			).magnitude();
+
+			if (distanceToTarget >= 2)
+			{
+				actorLoc.vel.overwriteWith
+				(
+					targetPos
+				).subtract
+				(
+					actorPos
+				).normalize();
+
+				actorLoc.orientation.forward.overwriteWith(actorLoc.vel).normalize();
+			}
+			else
+			{
+				actorPos.overwriteWith(targetPos);
+				var moversInPlace = place.movables();
+				var grazersInPlace = moversInPlace.filter(x => x.name.startsWith("Grazer") );
+				var reachDistance = 20; // todo
+				var grazerInReach = grazersInPlace.filter
+				(
+					x => entityActor.locatable().distanceFromEntity(x) < reachDistance
+				)[0];
+				if (grazerInReach != null)
+				{
+					grazerInReach.killable().integrity = 0;
+				}
+				actor.target = null;
+			}
+		};
+		
+		var carnivoreDie = (universe: Universe, world: World, place: Place, entityDying: Entity) => // die
+		{
+			entityDying.locatable().entitySpawnWithDefnName
+			(
+				universe, world, place, entityDying, "Meat"
+			);
+		};
+
+		var carnivoreEntityDefn = new Entity
+		(
+			"Carnivore",
+			[
+				new Actor(carnivoreActivity, null),
+				new Collidable(carnivoreCollider, null, null),
+				new Constrainable([constraintSpeedMax1]),
+				new Drawable(carnivoreVisual, null),
+				new DrawableCamera(),
+				new Killable(10, null, carnivoreDie),
+				new Locatable(new Disposition(new Coords(0, 0, 0), null, null) )
+			]
+		);
+
+		return carnivoreEntityDefn;
+	};
+
 	entityDefnBuildEnemyGeneratorChaser(entityDimension: number, damageTypeName: string): Entity
 	{
-		var enemyColor: string;
+		var enemyColor: Color;
 		var damageTypes = DamageType.Instances();
 		if (damageTypeName == null)
 		{
-			enemyColor = "Red";
+			enemyColor = Color.byName("Red");
 		}
 		else if (damageTypeName == damageTypes.Cold.name)
 		{
-			enemyColor = "Cyan";
+			enemyColor = Color.byName("Cyan");
 		}
 		else if (damageTypeName == damageTypes.Heat.name)
 		{
-			enemyColor = "Yellow";
+			enemyColor = Color.byName("Yellow");
 		}
 		var visualEyeRadius = entityDimension * .75 / 2;
 		var visualBuilder = new VisualBuilder();
@@ -61,7 +233,7 @@ class PlaceBuilderDemo_Movers
 					// todo - Scale.
 					new Coords(-8, -8, 0), new Coords(0, 0, 0), new Coords(8, -8, 0)
 				]),
-				"rgb(64, 64, 64)",
+				Color.byName("GrayDark"),
 				3, // lineThickness
 				null
 			),
@@ -100,7 +272,7 @@ class PlaceBuilderDemo_Movers
 			new VisualPolygon
 			(
 				new Path(enemyColliderAsFace.vertices),
-				Color.byName(enemyColor),
+				enemyColor,
 				Color.byName("Red") // colorBorder
 			),
 			visualEyesWithBrowsDirectional,
@@ -261,7 +433,7 @@ class PlaceBuilderDemo_Movers
 
 	entityDefnBuildFriendly(entityDimension: number): Entity
 	{
-		var friendlyColor = "Green";
+		var friendlyColor = Color.byName("GreenDark");
 		var friendlyDimension = entityDimension;
 
 		var constraintSpeedMax1 = new Constraint_SpeedMaxXY(1);
@@ -297,7 +469,7 @@ class PlaceBuilderDemo_Movers
 					0, // radiusInner
 					new Coords(1, 0, 0), // directionMin
 					.5, // angleSpannedInTurns
-					"White",
+					Color.byName("White"),
 					null // todo
 				),
 				new Coords(0, friendlyDimension / 3, 0) // offset
@@ -388,7 +560,7 @@ class PlaceBuilderDemo_Movers
 				),
 				ItemHolder.fromItems
 				([
-					new Item("Ammo", 5),
+					new Item("Ammo", 200),
 					new Item("Coin", 200),
 					new Item("Gun", 1),
 					new Item("Key", 1),
@@ -403,7 +575,7 @@ class PlaceBuilderDemo_Movers
 
 	entityDefnBuildGrazer(entityDimension: number): Entity
 	{
-		var grazerColor = "Brown";
+		var grazerColor = Color.byName("Brown");
 		var grazerDimension = entityDimension;
 
 		var constraintSpeedMax1 = new Constraint_SpeedMaxXY(1);
@@ -568,7 +740,7 @@ class PlaceBuilderDemo_Movers
 
 		var playerHeadRadius = entityDimension * .75;
 		var playerCollider = new Sphere(new Coords(0, 0, 0), playerHeadRadius);
-		var playerColor = "Gray";
+		var playerColor = Color.byName("Gray");
 
 		var playerVisualBodyNormal: Visual = visualBuilder.circleWithEyesAndLegs
 		(
@@ -576,7 +748,7 @@ class PlaceBuilderDemo_Movers
 		);
 		var playerVisualBodyHidden = visualBuilder.circleWithEyesAndLegs
 		(
-			playerHeadRadius, "Black", visualEyeRadius, visualEyesBlinking
+			playerHeadRadius, Color.byName("Black"), visualEyeRadius, visualEyesBlinking
 		);
 		var playerVisualBodyHidable = new VisualSelect
 		(
@@ -590,7 +762,11 @@ class PlaceBuilderDemo_Movers
 		var playerVisualBodyJumpable = new VisualJump2D
 		(
 			playerVisualBodyHidable,
-			new VisualEllipse(playerHeadRadius, playerHeadRadius / 2, 0, "DarkGray", "Black"),
+			new VisualEllipse
+			(
+				playerHeadRadius, playerHeadRadius / 2, 0,
+				Color.byName("GrayDark"), Color.byName("Black")
+			),
 			null
 		);
 

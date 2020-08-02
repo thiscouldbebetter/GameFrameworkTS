@@ -64,7 +64,7 @@ class MapOfCells
 
 		// todo
 		// var cellSizeInPixels = this.cellSize;
-		// var cellVisual = new VisualRectangle(cellSizeInPixels, "Blue", null, false); // isCentered
+		// var cellVisual = new VisualRectangle(cellSizeInPixels, Color.byName("Blue"), null, false); // isCentered
 
 		for (var y = cellPosStart.y; y < cellPosEnd.y; y++)
 		{

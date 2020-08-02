@@ -3,13 +3,13 @@ class VisualLine implements Visual
 {
 	fromPos: Coords;
 	toPos: Coords;
-	color: string;
+	color: Color;
 	lineThickness: number;
 
 	_drawPosFrom: Coords;
 	_drawPosTo: Coords;
 
-	constructor(fromPos: Coords, toPos: Coords, color: string, lineThickness: number)
+	constructor(fromPos: Coords, toPos: Coords, color: Color, lineThickness: number)
 	{
 		this.fromPos = fromPos;
 		this.toPos = toPos;
@@ -41,7 +41,7 @@ class VisualLine implements Visual
 			this.toPos
 		);
 
-		display.drawLine(drawPosFrom, drawPosTo, this.color, this.lineThickness);
+		display.drawLine(drawPosFrom, drawPosTo, this.color.systemColor(), this.lineThickness);
 	};
 
 	// Clonable.

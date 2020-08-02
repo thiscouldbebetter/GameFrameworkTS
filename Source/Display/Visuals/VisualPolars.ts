@@ -2,14 +2,14 @@
 class VisualPolars implements Visual
 {
 	polars: Polar[];
-	color: string;
+	color: Color;
 	lineThickness: number;
 
 	_polar: Polar;
 	_fromPos: Coords;
 	_toPos: Coords;
 
-	constructor(polars: Polar[], color: string, lineThickness: number)
+	constructor(polars: Polar[], color: Color, lineThickness: number)
 	{
 		this.polars = polars;
 		this.color = color;
@@ -41,7 +41,7 @@ class VisualPolars implements Visual
 
 			display.drawLine
 			(
-				fromPos, toPos, this.color, this.lineThickness
+				fromPos, toPos, this.color.systemColor(), this.lineThickness
 			);
 
 			fromPos.overwriteWith(toPos);

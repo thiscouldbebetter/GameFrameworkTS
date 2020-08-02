@@ -307,13 +307,10 @@ class CollisionHelper
 				collidable1EntitiesAlreadyCollidedWith.push(entity0);
 			}
 		}
-		else
+		else if (wereEntitiesAlreadyColliding)
 		{
-			if (wereEntitiesAlreadyColliding)
-			{
-				ArrayHelper.remove(collidable0EntitiesAlreadyCollidedWith, entity1);
-				ArrayHelper.remove(collidable1EntitiesAlreadyCollidedWith, entity0);
-			}
+			ArrayHelper.remove(collidable0EntitiesAlreadyCollidedWith, entity1);
+			ArrayHelper.remove(collidable1EntitiesAlreadyCollidedWith, entity0);
 		}
 
 		return doCollide;

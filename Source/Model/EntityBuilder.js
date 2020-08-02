@@ -1,7 +1,7 @@
 "use strict";
 class EntityBuilder {
     messageFloater(text, pos) {
-        var color = "Red";
+        var color = Color.byName("Red");
         var ticksToLive = 20;
         var riseSpeed = -1;
         var visual = new VisualText(new DataBinding(text, null, null), color, null);

@@ -13,7 +13,7 @@ class VisualLine {
         var pos = entity.locatable().loc.pos;
         var drawPosFrom = this._drawPosFrom.overwriteWith(pos).add(this.fromPos);
         var drawPosTo = this._drawPosTo.overwriteWith(pos).add(this.toPos);
-        display.drawLine(drawPosFrom, drawPosTo, this.color, this.lineThickness);
+        display.drawLine(drawPosFrom, drawPosTo, this.color.systemColor(), this.lineThickness);
     }
     ;
     // Clonable.

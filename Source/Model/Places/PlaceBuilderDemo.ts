@@ -43,6 +43,7 @@ class PlaceBuilderDemo
 		this.build_Interior("Base", size, placeNameToReturnTo);
 
 		this.entities.push(this.entityBuildFromDefn(this.entityDefnsByName.get("Player")));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Bomb"), 3));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Book"), 1));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Campfire"), 1));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Container"), 1));
@@ -131,8 +132,9 @@ class PlaceBuilderDemo
 			new Coords(0, -1, 0), new Coords(1, -1, 0)
 		];
 
-		var colorToTerrainVisualsByName = (color: string) =>
+		var colorToTerrainVisualsByName = (colorName: string) =>
 		{
+			var color = Color.byName(colorName);
 			var borderWidthAsFraction = .25;
 			var borderSizeCorner = mapCellSize.clone().multiplyScalar
 			(
@@ -360,7 +362,7 @@ class PlaceBuilderDemo
 			new Terrain("Water", 	"~", 0, true, colorToTerrainVisualsByName("Blue")),
 			new Terrain("Sand", 	".", 1, false, colorToTerrainVisualsByName("Tan")),
 			new Terrain("Grass", 	":", 2, false, colorToTerrainVisualsByName("Green")),
-			new Terrain("Trees", 	"Q", 3, false, colorToTerrainVisualsByName("DarkGreen")),
+			new Terrain("Trees", 	"Q", 3, false, colorToTerrainVisualsByName("GreenDark")),
 			new Terrain("Rock", 	"A", 4, false, colorToTerrainVisualsByName("Gray")),
 			new Terrain("Snow", 	"*", 5, false, colorToTerrainVisualsByName("White")),
 		]
@@ -507,10 +509,12 @@ class PlaceBuilderDemo
 		var mapCellsAsEntities = map.cellsAsEntities(mapAndCellPosToEntity);
 		this.entities.push(...mapCellsAsEntities);
 
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Carnivore"), 1));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Flower"), 1));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Grazer"), 1));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("MushroomGenerator"), 1));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Tree"), 1));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Grass"), 12));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Grazer"), 3));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("MushroomGenerator"), 2));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Tree"), 6));
 
 		var place = new Place(this.name, "Demo", size, this.entities);
 		return place;
@@ -536,11 +540,12 @@ class PlaceBuilderDemo
 
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Tree"), 10));
 
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Ammo"), 5));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Armor"), 1));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Boulder"), 3));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Carnivore"), 1));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Crystal"), 2));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Flower"), 6));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Fruit"), 1));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("GrassGenerator"), 3));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Grazer"), 1));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Material"), 2));
@@ -610,7 +615,7 @@ class PlaceBuilderDemo
 
 		var wallThickness = this.entityBuildObstacleWalls
 		(
-			"Red", areNeighborsConnectedESWN, namePrefix, placePos
+			Color.byName("Red"), areNeighborsConnectedESWN, namePrefix, placePos
 		);
 
 		var marginThickness = wallThickness * 8;
@@ -680,7 +685,7 @@ class PlaceBuilderDemo
 			new VisualRectangle
 			(
 				visualBackgroundCellSize,
-				null, "rgba(255, 255, 255, 0.02)", null
+				null, new Color(null, null, [1, 1, 1, 0.02]), null
 			),
 			true // expandViewStartAndEndByCell
 		);
@@ -704,7 +709,7 @@ class PlaceBuilderDemo
 			new VisualRectangle
 			(
 				visualBackgroundCellSize,
-				null, "rgba(255, 255, 255, 0.06)", null
+				null, new Color(null, null, [1, 1, 1, 0.06]), null
 			),
 			true // expandViewStartAndEndByCell
 		);
@@ -779,7 +784,7 @@ class PlaceBuilderDemo
 		entities: Entity[], entityDimension: number, entitySize: Coords, numberOfKeysToUnlockGoal: number
 	)
 	{
-		var itemKeyColor = "Yellow";
+		var itemKeyColor = Color.byName("Yellow");
 		var goalPos = new Coords(0, 0, 0).randomize(this.randomizer).multiplyScalar
 		(
 			.5
@@ -791,7 +796,7 @@ class PlaceBuilderDemo
 			this.size
 		);
 		var goalLoc = new Disposition(goalPos, null, null);
-		var goalColor = "Green";
+		var goalColor = Color.byName("GreenDark");
 		var goalEntity = new Entity
 		(
 			"Goal",
@@ -864,7 +869,7 @@ class PlaceBuilderDemo
 
 	entityBuildObstacleWalls
 	(
-		wallColor: string, areNeighborsConnectedESWN: boolean[], placeNamePrefix: string, placePos: Coords
+		wallColor: Color, areNeighborsConnectedESWN: boolean[], placeNamePrefix: string, placePos: Coords
 	)
 	{
 		areNeighborsConnectedESWN = areNeighborsConnectedESWN || [ false, false, false, false ];
@@ -979,7 +984,7 @@ class PlaceBuilderDemo
 						new Portal(neighborName, "PortalToNeighbor" + ((i + 2) % 4), false),
 						new Drawable
 						(
-							new VisualRectangle(portalSize, "Violet", null, null),
+							new VisualRectangle(portalSize, Color.byName("Violet"), null, null),
 							null
 						),
 						new DrawableCamera()
@@ -1045,7 +1050,7 @@ class PlaceBuilderDemo
 
 	entityDefnBuildStore(entityDimension: number): Entity
 	{
-		var storeColor = "Brown";
+		var storeColor = Color.byName("Brown");
 		var entitySize = new Coords(1, 1, 1).multiplyScalar(entityDimension);
 		var storeEntityDefn = new Entity
 		(
@@ -1066,7 +1071,7 @@ class PlaceBuilderDemo
 							new VisualRectangle
 							(
 								new Coords(1.1, .2, 0).multiplyScalar(entityDimension),
-								"Gray", null, null
+								Color.byName("Gray"), null, null
 							),
 							new Coords(0, -.75, 0).multiplyScalar(entityDimension)
 						),
@@ -1156,6 +1161,154 @@ class PlaceBuilderDemo
 		return itemArmorEntityDefn;
 	};
 
+	entityDefnBuildBomb(entityDimension: number): Entity
+	{
+		var entityDimensionHalf = entityDimension / 2;
+
+		var itemDefnBombName = "Bomb";
+		var itemBombVisual = this.itemDefnsByName.get(itemDefnBombName).visual;
+		var itemBombCollider = new Sphere(new Coords(0, 0, 0), entityDimensionHalf);
+
+		var itemBombDevice = new Device
+		(
+			"Bomb",
+			(u: Universe, w: World, p: Place, entity: Entity) => // initialize
+			{
+				var device = entity.device();
+				device.ticksToCharge = 10;
+				device.tickLastUsed = 0;
+			},
+			(u: Universe, w: World, p: Place, e: Entity) => // update
+			{
+				// todo
+			},
+			(u: Universe, world: World, p: Place, entityUser: Entity, entityDevice: Entity) => // use
+			{
+				var device = entityDevice.device();
+				var tickCurrent = world.timerTicksSoFar;
+				var ticksSinceUsed = tickCurrent - device.tickLastUsed;
+				if (ticksSinceUsed < device.ticksToCharge)
+				{
+					return;
+				}
+
+				var userAsItemHolder = entityUser.itemHolder();
+				var hasAmmo = userAsItemHolder.hasItemWithDefnNameAndQuantity("Bomb", 1);
+				if (hasAmmo == false)
+				{
+					return;
+				}
+
+				userAsItemHolder.itemSubtractDefnNameAndQuantity("Bomb", 1);
+				hasAmmo = userAsItemHolder.hasItemWithDefnNameAndQuantity("Bomb", 1);
+				if (hasAmmo == false)
+				{
+					entityUser.equipmentUser().unequipItemFromSocketWithName(world, "Wielding");
+				}
+
+				device.tickLastUsed = tickCurrent;
+
+				var userLoc = entityUser.locatable().loc;
+				var userPos = userLoc.pos;
+				var userVel = userLoc.vel;
+				var userSpeed = userVel.magnitude();
+				if (userSpeed == 0) { return; }
+
+				var projectileDimension = 1.5;
+				var projectileVisual = new VisualGroup
+				([
+					(entityDevice.drawable().visual as VisualCameraProjection).child,
+					// todo - Add sparks?
+				]);
+
+				var userDirection = userVel.clone().normalize();
+				var userRadius = entityUser.collidable().collider.radius;
+				var projectilePos = userPos.clone().add
+				(
+					userDirection.clone().multiplyScalar(userRadius + projectileDimension).double()
+				);
+				var projectileOri = new Orientation
+				(
+					userVel.clone().normalize(), null
+				);
+				var projectileLoc = new Disposition(projectilePos, projectileOri, null);
+				projectileLoc.vel.overwriteWith(userVel).clearZ().double();
+
+				var projectileCollider =
+					new Sphere(new Coords(0, 0, 0), projectileDimension);
+
+				// todo
+				var projectileCollide = null;
+				var projectileDie = (u: Universe, w: World, p: Place, entityDying: Entity) =>
+				{
+					var explosionRadius = 32;
+					var explosionVisual = new VisualCircle(explosionRadius, Color.byName("Yellow"), null);
+					var explosionCollider = new Sphere(new Coords(0, 0, 0), explosionRadius);
+					var explosionCollide = (universe: Universe, world: World, place: Place, entityProjectile: Entity, entityOther: Entity) =>
+					{
+						var killable = entityOther.killable();
+						if (killable != null)
+						{
+							killable.damageApply
+							(
+								universe, world, place, entityProjectile,
+								entityOther, entityProjectile.damager().damagePerHit
+							);
+						}
+					};
+					var explosionEntity = new Entity
+					(
+						"BombExplosion",
+						[
+							new Collidable(explosionCollider, [ Killable.name ], explosionCollide),
+							new Damager(new Damage(20, null)),
+							new Drawable(explosionVisual, null),
+							new DrawableCamera(),
+							new Ephemeral(8, null),
+							entityDying.locatable()
+						]
+					);
+					p.entitiesToSpawn.push(explosionEntity);
+				}
+
+				var projectileEntity = new Entity
+				(
+					"ProjectileBomb",
+					[
+						new Ephemeral(64, projectileDie),
+						new Locatable( projectileLoc ),
+						new Collidable
+						(
+							projectileCollider,
+							[ Collidable.name ],
+							projectileCollide
+						),
+						new Constrainable([new Constraint_FrictionXY(.03, .5)]),
+						new Drawable(projectileVisual, null),
+						new DrawableCamera()
+					]
+				);
+
+				p.entitiesToSpawn.push(projectileEntity);
+			}
+		);
+
+		var itemBombEntityDefn = new Entity
+		(
+			itemDefnBombName,
+			[
+				new Item(itemDefnBombName, 1),
+				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
+				new Collidable(itemBombCollider, null, null),
+				itemBombDevice,
+				new Drawable(itemBombVisual, null),
+				new DrawableCamera(),
+			]
+		);
+
+		return itemBombEntityDefn;
+	};
+
 	entityDefnBuildBook(entityDimension: number): Entity
 	{
 		var entityDimensionHalf = entityDimension / 2;
@@ -1185,7 +1338,7 @@ class PlaceBuilderDemo
 
 		var campfireName = "Campfire";
 
-		var campfireColor = "Orange";
+		var campfireColor = Color.byName("Orange");
 		var flameVisualStatic = new VisualGroup
 		([
 			new VisualPolygon
@@ -1196,7 +1349,7 @@ class PlaceBuilderDemo
 					new Coords(entityDimension, 0, 0),
 					new Coords(-entityDimension, 0, 0),
 				]),
-				Color.byName(campfireColor),
+				campfireColor,
 				null
 			),
 			new VisualPolygon
@@ -1361,6 +1514,29 @@ class PlaceBuilderDemo
 		return entityDefn;
 	};
 
+	entityDefnBuildFruit(entityDimension: number): Entity
+	{
+		var entityDimensionHalf = entityDimension / 2;
+
+		var itemDefnFruitName = "Fruit";
+		var itemFruitVisual = this.itemDefnsByName.get(itemDefnFruitName).visual;
+		var itemFruitCollider = new Sphere(new Coords(0, 0, 0), entityDimensionHalf);
+
+		var itemFruitEntityDefn = new Entity
+		(
+			itemDefnFruitName,
+			[
+				new Item(itemDefnFruitName, 1),
+				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
+				new Collidable(itemFruitCollider, null, null),
+				new Drawable(itemFruitVisual, null),
+				new DrawableCamera(),
+			]
+		);
+
+		return itemFruitEntityDefn;
+	};
+
 	entityDefnBuildGenerator(entityDefnToGenerate: Entity): Entity
 	{
 		var generator = new Generator
@@ -1431,7 +1607,7 @@ class PlaceBuilderDemo
 				var userSpeed = userVel.magnitude();
 				if (userSpeed == 0) { return; }
 
-				var projectileColor = "Cyan";
+				var projectileColor = Color.byName("Cyan");
 				var projectileDimension = 1.5;
 				var projectileVisual = new VisualGroup
 				(
@@ -1491,7 +1667,7 @@ class PlaceBuilderDemo
 					{
 						var entityExplosion = new Entity
 						(
-							"Explosion",
+							"BulletExplosion",
 							[
 								new Ephemeral(8, null),
 								new Drawable(visualExplosion, null),
@@ -1505,7 +1681,7 @@ class PlaceBuilderDemo
 
 				var projectileEntity = new Entity
 				(
-					"Projectile",
+					"ProjectileBullet",
 					[
 						new Damager(new Damage(10, null)),
 						new Ephemeral(32, null),
@@ -1791,7 +1967,7 @@ class PlaceBuilderDemo
 		var entityDimensionHalf = entityDimension / 2;
 
 		var itemDefnPotionName = "Potion";
-		var itemPotionColor = "Blue";
+		var itemPotionColor = Color.byName("Blue");
 		var itemPotionVisual = new VisualGroup
 		([
 			new VisualPolygon
@@ -1808,7 +1984,7 @@ class PlaceBuilderDemo
 				(
 					Transform_Scale.fromScalar(entityDimension)
 				),
-				Color.byName(itemPotionColor),
+				itemPotionColor,
 				Color.byName("White")
 			),
 			new VisualOffset
@@ -1967,9 +2143,9 @@ class PlaceBuilderDemo
 					null, // damageApply
 					(universe: Universe, world: World, place: Place, entityKillable: Entity) => // die
 					{
-						var entityExplosion = new Entity
+						var entityStrike = new Entity
 						(
-							"Explosion",
+							"SwordStrike",
 							[
 								new Ephemeral(8, null),
 								new Drawable(visualExplosion, null),
@@ -1977,13 +2153,13 @@ class PlaceBuilderDemo
 								entityKillable.locatable()
 							]
 						);
-						place.entitiesToSpawn.push(entityExplosion);
+						place.entitiesToSpawn.push(entityStrike);
 					}
 				);
 
 				var projectileEntity = new Entity
 				(
-					"Projectile",
+					"ProjectileSword",
 					[
 						new Damager(new Damage(10, damageTypeName)),
 						new Ephemeral(8, null),
@@ -2066,17 +2242,20 @@ class PlaceBuilderDemo
 			this.movers.entityDefnBuildEnemyGeneratorChaser(entityDimension, null),
 			this.movers.entityDefnBuildEnemyGeneratorChaser(entityDimension, "Cold"),
 			this.movers.entityDefnBuildEnemyGeneratorChaser(entityDimension, "Heat"),
+			this.movers.entityDefnBuildCarnivore(entityDimension),
 			this.movers.entityDefnBuildFriendly(entityDimension),
 			this.movers.entityDefnBuildGrazer(entityDimension),
 			this.movers.entityDefnBuildPlayer(entityDimension),
 
 			this.entityDefnBuildAccessory(entityDimension),
 			this.entityDefnBuildArmor(entityDimension),
+			this.entityDefnBuildBomb(entityDimension),
 			this.entityDefnBuildBook(entityDimension),
 			this.entityDefnBuildCampfire(entityDimension),
 			this.entityDefnBuildCoin(entityDimension),
 			this.entityDefnBuildCrystal(entityDimension),
 			entityDefnFlower,
+			this.entityDefnBuildFruit(entityDimension),
 			this.entityDefnBuildGenerator(entityDefnFlower),
 			this.entityDefnBuildGun(entityDimension),
 			this.entityDefnBuildGunAmmo(entityDimension),
@@ -2120,7 +2299,7 @@ class PlaceBuilderDemo
 		// ammo
 
 		var itemDefnAmmoName = "Ammo";
-		var itemAmmoColor = "rgb(0, 128, 128)";
+		var itemAmmoColor = new Color(null, null, [0, .5, .5, 1]);
 		var entityDimension = 10; // todo
 		var path = new Path
 		([
@@ -2137,7 +2316,7 @@ class PlaceBuilderDemo
 		([
 			new VisualPolygon
 			(
-				path, Color.fromSystemColor(itemAmmoColor), null
+				path, itemAmmoColor, null
 			),
 			new VisualOffset
 			(
@@ -2149,7 +2328,7 @@ class PlaceBuilderDemo
 		// armor
 
 		var itemDefnArmorName = "Armor";
-		var itemArmorColor = "Green";
+		var itemArmorColor = Color.byName("GreenDark");
 		var path = new Path
 		([
 			new Coords(0, 0.5, 0),
@@ -2163,7 +2342,7 @@ class PlaceBuilderDemo
 		);
 		var itemArmorVisual = new VisualGroup
 		([
-			new VisualPolygon(path, Color.byName(itemArmorColor), null),
+			new VisualPolygon(path, itemArmorColor, null),
 			new VisualOffset
 			(
 				new VisualText(new DataBinding(itemDefnArmorName, null, null), itemArmorColor, null),
@@ -2171,10 +2350,49 @@ class PlaceBuilderDemo
 			)
 		]);
 
+		// bomb
+
+		var itemDefnBombName = "Bomb";
+		var itemBombColor = Color.byName("BlueDark");
+		var itemBombVisual = new VisualGroup
+		([
+			// fuse
+			new VisualOffset
+			(
+				new VisualRectangle
+				(
+					new Coords(.1, 0.5, 1).multiplyScalar(entityDimensionHalf),
+					Color.byName("Tan"),
+					null, // colorBorder
+					true // isCentered
+				),
+				new Coords(0, -1, 0).multiplyScalar(entityDimensionHalf)
+			),
+			// body
+			new VisualCircle
+			(
+				entityDimensionHalf, itemBombColor, null
+			),
+			// highlight
+			new VisualOffset
+			(
+				new VisualCircle
+				(
+					entityDimensionHalf * .3, Color.byName("Blue"), null
+				),
+				new Coords(-entityDimensionHalf / 3, -entityDimensionHalf / 3, 0)
+			),
+			new VisualOffset
+			(
+				new VisualText(new DataBinding(itemDefnBombName, null, null), itemBombColor, null),
+				new Coords(0, 0 - entityDimension, 0)
+			)
+		]);
+
 		// book
 
 		var itemBookName = "Book";
-		var itemBookColor = "Blue";
+		var itemBookColor = Color.byName("Blue");
 		var itemBookVisual = new VisualGroup
 		([
 			new VisualRectangle
@@ -2187,7 +2405,7 @@ class PlaceBuilderDemo
 				new VisualRectangle
 				(
 					new Coords(.1, 1.1, 0).multiplyScalar(entityDimension),
-					"White", null, null
+					Color.byName("White"), null, null
 				),
 				new Coords(.4, 0, 0).multiplyScalar(entityDimension)
 			),
@@ -2201,12 +2419,12 @@ class PlaceBuilderDemo
 		// coin
 
 		var itemDefnCoinName = "Coin";
-		var itemCoinColor = "Yellow";
+		var itemCoinColor = Color.byName("Yellow");
 		var itemCoinVisual = new VisualGroup
 		([
 			new VisualCircle
 			(
-				entityDimensionHalf, Color.byName(itemCoinColor), null
+				entityDimensionHalf, itemCoinColor, null
 			),
 			new VisualCircle
 			(
@@ -2222,7 +2440,7 @@ class PlaceBuilderDemo
 		// crystal
 
 		var itemCrystalName = "Crystal";
-		var itemCrystalColor = "Cyan";
+		var itemCrystalColor = Color.byName("Cyan");
 		var itemCrystalVisual = new VisualGroup
 		([
 			new VisualPolygon
@@ -2240,7 +2458,7 @@ class PlaceBuilderDemo
 						new Coords(1, 1, 1).multiplyScalar(entityDimension / 2)
 					)
 				),
-				Color.byName(itemCrystalColor),
+				itemCrystalColor,
 				Color.byName("White")
 			),
 			new VisualPolygon
@@ -2271,7 +2489,7 @@ class PlaceBuilderDemo
 		// flower
 
 		var itemNameFlower = "Flower";
-		var colorFlower = "Pink";
+		var colorFlower = Color.byName("Pink");
 		var itemFlowerVisual = new VisualGroup
 		([
 			new VisualOffset
@@ -2282,7 +2500,7 @@ class PlaceBuilderDemo
 					entityDimensionHalf * 2 - 2, // radiusInner
 					new Coords(-1, 1, 0).normalize(), // directionMin
 					.25, // angleSpannedInTurns
-					"Green",
+					Color.byName("GreenDark"),
 					null
 				),
 				new Coords(.5, 1.75, 0).multiplyScalar(entityDimensionHalf)
@@ -2306,13 +2524,38 @@ class PlaceBuilderDemo
 						new Coords(1, 1, 1).multiplyScalar(entityDimensionHalf)
 					)
 				),
-				Color.byName(colorFlower),
+				colorFlower,
 				Color.byName("Red")
 			),
 			new VisualOffset
 			(
 				new VisualText(new DataBinding(itemNameFlower, null, null), colorFlower, null),
 				new Coords(0, 0 - entityDimensionHalf * 2, 0)
+			)
+		]);
+
+		// fruit
+
+		var itemDefnFruitName = "Fruit";
+		var itemFruitColor = Color.byName("Orange");
+		var itemFruitVisual = new VisualGroup
+		([
+			new VisualCircle
+			(
+				entityDimensionHalf, itemFruitColor, null
+			),
+			new VisualOffset
+			(
+				new VisualCircle
+				(
+					entityDimensionHalf * .25, Color.byName("White"), null
+				),
+				new Coords(-entityDimensionHalf / 2, -entityDimensionHalf / 2, 0)
+			),
+			new VisualOffset
+			(
+				new VisualText(new DataBinding(itemDefnFruitName, null, null), itemFruitColor, null),
+				new Coords(0, 0 - entityDimension, 0)
 			)
 		]);
 
@@ -2328,7 +2571,7 @@ class PlaceBuilderDemo
 			),
 			new VisualOffset
 			(
-				new VisualText(new DataBinding(itemNameGrass, null, null), "Green", null),
+				new VisualText(new DataBinding(itemNameGrass, null, null), Color.byName("GreenDark"), null),
 				new Coords(0, 0 - entityDimensionHalf * 3, 0)
 			)
 		]);
@@ -2336,7 +2579,7 @@ class PlaceBuilderDemo
 		// gun
 
 		var itemGunName = "Gun";
-		var itemGunColor = "rgb(0, 128, 128)";
+		var itemGunColor = new Color(null, null, [0, .5, .5, 1]);
 		var itemGunVisual = new VisualGroup
 		([
 			new VisualPath
@@ -2364,7 +2607,7 @@ class PlaceBuilderDemo
 		// key
 
 		var itemKeyName = "Key";
-		var itemKeyColor = "Yellow";
+		var itemKeyColor = Color.byName("Yellow");
 		var itemKeyVisual = new VisualGroup
 		([
 			new VisualArc
@@ -2399,14 +2642,14 @@ class PlaceBuilderDemo
 		// log
 
 		var itemLogName = "Log";
-		var itemLogColor = "Brown";
+		var itemLogColor = Color.byName("Brown");
 		var itemLogVisual = new VisualGroup
 		([
 			new VisualOffset
 			(
 				new VisualCircle
 				(
-					entityDimensionHalf, Color.byName(itemLogColor), null
+					entityDimensionHalf, itemLogColor, null
 				),
 				new Coords(entityDimension, 0, 0)
 			),
@@ -2433,7 +2676,7 @@ class PlaceBuilderDemo
 		// material
 
 		var itemMaterialName = "Material";
-		var itemMaterialColor = "Gray";
+		var itemMaterialColor = Color.byName("Gray");
 		var itemMaterialVisual = new VisualGroup
 		([
 			new VisualPolygon
@@ -2448,7 +2691,7 @@ class PlaceBuilderDemo
 				(
 					Transform_Scale.fromScalar(entityDimension)
 				),
-				Color.byName(itemMaterialColor),
+				itemMaterialColor,
 				null
 			),
 			new VisualOffset
@@ -2461,16 +2704,16 @@ class PlaceBuilderDemo
 		// meat
 
 		var itemMeatName = "Meat";
-		var itemMeatColor = "Red";
+		var itemMeatColor = Color.byName("Red");
 		var itemMeatVisual = new VisualGroup
 		([
 			new VisualCircle
 			(
-				entityDimensionHalf, Color.byName(itemMeatColor), null
+				entityDimensionHalf, itemMeatColor, null
 			),
 			new VisualCircle
 			(
-				entityDimensionHalf * .75, null, Color.byName("Gray")
+				entityDimensionHalf * .75, null, Color.byName("White")
 			),
 			new VisualOffset
 			(
@@ -2482,13 +2725,13 @@ class PlaceBuilderDemo
 		// medicine
 
 		var itemMedicineName = "Medicine";
-		var itemMedicineColor = "Red";
+		var itemMedicineColor = Color.byName("Red");
 		var itemMedicineVisual = new VisualGroup
 		([
 			new VisualRectangle
 			(
 				new Coords(1, 1, 0).multiplyScalar(entityDimension),
-				"White", null, null
+				Color.byName("White"), null, null
 			),
 			new VisualPolygon
 			(
@@ -2510,7 +2753,7 @@ class PlaceBuilderDemo
 				(
 					Transform_Scale.fromScalar(entityDimension)
 				),
-				Color.byName(itemMedicineColor),
+				itemMedicineColor,
 				null
 			),
 			new VisualOffset
@@ -2523,8 +2766,8 @@ class PlaceBuilderDemo
 		// mushroom
 
 		var itemMushroomName = "Mushroom";
-		var colorStem = "Gray";
-		var colorCap = "Purple";
+		var colorStem = Color.byName("Gray");
+		var colorCap = Color.byName("Violet");
 		var itemMushroomVisual = new VisualGroup
 		([
 			new VisualOffset
@@ -2559,7 +2802,7 @@ class PlaceBuilderDemo
 		// ore
 
 		var itemOreName = "Ore";
-		var itemOreColor = "Gray";
+		var itemOreColor = Color.byName("Gray");
 		var itemOreVisual = new VisualGroup
 		([
 			new VisualArc
@@ -2581,7 +2824,7 @@ class PlaceBuilderDemo
 		// pick
 
 		var itemPickName = "Pick";
-		var itemPickColor = "Gray";
+		var itemPickColor = Color.byName("Gray");
 		var itemPickVisual = new VisualGroup
 		([
 			new VisualOffset
@@ -2589,7 +2832,7 @@ class PlaceBuilderDemo
 				new VisualRectangle
 				(
 					new Coords(entityDimension / 4, entityDimension, 0),
-					"Brown", null, null
+					Color.byName("Brown"), null, null
 				),
 				new Coords(0, 0 - entityDimension / 2, 0)
 			),
@@ -2605,7 +2848,7 @@ class PlaceBuilderDemo
 				(
 					Transform_Scale.fromScalar(entityDimension)
 				),
-				Color.byName(itemPickColor),
+				itemPickColor,
 				null
 			),
 			new VisualOffset
@@ -2622,7 +2865,7 @@ class PlaceBuilderDemo
 		// shovel
 
 		var itemShovelName = "Shovel";
-		var itemShovelColor = "Gray";
+		var itemShovelColor = Color.byName("Gray");
 		var itemShovelVisual = new VisualGroup
 		([
 			new VisualOffset
@@ -2630,7 +2873,7 @@ class PlaceBuilderDemo
 				new VisualRectangle
 				(
 					new Coords(entityDimension / 4, entityDimension, 0),
-					"Brown", null, null
+					Color.byName("Brown"), null, null
 				),
 				new Coords(0, 0 + entityDimension / 2, 0)
 			),
@@ -2646,7 +2889,7 @@ class PlaceBuilderDemo
 				(
 					Transform_Scale.fromScalar(entityDimension)
 				),
-				Color.byName(itemShovelColor),
+				itemShovelColor,
 				null
 			),
 			new VisualOffset
@@ -2663,7 +2906,7 @@ class PlaceBuilderDemo
 		// speed boots
 
 		var itemSpeedBootsName = "Speed Boots";
-		var itemAccessoryColor = "Orange";
+		var itemAccessoryColor = Color.byName("Orange");
 		var itemSpeedBootsVisual = new VisualGroup
 		([
 			new VisualPolygon
@@ -2679,7 +2922,7 @@ class PlaceBuilderDemo
 				(
 					Transform_Scale.fromScalar(entityDimension)
 				),
-				Color.byName(itemAccessoryColor),
+				itemAccessoryColor,
 				null
 			),
 			new VisualOffset
@@ -2726,7 +2969,7 @@ class PlaceBuilderDemo
 			),
 			new VisualOffset
 			(
-				new VisualText(DataBinding.fromContext("Sword"), itemSwordColor.systemColor(), null),
+				new VisualText(DataBinding.fromContext("Sword"), itemSwordColor, null),
 				new Coords(0, 0 - entityDimension * 2.5, 0)
 			)
 		]);
@@ -2744,7 +2987,7 @@ class PlaceBuilderDemo
 		// toolset
 
 		var itemToolsetName = "Toolset";
-		var itemToolsetColor = "Gray";
+		var itemToolsetColor = Color.byName("Gray");
 		var itemToolsetVisual = new VisualGroup
 		([
 			new VisualOffset
@@ -2752,7 +2995,7 @@ class PlaceBuilderDemo
 				new VisualRectangle
 				(
 					new Coords(entityDimension / 4, entityDimension, 0),
-					"Brown", null, null
+					Color.byName("Brown"), null, null
 				),
 				new Coords(0, entityDimension / 2, 0)
 			),
@@ -2773,10 +3016,12 @@ class PlaceBuilderDemo
 			// 			name, 				appr, desc, mass, 	val,stax, categoryNames, visual, use
 			new ItemDefn("Ammo", 			null, null, null, 	null, null, null, null, itemAmmoVisual),
 			new ItemDefn("Armor", 			null, null, 50, 	30, null, [ "Armor" ], itemUseEquip, itemArmorVisual),
+			new ItemDefn("Bomb", 			null, null, 5, 		10, null, [ "Wieldable" ], itemUseEquip, itemBombVisual),
 			new ItemDefn("Coin", 			null, null, .01, 	1, null, null, null, itemCoinVisual),
 			new ItemDefn("Crystal", 		null, null, .1, 	1, null, null, null, itemCrystalVisual),
 			new ItemDefn("Enhanced Armor",	null, null, 60, 	60, null, [ "Armor" ], itemUseEquip, itemArmorVisual),
 			new ItemDefn("Flower", 			null, null, .01, 	1, null, null, null, itemFlowerVisual),
+			new ItemDefn("Fruit", 			null, null, .25, 	1, null, null, null, itemFruitVisual),
 			new ItemDefn("Grass", 			null, null, .01, 	1, null, null, null, itemGrassVisual),
 			new ItemDefn("Gun",				null, null, 5, 		100, null, [ "Wieldable" ], itemUseEquip, itemGunVisual),
 			new ItemDefn("Key", 			null, null, .1, 	5, null, null, null, itemKeyVisual),

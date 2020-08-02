@@ -3,26 +3,26 @@ class Collidable
 {
 	colliderAtRest: any;
 	entityPropertyNamesToCollideWith: string[];
-	collideEntities: any;
+	_collideEntities: (u: Universe, w: World, p: Place, e0: Entity, e1: Entity) => void;
 
 	collider: any;
 	ticksUntilCanCollide: number;
 	entitiesAlreadyCollidedWith: Entity[];
 
-	_transformTranslate: any;
+	_transformTranslate: Transform_Translate;
 
-	constructor(colliderAtRest: any, entityPropertyNamesToCollideWith: string[], collideEntities: any)
+	constructor
+	(
+		colliderAtRest: any,
+		entityPropertyNamesToCollideWith: string[],
+		collideEntities: (u: Universe, w: World, p: Place, e0: Entity, e1: Entity) => void
+	)
 	{
 		this.colliderAtRest = colliderAtRest;
-		this.entityPropertyNamesToCollideWith = entityPropertyNamesToCollideWith;
-		this.collideEntities = collideEntities;
+		this.entityPropertyNamesToCollideWith = entityPropertyNamesToCollideWith || [];
+		this._collideEntities = collideEntities;
 
 		this.collider = this.colliderAtRest.clone();
-
-		if (this.entityPropertyNamesToCollideWith == null)
-		{
-			this.entityPropertyNamesToCollideWith = [];
-		}
 
 		this.ticksUntilCanCollide = 0;
 		this.entitiesAlreadyCollidedWith = [];
@@ -30,6 +30,14 @@ class Collidable
 		// Helper variables.
 
 		this._transformTranslate = new Transform_Translate(new Coords(0, 0, 0));
+	}
+
+	collideEntities(u: Universe, w: World, p: Place, e0: Entity, e1: Entity)
+	{
+		if (this._collideEntities != null)
+		{
+			this._collideEntities(u, w, p, e0, e1);
+		}
 	}
 
 	colliderLocateForEntity(entity: Entity)
@@ -82,15 +90,10 @@ class Collidable
 									universe, world, place, entity, entityOther
 								);
 
-								var collidableOtherCollideEntities =
-									entityOther.collidable().collideEntities;
-								if (collidableOtherCollideEntities != null)
-								{
-									collidableOtherCollideEntities
-									(
-										universe, world, place, entityOther, entity
-									);
-								}
+								entityOther.collidable().collideEntities
+								(
+									universe, world, place, entityOther, entity
+								);
 							}
 						}
 					}
@@ -107,7 +110,7 @@ class Collidable
 		(
 			this.colliderAtRest.clone(),
 			this.entityPropertyNamesToCollideWith,
-			this.collideEntities
+			this._collideEntities
 		);
 	};
 }

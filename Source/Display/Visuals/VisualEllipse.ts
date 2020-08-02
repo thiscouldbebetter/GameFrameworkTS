@@ -4,13 +4,13 @@ class VisualEllipse implements Visual
 	semimajorAxis: number;
 	semiminorAxis: number;
 	rotationInTurns: number;
-	colorFill: string;
-	colorBorder: string;
+	colorFill: Color;
+	colorBorder: Color;
 
 	constructor
 	(
 		semimajorAxis: number, semiminorAxis: number, rotationInTurns: number,
-		colorFill: string, colorBorder: string
+		colorFill: Color, colorBorder: Color
 	)
 	{
 		this.semimajorAxis = semimajorAxis;
@@ -30,7 +30,8 @@ class VisualEllipse implements Visual
 			drawableLoc.pos,
 			this.semimajorAxis, this.semiminorAxis,
 			NumberHelper.wrapToRangeZeroOne(this.rotationInTurns + drawableRotationInTurns),
-			this.colorFill, this.colorBorder
+			(this.colorFill == null ? null : this.colorFill.systemColor() ),
+			(this.colorBorder == null ? null : this.colorBorder.systemColor() )
 		);
 	};
 

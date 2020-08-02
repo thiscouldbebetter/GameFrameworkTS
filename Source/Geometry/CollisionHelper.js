@@ -189,11 +189,9 @@ class CollisionHelper {
                 collidable1EntitiesAlreadyCollidedWith.push(entity0);
             }
         }
-        else {
-            if (wereEntitiesAlreadyColliding) {
-                ArrayHelper.remove(collidable0EntitiesAlreadyCollidedWith, entity1);
-                ArrayHelper.remove(collidable1EntitiesAlreadyCollidedWith, entity0);
-            }
+        else if (wereEntitiesAlreadyColliding) {
+            ArrayHelper.remove(collidable0EntitiesAlreadyCollidedWith, entity1);
+            ArrayHelper.remove(collidable1EntitiesAlreadyCollidedWith, entity0);
         }
         return doCollide;
     }

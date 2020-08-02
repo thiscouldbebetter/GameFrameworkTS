@@ -51,8 +51,9 @@ class EquipmentUser {
         return this.socketGroup.socketsByDefnName.get(socketName).itemEntityEquipped;
     }
     ;
-    unequipItemFromSocket(universe, world, place, entityEquipmentUser, socketToUnequipFrom) {
+    unequipItemFromSocketWithName(world, socketName) {
         var message;
+        var socketToUnequipFrom = this.socketGroup.socketsByDefnName.get(socketName);
         if (socketToUnequipFrom == null) {
             message = "Nothing to unequip!";
         }
@@ -138,7 +139,7 @@ class EquipmentUser {
         null, // bindingForIsEnabled
         function confirm() {
             var socketToUnequipFrom = equipmentUser.socketSelected;
-            var message = equipmentUser.unequipItemFromSocket(universe, world, place, entityEquipmentUser, socketToUnequipFrom);
+            var message = equipmentUser.unequipItemFromSocketWithName(world, socketToUnequipFrom.defnName);
             equipmentUser.statusMessage = message;
         }, null);
         var back = function () {

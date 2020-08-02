@@ -95,13 +95,10 @@ class EquipmentUser
 		return this.socketGroup.socketsByDefnName.get(socketName).itemEntityEquipped;
 	};
 
-	unequipItemFromSocket
-	(
-		universe: Universe, world: World, place: Place, entityEquipmentUser: Entity,
-		socketToUnequipFrom: EquipmentSocket
-	)
+	unequipItemFromSocketWithName(world: World, socketName: string)
 	{
 		var message;
+		var socketToUnequipFrom = this.socketGroup.socketsByDefnName.get(socketName);
 		if (socketToUnequipFrom == null)
 		{
 			message = "Nothing to unequip!";
@@ -255,11 +252,7 @@ class EquipmentUser
 			function confirm()
 			{
 				var socketToUnequipFrom = equipmentUser.socketSelected;
-
-				var message = equipmentUser.unequipItemFromSocket
-				(
-					universe, world, place, entityEquipmentUser, socketToUnequipFrom
-				);
+				var message = equipmentUser.unequipItemFromSocketWithName(world, socketToUnequipFrom.defnName);
 				equipmentUser.statusMessage = message;
 			},
 			null

@@ -6,7 +6,7 @@ class PlaceBuilderDemo_Emplacements {
     entityDefnBuildBoulder(entityDimension) {
         entityDimension /= 2;
         var itemDefnName = "Boulder";
-        var colorBoulder = "Gray";
+        var colorBoulder = Color.byName("Gray");
         var itemBoulderVisual = new VisualGroup([
             new VisualArc(entityDimension * 2, // radiusOuter
             0, // radiusInner
@@ -35,12 +35,12 @@ class PlaceBuilderDemo_Emplacements {
         return itemBoulderEntityDefn;
     }
     entityDefnBuildContainer(entityDimension) {
-        var containerColor = "Orange";
+        var containerColor = Color.byName("Orange");
         var entitySize = new Coords(1.5, 1, 0).multiplyScalar(entityDimension);
         var visual = new VisualGroup([
             new VisualRectangle(entitySize, containerColor, null, null),
-            new VisualRectangle(new Coords(1.5 * entityDimension, 1, 0), "Gray", null, null),
-            new VisualRectangle(new Coords(.5, .5, 0).multiplyScalar(entityDimension), "Gray", null, null),
+            new VisualRectangle(new Coords(1.5 * entityDimension, 1, 0), Color.byName("Gray"), null, null),
+            new VisualRectangle(new Coords(.5, .5, 0).multiplyScalar(entityDimension), Color.byName("Gray"), null, null),
             new VisualOffset(new VisualText(new DataBinding("Container", null, null), containerColor, null), new Coords(0, 0 - entityDimension, 0))
         ]);
         var containerEntityDefn = new Entity("Container", [
@@ -63,7 +63,7 @@ class PlaceBuilderDemo_Emplacements {
     }
     ;
     entityDefnBuildExit(entityDimension) {
-        var exitColor = "Brown";
+        var exitColor = Color.byName("Brown");
         var entitySize = new Coords(1, 1, 1).multiplyScalar(entityDimension);
         var visual = new VisualGroup([
             new VisualPolygon(new Path([
@@ -71,7 +71,7 @@ class PlaceBuilderDemo_Emplacements {
                 new Coords(-0.5, 0, 0),
                 new Coords(-0.5, -1.5, 0),
                 new Coords(0.5, -1.5, 0)
-            ]).transform(Transform_Scale.fromScalar(entityDimension)), Color.byName(exitColor), null),
+            ]).transform(Transform_Scale.fromScalar(entityDimension)), exitColor, null),
             new VisualOffset(new VisualCircle(entityDimension / 8, Color.byName("Yellow"), null), new Coords(entityDimension / 4, 0 - entityDimension / 2, 0)),
             new VisualOffset(new VisualText(new DataBinding("Exit", null, null), exitColor, null), new Coords(0, 0 - entityDimension * 2.5, 0))
         ]);
@@ -92,14 +92,14 @@ class PlaceBuilderDemo_Emplacements {
     entityDefnBuildHole(entityDimension) {
         var entityName = "Hole";
         entityDimension *= 1.5;
-        var itemHoleColor = "Brown";
+        var itemHoleColor = Color.byName("Brown");
         var itemHoleVisual = new VisualGroup([
             new VisualPolygon(new Path([
                 new Coords(-0.5, 0.0, 0),
                 new Coords(0.5, 0.0, 0),
                 new Coords(0.4, -0.2, 0),
                 new Coords(-0.4, -0.2, 0),
-            ]).transform(Transform_Scale.fromScalar(entityDimension)), Color.byName(itemHoleColor), null),
+            ]).transform(Transform_Scale.fromScalar(entityDimension)), itemHoleColor, null),
             new VisualOffset(new VisualText(new DataBinding(entityName, null, null), itemHoleColor, null), new Coords(0, 0 - entityDimension, 0))
         ]);
         var entityDefn = new Entity(entityName, [
@@ -112,7 +112,7 @@ class PlaceBuilderDemo_Emplacements {
     }
     ;
     entityDefnBuildObstacleBar(entityDimension) {
-        var obstacleColor = "Red";
+        var obstacleColor = Color.byName("Red");
         var obstacleBarSize = new Coords(6, 2, 1).multiplyScalar(entityDimension);
         var obstacleRotationInTurns = .0625;
         var obstacleCollider = new BoxRotated(new Box(new Coords(0, 0, 0), obstacleBarSize), obstacleRotationInTurns);
@@ -135,7 +135,7 @@ class PlaceBuilderDemo_Emplacements {
     }
     ;
     entityDefnBuildObstacleMine(entityDimension) {
-        var obstacleColor = "Red";
+        var obstacleColor = Color.byName("Red");
         var obstacleMappedCellSource = [
             "....xxxx....",
             ".....xx.....",
@@ -185,7 +185,7 @@ class PlaceBuilderDemo_Emplacements {
     }
     ;
     entityDefnBuildObstacleRing(entityDimension) {
-        var obstacleColor = "Red";
+        var obstacleColor = Color.byName("Red");
         var obstacleRadiusOuter = entityDimension * 3.5;
         var obstacleRadiusInner = obstacleRadiusOuter - entityDimension;
         var obstacleAngleSpannedInTurns = .85;
@@ -218,7 +218,7 @@ class PlaceBuilderDemo_Emplacements {
                 new Coords(0.5, -0.5, 0)
             ]).transform(Transform_Scale.fromScalar(entityDimension)), Color.byName(baseColor), null),
             new VisualOffset(new VisualDynamic((u, w, d, e) => {
-                var baseColor = "Brown";
+                var baseColor = Color.byName("Brown");
                 return new VisualText(new DataBinding(e.portal().destinationPlaceName, null, null), baseColor, null);
             }), new Coords(0, entityDimension, 0))
         ]);
@@ -239,9 +239,9 @@ class PlaceBuilderDemo_Emplacements {
     entityDefnBuildTree(entityDimension) {
         var entityName = "Tree";
         entityDimension *= 1.5;
-        var color = "Green";
+        var color = Color.byName("GreenDark");
         var visual = new VisualGroup([
-            new VisualRectangle(new Coords(1, 2, 0).multiplyScalar(entityDimension * 0.5), "Brown", null, null),
+            new VisualRectangle(new Coords(1, 2, 0).multiplyScalar(entityDimension * 0.5), Color.byName("Brown"), null, null),
             new VisualOffset(new VisualEllipse(entityDimension, // semimajorAxis
             entityDimension * .8, 0, // rotationInTurns
             color, null // colorBorder

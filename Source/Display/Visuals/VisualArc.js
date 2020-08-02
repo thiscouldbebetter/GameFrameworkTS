@@ -19,7 +19,7 @@ class VisualArc {
             + this._polar.fromCoords(this.directionMin).azimuthInTurns;
         var wedgeAngleMax = wedgeAngleMin + this.angleSpannedInTurns;
         display.drawArc(drawPos, // center
-        this.radiusInner, this.radiusOuter, wedgeAngleMin, wedgeAngleMax, this.colorFill, this.colorBorder);
+        this.radiusInner, this.radiusOuter, wedgeAngleMin, wedgeAngleMax, (this.colorFill == null ? null : this.colorFill.systemColor()), (this.colorBorder == null ? null : this.colorBorder.systemColor()));
     }
     ;
     // Clonable.

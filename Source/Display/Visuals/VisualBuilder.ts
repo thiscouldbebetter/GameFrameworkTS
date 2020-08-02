@@ -13,7 +13,7 @@ class VisualBuilder
 
 	circleWithEyesAndLegs
 	(
-		circleRadius: number, circleColor: string, eyeRadius: number, visualEyes: Visual
+		circleRadius: number, circleColor: Color, eyeRadius: number, visualEyes: Visual
 	)
 	{
 		visualEyes = visualEyes || this.eyesBlinking(eyeRadius);
@@ -303,7 +303,7 @@ class VisualBuilder
 
 		var circleWithEyes: Visual = new VisualGroup
 		([
-			new VisualCircle(circleRadius, Color.byName(circleColor), null),
+			new VisualCircle(circleRadius, circleColor, null),
 			visualEyesDirectional
 		]);
 
