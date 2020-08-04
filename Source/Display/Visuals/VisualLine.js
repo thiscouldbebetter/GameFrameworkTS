@@ -9,7 +9,7 @@ class VisualLine {
         this._drawPosFrom = new Coords(0, 0, 0);
         this._drawPosTo = new Coords(0, 0, 0);
     }
-    draw(universe, world, display, entity) {
+    draw(universe, world, place, entity, display) {
         var pos = entity.locatable().loc.pos;
         var drawPosFrom = this._drawPosFrom.overwriteWith(pos).add(this.fromPos);
         var drawPosTo = this._drawPosTo.overwriteWith(pos).add(this.toPos);

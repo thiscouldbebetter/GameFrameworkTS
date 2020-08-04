@@ -7,7 +7,7 @@ class VisualEllipse {
         this.colorFill = colorFill;
         this.colorBorder = colorBorder;
     }
-    draw(universe, world, display, entity) {
+    draw(universe, world, place, entity, display) {
         var drawableLoc = entity.locatable().loc;
         var drawableOrientation = drawableLoc.orientation;
         var drawableRotationInTurns = drawableOrientation.headingInTurns();

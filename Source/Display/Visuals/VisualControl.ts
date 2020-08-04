@@ -13,7 +13,7 @@ class VisualControl implements Visual
 		this._drawLoc = new Disposition(new Coords(0, 0, 0), null, null);
 	}
 
-	draw(universe: Universe, world: World, display: Display, entity: Entity)
+	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		var display = universe.display;
 		var drawLoc = this._drawLoc;

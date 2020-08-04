@@ -3,7 +3,7 @@ class VisualSound {
     constructor(soundNameToPlay) {
         this.soundNameToPlay = soundNameToPlay;
     }
-    draw(universe, world, display, entity) {
+    draw(universe, world, place, entity, display) {
         universe.soundHelper.soundWithNamePlayAsEffect(universe, this.soundNameToPlay);
     }
     ;

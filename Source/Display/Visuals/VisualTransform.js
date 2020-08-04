@@ -22,10 +22,10 @@ class VisualTransform {
     }
     ;
     // Visual.
-    draw(universe, world, display, entity) {
+    draw(universe, world, place, entity, display) {
         this._childBeforeTransform.overwriteWith(this.child);
         this.transformToApply.transform(this.child);
-        this.child.draw(universe, world, display, entity);
+        this.child.draw(universe, world, place, entity, display);
         this.child.overwriteWith(this._childBeforeTransform);
     }
     ;

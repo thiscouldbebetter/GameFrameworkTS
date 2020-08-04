@@ -22,7 +22,7 @@ class VisualRectangle implements Visual
 		this._drawPos = new Coords(0, 0, 0);
 	}
 
-	draw(universe: Universe, world: World, display: Display, entity: Entity)
+	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		var drawPos = this._drawPos.overwriteWith
 		(
@@ -31,10 +31,7 @@ class VisualRectangle implements Visual
 
 		if (this.isCentered)
 		{
-			drawPos.subtract
-			(
-				this.sizeHalf
-			);
+			drawPos.subtract(this.sizeHalf);
 		}
 
 		display.drawRectangle

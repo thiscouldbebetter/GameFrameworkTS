@@ -4,10 +4,10 @@ class VisualRotate {
         this.rotationInTurns = rotationInTurns;
         this.child = child;
     }
-    draw(universe, world, display, entity) {
+    draw(universe, world, place, entity, display) {
         display.stateSave();
         display.rotateTurnsAroundCenter(this.rotationInTurns, entity.locatable().loc.pos);
-        this.child.draw(universe, world, display, entity);
+        this.child.draw(universe, world, place, entity, display);
         display.stateRestore();
     }
     ;

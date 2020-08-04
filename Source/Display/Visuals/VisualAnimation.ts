@@ -33,9 +33,9 @@ class VisualAnimation implements Visual
 
 	// visual
 
-	draw(universe: Universe, world: World, display: Display, entity: Entity)
+	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
-		this.update(universe, world, display, entity);
+		this.update(universe, world, place, entity, display);
 	};
 
 	frameCurrent(world: World, drawable: Drawable)
@@ -89,7 +89,7 @@ class VisualAnimation implements Visual
 		return returnValue;
 	};
 
-	update(universe: Universe, world: World, display: Display, entity: Entity)
+	update(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		var drawable = entity.drawable();
 
@@ -99,7 +99,7 @@ class VisualAnimation implements Visual
 		}
 
 		var frameCurrent = this.frameCurrent(world, drawable);
-		frameCurrent.draw(universe, world, display, entity);
+		frameCurrent.draw(universe, world, place, entity, display);
 	};
 
 	// Clonable.

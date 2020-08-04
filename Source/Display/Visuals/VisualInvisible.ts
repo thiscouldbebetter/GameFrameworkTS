@@ -31,7 +31,7 @@ class VisualInvisible implements Visual
 
 	// Visual.
 
-	draw(universe: Universe, world: World, display: Display, entity: Entity)
+	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		// Do nothing.
 	};

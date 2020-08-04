@@ -11,7 +11,7 @@ class VisualArc {
         this._drawPos = new Coords(0, 0, 0);
         this._polar = new Polar(0, 0, 0);
     }
-    draw(universe, world, display, entity) {
+    draw(universe, world, place, entity, display) {
         var drawableLoc = entity.locatable().loc;
         var drawPos = this._drawPos.overwriteWith(drawableLoc.pos);
         var drawableAngleInTurns = drawableLoc.orientation.headingInTurns();

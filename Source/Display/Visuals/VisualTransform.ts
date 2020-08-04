@@ -37,11 +37,11 @@ class VisualTransform implements Visual
 
 	// Visual.
 
-	draw(universe: Universe, world: World, display: Display, entity: Entity)
+	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		this._childBeforeTransform.overwriteWith(this.child);
 		this.transformToApply.transform(this.child);
-		this.child.draw(universe, world, display, entity);
+		this.child.draw(universe, world, place, entity, display);
 		this.child.overwriteWith(this._childBeforeTransform);
 	};
 }

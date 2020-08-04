@@ -39,7 +39,7 @@ class VisualImageImmediate implements VisualImage
 
 	// visual
 
-	draw(universe: Universe, world: World, display: Display, entity: Entity)
+	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		var image = this.image(universe);
 		var imageSize = image.sizeInPixels;

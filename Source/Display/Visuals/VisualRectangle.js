@@ -8,7 +8,7 @@ class VisualRectangle {
         this.sizeHalf = this.size.clone().half();
         this._drawPos = new Coords(0, 0, 0);
     }
-    draw(universe, world, display, entity) {
+    draw(universe, world, place, entity, display) {
         var drawPos = this._drawPos.overwriteWith(entity.locatable().loc.pos);
         if (this.isCentered) {
             drawPos.subtract(this.sizeHalf);

@@ -26,7 +26,7 @@ class VisualJump2D implements Visual
 
 	// Visual.
 
-	draw(universe: Universe, world: World, display: Display, entity: Entity)
+	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		var entityPos = entity.locatable().loc.pos;
 		var entityPosZ = entityPos.z;
@@ -35,14 +35,14 @@ class VisualJump2D implements Visual
 		var height = 0 - entityPosZ;
 		if (height <= 0)
 		{
-			this.visualJumper.draw(universe, world, display, entity);
+			this.visualJumper.draw(universe, world, place, entity, display);
 		}
 		else
 		{
-			this.visualShadow.draw(universe, world, display, entity);
+			this.visualShadow.draw(universe, world, place, entity, display);
 			this._posSaved.overwriteWith(entityPos);
 			entityPos.y -= height;
-			this.visualJumper.draw(universe, world, display, entity);
+			this.visualJumper.draw(universe, world, place, entity, display);
 			entityPos.overwriteWith(this._posSaved);
 		}
 	};

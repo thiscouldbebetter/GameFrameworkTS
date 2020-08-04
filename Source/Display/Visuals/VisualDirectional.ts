@@ -14,7 +14,7 @@ class VisualDirectional implements Visual
 		this.numberOfDirections = this.visualsForDirections.length;
 	}
 
-	draw(universe: Universe, world: World, display: Display, entity: Entity)
+	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		var loc = entity.locatable().loc;
 		var headingInTurns = loc.orientation.headingInTurns();
@@ -37,7 +37,7 @@ class VisualDirectional implements Visual
 			visualForHeading = this.visualsForDirections[direction];
 		}
 
-		visualForHeading.draw(universe, world, display, entity);
+		visualForHeading.draw(universe, world, place, entity, display);
 	};
 
 	// Clonable.

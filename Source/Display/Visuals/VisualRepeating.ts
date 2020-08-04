@@ -45,7 +45,7 @@ class VisualRepeating implements Visual
 		}
 	}
 
-	draw(universe: Universe, world: World, display: Display, entity: Entity)
+	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		var drawPos = entity.locatable().loc.pos;
 
@@ -77,7 +77,7 @@ class VisualRepeating implements Visual
 					drawPosWrapped
 				);
 
-				this.child.draw(universe, world, display, entity);
+				this.child.draw(universe, world, place, entity, display);
 			}
 		}
 

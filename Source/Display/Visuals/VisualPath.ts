@@ -20,7 +20,7 @@ class VisualPath implements Visual
 		this.transformTranslate = new Transform_Translate(new Coords(0, 0, 0));
 	}
 
-	draw(universe: Universe, world: World, display: Display, entity: Entity)
+	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		var drawablePos = entity.locatable().loc.pos;
 		this.transformTranslate.displacement.overwriteWith(drawablePos);

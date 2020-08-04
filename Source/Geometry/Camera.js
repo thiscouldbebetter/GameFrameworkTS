@@ -73,7 +73,7 @@ class Camera {
         return viewCoords;
     }
     ;
-    drawEntitiesInViewThenClear(universe, world, display) {
+    drawEntitiesInViewThenClear(universe, world, place, display) {
         this.loc.pos.round(); // hack - To prevent lines between map tiles.
         display.drawBackground("Black", "Black");
         this.entitiesInView.sort((a, b) => {
@@ -91,7 +91,7 @@ class Camera {
         for (var i = 0; i < this.entitiesInView.length; i++) {
             var entity = this.entitiesInView[i];
             var visual = entity.drawable().visual;
-            visual.drawImmediate(universe, world, display, entity);
+            visual.drawImmediate(universe, world, place, entity, display);
         }
         this.entitiesInView.length = 0;
     }

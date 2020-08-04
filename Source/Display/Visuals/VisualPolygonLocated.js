@@ -7,7 +7,7 @@ class VisualPolygonLocated {
         this.verticesAsPathTransformed = this.verticesAsPath.clone();
         this.transformLocate = new Transform_Locate(new Disposition(new Coords(0, 0, 0), null, null));
     }
-    draw(universe, world, display, entity) {
+    draw(universe, world, place, entity, display) {
         var drawableLoc = entity.locatable().loc;
         var loc = this.transformLocate.loc;
         loc.overwriteWith(drawableLoc);

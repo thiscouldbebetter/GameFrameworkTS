@@ -5,7 +5,7 @@ class VisualCircleGradient {
         this.gradientFill = gradientFill;
         this.colorBorder = colorBorder;
     }
-    draw(universe, world, display, entity) {
+    draw(universe, world, place, entity, display) {
         display.drawCircleWithGradient(entity.locatable().loc.pos, this.radius, this.gradientFill, this.colorBorder);
     }
     ;

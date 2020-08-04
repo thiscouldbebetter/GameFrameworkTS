@@ -13,20 +13,20 @@ class VisualJump2D {
     }
     ;
     // Visual.
-    draw(universe, world, display, entity) {
+    draw(universe, world, place, entity, display) {
         var entityPos = entity.locatable().loc.pos;
         var entityPosZ = entityPos.z;
         var camera = world.placeCurrent.camera(); // hack
         entityPosZ -= camera.focalLength;
         var height = 0 - entityPosZ;
         if (height <= 0) {
-            this.visualJumper.draw(universe, world, display, entity);
+            this.visualJumper.draw(universe, world, place, entity, display);
         }
         else {
-            this.visualShadow.draw(universe, world, display, entity);
+            this.visualShadow.draw(universe, world, place, entity, display);
             this._posSaved.overwriteWith(entityPos);
             entityPos.y -= height;
-            this.visualJumper.draw(universe, world, display, entity);
+            this.visualJumper.draw(universe, world, place, entity, display);
             entityPos.overwriteWith(this._posSaved);
         }
     }

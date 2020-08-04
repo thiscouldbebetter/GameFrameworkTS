@@ -6,7 +6,7 @@ class Drawable {
     }
     updateForTimerTick(universe, world, place, entity) {
         if (this.isVisible) {
-            this.visual.draw(universe, world, universe.display, entity);
+            this.visual.draw(universe, world, place, entity, universe.display);
         }
     }
     ;

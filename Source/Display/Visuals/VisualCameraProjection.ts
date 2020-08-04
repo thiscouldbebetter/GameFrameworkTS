@@ -15,7 +15,7 @@ class VisualCameraProjection implements Visual
 		this._posSaved = new Coords(0, 0, 0);
 	}
 
-	draw(universe: Universe, world: World, display: Display, entity: Entity)
+	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		var drawablePos = entity.locatable().loc.pos;
 		this._posSaved.overwriteWith(drawablePos);
@@ -48,7 +48,7 @@ class VisualCameraProjection implements Visual
 		drawablePos.overwriteWith(this._posSaved);
 	};
 
-	drawImmediate(universe: Universe, world: World, display: Display, entity: Entity)
+	drawImmediate(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		var drawablePos = entity.locatable().loc.pos;
 		this._posSaved.overwriteWith(drawablePos);
@@ -56,7 +56,7 @@ class VisualCameraProjection implements Visual
 		var camera = this.cameraFactory(universe, world);
 		camera.coordsTransformWorldToView(drawablePos);
 
-		this.child.draw(universe, world, display, entity);
+		this.child.draw(universe, world, place, entity, display);
 
 		drawablePos.overwriteWith(this._posSaved);
 	};

@@ -26,11 +26,11 @@ class VisualSelect implements Visual
 		}
 	}
 
-	draw(universe: Universe, world: World, display: Display, entity: Entity)
+	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		var childToSelectName = this.selectChildName(universe, world, display, entity, this);
 		var childSelected = this.childrenByName.get(childToSelectName);
-		childSelected.draw(universe, world, display, entity);
+		childSelected.draw(universe, world, place, entity, display);
 	};
 
 	// Clonable.

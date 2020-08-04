@@ -16,7 +16,7 @@ class VisualImageScaled {
         return returnValues;
     }
     ;
-    draw(universe, world, display, entity) {
+    draw(universe, world, place, entity, display) {
         var image = this.visualImage.image(universe);
         var imageSize = this.sizeScaled;
         var drawPos = this._drawPos.clear().subtract(imageSize).half().add(entity.locatable().loc.pos);

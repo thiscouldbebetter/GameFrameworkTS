@@ -8,7 +8,7 @@ class VisualSound implements Visual
 		this.soundNameToPlay = soundNameToPlay;
 	}
 
-	draw(universe: Universe, world: World, display: Display, entity: Entity)
+	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		universe.soundHelper.soundWithNamePlayAsEffect(universe, this.soundNameToPlay);
 	};

@@ -57,7 +57,7 @@ class Place
 			var drawable = entity.drawable();
 			drawable.updateForTimerTick(universe, world, this, entity);
 		}
-		this.camera().drawEntitiesInViewThenClear(universe, world, universe.display);
+		this.camera().drawEntitiesInViewThenClear(universe, world, this, universe.display);
 	};
 
 	entitiesByPropertyName(propertyName: string)

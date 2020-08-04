@@ -11,10 +11,10 @@ class VisualSelect {
             this.childrenByName.set(childName, child);
         }
     }
-    draw(universe, world, display, entity) {
+    draw(universe, world, place, entity, display) {
         var childToSelectName = this.selectChildName(universe, world, display, entity, this);
         var childSelected = this.childrenByName.get(childToSelectName);
-        childSelected.draw(universe, world, display, entity);
+        childSelected.draw(universe, world, place, entity, display);
     }
     ;
     // Clonable.

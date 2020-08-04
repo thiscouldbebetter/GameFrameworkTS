@@ -55,7 +55,9 @@ class ControlVisual {
         locatableEntity.locatable().loc.pos.overwriteWith(drawPos);
         drawPos.add(this._sizeHalf.overwriteWith(this.size).half());
         var visualToDraw = this.visual.get();
-        visualToDraw.draw(universe, universe.world, display, locatableEntity);
+        var world = universe.world;
+        var place = (world == null ? null : world.placeCurrent);
+        visualToDraw.draw(universe, world, place, locatableEntity, display);
     }
     ;
 }

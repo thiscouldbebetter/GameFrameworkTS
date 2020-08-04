@@ -5,7 +5,7 @@ class VisualCircle {
         this.colorFill = colorFill;
         this.colorBorder = colorBorder;
     }
-    draw(universe, world, display, entity) {
+    draw(universe, world, place, entity, display) {
         display.drawCircle(entity.locatable().loc.pos, this.radius, (this.colorFill == null ? null : this.colorFill.systemColor()), (this.colorBorder == null ? null : this.colorBorder.systemColor()));
     }
     ;

@@ -9,7 +9,7 @@ class VisualPolars {
         this._fromPos = new Coords(0, 0, 0);
         this._toPos = new Coords(0, 0, 0);
     }
-    draw(universe, world, display, entity) {
+    draw(universe, world, place, entity, display) {
         var drawableLoc = entity.locatable().loc;
         var drawablePos = drawableLoc.pos;
         var drawableHeadingInTurns = drawableLoc.orientation.headingInTurns();

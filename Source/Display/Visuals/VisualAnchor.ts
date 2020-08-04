@@ -15,12 +15,12 @@ class VisualAnchor implements Visual
 		this._posSaved = new Coords(0, 0, 0);
 	}
 
-	draw(universe: Universe, world: World, display: Display, entity: Entity)
+	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		var drawablePos = entity.locatable().loc.pos;
 		this._posSaved.overwriteWith(drawablePos);
 		drawablePos.overwriteWith(this.posToAnchorAt);
-		this.child.draw(universe, world, display, entity);
+		this.child.draw(universe, world, place, entity, display);
 		drawablePos.overwriteWith(this._posSaved);
 	};
 

@@ -5,7 +5,7 @@ class VisualControl {
         // Helper variables.
         this._drawLoc = new Disposition(new Coords(0, 0, 0), null, null);
     }
-    draw(universe, world, display, entity) {
+    draw(universe, world, place, entity, display) {
         var display = universe.display;
         var drawLoc = this._drawLoc;
         drawLoc.pos.clear();

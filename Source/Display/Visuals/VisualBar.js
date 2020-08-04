@@ -9,7 +9,7 @@ class VisualBar {
         this._sizeCurrent = this.size.clone();
         this._sizeHalf = this.size.clone().half();
     }
-    draw(universe, world, display, entity) {
+    draw(universe, world, place, entity, display) {
         var pos = this._drawPos.overwriteWith(entity.locatable().loc.pos).subtract(this._sizeHalf);
         var _amountCurrent = this.amountCurrent.contextSet(entity).get();
         var _amountMax = this.amountMax.contextSet(entity).get();

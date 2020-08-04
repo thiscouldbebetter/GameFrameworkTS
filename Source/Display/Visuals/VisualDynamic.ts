@@ -8,10 +8,10 @@ class VisualDynamic implements Visual
 		this.methodForVisual = methodForVisual;
 	}
 
-	draw(universe: Universe, world: World, display: Display, entity: Entity)
+	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		var visual = this.methodForVisual.call(this, universe, world, display, entity);
-		visual.draw(universe, world, display, entity);
+		visual.draw(universe, world, place, entity, display);
 	};
 
 	// Clonable.

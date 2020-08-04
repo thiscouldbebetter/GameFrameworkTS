@@ -25,7 +25,7 @@ class VisualArc implements Visual
 		this._polar = new Polar(0, 0, 0);
 	}
 
-	draw(universe: Universe, world: World, display: Display, entity: Entity)
+	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		var drawableLoc = entity.locatable().loc;
 		var drawPos = this._drawPos.overwriteWith

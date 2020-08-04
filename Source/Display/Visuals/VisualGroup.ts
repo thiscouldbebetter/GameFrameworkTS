@@ -8,12 +8,12 @@ class VisualGroup implements Visual
 		this.children = children;
 	}
 
-	draw(universe: Universe, world: World, display: Display, entity: Entity)
+	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		for (var i = 0; i < this.children.length; i++)
 		{
 			var child = this.children[i];
-			child.draw(universe, world, display, entity);
+			child.draw(universe, world, place, entity, display);
 		}
 	};
 

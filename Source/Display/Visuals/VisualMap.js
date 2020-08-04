@@ -15,20 +15,20 @@ class VisualMap {
         this._drawPos = new Coords(0, 0, 0);
         this._posSaved = new Coords(0, 0, 0);
     }
-    draw(universe, world, display, entity) {
+    draw(universe, world, place, entity, display) {
         if (this.shouldConvertToImage) {
             if (this.visualImage == null) {
-                this.draw_ConvertToImage(universe, world, display, entity);
+                this.draw_ConvertToImage(universe, world, place, entity, display);
             }
-            this.visualImage.draw(universe, world, display, entity);
+            this.visualImage.draw(universe, world, place, entity, display);
         }
         else {
             var cellPosStart = this._cellPosStart.clear();
             var cellPosEnd = this._cellPosEnd.overwriteWith(this.map.sizeInCells);
-            this.draw_ConvertToImage_Cells(universe, world, display, entity, cellPosStart, cellPosEnd, display);
+            this.draw_ConvertToImage_Cells(universe, world, place, entity, display, cellPosStart, cellPosEnd, display);
         }
     }
-    draw_ConvertToImage(universe, world, display, entity) {
+    draw_ConvertToImage(universe, world, place, entity, display) {
         var mapSizeInCells = this.map.sizeInCells;
         var drawablePos = entity.locatable().loc.pos;
         this._posSaved.overwriteWith(drawablePos);
@@ -47,12 +47,12 @@ class VisualMap {
         }
         var displayForImage = new Display2D([this.map.size], null, null, null, null, null);
         displayForImage.toDomElement();
-        this.draw_ConvertToImage_Cells(universe, world, display, entity, cellPosStart, cellPosEnd, displayForImage);
+        this.draw_ConvertToImage_Cells(universe, world, place, entity, display, cellPosStart, cellPosEnd, displayForImage);
         var image = Image2.fromSystemImage("Map", displayForImage.canvas);
         this.visualImage = new VisualImageImmediate(image);
         drawablePos.overwriteWith(this._posSaved);
     }
-    draw_ConvertToImage_Cells(universe, world, display, entity, cellPosStart, cellPosEnd, displayForImage) {
+    draw_ConvertToImage_Cells(universe, world, place, entity, display, cellPosStart, cellPosEnd, displayForImage) {
         var drawPos = this._drawPos;
         var drawablePos = entity.locatable().loc.pos;
         var cellPosInCells = this._cellPosInCells;
@@ -72,7 +72,7 @@ class VisualMap {
                     drawPos.subtract(this._cameraPos).multiply(cellSizeInPixels).add(display.displayToUse().sizeInPixelsHalf);
                 }
                 drawablePos.overwriteWith(drawPos);
-                cellVisual.draw(universe, world, displayForImage, entity);
+                cellVisual.draw(universe, world, place, entity, displayForImage);
             }
         }
         return displayForImage;

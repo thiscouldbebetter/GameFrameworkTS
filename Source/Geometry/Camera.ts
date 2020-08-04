@@ -175,7 +175,7 @@ class Camera
 		return viewCoords;
 	};
 
-	drawEntitiesInViewThenClear(universe: Universe, world: World, display: Display)
+	drawEntitiesInViewThenClear(universe: Universe, world: World, place: Place, display: Display)
 	{
 		this.loc.pos.round(); // hack - To prevent lines between map tiles.
 
@@ -204,7 +204,7 @@ class Camera
 		{
 			var entity = this.entitiesInView[i];
 			var visual = entity.drawable().visual as VisualCameraProjection;
-			visual.drawImmediate(universe, world, display, entity)
+			visual.drawImmediate(universe, world, place, entity, display);
 		}
 
 		this.entitiesInView.length = 0;

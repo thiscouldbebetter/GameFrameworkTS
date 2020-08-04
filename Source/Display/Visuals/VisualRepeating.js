@@ -19,7 +19,7 @@ class VisualRepeating {
             this._endPosInCells.addDimensions(1, 1, 0);
         }
     }
-    draw(universe, world, display, entity) {
+    draw(universe, world, place, entity, display) {
         var drawPos = entity.locatable().loc.pos;
         this._drawablePosToRestore.overwriteWith(drawPos);
         var drawPosWrapped = this._drawPosWrapped.overwriteWith(drawPos).wrapToRangeMax(this.cellSize);
@@ -29,7 +29,7 @@ class VisualRepeating {
             for (var x = this._startPosInCells.x; x < this._endPosInCells.x; x++) {
                 cellPos.x = x;
                 drawPos.overwriteWith(this._drawOffset.overwriteWith(cellPos).multiply(this.cellSize)).add(drawPosWrapped);
-                this.child.draw(universe, world, display, entity);
+                this.child.draw(universe, world, place, entity, display);
             }
         }
         drawPos.overwriteWith(this._drawablePosToRestore);

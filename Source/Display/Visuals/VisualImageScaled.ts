@@ -27,7 +27,7 @@ class VisualImageScaled implements VisualImage
 		return returnValues;
 	};
 
-	draw(universe: Universe, world: World, display: Display, entity: Entity)
+	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		var image = this.visualImage.image(universe);
 		var imageSize = this.sizeScaled;

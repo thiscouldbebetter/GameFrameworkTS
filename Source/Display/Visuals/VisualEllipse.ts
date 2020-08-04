@@ -20,7 +20,7 @@ class VisualEllipse implements Visual
 		this.colorBorder = colorBorder;
 	}
 
-	draw(universe: Universe, world: World, display: Display, entity: Entity)
+	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		var drawableLoc = entity.locatable().loc;
 		var drawableOrientation = drawableLoc.orientation;

@@ -5,7 +5,7 @@ class VisualDirectional {
         this.visualsForDirections = visualsForDirections;
         this.numberOfDirections = this.visualsForDirections.length;
     }
-    draw(universe, world, display, entity) {
+    draw(universe, world, place, entity, display) {
         var loc = entity.locatable().loc;
         var headingInTurns = loc.orientation.headingInTurns();
         var visualForHeading;
@@ -16,7 +16,7 @@ class VisualDirectional {
             var direction = NumberHelper.wrapToRangeMinMax(Math.round(headingInTurns * this.numberOfDirections), 0, this.numberOfDirections);
             visualForHeading = this.visualsForDirections[direction];
         }
-        visualForHeading.draw(universe, world, display, entity);
+        visualForHeading.draw(universe, world, place, entity, display);
     }
     ;
     // Clonable.

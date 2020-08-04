@@ -22,7 +22,7 @@ class VisualPolars implements Visual
 		this._toPos = new Coords(0, 0, 0);
 	}
 
-	draw(universe: Universe, world: World, display: Display, entity: Entity)
+	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		var drawableLoc = entity.locatable().loc;
 		var drawablePos = drawableLoc.pos;

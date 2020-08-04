@@ -22,7 +22,7 @@ class VisualImageImmediate {
     }
     ;
     // visual
-    draw(universe, world, display, entity) {
+    draw(universe, world, place, entity, display) {
         var image = this.image(universe);
         var imageSize = image.sizeInPixels;
         var drawPos = this._drawPos.clear().subtract(imageSize).half().add(entity.locatable().loc.pos);

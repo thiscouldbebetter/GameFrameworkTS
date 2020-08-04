@@ -11,7 +11,7 @@ class VisualParticles {
         this.ticksSoFar = 0;
         this.particleEntities = [];
     }
-    draw(universe, world, display, entity) {
+    draw(universe, world, place, entity, display) {
         if (this.ticksSoFar < this.ticksToGenerate || this.ticksToGenerate == null) {
             var particleCountThisTick;
             if (this.particlesPerTick >= 1) {
@@ -46,7 +46,7 @@ class VisualParticles {
             }
             else {
                 ephemeral.ticksToLive--;
-                particleEntity.drawable().visual.draw(universe, world, display, particleEntity);
+                particleEntity.drawable().visual.draw(universe, world, place, particleEntity, display);
                 this.transformToApplyEachTick.transform(particleEntity.drawable().visual);
             }
         });

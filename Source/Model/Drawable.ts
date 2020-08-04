@@ -16,7 +16,7 @@ class Drawable
 	{
 		if (this.isVisible)
 		{
-			this.visual.draw(universe, world, universe.display, entity);
+			this.visual.draw(universe, world, place, entity, universe.display);
 		}
 	};
 

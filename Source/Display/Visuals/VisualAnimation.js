@@ -17,8 +17,8 @@ class VisualAnimation {
         }
     }
     // visual
-    draw(universe, world, display, entity) {
-        this.update(universe, world, display, entity);
+    draw(universe, world, place, entity, display) {
+        this.update(universe, world, place, entity, display);
     }
     ;
     frameCurrent(world, drawable) {
@@ -59,13 +59,13 @@ class VisualAnimation {
         return returnValue;
     }
     ;
-    update(universe, world, display, entity) {
+    update(universe, world, place, entity, display) {
         var drawable = entity.drawable();
         if (drawable.tickStarted == null) {
             drawable.tickStarted = world.timerTicksSoFar;
         }
         var frameCurrent = this.frameCurrent(world, drawable);
-        frameCurrent.draw(universe, world, display, entity);
+        frameCurrent.draw(universe, world, place, entity, display);
     }
     ;
     // Clonable.

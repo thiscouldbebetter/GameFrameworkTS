@@ -12,7 +12,7 @@ class VisualCircleGradient implements Visual
 		this.colorBorder = colorBorder;
 	}
 
-	draw(universe: Universe, world: World, display: Display, entity: Entity)
+	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		display.drawCircleWithGradient
 		(

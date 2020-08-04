@@ -8,7 +8,7 @@ class VisualPath {
         this.verticesAsPathTransformed = this.verticesAsPath.clone();
         this.transformTranslate = new Transform_Translate(new Coords(0, 0, 0));
     }
-    draw(universe, world, display, entity) {
+    draw(universe, world, place, entity, display) {
         var drawablePos = entity.locatable().loc.pos;
         this.transformTranslate.displacement.overwriteWith(drawablePos);
         this.verticesAsPathTransformed.overwriteWith(this.verticesAsPath);

@@ -10,13 +10,13 @@ class VisualRotate implements Visual
 		this.child = child;
 	}
 
-	draw(universe: Universe, world: World, display: Display, entity: Entity)
+	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		display.stateSave();
 
 		display.rotateTurnsAroundCenter(this.rotationInTurns, entity.locatable().loc.pos);
 
-		this.child.draw(universe, world, display, entity);
+		this.child.draw(universe, world, place, entity, display);
 
 		display.stateRestore();
 	};

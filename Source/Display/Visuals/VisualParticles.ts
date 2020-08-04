@@ -35,7 +35,7 @@ class VisualParticles implements Visual
 		this.particleEntities = [];
 	}
 
-	draw(universe: Universe, world: World, display: Display, entity: Entity)
+	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		if (this.ticksSoFar < this.ticksToGenerate || this.ticksToGenerate == null)
 		{
@@ -90,7 +90,10 @@ class VisualParticles implements Visual
 			else
 			{
 				ephemeral.ticksToLive--;
-				particleEntity.drawable().visual.draw(universe, world, display, particleEntity);
+				particleEntity.drawable().visual.draw
+				(
+					universe, world, place, particleEntity, display
+				);
 				this.transformToApplyEachTick.transform(particleEntity.drawable().visual);
 			}
 		});

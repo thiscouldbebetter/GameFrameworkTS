@@ -32,7 +32,7 @@ class VisualMesh implements Visual
 
 	// Visual.
 
-	draw(universe: Universe, world: World, display: Display, entity: Entity)
+	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		display.drawMeshWithOrientation(this.mesh, entity.locatable().loc.orientation);
 	};

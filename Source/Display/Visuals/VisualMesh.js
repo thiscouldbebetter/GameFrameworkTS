@@ -21,7 +21,7 @@ class VisualMesh {
     }
     ;
     // Visual.
-    draw(universe, world, display, entity) {
+    draw(universe, world, place, entity, display) {
         display.drawMeshWithOrientation(this.mesh, entity.locatable().loc.orientation);
     }
     ;

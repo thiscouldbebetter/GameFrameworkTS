@@ -22,7 +22,7 @@ class VisualLine implements Visual
 		this._drawPosTo = new Coords(0, 0, 0);
 	}
 
-	draw(universe: Universe, world: World, display: Display, entity: Entity)
+	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		var pos = entity.locatable().loc.pos;
 		var drawPosFrom = this._drawPosFrom.overwriteWith

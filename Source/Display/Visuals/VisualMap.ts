@@ -35,16 +35,16 @@ class VisualMap implements Visual
 		this._posSaved = new Coords(0, 0, 0);
 	}
 
-	draw(universe: Universe, world: World, display: Display, entity: Entity)
+	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		if (this.shouldConvertToImage)
 		{
 			if (this.visualImage == null)
 			{
-				this.draw_ConvertToImage(universe, world, display, entity);
+				this.draw_ConvertToImage(universe, world, place, entity, display);
 			}
 
-			this.visualImage.draw(universe, world, display, entity);
+			this.visualImage.draw(universe, world, place, entity, display);
 		}
 		else
 		{
@@ -52,12 +52,12 @@ class VisualMap implements Visual
 			var cellPosEnd = this._cellPosEnd.overwriteWith(this.map.sizeInCells);
 			this.draw_ConvertToImage_Cells
 			(
-				universe, world, display, entity, cellPosStart, cellPosEnd, display
+				universe, world, place, entity, display, cellPosStart, cellPosEnd, display
 			);
 		}
 	}
 
-	draw_ConvertToImage(universe: Universe, world: World, display: Display, entity: Entity)
+	draw_ConvertToImage(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		var mapSizeInCells = this.map.sizeInCells;
 		var drawablePos = entity.locatable().loc.pos;
@@ -83,7 +83,11 @@ class VisualMap implements Visual
 		var displayForImage = new Display2D([this.map.size], null, null, null, null, null);
 		displayForImage.toDomElement();
 
-		this.draw_ConvertToImage_Cells(universe, world, display, entity, cellPosStart, cellPosEnd, displayForImage);
+		this.draw_ConvertToImage_Cells
+		(
+			universe, world, place, entity, display, cellPosStart,
+			cellPosEnd, displayForImage
+		);
 
 		var image = Image2.fromSystemImage
 		(
@@ -96,8 +100,10 @@ class VisualMap implements Visual
 
 	draw_ConvertToImage_Cells
 	(
-		universe: Universe, world: World, display: Display, entity: Entity,
-		cellPosStart: Coords, cellPosEnd: Coords, displayForImage: Display)
+		universe: Universe, world: World, place: Place, entity: Entity,
+		display: Display, cellPosStart: Coords, cellPosEnd: Coords,
+		displayForImage: Display
+	)
 	{
 		var drawPos = this._drawPos;
 		var drawablePos = entity.locatable().loc.pos;
@@ -147,7 +153,7 @@ class VisualMap implements Visual
 
 				drawablePos.overwriteWith(drawPos);
 
-				cellVisual.draw(universe, world, displayForImage, entity);
+				cellVisual.draw(universe, world, place, entity, displayForImage);
 			}
 		}
 

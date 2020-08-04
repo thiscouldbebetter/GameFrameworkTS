@@ -5,7 +5,7 @@ class VisualText {
         this.colorFill = colorFill;
         this.colorBorder = colorBorder;
     }
-    draw(universe, world, display, entity) {
+    draw(universe, world, place, entity, display) {
         var text = this.text(universe, world, display, entity);
         display.drawText(text, display.fontHeightInPixels, entity.locatable().loc.pos, (this.colorFill == null ? null : this.colorFill.systemColor()), (this.colorBorder == null ? null : this.colorBorder.systemColor()), false, // areColorsReversed
         true, // isCentered

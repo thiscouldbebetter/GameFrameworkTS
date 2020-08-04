@@ -26,7 +26,7 @@ class VisualBar implements Visual
 		this._sizeHalf = this.size.clone().half();
 	}
 
-	draw(universe: Universe, world: World, display: Display, entity: Entity)
+	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		var pos = this._drawPos.overwriteWith(entity.locatable().loc.pos).subtract(this._sizeHalf);
 		var _amountCurrent: number = this.amountCurrent.contextSet(entity).get() as number;
