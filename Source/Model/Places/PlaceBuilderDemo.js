@@ -812,12 +812,11 @@ class PlaceBuilderDemo {
         var flameVisualStaticSmall = flameVisualStatic.clone().transform(new Transform_Scale(new Coords(1, .8, 1)));
         var flameVisualStaticLarge = flameVisualStatic.clone().transform(new Transform_Scale(new Coords(1, 1.2, 1)));
         var smokePuffVisual = new VisualCircle(entityDimensionHalf, Color.byName("GrayLight"), null);
-        var smokePuffVel = new Coords(.33, -1.5, 0);
         var smokeVisual = new VisualParticles("Smoke", null, // ticksToGenerate
         1 / 3, // particlesPerTick
         () => 50, // particleTicksToLiveGet
         // particleVelocityGet
-        () => smokePuffVel.clone().add(new Coords(Math.random() - 0.5, 0, 0)), new Transform_Dynamic((transformable) => {
+        () => new Coords(.33, -1.5, 0).add(new Coords(Math.random() - 0.5, 0, 0)), new Transform_Dynamic((transformable) => {
             var transformableAsVisualCircle = transformable;
             transformableAsVisualCircle.radius *= 1.02;
             var color = transformableAsVisualCircle.colorFill.clone();

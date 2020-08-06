@@ -73,14 +73,12 @@ class World {
         defns, places);
         return returnValue;
     }
-    ;
     // instance methods
     draw(universe) {
         if (this.placeCurrent != null) {
-            this.placeCurrent.draw(universe, this);
+            this.placeCurrent.draw(universe, this, universe.display);
         }
     }
-    ;
     initialize(universe) {
         if (this.placeNext != null) {
             if (this.placeCurrent != null) {
@@ -93,7 +91,15 @@ class World {
             this.placeCurrent.initialize(universe, this);
         }
     }
-    ;
+    timePlayingAsString(universe, isShort) {
+        var secondsPlayingTotal = Math.floor(this.timerTicksSoFar / universe.timerHelper.ticksPerSecond);
+        var minutesPlayingTotal = Math.floor(secondsPlayingTotal / 60);
+        var hoursPlayingTotal = Math.floor(minutesPlayingTotal / 60);
+        var timePlayingAsString = hoursPlayingTotal + " " + (isShort ? "h" : "hours") + " "
+            + (minutesPlayingTotal % 60) + " " + (isShort ? "m" : "minutes") + " "
+            + (secondsPlayingTotal % 60) + " " + (isShort ? "s" : "seconds");
+        return timePlayingAsString;
+    }
     updateForTimerTick(universe) {
         if (this.placeNext != null) {
             if (this.placeCurrent != null) {
@@ -106,5 +112,4 @@ class World {
         this.placeCurrent.updateForTimerTick(universe, this);
         this.timerTicksSoFar++;
     }
-    ;
 }

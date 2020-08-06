@@ -1376,7 +1376,6 @@ class PlaceBuilderDemo
 		) as VisualGroup;
 
 		var smokePuffVisual = new VisualCircle(entityDimensionHalf, Color.byName("GrayLight"), null);
-		var smokePuffVel = new Coords(.33, -1.5, 0);
 		var smokeVisual = new VisualParticles
 		(
 			"Smoke",
@@ -1384,7 +1383,7 @@ class PlaceBuilderDemo
 			1 / 3, // particlesPerTick
 			() => 50, // particleTicksToLiveGet
 			// particleVelocityGet
-			() => smokePuffVel.clone().add(new Coords(Math.random() - 0.5, 0, 0) ),
+			() => new Coords(.33, -1.5, 0).add(new Coords(Math.random() - 0.5, 0, 0) ),
 			new Transform_Dynamic
 			(
 				(transformable: Transformable) =>

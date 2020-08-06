@@ -5,9 +5,10 @@ class VenueVideo {
         this.venueNext = venueNext;
         this.hasVideoBeenStarted = false;
         var inputNames = Input.Names();
+        var controlActionNames = ControlActionNames.Instances();
         this.actionToInputsMappings =
             [
-                new ActionToInputsMapping("VideoSkip", [inputNames.Escape, inputNames.GamepadButton0 + "0"], true),
+                new ActionToInputsMapping(controlActionNames.ControlCancel, [inputNames.Escape, inputNames.GamepadButton0 + "0"], true),
             ];
         this.actionToInputsMappingsByInputName = ArrayHelper.addLookupsMultiple(this.actionToInputsMappings, (x) => x.inputNames);
     }
@@ -31,15 +32,16 @@ class VenueVideo {
                 shouldVideoBeStopped = true;
             }
             else {
+                var controlActionNames = ControlActionNames.Instances();
                 var inputsPressed = inputHelper.inputsPressed;
                 for (var i = 0; i < inputsPressed.length; i++) {
                     var inputPressed = inputsPressed[i];
                     if (inputPressed.isActive) {
-                        var actionToInputsMapping = this.actionToInputsMappingsByInputName[inputPressed.name];
+                        var actionToInputsMapping = this.actionToInputsMappingsByInputName.get(inputPressed.name);
                         if (actionToInputsMapping != null) {
                             inputPressed.isActive = false;
                             var actionName = actionToInputsMapping.actionName;
-                            if (actionName == "VideoSkip") {
+                            if (actionName == controlActionNames.ControlCancel) {
                                 shouldVideoBeStopped = true;
                             }
                         }

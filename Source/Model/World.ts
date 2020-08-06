@@ -138,7 +138,7 @@ class World
 			places
 		);
 		return returnValue;
-	};
+	}
 
 	// instance methods
 
@@ -146,9 +146,9 @@ class World
 	{
 		if (this.placeCurrent != null)
 		{
-			this.placeCurrent.draw(universe, this);
+			this.placeCurrent.draw(universe, this, universe.display);
 		}
-	};
+	}
 
 	initialize(universe: Universe)
 	{
@@ -166,7 +166,24 @@ class World
 		{
 			this.placeCurrent.initialize(universe, this);
 		}
-	};
+	}
+
+	timePlayingAsString(universe: Universe, isShort: boolean)
+	{
+		var secondsPlayingTotal = Math.floor
+		(
+			this.timerTicksSoFar / universe.timerHelper.ticksPerSecond
+		);
+		var minutesPlayingTotal = Math.floor(secondsPlayingTotal / 60);
+		var hoursPlayingTotal = Math.floor(minutesPlayingTotal / 60);
+
+		var timePlayingAsString =
+			hoursPlayingTotal + " " + (isShort ? "h" : "hours") + " "
+			+ (minutesPlayingTotal % 60) + " " + (isShort ? "m" : "minutes") + " "
+			+ (secondsPlayingTotal % 60) + " " + (isShort ? "s" : "seconds");
+
+		return timePlayingAsString;
+	}
 
 	updateForTimerTick(universe: Universe)
 	{
@@ -182,5 +199,5 @@ class World
 		}
 		this.placeCurrent.updateForTimerTick(universe, this);
 		this.timerTicksSoFar++;
-	};
+	}
 }

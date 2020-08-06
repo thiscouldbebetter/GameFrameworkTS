@@ -40,7 +40,14 @@ class DateTime {
             + StringHelper.padStart("" + this.seconds, 2, "0");
         return returnValue;
     }
-    ;
+    toStringHH_MM_SS() {
+        var returnValue = +StringHelper.padStart("" + this.hours, 2, "0")
+            + ":"
+            + StringHelper.padStart("" + this.minutes, 2, "0")
+            + ":"
+            + StringHelper.padStart("" + this.seconds, 2, "0");
+        return returnValue;
+    }
     toStringTimestamp() {
         var returnValue = ""
             + this.year
@@ -56,5 +63,27 @@ class DateTime {
             + StringHelper.padStart("" + this.seconds, 2, "0");
         return returnValue;
     }
-    ;
+    toStringYYYY_MM_DD() {
+        var returnValue = "" + this.year
+            + "/" + StringHelper.padStart("" + this.month, 2, "0")
+            + "/" + StringHelper.padStart("" + this.day, 2, "0");
+        return returnValue;
+    }
+    toStringYYYYMMDD_HHMM_SS() {
+        return this.year + "-" + this.toStringMMDD_HHMM_SS();
+    }
+    toStringYYYY_MM_DD_HH_MM_SS() {
+        var returnValue = "" + this.year
+            + "/"
+            + StringHelper.padStart("" + this.month, 2, "0")
+            + "/"
+            + StringHelper.padStart("" + this.day, 2, "0")
+            + "-"
+            + StringHelper.padStart("" + this.hours, 2, "0")
+            + ":"
+            + StringHelper.padStart("" + this.minutes, 2, "0")
+            + ":"
+            + StringHelper.padStart("" + this.seconds, 2, "0");
+        return returnValue;
+    }
 }

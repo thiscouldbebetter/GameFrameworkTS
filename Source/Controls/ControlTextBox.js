@@ -48,7 +48,16 @@ class ControlTextBox {
             // This is a bit counterintuitive.
             var direction = (actionNameToHandle == controlActionNames.ControlIncrement ? -1 : 1);
             var charCodeAtCursor = (this.cursorPos < text.length ? text.charCodeAt(this.cursorPos) : "A".charCodeAt(0) - 1);
-            charCodeAtCursor = NumberHelper.wrapToRangeMinMax(charCodeAtCursor + direction, "A".charCodeAt(0), "Z".charCodeAt(0) + 1);
+            if (charCodeAtCursor == "Z".charCodeAt(0) && direction == 1) {
+                charCodeAtCursor = "a".charCodeAt(0);
+            }
+            else if (charCodeAtCursor == "a".charCodeAt(0) && direction == -1) {
+                charCodeAtCursor = "Z".charCodeAt(0);
+            }
+            else {
+                charCodeAtCursor = charCodeAtCursor + direction;
+            }
+            charCodeAtCursor = NumberHelper.wrapToRangeMinMax(charCodeAtCursor, "A".charCodeAt(0), "z".charCodeAt(0) + 1);
             var charAtCursor = String.fromCharCode(charCodeAtCursor);
             this.text(text.substr(0, this.cursorPos)
                 + charAtCursor

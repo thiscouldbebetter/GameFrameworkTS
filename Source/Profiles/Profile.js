@@ -1,8 +1,11 @@
 "use strict";
 class Profile {
-    constructor(name, saveStateNames) {
+    constructor(name, saveStates) {
         this.name = name;
-        this.saveStateNames = saveStateNames;
+        this.saveStates = saveStates;
         this.saveStateNameSelected = null;
+    }
+    saveStateSelected() {
+        return this.saveStates.filter(x => x.name == this.saveStateNameSelected)[0];
     }
 }

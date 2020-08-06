@@ -1093,18 +1093,7 @@ class PlaceBuilderDemo_Movers
 				var labelSize = new Coords(300, fontHeight * 1.25, 0);
 				var marginX = fontHeight;
 
-				var secondsPlayingTotal = Math.floor
-				(
-					universe.world.timerTicksSoFar
-					/ universe.timerHelper.ticksPerSecond
-				);
-				var minutesPlayingTotal = Math.floor(secondsPlayingTotal / 60);
-				var hoursPlayingTotal = Math.floor(minutesPlayingTotal / 60);
-
-				var timePlayingAsString =
-					hoursPlayingTotal + " hours "
-					+ (minutesPlayingTotal % 60) + " minutes "
-					+ (secondsPlayingTotal % 60) + " seconds";
+				var timePlayingAsString = universe.world.timePlayingAsString(universe, false);
 
 				var statusAsControl = new ControlContainer
 				(

@@ -31,14 +31,14 @@ class Place {
         return world.defn.placeDefnsByName().get(this.defnName);
     }
     ;
-    draw(universe, world) {
+    draw(universe, world, display) {
         var entitiesDrawable = this.entitiesByPropertyName(Drawable.name);
         for (var i = 0; i < entitiesDrawable.length; i++) {
             var entity = entitiesDrawable[i];
             var drawable = entity.drawable();
             drawable.updateForTimerTick(universe, world, this, entity);
         }
-        this.camera().drawEntitiesInViewThenClear(universe, world, this, universe.display);
+        this.camera().drawEntitiesInViewThenClear(universe, world, this, display);
     }
     ;
     entitiesByPropertyName(propertyName) {

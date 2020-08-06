@@ -2,13 +2,18 @@
 class Profile
 {
 	name: string;
-	saveStateNames: string[];
+	saveStates: SaveState[];
 	saveStateNameSelected: string;
 
-	constructor(name: string, saveStateNames: string[])
+	constructor(name: string, saveStates: SaveState[])
 	{
 		this.name = name;
-		this.saveStateNames = saveStateNames;
+		this.saveStates = saveStates;
 		this.saveStateNameSelected = null;
+	}
+
+	saveStateSelected()
+	{
+		return this.saveStates.filter(x => x.name == this.saveStateNameSelected)[0];
 	}
 }

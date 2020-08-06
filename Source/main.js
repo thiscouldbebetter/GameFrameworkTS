@@ -21,6 +21,6 @@ function main() {
     "Gray", "White", // colorFore, colorBack
     null);
     var timerHelper = new TimerHelper(20);
-    var universe = Universe.create("Game Framework Demo Game", "0.0.0-20200721-2115", timerHelper, display, mediaLibrary, null);
+    var universe = Universe.create("Game Framework Demo Game", "0.0.0-20200804-0100", timerHelper, display, mediaLibrary, null);
     universe.initialize(function () { universe.start(); });
 }
