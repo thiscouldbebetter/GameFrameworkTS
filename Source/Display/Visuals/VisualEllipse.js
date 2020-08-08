@@ -11,7 +11,7 @@ class VisualEllipse {
         var drawableLoc = entity.locatable().loc;
         var drawableOrientation = drawableLoc.orientation;
         var drawableRotationInTurns = drawableOrientation.headingInTurns();
-        display.drawEllipse(drawableLoc.pos, this.semimajorAxis, this.semiminorAxis, NumberHelper.wrapToRangeZeroOne(this.rotationInTurns + drawableRotationInTurns), (this.colorFill == null ? null : this.colorFill.systemColor()), (this.colorBorder == null ? null : this.colorBorder.systemColor()));
+        display.drawEllipse(drawableLoc.pos, this.semimajorAxis, this.semiminorAxis, NumberHelper.wrapToRangeZeroOne(this.rotationInTurns + drawableRotationInTurns), Color.systemColorGet(this.colorFill), Color.systemColorGet(this.colorBorder));
     }
     ;
     // Clonable.

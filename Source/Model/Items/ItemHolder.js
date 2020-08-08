@@ -335,7 +335,7 @@ class ItemHolder {
             new DataBinding(this, (c) => {
                 var i = c.itemEntitySelected;
                 return (i == null ? visualNone : i.item().defn(world).visual);
-            }, null), "Black" // colorBackground
+            }, null), Color.byName("Black") // colorBackground
             ),
             new ControlLabel("infoStatus", new Coords(150, 115, 0), // pos
             new Coords(200, 15, 0), // size

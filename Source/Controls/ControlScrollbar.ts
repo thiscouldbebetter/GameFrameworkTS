@@ -204,7 +204,7 @@ class ControlScrollbar implements Control
 			var colorBack = (this.isHighlighted ? style.colorBorder : style.colorFill);
 
 			var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
-			display.drawRectangle(drawPos, this.size, colorFore, null, null);
+			display.drawRectangle(drawPos, this.size, Color.systemColorGet(colorFore), null, null);
 
 			drawLoc.pos.add(this.pos);
 			this.buttonScrollDown.draw(universe, display, drawLoc);
@@ -217,8 +217,8 @@ class ControlScrollbar implements Control
 			(
 				sliderPosInPixels,
 				sliderSizeInPixels,
-				colorBack,
-				colorFore,
+				Color.systemColorGet(colorBack),
+				Color.systemColorGet(colorFore),
 				null
 			);
 		}

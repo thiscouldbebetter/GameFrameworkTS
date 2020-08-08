@@ -411,7 +411,9 @@ class ControlTabbed implements Control
 		display.drawRectangle
 		(
 			drawPos, this.size,
-			style.colorBackground, style.colorBorder, null
+			Color.systemColorGet(style.colorBackground),
+			Color.systemColorGet(style.colorBorder),
+			null
 		);
 
 		var buttons = this.buttonsForChildren;

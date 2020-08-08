@@ -4,43 +4,55 @@ GameFrameworkTS - Issues
 Features
 --------
 
-Crafting - Automatic Stage Button
-Crafting - Queue and Durations
-Crafting - Uncarryable Tools in Environment
-Crafting - Facilities - Crafter + Container
-Clickable Quick Slots
-Carnivores, Who Eat Grazers
-Animal Growth, Aging and Natural Death
-Animal Procreation
-Unloading World Before Save, Reloading After
-Storage - Separate Profiles and Worlds
-Images in Lists and Grids
-Move Esc Menu into Tab of Tab Menu
+Controls - Auto-Map
+Controls - Clickable Quick Slots
+Controls - Control is Superclass Instead of Interface
 Controls - Decorations
+Controls - Images in Lists and Grids
+Controls - Journal and Quests
+Controls - Move Esc Menu into Tab of Tab Menu
+Controls - Player Notes
+Controls - TextBox Respects Backspace
+
+Items - Agriculture - Seeds, Planting, Watering, Harvesting
+Items - Generated Devices with Varying Specs
+Items - Crafting - Automatic Stage Button
+Items - Crafting - Queue and Durations
+Items - Crafting - Uncarryable Tools in Environment
+Items - Crafting - Facilities - Crafter + Container
+
+Movers - Animal Growth, Aging and Natural Death
+Movers - Animal Procreation
+Movers - Carnivores Eat Grazers
+Movers - Food, Eating, and Hunger
+Movers - Vehicles
+
+Movers - Enemies - Sight And Hearing
+Movers - Enemies - Enemy Generators Use Generator Class
+
+Movers - Enemies - Types - Bombers
+Movers - Enemies - Types - Hiders
+Movers - Enemies - Types - Shooters
+
+Places - Load/Unload Zones in Terrarium
+Places - Map Tiles as Obstacles
+Places - Map Tiles from Images
+Places - Map Tiles - Generated
+
+Storage - Separate Profiles and Worlds
+Storage - Unloading World Before Save, Reloading After
+
+Storage - Saves - Fix Spacing on Load Screen
+Storage - Saves - Add Description
+Storage - Saves - Add Snapshot
+
 Sound - Hitting Obstacle
 Sound - Shooting Gun
 Sound - Bullet Hits
 Sound - Swinging Sword
 Sound - Sword Hits
 Sound - Effects from Builtin JS AudioContext
-Food, Eating, and Hunger
-Map Tiles as Obstacles
-Map Tiles from Images
-Map Tiles - Generated
-Vehicles
-Agriculture - Seeds, Planting, Watering, Harvesting
-Load/Unload Zones in Terrarium
-Generated Devices with Varying Specs
-Journal and Quests
-Auto-Map
-Player Notes
-Saves - Fix Spacing on Load Screen
-Saves - Add Description
-Saves - Add Snapshot
-Enemies - Bombers
-Enemies - Hiders
-Enemies - Shooters
-Enemies - Enemy Generators Use Generator Class
+Sound - Music on Title Screen
 
 
 Fixes

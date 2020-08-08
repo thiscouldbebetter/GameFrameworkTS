@@ -4,14 +4,14 @@ class VisualTransform implements Visual
 	transformToApply: Transform;
 	child: Visual;
 
-	_childBeforeTransform: Visual;
+	_childTransformed: Visual;
 
 	constructor(transformToApply: Transform, child: Visual)
 	{
 		this.transformToApply = transformToApply;
 		this.child = child;
 
-		this._childBeforeTransform = this.child.clone();
+		this._childTransformed = child.clone();
 	}
 
 	// Cloneable.
@@ -39,9 +39,8 @@ class VisualTransform implements Visual
 
 	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
-		this._childBeforeTransform.overwriteWith(this.child);
-		this.transformToApply.transform(this.child);
-		this.child.draw(universe, world, place, entity, display);
-		this.child.overwriteWith(this._childBeforeTransform);
+		this._childTransformed.overwriteWith(this.child);
+		this.transformToApply.transform(this._childTransformed);
+		this._childTransformed.draw(universe, world, place, entity, display);
 	};
 }

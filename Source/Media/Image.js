@@ -14,7 +14,6 @@ class Image2 {
         returnValue.isLoaded = true;
         return returnValue;
     }
-    ;
     // instance methods
     clone() {
         var returnValue = new Image2(null, null);
@@ -25,7 +24,6 @@ class Image2 {
         returnValue.isLoaded = this.isLoaded;
         return returnValue;
     }
-    ;
     load() {
         if (this.sourcePath != null) {
             var image = this;
@@ -38,6 +36,10 @@ class Image2 {
             };
             imgElement.src = this.sourcePath;
         }
+        return this;
     }
-    ;
+    unload() {
+        this.systemImage = null;
+        return this;
+    }
 }

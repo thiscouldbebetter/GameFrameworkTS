@@ -121,8 +121,8 @@ class MeshTextured implements Transformable
 		(
 			this.geometry.clone(),
 			this.materials,
-			( this.faceTextures == null ? null : ArrayHelper.clone(this.faceTextures) ),
-			( this.vertexGroups == null ? null : ArrayHelper.clone(this.vertexGroups) )
+			ArrayHelper.clone(this.faceTextures),
+			ArrayHelper.clone(this.vertexGroups)
 		);
 	};
 

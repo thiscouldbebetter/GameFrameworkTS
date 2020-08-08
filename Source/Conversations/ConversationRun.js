@@ -68,7 +68,7 @@ class ConversationRun {
         // children
         [
             new ControlVisual("visualPortrait", marginSize.clone(), portraitSize, // size
-            DataBinding.fromContext(conversationDefn.visualPortrait), "Black" // colorBackground
+            DataBinding.fromContext(conversationDefn.visualPortrait), Color.byName("Black") // colorBackground
             ),
             new ControlLabel("labelSpeaker", new Coords(marginSize.x * 2 + portraitSize.x, marginSize.y + portraitSize.y / 2 - labelHeight / 2, 0), // pos
             size, // size

@@ -22,8 +22,8 @@ class VisualText implements Visual
 			text,
 			this.heightInPixels || display.fontHeightInPixels,
 			entity.locatable().loc.pos,
-			(this.colorFill == null ? null : this.colorFill.systemColor() ),
-			(this.colorBorder == null ? null : this.colorBorder.systemColor() ),
+			Color.systemColorGet(this.colorFill),
+			Color.systemColorGet(this.colorBorder),
 			false, // areColorsReversed
 			true, // isCentered
 			null // widthMaxInPixels

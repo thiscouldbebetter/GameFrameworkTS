@@ -67,13 +67,18 @@ class ArrayHelper
 
 	static clone(array: any)
 	{
-		var returnValue = [];
+		var returnValue: any = null;
 
-		for (var i = 0; i < array.length; i++)
+		if (array != null)
 		{
-			var element = array[i];
-			var elementCloned = element.clone();
-			returnValue.push(elementCloned);
+			returnValue = [];
+
+			for (var i = 0; i < array.length; i++)
+			{
+				var element = array[i];
+				var elementCloned = element.clone();
+				returnValue.push(elementCloned);
+			}
 		}
 
 		return returnValue;

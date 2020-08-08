@@ -2,12 +2,12 @@
 class ControlStyle
 {
 	name: string;
-	colorBackground: string;
-	colorFill: string;
-	colorBorder: string;
-	colorDisabled: string;
+	colorBackground: Color;
+	colorFill: Color;
+	colorBorder: Color;
+	colorDisabled: Color;
 
-	constructor(name: string, colorBackground: string, colorFill: string, colorBorder: string, colorDisabled: string)
+	constructor(name: string, colorBackground: Color, colorFill: Color, colorBorder: Color, colorDisabled: Color)
 	{
 		this.name = name;
 		this.colorBackground = colorBackground;
@@ -36,10 +36,10 @@ class ControlStyle_Instances
 		this.Default = new ControlStyle
 		(
 			"Default", // name
-			"rgb(240, 240, 240)", // colorBackground
-			"White", // colorFill
-			"Gray", // colorBorder
-			"LightGray" // colorDisabled
+			Color.fromRGB(240/255, 240/255, 240/255), // colorBackground
+			Color.byName("White"), // colorFill
+			Color.byName("Gray"), // colorBorder
+			Color.byName("GrayLight") // colorDisabled
 		);
 	}
 }

@@ -381,8 +381,8 @@ class ControlList implements Control
 		(
 			drawPos,
 			this.size,
-			colorBack, // fill
-			style.colorBorder, // border
+			Color.systemColorGet(colorBack), // fill
+			Color.systemColorGet(style.colorBorder), // border
 			false // areColorsReversed
 		);
 
@@ -435,7 +435,7 @@ class ControlList implements Control
 				(
 					drawPos2,
 					this.itemSpacing(),
-					colorFore, // colorFill
+					Color.systemColorGet(colorFore), // colorFill
 					null, null
 				);
 			}
@@ -455,8 +455,8 @@ class ControlList implements Control
 				text,
 				this.fontHeightInPixels,
 				drawPos2,
-				colorFore,
-				colorBack,
+				Color.systemColorGet(colorFore),
+				Color.systemColorGet(colorBack),
 				(i == this.indexOfItemSelected(null)), // areColorsReversed
 				false, // isCentered
 				this.size.x // widthMaxInPixels

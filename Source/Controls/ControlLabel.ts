@@ -116,8 +116,8 @@ class ControlLabel implements Control
 					textLine,
 					this.fontHeightInPixels,
 					drawPos,
-					style.colorBorder,
-					style.colorFill, // colorOutline
+					Color.systemColorGet(style.colorBorder),
+					Color.systemColorGet(style.colorFill), // colorOutline
 					null, // areColorsReversed
 					this.isTextCentered,
 					widthMaxInPixels

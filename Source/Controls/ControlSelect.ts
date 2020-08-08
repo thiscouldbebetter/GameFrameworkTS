@@ -191,7 +191,8 @@ class ControlSelect implements Control
 		display.drawRectangle
 		(
 			drawPos, this.size,
-			style.colorFill, style.colorBorder,
+			Color.systemColorGet(style.colorFill),
+			Color.systemColorGet(style.colorBorder),
 			this.isHighlighted // areColorsReversed
 		);
 
@@ -210,8 +211,8 @@ class ControlSelect implements Control
 			text,
 			this.fontHeightInPixels,
 			drawPos,
-			style.colorBorder,
-			style.colorFill,
+			Color.systemColorGet(style.colorBorder),
+			Color.systemColorGet(style.colorFill),
 			this.isHighlighted,
 			true, // isCentered
 			this.size.x // widthMaxInPixels

@@ -395,6 +395,8 @@ class Display3D implements Display
 		this.tempCoords = new Coords(0, 0, 0);
 		this.tempMatrix0 = Matrix.buildZeroes();
 		this.tempMatrix1 = Matrix.buildZeroes();
+
+		return this;
 	};
 
 	lightingSet(todo: Lighting)

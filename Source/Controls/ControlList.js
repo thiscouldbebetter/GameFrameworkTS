@@ -237,8 +237,8 @@ class ControlList {
         var style = this.style(universe);
         var colorFore = (this.isHighlighted ? style.colorFill : style.colorBorder);
         var colorBack = (this.isHighlighted ? style.colorBorder : style.colorFill);
-        display.drawRectangle(drawPos, this.size, colorBack, // fill
-        style.colorBorder, // border
+        display.drawRectangle(drawPos, this.size, Color.systemColorGet(colorBack), // fill
+        Color.systemColorGet(style.colorBorder), // border
         false // areColorsReversed
         );
         var textMarginLeft = 2;
@@ -259,12 +259,12 @@ class ControlList {
             var offsetInItems = new Coords(iOffset % this.widthInItems, Math.floor(iOffset / this.widthInItems), 0);
             drawPos2.overwriteWith(this.itemSpacing()).multiply(offsetInItems).add(drawPos);
             if (item == itemSelected) {
-                display.drawRectangle(drawPos2, this.itemSpacing(), colorFore, // colorFill
+                display.drawRectangle(drawPos2, this.itemSpacing(), Color.systemColorGet(colorFore), // colorFill
                 null, null);
             }
             var text = this.bindingForItemText.contextSet(item).get();
             drawPos2.addDimensions(textMarginLeft, 0, 0);
-            display.drawText(text, this.fontHeightInPixels, drawPos2, colorFore, colorBack, (i == this.indexOfItemSelected(null)), // areColorsReversed
+            display.drawText(text, this.fontHeightInPixels, drawPos2, Color.systemColorGet(colorFore), Color.systemColorGet(colorBack), (i == this.indexOfItemSelected(null)), // areColorsReversed
             false, // isCentered
             this.size.x // widthMaxInPixels
             );

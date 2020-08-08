@@ -5,7 +5,7 @@ class ControlVisual implements Control
 	pos: Coords;
 	size: Coords;
 	visual: DataBinding<any,Visual>;
-	colorBackground: string;
+	colorBackground: Color;
 
 	fontHeightInPixels: number;
 	parent: Control;
@@ -16,7 +16,7 @@ class ControlVisual implements Control
 	_locatableEntity: Entity;
 	_sizeHalf: Coords;
 
-	constructor(name: string, pos: Coords, size: Coords, visual: DataBinding<any,Visual>, colorBackground: string)
+	constructor(name: string, pos: Coords, size: Coords, visual: DataBinding<any,Visual>, colorBackground: Color)
 	{
 		this.name = name;
 		this.pos = pos;
@@ -96,7 +96,9 @@ class ControlVisual implements Control
 		display.drawRectangle
 		(
 			drawPos, this.size,
-			colorFill, style.colorBorder, null
+			Color.systemColorGet(colorFill),
+			Color.systemColorGet(style.colorBorder),
+			null
 		);
 
 		var locatableEntity = this._locatableEntity;

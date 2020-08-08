@@ -16,6 +16,9 @@ class Color {
         returnValue._systemColor = systemColor;
         return returnValue;
     }
+    static systemColorGet(color) {
+        return (color == null ? null : color.systemColor());
+    }
     static Instances() {
         if (Color._instances == null) {
             Color._instances = new Color_Instances();

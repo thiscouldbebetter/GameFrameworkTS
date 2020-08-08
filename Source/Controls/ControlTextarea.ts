@@ -240,8 +240,8 @@ class ControlTextarea implements Control
 		(
 			drawPos,
 			this.size,
-			colorBack, // fill
-			style.colorBorder, // border
+			Color.systemColorGet(colorBack), // fill
+			Color.systemColorGet(style.colorBorder), // border
 			false // areColorsReversed
 		);
 
@@ -275,8 +275,8 @@ class ControlTextarea implements Control
 				line,
 				this.fontHeightInPixels,
 				drawPos2,
-				colorFore,
-				colorBack,
+				Color.systemColorGet(colorFore),
+				Color.systemColorGet(colorBack),
 				false, // areColorsReversed
 				false, // isCentered
 				this.size.x // widthMaxInPixels

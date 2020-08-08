@@ -121,13 +121,13 @@ class ControlTextBox {
         var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
         var style = this.style(universe);
         var text = this.text(null, null);
-        display.drawRectangle(drawPos, this.size, style.colorFill, style.colorBorder, this.isHighlighted // areColorsReversed
+        display.drawRectangle(drawPos, this.size, Color.systemColorGet(style.colorFill), Color.systemColorGet(style.colorBorder), this.isHighlighted // areColorsReversed
         );
         var textWidth = display.textWidthForFontHeight(text, this.fontHeightInPixels);
         var textSize = this._textSize.overwriteWithDimensions(textWidth, this.fontHeightInPixels, 0);
         var textMargin = this._textMargin.overwriteWith(this.size).subtract(textSize).half();
         var drawPosText = this._drawPosText.overwriteWith(drawPos).add(textMargin);
-        display.drawText(text, this.fontHeightInPixels, drawPosText, style.colorBorder, style.colorFill, this.isHighlighted, false, // isCentered
+        display.drawText(text, this.fontHeightInPixels, drawPosText, Color.systemColorGet(style.colorBorder), Color.systemColorGet(style.colorFill), this.isHighlighted, false, // isCentered
         this.size.x // widthMaxInPixels
         );
         if (this.isHighlighted) {
@@ -137,8 +137,8 @@ class ControlTextBox {
             var cursorWidth = display.textWidthForFontHeight(textAtCursor, this.fontHeightInPixels);
             drawPosText.x += cursorX;
             display.drawRectangle(drawPosText, new Coords(cursorWidth, this.fontHeightInPixels, 0), // size
-            style.colorFill, style.colorFill, null);
-            display.drawText(textAtCursor, this.fontHeightInPixels, drawPosText, style.colorBorder, null, // colorBack
+            Color.systemColorGet(style.colorFill), Color.systemColorGet(style.colorFill), null);
+            display.drawText(textAtCursor, this.fontHeightInPixels, drawPosText, Color.systemColorGet(style.colorBorder), null, // colorBack
             false, // isHighlighted
             false, // isCentered
             this.size.x // widthMaxInPixels

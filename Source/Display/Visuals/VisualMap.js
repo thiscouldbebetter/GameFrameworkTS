@@ -49,7 +49,7 @@ class VisualMap {
         displayForImage.toDomElement();
         this.draw_ConvertToImage_Cells(universe, world, place, entity, display, cellPosStart, cellPosEnd, displayForImage);
         var image = Image2.fromSystemImage("Map", displayForImage.canvas);
-        this.visualImage = new VisualImageImmediate(image);
+        this.visualImage = new VisualImageImmediate(image, false); // isScaled
         drawablePos.overwriteWith(this._posSaved);
     }
     draw_ConvertToImage_Cells(universe, world, place, entity, display, cellPosStart, cellPosEnd, displayForImage) {

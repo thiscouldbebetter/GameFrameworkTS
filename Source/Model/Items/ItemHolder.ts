@@ -581,7 +581,7 @@ class ItemHolder
 					},
 					null
 				),
-				"Black" // colorBackground
+				Color.byName("Black") // colorBackground
 			),
 
 			new ControlLabel

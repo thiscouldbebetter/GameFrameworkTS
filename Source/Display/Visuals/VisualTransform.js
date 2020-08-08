@@ -3,7 +3,7 @@ class VisualTransform {
     constructor(transformToApply, child) {
         this.transformToApply = transformToApply;
         this.child = child;
-        this._childBeforeTransform = this.child.clone();
+        this._childTransformed = child.clone();
     }
     // Cloneable.
     clone() {
@@ -23,10 +23,9 @@ class VisualTransform {
     ;
     // Visual.
     draw(universe, world, place, entity, display) {
-        this._childBeforeTransform.overwriteWith(this.child);
-        this.transformToApply.transform(this.child);
-        this.child.draw(universe, world, place, entity, display);
-        this.child.overwriteWith(this._childBeforeTransform);
+        this._childTransformed.overwriteWith(this.child);
+        this.transformToApply.transform(this._childTransformed);
+        this._childTransformed.draw(universe, world, place, entity, display);
     }
     ;
 }

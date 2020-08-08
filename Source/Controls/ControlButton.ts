@@ -132,7 +132,8 @@ class ControlButton implements Control
 			display.drawRectangle
 			(
 				drawPos, this.size,
-				colorFill, colorBorder,
+				Color.systemColorGet(colorFill),
+				Color.systemColorGet(colorBorder),
 				isHighlighted // areColorsReversed
 			);
 		}
@@ -146,8 +147,8 @@ class ControlButton implements Control
 			this.text,
 			this.fontHeightInPixels,
 			drawPos,
-			colorText,
-			colorFill,
+			Color.systemColorGet(colorText),
+			Color.systemColorGet(colorFill),
 			isHighlighted,
 			true, // isCentered
 			this.size.x // widthMaxInPixels

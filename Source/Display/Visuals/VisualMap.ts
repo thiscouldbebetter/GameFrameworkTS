@@ -93,7 +93,7 @@ class VisualMap implements Visual
 		(
 			"Map", displayForImage.canvas
 		);
-		this.visualImage = new VisualImageImmediate(image);
+		this.visualImage = new VisualImageImmediate(image, false); // isScaled
 
 		drawablePos.overwriteWith(this._posSaved);
 	}

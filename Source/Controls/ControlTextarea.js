@@ -161,8 +161,8 @@ class ControlTextarea {
         var style = this.style(universe);
         var colorFore = (this.isHighlighted ? style.colorFill : style.colorBorder);
         var colorBack = (this.isHighlighted ? style.colorBorder : style.colorFill);
-        display.drawRectangle(drawPos, this.size, colorBack, // fill
-        style.colorBorder, // border
+        display.drawRectangle(drawPos, this.size, Color.systemColorGet(colorBack), // fill
+        Color.systemColorGet(style.colorBorder), // border
         false // areColorsReversed
         );
         var itemSizeY = this.lineSpacing;
@@ -181,7 +181,7 @@ class ControlTextarea {
         var drawPos2 = new Coords(drawPos.x + textMarginLeft, itemPosY, 0);
         for (var i = indexStart; i <= indexEnd; i++) {
             var line = lines[i];
-            display.drawText(line, this.fontHeightInPixels, drawPos2, colorFore, colorBack, false, // areColorsReversed
+            display.drawText(line, this.fontHeightInPixels, drawPos2, Color.systemColorGet(colorFore), Color.systemColorGet(colorBack), false, // areColorsReversed
             false, // isCentered
             this.size.x // widthMaxInPixels
             );

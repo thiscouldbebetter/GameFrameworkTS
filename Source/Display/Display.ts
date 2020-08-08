@@ -56,7 +56,7 @@ interface Display
 	fontSet(fontName: string, fontHeightInPixels: number): void;
 	flush(): void;
 	hide(universe: Universe): void;
-	initialize(universe: Universe): void;
+	initialize(universe: Universe): Display;
 	rotateTurnsAroundCenter(turnsToRotate: number, centerOfRotation: Coords): void;
 	sizeDefault(): Coords;
 	scaleFactor(): Coords;

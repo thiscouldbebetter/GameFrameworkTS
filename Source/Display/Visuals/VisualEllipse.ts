@@ -30,8 +30,8 @@ class VisualEllipse implements Visual
 			drawableLoc.pos,
 			this.semimajorAxis, this.semiminorAxis,
 			NumberHelper.wrapToRangeZeroOne(this.rotationInTurns + drawableRotationInTurns),
-			(this.colorFill == null ? null : this.colorFill.systemColor() ),
-			(this.colorBorder == null ? null : this.colorBorder.systemColor() )
+			Color.systemColorGet(this.colorFill),
+			Color.systemColorGet(this.colorBorder)
 		);
 	};
 

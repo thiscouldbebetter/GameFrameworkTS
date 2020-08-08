@@ -218,7 +218,8 @@ class ControlTextBox implements Control
 		display.drawRectangle
 		(
 			drawPos, this.size,
-			style.colorFill, style.colorBorder,
+			Color.systemColorGet(style.colorFill),
+			Color.systemColorGet(style.colorBorder),
 			this.isHighlighted // areColorsReversed
 		);
 
@@ -236,8 +237,8 @@ class ControlTextBox implements Control
 			text,
 			this.fontHeightInPixels,
 			drawPosText,
-			style.colorBorder,
-			style.colorFill,
+			Color.systemColorGet(style.colorBorder),
+			Color.systemColorGet(style.colorFill),
 			this.isHighlighted,
 			false, // isCentered
 			this.size.x // widthMaxInPixels
@@ -261,8 +262,8 @@ class ControlTextBox implements Control
 			(
 				drawPosText,
 				new Coords(cursorWidth, this.fontHeightInPixels, 0), // size
-				style.colorFill,
-				style.colorFill,
+				Color.systemColorGet(style.colorFill),
+				Color.systemColorGet(style.colorFill),
 				null
 			);
 
@@ -271,7 +272,7 @@ class ControlTextBox implements Control
 				textAtCursor,
 				this.fontHeightInPixels,
 				drawPosText,
-				style.colorBorder,
+				Color.systemColorGet(style.colorBorder),
 				null, // colorBack
 				false, // isHighlighted
 				false, // isCentered

@@ -50,7 +50,7 @@ class ControlVisual {
         var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
         var style = this.style(universe);
         var colorFill = this.colorBackground || style.colorFill;
-        display.drawRectangle(drawPos, this.size, colorFill, style.colorBorder, null);
+        display.drawRectangle(drawPos, this.size, Color.systemColorGet(colorFill), Color.systemColorGet(style.colorBorder), null);
         var locatableEntity = this._locatableEntity;
         locatableEntity.locatable().loc.pos.overwriteWith(drawPos);
         drawPos.add(this._sizeHalf.overwriteWith(this.size).half());

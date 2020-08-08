@@ -54,11 +54,14 @@ class ArrayHelper {
     }
     ;
     static clone(array) {
-        var returnValue = [];
-        for (var i = 0; i < array.length; i++) {
-            var element = array[i];
-            var elementCloned = element.clone();
-            returnValue.push(elementCloned);
+        var returnValue = null;
+        if (array != null) {
+            returnValue = [];
+            for (var i = 0; i < array.length; i++) {
+                var element = array[i];
+                var elementCloned = element.clone();
+                returnValue.push(elementCloned);
+            }
         }
         return returnValue;
     }

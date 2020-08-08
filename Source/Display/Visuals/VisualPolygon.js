@@ -12,12 +12,12 @@ class VisualPolygon {
         this.transformTranslate.displacement.overwriteWith(drawablePos);
         this.verticesAsPathTransformed.overwriteWith(this.verticesAsPath);
         Transforms.applyTransformToCoordsMany(this.transformTranslate, this.verticesAsPathTransformed.points);
-        display.drawPolygon(this.verticesAsPathTransformed.points, (this.colorFill == null ? null : this.colorFill.systemColor()), (this.colorBorder == null ? null : this.colorBorder.systemColor()));
+        display.drawPolygon(this.verticesAsPathTransformed.points, Color.systemColorGet(this.colorFill), Color.systemColorGet(this.colorBorder));
     }
     ;
     // Clonable.
     clone() {
-        return new VisualPolygon(this.verticesAsPath.clone(), this.colorFill == null ? null : this.colorFill.clone(), this.colorBorder == null ? null : this.colorBorder.clone());
+        return new VisualPolygon(this.verticesAsPath.clone(), ClonableHelper.clone(this.colorFill), ClonableHelper.clone(this.colorBorder));
     }
     overwriteWith(other) {
         var otherAsVisualPolygon = other;

@@ -32,7 +32,7 @@ class Image2
 		returnValue.isLoaded = true;
 
 		return returnValue;
-	};
+	}
 
 	// instance methods
 
@@ -47,7 +47,7 @@ class Image2
 		returnValue.isLoaded = this.isLoaded;
 
 		return returnValue;
-	};
+	}
 
 	load()
 	{
@@ -68,5 +68,12 @@ class Image2
 			};
 			imgElement.src = this.sourcePath;
 		}
-	};
+		return this;
+	}
+
+	unload()
+	{
+		this.systemImage = null;
+		return this;
+	}
 }

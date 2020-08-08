@@ -31,6 +31,11 @@ class Color
 		return returnValue;
 	}
 
+	static systemColorGet(color: Color)
+	{
+		return (color == null ? null : color.systemColor() );
+	}
+
 	// constants
 
 	static NumberOfComponentsRGBA = 4;

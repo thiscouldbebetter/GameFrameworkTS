@@ -32,7 +32,7 @@ class WordBubble {
         // children
         [
             new ControlVisual("visualPortrait", marginSize, portraitSize, // size
-            DataBinding.fromContext(this.visualForPortrait), "Black" // colorBackground
+            DataBinding.fromContext(this.visualForPortrait), Color.byName("Black") // colorBackground
             ),
             new ControlLabel("labelSlideText", new Coords(portraitSize.x + margin, 0, 0).add(marginSize), wordPaneSize, // size
             false, // isTextCentered,

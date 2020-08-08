@@ -37,8 +37,8 @@ class VisualPolygon implements Visual
 		display.drawPolygon
 		(
 			this.verticesAsPathTransformed.points,
-			(this.colorFill == null ? null: this.colorFill.systemColor()),
-			(this.colorBorder == null ? null : this.colorBorder.systemColor())
+			Color.systemColorGet(this.colorFill),
+			Color.systemColorGet(this.colorBorder)
 		);
 	};
 
@@ -49,8 +49,8 @@ class VisualPolygon implements Visual
 		return new VisualPolygon
 		(
 			this.verticesAsPath.clone(),
-			this.colorFill == null ? null : this.colorFill.clone(),
-			this.colorBorder == null ? null: this.colorBorder.clone()
+			ClonableHelper.clone(this.colorFill),
+			ClonableHelper.clone(this.colorBorder)
 		);
 	}
 

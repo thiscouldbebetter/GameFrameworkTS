@@ -239,7 +239,7 @@ class ControlTabbed {
         drawLoc = this._drawLoc.overwriteWith(drawLoc);
         var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
         var style = this.style(universe);
-        display.drawRectangle(drawPos, this.size, style.colorBackground, style.colorBorder, null);
+        display.drawRectangle(drawPos, this.size, Color.systemColorGet(style.colorBackground), Color.systemColorGet(style.colorBorder), null);
         var buttons = this.buttonsForChildren;
         for (var i = 0; i < buttons.length; i++) {
             var button = buttons[i];

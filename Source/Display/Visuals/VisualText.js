@@ -8,7 +8,7 @@ class VisualText {
     }
     draw(universe, world, place, entity, display) {
         var text = this.text(universe, world, display, entity);
-        display.drawText(text, this.heightInPixels || display.fontHeightInPixels, entity.locatable().loc.pos, (this.colorFill == null ? null : this.colorFill.systemColor()), (this.colorBorder == null ? null : this.colorBorder.systemColor()), false, // areColorsReversed
+        display.drawText(text, this.heightInPixels || display.fontHeightInPixels, entity.locatable().loc.pos, Color.systemColorGet(this.colorFill), Color.systemColorGet(this.colorBorder), false, // areColorsReversed
         true, // isCentered
         null // widthMaxInPixels
         );

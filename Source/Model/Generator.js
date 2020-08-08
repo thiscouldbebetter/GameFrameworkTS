@@ -22,7 +22,7 @@ class Generator {
             if (ticksSinceGenerated >= this.ticksToGenerate) {
                 this.tickLastGenerated = world.timerTicksSoFar;
                 var entityGenerated = this.entityToGenerate.clone();
-                entityGenerated.locatable().loc.overwriteWith(entityGenerator.locatable().loc).pos.add(new Coords(0, 0, 0).randomize(universe.randomizer).multiplyScalar(3));
+                entityGenerated.locatable().loc.overwriteWith(entityGenerator.locatable().loc);
                 this.entitiesGenerated.push(entityGenerated);
                 place.entitySpawn(universe, world, entityGenerated);
             }

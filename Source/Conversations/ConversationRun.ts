@@ -124,7 +124,7 @@ class ConversationRun
 					marginSize.clone(),
 					portraitSize, // size
 					DataBinding.fromContext(conversationDefn.visualPortrait),
-					"Black" // colorBackground
+					Color.byName("Black") // colorBackground
 				),
 
 				new ControlLabel

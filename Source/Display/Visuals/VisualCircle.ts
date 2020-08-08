@@ -17,8 +17,8 @@ class VisualCircle implements Visual
 		display.drawCircle
 		(
 			entity.locatable().loc.pos, this.radius,
-			( this.colorFill == null ? null : this.colorFill.systemColor() ),
-			( this.colorBorder == null ? null : this.colorBorder.systemColor() )
+			Color.systemColorGet(this.colorFill),
+			Color.systemColorGet(this.colorBorder)
 		);
 	};
 

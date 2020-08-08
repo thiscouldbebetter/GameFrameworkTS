@@ -37,8 +37,8 @@ class VisualRectangle implements Visual
 		display.drawRectangle
 		(
 			drawPos, this.size,
-			(this.colorFill == null ? null : this.colorFill.systemColor() ),
-			(this.colorBorder == null ? null : this.colorBorder.systemColor() ),
+			Color.systemColorGet(this.colorFill),
+			Color.systemColorGet(this.colorBorder),
 			null
 		);
 	};
