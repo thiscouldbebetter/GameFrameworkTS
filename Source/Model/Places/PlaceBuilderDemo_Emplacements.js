@@ -103,10 +103,19 @@ class PlaceBuilderDemo_Emplacements {
             new VisualOffset(new VisualText(DataBinding.fromContext(entityName), null, itemHoleColor, null), new Coords(0, 0 - entityDimension, 0))
         ]);
         var entityDefn = new Entity(entityName, [
-            new Ephemeral(500, null),
+            new ItemContainer(),
+            new ItemHolder([]),
             new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
             new Drawable(itemHoleVisual, null),
-            new DrawableCamera()
+            new DrawableCamera(),
+            new Hidable(false),
+            new Usable((u, w, p, eUsing, eUsed) => {
+                var itemContainerAsControl = eUsed.itemContainer().toControl(u, u.display.sizeInPixels, eUsing, eUsed, u.venueCurrent);
+                var venueNext = new VenueControls(itemContainerAsControl);
+                venueNext = new VenueFader(venueNext, null, null, null);
+                u.venueNext = venueNext;
+                return null;
+            })
         ]);
         return entityDefn;
     }

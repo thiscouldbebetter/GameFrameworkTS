@@ -83,6 +83,8 @@ class Entity
 
 	equippable(): Equippable { return this.propertiesByName.get(Equippable.name); }
 
+	hidable(): Hidable { return this.propertiesByName.get(Hidable.name); }
+
 	item(): Item { return this.propertiesByName.get(Item.name); }
 
 	itemContainer(): ItemContainer { return this.propertiesByName.get(ItemContainer.name); }

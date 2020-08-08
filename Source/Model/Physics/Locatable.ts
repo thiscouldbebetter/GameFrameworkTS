@@ -18,8 +18,10 @@ class Locatable
 		var entityDefns = world.defn.entityDefnsByName();
 		var entityDefnToSpawn = entityDefns.get(entityToSpawnDefnName);
 		var entityToSpawn = entityDefnToSpawn.clone();
-		entityToSpawn.locatable().loc.overwriteWith(entitySpawning.locatable().loc);
-		entityToSpawn.locatable().loc.vel.clear();
+		var loc = entityToSpawn.locatable().loc;
+		loc.overwriteWith(entitySpawning.locatable().loc);
+		loc.accel.clear();
+		loc.vel.clear();
 		place.entitySpawn(universe, world, entityToSpawn);
 		return entityToSpawn;
 	}

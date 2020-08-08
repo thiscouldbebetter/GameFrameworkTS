@@ -2,7 +2,7 @@
 class VenueVideo implements Venue
 {
 	videoName: string;
-	venueNext: any;
+	venueNext: Venue;
 
 	actionToInputsMappings: ActionToInputsMapping[];
 	actionToInputsMappingsByInputName: any;

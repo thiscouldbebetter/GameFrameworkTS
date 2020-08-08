@@ -39,13 +39,6 @@ Places - Map Tiles as Obstacles
 Places - Map Tiles from Images
 Places - Map Tiles - Generated
 
-Storage - Separate Profiles and Worlds
-Storage - Unloading World Before Save, Reloading After
-
-Storage - Saves - Fix Spacing on Load Screen
-Storage - Saves - Add Description
-Storage - Saves - Add Snapshot
-
 Sound - Hitting Obstacle
 Sound - Shooting Gun
 Sound - Bullet Hits
@@ -57,7 +50,11 @@ Sound - Music on Title Screen
 
 Fixes
 -----
-Load World From File
-Sword Swing Direction is Wrong
-Barter - Trade Coins and Sword for Gun, Still Have Sword
-Portals Between Rooms Start Player Outside
+
+Items - Barter - Trade Coins and Sword for Gun, Still Have Sword
+Items - Put Wielded Item in Container, It Remains Equipped
+Items - Sword Swing Direction is Wrong
+
+Portals - Between Rooms Start Player Outside
+
+Storage - Fix Load World From File

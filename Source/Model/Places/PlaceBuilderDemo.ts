@@ -1177,11 +1177,10 @@ class PlaceBuilderDemo
 		var itemBombDevice = new Device
 		(
 			"Bomb",
+			10, // ticksToCharge
 			(u: Universe, w: World, p: Place, entity: Entity) => // initialize
 			{
-				var device = entity.device();
-				device.ticksToCharge = 10;
-				device.tickLastUsed = 0;
+				// todo
 			},
 			(u: Universe, w: World, p: Place, e: Entity) => // update
 			{
@@ -1189,14 +1188,6 @@ class PlaceBuilderDemo
 			},
 			(u: Universe, world: World, p: Place, entityUser: Entity, entityDevice: Entity) => // use
 			{
-				var device = entityDevice.device();
-				var tickCurrent = world.timerTicksSoFar;
-				var ticksSinceUsed = tickCurrent - device.tickLastUsed;
-				if (ticksSinceUsed < device.ticksToCharge)
-				{
-					return;
-				}
-
 				var userAsItemHolder = entityUser.itemHolder();
 				var hasAmmo = userAsItemHolder.hasItemWithDefnNameAndQuantity("Bomb", 1);
 				if (hasAmmo == false)
@@ -1210,8 +1201,6 @@ class PlaceBuilderDemo
 				{
 					entityUser.equipmentUser().unequipItemFromSocketWithName(world, "Wielding");
 				}
-
-				device.tickLastUsed = tickCurrent;
 
 				var userLoc = entityUser.locatable().loc;
 				var userPos = userLoc.pos;
@@ -1574,11 +1563,10 @@ class PlaceBuilderDemo
 		var itemGunDevice = new Device
 		(
 			"Gun",
+			10, // ticksToCharge
 			(u: Universe, w: World, p: Place, entity: Entity) => // initialize
 			{
-				var device = entity.device();
-				device.ticksToCharge = 10;
-				device.tickLastUsed = 0;
+				// todo
 			},
 			(u: Universe, w: World, p: Place, e: Entity) => // update
 			{
@@ -1934,6 +1922,7 @@ class PlaceBuilderDemo
 		var itemPickDevice = new Device
 		(
 			"Pick",
+			10, // ticksToCharge
 			null, // initialize: (u: Universe, w: World, p: Place, e: Entity) => void,
 			null, // update: (u: Universe, w: World, p: Place, e: Entity) => void,
 			(u: Universe, w: World, p: Place, eUser: Entity, eDevice: Entity) => // use
@@ -1960,7 +1949,8 @@ class PlaceBuilderDemo
 				new Collidable(itemPickCollider, null, null),
 				itemPickDevice,
 				new Drawable(itemPickVisual, null),
-				new DrawableCamera()
+				new DrawableCamera(),
+				new Equippable(null)
 			]
 		);
 
@@ -2025,11 +2015,34 @@ class PlaceBuilderDemo
 		var itemShovelDevice = new Device
 		(
 			"Shovel",
+			10, // ticksToCharge
 			null, // initialize: (u: Universe, w: World, p: Place, e: Entity) => void,
 			null, // update: (u: Universe, w: World, p: Place, e: Entity) => void,
 			(u: Universe, w: World, p: Place, eUser: Entity, eDevice: Entity) => // use
 			{
-				eUser.locatable().entitySpawnWithDefnName(u, w, p, eUser, "Hole");
+				var holesInPlace = p.entities.filter(x => x.name.startsWith("Hole"));
+				var rangeMax = 20; // todo
+				var holeInRange = holesInPlace.filter
+				(
+					x => x.locatable().distanceFromEntity(eUser) < rangeMax
+				)[0];
+				if (holeInRange != null)
+				{
+					var isHoleEmpty = (holeInRange.itemHolder().itemEntities.length == 0);
+					if (isHoleEmpty)
+					{
+						p.entitiesToRemove.push(holeInRange);
+					}
+					else
+					{
+						var holeInRangeHidable = holeInRange.hidable();
+						holeInRangeHidable.isHidden = (holeInRangeHidable.isHidden == false);
+					}
+				}
+				else
+				{
+					eUser.locatable().entitySpawnWithDefnName(u, w, p, eUser, "Hole");
+				}
 			}
 		);
 
@@ -2042,7 +2055,8 @@ class PlaceBuilderDemo
 				new Collidable(itemShovelCollider, null, null),
 				itemShovelDevice,
 				new Drawable(itemShovelVisual, null),
-				new DrawableCamera()
+				new DrawableCamera(),
+				new Equippable(null)
 			]
 		);
 
@@ -2071,28 +2085,11 @@ class PlaceBuilderDemo
 		var itemSwordDevice = new Device
 		(
 			itemDefnName,
-			(u: Universe, w: World, p: Place, entity: Entity) => // initialize
-			{
-				var device = entity.device();
-				device.ticksToCharge = 10;
-				device.tickLastUsed = 0;
-			},
-			(u: Universe, w: World, p: Place, e: Entity) => // update
-			{
-				// todo
-			},
+			10, // ticksToCharge
+			null, // init
+			null, // update
 			(universe: Universe, world: World, place: Place, entityUser: Entity, entityDevice: Entity) => // use
 			{
-				var device = entityDevice.device();
-				var tickCurrent = world.timerTicksSoFar;
-				var ticksSinceUsed = tickCurrent - device.tickLastUsed;
-				if (ticksSinceUsed < device.ticksToCharge)
-				{
-					return;
-				}
-
-				device.tickLastUsed = tickCurrent;
-
 				var userLoc = entityUser.locatable().loc;
 				var userPos = userLoc.pos;
 				var userVel = userLoc.vel;
@@ -3105,7 +3102,7 @@ class PlaceBuilderDemo
 						null
 					);
 
-					var venueNext: any = new VenueControls(container);
+					var venueNext: Venue = new VenueControls(container);
 					venueNext = new VenueFader(venueNext, null, null, null);
 					universe.venueNext = venueNext;
 

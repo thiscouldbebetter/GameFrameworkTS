@@ -8,6 +8,7 @@ class Collidable
 	collider: any;
 	ticksUntilCanCollide: number;
 	entitiesAlreadyCollidedWith: Entity[];
+	isDisabled: boolean;
 
 	_transformTranslate: Transform_Translate;
 
@@ -26,6 +27,7 @@ class Collidable
 
 		this.ticksUntilCanCollide = 0;
 		this.entitiesAlreadyCollidedWith = [];
+		this.isDisabled = false;
 
 		// Helper variables.
 
@@ -60,6 +62,11 @@ class Collidable
 
 	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity)
 	{
+		if (this.isDisabled)
+		{
+			return;
+		}
+
 		if (this.ticksUntilCanCollide > 0)
 		{
 			this.ticksUntilCanCollide--;

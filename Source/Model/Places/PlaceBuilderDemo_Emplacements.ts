@@ -120,7 +120,7 @@ class PlaceBuilderDemo_Emplacements
 							entityUsing, entityOther,
 							universe.venueCurrent
 						);
-						var venueNext: any = new VenueControls(itemContainerAsControl);
+						var venueNext: Venue = new VenueControls(itemContainerAsControl);
 						venueNext = new VenueFader(venueNext, null, null, null);
 						universe.venueNext = venueNext;
 						return null;
@@ -222,10 +222,28 @@ class PlaceBuilderDemo_Emplacements
 		(
 			entityName,
 			[
-				new Ephemeral(500, null),
+				new ItemContainer(),
+				new ItemHolder([]),
 				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
 				new Drawable(itemHoleVisual, null),
-				new DrawableCamera()
+				new DrawableCamera(),
+				new Hidable(false),
+				new Usable
+				(
+					(u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) =>
+					{
+						var itemContainerAsControl = eUsed.itemContainer().toControl
+						(
+							u, u.display.sizeInPixels,
+							eUsing, eUsed,
+							u.venueCurrent
+						);
+						var venueNext: Venue = new VenueControls(itemContainerAsControl);
+						venueNext = new VenueFader(venueNext, null, null, null);
+						u.venueNext = venueNext;
+						return null;
+					}
+				)
 			]
 		);
 

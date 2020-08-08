@@ -32,6 +32,7 @@ class Place
 			Collidable.name,
 			CollisionTracker.name,
 			Generator.name,
+			Hidable.name,
 			Idleable.name,
 			Actor.name,
 			Playable.name,

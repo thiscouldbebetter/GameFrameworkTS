@@ -62,11 +62,6 @@ class ItemContainer {
             new Coords(85, 25, 0), // size
             false, // isTextCentered
             entityGetterPutter.name + ":", fontHeight),
-            new ControlButton("buttonGet", new Coords(size.x / 2 - buttonSize.x - margin / 2, size.y - margin - buttonSize.y, 0), // pos
-            buttonSize.clone(), ">", fontHeight, true, // hasBorder
-            DataBinding.fromContext(true), // isEnabled
-            get, // click
-            null, null),
             new ControlList("listOtherItems", new Coords(size.x - margin - listSize.x, margin * 2, 0), // pos
             listSize.clone(), new DataBinding(itemHolderGetterPutter, (c) => {
                 return c.itemEntities; //.filter(x => x.item().defnName != itemDefnNameCurrency);
@@ -77,6 +72,11 @@ class ItemContainer {
             DataBinding.fromContext(true), // isEnabled
             put, // confirm
             null),
+            new ControlButton("buttonGet", new Coords(size.x / 2 - buttonSize.x - margin / 2, size.y - margin - buttonSize.y, 0), // pos
+            buttonSize.clone(), ">", fontHeight, true, // hasBorder
+            DataBinding.fromContext(true), // isEnabled
+            get, // click
+            null, null),
             new ControlButton("buttonPut", new Coords(size.x / 2 + margin / 2, size.y - margin - buttonSize.y, 0), // pos
             buttonSize.clone(), "<", fontHeight, true, // hasBorder
             DataBinding.fromContext(true), // isEnabled

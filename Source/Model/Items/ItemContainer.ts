@@ -133,24 +133,6 @@ class ItemContainer
 					fontHeight
 				),
 
-				new ControlButton
-				(
-					"buttonGet",
-					new Coords
-					(
-						size.x / 2 - buttonSize.x - margin / 2,
-						size.y - margin - buttonSize.y,
-						0
-					), // pos
-					buttonSize.clone(),
-					">",
-					fontHeight,
-					true, // hasBorder
-					DataBinding.fromContext(true), // isEnabled
-					get, // click
-					null, null
-				),
-
 				new ControlList
 				(
 					"listOtherItems",
@@ -182,6 +164,24 @@ class ItemContainer
 					DataBinding.fromContext(true), // isEnabled
 					put, // confirm
 					null
+				),
+
+				new ControlButton
+				(
+					"buttonGet",
+					new Coords
+					(
+						size.x / 2 - buttonSize.x - margin / 2,
+						size.y - margin - buttonSize.y,
+						0
+					), // pos
+					buttonSize.clone(),
+					">",
+					fontHeight,
+					true, // hasBorder
+					DataBinding.fromContext(true), // isEnabled
+					get, // click
+					null, null
 				),
 
 				new ControlButton

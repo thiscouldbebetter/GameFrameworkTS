@@ -47,7 +47,7 @@ class Action_Instances
 				(
 					universe, universe.display.sizeInPixels, actor, universe.venueCurrent
 				);
-				var venueNext: any = new VenueControls(control);
+				var venueNext: Venue = new VenueControls(control);
 				venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 				universe.venueNext = venueNext;
 			}
@@ -58,7 +58,7 @@ class Action_Instances
 			"ShowMenu",
 			(universe: Universe, world: World, place: Place, actor: Entity) => // perform
 			{
-				var venueNext: any = new VenueControls
+				var venueNext: Venue = new VenueControls
 				(
 					universe.controlBuilder.gameAndSettings(universe, null)
 				);

@@ -7,6 +7,7 @@ class Collidable {
         this.collider = this.colliderAtRest.clone();
         this.ticksUntilCanCollide = 0;
         this.entitiesAlreadyCollidedWith = [];
+        this.isDisabled = false;
         // Helper variables.
         this._transformTranslate = new Transform_Translate(new Coords(0, 0, 0));
     }
@@ -25,6 +26,9 @@ class Collidable {
     }
     ;
     updateForTimerTick(universe, world, place, entity) {
+        if (this.isDisabled) {
+            return;
+        }
         if (this.ticksUntilCanCollide > 0) {
             this.ticksUntilCanCollide--;
         }
