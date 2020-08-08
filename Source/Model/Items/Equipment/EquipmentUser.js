@@ -113,8 +113,7 @@ class EquipmentUser {
                 }
             }
         }
-        var itemEntitiesEquippable = itemHolder.itemEntities;
-        // todo
+        var itemEntitiesEquippable = itemHolder.itemEntities.filter(x => x.equippable() != null);
         var world = universe.world;
         var place = world.placeCurrent;
         var listHeight = 90;

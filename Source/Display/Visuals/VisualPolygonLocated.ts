@@ -1,21 +1,19 @@
 
 class VisualPolygonLocated implements Visual
 {
-	verticesAsPath: Path;
-	colorFill: string;
-	colorBorder: string;
-
-	verticesAsPathTransformed: Path;
+	visualPolygon: VisualPolygon;
+	visualPolygonTransformed: VisualPolygon;
 	transformLocate: Transform_Locate;
 
-	constructor(verticesAsPath: Path, colorFill: string, colorBorder: string)
+	constructor(visualPolygon: VisualPolygon)
 	{
-		this.verticesAsPath = verticesAsPath;
-		this.colorFill = colorFill;
-		this.colorBorder = colorBorder;
+		this.visualPolygon = visualPolygon;
 
-		this.verticesAsPathTransformed = this.verticesAsPath.clone();
-		this.transformLocate = new Transform_Locate(new Disposition(new Coords(0, 0, 0), null, null));
+		this.visualPolygonTransformed = this.visualPolygon.clone() as VisualPolygon;
+		this.transformLocate = new Transform_Locate
+		(
+			new Disposition(new Coords(0, 0, 0), null, null)
+		);
 	}
 
 	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
@@ -24,21 +22,17 @@ class VisualPolygonLocated implements Visual
 		var loc = this.transformLocate.loc;
 		loc.overwriteWith(drawableLoc);
 
-		this.verticesAsPathTransformed.overwriteWith
+		this.visualPolygonTransformed.overwriteWith
 		(
-			this.verticesAsPath
+			this.visualPolygon
+		).transform
+		(
+			this.transformLocate
 		);
 
-		Transforms.applyTransformToCoordsMany
+		this.visualPolygonTransformed.draw
 		(
-			this.transformLocate,
-			this.verticesAsPathTransformed.points
-		);
-
-		display.drawPolygon
-		(
-			this.verticesAsPathTransformed.points,
-			this.colorFill, this.colorBorder
+			universe, world, place, entity, display
 		);
 	};
 
@@ -58,6 +52,7 @@ class VisualPolygonLocated implements Visual
 
 	transform(transformToApply: Transform): Transformable
 	{
-		return this; // todo
+		this.visualPolygonTransformed.transform(transformToApply);
+		return this;
 	}
 }

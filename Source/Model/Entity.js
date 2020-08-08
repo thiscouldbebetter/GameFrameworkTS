@@ -50,6 +50,7 @@ class Entity {
     drawable() { return this.propertiesByName.get(Drawable.name); }
     ephemeral() { return this.propertiesByName.get(Ephemeral.name); }
     equipmentUser() { return this.propertiesByName.get(EquipmentUser.name); }
+    equippable() { return this.propertiesByName.get(Equippable.name); }
     item() { return this.propertiesByName.get(Item.name); }
     itemContainer() { return this.propertiesByName.get(ItemContainer.name); }
     itemCrafter() { return this.propertiesByName.get(ItemCrafter.name); }

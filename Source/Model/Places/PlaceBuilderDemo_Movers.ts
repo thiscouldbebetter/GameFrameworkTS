@@ -90,7 +90,7 @@ class PlaceBuilderDemo_Movers
 			),
 			new VisualOffset
 			(
-				new VisualText(new DataBinding("Carnivore", null, null), carnivoreColor, null),
+				new VisualText(new DataBinding("Carnivore", null, null), null, carnivoreColor, null),
 				new Coords(0, 0 - carnivoreDimension * 2, 0)
 			)
 		]);
@@ -177,9 +177,17 @@ class PlaceBuilderDemo_Movers
 		);
 
 		return carnivoreEntityDefn;
-	};
+	}
 
-	entityDefnBuildEnemyGeneratorChaser(entityDimension: number, damageTypeName: string): Entity
+	entityDefnBuildEnemyGenerator
+	(
+		enemyTypeName: string,
+		entityDimension: number,
+		sizeTopAsFractionOfBottom: number,
+		damageTypeName: string,
+		integrityMax: number,
+		speedMax: number
+	): Entity
 	{
 		var enemyColor: Color;
 		var damageTypes = DamageType.Instances();
@@ -199,13 +207,14 @@ class PlaceBuilderDemo_Movers
 		var visualBuilder = new VisualBuilder();
 		var visualEyesBlinking = visualBuilder.eyesBlinking(visualEyeRadius);
 
-		var constraintSpeedMax1 = new Constraint_SpeedMaxXY(1);
+		var constraintSpeedMax1 = new Constraint_SpeedMaxXY(speedMax);
 
 		var enemyDimension = entityDimension * 2;
 
-		var enemyColliderAsFace = new Face([
-			new Coords(-.5, -1, 0).multiplyScalar(enemyDimension).half(),
-			new Coords(.5, -1, 0).multiplyScalar(enemyDimension).half(),
+		var enemyColliderAsFace = new Face
+		([
+			new Coords(-sizeTopAsFractionOfBottom, -1, 0).multiplyScalar(enemyDimension).half(),
+			new Coords(sizeTopAsFractionOfBottom, -1, 0).multiplyScalar(enemyDimension).half(),
 			new Coords(1, 1, 0).multiplyScalar(enemyDimension).half(),
 			new Coords(-1, 1, 0).multiplyScalar(enemyDimension).half(),
 		]);
@@ -278,7 +287,7 @@ class PlaceBuilderDemo_Movers
 			visualEyesWithBrowsDirectional,
 			new VisualOffset
 			(
-				new VisualText(DataBinding.fromContext("Chaser"), enemyColor, null),
+				new VisualText(DataBinding.fromContext(enemyTypeName), null, enemyColor, null),
 				new Coords(0, 0 - enemyDimension, 0)
 			)
 		]);
@@ -327,7 +336,7 @@ class PlaceBuilderDemo_Movers
 
 		var enemyKillable = new Killable
 		(
-			20, // integrityMax
+			integrityMax,
 			enemyDamageApply,
 			(universe: Universe, world: World, place: Place, entityDying: Entity) => // die
 			{
@@ -357,7 +366,7 @@ class PlaceBuilderDemo_Movers
 						universe, world,
 						universe.entityBuilder.messageFloater
 						(
-							learningMessage, entityPlayer.locatable().loc.pos
+							learningMessage, entityPlayer.locatable().loc.pos, Color.byName("Green")
 						)
 					);
 				}
@@ -367,7 +376,7 @@ class PlaceBuilderDemo_Movers
 		// todo - Remove closures.
 		var enemyEntityPrototype = new Entity
 		(
-			"Chaser" + (damageTypeName || "Normal"),
+			enemyTypeName + (damageTypeName || "Normal"),
 			[
 				new Actor(enemyActivity, "Player"),
 				new Constrainable([constraintSpeedMax1]),
@@ -390,6 +399,23 @@ class PlaceBuilderDemo_Movers
 			var enemyCountMax = 1;
 			if (enemyCount < enemyCountMax)
 			{
+				var ticksDelayedSoFar = actor.actor().target;
+				if (ticksDelayedSoFar == null)
+				{
+					ticksDelayedSoFar = 0;
+				}
+				ticksDelayedSoFar++;
+				var ticksToDelay = 200;
+				if (ticksDelayedSoFar < ticksToDelay)
+				{
+					actor.actor().target = ticksDelayedSoFar;
+					return;
+				}
+				else
+				{
+					actor.actor().target = null;
+				}
+
 				var enemyEntityToPlace = enemyEntityPrototype.clone();
 
 				var placeSizeHalf = place.size.clone().half();
@@ -429,7 +455,65 @@ class PlaceBuilderDemo_Movers
 		);
 
 		return enemyGeneratorEntityDefn;
-	};
+	}
+
+	entityDefnBuildEnemyGeneratorChaser(entityDimension: number, damageTypeName: string): Entity
+	{
+		var enemyTypeName = "Chaser";
+		var speedMax = 1;
+		var sizeTopAsFractionOfBottom = .5;
+		var integrityMax = 20;
+
+		var returnValue = this.entityDefnBuildEnemyGenerator
+		(
+			enemyTypeName,
+			entityDimension,
+			sizeTopAsFractionOfBottom,
+			damageTypeName,
+			integrityMax,
+			speedMax
+		);
+		return returnValue;
+	}
+
+	entityDefnBuildEnemyGeneratorRunner(entityDimension: number, damageTypeName: string): Entity
+	{
+		entityDimension *= .75;
+		var enemyTypeName = "Runner";
+		var speedMax = 2;
+		var sizeTopAsFractionOfBottom = .5;
+		var integrityMax = 10;
+
+		var returnValue = this.entityDefnBuildEnemyGenerator
+		(
+			enemyTypeName,
+			entityDimension,
+			sizeTopAsFractionOfBottom,
+			damageTypeName,
+			integrityMax,
+			speedMax
+		);
+		return returnValue;
+	}
+
+	entityDefnBuildEnemyGeneratorTank(entityDimension: number, damageTypeName: string): Entity
+	{
+		var enemyTypeName = "Tank";
+		var speedMax = .5;
+		var sizeTopAsFractionOfBottom = 1;
+		var integrityMax = 40;
+
+		var returnValue = this.entityDefnBuildEnemyGenerator
+		(
+			enemyTypeName,
+			entityDimension,
+			sizeTopAsFractionOfBottom,
+			damageTypeName,
+			integrityMax,
+			speedMax
+		);
+		return returnValue;
+	}
 
 	entityDefnBuildFriendly(entityDimension: number): Entity
 	{
@@ -503,7 +587,7 @@ class PlaceBuilderDemo_Movers
 			),
 			new VisualOffset
 			(
-				new VisualText(new DataBinding("Talker", null, null), friendlyColor, null),
+				new VisualText(new DataBinding("Talker", null, null), null, friendlyColor, null),
 				new Coords(0, 0 - friendlyDimension * 2, 0)
 			)
 		]);
@@ -642,7 +726,7 @@ class PlaceBuilderDemo_Movers
 			),
 			new VisualOffset
 			(
-				new VisualText(new DataBinding("Grazer", null, null), grazerColor, null),
+				new VisualText(new DataBinding("Grazer", null, null), null, grazerColor, null),
 				new Coords(0, 0 - grazerDimension * 2, 0)
 			)
 		]);
@@ -820,7 +904,7 @@ class PlaceBuilderDemo_Movers
 
 		var playerVisualName = new VisualOffset
 		(
-			new VisualText(new DataBinding(entityDefnNamePlayer, null, null), playerColor, null),
+			new VisualText(new DataBinding(entityDefnNamePlayer, null, null), null, playerColor, null),
 			new Coords(0, 0 - playerHeadRadius * 3, 0)
 		);
 		var playerVisualHealthBar = new VisualOffset
@@ -853,7 +937,7 @@ class PlaceBuilderDemo_Movers
 				var messageEntity = universe.entityBuilder.messageFloater
 				(
 					"-" + damage,
-					entityPlayer.locatable().loc.pos
+					entityPlayer.locatable().loc.pos, Color.byName("Red")
 				);
 
 				place.entitySpawn(universe, world, messageEntity);

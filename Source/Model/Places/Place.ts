@@ -121,19 +121,18 @@ class Place
 
 	entitySpawn(universe: Universe, world: World, entity: Entity)
 	{
-		var entityName = entity.name;
-		if (entityName == null)
+		if (entity.name == null)
 		{
-			entityName = "Entity";
+			entity.name = "Entity";
 		}
 
-		if (this.entitiesByName.get(entityName) != null)
+		if (this.entitiesByName.has(entity.name))
 		{
-			entityName += universe.idHelper.idNext();
+			entity.name += universe.idHelper.idNext();
 		}
 
 		this.entities.push(entity);
-		this.entitiesByName.set(entityName, entity);
+		this.entitiesByName.set(entity.name, entity);
 
 		var entityProperties = entity.properties;
 		for (var i = 0; i < entityProperties.length; i++)

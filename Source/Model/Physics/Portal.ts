@@ -24,7 +24,7 @@ class Portal
 		var messageBoxSize = universe.display.sizeDefault();
 		var venueMessage = new VenueMessage
 		(
-			new DataBinding("Portal to:" + portal.destinationPlaceName, null, null),
+			new DataBinding("Portal to: " + portal.destinationPlaceName, null, null),
 			(universe: Universe) => // acknowledge
 			{
 				portal.transport

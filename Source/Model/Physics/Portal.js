@@ -10,7 +10,7 @@ class Portal {
         var portal = entityPortal.portal();
         var venueCurrent = universe.venueCurrent;
         var messageBoxSize = universe.display.sizeDefault();
-        var venueMessage = new VenueMessage(new DataBinding("Portal to:" + portal.destinationPlaceName, null, null), (universe) => // acknowledge
+        var venueMessage = new VenueMessage(new DataBinding("Portal to: " + portal.destinationPlaceName, null, null), (universe) => // acknowledge
          {
             portal.transport(universe, universe.world, universe.world.placeCurrent, entityToTransport, entityPortal);
             universe.venueNext = new VenueFader(venueCurrent, null, null, null);

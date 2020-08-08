@@ -26,25 +26,22 @@ Sound - Effects from Builtin JS AudioContext
 Food, Eating, and Hunger
 Map Tiles as Obstacles
 Map Tiles from Images
+Map Tiles - Generated
 Vehicles
 Agriculture - Seeds, Planting, Watering, Harvesting
-Generated Map Tiles
 Load/Unload Zones in Terrarium
 Generated Devices with Varying Specs
-Explosives
 Journal and Quests
 Auto-Map
 Player Notes
 Saves - Fix Spacing on Load Screen
-Saves - Move DateSave from World to Save
 Saves - Add Description
 Saves - Add Snapshot
-Emplacements - Interact via Action not Collision
 Enemies - Bombers
 Enemies - Hiders
 Enemies - Shooters
-Enemies - Runners
-Enemies - Tanks
+Enemies - Enemy Generators Use Generator Class
+
 
 Fixes
 -----

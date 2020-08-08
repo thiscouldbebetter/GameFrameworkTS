@@ -81,6 +81,8 @@ class Entity
 
 	equipmentUser(): EquipmentUser { return this.propertiesByName.get(EquipmentUser.name); }
 
+	equippable(): Equippable { return this.propertiesByName.get(Equippable.name); }
+
 	item(): Item { return this.propertiesByName.get(Item.name); }
 
 	itemContainer(): ItemContainer { return this.propertiesByName.get(ItemContainer.name); }

@@ -21,19 +21,25 @@ class Generator
 	finalize(u: Universe, w: World, p: Place, e: Entity) {}
 	initialize(u: Universe, w: World, p: Place, e: Entity) {}
 
-	updateForTimerTick(u: Universe, world: World, place: Place, entityGenerator: Entity)
+	updateForTimerTick(universe: Universe, world: World, place: Place, entityGenerator: Entity)
 	{
 		var placeEntitiesByName = place.entitiesByName;
-		var entitiesGeneratedButNoLongerExtant =
-			this.entitiesGenerated.filter(e => placeEntitiesByName.has(e.name) == false);
-		entitiesGeneratedButNoLongerExtant.forEach
+
+		var entitiesGeneratedCountBefore = this.entitiesGenerated.length;
+		this.entitiesGenerated = this.entitiesGenerated.filter
 		(
-			e => this.entitiesGenerated.splice(this.entitiesGenerated.indexOf(e), 1)
+			e => placeEntitiesByName.has(e.name)
 		);
+		var entitiesGeneratedCountAfter = this.entitiesGenerated.length;
+		if (entitiesGeneratedCountAfter < entitiesGeneratedCountBefore)
+		{
+			this.tickLastGenerated = world.timerTicksSoFar;
+		}
 
 		if (this.entitiesGenerated.length < this.entitiesGeneratedMax)
 		{
-			var ticksSinceGenerated = world.timerTicksSoFar - this.tickLastGenerated;
+			var ticksSinceGenerated =
+				world.timerTicksSoFar - this.tickLastGenerated;
 			if (ticksSinceGenerated >= this.ticksToGenerate)
 			{
 				this.tickLastGenerated = world.timerTicksSoFar;
@@ -43,7 +49,7 @@ class Generator
 					entityGenerator.locatable().loc
 				);
 				this.entitiesGenerated.push(entityGenerated);
-				place.entitiesToSpawn.push(entityGenerated);
+				place.entitySpawn(universe, world, entityGenerated);
 			}
 		}
 	}

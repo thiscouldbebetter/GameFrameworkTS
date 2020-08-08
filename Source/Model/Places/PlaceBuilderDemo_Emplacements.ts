@@ -26,7 +26,7 @@ class PlaceBuilderDemo_Emplacements
 			),
 			new VisualOffset
 			(
-				new VisualText(new DataBinding(itemDefnName, null, null), colorBoulder, null),
+				new VisualText(new DataBinding(itemDefnName, null, null), null, colorBoulder, null),
 				new Coords(0, 0 - entityDimension * 3, 0)
 			)
 		]);
@@ -94,7 +94,7 @@ class PlaceBuilderDemo_Emplacements
 			),
 			new VisualOffset
 			(
-				new VisualText(new DataBinding("Container", null, null), containerColor, null),
+				new VisualText(new DataBinding("Container", null, null), null, containerColor, null),
 				new Coords(0, 0 - entityDimension, 0)
 			)
 		]);
@@ -161,7 +161,7 @@ class PlaceBuilderDemo_Emplacements
 			),
 			new VisualOffset
 			(
-				new VisualText(new DataBinding("Exit", null, null), exitColor, null),
+				new VisualText(new DataBinding("Exit", null, null), null, exitColor, null),
 				new Coords(0, 0 - entityDimension * 2.5, 0)
 			)
 		]);
@@ -213,7 +213,7 @@ class PlaceBuilderDemo_Emplacements
 			),
 			new VisualOffset
 			(
-				new VisualText(new DataBinding(entityName, null, null), itemHoleColor, null),
+				new VisualText(DataBinding.fromContext(entityName), null, itemHoleColor, null),
 				new Coords(0, 0 - entityDimension, 0)
 			)
 		]);
@@ -258,7 +258,7 @@ class PlaceBuilderDemo_Emplacements
 				),
 				new VisualOffset
 				(
-					new VisualText(new DataBinding("Bar", null, null), obstacleColor, null),
+					new VisualText(new DataBinding("Bar", null, null), null, obstacleColor, null),
 					new Coords(0, 0 - obstacleCollider.box.size.y, 0)
 				)
 			])
@@ -335,7 +335,7 @@ class PlaceBuilderDemo_Emplacements
 			new VisualMap(obstacleMappedMap, obstacleMappedVisualLookup, null, null),
 			new VisualOffset
 			(
-				new VisualText(new DataBinding("Mine", null, null), obstacleColor, null),
+				new VisualText(new DataBinding("Mine", null, null), null, obstacleColor, null),
 				new Coords(0, 0 - entityDimension * 2, 0)
 			)
 		]);
@@ -449,8 +449,7 @@ class PlaceBuilderDemo_Emplacements
 						return new VisualText
 						(
 							new DataBinding(e.portal().destinationPlaceName, null, null),
-							baseColor,
-							null
+							null, baseColor, null
 						)
 					}
 				),
@@ -507,7 +506,7 @@ class PlaceBuilderDemo_Emplacements
 			),
 			new VisualOffset
 			(
-				new VisualText(new DataBinding(entityName, null, null), color, null),
+				new VisualText(new DataBinding(entityName, null, null), null, color, null),
 				new Coords(0, 0 - entityDimension * 2, 0)
 			)
 		]);

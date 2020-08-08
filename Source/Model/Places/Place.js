@@ -87,15 +87,14 @@ class Place {
     }
     ;
     entitySpawn(universe, world, entity) {
-        var entityName = entity.name;
-        if (entityName == null) {
-            entityName = "Entity";
+        if (entity.name == null) {
+            entity.name = "Entity";
         }
-        if (this.entitiesByName.get(entityName) != null) {
-            entityName += universe.idHelper.idNext();
+        if (this.entitiesByName.has(entity.name)) {
+            entity.name += universe.idHelper.idNext();
         }
         this.entities.push(entity);
-        this.entitiesByName.set(entityName, entity);
+        this.entitiesByName.set(entity.name, entity);
         var entityProperties = entity.properties;
         for (var i = 0; i < entityProperties.length; i++) {
             var property = entityProperties[i];
