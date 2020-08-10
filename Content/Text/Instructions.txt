@@ -1,3 +1,6 @@
 Arrow keys to move.
-Enter key to fire.
-Escape for menu.
+F key to fire.
+E key to use.
+G key to pick up.
+Escape for game menu.
+Tab for player menu.

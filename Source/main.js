@@ -4,6 +4,7 @@ function main() {
     // deserialization of existing saved items after the schema changes.
     // localStorage.clear();
     var mediaLibrary = MediaLibrary.fromFileNames("../Content/", [
+        "Anvil.svg",
         "Friendly.png",
         "Grass.svg",
         "Title.png"

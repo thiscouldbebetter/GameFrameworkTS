@@ -330,7 +330,7 @@ class EquipmentUser
 					new Coords(100, -5, 0), // pos
 					new Coords(100, 25, 0), // size
 					true, // isTextCentered
-					"Equipment",
+					"Equip",
 					fontHeightLarge
 				)
 			);

@@ -97,6 +97,8 @@ class Entity
 
 	itemStore(): ItemStore { return this.propertiesByName.get(ItemStore.name); }
 
+	journalKeeper(): JournalKeeper { return this.propertiesByName.get(JournalKeeper.name); }
+
 	killable(): Killable { return this.propertiesByName.get(Killable.name); }
 
 	locatable(): Locatable { return this.propertiesByName.get(Locatable.name); }

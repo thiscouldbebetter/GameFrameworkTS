@@ -13,18 +13,35 @@ class ItemHolder {
         var itemEntities = items.map(x => x.toEntity());
         return new ItemHolder(itemEntities);
     }
-    ;
     // Instance methods.
+    clear() {
+        this.itemEntities.length = 0;
+        this.itemEntitySelected = null;
+        this.statusMessage = "";
+    }
     hasItem(itemToCheck) {
         return this.hasItemWithDefnNameAndQuantity(itemToCheck.defnName, itemToCheck.quantity);
     }
-    ;
     hasItemWithDefnNameAndQuantity(defnName, quantityToCheck) {
         var itemExistingQuantity = this.itemQuantityByDefnName(defnName);
         var returnValue = (itemExistingQuantity >= quantityToCheck);
         return returnValue;
     }
-    ;
+    itemEntitiesAdd(itemEntitiesToAdd) {
+        itemEntitiesToAdd.forEach(x => this.itemEntityAdd(x));
+    }
+    itemEntitiesAllTransferTo(other) {
+        this.itemEntitiesTransferTo(this.itemEntities, other);
+    }
+    itemEntitiesByDefnName(defnName) {
+        return this.itemEntities.filter(x => x.item().defnName == defnName);
+    }
+    itemEntitiesTransferTo(itemEntitiesToTransfer, other) {
+        for (var i = 0; i < itemEntitiesToTransfer.length; i++) {
+            var itemEntity = itemEntitiesToTransfer[i];
+            this.itemEntityTransferTo(itemEntity, other);
+        }
+    }
     itemEntitiesWithDefnNameJoin(defnName) {
         var itemEntitiesMatching = this.itemEntities.filter(x => x.item().defnName == defnName);
         var itemEntityJoined = itemEntitiesMatching[0];
@@ -38,7 +55,6 @@ class ItemHolder {
         }
         return itemEntityJoined;
     }
-    ;
     itemEntityAdd(itemEntityToAdd) {
         var itemToAdd = itemEntityToAdd.item();
         var itemDefnName = itemToAdd.defnName;
@@ -50,41 +66,12 @@ class ItemHolder {
             itemEntityExisting.item().quantity += itemToAdd.quantity;
         }
     }
-    ;
     itemEntityRemove(itemEntityToRemove) {
         var doesExist = this.itemEntities.indexOf(itemEntityToRemove) >= 0;
         if (doesExist) {
             ArrayHelper.remove(this.itemEntities, itemEntityToRemove);
         }
     }
-    ;
-    itemSubtract(itemToSubtract) {
-        this.itemSubtractDefnNameAndQuantity(itemToSubtract.defnName, itemToSubtract.quantity);
-    }
-    ;
-    itemSubtractDefnNameAndQuantity(itemDefnName, quantityToSubtract) {
-        this.itemEntitiesWithDefnNameJoin(itemDefnName);
-        var itemExisting = this.itemsByDefnName(itemDefnName)[0];
-        if (itemExisting != null) {
-            itemExisting.quantity -= quantityToSubtract;
-            if (itemExisting.quantity <= 0) {
-                var itemEntityExisting = this.itemEntitiesByDefnName(itemDefnName)[0];
-                ArrayHelper.remove(this.itemEntities, itemEntityExisting);
-            }
-        }
-    }
-    ;
-    itemEntitiesAllTransferTo(other) {
-        this.itemEntitiesTransferTo(this.itemEntities, other);
-    }
-    ;
-    itemEntitiesTransferTo(itemEntitiesToTransfer, other) {
-        for (var i = 0; i < itemEntitiesToTransfer.length; i++) {
-            var itemEntity = itemEntitiesToTransfer[i];
-            this.itemEntityTransferTo(itemEntity, other);
-        }
-    }
-    ;
     itemEntitySplit(itemEntityToSplit, quantityToSplit) {
         var itemEntitySplitted = null;
         var itemToSplit = itemEntityToSplit.item();
@@ -106,46 +93,49 @@ class ItemHolder {
         }
         return itemEntitySplitted;
     }
-    ;
     itemEntityTransferTo(itemEntity, other) {
         other.itemEntityAdd(itemEntity);
         ArrayHelper.remove(this.itemEntities, itemEntity);
     }
-    ;
     itemEntityTransferSingleTo(itemEntity, other) {
         var itemEntitySingle = this.itemEntitySplit(itemEntity, 1);
         this.itemEntityTransferTo(itemEntitySingle, other);
     }
-    ;
+    itemQuantityByDefnName(defnName) {
+        return this.itemsByDefnName(defnName).map(y => y.quantity).reduce((a, b) => a + b, 0);
+    }
+    itemSubtract(itemToSubtract) {
+        this.itemSubtractDefnNameAndQuantity(itemToSubtract.defnName, itemToSubtract.quantity);
+    }
+    itemSubtractDefnNameAndQuantity(itemDefnName, quantityToSubtract) {
+        this.itemEntitiesWithDefnNameJoin(itemDefnName);
+        var itemExisting = this.itemsByDefnName(itemDefnName)[0];
+        if (itemExisting != null) {
+            itemExisting.quantity -= quantityToSubtract;
+            if (itemExisting.quantity <= 0) {
+                var itemEntityExisting = this.itemEntitiesByDefnName(itemDefnName)[0];
+                ArrayHelper.remove(this.itemEntities, itemEntityExisting);
+            }
+        }
+    }
     itemTransferTo(itemToTransfer, other) {
         var itemDefnName = itemToTransfer.defnName;
         this.itemEntitiesWithDefnNameJoin(itemDefnName);
         var itemEntityExisting = this.itemEntitiesByDefnName(itemDefnName)[0];
         if (itemEntityExisting != null) {
             var itemEntityToTransfer = this.itemEntitySplit(itemEntityExisting, itemToTransfer.quantity);
-            other.itemEntityAdd(itemEntityToTransfer);
+            other.itemEntityAdd(itemEntityToTransfer.clone());
             this.itemSubtract(itemToTransfer);
         }
     }
-    ;
-    itemEntitiesByDefnName(defnName) {
-        return this.itemEntities.filter(x => x.item().defnName == defnName);
-    }
-    ;
-    itemQuantityByDefnName(defnName) {
-        return this.itemsByDefnName(defnName).map(y => y.quantity).reduce((a, b) => a + b, 0);
-    }
-    ;
     itemsByDefnName(defnName) {
         return this.itemEntitiesByDefnName(defnName).map(x => x.item());
     }
-    ;
     tradeValueOfAllItems(world) {
         var tradeValueTotal = this.itemEntities.reduce((sumSoFar, itemEntity) => sumSoFar + itemEntity.item().tradeValue(world), 0 // sumSoFar
         );
         return tradeValueTotal;
     }
-    ;
     // controls
     toControl(universe, size, entityItemHolder, venuePrev, includeTitleAndDoneButton) {
         this.statusMessage = "Use, drop, and sort items.";
@@ -392,7 +382,7 @@ class ItemHolder {
             new ActionToInputsMapping("Split", ["/"], true),
             new ActionToInputsMapping("Join", ["="], true),
             new ActionToInputsMapping("Drop", ["d"], true),
-            new ActionToInputsMapping("Use", ["u"], true),
+            new ActionToInputsMapping("Use", ["e"], true),
             new ActionToInputsMapping("Item0", ["_0"], true),
             new ActionToInputsMapping("Item1", ["_1"], true),
             new ActionToInputsMapping("Item2", ["_2"], true),
@@ -424,10 +414,8 @@ class ItemHolder {
         returnValue.scalePosAndSize(scaleMultiplier);
         return returnValue;
     }
-    ;
     // cloneable
     clone() {
         return new ItemHolder(ArrayHelper.clone(this.itemEntities));
     }
-    ;
 }

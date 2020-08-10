@@ -1,14 +1,14 @@
 
 class PlaceBuilderDemo
 {
-	randomizer: any;
+	randomizer: Randomizer;
 	cameraViewSize: Coords;
 
 	actions: Action[];
 	actionToInputsMappings: ActionToInputsMapping[];
-	entities: any;
-	entityDefns: any;
-	entityDefnsByName: any;
+	entities: Entity[];
+	entityDefns: Entity[];
+	entityDefnsByName: Map<string,Entity>;
 	itemDefns: ItemDefn[];
 	itemDefnsByName: Map<string, ItemDefn>;
 	name: string;
@@ -18,7 +18,7 @@ class PlaceBuilderDemo
 	emplacements: PlaceBuilderDemo_Emplacements;
 	movers: PlaceBuilderDemo_Movers;
 
-	constructor(randomizer: any, cameraViewSize: Coords)
+	constructor(randomizer: Randomizer, cameraViewSize: Coords)
 	{
 		this.actions = this.actionsBuild();
 		this.actionToInputsMappings = this.actionToInputsMappingsBuild();
@@ -42,15 +42,23 @@ class PlaceBuilderDemo
 	{
 		this.build_Interior("Base", size, placeNameToReturnTo);
 
-		this.entities.push(this.entityBuildFromDefn(this.entityDefnsByName.get("Player")));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Bomb"), 3));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Book"), 1));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Campfire"), 1));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Container"), 1));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Friendly"), 1));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Sword"), 1));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("SwordCold"), 1));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("SwordHeat"), 1));
+		var entityDefns = this.entityDefnsByName;
+		this.entities.push(this.entityBuildFromDefn(entityDefns.get("Player")));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Anvil"), 1));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Bomb"), 3));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Book"), 1));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Campfire"), 1));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Friendly"), 1));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Sword"), 1));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("SwordCold"), 1));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("SwordHeat"), 1));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Toolset"), 1));
+
+		var container = this.entitiesBuildFromDefnAndCount(entityDefns.get("Container"), 1)[0];
+		var itemEntityOre = this.entitiesBuildFromDefnAndCount(entityDefns.get("Iron Ore"), 1)[0];
+		itemEntityOre.item().quantity = 3; // For crafting.
+		container.itemHolder().itemEntityAdd(itemEntityOre);
+		this.entities.push(container);
 
 		var place = new Place(this.name, "Demo", size, this.entities);
 
@@ -551,14 +559,12 @@ class PlaceBuilderDemo
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Fruit"), 1));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("GrassGenerator"), 3));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Grazer"), 1));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Material"), 2));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Iron Ore"), 1));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Medicine"), 2));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("MushroomGenerator"), 1));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Ore"), 1));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Pick"), 1));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Shovel"), 1));
 		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Speed Boots"), 1));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Toolset"), 1));
 
 		var entityRadioMessage =
 			this.entityBuildRadioMessage(entityDefns.get("Friendly").drawable().visual, "This is " + this.name + ".");
@@ -1326,119 +1332,6 @@ class PlaceBuilderDemo
 		return itemBookEntityDefn;
 	}
 
-	entityDefnBuildCampfire(entityDimension: number): Entity
-	{
-		var entityDimensionHalf = entityDimension / 2;
-
-		var campfireName = "Campfire";
-
-		var campfireColor = Color.byName("Orange");
-		var flameVisualStatic = new VisualGroup
-		([
-			new VisualPolygon
-			(
-				new Path
-				([
-					new Coords(0, -entityDimension * 2, 0),
-					new Coords(entityDimension, 0, 0),
-					new Coords(-entityDimension, 0, 0),
-				]),
-				campfireColor,
-				null
-			),
-			new VisualPolygon
-			(
-				new Path
-				([
-					new Coords(0, -entityDimension, 0),
-					new Coords(entityDimensionHalf, 0, 0),
-					new Coords(-entityDimensionHalf, 0, 0),
-				]),
-				Color.byName("Yellow"),
-				null
-			)
-		]);
-
-		var flameVisualStaticSmall = flameVisualStatic.clone().transform
-		(
-			new Transform_Scale(new Coords(1, .8, 1))
-		) as VisualGroup;
-
-		var flameVisualStaticLarge = flameVisualStatic.clone().transform
-		(
-			new Transform_Scale(new Coords(1, 1.2, 1))
-		) as VisualGroup;
-
-		var smokePuffVisual = new VisualCircle(entityDimensionHalf, Color.byName("GrayLight"), null);
-		var smokeVisual = new VisualParticles
-		(
-			"Smoke",
-			null, // ticksToGenerate
-			1 / 3, // particlesPerTick
-			() => 50, // particleTicksToLiveGet
-			// particleVelocityGet
-			() => new Coords(.33, -1.5, 0).add(new Coords(Math.random() - 0.5, 0, 0) ),
-			new Transform_Dynamic
-			(
-				(transformable: Transformable) =>
-				{
-					var transformableAsVisualCircle = transformable as VisualCircle;
-					transformableAsVisualCircle.radius *= 1.02;
-					var color = transformableAsVisualCircle.colorFill.clone();
-					color.alpha(color.alpha(null) * .95);
-					transformableAsVisualCircle.colorFill = color;
-					return transformable;
-				}
-			),
-			smokePuffVisual
-		);
-
-		var ticksPerFrame = 3;
-		var flameVisual = new VisualAnimation
-		(
-			"Flame", // name
-			[ ticksPerFrame, ticksPerFrame, ticksPerFrame, ticksPerFrame ],
-			[
-				flameVisualStaticSmall,
-				flameVisualStatic,
-				flameVisualStaticLarge,
-				flameVisualStatic
-			],
-			true // isRepeating
-		);
-
-		var itemLogVisual = this.itemDefnsByName.get("Log").visual;
-		var itemLogVisualMinusText = itemLogVisual.clone() as VisualGroup;
-		itemLogVisualMinusText.children.length--;
-
-		var campfireVisual = new VisualGroup
-		([
-			smokeVisual,
-			itemLogVisualMinusText,
-			flameVisual,
-			new VisualOffset
-			(
-				new VisualText(new DataBinding(campfireName, null, null), null, campfireColor, null),
-				new Coords(0, 0 - entityDimension * 2, 0)
-			)
-		]);
-
-		var campfireCollider = new Sphere(new Coords(0, 0, 0), entityDimensionHalf);
-
-		var campfireEntityDefn = new Entity
-		(
-			campfireName,
-			[
-				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
-				new Collidable(campfireCollider, null, null),
-				new Drawable(campfireVisual, null),
-				new DrawableCamera()
-			]
-		);
-
-		return campfireEntityDefn;
-	};
-
 	entityDefnBuildCoin(entityDimension: number): Entity
 	{
 		var entityDimensionHalf = entityDimension / 2;
@@ -1772,6 +1665,52 @@ class PlaceBuilderDemo
 		return itemAmmoEntityDefn;
 	};
 
+	entityDefnBuildIron(entityDimension: number): Entity
+	{
+		var entityDimensionHalf = entityDimension / 2;
+
+		var itemDefnIronName = "Iron";
+		var itemIronVisual = this.itemDefnsByName.get(itemDefnIronName).visual;
+		var itemIronCollider = new Sphere(new Coords(0, 0, 0), entityDimensionHalf);
+
+		var itemIronEntityDefn = new Entity
+		(
+			itemDefnIronName,
+			[
+				new Item(itemDefnIronName, 1),
+				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
+				new Collidable(itemIronCollider, null, null),
+				new Drawable(itemIronVisual, null),
+				new DrawableCamera()
+			]
+		);
+
+		return itemIronEntityDefn;
+	};
+
+	entityDefnBuildIronOre(entityDimension: number): Entity
+	{
+		var entityDimensionHalf = entityDimension / 2;
+
+		var itemDefnOreName = "Iron Ore";
+		var itemOreVisual = this.itemDefnsByName.get(itemDefnOreName).visual;
+		var itemOreCollider = new Sphere(new Coords(0, 0, 0), entityDimensionHalf);
+
+		var itemOreEntityDefn = new Entity
+		(
+			itemDefnOreName,
+			[
+				new Item(itemDefnOreName, 1),
+				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
+				new Collidable(itemOreCollider, null, null),
+				new Drawable(itemOreVisual, null),
+				new DrawableCamera()
+			]
+		);
+
+		return itemOreEntityDefn;
+	};
+
 	entityDefnBuildLog(entityDimension: number): Entity
 	{
 		var entityDimensionHalf = entityDimension / 2;
@@ -1793,29 +1732,6 @@ class PlaceBuilderDemo
 		);
 
 		return itemLogEntityDefn;
-	};
-
-	entityDefnBuildMaterial(entityDimension: number): Entity
-	{
-		var entityDimensionHalf = entityDimension / 2;
-
-		var itemDefnMaterialName = "Material";
-		var itemMaterialVisual = this.itemDefnsByName.get(itemDefnMaterialName).visual;
-		var itemMaterialCollider = new Sphere(new Coords(0, 0, 0), entityDimensionHalf);
-
-		var itemMaterialEntityDefn = new Entity
-		(
-			itemDefnMaterialName,
-			[
-				new Item(itemDefnMaterialName, 1),
-				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
-				new Collidable(itemMaterialCollider, null, null),
-				new Drawable(itemMaterialVisual, null),
-				new DrawableCamera()
-			]
-		);
-
-		return itemMaterialEntityDefn;
 	};
 
 	entityDefnBuildMeat(entityDimension: number): Entity
@@ -1888,29 +1804,6 @@ class PlaceBuilderDemo
 
 		return itemMushroomEntityDefn;
 	}
-
-	entityDefnBuildOre(entityDimension: number): Entity
-	{
-		var entityDimensionHalf = entityDimension / 2;
-
-		var itemDefnOreName = "Ore";
-		var itemOreVisual = this.itemDefnsByName.get(itemDefnOreName).visual;
-		var itemOreCollider = new Sphere(new Coords(0, 0, 0), entityDimensionHalf);
-
-		var itemOreEntityDefn = new Entity
-		(
-			itemDefnOreName,
-			[
-				new Item(itemDefnOreName, 1),
-				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
-				new Collidable(itemOreCollider, null, null),
-				new Drawable(itemOreVisual, null),
-				new DrawableCamera()
-			]
-		);
-
-		return itemOreEntityDefn;
-	};
 
 	entityDefnBuildPick(entityDimension: number): Entity
 	{
@@ -2236,7 +2129,9 @@ class PlaceBuilderDemo
 
 		var entityDefns =
 		[
+			this.emplacements.entityDefnBuildAnvil(entityDimension),
 			this.emplacements.entityDefnBuildBoulder(entityDimension),
+			this.emplacements.entityDefnBuildCampfire(entityDimension),
 			this.emplacements.entityDefnBuildContainer(entityDimension),
 			this.emplacements.entityDefnBuildExit(entityDimension),
 			this.emplacements.entityDefnBuildHole(entityDimension),
@@ -2261,7 +2156,6 @@ class PlaceBuilderDemo
 			this.entityDefnBuildArmor(entityDimension),
 			this.entityDefnBuildBomb(entityDimension),
 			this.entityDefnBuildBook(entityDimension),
-			this.entityDefnBuildCampfire(entityDimension),
 			this.entityDefnBuildCoin(entityDimension),
 			this.entityDefnBuildCrystal(entityDimension),
 			entityDefnFlower,
@@ -2269,15 +2163,15 @@ class PlaceBuilderDemo
 			this.entityDefnBuildGenerator(entityDefnFlower),
 			this.entityDefnBuildGun(entityDimension),
 			this.entityDefnBuildGunAmmo(entityDimension),
+			this.entityDefnBuildIron(entityDimension),
+			this.entityDefnBuildIronOre(entityDimension),
 			this.entityDefnBuildLog(entityDimension),
-			this.entityDefnBuildMaterial(entityDimension),
 			this.entityDefnBuildMedicine(entityDimension),
 			this.entityDefnBuildMeat(entityDimension),
 			entityDefnMushroom,
 			this.entityDefnBuildGenerator(entityDefnMushroom),
 			entityDefnGrass,
 			this.entityDefnBuildGenerator(entityDefnGrass),
-			this.entityDefnBuildOre(entityDimension),
 			this.entityDefnBuildPick(entityDimension),
 			this.entityDefnBuildPotion(entityDimension),
 			this.entityDefnBuildShovel(entityDimension),
@@ -2614,6 +2508,56 @@ class PlaceBuilderDemo
 			)
 		]);
 
+		// iron
+
+		var itemIronName = "Iron";
+		var itemIronColor = Color.byName("Gray");
+		var itemIronVisual = new VisualGroup
+		([
+			new VisualPolygon
+			(
+				new Path
+				([
+					new Coords(-0.5, 0.4, 0),
+					new Coords(0.5, 0.4, 0),
+					new Coords(0.2, -0.4, 0),
+					new Coords(-0.2, -0.4, 0),
+				]).transform
+				(
+					Transform_Scale.fromScalar(entityDimension)
+				),
+				itemIronColor,
+				null
+			),
+			new VisualOffset
+			(
+				new VisualText(new DataBinding(itemIronName, null, null), null, itemIronColor, null),
+				new Coords(0, 0 - entityDimension, 0)
+			)
+		]);
+
+		// iron ore
+
+		var itemIronOreName = "Iron Ore";
+		var itemIronOreColor = Color.byName("Gray");
+		var itemIronOreVisual = new VisualGroup
+		([
+			new VisualArc
+			(
+				entityDimension / 2, // radiusOuter
+				0, // radiusInner
+				new Coords(-1, 0, 0), // directionMin
+				.5, // angleSpannedInTurns
+				itemIronOreColor,
+				null
+			),
+			new VisualOffset
+			(
+				new VisualText(new DataBinding(itemIronOreName, null, null), null, itemIronOreColor, null),
+				new Coords(0, 0 - entityDimension * 1.5, 0)
+			)
+		]);
+
 		// key
 
 		var itemKeyName = "Key";
@@ -2679,34 +2623,6 @@ class PlaceBuilderDemo
 			new VisualOffset
 			(
 				new VisualText(new DataBinding(itemLogName, null, null), null, itemLogColor, null),
-				new Coords(0, 0 - entityDimension, 0)
-			)
-		]);
-
-		// material
-
-		var itemMaterialName = "Material";
-		var itemMaterialColor = Color.byName("Gray");
-		var itemMaterialVisual = new VisualGroup
-		([
-			new VisualPolygon
-			(
-				new Path
-				([
-					new Coords(-0.5, 0.4, 0),
-					new Coords(0.5, 0.4, 0),
-					new Coords(0.2, -0.4, 0),
-					new Coords(-0.2, -0.4, 0),
-				]).transform
-				(
-					Transform_Scale.fromScalar(entityDimension)
-				),
-				itemMaterialColor,
-				null
-			),
-			new VisualOffset
-			(
-				new VisualText(new DataBinding(itemMaterialName, null, null), null, itemMaterialColor, null),
 				new Coords(0, 0 - entityDimension, 0)
 			)
 		]);
@@ -2806,28 +2722,6 @@ class PlaceBuilderDemo
 			(
 				new VisualText(new DataBinding(itemMushroomName, null, null), null, colorCap, null),
 				new Coords(0, 0 - entityDimensionHalf * 3, 0)
-			)
-		]);
-
-		// ore
-
-		var itemOreName = "Ore";
-		var itemOreColor = Color.byName("Gray");
-		var itemOreVisual = new VisualGroup
-		([
-			new VisualArc
-			(
-				entityDimension / 2, // radiusOuter
-				0, // radiusInner
-				new Coords(-1, 0, 0), // directionMin
-				.5, // angleSpannedInTurns
-				itemOreColor,
-				null
-			),
-			new VisualOffset
-			(
-				new VisualText(new DataBinding(itemOreName, null, null), null, itemOreColor, null),
-				new Coords(0, 0 - entityDimension * 1.5, 0)
 			)
 		]);
 
@@ -3034,12 +2928,12 @@ class PlaceBuilderDemo
 			new ItemDefn("Fruit", 			null, null, .25, 	1, null, null, null, itemFruitVisual),
 			new ItemDefn("Grass", 			null, null, .01, 	1, null, null, null, itemGrassVisual),
 			new ItemDefn("Gun",				null, null, 5, 		100, null, [ "Wieldable" ], itemUseEquip, itemGunVisual),
+			new ItemDefn("Iron", 			null, null, 10, 	5, null, null, null, itemIronVisual),
+			new ItemDefn("Iron Ore", 		null, null, 10, 	1, null, null, null, itemIronOreVisual),
 			new ItemDefn("Key", 			null, null, .1, 	5, null, null, null, itemKeyVisual),
 			new ItemDefn("Log", 			null, null, 10, 	1, null, null, null, itemLogVisual),
-			new ItemDefn("Material", 		null, null, 10, 	3, null, null, null, itemMaterialVisual),
 			new ItemDefn("Meat", 			null, null, 10, 	3, null, null, null, itemMeatVisual),
 			new ItemDefn("Mushroom", 		null, null, .01, 	1, null, null, null, itemMushroomVisual),
-			new ItemDefn("Ore", 			null, null, 10, 	1, null, null, null, itemOreVisual),
 			new ItemDefn("Pick", 			null, null, 1, 		30, null, [ "Wieldable" ], itemUseEquip, itemPickVisual),
 			new ItemDefn("Shovel", 			null, null, 1, 		30, null, [ "Wieldable" ], itemUseEquip, itemShovelVisual),
 			new ItemDefn("Speed Boots", 	null, null, 10, 	30, null, [ "Accessory" ], itemUseEquip, itemSpeedBootsVisual),
@@ -3073,7 +2967,7 @@ class PlaceBuilderDemo
 						"textareaContents",
 						size.clone().half().half(),
 						size.clone().half(),
-						text,
+						DataBinding.fromContext(text),
 						fontHeight,
 						new DataBinding(false, null, null) // isEnabled
 					);
@@ -3376,7 +3270,7 @@ class PlaceBuilderDemo
 			new ActionToInputsMapping("Jump", 		[ inputNames.Space, inputNames.GamepadButton0 + "1" ], inactivateTrue),
 			new ActionToInputsMapping("PickUp", 	[ "g", inputNames.GamepadButton0 + "4" ], inactivateTrue),
 			new ActionToInputsMapping("Run", 		[ inputNames.Shift, inputNames.GamepadButton0 + "2" ], inactivateFalse),
-			new ActionToInputsMapping("Use", 		[ "u", inputNames.GamepadButton0 + "5" ], inactivateTrue),
+			new ActionToInputsMapping("Use", 		[ "e", inputNames.GamepadButton0 + "5" ], inactivateTrue),
 
 			new ActionToInputsMapping("Item0", 	[ "_0" ], inactivateFalse),
 			new ActionToInputsMapping("Item1", 	[ "_1" ], inactivateFalse),

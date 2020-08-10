@@ -4,7 +4,7 @@ class ControlTextarea implements Control
 	name: string;
 	pos: Coords;
 	size: Coords;
-	text: any;
+	_text: DataBinding<any, string>;
 	fontHeightInPixels: number
 	_isEnabled: DataBinding<any, boolean>;
 
@@ -20,12 +20,16 @@ class ControlTextarea implements Control
 	_mouseClickPos: Coords;
 	_textAsLines: any;
 
-	constructor(name: string, pos: Coords, size: Coords, text: any, fontHeightInPixels: number, isEnabled: DataBinding<any, boolean>)
+	constructor
+	(
+		name: string, pos: Coords, size: Coords, text: DataBinding<any, string>,
+		fontHeightInPixels: number, isEnabled: DataBinding<any, boolean>
+	)
 	{
 		this.name = name;
 		this.pos = pos;
 		this.size = size;
-		this.text = text;
+		this._text = text;
 		this.fontHeightInPixels = fontHeightInPixels;
 		this._isEnabled = isEnabled;
 
@@ -123,30 +127,32 @@ class ControlTextarea implements Control
 			this._indexOfLineSelected = valueToSet;
 		}
 		return returnValue;
-	};
+	}
 
 	isEnabled()
 	{
 		return (this._isEnabled.get());
-	};
+	}
+
+	text()
+	{
+		return this._text.get();
+	}
 
 	textAsLines()
 	{
-		if (this._textAsLines == null)
-		{
-			this._textAsLines = [];
+		this._textAsLines = [];
 
-			var charWidthInPixels = this.fontHeightInPixels / 2; // hack
-			var charsPerLine = Math.floor(this.size.x / charWidthInPixels);
-			var textComplete = this.text;
-			var textLength = textComplete.length;
-			var i = 0;
-			while (i < textLength)
-			{
-				var line = textComplete.substr(i, charsPerLine);
-				this._textAsLines.push(line);
-				i += charsPerLine;
-			}
+		var charWidthInPixels = this.fontHeightInPixels / 2; // hack
+		var charsPerLine = Math.floor(this.size.x / charWidthInPixels);
+		var textComplete = this.text();
+		var textLength = textComplete.length;
+		var i = 0;
+		while (i < textLength)
+		{
+			var line = textComplete.substr(i, charsPerLine);
+			this._textAsLines.push(line);
+			i += charsPerLine;
 		}
 
 		return this._textAsLines;

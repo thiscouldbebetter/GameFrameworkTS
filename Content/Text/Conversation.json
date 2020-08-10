@@ -199,7 +199,7 @@
 		},
 		{
 			"defnName": "Display",
-			"text": "but basically, use the arrow keys to move."
+			"text": "But basically, use the arrow keys to move."
 		},
 		{
 			"defnName": "Display",
@@ -207,7 +207,7 @@
 		},
 		{
 			"defnName": "Display",
-			"text": "...you'll go outside."
+			"text": "...and press E, you'll go outside."
 		},
 		{
 			"defnName": "Display",
@@ -284,7 +284,15 @@
 		},
 		{
 			"defnName": "Display",
-			"text": "Enter uses a weapon, if one's equipped."
+			"text": "The E key uses anything usable nearby."
+		},
+		{
+			"defnName": "Display",
+			"text": "The F key uses a weapon, if one's equipped."
+		},
+		{
+			"defnName": "Display",
+			"text": "Tab and Escape bring up menus."
 		},
 		{
 			"defnName": "Display",

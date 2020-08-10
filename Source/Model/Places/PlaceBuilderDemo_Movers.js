@@ -331,8 +331,8 @@ class PlaceBuilderDemo_Movers {
                 new Item("Ammo", 200),
                 new Item("Coin", 200),
                 new Item("Gun", 1),
+                new Item("Iron", 3),
                 new Item("Key", 1),
-                new Item("Material", 3),
                 new Item("Medicine", 4),
             ]),
         ]);
@@ -537,6 +537,10 @@ class PlaceBuilderDemo_Movers {
             new EquipmentSocketDefn("Item9", itemCategoriesForQuickSlots),
         ]);
         var equipmentUser = new EquipmentUser(equipmentSocketDefnGroup);
+        var journal = new Journal([
+            new JournalEntry("First Entry", "I started a journal.  We'll see how it goes."),
+        ]);
+        var journalKeeper = new JournalKeeper(journal);
         var killable = new Killable(50, // integrity
         (universe, world, place, entityDamager, entityKillable) => // damageApply
          {
@@ -572,30 +576,17 @@ class PlaceBuilderDemo_Movers {
             entityMovable.locatable().loc.accel.multiplyScalar(accelerationMultiplier);
         });
         var itemCrafter = new ItemCrafter([
-            new CraftingRecipe("Enhanced Armor", [
-                new Item("Armor", 1),
-                new Item("Material", 1),
-                new Item("Toolset", 1)
+            new CraftingRecipe("Iron", 0, // ticksToComplete
+            [
+                new Item("Iron Ore", 3),
             ], [
-                new Entity("", // name
+                new Entity("Iron", // name
                 [
-                    new Item("Enhanced Armor", 1),
-                    new Armor(.3)
-                ]),
-                new Entity("", // name
-                [
-                    new Item("Toolset", 1)
+                    new Item("Iron", 1),
                 ])
             ]),
-            new CraftingRecipe("Material", [
-                new Item("Ore", 3),
-            ], [
-                new Entity("Material", // name
-                [
-                    new Item("Material", 1),
-                ])
-            ]),
-            new CraftingRecipe("Potion", [
+            new CraftingRecipe("Potion", 0, // ticksToComplete
+            [
                 new Item("Crystal", 1),
                 new Item("Flower", 1),
                 new Item("Mushroom", 1)
@@ -629,17 +620,19 @@ class PlaceBuilderDemo_Movers {
                 labelSize.clone(), false, // isTextCentered
                 "Experience: " + entity.skillLearner().learningAccumulated, fontHeight),
             ], null, null);
-            var tabButtonSize = new Coords(40, 20, 0);
+            var tabButtonSize = new Coords(36, 20, 0);
             var tabPageSize = size.clone().subtract(new Coords(0, tabButtonSize.y + 10, 0));
             var itemHolderAsControl = entity.itemHolder().toControl(universe, tabPageSize, entity, venuePrev, false // includeTitleAndDoneButton
             );
             var equipmentUserAsControl = entity.equipmentUser().toControl(universe, tabPageSize, entity, venuePrev, false // includeTitleAndDoneButton
             );
-            var crafterAsControl = entity.itemCrafter().toControl(universe, tabPageSize, entity, venuePrev, false // includeTitleAndDoneButton
+            var crafterAsControl = entity.itemCrafter().toControl(universe, tabPageSize, entity, entity, venuePrev, false // includeTitleAndDoneButton
             );
             var skillLearnerAsControl = entity.skillLearner().toControl(universe, tabPageSize, entity, venuePrev, false // includeTitleAndDoneButton
             );
-            var back = function () {
+            var journalKeeperAsControl = entity.journalKeeper().toControl(universe, tabPageSize, entity, venuePrev, false // includeTitleAndDoneButton
+            );
+            var back = () => {
                 var venueNext = venuePrev;
                 venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
                 universe.venueNext = venueNext;
@@ -650,7 +643,8 @@ class PlaceBuilderDemo_Movers {
                 itemHolderAsControl,
                 equipmentUserAsControl,
                 crafterAsControl,
-                skillLearnerAsControl
+                skillLearnerAsControl,
+                journalKeeperAsControl
             ], null, // fontHeightInPixels
             back);
             return returnValue;
@@ -669,6 +663,7 @@ class PlaceBuilderDemo_Movers {
             ItemHolder.fromItems([
                 new Item("Coin", 100),
             ]),
+            journalKeeper,
             killable,
             movable,
             new Playable(null),

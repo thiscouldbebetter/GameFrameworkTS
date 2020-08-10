@@ -58,6 +58,7 @@ class Entity {
     itemDefn() { return this.propertiesByName.get(ItemDefn.name); }
     itemHolder() { return this.propertiesByName.get(ItemHolder.name); }
     itemStore() { return this.propertiesByName.get(ItemStore.name); }
+    journalKeeper() { return this.propertiesByName.get(JournalKeeper.name); }
     killable() { return this.propertiesByName.get(Killable.name); }
     locatable() { return this.propertiesByName.get(Locatable.name); }
     movable() { return this.propertiesByName.get(Movable.name); }

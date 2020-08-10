@@ -4,7 +4,7 @@ class ControlTextarea {
         this.name = name;
         this.pos = pos;
         this.size = size;
-        this.text = text;
+        this._text = text;
         this.fontHeightInPixels = fontHeightInPixels;
         this._isEnabled = isEnabled;
         this.lineSpacing = 1.2 * this.fontHeightInPixels; // hack
@@ -79,24 +79,23 @@ class ControlTextarea {
         }
         return returnValue;
     }
-    ;
     isEnabled() {
         return (this._isEnabled.get());
     }
-    ;
+    text() {
+        return this._text.get();
+    }
     textAsLines() {
-        if (this._textAsLines == null) {
-            this._textAsLines = [];
-            var charWidthInPixels = this.fontHeightInPixels / 2; // hack
-            var charsPerLine = Math.floor(this.size.x / charWidthInPixels);
-            var textComplete = this.text;
-            var textLength = textComplete.length;
-            var i = 0;
-            while (i < textLength) {
-                var line = textComplete.substr(i, charsPerLine);
-                this._textAsLines.push(line);
-                i += charsPerLine;
-            }
+        this._textAsLines = [];
+        var charWidthInPixels = this.fontHeightInPixels / 2; // hack
+        var charsPerLine = Math.floor(this.size.x / charWidthInPixels);
+        var textComplete = this.text();
+        var textLength = textComplete.length;
+        var i = 0;
+        while (i < textLength) {
+            var line = textComplete.substr(i, charsPerLine);
+            this._textAsLines.push(line);
+            i += charsPerLine;
         }
         return this._textAsLines;
     }

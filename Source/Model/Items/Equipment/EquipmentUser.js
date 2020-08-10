@@ -171,7 +171,7 @@ class EquipmentUser {
             childControls.splice(0, 0, new ControlLabel("labelEquipment", new Coords(100, -5, 0), // pos
             new Coords(100, 25, 0), // size
             true, // isTextCentered
-            "Equipment", fontHeightLarge));
+            "Equip", fontHeightLarge));
             childControls.push(new ControlButton("buttonDone", new Coords(170, 115, 0), // pos
             new Coords(20, 10, 0), // size
             "Done", fontHeightSmall, true, // hasBorder

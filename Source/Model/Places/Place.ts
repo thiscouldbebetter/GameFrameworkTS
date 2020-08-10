@@ -34,6 +34,7 @@ class Place
 			Generator.name,
 			Hidable.name,
 			Idleable.name,
+			ItemCrafter.name,
 			Actor.name,
 			Playable.name,
 			SkillLearner.name,

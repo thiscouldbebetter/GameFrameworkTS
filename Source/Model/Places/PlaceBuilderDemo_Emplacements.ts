@@ -7,6 +7,86 @@ class PlaceBuilderDemo_Emplacements
 		this.parent = parent;
 	}
 
+	entityDefnBuildAnvil(entityDimension: number): Entity
+	{
+		var anvilName = "Anvil";
+		var anvilVisual: Visual = new VisualImageScaled
+		(
+			new VisualImageFromLibrary(anvilName),
+			new Coords(1, 1, 0).multiplyScalar(entityDimension * 2) // sizeScaled
+		);
+		anvilVisual = new VisualGroup
+		([
+			anvilVisual,
+			new VisualOffset
+			(
+				new VisualText(new DataBinding(anvilName, null, null), null, Color.byName("Blue"), null),
+				new Coords(0, 0 - entityDimension * 2, 0)
+			)
+		]);
+		var anvilUse = (universe: Universe, w: World, p: Place, entityUsing: Entity, entityUsed: Entity) =>
+		{
+			var itemCrafter = entityUsed.itemCrafter();
+			var itemCrafterAsControls = itemCrafter.toControl
+			(
+				universe,
+				universe.display.sizeInPixels,
+				entityUsed, // entityItemCrafter
+				entityUsing, // entityItemHolder
+				universe.venueCurrent,
+				true // includeTitleAndDoneButton
+			);
+			var venueNext: Venue = new VenueControls(itemCrafterAsControls);
+			universe.venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
+			return "";
+		};
+		var anvilItemCrafter = new ItemCrafter
+		([
+			new CraftingRecipe
+			(
+				"Enhanced Armor",
+				0, // ticksToComplete,
+				[
+					new Item("Armor", 1),
+					new Item("Iron", 1),
+					new Item("Toolset", 1)
+				],
+				[
+					new Entity
+					(
+						"", // name
+						[
+							new Item("Enhanced Armor", 1),
+							new Armor(.3)
+						]
+					),
+					new Entity
+					(
+						"", // name
+						[
+							new Item("Toolset", 1)
+						]
+					)
+				]
+			)
+		]);
+
+		var itemAnvilEntityDefn = new Entity
+		(
+			anvilName,
+			[
+				new Locatable(new Disposition(new Coords(0, 0, 0), null, null) ),
+				new Drawable(anvilVisual, null),
+				new DrawableCamera(),
+				anvilItemCrafter,
+				new ItemHolder([]),
+				new Usable(anvilUse)
+			]
+		);
+
+		return itemAnvilEntityDefn;
+	}
+
 	entityDefnBuildBoulder(entityDimension: number): Entity
 	{
 		entityDimension /= 2;
@@ -52,7 +132,7 @@ class PlaceBuilderDemo_Emplacements
 			{
 				var entityDropped = entityDying.locatable().entitySpawnWithDefnName
 				(
-					u, w, p, entityDying, "Ore"
+					u, w, p, entityDying, "Iron Ore"
 				);
 				entityDropped.item().quantity = DiceRoll.roll("1d3", null);
 			}
@@ -72,6 +152,119 @@ class PlaceBuilderDemo_Emplacements
 
 		return itemBoulderEntityDefn;
 	}
+
+	entityDefnBuildCampfire(entityDimension: number): Entity
+	{
+		var entityDimensionHalf = entityDimension / 2;
+
+		var campfireName = "Campfire";
+
+		var campfireColor = Color.byName("Orange");
+		var flameVisualStatic = new VisualGroup
+		([
+			new VisualPolygon
+			(
+				new Path
+				([
+					new Coords(0, -entityDimension * 2, 0),
+					new Coords(entityDimension, 0, 0),
+					new Coords(-entityDimension, 0, 0),
+				]),
+				campfireColor,
+				null
+			),
+			new VisualPolygon
+			(
+				new Path
+				([
+					new Coords(0, -entityDimension, 0),
+					new Coords(entityDimensionHalf, 0, 0),
+					new Coords(-entityDimensionHalf, 0, 0),
+				]),
+				Color.byName("Yellow"),
+				null
+			)
+		]);
+
+		var flameVisualStaticSmall = flameVisualStatic.clone().transform
+		(
+			new Transform_Scale(new Coords(1, .8, 1))
+		) as VisualGroup;
+
+		var flameVisualStaticLarge = flameVisualStatic.clone().transform
+		(
+			new Transform_Scale(new Coords(1, 1.2, 1))
+		) as VisualGroup;
+
+		var smokePuffVisual = new VisualCircle(entityDimensionHalf, Color.byName("GrayLight"), null);
+		var smokeVisual = new VisualParticles
+		(
+			"Smoke",
+			null, // ticksToGenerate
+			1 / 3, // particlesPerTick
+			() => 50, // particleTicksToLiveGet
+			// particleVelocityGet
+			() => new Coords(.33, -1.5, 0).add(new Coords(Math.random() - 0.5, 0, 0) ),
+			new Transform_Dynamic
+			(
+				(transformable: Transformable) =>
+				{
+					var transformableAsVisualCircle = transformable as VisualCircle;
+					transformableAsVisualCircle.radius *= 1.02;
+					var color = transformableAsVisualCircle.colorFill.clone();
+					color.alpha(color.alpha(null) * .95);
+					transformableAsVisualCircle.colorFill = color;
+					return transformable;
+				}
+			),
+			smokePuffVisual
+		);
+
+		var ticksPerFrame = 3;
+		var flameVisual = new VisualAnimation
+		(
+			"Flame", // name
+			[ ticksPerFrame, ticksPerFrame, ticksPerFrame, ticksPerFrame ],
+			[
+				flameVisualStaticSmall,
+				flameVisualStatic,
+				flameVisualStaticLarge,
+				flameVisualStatic
+			],
+			true // isRepeating
+		);
+
+		var itemLogVisual = this.parent.itemDefnsByName.get("Log").visual;
+		var itemLogVisualMinusText = itemLogVisual.clone() as VisualGroup;
+		itemLogVisualMinusText.children.length--;
+
+		var campfireVisual = new VisualGroup
+		([
+			smokeVisual,
+			itemLogVisualMinusText,
+			flameVisual,
+			new VisualOffset
+			(
+				new VisualText(new DataBinding(campfireName, null, null), null, campfireColor, null),
+				new Coords(0, 0 - entityDimension * 2, 0)
+			)
+		]);
+
+		var campfireCollider = new Sphere(new Coords(0, 0, 0), entityDimensionHalf);
+
+		var campfireEntityDefn = new Entity
+		(
+			campfireName,
+			[
+				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
+				new Collidable(campfireCollider, null, null),
+				new Drawable(campfireVisual, null),
+				new DrawableCamera()
+			]
+		);
+
+		return campfireEntityDefn;
+	};
 
 	entityDefnBuildContainer(entityDimension: number): Entity
 	{

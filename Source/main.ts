@@ -8,6 +8,7 @@ function main()
 	(
 		"../Content/",
 		[
+			"Anvil.svg",
 			"Friendly.png",
 			"Grass.svg",
 			"Title.png"

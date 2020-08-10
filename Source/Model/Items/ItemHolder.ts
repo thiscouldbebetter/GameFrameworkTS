@@ -25,21 +25,55 @@ class ItemHolder
 	{
 		var itemEntities = items.map(x => x.toEntity());
 		return new ItemHolder(itemEntities);
-	};
+	}
 
 	// Instance methods.
+
+	clear()
+	{
+		this.itemEntities.length = 0;
+		this.itemEntitySelected = null;
+		this.statusMessage = "";
+	}
 
 	hasItem(itemToCheck: Item)
 	{
 		return this.hasItemWithDefnNameAndQuantity(itemToCheck.defnName, itemToCheck.quantity);
-	};
+	}
 
 	hasItemWithDefnNameAndQuantity(defnName: string, quantityToCheck: number)
 	{
 		var itemExistingQuantity = this.itemQuantityByDefnName(defnName);
 		var returnValue = (itemExistingQuantity >= quantityToCheck);
 		return returnValue;
-	};
+	}
+
+	itemEntitiesAdd(itemEntitiesToAdd: Entity[])
+	{
+		itemEntitiesToAdd.forEach(x => this.itemEntityAdd(x));
+	}
+
+	itemEntitiesAllTransferTo(other: ItemHolder)
+	{
+		this.itemEntitiesTransferTo(this.itemEntities, other);
+	}
+
+	itemEntitiesByDefnName(defnName: string)
+	{
+		return this.itemEntities.filter
+		(
+			x => x.item().defnName == defnName
+		);
+	}
+
+	itemEntitiesTransferTo(itemEntitiesToTransfer: Entity[], other: ItemHolder)
+	{
+		for (var i = 0; i < itemEntitiesToTransfer.length; i++)
+		{
+			var itemEntity = itemEntitiesToTransfer[i];
+			this.itemEntityTransferTo(itemEntity, other);
+		}
+	}
 
 	itemEntitiesWithDefnNameJoin(defnName: string)
 	{
@@ -56,7 +90,7 @@ class ItemHolder
 			}
 		}
 		return itemEntityJoined;
-	};
+	}
 
 	itemEntityAdd(itemEntityToAdd: Entity)
 	{
@@ -71,7 +105,7 @@ class ItemHolder
 		{
 			itemEntityExisting.item().quantity += itemToAdd.quantity;
 		}
-	};
+	}
 
 	itemEntityRemove(itemEntityToRemove: Entity)
 	{
@@ -80,41 +114,7 @@ class ItemHolder
 		{
 			ArrayHelper.remove(this.itemEntities, itemEntityToRemove);
 		}
-	};
-
-	itemSubtract(itemToSubtract: Item)
-	{
-		this.itemSubtractDefnNameAndQuantity(itemToSubtract.defnName, itemToSubtract.quantity);
-	};
-
-	itemSubtractDefnNameAndQuantity(itemDefnName: string, quantityToSubtract: number)
-	{
-		this.itemEntitiesWithDefnNameJoin(itemDefnName);
-		var itemExisting = this.itemsByDefnName(itemDefnName)[0];
-		if (itemExisting != null)
-		{
-			itemExisting.quantity -= quantityToSubtract;
-			if (itemExisting.quantity <= 0)
-			{
-				var itemEntityExisting = this.itemEntitiesByDefnName(itemDefnName)[0];
-				ArrayHelper.remove(this.itemEntities, itemEntityExisting);
-			}
-		}
-	};
-
-	itemEntitiesAllTransferTo(other: ItemHolder)
-	{
-		this.itemEntitiesTransferTo(this.itemEntities, other);
-	};
-
-	itemEntitiesTransferTo(itemEntitiesToTransfer: Entity[], other: ItemHolder)
-	{
-		for (var i = 0; i < itemEntitiesToTransfer.length; i++)
-		{
-			var itemEntity = itemEntitiesToTransfer[i];
-			this.itemEntityTransferTo(itemEntity, other);
-		}
-	};
+	}
 
 	itemEntitySplit(itemEntityToSplit: Entity, quantityToSplit: number)
 	{
@@ -147,41 +147,19 @@ class ItemHolder
 		}
 
 		return itemEntitySplitted;
-	};
+	}
 
 	itemEntityTransferTo(itemEntity: Entity, other: ItemHolder)
 	{
 		other.itemEntityAdd(itemEntity);
 		ArrayHelper.remove(this.itemEntities, itemEntity);
-	};
+	}
 
 	itemEntityTransferSingleTo(itemEntity: Entity, other: ItemHolder)
 	{
 		var itemEntitySingle = this.itemEntitySplit(itemEntity, 1);
 		this.itemEntityTransferTo(itemEntitySingle, other);
-	};
-
-	itemTransferTo(itemToTransfer: Item, other: ItemHolder)
-	{
-		var itemDefnName = itemToTransfer.defnName;
-		this.itemEntitiesWithDefnNameJoin(itemDefnName);
-		var itemEntityExisting = this.itemEntitiesByDefnName(itemDefnName)[0];
-		if (itemEntityExisting != null)
-		{
-			var itemEntityToTransfer =
-				this.itemEntitySplit(itemEntityExisting, itemToTransfer.quantity);
-			other.itemEntityAdd(itemEntityToTransfer);
-			this.itemSubtract(itemToTransfer);
-		}
-	};
-
-	itemEntitiesByDefnName(defnName: string)
-	{
-		return this.itemEntities.filter
-		(
-			x => x.item().defnName == defnName
-		);
-	};
+	}
 
 	itemQuantityByDefnName(defnName: string)
 	{
@@ -192,12 +170,46 @@ class ItemHolder
 		(
 			(a,b) => a + b, 0
 		);
-	};
+	}
+
+	itemSubtract(itemToSubtract: Item)
+	{
+		this.itemSubtractDefnNameAndQuantity(itemToSubtract.defnName, itemToSubtract.quantity);
+	}
+
+	itemSubtractDefnNameAndQuantity(itemDefnName: string, quantityToSubtract: number)
+	{
+		this.itemEntitiesWithDefnNameJoin(itemDefnName);
+		var itemExisting = this.itemsByDefnName(itemDefnName)[0];
+		if (itemExisting != null)
+		{
+			itemExisting.quantity -= quantityToSubtract;
+			if (itemExisting.quantity <= 0)
+			{
+				var itemEntityExisting = this.itemEntitiesByDefnName(itemDefnName)[0];
+				ArrayHelper.remove(this.itemEntities, itemEntityExisting);
+			}
+		}
+	}
+
+	itemTransferTo(itemToTransfer: Item, other: ItemHolder)
+	{
+		var itemDefnName = itemToTransfer.defnName;
+		this.itemEntitiesWithDefnNameJoin(itemDefnName);
+		var itemEntityExisting = this.itemEntitiesByDefnName(itemDefnName)[0];
+		if (itemEntityExisting != null)
+		{
+			var itemEntityToTransfer =
+				this.itemEntitySplit(itemEntityExisting, itemToTransfer.quantity);
+			other.itemEntityAdd(itemEntityToTransfer.clone());
+			this.itemSubtract(itemToTransfer);
+		}
+	}
 
 	itemsByDefnName(defnName: string)
 	{
 		return this.itemEntitiesByDefnName(defnName).map(x => x.item());
-	};
+	}
 
 	tradeValueOfAllItems(world: World)
 	{
@@ -208,7 +220,7 @@ class ItemHolder
 		);
 
 		return tradeValueTotal;
-	};
+	}
 
 	// controls
 
@@ -687,7 +699,7 @@ class ItemHolder
 				new ActionToInputsMapping( "Split", [ "/" ], true ),
 				new ActionToInputsMapping( "Join", [ "=" ], true ),
 				new ActionToInputsMapping( "Drop", [ "d" ], true ),
-				new ActionToInputsMapping( "Use", [ "u" ], true ),
+				new ActionToInputsMapping( "Use", [ "e" ], true ),
 
 				new ActionToInputsMapping( "Item0", [ "_0" ], true ),
 				new ActionToInputsMapping( "Item1", [ "_1" ], true ),
@@ -744,12 +756,12 @@ class ItemHolder
 		returnValue.scalePosAndSize(scaleMultiplier);
 
 		return returnValue;
-	};
+	}
 
 	// cloneable
 
 	clone()
 	{
 		return new ItemHolder(ArrayHelper.clone(this.itemEntities) );
-	};
+	}
 }
