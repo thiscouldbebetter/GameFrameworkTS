@@ -84,20 +84,7 @@ class PlaceBuilderDemo_Emplacements {
         var entityDimensionHalf = entityDimension / 2;
         var campfireName = "Campfire";
         var campfireColor = Color.byName("Orange");
-        var flameVisualStatic = new VisualGroup([
-            new VisualPolygon(new Path([
-                new Coords(0, -entityDimension * 2, 0),
-                new Coords(entityDimension, 0, 0),
-                new Coords(-entityDimension, 0, 0),
-            ]), campfireColor, null),
-            new VisualPolygon(new Path([
-                new Coords(0, -entityDimension, 0),
-                new Coords(entityDimensionHalf, 0, 0),
-                new Coords(-entityDimensionHalf, 0, 0),
-            ]), Color.byName("Yellow"), null)
-        ]);
-        var flameVisualStaticSmall = flameVisualStatic.clone().transform(new Transform_Scale(new Coords(1, .8, 1)));
-        var flameVisualStaticLarge = flameVisualStatic.clone().transform(new Transform_Scale(new Coords(1, 1.2, 1)));
+        var flameVisual = VisualBuilder.Instance().flame(entityDimension);
         var smokePuffVisual = new VisualCircle(entityDimensionHalf, Color.byName("GrayLight"), null);
         var smokeVisual = new VisualParticles("Smoke", null, // ticksToGenerate
         1 / 3, // particlesPerTick
@@ -111,15 +98,6 @@ class PlaceBuilderDemo_Emplacements {
             transformableAsVisualCircle.colorFill = color;
             return transformable;
         }), smokePuffVisual);
-        var ticksPerFrame = 3;
-        var flameVisual = new VisualAnimation("Flame", // name
-        [ticksPerFrame, ticksPerFrame, ticksPerFrame, ticksPerFrame], [
-            flameVisualStaticSmall,
-            flameVisualStatic,
-            flameVisualStaticLarge,
-            flameVisualStatic
-        ], true // isRepeating
-        );
         var itemLogVisual = this.parent.itemDefnsByName.get("Log").visual;
         var itemLogVisualMinusText = itemLogVisual.clone();
         itemLogVisualMinusText.children.length--;
@@ -130,9 +108,15 @@ class PlaceBuilderDemo_Emplacements {
             new VisualOffset(new VisualText(new DataBinding(campfireName, null, null), null, campfireColor, null), new Coords(0, 0 - entityDimension * 2, 0))
         ]);
         var campfireCollider = new Sphere(new Coords(0, 0, 0), entityDimensionHalf);
+        var campfireCollide = (u, w, p, entityCampfire, entityOther) => {
+            var entityOtherEffectable = entityOther.effectable();
+            entityOtherEffectable.effectAdd(Effect.Instances().Burning.clone());
+            entityCampfire.collidable().ticksUntilCanCollide = 50;
+        };
+        var campfireCollidable = new Collidable(campfireCollider, [Collidable.name], campfireCollide);
         var campfireEntityDefn = new Entity(campfireName, [
             new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
-            new Collidable(campfireCollider, null, null),
+            campfireCollidable,
             new Drawable(campfireVisual, null),
             new DrawableCamera()
         ]);

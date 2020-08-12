@@ -331,6 +331,18 @@ class PlaceBuilderDemo_Movers
 			}
 			var damageApplied = new Damage(damageToApply.amount * damageMultiplier, damageToApplyTypeName);
 			eKillable.killable().integritySubtract(damageToApply.amount * damageMultiplier);
+
+			p.entitySpawn
+			(
+				u, w,
+				u.entityBuilder.messageFloater
+				(
+					"" + damageApplied,
+					eKillable.locatable().loc.pos,
+					Color.byName("Red")
+				)
+			);
+
 			return damageApplied.amount;
 		};
 
@@ -918,10 +930,20 @@ class PlaceBuilderDemo_Movers
 			),
 			new Coords(0, 0 - entityDimension * 3, 0)
 		);
+		var playerVisualEffect = new VisualOffset
+		(
+			new VisualDynamic
+			(
+				(u: Universe, w: World, d: Display, e: Entity) =>
+					e.effectable().effectsAsVisual()
+			),
+			new Coords(0, -entityDimension * 4, 0)
+		);
 
 		var playerVisual = new VisualGroup
 		([
-			playerVisualWielding, playerVisualBodyJumpable, playerVisualName, playerVisualHealthBar
+			playerVisualWielding, playerVisualBodyJumpable, playerVisualName,
+			playerVisualHealthBar, playerVisualEffect
 		]);
 
 		var playerCollide = (universe: Universe, world: World, place: Place, entityPlayer: Entity, entityOther: Entity) =>
@@ -930,17 +952,9 @@ class PlaceBuilderDemo_Movers
 			{
 				universe.collisionHelper.collideCollidables(entityPlayer, entityOther);
 
-				var damage = entityPlayer.killable().damageApply(
+				entityPlayer.killable().damageApply(
 					universe, world, place, entityOther, entityPlayer, null // todo
 				);
-
-				var messageEntity = universe.entityBuilder.messageFloater
-				(
-					"-" + damage,
-					entityPlayer.locatable().loc.pos, Color.byName("Red")
-				);
-
-				place.entitySpawn(universe, world, messageEntity);
 			}
 			else if (entityOther.propertiesByName.get(Goal.name) != null)
 			{
@@ -1053,18 +1067,29 @@ class PlaceBuilderDemo_Movers
 		var killable = new Killable
 		(
 			50, // integrity
-			(universe: Universe, world: World, place: Place, entityDamager: Entity, entityKillable: Entity) => // damageApply
+			(universe: Universe, world: World, place: Place, entityDamager: Entity, entityKillable: Entity, damage: Damage) => // damageApply
 			{
-				var damage = entityDamager.damager().damagePerHit.amount;
+				var damageAmount = damage.amount;
 				var equipmentUser = entityKillable.equipmentUser();
 				var armorEquipped = equipmentUser.itemEntityInSocketWithName("Armor");
 				if (armorEquipped != null)
 				{
 					var armor = armorEquipped.propertiesByName.get(Armor.name);
-					damage *= armor.damageMultiplier;
+					damageAmount *= armor.damageMultiplier;
 				}
-				entityKillable.killable().integritySubtract(damage);
-				return damage;
+				entityKillable.killable().integritySubtract(damageAmount);
+
+				var damageAmountAsString = "" + (damageAmount > 0 ? "" : "+") + (0 - damageAmount);
+				var messageColorName = (damageAmount > 0? "Red" : "Green");
+				var messageEntity = universe.entityBuilder.messageFloater
+				(
+					damageAmountAsString,
+					entityKillable.locatable().loc.pos,
+					Color.byName(messageColorName)
+				);
+				place.entitySpawn(universe, world, messageEntity);
+
+				return damageAmount;
 			},
 			(universe: Universe, world: World, place: Place, entityKillable: Entity) => // die
 			{
@@ -1280,6 +1305,7 @@ class PlaceBuilderDemo_Movers
 				controllable,
 				new Drawable(playerVisual, null),
 				new DrawableCamera(),
+				new Effectable([]),
 				equipmentUser,
 				new Idleable(),
 				itemCrafter,

@@ -1212,8 +1212,7 @@ class PlaceBuilderDemo {
                 var killable = entityOther.killable();
                 if (killable != null) {
                     var damageToApply = entityProjectile.damager().damagePerHit;
-                    var damageApplied = killable.damageApply(universe, world, place, entityProjectile, entityOther, damageToApply);
-                    place.entitySpawn(universe, world, universe.entityBuilder.messageFloater("" + damageApplied, entityOther.locatable().loc.pos, Color.byName("Red")));
+                    killable.damageApply(universe, world, place, entityProjectile, entityOther, damageToApply);
                     entityProjectile.killable().integrity = 0;
                 }
             };
@@ -1682,11 +1681,11 @@ class PlaceBuilderDemo {
             ["Consumable"], // categoryNames
             (universe, world, place, entityUser, entityItem) => // use
              {
-                var integrityToRestore = 10;
-                entityUser.killable().integrityAdd(integrityToRestore);
+                var effectToApply = Effect.Instances().Healing;
+                entityUser.effectable().effectAdd(effectToApply);
                 var item = entityItem.item();
                 entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
-                var message = "The medicine restores " + integrityToRestore + " points.";
+                var message = "You use the medicine.";
                 return message;
             }, itemMedicineVisual),
             new ItemDefn("Potion", null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize

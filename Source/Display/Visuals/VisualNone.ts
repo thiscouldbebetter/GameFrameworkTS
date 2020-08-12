@@ -1,6 +1,8 @@
 
 class VisualNone implements Visual
 {
+	static Instance: VisualNone = new VisualNone();
+
 	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		// do nothing

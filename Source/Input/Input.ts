@@ -32,6 +32,7 @@ class Input_Names
 	ArrowLeft: string;
 	ArrowRight: string;
 	ArrowUp: string;
+	Backspace: string;
 	Enter: string;
 	Escape: string;
 	GamepadButton0: string;
@@ -55,6 +56,7 @@ class Input_Names
 		this.ArrowLeft = "ArrowLeft";
 		this.ArrowRight = "ArrowRight";
 		this.ArrowUp = "ArrowUp";
+		this.Backspace = "Backspace";
 		this.Enter = "Enter";
 		this.Escape = "Escape";
 		this.GamepadButton0 = "GamepadButton0_";
@@ -75,6 +77,7 @@ class Input_Names
 			this.ArrowLeft,
 			this.ArrowRight,
 			this.ArrowUp,
+			this.Backspace,
 			this.Enter,
 			this.Escape,
 			this.GamepadButton0,

@@ -77,6 +77,8 @@ class Entity
 
 	drawable(): Drawable { return this.propertiesByName.get(Drawable.name); }
 
+	effectable() : Effectable { return this.propertiesByName.get(Effectable.name); }
+
 	ephemeral(): Ephemeral { return this.propertiesByName.get(Ephemeral.name); }
 
 	equipmentUser(): EquipmentUser { return this.propertiesByName.get(EquipmentUser.name); }

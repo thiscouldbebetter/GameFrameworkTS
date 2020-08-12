@@ -9,23 +9,22 @@ Controls - Clickable Quick Slots
 Controls - Control is Superclass Instead of Interface
 Controls - Decorations
 Controls - Images in Lists and Grids
-Controls - Journal and Quests
 Controls - Move Esc Menu into Tab of Tab Menu
 Controls - Player Notes
-Controls - TextBox Respects Backspace
 
 Items - Agriculture - Seeds, Planting, Watering, Harvesting
+Items - Crafting - Blocking with Working Animation
 Items - Generated Devices with Varying Specs
-Items - Crafting - Automatic Stage Button
-Items - Crafting - Queue and Durations
-Items - Crafting - Uncarryable Tools in Environment
-Items - Crafting - Facilities - Crafter + Container
+Items - Weapons - Applying Effects to Target
 
-Movers - Animal Growth, Aging and Natural Death
-Movers - Animal Procreation
-Movers - Carnivores Eat Grazers
+Movers - Effects - Cold, Heat, Healing
 Movers - Food, Eating, and Hunger
-Movers - Vehicles
+Movers - Vehicles - Differential Terrain Traversal
+
+Movers - Animals - Carnivores Eat Grazers
+Movers - Animals - Growth, Aging and Natural Death
+Movers - Animals - Lairs and Sleep
+Movers - Animals - Procreation
 
 Movers - Enemies - Sight And Hearing
 Movers - Enemies - Enemy Generators Use Generator Class
@@ -33,6 +32,9 @@ Movers - Enemies - Enemy Generators Use Generator Class
 Movers - Enemies - Types - Bombers
 Movers - Enemies - Types - Hiders
 Movers - Enemies - Types - Shooters
+
+Movers - Player - Wielded Tool Rotates with Player
+Movers - Player - Sword Swings
 
 Places - Load/Unload Zones in Terrarium
 Places - Map Tiles as Obstacles
@@ -55,6 +57,7 @@ Items - Barter - Trade Coins and Sword for Gun, Still Have Sword
 Items - Put Wielded Item in Container, It Remains Equipped
 Items - Sword Swing Direction is Wrong
 
-Portals - Between Rooms Start Player Outside
+Places - Map Tiles - Fix Overlapping
+Places - Portals - Between Rooms Start Player Outside
 
 Storage - Fix Load World From File

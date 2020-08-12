@@ -16,3 +16,4 @@ class VisualNone {
         return this; // todo
     }
 }
+VisualNone.Instance = new VisualNone();

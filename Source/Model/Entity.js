@@ -48,6 +48,7 @@ class Entity {
     damager() { return this.propertiesByName.get(Damager.name); }
     device() { return this.propertiesByName.get(Device.name); }
     drawable() { return this.propertiesByName.get(Drawable.name); }
+    effectable() { return this.propertiesByName.get(Effectable.name); }
     ephemeral() { return this.propertiesByName.get(Ephemeral.name); }
     equipmentUser() { return this.propertiesByName.get(EquipmentUser.name); }
     equippable() { return this.propertiesByName.get(Equippable.name); }

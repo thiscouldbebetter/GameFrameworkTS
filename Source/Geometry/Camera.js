@@ -81,10 +81,10 @@ class Camera {
             var bPos = b.locatable().loc.pos;
             var returnValue;
             if (aPos.z != bPos.z) {
-                returnValue = (aPos.z > bPos.z ? 1 : -1);
+                returnValue = bPos.z - aPos.z;
             }
             else {
-                returnValue = (aPos.y > bPos.y ? 1 : -1);
+                returnValue = aPos.y - bPos.y;
             }
             return returnValue;
         });

@@ -174,6 +174,7 @@ class PlaceBuilderDemo_Movers {
             }
             var damageApplied = new Damage(damageToApply.amount * damageMultiplier, damageToApplyTypeName);
             eKillable.killable().integritySubtract(damageToApply.amount * damageMultiplier);
+            p.entitySpawn(u, w, u.entityBuilder.messageFloater("" + damageApplied, eKillable.locatable().loc.pos, Color.byName("Red")));
             return damageApplied.amount;
         };
         var enemyKillable = new Killable(integrityMax, enemyDamageApply, (universe, world, place, entityDying) => // die
@@ -463,16 +464,16 @@ class PlaceBuilderDemo_Movers {
         }, ["Visible", "Hidden"], [playerVisualWieldable, visualNone]);
         var playerVisualName = new VisualOffset(new VisualText(new DataBinding(entityDefnNamePlayer, null, null), null, playerColor, null), new Coords(0, 0 - playerHeadRadius * 3, 0));
         var playerVisualHealthBar = new VisualOffset(new VisualBar(new Coords(entityDimension * 3, entityDimension * .8, 0), Color.Instances().Red, DataBinding.fromGet((c) => c.killable().integrity), DataBinding.fromGet((c) => c.killable().integrityMax)), new Coords(0, 0 - entityDimension * 3, 0));
+        var playerVisualEffect = new VisualOffset(new VisualDynamic((u, w, d, e) => e.effectable().effectsAsVisual()), new Coords(0, -entityDimension * 4, 0));
         var playerVisual = new VisualGroup([
-            playerVisualWielding, playerVisualBodyJumpable, playerVisualName, playerVisualHealthBar
+            playerVisualWielding, playerVisualBodyJumpable, playerVisualName,
+            playerVisualHealthBar, playerVisualEffect
         ]);
         var playerCollide = (universe, world, place, entityPlayer, entityOther) => {
             if (entityOther.damager() != null) {
                 universe.collisionHelper.collideCollidables(entityPlayer, entityOther);
-                var damage = entityPlayer.killable().damageApply(universe, world, place, entityOther, entityPlayer, null // todo
+                entityPlayer.killable().damageApply(universe, world, place, entityOther, entityPlayer, null // todo
                 );
-                var messageEntity = universe.entityBuilder.messageFloater("-" + damage, entityPlayer.locatable().loc.pos, Color.byName("Red"));
-                place.entitySpawn(universe, world, messageEntity);
             }
             else if (entityOther.propertiesByName.get(Goal.name) != null) {
                 var itemDefnKeyName = "Key";
@@ -542,17 +543,21 @@ class PlaceBuilderDemo_Movers {
         ]);
         var journalKeeper = new JournalKeeper(journal);
         var killable = new Killable(50, // integrity
-        (universe, world, place, entityDamager, entityKillable) => // damageApply
+        (universe, world, place, entityDamager, entityKillable, damage) => // damageApply
          {
-            var damage = entityDamager.damager().damagePerHit.amount;
+            var damageAmount = damage.amount;
             var equipmentUser = entityKillable.equipmentUser();
             var armorEquipped = equipmentUser.itemEntityInSocketWithName("Armor");
             if (armorEquipped != null) {
                 var armor = armorEquipped.propertiesByName.get(Armor.name);
-                damage *= armor.damageMultiplier;
+                damageAmount *= armor.damageMultiplier;
             }
-            entityKillable.killable().integritySubtract(damage);
-            return damage;
+            entityKillable.killable().integritySubtract(damageAmount);
+            var damageAmountAsString = "" + (damageAmount > 0 ? "" : "+") + (0 - damageAmount);
+            var messageColorName = (damageAmount > 0 ? "Red" : "Green");
+            var messageEntity = universe.entityBuilder.messageFloater(damageAmountAsString, entityKillable.locatable().loc.pos, Color.byName(messageColorName));
+            place.entitySpawn(universe, world, messageEntity);
+            return damageAmount;
         }, (universe, world, place, entityKillable) => // die
          {
             var venueMessage = new VenueMessage(new DataBinding("You lose!", null, null), (universe) => // acknowledge
@@ -657,6 +662,7 @@ class PlaceBuilderDemo_Movers {
             controllable,
             new Drawable(playerVisual, null),
             new DrawableCamera(),
+            new Effectable([]),
             equipmentUser,
             new Idleable(),
             itemCrafter,

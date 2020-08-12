@@ -349,5 +349,61 @@ class VisualBuilder
 		);
 
 		return visualEyesBlinking;
-	};
+	}
+
+	flame(dimension: number)
+	{
+		var dimensionHalf = dimension / 2;
+		var flameVisualStatic = new VisualGroup
+		([
+			new VisualPolygon
+			(
+				new Path
+				([
+					new Coords(0, -dimension * 2, 0),
+					new Coords(dimension, 0, 0),
+					new Coords(-dimension, 0, 0),
+				]),
+				Color.byName("Orange"),
+				null
+			),
+			new VisualPolygon
+			(
+				new Path
+				([
+					new Coords(0, -dimension, 0),
+					new Coords(dimensionHalf, 0, 0),
+					new Coords(-dimensionHalf, 0, 0),
+				]),
+				Color.byName("Yellow"),
+				null
+			)
+		]);
+
+		var flameVisualStaticSmall = flameVisualStatic.clone().transform
+		(
+			new Transform_Scale(new Coords(1, .8, 1))
+		) as VisualGroup;
+
+		var flameVisualStaticLarge = flameVisualStatic.clone().transform
+		(
+			new Transform_Scale(new Coords(1, 1.2, 1))
+		) as VisualGroup;
+
+		var ticksPerFrame = 3;
+		var flameVisual = new VisualAnimation
+		(
+			"Flame", // name
+			[ ticksPerFrame, ticksPerFrame, ticksPerFrame, ticksPerFrame ],
+			[
+				flameVisualStaticSmall,
+				flameVisualStatic,
+				flameVisualStaticLarge,
+				flameVisualStatic
+			],
+			true // isRepeating
+		);
+
+		return flameVisual;
+	}
 }

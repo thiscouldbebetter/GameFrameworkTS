@@ -16,6 +16,7 @@ class Place {
                 Constrainable.name,
                 Collidable.name,
                 CollisionTracker.name,
+                Effectable.name,
                 Generator.name,
                 Hidable.name,
                 Idleable.name,

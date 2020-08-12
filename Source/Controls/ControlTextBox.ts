@@ -68,7 +68,11 @@ class ControlTextBox implements Control
 		var text = this.text(null, null);
 
 		var controlActionNames = ControlActionNames.Instances();
-		if (actionNameToHandle == controlActionNames.ControlCancel)
+		if
+		(
+			actionNameToHandle == controlActionNames.ControlCancel
+			|| actionNameToHandle == Input.Names().Backspace
+		)
 		{
 			this.text(text.substr(0, text.length - 1), null);
 

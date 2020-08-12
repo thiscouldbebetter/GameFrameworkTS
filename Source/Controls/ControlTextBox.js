@@ -36,7 +36,8 @@ class ControlTextBox {
     actionHandle(actionNameToHandle, universe) {
         var text = this.text(null, null);
         var controlActionNames = ControlActionNames.Instances();
-        if (actionNameToHandle == controlActionNames.ControlCancel) {
+        if (actionNameToHandle == controlActionNames.ControlCancel
+            || actionNameToHandle == Input.Names().Backspace) {
             this.text(text.substr(0, text.length - 1), null);
             this.cursorPos = NumberHelper.wrapToRangeMinMax(this.cursorPos - 1, 0, text.length + 1);
         }
