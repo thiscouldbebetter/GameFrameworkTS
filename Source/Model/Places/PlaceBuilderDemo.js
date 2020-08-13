@@ -765,7 +765,8 @@ class PlaceBuilderDemo {
                 new Collidable(projectileCollider, [Collidable.name], projectileCollide),
                 new Constrainable([new Constraint_FrictionXY(.03, .5)]),
                 new Drawable(projectileVisual, null),
-                new DrawableCamera()
+                new DrawableCamera(),
+                new Equippable(null)
             ]);
             p.entitiesToSpawn.push(projectileEntity);
         });

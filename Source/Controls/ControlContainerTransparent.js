@@ -1,7 +1,7 @@
 "use strict";
-class ControlContainerTransparent {
+class ControlContainerTransparent extends ControlBase {
     constructor(containerInner) {
-        this.name = containerInner.name;
+        super(containerInner.name, containerInner.pos, containerInner.size, containerInner.fontHeightInPixels);
         this.containerInner = containerInner;
     }
     // instance methods
@@ -25,8 +25,6 @@ class ControlContainerTransparent {
         return this.containerInner.actionHandle(actionNameToHandle, universe);
     }
     ;
-    focusGain() { }
-    focusLose() { }
     isEnabled() {
         return true; // todo
     }
@@ -46,8 +44,6 @@ class ControlContainerTransparent {
         return wasClickHandled;
     }
     ;
-    mouseEnter() { }
-    mouseExit() { }
     mouseMove(mouseMovePos) {
         this.containerInner.mouseMove(mouseMovePos);
     }

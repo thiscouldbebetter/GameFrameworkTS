@@ -1,13 +1,10 @@
 "use strict";
-class ControlTextBox {
+class ControlTextBox extends ControlBase {
     constructor(name, pos, size, text, fontHeightInPixels, numberOfCharsMax) {
-        this.name = name;
-        this.pos = pos;
-        this.size = size;
+        super(name, pos, size, fontHeightInPixels);
         this._text = text;
         this.fontHeightInPixels = fontHeightInPixels;
         this.numberOfCharsMax = numberOfCharsMax;
-        this.isHighlighted = false;
         this.cursorPos = this.text(null, null).length;
         // Helper variables.
         this._drawPos = new Coords(0, 0, 0);
@@ -83,33 +80,14 @@ class ControlTextBox {
         return true; // wasActionHandled
     }
     ;
-    actionToInputsMappings() {
-        return null; // todo
-    }
-    childWithFocus() {
-        return null; // todo
-    }
-    focusGain() {
-        this.isHighlighted = true;
-    }
-    ;
-    focusLose() {
-        this.isHighlighted = false;
-    }
-    ;
-    isEnabled() {
-        return true; // todo
-    }
     mouseClick(mouseClickPos) {
         var parent = this.parent;
-        parent.indexOfChildWithFocus = parent.children.indexOf(this);
+        var parentAsContainer = parent;
+        parentAsContainer.indexOfChildWithFocus = parentAsContainer.children.indexOf(this);
         this.isHighlighted = true;
         return true;
     }
     ;
-    mouseEnter() { }
-    mouseExit() { }
-    mouseMove(mouseMovePos) { }
     scalePosAndSize(scaleFactor) {
         this.pos.multiply(scaleFactor);
         this.size.multiply(scaleFactor);

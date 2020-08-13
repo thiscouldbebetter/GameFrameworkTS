@@ -23,6 +23,7 @@ Some placeholder media files are included in the Content directory for testing p
 ![Equipment](/Screenshots/Screenshot-Equipment.png?raw=true "Equipment")
 ![Crafting](/Screenshots/Screenshot-Crafting.png?raw=true "Crafting")
 ![Skills](/Screenshots/Screenshot-Skills.png?raw=true "Skills")
+![Journal](/Screenshots/Screenshot-Journal.png?raw=true "Journal")
 ![Conversation](/Screenshots/Screenshot-Conversation.png?raw=true "Conversation")
 ![Container](/Screenshots/Screenshot-Container.png?raw=true "Container")
 ![Bartering](/Screenshots/Screenshot-Bartering.png?raw=true "Bartering")

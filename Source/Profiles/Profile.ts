@@ -1046,8 +1046,8 @@ class Profile
 				new ControlButton
 				(
 					"buttonBack",
-					new Coords(sizeBase.x - 10 - 25, sizeBase.y - 10 - 15, 0), // pos
-					new Coords(25, 15, 0), // size
+					new Coords(sizeBase.x - 10 - 25, sizeBase.y - 10 - 20, 0), // pos
+					new Coords(25, 20, 0), // size
 					"Back",
 					fontHeight,
 					true, // hasBorder

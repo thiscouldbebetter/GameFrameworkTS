@@ -1,16 +1,10 @@
 
-class ControlTextarea implements Control
+class ControlTextarea extends ControlBase
 {
-	name: string;
-	pos: Coords;
-	size: Coords;
 	_text: DataBinding<any, string>;
-	fontHeightInPixels: number
 	_isEnabled: DataBinding<any, boolean>;
 
-	isHighlighted: boolean;
 	lineSpacing: number;
-	parent: Control;
 	scrollbar: ControlScrollbar;
 	styleName: string;
 
@@ -26,6 +20,7 @@ class ControlTextarea implements Control
 		fontHeightInPixels: number, isEnabled: DataBinding<any, boolean>
 	)
 	{
+		super(name, pos, size, fontHeightInPixels);
 		this.name = name;
 		this.pos = pos;
 		this.size = size;
@@ -34,8 +29,6 @@ class ControlTextarea implements Control
 		this._isEnabled = isEnabled;
 
 		this.lineSpacing = 1.2 * this.fontHeightInPixels; // hack
-
-		this.isHighlighted = false;
 
 		var scrollbarWidth = this.lineSpacing;
 		this.scrollbar = new ControlScrollbar
@@ -83,26 +76,6 @@ class ControlTextarea implements Control
 			wasActionHandled = true;
 		}
 		return wasActionHandled;
-	};
-
-	actionToInputsMappings(): ActionToInputsMapping[]
-	{
-		return null; // todo
-	}
-
-	childWithFocus(): Control
-	{
-		return null;
-	}
-
-	focusGain()
-	{
-		this.isHighlighted = true;
-	};
-
-	focusLose()
-	{
-		this.isHighlighted = false;
 	};
 
 	indexOfFirstLineVisible()
@@ -206,15 +179,6 @@ class ControlTextarea implements Control
 		}
 
 		return true; // wasActionHandled
-	};
-
-	mouseEnter() {}
-
-	mouseExit() {}
-
-	mouseMove(movePos: Coords)
-	{
-		// Do nothing.
 	};
 
 	scalePosAndSize(scaleFactor: Coords)

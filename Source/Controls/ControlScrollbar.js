@@ -1,9 +1,7 @@
 "use strict";
-class ControlScrollbar {
+class ControlScrollbar extends ControlBase {
     constructor(pos, size, fontHeightInPixels, itemHeight, items, sliderPosInItems) {
-        this.pos = pos;
-        this.size = size;
-        this.fontHeightInPixels = fontHeightInPixels;
+        super(null, pos, size, fontHeightInPixels);
         this.itemHeight = itemHeight;
         this._items = items;
         this._sliderPosInItems = sliderPosInItems;
@@ -32,17 +30,6 @@ class ControlScrollbar {
         return true;
     }
     ;
-    actionToInputsMappings() {
-        return null; // todo
-    }
-    childWithFocus() {
-        return null; // todo
-    }
-    focusGain() { }
-    focusLose() { }
-    isEnabled() {
-        return true;
-    }
     isVisible() {
         return this.windowSizeInItems < this.items().length;
     }
@@ -53,9 +40,6 @@ class ControlScrollbar {
     mouseClick(pos) {
         return false;
     }
-    mouseEnter() { }
-    mouseExit() { }
-    mouseMove(pos) { }
     scalePosAndSize(scaleFactor) {
         this.pos.multiply(scaleFactor);
         this.size.multiply(scaleFactor);

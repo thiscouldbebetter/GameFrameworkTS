@@ -1,22 +1,16 @@
 
-class ControlContainer implements Control
+class ControlContainer extends ControlBase
 {
-	name: string;
-	pos: Coords;
-	size: Coords;
-	children: Control[];
-	childrenByName: Map<string, Control>;
+	children: ControlBase[];
+	childrenByName: Map<string, ControlBase>;
 	actions: Action[];
 	actionsByName: Map<string, Action>;
 	_actionToInputsMappings: ActionToInputsMapping[];
 
-	childrenContainingPos: Control[];
-	childrenContainingPosPrev: Control[];
+	childrenContainingPos: ControlBase[];
+	childrenContainingPosPrev: ControlBase[];
 	indexOfChildWithFocus: number;
 	styleName: string;
-
-	fontHeightInPixels: number;
-	parent: Control;
 
 	_childMax: Coords;
 	_drawPos: Coords;
@@ -27,9 +21,7 @@ class ControlContainer implements Control
 
 	constructor(name: string, pos: Coords, size: Coords, children: any, actions: Action[], actionToInputsMappings: ActionToInputsMapping[])
 	{
-		this.name = name;
-		this.pos = pos;
-		this.size = size;
+		super(name, pos, size, null);
 		this.children = children;
 		this.childrenByName = ArrayHelper.addLookupsByName(this.children);
 		this.actions = (actions || []);
@@ -204,7 +196,7 @@ class ControlContainer implements Control
 
 	childrenAtPosAddToList
 	(
-		posToCheck: Coords, listToAddTo: Control[], addFirstChildOnly: boolean
+		posToCheck: Coords, listToAddTo: ControlBase[], addFirstChildOnly: boolean
 	)
 	{
 		posToCheck = this._posToCheck.overwriteWith(posToCheck).clearZ();

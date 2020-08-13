@@ -1,11 +1,11 @@
 
 class VisualControl implements Visual
 {
-	controlRoot: Control;
+	controlRoot: ControlBase;
 
 	_drawLoc: Disposition;
 
-	constructor(controlRoot: Control)
+	constructor(controlRoot: ControlBase)
 	{
 		this.controlRoot = controlRoot;
 

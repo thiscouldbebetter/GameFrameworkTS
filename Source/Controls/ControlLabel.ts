@@ -1,14 +1,10 @@
 
-class ControlLabel implements Control
+class ControlLabel extends ControlBase
 {
-	name: string;
-	pos: Coords;
-	size: Coords;
 	isTextCentered: boolean;
 	_text: any;
-	fontHeightInPixels: number;
 
-	parent: Control;
+	parent: ControlBase;
 	styleName: string;
 
 	_drawPos: Coords;
@@ -19,12 +15,9 @@ class ControlLabel implements Control
 		text: any, fontHeightInPixels: number
 	)
 	{
-		this.name = name;
-		this.pos = pos;
-		this.size = size;
+		super(name, pos, size, fontHeightInPixels);
 		this.isTextCentered = isTextCentered;
 		this._text = text;
-		this.fontHeightInPixels = fontHeightInPixels;
 
 		// Helper variables.
 
@@ -49,20 +42,6 @@ class ControlLabel implements Control
 		return false; // wasActionHandled
 	}
 
-	actionToInputsMappings(): ActionToInputsMapping[]
-	{
-		return null; // todo
-	}
-
-	childWithFocus(): Control
-	{
-		return null; // todo
-	}
-
-	focusGain() {}
-
-	focusLose() {}
-
 	isEnabled()
 	{
 		return false;
@@ -72,12 +51,6 @@ class ControlLabel implements Control
 	{
 		return false;
 	}
-
-	mouseEnter() {}
-
-	mouseExit() {}
-
-	mouseMove(pos: Coords) {}
 
 	scalePosAndSize(scaleFactor: Coords)
 	{

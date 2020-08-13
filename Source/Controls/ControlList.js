@@ -1,12 +1,9 @@
 "use strict";
-class ControlList {
+class ControlList extends ControlBase {
     constructor(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected, bindingForItemValue, bindingForIsEnabled, confirm, widthInItems) {
-        this.name = name;
-        this.pos = pos;
-        this.size = size;
+        super(name, pos, size, fontHeightInPixels);
         this._items = items;
         this.bindingForItemText = bindingForItemText;
-        this.fontHeightInPixels = fontHeightInPixels;
         this.bindingForItemSelected = bindingForItemSelected;
         this.bindingForItemValue = bindingForItemValue;
         this.bindingForIsEnabled = bindingForIsEnabled || DataBinding.fromContext(true);
@@ -65,20 +62,6 @@ class ControlList {
             }
         }
         return wasActionHandled;
-    }
-    ;
-    actionToInputsMappings() {
-        return null; // todo
-    }
-    childWithFocus() {
-        return null; // todo
-    }
-    focusGain() {
-        this.isHighlighted = true;
-    }
-    ;
-    focusLose() {
-        this.isHighlighted = false;
     }
     ;
     indexOfFirstItemVisible() {

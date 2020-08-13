@@ -4,6 +4,9 @@ class EquipmentUser {
         this.socketGroup = new EquipmentSocketGroup(socketDefnGroup);
     }
     equipEntityWithItem(universe, world, place, entityEquipmentUser, itemEntityToEquip) {
+        if (itemEntityToEquip == null) {
+            return;
+        }
         var sockets = this.socketGroup.sockets;
         var socketDefnGroup = this.socketGroup.defnGroup;
         var itemToEquip = itemEntityToEquip.item();
@@ -116,7 +119,7 @@ class EquipmentUser {
         var itemEntitiesEquippable = itemHolder.itemEntities.filter(x => x.equippable() != null);
         var world = universe.world;
         var place = world.placeCurrent;
-        var listHeight = 90;
+        var listHeight = 100;
         var listEquippables = new ControlList("listEquippables", new Coords(10, 15, 0), // pos
         new Coords(70, listHeight, 0), // size
         new DataBinding(itemEntitiesEquippable, null, null), // items
@@ -160,9 +163,9 @@ class EquipmentUser {
             false, // isTextCentered
             "Equipped:", fontHeightSmall),
             listEquipped,
-            new ControlLabel("infoStatus", new Coords(10, 115, 0), // pos
-            new Coords(160, 15, 0), // size
-            false, // isTextCentered
+            new ControlLabel("infoStatus", new Coords(sizeBase.x / 2, 125, 0), // pos
+            new Coords(sizeBase.x, 15, 0), // size
+            true, // isTextCentered
             new DataBinding(this, (c) => c.statusMessage, null), // text
             fontHeightSmall)
         ], [new Action("Back", back)], [new ActionToInputsMapping("Back", [Input.Names().Escape], true)]);

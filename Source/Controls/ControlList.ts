@@ -1,5 +1,5 @@
 
-class ControlList implements Control
+class ControlList extends ControlBase
 {
 	name: string;
 	pos: Coords;
@@ -15,7 +15,7 @@ class ControlList implements Control
 
 	isHighlighted: boolean;
 	_itemSpacing: Coords;
-	parent: Control;
+	parent: ControlBase;
 	scrollbar: ControlScrollbar;
 	styleName: string;
 
@@ -33,12 +33,9 @@ class ControlList implements Control
 		widthInItems: number
 	)
 	{
-		this.name = name;
-		this.pos = pos;
-		this.size = size;
+		super(name, pos, size, fontHeightInPixels);
 		this._items = items;
 		this.bindingForItemText = bindingForItemText;
-		this.fontHeightInPixels = fontHeightInPixels;
 		this.bindingForItemSelected = bindingForItemSelected;
 		this.bindingForItemValue = bindingForItemValue;
 		this.bindingForIsEnabled = bindingForIsEnabled || DataBinding.fromContext(true);
@@ -132,26 +129,6 @@ class ControlList implements Control
 			}
 		}
 		return wasActionHandled;
-	};
-
-	actionToInputsMappings(): ActionToInputsMapping[]
-	{
-		return null; // todo
-	}
-
-	childWithFocus(): Control
-	{
-		return null; // todo
-	}
-
-	focusGain()
-	{
-		this.isHighlighted = true;
-	};
-
-	focusLose()
-	{
-		this.isHighlighted = false;
 	};
 
 	indexOfFirstItemVisible()

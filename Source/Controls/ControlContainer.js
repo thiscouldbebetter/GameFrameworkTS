@@ -1,9 +1,7 @@
 "use strict";
-class ControlContainer {
+class ControlContainer extends ControlBase {
     constructor(name, pos, size, children, actions, actionToInputsMappings) {
-        this.name = name;
-        this.pos = pos;
-        this.size = size;
+        super(name, pos, size, null);
         this.children = children;
         this.childrenByName = ArrayHelper.addLookupsByName(this.children);
         this.actions = (actions || []);

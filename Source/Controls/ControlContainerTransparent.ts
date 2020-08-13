@@ -1,17 +1,11 @@
 
-class ControlContainerTransparent implements Control
+class ControlContainerTransparent extends ControlBase
 {
-	name: string;
 	containerInner: ControlContainer;
-
-	fontHeightInPixels: number;
-	parent: Control;
-	pos: Coords;
-	size: Coords;
 
 	constructor(containerInner: ControlContainer)
 	{
-		this.name = containerInner.name;
+		super(containerInner.name, containerInner.pos, containerInner.size, containerInner.fontHeightInPixels);
 		this.containerInner = containerInner;
 	}
 
@@ -34,7 +28,7 @@ class ControlContainerTransparent implements Control
 
 	childrenAtPosAddToList
 	(
-		posToCheck: Coords, listToAddTo: Control[], addFirstChildOnly: boolean
+		posToCheck: Coords, listToAddTo: ControlBase[], addFirstChildOnly: boolean
 	)
 	{
 		return this.containerInner.childrenAtPosAddToList
@@ -47,10 +41,6 @@ class ControlContainerTransparent implements Control
 	{
 		return this.containerInner.actionHandle(actionNameToHandle, universe);
 	};
-
-	focusGain() {}
-
-	focusLose() {}
 
 	isEnabled()
 	{
@@ -82,10 +72,6 @@ class ControlContainerTransparent implements Control
 
 		return wasClickHandled;
 	};
-
-	mouseEnter() {}
-
-	mouseExit() {}
 
 	mouseMove(mouseMovePos: Coords)
 	{

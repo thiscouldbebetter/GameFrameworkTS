@@ -1,18 +1,12 @@
 
-class ControlSelect implements Control
+class ControlSelect extends ControlBase
 {
-	name: string;
-	pos: Coords;
-	size: Coords;
 	_valueSelected: any;
 	_options: any;
 	bindingForOptionValues: DataBinding<any, any>;
 	bindingForOptionText: DataBinding<any, string>;
-	fontHeightInPixels: number;
 
 	indexOfOptionSelected: number;
-	isHighlighted: boolean;
-	parent: Control;
 	styleName: string;
 
 	_drawPos: Coords;
@@ -30,14 +24,11 @@ class ControlSelect implements Control
 		fontHeightInPixels: number
 	)
 	{
-		this.name = name;
-		this.pos = pos;
-		this.size = size;
+		super(name, pos, size, fontHeightInPixels);
 		this._valueSelected = valueSelected;
 		this._options = options;
 		this.bindingForOptionValues = bindingForOptionValues;
 		this.bindingForOptionText = bindingForOptionText;
-		this.fontHeightInPixels = fontHeightInPixels;
 
 		this.indexOfOptionSelected = null;
 		var valueSelected = this.valueSelected();
@@ -56,8 +47,6 @@ class ControlSelect implements Control
 				break;
 			}
 		}
-
-		this.isHighlighted = false;
 
 		// Helper variables.
 		this._drawPos = new Coords(0, 0, 0);
@@ -82,43 +71,11 @@ class ControlSelect implements Control
 		return true; // wasActionHandled
 	};
 
-	actionToInputsMappings() : ActionToInputsMapping[]
-	{
-		return null;
-	}
-
-	childWithFocus(): Control
-	{
-		return null;
-	}
-
-	focusGain()
-	{
-			this.isHighlighted = true;
-	};
-
-	focusLose()
-	{
-			this.isHighlighted = false;
-	};
-
-	isEnabled()
-	{
-		// todo
-		return true;
-	};
-
 	mouseClick(clickPos: Coords)
 	{
 		this.optionSelectedNextInDirection(1);
 		return true; // wasClickHandled
 	};
-
-	mouseEnter() {}
-
-	mouseExit() {}
-
-	mouseMove(pos: Coords) {}
 
 	optionSelected()
 	{

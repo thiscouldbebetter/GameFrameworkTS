@@ -229,7 +229,9 @@ class SkillLearner
 					),
 					new DataBinding(null, null, null), // bindingForItemText
 					labelHeight, // fontHeightInPixels
-					null, null, null, null, null
+					null, null,
+					DataBinding.fromContext(true), // isEnabled
+					null, null
 				),
 
 				new ControlLabel
@@ -277,7 +279,8 @@ class SkillLearner
 					(
 						null, (c: Skill) => c.name, null
 					), // bindingForItemValue
-					null, null, null
+					DataBinding.fromContext(true), // isEnabled
+					null, null
 				),
 
 				new ControlLabel

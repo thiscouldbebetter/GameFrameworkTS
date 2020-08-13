@@ -1,16 +1,10 @@
 
-class ControlTextBox implements Control
+class ControlTextBox extends ControlBase
 {
-	name: string;
-	pos: Coords;
-	size: Coords;
 	_text: any;
-	fontHeightInPixels: number;
 	numberOfCharsMax: number;
 
 	cursorPos: number;
-	isHighlighted: boolean;
-	parent: any;
 	styleName: string;
 
 	_drawPos: Coords;
@@ -21,14 +15,11 @@ class ControlTextBox implements Control
 
 	constructor(name: string, pos: Coords, size: Coords, text: any, fontHeightInPixels: number, numberOfCharsMax: number)
 	{
-		this.name = name;
-		this.pos = pos;
-		this.size = size;
+		super(name, pos, size, fontHeightInPixels);
 		this._text = text;
 		this.fontHeightInPixels = fontHeightInPixels;
 		this.numberOfCharsMax = numberOfCharsMax;
 
-		this.isHighlighted = false;
 		this.cursorPos = this.text(null, null).length;
 
 		// Helper variables.
@@ -163,44 +154,14 @@ class ControlTextBox implements Control
 		return true; // wasActionHandled
 	};
 
-	actionToInputsMappings(): ActionToInputsMapping[]
-	{
-		return null; // todo
-	}
-
-	childWithFocus(): Control
-	{
-		return null; // todo
-	}
-
-	focusGain()
-	{
-		this.isHighlighted = true;
-	};
-
-	focusLose()
-	{
-		this.isHighlighted = false;
-	};
-
-	isEnabled()
-	{
-		return true; // todo
-	}
-
 	mouseClick(mouseClickPos: Coords)
 	{
 		var parent = this.parent;
-		parent.indexOfChildWithFocus = parent.children.indexOf(this);
+		var parentAsContainer = parent as ControlContainer;
+		parentAsContainer.indexOfChildWithFocus = parentAsContainer.children.indexOf(this);
 		this.isHighlighted = true;
 		return true;
 	};
-
-	mouseEnter() {}
-
-	mouseExit() {}
-
-	mouseMove(mouseMovePos: Coords) {}
 
 	scalePosAndSize(scaleFactor: Coords)
 	{

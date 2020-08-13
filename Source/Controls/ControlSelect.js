@@ -1,14 +1,11 @@
 "use strict";
-class ControlSelect {
+class ControlSelect extends ControlBase {
     constructor(name, pos, size, valueSelected, options, bindingForOptionValues, bindingForOptionText, fontHeightInPixels) {
-        this.name = name;
-        this.pos = pos;
-        this.size = size;
+        super(name, pos, size, fontHeightInPixels);
         this._valueSelected = valueSelected;
         this._options = options;
         this.bindingForOptionValues = bindingForOptionValues;
         this.bindingForOptionText = bindingForOptionText;
-        this.fontHeightInPixels = fontHeightInPixels;
         this.indexOfOptionSelected = null;
         var valueSelected = this.valueSelected();
         var options = this.options();
@@ -20,7 +17,6 @@ class ControlSelect {
                 break;
             }
         }
-        this.isHighlighted = false;
         // Helper variables.
         this._drawPos = new Coords(0, 0, 0);
         this._sizeHalf = new Coords(0, 0, 0);
@@ -37,33 +33,11 @@ class ControlSelect {
         return true; // wasActionHandled
     }
     ;
-    actionToInputsMappings() {
-        return null;
-    }
-    childWithFocus() {
-        return null;
-    }
-    focusGain() {
-        this.isHighlighted = true;
-    }
-    ;
-    focusLose() {
-        this.isHighlighted = false;
-    }
-    ;
-    isEnabled() {
-        // todo
-        return true;
-    }
-    ;
     mouseClick(clickPos) {
         this.optionSelectedNextInDirection(1);
         return true; // wasClickHandled
     }
     ;
-    mouseEnter() { }
-    mouseExit() { }
-    mouseMove(pos) { }
     optionSelected() {
         var optionSelected = (this.indexOfOptionSelected == null
             ? null

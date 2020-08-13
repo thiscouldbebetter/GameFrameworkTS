@@ -1,22 +1,34 @@
 
-interface Control
+class ControlBase
 {
 	fontHeightInPixels: number
 	name: string;
-	parent: Control;
+	parent: ControlBase;
 	pos: Coords;
 	size: Coords;
 
-	actionHandle(actionName: string, universe: Universe): boolean;
-	actionToInputsMappings(): ActionToInputsMapping[];
-	childWithFocus(): Control;
-	draw(u: Universe, d: Display, drawLoc: Disposition): void;
-	focusGain(): void;
-	focusLose(): void;
-	isEnabled(): boolean; // todo - Rename to "canReceiveFocus()"?
-	mouseClick(x: Coords): boolean;
-	mouseEnter(): void;
-	mouseExit(): void;
-	mouseMove(x: Coords): void;
-	scalePosAndSize(x: Coords): void;
+	isHighlighted: boolean;
+
+	constructor(name: string, pos: Coords, size: Coords, fontHeightInPixels: number)
+	{
+		this.name = name;
+		this.pos = pos;
+		this.size = size;
+		this.fontHeightInPixels = fontHeightInPixels;
+
+		this.isHighlighted = false;
+	}
+
+	actionHandle(actionName: string, universe: Universe): boolean { return false; }
+	actionToInputsMappings(): ActionToInputsMapping[] { return null; }
+	childWithFocus(): ControlBase { return null; }
+	draw(u: Universe, d: Display, drawLoc: Disposition): void {}
+	focusGain(): void { this.isHighlighted = true; }
+	focusLose(): void { this.isHighlighted = false; }
+	isEnabled(): boolean { return true; }
+	mouseClick(x: Coords): boolean { return false; }
+	mouseEnter(): void { this.isHighlighted = true; }
+	mouseExit(): void { this.isHighlighted = false; }
+	mouseMove(x: Coords): void {}
+	scalePosAndSize(x: Coords): void {}
 }

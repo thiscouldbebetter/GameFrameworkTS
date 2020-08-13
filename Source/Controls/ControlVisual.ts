@@ -1,14 +1,9 @@
 
-class ControlVisual implements Control
+class ControlVisual extends ControlBase
 {
-	name: string;
-	pos: Coords;
-	size: Coords;
 	visual: DataBinding<any,Visual>;
 	colorBackground: Color;
 
-	fontHeightInPixels: number;
-	parent: Control;
 	styleName: string;
 
 	_drawPos: Coords;
@@ -16,11 +11,12 @@ class ControlVisual implements Control
 	_locatableEntity: Entity;
 	_sizeHalf: Coords;
 
-	constructor(name: string, pos: Coords, size: Coords, visual: DataBinding<any,Visual>, colorBackground: Color)
+	constructor(
+		name: string, pos: Coords, size: Coords,
+		visual: DataBinding<any, Visual>, colorBackground: Color
+	)
 	{
-		this.name = name;
-		this.pos = pos;
-		this.size = size;
+		super(name, pos, size, null);
 		this.visual = visual;
 		this.colorBackground = colorBackground;
 
@@ -48,19 +44,6 @@ class ControlVisual implements Control
 		return false;
 	}
 
-	actionToInputsMappings(): ActionToInputsMapping[]
-	{
-		return null;
-	}
-
-	childWithFocus(): Control
-	{
-		return null;
-	}
-
-	focusGain() {}
-	focusLose() {}
-
 	isEnabled()
 	{
 		return false;
@@ -70,12 +53,6 @@ class ControlVisual implements Control
 	{
 		return false;
 	}
-
-	mouseEnter() {}
-
-	mouseExit() {}
-
-	mouseMove(x: Coords) {}
 
 	scalePosAndSize(scaleFactors: Coords)
 	{

@@ -1,12 +1,9 @@
 "use strict";
-class ControlLabel {
+class ControlLabel extends ControlBase {
     constructor(name, pos, size, isTextCentered, text, fontHeightInPixels) {
-        this.name = name;
-        this.pos = pos;
-        this.size = size;
+        super(name, pos, size, fontHeightInPixels);
         this.isTextCentered = isTextCentered;
         this._text = text;
-        this.fontHeightInPixels = fontHeightInPixels;
         // Helper variables.
         this._drawPos = new Coords(0, 0, 0);
     }
@@ -21,23 +18,12 @@ class ControlLabel {
     actionHandle(actionName) {
         return false; // wasActionHandled
     }
-    actionToInputsMappings() {
-        return null; // todo
-    }
-    childWithFocus() {
-        return null; // todo
-    }
-    focusGain() { }
-    focusLose() { }
     isEnabled() {
         return false;
     }
     mouseClick(pos) {
         return false;
     }
-    mouseEnter() { }
-    mouseExit() { }
-    mouseMove(pos) { }
     scalePosAndSize(scaleFactor) {
         this.pos.multiply(scaleFactor);
         this.size.multiply(scaleFactor);

@@ -139,7 +139,8 @@ class SkillLearner {
             // items
             new DataBinding(this.skillsKnownNames, null, null), new DataBinding(null, null, null), // bindingForItemText
             labelHeight, // fontHeightInPixels
-            null, null, null, null, null),
+            null, null, DataBinding.fromContext(true), // isEnabled
+            null, null),
             new ControlLabel("labelSkillsAvailable", // name,
             new Coords(size.x - margin - listSize.x, 40, 0), // pos,
             new Coords(size.x - margin * 2, labelHeight, 0), // size,
@@ -161,7 +162,8 @@ class SkillLearner {
                 c.skillSelectedName = skillName;
             }), // bindingForItemSelected
             new DataBinding(null, (c) => c.name, null), // bindingForItemValue
-            null, null, null),
+            DataBinding.fromContext(true), // isEnabled
+            null, null),
             new ControlLabel("labelSkillSelected", // name,
             new Coords(margin, 220, 0), // pos,
             new Coords(size.x - margin * 2, labelHeight, 0), // size,

@@ -1,19 +1,13 @@
 
-class ControlScrollbar implements Control
+class ControlScrollbar extends ControlBase
 {
-	pos: Coords;
-	size: Coords;
-	fontHeightInPixels: number;
 	itemHeight: number;
 	_items: any;
 	_sliderPosInItems: number;
 
-	name: string;
 	buttonScrollDown: ControlButton;
 	buttonScrollUp: ControlButton;
 	handleSize: Coords;
-	isHighlighted: boolean;
-	parent: Control;
 	styleName: string;
 	windowSizeInItems: number;
 
@@ -25,9 +19,7 @@ class ControlScrollbar implements Control
 		itemHeight: number, items: any, sliderPosInItems: number
 	)
 	{
-		this.pos = pos;
-		this.size = size;
-		this.fontHeightInPixels = fontHeightInPixels;
+		super(null, pos, size, fontHeightInPixels);
 		this.itemHeight = itemHeight;
 		this._items = items;
 		this._sliderPosInItems = sliderPosInItems;
@@ -71,25 +63,6 @@ class ControlScrollbar implements Control
 		return true;
 	};
 
-	actionToInputsMappings(): ActionToInputsMapping[]
-	{
-		return null; // todo
-	}
-
-	childWithFocus(): Control
-	{
-		return null; // todo
-	}
-
-	focusGain() {}
-
-	focusLose() {}
-
-	isEnabled()
-	{
-		return true;
-	}
-
 	isVisible()
 	{
 		return this.windowSizeInItems < this.items().length
@@ -104,12 +77,6 @@ class ControlScrollbar implements Control
 	{
 		return false;
 	}
-
-	mouseEnter() {}
-
-	mouseExit() {}
-
-	mouseMove(pos: Coords) {}
 
 	scalePosAndSize(scaleFactor: Coords)
 	{

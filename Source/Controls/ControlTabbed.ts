@@ -1,19 +1,14 @@
 
-class ControlTabbed implements Control
+class ControlTabbed extends ControlBase
 {
-	name: string;
-	pos: Coords;
-	size: Coords;
 	tabButtonSize: Coords;
-	children: Control[];
+	children: ControlBase[];
 	childrenByName: any;
-	fontHeightInPixels: number;
 	cancel: (u: Universe) => void;
 
 	buttonsForChildren: any;
 	childSelectedIndex: number;
 	isChildSelectedActive: boolean;
-	parent: Control;
 	styleName: string;
 
 	_childMax: Coords;
@@ -27,13 +22,11 @@ class ControlTabbed implements Control
 	constructor
 	(
 		name: string, pos: Coords, size: Coords, tabButtonSize: Coords,
-		children: Control[], fontHeightInPixels: number,
+		children: ControlBase[], fontHeightInPixels: number,
 		cancel: (u: Universe) => void
 	)
 	{
-		this.name = name;
-		this.pos = pos;
-		this.size = size;
+		super(name, pos, size, fontHeightInPixels || 10);
 		this.tabButtonSize = tabButtonSize;
 		this.children = children;
 		this.childrenByName = ArrayHelper.addLookupsByName(this.children);
@@ -42,11 +35,9 @@ class ControlTabbed implements Control
 		this.childSelectedIndex = 0;
 		this.isChildSelectedActive = false;
 
-		fontHeightInPixels = fontHeightInPixels || 10;
-
-		var marginSize = fontHeightInPixels;
+		var marginSize = this.fontHeightInPixels;
 		var tabPaneHeight = marginSize + this.tabButtonSize.y;
-		var buttonsForChildren: Control[] = [];
+		var buttonsForChildren: ControlBase[] = [];
 
 		for (var i = 0; i < this.children.length; i++)
 		{
@@ -61,7 +52,7 @@ class ControlTabbed implements Control
 				new Coords(marginSize + this.tabButtonSize.x * i, marginSize, 0), // pos
 				this.tabButtonSize.clone(),
 				childName, // text
-				fontHeightInPixels,
+				this.fontHeightInPixels,
 				true, // hasBorder
 				true, // isEnabled
 				(b: any) => this.childSelectedIndex = buttonsForChildren.indexOf(b), // hack
@@ -80,7 +71,7 @@ class ControlTabbed implements Control
 				new Coords(this.size.x - marginSize - this.tabButtonSize.x, marginSize, 0), // pos
 				this.tabButtonSize.clone(),
 				"Done", // text
-				fontHeightInPixels,
+				this.fontHeightInPixels,
 				true, // hasBorder
 				true, // isEnabled
 				this.cancel, // click
@@ -234,7 +225,7 @@ class ControlTabbed implements Control
 
 	childrenAtPosAddToList
 	(
-		posToCheck: Coords, listToAddTo: Control[], addFirstChildOnly: boolean
+		posToCheck: Coords, listToAddTo: ControlBase[], addFirstChildOnly: boolean
 	)
 	{
 		posToCheck = this._posToCheck.overwriteWith(posToCheck).clearZ();

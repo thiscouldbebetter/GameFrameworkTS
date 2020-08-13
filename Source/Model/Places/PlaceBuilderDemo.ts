@@ -1285,7 +1285,8 @@ class PlaceBuilderDemo
 						),
 						new Constrainable([new Constraint_FrictionXY(.03, .5)]),
 						new Drawable(projectileVisual, null),
-						new DrawableCamera()
+						new DrawableCamera(),
+						new Equippable(null)
 					]
 				);
 

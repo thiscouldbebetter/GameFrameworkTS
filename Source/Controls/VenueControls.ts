@@ -1,7 +1,7 @@
 
 class VenueControls implements Venue
 {
-	controlRoot: Control;
+	controlRoot: ControlBase;
 	actionToInputsMappings: ActionToInputsMapping[];
 	actionToInputsMappingsByInputName: Map<string, ActionToInputsMapping>;
 
@@ -10,7 +10,7 @@ class VenueControls implements Venue
 	_mouseMovePos: Coords;
 	_mouseMovePosPrev: Coords;
 
-	constructor(controlRoot: Control)
+	constructor(controlRoot: ControlBase)
 	{
 		this.controlRoot = controlRoot;
 

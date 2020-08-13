@@ -8,7 +8,11 @@ class ItemContainer
 		var itemHolderFrom = entityFrom.itemHolder();
 		var itemHolderTo = entityTo.itemHolder();
 
-		if (itemHolderFrom.itemEntitySelected != null)
+		if (itemHolderFrom.itemEntitySelected == null)
+		{
+			this.statusMessage = "Select and click buttons transfer items."
+		}
+		else
 		{
 			var itemEntityToTransfer = itemHolderFrom.itemEntitySelected;
 			var itemToTransfer = itemEntityToTransfer.item();
@@ -42,11 +46,11 @@ class ItemContainer
 
 		var fontHeight = 10;
 		var margin = fontHeight * 1.5;
-		var buttonSize = new Coords(4, 2, 0).multiplyScalar(fontHeight);
+		var buttonSize = new Coords(2, 2, 0).multiplyScalar(fontHeight);
 		var listSize = new Coords
 		(
-			(size.x - margin * 3) / 2,
-			size.y - margin * 4 - buttonSize.y - fontHeight,
+			(size.x - margin * 4 - buttonSize.x) / 2,
+			size.y - margin * 4 - fontHeight * 2,
 			0
 		);
 
@@ -123,9 +127,45 @@ class ItemContainer
 					null
 				),
 
+				new ControlButton
+				(
+					"buttonGet",
+					new Coords
+					(
+						(size.x - buttonSize.x) / 2,
+						(size.y - buttonSize.y - margin) / 2,
+						0
+					), // pos
+					buttonSize.clone(),
+					">",
+					fontHeight,
+					true, // hasBorder
+					DataBinding.fromContext(true), // isEnabled
+					get, // click
+					null, null
+				),
+
+				new ControlButton
+				(
+					"buttonPut",
+					new Coords
+					(
+						(size.x - buttonSize.x) / 2,
+						(size.y + buttonSize.y + margin) / 2,
+						0
+					), // pos
+					buttonSize.clone(),
+					"<",
+					fontHeight,
+					true, // hasBorder
+					DataBinding.fromContext(true), // isEnabled
+					put, // click
+					null, null
+				),
+
 				new ControlLabel
 				(
-					"labelCustomerName",
+					"labelGetterPutterName",
 					new Coords(size.x - margin - listSize.x, margin, 0), // pos
 					new Coords(85, 25, 0), // size
 					false, // isTextCentered
@@ -166,41 +206,10 @@ class ItemContainer
 					null
 				),
 
-				new ControlButton
-				(
-					"buttonGet",
-					new Coords
-					(
-						size.x / 2 - buttonSize.x - margin / 2,
-						size.y - margin - buttonSize.y,
-						0
-					), // pos
-					buttonSize.clone(),
-					">",
-					fontHeight,
-					true, // hasBorder
-					DataBinding.fromContext(true), // isEnabled
-					get, // click
-					null, null
-				),
-
-				new ControlButton
-				(
-					"buttonPut",
-					new Coords(size.x / 2 + margin / 2, size.y - margin - buttonSize.y, 0), // pos
-					buttonSize.clone(),
-					"<",
-					fontHeight,
-					true, // hasBorder
-					DataBinding.fromContext(true), // isEnabled
-					put, // click
-					null, null
-				),
-
 				new ControlLabel
 				(
 					"infoStatus",
-					new Coords(size.x / 2, size.y - margin * 2 - buttonSize.y, 0), // pos
+					new Coords(size.x / 2, size.y - margin - fontHeight, 0), // pos
 					new Coords(size.x, fontHeight, 0), // size
 					true, // isTextCentered
 					new DataBinding(this, c => c.statusMessage, null),

@@ -1,19 +1,13 @@
 
-class ControlButton implements Control
+class ControlButton extends ControlBase
 {
-	name: string;
-	pos: Coords;
-	size: Coords;
 	text: string;
-	fontHeightInPixels: number;
 	hasBorder: boolean;
 	_isEnabled: any;
 	click: any;
 	context: any;
 	canBeHeldDown: boolean;
 
-	isHighlighted: boolean;
-	parent: Control;
 	styleName: string;
 
 	_drawLoc: Disposition;
@@ -25,18 +19,13 @@ class ControlButton implements Control
 		fontHeightInPixels: number, hasBorder: boolean, isEnabled: any,
 		click: any, context: any, canBeHeldDown: boolean)
 	{
-		this.name = name;
-		this.pos = pos;
-		this.size = size;
+		super(name, pos, size, fontHeightInPixels);
 		this.text = text;
-		this.fontHeightInPixels = fontHeightInPixels;
 		this.hasBorder = hasBorder;
 		this._isEnabled = isEnabled;
 		this.click = click;
 		this.context = context;
 		this.canBeHeldDown = (canBeHeldDown == null ? false : canBeHeldDown);
-
-		this.isHighlighted = false;
 
 		// Helper variables.
 		this._drawLoc = new Disposition(new Coords(0, 0, 0), Orientation.default(), null);
@@ -58,7 +47,7 @@ class ControlButton implements Control
 		return null; // todo
 	}
 
-	childWithFocus(): Control
+	childWithFocus(): ControlBase
 	{
 		return null;
 	}
@@ -70,16 +59,6 @@ class ControlButton implements Control
 
 	// events
 
-	focusGain()
-	{
-		this.isHighlighted = true;
-	};
-
-	focusLose()
-	{
-		this.isHighlighted = false;
-	};
-
 	mouseClick(clickPos: Coords)
 	{
 		if (this.isEnabled())
@@ -88,18 +67,6 @@ class ControlButton implements Control
 		}
 		return (this.canBeHeldDown == false); // wasClickHandled
 	};
-
-	mouseEnter()
-	{
-		this.isHighlighted = true;
-	};
-
-	mouseExit()
-	{
-		this.isHighlighted = false;
-	};
-
-	mouseMove(movePos: Coords) {}
 
 	scalePosAndSize(scaleFactor: Coords)
 	{

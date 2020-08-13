@@ -1,17 +1,14 @@
 "use strict";
-class ControlTabbed {
+class ControlTabbed extends ControlBase {
     constructor(name, pos, size, tabButtonSize, children, fontHeightInPixels, cancel) {
-        this.name = name;
-        this.pos = pos;
-        this.size = size;
+        super(name, pos, size, fontHeightInPixels || 10);
         this.tabButtonSize = tabButtonSize;
         this.children = children;
         this.childrenByName = ArrayHelper.addLookupsByName(this.children);
         this.cancel = cancel;
         this.childSelectedIndex = 0;
         this.isChildSelectedActive = false;
-        fontHeightInPixels = fontHeightInPixels || 10;
-        var marginSize = fontHeightInPixels;
+        var marginSize = this.fontHeightInPixels;
         var tabPaneHeight = marginSize + this.tabButtonSize.y;
         var buttonsForChildren = [];
         for (var i = 0; i < this.children.length; i++) {
@@ -20,7 +17,7 @@ class ControlTabbed {
             var childName = child.name;
             var button = new ControlButton("button" + childName, new Coords(marginSize + this.tabButtonSize.x * i, marginSize, 0), // pos
             this.tabButtonSize.clone(), childName, // text
-            fontHeightInPixels, true, // hasBorder
+            this.fontHeightInPixels, true, // hasBorder
             true, // isEnabled
             (b) => this.childSelectedIndex = buttonsForChildren.indexOf(b), // hack
             null, null);
@@ -31,7 +28,7 @@ class ControlTabbed {
             this.children.push(null);
             var button = new ControlButton("buttonCancel", new Coords(this.size.x - marginSize - this.tabButtonSize.x, marginSize, 0), // pos
             this.tabButtonSize.clone(), "Done", // text
-            fontHeightInPixels, true, // hasBorder
+            this.fontHeightInPixels, true, // hasBorder
             true, // isEnabled
             this.cancel, // click
             null, null);

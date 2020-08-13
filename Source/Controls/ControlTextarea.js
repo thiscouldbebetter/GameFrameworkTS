@@ -1,6 +1,7 @@
 "use strict";
-class ControlTextarea {
+class ControlTextarea extends ControlBase {
     constructor(name, pos, size, text, fontHeightInPixels, isEnabled) {
+        super(name, pos, size, fontHeightInPixels);
         this.name = name;
         this.pos = pos;
         this.size = size;
@@ -8,7 +9,6 @@ class ControlTextarea {
         this.fontHeightInPixels = fontHeightInPixels;
         this._isEnabled = isEnabled;
         this.lineSpacing = 1.2 * this.fontHeightInPixels; // hack
-        this.isHighlighted = false;
         var scrollbarWidth = this.lineSpacing;
         this.scrollbar = new ControlScrollbar(new Coords(this.size.x - scrollbarWidth, 0, 0), // pos
         new Coords(scrollbarWidth, this.size.y, 0), // size
@@ -45,20 +45,6 @@ class ControlTextarea {
             wasActionHandled = true;
         }
         return wasActionHandled;
-    }
-    ;
-    actionToInputsMappings() {
-        return null; // todo
-    }
-    childWithFocus() {
-        return null;
-    }
-    focusGain() {
-        this.isHighlighted = true;
-    }
-    ;
-    focusLose() {
-        this.isHighlighted = false;
     }
     ;
     indexOfFirstLineVisible() {
@@ -133,12 +119,6 @@ class ControlTextarea {
             }
         }
         return true; // wasActionHandled
-    }
-    ;
-    mouseEnter() { }
-    mouseExit() { }
-    mouseMove(movePos) {
-        // Do nothing.
     }
     ;
     scalePosAndSize(scaleFactor) {

@@ -1,9 +1,7 @@
 "use strict";
-class ControlVisual {
+class ControlVisual extends ControlBase {
     constructor(name, pos, size, visual, colorBackground) {
-        this.name = name;
-        this.pos = pos;
-        this.size = size;
+        super(name, pos, size, null);
         this.visual = visual;
         this.colorBackground = colorBackground;
         // Helper variables.
@@ -22,23 +20,12 @@ class ControlVisual {
     actionHandle(actionName, universe) {
         return false;
     }
-    actionToInputsMappings() {
-        return null;
-    }
-    childWithFocus() {
-        return null;
-    }
-    focusGain() { }
-    focusLose() { }
     isEnabled() {
         return false;
     }
     mouseClick(x) {
         return false;
     }
-    mouseEnter() { }
-    mouseExit() { }
-    mouseMove(x) { }
     scalePosAndSize(scaleFactors) {
         this.pos.multiply(scaleFactors);
         this.size.multiply(scaleFactors);

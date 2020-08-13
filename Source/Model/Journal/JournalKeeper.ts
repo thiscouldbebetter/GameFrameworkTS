@@ -37,7 +37,7 @@ class JournalKeeper
 
 		var buttonSize = new Coords(20, 10, 0);
 
-		var childControls: Control[] =
+		var childControls: ControlBase[] =
 		[
 			new ControlLabel
 			(

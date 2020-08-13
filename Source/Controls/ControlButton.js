@@ -1,17 +1,13 @@
 "use strict";
-class ControlButton {
+class ControlButton extends ControlBase {
     constructor(name, pos, size, text, fontHeightInPixels, hasBorder, isEnabled, click, context, canBeHeldDown) {
-        this.name = name;
-        this.pos = pos;
-        this.size = size;
+        super(name, pos, size, fontHeightInPixels);
         this.text = text;
-        this.fontHeightInPixels = fontHeightInPixels;
         this.hasBorder = hasBorder;
         this._isEnabled = isEnabled;
         this.click = click;
         this.context = context;
         this.canBeHeldDown = (canBeHeldDown == null ? false : canBeHeldDown);
-        this.isHighlighted = false;
         // Helper variables.
         this._drawLoc = new Disposition(new Coords(0, 0, 0), Orientation.default(), null);
         this._sizeHalf = new Coords(0, 0, 0);
@@ -34,14 +30,6 @@ class ControlButton {
     }
     ;
     // events
-    focusGain() {
-        this.isHighlighted = true;
-    }
-    ;
-    focusLose() {
-        this.isHighlighted = false;
-    }
-    ;
     mouseClick(clickPos) {
         if (this.isEnabled()) {
             this.click(this.context);
@@ -49,15 +37,6 @@ class ControlButton {
         return (this.canBeHeldDown == false); // wasClickHandled
     }
     ;
-    mouseEnter() {
-        this.isHighlighted = true;
-    }
-    ;
-    mouseExit() {
-        this.isHighlighted = false;
-    }
-    ;
-    mouseMove(movePos) { }
     scalePosAndSize(scaleFactor) {
         this.pos.multiply(scaleFactor);
         this.size.multiply(scaleFactor);

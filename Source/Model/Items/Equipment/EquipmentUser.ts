@@ -18,6 +18,10 @@ class EquipmentUser
 		universe: Universe, world: World, place: Place, entityEquipmentUser: Entity, itemEntityToEquip: Entity
 	)
 	{
+		if (itemEntityToEquip == null)
+		{
+			return;
+		}
 		var sockets = this.socketGroup.sockets;
 		var socketDefnGroup = this.socketGroup.defnGroup;
 		var itemToEquip = itemEntityToEquip.item();
@@ -191,7 +195,7 @@ class EquipmentUser
 		var world = universe.world;
 		var place = world.placeCurrent;
 
-		var listHeight = 90;
+		var listHeight = 100;
 
 		var listEquippables = new ControlList
 		(
@@ -298,9 +302,9 @@ class EquipmentUser
 				new ControlLabel
 				(
 					"infoStatus",
-					new Coords(10, 115, 0), // pos
-					new Coords(160, 15, 0), // size
-					false, // isTextCentered
+					new Coords(sizeBase.x / 2, 125, 0), // pos
+					new Coords(sizeBase.x, 15, 0), // size
+					true, // isTextCentered
 					new DataBinding
 					(
 						this,
