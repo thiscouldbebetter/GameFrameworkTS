@@ -20,7 +20,7 @@ class EquipmentUser
 	{
 		if (itemEntityToEquip == null)
 		{
-			return;
+			return null;
 		}
 		var sockets = this.socketGroup.sockets;
 		var socketDefnGroup = this.socketGroup.defnGroup;

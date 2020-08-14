@@ -292,25 +292,80 @@ class PlaceBuilderDemo_Movers
 			)
 		]);
 
-		var enemyActivity = (universe: Universe, world: World, place: Place, actor: Entity, entityToTargetName: string) =>
+		var enemyActivity = (universe: Universe, world: World, place: Place, actor: Entity, target: any) =>
 		{
-			var target = place.entitiesByName.get(entityToTargetName);
-			if (target == null)
+			var actorLoc = actor.locatable().loc;
+			var actorPos = actorLoc.pos;
+			var actorOrientation = actorLoc.orientation;
+			var actorForward = actorOrientation.forward;
+
+			var entityToTargetPrefix = "Player";
+			var targetsPreferred = place.entities.filter
+			(
+				x => x.name.startsWith(entityToTargetPrefix)
+			);
+			var detectionDistance = 150;
+			var displacement = new Coords(0, 0, 0);
+			var targetPreferredInRange = targetsPreferred.filter
+			(
+				(entityToTarget: Entity) =>
+				{
+					var entityToTargetLoc = entityToTarget.locatable().loc;
+					var entityToTargetPos = entityToTargetLoc.pos;
+					displacement.overwriteWith(entityToTargetPos).subtract(actorPos);
+					var distanceForward = displacement.dotProduct(actorForward);
+					var isVisible = 
+					(
+						displacement.magnitude() < detectionDistance
+						&& distanceForward >= 0
+					);
+					return isVisible;
+				}
+			)[0];
+
+			var targetPosToApproach;
+
+			if (targetPreferredInRange == null)
 			{
-				return;
+				var targetPosExisting = actor.actor().target;
+				if (targetPosExisting == null)
+				{
+					targetPosToApproach =
+						new Coords(0, 0, 0).randomize(universe.randomizer).multiply(place.size);
+				}
+				else
+				{
+					targetPosToApproach = targetPosExisting;
+				}
+			}
+			else
+			{
+				targetPosToApproach = targetPreferredInRange.locatable().loc.pos.clone();
 			}
 
-			var actorLoc = actor.locatable().loc;
+			actor.actor().target = targetPosToApproach;
 
-			actorLoc.accel.overwriteWith
-			(
-				target.locatable().loc.pos
-			).subtract
-			(
-				actorLoc.pos
-			).normalize().multiplyScalar(.1).clearZ();
+			var targetDisplacement = targetPosToApproach.clone().subtract(actorPos);
+			var targetDistance = targetDisplacement.magnitude();
+			var distanceMin = 1;
+			if (targetDistance <= distanceMin)
+			{
+				actorPos.overwriteWith(targetPosToApproach);
+				actor.actor().target = null;
+			}
+			else
+			{
+				var acceleration = .1;
+				actorLoc.accel.overwriteWith
+				(
+					targetPosToApproach
+				).subtract
+				(
+					actorPos
+				).normalize().multiplyScalar(acceleration).clearZ();
 
-			actorLoc.orientation.forwardSet(actorLoc.accel.clone().normalize());
+				actorOrientation.forwardSet(actorLoc.accel.clone().normalize());
+			}
 		};
 
 		var enemyDamageApply = (u: Universe, w: World, p: Place, eDamager: Entity, eKillable: Entity, damageToApply: Damage) =>
@@ -390,7 +445,7 @@ class PlaceBuilderDemo_Movers
 		(
 			enemyTypeName + (damageTypeName || "Normal"),
 			[
-				new Actor(enemyActivity, "Player"),
+				new Actor(enemyActivity, null),
 				new Constrainable([constraintSpeedMax1]),
 				new Collidable(enemyCollider, null, null),
 				new Damager(new Damage(10, damageTypeName)),
@@ -914,46 +969,50 @@ class PlaceBuilderDemo_Movers
 			[ playerVisualWieldable, visualNone ]
 		);
 
-		var playerVisualName = new VisualOffset
+		var playerVisualName = new VisualText
 		(
-			new VisualText(new DataBinding(entityDefnNamePlayer, null, null), null, playerColor, null),
-			new Coords(0, 0 - playerHeadRadius * 3, 0)
+			new DataBinding(entityDefnNamePlayer, null, null), null, playerColor, null
 		);
-		var playerVisualHealthBar = new VisualOffset
+		var playerVisualHealthBar = new VisualBar
 		(
-			new VisualBar
-			(
-				new Coords(entityDimension * 3, entityDimension * .8, 0),
-				Color.Instances().Red,
-				DataBinding.fromGet( (c: Entity) => c.killable().integrity ),
-				DataBinding.fromGet( (c: Entity) => c.killable().integrityMax ),
-			),
-			new Coords(0, 0 - entityDimension * 3, 0)
+			new Coords(entityDimension * 3, entityDimension * .8, 0),
+			Color.Instances().Red,
+			DataBinding.fromGet( (c: Entity) => c.killable().integrity ),
+			DataBinding.fromGet( (c: Entity) => c.killable().integrityMax ),
 		);
-		var playerVisualEffect = new VisualOffset
+		var playerVisualEffect = new VisualDynamic
 		(
-			new VisualDynamic
+			(u: Universe, w: World, d: Display, e: Entity) =>
+				e.effectable().effectsAsVisual()
+		);
+		var playerVisualStatusInfo = new VisualOffset
+		(
+			new VisualStack
 			(
-				(u: Universe, w: World, d: Display, e: Entity) =>
-					e.effectable().effectsAsVisual()
+				new Coords(0, 0 - entityDimension, 0), // childSpacing
+				[
+					playerVisualName,
+					playerVisualHealthBar,
+					playerVisualEffect
+				]
 			),
-			new Coords(0, -entityDimension * 4, 0)
+			new Coords(0, 0 - entityDimension * 2, 0) // offset
 		);
 
 		var playerVisual = new VisualGroup
 		([
-			playerVisualWielding, playerVisualBodyJumpable, playerVisualName,
-			playerVisualHealthBar, playerVisualEffect
+			playerVisualWielding, playerVisualBodyJumpable, playerVisualStatusInfo
 		]);
 
 		var playerCollide = (universe: Universe, world: World, place: Place, entityPlayer: Entity, entityOther: Entity) =>
 		{
-			if (entityOther.damager() != null)
+			var entityOtherDamager = entityOther.damager();
+			if (entityOtherDamager != null)
 			{
 				universe.collisionHelper.collideCollidables(entityPlayer, entityOther);
 
 				entityPlayer.killable().damageApply(
-					universe, world, place, entityOther, entityPlayer, null // todo
+					universe, world, place, entityOther, entityPlayer, entityOtherDamager.damagePerHit
 				);
 			}
 			else if (entityOther.propertiesByName.get(Goal.name) != null)
