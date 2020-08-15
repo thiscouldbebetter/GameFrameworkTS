@@ -4,6 +4,9 @@ class Damage {
         this.amount = amount;
         this.typeName = typeName;
     }
+    toString() {
+        return this.amount + " " + (this.typeName || "");
+    }
     type() {
         return DamageType.byName(this.typeName);
     }

@@ -17,7 +17,6 @@ Items - Crafting - Blocking with Working Animation
 Items - Generated Devices with Varying Specs
 Items - Weapons - Applying Effects to Target
 
-Movers - Food, Eating, and Hunger
 Movers - Vehicles - Differential Terrain Traversal
 
 Movers - Animals - Carnivores Eat Grazers

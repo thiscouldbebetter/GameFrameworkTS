@@ -42,6 +42,7 @@ class World {
             Ephemeral.name,
             Recurrent.name,
             Killable.name,
+            Starvable.name,
             Camera.name
         ];
         var placeDefnDemo = new PlaceDefn("Demo", actions, actionToInputsMappings, propertyNamesToProcess, null, // placeInitialize

@@ -69,6 +69,7 @@ class World
 			Ephemeral.name,
 			Recurrent.name,
 			Killable.name,
+			Starvable.name,
 			Camera.name
 		]
 

@@ -392,7 +392,7 @@ class PlaceBuilderDemo_Movers
 				u, w,
 				u.entityBuilder.messageFloater
 				(
-					"" + damageApplied,
+					"" + damageApplied.toString(),
 					eKillable.locatable().loc.pos,
 					Color.byName("Red")
 				)
@@ -929,13 +929,26 @@ class PlaceBuilderDemo_Movers
 		(
 			new DataBinding(entityDefnNamePlayer, null, null), null, playerColor, null
 		);
+		var playerVisualBarSize = new Coords(entityDimension * 3, entityDimension * .8, 0);
 		var playerVisualHealthBar = new VisualBar
 		(
-			new Coords(entityDimension * 3, entityDimension * .8, 0),
+			"H", // abbreviation
+			playerVisualBarSize,
 			Color.Instances().Red,
 			DataBinding.fromGet( (c: Entity) => c.killable().integrity ),
 			DataBinding.fromGet( (c: Entity) => c.killable().integrityMax ),
+			1 // fractionBelowWhichToShow
 		);
+		var playerVisualSatietyBar = new VisualBar
+		(
+			"F", // abbreviation
+			playerVisualBarSize,
+			Color.Instances().Brown,
+			DataBinding.fromGet( (c: Entity) => c.starvable().satiety ),
+			DataBinding.fromGet( (c: Entity) => c.starvable().satietyMax ),
+			.5 // fractionBelowWhichToShow
+		);
+
 		var playerVisualEffect = new VisualDynamic
 		(
 			(u: Universe, w: World, d: Display, e: Entity) =>
@@ -949,6 +962,7 @@ class PlaceBuilderDemo_Movers
 				[
 					playerVisualName,
 					playerVisualHealthBar,
+					playerVisualSatietyBar,
 					playerVisualEffect
 				]
 			),
@@ -1079,6 +1093,15 @@ class PlaceBuilderDemo_Movers
 		]);
 		var journalKeeper = new JournalKeeper(journal);
 
+		var itemHolder = new ItemHolder
+		(
+			[
+				new Item("Coin", 100),
+			].map(x => x.toEntity() ),
+			100, // weightMax
+			20 // reachRadius
+		);
+
 		var killable = new Killable
 		(
 			50, // integrity
@@ -1123,6 +1146,16 @@ class PlaceBuilderDemo_Movers
 					true // showMessageOnly
 				);
 				universe.venueNext = venueMessage;
+			}
+		);
+
+		var starvable = new Starvable
+		(
+			1200, // satietyMax
+			.05, // satietyToLosePerTick
+			(u: Universe, w: World, p: Place, e: Entity) =>
+			{
+				e.killable().integritySubtract(.1);
 			}
 		);
 
@@ -1324,19 +1357,13 @@ class PlaceBuilderDemo_Movers
 				equipmentUser,
 				new Idleable(),
 				itemCrafter,
-				new ItemHolder
-				(
-					[
-						new Item("Coin", 100),
-					].map(x => x.toEntity() ),
-					100, // weightMax
-					20 // reachRadius
-				),
+				itemHolder,
 				journalKeeper,
 				killable,
 				movable,
 				new Playable(null),
-				new SkillLearner(null, null, null)
+				new SkillLearner(null, null, null),
+				starvable
 			]
 		);
 

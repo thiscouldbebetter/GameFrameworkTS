@@ -161,7 +161,7 @@ class ItemHolder {
         return massTotal;
     }
     massOfAllItemsOverMax(world) {
-        return "" + this.massOfAllItems(world) + "/" + this.massMax;
+        return "" + Math.ceil(this.massOfAllItems(world)) + "/" + this.massMax;
     }
     tradeValueOfAllItems(world) {
         var tradeValueTotal = this.itemEntities.reduce((sumSoFar, itemEntity) => sumSoFar + itemEntity.item().tradeValue(world), 0 // sumSoFar

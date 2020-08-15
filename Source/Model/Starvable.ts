@@ -2,6 +2,7 @@
 class Starvable
 {
 	satietyMax: number;
+	satietyLostPerTick: number;
 	_starve: (u: Universe, w: World, p: Place, e: Entity) => void;
 
 	satiety: number;
@@ -9,10 +10,12 @@ class Starvable
 	constructor
 	(
 		satietyMax: number,
+		satietyLostPerTick: number,
 		starve: (u: Universe, w: World, p: Place, e: Entity) => void
 	)
 	{
 		this.satietyMax = satietyMax;
+		this.satietyLostPerTick = satietyLostPerTick;
 		this._starve = starve;
 
 		this.satiety = this.satietyMax;
@@ -40,20 +43,19 @@ class Starvable
 		this.satietyAdd(0 - amountToSubtract);
 	}
 
-	isAlive()
+	isStarving()
 	{
 		return (this.satiety > 0);
 	};
 
 	updateForTimerTick(universe: Universe, world: World, place: Place, entityStarvable: Entity)
 	{
-		if (this.isAlive())
+		if (this.isStarving())
 		{
-			this.satiety--;
+			this.satiety -= this.satietyLostPerTick;
 		}
 		else
 		{
-			place.entitiesToRemove.push(entityStarvable);
 			this.starve(universe, world, place, entityStarvable);
 		}
 	};
@@ -62,6 +64,6 @@ class Starvable
 
 	clone()
 	{
-		return new Starvable(this.satietyMax, this._starve);
+		return new Starvable(this.satietyMax, this.satietyLostPerTick, this._starve);
 	};
 }

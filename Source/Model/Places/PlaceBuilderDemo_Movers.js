@@ -211,7 +211,7 @@ class PlaceBuilderDemo_Movers {
             }
             var damageApplied = new Damage(damageToApply.amount * damageMultiplier, damageToApplyTypeName);
             eKillable.killable().integritySubtract(damageToApply.amount * damageMultiplier);
-            p.entitySpawn(u, w, u.entityBuilder.messageFloater("" + damageApplied, eKillable.locatable().loc.pos, Color.byName("Red")));
+            p.entitySpawn(u, w, u.entityBuilder.messageFloater("" + damageApplied.toString(), eKillable.locatable().loc.pos, Color.byName("Red")));
             return damageApplied.amount;
         };
         var enemyKillable = new Killable(integrityMax, enemyDamageApply, (universe, world, place, entityDying) => // die
@@ -481,12 +481,19 @@ class PlaceBuilderDemo_Movers {
         }, ["Normal", "Hidden"], [playerVisualBodyNormal, playerVisualBodyHidden]);
         var playerVisualBodyJumpable = new VisualJump2D(playerVisualBodyHidable, new VisualEllipse(playerHeadRadius, playerHeadRadius / 2, 0, Color.byName("GrayDark"), Color.byName("Black")), null);
         var playerVisualName = new VisualText(new DataBinding(entityDefnNamePlayer, null, null), null, playerColor, null);
-        var playerVisualHealthBar = new VisualBar(new Coords(entityDimension * 3, entityDimension * .8, 0), Color.Instances().Red, DataBinding.fromGet((c) => c.killable().integrity), DataBinding.fromGet((c) => c.killable().integrityMax));
+        var playerVisualBarSize = new Coords(entityDimension * 3, entityDimension * .8, 0);
+        var playerVisualHealthBar = new VisualBar("H", // abbreviation
+        playerVisualBarSize, Color.Instances().Red, DataBinding.fromGet((c) => c.killable().integrity), DataBinding.fromGet((c) => c.killable().integrityMax), 1 // fractionBelowWhichToShow
+        );
+        var playerVisualSatietyBar = new VisualBar("F", // abbreviation
+        playerVisualBarSize, Color.Instances().Brown, DataBinding.fromGet((c) => c.starvable().satiety), DataBinding.fromGet((c) => c.starvable().satietyMax), .5 // fractionBelowWhichToShow
+        );
         var playerVisualEffect = new VisualDynamic((u, w, d, e) => e.effectable().effectsAsVisual());
         var playerVisualStatusInfo = new VisualOffset(new VisualStack(new Coords(0, 0 - entityDimension, 0), // childSpacing
         [
             playerVisualName,
             playerVisualHealthBar,
+            playerVisualSatietyBar,
             playerVisualEffect
         ]), new Coords(0, 0 - entityDimension * 2, 0) // offset
         );
@@ -566,6 +573,11 @@ class PlaceBuilderDemo_Movers {
             new JournalEntry("First Entry", "I started a journal.  We'll see how it goes."),
         ]);
         var journalKeeper = new JournalKeeper(journal);
+        var itemHolder = new ItemHolder([
+            new Item("Coin", 100),
+        ].map(x => x.toEntity()), 100, // weightMax
+        20 // reachRadius
+        );
         var killable = new Killable(50, // integrity
         (universe, world, place, entityDamager, entityKillable, damage) => // damageApply
          {
@@ -592,6 +604,11 @@ class PlaceBuilderDemo_Movers {
             true // showMessageOnly
             );
             universe.venueNext = venueMessage;
+        });
+        var starvable = new Starvable(1200, // satietyMax
+        .05, // satietyToLosePerTick
+        (u, w, p, e) => {
+            e.killable().integritySubtract(.1);
         });
         var movable = new Movable(0.5, // accelerationPerTick
         (universe, world, place, entityMovable) => // accelerate
@@ -690,16 +707,13 @@ class PlaceBuilderDemo_Movers {
             equipmentUser,
             new Idleable(),
             itemCrafter,
-            new ItemHolder([
-                new Item("Coin", 100),
-            ].map(x => x.toEntity()), 100, // weightMax
-            20 // reachRadius
-            ),
+            itemHolder,
             journalKeeper,
             killable,
             movable,
             new Playable(null),
-            new SkillLearner(null, null, null)
+            new SkillLearner(null, null, null),
+            starvable
         ]);
         var controlStatus = new ControlLabel("infoStatus", new Coords(8, 5, 0), //pos,
         new Coords(150, 0, 0), //size,

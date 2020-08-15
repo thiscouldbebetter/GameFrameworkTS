@@ -265,7 +265,7 @@ class ItemHolder
 
 	massOfAllItemsOverMax(world: World)
 	{
-		return "" + this.massOfAllItems(world) + "/" + this.massMax;
+		return "" + Math.ceil(this.massOfAllItems(world)) + "/" + this.massMax;
 	}
 
 	tradeValueOfAllItems(world: World)

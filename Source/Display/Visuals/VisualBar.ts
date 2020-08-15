@@ -1,10 +1,12 @@
 
 class VisualBar implements Visual
 {
+	abbreviation: string;
 	size: Coords;
 	color: Color;
 	amountCurrent: DataBinding<Entity, number>;
 	amountMax: DataBinding<Entity, number>;
+	fractionBelowWhichToShow: number;
 
 	_drawPos: Coords;
 	_sizeCurrent: Coords;
@@ -12,14 +14,17 @@ class VisualBar implements Visual
 
 	constructor
 	(
+		abbreviation: string,
 		size: Coords, color: Color, amountCurrent: DataBinding<Entity, number>,
-		amountMax: DataBinding<Entity, number>
+		amountMax: DataBinding<Entity, number>, fractionBelowWhichToShow: number
 	)
 	{
+		this.abbreviation = abbreviation;
 		this.size = size;
 		this.color = color;
 		this.amountCurrent = amountCurrent;
 		this.amountMax = amountMax;
+		this.fractionBelowWhichToShow = fractionBelowWhichToShow || 1;
 
 		this._drawPos = new Coords(0, 0, 0);
 		this._sizeCurrent = this.size.clone();
@@ -28,12 +33,17 @@ class VisualBar implements Visual
 
 	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
+		var wasVisible = false;
+
 		var pos = this._drawPos.overwriteWith(entity.locatable().loc.pos).subtract(this._sizeHalf);
 		var _amountCurrent: number = this.amountCurrent.contextSet(entity).get() as number;
 		var _amountMax: number = this.amountMax.contextSet(entity).get() as number;
-		var fractionCurrent: number = _amountCurrent / _amountMax as number;
-		if (fractionCurrent < 1)
+		var fractionCurrent = _amountCurrent / _amountMax;
+
+		if (fractionCurrent < this.fractionBelowWhichToShow)
 		{
+			wasVisible = true;
+
 			var widthCurrent = fractionCurrent * this.size.x;
 			this._sizeCurrent.x = widthCurrent;
 			display.drawRectangle
@@ -62,10 +72,11 @@ class VisualBar implements Visual
 			);
 
 			pos.add(this._sizeHalf);
-			var remainingOverMax = _amountCurrent + "/" + _amountMax;
+			var remainingOverMax = Math.round(_amountCurrent) + "/" + _amountMax;
+			var text = this.abbreviation + ":" + remainingOverMax;
 			display.drawText
 			(
-				remainingOverMax,
+				text,
 				this.size.y, // fontHeightInPixels
 				pos, 
 				colorForBorder.systemColor(),
@@ -75,7 +86,9 @@ class VisualBar implements Visual
 				null, // widthMaxInPixels
 			);
 		}
-	};
+
+		return wasVisible;
+	}
 
 	// Clonable.
 

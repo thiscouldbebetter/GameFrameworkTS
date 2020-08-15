@@ -47,16 +47,18 @@ class PlaceBuilderDemo
 
 		var entityDefns = this.entityDefnsByName;
 		this.entities.push(this.entityBuildFromDefn(entityDefns.get("Player"), entityPosRange, randomizer) );
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Anvil"), 1, entityPosRange, randomizer));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Bomb"), 3, entityPosRange, randomizer));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Book"), 1, entityPosRange, randomizer));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Campfire"), 1, entityPosRange, randomizer));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Friendly"), 1, entityPosRange, randomizer));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Sword"), 1, entityPosRange, randomizer));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("SwordCold"), 1, entityPosRange, randomizer));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("SwordHeat"), 1, entityPosRange, randomizer));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Toolset"), 1, entityPosRange, randomizer));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Weight"), 1, entityPosRange, randomizer));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Anvil"), 1, null, entityPosRange, randomizer));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Bomb"), 3, null, entityPosRange, randomizer));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Book"), 1, null, entityPosRange, randomizer));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Bread"), 1, 5, entityPosRange, randomizer));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Campfire"), 1, null, entityPosRange, randomizer));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Friendly"), 1, null, entityPosRange, randomizer));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Meat"), 1, null, entityPosRange, randomizer));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Sword"), 1, null, entityPosRange, randomizer));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("SwordCold"), 1, null, entityPosRange, randomizer));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("SwordHeat"), 1, null, entityPosRange, randomizer));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Toolset"), 1, null, entityPosRange, randomizer));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Weight"), 1, null, entityPosRange, randomizer));
 
 		var container = this.entityBuildFromDefn(entityDefns.get("Container"), entityPosRange, randomizer);
 		var itemEntityOre = this.entityBuildFromDefn(entityDefns.get("Iron Ore"), entityPosRange, randomizer);
@@ -527,12 +529,12 @@ class PlaceBuilderDemo
 		var entityPosRange = new Box(size.clone().half(), size.clone().subtract(this.marginSize));
 		var randomizer = this.randomizer;
 
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Carnivore"), 1, entityPosRange, randomizer));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Flower"), 1, entityPosRange, randomizer));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Grass"), 12, entityPosRange, randomizer));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Grazer"), 3, entityPosRange, randomizer));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("MushroomGenerator"), 2, entityPosRange, randomizer));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Tree"), 6, entityPosRange, randomizer));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Carnivore"), 1, null, entityPosRange, randomizer));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Flower"), 1, null, entityPosRange, randomizer));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Grass"), 12, null, entityPosRange, randomizer));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Grazer"), 3, null, entityPosRange, randomizer));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("MushroomGenerator"), 2, null, entityPosRange, randomizer));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Tree"), 6, null, entityPosRange, randomizer));
 
 		var randomizerSeed = this.randomizer.getNextRandom();
 		var place = new PlaceRoom(this.name, "Demo", size, this.entities, randomizerSeed);
@@ -556,31 +558,31 @@ class PlaceBuilderDemo
 		var entityPosRange = new Box(size.clone().half(), size.clone().subtract(this.marginSize));
 		var randomizer = this.randomizer;
 
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("EnemyGeneratorChaserNormal"), 1, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("EnemyGeneratorChaserCold"), 1, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("EnemyGeneratorChaserHeat"), 1, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("EnemyGeneratorRunnerNormal"), 1, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("EnemyGeneratorTankNormal"), 1, entityPosRange, randomizer));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("EnemyGeneratorChaserNormal"), 1, null, entityPosRange, randomizer));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("EnemyGeneratorChaserCold"), 1, null, entityPosRange, randomizer));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("EnemyGeneratorChaserHeat"), 1, null, entityPosRange, randomizer));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("EnemyGeneratorRunnerNormal"), 1, null, entityPosRange, randomizer));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("EnemyGeneratorTankNormal"), 1, null, entityPosRange, randomizer));
 
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Bar"), 1, entityPosRange, randomizer));
-		//entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Mine"), 48, entityPosRange, randomizer));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Bar"), 1, null, entityPosRange, randomizer));
+		//entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Mine"), 48, null, entityPosRange, randomizer));
 
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Tree"), 10, entityPosRange, randomizer));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Tree"), 10, null, entityPosRange, randomizer));
 
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Armor"), 1, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Boulder"), 3, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Carnivore"), 1, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Crystal"), 2, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Flower"), 6, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Fruit"), 1, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("GrassGenerator"), 3, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Grazer"), 1, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Iron Ore"), 1, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Medicine"), 2, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("MushroomGenerator"), 1, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Pick"), 1, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Shovel"), 1, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Speed Boots"), 1, entityPosRange, randomizer));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Armor"), 1, null, entityPosRange, randomizer));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Boulder"), 3, null, entityPosRange, randomizer));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Carnivore"), 1, null, entityPosRange, randomizer));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Crystal"), 2, null, entityPosRange, randomizer));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Flower"), 6, null, entityPosRange, randomizer));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Fruit"), 1, null, entityPosRange, randomizer));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("GrassGenerator"), 3, null, entityPosRange, randomizer));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Grazer"), 1, null, entityPosRange, randomizer));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Iron Ore"), 1, null, entityPosRange, randomizer));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Medicine"), 2, null, entityPosRange, randomizer));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("MushroomGenerator"), 1, null, entityPosRange, randomizer));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Pick"), 1, null, entityPosRange, randomizer));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Shovel"), 1, null, entityPosRange, randomizer));
+		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Speed Boots"), 1, null, entityPosRange, randomizer));
 
 		var entityMineLoader = this.entityBuildLoader(entityDefns.get("Mine"), 48, entityPosRange, randomizer);
 		entities.push(entityMineLoader);
@@ -773,25 +775,43 @@ class PlaceBuilderDemo
 		);
 	}
 
-	entitiesBuildFromDefnAndCount(entityDefn: Entity, entityCount: number, posRange: Box, randomizer: Randomizer)
+	entitiesBuildFromDefnAndCount
+	(
+		entityDefn: Entity, entityCount: number, itemQuantityPerEntity: number,
+		posRange: Box, randomizer: Randomizer
+	)
 	{
 		var returnEntities = [];
 
 		for (var i = 0; i < entityCount; i++)
 		{
-			var entity = this.entityBuildFromDefn(entityDefn, posRange, randomizer);
+			var entity = this.entityBuildFromDefn
+			(
+				entityDefn, posRange, randomizer
+			);
+
+			var entityItem = entity.item();
+			if (entityItem != null)
+			{
+				entityItem.quantity = itemQuantityPerEntity || 1;
+			}
+
 			returnEntities.push(entity);
 		}
 
 		return returnEntities;
 	};
 
-	entityBuildFromDefn(entityDefn: Entity, posRange: Box, randomizer: Randomizer): Entity
+	entityBuildFromDefn
+	(
+		entityDefn: Entity, posRange: Box, randomizer: Randomizer
+	): Entity
 	{
 		var entity = entityDefn.clone();
-		if (entity.locatable() != null)
+		var entityLocatable = entity.locatable();
+		if (entityLocatable != null)
 		{
-			entity.locatable().loc.pos.randomize
+			entityLocatable.loc.pos.randomize
 			(
 				randomizer
 			).multiply
@@ -906,7 +926,7 @@ class PlaceBuilderDemo
 				var entityPosRange = new Box(place.size.clone().half(), place.size.clone());
 				var entitiesCreated = placeBuilder.entitiesBuildFromDefnAndCount
 				(
-					entityDefn, entityCount, entityPosRange, randomizer
+					entityDefn, entityCount, null, entityPosRange, randomizer
 				);
 				place.entitiesToSpawn.push
 				(
@@ -1389,6 +1409,29 @@ class PlaceBuilderDemo
 		);
 
 		return itemBookEntityDefn;
+	}
+
+	entityDefnBuildBread(entityDimension: number): Entity
+	{
+		var entityDimensionHalf = entityDimension / 2;
+
+		var itemDefnBreadName = "Bread";
+		var itemBreadVisual = this.itemDefnsByName.get(itemDefnBreadName).visual;
+		var itemBreadCollider = new Sphere(new Coords(0, 0, 0), entityDimensionHalf);
+
+		var itemBreadEntityDefn = new Entity
+		(
+			itemDefnBreadName,
+			[
+				new Item(itemDefnBreadName, 1),
+				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
+				new Collidable(itemBreadCollider, null, null),
+				new Drawable(itemBreadVisual, null),
+				new DrawableCamera()
+			]
+		);
+
+		return itemBreadEntityDefn;
 	}
 
 	entityDefnBuildCoin(entityDimension: number): Entity
@@ -2228,6 +2271,7 @@ class PlaceBuilderDemo
 			this.entityDefnBuildArmor(entityDimension),
 			this.entityDefnBuildBomb(entityDimension),
 			this.entityDefnBuildBook(entityDimension),
+			this.entityDefnBuildBread(entityDimension),
 			this.entityDefnBuildCoin(entityDimension),
 			this.entityDefnBuildCrystal(entityDimension),
 			entityDefnFlower,
@@ -2389,6 +2433,28 @@ class PlaceBuilderDemo
 			new VisualOffset
 			(
 				new VisualText(new DataBinding(itemBookName, null, null), null, itemBookColor, null),
+				new Coords(0, 0 - entityDimension * 1.5, 0)
+			)
+		]);
+
+		// bread
+
+		var itemBreadName = "Bread";
+		var itemBreadColor = Color.byName("Orange");
+		var itemBreadVisual = new VisualGroup
+		([
+			new VisualArc
+			(
+				entityDimension / 2, // radiusOuter
+				0, // radiusInner
+				new Coords(-1, 0, 0), // directionMin
+				.5, // angleSpannedInTurns
+				itemBreadColor,
+				null
+			),
+			new VisualOffset
+			(
+				new VisualText(new DataBinding(itemBreadName, null, null), null, itemBreadColor, null),
 				new Coords(0, 0 - entityDimension * 1.5, 0)
 			)
 		]);
@@ -2717,7 +2783,7 @@ class PlaceBuilderDemo
 			new VisualOffset
 			(
 				new VisualText(new DataBinding(itemMeatName, null, null), null, itemMeatColor, null),
-				new Coords(0, 0 - entityDimension, 0)
+				new Coords(0, 0 - entityDimension * 1.5, 0)
 			)
 		]);
 
@@ -3042,14 +3108,12 @@ class PlaceBuilderDemo
 			new ItemDefn("Crystal", 		null, null, .1, 	1, null, null, null, itemCrystalVisual),
 			new ItemDefn("Enhanced Armor",	null, null, 60, 	60, null, [ "Armor" ], itemUseEquip, itemArmorVisual),
 			new ItemDefn("Flower", 			null, null, .01, 	1, null, null, null, itemFlowerVisual),
-			new ItemDefn("Fruit", 			null, null, .25, 	1, null, null, null, itemFruitVisual),
 			new ItemDefn("Grass", 			null, null, .01, 	1, null, null, null, itemGrassVisual),
 			new ItemDefn("Gun",				null, null, 5, 		100, null, [ "Wieldable" ], itemUseEquip, itemGunVisual),
 			new ItemDefn("Iron", 			null, null, 10, 	5, null, null, null, itemIronVisual),
 			new ItemDefn("Iron Ore", 		null, null, 10, 	1, null, null, null, itemIronOreVisual),
 			new ItemDefn("Key", 			null, null, .1, 	5, null, null, null, itemKeyVisual),
 			new ItemDefn("Log", 			null, null, 10, 	1, null, null, null, itemLogVisual),
-			new ItemDefn("Meat", 			null, null, 10, 	3, null, null, null, itemMeatVisual),
 			new ItemDefn("Mushroom", 		null, null, .01, 	1, null, null, null, itemMushroomVisual),
 			new ItemDefn("Pick", 			null, null, 1, 		30, null, [ "Wieldable" ], itemUseEquip, itemPickVisual),
 			new ItemDefn("Shovel", 			null, null, 1, 		30, null, [ "Wieldable" ], itemUseEquip, itemShovelVisual),
@@ -3121,6 +3185,51 @@ class PlaceBuilderDemo
 					return "";
 				},
 				itemBookVisual
+			),
+
+			new ItemDefn
+			(
+				"Bread", null, null, 1, 4, null, // name, appearance, descripton, mass, value, stackSize
+				[ "Consumable" ], // categoryNames
+				(universe: Universe, world: World, place: Place, entityUser: Entity, entityItem: Entity) => // use
+				{
+					entityUser.starvable().satietyAdd(100);
+					var item = entityItem.item();
+					entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
+					var message = "You eat the bread.";
+					return message;
+				},
+				itemBreadVisual
+			),
+
+			new ItemDefn
+			(
+				"Fruit", null, null, .25, 6, null, // name, appearance, descripton, mass, value, stackSize
+				[ "Consumable" ], // categoryNames
+				(universe: Universe, world: World, place: Place, entityUser: Entity, entityItem: Entity) => // use
+				{
+					entityUser.starvable().satietyAdd(50);
+					var item = entityItem.item();
+					entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
+					var message = "You eat the fruit.";
+					return message;
+				},
+				itemFruitVisual
+			),
+
+			new ItemDefn
+			(
+				"Meat", null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize
+				[ "Consumable" ], // categoryNames
+				(universe: Universe, world: World, place: Place, entityUser: Entity, entityItem: Entity) => // use
+				{
+					entityUser.starvable().satietyAdd(200);
+					var item = entityItem.item();
+					entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
+					var message = "You eat the meat.";
+					return message;
+				},
+				itemMeatVisual
 			),
 
 			new ItemDefn
@@ -3326,7 +3435,7 @@ class PlaceBuilderDemo
 						if (isOnGround)
 						{
 							var vel = loc.vel;
-							var speedRunning = 16;
+							var speedRunning = 4;
 							var speedCurrent = vel.magnitude();
 							if (speedCurrent > 0 && speedCurrent < speedRunning)
 							{

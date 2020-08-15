@@ -130,6 +130,8 @@ class Entity
 
 	skillLearner(): SkillLearner { return this.propertiesByName.get(SkillLearner.name); }
 
+	starvable(): Starvable { return this.propertiesByName.get(Starvable.name); }
+
 	talker(): Talker { return this.propertiesByName.get(Talker.name); }
 
 	usable(): Usable { return this.propertiesByName.get(Usable.name); }

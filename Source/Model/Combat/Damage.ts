@@ -10,6 +10,11 @@ class Damage
 		this.typeName = typeName;
 	}
 
+	toString()
+	{
+		return this.amount + " " + (this.typeName || "");
+	}
+
 	type()
 	{
 		return DamageType.byName(this.typeName);

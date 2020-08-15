@@ -76,6 +76,7 @@ class Entity {
     playable() { return this.propertiesByName.get(Playable.name); }
     portal() { return this.propertiesByName.get(Portal.name); }
     skillLearner() { return this.propertiesByName.get(SkillLearner.name); }
+    starvable() { return this.propertiesByName.get(Starvable.name); }
     talker() { return this.propertiesByName.get(Talker.name); }
     usable() { return this.propertiesByName.get(Usable.name); }
 }

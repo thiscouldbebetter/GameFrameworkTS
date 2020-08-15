@@ -10,8 +10,8 @@ class VisualStack {
         this._posSaved.overwriteWith(drawPos);
         for (var i = 0; i < this.children.length; i++) {
             var child = this.children[i];
-            if ((child instanceof VisualNone) == false) {
-                child.draw(universe, world, place, entity, display);
+            var wasChildVisible = child.draw(universe, world, place, entity, display);
+            if (wasChildVisible) {
                 drawPos.add(this.childSpacing);
             }
         }
