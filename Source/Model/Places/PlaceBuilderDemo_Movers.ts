@@ -709,15 +709,19 @@ class PlaceBuilderDemo_Movers
 					},
 					null
 				),
-				ItemHolder.fromItems
-				([
-					new Item("Ammo", 200),
-					new Item("Coin", 200),
-					new Item("Gun", 1),
-					new Item("Iron", 3),
-					new Item("Key", 1),
-					new Item("Medicine", 4),
-				]),
+				new ItemHolder
+				(
+					[
+						new Item("Ammo", 200),
+						new Item("Coin", 200),
+						new Item("Gun", 1),
+						new Item("Iron", 3),
+						new Item("Key", 1),
+						new Item("Medicine", 4),
+					].map(x => x.toEntity()),
+					null, // weightMax
+					null // reachRadius
+				),
 			]
 		);
 
@@ -1320,10 +1324,14 @@ class PlaceBuilderDemo_Movers
 				equipmentUser,
 				new Idleable(),
 				itemCrafter,
-				ItemHolder.fromItems
-				([
-					new Item("Coin", 100),
-				]),
+				new ItemHolder
+				(
+					[
+						new Item("Coin", 100),
+					].map(x => x.toEntity() ),
+					100, // weightMax
+					20 // reachRadius
+				),
 				journalKeeper,
 				killable,
 				movable,

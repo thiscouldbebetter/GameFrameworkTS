@@ -28,8 +28,15 @@ class ItemContainer
 			this.statusMessage =
 				messagePrefix
 				+ " " + itemToTransfer.defnName + ".";
+
+			var equipmentUser = entityFrom.equipmentUser();
+			if (equipmentUser != null)
+			{
+				equipmentUser.unequipItemsNoLongerHeld(entityFrom);
+			}
+
 		}
-	};
+	}
 
 	// Controllable.
 
@@ -86,7 +93,7 @@ class ItemContainer
 			[
 				new ControlLabel
 				(
-					"labelStoreName",
+					"labelContainerName",
 					new Coords(margin, margin, 0), // pos
 					new Coords(listSize.x, 25, 0), // size
 					false, // isTextCentered
@@ -96,7 +103,7 @@ class ItemContainer
 
 				new ControlList
 				(
-					"listStoreItems",
+					"listContainerItems",
 					new Coords(margin, margin * 2, 0), // pos
 					listSize.clone(),
 					new DataBinding
@@ -104,7 +111,7 @@ class ItemContainer
 						itemHolderContainer,
 						(c: ItemHolder) =>
 						{
-							return c.itemEntities;//.filter(x => x.item().defnName != itemDefnNameCurrency);
+							return c.itemEntities;
 						},
 						null
 					), // items
@@ -237,5 +244,5 @@ class ItemContainer
 		);
 
 		return returnValue;
-	};
+	}
 }

@@ -34,7 +34,7 @@ class ItemDefn
 	static new1(name: string)
 	{
 		return new ItemDefn(name, null, null, null, null, null, null, null, null);
-	};
+	}
 
 	static fromNameCategoryNameAndUse(name: string, categoryName: string, use: any)
 	{
@@ -42,14 +42,14 @@ class ItemDefn
 		returnValue.categoryNames = [ categoryName ];
 		returnValue.use = use;
 		return returnValue;
-	};
+	}
 
 	static fromNameAndUse(name: string, use: any)
 	{
 		var returnValue = ItemDefn.new1(name);
 		returnValue.use = use;
 		return returnValue;
-	};
+	}
 
 	use(u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity)
 	{
@@ -63,5 +63,5 @@ class ItemDefn
 			returnValue = this._use(u, w, p, eUsing, eUsed);
 		}
 		return returnValue;
-	};
+	}
 }

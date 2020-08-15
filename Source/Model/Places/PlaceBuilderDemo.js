@@ -28,6 +28,7 @@ class PlaceBuilderDemo {
         this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("SwordCold"), 1, entityPosRange, randomizer));
         this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("SwordHeat"), 1, entityPosRange, randomizer));
         this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Toolset"), 1, entityPosRange, randomizer));
+        this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Weight"), 1, entityPosRange, randomizer));
         var container = this.entityBuildFromDefn(entityDefns.get("Container"), entityPosRange, randomizer);
         var itemEntityOre = this.entityBuildFromDefn(entityDefns.get("Iron Ore"), entityPosRange, randomizer);
         itemEntityOre.item().quantity = 3; // For crafting.
@@ -670,12 +671,14 @@ class PlaceBuilderDemo {
             ]), null),
             new DrawableCamera(),
             new ItemStore("Coin"),
-            ItemHolder.fromItems([
+            new ItemHolder([
                 new Item("Coin", 100),
                 new Item("Gun", 1),
                 new Item("Key", 10),
                 new Item("Medicine", 100)
-            ]),
+            ].map(x => x.toEntity()), null, // weightMax
+            null // reachRadius
+            ),
             new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
             new Usable((u, w, p, eUsing, eUsed) => {
                 eUsed.itemStore().use(u, w, p, eUsing, eUsed);
@@ -697,7 +700,7 @@ class PlaceBuilderDemo {
             new Collidable(itemAccessoryCollider, null, null),
             new Drawable(itemAccessoryVisual, null),
             new DrawableCamera(),
-            new Equippable(null)
+            new Equippable(null, null)
         ]);
         return itemAccessoryEntityDefn;
     }
@@ -716,7 +719,7 @@ class PlaceBuilderDemo {
             new Armor(.5),
             boundable,
             collidable,
-            new Equippable(null),
+            new Equippable(null, null),
             new Item(itemDefnArmorName, 1),
             new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
             new Drawable(itemArmorVisual, null),
@@ -796,7 +799,7 @@ class PlaceBuilderDemo {
                 new Constrainable([new Constraint_FrictionXY(.03, .5)]),
                 new Drawable(projectileVisual, null),
                 new DrawableCamera(),
-                new Equippable(null)
+                new Equippable(null, null)
             ]);
             p.entitiesToSpawn.push(projectileEntity);
         });
@@ -1093,7 +1096,7 @@ class PlaceBuilderDemo {
             new Collidable(itemMedicineCollider, null, null),
             new Drawable(itemMedicineVisual, null),
             new DrawableCamera(),
-            new Equippable(null)
+            new Equippable(null, null)
         ]);
         return itemMedicineEntityDefn;
     }
@@ -1135,7 +1138,7 @@ class PlaceBuilderDemo {
             itemPickDevice,
             new Drawable(itemPickVisual, null),
             new DrawableCamera(),
-            new Equippable(null)
+            new Equippable(null, null)
         ]);
         return itemPickEntityDefn;
     }
@@ -1199,7 +1202,7 @@ class PlaceBuilderDemo {
             itemShovelDevice,
             new Drawable(itemShovelVisual, null),
             new DrawableCamera(),
-            new Equippable(null)
+            new Equippable(null, null)
         ]);
         return itemShovelEntityDefn;
     }
@@ -1278,12 +1281,11 @@ class PlaceBuilderDemo {
             new Collidable(itemSwordCollider, null, null),
             new Drawable(itemSwordVisual, null),
             new DrawableCamera(),
-            new Equippable(null),
+            new Equippable(null, null),
             itemSwordDevice
         ]);
         return itemSwordEntityDefn;
     }
-    ;
     entityDefnBuildToolset(entityDimension) {
         var itemDefnName = "Toolset";
         var itemToolsetVisual = this.itemDefnsByName.get(itemDefnName).visual;
@@ -1297,7 +1299,19 @@ class PlaceBuilderDemo {
         ]);
         return itemToolsetEntityDefn;
     }
-    ;
+    entityDefnBuildWeight(entityDimension) {
+        var itemDefnName = "Weight";
+        var itemWeightVisual = this.itemDefnsByName.get(itemDefnName).visual;
+        var itemWeightCollider = new Sphere(new Coords(0, 0, 0), entityDimension / 2);
+        var itemWeightEntityDefn = new Entity(itemDefnName, [
+            new Item(itemDefnName, 1),
+            new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
+            new Collidable(itemWeightCollider, null, null),
+            new Drawable(itemWeightVisual, null),
+            new DrawableCamera()
+        ]);
+        return itemWeightEntityDefn;
+    }
     entityDefnsBuild(entityDimension) {
         var entityDefnFlower = this.entityDefnBuildFlower(entityDimension);
         var entityDefnGrass = this.entityDefnBuildGrass(entityDimension);
@@ -1351,10 +1365,10 @@ class PlaceBuilderDemo {
             this.entityDefnBuildSword(entityDimension, "Cold"),
             this.entityDefnBuildSword(entityDimension, "Heat"),
             this.entityDefnBuildToolset(entityDimension),
+            this.entityDefnBuildWeight(entityDimension),
         ];
         return entityDefns;
     }
-    ;
     itemDefnsBuild(entityDimension) {
         var entityDimensionHalf = entityDimension / 2;
         var itemUseEquip = (universe, world, place, entityUser, entityItem) => {
@@ -1652,9 +1666,26 @@ class PlaceBuilderDemo {
             new VisualRectangle(new Coords(entityDimension, entityDimension / 2, 0), itemToolsetColor, null, null),
             new VisualOffset(new VisualText(new DataBinding(itemToolsetName, null, null), null, itemToolsetColor, null), new Coords(0, 0 - entityDimension, 0))
         ]);
+        // weight
+        var itemWeightName = "Weight";
+        var itemWeightColor = Color.byName("Blue");
+        var itemWeightVisual = new VisualGroup([
+            new VisualOffset(new VisualArc(entityDimensionHalf, // radiusOuter
+            entityDimensionHalf / 2, // radiusInner
+            new Coords(-1, 0, 0).normalize(), // directionMin
+            .5, // angleSpannedInTurns
+            itemWeightColor, null), new Coords(0, -1, 0).multiplyScalar(entityDimensionHalf)),
+            new VisualPolygon(new Path([
+                new Coords(-.75, .5, 0),
+                new Coords(-.5, -.5, 0),
+                new Coords(.5, -.5, 0),
+                new Coords(.75, .5, 0)
+            ]).transform(new Transform_Scale(new Coords(1, 1, 1).multiplyScalar(entityDimension))), itemWeightColor, null),
+            new VisualOffset(new VisualText(new DataBinding(itemWeightName, null, null), null, itemWeightColor, null), new Coords(0, 0 - entityDimension * 2, 0))
+        ]);
         var itemDefns = [
-            // 			name, 				appr, desc, mass, 	val,stax, categoryNames, visual, use
-            new ItemDefn("Ammo", null, null, null, null, null, null, null, itemAmmoVisual),
+            // 			name, 				appr, desc, mass, 	val,stax, categoryNames, use, transfer, visual
+            new ItemDefn("Ammo", null, null, .05, 5, null, null, null, itemAmmoVisual),
             new ItemDefn("Armor", null, null, 50, 30, null, ["Armor"], itemUseEquip, itemArmorVisual),
             new ItemDefn("Bomb", null, null, 5, 10, null, ["Wieldable"], itemUseEquip, itemBombVisual),
             new ItemDefn("Coin", null, null, .01, 1, null, null, null, itemCoinVisual),
@@ -1677,6 +1708,7 @@ class PlaceBuilderDemo {
             new ItemDefn("SwordCold", null, null, 10, 100, null, ["Wieldable"], itemUseEquip, itemSwordColdVisual),
             new ItemDefn("SwordHeat", null, null, 10, 100, null, ["Wieldable"], itemUseEquip, itemSwordHeatVisual),
             new ItemDefn("Toolset", null, null, 1, 30, null, null, null, itemToolsetVisual),
+            new ItemDefn("Weight", null, null, 2000, 5, null, null, null, itemWeightVisual),
             new ItemDefn("Book", null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize
             null, // categoryNames
             (universe, world, place, entityUser, entityItem) => // use
@@ -1806,16 +1838,11 @@ class PlaceBuilderDemo {
                     }
                 }
             }),
-            new Action("PickUp", (universe, world, place, actor) => // perform
+            new Action("Pick Up", (universe, world, place, entityActor) => // perform
              {
-                var entityItemsInPlace = place.items();
-                var actorPos = actor.locatable().loc.pos;
-                var radiusOfReach = 20; // todo
-                var entityItemsWithinReach = entityItemsInPlace.filter(x => x.locatable().loc.pos.clone().subtract(actorPos).magnitude() < radiusOfReach);
-                if (entityItemsWithinReach.length > 0) {
-                    var entityToPickUp = entityItemsWithinReach[0];
-                    actor.itemHolder().itemEntityAdd(entityToPickUp);
-                    place.entitiesToRemove.push(entityToPickUp);
+                var message = entityActor.itemHolder().itemPickUpClosest(universe, world, place, entityActor);
+                if (message != null) {
+                    place.entitySpawn(universe, world, universe.entityBuilder.messageFloater(message, entityActor.locatable().loc.pos, Color.byName("Red")));
                 }
             }),
             new Action("Run", (universe, world, place, actor) => // perform
@@ -1875,7 +1902,7 @@ class PlaceBuilderDemo {
             new ActionToInputsMapping("Fire", ["f", inputNames.Enter, inputNames.GamepadButton0 + "0"], inactivateTrue),
             new ActionToInputsMapping("Hide", ["h", inputNames.GamepadButton0 + "3"], inactivateFalse),
             new ActionToInputsMapping("Jump", [inputNames.Space, inputNames.GamepadButton0 + "1"], inactivateTrue),
-            new ActionToInputsMapping("PickUp", ["g", inputNames.GamepadButton0 + "4"], inactivateTrue),
+            new ActionToInputsMapping("Pick Up", ["g", inputNames.GamepadButton0 + "4"], inactivateTrue),
             new ActionToInputsMapping("Run", [inputNames.Shift, inputNames.GamepadButton0 + "2"], inactivateFalse),
             new ActionToInputsMapping("Use", ["e", inputNames.GamepadButton0 + "5"], inactivateTrue),
             new ActionToInputsMapping("Item0", ["_0"], inactivateFalse),

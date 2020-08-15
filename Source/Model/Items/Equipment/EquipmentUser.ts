@@ -66,6 +66,7 @@ class EquipmentUser
 	{
 		var itemToEquip = itemEntityToEquip.item();
 		var itemDefn = itemToEquip.defn(world);
+		var equippable = itemEntityToEquip.equippable();
 
 		var message = itemDefn.appearance;
 
@@ -77,11 +78,19 @@ class EquipmentUser
 		}
 		else if (socket.itemEntityEquipped == itemEntityToEquip)
 		{
+			if (equippable != null)
+			{
+				equippable.unequip(universe, world, place, itemEntityToEquip);
+			}
 			socket.itemEntityEquipped = null;
 			message += " unequipped."
 		}
 		else
 		{
+			if (equippable != null)
+			{
+				equippable.equip(universe, world, place, itemEntityToEquip);
+			}
 			socket.itemEntityEquipped = itemEntityToEquip;
 			message += " equipped";
 			if (includeSocketNameInMessage)
@@ -123,7 +132,26 @@ class EquipmentUser
 			}
 		}
 		return message;
-	};
+	}
+
+	unequipItemsNoLongerHeld(entityEquipmentUser: Entity)
+	{
+		var itemHolder = entityEquipmentUser.itemHolder();
+		var itemEntitiesHeld = itemHolder.itemEntities;
+		var sockets = this.socketGroup.sockets;
+		for (var i = 0; i < sockets.length; i++)
+		{
+			var socket = sockets[i];
+			var socketItemEntity = socket.itemEntityEquipped;
+			if (socketItemEntity != null)
+			{
+				if (itemEntitiesHeld.indexOf(socketItemEntity) == -1)
+				{
+					socket.itemEntityEquipped = null;
+				}
+			}
+		}
+	}
 
 	unequipItemEntity(itemEntityToUnequip: Entity)
 	{

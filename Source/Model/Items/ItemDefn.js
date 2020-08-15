@@ -14,20 +14,17 @@ class ItemDefn {
     static new1(name) {
         return new ItemDefn(name, null, null, null, null, null, null, null, null);
     }
-    ;
     static fromNameCategoryNameAndUse(name, categoryName, use) {
         var returnValue = ItemDefn.new1(name);
         returnValue.categoryNames = [categoryName];
         returnValue.use = use;
         return returnValue;
     }
-    ;
     static fromNameAndUse(name, use) {
         var returnValue = ItemDefn.new1(name);
         returnValue.use = use;
         return returnValue;
     }
-    ;
     use(u, w, p, eUsing, eUsed) {
         var returnValue;
         if (this._use == null) {
@@ -38,5 +35,4 @@ class ItemDefn {
         }
         return returnValue;
     }
-    ;
 }

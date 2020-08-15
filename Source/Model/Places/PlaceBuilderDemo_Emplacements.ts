@@ -79,7 +79,7 @@ class PlaceBuilderDemo_Emplacements
 				new Drawable(anvilVisual, null),
 				new DrawableCamera(),
 				anvilItemCrafter,
-				new ItemHolder([]),
+				new ItemHolder([], null, null),
 				new Usable(anvilUse)
 			]
 		);
@@ -205,8 +205,11 @@ class PlaceBuilderDemo_Emplacements
 		var campfireCollide = (u: Universe, w: World, p: Place, entityCampfire: Entity, entityOther: Entity) =>
 		{
 			var entityOtherEffectable = entityOther.effectable();
-			entityOtherEffectable.effectAdd(Effect.Instances().Burning.clone());
-			entityCampfire.collidable().ticksUntilCanCollide = 50;
+			if (entityOtherEffectable != null)
+			{
+				entityOtherEffectable.effectAdd(Effect.Instances().Burning.clone());
+				entityCampfire.collidable().ticksUntilCanCollide = 50;
+			}
 		};
 		var campfireCollidable = new Collidable
 		(
@@ -263,7 +266,7 @@ class PlaceBuilderDemo_Emplacements
 				new Drawable(visual, null),
 				new DrawableCamera(),
 				new ItemContainer(),
-				new ItemHolder([]),
+				new ItemHolder([], null, null),
 				new Locatable(null),
 				new Usable
 				(
@@ -379,7 +382,7 @@ class PlaceBuilderDemo_Emplacements
 			entityName,
 			[
 				new ItemContainer(),
-				new ItemHolder([]),
+				new ItemHolder([], null, null),
 				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
 				new Drawable(itemHoleVisual, null),
 				new DrawableCamera(),

@@ -16,9 +16,12 @@ class ItemContainer {
             this.statusMessage =
                 messagePrefix
                     + " " + itemToTransfer.defnName + ".";
+            var equipmentUser = entityFrom.equipmentUser();
+            if (equipmentUser != null) {
+                equipmentUser.unequipItemsNoLongerHeld(entityFrom);
+            }
         }
     }
-    ;
     // Controllable.
     toControl(universe, size, entityGetterPutter, entityContainer, venuePrev) {
         if (size == null) {
@@ -47,13 +50,13 @@ class ItemContainer {
         size.clone(), 
         // children
         [
-            new ControlLabel("labelStoreName", new Coords(margin, margin, 0), // pos
+            new ControlLabel("labelContainerName", new Coords(margin, margin, 0), // pos
             new Coords(listSize.x, 25, 0), // size
             false, // isTextCentered
             entityContainer.name + ":", fontHeight),
-            new ControlList("listStoreItems", new Coords(margin, margin * 2, 0), // pos
+            new ControlList("listContainerItems", new Coords(margin, margin * 2, 0), // pos
             listSize.clone(), new DataBinding(itemHolderContainer, (c) => {
-                return c.itemEntities; //.filter(x => x.item().defnName != itemDefnNameCurrency);
+                return c.itemEntities;
             }, null), // items
             new DataBinding(null, (c) => c.item().toString(world), null), // bindingForItemText
             fontHeight, new DataBinding(itemHolderContainer, (c) => c.itemEntitySelected, (c, v) => { c.itemEntitySelected = v; }), // bindingForItemSelected
@@ -97,5 +100,4 @@ class ItemContainer {
         ], [new Action("Back", back)], [new ActionToInputsMapping("Back", [Input.Names().Escape], true)]);
         return returnValue;
     }
-    ;
 }

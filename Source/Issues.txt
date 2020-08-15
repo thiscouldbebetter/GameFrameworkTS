@@ -52,8 +52,6 @@ Sound - Music on Title Screen
 Fixes
 -----
 
-Items - Barter - Trade Coins and Sword for Gun, Still Have Sword
-Items - Put Wielded Item in Container, It Remains Equipped
 Items - Sword Swing Direction is Wrong
 
 Places - Map Tiles - Fix Overlapping

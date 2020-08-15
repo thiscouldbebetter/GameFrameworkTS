@@ -2,15 +2,37 @@
 class Equippable
 {
 	_equip: (u: Universe, w: World, p: Place, e: Entity) => void;
+	_unequip: (u: Universe, w: World, p: Place, e: Entity) => void;
 
-	constructor(equip: (u: Universe, w: World, p: Place, e: Entity) => void)
+	isEquipped: boolean;
+
+	constructor
+	(
+		equip: (u: Universe, w: World, p: Place, e: Entity) => void,
+		unequip: (u: Universe, w: World, p: Place, e: Entity) => void
+	)
 	{
 		this._equip = equip;
+		this._unequip = unequip;
+		this.isEquipped = false;
 	}
 
 	equip(u: Universe, w: World, p: Place, e: Entity)
 	{
-		this._equip(u, w, p, e);
+		if (this._equip != null)
+		{
+			this._equip(u, w, p, e);
+		}
+		this.isEquipped = true;
+	}
+
+	unequip(u: Universe, w: World, p: Place, e: Entity)
+	{
+		if (this._unequip != null)
+		{
+			this._unequip(u, w, p, e);
+		}
+		this.isEquipped = false;
 	}
 
 	// Clonable.

@@ -56,6 +56,7 @@ class PlaceBuilderDemo
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("SwordCold"), 1, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("SwordHeat"), 1, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Toolset"), 1, entityPosRange, randomizer));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Weight"), 1, entityPosRange, randomizer));
 
 		var container = this.entityBuildFromDefn(entityDefns.get("Container"), entityPosRange, randomizer);
 		var itemEntityOre = this.entityBuildFromDefn(entityDefns.get("Iron Ore"), entityPosRange, randomizer);
@@ -1147,13 +1148,17 @@ class PlaceBuilderDemo
 				),
 				new DrawableCamera(),
 				new ItemStore("Coin"),
-				ItemHolder.fromItems
-				([
-					new Item("Coin", 100),
-					new Item("Gun", 1),
-					new Item("Key", 10),
-					new Item("Medicine", 100)
-				]),
+				new ItemHolder
+				(
+					[
+						new Item("Coin", 100),
+						new Item("Gun", 1),
+						new Item("Key", 10),
+						new Item("Medicine", 100)
+					].map(x => x.toEntity()),
+					null, // weightMax
+					null // reachRadius
+				),
 				new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
 				new Usable
 				(
@@ -1188,7 +1193,7 @@ class PlaceBuilderDemo
 				new Collidable(itemAccessoryCollider, null, null),
 				new Drawable(itemAccessoryVisual, null),
 				new DrawableCamera(),
-				new Equippable(null)
+				new Equippable(null, null)
 			]
 		);
 
@@ -1214,7 +1219,7 @@ class PlaceBuilderDemo
 				new Armor(.5),
 				boundable,
 				collidable,
-				new Equippable(null),
+				new Equippable(null, null),
 				new Item(itemDefnArmorName, 1),
 				new Locatable( new Disposition( new Coords(0, 0, 0), null, null ) ),
 				new Drawable(itemArmorVisual, null),
@@ -1339,7 +1344,7 @@ class PlaceBuilderDemo
 						new Constrainable([new Constraint_FrictionXY(.03, .5)]),
 						new Drawable(projectileVisual, null),
 						new DrawableCamera(),
-						new Equippable(null)
+						new Equippable(null, null)
 					]
 				);
 
@@ -1828,7 +1833,7 @@ class PlaceBuilderDemo
 				new Collidable(itemMedicineCollider, null, null),
 				new Drawable(itemMedicineVisual, null),
 				new DrawableCamera(),
-				new Equippable(null)
+				new Equippable(null, null)
 			]
 		);
 
@@ -1897,7 +1902,7 @@ class PlaceBuilderDemo
 				itemPickDevice,
 				new Drawable(itemPickVisual, null),
 				new DrawableCamera(),
-				new Equippable(null)
+				new Equippable(null, null)
 			]
 		);
 
@@ -2003,7 +2008,7 @@ class PlaceBuilderDemo
 				itemShovelDevice,
 				new Drawable(itemShovelVisual, null),
 				new DrawableCamera(),
-				new Equippable(null)
+				new Equippable(null, null)
 			]
 		);
 
@@ -2134,13 +2139,13 @@ class PlaceBuilderDemo
 				new Collidable(itemSwordCollider, null, null),
 				new Drawable(itemSwordVisual, null),
 				new DrawableCamera(),
-				new Equippable(null),
+				new Equippable(null, null),
 				itemSwordDevice
 			]
 		);
 
 		return itemSwordEntityDefn;
-	};
+	}
 
 	entityDefnBuildToolset(entityDimension: number)
 	{
@@ -2163,7 +2168,30 @@ class PlaceBuilderDemo
 		);
 
 		return itemToolsetEntityDefn;
-	};
+	}
+
+	entityDefnBuildWeight(entityDimension: number)
+	{
+		var itemDefnName = "Weight";
+
+		var itemWeightVisual = this.itemDefnsByName.get(itemDefnName).visual;
+
+		var itemWeightCollider = new Sphere(new Coords(0, 0, 0), entityDimension / 2);
+
+		var itemWeightEntityDefn = new Entity
+		(
+			itemDefnName,
+			[
+				new Item(itemDefnName, 1),
+				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
+				new Collidable(itemWeightCollider, null, null),
+				new Drawable(itemWeightVisual, null),
+				new DrawableCamera()
+			]
+		);
+
+		return itemWeightEntityDefn;
+	}
 
 	entityDefnsBuild(entityDimension: number): Entity[]
 	{
@@ -2224,9 +2252,10 @@ class PlaceBuilderDemo
 			this.entityDefnBuildSword(entityDimension, "Cold"),
 			this.entityDefnBuildSword(entityDimension, "Heat"),
 			this.entityDefnBuildToolset(entityDimension),
+			this.entityDefnBuildWeight(entityDimension),
 		];
 		return entityDefns;
-	};
+	}
 
 	itemDefnsBuild(entityDimension: number)
 	{
@@ -2959,10 +2988,54 @@ class PlaceBuilderDemo
 			)
 		]);
 
+		// weight
+
+		var itemWeightName = "Weight";
+		var itemWeightColor = Color.byName("Blue");
+		var itemWeightVisual = new VisualGroup
+		([
+			new VisualOffset
+			(
+				new VisualArc
+				(
+					entityDimensionHalf, // radiusOuter
+					entityDimensionHalf / 2, // radiusInner
+					new Coords(-1, 0, 0).normalize(), // directionMin
+					.5, // angleSpannedInTurns
+					itemWeightColor,
+					null
+				),
+				new Coords(0, -1, 0).multiplyScalar(entityDimensionHalf)
+			),
+			new VisualPolygon
+			(
+				new Path
+				([
+					new Coords(-.75, .5, 0),
+					new Coords(-.5, -.5, 0),
+					new Coords(.5, -.5, 0),
+					new Coords(.75, .5, 0)
+				]).transform
+				(
+					new Transform_Scale
+					(
+						new Coords(1, 1, 1).multiplyScalar(entityDimension)
+					)
+				),
+				itemWeightColor,
+				null
+			),
+			new VisualOffset
+			(
+				new VisualText(new DataBinding(itemWeightName, null, null), null, itemWeightColor, null),
+				new Coords(0, 0 - entityDimension * 2, 0)
+			)
+		]);
+
 		var itemDefns =
 		[
-			// 			name, 				appr, desc, mass, 	val,stax, categoryNames, visual, use
-			new ItemDefn("Ammo", 			null, null, null, 	null, null, null, null, itemAmmoVisual),
+			// 			name, 				appr, desc, mass, 	val,stax, categoryNames, use, transfer, visual
+			new ItemDefn("Ammo", 			null, null, .05, 	5, 	null, null, null, itemAmmoVisual),
 			new ItemDefn("Armor", 			null, null, 50, 	30, null, [ "Armor" ], itemUseEquip, itemArmorVisual),
 			new ItemDefn("Bomb", 			null, null, 5, 		10, null, [ "Wieldable" ], itemUseEquip, itemBombVisual),
 			new ItemDefn("Coin", 			null, null, .01, 	1, null, null, null, itemCoinVisual),
@@ -2985,6 +3058,7 @@ class PlaceBuilderDemo
 			new ItemDefn("SwordCold",		null, null, 10, 	100, null, [ "Wieldable" ], itemUseEquip, itemSwordColdVisual),
 			new ItemDefn("SwordHeat",		null, null, 10, 	100, null, [ "Wieldable" ], itemUseEquip, itemSwordHeatVisual),
 			new ItemDefn("Toolset", 		null, null, 1, 		30, null, null, null, itemToolsetVisual),
+			new ItemDefn("Weight", 			null, null, 2000,	5, null, null, null, itemWeightVisual),
 
 			new ItemDefn
 			(
@@ -3215,21 +3289,25 @@ class PlaceBuilderDemo
 			),
 			new Action
 			(
-				"PickUp",
-				(universe: Universe, world: World, place: Place, actor: Entity) => // perform
+				"Pick Up",
+				(universe: Universe, world: World, place: Place, entityActor: Entity) => // perform
 				{
-					var entityItemsInPlace = place.items();
-					var actorPos = actor.locatable().loc.pos;
-					var radiusOfReach = 20; // todo
-					var entityItemsWithinReach = entityItemsInPlace.filter
+					var message = entityActor.itemHolder().itemPickUpClosest
 					(
-						x => x.locatable().loc.pos.clone().subtract(actorPos).magnitude() < radiusOfReach
+						universe, world, place, entityActor
 					);
-					if (entityItemsWithinReach.length > 0)
+					if (message != null)
 					{
-						var entityToPickUp = entityItemsWithinReach[0];
-						actor.itemHolder().itemEntityAdd(entityToPickUp);
-						place.entitiesToRemove.push(entityToPickUp);
+						place.entitySpawn
+						(
+							universe, world,
+							universe.entityBuilder.messageFloater
+							(
+								message,
+								entityActor.locatable().loc.pos,
+								Color.byName("Red")
+							)
+						);
 					}
 				}
 			),
@@ -3312,7 +3390,7 @@ class PlaceBuilderDemo
 			new ActionToInputsMapping("Fire", 		[ "f", inputNames.Enter, inputNames.GamepadButton0 + "0" ], inactivateTrue),
 			new ActionToInputsMapping("Hide", 		[ "h", inputNames.GamepadButton0 + "3" ], inactivateFalse),
 			new ActionToInputsMapping("Jump", 		[ inputNames.Space, inputNames.GamepadButton0 + "1" ], inactivateTrue),
-			new ActionToInputsMapping("PickUp", 	[ "g", inputNames.GamepadButton0 + "4" ], inactivateTrue),
+			new ActionToInputsMapping("Pick Up", 	[ "g", inputNames.GamepadButton0 + "4" ], inactivateTrue),
 			new ActionToInputsMapping("Run", 		[ inputNames.Shift, inputNames.GamepadButton0 + "2" ], inactivateFalse),
 			new ActionToInputsMapping("Use", 		[ "e", inputNames.GamepadButton0 + "5" ], inactivateTrue),
 

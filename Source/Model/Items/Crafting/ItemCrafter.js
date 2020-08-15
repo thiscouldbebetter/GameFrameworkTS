@@ -2,7 +2,7 @@
 class ItemCrafter {
     constructor(recipesAvailable) {
         this.recipesAvailable = recipesAvailable || [];
-        this.itemHolderStaged = new ItemHolder([]);
+        this.itemHolderStaged = new ItemHolder([], null, null);
         this.recipeAvailableSelected = null;
         this.recipeInProgressTicksSoFar = 0;
         this.recipeQueuedSelected = null;

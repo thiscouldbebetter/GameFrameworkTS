@@ -1,17 +1,14 @@
 "use strict";
 class ItemHolder {
-    constructor(itemEntities) {
+    constructor(itemEntities, massMax, reachRadius) {
         this.itemEntities = [];
+        this.massMax = massMax;
+        this.reachRadius = reachRadius || 20;
         itemEntities = itemEntities || [];
         for (var i = 0; i < itemEntities.length; i++) {
             var itemEntity = itemEntities[i];
             this.itemEntityAdd(itemEntity);
         }
-    }
-    // Static methods.
-    static fromItems(items) {
-        var itemEntities = items.map(x => x.toEntity());
-        return new ItemHolder(itemEntities);
     }
     // Instance methods.
     clear() {
@@ -37,6 +34,11 @@ class ItemHolder {
         return this.itemEntities.filter(x => x.item().defnName == defnName);
     }
     itemEntitiesTransferTo(itemEntitiesToTransfer, other) {
+        if (itemEntitiesToTransfer == this.itemEntities) {
+            // Create a new array to avoid modifying the one being looped through.
+            itemEntitiesToTransfer = new Array();
+            itemEntitiesToTransfer.push(...this.itemEntities);
+        }
         for (var i = 0; i < itemEntitiesToTransfer.length; i++) {
             var itemEntity = itemEntitiesToTransfer[i];
             this.itemEntityTransferTo(itemEntity, other);
@@ -96,6 +98,9 @@ class ItemHolder {
     itemEntityTransferTo(itemEntity, other) {
         other.itemEntityAdd(itemEntity);
         ArrayHelper.remove(this.itemEntities, itemEntity);
+        if (this.itemEntitySelected == itemEntity) {
+            this.itemEntitySelected = null;
+        }
     }
     itemEntityTransferSingleTo(itemEntity, other) {
         var itemEntitySingle = this.itemEntitySplit(itemEntity, 1);
@@ -103,6 +108,25 @@ class ItemHolder {
     }
     itemQuantityByDefnName(defnName) {
         return this.itemsByDefnName(defnName).map(y => y.quantity).reduce((a, b) => a + b, 0);
+    }
+    itemPickUpClosest(universe, world, place, entityItemHolder) {
+        var returnMessage = null;
+        var entityItemsInPlace = place.items();
+        var entityItemToPickUp = entityItemsInPlace.filter(x => x.locatable().distanceFromEntity(entityItemHolder) < this.reachRadius).sort((a, b) => a.locatable().distanceFromEntity(entityItemHolder)
+            - b.locatable().distanceFromEntity(entityItemHolder))[0];
+        if (entityItemToPickUp != null) {
+            var massHeld = this.massOfAllItems(world);
+            var massOfItem = entityItemToPickUp.item().mass(world);
+            var massTotal = massHeld + massOfItem;
+            if (massTotal > this.massMax) {
+                returnMessage = "Too heavy!";
+            }
+            else {
+                this.itemEntityAdd(entityItemToPickUp);
+                place.entitiesToRemove.push(entityItemToPickUp);
+            }
+        }
+        return returnMessage;
     }
     itemSubtract(itemToSubtract) {
         this.itemSubtractDefnNameAndQuantity(itemToSubtract.defnName, itemToSubtract.quantity);
@@ -130,6 +154,14 @@ class ItemHolder {
     }
     itemsByDefnName(defnName) {
         return this.itemEntitiesByDefnName(defnName).map(x => x.item());
+    }
+    massOfAllItems(world) {
+        var massTotal = this.itemEntities.reduce((sumSoFar, itemEntity) => sumSoFar + itemEntity.item().mass(world), 0 // sumSoFar
+        );
+        return massTotal;
+    }
+    massOfAllItemsOverMax(world) {
+        return "" + this.massOfAllItems(world) + "/" + this.massMax;
     }
     tradeValueOfAllItems(world) {
         var tradeValueTotal = this.itemEntities.reduce((sumSoFar, itemEntity) => sumSoFar + itemEntity.item().tradeValue(world), 0 // sumSoFar
@@ -254,7 +286,7 @@ class ItemHolder {
             false, // isTextCentered
             "Items Held:", fontHeightSmall),
             new ControlList("listItems", new Coords(10, 15, 0), // pos
-            new Coords(70, 110, 0), // size
+            new Coords(70, 100, 0), // size
             new DataBinding(this.itemEntities, null, null), // items
             new DataBinding(null, (c) => c.item().toString(world), null), // bindingForItemText
             fontHeightSmall, new DataBinding(this, (c) => c.itemEntitySelected, (c, v) => { c.itemEntitySelected = v; }), // bindingForItemSelected
@@ -264,6 +296,10 @@ class ItemHolder {
              {
                 use();
             }, null),
+            new ControlLabel("infoWeight", new Coords(10, 115, 0), // pos
+            new Coords(100, 25, 0), // size
+            false, // isTextCentered
+            new DataBinding(this, (c) => "Weight: " + c.massOfAllItemsOverMax(world), null), fontHeightSmall),
             new ControlButton("buttonUp", new Coords(85, 15, 0), // pos
             new Coords(15, 10, 0), // size
             "Up", fontHeightSmall, true, // hasBorder
@@ -416,6 +452,6 @@ class ItemHolder {
     }
     // cloneable
     clone() {
-        return new ItemHolder(ArrayHelper.clone(this.itemEntities));
+        return new ItemHolder(ArrayHelper.clone(this.itemEntities), this.massMax, this.reachRadius);
     }
 }
