@@ -33,7 +33,6 @@ Movers - Enemies - Types - Bombers
 Movers - Enemies - Types - Hiders
 Movers - Enemies - Types - Shooters
 
-Movers - Player - Wielded Tool Rotates with Player
 Movers - Player - Sword Swings
 
 Places - Load/Unload Zones in Terrarium

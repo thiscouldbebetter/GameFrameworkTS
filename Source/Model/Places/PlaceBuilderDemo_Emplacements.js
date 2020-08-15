@@ -250,7 +250,8 @@ class PlaceBuilderDemo_Emplacements {
         ];
         var obstacleMappedSizeInCells = new Coords(obstacleMappedCellSource[0].length, obstacleMappedCellSource.length, 1);
         var obstacleMappedCellSize = new Coords(2, 2, 1);
-        var obstacleMappedMap = new MapOfCells("Mine", obstacleMappedSizeInCells, obstacleMappedCellSize, new MapCell(), // cellPrototype
+        var entityDefnName = "Mine";
+        var obstacleMappedMap = new MapOfCells(entityDefnName, obstacleMappedSizeInCells, obstacleMappedCellSize, new MapCell(), // cellPrototype
         (map, cellPosInCells, cellToOverwrite) => // cellAtPosInCells
          {
             var cellCode = map.cellSource[cellPosInCells.y][cellPosInCells.x];
@@ -266,12 +267,12 @@ class PlaceBuilderDemo_Emplacements {
         ]);
         var obstacleMappedVisual = new VisualGroup([
             new VisualMap(obstacleMappedMap, obstacleMappedVisualLookup, null, null),
-            new VisualOffset(new VisualText(new DataBinding("Mine", null, null), null, obstacleColor, null), new Coords(0, 0 - entityDimension * 2, 0))
+            new VisualOffset(new VisualText(new DataBinding(entityDefnName, null, null), null, obstacleColor, null), new Coords(0, 0 - entityDimension * 2, 0))
         ]);
         var obstacleCollidable = new Collidable(new MapLocated(obstacleMappedMap, new Disposition(new Coords(0, 0, 0), null, null)), null, null);
         var obstacleBounds = new Box(obstacleCollidable.collider.loc.pos, obstacleMappedMap.size);
         var obstacleBoundable = new Boundable(obstacleBounds);
-        var obstacleMappedEntityDefn = new Entity("Mine", [
+        var obstacleMappedEntityDefn = new Entity(entityDefnName, [
             obstacleBoundable,
             obstacleCollidable,
             new Damager(new Damage(10, null)),
@@ -281,7 +282,6 @@ class PlaceBuilderDemo_Emplacements {
         ]);
         return obstacleMappedEntityDefn;
     }
-    ;
     entityDefnBuildObstacleRing(entityDimension) {
         var obstacleColor = Color.byName("Red");
         var obstacleRadiusOuter = entityDimension * 3.5;

@@ -481,9 +481,10 @@ class PlaceBuilderDemo_Emplacements
 
 		var obstacleMappedCellSize = new Coords(2, 2, 1);
 
+		var entityDefnName = "Mine";
 		var obstacleMappedMap = new MapOfCells
 		(
-			"Mine",
+			entityDefnName,
 			obstacleMappedSizeInCells,
 			obstacleMappedCellSize,
 			new MapCell(), // cellPrototype
@@ -509,7 +510,7 @@ class PlaceBuilderDemo_Emplacements
 			new VisualMap(obstacleMappedMap, obstacleMappedVisualLookup, null, null),
 			new VisualOffset
 			(
-				new VisualText(new DataBinding("Mine", null, null), null, obstacleColor, null),
+				new VisualText(new DataBinding(entityDefnName, null, null), null, obstacleColor, null),
 				new Coords(0, 0 - entityDimension * 2, 0)
 			)
 		]);
@@ -528,7 +529,7 @@ class PlaceBuilderDemo_Emplacements
 
 		var obstacleMappedEntityDefn = new Entity
 		(
-			"Mine",
+			entityDefnName,
 			[
 				obstacleBoundable,
 				obstacleCollidable,
@@ -540,7 +541,7 @@ class PlaceBuilderDemo_Emplacements
 		);
 
 		return obstacleMappedEntityDefn;
-	};
+	}
 
 	entityDefnBuildObstacleRing(entityDimension: number): Entity
 	{

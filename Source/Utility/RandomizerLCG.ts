@@ -8,22 +8,22 @@ class RandomizerLCG implements Randomizer
 	modulus: number;
 	currentRandom: number;
 
-	constructor(multiplier: number, addend: number, modulus: number, firstRandom: number)
+	constructor(firstRandom: number, multiplier: number, addend: number, modulus: number)
 	{
-		this.multiplier = multiplier;
-		this.addend = addend;
-		this.modulus = modulus;
 		this.currentRandom = firstRandom;
+		this.multiplier = multiplier || 1103515245;
+		this.addend = addend || 12345;
+		this.modulus = modulus || Math.pow(2.0, 31);
 	}
 
 	static default()
 	{
 		return new RandomizerLCG
 		(
+			0.12345, // firstRandom
 			1103515245, // multiplier
 			12345, // addend
-			Math.pow(2.0, 31), // modulus
-			0.12345 // firstRandom
+			Math.pow(2.0, 31) // modulus
 		);
 	};
 

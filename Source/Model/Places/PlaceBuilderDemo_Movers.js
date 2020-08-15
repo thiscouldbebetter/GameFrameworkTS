@@ -472,33 +472,12 @@ class PlaceBuilderDemo_Movers {
         var playerHeadRadius = entityDimension * .75;
         var playerCollider = new Sphere(new Coords(0, 0, 0), playerHeadRadius);
         var playerColor = Color.byName("Gray");
-        var playerVisualBodyNormal = visualBuilder.circleWithEyesAndLegs(playerHeadRadius, playerColor, visualEyeRadius, visualEyesBlinking);
+        var playerVisualBodyNormal = visualBuilder.circleWithEyesAndLegsAndArms(playerHeadRadius, playerColor, visualEyeRadius, visualEyesBlinking);
         var playerVisualBodyHidden = visualBuilder.circleWithEyesAndLegs(playerHeadRadius, Color.byName("Black"), visualEyeRadius, visualEyesBlinking);
         var playerVisualBodyHidable = new VisualSelect(function selectChildName(u, w, d, e) {
             return (e.playable().isHiding ? "Hidden" : "Normal");
         }, ["Normal", "Hidden"], [playerVisualBodyNormal, playerVisualBodyHidden]);
         var playerVisualBodyJumpable = new VisualJump2D(playerVisualBodyHidable, new VisualEllipse(playerHeadRadius, playerHeadRadius / 2, 0, Color.byName("GrayDark"), Color.byName("Black")), null);
-        // wielding
-        var visualNone = new VisualNone();
-        var playerVisualWieldable = new VisualDynamic((u, w, d, e) => {
-            var equipmentUser = e.equipmentUser();
-            var entityWieldableEquipped = equipmentUser.itemEntityInSocketWithName("Wielding");
-            var itemVisual = entityWieldableEquipped.item().defn(w).visual;
-            return itemVisual;
-        });
-        playerVisualWieldable = new VisualGroup([
-            new VisualOffset(new VisualGroup([
-                // arm
-                new VisualLine(new Coords(0, 0, 0), new Coords(playerHeadRadius * 2, 0, 0), playerColor, 2 // lineThickness
-                ),
-                // wieldable
-                new VisualOffset(playerVisualWieldable, new Coords(playerHeadRadius * 2, 0, 0))
-            ]), new Coords(0, 0 - playerHeadRadius, 0))
-        ]);
-        var playerVisualWielding = new VisualSelect((u, w, d, e) => // selectChildName
-         {
-            return (e.equipmentUser().itemEntityInSocketWithName("Wielding") == null ? "Hidden" : "Visible");
-        }, ["Visible", "Hidden"], [playerVisualWieldable, visualNone]);
         var playerVisualName = new VisualText(new DataBinding(entityDefnNamePlayer, null, null), null, playerColor, null);
         var playerVisualHealthBar = new VisualBar(new Coords(entityDimension * 3, entityDimension * .8, 0), Color.Instances().Red, DataBinding.fromGet((c) => c.killable().integrity), DataBinding.fromGet((c) => c.killable().integrityMax));
         var playerVisualEffect = new VisualDynamic((u, w, d, e) => e.effectable().effectsAsVisual());
@@ -510,7 +489,7 @@ class PlaceBuilderDemo_Movers {
         ]), new Coords(0, 0 - entityDimension * 2, 0) // offset
         );
         var playerVisual = new VisualGroup([
-            playerVisualWielding, playerVisualBodyJumpable, playerVisualStatusInfo
+            playerVisualBodyJumpable, playerVisualStatusInfo
         ]);
         var playerCollide = (universe, world, place, entityPlayer, entityOther) => {
             var entityOtherDamager = entityOther.damager();

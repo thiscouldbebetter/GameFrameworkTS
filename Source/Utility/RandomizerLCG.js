@@ -1,16 +1,16 @@
 "use strict";
 class RandomizerLCG {
-    constructor(multiplier, addend, modulus, firstRandom) {
-        this.multiplier = multiplier;
-        this.addend = addend;
-        this.modulus = modulus;
+    constructor(firstRandom, multiplier, addend, modulus) {
         this.currentRandom = firstRandom;
+        this.multiplier = multiplier || 1103515245;
+        this.addend = addend || 12345;
+        this.modulus = modulus || Math.pow(2.0, 31);
     }
     static default() {
-        return new RandomizerLCG(1103515245, // multiplier
+        return new RandomizerLCG(0.12345, // firstRandom
+        1103515245, // multiplier
         12345, // addend
-        Math.pow(2.0, 31), // modulus
-        0.12345 // firstRandom
+        Math.pow(2.0, 31) // modulus
         );
     }
     ;

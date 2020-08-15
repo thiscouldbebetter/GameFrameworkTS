@@ -9,26 +9,7 @@ class Place {
         this._entitiesByPropertyName = new Map();
         this.entitiesToSpawn = entities.slice();
         this.entitiesToRemove = [];
-        this.propertyNamesToProcess =
-            [
-                Locatable.name,
-                Boundable.name,
-                Constrainable.name,
-                Collidable.name,
-                CollisionTracker.name,
-                Effectable.name,
-                Generator.name,
-                Hidable.name,
-                Idleable.name,
-                ItemCrafter.name,
-                Actor.name,
-                Playable.name,
-                SkillLearner.name,
-                Ephemeral.name,
-                Recurrent.name,
-                Killable.name,
-                Camera.name
-            ];
+        this.isLoaded = false;
     }
     defn(world) {
         return world.defn.placeDefnsByName().get(this.defnName);
@@ -52,15 +33,6 @@ class Place {
         }
         return returnValues;
     }
-    ;
-    entitiesInitialize(universe, world) {
-        for (var i = 0; i < this.entities.length; i++) {
-            var entity = this.entities[i];
-            entity.initialize(universe, world, this);
-        }
-        this.entitiesToSpawn.length = 0;
-    }
-    ;
     entitiesRemove() {
         for (var i = 0; i < this.entitiesToRemove.length; i++) {
             var entity = this.entitiesToRemove[i];
@@ -107,22 +79,44 @@ class Place {
         }
         entity.initialize(universe, world, this);
     }
-    ;
     finalize(universe, world) {
         this.entitiesRemove();
         universe.inputHelper.inputsRemoveAll();
+        for (var i = 0; i < this.entities.length; i++) {
+            var entity = this.entities[i];
+            entity.finalize(universe, world, this);
+        }
     }
-    ;
     initialize(universe, world) {
+        var defn = this.defn(world);
+        defn.placeInitialize(universe, world, this);
         this.entitiesSpawn(universe, world);
-        this.entitiesInitialize(universe, world);
+        this.entitiesToSpawn.length = 0;
+        for (var i = 0; i < this.entities.length; i++) {
+            var entity = this.entities[i];
+            entity.initialize(universe, world, this);
+        }
     }
-    ;
+    load(universe, world) {
+        if (this.isLoaded == false) {
+            var loadables = this.loadables();
+            loadables.forEach(x => x.loadable().load(universe, world, this, x));
+            this.isLoaded = true;
+        }
+    }
+    unload(universe, world) {
+        if (this.isLoaded) {
+            var loadables = this.loadables();
+            loadables.forEach(x => x.loadable().unload(universe, world, this, x));
+            this.isLoaded = false;
+        }
+    }
     updateForTimerTick(universe, world) {
         this.entitiesRemove();
         this.entitiesSpawn(universe, world);
-        for (var p = 0; p < this.propertyNamesToProcess.length; p++) {
-            var propertyName = this.propertyNamesToProcess[p];
+        var propertyNamesToProcess = this.defn(world).propertyNamesToProcess;
+        for (var p = 0; p < propertyNamesToProcess.length; p++) {
+            var propertyName = propertyNamesToProcess[p];
             var entitiesWithProperty = this.entitiesByPropertyName(propertyName);
             if (entitiesWithProperty != null) {
                 for (var i = 0; i < entitiesWithProperty.length; i++) {
@@ -141,6 +135,9 @@ class Place {
     }
     items() {
         return this.entitiesByPropertyName(Item.name);
+    }
+    loadables() {
+        return this.entitiesByPropertyName(Loadable.name);
     }
     movables() {
         return this.entitiesByPropertyName(Movable.name);

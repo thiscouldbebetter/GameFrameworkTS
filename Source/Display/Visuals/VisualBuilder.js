@@ -7,7 +7,7 @@ class VisualBuilder {
         return VisualBuilder._instance;
     }
     ;
-    circleWithEyesAndLegs(circleRadius, circleColor, eyeRadius, visualEyes) {
+    circleWithEyes(circleRadius, circleColor, eyeRadius, visualEyes) {
         visualEyes = visualEyes || this.eyesBlinking(eyeRadius);
         var visualEyesDirectional = new VisualDirectional(visualEyes, // visualForNoDirection
         [
@@ -16,6 +16,15 @@ class VisualBuilder {
             new VisualOffset(visualEyes, new Coords(-1, 0, 0).multiplyScalar(eyeRadius)),
             new VisualOffset(visualEyes, new Coords(0, -1, 0).multiplyScalar(eyeRadius))
         ]);
+        var circleWithEyes = new VisualGroup([
+            new VisualCircle(circleRadius, circleColor, null),
+            visualEyesDirectional
+        ]);
+        circleWithEyes = new VisualOffset(circleWithEyes, new Coords(0, -circleRadius, 0));
+        return circleWithEyes;
+    }
+    circleWithEyesAndLegs(circleRadius, circleColor, eyeRadius, visualEyes) {
+        var circleWithEyes = this.circleWithEyes(circleRadius, circleColor, eyeRadius, visualEyes);
         var lineThickness = 2;
         var spaceBetweenLegsHalf = eyeRadius * .75;
         var legLength = eyeRadius * 1.5;
@@ -121,11 +130,6 @@ class VisualBuilder {
             visualLegsFacingLeftWalking,
             visualLegsFacingUpWalking
         ]);
-        var circleWithEyes = new VisualGroup([
-            new VisualCircle(circleRadius, circleColor, null),
-            visualEyesDirectional
-        ]);
-        circleWithEyes = new VisualOffset(circleWithEyes, new Coords(0, -circleRadius, 0));
         var returnValue = new VisualGroup([
             visualLegsDirectional,
             circleWithEyes
@@ -133,6 +137,58 @@ class VisualBuilder {
         return returnValue;
     }
     ;
+    circleWithEyesAndLegsAndArms(circleRadius, circleColor, eyeRadius, visualEyes) {
+        var lineThickness = 2;
+        var circleWithEyesAndLegs = this.circleWithEyesAndLegs(circleRadius, circleColor, eyeRadius, visualEyes);
+        var visualNone = new VisualNone();
+        var visualWieldable = new VisualDynamic((u, w, d, e) => {
+            var equipmentUser = e.equipmentUser();
+            var entityWieldableEquipped = equipmentUser.itemEntityInSocketWithName("Wielding");
+            var itemVisual = entityWieldableEquipped.item().defn(w).visual;
+            return itemVisual;
+        });
+        var visualArmAndWieldableFacingRight = new VisualGroup([
+            // arm
+            new VisualLine(new Coords(0, 0, 0), new Coords(2, 1, 0).multiplyScalar(circleRadius), circleColor, lineThickness),
+            // wieldable
+            new VisualOffset(visualWieldable, new Coords(2, 1, 0).multiplyScalar(circleRadius))
+        ]);
+        var visualArmAndWieldableFacingDown = new VisualGroup([
+            // arm
+            new VisualLine(new Coords(0, 0, 0), new Coords(-2, 0, 0).multiplyScalar(circleRadius), circleColor, lineThickness),
+            // wieldable
+            new VisualOffset(visualWieldable, new Coords(-2, 0, 0).multiplyScalar(circleRadius))
+        ]);
+        var visualArmAndWieldableFacingLeft = new VisualGroup([
+            // arm
+            new VisualLine(new Coords(0, 0, 0), new Coords(-2, 1, 0).multiplyScalar(circleRadius), circleColor, lineThickness),
+            // wieldable
+            new VisualOffset(visualWieldable, new Coords(-2, 1, 0).multiplyScalar(circleRadius))
+        ]);
+        var visualArmAndWieldableFacingUp = new VisualGroup([
+            // arm
+            new VisualLine(new Coords(0, 0, 0), new Coords(2, 0, 0).multiplyScalar(circleRadius), circleColor, lineThickness),
+            // wieldable
+            new VisualOffset(visualWieldable, new Coords(2, 0, 0).multiplyScalar(circleRadius))
+        ]);
+        var visualArmAndWieldableDirectional = new VisualDirectional(visualArmAndWieldableFacingDown, // visualForNoDirection,
+        [
+            visualArmAndWieldableFacingRight,
+            visualArmAndWieldableFacingDown,
+            visualArmAndWieldableFacingLeft,
+            visualArmAndWieldableFacingUp
+        ]);
+        var visualArmAndWieldableDirectionalOffset = new VisualOffset(visualArmAndWieldableDirectional, new Coords(0, 0 - circleRadius, 0));
+        var visualWielding = new VisualSelect((u, w, d, e) => // selectChildName
+         {
+            return (e.equipmentUser().itemEntityInSocketWithName("Wielding") == null ? "Hidden" : "Visible");
+        }, ["Visible", "Hidden"], [visualArmAndWieldableDirectionalOffset, visualNone]);
+        var returnValue = new VisualGroup([
+            visualWielding,
+            circleWithEyesAndLegs
+        ]);
+        return returnValue;
+    }
     eyesBlinking(visualEyeRadius) {
         var visualPupilRadius = visualEyeRadius / 2;
         var visualEye = new VisualGroup([

@@ -1,5 +1,5 @@
 
-class SaveState implements Loadable
+class SaveState
 {
 	name: string;
 	placeName: string

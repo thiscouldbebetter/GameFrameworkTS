@@ -45,7 +45,7 @@ function main()
 	var universe = Universe.create
 	(
 		"Game Framework Demo Game",
-		"0.0.0-20200813-0430", // version
+		"0.0.0-20200815-0515", // version
 		timerHelper,
 		display,
 		mediaLibrary,

@@ -24,10 +24,32 @@ class World {
         var placeBuilder = new PlaceBuilderDemo(randomizer, cameraViewSize);
         var actions = placeBuilder.actions;
         var actionToInputsMappings = placeBuilder.actionToInputsMappings;
+        var propertyNamesToProcess = [
+            Locatable.name,
+            Boundable.name,
+            Constrainable.name,
+            Collidable.name,
+            CollisionTracker.name,
+            Effectable.name,
+            Generator.name,
+            Hidable.name,
+            Idleable.name,
+            ItemCrafter.name,
+            Actor.name,
+            Loadable.name,
+            Playable.name,
+            SkillLearner.name,
+            Ephemeral.name,
+            Recurrent.name,
+            Killable.name,
+            Camera.name
+        ];
+        var placeDefnDemo = new PlaceDefn("Demo", actions, actionToInputsMappings, propertyNamesToProcess, null, // placeInitialize
+        null // placeFinalize
+        );
+        var placeDefns = [placeDefnDemo]; // todo
         var itemDefns = placeBuilder.itemDefns;
         var entityDefns = placeBuilder.entityDefns;
-        var placeDefnDemo = new PlaceDefn("Demo", actions, actionToInputsMappings);
-        var placeDefns = [placeDefnDemo]; // todo
         var skills = Skill.skillsDemo();
         var defns = new WorldDefn([entityDefns, itemDefns, placeDefns, skills]);
         var places = [];

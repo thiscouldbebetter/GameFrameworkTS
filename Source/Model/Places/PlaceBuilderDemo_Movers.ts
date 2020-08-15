@@ -893,7 +893,7 @@ class PlaceBuilderDemo_Movers
 		var playerCollider = new Sphere(new Coords(0, 0, 0), playerHeadRadius);
 		var playerColor = Color.byName("Gray");
 
-		var playerVisualBodyNormal: Visual = visualBuilder.circleWithEyesAndLegs
+		var playerVisualBodyNormal: Visual = visualBuilder.circleWithEyesAndLegsAndArms
 		(
 			playerHeadRadius, playerColor, visualEyeRadius, visualEyesBlinking
 		);
@@ -919,54 +919,6 @@ class PlaceBuilderDemo_Movers
 				Color.byName("GrayDark"), Color.byName("Black")
 			),
 			null
-		);
-
-		// wielding
-
-		var visualNone = new VisualNone();
-		var playerVisualWieldable: Visual = new VisualDynamic
-		(
-			(u: Universe, w: World, d: Display, e: Entity) => 
-			{
-				var equipmentUser = e.equipmentUser();
-				var entityWieldableEquipped =
-					equipmentUser.itemEntityInSocketWithName("Wielding");
-				var itemVisual = entityWieldableEquipped.item().defn(w).visual;
-				return itemVisual;
-			}
-		);
-		playerVisualWieldable = new VisualGroup
-		([
-			new VisualOffset
-			(
-				new VisualGroup
-				([
-					// arm
-					new VisualLine
-					(
-						new Coords(0, 0, 0),
-						new Coords(playerHeadRadius * 2, 0, 0),
-						playerColor,
-						2 // lineThickness
-					),
-					// wieldable
-					new VisualOffset
-					(
-						playerVisualWieldable,
-						new Coords(playerHeadRadius * 2, 0, 0)
-					)
-				]),
-				new Coords(0, 0 - playerHeadRadius, 0)
-			)
-		]);
-		var playerVisualWielding = new VisualSelect
-		(
-			(u: Universe, w: World, d: Display, e: Entity) => // selectChildName
-			{
-				return (e.equipmentUser().itemEntityInSocketWithName("Wielding") == null ? "Hidden" : "Visible");
-			},
-			[ "Visible", "Hidden" ],
-			[ playerVisualWieldable, visualNone ]
 		);
 
 		var playerVisualName = new VisualText
@@ -1001,7 +953,7 @@ class PlaceBuilderDemo_Movers
 
 		var playerVisual = new VisualGroup
 		([
-			playerVisualWielding, playerVisualBodyJumpable, playerVisualStatusInfo
+			playerVisualBodyJumpable, playerVisualStatusInfo
 		]);
 
 		var playerCollide = (universe: Universe, world: World, place: Place, entityPlayer: Entity, entityOther: Entity) =>

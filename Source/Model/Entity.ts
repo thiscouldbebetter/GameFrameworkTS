@@ -19,6 +19,19 @@ class Entity
 		}
 	}
 
+	finalize(universe: Universe, world: World, place: Place)
+	{
+		var entityProperties = this.properties;
+		for (var p = 0; p < entityProperties.length; p++)
+		{
+			var property = entityProperties[p];
+			if (property.finalize != null)
+			{
+				property.finalize(universe, world, place, this);
+			}
+		}
+	}
+
 	initialize(universe: Universe, world: World, place: Place)
 	{
 		var entityProperties = this.properties;
@@ -30,7 +43,7 @@ class Entity
 				property.initialize(universe, world, place, this);
 			}
 		}
-	};
+	}
 
 	propertyAdd(propertyToAdd: any)
 	{
@@ -100,6 +113,8 @@ class Entity
 	itemStore(): ItemStore { return this.propertiesByName.get(ItemStore.name); }
 
 	journalKeeper(): JournalKeeper { return this.propertiesByName.get(JournalKeeper.name); }
+
+	loadable(): Loadable { return this.propertiesByName.get(Loadable.name); }
 
 	killable(): Killable { return this.propertiesByName.get(Killable.name); }
 
