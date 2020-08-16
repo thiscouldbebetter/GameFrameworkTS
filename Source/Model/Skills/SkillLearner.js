@@ -1,6 +1,8 @@
 "use strict";
-class SkillLearner {
+class SkillLearner extends EntityProperty //<SkillLearner>
+ {
     constructor(skillBeingLearnedName, learningAccumulated, skillsKnownNames) {
+        super();
         this.skillBeingLearnedName = skillBeingLearnedName;
         this.learningAccumulated = learningAccumulated || 0;
         this.skillsKnownNames = skillsKnownNames || [];

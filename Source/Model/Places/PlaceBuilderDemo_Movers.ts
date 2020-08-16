@@ -659,6 +659,43 @@ class PlaceBuilderDemo_Movers
 			)
 		]);
 
+		var friendlyActivity = (universe: Universe, world: World, place: Place, entityActor: Entity, target: any) =>
+		{
+			var actor = entityActor.actor();
+			var targetPos = actor.target;
+			if (targetPos == null)
+			{
+				var randomizer = universe.randomizer;
+				targetPos =
+					new Coords(0, 0, 0).randomize(randomizer).multiply(place.size);
+				actor.target = targetPos;
+			}
+
+			var actorLoc = entityActor.locatable().loc;
+			var actorPos = actorLoc.pos;
+
+			var distanceToTarget = targetPos.clone().subtract
+			(
+				actorPos
+			).magnitude();
+
+			if (distanceToTarget >= 2)
+			{
+				actorLoc.vel.overwriteWith
+				(
+					targetPos
+				).subtract
+				(
+					actorPos
+				).normalize();
+			}
+			else
+			{
+				actorPos.overwriteWith(targetPos);
+				actor.target = null;
+			}
+		};
+
 		var friendlyEntityDefn = new Entity
 		(
 			"Friendly",
@@ -669,46 +706,7 @@ class PlaceBuilderDemo_Movers
 				new Drawable(friendlyVisual, null),
 				new DrawableCamera(),
 				new Talker("AnEveningWithProfessorSurly"),
-				new Actor
-				(
-					(universe: Universe, world: World, place: Place, entityActor: Entity, target: any) => // activity
-					{
-						var actor = entityActor.actor();
-						var targetPos = actor.target;
-						if (targetPos == null)
-						{
-							var randomizer = universe.randomizer;
-							targetPos =
-								new Coords(0, 0, 0).randomize(randomizer).multiply(place.size);
-							actor.target = targetPos;
-						}
-
-						var actorLoc = entityActor.locatable().loc;
-						var actorPos = actorLoc.pos;
-
-						var distanceToTarget = targetPos.clone().subtract
-						(
-							actorPos
-						).magnitude();
-
-						if (distanceToTarget >= 2)
-						{
-							actorLoc.vel.overwriteWith
-							(
-								targetPos
-							).subtract
-							(
-								actorPos
-							).normalize();
-						}
-						else
-						{
-							actorPos.overwriteWith(targetPos);
-							actor.target = null;
-						}
-					},
-					null
-				),
+				new Actor(friendlyActivity, null),
 				new ItemHolder
 				(
 					[
@@ -909,7 +907,7 @@ class PlaceBuilderDemo_Movers
 		(
 			function selectChildName(u: Universe, w: World, d: Display, e: Entity)
 			{
-				return (e.playable().isHiding ? "Hidden" : "Normal");
+				return (e.hidable().isHidden ? "Hidden" : "Normal");
 			},
 			[ "Normal", "Hidden" ],
 			[ playerVisualBodyNormal, playerVisualBodyHidden ]
@@ -988,8 +986,11 @@ class PlaceBuilderDemo_Movers
 			else if (entityOther.propertiesByName.get(Goal.name) != null)
 			{
 				var itemDefnKeyName = "Key";
-				var keysRequired =
-					new Item(itemDefnKeyName, entityOther.propertiesByName.get(Goal.name).numberOfKeysToUnlock);
+				var keysRequired = new Item
+				(
+					itemDefnKeyName,
+					(entityOther.propertiesByName.get(Goal.name) as Goal).numberOfKeysToUnlock
+				);
 				if (entityPlayer.itemHolder().hasItem(keysRequired))
 				{
 					var venueMessage = new VenueMessage
@@ -1112,7 +1113,7 @@ class PlaceBuilderDemo_Movers
 				var armorEquipped = equipmentUser.itemEntityInSocketWithName("Armor");
 				if (armorEquipped != null)
 				{
-					var armor = armorEquipped.propertiesByName.get(Armor.name);
+					var armor = (armorEquipped.propertiesByName.get(Armor.name) as Armor);
 					damageAmount *= armor.damageMultiplier;
 				}
 				entityKillable.killable().integritySubtract(damageAmount);
@@ -1338,11 +1339,55 @@ class PlaceBuilderDemo_Movers
 			}
 		);
 
+		var playerActivity = (universe: Universe, world: World, place: Place, entityPlayer: Entity) =>
+		{
+			var inputHelper = universe.inputHelper;
+			if (inputHelper.isMouseClicked(null))
+			{
+				inputHelper.isMouseClicked(false);
+
+				var playerPos = entityPlayer.locatable().loc.pos;
+				var camera = place.camera();
+
+				playerPos.overwriteWith
+				(
+					inputHelper.mouseClickPos
+				).divide
+				(
+					universe.display.scaleFactor()
+				).add
+				(
+					camera.loc.pos
+				).subtract
+				(
+					camera.viewSizeHalf
+				).trimToRangeMax
+				(
+					place.size
+				);
+
+				universe.soundHelper.soundWithNamePlayAsEffect(universe, "Sound");
+			}
+
+			var placeDefn = place.defn(world);
+			var actionsByName = placeDefn.actionsByName;
+			var actionToInputsMappingsByInputName = placeDefn.actionToInputsMappingsByInputName;
+			var actionsToPerform = inputHelper.actionsFromInput
+			(
+				actionsByName, actionToInputsMappingsByInputName
+			);
+			for (var i = 0; i < actionsToPerform.length; i++)
+			{
+				var action = actionsToPerform[i];
+				action.perform(universe, world, place, entityPlayer);
+			}
+		};
+
 		var playerEntityDefn = new Entity
 		(
 			entityDefnNamePlayer,
 			[
-				new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
+				new Actor(playerActivity, null),
 				new Collidable
 				(
 					playerCollider,
@@ -1355,13 +1400,15 @@ class PlaceBuilderDemo_Movers
 				new DrawableCamera(),
 				new Effectable([]),
 				equipmentUser,
+				new Hidable(false),
 				new Idleable(),
 				itemCrafter,
 				itemHolder,
 				journalKeeper,
+				new Locatable(null),
 				killable,
 				movable,
-				new Playable(null),
+				new Playable(),
 				new SkillLearner(null, null, null),
 				starvable
 			]

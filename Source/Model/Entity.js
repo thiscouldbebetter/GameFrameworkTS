@@ -39,7 +39,8 @@ class Entity {
         var propertiesCloned = [];
         for (var i = 0; i < this.properties.length; i++) {
             var property = this.properties[i];
-            var propertyCloned = (property.clone == null ? property : property.clone());
+            var propertyAsAny = property;
+            var propertyCloned = (propertyAsAny.clone == null ? propertyAsAny : propertyAsAny.clone());
             propertiesCloned.push(propertyCloned);
         }
         var returnValue = new Entity(nameCloned, propertiesCloned);
@@ -68,8 +69,8 @@ class Entity {
     itemHolder() { return this.propertiesByName.get(ItemHolder.name); }
     itemStore() { return this.propertiesByName.get(ItemStore.name); }
     journalKeeper() { return this.propertiesByName.get(JournalKeeper.name); }
-    loadable() { return this.propertiesByName.get(Loadable.name); }
     killable() { return this.propertiesByName.get(Killable.name); }
+    loadable() { return this.propertiesByName.get(Loadable.name); }
     locatable() { return this.propertiesByName.get(Locatable.name); }
     movable() { return this.propertiesByName.get(Movable.name); }
     recurrent() { return this.propertiesByName.get(Recurrent.name); }

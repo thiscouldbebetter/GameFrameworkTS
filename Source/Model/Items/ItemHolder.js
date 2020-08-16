@@ -1,6 +1,8 @@
 "use strict";
-class ItemHolder {
+class ItemHolder extends EntityProperty //<ItemHolder>
+ {
     constructor(itemEntities, massMax, reachRadius) {
+        super();
         this.itemEntities = [];
         this.massMax = massMax;
         this.reachRadius = reachRadius || 20;

@@ -1,6 +1,8 @@
 "use strict";
-class Locatable {
+class Locatable extends EntityProperty //<Locatable>
+ {
     constructor(loc) {
+        super();
         this.loc = loc || new Disposition(null, null, null);
     }
     distanceFromEntity(entity) {

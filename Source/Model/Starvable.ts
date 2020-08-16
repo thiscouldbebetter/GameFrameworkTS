@@ -1,5 +1,5 @@
 
-class Starvable
+class Starvable extends EntityProperty
 {
 	satietyMax: number;
 	satietyLostPerTick: number;
@@ -14,6 +14,7 @@ class Starvable
 		starve: (u: Universe, w: World, p: Place, e: Entity) => void
 	)
 	{
+		super();
 		this.satietyMax = satietyMax;
 		this.satietyLostPerTick = satietyLostPerTick;
 		this._starve = starve;

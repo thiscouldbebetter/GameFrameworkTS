@@ -1,5 +1,5 @@
 
-class Recurrent
+class Recurrent extends EntityProperty
 {
 	ticksPerRecurrence: number;
 	timesToRecur: number;
@@ -10,6 +10,7 @@ class Recurrent
 
 	constructor(ticksPerRecurrence: number, timesToRecur: number, recur: any)
 	{
+		super();
 		this.ticksPerRecurrence = ticksPerRecurrence;
 		this.timesToRecur = timesToRecur;
 		this.recur = recur;

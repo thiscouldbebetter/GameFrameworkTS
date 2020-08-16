@@ -1,18 +1,35 @@
 Game Framework
 ==============
 
-The TypeScript code in this repository implements a video game framework and demonstrates its features with a rudimentary video game.  To see it in action, install Node.js, install the Typescript compiler TSC with the command "npm install tsc", run "tsc" within the "Source" directory, and then  open the file GameFramework.html in a web browser that runs JavaScript.
+The TypeScript code in this repository implements a video game framework and demonstrates its features with a simple video game.
 
-Features:
+Running
+-------
+
+To run, open the file GameFramework.html in a web browser that runs JavaScript.  Because the latest compiled .js files are included as part of the repository, it should not be necessary to build the game first before it can be run.
+
+
+Building
+--------
+
+* Install Node.js.
+* Install the Typescript compiler TSC with the command "npm install tsc".
+* Run the command "tsc" within the "Source" directory.
+
+
+Features
+--------
 
 * Display - System-level graphics concepts are abstracted behind interfaces.
 * Controls - Buttons, lists, text boxes, scrollbars, tabs, and so on.
-* Persistence - Including player profiles and saving and loading games to and from browser local storage or files.
-* Media - Loading and presenting images, sounds, music, videos, and data files.
+* Persistence - Player profiles and saving and loading games to and from browser local storage or files.
+* Media - Loading and presenting images, sounds, music, videos, fonts, text, and data files.
 * Physics - Position, orientation, movement, and collision detection and response.
-* Model - Common game concepts like inventory, equipment, crafting, skills, containers, and trade.
+* Model - Common game concepts like inventory, equipment, crafting, conversations, skills, containers, and trade.
 
-Some placeholder media files are included in the Content directory for testing purposes.
+
+Screenshots
+-----------
 
 ![Gameplay](/Screenshots/Screenshot-Gameplay.png?raw=true "Gameplay")
 ![Title](/Screenshots/Screenshot-Title.png?raw=true "Title")

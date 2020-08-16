@@ -1,6 +1,8 @@
 "use strict";
-class Collidable {
+class Collidable extends EntityProperty //<Collidable>
+ {
     constructor(colliderAtRest, entityPropertyNamesToCollideWith, collideEntities) {
+        super();
         this.colliderAtRest = colliderAtRest;
         this.entityPropertyNamesToCollideWith = entityPropertyNamesToCollideWith || [];
         this._collideEntities = collideEntities;

@@ -1,6 +1,8 @@
 "use strict";
-class Killable {
+class Killable extends EntityProperty //<Killable>
+ {
     constructor(integrityMax, damageApply, die) {
+        super();
         this.integrityMax = integrityMax;
         this._damageApply = damageApply;
         this._die = die;

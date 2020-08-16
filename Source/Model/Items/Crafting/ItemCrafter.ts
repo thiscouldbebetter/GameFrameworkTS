@@ -1,5 +1,5 @@
 
-class ItemCrafter
+class ItemCrafter extends EntityProperty
 {
 	recipesAvailable: CraftingRecipe[];
 
@@ -12,6 +12,8 @@ class ItemCrafter
 
 	constructor(recipesAvailable: CraftingRecipe[])
 	{
+		super();
+
 		this.recipesAvailable = recipesAvailable || [];
 
 		this.itemHolderStaged = new ItemHolder([], null, null);

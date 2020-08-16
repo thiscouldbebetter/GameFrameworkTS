@@ -1,12 +1,18 @@
 "use strict";
-class Device {
+class Device extends EntityProperty {
     constructor(name, ticksToCharge, initialize, update, use) {
+        super();
         this.name = name;
         this.ticksToCharge = ticksToCharge;
-        this.initialize = initialize;
+        this._initialize = initialize;
         this.update = update;
         this.use = use;
         this.tickLastUsed = 0 - this.ticksToCharge;
+    }
+    initialize(u, w, p, e) {
+        if (this._initialize != null) {
+            this._initialize(u, w, p, e);
+        }
     }
     use(u, w, p, eUser, eDevice) {
         var tickCurrent = w.timerTicksSoFar;
@@ -18,7 +24,7 @@ class Device {
     }
     // clonable
     clone() {
-        return new Device(this.name, this.ticksToCharge, this.initialize, this.update, this.use);
+        return new Device(this.name, this.ticksToCharge, this._initialize, this.update, this.use);
     }
     ;
 }

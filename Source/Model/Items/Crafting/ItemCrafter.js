@@ -1,6 +1,7 @@
 "use strict";
-class ItemCrafter {
+class ItemCrafter extends EntityProperty {
     constructor(recipesAvailable) {
+        super();
         this.recipesAvailable = recipesAvailable || [];
         this.itemHolderStaged = new ItemHolder([], null, null);
         this.recipeAvailableSelected = null;

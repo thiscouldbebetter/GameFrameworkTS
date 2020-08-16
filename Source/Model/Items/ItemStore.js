@@ -1,6 +1,8 @@
 "use strict";
-class ItemStore {
+class ItemStore extends EntityProperty //<ItemStore>
+ {
     constructor(itemDefnNameCurrency) {
+        super();
         this.itemDefnNameCurrency = itemDefnNameCurrency;
         this.statusMessage = "-";
     }

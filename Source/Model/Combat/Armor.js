@@ -1,6 +1,7 @@
 "use strict";
-class Armor {
+class Armor extends EntityProperty {
     constructor(damageMultiplier) {
+        super();
         this.damageMultiplier = damageMultiplier;
     }
 }

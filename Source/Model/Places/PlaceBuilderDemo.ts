@@ -121,8 +121,7 @@ class PlaceBuilderDemo
 			new Coords(1, -1, 0)
 		];
 		var neighborPos = new Coords(0, 0, 0);
-		var boxZeroes = new Box(new Coords(0, 0, 0), new Coords(0, 0, 0) );
-
+		var boxZeroes = new Box(new Coords(0, 0, 0), new Coords(0, 0, 0));
 		for (var y = 0; y < placeSizeInZones.y; y++)
 		{
 			zonePosInZones.y = y;
@@ -133,12 +132,26 @@ class PlaceBuilderDemo
 
 				var zonePos = zonePosInZones.clone().multiply(zoneSize);
 
+				/*
 				var neighborNames = neighborOffsets.filter
 				(
 					x => neighborPos.overwriteWith(x).add(zonePosInZones).isInRangeMaxExclusive(placeSizeInZones)
 				).map
 				(
 					x => "Zone" + neighborPos.overwriteWith(x).add(zonePosInZones).toStringXY()
+				);
+				*/
+
+				var neighborNames = neighborOffsets.map
+				(
+					x =>
+						"Zone" + neighborPos.overwriteWith(x).add
+						(
+							zonePosInZones
+						).wrapToRangeMax
+						(
+							placeSizeInZones
+						).toStringXY()
 				);
 
 				var entityBoulderCorner = this.entityBuildFromDefn
@@ -162,14 +175,36 @@ class PlaceBuilderDemo
 			}
 		}
 
-		var zone0 = zones[0];
-		zone0.entities.push(...this.entities);
+		var zoneStart = zones[0];
+		zoneStart.entities.push(...this.entities);
+
+		var zonesByName = ArrayHelper.addLookupsByName(zones);
+		var posInZones = new Coords(0, 0, 0);
 
 		var placeSize = placeSizeInZones.clone().multiply(zoneSize);
-		var place = new PlaceZoned("Zoned", "Demo", placeSize, "Player", zones);
+		var place = new PlaceZoned
+		(
+			"Zoned", // name
+			"Demo", // defnName
+			placeSize,
+			"Player", // entityToFollowName
+			zoneStart.name, // zoneStartName
+			(zoneName: string) => zonesByName.get(zoneName),
+			(posToCheck: Coords) => // zoneAtPos
+				zonesByName.get
+				(
+					"Zone" + posInZones.overwriteWith
+					(
+						posToCheck
+					).divide
+					(
+						zoneSize
+					).floor().toStringXY()
+				) 
+		);
 
 		var entityCamera = this.build_Camera(this.cameraViewSize, place.size);
-		zone0.entities.push(entityCamera);
+		zoneStart.entities.push(entityCamera);
 
 		return place;
 	}
@@ -3431,18 +3466,17 @@ class PlaceBuilderDemo
 				{
 					var learner = actor.skillLearner();
 					var knowsHowToHide = learner.skillsKnownNames.indexOf("Hiding") >= 0;
-					//knowsHowToHide = true; // debug
 					if (knowsHowToHide)
 					{
-						var perceptible = actor.playable(); // hack
-						var isAlreadyHiding = perceptible.isHiding;
+						var hidable = actor.hidable();
+						var isAlreadyHiding = hidable.isHidden;
 						if (isAlreadyHiding)
 						{
-							perceptible.isHiding = false;
+							hidable.isHidden = false;
 						}
 						else
 						{
-							perceptible.isHiding = true;
+							hidable.isHidden = true;
 						}
 					}
 				}

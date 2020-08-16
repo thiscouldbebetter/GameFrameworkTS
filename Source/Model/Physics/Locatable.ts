@@ -1,10 +1,11 @@
 
-class Locatable
+class Locatable extends EntityProperty
 {
 	loc: Disposition;
 
 	constructor(loc: Disposition)
 	{
+		super();
 		this.loc = loc || new Disposition(null, null, null);
 	}
 

@@ -1,26 +1,27 @@
 "use strict";
 class PlaceZoned extends Place {
-    constructor(name, defnName, size, entityToFollowName, zones) {
+    constructor(name, defnName, size, entityToFollowName, zoneStartName, zoneGetByName, zoneAtPos) {
         super(name, defnName, size, [] // entities
         );
         this.entityToFollowName = entityToFollowName;
-        this.zones = zones;
+        this.zoneStartName = zoneStartName;
+        this.zoneGetByName = zoneGetByName;
+        this.zoneAtPos = zoneAtPos;
         this.zoneCentralAndNeighbors = [];
-        this.zonesByName = ArrayHelper.addLookupsByName(this.zones);
     }
     // Place implementation.
     initialize(universe, world) {
-        var zone0 = this.zones[0];
-        this.entitiesToSpawn.push(...zone0.entities);
+        var zoneStart = this.zoneGetByName(this.zoneStartName);
+        this.entitiesToSpawn.push(...zoneStart.entities);
         super.initialize(universe, world);
     }
     updateForTimerTick(universe, world) {
         var entityToFollow = this.entitiesByName.get(this.entityToFollowName);
         var entityToFollowPos = entityToFollow.locatable().loc.pos;
-        var zoneCentralCurrent = this.zones.filter(zone => zone.bounds.containsPoint(entityToFollowPos))[0];
+        var zoneCentralCurrent = this.zoneAtPos(entityToFollowPos);
         if (zoneCentralCurrent != null && zoneCentralCurrent != this.zoneCentral) {
             this.zoneCentral = zoneCentralCurrent;
-            var zonesNeighboringZoneCentral = this.zoneCentral.zonesAdjacentNames.map(zoneName => this.zonesByName.get(zoneName));
+            var zonesNeighboringZoneCentral = this.zoneCentral.zonesAdjacentNames.map(zoneName => this.zoneGetByName(zoneName));
             var zoneCentralAndNeighborsNext = [this.zoneCentral];
             zoneCentralAndNeighborsNext.push(...zonesNeighboringZoneCentral);
             var zoneCentralAndNeighborsPrev = this.zoneCentralAndNeighbors;

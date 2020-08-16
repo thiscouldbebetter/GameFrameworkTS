@@ -1,5 +1,5 @@
 
-class Collidable
+class Collidable extends EntityProperty
 {
 	colliderAtRest: any;
 	entityPropertyNamesToCollideWith: string[];
@@ -19,6 +19,7 @@ class Collidable
 		collideEntities: (u: Universe, w: World, p: Place, e0: Entity, e1: Entity) => void
 	)
 	{
+		super();
 		this.colliderAtRest = colliderAtRest;
 		this.entityPropertyNamesToCollideWith = entityPropertyNamesToCollideWith || [];
 		this._collideEntities = collideEntities;

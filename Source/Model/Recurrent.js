@@ -1,6 +1,8 @@
 "use strict";
-class Recurrent {
+class Recurrent extends EntityProperty //<Recurrent>
+ {
     constructor(ticksPerRecurrence, timesToRecur, recur) {
+        super();
         this.ticksPerRecurrence = ticksPerRecurrence;
         this.timesToRecur = timesToRecur;
         this.recur = recur;

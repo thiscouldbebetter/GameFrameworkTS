@@ -1,11 +1,6 @@
 
-class DrawableCamera
+class DrawableCamera extends EntityProperty
 {
-	constructor()
-	{
-		// Do nothing.
-	}
-
 	initialize(universe: Universe, world: World, place: Place, entity: Entity)
 	{
 		var drawable = entity.drawable();

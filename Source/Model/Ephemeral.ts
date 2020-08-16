@@ -1,11 +1,12 @@
 
-class Ephemeral
+class Ephemeral extends EntityProperty
 {
 	ticksToLive: number;
 	expire: any;
 
 	constructor(ticksToLive: number, expire: any)
 	{
+		super();
 		this.ticksToLive = ticksToLive;
 		this.expire = expire;
 	}

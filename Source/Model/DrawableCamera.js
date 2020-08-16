@@ -1,8 +1,6 @@
 "use strict";
-class DrawableCamera {
-    constructor() {
-        // Do nothing.
-    }
+class DrawableCamera extends EntityProperty //<DrawableCamera>
+ {
     initialize(universe, world, place, entity) {
         var drawable = entity.drawable();
         var visual = drawable.visual;

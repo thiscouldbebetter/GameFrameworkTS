@@ -1,6 +1,8 @@
 "use strict";
-class Boundable {
+class Boundable extends EntityProperty //<Boundable>
+ {
     constructor(bounds) {
+        super();
         this.bounds = bounds;
     }
     updateForTimerTick(u, w, p, e) {

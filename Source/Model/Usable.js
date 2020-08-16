@@ -1,6 +1,8 @@
 "use strict";
-class Usable {
+class Usable extends EntityProperty //<Usable>
+ {
     constructor(use) {
+        super();
         this._use = use;
         this.isDisabled = false;
     }

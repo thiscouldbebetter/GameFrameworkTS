@@ -1,6 +1,8 @@
 "use strict";
-class Effectable {
+class Effectable extends EntityProperty //<Effectable>
+ {
     constructor(effects) {
+        super();
         this.effects = effects || new Array();
     }
     effectAdd(effectToAdd) {

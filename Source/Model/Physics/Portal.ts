@@ -1,5 +1,5 @@
 
-class Portal
+class Portal extends EntityProperty
 {
 	destinationPlaceName: string;
 	destinationEntityName: string;
@@ -11,6 +11,7 @@ class Portal
 		clearsVelocity: boolean
 	)
 	{
+		super();
 		this.destinationPlaceName = destinationPlaceName;
 		this.destinationEntityName = destinationEntityName;
 		this.clearsVelocity = clearsVelocity || true;

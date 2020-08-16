@@ -1,6 +1,7 @@
 "use strict";
-class ItemDefn {
+class ItemDefn extends EntityProperty {
     constructor(name, appearance, description, mass, tradeValue, stackSizeMax, categoryNames, use, visual) {
+        super();
         this.name = name;
         this.appearance = appearance || name;
         this.description = description;

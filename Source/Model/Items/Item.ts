@@ -1,11 +1,12 @@
 
-class Item
+class Item extends EntityProperty
 {
 	defnName: string;
 	quantity: number;
 
 	constructor(defnName: string, quantity: number)
 	{
+		super();
 		this.defnName = defnName;
 		this.quantity = quantity;
 	}

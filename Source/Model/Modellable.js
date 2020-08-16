@@ -1,6 +1,8 @@
 "use strict";
-class Modellable {
+class Modellable extends EntityProperty //<Modellable>
+ {
     constructor(model) {
+        super();
         this.model = model;
     }
     updateForTimerTick(universe, world, place, entity) {

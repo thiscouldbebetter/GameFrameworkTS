@@ -2,13 +2,23 @@
 class PlaceZoned extends Place
 {
 	entityToFollowName: string;
-	zones: Zone[];
+	zoneStartName: string;
+	zoneGetByName: (zoneName: string) => Zone;
+	zoneAtPos: (posToCheck: Coords) => Zone;
 
 	zoneCentral: Zone;
 	zoneCentralAndNeighbors: Zone[];
-	zonesByName: Map<string, Zone>;
 
-	constructor(name: string, defnName: string, size: Coords, entityToFollowName: string, zones: Zone[])
+	constructor
+	(
+		name: string,
+		defnName: string,
+		size: Coords,
+		entityToFollowName: string,
+		zoneStartName: string,
+		zoneGetByName: (zoneName: string) => Zone,
+		zoneAtPos: (posToCheck: Coords) => Zone
+	)
 	{
 		super
 		(
@@ -19,17 +29,18 @@ class PlaceZoned extends Place
 		);
 
 		this.entityToFollowName = entityToFollowName;
-		this.zones = zones;
+		this.zoneStartName = zoneStartName;
+		this.zoneGetByName = zoneGetByName;
+		this.zoneAtPos = zoneAtPos;
 		this.zoneCentralAndNeighbors = [];
-		this.zonesByName = ArrayHelper.addLookupsByName(this.zones);
 	}
 
 	// Place implementation.
 
 	initialize(universe: Universe, world: World)
 	{
-		var zone0 = this.zones[0];
-		this.entitiesToSpawn.push(...zone0.entities);
+		var zoneStart = this.zoneGetByName(this.zoneStartName);
+		this.entitiesToSpawn.push(...zoneStart.entities);
 		super.initialize(universe, world);
 	}
 
@@ -37,14 +48,13 @@ class PlaceZoned extends Place
 	{
 		var entityToFollow = this.entitiesByName.get(this.entityToFollowName);
 		var entityToFollowPos = entityToFollow.locatable().loc.pos;
-		var zoneCentralCurrent =
-			this.zones.filter(zone => zone.bounds.containsPoint(entityToFollowPos))[0];
+		var zoneCentralCurrent = this.zoneAtPos(entityToFollowPos);
 		if (zoneCentralCurrent != null && zoneCentralCurrent != this.zoneCentral)
 		{
 			this.zoneCentral = zoneCentralCurrent;
 			var zonesNeighboringZoneCentral = this.zoneCentral.zonesAdjacentNames.map
 			(
-				zoneName => this.zonesByName.get(zoneName)
+				zoneName => this.zoneGetByName(zoneName)
 			);
 			var zoneCentralAndNeighborsNext = [ this.zoneCentral ];
 			zoneCentralAndNeighborsNext.push(...zonesNeighboringZoneCentral);

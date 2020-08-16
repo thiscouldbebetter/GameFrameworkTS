@@ -1,8 +1,8 @@
 
-class Device
+class Device extends EntityProperty
 {
 	name: string;
-	initialize: (u: Universe, w: World, p: Place, e: Entity) => void;
+	_initialize: (u: Universe, w: World, p: Place, e: Entity) => void;
 	update: (u: Universe, w: World, p: Place, e: Entity) => void;
 	_use: (u: Universe, w: World, p: Place, eUser: Entity, eDevice: Entity) => void;
 
@@ -17,13 +17,22 @@ class Device
 		update: (u: Universe, w: World, p: Place, e: Entity) => void,
 		use: (u: Universe, w: World, p: Place, eUser: Entity, eDevice: Entity) => void)
 	{
+		super();
 		this.name = name;
 		this.ticksToCharge = ticksToCharge;
-		this.initialize = initialize;
+		this._initialize = initialize;
 		this.update = update;
 		this.use = use;
 
 		this.tickLastUsed = 0 - this.ticksToCharge;
+	}
+
+	initialize(u: Universe, w: World, p: Place, e: Entity)
+	{
+		if (this._initialize != null)
+		{
+			this._initialize(u, w, p, e);
+		}
 	}
 
 	use(u: Universe, w: World, p: Place, eUser: Entity, eDevice: Entity)
@@ -41,6 +50,6 @@ class Device
 
 	clone()
 	{
-		return new Device(this.name, this.ticksToCharge, this.initialize, this.update, this.use);
+		return new Device(this.name, this.ticksToCharge, this._initialize, this.update, this.use);
 	};
 }

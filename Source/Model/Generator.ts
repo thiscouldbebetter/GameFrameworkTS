@@ -1,5 +1,5 @@
 
-class Generator
+class Generator extends EntityProperty
 {
 	entityToGenerate: Entity;
 	ticksToGenerate: number;
@@ -10,6 +10,7 @@ class Generator
 
 	constructor(entityToGenerate: Entity, ticksToGenerate: number, entitiesGeneratedMax: number)
 	{
+		super();
 		this.entityToGenerate = entityToGenerate;
 		this.ticksToGenerate = ticksToGenerate;
 		this.entitiesGeneratedMax = entitiesGeneratedMax || 1;
@@ -17,9 +18,6 @@ class Generator
 		this.entitiesGenerated = new Array<Entity>();
 		this.tickLastGenerated = 0 - this.ticksToGenerate;
 	}
-
-	finalize(u: Universe, w: World, p: Place, e: Entity) {}
-	initialize(u: Universe, w: World, p: Place, e: Entity) {}
 
 	updateForTimerTick(universe: Universe, world: World, place: Place, entityGenerator: Entity)
 	{

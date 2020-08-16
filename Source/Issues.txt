@@ -16,6 +16,7 @@ Items - Crafting - Blocking with Working Animation
 Items - Generated Devices with Varying Specs
 Items - Weapons - Applying Effects to Target
 
+Movers - Vehicles
 Movers - Vehicles - Differential Terrain Traversal
 
 Movers - Animals - Carnivores Eat Grazers
@@ -37,7 +38,6 @@ Places - Load/Unload Zones in Terrarium
 Places - Map Tiles as Obstacles
 Places - Map Tiles from Images
 Places - Map Tiles - Generated
-Places - Zones
 
 Sound - Hitting Obstacle
 Sound - Shooting Gun

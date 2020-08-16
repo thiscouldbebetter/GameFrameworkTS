@@ -1,3 +1,3 @@
 
-class Enemy
+class Enemy extends EntityProperty
 {}

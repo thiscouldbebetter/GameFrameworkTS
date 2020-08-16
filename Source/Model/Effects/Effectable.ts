@@ -1,10 +1,11 @@
 
-class Effectable
+class Effectable extends EntityProperty
 {
 	effects: Effect[];
 
 	constructor(effects: Effect[])
 	{
+		super();
 		this.effects = effects || new Array<Effect>();
 	}
 

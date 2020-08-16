@@ -1,6 +1,7 @@
 "use strict";
-class Camera {
+class Camera extends EntityProperty {
     constructor(viewSize, focalLength, loc) {
+        super();
         this.viewSize = viewSize;
         this.focalLength = focalLength;
         this.loc = loc;

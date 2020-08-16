@@ -1,5 +1,5 @@
 
-class JournalKeeper
+class JournalKeeper extends EntityProperty
 {
 	journal: Journal;
 
@@ -8,6 +8,7 @@ class JournalKeeper
 
 	constructor(journal: Journal)
 	{
+		super();
 		this.journal = journal;
 	}
 

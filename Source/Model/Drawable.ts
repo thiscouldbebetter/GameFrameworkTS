@@ -1,5 +1,5 @@
 
-class Drawable
+class Drawable extends EntityProperty
 {
 	visual: Visual;
 	isVisible: boolean;
@@ -8,6 +8,7 @@ class Drawable
 
 	constructor(visual: Visual, isVisible: boolean)
 	{
+		super();
 		this.visual = visual;
 		this.isVisible = (isVisible == null ? true : isVisible);
 	}

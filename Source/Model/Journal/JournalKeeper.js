@@ -1,6 +1,8 @@
 "use strict";
-class JournalKeeper {
+class JournalKeeper extends EntityProperty //<JournalKeeper>
+ {
     constructor(journal) {
+        super();
         this.journal = journal;
     }
     // Controls.

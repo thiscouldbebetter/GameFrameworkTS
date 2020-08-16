@@ -1,5 +1,5 @@
 
-class ItemDefn
+class ItemDefn extends EntityProperty
 {
 	name: string;
 	appearance: string;
@@ -19,6 +19,7 @@ class ItemDefn
 		visual: Visual
 	)
 	{
+		super();
 		this.name = name;
 
 		this.appearance = appearance || name;

@@ -1,5 +1,5 @@
 
-class Idleable
+class Idleable extends EntityProperty
 {
 	updateForTimerTick(universe: Universe, world: World, place: Place, entityPlayer: Entity)
 	{

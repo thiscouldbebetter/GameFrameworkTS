@@ -1,6 +1,7 @@
 "use strict";
-class Controllable {
+class Controllable extends EntityProperty {
     constructor(toControl) {
+        super();
         this.toControl = toControl;
     }
 }

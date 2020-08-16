@@ -1,5 +1,5 @@
 
-class Usable
+class Usable extends EntityProperty
 {
 	_use: (u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) => string;
 
@@ -7,6 +7,7 @@ class Usable
 
 	constructor(use: (u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) => string)
 	{
+		super();
 		this._use = use;
 
 		this.isDisabled = false;

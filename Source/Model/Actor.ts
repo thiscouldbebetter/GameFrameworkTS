@@ -1,5 +1,5 @@
 
-class Actor
+class Actor extends EntityProperty
 {
 	activity: any;
 	target: any;
@@ -8,6 +8,7 @@ class Actor
 
 	constructor(activity: any, target: any)
 	{
+		super();
 		this.activity = activity;
 		this.target = target;
 		this.actions = [];

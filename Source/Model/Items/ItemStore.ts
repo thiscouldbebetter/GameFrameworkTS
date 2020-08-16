@@ -1,5 +1,5 @@
 
-class ItemStore
+class ItemStore extends EntityProperty
 {
 	itemDefnNameCurrency: string;
 
@@ -7,6 +7,7 @@ class ItemStore
 
 	constructor(itemDefnNameCurrency: string)
 	{
+		super();
 		this.itemDefnNameCurrency = itemDefnNameCurrency;
 		this.statusMessage = "-";
 	}

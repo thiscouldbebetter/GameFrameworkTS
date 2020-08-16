@@ -1,14 +1,14 @@
 "use strict";
-class Generator {
+class Generator extends EntityProperty //<Generator>
+ {
     constructor(entityToGenerate, ticksToGenerate, entitiesGeneratedMax) {
+        super();
         this.entityToGenerate = entityToGenerate;
         this.ticksToGenerate = ticksToGenerate;
         this.entitiesGeneratedMax = entitiesGeneratedMax || 1;
         this.entitiesGenerated = new Array();
         this.tickLastGenerated = 0 - this.ticksToGenerate;
     }
-    finalize(u, w, p, e) { }
-    initialize(u, w, p, e) { }
     updateForTimerTick(universe, world, place, entityGenerator) {
         var placeEntitiesByName = place.entitiesByName;
         var entitiesGeneratedCountBefore = this.entitiesGenerated.length;

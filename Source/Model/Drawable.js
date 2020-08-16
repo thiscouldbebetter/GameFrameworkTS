@@ -1,6 +1,8 @@
 "use strict";
-class Drawable {
+class Drawable extends EntityProperty //<Drawable>
+ {
     constructor(visual, isVisible) {
+        super();
         this.visual = visual;
         this.isVisible = (isVisible == null ? true : isVisible);
     }

@@ -1,6 +1,8 @@
 "use strict";
-class Item {
+class Item extends EntityProperty //<Item>
+ {
     constructor(defnName, quantity) {
+        super();
         this.defnName = defnName;
         this.quantity = quantity;
     }

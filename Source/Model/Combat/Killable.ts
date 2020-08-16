@@ -1,5 +1,5 @@
 
-class Killable
+class Killable extends EntityProperty
 {
 	integrityMax: number;
 	_damageApply: (u: Universe, w: World, p: Place, eDamager: Entity, eKillable: Entity, damageToApply: Damage) => number;
@@ -14,6 +14,7 @@ class Killable
 		die: (u: Universe, w: World, p: Place, e: Entity) => void
 	)
 	{
+		super();
 		this.integrityMax = integrityMax;
 		this._damageApply = damageApply;
 		this._die = die;

@@ -1,6 +1,8 @@
 "use strict";
-class ItemBarterer {
+class ItemBarterer extends EntityProperty //<ItemBarterer>
+ {
     constructor() {
+        super();
         this.itemHolderCustomerOffer = new ItemHolder(null, null, null);
         this.itemHolderStoreOffer = new ItemHolder(null, null, null);
         this.statusMessage = "Choose items to trade and click the 'Offer' button.";

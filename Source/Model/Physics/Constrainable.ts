@@ -1,10 +1,11 @@
 
-class Constrainable
+class Constrainable extends EntityProperty
 {
 	constraints: Constraint[];
 
 	constructor(constraints: Constraint[])
 	{
+		super();
 		this.constraints = constraints;
 	}
 

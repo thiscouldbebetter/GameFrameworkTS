@@ -1,5 +1,5 @@
 
-class Camera
+class Camera extends EntityProperty
 {
 	viewSize: Coords;
 	focalLength: number;
@@ -13,6 +13,7 @@ class Camera
 
 	constructor(viewSize: Coords, focalLength: number, loc: Disposition)
 	{
+		super();
 		this.viewSize = viewSize;
 		this.focalLength = focalLength;
 		this.loc = loc;

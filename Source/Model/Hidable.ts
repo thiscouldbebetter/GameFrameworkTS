@@ -1,5 +1,5 @@
 
-class Hidable
+class Hidable extends EntityProperty
 {
 	isHidden: boolean;
 
@@ -7,6 +7,7 @@ class Hidable
 
 	constructor(isHidden: boolean)
 	{
+		super();
 		this.isHidden = isHidden;
 
 		this._isHiddenPrev = null;

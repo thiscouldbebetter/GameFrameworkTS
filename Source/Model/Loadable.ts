@@ -1,5 +1,5 @@
 
-class Loadable
+class Loadable extends EntityProperty
 {
 	isLoaded: boolean;
 	_load: (universe: Universe, world: World, place: Place, entity: Entity) => void;
@@ -11,6 +11,7 @@ class Loadable
 		unload: (universe: Universe, world: World, place: Place, entity: Entity) => void
 	)
 	{
+		super();
 		this.isLoaded = false;
 		this._load = load;
 		this._unload = unload;

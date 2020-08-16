@@ -82,7 +82,16 @@ class PlaceBuilderDemo {
             for (var x = 0; x < placeSizeInZones.x; x++) {
                 zonePosInZones.x = x;
                 var zonePos = zonePosInZones.clone().multiply(zoneSize);
-                var neighborNames = neighborOffsets.filter(x => neighborPos.overwriteWith(x).add(zonePosInZones).isInRangeMaxExclusive(placeSizeInZones)).map(x => "Zone" + neighborPos.overwriteWith(x).add(zonePosInZones).toStringXY());
+                /*
+                var neighborNames = neighborOffsets.filter
+                (
+                    x => neighborPos.overwriteWith(x).add(zonePosInZones).isInRangeMaxExclusive(placeSizeInZones)
+                ).map
+                (
+                    x => "Zone" + neighborPos.overwriteWith(x).add(zonePosInZones).toStringXY()
+                );
+                */
+                var neighborNames = neighborOffsets.map(x => "Zone" + neighborPos.overwriteWith(x).add(zonePosInZones).wrapToRangeMax(placeSizeInZones).toStringXY());
                 var entityBoulderCorner = this.entityBuildFromDefn(this.entityDefnsByName.get("Boulder"), boxZeroes, this.randomizer);
                 var zone = new Zone("Zone" + zonePosInZones.toStringXY(), Box.fromMinAndSize(zonePos, zoneSize), neighborNames, [
                     entityBoulderCorner
@@ -90,12 +99,19 @@ class PlaceBuilderDemo {
                 zones.push(zone);
             }
         }
-        var zone0 = zones[0];
-        zone0.entities.push(...this.entities);
+        var zoneStart = zones[0];
+        zoneStart.entities.push(...this.entities);
+        var zonesByName = ArrayHelper.addLookupsByName(zones);
+        var posInZones = new Coords(0, 0, 0);
         var placeSize = placeSizeInZones.clone().multiply(zoneSize);
-        var place = new PlaceZoned("Zoned", "Demo", placeSize, "Player", zones);
+        var place = new PlaceZoned("Zoned", // name
+        "Demo", // defnName
+        placeSize, "Player", // entityToFollowName
+        zoneStart.name, // zoneStartName
+        (zoneName) => zonesByName.get(zoneName), (posToCheck) => // zoneAtPos
+         zonesByName.get("Zone" + posInZones.overwriteWith(posToCheck).divide(zoneSize).floor().toStringXY()));
         var entityCamera = this.build_Camera(this.cameraViewSize, place.size);
-        zone0.entities.push(entityCamera);
+        zoneStart.entities.push(entityCamera);
         return place;
     }
     buildTerrarium(size, placeNameToReturnTo) {
@@ -1910,15 +1926,14 @@ class PlaceBuilderDemo {
              {
                 var learner = actor.skillLearner();
                 var knowsHowToHide = learner.skillsKnownNames.indexOf("Hiding") >= 0;
-                //knowsHowToHide = true; // debug
                 if (knowsHowToHide) {
-                    var perceptible = actor.playable(); // hack
-                    var isAlreadyHiding = perceptible.isHiding;
+                    var hidable = actor.hidable();
+                    var isAlreadyHiding = hidable.isHidden;
                     if (isAlreadyHiding) {
-                        perceptible.isHiding = false;
+                        hidable.isHidden = false;
                     }
                     else {
-                        perceptible.isHiding = true;
+                        hidable.isHidden = true;
                     }
                 }
             }),

@@ -1,5 +1,5 @@
 
-class EquipmentUser
+class EquipmentUser extends EntityProperty
 {
 	socketGroup: EquipmentSocketGroup;
 	socketDefnGroup: EquipmentSocketDefnGroup;
@@ -10,6 +10,7 @@ class EquipmentUser
 
 	constructor(socketDefnGroup: EquipmentSocketDefnGroup)
 	{
+		super();
 		this.socketGroup = new EquipmentSocketGroup(socketDefnGroup);
 	}
 

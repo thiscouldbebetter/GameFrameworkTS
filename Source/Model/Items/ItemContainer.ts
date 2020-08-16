@@ -1,5 +1,5 @@
 
-class ItemContainer
+class ItemContainer extends EntityProperty
 {
 	statusMessage: string;
 

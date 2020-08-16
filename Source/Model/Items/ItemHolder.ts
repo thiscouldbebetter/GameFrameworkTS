@@ -1,5 +1,5 @@
 
-class ItemHolder
+class ItemHolder extends EntityProperty
 {
 	itemEntities: Entity[];
 	massMax: number;
@@ -13,6 +13,7 @@ class ItemHolder
 		itemEntities: Entity[], massMax: number, reachRadius: number
 	)
 	{
+		super();
 		this.itemEntities = [];
 		this.massMax = massMax;
 		this.reachRadius = reachRadius || 20;

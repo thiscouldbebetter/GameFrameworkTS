@@ -1,5 +1,5 @@
 
-class SkillLearner
+class SkillLearner extends EntityProperty
 {
 	skillBeingLearnedName: string;
 	learningAccumulated: number;
@@ -9,6 +9,7 @@ class SkillLearner
 
 	constructor(skillBeingLearnedName: string, learningAccumulated: number, skillsKnownNames: string[])
 	{
+		super();
 		this.skillBeingLearnedName = skillBeingLearnedName;
 		this.learningAccumulated = learningAccumulated || 0;
 		this.skillsKnownNames = skillsKnownNames || [];

@@ -337,6 +337,26 @@ class PlaceBuilderDemo_Movers {
             ),
             new VisualOffset(new VisualText(new DataBinding("Talker", null, null), null, friendlyColor, null), new Coords(0, 0 - friendlyDimension * 2, 0))
         ]);
+        var friendlyActivity = (universe, world, place, entityActor, target) => {
+            var actor = entityActor.actor();
+            var targetPos = actor.target;
+            if (targetPos == null) {
+                var randomizer = universe.randomizer;
+                targetPos =
+                    new Coords(0, 0, 0).randomize(randomizer).multiply(place.size);
+                actor.target = targetPos;
+            }
+            var actorLoc = entityActor.locatable().loc;
+            var actorPos = actorLoc.pos;
+            var distanceToTarget = targetPos.clone().subtract(actorPos).magnitude();
+            if (distanceToTarget >= 2) {
+                actorLoc.vel.overwriteWith(targetPos).subtract(actorPos).normalize();
+            }
+            else {
+                actorPos.overwriteWith(targetPos);
+                actor.target = null;
+            }
+        };
         var friendlyEntityDefn = new Entity("Friendly", [
             new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
             new Constrainable([constraintSpeedMax1]),
@@ -344,27 +364,7 @@ class PlaceBuilderDemo_Movers {
             new Drawable(friendlyVisual, null),
             new DrawableCamera(),
             new Talker("AnEveningWithProfessorSurly"),
-            new Actor((universe, world, place, entityActor, target) => // activity
-             {
-                var actor = entityActor.actor();
-                var targetPos = actor.target;
-                if (targetPos == null) {
-                    var randomizer = universe.randomizer;
-                    targetPos =
-                        new Coords(0, 0, 0).randomize(randomizer).multiply(place.size);
-                    actor.target = targetPos;
-                }
-                var actorLoc = entityActor.locatable().loc;
-                var actorPos = actorLoc.pos;
-                var distanceToTarget = targetPos.clone().subtract(actorPos).magnitude();
-                if (distanceToTarget >= 2) {
-                    actorLoc.vel.overwriteWith(targetPos).subtract(actorPos).normalize();
-                }
-                else {
-                    actorPos.overwriteWith(targetPos);
-                    actor.target = null;
-                }
-            }, null),
+            new Actor(friendlyActivity, null),
             new ItemHolder([
                 new Item("Ammo", 200),
                 new Item("Coin", 200),
@@ -477,7 +477,7 @@ class PlaceBuilderDemo_Movers {
         var playerVisualBodyNormal = visualBuilder.circleWithEyesAndLegsAndArms(playerHeadRadius, playerColor, visualEyeRadius, visualEyesBlinking);
         var playerVisualBodyHidden = visualBuilder.circleWithEyesAndLegs(playerHeadRadius, Color.byName("Black"), visualEyeRadius, visualEyesBlinking);
         var playerVisualBodyHidable = new VisualSelect(function selectChildName(u, w, d, e) {
-            return (e.playable().isHiding ? "Hidden" : "Normal");
+            return (e.hidable().isHidden ? "Hidden" : "Normal");
         }, ["Normal", "Hidden"], [playerVisualBodyNormal, playerVisualBodyHidden]);
         var playerVisualBodyJumpable = new VisualJump2D(playerVisualBodyHidable, new VisualEllipse(playerHeadRadius, playerHeadRadius / 2, 0, Color.byName("GrayDark"), Color.byName("Black")), null);
         var playerVisualName = new VisualText(new DataBinding(entityDefnNamePlayer, null, null), null, playerColor, null);
@@ -695,8 +695,26 @@ class PlaceBuilderDemo_Movers {
             back);
             return returnValue;
         });
+        var playerActivity = (universe, world, place, entityPlayer) => {
+            var inputHelper = universe.inputHelper;
+            if (inputHelper.isMouseClicked(null)) {
+                inputHelper.isMouseClicked(false);
+                var playerPos = entityPlayer.locatable().loc.pos;
+                var camera = place.camera();
+                playerPos.overwriteWith(inputHelper.mouseClickPos).divide(universe.display.scaleFactor()).add(camera.loc.pos).subtract(camera.viewSizeHalf).trimToRangeMax(place.size);
+                universe.soundHelper.soundWithNamePlayAsEffect(universe, "Sound");
+            }
+            var placeDefn = place.defn(world);
+            var actionsByName = placeDefn.actionsByName;
+            var actionToInputsMappingsByInputName = placeDefn.actionToInputsMappingsByInputName;
+            var actionsToPerform = inputHelper.actionsFromInput(actionsByName, actionToInputsMappingsByInputName);
+            for (var i = 0; i < actionsToPerform.length; i++) {
+                var action = actionsToPerform[i];
+                action.perform(universe, world, place, entityPlayer);
+            }
+        };
         var playerEntityDefn = new Entity(entityDefnNamePlayer, [
-            new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
+            new Actor(playerActivity, null),
             new Collidable(playerCollider, [Collidable.name], // entityPropertyNamesToCollideWith
             playerCollide),
             constrainable,
@@ -705,13 +723,15 @@ class PlaceBuilderDemo_Movers {
             new DrawableCamera(),
             new Effectable([]),
             equipmentUser,
+            new Hidable(false),
             new Idleable(),
             itemCrafter,
             itemHolder,
             journalKeeper,
+            new Locatable(null),
             killable,
             movable,
-            new Playable(null),
+            new Playable(),
             new SkillLearner(null, null, null),
             starvable
         ]);

@@ -1,6 +1,7 @@
 "use strict";
-class EquipmentUser {
+class EquipmentUser extends EntityProperty {
     constructor(socketDefnGroup) {
+        super();
         this.socketGroup = new EquipmentSocketGroup(socketDefnGroup);
     }
     equipEntityWithItem(universe, world, place, entityEquipmentUser, itemEntityToEquip) {

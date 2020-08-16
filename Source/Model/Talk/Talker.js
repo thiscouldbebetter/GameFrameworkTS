@@ -1,6 +1,8 @@
 "use strict";
-class Talker {
+class Talker extends EntityProperty //<Talker>
+ {
     constructor(conversationDefnName) {
+        super();
         this.conversationDefnName = conversationDefnName;
     }
 }

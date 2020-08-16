@@ -1,5 +1,5 @@
 
-class Equippable
+class Equippable extends EntityProperty
 {
 	_equip: (u: Universe, w: World, p: Place, e: Entity) => void;
 	_unequip: (u: Universe, w: World, p: Place, e: Entity) => void;
@@ -12,6 +12,7 @@ class Equippable
 		unequip: (u: Universe, w: World, p: Place, e: Entity) => void
 	)
 	{
+		super();
 		this._equip = equip;
 		this._unequip = unequip;
 		this.isEquipped = false;

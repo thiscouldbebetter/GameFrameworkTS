@@ -1,6 +1,7 @@
 "use strict";
-class Equippable {
+class Equippable extends EntityProperty {
     constructor(equip, unequip) {
+        super();
         this._equip = equip;
         this._unequip = unequip;
         this.isEquipped = false;

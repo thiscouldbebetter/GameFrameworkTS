@@ -1,6 +1,7 @@
 "use strict";
-class Damager {
+class Damager extends EntityProperty {
     constructor(damagePerHit) {
+        super();
         this.damagePerHit = damagePerHit;
     }
 }

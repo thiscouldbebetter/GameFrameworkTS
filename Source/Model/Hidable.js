@@ -1,6 +1,8 @@
 "use strict";
-class Hidable {
+class Hidable extends EntityProperty //<Hidable>
+ {
     constructor(isHidden) {
+        super();
         this.isHidden = isHidden;
         this._isHiddenPrev = null;
     }
