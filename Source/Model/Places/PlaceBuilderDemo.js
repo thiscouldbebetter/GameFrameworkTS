@@ -52,8 +52,8 @@ class PlaceBuilderDemo {
             this.build_Goal(entityDimension);
         }
         this.entitiesAllGround();
-        var camera = this.build_Camera(this.cameraViewSize);
-        this.entities.splice(0, 0, ...this.entityBuildBackground(camera));
+        var entityCamera = this.build_Camera(this.cameraViewSize, this.size);
+        this.entities.splice(0, 0, ...this.entityBuildBackground(entityCamera.camera()));
         var randomizerSeed = this.randomizer.getNextRandom();
         var place = new PlaceRoom(this.name, "Demo", size, this.entities, randomizerSeed);
         return place;
@@ -61,11 +61,41 @@ class PlaceBuilderDemo {
     buildZoned(size, placeNameToReturnTo) {
         this.entities = [];
         this.entityBuildExit(placeNameToReturnTo);
-        this.build_Camera(this.cameraViewSize);
-        var zone = new Zone("Zone0", new Box(new Coords(0, 0, 0), size), [], // zonesAdjacentNames
-        this.entities);
-        var zones = [zone];
-        var place = new PlaceZoned("Zoned", "Demo", "Player", zones);
+        var zones = [];
+        var placeSizeInZones = new Coords(3, 3, 1);
+        var zonePosInZones = new Coords(0, 0, 0);
+        var zoneSize = size;
+        var neighborOffsets = [
+            new Coords(1, 0, 0),
+            new Coords(1, 1, 0),
+            new Coords(0, 1, 0),
+            new Coords(-1, 1, 0),
+            new Coords(-1, 0, 0),
+            new Coords(-1, -1, 0),
+            new Coords(0, -1, 0),
+            new Coords(1, -1, 0)
+        ];
+        var neighborPos = new Coords(0, 0, 0);
+        var boxZeroes = new Box(new Coords(0, 0, 0), new Coords(0, 0, 0));
+        for (var y = 0; y < placeSizeInZones.y; y++) {
+            zonePosInZones.y = y;
+            for (var x = 0; x < placeSizeInZones.x; x++) {
+                zonePosInZones.x = x;
+                var zonePos = zonePosInZones.clone().multiply(zoneSize);
+                var neighborNames = neighborOffsets.filter(x => neighborPos.overwriteWith(x).add(zonePosInZones).isInRangeMaxExclusive(placeSizeInZones)).map(x => "Zone" + neighborPos.overwriteWith(x).add(zonePosInZones).toStringXY());
+                var entityBoulderCorner = this.entityBuildFromDefn(this.entityDefnsByName.get("Boulder"), boxZeroes, this.randomizer);
+                var zone = new Zone("Zone" + zonePosInZones.toStringXY(), Box.fromMinAndSize(zonePos, zoneSize), neighborNames, [
+                    entityBoulderCorner
+                ]);
+                zones.push(zone);
+            }
+        }
+        var zone0 = zones[0];
+        zone0.entities.push(...this.entities);
+        var placeSize = placeSizeInZones.clone().multiply(zoneSize);
+        var place = new PlaceZoned("Zoned", "Demo", placeSize, "Player", zones);
+        var entityCamera = this.build_Camera(this.cameraViewSize, place.size);
+        zone0.entities.push(entityCamera);
         return place;
     }
     buildTerrarium(size, placeNameToReturnTo) {
@@ -344,10 +374,10 @@ class PlaceBuilderDemo {
         var place = new PlaceRoom(this.name, "Demo", size, this.entities, randomizerSeed);
         return place;
     }
-    build_Camera(cameraViewSize) {
-        var cameraEntity = this.entityBuildCamera(cameraViewSize);
+    build_Camera(cameraViewSize, placeSize) {
+        var cameraEntity = this.entityBuildCamera(cameraViewSize, placeSize);
         this.entities.push(cameraEntity);
-        return cameraEntity.camera();
+        return cameraEntity;
     }
     ;
     build_Exterior(placePos, placeNamesToIncludePortalsTo) {
@@ -413,7 +443,7 @@ class PlaceBuilderDemo {
         this.build_SizeWallsAndMargins(this.name, null, null);
         this.entityBuildExit(placeNameToReturnTo);
         this.entitiesAllGround();
-        this.build_Camera(this.cameraViewSize);
+        this.build_Camera(this.cameraViewSize, this.size);
     }
     build_SizeWallsAndMargins(namePrefix, placePos, areNeighborsConnectedESWN) {
         this.size = this.size.clearZ();
@@ -423,11 +453,11 @@ class PlaceBuilderDemo {
         this.marginSize = marginSize;
     }
     // Constructor helpers.
-    entityBuildCamera(cameraViewSize) {
+    entityBuildCamera(cameraViewSize, placeSize) {
         var viewSizeHalf = cameraViewSize.clone().half();
         var cameraHeightAbovePlayfield = cameraViewSize.x;
         var cameraZ = 0 - cameraHeightAbovePlayfield;
-        var cameraPosBox = new Box(new Coords(0, 0, 0), new Coords(0, 0, 0)).fromMinAndMax(viewSizeHalf.clone().zSet(cameraZ), this.size.clone().subtract(viewSizeHalf).zSet(cameraZ));
+        var cameraPosBox = Box.fromMinAndMax(viewSizeHalf.clone().zSet(cameraZ), placeSize.clone().subtract(viewSizeHalf).zSet(cameraZ));
         var cameraPos = viewSizeHalf.clone();
         var cameraLoc = new Disposition(cameraPos, Orientation.Instances().ForwardZDownY.clone(), null);
         var camera = new Camera(cameraViewSize, cameraHeightAbovePlayfield, // focalLength
@@ -442,7 +472,6 @@ class PlaceBuilderDemo {
         ]);
         return cameraEntity;
     }
-    ;
     entityBuildBackground(camera) {
         var returnValues = [];
         var visualBackgroundDimension = 100;
@@ -470,7 +499,6 @@ class PlaceBuilderDemo {
         returnValues.push(entityBackgroundTop);
         return returnValues;
     }
-    ;
     entityBuildExit(placeNameToReturnTo) {
         var entityPosRange = new Box(this.size.clone().half(), this.size.clone().subtract(this.marginSize));
         var exit = this.entityBuildFromDefn(this.entityDefnsByName.get("Exit"), entityPosRange, this.randomizer);

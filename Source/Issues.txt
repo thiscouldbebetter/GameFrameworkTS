@@ -6,7 +6,6 @@ Features
 
 Controls - Auto-Map
 Controls - Clickable Quick Slots
-Controls - Control is Superclass Instead of Interface
 Controls - Decorations
 Controls - Images in Lists and Grids
 Controls - Move Esc Menu into Tab of Tab Menu
@@ -38,6 +37,7 @@ Places - Load/Unload Zones in Terrarium
 Places - Map Tiles as Obstacles
 Places - Map Tiles from Images
 Places - Map Tiles - Generated
+Places - Zones
 
 Sound - Hitting Obstacle
 Sound - Shooting Gun

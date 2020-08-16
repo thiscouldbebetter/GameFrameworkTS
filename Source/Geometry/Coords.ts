@@ -31,7 +31,7 @@ class Coords
 			Coords._instances = new Coords_Instances();
 		}
 		return Coords._instances;
-	};
+	}
 
 	// methods
 
@@ -41,7 +41,7 @@ class Coords
 		this.y = Math.abs(this.y);
 		this.z = Math.abs(this.z);
 		return this;
-	};
+	}
 
 	add(other: Coords): Coords
 	{
@@ -49,7 +49,7 @@ class Coords
 		this.y += other.y;
 		this.z += other.z;
 		return this;
-	};
+	}
 
 	addDimensions(x: number, y: number, z: number): Coords
 	{
@@ -57,7 +57,7 @@ class Coords
 		this.y += y;
 		this.z += z;
 		return this;
-	};
+	}
 
 	ceiling(): Coords
 	{
@@ -65,7 +65,7 @@ class Coords
 		this.y = Math.ceil(this.y);
 		this.z = Math.ceil(this.z);
 		return this;
-	};
+	}
 
 	clear(): Coords
 	{
@@ -73,18 +73,18 @@ class Coords
 		this.y = 0;
 		this.z = 0;
 		return this;
-	};
+	}
 
 	clearZ(): Coords
 	{
 		this.z = 0;
 		return this;
-	};
+	}
 
 	clone(): Coords
 	{
 		return new Coords(this.x, this.y, this.z);
-	};
+	}
 
 	crossProduct(other: Coords): Coords
 	{
@@ -94,7 +94,7 @@ class Coords
 			this.z * other.x - this.x * other.z,
 			this.x * other.y - this.y * other.x
 		);
-	};
+	}
 
 	dimensionGet(dimensionIndex: number): number
 	{
@@ -114,7 +114,7 @@ class Coords
 		}
 
 		return returnValue;
-	};
+	}
 
 	dimensionSet(dimensionIndex: number, valueToSet: number): Coords
 	{
@@ -132,12 +132,12 @@ class Coords
 		}
 
 		return this;
-	};
+	}
 
 	dimensions(): number[]
 	{
 		return [ this.x, this.y, this.z ];
-	};
+	}
 
 	directions(): Coords
 	{
@@ -169,7 +169,7 @@ class Coords
 		}
 
 		return this;
-	};
+	}
 
 	divide(other: Coords): Coords
 	{
@@ -177,7 +177,7 @@ class Coords
 		this.y /= other.y;
 		this.z /= other.z;
 		return this;
-	};
+	}
 
 	divideScalar(scalar: number): Coords
 	{
@@ -185,27 +185,27 @@ class Coords
 		this.y /= scalar;
 		this.z /= scalar;
 		return this;
-	};
+	}
 
 	dotProduct(other: Coords): number
 	{
 		return this.x * other.x + this.y * other.y + this.z * other.z;
-	};
+	}
 
 	double(): Coords
 	{
 		return this.multiplyScalar(2);
-	};
+	}
 
 	equals(other: Coords): boolean
 	{
 		return (this.x == other.x && this.y == other.y && this.z == other.z);
-	};
+	}
 
 	equalsXY(other: Coords): boolean
 	{
 		return (this.x == other.x && this.y == other.y);
-	};
+	}
 
 	floor(): Coords
 	{
@@ -213,12 +213,12 @@ class Coords
 		this.y = Math.floor(this.y);
 		this.z = Math.floor(this.z);
 		return this;
-	};
+	}
 
 	half(): Coords
 	{
 		return this.divideScalar(2);
-	};
+	}
 
 	invert(): Coords
 	{
@@ -226,12 +226,17 @@ class Coords
 		this.y = 0 - this.y;
 		this.z = 0 - this.z;
 		return this;
-	};
+	}
 
 	isInRangeMax(max: Coords)
 	{
 		return this.isInRangeMinMax(Coords.Instances().Zeroes, max);
-	};
+	}
+
+	isInRangeMaxExclusive(max: Coords)
+	{
+		return this.isInRangeMinInclusiveMaxExclusive(Coords.Instances().Zeroes, max);
+	}
 
 	isInRangeMinMax(min: Coords, max: Coords): boolean
 	{
@@ -246,12 +251,27 @@ class Coords
 		);
 
 		return returnValue;
-	};
+	}
+
+	isInRangeMinInclusiveMaxExclusive(min: Coords, max: Coords): boolean
+	{
+		var returnValue =
+		(
+			this.x >= min.x
+			&& this.x < max.x
+			&& this.y >= min.y
+			&& this.y < max.y
+			&& this.z >= min.z
+			&& this.z < max.z
+		);
+
+		return returnValue;
+	}
 
 	magnitude(): number
 	{
 		return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
-	};
+	}
 
 	multiply(other: Coords): Coords
 	{
@@ -259,7 +279,7 @@ class Coords
 		this.y *= other.y;
 		this.z *= other.z;
 		return this;
-	};
+	}
 
 	multiplyDimensions(x: number, y: number, z: number): Coords
 	{
@@ -267,7 +287,7 @@ class Coords
 		this.y *= y;
 		this.z *= z;
 		return this;
-	};
+	}
 
 	multiplyScalar(scalar: number): Coords
 	{
@@ -275,7 +295,7 @@ class Coords
 		this.y *= scalar;
 		this.z *= scalar;
 		return this;
-	};
+	}
 
 	normalize(): Coords
 	{
@@ -285,7 +305,7 @@ class Coords
 			this.divideScalar(magnitude);
 		}
 		return this;
-	};
+	}
 
 	overwriteWith(other: Coords): Coords
 	{
@@ -293,7 +313,7 @@ class Coords
 		this.y = other.y;
 		this.z = other.z;
 		return this;
-	};
+	}
 
 	overwriteWithDimensions(x: number, y: number, z: number): Coords
 	{
@@ -301,19 +321,19 @@ class Coords
 		this.y = y;
 		this.z = z;
 		return this;
-	};
+	}
 
 	overwriteWithXY(other: Coords): Coords
 	{
 		this.x = other.x;
 		this.y = other.y;
 		return this;
-	};
+	}
 
 	productOfDimensions(): number
 	{
 		return this.x * this.y * this.z;
-	};
+	}
 
 	randomize(randomizer: Randomizer): Coords
 	{
@@ -325,7 +345,7 @@ class Coords
 		this.y = randomizer.getNextRandom();
 		this.z = randomizer.getNextRandom();
 		return this;
-	};
+	}
 
 	right(): Coords
 	{
@@ -333,7 +353,7 @@ class Coords
 		this.y = this.x;
 		this.x = 0 - temp;
 		return this;
-	};
+	}
 
 	round(): Coords
 	{
@@ -341,7 +361,7 @@ class Coords
 		this.y = Math.round(this.y);
 		this.z = Math.round(this.z);
 		return this;
-	};
+	}
 
 	subtract(other: Coords): Coords
 	{
@@ -349,7 +369,7 @@ class Coords
 		this.y -= other.y;
 		this.z -= other.z;
 		return this;
-	};
+	}
 
 	subtractWrappedToRangeMax(other: Coords, max: Coords): Coords
 	{
@@ -357,12 +377,12 @@ class Coords
 		this.y = NumberHelper.subtractWrappedToRangeMax(this.y, other.y, max.y);
 		this.z = NumberHelper.subtractWrappedToRangeMax(this.z, other.z, max.z);
 		return this;
-	};
+	}
 
 	sumOfDimensions(): number
 	{
 		return this.x + this.y + this.z;
-	};
+	}
 
 	trimToMagnitudeMax(magnitudeMax: number): Coords
 	{
@@ -372,7 +392,7 @@ class Coords
 			this.divideScalar(magnitude).multiplyScalar(magnitudeMax);
 		}
 		return this;
-	};
+	}
 
 	trimToRangeMax(max: Coords): Coords
 	{
@@ -404,7 +424,7 @@ class Coords
 		}
 
 		return this;
-	};
+	}
 
 	trimToRangeMinMax(min: Coords, max: Coords): Coords
 	{
@@ -436,7 +456,7 @@ class Coords
 		}
 
 		return this;
-	};
+	}
 
 	wrapToRangeMax(max: Coords): Coords
 	{
@@ -471,37 +491,37 @@ class Coords
 		}
 
 		return this;
-	};
+	}
 
 	xSet(value: number): Coords
 	{
 		this.x = value;
 		return this;
-	};
+	}
 
 	ySet(value: number): Coords
 	{
 		this.y = value;
 		return this;
-	};
+	}
 
 	zSet(value: number): Coords
 	{
 		this.z = value;
 		return this;
-	};
+	}
 
 	// string
 
 	toString()
 	{
 		return this.x + "x" + this.y + "x" + this.z;
-	};
+	}
 
 	toStringXY()
 	{
 		return this.x + "x" + this.y;
-	};
+	}
 }
 
 class Coords_Instances

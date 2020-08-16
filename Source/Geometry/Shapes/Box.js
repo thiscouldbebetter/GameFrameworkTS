@@ -8,6 +8,15 @@ class Box {
         this._max = new Coords(0, 0, 0);
         this._range = new RangeExtent(0, 0);
     }
+    static fromMinAndMax(min, max) {
+        var center = min.clone().add(max).half();
+        var size = max.clone().subtract(min);
+        return new Box(center, size);
+    }
+    static fromMinAndSize(min, size) {
+        var center = size.clone().half().add(min);
+        return new Box(center, size);
+    }
     // Static methods.
     static doBoxesInSetsOverlap(boxSet0, boxSet1) {
         var doAnyBoxOverlapSoFar = false;
@@ -23,27 +32,13 @@ class Box {
         }
         return doAnyBoxOverlapSoFar;
     }
-    ;
     // Instance methods.
     containsOther(other) {
         return (this.containsPoint(other.min()) && this.containsPoint(other.max()));
     }
-    ;
     containsPoint(pointToCheck) {
         return pointToCheck.isInRangeMinMax(this.min(), this.max());
     }
-    ;
-    fromMinAndMax(min, max) {
-        var center = min.clone().add(max).half();
-        var size = max.clone().subtract(min);
-        return new Box(center, size);
-    }
-    ;
-    fromMinAndSize(min, size) {
-        var center = size.clone().half().add(min);
-        return new Box(center, size);
-    }
-    ;
     intersectWith(other) {
         var thisMinDimensions = this.min().dimensions();
         var thisMaxDimensions = this.max().dimensions();
@@ -78,15 +73,12 @@ class Box {
         }
         return returnValue;
     }
-    ;
     max() {
         return this._max.overwriteWith(this.center).add(this.sizeHalf);
     }
-    ;
     min() {
         return this._min.overwriteWith(this.center).subtract(this.sizeHalf);
     }
-    ;
     ofPoints(points) {
         var point0 = points[0];
         var minSoFar = this._min.overwriteWith(point0);
@@ -117,59 +109,50 @@ class Box {
         this.sizeHalf.overwriteWith(this.size).half();
         return this;
     }
-    ;
     overlapsWith(other) {
         var returnValue = (this.overlapsWithOtherInDimension(other, 0)
             && this.overlapsWithOtherInDimension(other, 1)
             && this.overlapsWithOtherInDimension(other, 2));
         return returnValue;
     }
-    ;
     overlapsWithXY(other) {
         var returnValue = (this.overlapsWithOtherInDimension(other, 0)
             && this.overlapsWithOtherInDimension(other, 1));
         return returnValue;
     }
-    ;
     overlapsWithOtherInDimension(other, dimensionIndex) {
         var rangeThis = this.rangeForDimension(dimensionIndex, this._range);
         var rangeOther = other.rangeForDimension(dimensionIndex, other._range);
         var returnValue = rangeThis.overlapsWith(rangeOther);
         return returnValue;
     }
-    ;
     rangeForDimension(dimensionIndex, range) {
         range.min = this.min().dimensionGet(dimensionIndex);
         range.max = this.max().dimensionGet(dimensionIndex);
         return range;
     }
-    ;
     sizeOverwriteWith(sizeOther) {
         this.size.overwriteWith(sizeOther);
         this.sizeHalf.overwriteWith(this.size).half();
         return this;
     }
-    ;
     touches(other) {
         var returnValue = (this.touchesOtherInDimension(other, 0)
             && this.touchesOtherInDimension(other, 1)
             && this.touchesOtherInDimension(other, 2));
         return returnValue;
     }
-    ;
     touchesXY(other) {
         var returnValue = (this.touchesOtherInDimension(other, 0)
             && this.touchesOtherInDimension(other, 1));
         return returnValue;
     }
-    ;
     touchesOtherInDimension(other, dimensionIndex) {
         var rangeThis = this.rangeForDimension(dimensionIndex, this._range);
         var rangeOther = other.rangeForDimension(dimensionIndex, other._range);
         var returnValue = rangeThis.touches(rangeOther);
         return returnValue;
     }
-    ;
     trimCoords(coordsToTrim) {
         return coordsToTrim.trimToRangeMinMax(this.min(), this.max());
     }
@@ -185,7 +168,6 @@ class Box {
     clone() {
         return new Box(this.center.clone(), this.size.clone());
     }
-    ;
     overwriteWith(other) {
         this.center.overwriteWith(other.center);
         this.size.overwriteWith(other.size);
@@ -197,15 +179,12 @@ class Box {
     toString() {
         return this.min().toString() + ":" + this.max().toString();
     }
-    ;
     // transformable
     coordsGroupToTranslate() {
         return [this.center];
     }
-    ;
     transform(transformToApply) {
         Transforms.applyTransformToCoordsMany(transformToApply, this.coordsGroupToTranslate());
         return this;
     }
-    ;
 }

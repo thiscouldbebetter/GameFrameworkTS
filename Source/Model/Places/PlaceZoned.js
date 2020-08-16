@@ -1,11 +1,11 @@
 "use strict";
 class PlaceZoned extends Place {
-    constructor(name, defnName, entityToFollowName, zones) {
-        super(name, defnName, null, // size
-        [] // entities
+    constructor(name, defnName, size, entityToFollowName, zones) {
+        super(name, defnName, size, [] // entities
         );
         this.entityToFollowName = entityToFollowName;
         this.zones = zones;
+        this.zoneCentralAndNeighbors = [];
         this.zonesByName = ArrayHelper.addLookupsByName(this.zones);
     }
     // Place implementation.

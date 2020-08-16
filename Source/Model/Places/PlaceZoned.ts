@@ -8,18 +8,19 @@ class PlaceZoned extends Place
 	zoneCentralAndNeighbors: Zone[];
 	zonesByName: Map<string, Zone>;
 
-	constructor(name: string, defnName: string, entityToFollowName: string, zones: Zone[])
+	constructor(name: string, defnName: string, size: Coords, entityToFollowName: string, zones: Zone[])
 	{
 		super
 		(
 			name,
 			defnName,
-			null, // size
+			size,
 			[] // entities
 		);
 
 		this.entityToFollowName = entityToFollowName;
 		this.zones = zones;
+		this.zoneCentralAndNeighbors = [];
 		this.zonesByName = ArrayHelper.addLookupsByName(this.zones);
 	}
 

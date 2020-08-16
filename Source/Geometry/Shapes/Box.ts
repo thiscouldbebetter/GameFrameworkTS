@@ -22,6 +22,19 @@ class Box
 		this._range = new RangeExtent(0, 0);
 	}
 
+	static fromMinAndMax(min: Coords, max: Coords)
+	{
+		var center = min.clone().add(max).half();
+		var size = max.clone().subtract(min);
+		return new Box(center, size);
+	}
+
+	static fromMinAndSize(min: Coords, size: Coords)
+	{
+		var center = size.clone().half().add(min);
+		return new Box(center, size);
+	}
+
 	// Static methods.
 
 	static doBoxesInSetsOverlap(boxSet0: Box[], boxSet1: Box[])
@@ -49,32 +62,19 @@ class Box
 		}
 
 		return doAnyBoxOverlapSoFar;
-	};
+	}
 
 	// Instance methods.
 
 	containsOther(other: Box)
 	{
 		return ( this.containsPoint(other.min()) && this.containsPoint(other.max()) );
-	};
+	}
 
 	containsPoint(pointToCheck: Coords)
 	{
 		return pointToCheck.isInRangeMinMax(this.min(), this.max());
-	};
-
-	fromMinAndMax(min: Coords, max: Coords)
-	{
-		var center = min.clone().add(max).half();
-		var size = max.clone().subtract(min);
-		return new Box(center, size);
-	};
-
-	fromMinAndSize(min: Coords, size: Coords)
-	{
-		var center = size.clone().half().add(min);
-		return new Box(center, size);
-	};
+	}
 
 	intersectWith(other: Box)
 	{
@@ -122,17 +122,17 @@ class Box
 		}
 
 		return returnValue;
-	};
+	}
 
 	max()
 	{
 		return this._max.overwriteWith(this.center).add(this.sizeHalf);
-	};
+	}
 
 	min()
 	{
 		return this._min.overwriteWith(this.center).subtract(this.sizeHalf);
-	};
+	}
 
 	ofPoints(points: Coords[])
 	{
@@ -177,7 +177,7 @@ class Box
 		this.sizeHalf.overwriteWith(this.size).half();
 
 		return this;
-	};
+	}
 
 	overlapsWith(other: Box)
 	{
@@ -188,7 +188,7 @@ class Box
 			&& this.overlapsWithOtherInDimension(other, 2)
 		);
 		return returnValue;
-	};
+	}
 
 	overlapsWithXY(other: Box)
 	{
@@ -198,7 +198,7 @@ class Box
 			&& this.overlapsWithOtherInDimension(other, 1)
 		);
 		return returnValue;
-	};
+	}
 
 	overlapsWithOtherInDimension(other: Box, dimensionIndex: number)
 	{
@@ -206,21 +206,21 @@ class Box
 		var rangeOther = other.rangeForDimension(dimensionIndex, other._range);
 		var returnValue = rangeThis.overlapsWith(rangeOther);
 		return returnValue;
-	};
+	}
 
 	rangeForDimension(dimensionIndex: number, range: RangeExtent)
 	{
 		range.min = this.min().dimensionGet(dimensionIndex);
 		range.max = this.max().dimensionGet(dimensionIndex);
 		return range;
-	};
+	}
 
 	sizeOverwriteWith(sizeOther: Coords)
 	{
 		this.size.overwriteWith(sizeOther);
 		this.sizeHalf.overwriteWith(this.size).half();
 		return this;
-	};
+	}
 
 	touches(other: Box)
 	{
@@ -231,7 +231,7 @@ class Box
 			&& this.touchesOtherInDimension(other, 2)
 		);
 		return returnValue;
-	};
+	}
 
 	touchesXY(other: Box)
 	{
@@ -241,7 +241,7 @@ class Box
 			&& this.touchesOtherInDimension(other, 1)
 		);
 		return returnValue;
-	};
+	}
 
 	touchesOtherInDimension(other: Box, dimensionIndex: number)
 	{
@@ -249,7 +249,7 @@ class Box
 		var rangeOther = other.rangeForDimension(dimensionIndex, other._range);
 		var returnValue = rangeThis.touches(rangeOther);
 		return returnValue;
-	};
+	}
 
 	trimCoords(coordsToTrim: Coords)
 	{
@@ -271,7 +271,7 @@ class Box
 	clone()
 	{
 		return new Box(this.center.clone(), this.size.clone());
-	};
+	}
 
 	overwriteWith(other: Box)
 	{
@@ -286,18 +286,18 @@ class Box
 	toString()
 	{
 		return this.min().toString() + ":" + this.max().toString();
-	};
+	}
 
 	// transformable
 
 	coordsGroupToTranslate()
 	{
 		return [ this.center ];
-	};
+	}
 
 	transform(transformToApply: Transform)
 	{
 		Transforms.applyTransformToCoordsMany(transformToApply, this.coordsGroupToTranslate());
 		return this;
-	};
+	}
 }
