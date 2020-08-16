@@ -99,6 +99,29 @@ class PlaceBuilderDemo
 		return place;
 	}
 
+	buildZoned(size: Coords, placeNameToReturnTo: string)
+	{
+		this.entities = [];
+
+		this.entityBuildExit(placeNameToReturnTo);
+
+		this.build_Camera(this.cameraViewSize);
+
+		var zone = new Zone
+		(
+			"Zone0",
+			new Box(new Coords(0, 0, 0), size),
+			[], // zonesAdjacentNames
+			this.entities
+		);
+
+		var zones = [ zone ];
+
+		var place = new PlaceZoned("Zoned", "Demo", "Player", zones);
+
+		return place;
+	}
+
 	buildTerrarium(size: Coords, placeNameToReturnTo: string)
 	{
 		size = size.clone().multiplyScalar(2);

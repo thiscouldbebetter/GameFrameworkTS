@@ -73,7 +73,7 @@ class World {
                 var isGoal = (roomPos.equals(goalPos));
                 var placeNamesToIncludePortalsTo = [];
                 if (isStart) {
-                    placeNamesToIncludePortalsTo = ["Base", "Terrarium"];
+                    placeNamesToIncludePortalsTo = ["Base", "Terrarium", "Zoned"];
                 }
                 var placeBattlefield = placeBuilder.buildBattlefield(roomSize, roomPos, areNeighborsConnectedESWN, isGoal, placeNamesToIncludePortalsTo);
                 places.push(placeBattlefield);
@@ -88,10 +88,14 @@ class World {
         placeBattlefield0.name // placeNameToReturnTo
         );
         places.splice(0, 0, placeBase);
-        var placeBase = placeBuilder.buildTerrarium(displaySize.clone(), // size
+        var placeZoned = placeBuilder.buildZoned(displaySize.clone(), // size
         placeBattlefield0.name // placeNameToReturnTo
         );
-        places.push(placeBase);
+        places.push(placeZoned);
+        var placeTerrarium = placeBuilder.buildTerrarium(displaySize.clone(), // size
+        placeBattlefield0.name // placeNameToReturnTo
+        );
+        places.push(placeTerrarium);
         var returnValue = new World("World-" + nowAsString, now, // dateCreated
         defns, places);
         return returnValue;

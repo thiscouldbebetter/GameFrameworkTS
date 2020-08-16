@@ -58,6 +58,16 @@ class PlaceBuilderDemo {
         var place = new PlaceRoom(this.name, "Demo", size, this.entities, randomizerSeed);
         return place;
     }
+    buildZoned(size, placeNameToReturnTo) {
+        this.entities = [];
+        this.entityBuildExit(placeNameToReturnTo);
+        this.build_Camera(this.cameraViewSize);
+        var zone = new Zone("Zone0", new Box(new Coords(0, 0, 0), size), [], // zonesAdjacentNames
+        this.entities);
+        var zones = [zone];
+        var place = new PlaceZoned("Zoned", "Demo", "Player", zones);
+        return place;
+    }
     buildTerrarium(size, placeNameToReturnTo) {
         size = size.clone().multiplyScalar(2);
         this.build_Interior("Terrarium", size, placeNameToReturnTo);

@@ -120,7 +120,7 @@ class World
 				var placeNamesToIncludePortalsTo: string[] = [];
 				if (isStart)
 				{
-					placeNamesToIncludePortalsTo = [ "Base", "Terrarium" ];
+					placeNamesToIncludePortalsTo = [ "Base", "Terrarium", "Zoned" ];
 				}
 
 				var placeBattlefield = placeBuilder.buildBattlefield
@@ -150,12 +150,19 @@ class World
 		);
 		places.splice(0, 0, placeBase);
 
-		var placeBase = placeBuilder.buildTerrarium
+		var placeZoned = placeBuilder.buildZoned
 		(
 			displaySize.clone(), // size
 			placeBattlefield0.name // placeNameToReturnTo
 		);
-		places.push(placeBase);
+		places.push(placeZoned);
+
+		var placeTerrarium = placeBuilder.buildTerrarium
+		(
+			displaySize.clone(), // size
+			placeBattlefield0.name // placeNameToReturnTo
+		);
+		places.push(placeTerrarium);
 
 		var returnValue = new World
 		(
