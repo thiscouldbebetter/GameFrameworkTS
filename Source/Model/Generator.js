@@ -1,6 +1,5 @@
 "use strict";
-class Generator extends EntityProperty //<Generator>
- {
+class Generator extends EntityProperty {
     constructor(entityToGenerate, ticksToGenerate, entitiesGeneratedMax) {
         super();
         this.entityToGenerate = entityToGenerate;

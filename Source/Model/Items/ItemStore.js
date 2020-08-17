@@ -1,6 +1,5 @@
 "use strict";
-class ItemStore extends EntityProperty //<ItemStore>
- {
+class ItemStore extends EntityProperty {
     constructor(itemDefnNameCurrency) {
         super();
         this.itemDefnNameCurrency = itemDefnNameCurrency;

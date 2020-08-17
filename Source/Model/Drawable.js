@@ -1,6 +1,5 @@
 "use strict";
-class Drawable extends EntityProperty //<Drawable>
- {
+class Drawable extends EntityProperty {
     constructor(visual, isVisible) {
         super();
         this.visual = visual;

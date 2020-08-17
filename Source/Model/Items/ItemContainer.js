@@ -1,6 +1,5 @@
 "use strict";
-class ItemContainer extends EntityProperty //<ItemContainer>
- {
+class ItemContainer extends EntityProperty {
     transfer(world, entityFrom, entityTo, messagePrefix) {
         var itemHolderFrom = entityFrom.itemHolder();
         var itemHolderTo = entityTo.itemHolder();

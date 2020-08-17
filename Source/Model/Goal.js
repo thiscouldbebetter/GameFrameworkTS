@@ -1,6 +1,5 @@
 "use strict";
-class Goal extends EntityProperty //<Goal>
- {
+class Goal extends EntityProperty {
     constructor(numberOfKeysToUnlock) {
         super();
         this.numberOfKeysToUnlock = numberOfKeysToUnlock;

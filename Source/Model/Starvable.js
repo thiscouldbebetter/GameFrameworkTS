@@ -1,6 +1,5 @@
 "use strict";
-class Starvable extends EntityProperty //<Starvable>
- {
+class Starvable extends EntityProperty {
     constructor(satietyMax, satietyLostPerTick, starve) {
         super();
         this.satietyMax = satietyMax;

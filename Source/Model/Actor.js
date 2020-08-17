@@ -1,6 +1,5 @@
 "use strict";
-class Actor extends EntityProperty //<Actor>
- {
+class Actor extends EntityProperty {
     constructor(activity, target) {
         super();
         this.activity = activity;

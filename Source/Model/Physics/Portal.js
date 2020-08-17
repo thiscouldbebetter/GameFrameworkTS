@@ -1,6 +1,5 @@
 "use strict";
-class Portal extends EntityProperty //<Portal>
- {
+class Portal extends EntityProperty {
     constructor(destinationPlaceName, destinationEntityName, clearsVelocity) {
         super();
         this.destinationPlaceName = destinationPlaceName;

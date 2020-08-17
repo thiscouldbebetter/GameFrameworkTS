@@ -1,6 +1,5 @@
 "use strict";
-class Movable extends EntityProperty //<Movable>
- {
+class Movable extends EntityProperty {
     constructor(accelerationPerTick, accelerate) {
         super();
         this.accelerationPerTick = accelerationPerTick;

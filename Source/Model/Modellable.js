@@ -1,6 +1,5 @@
 "use strict";
-class Modellable extends EntityProperty //<Modellable>
- {
+class Modellable extends EntityProperty {
     constructor(model) {
         super();
         this.model = model;

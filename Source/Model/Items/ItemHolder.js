@@ -1,6 +1,5 @@
 "use strict";
-class ItemHolder extends EntityProperty //<ItemHolder>
- {
+class ItemHolder extends EntityProperty {
     constructor(itemEntities, massMax, reachRadius) {
         super();
         this.itemEntities = [];

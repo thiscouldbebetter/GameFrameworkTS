@@ -1,6 +1,5 @@
 "use strict";
-class Loadable extends EntityProperty //<Loadable>
- {
+class Loadable extends EntityProperty {
     constructor(load, unload) {
         super();
         this.isLoaded = false;

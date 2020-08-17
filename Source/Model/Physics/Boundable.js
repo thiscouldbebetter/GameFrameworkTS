@@ -1,6 +1,5 @@
 "use strict";
-class Boundable extends EntityProperty //<Boundable>
- {
+class Boundable extends EntityProperty {
     constructor(bounds) {
         super();
         this.bounds = bounds;

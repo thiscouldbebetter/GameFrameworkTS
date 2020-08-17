@@ -3,12 +3,17 @@ function main() {
     // It may be necessary to clear local storage to prevent errors on
     // deserialization of existing saved items after the schema changes.
     // localStorage.clear();
-    var mediaLibrary = MediaLibrary.fromFileNames("../Content/", [
+    var imageFileNames = [
         "Anvil.svg",
         "Friendly.png",
         "Grass.svg",
         "Title.png"
-    ], ["Sound.wav"], ["Music.mp3"], ["Movie.webm"], ["Font.ttf"], ["Conversation.json", "Instructions.txt"]);
+    ];
+    for (var i = 0; i < 32; i++) {
+        var imageFileName = "Car/" + StringHelper.padStart("" + i, 2, "0") + ".png";
+        imageFileNames.push(imageFileName);
+    }
+    var mediaLibrary = MediaLibrary.fromFileNames("../Content/", imageFileNames, ["Sound.wav"], ["Music.mp3"], ["Movie.webm"], ["Font.ttf"], ["Conversation.json", "Instructions.txt"]);
     var displaySizesAvailable = [
         new Coords(400, 300, 1),
         new Coords(640, 480, 1),

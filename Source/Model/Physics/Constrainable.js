@@ -1,6 +1,5 @@
 "use strict";
-class Constrainable extends EntityProperty //<Constrainable>
- {
+class Constrainable extends EntityProperty {
     constructor(constraints) {
         super();
         this.constraints = constraints;

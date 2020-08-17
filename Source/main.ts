@@ -4,15 +4,24 @@ function main()
 	// deserialization of existing saved items after the schema changes.
 	// localStorage.clear();
 
+	var imageFileNames = 
+	[
+		"Anvil.svg",
+		"Friendly.png",
+		"Grass.svg",
+		"Title.png"
+	];
+
+	for (var i = 0; i < 32; i++)
+	{
+		var imageFileName = "Car/" + StringHelper.padStart("" + i, 2, "0") + ".png";
+		imageFileNames.push(imageFileName);
+	}
+
 	var mediaLibrary = MediaLibrary.fromFileNames
 	(
 		"../Content/",
-		[
-			"Anvil.svg",
-			"Friendly.png",
-			"Grass.svg",
-			"Title.png"
-		],
+		imageFileNames,
 		[ "Sound.wav" ],
 		[ "Music.mp3" ],
 		[ "Movie.webm" ],

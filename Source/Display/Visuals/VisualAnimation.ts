@@ -23,6 +23,16 @@ class VisualAnimation implements Visual
 				this.ticksToHoldFrames.push(1);
 			}
 		}
+		else if (this.ticksToHoldFrames.length < this.frames.length)
+		{
+			for (var f = 0; f < this.frames.length; f++)
+			{
+				if (f >= this.ticksToHoldFrames.length)
+				{
+					this.ticksToHoldFrames.push(this.ticksToHoldFrames[f % this.ticksToHoldFrames.length]);
+				}
+			}
+		}
 
 		this.ticksToComplete = 0;
 		for (var f = 0; f < this.ticksToHoldFrames.length; f++)
@@ -36,14 +46,14 @@ class VisualAnimation implements Visual
 	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		this.update(universe, world, place, entity, display);
-	};
+	}
 
 	frameCurrent(world: World, drawable: Drawable)
 	{
 		var frameIndexCurrent = this.frameIndexCurrent(world, drawable);
 		var frameCurrent = this.frames[frameIndexCurrent];
 		return frameCurrent;
-	};
+	}
 
 	frameIndexCurrent(world: World, drawable: Drawable)
 	{
@@ -80,14 +90,14 @@ class VisualAnimation implements Visual
 		}
 
 		return returnValue;
-	};
+	}
 
 	isComplete(world: World, drawable: Drawable)
 	{
 		var ticksSinceStarted = world.timerTicksSoFar - drawable.tickStarted;
 		var returnValue = (ticksSinceStarted >= this.ticksToComplete);
 		return returnValue;
-	};
+	}
 
 	update(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
@@ -100,7 +110,7 @@ class VisualAnimation implements Visual
 
 		var frameCurrent = this.frameCurrent(world, drawable);
 		frameCurrent.draw(universe, world, place, entity, display);
-	};
+	}
 
 	// Clonable.
 
@@ -120,5 +130,4 @@ class VisualAnimation implements Visual
 	{
 		return this; // todo
 	}
-
 }

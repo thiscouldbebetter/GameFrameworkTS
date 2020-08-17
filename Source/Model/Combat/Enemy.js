@@ -1,4 +1,3 @@
 "use strict";
-class Enemy extends EntityProperty //<Enemy>
- {
+class Enemy extends EntityProperty {
 }

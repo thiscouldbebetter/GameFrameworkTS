@@ -11,6 +11,13 @@ class VisualAnimation {
                 this.ticksToHoldFrames.push(1);
             }
         }
+        else if (this.ticksToHoldFrames.length < this.frames.length) {
+            for (var f = 0; f < this.frames.length; f++) {
+                if (f >= this.ticksToHoldFrames.length) {
+                    this.ticksToHoldFrames.push(this.ticksToHoldFrames[f % this.ticksToHoldFrames.length]);
+                }
+            }
+        }
         this.ticksToComplete = 0;
         for (var f = 0; f < this.ticksToHoldFrames.length; f++) {
             this.ticksToComplete += this.ticksToHoldFrames[f];
@@ -20,13 +27,11 @@ class VisualAnimation {
     draw(universe, world, place, entity, display) {
         this.update(universe, world, place, entity, display);
     }
-    ;
     frameCurrent(world, drawable) {
         var frameIndexCurrent = this.frameIndexCurrent(world, drawable);
         var frameCurrent = this.frames[frameIndexCurrent];
         return frameCurrent;
     }
-    ;
     frameIndexCurrent(world, drawable) {
         var returnValue = -1;
         var ticksSinceStarted = world.timerTicksSoFar - drawable.tickStarted;
@@ -52,13 +57,11 @@ class VisualAnimation {
         }
         return returnValue;
     }
-    ;
     isComplete(world, drawable) {
         var ticksSinceStarted = world.timerTicksSoFar - drawable.tickStarted;
         var returnValue = (ticksSinceStarted >= this.ticksToComplete);
         return returnValue;
     }
-    ;
     update(universe, world, place, entity, display) {
         var drawable = entity.drawable();
         if (drawable.tickStarted == null) {
@@ -67,7 +70,6 @@ class VisualAnimation {
         var frameCurrent = this.frameCurrent(world, drawable);
         frameCurrent.draw(universe, world, place, entity, display);
     }
-    ;
     // Clonable.
     clone() {
         return this; // todo

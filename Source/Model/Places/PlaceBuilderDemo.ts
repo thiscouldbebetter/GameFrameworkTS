@@ -52,6 +52,7 @@ class PlaceBuilderDemo
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Book"), 1, null, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Bread"), 1, 5, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Campfire"), 1, null, entityPosRange, randomizer));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Car"), 1, null, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Friendly"), 1, null, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Meat"), 1, null, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Sword"), 1, null, entityPosRange, randomizer));
@@ -1541,6 +1542,30 @@ class PlaceBuilderDemo
 		return itemBreadEntityDefn;
 	}
 
+	entityDefnBuildCar(entityDimension: number): Entity
+	{
+		entityDimension /= 2;
+		var itemDefnName = "Car";
+
+		var itemCarVisual = this.itemDefnsByName.get(itemDefnName).visual;
+
+		var itemCarCollider = new Sphere(new Coords(0, 0, 0), entityDimension / 2);
+
+		var itemCarEntityDefn = new Entity
+		(
+			itemDefnName,
+			[
+				new Item(itemDefnName, 1),
+				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
+				new Collidable(itemCarCollider, null, null),
+				new Drawable(itemCarVisual, null),
+				new DrawableCamera()
+			]
+		);
+
+		return itemCarEntityDefn;
+	}
+
 	entityDefnBuildCoin(entityDimension: number): Entity
 	{
 		var entityDimensionHalf = entityDimension / 2;
@@ -2379,6 +2404,7 @@ class PlaceBuilderDemo
 			this.entityDefnBuildBomb(entityDimension),
 			this.entityDefnBuildBook(entityDimension),
 			this.entityDefnBuildBread(entityDimension),
+			this.entityDefnBuildCar(entityDimension),
 			this.entityDefnBuildCoin(entityDimension),
 			this.entityDefnBuildCrystal(entityDimension),
 			entityDefnFlower,
@@ -2563,6 +2589,40 @@ class PlaceBuilderDemo
 			(
 				new VisualText(new DataBinding(itemBreadName, null, null), null, itemBreadColor, null),
 				new Coords(0, 0 - entityDimension * 1.5, 0)
+			)
+		]);
+
+		// car
+
+		var itemNameCar = "Car";
+		var frames = new Array<VisualImage>();
+		var frameSizeScaled = new Coords(4, 3, 0).multiplyScalar(entityDimension);
+		for (var i = 0; i < 32; i++)
+		{
+			var frame = new VisualImageScaled
+			(
+				new VisualImageFromLibrary
+				(
+					"Car/" + StringHelper.padStart("" + i, 2, "0")
+				),
+				frameSizeScaled
+			);
+			frames.push(frame);
+		}
+		var itemCarVisual: Visual = new VisualAnimation
+		(
+			"CarTurnaround",
+			[ 1 ], // ticksToHoldFrames
+			frames,
+			true // isRepeating
+		);
+		itemCarVisual = new VisualGroup
+		([
+			itemCarVisual,
+			new VisualOffset
+			(
+				new VisualText(new DataBinding(itemNameCar, null, null), null, Color.byName("Blue"), null),
+				new Coords(0, 0 - entityDimensionHalf * 4, 0)
 			)
 		]);
 
@@ -3211,6 +3271,7 @@ class PlaceBuilderDemo
 			new ItemDefn("Ammo", 			null, null, .05, 	5, 	null, null, null, itemAmmoVisual),
 			new ItemDefn("Armor", 			null, null, 50, 	30, null, [ "Armor" ], itemUseEquip, itemArmorVisual),
 			new ItemDefn("Bomb", 			null, null, 5, 		10, null, [ "Wieldable" ], itemUseEquip, itemBombVisual),
+			new ItemDefn("Car", 			null, null, 2000, 	2000, null, null, null, itemCarVisual),
 			new ItemDefn("Coin", 			null, null, .01, 	1, null, null, null, itemCoinVisual),
 			new ItemDefn("Crystal", 		null, null, .1, 	1, null, null, null, itemCrystalVisual),
 			new ItemDefn("Enhanced Armor",	null, null, 60, 	60, null, [ "Armor" ], itemUseEquip, itemArmorVisual),

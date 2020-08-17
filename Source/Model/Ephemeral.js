@@ -1,6 +1,5 @@
 "use strict";
-class Ephemeral extends EntityProperty //<Ephemeral>
- {
+class Ephemeral extends EntityProperty {
     constructor(ticksToLive, expire) {
         super();
         this.ticksToLive = ticksToLive;
