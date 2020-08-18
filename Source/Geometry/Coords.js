@@ -137,6 +137,21 @@ class Coords {
     half() {
         return this.divideScalar(2);
     }
+    headingInTurns() {
+        var returnValue;
+        if (this.x == 0 && this.y == 0) {
+            returnValue = null;
+        }
+        else {
+            returnValue = Math.atan2(this.y, this.x) / (Math.PI * 2);
+            if (returnValue < 0) {
+                returnValue += 1;
+            }
+            returnValue = NumberHelper.wrapToRangeMinMax(returnValue, 0, 1);
+        }
+        return returnValue;
+    }
+    ;
     invert() {
         this.x = 0 - this.x;
         this.y = 0 - this.y;

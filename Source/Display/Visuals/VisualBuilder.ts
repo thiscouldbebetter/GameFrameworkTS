@@ -26,7 +26,8 @@ class VisualBuilder
 				new VisualOffset(visualEyes, new Coords(0, 1, 0).multiplyScalar(eyeRadius)),
 				new VisualOffset(visualEyes, new Coords(-1, 0, 0).multiplyScalar(eyeRadius)),
 				new VisualOffset(visualEyes, new Coords(0, -1, 0).multiplyScalar(eyeRadius))
-			]
+			],
+			null
 		);
 
 		var circleWithEyes: Visual = new VisualGroup
@@ -316,7 +317,8 @@ class VisualBuilder
 				visualLegsFacingDownWalking,
 				visualLegsFacingLeftWalking,
 				visualLegsFacingUpWalking
-			]
+			],
+			null
 		);
 
 		var returnValue = new VisualGroup
@@ -430,7 +432,8 @@ class VisualBuilder
 				visualArmAndWieldableFacingDown,
 				visualArmAndWieldableFacingLeft,
 				visualArmAndWieldableFacingUp
-			]
+			],
+			null
 		);
 
 		var visualArmAndWieldableDirectionalOffset = new VisualOffset

@@ -12,7 +12,7 @@ class VisualPolars {
     draw(universe, world, place, entity, display) {
         var drawableLoc = entity.locatable().loc;
         var drawablePos = drawableLoc.pos;
-        var drawableHeadingInTurns = drawableLoc.orientation.headingInTurns();
+        var drawableHeadingInTurns = drawableLoc.orientation.forward.headingInTurns();
         var polar = this._polar;
         var fromPos = this._fromPos.overwriteWith(drawablePos);
         var toPos = this._toPos;

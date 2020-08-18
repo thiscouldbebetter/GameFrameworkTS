@@ -15,7 +15,7 @@ class VisualBuilder {
             new VisualOffset(visualEyes, new Coords(0, 1, 0).multiplyScalar(eyeRadius)),
             new VisualOffset(visualEyes, new Coords(-1, 0, 0).multiplyScalar(eyeRadius)),
             new VisualOffset(visualEyes, new Coords(0, -1, 0).multiplyScalar(eyeRadius))
-        ]);
+        ], null);
         var circleWithEyes = new VisualGroup([
             new VisualCircle(circleRadius, circleColor, null),
             visualEyesDirectional
@@ -129,7 +129,7 @@ class VisualBuilder {
             visualLegsFacingDownWalking,
             visualLegsFacingLeftWalking,
             visualLegsFacingUpWalking
-        ]);
+        ], null);
         var returnValue = new VisualGroup([
             visualLegsDirectional,
             circleWithEyes
@@ -177,7 +177,7 @@ class VisualBuilder {
             visualArmAndWieldableFacingDown,
             visualArmAndWieldableFacingLeft,
             visualArmAndWieldableFacingUp
-        ]);
+        ], null);
         var visualArmAndWieldableDirectionalOffset = new VisualOffset(visualArmAndWieldableDirectional, new Coords(0, 0 - circleRadius, 0));
         var visualWielding = new VisualSelect((u, w, d, e) => // selectChildName
          {

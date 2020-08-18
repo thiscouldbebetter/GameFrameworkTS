@@ -33,7 +33,7 @@ class VisualArc implements Visual
 			drawableLoc.pos
 		);
 
-		var drawableAngleInTurns = drawableLoc.orientation.headingInTurns();
+		var drawableAngleInTurns = drawableLoc.orientation.forward.headingInTurns();
 		var wedgeAngleMin =
 			drawableAngleInTurns
 			+ this._polar.fromCoords(this.directionMin).azimuthInTurns;

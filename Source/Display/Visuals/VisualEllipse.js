@@ -10,7 +10,7 @@ class VisualEllipse {
     draw(universe, world, place, entity, display) {
         var drawableLoc = entity.locatable().loc;
         var drawableOrientation = drawableLoc.orientation;
-        var drawableRotationInTurns = drawableOrientation.headingInTurns();
+        var drawableRotationInTurns = drawableOrientation.forward.headingInTurns();
         display.drawEllipse(drawableLoc.pos, this.semimajorAxis, this.semiminorAxis, NumberHelper.wrapToRangeZeroOne(this.rotationInTurns + drawableRotationInTurns), Color.systemColorGet(this.colorFill), Color.systemColorGet(this.colorBorder));
     }
     ;

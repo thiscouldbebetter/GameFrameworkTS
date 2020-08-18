@@ -24,7 +24,7 @@ class VisualEllipse implements Visual
 	{
 		var drawableLoc = entity.locatable().loc;
 		var drawableOrientation = drawableLoc.orientation;
-		var drawableRotationInTurns = drawableOrientation.headingInTurns();
+		var drawableRotationInTurns = drawableOrientation.forward.headingInTurns();
 		display.drawEllipse
 		(
 			drawableLoc.pos,

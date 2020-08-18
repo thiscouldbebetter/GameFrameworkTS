@@ -17,7 +17,7 @@ class PlaceBuilderDemo_Movers {
             new VisualOffset(visualEyes, new Coords(0, 1, 0).multiplyScalar(visualEyeRadius)),
             new VisualOffset(visualEyes, new Coords(-1, 0, 0).multiplyScalar(visualEyeRadius)),
             new VisualOffset(visualEyes, new Coords(0, -1, 0).multiplyScalar(visualEyeRadius))
-        ]);
+        ], null);
         var carnivoreVisualNormal = new VisualGroup([
             new VisualPolygon(new Path([
                 new Coords(-2, -1, 0),
@@ -138,14 +138,14 @@ class PlaceBuilderDemo_Movers {
             new VisualOffset(visualEyesBlinkingWithBrows, new Coords(0, 1, 0).multiplyScalar(visualEyeRadius)),
             new VisualOffset(visualEyesBlinkingWithBrows, new Coords(-1, 0, 0).multiplyScalar(visualEyeRadius)),
             new VisualOffset(visualEyesBlinkingWithBrows, new Coords(0, -1, 0).multiplyScalar(visualEyeRadius))
-        ]);
+        ], null);
         var enemyVisual = new VisualGroup([
             new VisualDirectional(new VisualNone(), [
                 new VisualGroup([
                     new VisualOffset(enemyVisualArm, new Coords(-enemyDimension / 4, 0, 0)),
                     new VisualOffset(enemyVisualArm, new Coords(enemyDimension / 4, 0, 0))
                 ])
-            ]),
+            ], null),
             new VisualPolygon(new Path(enemyColliderAsFace.vertices), enemyColor, Color.byName("Red") // colorBorder
             ),
             visualEyesWithBrowsDirectional,
@@ -393,7 +393,7 @@ class PlaceBuilderDemo_Movers {
             new VisualOffset(visualEyes, new Coords(0, 1, 0).multiplyScalar(visualEyeRadius)),
             new VisualOffset(visualEyes, new Coords(-1, 0, 0).multiplyScalar(visualEyeRadius)),
             new VisualOffset(visualEyes, new Coords(0, -1, 0).multiplyScalar(visualEyeRadius))
-        ]);
+        ], null);
         var grazerVisualNormal = new VisualGroup([
             new VisualEllipse(grazerDimension, // semimajorAxis
             grazerDimension * .8, 0, // rotationInTurns

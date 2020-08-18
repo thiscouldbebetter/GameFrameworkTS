@@ -14,7 +14,7 @@ class VisualArc {
     draw(universe, world, place, entity, display) {
         var drawableLoc = entity.locatable().loc;
         var drawPos = this._drawPos.overwriteWith(drawableLoc.pos);
-        var drawableAngleInTurns = drawableLoc.orientation.headingInTurns();
+        var drawableAngleInTurns = drawableLoc.orientation.forward.headingInTurns();
         var wedgeAngleMin = drawableAngleInTurns
             + this._polar.fromCoords(this.directionMin).azimuthInTurns;
         var wedgeAngleMax = wedgeAngleMin + this.angleSpannedInTurns;

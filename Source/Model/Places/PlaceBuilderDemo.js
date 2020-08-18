@@ -905,18 +905,39 @@ class PlaceBuilderDemo {
         return itemBreadEntityDefn;
     }
     entityDefnBuildCar(entityDimension) {
-        entityDimension /= 2;
-        var itemDefnName = "Car";
-        var itemCarVisual = this.itemDefnsByName.get(itemDefnName).visual;
-        var itemCarCollider = new Sphere(new Coords(0, 0, 0), entityDimension / 2);
-        var itemCarEntityDefn = new Entity(itemDefnName, [
-            new Item(itemDefnName, 1),
-            new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
-            new Collidable(itemCarCollider, null, null),
-            new Drawable(itemCarVisual, null),
-            new DrawableCamera()
+        entityDimension *= .75;
+        var defnName = "Car";
+        var frames = new Array();
+        var frameSizeScaled = new Coords(4, 3, 0).multiplyScalar(entityDimension);
+        for (var i = 0; i < 32; i++) {
+            var frame = new VisualImageScaled(new VisualImageFromLibrary("Car/" + StringHelper.padStart("" + i, 2, "0")), frameSizeScaled);
+            frames.push(frame);
+        }
+        var carVisual = new VisualDirectional(frames[0], // visualForNoDirection
+        frames, // visualsForDirections
+        (e) => e.locatable().loc.vel.headingInTurns() // headingInTurnsGetForEntity
+        );
+        carVisual = new VisualGroup([
+            carVisual,
+            new VisualOffset(new VisualText(new DataBinding(defnName, null, null), null, Color.byName("Blue"), null), new Coords(0, 0 - entityDimension * 2.5, 0))
         ]);
-        return itemCarEntityDefn;
+        var carCollider = new Sphere(new Coords(0, 0, 0), entityDimension / 2);
+        var carLoc = new Disposition(null, null, null);
+        carLoc.spin = new Rotation(Coords.Instances().ZeroZeroOne, new Reference(.01));
+        var carUsable = new Usable((u, w, p, eUsing, eUsed) => {
+            var visualCar = eUsed.drawable().visual;
+            eUsing.drawable().visual = visualCar;
+            return null;
+        });
+        var carEntityDefn = new Entity(defnName, [
+            new Locatable(carLoc),
+            new Collidable(carCollider, null, null),
+            new Drawable(carVisual, null),
+            new DrawableCamera(),
+            carUsable,
+            new Vehicle()
+        ]);
+        return carEntityDefn;
     }
     entityDefnBuildCoin(entityDimension) {
         var entityDimensionHalf = entityDimension / 2;
@@ -1531,21 +1552,6 @@ class PlaceBuilderDemo {
             itemBreadColor, null),
             new VisualOffset(new VisualText(new DataBinding(itemBreadName, null, null), null, itemBreadColor, null), new Coords(0, 0 - entityDimension * 1.5, 0))
         ]);
-        // car
-        var itemNameCar = "Car";
-        var frames = new Array();
-        var frameSizeScaled = new Coords(4, 3, 0).multiplyScalar(entityDimension);
-        for (var i = 0; i < 32; i++) {
-            var frame = new VisualImageScaled(new VisualImageFromLibrary("Car/" + StringHelper.padStart("" + i, 2, "0")), frameSizeScaled);
-            frames.push(frame);
-        }
-        var itemCarVisual = new VisualAnimation("CarTurnaround", [1], // ticksToHoldFrames
-        frames, true // isRepeating
-        );
-        itemCarVisual = new VisualGroup([
-            itemCarVisual,
-            new VisualOffset(new VisualText(new DataBinding(itemNameCar, null, null), null, Color.byName("Blue"), null), new Coords(0, 0 - entityDimensionHalf * 4, 0))
-        ]);
         // coin
         var itemDefnCoinName = "Coin";
         var itemCoinColor = Color.byName("Yellow");
@@ -1806,7 +1812,6 @@ class PlaceBuilderDemo {
             new ItemDefn("Ammo", null, null, .05, 5, null, null, null, itemAmmoVisual),
             new ItemDefn("Armor", null, null, 50, 30, null, ["Armor"], itemUseEquip, itemArmorVisual),
             new ItemDefn("Bomb", null, null, 5, 10, null, ["Wieldable"], itemUseEquip, itemBombVisual),
-            new ItemDefn("Car", null, null, 2000, 2000, null, null, null, itemCarVisual),
             new ItemDefn("Coin", null, null, .01, 1, null, null, null, itemCoinVisual),
             new ItemDefn("Crystal", null, null, .1, 1, null, null, null, itemCrystalVisual),
             new ItemDefn("Enhanced Armor", null, null, 60, 60, null, ["Armor"], itemUseEquip, itemArmorVisual),

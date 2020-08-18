@@ -1544,26 +1544,67 @@ class PlaceBuilderDemo
 
 	entityDefnBuildCar(entityDimension: number): Entity
 	{
-		entityDimension /= 2;
-		var itemDefnName = "Car";
+		entityDimension *= .75
+		var defnName = "Car";
 
-		var itemCarVisual = this.itemDefnsByName.get(itemDefnName).visual;
-
-		var itemCarCollider = new Sphere(new Coords(0, 0, 0), entityDimension / 2);
-
-		var itemCarEntityDefn = new Entity
+		var frames = new Array<VisualImage>();
+		var frameSizeScaled = new Coords(4, 3, 0).multiplyScalar(entityDimension);
+		for (var i = 0; i < 32; i++)
+		{
+			var frame = new VisualImageScaled
+			(
+				new VisualImageFromLibrary
+				(
+					"Car/" + StringHelper.padStart("" + i, 2, "0")
+				),
+				frameSizeScaled
+			);
+			frames.push(frame);
+		}
+		var carVisual: Visual = new VisualDirectional
 		(
-			itemDefnName,
+			frames[0], // visualForNoDirection
+			frames, // visualsForDirections
+			(e: Entity) => e.locatable().loc.vel.headingInTurns() // headingInTurnsGetForEntity
+		);
+		carVisual = new VisualGroup
+		([
+			carVisual,
+			new VisualOffset
+			(
+				new VisualText(new DataBinding(defnName, null, null), null, Color.byName("Blue"), null),
+				new Coords(0, 0 - entityDimension * 2.5, 0)
+			)
+		]);
+
+		var carCollider = new Sphere(new Coords(0, 0, 0), entityDimension / 2);
+
+		var carLoc = new Disposition(null, null, null);
+		carLoc.spin = new Rotation(Coords.Instances().ZeroZeroOne, new Reference(.01));
+		var carUsable = new Usable
+		(
+			(u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity): string =>
+			{
+				var visualCar = eUsed.drawable().visual;
+				eUsing.drawable().visual = visualCar;
+				return null;
+			}
+		);
+
+		var carEntityDefn = new Entity
+		(
+			defnName,
 			[
-				new Item(itemDefnName, 1),
-				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
-				new Collidable(itemCarCollider, null, null),
-				new Drawable(itemCarVisual, null),
-				new DrawableCamera()
+				new Locatable(carLoc),
+				new Collidable(carCollider, null, null),
+				new Drawable(carVisual, null),
+				new DrawableCamera(),
+				carUsable,
+				new Vehicle()
 			]
 		);
 
-		return itemCarEntityDefn;
+		return carEntityDefn;
 	}
 
 	entityDefnBuildCoin(entityDimension: number): Entity
@@ -2592,40 +2633,6 @@ class PlaceBuilderDemo
 			)
 		]);
 
-		// car
-
-		var itemNameCar = "Car";
-		var frames = new Array<VisualImage>();
-		var frameSizeScaled = new Coords(4, 3, 0).multiplyScalar(entityDimension);
-		for (var i = 0; i < 32; i++)
-		{
-			var frame = new VisualImageScaled
-			(
-				new VisualImageFromLibrary
-				(
-					"Car/" + StringHelper.padStart("" + i, 2, "0")
-				),
-				frameSizeScaled
-			);
-			frames.push(frame);
-		}
-		var itemCarVisual: Visual = new VisualAnimation
-		(
-			"CarTurnaround",
-			[ 1 ], // ticksToHoldFrames
-			frames,
-			true // isRepeating
-		);
-		itemCarVisual = new VisualGroup
-		([
-			itemCarVisual,
-			new VisualOffset
-			(
-				new VisualText(new DataBinding(itemNameCar, null, null), null, Color.byName("Blue"), null),
-				new Coords(0, 0 - entityDimensionHalf * 4, 0)
-			)
-		]);
-
 		// coin
 
 		var itemDefnCoinName = "Coin";
@@ -3271,7 +3278,6 @@ class PlaceBuilderDemo
 			new ItemDefn("Ammo", 			null, null, .05, 	5, 	null, null, null, itemAmmoVisual),
 			new ItemDefn("Armor", 			null, null, 50, 	30, null, [ "Armor" ], itemUseEquip, itemArmorVisual),
 			new ItemDefn("Bomb", 			null, null, 5, 		10, null, [ "Wieldable" ], itemUseEquip, itemBombVisual),
-			new ItemDefn("Car", 			null, null, 2000, 	2000, null, null, null, itemCarVisual),
 			new ItemDefn("Coin", 			null, null, .01, 	1, null, null, null, itemCoinVisual),
 			new ItemDefn("Crystal", 		null, null, .1, 	1, null, null, null, itemCrystalVisual),
 			new ItemDefn("Enhanced Armor",	null, null, 60, 	60, null, [ "Armor" ], itemUseEquip, itemArmorVisual),

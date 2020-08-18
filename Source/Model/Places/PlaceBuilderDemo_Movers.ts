@@ -28,7 +28,8 @@ class PlaceBuilderDemo_Movers
 				new VisualOffset(visualEyes, new Coords(0, 1, 0).multiplyScalar(visualEyeRadius)),
 				new VisualOffset(visualEyes, new Coords(-1, 0, 0).multiplyScalar(visualEyeRadius)),
 				new VisualOffset(visualEyes, new Coords(0, -1, 0).multiplyScalar(visualEyeRadius))
-			]
+			],
+			null
 		);
 
 		var carnivoreVisualNormal = new VisualGroup
@@ -256,7 +257,8 @@ class PlaceBuilderDemo_Movers
 				new VisualOffset(visualEyesBlinkingWithBrows, new Coords(0, 1, 0).multiplyScalar(visualEyeRadius)),
 				new VisualOffset(visualEyesBlinkingWithBrows, new Coords(-1, 0, 0).multiplyScalar(visualEyeRadius)),
 				new VisualOffset(visualEyesBlinkingWithBrows, new Coords(0, -1, 0).multiplyScalar(visualEyeRadius))
-			]
+			],
+			null
 		);
 
 		var enemyVisual = new VisualGroup
@@ -276,7 +278,8 @@ class PlaceBuilderDemo_Movers
 							enemyVisualArm, new Coords(enemyDimension / 4, 0, 0)
 						)
 					])
-				]
+				],
+				null
 			),
 			new VisualPolygon
 			(
@@ -747,7 +750,8 @@ class PlaceBuilderDemo_Movers
 				new VisualOffset(visualEyes, new Coords(0, 1, 0).multiplyScalar(visualEyeRadius)),
 				new VisualOffset(visualEyes, new Coords(-1, 0, 0).multiplyScalar(visualEyeRadius)),
 				new VisualOffset(visualEyes, new Coords(0, -1, 0).multiplyScalar(visualEyeRadius))
-			]
+			],
+			null
 		);
 
 		var grazerVisualNormal = new VisualGroup
