@@ -29,15 +29,9 @@ class ControlLabel extends ControlBase {
         this.size.multiply(scaleFactor);
         this.fontHeightInPixels *= scaleFactor.y;
     }
-    ;
-    style(universe) {
-        return universe.controlBuilder.stylesByName.get(this.styleName == null ? "Default" : this.styleName);
-    }
-    ;
     text() {
         return (this._text.get == null ? this._text : this._text.get());
     }
-    ;
     // drawable
     draw(universe, display, drawLoc) {
         var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
@@ -55,5 +49,4 @@ class ControlLabel extends ControlBase {
             }
         }
     }
-    ;
 }

@@ -49,16 +49,6 @@ class ControlContainer extends ControlBase
 
 	// instance methods
 
-	isEnabled()
-	{
-		return true;
-	};
-
-	style(universe: Universe)
-	{
-		return universe.controlBuilder.stylesByName.get(this.styleName == null ? "Default" : this.styleName);
-	};
-
 	// actions
 
 	actionHandle(actionNameToHandle: string, universe: Universe)
@@ -128,12 +118,12 @@ class ControlContainer extends ControlBase
 	actionToInputsMappings()
 	{
 		return this._actionToInputsMappings;
-	};
+	}
 
 	childWithFocus()
 	{
 		return (this.indexOfChildWithFocus == null ? null : this.children[this.indexOfChildWithFocus] );
-	};
+	}
 
 	childWithFocusNextInDirection(direction: number)
 	{
@@ -192,7 +182,7 @@ class ControlContainer extends ControlBase
 		var returnValue = this.childWithFocus();
 
 		return returnValue;
-	};
+	}
 
 	childrenAtPosAddToList
 	(
@@ -222,7 +212,7 @@ class ControlContainer extends ControlBase
 		}
 
 		return listToAddTo;
-	};
+	}
 
 	focusGain()
 	{
@@ -232,7 +222,7 @@ class ControlContainer extends ControlBase
 		{
 			childWithFocus.focusGain();
 		}
-	};
+	}
 
 	focusLose()
 	{
@@ -242,7 +232,7 @@ class ControlContainer extends ControlBase
 			childWithFocus.focusLose();
 			this.indexOfChildWithFocus = null;
 		}
-	};
+	}
 
 	mouseClick(mouseClickPos: Coords)
 	{
@@ -276,17 +266,7 @@ class ControlContainer extends ControlBase
 		}
 
 		return wasClickHandled;
-	};
-
-	mouseEnter()
-	{
-		// Do nothing.
-	};
-
-	mouseExit()
-	{
-		// Do nothing.
-	};
+	}
 
 	mouseMove(mouseMovePos: Coords)
 	{
@@ -331,7 +311,7 @@ class ControlContainer extends ControlBase
 				}
 			}
 		}
-	};
+	}
 
 	scalePosAndSize(scaleFactor: Coords)
 	{
@@ -357,7 +337,7 @@ class ControlContainer extends ControlBase
 		}
 
 		return this;
-	};
+	}
 
 	shiftChildPositions(displacement: Coords)
 	{
@@ -366,12 +346,12 @@ class ControlContainer extends ControlBase
 			var child = this.children[i];
 			child.pos.add(displacement);
 		}
-	};
+	}
 
 	toVenue()
 	{
 		return new VenueFader(new VenueControls(this), null, null, null);
-	};
+	}
 
 	// drawable
 
@@ -395,5 +375,5 @@ class ControlContainer extends ControlBase
 			var child = children[i];
 			child.draw(universe, display, drawLoc);
 		}
-	};
+	}
 }

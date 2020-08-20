@@ -57,17 +57,12 @@ class ControlLabel extends ControlBase
 		this.pos.multiply(scaleFactor);
 		this.size.multiply(scaleFactor);
 		this.fontHeightInPixels *= scaleFactor.y;
-	};
-
-	style(universe: Universe)
-	{
-		return universe.controlBuilder.stylesByName.get(this.styleName == null ? "Default" : this.styleName);
-	};
+	}
 
 	text()
 	{
 		return (this._text.get == null ? this._text : this._text.get() );
-	};
+	}
 
 	// drawable
 
@@ -99,5 +94,5 @@ class ControlLabel extends ControlBase
 				drawPos.y += this.fontHeightInPixels;
 			}
 		}
-	};
+	}
 }

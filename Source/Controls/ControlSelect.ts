@@ -69,13 +69,13 @@ class ControlSelect extends ControlBase
 			this.optionSelectedNextInDirection(1);
 		}
 		return true; // wasActionHandled
-	};
+	}
 
 	mouseClick(clickPos: Coords)
 	{
 		this.optionSelectedNextInDirection(1);
 		return true; // wasClickHandled
-	};
+	}
 
 	optionSelected()
 	{
@@ -86,7 +86,7 @@ class ControlSelect extends ControlBase
 			: this.options()[this.indexOfOptionSelected]
 		);
 		return optionSelected;
-	};
+	}
 
 	optionSelectedNextInDirection(direction: number)
 	{
@@ -113,29 +113,31 @@ class ControlSelect extends ControlBase
 		{
 			this._valueSelected = valueToSelect;
 		}
-	};
+	}
 
 	options()
 	{
 		return (this._options.get == null ? this._options : this._options.get() );
-	};
+	}
 
 	scalePosAndSize(scaleFactor: Coords)
 	{
 		this.pos.multiply(scaleFactor);
 		this.size.multiply(scaleFactor);
 		this.fontHeightInPixels *= scaleFactor.y;
-	};
-
-	style(universe: Universe)
-	{
-		return universe.controlBuilder.stylesByName.get(this.styleName == null ? "Default" : this.styleName);
-	};
+	}
 
 	valueSelected()
 	{
-		return (this._valueSelected == null ? null : (this._valueSelected.get == null ? this._valueSelected : this._valueSelected.get() ) );
-	};
+		var returnValue =
+		(
+			this._valueSelected == null
+			? null
+			: (this._valueSelected.get == null ? this._valueSelected : this._valueSelected.get() )
+		);
+
+		return returnValue;
+	}
 
 	// drawable
 
@@ -174,5 +176,5 @@ class ControlSelect extends ControlBase
 			true, // isCentered
 			this.size.x // widthMaxInPixels
 		);
-	};
+	}
 }

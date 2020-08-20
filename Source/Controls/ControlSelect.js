@@ -32,19 +32,16 @@ class ControlSelect extends ControlBase {
         }
         return true; // wasActionHandled
     }
-    ;
     mouseClick(clickPos) {
         this.optionSelectedNextInDirection(1);
         return true; // wasClickHandled
     }
-    ;
     optionSelected() {
         var optionSelected = (this.indexOfOptionSelected == null
             ? null
             : this.options()[this.indexOfOptionSelected]);
         return optionSelected;
     }
-    ;
     optionSelectedNextInDirection(direction) {
         var options = this.options();
         this.indexOfOptionSelected = NumberHelper.wrapToRangeMinMax(this.indexOfOptionSelected + direction, 0, options.length);
@@ -59,25 +56,20 @@ class ControlSelect extends ControlBase {
             this._valueSelected = valueToSelect;
         }
     }
-    ;
     options() {
         return (this._options.get == null ? this._options : this._options.get());
     }
-    ;
     scalePosAndSize(scaleFactor) {
         this.pos.multiply(scaleFactor);
         this.size.multiply(scaleFactor);
         this.fontHeightInPixels *= scaleFactor.y;
     }
-    ;
-    style(universe) {
-        return universe.controlBuilder.stylesByName.get(this.styleName == null ? "Default" : this.styleName);
-    }
-    ;
     valueSelected() {
-        return (this._valueSelected == null ? null : (this._valueSelected.get == null ? this._valueSelected : this._valueSelected.get()));
+        var returnValue = (this._valueSelected == null
+            ? null
+            : (this._valueSelected.get == null ? this._valueSelected : this._valueSelected.get()));
+        return returnValue;
     }
-    ;
     // drawable
     draw(universe, display, drawLoc) {
         var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
@@ -93,5 +85,4 @@ class ControlSelect extends ControlBase {
         this.size.x // widthMaxInPixels
         );
     }
-    ;
 }

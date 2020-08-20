@@ -94,22 +94,7 @@ class ControlTabbed extends ControlBase
 
 	// instance methods
 
-	isEnabled()
-	{
-		return true;
-	};
-
-	style(universe: Universe)
-	{
-		return universe.controlBuilder.stylesByName.get(this.styleName == null ? "Default" : this.styleName);
-	};
-
 	// actions
-
-	actionToInputsMappings(): ActionToInputsMapping[]
-	{
-		return [];
-	}
 
 	actionHandle(actionNameToHandle: string, universe: Universe)
 	{

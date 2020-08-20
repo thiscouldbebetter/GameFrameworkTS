@@ -215,6 +215,16 @@ class Coords
 		return this;
 	}
 
+	fromHeadingInTurns(headingInTurns: number): Coords
+	{
+		var headingInRadians = headingInTurns * Polar.RadiansPerTurn;
+
+		this.x = Math.cos(headingInRadians);
+		this.y = Math.sin(headingInRadians);
+
+		return this;
+	}
+
 	half(): Coords
 	{
 		return this.divideScalar(2);

@@ -42,20 +42,10 @@ class ControlButton extends ControlBase
 		return (this.canBeHeldDown == false); // wasActionHandled
 	};
 
-	actionToInputsMappings(): ActionToInputsMapping[]
-	{
-		return null; // todo
-	}
-
-	childWithFocus(): ControlBase
-	{
-		return null;
-	}
-
 	isEnabled()
 	{
 		return (this._isEnabled.get == null ? this._isEnabled : this._isEnabled.get() );
-	};
+	}
 
 	// events
 
@@ -66,19 +56,14 @@ class ControlButton extends ControlBase
 			this.click(this.context);
 		}
 		return (this.canBeHeldDown == false); // wasClickHandled
-	};
+	}
 
 	scalePosAndSize(scaleFactor: Coords)
 	{
 		this.pos.multiply(scaleFactor);
 		this.size.multiply(scaleFactor);
 		this.fontHeightInPixels *= scaleFactor.y;
-	};
-
-	style(universe: Universe)
-	{
-		return universe.controlBuilder.stylesByName.get(this.styleName == null ? "Default" : this.styleName);
-	};
+	}
 
 	// drawable
 
@@ -120,5 +105,5 @@ class ControlButton extends ControlBase
 			true, // isCentered
 			this.size.x // widthMaxInPixels
 		);
-	};
+	}
 }

@@ -129,7 +129,7 @@ class ControlTextarea extends ControlBase
 		}
 
 		return this._textAsLines;
-	};
+	}
 
 	mouseClick(clickPos: Coords)
 	{
@@ -179,7 +179,7 @@ class ControlTextarea extends ControlBase
 		}
 
 		return true; // wasActionHandled
-	};
+	}
 
 	scalePosAndSize(scaleFactor: Coords)
 	{
@@ -188,12 +188,7 @@ class ControlTextarea extends ControlBase
 		this.fontHeightInPixels *= scaleFactor.y;
 		this.lineSpacing *= scaleFactor.y;
 		this.scrollbar.scalePosAndSize(scaleFactor);
-	};
-
-	style(universe: Universe)
-	{
-		return universe.controlBuilder.stylesByName.get(this.styleName == null ? "Default" : this.styleName);
-	};
+	}
 
 	// drawable
 
@@ -256,5 +251,5 @@ class ControlTextarea extends ControlBase
 		}
 
 		this.scrollbar.draw(universe, display, drawLoc);
-	};
+	}
 }

@@ -23,7 +23,7 @@ class Polar
 	{
 		this.azimuthInTurns += turnsToAdd;
 		return this;
-	};
+	}
 
 	fromCoords(coordsToConvert: Coords)
 	{
@@ -43,7 +43,7 @@ class Polar
 			/ Polar.RadiansPerTurn;
 
 		return this;
-	};
+	}
 
 	overwriteWith(other: Polar)
 	{
@@ -51,7 +51,7 @@ class Polar
 		this.radius = other.radius;
 		this.elevationInTurns = other.elevationInTurns;
 		return this;
-	};
+	}
 
 	overwriteWithAzimuthRadiusElevation
 	(
@@ -65,7 +65,7 @@ class Polar
 			this.elevationInTurns = elevationInTurns;
 		}
 		return this;
-	};
+	}
 
 	random(randomizer: Randomizer)
 	{
@@ -77,7 +77,7 @@ class Polar
 		this.azimuthInTurns = randomizer.getNextRandom();
 		this.elevationInTurns = randomizer.getNextRandom();
 		return this;
-	};
+	}
 
 	toCoords(coords: Coords)
 	{
@@ -94,7 +94,7 @@ class Polar
 		).multiplyScalar(this.radius);
 
 		return coords;
-	};
+	}
 
 	wrap()
 	{
@@ -107,12 +107,12 @@ class Polar
 			this.azimuthInTurns--;
 		}
 		return this;
-	};
+	}
 
 	// Clonable.
 
 	clone()
 	{
 		return new Polar(this.azimuthInTurns, this.radius, this.elevationInTurns);
-	};
+	}
 }

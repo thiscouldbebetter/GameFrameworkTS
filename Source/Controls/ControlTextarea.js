@@ -85,7 +85,6 @@ class ControlTextarea extends ControlBase {
         }
         return this._textAsLines;
     }
-    ;
     mouseClick(clickPos) {
         clickPos = this._mouseClickPos.overwriteWith(clickPos);
         if (clickPos.x - this.pos.x > this.size.x - this.scrollbar.handleSize.x) {
@@ -120,7 +119,6 @@ class ControlTextarea extends ControlBase {
         }
         return true; // wasActionHandled
     }
-    ;
     scalePosAndSize(scaleFactor) {
         this.pos.multiply(scaleFactor);
         this.size.multiply(scaleFactor);
@@ -128,11 +126,6 @@ class ControlTextarea extends ControlBase {
         this.lineSpacing *= scaleFactor.y;
         this.scrollbar.scalePosAndSize(scaleFactor);
     }
-    ;
-    style(universe) {
-        return universe.controlBuilder.stylesByName.get(this.styleName == null ? "Default" : this.styleName);
-    }
-    ;
     // drawable
     draw(universe, display, drawLoc) {
         drawLoc = this._drawLoc.overwriteWith(drawLoc);
@@ -168,5 +161,4 @@ class ControlTextarea extends ControlBase {
         }
         this.scrollbar.draw(universe, display, drawLoc);
     }
-    ;
 }

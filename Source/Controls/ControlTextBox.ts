@@ -30,11 +30,6 @@ class ControlTextBox extends ControlBase
 		this._textSize = new Coords(0, 0, 0);
 	}
 
-	style(universe: Universe)
-	{
-		return universe.controlBuilder.stylesByName.get(this.styleName == null ? "Default" : this.styleName);
-	};
-
 	text(value: any, universe: Universe)
 	{
 		if (value != null)
@@ -50,7 +45,7 @@ class ControlTextBox extends ControlBase
 		}
 
 		return (this._text.get == null ? this._text : this._text.get(universe) );
-	};
+	}
 
 	// events
 
@@ -152,7 +147,7 @@ class ControlTextBox extends ControlBase
 		}
 
 		return true; // wasActionHandled
-	};
+	}
 
 	mouseClick(mouseClickPos: Coords)
 	{
@@ -161,7 +156,7 @@ class ControlTextBox extends ControlBase
 		parentAsContainer.indexOfChildWithFocus = parentAsContainer.children.indexOf(this);
 		this.isHighlighted = true;
 		return true;
-	};
+	}
 
 	scalePosAndSize(scaleFactor: Coords)
 	{
@@ -169,7 +164,7 @@ class ControlTextBox extends ControlBase
 		this.size.multiply(scaleFactor);
 		this.fontHeightInPixels *= scaleFactor.y;
 		return this;
-	};
+	}
 
 	// drawable
 
@@ -244,5 +239,5 @@ class ControlTextBox extends ControlBase
 				this.size.x // widthMaxInPixels
 			);
 		}
-	};
+	}
 }

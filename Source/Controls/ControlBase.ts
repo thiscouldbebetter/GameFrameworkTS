@@ -6,6 +6,7 @@ class ControlBase
 	parent: ControlBase;
 	pos: Coords;
 	size: Coords;
+	styleName: string;
 
 	isHighlighted: boolean;
 
@@ -20,7 +21,7 @@ class ControlBase
 	}
 
 	actionHandle(actionName: string, universe: Universe): boolean { return false; }
-	actionToInputsMappings(): ActionToInputsMapping[] { return null; }
+	actionToInputsMappings(): ActionToInputsMapping[] { return new Array<ActionToInputsMapping>(); }
 	childWithFocus(): ControlBase { return null; }
 	draw(u: Universe, d: Display, drawLoc: Disposition): void {}
 	focusGain(): void { this.isHighlighted = true; }
@@ -31,4 +32,9 @@ class ControlBase
 	mouseExit(): void { this.isHighlighted = false; }
 	mouseMove(x: Coords): void {}
 	scalePosAndSize(x: Coords): void {}
+	style(universe: Universe)
+	{
+		return universe.controlBuilder.stylesByName.get(this.styleName == null ? "Default" : this.styleName);
+	}
+
 }

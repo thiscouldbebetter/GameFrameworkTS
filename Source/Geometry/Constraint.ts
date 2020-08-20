@@ -146,12 +146,12 @@ class Constraint_ContainInHemispace implements Constraint
 class Constraint_FrictionXY implements Constraint
 {
 	target: number;
-	speedMin: number;
+	speedBelowWhichToStop: number;
 
-	constructor(target: number, speedMin: number)
+	constructor(target: number, speedBelowWhichToStop: number)
 	{
 		this.target = target;
-		this.speedMin = speedMin || 0;
+		this.speedBelowWhichToStop = speedBelowWhichToStop || 0;
 	}
 
 	constrain(universe: Universe, world: World, place: Place, entity: Entity)
@@ -162,7 +162,7 @@ class Constraint_FrictionXY implements Constraint
 		var entityVelZSaved = entityVel.z;
 		entityVel.z = 0;
 		var speed = entityVel.magnitude();
-		if (speed < this.speedMin)
+		if (speed < this.speedBelowWhichToStop)
 		{
 			entityVel.clear();
 		}

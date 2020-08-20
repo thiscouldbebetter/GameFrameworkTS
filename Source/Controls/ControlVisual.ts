@@ -34,11 +34,6 @@ class ControlVisual extends ControlBase
 		this._sizeHalf = new Coords(0, 0, 0);
 	}
 
-	style(universe: Universe)
-	{
-		return universe.controlBuilder.stylesByName.get(this.styleName == null ? "Default" : this.styleName);
-	};
-
 	actionHandle(actionName: string, universe: Universe): boolean
 	{
 		return false;

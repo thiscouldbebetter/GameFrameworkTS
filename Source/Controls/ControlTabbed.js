@@ -45,18 +45,7 @@ class ControlTabbed extends ControlBase {
         this._posToCheck = new Coords(0, 0, 0);
     }
     // instance methods
-    isEnabled() {
-        return true;
-    }
-    ;
-    style(universe) {
-        return universe.controlBuilder.stylesByName.get(this.styleName == null ? "Default" : this.styleName);
-    }
-    ;
     // actions
-    actionToInputsMappings() {
-        return [];
-    }
     actionHandle(actionNameToHandle, universe) {
         var wasActionHandled = false;
         var childSelected = this.childSelected();

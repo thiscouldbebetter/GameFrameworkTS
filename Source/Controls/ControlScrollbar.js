@@ -29,14 +29,12 @@ class ControlScrollbar extends ControlBase {
     actionHandle(actionNameToHandle, universe) {
         return true;
     }
-    ;
     isVisible() {
         return this.windowSizeInItems < this.items().length;
     }
     items() {
         return (this._items.get == null ? this._items : this._items.get());
     }
-    ;
     mouseClick(pos) {
         return false;
     }
@@ -53,25 +51,20 @@ class ControlScrollbar extends ControlBase {
         var sliderPosInItems = NumberHelper.trimToRangeMinMax(this.sliderPosInItems() + 1, 0, this.sliderMaxInItems());
         this._sliderPosInItems = sliderPosInItems;
     }
-    ;
     scrollUp() {
         var sliderPosInItems = NumberHelper.trimToRangeMinMax(this.sliderPosInItems() - 1, 0, this.sliderMaxInItems());
         this._sliderPosInItems = sliderPosInItems;
     }
-    ;
     slideSizeInPixels() {
         var slideSizeInPixels = new Coords(this.handleSize.x, this.size.y - 2 * this.handleSize.y, 0);
         return slideSizeInPixels;
     }
-    ;
     sliderPosInItems() {
         return this._sliderPosInItems;
     }
-    ;
     sliderMaxInItems() {
         return this.items().length - Math.floor(this.windowSizeInItems);
     }
-    ;
     sliderPosInPixels() {
         var sliderPosInPixels = new Coords(this.size.x - this.handleSize.x, this.handleSize.y
             + this.sliderPosInItems()
@@ -79,16 +72,10 @@ class ControlScrollbar extends ControlBase {
                 / this.items().length, 0);
         return sliderPosInPixels;
     }
-    ;
     sliderSizeInPixels() {
         var sliderSizeInPixels = this.slideSizeInPixels().multiply(new Coords(1, this.windowSizeInItems / this.items().length, 0));
         return sliderSizeInPixels;
     }
-    ;
-    style(universe) {
-        return universe.controlBuilder.stylesByName.get(this.styleName == null ? "Default" : this.styleName);
-    }
-    ;
     // drawable
     draw(universe, display, drawLoc) {
         if (this.isVisible()) {
@@ -105,5 +92,4 @@ class ControlScrollbar extends ControlBase {
             display.drawRectangle(sliderPosInPixels, sliderSizeInPixels, Color.systemColorGet(colorBack), Color.systemColorGet(colorFore), null);
         }
     }
-    ;
 }

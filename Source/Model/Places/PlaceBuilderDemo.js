@@ -915,27 +915,49 @@ class PlaceBuilderDemo {
         }
         var carVisual = new VisualDirectional(frames[0], // visualForNoDirection
         frames, // visualsForDirections
-        (e) => e.locatable().loc.vel.headingInTurns() // headingInTurnsGetForEntity
+        null // headingInTurnsGetForEntity
         );
         carVisual = new VisualGroup([
             carVisual,
             new VisualOffset(new VisualText(new DataBinding(defnName, null, null), null, Color.byName("Blue"), null), new Coords(0, 0 - entityDimension * 2.5, 0))
         ]);
         var carCollider = new Sphere(new Coords(0, 0, 0), entityDimension / 2);
+        var carCollide = (universe, world, place, entityPlayer, entityOther) => {
+            if (entityOther.portal() != null) {
+                var usable = entityOther.usable();
+                if (usable == null) {
+                    var portal = entityOther.portal();
+                    portal.use(universe, world, place, entityPlayer, entityOther);
+                }
+            }
+            else {
+                universe.collisionHelper.collideCollidables(entityPlayer, entityOther);
+            }
+        };
+        var carCollidable = new Collidable(carCollider, [Collidable.name], carCollide);
+        var carConstrainable = new Constrainable([
+            new Constraint_FrictionXY(.03, .2)
+        ]);
         var carLoc = new Disposition(null, null, null);
-        carLoc.spin = new Rotation(Coords.Instances().ZeroZeroOne, new Reference(.01));
+        //carLoc.spin = new Rotation(Coords.Instances().ZeroZeroOne, new Reference(.01));
         var carUsable = new Usable((u, w, p, eUsing, eUsed) => {
-            var visualCar = eUsed.drawable().visual;
-            eUsing.drawable().visual = visualCar;
+            var vehicle = eUsed.propertiesByName.get(Vehicle.name);
+            vehicle.entityOccupant = eUsing;
+            p.entitiesToRemove.push(eUsing);
             return null;
         });
+        var vehicle = new Vehicle(.2, // accelerationPerTick
+        5, // speedMax
+        .01 // steeringAngleInTurns
+        );
         var carEntityDefn = new Entity(defnName, [
             new Locatable(carLoc),
-            new Collidable(carCollider, null, null),
+            carCollidable,
+            carConstrainable,
             new Drawable(carVisual, null),
             new DrawableCamera(),
             carUsable,
-            new Vehicle()
+            vehicle
         ]);
         return carEntityDefn;
     }

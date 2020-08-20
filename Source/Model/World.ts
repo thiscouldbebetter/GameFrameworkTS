@@ -57,20 +57,24 @@ class World
 			Constrainable.name,
 			Collidable.name,
 			CollisionTracker.name,
+
+			Actor.name,
 			Effectable.name,
 			Generator.name,
 			Hidable.name,
 			Idleable.name,
 			ItemCrafter.name,
-			Actor.name,
 			Loadable.name,
 			Playable.name,
 			SkillLearner.name,
-			Ephemeral.name,
 			Recurrent.name,
+			Vehicle.name,
+
+			Ephemeral.name,
 			Killable.name,
 			Starvable.name,
-			Camera.name
+
+			Camera.name,
 		]
 
 		var placeDefnDemo = new PlaceDefn

@@ -338,11 +338,6 @@ class ControlList extends ControlBase
 		this.scrollbar.scalePosAndSize(scaleFactor);
 	};
 
-	style(universe: Universe)
-	{
-		return universe.controlBuilder.stylesByName.get(this.styleName == null ? "Default" : this.styleName);
-	};
-
 	// drawable
 
 	draw(universe: Universe, display: Display, drawLoc: Disposition)

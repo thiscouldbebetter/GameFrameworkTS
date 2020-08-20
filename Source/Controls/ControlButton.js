@@ -19,16 +19,9 @@ class ControlButton extends ControlBase {
         return (this.canBeHeldDown == false); // wasActionHandled
     }
     ;
-    actionToInputsMappings() {
-        return null; // todo
-    }
-    childWithFocus() {
-        return null;
-    }
     isEnabled() {
         return (this._isEnabled.get == null ? this._isEnabled : this._isEnabled.get());
     }
-    ;
     // events
     mouseClick(clickPos) {
         if (this.isEnabled()) {
@@ -36,17 +29,11 @@ class ControlButton extends ControlBase {
         }
         return (this.canBeHeldDown == false); // wasClickHandled
     }
-    ;
     scalePosAndSize(scaleFactor) {
         this.pos.multiply(scaleFactor);
         this.size.multiply(scaleFactor);
         this.fontHeightInPixels *= scaleFactor.y;
     }
-    ;
-    style(universe) {
-        return universe.controlBuilder.stylesByName.get(this.styleName == null ? "Default" : this.styleName);
-    }
-    ;
     // drawable
     draw(universe, display, drawLoc) {
         var drawPos = this._drawLoc.overwriteWith(drawLoc).pos;
@@ -66,5 +53,4 @@ class ControlButton extends ControlBase {
         this.size.x // widthMaxInPixels
         );
     }
-    ;
 }

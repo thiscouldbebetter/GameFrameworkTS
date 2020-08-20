@@ -134,6 +134,12 @@ class Coords {
         this.z = Math.floor(this.z);
         return this;
     }
+    fromHeadingInTurns(headingInTurns) {
+        var headingInRadians = headingInTurns * Polar.RadiansPerTurn;
+        this.x = Math.cos(headingInRadians);
+        this.y = Math.sin(headingInRadians);
+        return this;
+    }
     half() {
         return this.divideScalar(2);
     }

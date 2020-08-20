@@ -1565,7 +1565,7 @@ class PlaceBuilderDemo
 		(
 			frames[0], // visualForNoDirection
 			frames, // visualsForDirections
-			(e: Entity) => e.locatable().loc.vel.headingInTurns() // headingInTurnsGetForEntity
+			null // headingInTurnsGetForEntity
 		);
 		carVisual = new VisualGroup
 		([
@@ -1579,16 +1579,48 @@ class PlaceBuilderDemo
 
 		var carCollider = new Sphere(new Coords(0, 0, 0), entityDimension / 2);
 
+		var carCollide = (universe: Universe, world: World, place: Place, entityPlayer: Entity, entityOther: Entity) =>
+		{
+			if (entityOther.portal() != null)
+			{
+				var usable = entityOther.usable();
+				if (usable == null)
+				{
+					var portal = entityOther.portal();
+					portal.use(universe, world, place, entityPlayer, entityOther);
+				}
+			}
+			else
+			{
+				universe.collisionHelper.collideCollidables(entityPlayer, entityOther);
+			}
+		};
+
+		var carCollidable = new Collidable(carCollider, [Collidable.name], carCollide);
+
+		var carConstrainable = new Constrainable
+		([
+			new Constraint_FrictionXY(.03, .2)
+		]);
+
 		var carLoc = new Disposition(null, null, null);
-		carLoc.spin = new Rotation(Coords.Instances().ZeroZeroOne, new Reference(.01));
+		//carLoc.spin = new Rotation(Coords.Instances().ZeroZeroOne, new Reference(.01));
 		var carUsable = new Usable
 		(
 			(u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity): string =>
 			{
-				var visualCar = eUsed.drawable().visual;
-				eUsing.drawable().visual = visualCar;
+				var vehicle = eUsed.propertiesByName.get(Vehicle.name) as Vehicle;
+				vehicle.entityOccupant = eUsing;
+				p.entitiesToRemove.push(eUsing);
 				return null;
 			}
+		);
+
+		var vehicle = new Vehicle
+		(
+			.2, // accelerationPerTick
+			5, // speedMax
+			.01 // steeringAngleInTurns
 		);
 
 		var carEntityDefn = new Entity
@@ -1596,11 +1628,12 @@ class PlaceBuilderDemo
 			defnName,
 			[
 				new Locatable(carLoc),
-				new Collidable(carCollider, null, null),
+				carCollidable,
+				carConstrainable,
 				new Drawable(carVisual, null),
 				new DrawableCamera(),
 				carUsable,
-				new Vehicle()
+				vehicle
 			]
 		);
 

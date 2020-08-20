@@ -61,7 +61,7 @@ class ControlScrollbar extends ControlBase
 	actionHandle(actionNameToHandle: string, universe: Universe)
 	{
 		return true;
-	};
+	}
 
 	isVisible()
 	{
@@ -71,7 +71,7 @@ class ControlScrollbar extends ControlBase
 	items()
 	{
 		return (this._items.get == null ? this._items : this._items.get());
-	};
+	}
 
 	mouseClick(pos: Coords): boolean
 	{
@@ -96,7 +96,7 @@ class ControlScrollbar extends ControlBase
 		);
 
 		this._sliderPosInItems = sliderPosInItems;
-	};
+	}
 
 	scrollUp()
 	{
@@ -106,7 +106,7 @@ class ControlScrollbar extends ControlBase
 		);
 
 		this._sliderPosInItems = sliderPosInItems;
-	};
+	}
 
 	slideSizeInPixels()
 	{
@@ -118,17 +118,17 @@ class ControlScrollbar extends ControlBase
 		);
 
 		return slideSizeInPixels;
-	};
+	}
 
 	sliderPosInItems()
 	{
 		return this._sliderPosInItems;
-	};
+	}
 
 	sliderMaxInItems()
 	{
 		return this.items().length - Math.floor(this.windowSizeInItems);
-	};
+	}
 
 	sliderPosInPixels()
 	{
@@ -143,7 +143,7 @@ class ControlScrollbar extends ControlBase
 		);
 
 		return sliderPosInPixels;
-	};
+	}
 
 	sliderSizeInPixels()
 	{
@@ -153,12 +153,7 @@ class ControlScrollbar extends ControlBase
 		);
 
 		return sliderSizeInPixels;
-	};
-
-	style(universe: Universe)
-	{
-		return universe.controlBuilder.stylesByName.get(this.styleName == null ? "Default" : this.styleName);
-	};
+	}
 
 	// drawable
 
@@ -189,5 +184,5 @@ class ControlScrollbar extends ControlBase
 				null
 			);
 		}
-	};
+	}
 }

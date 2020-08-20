@@ -23,14 +23,6 @@ class ControlContainer extends ControlBase {
         this._posToCheck = new Coords(0, 0, 0);
     }
     // instance methods
-    isEnabled() {
-        return true;
-    }
-    ;
-    style(universe) {
-        return universe.controlBuilder.stylesByName.get(this.styleName == null ? "Default" : this.styleName);
-    }
-    ;
     // actions
     actionHandle(actionNameToHandle, universe) {
         var wasActionHandled = false;
@@ -79,11 +71,9 @@ class ControlContainer extends ControlBase {
     actionToInputsMappings() {
         return this._actionToInputsMappings;
     }
-    ;
     childWithFocus() {
         return (this.indexOfChildWithFocus == null ? null : this.children[this.indexOfChildWithFocus]);
     }
-    ;
     childWithFocusNextInDirection(direction) {
         if (this.indexOfChildWithFocus == null) {
             var iStart = (direction == 1 ? 0 : this.children.length - 1);
@@ -117,7 +107,6 @@ class ControlContainer extends ControlBase {
         var returnValue = this.childWithFocus();
         return returnValue;
     }
-    ;
     childrenAtPosAddToList(posToCheck, listToAddTo, addFirstChildOnly) {
         posToCheck = this._posToCheck.overwriteWith(posToCheck).clearZ();
         for (var i = this.children.length - 1; i >= 0; i--) {
@@ -132,7 +121,6 @@ class ControlContainer extends ControlBase {
         }
         return listToAddTo;
     }
-    ;
     focusGain() {
         this.indexOfChildWithFocus = null;
         var childWithFocus = this.childWithFocusNextInDirection(1);
@@ -140,7 +128,6 @@ class ControlContainer extends ControlBase {
             childWithFocus.focusGain();
         }
     }
-    ;
     focusLose() {
         var childWithFocus = this.childWithFocus();
         if (childWithFocus != null) {
@@ -148,7 +135,6 @@ class ControlContainer extends ControlBase {
             this.indexOfChildWithFocus = null;
         }
     }
-    ;
     mouseClick(mouseClickPos) {
         mouseClickPos = this._mouseClickPos.overwriteWith(mouseClickPos).subtract(this.pos);
         var childrenContainingPos = this.childrenAtPosAddToList(mouseClickPos, ArrayHelper.clear(this.childrenContainingPos), true // addFirstChildOnly
@@ -165,15 +151,6 @@ class ControlContainer extends ControlBase {
         }
         return wasClickHandled;
     }
-    ;
-    mouseEnter() {
-        // Do nothing.
-    }
-    ;
-    mouseExit() {
-        // Do nothing.
-    }
-    ;
     mouseMove(mouseMovePos) {
         var temp = this.childrenContainingPosPrev;
         this.childrenContainingPosPrev = this.childrenContainingPos;
@@ -201,7 +178,6 @@ class ControlContainer extends ControlBase {
             }
         }
     }
-    ;
     scalePosAndSize(scaleFactor) {
         this.pos.multiply(scaleFactor);
         this.size.multiply(scaleFactor);
@@ -220,18 +196,15 @@ class ControlContainer extends ControlBase {
         }
         return this;
     }
-    ;
     shiftChildPositions(displacement) {
         for (var i = 0; i < this.children.length; i++) {
             var child = this.children[i];
             child.pos.add(displacement);
         }
     }
-    ;
     toVenue() {
         return new VenueFader(new VenueControls(this), null, null, null);
     }
-    ;
     // drawable
     draw(universe, display, drawLoc) {
         drawLoc = this._drawLoc.overwriteWith(drawLoc);
@@ -244,5 +217,4 @@ class ControlContainer extends ControlBase {
             child.draw(universe, display, drawLoc);
         }
     }
-    ;
 }

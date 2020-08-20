@@ -480,14 +480,20 @@ class CollisionHelper
 			box.sizeHalf
 		);
 
+		var sphereVel = sphereLoc.vel;
+		var sphereOrientation = sphereLoc.orientation;
+
 		if (Math.abs(collisionRelativeToBox.x) >= Math.abs(collisionRelativeToBox.y))
 		{
-			sphereLoc.vel.x *= -1;
+			sphereVel.x *= -1;
+			sphereOrientation.forward.x *= -1;
 		}
 		else
 		{
-			sphereLoc.vel.y *= -1;
+			sphereVel.y *= -1;
+			sphereOrientation.forward.y *= -1;
 		}
+		sphereOrientation.orthogonalize();
 	};
 
 	collideCollidablesBoxRotatedAndSphere(entityBoxRotated: Entity, entitySphere: Entity)

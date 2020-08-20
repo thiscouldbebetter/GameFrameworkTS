@@ -73,9 +73,9 @@ class Constraint_ContainInHemispace {
     ;
 }
 class Constraint_FrictionXY {
-    constructor(target, speedMin) {
+    constructor(target, speedBelowWhichToStop) {
         this.target = target;
-        this.speedMin = speedMin || 0;
+        this.speedBelowWhichToStop = speedBelowWhichToStop || 0;
     }
     constrain(universe, world, place, entity) {
         var targetFrictionCoefficient = this.target;
@@ -84,7 +84,7 @@ class Constraint_FrictionXY {
         var entityVelZSaved = entityVel.z;
         entityVel.z = 0;
         var speed = entityVel.magnitude();
-        if (speed < this.speedMin) {
+        if (speed < this.speedBelowWhichToStop) {
             entityVel.clear();
         }
         else {

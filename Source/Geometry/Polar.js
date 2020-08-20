@@ -10,7 +10,6 @@ class Polar {
         this.azimuthInTurns += turnsToAdd;
         return this;
     }
-    ;
     fromCoords(coordsToConvert) {
         this.azimuthInTurns =
             Math.atan2(coordsToConvert.y, coordsToConvert.x)
@@ -24,14 +23,12 @@ class Polar {
                 / Polar.RadiansPerTurn;
         return this;
     }
-    ;
     overwriteWith(other) {
         this.azimuthInTurns = other.azimuthInTurns;
         this.radius = other.radius;
         this.elevationInTurns = other.elevationInTurns;
         return this;
     }
-    ;
     overwriteWithAzimuthRadiusElevation(azimuthInTurns, radius, elevationInTurns) {
         this.azimuthInTurns = azimuthInTurns;
         this.radius = radius;
@@ -40,7 +37,6 @@ class Polar {
         }
         return this;
     }
-    ;
     random(randomizer) {
         if (randomizer == null) {
             randomizer = new RandomizerSystem();
@@ -49,7 +45,6 @@ class Polar {
         this.elevationInTurns = randomizer.getNextRandom();
         return this;
     }
-    ;
     toCoords(coords) {
         var azimuthInRadians = this.azimuthInTurns * Polar.RadiansPerTurn;
         var elevationInRadians = this.elevationInTurns * Polar.RadiansPerTurn;
@@ -57,7 +52,6 @@ class Polar {
         coords.overwriteWithDimensions(Math.cos(azimuthInRadians) * cosineOfElevation, Math.sin(azimuthInRadians) * cosineOfElevation, Math.sin(elevationInRadians)).multiplyScalar(this.radius);
         return coords;
     }
-    ;
     wrap() {
         while (this.azimuthInTurns < 0) {
             this.azimuthInTurns++;
@@ -67,12 +61,10 @@ class Polar {
         }
         return this;
     }
-    ;
     // Clonable.
     clone() {
         return new Polar(this.azimuthInTurns, this.radius, this.elevationInTurns);
     }
-    ;
 }
 // constants
 Polar.DegreesPerTurn = 360;

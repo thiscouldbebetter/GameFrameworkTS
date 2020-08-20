@@ -8,7 +8,7 @@ class ControlBase {
         this.isHighlighted = false;
     }
     actionHandle(actionName, universe) { return false; }
-    actionToInputsMappings() { return null; }
+    actionToInputsMappings() { return new Array(); }
     childWithFocus() { return null; }
     draw(u, d, drawLoc) { }
     focusGain() { this.isHighlighted = true; }
@@ -19,4 +19,7 @@ class ControlBase {
     mouseExit() { this.isHighlighted = false; }
     mouseMove(x) { }
     scalePosAndSize(x) { }
+    style(universe) {
+        return universe.controlBuilder.stylesByName.get(this.styleName == null ? "Default" : this.styleName);
+    }
 }

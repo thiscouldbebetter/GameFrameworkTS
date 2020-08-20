@@ -13,10 +13,6 @@ class ControlTextBox extends ControlBase {
         this._textMargin = new Coords(0, 0, 0);
         this._textSize = new Coords(0, 0, 0);
     }
-    style(universe) {
-        return universe.controlBuilder.stylesByName.get(this.styleName == null ? "Default" : this.styleName);
-    }
-    ;
     text(value, universe) {
         if (value != null) {
             if (this._text.set == null) {
@@ -28,7 +24,6 @@ class ControlTextBox extends ControlBase {
         }
         return (this._text.get == null ? this._text : this._text.get(universe));
     }
-    ;
     // events
     actionHandle(actionNameToHandle, universe) {
         var text = this.text(null, null);
@@ -79,7 +74,6 @@ class ControlTextBox extends ControlBase {
         }
         return true; // wasActionHandled
     }
-    ;
     mouseClick(mouseClickPos) {
         var parent = this.parent;
         var parentAsContainer = parent;
@@ -87,14 +81,12 @@ class ControlTextBox extends ControlBase {
         this.isHighlighted = true;
         return true;
     }
-    ;
     scalePosAndSize(scaleFactor) {
         this.pos.multiply(scaleFactor);
         this.size.multiply(scaleFactor);
         this.fontHeightInPixels *= scaleFactor.y;
         return this;
     }
-    ;
     // drawable
     draw(universe, display, drawLoc) {
         var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
@@ -124,5 +116,4 @@ class ControlTextBox extends ControlBase {
             );
         }
     }
-    ;
 }
