@@ -371,7 +371,7 @@ class ItemHolder extends EntityProperty {
                 return c.statusMessage;
             }, null), // text
             fontHeightSmall),
-            new ControlButton("buttonUse", new Coords(135, 95, 0), // pos
+            new ControlButton("buttonUse", new Coords(132.5, 95, 0), // pos
             new Coords(15, 10, 0), // size
             "Use", fontHeightSmall, true, // hasBorder
             new DataBinding(this, (c) => {
@@ -381,7 +381,7 @@ class ItemHolder extends EntityProperty {
             (universe) => {
                 use();
             }, null, null),
-            new ControlButton("buttonDrop", new Coords(155, 95, 0), // pos
+            new ControlButton("buttonDrop", new Coords(152.5, 95, 0), // pos
             new Coords(15, 10, 0), // size
             "Drop", fontHeightSmall, true, // hasBorder
             new DataBinding(this, (c) => (c.itemEntitySelected != null), null), // isEnabled

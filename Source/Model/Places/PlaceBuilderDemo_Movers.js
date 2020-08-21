@@ -370,9 +370,9 @@ class PlaceBuilderDemo_Movers {
             new Talker("AnEveningWithProfessorSurly"),
             new Actor(friendlyActivity, null),
             new ItemHolder([
-                new Item("Ammo", 200),
+                new Item("Arrow", 200),
+                new Item("Bow", 1),
                 new Item("Coin", 200),
-                new Item("Gun", 1),
                 new Item("Iron", 3),
                 new Item("Key", 1),
                 new Item("Medicine", 4),
@@ -751,7 +751,7 @@ class PlaceBuilderDemo_Movers {
             var player = c;
             var itemHolder = player.itemHolder();
             var statusText = "H:" + player.killable().integrity
-                + "   A:" + itemHolder.itemQuantityByDefnName("Ammo")
+                + "   A:" + itemHolder.itemQuantityByDefnName("Arrow")
                 + "   K:" + itemHolder.itemQuantityByDefnName("Key")
                 + "   $:" + itemHolder.itemQuantityByDefnName("Coin")
                 + "   X:" + player.skillLearner().learningAccumulated;
