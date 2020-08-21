@@ -61,7 +61,6 @@ class Entity {
     ephemeral() { return this.propertiesByName.get(Ephemeral.name); }
     equipmentUser() { return this.propertiesByName.get(EquipmentUser.name); }
     equippable() { return this.propertiesByName.get(Equippable.name); }
-    hidable() { return this.propertiesByName.get(Hidable.name); }
     item() { return this.propertiesByName.get(Item.name); }
     itemContainer() { return this.propertiesByName.get(ItemContainer.name); }
     itemCrafter() { return this.propertiesByName.get(ItemCrafter.name); }
@@ -74,6 +73,8 @@ class Entity {
     locatable() { return this.propertiesByName.get(Locatable.name); }
     movable() { return this.propertiesByName.get(Movable.name); }
     recurrent() { return this.propertiesByName.get(Recurrent.name); }
+    perceptible() { return this.propertiesByName.get(Perceptible.name); }
+    perceptor() { return this.propertiesByName.get(Perceptor.name); }
     playable() { return this.propertiesByName.get(Playable.name); }
     portal() { return this.propertiesByName.get(Portal.name); }
     skillLearner() { return this.propertiesByName.get(SkillLearner.name); }

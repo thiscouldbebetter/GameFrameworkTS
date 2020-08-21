@@ -99,8 +99,6 @@ class Entity
 
 	equippable(): Equippable { return this.propertiesByName.get(Equippable.name) as Equippable; }
 
-	hidable(): Hidable { return this.propertiesByName.get(Hidable.name) as Hidable; }
-
 	item(): Item { return this.propertiesByName.get(Item.name) as Item; }
 
 	itemContainer(): ItemContainer { return this.propertiesByName.get(ItemContainer.name) as ItemContainer; }
@@ -124,6 +122,10 @@ class Entity
 	movable(): Movable { return this.propertiesByName.get(Movable.name) as Movable; }
 
 	recurrent(): Recurrent { return this.propertiesByName.get(Recurrent.name) as Recurrent; }
+
+	perceptible(): Perceptible { return this.propertiesByName.get(Perceptible.name) as Perceptible; }
+
+	perceptor(): Perceptor { return this.propertiesByName.get(Perceptor.name) as Perceptor; }
 
 	playable(): Playable { return this.propertiesByName.get(Playable.name) as Playable; }
 

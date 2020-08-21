@@ -66,6 +66,14 @@ class Vehicle extends EntityProperty
 				{
 					vehicle.steeringDirection = 1;
 				}
+				else if (actionName == "Use")
+				{
+					var occupantLoc = this.entityOccupant.locatable().loc;
+					occupantLoc.pos.overwriteWith(vehicleLoc.pos);
+					occupantLoc.vel.clear();
+					place.entitiesToSpawn.push(this.entityOccupant);
+					this.entityOccupant = null;
+				}
 			}
 
 			var vehicleHeadingInTurns = vehicleForward.headingInTurns();

@@ -386,7 +386,7 @@ class PlaceBuilderDemo_Emplacements
 				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
 				new Drawable(itemHoleVisual, null),
 				new DrawableCamera(),
-				new Hidable(false),
+				new Perceptible(false, () => 0, () => 0),
 				new Usable
 				(
 					(u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) =>

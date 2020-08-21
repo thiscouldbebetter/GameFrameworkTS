@@ -20,6 +20,7 @@ class Skill
 
 			new Skill("Jumping", 4, []),
 			new Skill("Running", 4, []),
+			new Skill("Sneaking", 4, []),
 			new Skill("Strafing", 4, []),
 
 			new Skill("Hiding", 8, [ "Running" ]),

@@ -2236,8 +2236,9 @@ class PlaceBuilderDemo
 					}
 					else
 					{
-						var holeInRangeHidable = holeInRange.hidable();
-						holeInRangeHidable.isHidden = (holeInRangeHidable.isHidden == false);
+						var holeInRangePerceptible = holeInRange.perceptible();
+						holeInRangePerceptible.isHiding =
+							(holeInRangePerceptible.isHiding == false);
 					}
 				}
 				else
@@ -3568,15 +3569,15 @@ class PlaceBuilderDemo
 					var knowsHowToHide = learner.skillsKnownNames.indexOf("Hiding") >= 0;
 					if (knowsHowToHide)
 					{
-						var hidable = actor.hidable();
-						var isAlreadyHiding = hidable.isHidden;
+						var perceptible = actor.perceptible();
+						var isAlreadyHiding = perceptible.isHiding;
 						if (isAlreadyHiding)
 						{
-							hidable.isHidden = false;
+							perceptible.isHiding = false;
 						}
 						else
 						{
-							hidable.isHidden = true;
+							perceptible.isHiding = true;
 						}
 					}
 				}
@@ -3653,6 +3654,27 @@ class PlaceBuilderDemo
 			),
 			new Action
 			(
+				"Sneak",
+				(universe: Universe, world: World, place: Place, actor: Entity) => // perform
+				{
+					// var learner = actor.skillLearner();
+					// var knowsHowToSneak = learner.skillsKnownNames.indexOf("Sneaking") >= 0;
+					var knowsHowToSneak = true; // debug
+					if (knowsHowToSneak)
+					{
+						var loc = actor.locatable().loc;
+						var isOnGround = (loc.pos.z >= 0);
+						if (isOnGround)
+						{
+							var vel = loc.vel;
+							var speedSneaking = .5;
+							vel.trimToMagnitudeMax(speedSneaking);
+						}
+					}
+				}
+			),
+			new Action
+			(
 				"Use",
 				(universe: Universe, world: World, place: Place, actor: Entity) => // perform
 				{
@@ -3707,6 +3729,7 @@ class PlaceBuilderDemo
 			new ActionToInputsMapping("Jump", 		[ inputNames.Space, inputNames.GamepadButton0 + "1" ], inactivateTrue),
 			new ActionToInputsMapping("Pick Up", 	[ "g", inputNames.GamepadButton0 + "4" ], inactivateTrue),
 			new ActionToInputsMapping("Run", 		[ inputNames.Shift, inputNames.GamepadButton0 + "2" ], inactivateFalse),
+			new ActionToInputsMapping("Sneak", 		[ inputNames.Control, inputNames.GamepadButton0 + "6" ], inactivateFalse),
 			new ActionToInputsMapping("Use", 		[ "e", inputNames.GamepadButton0 + "5" ], inactivateTrue),
 
 			new ActionToInputsMapping("Item0", 	[ "_0" ], inactivateFalse),

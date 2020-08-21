@@ -58,15 +58,16 @@ class World
 			Collidable.name,
 			CollisionTracker.name,
 
+			Idleable.name,
 			Actor.name,
+
 			Effectable.name,
 			Generator.name,
-			Hidable.name,
-			Idleable.name,
 			ItemCrafter.name,
 			Loadable.name,
 			Playable.name,
 			SkillLearner.name,
+			Perceptible.name,
 			Recurrent.name,
 			Vehicle.name,
 

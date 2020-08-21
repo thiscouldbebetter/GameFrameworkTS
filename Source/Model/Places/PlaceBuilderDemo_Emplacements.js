@@ -199,7 +199,7 @@ class PlaceBuilderDemo_Emplacements {
             new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
             new Drawable(itemHoleVisual, null),
             new DrawableCamera(),
-            new Hidable(false),
+            new Perceptible(false, () => 0, () => 0),
             new Usable((u, w, p, eUsing, eUsed) => {
                 var itemContainerAsControl = eUsed.itemContainer().toControl(u, u.display.sizeInPixels, eUsing, eUsed, u.venueCurrent);
                 var venueNext = new VenueControls(itemContainerAsControl);

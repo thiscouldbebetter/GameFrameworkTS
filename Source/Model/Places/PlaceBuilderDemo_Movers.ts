@@ -300,50 +300,75 @@ class PlaceBuilderDemo_Movers
 			var actorLoc = actor.locatable().loc;
 			var actorPos = actorLoc.pos;
 			var actorOrientation = actorLoc.orientation;
-			var actorForward = actorOrientation.forward;
 
 			var entityToTargetPrefix = "Player";
 			var targetsPreferred = place.entities.filter
 			(
 				x => x.name.startsWith(entityToTargetPrefix)
 			);
-			var detectionDistance = 150;
+
 			var displacement = new Coords(0, 0, 0);
-			var targetPreferredInRange = targetsPreferred.filter
+			var targetPreferredInSight = targetsPreferred.filter
 			(
-				(entityToTarget: Entity) =>
-				{
-					var entityToTargetLoc = entityToTarget.locatable().loc;
-					var entityToTargetPos = entityToTargetLoc.pos;
-					displacement.overwriteWith(entityToTargetPos).subtract(actorPos);
-					var distanceForward = displacement.dotProduct(actorForward);
-					var isVisible = 
+				x =>
+					x.perceptible() == null
+					|| x.perceptible().canBeSeen(universe, world, place, x, actor)
+			).sort
+			(
+				(a, b) =>
+					displacement.overwriteWith
 					(
-						displacement.magnitude() < detectionDistance
-						&& distanceForward >= 0
-					);
-					return isVisible;
-				}
+						a.locatable().loc.pos
+					).subtract
+					(
+						b.locatable().loc.pos
+					).magnitude()
 			)[0];
 
 			var targetPosToApproach;
 
-			if (targetPreferredInRange == null)
+			if (targetPreferredInSight != null)
 			{
-				var targetPosExisting = actor.actor().target;
-				if (targetPosExisting == null)
-				{
-					targetPosToApproach =
-						new Coords(0, 0, 0).randomize(universe.randomizer).multiply(place.size);
-				}
-				else
-				{
-					targetPosToApproach = targetPosExisting;
-				}
+				targetPosToApproach =
+					targetPreferredInSight.locatable().loc.pos.clone();
 			}
 			else
 			{
-				targetPosToApproach = targetPreferredInRange.locatable().loc.pos.clone();
+				var targetPreferredInHearing = targetsPreferred.filter
+				(
+					x =>
+						x.perceptible() == null
+						|| x.perceptible().canBeHeard(universe, world, place, x, actor)
+				).sort
+				(
+					(a, b) =>
+						displacement.overwriteWith
+						(
+							a.locatable().loc.pos
+						).subtract
+						(
+							b.locatable().loc.pos
+						).magnitude()
+				)[0];
+
+				if (targetPreferredInHearing != null)
+				{
+					targetPosToApproach =
+						targetPreferredInHearing.locatable().loc.pos.clone();
+				}
+				else
+				{
+					var targetPosExisting = actor.actor().target;
+					if (targetPosExisting == null)
+					{
+						targetPosToApproach =
+							new Coords(0, 0, 0).randomize(universe.randomizer).multiply(place.size);
+					}
+					else
+					{
+						targetPosToApproach = targetPosExisting;
+					}
+				}
 			}
 
 			actor.actor().target = targetPosToApproach;
@@ -443,6 +468,12 @@ class PlaceBuilderDemo_Movers
 			}
 		);
 
+		var enemyPerceptor = new Perceptor
+		(
+			1, // sightThreshold
+			1 // hearingThreshold
+		);
+
 		// todo - Remove closures.
 		var enemyEntityPrototype = new Entity
 		(
@@ -457,6 +488,7 @@ class PlaceBuilderDemo_Movers
 				new Enemy(),
 				enemyKillable,
 				new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
+				enemyPerceptor
 			]
 		);
 
@@ -911,7 +943,7 @@ class PlaceBuilderDemo_Movers
 		(
 			function selectChildName(u: Universe, w: World, d: Display, e: Entity)
 			{
-				return (e.hidable().isHidden ? "Hidden" : "Normal");
+				return (e.perceptible().isHiding ? "Hidden" : "Normal");
 			},
 			[ "Normal", "Hidden" ],
 			[ playerVisualBodyNormal, playerVisualBodyHidden ]
@@ -1387,6 +1419,13 @@ class PlaceBuilderDemo_Movers
 			}
 		};
 
+		var perceptible = new Perceptible
+		(
+			false, // hiding
+			(u: Universe, w: World, p: Place, e: Entity) => 150, // visibility
+			(u: Universe, w: World, p: Place, e: Entity) => 5000 // audibility
+		);
+
 		var playerEntityDefn = new Entity
 		(
 			entityDefnNamePlayer,
@@ -1404,14 +1443,19 @@ class PlaceBuilderDemo_Movers
 				new DrawableCamera(),
 				new Effectable([]),
 				equipmentUser,
-				new Hidable(false),
-				new Idleable(),
+				new Idleable
+				(
+					1, // ticksUntilIdle
+					(u: Universe, w: World, p: Place, e: Entity) =>
+						e.locatable().loc.orientation.forward.clear()
+				),
 				itemCrafter,
 				itemHolder,
 				journalKeeper,
 				new Locatable(null),
 				killable,
 				movable,
+				perceptible,
 				new Playable(),
 				new SkillLearner(null, null, null),
 				starvable

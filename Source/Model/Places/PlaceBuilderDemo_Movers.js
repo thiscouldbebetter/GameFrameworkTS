@@ -155,33 +155,33 @@ class PlaceBuilderDemo_Movers {
             var actorLoc = actor.locatable().loc;
             var actorPos = actorLoc.pos;
             var actorOrientation = actorLoc.orientation;
-            var actorForward = actorOrientation.forward;
             var entityToTargetPrefix = "Player";
             var targetsPreferred = place.entities.filter(x => x.name.startsWith(entityToTargetPrefix));
-            var detectionDistance = 150;
             var displacement = new Coords(0, 0, 0);
-            var targetPreferredInRange = targetsPreferred.filter((entityToTarget) => {
-                var entityToTargetLoc = entityToTarget.locatable().loc;
-                var entityToTargetPos = entityToTargetLoc.pos;
-                displacement.overwriteWith(entityToTargetPos).subtract(actorPos);
-                var distanceForward = displacement.dotProduct(actorForward);
-                var isVisible = (displacement.magnitude() < detectionDistance
-                    && distanceForward >= 0);
-                return isVisible;
-            })[0];
+            var targetPreferredInSight = targetsPreferred.filter(x => x.perceptible() == null
+                || x.perceptible().canBeSeen(universe, world, place, x, actor)).sort((a, b) => displacement.overwriteWith(a.locatable().loc.pos).subtract(b.locatable().loc.pos).magnitude())[0];
             var targetPosToApproach;
-            if (targetPreferredInRange == null) {
-                var targetPosExisting = actor.actor().target;
-                if (targetPosExisting == null) {
-                    targetPosToApproach =
-                        new Coords(0, 0, 0).randomize(universe.randomizer).multiply(place.size);
-                }
-                else {
-                    targetPosToApproach = targetPosExisting;
-                }
+            if (targetPreferredInSight != null) {
+                targetPosToApproach =
+                    targetPreferredInSight.locatable().loc.pos.clone();
             }
             else {
-                targetPosToApproach = targetPreferredInRange.locatable().loc.pos.clone();
+                var targetPreferredInHearing = targetsPreferred.filter(x => x.perceptible() == null
+                    || x.perceptible().canBeHeard(universe, world, place, x, actor)).sort((a, b) => displacement.overwriteWith(a.locatable().loc.pos).subtract(b.locatable().loc.pos).magnitude())[0];
+                if (targetPreferredInHearing != null) {
+                    targetPosToApproach =
+                        targetPreferredInHearing.locatable().loc.pos.clone();
+                }
+                else {
+                    var targetPosExisting = actor.actor().target;
+                    if (targetPosExisting == null) {
+                        targetPosToApproach =
+                            new Coords(0, 0, 0).randomize(universe.randomizer).multiply(place.size);
+                    }
+                    else {
+                        targetPosToApproach = targetPosExisting;
+                    }
+                }
             }
             actor.actor().target = targetPosToApproach;
             var targetDisplacement = targetPosToApproach.clone().subtract(actorPos);
@@ -231,6 +231,9 @@ class PlaceBuilderDemo_Movers {
                 place.entitySpawn(universe, world, universe.entityBuilder.messageFloater(learningMessage, entityPlayer.locatable().loc.pos, Color.byName("Green")));
             }
         });
+        var enemyPerceptor = new Perceptor(1, // sightThreshold
+        1 // hearingThreshold
+        );
         // todo - Remove closures.
         var enemyEntityPrototype = new Entity(enemyTypeName + (damageTypeName || "Normal"), [
             new Actor(enemyActivity, null),
@@ -242,6 +245,7 @@ class PlaceBuilderDemo_Movers {
             new Enemy(),
             enemyKillable,
             new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
+            enemyPerceptor
         ]);
         var generatorActivity = (universe, world, place, actor, entityToTargetName) => {
             var enemyCount = place.entitiesByPropertyName(Enemy.name).filter(x => x.name.startsWith(enemyEntityPrototype.name)).length;
@@ -477,7 +481,7 @@ class PlaceBuilderDemo_Movers {
         var playerVisualBodyNormal = visualBuilder.circleWithEyesAndLegsAndArms(playerHeadRadius, playerColor, visualEyeRadius, visualEyesBlinking);
         var playerVisualBodyHidden = visualBuilder.circleWithEyesAndLegs(playerHeadRadius, Color.byName("Black"), visualEyeRadius, visualEyesBlinking);
         var playerVisualBodyHidable = new VisualSelect(function selectChildName(u, w, d, e) {
-            return (e.hidable().isHidden ? "Hidden" : "Normal");
+            return (e.perceptible().isHiding ? "Hidden" : "Normal");
         }, ["Normal", "Hidden"], [playerVisualBodyNormal, playerVisualBodyHidden]);
         var playerVisualBodyJumpable = new VisualJump2D(playerVisualBodyHidable, new VisualEllipse(playerHeadRadius, playerHeadRadius / 2, 0, Color.byName("GrayDark"), Color.byName("Black")), null);
         var playerVisualName = new VisualText(new DataBinding(entityDefnNamePlayer, null, null), null, playerColor, null);
@@ -713,6 +717,10 @@ class PlaceBuilderDemo_Movers {
                 action.perform(universe, world, place, entityPlayer);
             }
         };
+        var perceptible = new Perceptible(false, // hiding
+        (u, w, p, e) => 150, // visibility
+        (u, w, p, e) => 5000 // audibility
+        );
         var playerEntityDefn = new Entity(entityDefnNamePlayer, [
             new Actor(playerActivity, null),
             new Collidable(playerCollider, [Collidable.name], // entityPropertyNamesToCollideWith
@@ -723,14 +731,15 @@ class PlaceBuilderDemo_Movers {
             new DrawableCamera(),
             new Effectable([]),
             equipmentUser,
-            new Hidable(false),
-            new Idleable(),
+            new Idleable(1, // ticksUntilIdle
+            (u, w, p, e) => e.locatable().loc.orientation.forward.clear()),
             itemCrafter,
             itemHolder,
             journalKeeper,
             new Locatable(null),
             killable,
             movable,
+            perceptible,
             new Playable(),
             new SkillLearner(null, null, null),
             starvable
