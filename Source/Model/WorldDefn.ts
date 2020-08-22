@@ -27,6 +27,11 @@ class WorldDefn
 		return this.defnsByNameByTypeName.get(Action.name);
 	}
 
+	activityDefnsByName()
+	{
+		return this.defnsByNameByTypeName.get(ActivityDefn.name);
+	}
+
 	entityDefnsByName()
 	{
 		return this.defnsByNameByTypeName.get(Entity.name);

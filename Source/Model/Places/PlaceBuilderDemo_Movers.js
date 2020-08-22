@@ -46,9 +46,8 @@ class PlaceBuilderDemo_Movers {
             ),
             new VisualOffset(new VisualText(new DataBinding("Carnivore", null, null), null, carnivoreColor, null), new Coords(0, 0 - carnivoreDimension * 2, 0))
         ]);
-        var carnivoreActivity = (universe, world, place, entityActor, target) => {
-            var actor = entityActor.actor();
-            var targetPos = actor.target;
+        var carnivoreActivityPerform = (universe, world, place, entityActor, activity) => {
+            var targetPos = activity.target;
             if (targetPos == null) {
                 var moversInPlace = place.movables();
                 var grazersInPlace = moversInPlace.filter(x => x.name.startsWith("Grazer"));
@@ -60,7 +59,7 @@ class PlaceBuilderDemo_Movers {
                 else {
                     targetPos = grazersInPlace[0].locatable().loc.pos;
                 }
-                actor.target = targetPos;
+                activity.target = targetPos;
             }
             var actorLoc = entityActor.locatable().loc;
             var actorPos = actorLoc.pos;
@@ -78,15 +77,18 @@ class PlaceBuilderDemo_Movers {
                 if (grazerInReach != null) {
                     grazerInReach.killable().integrity = 0;
                 }
-                actor.target = null;
+                activity.target = null;
             }
         };
+        var carnivoreActivityDefn = new ActivityDefn("Carnivore", carnivoreActivityPerform);
+        this.parent.activityDefns.push(carnivoreActivityDefn);
+        var carnivoreActivity = new Activity(carnivoreActivityDefn.name, null);
         var carnivoreDie = (universe, world, place, entityDying) => // die
          {
             entityDying.locatable().entitySpawnWithDefnName(universe, world, place, entityDying, "Meat");
         };
         var carnivoreEntityDefn = new Entity("Carnivore", [
-            new Actor(carnivoreActivity, null),
+            new Actor(carnivoreActivity),
             new Collidable(carnivoreCollider, null, null),
             new Constrainable([constraintSpeedMax1]),
             new Drawable(carnivoreVisual, null),
@@ -151,7 +153,7 @@ class PlaceBuilderDemo_Movers {
             visualEyesWithBrowsDirectional,
             new VisualOffset(new VisualText(DataBinding.fromContext(enemyTypeName), null, enemyColor, null), new Coords(0, 0 - enemyDimension, 0))
         ]);
-        var enemyActivity = (universe, world, place, actor, target) => {
+        var enemyActivityPerform = (universe, world, place, actor, activity) => {
             var actorLoc = actor.locatable().loc;
             var actorPos = actorLoc.pos;
             var actorOrientation = actorLoc.orientation;
@@ -173,7 +175,7 @@ class PlaceBuilderDemo_Movers {
                         targetPreferredInHearing.locatable().loc.pos.clone();
                 }
                 else {
-                    var targetPosExisting = actor.actor().target;
+                    var targetPosExisting = activity.target;
                     if (targetPosExisting == null) {
                         targetPosToApproach =
                             new Coords(0, 0, 0).randomize(universe.randomizer).multiply(place.size);
@@ -183,13 +185,13 @@ class PlaceBuilderDemo_Movers {
                     }
                 }
             }
-            actor.actor().target = targetPosToApproach;
+            activity.target = targetPosToApproach;
             var targetDisplacement = targetPosToApproach.clone().subtract(actorPos);
             var targetDistance = targetDisplacement.magnitude();
             var distanceMin = 1;
             if (targetDistance <= distanceMin) {
                 actorPos.overwriteWith(targetPosToApproach);
-                actor.actor().target = null;
+                activity.target = null;
             }
             else {
                 var acceleration = .1;
@@ -197,6 +199,9 @@ class PlaceBuilderDemo_Movers {
                 actorOrientation.forwardSet(actorLoc.accel.clone().normalize());
             }
         };
+        var enemyActivityDefn = new ActivityDefn("Enemy", enemyActivityPerform);
+        this.parent.activityDefns.push(enemyActivityDefn);
+        var enemyActivity = new Activity(enemyActivityDefn.name, null);
         var enemyDamageApply = (u, w, p, eDamager, eKillable, damageToApply) => {
             var damageToApplyTypeName = damageToApply.typeName;
             var damageInflictedByTargetTypeName = eKillable.damager().damagePerHit.typeName;
@@ -236,7 +241,7 @@ class PlaceBuilderDemo_Movers {
         );
         // todo - Remove closures.
         var enemyEntityPrototype = new Entity(enemyTypeName + (damageTypeName || "Normal"), [
-            new Actor(enemyActivity, null),
+            new Actor(enemyActivity),
             new Constrainable([constraintSpeedMax1]),
             new Collidable(enemyCollider, null, null),
             new Damager(new Damage(10, damageTypeName)),
@@ -247,22 +252,22 @@ class PlaceBuilderDemo_Movers {
             new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
             enemyPerceptor
         ]);
-        var generatorActivity = (universe, world, place, actor, entityToTargetName) => {
+        var generatorActivityPerform = (universe, world, place, actor, activity) => {
             var enemyCount = place.entitiesByPropertyName(Enemy.name).filter(x => x.name.startsWith(enemyEntityPrototype.name)).length;
             var enemyCountMax = 1;
             if (enemyCount < enemyCountMax) {
-                var ticksDelayedSoFar = actor.actor().target;
+                var ticksDelayedSoFar = activity.target;
                 if (ticksDelayedSoFar == null) {
                     ticksDelayedSoFar = 0;
                 }
                 ticksDelayedSoFar++;
                 var ticksToDelay = 200;
                 if (ticksDelayedSoFar < ticksToDelay) {
-                    actor.actor().target = ticksDelayedSoFar;
+                    activity.target = ticksDelayedSoFar;
                     return;
                 }
                 else {
-                    actor.actor().target = null;
+                    activity.target = null;
                 }
                 var enemyEntityToPlace = enemyEntityPrototype.clone();
                 var placeSizeHalf = place.size.clone().half();
@@ -275,8 +280,11 @@ class PlaceBuilderDemo_Movers {
                 place.entitiesToSpawn.push(enemyEntityToPlace);
             }
         };
+        var generatorActivityDefn = new ActivityDefn("Generate" + enemyEntityPrototype.name, generatorActivityPerform);
+        this.parent.activityDefns.push(generatorActivityDefn);
+        var generatorActivity = new Activity(generatorActivityDefn.name, null);
         var enemyGeneratorEntityDefn = new Entity("EnemyGenerator" + enemyEntityPrototype.name, [
-            new Actor(generatorActivity, null)
+            new Actor(generatorActivity)
         ]);
         return enemyGeneratorEntityDefn;
     }
@@ -341,14 +349,13 @@ class PlaceBuilderDemo_Movers {
             ),
             new VisualOffset(new VisualText(new DataBinding("Talker", null, null), null, friendlyColor, null), new Coords(0, 0 - friendlyDimension * 2, 0))
         ]);
-        var friendlyActivity = (universe, world, place, entityActor, target) => {
-            var actor = entityActor.actor();
-            var targetPos = actor.target;
+        var friendlyActivityPerform = (universe, world, place, entityActor, activity) => {
+            var targetPos = activity.target;
             if (targetPos == null) {
                 var randomizer = universe.randomizer;
                 targetPos =
                     new Coords(0, 0, 0).randomize(randomizer).multiply(place.size);
-                actor.target = targetPos;
+                activity.target = targetPos;
             }
             var actorLoc = entityActor.locatable().loc;
             var actorPos = actorLoc.pos;
@@ -358,9 +365,12 @@ class PlaceBuilderDemo_Movers {
             }
             else {
                 actorPos.overwriteWith(targetPos);
-                actor.target = null;
+                activity.target = null;
             }
         };
+        var friendlyActivityDefn = new ActivityDefn("Friendly", friendlyActivityPerform);
+        this.parent.activityDefns.push(friendlyActivityDefn);
+        var friendlyActivity = new Activity(friendlyActivityDefn.name, null);
         var friendlyEntityDefn = new Entity("Friendly", [
             new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
             new Constrainable([constraintSpeedMax1]),
@@ -368,7 +378,7 @@ class PlaceBuilderDemo_Movers {
             new Drawable(friendlyVisual, null),
             new DrawableCamera(),
             new Talker("AnEveningWithProfessorSurly"),
-            new Actor(friendlyActivity, null),
+            new Actor(friendlyActivity),
             new ItemHolder([
                 new Item("Arrow", 200),
                 new Item("Bow", 1),
@@ -419,9 +429,8 @@ class PlaceBuilderDemo_Movers {
             ),
             new VisualOffset(new VisualText(new DataBinding("Grazer", null, null), null, grazerColor, null), new Coords(0, 0 - grazerDimension * 2, 0))
         ]);
-        var grazerActivity = (universe, world, place, entityActor, target) => {
-            var actor = entityActor.actor();
-            var targetPos = actor.target;
+        var grazerActivityPerform = (universe, world, place, entityActor, activity) => {
+            var targetPos = activity.target;
             if (targetPos == null) {
                 var itemsInPlace = place.items();
                 var itemsGrassInPlace = itemsInPlace.filter(x => x.item().defnName == "Grass");
@@ -433,7 +442,7 @@ class PlaceBuilderDemo_Movers {
                 else {
                     targetPos = itemsGrassInPlace[0].locatable().loc.pos;
                 }
-                actor.target = targetPos;
+                activity.target = targetPos;
             }
             var actorLoc = entityActor.locatable().loc;
             var actorPos = actorLoc.pos;
@@ -451,15 +460,18 @@ class PlaceBuilderDemo_Movers {
                 if (itemGrassInReach != null) {
                     place.entitiesToRemove.push(itemGrassInReach);
                 }
-                actor.target = null;
+                activity.target = null;
             }
         };
+        var grazerActivityDefn = new ActivityDefn("Grazer", grazerActivityPerform);
+        this.parent.activityDefns.push(grazerActivityDefn);
+        var grazerActivity = new Activity(grazerActivityDefn.name, null);
         var grazerDie = (universe, world, place, entityDying) => // die
          {
             entityDying.locatable().entitySpawnWithDefnName(universe, world, place, entityDying, "Meat");
         };
         var grazerEntityDefn = new Entity("Grazer", [
-            new Actor(grazerActivity, null),
+            new Actor(grazerActivity),
             new Collidable(grazerCollider, null, null),
             new Constrainable([constraintSpeedMax1]),
             new Drawable(grazerVisual, null),
@@ -699,7 +711,7 @@ class PlaceBuilderDemo_Movers {
             back);
             return returnValue;
         });
-        var playerActivity = (universe, world, place, entityPlayer) => {
+        var playerActivityPerform = (universe, world, place, entityPlayer, activity) => {
             var inputHelper = universe.inputHelper;
             if (inputHelper.isMouseClicked(null)) {
                 inputHelper.isMouseClicked(false);
@@ -717,12 +729,39 @@ class PlaceBuilderDemo_Movers {
                 action.perform(universe, world, place, entityPlayer);
             }
         };
+        var playerActivityDefn = new ActivityDefn("Player", playerActivityPerform);
+        this.parent.activityDefns.push(playerActivityDefn);
+        var playerActivity = new Activity(playerActivityDefn.name, null);
+        var playerActivityWaitPerform = (universe, world, place, entityPlayer, activity) => {
+            var drawable = entityPlayer.drawable();
+            var visualAsCameraProjection = drawable.visual;
+            var ticksToWait = activity.target;
+            if (ticksToWait == null) {
+                visualAsCameraProjection.child = new VisualGroup([
+                    visualAsCameraProjection.child,
+                    new VisualOffset(new VisualText(DataBinding.fromContext("Waiting"), null, Color.byName("Gray"), null), new Coords(0, -entityDimension * 3, 0))
+                ]);
+                ticksToWait = 60; // 3 seconds.
+            }
+            else if (ticksToWait > 0) {
+                ticksToWait--;
+            }
+            else {
+                ticksToWait = null;
+                activity.defnName = "Player";
+                visualAsCameraProjection.child =
+                    visualAsCameraProjection.child.children[0];
+            }
+            activity.target = ticksToWait;
+        };
+        var playerActivityDefnWait = new ActivityDefn("Wait", playerActivityWaitPerform);
+        this.parent.activityDefns.push(playerActivityDefnWait);
         var perceptible = new Perceptible(false, // hiding
         (u, w, p, e) => 150, // visibility
         (u, w, p, e) => 5000 // audibility
         );
         var playerEntityDefn = new Entity(entityDefnNamePlayer, [
-            new Actor(playerActivity, null),
+            new Actor(playerActivity),
             new Collidable(playerCollider, [Collidable.name], // entityPropertyNamesToCollideWith
             playerCollide),
             constrainable,

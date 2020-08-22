@@ -3,6 +3,7 @@ class PlaceBuilderDemo {
     constructor(randomizer, cameraViewSize) {
         this.actions = this.actionsBuild();
         this.actionToInputsMappings = this.actionToInputsMappingsBuild();
+        this.activityDefns = [];
         this.emplacements = new PlaceBuilderDemo_Emplacements(this);
         this.movers = new PlaceBuilderDemo_Movers(this);
         this.randomizer = randomizer || RandomizerLCG.default();
@@ -1351,7 +1352,8 @@ class PlaceBuilderDemo {
             var projectileDimension = 1.5;
             var projectileVisual = entityDevice.drawable().visual;
             projectileVisual = projectileVisual.child;
-            projectileVisual = new VisualPolygonLocated(projectileVisual);
+            projectileVisual =
+                new VisualPolygonLocated(projectileVisual);
             var userDirection = userVel.clone().normalize();
             var userRadius = entityUser.collidable().collider.radius;
             var projectilePos = userPos.clone().add(userDirection.clone().multiplyScalar(userRadius + projectileDimension).double());
@@ -1524,6 +1526,7 @@ class PlaceBuilderDemo {
             new Coords(0, 0, 0),
             new Coords(.25, .5, 0),
             new Coords(.25, .75, 0),
+            new Coords(0, .5, 0),
             new Coords(-.25, .75, 0),
             new Coords(-.25, .5, 0),
         ]).transform(Transform_Scale.fromScalar(entityDimension));
@@ -1752,8 +1755,9 @@ class PlaceBuilderDemo {
         var itemShovelVisual = new VisualGroup([
             new VisualOffset(new VisualRectangle(new Coords(entityDimension / 4, entityDimension, 0), Color.byName("Brown"), null, null), new Coords(0, 0 + entityDimension / 2, 0)),
             new VisualPolygon(new Path([
-                new Coords(0.25, 1.5, 0),
-                new Coords(-0.25, 1.5, 0),
+                new Coords(0.5, 1.5, 0),
+                new Coords(0, 1.75, 0),
+                new Coords(-0.5, 1.5, 0),
                 new Coords(-0.5, 1.0, 0),
                 new Coords(0.5, 1.0, 0)
             ]).transform(Transform_Scale.fromScalar(entityDimension)), itemShovelColor, null),
@@ -2057,6 +2061,10 @@ class PlaceBuilderDemo {
                     entityToUse.usable().use(universe, world, place, actor, entityToUse);
                 }
             }),
+            new Action("Wait", (universe, world, place, actor) => // perform
+             {
+                actor.actor().activity.defnName = "Wait";
+            }),
             new Action("Item0", (u, w, p, e) => e.equipmentUser().useItemInSocketNumbered(u, w, p, e, 0)),
             new Action("Item1", (u, w, p, e) => e.equipmentUser().useItemInSocketNumbered(u, w, p, e, 1)),
             new Action("Item2", (u, w, p, e) => e.equipmentUser().useItemInSocketNumbered(u, w, p, e, 2)),
@@ -2089,6 +2097,7 @@ class PlaceBuilderDemo {
             new ActionToInputsMapping("Run", [inputNames.Shift, inputNames.GamepadButton0 + "2"], inactivateFalse),
             new ActionToInputsMapping("Sneak", [inputNames.Control, inputNames.GamepadButton0 + "6"], inactivateFalse),
             new ActionToInputsMapping("Use", ["e", inputNames.GamepadButton0 + "5"], inactivateTrue),
+            new ActionToInputsMapping("Wait", ["w"], inactivateTrue),
             new ActionToInputsMapping("Item0", ["_0"], inactivateFalse),
             new ActionToInputsMapping("Item1", ["_1"], inactivateFalse),
             new ActionToInputsMapping("Item2", ["_2"], inactivateFalse),

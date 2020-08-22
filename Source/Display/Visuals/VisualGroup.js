@@ -9,7 +9,6 @@ class VisualGroup {
             child.draw(universe, world, place, entity, display);
         }
     }
-    ;
     // Clonable.
     clone() {
         return new VisualGroup(ArrayHelper.clone(this.children));

@@ -6,6 +6,7 @@ class PlaceBuilderDemo
 
 	actions: Action[];
 	actionToInputsMappings: ActionToInputsMapping[];
+	activityDefns: ActivityDefn[];
 	entities: Entity[];
 	entityDefns: Entity[];
 	entityDefnsByName: Map<string,Entity>;
@@ -22,6 +23,7 @@ class PlaceBuilderDemo
 	{
 		this.actions = this.actionsBuild();
 		this.actionToInputsMappings = this.actionToInputsMappingsBuild();
+		this.activityDefns = [];
 
 		this.emplacements = new PlaceBuilderDemo_Emplacements(this);
 		this.movers = new PlaceBuilderDemo_Movers(this);
@@ -2301,7 +2303,8 @@ class PlaceBuilderDemo
 
 				var projectileVisual = entityDevice.drawable().visual;
 				projectileVisual = (projectileVisual as VisualCameraProjection).child;
-				projectileVisual = new VisualPolygonLocated(projectileVisual as VisualPolygon);
+				projectileVisual =
+					new VisualPolygonLocated(projectileVisual as VisualPolygon);
 
 				var userDirection = userVel.clone().normalize();
 				var userRadius = entityUser.collidable().collider.radius;
@@ -2573,6 +2576,7 @@ class PlaceBuilderDemo
 			new Coords(0, 0, 0),
 			new Coords(.25, .5, 0),
 			new Coords(.25, .75, 0),
+			new Coords(0, .5, 0),
 			new Coords(-.25, .75, 0),
 			new Coords(-.25, .5, 0),
 		]).transform
@@ -3155,8 +3159,9 @@ class PlaceBuilderDemo
 			(
 				new Path
 				([
-					new Coords(0.25, 1.5, 0),
-					new Coords(-0.25, 1.5, 0),
+					new Coords(0.5, 1.5, 0),
+					new Coords(0, 1.75, 0),
+					new Coords(-0.5, 1.5, 0),
 					new Coords(-0.5, 1.0, 0),
 					new Coords(0.5, 1.0, 0)
 				]).transform
@@ -3715,6 +3720,14 @@ class PlaceBuilderDemo
 					}
 				}
 			),
+			new Action
+			(
+				"Wait",
+				(universe: Universe, world: World, place: Place, actor: Entity) => // perform
+				{
+					actor.actor().activity.defnName = "Wait";
+				}
+			),
 			new Action("Item0", (u: Universe, w: World, p: Place, e: Entity) => e.equipmentUser().useItemInSocketNumbered(u, w, p, e, 0)),
 			new Action("Item1", (u: Universe, w: World, p: Place, e: Entity) => e.equipmentUser().useItemInSocketNumbered(u, w, p, e, 1)),
 			new Action("Item2", (u: Universe, w: World, p: Place, e: Entity) => e.equipmentUser().useItemInSocketNumbered(u, w, p, e, 2)),
@@ -3754,6 +3767,7 @@ class PlaceBuilderDemo
 			new ActionToInputsMapping("Run", 		[ inputNames.Shift, inputNames.GamepadButton0 + "2" ], inactivateFalse),
 			new ActionToInputsMapping("Sneak", 		[ inputNames.Control, inputNames.GamepadButton0 + "6" ], inactivateFalse),
 			new ActionToInputsMapping("Use", 		[ "e", inputNames.GamepadButton0 + "5" ], inactivateTrue),
+			new ActionToInputsMapping("Wait", 		[ "w" ], inactivateTrue),
 
 			new ActionToInputsMapping("Item0", 	[ "_0" ], inactivateFalse),
 			new ActionToInputsMapping("Item1", 	[ "_1" ], inactivateFalse),

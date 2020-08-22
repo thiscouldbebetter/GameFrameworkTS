@@ -15,7 +15,7 @@ class VisualGroup implements Visual
 			var child = this.children[i];
 			child.draw(universe, world, place, entity, display);
 		}
-	};
+	}
 
 	// Clonable.
 

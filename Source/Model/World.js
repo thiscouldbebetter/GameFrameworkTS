@@ -50,10 +50,11 @@ class World {
         null // placeFinalize
         );
         var placeDefns = [placeDefnDemo]; // todo
+        var activityDefns = placeBuilder.activityDefns;
         var itemDefns = placeBuilder.itemDefns;
         var entityDefns = placeBuilder.entityDefns;
         var skills = Skill.skillsDemo();
-        var defns = new WorldDefn([entityDefns, itemDefns, placeDefns, skills]);
+        var defns = new WorldDefn([activityDefns, entityDefns, itemDefns, placeDefns, skills]);
         var places = [];
         var worldSizeInRooms = new Coords(2, 2, 1);
         var roomPos = new Coords(0, 0, 0);
