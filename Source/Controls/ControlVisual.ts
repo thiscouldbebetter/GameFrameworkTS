@@ -28,7 +28,7 @@ class ControlVisual extends ControlBase
 			"_drawableEntity",
 			[
 				this._locatable,
-				new Drawable(null, null)
+				new Drawable(new VisualNone(), null)
 			]
 		);
 		this._sizeHalf = new Coords(0, 0, 0);

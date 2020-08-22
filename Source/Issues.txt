@@ -16,21 +16,23 @@ Items - Crafting - Blocking with Working Animation
 Items - Generated Devices with Varying Specs
 Items - Weapons - Applying Effects to Target
 
-Movers - Vehicles
-Movers - Vehicles - Differential Terrain Traversal
+Items - Devices - Weapons - Arrows when Firing Bow
 
 Movers - Animals - Carnivores Eat Grazers
 Movers - Animals - Growth, Aging and Natural Death
 Movers - Animals - Lairs and Sleep
 Movers - Animals - Procreation
 
+Movers - Desire System
+
 Movers - Enemies - Patrols
-Movers - Enemies - Sight And Hearing
 Movers - Enemies - Enemy Generators Use Generator Class
 
 Movers - Enemies - Types - Bombers
 Movers - Enemies - Types - Hiders
 Movers - Enemies - Types - Shooters
+
+Movers - Vehicles - Differential Terrain Traversal
 
 Movers - Player - Sword Swings
 
@@ -47,11 +49,13 @@ Sound - Sword Hits
 Sound - Effects from Builtin JS AudioContext
 Sound - Music on Title Screen
 
+Visuals - Non-Linear Animation System
 
 Fixes
 -----
 
 Items - Sword Swing Direction is Wrong
+Items - Bowstring Direction Doesn't Change with Player
 
 Places - Map Tiles - Fix Overlapping
 Places - Portals - Between Rooms Start Player Outside

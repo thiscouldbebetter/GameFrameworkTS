@@ -23,18 +23,14 @@ class VisualAnimation {
             this.ticksToComplete += this.ticksToHoldFrames[f];
         }
     }
-    // visual
-    draw(universe, world, place, entity, display) {
-        this.update(universe, world, place, entity, display);
-    }
-    frameCurrent(world, drawable) {
-        var frameIndexCurrent = this.frameIndexCurrent(world, drawable);
+    frameCurrent(world, tickStarted) {
+        var frameIndexCurrent = this.frameIndexCurrent(world, tickStarted);
         var frameCurrent = this.frames[frameIndexCurrent];
         return frameCurrent;
     }
-    frameIndexCurrent(world, drawable) {
+    frameIndexCurrent(world, tickStarted) {
         var returnValue = -1;
-        var ticksSinceStarted = world.timerTicksSoFar - drawable.tickStarted;
+        var ticksSinceStarted = world.timerTicksSoFar - tickStarted;
         if (ticksSinceStarted >= this.ticksToComplete) {
             if (this.isRepeating) {
                 ticksSinceStarted = ticksSinceStarted % this.ticksToComplete;
@@ -57,17 +53,19 @@ class VisualAnimation {
         }
         return returnValue;
     }
-    isComplete(world, drawable) {
-        var ticksSinceStarted = world.timerTicksSoFar - drawable.tickStarted;
+    isComplete(world, tickStarted) {
+        var ticksSinceStarted = world.timerTicksSoFar - tickStarted;
         var returnValue = (ticksSinceStarted >= this.ticksToComplete);
         return returnValue;
     }
-    update(universe, world, place, entity, display) {
-        var drawable = entity.drawable();
-        if (drawable.tickStarted == null) {
-            drawable.tickStarted = world.timerTicksSoFar;
-        }
-        var frameCurrent = this.frameCurrent(world, drawable);
+    toVisualAnimationGroup() {
+        return new VisualAnimationGroup(this.name + "_AsGroup", [this]);
+    }
+    // Visual.
+    draw(universe, world, place, entity, display) {
+        var animatable = entity.drawable().animatable();
+        var tickStarted = animatable.animationWithNameStartIfNecessary(this.name, world);
+        var frameCurrent = this.frameCurrent(world, tickStarted);
         frameCurrent.draw(universe, world, place, entity, display);
     }
     // Clonable.

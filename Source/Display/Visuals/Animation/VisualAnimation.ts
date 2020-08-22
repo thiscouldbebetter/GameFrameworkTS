@@ -41,25 +41,18 @@ class VisualAnimation implements Visual
 		}
 	}
 
-	// visual
-
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	frameCurrent(world: World, tickStarted: number)
 	{
-		this.update(universe, world, place, entity, display);
-	}
-
-	frameCurrent(world: World, drawable: Drawable)
-	{
-		var frameIndexCurrent = this.frameIndexCurrent(world, drawable);
+		var frameIndexCurrent = this.frameIndexCurrent(world, tickStarted);
 		var frameCurrent = this.frames[frameIndexCurrent];
 		return frameCurrent;
 	}
 
-	frameIndexCurrent(world: World, drawable: Drawable)
+	frameIndexCurrent(world: World, tickStarted: number)
 	{
 		var returnValue = -1;
 
-		var ticksSinceStarted = world.timerTicksSoFar - drawable.tickStarted;
+		var ticksSinceStarted = world.timerTicksSoFar - tickStarted;
 
 		if (ticksSinceStarted >= this.ticksToComplete)
 		{
@@ -92,23 +85,25 @@ class VisualAnimation implements Visual
 		return returnValue;
 	}
 
-	isComplete(world: World, drawable: Drawable)
+	isComplete(world: World, tickStarted: number)
 	{
-		var ticksSinceStarted = world.timerTicksSoFar - drawable.tickStarted;
+		var ticksSinceStarted = world.timerTicksSoFar - tickStarted;
 		var returnValue = (ticksSinceStarted >= this.ticksToComplete);
 		return returnValue;
 	}
 
-	update(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	toVisualAnimationGroup()
 	{
-		var drawable = entity.drawable();
+		return new VisualAnimationGroup(this.name + "_AsGroup", [this]);
+	}
 
-		if (drawable.tickStarted == null)
-		{
-			drawable.tickStarted = world.timerTicksSoFar;
-		}
+	// Visual.
 
-		var frameCurrent = this.frameCurrent(world, drawable);
+	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	{
+		var animatable = entity.drawable().animatable();
+		var tickStarted = animatable.animationWithNameStartIfNecessary(this.name, world);
+		var frameCurrent = this.frameCurrent(world, tickStarted);
 		frameCurrent.draw(universe, world, place, entity, display);
 	}
 

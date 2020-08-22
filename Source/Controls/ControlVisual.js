@@ -9,7 +9,7 @@ class ControlVisual extends ControlBase {
         this._locatable = new Locatable(new Disposition(this._drawPos, null, null));
         this._locatableEntity = new Entity("_drawableEntity", [
             this._locatable,
-            new Drawable(null, null)
+            new Drawable(new VisualNone(), null)
         ]);
         this._sizeHalf = new Coords(0, 0, 0);
     }

@@ -754,30 +754,32 @@ class PlaceBuilderDemo_Movers
 		this.parent.activityDefns.push(friendlyActivityDefn);
 		var friendlyActivity = new Activity(friendlyActivityDefn.name, null);
 
+		var itemHolder = new ItemHolder
+		(
+			[
+				new Item("Arrow", 200),
+				new Item("Bow", 1),
+				new Item("Coin", 200),
+				new Item("Iron", 3),
+				new Item("Key", 1),
+				new Item("Medicine", 4),
+			].map(x => x.toEntity()),
+			null, // weightMax
+			null // reachRadius
+		);
+
 		var friendlyEntityDefn = new Entity
 		(
 			"Friendly",
 			[
-				new Locatable(new Disposition(new Coords(0, 0, 0), null, null) ),
+				new Actor(friendlyActivity),
 				new Constrainable([constraintSpeedMax1]),
 				new Collidable(friendlyCollider, null, null),
 				new Drawable(friendlyVisual, null),
 				new DrawableCamera(),
+				itemHolder,
+				new Locatable(new Disposition(new Coords(0, 0, 0), null, null) ),
 				new Talker("AnEveningWithProfessorSurly"),
-				new Actor(friendlyActivity),
-				new ItemHolder
-				(
-					[
-						new Item("Arrow", 200),
-						new Item("Bow", 1),
-						new Item("Coin", 200),
-						new Item("Iron", 3),
-						new Item("Key", 1),
-						new Item("Medicine", 4),
-					].map(x => x.toEntity()),
-					null, // weightMax
-					null // reachRadius
-				),
 			]
 		);
 
