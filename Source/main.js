@@ -27,7 +27,8 @@ function main() {
     "Gray", "White", // colorFore, colorBack
     null);
     var timerHelper = new TimerHelper(20);
+    var controlStyle = ControlStyle.Instances().Default;
     var universe = Universe.create("Game Framework Demo Game", "0.0.0-20200815-0515", // version
-    timerHelper, display, mediaLibrary, null);
+    timerHelper, display, mediaLibrary, controlStyle, null);
     universe.initialize(function () { universe.start(); });
 }

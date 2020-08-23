@@ -1,7 +1,7 @@
 "use strict";
 class Transform_Locate {
     constructor(loc) {
-        this.loc = loc;
+        this.loc = loc || new Disposition(null, null, null);
         this.transformOrient = new Transform_Orient(null);
         this.transformTranslate = new Transform_Translate(null);
     }
@@ -9,7 +9,7 @@ class Transform_Locate {
         return this; // todo
     }
     transform(transformable) {
-        return transformable; // todo
+        return transformable.transform(this);
     }
     transformCoords(coordsToTransform) {
         this.transformOrient.orientation = this.loc.orientation;

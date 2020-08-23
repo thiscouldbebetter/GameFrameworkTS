@@ -17,7 +17,6 @@ class ControlList extends ControlBase
 	_itemSpacing: Coords;
 	parent: ControlBase;
 	scrollbar: ControlScrollbar;
-	styleName: string;
 
 	_drawLoc: Disposition;
 	_drawPos: Coords;
@@ -279,7 +278,9 @@ class ControlList extends ControlBase
 	{
 		clickPos = this._mouseClickPos.overwriteWith(clickPos);
 
-		if (clickPos.x - this.pos.x > this.size.x - this.scrollbar.handleSize.x)
+		var isClickPosInScrollbar =
+			(clickPos.x - this.pos.x > this.size.x - this.scrollbar.handleSize.x);
+		if (isClickPosInScrollbar)
 		{
 			if (clickPos.y - this.pos.y <= this.scrollbar.handleSize.y)
 			{
@@ -289,25 +290,12 @@ class ControlList extends ControlBase
 			{
 				this.scrollbar.scrollDown();
 			}
-			else
-			{
-				// todo
-
-				/*
-				var clickPosRelativeToSlideInPixels = clickPos.subtract
-				(
-					this.scrollbar.pos
-				).subtract
-				(
-					new Coords(0, this.scrollbar.handleSize.y, 0)
-				);
-				*/
-			}
 		}
 		else
 		{
 			var clickOffsetInPixels = clickPos.clone().subtract(this.pos);
-			var clickOffsetInItems = clickOffsetInPixels.clone().divide(this.itemSpacing()).floor();
+			var clickOffsetInItems =
+				clickOffsetInPixels.clone().divide(this.itemSpacing()).floor();
 			var rowOfItemClicked =
 				this.indexOfFirstRowVisible() + clickOffsetInItems.y;
 			var indexOfItemClicked =
@@ -316,7 +304,18 @@ class ControlList extends ControlBase
 			var items = this.items();
 			if (indexOfItemClicked < items.length)
 			{
-				this.indexOfItemSelected(indexOfItemClicked);
+				var indexOfItemSelectedOld = this.indexOfItemSelected(null);
+				if (indexOfItemClicked == indexOfItemSelectedOld)
+				{
+					if (this.confirm != null)
+					{
+						this.confirm(null); // todo
+					}
+				}
+				else
+				{
+					this.indexOfItemSelected(indexOfItemClicked);
+				}
 			}
 		}
 

@@ -10,12 +10,13 @@ class Transform_RotateRight implements Transform
 
 	overwriteWith(other: Transform)
 	{
-		return this; // todo
+		this.quarterTurnsToRotate = (other as Transform_RotateRight).quarterTurnsToRotate;
+		return this;
 	}
 
 	transform(transformable: Transformable): Transformable
 	{
-		return transformable; // todo
+		return transformable.transform(this);
 	}
 
 	transformCoords(coordsToTransform: Coords)

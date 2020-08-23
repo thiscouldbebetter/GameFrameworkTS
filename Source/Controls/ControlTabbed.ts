@@ -9,7 +9,6 @@ class ControlTabbed extends ControlBase
 	buttonsForChildren: any;
 	childSelectedIndex: number;
 	isChildSelectedActive: boolean;
-	styleName: string;
 
 	_childMax: Coords;
 	_childrenContainingPos: any;
@@ -26,7 +25,7 @@ class ControlTabbed extends ControlBase
 		cancel: (u: Universe) => void
 	)
 	{
-		super(name, pos, size, fontHeightInPixels || 10);
+		super(name, pos, size, fontHeightInPixels);
 		this.tabButtonSize = tabButtonSize;
 		this.children = children;
 		this.childrenByName = ArrayHelper.addLookupsByName(this.children);
@@ -46,10 +45,13 @@ class ControlTabbed extends ControlBase
 			child.pos.y += tabPaneHeight;
 
 			var childName = child.name;
+
+			var buttonPos = new Coords(marginSize + this.tabButtonSize.x * i, marginSize, 0);
+
 			var button = new ControlButton
 			(
 				"button" + childName,
-				new Coords(marginSize + this.tabButtonSize.x * i, marginSize, 0), // pos
+				buttonPos,
 				this.tabButtonSize.clone(),
 				childName, // text
 				this.fontHeightInPixels,
@@ -369,12 +371,12 @@ class ControlTabbed extends ControlBase
 		}
 
 		return this;
-	};
+	}
 
 	toVenue()
 	{
-		return new VenueFader(new VenueControls(this), null, null, null);
-	};
+		return new VenueFader(new VenueControls(this, false), null, null, null);
+	}
 
 	// drawable
 

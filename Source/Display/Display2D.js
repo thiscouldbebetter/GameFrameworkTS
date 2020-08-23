@@ -255,7 +255,8 @@ class Display2D {
             }
             var textWidthInPixels = this.textWidthForFontHeight(textTrimmed, fontHeightInPixels);
             if (isCentered) {
-                drawPos.addDimensions(0 - textWidthInPixels / 2, 0 - fontHeightInPixels / 2, 0);
+                drawPos.addDimensions(0 - textWidthInPixels / 2, 0 - (fontHeightInPixels / 2) * 1.2, // hack
+                0);
             }
             if (colorOutline != null) {
                 this.graphics.strokeStyle = colorOutline;

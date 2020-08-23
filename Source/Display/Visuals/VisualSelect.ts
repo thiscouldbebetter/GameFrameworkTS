@@ -1,37 +1,32 @@
 
 class VisualSelect implements Visual
 {
-	selectChildName: (u: Universe, w: World, d: Display, e:Entity, v: VisualSelect) => string;
-	childNames: string[];
-	children: Visual[];
 	childrenByName: Map<string, Visual>;
+	selectChildNames: (u: Universe, w: World, d: Display, e:Entity, v: VisualSelect) => string[];
 
 	constructor
 	(
-		selectChildName: (u: Universe, w: World, d: Display, e:Entity, v: VisualSelect) => string,
-		childNames: string[],
-		children: Visual[]
+		childrenByName: Map<string, Visual>,
+		selectChildNames: (u: Universe, w: World, d: Display, e:Entity, v: VisualSelect) => string[]
 	)
 	{
-		this.selectChildName = selectChildName;
-		this.childNames = childNames;
-		this.children = children;
-		this.childrenByName = new Map<string, Visual>();
-
-		for (var i = 0; i < this.children.length; i++)
-		{
-			var childName = this.childNames[i];
-			var child = this.children[i];
-			this.childrenByName.set(childName, child);
-		}
+		this.childrenByName = childrenByName;
+		this.selectChildNames = selectChildNames;
 	}
 
 	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
-		var childToSelectName = this.selectChildName(universe, world, display, entity, this);
-		var childSelected = this.childrenByName.get(childToSelectName);
-		childSelected.draw(universe, world, place, entity, display);
-	};
+		var childrenToSelectNames =
+			this.selectChildNames(universe, world, display, entity, this);
+		var childrenSelected = childrenToSelectNames.map
+		(
+			childToSelectName => this.childrenByName.get(childToSelectName)
+		);
+		childrenSelected.forEach
+		(
+			childSelected => childSelected.draw(universe, world, place, entity, display)
+		);
+	}
 
 	// Clonable.
 

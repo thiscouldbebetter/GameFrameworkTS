@@ -51,6 +51,8 @@ function main()
 
 	var timerHelper = new TimerHelper(20);
 
+	var controlStyle = ControlStyle.Instances().Default;
+
 	var universe = Universe.create
 	(
 		"Game Framework Demo Game",
@@ -58,6 +60,7 @@ function main()
 		timerHelper,
 		display,
 		mediaLibrary,
+		controlStyle,
 		null
 	);
 	universe.initialize

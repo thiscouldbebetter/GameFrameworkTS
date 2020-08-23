@@ -4,7 +4,11 @@ class Action
 	name: string;
 	perform: (u: Universe, w: World, p: Place, e: Entity) => void;
 
-	constructor(name: string, perform: (u: Universe, w: World, p: Place, e: Entity) => void)
+	constructor
+	(
+		name: string,
+		perform: (u: Universe, w: World, p: Place, e: Entity) => void
+	)
 	{
 		this.name = name;
 		this.perform = perform;
@@ -45,9 +49,9 @@ class Action_Instances
 			{
 				var control = actor.controllable().toControl
 				(
-					universe, universe.display.sizeInPixels, actor, universe.venueCurrent
+					universe, universe.display.sizeInPixels, actor, universe.venueCurrent, true
 				);
-				var venueNext: Venue = new VenueControls(control);
+				var venueNext: Venue = new VenueControls(control, false);
 				venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 				universe.venueNext = venueNext;
 			}
@@ -60,7 +64,8 @@ class Action_Instances
 			{
 				var venueNext: Venue = new VenueControls
 				(
-					universe.controlBuilder.gameAndSettings(universe, null)
+					universe.controlBuilder.gameAndSettings(universe, null),
+					false
 				);
 				venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 				universe.venueNext = venueNext;

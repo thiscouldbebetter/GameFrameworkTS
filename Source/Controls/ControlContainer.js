@@ -3,10 +3,11 @@ class ControlContainer extends ControlBase {
     constructor(name, pos, size, children, actions, actionToInputsMappings) {
         super(name, pos, size, null);
         this.children = children;
-        this.childrenByName = ArrayHelper.addLookupsByName(this.children);
         this.actions = (actions || []);
-        this.actionsByName = ArrayHelper.addLookupsByName(this.actions);
         this._actionToInputsMappings = actionToInputsMappings || [];
+        this._actionToInputsMappingsByInputName = ArrayHelper.addLookupsMultiple(this._actionToInputsMappings, x => x.inputNames);
+        this.childrenByName = ArrayHelper.addLookupsByName(this.children);
+        this.actionsByName = ArrayHelper.addLookupsByName(this.actions);
         for (var i = 0; i < this.children.length; i++) {
             var child = this.children[i];
             child.parent = this;
@@ -55,7 +56,15 @@ class ControlContainer extends ControlBase {
                 }
             }
         }
-        else if (this.actionsByName.get(actionNameToHandle) != null) {
+        else if (this._actionToInputsMappingsByInputName.has(actionNameToHandle)) {
+            var inputName = actionNameToHandle; // Likely passed from parent as raw input.
+            var mapping = this._actionToInputsMappingsByInputName.get(inputName);
+            var actionName = mapping.actionName;
+            var action = this.actionsByName.get(actionName);
+            action.perform(universe, null, null, null);
+            wasActionHandled = true;
+        }
+        else if (this.actionsByName.has(actionNameToHandle)) {
             var action = this.actionsByName.get(actionNameToHandle);
             action.perform(universe, null, null, null);
             wasActionHandled = true;
@@ -203,7 +212,7 @@ class ControlContainer extends ControlBase {
         }
     }
     toVenue() {
-        return new VenueFader(new VenueControls(this), null, null, null);
+        return new VenueFader(new VenueControls(this, false), null, null, null);
     }
     // drawable
     draw(universe, display, drawLoc) {

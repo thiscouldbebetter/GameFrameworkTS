@@ -49,16 +49,17 @@ class VisualBuilder {
         );
         var visualLegsFacingDownStanding = new VisualGroup([
             new VisualOffset(visualLegDownLeft, offsetLegLeft),
-            new VisualOffset(visualLegDownRight, offsetLegRight),
+            new VisualOffset(visualLegDownRight, offsetLegRight)
         ]);
+        var ticksPerStepAsArray = [ticksPerStep, ticksPerStep];
         var visualLegsFacingDownWalking = new VisualGroup([
             new VisualOffset(new VisualAnimation(null, // name
-            [ticksPerStep, ticksPerStep], [
+            ticksPerStepAsArray, [
                 visualLegDownLeft,
                 new VisualOffset(visualLegDownLeft, new Coords(0, -legLengthHalf, 0))
             ], isRepeating), offsetLegLeft),
             new VisualOffset(new VisualAnimation(null, // name
-            [ticksPerStep, ticksPerStep], [
+            ticksPerStepAsArray, [
                 new VisualOffset(visualLegDownRight, new Coords(0, -legLengthHalf, 0)),
                 visualLegDownRight
             ], isRepeating), offsetLegRight),
@@ -75,14 +76,18 @@ class VisualBuilder {
             new Coords(footLengthHalf, legLength - footLengthHalf, 0)
         ]), circleColor, lineThickness, false // isClosed
         );
+        var visualLegsFacingUpStanding = new VisualGroup([
+            new VisualOffset(visualLegUpLeft, offsetLegLeft),
+            new VisualOffset(visualLegUpRight, offsetLegRight)
+        ]);
         var visualLegsFacingUpWalking = new VisualGroup([
             new VisualOffset(new VisualAnimation(null, // name
-            [ticksPerStep, ticksPerStep], [
+            ticksPerStepAsArray, [
                 visualLegUpLeft,
                 new VisualOffset(visualLegUpLeft, new Coords(0, -legLengthHalf, 0))
             ], isRepeating), offsetLegLeft),
             new VisualOffset(new VisualAnimation(null, // name
-            [ticksPerStep, ticksPerStep], [
+            ticksPerStepAsArray, [
                 new VisualOffset(visualLegUpRight, new Coords(0, -legLengthHalf, 0)),
                 visualLegUpRight
             ], isRepeating), offsetLegRight),
@@ -93,14 +98,18 @@ class VisualBuilder {
             new Coords(-footLength, legLength, 0)
         ]), circleColor, lineThickness, false // isClosed
         );
+        var visualLegsFacingLeftStanding = new VisualGroup([
+            new VisualOffset(visualLegFacingLeft, offsetLegLeft),
+            new VisualOffset(visualLegFacingLeft, offsetLegRight)
+        ]);
         var visualLegsFacingLeftWalking = new VisualGroup([
             new VisualOffset(new VisualAnimation(null, // name
-            [ticksPerStep, ticksPerStep], [
+            ticksPerStepAsArray, [
                 visualLegFacingLeft,
                 new VisualOffset(visualLegFacingLeft, new Coords(0, -legLengthHalf, 0))
             ], isRepeating), offsetLegLeft),
             new VisualOffset(new VisualAnimation(null, // name
-            [ticksPerStep, ticksPerStep], [
+            ticksPerStepAsArray, [
                 new VisualOffset(visualLegFacingLeft, new Coords(0, -legLengthHalf, 0)),
                 visualLegFacingLeft
             ], isRepeating), offsetLegRight),
@@ -111,25 +120,71 @@ class VisualBuilder {
             new Coords(footLength, legLength, 0)
         ]), circleColor, lineThickness, false // isClosed
         );
+        var visualLegsFacingRightStanding = new VisualGroup([
+            new VisualOffset(visualLegFacingRight, offsetLegLeft),
+            new VisualOffset(visualLegFacingRight, offsetLegRight)
+        ]);
         var visualLegsFacingRightWalking = new VisualGroup([
             new VisualOffset(new VisualAnimation(null, // name
-            [ticksPerStep, ticksPerStep], [
+            ticksPerStepAsArray, [
                 visualLegFacingRight,
                 new VisualOffset(visualLegFacingRight, new Coords(0, -legLengthHalf, 0))
             ], isRepeating), offsetLegLeft),
             new VisualOffset(new VisualAnimation(null, // name
-            [ticksPerStep, ticksPerStep], [
+            ticksPerStepAsArray, [
                 new VisualOffset(visualLegFacingRight, new Coords(0, -legLengthHalf, 0)),
                 visualLegFacingRight
             ], isRepeating), offsetLegRight),
         ]);
-        var visualLegsDirectional = new VisualDirectional(visualLegsFacingDownStanding, // visualForNoDirection
-        [
-            visualLegsFacingRightWalking,
-            visualLegsFacingDownWalking,
-            visualLegsFacingLeftWalking,
-            visualLegsFacingUpWalking
-        ], null);
+        var visualLegsStandingNamesByHeading = [
+            "FacingRightStanding",
+            "FacingDownStanding",
+            "FacingLeftStanding",
+            "FacingUpStanding"
+        ];
+        var visualLegsWalkingNamesByHeading = [
+            "FacingRightWalking",
+            "FacingDownWalking",
+            "FacingLeftWalking",
+            "FacingUpWalking"
+        ];
+        var visualLegsDirectional = new VisualSelect(
+        // childrenByName
+        new Map([
+            ["FacingRightStanding", visualLegsFacingRightStanding],
+            ["FacingDownStanding", visualLegsFacingDownStanding],
+            ["FacingLeftStanding", visualLegsFacingLeftStanding],
+            ["FacingUpStanding", visualLegsFacingUpStanding],
+            ["FacingRightWalking", visualLegsFacingRightWalking],
+            ["FacingDownWalking", visualLegsFacingDownWalking],
+            ["FacingLeftWalking", visualLegsFacingLeftWalking],
+            ["FacingUpWalking", visualLegsFacingUpWalking]
+        ]), 
+        // selectChildNames
+        (u, w, d, e, v) => {
+            var entityLoc = e.locatable().loc;
+            var entityForward = entityLoc.orientation.forward;
+            var entityForwardInTurns = entityForward.headingInTurns();
+            var childNameToSelect;
+            if (entityForwardInTurns == null) {
+                childNameToSelect = "FacingDownStanding";
+            }
+            else {
+                var headingCount = 4;
+                var headingIndex = Math.floor(entityForwardInTurns * headingCount); // todo
+                var entitySpeed = entityLoc.vel.magnitude();
+                var namesByHeading;
+                var speedMin = 0.2;
+                if (entitySpeed > speedMin) {
+                    namesByHeading = visualLegsWalkingNamesByHeading;
+                }
+                else {
+                    namesByHeading = visualLegsStandingNamesByHeading;
+                }
+                childNameToSelect = namesByHeading[headingIndex];
+            }
+            return [childNameToSelect];
+        });
         var returnValue = new VisualGroup([
             visualLegsDirectional,
             circleWithEyes
@@ -144,9 +199,13 @@ class VisualBuilder {
         var visualWieldable = new VisualDynamic((u, w, d, e) => {
             var equipmentUser = e.equipmentUser();
             var entityWieldableEquipped = equipmentUser.itemEntityInSocketWithName("Wielding");
-            var itemVisual = entityWieldableEquipped.item().defn(w).visual;
+            var itemDrawable = entityWieldableEquipped.drawable();
+            var itemVisual = (itemDrawable == null
+                ? entityWieldableEquipped.item().defn(w).visual
+                : itemDrawable.visual.child);
             return itemVisual;
         });
+        visualWieldable = new VisualAnchor(visualWieldable, null, Orientation.Instances().ForwardXDownZ);
         var visualArmAndWieldableFacingRight = new VisualGroup([
             // arm
             new VisualLine(new Coords(0, 0, 0), new Coords(2, 1, 0).multiplyScalar(circleRadius), circleColor, lineThickness),
@@ -179,10 +238,15 @@ class VisualBuilder {
             visualArmAndWieldableFacingUp
         ], null);
         var visualArmAndWieldableDirectionalOffset = new VisualOffset(visualArmAndWieldableDirectional, new Coords(0, 0 - circleRadius, 0));
-        var visualWielding = new VisualSelect((u, w, d, e) => // selectChildName
+        var visualWielding = new VisualSelect(new Map([
+            ["Visible", visualArmAndWieldableDirectionalOffset],
+            ["Hidden", visualNone]
+        ]), (u, w, d, e) => // selectChildNames
          {
-            return (e.equipmentUser().itemEntityInSocketWithName("Wielding") == null ? "Hidden" : "Visible");
-        }, ["Visible", "Hidden"], [visualArmAndWieldableDirectionalOffset, visualNone]);
+            var itemEntityWielded = e.equipmentUser().itemEntityInSocketWithName("Wielding");
+            var returnValue = (itemEntityWielded == null ? "Hidden" : "Visible");
+            return [returnValue];
+        });
         var returnValue = new VisualGroup([
             visualWielding,
             circleWithEyesAndLegs

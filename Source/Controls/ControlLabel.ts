@@ -5,7 +5,6 @@ class ControlLabel extends ControlBase
 	_text: any;
 
 	parent: ControlBase;
-	styleName: string;
 
 	_drawPos: Coords;
 

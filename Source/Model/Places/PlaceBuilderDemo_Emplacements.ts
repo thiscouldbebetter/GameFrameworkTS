@@ -15,15 +15,18 @@ class PlaceBuilderDemo_Emplacements
 			new VisualImageFromLibrary(anvilName),
 			new Coords(1, 1, 0).multiplyScalar(entityDimension * 2) // sizeScaled
 		);
-		anvilVisual = new VisualGroup
-		([
-			anvilVisual,
-			new VisualOffset
+		anvilVisual = new VisualGroup( [ anvilVisual ] );
+		if (this.parent.visualsHaveText)
+		{
+			(anvilVisual as VisualGroup).children.push
 			(
-				new VisualText(new DataBinding(anvilName, null, null), null, Color.byName("Blue"), null),
-				new Coords(0, 0 - entityDimension * 2, 0)
-			)
-		]);
+				new VisualOffset
+				(
+					new VisualText(new DataBinding(anvilName, null, null), null, Color.byName("Blue"), null),
+					new Coords(0, 0 - entityDimension * 2, 0)
+				)
+			);
+		}
 		var anvilUse = (universe: Universe, w: World, p: Place, entityUsing: Entity, entityUsed: Entity) =>
 		{
 			var itemCrafter = entityUsed.itemCrafter();
@@ -36,7 +39,7 @@ class PlaceBuilderDemo_Emplacements
 				universe.venueCurrent,
 				true // includeTitleAndDoneButton
 			);
-			var venueNext: Venue = new VenueControls(itemCrafterAsControls);
+			var venueNext: Venue = new VenueControls(itemCrafterAsControls, false);
 			universe.venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 			return "";
 		};
@@ -103,13 +106,19 @@ class PlaceBuilderDemo_Emplacements
 				.5, // angleSpannedInTurns
 				colorBoulder,
 				null
-			),
-			new VisualOffset
-			(
-				new VisualText(new DataBinding(itemDefnName, null, null), null, colorBoulder, null),
-				new Coords(0, 0 - entityDimension * 3, 0)
 			)
 		]);
+		if (this.parent.visualsHaveText)
+		{
+			itemBoulderVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding(itemDefnName, null, null), null, colorBoulder, null),
+					new Coords(0, 0 - entityDimension * 3, 0)
+				)
+			);
+		}
 
 		var collider = new Box
 		(
@@ -187,19 +196,30 @@ class PlaceBuilderDemo_Emplacements
 
 		var itemLogVisual = this.parent.itemDefnsByName.get("Log").visual;
 		var itemLogVisualMinusText = itemLogVisual.clone() as VisualGroup;
-		itemLogVisualMinusText.children.length--;
+
+		if (this.parent.visualsHaveText)
+		{
+			itemLogVisualMinusText.children.length--;
+		}
 
 		var campfireVisual = new VisualGroup
 		([
 			smokeVisual,
 			itemLogVisualMinusText,
 			flameVisual,
-			new VisualOffset
-			(
-				new VisualText(new DataBinding(campfireName, null, null), null, campfireColor, null),
-				new Coords(0, 0 - entityDimension * 2, 0)
-			)
 		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			campfireVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding(campfireName, null, null), null, campfireColor, null),
+					new Coords(0, 0 - entityDimension * 2, 0)
+				)
+			);
+		}
 
 		var campfireCollider = new Sphere(new Coords(0, 0, 0), entityDimensionHalf);
 		var campfireCollide = (u: Universe, w: World, p: Place, entityCampfire: Entity, entityOther: Entity) =>
@@ -250,13 +270,20 @@ class PlaceBuilderDemo_Emplacements
 			(
 				new Coords(.5, .5, 0).multiplyScalar(entityDimension),
 				Color.byName("Gray"), null, null
-			),
-			new VisualOffset
-			(
-				new VisualText(new DataBinding("Container", null, null), null, containerColor, null),
-				new Coords(0, 0 - entityDimension, 0)
 			)
 		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			visual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding("Container", null, null), null, containerColor, null),
+					new Coords(0, 0 - entityDimension, 0)
+				)
+			);
+		}
 
 		var containerEntityDefn = new Entity
 		(
@@ -279,7 +306,7 @@ class PlaceBuilderDemo_Emplacements
 							entityUsing, entityOther,
 							universe.venueCurrent
 						);
-						var venueNext: Venue = new VenueControls(itemContainerAsControl);
+						var venueNext: Venue = new VenueControls(itemContainerAsControl, false);
 						venueNext = new VenueFader(venueNext, null, null, null);
 						universe.venueNext = venueNext;
 						return null;
@@ -317,13 +344,20 @@ class PlaceBuilderDemo_Emplacements
 			(
 				new VisualCircle(entityDimension / 8, Color.byName("Yellow"), null),
 				new Coords(entityDimension / 4, 0 - entityDimension / 2, 0)
-			),
-			new VisualOffset
-			(
-				new VisualText(new DataBinding("Exit", null, null), null, exitColor, null),
-				new Coords(0, 0 - entityDimension * 2.5, 0)
 			)
 		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			visual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding("Exit", null, null), null, exitColor, null),
+					new Coords(0, 0 - entityDimension * 2.5, 0)
+				)
+			);
+		}
 
 		var exitEntityDefn = new Entity
 		(
@@ -369,13 +403,32 @@ class PlaceBuilderDemo_Emplacements
 				),
 				itemHoleColor,
 				null
-			),
-			new VisualOffset
-			(
-				new VisualText(DataBinding.fromContext(entityName), null, itemHoleColor, null),
-				new Coords(0, 0 - entityDimension, 0)
 			)
 		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			itemHoleVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(DataBinding.fromContext(entityName), null, itemHoleColor, null),
+					new Coords(0, 0 - entityDimension, 0)
+				)
+			);
+		}
+
+		var use = (u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity): any =>
+		{
+			var itemContainerAsControl = eUsed.itemContainer().toControl
+			(
+				u, u.display.sizeInPixels, eUsing, eUsed, u.venueCurrent
+			);
+			var venueNext: Venue = new VenueControls(itemContainerAsControl, false);
+			venueNext = new VenueFader(venueNext, null, null, null);
+			u.venueNext = venueNext;
+			return null;
+		}
 
 		var entityDefn = new Entity
 		(
@@ -387,27 +440,12 @@ class PlaceBuilderDemo_Emplacements
 				new Drawable(itemHoleVisual, null),
 				new DrawableCamera(),
 				new Perceptible(false, () => 0, () => 0),
-				new Usable
-				(
-					(u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) =>
-					{
-						var itemContainerAsControl = eUsed.itemContainer().toControl
-						(
-							u, u.display.sizeInPixels,
-							eUsing, eUsed,
-							u.venueCurrent
-						);
-						var venueNext: Venue = new VenueControls(itemContainerAsControl);
-						venueNext = new VenueFader(venueNext, null, null, null);
-						u.venueNext = venueNext;
-						return null;
-					}
-				)
+				new Usable(use)
 			]
 		);
 
 		return entityDefn;
-	};
+	}
 
 	entityDefnBuildObstacleBar(entityDimension: number): Entity
 	{
@@ -423,23 +461,27 @@ class PlaceBuilderDemo_Emplacements
 		var obstacleBounds = obstacleCollidable.collider.sphereSwept();
 		var obstacleBoundable = new Boundable(obstacleBounds);
 
-		var visual = new VisualRotate
-		(
-			obstacleRotationInTurns,
-			new VisualGroup
-			([
-				new VisualRectangle
-				(
-					obstacleCollider.box.size,
-					obstacleColor, obstacleColor, null
-				),
+		var visualBody = new VisualGroup
+		([
+			new VisualRectangle
+			(
+				obstacleCollider.box.size, obstacleColor, obstacleColor, null
+			)
+		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			visualBody.children.push
+			(
 				new VisualOffset
 				(
 					new VisualText(new DataBinding("Bar", null, null), null, obstacleColor, null),
 					new Coords(0, 0 - obstacleCollider.box.size.y, 0)
 				)
-			])
-		);
+			);
+		}
+
+		var visual = new VisualRotate(obstacleRotationInTurns, visualBody);
 
 		var obstacleBarEntityDefn = new Entity
 		(
@@ -455,7 +497,7 @@ class PlaceBuilderDemo_Emplacements
 		);
 
 		return obstacleBarEntityDefn;
-	};
+	}
 
 	entityDefnBuildObstacleMine(entityDimension: number): Entity
 	{
@@ -510,13 +552,20 @@ class PlaceBuilderDemo_Emplacements
 		]);
 		var obstacleMappedVisual = new VisualGroup
 		([
-			new VisualMap(obstacleMappedMap, obstacleMappedVisualLookup, null, null),
-			new VisualOffset
-			(
-				new VisualText(new DataBinding(entityDefnName, null, null), null, obstacleColor, null),
-				new Coords(0, 0 - entityDimension * 2, 0)
-			)
+			new VisualMap(obstacleMappedMap, obstacleMappedVisualLookup, null, null)
 		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			obstacleMappedVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding(entityDefnName, null, null), null, obstacleColor, null),
+					new Coords(0, 0 - entityDimension * 2, 0)
+				)
+			);
+		}
 
 		var obstacleCollidable = new Collidable
 		(
@@ -591,7 +640,7 @@ class PlaceBuilderDemo_Emplacements
 		);
 
 		return obstacleRingEntityDefn;
-	};
+	}
 
 	entityDefnBuildPortal(entityDimension: number): Entity
 	{
@@ -635,6 +684,12 @@ class PlaceBuilderDemo_Emplacements
 			)
 		]);
 
+		var portalUse = (u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity): any =>
+		{
+			eUsed.portal().use(u, w, p, eUsing, eUsed);
+			return null;
+		};
+
 		var portalEntity = new Entity
 		(
 			"Portal",
@@ -644,26 +699,19 @@ class PlaceBuilderDemo_Emplacements
 				new DrawableCamera(),
 				new Locatable(new Disposition(new Coords(0, 0, 0), null, null) ),
 				new Portal(null, "Exit", true),
-				new Usable
-				(
-					(u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) =>
-					{
-						eUsed.portal().use(u, w, p, eUsing, eUsed);
-						return null;
-					}
-				)
+				new Usable(portalUse)
 			]
 		);
 
 		return portalEntity;
-	};
+	}
 
 	entityDefnBuildTree(entityDimension: number): Entity
 	{
 		var entityName = "Tree";
 		entityDimension *= 1.5;
 		var color = Color.byName("GreenDark");
-		var visual: any = new VisualGroup
+		var visualTree = new VisualGroup
 		([
 			new VisualRectangle
 			(
@@ -682,13 +730,19 @@ class PlaceBuilderDemo_Emplacements
 				),
 				new Coords(0, -entityDimension, 0)
 			),
-			new VisualOffset
-			(
-				new VisualText(new DataBinding(entityName, null, null), null, color, null),
-				new Coords(0, 0 - entityDimension * 2, 0)
-			)
 		]);
-		visual = new VisualOffset(visual, new Coords(0, 0 - entityDimension, 0));
+		if (this.parent.visualsHaveText)
+		{
+			visualTree.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding(entityName, null, null), null, color, null),
+					new Coords(0, 0 - entityDimension * 2, 0)
+				)
+			);
+		}
+		var visual = new VisualOffset(visualTree, new Coords(0, 0 - entityDimension, 0));
 		var collider = new Box
 		(
 			new Coords(0, 0, 0),
@@ -714,5 +768,5 @@ class PlaceBuilderDemo_Emplacements
 		);
 
 		return entityDefn;
-	};
+	}
 }

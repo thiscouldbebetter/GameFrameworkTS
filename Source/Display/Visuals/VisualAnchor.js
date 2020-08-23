@@ -1,17 +1,28 @@
 "use strict";
 class VisualAnchor {
-    constructor(child, posToAnchorAt) {
+    constructor(child, posToAnchorAt, orientationToAnchorAt) {
         this.child = child;
         this.posToAnchorAt = posToAnchorAt;
+        this.orientationToAnchorAt = orientationToAnchorAt;
         // Helper variables.
         this._posSaved = new Coords(0, 0, 0);
+        this._orientationSaved = new Orientation(null, null);
     }
     draw(universe, world, place, entity, display) {
-        var drawablePos = entity.locatable().loc.pos;
+        var drawableLoc = entity.locatable().loc;
+        var drawablePos = drawableLoc.pos;
+        var drawableOrientation = drawableLoc.orientation;
         this._posSaved.overwriteWith(drawablePos);
-        drawablePos.overwriteWith(this.posToAnchorAt);
+        this._orientationSaved.overwriteWith(drawableOrientation);
+        if (this.posToAnchorAt != null) {
+            drawablePos.overwriteWith(this.posToAnchorAt);
+        }
+        if (this.orientationToAnchorAt != null) {
+            drawableOrientation.overwriteWith(this.orientationToAnchorAt);
+        }
         this.child.draw(universe, world, place, entity, display);
         drawablePos.overwriteWith(this._posSaved);
+        drawableOrientation.overwriteWith(this._orientationSaved);
     }
     ;
     // Clonable.

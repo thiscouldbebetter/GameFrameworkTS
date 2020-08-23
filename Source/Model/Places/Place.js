@@ -127,7 +127,13 @@ class Place {
             }
         }
     }
-    ;
+    // Controls.
+    toControl(universe, world) {
+        var player = this.player();
+        var playerControllable = player.controllable();
+        var returnValue = playerControllable.toControl(universe, universe.display.sizeInPixels, player, null, false);
+        return returnValue;
+    }
     // Entity convenience accessors.
     camera() {
         var cameraEntity = this.entitiesByPropertyName(Camera.name)[0];

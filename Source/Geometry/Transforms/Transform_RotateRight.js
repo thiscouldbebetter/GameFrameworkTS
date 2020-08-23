@@ -4,10 +4,11 @@ class Transform_RotateRight {
         this.quarterTurnsToRotate = quarterTurnsToRotate;
     }
     overwriteWith(other) {
-        return this; // todo
+        this.quarterTurnsToRotate = other.quarterTurnsToRotate;
+        return this;
     }
     transform(transformable) {
-        return transformable; // todo
+        return transformable.transform(this);
     }
     transformCoords(coordsToTransform) {
         for (var i = 0; i < this.quarterTurnsToRotate; i++) {

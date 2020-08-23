@@ -18,6 +18,15 @@ class DrawableAnimatable
 		this.ticksStartedByAnimationName.delete(name);
 	}
 
+	animationWithNameStartIfNecessary(animationName: string, world: World)
+	{
+		if (this.ticksStartedByAnimationName.has(animationName) == false)
+		{
+			this.ticksStartedByAnimationName.set(animationName, world.timerTicksSoFar);
+		}
+		return this.ticksStartedByAnimationName.get(animationName);
+	}
+
 	animationsRunningNames()
 	{
 		var animationsRunningNames = Array.from(this.ticksStartedByAnimationName.keys()).filter
@@ -27,12 +36,8 @@ class DrawableAnimatable
 		return animationsRunningNames;
 	}
 
-	animationWithNameStartIfNecessary(animationName: string, world: World)
+	animationsStopAll()
 	{
-		if (this.ticksStartedByAnimationName.has(animationName) == false)
-		{
-			this.ticksStartedByAnimationName.set(animationName, world.timerTicksSoFar);
-		}
-		return this.ticksStartedByAnimationName.get(animationName);
+		this.ticksStartedByAnimationName.clear();
 	}
 }

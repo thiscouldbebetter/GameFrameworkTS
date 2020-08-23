@@ -1,15 +1,15 @@
 
 class Equippable extends EntityProperty
 {
-	_equip: (u: Universe, w: World, p: Place, e: Entity) => void;
-	_unequip: (u: Universe, w: World, p: Place, e: Entity) => void;
+	_equip: (u: Universe, w: World, p: Place, eEquipmentUser: Entity, eEquippable: Entity) => void;
+	_unequip: (u: Universe, w: World, p: Place, eEquipmentUser: Entity, eEquippable: Entity) => void;
 
 	isEquipped: boolean;
 
 	constructor
 	(
-		equip: (u: Universe, w: World, p: Place, e: Entity) => void,
-		unequip: (u: Universe, w: World, p: Place, e: Entity) => void
+		equip: (u: Universe, w: World, p: Place, eEquipmentUser: Entity, eEquippable: Entity) => void,
+		unequip: (u: Universe, w: World, p: Place, eEquipmentUser: Entity, eEquippable: Entity) => void
 	)
 	{
 		super();
@@ -18,20 +18,20 @@ class Equippable extends EntityProperty
 		this.isEquipped = false;
 	}
 
-	equip(u: Universe, w: World, p: Place, e: Entity)
+	equip(u: Universe, w: World, p: Place, eEquipmentUser: Entity, eEquippable: Entity)
 	{
 		if (this._equip != null)
 		{
-			this._equip(u, w, p, e);
+			this._equip(u, w, p, eEquipmentUser, eEquippable);
 		}
 		this.isEquipped = true;
 	}
 
-	unequip(u: Universe, w: World, p: Place, e: Entity)
+	unequip(u: Universe, w: World, p: Place, eEquipmentUser: Entity, eEquippable: Entity)
 	{
 		if (this._unequip != null)
 		{
-			this._unequip(u, w, p, e);
+			this._unequip(u, w, p, eEquipmentUser, eEquippable);
 		}
 		this.isEquipped = false;
 	}

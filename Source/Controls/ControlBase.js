@@ -20,6 +20,6 @@ class ControlBase {
     mouseMove(x) { }
     scalePosAndSize(x) { }
     style(universe) {
-        return universe.controlBuilder.stylesByName.get(this.styleName == null ? "Default" : this.styleName);
+        return universe.controlStyle; // todo
     }
 }

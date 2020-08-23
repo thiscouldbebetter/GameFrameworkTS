@@ -6,6 +6,7 @@ class Universe
 	timerHelper: TimerHelper;
 	display: Display;
 	mediaLibrary: MediaLibrary;
+	controlStyle: ControlStyle;
 	world: World;
 
 	collisionHelper: CollisionHelper;
@@ -25,13 +26,23 @@ class Universe
 	venueNext: Venue;
 	venueCurrent: Venue;
 
-	constructor(name: string, version: string, timerHelper: TimerHelper, display: Display, mediaLibrary: MediaLibrary, world: World)
+	constructor
+	(
+		name: string,
+		version: string,
+		timerHelper: TimerHelper,
+		display: Display,
+		mediaLibrary: MediaLibrary,
+		controlStyle: ControlStyle,
+		world: World
+	)
 	{
 		this.name = name;
 		this.version = version;
 		this.timerHelper = timerHelper;
 		this.display = display;
 		this.mediaLibrary = mediaLibrary;
+		this.controlStyle = controlStyle;
 		this.world = world;
 
 		this.collisionHelper = new CollisionHelper();
@@ -47,7 +58,16 @@ class Universe
 
 	// static methods
 
-	static create(name: string, version: string, timerHelper: TimerHelper, display: Display, mediaLibrary: MediaLibrary, world: World)
+	static create
+	(
+		name: string,
+		version: string,
+		timerHelper: TimerHelper,
+		display: Display,
+		mediaLibrary: MediaLibrary,
+		controlStyle: ControlStyle,
+		world: World
+	)
 	{
 		var returnValue = new Universe
 		(
@@ -56,6 +76,7 @@ class Universe
 			timerHelper,
 			display,
 			mediaLibrary,
+			controlStyle,
 			world
 		);
 
@@ -92,13 +113,10 @@ class Universe
 		this.soundHelper = new SoundHelper(this.mediaLibrary.sounds);
 		this.videoHelper = new VideoHelper(this.mediaLibrary.videos);
 
-		var venueControlsTitle: any = new VenueControls
+		var venueControlsTitle: Venue = new VenueControls
 		(
-			this.controlBuilder.title
-			(
-				this,
-				this.display.sizeInPixels
-			)
+			this.controlBuilder.title(this, this.display.sizeInPixels),
+			false
 		);
 
 		venueControlsTitle = new VenueFader

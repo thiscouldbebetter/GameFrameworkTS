@@ -59,7 +59,7 @@ class ConversationRun {
         var viewLog = () => {
             var venueCurrent = universe.venueCurrent;
             var transcriptAsControl = conversationRun.toControlTranscript(size, universe, venueCurrent);
-            var venueNext = new VenueControls(transcriptAsControl);
+            var venueNext = new VenueControls(transcriptAsControl, false);
             venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
             universe.venueNext = venueNext;
         };
@@ -68,7 +68,8 @@ class ConversationRun {
         // children
         [
             new ControlVisual("visualPortrait", marginSize.clone(), portraitSize, // size
-            DataBinding.fromContext(conversationDefn.visualPortrait), Color.byName("Black") // colorBackground
+            DataBinding.fromContext(conversationDefn.visualPortrait), Color.byName("Black"), // colorBackground
+            null // colorBorder
             ),
             new ControlLabel("labelSpeaker", new Coords(marginSize.x * 2 + portraitSize.x, marginSize.y + portraitSize.y / 2 - labelHeight / 2, 0), // pos
             size, // size

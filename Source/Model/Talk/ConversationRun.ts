@@ -106,7 +106,7 @@ class ConversationRun
 			(
 				size, universe, venueCurrent
 			);
-			var venueNext: Venue = new VenueControls(transcriptAsControl);
+			var venueNext: Venue = new VenueControls(transcriptAsControl, false);
 			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 			universe.venueNext = venueNext;
 		};
@@ -124,7 +124,8 @@ class ConversationRun
 					marginSize.clone(),
 					portraitSize, // size
 					DataBinding.fromContext(conversationDefn.visualPortrait),
-					Color.byName("Black") // colorBackground
+					Color.byName("Black"), // colorBackground
+					null // colorBorder
 				),
 
 				new ControlLabel

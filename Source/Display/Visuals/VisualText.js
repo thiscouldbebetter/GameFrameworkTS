@@ -2,13 +2,13 @@
 class VisualText {
     constructor(text, heightInPixels, colorFill, colorBorder) {
         this._text = text;
-        this.heightInPixels = heightInPixels;
+        this.heightInPixels = heightInPixels || 10;
         this.colorFill = colorFill;
         this.colorBorder = colorBorder;
     }
     draw(universe, world, place, entity, display) {
         var text = this.text(universe, world, display, entity);
-        display.drawText(text, this.heightInPixels || display.fontHeightInPixels, entity.locatable().loc.pos, Color.systemColorGet(this.colorFill), Color.systemColorGet(this.colorBorder), false, // areColorsReversed
+        display.drawText(text, this.heightInPixels, entity.locatable().loc.pos, Color.systemColorGet(this.colorFill), Color.systemColorGet(this.colorBorder), false, // areColorsReversed
         true, // isCentered
         null // widthMaxInPixels
         );

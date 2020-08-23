@@ -10,9 +10,10 @@ class VenueControls implements Venue
 	_mouseMovePos: Coords;
 	_mouseMovePosPrev: Coords;
 
-	constructor(controlRoot: ControlBase)
+	constructor(controlRoot: ControlBase, ignoreKeyboardAndGamepadInputs: boolean)
 	{
 		this.controlRoot = controlRoot;
+		ignoreKeyboardAndGamepadInputs = ignoreKeyboardAndGamepadInputs || false;
 
 		function buildGamepadInputs(inputName: string)
 		{
@@ -76,6 +77,11 @@ class VenueControls implements Venue
 				inactivate
 			)
 		];
+
+		if (ignoreKeyboardAndGamepadInputs)
+		{
+			this.actionToInputsMappings.length = 0;
+		}
 
 		var mappingsGet = this.controlRoot.actionToInputsMappings;
 		if (mappingsGet != null)

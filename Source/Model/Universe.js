@@ -1,11 +1,12 @@
 "use strict";
 class Universe {
-    constructor(name, version, timerHelper, display, mediaLibrary, world) {
+    constructor(name, version, timerHelper, display, mediaLibrary, controlStyle, world) {
         this.name = name;
         this.version = version;
         this.timerHelper = timerHelper;
         this.display = display;
         this.mediaLibrary = mediaLibrary;
+        this.controlStyle = controlStyle;
         this.world = world;
         this.collisionHelper = new CollisionHelper();
         this.controlBuilder = new ControlBuilder([ControlStyle.Instances().Default]);
@@ -17,8 +18,8 @@ class Universe {
         this.venueNext = null;
     }
     // static methods
-    static create(name, version, timerHelper, display, mediaLibrary, world) {
-        var returnValue = new Universe(name, version, timerHelper, display, mediaLibrary, world);
+    static create(name, version, timerHelper, display, mediaLibrary, controlStyle, world) {
+        var returnValue = new Universe(name, version, timerHelper, display, mediaLibrary, controlStyle, world);
         var debuggingMode = URLParser.fromWindow().queryStringParameters["debug"];
         returnValue.debuggingMode = debuggingMode;
         return returnValue;
@@ -36,7 +37,7 @@ class Universe {
         this.platformHelper.platformableAdd(this.display);
         this.soundHelper = new SoundHelper(this.mediaLibrary.sounds);
         this.videoHelper = new VideoHelper(this.mediaLibrary.videos);
-        var venueControlsTitle = new VenueControls(this.controlBuilder.title(this, this.display.sizeInPixels));
+        var venueControlsTitle = new VenueControls(this.controlBuilder.title(this, this.display.sizeInPixels), false);
         venueControlsTitle = new VenueFader(venueControlsTitle, venueControlsTitle, null, null);
         this.venueNext = venueControlsTitle;
         this.inputHelper = new InputHelper();

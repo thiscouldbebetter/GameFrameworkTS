@@ -477,7 +477,12 @@ class Display2D implements Display
 
 			if (isCentered)
 			{
-				drawPos.addDimensions(0 - textWidthInPixels / 2, 0 - fontHeightInPixels / 2, 0);
+				drawPos.addDimensions
+				(
+					0 - textWidthInPixels / 2,
+					0 - (fontHeightInPixels / 2) * 1.2, // hack
+					0)
+				;
 			}
 
 			if (colorOutline != null)

@@ -6,15 +6,15 @@ class Equippable extends EntityProperty {
         this._unequip = unequip;
         this.isEquipped = false;
     }
-    equip(u, w, p, e) {
+    equip(u, w, p, eEquipmentUser, eEquippable) {
         if (this._equip != null) {
-            this._equip(u, w, p, e);
+            this._equip(u, w, p, eEquipmentUser, eEquippable);
         }
         this.isEquipped = true;
     }
-    unequip(u, w, p, e) {
+    unequip(u, w, p, eEquipmentUser, eEquippable) {
         if (this._unequip != null) {
-            this._unequip(u, w, p, e);
+            this._unequip(u, w, p, eEquipmentUser, eEquippable);
         }
         this.isEquipped = false;
     }

@@ -81,7 +81,8 @@ class WordBubble
 					marginSize,
 					portraitSize, // size
 					DataBinding.fromContext(this.visualForPortrait),
-					Color.byName("Black") // colorBackground
+					Color.byName("Black"), // colorBackground
+					null // colorBorder
 				),
 
 				new ControlLabel

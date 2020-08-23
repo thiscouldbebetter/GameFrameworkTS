@@ -57,7 +57,7 @@ class ItemStore extends EntityProperty
 			entityUsing, entityUsed,
 			universe.venueCurrent
 		);
-		var venueNext: Venue = new VenueControls(storeAsControl);
+		var venueNext: Venue = new VenueControls(storeAsControl, false);
 		venueNext = new VenueFader(venueNext, null, null, null);
 		universe.venueNext = venueNext;
 	}

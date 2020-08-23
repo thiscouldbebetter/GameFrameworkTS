@@ -165,24 +165,13 @@ class ControlList extends ControlBase {
     ;
     mouseClick(clickPos) {
         clickPos = this._mouseClickPos.overwriteWith(clickPos);
-        if (clickPos.x - this.pos.x > this.size.x - this.scrollbar.handleSize.x) {
+        var isClickPosInScrollbar = (clickPos.x - this.pos.x > this.size.x - this.scrollbar.handleSize.x);
+        if (isClickPosInScrollbar) {
             if (clickPos.y - this.pos.y <= this.scrollbar.handleSize.y) {
                 this.scrollbar.scrollUp();
             }
             else if (clickPos.y - this.pos.y >= this.scrollbar.size.y - this.scrollbar.handleSize.y) {
                 this.scrollbar.scrollDown();
-            }
-            else {
-                // todo
-                /*
-                var clickPosRelativeToSlideInPixels = clickPos.subtract
-                (
-                    this.scrollbar.pos
-                ).subtract
-                (
-                    new Coords(0, this.scrollbar.handleSize.y, 0)
-                );
-                */
             }
         }
         else {
@@ -192,7 +181,15 @@ class ControlList extends ControlBase {
             var indexOfItemClicked = rowOfItemClicked * this.widthInItems + clickOffsetInItems.x;
             var items = this.items();
             if (indexOfItemClicked < items.length) {
-                this.indexOfItemSelected(indexOfItemClicked);
+                var indexOfItemSelectedOld = this.indexOfItemSelected(null);
+                if (indexOfItemClicked == indexOfItemSelectedOld) {
+                    if (this.confirm != null) {
+                        this.confirm(null); // todo
+                    }
+                }
+                else {
+                    this.indexOfItemSelected(indexOfItemClicked);
+                }
             }
         }
         return true; // wasActionHandled

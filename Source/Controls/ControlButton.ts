@@ -8,8 +8,6 @@ class ControlButton extends ControlBase
 	context: any;
 	canBeHeldDown: boolean;
 
-	styleName: string;
-
 	_drawLoc: Disposition;
 	_sizeHalf: Coords;
 

@@ -9,7 +9,7 @@ class VisualText implements Visual
 	constructor(text: DataBinding<any, string>, heightInPixels: number, colorFill: Color, colorBorder: Color)
 	{
 		this._text = text;
-		this.heightInPixels = heightInPixels;
+		this.heightInPixels = heightInPixels || 10;
 		this.colorFill = colorFill;
 		this.colorBorder = colorBorder;
 	}
@@ -20,7 +20,7 @@ class VisualText implements Visual
 		display.drawText
 		(
 			text,
-			this.heightInPixels || display.fontHeightInPixels,
+			this.heightInPixels,
 			entity.locatable().loc.pos,
 			Color.systemColorGet(this.colorFill),
 			Color.systemColorGet(this.colorBorder),

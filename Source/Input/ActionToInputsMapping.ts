@@ -15,7 +15,7 @@ class ActionToInputsMapping
 	action(universe: Universe)
 	{
 		return universe.world.defn.actionDefnsByName().get(this.actionName);
-	};
+	}
 
 	// Cloneable implementation.
 
@@ -25,12 +25,12 @@ class ActionToInputsMapping
 		(
 			this.actionName, this.inputNames.slice(), this.inactivateInputWhenActionPerformed
 		);
-	};
+	}
 
 	overwriteWith(other: ActionToInputsMapping)
 	{
 		this.actionName = other.actionName;
 		this.inputNames = other.inputNames.slice();
 		this.inactivateInputWhenActionPerformed = other.inactivateInputWhenActionPerformed;
-	};
+	}
 }

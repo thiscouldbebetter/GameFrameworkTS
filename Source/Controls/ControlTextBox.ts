@@ -5,7 +5,6 @@ class ControlTextBox extends ControlBase
 	numberOfCharsMax: number;
 
 	cursorPos: number;
-	styleName: string;
 
 	_drawPos: Coords;
 	_drawPosText: Coords;
@@ -153,7 +152,8 @@ class ControlTextBox extends ControlBase
 	{
 		var parent = this.parent;
 		var parentAsContainer = parent as ControlContainer;
-		parentAsContainer.indexOfChildWithFocus = parentAsContainer.children.indexOf(this);
+		parentAsContainer.indexOfChildWithFocus =
+			parentAsContainer.children.indexOf(this);
 		this.isHighlighted = true;
 		return true;
 	}

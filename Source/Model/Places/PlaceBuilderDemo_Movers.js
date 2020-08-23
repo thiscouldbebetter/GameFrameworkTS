@@ -18,7 +18,7 @@ class PlaceBuilderDemo_Movers {
             new VisualOffset(visualEyes, new Coords(-1, 0, 0).multiplyScalar(visualEyeRadius)),
             new VisualOffset(visualEyes, new Coords(0, -1, 0).multiplyScalar(visualEyeRadius))
         ], null);
-        var carnivoreVisualNormal = new VisualGroup([
+        var carnivoreVisualBody = new VisualGroup([
             new VisualPolygon(new Path([
                 new Coords(-2, -1, 0),
                 new Coords(-0.5, 0, 0),
@@ -32,6 +32,8 @@ class PlaceBuilderDemo_Movers {
             ),
             new VisualOffset(visualEyesDirectional, new Coords(0, 0, 0)),
         ]);
+        var carnivoreVisualNormal = new VisualAnchor(carnivoreVisualBody, null, // posToAnchorAt
+        Orientation.Instances().ForwardXDownZ);
         var carnivoreVisual = new VisualGroup([
             new VisualAnimation("Carnivore", [100, 100], // ticksToHoldFrames
             // children
@@ -44,8 +46,10 @@ class PlaceBuilderDemo_Movers {
                 carnivoreVisualNormal
             ], false // isRepeating
             ),
-            new VisualOffset(new VisualText(new DataBinding("Carnivore", null, null), null, carnivoreColor, null), new Coords(0, 0 - carnivoreDimension * 2, 0))
         ]);
+        if (this.parent.visualsHaveText) {
+            carnivoreVisual.children.push(new VisualOffset(new VisualText(new DataBinding("Carnivore", null, null), null, carnivoreColor, null), new Coords(0, 0 - carnivoreDimension * 2, 0)));
+        }
         var carnivoreActivityPerform = (universe, world, place, entityActor, activity) => {
             var targetPos = activity.target;
             if (targetPos == null) {
@@ -148,11 +152,14 @@ class PlaceBuilderDemo_Movers {
                     new VisualOffset(enemyVisualArm, new Coords(enemyDimension / 4, 0, 0))
                 ])
             ], null),
-            new VisualPolygon(new Path(enemyColliderAsFace.vertices), enemyColor, Color.byName("Red") // colorBorder
-            ),
+            new VisualAnchor(new VisualPolygon(new Path(enemyColliderAsFace.vertices), enemyColor, Color.byName("Red") // colorBorder
+            ), null, // posToAnchorAt
+            Orientation.Instances().ForwardXDownZ.clone()),
             visualEyesWithBrowsDirectional,
-            new VisualOffset(new VisualText(DataBinding.fromContext(enemyTypeName), null, enemyColor, null), new Coords(0, 0 - enemyDimension, 0))
         ]);
+        if (this.parent.visualsHaveText) {
+            enemyVisual.children.push(new VisualOffset(new VisualText(DataBinding.fromContext(enemyTypeName), null, enemyColor, null), new Coords(0, 0 - enemyDimension, 0)));
+        }
         var enemyActivityPerform = (universe, world, place, actor, activity) => {
             var actorLoc = actor.locatable().loc;
             var actorPos = actorLoc.pos;
@@ -346,9 +353,11 @@ class PlaceBuilderDemo_Movers {
                 friendlyVisualNormal), null),
                 friendlyVisualNormal
             ], false // isRepeating
-            ),
-            new VisualOffset(new VisualText(new DataBinding("Talker", null, null), null, friendlyColor, null), new Coords(0, 0 - friendlyDimension * 2, 0))
+            )
         ]);
+        if (this.parent.visualsHaveText) {
+            friendlyVisual.children.push(new VisualOffset(new VisualText(new DataBinding("Talker", null, null), null, friendlyColor, null), new Coords(0, 0 - friendlyDimension * 2, 0)));
+        }
         var friendlyActivityPerform = (universe, world, place, entityActor, activity) => {
             var targetPos = activity.target;
             if (targetPos == null) {
@@ -427,9 +436,11 @@ class PlaceBuilderDemo_Movers {
                 grazerVisualNormal), null),
                 grazerVisualNormal
             ], false // isRepeating
-            ),
-            new VisualOffset(new VisualText(new DataBinding("Grazer", null, null), null, grazerColor, null), new Coords(0, 0 - grazerDimension * 2, 0))
+            )
         ]);
+        if (this.parent.visualsHaveText) {
+            grazerVisual.children.push(new VisualOffset(new VisualText(new DataBinding("Grazer", null, null), null, grazerColor, null), new Coords(0, 0 - grazerDimension * 2, 0)));
+        }
         var grazerActivityPerform = (universe, world, place, entityActor, activity) => {
             var targetPos = activity.target;
             if (targetPos == null) {
@@ -483,7 +494,7 @@ class PlaceBuilderDemo_Movers {
         return grazerEntityDefn;
     }
     ;
-    entityDefnBuildPlayer(entityDimension) {
+    entityDefnBuildPlayer(entityDimension, displaySize) {
         var entityDefnNamePlayer = "Player";
         var visualEyeRadius = entityDimension * .75 / 2;
         var visualBuilder = new VisualBuilder();
@@ -493,11 +504,16 @@ class PlaceBuilderDemo_Movers {
         var playerColor = Color.byName("Gray");
         var playerVisualBodyNormal = visualBuilder.circleWithEyesAndLegsAndArms(playerHeadRadius, playerColor, visualEyeRadius, visualEyesBlinking);
         var playerVisualBodyHidden = visualBuilder.circleWithEyesAndLegs(playerHeadRadius, Color.byName("Black"), visualEyeRadius, visualEyesBlinking);
-        var playerVisualBodyHidable = new VisualSelect(function selectChildName(u, w, d, e) {
-            return (e.perceptible().isHiding ? "Hidden" : "Normal");
-        }, ["Normal", "Hidden"], [playerVisualBodyNormal, playerVisualBodyHidden]);
+        var playerVisualBodyHidable = new VisualSelect(
+        // childrenByName
+        new Map([
+            ["Normal", playerVisualBodyNormal],
+            ["Hidden", playerVisualBodyHidden]
+        ]), (u, w, d, e) => // selectChildNames
+         {
+            return [(e.perceptible().isHiding ? "Hidden" : "Normal")];
+        });
         var playerVisualBodyJumpable = new VisualJump2D(playerVisualBodyHidable, new VisualEllipse(playerHeadRadius, playerHeadRadius / 2, 0, Color.byName("GrayDark"), Color.byName("Black")), null);
-        var playerVisualName = new VisualText(new DataBinding(entityDefnNamePlayer, null, null), null, playerColor, null);
         var playerVisualBarSize = new Coords(entityDimension * 3, entityDimension * .8, 0);
         var playerVisualHealthBar = new VisualBar("H", // abbreviation
         playerVisualBarSize, Color.Instances().Red, DataBinding.fromGet((c) => c.killable().integrity), DataBinding.fromGet((c) => c.killable().integrityMax), 1 // fractionBelowWhichToShow
@@ -506,13 +522,16 @@ class PlaceBuilderDemo_Movers {
         playerVisualBarSize, Color.Instances().Brown, DataBinding.fromGet((c) => c.starvable().satiety), DataBinding.fromGet((c) => c.starvable().satietyMax), .5 // fractionBelowWhichToShow
         );
         var playerVisualEffect = new VisualDynamic((u, w, d, e) => e.effectable().effectsAsVisual());
-        var playerVisualStatusInfo = new VisualOffset(new VisualStack(new Coords(0, 0 - entityDimension, 0), // childSpacing
-        [
-            playerVisualName,
+        var playerVisualsForStatusInfo = [
             playerVisualHealthBar,
             playerVisualSatietyBar,
             playerVisualEffect
-        ]), new Coords(0, 0 - entityDimension * 2, 0) // offset
+        ];
+        if (this.parent.visualsHaveText) {
+            playerVisualsForStatusInfo.splice(0, 0, new VisualText(new DataBinding(entityDefnNamePlayer, null, null), null, playerColor, null));
+        }
+        var playerVisualStatusInfo = new VisualOffset(new VisualStack(new Coords(0, 0 - entityDimension, 0), // childSpacing
+        playerVisualsForStatusInfo), new Coords(0, 0 - entityDimension * 2, 0) // offset
         );
         var playerVisual = new VisualGroup([
             playerVisualBodyJumpable, playerVisualStatusInfo
@@ -529,7 +548,7 @@ class PlaceBuilderDemo_Movers {
                 if (entityPlayer.itemHolder().hasItem(keysRequired)) {
                     var venueMessage = new VenueMessage(new DataBinding("You win!", null, null), (universe) => // acknowledge
                      {
-                        universe.venueNext = new VenueFader(new VenueControls(universe.controlBuilder.title(universe, null)), null, null, null);
+                        universe.venueNext = new VenueFader(new VenueControls(universe.controlBuilder.title(universe, null), false), null, null, null);
                     }, universe.venueCurrent, // venuePrev
                     universe.display.sizeDefault().clone(), //.half(),
                     true // showMessageOnly
@@ -557,7 +576,7 @@ class PlaceBuilderDemo_Movers {
                 );
                 var conversationSize = universe.display.sizeDefault().clone();
                 var conversationAsControl = conversation.toControl(conversationSize, universe);
-                var venueNext = new VenueControls(conversationAsControl);
+                var venueNext = new VenueControls(conversationAsControl, false);
                 universe.venueNext = venueNext;
             }
         };
@@ -615,7 +634,7 @@ class PlaceBuilderDemo_Movers {
          {
             var venueMessage = new VenueMessage(new DataBinding("You lose!", null, null), (universe) => // acknowledge
              {
-                universe.venueNext = new VenueFader(new VenueControls(universe.controlBuilder.title(universe, null)), null, null, null);
+                universe.venueNext = new VenueFader(new VenueControls(universe.controlBuilder.title(universe, null), false), null, null, null);
             }, universe.venueCurrent, // venuePrev
             universe.display.sizeDefault().clone(), //.half(),
             true // showMessageOnly
@@ -660,9 +679,8 @@ class PlaceBuilderDemo_Movers {
                 ])
             ])
         ]);
-        var controllable = new Controllable((universe, size, entity, venuePrev) => // toControl
-         {
-            var fontHeight = 12;
+        var toControlMenu = (universe, size, entity, venuePrev) => {
+            var fontHeight = 10;
             var labelSize = new Coords(300, fontHeight * 1.25, 0);
             var marginX = fontHeight;
             var timePlayingAsString = universe.world.timePlayingAsString(universe, false);
@@ -708,8 +726,58 @@ class PlaceBuilderDemo_Movers {
                 crafterAsControl,
                 skillLearnerAsControl,
                 journalKeeperAsControl
-            ], null, // fontHeightInPixels
-            back);
+            ], fontHeight, back);
+            return returnValue;
+        };
+        var toControlWorldOverlay = (universe, size, entity) => {
+            var world = universe.world;
+            var itemHolder = entity.itemHolder();
+            var equipmentUser = entity.equipmentUser();
+            var fontHeightInPixels = 10;
+            var margin = 10;
+            var itemQuickSlotCount = 10;
+            var buttonsForItemQuickSlots = new Array();
+            var buttonSize = new Coords(25, 25, 0);
+            var buttonWidthAll = itemQuickSlotCount * buttonSize.x;
+            var buttonMargin = (size.x - buttonWidthAll) / (itemQuickSlotCount + 1);
+            var buttonPos = new Coords(buttonMargin, size.y - margin - buttonSize.y, 0);
+            for (var i = 0; i < itemQuickSlotCount; i++) {
+                var buttonText = "\n   " + i;
+                var button = new ControlButton("buttonItemQuickSlot" + i, buttonPos.clone(), buttonSize, buttonText, fontHeightInPixels, false, // hasBorder
+                true, // isEnabled,
+                () => {
+                    itemHolder.equipItemInNumberedSlot(universe, entity, i);
+                }, null, // context
+                false // canBeHeldDown
+                );
+                var visualItemInQuickSlot = new ControlVisual("visualItemInQuickSlot", buttonPos.clone(), buttonSize, new DataBinding(i, (c) => {
+                    var returnValue = null;
+                    var itemEntityEquipped = equipmentUser.itemEntityInSocketWithName("Item" + c);
+                    if (itemEntityEquipped != null) {
+                        var item = itemEntityEquipped.item();
+                        returnValue = item.defn(world).visual;
+                    }
+                    return returnValue;
+                }, null), null, null // colorBackground, colorBorder
+                );
+                buttonsForItemQuickSlots.push(visualItemInQuickSlot);
+                buttonsForItemQuickSlots.push(button);
+                buttonPos.x += buttonSize.x + buttonMargin;
+            }
+            var childControls = buttonsForItemQuickSlots;
+            var controlOverlayContainer = new ControlContainer("containerPlayer", new Coords(0, 0, 0), // pos,
+            displaySize.clone(), childControls, null, null);
+            var controlOverlayTransparent = new ControlContainerTransparent(controlOverlayContainer);
+            return controlOverlayTransparent;
+        };
+        var controllable = new Controllable((universe, size, entity, venuePrev, isMenu) => {
+            var returnValue;
+            if (isMenu) {
+                returnValue = toControlMenu(universe, size, entity, venuePrev);
+            }
+            else {
+                returnValue = toControlWorldOverlay(universe, size, entity);
+            }
             return returnValue;
         });
         var playerActivityPerform = (universe, world, place, entityPlayer, activity) => {
@@ -771,8 +839,14 @@ class PlaceBuilderDemo_Movers {
             new DrawableCamera(),
             new Effectable([]),
             equipmentUser,
-            new Idleable(1, // ticksUntilIdle
-            (u, w, p, e) => e.locatable().loc.orientation.forward.clear()),
+            /*
+            new Idleable
+            (
+                1, // ticksUntilIdle
+                (u: Universe, w: World, p: Place, e: Entity) =>
+                    e.locatable().loc.orientation.forward.clear()
+            ),
+            */
             itemCrafter,
             itemHolder,
             journalKeeper,
@@ -784,24 +858,6 @@ class PlaceBuilderDemo_Movers {
             new SkillLearner(null, null, null),
             starvable
         ]);
-        var controlStatus = new ControlLabel("infoStatus", new Coords(8, 5, 0), //pos,
-        new Coords(150, 0, 0), //size,
-        false, // isTextCentered,
-        new DataBinding(playerEntityDefn, (c) => {
-            var player = c;
-            var itemHolder = player.itemHolder();
-            var statusText = "H:" + player.killable().integrity
-                + "   A:" + itemHolder.itemQuantityByDefnName("Arrow")
-                + "   K:" + itemHolder.itemQuantityByDefnName("Key")
-                + "   $:" + itemHolder.itemQuantityByDefnName("Coin")
-                + "   X:" + player.skillLearner().learningAccumulated;
-            var statusText = "";
-            return statusText;
-        }, null), // text,
-        10 // fontHeightInPixels
-        );
-        var playerVisualStatus = new VisualControl(controlStatus);
-        playerVisual.children.push(playerVisualStatus);
         return playerEntityDefn;
     }
     ;

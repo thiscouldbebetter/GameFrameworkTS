@@ -141,4 +141,8 @@ class World {
         this.placeCurrent.updateForTimerTick(universe, this);
         this.timerTicksSoFar++;
     }
+    // Controls.
+    toControl(universe) {
+        return this.placeCurrent.toControl(universe, this);
+    }
 }

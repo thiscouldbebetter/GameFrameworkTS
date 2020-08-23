@@ -1,22 +1,14 @@
 "use strict";
 class VisualSelect {
-    constructor(selectChildName, childNames, children) {
-        this.selectChildName = selectChildName;
-        this.childNames = childNames;
-        this.children = children;
-        this.childrenByName = new Map();
-        for (var i = 0; i < this.children.length; i++) {
-            var childName = this.childNames[i];
-            var child = this.children[i];
-            this.childrenByName.set(childName, child);
-        }
+    constructor(childrenByName, selectChildNames) {
+        this.childrenByName = childrenByName;
+        this.selectChildNames = selectChildNames;
     }
     draw(universe, world, place, entity, display) {
-        var childToSelectName = this.selectChildName(universe, world, display, entity, this);
-        var childSelected = this.childrenByName.get(childToSelectName);
-        childSelected.draw(universe, world, place, entity, display);
+        var childrenToSelectNames = this.selectChildNames(universe, world, display, entity, this);
+        var childrenSelected = childrenToSelectNames.map(childToSelectName => this.childrenByName.get(childToSelectName));
+        childrenSelected.forEach(childSelected => childSelected.draw(universe, world, place, entity, display));
     }
-    ;
     // Clonable.
     clone() {
         return this; // todo

@@ -58,9 +58,6 @@ class VisualAnimation {
         var returnValue = (ticksSinceStarted >= this.ticksToComplete);
         return returnValue;
     }
-    toVisualAnimationGroup() {
-        return new VisualAnimationGroup(this.name + "_AsGroup", [this]);
-    }
     // Visual.
     draw(universe, world, place, entity, display) {
         var animatable = entity.drawable().animatable();

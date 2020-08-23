@@ -92,11 +92,6 @@ class VisualAnimation implements Visual
 		return returnValue;
 	}
 
-	toVisualAnimationGroup()
-	{
-		return new VisualAnimationGroup(this.name + "_AsGroup", [this]);
-	}
-
 	// Visual.
 
 	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)

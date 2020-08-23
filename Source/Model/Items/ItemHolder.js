@@ -17,6 +17,18 @@ class ItemHolder extends EntityProperty {
         this.itemEntitySelected = null;
         this.statusMessage = "";
     }
+    equipItemInNumberedSlot(universe, entityItemHolder, slotNumber) {
+        var entityItemToEquip = this.itemEntitySelected;
+        if (entityItemToEquip != null) {
+            var world = universe.world;
+            var place = world.placeCurrent;
+            var equipmentUser = entityItemHolder.equipmentUser();
+            var socketName = "Item" + slotNumber;
+            var includeSocketNameInMessage = true;
+            var message = equipmentUser.equipItemEntityInSocketWithName(universe, world, place, entityItemHolder, entityItemToEquip, socketName, includeSocketNameInMessage);
+            this.statusMessage = message;
+        }
+    }
     hasItem(itemToCheck) {
         return this.hasItemWithDefnNameAndQuantity(itemToCheck.defnName, itemToCheck.quantity);
     }
@@ -69,6 +81,28 @@ class ItemHolder extends EntityProperty {
             itemEntityExisting.item().quantity += itemToAdd.quantity;
         }
     }
+    itemEntityFindClosest(universe, world, place, entityItemHolder) {
+        var entityItemsInPlace = place.items();
+        var entityItemClosest = entityItemsInPlace.filter(x => x.locatable().distanceFromEntity(entityItemHolder) < this.reachRadius).sort((a, b) => a.locatable().distanceFromEntity(entityItemHolder)
+            - b.locatable().distanceFromEntity(entityItemHolder))[0];
+        return entityItemClosest;
+    }
+    itemEntityPickUp(universe, world, place, entityItemHolder, entityItemToPickUp) {
+        var returnMessage = null;
+        if (entityItemToPickUp != null) {
+            var massHeld = this.massOfAllItems(world);
+            var massOfItem = entityItemToPickUp.item().mass(world);
+            var massTotal = massHeld + massOfItem;
+            if (massTotal > this.massMax) {
+                returnMessage = "Too heavy!";
+            }
+            else {
+                this.itemEntityAdd(entityItemToPickUp);
+                place.entitiesToRemove.push(entityItemToPickUp);
+            }
+        }
+        return returnMessage;
+    }
     itemEntityRemove(itemEntityToRemove) {
         var doesExist = this.itemEntities.indexOf(itemEntityToRemove) >= 0;
         if (doesExist) {
@@ -109,25 +143,6 @@ class ItemHolder extends EntityProperty {
     }
     itemQuantityByDefnName(defnName) {
         return this.itemsByDefnName(defnName).map(y => y.quantity).reduce((a, b) => a + b, 0);
-    }
-    itemPickUpClosest(universe, world, place, entityItemHolder) {
-        var returnMessage = null;
-        var entityItemsInPlace = place.items();
-        var entityItemToPickUp = entityItemsInPlace.filter(x => x.locatable().distanceFromEntity(entityItemHolder) < this.reachRadius).sort((a, b) => a.locatable().distanceFromEntity(entityItemHolder)
-            - b.locatable().distanceFromEntity(entityItemHolder))[0];
-        if (entityItemToPickUp != null) {
-            var massHeld = this.massOfAllItems(world);
-            var massOfItem = entityItemToPickUp.item().mass(world);
-            var massTotal = massHeld + massOfItem;
-            if (massTotal > this.massMax) {
-                returnMessage = "Too heavy!";
-            }
-            else {
-                this.itemEntityAdd(entityItemToPickUp);
-                place.entitiesToRemove.push(entityItemToPickUp);
-            }
-        }
-        return returnMessage;
     }
     itemSubtract(itemToSubtract) {
         this.itemSubtractDefnNameAndQuantity(itemToSubtract.defnName, itemToSubtract.quantity);
@@ -267,18 +282,6 @@ class ItemHolder extends EntityProperty {
         var sort = () => {
             itemHolder.itemEntities.sort((x, y) => (x.item().defnName > y.item().defnName ? 1 : -1));
         };
-        var equipItemInNumberedSlot = (slotNumber) => {
-            var entityItemToEquip = itemHolder.itemEntitySelected;
-            if (entityItemToEquip != null) {
-                var world = universe.world;
-                var place = world.placeCurrent;
-                var equipmentUser = entityItemHolder.equipmentUser();
-                var socketName = "Item" + slotNumber;
-                var includeSocketNameInMessage = true;
-                var message = equipmentUser.equipItemEntityInSocketWithName(universe, world, place, entityItemToEquip, socketName, includeSocketNameInMessage);
-                itemHolder.statusMessage = message;
-            }
-        };
         var buttonSize = new Coords(20, 10, 0);
         var visualNone = new VisualNone();
         var childControls = [
@@ -362,14 +365,12 @@ class ItemHolder extends EntityProperty {
             new DataBinding(this, (c) => {
                 var i = c.itemEntitySelected;
                 return (i == null ? visualNone : i.item().defn(world).visual);
-            }, null), Color.byName("Black") // colorBackground
-            ),
+            }, null), Color.byName("Black"), // colorBackground
+            null),
             new ControlLabel("infoStatus", new Coords(150, 115, 0), // pos
             new Coords(200, 15, 0), // size
             true, // isTextCentered
-            new DataBinding(this, (c) => {
-                return c.statusMessage;
-            }, null), // text
+            new DataBinding(this, (c) => c.statusMessage, null), // text
             fontHeightSmall),
             new ControlButton("buttonUse", new Coords(132.5, 95, 0), // pos
             new Coords(15, 10, 0), // size
@@ -401,16 +402,16 @@ class ItemHolder extends EntityProperty {
             new Action("Sort", sort),
             new Action("Drop", drop),
             new Action("Use", use),
-            new Action("Item0", function perform() { equipItemInNumberedSlot(0); }),
-            new Action("Item1", function perform() { equipItemInNumberedSlot(1); }),
-            new Action("Item2", function perform() { equipItemInNumberedSlot(2); }),
-            new Action("Item3", function perform() { equipItemInNumberedSlot(3); }),
-            new Action("Item4", function perform() { equipItemInNumberedSlot(4); }),
-            new Action("Item5", function perform() { equipItemInNumberedSlot(5); }),
-            new Action("Item6", function perform() { equipItemInNumberedSlot(6); }),
-            new Action("Item7", function perform() { equipItemInNumberedSlot(7); }),
-            new Action("Item8", function perform() { equipItemInNumberedSlot(8); }),
-            new Action("Item9", function perform() { equipItemInNumberedSlot(9); }),
+            new Action("Item0", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 0)),
+            new Action("Item1", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 1)),
+            new Action("Item2", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 2)),
+            new Action("Item3", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 3)),
+            new Action("Item4", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 4)),
+            new Action("Item5", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 5)),
+            new Action("Item6", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 6)),
+            new Action("Item7", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 7)),
+            new Action("Item8", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 8)),
+            new Action("Item9", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 9)),
         ], [
             new ActionToInputsMapping("Back", [Input.Names().Escape], true),
             new ActionToInputsMapping("Up", ["["], true),

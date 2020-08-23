@@ -8,7 +8,6 @@ class ControlScrollbar extends ControlBase
 	buttonScrollDown: ControlButton;
 	buttonScrollUp: ControlButton;
 	handleSize: Coords;
-	styleName: string;
 	windowSizeInItems: number;
 
 	_drawPos: Coords;

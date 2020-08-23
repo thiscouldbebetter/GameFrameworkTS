@@ -6,7 +6,6 @@ class ControlBase
 	parent: ControlBase;
 	pos: Coords;
 	size: Coords;
-	styleName: string;
 
 	isHighlighted: boolean;
 
@@ -34,7 +33,7 @@ class ControlBase
 	scalePosAndSize(x: Coords): void {}
 	style(universe: Universe)
 	{
-		return universe.controlBuilder.stylesByName.get(this.styleName == null ? "Default" : this.styleName);
+		return universe.controlStyle; // todo
 	}
 
 }

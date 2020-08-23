@@ -7,7 +7,6 @@ class ControlSelect extends ControlBase
 	bindingForOptionText: DataBinding<any, string>;
 
 	indexOfOptionSelected: number;
-	styleName: string;
 
 	_drawPos: Coords;
 	_sizeHalf: Coords;

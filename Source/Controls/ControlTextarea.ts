@@ -6,7 +6,6 @@ class ControlTextarea extends ControlBase
 
 	lineSpacing: number;
 	scrollbar: ControlScrollbar;
-	styleName: string;
 
 	_drawPos: Coords;
 	_drawLoc: Disposition;

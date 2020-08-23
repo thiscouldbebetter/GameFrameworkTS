@@ -6,7 +6,7 @@ class VisualPolygon implements Visual
 	colorBorder: Color;
 
 	verticesAsPathTransformed: Path;
-	transformTranslate: Transform_Translate;
+	transformLocate: Transform_Locate;
 
 	constructor(verticesAsPath: Path, colorFill: Color, colorBorder: Color)
 	{
@@ -15,13 +15,13 @@ class VisualPolygon implements Visual
 		this.colorBorder = colorBorder;
 
 		this.verticesAsPathTransformed = this.verticesAsPath.clone();
-		this.transformTranslate = new Transform_Translate(new Coords(0, 0, 0));
+		this.transformLocate = new Transform_Locate(null);
 	}
 
 	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
-		var drawablePos = entity.locatable().loc.pos;
-		this.transformTranslate.displacement.overwriteWith(drawablePos);
+		var drawableLoc = entity.locatable().loc;
+		this.transformLocate.loc.overwriteWith(drawableLoc);
 
 		this.verticesAsPathTransformed.overwriteWith
 		(
@@ -30,7 +30,7 @@ class VisualPolygon implements Visual
 
 		Transforms.applyTransformToCoordsMany
 		(
-			this.transformTranslate,
+			this.transformLocate,
 			this.verticesAsPathTransformed.points
 		);
 
@@ -40,7 +40,7 @@ class VisualPolygon implements Visual
 			Color.systemColorGet(this.colorFill),
 			Color.systemColorGet(this.colorBorder)
 		);
-	};
+	}
 
 	// Clonable.
 

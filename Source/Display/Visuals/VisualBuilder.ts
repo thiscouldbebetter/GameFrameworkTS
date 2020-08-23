@@ -87,17 +87,11 @@ class VisualBuilder
 
 		var visualLegsFacingDownStanding = new VisualGroup
 		([
-			new VisualOffset
-			(
-				visualLegDownLeft,
-				offsetLegLeft
-			),
-			new VisualOffset
-			(
-				visualLegDownRight,
-				offsetLegRight
-			),
+			new VisualOffset(visualLegDownLeft, offsetLegLeft),
+			new VisualOffset(visualLegDownRight, offsetLegRight)
 		]);
+
+		var ticksPerStepAsArray = [ ticksPerStep, ticksPerStep ];
 
 		var visualLegsFacingDownWalking = new VisualGroup
 		([
@@ -106,7 +100,7 @@ class VisualBuilder
 				new VisualAnimation
 				(
 					null, // name
-					[ ticksPerStep, ticksPerStep ],
+					ticksPerStepAsArray,
 					[
 						visualLegDownLeft,
 						new VisualOffset
@@ -124,7 +118,7 @@ class VisualBuilder
 				new VisualAnimation
 				(
 					null, // name
-					[ ticksPerStep, ticksPerStep ],
+					ticksPerStepAsArray,
 					[
 						new VisualOffset
 						(
@@ -165,6 +159,12 @@ class VisualBuilder
 			false // isClosed
 		);
 
+		var visualLegsFacingUpStanding = new VisualGroup
+		([
+			new VisualOffset(visualLegUpLeft, offsetLegLeft),
+			new VisualOffset(visualLegUpRight, offsetLegRight)
+		]);
+
 		var visualLegsFacingUpWalking = new VisualGroup
 		([
 			new VisualOffset
@@ -172,7 +172,7 @@ class VisualBuilder
 				new VisualAnimation
 				(
 					null, // name
-					[ ticksPerStep, ticksPerStep ],
+					ticksPerStepAsArray,
 					[
 						visualLegUpLeft,
 						new VisualOffset
@@ -190,7 +190,7 @@ class VisualBuilder
 				new VisualAnimation
 				(
 					null, // name
-					[ ticksPerStep, ticksPerStep ],
+					ticksPerStepAsArray,
 					[
 						new VisualOffset
 						(
@@ -217,6 +217,13 @@ class VisualBuilder
 			lineThickness,
 			false // isClosed
 		);
+
+		var visualLegsFacingLeftStanding = new VisualGroup
+		([
+			new VisualOffset(visualLegFacingLeft, offsetLegLeft),
+			new VisualOffset(visualLegFacingLeft, offsetLegRight)
+		]);
+
 		var visualLegsFacingLeftWalking = new VisualGroup
 		([
 			new VisualOffset
@@ -224,7 +231,7 @@ class VisualBuilder
 				new VisualAnimation
 				(
 					null, // name
-					[ ticksPerStep, ticksPerStep ],
+					ticksPerStepAsArray,
 					[
 						visualLegFacingLeft,
 						new VisualOffset
@@ -242,7 +249,7 @@ class VisualBuilder
 				new VisualAnimation
 				(
 					null, // name
-					[ ticksPerStep, ticksPerStep ],
+					ticksPerStepAsArray,
 					[
 						new VisualOffset
 						(
@@ -269,6 +276,13 @@ class VisualBuilder
 			lineThickness,
 			false // isClosed
 		);
+
+		var visualLegsFacingRightStanding = new VisualGroup
+		([
+			new VisualOffset(visualLegFacingRight, offsetLegLeft),
+			new VisualOffset(visualLegFacingRight, offsetLegRight)
+		]);
+
 		var visualLegsFacingRightWalking = new VisualGroup
 		([
 			new VisualOffset
@@ -276,7 +290,7 @@ class VisualBuilder
 				new VisualAnimation
 				(
 					null, // name
-					[ ticksPerStep, ticksPerStep ],
+					ticksPerStepAsArray,
 					[
 						visualLegFacingRight,
 						new VisualOffset
@@ -294,7 +308,7 @@ class VisualBuilder
 				new VisualAnimation
 				(
 					null, // name
-					[ ticksPerStep, ticksPerStep ],
+					ticksPerStepAsArray,
 					[
 						new VisualOffset
 						(
@@ -309,16 +323,68 @@ class VisualBuilder
 			),
 		]);
 
-		var visualLegsDirectional = new VisualDirectional
+		var visualLegsStandingNamesByHeading =
+		[
+			"FacingRightStanding",
+			"FacingDownStanding",
+			"FacingLeftStanding",
+			"FacingUpStanding"
+		];
+
+		var visualLegsWalkingNamesByHeading =
+		[
+			"FacingRightWalking",
+			"FacingDownWalking",
+			"FacingLeftWalking",
+			"FacingUpWalking"
+		];
+
+		var visualLegsDirectional = new VisualSelect
 		(
-			visualLegsFacingDownStanding, // visualForNoDirection
-			[
-				visualLegsFacingRightWalking,
-				visualLegsFacingDownWalking,
-				visualLegsFacingLeftWalking,
-				visualLegsFacingUpWalking
-			],
-			null
+			// childrenByName
+			new Map<string, Visual>
+			([
+				[ "FacingRightStanding", visualLegsFacingRightStanding ],
+				[ "FacingDownStanding", visualLegsFacingDownStanding ],
+				[ "FacingLeftStanding", visualLegsFacingLeftStanding ],
+				[ "FacingUpStanding", visualLegsFacingUpStanding ],
+
+				[ "FacingRightWalking", visualLegsFacingRightWalking ],
+				[ "FacingDownWalking", visualLegsFacingDownWalking ],
+				[ "FacingLeftWalking", visualLegsFacingLeftWalking ],
+				[ "FacingUpWalking", visualLegsFacingUpWalking ]
+			]),
+			// selectChildNames
+			(u: Universe, w: World, d: Display, e: Entity, v: VisualSelect) =>
+			{
+				var entityLoc = e.locatable().loc;
+				var entityForward = entityLoc.orientation.forward;
+				var entityForwardInTurns = entityForward.headingInTurns();
+				var childNameToSelect;
+				if (entityForwardInTurns == null)
+				{
+					childNameToSelect = "FacingDownStanding";
+				}
+				else
+				{
+					var headingCount = 4; 
+					var headingIndex =
+						Math.floor(entityForwardInTurns * headingCount); // todo
+					var entitySpeed = entityLoc.vel.magnitude();
+					var namesByHeading;
+					var speedMin = 0.2;
+					if (entitySpeed > speedMin)
+					{
+						namesByHeading = visualLegsWalkingNamesByHeading;
+					}
+					else
+					{
+						namesByHeading = visualLegsStandingNamesByHeading;
+					}
+					childNameToSelect = namesByHeading[headingIndex];
+				}
+				return [ childNameToSelect ];
+			},
 		);
 
 		var returnValue = new VisualGroup
@@ -347,9 +413,20 @@ class VisualBuilder
 				var equipmentUser = e.equipmentUser();
 				var entityWieldableEquipped =
 					equipmentUser.itemEntityInSocketWithName("Wielding");
-				var itemVisual = entityWieldableEquipped.item().defn(w).visual;
+				var itemDrawable = entityWieldableEquipped.drawable();
+				var itemVisual =
+					(
+						itemDrawable == null
+						? entityWieldableEquipped.item().defn(w).visual
+						: (itemDrawable.visual as VisualCameraProjection).child
+					);
 				return itemVisual;
 			}
+		);
+
+		visualWieldable = new VisualAnchor
+		(
+			visualWieldable, null, Orientation.Instances().ForwardXDownZ
 		);
 
 		var visualArmAndWieldableFacingRight = new VisualGroup
@@ -444,12 +521,19 @@ class VisualBuilder
 
 		var visualWielding = new VisualSelect
 		(
-			(u: Universe, w: World, d: Display, e: Entity) => // selectChildName
+			new Map<string, Visual>
+			([
+				[ "Visible", visualArmAndWieldableDirectionalOffset ],
+				[ "Hidden", visualNone ]
+			]),
+			(u: Universe, w: World, d: Display, e: Entity) => // selectChildNames
 			{
-				return (e.equipmentUser().itemEntityInSocketWithName("Wielding") == null ? "Hidden" : "Visible");
-			},
-			[ "Visible", "Hidden" ],
-			[ visualArmAndWieldableDirectionalOffset, visualNone ]
+				var itemEntityWielded =
+					e.equipmentUser().itemEntityInSocketWithName("Wielding");
+				var returnValue = 
+					(itemEntityWielded == null ? "Hidden" : "Visible");
+				return [ returnValue ];
+			}
 		);
 
 		var returnValue = new VisualGroup

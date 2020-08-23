@@ -1,7 +1,8 @@
 "use strict";
 class VenueControls {
-    constructor(controlRoot) {
+    constructor(controlRoot, ignoreKeyboardAndGamepadInputs) {
         this.controlRoot = controlRoot;
+        ignoreKeyboardAndGamepadInputs = ignoreKeyboardAndGamepadInputs || false;
         function buildGamepadInputs(inputName) {
             var numberOfGamepads = 1; // todo
             var returnValues = [];
@@ -24,6 +25,9 @@ class VenueControls {
                 new ActionToInputsMapping(controlActionNames.ControlConfirm, ArrayHelper.addMany([inputNames.Enter], buildGamepadInputs(inputNames.GamepadButton1)), inactivate),
                 new ActionToInputsMapping(controlActionNames.ControlCancel, ArrayHelper.addMany([inputNames.Escape], buildGamepadInputs(inputNames.GamepadButton0)), inactivate)
             ];
+        if (ignoreKeyboardAndGamepadInputs) {
+            this.actionToInputsMappings.length = 0;
+        }
         var mappingsGet = this.controlRoot.actionToInputsMappings;
         if (mappingsGet != null) {
             var mappings = mappingsGet.call(this.controlRoot);

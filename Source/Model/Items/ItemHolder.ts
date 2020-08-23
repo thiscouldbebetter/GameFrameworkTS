@@ -35,6 +35,25 @@ class ItemHolder extends EntityProperty
 		this.statusMessage = "";
 	}
 
+	equipItemInNumberedSlot(universe: Universe, entityItemHolder: Entity, slotNumber: number)
+	{
+		var entityItemToEquip = this.itemEntitySelected;
+		if (entityItemToEquip != null)
+		{
+			var world = universe.world;
+			var place = world.placeCurrent;
+			var equipmentUser = entityItemHolder.equipmentUser();
+			var socketName = "Item" + slotNumber;
+			var includeSocketNameInMessage = true;
+			var message = equipmentUser.equipItemEntityInSocketWithName
+			(
+				universe, world, place, entityItemHolder, entityItemToEquip,
+				socketName, includeSocketNameInMessage
+			);
+			this.statusMessage = message;
+		}
+	}
+
 	hasItem(itemToCheck: Item)
 	{
 		return this.hasItemWithDefnNameAndQuantity(itemToCheck.defnName, itemToCheck.quantity);
@@ -112,6 +131,49 @@ class ItemHolder extends EntityProperty
 		}
 	}
 
+	itemEntityFindClosest(universe: Universe, world: World, place: Place, entityItemHolder: Entity)
+	{
+		var entityItemsInPlace = place.items();
+		var entityItemClosest = entityItemsInPlace.filter
+		(
+			x => x.locatable().distanceFromEntity(entityItemHolder) < this.reachRadius
+		).sort
+		(
+			(a, b) =>
+				a.locatable().distanceFromEntity(entityItemHolder)
+				- b.locatable().distanceFromEntity(entityItemHolder)
+		)[0];
+
+		return entityItemClosest;
+	}
+
+	itemEntityPickUp
+	(
+		universe: Universe, world: World, place: Place,
+		entityItemHolder: Entity, entityItemToPickUp: Entity
+	)
+	{
+		var returnMessage: string = null;
+
+		if (entityItemToPickUp != null)
+		{
+			var massHeld = this.massOfAllItems(world);
+			var massOfItem = entityItemToPickUp.item().mass(world);
+			var massTotal = massHeld + massOfItem;
+			if (massTotal > this.massMax)
+			{
+				returnMessage = "Too heavy!";
+			}
+			else
+			{
+				this.itemEntityAdd(entityItemToPickUp);
+				place.entitiesToRemove.push(entityItemToPickUp);
+			}
+		}
+
+		return returnMessage;
+	}
+
 	itemEntityRemove(itemEntityToRemove: Entity)
 	{
 		var doesExist = this.itemEntities.indexOf(itemEntityToRemove) >= 0;
@@ -179,39 +241,6 @@ class ItemHolder extends EntityProperty
 		(
 			(a,b) => a + b, 0
 		);
-	}
-
-	itemPickUpClosest(universe: Universe, world: World, place: Place, entityItemHolder: Entity)
-	{
-		var returnMessage: string = null;
-
-		var entityItemsInPlace = place.items();
-		var entityItemToPickUp = entityItemsInPlace.filter
-		(
-			x => x.locatable().distanceFromEntity(entityItemHolder) < this.reachRadius
-		).sort
-		(
-			(a, b) =>
-				a.locatable().distanceFromEntity(entityItemHolder)
-				- b.locatable().distanceFromEntity(entityItemHolder)
-		)[0];
-		if (entityItemToPickUp != null)
-		{
-			var massHeld = this.massOfAllItems(world);
-			var massOfItem = entityItemToPickUp.item().mass(world);
-			var massTotal = massHeld + massOfItem;
-			if (massTotal > this.massMax)
-			{
-				returnMessage = "Too heavy!";
-			}
-			else
-			{
-				this.itemEntityAdd(entityItemToPickUp);
-				place.entitiesToRemove.push(entityItemToPickUp);
-			}
-		}
-
-		return returnMessage;
 	}
 
 	itemSubtract(itemToSubtract: Item)
@@ -414,25 +443,6 @@ class ItemHolder extends EntityProperty
 			(
 				(x, y) => (x.item().defnName > y.item().defnName ? 1 : -1)
 			);
-		};
-
-		var equipItemInNumberedSlot = (slotNumber: number) =>
-		{
-			var entityItemToEquip = itemHolder.itemEntitySelected;
-			if (entityItemToEquip != null)
-			{
-				var world = universe.world;
-				var place = world.placeCurrent;
-				var equipmentUser = entityItemHolder.equipmentUser();
-				var socketName = "Item" + slotNumber;
-				var includeSocketNameInMessage = true;
-				var message = equipmentUser.equipItemEntityInSocketWithName
-				(
-					universe, world, place, entityItemToEquip,
-					socketName, includeSocketNameInMessage
-				);
-				itemHolder.statusMessage = message;
-			}
 		};
 
 		var buttonSize = new Coords(20, 10, 0);
@@ -666,7 +676,8 @@ class ItemHolder extends EntityProperty
 					},
 					null
 				),
-				Color.byName("Black") // colorBackground
+				Color.byName("Black"), // colorBackground
+				null
 			),
 
 			new ControlLabel
@@ -678,10 +689,7 @@ class ItemHolder extends EntityProperty
 				new DataBinding
 				(
 					this,
-					(c: ItemHolder) =>
-					{
-						return c.statusMessage;
-					},
+					(c: ItemHolder) => c.statusMessage,
 					null
 				), // text
 				fontHeightSmall
@@ -751,16 +759,16 @@ class ItemHolder extends EntityProperty
 				new Action("Drop", drop),
 				new Action("Use", use),
 
-				new Action("Item0", function perform() { equipItemInNumberedSlot(0) } ),
-				new Action("Item1", function perform() { equipItemInNumberedSlot(1) } ),
-				new Action("Item2", function perform() { equipItemInNumberedSlot(2) } ),
-				new Action("Item3", function perform() { equipItemInNumberedSlot(3) } ),
-				new Action("Item4", function perform() { equipItemInNumberedSlot(4) } ),
-				new Action("Item5", function perform() { equipItemInNumberedSlot(5) } ),
-				new Action("Item6", function perform() { equipItemInNumberedSlot(6) } ),
-				new Action("Item7", function perform() { equipItemInNumberedSlot(7) } ),
-				new Action("Item8", function perform() { equipItemInNumberedSlot(8) } ),
-				new Action("Item9", function perform() { equipItemInNumberedSlot(9) } ),
+				new Action("Item0", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 0) ),
+				new Action("Item1", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 1) ),
+				new Action("Item2", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 2) ),
+				new Action("Item3", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 3) ),
+				new Action("Item4", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 4) ),
+				new Action("Item5", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 5) ),
+				new Action("Item6", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 6) ),
+				new Action("Item7", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 7) ),
+				new Action("Item8", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 8) ),
+				new Action("Item9", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 9) ),
 			],
 
 			[

@@ -1,7 +1,7 @@
 "use strict";
 class ControlTabbed extends ControlBase {
     constructor(name, pos, size, tabButtonSize, children, fontHeightInPixels, cancel) {
-        super(name, pos, size, fontHeightInPixels || 10);
+        super(name, pos, size, fontHeightInPixels);
         this.tabButtonSize = tabButtonSize;
         this.children = children;
         this.childrenByName = ArrayHelper.addLookupsByName(this.children);
@@ -15,8 +15,8 @@ class ControlTabbed extends ControlBase {
             var child = this.children[i];
             child.pos.y += tabPaneHeight;
             var childName = child.name;
-            var button = new ControlButton("button" + childName, new Coords(marginSize + this.tabButtonSize.x * i, marginSize, 0), // pos
-            this.tabButtonSize.clone(), childName, // text
+            var buttonPos = new Coords(marginSize + this.tabButtonSize.x * i, marginSize, 0);
+            var button = new ControlButton("button" + childName, buttonPos, this.tabButtonSize.clone(), childName, // text
             this.fontHeightInPixels, true, // hasBorder
             true, // isEnabled
             (b) => this.childSelectedIndex = buttonsForChildren.indexOf(b), // hack
@@ -215,11 +215,9 @@ class ControlTabbed extends ControlBase {
         }
         return this;
     }
-    ;
     toVenue() {
-        return new VenueFader(new VenueControls(this), null, null, null);
+        return new VenueFader(new VenueControls(this, false), null, null, null);
     }
-    ;
     // drawable
     draw(universe, display, drawLoc) {
         drawLoc = this._drawLoc.overwriteWith(drawLoc);

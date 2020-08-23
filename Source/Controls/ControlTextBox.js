@@ -77,7 +77,8 @@ class ControlTextBox extends ControlBase {
     mouseClick(mouseClickPos) {
         var parent = this.parent;
         var parentAsContainer = parent;
-        parentAsContainer.indexOfChildWithFocus = parentAsContainer.children.indexOf(this);
+        parentAsContainer.indexOfChildWithFocus =
+            parentAsContainer.children.indexOf(this);
         this.isHighlighted = true;
         return true;
     }

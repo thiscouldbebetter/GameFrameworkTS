@@ -264,7 +264,7 @@ class ControlBuilder
 		{
 			var venueNext: Venue = new VenueControls
 			(
-				universe.controlBuilder.gameAndSettings(universe, size)
+				universe.controlBuilder.gameAndSettings(universe, size), false
 			);
 			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 			universe.venueNext = venueNext;
@@ -290,7 +290,7 @@ class ControlBuilder
 					{
 						var venueNext: Venue = new VenueControls
 						(
-							Profile.toControlSaveStateSave(universe, size)
+							Profile.toControlSaveStateSave(universe, size), false
 						);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 						universe.venueNext = venueNext;
@@ -311,7 +311,7 @@ class ControlBuilder
 					{
 						var venueNext: Venue = new VenueControls
 						(
-							Profile.toControlSaveStateLoad(universe, null)
+							Profile.toControlSaveStateLoad(universe, null), false
 						);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 						universe.venueNext = venueNext;
@@ -369,7 +369,7 @@ class ControlBuilder
 								universe.reset();
 								var venueNext: Venue = new VenueControls
 								(
-									universe.controlBuilder.title(universe, null)
+									universe.controlBuilder.title(universe, null), false
 								);
 								venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 								universe.venueNext = venueNext;
@@ -378,14 +378,14 @@ class ControlBuilder
 							{
 								var venueNext: Venue = new VenueControls
 								(
-									universe.controlBuilder.gameAndSettings(universe, size)
+									universe.controlBuilder.gameAndSettings(universe, size), false
 								);
 								venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 								universe.venueNext = venueNext;
 							}
 						);
 
-						var venueNext: Venue = new VenueControls(controlConfirm);
+						var venueNext: Venue = new VenueControls(controlConfirm, false);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 						universe.venueNext = venueNext;
 					},
@@ -467,7 +467,7 @@ class ControlBuilder
 					{
 						var venueNext: Venue = new VenueControls
 						(
-							universe.controlBuilder.game(universe, size)
+							universe.controlBuilder.game(universe, size), false
 						);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 						universe.venueNext = venueNext;
@@ -488,7 +488,7 @@ class ControlBuilder
 					{
 						var venueNext: Venue = new VenueControls
 						(
-							universe.controlBuilder.settings(universe, null)
+							universe.controlBuilder.settings(universe, null), false
 						);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 						universe.venueNext = venueNext;
@@ -726,7 +726,7 @@ class ControlBuilder
 								universe.venueNext = venueNext;
 							}
 						);
-						var venueNext: Venue = new VenueControls(controlConfirm);
+						var venueNext: Venue = new VenueControls(controlConfirm, false);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 						universe.venueNext = venueNext;
 					},
@@ -836,7 +836,7 @@ class ControlBuilder
 		var back = function()
 		{
 			var control = universe.controlBuilder.gameAndSettings(universe, size);
-			var venueNext: Venue = new VenueControls(control);
+			var venueNext: Venue = new VenueControls(control, false);
 			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 			universe.venueNext = venueNext;
 		};
@@ -958,7 +958,7 @@ class ControlBuilder
 
 						var venueNext: Venue = new VenueControls
 						(
-							universe.controlBuilder.settings(universe, null)
+							universe.controlBuilder.settings(universe, null), false
 						);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 						universe.venueNext = venueNext;
@@ -980,7 +980,7 @@ class ControlBuilder
 						var venueCurrent = universe.venueCurrent;
 						var controlGameControls =
 							universe.controlBuilder.inputs(universe, size, venueCurrent);
-						var venueNext: Venue = new VenueControls(controlGameControls);
+						var venueNext: Venue = new VenueControls(controlGameControls, false);
 						venueNext = new VenueFader(venueNext, venueCurrent, null, null);
 						universe.venueNext = venueNext;
 					},
@@ -1047,7 +1047,7 @@ class ControlBuilder
 							new VisualImageFromLibrary(imageName),
 							null, null
 						),
-						null
+						null, null
 					),
 
 					new ControlLabel
@@ -1075,7 +1075,7 @@ class ControlBuilder
 							if (slideIndexNext < controlsForSlides.length)
 							{
 								var controlForSlideNext = controlsForSlides[slideIndexNext];
-								venueNext = new VenueControls(controlForSlideNext);
+								venueNext = new VenueControls(controlForSlideNext, false);
 							}
 							else
 							{
@@ -1124,7 +1124,7 @@ class ControlBuilder
 				},
 				(universe: Universe, result: any) => // done
 				{
-					var venueProfileSelect = new VenueControls(result);
+					var venueProfileSelect = new VenueControls(result, false);
 
 					universe.venueNext =
 						new VenueFader(venueProfileSelect, universe.venueCurrent, null, null);
@@ -1152,14 +1152,14 @@ class ControlBuilder
 						new VisualImageScaled(new VisualImageFromLibrary("Title"), size),
 						null, null
 					),
-					null //?
+					null, null // colors
 				),
 
 				new ControlButton
 				(
 					"buttonStart",
-					new Coords(75, 100, 0), // pos
-					new Coords(50, 40, 0), // size
+					new Coords(75, 120, 0), // pos
+					new Coords(50, fontHeight * 2, 0), // size
 					"Start",
 					fontHeight * 2,
 					false, // hasBorder
@@ -1282,7 +1282,7 @@ class ControlBuilder
 							);
 
 							var venueInstructions =
-								new VenueControls(controlInstructions);
+								new VenueControls(controlInstructions, false);
 
 							var venueMovie = new VenueVideo
 							(
@@ -1312,7 +1312,8 @@ class ControlBuilder
 					{
 						var venueNext: Venue = new VenueControls
 						(
-							Profile.toControlSaveStateLoad(universe, null)
+							Profile.toControlSaveStateLoad(universe, null),
+							false
 						);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 						universe.venueNext = venueNext;
@@ -1356,7 +1357,8 @@ class ControlBuilder
 
 								var venueNext: Venue = new VenueControls
 								(
-									Profile.toControlSaveStateLoad(universe, null)
+									Profile.toControlSaveStateLoad(universe, null),
+									false
 								);
 								venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 								universe.venueNext = venueNext;
@@ -1365,14 +1367,15 @@ class ControlBuilder
 							{
 								var venueNext: Venue = new VenueControls
 								(
-									Profile.toControlSaveStateLoad(universe, null)
+									Profile.toControlSaveStateLoad(universe, null),
+									false
 								);
 								venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 								universe.venueNext = venueNext;
 							}
 						);
 
-						var venueNext: Venue = new VenueControls(controlConfirm);
+						var venueNext: Venue = new VenueControls(controlConfirm, false);
 						venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 
 						universe.venueNext = venueNext;
@@ -1430,7 +1433,8 @@ class ControlBuilder
 					universe.world = saveStateReloaded.world;
 					var venueNext: Venue = new VenueControls
 					(
-						universe.controlBuilder.worldLoad(universe, null)
+						universe.controlBuilder.worldLoad(universe, null),
+						false
 					);
 					venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 					universe.venueNext = venueNext;
@@ -1446,7 +1450,7 @@ class ControlBuilder
 		{
 			var venueNext: Venue = new VenueControls
 			(
-				universe.controlBuilder.worldLoad(universe, null)
+				universe.controlBuilder.worldLoad(universe, null), false
 			);
 			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 			universe.venueNext = venueNext;
@@ -1518,7 +1522,7 @@ class ControlBuilder
 							universe, size, "Abandon the current game?", 
 							confirm, cancel
 						);
-						var venueConfirm = new VenueControls(controlConfirm);
+						var venueConfirm = new VenueControls(controlConfirm, false);
 						universe.venueNext = new VenueFader(venueConfirm, universe.venueCurrent, null, null);
 					},
 					null, null
@@ -1537,8 +1541,7 @@ class ControlBuilder
 					{
 						var venueFileUpload = new VenueFileUpload(null, null);
 
-						var venueMessageReadyToLoad = new VenueControls
-						(
+						var controlMessageReadyToLoad = 
 							universe.controlBuilder.message
 							(
 								universe,
@@ -1556,7 +1559,7 @@ class ControlBuilder
 
 										var venueNext: Venue = new VenueControls
 										(
-											universe.controlBuilder.game(universe, size)
+											universe.controlBuilder.game(universe, size), false
 										);
 										venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 										universe.venueNext = venueNext;
@@ -1572,27 +1575,33 @@ class ControlBuilder
 									);
 								},
 								null
-							)
+							);
+
+						var venueMessageReadyToLoad = new VenueControls
+						(
+							controlMessageReadyToLoad, false
+						);
+
+						var controlMessageCancelled = universe.controlBuilder.message
+						(
+							universe,
+							size,
+							new DataBinding("No file specified.", null, null),
+							() => // acknowlege
+							{
+								var venueNext: Venue = new VenueControls
+								(
+									universe.controlBuilder.game(universe, size), false
+								);
+								venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
+								universe.venueNext = venueNext;
+							},
+							false //?
 						);
 
 						var venueMessageCancelled = new VenueControls
 						(
-							universe.controlBuilder.message
-							(
-								universe,
-								size,
-								new DataBinding("No file specified.", null, null),
-								() => // acknowlege
-								{
-									var venueNext: Venue = new VenueControls
-									(
-										universe.controlBuilder.game(universe, size)
-									);
-									venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
-									universe.venueNext = venueNext;
-								},
-								false //?
-							)
+							controlMessageCancelled, false
 						);
 
 						venueFileUpload.venueNextIfFileSpecified = venueMessageReadyToLoad;
@@ -1616,7 +1625,7 @@ class ControlBuilder
 					{
 						var venueGame = new VenueControls
 						(
-							universe.controlBuilder.game(universe, size)
+							universe.controlBuilder.game(universe, size), false
 						);
 						universe.venueNext = new VenueFader(venueGame, universe.venueCurrent, null, null);
 					},

@@ -3,8 +3,7 @@ class ControlVisual extends ControlBase
 {
 	visual: DataBinding<any,Visual>;
 	colorBackground: Color;
-
-	styleName: string;
+	colorBorder: Color;
 
 	_drawPos: Coords;
 	_locatable: Locatable;
@@ -13,12 +12,14 @@ class ControlVisual extends ControlBase
 
 	constructor(
 		name: string, pos: Coords, size: Coords,
-		visual: DataBinding<any, Visual>, colorBackground: Color
+		visual: DataBinding<any, Visual>, colorBackground: Color,
+		colorBorder: Color
 	)
 	{
 		super(name, pos, size, null);
 		this.visual = visual;
 		this.colorBackground = colorBackground;
+		this.colorBorder = colorBorder;
 
 		// Helper variables.
 		this._drawPos = new Coords(0, 0, 0);
@@ -61,24 +62,28 @@ class ControlVisual extends ControlBase
 
 	draw(universe: Universe, display: Display, drawLoc: Disposition)
 	{
-		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
-		var style = this.style(universe);
-
-		var colorFill = this.colorBackground || style.colorFill;
-		display.drawRectangle
-		(
-			drawPos, this.size,
-			Color.systemColorGet(colorFill),
-			Color.systemColorGet(style.colorBorder),
-			null
-		);
-
-		var locatableEntity = this._locatableEntity;
-		locatableEntity.locatable().loc.pos.overwriteWith(drawPos);
-		drawPos.add(this._sizeHalf.overwriteWith(this.size).half());
 		var visualToDraw = this.visual.get();
-		var world = universe.world;
-		var place = (world == null ? null : world.placeCurrent);
-		visualToDraw.draw(universe, world, place, locatableEntity, display);
-	};
+		if (visualToDraw != null)
+		{
+			var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
+			var style = this.style(universe);
+
+			var colorFill = this.colorBackground || Color.Instances()._Transparent;
+			var colorBorder = this.colorBorder || style.colorBorder;
+			display.drawRectangle
+			(
+				drawPos, this.size,
+				Color.systemColorGet(colorFill),
+				Color.systemColorGet(colorBorder),
+				null
+			);
+
+			var locatableEntity = this._locatableEntity;
+			locatableEntity.locatable().loc.pos.overwriteWith(drawPos);
+			drawPos.add(this._sizeHalf.overwriteWith(this.size).half());
+			var world = universe.world;
+			var place = (world == null ? null : world.placeCurrent);
+			visualToDraw.draw(universe, world, place, locatableEntity, display);
+		}
+	}
 }

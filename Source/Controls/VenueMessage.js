@@ -33,7 +33,7 @@ class VenueMessage {
             if (this.venuePrev != null) {
                 venuesToLayer.push(this.venuePrev);
             }
-            venuesToLayer.push(new VenueControls(controlMessage));
+            venuesToLayer.push(new VenueControls(controlMessage, false));
             this._venueInner = new VenueLayered(venuesToLayer, null);
         }
         return this._venueInner;

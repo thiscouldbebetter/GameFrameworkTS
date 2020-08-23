@@ -23,30 +23,54 @@ class EquipmentUser extends EntityProperty {
         }
         else {
             var socketFoundName = socketFound.defnName;
-            message = this.equipItemEntityInSocketWithName(universe, world, place, itemEntityToEquip, socketFoundName, false);
+            message = this.equipItemEntityInSocketWithName(universe, world, place, entityEquipmentUser, itemEntityToEquip, socketFoundName, false);
         }
         return message;
     }
-    ;
-    equipItemEntityInSocketWithName(universe, world, place, itemEntityToEquip, socketName, includeSocketNameInMessage) {
+    equipItemEntityInFirstOpenQuickSlot(universe, world, place, entityEquipmentUser, itemEntityToEquip, includeSocketNameInMessage) {
+        var itemToEquipDefnName = itemEntityToEquip.item().defnName;
+        var socketFound = null;
+        var itemQuickSlotCount = 10;
+        for (var i = 0; i < itemQuickSlotCount; i++) {
+            var socketName = "Item" + i;
+            var socket = this.socketByName(socketName);
+            if (socketFound == null && socket.itemEntityEquipped == null) {
+                socketFound = socket;
+            }
+            else if (socket.itemEntityEquipped != null) {
+                var itemInSocketDefnName = socket.itemEntityEquipped.item().defnName;
+                if (itemInSocketDefnName == itemToEquipDefnName) {
+                    socketFound = socket;
+                    break;
+                }
+            }
+        }
+        if (socketFound != null) {
+            this.equipItemEntityInSocketWithName(universe, world, place, entityEquipmentUser, itemEntityToEquip, socketFound.defnName, includeSocketNameInMessage);
+        }
+    }
+    equipItemEntityInSocketWithName(universe, world, place, entityEquipmentUser, itemEntityToEquip, socketName, includeSocketNameInMessage) {
+        if (itemEntityToEquip == null) {
+            return "Nothing to equip!";
+        }
         var itemToEquip = itemEntityToEquip.item();
         var itemDefn = itemToEquip.defn(world);
         var equippable = itemEntityToEquip.equippable();
         var message = itemDefn.appearance;
-        var socket = this.socketGroup.socketsByDefnName.get(socketName);
+        var socket = this.socketByName(socketName);
         if (socket == null) {
             message += " cannot be equipped.";
         }
         else if (socket.itemEntityEquipped == itemEntityToEquip) {
             if (equippable != null) {
-                equippable.unequip(universe, world, place, itemEntityToEquip);
+                equippable.unequip(universe, world, place, entityEquipmentUser, itemEntityToEquip);
             }
             socket.itemEntityEquipped = null;
             message += " unequipped.";
         }
         else {
             if (equippable != null) {
-                equippable.equip(universe, world, place, itemEntityToEquip);
+                equippable.equip(universe, world, place, entityEquipmentUser, itemEntityToEquip);
             }
             socket.itemEntityEquipped = itemEntityToEquip;
             message += " equipped";
@@ -57,11 +81,13 @@ class EquipmentUser extends EntityProperty {
         }
         return message;
     }
-    ;
     itemEntityInSocketWithName(socketName) {
-        return this.socketGroup.socketsByDefnName.get(socketName).itemEntityEquipped;
+        var socket = this.socketByName(socketName);
+        return socket.itemEntityEquipped;
     }
-    ;
+    socketByName(socketName) {
+        return this.socketGroup.socketsByDefnName.get(socketName);
+    }
     unequipItemFromSocketWithName(world, socketName) {
         var message;
         var socketToUnequipFrom = this.socketGroup.socketsByDefnName.get(socketName);
@@ -90,8 +116,10 @@ class EquipmentUser extends EntityProperty {
             var socket = sockets[i];
             var socketItemEntity = socket.itemEntityEquipped;
             if (socketItemEntity != null) {
+                var socketItemDefnName = socketItemEntity.item().defnName;
                 if (itemEntitiesHeld.indexOf(socketItemEntity) == -1) {
-                    socket.itemEntityEquipped = null;
+                    var itemEntityOfSameType = itemEntitiesHeld.filter(x => x.item().defnName == socketItemDefnName)[0];
+                    socket.itemEntityEquipped = itemEntityOfSameType;
                 }
             }
         }
@@ -141,6 +169,11 @@ class EquipmentUser extends EntityProperty {
         var world = universe.world;
         var place = world.placeCurrent;
         var listHeight = 100;
+        var equipItemSelectedToSocketDefault = () => {
+            var itemEntityToEquip = equipmentUser.itemEntitySelected;
+            var message = equipmentUser.equipEntityWithItem(universe, world, place, entityEquipmentUser, itemEntityToEquip);
+            equipmentUser.statusMessage = message;
+        };
         var listEquippables = new ControlList("listEquippables", new Coords(10, 15, 0), // pos
         new Coords(70, listHeight, 0), // size
         new DataBinding(itemEntitiesEquippable, null, null), // items
@@ -148,23 +181,51 @@ class EquipmentUser extends EntityProperty {
         fontHeightSmall, new DataBinding(this, (c) => { return c.itemEntitySelected; }, (c, v) => { c.itemEntitySelected = v; }), // bindingForItemSelected
         DataBinding.fromGet((c) => c), // bindingForItemValue
         null, // bindingForIsEnabled
-        function confirm() {
+        equipItemSelectedToSocketDefault, null);
+        var equipItemSelectedToSocketSelected = () => {
             var itemEntityToEquip = equipmentUser.itemEntitySelected;
-            var message = equipmentUser.equipEntityWithItem(universe, world, place, entityEquipmentUser, itemEntityToEquip);
+            var message;
+            var socketSelected = equipmentUser.socketSelected;
+            if (socketSelected == null) {
+                message = equipmentUser.equipEntityWithItem(universe, world, place, entityEquipmentUser, itemEntityToEquip);
+            }
+            else {
+                message = equipmentUser.equipItemEntityInSocketWithName(universe, world, place, entityEquipmentUser, itemEntityToEquip, socketSelected.defnName, true // includeSocketNameInMessage
+                );
+            }
             equipmentUser.statusMessage = message;
-        }, null);
-        var listEquipped = new ControlList("listEquipped", new Coords(90, 15, 0), // pos
-        new Coords(100, listHeight, 0), // size
+        };
+        var equipItemSelectedInQuickSlot = (quickSlotNumber) => {
+            equipmentUser.equipItemEntityInSocketWithName(universe, universe.world, universe.world.placeCurrent, entityEquipmentUser, equipmentUser.itemEntitySelected, "Item" + quickSlotNumber, // socketName
+            true // includeSocketNameInMessage
+            );
+        };
+        var buttonEquip = new ControlButton("buttonEquip", new Coords(85, 50, 0), // pos
+        new Coords(10, 10, 0), // size
+        ">", // text
+        fontHeight * 0.8, true, // hasBorder
+        true, // isEnabled - todo
+        equipItemSelectedToSocketSelected, null, null);
+        var unequipFromSocketSelected = () => {
+            var socketToUnequipFrom = equipmentUser.socketSelected;
+            var message = equipmentUser.unequipItemFromSocketWithName(world, socketToUnequipFrom.defnName);
+            equipmentUser.statusMessage = message;
+        };
+        var buttonUnequip = new ControlButton("buttonEquip", new Coords(85, 65, 0), // pos
+        new Coords(10, 10, 0), // size
+        "<", // text
+        fontHeight * 0.8, true, // hasBorder
+        true, // isEnabled - todo
+        unequipFromSocketSelected, null, null);
+        var listEquipped = new ControlList("listEquipped", new Coords(100, 15, 0), // pos
+        new Coords(90, listHeight, 0), // size
         new DataBinding(sockets, null, null), // items
         new DataBinding(null, (c) => c.toString(world), null), // bindingForItemText
         fontHeightSmall, new DataBinding(this, (c) => c.socketSelected, (c, v) => { c.socketSelected = v; }), // bindingForItemSelected
         DataBinding.fromGet((c) => c), // bindingForItemValue
         null, // bindingForIsEnabled
-        function confirm() {
-            var socketToUnequipFrom = equipmentUser.socketSelected;
-            var message = equipmentUser.unequipItemFromSocketWithName(world, socketToUnequipFrom.defnName);
-            equipmentUser.statusMessage = message;
-        }, null);
+        unequipFromSocketSelected, // confirm
+        null);
         var back = function () {
             var venueNext = venuePrev;
             venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
@@ -179,7 +240,9 @@ class EquipmentUser extends EntityProperty {
             false, // isTextCentered
             "Equippable:", fontHeightSmall),
             listEquippables,
-            new ControlLabel("labelEquipped", new Coords(90, 5, 0), // pos
+            buttonEquip,
+            buttonUnequip,
+            new ControlLabel("labelEquipped", new Coords(100, 5, 0), // pos
             new Coords(100, 25, 0), // size
             false, // isTextCentered
             "Equipped:", fontHeightSmall),
@@ -189,7 +252,31 @@ class EquipmentUser extends EntityProperty {
             true, // isTextCentered
             new DataBinding(this, (c) => c.statusMessage, null), // text
             fontHeightSmall)
-        ], [new Action("Back", back)], [new ActionToInputsMapping("Back", [Input.Names().Escape], true)]);
+        ], [
+            new Action("Back", back),
+            new Action("EquipItemSelectedInQuickSlot0", () => equipItemSelectedInQuickSlot(0)),
+            new Action("EquipItemSelectedInQuickSlot1", () => equipItemSelectedInQuickSlot(1)),
+            new Action("EquipItemSelectedInQuickSlot2", () => equipItemSelectedInQuickSlot(2)),
+            new Action("EquipItemSelectedInQuickSlot3", () => equipItemSelectedInQuickSlot(3)),
+            new Action("EquipItemSelectedInQuickSlot4", () => equipItemSelectedInQuickSlot(4)),
+            new Action("EquipItemSelectedInQuickSlot5", () => equipItemSelectedInQuickSlot(5)),
+            new Action("EquipItemSelectedInQuickSlot6", () => equipItemSelectedInQuickSlot(6)),
+            new Action("EquipItemSelectedInQuickSlot7", () => equipItemSelectedInQuickSlot(7)),
+            new Action("EquipItemSelectedInQuickSlot8", () => equipItemSelectedInQuickSlot(8)),
+            new Action("EquipItemSelectedInQuickSlot9", () => equipItemSelectedInQuickSlot(9)),
+        ], [
+            new ActionToInputsMapping("Back", [Input.Names().Escape], true),
+            new ActionToInputsMapping("EquipItemSelectedInQuickSlot0", ["_0"], true),
+            new ActionToInputsMapping("EquipItemSelectedInQuickSlot1", ["_1"], true),
+            new ActionToInputsMapping("EquipItemSelectedInQuickSlot2", ["_2"], true),
+            new ActionToInputsMapping("EquipItemSelectedInQuickSlot3", ["_3"], true),
+            new ActionToInputsMapping("EquipItemSelectedInQuickSlot4", ["_4"], true),
+            new ActionToInputsMapping("EquipItemSelectedInQuickSlot5", ["_5"], true),
+            new ActionToInputsMapping("EquipItemSelectedInQuickSlot6", ["_6"], true),
+            new ActionToInputsMapping("EquipItemSelectedInQuickSlot7", ["_7"], true),
+            new ActionToInputsMapping("EquipItemSelectedInQuickSlot8", ["_8"], true),
+            new ActionToInputsMapping("EquipItemSelectedInQuickSlot9", ["_9"], true),
+        ]);
         if (includeTitleAndDoneButton) {
             var childControls = returnValue.children;
             childControls.splice(0, 0, new ControlLabel("labelEquipment", new Coords(100, -5, 0), // pos
@@ -211,5 +298,4 @@ class EquipmentUser extends EntityProperty {
         returnValue.scalePosAndSize(scaleMultiplier);
         return returnValue;
     }
-    ;
 }
