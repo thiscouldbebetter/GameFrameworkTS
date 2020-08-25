@@ -6,7 +6,7 @@ class VisualBar {
         this.color = color;
         this.amountCurrent = amountCurrent;
         this.amountMax = amountMax;
-        this.fractionBelowWhichToShow = fractionBelowWhichToShow || 1;
+        this.fractionBelowWhichToShow = fractionBelowWhichToShow;
         this._drawPos = new Coords(0, 0, 0);
         this._sizeCurrent = this.size.clone();
         this._sizeHalf = this.size.clone().half();
@@ -17,7 +17,9 @@ class VisualBar {
         var _amountCurrent = this.amountCurrent.contextSet(entity).get();
         var _amountMax = this.amountMax.contextSet(entity).get();
         var fractionCurrent = _amountCurrent / _amountMax;
-        if (fractionCurrent < this.fractionBelowWhichToShow) {
+        var shouldShow = (this.fractionBelowWhichToShow == null
+            || fractionCurrent < this.fractionBelowWhichToShow);
+        if (shouldShow) {
             wasVisible = true;
             var widthCurrent = fractionCurrent * this.size.x;
             this._sizeCurrent.x = widthCurrent;

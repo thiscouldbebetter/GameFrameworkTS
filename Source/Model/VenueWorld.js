@@ -14,7 +14,7 @@ class VenueWorld {
         universe.world = this.world;
         this.world.initialize(universe);
         var soundHelper = universe.soundHelper;
-        soundHelper.soundWithNamePlayAsMusic(universe, "Music");
+        soundHelper.soundWithNamePlayAsMusic(universe, "Music_Music");
         this.venueControls = new VenueControls(this.world.toControl(universe), true // ignoreKeyboardAndGamepadInputs 
         );
     }

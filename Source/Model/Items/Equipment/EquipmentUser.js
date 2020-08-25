@@ -263,7 +263,7 @@ class EquipmentUser extends EntityProperty {
             new Action("EquipItemSelectedInQuickSlot6", () => equipItemSelectedInQuickSlot(6)),
             new Action("EquipItemSelectedInQuickSlot7", () => equipItemSelectedInQuickSlot(7)),
             new Action("EquipItemSelectedInQuickSlot8", () => equipItemSelectedInQuickSlot(8)),
-            new Action("EquipItemSelectedInQuickSlot9", () => equipItemSelectedInQuickSlot(9)),
+            new Action("EquipItemSelectedInQuickSlot9", () => equipItemSelectedInQuickSlot(9))
         ], [
             new ActionToInputsMapping("Back", [Input.Names().Escape], true),
             new ActionToInputsMapping("EquipItemSelectedInQuickSlot0", ["_0"], true),
@@ -275,7 +275,7 @@ class EquipmentUser extends EntityProperty {
             new ActionToInputsMapping("EquipItemSelectedInQuickSlot6", ["_6"], true),
             new ActionToInputsMapping("EquipItemSelectedInQuickSlot7", ["_7"], true),
             new ActionToInputsMapping("EquipItemSelectedInQuickSlot8", ["_8"], true),
-            new ActionToInputsMapping("EquipItemSelectedInQuickSlot9", ["_9"], true),
+            new ActionToInputsMapping("EquipItemSelectedInQuickSlot9", ["_9"], true)
         ]);
         if (includeTitleAndDoneButton) {
             var childControls = returnValue.children;

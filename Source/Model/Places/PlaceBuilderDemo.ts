@@ -1766,7 +1766,7 @@ class PlaceBuilderDemo
 			(
 				new VisualImageFromLibrary
 				(
-					"Car/" + StringHelper.padStart("" + i, 2, "0")
+					"Car_" + StringHelper.padStart("" + i, 2, "0")
 				),
 				frameSizeScaled
 			);

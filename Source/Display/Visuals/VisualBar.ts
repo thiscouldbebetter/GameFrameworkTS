@@ -24,7 +24,7 @@ class VisualBar implements Visual
 		this.color = color;
 		this.amountCurrent = amountCurrent;
 		this.amountMax = amountMax;
-		this.fractionBelowWhichToShow = fractionBelowWhichToShow || 1;
+		this.fractionBelowWhichToShow = fractionBelowWhichToShow;
 
 		this._drawPos = new Coords(0, 0, 0);
 		this._sizeCurrent = this.size.clone();
@@ -40,7 +40,13 @@ class VisualBar implements Visual
 		var _amountMax: number = this.amountMax.contextSet(entity).get() as number;
 		var fractionCurrent = _amountCurrent / _amountMax;
 
-		if (fractionCurrent < this.fractionBelowWhichToShow)
+		var shouldShow =
+		(
+			this.fractionBelowWhichToShow == null
+			|| fractionCurrent < this.fractionBelowWhichToShow
+		);
+
+		if (shouldShow)
 		{
 			wasVisible = true;
 

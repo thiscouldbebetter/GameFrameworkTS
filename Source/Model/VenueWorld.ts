@@ -28,7 +28,7 @@ class VenueWorld implements Venue
 		this.world.initialize(universe);
 
 		var soundHelper = universe.soundHelper;
-		soundHelper.soundWithNamePlayAsMusic(universe, "Music");
+		soundHelper.soundWithNamePlayAsMusic(universe, "Music_Music");
 
 		this.venueControls = new VenueControls
 		(

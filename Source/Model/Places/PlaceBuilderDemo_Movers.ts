@@ -1094,6 +1094,8 @@ class PlaceBuilderDemo_Movers
 
 		var playerCollide = (universe: Universe, world: World, place: Place, entityPlayer: Entity, entityOther: Entity) =>
 		{
+			var soundHelper = universe.soundHelper;
+
 			var entityOtherDamager = entityOther.damager();
 			if (entityOtherDamager != null)
 			{
@@ -1102,6 +1104,8 @@ class PlaceBuilderDemo_Movers
 				entityPlayer.killable().damageApply(
 					universe, world, place, entityOther, entityPlayer, entityOtherDamager.damagePerHit
 				);
+
+				soundHelper.soundWithNamePlayAsEffect(universe, "Clang");
 			}
 			else if (entityOther.propertiesByName.get(Goal.name) != null)
 			{
@@ -1468,14 +1472,58 @@ class PlaceBuilderDemo_Movers
 			(universe: Universe, size: Coords, entity: Entity) =>
 		{
 			var world = universe.world;
-			var itemHolder = entity.itemHolder();
+			var place = world.placeCurrent;
 			var equipmentUser = entity.equipmentUser();
 
+			var childControls = new Array<ControlBase>();
+
+			var entityDimension = 10; // todo
 			var fontHeightInPixels = 10;
 			var margin = 10;
 
+			var playerVisualBarSize = new Coords(entityDimension * 3, entityDimension * .8, 0);
+
+			var killable = entity.killable();
+			var playerVisualHealthBar = new VisualBar
+			(
+				"H", // abbreviation
+				playerVisualBarSize,
+				Color.Instances().Red,
+				new DataBinding(null, (c: Entity) => killable.integrity, null),
+				new DataBinding(null, (c: Entity) => killable.integrityMax, null),
+				null // fractionBelowWhichToShow
+			);
+
+			var starvable = entity.starvable();
+			var playerVisualSatietyBar = new VisualBar
+			(
+				"F", // abbreviation
+				playerVisualBarSize,
+				Color.Instances().Brown,
+				new DataBinding(null, (c: any) => starvable.satiety, null ),
+				new DataBinding(null, (c: any) => starvable.satietyMax, null ),
+				null // fractionBelowWhichToShow
+			);
+
+			var playerVisualStatusInfo: Visual = new VisualStack
+			(
+				new Coords(0, playerVisualBarSize.y * 2, 0), // childSpacing
+				[ playerVisualHealthBar, playerVisualSatietyBar ]
+			);
+
+			var controlPlayerStatusInfo = new ControlVisual
+			(
+				"visualPlayerStatusInfo",
+				new Coords(4, 2, 0).multiplyScalar(playerVisualBarSize.y), // pos
+				new Coords(0, 0, 0), // size
+				DataBinding.fromContext(playerVisualStatusInfo),
+				null, null
+			);
+
+			childControls.push(controlPlayerStatusInfo);
+
 			var itemQuickSlotCount = 10;
-			var buttonsForItemQuickSlots = new Array<ControlBase>();
+
 			var buttonSize = new Coords(25, 25, 0);
 			var buttonWidthAll = itemQuickSlotCount * buttonSize.x;
 			var buttonMargin = (size.x - buttonWidthAll) / (itemQuickSlotCount + 1);
@@ -1499,7 +1547,10 @@ class PlaceBuilderDemo_Movers
 					true, // isEnabled,
 					() =>
 					{
-						itemHolder.equipItemInNumberedSlot(universe, entity, i)
+						var itemEntity =
+							equipmentUser.itemEntityInSocketWithName("Item" + i);
+						var item = itemEntity.item();
+						item.use(universe, world, place, entity, itemEntity);
 					},
 					null, // context
 					false // canBeHeldDown
@@ -1530,13 +1581,11 @@ class PlaceBuilderDemo_Movers
 					null, null // colorBackground, colorBorder
 				);
 
-				buttonsForItemQuickSlots.push(visualItemInQuickSlot);
-				buttonsForItemQuickSlots.push(button);
+				childControls.push(visualItemInQuickSlot);
+				childControls.push(button);
 
 				buttonPos.x += buttonSize.x + buttonMargin;
 			} 
-
-			var childControls = buttonsForItemQuickSlots;
 
 			var controlOverlayContainer = new ControlContainer
 			(
@@ -1597,7 +1646,7 @@ class PlaceBuilderDemo_Movers
 					place.size
 				);
 
-				universe.soundHelper.soundWithNamePlayAsEffect(universe, "Sound");
+				universe.soundHelper.soundWithNamePlayAsEffect(universe, "Effects_Sound");
 			}
 
 			var placeDefn = place.defn(world);

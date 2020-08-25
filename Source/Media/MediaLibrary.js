@@ -26,7 +26,41 @@ class MediaLibrary {
         this.collectionsByName.set("Fonts", this.fontsByName);
         this.collectionsByName.set("TextStrings", this.textStringsByName);
     }
-    static fromFileNames(contentPath, imageFileNames, effectFileNames, musicFileNames, videoFileNames, fontFileNames, textStringFileNames) {
+    static fromFilePaths(mediaFilePaths) {
+        var images = new Array();
+        var sounds = new Array();
+        var videos = new Array();
+        var fonts = new Array();
+        var textStrings = new Array();
+        var typesAndArraysByFileExtension = new Map([
+            ["jpg", [Image2, images]],
+            ["png", [Image2, images]],
+            ["svg", [Image2, images]],
+            ["mp3", [Sound, sounds]],
+            ["wav", [Sound, sounds]],
+            ["webm", [Video, videos]],
+            ["ttf", [Font, fonts]],
+            ["json", [TextString, textStrings]],
+            ["txt", [TextString, textStrings]],
+        ]);
+        for (var i = 0; i < mediaFilePaths.length; i++) {
+            var filePath = mediaFilePaths[i];
+            var filePathParts = filePath.split("/");
+            filePathParts.splice(0, 3); // Remove "../Content/[mediaType]/"
+            var fileName = filePathParts.join("_");
+            var fileStemAndExtension = fileName.split(".");
+            var fileStem = fileStemAndExtension[0];
+            var fileExtension = fileStemAndExtension[1];
+            var typeAndArray = typesAndArraysByFileExtension.get(fileExtension);
+            var mediaType = typeAndArray[0];
+            var mediaArray = typeAndArray[1];
+            var mediaObject = new mediaType(fileStem, filePath);
+            mediaArray.push(mediaObject);
+        }
+        var returnValue = new MediaLibrary(images, sounds, videos, fonts, textStrings);
+        return returnValue;
+    }
+    static fromFileNamesByCategory(contentPath, imageFileNames, effectFileNames, musicFileNames, videoFileNames, fontFileNames, textStringFileNames) {
         var mediaTypesPathsAndFileNames = [
             [Image2, "Images", imageFileNames],
             [Sound, "Audio/Effects", effectFileNames],

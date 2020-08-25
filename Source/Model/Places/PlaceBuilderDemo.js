@@ -1025,7 +1025,7 @@ class PlaceBuilderDemo {
         var frames = new Array();
         var frameSizeScaled = new Coords(4, 3, 0).multiplyScalar(entityDimension);
         for (var i = 0; i < 32; i++) {
-            var frame = new VisualImageScaled(new VisualImageFromLibrary("Car/" + StringHelper.padStart("" + i, 2, "0")), frameSizeScaled);
+            var frame = new VisualImageScaled(new VisualImageFromLibrary("Car_" + StringHelper.padStart("" + i, 2, "0")), frameSizeScaled);
             frames.push(frame);
         }
         var carVisualBody = new VisualDirectional(frames[0], // visualForNoDirection

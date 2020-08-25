@@ -48,7 +48,57 @@ class MediaLibrary
 		this.collectionsByName.set("TextStrings", this.textStringsByName);
 	}
 
-	static fromFileNames
+	static fromFilePaths(mediaFilePaths: string[])
+	{
+		var images = new Array<Image2>();
+		var sounds = new Array<Sound>();
+		var videos = new Array<Video>();
+		var fonts = new Array<Font>();
+		var textStrings = new Array<TextString>();
+
+		var typesAndArraysByFileExtension = new Map<string,Array<any>>
+		([
+			[ "jpg", [ Image2, images ] ],
+			[ "png", [ Image2, images ] ],
+			[ "svg", [ Image2, images ] ],
+
+			[ "mp3", [ Sound, sounds ] ],
+			[ "wav", [ Sound, sounds ] ],
+
+			[ "webm", [ Video, videos ] ],
+
+			[ "ttf", [ Font, fonts ] ],
+
+			[ "json", [ TextString, textStrings ] ],
+			[ "txt", [ TextString, textStrings ] ],
+		]);
+
+		for (var i = 0; i < mediaFilePaths.length; i++)
+		{
+			var filePath = mediaFilePaths[i];
+			var filePathParts = filePath.split("/");
+			filePathParts.splice(0, 3); // Remove "../Content/[mediaType]/"
+			var fileName = filePathParts.join("_");
+			var fileStemAndExtension = fileName.split(".");
+			var fileStem = fileStemAndExtension[0];
+			var fileExtension = fileStemAndExtension[1];
+			var typeAndArray =
+				typesAndArraysByFileExtension.get(fileExtension);
+			var mediaType = typeAndArray[0];
+			var mediaArray = typeAndArray[1];
+			var mediaObject = new mediaType(fileStem, filePath);
+			mediaArray.push(mediaObject);
+		}
+
+		var returnValue = new MediaLibrary
+		(
+			images, sounds, videos, fonts, textStrings
+		);
+
+		return returnValue;
+	}
+
+	static fromFileNamesByCategory
 	(
 		contentPath: string, imageFileNames: string[], effectFileNames: string[],
 		musicFileNames: string[], videoFileNames: string[], fontFileNames: string[],
