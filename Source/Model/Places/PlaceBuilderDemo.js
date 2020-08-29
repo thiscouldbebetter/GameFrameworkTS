@@ -152,6 +152,19 @@ class PlaceBuilderDemo {
         ];
         var mapSizeInCells = new Coords(mapCellSource[0].length, mapCellSource.length, 1);
         var mapCellSize = size.clone().divide(mapSizeInCells).ceiling();
+        /*
+        // Adding colliders this way slows things down too much.
+
+        var cellCollider = new Box(new Coords(0, 0, 0), mapCellSize);
+        var cellCollide = (u: Universe, w: World, p: Place, e0: Entity, e1: Entity) =>
+        {
+            return;
+        };
+        var cellCollidable = new Collidable
+        (
+            cellCollider, [ Collidable.name ], cellCollide
+        );
+        */
         var neighborOffsets = [
             // e, se, s, sw, w, nw, n, ne
             new Coords(1, 0, 0), new Coords(1, 1, 0), new Coords(0, 1, 0),
@@ -376,6 +389,7 @@ class PlaceBuilderDemo {
             }
             var cellVisual = new VisualGroup(cellVisuals);
             var cellAsEntity = new Entity(this.name + cellPosInCells.toString(), [
+                //cellCollidable.clone(),
                 new Drawable(cellVisual, null),
                 new DrawableCamera(),
                 new Locatable(new Disposition(cellPosInPixels, null, null))
@@ -1204,14 +1218,16 @@ class PlaceBuilderDemo {
     entityDefnBuildMeat(entityDimension) {
         var entityDimensionHalf = entityDimension / 2;
         var itemDefnMeatName = "Meat";
-        var itemMeatVisual = this.itemDefnsByName.get(itemDefnMeatName).visual;
+        var itemMeatDefn = this.itemDefnsByName.get(itemDefnMeatName);
+        var itemMeatVisual = itemMeatDefn.visual;
         var itemMeatCollider = new Sphere(new Coords(0, 0, 0), entityDimensionHalf);
         var itemMeatEntityDefn = new Entity(itemDefnMeatName, [
             new Item(itemDefnMeatName, 1),
             new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
             new Collidable(itemMeatCollider, null, null),
             new Drawable(itemMeatVisual, null),
-            new DrawableCamera()
+            new DrawableCamera(),
+            new Usable(itemMeatDefn.use)
         ]);
         return itemMeatEntityDefn;
     }
@@ -1966,7 +1982,7 @@ class PlaceBuilderDemo {
             ["Consumable"], // categoryNames
             (universe, world, place, entityUser, entityItem) => // use
              {
-                entityUser.starvable().satietyAdd(100);
+                entityUser.starvable().satietyAdd(10);
                 var item = entityItem.item();
                 entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
                 var message = "You eat the bread.";
@@ -1976,7 +1992,7 @@ class PlaceBuilderDemo {
             ["Consumable"], // categoryNames
             (universe, world, place, entityUser, entityItem) => // use
              {
-                entityUser.starvable().satietyAdd(50);
+                entityUser.starvable().satietyAdd(5);
                 var item = entityItem.item();
                 entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
                 var message = "You eat the fruit.";
@@ -1986,7 +2002,7 @@ class PlaceBuilderDemo {
             ["Consumable"], // categoryNames
             (universe, world, place, entityUser, entityItem) => // use
              {
-                entityUser.starvable().satietyAdd(200);
+                entityUser.starvable().satietyAdd(20);
                 var item = entityItem.item();
                 entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
                 var message = "You eat the meat.";
@@ -2031,7 +2047,6 @@ class PlaceBuilderDemo {
         var actionsAll = Action.Instances();
         var actions = [
             actionsAll.DoNothing,
-            actionsAll.ShowItems,
             actionsAll.ShowMenu,
             new Action("MoveDown", (universe, world, place, actor) => // perform
              {
@@ -2176,8 +2191,7 @@ class PlaceBuilderDemo {
         var inactivateFalse = false;
         var inactivateTrue = true;
         var actionToInputsMappings = [
-            new ActionToInputsMapping("ShowMenu", [inputNames.Escape], inactivateFalse),
-            new ActionToInputsMapping("ShowItems", [inputNames.Tab], inactivateFalse),
+            new ActionToInputsMapping("ShowMenu", [inputNames.Escape, inputNames.Tab], inactivateFalse),
             new ActionToInputsMapping("MoveDown", [inputNames.ArrowDown, inputNames.GamepadMoveDown + "0"], inactivateFalse),
             new ActionToInputsMapping("MoveLeft", [inputNames.ArrowLeft, inputNames.GamepadMoveLeft + "0"], inactivateFalse),
             new ActionToInputsMapping("MoveRight", [inputNames.ArrowRight, inputNames.GamepadMoveRight + "0"], inactivateFalse),

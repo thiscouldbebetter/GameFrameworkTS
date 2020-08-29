@@ -3,6 +3,7 @@ class ControlTextBox extends ControlBase
 {
 	_text: any;
 	numberOfCharsMax: number;
+	_isEnabled: DataBinding<any,boolean>;
 
 	cursorPos: number;
 
@@ -12,14 +13,20 @@ class ControlTextBox extends ControlBase
 	_textMargin: Coords;
 	_textSize: Coords;
 
-	constructor(name: string, pos: Coords, size: Coords, text: any, fontHeightInPixels: number, numberOfCharsMax: number)
+	constructor
+	(
+		name: string, pos: Coords, size: Coords, text: any,
+		fontHeightInPixels: number, numberOfCharsMax: number,
+		isEnabled: DataBinding<any,boolean>
+	)
 	{
 		super(name, pos, size, fontHeightInPixels);
 		this._text = text;
 		this.fontHeightInPixels = fontHeightInPixels;
 		this.numberOfCharsMax = numberOfCharsMax;
+		this._isEnabled = isEnabled;
 
-		this.cursorPos = this.text(null, null).length;
+		this.cursorPos = null;
 
 		// Helper variables.
 		this._drawPos = new Coords(0, 0, 0);
@@ -106,13 +113,11 @@ class ControlTextBox extends ControlBase
 
 			var charAtCursor = String.fromCharCode(charCodeAtCursor);
 
-			this.text
-			(
-				text.substr(0, this.cursorPos)
-					+ charAtCursor
-					+ text.substr(this.cursorPos + 1),
-				null
-			);
+			var textEdited = text.substr(0, this.cursorPos)
+				+ charAtCursor
+				+ text.substr(this.cursorPos + 1);
+
+			this.text(textEdited, null);
 		}
 		else if (actionNameToHandle.length == 1 || actionNameToHandle.startsWith("_") ) // printable character
 		{
@@ -130,13 +135,12 @@ class ControlTextBox extends ControlBase
 
 			if (this.numberOfCharsMax == null || text.length < this.numberOfCharsMax)
 			{
-				text = this.text
-				(
+				var textEdited = 
 					text.substr(0, this.cursorPos)
 						+ actionNameToHandle
-						+ text.substr(this.cursorPos),
-					null
-				);
+						+ text.substr(this.cursorPos);
+
+				text = this.text(textEdited, null);
 
 				this.cursorPos = NumberHelper.wrapToRangeMinMax
 				(
@@ -146,6 +150,23 @@ class ControlTextBox extends ControlBase
 		}
 
 		return true; // wasActionHandled
+	}
+
+	focusGain()
+	{
+		this.isHighlighted = true;
+		this.cursorPos = this.text(null, null).length;
+	}
+
+	focusLose()
+	{
+		this.isHighlighted = false;
+		this.cursorPos = null;
+	}
+
+	isEnabled()
+	{
+		return (this._isEnabled.get());
 	}
 
 	mouseClick(mouseClickPos: Coords)

@@ -208,21 +208,14 @@ class World
 		}
 	}
 
-	timePlayingAsString(universe: Universe, isShort: boolean)
+	timePlayingAsStringShort(universe: Universe)
 	{
-		var secondsPlayingTotal = Math.floor
-		(
-			this.timerTicksSoFar / universe.timerHelper.ticksPerSecond
-		);
-		var minutesPlayingTotal = Math.floor(secondsPlayingTotal / 60);
-		var hoursPlayingTotal = Math.floor(minutesPlayingTotal / 60);
+		return universe.timerHelper.ticksToStringH_M_S(this.timerTicksSoFar);
+	}
 
-		var timePlayingAsString =
-			hoursPlayingTotal + " " + (isShort ? "h" : "hours") + " "
-			+ (minutesPlayingTotal % 60) + " " + (isShort ? "m" : "minutes") + " "
-			+ (secondsPlayingTotal % 60) + " " + (isShort ? "s" : "seconds");
-
-		return timePlayingAsString;
+	timePlayingAsStringLong(universe: Universe)
+	{
+		return universe.timerHelper.ticksToStringHours_Minutes_Seconds(this.timerTicksSoFar);
 	}
 
 	updateForTimerTick(universe: Universe)

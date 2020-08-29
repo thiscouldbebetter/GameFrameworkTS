@@ -28,7 +28,6 @@ class Action
 class Action_Instances
 {
 	DoNothing: Action;
-	ShowItems: Action;
 	ShowMenu: Action;
 
 	constructor()
@@ -42,9 +41,9 @@ class Action_Instances
 			}
 		);
 
-		this.ShowItems = new Action
+		this.ShowMenu = new Action
 		(
-			"ShowItems",
+			"ShowMenu",
 			(universe: Universe, world: World, place: Place, actor: Entity) => // perform
 			{
 				var control = actor.controllable().toControl
@@ -52,21 +51,6 @@ class Action_Instances
 					universe, universe.display.sizeInPixels, actor, universe.venueCurrent, true
 				);
 				var venueNext: Venue = new VenueControls(control, false);
-				venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
-				universe.venueNext = venueNext;
-			}
-		);
-
-		this.ShowMenu = new Action
-		(
-			"ShowMenu",
-			(universe: Universe, world: World, place: Place, actor: Entity) => // perform
-			{
-				var venueNext: Venue = new VenueControls
-				(
-					universe.controlBuilder.gameAndSettings(universe, null),
-					false
-				);
 				venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 				universe.venueNext = venueNext;
 			}

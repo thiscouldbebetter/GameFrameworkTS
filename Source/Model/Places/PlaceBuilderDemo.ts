@@ -262,6 +262,20 @@ class PlaceBuilderDemo
 		);
 		var mapCellSize = size.clone().divide(mapSizeInCells).ceiling();
 
+		/*
+		// Adding colliders this way slows things down too much.
+
+		var cellCollider = new Box(new Coords(0, 0, 0), mapCellSize);
+		var cellCollide = (u: Universe, w: World, p: Place, e0: Entity, e1: Entity) =>
+		{
+			return;
+		};
+		var cellCollidable = new Collidable
+		(
+			cellCollider, [ Collidable.name ], cellCollide
+		);
+		*/
+
 		var neighborOffsets =
 		[
 			// e, se, s, sw, w, nw, n, ne
@@ -619,7 +633,6 @@ class PlaceBuilderDemo
 					}
 				}
 
-
 				if (borderTypeIndex != null)
 				{
 					var neighborTerrainToUse = neighborTerrains[neighborIndexToUse];
@@ -636,6 +649,7 @@ class PlaceBuilderDemo
 			(
 				this.name + cellPosInCells.toString(),
 				[
+					//cellCollidable.clone(),
 					new Drawable(cellVisual, null),
 					new DrawableCamera(),
 					new Locatable(new Disposition(cellPosInPixels, null, null))
@@ -2068,7 +2082,8 @@ class PlaceBuilderDemo
 		var entityDimensionHalf = entityDimension / 2;
 
 		var itemDefnMeatName = "Meat";
-		var itemMeatVisual = this.itemDefnsByName.get(itemDefnMeatName).visual;
+		var itemMeatDefn = this.itemDefnsByName.get(itemDefnMeatName);
+		var itemMeatVisual = itemMeatDefn.visual;
 		var itemMeatCollider = new Sphere(new Coords(0, 0, 0), entityDimensionHalf);
 
 		var itemMeatEntityDefn = new Entity
@@ -2079,7 +2094,8 @@ class PlaceBuilderDemo
 				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
 				new Collidable(itemMeatCollider, null, null),
 				new Drawable(itemMeatVisual, null),
-				new DrawableCamera()
+				new DrawableCamera(),
+				new Usable(itemMeatDefn.use)
 			]
 		);
 
@@ -3660,7 +3676,7 @@ class PlaceBuilderDemo
 				[ "Consumable" ], // categoryNames
 				(universe: Universe, world: World, place: Place, entityUser: Entity, entityItem: Entity) => // use
 				{
-					entityUser.starvable().satietyAdd(100);
+					entityUser.starvable().satietyAdd(10);
 					var item = entityItem.item();
 					entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
 					var message = "You eat the bread.";
@@ -3675,7 +3691,7 @@ class PlaceBuilderDemo
 				[ "Consumable" ], // categoryNames
 				(universe: Universe, world: World, place: Place, entityUser: Entity, entityItem: Entity) => // use
 				{
-					entityUser.starvable().satietyAdd(50);
+					entityUser.starvable().satietyAdd(5);
 					var item = entityItem.item();
 					entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
 					var message = "You eat the fruit.";
@@ -3690,7 +3706,7 @@ class PlaceBuilderDemo
 				[ "Consumable" ], // categoryNames
 				(universe: Universe, world: World, place: Place, entityUser: Entity, entityItem: Entity) => // use
 				{
-					entityUser.starvable().satietyAdd(200);
+					entityUser.starvable().satietyAdd(20);
 					var item = entityItem.item();
 					entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
 					var message = "You eat the meat.";
@@ -3757,7 +3773,6 @@ class PlaceBuilderDemo
 		var actions =
 		[
 			actionsAll.DoNothing,
-			actionsAll.ShowItems,
 			actionsAll.ShowMenu,
 			new Action
 			(
@@ -4009,8 +4024,7 @@ class PlaceBuilderDemo
 
 		var actionToInputsMappings =
 		[
-			new ActionToInputsMapping("ShowMenu", [ inputNames.Escape ], inactivateFalse),
-			new ActionToInputsMapping("ShowItems", [ inputNames.Tab ], inactivateFalse),
+			new ActionToInputsMapping("ShowMenu", [ inputNames.Escape, inputNames.Tab ], inactivateFalse),
 
 			new ActionToInputsMapping("MoveDown", 	[ inputNames.ArrowDown, inputNames.GamepadMoveDown + "0" ], inactivateFalse),
 			new ActionToInputsMapping("MoveLeft", 	[ inputNames.ArrowLeft, inputNames.GamepadMoveLeft + "0" ], inactivateFalse),

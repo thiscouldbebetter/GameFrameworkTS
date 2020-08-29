@@ -9,15 +9,15 @@ class Profile {
         return this.saveStates.filter(x => x.name == this.saveStateNameSelected)[0];
     }
     // controls
-    static toControlSaveStateLoad(universe, size) {
+    static toControlSaveStateLoad(universe, size, venuePrev) {
         var isLoadNotSave = true;
-        return Profile.toControlSaveStateLoadOrSave(universe, size, isLoadNotSave);
+        return Profile.toControlSaveStateLoadOrSave(universe, size, venuePrev, isLoadNotSave);
     }
-    static toControlSaveStateSave(universe, size) {
+    static toControlSaveStateSave(universe, size, venuePrev) {
         var isLoadNotSave = false;
-        return Profile.toControlSaveStateLoadOrSave(universe, size, isLoadNotSave);
+        return Profile.toControlSaveStateLoadOrSave(universe, size, venuePrev, isLoadNotSave);
     }
-    static toControlSaveStateLoadOrSave(universe, size, isLoadNotSave) {
+    static toControlSaveStateLoadOrSave(universe, size, venuePrev, isLoadNotSave) {
         if (size == null) {
             size = universe.display.sizeDefault();
         }
@@ -31,7 +31,7 @@ class Profile {
         var loadNewWorld = () => {
             var world = World.create(universe);
             universe.world = world;
-            var venueNext = new VenueControls(controlBuilder.worldDetail(universe, size), false);
+            var venueNext = new VenueControls(controlBuilder.worldDetail(universe, size, universe.venueCurrent), false);
             venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
             universe.venueNext = venueNext;
         };
@@ -64,7 +64,7 @@ class Profile {
             var nowAsString = now.toStringYYYYMMDD_HHMM_SS();
             var place = world.placeCurrent;
             var placeName = place.name;
-            var timePlayingAsString = world.timePlayingAsString(universe, true); // isShort
+            var timePlayingAsString = world.timePlayingAsStringShort(universe);
             var displaySize = universe.display.sizeInPixels;
             var displayFull = new Display2D([displaySize], null, null, null, null, true); // isInvisible
             displayFull.initialize(universe);
@@ -104,7 +104,7 @@ class Profile {
             var message = (wasSaveSuccessful ? "Game saved successfully." : "Save failed due to errors.");
             var controlMessage = universe.controlBuilder.message(universe, size, new DataBinding(message, null, null), () => // acknowledge
              {
-                var venueNext = new VenueControls(universe.controlBuilder.game(universe, null), false);
+                var venueNext = new VenueControls(universe.controlBuilder.game(universe, null, universe.venueCurrent), false);
                 venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
                 universe.venueNext = venueNext;
             }, false);
@@ -140,7 +140,7 @@ class Profile {
                 new FileHelper().saveBytesToFileWithName(worldCompressedAsBytes, universe.world.name + ".json.lzw");
                 var controlMessage = universe.controlBuilder.message(universe, size, new DataBinding(message, null, null), () => // acknowledge
                  {
-                    var venueNext = new VenueControls(universe.controlBuilder.game(universe, null), false);
+                    var venueNext = new VenueControls(universe.controlBuilder.game(universe, null, universe.venueCurrent), false);
                     venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
                     universe.venueNext = venueNext;
                 }, null);
@@ -160,7 +160,7 @@ class Profile {
                     var worldSerialized = compressor.decompressString(worldAsStringCompressed);
                     var worldDeserialized = universe.serializer.deserialize(worldSerialized);
                     universe.world = worldDeserialized;
-                    var venueNext = new VenueControls(universe.controlBuilder.game(universe, size), false);
+                    var venueNext = new VenueControls(universe.controlBuilder.game(universe, size, universe.venueCurrent), false);
                     venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
                     universe.venueNext = venueNext;
                 }
@@ -172,7 +172,7 @@ class Profile {
             var venueMessageReadyToLoad = new VenueControls(controlMessageReadyToLoad, false);
             var controlMessageCancelled = universe.controlBuilder.message(universe, size, new DataBinding("No file specified.", null, null), () => // acknowlege
              {
-                var venueNext = new VenueControls(universe.controlBuilder.game(universe, size), false);
+                var venueNext = new VenueControls(universe.controlBuilder.game(universe, size, universe.venueCurrent), false);
                 venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
                 universe.venueNext = venueNext;
             }, false //?
@@ -194,23 +194,16 @@ class Profile {
             var profile = universe.profile;
             ArrayHelper.remove(profile.saveStates, saveStateSelected);
             storageHelper.save(profile.name, profile);
-            var venueNext = new VenueControls(Profile.toControlSaveStateLoad(universe, size), false);
-            venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
-            universe.venueNext = venueNext;
         };
         var deleteSaveSelected = () => {
             var saveStateSelected = universe.profile.saveStateSelected();
             if (saveStateSelected == null) {
                 return;
             }
-            var controlConfirm = universe.controlBuilder.confirm(universe, size, "Delete save state \""
+            var controlConfirm = universe.controlBuilder.confirmAndReturnToVenue(universe, size, "Delete save state \""
                 + saveStateSelected.timeSaved.toStringYYYY_MM_DD_HH_MM_SS()
-                + "\"?", deleteSaveSelectedConfirm, () => // cancel
-             {
-                var venueNext = new VenueControls(Profile.toControlSaveStateLoad(universe, size), false);
-                venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
-                universe.venueNext = venueNext;
-            });
+                + "\"?", universe.venueCurrent, deleteSaveSelectedConfirm, null // cancel
+            );
             var venueNext = new VenueControls(controlConfirm, false);
             venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
             universe.venueNext = venueNext;
@@ -342,7 +335,9 @@ class Profile {
             new ControlTextBox("textBoxName", new Coords(50, 50, 0), // pos
             new Coords(100, 20, 0), // size
             new DataBinding(universe.profile, (c) => { return c.name; }, (c, v) => { c.name = v; }), // text
-            fontHeight, null),
+            fontHeight, null, // charCountMax
+            new DataBinding(true, null, null) // isEnabled
+            ),
             new ControlButton("buttonCreate", new Coords(50, 80, 0), // pos
             new Coords(45, buttonHeightBase, 0), // size
             "Create", fontHeight, true, // hasBorder
@@ -366,7 +361,7 @@ class Profile {
                 storageHelper.save("ProfileNames", profileNames);
                 storageHelper.save(profileName, profile);
                 universe.profile = profile;
-                var venueNext = new VenueControls(Profile.toControlSaveStateLoad(universe, null), false);
+                var venueNext = new VenueControls(Profile.toControlSaveStateLoad(universe, null, universe.venueCurrent), false);
                 venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
                 universe.venueNext = venueNext;
             }, null, null),
@@ -376,7 +371,7 @@ class Profile {
             true, // isEnabled
             () => // click
              {
-                var venueNext = new VenueControls(Profile.toControlProfileSelect(universe, null), false);
+                var venueNext = new VenueControls(Profile.toControlProfileSelect(universe, null, universe.venueCurrent), false);
                 venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
                 universe.venueNext = venueNext;
             }, null, null),
@@ -384,7 +379,7 @@ class Profile {
         returnValue.scalePosAndSize(scaleMultiplier);
         return returnValue;
     }
-    static toControlProfileSelect(universe, size) {
+    static toControlProfileSelect(universe, size, venuePrev) {
         if (size == null) {
             size = universe.display.sizeDefault();
         }
@@ -413,7 +408,7 @@ class Profile {
             var profileSelected = listProfiles.itemSelected(null);
             universe.profile = profileSelected;
             if (profileSelected != null) {
-                var venueNext = new VenueControls(Profile.toControlSaveStateLoad(universe, null), false);
+                var venueNext = new VenueControls(Profile.toControlSaveStateLoad(universe, null, universe.venueCurrent), false);
                 venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
                 universe.venueNext = venueNext;
             }
@@ -447,21 +442,14 @@ class Profile {
             var profileNames = storageHelper.load("ProfileNames");
             ArrayHelper.remove(profileNames, profileSelected.name);
             storageHelper.save("ProfileNames", profileNames);
-            var venueNext = new VenueControls(Profile.toControlProfileSelect(universe, size), false);
-            venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
-            universe.venueNext = venueNext;
         };
         var deleteProfile = () => {
             var profileSelected = universe.profile;
             if (profileSelected != null) {
-                var controlConfirm = universe.controlBuilder.confirm(universe, size, "Delete profile \""
+                var controlConfirm = universe.controlBuilder.confirmAndReturnToVenue(universe, size, "Delete profile \""
                     + profileSelected.name
-                    + "\"?", deleteProfileConfirm, () => // cancel
-                 {
-                    var venueNext = new VenueControls(Profile.toControlProfileSelect(universe, size), false);
-                    venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
-                    universe.venueNext = venueNext;
-                });
+                    + "\"?", universe.venueCurrent, deleteProfileConfirm, null // cancel
+                );
                 var venueNext = new VenueControls(controlConfirm, false);
                 venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
                 universe.venueNext = venueNext;
@@ -515,7 +503,7 @@ class Profile {
             true, // isEnabled
             () => // click
              {
-                var venueNext = new VenueControls(universe.controlBuilder.title(universe, null), false);
+                var venueNext = venuePrev;
                 venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
                 universe.venueNext = venueNext;
             }, null, null),

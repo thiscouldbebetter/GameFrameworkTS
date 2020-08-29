@@ -1105,7 +1105,7 @@ class PlaceBuilderDemo_Movers
 					universe, world, place, entityOther, entityPlayer, entityOtherDamager.damagePerHit
 				);
 
-				soundHelper.soundWithNamePlayAsEffect(universe, "Clang");
+				soundHelper.soundWithNamePlayAsEffect(universe, "Effects_Clang");
 			}
 			else if (entityOther.propertiesByName.get(Goal.name) != null)
 			{
@@ -1218,7 +1218,7 @@ class PlaceBuilderDemo_Movers
 
 		var journal = new Journal
 		([
-			new JournalEntry("First Entry", "I started a journal.  We'll see how it goes."),
+			new JournalEntry(0, "First Entry", "I started a journal.  We'll see how it goes."),
 		]);
 		var journalKeeper = new JournalKeeper(journal);
 
@@ -1283,8 +1283,8 @@ class PlaceBuilderDemo_Movers
 
 		var starvable = new Starvable
 		(
-			1200, // satietyMax
-			.05, // satietyToLosePerTick
+			100, // satietyMax
+			.004, // satietyToLosePerTick
 			(u: Universe, w: World, p: Place, e: Entity) =>
 			{
 				e.killable().integritySubtract(.1);
@@ -1361,7 +1361,7 @@ class PlaceBuilderDemo_Movers
 			var labelSize = new Coords(300, fontHeight * 1.25, 0);
 			var marginX = fontHeight;
 
-			var timePlayingAsString = universe.world.timePlayingAsString(universe, false);
+			var timePlayingAsString = universe.world.timePlayingAsStringLong(universe);
 
 			var statusAsControl = new ControlContainer
 			(
@@ -1441,6 +1441,11 @@ class PlaceBuilderDemo_Movers
 				universe, tabPageSize, entity, venuePrev, false // includeTitleAndDoneButton
 			);
 
+			var gameAndSettingsMenuAsControl = universe.controlBuilder.gameAndSettings
+			(
+				universe, tabPageSize, universe.venueCurrent, false // includeResumeButton
+			);
+
 			var back = () =>
 			{
 				var venueNext: Venue = venuePrev;
@@ -1460,7 +1465,8 @@ class PlaceBuilderDemo_Movers
 					equipmentUserAsControl,
 					crafterAsControl,
 					skillLearnerAsControl,
-					journalKeeperAsControl
+					journalKeeperAsControl,
+					gameAndSettingsMenuAsControl
 				],
 				fontHeight,
 				back
@@ -1532,6 +1538,28 @@ class PlaceBuilderDemo_Movers
 			(
 				buttonMargin, size.y - margin - buttonSize.y, 0
 			);
+
+			var useItemInQuickSlot = (slotNumber: number) =>
+			{
+				equipmentUser.useItemInSocketNumbered
+				(
+					universe, world, place, entity, slotNumber
+				);
+			};
+			var buttonClicks =
+			[
+				() => useItemInQuickSlot(0),
+				() => useItemInQuickSlot(1),
+				() => useItemInQuickSlot(2),
+				() => useItemInQuickSlot(3),
+				() => useItemInQuickSlot(4),
+				() => useItemInQuickSlot(5),
+				() => useItemInQuickSlot(6),
+				() => useItemInQuickSlot(7),
+				() => useItemInQuickSlot(8),
+				() => useItemInQuickSlot(9),
+			];
+
 			for (var i = 0; i < itemQuickSlotCount; i++)
 			{
 				var buttonText = "\n   " + i;
@@ -1545,13 +1573,7 @@ class PlaceBuilderDemo_Movers
 					fontHeightInPixels,
 					false, // hasBorder
 					true, // isEnabled,
-					() =>
-					{
-						var itemEntity =
-							equipmentUser.itemEntityInSocketWithName("Item" + i);
-						var item = itemEntity.item();
-						item.use(universe, world, place, entity, itemEntity);
-					},
+					buttonClicks[i],
 					null, // context
 					false // canBeHeldDown
 				);
@@ -1624,6 +1646,8 @@ class PlaceBuilderDemo_Movers
 			var inputHelper = universe.inputHelper;
 			if (inputHelper.isMouseClicked(null))
 			{
+				/*
+				// teleport 
 				inputHelper.isMouseClicked(false);
 
 				var playerPos = entityPlayer.locatable().loc.pos;
@@ -1647,6 +1671,7 @@ class PlaceBuilderDemo_Movers
 				);
 
 				universe.soundHelper.soundWithNamePlayAsEffect(universe, "Effects_Sound");
+				*/
 			}
 
 			var placeDefn = place.defn(world);

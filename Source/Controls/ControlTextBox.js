@@ -1,11 +1,12 @@
 "use strict";
 class ControlTextBox extends ControlBase {
-    constructor(name, pos, size, text, fontHeightInPixels, numberOfCharsMax) {
+    constructor(name, pos, size, text, fontHeightInPixels, numberOfCharsMax, isEnabled) {
         super(name, pos, size, fontHeightInPixels);
         this._text = text;
         this.fontHeightInPixels = fontHeightInPixels;
         this.numberOfCharsMax = numberOfCharsMax;
-        this.cursorPos = this.text(null, null).length;
+        this._isEnabled = isEnabled;
+        this.cursorPos = null;
         // Helper variables.
         this._drawPos = new Coords(0, 0, 0);
         this._drawPosText = new Coords(0, 0, 0);
@@ -52,9 +53,10 @@ class ControlTextBox extends ControlBase {
             }
             charCodeAtCursor = NumberHelper.wrapToRangeMinMax(charCodeAtCursor, "A".charCodeAt(0), "z".charCodeAt(0) + 1);
             var charAtCursor = String.fromCharCode(charCodeAtCursor);
-            this.text(text.substr(0, this.cursorPos)
+            var textEdited = text.substr(0, this.cursorPos)
                 + charAtCursor
-                + text.substr(this.cursorPos + 1), null);
+                + text.substr(this.cursorPos + 1);
+            this.text(textEdited, null);
         }
         else if (actionNameToHandle.length == 1 || actionNameToHandle.startsWith("_")) {
             if (actionNameToHandle.startsWith("_")) {
@@ -66,13 +68,25 @@ class ControlTextBox extends ControlBase {
                 }
             }
             if (this.numberOfCharsMax == null || text.length < this.numberOfCharsMax) {
-                text = this.text(text.substr(0, this.cursorPos)
+                var textEdited = text.substr(0, this.cursorPos)
                     + actionNameToHandle
-                    + text.substr(this.cursorPos), null);
+                    + text.substr(this.cursorPos);
+                text = this.text(textEdited, null);
                 this.cursorPos = NumberHelper.wrapToRangeMinMax(this.cursorPos + 1, 0, text.length + 1);
             }
         }
         return true; // wasActionHandled
+    }
+    focusGain() {
+        this.isHighlighted = true;
+        this.cursorPos = this.text(null, null).length;
+    }
+    focusLose() {
+        this.isHighlighted = false;
+        this.cursorPos = null;
+    }
+    isEnabled() {
+        return (this._isEnabled.get());
     }
     mouseClick(mouseClickPos) {
         var parent = this.parent;

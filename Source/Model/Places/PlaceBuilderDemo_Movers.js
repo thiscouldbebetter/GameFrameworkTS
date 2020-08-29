@@ -542,7 +542,7 @@ class PlaceBuilderDemo_Movers {
             if (entityOtherDamager != null) {
                 universe.collisionHelper.collideCollidables(entityPlayer, entityOther);
                 entityPlayer.killable().damageApply(universe, world, place, entityOther, entityPlayer, entityOtherDamager.damagePerHit);
-                soundHelper.soundWithNamePlayAsEffect(universe, "Clang");
+                soundHelper.soundWithNamePlayAsEffect(universe, "Effects_Clang");
             }
             else if (entityOther.propertiesByName.get(Goal.name) != null) {
                 var itemDefnKeyName = "Key";
@@ -608,7 +608,7 @@ class PlaceBuilderDemo_Movers {
         ]);
         var equipmentUser = new EquipmentUser(equipmentSocketDefnGroup);
         var journal = new Journal([
-            new JournalEntry("First Entry", "I started a journal.  We'll see how it goes."),
+            new JournalEntry(0, "First Entry", "I started a journal.  We'll see how it goes."),
         ]);
         var journalKeeper = new JournalKeeper(journal);
         var itemHolder = new ItemHolder([
@@ -643,8 +643,8 @@ class PlaceBuilderDemo_Movers {
             );
             universe.venueNext = venueMessage;
         });
-        var starvable = new Starvable(1200, // satietyMax
-        .05, // satietyToLosePerTick
+        var starvable = new Starvable(100, // satietyMax
+        .004, // satietyToLosePerTick
         (u, w, p, e) => {
             e.killable().integritySubtract(.1);
         });
@@ -685,7 +685,7 @@ class PlaceBuilderDemo_Movers {
             var fontHeight = 10;
             var labelSize = new Coords(300, fontHeight * 1.25, 0);
             var marginX = fontHeight;
-            var timePlayingAsString = universe.world.timePlayingAsString(universe, false);
+            var timePlayingAsString = universe.world.timePlayingAsStringLong(universe);
             var statusAsControl = new ControlContainer("Status", new Coords(0, 0, 0), // pos
             size.clone().addDimensions(0, -30, 0), // size
             // children
@@ -715,6 +715,8 @@ class PlaceBuilderDemo_Movers {
             );
             var journalKeeperAsControl = entity.journalKeeper().toControl(universe, tabPageSize, entity, venuePrev, false // includeTitleAndDoneButton
             );
+            var gameAndSettingsMenuAsControl = universe.controlBuilder.gameAndSettings(universe, tabPageSize, universe.venueCurrent, false // includeResumeButton
+            );
             var back = () => {
                 var venueNext = venuePrev;
                 venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
@@ -727,7 +729,8 @@ class PlaceBuilderDemo_Movers {
                 equipmentUserAsControl,
                 crafterAsControl,
                 skillLearnerAsControl,
-                journalKeeperAsControl
+                journalKeeperAsControl,
+                gameAndSettingsMenuAsControl
             ], fontHeight, back);
             return returnValue;
         };
@@ -759,15 +762,26 @@ class PlaceBuilderDemo_Movers {
             var buttonWidthAll = itemQuickSlotCount * buttonSize.x;
             var buttonMargin = (size.x - buttonWidthAll) / (itemQuickSlotCount + 1);
             var buttonPos = new Coords(buttonMargin, size.y - margin - buttonSize.y, 0);
+            var useItemInQuickSlot = (slotNumber) => {
+                equipmentUser.useItemInSocketNumbered(universe, world, place, entity, slotNumber);
+            };
+            var buttonClicks = [
+                () => useItemInQuickSlot(0),
+                () => useItemInQuickSlot(1),
+                () => useItemInQuickSlot(2),
+                () => useItemInQuickSlot(3),
+                () => useItemInQuickSlot(4),
+                () => useItemInQuickSlot(5),
+                () => useItemInQuickSlot(6),
+                () => useItemInQuickSlot(7),
+                () => useItemInQuickSlot(8),
+                () => useItemInQuickSlot(9),
+            ];
             for (var i = 0; i < itemQuickSlotCount; i++) {
                 var buttonText = "\n   " + i;
                 var button = new ControlButton("buttonItemQuickSlot" + i, buttonPos.clone(), buttonSize, buttonText, fontHeightInPixels, false, // hasBorder
                 true, // isEnabled,
-                () => {
-                    var itemEntity = equipmentUser.itemEntityInSocketWithName("Item" + i);
-                    var item = itemEntity.item();
-                    item.use(universe, world, place, entity, itemEntity);
-                }, null, // context
+                buttonClicks[i], null, // context
                 false // canBeHeldDown
                 );
                 var visualItemInQuickSlot = new ControlVisual("visualItemInQuickSlot", buttonPos.clone(), buttonSize, new DataBinding(i, (c) => {
@@ -802,11 +816,32 @@ class PlaceBuilderDemo_Movers {
         var playerActivityPerform = (universe, world, place, entityPlayer, activity) => {
             var inputHelper = universe.inputHelper;
             if (inputHelper.isMouseClicked(null)) {
+                /*
+                // teleport
                 inputHelper.isMouseClicked(false);
+
                 var playerPos = entityPlayer.locatable().loc.pos;
                 var camera = place.camera();
-                playerPos.overwriteWith(inputHelper.mouseClickPos).divide(universe.display.scaleFactor()).add(camera.loc.pos).subtract(camera.viewSizeHalf).trimToRangeMax(place.size);
+
+                playerPos.overwriteWith
+                (
+                    inputHelper.mouseClickPos
+                ).divide
+                (
+                    universe.display.scaleFactor()
+                ).add
+                (
+                    camera.loc.pos
+                ).subtract
+                (
+                    camera.viewSizeHalf
+                ).trimToRangeMax
+                (
+                    place.size
+                );
+
                 universe.soundHelper.soundWithNamePlayAsEffect(universe, "Effects_Sound");
+                */
             }
             var placeDefn = place.defn(world);
             var actionsByName = placeDefn.actionsByName;

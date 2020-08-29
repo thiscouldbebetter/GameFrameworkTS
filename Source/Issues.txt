@@ -24,6 +24,7 @@ Movers - Animals - Lairs and Sleep
 Movers - Animals - Procreation
 
 Movers - Desire System
+Movers - Differential Terrain Traversal
 
 Movers - Enemies - Patrols
 Movers - Enemies - Enemy Generators Use Generator Class
@@ -32,14 +33,18 @@ Movers - Enemies - Types - Bombers
 Movers - Enemies - Types - Hiders
 Movers - Enemies - Types - Shooters
 
-Movers - Vehicles - Differential Terrain Traversal
-
 Movers - Player - Sword Swings
 
-Places - Load/Unload Zones in Terrarium
+Places - Whole Boundary is Big Portal
+Places - Darkness and Lighting
+Places - Day/Night Cycle
+Places - Dungeon
 Places - Map Tiles as Obstacles
 Places - Map Tiles from Images
 Places - Map Tiles - Generated
+Places - Terrarium - Load/Unload Zones
+Places - Parallax
+Places - Weather
 
 Sound - Hitting Obstacle
 Sound - Shooting Gun
@@ -51,9 +56,15 @@ Sound - Music on Title Screen
 
 Visuals - Non-Linear Animation System
 
+Visuals - Symbols - Bread Slice for Food
+Visuals - Symbols - Heart for Health
+
 Fixes
 -----
 
+Controls - ControlTabbed - Mouse Support
+
+Items - Special Swords Held by Blade
 Items - Sword Swing Direction is Wrong
 Items - Bowstring Direction Doesn't Change with Player
 

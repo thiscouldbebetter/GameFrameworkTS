@@ -2,12 +2,10 @@
 class ControlTextarea extends ControlBase {
     constructor(name, pos, size, text, fontHeightInPixels, isEnabled) {
         super(name, pos, size, fontHeightInPixels);
-        this.name = name;
-        this.pos = pos;
-        this.size = size;
         this._text = text;
-        this.fontHeightInPixels = fontHeightInPixels;
         this._isEnabled = isEnabled;
+        this.charCountMax = null; // todo
+        this.cursorPos = null;
         this.lineSpacing = 1.2 * this.fontHeightInPixels; // hack
         var scrollbarWidth = this.lineSpacing;
         this.scrollbar = new ControlScrollbar(new Coords(this.size.x - scrollbarWidth, 0, 0), // pos
@@ -21,40 +19,49 @@ class ControlTextarea extends ControlBase {
         this._mouseClickPos = new Coords(0, 0, 0);
     }
     actionHandle(actionNameToHandle, universe) {
-        var wasActionHandled = false;
+        var text = this.text(null);
         var controlActionNames = ControlActionNames.Instances();
-        if (actionNameToHandle == controlActionNames.ControlIncrement) {
-            // todo
-            // this.itemSelectedNextInDirection(1);
-            wasActionHandled = true;
-        }
-        else if (actionNameToHandle == controlActionNames.ControlDecrement) {
-            // todo
-            // this.itemSelectedNextInDirection(-1);
-            wasActionHandled = true;
+        if (actionNameToHandle == controlActionNames.ControlCancel
+            || actionNameToHandle == Input.Names().Backspace) {
+            this.text(text.substr(0, text.length - 1));
+            this.cursorPos = NumberHelper.wrapToRangeMinMax(this.cursorPos - 1, 0, text.length + 1);
         }
         else if (actionNameToHandle == controlActionNames.ControlConfirm) {
-            // todo
-            /*
-            if (this.confirm != null)
-            {
-                this.confirm();
-                wasActionHandled = true;
-            }
-            */
-            wasActionHandled = true;
+            this.cursorPos = NumberHelper.wrapToRangeMinMax(this.cursorPos + 1, 0, text.length + 1);
         }
-        return wasActionHandled;
+        else if (actionNameToHandle.length == 1 || actionNameToHandle.startsWith("_")) {
+            if (actionNameToHandle.startsWith("_")) {
+                if (actionNameToHandle == "_") {
+                    actionNameToHandle = " ";
+                }
+                else {
+                    actionNameToHandle = actionNameToHandle.substr(1);
+                }
+            }
+            if (this.charCountMax == null || text.length < this.charCountMax) {
+                var textEdited = text.substr(0, this.cursorPos)
+                    + actionNameToHandle
+                    + text.substr(this.cursorPos);
+                text = this.text(textEdited);
+                this.cursorPos = NumberHelper.wrapToRangeMinMax(this.cursorPos + 1, 0, text.length + 1);
+            }
+        }
+        return true; // wasActionHandled
     }
-    ;
+    focusGain() {
+        this.isHighlighted = true;
+        this.cursorPos = this.text(null).length;
+    }
+    focusLose() {
+        this.isHighlighted = false;
+        this.cursorPos = null;
+    }
     indexOfFirstLineVisible() {
         return this.scrollbar.sliderPosInItems();
     }
-    ;
     indexOfLastLineVisible() {
         return this.indexOfFirstLineVisible() + Math.floor(this.scrollbar.windowSizeInItems) - 1;
     }
-    ;
     indexOfLineSelected(valueToSet) {
         var returnValue = valueToSet;
         if (valueToSet == null) {
@@ -68,14 +75,17 @@ class ControlTextarea extends ControlBase {
     isEnabled() {
         return (this._isEnabled.get());
     }
-    text() {
+    text(value) {
+        if (value != null) {
+            this._text.set(value);
+        }
         return this._text.get();
     }
     textAsLines() {
         this._textAsLines = [];
         var charWidthInPixels = this.fontHeightInPixels / 2; // hack
         var charsPerLine = Math.floor(this.size.x / charWidthInPixels);
-        var textComplete = this.text();
+        var textComplete = this.text(null);
         var textLength = textComplete.length;
         var i = 0;
         while (i < textLength) {
@@ -141,8 +151,14 @@ class ControlTextarea extends ControlBase {
         var textMarginLeft = 2;
         var itemPosY = drawPos.y;
         var lines = this.textAsLines();
-        if (lines == null) {
+        if (lines == null || lines.length == 0) {
             return;
+        }
+        if (this.isHighlighted) {
+            // todo - Cursor positioning.
+            var lineIndexFinal = lines.length - 1;
+            var lineFinal = lines[lineIndexFinal];
+            lines[lineIndexFinal] = lineFinal + "_";
         }
         var numberOfLinesVisible = Math.floor(this.size.y / itemSizeY);
         var indexStart = this.indexOfFirstLineVisible();

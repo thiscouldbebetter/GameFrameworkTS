@@ -94,12 +94,26 @@ class ControlBuilder {
         ], null, null);
         return returnValue;
     }
-    ;
     confirm(universe, size, message, confirm, cancel) {
         return this.choice(universe, size, new DataBinding(message, null, null), ["Confirm", "Cancel"], [confirm, cancel], null);
     }
+    confirmAndReturnToVenue(universe, size, message, venuePrev, confirm, cancel) {
+        var confirmThenReturnToVenuePrev = () => {
+            confirm();
+            var venueNext = new VenueFader(venuePrev, universe.venueCurrent, null, null);
+            universe.venueNext = venueNext;
+        };
+        var cancelThenReturnToVenuePrev = () => {
+            if (cancel != null) {
+                cancel();
+            }
+            var venueNext = new VenueFader(venuePrev, universe.venueCurrent, null, null);
+            universe.venueNext = venueNext;
+        };
+        return this.choice(universe, size, new DataBinding(message, null, null), ["Confirm", "Cancel"], [confirmThenReturnToVenuePrev, cancelThenReturnToVenuePrev], null);
+    }
     ;
-    game(universe, size) {
+    game(universe, size, venuePrev) {
         if (size == null) {
             size = universe.display.sizeDefault().clone();
         }
@@ -119,7 +133,7 @@ class ControlBuilder {
         var row3PosY = row2PosY + rowHeight;
         var row4PosY = row3PosY + rowHeight;
         var back = () => {
-            var venueNext = new VenueControls(universe.controlBuilder.gameAndSettings(universe, size), false);
+            var venueNext = venuePrev;
             venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
             universe.venueNext = venueNext;
         };
@@ -132,7 +146,7 @@ class ControlBuilder {
             true, // isEnabled
             () => // click
              {
-                var venueNext = new VenueControls(Profile.toControlSaveStateSave(universe, size), false);
+                var venueNext = new VenueControls(Profile.toControlSaveStateSave(universe, size, universe.venueCurrent), false);
                 venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
                 universe.venueNext = venueNext;
             }, null, null),
@@ -141,7 +155,7 @@ class ControlBuilder {
             true, // isEnabled
             () => // click
              {
-                var venueNext = new VenueControls(Profile.toControlSaveStateLoad(universe, null), false);
+                var venueNext = new VenueControls(Profile.toControlSaveStateLoad(universe, null, universe.venueCurrent), false);
                 venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
                 universe.venueNext = venueNext;
             }, null, null),
@@ -172,7 +186,7 @@ class ControlBuilder {
                     universe.venueNext = venueNext;
                 }, () => // cancel
                  {
-                    var venueNext = new VenueControls(universe.controlBuilder.gameAndSettings(universe, size), false);
+                    var venueNext = venuePrev;
                     venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
                     universe.venueNext = venueNext;
                 });
@@ -190,7 +204,7 @@ class ControlBuilder {
         return returnValue;
     }
     ;
-    gameAndSettings(universe, size) {
+    gameAndSettings(universe, size, venuePrev, includeResumeButton) {
         if (size == null) {
             size = universe.display.sizeDefault().clone();
         }
@@ -205,12 +219,7 @@ class ControlBuilder {
         var row0PosY = margin;
         var row1PosY = row0PosY + rowHeight;
         var row2PosY = row1PosY + rowHeight;
-        var back = () => {
-            var venueNext = new VenueWorld(universe.world);
-            venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
-            universe.venueNext = venueNext;
-        };
-        var returnValue = new ControlContainer("Game", this._zeroes, // pos
+        var returnValue = new ControlContainer("Game", this._zeroes.clone(), // pos
         this.sizeBase.clone(), 
         // children
         [
@@ -220,7 +229,7 @@ class ControlBuilder {
             true, // isEnabled
             () => // click
              {
-                var venueNext = new VenueControls(universe.controlBuilder.game(universe, size), false);
+                var venueNext = new VenueControls(universe.controlBuilder.game(universe, null, universe.venueCurrent), false);
                 venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
                 universe.venueNext = venueNext;
             }, null, null),
@@ -230,16 +239,28 @@ class ControlBuilder {
             true, // isEnabled
             () => // click
              {
-                var venueNext = new VenueControls(universe.controlBuilder.settings(universe, null), false);
+                var venueNext = new VenueControls(universe.controlBuilder.settings(universe, null, universe.venueCurrent), false);
                 venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
                 universe.venueNext = venueNext;
             }, null, null),
-            new ControlButton("buttonResume", new Coords(70, row2PosY, 0), // pos
+        ], [], // actions
+        [] // mappings
+        );
+        if (includeResumeButton) {
+            var back = () => {
+                var venueNext = venuePrev;
+                venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
+                universe.venueNext = venueNext;
+            };
+            var buttonResume = new ControlButton("buttonResume", new Coords(70, row2PosY, 0), // pos
             new Coords(60, buttonHeight, 0), // size
             "Resume", fontHeight, true, // hasBorder
             true, // isEnabled
-            back, null, null),
-        ], [new Action("Back", back)], [new ActionToInputsMapping("Back", ["Escape"], true)]);
+            back, null, null);
+            returnValue.children.push(buttonResume);
+            returnValue.actions.push(new Action("Back", back));
+            returnValue._actionToInputsMappings.push(new ActionToInputsMapping("Back", ["Escape"], true));
+        }
         returnValue.scalePosAndSize(scaleMultiplier);
         return returnValue;
     }
@@ -325,18 +346,11 @@ class ControlBuilder {
             true, // isEnabled
             () => {
                 var venueInputs = universe.venueCurrent;
-                var controlConfirm = universe.controlBuilder.confirm(universe, size, "Are you sure you want to restore defaults?", () => // confirm
+                var controlConfirm = universe.controlBuilder.confirmAndReturnToVenue(universe, size, "Are you sure you want to restore defaults?", venueInputs, () => // confirm
                  {
                     placeDefn.actionToInputsMappingsRestoreDefaults();
-                    var venueNext = venueInputs;
-                    venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
-                    universe.venueNext = venueNext;
-                }, () => // cancel
-                 {
-                    var venueNext = venueInputs;
-                    venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
-                    universe.venueNext = venueNext;
-                });
+                }, null // cancel
+                );
                 var venueNext = new VenueControls(controlConfirm, false);
                 venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
                 universe.venueNext = venueNext;
@@ -381,7 +395,7 @@ class ControlBuilder {
         return this.choice(universe, size, message, optionNames, optionFunctions, showMessageOnly);
     }
     ;
-    settings(universe, size) {
+    settings(universe, size, venuePrev) {
         if (size == null) {
             size = universe.display.sizeDefault();
         }
@@ -398,8 +412,7 @@ class ControlBuilder {
         var row3PosY = row2PosY + rowHeight;
         var row4PosY = row3PosY + rowHeight;
         var back = function () {
-            var control = universe.controlBuilder.gameAndSettings(universe, size);
-            var venueNext = new VenueControls(control, false);
+            var venueNext = venuePrev;
             venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
             universe.venueNext = venueNext;
         };
@@ -457,7 +470,7 @@ class ControlBuilder {
                 display.canvas = null; // hack
                 display.initialize(universe);
                 platformHelper.initialize(universe);
-                var venueNext = new VenueControls(universe.controlBuilder.settings(universe, null), false);
+                var venueNext = new VenueControls(universe.controlBuilder.settings(universe, null, universe.venueCurrent), false);
                 venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
                 universe.venueNext = venueNext;
             }, null, null),
@@ -537,7 +550,7 @@ class ControlBuilder {
             var venueMessage = VenueMessage.fromText("Loading profiles...");
             var venueTask = new VenueTask(venueMessage, () => // perform
              {
-                var result = Profile.toControlProfileSelect(universe, null);
+                var result = Profile.toControlProfileSelect(universe, null, universe.venueCurrent);
                 return result;
             }, (universe, result) => // done
              {
@@ -570,7 +583,7 @@ class ControlBuilder {
         return returnValue;
     }
     ;
-    worldDetail(universe, size) {
+    worldDetail(universe, size, venuePrev) {
         if (size == null) {
             size = universe.display.sizeDefault();
         }
@@ -633,7 +646,7 @@ class ControlBuilder {
             true, // isEnabled
             () => // click
              {
-                var venueNext = new VenueControls(Profile.toControlSaveStateLoad(universe, null), false);
+                var venueNext = venuePrev;
                 venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
                 universe.venueNext = venueNext;
             }, null, null),
@@ -645,9 +658,9 @@ class ControlBuilder {
              {
                 var saveState = universe.profile.saveStateSelected();
                 var saveStateName = saveState.name;
-                var controlConfirm = universe.controlBuilder.confirm(universe, size, "Delete save \""
+                var controlConfirm = universe.controlBuilder.confirmAndReturnToVenue(universe, size, "Delete save \""
                     + saveStateName
-                    + "\"?", () => // confirm
+                    + "\"?", universe.venueCurrent, () => // confirm
                  {
                     var storageHelper = universe.storageHelper;
                     var profile = universe.profile;
@@ -656,15 +669,8 @@ class ControlBuilder {
                     storageHelper.save(profile.name, profile);
                     universe.world = null;
                     storageHelper.delete(saveStateName);
-                    var venueNext = new VenueControls(Profile.toControlSaveStateLoad(universe, null), false);
-                    venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
-                    universe.venueNext = venueNext;
-                }, () => // cancel
-                 {
-                    var venueNext = new VenueControls(Profile.toControlSaveStateLoad(universe, null), false);
-                    venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
-                    universe.venueNext = venueNext;
-                });
+                }, null // cancel
+                );
                 var venueNext = new VenueControls(controlConfirm, false);
                 venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
                 universe.venueNext = venueNext;
@@ -750,7 +756,7 @@ class ControlBuilder {
                         var worldSerialized = compressor.decompressString(worldAsStringCompressed);
                         var worldDeserialized = universe.serializer.deserialize(worldSerialized);
                         universe.world = worldDeserialized;
-                        var venueNext = new VenueControls(universe.controlBuilder.game(universe, size), false);
+                        var venueNext = new VenueControls(universe.controlBuilder.game(universe, size, universe.venueCurrent), false);
                         venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
                         universe.venueNext = venueNext;
                     }
@@ -762,7 +768,7 @@ class ControlBuilder {
                 var venueMessageReadyToLoad = new VenueControls(controlMessageReadyToLoad, false);
                 var controlMessageCancelled = universe.controlBuilder.message(universe, size, new DataBinding("No file specified.", null, null), () => // acknowlege
                  {
-                    var venueNext = new VenueControls(universe.controlBuilder.game(universe, size), false);
+                    var venueNext = new VenueControls(universe.controlBuilder.game(universe, size, universe.venueCurrent), false);
                     venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
                     universe.venueNext = venueNext;
                 }, false //?
@@ -778,7 +784,7 @@ class ControlBuilder {
             true, // isEnabled
             () => // click
              {
-                var venueGame = new VenueControls(universe.controlBuilder.game(universe, size), false);
+                var venueGame = new VenueControls(universe.controlBuilder.game(universe, size, universe.venueCurrent), false);
                 universe.venueNext = new VenueFader(venueGame, universe.venueCurrent, null, null);
             }, null, null),
         ], null, null);

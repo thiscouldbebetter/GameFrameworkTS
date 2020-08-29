@@ -246,6 +246,7 @@ class EquipmentUser extends EntityProperty
 			var itemEquipped = entityItemEquipped.item();
 			itemEquipped.use(universe, world, place, actor, entityItemEquipped);
 		}
+		this.unequipItemsNoLongerHeld(actor);
 	}
 
 	// control

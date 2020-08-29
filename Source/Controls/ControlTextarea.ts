@@ -4,6 +4,8 @@ class ControlTextarea extends ControlBase
 	_text: DataBinding<any, string>;
 	_isEnabled: DataBinding<any, boolean>;
 
+	charCountMax: number;
+	cursorPos: number;
 	lineSpacing: number;
 	scrollbar: ControlScrollbar;
 
@@ -20,12 +22,11 @@ class ControlTextarea extends ControlBase
 	)
 	{
 		super(name, pos, size, fontHeightInPixels);
-		this.name = name;
-		this.pos = pos;
-		this.size = size;
 		this._text = text;
-		this.fontHeightInPixels = fontHeightInPixels;
 		this._isEnabled = isEnabled;
+
+		this.charCountMax = null; // todo
+		this.cursorPos = null;
 
 		this.lineSpacing = 1.2 * this.fontHeightInPixels; // hack
 
@@ -46,46 +47,127 @@ class ControlTextarea extends ControlBase
 		this._mouseClickPos = new Coords(0, 0, 0);
 	}
 
-	actionHandle(actionNameToHandle: string, universe: Universe)
+	actionHandle(actionNameToHandle: string, universe: Universe): boolean
 	{
-		var wasActionHandled = false;
+		var text = this.text(null);
+
 		var controlActionNames = ControlActionNames.Instances();
-		if (actionNameToHandle == controlActionNames.ControlIncrement)
+		if
+		(
+			actionNameToHandle == controlActionNames.ControlCancel
+			|| actionNameToHandle == Input.Names().Backspace
+		)
 		{
-			// todo
-			// this.itemSelectedNextInDirection(1);
-			wasActionHandled = true;
-		}
-		else if (actionNameToHandle == controlActionNames.ControlDecrement)
-		{
-			// todo
-			// this.itemSelectedNextInDirection(-1);
-			wasActionHandled = true;
+			this.text(text.substr(0, text.length - 1));
+
+			this.cursorPos = NumberHelper.wrapToRangeMinMax
+			(
+				this.cursorPos - 1, 0, text.length + 1
+			);
 		}
 		else if (actionNameToHandle == controlActionNames.ControlConfirm)
 		{
-			// todo
-			/*
-			if (this.confirm != null)
-			{
-				this.confirm();
-				wasActionHandled = true;
-			}
-			*/
-			wasActionHandled = true;
+			this.cursorPos = NumberHelper.wrapToRangeMinMax(this.cursorPos + 1, 0, text.length + 1);
 		}
-		return wasActionHandled;
-	};
+		/* // todo - No-keyboard support.
+		else if
+		(
+			actionNameToHandle == controlActionNames.ControlIncrement
+			|| actionNameToHandle == controlActionNames.ControlDecrement
+		)
+		{
+			// This is a bit counterintuitive.
+			var direction = (actionNameToHandle == controlActionNames.ControlIncrement ? -1 : 1);
+
+			var charCodeAtCursor =
+			(
+				this.cursorPos < text.length ? text.charCodeAt(this.cursorPos) : "A".charCodeAt(0) - 1
+			);
+
+			if (charCodeAtCursor == "Z".charCodeAt(0) && direction == 1)
+			{
+				charCodeAtCursor = "a".charCodeAt(0);
+			}
+			else if (charCodeAtCursor == "a".charCodeAt(0) && direction == -1)
+			{
+				charCodeAtCursor = "Z".charCodeAt(0);
+			}
+			else
+			{
+				charCodeAtCursor = charCodeAtCursor + direction;
+			}
+
+			charCodeAtCursor = NumberHelper.wrapToRangeMinMax
+			(
+				charCodeAtCursor,
+				"A".charCodeAt(0),
+				"z".charCodeAt(0) + 1
+			);
+
+			var charAtCursor = String.fromCharCode(charCodeAtCursor);
+
+			this.text
+			(
+				text.substr(0, this.cursorPos)
+					+ charAtCursor
+					+ text.substr(this.cursorPos + 1)
+			);
+		}
+		*/
+		else if (actionNameToHandle.length == 1 || actionNameToHandle.startsWith("_") ) // printable character
+		{
+			if (actionNameToHandle.startsWith("_"))
+			{
+				if (actionNameToHandle == "_")
+				{
+					actionNameToHandle = " ";
+				}
+				else
+				{
+					actionNameToHandle = actionNameToHandle.substr(1);
+				}
+			}
+
+			if (this.charCountMax == null || text.length < this.charCountMax)
+			{
+				var textEdited = 
+					text.substr(0, this.cursorPos)
+						+ actionNameToHandle
+						+ text.substr(this.cursorPos)
+
+				text = this.text(textEdited);
+
+				this.cursorPos = NumberHelper.wrapToRangeMinMax
+				(
+					this.cursorPos + 1, 0, text.length + 1
+				);
+			}
+		}
+
+		return true; // wasActionHandled
+	}
+
+	focusGain()
+	{
+		this.isHighlighted = true;
+		this.cursorPos = this.text(null).length;
+	}
+
+	focusLose()
+	{
+		this.isHighlighted = false;
+		this.cursorPos = null;
+	}
 
 	indexOfFirstLineVisible()
 	{
 		return this.scrollbar.sliderPosInItems();
-	};
+	}
 
 	indexOfLastLineVisible()
 	{
 		return this.indexOfFirstLineVisible() + Math.floor(this.scrollbar.windowSizeInItems) - 1;
-	};
+	}
 
 	indexOfLineSelected(valueToSet: number)
 	{
@@ -106,8 +188,13 @@ class ControlTextarea extends ControlBase
 		return (this._isEnabled.get());
 	}
 
-	text()
+	text(value: string)
 	{
+		if (value != null)
+		{
+			this._text.set(value);
+		}
+
 		return this._text.get();
 	}
 
@@ -117,7 +204,7 @@ class ControlTextarea extends ControlBase
 
 		var charWidthInPixels = this.fontHeightInPixels / 2; // hack
 		var charsPerLine = Math.floor(this.size.x / charWidthInPixels);
-		var textComplete = this.text();
+		var textComplete = this.text(null);
 		var textLength = textComplete.length;
 		var i = 0;
 		while (i < textLength)
@@ -215,9 +302,18 @@ class ControlTextarea extends ControlBase
 
 		var lines = this.textAsLines();
 
-		if (lines == null)
+		if (lines == null || lines.length == 0)
 		{
 			return;
+		}
+
+		if (this.isHighlighted)
+		{
+			// todo - Cursor positioning.
+
+			var lineIndexFinal = lines.length - 1;
+			var lineFinal = lines[lineIndexFinal];
+			lines[lineIndexFinal] = lineFinal + "_";
 		}
 
 		var numberOfLinesVisible = Math.floor(this.size.y / itemSizeY);

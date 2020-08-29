@@ -35,5 +35,4 @@ class ControlBase
 	{
 		return universe.controlStyle; // todo
 	}
-
 }

@@ -120,14 +120,11 @@ class World {
             this.placeCurrent.initialize(universe, this);
         }
     }
-    timePlayingAsString(universe, isShort) {
-        var secondsPlayingTotal = Math.floor(this.timerTicksSoFar / universe.timerHelper.ticksPerSecond);
-        var minutesPlayingTotal = Math.floor(secondsPlayingTotal / 60);
-        var hoursPlayingTotal = Math.floor(minutesPlayingTotal / 60);
-        var timePlayingAsString = hoursPlayingTotal + " " + (isShort ? "h" : "hours") + " "
-            + (minutesPlayingTotal % 60) + " " + (isShort ? "m" : "minutes") + " "
-            + (secondsPlayingTotal % 60) + " " + (isShort ? "s" : "seconds");
-        return timePlayingAsString;
+    timePlayingAsStringShort(universe) {
+        return universe.timerHelper.ticksToStringH_M_S(this.timerTicksSoFar);
+    }
+    timePlayingAsStringLong(universe) {
+        return universe.timerHelper.ticksToStringHours_Minutes_Seconds(this.timerTicksSoFar);
     }
     updateForTimerTick(universe) {
         if (this.placeNext != null) {

@@ -3,6 +3,7 @@ class JournalKeeper extends EntityProperty
 {
 	journal: Journal;
 
+	isJournalEntrySelectedEditable: boolean;
 	journalEntrySelected: JournalEntry;
 	statusMessage: string;
 
@@ -14,9 +15,16 @@ class JournalKeeper extends EntityProperty
 
 	// Controls.
 
-	toControl(universe: Universe, size: Coords, entityJournalKeeper: Entity, venuePrev: Venue, includeTitleAndDoneButton: boolean)
+	toControl
+	(
+		universe: Universe, size: Coords, entityJournalKeeper: Entity,
+		venuePrev: Venue, includeTitleAndDoneButton: boolean
+	)
 	{
-		this.statusMessage = "Review journal entries.";
+		var world = universe.world;
+		var journalKeeper = entityJournalKeeper.journalKeeper();
+
+		this.statusMessage = "Read and edit journal entries.";
 
 		if (size == null)
 		{
@@ -50,6 +58,35 @@ class JournalKeeper extends EntityProperty
 				fontHeightSmall
 			),
 
+			new ControlButton
+			(
+				"buttonEntryNew",
+				new Coords(65, 5, 0), // pos
+				new Coords(30, 8, 0), // size
+				"New",
+				fontHeightSmall,
+				true, // hasBorder,
+				new DataBinding
+				(
+					this,
+					(c: JournalKeeper) => true, // todo
+					null
+				), // isEnabled
+				() =>
+				{
+					var journal = journalKeeper.journal;
+					var entryNew = new JournalEntry
+					(
+						world.timerTicksSoFar,
+						"-", // title
+						"", // body
+					);
+					journal.entries.push(entryNew);
+				}, // click
+				null, // context
+				false, // canBeHeldDown
+			),
+
 			new ControlList
 			(
 				"listEntries",
@@ -59,7 +96,7 @@ class JournalKeeper extends EntityProperty
 				new DataBinding
 				(
 					null,
-					(c: JournalEntry) => c.toString(),
+					(c: JournalEntry) => c.toString(universe),
 					null
 				), // bindingForItemText
 				fontHeightSmall,
@@ -67,7 +104,11 @@ class JournalKeeper extends EntityProperty
 				(
 					this,
 					(c: JournalKeeper) => c.journalEntrySelected,
-					(c: JournalKeeper, v: JournalEntry) => { c.journalEntrySelected = v; }
+					(c: JournalKeeper, v: JournalEntry) =>
+					{
+						c.journalEntrySelected = v;
+						c.isJournalEntrySelectedEditable = false;
+					}
 				), // bindingForItemSelected
 				DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
 				DataBinding.fromContext(true), // isEnabled
@@ -81,37 +122,176 @@ class JournalKeeper extends EntityProperty
 			new ControlLabel
 			(
 				"labelEntrySelected",
-				new Coords(105, 10, 0), // pos
+				new Coords(105, 5, 0), // pos
 				new Coords(100, 15, 0), // size
 				false, // isTextCentered
 				"Entry Selected:",
 				fontHeightSmall
 			),
 
+			new ControlButton
+			(
+				"buttonEntrySelectedEdit",
+				new Coords(146, 5, 0), // pos
+				new Coords(15, 8, 0), // size
+				"Lock",
+				fontHeightSmall,
+				true, // hasBorder,
+				new DataBinding
+				(
+					this,
+					(c: JournalKeeper) =>
+					(
+						c.journalEntrySelected != null
+						&& c.isJournalEntrySelectedEditable
+					),
+					null
+				), // isEnabled
+				() =>
+				{
+					journalKeeper.isJournalEntrySelectedEditable = false;
+				}, // click
+				null, // context
+				false, // canBeHeldDown
+			),
+
+			new ControlButton
+			(
+				"buttonEntrySelectedEdit",
+				new Coords(164, 5, 0), // pos
+				new Coords(15, 8, 0), // size
+				"Edit",
+				fontHeightSmall,
+				true, // hasBorder,
+				new DataBinding
+				(
+					this,
+					(c: JournalKeeper) =>
+					(
+						c.journalEntrySelected != null
+						&& c.isJournalEntrySelectedEditable == false
+					),
+					null
+				), // isEnabled
+				() =>
+				{
+					journalKeeper.isJournalEntrySelectedEditable = true;
+				}, // click
+				null, // context
+				false, // canBeHeldDown
+			),
+
+			new ControlButton
+			(
+				"buttonEntrySelectedDelete",
+				new Coords(182, 5, 0), // pos
+				new Coords(8, 8, 0), // size
+				"X",
+				fontHeightSmall,
+				true, // hasBorder,
+				new DataBinding
+				(
+					this,
+					(c: JournalKeeper) => c.journalEntrySelected != null, // todo
+					null
+				), // isEnabled
+				() =>
+				{
+					var controlConfirm = universe.controlBuilder.confirmAndReturnToVenue
+					(
+						universe,
+						universe.display.sizeInPixels, // size
+						"Are you sure you want to delete this entry?",
+						universe.venueCurrent,
+						() => // confirm
+						{
+							var journal = journalKeeper.journal;
+							var entryToDelete = journalKeeper.journalEntrySelected;
+							ArrayHelper.remove(journal.entries, entryToDelete);
+							journalKeeper.journalEntrySelected = null;
+						},
+						null // cancel
+					);
+
+					var venueNext: Venue = new VenueControls(controlConfirm, false);
+					venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
+					universe.venueNext = venueNext;
+
+				}, // click
+				null, // context
+				false // canBeHeldDown
+			),
+
 			new ControlLabel
 			(
-				"infoEntrySelected",
-				new Coords(105, 20, 0), // pos
-				new Coords(200, 15, 0), // size
+				"labelEntrySelectedTimeRecorded",
+				new Coords(105, 15, 0), // pos
+				new Coords(100, 15, 0), // size
+				false, // isTextCentered
+				new DataBinding
+				(
+					"Time Recorded:", null, null
+				),
+				fontHeightSmall
+			),
+
+			new ControlLabel
+			(
+				"labelEntrySelectedTimeRecorded",
+				new Coords(145, 15, 0), // pos
+				new Coords(100, 15, 0), // size
 				false, // isTextCentered
 				new DataBinding
 				(
 					this,
 					(c: JournalKeeper) =>
 					{
-						var j = c.journalEntrySelected;
-						return (j == null ? "-" : j.toString());
+						var entry = c.journalEntrySelected;
+						return (entry == null ? "-" : entry.timeRecordedAsStringH_M_S(universe));
 					},
 					null
-				), // text
+				),
 				fontHeightSmall
+			),
+
+			new ControlTextBox
+			(
+				"textTitle",
+				new Coords(105, 25, 0), // pos
+				new Coords(85, 10, 0), // size
+				new DataBinding
+				(
+					this,
+					(c: JournalKeeper) =>
+					{
+						var j = c.journalEntrySelected;
+						return (j == null ? "" : j.title);
+					},
+					(c: JournalKeeper, v: string) =>
+					{
+						var journalEntry = c.journalEntrySelected;
+						if (journalEntry != null)
+						{
+							journalEntry.title = v;
+						}
+					}
+				), // text
+				fontHeightSmall,
+				32, // charCountMax
+				new DataBinding
+				(
+					this,
+					(c: JournalKeeper) => 
+						(c.journalEntrySelected != null && c.isJournalEntrySelectedEditable),
+					null
+				) // isEnabled
 			),
 
 			new ControlTextarea
 			(
 				"textareaEntryBody",
-				new Coords(105, 30, 0), // pos
-				new Coords(85, 80, 0), // size
+				new Coords(105, 40, 0), // pos
+				new Coords(85, 70, 0), // size
 				new DataBinding
 				(
 					this,
@@ -120,10 +300,25 @@ class JournalKeeper extends EntityProperty
 						var j = c.journalEntrySelected;
 						return (j == null ? "" : j.body);
 					},
-					null
+					(c: JournalKeeper, v: string) =>
+					{
+						var journalEntry = c.journalEntrySelected;
+						if (journalEntry != null)
+						{
+							journalEntry.body = v;
+						}
+					}
 				), // text
 				fontHeightSmall,
-				new DataBinding(false, null, null) // isEnabled
+				new DataBinding
+				(
+					this,
+					(c: JournalKeeper) => 
+					{
+						return (c.journalEntrySelected != null && c.isJournalEntrySelectedEditable);
+					},
+					null
+				) // isEnabled
 			),
 
 			new ControlLabel
