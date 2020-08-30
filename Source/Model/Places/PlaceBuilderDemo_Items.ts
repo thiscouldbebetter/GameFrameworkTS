@@ -83,13 +83,20 @@ class PlaceBuilderDemo_Items
 		);
 		var itemArmorVisual = new VisualGroup
 		([
-			new VisualPolygon(path, itemArmorColor, null),
-			new VisualOffset
-			(
-				new VisualText(new DataBinding(itemArmorName, null, null), null, itemArmorColor, null),
-				new Coords(0, 0 - this.entityDimension, 0)
-			)
+			new VisualPolygon(path, itemArmorColor, null)
 		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			itemArmorVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding(itemArmorName, null, null), null, itemArmorColor, null),
+					new Coords(0, 0 - this.entityDimension, 0)
+				)
+			);
+		}
 
 		var itemArmor = new ItemDefn(itemArmorName, null, null, 50, 30, null, [ "Armor" ], this.itemUseEquip, itemArmorVisual);
 
@@ -113,13 +120,20 @@ class PlaceBuilderDemo_Items
 		);
 		var itemArmorVisual = new VisualGroup
 		([
-			new VisualPolygon(path, itemArmorColor, null),
-			new VisualOffset
-			(
-				new VisualText(new DataBinding(itemArmorName, null, null), null, itemArmorColor, null),
-				new Coords(0, 0 - this.entityDimension, 0)
-			)
+			new VisualPolygon(path, itemArmorColor, null)
 		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			itemArmorVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding(itemArmorName, null, null), null, itemArmorColor, null),
+					new Coords(0, 0 - this.entityDimension, 0)
+				)
+			);
+		}
 
 		var itemArmor = new ItemDefn(itemArmorName, null, null, 50, 30, null, [ "Armor" ], this.itemUseEquip, itemArmorVisual);
 

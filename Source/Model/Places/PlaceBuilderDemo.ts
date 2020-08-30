@@ -115,6 +115,39 @@ class PlaceBuilderDemo // Main.
 		return place;
 	}
 
+	buildTunnels(size: Coords, placeNameToReturnTo: string)
+	{
+		size = size.clone().multiplyScalar(4);
+
+		this.build_Interior("Tunnels", size, placeNameToReturnTo);
+
+		var randomizerSeed = this.randomizer.getNextRandom();
+
+		var networkNodeCount = 24;
+		var network = Network.random(networkNodeCount, this.randomizer);
+		network = network.transform(new Transform_Scale(size));
+		var tunnelsVisual = new VisualNetwork(network);
+
+		var tunnelsEntity = new Entity
+		(
+			"Tunnels",
+			[
+				new Drawable(tunnelsVisual, null),
+				new DrawableCamera(),
+				new Locatable(null)
+			]
+		);
+
+		this.entities.push(tunnelsEntity);
+
+		var place = new PlaceRoom
+		(
+			this.name, "Demo", size, this.entities, randomizerSeed
+		);
+
+		return place;
+	}
+
 	buildZoned(size: Coords, placeNameToReturnTo: string)
 	{
 		this.entities = [];
