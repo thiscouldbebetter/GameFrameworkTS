@@ -122,7 +122,7 @@ class Display2D implements Display
 			this.graphics.closePath();
 			this.graphics.stroke();
 		}
-	};
+	}
 
 	drawBackground(colorBack: string, colorBorder: string)
 	{
@@ -134,7 +134,7 @@ class Display2D implements Display
 			colorBorder || this.colorFore,
 			null
 		);
-	};
+	}
 
 	drawCircle(center: Coords, radius: number, colorFill: string, colorBorder: string)
 	{
@@ -159,7 +159,7 @@ class Display2D implements Display
 			this.graphics.strokeStyle = colorBorder;
 			this.graphics.stroke();
 		}
-	};
+	}
 
 	drawCircleWithGradient(center: Coords, radius: number, gradientFill: Gradient, colorBorder: string)
 	{
@@ -192,7 +192,7 @@ class Display2D implements Display
 			this.graphics.strokeStyle = colorBorder;
 			this.graphics.stroke();
 		}
-	};
+	}
 
 	drawCrosshairs(center: Coords, radius: number, color: string)
 	{
@@ -243,12 +243,12 @@ class Display2D implements Display
 		}
 
 		this.graphics.restore();
-	};
+	}
 
 	drawImage(imageToDraw: Image2, pos: Coords)
 	{
 		this.graphics.drawImage(imageToDraw.systemImage, pos.x, pos.y);
-	};
+	}
 
 	drawImagePartial(imageToDraw: Image2, pos: Coords, boxToShow: Box)
 	{
@@ -261,12 +261,12 @@ class Display2D implements Display
 			sourcePos.x, sourcePos.y, sourceSize.x, sourceSize.y,
 			pos.x, pos.y, sourceSize.x, sourceSize.y
 		);
-	};
+	}
 
 	drawImageScaled(imageToDraw: Image2, pos: Coords, size: Coords)
 	{
 		this.graphics.drawImage(imageToDraw.systemImage, pos.x, pos.y, size.x, size.y);
-	};
+	}
 
 	drawLine(fromPos: Coords, toPos: Coords, color: string, lineThickness: number)
 	{
@@ -290,12 +290,12 @@ class Display2D implements Display
 		this.graphics.stroke();
 
 		this.graphics.lineWidth = lineWidthToRestore;
-	};
+	}
 
 	drawMeshWithOrientation(mesh: MeshTextured, meshOrientation: Orientation)
 	{
 		// todo
-	};
+	}
 
 	drawPath(vertices: Coords[], color: string, lineThickness: number, isClosed: boolean)
 	{
@@ -340,7 +340,7 @@ class Display2D implements Display
 		(
 			pos.x, pos.y, 1, 1
 		);
-	};
+	}
 
 	drawPolygon(vertices: Coords[], colorFill: string, colorBorder: string)
 	{
@@ -375,7 +375,7 @@ class Display2D implements Display
 			this.graphics.strokeStyle = colorBorder;
 			this.graphics.stroke();
 		}
-	};
+	}
 
 	drawRectangle
 	(
@@ -408,7 +408,7 @@ class Display2D implements Display
 				size.x, size.y
 			);
 		}
-	};
+	}
 
 	drawRectangleCentered
 	(
@@ -418,7 +418,7 @@ class Display2D implements Display
 		var sizeHalf = this._sizeHalf.overwriteWith(size).half();
 		var posAdjusted = this._drawPos.overwriteWith(pos).subtract(sizeHalf);
 		this.drawRectangle(posAdjusted, size, colorFill, colorBorder, null);
-	};
+	}
 
 	drawText
 	(
@@ -497,7 +497,7 @@ class Display2D implements Display
 		}
 
 		this.graphics.font = fontToRestore;
-	};
+	}
 
 	drawWedge
 	(
@@ -551,7 +551,19 @@ class Display2D implements Display
 			this.graphics.closePath();
 			this.graphics.stroke();
 		}
-	};
+	}
+
+	eraseModeSet(value: boolean)
+	{
+		if (value)
+		{
+			this.graphics.globalCompositeOperation = "destination-out"; // todo - ?
+		}
+		else
+		{
+			this.graphics.globalCompositeOperation = "source-atop";
+		}
+	}
 
 	fontSet(fontName: string, fontHeightInPixels: number)
 	{
@@ -561,14 +573,14 @@ class Display2D implements Display
 			this.fontHeightInPixels = fontHeightInPixels || this.fontHeightInPixels;
 			this.graphics.font = this.fontHeightInPixels + "px " + this.fontName;
 		}
-	};
+	}
 
 	flush() {}
 
 	hide(universe: Universe)
 	{
 		universe.platformHelper.platformableRemove(this);
-	};
+	}
 
 	initialize(universe: Universe)
 	{
@@ -596,7 +608,7 @@ class Display2D implements Display
 		}
 
 		return this;
-	};
+	}
 
 	rotateTurnsAroundCenter(turnsToRotate: number, centerOfRotation: Coords)
 	{
@@ -613,7 +625,7 @@ class Display2D implements Display
 	sizeDefault()
 	{
 		return this._sizeDefault;
-	};
+	}
 
 	scaleFactor()
 	{
@@ -623,7 +635,7 @@ class Display2D implements Display
 			this._scaleFactor = this.sizeInPixels.clone().divide(sizeBase);
 		}
 		return this._scaleFactor;
-	};
+	}
 
 	stateRestore()
 	{
@@ -642,12 +654,12 @@ class Display2D implements Display
 		var returnValue = this.graphics.measureText(textToMeasure).width;
 		this.graphics.font = fontToRestore;
 		return returnValue;
-	};
+	}
 
 	toImage()
 	{
 		return Image2.fromSystemImage("[fromDisplay]", this.canvas);
-	};
+	}
 
 	// platformable
 
@@ -674,5 +686,5 @@ class Display2D implements Display
 		}
 
 		return this.canvas;
-	};
+	}
 }

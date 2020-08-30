@@ -80,7 +80,7 @@ class Display3D implements Display
 			false, // transpose
 			matrixCamera.toWebGLArray()
 		);
-	};
+	}
 
 	clear()
 	{
@@ -93,12 +93,12 @@ class Display3D implements Display
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 		this._display2DOverlay.clear();
-	};
+	}
 
 	displayToUse(): Display
 	{
 		return this;
-	};
+	}
 
 	drawCrosshairs(center: Coords, radius: number, color: string)
 	{
@@ -320,7 +320,7 @@ class Display3D implements Display
 				numberOfTrianglesSoFar * Display3D.VerticesPerTriangle
 			);
 		} // end for each material
-	};
+	}
 
 	drawMeshWithOrientation(mesh: MeshTextured, meshOrientation: Orientation)
 	{
@@ -356,7 +356,7 @@ class Display3D implements Display
 		);
 
 		this.drawMesh(mesh);
-	};
+	}
 
 	drawPixel(pos: Coords, color: string): void
 	{
@@ -397,7 +397,7 @@ class Display3D implements Display
 		this.tempMatrix1 = Matrix.buildZeroes();
 
 		return this;
-	};
+	}
 
 	lightingSet(todo: Lighting)
 	{
@@ -424,7 +424,7 @@ class Display3D implements Display
 			shaderProgram.lightDirectionalIntensity,
 			lighting.directionalIntensity
 		);
-	};
+	}
 
 	// Display2D overlay.
 
@@ -441,47 +441,47 @@ class Display3D implements Display
 	drawBackground(colorBack: string, colorBorder: string)
 	{
 		this._display2DOverlay.drawBackground(colorBack, colorBorder);
-	};
+	}
 
 	drawCircle(center: Coords, radius: number, colorFill: string, colorBorder: string)
 	{
 		this._display2DOverlay.drawCircle(center, radius, colorFill, colorBorder);
-	};
+	}
 
 	drawCircleWithGradient(center: Coords, radius: number, gradientFill: Gradient, colorBorder: string)
 	{
 		this._display2DOverlay.drawCircleWithGradient(center, radius, gradientFill, colorBorder);
-	};
+	}
 
 	drawImage(imageToDraw: Image2, pos: Coords)
 	{
 		this._display2DOverlay.drawImage(imageToDraw, pos);
-	};
+	}
 
 	drawImagePartial(imageToDraw: Image2, pos: Coords, boxToShow: Box)
 	{
 		this._display2DOverlay.drawImagePartial(imageToDraw, pos, boxToShow);
-	};
+	}
 
 	drawImageScaled(imageToDraw: Image2, pos: Coords, size: Coords)
 	{
 		this._display2DOverlay.drawImageScaled(imageToDraw, pos, size);
-	};
+	}
 
 	drawLine(fromPos: Coords, toPos: Coords, color: string, lineThickness: number)
 	{
 		this._display2DOverlay.drawLine(fromPos, toPos, color, lineThickness);
-	};
+	}
 
 	drawPath(vertices: Coords[], color: string, lineThickness: number, isClosed: boolean)
 	{
 		this._display2DOverlay.drawPath(vertices, color, lineThickness, isClosed);
-	};
+	}
 
 	drawPolygon(vertices: Coords[], colorFill: string, colorBorder: string)
 	{
 		this._display2DOverlay.drawPolygon(vertices, colorFill, colorBorder);
-	};
+	}
 
 	drawRectangle
 	(
@@ -496,7 +496,7 @@ class Display3D implements Display
 		(
 			pos, size, colorFill, colorBorder, areColorsReversed
 		);
-	};
+	}
 
 	drawRectangleCentered
 	(
@@ -529,7 +529,7 @@ class Display3D implements Display
 			isCentered,
 			widthMaxInPixels
 		);
-	};
+	}
 
 	drawWedge
 	(
@@ -543,10 +543,15 @@ class Display3D implements Display
 		);
 	}
 
+	eraseModeSet(value: boolean)
+	{
+		this._display2DOverlay.eraseModeSet(value);
+	}
+
 	fontSet(fontName: string, fontHeightInPixels: number)
 	{
 		this._display2DOverlay.fontSet(fontName, fontHeightInPixels);
-	};
+	}
 
 	flush() {}
 
@@ -560,14 +565,14 @@ class Display3D implements Display
 	scaleFactor()
 	{
 		return this._scaleFactor;
-	};
+	}
 
 	show(): void {}
 
 	sizeDefault()
 	{
 		return this._sizeDefault;
-	};
+	}
 
 	stateRestore()
 	{
@@ -582,7 +587,7 @@ class Display3D implements Display
 	textWidthForFontHeight(textToMeasure: string, fontHeightInPixels: number): number
 	{
 		return this._display2DOverlay.textWidthForFontHeight(textToMeasure, fontHeightInPixels);
-	};
+	}
 
 	toImage(): Image2
 	{

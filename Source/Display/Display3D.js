@@ -21,7 +21,6 @@ class Display3D {
         gl.uniformMatrix4fv(shaderProgram.cameraMatrix, false, // transpose
         matrixCamera.toWebGLArray());
     }
-    ;
     clear() {
         var webGLContext = this.webGLContext;
         var gl = webGLContext.gl;
@@ -31,11 +30,9 @@ class Display3D {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         this._display2DOverlay.clear();
     }
-    ;
     displayToUse() {
         return this;
     }
-    ;
     drawCrosshairs(center, radius, color) {
         this._display2DOverlay.drawCrosshairs(center, radius, color);
     }
@@ -137,7 +134,6 @@ class Display3D {
             gl.drawArrays(gl.TRIANGLES, 0, numberOfTrianglesSoFar * Display3D.VerticesPerTriangle);
         } // end for each material
     }
-    ;
     drawMeshWithOrientation(mesh, meshOrientation) {
         var matrixOrient = this.matrixOrient;
         var matrixEntity = this.matrixEntity.overwriteWithOrientationMover(meshOrientation).multiply(matrixOrient.overwriteWithOrientationEntity(meshOrientation));
@@ -150,7 +146,6 @@ class Display3D {
         matrixEntity.toWebGLArray());
         this.drawMesh(mesh);
     }
-    ;
     drawPixel(pos, color) {
         this._display2DOverlay.drawPixel(pos, color);
     }
@@ -178,7 +173,6 @@ class Display3D {
         this.tempMatrix1 = Matrix.buildZeroes();
         return this;
     }
-    ;
     lightingSet(todo) {
         var webGLContext = this.webGLContext;
         var gl = webGLContext.gl;
@@ -188,7 +182,6 @@ class Display3D {
         gl.uniform3fv(shaderProgram.lightDirection, WebGLContext.coordsToWebGLArray(lighting.direction));
         gl.uniform1f(shaderProgram.lightDirectionalIntensity, lighting.directionalIntensity);
     }
-    ;
     // Display2D overlay.
     drawArc(center, radiusInner, radiusOuter, angleStartInTurns, angleStopInTurns, colorFill, colorBorder) {
         this._display2DOverlay.drawArc(center, radiusInner, radiusOuter, angleStartInTurns, angleStopInTurns, colorFill, colorBorder);
@@ -197,57 +190,48 @@ class Display3D {
     drawBackground(colorBack, colorBorder) {
         this._display2DOverlay.drawBackground(colorBack, colorBorder);
     }
-    ;
     drawCircle(center, radius, colorFill, colorBorder) {
         this._display2DOverlay.drawCircle(center, radius, colorFill, colorBorder);
     }
-    ;
     drawCircleWithGradient(center, radius, gradientFill, colorBorder) {
         this._display2DOverlay.drawCircleWithGradient(center, radius, gradientFill, colorBorder);
     }
-    ;
     drawImage(imageToDraw, pos) {
         this._display2DOverlay.drawImage(imageToDraw, pos);
     }
-    ;
     drawImagePartial(imageToDraw, pos, boxToShow) {
         this._display2DOverlay.drawImagePartial(imageToDraw, pos, boxToShow);
     }
-    ;
     drawImageScaled(imageToDraw, pos, size) {
         this._display2DOverlay.drawImageScaled(imageToDraw, pos, size);
     }
-    ;
     drawLine(fromPos, toPos, color, lineThickness) {
         this._display2DOverlay.drawLine(fromPos, toPos, color, lineThickness);
     }
-    ;
     drawPath(vertices, color, lineThickness, isClosed) {
         this._display2DOverlay.drawPath(vertices, color, lineThickness, isClosed);
     }
-    ;
     drawPolygon(vertices, colorFill, colorBorder) {
         this._display2DOverlay.drawPolygon(vertices, colorFill, colorBorder);
     }
-    ;
     drawRectangle(pos, size, colorFill, colorBorder, areColorsReversed) {
         this._display2DOverlay.drawRectangle(pos, size, colorFill, colorBorder, areColorsReversed);
     }
-    ;
     drawRectangleCentered(pos, size, colorFill, colorBorder) {
         this._display2DOverlay.drawRectangleCentered(pos, size, colorFill, colorBorder);
     }
     drawText(text, fontHeightInPixels, pos, colorFill, colorOutline, areColorsReversed, isCentered, widthMaxInPixels) {
         this._display2DOverlay.drawText(text, fontHeightInPixels, pos, colorFill, colorOutline, areColorsReversed, isCentered, widthMaxInPixels);
     }
-    ;
     drawWedge(center, radius, angleStartInTurns, angleStopInTurns, colorFill, colorBorder) {
         this._display2DOverlay.drawWedge(center, radius, angleStartInTurns, angleStopInTurns, colorFill, colorBorder);
+    }
+    eraseModeSet(value) {
+        this._display2DOverlay.eraseModeSet(value);
     }
     fontSet(fontName, fontHeightInPixels) {
         this._display2DOverlay.fontSet(fontName, fontHeightInPixels);
     }
-    ;
     flush() { }
     hide() { }
     rotateTurnsAroundCenter(turnsToRotate, centerOfRotation) {
@@ -256,12 +240,10 @@ class Display3D {
     scaleFactor() {
         return this._scaleFactor;
     }
-    ;
     show() { }
     sizeDefault() {
         return this._sizeDefault;
     }
-    ;
     stateRestore() {
         this._display2DOverlay.stateRestore();
     }
@@ -271,7 +253,6 @@ class Display3D {
     textWidthForFontHeight(textToMeasure, fontHeightInPixels) {
         return this._display2DOverlay.textWidthForFontHeight(textToMeasure, fontHeightInPixels);
     }
-    ;
     toImage() {
         return null;
     }

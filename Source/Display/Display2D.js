@@ -49,12 +49,10 @@ class Display2D {
             this.graphics.stroke();
         }
     }
-    ;
     drawBackground(colorBack, colorBorder) {
         this.drawRectangle(this._zeroes, this.sizeDefault(), // Automatic scaling.
         colorBack || this.colorBack, colorBorder || this.colorFore, null);
     }
-    ;
     drawCircle(center, radius, colorFill, colorBorder) {
         var drawPos = this._drawPos.overwriteWith(center);
         this.graphics.beginPath();
@@ -68,7 +66,6 @@ class Display2D {
             this.graphics.stroke();
         }
     }
-    ;
     drawCircleWithGradient(center, radius, gradientFill, colorBorder) {
         this.graphics.beginPath();
         this.graphics.arc(center.x, center.y, radius, 0, Display2D.RadiansPerTurn);
@@ -85,7 +82,6 @@ class Display2D {
             this.graphics.stroke();
         }
     }
-    ;
     drawCrosshairs(center, radius, color) {
         var drawPos = this._drawPos.overwriteWith(center);
         this.graphics.beginPath();
@@ -119,21 +115,17 @@ class Display2D {
         }
         this.graphics.restore();
     }
-    ;
     drawImage(imageToDraw, pos) {
         this.graphics.drawImage(imageToDraw.systemImage, pos.x, pos.y);
     }
-    ;
     drawImagePartial(imageToDraw, pos, boxToShow) {
         var sourcePos = boxToShow.min();
         var sourceSize = boxToShow.size;
         this.graphics.drawImage(imageToDraw.systemImage, sourcePos.x, sourcePos.y, sourceSize.x, sourceSize.y, pos.x, pos.y, sourceSize.x, sourceSize.y);
     }
-    ;
     drawImageScaled(imageToDraw, pos, size) {
         this.graphics.drawImage(imageToDraw.systemImage, pos.x, pos.y, size.x, size.y);
     }
-    ;
     drawLine(fromPos, toPos, color, lineThickness) {
         var drawPos = this._drawPos;
         this.graphics.strokeStyle = color;
@@ -149,11 +141,9 @@ class Display2D {
         this.graphics.stroke();
         this.graphics.lineWidth = lineWidthToRestore;
     }
-    ;
     drawMeshWithOrientation(mesh, meshOrientation) {
         // todo
     }
-    ;
     drawPath(vertices, color, lineThickness, isClosed) {
         var lineWidthSaved = this.graphics.lineWidth;
         this.graphics.lineWidth = (lineThickness == null ? 1 : lineThickness);
@@ -181,7 +171,6 @@ class Display2D {
         this.graphics.fillStyle = color;
         this.graphics.fillRect(pos.x, pos.y, 1, 1);
     }
-    ;
     drawPolygon(vertices, colorFill, colorBorder) {
         this.graphics.beginPath();
         var drawPos = this._drawPos;
@@ -205,7 +194,6 @@ class Display2D {
             this.graphics.stroke();
         }
     }
-    ;
     drawRectangle(pos, size, colorFill, colorBorder, areColorsReversed) {
         if (areColorsReversed) {
             var temp = colorFill;
@@ -221,13 +209,11 @@ class Display2D {
             this.graphics.strokeRect(pos.x, pos.y, size.x, size.y);
         }
     }
-    ;
     drawRectangleCentered(pos, size, colorFill, colorBorder) {
         var sizeHalf = this._sizeHalf.overwriteWith(size).half();
         var posAdjusted = this._drawPos.overwriteWith(pos).subtract(sizeHalf);
         this.drawRectangle(posAdjusted, size, colorFill, colorBorder, null);
     }
-    ;
     drawText(text, fontHeightInPixels, pos, colorFill, colorOutline, areColorsReversed, isCentered, widthMaxInPixels) {
         var fontToRestore = this.graphics.font;
         if (fontHeightInPixels == null) {
@@ -267,7 +253,6 @@ class Display2D {
         }
         this.graphics.font = fontToRestore;
     }
-    ;
     drawWedge(center, radius, angleStartInTurns, angleStopInTurns, colorFill, colorBorder) {
         var drawPos = this._drawPos.overwriteWith(center);
         var angleStartInRadians = angleStartInTurns * Display2D.RadiansPerTurn;
@@ -295,7 +280,14 @@ class Display2D {
             this.graphics.stroke();
         }
     }
-    ;
+    eraseModeSet(value) {
+        if (value) {
+            this.graphics.globalCompositeOperation = "destination-out"; // todo - ?
+        }
+        else {
+            this.graphics.globalCompositeOperation = "source-atop";
+        }
+    }
     fontSet(fontName, fontHeightInPixels) {
         if (fontName != this.fontName || fontHeightInPixels != this.fontHeightInPixels) {
             this.fontName = fontName || this.fontName;
@@ -303,12 +295,10 @@ class Display2D {
             this.graphics.font = this.fontHeightInPixels + "px " + this.fontName;
         }
     }
-    ;
     flush() { }
     hide(universe) {
         universe.platformHelper.platformableRemove(this);
     }
-    ;
     initialize(universe) {
         if (this.isInvisible) {
             this.toDomElement();
@@ -330,7 +320,6 @@ class Display2D {
         }
         return this;
     }
-    ;
     rotateTurnsAroundCenter(turnsToRotate, centerOfRotation) {
         var graphics = this.graphics;
         graphics.translate(centerOfRotation.x, centerOfRotation.y);
@@ -341,7 +330,6 @@ class Display2D {
     sizeDefault() {
         return this._sizeDefault;
     }
-    ;
     scaleFactor() {
         if (this._scaleFactor == null) {
             var sizeBase = this.sizesAvailable[0];
@@ -349,7 +337,6 @@ class Display2D {
         }
         return this._scaleFactor;
     }
-    ;
     stateRestore() {
         this.graphics.restore();
     }
@@ -363,11 +350,9 @@ class Display2D {
         this.graphics.font = fontToRestore;
         return returnValue;
     }
-    ;
     toImage() {
         return Image2.fromSystemImage("[fromDisplay]", this.canvas);
     }
-    ;
     // platformable
     toDomElement() {
         if (this.canvas == null) {
@@ -385,7 +370,6 @@ class Display2D {
         }
         return this.canvas;
     }
-    ;
 }
 // constants
 Display2D.RadiansPerTurn = Math.PI * 2.0;

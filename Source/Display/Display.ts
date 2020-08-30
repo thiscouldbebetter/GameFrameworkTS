@@ -53,6 +53,7 @@ interface Display
 		center: Coords, radius: number, angleStartInTurns: number,
 		angleStopInTurns: number, colorFill: string, colorBorder: string
 	): void;
+	eraseModeSet(value: boolean): void;
 	fontSet(fontName: string, fontHeightInPixels: number): void;
 	flush(): void;
 	hide(universe: Universe): void;

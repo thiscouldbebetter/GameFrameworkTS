@@ -1,0 +1,1444 @@
+
+class PlaceBuilderDemo_Items
+{
+	parent: PlaceBuilderDemo;
+	entityDimension: number;
+
+	entityDimensionHalf: number;
+
+	constructor(parent: PlaceBuilderDemo, entityDimension: number)
+	{
+		this.parent = parent;
+		this.entityDimension = entityDimension;
+
+		this.entityDimensionHalf = this.entityDimension / 2;
+	}
+
+	itemDefnsBuild()
+	{
+		var itemDefns =
+		[
+			this.armor(),
+			this.armorEnhanced(),
+			this.arrow(),
+			this.bomb(),
+			this.book(),
+			this.bow(),
+			this.bread(),
+			this.coin(),
+			this.crystal(),
+			this.flower(),
+			this.fruit(), 
+			this.grass(),
+			this.iron(),
+			this.ironOre(),
+			this.key(),
+			this.log(),
+			this.meat(), 
+			this.medicine(),
+			this.mushroom(),
+			this.pick(),
+			this.potion(),
+			this.shovel(),
+			this.speedBoots(),
+			this.sword(),
+			this.swordCold(),
+			this.swordHeat(),
+			this.toolset(),
+			this.walkieTalkie(),
+			this.weight()
+		];
+
+		return itemDefns;
+
+	}
+
+	itemUseEquip(universe: Universe, world: World, place: Place, entityUser: Entity, entityItem: Entity)
+	{
+		var equipmentUser = entityUser.equipmentUser();
+		var message = equipmentUser.equipEntityWithItem
+		(
+			universe, world, place, entityUser, entityItem
+		);
+		return message;
+	}
+
+	// Items.
+
+	armor()
+	{
+		var itemArmorName = "Armor";
+		var itemArmorColor = Color.byName("GreenDark");
+		var path = new Path
+		([
+			new Coords(0, 0.5, 0),
+			new Coords(-.5, 0, 0),
+			new Coords(-.5, -.5, 0),
+			new Coords(.5, -.5, 0),
+			new Coords(.5, 0, 0),
+		]).transform
+		(
+			Transform_Scale.fromScalar(this.entityDimension)
+		);
+		var itemArmorVisual = new VisualGroup
+		([
+			new VisualPolygon(path, itemArmorColor, null),
+			new VisualOffset
+			(
+				new VisualText(new DataBinding(itemArmorName, null, null), null, itemArmorColor, null),
+				new Coords(0, 0 - this.entityDimension, 0)
+			)
+		]);
+
+		var itemArmor = new ItemDefn(itemArmorName, null, null, 50, 30, null, [ "Armor" ], this.itemUseEquip, itemArmorVisual);
+
+		return itemArmor;
+	}
+
+	armorEnhanced()
+	{
+		var itemArmorName = "Enhanced Armor";
+		var itemArmorColor = Color.byName("GreenDark");
+		var path = new Path
+		([
+			new Coords(0, 0.5, 0),
+			new Coords(-.5, 0, 0),
+			new Coords(-.5, -.5, 0),
+			new Coords(.5, -.5, 0),
+			new Coords(.5, 0, 0),
+		]).transform
+		(
+			Transform_Scale.fromScalar(this.entityDimension)
+		);
+		var itemArmorVisual = new VisualGroup
+		([
+			new VisualPolygon(path, itemArmorColor, null),
+			new VisualOffset
+			(
+				new VisualText(new DataBinding(itemArmorName, null, null), null, itemArmorColor, null),
+				new Coords(0, 0 - this.entityDimension, 0)
+			)
+		]);
+
+		var itemArmor = new ItemDefn(itemArmorName, null, null, 50, 30, null, [ "Armor" ], this.itemUseEquip, itemArmorVisual);
+
+		return itemArmor;
+	}
+
+	arrow()
+	{
+		var itemArrowName = "Arrow";
+		var itemArrowColor = new Color(null, null, [0, .5, .5, 1]);
+		var pathHead = new Path
+		([
+			new Coords(0, -1, 0),
+			new Coords(.25, -0.5, 0),
+			new Coords(-.25, -0.5, 0),
+		]).transform
+		(
+			Transform_Scale.fromScalar(this.entityDimension)
+		);
+		var itemArrowVisualHead = new VisualPolygon
+		(
+			pathHead, itemArrowColor, null
+		);
+
+		var pathTail = new Path
+		([
+			new Coords(0, 0, 0),
+			new Coords(.25, .5, 0),
+			new Coords(.25, .75, 0),
+			new Coords(0, .5, 0),
+			new Coords(-.25, .75, 0),
+			new Coords(-.25, .5, 0),
+		]).transform
+		(
+			Transform_Scale.fromScalar(this.entityDimension)
+		);
+		var itemArrowVisualTail = new VisualPolygon
+		(
+			pathTail, Color.byName("White"), null
+		);
+
+		var itemArrowVisual = new VisualGroup
+		([
+			itemArrowVisualTail,
+			new VisualRectangle
+			(
+				new Coords(1, 10, 0), Color.byName("Brown"), null, true
+			),
+			itemArrowVisualHead,
+		]);
+		if (this.parent.visualsHaveText)
+		{
+			itemArrowVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding(itemArrowName, null, null), null, itemArrowColor, null),
+					new Coords(0, 0 - this.entityDimension * 1.5, 0)
+				)
+			);
+		}
+
+		var itemArrow = new ItemDefn(itemArrowName, null, null, .05, 5, null, null, null, itemArrowVisual);
+
+		return itemArrow;
+	}
+
+	bomb()
+	{
+		var itemBombName = "Bomb";
+		var itemBombColor = Color.byName("BlueDark");
+		var itemBombVisual = new VisualGroup
+		([
+			// fuse
+			new VisualOffset
+			(
+				new VisualRectangle
+				(
+					new Coords(.2, 1, 1).multiplyScalar(this.entityDimensionHalf),
+					Color.byName("Tan"),
+					null, // colorBorder
+					true // isCentered
+				),
+				new Coords(0, -1, 0).multiplyScalar(this.entityDimensionHalf)
+			),
+			// body
+			new VisualCircle
+			(
+				this.entityDimensionHalf, itemBombColor, null
+			),
+			// highlight
+			new VisualOffset
+			(
+				new VisualCircle
+				(
+					this.entityDimensionHalf * .3, Color.byName("Blue"), null
+				),
+				new Coords(-this.entityDimensionHalf / 3, -this.entityDimensionHalf / 3, 0)
+			)
+		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			itemBombVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding(itemBombName, null, null), null, itemBombColor, null),
+					new Coords(0, 0 - this.entityDimension * 2, 0)
+				)
+			);
+		}
+
+		var itemBomb = new ItemDefn(itemBombName, null, null, 5, 10, null, [ "Wieldable" ], this.itemUseEquip, itemBombVisual);
+
+		return itemBomb;
+	}
+
+	book()
+	{
+		var itemBookName = "Book";
+		var itemBookColor = Color.byName("Blue");
+		var itemBookVisual = new VisualGroup
+		([
+			new VisualRectangle
+			(
+				new Coords(1, 1.25, 0).multiplyScalar(this.entityDimension),
+				itemBookColor, null, null
+			),
+			new VisualOffset
+			(
+				new VisualRectangle
+				(
+					new Coords(.1, 1.1, 0).multiplyScalar(this.entityDimension),
+					Color.byName("White"), null, null
+				),
+				new Coords(.4, 0, 0).multiplyScalar(this.entityDimension)
+			)
+		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			itemBookVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding(itemBookName, null, null), null, itemBookColor, null),
+					new Coords(0, 0 - this.entityDimension * 1.5, 0)
+				)
+			);
+		}
+
+		var itemBook = new ItemDefn
+		(
+			itemBookName, null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize
+			null, // categoryNames
+			(universe: Universe, world: World, place: Place, entityUser: Entity, entityItem: Entity) => // use
+			{
+				var venuePrev = universe.venueCurrent;
+				var back = function()
+				{
+					var venueNext = venuePrev;
+					venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
+					universe.venueNext = venueNext;
+				};
+
+				var text =
+					"Fourscore and seven years ago, our fathers brought forth upon this continent "
+					+ "a new nation, conceived in liberty, and dedicated to the proposition that "
+					+ " all men are created equal. ";
+				var size = universe.display.sizeInPixels.clone();
+				var fontHeight = 10;
+				var textarea = new ControlTextarea
+				(
+					"textareaContents",
+					size.clone().half().half(),
+					size.clone().half(),
+					DataBinding.fromContext(text),
+					fontHeight,
+					new DataBinding(false, null, null) // isEnabled
+				);
+				var button = new ControlButton
+				(
+					"buttonDone",
+					new Coords(size.x / 4, 3 * size.y / 4 + fontHeight, 1),
+					new Coords(size.x / 2, fontHeight * 2, 1),
+					"Done",
+					fontHeight,
+					true, // hasBorder
+					true, // isEnabled
+					back, // click
+					null, null
+				);
+				var container = new ControlContainer
+				(
+					"containerBook",
+					new Coords(0, 0, 0),
+					size.clone(),
+					[ textarea, button ], // children
+					[
+						new Action( ControlActionNames.Instances().ControlCancel, back ),
+						new Action( ControlActionNames.Instances().ControlConfirm, back )
+					],
+					null
+				);
+
+				var venueNext: Venue = new VenueControls(container, false);
+				venueNext = new VenueFader(venueNext, null, null, null);
+				universe.venueNext = venueNext;
+
+				return "";
+			},
+			itemBookVisual
+		);
+
+		return itemBook;
+	}
+
+	bow()
+	{
+		var itemBowName = "Bow";
+		var itemBowColor = Color.byName("Brown");
+
+		var itemBowVisualString = new VisualPolygon
+		(
+			new Path
+			([
+				new Coords(0, -this.entityDimension, 0),
+				new Coords(1, -this.entityDimension, 0),
+				new Coords(1, this.entityDimension, 0),
+				new Coords(0, this.entityDimension, 0),
+			]),
+			Color.byName("White"),
+			null
+		);
+
+		var itemBowVisualBody = new VisualArc
+		(
+			this.entityDimension, // radiusOuter
+			this.entityDimension - 3, // radiusInner
+			new Coords(0, -1, 0), // directionMin
+			.5, // angleSpannedInTurns
+			itemBowColor,
+			null
+		);
+
+		var itemBowVisual = new VisualGroup
+		([
+			itemBowVisualString,
+			itemBowVisualBody
+		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			itemBowVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding(itemBowName, null, null), null, itemBowColor, null),
+					new Coords(0, 0 - this.entityDimension * 2, 0)
+				)
+			);
+		}
+
+		var itemBow = new ItemDefn(itemBowName, null, null, 5, 100, null, [ "Wieldable" ], this.itemUseEquip, itemBowVisual);
+
+		return itemBow;
+	}
+
+	bread()
+	{
+		var itemBreadName = "Bread";
+		var itemBreadColor = Color.byName("Orange");
+		var itemBreadVisual = new VisualGroup
+		([
+			new VisualArc
+			(
+				this.entityDimension / 2, // radiusOuter
+				0, // radiusInner
+				new Coords(-1, 0, 0), // directionMin
+				.5, // angleSpannedInTurns
+				itemBreadColor,
+				null
+			)
+		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			itemBreadVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding(itemBreadName, null, null), null, itemBreadColor, null),
+					new Coords(0, 0 - this.entityDimension * 1.5, 0)
+				)
+			);
+		}
+
+		var itemBread = new ItemDefn
+		(
+			itemBreadName, null, null, 1, 4, null, // name, appearance, descripton, mass, value, stackSize
+			[ "Consumable" ], // categoryNames
+			(universe: Universe, world: World, place: Place, entityUser: Entity, entityItem: Entity) => // use
+			{
+				entityUser.starvable().satietyAdd(10);
+				var item = entityItem.item();
+				entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
+				var message = "You eat the bread.";
+				return message;
+			},
+			itemBreadVisual
+		);
+
+		return itemBread;
+	}
+
+	coin()
+	{
+		var itemCoinName = "Coin";
+		var itemCoinColor = Color.byName("Yellow");
+		var itemCoinVisual = new VisualGroup
+		([
+			new VisualCircle
+			(
+				this.entityDimensionHalf, itemCoinColor, null
+			),
+			new VisualCircle
+			(
+				this.entityDimensionHalf * .75, null, Color.byName("Gray")
+			)
+		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			itemCoinVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding(itemCoinName, null, null), null, itemCoinColor, null),
+					new Coords(0, 0 - this.entityDimension, 0)
+				)
+			);
+		}
+
+		var itemCoin = new ItemDefn(itemCoinName, null, null, .01, 1, null, null, null, itemCoinVisual);
+
+		return itemCoin;
+	}
+
+	crystal()
+	{
+		var itemCrystalName = "Crystal";
+		var itemCrystalColor = Color.byName("Cyan");
+		var itemCrystalVisual = new VisualGroup
+		([
+			new VisualPolygon
+			(
+				new Path
+				([
+					new Coords(1, 0, 0),
+					new Coords(0, 1, 0),
+					new Coords(-1, 0, 0),
+					new Coords(0, -1, 0)
+				]).transform
+				(
+					new Transform_Scale
+					(
+						new Coords(1, 1, 1).multiplyScalar(this.entityDimension / 2)
+					)
+				),
+				itemCrystalColor,
+				Color.byName("White")
+			),
+			new VisualPolygon
+			(
+				new Path
+				([
+					new Coords(1, 0, 0),
+					new Coords(0, 1, 0),
+					new Coords(-1, 0, 0),
+					new Coords(0, -1, 0)
+				]).transform
+				(
+					new Transform_Scale
+					(
+						new Coords(1, 1, 1).multiplyScalar(this.entityDimension / 4)
+					)
+				),
+				Color.byName("White"),
+				null
+			)
+		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			itemCrystalVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding(itemCrystalName, null, null), null, itemCrystalColor, null),
+					new Coords(0, 0 - this.entityDimension, 0)
+				)
+			);
+		}
+
+		var itemCrystal = new ItemDefn(itemCrystalName, null, null, .1, 1, null, null, null, itemCrystalVisual);
+
+		return itemCrystal;
+	}
+
+	flower()
+	{
+		var itemFlowerName = "Flower";
+		var colorFlower = Color.byName("Pink");
+		var itemFlowerVisual = new VisualGroup
+		([
+			new VisualOffset
+			(
+				new VisualArc
+				(
+					this.entityDimensionHalf * 2, // radiusOuter
+					this.entityDimensionHalf * 2 - 2, // radiusInner
+					new Coords(-1, 1, 0).normalize(), // directionMin
+					.25, // angleSpannedInTurns
+					Color.byName("GreenDark"),
+					null
+				),
+				new Coords(.5, 1.75, 0).multiplyScalar(this.entityDimensionHalf)
+			),
+			new VisualPolygon
+			(
+				new Path
+				([
+					new Coords(1, 0, 0),
+					new Coords(.3, .3, 0),
+					new Coords(0, 1, 0),
+					new Coords(-.3, .3, 0),
+					new Coords(-1, 0, 0),
+					new Coords(-.3, -.3, 0),
+					new Coords(0, -1, 0),
+					new Coords(.3, -.3, 0)
+				]).transform
+				(
+					new Transform_Scale
+					(
+						new Coords(1, 1, 1).multiplyScalar(this.entityDimensionHalf)
+					)
+				),
+				colorFlower,
+				Color.byName("Red")
+			)
+		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			itemFlowerVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding(itemFlowerName, null, null), null, colorFlower, null),
+					new Coords(0, 0 - this.entityDimensionHalf * 2, 0)
+				)
+			);
+		}
+
+		var itemFlower = new ItemDefn(itemFlowerName, null, null, .01, 1, null, null, null, itemFlowerVisual);
+
+		return itemFlower;
+	}
+
+	fruit()
+	{
+		var itemFruitName = "Fruit";
+		var itemFruitColor = Color.byName("Orange");
+		var itemFruitVisual = new VisualGroup
+		([
+			new VisualCircle
+			(
+				this.entityDimensionHalf, itemFruitColor, null
+			),
+			new VisualOffset
+			(
+				new VisualCircle
+				(
+					this.entityDimensionHalf * .25, Color.byName("White"), null
+				),
+				new Coords(-this.entityDimensionHalf / 2, -this.entityDimensionHalf / 2, 0)
+			)
+		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			itemFruitVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding(itemFruitName, null, null), null, itemFruitColor, null),
+					new Coords(0, 0 - this.entityDimension, 0)
+				)
+			);
+		}
+
+		var itemFruit = new ItemDefn
+		(
+			itemFruitName, null, null, .25, 6, null, // name, appearance, descripton, mass, value, stackSize
+			[ "Consumable" ], // categoryNames
+			(universe: Universe, world: World, place: Place, entityUser: Entity, entityItem: Entity) => // use
+			{
+				entityUser.starvable().satietyAdd(5);
+				var item = entityItem.item();
+				entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
+				var message = "You eat the fruit.";
+				return message;
+			},
+			itemFruitVisual
+		);
+
+		return itemFruit;
+	}
+
+	grass()
+	{
+		var itemGrassName = "Grass";
+		var itemGrassVisual = new VisualGroup
+		([
+			new VisualImageScaled
+			(
+				new VisualImageFromLibrary("Grass"),
+				new Coords(1, 1, 0).multiplyScalar(this.entityDimensionHalf * 4) // sizeScaled
+			),
+		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			itemGrassVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding(itemGrassName, null, null), null, Color.byName("GreenDark"), null),
+					new Coords(0, 0 - this.entityDimensionHalf * 3, 0)
+				)
+			);
+		}
+
+		var itemGrass = new ItemDefn(itemGrassName, null, null, .01, 1, null, null, null, itemGrassVisual);
+
+		return itemGrass;
+	}
+
+	iron()
+	{
+		var itemIronName = "Iron";
+		var itemIronColor = Color.byName("Gray");
+		var itemIronVisual = new VisualGroup
+		([
+			new VisualPolygon
+			(
+				new Path
+				([
+					new Coords(-0.5, 0.4, 0),
+					new Coords(0.5, 0.4, 0),
+					new Coords(0.2, -0.4, 0),
+					new Coords(-0.2, -0.4, 0),
+				]).transform
+				(
+					Transform_Scale.fromScalar(this.entityDimension)
+				),
+				itemIronColor,
+				null
+			)
+		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			itemIronVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding(itemIronName, null, null), null, itemIronColor, null),
+					new Coords(0, 0 - this.entityDimension, 0)
+				)
+			);
+		}
+
+		var itemIron = new ItemDefn(itemIronName, null, null, 10, 5, null, null, null, itemIronVisual);
+
+		return itemIron;
+	}
+
+	ironOre()
+	{
+		var itemIronOreName = "Iron Ore";
+		var itemIronOreColor = Color.byName("Gray");
+		var itemIronOreVisual = new VisualGroup
+		([
+			new VisualArc
+			(
+				this.entityDimension / 2, // radiusOuter
+				0, // radiusInner
+				new Coords(-1, 0, 0), // directionMin
+				.5, // angleSpannedInTurns
+				itemIronOreColor,
+				null
+			)
+		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			itemIronOreVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding(itemIronOreName, null, null), null, itemIronOreColor, null),
+					new Coords(0, 0 - this.entityDimension * 1.5, 0)
+				)
+			);
+		}
+
+		var itemIronOre = new ItemDefn(itemIronOreName, null, null, 10, 1, null, null, null, itemIronOreVisual);
+
+		return itemIronOre;
+	}
+
+	key()
+	{
+		var itemKeyName = "Key";
+		var itemKeyColor = Color.byName("Yellow");
+		var itemKeyVisual = new VisualGroup
+		([
+			new VisualArc
+			(
+				this.entityDimensionHalf, // radiusOuter
+				this.entityDimensionHalf / 2, // radiusInner
+				Coords.Instances().Ones, // directionMin
+				1, // angleSpannedInTurns
+				itemKeyColor,
+				null
+			),
+			new VisualOffset
+			(
+				new VisualPolars
+				(
+					[
+						new Polar(0, this.entityDimensionHalf, 0),
+						new Polar(.25, this.entityDimensionHalf / 2, 0)
+					],
+					itemKeyColor,
+					this.entityDimensionHalf / 2 // lineThickness
+				),
+				new Coords(this.entityDimensionHalf, 0, 0)
+			),
+		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			itemKeyVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding(itemKeyName, null, null), null, itemKeyColor, null),
+					new Coords(0, 0 - this.entityDimension * 2, 0)
+				)
+			);
+		}
+
+		var itemKey = new ItemDefn(itemKeyName, null, null, .1, 5, null, null, null, itemKeyVisual);
+
+		return itemKey;
+	}
+
+	log()
+	{
+		var itemLogName = "Log";
+		var itemLogColor = Color.byName("Brown");
+		var itemLogVisual = new VisualGroup
+		([
+			new VisualOffset
+			(
+				new VisualCircle
+				(
+					this.entityDimensionHalf, itemLogColor, null
+				),
+				new Coords(this.entityDimension, 0, 0)
+			),
+			new VisualRectangle
+			(
+				new Coords(this.entityDimension * 2, this.entityDimension, 0),
+				itemLogColor, null, null
+			),
+			new VisualOffset
+			(
+				new VisualCircle
+				(
+					this.entityDimensionHalf, Color.byName("Tan"), null
+				),
+				new Coords(-this.entityDimension, 0, 0)
+			)
+		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			itemLogVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding(itemLogName, null, null), null, itemLogColor, null),
+					new Coords(0, 0 - this.entityDimension, 0)
+				)
+			);
+		}
+
+		var itemLog = new ItemDefn(itemLogName, null, null, 10, 1, null, null, null, itemLogVisual);
+
+		return itemLog;
+	}
+
+	meat()
+	{
+		var itemMeatName = "Meat";
+		var itemMeatColor = Color.byName("Red");
+		var itemMeatVisual = new VisualGroup
+		([
+			new VisualCircle
+			(
+				this.entityDimensionHalf, itemMeatColor, null
+			),
+			new VisualCircle
+			(
+				this.entityDimensionHalf * .9, null, Color.byName("White")
+			),
+			new VisualOffset
+			(
+				new VisualCircle
+				(
+					this.entityDimensionHalf * .2, Color.byName("Pink"), Color.byName("White")
+				),
+				new Coords(this.entityDimensionHalf * .2, 0, 0)
+			)
+		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			itemMeatVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding(itemMeatName, null, null), null, itemMeatColor, null),
+					new Coords(0, 0 - this.entityDimension * 1.5, 0)
+				)
+			);
+		}
+
+		var itemMeat = new ItemDefn
+		(
+			itemMeatName, null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize
+			[ "Consumable" ], // categoryNames
+			(universe: Universe, world: World, place: Place, entityUser: Entity, entityItem: Entity) => // use
+			{
+				entityUser.starvable().satietyAdd(20);
+				var item = entityItem.item();
+				entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
+				var message = "You eat the meat.";
+				return message;
+			},
+			itemMeatVisual
+		);
+
+		return itemMeat;
+	}
+
+	medicine()
+	{
+		var itemMedicineName = "Medicine";
+		var itemMedicineColor = Color.byName("Red");
+		var itemMedicineVisual = new VisualGroup
+		([
+			new VisualRectangle
+			(
+				new Coords(1, 1, 0).multiplyScalar(this.entityDimension),
+				Color.byName("White"), null, null
+			),
+			new VisualPolygon
+			(
+				new Path
+				([
+					new Coords(-0.5, -0.2, 0),
+					new Coords(-0.2, -0.2, 0),
+					new Coords(-0.2, -0.5, 0),
+					new Coords(0.2, -0.5, 0),
+					new Coords(0.2, -0.2, 0),
+					new Coords(0.5, -0.2, 0),
+					new Coords(0.5, 0.2, 0),
+					new Coords(0.2, 0.2, 0),
+					new Coords(0.2, 0.5, 0),
+					new Coords(-0.2, 0.5, 0),
+					new Coords(-0.2, 0.2, 0),
+					new Coords(-0.5, 0.2, 0)
+				]).transform
+				(
+					Transform_Scale.fromScalar(this.entityDimension)
+				),
+				itemMedicineColor,
+				null
+			)
+		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			itemMedicineVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding(itemMedicineName, null, null), null, itemMedicineColor, null),
+					new Coords(0, 0 - this.entityDimension, 0)
+				)
+			);
+		}
+
+		var itemMedicine = new ItemDefn
+		(
+			itemMedicineName, null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize
+			[ "Consumable" ], // categoryNames
+			(universe: Universe, world: World, place: Place, entityUser: Entity, entityItem: Entity) => // use
+			{
+				var effectToApply = Effect.Instances().Healing;
+				entityUser.effectable().effectAdd(effectToApply);
+				var item = entityItem.item();
+				entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
+				var message = "You use the medicine.";
+				return message;
+			},
+			itemMedicineVisual
+		);
+
+		return itemMedicine;
+	}
+
+	mushroom()
+	{
+		var itemMushroomName = "Mushroom";
+		var colorStem = Color.byName("Gray");
+		var colorCap = Color.byName("Violet");
+		var itemMushroomVisual = new VisualGroup
+		([
+			new VisualOffset
+			(
+				new VisualArc
+				(
+					this.entityDimensionHalf, // radiusOuter
+					0, // radiusInner
+					new Coords(-1, 0, 0), // directionMin
+					.5, // angleSpannedInTurns
+					colorCap,
+					null
+				),
+				new Coords(0, -this.entityDimensionHalf / 2, 0)
+			),
+			new VisualOffset
+			(
+				new VisualRectangle
+				(
+					new Coords(this.entityDimensionHalf / 2, this.entityDimensionHalf, 0),
+					colorStem, null, null
+				),
+				new Coords(0, 0, 0)
+			)
+		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			itemMushroomVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding(itemMushroomName, null, null), null, colorCap, null),
+					new Coords(0, 0 - this.entityDimensionHalf * 3, 0)
+				)
+			);
+		}
+
+		var itemMushroom = new ItemDefn(itemMushroomName, null, null, .01, 1, null, null, null, itemMushroomVisual);
+
+		return itemMushroom;
+	}
+
+	pick()
+	{
+		var itemPickName = "Pick";
+		var itemPickColor = Color.byName("Gray");
+		var itemPickVisual = new VisualGroup
+		([
+			new VisualOffset
+			(
+				new VisualRectangle
+				(
+					new Coords(this.entityDimension / 4, this.entityDimension, 0),
+					Color.byName("Brown"), null, null
+				),
+				new Coords(0, 0 - this.entityDimension / 2, 0)
+			),
+			new VisualPolygon
+			(
+				new Path
+				([
+					new Coords(0.75, -1, 0),
+					new Coords(-0.75, -1, 0),
+					new Coords(-0.5, -1.4, 0),
+					new Coords(0.5, -1.4, 0)
+				]).transform
+				(
+					Transform_Scale.fromScalar(this.entityDimension)
+				),
+				itemPickColor,
+				null
+			)
+		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			itemPickVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText
+					(
+						DataBinding.fromContext(itemPickName),
+						null, itemPickColor, null
+					),
+					new Coords(0, 0 - this.entityDimension * 2, 0)
+				)
+			);
+		}
+
+		var itemPick = new ItemDefn(itemPickName, null, null, 1, 30, null, [ "Wieldable" ], this.itemUseEquip, itemPickVisual);
+
+		return itemPick;
+	}
+
+	potion()
+	{
+		// todo - Same as medicine right now.
+
+		var itemPotionName = "Potion";
+		var itemPotionColor = Color.byName("Red");
+		var itemPotionVisual = new VisualGroup
+		([
+			new VisualRectangle
+			(
+				new Coords(1, 1, 0).multiplyScalar(this.entityDimension),
+				Color.byName("White"), null, null
+			),
+			new VisualPolygon
+			(
+				new Path
+				([
+					new Coords(-0.5, -0.2, 0),
+					new Coords(-0.2, -0.2, 0),
+					new Coords(-0.2, -0.5, 0),
+					new Coords(0.2, -0.5, 0),
+					new Coords(0.2, -0.2, 0),
+					new Coords(0.5, -0.2, 0),
+					new Coords(0.5, 0.2, 0),
+					new Coords(0.2, 0.2, 0),
+					new Coords(0.2, 0.5, 0),
+					new Coords(-0.2, 0.5, 0),
+					new Coords(-0.2, 0.2, 0),
+					new Coords(-0.5, 0.2, 0)
+				]).transform
+				(
+					Transform_Scale.fromScalar(this.entityDimension)
+				),
+				itemPotionColor,
+				null
+			)
+		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			itemPotionVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding(itemPotionName, null, null), null, itemPotionColor, null),
+					new Coords(0, 0 - this.entityDimension, 0)
+				)
+			);
+		}
+
+		var itemPotion = new ItemDefn
+		(
+			itemPotionName, null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize
+			[ "Consumable" ], // categoryNames
+			(universe: Universe, world: World, place: Place, entityUser: Entity, entityItem: Entity) => // use
+			{
+				var effectToApply = Effect.Instances().Healing;
+				entityUser.effectable().effectAdd(effectToApply);
+				var item = entityItem.item();
+				entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
+				var message = "You use the medicine.";
+				return message;
+			},
+			itemPotionVisual
+		);
+
+		return itemPotion;
+	}
+
+	shovel()
+	{
+		var itemShovelName = "Shovel";
+		var itemShovelColor = Color.byName("Gray");
+		var itemShovelVisual = new VisualGroup
+		([
+			new VisualOffset
+			(
+				new VisualRectangle
+				(
+					new Coords(this.entityDimension / 4, this.entityDimension, 0),
+					Color.byName("Brown"), null, null
+				),
+				new Coords(0, 0 + this.entityDimension / 2, 0)
+			),
+			new VisualPolygon
+			(
+				new Path
+				([
+					new Coords(0.5, 1.5, 0),
+					new Coords(0, 1.75, 0),
+					new Coords(-0.5, 1.5, 0),
+					new Coords(-0.5, 1.0, 0),
+					new Coords(0.5, 1.0, 0)
+				]).transform
+				(
+					Transform_Scale.fromScalar(this.entityDimension)
+				),
+				itemShovelColor,
+				null
+			)
+		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			itemShovelVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText
+					(
+						DataBinding.fromContext(itemShovelName),
+						null, itemShovelColor, null
+					),
+					new Coords(0, 0 - this.entityDimension * 2, 0)
+				)
+			);
+		}
+
+		var itemShovel = new ItemDefn(itemShovelName, null, null, 1, 30, null, [ "Wieldable" ], this.itemUseEquip, itemShovelVisual);
+
+		return itemShovel;
+	}
+
+	speedBoots()
+	{
+		var itemSpeedBootsName = "Speed Boots";
+		var itemAccessoryColor = Color.byName("Orange");
+		var itemSpeedBootsVisual = new VisualGroup
+		([
+			new VisualPolygon
+			(
+				new Path
+				([
+					new Coords(0, 0, 0),
+					new Coords(1, 0, 0),
+					new Coords(.5, -.5, 0),
+					new Coords(.5, -1, 0),
+					new Coords(0, -1, 0),
+				]).transform
+				(
+					Transform_Scale.fromScalar(this.entityDimension)
+				),
+				itemAccessoryColor,
+				null
+			)
+		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			itemSpeedBootsVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding(itemSpeedBootsName, null, null), null, itemAccessoryColor, null),
+					new Coords(0, 0 - this.entityDimension * 2, 0)
+				)
+			);
+		}
+
+		var itemSpeedBoots = new ItemDefn
+		(
+			itemSpeedBootsName, null, null, 10, 30, null, [ "Accessory" ], this.itemUseEquip, itemSpeedBootsVisual
+		);
+
+		return itemSpeedBoots;
+	}
+
+	sword()
+	{
+		var itemSwordVisual = this.sword_Visual();
+		var itemSword = new ItemDefn("Sword", null, null, 10, 100, null, [ "Wieldable" ], this.itemUseEquip, itemSwordVisual);
+		return itemSword;
+	}
+
+	sword_Visual()
+	{
+		var itemSwordColor = Color.fromRGB(0, .5, .5);
+
+		var itemSwordVisualBladePath = new Path
+		([
+			// blade
+			new Coords(-0.4, 0.2, 0),
+			new Coords(.9, 0.2, 0),
+			new Coords(1.1, 0, 0),
+			new Coords(.9, -0.2, 0),
+			new Coords(-0.4, -0.2, 0),
+		]);
+
+		var itemSwordVisualHiltPath = new Path
+		([
+			// hilt
+			new Coords(-0.4, -0.5, 0),
+			new Coords(-0.8, -0.5, 0),
+			new Coords(-0.8, -0.2, 0),
+			new Coords(-1.1, -0.2, 0),
+			new Coords(-1.1, 0.2, 0),
+			new Coords(-0.8, 0.2, 0),
+			new Coords(-0.8, 0.5, 0),
+			new Coords(-0.4, 0.5, 0)
+		]);
+
+		var transform = new Transform_Multiple
+		([
+			Transform_Scale.fromScalar(this.entityDimension),
+			new Transform_RotateRight(3) // quarter-turns
+		]);
+
+		var itemSwordVisualBlade = new VisualPolygon //Located
+		(
+			itemSwordVisualBladePath.transform(transform),
+			Color.byName("GrayLight"),
+			null // colorBorder
+		);
+
+		var itemSwordVisualHilt = new VisualPolygon //Located
+		(
+			itemSwordVisualHiltPath.transform(transform),
+			itemSwordColor,
+			null // colorBorder
+		);
+		
+		var itemSwordVisualBody = new VisualGroup
+		([
+			itemSwordVisualBlade, itemSwordVisualHilt
+		]);
+
+		var itemSwordVisual = new VisualGroup
+		([
+			itemSwordVisualBody
+		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			itemSwordVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(DataBinding.fromContext("Sword"), null, itemSwordColor, null),
+					new Coords(0, 0 - this.entityDimension * 2, 0)
+				)
+			);
+		}
+
+		return itemSwordVisual;
+	}
+
+	swordCold()
+	{
+		var itemSwordVisual = this.sword_Visual();
+		var itemSwordColdVisual = new VisualTransform
+		(
+			new Transform_Colorize(Color.byName("Cyan"), null), itemSwordVisual
+		);
+		var itemSwordCold = new ItemDefn
+		(
+			"SwordCold", null, null, 10, 100, null, [ "Wieldable" ], this.itemUseEquip, itemSwordColdVisual
+		);
+		return itemSwordCold;
+	}
+
+	swordHeat()
+	{
+		var itemSwordVisual = this.sword_Visual();
+		var itemSwordHeatVisual = new VisualTransform
+		(
+			new Transform_Colorize(Color.byName("Yellow"), null), itemSwordVisual
+		);
+		var itemSwordHeat = new ItemDefn
+		(
+			"SwordHeat", null, null, 10, 100, null, [ "Wieldable" ], this.itemUseEquip, itemSwordHeatVisual
+		);
+		return itemSwordHeat;
+	}
+
+	toolset()
+	{
+		var itemToolsetName = "Toolset";
+		var itemToolsetColor = Color.byName("Gray");
+		var itemToolsetVisual = new VisualGroup
+		([
+			new VisualOffset
+			(
+				new VisualRectangle
+				(
+					new Coords(this.entityDimension / 4, this.entityDimension, 0),
+					Color.byName("Brown"), null, null
+				),
+				new Coords(0, this.entityDimension / 2, 0)
+			),
+			new VisualRectangle
+			(
+				new Coords(this.entityDimension, this.entityDimension / 2, 0),
+				itemToolsetColor, null, null
+			)
+		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			itemToolsetVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding(itemToolsetName, null, null), null, itemToolsetColor, null),
+					new Coords(0, 0 - this.entityDimension, 0)
+				)
+			);
+		}
+
+		var itemToolset = new ItemDefn(itemToolsetName, null, null, 1, 30, null, null, null, itemToolsetVisual);
+
+		return itemToolset;
+	}
+
+	walkieTalkie()
+	{
+		var itemWalkieTalkie = new ItemDefn
+		(
+			"Walkie-Talkie", null, null, 2, 10, null,
+			[], // categoryNames
+			(universe: Universe, world: World, place: Place, entityUser: Entity, entityItem: Entity) => // use
+			{
+				return "There is no response but static.";
+			},
+			new VisualNone() // todo
+		);
+
+		return itemWalkieTalkie;
+	}
+
+	weight()
+	{
+		var itemWeightName = "Weight";
+		var itemWeightColor = Color.byName("Blue");
+		var itemWeightVisual = new VisualGroup
+		([
+			new VisualOffset
+			(
+				new VisualArc
+				(
+					this.entityDimensionHalf, // radiusOuter
+					this.entityDimensionHalf / 2, // radiusInner
+					new Coords(-1, 0, 0).normalize(), // directionMin
+					.5, // angleSpannedInTurns
+					itemWeightColor,
+					null
+				),
+				new Coords(0, -1, 0).multiplyScalar(this.entityDimensionHalf)
+			),
+			new VisualPolygon
+			(
+				new Path
+				([
+					new Coords(-.75, .5, 0),
+					new Coords(-.5, -.5, 0),
+					new Coords(.5, -.5, 0),
+					new Coords(.75, .5, 0)
+				]).transform
+				(
+					new Transform_Scale
+					(
+						new Coords(1, 1, 1).multiplyScalar(this.entityDimension)
+					)
+				),
+				itemWeightColor,
+				null
+			)
+		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			itemWeightVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding(itemWeightName, null, null), null, itemWeightColor, null),
+					new Coords(0, 0 - this.entityDimension * 2, 0)
+				)
+			);
+		}
+
+		var itemWeight = new ItemDefn(itemWeightName, null, null, 2000, 5, null, null, null, itemWeightVisual);
+
+		return itemWeight;
+	}
+}
