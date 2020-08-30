@@ -130,7 +130,10 @@ class PlaceBuilderDemo_Emplacements
 			collider,
 			[ Collidable.name ], // entityPropertyNamesToCollideWith,
 			// collideEntities
-			(u: Universe, w: World, p: Place, e: Entity, e2: Entity) => { u.collisionHelper.collideCollidablesReverseVelocities(e, e2); }
+			(u: Universe, w: World, p: Place, e: Entity, e2: Entity) =>
+			{
+				u.collisionHelper.collideEntitiesReverseVelocities(e, e2);
+			}
 		);
 
 		var killable = new Killable
@@ -753,7 +756,10 @@ class PlaceBuilderDemo_Emplacements
 			collider,
 			[ Collidable.name ], // entityPropertyNamesToCollideWith,
 			// collideEntities
-			(u: Universe, w: World, p: Place, e: Entity, e2: Entity) => { u.collisionHelper.collideCollidablesReverseVelocities(e, e2); }
+			(u: Universe, w: World, p: Place, e: Entity, e2: Entity) =>
+			{
+				u.collisionHelper.collideEntitiesReverseVelocities(e, e2);
+			}
 		);
 
 		var entityDefn = new Entity

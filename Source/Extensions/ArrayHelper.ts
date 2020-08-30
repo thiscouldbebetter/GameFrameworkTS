@@ -102,7 +102,7 @@ class ArrayHelper
 		return (array.indexOf(elementToFind) >= 0);
 	};
 
-	static equals(array: any, other: any)
+	static equals(array: any[], other: any[])
 	{
 		var areEqualSoFar;
 

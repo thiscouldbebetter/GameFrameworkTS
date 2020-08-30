@@ -1,10 +1,11 @@
 "use strict";
 class Collision {
     constructor(pos, distanceToCollision, colliders) {
-        this.pos = (pos == null ? new Coords(0, 0, 0) : pos);
+        this.pos = pos || new Coords(0, 0, 0);
         this.distanceToCollision = distanceToCollision;
         this.collidables = [];
         this.colliders = colliders || [];
+        this.collidersByName = new Map();
         this.normals = [new Coords(0, 0, 0), new Coords(0, 0, 0)];
         this.isActive = false;
     }
@@ -12,9 +13,9 @@ class Collision {
         this.isActive = false;
         ArrayHelper.clear(this.collidables);
         ArrayHelper.clear(this.colliders);
+        this.collidersByName.clear();
         return this;
     }
-    ;
     equals(other) {
         var returnValue = (this.isActive == other.isActive
             &&
@@ -22,8 +23,7 @@ class Collision {
                     ||
                         (this.pos.equals(other.pos)
                             && this.distanceToCollision == other.distanceToCollision
-                            && this.colliders.equals(other.colliders))));
+                            && ArrayHelper.equals(this.colliders, other.colliders))));
         return returnValue;
     }
-    ;
 }

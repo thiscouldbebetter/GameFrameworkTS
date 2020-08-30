@@ -540,7 +540,7 @@ class PlaceBuilderDemo_Movers {
             var soundHelper = universe.soundHelper;
             var entityOtherDamager = entityOther.damager();
             if (entityOtherDamager != null) {
-                universe.collisionHelper.collideCollidables(entityPlayer, entityOther);
+                universe.collisionHelper.collideEntities(entityPlayer, entityOther);
                 entityPlayer.killable().damageApply(universe, world, place, entityOther, entityPlayer, entityOtherDamager.damagePerHit);
                 soundHelper.soundWithNamePlayAsEffect(universe, "Effects_Clang");
             }

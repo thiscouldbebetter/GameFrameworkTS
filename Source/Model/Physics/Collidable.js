@@ -12,20 +12,18 @@ class Collidable extends EntityProperty {
         // Helper variables.
         this._transformTranslate = new Transform_Translate(new Coords(0, 0, 0));
     }
-    collideEntities(u, w, p, e0, e1) {
+    collideEntities(u, w, p, e0, e1, c) {
         if (this._collideEntities != null) {
-            this._collideEntities(u, w, p, e0, e1);
+            this._collideEntities(u, w, p, e0, e1, c);
         }
     }
     colliderLocateForEntity(entity) {
         this.collider.overwriteWith(this.colliderAtRest);
         Transforms.applyTransformToCoordsMany(this._transformTranslate.displacementSet(entity.locatable().loc.pos), this.collider.coordsGroupToTranslate());
     }
-    ;
     initialize(universe, world, place, entity) {
         this.colliderLocateForEntity(entity);
     }
-    ;
     updateForTimerTick(universe, world, place, entity) {
         if (this.isDisabled) {
             return;
@@ -42,10 +40,12 @@ class Collidable extends EntityProperty {
                     for (var e = 0; e < entitiesWithProperty.length; e++) {
                         var entityOther = entitiesWithProperty[e];
                         if (entityOther != entity) {
-                            var doEntitiesCollide = universe.collisionHelper.doEntitiesCollide(entity, entityOther);
+                            var collisionHelper = universe.collisionHelper;
+                            var doEntitiesCollide = collisionHelper.doEntitiesCollide(entity, entityOther);
                             if (doEntitiesCollide) {
-                                this.collideEntities(universe, world, place, entity, entityOther);
-                                entityOther.collidable().collideEntities(universe, world, place, entityOther, entity);
+                                var collision = collisionHelper.collisionOfEntities(entity, entityOther, collision);
+                                this.collideEntities(universe, world, place, entity, entityOther, collision);
+                                entityOther.collidable().collideEntities(universe, world, place, entityOther, entity, collision);
                             }
                         }
                     }
@@ -53,10 +53,8 @@ class Collidable extends EntityProperty {
             }
         }
     }
-    ;
     // cloneable
     clone() {
         return new Collidable(this.colliderAtRest.clone(), this.entityPropertyNamesToCollideWith, this._collideEntities);
     }
-    ;
 }

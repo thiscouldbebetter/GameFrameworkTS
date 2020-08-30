@@ -262,19 +262,22 @@ class PlaceBuilderDemo
 		);
 		var mapCellSize = size.clone().divide(mapSizeInCells).ceiling();
 
-		/*
-		// Adding colliders this way slows things down too much.
-
 		var cellCollider = new Box(new Coords(0, 0, 0), mapCellSize);
 		var cellCollide = (u: Universe, w: World, p: Place, e0: Entity, e1: Entity) =>
 		{
-			return;
+			var traversable = e0.traversable();
+			if (traversable != null)
+			{
+				if (traversable.isBlocking)
+				{
+					u.collisionHelper.collideEntitiesReverseVelocities(e0, e1);
+				}
+			}
 		};
 		var cellCollidable = new Collidable
 		(
-			cellCollider, [ Collidable.name ], cellCollide
+			cellCollider, [ Playable.name ], cellCollide
 		);
-		*/
 
 		var neighborOffsets =
 		[
@@ -511,12 +514,12 @@ class PlaceBuilderDemo
 		var terrains =
 		[
 						//name, codeChar, level, isBlocking, visual
-			new Terrain("Water", 	"~", 0, true, colorToTerrainVisualsByName("Blue")),
-			new Terrain("Sand", 	".", 1, false, colorToTerrainVisualsByName("Tan")),
-			new Terrain("Grass", 	":", 2, false, colorToTerrainVisualsByName("Green")),
-			new Terrain("Trees", 	"Q", 3, false, colorToTerrainVisualsByName("GreenDark")),
-			new Terrain("Rock", 	"A", 4, false, colorToTerrainVisualsByName("Gray")),
-			new Terrain("Snow", 	"*", 5, false, colorToTerrainVisualsByName("White")),
+			new Terrain("Water", 	"~", 0, new Traversable(true), colorToTerrainVisualsByName("Blue")),
+			new Terrain("Sand", 	".", 1, new Traversable(false), colorToTerrainVisualsByName("Tan")),
+			new Terrain("Grass", 	":", 2, new Traversable(false), colorToTerrainVisualsByName("Green")),
+			new Terrain("Trees", 	"Q", 3, new Traversable(false), colorToTerrainVisualsByName("GreenDark")),
+			new Terrain("Rock", 	"A", 4, new Traversable(false), colorToTerrainVisualsByName("Gray")),
+			new Terrain("Snow", 	"*", 5, new Traversable(false), colorToTerrainVisualsByName("White")),
 		]
 		var terrainsByName = ArrayHelper.addLookupsByName(terrains);
 		var terrainsByCodeChar: any = ArrayHelper.addLookups(terrains, (x: Terrain) => x.codeChar);
@@ -554,6 +557,7 @@ class PlaceBuilderDemo
 
 			var cell = map.cellAtPosInCells(cellPosInCells);
 			var cellTerrain = terrainsByName.get(cell.visualName);
+
 			var cellTerrainVisuals = cellTerrain.visuals;
 			cellVisuals.push(cellTerrainVisuals[0]);
 
@@ -649,12 +653,14 @@ class PlaceBuilderDemo
 			(
 				this.name + cellPosInCells.toString(),
 				[
-					//cellCollidable.clone(),
+					cellCollidable.clone(),
 					new Drawable(cellVisual, null),
 					new DrawableCamera(),
-					new Locatable(new Disposition(cellPosInPixels, null, null))
+					new Locatable(new Disposition(cellPosInPixels, null, null)),
+					cellTerrain.traversable
 				]
 			);
+
 			return cellAsEntity;
 		};
 
@@ -1824,7 +1830,7 @@ class PlaceBuilderDemo
 			}
 			else
 			{
-				universe.collisionHelper.collideCollidables(entityPlayer, entityOther);
+				universe.collisionHelper.collideEntities(entityPlayer, entityOther);
 			}
 		};
 

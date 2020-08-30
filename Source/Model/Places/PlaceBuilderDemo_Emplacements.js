@@ -66,7 +66,9 @@ class PlaceBuilderDemo_Emplacements {
         var collider = new Box(new Coords(0, 0, 0), new Coords(1, .1, 1).multiplyScalar(entityDimension));
         var collidable = new Collidable(collider, [Collidable.name], // entityPropertyNamesToCollideWith,
         // collideEntities
-        (u, w, p, e, e2) => { u.collisionHelper.collideCollidablesReverseVelocities(e, e2); });
+        (u, w, p, e, e2) => {
+            u.collisionHelper.collideEntitiesReverseVelocities(e, e2);
+        });
         var killable = new Killable(1, // integrityMax
         null, // damageApply
         (u, w, p, entityDying) => {
@@ -369,7 +371,9 @@ class PlaceBuilderDemo_Emplacements {
         var collider = new Box(new Coords(0, 0, 0), new Coords(1, .1, 1).multiplyScalar(entityDimension * .25));
         var collidable = new Collidable(collider, [Collidable.name], // entityPropertyNamesToCollideWith,
         // collideEntities
-        (u, w, p, e, e2) => { u.collisionHelper.collideCollidablesReverseVelocities(e, e2); });
+        (u, w, p, e, e2) => {
+            u.collisionHelper.collideEntitiesReverseVelocities(e, e2);
+        });
         var entityDefn = new Entity(entityName, [
             new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
             collidable,

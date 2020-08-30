@@ -3,18 +3,20 @@ class Collision
 {
 	pos: Coords;
 	distanceToCollision: number;
-	colliders: any;
+	colliders: any[];
+	collidersByName: Map<string,any>;
 
-	collidables: any;
-	normals: any;
+	collidables: Entity[];
+	normals: Coords[];
 	isActive: boolean;
 
-	constructor(pos: Coords, distanceToCollision: number, colliders: any)
+	constructor(pos: Coords, distanceToCollision: number, colliders: any[])
 	{
-		this.pos = (pos == null ? new Coords(0, 0, 0) : pos);
+		this.pos = pos || new Coords(0, 0, 0);
 		this.distanceToCollision = distanceToCollision;
 		this.collidables = [];
 		this.colliders = colliders || [];
+		this.collidersByName = new Map<string,any>();
 		this.normals = [ new Coords(0, 0, 0), new Coords(0, 0, 0) ];
 
 		this.isActive = false;
@@ -25,8 +27,9 @@ class Collision
 		this.isActive = false;
 		ArrayHelper.clear(this.collidables);
 		ArrayHelper.clear(this.colliders);
+		this.collidersByName.clear();
 		return this;
-	};
+	}
 
 	equals(other: Collision)
 	{
@@ -40,11 +43,11 @@ class Collision
 				(
 					this.pos.equals(other.pos)
 					&& this.distanceToCollision == other.distanceToCollision
-					&& this.colliders.equals(other.colliders)
+					&& ArrayHelper.equals(this.colliders, other.colliders)
 				)
 			)
 		);
 
 		return returnValue;
-	};
+	}
 }

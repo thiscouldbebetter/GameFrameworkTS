@@ -3,7 +3,7 @@ class Collidable extends EntityProperty
 {
 	colliderAtRest: any;
 	entityPropertyNamesToCollideWith: string[];
-	_collideEntities: (u: Universe, w: World, p: Place, e0: Entity, e1: Entity) => void;
+	_collideEntities: (u: Universe, w: World, p: Place, e0: Entity, e1: Entity, c: Collision) => void;
 
 	collider: any;
 	ticksUntilCanCollide: number;
@@ -16,7 +16,7 @@ class Collidable extends EntityProperty
 	(
 		colliderAtRest: any,
 		entityPropertyNamesToCollideWith: string[],
-		collideEntities: (u: Universe, w: World, p: Place, e0: Entity, e1: Entity) => void
+		collideEntities: (u: Universe, w: World, p: Place, e0: Entity, e1: Entity, c: Collision) => void
 	)
 	{
 		super();
@@ -35,11 +35,11 @@ class Collidable extends EntityProperty
 		this._transformTranslate = new Transform_Translate(new Coords(0, 0, 0));
 	}
 
-	collideEntities(u: Universe, w: World, p: Place, e0: Entity, e1: Entity)
+	collideEntities(u: Universe, w: World, p: Place, e0: Entity, e1: Entity, c: Collision)
 	{
 		if (this._collideEntities != null)
 		{
-			this._collideEntities(u, w, p, e0, e1);
+			this._collideEntities(u, w, p, e0, e1, c);
 		}
 	}
 
@@ -54,12 +54,12 @@ class Collidable extends EntityProperty
 			),
 			this.collider.coordsGroupToTranslate()
 		);
-	};
+	}
 
 	initialize(universe: Universe, world: World, place: Place, entity: Entity)
 	{
 		this.colliderLocateForEntity(entity);
-	};
+	}
 
 	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity)
 	{
@@ -87,20 +87,24 @@ class Collidable extends EntityProperty
 						var entityOther = entitiesWithProperty[e];
 						if (entityOther != entity)
 						{
-							var doEntitiesCollide = universe.collisionHelper.doEntitiesCollide
+							var collisionHelper = universe.collisionHelper;
+							var doEntitiesCollide = collisionHelper.doEntitiesCollide
 							(
 								entity, entityOther
 							);
 							if (doEntitiesCollide)
 							{
+								var collision =
+									collisionHelper.collisionOfEntities(entity, entityOther, collision);
+
 								this.collideEntities
 								(
-									universe, world, place, entity, entityOther
+									universe, world, place, entity, entityOther, collision
 								);
 
 								entityOther.collidable().collideEntities
 								(
-									universe, world, place, entityOther, entity
+									universe, world, place, entityOther, entity, collision
 								);
 							}
 						}
@@ -108,7 +112,7 @@ class Collidable extends EntityProperty
 				}
 			}
 		}
-	};
+	}
 
 	// cloneable
 
@@ -120,5 +124,5 @@ class Collidable extends EntityProperty
 			this.entityPropertyNamesToCollideWith,
 			this._collideEntities
 		);
-	};
+	}
 }

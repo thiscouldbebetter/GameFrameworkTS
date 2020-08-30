@@ -5,6 +5,7 @@ class CollisionHelper {
         this.colliderTypeNamesToDoCollideLookup = this.doCollideLookupBuild();
         this.colliderTypeNamesToDoesContainLookup = this.doesContainLookupBuild();
         this.colliderTypeNamesToCollideLookup = this.collisionResponseLookupBuild();
+        this.colliderTypeNamesToCollisionFindLookup = this.collisionFindLookupBuild();
         // Helper variables.
         this._box = new Box(new Coords(0, 0, 0), new Coords(0, 0, 0));
         this._collision = new Collision(new Coords(0, 0, 0), null, null);
@@ -16,6 +17,44 @@ class CollisionHelper {
         this._size = new Coords(0, 0, 0);
     }
     // constructor helpers
+    collisionFindLookupBuild() {
+        var lookupOfLookups = new Map();
+        var lookup;
+        var notDefined = null; // todo
+        var boxName = (typeof Box == notDefined ? null : Box.name);
+        var boxRotatedName = (typeof BoxRotated == notDefined ? null : BoxRotated.name);
+        var mapLocatedName = (typeof MapLocated == notDefined ? null : MapLocated.name);
+        var meshName = (typeof Mesh == notDefined ? null : Mesh.name);
+        var sphereName = (typeof Sphere == notDefined ? null : Sphere.name);
+        if (boxName != null) {
+            lookup = new Map();
+            lookup.set(boxName, this.collisionOfBoxAndBox);
+            lookup.set(mapLocatedName, this.collisionOfBoxAndMapLocated);
+            lookup.set(sphereName, this.collisionOfBoxAndSphere);
+            lookupOfLookups.set(boxName, lookup);
+        }
+        if (mapLocatedName != null) {
+            lookup = new Map();
+            lookup.set(boxName, this.collisionOfMapLocatedAndBox);
+            lookup.set(sphereName, this.collisionOfMapLocatedAndSphere);
+            lookupOfLookups.set(mapLocatedName, lookup);
+        }
+        if (meshName != null) {
+            lookup = new Map();
+            lookup.set(boxName, this.collisionOfMeshAndBox);
+            lookup.set(sphereName, this.collisionOfMeshAndSphere);
+            lookupOfLookups.set(meshName, lookup);
+        }
+        if (sphereName != null) {
+            lookup = new Map();
+            lookup.set(boxName, this.collisionOfSphereAndBox);
+            lookup.set(boxRotatedName, this.collisionOfSphereAndBoxRotated);
+            lookup.set(mapLocatedName, this.collisionOfSphereAndMapLocated);
+            lookup.set(sphereName, this.collisionOfSpheres);
+            lookupOfLookups.set(sphereName, lookup);
+        }
+        return lookupOfLookups;
+    }
     collisionResponseLookupBuild() {
         var lookupOfLookups = new Map();
         var lookup;
@@ -28,45 +67,44 @@ class CollisionHelper {
         var sphereName = (typeof Sphere == notDefined ? null : Sphere.name);
         if (boxName != null) {
             lookup = new Map();
-            lookup.set(sphereName, this.collideCollidablesBoxAndSphere);
+            lookup.set(sphereName, this.collideEntitiesBoxAndSphere);
             lookupOfLookups.set(boxName, lookup);
         }
         if (mapLocatedName != null) {
             lookup = new Map();
-            lookup.set(sphereName, this.collideCollidablesReverseVelocities);
+            lookup.set(sphereName, this.collideEntitiesReverseVelocities);
             lookupOfLookups.set(mapLocatedName, lookup);
         }
         if (meshName != null) {
             lookup = new Map();
-            lookup.set(mapLocatedName, this.collideCollidablesReverseVelocities);
-            lookup.set(meshName, this.collideCollidablesReverseVelocities);
-            lookup.set(shapeGroupAllName, this.collideCollidablesReverseVelocities);
-            lookup.set(sphereName, this.collideCollidablesReverseVelocities);
+            lookup.set(mapLocatedName, this.collideEntitiesReverseVelocities);
+            lookup.set(meshName, this.collideEntitiesReverseVelocities);
+            lookup.set(shapeGroupAllName, this.collideEntitiesReverseVelocities);
+            lookup.set(sphereName, this.collideEntitiesReverseVelocities);
             lookupOfLookups.set(meshName, lookup);
         }
         if (boxRotatedName != null) {
             lookup = new Map();
-            lookup.set(sphereName, this.collideCollidablesBoxRotatedAndSphere);
+            lookup.set(sphereName, this.collideEntitiesBoxRotatedAndSphere);
             lookupOfLookups.set(boxRotatedName, lookup);
         }
         if (shapeGroupAllName != null) {
             lookup = new Map();
-            lookup.set(sphereName, this.collideCollidablesSphereAndShapeGroupAll);
+            lookup.set(sphereName, this.collideEntitiesSphereAndShapeGroupAll);
             lookupOfLookups.set(shapeGroupAllName, lookup);
         }
         if (sphereName != null) {
             lookup = new Map();
-            lookup.set(boxName, this.collideCollidablesSphereAndBox);
-            lookup.set(mapLocatedName, this.collideCollidablesReverseVelocities);
-            lookup.set(meshName, this.collideCollidablesReverseVelocities);
-            lookup.set(boxRotatedName, this.collideCollidablesSphereAndBoxRotated);
-            lookup.set(shapeGroupAllName, this.collideCollidablesReverseVelocities);
-            lookup.set(sphereName, this.collideCollidablesSphereAndSphere);
+            lookup.set(boxName, this.collideEntitiesSphereAndBox);
+            lookup.set(mapLocatedName, this.collideEntitiesReverseVelocities);
+            lookup.set(meshName, this.collideEntitiesReverseVelocities);
+            lookup.set(boxRotatedName, this.collideEntitiesSphereAndBoxRotated);
+            lookup.set(shapeGroupAllName, this.collideEntitiesReverseVelocities);
+            lookup.set(sphereName, this.collideEntitiesSphereAndSphere);
             lookupOfLookups.set(sphereName, lookup);
         }
         return lookupOfLookups;
     }
-    ;
     doCollideLookupBuild() {
         var lookupOfLookups = new Map();
         var andText = "And";
@@ -117,7 +155,7 @@ class CollisionHelper {
     }
     ;
     // instance methods
-    collideCollidables(entityColliding, entityCollidedWith) {
+    collideEntities(entityColliding, entityCollidedWith) {
         var returnValue;
         var collider0 = entityColliding.collidable().collider;
         var collider1 = entityCollidedWith.collidable().collider;
@@ -148,12 +186,45 @@ class CollisionHelper {
         }
         return returnValue;
     }
-    ;
     collisionClosest(collisionsToCheck) {
         var returnValue = collisionsToCheck.filter(x => x.isActive).sort((x, y) => x.distanceToCollision - y.distanceToCollision)[0];
         return returnValue;
     }
-    ;
+    collisionOfEntities(entityColliding, entityCollidedWith, collision) {
+        var returnValue;
+        if (collision == null) {
+            collision = new Collision(null, null, null);
+        }
+        collision.isActive = false;
+        var collider0 = entityColliding.collidable().collider;
+        var collider1 = entityCollidedWith.collidable().collider;
+        while (collider0.collider != null) {
+            collider0 = collider0.collider();
+        }
+        while (collider1.collider != null) {
+            collider1 = collider1.collider();
+        }
+        var collider0TypeName = collider0.constructor.name;
+        var collider1TypeName = collider1.constructor.name;
+        var collideLookup = this.colliderTypeNamesToCollisionFindLookup.get(collider0TypeName);
+        if (collideLookup == null) {
+            if (this.throwErrorIfCollidersCannotBeCollided) {
+                throw "Error!  Colliders of types cannot be collided: " + collider0TypeName + "," + collider1TypeName;
+            }
+        }
+        else {
+            var collisionMethod = collideLookup.get(collider1TypeName);
+            if (collisionMethod == null) {
+                if (this.throwErrorIfCollidersCannotBeCollided) {
+                    throw "Error!  Colliders of types cannot be collided: " + collider0TypeName + "," + collider1TypeName;
+                }
+            }
+            else {
+                returnValue = collisionMethod.call(this, collider0, collider1, collision);
+            }
+        }
+        return returnValue;
+    }
     collisionsOfEntitiesCollidableInSets(entitiesCollidable0, entitiesCollidable1) {
         var returnValues = [];
         for (var i = 0; i < entitiesCollidable0.length; i++) {
@@ -171,7 +242,6 @@ class CollisionHelper {
         }
         return returnValues;
     }
-    ;
     doEntitiesCollide(entity0, entity1) {
         var collidable0 = entity0.collidable();
         var collidable1 = entity1.collidable();
@@ -195,7 +265,6 @@ class CollisionHelper {
         }
         return doCollide;
     }
-    ;
     doCollidablesCollide(entityCollidable0, entityCollidable1) {
         var doCollidersCollide = false;
         var collidable0 = entityCollidable0.collidable();
@@ -216,7 +285,6 @@ class CollisionHelper {
         }
         return doCollidersCollide;
     }
-    ;
     doCollidersCollide(collider0, collider1) {
         var returnValue = false;
         while (collider0.collider != null) {
@@ -246,7 +314,6 @@ class CollisionHelper {
         }
         return returnValue;
     }
-    ;
     doesColliderContainOther(collider0, collider1) {
         var returnValue = false;
         while (collider0.collider != null) {
@@ -276,17 +343,15 @@ class CollisionHelper {
         }
         return returnValue;
     }
-    ;
     // shapes
-    // collideCollidablesXAndY
-    collideCollidablesReverseVelocities(collidable0, collidable1) {
+    // collideEntitiesXAndY
+    collideEntitiesReverseVelocities(collidable0, collidable1) {
         // todo
         // A simple collision response for shape pairs not yet implemented.
         collidable0.locatable().loc.vel.invert();
         collidable1.locatable().loc.vel.invert();
     }
-    ;
-    collideCollidablesBoxAndSphere(entityBox, entitySphere) {
+    collideEntitiesBoxAndSphere(entityBox, entitySphere) {
         var sphereLoc = entitySphere.locatable().loc;
         var box = entityBox.collidable().collider;
         var sphere = entitySphere.collidable().collider;
@@ -305,8 +370,7 @@ class CollisionHelper {
         }
         sphereOrientation.orthogonalize();
     }
-    ;
-    collideCollidablesBoxRotatedAndSphere(entityBoxRotated, entitySphere) {
+    collideEntitiesBoxRotatedAndSphere(entityBoxRotated, entitySphere) {
         var rectangle = entityBoxRotated.collidable().collider;
         var sphere = entitySphere.collidable().collider;
         var collision = this.collisionOfBoxRotatedAndSphere(rectangle, sphere, this._collision, true //shouldCalculatePos
@@ -317,21 +381,17 @@ class CollisionHelper {
         var rectangleVel = entityBoxRotated.locatable().loc.vel;
         rectangleVel.add(normal.clone().multiplyScalar(rectangleVel.dotProduct(normal) * -2));
     }
-    ;
-    collideCollidablesSphereAndBox(entitySphere, entityBox) {
-        this.collideCollidablesBoxAndSphere(entityBox, entitySphere);
+    collideEntitiesSphereAndBox(entitySphere, entityBox) {
+        this.collideEntitiesBoxAndSphere(entityBox, entitySphere);
     }
-    ;
-    collideCollidablesSphereAndBoxRotated(entitySphere, entityBoxRotated) {
-        this.collideCollidablesBoxRotatedAndSphere(entityBoxRotated, entitySphere);
+    collideEntitiesSphereAndBoxRotated(entitySphere, entityBoxRotated) {
+        this.collideEntitiesBoxRotatedAndSphere(entityBoxRotated, entitySphere);
     }
-    ;
-    collideCollidablesSphereAndShapeGroupAll(entitySphere, entityShapeGroupAll) {
+    collideEntitiesSphereAndShapeGroupAll(entitySphere, entityShapeGroupAll) {
         // todo
-        this.collideCollidablesReverseVelocities(entitySphere, entityShapeGroupAll);
+        this.collideEntitiesReverseVelocities(entitySphere, entityShapeGroupAll);
     }
-    ;
-    collideCollidablesSphereAndSphere(entityColliding, entityCollidedWith) {
+    collideEntitiesSphereAndSphere(entityColliding, entityCollidedWith) {
         var entityCollidingLoc = entityColliding.locatable().loc;
         var entityCollidedWithLoc = entityCollidedWith.locatable().loc;
         var entityCollidingPos = entityCollidingLoc.pos;
@@ -346,7 +406,6 @@ class CollisionHelper {
         var accelOfReflection = direction.multiplyScalar(speedAlongRadius * 2);
         entityCollidedWithLoc.accel.subtract(accelOfReflection);
     }
-    ;
     // collisionOfXAndY
     collisionOfBoxAndBox(box1, box2, collision) {
         if (collision == null) {
@@ -359,7 +418,53 @@ class CollisionHelper {
         }
         return collision;
     }
-    ;
+    collisionOfBoxAndMapLocated(box, mapLocated, collision) {
+        var doBoundsCollide = this.doBoxAndBoxCollide(mapLocated.box, box);
+        if (doBoundsCollide == false) {
+            return collision;
+        }
+        var map = mapLocated.map;
+        var cell = map.cellPrototype.clone();
+        var cellPosAbsolute = new Coords(0, 0, 0);
+        var cellPosInCells = new Coords(0, 0, 0);
+        var mapSizeInCells = map.sizeInCells;
+        var mapCellSize = map.cellSize;
+        var mapSizeHalf = map.sizeHalf;
+        var mapPos = mapLocated.loc.pos;
+        var cellAsBox = new Box(new Coords(0, 0, 0), map.cellSize);
+        for (var y = 0; y < mapSizeInCells.y; y++) {
+            cellPosInCells.y = y;
+            cellPosAbsolute.y = (y * mapCellSize.y) + mapPos.y - mapSizeHalf.y;
+            for (var x = 0; x < mapSizeInCells.x; x++) {
+                cellPosInCells.x = x;
+                cellPosAbsolute.x = (x * mapCellSize.x) + mapPos.x - mapSizeHalf.x;
+                cell = map.cellAtPosInCells(cellPosInCells);
+                if (cell.isBlocking) {
+                    cellAsBox.center.overwriteWith(cellPosAbsolute);
+                    var doCellAndBoxCollide = this.doBoxAndBoxCollide(cellAsBox, box);
+                    if (doCellAndBoxCollide) {
+                        collision.isActive = true;
+                        collision.pos.overwriteWith(cellAsBox.center);
+                        break;
+                    }
+                }
+            }
+        }
+        return collision;
+    }
+    collisionOfBoxAndMesh(box, mesh, collision) {
+        if (collision == null) {
+            collision = new Collision(null, null, null);
+        }
+        // hack
+        var meshBoundsAsBox = mesh.box();
+        var boxOfIntersection = box.intersectWith(meshBoundsAsBox);
+        if (boxOfIntersection != null) {
+            collision.isActive = true;
+            collision.pos.overwriteWith(boxOfIntersection.center);
+        }
+        return collision;
+    }
     collisionOfBoxAndSphere(box, sphere, collision, shouldCalculatePos) {
         var doCollide = false;
         var displacementBetweenCenters = this._displacement.overwriteWith(sphere.center).subtract(box.center);
@@ -394,46 +499,29 @@ class CollisionHelper {
         }
         return collision;
     }
-    ;
-    collisionOfHemispaceAndBox(hemispace, box, collision) {
+    collisionOfBoxRotatedAndSphere(boxRotated, sphere, collision, shouldCalculatePos) {
         if (collision == null) {
             collision = new Collision(null, null, null);
         }
-        var plane = hemispace.plane;
-        var boxVertices = box.vertices();
-        for (var i = 0; i < boxVertices.length; i++) {
-            var vertex = boxVertices[i];
-            var distanceOfVertexFromOriginAlongNormal = vertex.dotProduct(plane.normal);
-            var distanceOfVertexAbovePlane = distanceOfVertexFromOriginAlongNormal
-                - plane.distanceFromOrigin;
-            if (distanceOfVertexAbovePlane < 0) {
-                collision.isActive = true;
-                plane.pointClosestToOrigin(collision.pos);
-                collision.colliders.length = 0;
-                collision.colliders.push(hemispace);
-                break;
-            }
+        var doCollide = this.doBoxRotatedAndSphereCollide(boxRotated, sphere);
+        if (doCollide) {
+            var collisionPos = collision.pos;
+            var rectangleCenter = boxRotated.box.center;
+            var displacementBetweenCenters = collisionPos.overwriteWith(sphere.center).subtract(rectangleCenter);
+            var distanceBetweenCenters = displacementBetweenCenters.magnitude();
+            var distanceFromRectangleCenterToSphere = distanceBetweenCenters - sphere.radius;
+            var displacementToSphere = displacementBetweenCenters.divideScalar(distanceBetweenCenters).multiplyScalar(distanceFromRectangleCenterToSphere);
+            collisionPos = displacementToSphere.add(rectangleCenter);
+            var normals = collision.normals;
+            normals[0].overwriteWith(boxRotated.surfaceNormalNearPos(collision.pos));
+            normals[1].overwriteWith(normals[0]).invert();
+            var colliders = collision.colliders;
+            colliders[0] = boxRotated;
+            colliders[1] = sphere;
+            return collision;
         }
         return collision;
     }
-    ;
-    collisionOfHemispaceAndSphere(hemispace, sphere, collision) {
-        if (collision == null) {
-            collision = new Collision(null, null, null);
-        }
-        var plane = hemispace.plane;
-        var distanceOfSphereCenterFromOriginAlongNormal = sphere.center.dotProduct(plane.normal);
-        var distanceOfSphereCenterAbovePlane = distanceOfSphereCenterFromOriginAlongNormal
-            - plane.distanceFromOrigin;
-        if (distanceOfSphereCenterAbovePlane < sphere.radius) {
-            collision.isActive = true;
-            plane.pointClosestToOrigin(collision.pos);
-            collision.colliders.length = 0;
-            collision.colliders.push(hemispace);
-        }
-        return collision;
-    }
-    ;
     collisionOfEdgeAndEdge(edge0, edge1, collision) {
         // 2D
         if (collision == null) {
@@ -463,13 +551,12 @@ class CollisionHelper {
                     collision.distanceToCollision = distanceAlongEdge0ToLineOfEdge1;
                     collision.pos.overwriteWith(edge0.direction()).multiplyScalar(distanceAlongEdge0ToLineOfEdge1).add(edge0.vertices[0]);
                     collision.colliders.push(edge1);
-                    collision.colliders.Edge = edge1;
+                    collision.collidersByName.set(Edge.name, edge1);
                 }
             } // end if (doesEdgeCrossLineOfOther)
         } // end if (doBoundsOverlap)
         return collision;
     }
-    ;
     collisionOfEdgeAndFace(edge, face, collision) {
         var facePlane = face.plane();
         collision = this.collisionOfEdgeAndPlane(edge, facePlane, collision);
@@ -477,14 +564,12 @@ class CollisionHelper {
             var isWithinFace = face.containsPoint(collision.pos);
             collision.isActive = isWithinFace;
             if (isWithinFace) {
-                var colliders = collision.colliders;
-                colliders.push(face);
-                colliders.Face = face;
+                collision.colliders.push(face);
+                collision.collidersByName.set(Face.name, face);
             }
         }
         return collision;
     }
-    ;
     collisionsOfEdgeAndMesh(edge, mesh, collisions, stopAfterFirst) {
         if (collisions == null) {
             collisions = [];
@@ -495,7 +580,7 @@ class CollisionHelper {
             var collision = this.collisionOfEdgeAndFace(edge, meshFace, null);
             if (collision != null && collision.isActive) {
                 collision.colliders.push(mesh);
-                collision.colliders.Mesh = mesh;
+                collision.collidersByName.set(Mesh.name, mesh);
                 collisions.push(collision);
                 if (stopAfterFirst) {
                     break;
@@ -504,7 +589,6 @@ class CollisionHelper {
         }
         return collisions;
     }
-    ;
     collisionOfEdgeAndPlane(edge, plane, collision) {
         if (collision == null) {
             collision = new Collision(null, null, null);
@@ -525,52 +609,130 @@ class CollisionHelper {
                 collision.pos.overwriteWith(edgeDirection).multiplyScalar(distanceToCollision).add(edge.vertices[0]);
                 collision.distanceToCollision = distanceToCollision;
                 var colliders = returnValue.colliders;
+                var collidersByName = returnValue.collidersByName;
                 colliders.length = 0;
+                collidersByName.clear();
                 colliders.push(edge);
-                colliders.Edge = edge;
+                collidersByName.set(Edge.name, edge);
                 colliders.push(plane);
-                colliders.Plane = plane;
+                collidersByName.set(Plane.name, plane);
             }
         }
         return returnValue;
     }
-    ;
-    collisionOfBoxRotatedAndSphere(boxRotated, sphere, collision, shouldCalculatePos) {
+    collisionOfHemispaceAndBox(hemispace, box, collision) {
         if (collision == null) {
             collision = new Collision(null, null, null);
         }
-        var doCollide = this.doBoxRotatedAndSphereCollide(boxRotated, sphere);
-        if (doCollide) {
-            var collisionPos = collision.pos;
-            var rectangleCenter = boxRotated.box.center;
-            var displacementBetweenCenters = collisionPos.overwriteWith(sphere.center).subtract(rectangleCenter);
-            var distanceBetweenCenters = displacementBetweenCenters.magnitude();
-            var distanceFromRectangleCenterToSphere = distanceBetweenCenters - sphere.radius;
-            var displacementToSphere = displacementBetweenCenters.divideScalar(distanceBetweenCenters).multiplyScalar(distanceFromRectangleCenterToSphere);
-            collisionPos = displacementToSphere.add(rectangleCenter);
-            var normals = collision.normals;
-            normals[0].overwriteWith(boxRotated.surfaceNormalNearPos(collision.pos));
-            normals[1].overwriteWith(normals[0]).invert();
-            var colliders = collision.colliders;
-            colliders[0] = boxRotated;
-            colliders[1] = sphere;
-            return collision;
+        var plane = hemispace.plane;
+        var boxVertices = box.vertices();
+        for (var i = 0; i < boxVertices.length; i++) {
+            var vertex = boxVertices[i];
+            var distanceOfVertexFromOriginAlongNormal = vertex.dotProduct(plane.normal);
+            var distanceOfVertexAbovePlane = distanceOfVertexFromOriginAlongNormal
+                - plane.distanceFromOrigin;
+            if (distanceOfVertexAbovePlane < 0) {
+                collision.isActive = true;
+                plane.pointClosestToOrigin(collision.pos);
+                collision.colliders.length = 0;
+                collision.colliders.push(hemispace);
+                break;
+            }
         }
         return collision;
     }
-    ;
+    collisionOfHemispaceAndSphere(hemispace, sphere, collision) {
+        if (collision == null) {
+            collision = new Collision(null, null, null);
+        }
+        var plane = hemispace.plane;
+        var distanceOfSphereCenterFromOriginAlongNormal = sphere.center.dotProduct(plane.normal);
+        var distanceOfSphereCenterAbovePlane = distanceOfSphereCenterFromOriginAlongNormal
+            - plane.distanceFromOrigin;
+        if (distanceOfSphereCenterAbovePlane < sphere.radius) {
+            collision.isActive = true;
+            plane.pointClosestToOrigin(collision.pos);
+            collision.colliders.length = 0;
+            collision.colliders.push(hemispace);
+        }
+        return collision;
+    }
+    collisionOfMapLocatedAndBox(mapLocated, box, collision) {
+        return this.collisionOfBoxAndMapLocated(box, mapLocated, collision);
+    }
+    collisionOfMapLocatedAndSphere(mapLocated, sphere, collision) {
+        var doBoundsCollide = this.doBoxAndSphereCollide(mapLocated.box, sphere);
+        if (doBoundsCollide == false) {
+            return collision;
+        }
+        var map = mapLocated.map;
+        var cell = map.cellPrototype.clone();
+        var cellPosAbsolute = new Coords(0, 0, 0);
+        var cellPosInCells = new Coords(0, 0, 0);
+        var mapSizeInCells = map.sizeInCells;
+        var mapCellSize = map.cellSize;
+        var mapSizeHalf = map.sizeHalf;
+        var mapPos = mapLocated.loc.pos;
+        var cellAsBox = new Box(new Coords(0, 0, 0), map.cellSize);
+        for (var y = 0; y < mapSizeInCells.y; y++) {
+            cellPosInCells.y = y;
+            cellPosAbsolute.y = (y * mapCellSize.y) + mapPos.y - mapSizeHalf.y;
+            for (var x = 0; x < mapSizeInCells.x; x++) {
+                cellPosInCells.x = x;
+                cellPosAbsolute.x = (x * mapCellSize.x) + mapPos.x - mapSizeHalf.x;
+                cell = map.cellAtPosInCells(cellPosInCells);
+                if (cell.isBlocking) {
+                    cellAsBox.center.overwriteWith(cellPosAbsolute);
+                    var doCellAndSphereCollide = this.doBoxAndSphereCollide(cellAsBox, sphere);
+                    if (doCellAndSphereCollide) {
+                        collision.isActive = true;
+                        collision.pos.overwriteWith(cellAsBox.center);
+                        break;
+                    }
+                }
+            }
+        }
+        return collision;
+    }
+    collisionOfMeshAndBox(mesh, box, collision) {
+        return this.collisionOfBoxAndMesh(box, mesh, collision);
+    }
+    collisionOfMeshAndSphere(mesh, sphere, collision) {
+        // hack
+        var meshBoundsAsBox = mesh.box();
+        return this.collisionOfBoxAndSphere(meshBoundsAsBox, sphere, collision, true); // shouldCalculatePos
+    }
+    collisionOfSphereAndBox(sphere, box, collision, shouldCalculatePos) {
+        return this.collisionOfBoxAndSphere(box, sphere, collision, shouldCalculatePos);
+    }
+    collisionOfSphereAndBoxRotated(sphere, boxRotated, collision, shouldCalculatePos) {
+        return this.collisionOfBoxRotatedAndSphere(boxRotated, sphere, collision, shouldCalculatePos);
+    }
+    collisionOfSphereAndMapLocated(sphere, mapLocated, collision) {
+        return this.collisionOfMapLocatedAndSphere(mapLocated, sphere, collision);
+    }
+    collisionOfSpheres(sphere0, sphere1, collision) {
+        var shapeCollidingPos = sphere0.center;
+        var shapeCollidedWithPos = sphere1.center;
+        var displacement = this._displacement.overwriteWith(shapeCollidedWithPos).subtract(shapeCollidingPos);
+        var distance = displacement.magnitude();
+        var direction = displacement.divideScalar(distance);
+        var sumOfRadii = sphere0.radius
+            + sphere1.radius;
+        shapeCollidedWithPos.overwriteWith(direction).multiplyScalar(sumOfRadii).add(shapeCollidingPos);
+        collision.pos.overwriteWith(direction).multiplyScalar(distance / 2).add(sphere0.center);
+        return collision;
+    }
     // doXAndYCollide
     doBoxAndBoxCollide(box0, box1) {
         var returnValue = box0.overlapsWith(box1);
         return returnValue;
     }
-    ;
     doBoxAndBoxRotatedCollide(box, boxRotated) {
         // todo
         var boxRotatedAsSphere = boxRotated.sphereSwept();
         return this.doBoxAndSphereCollide(box, boxRotatedAsSphere);
     }
-    ;
     doBoxAndCylinderCollide(box, cylinder) {
         var returnValue = false;
         var displacementBetweenCenters = this._displacement.overwriteWith(box.center).subtract(cylinder.center);
@@ -584,7 +746,6 @@ class CollisionHelper {
         }
         return returnValue;
     }
-    ;
     doBoxAndHemispaceCollide(box, hemispace) {
         var returnValue = false;
         var vertices = Mesh.fromBox(box).vertices();
@@ -597,28 +758,23 @@ class CollisionHelper {
         }
         return returnValue;
     }
-    ;
     doBoxAndMapLocatedCollide(box, mapLocated) {
         // todo
         return this.doBoxAndBoxCollide(box, mapLocated.box);
     }
-    ;
     doBoxAndMeshCollide(box, mesh) {
         // todo
         return this.doBoxAndBoxCollide(box, mesh.box());
     }
-    ;
     doBoxAndShapeInverseCollide(box, shapeInverse) {
         return this.doShapeInverseAndShapeCollide(shapeInverse, box);
     }
     doBoxAndShapeGroupAllCollide(box, shapeGroupAll) {
         return this.doShapeGroupAllAndShapeCollide(shapeGroupAll, box);
     }
-    ;
     doBoxAndSphereCollide(box, sphere) {
         return this.collisionOfBoxAndSphere(box, sphere, this._collision, false).isActive;
     }
-    ;
     doCylinderAndCylinderCollide(cylinder0, cylinder1) {
         var returnValue = false;
         var displacement = this._displacement.overwriteWith(cylinder1.center).subtract(cylinder0.center).clearZ();
@@ -656,17 +812,14 @@ class CollisionHelper {
         }
         return returnValue;
     }
-    ;
     doEdgeAndFaceCollide(edge, face, collision) {
         return (this.collisionOfEdgeAndFace(edge, face, collision).isActive);
     }
-    ;
     doEdgeAndHemispaceCollide(edge, hemispace) {
         var vertices = edge.vertices;
         var returnValue = (hemispace.containsPoint(vertices[0]) || hemispace.containsPoint(vertices[1]));
         return returnValue;
     }
-    ;
     doEdgeAndMeshCollide(edge, mesh) {
         var returnValue = false;
         var edgeDirection = edge.direction();
@@ -685,21 +838,17 @@ class CollisionHelper {
         }
         return returnValue;
     }
-    ;
     doEdgeAndPlaneCollide(edge, plane) {
         return (this.collisionOfEdgeAndPlane(edge, plane, this._collision.clear()) != null);
     }
-    ;
     doHemispaceAndBoxCollide(hemispace, box) {
         var collision = this.collisionOfHemispaceAndBox(hemispace, box, this._collision.clear());
         return collision.isActive;
     }
-    ;
     doHemispaceAndSphereCollide(hemispace, sphere) {
         var collision = this.collisionOfHemispaceAndSphere(hemispace, sphere, this._collision.clear());
         return collision.isActive;
     }
-    ;
     doMeshAndMeshCollide(mesh0, mesh1) {
         var returnValue = true;
         // hack - Meshes are assumed to be convex.
@@ -748,11 +897,9 @@ class CollisionHelper {
         }
         return returnValue;
     }
-    ;
     doMapLocatedAndBoxCollide(mapLocated, box) {
         return this.doBoxAndMapLocatedCollide(box, mapLocated);
     }
-    ;
     doMapLocatedAndMapLocatedCollide(mapLocated0, mapLocated1) {
         var returnValue = false;
         var doBoundsCollide = this.doBoxAndBoxCollide(mapLocated0.box, mapLocated1.box);
@@ -806,7 +953,6 @@ class CollisionHelper {
         }
         return returnValue;
     }
-    ;
     doMapLocatedAndSphereCollide(mapLocated, sphere) {
         var returnValue = false;
         var doBoundsCollide = this.doBoxAndSphereCollide(mapLocated.box, sphere);
@@ -841,7 +987,6 @@ class CollisionHelper {
         }
         return returnValue;
     }
-    ;
     doMeshAndSphereCollide(mesh, sphere) {
         var returnValue = true;
         // hack - Mesh is assumed to be convex.
@@ -858,11 +1003,9 @@ class CollisionHelper {
         }
         return returnValue;
     }
-    ;
     doBoxRotatedAndBoxCollide(boxRotated, box) {
         return this.doBoxAndBoxRotatedCollide(box, boxRotated);
     }
-    ;
     doBoxRotatedAndSphereCollide(boxRotated, sphere) {
         var box = boxRotated.box;
         var center = box.center;
@@ -884,39 +1027,30 @@ class CollisionHelper {
         sphereCenter.overwriteWith(sphereCenterToRestore);
         return returnValue;
     }
-    ;
     doSphereAndBoxCollide(sphere, box) {
         return this.doBoxAndSphereCollide(box, sphere);
     }
-    ;
     doSphereAndMapLocatedCollide(sphere, mapLocated) {
         return this.doMapLocatedAndSphereCollide(mapLocated, sphere);
     }
-    ;
     doSphereAndMeshCollide(sphere, mesh) {
         return this.doMeshAndSphereCollide(mesh, sphere);
     }
-    ;
     doSphereAndBoxRotatedCollide(sphere, boxRotated) {
         return this.doBoxRotatedAndSphereCollide(boxRotated, sphere);
     }
-    ;
     doSphereAndShapeContainerCollide(sphere, shapeContainer) {
         return this.doShapeContainerAndShapeCollide(shapeContainer, sphere);
     }
-    ;
     doSphereAndShapeGroupAllCollide(sphere, shapeGroupAll) {
         return this.doShapeGroupAllAndShapeCollide(shapeGroupAll, sphere);
     }
-    ;
     doSphereAndShapeGroupAnyCollide(sphere, shapeGroupAny) {
         return this.doShapeGroupAnyAndShapeCollide(shapeGroupAny, sphere);
     }
-    ;
     doSphereAndShapeInverseCollide(sphere, shapeInverse) {
         return this.doShapeInverseAndShapeCollide(shapeInverse, sphere);
     }
-    ;
     doSphereAndSphereCollide(sphere0, sphere1) {
         var displacement = this._displacement.overwriteWith(sphere1.center).subtract(sphere0.center);
         var distance = displacement.magnitude();
@@ -924,7 +1058,6 @@ class CollisionHelper {
         var returnValue = (distance < sumOfRadii);
         return returnValue;
     }
-    ;
     // boolean combinations
     doShapeGroupAllAndBoxCollide(groupAll, shapeOther) {
         return this.doShapeGroupAllAndShapeCollide(groupAll, shapeOther);
@@ -942,7 +1075,6 @@ class CollisionHelper {
         }
         return returnValue;
     }
-    ;
     doShapeGroupAnyAndBoxCollide(groupAny, box) {
         return this.doShapeGroupAnyAndShapeCollide(groupAny, box);
     }
@@ -959,58 +1091,45 @@ class CollisionHelper {
         }
         return returnValue;
     }
-    ;
     doShapeContainerAndShapeCollide(container, shapeOther) {
         return this.doesColliderContainOther(container.shape, shapeOther);
     }
-    ;
     doShapeContainerAndBoxCollide(container, box) {
         return this.doShapeContainerAndShapeCollide(container, box);
     }
-    ;
     doShapeInverseAndShapeCollide(inverse, shapeOther) {
         return (this.doCollidersCollide(inverse.shape, shapeOther) == false);
     }
-    ;
     doShapeGroupAllAndSphereCollide(group, shape) {
         return this.doShapeGroupAllAndShapeCollide(group, shape);
     }
-    ;
     doBoxAndShapeGroupAnyCollide(box, group) {
         return this.doShapeGroupAnyAndShapeCollide(group, box);
     }
-    ;
     doShapeContainerAndSphereCollide(container, sphere) {
         return this.doShapeContainerAndShapeCollide(container, sphere);
     }
-    ;
     doShapeGroupAnyAndSphereCollide(group, sphere) {
         return this.doShapeGroupAnyAndShapeCollide(group, sphere);
     }
-    ;
     doShapeInverseAndBoxCollide(inverse, box) {
         return this.doShapeInverseAndShapeCollide(inverse, box);
     }
-    ;
     doShapeInverseAndSphereCollide(inverse, sphere) {
         return this.doShapeInverseAndShapeCollide(inverse, sphere);
     }
-    ;
     // contains
     doesBoxContainBox(box0, box1) {
         return box0.containsOther(box1);
     }
-    ;
     doesBoxContainHemispace(box, hemispace) {
         return false;
     }
-    ;
     doesBoxContainSphere(box, sphere) {
         var boxForSphere = new Box(sphere.center, new Coords(1, 1, 1).multiplyScalar(sphere.radius * 2));
         var returnValue = box.containsOther(boxForSphere);
         return returnValue;
     }
-    ;
     doesHemispaceContainBox(hemispace, box) {
         var returnValue = true;
         var vertices = Mesh.fromBox(box).vertices();
@@ -1023,7 +1142,6 @@ class CollisionHelper {
         }
         return returnValue;
     }
-    ;
     doesHemispaceContainSphere(hemispace, sphere) {
         var plane = hemispace.plane;
         var distanceOfSphereCenterAbovePlane = sphere.center.dotProduct(plane.normal)
@@ -1031,19 +1149,15 @@ class CollisionHelper {
         var returnValue = (distanceOfSphereCenterAbovePlane >= sphere.radius);
         return returnValue;
     }
-    ;
     doesSphereContainBox(sphere, box) {
         var sphereCircumscribingBox = new Sphere(box.center, box.max().magnitude());
         var returnValue = sphere.containsOther(sphereCircumscribingBox);
         return returnValue;
     }
-    ;
     doesSphereContainHemispace(sphere, hemispace) {
         return false;
     }
-    ;
     doesSphereContainSphere(sphere0, sphere1) {
         return sphere0.containsOther(sphere1);
     }
-    ;
 }
