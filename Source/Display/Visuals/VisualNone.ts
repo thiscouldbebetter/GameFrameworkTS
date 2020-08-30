@@ -6,7 +6,7 @@ class VisualNone implements Visual
 	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		// do nothing
-	};
+	}
 
 	// Clonable.
 

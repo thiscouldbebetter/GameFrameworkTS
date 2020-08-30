@@ -27,6 +27,7 @@ class PlaceBuilderDemo_Items
 			this.bread(),
 			this.coin(),
 			this.crystal(),
+			this.doughnut(),
 			this.flower(),
 			this.fruit(), 
 			this.grass(),
@@ -392,16 +393,39 @@ class PlaceBuilderDemo_Items
 	{
 		var itemBreadName = "Bread";
 		var itemBreadColor = Color.byName("Orange");
+
+		var itemBreadVisualCut = new VisualEllipse
+		(
+			this.entityDimension * .15, // semimajorAxis
+			this.entityDimensionHalf * .15,
+			0, // rotationInTurns
+			Color.byName("Tan"),
+			null // colorBorder
+		);
+
 		var itemBreadVisual = new VisualGroup
 		([
-			new VisualArc
+			new VisualEllipse
 			(
-				this.entityDimension / 2, // radiusOuter
-				0, // radiusInner
-				new Coords(-1, 0, 0), // directionMin
-				.5, // angleSpannedInTurns
+				this.entityDimensionHalf * 1.5, // semimajorAxis
+				this.entityDimensionHalf * .75,
+				.25, // rotationInTurns
 				itemBreadColor,
-				null
+				null // colorBorder
+			),
+
+			itemBreadVisualCut,
+
+			new VisualOffset
+			(
+				itemBreadVisualCut,
+				new Coords(0, -this.entityDimensionHalf * 0.75, 0)
+			),
+
+			new VisualOffset
+			(
+				itemBreadVisualCut,
+				new Coords(0, this.entityDimensionHalf * 0.75, 0)
 			)
 		]);
 
@@ -527,6 +551,64 @@ class PlaceBuilderDemo_Items
 		var itemCrystal = new ItemDefn(itemCrystalName, null, null, .1, 1, null, null, null, itemCrystalVisual);
 
 		return itemCrystal;
+	}
+
+	doughnut()
+	{
+		var itemDoughnutName = "Doughnut";
+		var itemDoughnutColor = Color.byName("Orange");
+
+		var itemDoughnutVisualBody = new VisualGroup
+		([
+			// body
+			new VisualCircle
+			(
+				this.entityDimensionHalf, itemDoughnutColor, null
+			),
+			// hole
+			new VisualErase
+			(
+				new VisualCircle
+				(
+					this.entityDimensionHalf * .3, itemDoughnutColor, null
+				)
+			)
+		]);
+
+		var itemDoughnutVisual = new VisualBuffered
+		(
+			new Coords(1, 1, 0).multiplyScalar(this.entityDimension * 1.2),
+			itemDoughnutVisualBody
+		)
+
+		if (this.parent.visualsHaveText)
+		{
+			itemDoughnutVisualBody.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding(itemDoughnutName, null, null), null, itemDoughnutColor, null),
+					new Coords(0, 0 - this.entityDimension * 2, 0)
+				)
+			);
+		}
+
+		var itemDoughnut = new ItemDefn
+		(
+			itemDoughnutName, null, null, 1, 4, null, // name, appearance, descripton, mass, value, stackSize
+			[ "Consumable" ], // categoryNames
+			(universe: Universe, world: World, place: Place, entityUser: Entity, entityItem: Entity) => // use
+			{
+				entityUser.starvable().satietyAdd(2);
+				var item = entityItem.item();
+				entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
+				var message = "You eat the doughnut.";
+				return message;
+			},
+			itemDoughnutVisual
+		);
+
+		return itemDoughnut;
 	}
 
 	flower()

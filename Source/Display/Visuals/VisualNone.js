@@ -3,7 +3,6 @@ class VisualNone {
     draw(universe, world, place, entity, display) {
         // do nothing
     }
-    ;
     // Clonable.
     clone() {
         return this; // todo

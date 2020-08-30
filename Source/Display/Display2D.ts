@@ -40,11 +40,14 @@ class Display2D implements Display
 		this._zeroes = Coords.Instances().Zeroes;
 	}
 
+	static fromSizeAndIsInvisible(size: Coords, isInvisible: boolean)
+	{
+		return new Display2D([size], null, null, null, null, isInvisible);
+	}
+
 	// constants
 
 	static RadiansPerTurn = Math.PI * 2.0;
-
-	// methods
 
 	clear()
 	{
@@ -52,7 +55,7 @@ class Display2D implements Display
 		(
 			0, 0, this.sizeInPixels.x, this.sizeInPixels.y
 		);
-	};
+	}
 
 	displayToUse(): Display
 	{

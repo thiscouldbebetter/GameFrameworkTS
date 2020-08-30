@@ -4,9 +4,11 @@ class VisualErase {
         this.child = child;
     }
     draw(universe, world, place, entity, display) {
+        display.stateSave();
         display.eraseModeSet(true);
         this.child.draw(universe, world, place, entity, display);
         display.eraseModeSet(false);
+        display.stateRestore();
     }
     // Clonable.
     clone() {

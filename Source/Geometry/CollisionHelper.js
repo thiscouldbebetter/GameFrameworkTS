@@ -30,6 +30,7 @@ class CollisionHelper {
             lookup = new Map();
             lookup.set(boxName, this.collisionOfBoxAndBox);
             lookup.set(mapLocatedName, this.collisionOfBoxAndMapLocated);
+            lookup.set(meshName, this.collisionOfBoxAndMesh);
             lookup.set(sphereName, this.collisionOfBoxAndSphere);
             lookupOfLookups.set(boxName, lookup);
         }

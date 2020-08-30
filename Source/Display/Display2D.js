@@ -14,11 +14,12 @@ class Display2D {
         this._sizeHalf = new Coords(0, 0, 0);
         this._zeroes = Coords.Instances().Zeroes;
     }
-    // methods
+    static fromSizeAndIsInvisible(size, isInvisible) {
+        return new Display2D([size], null, null, null, null, isInvisible);
+    }
     clear() {
         this.graphics.clearRect(0, 0, this.sizeInPixels.x, this.sizeInPixels.y);
     }
-    ;
     displayToUse() {
         return this;
     }

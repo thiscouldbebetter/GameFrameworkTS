@@ -67,6 +67,7 @@ class PlaceBuilderDemo // Main.
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Bread"), 1, 5, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Campfire"), 1, null, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Car"), 1, null, entityPosRange, randomizer));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Doughnut"), 1, 12, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Friendly"), 1, null, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Meat"), 1, null, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Sword"), 1, null, entityPosRange, randomizer));
@@ -227,17 +228,28 @@ class PlaceBuilderDemo // Main.
 	buildTerrarium(size: Coords, placeNameToReturnTo: string)
 	{
 		size = size.clone().multiplyScalar(2);
-		this.build_Interior("Terrarium", size, placeNameToReturnTo);
+
+		//this.build_Interior("Terrarium", size, placeNameToReturnTo);
+
+		this.name = "Terrarium";
+		this.size = size;
+
+		this.entities = [];
+
+		this.build_SizeWallsAndMargins(this.name, null, null);
+
+		this.entitiesAllGround();
+		this.build_Camera(this.cameraViewSize, this.size);
 
 		// todo
 
 		var mapCellSource =
 		[
-			"~~~~~~~~~~~~~~~~....::::QQAA****",
-			"~~~~~~~~~~~~~~~~.....:::QQAAA***",
-			"~~........~~~~.....:QQQQQQAAAAAA",
+			"....................::::QQAA****",
+			"...~~~~~~~~~~~~~.....:::QQAAA***",
+			"~~~~~~~~~~~~~~.....:QQQQQQAAAAAA",
 			"~~........~~~~....::QQQQQQAAAAAA",
-			"~~......~~~~~~....::QQQQQQQQQQQQ",
+			"~~........~~~~....::QQQQQQQQQQQQ",
 			"~~......~~~~~~.....:QQQQQQQQQQQQ",
 			"~~~~~~..~~~~~~~~....:::::::QQQ::",
 			"~~~~~~..~~~~~~~~....:..::::::Q::",
@@ -265,6 +277,15 @@ class PlaceBuilderDemo // Main.
 			1
 		);
 		var mapCellSize = size.clone().divide(mapSizeInCells).ceiling();
+
+		var entityExitPosRange = new Box(mapCellSize.clone().half(), null);
+		var exit = this.entityBuildFromDefn
+		(
+			this.entityDefnsByName.get("Exit"), entityExitPosRange, this.randomizer
+		);
+		exit.portal().destinationPlaceName = placeNameToReturnTo;
+		exit.portal().destinationEntityName = this.name;
+		this.entities.push(exit);
 
 		var cellCollider = new Box(new Coords(0, 0, 0), mapCellSize);
 		var cellCollide = (u: Universe, w: World, p: Place, e0: Entity, e1: Entity) =>
@@ -675,6 +696,7 @@ class PlaceBuilderDemo // Main.
 		var randomizer = this.randomizer;
 
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Carnivore"), 1, null, entityPosRange, randomizer));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Doughnut"), 1, 12, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Flower"), 1, null, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Grass"), 12, null, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Grazer"), 3, null, entityPosRange, randomizer));
@@ -1928,6 +1950,29 @@ class PlaceBuilderDemo // Main.
 		return itemCrystalEntityDefn;
 	}
 
+	entityDefnBuildDoughnut(entityDimension: number): Entity
+	{
+		var entityDimensionHalf = entityDimension / 2;
+
+		var itemDefnDoughnutName = "Doughnut";
+		var itemDoughnutVisual = this.itemDefnsByName.get(itemDefnDoughnutName).visual;
+		var itemDoughnutCollider = new Sphere(new Coords(0, 0, 0), entityDimensionHalf);
+
+		var itemDoughnutEntityDefn = new Entity
+		(
+			itemDefnDoughnutName,
+			[
+				new Item(itemDefnDoughnutName, 1),
+				new Locatable(null),
+				new Collidable(itemDoughnutCollider, null, null),
+				new Drawable(itemDoughnutVisual, null),
+				new DrawableCamera()
+			]
+		);
+
+		return itemDoughnutEntityDefn;
+	}
+
 	entityDefnBuildFlower(entityDimension: number): Entity
 	{
 		entityDimension *= .5;
@@ -2550,6 +2595,7 @@ class PlaceBuilderDemo // Main.
 			this.entityDefnBuildCar(entityDimension),
 			this.entityDefnBuildCoin(entityDimension),
 			this.entityDefnBuildCrystal(entityDimension),
+			this.entityDefnBuildDoughnut(entityDimension),
 			entityDefnFlower,
 			this.entityDefnBuildFruit(entityDimension),
 			this.entityDefnBuildGenerator(entityDefnFlower),
