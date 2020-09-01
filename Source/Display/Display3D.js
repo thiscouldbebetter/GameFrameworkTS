@@ -202,6 +202,9 @@ class Display3D {
     drawImagePartial(imageToDraw, pos, boxToShow) {
         this._display2DOverlay.drawImagePartial(imageToDraw, pos, boxToShow);
     }
+    drawImagePartialScaled(imageToDraw, pos, regionToDrawAsBox, sizeToDraw) {
+        this._display2DOverlay.drawImagePartialScaled(imageToDraw, pos, regionToDrawAsBox, sizeToDraw);
+    }
     drawImageScaled(imageToDraw, pos, size) {
         this._display2DOverlay.drawImageScaled(imageToDraw, pos, size);
     }

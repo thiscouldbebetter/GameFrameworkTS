@@ -27,7 +27,8 @@ interface Display
 		rotationInTurns: number, colorFill: string, colorBorder: string
 	): void;
 	drawImage(imageToDraw: Image2, pos: Coords): void;
-	drawImagePartial(imageToDraw: Image2, pos: Coords, boxToShow: Box): void;
+	drawImagePartial(imageToDraw: Image2, pos: Coords, regionToDrawAsBox: Box): void;
+	drawImagePartialScaled(imageToDraw: Image2, pos: Coords, regionToDrawAsBox: Box, sizeToDraw: Coords): void;
 	drawImageScaled(imageToDraw: Image2, pos: Coords, size: Coords): void;
 	drawLine(fromPos: Coords, toPos: Coords, color: string, lineThickness: number): void;
 	drawMeshWithOrientation(mesh: MeshTextured, meshOrientation: Orientation): void;

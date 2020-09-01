@@ -34,7 +34,7 @@ class VisualImageFromLibrary implements VisualImage
 	image(universe: Universe): Image2
 	{
 		return universe.mediaLibrary.imageGetByName(this.imageName);
-	};
+	}
 
 	// visual
 
@@ -47,7 +47,7 @@ class VisualImageFromLibrary implements VisualImage
 			entity.locatable().loc.pos
 		);
 		display.drawImageScaled(image, drawPos, imageSize);
-	};
+	}
 
 	// Clonable.
 

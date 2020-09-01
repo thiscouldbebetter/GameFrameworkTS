@@ -253,16 +253,29 @@ class Display2D implements Display
 		this.graphics.drawImage(imageToDraw.systemImage, pos.x, pos.y);
 	}
 
-	drawImagePartial(imageToDraw: Image2, pos: Coords, boxToShow: Box)
+	drawImagePartial(imageToDraw: Image2, pos: Coords, regionToDrawAsBox: Box)
 	{
-		var sourcePos = boxToShow.min();
-		var sourceSize = boxToShow.size;
+		this.drawImagePartialScaled(imageToDraw, pos, regionToDrawAsBox, null);
+	}
+
+	drawImagePartialScaled
+	(
+		imageToDraw: Image2, pos: Coords, regionToDrawAsBox: Box, sizeToDraw: Coords
+	)
+	{
+		var sourcePos = regionToDrawAsBox.min();
+		var sourceSize = regionToDrawAsBox.size;
+
+		if (sizeToDraw == null)
+		{
+			sizeToDraw = sourceSize;
+		}
 
 		this.graphics.drawImage
 		(
 			imageToDraw.systemImage,
 			sourcePos.x, sourcePos.y, sourceSize.x, sourceSize.y,
-			pos.x, pos.y, sourceSize.x, sourceSize.y
+			pos.x, pos.y, sizeToDraw.x, sizeToDraw.y
 		);
 	}
 

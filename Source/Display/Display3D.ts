@@ -463,6 +463,11 @@ class Display3D implements Display
 		this._display2DOverlay.drawImagePartial(imageToDraw, pos, boxToShow);
 	}
 
+	drawImagePartialScaled(imageToDraw: Image2, pos: Coords, regionToDrawAsBox: Box, sizeToDraw: Coords)
+	{
+		this._display2DOverlay.drawImagePartialScaled(imageToDraw, pos, regionToDrawAsBox, sizeToDraw);
+	}
+
 	drawImageScaled(imageToDraw: Image2, pos: Coords, size: Coords)
 	{
 		this._display2DOverlay.drawImageScaled(imageToDraw, pos, size);

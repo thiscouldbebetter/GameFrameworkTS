@@ -119,10 +119,16 @@ class Display2D {
     drawImage(imageToDraw, pos) {
         this.graphics.drawImage(imageToDraw.systemImage, pos.x, pos.y);
     }
-    drawImagePartial(imageToDraw, pos, boxToShow) {
-        var sourcePos = boxToShow.min();
-        var sourceSize = boxToShow.size;
-        this.graphics.drawImage(imageToDraw.systemImage, sourcePos.x, sourcePos.y, sourceSize.x, sourceSize.y, pos.x, pos.y, sourceSize.x, sourceSize.y);
+    drawImagePartial(imageToDraw, pos, regionToDrawAsBox) {
+        this.drawImagePartialScaled(imageToDraw, pos, regionToDrawAsBox, null);
+    }
+    drawImagePartialScaled(imageToDraw, pos, regionToDrawAsBox, sizeToDraw) {
+        var sourcePos = regionToDrawAsBox.min();
+        var sourceSize = regionToDrawAsBox.size;
+        if (sizeToDraw == null) {
+            sizeToDraw = sourceSize;
+        }
+        this.graphics.drawImage(imageToDraw.systemImage, sourcePos.x, sourcePos.y, sourceSize.x, sourceSize.y, pos.x, pos.y, sizeToDraw.x, sizeToDraw.y);
     }
     drawImageScaled(imageToDraw, pos, size) {
         this.graphics.drawImage(imageToDraw.systemImage, pos.x, pos.y, size.x, size.y);

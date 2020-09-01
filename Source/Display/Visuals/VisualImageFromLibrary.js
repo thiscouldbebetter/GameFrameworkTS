@@ -20,7 +20,6 @@ class VisualImageFromLibrary {
     image(universe) {
         return universe.mediaLibrary.imageGetByName(this.imageName);
     }
-    ;
     // visual
     draw(universe, world, place, entity, display) {
         var image = this.image(universe);
@@ -28,7 +27,6 @@ class VisualImageFromLibrary {
         var drawPos = this._drawPos.clear().subtract(imageSize).half().add(entity.locatable().loc.pos);
         display.drawImageScaled(image, drawPos, imageSize);
     }
-    ;
     // Clonable.
     clone() {
         return this; // todo

@@ -1837,19 +1837,35 @@ class PlaceBuilderDemo // Main.
 		entityDimension *= .75
 		var defnName = "Car";
 
-		var frames = new Array<VisualImage>();
+		var frames = new Array<Visual>();
 		var frameSizeScaled = new Coords(4, 3, 0).multiplyScalar(entityDimension);
-		for (var i = 0; i < 32; i++)
+
+		var visualTileset = new VisualImageFromLibrary("Car");
+		var tileSizeInPixels = new Coords(64, 48, 0);
+		var tilesetSizeInTiles = new Coords(8, 4, 0);
+		var tilePosInTiles = new Coords(0, 0, 0);
+
+		for (var y = 0; y < tilesetSizeInTiles.y; y++)
 		{
-			var frame = new VisualImageScaled
-			(
-				new VisualImageFromLibrary
+			tilePosInTiles.y = y;
+
+			for (var x = 0; x < tilesetSizeInTiles.x; x++)
+			{
+				tilePosInTiles.x = x;
+
+				var regionPos = tileSizeInPixels.clone().multiply(tilePosInTiles);
+				var regionToDrawAsBox =
+					Box.fromMinAndSize(regionPos, tileSizeInPixels);
+
+				var visualForFrame = new VisualImageScaledPartial
 				(
-					"Car_" + StringHelper.padStart("" + i, 2, "0")
-				),
-				frameSizeScaled
-			);
-			frames.push(frame);
+					visualTileset,
+					regionToDrawAsBox,
+					frameSizeScaled
+				);
+
+				frames.push(visualForFrame);
+			}
 		}
 		var carVisualBody = new VisualDirectional
 		(
