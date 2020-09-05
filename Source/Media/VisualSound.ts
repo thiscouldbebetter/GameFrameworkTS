@@ -2,16 +2,26 @@
 class VisualSound implements Visual
 {
 	soundNameToPlay: string;
+	isMusic: boolean;
 
-	constructor(soundNameToPlay: string)
+	constructor(soundNameToPlay: string, isMusic: boolean)
 	{
 		this.soundNameToPlay = soundNameToPlay;
+		this.isMusic = isMusic;
 	}
 
 	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
-		universe.soundHelper.soundWithNamePlayAsEffect(universe, this.soundNameToPlay);
-	};
+		var soundHelper = universe.soundHelper;
+		if (this.isMusic)
+		{
+			soundHelper.soundWithNamePlayAsMusic(universe, this.soundNameToPlay);
+		}
+		else
+		{
+			soundHelper.soundWithNamePlayAsEffect(universe, this.soundNameToPlay);
+		}
+	}
 
 	// Clonable.
 

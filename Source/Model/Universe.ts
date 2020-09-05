@@ -113,24 +113,24 @@ class Universe
 		this.soundHelper = new SoundHelper(this.mediaLibrary.sounds);
 		this.videoHelper = new VideoHelper(this.mediaLibrary.videos);
 
-		var venueControlsTitle: Venue = new VenueControls
+		var venueControlsOpening: Venue = new VenueControls
 		(
-			this.controlBuilder.title(this, this.display.sizeInPixels),
+			this.controlBuilder.opening(this, this.display.sizeInPixels),
 			false
 		);
 
-		venueControlsTitle = new VenueFader
+		venueControlsOpening = new VenueFader
 		(
-			venueControlsTitle, venueControlsTitle, null, null
+			venueControlsOpening, venueControlsOpening, null, null
 		);
 
-		this.venueNext = venueControlsTitle;
+		this.venueNext = venueControlsOpening;
 
 		this.inputHelper = new InputHelper();
 		this.inputHelper.initialize(this);
 
 		callback(this);
-	};
+	}
 
 	reset()
 	{

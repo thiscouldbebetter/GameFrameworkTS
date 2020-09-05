@@ -79,7 +79,7 @@ class VisualBar implements Visual
 
 			pos.add(this._sizeHalf);
 			var remainingOverMax = Math.round(_amountCurrent) + "/" + _amountMax;
-			var text = this.abbreviation + ":" + remainingOverMax;
+			var text = (this.abbreviation == null ? "" : (this.abbreviation + ":")) + remainingOverMax;
 			display.drawText
 			(
 				text,

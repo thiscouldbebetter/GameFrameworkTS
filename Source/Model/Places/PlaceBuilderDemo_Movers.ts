@@ -1032,7 +1032,7 @@ class PlaceBuilderDemo_Movers
 			null
 		);
 
-		var playerVisualBarSize = new Coords(entityDimension * 3, entityDimension * .8, 0);
+		var playerVisualBarSize = new Coords(entityDimension * 3, entityDimension * 0.8, 0);
 		var playerVisualHealthBar = new VisualBar
 		(
 			"H", // abbreviation
@@ -1357,7 +1357,7 @@ class PlaceBuilderDemo_Movers
 		var toControlMenu = 
 			(universe: Universe, size: Coords, entity: Entity, venuePrev: Venue) =>
 		{
-			var fontHeight = 10;
+			var fontHeight = 12;
 			var labelSize = new Coords(300, fontHeight * 1.25, 0);
 			var marginX = fontHeight;
 
@@ -1487,12 +1487,14 @@ class PlaceBuilderDemo_Movers
 			var fontHeightInPixels = 10;
 			var margin = 10;
 
-			var playerVisualBarSize = new Coords(entityDimension * 3, entityDimension * .8, 0);
+			var itemDefnsByName = world.defn.itemDefnsByName();
+
+			var playerVisualBarSize = new Coords(entityDimension * 4, entityDimension, 0);
 
 			var killable = entity.killable();
 			var playerVisualHealthBar = new VisualBar
 			(
-				"H", // abbreviation
+				null, // "H", // abbreviation
 				playerVisualBarSize,
 				Color.Instances().Red,
 				new DataBinding(null, (c: Entity) => killable.integrity, null),
@@ -1500,10 +1502,22 @@ class PlaceBuilderDemo_Movers
 				null // fractionBelowWhichToShow
 			);
 
+			var playerVisualHealthIcon = itemDefnsByName.get("Heart").visual;
+
+			var playerVisualHealthBarPlusIcon = new VisualGroup
+			([
+				playerVisualHealthBar,
+				new VisualOffset
+				(
+					playerVisualHealthIcon,
+					new Coords(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0, 0)
+				)
+			]);
+
 			var starvable = entity.starvable();
 			var playerVisualSatietyBar = new VisualBar
 			(
-				"F", // abbreviation
+				null, // "F", // abbreviation
 				playerVisualBarSize,
 				Color.Instances().Brown,
 				new DataBinding(null, (c: any) => starvable.satiety, null ),
@@ -1511,16 +1525,34 @@ class PlaceBuilderDemo_Movers
 				null // fractionBelowWhichToShow
 			);
 
-			var playerVisualStatusInfo: Visual = new VisualStack
-			(
-				new Coords(0, playerVisualBarSize.y * 2, 0), // childSpacing
-				[ playerVisualHealthBar, playerVisualSatietyBar ]
-			);
+			var playerVisualSatietyIcon = itemDefnsByName.get("Bread").visual;
+
+			var playerVisualSatietyBarPlusIcon = new VisualGroup
+			([
+				playerVisualSatietyBar,
+				new VisualOffset
+				(
+					playerVisualSatietyIcon,
+					new Coords(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0, 0)
+				)
+			]);
+
+			var childSpacing = new Coords(0, playerVisualBarSize.y * 2, 0);
+
+			var playerVisualStatusInfo: Visual = new VisualGroup
+			([
+				playerVisualHealthBarPlusIcon,
+				new VisualOffset
+				(
+					playerVisualSatietyBarPlusIcon,
+					childSpacing
+				)
+			]);
 
 			var controlPlayerStatusInfo = new ControlVisual
 			(
 				"visualPlayerStatusInfo",
-				new Coords(4, 2, 0).multiplyScalar(playerVisualBarSize.y), // pos
+				new Coords(5, 2, 0).multiplyScalar(playerVisualBarSize.y), // pos
 				new Coords(0, 0, 0), // size
 				DataBinding.fromContext(playerVisualStatusInfo),
 				null, null

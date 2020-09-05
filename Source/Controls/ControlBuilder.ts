@@ -554,7 +554,7 @@ class ControlBuilder
 		returnValue.scalePosAndSize(scaleMultiplier);
 
 		return returnValue;
-	};
+	}
 
 	inputs (universe: Universe, size: Coords, venuePrev: Venue)
 	{
@@ -835,7 +835,83 @@ class ControlBuilder
 		(
 			universe, size, message, optionNames, optionFunctions, showMessageOnly
 		);
-	};
+	}
+
+	opening(universe: Universe, size: Coords)
+	{
+		if (size == null)
+		{
+			size = universe.display.sizeDefault();
+		}
+
+		var scaleMultiplier =
+			this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
+
+		var fontHeight = this.fontHeightInPixelsBase;
+
+		var start = () =>
+		{
+			var title = this.title(universe, size);
+	
+			var venueTitle = new VenueControls(title, false);
+
+			universe.venueNext =
+				new VenueFader(venueTitle, universe.venueCurrent, null, null);
+		};
+
+		var visual = new VisualGroup
+		([
+			new VisualImageScaled
+			(
+				new VisualImageFromLibrary("Opening"), size
+			)
+		]);
+
+		var returnValue = new ControlContainer
+		(
+			"containerOpening",
+			this._zeroes, // pos
+			this.sizeBase.clone(), // size
+			// children
+			[
+				new ControlVisual
+				(
+					"imageOpening",
+					this._zeroes.clone(),
+					this.sizeBase.clone(), // size
+					new DataBinding
+					(
+						visual, null, null
+					),
+					null, null // colors
+				),
+
+				new ControlButton
+				(
+					"buttonStart",
+					new Coords(75, 120, 0), // pos
+					new Coords(50, fontHeight * 2, 0), // size
+					"Start",
+					fontHeight * 2,
+					false, // hasBorder
+					true, // isEnabled
+					start, // click
+					null, null
+				)
+			], // end children
+
+			[
+				new Action( ControlActionNames.Instances().ControlCancel, start ),
+				new Action( ControlActionNames.Instances().ControlConfirm, start )
+			],
+
+			null
+		);
+
+		returnValue.scalePosAndSize(scaleMultiplier);
+
+		return returnValue;
+	}
 
 	settings(universe: Universe, size: Coords, venuePrev: Venue)
 	{
@@ -1123,7 +1199,7 @@ class ControlBuilder
 		}
 
 		return controlsForSlides[0];
-	};
+	}
 
 	title(universe: Universe, size: Coords)
 	{
@@ -1162,6 +1238,20 @@ class ControlBuilder
 				new VenueFader(venueTask, universe.venueCurrent, null, null);
 		};
 
+		var visual = new VisualGroup
+		([
+			new VisualImageScaled
+			(
+				new VisualImageFromLibrary("Title"), size
+			)
+		]);
+
+		var soundNameMusic = "Music_Title";
+		visual.children.push
+		(
+			new VisualSound(soundNameMusic, true) // isMusic
+		);
+
 		var returnValue = new ControlContainer
 		(
 			"containerTitle",
@@ -1172,12 +1262,11 @@ class ControlBuilder
 				new ControlVisual
 				(
 					"imageTitle",
-					this._zeroes,
+					this._zeroes.clone(),
 					this.sizeBase.clone(), // size
 					new DataBinding
 					(
-						new VisualImageScaled(new VisualImageFromLibrary("Title"), size),
-						null, null
+						visual, null, null
 					),
 					null, null // colors
 				),

@@ -10,7 +10,6 @@ class VisualRotate {
         this.child.draw(universe, world, place, entity, display);
         display.stateRestore();
     }
-    ;
     // Clonable.
     clone() {
         return this; // todo

@@ -514,7 +514,7 @@ class PlaceBuilderDemo_Movers {
             return [(e.perceptible().isHiding ? "Hidden" : "Normal")];
         });
         var playerVisualBodyJumpable = new VisualJump2D(playerVisualBodyHidable, new VisualEllipse(playerHeadRadius, playerHeadRadius / 2, 0, Color.byName("GrayDark"), Color.byName("Black")), null);
-        var playerVisualBarSize = new Coords(entityDimension * 3, entityDimension * .8, 0);
+        var playerVisualBarSize = new Coords(entityDimension * 3, entityDimension * 0.8, 0);
         var playerVisualHealthBar = new VisualBar("H", // abbreviation
         playerVisualBarSize, Color.Instances().Red, DataBinding.fromGet((c) => c.killable().integrity), DataBinding.fromGet((c) => c.killable().integrityMax), 1 // fractionBelowWhichToShow
         );
@@ -682,7 +682,7 @@ class PlaceBuilderDemo_Movers {
             ])
         ]);
         var toControlMenu = (universe, size, entity, venuePrev) => {
-            var fontHeight = 10;
+            var fontHeight = 12;
             var labelSize = new Coords(300, fontHeight * 1.25, 0);
             var marginX = fontHeight;
             var timePlayingAsString = universe.world.timePlayingAsStringLong(universe);
@@ -742,18 +742,32 @@ class PlaceBuilderDemo_Movers {
             var entityDimension = 10; // todo
             var fontHeightInPixels = 10;
             var margin = 10;
-            var playerVisualBarSize = new Coords(entityDimension * 3, entityDimension * .8, 0);
+            var itemDefnsByName = world.defn.itemDefnsByName();
+            var playerVisualBarSize = new Coords(entityDimension * 4, entityDimension, 0);
             var killable = entity.killable();
-            var playerVisualHealthBar = new VisualBar("H", // abbreviation
+            var playerVisualHealthBar = new VisualBar(null, // "H", // abbreviation
             playerVisualBarSize, Color.Instances().Red, new DataBinding(null, (c) => killable.integrity, null), new DataBinding(null, (c) => killable.integrityMax, null), null // fractionBelowWhichToShow
             );
+            var playerVisualHealthIcon = itemDefnsByName.get("Heart").visual;
+            var playerVisualHealthBarPlusIcon = new VisualGroup([
+                playerVisualHealthBar,
+                new VisualOffset(playerVisualHealthIcon, new Coords(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0, 0))
+            ]);
             var starvable = entity.starvable();
-            var playerVisualSatietyBar = new VisualBar("F", // abbreviation
+            var playerVisualSatietyBar = new VisualBar(null, // "F", // abbreviation
             playerVisualBarSize, Color.Instances().Brown, new DataBinding(null, (c) => starvable.satiety, null), new DataBinding(null, (c) => starvable.satietyMax, null), null // fractionBelowWhichToShow
             );
-            var playerVisualStatusInfo = new VisualStack(new Coords(0, playerVisualBarSize.y * 2, 0), // childSpacing
-            [playerVisualHealthBar, playerVisualSatietyBar]);
-            var controlPlayerStatusInfo = new ControlVisual("visualPlayerStatusInfo", new Coords(4, 2, 0).multiplyScalar(playerVisualBarSize.y), // pos
+            var playerVisualSatietyIcon = itemDefnsByName.get("Bread").visual;
+            var playerVisualSatietyBarPlusIcon = new VisualGroup([
+                playerVisualSatietyBar,
+                new VisualOffset(playerVisualSatietyIcon, new Coords(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0, 0))
+            ]);
+            var childSpacing = new Coords(0, playerVisualBarSize.y * 2, 0);
+            var playerVisualStatusInfo = new VisualGroup([
+                playerVisualHealthBarPlusIcon,
+                new VisualOffset(playerVisualSatietyBarPlusIcon, childSpacing)
+            ]);
+            var controlPlayerStatusInfo = new ControlVisual("visualPlayerStatusInfo", new Coords(5, 2, 0).multiplyScalar(playerVisualBarSize.y), // pos
             new Coords(0, 0, 0), // size
             DataBinding.fromContext(playerVisualStatusInfo), null, null);
             childControls.push(controlPlayerStatusInfo);

@@ -30,6 +30,7 @@ Movers - Enemies - Types - Bombers
 Movers - Enemies - Types - Hiders
 Movers - Enemies - Types - Shooters
 
+Movers - Player - Stamina
 Movers - Player - Sword Swings
 
 Places - Whole Boundary is Big Portal
@@ -52,9 +53,6 @@ Sound - Effects from Builtin JS AudioContext
 Sound - Music on Title Screen
 
 Visuals - Non-Linear Animation System
-
-Visuals - Symbols - Bread Slice for Food
-Visuals - Symbols - Heart for Health
 
 Fixes
 -----

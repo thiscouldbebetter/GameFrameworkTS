@@ -20,6 +20,7 @@ class PlaceBuilderDemo_Items {
             this.flower(),
             this.fruit(),
             this.grass(),
+            this.heart(),
             this.iron(),
             this.ironOre(),
             this.key(),
@@ -203,17 +204,17 @@ class PlaceBuilderDemo_Items {
         var itemBreadName = "Bread";
         var itemBreadColor = Color.byName("Orange");
         var itemBreadVisualCut = new VisualEllipse(this.entityDimension * .15, // semimajorAxis
-        this.entityDimensionHalf * .15, 0, // rotationInTurns
+        this.entityDimensionHalf * .15, .25, // rotationInTurns
         Color.byName("Tan"), null // colorBorder
         );
         var itemBreadVisual = new VisualGroup([
             new VisualEllipse(this.entityDimensionHalf * 1.5, // semimajorAxis
-            this.entityDimensionHalf * .75, .25, // rotationInTurns
+            this.entityDimensionHalf * .75, 0, // rotationInTurns
             itemBreadColor, null // colorBorder
             ),
             itemBreadVisualCut,
-            new VisualOffset(itemBreadVisualCut, new Coords(0, -this.entityDimensionHalf * 0.75, 0)),
-            new VisualOffset(itemBreadVisualCut, new Coords(0, this.entityDimensionHalf * 0.75, 0))
+            new VisualOffset(itemBreadVisualCut, new Coords(-this.entityDimensionHalf * 0.75, 0, 0)),
+            new VisualOffset(itemBreadVisualCut, new Coords(this.entityDimensionHalf * 0.75, 0, 0))
         ]);
         if (this.parent.visualsHaveText) {
             itemBreadVisual.children.push(new VisualOffset(new VisualText(new DataBinding(itemBreadName, null, null), null, itemBreadColor, null), new Coords(0, 0 - this.entityDimension * 1.5, 0)));
@@ -350,6 +351,34 @@ class PlaceBuilderDemo_Items {
         }
         var itemGrass = new ItemDefn(itemGrassName, null, null, .01, 1, null, null, null, itemGrassVisual);
         return itemGrass;
+    }
+    heart() {
+        var entityDimensionQuarter = this.entityDimensionHalf / 2;
+        var itemHeartName = "Heart";
+        var itemHeartColor = Color.byName("Red");
+        var itemHeartVisual = new VisualGroup([
+            new VisualOffset(new VisualArc(entityDimensionQuarter, // radiusOuter
+            0, // radiusInner
+            new Coords(-1, 0, 0), // directionMin
+            .5, // angleSpannedInTurns
+            itemHeartColor, null), new Coords(-entityDimensionQuarter, 0, 0)),
+            new VisualOffset(new VisualArc(entityDimensionQuarter, // radiusOuter
+            0, // radiusInner
+            new Coords(-1, 0, 0), // directionMin
+            .5, // angleSpannedInTurns
+            itemHeartColor, null), new Coords(entityDimensionQuarter, 0, 0)),
+            new VisualPolygon(new Path([
+                new Coords(-1.1, 0, 0),
+                new Coords(1.1, 0, 0),
+                new Coords(0, 1.3, 0),
+            ]).transform(Transform_Scale.fromScalar(this.entityDimensionHalf)), itemHeartColor, null)
+        ]);
+        if (this.parent.visualsHaveText) {
+            itemHeartVisual.children.push(new VisualOffset(new VisualText(new DataBinding(itemHeartName, null, null), null, itemHeartColor, null), new Coords(0, 0 - this.entityDimension * 1.5, 0)));
+        }
+        var itemHeartVisualShifted = new VisualOffset(itemHeartVisual, new Coords(0, -entityDimensionQuarter, 0));
+        var itemHeart = new ItemDefn(itemHeartName, null, null, 10, 1, null, null, null, itemHeartVisualShifted);
+        return itemHeart;
     }
     iron() {
         var itemIronName = "Iron";
@@ -580,6 +609,13 @@ class PlaceBuilderDemo_Items {
                 new Coords(.5, -.5, 0),
                 new Coords(.5, -1, 0),
                 new Coords(0, -1, 0),
+            ]).transform(Transform_Scale.fromScalar(this.entityDimension)), itemAccessoryColor, null),
+            new VisualPolygon(new Path([
+                new Coords(-.1, 0, 0),
+                new Coords(-1.1, 0, 0),
+                new Coords(-.6, -.5, 0),
+                new Coords(-.6, -1, 0),
+                new Coords(-.1, -1, 0),
             ]).transform(Transform_Scale.fromScalar(this.entityDimension)), itemAccessoryColor, null)
         ]);
         if (this.parent.visualsHaveText) {

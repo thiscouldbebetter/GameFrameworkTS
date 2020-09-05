@@ -43,7 +43,7 @@ class VisualPath implements Visual
 			this.lineThickness,
 			this.isClosed
 		);
-	};
+	}
 
 	// Clonable.
 

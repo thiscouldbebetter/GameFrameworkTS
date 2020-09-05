@@ -19,7 +19,7 @@ class VisualRotate implements Visual
 		this.child.draw(universe, world, place, entity, display);
 
 		display.stateRestore();
-	};
+	}
 
 	// Clonable.
 

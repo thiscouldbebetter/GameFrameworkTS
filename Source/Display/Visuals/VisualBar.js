@@ -38,7 +38,7 @@ class VisualBar {
             display.drawRectangle(pos, this.size, null, colorForBorder.systemColor(), null);
             pos.add(this._sizeHalf);
             var remainingOverMax = Math.round(_amountCurrent) + "/" + _amountMax;
-            var text = this.abbreviation + ":" + remainingOverMax;
+            var text = (this.abbreviation == null ? "" : (this.abbreviation + ":")) + remainingOverMax;
             display.drawText(text, this.size.y, // fontHeightInPixels
             pos, colorForBorder.systemColor(), "Black", // colorOutline,
             false, // areColorsReversed

@@ -15,7 +15,6 @@ class VisualPath {
         Transforms.applyTransformToCoordsMany(this.transformTranslate, this.verticesAsPathTransformed.points);
         display.drawPath(this.verticesAsPathTransformed.points, this.color.systemColor(), this.lineThickness, this.isClosed);
     }
-    ;
     // Clonable.
     clone() {
         return this; // todo

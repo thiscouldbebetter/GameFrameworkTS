@@ -37,14 +37,13 @@ class Universe {
         this.platformHelper.platformableAdd(this.display);
         this.soundHelper = new SoundHelper(this.mediaLibrary.sounds);
         this.videoHelper = new VideoHelper(this.mediaLibrary.videos);
-        var venueControlsTitle = new VenueControls(this.controlBuilder.title(this, this.display.sizeInPixels), false);
-        venueControlsTitle = new VenueFader(venueControlsTitle, venueControlsTitle, null, null);
-        this.venueNext = venueControlsTitle;
+        var venueControlsOpening = new VenueControls(this.controlBuilder.opening(this, this.display.sizeInPixels), false);
+        venueControlsOpening = new VenueFader(venueControlsOpening, venueControlsOpening, null, null);
+        this.venueNext = venueControlsOpening;
         this.inputHelper = new InputHelper();
         this.inputHelper.initialize(this);
         callback(this);
     }
-    ;
     reset() {
         // hack
         this.soundHelper.reset();

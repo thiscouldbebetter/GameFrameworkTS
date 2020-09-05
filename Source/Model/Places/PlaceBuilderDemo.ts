@@ -69,6 +69,7 @@ class PlaceBuilderDemo // Main.
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Car"), 1, null, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Doughnut"), 1, 12, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Friendly"), 1, null, entityPosRange, randomizer));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Heart"), 1, null, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Meat"), 1, null, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Sword"), 1, null, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("SwordCold"), 1, null, entityPosRange, randomizer));
@@ -2112,6 +2113,29 @@ class PlaceBuilderDemo // Main.
 		return itemGrassEntityDefn;
 	}
 
+	entityDefnBuildHeart(entityDimension: number): Entity
+	{
+		var entityDimensionHalf = entityDimension / 2;
+
+		var itemDefnHeartName = "Heart";
+		var itemHeartVisual = this.itemDefnsByName.get(itemDefnHeartName).visual;
+		var itemHeartCollider = new Sphere(new Coords(0, 0, 0), entityDimensionHalf);
+
+		var itemHeartEntityDefn = new Entity
+		(
+			itemDefnHeartName,
+			[
+				new Item(itemDefnHeartName, 1),
+				new Locatable(null),
+				new Collidable(itemHeartCollider, null, null),
+				new Drawable(itemHeartVisual, null),
+				new DrawableCamera()
+			]
+		);
+
+		return itemHeartEntityDefn;
+	}
+
 	entityDefnBuildIron(entityDimension: number): Entity
 	{
 		var entityDimensionHalf = entityDimension / 2;
@@ -2648,6 +2672,7 @@ class PlaceBuilderDemo // Main.
 			entityDefnFlower,
 			this.entityDefnBuildFruit(entityDimension),
 			this.entityDefnBuildGenerator(entityDefnFlower),
+			this.entityDefnBuildHeart(entityDimension),
 			this.entityDefnBuildIron(entityDimension),
 			this.entityDefnBuildIronOre(entityDimension),
 			this.entityDefnBuildLog(entityDimension),

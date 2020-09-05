@@ -1,12 +1,18 @@
 "use strict";
 class VisualSound {
-    constructor(soundNameToPlay) {
+    constructor(soundNameToPlay, isMusic) {
         this.soundNameToPlay = soundNameToPlay;
+        this.isMusic = isMusic;
     }
     draw(universe, world, place, entity, display) {
-        universe.soundHelper.soundWithNamePlayAsEffect(universe, this.soundNameToPlay);
+        var soundHelper = universe.soundHelper;
+        if (this.isMusic) {
+            soundHelper.soundWithNamePlayAsMusic(universe, this.soundNameToPlay);
+        }
+        else {
+            soundHelper.soundWithNamePlayAsEffect(universe, this.soundNameToPlay);
+        }
     }
-    ;
     // Clonable.
     clone() {
         return this; // todo

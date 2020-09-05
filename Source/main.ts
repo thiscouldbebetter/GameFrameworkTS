@@ -65,12 +65,14 @@ function mediaFilePathsBuild()
 		imageDirectoryPath + "Car.png",
 		imageDirectoryPath + "Friendly.png",
 		imageDirectoryPath + "Grass.svg",
+		imageDirectoryPath + "Opening.png",
 		imageDirectoryPath + "Title.png",
 
 		soundEffectDirectoryPath + "Sound.wav",
 		soundEffectDirectoryPath + "Clang.wav",
 
 		soundMusicDirectoryPath + "Music.mp3",
+		soundMusicDirectoryPath + "Title.mp3",
 
 		videoDirectoryPath + "Movie.webm",
 

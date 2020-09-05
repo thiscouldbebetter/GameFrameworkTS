@@ -59,32 +59,31 @@ class SoundHelper
 			var sound = this.sounds[i];
 			sound.offsetInSeconds = 0;
 		}
-	};
+	}
 
 	soundWithNamePlayAsEffect(universe: Universe, soundName: string)
 	{
 		var sound = this.soundsByName.get(soundName);
 		sound.isRepeating = false;
 		sound.play(universe, this.soundVolume);
-	};
+	}
 
-	soundWithNamePlayAsMusic(universe: Universe, soundToPlayName: string)
+	soundWithNamePlayAsMusic(universe: Universe, soundName: string)
 	{
-		var soundToPlay = this.soundsByName.get(soundToPlayName);
-
-		soundToPlay.isRepeating = true;
+		var sound = this.soundsByName.get(soundName);
+		sound.isRepeating = true;
 
 		var soundAlreadyPlaying = this.soundForMusic;
 
 		if (soundAlreadyPlaying != null)
 		{
-			if (soundAlreadyPlaying.name != soundToPlayName)
+			if (soundAlreadyPlaying.name != soundName)
 			{
 				soundAlreadyPlaying.stop(universe);
 			}
 		}
 
-		soundToPlay.play(universe, this.musicVolume);
-		this.soundForMusic = soundToPlay;
-	};
+		sound.play(universe, this.musicVolume);
+		this.soundForMusic = sound;
+	}
 }
