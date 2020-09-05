@@ -46,25 +46,25 @@ class Starvable extends EntityProperty
 
 	isStarving()
 	{
-		return (this.satiety > 0);
-	};
+		return (this.satiety <= 0);
+	}
 
 	updateForTimerTick(universe: Universe, world: World, place: Place, entityStarvable: Entity)
 	{
 		if (this.isStarving())
 		{
-			this.satiety -= this.satietyLostPerTick;
+			this.starve(universe, world, place, entityStarvable);
 		}
 		else
 		{
-			this.starve(universe, world, place, entityStarvable);
+			this.satiety -= this.satietyLostPerTick;
 		}
-	};
+	}
 
 	// cloneable
 
 	clone()
 	{
 		return new Starvable(this.satietyMax, this.satietyLostPerTick, this._starve);
-	};
+	}
 }

@@ -80,6 +80,7 @@ class Entity {
     skillLearner() { return this.propertiesByName.get(SkillLearner.name); }
     starvable() { return this.propertiesByName.get(Starvable.name); }
     talker() { return this.propertiesByName.get(Talker.name); }
+    tirable() { return this.propertiesByName.get(Tirable.name); }
     traversable() { return this.propertiesByName.get(Traversable.name); }
     usable() { return this.propertiesByName.get(Usable.name); }
 }

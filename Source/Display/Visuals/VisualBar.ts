@@ -5,6 +5,7 @@ class VisualBar implements Visual
 	size: Coords;
 	color: Color;
 	amountCurrent: DataBinding<Entity, number>;
+	amountThreshold: DataBinding<Entity, number>;
 	amountMax: DataBinding<Entity, number>;
 	fractionBelowWhichToShow: number;
 
@@ -15,14 +16,19 @@ class VisualBar implements Visual
 	constructor
 	(
 		abbreviation: string,
-		size: Coords, color: Color, amountCurrent: DataBinding<Entity, number>,
-		amountMax: DataBinding<Entity, number>, fractionBelowWhichToShow: number
+		size: Coords,
+		color: Color,
+		amountCurrent: DataBinding<Entity, number>,
+		amountThreshold: DataBinding<Entity, number>,
+		amountMax: DataBinding<Entity, number>,
+		fractionBelowWhichToShow: number
 	)
 	{
 		this.abbreviation = abbreviation;
 		this.size = size;
 		this.color = color;
 		this.amountCurrent = amountCurrent;
+		this.amountThreshold = amountThreshold;
 		this.amountMax = amountMax;
 		this.fractionBelowWhichToShow = fractionBelowWhichToShow;
 
@@ -70,6 +76,18 @@ class VisualBar implements Visual
 			else
 			{
 				colorForBorder = colors.White;
+			}
+
+			if (this.amountThreshold != null)
+			{
+				var thresholdFraction = this.amountThreshold.contextSet(entity).get() as number;
+				this._sizeCurrent.x = thresholdFraction * this.size.x;
+				display.drawRectangle
+				(
+					this._sizeCurrent, // pos
+					new Coords(1, this.size.y, 0), // size
+					this.color.systemColor(), null, null
+				)
 			}
 
 			display.drawRectangle

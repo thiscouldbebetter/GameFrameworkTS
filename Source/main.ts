@@ -66,7 +66,9 @@ function mediaFilePathsBuild()
 		imageDirectoryPath + "Friendly.png",
 		imageDirectoryPath + "Grass.svg",
 		imageDirectoryPath + "Opening.png",
+		imageDirectoryPath + "Pillow.svg",
 		imageDirectoryPath + "Title.png",
+		imageDirectoryPath + "Zap.svg",
 
 		soundEffectDirectoryPath + "Sound.wav",
 		soundEffectDirectoryPath + "Clang.wav",

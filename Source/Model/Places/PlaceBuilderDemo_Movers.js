@@ -516,10 +516,12 @@ class PlaceBuilderDemo_Movers {
         var playerVisualBodyJumpable = new VisualJump2D(playerVisualBodyHidable, new VisualEllipse(playerHeadRadius, playerHeadRadius / 2, 0, Color.byName("GrayDark"), Color.byName("Black")), null);
         var playerVisualBarSize = new Coords(entityDimension * 3, entityDimension * 0.8, 0);
         var playerVisualHealthBar = new VisualBar("H", // abbreviation
-        playerVisualBarSize, Color.Instances().Red, DataBinding.fromGet((c) => c.killable().integrity), DataBinding.fromGet((c) => c.killable().integrityMax), 1 // fractionBelowWhichToShow
+        playerVisualBarSize, Color.Instances().Red, DataBinding.fromGet((c) => c.killable().integrity), null, // amountThreshold
+        DataBinding.fromGet((c) => c.killable().integrityMax), 1 // fractionBelowWhichToShow
         );
         var playerVisualSatietyBar = new VisualBar("F", // abbreviation
-        playerVisualBarSize, Color.Instances().Brown, DataBinding.fromGet((c) => c.starvable().satiety), DataBinding.fromGet((c) => c.starvable().satietyMax), .5 // fractionBelowWhichToShow
+        playerVisualBarSize, Color.Instances().Brown, DataBinding.fromGet((c) => c.starvable().satiety), null, // amountThreshold
+        DataBinding.fromGet((c) => c.starvable().satietyMax), .5 // fractionBelowWhichToShow
         );
         var playerVisualEffect = new VisualDynamic((u, w, d, e) => e.effectable().effectsAsVisual());
         var playerVisualsForStatusInfo = [
@@ -648,6 +650,13 @@ class PlaceBuilderDemo_Movers {
         (u, w, p, e) => {
             e.killable().integritySubtract(.1);
         });
+        var tirable = new Tirable(100, // staminaMaxAfterSleep
+        .001, // staminaMaxLostPerTick: number,
+        .002, // staminaMaxRecoveredPerTickOfSleep: number,
+        (u, w, p, e) => // fallAsleep
+         {
+            // todo
+        });
         var movable = new Movable(0.5, // accelerationPerTick
         (universe, world, place, entityMovable) => // accelerate
          {
@@ -746,7 +755,8 @@ class PlaceBuilderDemo_Movers {
             var playerVisualBarSize = new Coords(entityDimension * 4, entityDimension, 0);
             var killable = entity.killable();
             var playerVisualHealthBar = new VisualBar(null, // "H", // abbreviation
-            playerVisualBarSize, Color.Instances().Red, new DataBinding(null, (c) => killable.integrity, null), new DataBinding(null, (c) => killable.integrityMax, null), null // fractionBelowWhichToShow
+            playerVisualBarSize, Color.Instances().Red, new DataBinding(null, (c) => killable.integrity, null), null, // amountThreshold
+            new DataBinding(null, (c) => killable.integrityMax, null), null // fractionBelowWhichToShow
             );
             var playerVisualHealthIcon = itemDefnsByName.get("Heart").visual;
             var playerVisualHealthBarPlusIcon = new VisualGroup([
@@ -755,17 +765,28 @@ class PlaceBuilderDemo_Movers {
             ]);
             var starvable = entity.starvable();
             var playerVisualSatietyBar = new VisualBar(null, // "F", // abbreviation
-            playerVisualBarSize, Color.Instances().Brown, new DataBinding(null, (c) => starvable.satiety, null), new DataBinding(null, (c) => starvable.satietyMax, null), null // fractionBelowWhichToShow
+            playerVisualBarSize, Color.Instances().Brown, new DataBinding(null, (c) => starvable.satiety, null), null, // amountThreshold
+            new DataBinding(null, (c) => starvable.satietyMax, null), null // fractionBelowWhichToShow
             );
             var playerVisualSatietyIcon = itemDefnsByName.get("Bread").visual;
             var playerVisualSatietyBarPlusIcon = new VisualGroup([
                 playerVisualSatietyBar,
                 new VisualOffset(playerVisualSatietyIcon, new Coords(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0, 0))
             ]);
+            var tirable = entity.tirable();
+            var playerVisualStaminaBar = new VisualBar(null, // "S", // abbreviation
+            playerVisualBarSize, Color.Instances().Yellow, new DataBinding(null, (c) => tirable.stamina, null), new DataBinding(null, (c) => tirable.staminaMaxRemainingBeforeSleep, null), new DataBinding(null, (c) => tirable.staminaMaxAfterSleep, null), null // fractionBelowWhichToShow
+            );
+            var playerVisualStaminaIcon = new VisualImageScaled(new VisualImageFromLibrary("Zap"), new Coords(1, 1, 0).multiplyScalar(playerVisualBarSize.y * 1.5));
+            var playerVisualStaminaBarPlusIcon = new VisualGroup([
+                playerVisualStaminaBar,
+                new VisualOffset(playerVisualStaminaIcon, new Coords(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0, 0))
+            ]);
             var childSpacing = new Coords(0, playerVisualBarSize.y * 2, 0);
             var playerVisualStatusInfo = new VisualGroup([
                 playerVisualHealthBarPlusIcon,
-                new VisualOffset(playerVisualSatietyBarPlusIcon, childSpacing)
+                new VisualOffset(playerVisualSatietyBarPlusIcon, childSpacing),
+                new VisualOffset(playerVisualStaminaBarPlusIcon, childSpacing.clone().double())
             ]);
             var controlPlayerStatusInfo = new ControlVisual("visualPlayerStatusInfo", new Coords(5, 2, 0).multiplyScalar(playerVisualBarSize.y), // pos
             new Coords(0, 0, 0), // size
@@ -924,7 +945,8 @@ class PlaceBuilderDemo_Movers {
             perceptible,
             new Playable(),
             new SkillLearner(null, null, null),
-            starvable
+            starvable,
+            tirable
         ]);
         return playerEntityDefn;
     }

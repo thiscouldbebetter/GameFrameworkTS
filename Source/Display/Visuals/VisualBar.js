@@ -1,10 +1,11 @@
 "use strict";
 class VisualBar {
-    constructor(abbreviation, size, color, amountCurrent, amountMax, fractionBelowWhichToShow) {
+    constructor(abbreviation, size, color, amountCurrent, amountThreshold, amountMax, fractionBelowWhichToShow) {
         this.abbreviation = abbreviation;
         this.size = size;
         this.color = color;
         this.amountCurrent = amountCurrent;
+        this.amountThreshold = amountThreshold;
         this.amountMax = amountMax;
         this.fractionBelowWhichToShow = fractionBelowWhichToShow;
         this._drawPos = new Coords(0, 0, 0);
@@ -34,6 +35,13 @@ class VisualBar {
             }
             else {
                 colorForBorder = colors.White;
+            }
+            if (this.amountThreshold != null) {
+                var thresholdFraction = this.amountThreshold.contextSet(entity).get();
+                this._sizeCurrent.x = thresholdFraction * this.size.x;
+                display.drawRectangle(this._sizeCurrent, // pos
+                new Coords(1, this.size.y, 0), // size
+                this.color.systemColor(), null, null);
             }
             display.drawRectangle(pos, this.size, null, colorForBorder.systemColor(), null);
             pos.add(this._sizeHalf);

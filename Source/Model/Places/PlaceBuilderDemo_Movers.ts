@@ -1039,6 +1039,7 @@ class PlaceBuilderDemo_Movers
 			playerVisualBarSize,
 			Color.Instances().Red,
 			DataBinding.fromGet( (c: Entity) => c.killable().integrity ),
+			null, // amountThreshold
 			DataBinding.fromGet( (c: Entity) => c.killable().integrityMax ),
 			1 // fractionBelowWhichToShow
 		);
@@ -1048,6 +1049,7 @@ class PlaceBuilderDemo_Movers
 			playerVisualBarSize,
 			Color.Instances().Brown,
 			DataBinding.fromGet( (c: Entity) => c.starvable().satiety ),
+			null, // amountThreshold
 			DataBinding.fromGet( (c: Entity) => c.starvable().satietyMax ),
 			.5 // fractionBelowWhichToShow
 		);
@@ -1291,6 +1293,17 @@ class PlaceBuilderDemo_Movers
 			}
 		);
 
+		var tirable = new Tirable
+		(
+			100, // staminaMaxAfterSleep
+			.001, // staminaMaxLostPerTick: number,
+			.002, // staminaMaxRecoveredPerTickOfSleep: number,
+			(u: Universe, w: World, p: Place, e: Entity) => // fallAsleep
+			{
+				// todo
+			}
+		);
+
 		var movable = new Movable
 		(
 			0.5, // accelerationPerTick
@@ -1498,6 +1511,7 @@ class PlaceBuilderDemo_Movers
 				playerVisualBarSize,
 				Color.Instances().Red,
 				new DataBinding(null, (c: Entity) => killable.integrity, null),
+				null, // amountThreshold
 				new DataBinding(null, (c: Entity) => killable.integrityMax, null),
 				null // fractionBelowWhichToShow
 			);
@@ -1521,6 +1535,7 @@ class PlaceBuilderDemo_Movers
 				playerVisualBarSize,
 				Color.Instances().Brown,
 				new DataBinding(null, (c: any) => starvable.satiety, null ),
+				null, // amountThreshold
 				new DataBinding(null, (c: any) => starvable.satietyMax, null ),
 				null // fractionBelowWhichToShow
 			);
@@ -1537,6 +1552,34 @@ class PlaceBuilderDemo_Movers
 				)
 			]);
 
+			var tirable = entity.tirable();
+			var playerVisualStaminaBar = new VisualBar
+			(
+				null, // "S", // abbreviation
+				playerVisualBarSize,
+				Color.Instances().Yellow,
+				new DataBinding(null, (c: any) => tirable.stamina, null ),
+				new DataBinding(null, (c: any) => tirable.staminaMaxRemainingBeforeSleep, null ),
+				new DataBinding(null, (c: any) => tirable.staminaMaxAfterSleep, null ),
+				null // fractionBelowWhichToShow
+			);
+
+			var playerVisualStaminaIcon = new VisualImageScaled
+			(
+				new VisualImageFromLibrary("Zap"),
+				new Coords(1, 1, 0).multiplyScalar(playerVisualBarSize.y * 1.5)
+			);
+
+			var playerVisualStaminaBarPlusIcon = new VisualGroup
+			([
+				playerVisualStaminaBar,
+				new VisualOffset
+				(
+					playerVisualStaminaIcon,
+					new Coords(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0, 0)
+				)
+			]);
+
 			var childSpacing = new Coords(0, playerVisualBarSize.y * 2, 0);
 
 			var playerVisualStatusInfo: Visual = new VisualGroup
@@ -1546,6 +1589,11 @@ class PlaceBuilderDemo_Movers
 				(
 					playerVisualSatietyBarPlusIcon,
 					childSpacing
+				),
+				new VisualOffset
+				(
+					playerVisualStaminaBarPlusIcon,
+					childSpacing.clone().double()
 				)
 			]);
 
@@ -1805,7 +1853,8 @@ class PlaceBuilderDemo_Movers
 				perceptible,
 				new Playable(),
 				new SkillLearner(null, null, null),
-				starvable
+				starvable,
+				tirable
 			]
 		);
 

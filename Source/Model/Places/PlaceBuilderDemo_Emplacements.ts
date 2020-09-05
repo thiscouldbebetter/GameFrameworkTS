@@ -645,6 +645,51 @@ class PlaceBuilderDemo_Emplacements
 		return obstacleRingEntityDefn;
 	}
 
+	entityDefnBuildPillow(entityDimension: number): Entity
+	{
+		var pillowName = "Pillow";
+		var pillowVisual: Visual = new VisualImageScaled
+		(
+			new VisualImageFromLibrary(pillowName),
+			new Coords(1, .75, 0).multiplyScalar(entityDimension * 2) // sizeScaled
+		);
+		pillowVisual = new VisualGroup( [ pillowVisual ] );
+		if (this.parent.visualsHaveText)
+		{
+			(pillowVisual as VisualGroup).children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(new DataBinding(pillowName, null, null), null, Color.byName("Blue"), null),
+					new Coords(0, 0 - entityDimension * 2, 0)
+				)
+			);
+		}
+		var pillowUse = (universe: Universe, w: World, p: Place, entityUsing: Entity, entityUsed: Entity) =>
+		{
+			var tirable = entityUsing.tirable();
+			tirable.fallAsleep(universe, w, p, entityUsing);
+			var venueNext = universe.venueCurrent;
+			venueNext = new VenueFader(venueNext, venueNext, null, null);
+			universe.venueNext = venueNext;
+			return ""; // todo
+		};
+
+		var itemPillowEntityDefn = new Entity
+		(
+			pillowName,
+			[
+				new Locatable(new Disposition(new Coords(0, 0, 0), null, null) ),
+				new Drawable(pillowVisual, null),
+				new DrawableCamera(),
+				new ItemHolder([], null, null),
+				new Usable(pillowUse)
+			]
+		);
+
+		return itemPillowEntityDefn;
+	}
+
 	entityDefnBuildPortal(entityDimension: number): Entity
 	{
 		var baseColor = "Brown";

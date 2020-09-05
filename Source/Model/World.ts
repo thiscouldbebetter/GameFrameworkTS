@@ -74,6 +74,7 @@ class World
 			Ephemeral.name,
 			Killable.name,
 			Starvable.name,
+			Tirable.name,
 
 			Camera.name,
 		]

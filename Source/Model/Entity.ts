@@ -137,6 +137,8 @@ class Entity
 
 	talker(): Talker { return this.propertiesByName.get(Talker.name) as Talker; }
 
+	tirable(): Tirable { return this.propertiesByName.get(Tirable.name) as Tirable; }
+
 	traversable(): Traversable { return this.propertiesByName.get(Traversable.name) as Traversable; }
 
 	usable(): Usable { return this.propertiesByName.get(Usable.name) as Usable; }

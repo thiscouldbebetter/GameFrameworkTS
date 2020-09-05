@@ -37,6 +37,7 @@ class PlaceBuilderDemo // Main.
         this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Friendly"), 1, null, entityPosRange, randomizer));
         this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Heart"), 1, null, entityPosRange, randomizer));
         this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Meat"), 1, null, entityPosRange, randomizer));
+        this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Pillow"), 1, null, entityPosRange, randomizer));
         this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Sword"), 1, null, entityPosRange, randomizer));
         this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("SwordCold"), 1, null, entityPosRange, randomizer));
         this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("SwordHeat"), 1, null, entityPosRange, randomizer));
@@ -1546,6 +1547,7 @@ class PlaceBuilderDemo // Main.
             this.emplacementsBuilder.entityDefnBuildObstacleBar(entityDimension),
             this.emplacementsBuilder.entityDefnBuildObstacleMine(entityDimension),
             this.emplacementsBuilder.entityDefnBuildObstacleRing(entityDimension),
+            this.emplacementsBuilder.entityDefnBuildPillow(entityDimension),
             this.emplacementsBuilder.entityDefnBuildTree(entityDimension),
             this.moversBuilder.entityDefnBuildEnemyGeneratorChaser(entityDimension, null),
             this.moversBuilder.entityDefnBuildEnemyGeneratorChaser(entityDimension, "Cold"),

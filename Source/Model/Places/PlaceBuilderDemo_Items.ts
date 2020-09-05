@@ -1360,11 +1360,11 @@ class PlaceBuilderDemo_Items
 			(
 				new Path
 				([
-					new Coords(0, 0, 0),
-					new Coords(1, 0, 0),
+					new Coords(0, .5, 0),
+					new Coords(1, .5, 0),
+					new Coords(.5, 0, 0),
 					new Coords(.5, -.5, 0),
-					new Coords(.5, -1, 0),
-					new Coords(0, -1, 0),
+					new Coords(0, -.5, 0),
 				]).transform
 				(
 					Transform_Scale.fromScalar(this.entityDimension)
@@ -1377,11 +1377,11 @@ class PlaceBuilderDemo_Items
 			(
 				new Path
 				([
-					new Coords(-.1, 0, 0),
-					new Coords(-1.1, 0, 0),
+					new Coords(-.1, .5, 0),
+					new Coords(-1.1, .5, 0),
+					new Coords(-.6, 0, 0),
 					new Coords(-.6, -.5, 0),
-					new Coords(-.6, -1, 0),
-					new Coords(-.1, -1, 0),
+					new Coords(-.1, -.5, 0),
 				]).transform
 				(
 					Transform_Scale.fromScalar(this.entityDimension)
@@ -1389,7 +1389,6 @@ class PlaceBuilderDemo_Items
 				itemAccessoryColor,
 				null
 			)
-
 		]);
 
 		if (this.parent.visualsHaveText)
