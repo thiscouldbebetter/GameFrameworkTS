@@ -13,8 +13,6 @@ Items - Crafting - Blocking with Working Animation
 Items - Generated Devices with Varying Specs
 Items - Weapons - Applying Effects to Target
 
-Items - Devices - Weapons - Arrows when Firing Bow
-
 Movers - Animals - Carnivores Eat Grazers
 Movers - Animals - Growth, Aging and Natural Death
 Movers - Animals - Lairs and Sleep
@@ -30,8 +28,10 @@ Movers - Enemies - Types - Bombers
 Movers - Enemies - Types - Hiders
 Movers - Enemies - Types - Shooters
 
-Movers - Player - Stamina
+Movers - Player - Stamina - Jump, Run, Dash
 Movers - Player - Sword Swings
+
+Movers - Vehicle - Boat
 
 Places - Whole Boundary is Big Portal
 Places - Darkness and Lighting
@@ -45,12 +45,11 @@ Places - Parallax
 Places - Weather
 
 Sound - Hitting Obstacle
-Sound - Shooting Gun
-Sound - Bullet Hits
+Sound - Shooting Bow
+Sound - Arrow Hits
 Sound - Swinging Sword
 Sound - Sword Hits
 Sound - Effects from Builtin JS AudioContext
-Sound - Music on Title Screen
 
 Visuals - Non-Linear Animation System
 

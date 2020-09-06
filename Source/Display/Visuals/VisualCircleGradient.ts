@@ -2,10 +2,10 @@
 class VisualCircleGradient implements Visual
 {
 	radius: number;
-	gradientFill: Gradient;
+	gradientFill: ValueBreakGroup;
 	colorBorder: string;
 
-	constructor(radius: number, gradientFill: Gradient, colorBorder: string)
+	constructor(radius: number, gradientFill: ValueBreakGroup, colorBorder: string)
 	{
 		this.radius = radius;
 		this.gradientFill = gradientFill;
@@ -18,7 +18,7 @@ class VisualCircleGradient implements Visual
 		(
 			entity.locatable().loc.pos, this.radius, this.gradientFill, this.colorBorder
 		);
-	};
+	}
 
 	// Clonable.
 

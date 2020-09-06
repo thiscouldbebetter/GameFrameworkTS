@@ -53,18 +53,36 @@ class VisualArc implements Visual
 
 	clone(): Visual
 	{
-		return this; // todo
+		return new VisualArc
+		(
+			this.radiusOuter, this.radiusInner,
+			this.directionMin.clone(),
+			this.angleSpannedInTurns,
+			this.colorFill.clone(),
+			(this.colorBorder == null ? null : this.colorBorder.clone())
+		)
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(otherAsVisual: Visual): Visual
 	{
-		return this; // todo
+		var other = otherAsVisual as VisualArc;
+		this.radiusOuter = other.radiusOuter;
+		this.radiusInner = other.radiusInner;
+		this.directionMin.overwriteWith(other.directionMin);
+		this.angleSpannedInTurns = other.angleSpannedInTurns;
+		this.colorFill.overwriteWith(other.colorFill);
+		if (this.colorBorder != null)
+		{
+			this.colorBorder.overwriteWith(other.colorBorder);
+		}
+		return this;
 	}
 
 	// Transformable.
 
 	transform(transformToApply: Transform): Transformable
 	{
-		return this; // todo
+		transformToApply.transformCoords(this.directionMin);
+		return this;
 	}
 }

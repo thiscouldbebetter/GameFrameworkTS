@@ -1,5 +1,5 @@
 
-class AnimationKeyframe
+class AnimationKeyframe implements Interpolatable
 {
 	frameIndex: number;
 	transforms: Transform_Interpolatable[];
@@ -12,8 +12,10 @@ class AnimationKeyframe
 		this.transformsByPropertyName = ArrayHelper.addLookups(this.transforms, (x: Transform_Interpolatable) => x.propertyName );
 	}
 
-	interpolateWith(other: AnimationKeyframe, fractionOfProgressTowardOther: number)
+	interpolateWith(otherAsAny: any, fractionOfProgressTowardOther: number)
 	{
+		var other = otherAsAny as AnimationKeyframe;
+
 		var transformsInterpolated = [];
 
 		for (var i = 0; i < this.transforms.length; i++)

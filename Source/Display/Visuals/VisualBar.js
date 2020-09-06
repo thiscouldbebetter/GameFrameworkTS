@@ -1,6 +1,6 @@
 "use strict";
 class VisualBar {
-    constructor(abbreviation, size, color, amountCurrent, amountThreshold, amountMax, fractionBelowWhichToShow) {
+    constructor(abbreviation, size, color, amountCurrent, amountThreshold, amountMax, fractionBelowWhichToShow, colorForBorderAsValueBreakGroup, text) {
         this.abbreviation = abbreviation;
         this.size = size;
         this.color = color;
@@ -8,6 +8,8 @@ class VisualBar {
         this.amountThreshold = amountThreshold;
         this.amountMax = amountMax;
         this.fractionBelowWhichToShow = fractionBelowWhichToShow;
+        this.colorForBorderAsValueBreakGroup = colorForBorderAsValueBreakGroup;
+        this.text = text;
         this._drawPos = new Coords(0, 0, 0);
         this._sizeCurrent = this.size.clone();
         this._sizeHalf = this.size.clone().half();
@@ -26,15 +28,12 @@ class VisualBar {
             this._sizeCurrent.x = widthCurrent;
             display.drawRectangle(pos, this._sizeCurrent, this.color.systemColor(), null, null);
             var colorForBorder = null;
-            var colors = Color.Instances();
-            if (fractionCurrent < .33) {
-                colorForBorder = colors.Red;
-            }
-            else if (fractionCurrent < .67) {
-                colorForBorder = colors.Yellow;
+            if (this.colorForBorderAsValueBreakGroup == null) {
+                colorForBorder = Color.Instances().White;
             }
             else {
-                colorForBorder = colors.White;
+                colorForBorder =
+                    this.colorForBorderAsValueBreakGroup.valueAtPosition(fractionCurrent);
             }
             if (this.amountThreshold != null) {
                 var thresholdFraction = this.amountThreshold.contextSet(entity).get();
@@ -45,8 +44,14 @@ class VisualBar {
             }
             display.drawRectangle(pos, this.size, null, colorForBorder.systemColor(), null);
             pos.add(this._sizeHalf);
-            var remainingOverMax = Math.round(_amountCurrent) + "/" + _amountMax;
-            var text = (this.abbreviation == null ? "" : (this.abbreviation + ":")) + remainingOverMax;
+            var text;
+            if (this.text == null) {
+                var remainingOverMax = Math.round(_amountCurrent) + "/" + _amountMax;
+                text = (this.abbreviation == null ? "" : (this.abbreviation + ":")) + remainingOverMax;
+            }
+            else {
+                text = this.text.get();
+            }
             display.drawText(text, this.size.y, // fontHeightInPixels
             pos, colorForBorder.systemColor(), "Black", // colorOutline,
             false, // areColorsReversed

@@ -24,13 +24,23 @@ class VisualArc {
     ;
     // Clonable.
     clone() {
-        return this; // todo
+        return new VisualArc(this.radiusOuter, this.radiusInner, this.directionMin.clone(), this.angleSpannedInTurns, this.colorFill.clone(), (this.colorBorder == null ? null : this.colorBorder.clone()));
     }
-    overwriteWith(other) {
-        return this; // todo
+    overwriteWith(otherAsVisual) {
+        var other = otherAsVisual;
+        this.radiusOuter = other.radiusOuter;
+        this.radiusInner = other.radiusInner;
+        this.directionMin.overwriteWith(other.directionMin);
+        this.angleSpannedInTurns = other.angleSpannedInTurns;
+        this.colorFill.overwriteWith(other.colorFill);
+        if (this.colorBorder != null) {
+            this.colorBorder.overwriteWith(other.colorBorder);
+        }
+        return this;
     }
     // Transformable.
     transform(transformToApply) {
-        return this; // todo
+        transformToApply.transformCoords(this.directionMin);
+        return this;
     }
 }

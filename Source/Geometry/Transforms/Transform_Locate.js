@@ -18,5 +18,4 @@ class Transform_Locate {
         this.transformTranslate.transformCoords(coordsToTransform);
         return coordsToTransform;
     }
-    ;
 }

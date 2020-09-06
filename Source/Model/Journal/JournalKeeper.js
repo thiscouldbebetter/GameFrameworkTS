@@ -148,7 +148,7 @@ class JournalKeeper extends EntityProperty {
             }, null), // text
             fontHeightSmall)
         ];
-        var returnValue = new ControlContainer("Journal", new Coords(0, 0, 0), // pos
+        var returnValue = new ControlContainer("Notes", new Coords(0, 0, 0), // pos
         sizeBase.clone(), // size
         childControls, [
             new Action("Back", back),

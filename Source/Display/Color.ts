@@ -1,5 +1,5 @@
 
-class Color
+class Color implements Interpolatable
 {
 	name: string;
 	code: string;
@@ -105,6 +105,34 @@ class Color
 		ArrayHelper.overwriteWith(this.componentsRGBA, other.componentsRGBA);
 		this._systemColor = null;
 		return this;
+	}
+
+	// Interpolatable.
+
+	interpolateWith(otherAsAny: any, fractionOfProgressTowardOther: number)
+	{
+		var other = otherAsAny as Color;
+		var componentsRGBAThis = this.componentsRGBA;
+		var componentsRGBAOther = other.componentsRGBA;
+		var componentsRGBAInterpolated = new Array<number>();
+		for (var i = 0; i < componentsRGBAThis.length; i++)
+		{
+			var componentThis = componentsRGBAThis[i];
+			var componentOther = componentsRGBAOther[i];
+			var componentInterpolated =
+				componentThis
+				+ componentOther * fractionOfProgressTowardOther;
+			componentsRGBAInterpolated[i] = componentInterpolated;
+		}
+
+		var colorInterpolated = new Color
+		(
+			"Interpolated",
+			null, // code
+			componentsRGBAInterpolated
+		);
+
+		return colorInterpolated;
 	}
 }
 

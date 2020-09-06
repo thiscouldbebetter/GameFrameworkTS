@@ -2,6 +2,7 @@
 class Transform_Orient {
     constructor(orientation) {
         this.orientation = orientation;
+        this._components = [new Coords(0, 0, 0), new Coords(0, 0, 0), new Coords(0, 0, 0)];
     }
     overwriteWith(other) {
         return this; // todo
@@ -9,13 +10,10 @@ class Transform_Orient {
     transform(transformable) {
         return transformable.transform(this);
     }
-    ;
     transformCoords(coordsToTransform) {
-        // todo
-        // Compare to Transform_OrientRDF.transformCoords().
-        // Should this be doing the same thing?
-        coordsToTransform.overwriteWithDimensions(this.orientation.forward.dotProduct(coordsToTransform), this.orientation.right.dotProduct(coordsToTransform), this.orientation.down.dotProduct(coordsToTransform));
+        var components = this._components;
+        var ori = this.orientation;
+        coordsToTransform.overwriteWith(components[0].overwriteWith(ori.forward).multiplyScalar(coordsToTransform.x).add(components[1].overwriteWith(ori.right).multiplyScalar(coordsToTransform.y).add(components[2].overwriteWith(ori.down).multiplyScalar(coordsToTransform.z))));
         return coordsToTransform;
     }
-    ;
 }

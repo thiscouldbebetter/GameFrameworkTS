@@ -74,7 +74,8 @@ class Display2D {
         var gradientStops = gradientFill.stops;
         for (var i = 0; i < gradientStops.length; i++) {
             var stop = gradientStops[i];
-            systemGradient.addColorStop(stop.position, stop.color.systemColor());
+            var stopColor = stop.value;
+            systemGradient.addColorStop(stop.position, stopColor.systemColor());
         }
         this.graphics.fillStyle = systemGradient;
         this.graphics.fill();

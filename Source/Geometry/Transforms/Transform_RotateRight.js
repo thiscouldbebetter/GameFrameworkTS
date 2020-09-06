@@ -18,5 +18,4 @@ class Transform_RotateRight {
         }
         return coordsToTransform;
     }
-    ;
 }

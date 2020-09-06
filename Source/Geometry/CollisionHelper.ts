@@ -83,6 +83,7 @@ class CollisionHelper
 			lookup.set(boxName, this.collisionOfSphereAndBox);
 			lookup.set(boxRotatedName, this.collisionOfSphereAndBoxRotated);
 			lookup.set(mapLocatedName, this.collisionOfSphereAndMapLocated);
+			lookup.set(meshName, this.collisionOfSphereAndMesh);
 			lookup.set(sphereName, this.collisionOfSpheres);
 			lookupOfLookups.set(sphereName, lookup);
 		}
@@ -1231,6 +1232,11 @@ class CollisionHelper
 	collisionOfSphereAndMapLocated(sphere: Sphere, mapLocated: MapLocated, collision: Collision)
 	{
 		return this.collisionOfMapLocatedAndSphere(mapLocated, sphere, collision);
+	}
+
+	collisionOfSphereAndMesh(sphere: Sphere, mesh: Mesh, collision: Collision)
+	{
+		return this.collisionOfMeshAndSphere(mesh, sphere, collision);
 	}
 
 	collisionOfSpheres(sphere0: Sphere, sphere1: Sphere, collision: Collision)

@@ -103,7 +103,7 @@ class Effect_Instances
 			VisualBuilder.Instance().flame(visualDimension),
 			(u: Universe, w: World, p: Place, e: Entity, effect: Effect) =>
 			{
-				e.killable().damageApply(u, w, p, null, e, new Damage(1, "Heat") );
+				e.killable().damageApply(u, w, p, null, e, new Damage(1, "Heat", null) );
 			}
 		);
 
@@ -115,7 +115,7 @@ class Effect_Instances
 			new VisualCircle(visualDimension, Color.byName("Cyan"), null),
 			(u: Universe, w: World, p: Place, e: Entity, effect: Effect) =>
 			{
-				e.killable().damageApply(u, w, p, null, e, new Damage(1, "Cold") );
+				e.killable().damageApply(u, w, p, null, e, new Damage(1, "Cold", null) );
 			}
 		);
 
@@ -149,7 +149,7 @@ class Effect_Instances
 			),
 			(u: Universe, w: World, p: Place, e: Entity, effect: Effect) =>
 			{
-				e.killable().damageApply(u, w, p, null, e, new Damage(-1, "Healing") );
+				e.killable().damageApply(u, w, p, null, e, new Damage(-1, "Healing", null) );
 			}
 		);
 

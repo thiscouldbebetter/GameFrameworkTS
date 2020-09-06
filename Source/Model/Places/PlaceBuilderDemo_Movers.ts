@@ -279,38 +279,65 @@ class PlaceBuilderDemo_Movers
 			null
 		);
 
+		var visualEffect = new VisualAnchor
+		(
+			new VisualDynamic
+			(
+				(u: Universe, w: World, d: Display, e: Entity) =>
+					e.effectable().effectsAsVisual()
+			),
+			null, Orientation.Instances().ForwardXDownZ
+		);
+
+		var visualStatusInfo = new VisualOffset
+		(
+			new VisualStack
+			(
+				new Coords(0, 0 - entityDimension, 0), // childSpacing
+				[
+					visualEffect
+				]
+			),
+			new Coords(0, 0 - entityDimension * 2, 0) // offset
+		);
+
+		var visualBody = new VisualAnchor
+		(
+			new VisualPolygon
+			(
+				new Path(enemyColliderAsFace.vertices),
+				enemyColor,
+				Color.byName("Red") // colorBorder
+			),
+			null, // posToAnchorAt
+			Orientation.Instances().ForwardXDownZ.clone()
+		);
+
+		var visualArms = new VisualDirectional
+		(
+			new VisualNone(),
+			[
+				new VisualGroup
+				([
+					new VisualOffset
+					(
+						enemyVisualArm, new Coords(-enemyDimension / 4, 0, 0)
+					),
+					new VisualOffset
+					(
+						enemyVisualArm, new Coords(enemyDimension / 4, 0, 0)
+					)
+				])
+			],
+			null
+		);
+
 		var enemyVisual = new VisualGroup
 		([
-			new VisualDirectional
-			(
-				new VisualNone(),
-				[
-					new VisualGroup
-					([
-						new VisualOffset
-						(
-							enemyVisualArm, new Coords(-enemyDimension / 4, 0, 0)
-						),
-						new VisualOffset
-						(
-							enemyVisualArm, new Coords(enemyDimension / 4, 0, 0)
-						)
-					])
-				],
-				null
-			),
-			new VisualAnchor
-			(
-				new VisualPolygon
-				(
-					new Path(enemyColliderAsFace.vertices),
-					enemyColor,
-					Color.byName("Red") // colorBorder
-				),
-				null, // posToAnchorAt
-				Orientation.Instances().ForwardXDownZ.clone()
-			),
+			visualArms,
+			visualBody,
 			visualEyesWithBrowsDirectional,
+			visualStatusInfo
 		]);
 
 		if (this.parent.visualsHaveText)
@@ -440,15 +467,27 @@ class PlaceBuilderDemo_Movers
 			{
 				if (damageInflictedByTargetTypeName == damageToApplyTypeName)
 				{
-					damageMultiplier = 0;
+					damageMultiplier = 0.1;
 				}
 				else
 				{
 					damageMultiplier = 2;
 				}
 			}
-			var damageApplied = new Damage(damageToApply.amount * damageMultiplier, damageToApplyTypeName);
+			var damageApplied = new Damage
+			(
+				damageToApply.amount * damageMultiplier,
+				damageToApplyTypeName,
+				null // effectsAndChances
+			);
 			eKillable.killable().integritySubtract(damageToApply.amount * damageMultiplier);
+
+			var effectable = eKillable.effectable();
+			var effectsToApply = damageToApply.effectsOccurring(u.randomizer);
+			effectsToApply.forEach
+			(
+				effect => effectable.effectAdd(effect.clone())
+			);
 
 			p.entitySpawn
 			(
@@ -464,43 +503,45 @@ class PlaceBuilderDemo_Movers
 			return damageApplied.amount;
 		};
 
+		var enemyDie = (universe: Universe, world: World, place: Place, entityDying: Entity) => // die
+		{
+			var chanceOfDroppingCoin = 1;
+			var doesDropCoin = (Math.random() < chanceOfDroppingCoin);
+			if (doesDropCoin)
+			{
+				entityDying.locatable().entitySpawnWithDefnName
+				(
+					universe, world, place, entityDying, "Coin"
+				);
+			}
+
+			var entityPlayer = place.player();
+			var learner = entityPlayer.skillLearner();
+			var defns = world.defn;
+			var skillsAll = defns.defnArraysByTypeName.get(Skill.name); // todo - Just use the "-ByName" lookup.
+			var skillsByName = defns.defnsByNameByTypeName.get(Skill.name);
+			var learningMessage = learner.learningIncrement
+			(
+				skillsAll, skillsByName, 1
+			);
+			if (learningMessage != null)
+			{
+				place.entitySpawn
+				(
+					universe, world,
+					universe.entityBuilder.messageFloater
+					(
+						learningMessage, entityPlayer.locatable().loc.pos, Color.byName("Green")
+					)
+				);
+			}
+		};
+
 		var enemyKillable = new Killable
 		(
 			integrityMax,
 			enemyDamageApply,
-			(universe: Universe, world: World, place: Place, entityDying: Entity) => // die
-			{
-				var chanceOfDroppingCoin = 1;
-				var doesDropCoin = (Math.random() < chanceOfDroppingCoin);
-				if (doesDropCoin)
-				{
-					entityDying.locatable().entitySpawnWithDefnName
-					(
-						universe, world, place, entityDying, "Coin"
-					);
-				}
-
-				var entityPlayer = place.player();
-				var learner = entityPlayer.skillLearner();
-				var defns = world.defn;
-				var skillsAll = defns.defnArraysByTypeName.get(Skill.name); // todo - Just use the "-ByName" lookup.
-				var skillsByName = defns.defnsByNameByTypeName.get(Skill.name);
-				var learningMessage = learner.learningIncrement
-				(
-					skillsAll, skillsByName, 1
-				);
-				if (learningMessage != null)
-				{
-					place.entitySpawn
-					(
-						universe, world,
-						universe.entityBuilder.messageFloater
-						(
-							learningMessage, entityPlayer.locatable().loc.pos, Color.byName("Green")
-						)
-					);
-				}
-			}
+			enemyDie
 		);
 
 		var enemyPerceptor = new Perceptor
@@ -517,9 +558,10 @@ class PlaceBuilderDemo_Movers
 				new Actor(enemyActivity),
 				new Constrainable([constraintSpeedMax1]),
 				new Collidable(enemyCollider, null, null),
-				new Damager(new Damage(10, damageTypeName)),
+				new Damager(new Damage(10, damageTypeName, null)),
 				new Drawable(enemyVisual, null),
 				new DrawableCamera(),
+				new Effectable([]),
 				new Enemy(),
 				enemyKillable,
 				new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
@@ -1041,7 +1083,9 @@ class PlaceBuilderDemo_Movers
 			DataBinding.fromGet( (c: Entity) => c.killable().integrity ),
 			null, // amountThreshold
 			DataBinding.fromGet( (c: Entity) => c.killable().integrityMax ),
-			1 // fractionBelowWhichToShow
+			1, // fractionBelowWhichToShow
+			null, // colorForBorderAsValueBreakGroup
+			null // text
 		);
 		var playerVisualSatietyBar = new VisualBar
 		(
@@ -1051,13 +1095,19 @@ class PlaceBuilderDemo_Movers
 			DataBinding.fromGet( (c: Entity) => c.starvable().satiety ),
 			null, // amountThreshold
 			DataBinding.fromGet( (c: Entity) => c.starvable().satietyMax ),
-			.5 // fractionBelowWhichToShow
+			.5, // fractionBelowWhichToShow
+			null, // colorForBorderAsValueBreakGroup
+			null // text
 		);
 
-		var playerVisualEffect = new VisualDynamic
+		var playerVisualEffect = new VisualAnchor
 		(
-			(u: Universe, w: World, d: Display, e: Entity) =>
-				e.effectable().effectsAsVisual()
+			new VisualDynamic
+			(
+				(u: Universe, w: World, d: Display, e: Entity) =>
+					e.effectable().effectsAsVisual()
+			),
+			null, Orientation.Instances().ForwardXDownZ
 		);
 
 		var playerVisualsForStatusInfo: Visual[] =
@@ -1513,7 +1563,9 @@ class PlaceBuilderDemo_Movers
 				new DataBinding(null, (c: Entity) => killable.integrity, null),
 				null, // amountThreshold
 				new DataBinding(null, (c: Entity) => killable.integrityMax, null),
-				null // fractionBelowWhichToShow
+				null, // fractionBelowWhichToShow
+				null, // colorForBorderAsValueBreakGroup
+				null // text
 			);
 
 			var playerVisualHealthIcon = itemDefnsByName.get("Heart").visual;
@@ -1537,7 +1589,9 @@ class PlaceBuilderDemo_Movers
 				new DataBinding(null, (c: any) => starvable.satiety, null ),
 				null, // amountThreshold
 				new DataBinding(null, (c: any) => starvable.satietyMax, null ),
-				null // fractionBelowWhichToShow
+				null, // fractionBelowWhichToShow
+				null, // colorForBorderAsValueBreakGroup
+				null // text
 			);
 
 			var playerVisualSatietyIcon = itemDefnsByName.get("Bread").visual;
@@ -1561,7 +1615,9 @@ class PlaceBuilderDemo_Movers
 				new DataBinding(null, (c: any) => tirable.stamina, null ),
 				new DataBinding(null, (c: any) => tirable.staminaMaxRemainingBeforeSleep, null ),
 				new DataBinding(null, (c: any) => tirable.staminaMaxAfterSleep, null ),
-				null // fractionBelowWhichToShow
+				null, // fractionBelowWhichToShow
+				null, // colorForBorderAsValueBreakGroup
+				null // text
 			);
 
 			var playerVisualStaminaIcon = new VisualImageScaled
@@ -1580,6 +1636,66 @@ class PlaceBuilderDemo_Movers
 				)
 			]);
 
+			var hoursPerDay = 24;
+			var minutesPerHour = 60;
+			var minutesPerDay = minutesPerHour * hoursPerDay;
+			// var gameMinutesPerActualSecond = 1;
+			var timerTicksPerGameDay =
+				minutesPerDay * universe.timerHelper.ticksPerSecond;
+
+			var ticksToHH_MM = (ticks: number) =>
+			{
+				var ticksIntoDay = world.timerTicksSoFar % timerTicksPerGameDay;
+				var fractionOfDay = ticksIntoDay / timerTicksPerGameDay;
+				var gameMinutesIntoDay = Math.round(fractionOfDay * minutesPerDay);
+				var gameHoursIntoDay = Math.floor(gameMinutesIntoDay / minutesPerHour);
+				var gameMinutesIntoHour = gameMinutesIntoDay % minutesPerHour;
+				var returnValue =
+					StringHelper.padStart("" + gameHoursIntoDay, 2, "0")
+					+ ":"
+					+ StringHelper.padStart("" + gameMinutesIntoHour, 2, "0");
+				return returnValue;
+			};
+
+			var playerVisualTimeBar = new VisualBar
+			(
+				null, // "T", // abbreviation
+				playerVisualBarSize,
+				Color.Instances().Cyan,
+				new DataBinding
+				(
+					null,
+					(c: any) => world.timerTicksSoFar % timerTicksPerGameDay,
+					null
+				),
+				null, // threshold
+				new DataBinding
+				(
+					null,
+					(c: any) => timerTicksPerGameDay,
+					null
+				),
+				null, // fractionBelowWhichToShow
+				null, // colorForBorderAsValueBreakGroup
+				// text
+				new DataBinding
+				(
+					world, (c: World) => ticksToHH_MM(c.timerTicksSoFar), null
+				)
+			);
+
+			var playerVisualTimeIcon = VisualBuilder.Instance().sun(playerVisualBarSize.y * .5);
+
+			var playerVisualTimeBarPlusIcon = new VisualGroup
+			([
+				playerVisualTimeBar,
+				new VisualOffset
+				(
+					playerVisualTimeIcon,
+					new Coords(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0, 0)
+				)
+			]);
+
 			var childSpacing = new Coords(0, playerVisualBarSize.y * 2, 0);
 
 			var playerVisualStatusInfo: Visual = new VisualGroup
@@ -1594,6 +1710,16 @@ class PlaceBuilderDemo_Movers
 				(
 					playerVisualStaminaBarPlusIcon,
 					childSpacing.clone().double()
+				),
+				new VisualOffset
+				(
+					playerVisualTimeBarPlusIcon,
+					new Coords
+					(
+						size.x - (playerVisualBarSize.x * 2 + playerVisualBarSize.y),
+						0,
+						0
+					)
 				)
 			]);
 

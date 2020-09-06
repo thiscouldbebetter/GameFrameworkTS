@@ -205,28 +205,29 @@ class VisualBuilder {
                 : itemDrawable.visual.child);
             return itemVisual;
         });
-        visualWieldable = new VisualAnchor(visualWieldable, null, Orientation.Instances().ForwardXDownZ);
+        var orientationToAnchorTo = Orientation.Instances().ForwardXDownZ;
+        visualWieldable = new VisualAnchor(visualWieldable, null, orientationToAnchorTo);
         var visualArmAndWieldableFacingRight = new VisualGroup([
             // arm
-            new VisualLine(new Coords(0, 0, 0), new Coords(2, 1, 0).multiplyScalar(circleRadius), circleColor, lineThickness),
+            new VisualAnchor(new VisualLine(new Coords(0, 0, 0), new Coords(2, 1, 0).multiplyScalar(circleRadius), circleColor, lineThickness), null, orientationToAnchorTo),
             // wieldable
             new VisualOffset(visualWieldable, new Coords(2, 1, 0).multiplyScalar(circleRadius))
         ]);
         var visualArmAndWieldableFacingDown = new VisualGroup([
             // arm
-            new VisualLine(new Coords(0, 0, 0), new Coords(-2, 0, 0).multiplyScalar(circleRadius), circleColor, lineThickness),
+            new VisualAnchor(new VisualLine(new Coords(0, 0, 0), new Coords(-2, 0, 0).multiplyScalar(circleRadius), circleColor, lineThickness), null, orientationToAnchorTo),
             // wieldable
             new VisualOffset(visualWieldable, new Coords(-2, 0, 0).multiplyScalar(circleRadius))
         ]);
         var visualArmAndWieldableFacingLeft = new VisualGroup([
             // arm
-            new VisualLine(new Coords(0, 0, 0), new Coords(-2, 1, 0).multiplyScalar(circleRadius), circleColor, lineThickness),
+            new VisualAnchor(new VisualLine(new Coords(0, 0, 0), new Coords(-2, 1, 0).multiplyScalar(circleRadius), circleColor, lineThickness), null, orientationToAnchorTo),
             // wieldable
             new VisualOffset(visualWieldable, new Coords(-2, 1, 0).multiplyScalar(circleRadius))
         ]);
         var visualArmAndWieldableFacingUp = new VisualGroup([
             // arm
-            new VisualLine(new Coords(0, 0, 0), new Coords(2, 0, 0).multiplyScalar(circleRadius), circleColor, lineThickness),
+            new VisualAnchor(new VisualLine(new Coords(0, 0, 0), new Coords(2, 0, 0).multiplyScalar(circleRadius), circleColor, lineThickness), null, orientationToAnchorTo),
             // wieldable
             new VisualOffset(visualWieldable, new Coords(2, 0, 0).multiplyScalar(circleRadius))
         ]);
@@ -293,5 +294,33 @@ class VisualBuilder {
         ], true // isRepeating
         );
         return flameVisual;
+    }
+    ice(dimension) {
+        var dimensionHalf = dimension / 2;
+        var color = Color.byName("Cyan");
+        var visual = new VisualGroup([
+            new VisualPolygon(new Path([
+                new Coords(-1, -1, 0),
+                new Coords(1, -1, 0),
+                new Coords(1, 1, 0),
+                new Coords(-1, 1, 0),
+            ]).transform(new Transform_Scale(new Coords(1, 1, 1).multiplyScalar(dimensionHalf))), null, // colorFill
+            color // border
+            ),
+        ]);
+        return visual;
+    }
+    sun(dimension) {
+        var color = Color.Instances().Yellow;
+        var rayThickness = 1;
+        var dimensionOblique = dimension * Math.sin(Math.PI / 4);
+        var sunVisual = new VisualGroup([
+            new VisualLine(new Coords(-dimension, 0, 0), new Coords(dimension, 0, 0), color, rayThickness),
+            new VisualLine(new Coords(0, -dimension, 0), new Coords(0, dimension, 0), color, rayThickness),
+            new VisualLine(new Coords(-dimensionOblique, -dimensionOblique, 0), new Coords(dimensionOblique, dimensionOblique, 0), color, rayThickness),
+            new VisualLine(new Coords(-dimensionOblique, dimensionOblique, 0), new Coords(dimensionOblique, -dimensionOblique, 0), color, rayThickness),
+            new VisualCircle(dimension / 2, color, null),
+        ]);
+        return sunVisual;
     }
 }

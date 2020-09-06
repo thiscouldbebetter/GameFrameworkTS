@@ -8,23 +8,33 @@ class VisualLine {
         // Helper variables.
         this._drawPosFrom = new Coords(0, 0, 0);
         this._drawPosTo = new Coords(0, 0, 0);
+        this._transformLocate = new Transform_Locate(null);
     }
     draw(universe, world, place, entity, display) {
-        var pos = entity.locatable().loc.pos;
-        var drawPosFrom = this._drawPosFrom.overwriteWith(pos).add(this.fromPos);
-        var drawPosTo = this._drawPosTo.overwriteWith(pos).add(this.toPos);
+        var loc = entity.locatable().loc;
+        this._transformLocate.loc = loc;
+        var drawPosFrom = this._drawPosFrom.overwriteWith(this.fromPos);
+        this._transformLocate.transformCoords(drawPosFrom);
+        var drawPosTo = this._drawPosTo.overwriteWith(this.toPos);
+        this._transformLocate.transformCoords(drawPosTo);
         display.drawLine(drawPosFrom, drawPosTo, this.color.systemColor(), this.lineThickness);
     }
-    ;
     // Clonable.
     clone() {
-        return this; // todo
+        return new VisualLine(this.fromPos.clone(), this.toPos.clone(), this.color.clone(), this.lineThickness);
     }
-    overwriteWith(other) {
-        return this; // todo
+    overwriteWith(otherAsVisual) {
+        var other = otherAsVisual;
+        this.fromPos.overwriteWith(other.fromPos);
+        this.toPos.overwriteWith(other.toPos);
+        this.color.overwriteWith(other.color);
+        this.lineThickness = other.lineThickness;
+        return this;
     }
     // Transformable.
     transform(transformToApply) {
-        return this; // todo
+        transformToApply.transformCoords(this.fromPos);
+        transformToApply.transformCoords(this.toPos);
+        return this;
     }
 }

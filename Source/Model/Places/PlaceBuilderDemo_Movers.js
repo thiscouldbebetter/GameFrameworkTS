@@ -145,17 +145,26 @@ class PlaceBuilderDemo_Movers {
             new VisualOffset(visualEyesBlinkingWithBrows, new Coords(-1, 0, 0).multiplyScalar(visualEyeRadius)),
             new VisualOffset(visualEyesBlinkingWithBrows, new Coords(0, -1, 0).multiplyScalar(visualEyeRadius))
         ], null);
+        var visualEffect = new VisualAnchor(new VisualDynamic((u, w, d, e) => e.effectable().effectsAsVisual()), null, Orientation.Instances().ForwardXDownZ);
+        var visualStatusInfo = new VisualOffset(new VisualStack(new Coords(0, 0 - entityDimension, 0), // childSpacing
+        [
+            visualEffect
+        ]), new Coords(0, 0 - entityDimension * 2, 0) // offset
+        );
+        var visualBody = new VisualAnchor(new VisualPolygon(new Path(enemyColliderAsFace.vertices), enemyColor, Color.byName("Red") // colorBorder
+        ), null, // posToAnchorAt
+        Orientation.Instances().ForwardXDownZ.clone());
+        var visualArms = new VisualDirectional(new VisualNone(), [
+            new VisualGroup([
+                new VisualOffset(enemyVisualArm, new Coords(-enemyDimension / 4, 0, 0)),
+                new VisualOffset(enemyVisualArm, new Coords(enemyDimension / 4, 0, 0))
+            ])
+        ], null);
         var enemyVisual = new VisualGroup([
-            new VisualDirectional(new VisualNone(), [
-                new VisualGroup([
-                    new VisualOffset(enemyVisualArm, new Coords(-enemyDimension / 4, 0, 0)),
-                    new VisualOffset(enemyVisualArm, new Coords(enemyDimension / 4, 0, 0))
-                ])
-            ], null),
-            new VisualAnchor(new VisualPolygon(new Path(enemyColliderAsFace.vertices), enemyColor, Color.byName("Red") // colorBorder
-            ), null, // posToAnchorAt
-            Orientation.Instances().ForwardXDownZ.clone()),
+            visualArms,
+            visualBody,
             visualEyesWithBrowsDirectional,
+            visualStatusInfo
         ]);
         if (this.parent.visualsHaveText) {
             enemyVisual.children.push(new VisualOffset(new VisualText(DataBinding.fromContext(enemyTypeName), null, enemyColor, null), new Coords(0, 0 - enemyDimension, 0)));
@@ -215,18 +224,22 @@ class PlaceBuilderDemo_Movers {
             var damageMultiplier = 1;
             if (damageInflictedByTargetTypeName != null) {
                 if (damageInflictedByTargetTypeName == damageToApplyTypeName) {
-                    damageMultiplier = 0;
+                    damageMultiplier = 0.1;
                 }
                 else {
                     damageMultiplier = 2;
                 }
             }
-            var damageApplied = new Damage(damageToApply.amount * damageMultiplier, damageToApplyTypeName);
+            var damageApplied = new Damage(damageToApply.amount * damageMultiplier, damageToApplyTypeName, null // effectsAndChances
+            );
             eKillable.killable().integritySubtract(damageToApply.amount * damageMultiplier);
+            var effectable = eKillable.effectable();
+            var effectsToApply = damageToApply.effectsOccurring(u.randomizer);
+            effectsToApply.forEach(effect => effectable.effectAdd(effect.clone()));
             p.entitySpawn(u, w, u.entityBuilder.messageFloater("" + damageApplied.toString(), eKillable.locatable().loc.pos, Color.byName("Red")));
             return damageApplied.amount;
         };
-        var enemyKillable = new Killable(integrityMax, enemyDamageApply, (universe, world, place, entityDying) => // die
+        var enemyDie = (universe, world, place, entityDying) => // die
          {
             var chanceOfDroppingCoin = 1;
             var doesDropCoin = (Math.random() < chanceOfDroppingCoin);
@@ -242,7 +255,8 @@ class PlaceBuilderDemo_Movers {
             if (learningMessage != null) {
                 place.entitySpawn(universe, world, universe.entityBuilder.messageFloater(learningMessage, entityPlayer.locatable().loc.pos, Color.byName("Green")));
             }
-        });
+        };
+        var enemyKillable = new Killable(integrityMax, enemyDamageApply, enemyDie);
         var enemyPerceptor = new Perceptor(1, // sightThreshold
         1 // hearingThreshold
         );
@@ -251,9 +265,10 @@ class PlaceBuilderDemo_Movers {
             new Actor(enemyActivity),
             new Constrainable([constraintSpeedMax1]),
             new Collidable(enemyCollider, null, null),
-            new Damager(new Damage(10, damageTypeName)),
+            new Damager(new Damage(10, damageTypeName, null)),
             new Drawable(enemyVisual, null),
             new DrawableCamera(),
+            new Effectable([]),
             new Enemy(),
             enemyKillable,
             new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
@@ -517,13 +532,17 @@ class PlaceBuilderDemo_Movers {
         var playerVisualBarSize = new Coords(entityDimension * 3, entityDimension * 0.8, 0);
         var playerVisualHealthBar = new VisualBar("H", // abbreviation
         playerVisualBarSize, Color.Instances().Red, DataBinding.fromGet((c) => c.killable().integrity), null, // amountThreshold
-        DataBinding.fromGet((c) => c.killable().integrityMax), 1 // fractionBelowWhichToShow
+        DataBinding.fromGet((c) => c.killable().integrityMax), 1, // fractionBelowWhichToShow
+        null, // colorForBorderAsValueBreakGroup
+        null // text
         );
         var playerVisualSatietyBar = new VisualBar("F", // abbreviation
         playerVisualBarSize, Color.Instances().Brown, DataBinding.fromGet((c) => c.starvable().satiety), null, // amountThreshold
-        DataBinding.fromGet((c) => c.starvable().satietyMax), .5 // fractionBelowWhichToShow
+        DataBinding.fromGet((c) => c.starvable().satietyMax), .5, // fractionBelowWhichToShow
+        null, // colorForBorderAsValueBreakGroup
+        null // text
         );
-        var playerVisualEffect = new VisualDynamic((u, w, d, e) => e.effectable().effectsAsVisual());
+        var playerVisualEffect = new VisualAnchor(new VisualDynamic((u, w, d, e) => e.effectable().effectsAsVisual()), null, Orientation.Instances().ForwardXDownZ);
         var playerVisualsForStatusInfo = [
             playerVisualHealthBar,
             playerVisualSatietyBar,
@@ -756,7 +775,9 @@ class PlaceBuilderDemo_Movers {
             var killable = entity.killable();
             var playerVisualHealthBar = new VisualBar(null, // "H", // abbreviation
             playerVisualBarSize, Color.Instances().Red, new DataBinding(null, (c) => killable.integrity, null), null, // amountThreshold
-            new DataBinding(null, (c) => killable.integrityMax, null), null // fractionBelowWhichToShow
+            new DataBinding(null, (c) => killable.integrityMax, null), null, // fractionBelowWhichToShow
+            null, // colorForBorderAsValueBreakGroup
+            null // text
             );
             var playerVisualHealthIcon = itemDefnsByName.get("Heart").visual;
             var playerVisualHealthBarPlusIcon = new VisualGroup([
@@ -766,7 +787,9 @@ class PlaceBuilderDemo_Movers {
             var starvable = entity.starvable();
             var playerVisualSatietyBar = new VisualBar(null, // "F", // abbreviation
             playerVisualBarSize, Color.Instances().Brown, new DataBinding(null, (c) => starvable.satiety, null), null, // amountThreshold
-            new DataBinding(null, (c) => starvable.satietyMax, null), null // fractionBelowWhichToShow
+            new DataBinding(null, (c) => starvable.satietyMax, null), null, // fractionBelowWhichToShow
+            null, // colorForBorderAsValueBreakGroup
+            null // text
             );
             var playerVisualSatietyIcon = itemDefnsByName.get("Bread").visual;
             var playerVisualSatietyBarPlusIcon = new VisualGroup([
@@ -775,18 +798,48 @@ class PlaceBuilderDemo_Movers {
             ]);
             var tirable = entity.tirable();
             var playerVisualStaminaBar = new VisualBar(null, // "S", // abbreviation
-            playerVisualBarSize, Color.Instances().Yellow, new DataBinding(null, (c) => tirable.stamina, null), new DataBinding(null, (c) => tirable.staminaMaxRemainingBeforeSleep, null), new DataBinding(null, (c) => tirable.staminaMaxAfterSleep, null), null // fractionBelowWhichToShow
+            playerVisualBarSize, Color.Instances().Yellow, new DataBinding(null, (c) => tirable.stamina, null), new DataBinding(null, (c) => tirable.staminaMaxRemainingBeforeSleep, null), new DataBinding(null, (c) => tirable.staminaMaxAfterSleep, null), null, // fractionBelowWhichToShow
+            null, // colorForBorderAsValueBreakGroup
+            null // text
             );
             var playerVisualStaminaIcon = new VisualImageScaled(new VisualImageFromLibrary("Zap"), new Coords(1, 1, 0).multiplyScalar(playerVisualBarSize.y * 1.5));
             var playerVisualStaminaBarPlusIcon = new VisualGroup([
                 playerVisualStaminaBar,
                 new VisualOffset(playerVisualStaminaIcon, new Coords(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0, 0))
             ]);
+            var hoursPerDay = 24;
+            var minutesPerHour = 60;
+            var minutesPerDay = minutesPerHour * hoursPerDay;
+            // var gameMinutesPerActualSecond = 1;
+            var timerTicksPerGameDay = minutesPerDay * universe.timerHelper.ticksPerSecond;
+            var ticksToHH_MM = (ticks) => {
+                var ticksIntoDay = world.timerTicksSoFar % timerTicksPerGameDay;
+                var fractionOfDay = ticksIntoDay / timerTicksPerGameDay;
+                var gameMinutesIntoDay = Math.round(fractionOfDay * minutesPerDay);
+                var gameHoursIntoDay = Math.floor(gameMinutesIntoDay / minutesPerHour);
+                var gameMinutesIntoHour = gameMinutesIntoDay % minutesPerHour;
+                var returnValue = StringHelper.padStart("" + gameHoursIntoDay, 2, "0")
+                    + ":"
+                    + StringHelper.padStart("" + gameMinutesIntoHour, 2, "0");
+                return returnValue;
+            };
+            var playerVisualTimeBar = new VisualBar(null, // "T", // abbreviation
+            playerVisualBarSize, Color.Instances().Cyan, new DataBinding(null, (c) => world.timerTicksSoFar % timerTicksPerGameDay, null), null, // threshold
+            new DataBinding(null, (c) => timerTicksPerGameDay, null), null, // fractionBelowWhichToShow
+            null, // colorForBorderAsValueBreakGroup
+            // text
+            new DataBinding(world, (c) => ticksToHH_MM(c.timerTicksSoFar), null));
+            var playerVisualTimeIcon = VisualBuilder.Instance().sun(playerVisualBarSize.y * .5);
+            var playerVisualTimeBarPlusIcon = new VisualGroup([
+                playerVisualTimeBar,
+                new VisualOffset(playerVisualTimeIcon, new Coords(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0, 0))
+            ]);
             var childSpacing = new Coords(0, playerVisualBarSize.y * 2, 0);
             var playerVisualStatusInfo = new VisualGroup([
                 playerVisualHealthBarPlusIcon,
                 new VisualOffset(playerVisualSatietyBarPlusIcon, childSpacing),
-                new VisualOffset(playerVisualStaminaBarPlusIcon, childSpacing.clone().double())
+                new VisualOffset(playerVisualStaminaBarPlusIcon, childSpacing.clone().double()),
+                new VisualOffset(playerVisualTimeBarPlusIcon, new Coords(size.x - (playerVisualBarSize.x * 2 + playerVisualBarSize.y), 0, 0))
             ]);
             var controlPlayerStatusInfo = new ControlVisual("visualPlayerStatusInfo", new Coords(5, 2, 0).multiplyScalar(playerVisualBarSize.y), // pos
             new Coords(0, 0, 0), // size

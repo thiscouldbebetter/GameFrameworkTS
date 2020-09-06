@@ -51,6 +51,7 @@ class CollisionHelper {
             lookup.set(boxName, this.collisionOfSphereAndBox);
             lookup.set(boxRotatedName, this.collisionOfSphereAndBoxRotated);
             lookup.set(mapLocatedName, this.collisionOfSphereAndMapLocated);
+            lookup.set(meshName, this.collisionOfSphereAndMesh);
             lookup.set(sphereName, this.collisionOfSpheres);
             lookupOfLookups.set(sphereName, lookup);
         }
@@ -711,6 +712,9 @@ class CollisionHelper {
     }
     collisionOfSphereAndMapLocated(sphere, mapLocated, collision) {
         return this.collisionOfMapLocatedAndSphere(mapLocated, sphere, collision);
+    }
+    collisionOfSphereAndMesh(sphere, mesh, collision) {
+        return this.collisionOfMeshAndSphere(mesh, sphere, collision);
     }
     collisionOfSpheres(sphere0, sphere1, collision) {
         var shapeCollidingPos = sphere0.center;

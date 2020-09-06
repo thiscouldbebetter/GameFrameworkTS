@@ -492,7 +492,7 @@ class PlaceBuilderDemo_Emplacements
 			[
 				obstacleBoundable,
 				obstacleCollidable,
-				new Damager(new Damage(10, null)),
+				new Damager(new Damage(10, null, null)),
 				new Drawable(visual, null),
 				new DrawableCamera(),
 				new Locatable(new Disposition(new Coords(0, 0, 0), null, null) )
@@ -588,7 +588,7 @@ class PlaceBuilderDemo_Emplacements
 			[
 				obstacleBoundable,
 				obstacleCollidable,
-				new Damager(new Damage(10, null)),
+				new Damager(new Damage(10, null, null)),
 				new Drawable(obstacleMappedVisual, null),
 				new DrawableCamera(),
 				new Locatable(new Disposition(new Coords(0, 0, 0), null, null) )
@@ -636,7 +636,7 @@ class PlaceBuilderDemo_Emplacements
 			[
 				new Locatable(obstacleLoc),
 				new Collidable(obstacleCollider, null, null),
-				new Damager(new Damage(10, null)),
+				new Damager(new Damage(10, null, null)),
 				new Drawable(obstacleRingVisual, null),
 				new DrawableCamera()
 			]

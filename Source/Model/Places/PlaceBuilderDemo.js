@@ -42,6 +42,7 @@ class PlaceBuilderDemo // Main.
         this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("SwordCold"), 1, null, entityPosRange, randomizer));
         this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("SwordHeat"), 1, null, entityPosRange, randomizer));
         this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Toolset"), 1, null, entityPosRange, randomizer));
+        this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Torch"), 1, null, entityPosRange, randomizer));
         this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Weight"), 1, null, entityPosRange, randomizer));
         var container = this.entityBuildFromDefn(entityDefns.get("Container"), entityPosRange, randomizer);
         var itemEntityOre = this.entityBuildFromDefn(entityDefns.get("Iron Ore"), entityPosRange, randomizer);
@@ -723,7 +724,7 @@ class PlaceBuilderDemo // Main.
                 var wallEntity = new Entity("ObstacleWall" + i + "_" + d, [
                     new Locatable(wallPartLoc),
                     new Collidable(wallCollider, null, null),
-                    new Damager(new Damage(10, null)),
+                    new Damager(new Damage(10, null, null)),
                     new Drawable(wallVisual, null),
                     new DrawableCamera()
                 ]);
@@ -917,7 +918,7 @@ class PlaceBuilderDemo // Main.
                 };
                 var explosionEntity = new Entity("BombExplosion", [
                     new Collidable(explosionCollider, [Killable.name], explosionCollide),
-                    new Damager(new Damage(20, null)),
+                    new Damager(new Damage(20, null, null)),
                     new Drawable(explosionVisual, null),
                     new DrawableCamera(),
                     new Ephemeral(8, null),
@@ -966,14 +967,7 @@ class PlaceBuilderDemo // Main.
         var itemDefnName = "Bow";
         var itemBowVisual = this.itemDefnsByName.get(itemDefnName).visual;
         var itemBowCollider = new Sphere(new Coords(0, 0, 0), entityDimension / 2);
-        var itemBowDevice = new Device("Bow", 10, // ticksToCharge
-        (u, w, p, entity) => // initialize
-         {
-            // todo
-        }, (u, w, p, e) => // update
-         {
-            // todo
-        }, (u, world, p, entityUser, entityDevice) => // use
+        var itemBowUse = (u, world, p, entityUser, entityDevice) => // use
          {
             var device = entityDevice.device();
             var tickCurrent = world.timerTicksSoFar;
@@ -996,13 +990,11 @@ class PlaceBuilderDemo // Main.
             if (userSpeed == 0) {
                 return;
             }
-            var projectileColor = Color.byName("Cyan");
             var projectileDimension = 1.5;
-            var projectileVisual = new VisualGroup(new Array(new VisualEllipse(projectileDimension * 2, // semimajorAxis,
-            projectileDimension, // semiminorAxis,
-            0, // rotationInTurns,
-            projectileColor, // colorFill
-            null), new VisualOffset(new VisualText(new DataBinding("Projectile", null, null), null, projectileColor, null), new Coords(0, 0 - projectileDimension * 3, 0))));
+            var itemEntityArrow = userAsItemHolder.itemEntitiesByDefnName("Arrow")[0];
+            var itemArrow = itemEntityArrow.item();
+            var itemArrowDefn = itemArrow.defn(world);
+            var projectileVisual = itemArrowDefn.visual;
             var userDirection = userVel.clone().normalize();
             var userRadius = entityUser.collidable().collider.radius;
             var projectilePos = userPos.clone().add(userDirection.clone().multiplyScalar(userRadius + projectileDimension).double());
@@ -1017,21 +1009,21 @@ class PlaceBuilderDemo // Main.
                     entityProjectile.killable().integrity = 0;
                 }
             };
-            var visualExplosion = new VisualCircle(8, Color.byName("Red"), null);
+            var visualStrike = new VisualCircle(8, Color.byName("Red"), null);
             var killable = new Killable(1, // integrityMax
             null, // damageApply
             (universe, world, place, entityKillable) => // die
              {
-                var entityExplosion = new Entity("BulletExplosion", [
+                var entityStrike = new Entity("ArrowStrike", [
                     new Ephemeral(8, null),
-                    new Drawable(visualExplosion, null),
+                    new Drawable(visualStrike, null),
                     new DrawableCamera(),
                     entityKillable.locatable()
                 ]);
-                place.entitiesToSpawn.push(entityExplosion);
+                place.entitiesToSpawn.push(entityStrike);
             });
-            var projectileEntity = new Entity("ProjectileBullet", [
-                new Damager(new Damage(10, null)),
+            var projectileEntity = new Entity("ProjectileArrow", [
+                new Damager(new Damage(10, null, null)),
                 new Ephemeral(32, null),
                 killable,
                 new Locatable(projectileLoc),
@@ -1040,7 +1032,15 @@ class PlaceBuilderDemo // Main.
                 new DrawableCamera()
             ]);
             p.entitiesToSpawn.push(projectileEntity);
-        });
+        };
+        var itemBowDevice = new Device("Bow", 10, // ticksToCharge
+        (u, w, p, entity) => // initialize
+         {
+            // todo
+        }, (u, w, p, e) => // update
+         {
+            // todo
+        }, itemBowUse);
         var itemBowEntityDefn = new Entity(itemDefnName, [
             new Item(itemDefnName, 1),
             new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
@@ -1446,14 +1446,13 @@ class PlaceBuilderDemo // Main.
             }
             var userDirection = userVel.clone().normalize();
             var userRadius = entityUser.collidable().collider.radius;
+            var projectileDimension = 1.5;
             var projectilePos = userPos.clone().add(userDirection.clone().multiplyScalar(userRadius + projectileDimension).double());
             var projectileOri = new Orientation(userVel.clone().normalize(), null);
-            var projectileDimension = 1.5;
             var projectileVisual = entityDevice.drawable().visual;
             projectileVisual = projectileVisual.child;
             projectileVisual = projectileVisual.children[0].clone();
             projectileVisual.transform(new Transform_RotateRight(1));
-            //projectileVisual.transform(new Transform_Orient(projectileOri));
             var projectileLoc = new Disposition(projectilePos, projectileOri, null);
             projectileLoc.vel.overwriteWith(userVel).clearZ().double();
             var projectileCollider = new Sphere(new Coords(0, 0, 0), projectileDimension);
@@ -1465,21 +1464,37 @@ class PlaceBuilderDemo // Main.
                     entityProjectile.killable().integrity = 0;
                 }
             };
-            var visualExplosion = new VisualCircle(8, Color.byName("Red"), null);
+            var visualStrike = new VisualCircle(8, Color.byName("Red"), null);
             var killable = new Killable(1, // integrityMax
             null, // damageApply
             (universe, world, place, entityKillable) => // die
              {
                 var entityStrike = new Entity("SwordStrike", [
                     new Ephemeral(8, null),
-                    new Drawable(visualExplosion, null),
+                    new Drawable(visualStrike, null),
                     new DrawableCamera(),
                     entityKillable.locatable()
                 ]);
                 place.entitiesToSpawn.push(entityStrike);
             });
+            var effectsAndChances = new Array();
+            if (damageTypeName != null) {
+                var effect;
+                if (damageTypeName == "Cold") {
+                    effect = Effect.Instances().Frozen;
+                }
+                else if (damageTypeName == "Heat") {
+                    effect = Effect.Instances().Burning;
+                }
+                else {
+                    throw "Unrecognized damage type: " + damageTypeName;
+                }
+                var effectAndChance = [effect, 1];
+                effectsAndChances = [effectAndChance];
+            }
+            var projectileDamager = new Damager(new Damage(10, damageTypeName, effectsAndChances));
             var projectileEntity = new Entity("ProjectileSword", [
-                new Damager(new Damage(10, damageTypeName)),
+                projectileDamager,
                 new Ephemeral(8, null),
                 killable,
                 new Locatable(projectileLoc),
@@ -1518,6 +1533,19 @@ class PlaceBuilderDemo // Main.
             new DrawableCamera()
         ]);
         return itemToolsetEntityDefn;
+    }
+    entityDefnBuildTorch(entityDimension) {
+        var itemDefnName = "Torch";
+        var itemTorchVisual = this.itemDefnsByName.get(itemDefnName).visual;
+        var itemTorchCollider = new Sphere(new Coords(0, 0, 0), entityDimension / 2);
+        var itemTorchEntityDefn = new Entity(itemDefnName, [
+            new Item(itemDefnName, 1),
+            new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
+            new Collidable(itemTorchCollider, null, null),
+            new Drawable(itemTorchVisual, null),
+            new DrawableCamera()
+        ]);
+        return itemTorchEntityDefn;
     }
     entityDefnBuildWeight(entityDimension) {
         var itemDefnName = "Weight";
@@ -1590,6 +1618,7 @@ class PlaceBuilderDemo // Main.
             this.entityDefnBuildSword(entityDimension, "Cold"),
             this.entityDefnBuildSword(entityDimension, "Heat"),
             this.entityDefnBuildToolset(entityDimension),
+            this.entityDefnBuildTorch(entityDimension),
             this.entityDefnBuildWeight(entityDimension),
         ];
         return entityDefns;

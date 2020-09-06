@@ -66,6 +66,23 @@ class Color {
         this._systemColor = null;
         return this;
     }
+    // Interpolatable.
+    interpolateWith(otherAsAny, fractionOfProgressTowardOther) {
+        var other = otherAsAny;
+        var componentsRGBAThis = this.componentsRGBA;
+        var componentsRGBAOther = other.componentsRGBA;
+        var componentsRGBAInterpolated = new Array();
+        for (var i = 0; i < componentsRGBAThis.length; i++) {
+            var componentThis = componentsRGBAThis[i];
+            var componentOther = componentsRGBAOther[i];
+            var componentInterpolated = componentThis
+                + componentOther * fractionOfProgressTowardOther;
+            componentsRGBAInterpolated[i] = componentInterpolated;
+        }
+        var colorInterpolated = new Color("Interpolated", null, // code
+        componentsRGBAInterpolated);
+        return colorInterpolated;
+    }
 }
 // constants
 Color.NumberOfComponentsRGBA = 4;

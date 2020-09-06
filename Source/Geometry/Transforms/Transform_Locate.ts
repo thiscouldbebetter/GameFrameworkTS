@@ -33,5 +33,5 @@ class Transform_Locate implements Transform
 		this.transformTranslate.transformCoords(coordsToTransform);
 
 		return coordsToTransform;
-	};
+	}
 }

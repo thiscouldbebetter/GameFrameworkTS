@@ -8,6 +8,8 @@ class VisualBar implements Visual
 	amountThreshold: DataBinding<Entity, number>;
 	amountMax: DataBinding<Entity, number>;
 	fractionBelowWhichToShow: number;
+	colorForBorderAsValueBreakGroup: ValueBreakGroup;
+	text: DataBinding<any, string>;
 
 	_drawPos: Coords;
 	_sizeCurrent: Coords;
@@ -21,7 +23,9 @@ class VisualBar implements Visual
 		amountCurrent: DataBinding<Entity, number>,
 		amountThreshold: DataBinding<Entity, number>,
 		amountMax: DataBinding<Entity, number>,
-		fractionBelowWhichToShow: number
+		fractionBelowWhichToShow: number,
+		colorForBorderAsValueBreakGroup: ValueBreakGroup,
+		text: DataBinding<any, string>
 	)
 	{
 		this.abbreviation = abbreviation;
@@ -31,6 +35,8 @@ class VisualBar implements Visual
 		this.amountThreshold = amountThreshold;
 		this.amountMax = amountMax;
 		this.fractionBelowWhichToShow = fractionBelowWhichToShow;
+		this.colorForBorderAsValueBreakGroup = colorForBorderAsValueBreakGroup;
+		this.text = text;
 
 		this._drawPos = new Coords(0, 0, 0);
 		this._sizeCurrent = this.size.clone();
@@ -64,18 +70,14 @@ class VisualBar implements Visual
 			);
 
 			var colorForBorder: Color = null;
-			var colors = Color.Instances();
-			if (fractionCurrent < .33)
+			if (this.colorForBorderAsValueBreakGroup == null)
 			{
-				colorForBorder = colors.Red;
-			}
-			else if (fractionCurrent < .67)
-			{
-				colorForBorder = colors.Yellow;
+				colorForBorder = Color.Instances().White;
 			}
 			else
 			{
-				colorForBorder = colors.White;
+				colorForBorder =
+					this.colorForBorderAsValueBreakGroup.valueAtPosition(fractionCurrent);
 			}
 
 			if (this.amountThreshold != null)
@@ -96,8 +98,17 @@ class VisualBar implements Visual
 			);
 
 			pos.add(this._sizeHalf);
-			var remainingOverMax = Math.round(_amountCurrent) + "/" + _amountMax;
-			var text = (this.abbreviation == null ? "" : (this.abbreviation + ":")) + remainingOverMax;
+
+			var text: string;
+			if (this.text == null)
+			{
+				var remainingOverMax = Math.round(_amountCurrent) + "/" + _amountMax;
+				text = (this.abbreviation == null ? "" : (this.abbreviation + ":")) + remainingOverMax;
+			}
+			else
+			{
+				text = this.text.get();
+			}
 			display.drawText
 			(
 				text,

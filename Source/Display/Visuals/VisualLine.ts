@@ -8,6 +8,7 @@ class VisualLine implements Visual
 
 	_drawPosFrom: Coords;
 	_drawPosTo: Coords;
+	_transformLocate: Transform_Locate;
 
 	constructor(fromPos: Coords, toPos: Coords, color: Color, lineThickness: number)
 	{
@@ -20,46 +21,59 @@ class VisualLine implements Visual
 
 		this._drawPosFrom = new Coords(0, 0, 0);
 		this._drawPosTo = new Coords(0, 0, 0);
+		this._transformLocate = new Transform_Locate(null);
 	}
 
 	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
-		var pos = entity.locatable().loc.pos;
+		var loc = entity.locatable().loc;
+		this._transformLocate.loc = loc;
+
 		var drawPosFrom = this._drawPosFrom.overwriteWith
-		(
-			pos
-		).add
 		(
 			this.fromPos
 		);
+		this._transformLocate.transformCoords(drawPosFrom);
 
 		var drawPosTo = this._drawPosTo.overwriteWith
 		(
-			pos
-		).add
-		(
 			this.toPos
 		);
+		this._transformLocate.transformCoords(drawPosTo);
 
-		display.drawLine(drawPosFrom, drawPosTo, this.color.systemColor(), this.lineThickness);
-	};
+		display.drawLine
+		(
+			drawPosFrom, drawPosTo, this.color.systemColor(), this.lineThickness
+		);
+	}
 
 	// Clonable.
 
 	clone(): Visual
 	{
-		return this; // todo
+		return new VisualLine
+		(
+			this.fromPos.clone(), this.toPos.clone(),
+			this.color.clone(), this.lineThickness
+		);
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(otherAsVisual: Visual): Visual
 	{
-		return this; // todo
+		var other = otherAsVisual as VisualLine;
+		this.fromPos.overwriteWith(other.fromPos);
+		this.toPos.overwriteWith(other.toPos);
+		this.color.overwriteWith(other.color);
+		this.lineThickness = other.lineThickness;
+		return this;
 	}
 
 	// Transformable.
 
 	transform(transformToApply: Transform): Transformable
 	{
-		return this; // todo
+		transformToApply.transformCoords(this.fromPos);
+		transformToApply.transformCoords(this.toPos);
+		return this;
 	}
 }

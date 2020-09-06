@@ -29,5 +29,5 @@ class Transform_RotateRight implements Transform
 		}
 
 		return coordsToTransform;
-	};
+	}
 }

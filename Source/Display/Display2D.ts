@@ -164,7 +164,7 @@ class Display2D implements Display
 		}
 	}
 
-	drawCircleWithGradient(center: Coords, radius: number, gradientFill: Gradient, colorBorder: string)
+	drawCircleWithGradient(center: Coords, radius: number, gradientFill: ValueBreakGroup, colorBorder: string)
 	{
 		this.graphics.beginPath();
 		this.graphics.arc
@@ -184,7 +184,8 @@ class Display2D implements Display
 		for (var i = 0; i < gradientStops.length; i++)
 		{
 			var stop = gradientStops[i];
-			systemGradient.addColorStop(stop.position, stop.color.systemColor());
+			var stopColor = stop.value as Color;
+			systemGradient.addColorStop(stop.position, stopColor.systemColor());
 		}
 
 		this.graphics.fillStyle = systemGradient;

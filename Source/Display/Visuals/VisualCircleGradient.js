@@ -8,7 +8,6 @@ class VisualCircleGradient {
     draw(universe, world, place, entity, display) {
         display.drawCircleWithGradient(entity.locatable().loc.pos, this.radius, this.gradientFill, this.colorBorder);
     }
-    ;
     // Clonable.
     clone() {
         return this; // todo

@@ -19,7 +19,7 @@ interface Display
 	): void;
 	drawBackground(colorBack: string, colorBorder: string): void;
 	drawCircle(center: Coords, radius: number, colorFill: string, colorBorder: string): void;
-	drawCircleWithGradient(center: Coords, radius: number, gradientFill: Gradient, colorBorder: string): void;
+	drawCircleWithGradient(center: Coords, radius: number, gradientFill: ValueBreakGroup, colorBorder: string): void;
 	drawCrosshairs(center: Coords, radius: number, color: string): void;
 	drawEllipse
 	(

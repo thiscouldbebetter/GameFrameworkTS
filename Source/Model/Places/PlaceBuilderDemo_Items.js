@@ -36,6 +36,7 @@ class PlaceBuilderDemo_Items {
             this.swordCold(),
             this.swordHeat(),
             this.toolset(),
+            this.torch(),
             this.walkieTalkie(),
             this.weight()
         ];
@@ -88,25 +89,27 @@ class PlaceBuilderDemo_Items {
     arrow() {
         var itemArrowName = "Arrow";
         var itemArrowColor = new Color(null, null, [0, .5, .5, 1]);
+        var itemArrowVisualShaft = new VisualLine(new Coords(-5, 0, 0), new Coords(5, 0, 0), Color.byName("Brown"), 1 // lineThickness
+        );
         var pathHead = new Path([
-            new Coords(0, -1, 0),
-            new Coords(.25, -0.5, 0),
-            new Coords(-.25, -0.5, 0),
+            new Coords(1, 0, 0),
+            new Coords(0.5, .25, 0),
+            new Coords(0.5, -.25, 0),
         ]).transform(Transform_Scale.fromScalar(this.entityDimension));
         var itemArrowVisualHead = new VisualPolygon(pathHead, itemArrowColor, null);
         var pathTail = new Path([
             new Coords(0, 0, 0),
-            new Coords(.25, .5, 0),
-            new Coords(.25, .75, 0),
-            new Coords(0, .5, 0),
-            new Coords(-.25, .75, 0),
-            new Coords(-.25, .5, 0),
+            new Coords(-.5, .25, 0),
+            new Coords(-.75, .25, 0),
+            new Coords(-.5, 0, 0),
+            new Coords(-.75, -.25, 0),
+            new Coords(-.5, -.25, 0),
         ]).transform(Transform_Scale.fromScalar(this.entityDimension));
         var itemArrowVisualTail = new VisualPolygon(pathTail, Color.byName("White"), null);
         var itemArrowVisual = new VisualGroup([
             itemArrowVisualTail,
-            new VisualRectangle(new Coords(1, 10, 0), Color.byName("Brown"), null, true),
-            itemArrowVisualHead,
+            itemArrowVisualShaft,
+            itemArrowVisualHead
         ]);
         if (this.parent.visualsHaveText) {
             itemArrowVisual.children.push(new VisualOffset(new VisualText(new DataBinding(itemArrowName, null, null), null, itemArrowColor, null), new Coords(0, 0 - this.entityDimension * 1.5, 0)));
@@ -625,12 +628,12 @@ class PlaceBuilderDemo_Items {
         return itemSpeedBoots;
     }
     sword() {
-        var itemSwordVisual = this.sword_Visual();
+        var itemSwordVisual = this.sword_Visual(Color.byName("GrayLight"));
         var itemSword = new ItemDefn("Sword", null, null, 10, 100, null, ["Wieldable"], this.itemUseEquip, itemSwordVisual);
         return itemSword;
     }
-    sword_Visual() {
-        var itemSwordColor = Color.fromRGB(0, .5, .5);
+    sword_Visual(bladeColor) {
+        var hiltColor = Color.fromRGB(0, .5, .5);
         var itemSwordVisualBladePath = new Path([
             // blade
             new Coords(-0.4, 0.2, 0),
@@ -655,10 +658,10 @@ class PlaceBuilderDemo_Items {
             new Transform_RotateRight(3) // quarter-turns
         ]);
         var itemSwordVisualBlade = new VisualPolygon //Located
-        (itemSwordVisualBladePath.transform(transform), Color.byName("GrayLight"), null // colorBorder
+        (itemSwordVisualBladePath.transform(transform), bladeColor, null // colorBorder
         );
         var itemSwordVisualHilt = new VisualPolygon //Located
-        (itemSwordVisualHiltPath.transform(transform), itemSwordColor, null // colorBorder
+        (itemSwordVisualHiltPath.transform(transform), hiltColor, null // colorBorder
         );
         var itemSwordVisualBody = new VisualGroup([
             itemSwordVisualBlade, itemSwordVisualHilt
@@ -667,21 +670,23 @@ class PlaceBuilderDemo_Items {
             itemSwordVisualBody
         ]);
         if (this.parent.visualsHaveText) {
-            itemSwordVisual.children.push(new VisualOffset(new VisualText(DataBinding.fromContext("Sword"), null, itemSwordColor, null), new Coords(0, 0 - this.entityDimension * 2, 0)));
+            itemSwordVisual.children.push(new VisualOffset(new VisualText(DataBinding.fromContext("Sword"), null, bladeColor, null), new Coords(0, 0 - this.entityDimension * 2, 0)));
         }
         return itemSwordVisual;
     }
     swordCold() {
-        var itemSwordVisual = this.sword_Visual();
-        var itemSwordColdVisual = new VisualTransform(new Transform_Colorize(Color.byName("Cyan"), null), itemSwordVisual);
-        var itemSwordCold = new ItemDefn("SwordCold", null, null, 10, 100, null, ["Wieldable"], this.itemUseEquip, itemSwordColdVisual);
-        return itemSwordCold;
+        var bladeColor = Color.byName("Cyan");
+        var damageTypeName = "Cold";
+        var itemSwordVisual = this.sword_Visual(bladeColor);
+        var itemSword = new ItemDefn("Sword" + damageTypeName, null, null, 10, 100, null, ["Wieldable"], this.itemUseEquip, itemSwordVisual);
+        return itemSword;
     }
     swordHeat() {
-        var itemSwordVisual = this.sword_Visual();
-        var itemSwordHeatVisual = new VisualTransform(new Transform_Colorize(Color.byName("Yellow"), null), itemSwordVisual);
-        var itemSwordHeat = new ItemDefn("SwordHeat", null, null, 10, 100, null, ["Wieldable"], this.itemUseEquip, itemSwordHeatVisual);
-        return itemSwordHeat;
+        var bladeColor = Color.byName("Yellow");
+        var damageTypeName = "Heat";
+        var itemSwordVisual = this.sword_Visual(bladeColor);
+        var itemSword = new ItemDefn("Sword" + damageTypeName, null, null, 10, 100, null, ["Wieldable"], this.itemUseEquip, itemSwordVisual);
+        return itemSword;
     }
     toolset() {
         var itemToolsetName = "Toolset";
@@ -695,6 +700,29 @@ class PlaceBuilderDemo_Items {
         }
         var itemToolset = new ItemDefn(itemToolsetName, null, null, 1, 30, null, null, null, itemToolsetVisual);
         return itemToolset;
+    }
+    torch() {
+        var itemTorchName = "Torch";
+        var itemTorchColor = Color.byName("Brown");
+        var itemTorchVisualBody = new VisualRectangle(new Coords(this.entityDimension / 3, this.entityDimension * 1.5, 0), itemTorchColor, null, null);
+        var itemTorchVisualHead = new VisualEllipse(this.entityDimensionHalf * .65, // semimajorAxis
+        this.entityDimensionHalf * .45, .25, // rotationInTurns
+        Color.byName("Tan"), null // colorBorder
+        );
+        var itemTorchVisualFlame = VisualBuilder.Instance().flame(this.entityDimensionHalf * .6);
+        var itemTorchVisual = new VisualGroup([
+            new VisualOffset(itemTorchVisualBody, new Coords(0, 0, 0)),
+            new VisualOffset(itemTorchVisualHead, new Coords(0, 0 - this.entityDimension * .75, 0)),
+            new VisualOffset(itemTorchVisualFlame, new Coords(0, 0 - this.entityDimension * .7, 0))
+        ]);
+        if (this.parent.visualsHaveText) {
+            itemTorchVisual.children.push(new VisualOffset(new VisualText(new DataBinding(itemTorchName, null, null), null, itemTorchColor, null), new Coords(0, 0 - this.entityDimension * 1.5, 0)));
+        }
+        var itemTorch = new ItemDefn(itemTorchName, null, null, 1, 4, null, // name, appearance, descripton, mass, value, stackSize
+        ["Wieldable", "Consumable"], // categoryNames
+        null, // use
+        itemTorchVisual);
+        return itemTorch;
     }
     walkieTalkie() {
         var itemWalkieTalkie = new ItemDefn("Walkie-Talkie", null, null, 2, 10, null, [], // categoryNames

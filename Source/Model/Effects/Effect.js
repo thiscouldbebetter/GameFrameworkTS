@@ -44,12 +44,12 @@ class Effect_Instances {
         this.Burning = new Effect("Burning", 20, // ticksPerCycle
         5, // cyclesToLive
         VisualBuilder.Instance().flame(visualDimension), (u, w, p, e, effect) => {
-            e.killable().damageApply(u, w, p, null, e, new Damage(1, "Heat"));
+            e.killable().damageApply(u, w, p, null, e, new Damage(1, "Heat", null));
         });
         this.Frozen = new Effect("Frozen", 20, // ticksPerCycle
         5, // cyclesToLive
         new VisualCircle(visualDimension, Color.byName("Cyan"), null), (u, w, p, e, effect) => {
-            e.killable().damageApply(u, w, p, null, e, new Damage(1, "Cold"));
+            e.killable().damageApply(u, w, p, null, e, new Damage(1, "Cold", null));
         });
         this.Healing = new Effect("Healing", 40, // ticksPerCycle
         10, // cyclesToLive
@@ -67,7 +67,7 @@ class Effect_Instances {
             new Coords(-0.2, 0.2, 0),
             new Coords(-0.5, 0.2, 0)
         ]).transform(Transform_Scale.fromScalar(visualDimension * 1.5)), Color.byName("Red"), null), (u, w, p, e, effect) => {
-            e.killable().damageApply(u, w, p, null, e, new Damage(-1, "Healing"));
+            e.killable().damageApply(u, w, p, null, e, new Damage(-1, "Healing", null));
         });
         this._All =
             [
