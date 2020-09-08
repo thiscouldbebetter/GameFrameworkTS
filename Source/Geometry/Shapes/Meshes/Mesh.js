@@ -11,7 +11,6 @@ class Mesh {
         var returnValue = Mesh.fromBox(box);
         return returnValue;
     }
-    ;
     static cubeUnit(center) {
         if (center == null) {
             center = new Coords(0, 0, 0);
@@ -20,7 +19,6 @@ class Mesh {
         var returnValue = Mesh.boxOfSize(center, size);
         return returnValue;
     }
-    ;
     static fromBox(box) {
         var sizeHalf = box.sizeHalf;
         var min = new Coords(-sizeHalf.x, -sizeHalf.y, -sizeHalf.z);
@@ -48,7 +46,6 @@ class Mesh {
         var returnValue = new Mesh(box.center, vertexOffsets, faceBuilders);
         return returnValue;
     }
-    ;
     static fromFace(center, faceToExtrude, thickness) {
         var faceVertices = faceToExtrude.vertices;
         var numberOfFaceVertices = faceVertices.length;
@@ -84,7 +81,6 @@ class Mesh {
         faceBuilders);
         return returnValue;
     }
-    ;
     // instance methods
     box() {
         if (this._box == null) {
@@ -93,11 +89,9 @@ class Mesh {
         this._box.ofPoints(this.vertices());
         return this._box;
     }
-    ;
     edges() {
         return null; // todo
     }
-    ;
     faces() {
         var vertices = this.vertices();
         if (this._faces == null) {
@@ -110,7 +104,6 @@ class Mesh {
         }
         return this._faces;
     }
-    ;
     vertices() {
         if (this._vertices == null) {
             this._vertices = [];
@@ -125,7 +118,6 @@ class Mesh {
         }
         return this._vertices;
     }
-    ;
     // transformable
     transform(transformToApply) {
         for (var v = 0; v < this.vertexOffsets.length; v++) {
@@ -135,23 +127,24 @@ class Mesh {
         this.vertices(); // hack - Recalculate.
         return this;
     }
-    ;
     // clonable
     clone() {
         return new Mesh(this.center.clone(), ArrayHelper.clone(this.vertexOffsets), ArrayHelper.clone(this.faceBuilders));
     }
-    ;
     overwriteWith(other) {
         this.center.overwriteWith(other.center);
         ArrayHelper.overwriteWith(this.vertexOffsets, other.vertexOffsets);
         ArrayHelper.overwriteWith(this.faceBuilders, other.faceBuilders);
+        return this;
     }
-    ;
     // transformable
     coordsGroupToTranslate() {
         return [this.center];
     }
-    ;
+    // ShapeBase.
+    normalAtPos(posToCheck, normalOut) {
+        return this.box().normalAtPos(posToCheck, normalOut);
+    }
 }
 class Mesh_FaceBuilder {
     constructor(vertexIndices) {
@@ -175,14 +168,11 @@ class Mesh_FaceBuilder {
             this.vertexIndices[i] = vertexIndex;
         }
     }
-    ;
     // clonable
     clone() {
         return new Mesh_FaceBuilder(this.vertexIndices.slice());
     }
-    ;
     overwriteWith(other) {
         ArrayHelper.overwriteWith(this.vertexIndices, other.vertexIndices);
     }
-    ;
 }

@@ -1,5 +1,5 @@
 
-class Box
+class Box implements ShapeBase
 {
 	center: Coords;
 	size: Coords;
@@ -208,11 +208,11 @@ class Box
 		return returnValue;
 	}
 
-	rangeForDimension(dimensionIndex: number, range: RangeExtent)
+	rangeForDimension(dimensionIndex: number, rangeOut: RangeExtent)
 	{
-		range.min = this.min().dimensionGet(dimensionIndex);
-		range.max = this.max().dimensionGet(dimensionIndex);
-		return range;
+		rangeOut.min = this.min().dimensionGet(dimensionIndex);
+		rangeOut.max = this.max().dimensionGet(dimensionIndex);
+		return rangeOut;
 	}
 
 	sizeOverwriteWith(sizeOther: Coords)
@@ -299,5 +299,49 @@ class Box
 	{
 		Transforms.applyTransformToCoordsMany(transformToApply, this.coordsGroupToTranslate());
 		return this;
+	}
+
+	// ShapeBase.
+
+	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
+	{
+		var displacementOverSizeHalf = normalOut.overwriteWith
+		(
+			posToCheck
+		).subtract
+		(
+			this.center
+		).divide
+		(
+			this.sizeHalf
+		);
+
+		var greatestAbsoluteDisplacementDimensionSoFar = -1;
+		var dimensionIndex = null;
+		var multiplier = 0;
+
+		for (var d = 0; d < 3; d++) // dimension
+		{
+			var displacementDimensionOverSizeHalf
+				= displacementOverSizeHalf.dimensionGet(d);
+			var displacementDimensionOverSizeHalfAbsolute
+				= Math.abs(displacementDimensionOverSizeHalf);
+
+			if
+			(
+				displacementDimensionOverSizeHalfAbsolute
+				> greatestAbsoluteDisplacementDimensionSoFar
+			)
+			{
+				greatestAbsoluteDisplacementDimensionSoFar =
+					displacementDimensionOverSizeHalfAbsolute;
+				dimensionIndex = d;
+				multiplier = (displacementDimensionOverSizeHalf > 0 ? 1 : -1);
+			}
+		}
+
+		normalOut.clear().dimensionSet(dimensionIndex, 1).multiplyScalar(multiplier);
+
+		return normalOut;
 	}
 }

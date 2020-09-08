@@ -67,7 +67,7 @@ class PlaceBuilderDemo_Emplacements {
         var collidable = new Collidable(collider, [Collidable.name], // entityPropertyNamesToCollideWith,
         // collideEntities
         (u, w, p, e, e2) => {
-            u.collisionHelper.collideEntitiesReverseVelocities(e, e2);
+            u.collisionHelper.collideEntitiesBounce(e, e2);
         });
         var killable = new Killable(1, // integrityMax
         null, // damageApply
@@ -397,7 +397,7 @@ class PlaceBuilderDemo_Emplacements {
         var collidable = new Collidable(collider, [Collidable.name], // entityPropertyNamesToCollideWith,
         // collideEntities
         (u, w, p, e, e2) => {
-            u.collisionHelper.collideEntitiesReverseVelocities(e, e2);
+            u.collisionHelper.collideEntitiesBounce(e, e2);
         });
         var entityDefn = new Entity(entityName, [
             new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),

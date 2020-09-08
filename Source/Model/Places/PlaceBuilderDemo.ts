@@ -331,7 +331,7 @@ class PlaceBuilderDemo // Main.
 			{
 				if (traversable.isBlocking)
 				{
-					u.collisionHelper.collideEntitiesReverseVelocities(e0, e1);
+					u.collisionHelper.collideEntitiesBounce(e0, e1);
 				}
 			}
 		};
@@ -1882,7 +1882,7 @@ class PlaceBuilderDemo // Main.
 
 		var carCollider = new Sphere(new Coords(0, 0, 0), entityDimension / 2);
 
-		var carCollide = (universe: Universe, world: World, place: Place, entityPlayer: Entity, entityOther: Entity) =>
+		var carCollide = (universe: Universe, world: World, place: Place, entityVehicle: Entity, entityOther: Entity) =>
 		{
 			if (entityOther.portal() != null)
 			{
@@ -1890,12 +1890,12 @@ class PlaceBuilderDemo // Main.
 				if (usable == null)
 				{
 					var portal = entityOther.portal();
-					portal.use(universe, world, place, entityPlayer, entityOther);
+					portal.use(universe, world, place, entityVehicle, entityOther);
 				}
 			}
 			else
 			{
-				universe.collisionHelper.collideEntities(entityPlayer, entityOther);
+				universe.collisionHelper.collideEntitiesBlock(entityVehicle, entityOther);
 			}
 		};
 

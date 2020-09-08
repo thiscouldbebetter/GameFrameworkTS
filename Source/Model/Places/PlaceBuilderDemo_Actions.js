@@ -193,6 +193,7 @@ class PlaceBuilderDemo_Actions {
             var entityPickingUpLocatable = entityPickingUp.locatable();
             var itemLocatable = itemEntityGettingPickedUp.locatable();
             var distance = itemLocatable.approachOtherWithAccelerationAndSpeedMaxToDistance(entityPickingUpLocatable, .5, 4, 1);
+            itemLocatable.loc.orientation.default(); // hack
             if (distance == 0) {
                 activity.isDone = true;
                 var itemHolder = entityPickingUp.itemHolder();

@@ -13,19 +13,24 @@ class RangeExtent
 	clone()
 	{
 		return new RangeExtent(this.min, this.max);
-	};
+	}
 
 	intersectWith(other: RangeExtent)
 	{
 		this.min = (this.min >= other.min ? this.min : other.min);
 		this.max = (this.max <= other.max ? this.max : other.max);
 		return this;
-	};
+	}
 
 	midpoint()
 	{
 		return (this.min + this.max) / 2;
-	};
+	}
+
+	minAndMax()
+	{
+		return [ this.min, this.max ];
+	}
 
 	overlapsWith(other: RangeExtent)
 	{
@@ -36,21 +41,21 @@ class RangeExtent
 		);
 
 		return returnValue;
-	};
+	}
 
 	overwriteWith(other: RangeExtent)
 	{
 		this.min = other.min;
 		this.max = other.max;
 		return this;
-	};
+	}
 
 	overwriteWithMinAndMax(min: number, max: number)
 	{
 		this.min = min;
 		this.max = max;
 		return this;
-	};
+	}
 
 	random(randomizer: Randomizer)
 	{
@@ -60,7 +65,7 @@ class RangeExtent
 	size()
 	{
 		return this.max - this.min;
-	};
+	}
 
 	subtract(other: RangeExtent)
 	{
@@ -86,7 +91,7 @@ class RangeExtent
 		}
 
 		return returnValues;
-	};
+	}
 
 	touches(other: RangeExtent)
 	{
@@ -97,5 +102,5 @@ class RangeExtent
 		);
 
 		return returnValue;
-	};
+	}
 }

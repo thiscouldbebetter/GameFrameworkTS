@@ -1,5 +1,5 @@
 
-class Arc
+class Arc implements ShapeBase
 {
 	shell: Shell;
 	wedge: Wedge;
@@ -42,5 +42,12 @@ class Arc
 	coordsGroupToTranslate()
 	{
 		return [ this.shell.sphereOuter.center, this.wedge.vertex ];
+	}
+
+	// Shape.
+
+	normalAtPos(posToCheck: Coords, normalOut: Coords)
+	{
+		return this.shell.normalAtPos(posToCheck, normalOut);
 	}
 }

@@ -22,6 +22,11 @@ class Collision
 		this.isActive = false;
 	}
 
+	static create()
+	{
+		return new Collision(new Coords(0, 0, 0), null, []);
+	}
+
 	clear()
 	{
 		this.isActive = false;

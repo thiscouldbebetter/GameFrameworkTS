@@ -646,7 +646,7 @@ class PlaceBuilderDemo_Movers
 			)
 		]);
 
-		var friendlyVisual = new VisualGroup
+		var friendlyVisualGroup = new VisualGroup
 		([
 			new VisualAnimation
 			(
@@ -675,7 +675,7 @@ class PlaceBuilderDemo_Movers
 
 		if (this.parent.visualsHaveText)
 		{
-			friendlyVisual.children.push
+			friendlyVisualGroup.children.push
 			(
 				new VisualOffset
 				(
@@ -684,6 +684,11 @@ class PlaceBuilderDemo_Movers
 				)
 			);
 		}
+
+		var friendlyVisual = new VisualAnchor
+		(
+			friendlyVisualGroup, null, Orientation.Instances().ForwardXDownZ
+		);
 
 		var friendlyActivityPerform =
 			(universe: Universe, world: World, place: Place, entityActor: Entity, activity: Activity) =>
@@ -1049,7 +1054,7 @@ class PlaceBuilderDemo_Movers
 			var entityOtherDamager = entityOther.damager();
 			if (entityOtherDamager != null)
 			{
-				universe.collisionHelper.collideEntities(entityPlayer, entityOther);
+				universe.collisionHelper.collideEntitiesBounce(entityPlayer, entityOther);
 
 				entityPlayer.killable().damageApply(
 					universe, world, place, entityOther, entityPlayer, entityOtherDamager.damagePerHit

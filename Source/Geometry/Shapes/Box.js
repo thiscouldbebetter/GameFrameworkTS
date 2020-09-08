@@ -126,10 +126,10 @@ class Box {
         var returnValue = rangeThis.overlapsWith(rangeOther);
         return returnValue;
     }
-    rangeForDimension(dimensionIndex, range) {
-        range.min = this.min().dimensionGet(dimensionIndex);
-        range.max = this.max().dimensionGet(dimensionIndex);
-        return range;
+    rangeForDimension(dimensionIndex, rangeOut) {
+        rangeOut.min = this.min().dimensionGet(dimensionIndex);
+        rangeOut.max = this.max().dimensionGet(dimensionIndex);
+        return rangeOut;
     }
     sizeOverwriteWith(sizeOther) {
         this.size.overwriteWith(sizeOther);
@@ -186,5 +186,25 @@ class Box {
     transform(transformToApply) {
         Transforms.applyTransformToCoordsMany(transformToApply, this.coordsGroupToTranslate());
         return this;
+    }
+    // ShapeBase.
+    normalAtPos(posToCheck, normalOut) {
+        var displacementOverSizeHalf = normalOut.overwriteWith(posToCheck).subtract(this.center).divide(this.sizeHalf);
+        var greatestAbsoluteDisplacementDimensionSoFar = -1;
+        var dimensionIndex = null;
+        var multiplier = 0;
+        for (var d = 0; d < 3; d++) {
+            var displacementDimensionOverSizeHalf = displacementOverSizeHalf.dimensionGet(d);
+            var displacementDimensionOverSizeHalfAbsolute = Math.abs(displacementDimensionOverSizeHalf);
+            if (displacementDimensionOverSizeHalfAbsolute
+                > greatestAbsoluteDisplacementDimensionSoFar) {
+                greatestAbsoluteDisplacementDimensionSoFar =
+                    displacementDimensionOverSizeHalfAbsolute;
+                dimensionIndex = d;
+                multiplier = (displacementDimensionOverSizeHalf > 0 ? 1 : -1);
+            }
+        }
+        normalOut.clear().dimensionSet(dimensionIndex, 1).multiplyScalar(multiplier);
+        return normalOut;
     }
 }

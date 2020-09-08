@@ -9,19 +9,30 @@ class Shell {
             new ShapeInverse(new ShapeContainer(this.sphereInner))
         ]);
     }
+    center() {
+        return this.sphereOuter.center;
+    }
     collider() {
         return this._collider;
     }
-    ;
     // cloneable
     clone() {
         return new Shell(this.sphereOuter.clone(), this.radiusInner);
     }
-    ;
     overwriteWith(other) {
         this.sphereOuter.overwriteWith(other.sphereOuter);
         this.radiusInner = other.radiusInner;
         return this;
     }
-    ;
+    // Shape.
+    normalAtPos(posToCheck, normalOut) {
+        normalOut.overwriteWith(posToCheck).subtract(this.center());
+        var distanceFromCenter = normalOut.magnitude();
+        var distanceFromSphereOuter = Math.abs(distanceFromCenter - this.sphereOuter.radius);
+        var distanceFromSphereInner = Math.abs(distanceFromCenter - this.sphereInner.radius);
+        if (distanceFromSphereInner < distanceFromSphereOuter) {
+            normalOut.invert();
+        }
+        return normalOut;
+    }
 }

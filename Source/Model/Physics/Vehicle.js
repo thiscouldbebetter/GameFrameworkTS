@@ -19,13 +19,16 @@ class Vehicle extends EntityProperty {
             var vehicleLoc = entityVehicle.locatable().loc;
             var vehicleOrientation = vehicleLoc.orientation;
             var vehicleForward = vehicleOrientation.forward;
+            var vehicleRight = vehicleOrientation.right;
             var vehicleVel = vehicleLoc.vel;
+            var vehicleSpeed = vehicleVel.magnitude();
+            var isAccelerating = false;
             for (var i = 0; i < actionsToPerform.length; i++) {
                 var action = actionsToPerform[i];
                 var actionName = action.name;
                 // todo
                 if (actionName == "MoveUp") {
-                    vehicleLoc.vel.add(vehicleForward.clone().multiplyScalar(this.accelerationPerTick));
+                    isAccelerating = true;
                 }
                 else if (actionName == "MoveLeft") {
                     vehicle.steeringDirection = -1;
@@ -41,13 +44,16 @@ class Vehicle extends EntityProperty {
                     this.entityOccupant = null;
                 }
             }
-            var vehicleHeadingInTurns = vehicleForward.headingInTurns();
-            vehicleHeadingInTurns +=
-                vehicle.steeringDirection * vehicle.steeringAngleInTurns;
-            vehicleHeadingInTurns = NumberHelper.wrapToRangeMinMax(vehicleHeadingInTurns, 0, 1);
-            vehicleForward.fromHeadingInTurns(vehicleHeadingInTurns);
-            var vehicleSpeed = vehicleVel.magnitude();
-            vehicleVel.overwriteWith(vehicleForward).normalize().multiplyScalar(vehicleSpeed).trimToMagnitudeMax(this.speedMax);
+            if (isAccelerating) {
+                vehicleLoc.accel.overwriteWith(vehicleForward).multiplyScalar(this.accelerationPerTick);
+            }
+            if (vehicleSpeed > 0) {
+                vehicleOrientation.forwardSet(vehicleVel.clone().normalize());
+                var vehicleSpeedOverMax = vehicleSpeed / this.speedMax;
+                var steeringFactor = .5;
+                vehicleLoc.accel.add(vehicleRight.clone().multiplyScalar(vehicle.steeringDirection * steeringFactor * vehicleSpeedOverMax));
+            }
+            vehicleVel.trimToMagnitudeMax(this.speedMax);
         }
     }
 }

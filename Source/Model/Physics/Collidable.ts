@@ -6,11 +6,12 @@ class Collidable extends EntityProperty
 	_collideEntities: (u: Universe, w: World, p: Place, e0: Entity, e1: Entity, c: Collision) => void;
 
 	collider: any;
+	locPrev: Disposition;
 	ticksUntilCanCollide: number;
 	entitiesAlreadyCollidedWith: Entity[];
 	isDisabled: boolean;
 
-	_transformTranslate: Transform_Translate;
+	_transformLocate: Transform_Locate;
 
 	constructor
 	(
@@ -25,14 +26,14 @@ class Collidable extends EntityProperty
 		this._collideEntities = collideEntities;
 
 		this.collider = this.colliderAtRest.clone();
-
+		this.locPrev = new Disposition(null, null, null);
 		this.ticksUntilCanCollide = 0;
 		this.entitiesAlreadyCollidedWith = [];
 		this.isDisabled = false;
 
 		// Helper variables.
 
-		this._transformTranslate = new Transform_Translate(new Coords(0, 0, 0));
+		this._transformLocate = new Transform_Locate(null);
 	}
 
 	collideEntities(u: Universe, w: World, p: Place, e0: Entity, e1: Entity, c: Collision)
@@ -46,12 +47,11 @@ class Collidable extends EntityProperty
 	colliderLocateForEntity(entity: Entity)
 	{
 		this.collider.overwriteWith(this.colliderAtRest);
+		this._transformLocate.loc = entity.locatable().loc;
+
 		Transforms.applyTransformToCoordsMany
 		(
-			this._transformTranslate.displacementSet
-			(
-				entity.locatable().loc.pos
-			),
+			this._transformLocate,
 			this.collider.coordsGroupToTranslate()
 		);
 	}
@@ -67,6 +67,8 @@ class Collidable extends EntityProperty
 		{
 			return;
 		}
+
+		this.locPrev.overwriteWith(entity.locatable().loc);
 
 		if (this.ticksUntilCanCollide > 0)
 		{
@@ -94,15 +96,16 @@ class Collidable extends EntityProperty
 							);
 							if (doEntitiesCollide)
 							{
-								var collision =
-									collisionHelper.collisionOfEntities(entity, entityOther, collision);
+								var collision = Collision.create();
+								collisionHelper.collisionOfEntities(entity, entityOther, collision);
 
 								this.collideEntities
 								(
 									universe, world, place, entity, entityOther, collision
 								);
 
-								entityOther.collidable().collideEntities
+								var entityOtherCollidable = entityOther.collidable();
+								entityOtherCollidable.collideEntities
 								(
 									universe, world, place, entityOther, entity, collision
 								);

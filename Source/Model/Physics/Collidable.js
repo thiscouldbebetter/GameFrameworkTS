@@ -6,11 +6,12 @@ class Collidable extends EntityProperty {
         this.entityPropertyNamesToCollideWith = entityPropertyNamesToCollideWith || [];
         this._collideEntities = collideEntities;
         this.collider = this.colliderAtRest.clone();
+        this.locPrev = new Disposition(null, null, null);
         this.ticksUntilCanCollide = 0;
         this.entitiesAlreadyCollidedWith = [];
         this.isDisabled = false;
         // Helper variables.
-        this._transformTranslate = new Transform_Translate(new Coords(0, 0, 0));
+        this._transformLocate = new Transform_Locate(null);
     }
     collideEntities(u, w, p, e0, e1, c) {
         if (this._collideEntities != null) {
@@ -19,7 +20,8 @@ class Collidable extends EntityProperty {
     }
     colliderLocateForEntity(entity) {
         this.collider.overwriteWith(this.colliderAtRest);
-        Transforms.applyTransformToCoordsMany(this._transformTranslate.displacementSet(entity.locatable().loc.pos), this.collider.coordsGroupToTranslate());
+        this._transformLocate.loc = entity.locatable().loc;
+        Transforms.applyTransformToCoordsMany(this._transformLocate, this.collider.coordsGroupToTranslate());
     }
     initialize(universe, world, place, entity) {
         this.colliderLocateForEntity(entity);
@@ -28,6 +30,7 @@ class Collidable extends EntityProperty {
         if (this.isDisabled) {
             return;
         }
+        this.locPrev.overwriteWith(entity.locatable().loc);
         if (this.ticksUntilCanCollide > 0) {
             this.ticksUntilCanCollide--;
         }
@@ -43,9 +46,11 @@ class Collidable extends EntityProperty {
                             var collisionHelper = universe.collisionHelper;
                             var doEntitiesCollide = collisionHelper.doEntitiesCollide(entity, entityOther);
                             if (doEntitiesCollide) {
-                                var collision = collisionHelper.collisionOfEntities(entity, entityOther, collision);
+                                var collision = Collision.create();
+                                collisionHelper.collisionOfEntities(entity, entityOther, collision);
                                 this.collideEntities(universe, world, place, entity, entityOther, collision);
-                                entityOther.collidable().collideEntities(universe, world, place, entityOther, entity, collision);
+                                var entityOtherCollidable = entityOther.collidable();
+                                entityOtherCollidable.collideEntities(universe, world, place, entityOther, entity, collision);
                             }
                         }
                     }

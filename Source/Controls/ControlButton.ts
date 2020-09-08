@@ -26,7 +26,7 @@ class ControlButton extends ControlBase
 		this.canBeHeldDown = (canBeHeldDown == null ? false : canBeHeldDown);
 
 		// Helper variables.
-		this._drawLoc = new Disposition(new Coords(0, 0, 0), Orientation.default(), null);
+		this._drawLoc = new Disposition(null, null, null);
 		this._sizeHalf = new Coords(0, 0, 0);
 	}
 

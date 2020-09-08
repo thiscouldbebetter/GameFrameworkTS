@@ -132,7 +132,7 @@ class PlaceBuilderDemo_Emplacements
 			// collideEntities
 			(u: Universe, w: World, p: Place, e: Entity, e2: Entity) =>
 			{
-				u.collisionHelper.collideEntitiesReverseVelocities(e, e2);
+				u.collisionHelper.collideEntitiesBounce(e, e2);
 			}
 		);
 
@@ -803,7 +803,7 @@ class PlaceBuilderDemo_Emplacements
 			// collideEntities
 			(u: Universe, w: World, p: Place, e: Entity, e2: Entity) =>
 			{
-				u.collisionHelper.collideEntitiesReverseVelocities(e, e2);
+				u.collisionHelper.collideEntitiesBounce(e, e2);
 			}
 		);
 

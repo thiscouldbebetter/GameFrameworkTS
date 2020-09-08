@@ -9,8 +9,9 @@ class Orientation {
         this.axes = [this.forward, this.right, this.down];
         this.axesRDF = [this.right, this.down, this.forward];
     }
-    static default() {
-        return new Orientation(null, null);
+    default() {
+        var coordsInstances = Coords.Instances();
+        this.forwardDownSet(coordsInstances.OneZeroZero, coordsInstances.ZeroZeroOne);
     }
     static Instances() {
         if (Orientation._instances == null) {

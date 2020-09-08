@@ -9,6 +9,9 @@ class Collision {
         this.normals = [new Coords(0, 0, 0), new Coords(0, 0, 0)];
         this.isActive = false;
     }
+    static create() {
+        return new Collision(new Coords(0, 0, 0), null, []);
+    }
     clear() {
         this.isActive = false;
         ArrayHelper.clear(this.collidables);

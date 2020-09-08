@@ -1,5 +1,5 @@
 
-class MapLocated
+class MapLocated implements ShapeBase
 {
 	map: MapOfCells;
 	loc: Disposition;
@@ -19,17 +19,25 @@ class MapLocated
 	clone()
 	{
 		return new MapLocated(this.map, this.loc.clone());
-	};
+	}
 
 	overwriteWith(other: MapLocated)
 	{
 		this.loc.overwriteWith(other.loc);
-	};
+		return this;
+	}
 
 	// translatable
 
 	coordsGroupToTranslate()
 	{
 		return [ this.loc.pos ];
-	};
+	}
+
+	// Shape.
+
+	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
+	{
+		return normalOut.overwriteWith(posToCheck).subtract(this.loc.pos).normalize();
+	}
 }

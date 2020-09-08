@@ -192,7 +192,7 @@ class PlaceBuilderDemo // Main.
             var traversable = e0.traversable();
             if (traversable != null) {
                 if (traversable.isBlocking) {
-                    u.collisionHelper.collideEntitiesReverseVelocities(e0, e1);
+                    u.collisionHelper.collideEntitiesBounce(e0, e1);
                 }
             }
         };
@@ -1096,16 +1096,16 @@ class PlaceBuilderDemo // Main.
             carVisual.children.push(new VisualOffset(new VisualText(new DataBinding(defnName, null, null), null, Color.byName("Blue"), null), new Coords(0, 0 - entityDimension * 2.5, 0)));
         }
         var carCollider = new Sphere(new Coords(0, 0, 0), entityDimension / 2);
-        var carCollide = (universe, world, place, entityPlayer, entityOther) => {
+        var carCollide = (universe, world, place, entityVehicle, entityOther) => {
             if (entityOther.portal() != null) {
                 var usable = entityOther.usable();
                 if (usable == null) {
                     var portal = entityOther.portal();
-                    portal.use(universe, world, place, entityPlayer, entityOther);
+                    portal.use(universe, world, place, entityVehicle, entityOther);
                 }
             }
             else {
-                universe.collisionHelper.collideEntities(entityPlayer, entityOther);
+                universe.collisionHelper.collideEntitiesBlock(entityVehicle, entityOther);
             }
         };
         var carCollidable = new Collidable(carCollider, [Collidable.name], carCollide);

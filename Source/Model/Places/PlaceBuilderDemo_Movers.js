@@ -311,7 +311,7 @@ class PlaceBuilderDemo_Movers {
             ), new Coords(0, friendlyDimension / 3, 0) // offset
             )
         ]);
-        var friendlyVisual = new VisualGroup([
+        var friendlyVisualGroup = new VisualGroup([
             new VisualAnimation("Friendly", [100, 100], // ticksToHoldFrames
             // children
             [
@@ -325,8 +325,9 @@ class PlaceBuilderDemo_Movers {
             )
         ]);
         if (this.parent.visualsHaveText) {
-            friendlyVisual.children.push(new VisualOffset(new VisualText(new DataBinding("Talker", null, null), null, friendlyColor, null), new Coords(0, 0 - friendlyDimension * 2, 0)));
+            friendlyVisualGroup.children.push(new VisualOffset(new VisualText(new DataBinding("Talker", null, null), null, friendlyColor, null), new Coords(0, 0 - friendlyDimension * 2, 0)));
         }
+        var friendlyVisual = new VisualAnchor(friendlyVisualGroup, null, Orientation.Instances().ForwardXDownZ);
         var friendlyActivityPerform = (universe, world, place, entityActor, activity) => {
             var targetPos = activity.target;
             if (targetPos == null) {
@@ -515,7 +516,7 @@ class PlaceBuilderDemo_Movers {
             var soundHelper = universe.soundHelper;
             var entityOtherDamager = entityOther.damager();
             if (entityOtherDamager != null) {
-                universe.collisionHelper.collideEntities(entityPlayer, entityOther);
+                universe.collisionHelper.collideEntitiesBounce(entityPlayer, entityOther);
                 entityPlayer.killable().damageApply(universe, world, place, entityOther, entityPlayer, entityOtherDamager.damagePerHit);
                 soundHelper.soundWithNamePlayAsEffect(universe, "Effects_Clang");
             }

@@ -20,9 +20,10 @@ class Orientation
 		this.axesRDF = [ this.right, this.down, this.forward ];
 	}
 
-	static default()
+	default()
 	{
-		return new Orientation(null, null);
+		var coordsInstances = Coords.Instances();
+		this.forwardDownSet(coordsInstances.OneZeroZero, coordsInstances.ZeroZeroOne);
 	}
 
 	// instances

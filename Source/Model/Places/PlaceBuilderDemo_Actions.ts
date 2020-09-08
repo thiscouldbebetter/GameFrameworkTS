@@ -323,6 +323,7 @@ class PlaceBuilderDemo_Actions
 					(
 						entityPickingUpLocatable, .5, 4, 1
 					);
+				itemLocatable.loc.orientation.default(); // hack
 
 				if (distance == 0)
 				{
