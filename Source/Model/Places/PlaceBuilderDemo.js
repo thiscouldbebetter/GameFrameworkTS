@@ -11,7 +11,7 @@ class PlaceBuilderDemo // Main.
         this.moversBuilder = new PlaceBuilderDemo_Movers(this);
         this.actions = this.actionsBuilder.actionsBuild();
         this.actionToInputsMappings = this.actionsBuilder.actionToInputsMappingsBuild();
-        this.activityDefns = [];
+        this.activityDefns = this.actionsBuilder.activityDefnsBuild();
         this.cameraViewSize = cameraViewSize;
         this.itemDefns = this.itemsBuilder.itemDefnsBuild();
         this.itemDefnsByName = ArrayHelper.addLookupsByName(this.itemDefns);

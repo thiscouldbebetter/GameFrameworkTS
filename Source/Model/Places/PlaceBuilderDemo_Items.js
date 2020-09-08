@@ -346,7 +346,18 @@ class PlaceBuilderDemo_Items {
     grass() {
         var itemGrassName = "Grass";
         var itemGrassVisual = new VisualGroup([
-            new VisualImageScaled(new VisualImageFromLibrary("Grass"), new Coords(1, 1, 0).multiplyScalar(this.entityDimensionHalf * 4) // sizeScaled
+            /*
+            new VisualOffset
+            (
+                new VisualImageScaled
+                (
+                    new VisualImageFromLibrary("Grain"),
+                    new Coords(.3, 1, 0).multiplyScalar(this.entityDimension * 2) // sizeScaled
+                ),
+                new Coords(-.075, -1.2, 0).multiplyScalar(this.entityDimension)
+            ),
+            */
+            new VisualImageScaled(new VisualImageFromLibrary("Grass"), new Coords(1, 1, 0).multiplyScalar(this.entityDimension * 2) // sizeScaled
             ),
         ]);
         if (this.parent.visualsHaveText) {

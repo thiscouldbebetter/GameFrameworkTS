@@ -147,31 +147,27 @@ class ItemHolder extends EntityProperty
 		return entityItemClosest;
 	}
 
+	itemEntityCanPickUp
+	(
+		universe: Universe, world: World, place: Place,
+		entityItemHolder: Entity, entityItemToPickUp: Entity
+	)
+	{
+		var massAlreadyHeld = this.massOfAllItems(world);
+		var massOfItem = entityItemToPickUp.item().mass(world);
+		var massAfterPickup = massAlreadyHeld + massOfItem;
+		var canPickUp = (massAfterPickup <= this.massMax);
+		return canPickUp;
+	}
+
 	itemEntityPickUp
 	(
 		universe: Universe, world: World, place: Place,
 		entityItemHolder: Entity, entityItemToPickUp: Entity
 	)
 	{
-		var returnMessage: string = null;
-
-		if (entityItemToPickUp != null)
-		{
-			var massHeld = this.massOfAllItems(world);
-			var massOfItem = entityItemToPickUp.item().mass(world);
-			var massTotal = massHeld + massOfItem;
-			if (massTotal > this.massMax)
-			{
-				returnMessage = "Too heavy!";
-			}
-			else
-			{
-				this.itemEntityAdd(entityItemToPickUp);
-				place.entitiesToRemove.push(entityItemToPickUp);
-			}
-		}
-
-		return returnMessage;
+		this.itemEntityAdd(entityItemToPickUp);
+		place.entitiesToRemove.push(entityItemToPickUp);
 	}
 
 	itemEntityRemove(itemEntityToRemove: Entity)

@@ -169,53 +169,7 @@ class PlaceBuilderDemo_Movers {
         if (this.parent.visualsHaveText) {
             enemyVisual.children.push(new VisualOffset(new VisualText(DataBinding.fromContext(enemyTypeName), null, enemyColor, null), new Coords(0, 0 - enemyDimension, 0)));
         }
-        var enemyActivityPerform = (universe, world, place, actor, activity) => {
-            var actorLoc = actor.locatable().loc;
-            var actorPos = actorLoc.pos;
-            var actorOrientation = actorLoc.orientation;
-            var entityToTargetPrefix = "Player";
-            var targetsPreferred = place.entities.filter(x => x.name.startsWith(entityToTargetPrefix));
-            var displacement = new Coords(0, 0, 0);
-            var targetPreferredInSight = targetsPreferred.filter(x => x.perceptible() == null
-                || x.perceptible().canBeSeen(universe, world, place, x, actor)).sort((a, b) => displacement.overwriteWith(a.locatable().loc.pos).subtract(b.locatable().loc.pos).magnitude())[0];
-            var targetPosToApproach;
-            if (targetPreferredInSight != null) {
-                targetPosToApproach =
-                    targetPreferredInSight.locatable().loc.pos.clone();
-            }
-            else {
-                var targetPreferredInHearing = targetsPreferred.filter(x => x.perceptible() == null
-                    || x.perceptible().canBeHeard(universe, world, place, x, actor)).sort((a, b) => displacement.overwriteWith(a.locatable().loc.pos).subtract(b.locatable().loc.pos).magnitude())[0];
-                if (targetPreferredInHearing != null) {
-                    targetPosToApproach =
-                        targetPreferredInHearing.locatable().loc.pos.clone();
-                }
-                else {
-                    var targetPosExisting = activity.target;
-                    if (targetPosExisting == null) {
-                        targetPosToApproach =
-                            new Coords(0, 0, 0).randomize(universe.randomizer).multiply(place.size);
-                    }
-                    else {
-                        targetPosToApproach = targetPosExisting;
-                    }
-                }
-            }
-            activity.target = targetPosToApproach;
-            var targetDisplacement = targetPosToApproach.clone().subtract(actorPos);
-            var targetDistance = targetDisplacement.magnitude();
-            var distanceMin = 1;
-            if (targetDistance <= distanceMin) {
-                actorPos.overwriteWith(targetPosToApproach);
-                activity.target = null;
-            }
-            else {
-                var acceleration = .1;
-                actorLoc.accel.overwriteWith(targetPosToApproach).subtract(actorPos).normalize().multiplyScalar(acceleration).clearZ();
-                actorOrientation.forwardSet(actorLoc.accel.clone().normalize());
-            }
-        };
-        var enemyActivityDefn = new ActivityDefn("Enemy", enemyActivityPerform);
+        var enemyActivityDefn = Enemy.activityDefnBuild();
         this.parent.activityDefns.push(enemyActivityDefn);
         var enemyActivity = new Activity(enemyActivityDefn.name, null);
         var enemyDamageApply = (u, w, p, eDamager, eKillable, damageToApply) => {
@@ -943,6 +897,7 @@ class PlaceBuilderDemo_Movers {
         var playerActivityDefn = new ActivityDefn("Player", playerActivityPerform);
         this.parent.activityDefns.push(playerActivityDefn);
         var playerActivity = new Activity(playerActivityDefn.name, null);
+        playerActivity = new Activity(ActivityDefn.Instances().Simultaneous.name, [playerActivity]);
         var playerActivityWaitPerform = (universe, world, place, entityPlayer, activity) => {
             var drawable = entityPlayer.drawable();
             var visualAsCameraProjection = drawable.visual;

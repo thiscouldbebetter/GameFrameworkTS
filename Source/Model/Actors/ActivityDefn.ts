@@ -36,18 +36,39 @@ class ActivityDefn_Instances
 	_AllByName: Map<string, ActivityDefn>;
 
 	DoNothing: ActivityDefn;
+	Simultaneous: ActivityDefn;
 
 	constructor()
 	{
 		this.DoNothing = new ActivityDefn
 		(
 			"DoNothing",
-			(u: Universe, w: World, p: Place, e: Entity, a: Activity) => {}// perform
+			// perform
+			(u: Universe, w: World, p: Place, e: Entity, a: Activity) =>
+			{}
 		);
-		
+
+		this.Simultaneous = new ActivityDefn
+		(
+			"Simultaneous",
+			// perform
+			(u: Universe, w: World, p: Place, e: Entity, a: Activity) =>
+			{
+				var childActivities = a.target as Activity[];
+				childActivities = childActivities.filter(x => x.isDone == false);
+				a.target = childActivities;
+				for (var i = 0; i < childActivities.length; i++)
+				{
+					var childActivity = childActivities[i];
+					childActivity.perform(u, w, p, e);
+				}
+			}
+		);
+
 		this._All =
 		[
-			this.DoNothing
+			this.DoNothing,
+			this.Simultaneous
 		];
 
 		this._AllByName = ArrayHelper.addLookupsByName(this._All);

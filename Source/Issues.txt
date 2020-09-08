@@ -11,7 +11,6 @@ Controls - Images in Lists and Grids
 Items - Agriculture - Seeds, Planting, Watering, Harvesting
 Items - Crafting - Blocking with Working Animation
 Items - Generated Devices with Varying Specs
-Items - Weapons - Applying Effects to Target
 
 Movers - Animals - Carnivores Eat Grazers
 Movers - Animals - Growth, Aging and Natural Death
@@ -58,8 +57,6 @@ Fixes
 
 Controls - ControlTabbed - Mouse Support
 
-Items - Special Swords Held by Blade
-Items - Sword Swing Direction is Wrong
 Items - Bowstring Direction Doesn't Change with Player
 
 Places - Map Tiles - Fix Overlapping

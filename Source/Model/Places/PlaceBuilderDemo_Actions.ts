@@ -137,27 +137,25 @@ class PlaceBuilderDemo_Actions
 						return;
 					}
 
-					var message = itemHolder.itemEntityPickUp
+					var canPickUp = itemHolder.itemEntityCanPickUp
 					(
 						universe, world, place, entityActor, itemEntityToPickUp
 					);
 
-					if (message == null) // hack - Can pick up.
+					if (canPickUp)
 					{
-						var equipmentUser = entityActor.equipmentUser();
-						if (equipmentUser != null)
+						var actor = entityActor.actor();
+						var activity = actor.activity;
+						if (activity.defnName == ActivityDefn.Instances().Simultaneous.name)
 						{
-							equipmentUser.equipItemEntityInFirstOpenQuickSlot
-							(
-								universe, world, place, entityActor,
-								itemEntityToPickUp,
-								true // includeSocketNameInMessage
-							);
-							equipmentUser.unequipItemsNoLongerHeld(entityActor);
+							var childActivities = activity.target as Activity[];
+							var activityPickUp = new Activity("ItemPickUp", itemEntityToPickUp);
+							childActivities.push(activityPickUp);
 						}
 					}
 					else
 					{
+						var message = "Can't pick up!";
 						place.entitySpawn
 						(
 							universe, world,
@@ -297,5 +295,59 @@ class PlaceBuilderDemo_Actions
 		];
 
 		return actionToInputsMappings;
+	}
+
+	activityDefnsBuild()
+	{
+		var activityDefns = [];
+		activityDefns.push(...ActivityDefn.Instances()._All);
+		activityDefns.push(this.activityDefnItemPickUpBuild());
+		return activityDefns;
+	}
+
+	activityDefnItemPickUpBuild()
+	{
+		var activityDefnItemPickUp = new ActivityDefn
+		(
+			"ItemPickUp",
+			// perform
+			(universe: Universe, world: World, place: Place, entityPickingUp: Entity, activity: Activity) =>
+			{
+				var itemEntityGettingPickedUp = activity.target as Entity;
+
+				var entityPickingUpLocatable = entityPickingUp.locatable();
+
+				var itemLocatable = itemEntityGettingPickedUp.locatable();
+				var distance =
+					itemLocatable.approachOtherWithAccelerationAndSpeedMaxToDistance
+					(
+						entityPickingUpLocatable, .5, 4, 1
+					);
+
+				if (distance == 0)
+				{
+					activity.isDone = true;
+
+					var itemHolder = entityPickingUp.itemHolder();
+					itemHolder.itemEntityPickUp
+					(
+						universe, world, place, entityPickingUp, itemEntityGettingPickedUp
+					);
+
+					var equipmentUser = entityPickingUp.equipmentUser();
+					if (equipmentUser != null)
+					{
+						equipmentUser.equipItemEntityInFirstOpenQuickSlot
+						(
+							universe, world, place, entityPickingUp,
+							itemEntityGettingPickedUp, true // includeSocketNameInMessage
+						);
+						equipmentUser.unequipItemsNoLongerHeld(entityPickingUp);
+					}
+				}
+			}
+		);
+
+		return activityDefnItemPickUp;
 	}
 }

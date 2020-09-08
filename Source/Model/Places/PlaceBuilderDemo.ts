@@ -37,7 +37,7 @@ class PlaceBuilderDemo // Main.
 
 		this.actions = this.actionsBuilder.actionsBuild();
 		this.actionToInputsMappings = this.actionsBuilder.actionToInputsMappingsBuild();
-		this.activityDefns = [];
+		this.activityDefns = this.actionsBuilder.activityDefnsBuild();
 
 		this.cameraViewSize = cameraViewSize;
 

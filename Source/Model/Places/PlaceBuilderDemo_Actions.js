@@ -72,16 +72,18 @@ class PlaceBuilderDemo_Actions {
                 if (itemEntityToPickUp == null) {
                     return;
                 }
-                var message = itemHolder.itemEntityPickUp(universe, world, place, entityActor, itemEntityToPickUp);
-                if (message == null) {
-                    var equipmentUser = entityActor.equipmentUser();
-                    if (equipmentUser != null) {
-                        equipmentUser.equipItemEntityInFirstOpenQuickSlot(universe, world, place, entityActor, itemEntityToPickUp, true // includeSocketNameInMessage
-                        );
-                        equipmentUser.unequipItemsNoLongerHeld(entityActor);
+                var canPickUp = itemHolder.itemEntityCanPickUp(universe, world, place, entityActor, itemEntityToPickUp);
+                if (canPickUp) {
+                    var actor = entityActor.actor();
+                    var activity = actor.activity;
+                    if (activity.defnName == ActivityDefn.Instances().Simultaneous.name) {
+                        var childActivities = activity.target;
+                        var activityPickUp = new Activity("ItemPickUp", itemEntityToPickUp);
+                        childActivities.push(activityPickUp);
                     }
                 }
                 else {
+                    var message = "Can't pick up!";
                     place.entitySpawn(universe, world, universe.entityBuilder.messageFloater(message, entityActor.locatable().loc.pos, Color.byName("Red")));
                 }
             }),
@@ -176,5 +178,33 @@ class PlaceBuilderDemo_Actions {
             new ActionToInputsMapping("Item9", ["_9"], inactivateTrue),
         ];
         return actionToInputsMappings;
+    }
+    activityDefnsBuild() {
+        var activityDefns = [];
+        activityDefns.push(...ActivityDefn.Instances()._All);
+        activityDefns.push(this.activityDefnItemPickUpBuild());
+        return activityDefns;
+    }
+    activityDefnItemPickUpBuild() {
+        var activityDefnItemPickUp = new ActivityDefn("ItemPickUp", 
+        // perform
+        (universe, world, place, entityPickingUp, activity) => {
+            var itemEntityGettingPickedUp = activity.target;
+            var entityPickingUpLocatable = entityPickingUp.locatable();
+            var itemLocatable = itemEntityGettingPickedUp.locatable();
+            var distance = itemLocatable.approachOtherWithAccelerationAndSpeedMaxToDistance(entityPickingUpLocatable, .5, 4, 1);
+            if (distance == 0) {
+                activity.isDone = true;
+                var itemHolder = entityPickingUp.itemHolder();
+                itemHolder.itemEntityPickUp(universe, world, place, entityPickingUp, itemEntityGettingPickedUp);
+                var equipmentUser = entityPickingUp.equipmentUser();
+                if (equipmentUser != null) {
+                    equipmentUser.equipItemEntityInFirstOpenQuickSlot(universe, world, place, entityPickingUp, itemEntityGettingPickedUp, true // includeSocketNameInMessage
+                    );
+                    equipmentUser.unequipItemsNoLongerHeld(entityPickingUp);
+                }
+            }
+        });
+        return activityDefnItemPickUp;
     }
 }
