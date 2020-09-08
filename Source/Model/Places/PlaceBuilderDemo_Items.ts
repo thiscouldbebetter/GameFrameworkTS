@@ -228,14 +228,14 @@ class PlaceBuilderDemo_Items
 			// body
 			new VisualCircle
 			(
-				this.entityDimensionHalf, itemBombColor, null
+				this.entityDimensionHalf, itemBombColor, null, null
 			),
 			// highlight
 			new VisualOffset
 			(
 				new VisualCircle
 				(
-					this.entityDimensionHalf * .3, Color.byName("Blue"), null
+					this.entityDimensionHalf * .3, Color.byName("Blue"), null, null
 				),
 				new Coords(-this.entityDimensionHalf / 3, -this.entityDimensionHalf / 3, 0)
 			)
@@ -487,11 +487,11 @@ class PlaceBuilderDemo_Items
 		([
 			new VisualCircle
 			(
-				this.entityDimensionHalf, itemCoinColor, null
+				this.entityDimensionHalf, itemCoinColor, null, null
 			),
 			new VisualCircle
 			(
-				this.entityDimensionHalf * .75, null, Color.byName("Gray")
+				this.entityDimensionHalf * .75, null, Color.byName("Gray"), null
 			)
 		]);
 
@@ -583,14 +583,14 @@ class PlaceBuilderDemo_Items
 			// body
 			new VisualCircle
 			(
-				this.entityDimensionHalf, itemDoughnutColor, null
+				this.entityDimensionHalf, itemDoughnutColor, null, null
 			),
 			// hole
 			new VisualErase
 			(
 				new VisualCircle
 				(
-					this.entityDimensionHalf * .3, itemDoughnutColor, null
+					this.entityDimensionHalf * .3, itemDoughnutColor, null, null
 				)
 			)
 		]);
@@ -699,13 +699,13 @@ class PlaceBuilderDemo_Items
 		([
 			new VisualCircle
 			(
-				this.entityDimensionHalf, itemFruitColor, null
+				this.entityDimensionHalf, itemFruitColor, null, null
 			),
 			new VisualOffset
 			(
 				new VisualCircle
 				(
-					this.entityDimensionHalf * .25, Color.byName("White"), null
+					this.entityDimensionHalf * .25, Color.byName("White"), null, null
 				),
 				new Coords(-this.entityDimensionHalf / 2, -this.entityDimensionHalf / 2, 0)
 			)
@@ -985,7 +985,7 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualCircle
 				(
-					this.entityDimensionHalf, itemLogColor, null
+					this.entityDimensionHalf, itemLogColor, null, null
 				),
 				new Coords(this.entityDimension, 0, 0)
 			),
@@ -998,7 +998,7 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualCircle
 				(
-					this.entityDimensionHalf, Color.byName("Tan"), null
+					this.entityDimensionHalf, Color.byName("Tan"), null, null
 				),
 				new Coords(-this.entityDimension, 0, 0)
 			)
@@ -1029,17 +1029,17 @@ class PlaceBuilderDemo_Items
 		([
 			new VisualCircle
 			(
-				this.entityDimensionHalf, itemMeatColor, null
+				this.entityDimensionHalf, itemMeatColor, null, null
 			),
 			new VisualCircle
 			(
-				this.entityDimensionHalf * .9, null, Color.byName("White")
+				this.entityDimensionHalf * .9, null, Color.byName("White"), null
 			),
 			new VisualOffset
 			(
 				new VisualCircle
 				(
-					this.entityDimensionHalf * .2, Color.byName("Pink"), Color.byName("White")
+					this.entityDimensionHalf * .2, Color.byName("Pink"), Color.byName("White"), null
 				),
 				new Coords(this.entityDimensionHalf * .2, 0, 0)
 			)

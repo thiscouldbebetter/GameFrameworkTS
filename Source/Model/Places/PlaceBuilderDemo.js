@@ -71,6 +71,19 @@ class PlaceBuilderDemo // Main.
         var place = new PlaceRoom(this.name, "Demo", size, this.entities, randomizerSeed);
         return place;
     }
+    buildParallax(size, placeNameToReturnTo) {
+        this.name = "Parallax";
+        this.size = size;
+        this.entities = [];
+        this.entityBuildExit(placeNameToReturnTo);
+        this.entitiesAllGround();
+        this.build_Camera(this.cameraViewSize, this.size);
+        var entityCamera = this.build_Camera(this.cameraViewSize, this.size);
+        this.entities.splice(0, 0, ...this.entityBuildBackground(entityCamera.camera()));
+        var randomizerSeed = this.randomizer.getNextRandom();
+        var place = new PlaceRoom(this.name, "Demo", size, this.entities, randomizerSeed);
+        return place;
+    }
     buildTunnels(size, placeNameToReturnTo) {
         size = size.clone().multiplyScalar(4);
         this.build_Interior("Tunnels", size, placeNameToReturnTo);
@@ -78,7 +91,34 @@ class PlaceBuilderDemo // Main.
         var networkNodeCount = 24;
         var network = Network.random(networkNodeCount, this.randomizer);
         network = network.transform(new Transform_Scale(size));
-        var tunnelsVisual = new VisualNetwork(network);
+        //var tunnelsVisual = new VisualNetwork(network);
+        var tunnelsVisual = new VisualGroup([]);
+        var wallThickness = 4; // todo
+        var tunnelWidth = wallThickness * 8;
+        var color = Color.byName("Red");
+        var nodes = network.nodes;
+        for (var i = 0; i < nodes.length; i++) {
+            var node = nodes[i];
+            var visualWallNode = new VisualOffset(new VisualCircle(tunnelWidth, null, color, wallThickness), node.pos.clone());
+            tunnelsVisual.children.push(visualWallNode);
+        }
+        var links = network.links;
+        for (var i = 0; i < links.length; i++) {
+            var link = links[i];
+            var nodes = link.nodes(network);
+            var node0Pos = nodes[0].pos;
+            var node1Pos = nodes[1].pos;
+            var linkDisplacement = node1Pos.clone().subtract(node0Pos);
+            var linkForward = linkDisplacement.clone().normalize();
+            var nodeCenterToTunnel = linkForward.clone().multiplyScalar(tunnelWidth);
+            var linkRight = linkForward.clone().right();
+            var tunnelMidlineToWallRight = linkRight.clone().multiplyScalar(tunnelWidth);
+            var tunnelMidlineToWallLeft = tunnelMidlineToWallRight.clone().invert();
+            var visualWallRight = new VisualLine(tunnelMidlineToWallRight.clone().add(node0Pos).add(nodeCenterToTunnel), tunnelMidlineToWallRight.clone().add(node1Pos).subtract(nodeCenterToTunnel), color, wallThickness);
+            tunnelsVisual.children.push(visualWallRight);
+            var visualWallLeft = new VisualLine(tunnelMidlineToWallLeft.clone().add(node0Pos).add(nodeCenterToTunnel), tunnelMidlineToWallLeft.clone().add(node1Pos).subtract(nodeCenterToTunnel), color, wallThickness);
+            tunnelsVisual.children.push(visualWallLeft);
+        }
         var tunnelsEntity = new Entity("Tunnels", [
             new Drawable(tunnelsVisual, null),
             new DrawableCamera(),
@@ -908,7 +948,7 @@ class PlaceBuilderDemo // Main.
             var projectileCollide = null;
             var projectileDie = (u, w, p, entityDying) => {
                 var explosionRadius = 32;
-                var explosionVisual = new VisualCircle(explosionRadius, Color.byName("Yellow"), null);
+                var explosionVisual = new VisualCircle(explosionRadius, Color.byName("Yellow"), null, null);
                 var explosionCollider = new Sphere(new Coords(0, 0, 0), explosionRadius);
                 var explosionCollide = (universe, world, place, entityProjectile, entityOther) => {
                     var killable = entityOther.killable();
@@ -1009,7 +1049,7 @@ class PlaceBuilderDemo // Main.
                     entityProjectile.killable().integrity = 0;
                 }
             };
-            var visualStrike = new VisualCircle(8, Color.byName("Red"), null);
+            var visualStrike = new VisualCircle(8, Color.byName("Red"), null, null);
             var killable = new Killable(1, // integrityMax
             null, // damageApply
             (universe, world, place, entityKillable) => // die
@@ -1464,7 +1504,7 @@ class PlaceBuilderDemo // Main.
                     entityProjectile.killable().integrity = 0;
                 }
             };
-            var visualStrike = new VisualCircle(8, Color.byName("Red"), null);
+            var visualStrike = new VisualCircle(8, Color.byName("Red"), null, null);
             var killable = new Killable(1, // integrityMax
             null, // damageApply
             (universe, world, place, entityKillable) => // die

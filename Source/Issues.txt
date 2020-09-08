@@ -21,7 +21,6 @@ Movers - Desire System
 Movers - Differential Terrain Traversal
 
 Movers - Enemies - Patrols
-Movers - Enemies - Enemy Generators Use Generator Class
 
 Movers - Enemies - Types - Bombers
 Movers - Enemies - Types - Hiders
@@ -36,14 +35,10 @@ Places - Whole Boundary is Big Portal
 Places - Darkness and Lighting
 Places - Day/Night Cycle
 Places - Dungeon
-Places - Map Tiles as Obstacles
 Places - Map Tiles from Images
-Places - Map Tiles - Generated
 Places - Terrarium - Load/Unload Zones
-Places - Parallax
 Places - Weather
 
-Sound - Hitting Obstacle
 Sound - Shooting Bow
 Sound - Arrow Hits
 Sound - Swinging Sword

@@ -190,8 +190,8 @@ class Display3D {
     drawBackground(colorBack, colorBorder) {
         this._display2DOverlay.drawBackground(colorBack, colorBorder);
     }
-    drawCircle(center, radius, colorFill, colorBorder) {
-        this._display2DOverlay.drawCircle(center, radius, colorFill, colorBorder);
+    drawCircle(center, radius, colorFill, colorBorder, borderThickness) {
+        this._display2DOverlay.drawCircle(center, radius, colorFill, colorBorder, borderThickness);
     }
     drawCircleWithGradient(center, radius, gradientFill, colorBorder) {
         this._display2DOverlay.drawCircleWithGradient(center, radius, gradientFill, colorBorder);

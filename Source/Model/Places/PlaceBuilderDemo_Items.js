@@ -126,9 +126,9 @@ class PlaceBuilderDemo_Items {
             true // isCentered
             ), new Coords(0, -1, 0).multiplyScalar(this.entityDimensionHalf)),
             // body
-            new VisualCircle(this.entityDimensionHalf, itemBombColor, null),
+            new VisualCircle(this.entityDimensionHalf, itemBombColor, null, null),
             // highlight
-            new VisualOffset(new VisualCircle(this.entityDimensionHalf * .3, Color.byName("Blue"), null), new Coords(-this.entityDimensionHalf / 3, -this.entityDimensionHalf / 3, 0))
+            new VisualOffset(new VisualCircle(this.entityDimensionHalf * .3, Color.byName("Blue"), null, null), new Coords(-this.entityDimensionHalf / 3, -this.entityDimensionHalf / 3, 0))
         ]);
         if (this.parent.visualsHaveText) {
             itemBombVisual.children.push(new VisualOffset(new VisualText(new DataBinding(itemBombName, null, null), null, itemBombColor, null), new Coords(0, 0 - this.entityDimension * 2, 0)));
@@ -238,8 +238,8 @@ class PlaceBuilderDemo_Items {
         var itemCoinName = "Coin";
         var itemCoinColor = Color.byName("Yellow");
         var itemCoinVisual = new VisualGroup([
-            new VisualCircle(this.entityDimensionHalf, itemCoinColor, null),
-            new VisualCircle(this.entityDimensionHalf * .75, null, Color.byName("Gray"))
+            new VisualCircle(this.entityDimensionHalf, itemCoinColor, null, null),
+            new VisualCircle(this.entityDimensionHalf * .75, null, Color.byName("Gray"), null)
         ]);
         if (this.parent.visualsHaveText) {
             itemCoinVisual.children.push(new VisualOffset(new VisualText(new DataBinding(itemCoinName, null, null), null, itemCoinColor, null), new Coords(0, 0 - this.entityDimension, 0)));
@@ -275,9 +275,9 @@ class PlaceBuilderDemo_Items {
         var itemDoughnutColor = Color.byName("Orange");
         var itemDoughnutVisualBody = new VisualGroup([
             // body
-            new VisualCircle(this.entityDimensionHalf, itemDoughnutColor, null),
+            new VisualCircle(this.entityDimensionHalf, itemDoughnutColor, null, null),
             // hole
-            new VisualErase(new VisualCircle(this.entityDimensionHalf * .3, itemDoughnutColor, null))
+            new VisualErase(new VisualCircle(this.entityDimensionHalf * .3, itemDoughnutColor, null, null))
         ]);
         var itemDoughnutVisual = new VisualBuffered(new Coords(1, 1, 0).multiplyScalar(this.entityDimension * 1.2), itemDoughnutVisualBody);
         if (this.parent.visualsHaveText) {
@@ -325,8 +325,8 @@ class PlaceBuilderDemo_Items {
         var itemFruitName = "Fruit";
         var itemFruitColor = Color.byName("Orange");
         var itemFruitVisual = new VisualGroup([
-            new VisualCircle(this.entityDimensionHalf, itemFruitColor, null),
-            new VisualOffset(new VisualCircle(this.entityDimensionHalf * .25, Color.byName("White"), null), new Coords(-this.entityDimensionHalf / 2, -this.entityDimensionHalf / 2, 0))
+            new VisualCircle(this.entityDimensionHalf, itemFruitColor, null, null),
+            new VisualOffset(new VisualCircle(this.entityDimensionHalf * .25, Color.byName("White"), null, null), new Coords(-this.entityDimensionHalf / 2, -this.entityDimensionHalf / 2, 0))
         ]);
         if (this.parent.visualsHaveText) {
             itemFruitVisual.children.push(new VisualOffset(new VisualText(new DataBinding(itemFruitName, null, null), null, itemFruitColor, null), new Coords(0, 0 - this.entityDimension, 0)));
@@ -452,9 +452,9 @@ class PlaceBuilderDemo_Items {
         var itemLogName = "Log";
         var itemLogColor = Color.byName("Brown");
         var itemLogVisual = new VisualGroup([
-            new VisualOffset(new VisualCircle(this.entityDimensionHalf, itemLogColor, null), new Coords(this.entityDimension, 0, 0)),
+            new VisualOffset(new VisualCircle(this.entityDimensionHalf, itemLogColor, null, null), new Coords(this.entityDimension, 0, 0)),
             new VisualRectangle(new Coords(this.entityDimension * 2, this.entityDimension, 0), itemLogColor, null, null),
-            new VisualOffset(new VisualCircle(this.entityDimensionHalf, Color.byName("Tan"), null), new Coords(-this.entityDimension, 0, 0))
+            new VisualOffset(new VisualCircle(this.entityDimensionHalf, Color.byName("Tan"), null, null), new Coords(-this.entityDimension, 0, 0))
         ]);
         if (this.parent.visualsHaveText) {
             itemLogVisual.children.push(new VisualOffset(new VisualText(new DataBinding(itemLogName, null, null), null, itemLogColor, null), new Coords(0, 0 - this.entityDimension, 0)));
@@ -466,9 +466,9 @@ class PlaceBuilderDemo_Items {
         var itemMeatName = "Meat";
         var itemMeatColor = Color.byName("Red");
         var itemMeatVisual = new VisualGroup([
-            new VisualCircle(this.entityDimensionHalf, itemMeatColor, null),
-            new VisualCircle(this.entityDimensionHalf * .9, null, Color.byName("White")),
-            new VisualOffset(new VisualCircle(this.entityDimensionHalf * .2, Color.byName("Pink"), Color.byName("White")), new Coords(this.entityDimensionHalf * .2, 0, 0))
+            new VisualCircle(this.entityDimensionHalf, itemMeatColor, null, null),
+            new VisualCircle(this.entityDimensionHalf * .9, null, Color.byName("White"), null),
+            new VisualOffset(new VisualCircle(this.entityDimensionHalf * .2, Color.byName("Pink"), Color.byName("White"), null), new Coords(this.entityDimensionHalf * .2, 0, 0))
         ]);
         if (this.parent.visualsHaveText) {
             itemMeatVisual.children.push(new VisualOffset(new VisualText(new DataBinding(itemMeatName, null, null), null, itemMeatColor, null), new Coords(0, 0 - this.entityDimension * 1.5, 0)));

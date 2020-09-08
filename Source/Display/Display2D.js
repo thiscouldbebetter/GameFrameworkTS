@@ -54,7 +54,7 @@ class Display2D {
         this.drawRectangle(this._zeroes, this.sizeDefault(), // Automatic scaling.
         colorBack || this.colorBack, colorBorder || this.colorFore, null);
     }
-    drawCircle(center, radius, colorFill, colorBorder) {
+    drawCircle(center, radius, colorFill, colorBorder, borderThickness) {
         var drawPos = this._drawPos.overwriteWith(center);
         this.graphics.beginPath();
         this.graphics.arc(drawPos.x, drawPos.y, radius, 0, Display2D.RadiansPerTurn);
@@ -63,8 +63,11 @@ class Display2D {
             this.graphics.fill();
         }
         if (colorBorder != null) {
+            var lineWidthToRestore = this.graphics.lineWidth;
+            this.graphics.lineWidth = borderThickness;
             this.graphics.strokeStyle = colorBorder;
             this.graphics.stroke();
+            this.graphics.lineWidth = lineWidthToRestore;
         }
     }
     drawCircleWithGradient(center, radius, gradientFill, colorBorder) {

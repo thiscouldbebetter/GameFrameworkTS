@@ -48,7 +48,7 @@ class Effect_Instances {
         });
         this.Frozen = new Effect("Frozen", 20, // ticksPerCycle
         5, // cyclesToLive
-        new VisualCircle(visualDimension, Color.byName("Cyan"), null), (u, w, p, e, effect) => {
+        new VisualCircle(visualDimension, Color.byName("Cyan"), null, null), (u, w, p, e, effect) => {
             e.killable().damageApply(u, w, p, null, e, new Damage(1, "Cold", null));
         });
         this.Healing = new Effect("Healing", 40, // ticksPerCycle

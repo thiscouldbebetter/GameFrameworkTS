@@ -76,7 +76,10 @@ class World {
                 var isGoal = (roomPos.equals(goalPos));
                 var placeNamesToIncludePortalsTo = [];
                 if (isStart) {
-                    placeNamesToIncludePortalsTo = ["Base", "Terrarium", "Tunnels", "Zoned"];
+                    placeNamesToIncludePortalsTo =
+                        [
+                            "Base", "Parallax", "Terrarium", "Tunnels", "Zoned"
+                        ];
                 }
                 var placeBattlefield = placeBuilder.buildBattlefield(roomSize, roomPos, areNeighborsConnectedESWN, isGoal, placeNamesToIncludePortalsTo);
                 places.push(placeBattlefield);
@@ -91,6 +94,10 @@ class World {
         placeBattlefield0.name // placeNameToReturnTo
         );
         places.splice(0, 0, placeBase);
+        var placeParallax = placeBuilder.buildParallax(displaySize.clone().double().double(), // size
+        placeBattlefield0.name // placeNameToReturnTo
+        );
+        places.push(placeParallax);
         var placeTerrarium = placeBuilder.buildTerrarium(displaySize.clone(), // size
         placeBattlefield0.name // placeNameToReturnTo
         );

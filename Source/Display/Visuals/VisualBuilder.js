@@ -17,7 +17,7 @@ class VisualBuilder {
             new VisualOffset(visualEyes, new Coords(0, -1, 0).multiplyScalar(eyeRadius))
         ], null);
         var circleWithEyes = new VisualGroup([
-            new VisualCircle(circleRadius, circleColor, null),
+            new VisualCircle(circleRadius, circleColor, null, null),
             visualEyesDirectional
         ]);
         circleWithEyes = new VisualOffset(circleWithEyes, new Coords(0, -circleRadius, 0));
@@ -257,8 +257,8 @@ class VisualBuilder {
     eyesBlinking(visualEyeRadius) {
         var visualPupilRadius = visualEyeRadius / 2;
         var visualEye = new VisualGroup([
-            new VisualCircle(visualEyeRadius, Color.byName("White"), null),
-            new VisualCircle(visualPupilRadius, Color.byName("Black"), null)
+            new VisualCircle(visualEyeRadius, Color.byName("White"), null, null),
+            new VisualCircle(visualPupilRadius, Color.byName("Black"), null, null)
         ]);
         var visualEyes = new VisualGroup([
             new VisualOffset(visualEye, new Coords(-visualEyeRadius, 0, 0)),
@@ -319,7 +319,7 @@ class VisualBuilder {
             new VisualLine(new Coords(0, -dimension, 0), new Coords(0, dimension, 0), color, rayThickness),
             new VisualLine(new Coords(-dimensionOblique, -dimensionOblique, 0), new Coords(dimensionOblique, dimensionOblique, 0), color, rayThickness),
             new VisualLine(new Coords(-dimensionOblique, dimensionOblique, 0), new Coords(dimensionOblique, -dimensionOblique, 0), color, rayThickness),
-            new VisualCircle(dimension / 2, color, null),
+            new VisualCircle(dimension / 2, color, null, null),
         ]);
         return sunVisual;
     }

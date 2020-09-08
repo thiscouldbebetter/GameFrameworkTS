@@ -139,7 +139,11 @@ class Display2D implements Display
 		);
 	}
 
-	drawCircle(center: Coords, radius: number, colorFill: string, colorBorder: string)
+	drawCircle
+	(
+		center: Coords, radius: number, colorFill: string,
+		colorBorder: string, borderThickness: number
+	)
 	{
 		var drawPos = this._drawPos.overwriteWith(center);
 
@@ -159,8 +163,13 @@ class Display2D implements Display
 
 		if (colorBorder != null)
 		{
+			var lineWidthToRestore = this.graphics.lineWidth;
+
+			this.graphics.lineWidth = borderThickness;
 			this.graphics.strokeStyle = colorBorder;
 			this.graphics.stroke();
+
+			this.graphics.lineWidth = lineWidthToRestore;
 		}
 	}
 

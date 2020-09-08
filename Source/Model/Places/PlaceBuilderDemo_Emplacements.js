@@ -89,7 +89,7 @@ class PlaceBuilderDemo_Emplacements {
         var campfireName = "Campfire";
         var campfireColor = Color.byName("Orange");
         var flameVisual = VisualBuilder.Instance().flame(entityDimension);
-        var smokePuffVisual = new VisualCircle(entityDimensionHalf, Color.byName("GrayLight"), null);
+        var smokePuffVisual = new VisualCircle(entityDimensionHalf, Color.byName("GrayLight"), null, null);
         var smokeVisual = new VisualParticles("Smoke", null, // ticksToGenerate
         1 / 3, // particlesPerTick
         () => 50, // particleTicksToLiveGet
@@ -173,7 +173,7 @@ class PlaceBuilderDemo_Emplacements {
                 new Coords(-0.5, -1.5, 0),
                 new Coords(0.5, -1.5, 0)
             ]).transform(Transform_Scale.fromScalar(entityDimension)), exitColor, null),
-            new VisualOffset(new VisualCircle(entityDimension / 8, Color.byName("Yellow"), null), new Coords(entityDimension / 4, 0 - entityDimension / 2, 0))
+            new VisualOffset(new VisualCircle(entityDimension / 8, Color.byName("Yellow"), null, null), new Coords(entityDimension / 4, 0 - entityDimension / 2, 0))
         ]);
         if (this.parent.visualsHaveText) {
             visual.children.push(new VisualOffset(new VisualText(new DataBinding("Exit", null, null), null, exitColor, null), new Coords(0, 0 - entityDimension * 2.5, 0)));
@@ -382,12 +382,12 @@ class PlaceBuilderDemo_Emplacements {
         var entityName = "Tree";
         entityDimension *= 1.5;
         var color = Color.byName("GreenDark");
+        var colorBorder = Color.byName("Black");
         var visualTree = new VisualGroup([
             new VisualRectangle(new Coords(1, 2, 0).multiplyScalar(entityDimension * 0.5), Color.byName("Brown"), null, null),
             new VisualOffset(new VisualEllipse(entityDimension, // semimajorAxis
             entityDimension * .8, 0, // rotationInTurns
-            color, null // colorBorder
-            ), new Coords(0, -entityDimension, 0)),
+            color, colorBorder), new Coords(0, -entityDimension, 0)),
         ]);
         if (this.parent.visualsHaveText) {
             visualTree.children.push(new VisualOffset(new VisualText(new DataBinding(entityName, null, null), null, color, null), new Coords(0, 0 - entityDimension * 2, 0)));

@@ -443,9 +443,16 @@ class Display3D implements Display
 		this._display2DOverlay.drawBackground(colorBack, colorBorder);
 	}
 
-	drawCircle(center: Coords, radius: number, colorFill: string, colorBorder: string)
+	drawCircle
+	(
+		center: Coords, radius: number, colorFill: string,
+		colorBorder: string, borderThickness: number
+	)
 	{
-		this._display2DOverlay.drawCircle(center, radius, colorFill, colorBorder);
+		this._display2DOverlay.drawCircle
+		(
+			center, radius, colorFill, colorBorder, borderThickness
+		);
 	}
 
 	drawCircleWithGradient(center: Coords, radius: number, gradientFill: ValueBreakGroup, colorBorder: string)

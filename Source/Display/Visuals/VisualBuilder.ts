@@ -32,7 +32,7 @@ class VisualBuilder
 
 		var circleWithEyes: Visual = new VisualGroup
 		([
-			new VisualCircle(circleRadius, circleColor, null),
+			new VisualCircle(circleRadius, circleColor, null, null),
 			visualEyesDirectional
 		]);
 
@@ -570,8 +570,8 @@ class VisualBuilder
 
 		var visualEye = new VisualGroup
 		([
-			new VisualCircle(visualEyeRadius, Color.byName("White"), null),
-			new VisualCircle(visualPupilRadius, Color.byName("Black"), null)
+			new VisualCircle(visualEyeRadius, Color.byName("White"), null, null),
+			new VisualCircle(visualPupilRadius, Color.byName("Black"), null, null)
 		]);
 
 		var visualEyes = new VisualGroup
@@ -707,7 +707,7 @@ class VisualBuilder
 				color, rayThickness
 			),
 
-			new VisualCircle(dimension / 2, color, null),
+			new VisualCircle(dimension / 2, color, null, null),
 		]);
 
 		return sunVisual;

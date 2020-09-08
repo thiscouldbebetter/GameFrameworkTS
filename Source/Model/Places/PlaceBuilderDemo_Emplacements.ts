@@ -173,7 +173,7 @@ class PlaceBuilderDemo_Emplacements
 		var campfireColor = Color.byName("Orange");
 
 		var flameVisual = VisualBuilder.Instance().flame(entityDimension);
-		var smokePuffVisual = new VisualCircle(entityDimensionHalf, Color.byName("GrayLight"), null);
+		var smokePuffVisual = new VisualCircle(entityDimensionHalf, Color.byName("GrayLight"), null, null);
 		var smokeVisual = new VisualParticles
 		(
 			"Smoke",
@@ -345,7 +345,7 @@ class PlaceBuilderDemo_Emplacements
 			),
 			new VisualOffset
 			(
-				new VisualCircle(entityDimension / 8, Color.byName("Yellow"), null),
+				new VisualCircle(entityDimension / 8, Color.byName("Yellow"), null, null),
 				new Coords(entityDimension / 4, 0 - entityDimension / 2, 0)
 			)
 		]);
@@ -759,6 +759,7 @@ class PlaceBuilderDemo_Emplacements
 		var entityName = "Tree";
 		entityDimension *= 1.5;
 		var color = Color.byName("GreenDark");
+		var colorBorder = Color.byName("Black");
 		var visualTree = new VisualGroup
 		([
 			new VisualRectangle
@@ -774,7 +775,7 @@ class PlaceBuilderDemo_Emplacements
 					entityDimension * .8,
 					0, // rotationInTurns
 					color,
-					null // colorBorder
+					colorBorder
 				),
 				new Coords(0, -entityDimension, 0)
 			),
