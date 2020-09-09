@@ -59,6 +59,7 @@ class Shell implements ShapeBase
 		{
 			normalOut.invert();
 		}
+		normalOut.normalize();
 		return normalOut;
 	}
 }

@@ -7,9 +7,8 @@ class BoxRotated {
     sphereSwept() {
         return new Sphere(this.box.center, this.box.sizeHalf.magnitude());
     }
-    ;
-    surfaceNormalNearPos(posToCheck) {
-        var returnValue = new Coords(0, 0, 0);
+    normalAtPos(posToCheck, normalOut) {
+        // todo - Adapt or call Box.normalAtPos() instead.
         var plane = new Plane(new Coords(0, 0, 0), 0);
         var polar = new Polar(0, 1, 0);
         var box = this.box;
@@ -28,29 +27,25 @@ class BoxRotated {
                 var distanceOfPosToCheckFromPlane = Math.abs(plane.distanceToPointAlongNormal(posToCheck));
                 if (distanceOfPosToCheckFromPlane < distanceMinSoFar) {
                     distanceMinSoFar = distanceOfPosToCheckFromPlane;
-                    returnValue.overwriteWith(plane.normal);
+                    normalOut.overwriteWith(plane.normal);
                 }
                 polar.azimuthInTurns += .5;
                 polar.azimuthInTurns = NumberHelper.wrapToRangeZeroOne(polar.azimuthInTurns);
             }
         }
-        return returnValue;
+        return normalOut;
     }
-    ;
     // cloneable
     clone() {
         return new BoxRotated(this.box.clone(), this.angleInTurns);
     }
-    ;
     overwriteWith(other) {
         this.box.overwriteWith(other.box);
         this.angleInTurns = other.angleInTurns;
         return this;
     }
-    ;
     // transformable
     coordsGroupToTranslate() {
         return [this.box.center];
     }
-    ;
 }

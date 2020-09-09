@@ -9,17 +9,16 @@ class Locatable extends EntityProperty
 		this.loc = loc || new Disposition(null, null, null);
 	}
 
-	approachOtherWithAccelerationAndSpeedMaxToDistance
+	approachOtherWithAccelerationAndSpeedMax
 	(
 		locatableToApproach: Locatable,
 		accelerationPerTick: number,
-		speedMax: number,
-		distanceMin: number
+		speedMax: number// ,distanceMin: number
 	)
 	{
 		accelerationPerTick = accelerationPerTick || .1;
 		speedMax = speedMax || 1;
-		distanceMin = distanceMin || 1;
+		//distanceMin = distanceMin || 1;
 
 		var targetLoc = locatableToApproach.loc;
 		var targetPos = targetLoc.pos;
@@ -32,6 +31,7 @@ class Locatable extends EntityProperty
 		var targetPosRelative = targetPos.clone().subtract(actorPos);
 		var distanceToTarget = targetPosRelative.magnitude();
 
+		/*
 		if (distanceToTarget <= distanceMin)
 		{
 			distanceToTarget = 0;
@@ -39,6 +39,8 @@ class Locatable extends EntityProperty
 		}
 		else
 		{
+		*/
+
 			actorVel.trimToMagnitudeMax(speedMax);
 
 			// hack
@@ -58,7 +60,7 @@ class Locatable extends EntityProperty
 			).normalize().multiplyScalar(accelerationPerTick).clearZ();
 
 			actorOri.forwardSet(actorLoc.accel.clone().normalize());
-		}
+		//}
 
 		return distanceToTarget;
 	}

@@ -2,16 +2,19 @@
 class Movable extends EntityProperty
 {
 	accelerationPerTick: number;
+	speedMax: number;
 	_accelerate: (u: Universe, w: World, p: Place, e: Entity, a: number) => void;
 
 	constructor
 	(
 		accelerationPerTick: number,
+		speedMax: number,
 		accelerate: (u: Universe, w: World, p: Place, e: Entity, a: number) => void
 	)
 	{
 		super();
 		this.accelerationPerTick = accelerationPerTick;
+		this.speedMax = speedMax;
 		this._accelerate = accelerate || this.accelerateForward;
 	}
 

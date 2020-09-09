@@ -205,152 +205,28 @@ class PlaceBuilderDemo_Movers
 		sizeTopAsFractionOfBottom: number,
 		damageTypeName: string,
 		integrityMax: number,
-		speedMax: number
+		speedMax: number,
+		weapon: Weapon
 	): Entity
 	{
-		var enemyColor: Color;
-		var damageTypes = DamageType.Instances();
-		if (damageTypeName == null)
-		{
-			enemyColor = Color.byName("Red");
-		}
-		else if (damageTypeName == damageTypes.Cold.name)
-		{
-			enemyColor = Color.byName("Cyan");
-		}
-		else if (damageTypeName == damageTypes.Heat.name)
-		{
-			enemyColor = Color.byName("Yellow");
-		}
-		var visualEyeRadius = entityDimension * .75 / 2;
-		var visualBuilder = new VisualBuilder();
-		var visualEyesBlinking = visualBuilder.eyesBlinking(visualEyeRadius);
+		var enemyVisual = this.entityDefnBuildEnemyGenerator_Visual
+		(
+			enemyTypeName,
+			entityDimension,
+			sizeTopAsFractionOfBottom,
+			damageTypeName
+		);
 
-		var constraintSpeedMax1 = new Constraint_SpeedMaxXY(speedMax);
-
-		var enemyDimension = entityDimension * 2;
-
-		var enemyColliderAsFace = new Face
-		([
-			new Coords(-sizeTopAsFractionOfBottom, -1, 0).multiplyScalar(enemyDimension).half(),
-			new Coords(sizeTopAsFractionOfBottom, -1, 0).multiplyScalar(enemyDimension).half(),
-			new Coords(1, 1, 0).multiplyScalar(enemyDimension).half(),
-			new Coords(-1, 1, 0).multiplyScalar(enemyDimension).half(),
-		]);
+		var enemyVisualBody = (enemyVisual as VisualGroup).children[1] as VisualAnchor;
+		var enemyVisualBodyPolygon = enemyVisualBody.child as VisualPolygon;
+		var enemyVertices = enemyVisualBodyPolygon.verticesAsPath.points;
+		var enemyColliderAsFace = new Face(enemyVertices);
 		var enemyCollider = Mesh.fromFace
 		(
 			new Coords(0, 0, 0), // center
 			enemyColliderAsFace,
 			1 // thickness
 		);
-
-		var enemyVisualArm = new VisualPolars
-		(
-			[ new Polar(0, enemyDimension, 0) ],
-			enemyColor,
-			2 // lineThickness
-		);
-
-		var visualEyesBlinkingWithBrows = new VisualGroup
-		([
-			visualEyesBlinking,
-			new VisualPath
-			(
-				new Path
-				([
-					// todo - Scale.
-					new Coords(-8, -8, 0), new Coords(0, 0, 0), new Coords(8, -8, 0)
-				]),
-				Color.byName("GrayDark"),
-				3, // lineThickness
-				null
-			),
-		]);
-
-		var visualEyesWithBrowsDirectional = new VisualDirectional
-		(
-			visualEyesBlinking, // visualForNoDirection
-			[
-				new VisualOffset(visualEyesBlinkingWithBrows, new Coords(1, 0, 0).multiplyScalar(visualEyeRadius)),
-				new VisualOffset(visualEyesBlinkingWithBrows, new Coords(0, 1, 0).multiplyScalar(visualEyeRadius)),
-				new VisualOffset(visualEyesBlinkingWithBrows, new Coords(-1, 0, 0).multiplyScalar(visualEyeRadius)),
-				new VisualOffset(visualEyesBlinkingWithBrows, new Coords(0, -1, 0).multiplyScalar(visualEyeRadius))
-			],
-			null
-		);
-
-		var visualEffect = new VisualAnchor
-		(
-			new VisualDynamic
-			(
-				(u: Universe, w: World, d: Display, e: Entity) =>
-					e.effectable().effectsAsVisual()
-			),
-			null, Orientation.Instances().ForwardXDownZ
-		);
-
-		var visualStatusInfo = new VisualOffset
-		(
-			new VisualStack
-			(
-				new Coords(0, 0 - entityDimension, 0), // childSpacing
-				[
-					visualEffect
-				]
-			),
-			new Coords(0, 0 - entityDimension * 2, 0) // offset
-		);
-
-		var visualBody = new VisualAnchor
-		(
-			new VisualPolygon
-			(
-				new Path(enemyColliderAsFace.vertices),
-				enemyColor,
-				Color.byName("Red") // colorBorder
-			),
-			null, // posToAnchorAt
-			Orientation.Instances().ForwardXDownZ.clone()
-		);
-
-		var visualArms = new VisualDirectional
-		(
-			new VisualNone(),
-			[
-				new VisualGroup
-				([
-					new VisualOffset
-					(
-						enemyVisualArm, new Coords(-enemyDimension / 4, 0, 0)
-					),
-					new VisualOffset
-					(
-						enemyVisualArm, new Coords(enemyDimension / 4, 0, 0)
-					)
-				])
-			],
-			null
-		);
-
-		var enemyVisual = new VisualGroup
-		([
-			visualArms,
-			visualBody,
-			visualEyesWithBrowsDirectional,
-			visualStatusInfo
-		]);
-
-		if (this.parent.visualsHaveText)
-		{
-			enemyVisual.children.push
-			(
-				new VisualOffset
-				(
-					new VisualText(DataBinding.fromContext(enemyTypeName), null, enemyColor, null),
-					new Coords(0, 0 - enemyDimension, 0)
-				)
-			);
-		}
 
 		var enemyActivityDefn = Enemy.activityDefnBuild();
 		this.parent.activityDefns.push(enemyActivityDefn);
@@ -454,13 +330,13 @@ class PlaceBuilderDemo_Movers
 			enemyTypeName + (damageTypeName || "Normal"),
 			[
 				new Actor(enemyActivity),
-				new Constrainable([constraintSpeedMax1]),
+				new Constrainable([new Constraint_SpeedMaxXY(speedMax)]),
 				new Collidable(enemyCollider, null, null),
 				new Damager(new Damage(10, damageTypeName, null)),
 				new Drawable(enemyVisual, null),
 				new DrawableCamera(),
 				new Effectable([]),
-				new Enemy(),
+				new Enemy(weapon),
 				enemyKillable,
 				new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
 				enemyPerceptor
@@ -543,12 +419,160 @@ class PlaceBuilderDemo_Movers
 		return enemyGeneratorEntityDefn;
 	}
 
+	entityDefnBuildEnemyGenerator_Visual
+	(
+		enemyTypeName: string,
+		entityDimension: number,
+		sizeTopAsFractionOfBottom: number,
+		damageTypeName: string
+	)
+	{
+		var enemyColor: Color;
+		var damageTypes = DamageType.Instances();
+		if (damageTypeName == null)
+		{
+			enemyColor = Color.byName("Red");
+		}
+		else if (damageTypeName == damageTypes.Cold.name)
+		{
+			enemyColor = Color.byName("Cyan");
+		}
+		else if (damageTypeName == damageTypes.Heat.name)
+		{
+			enemyColor = Color.byName("Yellow");
+		}
+		var visualEyeRadius = entityDimension * .75 / 2;
+		var visualBuilder = new VisualBuilder();
+		var visualEyesBlinking = visualBuilder.eyesBlinking(visualEyeRadius);
+
+		var enemyDimension = entityDimension * 2;
+
+		var enemyVertices =
+		[
+			new Coords(-sizeTopAsFractionOfBottom, -1, 0).multiplyScalar(enemyDimension).half(),
+			new Coords(sizeTopAsFractionOfBottom, -1, 0).multiplyScalar(enemyDimension).half(),
+			new Coords(1, 1, 0).multiplyScalar(enemyDimension).half(),
+			new Coords(-1, 1, 0).multiplyScalar(enemyDimension).half(),
+		];
+
+		var enemyVisualArm = new VisualPolars
+		(
+			[ new Polar(0, enemyDimension, 0) ],
+			enemyColor,
+			2 // lineThickness
+		);
+
+		var visualEyesBlinkingWithBrows = new VisualGroup
+		([
+			visualEyesBlinking,
+			new VisualPath
+			(
+				new Path
+				([
+					// todo - Scale.
+					new Coords(-8, -8, 0), new Coords(0, 0, 0), new Coords(8, -8, 0)
+				]),
+				Color.byName("GrayDark"),
+				3, // lineThickness
+				null
+			),
+		]);
+
+		var visualEyesWithBrowsDirectional = new VisualDirectional
+		(
+			visualEyesBlinking, // visualForNoDirection
+			[
+				new VisualOffset(visualEyesBlinkingWithBrows, new Coords(1, 0, 0).multiplyScalar(visualEyeRadius)),
+				new VisualOffset(visualEyesBlinkingWithBrows, new Coords(0, 1, 0).multiplyScalar(visualEyeRadius)),
+				new VisualOffset(visualEyesBlinkingWithBrows, new Coords(-1, 0, 0).multiplyScalar(visualEyeRadius)),
+				new VisualOffset(visualEyesBlinkingWithBrows, new Coords(0, -1, 0).multiplyScalar(visualEyeRadius))
+			],
+			null
+		);
+
+		var visualEffect = new VisualAnchor
+		(
+			new VisualDynamic
+			(
+				(u: Universe, w: World, d: Display, e: Entity) =>
+					e.effectable().effectsAsVisual()
+			),
+			null, Orientation.Instances().ForwardXDownZ
+		);
+
+		var visualStatusInfo = new VisualOffset
+		(
+			new VisualStack
+			(
+				new Coords(0, 0 - entityDimension, 0), // childSpacing
+				[
+					visualEffect
+				]
+			),
+			new Coords(0, 0 - entityDimension * 2, 0) // offset
+		);
+
+		var visualBody = new VisualAnchor
+		(
+			new VisualPolygon
+			(
+				new Path(enemyVertices),
+				enemyColor,
+				Color.byName("Red") // colorBorder
+			),
+			null, // posToAnchorAt
+			Orientation.Instances().ForwardXDownZ.clone()
+		);
+
+		var visualArms = new VisualDirectional
+		(
+			new VisualNone(),
+			[
+				new VisualGroup
+				([
+					new VisualOffset
+					(
+						enemyVisualArm, new Coords(-enemyDimension / 4, 0, 0)
+					),
+					new VisualOffset
+					(
+						enemyVisualArm, new Coords(enemyDimension / 4, 0, 0)
+					)
+				])
+			],
+			null
+		);
+
+		var enemyVisual = new VisualGroup
+		([
+			visualArms,
+			visualBody,
+			visualEyesWithBrowsDirectional,
+			visualStatusInfo
+		]);
+
+		if (this.parent.visualsHaveText)
+		{
+			enemyVisual.children.push
+			(
+				new VisualOffset
+				(
+					new VisualText(DataBinding.fromContext(enemyTypeName), null, enemyColor, null),
+					new Coords(0, 0 - enemyDimension, 0)
+				)
+			);
+		}
+
+		return enemyVisual;
+	}
+
 	entityDefnBuildEnemyGeneratorChaser(entityDimension: number, damageTypeName: string): Entity
 	{
 		var enemyTypeName = "Chaser";
 		var speedMax = 1;
 		var sizeTopAsFractionOfBottom = .5;
 		var integrityMax = 20;
+		var weapon = null;
 
 		var returnValue = this.entityDefnBuildEnemyGenerator
 		(
@@ -557,7 +581,8 @@ class PlaceBuilderDemo_Movers
 			sizeTopAsFractionOfBottom,
 			damageTypeName,
 			integrityMax,
-			speedMax
+			speedMax,
+			weapon
 		);
 		return returnValue;
 	}
@@ -569,6 +594,7 @@ class PlaceBuilderDemo_Movers
 		var speedMax = 2;
 		var sizeTopAsFractionOfBottom = .5;
 		var integrityMax = 10;
+		var weapon = null;
 
 		var returnValue = this.entityDefnBuildEnemyGenerator
 		(
@@ -577,7 +603,44 @@ class PlaceBuilderDemo_Movers
 			sizeTopAsFractionOfBottom,
 			damageTypeName,
 			integrityMax,
-			speedMax
+			speedMax,
+			weapon
+		);
+		return returnValue;
+	}
+
+	entityDefnBuildEnemyGeneratorShooter(entityDimension: number, damageTypeName: string): Entity
+	{
+		var enemyTypeName = "Shooter";
+		var speedMax = 1;
+		var sizeTopAsFractionOfBottom = 0;
+		var integrityMax = 20;
+		var entityProjectile = new Entity
+		(
+			"Projectile",
+			[
+				new Drawable(new VisualCircle(2, Color.byName("Red"), null, null), true),
+				new Ephemeral(32, null),
+				new Killable(1, null, null),
+				new Locatable(null),
+				new Movable(3, 3, null)
+			]
+		);
+		var weapon = new Weapon
+		(
+			100, // ticksToRecharge
+			entityProjectile
+		);
+
+		var returnValue = this.entityDefnBuildEnemyGenerator
+		(
+			enemyTypeName,
+			entityDimension,
+			sizeTopAsFractionOfBottom,
+			damageTypeName,
+			integrityMax,
+			speedMax,
+			weapon
 		);
 		return returnValue;
 	}
@@ -588,6 +651,7 @@ class PlaceBuilderDemo_Movers
 		var speedMax = .5;
 		var sizeTopAsFractionOfBottom = 1;
 		var integrityMax = 40;
+		var weapon = null;
 
 		var returnValue = this.entityDefnBuildEnemyGenerator
 		(
@@ -596,7 +660,8 @@ class PlaceBuilderDemo_Movers
 			sizeTopAsFractionOfBottom,
 			damageTypeName,
 			integrityMax,
-			speedMax
+			speedMax,
+			weapon
 		);
 		return returnValue;
 	}
@@ -1239,7 +1304,7 @@ class PlaceBuilderDemo_Movers
 		var starvable = new Starvable
 		(
 			100, // satietyMax
-			.004, // satietyToLosePerTick
+			.001, // satietyToLosePerTick
 			(u: Universe, w: World, p: Place, e: Entity) =>
 			{
 				e.killable().integritySubtract(.1);
@@ -1260,6 +1325,7 @@ class PlaceBuilderDemo_Movers
 		var movable = new Movable
 		(
 			0.5, // accelerationPerTick
+			1, // speedMax
 			(universe: Universe, world: World, place: Place, entityMovable: Entity) => // accelerate
 			{
 				var equipmentUser = entityMovable.equipmentUser();
@@ -1380,7 +1446,10 @@ class PlaceBuilderDemo_Movers
 			);
 
 			var tabButtonSize = new Coords(36, 20, 0);
-			var tabPageSize = size.clone().subtract(new Coords(0, tabButtonSize.y + 10, 0));
+			var tabPageSize = size.clone().subtract
+			(
+				new Coords(0, tabButtonSize.y + fontHeight, 0)
+			);
 
 			var itemHolderAsControl = entity.itemHolder().toControl
 			(

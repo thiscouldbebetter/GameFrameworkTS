@@ -47,6 +47,8 @@ class CollisionHelper
 		var boxRotatedName = ( typeof BoxRotated == notDefined ? null : BoxRotated.name );
 		var mapLocatedName = ( typeof MapLocated == notDefined ? null : MapLocated.name );
 		var meshName = ( typeof Mesh == notDefined ? null : Mesh.name );
+		var shapeGroupAllName = (typeof ShapeGroupAll == notDefined ? null : ShapeGroupAll.name);
+		var shapeInverseName = (typeof ShapeInverse == notDefined ? null : ShapeInverse.name);
 		var sphereName = ( typeof Sphere == notDefined ? null : Sphere.name );
 
 		if (boxName != null)
@@ -55,6 +57,8 @@ class CollisionHelper
 			lookup.set(boxName, this.collisionOfBoxAndBox);
 			lookup.set(mapLocatedName, this.collisionOfBoxAndMapLocated);
 			lookup.set(meshName, this.collisionOfBoxAndMesh);
+			lookup.set(shapeGroupAllName, this.collisionOfShapeAndShapeGroupAll);
+			lookup.set(shapeInverseName, this.collisionOfShapeAndShapeInverse);
 			lookup.set(sphereName, this.collisionOfBoxAndSphere);
 			lookupOfLookups.set(boxName, lookup);
 		}
@@ -63,6 +67,7 @@ class CollisionHelper
 		{
 			lookup = new Map<string, any>();
 			lookup.set(boxName, this.collisionOfMapLocatedAndBox);
+			lookup.set(shapeGroupAllName, this.collisionOfShapeAndShapeGroupAll);
 			lookup.set(sphereName, this.collisionOfMapLocatedAndSphere);
 			lookupOfLookups.set(mapLocatedName, lookup);
 		}
@@ -71,8 +76,27 @@ class CollisionHelper
 		{
 			lookup = new Map<string, any>();
 			lookup.set(boxName, this.collisionOfMeshAndBox);
+			lookup.set(shapeGroupAllName, this.collisionOfShapeAndShapeGroupAll);
+			lookup.set(shapeInverseName, this.collisionOfShapeAndShapeInverse);
 			lookup.set(sphereName, this.collisionOfMeshAndSphere);
 			lookupOfLookups.set(meshName, lookup);
+		}
+
+		if (shapeGroupAllName != null)
+		{
+			lookup = new Map<string, any>();
+			lookup.set(boxName, this.collisionOfShapeGroupAllAndShape);
+			lookup.set(sphereName, this.collisionOfShapeGroupAllAndShape);
+			lookupOfLookups.set(shapeGroupAllName, lookup);
+		}
+
+		if (shapeInverseName != null)
+		{
+			lookup = new Map<string, any>();
+			lookup.set(boxName, this.collisionOfShapeInverseAndShape);
+			lookup.set(meshName, this.collisionOfShapeInverseAndShape);
+			lookup.set(sphereName, this.collisionOfShapeInverseAndShape);
+			lookupOfLookups.set(shapeInverseName, lookup);
 		}
 
 		if (sphereName != null)
@@ -82,6 +106,8 @@ class CollisionHelper
 			lookup.set(boxRotatedName, this.collisionOfSphereAndBoxRotated);
 			lookup.set(mapLocatedName, this.collisionOfSphereAndMapLocated);
 			lookup.set(meshName, this.collisionOfSphereAndMesh);
+			lookup.set(shapeGroupAllName, this.collisionOfShapeAndShapeGroupAll);
+			lookup.set(shapeInverseName, this.collisionOfShapeAndShapeInverse);
 			lookup.set(sphereName, this.collisionOfSpheres);
 			lookupOfLookups.set(sphereName, lookup);
 		}
@@ -186,13 +212,17 @@ class CollisionHelper
 
 	collisionOfEntities(entityColliding: Entity, entityCollidedWith: Entity, collisionOut: Collision)
 	{
-		var returnValue;
-
-		collisionOut.isActive = false;
-
 		var collider0 = entityColliding.collidable().collider;
 		var collider1 = entityCollidedWith.collidable().collider;
 
+		return this.collisionOfColliders(collider0, collider1, collisionOut);
+	}
+
+	collisionOfColliders(collider0: any, collider1: any, collisionOut: Collision)
+	{
+		collisionOut.isActive = false;
+
+		// Prevents having to add some composite shapes, for example, Shell.
 		while (collider0.collider != null)
 		{
 			collider0 = collider0.collider();
@@ -227,14 +257,14 @@ class CollisionHelper
 			}
 			else
 			{
-				returnValue = collisionMethod.call
+				collisionMethod.call
 				(
 					this, collider0, collider1, collisionOut
 				);
 			}
 		}
 
-		return returnValue;
+		return collisionOut;
 	}
 
 	collisionsOfEntitiesCollidableInSets(entitiesCollidable0: Entity[], entitiesCollidable1: Entity[])
@@ -843,10 +873,7 @@ class CollisionHelper
 			collisionPos = displacementToSphere.add(rectangleCenter);
 
 			var normals = collision.normals;
-			normals[0].overwriteWith
-			(
-				boxRotated.surfaceNormalNearPos(collision.pos)
-			);
+			boxRotated.normalAtPos(collision.pos, normals[0]);
 			normals[1].overwriteWith(normals[0]).invert();
 
 			var colliders = collision.colliders;
@@ -1161,6 +1188,26 @@ class CollisionHelper
 		// hack
 		var meshBoundsAsBox = mesh.box();
 		return this.collisionOfBoxAndSphere(meshBoundsAsBox, sphere, collision, true); // shouldCalculatePos
+	}
+
+	collisionOfShapeAndShapeGroupAll(shape: any, shapeGroupAll: ShapeGroupAll, collisionOut: Collision)
+	{
+		return this.collisionOfColliders(shape, shapeGroupAll.shapes[0], collisionOut);
+	}
+
+	collisionOfShapeAndShapeInverse(shape: any, shapeInverse: ShapeInverse, collisionOut: Collision)
+	{
+		return collisionOut; // todo
+	}
+
+	collisionOfShapeGroupAllAndShape(shapeGroupAll: ShapeGroupAll, shape: any, collisionOut: Collision)
+	{
+		return this.collisionOfShapeAndShapeGroupAll(shape, shapeGroupAll, collisionOut);
+	}
+
+	collisionOfShapeInverseAndShape(shapeInverse: ShapeInverse, shape: any, collisionOut: Collision)
+	{
+		return this.collisionOfShapeAndShapeInverse(shape, shapeInverse, collisionOut);
 	}
 
 	collisionOfSphereAndBox(sphere: Sphere, box: Box, collision: Collision, shouldCalculatePos: boolean)

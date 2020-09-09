@@ -113,9 +113,9 @@ class SkillLearner extends EntityProperty {
         // Do nothing.
     }
     // controls
-    toControl(universe, sizeIgnored, entity, venueToReturnTo, includeTitle) {
+    toControl(universe, size, entity, venueToReturnTo, includeTitle) {
         var display = universe.display;
-        var size = display.sizeInPixels.clone();
+        //var size = display.sizeInPixels.clone();
         var labelHeight = display.fontHeightInPixels * 1.2;
         var margin = 20;
         var labelHeightLarge = labelHeight * 2;

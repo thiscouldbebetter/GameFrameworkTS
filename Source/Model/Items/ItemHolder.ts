@@ -136,7 +136,8 @@ class ItemHolder extends EntityProperty
 		var entityItemsInPlace = place.items();
 		var entityItemClosest = entityItemsInPlace.filter
 		(
-			x => x.locatable().distanceFromEntity(entityItemHolder) < this.reachRadius
+			x =>
+				x.locatable().distanceFromEntity(entityItemHolder) < this.reachRadius
 		).sort
 		(
 			(a, b) =>

@@ -1,8 +1,9 @@
 "use strict";
 class Movable extends EntityProperty {
-    constructor(accelerationPerTick, accelerate) {
+    constructor(accelerationPerTick, speedMax, accelerate) {
         super();
         this.accelerationPerTick = accelerationPerTick;
+        this.speedMax = speedMax;
         this._accelerate = accelerate || this.accelerateForward;
     }
     accelerate(universe, world, place, entityMovable) {

@@ -33,6 +33,7 @@ class Shell {
         if (distanceFromSphereInner < distanceFromSphereOuter) {
             normalOut.invert();
         }
+        normalOut.normalize();
         return normalOut;
     }
 }

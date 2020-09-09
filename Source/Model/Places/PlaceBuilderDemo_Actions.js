@@ -78,8 +78,12 @@ class PlaceBuilderDemo_Actions {
                     var activity = actor.activity;
                     if (activity.defnName == ActivityDefn.Instances().Simultaneous.name) {
                         var childActivities = activity.target;
-                        var activityPickUp = new Activity("ItemPickUp", itemEntityToPickUp);
-                        childActivities.push(activityPickUp);
+                        var activityDefnName = "ItemPickUp";
+                        var activityPickUpExists = childActivities.some(x => x.defnName == activityDefnName);
+                        if (activityPickUpExists == false) {
+                            var activityPickUp = new Activity(activityDefnName, itemEntityToPickUp);
+                            childActivities.push(activityPickUp);
+                        }
                     }
                 }
                 else {
@@ -192,9 +196,11 @@ class PlaceBuilderDemo_Actions {
             var itemEntityGettingPickedUp = activity.target;
             var entityPickingUpLocatable = entityPickingUp.locatable();
             var itemLocatable = itemEntityGettingPickedUp.locatable();
-            var distance = itemLocatable.approachOtherWithAccelerationAndSpeedMaxToDistance(entityPickingUpLocatable, .5, 4, 1);
+            var distance = itemLocatable.approachOtherWithAccelerationAndSpeedMax //ToDistance
+            (entityPickingUpLocatable, .5, 4 //, 1
+            );
             itemLocatable.loc.orientation.default(); // hack
-            if (distance == 0) {
+            if (distance < 1) {
                 activity.isDone = true;
                 var itemHolder = entityPickingUp.itemHolder();
                 itemHolder.itemEntityPickUp(universe, world, place, entityPickingUp, itemEntityGettingPickedUp);

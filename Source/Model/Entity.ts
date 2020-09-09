@@ -99,6 +99,8 @@ class Entity
 
 	equippable(): Equippable { return this.propertiesByName.get(Equippable.name) as Equippable; }
 
+	enemy(): Enemy { return this.propertiesByName.get(Enemy.name) as Enemy; }
+
 	item(): Item { return this.propertiesByName.get(Item.name) as Item; }
 
 	itemContainer(): ItemContainer { return this.propertiesByName.get(ItemContainer.name) as ItemContainer; }

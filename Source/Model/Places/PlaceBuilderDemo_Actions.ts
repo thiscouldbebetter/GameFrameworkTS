@@ -149,8 +149,16 @@ class PlaceBuilderDemo_Actions
 						if (activity.defnName == ActivityDefn.Instances().Simultaneous.name)
 						{
 							var childActivities = activity.target as Activity[];
-							var activityPickUp = new Activity("ItemPickUp", itemEntityToPickUp);
-							childActivities.push(activityPickUp);
+							var activityDefnName = "ItemPickUp";
+							var activityPickUpExists = childActivities.some
+							(
+								x => x.defnName == activityDefnName
+							);
+							if (activityPickUpExists == false)
+							{
+								var activityPickUp = new Activity(activityDefnName, itemEntityToPickUp);
+								childActivities.push(activityPickUp);
+							}
 						}
 					}
 					else
@@ -319,13 +327,13 @@ class PlaceBuilderDemo_Actions
 
 				var itemLocatable = itemEntityGettingPickedUp.locatable();
 				var distance =
-					itemLocatable.approachOtherWithAccelerationAndSpeedMaxToDistance
+					itemLocatable.approachOtherWithAccelerationAndSpeedMax //ToDistance
 					(
-						entityPickingUpLocatable, .5, 4, 1
+						entityPickingUpLocatable, .5, 4 //, 1
 					);
 				itemLocatable.loc.orientation.default(); // hack
 
-				if (distance == 0)
+				if (distance < 1)
 				{
 					activity.isDone = true;
 

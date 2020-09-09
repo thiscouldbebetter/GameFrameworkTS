@@ -52,6 +52,8 @@ Fixes
 
 Controls - ControlTabbed - Mouse Support
 
+Emplacements - Ring Obstacle Collisions Not Working
+
 Items - Bowstring Direction Doesn't Change with Player
 
 Places - Map Tiles - Fix Overlapping

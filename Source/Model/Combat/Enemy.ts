@@ -1,6 +1,14 @@
 
 class Enemy extends EntityProperty
 {
+	weapon: Weapon;
+
+	constructor(weapon: Weapon)
+	{
+		super();
+		this.weapon = weapon;
+	}
+
 	static activityDefnBuild()
 	{
 		var enemyActivityPerform =
@@ -15,22 +23,21 @@ class Enemy extends EntityProperty
 			);
 
 			var displacement = new Coords(0, 0, 0);
+			var sortClosest = (a: Entity, b: Entity) =>
+				displacement.overwriteWith
+				(
+					a.locatable().loc.pos
+				).subtract
+				(
+					b.locatable().loc.pos
+				).magnitude();
+
 			var targetPreferredInSight = targetsPreferred.filter
 			(
 				x =>
 					x.perceptible() == null
 					|| x.perceptible().canBeSeen(universe, world, place, x, actor)
-			).sort
-			(
-				(a, b) =>
-					displacement.overwriteWith
-					(
-						a.locatable().loc.pos
-					).subtract
-					(
-						b.locatable().loc.pos
-					).magnitude()
-			)[0];
+			).sort(sortClosest)[0];
 
 			var targetPosToApproach;
 
@@ -46,17 +53,7 @@ class Enemy extends EntityProperty
 					x =>
 						x.perceptible() == null
 						|| x.perceptible().canBeHeard(universe, world, place, x, actor)
-				).sort
-				(
-					(a, b) =>
-						displacement.overwriteWith
-						(
-							a.locatable().loc.pos
-						).subtract
-						(
-							b.locatable().loc.pos
-						).magnitude()
-				)[0];
+				).sort(sortClosest)[0];
 
 				if (targetPreferredInHearing != null)
 				{
@@ -82,12 +79,16 @@ class Enemy extends EntityProperty
 
 			// hack
 			var targetLocatable = new Locatable(new Disposition(targetPosToApproach, null, null));
-			var distanceToTarget = actorLocatable.approachOtherWithAccelerationAndSpeedMaxToDistance
+
+			var enemy = actor.enemy();
+			var weapon = enemy.weapon;
+			var distanceToApproach = (weapon == null ? 4 : weapon.range);
+			var distanceToTarget = actorLocatable.approachOtherWithAccelerationAndSpeedMax //ToDistance
 			(
-				targetLocatable, .1, 1, 4
+				targetLocatable, .1, 1 //, distanceToApproach
 			);
 
-			if (distanceToTarget == 0)
+			if (distanceToTarget <= distanceToApproach)
 			{
 				activity.target = null;
 			}
