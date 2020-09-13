@@ -30,11 +30,11 @@ class ControlVisual extends ControlBase {
         return this;
     }
     // drawable
-    draw(universe, display, drawLoc) {
+    draw(universe, display, drawLoc, style) {
         var visualToDraw = this.visual.get();
         if (visualToDraw != null) {
             var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
-            var style = this.style(universe);
+            var style = style || this.style(universe);
             var colorFill = this.colorBackground || Color.Instances()._Transparent;
             var colorBorder = this.colorBorder || style.colorBorder;
             display.drawRectangle(drawPos, this.size, Color.systemColorGet(colorFill), Color.systemColorGet(colorBorder), null);

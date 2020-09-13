@@ -60,13 +60,13 @@ class ControlVisual extends ControlBase
 
 	// drawable
 
-	draw(universe: Universe, display: Display, drawLoc: Disposition)
+	draw(universe: Universe, display: Display, drawLoc: Disposition, style: ControlStyle)
 	{
 		var visualToDraw = this.visual.get();
 		if (visualToDraw != null)
 		{
 			var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
-			var style = this.style(universe);
+			var style = style || this.style(universe);
 
 			var colorFill = this.colorBackground || Color.Instances()._Transparent;
 			var colorBorder = this.colorBorder || style.colorBorder;

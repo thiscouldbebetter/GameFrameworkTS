@@ -18,8 +18,8 @@ class VisualControl implements Visual
 		var display = universe.display;
 		var drawLoc = this._drawLoc;
 		drawLoc.pos.clear();
-		this.controlRoot.draw(universe, display, drawLoc);
-	};
+		this.controlRoot.draw(universe, display, drawLoc, null);
+	}
 
 	// Clonable.
 

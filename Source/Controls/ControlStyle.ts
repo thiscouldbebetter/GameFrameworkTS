@@ -24,12 +24,21 @@ class ControlStyle
 			ControlStyle._instances = new ControlStyle_Instances();
 		}
 		return ControlStyle._instances;
-	};
+	}
+	
+	static byName(styleName: string)
+	{
+		return ControlStyle.Instances()._AllByName.get(styleName);
+	}
 }
 
 class ControlStyle_Instances
 {
 	Default: ControlStyle;
+	Dark: ControlStyle;
+
+	_All: ControlStyle[];
+	_AllByName: Map<string, ControlStyle>;
 
 	constructor()
 	{
@@ -41,5 +50,18 @@ class ControlStyle_Instances
 			Color.byName("Gray"), // colorBorder
 			Color.byName("GrayLight") // colorDisabled
 		);
+
+		this.Dark = new ControlStyle
+		(
+			"Dark", // name
+			Color.byName("GrayDark"), // colorBackground
+			Color.byName("Black"), // colorFill
+			Color.byName("White"), // colorBorder
+			Color.byName("GrayLight") // colorDisabled
+		);
+		
+		this._All = [ this.Default, this.Dark ];
+
+		this._AllByName = ArrayHelper.addLookupsByName(this._All);
 	}
 }

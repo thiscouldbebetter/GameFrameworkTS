@@ -96,7 +96,9 @@ class Color_Instances {
         this.Cyan = new Color("Cyan", "c", [0, 1, 1, 1]);
         this.Gray = new Color("Gray", "a", [0.5, 0.5, 0.5, 1]);
         this.GrayDark = new Color("GrayDark", "A", [0.25, 0.25, 0.25, 1]);
+        this.GrayDarker = new Color("GrayDarker", "#", [0.125, 0.125, 0.125, 1]);
         this.GrayLight = new Color("GrayLight", "@", [0.75, 0.75, 0.75, 1]);
+        this.GrayLighter = new Color("GrayLighter", "-", [0.825, 0.825, 0.825, 1]);
         this.Green = new Color("Green", "g", [0, 1, 0, 1]);
         this.GreenDark = new Color("GreenDark", "G", [0, .5, 0, 1]);
         this.Orange = new Color("Orange", "o", [1, 0.5, 0, 1]);
@@ -118,7 +120,9 @@ class Color_Instances {
                 this.Cyan,
                 this.Gray,
                 this.GrayDark,
+                this.GrayDarker,
                 this.GrayLight,
+                this.GrayLighter,
                 this.Green,
                 this.GreenDark,
                 this.Orange,

@@ -67,7 +67,12 @@ class Locatable extends EntityProperty
 
 	distanceFromEntity(entity: Entity)
 	{
-		return this.loc.pos.clone().subtract(entity.locatable().loc.pos).magnitude();
+		return this.distanceFromPos(entity.locatable().loc.pos);
+	}
+
+	distanceFromPos(posToCheck: Coords)
+	{
+		return this.loc.pos.clone().subtract(posToCheck).magnitude();
 	}
 
 	entitySpawnWithDefnName(universe: Universe, world: World, place: Place, entitySpawning: Entity, entityToSpawnDefnName: string)
@@ -98,12 +103,12 @@ class Locatable extends EntityProperty
 		{
 			loc.spin.transformOrientation(loc.orientation);
 		}
-	};
+	}
 
 	// Clonable.
 
 	clone()
 	{
 		return new Locatable(this.loc.clone());
-	};
+	}
 }

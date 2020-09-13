@@ -57,6 +57,7 @@ class Entity {
     damager() { return this.propertiesByName.get(Damager.name); }
     device() { return this.propertiesByName.get(Device.name); }
     drawable() { return this.propertiesByName.get(Drawable.name); }
+    drawableCamera() { return this.propertiesByName.get(DrawableCamera.name); }
     effectable() { return this.propertiesByName.get(Effectable.name); }
     ephemeral() { return this.propertiesByName.get(Ephemeral.name); }
     equipmentUser() { return this.propertiesByName.get(EquipmentUser.name); }
@@ -78,6 +79,7 @@ class Entity {
     perceptor() { return this.propertiesByName.get(Perceptor.name); }
     playable() { return this.propertiesByName.get(Playable.name); }
     portal() { return this.propertiesByName.get(Portal.name); }
+    selector() { return this.propertiesByName.get(Selector.name); }
     skillLearner() { return this.propertiesByName.get(SkillLearner.name); }
     starvable() { return this.propertiesByName.get(Starvable.name); }
     talker() { return this.propertiesByName.get(Talker.name); }

@@ -33,7 +33,6 @@ class ControlList extends ControlBase {
         null, null);
         return returnValue;
     }
-    ;
     static fromPosSizeItemsAndBindingForItemText(pos, size, items, bindingForItemText) {
         var returnValue = new ControlList("", // name,
         pos, size, items, bindingForItemText, 10, // fontHeightInPixels,
@@ -43,7 +42,6 @@ class ControlList extends ControlBase {
         null, null);
         return returnValue;
     }
-    ;
     actionHandle(actionNameToHandle, universe) {
         var wasActionHandled = false;
         var controlActionNames = ControlActionNames.Instances();
@@ -63,15 +61,12 @@ class ControlList extends ControlBase {
         }
         return wasActionHandled;
     }
-    ;
     indexOfFirstItemVisible() {
         return this.indexOfFirstRowVisible() * this.widthInItems;
     }
-    ;
     indexOfFirstRowVisible() {
         return this.scrollbar.sliderPosInItems();
     }
-    ;
     indexOfItemSelected(valueToSet) {
         var returnValue = valueToSet;
         var items = this.items();
@@ -87,21 +82,17 @@ class ControlList extends ControlBase {
         }
         return returnValue;
     }
-    ;
     indexOfLastItemVisible() {
         return this.indexOfLastRowVisible() * this.widthInItems;
     }
-    ;
     indexOfLastRowVisible() {
         var rowCountVisible = Math.floor(this.scrollbar.windowSizeInItems) - 1;
         var returnValue = this.indexOfFirstRowVisible() + rowCountVisible;
         return returnValue;
     }
-    ;
     isEnabled() {
         return (this.bindingForIsEnabled == null ? true : this.bindingForIsEnabled.get());
     }
-    ;
     itemSelected(itemToSet) {
         var returnValue = itemToSet;
         if (itemToSet == null) {
@@ -121,7 +112,6 @@ class ControlList extends ControlBase {
         }
         return returnValue;
     }
-    ;
     itemSelectedNextInDirection(direction) {
         var items = this.items();
         var numberOfItems = items.length;
@@ -153,16 +143,13 @@ class ControlList extends ControlBase {
         var returnValue = this.itemSelected(null);
         return returnValue;
     }
-    ;
     itemSpacing() {
         var scrollbarWidthVisible = (this.scrollbar.isVisible() ? this.scrollbar.size.x : 0);
         return this._itemSpacing.overwriteWithDimensions((this.size.x - scrollbarWidthVisible) / this.widthInItems, this._itemSpacing.y, 0);
     }
-    ;
     items() {
         return (this._items.get == null ? this._items : this._items.get());
     }
-    ;
     mouseClick(clickPos) {
         clickPos = this._mouseClickPos.overwriteWith(clickPos);
         var isClickPosInScrollbar = (clickPos.x - this.pos.x > this.size.x - this.scrollbar.handleSize.x);
@@ -194,7 +181,6 @@ class ControlList extends ControlBase {
         }
         return true; // wasActionHandled
     }
-    ;
     mouseEnter() { }
     mouseExit() { }
     mouseMove(movePos) { }
@@ -205,12 +191,11 @@ class ControlList extends ControlBase {
         this._itemSpacing.multiply(scaleFactor);
         this.scrollbar.scalePosAndSize(scaleFactor);
     }
-    ;
     // drawable
-    draw(universe, display, drawLoc) {
+    draw(universe, display, drawLoc, style) {
         drawLoc = this._drawLoc.overwriteWith(drawLoc);
         var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
-        var style = this.style(universe);
+        var style = style || this.style(universe);
         var colorFore = (this.isHighlighted ? style.colorFill : style.colorBorder);
         var colorBack = (this.isHighlighted ? style.colorBorder : style.colorFill);
         display.drawRectangle(drawPos, this.size, Color.systemColorGet(colorBack), // fill
@@ -245,7 +230,6 @@ class ControlList extends ControlBase {
             this.size.x // widthMaxInPixels
             );
         }
-        this.scrollbar.draw(universe, display, drawLoc);
+        this.scrollbar.draw(universe, display, drawLoc, style);
     }
-    ;
 }

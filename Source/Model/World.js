@@ -40,6 +40,7 @@ class World {
             SkillLearner.name,
             Perceptible.name,
             Recurrent.name,
+            Selector.name,
             Vehicle.name,
             Ephemeral.name,
             Killable.name,

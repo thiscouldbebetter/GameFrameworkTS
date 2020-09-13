@@ -13,7 +13,7 @@ class DrawableCamera extends EntityProperty
 				visual, (u: Universe, w: World) => w.placeCurrent.camera() 
 			)
 		}
-	};
+	}
 
 	// cloneable
 

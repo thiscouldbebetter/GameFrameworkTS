@@ -215,15 +215,15 @@ class ControlContainer extends ControlBase {
         return new VenueFader(new VenueControls(this, false), null, null, null);
     }
     // drawable
-    draw(universe, display, drawLoc) {
+    draw(universe, display, drawLoc, style) {
         drawLoc = this._drawLoc.overwriteWith(drawLoc);
         var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
-        var style = this.style(universe);
+        style = style || this.style(universe);
         display.drawRectangle(drawPos, this.size, Color.systemColorGet(style.colorBackground), Color.systemColorGet(style.colorBorder), null);
         var children = this.children;
         for (var i = 0; i < children.length; i++) {
             var child = children[i];
-            child.draw(universe, display, drawLoc);
+            child.draw(universe, display, drawLoc, style);
         }
     }
 }

@@ -5,7 +5,11 @@ class ControlContainerTransparent extends ControlBase
 
 	constructor(containerInner: ControlContainer)
 	{
-		super(containerInner.name, containerInner.pos, containerInner.size, containerInner.fontHeightInPixels);
+		super
+		(
+			containerInner.name, containerInner.pos, containerInner.size,
+			containerInner.fontHeightInPixels
+		);
 		this.containerInner = containerInner;
 	}
 
@@ -14,17 +18,17 @@ class ControlContainerTransparent extends ControlBase
 	actionToInputsMappings()
 	{
 		return this.containerInner.actionToInputsMappings();
-	};
+	}
 
 	childWithFocus()
 	{
 		return this.containerInner.childWithFocus();
-	};
+	}
 
 	childWithFocusNextInDirection(direction: number)
 	{
 		return this.containerInner.childWithFocusNextInDirection(direction);
-	};
+	}
 
 	childrenAtPosAddToList
 	(
@@ -35,12 +39,12 @@ class ControlContainerTransparent extends ControlBase
 		(
 			posToCheck, listToAddTo, addFirstChildOnly
 		);
-	};
+	}
 
 	actionHandle(actionNameToHandle: string, universe: Universe)
 	{
 		return this.containerInner.actionHandle(actionNameToHandle, universe);
-	};
+	}
 
 	isEnabled()
 	{
@@ -71,40 +75,47 @@ class ControlContainerTransparent extends ControlBase
 		}
 
 		return wasClickHandled;
-	};
+	}
 
 	mouseMove(mouseMovePos: Coords)
 	{
 		this.containerInner.mouseMove(mouseMovePos);
-	};
+	}
 
 	scalePosAndSize(scaleFactor: Coords)
 	{
 		return this.containerInner.scalePosAndSize(scaleFactor);
-	};
+	}
 
 	// drawable
 
-	draw(universe: Universe, display: Display, drawLoc: Disposition)
+	draw(universe: Universe, display: Display, drawLoc: Disposition, style: ControlStyle)
 	{
+		if (this.isVisible() == false)
+		{
+			return;
+		}
+
 		drawLoc = this.containerInner._drawLoc.overwriteWith(drawLoc);
 		var drawPos = this.containerInner._drawPos.overwriteWith(drawLoc.pos).add
 		(
 			this.containerInner.pos
 		);
+		
+		style = style || this.style(universe);
 
 		display.drawRectangle
 		(
 			drawPos, this.containerInner.size,
 			null, // display.colorBack,
-			display.colorFore, null
+			Color.systemColorGet(style.colorBorder), null
 		);
 
 		var children = this.containerInner.children;
 		for (var i = 0; i < children.length; i++)
 		{
 			var child = children[i];
-			child.draw(universe, display, drawLoc);
+			child.draw(universe, display, drawLoc, style);
 		}
-	};
+	}
 }

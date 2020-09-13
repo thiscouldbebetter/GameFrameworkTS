@@ -87,11 +87,9 @@ class ControlTabbed extends ControlBase {
         }
         return wasActionHandled;
     }
-    ;
     childSelected() {
         return (this.childSelectedIndex == null ? null : this.children[this.childSelectedIndex]);
     }
-    ;
     childSelectNextInDirection(direction) {
         while (true) {
             this.childSelectedIndex += direction;
@@ -110,7 +108,6 @@ class ControlTabbed extends ControlBase {
         var returnValue = this.childSelected();
         return returnValue;
     }
-    ;
     childWithFocus() {
         return this.childSelected();
     }
@@ -135,7 +132,6 @@ class ControlTabbed extends ControlBase {
         }
         return listToAddTo;
     }
-    ;
     focusGain() {
         this.childSelectedIndex = null;
         var childSelected = this.childSelectNextInDirection(1);
@@ -143,7 +139,6 @@ class ControlTabbed extends ControlBase {
             childSelected.focusGain();
         }
     }
-    ;
     focusLose() {
         var childSelected = this.childSelected();
         if (childSelected != null) {
@@ -151,7 +146,6 @@ class ControlTabbed extends ControlBase {
             this.childSelectedIndex = null;
         }
     }
-    ;
     mouseClick(mouseClickPos) {
         var mouseClickPos = this._mouseClickPos.overwriteWith(mouseClickPos).subtract(this.pos);
         var wasClickHandled = false;
@@ -179,7 +173,6 @@ class ControlTabbed extends ControlBase {
         }
         return wasClickHandled;
     }
-    ;
     mouseEnter() { }
     mouseExit() { }
     mouseMove(mouseMovePos) {
@@ -196,7 +189,6 @@ class ControlTabbed extends ControlBase {
         }
         return wasMoveHandled;
     }
-    ;
     scalePosAndSize(scaleFactor) {
         this.pos.multiply(scaleFactor);
         this.size.multiply(scaleFactor);
@@ -219,7 +211,7 @@ class ControlTabbed extends ControlBase {
         return new VenueFader(new VenueControls(this, false), null, null, null);
     }
     // drawable
-    draw(universe, display, drawLoc) {
+    draw(universe, display, drawLoc, style) {
         drawLoc = this._drawLoc.overwriteWith(drawLoc);
         var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
         var style = this.style(universe);
@@ -233,8 +225,7 @@ class ControlTabbed extends ControlBase {
         ;
         var child = this.childSelected();
         if (child != null) {
-            child.draw(universe, display, drawLoc);
+            child.draw(universe, display, drawLoc, style);
         }
     }
-    ;
 }

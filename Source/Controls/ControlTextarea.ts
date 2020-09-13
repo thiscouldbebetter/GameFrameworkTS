@@ -278,12 +278,12 @@ class ControlTextarea extends ControlBase
 
 	// drawable
 
-	draw(universe: Universe, display: Display, drawLoc: Disposition)
+	draw(universe: Universe, display: Display, drawLoc: Disposition, style: ControlStyle)
 	{
 		drawLoc = this._drawLoc.overwriteWith(drawLoc);
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 
-		var style = this.style(universe);
+		var style = style || this.style(universe);
 		var colorFore = (this.isHighlighted ? style.colorFill : style.colorBorder);
 		var colorBack = (this.isHighlighted ? style.colorBorder : style.colorFill);
 
@@ -345,6 +345,6 @@ class ControlTextarea extends ControlBase
 			drawPos2.y += itemSizeY;
 		}
 
-		this.scrollbar.draw(universe, display, drawLoc);
+		this.scrollbar.draw(universe, display, drawLoc, style);
 	}
 }

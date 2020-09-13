@@ -373,11 +373,11 @@ class ControlContainer extends ControlBase
 
 	// drawable
 
-	draw(universe: Universe, display: Display, drawLoc: Disposition)
+	draw(universe: Universe, display: Display, drawLoc: Disposition, style: ControlStyle)
 	{
 		drawLoc = this._drawLoc.overwriteWith(drawLoc);
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
-		var style = this.style(universe);
+		style = style || this.style(universe);
 
 		display.drawRectangle
 		(
@@ -391,7 +391,7 @@ class ControlContainer extends ControlBase
 		for (var i = 0; i < children.length; i++)
 		{
 			var child = children[i];
-			child.draw(universe, display, drawLoc);
+			child.draw(universe, display, drawLoc, style);
 		}
 	}
 }

@@ -44,9 +44,9 @@ class VenueControls {
         var display = universe.display;
         var drawLoc = this._drawLoc;
         drawLoc.pos.clear();
-        this.controlRoot.draw(universe, display, drawLoc);
+        var styleOverrideNone = null;
+        this.controlRoot.draw(universe, display, drawLoc, styleOverrideNone);
     }
-    ;
     finalize(universe) { }
     initialize(universe) { }
     updateForTimerTick(universe) {
@@ -92,5 +92,4 @@ class VenueControls {
             } // end if isActive
         } // end for
     }
-    ; // end method
-} // end class
+}

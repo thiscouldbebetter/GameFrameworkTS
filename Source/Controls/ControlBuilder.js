@@ -210,21 +210,22 @@ class ControlBuilder {
         }
         var scaleMultiplier = this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
         var fontHeight = this.fontHeightInPixelsBase;
+        var buttonWidth = 40;
         var buttonHeight = this.buttonHeightBase;
         var padding = 5;
-        var rowCount = 3;
+        var rowCount = (includeResumeButton ? 3 : 2);
         var rowHeight = buttonHeight + padding;
         var buttonsAllHeight = rowCount * buttonHeight + (rowCount - 1) * padding;
-        var margin = (this.sizeBase.y - buttonsAllHeight) / 2;
-        var row0PosY = margin;
+        var margin = new Coords((this.sizeBase.x - buttonWidth) / 2, (this.sizeBase.y - buttonsAllHeight) / 2, 0);
+        var row0PosY = margin.y;
         var row1PosY = row0PosY + rowHeight;
         var row2PosY = row1PosY + rowHeight;
         var returnValue = new ControlContainer("Game", this._zeroes.clone(), // pos
         this.sizeBase.clone(), 
         // children
         [
-            new ControlButton("buttonGame", new Coords(70, row0PosY, 0), // pos
-            new Coords(60, buttonHeight, 0), // size
+            new ControlButton("buttonGame", new Coords(margin.x, row0PosY, 0), // pos
+            new Coords(buttonWidth, buttonHeight, 0), // size
             "Game", fontHeight, true, // hasBorder
             true, // isEnabled
             () => // click
@@ -233,8 +234,8 @@ class ControlBuilder {
                 venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
                 universe.venueNext = venueNext;
             }, null, null),
-            new ControlButton("buttonSettings", new Coords(70, row1PosY, 0), // pos
-            new Coords(60, buttonHeight, 0), // size
+            new ControlButton("buttonSettings", new Coords(margin.x, row1PosY, 0), // pos
+            new Coords(buttonWidth, buttonHeight, 0), // size
             "Settings", fontHeight, true, // hasBorder
             true, // isEnabled
             () => // click
@@ -252,8 +253,8 @@ class ControlBuilder {
                 venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
                 universe.venueNext = venueNext;
             };
-            var buttonResume = new ControlButton("buttonResume", new Coords(70, row2PosY, 0), // pos
-            new Coords(60, buttonHeight, 0), // size
+            var buttonResume = new ControlButton("buttonResume", new Coords(margin.x, row2PosY, 0), // pos
+            new Coords(buttonWidth, buttonHeight, 0), // size
             "Resume", fontHeight, true, // hasBorder
             true, // isEnabled
             back, null, null);

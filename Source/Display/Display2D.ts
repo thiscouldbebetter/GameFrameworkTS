@@ -697,6 +697,7 @@ class Display2D implements Display
 
 			this.canvas.width = this.sizeInPixels.x;
 			this.canvas.height = this.sizeInPixels.y;
+			this.canvas.oncontextmenu = () => false;
 
 			this.graphics = this.canvas.getContext("2d");
 

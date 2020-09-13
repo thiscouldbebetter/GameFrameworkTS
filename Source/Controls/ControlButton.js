@@ -35,12 +35,12 @@ class ControlButton extends ControlBase {
         this.fontHeightInPixels *= scaleFactor.y;
     }
     // drawable
-    draw(universe, display, drawLoc) {
+    draw(universe, display, drawLoc, style) {
         var drawPos = this._drawLoc.overwriteWith(drawLoc).pos;
         drawPos.add(this.pos);
         var isEnabled = this.isEnabled();
         var isHighlighted = this.isHighlighted && isEnabled;
-        var style = this.style(universe);
+        style = style || this.style(universe);
         var colorFill = style.colorFill;
         var colorBorder = style.colorBorder;
         if (this.hasBorder) {

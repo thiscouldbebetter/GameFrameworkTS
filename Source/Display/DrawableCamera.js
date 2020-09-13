@@ -8,7 +8,6 @@ class DrawableCamera extends EntityProperty {
             drawable.visual = new VisualCameraProjection(visual, (u, w) => w.placeCurrent.camera());
         }
     }
-    ;
     // cloneable
     clone() {
         return this;

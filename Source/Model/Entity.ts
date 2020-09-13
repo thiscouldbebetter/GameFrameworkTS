@@ -91,6 +91,8 @@ class Entity
 
 	drawable(): Drawable { return this.propertiesByName.get(Drawable.name) as Drawable; }
 
+	drawableCamera(): DrawableCamera { return this.propertiesByName.get(DrawableCamera.name) as DrawableCamera; }
+
 	effectable() : Effectable { return this.propertiesByName.get(Effectable.name) as Effectable; }
 
 	ephemeral(): Ephemeral { return this.propertiesByName.get(Ephemeral.name) as Ephemeral; }
@@ -133,6 +135,8 @@ class Entity
 
 	portal(): Portal { return this.propertiesByName.get(Portal.name) as Portal; }
 
+	selector(): Selector { return this.propertiesByName.get(Selector.name) as Selector; }
+	
 	skillLearner(): SkillLearner { return this.propertiesByName.get(SkillLearner.name) as SkillLearner; }
 
 	starvable(): Starvable { return this.propertiesByName.get(Starvable.name) as Starvable; }

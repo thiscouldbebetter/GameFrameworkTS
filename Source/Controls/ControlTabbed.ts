@@ -158,12 +158,12 @@ class ControlTabbed extends ControlBase
 		}
 
 		return wasActionHandled;
-	};
+	}
 
 	childSelected()
 	{
 		return (this.childSelectedIndex == null ? null : this.children[this.childSelectedIndex] );
-	};
+	}
 
 	childSelectNextInDirection(direction: number)
 	{
@@ -203,7 +203,7 @@ class ControlTabbed extends ControlBase
 		var returnValue = this.childSelected();
 
 		return returnValue;
-	};
+	}
 
 	childWithFocus()
 	{
@@ -246,7 +246,7 @@ class ControlTabbed extends ControlBase
 		}
 
 		return listToAddTo;
-	};
+	}
 
 	focusGain()
 	{
@@ -256,7 +256,7 @@ class ControlTabbed extends ControlBase
 		{
 			childSelected.focusGain();
 		}
-	};
+	}
 
 	focusLose()
 	{
@@ -266,7 +266,7 @@ class ControlTabbed extends ControlBase
 			childSelected.focusLose();
 			this.childSelectedIndex = null;
 		}
-	};
+	}
 
 	mouseClick(mouseClickPos: Coords)
 	{
@@ -315,7 +315,7 @@ class ControlTabbed extends ControlBase
 		}
 
 		return wasClickHandled;
-	};
+	}
 
 	mouseEnter() {}
 	mouseExit() {}
@@ -345,7 +345,7 @@ class ControlTabbed extends ControlBase
 		}
 
 		return wasMoveHandled;
-	};
+	}
 
 	scalePosAndSize(scaleFactor: Coords)
 	{
@@ -380,7 +380,7 @@ class ControlTabbed extends ControlBase
 
 	// drawable
 
-	draw(universe: Universe, display: Display, drawLoc: Disposition)
+	draw(universe: Universe, display: Display, drawLoc: Disposition, style: ControlStyle)
 	{
 		drawLoc = this._drawLoc.overwriteWith(drawLoc);
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
@@ -405,7 +405,7 @@ class ControlTabbed extends ControlBase
 		var child = this.childSelected();
 		if (child != null)
 		{
-			child.draw(universe, display, drawLoc);
+			child.draw(universe, display, drawLoc, style);
 		}
-	};
+	}
 }

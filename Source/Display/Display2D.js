@@ -370,6 +370,7 @@ class Display2D {
             this.canvas = document.createElement("canvas");
             this.canvas.width = this.sizeInPixels.x;
             this.canvas.height = this.sizeInPixels.y;
+            this.canvas.oncontextmenu = () => false;
             this.graphics = this.canvas.getContext("2d");
             this.fontSet(null, this.fontHeightInPixels);
             // todo

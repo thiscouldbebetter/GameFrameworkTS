@@ -65,10 +65,10 @@ class ControlLabel extends ControlBase
 
 	// drawable
 
-	draw(universe: Universe, display: Display, drawLoc: Disposition)
+	draw(universe: Universe, display: Display, drawLoc: Disposition, style: ControlStyle)
 	{
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
-		var style = this.style(universe);
+		var style = style || this.style(universe);
 		var text = this.text();
 
 		if (text != null)

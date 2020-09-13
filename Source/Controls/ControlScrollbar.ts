@@ -156,11 +156,11 @@ class ControlScrollbar extends ControlBase
 
 	// drawable
 
-	draw(universe: Universe, display: Display, drawLoc: Disposition)
+	draw(universe: Universe, display: Display, drawLoc: Disposition, style: ControlStyle)
 	{
 		if (this.isVisible())
 		{
-			var style = this.style(universe);
+			style = style || this.style(universe);
 			var colorFore = (this.isHighlighted ? style.colorFill : style.colorBorder);
 			var colorBack = (this.isHighlighted ? style.colorBorder : style.colorFill);
 
@@ -168,17 +168,16 @@ class ControlScrollbar extends ControlBase
 			display.drawRectangle(drawPos, this.size, Color.systemColorGet(colorFore), null, null);
 
 			drawLoc.pos.add(this.pos);
-			this.buttonScrollDown.draw(universe, display, drawLoc);
-			this.buttonScrollUp.draw(universe, display, drawLoc);
+			this.buttonScrollDown.draw(universe, display, drawLoc, style);
+			this.buttonScrollUp.draw(universe, display, drawLoc, style);
 
 			var sliderPosInPixels = this.sliderPosInPixels().add(drawPos);
 			var sliderSizeInPixels = this.sliderSizeInPixels();
 
 			display.drawRectangle
 			(
-				sliderPosInPixels,
-				sliderSizeInPixels,
-				Color.systemColorGet(colorBack),
+				sliderPosInPixels, sliderSizeInPixels,
+				Color.systemColorGet(colorBack), 
 				Color.systemColorGet(colorFore),
 				null
 			);

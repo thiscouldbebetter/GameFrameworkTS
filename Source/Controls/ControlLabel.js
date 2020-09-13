@@ -33,9 +33,9 @@ class ControlLabel extends ControlBase {
         return (this._text.get == null ? this._text : this._text.get());
     }
     // drawable
-    draw(universe, display, drawLoc) {
+    draw(universe, display, drawLoc, style) {
         var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
-        var style = this.style(universe);
+        var style = style || this.style(universe);
         var text = this.text();
         if (text != null) {
             var textAsLines = ("" + text).split("\n");

@@ -119,7 +119,8 @@ class SkillLearner extends EntityProperty {
         var labelHeight = display.fontHeightInPixels * 1.2;
         var margin = 20;
         var labelHeightLarge = labelHeight * 2;
-        var listSize = new Coords((size.x - margin * 3) / 2, 150, 0); // size
+        size = size.clone().add(new Coords(0, 30, 0)); // hack
+        var listSize = new Coords((size.x - margin * 3) / 2, 150, 0);
         var defns = universe.world.defn;
         var skillsAll = defns.defnArraysByTypeName.get(Skill.name); // todo - Just use the -ByName lookup.
         var skillsAllByName = defns.defnsByNameByTypeName.get(Skill.name);

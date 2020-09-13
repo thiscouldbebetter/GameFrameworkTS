@@ -65,7 +65,7 @@ class ControlButton extends ControlBase
 
 	// drawable
 
-	draw(universe: Universe, display: Display, drawLoc: Disposition)
+	draw(universe: Universe, display: Display, drawLoc: Disposition, style: ControlStyle)
 	{
 		var drawPos = this._drawLoc.overwriteWith(drawLoc).pos;
 		drawPos.add(this.pos);
@@ -73,7 +73,7 @@ class ControlButton extends ControlBase
 		var isEnabled = this.isEnabled();
 		var isHighlighted = this.isHighlighted && isEnabled;
 
-		var style = this.style(universe);
+		style = style || this.style(universe);
 		var colorFill = style.colorFill;
 		var colorBorder = style.colorBorder;
 
