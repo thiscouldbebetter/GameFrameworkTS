@@ -5,7 +5,7 @@ class VisualSelect {
         this.selectChildNames = selectChildNames;
     }
     draw(universe, world, place, entity, display) {
-        var childrenToSelectNames = this.selectChildNames(universe, world, display, entity, this);
+        var childrenToSelectNames = this.selectChildNames(universe, world, place, entity, display);
         var childrenSelected = childrenToSelectNames.map(childToSelectName => this.childrenByName.get(childToSelectName));
         childrenSelected.forEach(childSelected => childSelected.draw(universe, world, place, entity, display));
     }

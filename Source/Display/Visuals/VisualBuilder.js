@@ -161,7 +161,7 @@ class VisualBuilder {
             ["FacingUpWalking", visualLegsFacingUpWalking]
         ]), 
         // selectChildNames
-        (u, w, d, e, v) => {
+        (u, w, p, e, d) => {
             var entityLoc = e.locatable().loc;
             var entityForward = entityLoc.orientation.forward;
             var entityForwardInTurns = entityForward.headingInTurns();
@@ -242,7 +242,7 @@ class VisualBuilder {
         var visualWielding = new VisualSelect(new Map([
             ["Visible", visualArmAndWieldableDirectionalOffset],
             ["Hidden", visualNone]
-        ]), (u, w, d, e) => // selectChildNames
+        ]), (u, w, p, e, d) => // selectChildNames
          {
             var itemEntityWielded = e.equipmentUser().itemEntityInSocketWithName("Wielding");
             var returnValue = (itemEntityWielded == null ? "Hidden" : "Visible");

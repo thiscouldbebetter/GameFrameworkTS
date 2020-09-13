@@ -355,7 +355,7 @@ class VisualBuilder
 				[ "FacingUpWalking", visualLegsFacingUpWalking ]
 			]),
 			// selectChildNames
-			(u: Universe, w: World, d: Display, e: Entity, v: VisualSelect) =>
+			(u: Universe, w: World, p: Place, e: Entity, d: Display) =>
 			{
 				var entityLoc = e.locatable().loc;
 				var entityForward = entityLoc.orientation.forward;
@@ -544,7 +544,7 @@ class VisualBuilder
 				[ "Visible", visualArmAndWieldableDirectionalOffset ],
 				[ "Hidden", visualNone ]
 			]),
-			(u: Universe, w: World, d: Display, e: Entity) => // selectChildNames
+			(u: Universe, w: World, p: Place, e: Entity, d: Display) => // selectChildNames
 			{
 				var itemEntityWielded =
 					e.equipmentUser().itemEntityInSocketWithName("Wielding");

@@ -2,12 +2,12 @@
 class VisualSelect implements Visual
 {
 	childrenByName: Map<string, Visual>;
-	selectChildNames: (u: Universe, w: World, d: Display, e:Entity, v: VisualSelect) => string[];
+	selectChildNames: (u: Universe, w: World, p: Place, e:Entity, d: Display) => string[];
 
 	constructor
 	(
 		childrenByName: Map<string, Visual>,
-		selectChildNames: (u: Universe, w: World, d: Display, e:Entity, v: VisualSelect) => string[]
+		selectChildNames: (u: Universe, w: World, p: Place, e:Entity, d: Display) => string[]
 	)
 	{
 		this.childrenByName = childrenByName;
@@ -17,7 +17,7 @@ class VisualSelect implements Visual
 	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		var childrenToSelectNames =
-			this.selectChildNames(universe, world, display, entity, this);
+			this.selectChildNames(universe, world, place, entity, display);
 		var childrenSelected = childrenToSelectNames.map
 		(
 			childToSelectName => this.childrenByName.get(childToSelectName)

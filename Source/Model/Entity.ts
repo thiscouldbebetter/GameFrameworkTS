@@ -75,6 +75,8 @@ class Entity
 
 	actor(): Actor { return this.propertiesByName.get(Actor.name) as Actor; }
 
+	alive(): Alive { return this.propertiesByName.get(Alive.name) as Alive; }
+
 	boundable(): Boundable { return this.propertiesByName.get(Boundable.name) as Boundable; }
 
 	camera(): Camera { return this.propertiesByName.get(Camera.name) as Camera; }

@@ -49,6 +49,7 @@ class Entity {
     ;
     // Convenience methods for properties.
     actor() { return this.propertiesByName.get(Actor.name); }
+    alive() { return this.propertiesByName.get(Alive.name); }
     boundable() { return this.propertiesByName.get(Boundable.name); }
     camera() { return this.propertiesByName.get(Camera.name); }
     collidable() { return this.propertiesByName.get(Collidable.name); }

@@ -415,25 +415,30 @@ class PlaceBuilderDemo_Movers {
             new VisualOffset(visualEyes, new Coords(-1, 0, 0).multiplyScalar(visualEyeRadius)),
             new VisualOffset(visualEyes, new Coords(0, -1, 0).multiplyScalar(visualEyeRadius))
         ], null);
-        var grazerVisualNormal = new VisualGroup([
-            new VisualEllipse(grazerDimension, // semimajorAxis
-            grazerDimension * .8, 0, // rotationInTurns
-            grazerColor, null // colorBorder
-            ),
-            new VisualOffset(visualEyesDirectional, new Coords(0, 0, 0)),
-        ]);
+        var grazerVisualBodyJuvenile = new VisualEllipse(grazerDimension * .75, // semimajorAxis
+        grazerDimension * .6, 0, // rotationInTurns
+        grazerColor, null // colorBorder
+        );
+        var grazerVisualBodyAdult = new VisualEllipse(grazerDimension, // semimajorAxis
+        grazerDimension * .8, 0, // rotationInTurns
+        grazerColor, null // colorBorder
+        );
+        var grazerVisualBodyElder = new VisualEllipse(grazerDimension, // semimajorAxis
+        grazerDimension * .8, 0, // rotationInTurns
+        Color.byName("LightGray"), null // colorBorder
+        );
+        var grazerVisualBodySelect = new VisualSelect(new Map([
+            ["Juvenile", grazerVisualBodyJuvenile],
+            ["Adult", grazerVisualBodyAdult],
+            ["Elder", grazerVisualBodyElder]
+        ]), (u, w, p, e) => {
+            //var alive = e.alive();
+            // todo
+            return ["Adult"];
+        });
         var grazerVisual = new VisualGroup([
-            new VisualAnimation("Grazer", [100, 100], // ticksToHoldFrames
-            // children
-            [
-                // todo - Fix blinking.
-                new VisualAnimation("Blinking", [5], // , 5 ], // ticksToHoldFrames
-                new Array(
-                //new VisualNone(),
-                grazerVisualNormal), null),
-                grazerVisualNormal
-            ], false // isRepeating
-            )
+            grazerVisualBodySelect,
+            visualEyesDirectional,
         ]);
         if (this.parent.visualsHaveText) {
             grazerVisual.children.push(new VisualOffset(new VisualText(new DataBinding("Grazer", null, null), null, grazerColor, null), new Coords(0, 0 - grazerDimension * 2, 0)));
@@ -479,8 +484,20 @@ class PlaceBuilderDemo_Movers {
          {
             entityDying.locatable().entitySpawnWithDefnName(universe, world, place, entityDying, "Meat");
         };
+        var grazerAlive = new Alive(0, // tickBorn
+        [
+            [
+                1000,
+                (u, w, p, e) => { }
+            ],
+            [
+                2000,
+                (u, w, p, e) => { }
+            ]
+        ]);
         var grazerEntityDefn = new Entity("Grazer", [
             new Actor(grazerActivity),
+            grazerAlive,
             new Collidable(grazerCollider, null, null),
             new Constrainable([constraintSpeedMax1]),
             new Drawable(grazerVisual, null),
@@ -505,7 +522,7 @@ class PlaceBuilderDemo_Movers {
         new Map([
             ["Normal", playerVisualBodyNormal],
             ["Hidden", playerVisualBodyHidden]
-        ]), (u, w, d, e) => // selectChildNames
+        ]), (u, w, p, e, d) => // selectChildNames
          {
             return [(e.perceptible().isHiding ? "Hidden" : "Normal")];
         });
@@ -697,12 +714,15 @@ class PlaceBuilderDemo_Movers {
             if (inputHelper.isMouseClicked(null)) {
                 var selector = entityPlayer.selector();
                 inputHelper.isMouseClicked(false);
-                var mousePos = inputHelper.mouseClickPos;
+                var mousePosRelativeToCameraView = inputHelper.mouseClickPos;
+                var camera = place.camera();
+                var mousePosAbsolute = mousePosRelativeToCameraView.clone().divide(universe.display.scaleFactor()).add(camera.loc.pos).subtract(camera.viewSizeHalf).clearZ();
                 var entitiesInPlace = place.entities;
                 var range = 20;
                 var entityToSelect = entitiesInPlace.filter(x => (selector.entitiesSelected.indexOf(x) == -1
-                    && x.locatable().distanceFromPos(mousePos) < range)).sort((a, b) => a.locatable().distanceFromPos(mousePos)
-                    - b.locatable().distanceFromPos(mousePos))[0];
+                    && x.locatable() != null
+                    && x.locatable().distanceFromPos(mousePosAbsolute) < range)).sort((a, b) => a.locatable().distanceFromPos(mousePosAbsolute)
+                    - b.locatable().distanceFromPos(mousePosAbsolute))[0];
                 selector.entitiesDeselectAll();
                 if (entityToSelect != null) {
                     selector.entitySelect(entityToSelect);
