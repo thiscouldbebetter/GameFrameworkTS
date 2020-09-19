@@ -185,46 +185,12 @@ class CollisionHelper {
         return returnValues;
     }
     doEntitiesCollide(entity0, entity1) {
+        var doCollidersCollide = false;
         var collidable0 = entity0.collidable();
         var collidable1 = entity1.collidable();
-        var collidable0EntitiesAlreadyCollidedWith = collidable0.entitiesAlreadyCollidedWith;
-        var collidable1EntitiesAlreadyCollidedWith = collidable1.entitiesAlreadyCollidedWith;
-        var doCollide = this.doCollidablesCollide(entity0, entity1);
-        var wereEntitiesAlreadyColliding = (collidable0EntitiesAlreadyCollidedWith.indexOf(entity1) >= 0
-            || collidable1EntitiesAlreadyCollidedWith.indexOf(entity0) >= 0);
-        if (doCollide) {
-            if (wereEntitiesAlreadyColliding) {
-                doCollide = false;
-            }
-            else {
-                collidable0EntitiesAlreadyCollidedWith.push(entity1);
-                collidable1EntitiesAlreadyCollidedWith.push(entity0);
-            }
-        }
-        else if (wereEntitiesAlreadyColliding) {
-            ArrayHelper.remove(collidable0EntitiesAlreadyCollidedWith, entity1);
-            ArrayHelper.remove(collidable1EntitiesAlreadyCollidedWith, entity0);
-        }
-        return doCollide;
-    }
-    doCollidablesCollide(entityCollidable0, entityCollidable1) {
-        var doCollidersCollide = false;
-        var collidable0 = entityCollidable0.collidable();
-        var collidable1 = entityCollidable1.collidable();
-        var canCollidablesCollideYet = (collidable0.ticksUntilCanCollide <= 0
-            && collidable1.ticksUntilCanCollide <= 0);
-        if (canCollidablesCollideYet) {
-            var collidable0Boundable = entityCollidable0.boundable();
-            var collidable1Boundable = entityCollidable1.boundable();
-            var doBoxesCollide = (collidable0Boundable == null
-                || collidable1Boundable == null
-                || this.doCollidersCollide(collidable0Boundable.bounds, collidable1Boundable.bounds));
-            if (doBoxesCollide) {
-                var collider0 = collidable0.collider;
-                var collider1 = collidable1.collider;
-                doCollidersCollide = this.doCollidersCollide(collider0, collider1);
-            }
-        }
+        var collider0 = collidable0.collider;
+        var collider1 = collidable1.collider;
+        doCollidersCollide = this.doCollidersCollide(collider0, collider1);
         return doCollidersCollide;
     }
     doCollidersCollide(collider0, collider1) {
@@ -300,8 +266,10 @@ class CollisionHelper {
         var collidable1 = entity1.collidable();
         var collider0 = collidable0.collider;
         var collider1 = collidable1.collider;
-        var normal0 = collider0.normalAtPos(collisionPos, new Coords(0, 0, 0));
-        var normal1 = collider1.normalAtPos(collisionPos, new Coords(0, 0, 0));
+        var normal0 = collider0.normalAtPos(collisionPos, new Coords(0, 0, 0) // normalOut
+        );
+        var normal1 = collider1.normalAtPos(collisionPos, new Coords(0, 0, 0) // normalOut
+        );
         var entity0Loc = entity0.locatable().loc;
         var entity1Loc = entity1.locatable().loc;
         var vel0 = entity0Loc.vel;
@@ -318,6 +286,22 @@ class CollisionHelper {
             var vel1Bounce = normal0.multiplyScalar(0 - vel1DotNormal0).multiplyScalar(multiplierOfRestitution);
             vel1.add(vel1Bounce);
             entity1Loc.orientation.forwardSet(vel1.clone().normalize());
+        }
+    }
+    collideEntitiesSeparate(entity0, entity1) {
+        var entity0Loc = entity0.locatable().loc;
+        var entity0Pos = entity0Loc.pos;
+        var collidable1 = entity1.collidable();
+        var collider1 = collidable1.collider;
+        var collider1Normal = collider1.normalAtPos(entity0Pos, new Coords(0, 0, 0) // normalOut
+        );
+        var distanceMovedSoFar = 0;
+        var distanceToMoveMax = 100;
+        while (this.doEntitiesCollide(entity0, entity1) && distanceMovedSoFar < distanceToMoveMax) {
+            distanceMovedSoFar++;
+            entity0Pos.add(collider1Normal);
+            var collidable0 = entity0.collidable();
+            collidable0.colliderLocateForEntity(entity0);
         }
     }
     /*

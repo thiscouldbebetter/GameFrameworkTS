@@ -199,7 +199,7 @@ class SkillLearner extends EntityProperty
 			150,
 			0
 		); 
-		
+
 		var defns = universe.world.defn;
 		var skillsAll = defns.defnArraysByTypeName.get(Skill.name); // todo - Just use the -ByName lookup.
 		var skillsAllByName = defns.defnsByNameByTypeName.get(Skill.name);

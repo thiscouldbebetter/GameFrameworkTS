@@ -37,7 +37,7 @@ class VisualDirectional implements Visual
 
 		return returnValue;
 	}
-	
+
 	// Visual.
 
 	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)

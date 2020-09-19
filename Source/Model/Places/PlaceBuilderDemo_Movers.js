@@ -320,7 +320,16 @@ class PlaceBuilderDemo_Movers {
         var friendlyColor = Color.byName("GreenDark");
         var friendlyDimension = entityDimension;
         var constraintSpeedMax1 = new Constraint_SpeedMaxXY(1);
+        var constrainable = new Constrainable([constraintSpeedMax1]);
         var friendlyCollider = new Sphere(new Coords(0, 0, 0), friendlyDimension);
+        var friendlyCollide = (u, w, p, eFriendly, eOther, c) => {
+            eFriendly.locatable().loc.vel.clear();
+            var collisionHelper = u.collisionHelper;
+            collisionHelper.collideEntitiesBounce(eFriendly, eOther);
+            collisionHelper.collideEntitiesSeparate(eFriendly, eOther);
+        };
+        var collidable = new Collidable(friendlyCollider, [Collidable.name], friendlyCollide);
+        //var collidable = new Collidable(friendlyCollider, null, null);
         var visualEyeRadius = entityDimension * .75 / 2;
         var visualBuilder = new VisualBuilder();
         var visualEyesBlinking = visualBuilder.eyesBlinking(visualEyeRadius);
@@ -367,7 +376,8 @@ class PlaceBuilderDemo_Movers {
             var actorPos = actorLoc.pos;
             var distanceToTarget = targetPos.clone().subtract(actorPos).magnitude();
             if (distanceToTarget >= 2) {
-                actorLoc.vel.overwriteWith(targetPos).subtract(actorPos).normalize();
+                var accelerationPerTick = .5;
+                actorLoc.accel.overwriteWith(targetPos).subtract(actorPos).normalize().multiplyScalar(accelerationPerTick);
             }
             else {
                 actorPos.overwriteWith(targetPos);
@@ -377,6 +387,7 @@ class PlaceBuilderDemo_Movers {
         var friendlyActivityDefn = new ActivityDefn("Friendly", friendlyActivityPerform);
         this.parent.activityDefns.push(friendlyActivityDefn);
         var friendlyActivity = new Activity(friendlyActivityDefn.name, null);
+        var actor = new Actor(friendlyActivity);
         var itemHolder = new ItemHolder([
             new Item("Arrow", 200),
             new Item("Bow", 1),
@@ -387,14 +398,19 @@ class PlaceBuilderDemo_Movers {
         ].map(x => x.toEntity()), null, // weightMax
         null // reachRadius
         );
+        var route = new Route(Direction.Instances()._ByHeading, // neighborOffsets
+        null, // bounds
+        null, null, null);
+        var routable = new Routable(route);
         var friendlyEntityDefn = new Entity("Friendly", [
-            new Actor(friendlyActivity),
-            new Constrainable([constraintSpeedMax1]),
-            new Collidable(friendlyCollider, null, null),
+            actor,
+            constrainable,
+            collidable,
             new Drawable(friendlyVisual, null),
             new DrawableCamera(),
             itemHolder,
-            new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
+            new Locatable(null),
+            routable,
             new Talker("AnEveningWithProfessorSurly"),
         ]);
         return friendlyEntityDefn;

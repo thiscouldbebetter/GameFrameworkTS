@@ -857,7 +857,7 @@ class ControlBuilder
 		var start = () =>
 		{
 			var title = this.title(universe, size);
-	
+
 			var venueTitle = new VenueControls(title, false);
 
 			universe.venueNext =

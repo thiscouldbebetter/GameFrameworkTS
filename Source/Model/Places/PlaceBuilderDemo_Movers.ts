@@ -97,7 +97,7 @@ class PlaceBuilderDemo_Movers
 				false // isRepeating
 			),
 		]);
-		
+
 		if (this.parent.visualsHaveText)
 		{
 			carnivoreVisual.children.push
@@ -672,8 +672,19 @@ class PlaceBuilderDemo_Movers
 		var friendlyDimension = entityDimension;
 
 		var constraintSpeedMax1 = new Constraint_SpeedMaxXY(1);
+		var constrainable = new Constrainable([constraintSpeedMax1]);
 
 		var friendlyCollider = new Sphere(new Coords(0, 0, 0), friendlyDimension);
+		var friendlyCollide =
+			(u: Universe, w: World, p: Place, eFriendly: Entity, eOther: Entity, c: Collision) =>
+			{
+				eFriendly.locatable().loc.vel.clear();
+				var collisionHelper = u.collisionHelper;
+				collisionHelper.collideEntitiesBounce(eFriendly, eOther);
+				collisionHelper.collideEntitiesSeparate(eFriendly, eOther);
+			};
+		var collidable = new Collidable(friendlyCollider, [ Collidable.name ], friendlyCollide);
+		//var collidable = new Collidable(friendlyCollider, null, null);
 
 		var visualEyeRadius = entityDimension * .75 / 2;
 		var visualBuilder = new VisualBuilder();
@@ -777,13 +788,15 @@ class PlaceBuilderDemo_Movers
 
 			if (distanceToTarget >= 2)
 			{
-				actorLoc.vel.overwriteWith
+				var accelerationPerTick = .5;
+
+				actorLoc.accel.overwriteWith
 				(
 					targetPos
 				).subtract
 				(
 					actorPos
-				).normalize();
+				).normalize().multiplyScalar(accelerationPerTick);
 			}
 			else
 			{
@@ -796,6 +809,8 @@ class PlaceBuilderDemo_Movers
 			new ActivityDefn("Friendly", friendlyActivityPerform);
 		this.parent.activityDefns.push(friendlyActivityDefn);
 		var friendlyActivity = new Activity(friendlyActivityDefn.name, null);
+
+		var actor = new Actor(friendlyActivity);
 
 		var itemHolder = new ItemHolder
 		(
@@ -811,17 +826,26 @@ class PlaceBuilderDemo_Movers
 			null // reachRadius
 		);
 
+		var route = new Route
+		(
+			Direction.Instances()._ByHeading, // neighborOffsets
+			null, // bounds
+			null, null, null
+		);
+		var routable = new Routable(route);
+
 		var friendlyEntityDefn = new Entity
 		(
 			"Friendly",
 			[
-				new Actor(friendlyActivity),
-				new Constrainable([constraintSpeedMax1]),
-				new Collidable(friendlyCollider, null, null),
+				actor,
+				constrainable,
+				collidable,
 				new Drawable(friendlyVisual, null),
 				new DrawableCamera(),
 				itemHolder,
-				new Locatable(new Disposition(new Coords(0, 0, 0), null, null) ),
+				new Locatable(null),
+				routable,
 				new Talker("AnEveningWithProfessorSurly"),
 			]
 		);
@@ -883,7 +907,7 @@ class PlaceBuilderDemo_Movers
 				Color.byName("LightGray"),
 				null // colorBorder
 			);
-		
+
 		var grazerVisualBodySelect = new VisualSelect
 		(
 			new Map<string,Visual>
@@ -988,7 +1012,7 @@ class PlaceBuilderDemo_Movers
 				universe, world, place, entityDying, "Meat"
 			);
 		};
-		
+
 		var grazerAlive = new Alive
 		(
 			0, // tickBorn
@@ -1434,7 +1458,7 @@ class PlaceBuilderDemo_Movers
 				(
 					camera.viewSizeHalf
 				).clearZ();
-				
+
 				var entitiesInPlace = place.entities;
 				var range = 20;
 				var entityToSelect = entitiesInPlace.filter
@@ -1451,7 +1475,7 @@ class PlaceBuilderDemo_Movers
 						a.locatable().distanceFromPos(mousePosAbsolute)
 						- b.locatable().distanceFromPos(mousePosAbsolute)
 				)[0];
-				
+
 				selector.entitiesDeselectAll();
 				if (entityToSelect != null)
 				{
@@ -1571,7 +1595,7 @@ class PlaceBuilderDemo_Movers
 
 		return playerEntityDefn;
 	}
-	
+
 	entityDefnBuildPlayer_Controllable()
 	{
 		var toControlMenu =
@@ -1924,9 +1948,9 @@ class PlaceBuilderDemo_Movers
 
 		var controlSelection =
 			selector.toControl(controlSelectionSize, controlSelectionPos);
-		
+
 		childControls.push(controlSelection);
-		
+
 		// Quick slots.
 
 		var itemQuickSlotCount = 10;
@@ -2020,7 +2044,7 @@ class PlaceBuilderDemo_Movers
 		);
 		var controlOverlayTransparent
 			= new ControlContainerTransparent(controlOverlayContainer);
-			
+
 		controlOverlayTransparent.styleName = ControlStyle.Instances().Dark.name;
 
 		return controlOverlayTransparent;

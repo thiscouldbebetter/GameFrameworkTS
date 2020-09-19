@@ -79,6 +79,7 @@ class PlaceBuilderDemo // Main.
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("SwordHeat"), 1, null, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Toolset"), 1, null, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Torch"), 1, null, entityPosRange, randomizer));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("TrafficCone"), 20, null, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Weight"), 1, null, entityPosRange, randomizer));
 
 		var container = this.entityBuildFromDefn(entityDefns.get("Container"), entityPosRange, randomizer);
@@ -2749,6 +2750,7 @@ class PlaceBuilderDemo // Main.
 			this.emplacementsBuilder.entityDefnBuildObstacleRing(entityDimension),
 			this.emplacementsBuilder.entityDefnBuildPillow(entityDimension),
 			this.emplacementsBuilder.entityDefnBuildTree(entityDimension),
+			this.emplacementsBuilder.entityDefnBuildTrafficCone(entityDimension),
 
 			this.moversBuilder.entityDefnBuildEnemyGeneratorChaser(entityDimension, null),
 			this.moversBuilder.entityDefnBuildEnemyGeneratorChaser(entityDimension, "Cold"),

@@ -173,7 +173,7 @@ class PlaceBuilderDemo_Emplacements {
                 new Coords(-0.5, -1.5, 0),
                 new Coords(0.5, -1.5, 0)
             ]).transform(Transform_Scale.fromScalar(entityDimension)), exitColor, null),
-            new VisualOffset(new VisualCircle(entityDimension / 8, Color.byName("Yellow"), null, null), new Coords(entityDimension / 4, 0 - entityDimension / 2, 0))
+            new VisualOffset(new VisualCircle(entityDimension / 8, Color.byName("Yellow"), null, null), new Coords(entityDimension / 4, 0 - entityDimension * .6, 0))
         ]);
         if (this.parent.visualsHaveText) {
             visual.children.push(new VisualOffset(new VisualText(new DataBinding("Exit", null, null), null, exitColor, null), new Coords(0, 0 - entityDimension * 2.5, 0)));
@@ -377,6 +377,39 @@ class PlaceBuilderDemo_Emplacements {
             new Usable(portalUse)
         ]);
         return portalEntity;
+    }
+    entityDefnBuildTrafficCone(entityDimension) {
+        var entityName = "TrafficCone";
+        entityDimension *= 1.5;
+        var color = Color.byName("Orange");
+        var visual = new VisualGroup([
+            new VisualPolygon(new Path([
+                new Coords(-1, 0, 0),
+                new Coords(-1, -0.1, 0),
+                new Coords(-0.5, -0.1, 0),
+                new Coords(-0.1, -1.5, 0),
+                new Coords(0.1, -1.5, 0),
+                new Coords(0.5, -0.1, 0),
+                new Coords(1, -0.1, 0),
+                new Coords(1, 0, 0)
+            ]).transform(Transform_Scale.fromScalar(entityDimension * 0.75)), color, null),
+        ]);
+        if (this.parent.visualsHaveText) {
+            visual.children.push(new VisualOffset(new VisualText(new DataBinding(entityName, null, null), null, color, null), new Coords(0, 0 - entityDimension * 2, 0)));
+        }
+        var collider = new Sphere(new Coords(0, 0, 0), entityDimension * .25);
+        var collidable = new Collidable(collider, [Collidable.name], // entityPropertyNamesToCollideWith,
+        // collideEntities
+        (u, w, p, e, e2) => {
+            u.collisionHelper.collideEntitiesBounce(e, e2);
+        });
+        var entityDefn = new Entity(entityName, [
+            new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
+            collidable,
+            new Drawable(visual, null),
+            new DrawableCamera()
+        ]);
+        return entityDefn;
     }
     entityDefnBuildTree(entityDimension) {
         var entityName = "Tree";

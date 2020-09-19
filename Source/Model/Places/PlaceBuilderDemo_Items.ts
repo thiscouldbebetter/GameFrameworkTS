@@ -843,7 +843,7 @@ class PlaceBuilderDemo_Items
 				)
 			);
 		}
-		
+
 		var itemHeartVisualShifted = new VisualOffset
 		(
 			itemHeartVisual, new Coords(0, -entityDimensionQuarter, 0)
@@ -1480,7 +1480,7 @@ class PlaceBuilderDemo_Items
 			hiltColor,
 			null // colorBorder
 		);
-		
+
 		var itemSwordVisualBody = new VisualGroup
 		([
 			itemSwordVisualBlade, itemSwordVisualHilt

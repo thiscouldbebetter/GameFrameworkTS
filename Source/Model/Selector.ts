@@ -2,7 +2,7 @@
 class Selector extends EntityProperty
 {
 	entitiesSelected: Entity[];
-	
+
 	_control: ControlBase;
 	entityForReticle: Entity;
 
@@ -28,29 +28,29 @@ class Selector extends EntityProperty
 			]
 		);
 	}
-	
+
 	entitiesDeselectAll()
 	{
 		this.entitiesSelected.length = 0;
 	}
-	
+
 	entitySelect(entityToSelect: Entity)
 	{
 		this.entitiesSelected.push(entityToSelect);
 	}
-	
+
 	// Clonable.
-	
+
 	clone()
 	{
 		return this;
 	}
-	
+
 	overwriteWith(other: Selector)
 	{
 		return this;
 	}
-	
+
 	// Controllable.
 
 	toControl(size: Coords, pos: Coords)
@@ -94,17 +94,17 @@ class Selector extends EntityProperty
 			],
 			null, null
 		);
-		
+
 		var controlSelection =
 			new ControlContainerTransparent(selectionAsContainer);
-			
+
 		this._control = controlSelection;
-			
+
 		return this._control;
 	}
 
 	// EntityProperty.
-	
+
 	updateForTimerTick(u: Universe, w: World, p: Place, entitySelector: Entity)
 	{
 		var entitySelected = this.entitiesSelected[0];

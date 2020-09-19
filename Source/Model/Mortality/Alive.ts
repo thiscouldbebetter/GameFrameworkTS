@@ -5,7 +5,7 @@ class Alive extends EntityProperty
 	ticksToRunAtAndUpdatesToRun: Array<[number, Function]>;
 
 	haveUpdatesBeenRun: boolean[];
-	
+
 	constructor(tickBorn: number, ticksToRunAtAndUpdatesToRun: Array<[number, Function]>)
 	{
 		super();
@@ -15,7 +15,7 @@ class Alive extends EntityProperty
 		this.haveUpdatesBeenRun =
 			this.ticksToRunAtAndUpdatesToRun.map(x => false);
 	}
-			
+
 	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity)
 	{
 		var ticksSinceBorn = w.timerTicksSoFar - this.tickBorn;
@@ -39,9 +39,9 @@ class Alive extends EntityProperty
 			}
 		}
 	}
-	
+
 	// Clonable.
-	
+
 	clone()
 	{
 		return new Alive(this.tickBorn, this.ticksToRunAtAndUpdatesToRun);

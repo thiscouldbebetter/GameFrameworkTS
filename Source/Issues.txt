@@ -26,6 +26,8 @@ Movers - Enemies - Types - Bombers
 Movers - Enemies - Types - Hiders
 Movers - Enemies - Types - Shooters
 
+Movers - Pathfinding around Obstacles
+
 Movers - Player - Stamina - Jump, Run, Dash
 Movers - Player - Sword Swings
 
@@ -37,6 +39,7 @@ Places - Day/Night Cycle
 Places - Dungeon
 Places - Map Tiles from Images
 Places - Terrarium - Load/Unload Zones
+Places - Turn-Based
 Places - Weather
 
 Sound - Shooting Bow

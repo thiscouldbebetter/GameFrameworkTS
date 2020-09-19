@@ -73,7 +73,7 @@ class StorageHelper
 		(
 			valueToSave, false // pretty-print
 		);
-		
+
 		var valueToSaveCompressed = this.compressor.compressString
 		(
 			valueToSaveSerialized

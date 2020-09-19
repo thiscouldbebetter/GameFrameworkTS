@@ -101,7 +101,7 @@ class ControlContainerTransparent extends ControlBase
 		(
 			this.containerInner.pos
 		);
-		
+
 		style = style || this.style(universe);
 
 		display.drawRectangle
