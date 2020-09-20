@@ -1,7 +1,8 @@
 "use strict";
 class Collidable extends EntityProperty {
-    constructor(colliderAtRest, entityPropertyNamesToCollideWith, collideEntities) {
+    constructor(ticksToWaitBetweenCollisions, colliderAtRest, entityPropertyNamesToCollideWith, collideEntities) {
         super();
+        this.ticksToWaitBetweenCollisions = ticksToWaitBetweenCollisions;
         this.colliderAtRest = colliderAtRest;
         this.entityPropertyNamesToCollideWith = entityPropertyNamesToCollideWith || [];
         this._collideEntities = collideEntities;
@@ -71,13 +72,16 @@ class Collidable extends EntityProperty {
                 doEntitiesCollide = collisionHelper.doCollidersCollide(collider0, collider1);
             }
         }
-        var wereEntitiesAlreadyColliding = (collidable0EntitiesAlreadyCollidedWith.indexOf(entity1) >= 0
-            || collidable1EntitiesAlreadyCollidedWith.indexOf(entity0) >= 0);
+        var wereEntitiesAlreadyColliding = (this.ticksUntilCanCollide > 0
+            &&
+                (collidable0EntitiesAlreadyCollidedWith.indexOf(entity1) >= 0
+                    || collidable1EntitiesAlreadyCollidedWith.indexOf(entity0) >= 0));
         if (doEntitiesCollide) {
             if (wereEntitiesAlreadyColliding) {
                 doEntitiesCollide = false;
             }
             else {
+                this.ticksUntilCanCollide = this.ticksToWaitBetweenCollisions;
                 collidable0EntitiesAlreadyCollidedWith.push(entity1);
                 collidable1EntitiesAlreadyCollidedWith.push(entity0);
             }
@@ -96,6 +100,6 @@ class Collidable extends EntityProperty {
     }
     // cloneable
     clone() {
-        return new Collidable(this.colliderAtRest.clone(), this.entityPropertyNamesToCollideWith, this._collideEntities);
+        return new Collidable(this.ticksToWaitBetweenCollisions, this.colliderAtRest.clone(), this.entityPropertyNamesToCollideWith, this._collideEntities);
     }
 }

@@ -1,6 +1,7 @@
 
 class Collidable extends EntityProperty
 {
+	ticksToWaitBetweenCollisions: number;
 	colliderAtRest: any;
 	entityPropertyNamesToCollideWith: string[];
 	_collideEntities: (u: Universe, w: World, p: Place, e0: Entity, e1: Entity, c: Collision) => void;
@@ -15,12 +16,14 @@ class Collidable extends EntityProperty
 
 	constructor
 	(
+		ticksToWaitBetweenCollisions: number,
 		colliderAtRest: any,
 		entityPropertyNamesToCollideWith: string[],
 		collideEntities: (u: Universe, w: World, p: Place, e0: Entity, e1: Entity, c: Collision) => void
 	)
 	{
 		super();
+		this.ticksToWaitBetweenCollisions = ticksToWaitBetweenCollisions;
 		this.colliderAtRest = colliderAtRest;
 		this.entityPropertyNamesToCollideWith = entityPropertyNamesToCollideWith || [];
 		this._collideEntities = collideEntities;
@@ -143,8 +146,12 @@ class Collidable extends EntityProperty
 
 		var wereEntitiesAlreadyColliding =
 		(
-			collidable0EntitiesAlreadyCollidedWith.indexOf(entity1) >= 0
-			|| collidable1EntitiesAlreadyCollidedWith.indexOf(entity0) >= 0
+			this.ticksUntilCanCollide > 0
+			&&
+			(
+				collidable0EntitiesAlreadyCollidedWith.indexOf(entity1) >= 0
+				|| collidable1EntitiesAlreadyCollidedWith.indexOf(entity0) >= 0
+			)
 		);
 
 		if (doEntitiesCollide)
@@ -155,6 +162,7 @@ class Collidable extends EntityProperty
 			}
 			else
 			{
+				this.ticksUntilCanCollide = this.ticksToWaitBetweenCollisions;
 				collidable0EntitiesAlreadyCollidedWith.push(entity1);
 				collidable1EntitiesAlreadyCollidedWith.push(entity0);
 			}
@@ -189,6 +197,7 @@ class Collidable extends EntityProperty
 	{
 		return new Collidable
 		(
+			this.ticksToWaitBetweenCollisions,
 			this.colliderAtRest.clone(),
 			this.entityPropertyNamesToCollideWith,
 			this._collideEntities

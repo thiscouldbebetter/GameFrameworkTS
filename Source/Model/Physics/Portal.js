@@ -1,13 +1,14 @@
 "use strict";
 class Portal extends EntityProperty {
-    constructor(destinationPlaceName, destinationEntityName, clearsVelocity) {
+    constructor(destinationPlaceName, destinationEntityName, velocityToApply) {
         super();
         this.destinationPlaceName = destinationPlaceName;
         this.destinationEntityName = destinationEntityName;
-        this.clearsVelocity = clearsVelocity || true;
+        this.velocityToApply = velocityToApply;
     }
     use(universe, world, placeToDepart, entityToTransport, entityPortal) {
-        entityPortal.collidable().ticksUntilCanCollide = 50; // hack
+        var entityPortalCollidable = entityPortal.collidable();
+        entityPortalCollidable.ticksUntilCanCollide = 40; // hack
         var portal = entityPortal.portal();
         var venueCurrent = universe.venueCurrent;
         var messageBoxSize = universe.display.sizeDefault();
@@ -24,19 +25,23 @@ class Portal extends EntityProperty {
         var destinationPlace = world.placesByName.get(this.destinationPlaceName);
         destinationPlace.initialize(universe, world);
         var destinationEntity = destinationPlace.entitiesByName.get(this.destinationEntityName);
+        var destinationCollidable = destinationEntity.collidable();
+        if (destinationCollidable != null) {
+            destinationCollidable.ticksUntilCanCollide = 50; // hack
+        }
         var destinationPos = destinationEntity.locatable().loc.pos;
         var entityToTransportLoc = entityToTransport.locatable().loc;
         var entityToTransportPos = entityToTransportLoc.pos;
         world.placeNext = destinationPlace;
         entityToTransportPos.overwriteWith(destinationPos);
         entityToTransport.collidable().entitiesAlreadyCollidedWith.push(destinationEntity);
-        if (this.clearsVelocity) {
-            entityToTransportLoc.vel.clear();
+        if (this.velocityToApply != null) {
+            entityToTransportLoc.vel.overwriteWith(this.velocityToApply);
         }
         placeToDepart.entitiesToRemove.push(entityToTransport);
         destinationPlace.entitiesToSpawn.push(entityToTransport);
     }
     clone() {
-        return new Portal(this.destinationPlaceName, this.destinationEntityName, this.clearsVelocity);
+        return new Portal(this.destinationPlaceName, this.destinationEntityName, this.velocityToApply == null ? null : this.velocityToApply.clone());
     }
 }

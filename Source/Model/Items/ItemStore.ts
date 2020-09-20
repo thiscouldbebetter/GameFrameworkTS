@@ -50,7 +50,7 @@ class ItemStore extends EntityProperty
 
 	use(universe: Universe, world: World, place: Place, entityUsing: Entity, entityUsed: Entity)
 	{
-		entityUsed.collidable().ticksUntilCanCollide = 50; // hack
+		//entityUsed.collidable().ticksUntilCanCollide = 50; // hack
 		var storeAsControl = entityUsed.itemStore().toControl
 		(
 			universe, universe.display.sizeInPixels,

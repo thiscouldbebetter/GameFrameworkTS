@@ -3,23 +3,25 @@ class Portal extends EntityProperty
 {
 	destinationPlaceName: string;
 	destinationEntityName: string;
-	clearsVelocity: boolean;
+	velocityToApply: Coords;
 
 	constructor
 	(
 		destinationPlaceName: string, destinationEntityName: string,
-		clearsVelocity: boolean
+		velocityToApply: Coords
 	)
 	{
 		super();
 		this.destinationPlaceName = destinationPlaceName;
 		this.destinationEntityName = destinationEntityName;
-		this.clearsVelocity = clearsVelocity || true;
+		this.velocityToApply = velocityToApply;
 	}
 
 	use(universe: Universe, world: World, placeToDepart: Place, entityToTransport: Entity, entityPortal: Entity)
 	{
-		entityPortal.collidable().ticksUntilCanCollide = 50; // hack
+		var entityPortalCollidable = entityPortal.collidable();
+		entityPortalCollidable.ticksUntilCanCollide = 40; // hack
+
 		var portal = entityPortal.portal();
 		var venueCurrent = universe.venueCurrent;
 		var messageBoxSize = universe.display.sizeDefault();
@@ -47,6 +49,11 @@ class Portal extends EntityProperty
 		var destinationPlace = world.placesByName.get(this.destinationPlaceName);
 		destinationPlace.initialize(universe, world);
 		var destinationEntity = destinationPlace.entitiesByName.get(this.destinationEntityName);
+		var destinationCollidable = destinationEntity.collidable();
+		if (destinationCollidable != null)
+		{
+			destinationCollidable.ticksUntilCanCollide = 50; // hack
+		}
 		var destinationPos = destinationEntity.locatable().loc.pos;
 
 		var entityToTransportLoc = entityToTransport.locatable().loc;
@@ -56,9 +63,9 @@ class Portal extends EntityProperty
 		entityToTransportPos.overwriteWith(destinationPos);
 		entityToTransport.collidable().entitiesAlreadyCollidedWith.push(destinationEntity);
 
-		if (this.clearsVelocity)
+		if (this.velocityToApply != null)
 		{
-			entityToTransportLoc.vel.clear();
+			entityToTransportLoc.vel.overwriteWith(this.velocityToApply);
 		}
 
 		placeToDepart.entitiesToRemove.push(entityToTransport);
@@ -71,7 +78,7 @@ class Portal extends EntityProperty
 		(
 			this.destinationPlaceName,
 			this.destinationEntityName,
-			this.clearsVelocity
+			this.velocityToApply == null ? null : this.velocityToApply.clone()
 		);
 	}
 }

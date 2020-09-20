@@ -28,11 +28,24 @@ class Entity {
             }
         }
     }
-    propertyAdd(propertyToAdd) {
+    propertyAddForPlace(propertyToAdd, place) {
         this.properties.push(propertyToAdd);
         this.propertiesByName.set(propertyToAdd.constructor.name, propertyToAdd);
+        if (place != null) {
+            var propertyName = propertyToAdd.constructor.name;
+            var entitiesWithProperty = place.entitiesByPropertyName(propertyName);
+            entitiesWithProperty.push(this);
+        }
     }
-    ;
+    propertyRemoveForPlace(propertyToRemove, place) {
+        ArrayHelper.remove(this.properties, propertyToRemove);
+        this.propertiesByName.delete(propertyToRemove.constructor.name);
+        if (place != null) {
+            var propertyName = propertyToRemove.constructor.name;
+            var entitiesWithProperty = place.entitiesByPropertyName(propertyName);
+            ArrayHelper.remove(entitiesWithProperty, this);
+        }
+    }
     // Cloneable.
     clone() {
         var nameCloned = this.name; // + IDHelper.Instance().idNext();
@@ -46,10 +59,8 @@ class Entity {
         var returnValue = new Entity(nameCloned, propertiesCloned);
         return returnValue;
     }
-    ;
     // Convenience methods for properties.
     actor() { return this.propertiesByName.get(Actor.name); }
-    alive() { return this.propertiesByName.get(Alive.name); }
     boundable() { return this.propertiesByName.get(Boundable.name); }
     camera() { return this.propertiesByName.get(Camera.name); }
     collidable() { return this.propertiesByName.get(Collidable.name); }
@@ -64,6 +75,7 @@ class Entity {
     equipmentUser() { return this.propertiesByName.get(EquipmentUser.name); }
     equippable() { return this.propertiesByName.get(Equippable.name); }
     enemy() { return this.propertiesByName.get(Enemy.name); }
+    forceField() { return this.propertiesByName.get(ForceField.name); }
     item() { return this.propertiesByName.get(Item.name); }
     itemContainer() { return this.propertiesByName.get(ItemContainer.name); }
     itemCrafter() { return this.propertiesByName.get(ItemCrafter.name); }
@@ -75,6 +87,8 @@ class Entity {
     loadable() { return this.propertiesByName.get(Loadable.name); }
     locatable() { return this.propertiesByName.get(Locatable.name); }
     movable() { return this.propertiesByName.get(Movable.name); }
+    obstacle() { return this.propertiesByName.get(Obstacle.name); }
+    phased() { return this.propertiesByName.get(Phased.name); }
     recurrent() { return this.propertiesByName.get(Recurrent.name); }
     perceptible() { return this.propertiesByName.get(Perceptible.name); }
     perceptor() { return this.propertiesByName.get(Perceptor.name); }

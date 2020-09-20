@@ -29,7 +29,7 @@ class ItemStore extends EntityProperty {
         }
     }
     use(universe, world, place, entityUsing, entityUsed) {
-        entityUsed.collidable().ticksUntilCanCollide = 50; // hack
+        //entityUsed.collidable().ticksUntilCanCollide = 50; // hack
         var storeAsControl = entityUsed.itemStore().toControl(universe, universe.display.sizeInPixels, entityUsing, entityUsed, universe.venueCurrent);
         var venueNext = new VenueControls(storeAsControl, false);
         venueNext = new VenueFader(venueNext, null, null, null);

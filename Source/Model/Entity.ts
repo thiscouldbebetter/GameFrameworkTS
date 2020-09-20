@@ -45,11 +45,29 @@ class Entity
 		}
 	}
 
-	propertyAdd(propertyToAdd: any)
+	propertyAddForPlace(propertyToAdd: EntityProperty, place: Place)
 	{
 		this.properties.push(propertyToAdd);
 		this.propertiesByName.set(propertyToAdd.constructor.name, propertyToAdd);
-	};
+		if (place != null)
+		{
+			var propertyName = propertyToAdd.constructor.name;
+			var entitiesWithProperty = place.entitiesByPropertyName(propertyName);
+			entitiesWithProperty.push(this);
+		}
+	}
+
+	propertyRemoveForPlace(propertyToRemove: EntityProperty, place: Place)
+	{
+		ArrayHelper.remove(this.properties, propertyToRemove);
+		this.propertiesByName.delete(propertyToRemove.constructor.name);
+		if (place != null)
+		{
+			var propertyName = propertyToRemove.constructor.name;
+			var entitiesWithProperty = place.entitiesByPropertyName(propertyName);
+			ArrayHelper.remove(entitiesWithProperty, this);
+		}
+	}
 
 	// Cloneable.
 
@@ -69,13 +87,11 @@ class Entity
 			nameCloned, propertiesCloned
 		);
 		return returnValue;
-	};
+	}
 
 	// Convenience methods for properties.
 
 	actor(): Actor { return this.propertiesByName.get(Actor.name) as Actor; }
-
-	alive(): Alive { return this.propertiesByName.get(Alive.name) as Alive; }
 
 	boundable(): Boundable { return this.propertiesByName.get(Boundable.name) as Boundable; }
 
@@ -105,6 +121,8 @@ class Entity
 
 	enemy(): Enemy { return this.propertiesByName.get(Enemy.name) as Enemy; }
 
+	forceField(): ForceField { return this.propertiesByName.get(ForceField.name) as ForceField; }
+
 	item(): Item { return this.propertiesByName.get(Item.name) as Item; }
 
 	itemContainer(): ItemContainer { return this.propertiesByName.get(ItemContainer.name) as ItemContainer; }
@@ -126,6 +144,10 @@ class Entity
 	locatable(): Locatable { return this.propertiesByName.get(Locatable.name) as Locatable; }
 
 	movable(): Movable { return this.propertiesByName.get(Movable.name) as Movable; }
+
+	obstacle(): Obstacle { return this.propertiesByName.get(Obstacle.name) as Obstacle; }
+
+	phased(): Phased { return this.propertiesByName.get(Phased.name) as Phased; }
 
 	recurrent(): Recurrent { return this.propertiesByName.get(Recurrent.name) as Recurrent; }
 

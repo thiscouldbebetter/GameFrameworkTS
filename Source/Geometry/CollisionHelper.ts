@@ -409,6 +409,41 @@ class CollisionHelper
 
 	// collideEntitiesXAndY
 
+	collideEntitiesBackUp(entity0: Entity, entity1: Entity)
+	{
+		var collidable0 = entity0.collidable();
+		var collidable1 = entity1.collidable();
+
+		var entity0Loc = entity0.locatable().loc;
+		var entity1Loc = entity1.locatable().loc;
+
+		var pos0 = entity0Loc.pos;
+		var pos1 = entity1Loc.pos;
+
+		var vel0 = entity0Loc.vel;
+		var vel1 = entity1Loc.vel;
+
+		var speed0 = vel0.magnitude();
+		var speed1 = vel1.magnitude();
+		var speedMax = Math.max(speed0, speed1);
+
+		var vel0InvertedNormalized = vel0.clone().invert().normalize();
+		var vel1InvertedNormalized = vel1.clone().invert().normalize();
+
+		var distanceBackedUpSoFar = 0;
+
+		while (this.doEntitiesCollide(entity0, entity1) && distanceBackedUpSoFar < speedMax)
+		{
+			distanceBackedUpSoFar++;
+
+			pos0.add(vel0InvertedNormalized);
+			pos1.add(vel1InvertedNormalized);
+
+			collidable0.colliderLocateForEntity(entity0);
+			collidable1.colliderLocateForEntity(entity1);
+		}
+	}
+
 	collideEntitiesBlock(entity0: Entity, entity1: Entity)
 	{
 		// todo - Needs separation as well.
@@ -494,7 +529,7 @@ class CollisionHelper
 		);
 
 		var distanceMovedSoFar = 0;
-		var distanceToMoveMax = 100;
+		var distanceToMoveMax = 10;
 
 		while (this.doEntitiesCollide(entity0, entity1) && distanceMovedSoFar < distanceToMoveMax)
 		{

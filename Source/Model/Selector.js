@@ -28,7 +28,7 @@ class Selector extends EntityProperty {
     // Controllable.
     toControl(size, pos) {
         var fontHeightInPixels = 12;
-        var margin = fontHeightInPixels;
+        var margin = fontHeightInPixels / 2;
         var labelSize = new Coords(size.x, fontHeightInPixels, 0);
         var selectionAsContainer = new ControlContainer("visualPlayerSelection", pos, // pos
         size, [

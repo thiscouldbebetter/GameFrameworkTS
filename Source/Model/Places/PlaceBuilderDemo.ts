@@ -407,7 +407,7 @@ class PlaceBuilderDemo // Main.
 		};
 		var cellCollidable = new Collidable
 		(
-			cellCollider, [ Playable.name ], cellCollide
+			0, cellCollider, [ Playable.name ], cellCollide
 		);
 
 		var neighborOffsets =
@@ -1019,7 +1019,7 @@ class PlaceBuilderDemo // Main.
 		(
 			"BackgroundTop",
 			[
-				new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
+				new Locatable(null),
 				new Drawable(visualBackgroundTop, null),
 				new DrawableCamera()
 			]
@@ -1141,7 +1141,7 @@ class PlaceBuilderDemo // Main.
 			"Goal",
 			[
 				new Locatable(goalLoc),
-				new Collidable(new Box(new Coords(0, 0, 0), entitySize), null, null),
+				new Collidable(0, new Box(new Coords(0, 0, 0), entitySize), null, null),
 				new Drawable(goalVisual, null),
 				new DrawableCamera(),
 				new Goal(numberOfKeysToUnlockGoal),
@@ -1177,7 +1177,7 @@ class PlaceBuilderDemo // Main.
 				[
 					new Item(itemDefnKeyName, 1),
 					new Locatable( new Disposition(itemKeyPos, null, null) ),
-					new Collidable(itemKeyCollider, null, null),
+					new Collidable(0, itemKeyCollider, null, null),
 					new Drawable(itemKeyVisual, null),
 					new DrawableCamera()
 				]
@@ -1235,7 +1235,8 @@ class PlaceBuilderDemo // Main.
 		var numberOfWalls = 4;
 		var wallThickness = 5;
 		var doorwayWidthHalf = wallThickness * 4;
-		var portalSize = new Coords(1, 1, 0).multiplyScalar(2 * doorwayWidthHalf);
+		var portalSizeWE = new Coords(.25, 1, 0).multiplyScalar(2 * doorwayWidthHalf);
+		var portalSizeNS = new Coords(1, .25, 0).multiplyScalar(2 * doorwayWidthHalf);
 
 		var neighborOffsets =
 		[
@@ -1244,6 +1245,33 @@ class PlaceBuilderDemo // Main.
 			new Coords(-1, 0, 0),
 			new Coords(0, -1, 0)
 		];
+
+		var portalCollide =
+			(u: Universe, w: World, p: Place, ePortal: Entity, eOther: Entity) =>
+			{
+				if (eOther.playable() != null)
+				{
+					var usable = ePortal.usable();
+					if (usable == null)
+					{
+						var portal = ePortal.portal();
+						portal.use(u, w, p, eOther, ePortal);
+					}
+				}
+			};
+
+		var forceFieldCollide =
+			(u: Universe, w: World, p: Place, ePortal: Entity, eOther: Entity) =>
+			{
+				if (eOther.playable() != null)
+				{
+					var forceField = ePortal.forceField();
+					if (forceField != null)
+					{
+						forceField.applyToEntity(eOther);
+					}
+				}
+			};
 
 		for (var i = 0; i < numberOfWalls; i++)
 		{
@@ -1315,7 +1343,7 @@ class PlaceBuilderDemo // Main.
 					"ObstacleWall" + i + "_" + d,
 					[
 						new Locatable(wallPartLoc),
-						new Collidable(wallCollider, null, null),
+						new Collidable(0, wallCollider, null, null),
 						new Damager(new Damage(10, null, null)),
 						new Drawable(wallVisual, null),
 						new DrawableCamera()
@@ -1329,33 +1357,71 @@ class PlaceBuilderDemo // Main.
 			{
 				var portalPos = wallPos.clone();
 				var neighborOffset = neighborOffsets[i];
+				var portalSize = (i % 2 == 0) ? portalSizeWE : portalSizeNS;
 				portalPos.add(neighborOffset.clone().multiply(portalSize));
 				var neighborPos = placePos.clone().add(neighborOffset);
 				var neighborName = placeNamePrefix + neighborPos.toStringXY();
+
+				var portal = new Portal
+				(
+					neighborName,
+					"PortalToNeighbor" + ((i + 2) % 4),
+					neighborOffset.clone().double()
+				);
+
+				var portalBox = new Box(new Coords(0, 0, 0), portalSize);
+
+				var collidable = new Collidable
+				(
+					0,
+					portalBox,
+					[ Playable.name ],
+					portalCollide
+				);
+
+				var locatable = new Locatable(new Disposition(portalPos, null, null));
 
 				var portalEntity = new Entity
 				(
 					"PortalToNeighbor" + i,
 					[
-						new Collidable(new Box(new Coords(0, 0, 0), portalSize), null, null),
-						new Locatable(new Disposition(portalPos, null, null)),
-						new Portal(neighborName, "PortalToNeighbor" + ((i + 2) % 4), false),
-						new Drawable
-						(
-							new VisualRectangle(portalSize, Color.byName("Violet"), null, null),
-							null
-						),
-						new DrawableCamera()
+						collidable,
+						locatable,
+						portal
 					]
 				);
 
 				entities.push(portalEntity);
+
+				var forceField = new ForceField
+				(
+					null, neighborOffset.clone().invert()
+				)
+				var forceFieldCollidable = new Collidable
+				(
+					0,
+					portalBox,
+					[ Playable.name ],
+					forceFieldCollide
+				);
+
+				var forceFieldEntity = new Entity
+				(
+					"PortalToNeighbor" + i + "_ForceField",
+					[
+						forceFieldCollidable,
+						forceField,
+						locatable
+					]
+				);
+
+				entities.push(forceFieldEntity);
 			}
 
 		}
 
 		return wallThickness;
-	};
+	}
 
 	entityBuildRadioMessage(visualForPortrait: Visual, message: string)
 	{
@@ -1444,7 +1510,7 @@ class PlaceBuilderDemo // Main.
 		(
 			"Store",
 			[
-				new Collidable(new Box(new Coords(0, 0, 0), entitySize), null, null),
+				new Collidable(0, new Box(new Coords(0, 0, 0), entitySize), null, null),
 				new Drawable(visual, null),
 				new DrawableCamera(),
 				new ItemStore("Coin"),
@@ -1459,7 +1525,7 @@ class PlaceBuilderDemo // Main.
 					null, // weightMax
 					null // reachRadius
 				),
-				new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
+				new Locatable(null),
 				new Usable
 				(
 					(u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) =>
@@ -1489,8 +1555,8 @@ class PlaceBuilderDemo // Main.
 			itemDefnAccessoryName,
 			[
 				new Item(itemDefnAccessoryName, 1),
-				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
-				new Collidable(itemAccessoryCollider, null, null),
+				new Locatable(null),
+				new Collidable(0, itemAccessoryCollider, null, null),
 				new Drawable(itemAccessoryVisual, null),
 				new DrawableCamera(),
 				new Equippable(null, null)
@@ -1507,7 +1573,7 @@ class PlaceBuilderDemo // Main.
 		var itemArmorVisual = itemDefn.visual;
 		var path = ((itemArmorVisual as VisualGroup).children[0] as VisualPolygon).verticesAsPath;
 		var itemArmorCollider = new Sphere(new Coords(0, 0, 0), entityDimension / 2);
-		var collidable = new Collidable(itemArmorCollider, null, null);
+		var collidable = new Collidable(0, itemArmorCollider, null, null);
 		var box = new Box(new Coords(0, 0, 0), new Coords(0, 0, 0) ).ofPoints(path.points);
 		box.center = collidable.collider.center;
 		var boundable = new Boundable(box);
@@ -1521,7 +1587,7 @@ class PlaceBuilderDemo // Main.
 				collidable,
 				new Equippable(null, null),
 				new Item(itemDefnArmorName, 1),
-				new Locatable( new Disposition( new Coords(0, 0, 0), null, null ) ),
+				new Locatable(null),
 				new Drawable(itemArmorVisual, null),
 				new DrawableCamera()
 			]
@@ -1542,7 +1608,7 @@ class PlaceBuilderDemo // Main.
 
 		var itemArrowCollider = new Sphere(new Coords(0, 0, 0), entityDimensionHalf);
 
-		var collidable = new Collidable(itemArrowCollider, null, null);
+		var collidable = new Collidable(0, itemArrowCollider, null, null);
 		var bounds = new Box(collidable.collider.center, arrowSize);
 		var boundable = new Boundable(bounds);
 
@@ -1557,7 +1623,7 @@ class PlaceBuilderDemo // Main.
 				new Drawable(itemArrowVisual, null),
 				new DrawableCamera(),
 				new Item(itemDefnArrowName, roundsPerPile),
-				new Locatable( new Disposition( new Coords(0, 0, 0), null, null ) ),
+				new Locatable(null),
 			]
 		);
 
@@ -1648,7 +1714,7 @@ class PlaceBuilderDemo // Main.
 					(
 						"BombExplosion",
 						[
-							new Collidable(explosionCollider, [ Killable.name ], explosionCollide),
+							new Collidable(0, explosionCollider, [ Killable.name ], explosionCollide),
 							new Damager(new Damage(20, null, null)),
 							new Drawable(explosionVisual, null),
 							new DrawableCamera(),
@@ -1667,6 +1733,7 @@ class PlaceBuilderDemo // Main.
 						new Locatable( projectileLoc ),
 						new Collidable
 						(
+							0,
 							projectileCollider,
 							[ Collidable.name ],
 							projectileCollide
@@ -1687,8 +1754,8 @@ class PlaceBuilderDemo // Main.
 			itemDefnBombName,
 			[
 				new Item(itemDefnBombName, 1),
-				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
-				new Collidable(itemBombCollider, null, null),
+				new Locatable(null),
+				new Collidable(0, itemBombCollider, null, null),
 				itemBombDevice,
 				new Drawable(itemBombVisual, null),
 				new DrawableCamera(),
@@ -1712,8 +1779,8 @@ class PlaceBuilderDemo // Main.
 			itemDefnBookName,
 			[
 				new Item(itemDefnBookName, 1),
-				new Locatable(new Disposition(new Coords(0, 0, 0), null, null) ),
-				new Collidable(itemBookCollider, null, null),
+				new Locatable(null),
+				new Collidable(0, itemBookCollider, null, null),
 				new Drawable(itemBookVisual, null),
 				new DrawableCamera()
 			]
@@ -1826,6 +1893,7 @@ class PlaceBuilderDemo // Main.
 					new Locatable( projectileLoc ),
 					new Collidable
 					(
+						0, // ticksToWaitBetweenCollisions
 						projectileCollider,
 						[ Killable.name ],
 						projectileCollide
@@ -1858,8 +1926,8 @@ class PlaceBuilderDemo // Main.
 			itemDefnName,
 			[
 				new Item(itemDefnName, 1),
-				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
-				new Collidable(itemBowCollider, null, null),
+				new Locatable(null),
+				new Collidable(0, itemBowCollider, null, null),
 				new Drawable(itemBowVisual, null),
 				new DrawableCamera(),
 				new Equippable(null, null),
@@ -1883,8 +1951,8 @@ class PlaceBuilderDemo // Main.
 			itemDefnBreadName,
 			[
 				new Item(itemDefnBreadName, 1),
-				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
-				new Collidable(itemBreadCollider, null, null),
+				new Locatable(null),
+				new Collidable(0, itemBreadCollider, null, null),
 				new Drawable(itemBreadVisual, null),
 				new DrawableCamera()
 			]
@@ -1970,7 +2038,7 @@ class PlaceBuilderDemo // Main.
 			}
 		};
 
-		var carCollidable = new Collidable(carCollider, [Collidable.name], carCollide);
+		var carCollidable = new Collidable(0, carCollider, [Collidable.name], carCollide);
 
 		var carConstrainable = new Constrainable
 		([
@@ -2027,8 +2095,8 @@ class PlaceBuilderDemo // Main.
 			itemDefnCoinName,
 			[
 				new Item(itemDefnCoinName, 1),
-				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
-				new Collidable(itemCoinCollider, null, null),
+				new Locatable(null),
+				new Collidable(0, itemCoinCollider, null, null),
 				new Drawable(itemCoinVisual, null),
 				new DrawableCamera()
 			]
@@ -2049,11 +2117,11 @@ class PlaceBuilderDemo // Main.
 		(
 			itemDefnCrystalName,
 			[
-				new Collidable(itemCrystalCollider, null, null),
+				new Collidable(0, itemCrystalCollider, null, null),
 				new Drawable(itemCrystalVisual, null),
 				new DrawableCamera(),
 				new Item(itemDefnCrystalName, 1),
-				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) )
+				new Locatable(null)
 			]
 		);
 
@@ -2074,7 +2142,7 @@ class PlaceBuilderDemo // Main.
 			[
 				new Item(itemDefnDoughnutName, 1),
 				new Locatable(null),
-				new Collidable(itemDoughnutCollider, null, null),
+				new Collidable(0, itemDoughnutCollider, null, null),
 				new Drawable(itemDoughnutVisual, null),
 				new DrawableCamera()
 			]
@@ -2095,8 +2163,8 @@ class PlaceBuilderDemo // Main.
 			itemDefnName,
 			[
 				new Item(itemDefnName, 1),
-				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
-				new Collidable(collider, null, null),
+				new Locatable(null),
+				new Collidable(0, collider, null, null),
 				new Drawable(visual, null),
 				new DrawableCamera()
 			]
@@ -2118,8 +2186,8 @@ class PlaceBuilderDemo // Main.
 			itemDefnFruitName,
 			[
 				new Item(itemDefnFruitName, 1),
-				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
-				new Collidable(itemFruitCollider, null, null),
+				new Locatable(null),
+				new Collidable(0, itemFruitCollider, null, null),
 				new Drawable(itemFruitVisual, null),
 				new DrawableCamera(),
 			]
@@ -2163,8 +2231,8 @@ class PlaceBuilderDemo // Main.
 			itemDefnName,
 			[
 				new Item(itemDefnName, 1),
-				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
-				new Collidable(itemGrassCollider, null, null),
+				new Locatable(null),
+				new Collidable(0, itemGrassCollider, null, null),
 				new Drawable(itemGrassVisual, null),
 				new DrawableCamera()
 			]
@@ -2187,7 +2255,7 @@ class PlaceBuilderDemo // Main.
 			[
 				new Item(itemDefnHeartName, 1),
 				new Locatable(null),
-				new Collidable(itemHeartCollider, null, null),
+				new Collidable(0, itemHeartCollider, null, null),
 				new Drawable(itemHeartVisual, null),
 				new DrawableCamera()
 			]
@@ -2209,8 +2277,8 @@ class PlaceBuilderDemo // Main.
 			itemDefnIronName,
 			[
 				new Item(itemDefnIronName, 1),
-				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
-				new Collidable(itemIronCollider, null, null),
+				new Locatable(null),
+				new Collidable(0, itemIronCollider, null, null),
 				new Drawable(itemIronVisual, null),
 				new DrawableCamera()
 			]
@@ -2232,8 +2300,8 @@ class PlaceBuilderDemo // Main.
 			itemDefnOreName,
 			[
 				new Item(itemDefnOreName, 1),
-				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
-				new Collidable(itemOreCollider, null, null),
+				new Locatable(null),
+				new Collidable(0, itemOreCollider, null, null),
 				new Drawable(itemOreVisual, null),
 				new DrawableCamera()
 			]
@@ -2255,8 +2323,8 @@ class PlaceBuilderDemo // Main.
 			itemDefnLogName,
 			[
 				new Item(itemDefnLogName, 1),
-				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
-				new Collidable(itemLogCollider, null, null),
+				new Locatable(null),
+				new Collidable(0, itemLogCollider, null, null),
 				new Drawable(itemLogVisual, null),
 				new DrawableCamera()
 			]
@@ -2279,8 +2347,8 @@ class PlaceBuilderDemo // Main.
 			itemDefnMeatName,
 			[
 				new Item(itemDefnMeatName, 1),
-				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
-				new Collidable(itemMeatCollider, null, null),
+				new Locatable(null),
+				new Collidable(0, itemMeatCollider, null, null),
 				new Drawable(itemMeatVisual, null),
 				new DrawableCamera(),
 				new Usable(itemMeatDefn.use)
@@ -2303,8 +2371,8 @@ class PlaceBuilderDemo // Main.
 			itemDefnMedicineName,
 			[
 				new Item(itemDefnMedicineName, 1),
-				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
-				new Collidable(itemMedicineCollider, null, null),
+				new Locatable(null),
+				new Collidable(0, itemMedicineCollider, null, null),
 				new Drawable(itemMedicineVisual, null),
 				new DrawableCamera(),
 				new Equippable(null, null)
@@ -2328,8 +2396,8 @@ class PlaceBuilderDemo // Main.
 			itemDefnName,
 			[
 				new Item(itemDefnName, 1),
-				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
-				new Collidable(itemMushroomCollider, null, null),
+				new Locatable(null),
+				new Collidable(0, itemMushroomCollider, null, null),
 				new Drawable(itemMushroomVisual, null),
 				new DrawableCamera()
 			]
@@ -2371,8 +2439,8 @@ class PlaceBuilderDemo // Main.
 			itemDefnName,
 			[
 				new Item(itemDefnName, 1),
-				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
-				new Collidable(itemPickCollider, null, null),
+				new Locatable(null),
+				new Collidable(0, itemPickCollider, null, null),
 				itemPickDevice,
 				new Drawable(itemPickVisual, null),
 				new DrawableCamera(),
@@ -2427,8 +2495,8 @@ class PlaceBuilderDemo // Main.
 			itemDefnPotionName,
 			[
 				new Item(itemDefnPotionName, 1),
-				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
-				new Collidable(itemPotionCollider, null, null),
+				new Locatable(null),
+				new Collidable(0, itemPotionCollider, null, null),
 				new Drawable(itemPotionVisual, null),
 				new DrawableCamera()
 			]
@@ -2484,8 +2552,8 @@ class PlaceBuilderDemo // Main.
 			itemDefnName,
 			[
 				new Item(itemDefnName, 1),
-				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
-				new Collidable(itemShovelCollider, null, null),
+				new Locatable(null),
+				new Collidable(0, itemShovelCollider, null, null),
 				itemShovelDevice,
 				new Drawable(itemShovelVisual, null),
 				new DrawableCamera(),
@@ -2615,7 +2683,7 @@ class PlaceBuilderDemo // Main.
 					new Locatable(projectileLoc),
 					new Collidable
 					(
-						projectileCollider, [ Killable.name ], projectileCollide
+						0, projectileCollider, [ Killable.name ], projectileCollide
 					),
 					new Drawable(projectileVisual, null),
 					new DrawableCamera()
@@ -2650,7 +2718,7 @@ class PlaceBuilderDemo // Main.
 			[
 				new Item(itemDefnName, 1),
 				new Locatable(null),
-				new Collidable(itemSwordCollider, null, null),
+				new Collidable(0, itemSwordCollider, null, null),
 				new Drawable(itemSwordVisual, null),
 				new DrawableCamera(),
 				itemSwordDevice,
@@ -2674,8 +2742,8 @@ class PlaceBuilderDemo // Main.
 			itemDefnName,
 			[
 				new Item(itemDefnName, 1),
-				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
-				new Collidable(itemToolsetCollider, null, null),
+				new Locatable(null),
+				new Collidable(0, itemToolsetCollider, null, null),
 				new Drawable(itemToolsetVisual, null),
 				new DrawableCamera()
 			]
@@ -2697,8 +2765,8 @@ class PlaceBuilderDemo // Main.
 			itemDefnName,
 			[
 				new Item(itemDefnName, 1),
-				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
-				new Collidable(itemTorchCollider, null, null),
+				new Locatable(null),
+				new Collidable(0, itemTorchCollider, null, null),
 				new Drawable(itemTorchVisual, null),
 				new DrawableCamera()
 			]
@@ -2720,8 +2788,8 @@ class PlaceBuilderDemo // Main.
 			itemDefnName,
 			[
 				new Item(itemDefnName, 1),
-				new Locatable( new Disposition(new Coords(0, 0, 0), null, null) ),
-				new Collidable(itemWeightCollider, null, null),
+				new Locatable(null),
+				new Collidable(0, itemWeightCollider, null, null),
 				new Drawable(itemWeightVisual, null),
 				new DrawableCamera()
 			]

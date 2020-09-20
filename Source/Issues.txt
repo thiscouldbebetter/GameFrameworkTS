@@ -13,7 +13,6 @@ Items - Crafting - Blocking with Working Animation
 Items - Generated Devices with Varying Specs
 
 Movers - Animals - Carnivores Eat Grazers
-Movers - Animals - Growth, Aging and Natural Death
 Movers - Animals - Lairs and Sleep
 Movers - Animals - Procreation
 

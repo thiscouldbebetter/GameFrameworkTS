@@ -53,10 +53,11 @@ class World
 		var propertyNamesToProcess = 
 		[
 			Locatable.name,
+			ForceField.name,
+
 			Boundable.name,
 			Constrainable.name,
 			Collidable.name,
-			CollisionTracker.name,
 
 			Idleable.name,
 			Actor.name,
@@ -74,6 +75,7 @@ class World
 
 			Ephemeral.name,
 			Killable.name,
+			Phased.name,
 			Starvable.name,
 			Tirable.name,
 

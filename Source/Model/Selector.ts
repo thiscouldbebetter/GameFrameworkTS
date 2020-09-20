@@ -56,7 +56,7 @@ class Selector extends EntityProperty
 	toControl(size: Coords, pos: Coords)
 	{
 		var fontHeightInPixels = 12;
-		var margin = fontHeightInPixels;
+		var margin = fontHeightInPixels / 2;
 
 		var labelSize = new Coords(size.x, fontHeightInPixels, 0);
 

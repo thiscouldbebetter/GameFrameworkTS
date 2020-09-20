@@ -127,6 +127,7 @@ class PlaceBuilderDemo_Emplacements
 		);
 		var collidable = new Collidable
 		(
+			0, // ticksToWaitBetweenCollisions
 			collider,
 			[ Collidable.name ], // entityPropertyNamesToCollideWith,
 			// collideEntities
@@ -231,11 +232,12 @@ class PlaceBuilderDemo_Emplacements
 			if (entityOtherEffectable != null)
 			{
 				entityOtherEffectable.effectAdd(Effect.Instances().Burning.clone());
-				entityCampfire.collidable().ticksUntilCanCollide = 50;
+				//entityCampfire.collidable().ticksUntilCanCollide = 50;
 			}
 		};
 		var campfireCollidable = new Collidable
 		(
+			0, // ticksToWaitBetweenCollisions
 			campfireCollider,
 			[ Collidable.name ],
 			campfireCollide
@@ -292,7 +294,10 @@ class PlaceBuilderDemo_Emplacements
 		(
 			"Container",
 			[
-				new Collidable(new Box(new Coords(0, 0, 0), entitySize), null, null),
+				new Collidable(
+					0, // ticksToWaitBetweenCollisions
+					new Box(new Coords(0, 0, 0), entitySize), null, null
+				),
 				new Drawable(visual, null),
 				new DrawableCamera(),
 				new ItemContainer(),
@@ -302,7 +307,7 @@ class PlaceBuilderDemo_Emplacements
 				(
 					(universe: Universe, w: World, p: Place, entityUsing: Entity, entityOther: Entity) =>
 					{
-						entityOther.collidable().ticksUntilCanCollide = 50; // hack
+						//entityOther.collidable().ticksUntilCanCollide = 50; // hack
 						var itemContainerAsControl = entityOther.itemContainer().toControl
 						(
 							universe, universe.display.sizeInPixels,
@@ -362,15 +367,22 @@ class PlaceBuilderDemo_Emplacements
 			);
 		}
 
+		var collidable = new Collidable
+		(
+			0, // ticksToWaitBetweenCollisions
+			new Box(new Coords(0, 0, 0), entitySize),
+			null, null
+		);
+
 		var exitEntityDefn = new Entity
 		(
 			"Exit",
 			[
-				new Collidable(new Box(new Coords(0, 0, 0), entitySize), null, null),
+				collidable,
 				new Drawable(visual, null),
 				new DrawableCamera(),
 				new Locatable(new Disposition(new Coords(0, 0, 0), null, null) ),
-				new Portal(null, null, true), // Destination must be set ouside this method.
+				new Portal(null, null, new Coords(0, 0, 0)), // Destination must be set ouside this method.
 				new Usable
 				(
 					(u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) => 
@@ -460,7 +472,7 @@ class PlaceBuilderDemo_Emplacements
 		(
 			new Box(new Coords(0, 0, 0), obstacleBarSize), obstacleRotationInTurns
 		);
-		var obstacleCollidable = new Collidable(obstacleCollider, null, null);
+		var obstacleCollidable = new Collidable(0, obstacleCollider, null, null);
 		var obstacleBounds = obstacleCollidable.collider.sphereSwept();
 		var obstacleBoundable = new Boundable(obstacleBounds);
 
@@ -572,6 +584,7 @@ class PlaceBuilderDemo_Emplacements
 
 		var obstacleCollidable = new Collidable
 		(
+			0, // ticksToWaitBetweenCollisions
 			new MapLocated
 			(
 				obstacleMappedMap,
@@ -635,7 +648,7 @@ class PlaceBuilderDemo_Emplacements
 			"Ring",
 			[
 				new Locatable(obstacleLoc),
-				new Collidable(obstacleCollider, null, null),
+				new Collidable(0, obstacleCollider, null, null),
 				new Damager(new Damage(10, null, null)),
 				new Drawable(obstacleRingVisual, null),
 				new DrawableCamera()
@@ -742,11 +755,11 @@ class PlaceBuilderDemo_Emplacements
 		(
 			"Portal",
 			[
-				new Collidable(new Box(new Coords(0, 0, 0), entitySize), null, null),
+				new Collidable(0, new Box(new Coords(0, 0, 0), entitySize), null, null),
 				new Drawable(visual, null),
 				new DrawableCamera(),
 				new Locatable(new Disposition(new Coords(0, 0, 0), null, null) ),
-				new Portal(null, "Exit", true),
+				new Portal(null, "Exit", new Coords(0, 0, 0)),
 				new Usable(portalUse)
 			]
 		);
@@ -796,6 +809,7 @@ class PlaceBuilderDemo_Emplacements
 		var collider = new Sphere(new Coords(0, 0, 0), entityDimension * .25);
 		var collidable = new Collidable
 		(
+			0, // ticksToWaitBetweenCollisions
 			collider,
 			[ Collidable.name ], // entityPropertyNamesToCollideWith,
 			// collideEntities
@@ -864,6 +878,7 @@ class PlaceBuilderDemo_Emplacements
 		);
 		var collidable = new Collidable
 		(
+			0, // ticksToWaitBetweenCollisions
 			collider,
 			[ Collidable.name ], // entityPropertyNamesToCollideWith,
 			// collideEntities

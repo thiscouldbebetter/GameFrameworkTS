@@ -26,10 +26,10 @@ class World {
         var actionToInputsMappings = placeBuilder.actionToInputsMappings;
         var propertyNamesToProcess = [
             Locatable.name,
+            ForceField.name,
             Boundable.name,
             Constrainable.name,
             Collidable.name,
-            CollisionTracker.name,
             Idleable.name,
             Actor.name,
             Effectable.name,
@@ -44,6 +44,7 @@ class World {
             Vehicle.name,
             Ephemeral.name,
             Killable.name,
+            Phased.name,
             Starvable.name,
             Tirable.name,
             Camera.name,

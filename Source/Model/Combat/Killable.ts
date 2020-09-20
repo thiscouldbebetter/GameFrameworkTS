@@ -35,7 +35,7 @@ class Killable extends EntityProperty
 			damageApplied = this._damageApply(universe, world, place, entityDamager, entityKillable, damageToApply);
 		}
 		return damageApplied;
-	};
+	}
 
 	die(u: Universe, w: World, p: Place, e: Entity)
 	{
@@ -60,10 +60,15 @@ class Killable extends EntityProperty
 		this.integrityAdd(0 - amountToSubtract);
 	}
 
+	kill()
+	{
+		this.integrity = 0;
+	}
+
 	isAlive()
 	{
 		return (this.integrity > 0);
-	};
+	}
 
 	updateForTimerTick(universe: Universe, world: World, place: Place, entityKillable: Entity)
 	{
@@ -72,12 +77,12 @@ class Killable extends EntityProperty
 			place.entitiesToRemove.push(entityKillable);
 			this.die(universe, world, place, entityKillable);
 		}
-	};
+	}
 
 	// cloneable
 
 	clone()
 	{
 		return new Killable(this.integrityMax, this._damageApply, this._die);
-	};
+	}
 }

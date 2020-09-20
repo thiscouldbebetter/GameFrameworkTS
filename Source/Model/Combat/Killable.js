@@ -18,7 +18,6 @@ class Killable extends EntityProperty {
         }
         return damageApplied;
     }
-    ;
     die(u, w, p, e) {
         if (this._die != null) {
             this._die(u, w, p, e);
@@ -31,20 +30,20 @@ class Killable extends EntityProperty {
     integritySubtract(amountToSubtract) {
         this.integrityAdd(0 - amountToSubtract);
     }
+    kill() {
+        this.integrity = 0;
+    }
     isAlive() {
         return (this.integrity > 0);
     }
-    ;
     updateForTimerTick(universe, world, place, entityKillable) {
         if (this.isAlive() == false) {
             place.entitiesToRemove.push(entityKillable);
             this.die(universe, world, place, entityKillable);
         }
     }
-    ;
     // cloneable
     clone() {
         return new Killable(this.integrityMax, this._damageApply, this._die);
     }
-    ;
 }

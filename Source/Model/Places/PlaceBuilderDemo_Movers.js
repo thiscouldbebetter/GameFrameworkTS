@@ -93,7 +93,7 @@ class PlaceBuilderDemo_Movers {
         };
         var carnivoreEntityDefn = new Entity("Carnivore", [
             new Actor(carnivoreActivity),
-            new Collidable(carnivoreCollider, null, null),
+            new Collidable(0, carnivoreCollider, null, null),
             new Constrainable([constraintSpeedMax1]),
             new Drawable(carnivoreVisual, null),
             new DrawableCamera(),
@@ -160,7 +160,7 @@ class PlaceBuilderDemo_Movers {
         var enemyEntityPrototype = new Entity(enemyTypeName + (damageTypeName || "Normal"), [
             new Actor(enemyActivity),
             new Constrainable([new Constraint_SpeedMaxXY(speedMax)]),
-            new Collidable(enemyCollider, null, null),
+            new Collidable(0, enemyCollider, null, null),
             new Damager(new Damage(10, damageTypeName, null)),
             new Drawable(enemyVisual, null),
             new DrawableCamera(),
@@ -323,12 +323,13 @@ class PlaceBuilderDemo_Movers {
         var constrainable = new Constrainable([constraintSpeedMax1]);
         var friendlyCollider = new Sphere(new Coords(0, 0, 0), friendlyDimension);
         var friendlyCollide = (u, w, p, eFriendly, eOther, c) => {
-            eFriendly.locatable().loc.vel.clear();
             var collisionHelper = u.collisionHelper;
-            collisionHelper.collideEntitiesBounce(eFriendly, eOther);
-            collisionHelper.collideEntitiesSeparate(eFriendly, eOther);
+            //eFriendly.locatable().loc.vel.clear();
+            //collisionHelper.collideEntitiesBounce(eFriendly, eOther);
+            //collisionHelper.collideEntitiesSeparate(eFriendly, eOther);
+            collisionHelper.collideEntitiesBackUp(eFriendly, eOther);
         };
-        var collidable = new Collidable(friendlyCollider, [Collidable.name], friendlyCollide);
+        var collidable = new Collidable(0, friendlyCollider, [Collidable.name], friendlyCollide);
         //var collidable = new Collidable(friendlyCollider, null, null);
         var visualEyeRadius = entityDimension * .75 / 2;
         var visualBuilder = new VisualBuilder();
@@ -435,26 +436,38 @@ class PlaceBuilderDemo_Movers {
         grazerDimension * .6, 0, // rotationInTurns
         grazerColor, null // colorBorder
         );
+        var grazerVisualJuvenile = new VisualGroup([
+            grazerVisualBodyJuvenile, visualEyesDirectional
+        ]);
         var grazerVisualBodyAdult = new VisualEllipse(grazerDimension, // semimajorAxis
         grazerDimension * .8, 0, // rotationInTurns
         grazerColor, null // colorBorder
         );
+        var grazerVisualAdult = new VisualGroup([
+            grazerVisualBodyAdult, visualEyesDirectional
+        ]);
         var grazerVisualBodyElder = new VisualEllipse(grazerDimension, // semimajorAxis
         grazerDimension * .8, 0, // rotationInTurns
-        Color.byName("LightGray"), null // colorBorder
+        Color.byName("GrayLight"), null // colorBorder
         );
-        var grazerVisualBodySelect = new VisualSelect(new Map([
-            ["Juvenile", grazerVisualBodyJuvenile],
-            ["Adult", grazerVisualBodyAdult],
-            ["Elder", grazerVisualBodyElder]
+        var grazerVisualElder = new VisualGroup([
+            grazerVisualBodyElder, visualEyesDirectional
+        ]);
+        var grazerVisualDead = new VisualEllipse(grazerDimension, // semimajorAxis
+        grazerDimension * .8, 0, // rotationInTurns
+        Color.byName("GrayLight"), null);
+        var grazerVisualSelect = new VisualSelect(new Map([
+            ["Juvenile", grazerVisualJuvenile],
+            ["Adult", grazerVisualAdult],
+            ["Elder", grazerVisualElder],
+            ["Dead", grazerVisualDead] // todo
         ]), (u, w, p, e) => {
-            //var alive = e.alive();
-            // todo
-            return ["Adult"];
+            var phased = e.phased();
+            var phase = phased.phaseCurrent(w);
+            return [phase.name];
         });
         var grazerVisual = new VisualGroup([
-            grazerVisualBodySelect,
-            visualEyesDirectional,
+            grazerVisualSelect
         ]);
         if (this.parent.visualsHaveText) {
             grazerVisual.children.push(new VisualOffset(new VisualText(new DataBinding("Grazer", null, null), null, grazerColor, null), new Coords(0, 0 - grazerDimension * 2, 0)));
@@ -500,21 +513,22 @@ class PlaceBuilderDemo_Movers {
          {
             entityDying.locatable().entitySpawnWithDefnName(universe, world, place, entityDying, "Meat");
         };
-        var grazerAlive = new Alive(0, // tickBorn
+        var grazerPhased = new Phased(0, // tickBorn
         [
-            [
-                1000,
-                (u, w, p, e) => { }
-            ],
-            [
-                2000,
-                (u, w, p, e) => { }
-            ]
+            new Phase("Juvenile", 0, (u, w, p, e) => { }),
+            new Phase("Adult", 500, (u, w, p, e) => { }),
+            new Phase("Elder", 3000, (u, w, p, e) => { }),
+            new Phase("Dead", 4000, (u, w, p, e) => {
+                e.propertyRemoveForPlace(e.actor(), p);
+                e.locatable().loc.vel.clear();
+                var ephemeral = new Ephemeral(300, null);
+                e.propertyAddForPlace(ephemeral, p);
+            })
         ]);
         var grazerEntityDefn = new Entity("Grazer", [
             new Actor(grazerActivity),
-            grazerAlive,
-            new Collidable(grazerCollider, null, null),
+            grazerPhased,
+            new Collidable(0, grazerCollider, null, null),
             new Constrainable([constraintSpeedMax1]),
             new Drawable(grazerVisual, null),
             new DrawableCamera(),
@@ -573,9 +587,12 @@ class PlaceBuilderDemo_Movers {
         ]);
         var playerCollide = (universe, world, place, entityPlayer, entityOther) => {
             var soundHelper = universe.soundHelper;
+            var collisionHelper = universe.collisionHelper;
             var entityOtherDamager = entityOther.damager();
             if (entityOtherDamager != null) {
-                universe.collisionHelper.collideEntitiesBounce(entityPlayer, entityOther);
+                collisionHelper.collideEntitiesBounce(entityPlayer, entityOther);
+                //collisionHelper.collideEntitiesBackUp(entityPlayer, entityOther);
+                //collisionHelper.collideEntitiesBlock(entityPlayer, entityOther);
                 entityPlayer.killable().damageApply(universe, world, place, entityOther, entityPlayer, entityOtherDamager.damagePerHit);
                 soundHelper.soundWithNamePlayAsEffect(universe, "Effects_Clang");
             }
@@ -593,16 +610,8 @@ class PlaceBuilderDemo_Movers {
                     universe.venueNext = venueMessage;
                 }
             }
-            else if (entityOther.portal() != null) {
-                var usable = entityOther.usable();
-                if (usable == null) {
-                    var portal = entityOther.portal();
-                    portal.use(universe, world, place, entityPlayer, entityOther);
-                }
-            }
             else if (entityOther.talker() != null) {
-                entityOther.collidable().ticksUntilCanCollide = 100;
-                //entityOther.drawable().animationRuns["Friendly"].ticksSinceStarted = 0;
+                entityOther.collidable().ticksUntilCanCollide = 100; // hack
                 var conversationDefnAsJSON = universe.mediaLibrary.textStringGetByName("Conversation").value;
                 var conversationDefn = ConversationDefn.deserialize(conversationDefnAsJSON);
                 var venueToReturnTo = universe.venueCurrent;
@@ -787,7 +796,8 @@ class PlaceBuilderDemo_Movers {
         );
         var playerEntityDefn = new Entity(entityDefnNamePlayer, [
             new Actor(playerActivity),
-            new Collidable(playerCollider, [Collidable.name], // entityPropertyNamesToCollideWith
+            new Collidable(0, // ticksToWaitBetweenCollisions
+            playerCollider, [Collidable.name], // entityPropertyNamesToCollideWith
             playerCollide),
             constrainable,
             controllable,

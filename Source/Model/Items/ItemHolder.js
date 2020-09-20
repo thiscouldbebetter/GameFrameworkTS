@@ -208,8 +208,8 @@ class ItemHolder extends EntityProperty {
                 var itemLocatable = itemEntityToDrop.locatable();
                 if (itemLocatable == null) {
                     itemLocatable = new Locatable(null);
-                    itemEntityToDrop.propertyAdd(itemLocatable);
-                    itemEntityToDrop.propertyAdd(new Drawable(itemToDropDefn.visual, null));
+                    itemEntityToDrop.propertyAddForPlace(itemLocatable, place);
+                    itemEntityToDrop.propertyAddForPlace(new Drawable(itemToDropDefn.visual, null), place);
                     // todo - Other properties: Collidable, etc.
                 }
                 var posToDropAt = itemLocatable.loc.pos;
@@ -217,7 +217,7 @@ class ItemHolder extends EntityProperty {
                 posToDropAt.overwriteWith(holderPos);
                 var collidable = itemEntityToDrop.collidable();
                 if (collidable != null) {
-                    collidable.ticksUntilCanCollide = 50;
+                    collidable.ticksUntilCanCollide = collidable.ticksToWaitBetweenCollisions;
                 }
                 place.entitySpawn(universe, world, itemEntityToDrop);
                 itemHolder.itemSubtract(itemToDrop);

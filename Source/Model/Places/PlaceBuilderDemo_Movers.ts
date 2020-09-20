@@ -186,7 +186,7 @@ class PlaceBuilderDemo_Movers
 			"Carnivore",
 			[
 				new Actor(carnivoreActivity),
-				new Collidable(carnivoreCollider, null, null),
+				new Collidable(0, carnivoreCollider, null, null),
 				new Constrainable([constraintSpeedMax1]),
 				new Drawable(carnivoreVisual, null),
 				new DrawableCamera(),
@@ -331,7 +331,7 @@ class PlaceBuilderDemo_Movers
 			[
 				new Actor(enemyActivity),
 				new Constrainable([new Constraint_SpeedMaxXY(speedMax)]),
-				new Collidable(enemyCollider, null, null),
+				new Collidable(0, enemyCollider, null, null),
 				new Damager(new Damage(10, damageTypeName, null)),
 				new Drawable(enemyVisual, null),
 				new DrawableCamera(),
@@ -678,12 +678,13 @@ class PlaceBuilderDemo_Movers
 		var friendlyCollide =
 			(u: Universe, w: World, p: Place, eFriendly: Entity, eOther: Entity, c: Collision) =>
 			{
-				eFriendly.locatable().loc.vel.clear();
 				var collisionHelper = u.collisionHelper;
-				collisionHelper.collideEntitiesBounce(eFriendly, eOther);
-				collisionHelper.collideEntitiesSeparate(eFriendly, eOther);
+				//eFriendly.locatable().loc.vel.clear();
+				//collisionHelper.collideEntitiesBounce(eFriendly, eOther);
+				//collisionHelper.collideEntitiesSeparate(eFriendly, eOther);
+				collisionHelper.collideEntitiesBackUp(eFriendly, eOther);
 			};
-		var collidable = new Collidable(friendlyCollider, [ Collidable.name ], friendlyCollide);
+		var collidable = new Collidable(0, friendlyCollider, [ Collidable.name ], friendlyCollide);
 		//var collidable = new Collidable(friendlyCollider, null, null);
 
 		var visualEyeRadius = entityDimension * .75 / 2;
@@ -887,6 +888,10 @@ class PlaceBuilderDemo_Movers
 				grazerColor,
 				null // colorBorder
 			);
+		var grazerVisualJuvenile = new VisualGroup
+		([
+			grazerVisualBodyJuvenile, visualEyesDirectional
+		]);
 
 		var grazerVisualBodyAdult = 
 			new VisualEllipse
@@ -897,6 +902,10 @@ class PlaceBuilderDemo_Movers
 				grazerColor,
 				null // colorBorder
 			);
+		var grazerVisualAdult = new VisualGroup
+		([
+			grazerVisualBodyAdult, visualEyesDirectional
+		]);
 
 		var grazerVisualBodyElder = 
 			new VisualEllipse
@@ -904,30 +913,44 @@ class PlaceBuilderDemo_Movers
 				grazerDimension, // semimajorAxis
 				grazerDimension * .8,
 				0, // rotationInTurns
-				Color.byName("LightGray"),
+				Color.byName("GrayLight"),
 				null // colorBorder
 			);
+		var grazerVisualElder = new VisualGroup
+		([
+			grazerVisualBodyElder, visualEyesDirectional
+		]);
 
-		var grazerVisualBodySelect = new VisualSelect
+		var grazerVisualDead = 
+			new VisualEllipse
+			(
+				grazerDimension, // semimajorAxis
+				grazerDimension * .8,
+				0, // rotationInTurns
+				Color.byName("GrayLight"),
+				null
+			);
+
+		var grazerVisualSelect = new VisualSelect
 		(
 			new Map<string,Visual>
 			([
-				[ "Juvenile", grazerVisualBodyJuvenile ],
-				[ "Adult", grazerVisualBodyAdult ],
-				[ "Elder", grazerVisualBodyElder ]
+				[ "Juvenile", grazerVisualJuvenile ],
+				[ "Adult", grazerVisualAdult ],
+				[ "Elder", grazerVisualElder ],
+				[ "Dead", grazerVisualDead ] // todo
 			]),
 			(u: Universe, w: World, p: Place, e: Entity) =>
 			{
-				//var alive = e.alive();
-				// todo
-				return [ "Adult" ];
+				var phased = e.phased();
+				var phase = phased.phaseCurrent(w);
+				return [ phase.name ];
 			}
 		);
 
 		var grazerVisual = new VisualGroup
 		([
-			grazerVisualBodySelect,
-			visualEyesDirectional,
+			grazerVisualSelect
 		]);
 
 		if (this.parent.visualsHaveText)
@@ -1013,18 +1036,41 @@ class PlaceBuilderDemo_Movers
 			);
 		};
 
-		var grazerAlive = new Alive
+		var grazerPhased = new Phased
 		(
 			0, // tickBorn
 			[
-				[
-					1000, // juvenile to adult
+				new Phase
+				(
+					"Juvenile",
+					0, 
 					(u: Universe, w: World, p: Place, e: Entity) => {}
-				],
-				[
-					2000, // adult to elder
+				),
+				new Phase
+				(
+					"Adult",
+					500,
 					(u: Universe, w: World, p: Place, e: Entity) => {}
-				]
+				),
+				new Phase
+				(
+					"Elder",
+					3000,
+					(u: Universe, w: World, p: Place, e: Entity) => {}
+				),
+				new Phase
+				(
+					"Dead",
+					4000,
+					(u: Universe, w: World, p: Place, e: Entity) =>
+					{
+						e.propertyRemoveForPlace(e.actor(), p);
+						e.locatable().loc.vel.clear();
+
+						var ephemeral = new Ephemeral(300, null);
+						e.propertyAddForPlace(ephemeral, p);
+					}
+				)
 			]
 		);
 
@@ -1033,8 +1079,8 @@ class PlaceBuilderDemo_Movers
 			"Grazer",
 			[
 				new Actor(grazerActivity),
-				grazerAlive,
-				new Collidable(grazerCollider, null, null),
+				grazerPhased,
+				new Collidable(0, grazerCollider, null, null),
 				new Constrainable([constraintSpeedMax1]),
 				new Drawable(grazerVisual, null),
 				new DrawableCamera(),
@@ -1163,10 +1209,14 @@ class PlaceBuilderDemo_Movers
 		{
 			var soundHelper = universe.soundHelper;
 
+			var collisionHelper = universe.collisionHelper;
+
 			var entityOtherDamager = entityOther.damager();
 			if (entityOtherDamager != null)
 			{
-				universe.collisionHelper.collideEntitiesBounce(entityPlayer, entityOther);
+				collisionHelper.collideEntitiesBounce(entityPlayer, entityOther);
+				//collisionHelper.collideEntitiesBackUp(entityPlayer, entityOther);
+				//collisionHelper.collideEntitiesBlock(entityPlayer, entityOther);
 
 				entityPlayer.killable().damageApply(
 					universe, world, place, entityOther, entityPlayer, entityOtherDamager.damagePerHit
@@ -1206,19 +1256,9 @@ class PlaceBuilderDemo_Movers
 					universe.venueNext = venueMessage as Venue;
 				}
 			}
-			else if (entityOther.portal() != null)
-			{
-				var usable = entityOther.usable();
-				if (usable == null)
-				{
-					var portal = entityOther.portal();
-					portal.use(universe, world, place, entityPlayer, entityOther);
-				}
-			}
 			else if (entityOther.talker() != null)
 			{
-				entityOther.collidable().ticksUntilCanCollide = 100;
-				//entityOther.drawable().animationRuns["Friendly"].ticksSinceStarted = 0;
+				entityOther.collidable().ticksUntilCanCollide = 100; // hack
 
 				var conversationDefnAsJSON =
 					universe.mediaLibrary.textStringGetByName("Conversation").value;
@@ -1560,6 +1600,7 @@ class PlaceBuilderDemo_Movers
 				new Actor(playerActivity),
 				new Collidable
 				(
+					0, // ticksToWaitBetweenCollisions
 					playerCollider,
 					[ Collidable.name ], // entityPropertyNamesToCollideWith
 					playerCollide
