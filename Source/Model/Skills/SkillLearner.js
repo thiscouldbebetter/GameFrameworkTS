@@ -9,11 +9,9 @@ class SkillLearner extends EntityProperty {
     isLearningInProgress() {
         return (this.learningAccumulated > 0);
     }
-    ;
     isSkillBeingLearned() {
         return (this.skillBeingLearnedName != null);
     }
-    ;
     skillCheapestAvailable(skillsAll) {
         var skillCheapest = null;
         var skillsAvailable = this.skillsAvailableToLearn(skillsAll);
@@ -22,7 +20,6 @@ class SkillLearner extends EntityProperty {
         }
         return skillCheapest;
     }
-    ;
     learningIncrement(skillsAll, skillsByName, amountToIncrement) {
         var message = null;
         var skillBeingLearned = this.skillBeingLearned(skillsByName);
@@ -46,11 +43,9 @@ class SkillLearner extends EntityProperty {
         }
         return message;
     }
-    ;
     learningAccumulatedOverRequired(skillsAllByName) {
         return this.learningAccumulated + "/" + this.learningRequired(skillsAllByName);
     }
-    ;
     learningRequired(skillsAllByName) {
         var skillBeingLearned = this.skillBeingLearned(skillsAllByName);
         var returnValue = (skillBeingLearned == null
@@ -62,7 +57,6 @@ class SkillLearner extends EntityProperty {
     skillSelected(skillsAllByName) {
         return (this.skillSelectedName == null ? null : skillsAllByName.get(this.skillSelectedName));
     }
-    ;
     skillsAvailableToLearn(skillsAll) {
         var skillsUnknown = [];
         for (var i = 0; i < skillsAll.length; i++) {
@@ -92,7 +86,6 @@ class SkillLearner extends EntityProperty {
         }
         return skillsUnknownWithKnownPrerequisites;
     }
-    ;
     skillsKnown(skillsAllByName) {
         var returnValues = [];
         for (var i = 0; i < this.skillsKnownNames.length; i++) {
@@ -102,12 +95,10 @@ class SkillLearner extends EntityProperty {
         }
         return returnValues;
     }
-    ;
     skillBeingLearned(skillsAllByName) {
         var returnValue = skillsAllByName.get(this.skillBeingLearnedName);
         return returnValue;
     }
-    ;
     // entity
     updateForTimerTick(universe, world, place, entity) {
         // Do nothing.
@@ -122,6 +113,7 @@ class SkillLearner extends EntityProperty {
         size = size.clone().add(new Coords(0, 30, 0)); // hack
         var listSize = new Coords((size.x - margin * 3) / 2, 150, 0);
         var defns = universe.world.defn;
+        var skillLearner = this;
         var skillsAll = defns.defnArraysByTypeName.get(Skill.name); // todo - Just use the -ByName lookup.
         var skillsAllByName = defns.defnsByNameByTypeName.get(Skill.name);
         var returnValue = new ControlContainer("Skills", // name,
@@ -158,14 +150,19 @@ class SkillLearner extends EntityProperty {
                 return c.skillsAvailableToLearn(skillsAll);
             }, null), new DataBinding(null, (c) => c.name, null), // bindingForItemText
             labelHeight, // fontHeightInPixels
-            new DataBinding(this, (c) => { return c.skillBeingLearned(skillsAllByName); }, (c, v) => {
+            new DataBinding(this, (c) => {
+                return c.skillSelected(skillsAllByName);
+            }, (c, v) => {
                 var skillName = v.name;
-                c.skillBeingLearnedName = skillName;
                 c.skillSelectedName = skillName;
             }), // bindingForItemSelected
-            new DataBinding(null, (c) => c.name, null), // bindingForItemValue
+            null, // bindingForItemValue
             DataBinding.fromContext(true), // isEnabled
-            null, null),
+            (u) => {
+                skillLearner.skillBeingLearnedName =
+                    skillLearner.skillSelectedName;
+            }, // confirm
+            null),
             new ControlLabel("labelSkillSelected", // name,
             new Coords(margin, 220, 0), // pos,
             new Coords(size.x - margin * 2, labelHeight, 0), // size,
@@ -177,6 +174,14 @@ class SkillLearner extends EntityProperty {
             new Coords(size.x - margin * 2, labelHeight, 0), // size,
             false, // isTextCentered,
             new DataBinding(this, (c) => (c.skillSelectedName || "-"), null), null),
+            new ControlLabel("labelSkillSelectedDescription", // name,
+            new Coords(margin, 232, 0), // pos,
+            new Coords(size.x - margin * 2, labelHeight, 0), // size,
+            false, // isTextCentered,
+            new DataBinding(this, (c) => {
+                var skill = c.skillSelected(skillsAllByName);
+                return (skill == null ? "-" : skill.description);
+            }, null), null),
             new ControlLabel("labelSkillBeingLearned", // name,
             new Coords(margin, size.y - margin - labelHeight * 2, 0), // pos,
             new Coords(size.x - margin * 2, labelHeight, 0), // size,
@@ -184,7 +189,7 @@ class SkillLearner extends EntityProperty {
             "Skill Being Learned:", // text
             null),
             new ControlLabel("textSkillBeingLearned", // name,
-            new Coords(155, size.y - margin - labelHeight * 2, 0), // pos,
+            new Coords(145, size.y - margin - labelHeight * 2, 0), // pos,
             new Coords(size.x - margin * 2, labelHeight, 0), // size,
             false, // isTextCentered,
             new DataBinding(this, (c) => {
@@ -197,7 +202,7 @@ class SkillLearner extends EntityProperty {
             "Learning Accumulated:", // text
             null),
             new ControlLabel("textLearningAccumulated", // name,
-            new Coords(160, size.y - margin - labelHeight, 0), // pos,
+            new Coords(145, size.y - margin - labelHeight, 0), // pos,
             new Coords(30, labelHeight, 0), // size,
             false, // isTextCentered,
             new DataBinding(this, (c) => c.learningAccumulatedOverRequired(skillsAllByName), null), // text
@@ -216,5 +221,4 @@ class SkillLearner extends EntityProperty {
         }
         return returnValue;
     }
-    ;
 }

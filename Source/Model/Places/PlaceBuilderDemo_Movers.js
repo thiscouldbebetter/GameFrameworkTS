@@ -693,6 +693,7 @@ class PlaceBuilderDemo_Movers {
             e.killable().integritySubtract(.1);
         });
         var tirable = new Tirable(100, // staminaMaxAfterSleep
+        .1, // staminaRecoveredPerTick
         .001, // staminaMaxLostPerTick: number,
         .002, // staminaMaxRecoveredPerTickOfSleep: number,
         (u, w, p, e) => // fallAsleep

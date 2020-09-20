@@ -106,7 +106,13 @@ class ControlList extends ControlBase {
         else {
             this._itemSelected = itemToSet;
             if (this.bindingForItemSelected != null) {
-                var valueToSet = this.bindingForItemValue.contextSet(this._itemSelected).get();
+                var valueToSet;
+                if (this.bindingForItemValue == null) {
+                    valueToSet = this._itemSelected;
+                }
+                else {
+                    valueToSet = this.bindingForItemValue.contextSet(this._itemSelected).get();
+                }
                 this.bindingForItemSelected.set(valueToSet);
             }
         }

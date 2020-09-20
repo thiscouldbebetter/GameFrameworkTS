@@ -1,8 +1,9 @@
 "use strict";
 class Tirable extends EntityProperty {
-    constructor(staminaMaxAfterSleep, staminaMaxLostPerTick, staminaMaxRecoveredPerTickOfSleep, fallAsleep) {
+    constructor(staminaMaxAfterSleep, staminaRecoveredPerTick, staminaMaxLostPerTick, staminaMaxRecoveredPerTickOfSleep, fallAsleep) {
         super();
         this.staminaMaxAfterSleep = staminaMaxAfterSleep;
+        this.staminaRecoveredPerTick = staminaRecoveredPerTick;
         this.staminaMaxLostPerTick = staminaMaxLostPerTick;
         this.staminaMaxRecoveredPerTickOfSleep = staminaMaxRecoveredPerTickOfSleep;
         this._fallAsleep = fallAsleep;
@@ -33,11 +34,11 @@ class Tirable extends EntityProperty {
         }
         else {
             this.staminaMaxRemainingBeforeSleep -= this.staminaMaxLostPerTick;
-            this.stamina = NumberHelper.trimToRangeMax(this.stamina, this.staminaMaxRemainingBeforeSleep);
+            this.staminaAdd(this.staminaRecoveredPerTick);
         }
     }
     // cloneable
     clone() {
-        return new Tirable(this.staminaMaxAfterSleep, this.staminaMaxLostPerTick, this.staminaMaxRecoveredPerTickOfSleep, this._fallAsleep);
+        return new Tirable(this.staminaMaxAfterSleep, this.staminaRecoveredPerTick, this.staminaMaxLostPerTick, this.staminaMaxRecoveredPerTickOfSleep, this._fallAsleep);
     }
 }

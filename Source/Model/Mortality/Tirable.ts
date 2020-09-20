@@ -2,6 +2,7 @@
 class Tirable extends EntityProperty
 {
 	staminaMaxAfterSleep: number;
+	staminaRecoveredPerTick: number;
 	staminaMaxLostPerTick: number;
 	staminaMaxRecoveredPerTickOfSleep: number;
 	_fallAsleep: (u: Universe, w: World, p: Place, e: Entity) => void;
@@ -12,6 +13,7 @@ class Tirable extends EntityProperty
 	constructor
 	(
 		staminaMaxAfterSleep: number,
+		staminaRecoveredPerTick: number,
 		staminaMaxLostPerTick: number,
 		staminaMaxRecoveredPerTickOfSleep: number,
 		fallAsleep: (u: Universe, w: World, p: Place, e: Entity) => void
@@ -19,6 +21,7 @@ class Tirable extends EntityProperty
 	{
 		super();
 		this.staminaMaxAfterSleep = staminaMaxAfterSleep;
+		this.staminaRecoveredPerTick = staminaRecoveredPerTick;
 		this.staminaMaxLostPerTick = staminaMaxLostPerTick;
 		this.staminaMaxRecoveredPerTickOfSleep = staminaMaxRecoveredPerTickOfSleep;
 		this._fallAsleep = fallAsleep;
@@ -71,10 +74,7 @@ class Tirable extends EntityProperty
 		else
 		{
 			this.staminaMaxRemainingBeforeSleep -= this.staminaMaxLostPerTick;
-			this.stamina = NumberHelper.trimToRangeMax
-			(
-				this.stamina, this.staminaMaxRemainingBeforeSleep
-			);
+			this.staminaAdd(this.staminaRecoveredPerTick);
 		}
 	}
 
@@ -85,6 +85,7 @@ class Tirable extends EntityProperty
 		return new Tirable
 		(
 			this.staminaMaxAfterSleep,
+			this.staminaRecoveredPerTick,
 			this.staminaMaxLostPerTick,
 			this.staminaMaxRecoveredPerTickOfSleep,
 			this._fallAsleep

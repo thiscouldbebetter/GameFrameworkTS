@@ -1517,6 +1517,14 @@ class PlaceBuilderDemo // Main.
             if (userSpeed == 0) {
                 return;
             }
+            var userTirable = entityUser.tirable();
+            var staminaToFire = 10;
+            if (userTirable.stamina < staminaToFire) {
+                var message = "Too tired!";
+                place.entitySpawn(universe, world, universe.entityBuilder.messageFloater(message, userPos.clone(), Color.byName("Red")));
+                return;
+            }
+            userTirable.staminaSubtract(staminaToFire);
             var userDirection = userVel.clone().normalize();
             var userRadius = entityUser.collidable().collider.radius;
             var projectileDimension = 1.5;

@@ -1,3 +1,4 @@
+
 class PlaceBuilderDemo_Movers
 {
 	parent: PlaceBuilderDemo;
@@ -1401,6 +1402,7 @@ class PlaceBuilderDemo_Movers
 		var tirable = new Tirable
 		(
 			100, // staminaMaxAfterSleep
+			.1, // staminaRecoveredPerTick
 			.001, // staminaMaxLostPerTick: number,
 			.002, // staminaMaxRecoveredPerTickOfSleep: number,
 			(u: Universe, w: World, p: Place, e: Entity) => // fallAsleep

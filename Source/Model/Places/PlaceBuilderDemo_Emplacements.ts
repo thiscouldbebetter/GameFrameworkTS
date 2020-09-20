@@ -1,3 +1,4 @@
+
 class PlaceBuilderDemo_Emplacements
 {
 	parent: PlaceBuilderDemo;
