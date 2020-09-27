@@ -1,7 +1,8 @@
 "use strict";
 class PlaceBuilderDemo // Main.
  {
-    constructor(randomizer, cameraViewSize) {
+    constructor(universe, randomizer, cameraViewSize) {
+        this.universe = universe;
         this.randomizer = randomizer || RandomizerLCG.default();
         this.visualsHaveText = false;
         var entityDimension = 10;
@@ -199,9 +200,9 @@ class PlaceBuilderDemo // Main.
         // todo
         var mapCellSource = [
             "....................::::QQAA****",
-            "...~~~~~~~~~~~~~.....:::QQAAA***",
-            "~~~~~~~~~~~~~~.....:QQQQQQAAAAAA",
-            "~~........~~~~....::QQQQQQAAAAAA",
+            ".....................:::QQAAA***",
+            "~~~~~~~~~~~~.......:QQQQQQAAAAAA",
+            "~~...~~...~~~~....::QQQQQQAAAAAA",
             "~~........~~~~....::QQQQQQQQQQQQ",
             "~~......~~~~~~.....:QQQQQQQQQQQQ",
             "~~~~~~..~~~~~~~~....:::::::QQQ::",
@@ -225,6 +226,7 @@ class PlaceBuilderDemo // Main.
         ];
         var mapSizeInCells = new Coords(mapCellSource[0].length, mapCellSource.length, 1);
         var mapCellSize = size.clone().divide(mapSizeInCells).ceiling();
+        var mapCellSizeHalf = mapCellSize.clone().half();
         var entityExitPosRange = new Box(mapCellSize.clone().half(), null);
         var exit = this.entityBuildFromDefn(this.entityDefnsByName.get("Exit"), entityExitPosRange, this.randomizer);
         exit.portal().destinationPlaceName = placeNameToReturnTo;
@@ -366,10 +368,76 @@ class PlaceBuilderDemo // Main.
             var visualsInOrder = visualNamesInOrder.map((x) => visualsByName.get(x));
             return visualsInOrder;
         };
+        var universe = this.universe;
+        var terrainNameToVisuals = function (terrainName) {
+            var imageName = "Terrain-" + terrainName;
+            var terrainVisualImageCombined = new VisualImageFromLibrary(imageName);
+            var imageSizeInPixels = terrainVisualImageCombined.image(universe).sizeInPixels;
+            var imageSizeInTiles = new Coords(5, 5, 1);
+            var tileSizeInPixels = imageSizeInPixels.clone().divide(imageSizeInTiles);
+            var tileSizeInPixelsHalf = tileSizeInPixels.clone().half();
+            var tileCenterBounds = new Box(imageSizeInPixels.clone().half(), tileSizeInPixels);
+            var terrainVisualCenter = new VisualImageScaledPartial(terrainVisualImageCombined, tileCenterBounds, mapCellSize // sizeToDraw
+            );
+            // hack - Correct for centering.
+            terrainVisualCenter = new VisualOffset(terrainVisualCenter, mapCellSizeHalf);
+            var tileOffsetInTilesHalf = new Coords(0, 0, 0);
+            var visualOffsetInMapCellsHalf = new Coords(0, 0, 0);
+            var offsetsToVisual = function (tileOffsetInTilesHalf, visualOffsetInMapCellsHalf) {
+                var terrainVisualBounds = Box.fromMinAndSize(tileOffsetInTilesHalf.clone().multiply(tileSizeInPixelsHalf), tileSizeInPixelsHalf);
+                var terrainVisual = new VisualImageScaledPartial(terrainVisualImageCombined, terrainVisualBounds, mapCellSizeHalf // sizeToDraw
+                );
+                // hack - Correct for centering.
+                terrainVisual = new VisualOffset(terrainVisual, visualOffsetInMapCellsHalf.clone().multiply(mapCellSizeHalf));
+                return terrainVisual;
+            };
+            var terrainVisualInsideSE = offsetsToVisual(tileOffsetInTilesHalf.overwriteWithDimensions(6, 6, 0), visualOffsetInMapCellsHalf.overwriteWithDimensions(1.5, 1.5, 0));
+            var terrainVisualInsideSW = offsetsToVisual(tileOffsetInTilesHalf.overwriteWithDimensions(3, 6, 0), visualOffsetInMapCellsHalf.overwriteWithDimensions(.5, 1.5, 0));
+            var terrainVisualInsideNW = offsetsToVisual(tileOffsetInTilesHalf.overwriteWithDimensions(3, 3, 0), visualOffsetInMapCellsHalf.overwriteWithDimensions(.5, .5, 0));
+            var terrainVisualInsideNE = offsetsToVisual(tileOffsetInTilesHalf.overwriteWithDimensions(6, 3, 0), visualOffsetInMapCellsHalf.overwriteWithDimensions(1.5, .5, 0));
+            var terrainVisualOutsideNW = offsetsToVisual(tileOffsetInTilesHalf.overwriteWithDimensions(0, 0, 0), visualOffsetInMapCellsHalf.overwriteWithDimensions(1.5, 1.5, 0));
+            var terrainVisualOutsideNE = offsetsToVisual(tileOffsetInTilesHalf.overwriteWithDimensions(9, 0, 0), visualOffsetInMapCellsHalf.overwriteWithDimensions(.5, 1.5, 0));
+            var terrainVisualOutsideSE = offsetsToVisual(tileOffsetInTilesHalf.overwriteWithDimensions(9, 9, 0), visualOffsetInMapCellsHalf.overwriteWithDimensions(.5, .5, 0));
+            var terrainVisualOutsideSW = offsetsToVisual(tileOffsetInTilesHalf.overwriteWithDimensions(0, 9, 0), visualOffsetInMapCellsHalf.overwriteWithDimensions(1.5, .5, 0));
+            var terrainVisualEBottom = offsetsToVisual // really more W
+            (tileOffsetInTilesHalf.overwriteWithDimensions(0, 5, 0), visualOffsetInMapCellsHalf.overwriteWithDimensions(1.5, 1.5, 0));
+            var terrainVisualSRight = offsetsToVisual(tileOffsetInTilesHalf.overwriteWithDimensions(5, 0, 0), visualOffsetInMapCellsHalf.overwriteWithDimensions(1.5, 1.5, 0));
+            var terrainVisualSLeft = offsetsToVisual(tileOffsetInTilesHalf.overwriteWithDimensions(4, 0, 0), visualOffsetInMapCellsHalf.overwriteWithDimensions(.5, 1.5, 0));
+            var terrainVisualWBottom = offsetsToVisual(tileOffsetInTilesHalf.overwriteWithDimensions(9, 5, 0), visualOffsetInMapCellsHalf.overwriteWithDimensions(.5, 1.5, 0));
+            var terrainVisualWTop = offsetsToVisual(tileOffsetInTilesHalf.overwriteWithDimensions(9, 4, 0), visualOffsetInMapCellsHalf.overwriteWithDimensions(.5, .5, 0));
+            var terrainVisualNLeft = offsetsToVisual(tileOffsetInTilesHalf.overwriteWithDimensions(4, 9, 0), visualOffsetInMapCellsHalf.overwriteWithDimensions(.5, .5, 0));
+            var terrainVisualNRight = offsetsToVisual(tileOffsetInTilesHalf.overwriteWithDimensions(5, 9, 0), visualOffsetInMapCellsHalf.overwriteWithDimensions(1.5, .5, 0));
+            var terrainVisualETop = offsetsToVisual(tileOffsetInTilesHalf.overwriteWithDimensions(0, 4, 0), visualOffsetInMapCellsHalf.overwriteWithDimensions(1.5, .5, 0));
+            var terrainVisuals = [
+                // center
+                terrainVisualCenter,
+                // se
+                terrainVisualEBottom,
+                terrainVisualInsideSE,
+                terrainVisualOutsideNW,
+                terrainVisualSRight,
+                // sw
+                terrainVisualSLeft,
+                terrainVisualInsideSW,
+                terrainVisualOutsideNE,
+                terrainVisualWBottom,
+                // nw
+                terrainVisualWTop,
+                terrainVisualInsideNW,
+                terrainVisualOutsideSE,
+                terrainVisualNLeft,
+                // ne
+                terrainVisualNRight,
+                terrainVisualInsideNE,
+                terrainVisualOutsideSW,
+                terrainVisualETop
+            ];
+            return terrainVisuals;
+        };
         var terrains = [
             //name, codeChar, level, isBlocking, visual
             new Terrain("Water", "~", 0, new Traversable(true), colorToTerrainVisualsByName("Blue")),
-            new Terrain("Sand", ".", 1, new Traversable(false), colorToTerrainVisualsByName("Tan")),
+            new Terrain("Sand", ".", 1, new Traversable(false), terrainNameToVisuals("Sand")),
             new Terrain("Grass", ":", 2, new Traversable(false), colorToTerrainVisualsByName("Green")),
             new Terrain("Trees", "Q", 3, new Traversable(false), colorToTerrainVisualsByName("GreenDark")),
             new Terrain("Rock", "A", 4, new Traversable(false), colorToTerrainVisualsByName("Gray")),

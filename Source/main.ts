@@ -68,6 +68,7 @@ function mediaFilePathsBuild()
 		imageDirectoryPath + "Grain.svg",
 		imageDirectoryPath + "Opening.png",
 		imageDirectoryPath + "Pillow.svg",
+		imageDirectoryPath + "Terrain-Sand.png",
 		imageDirectoryPath + "Title.png",
 		imageDirectoryPath + "Zap.svg",
 

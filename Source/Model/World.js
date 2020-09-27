@@ -21,7 +21,7 @@ class World {
         var randomizer = null; // Use default.
         var displaySize = universe.display.sizeInPixels;
         var cameraViewSize = displaySize.clone();
-        var placeBuilder = new PlaceBuilderDemo(randomizer, cameraViewSize);
+        var placeBuilder = new PlaceBuilderDemo(universe, randomizer, cameraViewSize);
         var actions = placeBuilder.actions;
         var actionToInputsMappings = placeBuilder.actionToInputsMappings;
         var propertyNamesToProcess = [

@@ -44,7 +44,7 @@ class World
 		var cameraViewSize = displaySize.clone();
 		var placeBuilder = new PlaceBuilderDemo
 		(
-			randomizer, cameraViewSize
+			universe, randomizer, cameraViewSize
 		);
 
 		var actions = placeBuilder.actions;
