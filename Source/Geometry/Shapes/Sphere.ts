@@ -62,4 +62,9 @@ class Sphere implements ShapeBase
 			this.center
 		).normalize();
 	}
+
+	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords)
+	{
+		return surfacePointOut.overwriteWith(posToCheck); // todo
+	}
 }

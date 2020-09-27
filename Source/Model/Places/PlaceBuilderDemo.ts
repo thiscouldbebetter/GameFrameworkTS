@@ -920,7 +920,11 @@ class PlaceBuilderDemo // Main.
 
 		var wallThickness = this.entityBuildObstacleWalls
 		(
-			Color.byName("Red"), areNeighborsConnectedESWN, namePrefix, placePos
+			Color.byName("Gray"),
+			areNeighborsConnectedESWN,
+			namePrefix,
+			placePos,
+			0 // damagePerHit
 		);
 
 		var marginThickness = wallThickness * 8;
@@ -1227,7 +1231,11 @@ class PlaceBuilderDemo // Main.
 
 	entityBuildObstacleWalls
 	(
-		wallColor: Color, areNeighborsConnectedESWN: boolean[], placeNamePrefix: string, placePos: Coords
+		wallColor: Color,
+		areNeighborsConnectedESWN: boolean[],
+		placeNamePrefix: string,
+		placePos: Coords,
+		damagePerHit: number
 	)
 	{
 		areNeighborsConnectedESWN = areNeighborsConnectedESWN || [ false, false, false, false ];
@@ -1308,6 +1316,11 @@ class PlaceBuilderDemo // Main.
 			}
 
 			var wallCollider = new Box(new Coords(0, 0, 0), wallSize);
+			var wallObstacle = new Obstacle();
+			var wallCollidable = new Collidable
+			(
+				0, wallCollider, [ Movable.name ], wallObstacle.collide
+			);
 			var wallVisual = new VisualRectangle(wallSize, wallColor, null, null);
 
 			var numberOfWallPartsOnSide = (isNeighborConnected ? 2 : 1);
@@ -1343,12 +1356,18 @@ class PlaceBuilderDemo // Main.
 					"ObstacleWall" + i + "_" + d,
 					[
 						new Locatable(wallPartLoc),
-						new Collidable(0, wallCollider, null, null),
-						new Damager(new Damage(10, null, null)),
+						wallCollidable,
 						new Drawable(wallVisual, null),
-						new DrawableCamera()
+						new DrawableCamera(),
+						wallObstacle
 					]
 				);
+
+				if (damagePerHit > 0)
+				{
+					var damager = new Damager(new Damage(10, null, null));
+					wallEntity.propertyAddForPlace(damager, null);
+				}
 
 				entities.push(wallEntity);
 			}

@@ -44,10 +44,16 @@ class Arc implements ShapeBase
 		return [ this.shell.sphereOuter.center, this.wedge.vertex ];
 	}
 
-	// Shape.
+	// ShapeBase.
 
 	normalAtPos(posToCheck: Coords, normalOut: Coords)
 	{
 		return this.shell.normalAtPos(posToCheck, normalOut);
 	}
+
+	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords)
+	{
+		return surfacePointOut.overwriteWith(posToCheck); // todo
+	}
+
 }

@@ -79,7 +79,7 @@ class Selector extends EntityProperty
 				new ControlLabel
 				(
 					"textEntitySelectedName",
-					new Coords(1, 1, 0).multiplyScalar(margin), // pos
+					new Coords(1, 1.5, 0).multiplyScalar(margin), // pos
 					labelSize,
 					false, // isTextCentered
 					new DataBinding

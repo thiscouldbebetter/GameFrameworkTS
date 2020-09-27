@@ -614,7 +614,7 @@ class PlaceBuilderDemo_Emplacements
 
 	entityDefnBuildObstacleRing(entityDimension: number): Entity
 	{
-		var obstacleColor = Color.byName("Red");
+		var obstacleColor = Color.byName("Gray");
 		var obstacleRadiusOuter = entityDimension * 3.5;
 		var obstacleRadiusInner = obstacleRadiusOuter - entityDimension;
 		var obstacleAngleSpannedInTurns = .85;
@@ -644,13 +644,19 @@ class PlaceBuilderDemo_Emplacements
 			null
 		);
 
+		var obstacleRingObstacle = new Obstacle();
+		var obstacleCollidable = new Collidable
+		(
+			0, obstacleCollider, [Movable.name], obstacleRingObstacle.collide
+		);
+
 		var obstacleRingEntityDefn = new Entity
 		(
 			"Ring",
 			[
 				new Locatable(obstacleLoc),
-				new Collidable(0, obstacleCollider, null, null),
-				new Damager(new Damage(10, null, null)),
+				obstacleCollidable,
+				//new Damager(new Damage(10, null, null)),
 				new Drawable(obstacleRingVisual, null),
 				new DrawableCamera()
 			]
@@ -812,7 +818,7 @@ class PlaceBuilderDemo_Emplacements
 		(
 			0, // ticksToWaitBetweenCollisions
 			collider,
-			[ Collidable.name ], // entityPropertyNamesToCollideWith,
+			[ Movable.name ], // entityPropertyNamesToCollideWith,
 			// collideEntities
 			(u: Universe, w: World, p: Place, e: Entity, e2: Entity) =>
 			{

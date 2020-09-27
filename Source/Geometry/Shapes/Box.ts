@@ -303,22 +303,10 @@ class Box implements ShapeBase
 
 	// ShapeBase.
 
-	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
+	dimensionForSurfaceClosestToPoint(posToCheck: Coords, displacementOverSizeHalf: Coords)
 	{
-		var displacementOverSizeHalf = normalOut.overwriteWith
-		(
-			posToCheck
-		).subtract
-		(
-			this.center
-		).divide
-		(
-			this.sizeHalf
-		);
-
 		var greatestAbsoluteDisplacementDimensionSoFar = -1;
 		var dimensionIndex = null;
-		var multiplier = 0;
 
 		for (var d = 0; d < 3; d++) // dimension
 		{
@@ -336,12 +324,40 @@ class Box implements ShapeBase
 				greatestAbsoluteDisplacementDimensionSoFar =
 					displacementDimensionOverSizeHalfAbsolute;
 				dimensionIndex = d;
-				multiplier = (displacementDimensionOverSizeHalf > 0 ? 1 : -1);
 			}
 		}
+
+		return dimensionIndex;
+	}
+
+	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
+	{
+		var displacementOverSizeHalf = normalOut.overwriteWith
+		(
+			posToCheck
+		).subtract
+		(
+			this.center
+		).divide
+		(
+			this.sizeHalf
+		);
+
+		var dimensionIndex =
+			this.dimensionForSurfaceClosestToPoint(posToCheck, displacementOverSizeHalf);
+
+		var displacementDimensionOverSizeHalf
+			= displacementOverSizeHalf.dimensionGet(dimensionIndex);
+
+		var multiplier = (displacementDimensionOverSizeHalf > 0 ? 1 : -1);
 
 		normalOut.clear().dimensionSet(dimensionIndex, 1).multiplyScalar(multiplier);
 
 		return normalOut;
+	}
+
+	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords)
+	{
+		return surfacePointOut.overwriteWith(posToCheck); // todo
 	}
 }

@@ -21,4 +21,7 @@ class MapLocated {
     normalAtPos(posToCheck, normalOut) {
         return normalOut.overwriteWith(posToCheck).subtract(this.loc.pos).normalize();
     }
+    surfacePointNearPos(posToCheck, surfacePointOut) {
+        return surfacePointOut.overwriteWith(posToCheck); // todo
+    }
 }

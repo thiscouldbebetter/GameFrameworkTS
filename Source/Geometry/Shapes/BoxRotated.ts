@@ -15,6 +15,8 @@ class BoxRotated implements ShapeBase
 		return new Sphere(this.box.center, this.box.sizeHalf.magnitude());
 	}
 
+	// ShapeBase.
+
 	normalAtPos(posToCheck: Coords, normalOut: Coords)
 	{
 		// todo - Adapt or call Box.normalAtPos() instead.
@@ -61,6 +63,11 @@ class BoxRotated implements ShapeBase
 		}
 
 		return normalOut;
+	}
+
+	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords)
+	{
+		return surfacePointOut.overwriteWith(posToCheck); // todo
 	}
 
 	// cloneable

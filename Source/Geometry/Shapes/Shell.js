@@ -24,16 +24,20 @@ class Shell {
         this.radiusInner = other.radiusInner;
         return this;
     }
-    // Shape.
+    // ShapeBase.
     normalAtPos(posToCheck, normalOut) {
-        normalOut.overwriteWith(posToCheck).subtract(this.center());
-        var distanceFromCenter = normalOut.magnitude();
+        var displacementFromCenter = normalOut.overwriteWith(posToCheck).subtract(this.center());
+        var distanceFromCenter = displacementFromCenter.magnitude();
         var distanceFromSphereOuter = Math.abs(distanceFromCenter - this.sphereOuter.radius);
         var distanceFromSphereInner = Math.abs(distanceFromCenter - this.sphereInner.radius);
+        // Note that normalOut == displacementFromCenter.
         if (distanceFromSphereInner < distanceFromSphereOuter) {
             normalOut.invert();
         }
         normalOut.normalize();
         return normalOut;
+    }
+    surfacePointNearPos(posToCheck, surfacePointOut) {
+        return surfacePointOut.overwriteWith(posToCheck); // todo
     }
 }

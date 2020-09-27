@@ -35,7 +35,7 @@ class Selector extends EntityProperty {
             new ControlLabel("labelSelected", new Coords(1, 0, 0).multiplyScalar(margin), // pos
             labelSize, false, // isTextCentered
             "Selected:", fontHeightInPixels),
-            new ControlLabel("textEntitySelectedName", new Coords(1, 1, 0).multiplyScalar(margin), // pos
+            new ControlLabel("textEntitySelectedName", new Coords(1, 1.5, 0).multiplyScalar(margin), // pos
             labelSize, false, // isTextCentered
             new DataBinding(this, (c) => (c.entitiesSelected.length == 0 ? "-" : c.entitiesSelected[0].name), null), fontHeightInPixels)
         ], null, null);

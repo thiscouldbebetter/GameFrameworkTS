@@ -7,6 +7,7 @@ class BoxRotated {
     sphereSwept() {
         return new Sphere(this.box.center, this.box.sizeHalf.magnitude());
     }
+    // ShapeBase.
     normalAtPos(posToCheck, normalOut) {
         // todo - Adapt or call Box.normalAtPos() instead.
         var plane = new Plane(new Coords(0, 0, 0), 0);
@@ -34,6 +35,9 @@ class BoxRotated {
             }
         }
         return normalOut;
+    }
+    surfacePointNearPos(posToCheck, surfacePointOut) {
+        return surfacePointOut.overwriteWith(posToCheck); // todo
     }
     // cloneable
     clone() {

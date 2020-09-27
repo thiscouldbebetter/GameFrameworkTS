@@ -27,8 +27,11 @@ class Arc {
     coordsGroupToTranslate() {
         return [this.shell.sphereOuter.center, this.wedge.vertex];
     }
-    // Shape.
+    // ShapeBase.
     normalAtPos(posToCheck, normalOut) {
         return this.shell.normalAtPos(posToCheck, normalOut);
+    }
+    surfacePointNearPos(posToCheck, surfacePointOut) {
+        return surfacePointOut.overwriteWith(posToCheck); // todo
     }
 }

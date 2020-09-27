@@ -32,4 +32,7 @@ class Sphere {
     normalAtPos(posToCheck, normalOut) {
         return normalOut.overwriteWith(posToCheck).subtract(this.center).normalize();
     }
+    surfacePointNearPos(posToCheck, surfacePointOut) {
+        return surfacePointOut.overwriteWith(posToCheck); // todo
+    }
 }

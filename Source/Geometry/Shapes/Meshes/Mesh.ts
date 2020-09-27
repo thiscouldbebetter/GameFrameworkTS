@@ -256,6 +256,11 @@ class Mesh implements ShapeBase
 	{
 		return this.box().normalAtPos(posToCheck, normalOut);
 	}
+
+	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords)
+	{
+		return surfacePointOut.overwriteWith(posToCheck); // todo
+	}
 }
 
 class Mesh_FaceBuilder

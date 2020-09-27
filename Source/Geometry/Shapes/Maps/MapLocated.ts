@@ -40,4 +40,9 @@ class MapLocated implements ShapeBase
 	{
 		return normalOut.overwriteWith(posToCheck).subtract(this.loc.pos).normalize();
 	}
+
+	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords)
+	{
+		return surfacePointOut.overwriteWith(posToCheck); // todo
+	}
 }

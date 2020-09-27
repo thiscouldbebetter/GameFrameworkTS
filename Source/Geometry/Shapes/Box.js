@@ -188,11 +188,9 @@ class Box {
         return this;
     }
     // ShapeBase.
-    normalAtPos(posToCheck, normalOut) {
-        var displacementOverSizeHalf = normalOut.overwriteWith(posToCheck).subtract(this.center).divide(this.sizeHalf);
+    dimensionForSurfaceClosestToPoint(posToCheck, displacementOverSizeHalf) {
         var greatestAbsoluteDisplacementDimensionSoFar = -1;
         var dimensionIndex = null;
-        var multiplier = 0;
         for (var d = 0; d < 3; d++) {
             var displacementDimensionOverSizeHalf = displacementOverSizeHalf.dimensionGet(d);
             var displacementDimensionOverSizeHalfAbsolute = Math.abs(displacementDimensionOverSizeHalf);
@@ -201,10 +199,19 @@ class Box {
                 greatestAbsoluteDisplacementDimensionSoFar =
                     displacementDimensionOverSizeHalfAbsolute;
                 dimensionIndex = d;
-                multiplier = (displacementDimensionOverSizeHalf > 0 ? 1 : -1);
             }
         }
+        return dimensionIndex;
+    }
+    normalAtPos(posToCheck, normalOut) {
+        var displacementOverSizeHalf = normalOut.overwriteWith(posToCheck).subtract(this.center).divide(this.sizeHalf);
+        var dimensionIndex = this.dimensionForSurfaceClosestToPoint(posToCheck, displacementOverSizeHalf);
+        var displacementDimensionOverSizeHalf = displacementOverSizeHalf.dimensionGet(dimensionIndex);
+        var multiplier = (displacementDimensionOverSizeHalf > 0 ? 1 : -1);
         normalOut.clear().dimensionSet(dimensionIndex, 1).multiplyScalar(multiplier);
         return normalOut;
+    }
+    surfacePointNearPos(posToCheck, surfacePointOut) {
+        return surfacePointOut.overwriteWith(posToCheck); // todo
     }
 }

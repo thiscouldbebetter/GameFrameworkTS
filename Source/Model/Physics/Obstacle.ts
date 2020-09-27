@@ -6,6 +6,13 @@ class Obstacle extends EntityProperty
 		super();
 	}
 
+	collide(u: Universe, w: World, p: Place, e: Entity, eOther: Entity)
+	{
+		var collisionHelper = u.collisionHelper;
+		collisionHelper.collideEntitiesBounce(e, eOther);
+		collisionHelper.collideEntitiesSeparate(eOther, e);
+	}
+
 	// Clonable.
 
 	clone()

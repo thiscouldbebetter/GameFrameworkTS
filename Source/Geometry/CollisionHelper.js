@@ -775,15 +775,19 @@ class CollisionHelper {
         return this.collisionOfMeshAndSphere(mesh, sphere, collision);
     }
     collisionOfSpheres(sphere0, sphere1, collision) {
-        var shapeCollidingPos = sphere0.center;
-        var shapeCollidedWithPos = sphere1.center;
-        var displacement = this._displacement.overwriteWith(shapeCollidedWithPos).subtract(shapeCollidingPos);
-        var distance = displacement.magnitude();
-        var direction = displacement.divideScalar(distance);
-        var sumOfRadii = sphere0.radius
-            + sphere1.radius;
-        shapeCollidedWithPos.overwriteWith(direction).multiplyScalar(sumOfRadii).add(shapeCollidingPos);
-        collision.pos.overwriteWith(direction).multiplyScalar(distance / 2).add(sphere0.center);
+        var sphere0Center = sphere0.center;
+        var sphere1Center = sphere1.center;
+        var sphere0Radius = sphere0.radius;
+        var sphere1Radius = sphere1.radius;
+        var displacementFromSphere0CenterTo1 = this._displacement.overwriteWith(sphere1Center).subtract(sphere0Center);
+        var distanceBetweenCenters = displacementFromSphere0CenterTo1.magnitude();
+        var distanceToRadicalCenter = (distanceBetweenCenters * distanceBetweenCenters
+            + sphere0Radius * sphere0Radius
+            - sphere1Radius * sphere1Radius)
+            / (2 * distanceBetweenCenters);
+        var directionFromSphere0CenterTo1 = displacementFromSphere0CenterTo1.divideScalar(distanceBetweenCenters);
+        var displacementFromSphereCenter0ToRadicalCenter = directionFromSphere0CenterTo1.multiplyScalar(distanceToRadicalCenter);
+        collision.pos.overwriteWith(displacementFromSphereCenter0ToRadicalCenter).add(sphere0Center);
         return collision;
     }
     // doXAndYCollide

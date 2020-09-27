@@ -561,7 +561,8 @@ class PlaceBuilderDemo // Main.
     }
     build_SizeWallsAndMargins(namePrefix, placePos, areNeighborsConnectedESWN) {
         this.size = this.size.clearZ();
-        var wallThickness = this.entityBuildObstacleWalls(Color.byName("Red"), areNeighborsConnectedESWN, namePrefix, placePos);
+        var wallThickness = this.entityBuildObstacleWalls(Color.byName("Gray"), areNeighborsConnectedESWN, namePrefix, placePos, 0 // damagePerHit
+        );
         var marginThickness = wallThickness * 8;
         var marginSize = new Coords(1, 1, 0).multiplyScalar(marginThickness);
         this.marginSize = marginSize;
@@ -707,7 +708,7 @@ class PlaceBuilderDemo // Main.
         ]);
         return returnValue;
     }
-    entityBuildObstacleWalls(wallColor, areNeighborsConnectedESWN, placeNamePrefix, placePos) {
+    entityBuildObstacleWalls(wallColor, areNeighborsConnectedESWN, placeNamePrefix, placePos, damagePerHit) {
         areNeighborsConnectedESWN = areNeighborsConnectedESWN || [false, false, false, false];
         var entities = this.entities;
         var numberOfWalls = 4;
@@ -762,6 +763,8 @@ class PlaceBuilderDemo // Main.
                 }
             }
             var wallCollider = new Box(new Coords(0, 0, 0), wallSize);
+            var wallObstacle = new Obstacle();
+            var wallCollidable = new Collidable(0, wallCollider, [Movable.name], wallObstacle.collide);
             var wallVisual = new VisualRectangle(wallSize, wallColor, null, null);
             var numberOfWallPartsOnSide = (isNeighborConnected ? 2 : 1);
             for (var d = 0; d < numberOfWallPartsOnSide; d++) {
@@ -785,11 +788,15 @@ class PlaceBuilderDemo // Main.
                 var wallPartLoc = new Disposition(wallPartPos, null, null);
                 var wallEntity = new Entity("ObstacleWall" + i + "_" + d, [
                     new Locatable(wallPartLoc),
-                    new Collidable(0, wallCollider, null, null),
-                    new Damager(new Damage(10, null, null)),
+                    wallCollidable,
                     new Drawable(wallVisual, null),
-                    new DrawableCamera()
+                    new DrawableCamera(),
+                    wallObstacle
                 ]);
+                if (damagePerHit > 0) {
+                    var damager = new Damager(new Damage(10, null, null));
+                    wallEntity.propertyAddForPlace(damager, null);
+                }
                 entities.push(wallEntity);
             }
             if (isNeighborConnected) {

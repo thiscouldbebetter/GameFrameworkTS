@@ -145,6 +145,9 @@ class Mesh {
     normalAtPos(posToCheck, normalOut) {
         return this.box().normalAtPos(posToCheck, normalOut);
     }
+    surfacePointNearPos(posToCheck, surfacePointOut) {
+        return surfacePointOut.overwriteWith(posToCheck); // todo
+    }
 }
 class Mesh_FaceBuilder {
     constructor(vertexIndices) {
