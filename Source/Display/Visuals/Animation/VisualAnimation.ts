@@ -96,7 +96,7 @@ class VisualAnimation implements Visual
 
 	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
-		var animatable = entity.drawable().animatable();
+		var animatable = entity.animatable();
 		var tickStarted = animatable.animationWithNameStartIfNecessary(this.name, world);
 		var frameCurrent = this.frameCurrent(world, tickStarted);
 		frameCurrent.draw(universe, world, place, entity, display);

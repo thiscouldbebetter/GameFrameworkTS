@@ -18,10 +18,11 @@ class Transform_Multiple implements Transform
 		for (var i = 0; i < this.transforms.length; i++)
 		{
 			var transform = this.transforms[i];
-			transform.transform(transformable);
+			//transform.transform(transformable);
+			transformable.transform(transform);
 		}
 		return transformable;
-	};
+	}
 
 	transformCoords(coordsToTransform: Coords): Coords
 	{
@@ -31,5 +32,5 @@ class Transform_Multiple implements Transform
 			transform.transformCoords(coordsToTransform);
 		}
 		return coordsToTransform;
-	};
+	}
 }

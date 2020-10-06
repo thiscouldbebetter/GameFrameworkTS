@@ -22,7 +22,10 @@ class Transform_MeshPoseWithSkeleton implements Transform
 		this.skeletonAtRest = skeletonAtRest;
 		this.skeletonPosed = skeletonPosed || this.skeletonAtRest.clone();
 		this.boneInfluences = boneInfluences;
-		this.boneInfluencesByName = ArrayHelper.addLookups( this.boneInfluences, (x: BoneInfluence) => x.boneName );
+		this.boneInfluencesByName = ArrayHelper.addLookups
+		(
+			this.boneInfluences, (x: BoneInfluence) => x.boneName
+		);
 
 		// Helper variables.
 		this._orientation = new Orientation(new Coords(0, 0, 0), new Coords(0, 0, 0));
@@ -38,7 +41,7 @@ class Transform_MeshPoseWithSkeleton implements Transform
 	{
 		this.transformMesh(transformable as MeshTextured);
 		return transformable;
-	};
+	}
 
 	transformCoords(coordsToTransform: Coords): Coords
 	{
@@ -58,8 +61,8 @@ class Transform_MeshPoseWithSkeleton implements Transform
 			var boneInfluence = this.boneInfluences[i];
 			var boneName = boneInfluence.boneName;
 
-			var boneAtRest = bonesAtRest[boneName];
-			var bonePosed = bonesPosed[boneName];
+			var boneAtRest = bonesAtRest.get(boneName);
+			var bonePosed = bonesPosed.get(boneName);
 
 			var boneAtRestOrientation = boneAtRest.orientation;
 
@@ -121,6 +124,5 @@ class Transform_MeshPoseWithSkeleton implements Transform
 			}
 
 		} // end for each boneInfluence
-	};
-
+	}
 }

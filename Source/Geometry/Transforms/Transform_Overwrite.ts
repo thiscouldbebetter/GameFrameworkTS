@@ -15,8 +15,10 @@ class Transform_Overwrite implements Transform
 
 	transform(transformable: Transformable): Transformable
 	{
-		return transformable; // todo
-	};
+		// todo
+		//transformable.overwriteWith(this.transformableToOverwriteWith);
+		return this;
+	}
 
 	transformCoords(coordsToTransform: Coords): Coords
 	{

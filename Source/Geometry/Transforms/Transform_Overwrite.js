@@ -7,9 +7,10 @@ class Transform_Overwrite {
         return this; // todo
     }
     transform(transformable) {
-        return transformable; // todo
+        // todo
+        //transformable.overwriteWith(this.transformableToOverwriteWith);
+        return this;
     }
-    ;
     transformCoords(coordsToTransform) {
         return coordsToTransform;
     }

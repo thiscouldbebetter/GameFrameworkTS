@@ -17,7 +17,6 @@ class Transform_MeshPoseWithSkeleton {
         this.transformMesh(transformable);
         return transformable;
     }
-    ;
     transformCoords(coordsToTransform) {
         return coordsToTransform;
     }
@@ -29,8 +28,8 @@ class Transform_MeshPoseWithSkeleton {
         for (var i = 0; i < this.boneInfluences.length; i++) {
             var boneInfluence = this.boneInfluences[i];
             var boneName = boneInfluence.boneName;
-            var boneAtRest = bonesAtRest[boneName];
-            var bonePosed = bonesPosed[boneName];
+            var boneAtRest = bonesAtRest.get(boneName);
+            var bonePosed = bonesPosed.get(boneName);
             var boneAtRestOrientation = boneAtRest.orientation;
             var vertexIndicesControlled = boneInfluence.vertexIndicesControlled;
             for (var vi = 0; vi < vertexIndicesControlled.length; vi++) {
@@ -47,5 +46,4 @@ class Transform_MeshPoseWithSkeleton {
             }
         } // end for each boneInfluence
     }
-    ;
 }

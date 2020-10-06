@@ -46,7 +46,7 @@ class Bone
 		}
 
 		return returnValue;
-	};
+	}
 
 	// cloneable
 
@@ -65,13 +65,14 @@ class Bone
 		);
 
 		return returnValue;
-	};
+	}
 
 	overwriteWith(other: Bone)
 	{
-		ArrayHelper.overwriteWith(this.orientation, other.orientation);
+		this.orientation.overwriteWith(other.orientation);
 		ArrayHelper.overwriteWith(this.children, other.children);
-	};
+		return this;
+	}
 
 	// transformable
 
@@ -83,5 +84,5 @@ class Bone
 			var axis = axes[i];
 			transformToApply.transformCoords(axis);
 		}
-	};
+	}
 }

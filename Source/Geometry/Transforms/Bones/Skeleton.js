@@ -19,18 +19,18 @@ class Skeleton {
         }
         return returnValue;
     }
-    ;
     // cloneable
     clone() {
         return new Skeleton(this.name, this.boneRoot.clone());
     }
-    ;
     overwriteWith(other) {
         for (var i = 0; i < this.bonesAll.length; i++) {
-            this.bonesAll[i].overwriteWith(other.bonesAll[i]);
+            var bone = this.bonesAll[i];
+            var boneOther = other.bonesAll[i];
+            bone.overwriteWith(boneOther);
         }
+        return this;
     }
-    ;
     // transformable
     transform(transformToApply) {
         for (var i = 0; i < this.bonesAll.length; i++) {
@@ -38,5 +38,4 @@ class Skeleton {
             bone.transform(transformToApply);
         }
     }
-    ;
 }

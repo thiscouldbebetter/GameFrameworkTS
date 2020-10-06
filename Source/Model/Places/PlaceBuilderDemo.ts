@@ -2993,6 +2993,7 @@ class PlaceBuilderDemo // Main.
 		(
 			itemDefnName,
 			[
+				new Animatable(null, null, null),
 				new Item(itemDefnName, 1),
 				new Locatable(null),
 				new Collidable(0, itemTorchCollider, null, null),

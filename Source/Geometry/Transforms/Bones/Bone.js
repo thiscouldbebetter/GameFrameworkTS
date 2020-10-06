@@ -21,7 +21,6 @@ class Bone {
         }
         return returnValue;
     }
-    ;
     // cloneable
     clone() {
         // hack - test
@@ -29,12 +28,11 @@ class Bone {
         var returnValue = new Bone(this.name, this.length, orientationCloned, ArrayHelper.clone(this.children), this.isVisible);
         return returnValue;
     }
-    ;
     overwriteWith(other) {
-        ArrayHelper.overwriteWith(this.orientation, other.orientation);
+        this.orientation.overwriteWith(other.orientation);
         ArrayHelper.overwriteWith(this.children, other.children);
+        return this;
     }
-    ;
     // transformable
     transform(transformToApply) {
         var axes = this.orientation.axes;
@@ -43,5 +41,4 @@ class Bone {
             transformToApply.transformCoords(axis);
         }
     }
-    ;
 }

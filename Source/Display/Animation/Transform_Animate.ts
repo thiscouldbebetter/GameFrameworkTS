@@ -1,36 +1,23 @@
 
-class Transform_Animate implements Transform
+class Transform_Animate
 {
-	animationDefnGroup: AnimationDefnGroup;
-	animatable: Animatable;
+	animationDefn: AnimationDefn;
+	ticksSinceStarted: number;
 
-	constructor(animationDefnGroup: AnimationDefnGroup)
+	constructor(animationDefn: AnimationDefn, ticksSinceStarted: number)
 	{
-		this.animationDefnGroup = animationDefnGroup;
-		this.animatable = new Animatable(); // hack
+		this.animationDefn = animationDefn;
+		this.ticksSinceStarted = ticksSinceStarted;
 	}
-
-	animationDefnCurrent()
-	{
-		var returnValue = null;
-
-		if (this.animatable.animationDefnNameCurrent != null)
-		{
-			var animationDefns = this.animationDefnGroup.animationDefnsByName;
-			returnValue = animationDefns.get(this.animatable.animationDefnNameCurrent);
-		}
-
-		return returnValue;
-	};
 
 	frameCurrent()
 	{
 		var returnValue = null;
 
-		var animationDefn = this.animationDefnCurrent();
+		var animationDefn = this.animationDefn;
 
 		var framesSinceBeginningOfCycle =
-			this.animatable.timerTicksSoFar // world.timerTicksSoFar
+			this.ticksSinceStarted
 			% animationDefn.numberOfFramesTotal;
 
 		var i;
@@ -47,11 +34,14 @@ class Transform_Animate implements Transform
 		}
 
 		var keyframe = keyframes[i];
-		var framesSinceKeyframe = framesSinceBeginningOfCycle - keyframe.frameIndex;
+		var framesSinceKeyframe =
+			framesSinceBeginningOfCycle - keyframe.frameIndex;
 
 		var keyframeNext = keyframes[i + 1];
-		var numberOfFrames = keyframeNext.frameIndex - keyframe.frameIndex;
-		var fractionOfProgressFromKeyframeToNext = framesSinceKeyframe / numberOfFrames;
+		var numberOfFrames =
+			keyframeNext.frameIndex - keyframe.frameIndex;
+		var fractionOfProgressFromKeyframeToNext =
+			framesSinceKeyframe / numberOfFrames;
 
 		returnValue = keyframe.interpolateWith
 		(
@@ -60,32 +50,29 @@ class Transform_Animate implements Transform
 		);
 
 		return returnValue;
-	};
+	}
 
-	overwriteWith(other: Transform): Transform
+	overwriteWith(other: Transform_Animate)
 	{
 		return this; // todo
 	}
 
-	transform(transformable: Transformable): Transformable
+	transform(transformable: any)
 	{
-		if (this.animatable.animationDefnNameCurrent != null)
+		var frameCurrent = this.frameCurrent();
+
+		var transforms = frameCurrent.transforms;
+
+		for (var i = 0; i < transforms.length; i++)
 		{
-			var frameCurrent = this.frameCurrent();
-
-			var transforms = frameCurrent.transforms;
-
-			for (var i = 0; i < transforms.length; i++)
-			{
-				var transformToApply = transforms[i];
-				transformToApply.transform(transformable);
-			}
+			var transformToApply = transforms[i];
+			transformToApply.transform(transformable);
 		}
 
 		return transformable;
-	};
+	}
 
-	transformCoords(coordsToTransform: Coords): Coords
+	transformCoords(coordsToTransform: Coords)
 	{
 		return coordsToTransform;
 	}

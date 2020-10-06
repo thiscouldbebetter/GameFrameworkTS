@@ -9,11 +9,11 @@ class Transform_Multiple {
     transform(transformable) {
         for (var i = 0; i < this.transforms.length; i++) {
             var transform = this.transforms[i];
-            transform.transform(transformable);
+            //transform.transform(transformable);
+            transformable.transform(transform);
         }
         return transformable;
     }
-    ;
     transformCoords(coordsToTransform) {
         for (var i = 0; i < this.transforms.length; i++) {
             var transform = this.transforms[i];
@@ -21,5 +21,4 @@ class Transform_Multiple {
         }
         return coordsToTransform;
     }
-    ;
 }

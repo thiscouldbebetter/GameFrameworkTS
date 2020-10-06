@@ -187,6 +187,7 @@ class PlaceBuilderDemo_Movers
 			"Carnivore",
 			[
 				new Actor(carnivoreActivity),
+				new Animatable(null, null, null),
 				new Collidable(0, carnivoreCollider, null, null),
 				new Constrainable([constraintSpeedMax1]),
 				new Drawable(carnivoreVisual, null),
@@ -331,6 +332,7 @@ class PlaceBuilderDemo_Movers
 			enemyTypeName + (damageTypeName || "Normal"),
 			[
 				new Actor(enemyActivity),
+				new Animatable(null, null, null),
 				new Constrainable([new Constraint_SpeedMaxXY(speedMax)]),
 				new Collidable(0, enemyCollider, null, null),
 				new Damager(new Damage(10, damageTypeName, null)),
@@ -841,6 +843,7 @@ class PlaceBuilderDemo_Movers
 			"Friendly",
 			[
 				actor,
+				new Animatable(null, null, null),
 				constrainable,
 				collidable,
 				new Drawable(friendlyVisual, null),
@@ -1080,6 +1083,7 @@ class PlaceBuilderDemo_Movers
 			"Grazer",
 			[
 				new Actor(grazerActivity),
+				new Animatable(null, null, null),
 				grazerPhased,
 				new Collidable(0, grazerCollider, null, null),
 				new Constrainable([constraintSpeedMax1]),
@@ -1600,6 +1604,7 @@ class PlaceBuilderDemo_Movers
 			entityDefnNamePlayer,
 			[
 				new Actor(playerActivity),
+				new Animatable(null, null, null),
 				new Collidable
 				(
 					0, // ticksToWaitBetweenCollisions

@@ -1695,6 +1695,7 @@ class PlaceBuilderDemo // Main.
         var itemTorchVisual = this.itemDefnsByName.get(itemDefnName).visual;
         var itemTorchCollider = new Sphere(new Coords(0, 0, 0), entityDimension / 2);
         var itemTorchEntityDefn = new Entity(itemDefnName, [
+            new Animatable(null, null, null),
             new Item(itemDefnName, 1),
             new Locatable(null),
             new Collidable(0, itemTorchCollider, null, null),

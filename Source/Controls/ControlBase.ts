@@ -1,7 +1,7 @@
 
 class ControlBase
 {
-	fontHeightInPixels: number
+	fontHeightInPixels: number;
 	name: string;
 	parent: ControlBase;
 	pos: Coords;

@@ -36,7 +36,7 @@ class Skeleton
 		}
 
 		return returnValue;
-	};
+	}
 
 	// cloneable
 
@@ -47,15 +47,18 @@ class Skeleton
 			this.name,
 			this.boneRoot.clone()
 		);
-	};
+	}
 
 	overwriteWith(other: Skeleton)
 	{
 		for (var i = 0; i < this.bonesAll.length; i++)
 		{
-			this.bonesAll[i].overwriteWith(other.bonesAll[i]);
+			var bone = this.bonesAll[i];
+			var boneOther = other.bonesAll[i];
+			bone.overwriteWith(boneOther);
 		}
-	};
+		return this;
+	}
 
 	// transformable
 
@@ -66,5 +69,5 @@ class Skeleton
 			var bone = this.bonesAll[i];
 			bone.transform(transformToApply);
 		}
-	};
+	}
 }

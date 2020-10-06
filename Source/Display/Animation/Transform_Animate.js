@@ -1,22 +1,13 @@
 "use strict";
 class Transform_Animate {
-    constructor(animationDefnGroup) {
-        this.animationDefnGroup = animationDefnGroup;
-        this.animatable = new Animatable(); // hack
+    constructor(animationDefn, ticksSinceStarted) {
+        this.animationDefn = animationDefn;
+        this.ticksSinceStarted = ticksSinceStarted;
     }
-    animationDefnCurrent() {
-        var returnValue = null;
-        if (this.animatable.animationDefnNameCurrent != null) {
-            var animationDefns = this.animationDefnGroup.animationDefnsByName;
-            returnValue = animationDefns.get(this.animatable.animationDefnNameCurrent);
-        }
-        return returnValue;
-    }
-    ;
     frameCurrent() {
         var returnValue = null;
-        var animationDefn = this.animationDefnCurrent();
-        var framesSinceBeginningOfCycle = this.animatable.timerTicksSoFar // world.timerTicksSoFar
+        var animationDefn = this.animationDefn;
+        var framesSinceBeginningOfCycle = this.ticksSinceStarted
             % animationDefn.numberOfFramesTotal;
         var i;
         var keyframes = animationDefn.keyframes;
@@ -34,22 +25,18 @@ class Transform_Animate {
         returnValue = keyframe.interpolateWith(keyframeNext, fractionOfProgressFromKeyframeToNext);
         return returnValue;
     }
-    ;
     overwriteWith(other) {
         return this; // todo
     }
     transform(transformable) {
-        if (this.animatable.animationDefnNameCurrent != null) {
-            var frameCurrent = this.frameCurrent();
-            var transforms = frameCurrent.transforms;
-            for (var i = 0; i < transforms.length; i++) {
-                var transformToApply = transforms[i];
-                transformToApply.transform(transformable);
-            }
+        var frameCurrent = this.frameCurrent();
+        var transforms = frameCurrent.transforms;
+        for (var i = 0; i < transforms.length; i++) {
+            var transformToApply = transforms[i];
+            transformToApply.transform(transformable);
         }
         return transformable;
     }
-    ;
     transformCoords(coordsToTransform) {
         return coordsToTransform;
     }

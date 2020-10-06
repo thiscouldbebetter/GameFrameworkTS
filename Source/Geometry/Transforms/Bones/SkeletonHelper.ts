@@ -180,7 +180,7 @@ class SkeletonHelper
 		);
 
 		return skeletonBiped;
-	};
+	}
 
 	static bipedAnimationDefnGroup()
 	{
@@ -195,7 +195,7 @@ class SkeletonHelper
 		);
 
 		return returnValue;
-	};
+	}
 
 	static bipedAnimationDefnDoSomething()
 	{
@@ -231,7 +231,7 @@ class SkeletonHelper
 		);
 
 		return returnValue;
-	};
+	}
 
 	static bipedAnimationDefnJump()
 	{
@@ -381,7 +381,7 @@ class SkeletonHelper
 		);
 
 		return animationDefnBipedWalk;
-	};
+	}
 
 	static transformBuildForMeshAndSkeleton_Proximity
 	(
@@ -446,9 +446,9 @@ class SkeletonHelper
 			meshAtRest,
 			skeletonAtRest,
 			boneInfluences,
-			skeletonPosed,
+			skeletonPosed
 		);
 
 		return returnValue;
-	};
+	}
 }

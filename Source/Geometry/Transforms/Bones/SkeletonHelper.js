@@ -54,7 +54,6 @@ class SkeletonHelper {
         skeletonBiped.transform(new Transform_Orient(new Orientation(new Coords(0, 1, 0), new Coords(0, 0, 1))));
         return skeletonBiped;
     }
-    ;
     static bipedAnimationDefnGroup() {
         var returnValue = new AnimationDefnGroup("Biped", [
             SkeletonHelper.bipedAnimationDefnDoSomething(),
@@ -63,7 +62,6 @@ class SkeletonHelper {
         ]);
         return returnValue;
     }
-    ;
     static bipedAnimationDefnDoSomething() {
         var returnValue = new AnimationDefn("DoSomething", [
             new AnimationKeyframe(0, new Array(new Transform_BonePose("Forearm.L", [.25]), new Transform_BonePose("Bicep.L", [.25, 0, -.25]), new Transform_BonePose("Forearm.R", [.25]), new Transform_BonePose("Bicep.R", [.25, 0, .25]))),
@@ -71,7 +69,6 @@ class SkeletonHelper {
         ]);
         return returnValue;
     }
-    ;
     static bipedAnimationDefnJump() {
         var returnValue = new AnimationDefn("Jump", [
             new AnimationKeyframe(0, new Array(new Transform_BonePose("Thigh.L", [.25]), new Transform_BonePose("Shin.L", [.25]), new Transform_BonePose("Thigh.R", [.25]), new Transform_BonePose("Shin.R", [.25]))),
@@ -92,7 +89,6 @@ class SkeletonHelper {
         ]);
         return animationDefnBipedWalk;
     }
-    ;
     static transformBuildForMeshAndSkeleton_Proximity(meshAtRest, skeletonAtRest, skeletonPosed) {
         var vertices = meshAtRest.geometry.vertices();
         var bones = skeletonAtRest.bonesAll;
@@ -124,5 +120,4 @@ class SkeletonHelper {
         var returnValue = new Transform_MeshPoseWithSkeleton(meshAtRest, skeletonAtRest, boneInfluences, skeletonPosed);
         return returnValue;
     }
-    ;
 }

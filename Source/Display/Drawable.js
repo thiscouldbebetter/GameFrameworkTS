@@ -5,12 +5,6 @@ class Drawable extends EntityProperty {
         this.visual = visual;
         this.isVisible = (isVisible == null ? true : isVisible);
     }
-    animatable() {
-        if (this._animatable == null) {
-            this._animatable = new DrawableAnimatable();
-        }
-        return this._animatable;
-    }
     updateForTimerTick(universe, world, place, entity) {
         if (this.isVisible) {
             this.visual.draw(universe, world, place, entity, universe.display);

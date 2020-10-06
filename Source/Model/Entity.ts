@@ -57,6 +57,11 @@ class Entity
 		}
 	}
 
+	propertyByName(name: string)
+	{
+		return this.propertiesByName.get(name);
+	}
+
 	propertyRemoveForPlace(propertyToRemove: EntityProperty, place: Place)
 	{
 		ArrayHelper.remove(this.properties, propertyToRemove);
@@ -91,85 +96,46 @@ class Entity
 
 	// Convenience methods for properties.
 
-	actor(): Actor { return this.propertiesByName.get(Actor.name) as Actor; }
-
-	boundable(): Boundable { return this.propertiesByName.get(Boundable.name) as Boundable; }
-
-	camera(): Camera { return this.propertiesByName.get(Camera.name) as Camera; }
-
-	collidable(): Collidable { return this.propertiesByName.get(Collidable.name) as Collidable; }
-
-	constrainable(): Constrainable { return this.propertiesByName.get(Constrainable.name) as Constrainable; }
-
-	controllable(): Controllable { return this.propertiesByName.get(Controllable.name) as Controllable; }
-
-	damager(): Damager { return this.propertiesByName.get(Damager.name) as Damager; }
-
-	device(): Device { return this.propertiesByName.get(Device.name) as Device; }
-
-	drawable(): Drawable { return this.propertiesByName.get(Drawable.name) as Drawable; }
-
-	drawableCamera(): DrawableCamera { return this.propertiesByName.get(DrawableCamera.name) as DrawableCamera; }
-
-	effectable() : Effectable { return this.propertiesByName.get(Effectable.name) as Effectable; }
-
-	ephemeral(): Ephemeral { return this.propertiesByName.get(Ephemeral.name) as Ephemeral; }
-
-	equipmentUser(): EquipmentUser { return this.propertiesByName.get(EquipmentUser.name) as EquipmentUser; }
-
-	equippable(): Equippable { return this.propertiesByName.get(Equippable.name) as Equippable; }
-
-	enemy(): Enemy { return this.propertiesByName.get(Enemy.name) as Enemy; }
-
-	forceField(): ForceField { return this.propertiesByName.get(ForceField.name) as ForceField; }
-
-	item(): Item { return this.propertiesByName.get(Item.name) as Item; }
-
-	itemContainer(): ItemContainer { return this.propertiesByName.get(ItemContainer.name) as ItemContainer; }
-
-	itemCrafter(): ItemCrafter { return this.propertiesByName.get(ItemCrafter.name) as ItemCrafter; }
-
-	itemDefn(): ItemDefn { return this.propertiesByName.get(ItemDefn.name) as ItemDefn; }
-
-	itemHolder(): ItemHolder { return this.propertiesByName.get(ItemHolder.name) as ItemHolder; }
-
-	itemStore(): ItemStore { return this.propertiesByName.get(ItemStore.name) as ItemStore; }
-
-	journalKeeper(): JournalKeeper { return this.propertiesByName.get(JournalKeeper.name) as JournalKeeper; }
-
-	killable(): Killable { return this.propertiesByName.get(Killable.name) as Killable; }
-
-	loadable(): Loadable { return this.propertiesByName.get(Loadable.name) as Loadable; }
-
-	locatable(): Locatable { return this.propertiesByName.get(Locatable.name) as Locatable; }
-
-	movable(): Movable { return this.propertiesByName.get(Movable.name) as Movable; }
-
-	obstacle(): Obstacle { return this.propertiesByName.get(Obstacle.name) as Obstacle; }
-
-	phased(): Phased { return this.propertiesByName.get(Phased.name) as Phased; }
-
-	recurrent(): Recurrent { return this.propertiesByName.get(Recurrent.name) as Recurrent; }
-
-	perceptible(): Perceptible { return this.propertiesByName.get(Perceptible.name) as Perceptible; }
-
-	perceptor(): Perceptor { return this.propertiesByName.get(Perceptor.name) as Perceptor; }
-
-	playable(): Playable { return this.propertiesByName.get(Playable.name) as Playable; }
-
-	portal(): Portal { return this.propertiesByName.get(Portal.name) as Portal; }
-
-	selector(): Selector { return this.propertiesByName.get(Selector.name) as Selector; }
-
-	skillLearner(): SkillLearner { return this.propertiesByName.get(SkillLearner.name) as SkillLearner; }
-
-	starvable(): Starvable { return this.propertiesByName.get(Starvable.name) as Starvable; }
-
-	talker(): Talker { return this.propertiesByName.get(Talker.name) as Talker; }
-
-	tirable(): Tirable { return this.propertiesByName.get(Tirable.name) as Tirable; }
-
-	traversable(): Traversable { return this.propertiesByName.get(Traversable.name) as Traversable; }
-
-	usable(): Usable { return this.propertiesByName.get(Usable.name) as Usable; }
+	actor(): Actor { return this.propertyByName(Actor.name) as Actor; }
+	animatable(): Animatable { return this.propertyByName(Animatable.name) as Animatable; }
+	boundable(): Boundable { return this.propertyByName(Boundable.name) as Boundable; }
+	camera(): Camera { return this.propertyByName(Camera.name) as Camera; }
+	collidable(): Collidable { return this.propertyByName(Collidable.name) as Collidable; }
+	constrainable(): Constrainable { return this.propertyByName(Constrainable.name) as Constrainable; }
+	controllable(): Controllable { return this.propertyByName(Controllable.name) as Controllable; }
+	damager(): Damager { return this.propertyByName(Damager.name) as Damager; }
+	device(): Device { return this.propertyByName(Device.name) as Device; }
+	drawable(): Drawable { return this.propertyByName(Drawable.name) as Drawable; }
+	drawableCamera(): DrawableCamera { return this.propertyByName(DrawableCamera.name) as DrawableCamera; }
+	effectable() : Effectable { return this.propertyByName(Effectable.name) as Effectable; }
+	ephemeral(): Ephemeral { return this.propertyByName(Ephemeral.name) as Ephemeral; }
+	equipmentUser(): EquipmentUser { return this.propertyByName(EquipmentUser.name) as EquipmentUser; }
+	equippable(): Equippable { return this.propertyByName(Equippable.name) as Equippable; }
+	enemy(): Enemy { return this.propertyByName(Enemy.name) as Enemy; }
+	forceField(): ForceField { return this.propertyByName(ForceField.name) as ForceField; }
+	item(): Item { return this.propertyByName(Item.name) as Item; }
+	itemContainer(): ItemContainer { return this.propertyByName(ItemContainer.name) as ItemContainer; }
+	itemCrafter(): ItemCrafter { return this.propertyByName(ItemCrafter.name) as ItemCrafter; }
+	itemDefn(): ItemDefn { return this.propertyByName(ItemDefn.name) as ItemDefn; }
+	itemHolder(): ItemHolder { return this.propertyByName(ItemHolder.name) as ItemHolder; }
+	itemStore(): ItemStore { return this.propertyByName(ItemStore.name) as ItemStore; }
+	journalKeeper(): JournalKeeper { return this.propertyByName(JournalKeeper.name) as JournalKeeper; }
+	killable(): Killable { return this.propertyByName(Killable.name) as Killable; }
+	loadable(): Loadable { return this.propertyByName(Loadable.name) as Loadable; }
+	locatable(): Locatable { return this.propertyByName(Locatable.name) as Locatable; }
+	movable(): Movable { return this.propertyByName(Movable.name) as Movable; }
+	obstacle(): Obstacle { return this.propertyByName(Obstacle.name) as Obstacle; }
+	phased(): Phased { return this.propertyByName(Phased.name) as Phased; }
+	recurrent(): Recurrent { return this.propertyByName(Recurrent.name) as Recurrent; }
+	perceptible(): Perceptible { return this.propertyByName(Perceptible.name) as Perceptible; }
+	perceptor(): Perceptor { return this.propertyByName(Perceptor.name) as Perceptor; }
+	playable(): Playable { return this.propertyByName(Playable.name) as Playable; }
+	portal(): Portal { return this.propertyByName(Portal.name) as Portal; }
+	selector(): Selector { return this.propertyByName(Selector.name) as Selector; }
+	skillLearner(): SkillLearner { return this.propertyByName(SkillLearner.name) as SkillLearner; }
+	starvable(): Starvable { return this.propertyByName(Starvable.name) as Starvable; }
+	talker(): Talker { return this.propertyByName(Talker.name) as Talker; }
+	tirable(): Tirable { return this.propertyByName(Tirable.name) as Tirable; }
+	traversable(): Traversable { return this.propertyByName(Traversable.name) as Traversable; }
+	usable(): Usable { return this.propertyByName(Usable.name) as Usable; }
 }

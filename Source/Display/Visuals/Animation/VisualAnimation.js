@@ -60,7 +60,7 @@ class VisualAnimation {
     }
     // Visual.
     draw(universe, world, place, entity, display) {
-        var animatable = entity.drawable().animatable();
+        var animatable = entity.animatable();
         var tickStarted = animatable.animationWithNameStartIfNecessary(this.name, world);
         var frameCurrent = this.frameCurrent(world, tickStarted);
         frameCurrent.draw(universe, world, place, entity, display);
