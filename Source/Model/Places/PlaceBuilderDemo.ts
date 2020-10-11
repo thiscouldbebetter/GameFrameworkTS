@@ -1311,10 +1311,9 @@ class PlaceBuilderDemo // Main.
 		var goalVisual = new VisualGroup
 		([
 			new VisualRectangle(entitySize, goalColor, null, null),
-			new VisualText
+			VisualText.fromTextAndColor
 			(
-				new DataBinding("" + numberOfKeysToUnlockGoal, null, null),
-				null, itemKeyColor, null
+				"" + numberOfKeysToUnlockGoal, itemKeyColor
 			)
 		]);
 		if (this.visualsHaveText)
@@ -1323,7 +1322,7 @@ class PlaceBuilderDemo // Main.
 			(
 				new VisualOffset
 				(
-					new VisualText(new DataBinding("Exit", null, null), null, goalColor, null),
+					VisualText.fromTextAndColor("Exit", goalColor),
 					new Coords(0, 0 - entityDimension * 2, 0)
 				)
 			);
@@ -1708,7 +1707,7 @@ class PlaceBuilderDemo // Main.
 			(
 				new VisualOffset
 				(
-					new VisualText(new DataBinding("Store", null, null), null, storeColor, null),
+					VisualText.fromTextAndColor("Store", storeColor),
 					new Coords(0, 0 - entityDimension * 2, 0)
 				)
 			);
@@ -2221,7 +2220,7 @@ class PlaceBuilderDemo // Main.
 			(
 				new VisualOffset
 				(
-					new VisualText(new DataBinding(defnName, null, null), null, Color.byName("Blue"), null),
+					VisualText.fromTextAndColor(defnName, Color.byName("Blue")),
 					new Coords(0, 0 - entityDimension * 2.5, 0)
 				)
 			);
@@ -2691,7 +2690,7 @@ class PlaceBuilderDemo // Main.
 			(
 				new VisualOffset
 				(
-					new VisualText(new DataBinding(itemDefnPotionName, null, null), null, itemPotionColor, null),
+					VisualText.fromTextAndColor(itemDefnPotionName, itemPotionColor),
 					new Coords(0, 0 - entityDimension, 0)
 				)
 			);

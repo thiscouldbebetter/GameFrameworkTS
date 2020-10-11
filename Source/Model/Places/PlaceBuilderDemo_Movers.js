@@ -48,7 +48,7 @@ class PlaceBuilderDemo_Movers {
             ),
         ]);
         if (this.parent.visualsHaveText) {
-            carnivoreVisual.children.push(new VisualOffset(new VisualText(new DataBinding("Carnivore", null, null), null, carnivoreColor, null), new Coords(0, 0 - carnivoreDimension * 2, 0)));
+            carnivoreVisual.children.push(new VisualOffset(VisualText.fromTextAndColor("Carnivore", carnivoreColor), new Coords(0, 0 - carnivoreDimension * 2, 0)));
         }
         var carnivoreActivityPerform = (universe, world, place, entityActor, activity) => {
             var targetPos = activity.target;
@@ -269,7 +269,7 @@ class PlaceBuilderDemo_Movers {
             visualStatusInfo
         ]);
         if (this.parent.visualsHaveText) {
-            enemyVisual.children.push(new VisualOffset(new VisualText(DataBinding.fromContext(enemyTypeName), null, enemyColor, null), new Coords(0, 0 - enemyDimension, 0)));
+            enemyVisual.children.push(new VisualOffset(VisualText.fromTextAndColor(enemyTypeName, enemyColor), new Coords(0, 0 - enemyDimension, 0)));
         }
         return enemyVisual;
     }
@@ -364,7 +364,7 @@ class PlaceBuilderDemo_Movers {
             )
         ]);
         if (this.parent.visualsHaveText) {
-            friendlyVisualGroup.children.push(new VisualOffset(new VisualText(new DataBinding("Talker", null, null), null, friendlyColor, null), new Coords(0, 0 - friendlyDimension * 2, 0)));
+            friendlyVisualGroup.children.push(new VisualOffset(VisualText.fromTextAndColor("Talker", friendlyColor), new Coords(0, 0 - friendlyDimension * 2, 0)));
         }
         var friendlyVisual = new VisualAnchor(friendlyVisualGroup, null, Orientation.Instances().ForwardXDownZ);
         var friendlyActivityPerform = (universe, world, place, entityActor, activity) => {
@@ -473,7 +473,7 @@ class PlaceBuilderDemo_Movers {
             grazerVisualSelect
         ]);
         if (this.parent.visualsHaveText) {
-            grazerVisual.children.push(new VisualOffset(new VisualText(new DataBinding("Grazer", null, null), null, grazerColor, null), new Coords(0, 0 - grazerDimension * 2, 0)));
+            grazerVisual.children.push(new VisualOffset(VisualText.fromTextAndColor("Grazer", grazerColor), new Coords(0, 0 - grazerDimension * 2, 0)));
         }
         var grazerActivityPerform = (universe, world, place, entityActor, activity) => {
             var targetPos = activity.target;
@@ -581,7 +581,7 @@ class PlaceBuilderDemo_Movers {
             playerVisualEffect
         ];
         if (this.parent.visualsHaveText) {
-            playerVisualsForStatusInfo.splice(0, 0, new VisualText(new DataBinding(entityDefnNamePlayer, null, null), null, playerColor, null));
+            playerVisualsForStatusInfo.splice(0, 0, VisualText.fromTextAndColor(entityDefnNamePlayer, playerColor));
         }
         var playerVisualStatusInfo = new VisualOffset(new VisualStack(new Coords(0, 0 - entityDimension, 0), // childSpacing
         playerVisualsForStatusInfo), new Coords(0, 0 - entityDimension * 2, 0) // offset
@@ -778,7 +778,7 @@ class PlaceBuilderDemo_Movers {
             if (ticksToWait == null) {
                 visualAsCameraProjection.child = new VisualGroup([
                     visualAsCameraProjection.child,
-                    new VisualOffset(new VisualText(DataBinding.fromContext("Waiting"), null, Color.byName("Gray"), null), new Coords(0, -entityDimension * 3, 0))
+                    new VisualOffset(VisualText.fromTextAndColor("Waiting", Color.byName("Gray")), new Coords(0, -entityDimension * 3, 0))
                 ]);
                 ticksToWait = 60; // 3 seconds.
             }

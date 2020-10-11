@@ -723,10 +723,10 @@ class PlaceBuilderDemo // Main.
         var goalColor = Color.byName("GreenDark");
         var goalVisual = new VisualGroup([
             new VisualRectangle(entitySize, goalColor, null, null),
-            new VisualText(new DataBinding("" + numberOfKeysToUnlockGoal, null, null), null, itemKeyColor, null)
+            VisualText.fromTextAndColor("" + numberOfKeysToUnlockGoal, itemKeyColor)
         ]);
         if (this.visualsHaveText) {
-            goalVisual.children.push(new VisualOffset(new VisualText(new DataBinding("Exit", null, null), null, goalColor, null), new Coords(0, 0 - entityDimension * 2, 0)));
+            goalVisual.children.push(new VisualOffset(VisualText.fromTextAndColor("Exit", goalColor), new Coords(0, 0 - entityDimension * 2, 0)));
         }
         var goalEntity = new Entity("Goal", [
             new Locatable(goalLoc),
@@ -931,7 +931,7 @@ class PlaceBuilderDemo // Main.
             new VisualOffset(new VisualRectangle(new Coords(1.1, .2, 0).multiplyScalar(entityDimension), Color.byName("Gray"), null, null), new Coords(0, -.75, 0).multiplyScalar(entityDimension)),
         ]);
         if (this.visualsHaveText) {
-            visual.children.push(new VisualOffset(new VisualText(new DataBinding("Store", null, null), null, storeColor, null), new Coords(0, 0 - entityDimension * 2, 0)));
+            visual.children.push(new VisualOffset(VisualText.fromTextAndColor("Store", storeColor), new Coords(0, 0 - entityDimension * 2, 0)));
         }
         var storeEntityDefn = new Entity("Store", [
             new Collidable(0, new Box(new Coords(0, 0, 0), entitySize), null, null),
@@ -1241,7 +1241,7 @@ class PlaceBuilderDemo // Main.
             carVisualBody
         ]);
         if (this.visualsHaveText) {
-            carVisual.children.push(new VisualOffset(new VisualText(new DataBinding(defnName, null, null), null, Color.byName("Blue"), null), new Coords(0, 0 - entityDimension * 2.5, 0)));
+            carVisual.children.push(new VisualOffset(VisualText.fromTextAndColor(defnName, Color.byName("Blue")), new Coords(0, 0 - entityDimension * 2.5, 0)));
         }
         var carCollider = new Sphere(new Coords(0, 0, 0), entityDimension / 2);
         var carCollide = (universe, world, place, entityVehicle, entityOther) => {
@@ -1521,7 +1521,7 @@ class PlaceBuilderDemo // Main.
             ]).transform(Transform_Scale.fromScalar(entityDimension)), itemPotionColor, Color.byName("White"))
         ]);
         if (this.visualsHaveText) {
-            itemPotionVisual.children.push(new VisualOffset(new VisualText(new DataBinding(itemDefnPotionName, null, null), null, itemPotionColor, null), new Coords(0, 0 - entityDimension, 0)));
+            itemPotionVisual.children.push(new VisualOffset(VisualText.fromTextAndColor(itemDefnPotionName, itemPotionColor), new Coords(0, 0 - entityDimension, 0)));
         }
         var itemPotionCollider = new Sphere(new Coords(0, 0, 0), entityDimensionHalf);
         var itemPotionEntityDefn = new Entity(itemDefnPotionName, [

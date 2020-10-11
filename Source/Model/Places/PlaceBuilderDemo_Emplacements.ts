@@ -23,7 +23,7 @@ class PlaceBuilderDemo_Emplacements
 			(
 				new VisualOffset
 				(
-					new VisualText(new DataBinding(anvilName, null, null), null, Color.byName("Blue"), null),
+					VisualText.fromTextAndColor(anvilName, Color.byName("Blue")),
 					new Coords(0, 0 - entityDimension * 2, 0)
 				)
 			);
@@ -115,7 +115,7 @@ class PlaceBuilderDemo_Emplacements
 			(
 				new VisualOffset
 				(
-					new VisualText(new DataBinding(itemDefnName, null, null), null, colorBoulder, null),
+					VisualText.fromTextAndColor(itemDefnName, colorBoulder),
 					new Coords(0, 0 - entityDimension * 3, 0)
 				)
 			);
@@ -220,7 +220,7 @@ class PlaceBuilderDemo_Emplacements
 			(
 				new VisualOffset
 				(
-					new VisualText(new DataBinding(campfireName, null, null), null, campfireColor, null),
+					VisualText.fromTextAndColor(campfireName, campfireColor),
 					new Coords(0, 0 - entityDimension * 2, 0)
 				)
 			);
@@ -286,7 +286,7 @@ class PlaceBuilderDemo_Emplacements
 			(
 				new VisualOffset
 				(
-					new VisualText(new DataBinding("Container", null, null), null, containerColor, null),
+					VisualText.fromTextAndColor("Container", containerColor),
 					new Coords(0, 0 - entityDimension, 0)
 				)
 			);
@@ -363,7 +363,7 @@ class PlaceBuilderDemo_Emplacements
 			(
 				new VisualOffset
 				(
-					new VisualText(new DataBinding("Exit", null, null), null, exitColor, null),
+					VisualText.fromTextAndColor("Exit", exitColor),
 					new Coords(0, 0 - entityDimension * 2.5, 0)
 				)
 			);
@@ -429,7 +429,7 @@ class PlaceBuilderDemo_Emplacements
 			(
 				new VisualOffset
 				(
-					new VisualText(DataBinding.fromContext(entityName), null, itemHoleColor, null),
+					VisualText.fromTextAndColor(entityName, itemHoleColor),
 					new Coords(0, 0 - entityDimension, 0)
 				)
 			);
@@ -492,7 +492,7 @@ class PlaceBuilderDemo_Emplacements
 			(
 				new VisualOffset
 				(
-					new VisualText(new DataBinding("Bar", null, null), null, obstacleColor, null),
+					VisualText.fromTextAndColor("Bar", obstacleColor),
 					new Coords(0, 0 - obstacleCollider.box.size.y, 0)
 				)
 			);
@@ -578,7 +578,7 @@ class PlaceBuilderDemo_Emplacements
 			(
 				new VisualOffset
 				(
-					new VisualText(new DataBinding(entityDefnName, null, null), null, obstacleColor, null),
+					VisualText.fromTextAndColor(entityDefnName, obstacleColor),
 					new Coords(0, 0 - entityDimension * 2, 0)
 				)
 			);
@@ -681,7 +681,7 @@ class PlaceBuilderDemo_Emplacements
 			(
 				new VisualOffset
 				(
-					new VisualText(new DataBinding(pillowName, null, null), null, Color.byName("Blue"), null),
+					VisualText.fromTextAndColor(pillowName, Color.byName("Blue")),
 					new Coords(0, 0 - entityDimension * 2, 0)
 				)
 			);
@@ -742,10 +742,10 @@ class PlaceBuilderDemo_Emplacements
 					(u: Universe, w: World, d: Display, e: Entity) =>
 					{
 						var baseColor = Color.byName("Brown");
-						return new VisualText
+						return VisualText.fromTextAndColor
 						(
-							new DataBinding(e.portal().destinationPlaceName, null, null),
-							null, baseColor, null
+							e.portal().destinationPlaceName,
+							baseColor
 						)
 					}
 				),
@@ -808,7 +808,7 @@ class PlaceBuilderDemo_Emplacements
 			(
 				new VisualOffset
 				(
-					new VisualText(new DataBinding(entityName, null, null), null, color, null),
+					VisualText.fromTextAndColor(entityName, color),
 					new Coords(0, 0 - entityDimension * 2, 0)
 				)
 			);
@@ -873,7 +873,7 @@ class PlaceBuilderDemo_Emplacements
 			(
 				new VisualOffset
 				(
-					new VisualText(new DataBinding(entityName, null, null), null, color, null),
+					VisualText.fromTextAndColor(entityName, color),
 					new Coords(0, 0 - entityDimension * 2, 0)
 				)
 			);

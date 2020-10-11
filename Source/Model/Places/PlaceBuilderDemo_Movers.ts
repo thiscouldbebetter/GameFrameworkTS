@@ -105,7 +105,7 @@ class PlaceBuilderDemo_Movers
 			(
 				new VisualOffset
 				(
-					new VisualText(new DataBinding("Carnivore", null, null), null, carnivoreColor, null),
+					VisualText.fromTextAndColor("Carnivore", carnivoreColor),
 					new Coords(0, 0 - carnivoreDimension * 2, 0)
 				)
 			);
@@ -560,7 +560,7 @@ class PlaceBuilderDemo_Movers
 			(
 				new VisualOffset
 				(
-					new VisualText(DataBinding.fromContext(enemyTypeName), null, enemyColor, null),
+					VisualText.fromTextAndColor(enemyTypeName, enemyColor),
 					new Coords(0, 0 - enemyDimension, 0)
 				)
 			);
@@ -759,7 +759,7 @@ class PlaceBuilderDemo_Movers
 			(
 				new VisualOffset
 				(
-					new VisualText(new DataBinding("Talker", null, null), null, friendlyColor, null),
+					VisualText.fromTextAndColor("Talker", friendlyColor),
 					new Coords(0, 0 - friendlyDimension * 2, 0)
 				)
 			);
@@ -963,7 +963,7 @@ class PlaceBuilderDemo_Movers
 			(
 				new VisualOffset
 				(
-					new VisualText(new DataBinding("Grazer", null, null), null, grazerColor, null),
+					VisualText.fromTextAndColor("Grazer", grazerColor),
 					new Coords(0, 0 - grazerDimension * 2, 0)
 				)
 			);
@@ -1188,9 +1188,9 @@ class PlaceBuilderDemo_Movers
 			playerVisualsForStatusInfo.splice
 			(
 				0, 0,
-				new VisualText
+				VisualText.fromTextAndColor
 				(
-					new DataBinding(entityDefnNamePlayer, null, null), null, playerColor, null
+					entityDefnNamePlayer, playerColor
 				)
 			);
 		}
@@ -1567,9 +1567,9 @@ class PlaceBuilderDemo_Movers
 					visualAsCameraProjection.child,
 					new VisualOffset
 					(
-						new VisualText
+						VisualText.fromTextAndColor
 						(
-							DataBinding.fromContext("Waiting"), null, Color.byName("Gray"), null
+							"Waiting", Color.byName("Gray")
 						),
 						new Coords(0, -entityDimension * 3, 0)
 					)

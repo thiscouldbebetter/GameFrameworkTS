@@ -2,21 +2,50 @@
 class VisualText implements Visual
 {
 	_text: DataBinding<any, string>;
+	shouldTextContextBeReset: boolean;
 	colorFill: Color;
 	colorBorder: Color;
 	heightInPixels: number;
 
-	constructor(text: DataBinding<any, string>, heightInPixels: number, colorFill: Color, colorBorder: Color)
+	_universeWorldPlaceEntities: UniverseWorldPlaceEntities;
+
+	constructor
+	(
+		text: DataBinding<any, string>,
+		shouldTextContextBeReset: boolean,
+		heightInPixels: number,
+		colorFill: Color,
+		colorBorder: Color
+	)
 	{
 		this._text = text;
+		this.shouldTextContextBeReset = shouldTextContextBeReset || false;
 		this.heightInPixels = heightInPixels || 10;
 		this.colorFill = colorFill;
 		this.colorBorder = colorBorder;
+
+		this._universeWorldPlaceEntities = UniverseWorldPlaceEntities.create();
 	}
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	static fromTextAndColor(text: string, colorFill: Color): VisualText
 	{
-		var text = this.text(universe, world, display, entity);
+		return new VisualText
+		(
+			DataBinding.fromContext(text),
+			false, // shouldTextContextBeReset
+			null, // heightInPixels
+			colorFill,
+			null // colorBorder
+		);
+	}
+
+	draw
+	(
+		universe: Universe, world: World, place: Place,
+		entity: Entity, display: Display
+	)
+	{
+		var text = this.text(universe, world, place, entity, display);
 		display.drawText
 		(
 			text,
@@ -28,12 +57,27 @@ class VisualText implements Visual
 			true, // isCentered
 			null // widthMaxInPixels
 		);
-	};
+	}
 
-	text(universe: Universe, world: World, display: Display, entity: Entity)
+	text
+	(
+		universe: Universe, world: World, place: Place,
+		entity: Entity, display: Display
+	)
 	{
-		return this._text.get();
-	};
+		if (this.shouldTextContextBeReset)
+		{
+			this._universeWorldPlaceEntities.fieldsSet
+			(
+				universe, world, place, entity, null
+			);
+			this._text.contextSet(this._universeWorldPlaceEntities);
+		}
+
+		var returnValue = this._text.get();
+
+		return returnValue;
+	}
 
 	// Clonable.
 
