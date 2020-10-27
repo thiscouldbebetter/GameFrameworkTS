@@ -29,7 +29,7 @@ class Place
 	defn(world: World)
 	{
 		return world.defn.placeDefnsByName().get(this.defnName);
-	};
+	}
 
 	draw(universe: Universe, world: World, display: Display)
 	{
@@ -41,7 +41,7 @@ class Place
 			drawable.updateForTimerTick(universe, world, this, entity);
 		}
 		this.camera().drawEntitiesInViewThenClear(universe, world, this, display);
-	};
+	}
 
 	entitiesByPropertyName(propertyName: string)
 	{
@@ -63,7 +63,7 @@ class Place
 			this.entityRemove(entity);
 		}
 		this.entitiesToRemove.length = 0;
-	};
+	}
 
 	entitiesSpawn(universe: Universe, world: World)
 	{
@@ -74,7 +74,7 @@ class Place
 		}
 
 		this.entitiesToSpawn.length = 0;
-	};
+	}
 
 	entityRemove(entity: Entity)
 	{
@@ -89,7 +89,7 @@ class Place
 		}
 		ArrayHelper.remove(this.entities, entity);
 		this.entitiesByName.delete(entity.name);
-	};
+	}
 
 	entitySpawn(universe: Universe, world: World, entity: Entity)
 	{

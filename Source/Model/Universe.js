@@ -1,13 +1,14 @@
 "use strict";
 class Universe {
-    constructor(name, version, timerHelper, display, mediaLibrary, controlStyle, world) {
+    constructor(name, version, timerHelper, display, mediaLibrary, controlStyle, worldCreate) {
         this.name = name;
         this.version = version;
         this.timerHelper = timerHelper;
         this.display = display;
         this.mediaLibrary = mediaLibrary;
         this.controlStyle = controlStyle;
-        this.world = world;
+        this._worldCreate =
+            worldCreate || ((u) => World.create(u));
         this.collisionHelper = new CollisionHelper();
         this.controlBuilder = new ControlBuilder([ControlStyle.Instances().Default]);
         this.entityBuilder = new EntityBuilder();
@@ -18,8 +19,8 @@ class Universe {
         this.venueNext = null;
     }
     // static methods
-    static create(name, version, timerHelper, display, mediaLibrary, controlStyle, world) {
-        var returnValue = new Universe(name, version, timerHelper, display, mediaLibrary, controlStyle, world);
+    static create(name, version, timerHelper, display, mediaLibrary, controlStyle, worldCreate) {
+        var returnValue = new Universe(name, version, timerHelper, display, mediaLibrary, controlStyle, worldCreate);
         var debuggingMode = URLParser.fromWindow().queryStringParameters["debug"];
         returnValue.debuggingMode = debuggingMode;
         return returnValue;
@@ -68,5 +69,7 @@ class Universe {
         }
         this.venueCurrent.updateForTimerTick(this);
     }
-    ;
+    worldCreate() {
+        return this._worldCreate(this);
+    }
 }

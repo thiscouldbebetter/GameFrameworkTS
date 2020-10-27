@@ -20,7 +20,8 @@ function main() {
     var timerHelper = new TimerHelper(20);
     var controlStyle = ControlStyle.Instances().Default;
     var universe = Universe.create("Game Framework Demo Game", "0.0.0-20200829-2200", // version
-    timerHelper, display, mediaLibrary, controlStyle, null);
+    timerHelper, display, mediaLibrary, controlStyle, null // worldCreate
+    );
     universe.initialize(function () { universe.start(); });
 }
 function mediaFilePathsBuild() {

@@ -40,7 +40,7 @@ function main()
 		display,
 		mediaLibrary,
 		controlStyle,
-		null
+		null // worldCreate
 	);
 	universe.initialize
 	(

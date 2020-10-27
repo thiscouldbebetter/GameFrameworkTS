@@ -13,8 +13,13 @@ class ItemDefn extends EntityProperty
 
 	constructor
 	(
-		name: string, appearance: string, description: string, mass: number,
-		tradeValue: number, stackSizeMax: number, categoryNames: string[],
+		name: string,
+		appearance: string,
+		description: string,
+		mass: number,
+		tradeValue: number,
+		stackSizeMax: number,
+		categoryNames: string[],
 		use: (u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) => string,
 		visual: Visual
 	)

@@ -29,7 +29,7 @@ class Profile {
         var visualThumbnailSize = new Coords(60, 45, 0);
         var venueToReturnTo = universe.venueCurrent;
         var loadNewWorld = () => {
-            var world = World.create(universe);
+            var world = universe.worldCreate();
             universe.world = world;
             var venueNext = new VenueControls(controlBuilder.worldDetail(universe, size, universe.venueCurrent), false);
             venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
@@ -417,9 +417,9 @@ class Profile {
             var messageAsDataBinding = new DataBinding(null, // Will be set below.
             (c) => "Generating world...", null);
             var venueMessage = new VenueMessage(messageAsDataBinding, null, null, null, null);
-            var venueTask = new VenueTask(venueMessage, () => //perform
+            var venueTask = new VenueTask(venueMessage, () => // perform
              {
-                return World.create(universe);
+                return universe.worldCreate();
             }, (universe, world) => // done
              {
                 universe.world = world;

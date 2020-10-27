@@ -7,6 +7,8 @@ class Universe
 	display: Display;
 	mediaLibrary: MediaLibrary;
 	controlStyle: ControlStyle;
+	_worldCreate: (u: Universe) => World;
+
 	world: World;
 
 	collisionHelper: CollisionHelper;
@@ -34,7 +36,7 @@ class Universe
 		display: Display,
 		mediaLibrary: MediaLibrary,
 		controlStyle: ControlStyle,
-		world: World
+		worldCreate: (u:Universe)=>World
 	)
 	{
 		this.name = name;
@@ -43,7 +45,8 @@ class Universe
 		this.display = display;
 		this.mediaLibrary = mediaLibrary;
 		this.controlStyle = controlStyle;
-		this.world = world;
+		this._worldCreate =
+			worldCreate || ( (u: Universe) => World.create(u) );
 
 		this.collisionHelper = new CollisionHelper();
 		this.controlBuilder = new ControlBuilder([ControlStyle.Instances().Default]);
@@ -66,7 +69,7 @@ class Universe
 		display: Display,
 		mediaLibrary: MediaLibrary,
 		controlStyle: ControlStyle,
-		world: World
+		worldCreate: (u: Universe) => World,
 	)
 	{
 		var returnValue = new Universe
@@ -77,7 +80,7 @@ class Universe
 			display,
 			mediaLibrary,
 			controlStyle,
-			world
+			worldCreate
 		);
 
 		var debuggingMode =
@@ -167,5 +170,10 @@ class Universe
 			}
 		}
 		this.venueCurrent.updateForTimerTick(this);
-	};
+	}
+
+	worldCreate()
+	{
+		return this._worldCreate(this);
+	}
 }

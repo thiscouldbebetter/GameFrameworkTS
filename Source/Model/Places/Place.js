@@ -14,7 +14,6 @@ class Place {
     defn(world) {
         return world.defn.placeDefnsByName().get(this.defnName);
     }
-    ;
     draw(universe, world, display) {
         var entitiesDrawable = this.entitiesByPropertyName(Drawable.name);
         for (var i = 0; i < entitiesDrawable.length; i++) {
@@ -24,7 +23,6 @@ class Place {
         }
         this.camera().drawEntitiesInViewThenClear(universe, world, this, display);
     }
-    ;
     entitiesByPropertyName(propertyName) {
         var returnValues = this._entitiesByPropertyName.get(propertyName);
         if (returnValues == null) {
@@ -40,7 +38,6 @@ class Place {
         }
         this.entitiesToRemove.length = 0;
     }
-    ;
     entitiesSpawn(universe, world) {
         for (var i = 0; i < this.entitiesToSpawn.length; i++) {
             var entity = this.entitiesToSpawn[i];
@@ -48,7 +45,6 @@ class Place {
         }
         this.entitiesToSpawn.length = 0;
     }
-    ;
     entityRemove(entity) {
         var entityProperties = entity.properties;
         for (var p = 0; p < entityProperties.length; p++) {
@@ -60,7 +56,6 @@ class Place {
         ArrayHelper.remove(this.entities, entity);
         this.entitiesByName.delete(entity.name);
     }
-    ;
     entitySpawn(universe, world, entity) {
         if (entity.name == null) {
             entity.name = "Entity";

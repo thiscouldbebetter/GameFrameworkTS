@@ -31,7 +31,10 @@ class Profile
 		return Profile.toControlSaveStateLoadOrSave(universe, size, venuePrev, isLoadNotSave);
 	}
 
-	static toControlSaveStateLoadOrSave(universe: Universe, size: Coords, venuePrev: Venue, isLoadNotSave: boolean)
+	static toControlSaveStateLoadOrSave
+	(
+		universe: Universe, size: Coords, venuePrev: Venue, isLoadNotSave: boolean
+	)
 	{
 		if (size == null)
 		{
@@ -50,7 +53,7 @@ class Profile
 
 		var loadNewWorld = () =>
 		{
-			var world = World.create(universe);
+			var world = universe.worldCreate();
 			universe.world = world;
 			var venueNext: Venue = new VenueControls
 			(
@@ -864,9 +867,9 @@ class Profile
 			var venueTask = new VenueTask
 			(
 				venueMessage,
-				() => //perform
+				() => // perform
 				{
-					return World.create(universe);
+					return universe.worldCreate();
 				},
 				(universe: Universe, world: World) => // done
 				{
