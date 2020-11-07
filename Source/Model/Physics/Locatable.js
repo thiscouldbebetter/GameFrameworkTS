@@ -4,6 +4,9 @@ class Locatable extends EntityProperty {
         super();
         this.loc = loc || new Disposition(null, null, null);
     }
+    static fromPos(pos) {
+        return new Locatable(new Disposition(pos, null, null));
+    }
     approachOtherWithAccelerationAndSpeedMax(locatableToApproach, accelerationPerTick, speedMax // ,distanceMin: number
     ) {
         accelerationPerTick = accelerationPerTick || .1;

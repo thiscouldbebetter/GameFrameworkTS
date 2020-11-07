@@ -25,7 +25,7 @@ class ConversationDefn
 	talkNodeByName(nameOfTalkNodeToGet: string)
 	{
 		return this.talkNodesByName.get(nameOfTalkNodeToGet);
-	};
+	}
 
 	talkNodesByNames(namesOfTalkNodesToGet: string[])
 	{
@@ -39,7 +39,7 @@ class ConversationDefn
 		}
 
 		return returnNodes;
-	};
+	}
 
 	expandFromContentTextString(contentTextString: TextString)
 	{
@@ -122,7 +122,14 @@ class ConversationDefn
 		// Additional processing to support minification.
 		conversationDefn.name = conversationDefn["name"];
 		var imagePortraitName = conversationDefn["imagePortraitName"];
-		conversationDefn.visualPortrait = new VisualImageFromLibrary(imagePortraitName);
+		if (imagePortraitName == null)
+		{
+			conversationDefn.visualPortrait = new VisualNone();
+		}
+		else
+		{
+			conversationDefn.visualPortrait = new VisualImageFromLibrary(imagePortraitName);
+		}
 		conversationDefn.contentTextStringName =
 			conversationDefn["contentTextStringName"];
 

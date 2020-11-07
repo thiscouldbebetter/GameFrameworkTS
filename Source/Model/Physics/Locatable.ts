@@ -9,6 +9,11 @@ class Locatable extends EntityProperty
 		this.loc = loc || new Disposition(null, null, null);
 	}
 
+	static fromPos(pos: Coords)
+	{
+		return new Locatable(new Disposition(pos, null, null));
+	}
+
 	approachOtherWithAccelerationAndSpeedMax
 	(
 		locatableToApproach: Locatable,

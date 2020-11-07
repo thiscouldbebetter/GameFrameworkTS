@@ -851,7 +851,7 @@ class PlaceBuilderDemo_Movers
 				itemHolder,
 				new Locatable(null),
 				routable,
-				new Talker("AnEveningWithProfessorSurly"),
+				new Talker("Conversation"),
 			]
 		);
 
@@ -1265,27 +1265,10 @@ class PlaceBuilderDemo_Movers
 			{
 				entityOther.collidable().ticksUntilCanCollide = 100; // hack
 
-				var conversationDefnAsJSON =
-					universe.mediaLibrary.textStringGetByName("Conversation").value;
-				var conversationDefn = ConversationDefn.deserialize(conversationDefnAsJSON);
-				var venueToReturnTo = universe.venueCurrent;
-				var conversation = new ConversationRun
+				entityOther.talker().talk
 				(
-					conversationDefn,
-					() => // quit
-					{
-						universe.venueNext = venueToReturnTo;
-					},
-					entityPlayer,
-					entityOther // entityTalker
+					universe, world, place, entityOther, entityPlayer
 				);
-				var conversationSize = universe.display.sizeDefault().clone();
-				var conversationAsControl =
-					conversation.toControl(conversationSize, universe);
-
-				var venueNext = new VenueControls(conversationAsControl, false);
-
-				universe.venueNext = venueNext;
 			}
 		};
 
@@ -1648,9 +1631,7 @@ class PlaceBuilderDemo_Movers
 	{
 		var toControlMenu = Playable.toControlMenu;
 		var toControlWorldOverlay = Playable.toControlWorldOverlay;
-
-		var controllable = new Controllable
-		(
+		var toControl = 
 			(universe: Universe, size: Coords, entity: Entity, venuePrev: Venue, isMenu: boolean) =>
 			{
 				var returnValue;
@@ -1664,7 +1645,8 @@ class PlaceBuilderDemo_Movers
 				}
 				return returnValue;
 			}
-		);
+
+		var controllable = new Controllable(toControl);
 
 		return controllable;
 	}

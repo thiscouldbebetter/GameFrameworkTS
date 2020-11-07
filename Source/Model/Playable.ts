@@ -4,7 +4,7 @@ class Playable extends EntityProperty
 	static toControlMenu
 	(
 		universe: Universe, size: Coords, entity: Entity, venuePrev: Venue
-	)
+	): ControlBase
 	{
 		var controlsForTabs = new Array<ControlBase>();
 

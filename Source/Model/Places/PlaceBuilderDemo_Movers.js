@@ -415,7 +415,7 @@ class PlaceBuilderDemo_Movers {
             itemHolder,
             new Locatable(null),
             routable,
-            new Talker("AnEveningWithProfessorSurly"),
+            new Talker("Conversation"),
         ]);
         return friendlyEntityDefn;
     }
@@ -616,18 +616,7 @@ class PlaceBuilderDemo_Movers {
             }
             else if (entityOther.talker() != null) {
                 entityOther.collidable().ticksUntilCanCollide = 100; // hack
-                var conversationDefnAsJSON = universe.mediaLibrary.textStringGetByName("Conversation").value;
-                var conversationDefn = ConversationDefn.deserialize(conversationDefnAsJSON);
-                var venueToReturnTo = universe.venueCurrent;
-                var conversation = new ConversationRun(conversationDefn, () => // quit
-                 {
-                    universe.venueNext = venueToReturnTo;
-                }, entityPlayer, entityOther // entityTalker
-                );
-                var conversationSize = universe.display.sizeDefault().clone();
-                var conversationAsControl = conversation.toControl(conversationSize, universe);
-                var venueNext = new VenueControls(conversationAsControl, false);
-                universe.venueNext = venueNext;
+                entityOther.talker().talk(universe, world, place, entityOther, entityPlayer);
             }
         };
         var constrainable = new Constrainable([
@@ -837,7 +826,7 @@ class PlaceBuilderDemo_Movers {
     entityDefnBuildPlayer_Controllable() {
         var toControlMenu = Playable.toControlMenu;
         var toControlWorldOverlay = Playable.toControlWorldOverlay;
-        var controllable = new Controllable((universe, size, entity, venuePrev, isMenu) => {
+        var toControl = (universe, size, entity, venuePrev, isMenu) => {
             var returnValue;
             if (isMenu) {
                 returnValue = toControlMenu(universe, size, entity, venuePrev);
@@ -846,7 +835,8 @@ class PlaceBuilderDemo_Movers {
                 returnValue = toControlWorldOverlay(universe, size, entity);
             }
             return returnValue;
-        });
+        };
+        var controllable = new Controllable(toControl);
         return controllable;
     }
 }

@@ -62,7 +62,7 @@ class ItemDefn extends EntityProperty
 		var returnValue;
 		if (this._use == null)
 		{
-			returnValue = "Can't use " + this.name + ".";
+			returnValue = "Can't use " + this.appearance + ".";
 		}
 		else
 		{
