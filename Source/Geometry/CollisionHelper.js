@@ -162,7 +162,8 @@ class CollisionHelper {
                 }
             }
             else {
-                collisionMethod.call(this, collider0, collider1, collisionOut);
+                collisionMethod.call(this, collider0, collider1, collisionOut, true // shouldCalculatePos
+                );
             }
         }
         return collisionOut;

@@ -29,7 +29,7 @@ class ItemDefn extends EntityProperty {
     use(u, w, p, eUsing, eUsed) {
         var returnValue;
         if (this._use == null) {
-            returnValue = "Can't use " + this.name + ".";
+            returnValue = "Can't use " + this.appearance + ".";
         }
         else {
             returnValue = this._use(u, w, p, eUsing, eUsed);

@@ -259,7 +259,7 @@ class CollisionHelper
 			{
 				collisionMethod.call
 				(
-					this, collider0, collider1, collisionOut
+					this, collider0, collider1, collisionOut, true // shouldCalculatePos
 				);
 			}
 		}
@@ -757,7 +757,10 @@ class CollisionHelper
 		return collision;
 	}
 
-	collisionOfBoxAndSphere(box: Box, sphere: Sphere, collision: Collision, shouldCalculatePos: boolean)
+	collisionOfBoxAndSphere
+	(
+		box: Box, sphere: Sphere, collision: Collision, shouldCalculatePos: boolean
+	)
 	{
 		var doCollide = false;
 

@@ -199,6 +199,32 @@ class PlaceBuilderDemo // Main.
         this.build_Camera(this.cameraViewSize, this.size);
         // todo
         var mapCellSource = [
+            /*
+            "................................",
+            "................................",
+            "..~.............................",
+            "................................",
+            "................................",
+            "................................",
+            "................................",
+            "................................",
+            "................................",
+            "................................",
+            "................................",
+            "................................",
+            "................................",
+            "................................",
+            "................................",
+            "................................",
+            "................................",
+            "................................",
+            "................................",
+            "................................",
+            "................................",
+            "................................",
+            "................................",
+            "................................",
+            */
             "....................::::QQAA****",
             ".....................:::QQAAA***",
             "~~~~~~~~~~~~.......:QQQQQQAAAAAA",
@@ -232,7 +258,7 @@ class PlaceBuilderDemo // Main.
         exit.portal().destinationPlaceName = placeNameToReturnTo;
         exit.portal().destinationEntityName = this.name;
         this.entities.push(exit);
-        var cellCollider = new Box(new Coords(0, 0, 0), mapCellSize);
+        var cellCollider = new Box(mapCellSizeHalf.clone(), mapCellSize);
         var cellCollide = (u, w, p, e0, e1) => {
             var traversable = e0.traversable();
             if (traversable != null) {
@@ -532,6 +558,8 @@ class PlaceBuilderDemo // Main.
             }
             var cellVisual = new VisualGroup(cellVisuals);
             var cellAsEntity = new Entity(this.name + cellPosInCells.toString(), [
+                new Boundable(new Box(new Coords(0, 0, 0), //cellPosInPixels,
+                mapCellSize)),
                 cellCollidable.clone(),
                 new Drawable(cellVisual, null),
                 new DrawableCamera(),

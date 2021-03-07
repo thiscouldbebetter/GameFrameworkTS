@@ -353,6 +353,33 @@ class PlaceBuilderDemo // Main.
 
 		var mapCellSource =
 		[
+			/*
+			"................................",
+			"................................",
+			"..~.............................",
+			"................................",
+			"................................",
+			"................................",
+			"................................",
+			"................................",
+			"................................",
+			"................................",
+			"................................",
+			"................................",
+			"................................",
+			"................................",
+			"................................",
+			"................................",
+			"................................",
+			"................................",
+			"................................",
+			"................................",
+			"................................",
+			"................................",
+			"................................",
+			"................................",
+			*/
+
 			"....................::::QQAA****",
 			".....................:::QQAAA***",
 			"~~~~~~~~~~~~.......:QQQQQQAAAAAA",
@@ -396,7 +423,7 @@ class PlaceBuilderDemo // Main.
 		exit.portal().destinationEntityName = this.name;
 		this.entities.push(exit);
 
-		var cellCollider = new Box(new Coords(0, 0, 0), mapCellSize);
+		var cellCollider = new Box(mapCellSizeHalf.clone(), mapCellSize);
 		var cellCollide = (u: Universe, w: World, p: Place, e0: Entity, e1: Entity) =>
 		{
 			var traversable = e0.traversable();
@@ -973,6 +1000,14 @@ class PlaceBuilderDemo // Main.
 			(
 				this.name + cellPosInCells.toString(),
 				[
+					new Boundable
+					(
+						new Box
+						(
+							new Coords(0, 0, 0), //cellPosInPixels,
+							mapCellSize
+						)
+					),
 					cellCollidable.clone(),
 					new Drawable(cellVisual, null),
 					new DrawableCamera(),
