@@ -6,15 +6,15 @@ Overview
 
 The following diagram illustrates the design architecture of GameFrameworkTS.
 
-	Universe
-	|
-	+---World
-		|
-		+---Places
-			|
-			+---Entities
-				|
-				+---Properties
+    Universe
+    |
+    +---World
+        |
+        +---Places
+            |
+            +---Entities
+                |
+                +---Properties
 
 
 Component Details
@@ -49,7 +49,10 @@ Some subclasses of EntityProperty are commonly shared among different game types
 * Movable - A moving object.
 * Constrainable - An object with constraints on its movement, like being unable to pass through solid objects.
 * Ephemeral - An entity that only lasts for a limited amount of time.
+* Killable - An entity that can be destroyed upon incurring enough damage.
+* Damager - An entity that can inflict damage on other entities.
 * Item - A item that can be picked up and held by a player or other item holder.
 * ItemHolder - An entity that can hold one or more items.
 * Equippable - An item that can be equipped and subsequently used by the player.
 * Portal - A zone that, when touched, transports the impinging entity to another place or location.
+
