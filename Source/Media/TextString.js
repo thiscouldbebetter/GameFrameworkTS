@@ -12,7 +12,6 @@ class TextString {
         returnValue.value = value;
         return returnValue;
     }
-    ;
     // instance methods
     load() {
         var text = this;
@@ -24,5 +23,4 @@ class TextString {
         };
         xmlHttpRequest.send();
     }
-    ;
 }

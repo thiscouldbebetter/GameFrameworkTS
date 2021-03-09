@@ -23,7 +23,6 @@ class SoundHelper {
         ];
         return returnValue;
     }
-    ;
     // instance methods
     audioContext() {
         if (this._audioContext == null) {

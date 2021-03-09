@@ -38,7 +38,7 @@ class SoundHelper
 		];
 
 		return returnValue;
-	};
+	}
 
 	// instance methods
 

@@ -630,7 +630,8 @@ class PlaceBuilderDemo_Emplacements
 			new Wedge
 			(
 				new Coords(0, 0, 0), // vertex
-				obstacleLoc.orientation.forward, //new Coords(1, 0, 0), // directionMin
+				new Coords(1, 0, 0), // directionMin
+				//obstacleLoc.orientation.forward, // directionMin
 				obstacleAngleSpannedInTurns
 			)
 		);

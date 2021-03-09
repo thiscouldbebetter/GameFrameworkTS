@@ -34,18 +34,18 @@ class Video
 		this.domElement.height = displaySize.y;
 
 		return this.domElement;
-	};
+	}
 
 	play(universe: Universe)
 	{
 		this.isFinished = false;
 		this._size = universe.display.sizeInPixels;
 		universe.platformHelper.platformableAdd(this);
-	};
+	}
 
 	stop(platformHelper: PlatformHelper)
 	{
 		platformHelper.platformableRemove(this);
 		this.isFinished = true;
-	};
+	}
 }

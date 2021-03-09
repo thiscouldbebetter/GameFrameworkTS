@@ -36,6 +36,11 @@ class MapLocated implements ShapeBase
 
 	// Shape.
 
+	locate(loc: Disposition): ShapeBase
+	{
+		return ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
+	}
+
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
 	{
 		return normalOut.overwriteWith(posToCheck).subtract(this.loc.pos).normalize();

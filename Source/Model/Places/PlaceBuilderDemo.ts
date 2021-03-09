@@ -75,14 +75,21 @@ class PlaceBuilderDemo // Main.
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Heart"), 1, null, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Meat"), 1, null, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Pillow"), 1, null, entityPosRange, randomizer));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Ring"), 1, null, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Sword"), 1, null, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("SwordCold"), 1, null, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("SwordHeat"), 1, null, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Toolset"), 1, null, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Torch"), 1, null, entityPosRange, randomizer));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("TrafficCone"), 20, null, entityPosRange, randomizer));
+		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("TrafficCone"), 10, null, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Weight"), 1, null, entityPosRange, randomizer));
+
+		var ring = this.entitiesBuildFromDefnAndCount
+		(
+			entityDefns.get("Ring"), 1, null, entityPosRange, randomizer
+		)[0];
+		var ringLoc = ring.locatable().loc;
+		ringLoc.spin.angleInTurnsRef.value = .001;
+		this.entities.push(ring);
 
 		var container = this.entityBuildFromDefn(entityDefns.get("Container"), entityPosRange, randomizer);
 		var itemEntityOre = this.entityBuildFromDefn(entityDefns.get("Iron Ore"), entityPosRange, randomizer);
@@ -1115,7 +1122,10 @@ class PlaceBuilderDemo // Main.
 			entities, entityDimension, entitySize, numberOfKeysToUnlockGoal
 		);
 		var entityPosRange = new Box(this.size.clone().half(), this.size.clone().subtract(this.marginSize) );
-		var entityRing = this.entityBuildFromDefn(entityDefns.get("Ring"), entityPosRange, this.randomizer);
+		var entityRing = this.entityBuildFromDefn
+		(
+			entityDefns.get("Ring"), entityPosRange, this.randomizer
+		);
 		var ringLoc = entityRing.locatable().loc;
 		ringLoc.pos.overwriteWith(goalEntity.locatable().loc.pos);
 		ringLoc.spin.angleInTurnsRef.value = .001;

@@ -21,8 +21,7 @@ class Collidable extends EntityProperty {
     }
     colliderLocateForEntity(entity) {
         this.collider.overwriteWith(this.colliderAtRest);
-        this._transformLocate.loc = entity.locatable().loc;
-        Transforms.applyTransformToCoordsMany(this._transformLocate, this.collider.coordsGroupToTranslate());
+        this.collider.locate(entity.locatable().loc);
     }
     initialize(universe, world, place, entity) {
         this.colliderLocateForEntity(entity);
@@ -31,7 +30,8 @@ class Collidable extends EntityProperty {
         if (this.isDisabled) {
             return;
         }
-        this.locPrev.overwriteWith(entity.locatable().loc);
+        var entityLoc = entity.locatable().loc;
+        this.locPrev.overwriteWith(entityLoc);
         if (this.ticksUntilCanCollide > 0) {
             this.ticksUntilCanCollide--;
         }

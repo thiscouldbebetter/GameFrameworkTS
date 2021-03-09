@@ -252,6 +252,11 @@ class Mesh implements ShapeBase
 
 	// ShapeBase.
 
+	locate(loc: Disposition): ShapeBase
+	{
+		return ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
+	}
+
 	normalAtPos(posToCheck: Coords, normalOut: Coords)
 	{
 		return this.box().normalAtPos(posToCheck, normalOut);

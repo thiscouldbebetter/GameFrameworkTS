@@ -17,6 +17,11 @@ class BoxRotated implements ShapeBase
 
 	// ShapeBase.
 
+	locate(loc: Disposition): ShapeBase
+	{
+		return ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
+	}
+
 	normalAtPos(posToCheck: Coords, normalOut: Coords)
 	{
 		// todo - Adapt or call Box.normalAtPos() instead.

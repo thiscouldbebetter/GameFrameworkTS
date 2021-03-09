@@ -21,21 +21,21 @@ class Arc implements ShapeBase
 	collider()
 	{
 		return this._collider;
-	};
+	}
 
 	// cloneable
 
 	clone()
 	{
 		return new Arc(this.shell.clone(), this.wedge.clone());
-	};
+	}
 
 	overwriteWith(other: Arc)
 	{
 		this.shell.overwriteWith(other.shell);
 		this.wedge.overwriteWith(other.wedge);
 		return this;
-	};
+	}
 
 	// transformable
 
@@ -45,6 +45,13 @@ class Arc implements ShapeBase
 	}
 
 	// ShapeBase.
+
+	locate(loc: Disposition): ShapeBase
+	{
+		var directionMin = this.wedge.directionMin;
+		directionMin.overwriteWith(loc.orientation.forward);
+		return ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
+	}
 
 	normalAtPos(posToCheck: Coords, normalOut: Coords)
 	{

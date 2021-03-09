@@ -52,6 +52,11 @@ class Sphere implements ShapeBase
 
 	// ShapeBase.
 
+	locate(loc: Disposition): ShapeBase
+	{
+		return ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
+	}
+
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
 	{
 		return normalOut.overwriteWith

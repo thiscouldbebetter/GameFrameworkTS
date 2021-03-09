@@ -8,6 +8,9 @@ class BoxRotated {
         return new Sphere(this.box.center, this.box.sizeHalf.magnitude());
     }
     // ShapeBase.
+    locate(loc) {
+        return ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
+    }
     normalAtPos(posToCheck, normalOut) {
         // todo - Adapt or call Box.normalAtPos() instead.
         var plane = new Plane(new Coords(0, 0, 0), 0);

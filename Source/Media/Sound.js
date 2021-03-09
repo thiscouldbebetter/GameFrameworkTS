@@ -18,13 +18,11 @@ class Sound {
         this.domElement.appendChild(domElementForSoundSource);
         return this.domElement;
     }
-    ;
     pause(universe) {
         var offsetInSeconds = this.domElement.currentTime;
         this.stop(universe);
         this.offsetInSeconds = offsetInSeconds;
     }
-    ;
     play(universe, volume) {
         if (this.isPlaying == false) {
             this.isPlaying = true;
@@ -33,11 +31,9 @@ class Sound {
             universe.platformHelper.platformableAdd(this);
         }
     }
-    ;
     reset() {
         this.offsetInSeconds = 0;
     }
-    ;
     stop(universe) {
         if (this.isPlaying) {
             this.isPlaying = false;
@@ -45,16 +41,13 @@ class Sound {
             this.offsetInSeconds = 0;
         }
     }
-    ;
     stopOrRepeat(universe) {
         if (this.isRepeating == false) {
             this.stop(universe);
         }
     }
-    ;
     // platformable
     toDomElement() {
         return this.domElement;
     }
-    ;
 }

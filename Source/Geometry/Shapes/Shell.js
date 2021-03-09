@@ -25,6 +25,9 @@ class Shell {
         return this;
     }
     // ShapeBase.
+    locate(loc) {
+        return ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
+    }
     normalAtPos(posToCheck, normalOut) {
         var displacementFromCenter = normalOut.overwriteWith(posToCheck).subtract(this.center());
         var distanceFromCenter = displacementFromCenter.magnitude();

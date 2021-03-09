@@ -10,7 +10,6 @@ class Hemispace {
         var returnValue = (distanceOfPointAbovePlane <= 0);
         return returnValue;
     }
-    ;
     trimCoords(coordsToTrim) {
         var distanceOfPointAbovePlane = this.plane.distanceToPointAlongNormal(coordsToTrim);
         var areCoordsOutsideHemispace = (distanceOfPointAbovePlane > 0);
@@ -20,5 +19,4 @@ class Hemispace {
         }
         return coordsToTrim;
     }
-    ;
 }

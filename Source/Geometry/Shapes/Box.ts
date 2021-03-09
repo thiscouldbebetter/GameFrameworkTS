@@ -330,6 +330,11 @@ class Box implements ShapeBase
 		return dimensionIndex;
 	}
 
+	locate(loc: Disposition): ShapeBase
+	{
+		return ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
+	}
+
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
 	{
 		var displacementOverSizeHalf = normalOut.overwriteWith

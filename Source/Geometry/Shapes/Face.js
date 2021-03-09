@@ -10,7 +10,6 @@ class Face {
         this._box.ofPoints(this.vertices);
         return this._box;
     }
-    ;
     containsPoint(pointToCheck) {
         var face = this;
         var faceNormal = face.plane().normal;
@@ -30,7 +29,6 @@ class Face {
         }
         return isPosWithinAllEdgesOfFaceSoFar;
     }
-    ;
     edges() {
         if (this._edges == null) {
             this._edges = [];
@@ -44,11 +42,9 @@ class Face {
         }
         return this._edges;
     }
-    ;
     equals(other) {
         return ArrayHelper.equals(this.vertices, other.vertices);
     }
-    ;
     plane() {
         if (this._plane == null) {
             this._plane = new Plane(new Coords(0, 0, 0), 0);
@@ -56,21 +52,17 @@ class Face {
         this._plane.fromPoints(this.vertices[0], this.vertices[1], this.vertices[2]);
         return this._plane;
     }
-    ;
     // Cloneable.
     clone() {
         return new Face(ArrayHelper.clone(this.vertices));
     }
-    ;
     overwriteWith(other) {
         ArrayHelper.overwriteWith(this.vertices, other.vertices);
         return this;
     }
-    ;
     // Transformable.
     transform(transformToApply) {
         Transforms.applyTransformToCoordsMany(transformToApply, this.vertices);
         return this;
     }
-    ;
 }

@@ -9,11 +9,9 @@ class Transforms {
             Transforms.applyTransformToCoordsMany(transformToApply, coordsArray);
         }
     }
-    ;
     static applyTransformToCoordsMany(transformToApply, coordsSetToTransform) {
         for (var i = 0; i < coordsSetToTransform.length; i++) {
             transformToApply.transformCoords(coordsSetToTransform[i]);
         }
     }
-    ;
 }

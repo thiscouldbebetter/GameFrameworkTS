@@ -317,7 +317,8 @@ class PlaceBuilderDemo_Emplacements {
         var obstacleLoc = new Disposition(new Coords(0, 0, 0), null, null);
         var obstacleCollider = new Arc(new Shell(new Sphere(new Coords(0, 0, 0), obstacleRadiusOuter), // sphereOuter
         obstacleRadiusInner), new Wedge(new Coords(0, 0, 0), // vertex
-        obstacleLoc.orientation.forward, //new Coords(1, 0, 0), // directionMin
+        new Coords(1, 0, 0), // directionMin
+        //obstacleLoc.orientation.forward, // directionMin
         obstacleAngleSpannedInTurns));
         var obstacleRingVisual = new VisualArc(obstacleRadiusOuter, obstacleRadiusInner, new Coords(1, 0, 0), // directionMin
         obstacleAngleSpannedInTurns, obstacleColor, null);

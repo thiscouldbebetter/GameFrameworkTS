@@ -15,7 +15,6 @@ class VenueVideo {
     draw() {
         // do nothing
     }
-    ;
     finalize(universe) { }
     initialize(universe) { }
     updateForTimerTick(universe) {
@@ -59,5 +58,4 @@ class VenueVideo {
             universe.venueNext = new VenueFader(this.venueNext, this, null, null);
         }
     }
-    ;
 }

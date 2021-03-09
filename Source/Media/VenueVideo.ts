@@ -32,7 +32,7 @@ class VenueVideo implements Venue
 	draw()
 	{
 		// do nothing
-	};
+	}
 
 	finalize(universe: Universe) {}
 	initialize(universe: Universe) {}
@@ -92,5 +92,5 @@ class VenueVideo implements Venue
 			universe.platformHelper.platformableShow(display);
 			universe.venueNext = new VenueFader(this.venueNext, this, null, null);
 		}
-	};
+	}
 }

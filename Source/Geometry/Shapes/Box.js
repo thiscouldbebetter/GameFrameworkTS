@@ -203,6 +203,9 @@ class Box {
         }
         return dimensionIndex;
     }
+    locate(loc) {
+        return ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
+    }
     normalAtPos(posToCheck, normalOut) {
         var displacementOverSizeHalf = normalOut.overwriteWith(posToCheck).subtract(this.center).divide(this.sizeHalf);
         var dimensionIndex = this.dimensionForSurfaceClosestToPoint(posToCheck, displacementOverSizeHalf);

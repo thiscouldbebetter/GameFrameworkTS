@@ -9,7 +9,6 @@ class ImageBuilder {
     buildImageFromStrings(name, stringsForPixels) {
         return this.buildImageFromStringsScaled(name, Coords.Instances().Ones, stringsForPixels);
     }
-    ;
     buildImagesFromStringArrays(name, stringArraysForImagePixels) {
         var returnValue = [];
         for (var i = 0; i < stringArraysForImagePixels.length; i++) {
@@ -19,7 +18,6 @@ class ImageBuilder {
         }
         return returnValue;
     }
-    ;
     buildImageFromStringsScaled(name, scaleFactor, stringsForPixels) {
         var sizeInPixels = new Coords(stringsForPixels[0].length, stringsForPixels.length, 0);
         var canvas = document.createElement("canvas");
@@ -48,7 +46,6 @@ class ImageBuilder {
         var returnValue = Image2.fromSystemImage(name, htmlImageFromCanvas);
         return returnValue;
     }
-    ;
     copyRegionFromImage(imageToCopyFrom, regionPos, regionSize) {
         var canvas = document.createElement("canvas");
         canvas.id = "region_" + regionPos.x + "_" + regionPos.y;
@@ -70,7 +67,6 @@ class ImageBuilder {
         var returnValue = Image2.fromSystemImage(imageToCopyFrom.name, htmlImageFromCanvas);
         return returnValue;
     }
-    ;
     sliceImageIntoTiles(imageToSlice, sizeInTiles) {
         var returnImages = [];
         var systemImageToSlice = imageToSlice.systemImage;
@@ -109,5 +105,4 @@ class ImageBuilder {
         }
         return returnImages;
     }
-    ;
 }

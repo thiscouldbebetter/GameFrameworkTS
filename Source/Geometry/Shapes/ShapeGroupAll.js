@@ -6,10 +6,8 @@ class ShapeGroupAll {
     clone() {
         return new ShapeGroupAll(ArrayHelper.clone(this.shapes));
     }
-    ;
     overwriteWith(other) {
         ArrayHelper.overwriteWith(this.shapes, other.shapes);
         return this;
     }
-    ;
 }

@@ -19,7 +19,7 @@ class Hemispace
 			- this.plane.distanceFromOrigin;
 		var returnValue = (distanceOfPointAbovePlane <= 0);
 		return returnValue;
-	};
+	}
 
 	trimCoords(coordsToTrim: Coords)
 	{
@@ -39,5 +39,5 @@ class Hemispace
 			coordsToTrim.add(displacementToClosestPointOnPlane);
 		}
 		return coordsToTrim;
-	};
+	}
 }

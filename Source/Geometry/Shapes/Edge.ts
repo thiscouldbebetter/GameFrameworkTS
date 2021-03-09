@@ -25,27 +25,27 @@ class Edge
 		}
 		this._box.ofPoints(this.vertices);
 		return this._box;
-	};
+	}
 
 	direction()
 	{
 		return this._direction.overwriteWith(this.displacement()).normalize();
-	};
+	}
 
 	equals(other: Edge)
 	{
 		return ArrayHelper.equals(this.vertices, other.vertices);
-	};
+	}
 
 	displacement()
 	{
 		return this._displacement.overwriteWith(this.vertices[1]).subtract(this.vertices[0]);
-	};
+	}
 
 	length()
 	{
 		return this.displacement().magnitude();
-	};
+	}
 
 	projectOntoOther(other: Edge)
 	{
@@ -67,30 +67,30 @@ class Edge
 		}
 
 		return this;
-	};
+	}
 
 	transverse(faceNormal: Coords)
 	{
 		return this._transverse.overwriteWith(this.direction()).crossProduct(faceNormal);
-	};
+	}
 
 	// string
 
 	toString()
 	{
 		return this.vertices.toString();
-	};
+	}
 
 	// Cloneable.
 
 	clone()
 	{
 		return new Edge(ArrayHelper.clone(this.vertices));
-	};
+	}
 
 	overwriteWith(other: Edge)
 	{
 		ArrayHelper.overwriteWith(this.vertices, other.vertices);
 		return this;
-	};
+	}
 }

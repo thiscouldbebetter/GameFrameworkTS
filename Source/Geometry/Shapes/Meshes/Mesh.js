@@ -142,6 +142,9 @@ class Mesh {
         return [this.center];
     }
     // ShapeBase.
+    locate(loc) {
+        return ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
+    }
     normalAtPos(posToCheck, normalOut) {
         return this.box().normalAtPos(posToCheck, normalOut);
     }

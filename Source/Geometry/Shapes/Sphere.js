@@ -29,6 +29,9 @@ class Sphere {
         return [this.center];
     }
     // ShapeBase.
+    locate(loc) {
+        return ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
+    }
     normalAtPos(posToCheck, normalOut) {
         return normalOut.overwriteWith(posToCheck).subtract(this.center).normalize();
     }

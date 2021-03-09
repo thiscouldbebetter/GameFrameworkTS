@@ -20,12 +20,12 @@ class Plane
 		(
 			this.normal
 		) - this.distanceFromOrigin;
-	};
+	}
 
 	equals(other: Plane)
 	{
 		return (this.normal.equals(other.normal) && this.distanceFromOrigin == other.distanceFromOrigin);
-	};
+	}
 
 	fromPoints(point0: Coords, point1: Coords, point2: Coords)
 	{
@@ -49,10 +49,10 @@ class Plane
 		this.distanceFromOrigin = point0.dotProduct(this.normal);
 
 		return this;
-	};
+	}
 
 	pointClosestToOrigin(point: Coords)
 	{
 		return point.overwriteWith(this.normal).multiplyScalar(this.distanceFromOrigin);
-	};
+	}
 }

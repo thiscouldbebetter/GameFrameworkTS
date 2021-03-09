@@ -18,16 +18,13 @@ class Video {
         this.domElement.height = displaySize.y;
         return this.domElement;
     }
-    ;
     play(universe) {
         this.isFinished = false;
         this._size = universe.display.sizeInPixels;
         universe.platformHelper.platformableAdd(this);
     }
-    ;
     stop(platformHelper) {
         platformHelper.platformableRemove(this);
         this.isFinished = true;
     }
-    ;
 }

@@ -11,11 +11,9 @@ class Wedge {
         var returnValue = NumberHelper.wrapToRangeMinMax(this.angleInTurnsMin() + this.angleSpannedInTurns, 0, 1);
         return returnValue;
     }
-    ;
     angleInTurnsMin() {
         return this.rayDirectionMinAsPolar.fromCoords(this.directionMin).azimuthInTurns;
     }
-    ;
     collider() {
         if (this._collider == null) {
             this.rayDirectionMinAsPolar = new Polar(0, 1, 0);
@@ -57,16 +55,13 @@ class Wedge {
         }
         return this._collider;
     }
-    ;
     // cloneable
     clone() {
         return new Wedge(this.vertex.clone(), this.directionMin.clone(), this.angleSpannedInTurns);
     }
-    ;
     overwriteWith(other) {
         this.vertex.overwriteWith(other.vertex);
         this.directionMin.overwriteWith(other.directionMin);
         this.angleSpannedInTurns = other.angleSpannedInTurns;
     }
-    ;
 }

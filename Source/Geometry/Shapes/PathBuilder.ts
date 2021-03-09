@@ -18,5 +18,5 @@ class PathBuilder
 
 		var returnValue = new Path(vertices);
 		return returnValue;
-	};
+	}
 }
