@@ -3,6 +3,8 @@ Game Framework
 
 The TypeScript code in this repository implements a video game framework and demonstrates its features with a simple video game.
 
+<img src="Screenshots/Recording-Gameplay.gif"></img>
+
 Running
 -------
 

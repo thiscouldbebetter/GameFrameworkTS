@@ -15,7 +15,7 @@ var ThisCouldBeBetter;
                 this.keysToPreventDefaultsFor =
                     [
                         inputNames.ArrowDown, inputNames.ArrowLeft, inputNames.ArrowRight,
-                        inputNames.ArrowUp, inputNames.Tab
+                        inputNames.ArrowUp, inputNames.Tab,
                     ];
                 this.inputsPressed = [];
                 this.inputsPressedByName = new Map();

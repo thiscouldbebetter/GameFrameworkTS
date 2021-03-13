@@ -15,6 +15,10 @@ var ThisCouldBeBetter;
                     worldCreate || ((u) => GameFramework.World.create(u));
                 this.collisionHelper = new GameFramework.CollisionHelper();
                 this.controlBuilder = new GameFramework.ControlBuilder([GameFramework.ControlStyle.Instances().Default]);
+                this.displayRecorder = new GameFramework.DisplayRecorder(1, // ticksPerFrame
+                100, // bufferSizeInFrames - 5 seconds at 20 fps.
+                true // isCircular
+                );
                 this.entityBuilder = new GameFramework.EntityBuilder();
                 this.idHelper = GameFramework.IDHelper.Instance();
                 this.platformHelper = new GameFramework.PlatformHelper();
@@ -29,12 +33,10 @@ var ThisCouldBeBetter;
                 returnValue.debuggingMode = debuggingMode;
                 return returnValue;
             }
-            ;
             // instance methods
             initialize(callback) {
                 this.mediaLibrary.waitForItemsAllToLoad(this.initialize_MediaLibraryLoaded.bind(this, callback));
             }
-            ;
             initialize_MediaLibraryLoaded(callback) {
                 this.platformHelper.initialize(this);
                 this.storageHelper = new GameFramework.StorageHelper(GameFramework.StringHelper.replaceAll(this.name, " ", "_") + "_", this.serializer, new GameFramework.CompressorLZW());
@@ -53,11 +55,9 @@ var ThisCouldBeBetter;
                 // hack
                 this.soundHelper.reset();
             }
-            ;
             start() {
                 this.timerHelper.initialize(this.updateForTimerTick.bind(this));
             }
-            ;
             updateForTimerTick() {
                 this.inputHelper.updateForTimerTick(this);
                 if (this.venueNext != null) {
@@ -72,6 +72,7 @@ var ThisCouldBeBetter;
                     }
                 }
                 this.venueCurrent.updateForTimerTick(this);
+                this.displayRecorder.updateForTimerTick(this);
             }
             worldCreate() {
                 return this._worldCreate(this);

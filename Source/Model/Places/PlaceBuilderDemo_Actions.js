@@ -95,6 +95,17 @@ var ThisCouldBeBetter;
                             place.entitySpawn(universe, world, universe.entityBuilder.messageFloater(message, entityActor.locatable().loc.pos, GameFramework.Color.byName("Red")));
                         }
                     }),
+                    new GameFramework.Action("Recording Start/Stop", (universe, world, place, actor) => // perform
+                     {
+                        var recorder = universe.displayRecorder;
+                        if (recorder.isRecording) {
+                            recorder.stop();
+                            recorder.framesRecordedDownload(universe);
+                        }
+                        else {
+                            recorder.start();
+                        }
+                    }),
                     new GameFramework.Action("Run", (universe, world, place, actor) => // perform
                      {
                         var learner = actor.skillLearner();
@@ -184,6 +195,7 @@ var ThisCouldBeBetter;
                     new GameFramework.ActionToInputsMapping("Item7", ["_7"], inactivateTrue),
                     new GameFramework.ActionToInputsMapping("Item8", ["_8"], inactivateTrue),
                     new GameFramework.ActionToInputsMapping("Item9", ["_9"], inactivateTrue),
+                    new GameFramework.ActionToInputsMapping("Recording Start/Stop", ["`"], inactivateTrue),
                 ];
                 return actionToInputsMappings;
             }

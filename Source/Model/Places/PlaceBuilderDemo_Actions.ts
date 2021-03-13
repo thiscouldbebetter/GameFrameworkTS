@@ -21,6 +21,7 @@ export class PlaceBuilderDemo_Actions
 		[
 			actionsAll.DoNothing,
 			actionsAll.ShowMenu,
+
 			new Action
 			(
 				"MoveDown",
@@ -32,6 +33,7 @@ export class PlaceBuilderDemo_Actions
 					);
 				}
 			),
+
 			new Action
 			(
 				"MoveLeft",
@@ -43,6 +45,7 @@ export class PlaceBuilderDemo_Actions
 					);
 				}
 			),
+
 			new Action
 			(
 				"MoveRight",
@@ -54,6 +57,7 @@ export class PlaceBuilderDemo_Actions
 					);
 				}
 			),
+
 			new Action
 			(
 				"MoveUp",
@@ -65,6 +69,7 @@ export class PlaceBuilderDemo_Actions
 					);
 				}
 			),
+
 			new Action
 			(
 				"Fire",
@@ -81,6 +86,7 @@ export class PlaceBuilderDemo_Actions
 					}
 				}
 			),
+
 			new Action
 			(
 				"Hide",
@@ -103,6 +109,7 @@ export class PlaceBuilderDemo_Actions
 					}
 				}
 			),
+
 			new Action
 			(
 				"Jump",
@@ -124,6 +131,7 @@ export class PlaceBuilderDemo_Actions
 					}
 				}
 			),
+
 			new Action
 			(
 				"Pick Up",
@@ -180,6 +188,25 @@ export class PlaceBuilderDemo_Actions
 					}
 				}
 			),
+
+			new Action
+			(
+				"Recording Start/Stop",
+				(universe: Universe, world: World, place: Place, actor: Entity) => // perform
+				{
+					var recorder = universe.displayRecorder;
+					if (recorder.isRecording)
+					{
+						recorder.stop();
+						recorder.framesRecordedDownload(universe);
+					}
+					else
+					{
+						recorder.start();
+					}
+				}
+			),
+
 			new Action
 			(
 				"Run",
@@ -205,6 +232,7 @@ export class PlaceBuilderDemo_Actions
 					}
 				}
 			),
+
 			new Action
 			(
 				"Sneak",
@@ -226,6 +254,7 @@ export class PlaceBuilderDemo_Actions
 					}
 				}
 			),
+
 			new Action
 			(
 				"Use",
@@ -245,6 +274,7 @@ export class PlaceBuilderDemo_Actions
 					}
 				}
 			),
+
 			new Action
 			(
 				"Wait",
@@ -303,6 +333,8 @@ export class PlaceBuilderDemo_Actions
 			new ActionToInputsMapping("Item7", 	[ "_7" ], inactivateTrue),
 			new ActionToInputsMapping("Item8", 	[ "_8" ], inactivateTrue),
 			new ActionToInputsMapping("Item9", 	[ "_9" ], inactivateTrue),
+
+			new ActionToInputsMapping("Recording Start/Stop", [ "`" ], inactivateTrue),
 		];
 
 		return actionToInputsMappings;

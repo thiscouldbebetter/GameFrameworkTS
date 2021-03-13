@@ -11,6 +11,15 @@ export class StringHelper
 		return value.substr(0, 1).toLowerCase() + value.substr(1);
 	}
 
+	static padEnd(stringToPad: string, lengthToPadTo: number, charToPadWith: string)
+	{
+		while (stringToPad.length < lengthToPadTo)
+		{
+			stringToPad = stringToPad + charToPadWith;
+		}
+		return stringToPad;
+	}
+
 	static padStart(stringToPad: string, lengthToPadTo: number, charToPadWith: string)
 	{
 		while (stringToPad.length < lengthToPadTo)

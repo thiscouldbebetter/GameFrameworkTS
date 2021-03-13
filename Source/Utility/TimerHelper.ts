@@ -8,6 +8,9 @@ export class TimerHelper
 	millisecondsPerTick: number;
 	timer: any;
 
+	handleEventTimerTick: any;
+	ticksSoFar: number;
+
 	constructor(ticksPerSecond: number)
 	{
 		this.ticksPerSecond = ticksPerSecond;
@@ -21,11 +24,20 @@ export class TimerHelper
 
 	initialize(handleEventTimerTick: any)
 	{
+		this.handleEventTimerTick = handleEventTimerTick;
+
+		this.ticksSoFar = 0;
+
 		this.timer = setInterval
 		(
-			handleEventTimerTick,
-			this.millisecondsPerTick
+			this.tick.bind(this), this.millisecondsPerTick
 		);
+	}
+
+	tick()
+	{
+		this.handleEventTimerTick();
+		this.ticksSoFar++;
 	}
 
 	ticksToStringH_M_S(ticksToConvert: number)

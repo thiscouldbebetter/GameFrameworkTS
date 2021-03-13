@@ -10,7 +10,13 @@ var ThisCouldBeBetter;
                 this.millisecondsPerTick = Math.floor(millisecondsPerSecond / this.ticksPerSecond);
             }
             initialize(handleEventTimerTick) {
-                this.timer = setInterval(handleEventTimerTick, this.millisecondsPerTick);
+                this.handleEventTimerTick = handleEventTimerTick;
+                this.ticksSoFar = 0;
+                this.timer = setInterval(this.tick.bind(this), this.millisecondsPerTick);
+            }
+            tick() {
+                this.handleEventTimerTick();
+                this.ticksSoFar++;
             }
             ticksToStringH_M_S(ticksToConvert) {
                 return this.ticksToString(ticksToConvert, " h ", " m ", " s");

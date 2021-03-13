@@ -16,6 +16,7 @@ export class Universe
 
 	collisionHelper: CollisionHelper;
 	controlBuilder: ControlBuilder;
+	displayRecorder: DisplayRecorder;
 	entityBuilder: EntityBuilder;
 	idHelper: IDHelper;
 	inputHelper: InputHelper;
@@ -53,6 +54,12 @@ export class Universe
 
 		this.collisionHelper = new CollisionHelper();
 		this.controlBuilder = new ControlBuilder([ControlStyle.Instances().Default]);
+		this.displayRecorder = new DisplayRecorder 
+		(
+			1, // ticksPerFrame
+			100, // bufferSizeInFrames - 5 seconds at 20 fps.
+			true // isCircular
+		);
 		this.entityBuilder = new EntityBuilder();
 		this.idHelper = IDHelper.Instance();
 		this.platformHelper = new PlatformHelper();
@@ -91,7 +98,7 @@ export class Universe
 		returnValue.debuggingMode = debuggingMode;
 
 		return returnValue;
-	};
+	}
 
 	// instance methods
 
@@ -101,7 +108,7 @@ export class Universe
 		(
 			this.initialize_MediaLibraryLoaded.bind(this, callback)
 		);
-	};
+	}
 
 	initialize_MediaLibraryLoaded(callback: (u: Universe) => void)
 	{
@@ -142,12 +149,12 @@ export class Universe
 	{
 		// hack
 		this.soundHelper.reset();
-	};
+	}
 
 	start()
 	{
 		this.timerHelper.initialize(this.updateForTimerTick.bind(this));
-	};
+	}
 
 	updateForTimerTick()
 	{
@@ -173,6 +180,8 @@ export class Universe
 			}
 		}
 		this.venueCurrent.updateForTimerTick(this);
+
+		this.displayRecorder.updateForTimerTick(this);
 	}
 
 	worldCreate()
