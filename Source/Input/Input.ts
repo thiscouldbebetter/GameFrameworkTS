@@ -1,5 +1,8 @@
 
-class Input
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Input
 {
 	name: string;
 
@@ -100,3 +103,4 @@ class Input_Names
 	}
 }
 
+}

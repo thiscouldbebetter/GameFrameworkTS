@@ -1,5 +1,8 @@
 
-class ControlTextBox extends ControlBase
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ControlTextBox extends ControlBase
 {
 	_text: any;
 	numberOfCharsMax: number;
@@ -261,4 +264,6 @@ class ControlTextBox extends ControlBase
 			);
 		}
 	}
+}
+
 }

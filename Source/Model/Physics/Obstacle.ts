@@ -1,5 +1,8 @@
 
-class Obstacle extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Obstacle extends EntityProperty
 {
 	constructor()
 	{
@@ -24,4 +27,6 @@ class Obstacle extends EntityProperty
 	{
 		return this;
 	}
+}
+
 }

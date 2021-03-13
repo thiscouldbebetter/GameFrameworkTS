@@ -1,5 +1,8 @@
 
-class VisualLine implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualLine implements Visual
 {
 	fromPos: Coords;
 	toPos: Coords;
@@ -76,4 +79,6 @@ class VisualLine implements Visual
 		transformToApply.transformCoords(this.toPos);
 		return this;
 	}
+}
+
 }

@@ -1,5 +1,8 @@
 
-class JournalKeeper extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class JournalKeeper extends EntityProperty
 {
 	journal: Journal;
 
@@ -397,5 +400,7 @@ class JournalKeeper extends EntityProperty
 
 		return returnValue;
 	}
+
+}
 
 }

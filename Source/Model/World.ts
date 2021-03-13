@@ -1,9 +1,12 @@
+namespace ThisCouldBeBetter.GameFramework
+{
+
 // This class, as implemented, is only a demonstration.
 // Its code is expected to be modified heavily in actual applications,
 // including the constructor, the draw() and update() methods,
 // and the static create() method.
 
-class World
+export class World
 {
 	name: string;
 	dateCreated: DateTime;
@@ -261,4 +264,6 @@ class World
 	{
 		return this.placeCurrent.toControl(universe, this);
 	}
+}
+
 }

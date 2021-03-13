@@ -1,5 +1,8 @@
 
-class PlaceBuilderDemo_Actions
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class PlaceBuilderDemo_Actions
 {
 	parent: PlaceBuilderDemo;
 
@@ -359,4 +362,6 @@ class PlaceBuilderDemo_Actions
 
 		return activityDefnItemPickUp;
 	}
+}
+
 }

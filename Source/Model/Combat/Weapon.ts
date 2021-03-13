@@ -1,5 +1,8 @@
 
-class Weapon
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Weapon
 {
 	ticksToRecharge: number;
 	entityProjectile: Entity;
@@ -19,4 +22,6 @@ class Weapon
 
 		this.tickLastFired = 0 - this.ticksToRecharge;
 	}
+}
+
 }

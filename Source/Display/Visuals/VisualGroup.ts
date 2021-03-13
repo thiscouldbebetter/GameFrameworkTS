@@ -1,5 +1,8 @@
 
-class VisualGroup implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualGroup implements Visual
 {
 	children: Visual[];
 
@@ -38,4 +41,6 @@ class VisualGroup implements Visual
 		this.children.forEach(x => transformToApply.transform(x));
 		return this;
 	}
+}
+
 }

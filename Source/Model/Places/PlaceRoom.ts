@@ -1,5 +1,8 @@
 
-class PlaceRoom extends Place
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class PlaceRoom extends Place
 {
 	randomizerSeed: number;
 
@@ -8,4 +11,6 @@ class PlaceRoom extends Place
 		super(name, defnName, size, entities);
 		this.randomizerSeed = randomizerSeed;
 	}
+}
+
 }

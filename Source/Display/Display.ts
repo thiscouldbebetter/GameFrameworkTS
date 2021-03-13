@@ -1,5 +1,8 @@
 
-interface Display
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export interface Display
 {
 	colorBack: string;
 	colorFore: string;
@@ -67,4 +70,6 @@ interface Display
 	textWidthForFontHeight(textToMeasure: string, fontHeightInPixels: number): number;
 	toImage(): Image2;
 	toDomElement(): HTMLElement;
+}
+
 }

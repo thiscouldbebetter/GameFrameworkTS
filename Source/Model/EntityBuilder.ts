@@ -1,5 +1,8 @@
 
-class EntityBuilder
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class EntityBuilder
 {
 	messageFloater(text: string, pos: Coords, color: Color)
 	{
@@ -27,5 +30,7 @@ class EntityBuilder
 		);
 
 		return messageEntity;
-	};
+	}
+}
+
 }

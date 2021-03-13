@@ -1,5 +1,8 @@
 
-class Path
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Path
 {
 	points: Coords[];
 
@@ -28,4 +31,6 @@ class Path
 		Transforms.applyTransformToCoordsMany(transformToApply, this.points);
 		return this;
 	}
+}
+
 }

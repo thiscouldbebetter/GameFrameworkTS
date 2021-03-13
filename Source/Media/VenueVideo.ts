@@ -1,5 +1,8 @@
 
-class VenueVideo implements Venue
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VenueVideo implements Venue
 {
 	videoName: string;
 	venueNext: Venue;
@@ -93,4 +96,6 @@ class VenueVideo implements Venue
 			universe.venueNext = new VenueFader(this.venueNext, this, null, null);
 		}
 	}
+}
+
 }

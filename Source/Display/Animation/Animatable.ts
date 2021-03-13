@@ -1,5 +1,8 @@
 
-class Animatable extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Animatable extends EntityProperty
 {
 	animationDefnGroup: AnimationDefnGroup;
 	transformableAtRest: any;
@@ -108,4 +111,6 @@ class Animatable extends EntityProperty
 	{
 		return this; // todo
 	}
+}
+
 }

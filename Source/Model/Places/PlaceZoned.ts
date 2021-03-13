@@ -1,5 +1,8 @@
 
-class PlaceZoned extends Place
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class PlaceZoned extends Place
 {
 	entityToFollowName: string;
 	zoneStartName: string;
@@ -106,7 +109,7 @@ class PlaceZoned extends Place
 	}
 }
 
-class Zone
+export class Zone
 {
 	name: string;
 	bounds: Box;
@@ -120,4 +123,6 @@ class Zone
 		this.zonesAdjacentNames = zonesAdjacentNames;
 		this.entities = entities;
 	}
+}
+
 }

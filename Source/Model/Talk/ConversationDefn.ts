@@ -1,7 +1,8 @@
 
-// classes
+namespace ThisCouldBeBetter.GameFramework
+{
 
-class ConversationDefn
+export class ConversationDefn
 {
 	name: string;
 	visualPortrait: Visual;
@@ -111,7 +112,7 @@ class ConversationDefn
 
 		this.talkNodes = talkNodesExpanded;
 		this.talkNodesByName = ArrayHelper.addLookupsByName(this.talkNodes);
-	};
+	}
 
 	// serialization
 
@@ -168,7 +169,7 @@ class ConversationDefn
 			ArrayHelper.addLookupsByName(conversationDefn.talkNodeDefns);
 
 		return conversationDefn;
-	};
+	}
 
 	serialize()
 	{
@@ -179,5 +180,7 @@ class ConversationDefn
 
 		this.talkNodeDefns = talkNodeDefnsToRestore;
 		return returnValue;
-	};
+	}
+}
+
 }

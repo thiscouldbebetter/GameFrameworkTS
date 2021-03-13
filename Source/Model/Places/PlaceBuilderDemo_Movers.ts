@@ -1,5 +1,8 @@
 
-class PlaceBuilderDemo_Movers
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class PlaceBuilderDemo_Movers
 {
 	parent: PlaceBuilderDemo;
 
@@ -1650,4 +1653,6 @@ class PlaceBuilderDemo_Movers
 
 		return controllable;
 	}
+}
+
 }

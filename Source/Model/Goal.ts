@@ -1,5 +1,8 @@
 
-class Goal extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Goal extends EntityProperty
 {
 	numberOfKeysToUnlock: number;
 
@@ -8,4 +11,6 @@ class Goal extends EntityProperty
 		super();
 		this.numberOfKeysToUnlock = numberOfKeysToUnlock;
 	}
+}
+
 }

@@ -1,5 +1,8 @@
 
-class MeshBuilder
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class MeshBuilder
 {
 	biped(material: Material, heightInPixels: number)
 	{
@@ -159,7 +162,7 @@ class MeshBuilder
 		//this.meshVerticesMergeIfWithinDistance(returnValue, 3);
 
 		return returnValue;
-	};
+	}
 
 	box(material: Material, size: Coords, pos: Coords)
 	{
@@ -176,7 +179,7 @@ class MeshBuilder
 		);
 
 		return returnMesh;
-	};
+	}
 
 	grid(sizeInCells: Coords, cellSize: Coords, material: Material)
 	{
@@ -267,7 +270,7 @@ class MeshBuilder
 		}
 
 		return returnMeshTextured;
-	};
+	}
 
 	room
 	(
@@ -375,7 +378,7 @@ class MeshBuilder
 		);
 
 		return returnMesh;
-	};
+	}
 
 	room_Ceiling(material: Material)
 	{
@@ -400,7 +403,7 @@ class MeshBuilder
 		);
 
 		return returnMesh;
-	};
+	}
 
 	room_Floor(material: Material)
 	{
@@ -419,7 +422,7 @@ class MeshBuilder
 		);
 
 		return returnMesh;
-	};
+	}
 
 	room_Wall(material: Material)
 	{
@@ -461,7 +464,7 @@ class MeshBuilder
 		);
 
 		return returnMeshTextured;
-	};
+	}
 
 	room_WallWithDoorway(material: Material, doorwayWidthScaleFactor: number, wallThickness: number)
 	{
@@ -620,7 +623,7 @@ class MeshBuilder
 		var returnMesh = this.unitCube_Geometry();
 		var returnMeshTextured = new MeshTextured(returnMesh, [ material ], null, null);
 		return returnMeshTextured;
-	};
+	}
 
 	unitCube_Geometry()
 	{
@@ -655,7 +658,7 @@ class MeshBuilder
 		);
 
 		return returnMesh;
-	};
+	}
 
 	unitRing(material: Material, numberOfVertices: number)
 	{
@@ -684,7 +687,7 @@ class MeshBuilder
 		var returnMeshTextured = new MeshTextured(returnMesh, [ material ], null, null);
 
 		return returnMeshTextured;
-	};
+	}
 
 	unitSquare(material: Material)
 	{
@@ -745,7 +748,7 @@ class MeshBuilder
 		}
 
 		return faceToClip;
-	};
+	}
 
 	mergeMeshes(meshesToMerge: MeshTextured[], vertexGroupNames: string[])
 	{
@@ -840,7 +843,7 @@ class MeshBuilder
 		);
 
 		return returnMeshTextured;
-	};
+	}
 
 	splitFaceByPlaneFrontAndBack(faceToDivide: FaceTextured, planeToDivideOn: Plane): FaceTextured[]
 	{
@@ -949,5 +952,7 @@ class MeshBuilder
 		}
 
 		return returnValues;
-	};
+	}
+}
+
 }

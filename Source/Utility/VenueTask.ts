@@ -1,5 +1,8 @@
 
-class VenueTask implements Venue
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VenueTask implements Venue
 {
 	venueInner: any;
 	perform: any;
@@ -33,7 +36,7 @@ class VenueTask implements Venue
 	draw(universe: Universe)
 	{
 		this.venueInner.draw(universe);
-	};
+	}
 
 	finalize(universe: Universe) {}
 
@@ -56,5 +59,7 @@ class VenueTask implements Venue
 		clearInterval(timer);
 
 		this.done(universe, result);
-	};
+	}
+}
+
 }

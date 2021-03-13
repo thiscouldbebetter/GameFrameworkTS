@@ -1,5 +1,8 @@
 
-class VisualBuilder
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualBuilder
 {
 	static _instance: VisualBuilder;
 	static Instance()
@@ -9,7 +12,7 @@ class VisualBuilder
 			VisualBuilder._instance = new VisualBuilder();
 		}
 		return VisualBuilder._instance;
-	};
+	}
 
 	circleWithEyes
 	(
@@ -712,4 +715,6 @@ class VisualBuilder
 
 		return sunVisual;
 	}
+}
+
 }

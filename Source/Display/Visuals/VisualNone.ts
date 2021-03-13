@@ -1,5 +1,8 @@
 
-class VisualNone implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualNone implements Visual
 {
 	static Instance: VisualNone = new VisualNone();
 
@@ -26,4 +29,6 @@ class VisualNone implements Visual
 	{
 		return this; // todo
 	}
+}
+
 }

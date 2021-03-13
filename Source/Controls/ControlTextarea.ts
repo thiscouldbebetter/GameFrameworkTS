@@ -1,5 +1,8 @@
 
-class ControlTextarea extends ControlBase
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ControlTextarea extends ControlBase
 {
 	_text: DataBinding<any, string>;
 	_isEnabled: DataBinding<any, boolean>;
@@ -347,4 +350,6 @@ class ControlTextarea extends ControlBase
 
 		this.scrollbar.draw(universe, display, drawLoc, style);
 	}
+}
+
 }

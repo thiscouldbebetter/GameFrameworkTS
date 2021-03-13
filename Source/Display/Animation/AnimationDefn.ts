@@ -1,5 +1,8 @@
 
-class AnimationDefn
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class AnimationDefn
 {
 	name: string;
 	keyframes: AnimationKeyframe[];
@@ -95,5 +98,7 @@ class AnimationDefn
 				}
 			}
 		}
-	};
+	}
+}
+
 }

@@ -1,5 +1,8 @@
 
-class ItemHolder extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ItemHolder extends EntityProperty
 {
 	itemEntities: Entity[];
 	massMax: number;
@@ -850,4 +853,6 @@ class ItemHolder extends EntityProperty
 			this.reachRadius
 		);
 	}
+}
+
 }

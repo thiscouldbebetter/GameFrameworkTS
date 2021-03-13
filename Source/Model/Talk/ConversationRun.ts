@@ -1,5 +1,8 @@
 
-class ConversationRun
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ConversationRun
 {
 	defn: ConversationDefn;
 	quit: () => void;
@@ -14,7 +17,13 @@ class ConversationRun
 	t: Entity;
 	vars: Map<string, any>;
 
-	constructor(defn: ConversationDefn, quit: () => void, entityPlayer: Entity, entityTalker: Entity)
+	constructor
+	(
+		defn: ConversationDefn,
+		quit: () => void,
+		entityPlayer: Entity,
+		entityTalker: Entity
+	)
 	{
 		this.defn = defn;
 		this.quit = quit;
@@ -56,12 +65,12 @@ class ConversationRun
 			this.scopeCurrent.talkNodeForOptionSelected = null;
 		}
 		this.update(universe);
-	};
+	}
 
 	update(universe: Universe)
 	{
 		this.scopeCurrent.update(universe, this);
-	};
+	}
 
 	// controls
 
@@ -273,7 +282,7 @@ class ConversationRun
 		returnValue.focusGain();
 
 		return returnValue;
-	};
+	}
 
 	toControlTranscript(size: Coords, universe: Universe, venueToReturnTo: Venue)
 	{
@@ -363,5 +372,7 @@ class ConversationRun
 		);
 
 		return returnValue;
-	};
+	}
+}
+
 }

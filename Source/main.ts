@@ -1,4 +1,8 @@
-function main()
+
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export function main()
 {
 	// It may be necessary to clear local storage to prevent errors on
 	// deserialization of existing saved items after the schema changes.
@@ -17,7 +21,6 @@ function main()
 		// Wrap.
 		new Coords(200, 150, 1),
 	];
-
 
 	var display = new Display2D
 	(
@@ -86,5 +89,7 @@ function mediaFilePathsBuild()
 		textStringDirectoryPath + "Instructions.txt",
 	];
 
-	return mediaFilePaths
+	return mediaFilePaths;
+}
+
 }

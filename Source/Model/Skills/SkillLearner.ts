@@ -1,5 +1,8 @@
 
-class SkillLearner extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class SkillLearner extends EntityProperty
 {
 	skillBeingLearnedName: string;
 	learningAccumulated: number;
@@ -413,4 +416,6 @@ class SkillLearner extends EntityProperty
 
 		return returnValue;
 	}
+}
+
 }

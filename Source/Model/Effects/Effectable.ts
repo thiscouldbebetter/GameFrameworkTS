@@ -1,5 +1,8 @@
 
-class Effectable extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Effectable extends EntityProperty
 {
 	effects: Effect[];
 
@@ -34,4 +37,6 @@ class Effectable extends EntityProperty
 		}
 		this.effects = this.effects.filter(x => x.isDone() == false);
 	}
+}
+
 }

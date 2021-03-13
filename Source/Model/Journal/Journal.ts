@@ -1,5 +1,8 @@
 
-class Journal
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Journal
 {
 	entries: JournalEntry[];
 
@@ -7,4 +10,6 @@ class Journal
 	{
 		this.entries = entries;
 	}
+}
+
 }

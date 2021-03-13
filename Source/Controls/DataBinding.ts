@@ -1,5 +1,8 @@
 
-class DataBinding<C, V>
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class DataBinding<C, V>
 {
 	context: C;
 	_get: (context: C) => V;
@@ -44,4 +47,6 @@ class DataBinding<C, V>
 			this._set(this.context, value);
 		}
 	};
+}
+
 }

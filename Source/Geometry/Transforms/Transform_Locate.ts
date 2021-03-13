@@ -1,5 +1,8 @@
 
-class Transform_Locate implements Transform
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Transform_Locate implements Transform
 {
 	loc: Disposition;
 
@@ -34,4 +37,6 @@ class Transform_Locate implements Transform
 
 		return coordsToTransform;
 	}
+}
+
 }

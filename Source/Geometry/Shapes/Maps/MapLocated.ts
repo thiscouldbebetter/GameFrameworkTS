@@ -1,5 +1,8 @@
 
-class MapLocated implements ShapeBase
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class MapLocated implements ShapeBase
 {
 	map: MapOfCells;
 	loc: Disposition;
@@ -50,4 +53,6 @@ class MapLocated implements ShapeBase
 	{
 		return surfacePointOut.overwriteWith(posToCheck); // todo
 	}
+}
+
 }

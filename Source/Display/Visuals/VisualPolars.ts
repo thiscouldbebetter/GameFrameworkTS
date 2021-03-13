@@ -1,5 +1,8 @@
 
-class VisualPolars implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualPolars implements Visual
 {
 	polars: Polar[];
 	color: Color;
@@ -66,4 +69,6 @@ class VisualPolars implements Visual
 	{
 		return this; // todo
 	}
+}
+
 }

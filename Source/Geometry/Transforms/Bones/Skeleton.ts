@@ -1,5 +1,8 @@
 
-class Skeleton
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Skeleton
 {
 	name: string;
 	boneRoot: Bone;
@@ -70,4 +73,6 @@ class Skeleton
 			bone.transform(transformToApply);
 		}
 	}
+}
+
 }

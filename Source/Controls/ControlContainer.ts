@@ -1,5 +1,8 @@
 
-class ControlContainer extends ControlBase
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ControlContainer extends ControlBase
 {
 	children: ControlBase[];
 	childrenByName: Map<string, ControlBase>;
@@ -394,4 +397,6 @@ class ControlContainer extends ControlBase
 			child.draw(universe, display, drawLoc, style);
 		}
 	}
+}
+
 }

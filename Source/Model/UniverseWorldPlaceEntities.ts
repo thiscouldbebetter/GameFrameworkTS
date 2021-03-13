@@ -1,5 +1,8 @@
 
-class UniverseWorldPlaceEntities
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class UniverseWorldPlaceEntities
 {
 	universe: Universe;
 	world: World;
@@ -38,4 +41,6 @@ class UniverseWorldPlaceEntities
 		this.entity2 = entity2;
 		return this;
 	}
+}
+
 }

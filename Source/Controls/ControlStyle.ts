@@ -1,5 +1,8 @@
 
-class ControlStyle
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ControlStyle
 {
 	name: string;
 	colorBackground: Color;
@@ -25,14 +28,14 @@ class ControlStyle
 		}
 		return ControlStyle._instances;
 	}
-	
+
 	static byName(styleName: string)
 	{
 		return ControlStyle.Instances()._AllByName.get(styleName);
 	}
 }
 
-class ControlStyle_Instances
+export class ControlStyle_Instances
 {
 	Default: ControlStyle;
 	Dark: ControlStyle;
@@ -64,4 +67,6 @@ class ControlStyle_Instances
 
 		this._AllByName = ArrayHelper.addLookupsByName(this._All);
 	}
+}
+
 }

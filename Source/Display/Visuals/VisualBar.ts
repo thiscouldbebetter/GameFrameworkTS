@@ -1,5 +1,8 @@
 
-class VisualBar implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualBar implements Visual
 {
 	abbreviation: string;
 	size: Coords;
@@ -143,4 +146,6 @@ class VisualBar implements Visual
 	{
 		return this; // todo
 	}
+}
+
 }

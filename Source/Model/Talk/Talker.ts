@@ -1,5 +1,8 @@
 
-class Talker extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Talker extends EntityProperty
 {
 	conversationDefnName: string;
 
@@ -33,4 +36,6 @@ class Talker extends EntityProperty
 
 		universe.venueNext = venueNext;
 	}
+}
+
 }

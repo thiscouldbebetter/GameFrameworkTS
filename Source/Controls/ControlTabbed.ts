@@ -1,5 +1,8 @@
 
-class ControlTabbed extends ControlBase
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ControlTabbed extends ControlBase
 {
 	tabButtonSize: Coords;
 	children: ControlBase[];
@@ -408,4 +411,6 @@ class ControlTabbed extends ControlBase
 			child.draw(universe, display, drawLoc, style);
 		}
 	}
+}
+
 }

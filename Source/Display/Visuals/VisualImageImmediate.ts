@@ -1,5 +1,8 @@
 
-class VisualImageImmediate implements VisualImage
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualImageImmediate implements VisualImage
 {
 	_image: Image2;
 	isScaled: boolean
@@ -61,4 +64,6 @@ class VisualImageImmediate implements VisualImage
 	{
 		return this; // todo
 	}
+}
+
 }

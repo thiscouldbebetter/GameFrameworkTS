@@ -1,5 +1,8 @@
 
-class Transform_Perspective implements Transform
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Transform_Perspective implements Transform
 {
 	focalLength: number;
 
@@ -35,5 +38,7 @@ class Transform_Perspective implements Transform
 			);
 		}
 		return coordsToTransform;
-	};
+	}
+}
+
 }

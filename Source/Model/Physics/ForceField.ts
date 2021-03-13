@@ -1,5 +1,8 @@
 
-class ForceField extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ForceField extends EntityProperty
 {
 	accelerationToApply: Coords;
 	velocityToApply: Coords;
@@ -49,4 +52,6 @@ class ForceField extends EntityProperty
 		}
 		return this;
 	}
+}
+
 }

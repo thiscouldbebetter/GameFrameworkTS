@@ -1,29 +1,36 @@
 "use strict";
-class Damage {
-    constructor(amount, typeName, effectsAndChances) {
-        this.amount = amount;
-        this.typeName = typeName;
-        this.effectsAndChances = effectsAndChances;
-    }
-    effectsOccurring(randomizer) {
-        var effectsOccurring = new Array();
-        if (this.effectsAndChances != null) {
-            for (var i = 0; i < this.effectsAndChances.length; i++) {
-                var effectAndChance = this.effectsAndChances[i];
-                var chance = effectAndChance[1];
-                var roll = randomizer.getNextRandom();
-                if (roll <= chance) {
-                    var effect = effectAndChance[0];
-                    effectsOccurring.push(effect);
+var ThisCouldBeBetter;
+(function (ThisCouldBeBetter) {
+    var GameFramework;
+    (function (GameFramework) {
+        class Damage {
+            constructor(amount, typeName, effectsAndChances) {
+                this.amount = amount;
+                this.typeName = typeName;
+                this.effectsAndChances = effectsAndChances;
+            }
+            effectsOccurring(randomizer) {
+                var effectsOccurring = new Array();
+                if (this.effectsAndChances != null) {
+                    for (var i = 0; i < this.effectsAndChances.length; i++) {
+                        var effectAndChance = this.effectsAndChances[i];
+                        var chance = effectAndChance[1];
+                        var roll = randomizer.getNextRandom();
+                        if (roll <= chance) {
+                            var effect = effectAndChance[0];
+                            effectsOccurring.push(effect);
+                        }
+                    }
                 }
+                return effectsOccurring;
+            }
+            toString() {
+                return this.amount + " " + (this.typeName || "");
+            }
+            type() {
+                return GameFramework.DamageType.byName(this.typeName);
             }
         }
-        return effectsOccurring;
-    }
-    toString() {
-        return this.amount + " " + (this.typeName || "");
-    }
-    type() {
-        return DamageType.byName(this.typeName);
-    }
-}
+        GameFramework.Damage = Damage;
+    })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
+})(ThisCouldBeBetter || (ThisCouldBeBetter = {}));

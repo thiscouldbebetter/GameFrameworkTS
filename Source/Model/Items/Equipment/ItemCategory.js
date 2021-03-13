@@ -1,6 +1,13 @@
 "use strict";
-class ItemCategory {
-    constructor(name) {
-        this.name = name;
-    }
-}
+var ThisCouldBeBetter;
+(function (ThisCouldBeBetter) {
+    var GameFramework;
+    (function (GameFramework) {
+        class ItemCategory {
+            constructor(name) {
+                this.name = name;
+            }
+        }
+        GameFramework.ItemCategory = ItemCategory;
+    })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
+})(ThisCouldBeBetter || (ThisCouldBeBetter = {}));

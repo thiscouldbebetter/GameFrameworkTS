@@ -1,5 +1,8 @@
 
-class CraftingRecipe
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class CraftingRecipe
 {
 	name: string;
 	ticksToComplete: number;
@@ -67,4 +70,6 @@ class CraftingRecipe
 			ArrayHelper.clone(this.itemEntitiesOut)
 		);
 	}
+}
+
 }

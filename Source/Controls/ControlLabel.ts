@@ -1,5 +1,8 @@
 
-class ControlLabel extends ControlBase
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ControlLabel extends ControlBase
 {
 	isTextCentered: boolean;
 	_text: any;
@@ -94,4 +97,6 @@ class ControlLabel extends ControlBase
 			}
 		}
 	}
+}
+
 }

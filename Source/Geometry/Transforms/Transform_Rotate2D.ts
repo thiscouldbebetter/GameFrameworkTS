@@ -1,5 +1,8 @@
 
-class Transform_Rotate2D implements Transform
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Transform_Rotate2D implements Transform
 {
 	turnsToRotate: number;
 
@@ -36,5 +39,7 @@ class Transform_Rotate2D implements Transform
 		);
 
 		return coordsToTransform;
-	};
+	}
+}
+
 }

@@ -1,5 +1,8 @@
 
-class MediaLibrary
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class MediaLibrary
 {
 	images: Image2[];
 	sounds: Sound[];
@@ -259,4 +262,6 @@ class MediaLibrary
 	{
 		return this.videosByName.get(name);
 	}
+}
+
 }

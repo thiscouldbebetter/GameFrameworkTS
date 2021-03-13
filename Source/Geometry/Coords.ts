@@ -1,5 +1,8 @@
 
-class Coords
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Coords
 {
 	x: number;
 	y: number;
@@ -585,4 +588,6 @@ class Coords_Instances
 		this.ZeroOneZero = new Coords(0, 1, 0);
 		this.Zeroes = new Coords(0, 0, 0);
 	}
+}
+
 }

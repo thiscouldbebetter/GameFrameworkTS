@@ -1,5 +1,8 @@
 
-class Vehicle extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Vehicle extends EntityProperty
 {
 	accelerationPerTick: number;
 	speedMax: number;
@@ -107,4 +110,6 @@ class Vehicle extends EntityProperty
 			);
 		}
 	}
+}
+
 }

@@ -1,5 +1,8 @@
 
-class ControlSelectOption
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ControlSelectOption
 {
 	value: any;
 	text: any;
@@ -11,4 +14,6 @@ class ControlSelectOption
 		this.value = value;
 		this.text = text;
 	}
+}
+
 }

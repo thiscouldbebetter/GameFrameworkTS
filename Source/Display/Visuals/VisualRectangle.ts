@@ -1,5 +1,8 @@
 
-class VisualRectangle implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualRectangle implements Visual
 {
 	size: Coords;
 	colorFill: Color;
@@ -41,7 +44,7 @@ class VisualRectangle implements Visual
 			Color.systemColorGet(this.colorBorder),
 			null
 		);
-	};
+	}
 
 	// Clonable.
 
@@ -61,4 +64,6 @@ class VisualRectangle implements Visual
 	{
 		return this; // todo
 	}
+}
+
 }

@@ -1,5 +1,8 @@
 
-class VisualPath implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualPath implements Visual
 {
 	verticesAsPath: Path;
 	color: Color;
@@ -63,4 +66,6 @@ class VisualPath implements Visual
 	{
 		return this; // todo
 	}
+}
+
 }

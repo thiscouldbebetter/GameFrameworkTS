@@ -1,5 +1,8 @@
 
-class Place
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Place
 {
 	name: string;
 	defnName: string;
@@ -230,5 +233,7 @@ class Place
 	{
 		return this.entitiesByPropertyName(Usable.name);
 	}
+
+}
 
 }

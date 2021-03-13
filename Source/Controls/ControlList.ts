@@ -1,5 +1,8 @@
 
-class ControlList extends ControlBase
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ControlList extends ControlBase
 {
 	name: string;
 	pos: Coords;
@@ -444,4 +447,6 @@ class ControlList extends ControlBase
 
 		this.scrollbar.draw(universe, display, drawLoc, style);
 	}
+}
+
 }

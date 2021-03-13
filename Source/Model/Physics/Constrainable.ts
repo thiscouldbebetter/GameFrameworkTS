@@ -1,5 +1,8 @@
 
-class Constrainable extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Constrainable extends EntityProperty
 {
 	constraints: Constraint[];
 
@@ -18,15 +21,17 @@ class Constrainable extends EntityProperty
 			var constraint = constraints[i];
 			constraint.constrain(universe, world, place, entity);
 		}
-	};
+	}
 
 	initialize(universe: Universe, world: World, place: Place, entity: Entity)
 	{
 		this.updateForTimerTick(universe, world, place, entity);
-	};
+	}
 
 	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity)
 	{
 		Constrainable.constrain(universe, world, place, entity);
-	};
+	}
+}
+
 }

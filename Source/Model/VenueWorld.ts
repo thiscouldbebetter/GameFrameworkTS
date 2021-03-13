@@ -1,5 +1,8 @@
 
-class VenueWorld implements Venue
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VenueWorld implements Venue
 {
 	name: string;
 	world: World;
@@ -43,4 +46,6 @@ class VenueWorld implements Venue
 		this.draw(universe);
 		this.venueControls.updateForTimerTick(universe);
 	}
+}
+
 }

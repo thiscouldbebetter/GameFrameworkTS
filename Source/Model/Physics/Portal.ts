@@ -1,5 +1,8 @@
 
-class Portal extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Portal extends EntityProperty
 {
 	destinationPlaceName: string;
 	destinationEntityName: string;
@@ -81,4 +84,6 @@ class Portal extends EntityProperty
 			this.velocityToApply == null ? null : this.velocityToApply.clone()
 		);
 	}
+}
+
 }

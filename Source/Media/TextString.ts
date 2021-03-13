@@ -1,5 +1,8 @@
 
-class TextString
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class TextString
 {
 	name: string;
 	sourcePath: string;
@@ -44,4 +47,6 @@ class TextString
 		};
 		xmlHttpRequest.send();
 	}
+}
+
 }

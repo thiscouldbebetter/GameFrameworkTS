@@ -1,5 +1,8 @@
 
-class Transform_OrientRDF implements Transform
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Transform_OrientRDF implements Transform
 {
 	orientation: Orientation;
 
@@ -41,4 +44,6 @@ class Transform_OrientRDF implements Transform
 
 		return coordsToTransform;
 	}
+}
+
 }

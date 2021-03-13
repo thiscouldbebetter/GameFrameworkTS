@@ -1,5 +1,8 @@
 
-class Damager extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Damager extends EntityProperty
 {
 	damagePerHit: Damage;
 
@@ -8,4 +11,6 @@ class Damager extends EntityProperty
 		super();
 		this.damagePerHit = damagePerHit;
 	}
+}
+
 }

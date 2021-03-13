@@ -1,5 +1,8 @@
 
-class Equippable extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Equippable extends EntityProperty
 {
 	_equip: (u: Universe, w: World, p: Place, eEquipmentUser: Entity, eEquippable: Entity) => void;
 	_unequip: (u: Universe, w: World, p: Place, eEquipmentUser: Entity, eEquippable: Entity) => void;
@@ -47,4 +50,6 @@ class Equippable extends EntityProperty
 	{
 		return this;
 	} 
+}
+
 }

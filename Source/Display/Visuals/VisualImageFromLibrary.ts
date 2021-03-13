@@ -1,5 +1,8 @@
 
-class VisualImageFromLibrary implements VisualImage
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualImageFromLibrary implements VisualImage
 {
 	imageName: string;
 
@@ -67,4 +70,6 @@ class VisualImageFromLibrary implements VisualImage
 	{
 		return this; // todo
 	}
+}
+
 }

@@ -1,5 +1,8 @@
 
-class Selector extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Selector extends EntityProperty
 {
 	entitiesSelected: Entity[];
 
@@ -119,4 +122,6 @@ class Selector extends EntityProperty
 			this.entityForReticle.drawable().updateForTimerTick(u, w, p, this.entityForReticle);
 		}
 	}
+}
+
 }

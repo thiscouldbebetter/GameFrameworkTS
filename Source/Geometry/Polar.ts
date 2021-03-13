@@ -1,5 +1,8 @@
 
-class Polar
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Polar
 {
 	azimuthInTurns: number;
 	radius: number;
@@ -115,4 +118,6 @@ class Polar
 	{
 		return new Polar(this.azimuthInTurns, this.radius, this.elevationInTurns);
 	}
+}
+
 }

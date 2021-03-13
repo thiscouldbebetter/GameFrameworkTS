@@ -1,5 +1,8 @@
 
-class Device extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Device extends EntityProperty
 {
 	name: string;
 	_initialize: (u: Universe, w: World, p: Place, e: Entity) => void;
@@ -51,5 +54,7 @@ class Device extends EntityProperty
 	clone()
 	{
 		return new Device(this.name, this.ticksToCharge, this._initialize, this.update, this.use);
-	};
+	}
+}
+
 }

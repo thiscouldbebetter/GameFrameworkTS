@@ -1,5 +1,8 @@
 
-class Plane
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Plane
 {
 	normal: Coords;
 	distanceFromOrigin: number;
@@ -55,4 +58,6 @@ class Plane
 	{
 		return point.overwriteWith(this.normal).multiplyScalar(this.distanceFromOrigin);
 	}
+}
+
 }

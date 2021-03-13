@@ -1,5 +1,8 @@
 
-class VisualText implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualText implements Visual
 {
 	_text: DataBinding<any, string>;
 	shouldTextContextBeReset: boolean;
@@ -97,4 +100,6 @@ class VisualText implements Visual
 	{
 		return this; // todo
 	}
+}
+
 }

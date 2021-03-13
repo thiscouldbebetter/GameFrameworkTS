@@ -1,5 +1,8 @@
 
-class ShapeGroupAny
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ShapeGroupAny
 {
 	shapes: any[];
 
@@ -7,4 +10,6 @@ class ShapeGroupAny
 	{
 		this.shapes = shapes;
 	}
+}
+
 }

@@ -1,5 +1,8 @@
 
-class AnimationDefnGroup
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class AnimationDefnGroup
 {
 	name: string;
 	animationDefns: AnimationDefn[];
@@ -11,4 +14,6 @@ class AnimationDefnGroup
 		this.animationDefns = animationDefns;
 		this.animationDefnsByName = ArrayHelper.addLookupsByName(this.animationDefns);
 	}
+}
+
 }

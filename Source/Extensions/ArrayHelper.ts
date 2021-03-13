@@ -1,10 +1,13 @@
-class ArrayHelper
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ArrayHelper
 {
 	static add(array: any[], element: any)
 	{
 		array.push(element);
 		return array;
-	};
+	}
 
 	static addMany(array: any[], elements: any[])
 	{
@@ -14,7 +17,7 @@ class ArrayHelper
 			array.push(element);
 		}
 		return array;
-	};
+	}
 
 	static addLookups<K, E>(array: E[], getKeyForElement: (e: E) => K ): Map<K, E>
 	{
@@ -26,12 +29,12 @@ class ArrayHelper
 			returnLookup.set(key, element);
 		}
 		return returnLookup;
-	};
+	}
 
 	static addLookupsByName<E extends Namable>(array: E[]): Map<string,E>
 	{
 		return ArrayHelper.addLookups(array, (element: E) => element.name);
-	};
+	}
 
 	static addLookupsMultiple<K, E>(array: any, getKeysForElement: (e:E) => Array<K> ): Map<K, E>
 	{
@@ -47,7 +50,7 @@ class ArrayHelper
 			}
 		}
 		return returnLookup;
-	};
+	}
 
 	static append(array: any, other: any)
 	{
@@ -57,13 +60,13 @@ class ArrayHelper
 			array.push(element);
 		}
 		return array;
-	};
+	}
 
 	static clear(array: any)
 	{
 		array.length = 0;
 		return array;
-	};
+	}
 
 	static clone(array: any)
 	{
@@ -82,7 +85,7 @@ class ArrayHelper
 		}
 
 		return returnValue;
-	};
+	}
 
 	static concatenateAll(arrays: any)
 	{
@@ -95,12 +98,12 @@ class ArrayHelper
 		}
 
 		return childrenConcatenated;
-	};
+	}
 
 	static contains(array: any, elementToFind: any)
 	{
 		return (array.indexOf(elementToFind) >= 0);
-	};
+	}
 
 	static equals(array: any[], other: any[])
 	{
@@ -123,7 +126,7 @@ class ArrayHelper
 		}
 
 		return areEqualSoFar;
-	};
+	}
 
 	static insertElementAfterOther(array: any, elementToInsert: any, other: any)
 	{
@@ -137,13 +140,13 @@ class ArrayHelper
 			array.push(elementToInsert);
 		}
 		return array;
-	};
+	}
 
 	static insertElementAt(array: any, element: any, index: number)
 	{
 		array.splice(index, 0, element);
 		return array;
-	};
+	}
 
 	static overwriteWith(array: any, other: any)
 	{
@@ -162,7 +165,7 @@ class ArrayHelper
 		}
 
 		return array;
-	};
+	}
 
 	static prepend(array: any, other: any)
 	{
@@ -172,12 +175,12 @@ class ArrayHelper
 			array.splice(0, 0, element);
 		}
 		return array;
-	};
+	}
 
 	static random(array: any, randomizer: Randomizer)
 	{
 		return array[ Math.floor(randomizer.getNextRandom() * array.length) ];
-	};
+	}
 
 	static remove(array: any, elementToRemove: any)
 	{
@@ -187,11 +190,13 @@ class ArrayHelper
 			array.splice(indexToRemoveAt, 1);
 		}
 		return array;
-	};
+	}
 
 	static removeAt(array: any, index: number)
 	{
 		array.splice(index, 1);
 		return array;
-	};
+	}
+}
+
 }

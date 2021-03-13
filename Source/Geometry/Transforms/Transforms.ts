@@ -1,5 +1,8 @@
 
-class Transforms
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Transforms
 {
 	static applyTransformToCoordsArrays
 	(
@@ -25,4 +28,6 @@ class Transforms
 			transformToApply.transformCoords(coordsSetToTransform[i]);
 		}
 	}
+}
+
 }

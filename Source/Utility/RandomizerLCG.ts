@@ -1,5 +1,8 @@
 
-class RandomizerLCG implements Randomizer
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class RandomizerLCG implements Randomizer
 {
 	// "LCG" = "Linear Congruential Generator"
 
@@ -25,7 +28,7 @@ class RandomizerLCG implements Randomizer
 			12345, // addend
 			Math.pow(2.0, 31) // modulus
 		);
-	};
+	}
 
 	getNextRandom()
 	{
@@ -41,5 +44,7 @@ class RandomizerLCG implements Randomizer
 		/ this.modulus;
 
 		return this.currentRandom;
-	};
+	}
+}
+
 }

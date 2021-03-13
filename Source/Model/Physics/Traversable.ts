@@ -1,5 +1,8 @@
 
-class Traversable extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Traversable extends EntityProperty
 {
 	isBlocking: boolean
 
@@ -8,4 +11,6 @@ class Traversable extends EntityProperty
 		super();
 		this.isBlocking = isBlocking;
 	}
+}
+
 }

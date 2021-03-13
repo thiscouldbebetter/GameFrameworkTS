@@ -1,5 +1,8 @@
 
-class BitStream
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class BitStream
 {
 	static BitsPerByte = 8;
 	static NaturalLogarithmOf2 = Math.log(2);
@@ -109,4 +112,6 @@ class BitStream
 			this.writeBit(bitValue);
 		}
 	}
+}
+
 }

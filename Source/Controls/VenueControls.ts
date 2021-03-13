@@ -1,5 +1,8 @@
 
-class VenueControls implements Venue
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VenueControls implements Venue
 {
 	controlRoot: ControlBase;
 	actionToInputsMappings: ActionToInputsMapping[];
@@ -199,5 +202,7 @@ class VenueControls implements Venue
 		} // end for
 
 	}
+
+}
 
 }

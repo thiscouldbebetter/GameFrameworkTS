@@ -1,5 +1,8 @@
 
-class ControlScrollbar extends ControlBase
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ControlScrollbar extends ControlBase
 {
 	itemHeight: number;
 	_items: any;
@@ -183,4 +186,6 @@ class ControlScrollbar extends ControlBase
 			);
 		}
 	}
+}
+
 }

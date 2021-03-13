@@ -1,5 +1,8 @@
 
-class EquipmentSocketDefn
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class EquipmentSocketDefn
 {
 	name: string;
 	categoriesAllowedNames: string[];
@@ -9,4 +12,6 @@ class EquipmentSocketDefn
 		this.name = name;
 		this.categoriesAllowedNames = categoriesAllowedNames;
 	}
+}
+
 }

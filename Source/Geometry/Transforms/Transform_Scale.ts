@@ -1,5 +1,8 @@
 
-class Transform_Scale implements Transform
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Transform_Scale implements Transform
 {
 	scaleFactors: Coords;
 
@@ -11,7 +14,7 @@ class Transform_Scale implements Transform
 	static fromScalar(scalar: number)
 	{
 		return new Transform_Scale(new Coords(1, 1, 1).multiplyScalar(scalar));
-	};
+	}
 
 	overwriteWith(other: Transform)
 	{
@@ -28,5 +31,7 @@ class Transform_Scale implements Transform
 	transformCoords(coordsToTransform: Coords)
 	{
 		return coordsToTransform.multiply(this.scaleFactors);
-	};
+	}
+}
+
 }

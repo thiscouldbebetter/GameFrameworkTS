@@ -1,5 +1,8 @@
 
-class Transform_Camera implements Transform
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Transform_Camera implements Transform
 {
 	camera: Camera;
 
@@ -47,5 +50,7 @@ class Transform_Camera implements Transform
 		this.transformPerspective.transformCoords(coordsToTransform);
 		this.transformViewCenter.transformCoords(coordsToTransform);
 		return coordsToTransform;
-	};
+	}
+}
+
 }

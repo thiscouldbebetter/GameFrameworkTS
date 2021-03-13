@@ -1,50 +1,54 @@
 "use strict";
-class ConversationScope {
-    constructor(parent, talkNodeCurrent, talkNodesForOptions) {
-        this.parent = parent;
-        this.talkNodeCurrent = talkNodeCurrent;
-        this.isPromptingForResponse = false;
-        this.talkNodesForOptions = talkNodesForOptions;
-        this.talkNodesForOptionsByName = ArrayHelper.addLookupsByName(this.talkNodesForOptions);
-        this.displayTextCurrent = "[conversation begins]";
-        this.talkNodeForOptionSelected = null;
-        this._talkNodesForOptionsActive = [];
-        this._emptyArray = [];
-        this.haveOptionsBeenUpdated = true;
-    }
-    talkNodeAdvance(conversationRun) {
-        var conversationDefn = conversationRun.defn;
-        var defnTalkNodes = conversationDefn.talkNodes;
-        var talkNodeIndex = defnTalkNodes.indexOf(this.talkNodeCurrent);
-        var talkNodeNext = defnTalkNodes[talkNodeIndex + 1];
-        this.talkNodeCurrent = talkNodeNext;
-        return this;
-    }
-    ;
-    talkNodesForOptionsActive() {
-        var returnValues;
-        if (this.isPromptingForResponse == false) {
-            returnValues = this._emptyArray;
-        }
-        else {
-            if (this.haveOptionsBeenUpdated) {
-                this.haveOptionsBeenUpdated = false;
-                this._talkNodesForOptionsActive.length = 0;
-                for (var i = 0; i < this.talkNodesForOptions.length; i++) {
-                    var talkNode = this.talkNodesForOptions[i];
-                    if (talkNode.isActive) {
-                        this._talkNodesForOptionsActive.push(talkNode);
-                    }
-                }
+var ThisCouldBeBetter;
+(function (ThisCouldBeBetter) {
+    var GameFramework;
+    (function (GameFramework) {
+        class ConversationScope {
+            constructor(parent, talkNodeCurrent, talkNodesForOptions) {
+                this.parent = parent;
+                this.talkNodeCurrent = talkNodeCurrent;
+                this.isPromptingForResponse = false;
+                this.talkNodesForOptions = talkNodesForOptions;
+                this.talkNodesForOptionsByName = GameFramework.ArrayHelper.addLookupsByName(this.talkNodesForOptions);
+                this.displayTextCurrent = "[conversation begins]";
+                this.talkNodeForOptionSelected = null;
+                this._talkNodesForOptionsActive = [];
+                this._emptyArray = [];
+                this.haveOptionsBeenUpdated = true;
             }
-            returnValues = this._talkNodesForOptionsActive;
+            talkNodeAdvance(conversationRun) {
+                var conversationDefn = conversationRun.defn;
+                var defnTalkNodes = conversationDefn.talkNodes;
+                var talkNodeIndex = defnTalkNodes.indexOf(this.talkNodeCurrent);
+                var talkNodeNext = defnTalkNodes[talkNodeIndex + 1];
+                this.talkNodeCurrent = talkNodeNext;
+                return this;
+            }
+            talkNodesForOptionsActive() {
+                var returnValues;
+                if (this.isPromptingForResponse == false) {
+                    returnValues = this._emptyArray;
+                }
+                else {
+                    if (this.haveOptionsBeenUpdated) {
+                        this.haveOptionsBeenUpdated = false;
+                        this._talkNodesForOptionsActive.length = 0;
+                        for (var i = 0; i < this.talkNodesForOptions.length; i++) {
+                            var talkNode = this.talkNodesForOptions[i];
+                            if (talkNode.isActive) {
+                                this._talkNodesForOptionsActive.push(talkNode);
+                            }
+                        }
+                    }
+                    returnValues = this._talkNodesForOptionsActive;
+                }
+                return returnValues;
+            }
+            update(universe, conversationRun) {
+                this.haveOptionsBeenUpdated = true;
+                this.talkNodeCurrent.execute(universe, conversationRun, this);
+            }
         }
-        return returnValues;
-    }
-    ;
-    update(universe, conversationRun) {
-        this.haveOptionsBeenUpdated = true;
-        this.talkNodeCurrent.execute(universe, conversationRun, this);
-    }
-    ;
-}
+        GameFramework.ConversationScope = ConversationScope;
+    })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
+})(ThisCouldBeBetter || (ThisCouldBeBetter = {}));

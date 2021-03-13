@@ -1,5 +1,8 @@
 
-class PlaceBuilderDemo // Main.
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class PlaceBuilderDemo // Main.
 {
 	universe: Universe;
 	randomizer: Randomizer;
@@ -3143,4 +3146,6 @@ class PlaceBuilderDemo // Main.
 		];
 		return entityDefns;
 	}
+}
+
 }

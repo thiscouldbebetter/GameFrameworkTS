@@ -1,5 +1,8 @@
 
-class Stopwatch
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Stopwatch
 {
 	name: string;
 
@@ -18,13 +21,13 @@ class Stopwatch
 	log()
 	{
 		console.log(this.name + ": " + this.timeElapsedLastRun);
-	};
+	}
 
 	start()
 	{
 		this.timeStarted = new Date();
 		return this;
-	};
+	}
 
 	stop()
 	{
@@ -33,5 +36,7 @@ class Stopwatch
 			this.timeStopped.getTime() - this.timeStarted.getTime();
 		this.timeElapsedTotal += this.timeElapsedLastRun;
 		return this;
-	};
+	}
+}
+
 }

@@ -1,5 +1,8 @@
 
-class DateTime
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class DateTime
 {
 	year: number;
 	month: number;
@@ -135,5 +138,6 @@ class DateTime
 
 		return returnValue;
 	}
+}
 
 }

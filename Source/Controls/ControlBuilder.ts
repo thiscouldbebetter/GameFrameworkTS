@@ -1,5 +1,8 @@
 
-class ControlBuilder
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ControlBuilder
 {
 	buttonHeightBase: number;
 	buttonHeightSmallBase: number;
@@ -1739,5 +1742,7 @@ class ControlBuilder
 		returnValue.scalePosAndSize(scaleMultiplier);
 
 		return returnValue;
-	};
+	}
+}
+
 }

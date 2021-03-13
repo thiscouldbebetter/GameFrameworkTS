@@ -1,5 +1,8 @@
 
-class ShapeHelper
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ShapeHelper
 {
 	_transformLocate: Transform_Locate;
 
@@ -30,4 +33,6 @@ class ShapeHelper
 
 		return shape;
 	}
+}
+
 }

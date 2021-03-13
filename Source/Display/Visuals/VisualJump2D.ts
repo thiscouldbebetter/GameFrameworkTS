@@ -1,5 +1,8 @@
 
-class VisualJump2D implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualJump2D implements Visual
 {
 	visualJumper: Visual;
 	visualShadow: Visual;
@@ -22,7 +25,7 @@ class VisualJump2D implements Visual
 		transformToApply.transform(this.visualJumper);
 		transformToApply.transform(this.visualShadow);
 		return this;
-	};
+	}
 
 	// Visual.
 
@@ -45,7 +48,7 @@ class VisualJump2D implements Visual
 			this.visualJumper.draw(universe, world, place, entity, display);
 			entityPos.overwriteWith(this._posSaved);
 		}
-	};
+	}
 
 	// Cloneable.
 
@@ -55,12 +58,14 @@ class VisualJump2D implements Visual
 		(
 			this.visualJumper.clone(), this.visualShadow.clone(), this.cameraFactory
 		);
-	};
+	}
 
 	overwriteWith(other: VisualJump2D): Visual
 	{
 		this.visualJumper.overwriteWith(other.visualJumper);
 		this.visualShadow.overwriteWith(other.visualShadow);
 		return this;
-	};
+	}
+}
+
 }

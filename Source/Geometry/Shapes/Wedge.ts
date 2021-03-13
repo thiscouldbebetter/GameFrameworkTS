@@ -1,5 +1,8 @@
 
-class Wedge
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Wedge
 {
 	vertex: Coords;
 	directionMin: Coords;
@@ -145,4 +148,6 @@ class Wedge
 		this.directionMin.overwriteWith(other.directionMin);
 		this.angleSpannedInTurns = other.angleSpannedInTurns;
 	}
+}
+
 }

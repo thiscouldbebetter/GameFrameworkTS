@@ -1,5 +1,8 @@
 
-class Locatable extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Locatable extends EntityProperty
 {
 	loc: Disposition;
 
@@ -116,4 +119,6 @@ class Locatable extends EntityProperty
 	{
 		return new Locatable(this.loc.clone());
 	}
+}
+
 }

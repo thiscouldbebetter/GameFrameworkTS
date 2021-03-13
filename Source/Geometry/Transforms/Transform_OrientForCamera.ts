@@ -1,5 +1,8 @@
 
-class Transform_OrientForCamera implements Transform
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Transform_OrientForCamera implements Transform
 {
 	orientation: Orientation;
 
@@ -27,5 +30,7 @@ class Transform_OrientForCamera implements Transform
 			this.orientation.forward.dotProduct(coordsToTransform)
 		);
 		return coordsToTransform;
-	};
+	}
+}
+
 }

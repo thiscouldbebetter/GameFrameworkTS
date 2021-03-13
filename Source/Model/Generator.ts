@@ -1,5 +1,8 @@
 
-class Generator extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Generator extends EntityProperty
 {
 	entityToGenerate: Entity;
 	ticksToGenerate: number;
@@ -69,4 +72,6 @@ class Generator extends EntityProperty
 		this.entitiesGeneratedMax = other.entitiesGeneratedMax;
 		return this;
 	}
+}
+
 }

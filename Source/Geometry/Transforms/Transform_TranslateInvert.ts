@@ -1,5 +1,8 @@
 
-class Transform_TranslateInvert implements Transform
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Transform_TranslateInvert implements Transform
 {
 	displacement: Coords;
 
@@ -21,5 +24,7 @@ class Transform_TranslateInvert implements Transform
 	transformCoords(coordsToTransform: Coords)
 	{
 		return coordsToTransform.subtract(this.displacement);
-	};
+	}
+}
+
 }

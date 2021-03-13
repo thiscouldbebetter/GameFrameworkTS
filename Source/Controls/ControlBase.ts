@@ -1,5 +1,8 @@
 
-class ControlBase
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ControlBase
 {
 	fontHeightInPixels: number;
 	name: string;
@@ -42,4 +45,6 @@ class ControlBase
 	{
 		return (this.styleName == null ? universe.controlStyle : ControlStyle.byName(this.styleName));
 	}
+}
+
 }

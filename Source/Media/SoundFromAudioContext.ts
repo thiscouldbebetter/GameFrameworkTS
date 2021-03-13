@@ -1,5 +1,8 @@
 
-class SoundFromAudioContext
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class SoundFromAudioContext
 {
 	gain: any;
 	oscillator: any;
@@ -28,4 +31,6 @@ class SoundFromAudioContext
 		var durationInSeconds = 1;
 		this.oscillator.stop(a.currentTime + durationInSeconds);
 	}
+}
+
 }

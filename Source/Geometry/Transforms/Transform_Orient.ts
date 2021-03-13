@@ -1,5 +1,8 @@
 
-class Transform_Orient implements Transform
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Transform_Orient implements Transform
 {
 	orientation: Orientation;
 
@@ -40,4 +43,6 @@ class Transform_Orient implements Transform
 
 		return coordsToTransform;
 	}
+}
+
 }

@@ -1,5 +1,8 @@
 
-class VisualImageScaledPartial implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualImageScaledPartial implements Visual
 {
 	visualImageToExtractFrom: VisualImage;
 	regionToDrawAsBox: Box;
@@ -50,4 +53,6 @@ class VisualImageScaledPartial implements Visual
 	{
 		return this; // todo
 	}
+}
+
 }

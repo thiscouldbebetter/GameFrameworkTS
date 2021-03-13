@@ -1,5 +1,8 @@
 
-class ItemDefn extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ItemDefn extends EntityProperty
 {
 	name: string;
 	appearance: string;
@@ -70,4 +73,6 @@ class ItemDefn extends EntityProperty
 		}
 		return returnValue;
 	}
+}
+
 }

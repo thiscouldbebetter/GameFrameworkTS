@@ -1,5 +1,8 @@
 
-class VenueFileUpload implements Venue
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VenueFileUpload implements Venue
 {
 	venueNextIfFileSpecified: Venue;
 	venueNextIfCancelled: Venue;
@@ -39,7 +42,7 @@ class VenueFileUpload implements Venue
 		var display = universe.display;
 		display.drawBackground("Black", null);
 		platformHelper.platformableShow(display);
-	};
+	}
 
 	initialize(universe: Universe)
 	{
@@ -87,7 +90,7 @@ class VenueFileUpload implements Venue
 		universe.platformHelper.platformableAdd(this);
 
 		inputFileUpload.focus();
-	};
+	}
 
 	updateForTimerTick(universe: Universe)
 	{
@@ -111,14 +114,14 @@ class VenueFileUpload implements Venue
 				}
 			}
 		}
-	};
+	}
 
 	// events
 
 	buttonCancel_Clicked(universe: Universe, event: any)
 	{
 		universe.venueNext = this.venueNextIfCancelled;
-	};
+	}
 
 	buttonLoad_Clicked(universe: Universe, event: any)
 	{
@@ -128,12 +131,14 @@ class VenueFileUpload implements Venue
 		{
 			universe.venueNext = this.venueNextIfFileSpecified;
 		}
-	};
+	}
 
 	// platformable
 
 	toDomElement()
 	{
 		return this.domElement;
-	};
+	}
+}
+
 }

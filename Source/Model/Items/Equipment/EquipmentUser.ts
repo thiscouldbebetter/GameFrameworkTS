@@ -1,5 +1,8 @@
 
-class EquipmentUser extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class EquipmentUser extends EntityProperty
 {
 	socketGroup: EquipmentSocketGroup;
 	socketDefnGroup: EquipmentSocketDefnGroup;
@@ -558,4 +561,6 @@ class EquipmentUser extends EntityProperty
 
 		return returnValue;
 	}
+}
+
 }

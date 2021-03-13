@@ -1,5 +1,8 @@
 
-class Profile
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Profile
 {
 	name: string;
 	saveStates: SaveState[];
@@ -1047,4 +1050,6 @@ class Profile
 
 		return returnValue;
 	}
+}
+
 }

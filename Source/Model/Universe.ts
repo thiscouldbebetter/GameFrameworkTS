@@ -1,5 +1,8 @@
 
-class Universe
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Universe
 {
 	name: string;
 	version: string;
@@ -176,4 +179,6 @@ class Universe
 	{
 		return this._worldCreate(this);
 	}
+}
+
 }

@@ -1,5 +1,8 @@
 
-class ItemBarterer extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ItemBarterer extends EntityProperty
 {
 	itemHolderCustomerOffer: ItemHolder;
 	itemHolderStoreOffer: ItemHolder;
@@ -28,7 +31,7 @@ class ItemBarterer extends EntityProperty
 			|| this.itemHolderStoreOffer.itemEntities.length > 0
 		);
 		return returnValue;
-	};
+	}
 
 	isOfferProfitableEnough(world: World)
 	{
@@ -37,7 +40,7 @@ class ItemBarterer extends EntityProperty
 		var isOfferProfitableToStore = (profitMarginForStore > 1);
 
 		return isOfferProfitableToStore;
-	};
+	}
 
 	profitMarginOfOfferForStore(world: World)
 	{
@@ -52,13 +55,13 @@ class ItemBarterer extends EntityProperty
 	patienceAdd(patienceToAdd: number)
 	{
 		this.patience = NumberHelper.trimToRangeMax(this.patience + patienceToAdd, this.patienceMax);
-	};
+	}
 
 	reset(entityCustomer: Entity, entityStore: Entity)
 	{
 		this.itemHolderCustomerOffer.itemEntitiesAllTransferTo(entityCustomer.itemHolder() );
 		this.itemHolderStoreOffer.itemEntitiesAllTransferTo(entityStore.itemHolder() );
-	};
+	}
 
 	trade(entityCustomer: Entity, entityStore: Entity)
 	{
@@ -75,7 +78,7 @@ class ItemBarterer extends EntityProperty
 				entityEquipmentUser.unequipItemsNoLongerHeld(entity);
 			}
 		}
-	};
+	}
 
 	// Controls.
 
@@ -552,5 +555,7 @@ class ItemBarterer extends EntityProperty
 		);
 
 		return returnValue;
-	};
+	}
+}
+
 }

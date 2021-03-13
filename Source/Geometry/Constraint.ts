@@ -1,19 +1,21 @@
 
+namespace ThisCouldBeBetter.GameFramework
+{
 
-interface Constraint
+export interface Constraint
 {
 	constrain: (universe: Universe, world: World, place: Place, entity: Entity) => void;
 }
 
-class Constraint_None implements Constraint
+export class Constraint_None implements Constraint
 {
 	constrain(universe: Universe, world: World, place: Place, entity: Entity)
 	{
 		// Do nothing.
-	};
+	}
 }
 
-class Constraint_AttachToEntityWithName implements Constraint
+export class Constraint_AttachToEntityWithName implements Constraint
 {
 	targetEntityName: string;
 
@@ -31,10 +33,10 @@ class Constraint_AttachToEntityWithName implements Constraint
 			var targetPos = targetEntity.locatable().loc.pos;
 			entityToConstrain.locatable().loc.pos.overwriteWith(targetPos);
 		}
-	};
+	}
 }
 
-class Constraint_Conditional implements Constraint
+export class Constraint_Conditional implements Constraint
 {
 	shouldChildApply: (u: Universe, w: World, p: Place, e: Entity) => boolean;
 	child: Constraint;
@@ -52,10 +54,10 @@ class Constraint_Conditional implements Constraint
 		{
 			this.child.constrain(universe, world, place, entity);
 		}
-	};
+	}
 }
 
-class Constraint_ContainInBox implements Constraint
+export class Constraint_ContainInBox implements Constraint
 {
 	boxToContainWithin: Box;
 
@@ -67,10 +69,10 @@ class Constraint_ContainInBox implements Constraint
 	constrain(universe: Universe, world: World, place: Place, entity: Entity)
 	{
 		this.boxToContainWithin.trimCoords(entity.locatable().loc.pos);
-	};
+	}
 }
 
-class Constraint_ContainInHemispace implements Constraint
+export class Constraint_ContainInHemispace implements Constraint
 {
 	hemispaceToContainWithin: Hemispace;
 	_coordsTemp: Coords;
@@ -140,10 +142,10 @@ class Constraint_ContainInHemispace implements Constraint
 				);
 			}
 		}
-	};
+	}
 }
 
-class Constraint_FrictionXY implements Constraint
+export class Constraint_FrictionXY implements Constraint
 {
 	target: number;
 	speedBelowWhichToStop: number;
@@ -175,10 +177,10 @@ class Constraint_FrictionXY implements Constraint
 			);
 		}
 		entityVel.z = entityVelZSaved;
-	};
+	}
 }
 
-class Constraint_FrictionDry implements Constraint
+export class Constraint_FrictionDry implements Constraint
 {
 	target: number;
 
@@ -206,10 +208,10 @@ class Constraint_FrictionDry implements Constraint
 				entityDirection.multiplyScalar(-frictionMagnitude)
 			);
 		}
-	};
+	}
 }
 
-class Constraint_Gravity implements Constraint
+export class Constraint_Gravity implements Constraint
 {
 	accelerationPerTick: Coords;
 
@@ -228,7 +230,7 @@ class Constraint_Gravity implements Constraint
 	}
 }
 
-class Constraint_Offset implements Constraint
+export class Constraint_Offset implements Constraint
 {
 	target: Coords;
 
@@ -241,10 +243,10 @@ class Constraint_Offset implements Constraint
 	{
 		var targetOffset = this.target;
 		entity.locatable().loc.pos.add(targetOffset);
-	};
+	}
 }
 
-class Constraint_OrientToward implements Constraint
+export class Constraint_OrientToward implements Constraint
 {
 	targetEntityName: string;
 
@@ -274,10 +276,10 @@ class Constraint_OrientToward implements Constraint
 		).normalize();
 
 		constrainableOrientation.forwardSet(constrainableForward);
-	};
+	}
 }
 
-class Constraint_SpeedMaxXY implements Constraint
+export class Constraint_SpeedMaxXY implements Constraint
 {
 	targetSpeedMax: number;
 
@@ -299,10 +301,10 @@ class Constraint_SpeedMaxXY implements Constraint
 			entityVel.normalize().multiplyScalar(targetSpeedMax);
 		}
 		entityVel.z = zSaved;
-	};
+	}
 }
 
-class Constraint_StopBelowSpeedMin implements Constraint
+export class Constraint_StopBelowSpeedMin implements Constraint
 {
 	target: number;
 
@@ -321,10 +323,10 @@ class Constraint_StopBelowSpeedMin implements Constraint
 		{
 			entityVel.clear();
 		}
-	};
+	}
 }
 
-class Constraint_TrimToRange implements Constraint
+export class Constraint_TrimToRange implements Constraint
 {
 	target: Coords;
 
@@ -338,10 +340,10 @@ class Constraint_TrimToRange implements Constraint
 		var targetSize = this.target;
 		var entityLoc = entity.locatable().loc;
 		entityLoc.pos.trimToRangeMax(targetSize);
-	};
+	}
 }
 
-class Constraint_WrapToRange implements Constraint
+export class Constraint_WrapToRange implements Constraint
 {
 	target: Coords;
 
@@ -355,10 +357,10 @@ class Constraint_WrapToRange implements Constraint
 		var targetRange = this.target;
 		var entityLoc = entity.locatable().loc;
 		entityLoc.pos.wrapToRangeMax(targetRange);
-	};
+	}
 }
 
-class Constraint_WrapXTrimY implements Constraint
+export class Constraint_WrapXTrimY implements Constraint
 {
 	target: Coords;
 
@@ -390,5 +392,7 @@ class Constraint_WrapXTrimY implements Constraint
 		{
 			entityPos.y = max.y;
 		}
-	};
+	}
+}
+
 }

@@ -1,5 +1,8 @@
 
-class Item extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Item extends EntityProperty
 {
 	defnName: string;
 	quantity: number;
@@ -59,4 +62,6 @@ class Item extends EntityProperty
 	{
 		return new Item(this.defnName, this.quantity);
 	}
+}
+
 }

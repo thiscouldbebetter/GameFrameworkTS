@@ -1,5 +1,8 @@
 
-class Arc implements ShapeBase
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Arc implements ShapeBase
 {
 	shell: Shell;
 	wedge: Wedge;
@@ -62,5 +65,6 @@ class Arc implements ShapeBase
 	{
 		return surfacePointOut.overwriteWith(posToCheck); // todo
 	}
+}
 
 }

@@ -1,5 +1,8 @@
 
-class VisualCircleGradient implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualCircleGradient implements Visual
 {
 	radius: number;
 	gradientFill: ValueBreakGroup;
@@ -38,4 +41,6 @@ class VisualCircleGradient implements Visual
 	{
 		return this; // todo
 	}
+}
+
 }

@@ -1,5 +1,8 @@
 
-class InterpolationMode
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class InterpolationMode
 {
 	fractionAdjust: (fraction: number) => number;
 
@@ -7,4 +10,6 @@ class InterpolationMode
 	{
 		this.fractionAdjust = fractionAdjust;
 	}
+}
+
 }

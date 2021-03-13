@@ -1,5 +1,8 @@
 
-class NumberHelper
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class NumberHelper
 {
 	// static class
 
@@ -106,4 +109,6 @@ class NumberHelper
 	{
 		return NumberHelper.wrapToRangeMinMax(n, 0, 1);
 	}
+}
+
 }

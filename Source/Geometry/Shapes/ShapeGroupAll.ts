@@ -1,5 +1,8 @@
 
-class ShapeGroupAll
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ShapeGroupAll
 {
 	shapes: any[];
 
@@ -18,4 +21,6 @@ class ShapeGroupAll
 		ArrayHelper.overwriteWith(this.shapes, other.shapes);
 		return this;
 	}
+}
+
 }

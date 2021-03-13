@@ -1,5 +1,8 @@
 
-class Video
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Video
 {
 	name: string;
 	sourcePath: string;
@@ -48,4 +51,6 @@ class Video
 		platformHelper.platformableRemove(this);
 		this.isFinished = true;
 	}
+}
+
 }

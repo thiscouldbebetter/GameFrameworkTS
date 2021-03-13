@@ -1,5 +1,8 @@
 
-class DamageType
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class DamageType
 {
 	name: string;
 
@@ -48,4 +51,6 @@ class DamageType_Instances
 
 		this._AllByName = ArrayHelper.addLookupsByName(this._All);
 	}
+}
+
 }

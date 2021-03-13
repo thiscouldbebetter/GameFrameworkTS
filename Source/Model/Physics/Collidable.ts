@@ -1,5 +1,8 @@
 
-class Collidable extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Collidable extends EntityProperty
 {
 	ticksToWaitBetweenCollisions: number;
 	colliderAtRest: any;
@@ -198,4 +201,6 @@ class Collidable extends EntityProperty
 			this._collideEntities
 		);
 	}
+}
+
 }

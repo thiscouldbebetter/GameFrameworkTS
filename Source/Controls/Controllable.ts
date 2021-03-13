@@ -1,5 +1,8 @@
 
-class Controllable extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Controllable extends EntityProperty
 {
 	toControl: any;
 
@@ -8,4 +11,6 @@ class Controllable extends EntityProperty
 		super();
 		this.toControl = toControl;
 	}
+}
+
 }

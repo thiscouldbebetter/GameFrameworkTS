@@ -1,5 +1,8 @@
 
-class ControlVisual extends ControlBase
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ControlVisual extends ControlBase
 {
 	visual: DataBinding<any,Visual>;
 	colorBackground: Color;
@@ -86,4 +89,6 @@ class ControlVisual extends ControlBase
 			visualToDraw.draw(universe, world, place, locatableEntity, display);
 		}
 	}
+}
+
 }

@@ -1,5 +1,8 @@
 
-class PlaceBuilderDemo_Items
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class PlaceBuilderDemo_Items
 {
 	parent: PlaceBuilderDemo;
 	entityDimension: number;
@@ -1717,4 +1720,6 @@ class PlaceBuilderDemo_Items
 
 		return itemWeight;
 	}
+}
+
 }

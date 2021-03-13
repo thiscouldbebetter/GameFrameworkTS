@@ -1,5 +1,8 @@
 
-class Reference
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Reference
 {
 	value: any;
 
@@ -11,12 +14,13 @@ class Reference
 	get()
 	{
 		return this.value;
-	};
+	}
 
 	set(valueToSet: any)
 	{
 		this.value = valueToSet;
 		return this.value;
-	};
+	}
+}
 
 }

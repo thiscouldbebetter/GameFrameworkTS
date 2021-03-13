@@ -1,5 +1,8 @@
 
-class InputHelper implements Platformable
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class InputHelper implements Platformable
 {
 	mouseClickPos: Coords;
 	mouseMovePos: Coords;
@@ -65,7 +68,7 @@ class InputHelper implements Platformable
 		}
 
 		return returnValues;
-	};
+	}
 
 	initialize(universe: Universe)
 	{
@@ -86,7 +89,7 @@ class InputHelper implements Platformable
 		}
 
 		this.gamepadsCheck();
-	};
+	}
 
 	inputAdd(inputPressedName: string)
 	{
@@ -96,7 +99,7 @@ class InputHelper implements Platformable
 			this.inputsPressedByName.set(inputPressedName, inputPressed);
 			this.inputsPressed.push(inputPressed);
 		}
-	};
+	}
 
 	inputRemove(inputReleasedName: string)
 	{
@@ -106,12 +109,12 @@ class InputHelper implements Platformable
 			this.inputsPressedByName.delete(inputReleasedName);
 			ArrayHelper.remove(this.inputsPressed, inputReleased);
 		}
-	};
+	}
 
 	inputsActive()
 	{
 		return this.inputsPressed.filter( (x) => x.isActive );
-	};
+	}
 
 	inputsRemoveAll()
 	{
@@ -120,7 +123,7 @@ class InputHelper implements Platformable
 			var input = this.inputsPressed[i];
 			this.inputRemove(input.name);
 		}
-	};
+	}
 
 	isMouseClicked(value: boolean)
 	{
@@ -146,12 +149,12 @@ class InputHelper implements Platformable
 		}
 
 		return returnValue;
-	};
+	}
 
 	updateForTimerTick(universe: Universe)
 	{
 		this.updateForTimerTick_Gamepads(universe);
-	};
+	}
 
 	updateForTimerTick_Gamepads(universe: Universe)
 	{
@@ -215,7 +218,7 @@ class InputHelper implements Platformable
 				}
 			}
 		}
-	};
+	}
 
 	// events
 
@@ -244,7 +247,7 @@ class InputHelper implements Platformable
 		}
 
 		this.inputAdd(inputPressed);
-	};
+	}
 
 	handleEventKeyUp(event: any)
 	{
@@ -263,7 +266,7 @@ class InputHelper implements Platformable
 		}
 
 		this.inputRemove(inputReleased);
-	};
+	}
 
 	// events - mouse
 
@@ -278,7 +281,7 @@ class InputHelper implements Platformable
 			0
 		);
 		this.inputAdd(Input.Names().MouseClick);
-	};
+	}
 
 	handleEventMouseMove(event: any)
 	{
@@ -297,12 +300,12 @@ class InputHelper implements Platformable
 			this.mouseMovePos.overwriteWith(this.mouseMovePosNext);
 			this.inputAdd(Input.Names().MouseMove);
 		}
-	};
+	}
 
 	handleEventMouseUp(event: any)
 	{
 		this.inputRemove(Input.Names().MouseClick);
-	};
+	}
 
 	// gamepads
 
@@ -318,12 +321,12 @@ class InputHelper implements Platformable
 				this.gamepadsConnected.push(gamepad);
 			}
 		}
-	};
+	}
 
 	systemGamepads()
 	{
 		return navigator.getGamepads();
-	};
+	}
 
 	// Platformable.
 
@@ -336,6 +339,7 @@ class InputHelper implements Platformable
 		divMain.onmouseup = this.handleEventMouseUp.bind(this);
 		divMain.onmousemove = (this.isMouseMovementTracked ? this.handleEventMouseMove.bind(this) : null);
 		return null;
-	};
+	}
+}
 
 }

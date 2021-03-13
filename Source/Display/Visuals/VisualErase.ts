@@ -1,5 +1,8 @@
 
-class VisualErase implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualErase implements Visual
 {
 	child: Visual;
 
@@ -35,4 +38,6 @@ class VisualErase implements Visual
 	{
 		return this; // todo
 	}
+}
+
 }

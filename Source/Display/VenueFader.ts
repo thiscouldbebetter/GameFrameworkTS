@@ -1,5 +1,8 @@
 
-class VenueFader implements Venue
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VenueFader implements Venue
 {
 	venuesToFadeFromAndTo: Venue[];
 	backgroundColor: Color;
@@ -37,7 +40,7 @@ class VenueFader implements Venue
 	{
 		var venueToFadeTo = this.venueToFadeTo();
 		venueToFadeTo.initialize(universe);
-	};
+	}
 
 	updateForTimerTick(universe: Universe)
 	{
@@ -102,17 +105,17 @@ class VenueFader implements Venue
 			fadeColor.systemColor(),
 			null, null
 		);
-	};
+	}
 
 	venueToFadeTo()
 	{
 		return this.venuesToFadeFromAndTo[1];
-	};
+	}
 
 	venueCurrent()
 	{
 		return this.venuesToFadeFromAndTo[this.venueIndexCurrent];
-	};
+	}
 
 	draw(universe: Universe)
 	{
@@ -121,5 +124,7 @@ class VenueFader implements Venue
 		{
 			venueCurrent.draw(universe);
 		}
-	};
+	}
+}
+
 }

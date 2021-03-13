@@ -1,5 +1,8 @@
 
-class ValueBreakGroup
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ValueBreakGroup
 {
 	stops: ValueBreak[];
 	interpolationMode: InterpolationMode;
@@ -51,7 +54,7 @@ class ValueBreakGroup
 	}
 }
 
-class ValueBreak
+export class ValueBreak
 {
 	position: number;
 	value: any;
@@ -61,4 +64,6 @@ class ValueBreak
 		this.position = position;
 		this.value = value;
 	}
+}
+
 }

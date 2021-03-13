@@ -1,5 +1,8 @@
 
-class BoxRotated implements ShapeBase
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class BoxRotated implements ShapeBase
 {
 	box: Box;
 	angleInTurns: number;
@@ -95,4 +98,6 @@ class BoxRotated implements ShapeBase
 	{
 		return [ this.box.center ];
 	}
+}
+
 }

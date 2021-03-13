@@ -1,5 +1,8 @@
 
-class Movable extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Movable extends EntityProperty
 {
 	accelerationPerTick: number;
 	speedMax: number;
@@ -33,7 +36,7 @@ class Movable extends EntityProperty
 		(
 			entityMovable.movable().accelerationPerTick
 		);
-	};
+	}
 
 	accelerateInDirection
 	(
@@ -55,5 +58,7 @@ class Movable extends EntityProperty
 	clone(): Movable
 	{
 		return this;
-	};
+	}
+}
+
 }

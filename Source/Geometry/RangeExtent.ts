@@ -1,5 +1,8 @@
 
-class RangeExtent
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class RangeExtent
 {
 	min: number;
 	max: number;
@@ -103,4 +106,6 @@ class RangeExtent
 
 		return returnValue;
 	}
+}
+
 }

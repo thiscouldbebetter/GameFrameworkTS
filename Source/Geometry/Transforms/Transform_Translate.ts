@@ -1,5 +1,8 @@
 
-class Transform_Translate implements Transform
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Transform_Translate implements Transform
 {
 	displacement: Coords;
 
@@ -12,7 +15,7 @@ class Transform_Translate implements Transform
 	{
 		this.displacement.overwriteWith(value);
 		return this;
-	};
+	}
 
 	// transform
 
@@ -24,10 +27,12 @@ class Transform_Translate implements Transform
 	transform(transformable: Transformable): Transformable
 	{
 		return transformable.transform(this);
-	};
+	}
 
 	transformCoords(coordsToTransform: Coords)
 	{
 		return coordsToTransform.add(this.displacement);
-	};
+	}
+}
+
 }

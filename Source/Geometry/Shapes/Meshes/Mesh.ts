@@ -1,5 +1,8 @@
 
-class Mesh implements ShapeBase
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Mesh implements ShapeBase
 {
 	center: Coords;
 	vertexOffsets: Coords[];
@@ -268,7 +271,7 @@ class Mesh implements ShapeBase
 	}
 }
 
-class Mesh_FaceBuilder
+export class Mesh_FaceBuilder
 {
 	vertexIndices: number[];
 
@@ -311,4 +314,6 @@ class Mesh_FaceBuilder
 	{
 		ArrayHelper.overwriteWith(this.vertexIndices, other.vertexIndices);
 	}
+}
+
 }

@@ -1,5 +1,8 @@
 
-class VenueLayered implements Venue
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VenueLayered implements Venue
 {
 	children: Venue[];
 	colorToOverlayBetweenChildren: Color;
@@ -22,12 +25,12 @@ class VenueLayered implements Venue
 				child.initialize(universe);
 			}
 		}
-	};
+	}
 
 	updateForTimerTick(universe: Universe)
 	{
 		this.children[this.children.length - 1].updateForTimerTick(universe);
-	};
+	}
 
 	draw(universe: Universe)
 	{
@@ -45,5 +48,7 @@ class VenueLayered implements Venue
 				);
 			}
 		}
-	};
+	}
+}
+
 }

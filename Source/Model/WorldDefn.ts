@@ -1,5 +1,8 @@
 
-class WorldDefn
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class WorldDefn
 {
 	defnArraysByTypeName: Map<string, any[]>;
 	defnsByNameByTypeName: Map<string, Map<string, any>>;
@@ -46,5 +49,7 @@ class WorldDefn
 	{
 		return this.defnsByNameByTypeName.get(PlaceDefn.name);
 	}
+
+}
 
 }

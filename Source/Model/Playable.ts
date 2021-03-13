@@ -1,5 +1,8 @@
 
-class Playable extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Playable extends EntityProperty
 {
 	static toControlMenu
 	(
@@ -463,5 +466,7 @@ class Playable extends EntityProperty
 
 		return controlOverlayTransparent;
 	}
+
+}
 
 }

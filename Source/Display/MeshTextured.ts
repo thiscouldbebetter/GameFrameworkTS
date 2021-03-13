@@ -1,5 +1,8 @@
 
-class MeshTextured implements Transformable
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class MeshTextured implements Transformable
 {
 	geometry: Mesh;
 	materials: Material[];
@@ -37,7 +40,7 @@ class MeshTextured implements Transformable
 		}
 
 		return this._faces;
-	};
+	}
 
 	faceTexturesBuild()
 	{
@@ -64,7 +67,7 @@ class MeshTextured implements Transformable
 		this.faceTextures = faceTextures;
 
 		return this;
-	};
+	}
 
 	faceIndicesByMaterialName()
 	{
@@ -93,14 +96,14 @@ class MeshTextured implements Transformable
 		}
 
 		return this._faceIndicesByMaterialName;
-	};
+	}
 
 	transform(transformToApply: Transform)
 	{
 		this.geometry.transform(transformToApply);
 
 		return this;
-	};
+	}
 
 	transformFaceTextures(transformToApply: Transform)
 	{
@@ -111,7 +114,7 @@ class MeshTextured implements Transformable
 		}
 
 		return this;
-	};
+	}
 
 	// cloneable
 
@@ -124,17 +127,17 @@ class MeshTextured implements Transformable
 			ArrayHelper.clone(this.faceTextures),
 			ArrayHelper.clone(this.vertexGroups)
 		);
-	};
+	}
 
 	overwriteWith(other: MeshTextured)
 	{
 		this.geometry.overwriteWith(other.geometry);
 		// todo
 		return this;
-	};
+	}
 }
 
-class MeshTexturedFaceTexture
+export class MeshTexturedFaceTexture
 {
 	materialName: string;
 	textureUVs: Coords[];
@@ -151,7 +154,7 @@ class MeshTexturedFaceTexture
 		(
 			this.materialName, ArrayHelper.clone(this.textureUVs)
 		);
-	};
+	}
 
 	// Transformable.
 
@@ -163,5 +166,7 @@ class MeshTexturedFaceTexture
 			transformToApply.transformCoords(textureUV);
 		}
 		return this;
-	};
+	}
+}
+
 }

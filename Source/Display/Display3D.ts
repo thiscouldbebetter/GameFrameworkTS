@@ -1,5 +1,8 @@
 
-class Display3D implements Display
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Display3D implements Display
 {
 	sizeInPixels: Coords;
 	sizesAvailable: Coords[];
@@ -615,5 +618,7 @@ class Display3D implements Display
 		var overlayAsDomElement = this._display2DOverlay.toDomElement();
 		returnValue.appendChild(overlayAsDomElement);
 		return returnValue;
-	};
+	}
+}
+
 }

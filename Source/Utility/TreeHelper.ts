@@ -1,5 +1,8 @@
 
-class TreeHelper
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class TreeHelper
 {
 	// Static class.
 
@@ -16,4 +19,6 @@ class TreeHelper
 		}
 		return listToAddTo;
 	}
+}
+
 }

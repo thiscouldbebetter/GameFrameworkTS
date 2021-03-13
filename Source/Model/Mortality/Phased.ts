@@ -1,5 +1,8 @@
 
-class Phased extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Phased extends EntityProperty
 {
 	tickBorn: number;
 	phases: Phase[];
@@ -62,7 +65,7 @@ class Phased extends EntityProperty
 	}
 }
 
-class Phase
+export class Phase
 {
 	name: string;
 	tickToRunAt: number;
@@ -84,4 +87,6 @@ class Phase
 	{
 		return this;
 	}
+}
+
 }

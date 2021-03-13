@@ -1,5 +1,8 @@
 
-class Direction
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Direction
 {
 	static _instances: Direction_Instances;
 	static Instances()
@@ -49,4 +52,6 @@ class Direction_Instances
 			this.NE,
 		];
 	}
+}
+
 }

@@ -1,5 +1,8 @@
 
-class Rotation
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Rotation
 {
 	axis: Coords;
 	angleInTurnsRef: Reference;
@@ -13,7 +16,7 @@ class Rotation
 	angleInTurns()
 	{
 		return this.angleInTurnsRef.value;
-	};
+	}
 
 	transformCoords(coordsToTransform: Coords)
 	{
@@ -26,10 +29,12 @@ class Rotation
 		);
 
 		return polar.toCoords(coordsToTransform);
-	};
+	}
 
 	transformOrientation(orientation: Orientation)
 	{
 		orientation.forwardSet(this.transformCoords(orientation.forward));
-	};
+	}
+}
+
 }

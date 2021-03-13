@@ -1,5 +1,8 @@
 
-class ControlContainerTransparent extends ControlBase
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ControlContainerTransparent extends ControlBase
 {
 	containerInner: ControlContainer;
 
@@ -118,4 +121,6 @@ class ControlContainerTransparent extends ControlBase
 			child.draw(universe, display, drawLoc, style);
 		}
 	}
+}
+
 }

@@ -1,5 +1,8 @@
 
-class Maze
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Maze
 {
 	cellSizeInPixels: Coords;
 	sizeInCells: Coords;
@@ -72,7 +75,7 @@ class Maze
 		}
 
 		return this;
-	};
+	}
 
 	generateRandom_ConnectCellToRandomNeighbor
 	(
@@ -133,7 +136,7 @@ class Maze
 		}
 
 		return numberOfCellsInNetworkMerged;
-	};
+	}
 
 	// instance methods
 
@@ -141,12 +144,14 @@ class Maze
 	{
 		var cellIndex = this.indexOfCellAtPos(cellPos);
 		return this.cells[cellIndex];
-	};
+	}
 
 	indexOfCellAtPos(cellPos: Coords)
 	{
 		var cellIndex = cellPos.y * this.sizeInCells.x + cellPos.x;
 
 		return cellIndex;
-	};
+	}
+}
+
 }

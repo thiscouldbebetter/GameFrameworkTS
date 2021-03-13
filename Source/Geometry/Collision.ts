@@ -1,5 +1,8 @@
 
-class Collision
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Collision
 {
 	pos: Coords;
 	distanceToCollision: number;
@@ -55,4 +58,6 @@ class Collision
 
 		return returnValue;
 	}
+}
+
 }

@@ -1,5 +1,8 @@
 
-class StorageHelper
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class StorageHelper
 {
 	propertyNamePrefix: string;
 	serializer: Serializer;
@@ -34,7 +37,7 @@ class StorageHelper
 			var itemToDelete = localStorage.getItem(key);
 			localStorage.removeItem(itemToDelete);
 		}
-	};
+	}
 
 	load(propertyName: string)
 	{
@@ -65,7 +68,7 @@ class StorageHelper
 		}
 
 		return returnValue;
-	};
+	}
 
 	save(propertyName: string, valueToSave: any)
 	{
@@ -87,5 +90,7 @@ class StorageHelper
 			propertyNamePrefixed,
 			valueToSaveCompressed
 		);
-	};
+	}
+}
+
 }

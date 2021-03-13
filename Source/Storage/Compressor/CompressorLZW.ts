@@ -1,5 +1,8 @@
 
-class CompressorLZW
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class CompressorLZW
 {
 	static ControlSymbolCount = 2;
 	static SymbolForBitWidthIncrease = 256;
@@ -216,4 +219,6 @@ class CompressorLZW
 		}
 		return symbolsByPattern;
 	}
+}
+
 }

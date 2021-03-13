@@ -1,5 +1,8 @@
 
-class ControlButton extends ControlBase
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ControlButton extends ControlBase
 {
 	text: string;
 	hasBorder: boolean;
@@ -104,4 +107,6 @@ class ControlButton extends ControlBase
 			this.size.x // widthMaxInPixels
 		);
 	}
+}
+
 }

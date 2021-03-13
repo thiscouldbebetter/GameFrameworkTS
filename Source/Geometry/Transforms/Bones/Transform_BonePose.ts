@@ -1,5 +1,8 @@
 
-class Transform_BonePose implements Transform_Interpolatable
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Transform_BonePose implements Transform_Interpolatable
 {
 	boneName: string;
 	cyclesToRotateAroundAxesDownRightForward: number[];
@@ -122,4 +125,6 @@ class Transform_BonePose implements Transform_Interpolatable
 	{
 		return null; // todo
 	}
+}
+
 }

@@ -1,5 +1,8 @@
 
-class VisualParticles implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualParticles implements Visual
 {
 	name: string;
 	ticksToGenerate: number;
@@ -117,4 +120,6 @@ class VisualParticles implements Visual
 	{
 		return this; // todo
 	}
+}
+
 }

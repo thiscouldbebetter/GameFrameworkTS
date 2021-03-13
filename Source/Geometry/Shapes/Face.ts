@@ -1,5 +1,8 @@
 
-class Face
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Face
 {
 	vertices: Coords[];
 
@@ -130,4 +133,6 @@ class Face
 		Transforms.applyTransformToCoordsMany(transformToApply, this.vertices);
 		return this;
 	}
+}
+
 }

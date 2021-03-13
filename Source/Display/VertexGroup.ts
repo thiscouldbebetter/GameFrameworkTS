@@ -1,5 +1,8 @@
 
-class VertexGroup
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VertexGroup
 {
 	name: string;
 	vertexIndices: number[];
@@ -15,5 +18,7 @@ class VertexGroup
 	clone()
 	{
 		return new VertexGroup(this.name, this.vertexIndices.slice());
-	};
+	}
+}
+
 }

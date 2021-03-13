@@ -1,5 +1,8 @@
 
-class Display2D implements Display
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Display2D implements Display
 {
 	sizesAvailable: Coords[];
 	fontName: string;
@@ -714,4 +717,6 @@ class Display2D implements Display
 
 		return this.canvas;
 	}
+}
+
 }

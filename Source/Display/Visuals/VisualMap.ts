@@ -1,5 +1,8 @@
 
-class VisualMap implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualMap implements Visual
 {
 	map: MapOfCells;
 	visualLookup: Map<string, Visual>;
@@ -178,4 +181,6 @@ class VisualMap implements Visual
 	{
 		return this; // todo
 	}
+}
+
 }

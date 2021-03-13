@@ -1,5 +1,8 @@
 
-class Ray
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Ray
 {
 	vertex: Coords;
 	direction: Coords;
@@ -9,4 +12,6 @@ class Ray
 		this.vertex = vertex;
 		this.direction = direction;
 	}
+}
+
 }

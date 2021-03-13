@@ -1,5 +1,8 @@
 
-class MapOfCells
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class MapOfCells
 {
 	name: string;
 	sizeInCells: Coords;
@@ -42,7 +45,7 @@ class MapOfCells
 	{
 		this._posInCells.overwriteWith(pos).divide(this.cellSize).floor();
 		return this.cellAtPosInCells(this._posInCells);
-	};
+	}
 
 	cellAtPosInCells(cellPosInCells: Coords)
 	{
@@ -52,7 +55,7 @@ class MapOfCells
 	numberOfCells()
 	{
 		return this.sizeInCells.x * this.sizeInCells.y;
-	};
+	}
 
 	cellsAsEntities(mapAndCellPosToEntity: any)
 	{
@@ -92,10 +95,12 @@ class MapOfCells
 			this.name, this.sizeInCells, this.cellSize,
 			this.cellPrototype, this.cellAtPosInCells, this.cellSource
 		);
-	};
+	}
 
 	overwriteWith(other: MapOfCells)
 	{
 		this.cellSource.overwriteWith(other.cellSource);
 	}
+}
+
 }

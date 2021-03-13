@@ -1,5 +1,8 @@
 
-class VisualRepeating implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualRepeating implements Visual
 {
 	cellSize: Coords;
 	viewSize: Coords;
@@ -82,7 +85,7 @@ class VisualRepeating implements Visual
 		}
 
 		drawPos.overwriteWith(this._drawablePosToRestore);
-	};
+	}
 
 	// Clonable.
 
@@ -102,4 +105,6 @@ class VisualRepeating implements Visual
 	{
 		return this; // todo
 	}
+}
+
 }

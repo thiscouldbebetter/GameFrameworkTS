@@ -1,21 +1,28 @@
 "use strict";
-class Transform_Locate {
-    constructor(loc) {
-        this.loc = loc || new Disposition(null, null, null);
-        this.transformOrient = new Transform_Orient(null);
-        this.transformTranslate = new Transform_Translate(null);
-    }
-    overwriteWith(other) {
-        return this; // todo
-    }
-    transform(transformable) {
-        return transformable.transform(this);
-    }
-    transformCoords(coordsToTransform) {
-        this.transformOrient.orientation = this.loc.orientation;
-        this.transformOrient.transformCoords(coordsToTransform);
-        this.transformTranslate.displacement = this.loc.pos;
-        this.transformTranslate.transformCoords(coordsToTransform);
-        return coordsToTransform;
-    }
-}
+var ThisCouldBeBetter;
+(function (ThisCouldBeBetter) {
+    var GameFramework;
+    (function (GameFramework) {
+        class Transform_Locate {
+            constructor(loc) {
+                this.loc = loc || new GameFramework.Disposition(null, null, null);
+                this.transformOrient = new GameFramework.Transform_Orient(null);
+                this.transformTranslate = new GameFramework.Transform_Translate(null);
+            }
+            overwriteWith(other) {
+                return this; // todo
+            }
+            transform(transformable) {
+                return transformable.transform(this);
+            }
+            transformCoords(coordsToTransform) {
+                this.transformOrient.orientation = this.loc.orientation;
+                this.transformOrient.transformCoords(coordsToTransform);
+                this.transformTranslate.displacement = this.loc.pos;
+                this.transformTranslate.transformCoords(coordsToTransform);
+                return coordsToTransform;
+            }
+        }
+        GameFramework.Transform_Locate = Transform_Locate;
+    })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
+})(ThisCouldBeBetter || (ThisCouldBeBetter = {}));

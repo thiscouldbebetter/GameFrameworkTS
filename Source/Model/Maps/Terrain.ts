@@ -1,5 +1,8 @@
 
-class Terrain
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Terrain
 {
 	name: string;
 	codeChar: string;
@@ -15,4 +18,6 @@ class Terrain
 		this.traversable = traversable;
 		this.visuals = visuals;
 	}
+}
+
 }

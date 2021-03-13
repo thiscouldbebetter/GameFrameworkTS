@@ -1,5 +1,8 @@
 
-class Recurrent extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Recurrent extends EntityProperty
 {
 	ticksPerRecurrence: number;
 	timesToRecur: number;
@@ -31,12 +34,14 @@ class Recurrent extends EntityProperty
 				this.recur(universe, world, place, entity);
 			}
 		}
-	};
+	}
 
 	// cloneable
 
 	clone()
 	{
 		return new Recurrent(this.ticksPerRecurrence, this.timesToRecur, this.recur);
-	};
+	}
+}
+
 }

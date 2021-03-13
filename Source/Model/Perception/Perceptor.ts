@@ -1,5 +1,8 @@
 
-class Perceptor extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Perceptor extends EntityProperty
 {
 	sightThreshold: number;
 	hearingThreshold: number;
@@ -10,4 +13,6 @@ class Perceptor extends EntityProperty
 		this.sightThreshold = sightThreshold;
 		this.hearingThreshold = hearingThreshold;
 	}
+}
+
 }

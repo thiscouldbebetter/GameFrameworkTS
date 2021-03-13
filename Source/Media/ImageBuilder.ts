@@ -1,5 +1,8 @@
 
-class ImageBuilder
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ImageBuilder
 {
 	colors: Color[];
 	colorsByCodeChar: any;
@@ -191,4 +194,6 @@ class ImageBuilder
 
 		return returnImages;
 	}
+}
+
 }

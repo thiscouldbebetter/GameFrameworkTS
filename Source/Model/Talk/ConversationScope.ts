@@ -1,5 +1,8 @@
 
-class ConversationScope
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ConversationScope
 {
 	parent: ConversationScope;
 	talkNodeCurrent: TalkNode;
@@ -37,7 +40,7 @@ class ConversationScope
 		var talkNodeNext = defnTalkNodes[talkNodeIndex + 1];
 		this.talkNodeCurrent = talkNodeNext;
 		return this;
-	};
+	}
 
 	talkNodesForOptionsActive()
 	{
@@ -67,11 +70,13 @@ class ConversationScope
 		}
 
 		return returnValues;
-	};
+	}
 
 	update(universe: Universe, conversationRun: ConversationRun)
 	{
 		this.haveOptionsBeenUpdated = true;
 		this.talkNodeCurrent.execute(universe, conversationRun, this);
-	};
+	}
+}
+
 }

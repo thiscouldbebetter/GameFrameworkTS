@@ -1,5 +1,8 @@
 
-class VenueMessage implements Venue
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VenueMessage implements Venue
 {
 	messageToShow: DataBinding<any, string>;
 	acknowledge: any;
@@ -32,7 +35,7 @@ class VenueMessage implements Venue
 	draw(universe: Universe)
 	{
 		this.venueInner(universe).draw(universe);
-	};
+	}
 
 	finalize(universe: Universe) {}
 
@@ -41,12 +44,12 @@ class VenueMessage implements Venue
 	updateForTimerTick(universe: Universe)
 	{
 		this.venueInner(universe).updateForTimerTick(universe);
-	};
+	}
 
 	sizeInPixels(universe: Universe)
 	{
 		return (this._sizeInPixels == null ? universe.display.sizeInPixels : this._sizeInPixels);
-	};
+	}
 
 	venueInner(universe: Universe)
 	{
@@ -76,5 +79,7 @@ class VenueMessage implements Venue
 		}
 
 		return this._venueInner;
-	};
+	}
+}
+
 }

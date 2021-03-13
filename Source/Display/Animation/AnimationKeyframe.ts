@@ -1,5 +1,8 @@
 
-class AnimationKeyframe implements Interpolatable
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class AnimationKeyframe implements Interpolatable
 {
 	frameIndex: number;
 	transforms: Transform_Interpolatable[];
@@ -42,5 +45,7 @@ class AnimationKeyframe implements Interpolatable
 		);
 
 		return returnValue;
-	};
+	}
+}
+
 }

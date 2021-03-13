@@ -1,5 +1,8 @@
 
-class Sound
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Sound
 {
 	name: string;
 	sourcePath: string;
@@ -88,4 +91,6 @@ class Sound
 	{
 		return this.domElement;
 	}
+}
+
 }

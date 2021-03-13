@@ -1,5 +1,8 @@
 
-class Activity
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Activity
 {
 	defnName: string;
 	target: any;
@@ -32,4 +35,6 @@ class Activity
 			this.defn(w).perform(u, w, p, e, this);
 		}
 	}
+}
+
 }

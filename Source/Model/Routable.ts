@@ -1,5 +1,8 @@
 
-class Routable extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Routable extends EntityProperty
 {
 	route: Route;
 
@@ -29,7 +32,7 @@ class Routable extends EntityProperty
 	}
 }
 
-class Route
+export class Route
 {
 	neighborOffsets: Coords[];
 	bounds: Box;
@@ -218,7 +221,7 @@ class Route
 	}
 }
 
-class RouteNode
+export class RouteNode
 {
 	pos: Coords;
 	costFromStart: number;
@@ -232,4 +235,6 @@ class RouteNode
 		this.costToGoalEstimated = costToGoalEstimated;
 		this.prev = prev;
 	}
+}
+
 }

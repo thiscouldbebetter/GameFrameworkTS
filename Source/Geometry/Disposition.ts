@@ -1,5 +1,8 @@
 
-class Disposition
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Disposition
 {
 	pos: Coords;
 	orientation: Orientation;
@@ -35,13 +38,13 @@ class Disposition
 	place(world: World)
 	{
 		return world.placesByName.get(this.placeName);
-	};
+	}
 
 	velSet(value: Coords)
 	{
 		this.vel.overwriteWith(value);
 		return this;
-	};
+	}
 
 	// cloneable
 
@@ -60,7 +63,7 @@ class Disposition
 		returnValue.timeOffsetInTicks = this.timeOffsetInTicks;
 
 		return returnValue;
-	};
+	}
 
 	overwriteWith(other: Disposition)
 	{
@@ -71,12 +74,14 @@ class Disposition
 		this.accel.overwriteWith(other.accel);
 		this.force.overwriteWith(other.force);
 		return this;
-	};
+	}
 
 	// strings
 
 	toString()
 	{
 		return this.pos.clone().round().toString();
-	};
+	}
+}
+
 }

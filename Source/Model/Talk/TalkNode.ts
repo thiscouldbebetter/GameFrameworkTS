@@ -1,5 +1,8 @@
 
-class TalkNode
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class TalkNode
 {
 	name: string;
 	defnName: string;
@@ -23,7 +26,7 @@ class TalkNode
 		var returnValue = "_" + TalkNode._idNext;
 		TalkNode._idNext++;
 		return returnValue;
-	};
+	}
 
 	// instance methods
 
@@ -34,23 +37,25 @@ class TalkNode
 		{
 			defn.activate(conversationRun, scope, this);
 		}
-	};
+	}
 
 	defn(conversationDefn: ConversationDefn)
 	{
 		return conversationDefn.talkNodeDefnsByName.get(this.defnName);
-	};
+	}
 
 	execute(universe: Universe, conversationRun: ConversationRun, scope: ConversationScope)
 	{
 		var defn = this.defn(conversationRun.defn);
 		defn.execute(universe, conversationRun, scope, this);
-	};
+	}
 
 	textForTranscript(conversationDefn: ConversationDefn)
 	{
 		var speakerName = (this.defnName == "Option" ? "YOU" : "THEY" );
 		var returnValue = speakerName + ": " + this.text;
 		return returnValue;
-	};
+	}
+}
+
 }

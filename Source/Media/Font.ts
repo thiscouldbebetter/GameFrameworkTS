@@ -1,5 +1,8 @@
 
-class Font
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Font
 {
 	name: string;
 	sourcePath: string;
@@ -25,4 +28,6 @@ class Font
 		document.head.appendChild(fontAsStyleElement);
 		this.isLoaded = true;
 	}
+}
+
 }

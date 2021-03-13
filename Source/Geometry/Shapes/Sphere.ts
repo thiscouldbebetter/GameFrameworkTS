@@ -1,5 +1,8 @@
 
-class Sphere implements ShapeBase
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Sphere implements ShapeBase
 {
 	center: Coords;
 	radius: number;
@@ -72,4 +75,6 @@ class Sphere implements ShapeBase
 	{
 		return surfacePointOut.overwriteWith(posToCheck); // todo
 	}
+}
+
 }

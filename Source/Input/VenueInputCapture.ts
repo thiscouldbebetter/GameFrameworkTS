@@ -1,5 +1,8 @@
 
-class VenueInputCapture implements Venue
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VenueInputCapture implements Venue
 {
 	venueToReturnTo: any;
 	functionToPassInputCapturedTo: any;
@@ -17,7 +20,7 @@ class VenueInputCapture implements Venue
 	draw(universe: Universe)
 	{
 		// Do nothing.
-	};
+	}
 
 	finalize(universe: Universe) {}
 
@@ -48,5 +51,7 @@ class VenueInputCapture implements Venue
 				}
 			}
 		}
-	};
+	}
+}
+
 }

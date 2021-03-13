@@ -1,5 +1,8 @@
 
-class VisualCircle implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualCircle implements Visual
 {
 	radius: number;
 	colorFill: Color;
@@ -52,4 +55,6 @@ class VisualCircle implements Visual
 	{
 		return this; // todo
 	}
+}
+
 }

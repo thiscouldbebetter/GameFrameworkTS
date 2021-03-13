@@ -1,5 +1,8 @@
 
-class VisualDynamic implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualDynamic implements Visual
 {
 	methodForVisual: (u: Universe, w: World, d: Display, e: Entity) => Visual;
 
@@ -32,4 +35,6 @@ class VisualDynamic implements Visual
 	{
 		return this; // todo
 	}
+}
+
 }

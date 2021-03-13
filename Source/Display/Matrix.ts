@@ -1,5 +1,8 @@
 
-class Matrix
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Matrix
 {
 	// A 4x4 matrix for interacting with WebGL.
 
@@ -23,7 +26,7 @@ class Matrix
 		]);
 
 		return returnValue;
-	};
+	}
 
 	// instance methods
 
@@ -39,7 +42,7 @@ class Matrix
 		var returnValue = new Matrix(valuesCloned);
 
 		return returnValue;
-	};
+	}
 
 	divideScalar(scalar: number)
 	{
@@ -49,7 +52,7 @@ class Matrix
 		}
 
 		return this;
-	};
+	}
 
 	multiply(other: Matrix)
 	{
@@ -80,7 +83,7 @@ class Matrix
 		this.overwriteWithValues(valuesMultiplied);
 
 		return this;
-	};
+	}
 
 	multiplyScalar(scalar: number)
 	{
@@ -90,7 +93,7 @@ class Matrix
 		}
 
 		return this;
-	};
+	}
 
 	overwriteWith(other: Matrix)
 	{
@@ -100,7 +103,7 @@ class Matrix
 		}
 
 		return this;
-	};
+	}
 
 	overwriteWithOrientationEntity(orientation: Orientation)
 	{
@@ -128,7 +131,7 @@ class Matrix
 
 
 		return this;
-	};
+	}
 
 	overwriteWithOrientationCamera(orientation: Orientation)
 	{
@@ -145,7 +148,7 @@ class Matrix
 		]);
 
 		return this;
-	};
+	}
 
 	overwriteWithOrientationMover(orientation: Orientation)
 	{
@@ -170,7 +173,7 @@ class Matrix
 		]);
 
 		return this;
-	};
+	}
 
 	overwriteWithPerspectiveForCamera(camera: Camera)
 	{
@@ -209,7 +212,7 @@ class Matrix
 		]);
 
 		return this;
-	};
+	}
 
 	overwriteWithTranslate(displacement: Coords)
 	{
@@ -222,7 +225,7 @@ class Matrix
 		]);
 
 		return this;
-	};
+	}
 
 	overwriteWithValues(otherValues: number[])
 	{
@@ -232,7 +235,7 @@ class Matrix
 		}
 
 		return this;
-	};
+	}
 
 	toWebGLArray()
 	{
@@ -249,5 +252,7 @@ class Matrix
 		var returnValuesAsFloat32Array = new Float32Array(returnValues);
 
 		return returnValuesAsFloat32Array;
-	};
+	}
+}
+
 }

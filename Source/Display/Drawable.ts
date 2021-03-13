@@ -1,5 +1,8 @@
 
-class Drawable extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Drawable extends EntityProperty
 {
 	visual: Visual;
 	isVisible: boolean;
@@ -25,4 +28,6 @@ class Drawable extends EntityProperty
 	{
 		return new Drawable(this.visual, this.isVisible);
 	}
+}
+
 }

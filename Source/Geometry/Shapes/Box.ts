@@ -1,5 +1,8 @@
 
-class Box implements ShapeBase
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Box implements ShapeBase
 {
 	center: Coords;
 	size: Coords;
@@ -365,4 +368,6 @@ class Box implements ShapeBase
 	{
 		return surfacePointOut.overwriteWith(posToCheck); // todo
 	}
+}
+
 }

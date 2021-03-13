@@ -1,5 +1,8 @@
 
-class Bone
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Bone
 {
 	name: string;
 	length: number;
@@ -85,4 +88,6 @@ class Bone
 			transformToApply.transformCoords(axis);
 		}
 	}
+}
+
 }

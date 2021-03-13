@@ -1,5 +1,8 @@
 
-class EquipmentSocket
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class EquipmentSocket
 {
 	defnName: string;
 	itemEntityEquipped: Entity;
@@ -13,7 +16,7 @@ class EquipmentSocket
 	defn(defnGroup: EquipmentSocketDefnGroup)
 	{
 		return defnGroup.socketDefnsByName.get(this.defnName);
-	};
+	}
 
 	toString(world: World)
 	{
@@ -25,5 +28,7 @@ class EquipmentSocket
 		);
 		var returnValue = this.defnName + ": " + itemEntityEquippedAsString;
 		return returnValue;
-	};
+	}
+}
+
 }

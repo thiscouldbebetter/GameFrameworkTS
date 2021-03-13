@@ -1,5 +1,8 @@
 
-class Edge
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Edge
 {
 	vertices: Coords[];
 
@@ -93,4 +96,6 @@ class Edge
 		ArrayHelper.overwriteWith(this.vertices, other.vertices);
 		return this;
 	}
+}
+
 }

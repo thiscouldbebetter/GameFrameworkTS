@@ -1,5 +1,8 @@
 
-class ShapeInverse
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ShapeInverse
 {
 	shape: any;
 
@@ -7,4 +10,6 @@ class ShapeInverse
 	{
 		this.shape = shape;
 	}
+}
+
 }

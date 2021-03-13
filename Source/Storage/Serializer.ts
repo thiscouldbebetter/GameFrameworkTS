@@ -1,5 +1,8 @@
 
-class Serializer
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Serializer
 {
 	deserialize(stringToDeserialize: string)
 	{
@@ -10,7 +13,7 @@ class Serializer
 		var returnValue = nodeRoot.unwrap(typeNames, []);
 
 		return returnValue;
-	};
+	}
 
 	serialize(objectToSerialize: any, prettyPrint: boolean)
 	{
@@ -29,10 +32,10 @@ class Serializer
 		);
 
 		return nodeRootSerialized;
-	};
+	}
 }
 
-class SerializerNode
+export class SerializerNode
 {
 	t: number;
 	i: number;
@@ -166,7 +169,7 @@ class SerializerNode
 
 		return this;
 
-	}; // end method
+	}
 
 	prototypesAssign()
 	{
@@ -187,7 +190,7 @@ class SerializerNode
 				}
 			}
 		}
-	};
+	}
 
 	unwrap(typeNames: string[], nodesAlreadyProcessed: any)
 	{
@@ -266,5 +269,7 @@ class SerializerNode
 		}
 
 		return this.o; // objectWrapped
-	};
+	}
+}
+
 }

@@ -1,5 +1,8 @@
 
-class PathBuilder
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class PathBuilder
 {
 	star(numberOfPoints: number, ratioOfInnerRadiusToOuter: number)
 	{
@@ -19,4 +22,6 @@ class PathBuilder
 		var returnValue = new Path(vertices);
 		return returnValue;
 	}
+}
+
 }

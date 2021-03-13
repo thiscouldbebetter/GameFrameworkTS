@@ -1,5 +1,8 @@
 
-class ByteStreamFromString implements ByteStream
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ByteStreamFromString implements ByteStream
 {
 	bytesAsString: string;
 	byteIndexCurrent: number;
@@ -33,4 +36,6 @@ class ByteStreamFromString implements ByteStream
 		this.bytesAsString += String.fromCharCode(byteToWrite);
 		this.byteIndexCurrent++;
 	}
+}
+
 }

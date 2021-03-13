@@ -1,5 +1,8 @@
 
-class VisualAnimation implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualAnimation implements Visual
 {
 	name: string;
 	ticksToHoldFrames: number[];
@@ -120,4 +123,6 @@ class VisualAnimation implements Visual
 	{
 		return this; // todo
 	}
+}
+
 }

@@ -1,4 +1,8 @@
-class LandscapeMap
+
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class LandscapeMap
 {
 	name: string;
 	depthMax: number;
@@ -259,7 +263,7 @@ class NeighborData
 	}
 }
 
-class LandscapeTerrain
+export class LandscapeTerrain
 {
 	name: string;
 	color: any;
@@ -273,7 +277,7 @@ class LandscapeTerrain
 	}
 }
 
-class LandscapeTerrainSet
+export class LandscapeTerrainSet
 {
 	name: string;
 	terrains: any;
@@ -300,4 +304,6 @@ class LandscapeTerrainSet
 
 		return returnValue;
 	}
+}
+
 }

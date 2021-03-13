@@ -1,5 +1,8 @@
 
-class Image2
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Image2
 {
 	name: string;
 	sourcePath: string;
@@ -76,4 +79,6 @@ class Image2
 		this.systemImage = null;
 		return this;
 	}
+}
+
 }

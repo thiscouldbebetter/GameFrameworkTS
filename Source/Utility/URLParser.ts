@@ -1,5 +1,8 @@
 
-class URLParser
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class URLParser
 {
 	urlAsString: string;
 	queryStringParameters: any;
@@ -27,5 +30,7 @@ class URLParser
 	static fromWindow()
 	{
 		return new URLParser(window.location.toString());
-	};
+	}
+}
+
 }

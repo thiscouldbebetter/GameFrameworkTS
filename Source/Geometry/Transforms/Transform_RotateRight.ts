@@ -1,5 +1,8 @@
 
-class Transform_RotateRight implements Transform
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Transform_RotateRight implements Transform
 {
 	quarterTurnsToRotate: number;
 
@@ -30,4 +33,6 @@ class Transform_RotateRight implements Transform
 
 		return coordsToTransform;
 	}
+}
+
 }

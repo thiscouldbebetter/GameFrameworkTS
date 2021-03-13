@@ -1,5 +1,8 @@
 
-class Actor extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Actor extends EntityProperty
 {
 	activity: Activity;
 
@@ -16,4 +19,6 @@ class Actor extends EntityProperty
 	{
 		this.activity.perform(universe, world, place, entity);
 	}
+}
+
 }

@@ -1,5 +1,8 @@
 
-class SkeletonHelper
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class SkeletonHelper
 {
 	static biped(heightInPixels: number)
 	{
@@ -451,4 +454,6 @@ class SkeletonHelper
 
 		return returnValue;
 	}
+}
+
 }

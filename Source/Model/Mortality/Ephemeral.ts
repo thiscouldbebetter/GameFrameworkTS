@@ -1,5 +1,8 @@
 
-class Ephemeral extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Ephemeral extends EntityProperty
 {
 	ticksToLive: number;
 	expire: any;
@@ -22,12 +25,14 @@ class Ephemeral extends EntityProperty
 				this.expire(universe, world, place, entityEphemeral);
 			}
 		}
-	};
+	}
 
 	// cloneable
 
 	clone()
 	{
 		return new Ephemeral(this.ticksToLive, this.expire);
-	};
+	}
+}
+
 }

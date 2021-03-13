@@ -1,5 +1,8 @@
 
-class Perceptible extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Perceptible extends EntityProperty
 {
 	isHiding: boolean;
 	visibility: (u: Universe, w: World, p: Place, e: Entity) => number;
@@ -108,4 +111,6 @@ class Perceptible extends EntityProperty
 		this.audibility = other.audibility;
 		return this;
 	}
+}
+
 }

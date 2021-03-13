@@ -1,5 +1,8 @@
 
-class Starvable extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Starvable extends EntityProperty
 {
 	satietyMax: number;
 	satietyLostPerTick: number;
@@ -67,4 +70,6 @@ class Starvable extends EntityProperty
 	{
 		return new Starvable(this.satietyMax, this.satietyLostPerTick, this._starve);
 	}
+}
+
 }

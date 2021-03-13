@@ -1,5 +1,8 @@
 
-class Transform_Multiple implements Transform
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Transform_Multiple implements Transform
 {
 	transforms: Transform[];
 
@@ -33,4 +36,6 @@ class Transform_Multiple implements Transform
 		}
 		return coordsToTransform;
 	}
+}
+
 }

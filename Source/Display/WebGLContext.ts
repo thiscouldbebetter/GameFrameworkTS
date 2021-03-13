@@ -1,5 +1,8 @@
 
-class WebGLContext
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class WebGLContext
 {
 	gl: WebGLRenderingContext;
 	shaderProgram: any;
@@ -19,7 +22,7 @@ class WebGLContext
 		var returnValues = new Float32Array(coordsToConvert.dimensions());
 
 		return returnValues;
-	};
+	}
 
 	// instance methods
 
@@ -46,7 +49,7 @@ class WebGLContext
 		gl.enable(gl.DEPTH_TEST);
 
 		return gl;
-	};
+	}
 
 	buildShaderProgram(gl: WebGLRenderingContext)
 	{
@@ -60,7 +63,7 @@ class WebGLContext
 		this.buildShaderProgram_SetUpInputVariables(gl, shaderProgram);
 
 		return shaderProgram;
-	};
+	}
 
 	buildShaderProgram_FragmentShader(gl: WebGLRenderingContext)
 	{
@@ -84,7 +87,7 @@ class WebGLContext
 		gl.compileShader(fragmentShader);
 
 		return fragmentShader;
-	};
+	}
 
 	buildShaderProgram_VertexShader(gl: WebGLRenderingContext)
 	{
@@ -121,7 +124,7 @@ class WebGLContext
 		gl.compileShader(vertexShader);
 
 		return vertexShader;
-	};
+	}
 
 	buildShaderProgram_Compile
 	(
@@ -135,7 +138,7 @@ class WebGLContext
 		gl.useProgram(shaderProgram);
 
 		return shaderProgram;
-	};
+	}
 
 	buildShaderProgram_SetUpInputVariables
 	(
@@ -205,5 +208,7 @@ class WebGLContext
 			shaderProgram,
 			"uNormalMatrix"
 		);
-	};
+	}
+}
+
 }

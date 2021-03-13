@@ -1,5 +1,8 @@
 
-class VisualStack implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualStack implements Visual
 {
 	childSpacing: Coords;
 	children: Visual[];
@@ -55,4 +58,6 @@ class VisualStack implements Visual
 		this.children.forEach(x => transformToApply.transform(x));
 		return this;
 	}
+}
+
 }

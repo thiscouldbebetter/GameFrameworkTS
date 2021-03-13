@@ -1,5 +1,8 @@
 
-class Transform_Overwrite implements Transform
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Transform_Overwrite implements Transform
 {
 	transformableToOverwriteWith: Transformable;
 
@@ -24,4 +27,6 @@ class Transform_Overwrite implements Transform
 	{
 		return coordsToTransform;
 	}
+}
+
 }

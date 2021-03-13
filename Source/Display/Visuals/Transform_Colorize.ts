@@ -1,5 +1,8 @@
 
-class Transform_Colorize implements Transform
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Transform_Colorize implements Transform
 {
 	colorFill: Color;
 	colorBorder: Color;
@@ -45,5 +48,7 @@ class Transform_Colorize implements Transform
 	{
 		return coordsToTransform; // todo
 	}
+
+}
 
 }

@@ -1,5 +1,8 @@
 
-class Transform_DimensionsSwap implements Transform
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Transform_DimensionsSwap implements Transform
 {
 	dimensionIndices: number[];
 
@@ -29,5 +32,7 @@ class Transform_DimensionsSwap implements Transform
 		coordsToTransform.dimensionSet(dimensionIndex0, dimension1);
 		coordsToTransform.dimensionSet(dimensionIndex1, dimension0);
 		return coordsToTransform;
-	};
+	}
+}
+
 }

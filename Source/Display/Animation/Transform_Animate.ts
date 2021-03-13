@@ -1,5 +1,8 @@
 
-class Transform_Animate
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Transform_Animate
 {
 	animationDefn: AnimationDefn;
 	ticksSinceStarted: number;
@@ -76,4 +79,6 @@ class Transform_Animate
 	{
 		return coordsToTransform;
 	}
+}
+
 }

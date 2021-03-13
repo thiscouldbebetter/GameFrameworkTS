@@ -1,5 +1,8 @@
 
-class Effect
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Effect
 {
 	name: string;
 	ticksPerCycle: number;
@@ -162,4 +165,6 @@ class Effect_Instances
 
 		this._AllByName = ArrayHelper.addLookupsByName(this._All);
 	}
+}
+
 }

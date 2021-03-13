@@ -1,5 +1,8 @@
 
-class PlaceBuilderDemo_Emplacements
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class PlaceBuilderDemo_Emplacements
 {
 	parent: PlaceBuilderDemo;
 
@@ -910,4 +913,6 @@ class PlaceBuilderDemo_Emplacements
 
 		return entityDefn;
 	}
+}
+
 }

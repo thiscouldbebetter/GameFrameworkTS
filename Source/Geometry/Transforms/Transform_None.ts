@@ -1,5 +1,8 @@
 
-class Transform_None implements Transform
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Transform_None implements Transform
 {
 	constructor()
 	{}
@@ -18,4 +21,6 @@ class Transform_None implements Transform
 	{
 		return coordsToTransform;
 	}
+}
+
 }

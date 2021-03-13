@@ -1,5 +1,8 @@
 
-class Usable extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Usable extends EntityProperty
 {
 	_use: (u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) => string;
 
@@ -37,3 +40,4 @@ class Usable extends EntityProperty
 	}
 }
 
+}

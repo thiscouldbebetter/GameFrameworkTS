@@ -1,5 +1,8 @@
 
-class Quaternion
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Quaternion
 {
 	w: number;
 	x: number;
@@ -30,7 +33,7 @@ class Quaternion
 		var returnValue = new Quaternion(w, x, y, z).normalize();
 
 		return returnValue;
-	};
+	}
 
 	// instance methods
 
@@ -56,12 +59,12 @@ class Quaternion
 		);
 
 		return coordsToRotate;
-	};
+	}
 
 	clone()
 	{
 		return new Quaternion(this.w, this.x, this.y, this.z);
-	};
+	}
 
 	divide(divisor: number)
 	{
@@ -71,7 +74,7 @@ class Quaternion
 		this.z /= divisor;
 
 		return this;
-	};
+	}
 
 	invert()
 	{
@@ -84,7 +87,7 @@ class Quaternion
 		this.z *= -1;
 
 		return this;
-	};
+	}
 
 	multiply(other: Quaternion)
 	{
@@ -95,7 +98,7 @@ class Quaternion
 			this.w * other.y - this.x * other.z + this.y * other.w + this.z * other.x,
 			this.w * other.z + this.x * other.y - this.y * other.x + this.z * other.w
 		);
-	};
+	}
 
 	magnitude()
 	{
@@ -106,19 +109,19 @@ class Quaternion
 			+ this.y * this.y
 			+ this.z * this.z
 		);
-	};
+	}
 
 	normalize()
 	{
 		return this.divide(this.magnitude());
-	};
+	}
 
 	overwriteWith(other: Quaternion)
 	{
 		this.overwriteWithWXYZ(other.w, other.x, other.y, other.z);
 
 		return this;
-	};
+	}
 
 	overwriteWithWXYZ(w: number, x: number, y: number, z: number)
 	{
@@ -128,7 +131,7 @@ class Quaternion
 		this.z = z;
 
 		return this;
-	};
+	}
 
 	toCoords(coordsToOverwrite: Coords): Coords
 	{
@@ -137,4 +140,6 @@ class Quaternion
 		coordsToOverwrite.z = this.z;
 		return coordsToOverwrite;
 	}
+}
+
 }

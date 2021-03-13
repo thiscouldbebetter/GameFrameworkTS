@@ -1,5 +1,8 @@
 
-class Lighting
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Lighting
 {
 	ambientIntensity: number;
 	direction: Coords;
@@ -11,4 +14,6 @@ class Lighting
 		this.direction = direction.clone().normalize();
 		this.directionalIntensity = directionalIntensity;
 	}
+}
+
 }

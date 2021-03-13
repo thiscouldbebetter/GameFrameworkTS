@@ -1,5 +1,8 @@
 
-class DrawableCamera extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class DrawableCamera extends EntityProperty
 {
 	initialize(universe: Universe, world: World, place: Place, entity: Entity)
 	{
@@ -21,4 +24,6 @@ class DrawableCamera extends EntityProperty
 	{
 		return this;
 	}
+}
+
 }

@@ -1,5 +1,8 @@
 
-class VisualArc implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualArc implements Visual
 {
 	radiusOuter: number;
 	radiusInner: number;
@@ -85,4 +88,6 @@ class VisualArc implements Visual
 		transformToApply.transformCoords(this.directionMin);
 		return this;
 	}
+}
+
 }

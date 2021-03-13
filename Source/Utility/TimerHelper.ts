@@ -1,5 +1,8 @@
 
-class TimerHelper
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class TimerHelper
 {
 	ticksPerSecond: number;
 	millisecondsPerTick: number;
@@ -60,4 +63,6 @@ class TimerHelper
 
 		return timeAsString;
 	}
+}
+
 }

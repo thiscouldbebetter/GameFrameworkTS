@@ -1,5 +1,8 @@
 
-class ShapeContainer
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ShapeContainer
 {
 	shape: any;
 
@@ -7,4 +10,6 @@ class ShapeContainer
 	{
 		this.shape = shape;
 	}
+}
+
 }

@@ -1,5 +1,8 @@
 
-class JournalEntry
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class JournalEntry
 {
 	tickRecorded: number;
 	title: string;
@@ -21,4 +24,6 @@ class JournalEntry
 	{
 		return universe.timerHelper.ticksToStringHColonMColonS(this.tickRecorded) + " - " + this.title;
 	}
+}
+
 }

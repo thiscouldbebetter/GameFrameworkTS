@@ -1,5 +1,8 @@
 
-class ItemContainer extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ItemContainer extends EntityProperty
 {
 	statusMessage: string;
 
@@ -245,4 +248,6 @@ class ItemContainer extends EntityProperty
 
 		return returnValue;
 	}
+}
+
 }

@@ -1,5 +1,8 @@
 
-class Action
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Action
 {
 	name: string;
 	perform: (u: Universe, w: World, p: Place, e: Entity) => void;
@@ -58,3 +61,4 @@ class Action_Instances
 	}
 }
 
+}

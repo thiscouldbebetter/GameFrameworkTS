@@ -1,5 +1,8 @@
 
-class Tirable extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Tirable extends EntityProperty
 {
 	staminaMaxAfterSleep: number;
 	staminaRecoveredPerTick: number;
@@ -91,4 +94,6 @@ class Tirable extends EntityProperty
 			this._fallAsleep
 		);
 	}
+}
+
 }

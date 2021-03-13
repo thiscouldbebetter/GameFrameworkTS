@@ -1,5 +1,8 @@
 
-class VisualPolygon implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualPolygon implements Visual
 {
 	verticesAsPath: Path;
 	colorFill: Color;
@@ -76,4 +79,6 @@ class VisualPolygon implements Visual
 		this.verticesAsPath.transform(transformToApply);
 		return this;
 	}
+}
+
 }

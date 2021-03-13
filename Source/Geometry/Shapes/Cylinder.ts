@@ -1,5 +1,8 @@
 
-class Cylinder
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Cylinder
 {
 	center: Coords;
 	radius: number;
@@ -15,4 +18,6 @@ class Cylinder
 
 		this.lengthHalf = this.length / 2;
 	}
+}
+
 }

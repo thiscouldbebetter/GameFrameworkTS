@@ -1,5 +1,8 @@
 
-class VisualTransform implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualTransform implements Visual
 {
 	transformToApply: Transform;
 	child: Visual;
@@ -19,21 +22,21 @@ class VisualTransform implements Visual
 	clone(): Visual
 	{
 		return new VisualTransform(this.transformToApply, this.child.clone());
-	};
+	}
 
 	overwriteWith(other: Visual): Visual
 	{
 		var otherAsVisualTransform = other as VisualTransform;
 		this.child.overwriteWith(otherAsVisualTransform.child);
 		return this;
-	};
+	}
 
 	// Transformable.
 
 	transform(transformToApply: Transform)
 	{
 		return this.child.transform(transformToApply);
-	};
+	}
 
 	// Visual.
 
@@ -42,5 +45,7 @@ class VisualTransform implements Visual
 		this._childTransformed.overwriteWith(this.child);
 		this.transformToApply.transform(this._childTransformed);
 		this._childTransformed.draw(universe, world, place, entity, display);
-	};
+	}
+}
+
 }

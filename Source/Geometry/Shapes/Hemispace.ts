@@ -1,5 +1,8 @@
 
-class Hemispace
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Hemispace
 {
 	plane: Plane;
 
@@ -40,4 +43,6 @@ class Hemispace
 		}
 		return coordsToTrim;
 	}
+}
+
 }

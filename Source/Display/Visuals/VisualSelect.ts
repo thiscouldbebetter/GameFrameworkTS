@@ -1,5 +1,8 @@
 
-class VisualSelect implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualSelect implements Visual
 {
 	childrenByName: Map<string, Visual>;
 	selectChildNames: (u: Universe, w: World, p: Place, e:Entity, d: Display) => string[];
@@ -46,4 +49,6 @@ class VisualSelect implements Visual
 	{
 		return this; // todo
 	}
+}
+
 }

@@ -1,5 +1,8 @@
 
-class VisualControl implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualControl implements Visual
 {
 	controlRoot: ControlBase;
 
@@ -39,4 +42,6 @@ class VisualControl implements Visual
 	{
 		return this; // todo
 	}
+}
+
 }

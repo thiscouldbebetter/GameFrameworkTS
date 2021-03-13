@@ -1,5 +1,8 @@
 
-class ItemCategory
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ItemCategory
 {
 	name: string;
 
@@ -7,4 +10,6 @@ class ItemCategory
 	{
 		this.name = name;
 	}
+}
+
 }

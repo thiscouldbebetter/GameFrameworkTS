@@ -1,5 +1,8 @@
 
-class MazeCell
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class MazeCell
 {
 	numberOfNeighbors: number;
 
@@ -16,4 +19,6 @@ class MazeCell
 		this.network = new MazeCellNetwork();
 		this.network.cells.push(this);
 	}
+}
+
 }

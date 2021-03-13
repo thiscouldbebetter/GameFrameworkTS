@@ -1,5 +1,8 @@
 
-class VisualImageScaled implements VisualImage
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualImageScaled implements VisualImage
 {
 	visualImage: VisualImage;
 	sizeToDraw: Coords;
@@ -61,4 +64,6 @@ class VisualImageScaled implements VisualImage
 	{
 		return this; // todo
 	}
+}
+
 }

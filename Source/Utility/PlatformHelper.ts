@@ -1,4 +1,8 @@
-class PlatformHelper
+
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class PlatformHelper
 {
 	// This class is meant to encapsulate interactions with the DOM ("Domain Object Model").
 
@@ -11,22 +15,22 @@ class PlatformHelper
 		{
 			this.divMain.appendChild(platformableAsDomElement);
 		}
-	};
+	}
 
 	platformableHide(platformable: Platformable)
 	{
 		platformable.toDomElement(this).style.display = "none";
-	};
+	}
 
 	platformableRemove(platformable: Platformable)
 	{
 		this.divMain.removeChild(platformable.toDomElement(this));
-	};
+	}
 
 	platformableShow(platformable: Platformable)
 	{
 		platformable.toDomElement(this).style.display = null;
-	};
+	}
 
 	initialize(universe: Universe)
 	{
@@ -44,10 +48,12 @@ class PlatformHelper
 		var display = universe.display;
 		divMain.style.marginLeft = 0 - display.sizeInPixels.x / 2;
 		divMain.style.marginTop = 0 - display.sizeInPixels.y / 2;
-	};
+	}
 }
 
-interface Platformable
+export interface Platformable
 {
 	toDomElement: (ph: PlatformHelper) => any;
+}
+
 }

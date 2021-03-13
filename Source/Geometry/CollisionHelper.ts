@@ -1,5 +1,8 @@
 
-class CollisionHelper
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class CollisionHelper
 {
 	throwErrorIfCollidersCannotBeCollided: boolean;
 	colliderTypeNamesToDoCollideLookup: any;
@@ -1865,4 +1868,6 @@ class CollisionHelper
 	{
 		return sphere0.containsOther(sphere1);
 	}
+}
+
 }

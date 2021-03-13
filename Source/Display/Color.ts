@@ -1,5 +1,8 @@
 
-class Color implements Interpolatable
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Color implements Interpolatable
 {
 	name: string;
 	code: string;
@@ -136,7 +139,7 @@ class Color implements Interpolatable
 	}
 }
 
-class Color_Instances
+export class Color_Instances
 {
 	_Transparent: Color;
 	Black: Color;
@@ -221,4 +224,6 @@ class Color_Instances
 		this._AllByCode = ArrayHelper.addLookups(this._All, (x: Color) => x.code);
 		this._AllByName = ArrayHelper.addLookupsByName(this._All);
 	}
+}
+
 }

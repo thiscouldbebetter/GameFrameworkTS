@@ -1,5 +1,8 @@
 
-class VisualOffset implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualOffset implements Visual
 {
 	child: Visual;
 	offset: Coords;
@@ -42,4 +45,6 @@ class VisualOffset implements Visual
 	{
 		return this; // todo
 	}
+}
+
 }

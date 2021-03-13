@@ -1,5 +1,8 @@
 
-class BoneInfluence
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class BoneInfluence
 {
 	boneName: string;
 	vertexIndicesControlled: number[];
@@ -38,5 +41,7 @@ class BoneInfluence
 		}
 
 		return boneInfluences;
-	};
+	}
+}
+
 }

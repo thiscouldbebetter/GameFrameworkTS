@@ -1,5 +1,8 @@
 
-class Camera extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Camera extends EntityProperty
 {
 	viewSize: Coords;
 	focalLength: number;
@@ -126,7 +129,7 @@ class Camera extends EntityProperty
 		}
 
 		return this._clipPlanes;
-	};
+	}
 
 	coordsTransformViewToWorld(viewCoords: Coords, ignoreZ: boolean)
 	{
@@ -150,7 +153,7 @@ class Camera extends EntityProperty
 		);
 
 		return worldCoords;
-	};
+	}
 
 	coordsTransformWorldToView(worldCoords: Coords)
 	{
@@ -174,7 +177,7 @@ class Camera extends EntityProperty
 		viewCoords.add(this.viewSizeHalf);
 
 		return viewCoords;
-	};
+	}
 
 	drawEntitiesInViewThenClear(universe: Universe, world: World, place: Place, display: Display)
 	{
@@ -209,10 +212,12 @@ class Camera extends EntityProperty
 		}
 
 		this.entitiesInView.length = 0;
-	};
+	}
 
 	updateForTimerTick()
 	{
 		// Do nothing.  Rendering is done in Place.draw().
-	};
+	}
+}
+
 }

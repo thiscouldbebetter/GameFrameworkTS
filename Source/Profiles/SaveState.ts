@@ -1,5 +1,8 @@
 
-class SaveState
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class SaveState
 {
 	name: string;
 	placeName: string
@@ -31,4 +34,6 @@ class SaveState
 	{
 		this.world = null;
 	}
+}
+
 }

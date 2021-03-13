@@ -1,5 +1,8 @@
 
-class Transform_MeshPoseWithSkeleton implements Transform
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Transform_MeshPoseWithSkeleton implements Transform
 {
 	meshAtRest: MeshTextured;
 	skeletonAtRest: Skeleton;
@@ -125,4 +128,6 @@ class Transform_MeshPoseWithSkeleton implements Transform
 
 		} // end for each boneInfluence
 	}
+}
+
 }

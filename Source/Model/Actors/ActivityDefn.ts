@@ -1,5 +1,8 @@
 
-class ActivityDefn
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ActivityDefn
 {
 	name: string;
 	_perform: (u: Universe, w: World, p: Place, e: Entity, a: Activity) => void;
@@ -73,4 +76,6 @@ class ActivityDefn_Instances
 
 		this._AllByName = ArrayHelper.addLookupsByName(this._All);
 	}
+}
+
 }

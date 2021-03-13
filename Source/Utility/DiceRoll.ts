@@ -1,5 +1,8 @@
 
-class DiceRoll
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class DiceRoll
 {
 	expression: string;
 
@@ -77,4 +80,6 @@ class DiceRoll
 
 		return totalSoFar;
 	}
+}
+
 }

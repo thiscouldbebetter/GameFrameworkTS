@@ -1,5 +1,8 @@
 
-class MazeCellNetwork
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class MazeCellNetwork
 {
 	networkID: number;
 	cells: any;
@@ -33,5 +36,7 @@ class MazeCellNetwork
 		}
 
 		return networkMerged;
-	};
+	}
+}
+
 }

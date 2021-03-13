@@ -1,5 +1,8 @@
 
-class ItemStore extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ItemStore extends EntityProperty
 {
 	itemDefnNameCurrency: string;
 
@@ -61,7 +64,6 @@ class ItemStore extends EntityProperty
 		venueNext = new VenueFader(venueNext, null, null, null);
 		universe.venueNext = venueNext;
 	}
-
 
 	// Controllable.
 
@@ -260,5 +262,7 @@ class ItemStore extends EntityProperty
 		);
 
 		return returnValue;
-	};
+	}
+}
+
 }

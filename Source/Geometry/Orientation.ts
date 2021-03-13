@@ -1,5 +1,8 @@
 
-class Orientation
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Orientation
 {
 	forward: Coords;
 	down: Coords;
@@ -36,7 +39,7 @@ class Orientation
 			Orientation._instances = new Orientation_Instances();
 		}
 		return Orientation._instances;
-	};
+	}
 
 
 	// methods
@@ -44,7 +47,7 @@ class Orientation
 	clone()
 	{
 		return new Orientation(this.forward.clone(), this.down.clone());
-	};
+	}
 
 	equals(other: Orientation)
 	{
@@ -59,14 +62,14 @@ class Orientation
 	{
 		this.forward.overwriteWith(value);
 		return this.orthogonalize();
-	};
+	}
 
 	forwardDownSet(forward: Coords, down: Coords)
 	{
 		this.forward.overwriteWith(forward);
 		this.down.overwriteWith(down);
 		return this.orthogonalize();
-	};
+	}
 
 	orthogonalize()
 	{
@@ -74,7 +77,7 @@ class Orientation
 		this.right.overwriteWith(this.down).crossProduct(this.forward).normalize();
 		this.down.overwriteWith(this.forward).crossProduct(this.right).normalize();
 		return this;
-	};
+	}
 
 	overwriteWith(other: Orientation)
 	{
@@ -82,7 +85,7 @@ class Orientation
 		this.right.overwriteWith(other.right);
 		this.down.overwriteWith(other.down);
 		return this;
-	};
+	}
 
 	projectCoords(coordsToProject: Coords)
 	{
@@ -93,7 +96,7 @@ class Orientation
 			coordsToProject.dotProduct(this.down)
 		);
 		return coordsToProject;
-	};
+	}
 
 	unprojectCoords(coordsToUnproject: Coords)
 	{
@@ -114,7 +117,7 @@ class Orientation
 		}
 
 		return coordsToUnproject.overwriteWith(returnValue);
-	};
+	}
 
 	projectCoordsRDF(coordsToProject: Coords)
 	{
@@ -125,7 +128,7 @@ class Orientation
 			coordsToProject.dotProduct(this.forward)
 		);
 		return coordsToProject;
-	};
+	}
 
 	unprojectCoordsRDF(coordsToUnproject: Coords)
 	{
@@ -149,7 +152,7 @@ class Orientation
 	}
 }
 
-class Orientation_Instances
+export class Orientation_Instances
 {
 	ForwardXDownZ: Orientation;
 	ForwardZDownY: Orientation;
@@ -168,4 +171,6 @@ class Orientation_Instances
 			new Coords(0, 1, 0) // down
 		);
 	}
+}
+
 }

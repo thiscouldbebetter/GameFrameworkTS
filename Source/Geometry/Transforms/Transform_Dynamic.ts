@@ -1,5 +1,8 @@
 
-class Transform_Dynamic implements Transform
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Transform_Dynamic implements Transform
 {
 	transformTransformable: (t: Transformable) => Transformable;
 
@@ -22,4 +25,6 @@ class Transform_Dynamic implements Transform
 	{
 		return coordsToTransform; // todo
 	}
+}
+
 }

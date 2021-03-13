@@ -1,5 +1,8 @@
 
-class Skill
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Skill
 {
 	name: string;
 	learningRequired: number;
@@ -83,6 +86,7 @@ class Skill
 		];
 
 		return returnValues;
-	};
+	}
+}
 
 }

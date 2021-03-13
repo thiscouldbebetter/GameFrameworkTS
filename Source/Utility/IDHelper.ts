@@ -1,4 +1,8 @@
-class IDHelper
+
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class IDHelper
 {
 	_idNext: number;
 
@@ -16,12 +20,14 @@ class IDHelper
 			IDHelper._instance = new IDHelper();
 		}
 		return IDHelper._instance;
-	};
+	}
 
 	idNext()
 	{
 		var returnValue = "_" + this._idNext;
 		this._idNext++;
 		return returnValue;
-	};
+	}
+}
+
 }

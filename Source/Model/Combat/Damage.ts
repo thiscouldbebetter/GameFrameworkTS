@@ -1,5 +1,8 @@
 
-class Damage
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Damage
 {
 	amount: number;
 	typeName: string;
@@ -43,4 +46,6 @@ class Damage
 	{
 		return DamageType.byName(this.typeName);
 	}
+}
+
 }

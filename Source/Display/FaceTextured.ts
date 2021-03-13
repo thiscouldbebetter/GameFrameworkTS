@@ -1,5 +1,8 @@
 
-class FaceTextured
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class FaceTextured
 {
 	geometry: Face;
 	material: Material;
@@ -9,4 +12,6 @@ class FaceTextured
 		this.geometry = geometry;
 		this.material = material;
 	}
+}
+
 }

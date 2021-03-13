@@ -1,5 +1,8 @@
 
-class ControlSelect extends ControlBase
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ControlSelect extends ControlBase
 {
 	_valueSelected: any;
 	_options: any;
@@ -176,4 +179,6 @@ class ControlSelect extends ControlBase
 			this.size.x // widthMaxInPixels
 		);
 	}
+}
+
 }

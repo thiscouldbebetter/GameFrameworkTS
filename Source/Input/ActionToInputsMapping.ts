@@ -1,5 +1,8 @@
 
-class ActionToInputsMapping
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ActionToInputsMapping
 {
 	actionName: string;
 	inputNames: string[];
@@ -33,4 +36,6 @@ class ActionToInputsMapping
 		this.inputNames = other.inputNames.slice();
 		this.inactivateInputWhenActionPerformed = other.inactivateInputWhenActionPerformed;
 	}
+}
+
 }

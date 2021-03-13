@@ -1,5 +1,8 @@
 
-class WordBubble
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class WordBubble
 {
 	visualForPortrait: Visual;
 	statements: string[];
@@ -129,4 +132,6 @@ class WordBubble
 
 		return containerWordBubble;
 	}
+}
+
 }

@@ -1,5 +1,8 @@
 
-class VisualAnchor implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualAnchor implements Visual
 {
 	child: Visual;
 	posToAnchorAt: Coords;
@@ -61,4 +64,6 @@ class VisualAnchor implements Visual
 	{
 		return this; // todo
 	}
+}
+
 }

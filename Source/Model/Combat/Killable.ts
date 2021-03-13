@@ -1,5 +1,8 @@
 
-class Killable extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Killable extends EntityProperty
 {
 	integrityMax: number;
 	_damageApply: (u: Universe, w: World, p: Place, eDamager: Entity, eKillable: Entity, damageToApply: Damage) => number;
@@ -85,4 +88,6 @@ class Killable extends EntityProperty
 	{
 		return new Killable(this.integrityMax, this._damageApply, this._die);
 	}
+}
+
 }

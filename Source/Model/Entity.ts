@@ -1,5 +1,8 @@
 
-class Entity
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Entity
 {
 	name: string;
 	properties: EntityProperty[];
@@ -138,4 +141,6 @@ class Entity
 	tirable(): Tirable { return this.propertyByName(Tirable.name) as Tirable; }
 	traversable(): Traversable { return this.propertyByName(Traversable.name) as Traversable; }
 	usable(): Usable { return this.propertyByName(Usable.name) as Usable; }
+}
+
 }

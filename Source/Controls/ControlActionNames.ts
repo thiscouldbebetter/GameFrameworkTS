@@ -1,5 +1,8 @@
 
-class ControlActionNames_Instances
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class ControlActionNames_Instances
 {
 	ControlCancel: string;
 	ControlConfirm: string;
@@ -19,7 +22,7 @@ class ControlActionNames_Instances
 	}
 }
 
-class ControlActionNames
+export class ControlActionNames
 {
 	static _instances: ControlActionNames_Instances;
 
@@ -32,4 +35,6 @@ class ControlActionNames
 
 		return ControlActionNames._instances;
 	};
+}
+
 }

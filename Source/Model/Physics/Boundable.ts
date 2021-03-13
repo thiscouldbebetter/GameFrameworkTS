@@ -1,5 +1,8 @@
 
-class Boundable extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Boundable extends EntityProperty
 {
 	bounds: any;
 
@@ -24,4 +27,6 @@ class Boundable extends EntityProperty
 		this.bounds.overwriteWith(other.bounds);
 		return this;
 	}
+}
+
 }

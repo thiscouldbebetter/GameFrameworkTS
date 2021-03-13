@@ -1,5 +1,8 @@
 
-class Modellable extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Modellable extends EntityProperty
 {
 	model: any;
 
@@ -12,6 +15,8 @@ class Modellable extends EntityProperty
 	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity)
 	{
 		// Do nothing.
-	};
+	}
+}
+
 }
 

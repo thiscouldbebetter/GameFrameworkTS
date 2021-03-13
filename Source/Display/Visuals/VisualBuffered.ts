@@ -1,5 +1,8 @@
 
-class VisualBuffered implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualBuffered implements Visual
 {
 	size: Coords;
 	child: Visual;
@@ -55,4 +58,6 @@ class VisualBuffered implements Visual
 	{
 		return this; // todo
 	}
+}
+
 }

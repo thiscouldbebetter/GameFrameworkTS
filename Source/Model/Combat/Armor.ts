@@ -1,5 +1,8 @@
 
-class Armor extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Armor extends EntityProperty
 {
 	damageMultiplier: number;
 
@@ -8,4 +11,6 @@ class Armor extends EntityProperty
 		super();
 		this.damageMultiplier = damageMultiplier;
 	}
+}
+
 }

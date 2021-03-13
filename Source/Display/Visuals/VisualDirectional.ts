@@ -1,5 +1,8 @@
 
-class VisualDirectional implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualDirectional implements Visual
 {
 	visualForNoDirection: Visual;
 	visualsForDirections: Visual[];
@@ -83,4 +86,6 @@ class VisualDirectional implements Visual
 	{
 		return this; // todo
 	}
+}
+
 }

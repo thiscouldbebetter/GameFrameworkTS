@@ -1,5 +1,8 @@
 
-class SoundHelper
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class SoundHelper
 {
 	sounds: Sound[];
 
@@ -86,4 +89,6 @@ class SoundHelper
 		sound.play(universe, this.musicVolume);
 		this.soundForMusic = sound;
 	}
+}
+
 }

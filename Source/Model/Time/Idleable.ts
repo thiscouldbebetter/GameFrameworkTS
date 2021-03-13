@@ -1,5 +1,8 @@
 
-class Idleable extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Idleable extends EntityProperty
 {
 	ticksUntilIdle: number;
 	_idle: (u: Universe, w: World, p: Place, e: Entity) => void;
@@ -44,5 +47,7 @@ class Idleable extends EntityProperty
 		{
 			this.idle(universe, world, place, entity);
 		}
-	};
+	}
+}
+
 }

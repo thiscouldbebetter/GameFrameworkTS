@@ -1,5 +1,8 @@
 
-class Network
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Network
 {
 	nodes: NetworkNode[];
 	links: NetworkLink[];
@@ -172,7 +175,7 @@ class NetworkNode
 	}
 }
 
-class VisualNetwork implements Visual
+export class VisualNetwork implements Visual
 {
 	network: Network;
 
@@ -248,4 +251,6 @@ class VisualNetwork implements Visual
 	{
 		return this; // todo
 	}
+}
+
 }

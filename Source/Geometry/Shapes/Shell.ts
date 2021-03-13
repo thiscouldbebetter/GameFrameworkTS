@@ -1,5 +1,8 @@
 
-class Shell implements ShapeBase
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Shell implements ShapeBase
 {
 	sphereOuter: Sphere;
 	radiusInner: number;
@@ -74,4 +77,6 @@ class Shell implements ShapeBase
 	{
 		return surfacePointOut.overwriteWith(posToCheck); // todo
 	}
+}
+
 }

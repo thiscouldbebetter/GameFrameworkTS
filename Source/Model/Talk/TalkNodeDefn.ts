@@ -1,5 +1,8 @@
 
-class TalkNodeDefn
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class TalkNodeDefn
 {
 	name: string;
 	execute: (u: Universe, r: ConversationRun, s: ConversationScope, n: TalkNode) => void;
@@ -321,3 +324,4 @@ class TalkNodeDefn_Instances
 	}
 }
 
+}

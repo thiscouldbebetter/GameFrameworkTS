@@ -1,5 +1,8 @@
 
-class Enemy extends EntityProperty
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Enemy extends EntityProperty
 {
 	weapon: Weapon;
 
@@ -98,5 +101,7 @@ class Enemy extends EntityProperty
 
 		return enemyActivityDefn;
 	}
+
+}
 
 }

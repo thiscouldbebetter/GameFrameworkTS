@@ -1,6 +1,11 @@
 
-class VisualSound implements Visual
+namespace ThisCouldBeBetter.GameFramework
 {
+
+export class VisualSound implements Visual
+{
+	// Yes, obviously sounds aren't really visual.
+
 	soundNameToPlay: string;
 	isMusic: boolean;
 
@@ -34,10 +39,13 @@ class VisualSound implements Visual
 	{
 		return this; // todo
 	}
+
 	// Transformable.
 
 	transform(transformToApply: Transform): Transformable
 	{
 		return this; // todo
 	}
+}
+
 }

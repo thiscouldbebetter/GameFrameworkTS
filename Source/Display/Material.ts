@@ -1,5 +1,8 @@
 
-class Material
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Material
 {
 	name: string;
 	colorStroke: Color;
@@ -23,10 +26,10 @@ class Material
 		}
 
 		return Material._instances;
-	};
+	}
 }
 
-class Material_Instances
+export class Material_Instances
 {
 	Default: Material;
 
@@ -42,3 +45,4 @@ class Material_Instances
 	}
 }
 
+}

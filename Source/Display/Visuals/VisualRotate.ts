@@ -1,5 +1,8 @@
 
-class VisualRotate implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualRotate implements Visual
 {
 	rotationInTurns: number;
 	child: Visual;
@@ -39,4 +42,6 @@ class VisualRotate implements Visual
 	{
 		return this; // todo
 	}
+}
+
 }

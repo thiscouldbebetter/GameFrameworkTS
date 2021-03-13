@@ -1,5 +1,8 @@
 
-class FileHelper
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class FileHelper
 {
 	loadFileAsBinaryString(systemFileToLoad: any, callback: any, contextForCallback: any)
 	{
@@ -9,7 +12,7 @@ class FileHelper
 			this.loadFile_FileLoaded(event, callback, contextForCallback, systemFileToLoad.name);
 		}
 		fileReader.readAsBinaryString(systemFileToLoad);
-	};
+	}
 
 	loadFileAsText(systemFileToLoad: any, callback: any, contextForCallback: any)
 	{
@@ -19,7 +22,7 @@ class FileHelper
 			this.loadFile_FileLoaded(event, callback, contextForCallback, systemFileToLoad.name);
 		}
 		fileReader.readAsText(systemFileToLoad);
-	};
+	}
 
 	loadFile_FileLoaded(fileLoadedEvent: any, callback: any, contextForCallback: any, fileName: string)
 	{
@@ -27,7 +30,7 @@ class FileHelper
 		var contentsOfFileLoaded = fileReader.result;
 
 		callback.call(contextForCallback, contentsOfFileLoaded);
-	};
+	}
 
 	saveBinaryStringToFileWithName(fileAsBinaryString: string, fileName: string)
 	{
@@ -46,7 +49,7 @@ class FileHelper
 		link.href = window.URL.createObjectURL(fileAsBlob);
 		link.download = fileName;
 		link.click();
-	};
+	}
 
 	saveBytesToFileWithName(fileAsBytes: number[], fileName: string)
 	{
@@ -65,7 +68,7 @@ class FileHelper
 		link.href = window.URL.createObjectURL(fileAsBlob);
 		link.download = fileName;
 		link.click();
-	};
+	}
 
 	saveTextStringToFileWithName(textToSave: string, fileNameToSaveAs: string)
 	{
@@ -76,5 +79,7 @@ class FileHelper
 		link.href = window.URL.createObjectURL(textToSaveAsBlob);
 		link.download = fileNameToSaveAs;
 		link.click();
-	};
+	}
+}
+
 }

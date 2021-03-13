@@ -1,5 +1,8 @@
 
-class VisualEllipse implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualEllipse implements Visual
 {
 	semimajorAxis: number;
 	semiminorAxis: number;
@@ -53,4 +56,6 @@ class VisualEllipse implements Visual
 	{
 		return this; // todo
 	}
+}
+
 }

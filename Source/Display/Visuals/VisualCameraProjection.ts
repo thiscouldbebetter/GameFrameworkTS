@@ -1,5 +1,8 @@
 
-class VisualCameraProjection implements Visual
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class VisualCameraProjection implements Visual
 {
 	child: Visual;
 	cameraFactory: (u: Universe, w: World) => Camera;
@@ -79,4 +82,6 @@ class VisualCameraProjection implements Visual
 	{
 		return this; // todo
 	}
+}
+
 }

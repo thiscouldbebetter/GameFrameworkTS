@@ -1,5 +1,8 @@
 
-class PlaceDefn
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class PlaceDefn
 {
 	name: string;
 	actions: Action[];
@@ -88,4 +91,6 @@ class PlaceDefn
 			this._placeInitialize(universe, world, place);
 		}
 	}
+}
+
 }

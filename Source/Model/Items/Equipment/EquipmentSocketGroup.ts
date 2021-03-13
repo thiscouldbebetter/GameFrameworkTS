@@ -1,5 +1,8 @@
 
-class EquipmentSocketGroup
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class EquipmentSocketGroup
 {
 	defnGroup: EquipmentSocketDefnGroup;
 	sockets: EquipmentSocket[];
@@ -21,6 +24,11 @@ class EquipmentSocketGroup
 			this.sockets.push(socket);
 		};
 
-		this.socketsByDefnName = ArrayHelper.addLookups(this.sockets, (x: EquipmentSocket) => x.defnName);
+		this.socketsByDefnName = ArrayHelper.addLookups
+		(
+			this.sockets, (x: EquipmentSocket) => x.defnName
+		);
 	}
+}
+
 }
