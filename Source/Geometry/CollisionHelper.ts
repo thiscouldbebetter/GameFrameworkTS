@@ -44,7 +44,7 @@ export class CollisionHelper
 		var lookupOfLookups = new Map<string, Map<string, any> >();
 		var lookup: Map<string, any>;
 
-		var notDefined = null; // todo
+		var notDefined = "undefined"; // todo
 
 		var boxName = ( typeof Box == notDefined ? null : Box.name );
 		var boxRotatedName = ( typeof BoxRotated == notDefined ? null : BoxRotated.name );
