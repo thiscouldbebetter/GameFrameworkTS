@@ -35,5 +35,6 @@ var ThisCouldBeBetter;
                     ];
             }
         }
+        GameFramework.Direction_Instances = Direction_Instances;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
 })(ThisCouldBeBetter || (ThisCouldBeBetter = {}));

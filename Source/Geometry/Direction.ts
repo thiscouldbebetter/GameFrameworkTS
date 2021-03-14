@@ -16,7 +16,7 @@ export class Direction
 	}
 }
 
-class Direction_Instances
+export class Direction_Instances
 {
 	E: Coords;
 	N: Coords;
