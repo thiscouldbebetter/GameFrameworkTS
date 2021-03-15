@@ -23,7 +23,7 @@ var ThisCouldBeBetter;
             collisionFindLookupBuild() {
                 var lookupOfLookups = new Map();
                 var lookup;
-                var notDefined = null; // todo
+                var notDefined = "undefined"; // todo
                 var boxName = (typeof GameFramework.Box == notDefined ? null : GameFramework.Box.name);
                 var boxRotatedName = (typeof GameFramework.BoxRotated == notDefined ? null : GameFramework.BoxRotated.name);
                 var mapLocatedName = (typeof GameFramework.MapLocated == notDefined ? null : GameFramework.MapLocated.name);
