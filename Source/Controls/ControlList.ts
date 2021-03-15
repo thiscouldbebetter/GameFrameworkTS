@@ -4,12 +4,8 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class ControlList extends ControlBase
 {
-	name: string;
-	pos: Coords;
-	size: Coords;
 	_items: any;
 	bindingForItemText: DataBinding<any, string>;
-	fontHeightInPixels: number;
 	bindingForItemSelected: DataBinding<any, any>;
 	bindingForItemValue: DataBinding<any, any>;
 	bindingForIsEnabled: DataBinding<any, boolean>;
