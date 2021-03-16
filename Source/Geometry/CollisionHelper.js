@@ -456,7 +456,7 @@ var ThisCouldBeBetter;
                 collision.clear();
                 var edge0Bounds = edge0.box();
                 var edge1Bounds = edge1.box();
-                var doBoundsOverlap = edge0Bounds.overlapsWith(edge1Bounds);
+                var doBoundsOverlap = edge0Bounds.overlapsWithXY(edge1Bounds);
                 if (doBoundsOverlap) {
                     var edge0ProjectedOntoEdge1 = edge0.clone().projectOntoOther(edge1);
                     var edgeProjectedVertices = edge0ProjectedOntoEdge1.vertices;
