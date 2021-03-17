@@ -54,12 +54,10 @@ Fixes
 
 Controls - ControlTabbed - Mouse Support
 
-Emplacements - Arc Obstacle Around Goal Impassable
-
 Items - Bowstring Direction Doesn't Change with Player
 
+Movers - Collisions - Rocks and Trees Not Blocking Vertically
 Places - Map Tiles - Fix Overlapping
-Places - Map Tiles - Only block when going west?
 Places - Portals - Between Rooms Start Player Outside
 
 Storage - Fix Load World From File

@@ -7,7 +7,7 @@ var ThisCouldBeBetter;
             constructor(center, size) {
                 this.center = center || new GameFramework.Coords(0, 0, 0);
                 this.size = size || new GameFramework.Coords(0, 0, 0);
-                this.sizeHalf = this.size.clone().half();
+                this._sizeHalf = this.size.clone().half();
                 this._min = new GameFramework.Coords(0, 0, 0);
                 this._max = new GameFramework.Coords(0, 0, 0);
                 this._range = new GameFramework.RangeExtent(0, 0);
@@ -78,10 +78,10 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             max() {
-                return this._max.overwriteWith(this.center).add(this.sizeHalf);
+                return this._max.overwriteWith(this.center).add(this.sizeHalf());
             }
             min() {
-                return this._min.overwriteWith(this.center).subtract(this.sizeHalf);
+                return this._min.overwriteWith(this.center).subtract(this.sizeHalf());
             }
             ofPoints(points) {
                 var point0 = points[0];
@@ -110,7 +110,6 @@ var ThisCouldBeBetter;
                 }
                 this.center.overwriteWith(minSoFar).add(maxSoFar).half();
                 this.size.overwriteWith(maxSoFar).subtract(minSoFar);
-                this.sizeHalf.overwriteWith(this.size).half();
                 return this;
             }
             overlapsWith(other) {
@@ -135,9 +134,11 @@ var ThisCouldBeBetter;
                 rangeOut.max = this.max().dimensionGet(dimensionIndex);
                 return rangeOut;
             }
+            sizeHalf() {
+                return this._sizeHalf.overwriteWith(this.size).half();
+            }
             sizeOverwriteWith(sizeOther) {
                 this.size.overwriteWith(sizeOther);
-                this.sizeHalf.overwriteWith(this.size).half();
                 return this;
             }
             touches(other) {
@@ -175,7 +176,6 @@ var ThisCouldBeBetter;
             overwriteWith(other) {
                 this.center.overwriteWith(other.center);
                 this.size.overwriteWith(other.size);
-                this.sizeHalf.overwriteWith(other.size).half();
                 return this;
             }
             ;
@@ -211,7 +211,7 @@ var ThisCouldBeBetter;
                 return GameFramework.ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
             }
             normalAtPos(posToCheck, normalOut) {
-                var displacementOverSizeHalf = normalOut.overwriteWith(posToCheck).subtract(this.center).divide(this.sizeHalf);
+                var displacementOverSizeHalf = normalOut.overwriteWith(posToCheck).subtract(this.center).divide(this.sizeHalf());
                 var dimensionIndex = this.dimensionForSurfaceClosestToPoint(posToCheck, displacementOverSizeHalf);
                 var displacementDimensionOverSizeHalf = displacementOverSizeHalf.dimensionGet(dimensionIndex);
                 var multiplier = (displacementDimensionOverSizeHalf > 0 ? 1 : -1);

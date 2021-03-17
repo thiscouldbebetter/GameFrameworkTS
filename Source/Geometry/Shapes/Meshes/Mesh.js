@@ -24,7 +24,7 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             static fromBox(box) {
-                var sizeHalf = box.sizeHalf;
+                var sizeHalf = box.sizeHalf();
                 var min = new GameFramework.Coords(-sizeHalf.x, -sizeHalf.y, -sizeHalf.z);
                 var max = new GameFramework.Coords(sizeHalf.x, sizeHalf.y, sizeHalf.z);
                 var vertexOffsets = [

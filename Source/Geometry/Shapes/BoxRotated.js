@@ -9,7 +9,7 @@ var ThisCouldBeBetter;
                 this.angleInTurns = angleInTurns;
             }
             sphereSwept() {
-                return new GameFramework.Sphere(this.box.center, this.box.sizeHalf.magnitude());
+                return new GameFramework.Sphere(this.box.center, this.box.sizeHalf().magnitude());
             }
             // ShapeBase.
             locate(loc) {
@@ -21,7 +21,7 @@ var ThisCouldBeBetter;
                 var polar = new GameFramework.Polar(0, 1, 0);
                 var box = this.box;
                 var center = box.center;
-                var sizeHalf = box.sizeHalf;
+                var sizeHalf = box.sizeHalf();
                 var displacementToSurface = new GameFramework.Coords(0, 0, 0);
                 var distanceMinSoFar = Number.POSITIVE_INFINITY;
                 for (var d = 0; d < 2; d++) {

@@ -395,7 +395,7 @@ var ThisCouldBeBetter;
                 var doCollide = false;
                 var displacementBetweenCenters = this._displacement.overwriteWith(sphere.center).subtract(box.center);
                 var displacementBetweenCentersAbsolute = displacementBetweenCenters.absolute();
-                var boxSizeHalf = box.sizeHalf;
+                var boxSizeHalf = box.sizeHalf();
                 var sphereRadius = sphere.radius;
                 var doExtentsCollide = (displacementBetweenCentersAbsolute.x <= boxSizeHalf.x + sphereRadius
                     && displacementBetweenCentersAbsolute.y <= boxSizeHalf.y + sphereRadius
@@ -681,7 +681,7 @@ var ThisCouldBeBetter;
             doBoxAndCylinderCollide(box, cylinder) {
                 var returnValue = false;
                 var displacementBetweenCenters = this._displacement.overwriteWith(box.center).subtract(cylinder.center);
-                if (displacementBetweenCenters.z < box.sizeHalf.z + cylinder.lengthHalf) {
+                if (displacementBetweenCenters.z < box.sizeHalf().z + cylinder.lengthHalf) {
                     displacementBetweenCenters.clearZ();
                     var direction = displacementBetweenCenters.normalize();
                     var pointOnCylinderClosestToBoxCenter = direction.multiplyScalar(cylinder.radius).add(cylinder.center);
