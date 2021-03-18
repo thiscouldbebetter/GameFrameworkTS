@@ -7,7 +7,7 @@ var ThisCouldBeBetter;
             constructor(center, size) {
                 this.center = center || new GameFramework.Coords(0, 0, 0);
                 this.size = size || new GameFramework.Coords(0, 0, 0);
-                this._sizeHalf = this.size.clone().half();
+                this._sizeHalf = new GameFramework.Coords(0, 0, 0);
                 this._min = new GameFramework.Coords(0, 0, 0);
                 this._max = new GameFramework.Coords(0, 0, 0);
                 this._range = new GameFramework.RangeExtent(0, 0);
@@ -42,6 +42,11 @@ var ThisCouldBeBetter;
             }
             containsPoint(pointToCheck) {
                 return pointToCheck.isInRangeMinMax(this.min(), this.max());
+            }
+            fromMinAndMax(min, max) {
+                this.center.overwriteWith(min).add(max).half();
+                this.size.overwriteWith(max).subtract(min);
+                return this;
             }
             intersectWith(other) {
                 var thisMinDimensions = this.min().dimensions();

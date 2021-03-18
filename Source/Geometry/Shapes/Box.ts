@@ -79,6 +79,13 @@ export class Box implements ShapeBase
 		return pointToCheck.isInRangeMinMax(this.min(), this.max());
 	}
 
+	fromMinAndMax(min: Coords, max: Coords)
+	{
+		this.center.overwriteWith(min).add(max).half();
+		this.size.overwriteWith(max).subtract(min);
+		return this;
+	}
+
 	intersectWith(other: Box)
 	{
 		var thisMinDimensions = this.min().dimensions();
