@@ -212,25 +212,25 @@ var ThisCouldBeBetter;
                 visualWieldable = new GameFramework.VisualAnchor(visualWieldable, null, orientationToAnchorTo);
                 var visualArmAndWieldableFacingRight = new GameFramework.VisualGroup([
                     // arm
-                    new GameFramework.VisualAnchor(new GameFramework.VisualLine(new GameFramework.Coords(0, 0, 0), new GameFramework.Coords(2, 1, 0).multiplyScalar(circleRadius), circleColor, lineThickness), null, orientationToAnchorTo),
+                    new GameFramework.VisualAnchor(new GameFramework.VisualLine(GameFramework.Coords.blank(), new GameFramework.Coords(2, 1, 0).multiplyScalar(circleRadius), circleColor, lineThickness), null, orientationToAnchorTo),
                     // wieldable
                     new GameFramework.VisualOffset(visualWieldable, new GameFramework.Coords(2, 1, 0).multiplyScalar(circleRadius))
                 ]);
                 var visualArmAndWieldableFacingDown = new GameFramework.VisualGroup([
                     // arm
-                    new GameFramework.VisualAnchor(new GameFramework.VisualLine(new GameFramework.Coords(0, 0, 0), new GameFramework.Coords(-2, 0, 0).multiplyScalar(circleRadius), circleColor, lineThickness), null, orientationToAnchorTo),
+                    new GameFramework.VisualAnchor(new GameFramework.VisualLine(GameFramework.Coords.blank(), new GameFramework.Coords(-2, 0, 0).multiplyScalar(circleRadius), circleColor, lineThickness), null, orientationToAnchorTo),
                     // wieldable
                     new GameFramework.VisualOffset(visualWieldable, new GameFramework.Coords(-2, 0, 0).multiplyScalar(circleRadius))
                 ]);
                 var visualArmAndWieldableFacingLeft = new GameFramework.VisualGroup([
                     // arm
-                    new GameFramework.VisualAnchor(new GameFramework.VisualLine(new GameFramework.Coords(0, 0, 0), new GameFramework.Coords(-2, 1, 0).multiplyScalar(circleRadius), circleColor, lineThickness), null, orientationToAnchorTo),
+                    new GameFramework.VisualAnchor(new GameFramework.VisualLine(GameFramework.Coords.blank(), new GameFramework.Coords(-2, 1, 0).multiplyScalar(circleRadius), circleColor, lineThickness), null, orientationToAnchorTo),
                     // wieldable
                     new GameFramework.VisualOffset(visualWieldable, new GameFramework.Coords(-2, 1, 0).multiplyScalar(circleRadius))
                 ]);
                 var visualArmAndWieldableFacingUp = new GameFramework.VisualGroup([
                     // arm
-                    new GameFramework.VisualAnchor(new GameFramework.VisualLine(new GameFramework.Coords(0, 0, 0), new GameFramework.Coords(2, 0, 0).multiplyScalar(circleRadius), circleColor, lineThickness), null, orientationToAnchorTo),
+                    new GameFramework.VisualAnchor(new GameFramework.VisualLine(GameFramework.Coords.blank(), new GameFramework.Coords(2, 0, 0).multiplyScalar(circleRadius), circleColor, lineThickness), null, orientationToAnchorTo),
                     // wieldable
                     new GameFramework.VisualOffset(visualWieldable, new GameFramework.Coords(2, 0, 0).multiplyScalar(circleRadius))
                 ]);

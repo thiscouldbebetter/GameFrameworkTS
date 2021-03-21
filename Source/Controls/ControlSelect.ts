@@ -51,8 +51,8 @@ export class ControlSelect extends ControlBase
 		}
 
 		// Helper variables.
-		this._drawPos = new Coords(0, 0, 0);
-		this._sizeHalf = new Coords(0, 0, 0);
+		this._drawPos = Coords.blank();
+		this._sizeHalf = Coords.blank();
 	}
 
 	actionHandle(actionNameToHandle: string, universe: Universe)

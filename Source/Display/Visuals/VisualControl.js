@@ -7,7 +7,7 @@ var ThisCouldBeBetter;
             constructor(controlRoot) {
                 this.controlRoot = controlRoot;
                 // Helper variables.
-                this._drawLoc = new GameFramework.Disposition(new GameFramework.Coords(0, 0, 0), null, null);
+                this._drawLoc = new GameFramework.Disposition(GameFramework.Coords.blank(), null, null);
             }
             draw(universe, world, place, entity, display) {
                 var display = universe.display;

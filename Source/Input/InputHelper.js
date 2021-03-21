@@ -6,10 +6,10 @@ var ThisCouldBeBetter;
         class InputHelper {
             constructor() {
                 // Helper variables.
-                this.mouseClickPos = new GameFramework.Coords(0, 0, 0);
-                this.mouseMovePos = new GameFramework.Coords(0, 0, 0);
-                this.mouseMovePosPrev = new GameFramework.Coords(0, 0, 0);
-                this.mouseMovePosNext = new GameFramework.Coords(0, 0, 0);
+                this.mouseClickPos = GameFramework.Coords.blank();
+                this.mouseMovePos = GameFramework.Coords.blank();
+                this.mouseMovePosPrev = GameFramework.Coords.blank();
+                this.mouseMovePosNext = GameFramework.Coords.blank();
                 var inputNames = GameFramework.Input.Names();
                 this.inputNamesLookup = inputNames._AllByName;
                 this.keysToPreventDefaultsFor =
@@ -19,9 +19,13 @@ var ThisCouldBeBetter;
                     ];
                 this.inputsPressed = [];
                 this.inputsPressedByName = new Map();
+                this.isEnabled = true;
             }
             actionsFromInput(actionsByName, actionToInputsMappingsByInputName) {
-                var returnValues = [];
+                var returnValues = new Array();
+                if (this.isEnabled == false) {
+                    return returnValues;
+                }
                 var inputsPressed = this.inputsPressed;
                 for (var i = 0; i < inputsPressed.length; i++) {
                     var inputPressed = inputsPressed[i];

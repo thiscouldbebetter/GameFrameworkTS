@@ -152,7 +152,7 @@ var ThisCouldBeBetter;
                     }, null), // text
                     fontHeightSmall)
                 ];
-                var returnValue = new GameFramework.ControlContainer("Notes", new GameFramework.Coords(0, 0, 0), // pos
+                var returnValue = new GameFramework.ControlContainer("Notes", GameFramework.Coords.blank(), // pos
                 sizeBase.clone(), // size
                 childControls, [
                     new GameFramework.Action("Back", back),

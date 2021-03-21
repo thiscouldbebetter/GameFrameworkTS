@@ -23,7 +23,7 @@ export class ControlLabel extends ControlBase
 
 		// Helper variables.
 
-		this._drawPos = new Coords(0, 0, 0);
+		this._drawPos = Coords.blank();
 	}
 
 	static fromPosAndText(pos: Coords, text: any)
@@ -37,7 +37,24 @@ export class ControlLabel extends ControlBase
 			text,
 			10 // fontHeightInPixels
 		);
-	};
+	}
+
+	static from5
+	(
+		name: string, pos: Coords, size: Coords, isTextCentered: boolean,
+		text: any
+	)
+	{
+		return new ControlLabel
+		(
+			name,
+			pos,
+			size,
+			isTextCentered,
+			text,
+			null // fontHeightInPixels
+		);
+	}
 
 	actionHandle(actionName: string)
 	{

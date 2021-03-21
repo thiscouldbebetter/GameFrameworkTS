@@ -441,7 +441,7 @@ export class VisualBuilder
 			(
 				new VisualLine
 				(
-					new Coords(0, 0, 0),
+					Coords.blank(),
 					new Coords(2, 1, 0).multiplyScalar(circleRadius),
 					circleColor,
 					lineThickness
@@ -463,7 +463,7 @@ export class VisualBuilder
 			(
 				new VisualLine
 				(
-					new Coords(0, 0, 0),
+					Coords.blank(),
 					new Coords(-2, 0, 0).multiplyScalar(circleRadius),
 					circleColor,
 					lineThickness
@@ -485,7 +485,7 @@ export class VisualBuilder
 			(
 				new VisualLine
 				(
-					new Coords(0, 0, 0),
+					Coords.blank(),
 					new Coords(-2, 1, 0).multiplyScalar(circleRadius),
 					circleColor,
 					lineThickness
@@ -507,7 +507,7 @@ export class VisualBuilder
 			(
 				new VisualLine
 				(
-					new Coords(0, 0, 0),
+					Coords.blank(),
 					new Coords(2, 0, 0).multiplyScalar(circleRadius),
 					circleColor,
 					lineThickness

@@ -41,7 +41,7 @@ export class VisualBar implements Visual
 		this.colorForBorderAsValueBreakGroup = colorForBorderAsValueBreakGroup;
 		this.text = text;
 
-		this._drawPos = new Coords(0, 0, 0);
+		this._drawPos = Coords.blank();
 		this._sizeCurrent = this.size.clone();
 		this._sizeHalf = this.size.clone().half();
 	}

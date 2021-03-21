@@ -25,7 +25,7 @@ export class ControlVisual extends ControlBase
 		this.colorBorder = colorBorder;
 
 		// Helper variables.
-		this._drawPos = new Coords(0, 0, 0);
+		this._drawPos = Coords.blank();
 		this._locatable = new Locatable(new Disposition(this._drawPos, null, null));
 		this._locatableEntity = new Entity
 		(
@@ -35,7 +35,7 @@ export class ControlVisual extends ControlBase
 				new Drawable(new VisualNone(), null)
 			]
 		);
-		this._sizeHalf = new Coords(0, 0, 0);
+		this._sizeHalf = Coords.blank();
 	}
 
 	actionHandle(actionName: string, universe: Universe): boolean

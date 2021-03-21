@@ -216,7 +216,7 @@ var ThisCouldBeBetter;
                     deleteSaveSelectedConfirm();
                     saveToLocalStorageAsNewSlot();
                 };
-                var returnValue = new GameFramework.ControlContainer("containerSaveStates", new GameFramework.Coords(0, 0, 0), // pos
+                var returnValue = new GameFramework.ControlContainer("containerSaveStates", GameFramework.Coords.blank(), // pos
                 sizeBase.clone(), // size
                 // children
                 [
@@ -328,7 +328,7 @@ var ThisCouldBeBetter;
                 var scaleMultiplier = size.clone().divide(sizeBase);
                 var fontHeight = controlBuilder.fontHeightInPixelsBase;
                 var buttonHeightBase = controlBuilder.buttonHeightBase;
-                var returnValue = new GameFramework.ControlContainer("containerProfileNew", new GameFramework.Coords(0, 0, 0), // pos
+                var returnValue = new GameFramework.ControlContainer("containerProfileNew", GameFramework.Coords.blank(), // pos
                 sizeBase.clone(), // size
                 // children
                 [
@@ -459,7 +459,7 @@ var ThisCouldBeBetter;
                         universe.venueNext = venueNext;
                     }
                 };
-                var returnValue = new GameFramework.ControlContainer("containerProfileSelect", new GameFramework.Coords(0, 0, 0), // pos
+                var returnValue = new GameFramework.ControlContainer("containerProfileSelect", GameFramework.Coords.blank(), // pos
                 sizeBase.clone(), // size
                 // children
                 [

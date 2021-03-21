@@ -12,6 +12,9 @@ var ThisCouldBeBetter;
             static fromContext(context) {
                 return new DataBinding(context, null, null);
             }
+            static fromContextAndGet(context, get) {
+                return new DataBinding(context, get, null);
+            }
             static fromGet(get) {
                 return new DataBinding(null, get, null);
             }
@@ -19,11 +22,9 @@ var ThisCouldBeBetter;
                 this.context = value;
                 return this;
             }
-            ;
             get() {
                 return (this._get == null ? this.context : this._get(this.context));
             }
-            ;
             set(value) {
                 if (this._set == null) {
                     this.context = value;
@@ -32,7 +33,6 @@ var ThisCouldBeBetter;
                     this._set(this.context, value);
                 }
             }
-            ;
         }
         GameFramework.DataBinding = DataBinding;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

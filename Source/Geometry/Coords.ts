@@ -38,6 +38,16 @@ export class Coords
 
 	// methods
 
+	static blank(): Coords
+	{
+		return new Coords(0, 0, 0);
+	}
+
+	static fromXY(x: number, y: number): Coords
+	{
+		return new Coords(x, y, 0);
+	}
+
 	absolute(): Coords
 	{
 		this.x = Math.abs(this.x);
@@ -586,7 +596,7 @@ class Coords_Instances
 		this.ZeroZeroOne = new Coords(0, 0, 1);
 		this.ZeroMinusOneZero = new Coords(0, -1, 0);
 		this.ZeroOneZero = new Coords(0, 1, 0);
-		this.Zeroes = new Coords(0, 0, 0);
+		this.Zeroes = Coords.blank();
 	}
 }
 

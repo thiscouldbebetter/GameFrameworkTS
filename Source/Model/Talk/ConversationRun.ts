@@ -11,7 +11,7 @@ export class ConversationRun
  
 	scopeCurrent: ConversationScope;
 	talkNodesForTranscript: TalkNode[];
-	variableLookup: Map<string, any>;
+	variablesByName: Map<string, any>;
 
 	p: Entity;
 	t: Entity;
@@ -42,14 +42,14 @@ export class ConversationRun
 
 		this.talkNodesForTranscript = [];
 
-		this.variableLookup = new Map<string, any>();
+		this.variablesByName = new Map<string, any>();
 
 		this.next(null);
 
 		// Abbreviate for scripts.
 		this.p = this.entityPlayer;
 		this.t = this.entityTalker;
-		this.vars = this.variableLookup;
+		this.vars = this.variablesByName;
 	}
 
 	// instance methods
@@ -70,6 +70,16 @@ export class ConversationRun
 	update(universe: Universe)
 	{
 		this.scopeCurrent.update(universe, this);
+	}
+
+	variableByName(variableName: string)
+	{
+		return this.variablesByName.get(variableName);
+	}
+
+	variableSet(variableName: string, variableValue: any)
+	{
+		this.variablesByName.set(variableName, variableValue);
 	}
 
 	// controls
@@ -123,7 +133,7 @@ export class ConversationRun
 		var returnValue = new ControlContainer
 		(
 			"containerConversation",
-			new Coords(0, 0, 0), // pos
+			Coords.blank(), // pos
 			size,
 			// children
 			[
@@ -306,7 +316,7 @@ export class ConversationRun
 		var returnValue = new ControlContainer
 		(
 			"containerConversation",
-			new Coords(0, 0, 0), // pos
+			Coords.blank(), // pos
 			size,
 			// children
 			[

@@ -32,11 +32,11 @@ export class ControlTextBox extends ControlBase
 		this.cursorPos = null;
 
 		// Helper variables.
-		this._drawPos = new Coords(0, 0, 0);
-		this._drawPosText = new Coords(0, 0, 0);
+		this._drawPos = Coords.blank();
+		this._drawPosText = Coords.blank();
 		this._drawLoc = new Disposition(this._drawPos, null, null);
-		this._textMargin = new Coords(0, 0, 0);
-		this._textSize = new Coords(0, 0, 0);
+		this._textMargin = Coords.blank();
+		this._textSize = Coords.blank();
 	}
 
 	text(value: any, universe: Universe)

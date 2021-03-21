@@ -34,12 +34,12 @@ export class VisualRepeating implements Visual
 			this.cellSize
 		);
 
-		this._cellPos = new Coords(0, 0, 0);
-		this._drawOffset = new Coords(0, 0, 0);
-		this._drawPosWrapped = new Coords(0, 0, 0);
-		this._drawablePosToRestore = new Coords(0, 0, 0);
+		this._cellPos = Coords.blank();
+		this._drawOffset = Coords.blank();
+		this._drawPosWrapped = Coords.blank();
+		this._drawablePosToRestore = Coords.blank();
 		this._endPosInCells = this.viewSizeInCells.clone();
-		this._startPosInCells = new Coords(0, 0, 0);
+		this._startPosInCells = Coords.blank();
 
 		if (expandViewStartAndEndByCell)
 		{

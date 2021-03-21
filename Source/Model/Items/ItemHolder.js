@@ -390,7 +390,7 @@ var ThisCouldBeBetter;
                         drop();
                     }, null, null)
                 ];
-                var returnValue = new GameFramework.ControlContainer("Items", new GameFramework.Coords(0, 0, 0), // pos
+                var returnValue = new GameFramework.ControlContainer("Items", GameFramework.Coords.blank(), // pos
                 sizeBase.clone(), // size
                 childControls, [
                     new GameFramework.Action("Back", back),

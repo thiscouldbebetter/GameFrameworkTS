@@ -6,10 +6,10 @@ var ThisCouldBeBetter;
         class Locatable extends GameFramework.EntityProperty {
             constructor(loc) {
                 super();
-                this.loc = loc || new GameFramework.Disposition(null, null, null);
+                this.loc = loc || GameFramework.Disposition.blank();
             }
             static fromPos(pos) {
-                return new Locatable(new GameFramework.Disposition(pos, null, null));
+                return new Locatable(GameFramework.Disposition.fromPos(pos));
             }
             approachOtherWithAccelerationAndSpeedMax(locatableToApproach, accelerationPerTick, speedMax // ,distanceMin: number
             ) {

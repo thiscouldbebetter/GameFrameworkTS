@@ -20,7 +20,7 @@ export class VisualBuffered implements Visual
 		this.displayForBuffer = Display2D.fromSizeAndIsInvisible(this.size, true);
 		this.sizeHalf = this.size.clone().half();
 
-		this._posSaved = new Coords(0, 0, 0);
+		this._posSaved = Coords.blank();
 
 		this.displayForBuffer.initialize(null);
 	}

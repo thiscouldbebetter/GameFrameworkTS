@@ -20,6 +20,12 @@ var ThisCouldBeBetter;
                 this.backgroundColor =
                     (backgroundColor == null ? GameFramework.Color.Instances().Black : backgroundColor);
             }
+            static fromVenueTo(venueToFadeTo) {
+                return new VenueFader(venueToFadeTo, null, null, null);
+            }
+            static fromVenuesToAndFrom(venueToFadeTo, venueToFadeFrom) {
+                return new VenueFader(venueToFadeTo, venueToFadeFrom, null, null);
+            }
             finalize(universe) { }
             initialize(universe) {
                 var venueToFadeTo = this.venueToFadeTo();
@@ -58,7 +64,7 @@ var ThisCouldBeBetter;
                 var fadeColor = this.backgroundColor.clone();
                 fadeColor.alpha(alphaOfFadeColor * this.backgroundColor.alpha(null));
                 var display = universe.display;
-                display.drawRectangle(new GameFramework.Coords(0, 0, 0), display.sizeDefault(), // Scaled automatically.
+                display.drawRectangle(GameFramework.Coords.blank(), display.sizeDefault(), // Scaled automatically.
                 fadeColor.systemColor(), null, null);
             }
             venueToFadeTo() {

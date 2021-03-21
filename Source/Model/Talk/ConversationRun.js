@@ -15,12 +15,12 @@ var ThisCouldBeBetter;
                 // talkNodesForOptions
                 []);
                 this.talkNodesForTranscript = [];
-                this.variableLookup = new Map();
+                this.variablesByName = new Map();
                 this.next(null);
                 // Abbreviate for scripts.
                 this.p = this.entityPlayer;
                 this.t = this.entityTalker;
-                this.vars = this.variableLookup;
+                this.vars = this.variablesByName;
             }
             // instance methods
             next(universe) {
@@ -35,6 +35,12 @@ var ThisCouldBeBetter;
             }
             update(universe) {
                 this.scopeCurrent.update(universe, this);
+            }
+            variableByName(variableName) {
+                return this.variablesByName.get(variableName);
+            }
+            variableSet(variableName, variableValue) {
+                this.variablesByName.set(variableName, variableValue);
             }
             // controls
             toControl(size, universe) {
@@ -65,7 +71,7 @@ var ThisCouldBeBetter;
                     venueNext = new GameFramework.VenueFader(venueNext, universe.venueCurrent, null, null);
                     universe.venueNext = venueNext;
                 };
-                var returnValue = new GameFramework.ControlContainer("containerConversation", new GameFramework.Coords(0, 0, 0), // pos
+                var returnValue = new GameFramework.ControlContainer("containerConversation", GameFramework.Coords.blank(), // pos
                 size, 
                 // children
                 [
@@ -126,7 +132,7 @@ var ThisCouldBeBetter;
                 var buttonHeight = 25;
                 var marginSize = new GameFramework.Coords(1, 1, 0).multiplyScalar(marginWidth);
                 var listSize = new GameFramework.Coords(size.x * .75, size.y - labelHeight - marginSize.y * 3, 0);
-                var returnValue = new GameFramework.ControlContainer("containerConversation", new GameFramework.Coords(0, 0, 0), // pos
+                var returnValue = new GameFramework.ControlContainer("containerConversation", GameFramework.Coords.blank(), // pos
                 size, 
                 // children
                 [

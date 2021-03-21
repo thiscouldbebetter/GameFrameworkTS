@@ -134,7 +134,7 @@ export class Playable extends EntityProperty
 		var statusAsControl = new ControlContainer
 		(
 			"Status",
-			new Coords(0, 0, 0), // pos
+			Coords.blank(), // pos
 			size.clone().addDimensions(0, -32, 0), // size
 			// children
 			controlsForStatusFields,
@@ -152,7 +152,7 @@ export class Playable extends EntityProperty
 		var returnValue = new ControlTabbed
 		(
 			"tabbedItems",
-			new Coords(0, 0, 0), // pos
+			Coords.blank(), // pos
 			size,
 			tabButtonSize,
 			controlsForTabs,
@@ -346,7 +346,7 @@ export class Playable extends EntityProperty
 		(
 			"visualPlayerStatusInfo",
 			new Coords(5, 2, 0).multiplyScalar(playerVisualBarSize.y), // pos
-			new Coords(0, 0, 0), // size
+			Coords.blank(), // size
 			DataBinding.fromContext(playerVisualStatusInfo),
 			null, null
 		);
@@ -454,7 +454,7 @@ export class Playable extends EntityProperty
 		var controlOverlayContainer = new ControlContainer
 		(
 			"containerPlayer",
-			new Coords(0, 0, 0), // pos,
+			Coords.blank(), // pos,
 			universe.display.sizeInPixels.clone(),
 			childControls,
 			null, null

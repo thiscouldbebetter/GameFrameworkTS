@@ -10,7 +10,7 @@ var ThisCouldBeBetter;
                 this.colorBorder = colorBorder;
                 this.isCentered = (isCentered == null ? true : isCentered);
                 this.sizeHalf = this.size.clone().half();
-                this._drawPos = new GameFramework.Coords(0, 0, 0);
+                this._drawPos = GameFramework.Coords.blank();
             }
             draw(universe, world, place, entity, display) {
                 var drawPos = this._drawPos.overwriteWith(entity.locatable().loc.pos);

@@ -13,6 +13,9 @@ var ThisCouldBeBetter;
                 this.axes = [this.forward, this.right, this.down];
                 this.axesRDF = [this.right, this.down, this.forward];
             }
+            static default() {
+                return new Orientation(new GameFramework.Coords(1, 0, 0), new GameFramework.Coords(0, 0, 1));
+            }
             default() {
                 var coordsInstances = GameFramework.Coords.Instances();
                 this.forwardDownSet(coordsInstances.OneZeroZero, coordsInstances.ZeroZeroOne);
@@ -59,8 +62,8 @@ var ThisCouldBeBetter;
                 return coordsToProject;
             }
             unprojectCoords(coordsToUnproject) {
-                var returnValue = new GameFramework.Coords(0, 0, 0);
-                var axisScaled = new GameFramework.Coords(0, 0, 0);
+                var returnValue = GameFramework.Coords.blank();
+                var axisScaled = GameFramework.Coords.blank();
                 for (var i = 0; i < this.axes.length; i++) {
                     var axis = this.axes[i];
                     axisScaled.overwriteWith(axis).multiplyScalar(coordsToUnproject.dimensionGet(i));
@@ -73,8 +76,8 @@ var ThisCouldBeBetter;
                 return coordsToProject;
             }
             unprojectCoordsRDF(coordsToUnproject) {
-                var returnValue = new GameFramework.Coords(0, 0, 0);
-                var axisScaled = new GameFramework.Coords(0, 0, 0);
+                var returnValue = GameFramework.Coords.blank();
+                var axisScaled = GameFramework.Coords.blank();
                 for (var i = 0; i < this.axesRDF.length; i++) {
                     var axis = this.axesRDF[i];
                     axisScaled.overwriteWith(axis).multiplyScalar(coordsToUnproject.dimensionGet(i));

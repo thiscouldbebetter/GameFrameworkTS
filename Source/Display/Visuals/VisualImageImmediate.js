@@ -8,7 +8,7 @@ var ThisCouldBeBetter;
                 this._image = image;
                 this.isScaled = isScaled || false;
                 // Helper variables.
-                this._drawPos = new GameFramework.Coords(0, 0, 0);
+                this._drawPos = GameFramework.Coords.blank();
             }
             // instance methods
             image(universe) {

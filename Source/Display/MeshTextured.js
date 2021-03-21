@@ -32,7 +32,7 @@ var ThisCouldBeBetter;
                 var numberOfFaces = this.geometry.faceBuilders.length;
                 for (var f = 0; f < numberOfFaces; f++) {
                     var faceTexture = new MeshTexturedFaceTexture(materialName, [
-                        new GameFramework.Coords(0, 0, 0),
+                        GameFramework.Coords.blank(),
                         new GameFramework.Coords(1, 0, 0),
                         new GameFramework.Coords(1, 1, 0),
                         new GameFramework.Coords(1, 0, 0)

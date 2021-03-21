@@ -31,7 +31,7 @@ export class Bone
 
 	pos(bonesByName: any)
 	{
-		var returnValue = new Coords(0, 0, 0);
+		var returnValue = Coords.blank();
 
 		var bone = bonesByName.get(this.parentName);
 

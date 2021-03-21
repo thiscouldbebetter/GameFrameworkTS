@@ -18,7 +18,7 @@ export class PlaceBuilderDemo_Movers
 
 		var constraintSpeedMax1 = new Constraint_SpeedMaxXY(1);
 
-		var carnivoreCollider = new Sphere(new Coords(0, 0, 0), carnivoreDimension);
+		var carnivoreCollider = new Sphere(Coords.blank(), carnivoreDimension);
 
 		var visualEyeRadius = entityDimension * .75 / 2;
 		var visualBuilder = new VisualBuilder();
@@ -64,7 +64,7 @@ export class PlaceBuilderDemo_Movers
 			new VisualOffset
 			(
 				visualEyesDirectional,
-				new Coords(0, 0, 0)
+				Coords.blank()
 			),
 		]);
 
@@ -126,7 +126,7 @@ export class PlaceBuilderDemo_Movers
 				{
 					var randomizer = universe.randomizer;
 					targetPos =
-						new Coords(0, 0, 0).randomize(randomizer).multiply(place.size);
+						Coords.blank().randomize(randomizer).multiply(place.size);
 				}
 				else
 				{
@@ -196,7 +196,7 @@ export class PlaceBuilderDemo_Movers
 				new Drawable(carnivoreVisual, null),
 				new DrawableCamera(),
 				new Killable(10, null, carnivoreDie),
-				new Locatable(new Disposition(new Coords(0, 0, 0), null, null) )
+				new Locatable(new Disposition(Coords.blank(), null, null) )
 			]
 		);
 
@@ -228,7 +228,7 @@ export class PlaceBuilderDemo_Movers
 		var enemyColliderAsFace = new Face(enemyVertices);
 		var enemyCollider = Mesh.fromFace
 		(
-			new Coords(0, 0, 0), // center
+			Coords.blank(), // center
 			enemyColliderAsFace,
 			1 // thickness
 		);
@@ -344,7 +344,7 @@ export class PlaceBuilderDemo_Movers
 				new Effectable([]),
 				new Enemy(weapon),
 				enemyKillable,
-				new Locatable(new Disposition(new Coords(0, 0, 0), null, null)),
+				new Locatable(new Disposition(Coords.blank(), null, null)),
 				enemyPerceptor
 			]
 		);
@@ -384,7 +384,7 @@ export class PlaceBuilderDemo_Movers
 					universe.randomizer.getNextRandom(), 1, 0
 				);
 				var offsetFromCenter =
-					directionFromCenter.toCoords(new Coords(0, 0, 0)).multiply
+					directionFromCenter.toCoords(Coords.blank()).multiply
 					(
 						placeSizeHalf
 					).double();
@@ -476,7 +476,7 @@ export class PlaceBuilderDemo_Movers
 				new Path
 				([
 					// todo - Scale.
-					new Coords(-8, -8, 0), new Coords(0, 0, 0), new Coords(8, -8, 0)
+					new Coords(-8, -8, 0), Coords.blank(), new Coords(8, -8, 0)
 				]),
 				Color.byName("GrayDark"),
 				3, // lineThickness
@@ -680,7 +680,7 @@ export class PlaceBuilderDemo_Movers
 		var constraintSpeedMax1 = new Constraint_SpeedMaxXY(1);
 		var constrainable = new Constrainable([constraintSpeedMax1]);
 
-		var friendlyCollider = new Sphere(new Coords(0, 0, 0), friendlyDimension);
+		var friendlyCollider = new Sphere(Coords.blank(), friendlyDimension);
 		var friendlyCollide =
 			(u: Universe, w: World, p: Place, eFriendly: Entity, eOther: Entity, c: Collision) =>
 			{
@@ -781,7 +781,7 @@ export class PlaceBuilderDemo_Movers
 			{
 				var randomizer = universe.randomizer;
 				targetPos =
-					new Coords(0, 0, 0).randomize(randomizer).multiply(place.size);
+					Coords.blank().randomize(randomizer).multiply(place.size);
 				activity.target = targetPos;
 			}
 
@@ -868,7 +868,7 @@ export class PlaceBuilderDemo_Movers
 
 		var constraintSpeedMax1 = new Constraint_SpeedMaxXY(1);
 
-		var grazerCollider = new Sphere(new Coords(0, 0, 0), grazerDimension);
+		var grazerCollider = new Sphere(Coords.blank(), grazerDimension);
 
 		var visualEyeRadius = entityDimension * .75 / 2;
 		var visualBuilder = new VisualBuilder();
@@ -984,7 +984,7 @@ export class PlaceBuilderDemo_Movers
 				{
 					var randomizer = universe.randomizer;
 					targetPos =
-						new Coords(0, 0, 0).randomize(randomizer).multiply(place.size);
+						Coords.blank().randomize(randomizer).multiply(place.size);
 				}
 				else
 				{
@@ -1093,7 +1093,7 @@ export class PlaceBuilderDemo_Movers
 				new Drawable(grazerVisual, null),
 				new DrawableCamera(),
 				new Killable(10, null, grazerDie),
-				new Locatable(new Disposition(new Coords(0, 0, 0), null, null) )
+				new Locatable(new Disposition(Coords.blank(), null, null) )
 			]
 		);
 
@@ -1108,7 +1108,7 @@ export class PlaceBuilderDemo_Movers
 		var visualEyesBlinking = visualBuilder.eyesBlinking(visualEyeRadius);
 
 		var playerHeadRadius = entityDimension * .75;
-		var playerCollider = new Sphere(new Coords(0, 0, 0), playerHeadRadius);
+		var playerCollider = new Sphere(Coords.blank(), playerHeadRadius);
 		var playerColor = Color.byName("Gray");
 
 		var playerVisualBodyNormal: Visual = visualBuilder.circleWithEyesAndLegsAndArms

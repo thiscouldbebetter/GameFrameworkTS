@@ -64,10 +64,10 @@ var ThisCouldBeBetter;
                 var defns = new GameFramework.WorldDefn([activityDefns, entityDefns, itemDefns, placeDefns, skills]);
                 var places = [];
                 var worldSizeInRooms = new GameFramework.Coords(2, 2, 1);
-                var roomPos = new GameFramework.Coords(0, 0, 0);
+                var roomPos = GameFramework.Coords.blank();
                 var roomSize = displaySize.clone().double();
-                var startPos = new GameFramework.Coords(0, 0, 0);
-                var goalPos = new GameFramework.Coords(0, 0, 0).randomize(null).multiply(worldSizeInRooms).floor();
+                var startPos = GameFramework.Coords.blank();
+                var goalPos = GameFramework.Coords.blank().randomize(null).multiply(worldSizeInRooms).floor();
                 for (var y = 0; y < worldSizeInRooms.y; y++) {
                     roomPos.y = y;
                     for (var x = 0; x < worldSizeInRooms.x; x++) {

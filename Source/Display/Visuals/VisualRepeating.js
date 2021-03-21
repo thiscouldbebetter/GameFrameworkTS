@@ -12,12 +12,12 @@ var ThisCouldBeBetter;
                     throw "Invalid argument: cellSize.z must not be 0.";
                 }
                 this.viewSizeInCells = this.viewSize.clone().divide(this.cellSize);
-                this._cellPos = new GameFramework.Coords(0, 0, 0);
-                this._drawOffset = new GameFramework.Coords(0, 0, 0);
-                this._drawPosWrapped = new GameFramework.Coords(0, 0, 0);
-                this._drawablePosToRestore = new GameFramework.Coords(0, 0, 0);
+                this._cellPos = GameFramework.Coords.blank();
+                this._drawOffset = GameFramework.Coords.blank();
+                this._drawPosWrapped = GameFramework.Coords.blank();
+                this._drawablePosToRestore = GameFramework.Coords.blank();
                 this._endPosInCells = this.viewSizeInCells.clone();
-                this._startPosInCells = new GameFramework.Coords(0, 0, 0);
+                this._startPosInCells = GameFramework.Coords.blank();
                 if (expandViewStartAndEndByCell) {
                     this._startPosInCells.addDimensions(-1, -1, 0);
                     this._endPosInCells.addDimensions(1, 1, 0);

@@ -16,16 +16,17 @@ export class InputHelper implements Platformable
 	inputsPressedByName: Map<string, Input>;
 	keysToPreventDefaultsFor: string[];
 
+	isEnabled: boolean;
 	isMouseMovementTracked: boolean;
 
 	constructor()
 	{
 		// Helper variables.
 
-		this.mouseClickPos = new Coords(0, 0, 0);
-		this.mouseMovePos = new Coords(0, 0, 0);
-		this.mouseMovePosPrev = new Coords(0, 0, 0);
-		this.mouseMovePosNext = new Coords(0, 0, 0);
+		this.mouseClickPos = Coords.blank();
+		this.mouseMovePos = Coords.blank();
+		this.mouseMovePosPrev = Coords.blank();
+		this.mouseMovePosNext = Coords.blank();
 
 		var inputNames = Input.Names();
 		this.inputNamesLookup = inputNames._AllByName;
@@ -37,6 +38,8 @@ export class InputHelper implements Platformable
 
 		this.inputsPressed = [];
 		this.inputsPressedByName = new Map<string, Input>();
+
+		this.isEnabled = true;
 	}
 
 	actionsFromInput
@@ -45,7 +48,12 @@ export class InputHelper implements Platformable
 		actionToInputsMappingsByInputName: Map<string, ActionToInputsMapping>
 	)
 	{
-		var returnValues = [];
+		var returnValues = new Array<Action>();
+
+		if (this.isEnabled == false)
+		{
+			return returnValues;
+		}
 
 		var inputsPressed = this.inputsPressed;
 		for (var i = 0; i < inputsPressed.length; i++)

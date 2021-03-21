@@ -439,7 +439,7 @@ export class EquipmentUser extends EntityProperty
 		var returnValue = new ControlContainer
 		(
 			"Equip",
-			new Coords(0, 0, 0), // pos
+			Coords.blank(), // pos
 			sizeBase.clone(), // size
 			// children
 			[

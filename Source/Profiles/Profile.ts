@@ -412,7 +412,7 @@ export class Profile
 		var returnValue = new ControlContainer
 		(
 			"containerSaveStates",
-			new Coords(0, 0, 0), // pos
+			Coords.blank(), // pos
 			sizeBase.clone(), // size
 			// children
 			[
@@ -693,7 +693,7 @@ export class Profile
 		var returnValue = new ControlContainer
 		(
 			"containerProfileNew",
-			new Coords(0, 0, 0), // pos
+			Coords.blank(), // pos
 			sizeBase.clone(), // size
 			// children
 			[
@@ -933,7 +933,7 @@ export class Profile
 		var returnValue = new ControlContainer
 		(
 			"containerProfileSelect",
-			new Coords(0, 0, 0), // pos
+			Coords.blank(), // pos
 			sizeBase.clone(), // size
 			// children
 			[

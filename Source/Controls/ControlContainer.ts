@@ -24,8 +24,12 @@ export class ControlContainer extends ControlBase
 
 	constructor
 	(
-		name: string, pos: Coords, size: Coords, children: ControlBase[],
-		actions: Action[], actionToInputsMappings: ActionToInputsMapping[]
+		name: string,
+		pos: Coords,
+		size: Coords,
+		children: ControlBase[],
+		actions: Action[],
+		actionToInputsMappings: ActionToInputsMapping[]
 	)
 	{
 		super(name, pos, size, null);
@@ -51,12 +55,26 @@ export class ControlContainer extends ControlBase
 		this.childrenContainingPosPrev = [];
 
 		// Helper variables.
-		this._childMax = new Coords(0, 0, 0);
-		this._drawPos = new Coords(0, 0, 0);
+		this._childMax = Coords.blank();
+		this._drawPos = Coords.blank();
 		this._drawLoc = new Disposition(this._drawPos, null, null);
-		this._mouseClickPos = new Coords(0, 0, 0);
-		this._mouseMovePos = new Coords(0, 0, 0);
-		this._posToCheck = new Coords(0, 0, 0);
+		this._mouseClickPos = Coords.blank();
+		this._mouseMovePos = Coords.blank();
+		this._posToCheck = Coords.blank();
+	}
+
+	static from4
+	(
+		name: string,
+		pos: Coords,
+		size: Coords,
+		children: ControlBase[]
+	)
+	{
+		return new ControlContainer
+		(
+			name, pos, size, children, null, null
+		);
 	}
 
 	// instance methods
@@ -134,11 +152,22 @@ export class ControlContainer extends ControlBase
 		}
 
 		return wasActionHandled;
-	};
+	}
 
 	actionToInputsMappings()
 	{
 		return this._actionToInputsMappings;
+	}
+
+	childAdd(childToAdd: ControlBase)
+	{
+		this.children.push(childToAdd);
+		this.childrenByName.set(childToAdd.name, childToAdd);
+	}
+
+	childByName(childName: string)
+	{
+		return this.childrenByName.get(childName);
 	}
 
 	childWithFocus()

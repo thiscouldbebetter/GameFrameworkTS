@@ -5,17 +5,23 @@ var ThisCouldBeBetter;
     (function (GameFramework) {
         class Disposition {
             constructor(pos, orientation, placeName) {
-                this.pos = pos || new GameFramework.Coords(0, 0, 0);
+                this.pos = pos || GameFramework.Coords.blank();
                 if (orientation == null) {
                     orientation = GameFramework.Orientation.Instances().ForwardXDownZ.clone();
                 }
                 this.orientation = orientation;
                 this.placeName = placeName;
-                this.vel = new GameFramework.Coords(0, 0, 0);
-                this.accel = new GameFramework.Coords(0, 0, 0);
-                this.force = new GameFramework.Coords(0, 0, 0);
+                this.vel = GameFramework.Coords.blank();
+                this.accel = GameFramework.Coords.blank();
+                this.force = GameFramework.Coords.blank();
                 this.spin = new GameFramework.Rotation(this.orientation.down, new GameFramework.Reference(0));
                 this.timeOffsetInTicks = 0;
+            }
+            static blank() {
+                return new Disposition(null, null, null);
+            }
+            static fromPos(pos) {
+                return new Disposition(pos, null, null);
             }
             place(world) {
                 return world.placesByName.get(this.placeName);

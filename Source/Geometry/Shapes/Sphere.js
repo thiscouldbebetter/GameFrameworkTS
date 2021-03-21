@@ -8,7 +8,7 @@ var ThisCouldBeBetter;
                 this.center = center;
                 this.radius = radius;
                 // Helper variables.
-                this._displacement = new GameFramework.Coords(0, 0, 0);
+                this._displacement = GameFramework.Coords.blank();
             }
             containsOther(other) {
                 var displacementOfOther = this._displacement.overwriteWith(other.center).subtract(this.center);
@@ -17,7 +17,7 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             pointRandom() {
-                return new GameFramework.Polar(0, this.radius, 0).random(null).toCoords(new GameFramework.Coords(0, 0, 0)).add(this.center);
+                return new GameFramework.Polar(0, this.radius, 0).random(null).toCoords(GameFramework.Coords.blank()).add(this.center);
             }
             // cloneable
             clone() {

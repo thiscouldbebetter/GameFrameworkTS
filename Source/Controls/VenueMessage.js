@@ -11,6 +11,9 @@ var ThisCouldBeBetter;
                 this._sizeInPixels = sizeInPixels;
                 this.showMessageOnly = showMessageOnly || false;
             }
+            static fromMessageAndAcknowledge(messageToShow, acknowledge) {
+                return new VenueMessage(messageToShow, acknowledge, null, null, null);
+            }
             static fromText(message) {
                 return new VenueMessage(new GameFramework.DataBinding(message, null, null), null, null, null, null);
             }

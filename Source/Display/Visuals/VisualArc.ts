@@ -24,7 +24,7 @@ export class VisualArc implements Visual
 		this.colorBorder = colorBorder;
 
 		// helper variables
-		this._drawPos = new Coords(0, 0, 0);
+		this._drawPos = Coords.blank();
 		this._polar = new Polar(0, 0, 0);
 	}
 

@@ -19,7 +19,7 @@ export class Face
 	{
 		if (this._box == null)
 		{
-			this._box = new Box(new Coords(0, 0, 0), new Coords(0, 0, 0));
+			this._box = new Box(Coords.blank(), Coords.blank());
 		}
 		this._box.ofPoints(this.vertices);
 		return this._box;
@@ -31,7 +31,7 @@ export class Face
 
 		var faceNormal = face.plane().normal;
 
-		var displacementFromVertex0ToCollision = new Coords(0, 0, 0);
+		var displacementFromVertex0ToCollision = Coords.blank();
 
 		var isPosWithinAllEdgesOfFaceSoFar = true;
 
@@ -100,7 +100,7 @@ export class Face
 	{
 		if (this._plane == null)
 		{
-			this._plane = new Plane(new Coords(0, 0, 0), 0);
+			this._plane = new Plane(Coords.blank(), 0);
 		}
 
 		this._plane.fromPoints

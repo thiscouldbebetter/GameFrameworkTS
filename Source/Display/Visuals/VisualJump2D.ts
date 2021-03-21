@@ -15,7 +15,7 @@ export class VisualJump2D implements Visual
 		this.visualJumper = visualJumper;
 		this.visualShadow = visualShadow;
 
-		this._posSaved = new Coords(0, 0, 0);
+		this._posSaved = Coords.blank();
 	}
 
 	// Transformable.

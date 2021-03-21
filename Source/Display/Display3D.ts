@@ -395,7 +395,7 @@ export class Display3D implements Display
 		this.matrixOrient = Matrix.buildZeroes();
 		this.matrixPerspective = Matrix.buildZeroes();
 		this.matrixTranslate = Matrix.buildZeroes();
-		this.tempCoords = new Coords(0, 0, 0);
+		this.tempCoords = Coords.blank();
 		this.tempMatrix0 = Matrix.buildZeroes();
 		this.tempMatrix1 = Matrix.buildZeroes();
 

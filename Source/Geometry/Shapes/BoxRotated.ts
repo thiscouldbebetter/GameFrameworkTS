@@ -29,12 +29,12 @@ export class BoxRotated implements ShapeBase
 	{
 		// todo - Adapt or call Box.normalAtPos() instead.
 
-		var plane = new Plane(new Coords(0, 0, 0), 0);
+		var plane = new Plane(Coords.blank(), 0);
 		var polar = new Polar(0, 1, 0);
 		var box = this.box;
 		var center = box.center;
 		var sizeHalf = box.sizeHalf();
-		var displacementToSurface = new Coords(0, 0, 0);
+		var displacementToSurface = Coords.blank();
 		var distanceMinSoFar = Number.POSITIVE_INFINITY;
 
 		for (var d = 0; d < 2; d++)

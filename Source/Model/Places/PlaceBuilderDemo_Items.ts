@@ -177,7 +177,7 @@ export class PlaceBuilderDemo_Items
 
 		var pathTail = new Path
 		([
-			new Coords(0, 0, 0),
+			Coords.blank(),
 			new Coords(-.5, .25, 0),
 			new Coords(-.75, .25, 0),
 			new Coords(-.5, 0, 0),
@@ -351,7 +351,7 @@ export class PlaceBuilderDemo_Items
 				var container = new ControlContainer
 				(
 					"containerBook",
-					new Coords(0, 0, 0),
+					Coords.blank(),
 					size.clone(),
 					[ textarea, button ], // children
 					[
@@ -1187,7 +1187,7 @@ export class PlaceBuilderDemo_Items
 					new Coords(this.entityDimensionHalf / 2, this.entityDimensionHalf, 0),
 					colorStem, null, null
 				),
-				new Coords(0, 0, 0)
+				Coords.blank()
 			)
 		]);
 
@@ -1610,7 +1610,7 @@ export class PlaceBuilderDemo_Items
 			new VisualOffset
 			(
 				itemTorchVisualBody,
-				new Coords(0, 0, 0)
+				Coords.blank()
 			),
 
 			new VisualOffset

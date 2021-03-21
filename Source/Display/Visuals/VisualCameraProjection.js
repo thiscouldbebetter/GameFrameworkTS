@@ -8,7 +8,7 @@ var ThisCouldBeBetter;
                 this.child = child;
                 this.cameraFactory = cameraFactory;
                 // Helper variables.
-                this._posSaved = new GameFramework.Coords(0, 0, 0);
+                this._posSaved = GameFramework.Coords.blank();
             }
             draw(universe, world, place, entity, display) {
                 var drawablePos = entity.locatable().loc.pos;

@@ -6,13 +6,13 @@ var ThisCouldBeBetter;
         class Edge {
             constructor(vertices) {
                 this.vertices = vertices;
-                this._direction = new GameFramework.Coords(0, 0, 0);
-                this._displacement = new GameFramework.Coords(0, 0, 0);
-                this._transverse = new GameFramework.Coords(0, 0, 0);
+                this._direction = GameFramework.Coords.blank();
+                this._displacement = GameFramework.Coords.blank();
+                this._transverse = GameFramework.Coords.blank();
             }
             box() {
                 if (this._box == null) {
-                    this._box = new GameFramework.Box(new GameFramework.Coords(0, 0, 0), new GameFramework.Coords(0, 0, 0));
+                    this._box = new GameFramework.Box(GameFramework.Coords.blank(), GameFramework.Coords.blank());
                 }
                 this._box.ofPoints(this.vertices);
                 return this._box;

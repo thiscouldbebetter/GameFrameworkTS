@@ -10,7 +10,7 @@ var ThisCouldBeBetter;
             }
             // EntityProperty.
             initialize(u, w, p, e) {
-                this.route.bounds = GameFramework.Box.fromMinAndMax(new GameFramework.Coords(0, 0, 0), p.size.clone());
+                this.route.bounds = GameFramework.Box.fromMinAndMax(GameFramework.Coords.blank(), p.size.clone());
             }
             // Clonable.
             clone() {
@@ -29,7 +29,7 @@ var ThisCouldBeBetter;
                 this.goalPos = goalPos;
                 this.lengthMax = lengthMax || Number.POSITIVE_INFINITY;
                 // Helper variables.
-                this._tempPos = new GameFramework.Coords(0, 0, 0);
+                this._tempPos = GameFramework.Coords.blank();
             }
             calculate() {
                 var startPos = this.startPos.clone();
@@ -87,7 +87,7 @@ var ThisCouldBeBetter;
             neighborsForNode(nodeCentral, goalPos) {
                 var returnValues = new Array();
                 var nodeCentralPos = nodeCentral.pos;
-                var neighborPos = new GameFramework.Coords(0, 0, 0);
+                var neighborPos = GameFramework.Coords.blank();
                 var neighborPositions = new Array();
                 var directions = this.neighborOffsets;
                 for (var i = 0; i < directions.length; i++) {

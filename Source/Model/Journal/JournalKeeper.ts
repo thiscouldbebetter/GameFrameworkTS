@@ -346,7 +346,7 @@ export class JournalKeeper extends EntityProperty
 		var returnValue = new ControlContainer
 		(
 			"Notes",
-			new Coords(0, 0, 0), // pos
+			Coords.blank(), // pos
 			sizeBase.clone(), // size
 			childControls,
 			[

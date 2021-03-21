@@ -179,7 +179,7 @@ export class ItemCrafter extends EntityProperty
 		var returnValue = new ControlContainer
 		(
 			"Craft",
-			new Coords(0, 0, 0), // pos
+			Coords.blank(), // pos
 			sizeBase.clone(), // size
 			// children
 			[

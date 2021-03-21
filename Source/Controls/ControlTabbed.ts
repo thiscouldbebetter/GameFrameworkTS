@@ -88,13 +88,13 @@ export class ControlTabbed extends ControlBase
 		this.buttonsForChildren = buttonsForChildren;
 
 		// Temporary variables.
-		this._childMax = new Coords(0, 0, 0);
+		this._childMax = Coords.blank();
 		this._childrenContainingPos = [];
-		this._drawPos = new Coords(0, 0, 0);
+		this._drawPos = Coords.blank();
 		this._drawLoc = new Disposition(this._drawPos, null, null);
-		this._mouseClickPos = new Coords(0, 0, 0);
-		this._mouseMovePos = new Coords(0, 0, 0);
-		this._posToCheck = new Coords(0, 0, 0);
+		this._mouseClickPos = Coords.blank();
+		this._mouseMovePos = Coords.blank();
+		this._posToCheck = Coords.blank();
 	}
 
 	// instance methods

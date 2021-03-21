@@ -38,7 +38,7 @@ export class MapOfCells
 
 		// Helper variables.
 		this._cell = this.cellPrototype.clone();
-		this._posInCells = new Coords(0, 0, 0);
+		this._posInCells = Coords.blank();
 	}
 
 	cellAtPos(pos: Coords)
@@ -61,8 +61,8 @@ export class MapOfCells
 	{
 		var returnValues = [];
 
-		var cellPosInCells = new Coords(0, 0, 0);
-		var cellPosStart = new Coords(0, 0, 0);
+		var cellPosInCells = Coords.blank();
+		var cellPosStart = Coords.blank();
 		var cellPosEnd = this.sizeInCells;
 
 		// todo

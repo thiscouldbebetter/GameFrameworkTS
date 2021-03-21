@@ -7,7 +7,7 @@ var ThisCouldBeBetter;
             constructor(childSpacing, children) {
                 this.childSpacing = childSpacing;
                 this.children = children;
-                this._posSaved = new GameFramework.Coords(0, 0, 0);
+                this._posSaved = GameFramework.Coords.blank();
             }
             draw(universe, world, place, entity, display) {
                 var drawPos = entity.locatable().loc.pos;

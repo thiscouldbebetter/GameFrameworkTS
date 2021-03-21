@@ -19,6 +19,12 @@ var ThisCouldBeBetter;
                 return Coords._instances;
             }
             // methods
+            static blank() {
+                return new Coords(0, 0, 0);
+            }
+            static fromXY(x, y) {
+                return new Coords(x, y, 0);
+            }
             absolute() {
                 this.x = Math.abs(this.x);
                 this.y = Math.abs(this.y);
@@ -383,7 +389,7 @@ var ThisCouldBeBetter;
                 this.ZeroZeroOne = new Coords(0, 0, 1);
                 this.ZeroMinusOneZero = new Coords(0, -1, 0);
                 this.ZeroOneZero = new Coords(0, 1, 0);
-                this.Zeroes = new Coords(0, 0, 0);
+                this.Zeroes = Coords.blank();
             }
         }
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

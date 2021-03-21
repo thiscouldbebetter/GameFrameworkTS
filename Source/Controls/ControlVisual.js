@@ -10,13 +10,13 @@ var ThisCouldBeBetter;
                 this.colorBackground = colorBackground;
                 this.colorBorder = colorBorder;
                 // Helper variables.
-                this._drawPos = new GameFramework.Coords(0, 0, 0);
+                this._drawPos = GameFramework.Coords.blank();
                 this._locatable = new GameFramework.Locatable(new GameFramework.Disposition(this._drawPos, null, null));
                 this._locatableEntity = new GameFramework.Entity("_drawableEntity", [
                     this._locatable,
                     new GameFramework.Drawable(new GameFramework.VisualNone(), null)
                 ]);
-                this._sizeHalf = new GameFramework.Coords(0, 0, 0);
+                this._sizeHalf = GameFramework.Coords.blank();
             }
             actionHandle(actionName, universe) {
                 return false;

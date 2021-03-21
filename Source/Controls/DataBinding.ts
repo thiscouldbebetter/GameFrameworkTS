@@ -20,6 +20,11 @@ export class DataBinding<C, V>
 		return new DataBinding(context, null, null);
 	}
 
+	static fromContextAndGet<C, V>(context: C, get: (context: C) => V)
+	{
+		return new DataBinding(context, get, null);
+	}
+
 	static fromGet<C, V>(get: (context: C) => V)
 	{
 		return new DataBinding(null, get, null);
@@ -29,12 +34,12 @@ export class DataBinding<C, V>
 	{
 		this.context = value;
 		return this;
-	};
+	}
 
 	get()
 	{
 		return (this._get == null ? this.context : this._get(this.context) );
-	};
+	}
 
 	set(value: V)
 	{
@@ -46,7 +51,7 @@ export class DataBinding<C, V>
 		{
 			this._set(this.context, value);
 		}
-	};
+	}
 }
 
 }

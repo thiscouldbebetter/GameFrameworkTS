@@ -22,8 +22,8 @@ export class VisualLine implements Visual
 
 		// Helper variables.
 
-		this._drawPosFrom = new Coords(0, 0, 0);
-		this._drawPosTo = new Coords(0, 0, 0);
+		this._drawPosFrom = Coords.blank();
+		this._drawPosTo = Coords.blank();
 		this._transformLocate = new Transform_Locate(null);
 	}
 

@@ -20,7 +20,7 @@ export class VisualPath implements Visual
 		this.isClosed = isClosed;
 
 		this.verticesAsPathTransformed = this.verticesAsPath.clone();
-		this.transformTranslate = new Transform_Translate(new Coords(0, 0, 0));
+		this.transformTranslate = new Transform_Translate(Coords.blank());
 	}
 
 	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)

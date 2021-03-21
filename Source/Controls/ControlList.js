@@ -23,9 +23,9 @@ var ThisCouldBeBetter;
                 this._items, 0 // value
                 );
                 // Helper variables.
-                this._drawPos = new GameFramework.Coords(0, 0, 0);
+                this._drawPos = GameFramework.Coords.blank();
                 this._drawLoc = new GameFramework.Disposition(this._drawPos, null, null);
-                this._mouseClickPos = new GameFramework.Coords(0, 0, 0);
+                this._mouseClickPos = GameFramework.Coords.blank();
             }
             static fromPosSizeAndItems(pos, size, items) {
                 var returnValue = new ControlList("", // name,
@@ -45,6 +45,15 @@ var ThisCouldBeBetter;
                 GameFramework.DataBinding.fromContext(true), // isEnabled
                 null, null);
                 return returnValue;
+            }
+            static from6(name, pos, size, items, bindingForItemText, fontHeightInPixels) {
+                return new ControlList(name, pos, size, items, bindingForItemText, fontHeightInPixels, null, null, null, null, null);
+            }
+            static from7(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected) {
+                return new ControlList(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected, null, null, null, null);
+            }
+            static from8(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected, bindingForItemValue) {
+                return new ControlList(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected, bindingForItemValue, null, null, null);
             }
             actionHandle(actionNameToHandle, universe) {
                 var wasActionHandled = false;
@@ -223,7 +232,7 @@ var ThisCouldBeBetter;
                     indexEnd = items.length - 1;
                 }
                 var itemSelected = this.itemSelected(null);
-                var drawPos2 = new GameFramework.Coords(0, 0, 0);
+                var drawPos2 = GameFramework.Coords.blank();
                 for (var i = indexStart; i <= indexEnd; i++) {
                     var item = items[i];
                     var iOffset = i - indexStart;

@@ -6,11 +6,11 @@ export class VenueMessage implements Venue
 {
 	messageToShow: DataBinding<any, string>;
 	acknowledge: any;
-	venuePrev: any;
+	venuePrev: Venue;
 	_sizeInPixels: Coords;
 	showMessageOnly: boolean;
 
-	_venueInner: any;
+	_venueInner: Venue;
 
 	constructor
 	(
@@ -23,6 +23,14 @@ export class VenueMessage implements Venue
 		this.venuePrev = venuePrev;
 		this._sizeInPixels = sizeInPixels;
 		this.showMessageOnly = showMessageOnly || false;
+	}
+
+	static fromMessageAndAcknowledge
+	(
+		messageToShow: DataBinding<any, string>, acknowledge: any
+	)
+	{
+		return new VenueMessage(messageToShow, acknowledge, null, null, null);
 	}
 
 	static fromText(message: string)

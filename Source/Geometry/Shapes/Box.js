@@ -5,11 +5,11 @@ var ThisCouldBeBetter;
     (function (GameFramework) {
         class Box {
             constructor(center, size) {
-                this.center = center || new GameFramework.Coords(0, 0, 0);
-                this.size = size || new GameFramework.Coords(0, 0, 0);
-                this._sizeHalf = new GameFramework.Coords(0, 0, 0);
-                this._min = new GameFramework.Coords(0, 0, 0);
-                this._max = new GameFramework.Coords(0, 0, 0);
+                this.center = center || GameFramework.Coords.blank();
+                this.size = size || GameFramework.Coords.blank();
+                this._sizeHalf = GameFramework.Coords.blank();
+                this._min = GameFramework.Coords.blank();
+                this._max = GameFramework.Coords.blank();
                 this._range = new GameFramework.RangeExtent(0, 0);
             }
             static fromMinAndMax(min, max) {
@@ -71,8 +71,8 @@ var ThisCouldBeBetter;
                 }
                 var returnValue = null;
                 if (doAllDimensionsOverlapSoFar) {
-                    var center = new GameFramework.Coords(0, 0, 0);
-                    var size = new GameFramework.Coords(0, 0, 0);
+                    var center = GameFramework.Coords.blank();
+                    var size = GameFramework.Coords.blank();
                     for (var d = 0; d < rangesForDimensions.length; d++) {
                         var rangeForDimension = rangesForDimensions[d];
                         center.dimensionSet(d, rangeForDimension.midpoint());

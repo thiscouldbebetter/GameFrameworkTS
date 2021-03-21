@@ -6,7 +6,7 @@ var ThisCouldBeBetter;
         class Hemispace {
             constructor(plane) {
                 this.plane = plane;
-                this._displacement = new GameFramework.Coords(0, 0, 0);
+                this._displacement = GameFramework.Coords.blank();
             }
             containsPoint(pointToCheck) {
                 var distanceOfPointAbovePlane = pointToCheck.dotProduct(this.plane.normal)

@@ -107,7 +107,7 @@ var ThisCouldBeBetter;
                         crafter.recipesQueued.push(crafter.recipeAvailableSelected);
                     }
                 };
-                var returnValue = new GameFramework.ControlContainer("Craft", new GameFramework.Coords(0, 0, 0), // pos
+                var returnValue = new GameFramework.ControlContainer("Craft", GameFramework.Coords.blank(), // pos
                 sizeBase.clone(), // size
                 // children
                 [

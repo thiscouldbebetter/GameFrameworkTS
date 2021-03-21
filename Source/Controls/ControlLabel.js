@@ -9,7 +9,7 @@ var ThisCouldBeBetter;
                 this.isTextCentered = isTextCentered;
                 this._text = text;
                 // Helper variables.
-                this._drawPos = new GameFramework.Coords(0, 0, 0);
+                this._drawPos = GameFramework.Coords.blank();
             }
             static fromPosAndText(pos, text) {
                 return new ControlLabel(null, //name
@@ -18,7 +18,10 @@ var ThisCouldBeBetter;
                 text, 10 // fontHeightInPixels
                 );
             }
-            ;
+            static from5(name, pos, size, isTextCentered, text) {
+                return new ControlLabel(name, pos, size, isTextCentered, text, null // fontHeightInPixels
+                );
+            }
             actionHandle(actionName) {
                 return false; // wasActionHandled
             }

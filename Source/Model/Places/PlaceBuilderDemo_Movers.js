@@ -11,7 +11,7 @@ var ThisCouldBeBetter;
                 var carnivoreColor = GameFramework.Color.byName("GrayDark");
                 var carnivoreDimension = entityDimension;
                 var constraintSpeedMax1 = new GameFramework.Constraint_SpeedMaxXY(1);
-                var carnivoreCollider = new GameFramework.Sphere(new GameFramework.Coords(0, 0, 0), carnivoreDimension);
+                var carnivoreCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), carnivoreDimension);
                 var visualEyeRadius = entityDimension * .75 / 2;
                 var visualBuilder = new GameFramework.VisualBuilder();
                 var visualEyes = visualBuilder.eyesBlinking(visualEyeRadius);
@@ -34,7 +34,7 @@ var ThisCouldBeBetter;
                         new GameFramework.Transform_Scale(new GameFramework.Coords(1, 1, 1).multiplyScalar(entityDimension))
                     ])), carnivoreColor, null // colorBorder
                     ),
-                    new GameFramework.VisualOffset(visualEyesDirectional, new GameFramework.Coords(0, 0, 0)),
+                    new GameFramework.VisualOffset(visualEyesDirectional, GameFramework.Coords.blank()),
                 ]);
                 var carnivoreVisualNormal = new GameFramework.VisualAnchor(carnivoreVisualBody, null, // posToAnchorAt
                 GameFramework.Orientation.Instances().ForwardXDownZ);
@@ -62,7 +62,7 @@ var ThisCouldBeBetter;
                         if (grazersInPlace.length == 0) {
                             var randomizer = universe.randomizer;
                             targetPos =
-                                new GameFramework.Coords(0, 0, 0).randomize(randomizer).multiply(place.size);
+                                GameFramework.Coords.blank().randomize(randomizer).multiply(place.size);
                         }
                         else {
                             targetPos = grazersInPlace[0].locatable().loc.pos;
@@ -103,7 +103,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Drawable(carnivoreVisual, null),
                     new GameFramework.DrawableCamera(),
                     new GameFramework.Killable(10, null, carnivoreDie),
-                    new GameFramework.Locatable(new GameFramework.Disposition(new GameFramework.Coords(0, 0, 0), null, null))
+                    new GameFramework.Locatable(new GameFramework.Disposition(GameFramework.Coords.blank(), null, null))
                 ]);
                 return carnivoreEntityDefn;
             }
@@ -113,7 +113,7 @@ var ThisCouldBeBetter;
                 var enemyVisualBodyPolygon = enemyVisualBody.child;
                 var enemyVertices = enemyVisualBodyPolygon.verticesAsPath.points;
                 var enemyColliderAsFace = new GameFramework.Face(enemyVertices);
-                var enemyCollider = GameFramework.Mesh.fromFace(new GameFramework.Coords(0, 0, 0), // center
+                var enemyCollider = GameFramework.Mesh.fromFace(GameFramework.Coords.blank(), // center
                 enemyColliderAsFace, 1 // thickness
                 );
                 var enemyActivityDefn = GameFramework.Enemy.activityDefnBuild();
@@ -173,7 +173,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Effectable([]),
                     new GameFramework.Enemy(weapon),
                     enemyKillable,
-                    new GameFramework.Locatable(new GameFramework.Disposition(new GameFramework.Coords(0, 0, 0), null, null)),
+                    new GameFramework.Locatable(new GameFramework.Disposition(GameFramework.Coords.blank(), null, null)),
                     enemyPerceptor
                 ]);
                 var generatorActivityPerform = (universe, world, place, actor, activity) => {
@@ -196,7 +196,7 @@ var ThisCouldBeBetter;
                         var enemyEntityToPlace = enemyEntityPrototype.clone();
                         var placeSizeHalf = place.size.clone().half();
                         var directionFromCenter = new GameFramework.Polar(universe.randomizer.getNextRandom(), 1, 0);
-                        var offsetFromCenter = directionFromCenter.toCoords(new GameFramework.Coords(0, 0, 0)).multiply(placeSizeHalf).double();
+                        var offsetFromCenter = directionFromCenter.toCoords(GameFramework.Coords.blank()).multiply(placeSizeHalf).double();
                         var enemyPosToStartAt = offsetFromCenter.trimToRangeMinMax(placeSizeHalf.clone().invert(), placeSizeHalf);
                         enemyPosToStartAt.multiplyScalar(1.1);
                         enemyPosToStartAt.add(placeSizeHalf);
@@ -240,7 +240,7 @@ var ThisCouldBeBetter;
                     visualEyesBlinking,
                     new GameFramework.VisualPath(new GameFramework.Path([
                         // todo - Scale.
-                        new GameFramework.Coords(-8, -8, 0), new GameFramework.Coords(0, 0, 0), new GameFramework.Coords(8, -8, 0)
+                        new GameFramework.Coords(-8, -8, 0), GameFramework.Coords.blank(), new GameFramework.Coords(8, -8, 0)
                     ]), GameFramework.Color.byName("GrayDark"), 3, // lineThickness
                     null),
                 ]);
@@ -327,7 +327,7 @@ var ThisCouldBeBetter;
                 var friendlyDimension = entityDimension;
                 var constraintSpeedMax1 = new GameFramework.Constraint_SpeedMaxXY(1);
                 var constrainable = new GameFramework.Constrainable([constraintSpeedMax1]);
-                var friendlyCollider = new GameFramework.Sphere(new GameFramework.Coords(0, 0, 0), friendlyDimension);
+                var friendlyCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), friendlyDimension);
                 var friendlyCollide = (u, w, p, eFriendly, eOther, c) => {
                     var collisionHelper = u.collisionHelper;
                     //eFriendly.locatable().loc.vel.clear();
@@ -376,7 +376,7 @@ var ThisCouldBeBetter;
                     if (targetPos == null) {
                         var randomizer = universe.randomizer;
                         targetPos =
-                            new GameFramework.Coords(0, 0, 0).randomize(randomizer).multiply(place.size);
+                            GameFramework.Coords.blank().randomize(randomizer).multiply(place.size);
                         activity.target = targetPos;
                     }
                     var actorLoc = entityActor.locatable().loc;
@@ -428,7 +428,7 @@ var ThisCouldBeBetter;
                 var grazerColor = GameFramework.Color.byName("Brown");
                 var grazerDimension = entityDimension;
                 var constraintSpeedMax1 = new GameFramework.Constraint_SpeedMaxXY(1);
-                var grazerCollider = new GameFramework.Sphere(new GameFramework.Coords(0, 0, 0), grazerDimension);
+                var grazerCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), grazerDimension);
                 var visualEyeRadius = entityDimension * .75 / 2;
                 var visualBuilder = new GameFramework.VisualBuilder();
                 var visualEyes = visualBuilder.eyesBlinking(visualEyeRadius);
@@ -487,7 +487,7 @@ var ThisCouldBeBetter;
                         if (itemsGrassInPlace.length == 0) {
                             var randomizer = universe.randomizer;
                             targetPos =
-                                new GameFramework.Coords(0, 0, 0).randomize(randomizer).multiply(place.size);
+                                GameFramework.Coords.blank().randomize(randomizer).multiply(place.size);
                         }
                         else {
                             targetPos = itemsGrassInPlace[0].locatable().loc.pos;
@@ -541,7 +541,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Drawable(grazerVisual, null),
                     new GameFramework.DrawableCamera(),
                     new GameFramework.Killable(10, null, grazerDie),
-                    new GameFramework.Locatable(new GameFramework.Disposition(new GameFramework.Coords(0, 0, 0), null, null))
+                    new GameFramework.Locatable(new GameFramework.Disposition(GameFramework.Coords.blank(), null, null))
                 ]);
                 return grazerEntityDefn;
             }
@@ -551,7 +551,7 @@ var ThisCouldBeBetter;
                 var visualBuilder = new GameFramework.VisualBuilder();
                 var visualEyesBlinking = visualBuilder.eyesBlinking(visualEyeRadius);
                 var playerHeadRadius = entityDimension * .75;
-                var playerCollider = new GameFramework.Sphere(new GameFramework.Coords(0, 0, 0), playerHeadRadius);
+                var playerCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), playerHeadRadius);
                 var playerColor = GameFramework.Color.byName("Gray");
                 var playerVisualBodyNormal = visualBuilder.circleWithEyesAndLegsAndArms(playerHeadRadius, playerColor, visualEyeRadius, visualEyesBlinking);
                 var playerVisualBodyHidden = visualBuilder.circleWithEyesAndLegs(playerHeadRadius, GameFramework.Color.byName("Black"), visualEyeRadius, visualEyesBlinking);

@@ -101,10 +101,10 @@ export class VenueControls implements Venue
 
 		// Helper variables.
 
-		this._drawLoc = new Disposition(new Coords(0, 0, 0), null, null);
-		this._mouseClickPos = new Coords(0, 0, 0);
-		this._mouseMovePos = new Coords(0, 0, 0);
-		this._mouseMovePosPrev = new Coords(0, 0, 0);
+		this._drawLoc = new Disposition(Coords.blank(), null, null);
+		this._mouseClickPos = Coords.blank();
+		this._mouseMovePos = Coords.blank();
+		this._mouseMovePosPrev = Coords.blank();
 	}
 
 	draw(universe: Universe)

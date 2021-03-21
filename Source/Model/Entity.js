@@ -32,6 +32,9 @@ var ThisCouldBeBetter;
                     }
                 }
             }
+            propertyAdd(propertyToAdd) {
+                this.propertyAddForPlace(propertyToAdd, null);
+            }
             propertyAddForPlace(propertyToAdd, place) {
                 this.properties.push(propertyToAdd);
                 this.propertiesByName.set(propertyToAdd.constructor.name, propertyToAdd);

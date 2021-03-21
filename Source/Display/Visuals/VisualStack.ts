@@ -14,7 +14,7 @@ export class VisualStack implements Visual
 		this.childSpacing = childSpacing;
 		this.children = children;
 
-		this._posSaved = new Coords(0, 0, 0);
+		this._posSaved = Coords.blank();
 	}
 
 	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)

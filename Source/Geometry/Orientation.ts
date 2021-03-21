@@ -23,6 +23,11 @@ export class Orientation
 		this.axesRDF = [ this.right, this.down, this.forward ];
 	}
 
+	static default()
+	{
+		return new Orientation(new Coords(1, 0, 0), new Coords(0, 0, 1));
+	}
+
 	default()
 	{
 		var coordsInstances = Coords.Instances();
@@ -100,9 +105,9 @@ export class Orientation
 
 	unprojectCoords(coordsToUnproject: Coords)
 	{
-		var returnValue = new Coords(0, 0, 0);
+		var returnValue = Coords.blank();
 
-		var axisScaled = new Coords(0, 0, 0);
+		var axisScaled = Coords.blank();
 
 		for (var i = 0; i < this.axes.length; i++)
 		{
@@ -132,9 +137,9 @@ export class Orientation
 
 	unprojectCoordsRDF(coordsToUnproject: Coords)
 	{
-		var returnValue = new Coords(0, 0, 0);
+		var returnValue = Coords.blank();
 
-		var axisScaled = new Coords(0, 0, 0);
+		var axisScaled = Coords.blank();
 
 		for (var i = 0; i < this.axesRDF.length; i++)
 		{

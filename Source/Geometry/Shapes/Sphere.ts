@@ -15,7 +15,7 @@ export class Sphere implements ShapeBase
 		this.radius = radius;
 
 		// Helper variables.
-		this._displacement = new Coords(0, 0, 0);
+		this._displacement = Coords.blank();
 	}
 
 	containsOther(other: Sphere)
@@ -29,7 +29,7 @@ export class Sphere implements ShapeBase
 
 	pointRandom()
 	{
-		return new Polar(0, this.radius, 0).random(null).toCoords(new Coords(0, 0, 0)).add(this.center);
+		return new Polar(0, this.radius, 0).random(null).toCoords(Coords.blank()).add(this.center);
 	}
 
 	// cloneable

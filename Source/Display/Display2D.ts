@@ -38,8 +38,8 @@ export class Display2D implements Display
 
 		// Helper variables.
 
-		this._drawPos = new Coords(0, 0, 0);
-		this._sizeHalf = new Coords(0, 0, 0);
+		this._drawPos = Coords.blank();
+		this._sizeHalf = Coords.blank();
 		this._zeroes = Coords.Instances().Zeroes;
 	}
 
@@ -89,7 +89,7 @@ export class Display2D implements Display
 			);
 			drawPos.overwriteWith(center).add
 			(
-				new Polar(angleStopInTurns, radiusOuter, 0).toCoords( new Coords(0, 0, 0) )
+				new Polar(angleStopInTurns, radiusOuter, 0).toCoords( Coords.blank() )
 			);
 			this.graphics.lineTo(drawPos.x, drawPos.y);
 			this.graphics.arc
@@ -115,7 +115,7 @@ export class Display2D implements Display
 			);
 			drawPos.overwriteWith(center).add
 			(
-				new Polar(angleStopInTurns, radiusOuter, 0).toCoords( new Coords(0, 0, 0) )
+				new Polar(angleStopInTurns, radiusOuter, 0).toCoords( Coords.blank() )
 			);
 			this.graphics.lineTo(drawPos.x, drawPos.y);
 			this.graphics.arc
@@ -546,7 +546,7 @@ export class Display2D implements Display
 			this.graphics.moveTo(center.x, center.y);
 			drawPos.overwriteWith(center).add
 			(
-				new Polar(angleStopInTurns, radius, 0).toCoords( new Coords(0, 0, 0) )
+				new Polar(angleStopInTurns, radius, 0).toCoords( Coords.blank() )
 			);
 			this.graphics.lineTo(drawPos.x, drawPos.y);
 			this.graphics.arc
@@ -567,7 +567,7 @@ export class Display2D implements Display
 			this.graphics.moveTo(center.x, center.y);
 			drawPos.overwriteWith(center).add
 			(
-				new Polar(angleStopInTurns, radius, 0).toCoords( new Coords(0, 0, 0) )
+				new Polar(angleStopInTurns, radius, 0).toCoords( Coords.blank() )
 			);
 			this.graphics.lineTo(drawPos.x, drawPos.y);
 			this.graphics.arc

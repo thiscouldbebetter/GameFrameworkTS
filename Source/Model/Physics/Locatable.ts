@@ -9,12 +9,12 @@ export class Locatable extends EntityProperty
 	constructor(loc: Disposition)
 	{
 		super();
-		this.loc = loc || new Disposition(null, null, null);
+		this.loc = loc || Disposition.blank();
 	}
 
 	static fromPos(pos: Coords)
 	{
-		return new Locatable(new Disposition(pos, null, null));
+		return new Locatable(Disposition.fromPos(pos));
 	}
 
 	approachOtherWithAccelerationAndSpeedMax

@@ -63,7 +63,7 @@ var ThisCouldBeBetter;
                 var sell = () => {
                     itemBarterer.transfer(world, entityCustomer, entityStore, "Sold");
                 };
-                var returnValue = new GameFramework.ControlContainer("containerTransfer", new GameFramework.Coords(0, 0, 0), // pos
+                var returnValue = new GameFramework.ControlContainer("containerTransfer", GameFramework.Coords.blank(), // pos
                 size.clone(), 
                 // children
                 [

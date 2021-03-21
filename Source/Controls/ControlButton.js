@@ -13,8 +13,14 @@ var ThisCouldBeBetter;
                 this.context = context;
                 this.canBeHeldDown = (canBeHeldDown == null ? false : canBeHeldDown);
                 // Helper variables.
-                this._drawLoc = new GameFramework.Disposition(null, null, null);
-                this._sizeHalf = new GameFramework.Coords(0, 0, 0);
+                this._drawLoc = GameFramework.Disposition.blank();
+                this._sizeHalf = GameFramework.Coords.blank();
+            }
+            static from8(name, pos, size, text, fontHeightInPixels, hasBorder, isEnabled, click) {
+                return new ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isEnabled, click, null, null);
+            }
+            static from9(name, pos, size, text, fontHeightInPixels, hasBorder, isEnabled, click, context) {
+                return new ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isEnabled, click, context, null);
             }
             actionHandle(actionNameToHandle, universe) {
                 if (actionNameToHandle == GameFramework.ControlActionNames.Instances().ControlConfirm) {

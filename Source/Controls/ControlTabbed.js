@@ -40,13 +40,13 @@ var ThisCouldBeBetter;
                 }
                 this.buttonsForChildren = buttonsForChildren;
                 // Temporary variables.
-                this._childMax = new GameFramework.Coords(0, 0, 0);
+                this._childMax = GameFramework.Coords.blank();
                 this._childrenContainingPos = [];
-                this._drawPos = new GameFramework.Coords(0, 0, 0);
+                this._drawPos = GameFramework.Coords.blank();
                 this._drawLoc = new GameFramework.Disposition(this._drawPos, null, null);
-                this._mouseClickPos = new GameFramework.Coords(0, 0, 0);
-                this._mouseMovePos = new GameFramework.Coords(0, 0, 0);
-                this._posToCheck = new GameFramework.Coords(0, 0, 0);
+                this._mouseClickPos = GameFramework.Coords.blank();
+                this._mouseMovePos = GameFramework.Coords.blank();
+                this._posToCheck = GameFramework.Coords.blank();
             }
             // instance methods
             // actions

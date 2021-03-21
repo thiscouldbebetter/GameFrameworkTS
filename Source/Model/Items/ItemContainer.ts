@@ -90,7 +90,7 @@ export class ItemContainer extends EntityProperty
 		var returnValue = new ControlContainer
 		(
 			"containerTransfer",
-			new Coords(0, 0, 0), // pos
+			Coords.blank(), // pos
 			size.clone(),
 			// children
 			[

@@ -48,6 +48,11 @@ export class Entity
 		}
 	}
 
+	propertyAdd(propertyToAdd: EntityProperty)
+	{
+		this.propertyAddForPlace(propertyToAdd, null);
+	}
+
 	propertyAddForPlace(propertyToAdd: EntityProperty, place: Place)
 	{
 		this.properties.push(propertyToAdd);

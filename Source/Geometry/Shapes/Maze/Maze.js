@@ -22,8 +22,8 @@ var ThisCouldBeBetter;
             generateRandom(randomizer) {
                 var sizeInCells = this.sizeInCells;
                 var numberOfCellsInMaze = this.sizeInCells.productOfDimensions();
-                var cellPos = new GameFramework.Coords(0, 0, 0);
-                var cellPosNeighbor = new GameFramework.Coords(0, 0, 0);
+                var cellPos = GameFramework.Coords.blank();
+                var cellPosNeighbor = GameFramework.Coords.blank();
                 var numberOfCellsInLargestNetworkSoFar = 0;
                 while (numberOfCellsInLargestNetworkSoFar < numberOfCellsInMaze) {
                     for (var y = 0; y < sizeInCells.y; y++) {

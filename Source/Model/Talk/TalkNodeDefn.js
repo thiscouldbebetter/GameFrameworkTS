@@ -49,7 +49,7 @@ var ThisCouldBeBetter;
                  {
                     var variableName = talkNode.text;
                     var talkNodeNameToJumpTo = talkNode.next;
-                    var variableValue = conversationRun.variableLookup.get(variableName);
+                    var variableValue = conversationRun.variableByName(variableName);
                     if (variableValue == true) {
                         scope.talkNodeAdvance(conversationRun);
                     }
@@ -63,7 +63,7 @@ var ThisCouldBeBetter;
                  {
                     var variableName = talkNode.text;
                     var talkNodeNameToJumpTo = talkNode.next;
-                    var variableValue = conversationRun.variableLookup.get(variableName);
+                    var variableValue = conversationRun.variableByName(variableName);
                     if (variableValue == true) {
                         scope.talkNodeCurrent = conversationRun.defn.talkNodeByName(talkNodeNameToJumpTo);
                     }
@@ -141,7 +141,7 @@ var ThisCouldBeBetter;
                     var scriptToRunAsString = "( function(u, cr) { return " + scriptExpression + "; } )";
                     var scriptToRun = eval(scriptToRunAsString);
                     var scriptResult = scriptToRun(conversationRun);
-                    conversationRun.variableLookup.set(variableName, scriptResult);
+                    conversationRun.variableSet(variableName, scriptResult);
                     scope.talkNodeAdvance(conversationRun);
                     conversationRun.update(universe); // hack
                 }, null // activate
@@ -150,7 +150,7 @@ var ThisCouldBeBetter;
                  {
                     var variableName = talkNode.text;
                     var variableValue = talkNode.next;
-                    conversationRun.variableLookup.set(variableName, variableValue);
+                    conversationRun.variableSet(variableName, variableValue);
                     scope.talkNodeAdvance(conversationRun);
                     conversationRun.update(universe); // hack
                 }, null // activate
@@ -158,7 +158,7 @@ var ThisCouldBeBetter;
                 this.VariableStore = new TalkNodeDefn("VariableStore", (universe, conversationRun, scope, talkNode) => // execute
                  {
                     var variableName = talkNode.text;
-                    var variableValue = conversationRun.variableLookup.get(variableName);
+                    var variableValue = conversationRun.variableByName(variableName);
                     var scriptExpression = talkNode.next;
                     var scriptToRunAsString = "( function(u, cr) { " + scriptExpression + " = " + variableValue + "; } )";
                     var scriptToRun = eval(scriptToRunAsString);

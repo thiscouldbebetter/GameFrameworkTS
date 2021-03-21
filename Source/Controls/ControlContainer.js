@@ -20,12 +20,15 @@ var ThisCouldBeBetter;
                 this.childrenContainingPos = [];
                 this.childrenContainingPosPrev = [];
                 // Helper variables.
-                this._childMax = new GameFramework.Coords(0, 0, 0);
-                this._drawPos = new GameFramework.Coords(0, 0, 0);
+                this._childMax = GameFramework.Coords.blank();
+                this._drawPos = GameFramework.Coords.blank();
                 this._drawLoc = new GameFramework.Disposition(this._drawPos, null, null);
-                this._mouseClickPos = new GameFramework.Coords(0, 0, 0);
-                this._mouseMovePos = new GameFramework.Coords(0, 0, 0);
-                this._posToCheck = new GameFramework.Coords(0, 0, 0);
+                this._mouseClickPos = GameFramework.Coords.blank();
+                this._mouseMovePos = GameFramework.Coords.blank();
+                this._posToCheck = GameFramework.Coords.blank();
+            }
+            static from4(name, pos, size, children) {
+                return new ControlContainer(name, pos, size, children, null, null);
             }
             // instance methods
             // actions
@@ -80,9 +83,15 @@ var ThisCouldBeBetter;
                 }
                 return wasActionHandled;
             }
-            ;
             actionToInputsMappings() {
                 return this._actionToInputsMappings;
+            }
+            childAdd(childToAdd) {
+                this.children.push(childToAdd);
+                this.childrenByName.set(childToAdd.name, childToAdd);
+            }
+            childByName(childName) {
+                return this.childrenByName.get(childName);
             }
             childWithFocus() {
                 return (this.indexOfChildWithFocus == null ? null : this.children[this.indexOfChildWithFocus]);

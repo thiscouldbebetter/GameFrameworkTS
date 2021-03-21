@@ -24,8 +24,12 @@ export class ControlList extends ControlBase
 
 	constructor
 	(
-		name: string, pos: Coords, size: Coords, items: DataBinding<any, any[]>,
-		bindingForItemText: DataBinding<any, string>, fontHeightInPixels: number,
+		name: string,
+		pos: Coords,
+		size: Coords,
+		items: DataBinding<any, any[]>,
+		bindingForItemText: DataBinding<any, string>,
+		fontHeightInPixels: number,
 		bindingForItemSelected: DataBinding<any, any>, bindingForItemValue: DataBinding<any, any>,
 		bindingForIsEnabled: DataBinding<any, boolean>, confirm: (u: Universe) => void,
 		widthInItems: number
@@ -57,9 +61,9 @@ export class ControlList extends ControlBase
 		);
 
 		// Helper variables.
-		this._drawPos = new Coords(0, 0, 0);
+		this._drawPos = Coords.blank();
 		this._drawLoc = new Disposition(this._drawPos, null, null);
-		this._mouseClickPos = new Coords(0, 0, 0);
+		this._mouseClickPos = Coords.blank();
 	}
 
 	static fromPosSizeAndItems(pos: Coords, size: Coords, items: DataBinding<any, any[]>)
@@ -102,6 +106,60 @@ export class ControlList extends ControlBase
 		);
 
 		return returnValue;
+	}
+
+	static from6
+	(
+		name: string,
+		pos: Coords,
+		size: Coords,
+		items: DataBinding<any, any[]>,
+		bindingForItemText: DataBinding<any, string>,
+		fontHeightInPixels: number
+	)
+	{
+		return new ControlList
+		(
+			name, pos, size, items, bindingForItemText, fontHeightInPixels,
+			null, null, null, null, null
+		);
+	}
+
+	static from7
+	(
+		name: string,
+		pos: Coords,
+		size: Coords,
+		items: DataBinding<any, any[]>,
+		bindingForItemText: DataBinding<any, string>,
+		fontHeightInPixels: number,
+		bindingForItemSelected: DataBinding<any, any>,
+	)
+	{
+		return new ControlList
+		(
+			name, pos, size, items, bindingForItemText, fontHeightInPixels,
+			bindingForItemSelected, null, null, null, null
+		);
+	}
+
+	static from8
+	(
+		name: string,
+		pos: Coords,
+		size: Coords,
+		items: DataBinding<any, any[]>,
+		bindingForItemText: DataBinding<any, string>,
+		fontHeightInPixels: number,
+		bindingForItemSelected: DataBinding<any, any>,
+		bindingForItemValue: DataBinding<any, any>,
+	)
+	{
+		return new ControlList
+		(
+			name, pos, size, items, bindingForItemText, fontHeightInPixels,
+			bindingForItemSelected, bindingForItemValue, null, null, null
+		);
 	}
 
 	actionHandle(actionNameToHandle: string, universe: Universe)
@@ -382,7 +440,7 @@ export class ControlList extends ControlBase
 
 		var itemSelected = this.itemSelected(null);
 
-		var drawPos2 = new Coords(0, 0, 0);
+		var drawPos2 = Coords.blank();
 
 		for (var i = indexStart; i <= indexEnd; i++)
 		{

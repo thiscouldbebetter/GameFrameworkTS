@@ -17,7 +17,7 @@ var ThisCouldBeBetter;
             }
             static cubeUnit(center) {
                 if (center == null) {
-                    center = new GameFramework.Coords(0, 0, 0);
+                    center = GameFramework.Coords.blank();
                 }
                 var size = new GameFramework.Coords(2, 2, 2);
                 var returnValue = Mesh.boxOfSize(center, size);
@@ -88,7 +88,7 @@ var ThisCouldBeBetter;
             // instance methods
             box() {
                 if (this._box == null) {
-                    this._box = new GameFramework.Box(new GameFramework.Coords(0, 0, 0), new GameFramework.Coords(0, 0, 0));
+                    this._box = new GameFramework.Box(GameFramework.Coords.blank(), GameFramework.Coords.blank());
                 }
                 this._box.ofPoints(this.vertices());
                 return this._box;
@@ -112,7 +112,7 @@ var ThisCouldBeBetter;
                 if (this._vertices == null) {
                     this._vertices = [];
                     for (var v = 0; v < this.vertexOffsets.length; v++) {
-                        this._vertices.push(new GameFramework.Coords(0, 0, 0));
+                        this._vertices.push(GameFramework.Coords.blank());
                     }
                 }
                 for (var v = 0; v < this._vertices.length; v++) {

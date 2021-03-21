@@ -19,10 +19,10 @@ var ThisCouldBeBetter;
                 if (this._clipPlanes == null) {
                     this._clipPlanes =
                         [
-                            new GameFramework.Plane(new GameFramework.Coords(0, 0, 0), 0),
-                            new GameFramework.Plane(new GameFramework.Coords(0, 0, 0), 0),
-                            new GameFramework.Plane(new GameFramework.Coords(0, 0, 0), 0),
-                            new GameFramework.Plane(new GameFramework.Coords(0, 0, 0), 0),
+                            new GameFramework.Plane(GameFramework.Coords.blank(), 0),
+                            new GameFramework.Plane(GameFramework.Coords.blank(), 0),
+                            new GameFramework.Plane(GameFramework.Coords.blank(), 0),
+                            new GameFramework.Plane(GameFramework.Coords.blank(), 0),
                         ];
                 }
                 var cameraLoc = this.loc;

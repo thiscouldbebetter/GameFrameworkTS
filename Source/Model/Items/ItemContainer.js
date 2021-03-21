@@ -50,7 +50,7 @@ var ThisCouldBeBetter;
                 var put = () => {
                     itemContainer.transfer(world, entityGetterPutter, entityContainer, "Put");
                 };
-                var returnValue = new GameFramework.ControlContainer("containerTransfer", new GameFramework.Coords(0, 0, 0), // pos
+                var returnValue = new GameFramework.ControlContainer("containerTransfer", GameFramework.Coords.blank(), // pos
                 size.clone(), 
                 // children
                 [

@@ -13,7 +13,7 @@ export class VisualControl implements Visual
 		this.controlRoot = controlRoot;
 
 		// Helper variables.
-		this._drawLoc = new Disposition(new Coords(0, 0, 0), null, null);
+		this._drawLoc = new Disposition(Coords.blank(), null, null);
 	}
 
 	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)

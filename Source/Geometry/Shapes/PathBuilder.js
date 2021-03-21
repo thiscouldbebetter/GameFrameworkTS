@@ -11,7 +11,7 @@ var ThisCouldBeBetter;
                 var vertices = [];
                 for (var i = 0; i < numberOfVertices; i++) {
                     polar.radius = (i % 2 == 0 ? 1 : ratioOfInnerRadiusToOuter);
-                    var vertex = polar.toCoords(new GameFramework.Coords(0, 0, 0));
+                    var vertex = polar.toCoords(GameFramework.Coords.blank());
                     vertices.push(vertex);
                     polar.azimuthInTurns += turnsPerVertex;
                 }

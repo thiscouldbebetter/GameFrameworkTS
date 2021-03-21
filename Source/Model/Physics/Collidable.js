@@ -11,7 +11,7 @@ var ThisCouldBeBetter;
                 this.entityPropertyNamesToCollideWith = entityPropertyNamesToCollideWith || [];
                 this._collideEntities = collideEntities;
                 this.collider = this.colliderAtRest.clone();
-                this.locPrev = new GameFramework.Disposition(null, null, null);
+                this.locPrev = GameFramework.Disposition.blank();
                 this.ticksUntilCanCollide = 0;
                 this.entitiesAlreadyCollidedWith = [];
                 this.isDisabled = false;

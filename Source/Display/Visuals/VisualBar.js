@@ -14,7 +14,7 @@ var ThisCouldBeBetter;
                 this.fractionBelowWhichToShow = fractionBelowWhichToShow;
                 this.colorForBorderAsValueBreakGroup = colorForBorderAsValueBreakGroup;
                 this.text = text;
-                this._drawPos = new GameFramework.Coords(0, 0, 0);
+                this._drawPos = GameFramework.Coords.blank();
                 this._sizeCurrent = this.size.clone();
                 this._sizeHalf = this.size.clone().half();
             }

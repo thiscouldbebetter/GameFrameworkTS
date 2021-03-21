@@ -11,8 +11,8 @@ var ThisCouldBeBetter;
                 this.boneInfluences = boneInfluences;
                 this.boneInfluencesByName = GameFramework.ArrayHelper.addLookups(this.boneInfluences, (x) => x.boneName);
                 // Helper variables.
-                this._orientation = new GameFramework.Orientation(new GameFramework.Coords(0, 0, 0), new GameFramework.Coords(0, 0, 0));
-                this._vertex = new GameFramework.Coords(0, 0, 0);
+                this._orientation = new GameFramework.Orientation(GameFramework.Coords.blank(), GameFramework.Coords.blank());
+                this._vertex = GameFramework.Coords.blank();
             }
             overwriteWith(other) {
                 return this; // todo

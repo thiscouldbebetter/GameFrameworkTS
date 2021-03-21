@@ -102,7 +102,7 @@ var ThisCouldBeBetter;
                 ]).transform(GameFramework.Transform_Scale.fromScalar(this.entityDimension));
                 var itemArrowVisualHead = new GameFramework.VisualPolygon(pathHead, itemArrowColor, null);
                 var pathTail = new GameFramework.Path([
-                    new GameFramework.Coords(0, 0, 0),
+                    GameFramework.Coords.blank(),
                     new GameFramework.Coords(-.5, .25, 0),
                     new GameFramework.Coords(-.75, .25, 0),
                     new GameFramework.Coords(-.5, 0, 0),
@@ -171,7 +171,7 @@ var ThisCouldBeBetter;
                     true, // isEnabled
                     back, // click
                     null, null);
-                    var container = new GameFramework.ControlContainer("containerBook", new GameFramework.Coords(0, 0, 0), size.clone(), [textarea, button], // children
+                    var container = new GameFramework.ControlContainer("containerBook", GameFramework.Coords.blank(), size.clone(), [textarea, button], // children
                     [
                         new GameFramework.Action(GameFramework.ControlActionNames.Instances().ControlCancel, back),
                         new GameFramework.Action(GameFramework.ControlActionNames.Instances().ControlConfirm, back)
@@ -535,7 +535,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Coords(-1, 0, 0), // directionMin
                     .5, // angleSpannedInTurns
                     colorCap, null), new GameFramework.Coords(0, -this.entityDimensionHalf / 2, 0)),
-                    new GameFramework.VisualOffset(new GameFramework.VisualRectangle(new GameFramework.Coords(this.entityDimensionHalf / 2, this.entityDimensionHalf, 0), colorStem, null, null), new GameFramework.Coords(0, 0, 0))
+                    new GameFramework.VisualOffset(new GameFramework.VisualRectangle(new GameFramework.Coords(this.entityDimensionHalf / 2, this.entityDimensionHalf, 0), colorStem, null, null), GameFramework.Coords.blank())
                 ]);
                 if (this.parent.visualsHaveText) {
                     itemMushroomVisual.children.push(new GameFramework.VisualOffset(GameFramework.VisualText.fromTextAndColor(itemMushroomName, colorCap), new GameFramework.Coords(0, 0 - this.entityDimensionHalf * 3, 0)));
@@ -726,7 +726,7 @@ var ThisCouldBeBetter;
                 );
                 var itemTorchVisualFlame = GameFramework.VisualBuilder.Instance().flame(this.entityDimensionHalf * .6);
                 var itemTorchVisual = new GameFramework.VisualGroup([
-                    new GameFramework.VisualOffset(itemTorchVisualBody, new GameFramework.Coords(0, 0, 0)),
+                    new GameFramework.VisualOffset(itemTorchVisualBody, GameFramework.Coords.blank()),
                     new GameFramework.VisualOffset(itemTorchVisualHead, new GameFramework.Coords(0, 0 - this.entityDimension * .75, 0)),
                     new GameFramework.VisualOffset(itemTorchVisualFlame, new GameFramework.Coords(0, 0 - this.entityDimension * .7, 0))
                 ]);

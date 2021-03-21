@@ -11,7 +11,7 @@ export class Transform_Locate implements Transform
 
 	constructor(loc: Disposition)
 	{
-		this.loc = loc || new Disposition(null, null, null);
+		this.loc = loc || Disposition.blank();
 
 		this.transformOrient = new Transform_Orient(null);
 		this.transformTranslate = new Transform_Translate(null);

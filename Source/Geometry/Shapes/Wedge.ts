@@ -58,13 +58,13 @@ export class Wedge
 		{
 			this.rayDirectionMinAsPolar = new Polar(0, 1, 0);
 			this.rayDirectionMaxAsPolar = new Polar(0, 1, 0);
-			this.rayDirectionMin = new Coords(0, 0, 0);
-			this.rayDirectionMax = new Coords(0, 0, 0);
-			this.downFromVertex = new Coords(0, 0, 0);
-			this.directionMinFromVertex = new Coords(0, 0, 0);
-			this.directionMaxFromVertex = new Coords(0, 0, 0);
-			this.planeForAngleMin = new Plane(new Coords(0, 0, 0), 0);
-			this.planeForAngleMax = new Plane(new Coords(0, 0, 0), 0);
+			this.rayDirectionMin = Coords.blank();
+			this.rayDirectionMax = Coords.blank();
+			this.downFromVertex = Coords.blank();
+			this.directionMinFromVertex = Coords.blank();
+			this.directionMaxFromVertex = Coords.blank();
+			this.planeForAngleMin = new Plane(Coords.blank(), 0);
+			this.planeForAngleMax = new Plane(Coords.blank(), 0);
 			this.hemispaces = 
 			[ 
 				new Hemispace(this.planeForAngleMin),

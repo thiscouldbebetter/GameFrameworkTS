@@ -12,7 +12,7 @@ var ThisCouldBeBetter;
                 this.windowSizeInItems = Math.floor(this.size.y / itemHeight);
                 this.handleSize = new GameFramework.Coords(this.size.x, this.size.x, 0);
                 this.buttonScrollUp = new GameFramework.ControlButton(null, // name
-                new GameFramework.Coords(0, 0, 0), // pos
+                GameFramework.Coords.blank(), // pos
                 this.handleSize.clone(), // size
                 "-", // text
                 this.fontHeightInPixels, true, // hasBorder
@@ -28,7 +28,7 @@ var ThisCouldBeBetter;
                 this.scrollDown, // click
                 null, null);
                 // Helper variables.
-                this._drawPos = new GameFramework.Coords(0, 0, 0);
+                this._drawPos = GameFramework.Coords.blank();
             }
             actionHandle(actionNameToHandle, universe) {
                 return true;

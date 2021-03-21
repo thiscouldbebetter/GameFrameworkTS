@@ -12,8 +12,8 @@ var ThisCouldBeBetter;
                 this.buttonHeightSmallBase = this.fontHeightInPixelsBase * 1.5;
                 this.sizeBase = new GameFramework.Coords(200, 150, 1);
                 // Helper variables.
-                this._zeroes = new GameFramework.Coords(0, 0, 0);
-                this._scaleMultiplier = new GameFramework.Coords(0, 0, 0);
+                this._zeroes = GameFramework.Coords.blank();
+                this._scaleMultiplier = GameFramework.Coords.blank();
             }
             choice(universe, size, message, optionNames, optionFunctions, showMessageOnly) {
                 size = size || universe.display.sizeDefault();
@@ -80,7 +80,7 @@ var ThisCouldBeBetter;
                 var listOptions = new GameFramework.ControlList("listOptions", new GameFramework.Coords(marginSize.x, labelSize.y + marginSize.y * 2, 0), listSize, options, bindingForOptionText, fontHeight, null, // bindingForItemSelected
                 null, // bindingForItemValue
                 null, null, null);
-                var returnValue = new GameFramework.ControlContainer("containerChoice", new GameFramework.Coords(0, 0, 0), size, [
+                var returnValue = new GameFramework.ControlContainer("containerChoice", GameFramework.Coords.blank(), size, [
                     new GameFramework.ControlLabel("labelMessage", new GameFramework.Coords(size.x / 2, marginSize.y + fontHeight / 2, 0), labelSize, true, // isTextCentered
                     message, fontHeight),
                     listOptions,

@@ -31,8 +31,8 @@ export class Transform_MeshPoseWithSkeleton implements Transform
 		);
 
 		// Helper variables.
-		this._orientation = new Orientation(new Coords(0, 0, 0), new Coords(0, 0, 0));
-		this._vertex = new Coords(0, 0, 0);
+		this._orientation = new Orientation(Coords.blank(), Coords.blank());
+		this._vertex = Coords.blank();
 	}
 
 	overwriteWith(other: Transform): Transform

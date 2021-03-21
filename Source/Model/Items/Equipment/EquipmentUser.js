@@ -236,7 +236,7 @@ var ThisCouldBeBetter;
                     venueNext = new GameFramework.VenueFader(venueNext, universe.venueCurrent, null, null);
                     universe.venueNext = venueNext;
                 };
-                var returnValue = new GameFramework.ControlContainer("Equip", new GameFramework.Coords(0, 0, 0), // pos
+                var returnValue = new GameFramework.ControlContainer("Equip", GameFramework.Coords.blank(), // pos
                 sizeBase.clone(), // size
                 // children
                 [

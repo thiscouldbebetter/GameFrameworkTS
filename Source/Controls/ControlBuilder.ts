@@ -26,8 +26,8 @@ export class ControlBuilder
 
 		// Helper variables.
 
-		this._zeroes = new Coords(0, 0, 0);
-		this._scaleMultiplier = new Coords(0, 0, 0);
+		this._zeroes = Coords.blank();
+		this._scaleMultiplier = Coords.blank();
 	}
 
 	choice
@@ -185,7 +185,7 @@ export class ControlBuilder
 		var returnValue = new ControlContainer
 		(
 			"containerChoice",
-			new Coords(0, 0, 0),
+			Coords.blank(),
 			size,
 			[
 				new ControlLabel

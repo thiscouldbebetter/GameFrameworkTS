@@ -17,7 +17,7 @@ var ThisCouldBeBetter;
             }
             // instance methods
             pos(bonesByName) {
-                var returnValue = new GameFramework.Coords(0, 0, 0);
+                var returnValue = GameFramework.Coords.blank();
                 var bone = bonesByName.get(this.parentName);
                 while (bone != null) {
                     returnValue.add(bone.orientation.forward.clone().multiplyScalar(bone.length));
