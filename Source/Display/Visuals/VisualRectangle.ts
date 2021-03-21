@@ -22,7 +22,7 @@ export class VisualRectangle implements Visual
 
 		this.sizeHalf = this.size.clone().half();
 
-		this._drawPos = Coords.blank();
+		this._drawPos = Coords.create();
 	}
 
 	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)

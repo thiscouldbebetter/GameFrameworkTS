@@ -15,7 +15,7 @@ export class VisualOffset implements Visual
 		this.offset = offset;
 
 		// Helper variables.
-		this._posSaved = Coords.blank();
+		this._posSaved = Coords.create();
 	}
 
 	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)

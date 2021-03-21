@@ -13,7 +13,7 @@ export class VisualImageFromLibrary implements VisualImage
 		this.imageName = imageName;
 
 		// Helper variables.
-		this._drawPos = Coords.blank();
+		this._drawPos = Coords.create();
 	}
 
 	// static methods

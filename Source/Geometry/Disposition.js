@@ -5,19 +5,19 @@ var ThisCouldBeBetter;
     (function (GameFramework) {
         class Disposition {
             constructor(pos, orientation, placeName) {
-                this.pos = pos || GameFramework.Coords.blank();
+                this.pos = pos || GameFramework.Coords.create();
                 if (orientation == null) {
                     orientation = GameFramework.Orientation.Instances().ForwardXDownZ.clone();
                 }
                 this.orientation = orientation;
                 this.placeName = placeName;
-                this.vel = GameFramework.Coords.blank();
-                this.accel = GameFramework.Coords.blank();
-                this.force = GameFramework.Coords.blank();
+                this.vel = GameFramework.Coords.create();
+                this.accel = GameFramework.Coords.create();
+                this.force = GameFramework.Coords.create();
                 this.spin = new GameFramework.Rotation(this.orientation.down, new GameFramework.Reference(0));
                 this.timeOffsetInTicks = 0;
             }
-            static blank() {
+            static create() {
                 return new Disposition(null, null, null);
             }
             static fromPos(pos) {

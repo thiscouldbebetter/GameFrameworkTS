@@ -33,7 +33,7 @@ export class ControlScrollbar extends ControlBase
 		this.buttonScrollUp = new ControlButton
 		(
 			null, // name
-			Coords.blank(), // pos
+			Coords.create(), // pos
 			this.handleSize.clone(), // size
 			"-", // text
 			this.fontHeightInPixels,
@@ -57,7 +57,7 @@ export class ControlScrollbar extends ControlBase
 		);
 
 		// Helper variables.
-		this._drawPos = Coords.blank();
+		this._drawPos = Coords.create();
 	}
 
 	actionHandle(actionNameToHandle: string, universe: Universe)

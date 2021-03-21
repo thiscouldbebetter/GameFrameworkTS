@@ -209,7 +209,7 @@ export class SkillLearner extends EntityProperty
 		var returnValue = new ControlContainer
 		(
 			"Skills", // name,
-			Coords.blank(), // pos,
+			Coords.create(), // pos,
 			size.clone(),
 			// children
 			[

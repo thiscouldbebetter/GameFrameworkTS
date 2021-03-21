@@ -81,7 +81,7 @@ export class Constraint_ContainInHemispace implements Constraint
 	{
 		this.hemispaceToContainWithin = hemispaceToContainWithin;
 
-		this._coordsTemp = Coords.blank();
+		this._coordsTemp = Coords.create();
 	}
 
 	constrain(universe: Universe, world: World, place: Place, entity: Entity)

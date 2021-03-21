@@ -12,7 +12,7 @@ export class Transform_Orient implements Transform
 	{
 		this.orientation = orientation;
 
-		this._components = [ Coords.blank(), Coords.blank(), Coords.blank() ];
+		this._components = [ Coords.create(), Coords.create(), Coords.create() ];
 	}
 
 	overwriteWith(other: Transform)

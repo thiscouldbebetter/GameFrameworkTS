@@ -32,7 +32,7 @@ export class Mesh implements ShapeBase
 	{
 		if (center == null)
 		{
-			center = Coords.blank();
+			center = Coords.create();
 		}
 		var size = new Coords(2, 2, 2);
 		var returnValue = Mesh.boxOfSize(center, size);
@@ -160,7 +160,7 @@ export class Mesh implements ShapeBase
 	{
 		if (this._box == null)
 		{
-			this._box = new Box(Coords.blank(), Coords.blank());
+			this._box = new Box(Coords.create(), Coords.create());
 		}
 		this._box.ofPoints(this.vertices());
 		return this._box;
@@ -197,7 +197,7 @@ export class Mesh implements ShapeBase
 			this._vertices = [];
 			for (var v = 0; v < this.vertexOffsets.length; v++)
 			{
-				this._vertices.push(Coords.blank());
+				this._vertices.push(Coords.create());
 			}
 		}
 

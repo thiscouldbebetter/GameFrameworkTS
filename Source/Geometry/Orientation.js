@@ -62,8 +62,8 @@ var ThisCouldBeBetter;
                 return coordsToProject;
             }
             unprojectCoords(coordsToUnproject) {
-                var returnValue = GameFramework.Coords.blank();
-                var axisScaled = GameFramework.Coords.blank();
+                var returnValue = GameFramework.Coords.create();
+                var axisScaled = GameFramework.Coords.create();
                 for (var i = 0; i < this.axes.length; i++) {
                     var axis = this.axes[i];
                     axisScaled.overwriteWith(axis).multiplyScalar(coordsToUnproject.dimensionGet(i));
@@ -76,8 +76,8 @@ var ThisCouldBeBetter;
                 return coordsToProject;
             }
             unprojectCoordsRDF(coordsToUnproject) {
-                var returnValue = GameFramework.Coords.blank();
-                var axisScaled = GameFramework.Coords.blank();
+                var returnValue = GameFramework.Coords.create();
+                var axisScaled = GameFramework.Coords.create();
                 for (var i = 0; i < this.axesRDF.length; i++) {
                     var axis = this.axesRDF[i];
                     axisScaled.overwriteWith(axis).multiplyScalar(coordsToUnproject.dimensionGet(i));

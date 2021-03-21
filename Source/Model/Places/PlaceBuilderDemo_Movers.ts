@@ -18,7 +18,7 @@ export class PlaceBuilderDemo_Movers
 
 		var constraintSpeedMax1 = new Constraint_SpeedMaxXY(1);
 
-		var carnivoreCollider = new Sphere(Coords.blank(), carnivoreDimension);
+		var carnivoreCollider = new Sphere(Coords.create(), carnivoreDimension);
 
 		var visualEyeRadius = entityDimension * .75 / 2;
 		var visualBuilder = new VisualBuilder();
@@ -64,7 +64,7 @@ export class PlaceBuilderDemo_Movers
 			new VisualOffset
 			(
 				visualEyesDirectional,
-				Coords.blank()
+				Coords.create()
 			),
 		]);
 
@@ -126,7 +126,7 @@ export class PlaceBuilderDemo_Movers
 				{
 					var randomizer = universe.randomizer;
 					targetPos =
-						Coords.blank().randomize(randomizer).multiply(place.size);
+						Coords.create().randomize(randomizer).multiply(place.size);
 				}
 				else
 				{
@@ -196,7 +196,7 @@ export class PlaceBuilderDemo_Movers
 				new Drawable(carnivoreVisual, null),
 				new DrawableCamera(),
 				new Killable(10, null, carnivoreDie),
-				new Locatable(new Disposition(Coords.blank(), null, null) )
+				new Locatable(new Disposition(Coords.create(), null, null) )
 			]
 		);
 
@@ -228,7 +228,7 @@ export class PlaceBuilderDemo_Movers
 		var enemyColliderAsFace = new Face(enemyVertices);
 		var enemyCollider = Mesh.fromFace
 		(
-			Coords.blank(), // center
+			Coords.create(), // center
 			enemyColliderAsFace,
 			1 // thickness
 		);
@@ -344,7 +344,7 @@ export class PlaceBuilderDemo_Movers
 				new Effectable([]),
 				new Enemy(weapon),
 				enemyKillable,
-				new Locatable(new Disposition(Coords.blank(), null, null)),
+				new Locatable(new Disposition(Coords.create(), null, null)),
 				enemyPerceptor
 			]
 		);
@@ -384,7 +384,7 @@ export class PlaceBuilderDemo_Movers
 					universe.randomizer.getNextRandom(), 1, 0
 				);
 				var offsetFromCenter =
-					directionFromCenter.toCoords(Coords.blank()).multiply
+					directionFromCenter.toCoords(Coords.create()).multiply
 					(
 						placeSizeHalf
 					).double();
@@ -476,7 +476,7 @@ export class PlaceBuilderDemo_Movers
 				new Path
 				([
 					// todo - Scale.
-					new Coords(-8, -8, 0), Coords.blank(), new Coords(8, -8, 0)
+					new Coords(-8, -8, 0), Coords.create(), new Coords(8, -8, 0)
 				]),
 				Color.byName("GrayDark"),
 				3, // lineThickness
@@ -680,7 +680,7 @@ export class PlaceBuilderDemo_Movers
 		var constraintSpeedMax1 = new Constraint_SpeedMaxXY(1);
 		var constrainable = new Constrainable([constraintSpeedMax1]);
 
-		var friendlyCollider = new Sphere(Coords.blank(), friendlyDimension);
+		var friendlyCollider = new Sphere(Coords.create(), friendlyDimension);
 		var friendlyCollide =
 			(u: Universe, w: World, p: Place, eFriendly: Entity, eOther: Entity, c: Collision) =>
 			{
@@ -781,7 +781,7 @@ export class PlaceBuilderDemo_Movers
 			{
 				var randomizer = universe.randomizer;
 				targetPos =
-					Coords.blank().randomize(randomizer).multiply(place.size);
+					Coords.create().randomize(randomizer).multiply(place.size);
 				activity.target = targetPos;
 			}
 
@@ -868,7 +868,7 @@ export class PlaceBuilderDemo_Movers
 
 		var constraintSpeedMax1 = new Constraint_SpeedMaxXY(1);
 
-		var grazerCollider = new Sphere(Coords.blank(), grazerDimension);
+		var grazerCollider = new Sphere(Coords.create(), grazerDimension);
 
 		var visualEyeRadius = entityDimension * .75 / 2;
 		var visualBuilder = new VisualBuilder();
@@ -984,7 +984,7 @@ export class PlaceBuilderDemo_Movers
 				{
 					var randomizer = universe.randomizer;
 					targetPos =
-						Coords.blank().randomize(randomizer).multiply(place.size);
+						Coords.create().randomize(randomizer).multiply(place.size);
 				}
 				else
 				{
@@ -1093,7 +1093,7 @@ export class PlaceBuilderDemo_Movers
 				new Drawable(grazerVisual, null),
 				new DrawableCamera(),
 				new Killable(10, null, grazerDie),
-				new Locatable(new Disposition(Coords.blank(), null, null) )
+				new Locatable(new Disposition(Coords.create(), null, null) )
 			]
 		);
 
@@ -1108,7 +1108,7 @@ export class PlaceBuilderDemo_Movers
 		var visualEyesBlinking = visualBuilder.eyesBlinking(visualEyeRadius);
 
 		var playerHeadRadius = entityDimension * .75;
-		var playerCollider = new Sphere(Coords.blank(), playerHeadRadius);
+		var playerCollider = new Sphere(Coords.create(), playerHeadRadius);
 		var playerColor = Color.byName("Gray");
 
 		var playerVisualBodyNormal: Visual = visualBuilder.circleWithEyesAndLegsAndArms
@@ -1244,17 +1244,13 @@ export class PlaceBuilderDemo_Movers
 				{
 					var venueMessage = new VenueMessage
 					(
-						new DataBinding("You win!", null, null),
+						DataBinding.fromContext("You win!"),
 						(universe: Universe) => // acknowledge
 						{
-							universe.venueNext = new VenueFader
+							universe.venueNext = VenueFader.fromVenuesToAndFrom
 							(
-								new VenueControls
-								(
-									universe.controlBuilder.title(universe, null),
-									false
-								),
-								null, null, null
+								universe.controlBuilder.title(universe, null).toVenue(),
+								null
 							);
 						},
 						universe.venueCurrent, // venuePrev
@@ -1360,15 +1356,12 @@ export class PlaceBuilderDemo_Movers
 			{
 				var venueMessage = new VenueMessage
 				(
-					new DataBinding("You lose!", null, null),
+					DataBinding.fromContext("You lose!"),
 					(universe: Universe) => // acknowledge
 					{
-						universe.venueNext = new VenueFader
+						universe.venueNext = VenueFader.fromVenueTo
 						(
-							new VenueControls
-							(
-								universe.controlBuilder.title(universe, null), false
-							), null, null, null
+							universe.controlBuilder.title(universe, null).toVenue()
 						);
 					},
 					universe.venueCurrent, // venuePrev

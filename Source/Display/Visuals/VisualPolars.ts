@@ -21,8 +21,8 @@ export class VisualPolars implements Visual
 		// temps
 
 		this._polar = new Polar(0, 0, 0);
-		this._fromPos = Coords.blank();
-		this._toPos = Coords.blank();
+		this._fromPos = Coords.create();
+		this._toPos = Coords.create();
 	}
 
 	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)

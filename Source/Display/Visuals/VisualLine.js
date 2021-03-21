@@ -10,8 +10,8 @@ var ThisCouldBeBetter;
                 this.color = color;
                 this.lineThickness = lineThickness || 1;
                 // Helper variables.
-                this._drawPosFrom = GameFramework.Coords.blank();
-                this._drawPosTo = GameFramework.Coords.blank();
+                this._drawPosFrom = GameFramework.Coords.create();
+                this._drawPosTo = GameFramework.Coords.create();
                 this._transformLocate = new GameFramework.Transform_Locate(null);
             }
             draw(universe, world, place, entity, display) {

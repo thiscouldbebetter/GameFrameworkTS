@@ -9,7 +9,7 @@ var ThisCouldBeBetter;
                 this.regionToDrawAsBox = regionToDrawAsBox;
                 this.sizeToDraw = sizeToDraw;
                 this.sizeToDrawHalf = this.sizeToDraw.clone().half();
-                this._posSaved = GameFramework.Coords.blank();
+                this._posSaved = GameFramework.Coords.create();
             }
             draw(universe, world, place, entity, display) {
                 var image = this.visualImageToExtractFrom.image(universe);

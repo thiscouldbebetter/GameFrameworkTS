@@ -20,33 +20,33 @@ var ThisCouldBeBetter;
                     child.pos.y += tabPaneHeight;
                     var childName = child.name;
                     var buttonPos = new GameFramework.Coords(marginSize + this.tabButtonSize.x * i, marginSize, 0);
-                    var button = new GameFramework.ControlButton("button" + childName, buttonPos, this.tabButtonSize.clone(), childName, // text
+                    var button = GameFramework.ControlButton.from8("button" + childName, buttonPos, this.tabButtonSize.clone(), childName, // text
                     this.fontHeightInPixels, true, // hasBorder
                     true, // isEnabled
-                    (b) => this.childSelectedIndex = buttonsForChildren.indexOf(b), // hack
-                    null, null);
+                    (b) => this.childSelectedIndex = buttonsForChildren.indexOf(b) // hack
+                    );
                     button.context = button; // hack
                     buttonsForChildren.push(button);
                 }
                 if (this.cancel != null) {
                     this.children.push(null);
-                    var button = new GameFramework.ControlButton("buttonCancel", new GameFramework.Coords(this.size.x - marginSize - this.tabButtonSize.x, marginSize, 0), // pos
+                    var button = GameFramework.ControlButton.from8("buttonCancel", new GameFramework.Coords(this.size.x - marginSize - this.tabButtonSize.x, marginSize, 0), // pos
                     this.tabButtonSize.clone(), "Done", // text
                     this.fontHeightInPixels, true, // hasBorder
                     true, // isEnabled
-                    this.cancel, // click
-                    null, null);
+                    this.cancel // click
+                    );
                     buttonsForChildren.push(button);
                 }
                 this.buttonsForChildren = buttonsForChildren;
                 // Temporary variables.
-                this._childMax = GameFramework.Coords.blank();
+                this._childMax = GameFramework.Coords.create();
                 this._childrenContainingPos = [];
-                this._drawPos = GameFramework.Coords.blank();
-                this._drawLoc = new GameFramework.Disposition(this._drawPos, null, null);
-                this._mouseClickPos = GameFramework.Coords.blank();
-                this._mouseMovePos = GameFramework.Coords.blank();
-                this._posToCheck = GameFramework.Coords.blank();
+                this._drawPos = GameFramework.Coords.create();
+                this._drawLoc = GameFramework.Disposition.fromPos(this._drawPos);
+                this._mouseClickPos = GameFramework.Coords.create();
+                this._mouseMovePos = GameFramework.Coords.create();
+                this._posToCheck = GameFramework.Coords.create();
             }
             // instance methods
             // actions
@@ -210,9 +210,6 @@ var ThisCouldBeBetter;
                     }
                 }
                 return this;
-            }
-            toVenue() {
-                return new GameFramework.VenueFader(new GameFramework.VenueControls(this, false), null, null, null);
             }
             // drawable
             draw(universe, display, drawLoc, style) {

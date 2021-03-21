@@ -61,17 +61,17 @@ var ThisCouldBeBetter;
                 };
                 var back = () => {
                     var venueNext = venueToReturnTo;
-                    venueNext = new GameFramework.VenueFader(venueNext, universe.venueCurrent, null, null);
+                    venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
                     universe.venueNext = venueNext;
                 };
                 var viewLog = () => {
                     var venueCurrent = universe.venueCurrent;
                     var transcriptAsControl = conversationRun.toControlTranscript(size, universe, venueCurrent);
-                    var venueNext = new GameFramework.VenueControls(transcriptAsControl, false);
-                    venueNext = new GameFramework.VenueFader(venueNext, universe.venueCurrent, null, null);
+                    var venueNext = transcriptAsControl.toVenue();
+                    venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
                     universe.venueNext = venueNext;
                 };
-                var returnValue = new GameFramework.ControlContainer("containerConversation", GameFramework.Coords.blank(), // pos
+                var returnValue = new GameFramework.ControlContainer("containerConversation", GameFramework.Coords.create(), // pos
                 size, 
                 // children
                 [
@@ -132,7 +132,7 @@ var ThisCouldBeBetter;
                 var buttonHeight = 25;
                 var marginSize = new GameFramework.Coords(1, 1, 0).multiplyScalar(marginWidth);
                 var listSize = new GameFramework.Coords(size.x * .75, size.y - labelHeight - marginSize.y * 3, 0);
-                var returnValue = new GameFramework.ControlContainer("containerConversation", GameFramework.Coords.blank(), // pos
+                var returnValue = new GameFramework.ControlContainer("containerConversation", GameFramework.Coords.create(), // pos
                 size, 
                 // children
                 [
@@ -143,7 +143,7 @@ var ThisCouldBeBetter;
                     (universe) => // click
                      {
                         var venueNext = venueToReturnTo;
-                        venueNext = new GameFramework.VenueFader(venueNext, universe.venueCurrent, null, null);
+                        venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
                         universe.venueNext = venueNext;
                     }, null, null),
                     new GameFramework.ControlLabel("labelTranscript", new GameFramework.Coords(size.x / 2, marginSize.y, 0), // pos

@@ -23,7 +23,7 @@ export class ControlLabel extends ControlBase
 
 		// Helper variables.
 
-		this._drawPos = Coords.blank();
+		this._drawPos = Coords.create();
 	}
 
 	static fromPosAndText(pos: Coords, text: any)

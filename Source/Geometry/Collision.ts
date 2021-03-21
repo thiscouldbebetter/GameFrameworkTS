@@ -15,19 +15,19 @@ export class Collision
 
 	constructor(pos: Coords, distanceToCollision: number, colliders: any[])
 	{
-		this.pos = pos || Coords.blank();
+		this.pos = pos || Coords.create();
 		this.distanceToCollision = distanceToCollision;
 		this.collidables = [];
 		this.colliders = colliders || [];
 		this.collidersByName = new Map<string,any>();
-		this.normals = [ Coords.blank(), Coords.blank() ];
+		this.normals = [ Coords.create(), Coords.create() ];
 
 		this.isActive = false;
 	}
 
 	static create()
 	{
-		return new Collision(Coords.blank(), null, []);
+		return new Collision(null, null, null);
 	}
 
 	clear()

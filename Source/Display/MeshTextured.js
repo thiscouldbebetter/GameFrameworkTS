@@ -11,6 +11,9 @@ var ThisCouldBeBetter;
                 this.faceTextures = faceTextures;
                 this.vertexGroups = vertexGroups;
             }
+            static fromMeshAndMaterials(geometry, materials) {
+                return new MeshTextured(geometry, materials, null, null);
+            }
             faces() {
                 if (this._faces == null) {
                     this._faces = [];
@@ -32,7 +35,7 @@ var ThisCouldBeBetter;
                 var numberOfFaces = this.geometry.faceBuilders.length;
                 for (var f = 0; f < numberOfFaces; f++) {
                     var faceTexture = new MeshTexturedFaceTexture(materialName, [
-                        GameFramework.Coords.blank(),
+                        GameFramework.Coords.create(),
                         new GameFramework.Coords(1, 0, 0),
                         new GameFramework.Coords(1, 1, 0),
                         new GameFramework.Coords(1, 0, 0)

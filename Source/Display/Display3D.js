@@ -172,7 +172,7 @@ var ThisCouldBeBetter;
                 this.matrixOrient = GameFramework.Matrix.buildZeroes();
                 this.matrixPerspective = GameFramework.Matrix.buildZeroes();
                 this.matrixTranslate = GameFramework.Matrix.buildZeroes();
-                this.tempCoords = GameFramework.Coords.blank();
+                this.tempCoords = GameFramework.Coords.create();
                 this.tempMatrix0 = GameFramework.Matrix.buildZeroes();
                 this.tempMatrix1 = GameFramework.Matrix.buildZeroes();
                 return this;

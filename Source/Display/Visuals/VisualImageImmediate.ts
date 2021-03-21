@@ -16,7 +16,7 @@ export class VisualImageImmediate implements VisualImage
 
 		// Helper variables.
 
-		this._drawPos = Coords.blank();
+		this._drawPos = Coords.create();
 	}
 
 	// instance methods

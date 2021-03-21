@@ -18,7 +18,7 @@ export class VisualAnchor implements Visual
 		this.orientationToAnchorAt = orientationToAnchorAt;
 
 		// Helper variables.
-		this._posSaved = Coords.blank();
+		this._posSaved = Coords.create();
 		this._orientationSaved = new Orientation(null, null);
 	}
 

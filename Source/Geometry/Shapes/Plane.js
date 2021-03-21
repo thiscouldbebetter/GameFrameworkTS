@@ -7,7 +7,7 @@ var ThisCouldBeBetter;
             constructor(normal, distanceFromOrigin) {
                 this.normal = normal;
                 this.distanceFromOrigin = distanceFromOrigin;
-                this._displacementFromPoint0To2 = GameFramework.Coords.blank();
+                this._displacementFromPoint0To2 = GameFramework.Coords.create();
             }
             distanceToPointAlongNormal(point) {
                 return point.dotProduct(this.normal) - this.distanceFromOrigin;

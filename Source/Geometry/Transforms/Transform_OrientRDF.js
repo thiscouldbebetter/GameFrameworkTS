@@ -7,7 +7,7 @@ var ThisCouldBeBetter;
             constructor(orientation) {
                 this.orientation = orientation;
                 // Helper variables.
-                this._components = [GameFramework.Coords.blank(), GameFramework.Coords.blank(), GameFramework.Coords.blank()];
+                this._components = [GameFramework.Coords.create(), GameFramework.Coords.create(), GameFramework.Coords.create()];
             }
             overwriteWith(other) {
                 return this; // todo

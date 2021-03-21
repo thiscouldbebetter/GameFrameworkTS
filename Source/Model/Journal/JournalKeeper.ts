@@ -42,8 +42,8 @@ export class JournalKeeper extends EntityProperty
 
 		var back = () =>
 		{
-			var venueNext = venuePrev;
-			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null) as Venue;
+			var venueNext: Venue = venuePrev;
+			venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
 			universe.venueNext = venueNext;
 		};
 
@@ -216,8 +216,8 @@ export class JournalKeeper extends EntityProperty
 						null // cancel
 					);
 
-					var venueNext: Venue = new VenueControls(controlConfirm, false);
-					venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
+					var venueNext: Venue = controlConfirm.toVenue();
+					venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
 					universe.venueNext = venueNext;
 
 				}, // click
@@ -346,7 +346,7 @@ export class JournalKeeper extends EntityProperty
 		var returnValue = new ControlContainer
 		(
 			"Notes",
-			Coords.blank(), // pos
+			Coords.create(), // pos
 			sizeBase.clone(), // size
 			childControls,
 			[

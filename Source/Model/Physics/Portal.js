@@ -16,10 +16,10 @@ var ThisCouldBeBetter;
                 var portal = entityPortal.portal();
                 var venueCurrent = universe.venueCurrent;
                 var messageBoxSize = universe.display.sizeDefault();
-                var venueMessage = new GameFramework.VenueMessage(new GameFramework.DataBinding("Portal to: " + portal.destinationPlaceName, null, null), (universe) => // acknowledge
+                var venueMessage = new GameFramework.VenueMessage(GameFramework.DataBinding.fromContext("Portal to: " + portal.destinationPlaceName), (universe) => // acknowledge
                  {
                     portal.transport(universe, universe.world, universe.world.placeCurrent, entityToTransport, entityPortal);
-                    universe.venueNext = new GameFramework.VenueFader(venueCurrent, null, null, null);
+                    universe.venueNext = GameFramework.VenueFader.fromVenueTo(venueCurrent);
                 }, venueCurrent, // venuePrev
                 messageBoxSize, true // showMessageOnly
                 );

@@ -12,11 +12,11 @@ var ThisCouldBeBetter;
                 this._isEnabled = isEnabled;
                 this.cursorPos = null;
                 // Helper variables.
-                this._drawPos = GameFramework.Coords.blank();
-                this._drawPosText = GameFramework.Coords.blank();
+                this._drawPos = GameFramework.Coords.create();
+                this._drawPosText = GameFramework.Coords.create();
                 this._drawLoc = new GameFramework.Disposition(this._drawPos, null, null);
-                this._textMargin = GameFramework.Coords.blank();
-                this._textSize = GameFramework.Coords.blank();
+                this._textMargin = GameFramework.Coords.create();
+                this._textSize = GameFramework.Coords.create();
             }
             text(value, universe) {
                 if (value != null) {

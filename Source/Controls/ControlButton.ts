@@ -37,8 +37,8 @@ export class ControlButton extends ControlBase
 		this.canBeHeldDown = (canBeHeldDown == null ? false : canBeHeldDown);
 
 		// Helper variables.
-		this._drawLoc = Disposition.blank();
-		this._sizeHalf = Coords.blank();
+		this._drawLoc = Disposition.create();
+		this._sizeHalf = Coords.create();
 	}
 
 	static from8

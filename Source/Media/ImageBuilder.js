@@ -28,7 +28,7 @@ var ThisCouldBeBetter;
                 canvas.width = sizeInPixels.x * scaleFactor.x;
                 canvas.height = sizeInPixels.y * scaleFactor.y;
                 var graphics = canvas.getContext("2d");
-                var pixelPos = GameFramework.Coords.blank();
+                var pixelPos = GameFramework.Coords.create();
                 var colorForPixel;
                 var colors = this.colorsByCodeChar;
                 for (var y = 0; y < sizeInPixels.y; y++) {
@@ -76,8 +76,8 @@ var ThisCouldBeBetter;
                 var systemImageToSlice = imageToSlice.systemImage;
                 var imageToSliceSize = imageToSlice.sizeInPixels;
                 var tileSize = imageToSliceSize.clone().divide(sizeInTiles);
-                var tilePos = GameFramework.Coords.blank();
-                var sourcePos = GameFramework.Coords.blank();
+                var tilePos = GameFramework.Coords.create();
+                var sourcePos = GameFramework.Coords.create();
                 for (var y = 0; y < sizeInTiles.y; y++) {
                     tilePos.y = y;
                     var returnImageRow = [];

@@ -184,8 +184,8 @@ export class MeshBuilder
 	grid(sizeInCells: Coords, cellSize: Coords, material: Material)
 	{
 		var vertexPositions = [];
-		var vertexPosInCells = Coords.blank();
-		var vertexPos = Coords.blank();
+		var vertexPosInCells = Coords.create();
+		var vertexPos = Coords.create();
 
 		for (var y = 0; y <= sizeInCells.y; y++)
 		{
@@ -230,7 +230,7 @@ export class MeshBuilder
 
 		var returnMesh = new Mesh
 		(
-			Coords.blank(), // center
+			Coords.create(), // center
 			vertexPositions,
 			faces // faceBuilders
 		);
@@ -241,7 +241,7 @@ export class MeshBuilder
 
 			var textureUVs =
 			[
-				Coords.blank(),
+				Coords.create(),
 				new Coords(1, 0, 0),
 				new Coords(1, 1, 0),
 				new Coords(0, 1, 0),
@@ -428,7 +428,7 @@ export class MeshBuilder
 	{
 		var returnMesh = new Mesh
 		(
-			Coords.blank(), // center
+			Coords.create(), // center
 			// vertices
 			[
 				// wall
@@ -454,7 +454,7 @@ export class MeshBuilder
 					material.name,
 					[
 						new Coords(1, 0, 0),
-						Coords.blank(),
+						Coords.create(),
 						new Coords(0, 1, 0),
 						new Coords(1, 1, 0),
 					]
@@ -475,7 +475,7 @@ export class MeshBuilder
 
 		var returnMesh = new Mesh
 		(
-			Coords.blank(), // center
+			Coords.create(), // center
 			// vertices
 			[
 				// wall
@@ -553,7 +553,7 @@ export class MeshBuilder
 					new Coords(0, 1, 0),
 					new Coords(1, 1, 0),
 					new Coords(1, 0, 0),
-					Coords.blank(),
+					Coords.create(),
 				]
 			).transform(transformScaleTop),
 			// left
@@ -564,7 +564,7 @@ export class MeshBuilder
 					new Coords(0, 1, 0),
 					new Coords(1, 1, 0),
 					new Coords(1, 0, 0),
-					Coords.blank(),
+					Coords.create(),
 				]
 			).transform(transformScaleSides),
 			// right
@@ -575,7 +575,7 @@ export class MeshBuilder
 					new Coords(0, 1, 0),
 					new Coords(1, 1, 0),
 					new Coords(1, 0, 0),
-					Coords.blank(),
+					Coords.create(),
 				]
 			).transform(transformScaleSides),
 			// doorframe
@@ -587,7 +587,7 @@ export class MeshBuilder
 					new Coords(0, 1, 0),
 					new Coords(1, 1, 0),
 					new Coords(1, 0, 0),
-					Coords.blank(),
+					Coords.create(),
 				]
 			).transform(transformScaleSidesDoorframe),
 			// right
@@ -598,7 +598,7 @@ export class MeshBuilder
 					new Coords(0, 1, 0),
 					new Coords(1, 1, 0),
 					new Coords(1, 0, 0),
-					Coords.blank(),
+					Coords.create(),
 				]
 			).transform(transformScaleSidesDoorframe),
 			// todo - top
@@ -621,7 +621,7 @@ export class MeshBuilder
 	unitCube(material: Material)
 	{
 		var returnMesh = this.unitCube_Geometry();
-		var returnMeshTextured = new MeshTextured(returnMesh, [ material ], null, null);
+		var returnMeshTextured = MeshTextured.fromMeshAndMaterials(returnMesh, [ material ]);
 		return returnMeshTextured;
 	}
 
@@ -629,7 +629,7 @@ export class MeshBuilder
 	{
 		var returnMesh = new Mesh
 		(
-			Coords.blank(), // center
+			Coords.create(), // center
 			// vertices
 			[
 				// top
@@ -670,7 +670,7 @@ export class MeshBuilder
 			var vertexAngleInTurns = i / numberOfVertices;
 
 			var vertexPolar = new Polar(vertexAngleInTurns, 1, 0);
-			var vertex = vertexPolar.toCoords(Coords.blank());
+			var vertex = vertexPolar.toCoords(Coords.create());
 
 			vertices.push(vertex);
 
@@ -679,12 +679,12 @@ export class MeshBuilder
 
 		var returnMesh = new Mesh
 		(
-			Coords.blank(), // center
+			Coords.create(), // center
 			vertices,
 			[ new Mesh_FaceBuilder(vertexIndicesForFace) ]
 		);
 
-		var returnMeshTextured = new MeshTextured(returnMesh, [ material ], null, null);
+		var returnMeshTextured = MeshTextured.fromMeshAndMaterials(returnMesh, [ material ]);
 
 		return returnMeshTextured;
 	}
@@ -693,7 +693,7 @@ export class MeshBuilder
 	{
 		var returnMesh = new Mesh
 		(
-			Coords.blank(), // center
+			Coords.create(), // center
 			// vertices
 			[
 				// back
@@ -718,7 +718,7 @@ export class MeshBuilder
 				(
 					material.name,
 					[
-						Coords.blank(),
+						Coords.create(),
 						new Coords(1, 0, 0),
 						new Coords(1, 1, 0),
 						new Coords(0, 1, 0),
@@ -811,7 +811,7 @@ export class MeshBuilder
 
 		var returnMesh = new Mesh
 		(
-			Coords.blank(), // center
+			Coords.create(), // center
 			verticesMerged,
 			faceBuildersMerged
 		);

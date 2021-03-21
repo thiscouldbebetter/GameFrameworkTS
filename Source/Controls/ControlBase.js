@@ -27,8 +27,12 @@ var ThisCouldBeBetter;
             mouseMove(x) { }
             scalePosAndSize(x) { }
             style(universe) {
-                return (this.styleName == null ? universe.controlStyle : GameFramework.ControlStyle.byName(this.styleName));
+                var returnValue = (this.styleName == null
+                    ? universe.controlBuilder.styleDefault()
+                    : universe.controlBuilder.styleByName(this.styleName));
+                return returnValue;
             }
+            toVenue() { return GameFramework.VenueControls.fromControl(this); }
         }
         GameFramework.ControlBase = ControlBase;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

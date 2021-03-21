@@ -9,7 +9,7 @@ var ThisCouldBeBetter;
                 this.isHiding = isHiding;
                 this.visibility = visibility;
                 this.audibility = audibility;
-                this._displacement = GameFramework.Coords.blank();
+                this._displacement = GameFramework.Coords.create();
                 this._isHidingPrev = null;
             }
             canBeSeen(u, w, p, entityPerceptible, entityPerceptor) {

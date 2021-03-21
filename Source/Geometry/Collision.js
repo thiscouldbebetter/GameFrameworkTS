@@ -5,16 +5,16 @@ var ThisCouldBeBetter;
     (function (GameFramework) {
         class Collision {
             constructor(pos, distanceToCollision, colliders) {
-                this.pos = pos || GameFramework.Coords.blank();
+                this.pos = pos || GameFramework.Coords.create();
                 this.distanceToCollision = distanceToCollision;
                 this.collidables = [];
                 this.colliders = colliders || [];
                 this.collidersByName = new Map();
-                this.normals = [GameFramework.Coords.blank(), GameFramework.Coords.blank()];
+                this.normals = [GameFramework.Coords.create(), GameFramework.Coords.create()];
                 this.isActive = false;
             }
             static create() {
-                return new Collision(GameFramework.Coords.blank(), null, []);
+                return new Collision(null, null, null);
             }
             clear() {
                 this.isActive = false;

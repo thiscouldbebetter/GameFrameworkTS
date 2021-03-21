@@ -241,7 +241,7 @@ export class PlaceBuilderDemo // Main.
 
 		var zones = [];
 		var placeSizeInZones = new Coords(3, 3, 1);
-		var zonePosInZones = Coords.blank();
+		var zonePosInZones = Coords.create();
 		var zoneSize = size;
 		var neighborOffsets =
 		[
@@ -254,8 +254,8 @@ export class PlaceBuilderDemo // Main.
 			new Coords(0, -1, 0),
 			new Coords(1, -1, 0)
 		];
-		var neighborPos = Coords.blank();
-		var boxZeroes = new Box(Coords.blank(), Coords.blank());
+		var neighborPos = Coords.create();
+		var boxZeroes = new Box(Coords.create(), Coords.create());
 		for (var y = 0; y < placeSizeInZones.y; y++)
 		{
 			zonePosInZones.y = y;
@@ -313,7 +313,7 @@ export class PlaceBuilderDemo // Main.
 		zoneStart.entities.push(...this.entities);
 
 		var zonesByName = ArrayHelper.addLookupsByName(zones);
-		var posInZones = Coords.blank();
+		var posInZones = Coords.create();
 
 		var placeSize = placeSizeInZones.clone().multiply(zoneSize);
 		var place = new PlaceZoned
@@ -525,13 +525,13 @@ export class PlaceBuilderDemo // Main.
 						new VisualOffset
 						(
 							new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
-							Coords.blank()
+							Coords.create()
 						),
 						// w
 						new VisualOffset
 						(
 							new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
-							Coords.blank()
+							Coords.create()
 						)
 					])
 				],
@@ -558,7 +558,7 @@ export class PlaceBuilderDemo // Main.
 					new VisualOffset
 					(
 						new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse),
-						Coords.blank()
+						Coords.create()
 					)
 				],
 				[
@@ -631,7 +631,7 @@ export class PlaceBuilderDemo // Main.
 					new VisualOffset
 					(
 						new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
-						Coords.blank()
+						Coords.create()
 					)
 				],
 				[
@@ -639,7 +639,7 @@ export class PlaceBuilderDemo // Main.
 					new VisualOffset
 					(
 						new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
-						Coords.blank()
+						Coords.create()
 					)
 				],
 				[
@@ -713,8 +713,8 @@ export class PlaceBuilderDemo // Main.
 				terrainVisualCenter, mapCellSizeHalf
 			);
 
-			var tileOffsetInTilesHalf = Coords.blank();
-			var visualOffsetInMapCellsHalf = Coords.blank();
+			var tileOffsetInTilesHalf = Coords.create();
+			var visualOffsetInMapCellsHalf = Coords.create();
 
 			var offsetsToVisual = function
 			(
@@ -921,7 +921,7 @@ export class PlaceBuilderDemo // Main.
 			var cellPosInPixels = cellPosInCells.clone().multiply(map.cellSize);
 
 			var neighborTerrains = [];
-			var neighborPos = Coords.blank();
+			var neighborPos = Coords.create();
 			for (var n = 0; n < neighborOffsets.length; n++)
 			{
 				var neighborOffset = neighborOffsets[n];
@@ -1014,7 +1014,7 @@ export class PlaceBuilderDemo // Main.
 					(
 						new Box
 						(
-							Coords.blank(), //cellPosInPixels,
+							Coords.create(), //cellPosInPixels,
 							mapCellSize
 						)
 					),
@@ -1344,7 +1344,7 @@ export class PlaceBuilderDemo // Main.
 	)
 	{
 		var itemKeyColor = Color.byName("Yellow");
-		var goalPos = Coords.blank().randomize(this.randomizer).multiplyScalar
+		var goalPos = Coords.create().randomize(this.randomizer).multiplyScalar
 		(
 			.5
 		).addDimensions
@@ -1381,7 +1381,7 @@ export class PlaceBuilderDemo // Main.
 			"Goal",
 			[
 				new Locatable(goalLoc),
-				new Collidable(0, new Box(Coords.blank(), entitySize), null, null),
+				new Collidable(0, new Box(Coords.create(), entitySize), null, null),
 				new Drawable(goalVisual, null),
 				new DrawableCamera(),
 				new Goal(numberOfKeysToUnlockGoal),
@@ -1407,9 +1407,9 @@ export class PlaceBuilderDemo // Main.
 		for (var i = 0; i < numberOfKeysToUnlockGoal; i++)
 		{
 			var itemKeyPos =
-				Coords.blank().randomize(this.randomizer).multiply(sizeMinusMargins).add(marginSize);
+				Coords.create().randomize(this.randomizer).multiply(sizeMinusMargins).add(marginSize);
 
-			var itemKeyCollider = new Sphere(Coords.blank(), entityDimensionHalf);
+			var itemKeyCollider = new Sphere(Coords.create(), entityDimensionHalf);
 
 			var itemKeyEntity = new Entity
 			(
@@ -1551,7 +1551,7 @@ export class PlaceBuilderDemo // Main.
 				}
 			}
 
-			var wallCollider = new Box(Coords.blank(), wallSize);
+			var wallCollider = new Box(Coords.create(), wallSize);
 			var wallObstacle = new Obstacle();
 			var wallCollidable = new Collidable
 			(
@@ -1624,7 +1624,7 @@ export class PlaceBuilderDemo // Main.
 					neighborOffset.clone().double()
 				);
 
-				var portalBox = new Box(Coords.blank(), portalSize);
+				var portalBox = new Box(Coords.create(), portalSize);
 
 				var collidable = new Collidable
 				(
@@ -1712,7 +1712,7 @@ export class PlaceBuilderDemo // Main.
 							var venuesForLayers: Venue[] =
 							[
 								u.venueCurrent,
-								new VenueControls(wordBubbleAsControl, false)
+								wordBubbleAsControl.toVenue()
 							];
 
 							u.venueNext = new VenueLayered
@@ -1765,7 +1765,7 @@ export class PlaceBuilderDemo // Main.
 		(
 			"Store",
 			[
-				new Collidable(0, new Box(Coords.blank(), entitySize), null, null),
+				new Collidable(0, new Box(Coords.create(), entitySize), null, null),
 				new Drawable(visual, null),
 				new DrawableCamera(),
 				new ItemStore("Coin"),
@@ -1803,7 +1803,7 @@ export class PlaceBuilderDemo // Main.
 
 		var itemDefnAccessoryName = "Speed Boots";
 		var itemAccessoryVisual = this.itemDefnsByName.get(itemDefnAccessoryName).visual;
-		var itemAccessoryCollider = new Sphere(Coords.blank(), entityDimensionHalf);
+		var itemAccessoryCollider = new Sphere(Coords.create(), entityDimensionHalf);
 
 		var itemAccessoryEntityDefn = new Entity
 		(
@@ -1827,9 +1827,9 @@ export class PlaceBuilderDemo // Main.
 		var itemDefn = this.itemDefnsByName.get(itemDefnArmorName);
 		var itemArmorVisual = itemDefn.visual;
 		var path = ((itemArmorVisual as VisualGroup).children[0] as VisualPolygon).verticesAsPath;
-		var itemArmorCollider = new Sphere(Coords.blank(), entityDimension / 2);
+		var itemArmorCollider = new Sphere(Coords.create(), entityDimension / 2);
 		var collidable = new Collidable(0, itemArmorCollider, null, null);
-		var box = new Box(Coords.blank(), Coords.blank() ).ofPoints(path.points);
+		var box = new Box(Coords.create(), Coords.create() ).ofPoints(path.points);
 		box.center = collidable.collider.center;
 		var boundable = new Boundable(box);
 
@@ -1861,7 +1861,7 @@ export class PlaceBuilderDemo // Main.
 
 		var arrowSize = new Coords(1, 1, 1);
 
-		var itemArrowCollider = new Sphere(Coords.blank(), entityDimensionHalf);
+		var itemArrowCollider = new Sphere(Coords.create(), entityDimensionHalf);
 
 		var collidable = new Collidable(0, itemArrowCollider, null, null);
 		var bounds = new Box(collidable.collider.center, arrowSize);
@@ -1891,7 +1891,7 @@ export class PlaceBuilderDemo // Main.
 
 		var itemDefnBombName = "Bomb";
 		var itemBombVisual = this.itemDefnsByName.get(itemDefnBombName).visual;
-		var itemBombCollider = new Sphere(Coords.blank(), entityDimensionHalf);
+		var itemBombCollider = new Sphere(Coords.create(), entityDimensionHalf);
 
 		var itemBombDevice = new Device
 		(
@@ -1944,7 +1944,7 @@ export class PlaceBuilderDemo // Main.
 				projectileLoc.vel.overwriteWith(userVel).clearZ().double();
 
 				var projectileCollider =
-					new Sphere(Coords.blank(), projectileDimension);
+					new Sphere(Coords.create(), projectileDimension);
 
 				// todo
 				var projectileCollide = null;
@@ -1952,7 +1952,7 @@ export class PlaceBuilderDemo // Main.
 				{
 					var explosionRadius = 32;
 					var explosionVisual = new VisualCircle(explosionRadius, Color.byName("Yellow"), null, null);
-					var explosionCollider = new Sphere(Coords.blank(), explosionRadius);
+					var explosionCollider = new Sphere(Coords.create(), explosionRadius);
 					var explosionCollide = (universe: Universe, world: World, place: Place, entityProjectile: Entity, entityOther: Entity) =>
 					{
 						var killable = entityOther.killable();
@@ -2027,7 +2027,7 @@ export class PlaceBuilderDemo // Main.
 
 		var itemDefnBookName = "Book";
 		var itemBookVisual = this.itemDefnsByName.get(itemDefnBookName).visual;
-		var itemBookCollider = new Sphere(Coords.blank(), entityDimensionHalf);
+		var itemBookCollider = new Sphere(Coords.create(), entityDimensionHalf);
 
 		var itemBookEntityDefn = new Entity
 		(
@@ -2051,7 +2051,7 @@ export class PlaceBuilderDemo // Main.
 
 		var itemBowVisual = this.itemDefnsByName.get(itemDefnName).visual;
 
-		var itemBowCollider = new Sphere(Coords.blank(), entityDimension / 2);
+		var itemBowCollider = new Sphere(Coords.create(), entityDimension / 2);
 
 		var itemBowUse = (u: Universe, world: World, p: Place, entityUser: Entity, entityDevice: Entity) => // use
 		{
@@ -2102,7 +2102,7 @@ export class PlaceBuilderDemo // Main.
 			projectileLoc.vel.overwriteWith(userVel).clearZ().double();
 
 			var projectileCollider =
-				new Sphere(Coords.blank(), projectileDimension);
+				new Sphere(Coords.create(), projectileDimension);
 
 			var projectileCollide = (universe: Universe, world: World, place: Place, entityProjectile: Entity, entityOther: Entity) =>
 			{
@@ -2199,7 +2199,7 @@ export class PlaceBuilderDemo // Main.
 
 		var itemDefnBreadName = "Bread";
 		var itemBreadVisual = this.itemDefnsByName.get(itemDefnBreadName).visual;
-		var itemBreadCollider = new Sphere(Coords.blank(), entityDimensionHalf);
+		var itemBreadCollider = new Sphere(Coords.create(), entityDimensionHalf);
 
 		var itemBreadEntityDefn = new Entity
 		(
@@ -2227,7 +2227,7 @@ export class PlaceBuilderDemo // Main.
 		var visualTileset = new VisualImageFromLibrary("Car");
 		var tileSizeInPixels = new Coords(64, 48, 0);
 		var tilesetSizeInTiles = new Coords(8, 4, 0);
-		var tilePosInTiles = Coords.blank();
+		var tilePosInTiles = Coords.create();
 
 		for (var y = 0; y < tilesetSizeInTiles.y; y++)
 		{
@@ -2274,7 +2274,7 @@ export class PlaceBuilderDemo // Main.
 			);
 		}
 
-		var carCollider = new Sphere(Coords.blank(), entityDimension / 2);
+		var carCollider = new Sphere(Coords.create(), entityDimension / 2);
 
 		var carCollide = (universe: Universe, world: World, place: Place, entityVehicle: Entity, entityOther: Entity) =>
 		{
@@ -2300,7 +2300,7 @@ export class PlaceBuilderDemo // Main.
 			new Constraint_FrictionXY(.03, .2)
 		]);
 
-		var carLoc = Disposition.blank();
+		var carLoc = Disposition.create();
 		//carLoc.spin = new Rotation(Coords.Instances().ZeroZeroOne, new Reference(.01));
 		var carUsable = new Usable
 		(
@@ -2343,7 +2343,7 @@ export class PlaceBuilderDemo // Main.
 
 		var itemDefnCoinName = "Coin";
 		var itemCoinVisual = this.itemDefnsByName.get(itemDefnCoinName).visual;
-		var itemCoinCollider = new Sphere(Coords.blank(), entityDimensionHalf);
+		var itemCoinCollider = new Sphere(Coords.create(), entityDimensionHalf);
 
 		var itemCoinEntityDefn = new Entity
 		(
@@ -2366,7 +2366,7 @@ export class PlaceBuilderDemo // Main.
 
 		var itemDefnCrystalName = "Crystal";
 		var itemCrystalVisual = this.itemDefnsByName.get(itemDefnCrystalName).visual;
-		var itemCrystalCollider = new Sphere(Coords.blank(), entityDimensionHalf);
+		var itemCrystalCollider = new Sphere(Coords.create(), entityDimensionHalf);
 
 		var itemCrystalEntityDefn = new Entity
 		(
@@ -2389,7 +2389,7 @@ export class PlaceBuilderDemo // Main.
 
 		var itemDefnDoughnutName = "Doughnut";
 		var itemDoughnutVisual = this.itemDefnsByName.get(itemDefnDoughnutName).visual;
-		var itemDoughnutCollider = new Sphere(Coords.blank(), entityDimensionHalf);
+		var itemDoughnutCollider = new Sphere(Coords.create(), entityDimensionHalf);
 
 		var itemDoughnutEntityDefn = new Entity
 		(
@@ -2411,7 +2411,7 @@ export class PlaceBuilderDemo // Main.
 		entityDimension *= .5;
 		var itemDefnName = "Flower";
 		var visual = this.itemDefnsByName.get(itemDefnName).visual;
-		var collider = new Sphere(Coords.blank(), entityDimension);
+		var collider = new Sphere(Coords.create(), entityDimension);
 
 		var entityDefn = new Entity
 		(
@@ -2434,7 +2434,7 @@ export class PlaceBuilderDemo // Main.
 
 		var itemDefnFruitName = "Fruit";
 		var itemFruitVisual = this.itemDefnsByName.get(itemDefnFruitName).visual;
-		var itemFruitCollider = new Sphere(Coords.blank(), entityDimensionHalf);
+		var itemFruitCollider = new Sphere(Coords.create(), entityDimensionHalf);
 
 		var itemFruitEntityDefn = new Entity
 		(
@@ -2479,7 +2479,7 @@ export class PlaceBuilderDemo // Main.
 
 		var itemGrassVisual = this.itemDefnsByName.get(itemDefnName).visual;
 
-		var itemGrassCollider = new Sphere(Coords.blank(), entityDimension / 2);
+		var itemGrassCollider = new Sphere(Coords.create(), entityDimension / 2);
 
 		var itemGrassEntityDefn = new Entity
 		(
@@ -2502,7 +2502,7 @@ export class PlaceBuilderDemo // Main.
 
 		var itemDefnHeartName = "Heart";
 		var itemHeartVisual = this.itemDefnsByName.get(itemDefnHeartName).visual;
-		var itemHeartCollider = new Sphere(Coords.blank(), entityDimensionHalf);
+		var itemHeartCollider = new Sphere(Coords.create(), entityDimensionHalf);
 
 		var itemHeartEntityDefn = new Entity
 		(
@@ -2525,7 +2525,7 @@ export class PlaceBuilderDemo // Main.
 
 		var itemDefnIronName = "Iron";
 		var itemIronVisual = this.itemDefnsByName.get(itemDefnIronName).visual;
-		var itemIronCollider = new Sphere(Coords.blank(), entityDimensionHalf);
+		var itemIronCollider = new Sphere(Coords.create(), entityDimensionHalf);
 
 		var itemIronEntityDefn = new Entity
 		(
@@ -2548,7 +2548,7 @@ export class PlaceBuilderDemo // Main.
 
 		var itemDefnOreName = "Iron Ore";
 		var itemOreVisual = this.itemDefnsByName.get(itemDefnOreName).visual;
-		var itemOreCollider = new Sphere(Coords.blank(), entityDimensionHalf);
+		var itemOreCollider = new Sphere(Coords.create(), entityDimensionHalf);
 
 		var itemOreEntityDefn = new Entity
 		(
@@ -2571,7 +2571,7 @@ export class PlaceBuilderDemo // Main.
 
 		var itemDefnLogName = "Log";
 		var itemLogVisual = this.itemDefnsByName.get(itemDefnLogName).visual;
-		var itemLogCollider = new Sphere(Coords.blank(), entityDimensionHalf);
+		var itemLogCollider = new Sphere(Coords.create(), entityDimensionHalf);
 
 		var itemLogEntityDefn = new Entity
 		(
@@ -2595,7 +2595,7 @@ export class PlaceBuilderDemo // Main.
 		var itemDefnMeatName = "Meat";
 		var itemMeatDefn = this.itemDefnsByName.get(itemDefnMeatName);
 		var itemMeatVisual = itemMeatDefn.visual;
-		var itemMeatCollider = new Sphere(Coords.blank(), entityDimensionHalf);
+		var itemMeatCollider = new Sphere(Coords.create(), entityDimensionHalf);
 
 		var itemMeatEntityDefn = new Entity
 		(
@@ -2619,7 +2619,7 @@ export class PlaceBuilderDemo // Main.
 
 		var itemDefnMedicineName = "Medicine";
 		var itemMedicineVisual = this.itemDefnsByName.get(itemDefnMedicineName).visual;
-		var itemMedicineCollider = new Sphere(Coords.blank(), entityDimensionHalf);
+		var itemMedicineCollider = new Sphere(Coords.create(), entityDimensionHalf);
 
 		var itemMedicineEntityDefn = new Entity
 		(
@@ -2644,7 +2644,7 @@ export class PlaceBuilderDemo // Main.
 
 		var itemMushroomVisual = this.itemDefnsByName.get(itemDefnName).visual;
 
-		var itemMushroomCollider = new Sphere(Coords.blank(), entityDimension / 2);
+		var itemMushroomCollider = new Sphere(Coords.create(), entityDimension / 2);
 
 		var itemMushroomEntityDefn = new Entity
 		(
@@ -2666,7 +2666,7 @@ export class PlaceBuilderDemo // Main.
 		var itemDefnName = "Pick";
 		var itemPickVisual = this.itemDefnsByName.get(itemDefnName).visual;
 
-		var itemPickCollider = new Sphere(Coords.blank(), entityDimension / 2);
+		var itemPickCollider = new Sphere(Coords.create(), entityDimension / 2);
 
 		var itemPickDevice = new Device
 		(
@@ -2743,7 +2743,7 @@ export class PlaceBuilderDemo // Main.
 				)
 			);
 		}
-		var itemPotionCollider = new Sphere(Coords.blank(), entityDimensionHalf);
+		var itemPotionCollider = new Sphere(Coords.create(), entityDimensionHalf);
 
 		var itemPotionEntityDefn = new Entity
 		(
@@ -2765,7 +2765,7 @@ export class PlaceBuilderDemo // Main.
 		var itemDefnName = "Shovel";
 		var itemShovelVisual = this.itemDefnsByName.get(itemDefnName).visual;
 
-		var itemShovelCollider = new Sphere(Coords.blank(), entityDimension / 2);
+		var itemShovelCollider = new Sphere(Coords.create(), entityDimension / 2);
 
 		var itemShovelDevice = new Device
 		(
@@ -2836,7 +2836,7 @@ export class PlaceBuilderDemo // Main.
 			itemDefnName += damageTypeName;
 		}
 
-		var itemSwordCollider = new Sphere(Coords.blank(), entityDimension / 2);
+		var itemSwordCollider = new Sphere(Coords.create(), entityDimension / 2);
 
 		var itemSwordDeviceUse =
 			(universe: Universe, world: World, place: Place, entityUser: Entity, entityDevice: Entity) => // use
@@ -2890,7 +2890,7 @@ export class PlaceBuilderDemo // Main.
 			projectileLoc.vel.overwriteWith(userVel).clearZ().double();
 
 			var projectileCollider =
-				new Sphere(Coords.blank(), projectileDimension);
+				new Sphere(Coords.create(), projectileDimension);
 
 			var projectileCollide = (universe: Universe, world: World, place: Place, entityProjectile: Entity, entityOther: Entity) =>
 			{
@@ -3011,7 +3011,7 @@ export class PlaceBuilderDemo // Main.
 
 		var itemToolsetVisual = this.itemDefnsByName.get(itemDefnName).visual;
 
-		var itemToolsetCollider = new Sphere(Coords.blank(), entityDimension / 2);
+		var itemToolsetCollider = new Sphere(Coords.create(), entityDimension / 2);
 
 		var itemToolsetEntityDefn = new Entity
 		(
@@ -3034,7 +3034,7 @@ export class PlaceBuilderDemo // Main.
 
 		var itemTorchVisual = this.itemDefnsByName.get(itemDefnName).visual;
 
-		var itemTorchCollider = new Sphere(Coords.blank(), entityDimension / 2);
+		var itemTorchCollider = new Sphere(Coords.create(), entityDimension / 2);
 
 		var itemTorchEntityDefn = new Entity
 		(
@@ -3058,7 +3058,7 @@ export class PlaceBuilderDemo // Main.
 
 		var itemWeightVisual = this.itemDefnsByName.get(itemDefnName).visual;
 
-		var itemWeightCollider = new Sphere(Coords.blank(), entityDimension / 2);
+		var itemWeightCollider = new Sphere(Coords.create(), entityDimension / 2);
 
 		var itemWeightEntityDefn = new Entity
 		(

@@ -14,8 +14,8 @@ var ThisCouldBeBetter;
                 this.colorBack = colorBack;
                 this.isInvisible = isInvisible || false;
                 // Helper variables.
-                this._drawPos = GameFramework.Coords.blank();
-                this._sizeHalf = GameFramework.Coords.blank();
+                this._drawPos = GameFramework.Coords.create();
+                this._sizeHalf = GameFramework.Coords.create();
                 this._zeroes = GameFramework.Coords.Instances().Zeroes;
             }
             static fromSizeAndIsInvisible(size, isInvisible) {
@@ -35,7 +35,7 @@ var ThisCouldBeBetter;
                     this.graphics.fillStyle = colorFill;
                     this.graphics.beginPath();
                     this.graphics.arc(center.x, center.y, radiusInner, angleStartInRadians, angleStopInRadians);
-                    drawPos.overwriteWith(center).add(new GameFramework.Polar(angleStopInTurns, radiusOuter, 0).toCoords(GameFramework.Coords.blank()));
+                    drawPos.overwriteWith(center).add(new GameFramework.Polar(angleStopInTurns, radiusOuter, 0).toCoords(GameFramework.Coords.create()));
                     this.graphics.lineTo(drawPos.x, drawPos.y);
                     this.graphics.arc(center.x, center.y, radiusOuter, angleStopInRadians, angleStartInRadians, true // counterclockwise
                     );
@@ -46,7 +46,7 @@ var ThisCouldBeBetter;
                     this.graphics.strokeStyle = colorBorder;
                     this.graphics.beginPath();
                     this.graphics.arc(center.x, center.y, radiusInner, angleStartInRadians, angleStopInRadians);
-                    drawPos.overwriteWith(center).add(new GameFramework.Polar(angleStopInTurns, radiusOuter, 0).toCoords(GameFramework.Coords.blank()));
+                    drawPos.overwriteWith(center).add(new GameFramework.Polar(angleStopInTurns, radiusOuter, 0).toCoords(GameFramework.Coords.create()));
                     this.graphics.lineTo(drawPos.x, drawPos.y);
                     this.graphics.arc(center.x, center.y, radiusOuter, angleStopInRadians, angleStartInRadians, true // counterclockwise
                     );
@@ -276,7 +276,7 @@ var ThisCouldBeBetter;
                     this.graphics.fillStyle = colorFill;
                     this.graphics.beginPath();
                     this.graphics.moveTo(center.x, center.y);
-                    drawPos.overwriteWith(center).add(new GameFramework.Polar(angleStopInTurns, radius, 0).toCoords(GameFramework.Coords.blank()));
+                    drawPos.overwriteWith(center).add(new GameFramework.Polar(angleStopInTurns, radius, 0).toCoords(GameFramework.Coords.create()));
                     this.graphics.lineTo(drawPos.x, drawPos.y);
                     this.graphics.arc(center.x, center.y, radius, angleStopInRadians, angleStartInRadians, true // counterclockwise
                     );
@@ -287,7 +287,7 @@ var ThisCouldBeBetter;
                     this.graphics.strokeStyle = colorBorder;
                     this.graphics.beginPath();
                     this.graphics.moveTo(center.x, center.y);
-                    drawPos.overwriteWith(center).add(new GameFramework.Polar(angleStopInTurns, radius, 0).toCoords(GameFramework.Coords.blank()));
+                    drawPos.overwriteWith(center).add(new GameFramework.Polar(angleStopInTurns, radius, 0).toCoords(GameFramework.Coords.create()));
                     this.graphics.lineTo(drawPos.x, drawPos.y);
                     this.graphics.arc(center.x, center.y, radius, angleStopInRadians, angleStartInRadians, true // counterclockwise
                     );

@@ -17,6 +17,11 @@ export class Action
 		this.perform = perform;
 	}
 
+	performForUniverse(universe: Universe)
+	{
+		this.perform(universe, null, null, null);
+	}
+
 	static _instances: Action_Instances;
 	static Instances()
 	{
@@ -53,8 +58,8 @@ class Action_Instances
 				(
 					universe, universe.display.sizeInPixels, actor, universe.venueCurrent, true
 				);
-				var venueNext: Venue = new VenueControls(control, false);
-				venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
+				var venueNext: Venue = control.toVenue();
+				venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
 				universe.venueNext = venueNext;
 			}
 		);

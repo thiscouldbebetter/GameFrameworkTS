@@ -4,17 +4,16 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Universe {
-            constructor(name, version, timerHelper, display, mediaLibrary, controlStyle, worldCreate) {
+            constructor(name, version, timerHelper, display, mediaLibrary, controlBuilder, worldCreate) {
                 this.name = name;
                 this.version = version;
                 this.timerHelper = timerHelper;
                 this.display = display;
                 this.mediaLibrary = mediaLibrary;
-                this.controlStyle = controlStyle;
+                this.controlBuilder = controlBuilder;
                 this._worldCreate =
                     worldCreate || ((u) => GameFramework.World.create(u));
                 this.collisionHelper = new GameFramework.CollisionHelper();
-                this.controlBuilder = new GameFramework.ControlBuilder([GameFramework.ControlStyle.Instances().Default]);
                 this.displayRecorder = new GameFramework.DisplayRecorder(1, // ticksPerFrame
                 100, // bufferSizeInFrames - 5 seconds at 20 fps.
                 true // isCircular
@@ -27,8 +26,8 @@ var ThisCouldBeBetter;
                 this.venueNext = null;
             }
             // static methods
-            static create(name, version, timerHelper, display, mediaLibrary, controlStyle, worldCreate) {
-                var returnValue = new Universe(name, version, timerHelper, display, mediaLibrary, controlStyle, worldCreate);
+            static create(name, version, timerHelper, display, mediaLibrary, controlBuilder, worldCreate) {
+                var returnValue = new Universe(name, version, timerHelper, display, mediaLibrary, controlBuilder, worldCreate);
                 var debuggingMode = GameFramework.URLParser.fromWindow().queryStringParameters["debug"];
                 returnValue.debuggingMode = debuggingMode;
                 return returnValue;
@@ -44,8 +43,8 @@ var ThisCouldBeBetter;
                 this.platformHelper.platformableAdd(this.display);
                 this.soundHelper = new GameFramework.SoundHelper(this.mediaLibrary.sounds);
                 this.videoHelper = new GameFramework.VideoHelper(this.mediaLibrary.videos);
-                var venueControlsOpening = new GameFramework.VenueControls(this.controlBuilder.opening(this, this.display.sizeInPixels), false);
-                venueControlsOpening = new GameFramework.VenueFader(venueControlsOpening, venueControlsOpening, null, null);
+                var venueControlsOpening = this.controlBuilder.opening(this, this.display.sizeInPixels).toVenue();
+                venueControlsOpening = GameFramework.VenueFader.fromVenuesToAndFrom(venueControlsOpening, venueControlsOpening);
                 this.venueNext = venueControlsOpening;
                 this.inputHelper = new GameFramework.InputHelper();
                 this.inputHelper.initialize(this);

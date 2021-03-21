@@ -48,7 +48,7 @@ var ThisCouldBeBetter;
         class Constraint_ContainInHemispace {
             constructor(hemispaceToContainWithin) {
                 this.hemispaceToContainWithin = hemispaceToContainWithin;
-                this._coordsTemp = GameFramework.Coords.blank();
+                this._coordsTemp = GameFramework.Coords.create();
             }
             constrain(universe, world, place, entity) {
                 var hemispace = this.hemispaceToContainWithin;

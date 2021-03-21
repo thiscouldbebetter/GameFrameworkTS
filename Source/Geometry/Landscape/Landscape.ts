@@ -37,7 +37,7 @@ export class LandscapeMap
 	{
 		var cornerCellPositions =
 		[
-			Coords.blank(), // nw
+			Coords.create(), // nw
 			new Coords(this.sizeInCellsMinusOnes.x, 0, 0), // ne
 			new Coords(this.sizeInCellsMinusOnes.x, this.sizeInCellsMinusOnes.y, 0), // se
 			new Coords(0, this.sizeInCellsMinusOnes.y, 0), // sw
@@ -50,8 +50,8 @@ export class LandscapeMap
 			this.cellAltitudes[cellIndex] = 0;
 		}
 
-		var parentPos = Coords.blank();
-		var childPos = Coords.blank();
+		var parentPos = Coords.create();
+		var childPos = Coords.create();
 
 		var neighborDatas =
 		[
@@ -198,7 +198,7 @@ export class LandscapeMap
 
 		var graphics = canvas.getContext("2d");
 
-		var cellPos = Coords.blank();
+		var cellPos = Coords.create();
 
 		for (var y = 0; y < this.sizeInCells.y; y++)
 		{
@@ -259,7 +259,7 @@ class NeighborData
 		this.neighborIndicesContributing = neighborIndicesContributing;
 		this.altitudeVariationMultiplier = altitudeVariationMultiplier;
 
-		this.pos = Coords.blank();
+		this.pos = Coords.create();
 	}
 }
 

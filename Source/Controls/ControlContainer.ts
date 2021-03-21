@@ -55,12 +55,12 @@ export class ControlContainer extends ControlBase
 		this.childrenContainingPosPrev = [];
 
 		// Helper variables.
-		this._childMax = Coords.blank();
-		this._drawPos = Coords.blank();
-		this._drawLoc = new Disposition(this._drawPos, null, null);
-		this._mouseClickPos = Coords.blank();
-		this._mouseMovePos = Coords.blank();
-		this._posToCheck = Coords.blank();
+		this._childMax = Coords.create();
+		this._drawPos = Coords.create();
+		this._drawLoc = Disposition.fromPos(this._drawPos);
+		this._mouseClickPos = Coords.create();
+		this._mouseMovePos = Coords.create();
+		this._posToCheck = Coords.create();
 	}
 
 	static from4
@@ -134,13 +134,13 @@ export class ControlContainer extends ControlBase
 			var mapping = this._actionToInputsMappingsByInputName.get(inputName);
 			var actionName = mapping.actionName;
 			var action = this.actionsByName.get(actionName);
-			action.perform(universe, null, null, null);
+			action.performForUniverse(universe);
 			wasActionHandled = true;
 		}
 		else if (this.actionsByName.has(actionNameToHandle))
 		{
 			var action = this.actionsByName.get(actionNameToHandle);
-			action.perform(universe, null, null, null);
+			action.performForUniverse(universe);
 			wasActionHandled = true;
 		}
 		else if (childWithFocus != null)
@@ -396,11 +396,6 @@ export class ControlContainer extends ControlBase
 			var child = this.children[i];
 			child.pos.add(displacement);
 		}
-	}
-
-	toVenue()
-	{
-		return new VenueFader(new VenueControls(this, false), null, null, null);
 	}
 
 	// drawable

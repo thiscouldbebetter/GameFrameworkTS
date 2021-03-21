@@ -23,9 +23,9 @@ var ThisCouldBeBetter;
                 this._items, 0 // value
                 );
                 // Helper variables.
-                this._drawPos = GameFramework.Coords.blank();
+                this._drawPos = GameFramework.Coords.create();
                 this._drawLoc = new GameFramework.Disposition(this._drawPos, null, null);
-                this._mouseClickPos = GameFramework.Coords.blank();
+                this._mouseClickPos = GameFramework.Coords.create();
             }
             static fromPosSizeAndItems(pos, size, items) {
                 var returnValue = new ControlList("", // name,
@@ -232,7 +232,7 @@ var ThisCouldBeBetter;
                     indexEnd = items.length - 1;
                 }
                 var itemSelected = this.itemSelected(null);
-                var drawPos2 = GameFramework.Coords.blank();
+                var drawPos2 = GameFramework.Coords.create();
                 for (var i = indexStart; i <= indexEnd; i++) {
                     var item = items[i];
                     var iOffset = i - indexStart;

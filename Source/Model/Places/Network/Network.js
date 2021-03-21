@@ -12,7 +12,7 @@ var ThisCouldBeBetter;
                 var nodes = [];
                 for (var i = 0; i < nodeCount; i++) {
                     var nodeId = i;
-                    var nodePos = GameFramework.Coords.blank().randomize(randomizer);
+                    var nodePos = GameFramework.Coords.create().randomize(randomizer);
                     var node = new NetworkNode(nodeId, nodePos);
                     nodes.push(node);
                 }
@@ -26,7 +26,7 @@ var ThisCouldBeBetter;
                 var nodesNotYetLinked = this.nodes.slice();
                 var nodesAlreadyLinked = [nodesNotYetLinked[0]];
                 nodesNotYetLinked.splice(0, 1);
-                var displacement = GameFramework.Coords.blank();
+                var displacement = GameFramework.Coords.create();
                 while (nodesNotYetLinked.length > 0) {
                     var nodeNotYetLinkedClosestSoFar = null;
                     var nodeAlreadyLinkedClosestSoFar = null;

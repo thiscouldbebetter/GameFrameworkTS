@@ -114,7 +114,7 @@ export class ConversationRun
 		var back = () =>
 		{
 			var venueNext = venueToReturnTo;
-			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
+			venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
 			universe.venueNext = venueNext;
 		};
 
@@ -125,15 +125,15 @@ export class ConversationRun
 			(
 				size, universe, venueCurrent
 			);
-			var venueNext: Venue = new VenueControls(transcriptAsControl, false);
-			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
+			var venueNext: Venue = transcriptAsControl.toVenue();
+			venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
 			universe.venueNext = venueNext;
 		};
 
 		var returnValue = new ControlContainer
 		(
 			"containerConversation",
-			Coords.blank(), // pos
+			Coords.create(), // pos
 			size,
 			// children
 			[
@@ -316,7 +316,7 @@ export class ConversationRun
 		var returnValue = new ControlContainer
 		(
 			"containerConversation",
-			Coords.blank(), // pos
+			Coords.create(), // pos
 			size,
 			// children
 			[
@@ -332,7 +332,10 @@ export class ConversationRun
 					(universe: Universe) => // click
 					{
 						var venueNext = venueToReturnTo;
-						venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
+						venueNext = VenueFader.fromVenuesToAndFrom
+						(
+							venueNext, universe.venueCurrent
+						);
 						universe.venueNext = venueNext;
 					},
 					null, null

@@ -104,8 +104,8 @@ export class ItemBarterer extends EntityProperty
 		var back = function()
 		{
 			itemBarterer.reset(entityCustomer, entityStore);
-			var venueNext = venuePrev;
-			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null) as Venue;
+			var venueNext: Venue = venuePrev;
+			venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
 			universe.venueNext = venueNext;
 		};
 
@@ -190,7 +190,7 @@ export class ItemBarterer extends EntityProperty
 		var returnValue = new ControlContainer
 		(
 			"containerTransfer",
-			Coords.blank(), // pos
+			Coords.create(), // pos
 			size.clone(),
 			// children
 			[

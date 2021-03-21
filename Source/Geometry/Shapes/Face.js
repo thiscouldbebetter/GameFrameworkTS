@@ -9,7 +9,7 @@ var ThisCouldBeBetter;
             }
             box() {
                 if (this._box == null) {
-                    this._box = new GameFramework.Box(GameFramework.Coords.blank(), GameFramework.Coords.blank());
+                    this._box = new GameFramework.Box(GameFramework.Coords.create(), GameFramework.Coords.create());
                 }
                 this._box.ofPoints(this.vertices);
                 return this._box;
@@ -17,7 +17,7 @@ var ThisCouldBeBetter;
             containsPoint(pointToCheck) {
                 var face = this;
                 var faceNormal = face.plane().normal;
-                var displacementFromVertex0ToCollision = GameFramework.Coords.blank();
+                var displacementFromVertex0ToCollision = GameFramework.Coords.create();
                 var isPosWithinAllEdgesOfFaceSoFar = true;
                 var edges = face.edges();
                 for (var e = 0; e < edges.length; e++) {
@@ -51,7 +51,7 @@ var ThisCouldBeBetter;
             }
             plane() {
                 if (this._plane == null) {
-                    this._plane = new GameFramework.Plane(GameFramework.Coords.blank(), 0);
+                    this._plane = new GameFramework.Plane(GameFramework.Coords.create(), 0);
                 }
                 this._plane.fromPoints(this.vertices[0], this.vertices[1], this.vertices[2]);
                 return this._plane;

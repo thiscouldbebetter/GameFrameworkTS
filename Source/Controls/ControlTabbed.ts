@@ -51,7 +51,7 @@ export class ControlTabbed extends ControlBase
 
 			var buttonPos = new Coords(marginSize + this.tabButtonSize.x * i, marginSize, 0);
 
-			var button = new ControlButton
+			var button = ControlButton.from8
 			(
 				"button" + childName,
 				buttonPos,
@@ -60,8 +60,7 @@ export class ControlTabbed extends ControlBase
 				this.fontHeightInPixels,
 				true, // hasBorder
 				true, // isEnabled
-				(b: any) => this.childSelectedIndex = buttonsForChildren.indexOf(b), // hack
-				null, null
+				(b: any) => this.childSelectedIndex = buttonsForChildren.indexOf(b) // hack
 			);
 			button.context = button; // hack
 			buttonsForChildren.push(button);
@@ -70,7 +69,7 @@ export class ControlTabbed extends ControlBase
 		if (this.cancel != null)
 		{
 			this.children.push(null);
-			var button = new ControlButton
+			var button = ControlButton.from8
 			(
 				"buttonCancel",
 				new Coords(this.size.x - marginSize - this.tabButtonSize.x, marginSize, 0), // pos
@@ -79,8 +78,7 @@ export class ControlTabbed extends ControlBase
 				this.fontHeightInPixels,
 				true, // hasBorder
 				true, // isEnabled
-				this.cancel, // click
-				null, null
+				this.cancel // click
 			);
 			buttonsForChildren.push(button);
 		}
@@ -88,13 +86,13 @@ export class ControlTabbed extends ControlBase
 		this.buttonsForChildren = buttonsForChildren;
 
 		// Temporary variables.
-		this._childMax = Coords.blank();
+		this._childMax = Coords.create();
 		this._childrenContainingPos = [];
-		this._drawPos = Coords.blank();
-		this._drawLoc = new Disposition(this._drawPos, null, null);
-		this._mouseClickPos = Coords.blank();
-		this._mouseMovePos = Coords.blank();
-		this._posToCheck = Coords.blank();
+		this._drawPos = Coords.create();
+		this._drawLoc = Disposition.fromPos(this._drawPos);
+		this._mouseClickPos = Coords.create();
+		this._mouseMovePos = Coords.create();
+		this._posToCheck = Coords.create();
 	}
 
 	// instance methods
@@ -374,11 +372,6 @@ export class ControlTabbed extends ControlBase
 		}
 
 		return this;
-	}
-
-	toVenue()
-	{
-		return new VenueFader(new VenueControls(this, false), null, null, null);
 	}
 
 	// drawable

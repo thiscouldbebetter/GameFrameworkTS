@@ -22,6 +22,11 @@ export class MeshTextured implements Transformable
 		this.vertexGroups = vertexGroups;
 	}
 
+	static fromMeshAndMaterials(geometry: Mesh, materials: Material[])
+	{
+		return new MeshTextured(geometry, materials, null, null);
+	}
+
 	faces(): FaceTextured[]
 	{
 		if (this._faces == null)
@@ -55,7 +60,7 @@ export class MeshTextured implements Transformable
 			(
 				materialName,
 				[
-					Coords.blank(),
+					Coords.create(),
 					new Coords(1, 0, 0),
 					new Coords(1, 1, 0),
 					new Coords(1, 0, 0)

@@ -39,10 +39,13 @@ var ThisCouldBeBetter;
                 }
                 this.actionToInputsMappingsByInputName = GameFramework.ArrayHelper.addLookupsMultiple(this.actionToInputsMappings, (x) => x.inputNames);
                 // Helper variables.
-                this._drawLoc = new GameFramework.Disposition(GameFramework.Coords.blank(), null, null);
-                this._mouseClickPos = GameFramework.Coords.blank();
-                this._mouseMovePos = GameFramework.Coords.blank();
-                this._mouseMovePosPrev = GameFramework.Coords.blank();
+                this._drawLoc = GameFramework.Disposition.create();
+                this._mouseClickPos = GameFramework.Coords.create();
+                this._mouseMovePos = GameFramework.Coords.create();
+                this._mouseMovePosPrev = GameFramework.Coords.create();
+            }
+            static fromControl(controlRoot) {
+                return new VenueControls(controlRoot, null);
             }
             draw(universe) {
                 var display = universe.display;

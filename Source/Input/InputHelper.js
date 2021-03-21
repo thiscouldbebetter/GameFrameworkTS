@@ -6,10 +6,10 @@ var ThisCouldBeBetter;
         class InputHelper {
             constructor() {
                 // Helper variables.
-                this.mouseClickPos = GameFramework.Coords.blank();
-                this.mouseMovePos = GameFramework.Coords.blank();
-                this.mouseMovePosPrev = GameFramework.Coords.blank();
-                this.mouseMovePosNext = GameFramework.Coords.blank();
+                this.mouseClickPos = GameFramework.Coords.create();
+                this.mouseMovePos = GameFramework.Coords.create();
+                this.mouseMovePosPrev = GameFramework.Coords.create();
+                this.mouseMovePosNext = GameFramework.Coords.create();
                 var inputNames = GameFramework.Input.Names();
                 this.inputNamesLookup = inputNames._AllByName;
                 this.keysToPreventDefaultsFor =

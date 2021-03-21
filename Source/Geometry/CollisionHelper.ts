@@ -27,14 +27,14 @@ export class CollisionHelper
 		this.colliderTypeNamesToCollisionFindLookup = this.collisionFindLookupBuild();
 
 		// Helper variables.
-		this._box = new Box(Coords.blank(), Coords.blank());
-		this._collision = new Collision(Coords.blank(), null, null);
-		this._displacement = Coords.blank();
-		this._polar = new Polar(0, 0, 0);
-		this._pos = Coords.blank();
-		this._range = new RangeExtent(0, 0);
-		this._range2 = new RangeExtent(0, 0);
-		this._size = Coords.blank();
+		this._box = Box.create();
+		this._collision = Collision.create();
+		this._displacement = Coords.create();
+		this._polar = Polar.create();
+		this._pos = Coords.create();
+		this._range = RangeExtent.create();
+		this._range2 = RangeExtent.create();
+		this._size = Coords.create();
 	}
 
 	// constructor helpers
@@ -286,7 +286,7 @@ export class CollisionHelper
 
 				if (doCollide)
 				{
-					var collision = new Collision(null, null, null);
+					var collision = Collision.create();
 					collision.collidables.push(entity0);
 					collision.collidables.push(entity1);
 					returnValues.push(collision);
@@ -473,11 +473,11 @@ export class CollisionHelper
 
 		var normal0 = collider0.normalAtPos
 		(
-			collisionPos, Coords.blank() // normalOut
+			collisionPos, Coords.create() // normalOut
 		);
 		var normal1 = collider1.normalAtPos
 		(
-			collisionPos, Coords.blank() // normalOut
+			collisionPos, Coords.create() // normalOut
 		);
 
 		var entity0Loc = entity0.locatable().loc;
@@ -528,7 +528,7 @@ export class CollisionHelper
 
 		var collider1Normal = collider1.normalAtPos
 		(
-			entity0Pos, Coords.blank() // normalOut
+			entity0Pos, Coords.create() // normalOut
 		);
 
 		var distanceMovedSoFar = 0;
@@ -550,7 +550,7 @@ export class CollisionHelper
 	{
 		if (collision == null)
 		{
-			collision = new Collision(null, null, null);
+			collision = Collision.create();
 		}
 
 		var boxOfIntersection = box1.intersectWith(box2);
@@ -575,13 +575,13 @@ export class CollisionHelper
 
 		var map = mapLocated.map;
 		var cell: any = map.cellPrototype.clone();
-		var cellPosAbsolute = Coords.blank();
-		var cellPosInCells = Coords.blank();
+		var cellPosAbsolute = Coords.create();
+		var cellPosInCells = Coords.create();
 		var mapSizeInCells = map.sizeInCells;
 		var mapCellSize = map.cellSize;
 		var mapSizeHalf = map.sizeHalf;
 		var mapPos = mapLocated.loc.pos;
-		var cellAsBox = new Box( Coords.blank(), map.cellSize );
+		var cellAsBox = new Box( Coords.create(), map.cellSize );
 
 		for (var y = 0; y < mapSizeInCells.y; y++)
 		{
@@ -616,7 +616,7 @@ export class CollisionHelper
 	{
 		if (collision == null)
 		{
-			collision = new Collision(null, null, null);
+			collision = Collision.create();
 		}
 
 		// hack
@@ -690,7 +690,7 @@ export class CollisionHelper
 
 		if (collision == null)
 		{
-			collision = new Collision(null, null, null);
+			collision = Collision.create();
 		}
 
 		collision.isActive = doCollide;
@@ -716,7 +716,7 @@ export class CollisionHelper
 	{
 		if (collision == null)
 		{
-			collision = new Collision(null, null, null);
+			collision = Collision.create();
 		}
 
 		var doCollide = this.doBoxRotatedAndSphereCollide
@@ -769,7 +769,7 @@ export class CollisionHelper
 
 		if (collision == null)
 		{
-			collision = new Collision(null, null, null);
+			collision = Collision.create();
 		}
 		collision.clear();
 
@@ -891,7 +891,7 @@ export class CollisionHelper
 	{
 		if (collision == null)
 		{
-			collision = new Collision(null, null, null);
+			collision = Collision.create();
 		}
 
 		var returnValue = collision;
@@ -952,7 +952,7 @@ export class CollisionHelper
 	{
 		if (collision == null)
 		{
-			collision = new Collision(null, null, null);
+			collision = Collision.create();
 		}
 
 		var plane = hemispace.plane;
@@ -982,7 +982,7 @@ export class CollisionHelper
 	{
 		if (collision == null)
 		{
-			collision = new Collision(null, null, null);
+			collision = Collision.create();
 		}
 
 		var plane = hemispace.plane;
@@ -1018,13 +1018,13 @@ export class CollisionHelper
 
 		var map = mapLocated.map;
 		var cell: any = map.cellPrototype.clone();
-		var cellPosAbsolute = Coords.blank();
-		var cellPosInCells = Coords.blank();
+		var cellPosAbsolute = Coords.create();
+		var cellPosInCells = Coords.create();
 		var mapSizeInCells = map.sizeInCells;
 		var mapCellSize = map.cellSize;
 		var mapSizeHalf = map.sizeHalf;
 		var mapPos = mapLocated.loc.pos;
-		var cellAsBox = new Box( Coords.blank(), map.cellSize );
+		var cellAsBox = new Box( Coords.create(), map.cellSize );
 
 		for (var y = 0; y < mapSizeInCells.y; y++)
 		{
@@ -1452,13 +1452,13 @@ export class CollisionHelper
 		var cell0 = map0.cellPrototype.clone() as any;
 		var cell1 = map1.cellPrototype.clone() as any;
 
-		var cell0PosAbsolute = Coords.blank();
+		var cell0PosAbsolute = Coords.create();
 
-		var cell0PosInCells = Coords.blank();
-		var cell1PosInCells = Coords.blank();
+		var cell0PosInCells = Coords.create();
+		var cell1PosInCells = Coords.create();
 
-		var cell1PosInCellsMin = Coords.blank();
-		var cell1PosInCellsMax = Coords.blank();
+		var cell1PosInCellsMin = Coords.create();
+		var cell1PosInCellsMax = Coords.create();
 
 		var map0SizeInCells = map0.sizeInCells;
 
@@ -1558,13 +1558,13 @@ export class CollisionHelper
 
 		var map = mapLocated.map;
 		var cell: any = map.cellPrototype.clone();
-		var cellPosAbsolute = Coords.blank();
-		var cellPosInCells = Coords.blank();
+		var cellPosAbsolute = Coords.create();
+		var cellPosInCells = Coords.create();
 		var mapSizeInCells = map.sizeInCells;
 		var mapCellSize = map.cellSize;
 		var mapSizeHalf = map.sizeHalf;
 		var mapPos = mapLocated.loc.pos;
-		var cellAsBox = new Box( Coords.blank(), map.cellSize );
+		var cellAsBox = new Box( Coords.create(), map.cellSize );
 
 		for (var y = 0; y < mapSizeInCells.y; y++)
 		{
@@ -1637,9 +1637,9 @@ export class CollisionHelper
 		var polar = this._polar;
 		polar.azimuthInTurns = boxRotated.angleInTurns;
 		polar.radius = 1;
-		var rectangleAxisX = polar.toCoords(Coords.blank());
+		var rectangleAxisX = polar.toCoords(Coords.create());
 		polar.azimuthInTurns += .25;
-		var rectangleAxisY = polar.toCoords(Coords.blank());
+		var rectangleAxisY = polar.toCoords(Coords.create());
 		var x = sphereCenter.dotProduct(rectangleAxisX);
 		var y = sphereCenter.dotProduct(rectangleAxisY);
 		sphereCenter.x = x;

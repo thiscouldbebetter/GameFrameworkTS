@@ -429,17 +429,17 @@ export class EquipmentUser extends EntityProperty
 			null
 		);
 
-		var back = function()
+		var back = () =>
 		{
 			var venueNext = venuePrev;
-			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
+			venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
 			universe.venueNext = venueNext;
 		};
 
 		var returnValue = new ControlContainer
 		(
 			"Equip",
-			Coords.blank(), // pos
+			Coords.create(), // pos
 			sizeBase.clone(), // size
 			// children
 			[

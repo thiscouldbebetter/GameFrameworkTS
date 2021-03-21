@@ -35,8 +35,8 @@ var ThisCouldBeBetter;
             use(universe, world, place, entityUsing, entityUsed) {
                 //entityUsed.collidable().ticksUntilCanCollide = 50; // hack
                 var storeAsControl = entityUsed.itemStore().toControl(universe, universe.display.sizeInPixels, entityUsing, entityUsed, universe.venueCurrent);
-                var venueNext = new GameFramework.VenueControls(storeAsControl, false);
-                venueNext = new GameFramework.VenueFader(venueNext, null, null, null);
+                var venueNext = storeAsControl.toVenue();
+                venueNext = GameFramework.VenueFader.fromVenueTo(venueNext);
                 universe.venueNext = venueNext;
             }
             // Controllable.
@@ -54,7 +54,7 @@ var ThisCouldBeBetter;
                 var world = universe.world;
                 var back = function () {
                     var venueNext = venuePrev;
-                    venueNext = new GameFramework.VenueFader(venueNext, universe.venueCurrent, null, null);
+                    venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
                     universe.venueNext = venueNext;
                 };
                 var buy = () => {
@@ -63,7 +63,7 @@ var ThisCouldBeBetter;
                 var sell = () => {
                     itemBarterer.transfer(world, entityCustomer, entityStore, "Sold");
                 };
-                var returnValue = new GameFramework.ControlContainer("containerTransfer", GameFramework.Coords.blank(), // pos
+                var returnValue = new GameFramework.ControlContainer("containerTransfer", GameFramework.Coords.create(), // pos
                 size.clone(), 
                 // children
                 [

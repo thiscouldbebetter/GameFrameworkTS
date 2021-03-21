@@ -33,7 +33,7 @@ export function main()
 
 	var timerHelper = new TimerHelper(20);
 
-	var controlStyle = ControlStyle.Instances().Default;
+	var controlBuilder = ControlBuilder.default();
 
 	var universe = Universe.create
 	(
@@ -42,7 +42,7 @@ export function main()
 		timerHelper,
 		display,
 		mediaLibrary,
-		controlStyle,
+		controlBuilder,
 		null // worldCreate
 	);
 	universe.initialize

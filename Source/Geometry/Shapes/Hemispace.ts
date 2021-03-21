@@ -12,7 +12,7 @@ export class Hemispace
 	{
 		this.plane = plane;
 
-		this._displacement = Coords.blank();
+		this._displacement = Coords.create();
 	}
 
 	containsPoint(pointToCheck: Coords)

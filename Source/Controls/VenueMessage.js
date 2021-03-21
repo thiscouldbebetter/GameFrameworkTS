@@ -11,11 +11,14 @@ var ThisCouldBeBetter;
                 this._sizeInPixels = sizeInPixels;
                 this.showMessageOnly = showMessageOnly || false;
             }
+            static fromMessage(message) {
+                return VenueMessage.fromMessageAndAcknowledge(message, null);
+            }
             static fromMessageAndAcknowledge(messageToShow, acknowledge) {
                 return new VenueMessage(messageToShow, acknowledge, null, null, null);
             }
             static fromText(message) {
-                return new VenueMessage(new GameFramework.DataBinding(message, null, null), null, null, null, null);
+                return VenueMessage.fromMessage(GameFramework.DataBinding.fromContext(message));
             }
             // instance methods
             draw(universe) {
@@ -37,7 +40,7 @@ var ThisCouldBeBetter;
                     if (this.venuePrev != null) {
                         venuesToLayer.push(this.venuePrev);
                     }
-                    venuesToLayer.push(new GameFramework.VenueControls(controlMessage, false));
+                    venuesToLayer.push(controlMessage.toVenue());
                     this._venueInner = new GameFramework.VenueLayered(venuesToLayer, null);
                 }
                 return this._venueInner;

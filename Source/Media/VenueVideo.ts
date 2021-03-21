@@ -93,7 +93,7 @@ export class VenueVideo implements Venue
 			var display = universe.display;
 			display.drawBackground("Black", "Black");
 			universe.platformHelper.platformableShow(display);
-			universe.venueNext = new VenueFader(this.venueNext, this, null, null);
+			universe.venueNext = universe.controlBuilder.venueTransitionalFromTo(this, this.venueNext);
 		}
 	}
 }

@@ -51,7 +51,7 @@ export class ImageBuilder
 
 		var graphics = canvas.getContext("2d");
 
-		var pixelPos = Coords.blank();
+		var pixelPos = Coords.create();
 		var colorForPixel;
 		var colors = this.colorsByCodeChar;
 
@@ -139,8 +139,8 @@ export class ImageBuilder
 		var imageToSliceSize = imageToSlice.sizeInPixels;
 		var tileSize = imageToSliceSize.clone().divide(sizeInTiles);
 
-		var tilePos = Coords.blank();
-		var sourcePos = Coords.blank();
+		var tilePos = Coords.create();
+		var sourcePos = Coords.create();
 
 		for (var y = 0; y < sizeInTiles.y; y++)
 		{

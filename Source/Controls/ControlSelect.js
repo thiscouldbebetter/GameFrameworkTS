@@ -22,8 +22,8 @@ var ThisCouldBeBetter;
                     }
                 }
                 // Helper variables.
-                this._drawPos = GameFramework.Coords.blank();
-                this._sizeHalf = GameFramework.Coords.blank();
+                this._drawPos = GameFramework.Coords.create();
+                this._sizeHalf = GameFramework.Coords.create();
             }
             actionHandle(actionNameToHandle, universe) {
                 var controlActionNames = GameFramework.ControlActionNames.Instances();

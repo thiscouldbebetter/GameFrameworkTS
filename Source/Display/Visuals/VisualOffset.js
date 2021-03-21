@@ -8,7 +8,7 @@ var ThisCouldBeBetter;
                 this.child = child;
                 this.offset = offset;
                 // Helper variables.
-                this._posSaved = GameFramework.Coords.blank();
+                this._posSaved = GameFramework.Coords.create();
             }
             draw(universe, world, place, entity, display) {
                 var drawablePos = entity.locatable().loc.pos;

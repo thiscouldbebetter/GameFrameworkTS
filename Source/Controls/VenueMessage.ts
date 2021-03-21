@@ -25,6 +25,11 @@ export class VenueMessage implements Venue
 		this.showMessageOnly = showMessageOnly || false;
 	}
 
+	static fromMessage(message: DataBinding<any,string>)
+	{
+		return VenueMessage.fromMessageAndAcknowledge(message, null);
+	}
+
 	static fromMessageAndAcknowledge
 	(
 		messageToShow: DataBinding<any, string>, acknowledge: any
@@ -35,7 +40,7 @@ export class VenueMessage implements Venue
 
 	static fromText(message: string)
 	{
-		return new VenueMessage(new DataBinding(message, null, null), null, null, null, null);
+		return VenueMessage.fromMessage(DataBinding.fromContext(message));
 	}
 
 	// instance methods
@@ -81,7 +86,7 @@ export class VenueMessage implements Venue
 				venuesToLayer.push(this.venuePrev);
 			}
 
-			venuesToLayer.push(new VenueControls(controlMessage, false));
+			venuesToLayer.push(controlMessage.toVenue());
 
 			this._venueInner = new VenueLayered(venuesToLayer, null);
 		}

@@ -60,17 +60,17 @@ var ThisCouldBeBetter;
                 var gameAndSettingsMenuAsControl = universe.controlBuilder.gameAndSettings(universe, tabPageSize, universe.venueCurrent, false // includeResumeButton
                 );
                 controlsForTabs.push(gameAndSettingsMenuAsControl);
-                var statusAsControl = new GameFramework.ControlContainer("Status", GameFramework.Coords.blank(), // pos
+                var statusAsControl = new GameFramework.ControlContainer("Status", GameFramework.Coords.create(), // pos
                 size.clone().addDimensions(0, -32, 0), // size
                 // children
                 controlsForStatusFields, null, null);
                 controlsForTabs.splice(0, 0, statusAsControl);
                 var back = () => {
                     var venueNext = venuePrev;
-                    venueNext = new GameFramework.VenueFader(venueNext, universe.venueCurrent, null, null);
+                    venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
                     universe.venueNext = venueNext;
                 };
-                var returnValue = new GameFramework.ControlTabbed("tabbedItems", GameFramework.Coords.blank(), // pos
+                var returnValue = new GameFramework.ControlTabbed("tabbedItems", GameFramework.Coords.create(), // pos
                 size, tabButtonSize, controlsForTabs, fontHeight, back);
                 return returnValue;
             }
@@ -154,7 +154,7 @@ var ThisCouldBeBetter;
                     new GameFramework.VisualOffset(playerVisualTimeBarPlusIcon, childSpacing.clone().multiplyScalar(3))
                 ]);
                 var controlPlayerStatusInfo = new GameFramework.ControlVisual("visualPlayerStatusInfo", new GameFramework.Coords(5, 2, 0).multiplyScalar(playerVisualBarSize.y), // pos
-                GameFramework.Coords.blank(), // size
+                GameFramework.Coords.create(), // size
                 GameFramework.DataBinding.fromContext(playerVisualStatusInfo), null, null);
                 childControls.push(controlPlayerStatusInfo);
                 // Selection.
@@ -205,7 +205,7 @@ var ThisCouldBeBetter;
                     childControls.push(button);
                     buttonPos.x += buttonSize.x + buttonMargin;
                 }
-                var controlOverlayContainer = new GameFramework.ControlContainer("containerPlayer", GameFramework.Coords.blank(), // pos,
+                var controlOverlayContainer = new GameFramework.ControlContainer("containerPlayer", GameFramework.Coords.create(), // pos,
                 universe.display.sizeInPixels.clone(), childControls, null, null);
                 var controlOverlayTransparent = new GameFramework.ControlContainerTransparent(controlOverlayContainer);
                 controlOverlayTransparent.styleName = GameFramework.ControlStyle.Instances().Dark.name;

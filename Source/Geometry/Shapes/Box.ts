@@ -15,14 +15,19 @@ export class Box implements ShapeBase
 
 	constructor(center: Coords, size: Coords)
 	{
-		this.center = center || Coords.blank();
-		this.size = size || Coords.blank();
+		this.center = center || Coords.create();
+		this.size = size || Coords.create();
 
-		this._sizeHalf = Coords.blank();
-		this._min = Coords.blank();
-		this._max = Coords.blank();
+		this._sizeHalf = Coords.create();
+		this._min = Coords.create();
+		this._max = Coords.create();
 
 		this._range = new RangeExtent(0, 0);
+	}
+
+	static create()
+	{
+		return new Box(null, null);
 	}
 
 	static fromMinAndMax(min: Coords, max: Coords)
@@ -119,8 +124,8 @@ export class Box implements ShapeBase
 
 		if (doAllDimensionsOverlapSoFar)
 		{
-			var center = Coords.blank();
-			var size = Coords.blank();
+			var center = Coords.create();
+			var size = Coords.create();
 			for (var d = 0; d < rangesForDimensions.length; d++)
 			{
 				var rangeForDimension = rangesForDimensions[d];

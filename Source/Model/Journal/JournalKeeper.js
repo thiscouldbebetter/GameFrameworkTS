@@ -22,7 +22,7 @@ var ThisCouldBeBetter;
                 var fontHeightLarge = fontHeight * 1.5;
                 var back = () => {
                     var venueNext = venuePrev;
-                    venueNext = new GameFramework.VenueFader(venueNext, universe.venueCurrent, null, null);
+                    venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
                     universe.venueNext = venueNext;
                 };
                 var buttonSize = new GameFramework.Coords(20, 10, 0);
@@ -97,8 +97,8 @@ var ThisCouldBeBetter;
                             journalKeeper.journalEntrySelected = null;
                         }, null // cancel
                         );
-                        var venueNext = new GameFramework.VenueControls(controlConfirm, false);
-                        venueNext = new GameFramework.VenueFader(venueNext, universe.venueCurrent, null, null);
+                        var venueNext = controlConfirm.toVenue();
+                        venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
                         universe.venueNext = venueNext;
                     }, // click
                     null, // context
@@ -152,7 +152,7 @@ var ThisCouldBeBetter;
                     }, null), // text
                     fontHeightSmall)
                 ];
-                var returnValue = new GameFramework.ControlContainer("Notes", GameFramework.Coords.blank(), // pos
+                var returnValue = new GameFramework.ControlContainer("Notes", GameFramework.Coords.create(), // pos
                 sizeBase.clone(), // size
                 childControls, [
                     new GameFramework.Action("Back", back),

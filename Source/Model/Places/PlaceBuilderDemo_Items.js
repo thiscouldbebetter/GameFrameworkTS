@@ -102,7 +102,7 @@ var ThisCouldBeBetter;
                 ]).transform(GameFramework.Transform_Scale.fromScalar(this.entityDimension));
                 var itemArrowVisualHead = new GameFramework.VisualPolygon(pathHead, itemArrowColor, null);
                 var pathTail = new GameFramework.Path([
-                    GameFramework.Coords.blank(),
+                    GameFramework.Coords.create(),
                     new GameFramework.Coords(-.5, .25, 0),
                     new GameFramework.Coords(-.75, .25, 0),
                     new GameFramework.Coords(-.5, 0, 0),
@@ -157,7 +157,7 @@ var ThisCouldBeBetter;
                     var venuePrev = universe.venueCurrent;
                     var back = function () {
                         var venueNext = venuePrev;
-                        venueNext = new GameFramework.VenueFader(venueNext, universe.venueCurrent, null, null);
+                        venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
                         universe.venueNext = venueNext;
                     };
                     var text = "Fourscore and seven years ago, our fathers brought forth upon this continent "
@@ -171,13 +171,13 @@ var ThisCouldBeBetter;
                     true, // isEnabled
                     back, // click
                     null, null);
-                    var container = new GameFramework.ControlContainer("containerBook", GameFramework.Coords.blank(), size.clone(), [textarea, button], // children
+                    var container = new GameFramework.ControlContainer("containerBook", GameFramework.Coords.create(), size.clone(), [textarea, button], // children
                     [
                         new GameFramework.Action(GameFramework.ControlActionNames.Instances().ControlCancel, back),
                         new GameFramework.Action(GameFramework.ControlActionNames.Instances().ControlConfirm, back)
                     ], null);
-                    var venueNext = new GameFramework.VenueControls(container, false);
-                    venueNext = new GameFramework.VenueFader(venueNext, null, null, null);
+                    var venueNext = container.toVenue();
+                    venueNext = GameFramework.VenueFader.fromVenueTo(venueNext);
                     universe.venueNext = venueNext;
                     return "";
                 }, itemBookVisual);
@@ -535,7 +535,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Coords(-1, 0, 0), // directionMin
                     .5, // angleSpannedInTurns
                     colorCap, null), new GameFramework.Coords(0, -this.entityDimensionHalf / 2, 0)),
-                    new GameFramework.VisualOffset(new GameFramework.VisualRectangle(new GameFramework.Coords(this.entityDimensionHalf / 2, this.entityDimensionHalf, 0), colorStem, null, null), GameFramework.Coords.blank())
+                    new GameFramework.VisualOffset(new GameFramework.VisualRectangle(new GameFramework.Coords(this.entityDimensionHalf / 2, this.entityDimensionHalf, 0), colorStem, null, null), GameFramework.Coords.create())
                 ]);
                 if (this.parent.visualsHaveText) {
                     itemMushroomVisual.children.push(new GameFramework.VisualOffset(GameFramework.VisualText.fromTextAndColor(itemMushroomName, colorCap), new GameFramework.Coords(0, 0 - this.entityDimensionHalf * 3, 0)));
@@ -726,7 +726,7 @@ var ThisCouldBeBetter;
                 );
                 var itemTorchVisualFlame = GameFramework.VisualBuilder.Instance().flame(this.entityDimensionHalf * .6);
                 var itemTorchVisual = new GameFramework.VisualGroup([
-                    new GameFramework.VisualOffset(itemTorchVisualBody, GameFramework.Coords.blank()),
+                    new GameFramework.VisualOffset(itemTorchVisualBody, GameFramework.Coords.create()),
                     new GameFramework.VisualOffset(itemTorchVisualHead, new GameFramework.Coords(0, 0 - this.entityDimension * .75, 0)),
                     new GameFramework.VisualOffset(itemTorchVisualFlame, new GameFramework.Coords(0, 0 - this.entityDimension * .7, 0))
                 ]);

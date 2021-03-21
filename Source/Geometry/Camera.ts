@@ -39,10 +39,10 @@ export class Camera extends EntityProperty
 		{
 			this._clipPlanes =
 			[
-				new Plane(Coords.blank(), 0),
-				new Plane(Coords.blank(), 0),
-				new Plane(Coords.blank(), 0),
-				new Plane(Coords.blank(), 0),
+				new Plane(Coords.create(), 0),
+				new Plane(Coords.create(), 0),
+				new Plane(Coords.create(), 0),
+				new Plane(Coords.create(), 0),
 			];
 		}
 

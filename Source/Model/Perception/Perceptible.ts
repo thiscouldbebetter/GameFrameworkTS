@@ -24,7 +24,7 @@ export class Perceptible extends EntityProperty
 		this.visibility = visibility;
 		this.audibility = audibility;
 
-		this._displacement = Coords.blank();
+		this._displacement = Coords.create();
 		this._isHidingPrev = null;
 	}
 

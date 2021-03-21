@@ -10,8 +10,8 @@ var ThisCouldBeBetter;
                 this.lineThickness = (lineThickness == null ? 1 : lineThickness);
                 // temps
                 this._polar = new GameFramework.Polar(0, 0, 0);
-                this._fromPos = GameFramework.Coords.blank();
-                this._toPos = GameFramework.Coords.blank();
+                this._fromPos = GameFramework.Coords.create();
+                this._toPos = GameFramework.Coords.create();
             }
             draw(universe, world, place, entity, display) {
                 var drawableLoc = entity.locatable().loc;

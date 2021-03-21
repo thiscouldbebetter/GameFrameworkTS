@@ -156,7 +156,7 @@ export class ItemCrafter extends EntityProperty
 		var back = () =>
 		{
 			var venueNext = venuePrev;
-			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
+			venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
 			universe.venueNext = venueNext;
 		};
 
@@ -179,7 +179,7 @@ export class ItemCrafter extends EntityProperty
 		var returnValue = new ControlContainer
 		(
 			"Craft",
-			Coords.blank(), // pos
+			Coords.create(), // pos
 			sizeBase.clone(), // size
 			// children
 			[

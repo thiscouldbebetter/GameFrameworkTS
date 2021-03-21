@@ -13,7 +13,7 @@ export class Transform_OrientRDF implements Transform
 		this.orientation = orientation;
 
 		// Helper variables.
-		this._components = [ Coords.blank(), Coords.blank(), Coords.blank() ];
+		this._components = [ Coords.create(), Coords.create(), Coords.create() ];
 	}
 
 	overwriteWith(other: Transform)

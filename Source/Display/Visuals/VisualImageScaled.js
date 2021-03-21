@@ -8,7 +8,7 @@ var ThisCouldBeBetter;
                 this.visualImage = visualImage;
                 this.sizeToDraw = sizeToDraw;
                 this.sizeToDrawHalf = this.sizeToDraw.clone().half();
-                this._posSaved = GameFramework.Coords.blank();
+                this._posSaved = GameFramework.Coords.create();
             }
             static manyFromSizeAndVisuals(sizeToDraw, visualsToScale) {
                 var returnValues = [];

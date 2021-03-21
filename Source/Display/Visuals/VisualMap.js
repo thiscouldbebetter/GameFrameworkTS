@@ -11,13 +11,13 @@ var ThisCouldBeBetter;
                 this.shouldConvertToImage =
                     (shouldConvertToImage == null ? true : shouldConvertToImage);
                 // Helper variables.
-                this._cameraPos = GameFramework.Coords.blank();
+                this._cameraPos = GameFramework.Coords.create();
                 this._cell = this.map.cellPrototype.clone();
-                this._cellPosEnd = GameFramework.Coords.blank();
-                this._cellPosInCells = GameFramework.Coords.blank();
-                this._cellPosStart = GameFramework.Coords.blank();
-                this._drawPos = GameFramework.Coords.blank();
-                this._posSaved = GameFramework.Coords.blank();
+                this._cellPosEnd = GameFramework.Coords.create();
+                this._cellPosInCells = GameFramework.Coords.create();
+                this._cellPosStart = GameFramework.Coords.create();
+                this._drawPos = GameFramework.Coords.create();
+                this._posSaved = GameFramework.Coords.create();
             }
             draw(universe, world, place, entity, display) {
                 if (this.shouldConvertToImage) {

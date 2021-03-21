@@ -197,7 +197,7 @@ var ThisCouldBeBetter;
                 var world = universe.world;
                 var back = () => {
                     var venueNext = venuePrev;
-                    venueNext = new GameFramework.VenueFader(venueNext, universe.venueCurrent, null, null);
+                    venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
                     universe.venueNext = venueNext;
                 };
                 var drop = () => {
@@ -390,7 +390,7 @@ var ThisCouldBeBetter;
                         drop();
                     }, null, null)
                 ];
-                var returnValue = new GameFramework.ControlContainer("Items", GameFramework.Coords.blank(), // pos
+                var returnValue = new GameFramework.ControlContainer("Items", GameFramework.Coords.create(), // pos
                 sizeBase.clone(), // size
                 childControls, [
                     new GameFramework.Action("Back", back),

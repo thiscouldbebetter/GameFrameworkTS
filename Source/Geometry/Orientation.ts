@@ -105,9 +105,9 @@ export class Orientation
 
 	unprojectCoords(coordsToUnproject: Coords)
 	{
-		var returnValue = Coords.blank();
+		var returnValue = Coords.create();
 
-		var axisScaled = Coords.blank();
+		var axisScaled = Coords.create();
 
 		for (var i = 0; i < this.axes.length; i++)
 		{
@@ -137,9 +137,9 @@ export class Orientation
 
 	unprojectCoordsRDF(coordsToUnproject: Coords)
 	{
-		var returnValue = Coords.blank();
+		var returnValue = Coords.create();
 
-		var axisScaled = Coords.blank();
+		var axisScaled = Coords.create();
 
 		for (var i = 0; i < this.axesRDF.length; i++)
 		{

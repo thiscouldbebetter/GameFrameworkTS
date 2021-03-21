@@ -9,7 +9,7 @@ export class Locatable extends EntityProperty
 	constructor(loc: Disposition)
 	{
 		super();
-		this.loc = loc || Disposition.blank();
+		this.loc = loc || Disposition.create();
 	}
 
 	static fromPos(pos: Coords)

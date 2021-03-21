@@ -43,8 +43,15 @@ export class ControlBase
 	scalePosAndSize(x: Coords): void {}
 	style(universe: Universe)
 	{
-		return (this.styleName == null ? universe.controlStyle : ControlStyle.byName(this.styleName));
+		var returnValue =
+		(
+			this.styleName == null
+			? universe.controlBuilder.styleDefault()
+			: universe.controlBuilder.styleByName(this.styleName)
+		);
+		return returnValue;
 	}
+	toVenue(): Venue { return VenueControls.fromControl(this); }
 }
 
 }

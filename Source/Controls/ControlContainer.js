@@ -20,12 +20,12 @@ var ThisCouldBeBetter;
                 this.childrenContainingPos = [];
                 this.childrenContainingPosPrev = [];
                 // Helper variables.
-                this._childMax = GameFramework.Coords.blank();
-                this._drawPos = GameFramework.Coords.blank();
-                this._drawLoc = new GameFramework.Disposition(this._drawPos, null, null);
-                this._mouseClickPos = GameFramework.Coords.blank();
-                this._mouseMovePos = GameFramework.Coords.blank();
-                this._posToCheck = GameFramework.Coords.blank();
+                this._childMax = GameFramework.Coords.create();
+                this._drawPos = GameFramework.Coords.create();
+                this._drawLoc = GameFramework.Disposition.fromPos(this._drawPos);
+                this._mouseClickPos = GameFramework.Coords.create();
+                this._mouseMovePos = GameFramework.Coords.create();
+                this._posToCheck = GameFramework.Coords.create();
             }
             static from4(name, pos, size, children) {
                 return new ControlContainer(name, pos, size, children, null, null);
@@ -68,12 +68,12 @@ var ThisCouldBeBetter;
                     var mapping = this._actionToInputsMappingsByInputName.get(inputName);
                     var actionName = mapping.actionName;
                     var action = this.actionsByName.get(actionName);
-                    action.perform(universe, null, null, null);
+                    action.performForUniverse(universe);
                     wasActionHandled = true;
                 }
                 else if (this.actionsByName.has(actionNameToHandle)) {
                     var action = this.actionsByName.get(actionNameToHandle);
-                    action.perform(universe, null, null, null);
+                    action.performForUniverse(universe);
                     wasActionHandled = true;
                 }
                 else if (childWithFocus != null) {
@@ -223,9 +223,6 @@ var ThisCouldBeBetter;
                     var child = this.children[i];
                     child.pos.add(displacement);
                 }
-            }
-            toVenue() {
-                return new GameFramework.VenueFader(new GameFramework.VenueControls(this, false), null, null, null);
             }
             // drawable
             draw(universe, display, drawLoc, style) {

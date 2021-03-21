@@ -231,12 +231,12 @@ var ThisCouldBeBetter;
                 null, // bindingForIsEnabled
                 unequipFromSocketSelected, // confirm
                 null);
-                var back = function () {
+                var back = () => {
                     var venueNext = venuePrev;
-                    venueNext = new GameFramework.VenueFader(venueNext, universe.venueCurrent, null, null);
+                    venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
                     universe.venueNext = venueNext;
                 };
-                var returnValue = new GameFramework.ControlContainer("Equip", GameFramework.Coords.blank(), // pos
+                var returnValue = new GameFramework.ControlContainer("Equip", GameFramework.Coords.create(), // pos
                 sizeBase.clone(), // size
                 // children
                 [

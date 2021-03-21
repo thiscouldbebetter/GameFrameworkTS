@@ -16,7 +16,7 @@ export class VisualImageScaled implements VisualImage
 		this.sizeToDraw = sizeToDraw;
 
 		this.sizeToDrawHalf = this.sizeToDraw.clone().half();
-		this._posSaved = Coords.blank();
+		this._posSaved = Coords.create();
 	}
 
 	static manyFromSizeAndVisuals(sizeToDraw: Coords, visualsToScale: VisualImage[])

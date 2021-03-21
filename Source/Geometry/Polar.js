@@ -9,6 +9,9 @@ var ThisCouldBeBetter;
                 this.radius = radius;
                 this.elevationInTurns = (elevationInTurns == null ? 0 : elevationInTurns);
             }
+            static create() {
+                return new Polar(0, 0, 0);
+            }
             // instance methods
             addToAzimuthInTurns(turnsToAdd) {
                 this.azimuthInTurns += turnsToAdd;

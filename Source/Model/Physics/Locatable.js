@@ -6,7 +6,7 @@ var ThisCouldBeBetter;
         class Locatable extends GameFramework.EntityProperty {
             constructor(loc) {
                 super();
-                this.loc = loc || GameFramework.Disposition.blank();
+                this.loc = loc || GameFramework.Disposition.create();
             }
             static fromPos(pos) {
                 return new Locatable(GameFramework.Disposition.fromPos(pos));

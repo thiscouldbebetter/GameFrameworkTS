@@ -22,9 +22,9 @@ var ThisCouldBeBetter;
             "Gray", "White", // colorFore, colorBack
             null);
             var timerHelper = new GameFramework.TimerHelper(20);
-            var controlStyle = GameFramework.ControlStyle.Instances().Default;
+            var controlBuilder = GameFramework.ControlBuilder.default();
             var universe = GameFramework.Universe.create("Game Framework Demo Game", "0.0.0-20200829-2200", // version
-            timerHelper, display, mediaLibrary, controlStyle, null // worldCreate
+            timerHelper, display, mediaLibrary, controlBuilder, null // worldCreate
             );
             universe.initialize(function () { universe.start(); });
         }

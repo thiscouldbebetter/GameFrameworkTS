@@ -46,8 +46,8 @@ export class Maze
 
 		var numberOfCellsInMaze = this.sizeInCells.productOfDimensions();
 
-		var cellPos = Coords.blank();
-		var cellPosNeighbor = Coords.blank();
+		var cellPos = Coords.create();
+		var cellPosNeighbor = Coords.create();
 
 		var numberOfCellsInLargestNetworkSoFar = 0;
 

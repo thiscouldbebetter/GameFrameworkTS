@@ -144,7 +144,7 @@ var ThisCouldBeBetter;
                 this.entityBuildExit(placeNameToReturnTo);
                 var zones = [];
                 var placeSizeInZones = new GameFramework.Coords(3, 3, 1);
-                var zonePosInZones = GameFramework.Coords.blank();
+                var zonePosInZones = GameFramework.Coords.create();
                 var zoneSize = size;
                 var neighborOffsets = [
                     new GameFramework.Coords(1, 0, 0),
@@ -156,8 +156,8 @@ var ThisCouldBeBetter;
                     new GameFramework.Coords(0, -1, 0),
                     new GameFramework.Coords(1, -1, 0)
                 ];
-                var neighborPos = GameFramework.Coords.blank();
-                var boxZeroes = new GameFramework.Box(GameFramework.Coords.blank(), GameFramework.Coords.blank());
+                var neighborPos = GameFramework.Coords.create();
+                var boxZeroes = new GameFramework.Box(GameFramework.Coords.create(), GameFramework.Coords.create());
                 for (var y = 0; y < placeSizeInZones.y; y++) {
                     zonePosInZones.y = y;
                     for (var x = 0; x < placeSizeInZones.x; x++) {
@@ -183,7 +183,7 @@ var ThisCouldBeBetter;
                 var zoneStart = zones[0];
                 zoneStart.entities.push(...this.entities);
                 var zonesByName = GameFramework.ArrayHelper.addLookupsByName(zones);
-                var posInZones = GameFramework.Coords.blank();
+                var posInZones = GameFramework.Coords.create();
                 var placeSize = placeSizeInZones.clone().multiply(zoneSize);
                 var place = new GameFramework.PlaceZoned("Zoned", // name
                 "Demo", // defnName
@@ -312,9 +312,9 @@ var ThisCouldBeBetter;
                             "InsideNW",
                             new GameFramework.VisualGroup([
                                 // n
-                                new GameFramework.VisualOffset(new GameFramework.VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse), GameFramework.Coords.blank()),
+                                new GameFramework.VisualOffset(new GameFramework.VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse), GameFramework.Coords.create()),
                                 // w
-                                new GameFramework.VisualOffset(new GameFramework.VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse), GameFramework.Coords.blank())
+                                new GameFramework.VisualOffset(new GameFramework.VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse), GameFramework.Coords.create())
                             ])
                         ],
                         [
@@ -328,7 +328,7 @@ var ThisCouldBeBetter;
                         ],
                         [
                             "OutsideSE",
-                            new GameFramework.VisualOffset(new GameFramework.VisualRectangle(borderSizeCorner, color, null, isCenteredFalse), GameFramework.Coords.blank())
+                            new GameFramework.VisualOffset(new GameFramework.VisualRectangle(borderSizeCorner, color, null, isCenteredFalse), GameFramework.Coords.create())
                         ],
                         [
                             "OutsideSW",
@@ -364,11 +364,11 @@ var ThisCouldBeBetter;
                         ],
                         [
                             "WTop",
-                            new GameFramework.VisualOffset(new GameFramework.VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse), GameFramework.Coords.blank())
+                            new GameFramework.VisualOffset(new GameFramework.VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse), GameFramework.Coords.create())
                         ],
                         [
                             "NLeft",
-                            new GameFramework.VisualOffset(new GameFramework.VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse), GameFramework.Coords.blank())
+                            new GameFramework.VisualOffset(new GameFramework.VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse), GameFramework.Coords.create())
                         ],
                         [
                             "NRight",
@@ -414,8 +414,8 @@ var ThisCouldBeBetter;
                     );
                     // hack - Correct for centering.
                     terrainVisualCenter = new GameFramework.VisualOffset(terrainVisualCenter, mapCellSizeHalf);
-                    var tileOffsetInTilesHalf = GameFramework.Coords.blank();
-                    var visualOffsetInMapCellsHalf = GameFramework.Coords.blank();
+                    var tileOffsetInTilesHalf = GameFramework.Coords.create();
+                    var visualOffsetInMapCellsHalf = GameFramework.Coords.create();
                     var offsetsToVisual = function (tileOffsetInTilesHalf, visualOffsetInMapCellsHalf) {
                         var terrainVisualBounds = GameFramework.Box.fromMinAndSize(tileOffsetInTilesHalf.clone().multiply(tileSizeInPixelsHalf), tileSizeInPixelsHalf);
                         var terrainVisual = new GameFramework.VisualImageScaledPartial(terrainVisualImageCombined, terrainVisualBounds, mapCellSizeHalf // sizeToDraw
@@ -503,7 +503,7 @@ var ThisCouldBeBetter;
                     cellVisuals.push(cellTerrainVisuals[0]);
                     var cellPosInPixels = cellPosInCells.clone().multiply(map.cellSize);
                     var neighborTerrains = [];
-                    var neighborPos = GameFramework.Coords.blank();
+                    var neighborPos = GameFramework.Coords.create();
                     for (var n = 0; n < neighborOffsets.length; n++) {
                         var neighborOffset = neighborOffsets[n];
                         neighborPos.overwriteWith(cellPosInCells).add(neighborOffset);
@@ -565,7 +565,7 @@ var ThisCouldBeBetter;
                     }
                     var cellVisual = new GameFramework.VisualGroup(cellVisuals);
                     var cellAsEntity = new GameFramework.Entity(this.name + cellPosInCells.toString(), [
-                        new GameFramework.Boundable(new GameFramework.Box(GameFramework.Coords.blank(), //cellPosInPixels,
+                        new GameFramework.Boundable(new GameFramework.Box(GameFramework.Coords.create(), //cellPosInPixels,
                         mapCellSize)),
                         cellCollidable.clone(),
                         new GameFramework.Drawable(cellVisual, null),
@@ -753,7 +753,7 @@ var ThisCouldBeBetter;
             ;
             entityBuildGoal(entities, entityDimension, entitySize, numberOfKeysToUnlockGoal) {
                 var itemKeyColor = GameFramework.Color.byName("Yellow");
-                var goalPos = GameFramework.Coords.blank().randomize(this.randomizer).multiplyScalar(.5).addDimensions(.25, .25, 0).multiply(this.size);
+                var goalPos = GameFramework.Coords.create().randomize(this.randomizer).multiplyScalar(.5).addDimensions(.25, .25, 0).multiply(this.size);
                 var goalLoc = new GameFramework.Disposition(goalPos, null, null);
                 var goalColor = GameFramework.Color.byName("GreenDark");
                 var goalVisual = new GameFramework.VisualGroup([
@@ -765,7 +765,7 @@ var ThisCouldBeBetter;
                 }
                 var goalEntity = new GameFramework.Entity("Goal", [
                     new GameFramework.Locatable(goalLoc),
-                    new GameFramework.Collidable(0, new GameFramework.Box(GameFramework.Coords.blank(), entitySize), null, null),
+                    new GameFramework.Collidable(0, new GameFramework.Box(GameFramework.Coords.create(), entitySize), null, null),
                     new GameFramework.Drawable(goalVisual, null),
                     new GameFramework.DrawableCamera(),
                     new GameFramework.Goal(numberOfKeysToUnlockGoal),
@@ -780,8 +780,8 @@ var ThisCouldBeBetter;
                 var itemDefnKeyName = "Key";
                 var itemKeyVisual = this.itemDefnsByName.get(itemDefnKeyName).visual;
                 for (var i = 0; i < numberOfKeysToUnlockGoal; i++) {
-                    var itemKeyPos = GameFramework.Coords.blank().randomize(this.randomizer).multiply(sizeMinusMargins).add(marginSize);
-                    var itemKeyCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), entityDimensionHalf);
+                    var itemKeyPos = GameFramework.Coords.create().randomize(this.randomizer).multiply(sizeMinusMargins).add(marginSize);
+                    var itemKeyCollider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimensionHalf);
                     var itemKeyEntity = new GameFramework.Entity(itemDefnKeyName + i, [
                         new GameFramework.Item(itemDefnKeyName, 1),
                         new GameFramework.Locatable(new GameFramework.Disposition(itemKeyPos, null, null)),
@@ -865,7 +865,7 @@ var ThisCouldBeBetter;
                             wallSize.y = wallSize.y / 2 - doorwayWidthHalf;
                         }
                     }
-                    var wallCollider = new GameFramework.Box(GameFramework.Coords.blank(), wallSize);
+                    var wallCollider = new GameFramework.Box(GameFramework.Coords.create(), wallSize);
                     var wallObstacle = new GameFramework.Obstacle();
                     var wallCollidable = new GameFramework.Collidable(0, wallCollider, [GameFramework.Movable.name], wallObstacle.collide);
                     var wallVisual = new GameFramework.VisualRectangle(wallSize, wallColor, null, null);
@@ -910,7 +910,7 @@ var ThisCouldBeBetter;
                         var neighborPos = placePos.clone().add(neighborOffset);
                         var neighborName = placeNamePrefix + neighborPos.toStringXY();
                         var portal = new GameFramework.Portal(neighborName, "PortalToNeighbor" + ((i + 2) % 4), neighborOffset.clone().double());
-                        var portalBox = new GameFramework.Box(GameFramework.Coords.blank(), portalSize);
+                        var portalBox = new GameFramework.Box(GameFramework.Coords.create(), portalSize);
                         var collidable = new GameFramework.Collidable(0, portalBox, [GameFramework.Playable.name], portalCollide);
                         var locatable = new GameFramework.Locatable(new GameFramework.Disposition(portalPos, null, null));
                         var portalEntity = new GameFramework.Entity("PortalToNeighbor" + i, [
@@ -951,7 +951,7 @@ var ThisCouldBeBetter;
                             var wordBubbleAsControl = wordBubble.toControl(u);
                             var venuesForLayers = [
                                 u.venueCurrent,
-                                new GameFramework.VenueControls(wordBubbleAsControl, false)
+                                wordBubbleAsControl.toVenue()
                             ];
                             u.venueNext = new GameFramework.VenueLayered(venuesForLayers, null);
                         }
@@ -969,7 +969,7 @@ var ThisCouldBeBetter;
                     visual.children.push(new GameFramework.VisualOffset(GameFramework.VisualText.fromTextAndColor("Store", storeColor), new GameFramework.Coords(0, 0 - entityDimension * 2, 0)));
                 }
                 var storeEntityDefn = new GameFramework.Entity("Store", [
-                    new GameFramework.Collidable(0, new GameFramework.Box(GameFramework.Coords.blank(), entitySize), null, null),
+                    new GameFramework.Collidable(0, new GameFramework.Box(GameFramework.Coords.create(), entitySize), null, null),
                     new GameFramework.Drawable(visual, null),
                     new GameFramework.DrawableCamera(),
                     new GameFramework.ItemStore("Coin"),
@@ -994,7 +994,7 @@ var ThisCouldBeBetter;
                 var entityDimensionHalf = entityDimension / 2;
                 var itemDefnAccessoryName = "Speed Boots";
                 var itemAccessoryVisual = this.itemDefnsByName.get(itemDefnAccessoryName).visual;
-                var itemAccessoryCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), entityDimensionHalf);
+                var itemAccessoryCollider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimensionHalf);
                 var itemAccessoryEntityDefn = new GameFramework.Entity(itemDefnAccessoryName, [
                     new GameFramework.Item(itemDefnAccessoryName, 1),
                     new GameFramework.Locatable(null),
@@ -1010,9 +1010,9 @@ var ThisCouldBeBetter;
                 var itemDefn = this.itemDefnsByName.get(itemDefnArmorName);
                 var itemArmorVisual = itemDefn.visual;
                 var path = itemArmorVisual.children[0].verticesAsPath;
-                var itemArmorCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), entityDimension / 2);
+                var itemArmorCollider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimension / 2);
                 var collidable = new GameFramework.Collidable(0, itemArmorCollider, null, null);
-                var box = new GameFramework.Box(GameFramework.Coords.blank(), GameFramework.Coords.blank()).ofPoints(path.points);
+                var box = new GameFramework.Box(GameFramework.Coords.create(), GameFramework.Coords.create()).ofPoints(path.points);
                 box.center = collidable.collider.center;
                 var boundable = new GameFramework.Boundable(box);
                 var itemArmorEntityDefn = new GameFramework.Entity(itemDefnArmorName, [
@@ -1032,7 +1032,7 @@ var ThisCouldBeBetter;
                 var itemDefnArrowName = "Arrow";
                 var itemArrowVisual = this.itemDefnsByName.get(itemDefnArrowName).visual;
                 var arrowSize = new GameFramework.Coords(1, 1, 1);
-                var itemArrowCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), entityDimensionHalf);
+                var itemArrowCollider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimensionHalf);
                 var collidable = new GameFramework.Collidable(0, itemArrowCollider, null, null);
                 var bounds = new GameFramework.Box(collidable.collider.center, arrowSize);
                 var boundable = new GameFramework.Boundable(bounds);
@@ -1051,7 +1051,7 @@ var ThisCouldBeBetter;
                 var entityDimensionHalf = entityDimension / 2;
                 var itemDefnBombName = "Bomb";
                 var itemBombVisual = this.itemDefnsByName.get(itemDefnBombName).visual;
-                var itemBombCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), entityDimensionHalf);
+                var itemBombCollider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimensionHalf);
                 var itemBombDevice = new GameFramework.Device("Bomb", 10, // ticksToCharge
                 (u, w, p, entity) => // initialize
                  {
@@ -1085,13 +1085,13 @@ var ThisCouldBeBetter;
                     var projectileOri = new GameFramework.Orientation(userVel.clone().normalize(), null);
                     var projectileLoc = new GameFramework.Disposition(projectilePos, projectileOri, null);
                     projectileLoc.vel.overwriteWith(userVel).clearZ().double();
-                    var projectileCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), projectileDimension);
+                    var projectileCollider = new GameFramework.Sphere(GameFramework.Coords.create(), projectileDimension);
                     // todo
                     var projectileCollide = null;
                     var projectileDie = (u, w, p, entityDying) => {
                         var explosionRadius = 32;
                         var explosionVisual = new GameFramework.VisualCircle(explosionRadius, GameFramework.Color.byName("Yellow"), null, null);
-                        var explosionCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), explosionRadius);
+                        var explosionCollider = new GameFramework.Sphere(GameFramework.Coords.create(), explosionRadius);
                         var explosionCollide = (universe, world, place, entityProjectile, entityOther) => {
                             var killable = entityOther.killable();
                             if (killable != null) {
@@ -1134,7 +1134,7 @@ var ThisCouldBeBetter;
                 var entityDimensionHalf = entityDimension / 2;
                 var itemDefnBookName = "Book";
                 var itemBookVisual = this.itemDefnsByName.get(itemDefnBookName).visual;
-                var itemBookCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), entityDimensionHalf);
+                var itemBookCollider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimensionHalf);
                 var itemBookEntityDefn = new GameFramework.Entity(itemDefnBookName, [
                     new GameFramework.Item(itemDefnBookName, 1),
                     new GameFramework.Locatable(null),
@@ -1148,7 +1148,7 @@ var ThisCouldBeBetter;
                 entityDimension = entityDimension * 2;
                 var itemDefnName = "Bow";
                 var itemBowVisual = this.itemDefnsByName.get(itemDefnName).visual;
-                var itemBowCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), entityDimension / 2);
+                var itemBowCollider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimension / 2);
                 var itemBowUse = (u, world, p, entityUser, entityDevice) => // use
                  {
                     var device = entityDevice.device();
@@ -1183,7 +1183,7 @@ var ThisCouldBeBetter;
                     var projectileOri = new GameFramework.Orientation(userVel.clone().normalize(), null);
                     var projectileLoc = new GameFramework.Disposition(projectilePos, projectileOri, null);
                     projectileLoc.vel.overwriteWith(userVel).clearZ().double();
-                    var projectileCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), projectileDimension);
+                    var projectileCollider = new GameFramework.Sphere(GameFramework.Coords.create(), projectileDimension);
                     var projectileCollide = (universe, world, place, entityProjectile, entityOther) => {
                         var killable = entityOther.killable();
                         if (killable != null) {
@@ -1239,7 +1239,7 @@ var ThisCouldBeBetter;
                 var entityDimensionHalf = entityDimension / 2;
                 var itemDefnBreadName = "Bread";
                 var itemBreadVisual = this.itemDefnsByName.get(itemDefnBreadName).visual;
-                var itemBreadCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), entityDimensionHalf);
+                var itemBreadCollider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimensionHalf);
                 var itemBreadEntityDefn = new GameFramework.Entity(itemDefnBreadName, [
                     new GameFramework.Item(itemDefnBreadName, 1),
                     new GameFramework.Locatable(null),
@@ -1257,7 +1257,7 @@ var ThisCouldBeBetter;
                 var visualTileset = new GameFramework.VisualImageFromLibrary("Car");
                 var tileSizeInPixels = new GameFramework.Coords(64, 48, 0);
                 var tilesetSizeInTiles = new GameFramework.Coords(8, 4, 0);
-                var tilePosInTiles = GameFramework.Coords.blank();
+                var tilePosInTiles = GameFramework.Coords.create();
                 for (var y = 0; y < tilesetSizeInTiles.y; y++) {
                     tilePosInTiles.y = y;
                     for (var x = 0; x < tilesetSizeInTiles.x; x++) {
@@ -1278,7 +1278,7 @@ var ThisCouldBeBetter;
                 if (this.visualsHaveText) {
                     carVisual.children.push(new GameFramework.VisualOffset(GameFramework.VisualText.fromTextAndColor(defnName, GameFramework.Color.byName("Blue")), new GameFramework.Coords(0, 0 - entityDimension * 2.5, 0)));
                 }
-                var carCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), entityDimension / 2);
+                var carCollider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimension / 2);
                 var carCollide = (universe, world, place, entityVehicle, entityOther) => {
                     if (entityOther.portal() != null) {
                         var usable = entityOther.usable();
@@ -1295,7 +1295,7 @@ var ThisCouldBeBetter;
                 var carConstrainable = new GameFramework.Constrainable([
                     new GameFramework.Constraint_FrictionXY(.03, .2)
                 ]);
-                var carLoc = GameFramework.Disposition.blank();
+                var carLoc = GameFramework.Disposition.create();
                 //carLoc.spin = new Rotation(Coords.Instances().ZeroZeroOne, new Reference(.01));
                 var carUsable = new GameFramework.Usable((u, w, p, eUsing, eUsed) => {
                     var vehicle = eUsed.propertiesByName.get(GameFramework.Vehicle.name);
@@ -1322,7 +1322,7 @@ var ThisCouldBeBetter;
                 var entityDimensionHalf = entityDimension / 2;
                 var itemDefnCoinName = "Coin";
                 var itemCoinVisual = this.itemDefnsByName.get(itemDefnCoinName).visual;
-                var itemCoinCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), entityDimensionHalf);
+                var itemCoinCollider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimensionHalf);
                 var itemCoinEntityDefn = new GameFramework.Entity(itemDefnCoinName, [
                     new GameFramework.Item(itemDefnCoinName, 1),
                     new GameFramework.Locatable(null),
@@ -1337,7 +1337,7 @@ var ThisCouldBeBetter;
                 var entityDimensionHalf = entityDimension / 2;
                 var itemDefnCrystalName = "Crystal";
                 var itemCrystalVisual = this.itemDefnsByName.get(itemDefnCrystalName).visual;
-                var itemCrystalCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), entityDimensionHalf);
+                var itemCrystalCollider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimensionHalf);
                 var itemCrystalEntityDefn = new GameFramework.Entity(itemDefnCrystalName, [
                     new GameFramework.Collidable(0, itemCrystalCollider, null, null),
                     new GameFramework.Drawable(itemCrystalVisual, null),
@@ -1351,7 +1351,7 @@ var ThisCouldBeBetter;
                 var entityDimensionHalf = entityDimension / 2;
                 var itemDefnDoughnutName = "Doughnut";
                 var itemDoughnutVisual = this.itemDefnsByName.get(itemDefnDoughnutName).visual;
-                var itemDoughnutCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), entityDimensionHalf);
+                var itemDoughnutCollider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimensionHalf);
                 var itemDoughnutEntityDefn = new GameFramework.Entity(itemDefnDoughnutName, [
                     new GameFramework.Item(itemDefnDoughnutName, 1),
                     new GameFramework.Locatable(null),
@@ -1365,7 +1365,7 @@ var ThisCouldBeBetter;
                 entityDimension *= .5;
                 var itemDefnName = "Flower";
                 var visual = this.itemDefnsByName.get(itemDefnName).visual;
-                var collider = new GameFramework.Sphere(GameFramework.Coords.blank(), entityDimension);
+                var collider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimension);
                 var entityDefn = new GameFramework.Entity(itemDefnName, [
                     new GameFramework.Item(itemDefnName, 1),
                     new GameFramework.Locatable(null),
@@ -1379,7 +1379,7 @@ var ThisCouldBeBetter;
                 var entityDimensionHalf = entityDimension / 2;
                 var itemDefnFruitName = "Fruit";
                 var itemFruitVisual = this.itemDefnsByName.get(itemDefnFruitName).visual;
-                var itemFruitCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), entityDimensionHalf);
+                var itemFruitCollider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimensionHalf);
                 var itemFruitEntityDefn = new GameFramework.Entity(itemDefnFruitName, [
                     new GameFramework.Item(itemDefnFruitName, 1),
                     new GameFramework.Locatable(null),
@@ -1403,7 +1403,7 @@ var ThisCouldBeBetter;
                 entityDimension /= 2;
                 var itemDefnName = "Grass";
                 var itemGrassVisual = this.itemDefnsByName.get(itemDefnName).visual;
-                var itemGrassCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), entityDimension / 2);
+                var itemGrassCollider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimension / 2);
                 var itemGrassEntityDefn = new GameFramework.Entity(itemDefnName, [
                     new GameFramework.Item(itemDefnName, 1),
                     new GameFramework.Locatable(null),
@@ -1417,7 +1417,7 @@ var ThisCouldBeBetter;
                 var entityDimensionHalf = entityDimension / 2;
                 var itemDefnHeartName = "Heart";
                 var itemHeartVisual = this.itemDefnsByName.get(itemDefnHeartName).visual;
-                var itemHeartCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), entityDimensionHalf);
+                var itemHeartCollider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimensionHalf);
                 var itemHeartEntityDefn = new GameFramework.Entity(itemDefnHeartName, [
                     new GameFramework.Item(itemDefnHeartName, 1),
                     new GameFramework.Locatable(null),
@@ -1431,7 +1431,7 @@ var ThisCouldBeBetter;
                 var entityDimensionHalf = entityDimension / 2;
                 var itemDefnIronName = "Iron";
                 var itemIronVisual = this.itemDefnsByName.get(itemDefnIronName).visual;
-                var itemIronCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), entityDimensionHalf);
+                var itemIronCollider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimensionHalf);
                 var itemIronEntityDefn = new GameFramework.Entity(itemDefnIronName, [
                     new GameFramework.Item(itemDefnIronName, 1),
                     new GameFramework.Locatable(null),
@@ -1445,7 +1445,7 @@ var ThisCouldBeBetter;
                 var entityDimensionHalf = entityDimension / 2;
                 var itemDefnOreName = "Iron Ore";
                 var itemOreVisual = this.itemDefnsByName.get(itemDefnOreName).visual;
-                var itemOreCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), entityDimensionHalf);
+                var itemOreCollider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimensionHalf);
                 var itemOreEntityDefn = new GameFramework.Entity(itemDefnOreName, [
                     new GameFramework.Item(itemDefnOreName, 1),
                     new GameFramework.Locatable(null),
@@ -1459,7 +1459,7 @@ var ThisCouldBeBetter;
                 var entityDimensionHalf = entityDimension / 2;
                 var itemDefnLogName = "Log";
                 var itemLogVisual = this.itemDefnsByName.get(itemDefnLogName).visual;
-                var itemLogCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), entityDimensionHalf);
+                var itemLogCollider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimensionHalf);
                 var itemLogEntityDefn = new GameFramework.Entity(itemDefnLogName, [
                     new GameFramework.Item(itemDefnLogName, 1),
                     new GameFramework.Locatable(null),
@@ -1474,7 +1474,7 @@ var ThisCouldBeBetter;
                 var itemDefnMeatName = "Meat";
                 var itemMeatDefn = this.itemDefnsByName.get(itemDefnMeatName);
                 var itemMeatVisual = itemMeatDefn.visual;
-                var itemMeatCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), entityDimensionHalf);
+                var itemMeatCollider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimensionHalf);
                 var itemMeatEntityDefn = new GameFramework.Entity(itemDefnMeatName, [
                     new GameFramework.Item(itemDefnMeatName, 1),
                     new GameFramework.Locatable(null),
@@ -1489,7 +1489,7 @@ var ThisCouldBeBetter;
                 var entityDimensionHalf = entityDimension / 2;
                 var itemDefnMedicineName = "Medicine";
                 var itemMedicineVisual = this.itemDefnsByName.get(itemDefnMedicineName).visual;
-                var itemMedicineCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), entityDimensionHalf);
+                var itemMedicineCollider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimensionHalf);
                 var itemMedicineEntityDefn = new GameFramework.Entity(itemDefnMedicineName, [
                     new GameFramework.Item(itemDefnMedicineName, 1),
                     new GameFramework.Locatable(null),
@@ -1504,7 +1504,7 @@ var ThisCouldBeBetter;
                 entityDimension /= 2;
                 var itemDefnName = "Mushroom";
                 var itemMushroomVisual = this.itemDefnsByName.get(itemDefnName).visual;
-                var itemMushroomCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), entityDimension / 2);
+                var itemMushroomCollider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimension / 2);
                 var itemMushroomEntityDefn = new GameFramework.Entity(itemDefnName, [
                     new GameFramework.Item(itemDefnName, 1),
                     new GameFramework.Locatable(null),
@@ -1517,7 +1517,7 @@ var ThisCouldBeBetter;
             entityDefnBuildPick(entityDimension) {
                 var itemDefnName = "Pick";
                 var itemPickVisual = this.itemDefnsByName.get(itemDefnName).visual;
-                var itemPickCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), entityDimension / 2);
+                var itemPickCollider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimension / 2);
                 var itemPickDevice = new GameFramework.Device("Pick", 10, // ticksToCharge
                 null, // initialize: (u: Universe, w: World, p: Place, e: Entity) => void,
                 null, // update: (u: Universe, w: World, p: Place, e: Entity) => void,
@@ -1558,7 +1558,7 @@ var ThisCouldBeBetter;
                 if (this.visualsHaveText) {
                     itemPotionVisual.children.push(new GameFramework.VisualOffset(GameFramework.VisualText.fromTextAndColor(itemDefnPotionName, itemPotionColor), new GameFramework.Coords(0, 0 - entityDimension, 0)));
                 }
-                var itemPotionCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), entityDimensionHalf);
+                var itemPotionCollider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimensionHalf);
                 var itemPotionEntityDefn = new GameFramework.Entity(itemDefnPotionName, [
                     new GameFramework.Item(itemDefnPotionName, 1),
                     new GameFramework.Locatable(null),
@@ -1571,7 +1571,7 @@ var ThisCouldBeBetter;
             entityDefnBuildShovel(entityDimension) {
                 var itemDefnName = "Shovel";
                 var itemShovelVisual = this.itemDefnsByName.get(itemDefnName).visual;
-                var itemShovelCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), entityDimension / 2);
+                var itemShovelCollider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimension / 2);
                 var itemShovelDevice = new GameFramework.Device("Shovel", 10, // ticksToCharge
                 null, // initialize: (u: Universe, w: World, p: Place, e: Entity) => void,
                 null, // update: (u: Universe, w: World, p: Place, e: Entity) => void,
@@ -1617,7 +1617,7 @@ var ThisCouldBeBetter;
                 else if (damageTypeName == "Heat") {
                     itemDefnName += damageTypeName;
                 }
-                var itemSwordCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), entityDimension / 2);
+                var itemSwordCollider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimension / 2);
                 var itemSwordDeviceUse = (universe, world, place, entityUser, entityDevice) => // use
                  {
                     var userLoc = entityUser.locatable().loc;
@@ -1646,7 +1646,7 @@ var ThisCouldBeBetter;
                     projectileVisual.transform(new GameFramework.Transform_RotateRight(1));
                     var projectileLoc = new GameFramework.Disposition(projectilePos, projectileOri, null);
                     projectileLoc.vel.overwriteWith(userVel).clearZ().double();
-                    var projectileCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), projectileDimension);
+                    var projectileCollider = new GameFramework.Sphere(GameFramework.Coords.create(), projectileDimension);
                     var projectileCollide = (universe, world, place, entityProjectile, entityOther) => {
                         var killable = entityOther.killable();
                         if (killable != null) {
@@ -1715,7 +1715,7 @@ var ThisCouldBeBetter;
             entityDefnBuildToolset(entityDimension) {
                 var itemDefnName = "Toolset";
                 var itemToolsetVisual = this.itemDefnsByName.get(itemDefnName).visual;
-                var itemToolsetCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), entityDimension / 2);
+                var itemToolsetCollider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimension / 2);
                 var itemToolsetEntityDefn = new GameFramework.Entity(itemDefnName, [
                     new GameFramework.Item(itemDefnName, 1),
                     new GameFramework.Locatable(null),
@@ -1728,7 +1728,7 @@ var ThisCouldBeBetter;
             entityDefnBuildTorch(entityDimension) {
                 var itemDefnName = "Torch";
                 var itemTorchVisual = this.itemDefnsByName.get(itemDefnName).visual;
-                var itemTorchCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), entityDimension / 2);
+                var itemTorchCollider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimension / 2);
                 var itemTorchEntityDefn = new GameFramework.Entity(itemDefnName, [
                     new GameFramework.Animatable(null, null, null),
                     new GameFramework.Item(itemDefnName, 1),
@@ -1742,7 +1742,7 @@ var ThisCouldBeBetter;
             entityDefnBuildWeight(entityDimension) {
                 var itemDefnName = "Weight";
                 var itemWeightVisual = this.itemDefnsByName.get(itemDefnName).visual;
-                var itemWeightCollider = new GameFramework.Sphere(GameFramework.Coords.blank(), entityDimension / 2);
+                var itemWeightCollider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimension / 2);
                 var itemWeightEntityDefn = new GameFramework.Entity(itemDefnName, [
                     new GameFramework.Item(itemDefnName, 1),
                     new GameFramework.Locatable(null),

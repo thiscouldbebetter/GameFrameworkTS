@@ -5,7 +5,7 @@ var ThisCouldBeBetter;
     (function (GameFramework) {
         class Transform_Locate {
             constructor(loc) {
-                this.loc = loc || GameFramework.Disposition.blank();
+                this.loc = loc || GameFramework.Disposition.create();
                 this.transformOrient = new GameFramework.Transform_Orient(null);
                 this.transformTranslate = new GameFramework.Transform_Translate(null);
             }

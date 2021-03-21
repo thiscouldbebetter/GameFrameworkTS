@@ -19,7 +19,7 @@ export class VisualImageScaledPartial implements Visual
 		this.sizeToDraw = sizeToDraw;
 
 		this.sizeToDrawHalf = this.sizeToDraw.clone().half();
-		this._posSaved = Coords.blank();
+		this._posSaved = Coords.create();
 	}
 
 	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)

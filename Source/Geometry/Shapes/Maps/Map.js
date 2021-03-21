@@ -17,7 +17,7 @@ var ThisCouldBeBetter;
                 this.cellSizeHalf = this.cellSize.clone().half();
                 // Helper variables.
                 this._cell = this.cellPrototype.clone();
-                this._posInCells = GameFramework.Coords.blank();
+                this._posInCells = GameFramework.Coords.create();
             }
             cellAtPos(pos) {
                 this._posInCells.overwriteWith(pos).divide(this.cellSize).floor();
@@ -31,8 +31,8 @@ var ThisCouldBeBetter;
             }
             cellsAsEntities(mapAndCellPosToEntity) {
                 var returnValues = [];
-                var cellPosInCells = GameFramework.Coords.blank();
-                var cellPosStart = GameFramework.Coords.blank();
+                var cellPosInCells = GameFramework.Coords.create();
+                var cellPosStart = GameFramework.Coords.create();
                 var cellPosEnd = this.sizeInCells;
                 // todo
                 // var cellSizeInPixels = this.cellSize;

@@ -15,6 +15,11 @@ export class Polar
 		this.elevationInTurns = (elevationInTurns == null ? 0 : elevationInTurns);
 	}
 
+	static create()
+	{
+		return new Polar(0, 0, 0);
+	}
+
 	// constants
 
 	static DegreesPerTurn = 360;

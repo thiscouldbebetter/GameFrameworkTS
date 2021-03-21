@@ -106,10 +106,10 @@ export class World
 		var places = [];
 
 		var worldSizeInRooms = new Coords(2, 2, 1);
-		var roomPos = Coords.blank();
+		var roomPos = Coords.create();
 		var roomSize = displaySize.clone().double();
-		var startPos = Coords.blank();
-		var goalPos = Coords.blank().randomize(null).multiply(worldSizeInRooms).floor();
+		var startPos = Coords.create();
+		var goalPos = Coords.create().randomize(null).multiply(worldSizeInRooms).floor();
 
 		for (var y = 0; y < worldSizeInRooms.y; y++)
 		{

@@ -6,7 +6,7 @@ var ThisCouldBeBetter;
         class Transform_Orient {
             constructor(orientation) {
                 this.orientation = orientation;
-                this._components = [GameFramework.Coords.blank(), GameFramework.Coords.blank(), GameFramework.Coords.blank()];
+                this._components = [GameFramework.Coords.create(), GameFramework.Coords.create(), GameFramework.Coords.create()];
             }
             overwriteWith(other) {
                 return this; // todo

@@ -10,7 +10,7 @@ var ThisCouldBeBetter;
                 this.lineThickness = lineThickness;
                 this.isClosed = isClosed;
                 this.verticesAsPathTransformed = this.verticesAsPath.clone();
-                this.transformTranslate = new GameFramework.Transform_Translate(GameFramework.Coords.blank());
+                this.transformTranslate = new GameFramework.Transform_Translate(GameFramework.Coords.create());
             }
             draw(universe, world, place, entity, display) {
                 var drawablePos = entity.locatable().loc.pos;

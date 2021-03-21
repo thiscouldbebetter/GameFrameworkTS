@@ -23,10 +23,10 @@ export class InputHelper implements Platformable
 	{
 		// Helper variables.
 
-		this.mouseClickPos = Coords.blank();
-		this.mouseMovePos = Coords.blank();
-		this.mouseMovePosPrev = Coords.blank();
-		this.mouseMovePosNext = Coords.blank();
+		this.mouseClickPos = Coords.create();
+		this.mouseMovePos = Coords.create();
+		this.mouseMovePosPrev = Coords.create();
+		this.mouseMovePosNext = Coords.create();
 
 		var inputNames = Input.Names();
 		this.inputNamesLookup = inputNames._AllByName;

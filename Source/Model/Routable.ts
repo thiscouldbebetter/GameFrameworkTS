@@ -16,7 +16,7 @@ export class Routable extends EntityProperty
 
 	initialize(u: Universe, w: World, p: Place, e: Entity)
 	{
-		this.route.bounds = Box.fromMinAndMax(Coords.blank(), p.size.clone());
+		this.route.bounds = Box.fromMinAndMax(Coords.create(), p.size.clone());
 	}
 
 	// Clonable.
@@ -57,7 +57,7 @@ export class Route
 		this.lengthMax = lengthMax || Number.POSITIVE_INFINITY;
 
 		// Helper variables.
-		this._tempPos = Coords.blank();
+		this._tempPos = Coords.create();
 	}
 
 	calculate()
@@ -163,7 +163,7 @@ export class Route
 	{
 		var returnValues = new Array<RouteNode>();
 		var nodeCentralPos = nodeCentral.pos;
-		var neighborPos = Coords.blank();
+		var neighborPos = Coords.create();
 
 		var neighborPositions = new Array<Coords>();
 

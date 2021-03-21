@@ -7,7 +7,7 @@ var ThisCouldBeBetter;
             constructor(visualJumper, visualShadow, cameraFactory) {
                 this.visualJumper = visualJumper;
                 this.visualShadow = visualShadow;
-                this._posSaved = GameFramework.Coords.blank();
+                this._posSaved = GameFramework.Coords.create();
             }
             // Transformable.
             transform(transformToApply) {

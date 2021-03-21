@@ -18,9 +18,9 @@ var ThisCouldBeBetter;
                 new GameFramework.DataBinding(this, (c) => c.textAsLines(), null), 0 // sliderPosInItems
                 );
                 // Helper variables.
-                this._drawPos = GameFramework.Coords.blank();
+                this._drawPos = GameFramework.Coords.create();
                 this._drawLoc = new GameFramework.Disposition(this._drawPos, null, null);
-                this._mouseClickPos = GameFramework.Coords.blank();
+                this._mouseClickPos = GameFramework.Coords.create();
             }
             actionHandle(actionNameToHandle, universe) {
                 var text = this.text(null);

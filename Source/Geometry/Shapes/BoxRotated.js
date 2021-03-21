@@ -17,12 +17,12 @@ var ThisCouldBeBetter;
             }
             normalAtPos(posToCheck, normalOut) {
                 // todo - Adapt or call Box.normalAtPos() instead.
-                var plane = new GameFramework.Plane(GameFramework.Coords.blank(), 0);
+                var plane = new GameFramework.Plane(GameFramework.Coords.create(), 0);
                 var polar = new GameFramework.Polar(0, 1, 0);
                 var box = this.box;
                 var center = box.center;
                 var sizeHalf = box.sizeHalf();
-                var displacementToSurface = GameFramework.Coords.blank();
+                var displacementToSurface = GameFramework.Coords.create();
                 var distanceMinSoFar = Number.POSITIVE_INFINITY;
                 for (var d = 0; d < 2; d++) {
                     polar.azimuthInTurns = this.angleInTurns + (d * .25);

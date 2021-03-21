@@ -29,13 +29,13 @@ export class VisualMap implements Visual
 			(shouldConvertToImage == null ? true : shouldConvertToImage);
 
 		// Helper variables.
-		this._cameraPos = Coords.blank();
+		this._cameraPos = Coords.create();
 		this._cell = this.map.cellPrototype.clone();
-		this._cellPosEnd = Coords.blank();
-		this._cellPosInCells = Coords.blank();
-		this._cellPosStart = Coords.blank();
-		this._drawPos = Coords.blank();
-		this._posSaved = Coords.blank();
+		this._cellPosEnd = Coords.create();
+		this._cellPosInCells = Coords.create();
+		this._cellPosStart = Coords.create();
+		this._drawPos = Coords.create();
+		this._posSaved = Coords.create();
 	}
 
 	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)

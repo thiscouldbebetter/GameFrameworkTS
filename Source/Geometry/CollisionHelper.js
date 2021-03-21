@@ -10,14 +10,14 @@ var ThisCouldBeBetter;
                 this.colliderTypeNamesToDoesContainLookup = this.doesContainLookupBuild();
                 this.colliderTypeNamesToCollisionFindLookup = this.collisionFindLookupBuild();
                 // Helper variables.
-                this._box = new GameFramework.Box(GameFramework.Coords.blank(), GameFramework.Coords.blank());
-                this._collision = new GameFramework.Collision(GameFramework.Coords.blank(), null, null);
-                this._displacement = GameFramework.Coords.blank();
-                this._polar = new GameFramework.Polar(0, 0, 0);
-                this._pos = GameFramework.Coords.blank();
-                this._range = new GameFramework.RangeExtent(0, 0);
-                this._range2 = new GameFramework.RangeExtent(0, 0);
-                this._size = GameFramework.Coords.blank();
+                this._box = GameFramework.Box.create();
+                this._collision = GameFramework.Collision.create();
+                this._displacement = GameFramework.Coords.create();
+                this._polar = GameFramework.Polar.create();
+                this._pos = GameFramework.Coords.create();
+                this._range = GameFramework.RangeExtent.create();
+                this._range2 = GameFramework.RangeExtent.create();
+                this._size = GameFramework.Coords.create();
             }
             // constructor helpers
             collisionFindLookupBuild() {
@@ -180,7 +180,7 @@ var ThisCouldBeBetter;
                         var entity1 = entitiesCollidable1[j];
                         var doCollide = this.doEntitiesCollide(entity0, entity1);
                         if (doCollide) {
-                            var collision = new GameFramework.Collision(null, null, null);
+                            var collision = GameFramework.Collision.create();
                             collision.collidables.push(entity0);
                             collision.collidables.push(entity1);
                             returnValues.push(collision);
@@ -294,9 +294,9 @@ var ThisCouldBeBetter;
                 var collidable1 = entity1.collidable();
                 var collider0 = collidable0.collider;
                 var collider1 = collidable1.collider;
-                var normal0 = collider0.normalAtPos(collisionPos, GameFramework.Coords.blank() // normalOut
+                var normal0 = collider0.normalAtPos(collisionPos, GameFramework.Coords.create() // normalOut
                 );
-                var normal1 = collider1.normalAtPos(collisionPos, GameFramework.Coords.blank() // normalOut
+                var normal1 = collider1.normalAtPos(collisionPos, GameFramework.Coords.create() // normalOut
                 );
                 var entity0Loc = entity0.locatable().loc;
                 var entity1Loc = entity1.locatable().loc;
@@ -321,7 +321,7 @@ var ThisCouldBeBetter;
                 var entity0Pos = entity0Loc.pos;
                 var collidable1 = entity1.collidable();
                 var collider1 = collidable1.collider;
-                var collider1Normal = collider1.normalAtPos(entity0Pos, GameFramework.Coords.blank() // normalOut
+                var collider1Normal = collider1.normalAtPos(entity0Pos, GameFramework.Coords.create() // normalOut
                 );
                 var distanceMovedSoFar = 0;
                 var distanceToMoveMax = 10;
@@ -335,7 +335,7 @@ var ThisCouldBeBetter;
             // collisionOfXAndY
             collisionOfBoxAndBox(box1, box2, collision) {
                 if (collision == null) {
-                    collision = new GameFramework.Collision(null, null, null);
+                    collision = GameFramework.Collision.create();
                 }
                 var boxOfIntersection = box1.intersectWith(box2);
                 if (boxOfIntersection != null) {
@@ -351,13 +351,13 @@ var ThisCouldBeBetter;
                 }
                 var map = mapLocated.map;
                 var cell = map.cellPrototype.clone();
-                var cellPosAbsolute = GameFramework.Coords.blank();
-                var cellPosInCells = GameFramework.Coords.blank();
+                var cellPosAbsolute = GameFramework.Coords.create();
+                var cellPosInCells = GameFramework.Coords.create();
                 var mapSizeInCells = map.sizeInCells;
                 var mapCellSize = map.cellSize;
                 var mapSizeHalf = map.sizeHalf;
                 var mapPos = mapLocated.loc.pos;
-                var cellAsBox = new GameFramework.Box(GameFramework.Coords.blank(), map.cellSize);
+                var cellAsBox = new GameFramework.Box(GameFramework.Coords.create(), map.cellSize);
                 for (var y = 0; y < mapSizeInCells.y; y++) {
                     cellPosInCells.y = y;
                     cellPosAbsolute.y = (y * mapCellSize.y) + mapPos.y - mapSizeHalf.y;
@@ -380,7 +380,7 @@ var ThisCouldBeBetter;
             }
             collisionOfBoxAndMesh(box, mesh, collision) {
                 if (collision == null) {
-                    collision = new GameFramework.Collision(null, null, null);
+                    collision = GameFramework.Collision.create();
                 }
                 // hack
                 var meshBoundsAsBox = mesh.box();
@@ -415,7 +415,7 @@ var ThisCouldBeBetter;
                     }
                 }
                 if (collision == null) {
-                    collision = new GameFramework.Collision(null, null, null);
+                    collision = GameFramework.Collision.create();
                 }
                 collision.isActive = doCollide;
                 if (doCollide && shouldCalculatePos) {
@@ -427,7 +427,7 @@ var ThisCouldBeBetter;
             }
             collisionOfBoxRotatedAndSphere(boxRotated, sphere, collision, shouldCalculatePos) {
                 if (collision == null) {
-                    collision = new GameFramework.Collision(null, null, null);
+                    collision = GameFramework.Collision.create();
                 }
                 var doCollide = this.doBoxRotatedAndSphereCollide(boxRotated, sphere);
                 if (doCollide) {
@@ -451,7 +451,7 @@ var ThisCouldBeBetter;
             collisionOfEdgeAndEdge(edge0, edge1, collision) {
                 // 2D
                 if (collision == null) {
-                    collision = new GameFramework.Collision(null, null, null);
+                    collision = GameFramework.Collision.create();
                 }
                 collision.clear();
                 var edge0Bounds = edge0.box();
@@ -517,7 +517,7 @@ var ThisCouldBeBetter;
             }
             collisionOfEdgeAndPlane(edge, plane, collision) {
                 if (collision == null) {
-                    collision = new GameFramework.Collision(null, null, null);
+                    collision = GameFramework.Collision.create();
                 }
                 var returnValue = collision;
                 var edgeVertex0 = edge.vertices[0];
@@ -548,7 +548,7 @@ var ThisCouldBeBetter;
             }
             collisionOfHemispaceAndBox(hemispace, box, collision) {
                 if (collision == null) {
-                    collision = new GameFramework.Collision(null, null, null);
+                    collision = GameFramework.Collision.create();
                 }
                 var plane = hemispace.plane;
                 var boxVertices = box.vertices();
@@ -569,7 +569,7 @@ var ThisCouldBeBetter;
             }
             collisionOfHemispaceAndSphere(hemispace, sphere, collision) {
                 if (collision == null) {
-                    collision = new GameFramework.Collision(null, null, null);
+                    collision = GameFramework.Collision.create();
                 }
                 var plane = hemispace.plane;
                 var distanceOfSphereCenterFromOriginAlongNormal = sphere.center.dotProduct(plane.normal);
@@ -593,13 +593,13 @@ var ThisCouldBeBetter;
                 }
                 var map = mapLocated.map;
                 var cell = map.cellPrototype.clone();
-                var cellPosAbsolute = GameFramework.Coords.blank();
-                var cellPosInCells = GameFramework.Coords.blank();
+                var cellPosAbsolute = GameFramework.Coords.create();
+                var cellPosInCells = GameFramework.Coords.create();
                 var mapSizeInCells = map.sizeInCells;
                 var mapCellSize = map.cellSize;
                 var mapSizeHalf = map.sizeHalf;
                 var mapPos = mapLocated.loc.pos;
-                var cellAsBox = new GameFramework.Box(GameFramework.Coords.blank(), map.cellSize);
+                var cellAsBox = new GameFramework.Box(GameFramework.Coords.create(), map.cellSize);
                 for (var y = 0; y < mapSizeInCells.y; y++) {
                     cellPosInCells.y = y;
                     cellPosAbsolute.y = (y * mapCellSize.y) + mapPos.y - mapSizeHalf.y;
@@ -855,11 +855,11 @@ var ThisCouldBeBetter;
                 var map1 = mapLocated1.map;
                 var cell0 = map0.cellPrototype.clone();
                 var cell1 = map1.cellPrototype.clone();
-                var cell0PosAbsolute = GameFramework.Coords.blank();
-                var cell0PosInCells = GameFramework.Coords.blank();
-                var cell1PosInCells = GameFramework.Coords.blank();
-                var cell1PosInCellsMin = GameFramework.Coords.blank();
-                var cell1PosInCellsMax = GameFramework.Coords.blank();
+                var cell0PosAbsolute = GameFramework.Coords.create();
+                var cell0PosInCells = GameFramework.Coords.create();
+                var cell1PosInCells = GameFramework.Coords.create();
+                var cell1PosInCellsMin = GameFramework.Coords.create();
+                var cell1PosInCellsMax = GameFramework.Coords.create();
                 var map0SizeInCells = map0.sizeInCells;
                 var map1SizeInCellsMinusOnes = map1.sizeInCellsMinusOnes;
                 var map0CellSize = map0.cellSize;
@@ -906,13 +906,13 @@ var ThisCouldBeBetter;
                 }
                 var map = mapLocated.map;
                 var cell = map.cellPrototype.clone();
-                var cellPosAbsolute = GameFramework.Coords.blank();
-                var cellPosInCells = GameFramework.Coords.blank();
+                var cellPosAbsolute = GameFramework.Coords.create();
+                var cellPosInCells = GameFramework.Coords.create();
                 var mapSizeInCells = map.sizeInCells;
                 var mapCellSize = map.cellSize;
                 var mapSizeHalf = map.sizeHalf;
                 var mapPos = mapLocated.loc.pos;
-                var cellAsBox = new GameFramework.Box(GameFramework.Coords.blank(), map.cellSize);
+                var cellAsBox = new GameFramework.Box(GameFramework.Coords.create(), map.cellSize);
                 for (var y = 0; y < mapSizeInCells.y; y++) {
                     cellPosInCells.y = y;
                     cellPosAbsolute.y = (y * mapCellSize.y) + mapPos.y - mapSizeHalf.y;
@@ -960,9 +960,9 @@ var ThisCouldBeBetter;
                 var polar = this._polar;
                 polar.azimuthInTurns = boxRotated.angleInTurns;
                 polar.radius = 1;
-                var rectangleAxisX = polar.toCoords(GameFramework.Coords.blank());
+                var rectangleAxisX = polar.toCoords(GameFramework.Coords.create());
                 polar.azimuthInTurns += .25;
-                var rectangleAxisY = polar.toCoords(GameFramework.Coords.blank());
+                var rectangleAxisY = polar.toCoords(GameFramework.Coords.create());
                 var x = sphereCenter.dotProduct(rectangleAxisX);
                 var y = sphereCenter.dotProduct(rectangleAxisY);
                 sphereCenter.x = x;

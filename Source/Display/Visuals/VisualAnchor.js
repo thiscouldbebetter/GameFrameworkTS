@@ -9,7 +9,7 @@ var ThisCouldBeBetter;
                 this.posToAnchorAt = posToAnchorAt;
                 this.orientationToAnchorAt = orientationToAnchorAt;
                 // Helper variables.
-                this._posSaved = GameFramework.Coords.blank();
+                this._posSaved = GameFramework.Coords.create();
                 this._orientationSaved = new GameFramework.Orientation(null, null);
             }
             draw(universe, world, place, entity, display) {

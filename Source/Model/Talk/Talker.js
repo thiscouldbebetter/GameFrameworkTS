@@ -19,7 +19,7 @@ var ThisCouldBeBetter;
                 );
                 var conversationSize = universe.display.sizeDefault().clone();
                 var conversationAsControl = conversation.toControl(conversationSize, universe);
-                var venueNext = new GameFramework.VenueControls(conversationAsControl, false);
+                var venueNext = conversationAsControl.toVenue();
                 universe.venueNext = venueNext;
             }
         }

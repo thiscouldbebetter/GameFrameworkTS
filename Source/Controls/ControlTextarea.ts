@@ -45,9 +45,9 @@ export class ControlTextarea extends ControlBase
 		);
 
 		// Helper variables.
-		this._drawPos = Coords.blank();
+		this._drawPos = Coords.create();
 		this._drawLoc = new Disposition(this._drawPos, null, null);
-		this._mouseClickPos = Coords.blank();
+		this._mouseClickPos = Coords.create();
 	}
 
 	actionHandle(actionNameToHandle: string, universe: Universe): boolean

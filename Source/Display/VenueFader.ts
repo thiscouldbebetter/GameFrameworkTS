@@ -116,7 +116,7 @@ export class VenueFader implements Venue
 		var display = universe.display;
 		display.drawRectangle
 		(
-			Coords.blank(),
+			Coords.create(),
 			display.sizeDefault(), // Scaled automatically.
 			fadeColor.systemColor(),
 			null, null

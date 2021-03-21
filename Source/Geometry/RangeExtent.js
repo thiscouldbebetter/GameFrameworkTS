@@ -8,6 +8,9 @@ var ThisCouldBeBetter;
                 this.min = min;
                 this.max = max;
             }
+            static create() {
+                return new RangeExtent(0, 0);
+            }
             clone() {
                 return new RangeExtent(this.min, this.max);
             }

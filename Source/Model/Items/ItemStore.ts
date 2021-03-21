@@ -60,8 +60,8 @@ export class ItemStore extends EntityProperty
 			entityUsing, entityUsed,
 			universe.venueCurrent
 		);
-		var venueNext: Venue = new VenueControls(storeAsControl, false);
-		venueNext = new VenueFader(venueNext, null, null, null);
+		var venueNext: Venue = storeAsControl.toVenue();
+		venueNext = VenueFader.fromVenueTo(venueNext);
 		universe.venueNext = venueNext;
 	}
 
@@ -92,8 +92,8 @@ export class ItemStore extends EntityProperty
 
 		var back = function()
 		{
-			var venueNext = venuePrev;
-			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null) as Venue;
+			var venueNext: Venue = venuePrev;
+			venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
 			universe.venueNext = venueNext;
 		};
 
@@ -110,7 +110,7 @@ export class ItemStore extends EntityProperty
 		var returnValue = new ControlContainer
 		(
 			"containerTransfer",
-			Coords.blank(), // pos
+			Coords.create(), // pos
 			size.clone(),
 			// children
 			[

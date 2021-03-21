@@ -121,7 +121,7 @@ var ThisCouldBeBetter;
                 var skillsAll = defns.defnArraysByTypeName.get(GameFramework.Skill.name); // todo - Just use the -ByName lookup.
                 var skillsAllByName = defns.defnsByNameByTypeName.get(GameFramework.Skill.name);
                 var returnValue = new GameFramework.ControlContainer("Skills", // name,
-                GameFramework.Coords.blank(), // pos,
+                GameFramework.Coords.create(), // pos,
                 size.clone(), 
                 // children
                 [

@@ -32,7 +32,7 @@ export class Collidable extends EntityProperty
 		this._collideEntities = collideEntities;
 
 		this.collider = this.colliderAtRest.clone();
-		this.locPrev = Disposition.blank();
+		this.locPrev = Disposition.create();
 		this.ticksUntilCanCollide = 0;
 		this.entitiesAlreadyCollidedWith = [];
 		this.isDisabled = false;

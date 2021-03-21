@@ -14,7 +14,7 @@ export class PathBuilder
 		for (var i = 0; i < numberOfVertices; i++)
 		{
 			polar.radius = (i % 2 == 0 ? 1 : ratioOfInnerRadiusToOuter);
-			var vertex = polar.toCoords( Coords.blank() );
+			var vertex = polar.toCoords( Coords.create() );
 			vertices.push(vertex);
 			polar.azimuthInTurns += turnsPerVertex;
 		}

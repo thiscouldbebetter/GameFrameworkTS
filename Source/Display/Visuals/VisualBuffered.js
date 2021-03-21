@@ -9,7 +9,7 @@ var ThisCouldBeBetter;
                 this.child = child;
                 this.displayForBuffer = GameFramework.Display2D.fromSizeAndIsInvisible(this.size, true);
                 this.sizeHalf = this.size.clone().half();
-                this._posSaved = GameFramework.Coords.blank();
+                this._posSaved = GameFramework.Coords.create();
                 this.displayForBuffer.initialize(null);
             }
             draw(universe, world, place, entity, display) {

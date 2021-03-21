@@ -15,16 +15,16 @@ export class Edge
 	{
 		this.vertices = vertices;
 
-		this._direction = Coords.blank();
-		this._displacement = Coords.blank();
-		this._transverse = Coords.blank();
+		this._direction = Coords.create();
+		this._displacement = Coords.create();
+		this._transverse = Coords.create();
 	}
 
 	box()
 	{
 		if (this._box == null)
 		{
-			this._box = new Box(Coords.blank(), Coords.blank());
+			this._box = new Box(Coords.create(), Coords.create());
 		}
 		this._box.ofPoints(this.vertices);
 		return this._box;

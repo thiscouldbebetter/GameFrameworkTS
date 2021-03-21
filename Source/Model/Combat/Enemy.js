@@ -13,7 +13,7 @@ var ThisCouldBeBetter;
                     var actorLocatable = actor.locatable();
                     var entityToTargetPrefix = "Player";
                     var targetsPreferred = place.entities.filter(x => x.name.startsWith(entityToTargetPrefix));
-                    var displacement = GameFramework.Coords.blank();
+                    var displacement = GameFramework.Coords.create();
                     var sortClosest = (a, b) => displacement.overwriteWith(a.locatable().loc.pos).subtract(b.locatable().loc.pos).magnitude();
                     var targetPreferredInSight = targetsPreferred.filter(x => x.perceptible() == null
                         || x.perceptible().canBeSeen(universe, world, place, x, actor)).sort(sortClosest)[0];
@@ -33,7 +33,7 @@ var ThisCouldBeBetter;
                             var targetPosExisting = activity.target;
                             if (targetPosExisting == null) {
                                 targetPosToApproach =
-                                    GameFramework.Coords.blank().randomize(universe.randomizer).multiply(place.size);
+                                    GameFramework.Coords.create().randomize(universe.randomizer).multiply(place.size);
                             }
                             else {
                                 targetPosToApproach = targetPosExisting;

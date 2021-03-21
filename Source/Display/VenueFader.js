@@ -64,7 +64,7 @@ var ThisCouldBeBetter;
                 var fadeColor = this.backgroundColor.clone();
                 fadeColor.alpha(alphaOfFadeColor * this.backgroundColor.alpha(null));
                 var display = universe.display;
-                display.drawRectangle(GameFramework.Coords.blank(), display.sizeDefault(), // Scaled automatically.
+                display.drawRectangle(GameFramework.Coords.create(), display.sizeDefault(), // Scaled automatically.
                 fadeColor.systemColor(), null, null);
             }
             venueToFadeTo() {

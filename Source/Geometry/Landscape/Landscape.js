@@ -18,7 +18,7 @@ var ThisCouldBeBetter;
             }
             generateRandom() {
                 var cornerCellPositions = [
-                    GameFramework.Coords.blank(),
+                    GameFramework.Coords.create(),
                     new GameFramework.Coords(this.sizeInCellsMinusOnes.x, 0, 0),
                     new GameFramework.Coords(this.sizeInCellsMinusOnes.x, this.sizeInCellsMinusOnes.y, 0),
                     new GameFramework.Coords(0, this.sizeInCellsMinusOnes.y, 0),
@@ -28,8 +28,8 @@ var ThisCouldBeBetter;
                     var cellIndex = this.indexOfCellAtPos(cornerPos);
                     this.cellAltitudes[cellIndex] = 0;
                 }
-                var parentPos = GameFramework.Coords.blank();
-                var childPos = GameFramework.Coords.blank();
+                var parentPos = GameFramework.Coords.create();
+                var childPos = GameFramework.Coords.create();
                 var neighborDatas = [
                     // directionToNeighbor, neighborIndicesContributing, altitudeVariationMultiplier
                     new NeighborData(new GameFramework.Coords(1, 0, 0), [0], 1),
@@ -93,7 +93,7 @@ var ThisCouldBeBetter;
                 canvas.width = this.sizeInCells.x;
                 canvas.height = this.sizeInCells.y;
                 var graphics = canvas.getContext("2d");
-                var cellPos = GameFramework.Coords.blank();
+                var cellPos = GameFramework.Coords.create();
                 for (var y = 0; y < this.sizeInCells.y; y++) {
                     cellPos.y = y;
                     for (var x = 0; x < this.sizeInCells.x; x++) {
@@ -123,7 +123,7 @@ var ThisCouldBeBetter;
                 this.directionToNeighbor = directionToNeighbor;
                 this.neighborIndicesContributing = neighborIndicesContributing;
                 this.altitudeVariationMultiplier = altitudeVariationMultiplier;
-                this.pos = GameFramework.Coords.blank();
+                this.pos = GameFramework.Coords.create();
             }
         }
         class LandscapeTerrain {

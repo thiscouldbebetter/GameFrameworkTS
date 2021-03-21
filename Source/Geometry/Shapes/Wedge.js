@@ -22,13 +22,13 @@ var ThisCouldBeBetter;
                 if (this._collider == null) {
                     this.rayDirectionMinAsPolar = new GameFramework.Polar(0, 1, 0);
                     this.rayDirectionMaxAsPolar = new GameFramework.Polar(0, 1, 0);
-                    this.rayDirectionMin = GameFramework.Coords.blank();
-                    this.rayDirectionMax = GameFramework.Coords.blank();
-                    this.downFromVertex = GameFramework.Coords.blank();
-                    this.directionMinFromVertex = GameFramework.Coords.blank();
-                    this.directionMaxFromVertex = GameFramework.Coords.blank();
-                    this.planeForAngleMin = new GameFramework.Plane(GameFramework.Coords.blank(), 0);
-                    this.planeForAngleMax = new GameFramework.Plane(GameFramework.Coords.blank(), 0);
+                    this.rayDirectionMin = GameFramework.Coords.create();
+                    this.rayDirectionMax = GameFramework.Coords.create();
+                    this.downFromVertex = GameFramework.Coords.create();
+                    this.directionMinFromVertex = GameFramework.Coords.create();
+                    this.directionMaxFromVertex = GameFramework.Coords.create();
+                    this.planeForAngleMin = new GameFramework.Plane(GameFramework.Coords.create(), 0);
+                    this.planeForAngleMax = new GameFramework.Plane(GameFramework.Coords.create(), 0);
                     this.hemispaces =
                         [
                             new GameFramework.Hemispace(this.planeForAngleMin),

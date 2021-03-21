@@ -38,7 +38,7 @@ export class Coords
 
 	// methods
 
-	static blank(): Coords
+	static create(): Coords
 	{
 		return new Coords(0, 0, 0);
 	}
@@ -596,7 +596,7 @@ class Coords_Instances
 		this.ZeroZeroOne = new Coords(0, 0, 1);
 		this.ZeroMinusOneZero = new Coords(0, -1, 0);
 		this.ZeroOneZero = new Coords(0, 1, 0);
-		this.Zeroes = Coords.blank();
+		this.Zeroes = Coords.create();
 	}
 }
 

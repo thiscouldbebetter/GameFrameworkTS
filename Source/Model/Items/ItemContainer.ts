@@ -70,10 +70,10 @@ export class ItemContainer extends EntityProperty
 
 		var world = universe.world;
 
-		var back = function()
+		var back = () =>
 		{
-			var venueNext = venuePrev;
-			venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null) as Venue;
+			var venueNext: Venue = venuePrev;
+			venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
 			universe.venueNext = venueNext;
 		};
 
@@ -90,7 +90,7 @@ export class ItemContainer extends EntityProperty
 		var returnValue = new ControlContainer
 		(
 			"containerTransfer",
-			Coords.blank(), // pos
+			Coords.create(), // pos
 			size.clone(),
 			// children
 			[

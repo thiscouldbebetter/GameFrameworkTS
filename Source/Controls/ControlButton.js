@@ -13,8 +13,8 @@ var ThisCouldBeBetter;
                 this.context = context;
                 this.canBeHeldDown = (canBeHeldDown == null ? false : canBeHeldDown);
                 // Helper variables.
-                this._drawLoc = GameFramework.Disposition.blank();
-                this._sizeHalf = GameFramework.Coords.blank();
+                this._drawLoc = GameFramework.Disposition.create();
+                this._sizeHalf = GameFramework.Coords.create();
             }
             static from8(name, pos, size, text, fontHeightInPixels, hasBorder, isEnabled, click) {
                 return new ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isEnabled, click, null, null);

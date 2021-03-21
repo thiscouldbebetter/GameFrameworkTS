@@ -59,7 +59,7 @@ var ThisCouldBeBetter;
                     var display = universe.display;
                     display.drawBackground("Black", "Black");
                     universe.platformHelper.platformableShow(display);
-                    universe.venueNext = new GameFramework.VenueFader(this.venueNext, this, null, null);
+                    universe.venueNext = universe.controlBuilder.venueTransitionalFromTo(this, this.venueNext);
                 }
             }
         }

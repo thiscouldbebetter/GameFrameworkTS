@@ -93,7 +93,7 @@ var ThisCouldBeBetter;
                 var crafter = this;
                 var back = () => {
                     var venueNext = venuePrev;
-                    venueNext = new GameFramework.VenueFader(venueNext, universe.venueCurrent, null, null);
+                    venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
                     universe.venueNext = venueNext;
                 };
                 var addToQueue = () => {
@@ -107,7 +107,7 @@ var ThisCouldBeBetter;
                         crafter.recipesQueued.push(crafter.recipeAvailableSelected);
                     }
                 };
-                var returnValue = new GameFramework.ControlContainer("Craft", GameFramework.Coords.blank(), // pos
+                var returnValue = new GameFramework.ControlContainer("Craft", GameFramework.Coords.create(), // pos
                 sizeBase.clone(), // size
                 // children
                 [

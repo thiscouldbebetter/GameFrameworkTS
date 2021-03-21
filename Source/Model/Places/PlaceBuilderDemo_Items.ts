@@ -177,7 +177,7 @@ export class PlaceBuilderDemo_Items
 
 		var pathTail = new Path
 		([
-			Coords.blank(),
+			Coords.create(),
 			new Coords(-.5, .25, 0),
 			new Coords(-.75, .25, 0),
 			new Coords(-.5, 0, 0),
@@ -316,8 +316,8 @@ export class PlaceBuilderDemo_Items
 				var venuePrev = universe.venueCurrent;
 				var back = function()
 				{
-					var venueNext = venuePrev;
-					venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
+					var venueNext: Venue = venuePrev;
+					venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
 					universe.venueNext = venueNext;
 				};
 
@@ -351,7 +351,7 @@ export class PlaceBuilderDemo_Items
 				var container = new ControlContainer
 				(
 					"containerBook",
-					Coords.blank(),
+					Coords.create(),
 					size.clone(),
 					[ textarea, button ], // children
 					[
@@ -361,8 +361,8 @@ export class PlaceBuilderDemo_Items
 					null
 				);
 
-				var venueNext: Venue = new VenueControls(container, false);
-				venueNext = new VenueFader(venueNext, null, null, null);
+				var venueNext: Venue = container.toVenue();
+				venueNext = VenueFader.fromVenueTo(venueNext);
 				universe.venueNext = venueNext;
 
 				return "";
@@ -1187,7 +1187,7 @@ export class PlaceBuilderDemo_Items
 					new Coords(this.entityDimensionHalf / 2, this.entityDimensionHalf, 0),
 					colorStem, null, null
 				),
-				Coords.blank()
+				Coords.create()
 			)
 		]);
 
@@ -1610,7 +1610,7 @@ export class PlaceBuilderDemo_Items
 			new VisualOffset
 			(
 				itemTorchVisualBody,
-				Coords.blank()
+				Coords.create()
 			),
 
 			new VisualOffset

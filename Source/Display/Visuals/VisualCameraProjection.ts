@@ -15,7 +15,7 @@ export class VisualCameraProjection implements Visual
 		this.cameraFactory = cameraFactory;
 
 		// Helper variables.
-		this._posSaved = Coords.blank();
+		this._posSaved = Coords.create();
 	}
 
 	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)

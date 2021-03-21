@@ -65,7 +65,7 @@ var ThisCouldBeBetter;
                 var back = function () {
                     itemBarterer.reset(entityCustomer, entityStore);
                     var venueNext = venuePrev;
-                    venueNext = new GameFramework.VenueFader(venueNext, universe.venueCurrent, null, null);
+                    venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
                     universe.venueNext = venueNext;
                 };
                 var itemOfferCustomer = () => {
@@ -118,7 +118,7 @@ var ThisCouldBeBetter;
                         }
                     }
                 };
-                var returnValue = new GameFramework.ControlContainer("containerTransfer", GameFramework.Coords.blank(), // pos
+                var returnValue = new GameFramework.ControlContainer("containerTransfer", GameFramework.Coords.create(), // pos
                 size.clone(), 
                 // children
                 [
