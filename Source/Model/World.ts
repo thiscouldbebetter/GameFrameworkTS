@@ -242,6 +242,11 @@ export class World
 		return universe.timerHelper.ticksToStringHours_Minutes_Seconds(this.timerTicksSoFar);
 	}
 
+	toVenue()
+	{
+		return new VenueWorld(this);
+	}
+
 	updateForTimerTick(universe: Universe)
 	{
 		if (this.placeNext != null)

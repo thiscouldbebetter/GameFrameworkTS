@@ -52,7 +52,7 @@ var ThisCouldBeBetter;
                          {
                             var worldSelected = saveStateSelected.world;
                             universe.world = worldSelected;
-                            var venueNext = new GameFramework.VenueWorld(worldSelected);
+                            var venueNext = worldSelected.toVenue();
                             venueNext = new GameFramework.VenueFader(venueNext, universe.venueCurrent, null, null);
                             universe.venueNext = venueNext;
                         });
@@ -432,7 +432,7 @@ var ThisCouldBeBetter;
                         var profileName = "Anon-" + nowAsString;
                         var profile = new Profile(profileName, []);
                         universe.profile = profile;
-                        var venueNext = new GameFramework.VenueWorld(universe.world);
+                        var venueNext = universe.world.toVenue();
                         venueNext = new GameFramework.VenueFader(venueNext, universe.venueCurrent, null, null);
                         universe.venueNext = venueNext;
                     });

@@ -663,7 +663,7 @@ var ThisCouldBeBetter;
                     () => // click
                      {
                         var world = universe.world;
-                        var venueWorld = new GameFramework.VenueWorld(world);
+                        var venueWorld = world.toVenue();
                         var venueNext;
                         if (world.dateSaved != null) {
                             venueNext = venueWorld;

@@ -144,6 +144,9 @@ var ThisCouldBeBetter;
             timePlayingAsStringLong(universe) {
                 return universe.timerHelper.ticksToStringHours_Minutes_Seconds(this.timerTicksSoFar);
             }
+            toVenue() {
+                return new GameFramework.VenueWorld(this);
+            }
             updateForTimerTick(universe) {
                 if (this.placeNext != null) {
                     if (this.placeCurrent != null) {

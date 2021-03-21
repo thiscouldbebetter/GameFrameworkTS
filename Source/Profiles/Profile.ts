@@ -94,7 +94,7 @@ export class Profile
 					{
 						var worldSelected = saveStateSelected.world;
 						universe.world = worldSelected;
-						var venueNext: Venue = new VenueWorld(worldSelected);
+						var venueNext: Venue = worldSelected.toVenue();
 						venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 						universe.venueNext = venueNext;
 					}
@@ -884,7 +884,7 @@ export class Profile
 					var profile = new Profile(profileName, []);
 					universe.profile = profile;
 
-					var venueNext: Venue = new VenueWorld(universe.world);
+					var venueNext: Venue = universe.world.toVenue();
 					venueNext = new VenueFader(venueNext, universe.venueCurrent, null, null);
 					universe.venueNext = venueNext;
 				}
