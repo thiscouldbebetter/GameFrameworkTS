@@ -51,7 +51,7 @@ export class ControlBase
 		);
 		return returnValue;
 	}
-	toVenue(): Venue { return VenueControls.fromControl(this); }
+	toVenue(): VenueControls { return VenueControls.fromControl(this); }
 }
 
 }
