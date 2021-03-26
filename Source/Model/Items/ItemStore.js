@@ -52,7 +52,7 @@ var ThisCouldBeBetter;
                 var itemHolderCustomer = entityCustomer.itemHolder();
                 var itemHolderStore = entityStore.itemHolder();
                 var world = universe.world;
-                var back = function () {
+                var back = () => {
                     var venueNext = venuePrev;
                     venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
                     universe.venueNext = venueNext;

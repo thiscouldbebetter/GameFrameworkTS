@@ -57,7 +57,8 @@ export class Sphere implements ShapeBase
 
 	locate(loc: Disposition): ShapeBase
 	{
-		return ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
+		this.center.overwriteWith(loc.pos);
+		return this;
 	}
 
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords

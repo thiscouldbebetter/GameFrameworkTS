@@ -291,7 +291,7 @@ export class Mesh_FaceBuilder
 		}
 		var returnValue = new Face(faceVertices);
 		return returnValue;
-	};
+	}
 
 	vertexIndicesShift(offset: number)
 	{

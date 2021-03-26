@@ -17,7 +17,7 @@ export class EntityBuilder
 			"Message" + text, // name
 			[
 				new Drawable(visual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 				new Ephemeral(ticksToLive, null),
 				new Locatable
 				(

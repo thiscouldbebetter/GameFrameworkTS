@@ -24,7 +24,7 @@ export class VisualImageImmediate implements VisualImage
 	image(universe: Universe): Image2
 	{
 		return this._image;
-	};
+	}
 
 	// visual
 
@@ -44,7 +44,7 @@ export class VisualImageImmediate implements VisualImage
 		{
 			display.drawImage(image, drawPos);
 		}
-	};
+	}
 
 	// Clonable.
 

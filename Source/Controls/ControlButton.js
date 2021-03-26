@@ -28,7 +28,6 @@ var ThisCouldBeBetter;
                 }
                 return (this.canBeHeldDown == false); // wasActionHandled
             }
-            ;
             isEnabled() {
                 return (this._isEnabled.get == null ? this._isEnabled : this._isEnabled.get());
             }

@@ -43,7 +43,6 @@ var ThisCouldBeBetter;
             random(randomizer) {
                 return this.min + (this.max - this.min) * randomizer.getNextRandom();
             }
-            ;
             size() {
                 return this.max - this.min;
             }

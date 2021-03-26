@@ -171,7 +171,6 @@ var ThisCouldBeBetter;
                 var returnValue = new GameFramework.Face(faceVertices);
                 return returnValue;
             }
-            ;
             vertexIndicesShift(offset) {
                 for (var i = 0; i < this.vertexIndices.length; i++) {
                     var vertexIndex = this.vertexIndices[i];

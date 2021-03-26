@@ -19,7 +19,6 @@ var ThisCouldBeBetter;
                 }
                 return returnValues;
             }
-            ;
             // instance methods
             image(universe) {
                 return universe.mediaLibrary.imageGetByName(this.imageName);
@@ -27,7 +26,7 @@ var ThisCouldBeBetter;
             // visual
             draw(universe, world, place, entity, display) {
                 var image = this.image(universe);
-                var imageSize = this.image(universe).sizeInPixels;
+                var imageSize = image.sizeInPixels;
                 var drawPos = this._drawPos.clear().subtract(imageSize).half().add(entity.locatable().loc.pos);
                 display.drawImageScaled(image, drawPos, imageSize);
             }

@@ -13,7 +13,7 @@ var ThisCouldBeBetter;
                 var messageEntity = new GameFramework.Entity("Message" + text, // name
                 [
                     new GameFramework.Drawable(visual, null),
-                    new GameFramework.DrawableCamera(),
+                    // new DrawableCamera(),
                     new GameFramework.Ephemeral(ticksToLive, null),
                     new GameFramework.Locatable(new GameFramework.Disposition(pos, null, null).velSet(new GameFramework.Coords(0, riseSpeed, 0))),
                 ]);

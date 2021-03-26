@@ -16,7 +16,7 @@ var ThisCouldBeBetter;
                 this.isLoaded = false;
             }
             defn(world) {
-                return world.defn.placeDefnsByName().get(this.defnName);
+                return world.defn.placeDefnByName(this.defnName);
             }
             draw(universe, world, display) {
                 var entitiesDrawable = this.entitiesByPropertyName(GameFramework.Drawable.name);
@@ -25,7 +25,8 @@ var ThisCouldBeBetter;
                     var drawable = entity.drawable();
                     drawable.updateForTimerTick(universe, world, this, entity);
                 }
-                this.camera().drawEntitiesInViewThenClear(universe, world, this, display);
+                var camera = this.camera();
+                camera.drawEntitiesInView(universe, world, this, display);
             }
             entitiesByPropertyName(propertyName) {
                 var returnValues = this._entitiesByPropertyName.get(propertyName);
@@ -137,6 +138,9 @@ var ThisCouldBeBetter;
             camera() {
                 var cameraEntity = this.entitiesByPropertyName(GameFramework.Camera.name)[0];
                 return (cameraEntity == null ? null : cameraEntity.camera());
+            }
+            drawables() {
+                return this.entitiesByPropertyName(GameFramework.Drawable.name);
             }
             items() {
                 return this.entitiesByPropertyName(GameFramework.Item.name);

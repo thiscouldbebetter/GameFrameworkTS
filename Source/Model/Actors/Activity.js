@@ -10,7 +10,7 @@ var ThisCouldBeBetter;
                 this.isDone = false;
             }
             defn(world) {
-                return world.defn.activityDefnsByName().get(this.defnName);
+                return world.defn.activityDefnByName(this.defnName);
             }
             defnNameAndTargetSet(defnName, target) {
                 this.defnName = defnName;

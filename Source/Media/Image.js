@@ -32,7 +32,7 @@ var ThisCouldBeBetter;
                 if (this.sourcePath != null) {
                     var image = this;
                     var imgElement = document.createElement("img");
-                    imgElement.onload = function (event) {
+                    imgElement.onload = (event) => {
                         var imgLoaded = event.target;
                         image.isLoaded = true;
                         image.systemImage = imgLoaded;

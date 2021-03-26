@@ -14,6 +14,7 @@ var ThisCouldBeBetter;
                 viewColliderSize.z = Number.POSITIVE_INFINITY;
                 this.viewCollider = new GameFramework.Box(this.loc.pos, viewColliderSize);
                 this.entitiesInView = [];
+                this._posSaved = GameFramework.Coords.create();
             }
             clipPlanes() {
                 if (this._clipPlanes == null) {
@@ -75,10 +76,48 @@ var ThisCouldBeBetter;
                 viewCoords.add(this.viewSizeHalf);
                 return viewCoords;
             }
-            drawEntitiesInViewThenClear(universe, world, place, display) {
+            drawEntitiesInView(universe, world, place, display) {
+                this.entitiesInView.length = 0;
                 this.loc.pos.round(); // hack - To prevent lines between map tiles.
+                var collisionHelper = universe.collisionHelper;
+                var placeEntitiesDrawable = place.drawables();
+                for (var i = 0; i < placeEntitiesDrawable.length; i++) {
+                    var entity = placeEntitiesDrawable[i];
+                    var drawable = entity.drawable();
+                    if (drawable.isVisible) {
+                        var entityPos = entity.locatable().loc.pos;
+                        this._posSaved.overwriteWith(entityPos);
+                        this.coordsTransformWorldToView(entityPos);
+                        var isEntityInView = false;
+                        var boundable = entity.boundable();
+                        if (boundable == null) // todo
+                         {
+                            isEntityInView = true;
+                        }
+                        else {
+                            var entityCollider = boundable.bounds;
+                            isEntityInView = collisionHelper.doCollidersCollide(entityCollider, this.viewCollider);
+                        }
+                        if (isEntityInView) {
+                            this.entitiesInView.push(entity);
+                        }
+                        entityPos.overwriteWith(this._posSaved);
+                    }
+                }
                 display.drawBackground("Black", "Black");
-                this.entitiesInView.sort((a, b) => {
+                this.entitiesSortByZThenY(this.entitiesInView);
+                for (var i = 0; i < this.entitiesInView.length; i++) {
+                    var entity = this.entitiesInView[i];
+                    var visual = entity.drawable().visual;
+                    var entityPos = entity.locatable().loc.pos;
+                    this._posSaved.overwriteWith(entityPos);
+                    this.coordsTransformWorldToView(entityPos);
+                    visual.draw(universe, world, place, entity, display);
+                    entityPos.overwriteWith(this._posSaved);
+                }
+            }
+            entitiesSortByZThenY(entitiesToSort) {
+                entitiesToSort.sort((a, b) => {
                     var aPos = a.locatable().loc.pos;
                     var bPos = b.locatable().loc.pos;
                     var returnValue;
@@ -90,12 +129,7 @@ var ThisCouldBeBetter;
                     }
                     return returnValue;
                 });
-                for (var i = 0; i < this.entitiesInView.length; i++) {
-                    var entity = this.entitiesInView[i];
-                    var visual = entity.drawable().visual;
-                    visual.drawImmediate(universe, world, place, entity, display);
-                }
-                this.entitiesInView.length = 0;
+                return entitiesToSort;
             }
             updateForTimerTick() {
                 // Do nothing.  Rendering is done in Place.draw().

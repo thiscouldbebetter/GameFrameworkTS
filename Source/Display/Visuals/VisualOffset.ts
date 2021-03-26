@@ -25,7 +25,7 @@ export class VisualOffset implements Visual
 		drawablePos.add(this.offset);
 		this.child.draw(universe, world, place, entity, display);
 		drawablePos.overwriteWith(this._posSaved);
-	};
+	}
 
 	// Clonable.
 

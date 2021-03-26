@@ -55,6 +55,7 @@ var ThisCouldBeBetter;
                     var entitiesWithProperty = place.entitiesByPropertyName(propertyName);
                     GameFramework.ArrayHelper.remove(entitiesWithProperty, this);
                 }
+                return this;
             }
             // Cloneable.
             clone() {
@@ -80,7 +81,6 @@ var ThisCouldBeBetter;
             damager() { return this.propertyByName(GameFramework.Damager.name); }
             device() { return this.propertyByName(GameFramework.Device.name); }
             drawable() { return this.propertyByName(GameFramework.Drawable.name); }
-            drawableCamera() { return this.propertyByName(GameFramework.DrawableCamera.name); }
             effectable() { return this.propertyByName(GameFramework.Effectable.name); }
             ephemeral() { return this.propertyByName(GameFramework.Ephemeral.name); }
             equipmentUser() { return this.propertyByName(GameFramework.EquipmentUser.name); }

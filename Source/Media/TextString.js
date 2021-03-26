@@ -21,7 +21,7 @@ var ThisCouldBeBetter;
                 var text = this;
                 var xmlHttpRequest = new XMLHttpRequest();
                 xmlHttpRequest.open("GET", this.sourcePath);
-                xmlHttpRequest.onreadystatechange = function () {
+                xmlHttpRequest.onreadystatechange = () => {
                     text.value = xmlHttpRequest.responseText;
                     text.isLoaded = true;
                 };

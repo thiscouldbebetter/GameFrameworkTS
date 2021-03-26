@@ -13,7 +13,6 @@ var ThisCouldBeBetter;
             clone() {
                 return new Transform_BonePose(this.boneName, this.cyclesToRotateAroundAxesDownRightForward);
             }
-            ;
             interpolateWith(other, fractionOfProgressTowardOther) {
                 var otherAsBonePose = other;
                 var cyclesToRotateAroundAxesDownRightForwardInterpolated = [];
@@ -27,7 +26,6 @@ var ThisCouldBeBetter;
                 var returnValue = new Transform_BonePose(this.boneName, cyclesToRotateAroundAxesDownRightForwardInterpolated);
                 return returnValue;
             }
-            ;
             overwriteWith(other) {
                 return this; // todo
             }
@@ -52,7 +50,6 @@ var ThisCouldBeBetter;
                 this.transform_Bone(quaternionsForRotation, boneToTransform);
                 return transformableToTransform;
             }
-            ;
             transform_Bone(quaternionsForRotation, boneToTransform) {
                 var axesToTransform = boneToTransform.orientation.axes;
                 for (var i = 0; i < quaternionsForRotation.length; i++) {
@@ -67,7 +64,6 @@ var ThisCouldBeBetter;
                     this.transform_Bone(quaternionsForRotation, childBone);
                 }
             }
-            ;
             transformCoords(coordsToTransform) {
                 return null; // todo
             }

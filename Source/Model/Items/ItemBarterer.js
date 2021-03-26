@@ -28,7 +28,6 @@ var ThisCouldBeBetter;
                 var profitMarginForStore = valueOfferedByCustomer / valueOfferedByStore;
                 return profitMarginForStore;
             }
-            ;
             patienceAdd(patienceToAdd) {
                 this.patience = GameFramework.NumberHelper.trimToRangeMax(this.patience + patienceToAdd, this.patienceMax);
             }
@@ -62,7 +61,7 @@ var ThisCouldBeBetter;
                 var itemHolderCustomer = entityCustomer.itemHolder();
                 var itemHolderStore = entityStore.itemHolder();
                 var world = universe.world;
-                var back = function () {
+                var back = () => {
                     itemBarterer.reset(entityCustomer, entityStore);
                     var venueNext = venuePrev;
                     venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);

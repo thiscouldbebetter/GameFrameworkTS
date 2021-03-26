@@ -68,7 +68,7 @@ export class RangeExtent
 	random(randomizer: Randomizer)
 	{
 		return this.min + (this.max - this.min) * randomizer.getNextRandom();
-	};
+	}
 
 	size()
 	{

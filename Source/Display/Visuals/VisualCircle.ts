@@ -27,7 +27,7 @@ export class VisualCircle implements Visual
 			Color.systemColorGet(this.colorBorder),
 			this.borderThickness
 		);
-	};
+	}
 
 	// Clonable.
 

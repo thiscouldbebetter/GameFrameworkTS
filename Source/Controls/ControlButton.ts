@@ -88,7 +88,7 @@ export class ControlButton extends ControlBase
 		}
 
 		return (this.canBeHeldDown == false); // wasActionHandled
-	};
+	}
 
 	isEnabled()
 	{

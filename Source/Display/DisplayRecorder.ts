@@ -52,7 +52,7 @@ export class DisplayRecorder
 				var reader = new FileReader();
 				reader.onload = () =>
 				{
-					var displayAsArrayBuffer = reader.result;
+					var displayAsArrayBuffer = reader.result as ArrayBuffer;
 					framesRecorded.push
 					(
 						displayAsArrayBuffer

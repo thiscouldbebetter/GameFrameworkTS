@@ -17,11 +17,9 @@ var ThisCouldBeBetter;
                 var returnValue = new DateTime(systemDate.getFullYear(), systemDate.getMonth() + 1, systemDate.getDate(), systemDate.getHours(), systemDate.getMinutes(), systemDate.getSeconds());
                 return returnValue;
             }
-            ;
             static now() {
                 return DateTime.fromSystemDate(new Date());
             }
-            ;
             // instance methods
             equals(other) {
                 var returnValue = (this.year == other.year
@@ -32,7 +30,6 @@ var ThisCouldBeBetter;
                     && this.seconds == other.seconds);
                 return returnValue;
             }
-            ;
             toStringMMDD_HHMM_SS() {
                 var returnValue = ""
                     + GameFramework.StringHelper.padStart("" + this.month, 2, "0")

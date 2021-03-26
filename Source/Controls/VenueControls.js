@@ -7,7 +7,7 @@ var ThisCouldBeBetter;
             constructor(controlRoot, ignoreKeyboardAndGamepadInputs) {
                 this.controlRoot = controlRoot;
                 ignoreKeyboardAndGamepadInputs = ignoreKeyboardAndGamepadInputs || false;
-                function buildGamepadInputs(inputName) {
+                var buildGamepadInputs = (inputName) => {
                     var numberOfGamepads = 1; // todo
                     var returnValues = [];
                     for (var i = 0; i < numberOfGamepads; i++) {
@@ -15,8 +15,7 @@ var ThisCouldBeBetter;
                         returnValues.push(inputNameForGamepad);
                     }
                     return returnValues;
-                }
-                ;
+                };
                 var controlActionNames = GameFramework.ControlActionNames.Instances();
                 var inputNames = GameFramework.Input.Names();
                 var inactivate = true;

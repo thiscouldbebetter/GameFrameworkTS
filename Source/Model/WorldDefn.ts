@@ -25,29 +25,29 @@ export class WorldDefn
 
 	// Convenience methods.
 
-	actionDefnsByName()
+	actionDefnByName(defnName: string)
 	{
-		return this.defnsByNameByTypeName.get(Action.name);
+		return this.defnsByNameByTypeName.get(Action.name).get(defnName);
 	}
 
-	activityDefnsByName()
+	activityDefnByName(defnName: string)
 	{
-		return this.defnsByNameByTypeName.get(ActivityDefn.name);
+		return this.defnsByNameByTypeName.get(ActivityDefn.name).get(defnName);
 	}
 
-	entityDefnsByName()
+	entityDefnByName(defnName: string)
 	{
-		return this.defnsByNameByTypeName.get(Entity.name);
+		return this.defnsByNameByTypeName.get(Entity.name).get(defnName);
 	}
 
-	itemDefnsByName()
+	itemDefnByName(defnName: string)
 	{
-		return this.defnsByNameByTypeName.get(ItemDefn.name);
+		return this.defnsByNameByTypeName.get(ItemDefn.name).get(defnName);
 	}
 
-	placeDefnsByName()
+	placeDefnByName(defnName: string)
 	{
-		return this.defnsByNameByTypeName.get(PlaceDefn.name);
+		return this.defnsByNameByTypeName.get(PlaceDefn.name).get(defnName);
 	}
 
 }

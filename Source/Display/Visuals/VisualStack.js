@@ -21,7 +21,6 @@ var ThisCouldBeBetter;
                 }
                 drawPos.overwriteWith(this._posSaved);
             }
-            ;
             // Clonable.
             clone() {
                 return new VisualStack(this.childSpacing.clone(), GameFramework.ArrayHelper.clone(this.children));

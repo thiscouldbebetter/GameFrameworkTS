@@ -17,20 +17,20 @@ var ThisCouldBeBetter;
                 }
             }
             // Convenience methods.
-            actionDefnsByName() {
-                return this.defnsByNameByTypeName.get(GameFramework.Action.name);
+            actionDefnByName(defnName) {
+                return this.defnsByNameByTypeName.get(GameFramework.Action.name).get(defnName);
             }
-            activityDefnsByName() {
-                return this.defnsByNameByTypeName.get(GameFramework.ActivityDefn.name);
+            activityDefnByName(defnName) {
+                return this.defnsByNameByTypeName.get(GameFramework.ActivityDefn.name).get(defnName);
             }
-            entityDefnsByName() {
-                return this.defnsByNameByTypeName.get(GameFramework.Entity.name);
+            entityDefnByName(defnName) {
+                return this.defnsByNameByTypeName.get(GameFramework.Entity.name).get(defnName);
             }
-            itemDefnsByName() {
-                return this.defnsByNameByTypeName.get(GameFramework.ItemDefn.name);
+            itemDefnByName(defnName) {
+                return this.defnsByNameByTypeName.get(GameFramework.ItemDefn.name).get(defnName);
             }
-            placeDefnsByName() {
-                return this.defnsByNameByTypeName.get(GameFramework.PlaceDefn.name);
+            placeDefnByName(defnName) {
+                return this.defnsByNameByTypeName.get(GameFramework.PlaceDefn.name).get(defnName);
             }
         }
         GameFramework.WorldDefn = WorldDefn;

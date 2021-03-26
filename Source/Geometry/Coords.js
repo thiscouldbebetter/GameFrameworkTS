@@ -167,7 +167,6 @@ var ThisCouldBeBetter;
                 }
                 return returnValue;
             }
-            ;
             invert() {
                 this.x = 0 - this.x;
                 this.y = 0 - this.y;

@@ -19,7 +19,6 @@ var ThisCouldBeBetter;
                 }
                 return returnValues;
             }
-            ;
             draw(universe, world, place, entity, display) {
                 var image = this.visualImage.image(universe);
                 var entityPos = entity.locatable().loc.pos;

@@ -78,7 +78,7 @@ export class Universe
 		display: Display,
 		mediaLibrary: MediaLibrary,
 		controlBuilder: ControlBuilder,
-		worldCreate: (u: Universe) => World,
+		worldCreate: (u: Universe) => World
 	)
 	{
 		var returnValue = new Universe

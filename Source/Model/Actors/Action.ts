@@ -30,7 +30,7 @@ export class Action
 			Action._instances = new Action_Instances();
 		}
 		return Action._instances;
-	};
+	}
 }
 
 class Action_Instances

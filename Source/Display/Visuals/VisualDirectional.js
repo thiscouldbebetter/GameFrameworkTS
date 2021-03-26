@@ -34,7 +34,6 @@ var ThisCouldBeBetter;
                 }
                 visualForHeading.draw(universe, world, place, entity, display);
             }
-            ;
             // Clonable.
             clone() {
                 return this; // todo

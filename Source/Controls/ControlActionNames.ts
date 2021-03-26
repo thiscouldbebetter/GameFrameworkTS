@@ -34,7 +34,7 @@ export class ControlActionNames
 		}
 
 		return ControlActionNames._instances;
-	};
+	}
 }
 
 }

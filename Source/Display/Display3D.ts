@@ -439,7 +439,7 @@ export class Display3D implements Display
 	)
 	{
 		this._display2DOverlay.drawArc(center, radiusInner, radiusOuter, angleStartInTurns, angleStopInTurns, colorFill, colorBorder);
-	};
+	}
 
 	drawBackground(colorBack: string, colorBorder: string)
 	{

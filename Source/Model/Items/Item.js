@@ -10,7 +10,7 @@ var ThisCouldBeBetter;
                 this.quantity = quantity;
             }
             defn(world) {
-                return world.defn.itemDefnsByName().get(this.defnName);
+                return world.defn.itemDefnByName(this.defnName);
             }
             isUsable(world) {
                 return (this.defn(world).use != null);

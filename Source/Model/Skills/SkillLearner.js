@@ -57,7 +57,6 @@ var ThisCouldBeBetter;
                     : skillBeingLearned.learningRequired);
                 return returnValue;
             }
-            ;
             skillSelected(skillsAllByName) {
                 return (this.skillSelectedName == null ? null : skillsAllByName.get(this.skillSelectedName));
             }

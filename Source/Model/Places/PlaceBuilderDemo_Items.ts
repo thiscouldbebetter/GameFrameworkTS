@@ -314,7 +314,7 @@ export class PlaceBuilderDemo_Items
 			(universe: Universe, world: World, place: Place, entityUser: Entity, entityItem: Entity) => // use
 			{
 				var venuePrev = universe.venueCurrent;
-				var back = function()
+				var back = () =>
 				{
 					var venueNext: Venue = venuePrev;
 					venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);

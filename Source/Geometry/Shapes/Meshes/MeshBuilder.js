@@ -296,7 +296,6 @@ var ThisCouldBeBetter;
                 var returnMeshTextured = new GameFramework.MeshTextured(returnMesh, [material], faceTextures, null).transformFaceTextures(new GameFramework.Transform_Scale(new GameFramework.Coords(1, 1, 1).multiplyScalar(2)));
                 return returnMeshTextured;
             }
-            ;
             unitCube(material) {
                 var returnMesh = this.unitCube_Geometry();
                 var returnMeshTextured = GameFramework.MeshTextured.fromMeshAndMaterials(returnMesh, [material]);
@@ -368,7 +367,6 @@ var ThisCouldBeBetter;
                 ], null);
                 return returnMeshTextured;
             }
-            ;
             clipFaceAgainstPlanes(faceToClip, planesToClipAgainst) {
                 for (var p = 0; p < planesToClipAgainst.length; p++) {
                     faceToClip = this.splitFaceByPlaneFrontAndBack(faceToClip, planesToClipAgainst[p])[0];

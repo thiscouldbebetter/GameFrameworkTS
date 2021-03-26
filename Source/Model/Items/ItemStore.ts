@@ -90,7 +90,7 @@ export class ItemStore extends EntityProperty
 
 		var world = universe.world;
 
-		var back = function()
+		var back = () =>
 		{
 			var venueNext: Venue = venuePrev;
 			venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);

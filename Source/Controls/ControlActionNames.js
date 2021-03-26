@@ -21,7 +21,6 @@ var ThisCouldBeBetter;
                 }
                 return ControlActionNames._instances;
             }
-            ;
         }
         GameFramework.ControlActionNames = ControlActionNames;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

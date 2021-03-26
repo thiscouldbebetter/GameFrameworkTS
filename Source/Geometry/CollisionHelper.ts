@@ -157,7 +157,7 @@ export class CollisionHelper
 		}
 
 		return lookupOfLookups;
-	};
+	}
 
 	doesContainLookupBuild()
 	{
@@ -196,7 +196,7 @@ export class CollisionHelper
 		}
 
 		return lookupOfLookups;
-	};
+	}
 
 	// instance methods
 
@@ -1354,6 +1354,11 @@ export class CollisionHelper
 		var collision = this.collisionOfHemispaceAndSphere(hemispace, sphere, this._collision.clear());
 
 		return collision.isActive;
+	}
+
+	doMeshAndBoxCollide(mesh: Mesh, box: Box)
+	{
+		return this.doBoxAndMeshCollide(box, mesh);
 	}
 
 	doMeshAndMeshCollide(mesh0: Mesh, mesh1: Mesh)

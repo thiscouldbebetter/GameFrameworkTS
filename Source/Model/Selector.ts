@@ -27,7 +27,7 @@ export class Selector extends EntityProperty
 			[
 				new Locatable(null),
 				new Drawable(visualReticle, false), // isVisible
-				new DrawableCamera()
+				// new DrawableCamera()
 			]
 		);
 	}
@@ -118,7 +118,6 @@ export class Selector extends EntityProperty
 			var reticleLoc = this.entityForReticle.locatable().loc;
 			reticleLoc.overwriteWith(entitySelected.locatable().loc);
 			reticleLoc.pos.z--;
-			this.entityForReticle.drawableCamera().initialize(u, w, p, this.entityForReticle);
 			this.entityForReticle.drawable().updateForTimerTick(u, w, p, this.entityForReticle);
 		}
 	}

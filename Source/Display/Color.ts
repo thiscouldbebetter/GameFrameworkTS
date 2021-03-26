@@ -55,7 +55,7 @@ export class Color implements Interpolatable
 		}
 
 		return Color._instances;
-	};
+	}
 
 	// methods
 
@@ -67,7 +67,7 @@ export class Color implements Interpolatable
 			this._systemColor = null;
 		}
 		return this.componentsRGBA[3];
-	};
+	}
 
 	multiplyRGBScalar(scalar: number)
 	{
@@ -76,7 +76,7 @@ export class Color implements Interpolatable
 			this.componentsRGBA[i] *= scalar;
 		}
 		return this;
-	};
+	}
 
 	systemColor()
 	{
@@ -92,7 +92,7 @@ export class Color implements Interpolatable
 		}
 
 		return this._systemColor;
-	};
+	}
 
 	// Clonable.
 

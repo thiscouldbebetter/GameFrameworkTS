@@ -17,7 +17,6 @@ var ThisCouldBeBetter;
                 this.child.draw(universe, world, place, entity, display);
                 drawablePos.overwriteWith(this._posSaved);
             }
-            ;
             // Clonable.
             clone() {
                 return this; // todo

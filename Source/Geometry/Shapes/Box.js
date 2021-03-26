@@ -85,6 +85,10 @@ var ThisCouldBeBetter;
                 }
                 return returnValue;
             }
+            locate(loc) {
+                this.center.overwriteWith(loc.pos);
+                return this;
+            }
             max() {
                 return this._max.overwriteWith(this.center).add(this.sizeHalf());
             }
@@ -169,7 +173,6 @@ var ThisCouldBeBetter;
             trimCoords(coordsToTrim) {
                 return coordsToTrim.trimToRangeMinMax(this.min(), this.max());
             }
-            ;
             vertices() {
                 if (this._vertices == null) {
                     this._vertices = [];
@@ -186,7 +189,6 @@ var ThisCouldBeBetter;
                 this.size.overwriteWith(other.size);
                 return this;
             }
-            ;
             // string
             toString() {
                 return this.min().toString() + ":" + this.max().toString();
@@ -203,7 +205,8 @@ var ThisCouldBeBetter;
             dimensionForSurfaceClosestToPoint(posToCheck, displacementOverSizeHalf) {
                 var greatestAbsoluteDisplacementDimensionSoFar = -1;
                 var dimensionIndex = null;
-                for (var d = 0; d < 3; d++) {
+                for (var d = 0; d < 3; d++) // dimension
+                 {
                     var displacementDimensionOverSizeHalf = displacementOverSizeHalf.dimensionGet(d);
                     var displacementDimensionOverSizeHalfAbsolute = Math.abs(displacementDimensionOverSizeHalf);
                     if (displacementDimensionOverSizeHalfAbsolute
@@ -214,9 +217,6 @@ var ThisCouldBeBetter;
                     }
                 }
                 return dimensionIndex;
-            }
-            locate(loc) {
-                return GameFramework.ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
             }
             normalAtPos(posToCheck, normalOut) {
                 var displacementOverSizeHalf = normalOut.overwriteWith(posToCheck).subtract(this.center).divide(this.sizeHalf());

@@ -36,7 +36,7 @@ export class VisualEllipse implements Visual
 			Color.systemColorGet(this.colorFill),
 			Color.systemColorGet(this.colorBorder)
 		);
-	};
+	}
 
 	// Clonable.
 

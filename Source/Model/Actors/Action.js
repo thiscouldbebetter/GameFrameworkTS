@@ -17,7 +17,6 @@ var ThisCouldBeBetter;
                 }
                 return Action._instances;
             }
-            ;
         }
         GameFramework.Action = Action;
         class Action_Instances {

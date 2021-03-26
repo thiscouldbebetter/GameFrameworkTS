@@ -44,7 +44,7 @@ export class VisualAnchor implements Visual
 
 		drawablePos.overwriteWith(this._posSaved);
 		drawableOrientation.overwriteWith(this._orientationSaved);
-	};
+	}
 
 	// Clonable.
 

@@ -80,6 +80,7 @@ export class Entity
 			var entitiesWithProperty = place.entitiesByPropertyName(propertyName);
 			ArrayHelper.remove(entitiesWithProperty, this);
 		}
+		return this;
 	}
 
 	// Cloneable.
@@ -114,7 +115,6 @@ export class Entity
 	damager(): Damager { return this.propertyByName(Damager.name) as Damager; }
 	device(): Device { return this.propertyByName(Device.name) as Device; }
 	drawable(): Drawable { return this.propertyByName(Drawable.name) as Drawable; }
-	drawableCamera(): DrawableCamera { return this.propertyByName(DrawableCamera.name) as DrawableCamera; }
 	effectable() : Effectable { return this.propertyByName(Effectable.name) as Effectable; }
 	ephemeral(): Ephemeral { return this.propertyByName(Ephemeral.name) as Ephemeral; }
 	equipmentUser(): EquipmentUser { return this.propertyByName(EquipmentUser.name) as EquipmentUser; }

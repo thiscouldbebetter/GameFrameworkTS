@@ -80,7 +80,6 @@ var ThisCouldBeBetter;
                 }
                 return returnValue;
             }
-            ;
             choiceList(universe, size, message, options, bindingForOptionText, buttonSelectText, select) {
                 // todo - Variable sizes.
                 var marginWidth = 10;
@@ -294,7 +293,7 @@ var ThisCouldBeBetter;
                 var fontHeight = this.fontHeightInPixelsBase;
                 var world = universe.world;
                 var placeCurrentDefnName = "Demo"; // hack
-                var placeDefn = world.defn.placeDefnsByName().get(placeCurrentDefnName);
+                var placeDefn = world.defn.placeDefnByName(placeCurrentDefnName);
                 placeDefn.actionToInputsMappingsEdit();
                 var returnValue = GameFramework.ControlContainer.from4("containerGameControls", this._zeroes, // pos
                 this.sizeBase.clone(), // size
@@ -405,7 +404,6 @@ var ThisCouldBeBetter;
                 returnValue.scalePosAndSize(scaleMultiplier);
                 return returnValue;
             }
-            ;
             message(universe, size, message, acknowledge, showMessageOnly) {
                 var optionNames = [];
                 var optionFunctions = [];
@@ -469,7 +467,7 @@ var ThisCouldBeBetter;
                 var row2PosY = row1PosY + rowHeight;
                 var row3PosY = row2PosY + rowHeight;
                 var row4PosY = row3PosY + rowHeight;
-                var back = function () {
+                var back = () => {
                     var venueNext = venuePrev;
                     venueNext = controlBuilder.venueTransitionalFromTo(universe.venueCurrent, venueNext);
                     universe.venueNext = venueNext;

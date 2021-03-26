@@ -30,7 +30,7 @@ export class TalkNodeDefn
 			TalkNodeDefn._instances = new TalkNodeDefn_Instances();
 		}
 		return TalkNodeDefn._instances;
-	};
+	}
 }
 
 class TalkNodeDefn_Instances

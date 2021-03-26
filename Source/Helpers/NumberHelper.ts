@@ -56,7 +56,7 @@ export class NumberHelper
 	static trimToRangeMax(n: number, max: number)
 	{
 		return NumberHelper.trimToRangeMinMax(n, 0, max);
-	};
+	}
 
 	static trimToRangeMinMax(n: number, min: number, max: number)
 	{

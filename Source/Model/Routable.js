@@ -45,7 +45,8 @@ var ThisCouldBeBetter;
                 nodesToBeConsidered.push(startNode);
                 var startPosAsString = startNode.pos.toString();
                 nodesToBeConsideredByName.set(startPosAsString, startNode);
-                while (nodesToBeConsidered.length > 0) {
+                while (nodesToBeConsidered.length > 0) // && nodesToBeConsidered.length < this.lengthMax)
+                 {
                     var nodeBeingConsidered = nodesToBeConsidered[0];
                     if (nodeBeingConsidered.pos.equalsXY(goalPos)) {
                         break;

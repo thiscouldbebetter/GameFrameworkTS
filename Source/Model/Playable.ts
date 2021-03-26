@@ -174,7 +174,7 @@ export class Playable extends EntityProperty
 		var fontHeightInPixels = 10;
 		var margin = 10;
 
-		var itemDefnsByName = world.defn.itemDefnsByName();
+		var worldDefn = world.defn;
 
 		var playerVisualBarSize = new Coords(entityDimension * 4, entityDimension, 0);
 
@@ -192,7 +192,7 @@ export class Playable extends EntityProperty
 			null // text
 		);
 
-		var playerVisualHealthIcon = itemDefnsByName.get("Heart").visual;
+		var playerVisualHealthIcon = worldDefn.itemDefnByName("Heart").visual;
 
 		var playerVisualHealthBarPlusIcon = new VisualGroup
 		([
@@ -218,7 +218,7 @@ export class Playable extends EntityProperty
 			null // text
 		);
 
-		var playerVisualSatietyIcon = itemDefnsByName.get("Bread").visual;
+		var playerVisualSatietyIcon = worldDefn.itemDefnByName("Bread").visual;
 
 		var playerVisualSatietyBarPlusIcon = new VisualGroup
 		([

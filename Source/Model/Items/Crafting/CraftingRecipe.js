@@ -27,7 +27,6 @@ var ThisCouldBeBetter;
             itemsInHeldOverRequiredForItemHolder(itemHolder) {
                 return this.itemsIn.map(x => x.defnName + " (" + itemHolder.itemQuantityByDefnName(x.defnName) + "/" + x.quantity + ")");
             }
-            ;
             nameAndSecondsToCompleteAsString(universe) {
                 return this.name + " (" + this.secondsToComplete(universe) + "s)";
             }

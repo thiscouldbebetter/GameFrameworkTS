@@ -190,7 +190,6 @@ var ThisCouldBeBetter;
             drawArc(center, radiusInner, radiusOuter, angleStartInTurns, angleStopInTurns, colorFill, colorBorder) {
                 this._display2DOverlay.drawArc(center, radiusInner, radiusOuter, angleStartInTurns, angleStopInTurns, colorFill, colorBorder);
             }
-            ;
             drawBackground(colorBack, colorBorder) {
                 this._display2DOverlay.drawBackground(colorBack, colorBorder);
             }

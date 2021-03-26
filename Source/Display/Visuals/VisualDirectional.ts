@@ -66,7 +66,7 @@ export class VisualDirectional implements Visual
 		}
 
 		visualForHeading.draw(universe, world, place, entity, display);
-	};
+	}
 
 	// Clonable.
 

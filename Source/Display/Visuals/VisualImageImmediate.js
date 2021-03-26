@@ -14,7 +14,6 @@ var ThisCouldBeBetter;
             image(universe) {
                 return this._image;
             }
-            ;
             // visual
             draw(universe, world, place, entity, display) {
                 var image = this.image(universe);
@@ -27,7 +26,6 @@ var ThisCouldBeBetter;
                     display.drawImage(image, drawPos);
                 }
             }
-            ;
             // Clonable.
             clone() {
                 return this; // todo

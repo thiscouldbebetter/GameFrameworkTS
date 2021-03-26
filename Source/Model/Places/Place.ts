@@ -31,7 +31,7 @@ export class Place
 
 	defn(world: World)
 	{
-		return world.defn.placeDefnsByName().get(this.defnName);
+		return world.defn.placeDefnByName(this.defnName);
 	}
 
 	draw(universe: Universe, world: World, display: Display)
@@ -43,7 +43,8 @@ export class Place
 			var drawable = entity.drawable();
 			drawable.updateForTimerTick(universe, world, this, entity);
 		}
-		this.camera().drawEntitiesInViewThenClear(universe, world, this, display);
+		var camera = this.camera();
+		camera.drawEntitiesInView(universe, world, this, display);
 	}
 
 	entitiesByPropertyName(propertyName: string)
@@ -207,6 +208,11 @@ export class Place
 	{
 		var cameraEntity = this.entitiesByPropertyName(Camera.name)[0];
 		return (cameraEntity == null ? null : cameraEntity.camera());
+	}
+
+	drawables()
+	{
+		return this.entitiesByPropertyName(Drawable.name);
 	}
 
 	items()

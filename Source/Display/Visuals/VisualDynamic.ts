@@ -15,7 +15,7 @@ export class VisualDynamic implements Visual
 	{
 		var visual = this.methodForVisual.call(this, universe, world, display, entity);
 		visual.draw(universe, world, place, entity, display);
-	};
+	}
 
 	// Clonable.
 

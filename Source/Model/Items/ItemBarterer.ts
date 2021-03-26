@@ -50,7 +50,7 @@ export class ItemBarterer extends EntityProperty
 		var profitMarginForStore = valueOfferedByCustomer / valueOfferedByStore;
 
 		return profitMarginForStore;
-	};
+	}
 
 	patienceAdd(patienceToAdd: number)
 	{
@@ -101,7 +101,7 @@ export class ItemBarterer extends EntityProperty
 
 		var world = universe.world;
 
-		var back = function()
+		var back = () =>
 		{
 			itemBarterer.reset(entityCustomer, entityStore);
 			var venueNext: Venue = venuePrev;

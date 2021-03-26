@@ -194,7 +194,7 @@ export class PlaceBuilderDemo_Movers
 				new Collidable(0, carnivoreCollider, null, null),
 				new Constrainable([constraintSpeedMax1]),
 				new Drawable(carnivoreVisual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 				new Killable(10, null, carnivoreDie),
 				new Locatable(new Disposition(Coords.create(), null, null) )
 			]
@@ -340,7 +340,7 @@ export class PlaceBuilderDemo_Movers
 				new Collidable(0, enemyCollider, null, null),
 				new Damager(new Damage(10, damageTypeName, null)),
 				new Drawable(enemyVisual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 				new Effectable([]),
 				new Enemy(weapon),
 				enemyKillable,
@@ -850,7 +850,7 @@ export class PlaceBuilderDemo_Movers
 				constrainable,
 				collidable,
 				new Drawable(friendlyVisual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 				itemHolder,
 				new Locatable(null),
 				routable,
@@ -859,7 +859,7 @@ export class PlaceBuilderDemo_Movers
 		);
 
 		return friendlyEntityDefn;
-	};
+	}
 
 	entityDefnBuildGrazer(entityDimension: number): Entity
 	{
@@ -1091,7 +1091,7 @@ export class PlaceBuilderDemo_Movers
 				new Collidable(0, grazerCollider, null, null),
 				new Constrainable([constraintSpeedMax1]),
 				new Drawable(grazerVisual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 				new Killable(10, null, grazerDie),
 				new Locatable(new Disposition(Coords.create(), null, null) )
 			]
@@ -1535,15 +1535,13 @@ export class PlaceBuilderDemo_Movers
 			(universe: Universe, world: World, place: Place, entityPlayer: Entity, activity: Activity) =>
 		{
 			var drawable = entityPlayer.drawable();
-			var visualAsCameraProjection =
-				drawable.visual as VisualCameraProjection;
 
 			var ticksToWait = activity.target as number;
 			if (ticksToWait == null)
 			{
-				visualAsCameraProjection.child = new VisualGroup
+				drawable.visual = new VisualGroup
 				([
-					visualAsCameraProjection.child,
+					drawable.visual,
 					new VisualOffset
 					(
 						VisualText.fromTextAndColor
@@ -1563,8 +1561,8 @@ export class PlaceBuilderDemo_Movers
 			{
 				ticksToWait = null;
 				activity.defnName = "Player";
-				visualAsCameraProjection.child =
-					(visualAsCameraProjection.child as VisualGroup).children[0];
+				drawable.visual =
+					(drawable.visual as VisualGroup).children[0];
 			}
 			activity.target = ticksToWait;
 		};
@@ -1594,7 +1592,7 @@ export class PlaceBuilderDemo_Movers
 				constrainable,
 				controllable,
 				new Drawable(playerVisual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 				new Effectable([]),
 				equipmentUser,
 				/*

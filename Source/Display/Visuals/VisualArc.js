@@ -25,7 +25,6 @@ var ThisCouldBeBetter;
                 display.drawArc(drawPos, // center
                 this.radiusInner, this.radiusOuter, wedgeAngleMin, wedgeAngleMax, GameFramework.Color.systemColorGet(this.colorFill), GameFramework.Color.systemColorGet(this.colorBorder));
             }
-            ;
             // Clonable.
             clone() {
                 return new VisualArc(this.radiusOuter, this.radiusInner, this.directionMin.clone(), this.angleSpannedInTurns, this.colorFill.clone(), (this.colorBorder == null ? null : this.colorBorder.clone()));

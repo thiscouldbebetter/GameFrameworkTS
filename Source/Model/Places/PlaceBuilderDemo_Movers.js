@@ -101,7 +101,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Collidable(0, carnivoreCollider, null, null),
                     new GameFramework.Constrainable([constraintSpeedMax1]),
                     new GameFramework.Drawable(carnivoreVisual, null),
-                    new GameFramework.DrawableCamera(),
+                    // new DrawableCamera(),
                     new GameFramework.Killable(10, null, carnivoreDie),
                     new GameFramework.Locatable(new GameFramework.Disposition(GameFramework.Coords.create(), null, null))
                 ]);
@@ -169,7 +169,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Collidable(0, enemyCollider, null, null),
                     new GameFramework.Damager(new GameFramework.Damage(10, damageTypeName, null)),
                     new GameFramework.Drawable(enemyVisual, null),
-                    new GameFramework.DrawableCamera(),
+                    // new DrawableCamera(),
                     new GameFramework.Effectable([]),
                     new GameFramework.Enemy(weapon),
                     enemyKillable,
@@ -415,7 +415,7 @@ var ThisCouldBeBetter;
                     constrainable,
                     collidable,
                     new GameFramework.Drawable(friendlyVisual, null),
-                    new GameFramework.DrawableCamera(),
+                    // new DrawableCamera(),
                     itemHolder,
                     new GameFramework.Locatable(null),
                     routable,
@@ -423,7 +423,6 @@ var ThisCouldBeBetter;
                 ]);
                 return friendlyEntityDefn;
             }
-            ;
             entityDefnBuildGrazer(entityDimension) {
                 var grazerColor = GameFramework.Color.byName("Brown");
                 var grazerDimension = entityDimension;
@@ -539,7 +538,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Collidable(0, grazerCollider, null, null),
                     new GameFramework.Constrainable([constraintSpeedMax1]),
                     new GameFramework.Drawable(grazerVisual, null),
-                    new GameFramework.DrawableCamera(),
+                    // new DrawableCamera(),
                     new GameFramework.Killable(10, null, grazerDie),
                     new GameFramework.Locatable(new GameFramework.Disposition(GameFramework.Coords.create(), null, null))
                 ]);
@@ -766,11 +765,10 @@ var ThisCouldBeBetter;
                 playerActivity = new GameFramework.Activity(GameFramework.ActivityDefn.Instances().Simultaneous.name, [playerActivity]);
                 var playerActivityWaitPerform = (universe, world, place, entityPlayer, activity) => {
                     var drawable = entityPlayer.drawable();
-                    var visualAsCameraProjection = drawable.visual;
                     var ticksToWait = activity.target;
                     if (ticksToWait == null) {
-                        visualAsCameraProjection.child = new GameFramework.VisualGroup([
-                            visualAsCameraProjection.child,
+                        drawable.visual = new GameFramework.VisualGroup([
+                            drawable.visual,
                             new GameFramework.VisualOffset(GameFramework.VisualText.fromTextAndColor("Waiting", GameFramework.Color.byName("Gray")), new GameFramework.Coords(0, -entityDimension * 3, 0))
                         ]);
                         ticksToWait = 60; // 3 seconds.
@@ -781,8 +779,8 @@ var ThisCouldBeBetter;
                     else {
                         ticksToWait = null;
                         activity.defnName = "Player";
-                        visualAsCameraProjection.child =
-                            visualAsCameraProjection.child.children[0];
+                        drawable.visual =
+                            drawable.visual.children[0];
                     }
                     activity.target = ticksToWait;
                 };
@@ -801,7 +799,7 @@ var ThisCouldBeBetter;
                     constrainable,
                     controllable,
                     new GameFramework.Drawable(playerVisual, null),
-                    new GameFramework.DrawableCamera(),
+                    // new DrawableCamera(),
                     new GameFramework.Effectable([]),
                     equipmentUser,
                     /*

@@ -16,7 +16,6 @@ var ThisCouldBeBetter;
                 var propertyNamePrefixed = this.propertyNamePrefix + propertyName;
                 localStorage.removeItem(propertyNamePrefixed);
             }
-            ;
             deleteAll() {
                 var keysAll = Object.keys(localStorage);
                 var keysWithPrefix = keysAll.filter(x => x.startsWith(this.propertyNamePrefix));

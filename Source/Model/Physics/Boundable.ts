@@ -14,7 +14,7 @@ export class Boundable extends EntityProperty
 
 	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity)
 	{
-		this.bounds.center.overwriteWith(e.locatable().loc.pos);
+		this.bounds.locate(e.locatable().loc);
 	}
 
 	clone(): Boundable

@@ -271,7 +271,7 @@ export class SkeletonHelper
 		);
 
 		return returnValue;
-	};
+	}
 
 	static bipedAnimationDefnWalk()
 	{

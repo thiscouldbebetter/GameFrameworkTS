@@ -51,7 +51,6 @@ var ThisCouldBeBetter;
                 );
                 return returnValue;
             }
-            ;
             static directoryNew(directoryName) {
                 var header = TarFileEntryHeader.default();
                 header.fileName = directoryName;
@@ -68,7 +67,6 @@ var ThisCouldBeBetter;
                 header.checksumCalculate();
                 return header;
             }
-            ;
             static fromBytes(bytes) {
                 var reader = new GameFramework.ByteStreamFromBytes(bytes);
                 var fileName = reader.readStringOfLength(100).trim();
@@ -141,7 +139,6 @@ var ThisCouldBeBetter;
                 writer.writeStringPaddedToLength(GameFramework.StringHelper.padEnd("", 12, "\0"), 12); // reserved
                 return headerAsBytes;
             }
-            ;
             // strings
             toString() {
                 var newline = "\n";
@@ -153,7 +150,6 @@ var ThisCouldBeBetter;
                     + newline;
                 return returnValue;
             }
-            ;
         }
         TarFileEntryHeader.FileNameMaxLength = 99;
         TarFileEntryHeader.SizeInBytes = 500;

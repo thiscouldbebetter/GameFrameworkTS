@@ -194,7 +194,6 @@ var ThisCouldBeBetter;
                 ]);
                 return returnValue;
             }
-            ;
             circleWithEyesAndLegsAndArms(circleRadius, circleColor, eyeRadius, visualEyes) {
                 var lineThickness = 2;
                 var circleWithEyesAndLegs = this.circleWithEyesAndLegs(circleRadius, circleColor, eyeRadius, visualEyes);
@@ -205,7 +204,7 @@ var ThisCouldBeBetter;
                     var itemDrawable = entityWieldableEquipped.drawable();
                     var itemVisual = (itemDrawable == null
                         ? entityWieldableEquipped.item().defn(w).visual
-                        : itemDrawable.visual.child);
+                        : itemDrawable.visual);
                     return itemVisual;
                 });
                 var orientationToAnchorTo = GameFramework.Orientation.Instances().ForwardXDownZ;

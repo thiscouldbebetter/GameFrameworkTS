@@ -264,7 +264,7 @@ export class Coords
 		}
 
 		return returnValue;
-	};
+	}
 
 	invert(): Coords
 	{

@@ -29,7 +29,6 @@ var ThisCouldBeBetter;
                     fromPos.overwriteWith(toPos);
                 }
             }
-            ;
             // Clonable.
             clone() {
                 return this; // todo

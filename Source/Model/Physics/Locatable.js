@@ -50,8 +50,7 @@ var ThisCouldBeBetter;
                 return this.loc.pos.clone().subtract(posToCheck).magnitude();
             }
             entitySpawnWithDefnName(universe, world, place, entitySpawning, entityToSpawnDefnName) {
-                var entityDefns = world.defn.entityDefnsByName();
-                var entityDefnToSpawn = entityDefns.get(entityToSpawnDefnName);
+                var entityDefnToSpawn = world.defn.entityDefnByName(entityToSpawnDefnName);
                 var entityToSpawn = entityDefnToSpawn.clone();
                 var loc = entityToSpawn.locatable().loc;
                 loc.overwriteWith(entitySpawning.locatable().loc);

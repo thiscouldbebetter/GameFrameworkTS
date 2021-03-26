@@ -13,7 +13,6 @@ var ThisCouldBeBetter;
                     var socket = new GameFramework.EquipmentSocket(socketDefn.name, null);
                     this.sockets.push(socket);
                 }
-                ;
                 this.socketsByDefnName = GameFramework.ArrayHelper.addLookups(this.sockets, (x) => x.defnName);
             }
         }

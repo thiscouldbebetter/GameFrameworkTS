@@ -18,7 +18,7 @@ export class VenueControls implements Venue
 		this.controlRoot = controlRoot;
 		ignoreKeyboardAndGamepadInputs = ignoreKeyboardAndGamepadInputs || false;
 
-		function buildGamepadInputs(inputName: string)
+		var buildGamepadInputs = (inputName: string) =>
 		{
 			var numberOfGamepads = 1; // todo
 

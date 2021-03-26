@@ -26,7 +26,7 @@ export class Transform_BonePose implements Transform_Interpolatable
 			this.boneName,
 			this.cyclesToRotateAroundAxesDownRightForward
 		);
-	};
+	}
 
 	interpolateWith(other: Transform_Interpolatable, fractionOfProgressTowardOther: number): Transform_Interpolatable
 	{
@@ -51,7 +51,7 @@ export class Transform_BonePose implements Transform_Interpolatable
 		);
 
 		return returnValue;
-	};
+	}
 
 	overwriteWith(other: Transform)
 	{
@@ -94,7 +94,7 @@ export class Transform_BonePose implements Transform_Interpolatable
 		this.transform_Bone(quaternionsForRotation, boneToTransform);
 
 		return transformableToTransform;
-	};
+	}
 
 	transform_Bone(quaternionsForRotation: Quaternion[], boneToTransform: Bone)
 	{
@@ -119,7 +119,7 @@ export class Transform_BonePose implements Transform_Interpolatable
 			var childBone = boneToTransform.children[i];
 			this.transform_Bone(quaternionsForRotation, childBone);
 		}
-	};
+	}
 
 	transformCoords(coordsToTransform: Coords): Coords
 	{

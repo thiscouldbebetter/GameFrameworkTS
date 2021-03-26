@@ -29,7 +29,6 @@ var ThisCouldBeBetter;
                 }
                 return Color._instances;
             }
-            ;
             // methods
             alpha(valueToSet) {
                 if (valueToSet != null) {
@@ -38,14 +37,12 @@ var ThisCouldBeBetter;
                 }
                 return this.componentsRGBA[3];
             }
-            ;
             multiplyRGBScalar(scalar) {
                 for (var i = 0; i < 3; i++) {
                     this.componentsRGBA[i] *= scalar;
                 }
                 return this;
             }
-            ;
             systemColor() {
                 if (this._systemColor == null) {
                     this._systemColor =
@@ -58,7 +55,6 @@ var ThisCouldBeBetter;
                 }
                 return this._systemColor;
             }
-            ;
             // Clonable.
             clone() {
                 return new Color(this.name, this.code, this.componentsRGBA.slice());

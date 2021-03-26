@@ -88,7 +88,7 @@ export class ControlScrollbar extends ControlBase
 		this.fontHeightInPixels *= scaleFactor.y;
 		this.buttonScrollUp.scalePosAndSize(scaleFactor);
 		this.buttonScrollDown.scalePosAndSize(scaleFactor);
-	};
+	}
 
 	scrollDown()
 	{

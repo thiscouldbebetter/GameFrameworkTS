@@ -140,7 +140,8 @@ var ThisCouldBeBetter;
                         if (direction == 1) {
                             indexOfItemSelected = 0;
                         }
-                        else {
+                        else // if (direction == -1)
+                         {
                             indexOfItemSelected = numberOfItems - 1;
                         }
                     }

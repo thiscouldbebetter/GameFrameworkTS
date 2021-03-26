@@ -82,7 +82,7 @@ var ThisCouldBeBetter;
                 var entityDimension = 10; // todo
                 var fontHeightInPixels = 10;
                 var margin = 10;
-                var itemDefnsByName = world.defn.itemDefnsByName();
+                var worldDefn = world.defn;
                 var playerVisualBarSize = new GameFramework.Coords(entityDimension * 4, entityDimension, 0);
                 var killable = entity.killable();
                 var playerVisualHealthBar = new GameFramework.VisualBar(null, // "H", // abbreviation
@@ -91,7 +91,7 @@ var ThisCouldBeBetter;
                 null, // colorForBorderAsValueBreakGroup
                 null // text
                 );
-                var playerVisualHealthIcon = itemDefnsByName.get("Heart").visual;
+                var playerVisualHealthIcon = worldDefn.itemDefnByName("Heart").visual;
                 var playerVisualHealthBarPlusIcon = new GameFramework.VisualGroup([
                     playerVisualHealthBar,
                     new GameFramework.VisualOffset(playerVisualHealthIcon, new GameFramework.Coords(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0, 0))
@@ -103,7 +103,7 @@ var ThisCouldBeBetter;
                 null, // colorForBorderAsValueBreakGroup
                 null // text
                 );
-                var playerVisualSatietyIcon = itemDefnsByName.get("Bread").visual;
+                var playerVisualSatietyIcon = worldDefn.itemDefnByName("Bread").visual;
                 var playerVisualSatietyBarPlusIcon = new GameFramework.VisualGroup([
                     playerVisualSatietyBar,
                     new GameFramework.VisualOffset(playerVisualSatietyIcon, new GameFramework.Coords(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0, 0))

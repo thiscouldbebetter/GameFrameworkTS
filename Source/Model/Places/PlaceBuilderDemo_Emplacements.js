@@ -46,7 +46,7 @@ var ThisCouldBeBetter;
                 var itemAnvilEntityDefn = new GameFramework.Entity(anvilName, [
                     new GameFramework.Locatable(new GameFramework.Disposition(GameFramework.Coords.create(), null, null)),
                     new GameFramework.Drawable(anvilVisual, null),
-                    new GameFramework.DrawableCamera(),
+                    // new DrawableCamera(),
                     anvilItemCrafter,
                     new GameFramework.ItemHolder([], null, null),
                     new GameFramework.Usable(anvilUse)
@@ -84,7 +84,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Locatable(new GameFramework.Disposition(GameFramework.Coords.create(), null, null)),
                     collidable,
                     new GameFramework.Drawable(itemBoulderVisual, null),
-                    new GameFramework.DrawableCamera(),
+                    // new DrawableCamera(),
                     killable
                 ]);
                 return itemBoulderEntityDefn;
@@ -134,12 +134,11 @@ var ThisCouldBeBetter;
                     new GameFramework.Animatable(null, null, null),
                     campfireCollidable,
                     new GameFramework.Drawable(campfireVisual, null),
-                    new GameFramework.DrawableCamera(),
+                    // new DrawableCamera(),
                     new GameFramework.Locatable(null)
                 ]);
                 return campfireEntityDefn;
             }
-            ;
             entityDefnBuildContainer(entityDimension) {
                 var containerColor = GameFramework.Color.byName("Orange");
                 var entitySize = new GameFramework.Coords(1.5, 1, 0).multiplyScalar(entityDimension);
@@ -155,7 +154,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Collidable(0, // ticksToWaitBetweenCollisions
                     new GameFramework.Box(GameFramework.Coords.create(), entitySize), null, null),
                     new GameFramework.Drawable(visual, null),
-                    new GameFramework.DrawableCamera(),
+                    // new DrawableCamera(),
                     new GameFramework.ItemContainer(),
                     new GameFramework.ItemHolder([], null, null),
                     new GameFramework.Locatable(null),
@@ -190,7 +189,7 @@ var ThisCouldBeBetter;
                 var exitEntityDefn = new GameFramework.Entity("Exit", [
                     collidable,
                     new GameFramework.Drawable(visual, null),
-                    new GameFramework.DrawableCamera(),
+                    // new DrawableCamera(),
                     new GameFramework.Locatable(new GameFramework.Disposition(GameFramework.Coords.create(), null, null)),
                     new GameFramework.Portal(null, null, GameFramework.Coords.create()),
                     new GameFramework.Usable((u, w, p, eUsing, eUsed) => {
@@ -227,7 +226,7 @@ var ThisCouldBeBetter;
                     new GameFramework.ItemHolder([], null, null),
                     new GameFramework.Locatable(new GameFramework.Disposition(GameFramework.Coords.create(), null, null)),
                     new GameFramework.Drawable(itemHoleVisual, null),
-                    new GameFramework.DrawableCamera(),
+                    // new DrawableCamera(),
                     new GameFramework.Perceptible(false, () => 0, () => 0),
                     new GameFramework.Usable(use)
                 ]);
@@ -253,7 +252,7 @@ var ThisCouldBeBetter;
                     obstacleCollidable,
                     new GameFramework.Damager(new GameFramework.Damage(10, null, null)),
                     new GameFramework.Drawable(visual, null),
-                    new GameFramework.DrawableCamera(),
+                    // new DrawableCamera(),
                     new GameFramework.Locatable(new GameFramework.Disposition(GameFramework.Coords.create(), null, null))
                 ]);
                 return obstacleBarEntityDefn;
@@ -306,7 +305,7 @@ var ThisCouldBeBetter;
                     obstacleCollidable,
                     new GameFramework.Damager(new GameFramework.Damage(10, null, null)),
                     new GameFramework.Drawable(obstacleMappedVisual, null),
-                    new GameFramework.DrawableCamera(),
+                    // new DrawableCamera(),
                     new GameFramework.Locatable(new GameFramework.Disposition(GameFramework.Coords.create(), null, null))
                 ]);
                 return obstacleMappedEntityDefn;
@@ -331,7 +330,6 @@ var ThisCouldBeBetter;
                     obstacleCollidable,
                     //new Damager(new Damage(10, null, null)),
                     new GameFramework.Drawable(obstacleRingVisual, null),
-                    new GameFramework.DrawableCamera()
                 ]);
                 return obstacleRingEntityDefn;
             }
@@ -354,7 +352,7 @@ var ThisCouldBeBetter;
                 var itemPillowEntityDefn = new GameFramework.Entity(pillowName, [
                     new GameFramework.Locatable(new GameFramework.Disposition(GameFramework.Coords.create(), null, null)),
                     new GameFramework.Drawable(pillowVisual, null),
-                    new GameFramework.DrawableCamera(),
+                    // new DrawableCamera(),
                     new GameFramework.ItemHolder([], null, null),
                     new GameFramework.Usable(pillowUse)
                 ]);
@@ -383,7 +381,7 @@ var ThisCouldBeBetter;
                 var portalEntity = new GameFramework.Entity("Portal", [
                     new GameFramework.Collidable(0, new GameFramework.Box(GameFramework.Coords.create(), entitySize), null, null),
                     new GameFramework.Drawable(visual, null),
-                    new GameFramework.DrawableCamera(),
+                    // new DrawableCamera(),
                     new GameFramework.Locatable(new GameFramework.Disposition(GameFramework.Coords.create(), null, null)),
                     new GameFramework.Portal(null, "Exit", GameFramework.Coords.create()),
                     new GameFramework.Usable(portalUse)
@@ -420,7 +418,6 @@ var ThisCouldBeBetter;
                     new GameFramework.Locatable(new GameFramework.Disposition(GameFramework.Coords.create(), null, null)),
                     collidable,
                     new GameFramework.Drawable(visual, null),
-                    new GameFramework.DrawableCamera()
                 ]);
                 return entityDefn;
             }
@@ -450,7 +447,6 @@ var ThisCouldBeBetter;
                     new GameFramework.Locatable(new GameFramework.Disposition(GameFramework.Coords.create(), null, null)),
                     collidable,
                     new GameFramework.Drawable(visual, null),
-                    new GameFramework.DrawableCamera()
                 ]);
                 return entityDefn;
             }

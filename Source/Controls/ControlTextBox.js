@@ -62,7 +62,8 @@ var ThisCouldBeBetter;
                         + text.substr(this.cursorPos + 1);
                     this.text(textEdited, null);
                 }
-                else if (actionNameToHandle.length == 1 || actionNameToHandle.startsWith("_")) {
+                else if (actionNameToHandle.length == 1 || actionNameToHandle.startsWith("_")) // printable character
+                 {
                     if (actionNameToHandle.startsWith("_")) {
                         if (actionNameToHandle == "_") {
                             actionNameToHandle = " ";

@@ -53,7 +53,8 @@ var ThisCouldBeBetter;
                     }
                     alphaOfFadeColor = fractionOfFadeCompleted;
                 }
-                else {
+                else // this.venueIndexCurrent == 1
+                 {
                     if (fractionOfFadeCompleted > 1) {
                         fractionOfFadeCompleted = 1;
                         universe.venueNext = this.venueCurrent();

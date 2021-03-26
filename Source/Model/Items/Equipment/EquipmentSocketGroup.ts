@@ -22,7 +22,7 @@ export class EquipmentSocketGroup
 			var socket = new EquipmentSocket(socketDefn.name, null);
 
 			this.sockets.push(socket);
-		};
+		}
 
 		this.socketsByDefnName = ArrayHelper.addLookups
 		(

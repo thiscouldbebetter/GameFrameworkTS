@@ -29,7 +29,7 @@ export class VisualImageScaled implements VisualImage
 			returnValues.push(visualScaled);
 		}
 		return returnValues;
-	};
+	}
 
 	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{

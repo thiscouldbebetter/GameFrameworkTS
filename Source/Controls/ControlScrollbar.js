@@ -50,7 +50,6 @@ var ThisCouldBeBetter;
                 this.buttonScrollUp.scalePosAndSize(scaleFactor);
                 this.buttonScrollDown.scalePosAndSize(scaleFactor);
             }
-            ;
             scrollDown() {
                 var sliderPosInItems = GameFramework.NumberHelper.trimToRangeMinMax(this.sliderPosInItems() + 1, 0, this.sliderMaxInItems());
                 this._sliderPosInItems = sliderPosInItems;

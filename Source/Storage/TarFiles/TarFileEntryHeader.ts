@@ -106,7 +106,7 @@ export class TarFileEntryHeader
 		);
 
 		return returnValue;
-	};
+	}
 
 	static directoryNew(directoryName: string): TarFileEntryHeader
 	{
@@ -128,7 +128,7 @@ export class TarFileEntryHeader
 		header.checksumCalculate();
 
 		return header;
-	};
+	}
 
 	static fromBytes(bytes: number[]): TarFileEntryHeader
 	{
@@ -257,7 +257,7 @@ export class TarFileEntryHeader
 		); // reserved
 
 		return headerAsBytes;
-	};
+	}
 
 	// strings
 
@@ -274,7 +274,7 @@ export class TarFileEntryHeader
 			+ newline;
 
 		return returnValue;
-	};
+	}
 }
 
 }

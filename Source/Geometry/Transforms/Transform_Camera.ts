@@ -4,7 +4,7 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Transform_Camera implements Transform
 {
-	camera: Camera;
+	_camera: Camera;
 
 	transformTranslateInvert: Transform_TranslateInvert;
 	transformOrientForCamera: Transform_OrientForCamera;
@@ -13,23 +13,23 @@ export class Transform_Camera implements Transform
 
 	constructor(camera: Camera)
 	{
-		this.camera = camera;
+		this._camera = camera;
 
 		this.transformTranslateInvert = new Transform_TranslateInvert
 		(
-			this.camera.loc.pos
+			camera.loc.pos
 		);
 		this.transformOrientForCamera = new Transform_OrientForCamera
 		(
-			this.camera.loc.orientation
+			camera.loc.orientation
 		);
 		this.transformPerspective = new Transform_Perspective
 		(
-			this.camera.focalLength
+			camera.focalLength
 		);
 		this.transformViewCenter = new Transform_Translate
 		(
-			this.camera.viewSizeHalf
+			camera.viewSizeHalf
 		);
 	}
 

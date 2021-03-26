@@ -101,7 +101,6 @@ var ThisCouldBeBetter;
                 this.graphics.lineTo(drawPos.x, drawPos.y + radius);
                 this.graphics.stroke();
             }
-            ;
             drawEllipse(center, semimajorAxis, semiminorAxis, rotationInTurns, colorFill, colorBorder) {
                 this.graphics.save();
                 this.graphics.translate(center.x, center.y);
@@ -181,7 +180,6 @@ var ThisCouldBeBetter;
                 this.graphics.stroke();
                 this.graphics.lineWidth = lineWidthSaved;
             }
-            ;
             drawPixel(pos, color) {
                 this.graphics.fillStyle = color;
                 this.graphics.fillRect(pos.x, pos.y, 1, 1);

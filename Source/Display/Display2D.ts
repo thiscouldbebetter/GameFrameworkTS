@@ -220,7 +220,7 @@ export class Display2D implements Display
 		this.graphics.moveTo(drawPos.x, drawPos.y - radius);
 		this.graphics.lineTo(drawPos.x, drawPos.y + radius);
 		this.graphics.stroke();
-	};
+	}
 
 	drawEllipse
 	(
@@ -360,7 +360,7 @@ export class Display2D implements Display
 		this.graphics.stroke();
 
 		this.graphics.lineWidth = lineWidthSaved;
-	};
+	}
 
 	drawPixel(pos: Coords, color: string)
 	{

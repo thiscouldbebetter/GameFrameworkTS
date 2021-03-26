@@ -59,7 +59,7 @@ export class Image2
 			var image = this;
 
 			var imgElement = document.createElement("img");
-			imgElement.onload = function(event)
+			imgElement.onload = (event) =>
 			{
 				var imgLoaded: any = event.target;
 				image.isLoaded = true;

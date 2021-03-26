@@ -125,7 +125,8 @@ var ThisCouldBeBetter;
             }
             constrain(universe, world, place, entity) {
                 var loc = entity.locatable().loc;
-                if (loc.pos.z < 0) {
+                if (loc.pos.z < 0) // hack
+                 {
                     loc.accel.add(this.accelerationPerTick);
                 }
             }

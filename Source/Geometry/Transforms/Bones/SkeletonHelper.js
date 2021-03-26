@@ -80,7 +80,6 @@ var ThisCouldBeBetter;
                 ]);
                 return returnValue;
             }
-            ;
             static bipedAnimationDefnWalk() {
                 var animationDefnBipedWalk = new GameFramework.AnimationDefn("Walk", [
                     new GameFramework.AnimationKeyframe(0, new Array(new GameFramework.Transform_BonePose("Bicep.L", [-.1]), new GameFramework.Transform_BonePose("Forearm.L", [0]), new GameFramework.Transform_BonePose("Thigh.L", [.1]), new GameFramework.Transform_BonePose("Shin.L", [0]), new GameFramework.Transform_BonePose("Bicep.R", [.1]), new GameFramework.Transform_BonePose("Forearm.R", [.1]), new GameFramework.Transform_BonePose("Thigh.R", [-.05]), new GameFramework.Transform_BonePose("Shin.R", [0]))),

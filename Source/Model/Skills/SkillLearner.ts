@@ -95,7 +95,7 @@ export class SkillLearner extends EntityProperty
 			: skillBeingLearned.learningRequired
 		);
 		return returnValue;
-	};
+	}
 
 	skillSelected(skillsAllByName: Map<string, Skill>)
 	{

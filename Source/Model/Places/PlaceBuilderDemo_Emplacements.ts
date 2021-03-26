@@ -84,7 +84,7 @@ export class PlaceBuilderDemo_Emplacements
 			[
 				new Locatable(new Disposition(Coords.create(), null, null) ),
 				new Drawable(anvilVisual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 				anvilItemCrafter,
 				new ItemHolder([], null, null),
 				new Usable(anvilUse)
@@ -162,7 +162,7 @@ export class PlaceBuilderDemo_Emplacements
 				new Locatable( new Disposition(Coords.create(), null, null) ),
 				collidable,
 				new Drawable(itemBoulderVisual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 				killable
 			]
 		);
@@ -254,13 +254,13 @@ export class PlaceBuilderDemo_Emplacements
 				new Animatable(null, null, null),
 				campfireCollidable,
 				new Drawable(campfireVisual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 				new Locatable(null)
 			]
 		);
 
 		return campfireEntityDefn;
-	};
+	}
 
 	entityDefnBuildContainer(entityDimension: number): Entity
 	{
@@ -304,7 +304,7 @@ export class PlaceBuilderDemo_Emplacements
 					new Box(Coords.create(), entitySize), null, null
 				),
 				new Drawable(visual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 				new ItemContainer(),
 				new ItemHolder([], null, null),
 				new Locatable(null),
@@ -385,7 +385,7 @@ export class PlaceBuilderDemo_Emplacements
 			[
 				collidable,
 				new Drawable(visual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 				new Locatable(new Disposition(Coords.create(), null, null) ),
 				new Portal(null, null, Coords.create()), // Destination must be set ouside this method.
 				new Usable
@@ -458,7 +458,7 @@ export class PlaceBuilderDemo_Emplacements
 				new ItemHolder([], null, null),
 				new Locatable( new Disposition(Coords.create(), null, null) ),
 				new Drawable(itemHoleVisual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 				new Perceptible(false, () => 0, () => 0),
 				new Usable(use)
 			]
@@ -511,7 +511,7 @@ export class PlaceBuilderDemo_Emplacements
 				obstacleCollidable,
 				new Damager(new Damage(10, null, null)),
 				new Drawable(visual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 				new Locatable(new Disposition(Coords.create(), null, null) )
 			]
 		);
@@ -608,7 +608,7 @@ export class PlaceBuilderDemo_Emplacements
 				obstacleCollidable,
 				new Damager(new Damage(10, null, null)),
 				new Drawable(obstacleMappedVisual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 				new Locatable(new Disposition(Coords.create(), null, null) )
 			]
 		);
@@ -663,7 +663,7 @@ export class PlaceBuilderDemo_Emplacements
 				obstacleCollidable,
 				//new Damager(new Damage(10, null, null)),
 				new Drawable(obstacleRingVisual, null),
-				new DrawableCamera()
+				// new DrawableCamera()
 			]
 		);
 
@@ -706,7 +706,7 @@ export class PlaceBuilderDemo_Emplacements
 			[
 				new Locatable(new Disposition(Coords.create(), null, null) ),
 				new Drawable(pillowVisual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 				new ItemHolder([], null, null),
 				new Usable(pillowUse)
 			]
@@ -769,7 +769,7 @@ export class PlaceBuilderDemo_Emplacements
 			[
 				new Collidable(0, new Box(Coords.create(), entitySize), null, null),
 				new Drawable(visual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 				new Locatable(new Disposition(Coords.create(), null, null) ),
 				new Portal(null, "Exit", Coords.create()),
 				new Usable(portalUse)
@@ -838,7 +838,7 @@ export class PlaceBuilderDemo_Emplacements
 				new Locatable( new Disposition(Coords.create(), null, null) ),
 				collidable,
 				new Drawable(visual, null),
-				new DrawableCamera()
+				// new DrawableCamera()
 			]
 		);
 
@@ -907,7 +907,7 @@ export class PlaceBuilderDemo_Emplacements
 				new Locatable( new Disposition(Coords.create(), null, null) ),
 				collidable,
 				new Drawable(visual, null),
-				new DrawableCamera()
+				// new DrawableCamera()
 			]
 		);
 

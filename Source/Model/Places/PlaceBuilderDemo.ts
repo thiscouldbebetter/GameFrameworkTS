@@ -218,7 +218,7 @@ export class PlaceBuilderDemo // Main.
 			"Tunnels",
 			[
 				new Drawable(tunnelsVisual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 				new Locatable(null)
 			]
 		);
@@ -685,7 +685,7 @@ export class PlaceBuilderDemo // Main.
 
 		var universe = this.universe;
 
-		var terrainNameToVisuals = function(terrainName: string)
+		var terrainNameToVisuals = (terrainName: string) =>
 		{
 			var imageName = "Terrain-" + terrainName;
 			var terrainVisualImageCombined = 
@@ -716,11 +716,11 @@ export class PlaceBuilderDemo // Main.
 			var tileOffsetInTilesHalf = Coords.create();
 			var visualOffsetInMapCellsHalf = Coords.create();
 
-			var offsetsToVisual = function
+			var offsetsToVisual =
 			(
 				tileOffsetInTilesHalf: Coords,
 				visualOffsetInMapCellsHalf: Coords
-			)
+			) =>
 			{
 				var terrainVisualBounds = Box.fromMinAndSize
 				(
@@ -1020,7 +1020,7 @@ export class PlaceBuilderDemo // Main.
 					),
 					cellCollidable.clone(),
 					new Drawable(cellVisual, null),
-					new DrawableCamera(),
+					// new DrawableCamera(),
 					new Locatable(new Disposition(cellPosInPixels, null, null)),
 					cellTerrain.traversable
 				]
@@ -1238,7 +1238,7 @@ export class PlaceBuilderDemo // Main.
 			[
 				new Locatable(new Disposition(new Coords(0, 0, camera.focalLength), null, null)),
 				new Drawable(visualBackgroundBottom, null),
-				new DrawableCamera()
+				// new DrawableCamera()
 			]
 		);
 		returnValues.push(entityBackgroundBottom);
@@ -1262,7 +1262,7 @@ export class PlaceBuilderDemo // Main.
 			[
 				new Locatable(null),
 				new Drawable(visualBackgroundTop, null),
-				new DrawableCamera()
+				// new DrawableCamera()
 			]
 		);
 		returnValues.push(entityBackgroundTop);
@@ -1383,7 +1383,7 @@ export class PlaceBuilderDemo // Main.
 				new Locatable(goalLoc),
 				new Collidable(0, new Box(Coords.create(), entitySize), null, null),
 				new Drawable(goalVisual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 				new Goal(numberOfKeysToUnlockGoal),
 			]
 		);
@@ -1419,7 +1419,7 @@ export class PlaceBuilderDemo // Main.
 					new Locatable( new Disposition(itemKeyPos, null, null) ),
 					new Collidable(0, itemKeyCollider, null, null),
 					new Drawable(itemKeyVisual, null),
-					new DrawableCamera()
+					// new DrawableCamera()
 				]
 			);
 
@@ -1594,7 +1594,7 @@ export class PlaceBuilderDemo // Main.
 						new Locatable(wallPartLoc),
 						wallCollidable,
 						new Drawable(wallVisual, null),
-						new DrawableCamera(),
+						// new DrawableCamera(),
 						wallObstacle
 					]
 				);
@@ -1767,7 +1767,7 @@ export class PlaceBuilderDemo // Main.
 			[
 				new Collidable(0, new Box(Coords.create(), entitySize), null, null),
 				new Drawable(visual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 				new ItemStore("Coin"),
 				new ItemHolder
 				(
@@ -1813,7 +1813,7 @@ export class PlaceBuilderDemo // Main.
 				new Locatable(null),
 				new Collidable(0, itemAccessoryCollider, null, null),
 				new Drawable(itemAccessoryVisual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 				new Equippable(null, null)
 			]
 		);
@@ -1844,7 +1844,7 @@ export class PlaceBuilderDemo // Main.
 				new Item(itemDefnArmorName, 1),
 				new Locatable(null),
 				new Drawable(itemArmorVisual, null),
-				new DrawableCamera()
+				// new DrawableCamera()
 			]
 		);
 
@@ -1876,7 +1876,7 @@ export class PlaceBuilderDemo // Main.
 				boundable,
 				collidable,
 				new Drawable(itemArrowVisual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 				new Item(itemDefnArrowName, roundsPerPile),
 				new Locatable(null),
 			]
@@ -1926,7 +1926,7 @@ export class PlaceBuilderDemo // Main.
 				var projectileDimension = 1.5;
 				var projectileVisual = new VisualGroup
 				([
-					(entityDevice.drawable().visual as VisualCameraProjection).child,
+					entityDevice.drawable().visual
 					// todo - Add sparks?
 				]);
 
@@ -1972,7 +1972,7 @@ export class PlaceBuilderDemo // Main.
 							new Collidable(0, explosionCollider, [ Killable.name ], explosionCollide),
 							new Damager(new Damage(20, null, null)),
 							new Drawable(explosionVisual, null),
-							new DrawableCamera(),
+							// new DrawableCamera(),
 							new Ephemeral(8, null),
 							entityDying.locatable()
 						]
@@ -1995,7 +1995,7 @@ export class PlaceBuilderDemo // Main.
 						),
 						new Constrainable([new Constraint_FrictionXY(.03, .5)]),
 						new Drawable(projectileVisual, null),
-						new DrawableCamera(),
+						// new DrawableCamera(),
 						new Equippable(null, null)
 					]
 				);
@@ -2013,7 +2013,7 @@ export class PlaceBuilderDemo // Main.
 				new Collidable(0, itemBombCollider, null, null),
 				itemBombDevice,
 				new Drawable(itemBombVisual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 				new Equippable(null, null)
 			]
 		);
@@ -2037,7 +2037,7 @@ export class PlaceBuilderDemo // Main.
 				new Locatable(null),
 				new Collidable(0, itemBookCollider, null, null),
 				new Drawable(itemBookVisual, null),
-				new DrawableCamera()
+				// new DrawableCamera()
 			]
 		);
 
@@ -2130,7 +2130,7 @@ export class PlaceBuilderDemo // Main.
 						[
 							new Ephemeral(8, null),
 							new Drawable(visualStrike, null),
-							new DrawableCamera(),
+							// new DrawableCamera(),
 							entityKillable.locatable()
 						]
 					);
@@ -2154,7 +2154,7 @@ export class PlaceBuilderDemo // Main.
 						projectileCollide
 					),
 					new Drawable(projectileVisual, null),
-					new DrawableCamera()
+					// new DrawableCamera()
 				]
 			);
 
@@ -2184,7 +2184,7 @@ export class PlaceBuilderDemo // Main.
 				new Locatable(null),
 				new Collidable(0, itemBowCollider, null, null),
 				new Drawable(itemBowVisual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 				new Equippable(null, null),
 				itemBowDevice
 			]
@@ -2209,7 +2209,7 @@ export class PlaceBuilderDemo // Main.
 				new Locatable(null),
 				new Collidable(0, itemBreadCollider, null, null),
 				new Drawable(itemBreadVisual, null),
-				new DrawableCamera()
+				// new DrawableCamera()
 			]
 		);
 
@@ -2328,7 +2328,7 @@ export class PlaceBuilderDemo // Main.
 				carCollidable,
 				carConstrainable,
 				new Drawable(carVisual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 				carUsable,
 				vehicle
 			]
@@ -2353,12 +2353,12 @@ export class PlaceBuilderDemo // Main.
 				new Locatable(null),
 				new Collidable(0, itemCoinCollider, null, null),
 				new Drawable(itemCoinVisual, null),
-				new DrawableCamera()
+				// new DrawableCamera()
 			]
 		);
 
 		return itemCoinEntityDefn;
-	};
+	}
 
 	entityDefnBuildCrystal(entityDimension: number): Entity
 	{
@@ -2374,7 +2374,7 @@ export class PlaceBuilderDemo // Main.
 			[
 				new Collidable(0, itemCrystalCollider, null, null),
 				new Drawable(itemCrystalVisual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 				new Item(itemDefnCrystalName, 1),
 				new Locatable(null)
 			]
@@ -2399,7 +2399,7 @@ export class PlaceBuilderDemo // Main.
 				new Locatable(null),
 				new Collidable(0, itemDoughnutCollider, null, null),
 				new Drawable(itemDoughnutVisual, null),
-				new DrawableCamera()
+				// new DrawableCamera()
 			]
 		);
 
@@ -2421,7 +2421,7 @@ export class PlaceBuilderDemo // Main.
 				new Locatable(null),
 				new Collidable(0, collider, null, null),
 				new Drawable(visual, null),
-				new DrawableCamera()
+				// new DrawableCamera()
 			]
 		);
 
@@ -2444,7 +2444,7 @@ export class PlaceBuilderDemo // Main.
 				new Locatable(null),
 				new Collidable(0, itemFruitCollider, null, null),
 				new Drawable(itemFruitVisual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 			]
 		);
 
@@ -2489,7 +2489,7 @@ export class PlaceBuilderDemo // Main.
 				new Locatable(null),
 				new Collidable(0, itemGrassCollider, null, null),
 				new Drawable(itemGrassVisual, null),
-				new DrawableCamera()
+				// new DrawableCamera()
 			]
 		);
 
@@ -2512,7 +2512,7 @@ export class PlaceBuilderDemo // Main.
 				new Locatable(null),
 				new Collidable(0, itemHeartCollider, null, null),
 				new Drawable(itemHeartVisual, null),
-				new DrawableCamera()
+				// new DrawableCamera()
 			]
 		);
 
@@ -2535,7 +2535,7 @@ export class PlaceBuilderDemo // Main.
 				new Locatable(null),
 				new Collidable(0, itemIronCollider, null, null),
 				new Drawable(itemIronVisual, null),
-				new DrawableCamera()
+				// new DrawableCamera()
 			]
 		);
 
@@ -2558,7 +2558,7 @@ export class PlaceBuilderDemo // Main.
 				new Locatable(null),
 				new Collidable(0, itemOreCollider, null, null),
 				new Drawable(itemOreVisual, null),
-				new DrawableCamera()
+				// new DrawableCamera()
 			]
 		);
 
@@ -2581,7 +2581,7 @@ export class PlaceBuilderDemo // Main.
 				new Locatable(null),
 				new Collidable(0, itemLogCollider, null, null),
 				new Drawable(itemLogVisual, null),
-				new DrawableCamera()
+				// new DrawableCamera()
 			]
 		);
 
@@ -2605,7 +2605,7 @@ export class PlaceBuilderDemo // Main.
 				new Locatable(null),
 				new Collidable(0, itemMeatCollider, null, null),
 				new Drawable(itemMeatVisual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 				new Usable(itemMeatDefn.use)
 			]
 		);
@@ -2629,7 +2629,7 @@ export class PlaceBuilderDemo // Main.
 				new Locatable(null),
 				new Collidable(0, itemMedicineCollider, null, null),
 				new Drawable(itemMedicineVisual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 				new Equippable(null, null)
 			]
 		);
@@ -2654,7 +2654,7 @@ export class PlaceBuilderDemo // Main.
 				new Locatable(null),
 				new Collidable(0, itemMushroomCollider, null, null),
 				new Drawable(itemMushroomVisual, null),
-				new DrawableCamera()
+				// new DrawableCamera()
 			]
 		);
 
@@ -2698,7 +2698,7 @@ export class PlaceBuilderDemo // Main.
 				new Collidable(0, itemPickCollider, null, null),
 				itemPickDevice,
 				new Drawable(itemPickVisual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 				new Equippable(null, null)
 			]
 		);
@@ -2753,7 +2753,7 @@ export class PlaceBuilderDemo // Main.
 				new Locatable(null),
 				new Collidable(0, itemPotionCollider, null, null),
 				new Drawable(itemPotionVisual, null),
-				new DrawableCamera()
+				// new DrawableCamera()
 			]
 		);
 
@@ -2811,7 +2811,7 @@ export class PlaceBuilderDemo // Main.
 				new Collidable(0, itemShovelCollider, null, null),
 				itemShovelDevice,
 				new Drawable(itemShovelVisual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 				new Equippable(null, null)
 			]
 		);
@@ -2882,7 +2882,6 @@ export class PlaceBuilderDemo // Main.
 			);
 
 			var projectileVisual = entityDevice.drawable().visual;
-			projectileVisual = (projectileVisual as VisualCameraProjection).child;
 			projectileVisual = (projectileVisual as VisualGroup).children[0].clone();
 			projectileVisual.transform(new Transform_RotateRight(1));
 
@@ -2919,7 +2918,7 @@ export class PlaceBuilderDemo // Main.
 						[
 							new Ephemeral(8, null),
 							new Drawable(visualStrike, null),
-							new DrawableCamera(),
+							// new DrawableCamera(),
 							entityKillable.locatable()
 						]
 					);
@@ -2962,7 +2961,7 @@ export class PlaceBuilderDemo // Main.
 						0, projectileCollider, [ Killable.name ], projectileCollide
 					),
 					new Drawable(projectileVisual, null),
-					new DrawableCamera()
+					// new DrawableCamera()
 				]
 			);
 
@@ -2996,7 +2995,7 @@ export class PlaceBuilderDemo // Main.
 				new Locatable(null),
 				new Collidable(0, itemSwordCollider, null, null),
 				new Drawable(itemSwordVisual, null),
-				new DrawableCamera(),
+				// new DrawableCamera(),
 				itemSwordDevice,
 				new Equippable(null, null)
 			]
@@ -3021,7 +3020,7 @@ export class PlaceBuilderDemo // Main.
 				new Locatable(null),
 				new Collidable(0, itemToolsetCollider, null, null),
 				new Drawable(itemToolsetVisual, null),
-				new DrawableCamera()
+				// new DrawableCamera()
 			]
 		);
 
@@ -3045,7 +3044,7 @@ export class PlaceBuilderDemo // Main.
 				new Locatable(null),
 				new Collidable(0, itemTorchCollider, null, null),
 				new Drawable(itemTorchVisual, null),
-				new DrawableCamera()
+				// new DrawableCamera()
 			]
 		);
 
@@ -3068,7 +3067,7 @@ export class PlaceBuilderDemo // Main.
 				new Locatable(null),
 				new Collidable(0, itemWeightCollider, null, null),
 				new Drawable(itemWeightVisual, null),
-				new DrawableCamera()
+				// new DrawableCamera()
 			]
 		);
 

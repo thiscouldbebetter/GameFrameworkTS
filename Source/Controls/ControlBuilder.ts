@@ -170,7 +170,7 @@ export class ControlBuilder
 		}
 
 		return returnValue;
-	};
+	}
 
 	choiceList
 	(
@@ -277,7 +277,7 @@ export class ControlBuilder
 				universe.venueCurrent, venuePrev
 			);
 			universe.venueNext = venueNext;
-		};
+		}
 
 		var cancelThenReturnToVenuePrev = () =>
 		{
@@ -290,7 +290,7 @@ export class ControlBuilder
 				universe.venueCurrent, venuePrev
 			);
 			universe.venueNext = venueNext;
-		};
+		}
 
 		return this.choice
 		(
@@ -339,7 +339,7 @@ export class ControlBuilder
 				 universe.venueCurrent, venueNext
 			);
 			universe.venueNext = venueNext;
-		};
+		}
 
 		var returnValue = new ControlContainer
 		(
@@ -648,7 +648,7 @@ export class ControlBuilder
 
 		var world = universe.world;
 		var placeCurrentDefnName = "Demo"; // hack
-		var placeDefn = world.defn.placeDefnsByName().get(placeCurrentDefnName);
+		var placeDefn = world.defn.placeDefnByName(placeCurrentDefnName);
 		placeDefn.actionToInputsMappingsEdit();
 
 		var returnValue = ControlContainer.from4
@@ -890,7 +890,7 @@ export class ControlBuilder
 		returnValue.scalePosAndSize(scaleMultiplier);
 
 		return returnValue;
-	};
+	}
 
 	message
 	(
@@ -1013,7 +1013,7 @@ export class ControlBuilder
 		var row3PosY = row2PosY + rowHeight;
 		var row4PosY = row3PosY + rowHeight;
 
-		var back = function()
+		var back = () =>
 		{
 			var venueNext = venuePrev;
 			venueNext = controlBuilder.venueTransitionalFromTo

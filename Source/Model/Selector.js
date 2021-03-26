@@ -13,7 +13,6 @@ var ThisCouldBeBetter;
                 this.entityForReticle = new GameFramework.Entity("Reticle", [
                     new GameFramework.Locatable(null),
                     new GameFramework.Drawable(visualReticle, false),
-                    new GameFramework.DrawableCamera()
                 ]);
             }
             entitiesDeselectAll() {
@@ -56,7 +55,6 @@ var ThisCouldBeBetter;
                     var reticleLoc = this.entityForReticle.locatable().loc;
                     reticleLoc.overwriteWith(entitySelected.locatable().loc);
                     reticleLoc.pos.z--;
-                    this.entityForReticle.drawableCamera().initialize(u, w, p, this.entityForReticle);
                     this.entityForReticle.drawable().updateForTimerTick(u, w, p, this.entityForReticle);
                 }
             }

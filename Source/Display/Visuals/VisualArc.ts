@@ -50,7 +50,7 @@ export class VisualArc implements Visual
 			Color.systemColorGet(this.colorFill),
 			Color.systemColorGet(this.colorBorder)
 		);
-	};
+	}
 
 	// Clonable.
 

@@ -139,6 +139,12 @@ export class Box implements ShapeBase
 		return returnValue;
 	}
 
+	locate(loc: Disposition)
+	{
+		this.center.overwriteWith(loc.pos);
+		return this;
+	}
+
 	max()
 	{
 		return this._max.overwriteWith(this.center).add(this.sizeHalf());
@@ -272,7 +278,7 @@ export class Box implements ShapeBase
 	trimCoords(coordsToTrim: Coords)
 	{
 		return coordsToTrim.trimToRangeMinMax(this.min(), this.max());
-	};
+	}
 
 	vertices()
 	{
@@ -296,7 +302,7 @@ export class Box implements ShapeBase
 		this.center.overwriteWith(other.center);
 		this.size.overwriteWith(other.size);
 		return this;
-	};
+	}
 
 	// string
 
@@ -345,11 +351,6 @@ export class Box implements ShapeBase
 		}
 
 		return dimensionIndex;
-	}
-
-	locate(loc: Disposition): ShapeBase
-	{
-		return ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
 	}
 
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords

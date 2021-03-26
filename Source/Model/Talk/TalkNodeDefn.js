@@ -15,7 +15,6 @@ var ThisCouldBeBetter;
                 }
                 return TalkNodeDefn._instances;
             }
-            ;
         }
         GameFramework.TalkNodeDefn = TalkNodeDefn;
         class TalkNodeDefn_Instances {

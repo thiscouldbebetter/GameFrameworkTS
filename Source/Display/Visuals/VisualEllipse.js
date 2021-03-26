@@ -17,7 +17,6 @@ var ThisCouldBeBetter;
                 var drawableRotationInTurns = drawableOrientation.forward.headingInTurns();
                 display.drawEllipse(drawableLoc.pos, this.semimajorAxis, this.semiminorAxis, GameFramework.NumberHelper.wrapToRangeZeroOne(this.rotationInTurns + drawableRotationInTurns), GameFramework.Color.systemColorGet(this.colorFill), GameFramework.Color.systemColorGet(this.colorBorder));
             }
-            ;
             // Clonable.
             clone() {
                 return this; // todo

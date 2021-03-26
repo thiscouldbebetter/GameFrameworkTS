@@ -616,7 +616,7 @@ export class MeshBuilder
 		);
 
 		return returnMeshTextured;
-	};
+	}
 
 	unitCube(material: Material)
 	{
@@ -729,7 +729,7 @@ export class MeshBuilder
 		);
 
 		return returnMeshTextured;
-	};
+	}
 
 	clipFaceAgainstPlanes(faceToClip: FaceTextured, planesToClipAgainst: Plane[])
 	{

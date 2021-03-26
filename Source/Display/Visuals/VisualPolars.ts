@@ -49,7 +49,7 @@ export class VisualPolars implements Visual
 
 			fromPos.overwriteWith(toPos);
 		}
-	};
+	}
 
 	// Clonable.
 

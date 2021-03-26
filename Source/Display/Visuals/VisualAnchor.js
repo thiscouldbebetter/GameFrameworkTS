@@ -28,7 +28,6 @@ var ThisCouldBeBetter;
                 drawablePos.overwriteWith(this._posSaved);
                 drawableOrientation.overwriteWith(this._orientationSaved);
             }
-            ;
             // Clonable.
             clone() {
                 return this; // todo

@@ -34,7 +34,8 @@ var ThisCouldBeBetter;
             }
             // ShapeBase.
             locate(loc) {
-                return GameFramework.ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
+                this.center.overwriteWith(loc.pos);
+                return this;
             }
             normalAtPos(posToCheck, normalOut) {
                 return normalOut.overwriteWith(posToCheck).subtract(this.center).normalize();

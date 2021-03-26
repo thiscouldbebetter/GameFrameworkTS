@@ -223,7 +223,6 @@ var ThisCouldBeBetter;
                     button.isHighlighted = (i == this.childSelectedIndex);
                     button.draw(universe, display, drawLoc);
                 }
-                ;
                 var child = this.childSelected();
                 if (child != null) {
                     child.draw(universe, display, drawLoc, style);

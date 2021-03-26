@@ -10,7 +10,7 @@ var ThisCouldBeBetter;
                 this.inactivateInputWhenActionPerformed = inactivateInputWhenActionPerformed;
             }
             action(universe) {
-                return universe.world.defn.actionDefnsByName().get(this.actionName);
+                return universe.world.defn.actionDefnByName(this.actionName);
             }
             // Cloneable implementation.
             clone() {

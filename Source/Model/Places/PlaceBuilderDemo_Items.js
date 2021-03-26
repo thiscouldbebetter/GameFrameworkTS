@@ -155,7 +155,7 @@ var ThisCouldBeBetter;
                 (universe, world, place, entityUser, entityItem) => // use
                  {
                     var venuePrev = universe.venueCurrent;
-                    var back = function () {
+                    var back = () => {
                         var venueNext = venuePrev;
                         venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
                         universe.venueNext = venueNext;

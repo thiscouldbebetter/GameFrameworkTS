@@ -30,7 +30,7 @@ export class VisualImageFromLibrary implements VisualImage
 		}
 
 		return returnValues;
-	};
+	}
 
 	// instance methods
 
@@ -44,7 +44,7 @@ export class VisualImageFromLibrary implements VisualImage
 	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		var image = this.image(universe);
-		var imageSize = this.image(universe).sizeInPixels;
+		var imageSize = image.sizeInPixels;
 		var drawPos = this._drawPos.clear().subtract(imageSize).half().add
 		(
 			entity.locatable().loc.pos

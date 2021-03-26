@@ -106,7 +106,6 @@ var ThisCouldBeBetter;
                 }
                 return lookupOfLookups;
             }
-            ;
             doesContainLookupBuild() {
                 var lookupOfLookups = new Map();
                 var containText = "Contain";
@@ -130,7 +129,6 @@ var ThisCouldBeBetter;
                 }
                 return lookupOfLookups;
             }
-            ;
             // instance methods
             collisionClosest(collisionsToCheck) {
                 var returnValue = collisionsToCheck.filter(x => x.isActive).sort((x, y) => x.distanceToCollision - y.distanceToCollision)[0];
@@ -793,6 +791,9 @@ var ThisCouldBeBetter;
             doHemispaceAndSphereCollide(hemispace, sphere) {
                 var collision = this.collisionOfHemispaceAndSphere(hemispace, sphere, this._collision.clear());
                 return collision.isActive;
+            }
+            doMeshAndBoxCollide(mesh, box) {
+                return this.doBoxAndMeshCollide(box, mesh);
             }
             doMeshAndMeshCollide(mesh0, mesh1) {
                 var returnValue = true;

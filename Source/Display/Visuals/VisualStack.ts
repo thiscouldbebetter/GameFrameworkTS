@@ -34,7 +34,7 @@ export class VisualStack implements Visual
 		}
 
 		drawPos.overwriteWith(this._posSaved);
-	};
+	}
 
 	// Clonable.
 

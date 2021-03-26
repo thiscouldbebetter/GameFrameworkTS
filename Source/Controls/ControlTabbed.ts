@@ -396,7 +396,7 @@ export class ControlTabbed extends ControlBase
 			var button = buttons[i];
 			button.isHighlighted = (i == this.childSelectedIndex);
 			button.draw(universe, display, drawLoc);
-		};
+		}
 
 		var child = this.childSelected();
 		if (child != null)

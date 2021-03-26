@@ -18,7 +18,7 @@ export class Activity
 
 	defn(world: World)
 	{
-		return world.defn.activityDefnsByName().get(this.defnName);
+		return world.defn.activityDefnByName(this.defnName);
 	}
 
 	defnNameAndTargetSet(defnName: string, target: any)

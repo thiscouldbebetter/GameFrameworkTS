@@ -85,8 +85,7 @@ export class Locatable extends EntityProperty
 
 	entitySpawnWithDefnName(universe: Universe, world: World, place: Place, entitySpawning: Entity, entityToSpawnDefnName: string)
 	{
-		var entityDefns = world.defn.entityDefnsByName();
-		var entityDefnToSpawn = entityDefns.get(entityToSpawnDefnName);
+		var entityDefnToSpawn = world.defn.entityDefnByName(entityToSpawnDefnName);
 		var entityToSpawn = entityDefnToSpawn.clone();
 		var loc = entityToSpawn.locatable().loc;
 		loc.overwriteWith(entitySpawning.locatable().loc);

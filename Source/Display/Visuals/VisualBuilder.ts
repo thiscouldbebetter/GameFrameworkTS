@@ -397,7 +397,7 @@ export class VisualBuilder
 		]);
 
 		return returnValue;
-	};
+	}
 
 	circleWithEyesAndLegsAndArms
 	(
@@ -421,7 +421,7 @@ export class VisualBuilder
 					(
 						itemDrawable == null
 						? entityWieldableEquipped.item().defn(w).visual
-						: (itemDrawable.visual as VisualCameraProjection).child
+						: itemDrawable.visual
 					);
 				return itemVisual;
 			}

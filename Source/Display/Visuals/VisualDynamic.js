@@ -11,7 +11,6 @@ var ThisCouldBeBetter;
                 var visual = this.methodForVisual.call(this, universe, world, display, entity);
                 visual.draw(universe, world, place, entity, display);
             }
-            ;
             // Clonable.
             clone() {
                 return this; // todo

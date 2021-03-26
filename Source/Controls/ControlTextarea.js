@@ -33,7 +33,53 @@ var ThisCouldBeBetter;
                 else if (actionNameToHandle == controlActionNames.ControlConfirm) {
                     this.cursorPos = GameFramework.NumberHelper.wrapToRangeMinMax(this.cursorPos + 1, 0, text.length + 1);
                 }
-                else if (actionNameToHandle.length == 1 || actionNameToHandle.startsWith("_")) {
+                /* // todo - No-keyboard support.
+                else if
+                (
+                    actionNameToHandle == controlActionNames.ControlIncrement
+                    || actionNameToHandle == controlActionNames.ControlDecrement
+                )
+                {
+                    // This is a bit counterintuitive.
+                    var direction = (actionNameToHandle == controlActionNames.ControlIncrement ? -1 : 1);
+        
+                    var charCodeAtCursor =
+                    (
+                        this.cursorPos < text.length ? text.charCodeAt(this.cursorPos) : "A".charCodeAt(0) - 1
+                    );
+        
+                    if (charCodeAtCursor == "Z".charCodeAt(0) && direction == 1)
+                    {
+                        charCodeAtCursor = "a".charCodeAt(0);
+                    }
+                    else if (charCodeAtCursor == "a".charCodeAt(0) && direction == -1)
+                    {
+                        charCodeAtCursor = "Z".charCodeAt(0);
+                    }
+                    else
+                    {
+                        charCodeAtCursor = charCodeAtCursor + direction;
+                    }
+        
+                    charCodeAtCursor = NumberHelper.wrapToRangeMinMax
+                    (
+                        charCodeAtCursor,
+                        "A".charCodeAt(0),
+                        "z".charCodeAt(0) + 1
+                    );
+        
+                    var charAtCursor = String.fromCharCode(charCodeAtCursor);
+        
+                    this.text
+                    (
+                        text.substr(0, this.cursorPos)
+                            + charAtCursor
+                            + text.substr(this.cursorPos + 1)
+                    );
+                }
+                */
+                else if (actionNameToHandle.length == 1 || actionNameToHandle.startsWith("_")) // printable character
+                 {
                     if (actionNameToHandle.startsWith("_")) {
                         if (actionNameToHandle == "_") {
                             actionNameToHandle = " ";

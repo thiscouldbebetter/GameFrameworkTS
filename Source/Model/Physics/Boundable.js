@@ -9,7 +9,7 @@ var ThisCouldBeBetter;
                 this.bounds = bounds;
             }
             updateForTimerTick(u, w, p, e) {
-                this.bounds.center.overwriteWith(e.locatable().loc.pos);
+                this.bounds.locate(e.locatable().loc);
             }
             clone() {
                 return new Boundable(this.bounds.clone());
