@@ -30,17 +30,22 @@ export class Box implements ShapeBase
 		return new Box(null, null);
 	}
 
-	static fromMinAndMax(min: Coords, max: Coords)
+	static fromMinAndMax(min: Coords, max: Coords): Box
 	{
 		var center = min.clone().add(max).half();
 		var size = max.clone().subtract(min);
 		return new Box(center, size);
 	}
 
-	static fromMinAndSize(min: Coords, size: Coords)
+	static fromMinAndSize(min: Coords, size: Coords): Box
 	{
 		var center = size.clone().half().add(min);
 		return new Box(center, size);
+	}
+
+	static fromSize(size: Coords): Box
+	{
+		return new Box(Coords.create(), size);
 	}
 
 	// Static methods.
@@ -383,6 +388,12 @@ export class Box implements ShapeBase
 	{
 		return surfacePointOut.overwriteWith(posToCheck); // todo
 	}
+
+	toBox(boxOut: Box): Box
+	{
+		return boxOut.overwriteWith(this);
+	}
+
 }
 
 }

@@ -4,12 +4,12 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class MapLocated implements ShapeBase
 {
-	map: MapOfCells;
+	map: MapOfCells<any>;
 	loc: Disposition;
 
 	box: Box;
 
-	constructor(map: MapOfCells, loc: Disposition)
+	constructor(map: MapOfCells<any>, loc: Disposition)
 	{
 		this.map = map;
 		this.loc = loc;
@@ -53,6 +53,8 @@ export class MapLocated implements ShapeBase
 	{
 		return surfacePointOut.overwriteWith(posToCheck); // todo
 	}
+
+	toBox(boxOut: Box): Box { throw("Not implemented!"); }
 }
 
 }

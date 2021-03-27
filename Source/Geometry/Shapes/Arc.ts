@@ -65,6 +65,12 @@ export class Arc implements ShapeBase
 	{
 		return surfacePointOut.overwriteWith(posToCheck); // todo
 	}
+
+	toBox(boxOut: Box): Box
+	{
+		return this.shell.toBox(boxOut);
+	}
+
 }
 
 }

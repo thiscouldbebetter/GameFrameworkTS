@@ -4,7 +4,7 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class VisualMap implements Visual
 {
-	map: MapOfCells;
+	map: MapOfCells<any>;
 	visualLookup: Map<string, Visual>;
 	cameraGet: (universe: Universe, world: World, display: Display, entity: Entity) => Camera;
 	shouldConvertToImage: boolean;
@@ -20,7 +20,7 @@ export class VisualMap implements Visual
 	_drawPos: Coords;
 	_posSaved: Coords;
 
-	constructor(map: MapOfCells, visualLookup: Map<string, Visual>, cameraGet: () => Camera, shouldConvertToImage: boolean)
+	constructor(map: MapOfCells<any>, visualLookup: Map<string, Visual>, cameraGet: () => Camera, shouldConvertToImage: boolean)
 	{
 		this.map = map;
 		this.visualLookup = visualLookup;
@@ -30,7 +30,7 @@ export class VisualMap implements Visual
 
 		// Helper variables.
 		this._cameraPos = Coords.create();
-		this._cell = this.map.cellPrototype.clone();
+		this._cell = this.map.cellCreate();
 		this._cellPosEnd = Coords.create();
 		this._cellPosInCells = Coords.create();
 		this._cellPosStart = Coords.create();

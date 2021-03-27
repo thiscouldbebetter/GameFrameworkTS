@@ -9,7 +9,7 @@ var ThisCouldBeBetter;
                 this.viewSize = viewSize;
                 this.child = child;
                 if (this.cellSize.z == 0) {
-                    throw "Invalid argument: cellSize.z must not be 0.";
+                    throw ("Invalid argument: cellSize.z must not be 0.");
                 }
                 this.viewSizeInCells = this.viewSize.clone().divide(this.cellSize);
                 this._cellPos = GameFramework.Coords.create();

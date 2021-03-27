@@ -139,6 +139,14 @@ var ThisCouldBeBetter;
                 var cameraEntity = this.entitiesByPropertyName(GameFramework.Camera.name)[0];
                 return (cameraEntity == null ? null : cameraEntity.camera());
             }
+            collisionTracker() {
+                var collisionTrackerEntity = this.entitiesByPropertyName(GameFramework.CollisionTracker.name)[0];
+                var returnValueAsProperty = (collisionTrackerEntity == null
+                    ? null
+                    : collisionTrackerEntity.propertyByName(GameFramework.CollisionTracker.name));
+                var returnValue = returnValueAsProperty;
+                return returnValue;
+            }
             drawables() {
                 return this.entitiesByPropertyName(GameFramework.Drawable.name);
             }

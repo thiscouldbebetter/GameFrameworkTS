@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Wedge
+export class Wedge implements ShapeBase
 {
 	vertex: Coords;
 	directionMin: Coords;
@@ -135,7 +135,7 @@ export class Wedge
 		return this._collider;
 	}
 
-	// cloneable
+	// Clonable.
 
 	clone()
 	{
@@ -147,7 +147,28 @@ export class Wedge
 		this.vertex.overwriteWith(other.vertex);
 		this.directionMin.overwriteWith(other.directionMin);
 		this.angleSpannedInTurns = other.angleSpannedInTurns;
+		return this;
 	}
+
+	// ShapeBase.
+
+	locate(loc: Disposition): ShapeBase
+	{
+		this.vertex.overwriteWith(loc.pos);
+		return this;
+	}
+
+	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
+	{
+		throw("Not implemented!");
+	}
+
+	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords
+	{
+		throw("Not implemented!");
+	}
+
+	toBox(boxOut: Box): Box { throw("Not implemented!"); }
 }
 
 }

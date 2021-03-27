@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Hemispace
+export class Hemispace implements ShapeBase
 {
 	plane: Plane;
 
@@ -42,6 +42,44 @@ export class Hemispace
 			coordsToTrim.add(displacementToClosestPointOnPlane);
 		}
 		return coordsToTrim;
+	}
+
+	// Clonable.
+
+	clone(): Hemispace
+	{
+		return new Hemispace(this.plane.clone());
+	}
+	
+	overwriteWith(other: Hemispace): Hemispace
+	{
+		this.plane.overwriteWith(other.plane);
+		return this;
+	}
+
+	// ShapeBase.
+
+	locate(loc: Disposition): ShapeBase
+	{
+		throw("Not implemented!");
+	}
+
+	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
+	{
+		return this.plane.normal;
+	}
+
+	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords
+	{
+		return surfacePointOut.overwriteWith
+		(
+			this.plane.pointOnPlaneNearestPos(posToCheck)
+		);
+	}
+
+	toBox(boxOut: Box): Box
+	{
+		throw("Not implemented!");
 	}
 }
 

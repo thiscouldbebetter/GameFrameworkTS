@@ -24,6 +24,9 @@ var ThisCouldBeBetter;
                 var center = size.clone().half().add(min);
                 return new Box(center, size);
             }
+            static fromSize(size) {
+                return new Box(GameFramework.Coords.create(), size);
+            }
             // Static methods.
             static doBoxesInSetsOverlap(boxSet0, boxSet1) {
                 var doAnyBoxOverlapSoFar = false;
@@ -228,6 +231,9 @@ var ThisCouldBeBetter;
             }
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 return surfacePointOut.overwriteWith(posToCheck); // todo
+            }
+            toBox(boxOut) {
+                return boxOut.overwriteWith(this);
             }
         }
         GameFramework.Box = Box;

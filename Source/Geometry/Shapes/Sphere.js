@@ -43,6 +43,11 @@ var ThisCouldBeBetter;
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 return surfacePointOut.overwriteWith(posToCheck); // todo
             }
+            toBox(boxOut) {
+                var diameter = this.radius * 2;
+                boxOut.size.overwriteWithDimensions(diameter, diameter, diameter);
+                return boxOut;
+            }
         }
         GameFramework.Sphere = Sphere;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

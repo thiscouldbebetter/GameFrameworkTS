@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Face
+export class Face implements ShapeBase
 {
 	vertices: Coords[];
 
@@ -125,6 +125,16 @@ export class Face
 		ArrayHelper.overwriteWith(this.vertices, other.vertices);
 		return this;
 	}
+
+	// ShapeBase.
+
+	locate(loc: Disposition): ShapeBase { throw("Not implemented!"); }
+
+	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords { throw("Not implemented!"); }
+
+	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords { throw("Not implemented!"); }
+
+	toBox(boxOut: Box): Box { throw("Not implemented!"); }
 
 	// Transformable.
 

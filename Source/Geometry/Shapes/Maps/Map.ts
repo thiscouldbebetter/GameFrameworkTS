@@ -2,13 +2,13 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class MapOfCells
+export class MapOfCells<T>
 {
 	name: string;
 	sizeInCells: Coords;
 	cellSize: Coords;
-	cellPrototype: MapCell;
-	_cellAtPosInCells: any;
+	cellCreate: () => T;
+	_cellAtPosInCells: (map: MapOfCells<T>, posInCells: Coords, cell: T) => T;
 	cellSource: any;
 
 	cellSizeHalf: Coords;
@@ -16,17 +16,27 @@ export class MapOfCells
 	sizeHalf: Coords;
 	sizeInCellsMinusOnes: Coords;
 
-	_cell: MapCell;
+	_cell: T;
 	_posInCells: Coords;
+	_posInCellsMax: Coords;
+	_posInCellsMin: Coords;
 
-	constructor(name: string, sizeInCells: Coords, cellSize: Coords, cellPrototype: MapCell, cellAtPosInCells: any, cellSource: any)
+	constructor
+	(
+		name: string,
+		sizeInCells: Coords,
+		cellSize: Coords,
+		cellCreate: () => T,
+		cellAtPosInCells: (map: MapOfCells<T>, posInCells: Coords, cell: T) => T,
+		cellSource: any
+	)
 	{
 		this.name = name;
 		this.sizeInCells = sizeInCells;
 		this.cellSize = cellSize;
-		this.cellPrototype = cellPrototype;
-		this._cellAtPosInCells = cellAtPosInCells;
-		this.cellSource = cellSource;
+		this.cellCreate = cellCreate || this.cellCreateDefault;
+		this._cellAtPosInCells = cellAtPosInCells || this.cellAtPosInCellsDefault;
+		this.cellSource = cellSource || new Array<T>();
 
 		this.sizeInCellsMinusOnes = this.sizeInCells.clone().subtract
 		(
@@ -37,37 +47,83 @@ export class MapOfCells
 		this.cellSizeHalf = this.cellSize.clone().half();
 
 		// Helper variables.
-		this._cell = this.cellPrototype.clone();
+		this._cell = this.cellCreate();
 		this._posInCells = Coords.create();
+		this._posInCellsMax = Coords.create();
+		this._posInCellsMin = Coords.create();
 	}
 
-	cellAtPos(pos: Coords)
+	cellAtPos(pos: Coords): T
 	{
 		this._posInCells.overwriteWith(pos).divide(this.cellSize).floor();
 		return this.cellAtPosInCells(this._posInCells);
 	}
 
-	cellAtPosInCells(cellPosInCells: Coords)
+	cellAtPosInCells(cellPosInCells: Coords): T
 	{
 		return this._cellAtPosInCells(this, cellPosInCells, this._cell);
 	}
 
-	numberOfCells()
+	cellAtPosInCellsDefault(map: MapOfCells<T>, cellPosInCells: Coords, cell: T): T
+	{
+		var cellIndex = cellPosInCells.y * this.sizeInCells.x + cellPosInCells.x;
+		var cell = this.cellSource[cellIndex] as T;
+		if (cell == null)
+		{
+			cell = this.cellCreate();
+			this.cellSource[cellIndex] = cell;
+		}
+		return cell;
+	}
+
+	cellCreateDefault(): any
+	{
+		return {};
+	}
+
+	cellsCount(): number
 	{
 		return this.sizeInCells.x * this.sizeInCells.y;
 	}
 
-	cellsAsEntities(mapAndCellPosToEntity: any)
+	cellsInBoxAddToList(box: Box, cellsInBox: T[]): T[]
 	{
-		var returnValues = [];
+		ArrayHelper.clear(cellsInBox);
+
+		var minPosInCells = this._posInCellsMin.overwriteWith
+		(
+			box.min()
+		).divide(this.cellSize).floor();
+
+		var maxPosInCells = this._posInCellsMax.overwriteWith
+		(
+			box.max()
+		).divide(this.cellSize).ceiling();
+
+		var cellPosInCells = this._posInCells;
+		for (var y = minPosInCells.y; y <= maxPosInCells.y; y++)
+		{
+			cellPosInCells.y = y;
+
+			for (var x = minPosInCells.x; x <= maxPosInCells.x; x++)
+			{
+				cellPosInCells.x = x;
+
+				var cellAtPos = this.cellAtPosInCells(cellPosInCells);
+				cellsInBox.push(cellAtPos);
+			}
+		}
+
+		return cellsInBox;
+	}
+
+	cellsAsEntities(mapAndCellPosToEntity: (m: MapOfCells<T>, p: Coords) => Entity): Entity[]
+	{
+		var returnValues = new Array<Entity>();
 
 		var cellPosInCells = Coords.create();
 		var cellPosStart = Coords.create();
 		var cellPosEnd = this.sizeInCells;
-
-		// todo
-		// var cellSizeInPixels = this.cellSize;
-		// var cellVisual = new VisualRectangle(cellSizeInPixels, Color.byName("Blue"), null, false); // isCentered
 
 		for (var y = cellPosStart.y; y < cellPosEnd.y; y++)
 		{
@@ -88,18 +144,23 @@ export class MapOfCells
 
 	// cloneable
 
-	clone()
+	clone(): MapOfCells<T>
 	{
-		return new MapOfCells
+		return new MapOfCells<T>
 		(
-			this.name, this.sizeInCells, this.cellSize,
-			this.cellPrototype, this.cellAtPosInCells, this.cellSource
+			this.name,
+			this.sizeInCells,
+			this.cellSize,
+			this.cellCreate,
+			this._cellAtPosInCells,
+			this.cellSource
 		);
 	}
 
-	overwriteWith(other: MapOfCells)
+	overwriteWith(other: MapOfCells<T>): MapOfCells<T>
 	{
 		this.cellSource.overwriteWith(other.cellSource);
+		return this;
 	}
 }
 

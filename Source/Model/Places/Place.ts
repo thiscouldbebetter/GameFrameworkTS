@@ -204,10 +204,23 @@ export class Place
 
 	// Entity convenience accessors.
 
-	camera()
+	camera(): Camera
 	{
 		var cameraEntity = this.entitiesByPropertyName(Camera.name)[0];
 		return (cameraEntity == null ? null : cameraEntity.camera());
+	}
+
+	collisionTracker(): CollisionTracker
+	{
+		var collisionTrackerEntity = this.entitiesByPropertyName(CollisionTracker.name)[0];
+		var returnValueAsProperty =
+		(
+			collisionTrackerEntity == null
+			? null
+			: collisionTrackerEntity.propertyByName(CollisionTracker.name)
+		);
+		var returnValue = returnValueAsProperty as CollisionTracker;
+		return returnValue;
 	}
 
 	drawables()

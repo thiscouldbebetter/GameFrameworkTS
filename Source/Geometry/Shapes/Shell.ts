@@ -77,6 +77,12 @@ export class Shell implements ShapeBase
 	{
 		return surfacePointOut.overwriteWith(posToCheck); // todo
 	}
+
+	toBox(boxOut: Box): Box
+	{
+		return this.sphereOuter.toBox(boxOut);
+	}
+
 }
 
 }

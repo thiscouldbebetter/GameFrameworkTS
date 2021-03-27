@@ -238,7 +238,7 @@ var ThisCouldBeBetter;
                 var obstacleRotationInTurns = .0625;
                 var obstacleCollider = new GameFramework.BoxRotated(new GameFramework.Box(GameFramework.Coords.create(), obstacleBarSize), obstacleRotationInTurns);
                 var obstacleCollidable = new GameFramework.Collidable(0, obstacleCollider, null, null);
-                var obstacleBounds = obstacleCollidable.collider.sphereSwept();
+                var obstacleBounds = obstacleCollidable.collider.sphereSwept().toBox(GameFramework.Box.create());
                 var obstacleBoundable = new GameFramework.Boundable(obstacleBounds);
                 var visualBody = new GameFramework.VisualGroup([
                     new GameFramework.VisualRectangle(obstacleCollider.box.size, obstacleColor, obstacleColor, null)
@@ -276,7 +276,7 @@ var ThisCouldBeBetter;
                 var obstacleMappedSizeInCells = new GameFramework.Coords(obstacleMappedCellSource[0].length, obstacleMappedCellSource.length, 1);
                 var obstacleMappedCellSize = new GameFramework.Coords(2, 2, 1);
                 var entityDefnName = "Mine";
-                var obstacleMappedMap = new GameFramework.MapOfCells(entityDefnName, obstacleMappedSizeInCells, obstacleMappedCellSize, new GameFramework.MapCell(), // cellPrototype
+                var obstacleMappedMap = new GameFramework.MapOfCells(entityDefnName, obstacleMappedSizeInCells, obstacleMappedCellSize, null, // cellCreate
                 (map, cellPosInCells, cellToOverwrite) => // cellAtPosInCells
                  {
                     var cellCode = map.cellSource[cellPosInCells.y][cellPosInCells.x];
@@ -296,9 +296,10 @@ var ThisCouldBeBetter;
                 if (this.parent.visualsHaveText) {
                     obstacleMappedVisual.children.push(new GameFramework.VisualOffset(GameFramework.VisualText.fromTextAndColor(entityDefnName, obstacleColor), new GameFramework.Coords(0, 0 - entityDimension * 2, 0)));
                 }
+                var obstacleCollider = new GameFramework.MapLocated(obstacleMappedMap, GameFramework.Disposition.create());
                 var obstacleCollidable = new GameFramework.Collidable(0, // ticksToWaitBetweenCollisions
-                new GameFramework.MapLocated(obstacleMappedMap, new GameFramework.Disposition(GameFramework.Coords.create(), null, null)), null, null);
-                var obstacleBounds = new GameFramework.Box(obstacleCollidable.collider.loc.pos, obstacleMappedMap.size);
+                obstacleCollider, null, null);
+                var obstacleBounds = new GameFramework.Box(obstacleCollider.loc.pos, obstacleMappedMap.size);
                 var obstacleBoundable = new GameFramework.Boundable(obstacleBounds);
                 var obstacleMappedEntityDefn = new GameFramework.Entity(entityDefnName, [
                     obstacleBoundable,
@@ -407,17 +408,20 @@ var ThisCouldBeBetter;
                 if (this.parent.visualsHaveText) {
                     visual.children.push(new GameFramework.VisualOffset(GameFramework.VisualText.fromTextAndColor(entityName, color), new GameFramework.Coords(0, 0 - entityDimension * 2, 0)));
                 }
-                var collider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimension * .25);
+                var colliderRadius = entityDimension * .25;
+                var collider = new GameFramework.Sphere(GameFramework.Coords.create(), colliderRadius);
                 var collidable = new GameFramework.Collidable(0, // ticksToWaitBetweenCollisions
                 collider, [GameFramework.Movable.name], // entityPropertyNamesToCollideWith,
                 // collideEntities
                 (u, w, p, e, e2) => {
                     u.collisionHelper.collideEntitiesBounce(e, e2);
                 });
+                var boundable = new GameFramework.Boundable(GameFramework.Box.fromSize(GameFramework.Coords.fromXY(1, 1).multiplyScalar(colliderRadius)));
                 var entityDefn = new GameFramework.Entity(entityName, [
-                    new GameFramework.Locatable(new GameFramework.Disposition(GameFramework.Coords.create(), null, null)),
+                    boundable,
                     collidable,
                     new GameFramework.Drawable(visual, null),
+                    new GameFramework.Locatable(GameFramework.Disposition.create())
                 ]);
                 return entityDefn;
             }

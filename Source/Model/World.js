@@ -31,6 +31,7 @@ var ThisCouldBeBetter;
                 var propertyNamesToProcess = [
                     GameFramework.Locatable.name,
                     GameFramework.ForceField.name,
+                    GameFramework.CollisionTracker.name,
                     GameFramework.Boundable.name,
                     GameFramework.Constrainable.name,
                     GameFramework.Collidable.name,

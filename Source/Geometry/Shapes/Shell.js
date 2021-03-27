@@ -47,6 +47,9 @@ var ThisCouldBeBetter;
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 return surfacePointOut.overwriteWith(posToCheck); // todo
             }
+            toBox(boxOut) {
+                return this.sphereOuter.toBox(boxOut);
+            }
         }
         GameFramework.Shell = Shell;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

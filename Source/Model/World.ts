@@ -58,6 +58,7 @@ export class World
 			Locatable.name,
 			ForceField.name,
 
+			CollisionTracker.name,
 			Boundable.name,
 			Constrainable.name,
 			Collidable.name,

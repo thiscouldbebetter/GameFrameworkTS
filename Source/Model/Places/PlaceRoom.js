@@ -5,7 +5,7 @@ var ThisCouldBeBetter;
     (function (GameFramework) {
         class PlaceRoom extends GameFramework.Place {
             constructor(name, defnName, size, entities, randomizerSeed) {
-                super(name, defnName, size, entities);
+                super(name, defnName, size, GameFramework.ArrayHelper.addMany(entities, [GameFramework.CollisionTracker.fromSize(size).toEntity()]));
                 this.randomizerSeed = randomizerSeed;
             }
         }

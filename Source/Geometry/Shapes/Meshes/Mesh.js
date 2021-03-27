@@ -155,6 +155,9 @@ var ThisCouldBeBetter;
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 return surfacePointOut.overwriteWith(posToCheck); // todo
             }
+            toBox(boxOut) {
+                return boxOut.ofPoints(this.vertices());
+            }
         }
         GameFramework.Mesh = Mesh;
         class Mesh_FaceBuilder {

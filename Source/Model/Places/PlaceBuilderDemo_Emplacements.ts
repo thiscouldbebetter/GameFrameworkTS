@@ -478,7 +478,8 @@ export class PlaceBuilderDemo_Emplacements
 			new Box(Coords.create(), obstacleBarSize), obstacleRotationInTurns
 		);
 		var obstacleCollidable = new Collidable(0, obstacleCollider, null, null);
-		var obstacleBounds = obstacleCollidable.collider.sphereSwept();
+		var obstacleBounds =
+			(obstacleCollidable.collider as BoxRotated).sphereSwept().toBox(Box.create());
 		var obstacleBoundable = new Boundable(obstacleBounds);
 
 		var visualBody = new VisualGroup
@@ -547,13 +548,13 @@ export class PlaceBuilderDemo_Emplacements
 		var obstacleMappedCellSize = new Coords(2, 2, 1);
 
 		var entityDefnName = "Mine";
-		var obstacleMappedMap = new MapOfCells
+		var obstacleMappedMap = new MapOfCells<any>
 		(
 			entityDefnName,
 			obstacleMappedSizeInCells,
 			obstacleMappedCellSize,
-			new MapCell(), // cellPrototype
-			(map: MapOfCells, cellPosInCells: any, cellToOverwrite: any) => // cellAtPosInCells
+			null, // cellCreate
+			(map: MapOfCells<any>, cellPosInCells: any, cellToOverwrite: any) => // cellAtPosInCells
 			{
 				var cellCode = map.cellSource[cellPosInCells.y][cellPosInCells.x];
 				var cellVisualName = (cellCode == "x" ? "Blocking" : "Open");
@@ -587,17 +588,20 @@ export class PlaceBuilderDemo_Emplacements
 			);
 		}
 
+		var obstacleCollider = new MapLocated
+		(
+			obstacleMappedMap, Disposition.create()
+		);
+
 		var obstacleCollidable = new Collidable
 		(
 			0, // ticksToWaitBetweenCollisions
-			new MapLocated
-			(
-				obstacleMappedMap,
-				new Disposition(Coords.create(), null, null)
-			),
-			null, null
+			obstacleCollider, null, null
 		);
-		var obstacleBounds = new Box(obstacleCollidable.collider.loc.pos, obstacleMappedMap.size);
+		var obstacleBounds = new Box
+		(
+			obstacleCollider.loc.pos, obstacleMappedMap.size
+		);
 		var obstacleBoundable = new Boundable(obstacleBounds);
 
 		var obstacleMappedEntityDefn = new Entity
@@ -818,7 +822,8 @@ export class PlaceBuilderDemo_Emplacements
 			);
 		}
 
-		var collider = new Sphere(Coords.create(), entityDimension * .25);
+		var colliderRadius = entityDimension * .25;
+		var collider = new Sphere(Coords.create(), colliderRadius);
 		var collidable = new Collidable
 		(
 			0, // ticksToWaitBetweenCollisions
@@ -831,14 +836,22 @@ export class PlaceBuilderDemo_Emplacements
 			}
 		);
 
+		var boundable = new Boundable
+		(
+			Box.fromSize
+			(
+				Coords.fromXY(1, 1).multiplyScalar(colliderRadius)
+			)
+		);
+
 		var entityDefn = new Entity
 		(
 			entityName,
 			[
-				new Locatable( new Disposition(Coords.create(), null, null) ),
+				boundable,
 				collidable,
 				new Drawable(visual, null),
-				// new DrawableCamera()
+				new Locatable( Disposition.create() )
 			]
 		);
 

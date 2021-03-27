@@ -31,6 +31,7 @@ var ThisCouldBeBetter;
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 return surfacePointOut.overwriteWith(posToCheck); // todo
             }
+            toBox(boxOut) { throw ("Not implemented!"); }
         }
         GameFramework.MapLocated = MapLocated;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

@@ -269,6 +269,11 @@ export class Mesh implements ShapeBase
 	{
 		return surfacePointOut.overwriteWith(posToCheck); // todo
 	}
+
+	toBox(boxOut: Box): Box
+	{
+		return boxOut.ofPoints(this.vertices());
+	}
 }
 
 export class Mesh_FaceBuilder

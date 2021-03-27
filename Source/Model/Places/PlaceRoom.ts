@@ -8,7 +8,14 @@ export class PlaceRoom extends Place
 
 	constructor(name: string, defnName: string, size: Coords, entities: Entity[], randomizerSeed: number)
 	{
-		super(name, defnName, size, entities);
+		super
+		(
+			name, defnName, size,
+			ArrayHelper.addMany
+			(
+				entities, [ CollisionTracker.fromSize(size).toEntity() ]
+			)
+		);
 		this.randomizerSeed = randomizerSeed;
 	}
 }

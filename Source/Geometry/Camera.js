@@ -13,7 +13,7 @@ var ThisCouldBeBetter;
                 var viewColliderSize = this.viewSize.clone();
                 viewColliderSize.z = Number.POSITIVE_INFINITY;
                 this.viewCollider = new GameFramework.Box(this.loc.pos, viewColliderSize);
-                this.entitiesInView = [];
+                this.entitiesInView = new Array();
                 this._posSaved = GameFramework.Coords.create();
             }
             clipPlanes() {
@@ -77,9 +77,29 @@ var ThisCouldBeBetter;
                 return viewCoords;
             }
             drawEntitiesInView(universe, world, place, display) {
-                this.entitiesInView.length = 0;
                 this.loc.pos.round(); // hack - To prevent lines between map tiles.
-                var collisionHelper = universe.collisionHelper;
+                this.entitiesInView = this.drawEntitiesInView_1_FindEntitiesInView(place, universe.collisionHelper, this.entitiesInView);
+                this.drawEntitiesInView_2_Draw(universe, world, place, display, this.entitiesInView);
+            }
+            drawEntitiesInView_1_FindEntitiesInView(place, collisionHelper, entitiesInView) {
+                return this.drawEntitiesInView_1_FindEntitiesInView_New(place, collisionHelper, entitiesInView);
+            }
+            drawEntitiesInView_1_FindEntitiesInView_New(place, collisionHelper, entitiesInView) {
+                var cameraEntity = new GameFramework.Entity(Camera.name, [
+                    new GameFramework.Boundable(this.viewCollider),
+                    GameFramework.Collidable.fromCollider(this.viewCollider)
+                ]);
+                var collisionTracker = place.collisionTracker();
+                var collisions = collisionTracker.entityCollidableAddAndFindCollisions(cameraEntity, collisionHelper, new Array());
+                var entitiesCollidedWith = collisions.map(x => x.entitiesColliding[1]);
+                var entitiesInView = entitiesCollidedWith.filter(x => x.drawable() != null);
+                var drawablesAll = place.drawables();
+                var drawablesUnboundable = drawablesAll.filter(x => x.boundable() == null);
+                entitiesInView.push(...drawablesUnboundable);
+                return entitiesInView;
+            }
+            drawEntitiesInView_1_FindEntitiesInView_Old(place, collisionHelper, entitiesInView) {
+                entitiesInView.length = 0;
                 var placeEntitiesDrawable = place.drawables();
                 for (var i = 0; i < placeEntitiesDrawable.length; i++) {
                     var entity = placeEntitiesDrawable[i];
@@ -99,15 +119,18 @@ var ThisCouldBeBetter;
                             isEntityInView = collisionHelper.doCollidersCollide(entityCollider, this.viewCollider);
                         }
                         if (isEntityInView) {
-                            this.entitiesInView.push(entity);
+                            entitiesInView.push(entity);
                         }
                         entityPos.overwriteWith(this._posSaved);
                     }
                 }
+                return entitiesInView;
+            }
+            drawEntitiesInView_2_Draw(universe, world, place, display, entitiesInView) {
                 display.drawBackground("Black", "Black");
-                this.entitiesSortByZThenY(this.entitiesInView);
-                for (var i = 0; i < this.entitiesInView.length; i++) {
-                    var entity = this.entitiesInView[i];
+                this.entitiesSortByZThenY(entitiesInView);
+                for (var i = 0; i < entitiesInView.length; i++) {
+                    var entity = entitiesInView[i];
                     var visual = entity.drawable().visual;
                     var entityPos = entity.locatable().loc.pos;
                     this._posSaved.overwriteWith(entityPos);

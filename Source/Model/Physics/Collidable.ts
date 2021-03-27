@@ -9,24 +9,24 @@ export class Collidable extends EntityProperty
 	entityPropertyNamesToCollideWith: string[];
 	_collideEntities: (u: Universe, w: World, p: Place, e0: Entity, e1: Entity, c: Collision) => void;
 
-	collider: any;
+	collider: ShapeBase;
 	locPrev: Disposition;
 	ticksUntilCanCollide: number;
 	entitiesAlreadyCollidedWith: Entity[];
 	isDisabled: boolean;
 
-	_transformLocate: Transform_Locate;
+	private _collisions: Collision[];
 
 	constructor
 	(
 		ticksToWaitBetweenCollisions: number,
-		colliderAtRest: any,
+		colliderAtRest: ShapeBase,
 		entityPropertyNamesToCollideWith: string[],
 		collideEntities: (u: Universe, w: World, p: Place, e0: Entity, e1: Entity, c: Collision) => void
 	)
 	{
 		super();
-		this.ticksToWaitBetweenCollisions = ticksToWaitBetweenCollisions;
+		this.ticksToWaitBetweenCollisions = ticksToWaitBetweenCollisions || 0;
 		this.colliderAtRest = colliderAtRest;
 		this.entityPropertyNamesToCollideWith = entityPropertyNamesToCollideWith || [];
 		this._collideEntities = collideEntities;
@@ -34,85 +34,158 @@ export class Collidable extends EntityProperty
 		this.collider = this.colliderAtRest.clone();
 		this.locPrev = Disposition.create();
 		this.ticksUntilCanCollide = 0;
-		this.entitiesAlreadyCollidedWith = [];
+		this.entitiesAlreadyCollidedWith = new Array<Entity>();
 		this.isDisabled = false;
 
 		// Helper variables.
 
-		this._transformLocate = new Transform_Locate(null);
+		this._collisions = new Array<Collision>();
 	}
 
-	collideEntities(u: Universe, w: World, p: Place, e0: Entity, e1: Entity, c: Collision)
+	static fromCollider(colliderAtRest: ShapeBase): Collidable
+	{
+		return new Collidable(null, colliderAtRest, null, null);
+	}
+
+	collideEntities(u: Universe, w: World, p: Place, e0: Entity, e1: Entity, c: Collision): Collision
 	{
 		if (this._collideEntities != null)
 		{
 			this._collideEntities(u, w, p, e0, e1, c);
 		}
+		return c;
 	}
 
-	colliderLocateForEntity(entity: Entity)
+	colliderLocateForEntity(entity: Entity): void
 	{
 		this.collider.overwriteWith(this.colliderAtRest);
 		this.collider.locate(entity.locatable().loc);
 	}
 
-	initialize(universe: Universe, world: World, place: Place, entity: Entity)
+	collisionsFindForEntity
+	(
+		universe: Universe, world: World, place: Place, entity: Entity,
+		collisionsSoFar: Collision[]
+	): Collision[]
 	{
-		this.colliderLocateForEntity(entity);
-	}
+		var collisionTracker = place.collisionTracker();
+		var entityBoundable = entity.boundable();
 
-	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity)
-	{
-		if (this.isDisabled)
+		if
+		(
+			collisionTracker == null
+			|| entityBoundable == null
+			|| entityBoundable.bounds.constructor.name != Box.name
+		)
 		{
-			return;
-		}
-
-		var entityLoc = entity.locatable().loc;
-		this.locPrev.overwriteWith(entityLoc);
-
-		if (this.ticksUntilCanCollide > 0)
-		{
-			this.ticksUntilCanCollide--;
+			collisionsSoFar = this.collisionsFindForEntity_WithoutTracker
+			(
+				universe, world, place, entity, collisionsSoFar
+			);
 		}
 		else
 		{
-			this.colliderLocateForEntity(entity);
+			collisionsSoFar = this.collisionsFindForEntity_WithTracker
+			(
+				universe, world, place, entity, collisionsSoFar, collisionTracker
+			);
+		}
 
-			for (var p = 0; p < this.entityPropertyNamesToCollideWith.length; p++)
+		return collisionsSoFar;
+	}
+
+	collisionsFindForEntity_WithTracker
+	(
+		universe: Universe, world: World, place: Place, entity: Entity,
+		collisionsSoFar: Collision[], collisionTracker: CollisionTracker
+	): Collision[]
+	{
+		collisionsSoFar = collisionTracker.entityCollidableAddAndFindCollisions
+		(
+			entity, universe.collisionHelper, collisionsSoFar
+		);
+		collisionsSoFar = collisionsSoFar.filter
+		(
+			collision =>
+				this.entityPropertyNamesToCollideWith.some
+				(
+					propertyName =>
+						collision.entitiesColliding[1].propertyByName(propertyName) != null
+				)
+		);
+		return collisionsSoFar;
+	}
+
+	collisionsFindForEntity_WithoutTracker
+	(
+		universe: Universe, world: World, place: Place, entity: Entity,
+		collisionsSoFar: Collision[]
+	): Collision[]
+	{
+		var collisionHelper = universe.collisionHelper;
+
+		for (var p = 0; p < this.entityPropertyNamesToCollideWith.length; p++)
+		{
+			var entityPropertyName = this.entityPropertyNamesToCollideWith[p];
+			var entitiesWithProperty = place.entitiesByPropertyName(entityPropertyName);
+			if (entitiesWithProperty != null)
 			{
-				var entityPropertyName = this.entityPropertyNamesToCollideWith[p];
-				var entitiesWithProperty = place.entitiesByPropertyName(entityPropertyName);
-				if (entitiesWithProperty != null)
+				for (var e = 0; e < entitiesWithProperty.length; e++)
 				{
-					for (var e = 0; e < entitiesWithProperty.length; e++)
+					var entityOther = entitiesWithProperty[e];
+					if (entityOther != entity)
 					{
-						var entityOther = entitiesWithProperty[e];
-						if (entityOther != entity)
+						var doEntitiesCollide = this.doEntitiesCollide
+						(
+							entity, entityOther, collisionHelper
+						);
+
+						if (doEntitiesCollide)
 						{
-							this.updateForTimerTick_Collide
+							var collision = collisionHelper.collisionOfEntities
 							(
-								universe, world, place, entity, entityOther
+								entity, entityOther, Collision.create()
 							);
+							collisionsSoFar.push(collision);
 						}
 					}
 				}
 			}
 		}
+
+		return collisionsSoFar;
 	}
 
-	updateForTimerTick_Collide
-	(
-		universe: Universe, world: World, place: Place, entity0: Entity, entity1: Entity
-	)
+	collisionHandle(universe: Universe, world: World, place: Place, collision: Collision): void
 	{
-		var collisionHelper = universe.collisionHelper;
+		var entitiesColliding = collision.entitiesColliding;
+		var entity = entitiesColliding[0];
+		var entityOther = entitiesColliding[1];
 
+		this.collideEntities
+		(
+			universe, world, place, entity, entityOther, collision
+		);
+
+		var entityOtherCollidable = entityOther.collidable();
+		entityOtherCollidable.collideEntities
+		(
+			universe, world, place, entityOther, entity, collision
+		);
+	}
+
+	doEntitiesCollide
+	(
+		entity0: Entity, entity1: Entity, collisionHelper: CollisionHelper
+	): boolean
+	{
 		var collidable0 = entity0.collidable();
 		var collidable1 = entity1.collidable();
 
-		var collidable0EntitiesAlreadyCollidedWith = collidable0.entitiesAlreadyCollidedWith;
-		var collidable1EntitiesAlreadyCollidedWith = collidable1.entitiesAlreadyCollidedWith;
+		var collidable0EntitiesAlreadyCollidedWith =
+			collidable0.entitiesAlreadyCollidedWith;
+		var collidable1EntitiesAlreadyCollidedWith =
+			collidable1.entitiesAlreadyCollidedWith;
 
 		var doEntitiesCollide = false;
 
@@ -126,14 +199,14 @@ export class Collidable extends EntityProperty
 		{
 			var collidable0Boundable = entity0.boundable();
 			var collidable1Boundable = entity1.boundable();
-			var doBoxesCollide =
+			var isEitherUnboundableOrDoBoundsCollide =
 			(
 				collidable0Boundable == null
 				|| collidable1Boundable == null
 				|| collisionHelper.doCollidersCollide(collidable0Boundable.bounds, collidable1Boundable.bounds)
 			);
 
-			if (doBoxesCollide)
+			if (isEitherUnboundableOrDoBoundsCollide)
 			{
 				var collider0 = collidable0.collider;
 				var collider1 = collidable1.collider;
@@ -144,12 +217,8 @@ export class Collidable extends EntityProperty
 
 		var wereEntitiesAlreadyColliding =
 		(
-			this.ticksUntilCanCollide > 0
-			&&
-			(
-				collidable0EntitiesAlreadyCollidedWith.indexOf(entity1) >= 0
-				|| collidable1EntitiesAlreadyCollidedWith.indexOf(entity0) >= 0
-			)
+			collidable0EntitiesAlreadyCollidedWith.indexOf(entity1) >= 0
+			|| collidable1EntitiesAlreadyCollidedWith.indexOf(entity0) >= 0
 		);
 
 		if (doEntitiesCollide)
@@ -171,21 +240,39 @@ export class Collidable extends EntityProperty
 			ArrayHelper.remove(collidable1EntitiesAlreadyCollidedWith, entity0);
 		}
 
-		if (doEntitiesCollide)
+		return doEntitiesCollide;
+	}
+
+	initialize(universe: Universe, world: World, place: Place, entity: Entity)
+	{
+		this.colliderLocateForEntity(entity);
+	}
+
+	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity)
+	{
+		if (this.isDisabled == false)
 		{
-			var collision = Collision.create();
-			collisionHelper.collisionOfEntities(entity0, entity1, collision);
+			var entityLoc = entity.locatable().loc;
+			this.locPrev.overwriteWith(entityLoc);
 
-			this.collideEntities
-			(
-				universe, world, place, entity0, entity1, collision
-			);
+			if (this.ticksUntilCanCollide > 0)
+			{
+				this.ticksUntilCanCollide--;
+			}
+			else
+			{
+				this.colliderLocateForEntity(entity);
 
-			var entity1Collidable = entity1.collidable();
-			entity1Collidable.collideEntities
-			(
-				universe, world, place, entity1, entity0, collision
-			);
+				var collisions = this.collisionsFindForEntity
+				(
+					universe, world, place, entity, ArrayHelper.clear(this._collisions)
+				);
+
+				collisions.forEach
+				(
+					collision => this.collisionHandle(universe, world, place, collision)
+				);
+			}
 		}
 	}
 

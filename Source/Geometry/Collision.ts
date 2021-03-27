@@ -6,20 +6,27 @@ export class Collision
 {
 	pos: Coords;
 	distanceToCollision: number;
-	colliders: any[];
-	collidersByName: Map<string,any>;
+	colliders: ShapeBase[];
+	collidersByName: Map<string,ShapeBase>;
+	entitiesColliding: Entity[];
 
-	collidables: Entity[];
 	normals: Coords[];
 	isActive: boolean;
 
-	constructor(pos: Coords, distanceToCollision: number, colliders: any[])
+	constructor
+	(
+		pos: Coords,
+		distanceToCollision: number,
+		colliders: ShapeBase[],
+		entitiesColliding: Entity[]
+	)
 	{
 		this.pos = pos || Coords.create();
 		this.distanceToCollision = distanceToCollision;
-		this.collidables = [];
-		this.colliders = colliders || [];
-		this.collidersByName = new Map<string,any>();
+		this.colliders = colliders || new Array<ShapeBase>();
+		this.entitiesColliding = entitiesColliding || new Array<Entity>();
+
+		this.collidersByName = new Map<string,ShapeBase>();
 		this.normals = [ Coords.create(), Coords.create() ];
 
 		this.isActive = false;
@@ -27,13 +34,13 @@ export class Collision
 
 	static create()
 	{
-		return new Collision(null, null, null);
+		return new Collision(null, null, null, null);
 	}
 
 	clear()
 	{
 		this.isActive = false;
-		ArrayHelper.clear(this.collidables);
+		ArrayHelper.clear(this.entitiesColliding);
 		ArrayHelper.clear(this.colliders);
 		this.collidersByName.clear();
 		return this;

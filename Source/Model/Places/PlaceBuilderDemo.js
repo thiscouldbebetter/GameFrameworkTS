@@ -478,7 +478,7 @@ var ThisCouldBeBetter;
                 ];
                 var terrainsByName = GameFramework.ArrayHelper.addLookupsByName(terrains);
                 var terrainsByCodeChar = GameFramework.ArrayHelper.addLookups(terrains, (x) => x.codeChar);
-                var map = new GameFramework.MapOfCells("Terrarium", mapSizeInCells, mapCellSize, new GameFramework.MapCell(), // cellPrototype
+                var map = new GameFramework.MapOfCells("Terrarium", mapSizeInCells, mapCellSize, null, // cellCreate
                 (map, cellPosInCells, cellToOverwrite) => // cellAtPosInCells
                  {
                     if (cellPosInCells.isInRangeMax(map.sizeInCellsMinusOnes)) {
@@ -1011,7 +1011,7 @@ var ThisCouldBeBetter;
                 var itemArmorCollider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimension / 2);
                 var collidable = new GameFramework.Collidable(0, itemArmorCollider, null, null);
                 var box = new GameFramework.Box(GameFramework.Coords.create(), GameFramework.Coords.create()).ofPoints(path.points);
-                box.center = collidable.collider.center;
+                box.center = itemArmorCollider.center;
                 var boundable = new GameFramework.Boundable(box);
                 var itemArmorEntityDefn = new GameFramework.Entity(itemDefnArmorName, [
                     new GameFramework.Armor(.5),
@@ -1031,7 +1031,7 @@ var ThisCouldBeBetter;
                 var arrowSize = new GameFramework.Coords(1, 1, 1);
                 var itemArrowCollider = new GameFramework.Sphere(GameFramework.Coords.create(), entityDimensionHalf);
                 var collidable = new GameFramework.Collidable(0, itemArrowCollider, null, null);
-                var bounds = new GameFramework.Box(collidable.collider.center, arrowSize);
+                var bounds = new GameFramework.Box(itemArrowCollider.center, arrowSize);
                 var boundable = new GameFramework.Boundable(bounds);
                 var roundsPerPile = 5;
                 var itemArrowEntityDefn = new GameFramework.Entity(itemDefnArrowName, [
@@ -1660,7 +1660,7 @@ var ThisCouldBeBetter;
                             effect = GameFramework.Effect.Instances().Burning;
                         }
                         else {
-                            throw "Unrecognized damage type: " + damageTypeName;
+                            throw ("Unrecognized damage type: " + damageTypeName);
                         }
                         var effectAndChance = [effect, 1];
                         effectsAndChances = [effectAndChance];

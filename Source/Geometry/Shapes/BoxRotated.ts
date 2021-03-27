@@ -78,6 +78,8 @@ export class BoxRotated implements ShapeBase
 		return surfacePointOut.overwriteWith(posToCheck); // todo
 	}
 
+	toBox(boxOut: Box): Box { throw("Not implemented!"); }
+
 	// cloneable
 
 	clone()

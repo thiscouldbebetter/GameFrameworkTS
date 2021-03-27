@@ -59,7 +59,7 @@ var ThisCouldBeBetter;
                 }
                 return this._collider;
             }
-            // cloneable
+            // Clonable.
             clone() {
                 return new Wedge(this.vertex.clone(), this.directionMin.clone(), this.angleSpannedInTurns);
             }
@@ -67,7 +67,20 @@ var ThisCouldBeBetter;
                 this.vertex.overwriteWith(other.vertex);
                 this.directionMin.overwriteWith(other.directionMin);
                 this.angleSpannedInTurns = other.angleSpannedInTurns;
+                return this;
             }
+            // ShapeBase.
+            locate(loc) {
+                this.vertex.overwriteWith(loc.pos);
+                return this;
+            }
+            normalAtPos(posToCheck, normalOut) {
+                throw ("Not implemented!");
+            }
+            surfacePointNearPos(posToCheck, surfacePointOut) {
+                throw ("Not implemented!");
+            }
+            toBox(boxOut) { throw ("Not implemented!"); }
         }
         GameFramework.Wedge = Wedge;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

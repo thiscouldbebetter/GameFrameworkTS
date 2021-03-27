@@ -37,8 +37,8 @@ export class VenueControls implements Venue
 		var inputNames = Input.Names();
 
 		var inactivate = true;
-		this.actionToInputsMappings =
-		[
+		this.actionToInputsMappings = new Array<ActionToInputsMapping>
+		(
 			new ActionToInputsMapping
 			(
 				controlActionNames.ControlIncrement,
@@ -79,7 +79,7 @@ export class VenueControls implements Venue
 				ArrayHelper.addMany( [inputNames.Escape], buildGamepadInputs(inputNames.GamepadButton0) ),
 				inactivate
 			)
-		];
+		);
 
 		if (ignoreKeyboardAndGamepadInputs)
 		{
@@ -90,7 +90,7 @@ export class VenueControls implements Venue
 		if (mappingsGet != null)
 		{
 			var mappings = mappingsGet.call(this.controlRoot);
-			ArrayHelper.addMany(this.actionToInputsMappings, mappings);
+			this.actionToInputsMappings.push(...mappings);
 		}
 
 		this.actionToInputsMappingsByInputName = ArrayHelper.addLookupsMultiple

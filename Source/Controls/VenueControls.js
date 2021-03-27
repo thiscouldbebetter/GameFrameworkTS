@@ -19,22 +19,14 @@ var ThisCouldBeBetter;
                 var controlActionNames = GameFramework.ControlActionNames.Instances();
                 var inputNames = GameFramework.Input.Names();
                 var inactivate = true;
-                this.actionToInputsMappings =
-                    [
-                        new GameFramework.ActionToInputsMapping(controlActionNames.ControlIncrement, GameFramework.ArrayHelper.addMany([inputNames.ArrowDown], buildGamepadInputs(inputNames.GamepadMoveDown)), inactivate),
-                        new GameFramework.ActionToInputsMapping(controlActionNames.ControlPrev, GameFramework.ArrayHelper.addMany([inputNames.ArrowLeft], buildGamepadInputs(inputNames.GamepadMoveLeft)), inactivate),
-                        new GameFramework.ActionToInputsMapping(controlActionNames.ControlNext, GameFramework.ArrayHelper.addMany([inputNames.ArrowRight], GameFramework.ArrayHelper.addMany([inputNames.ArrowRight, inputNames.Tab], buildGamepadInputs(inputNames.GamepadMoveRight))), inactivate),
-                        new GameFramework.ActionToInputsMapping(controlActionNames.ControlDecrement, GameFramework.ArrayHelper.addMany([inputNames.ArrowUp], buildGamepadInputs(inputNames.GamepadMoveUp)), inactivate),
-                        new GameFramework.ActionToInputsMapping(controlActionNames.ControlConfirm, GameFramework.ArrayHelper.addMany([inputNames.Enter], buildGamepadInputs(inputNames.GamepadButton1)), inactivate),
-                        new GameFramework.ActionToInputsMapping(controlActionNames.ControlCancel, GameFramework.ArrayHelper.addMany([inputNames.Escape], buildGamepadInputs(inputNames.GamepadButton0)), inactivate)
-                    ];
+                this.actionToInputsMappings = new Array(new GameFramework.ActionToInputsMapping(controlActionNames.ControlIncrement, GameFramework.ArrayHelper.addMany([inputNames.ArrowDown], buildGamepadInputs(inputNames.GamepadMoveDown)), inactivate), new GameFramework.ActionToInputsMapping(controlActionNames.ControlPrev, GameFramework.ArrayHelper.addMany([inputNames.ArrowLeft], buildGamepadInputs(inputNames.GamepadMoveLeft)), inactivate), new GameFramework.ActionToInputsMapping(controlActionNames.ControlNext, GameFramework.ArrayHelper.addMany([inputNames.ArrowRight], GameFramework.ArrayHelper.addMany([inputNames.ArrowRight, inputNames.Tab], buildGamepadInputs(inputNames.GamepadMoveRight))), inactivate), new GameFramework.ActionToInputsMapping(controlActionNames.ControlDecrement, GameFramework.ArrayHelper.addMany([inputNames.ArrowUp], buildGamepadInputs(inputNames.GamepadMoveUp)), inactivate), new GameFramework.ActionToInputsMapping(controlActionNames.ControlConfirm, GameFramework.ArrayHelper.addMany([inputNames.Enter], buildGamepadInputs(inputNames.GamepadButton1)), inactivate), new GameFramework.ActionToInputsMapping(controlActionNames.ControlCancel, GameFramework.ArrayHelper.addMany([inputNames.Escape], buildGamepadInputs(inputNames.GamepadButton0)), inactivate));
                 if (ignoreKeyboardAndGamepadInputs) {
                     this.actionToInputsMappings.length = 0;
                 }
                 var mappingsGet = this.controlRoot.actionToInputsMappings;
                 if (mappingsGet != null) {
                     var mappings = mappingsGet.call(this.controlRoot);
-                    GameFramework.ArrayHelper.addMany(this.actionToInputsMappings, mappings);
+                    this.actionToInputsMappings.push(...mappings);
                 }
                 this.actionToInputsMappingsByInputName = GameFramework.ArrayHelper.addLookupsMultiple(this.actionToInputsMappings, (x) => x.inputNames);
                 // Helper variables.

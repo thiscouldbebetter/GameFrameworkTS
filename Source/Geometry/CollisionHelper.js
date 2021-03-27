@@ -32,52 +32,65 @@ var ThisCouldBeBetter;
                 var shapeInverseName = (typeof GameFramework.ShapeInverse == notDefined ? null : GameFramework.ShapeInverse.name);
                 var sphereName = (typeof GameFramework.Sphere == notDefined ? null : GameFramework.Sphere.name);
                 if (boxName != null) {
-                    lookup = new Map();
-                    lookup.set(boxName, this.collisionOfBoxAndBox);
-                    lookup.set(mapLocatedName, this.collisionOfBoxAndMapLocated);
-                    lookup.set(meshName, this.collisionOfBoxAndMesh);
-                    lookup.set(shapeGroupAllName, this.collisionOfShapeAndShapeGroupAll);
-                    lookup.set(shapeInverseName, this.collisionOfShapeAndShapeInverse);
-                    lookup.set(sphereName, this.collisionOfBoxAndSphere);
+                    lookup = new Map([
+                        [boxName, this.collisionOfBoxAndBox],
+                        [boxRotatedName, this.collisionOfBoxAndBoxRotated],
+                        [mapLocatedName, this.collisionOfBoxAndMapLocated],
+                        [meshName, this.collisionOfBoxAndMesh],
+                        [shapeGroupAllName, this.collisionOfShapeAndShapeGroupAll],
+                        [shapeInverseName, this.collisionOfShapeAndShapeInverse],
+                        [sphereName, this.collisionOfBoxAndSphere]
+                    ]);
                     lookupOfLookups.set(boxName, lookup);
                 }
+                if (boxRotatedName != null) {
+                    lookup = new Map([
+                        [boxName, this.collisionOfBoxRotatedAndBox]
+                    ]);
+                }
                 if (mapLocatedName != null) {
-                    lookup = new Map();
-                    lookup.set(boxName, this.collisionOfMapLocatedAndBox);
-                    lookup.set(shapeGroupAllName, this.collisionOfShapeAndShapeGroupAll);
-                    lookup.set(sphereName, this.collisionOfMapLocatedAndSphere);
+                    lookup = new Map([
+                        [boxName, this.collisionOfMapLocatedAndBox],
+                        [mapLocatedName, this.collisionOfMapLocatedAndMapLocated],
+                        [shapeGroupAllName, this.collisionOfShapeAndShapeGroupAll],
+                        [sphereName, this.collisionOfMapLocatedAndSphere]
+                    ]);
                     lookupOfLookups.set(mapLocatedName, lookup);
                 }
                 if (meshName != null) {
-                    lookup = new Map();
-                    lookup.set(boxName, this.collisionOfMeshAndBox);
-                    lookup.set(shapeGroupAllName, this.collisionOfShapeAndShapeGroupAll);
-                    lookup.set(shapeInverseName, this.collisionOfShapeAndShapeInverse);
-                    lookup.set(sphereName, this.collisionOfMeshAndSphere);
+                    lookup = new Map([
+                        [boxName, this.collisionOfMeshAndBox],
+                        [shapeGroupAllName, this.collisionOfShapeAndShapeGroupAll],
+                        [shapeInverseName, this.collisionOfShapeAndShapeInverse],
+                        [sphereName, this.collisionOfMeshAndSphere]
+                    ]);
                     lookupOfLookups.set(meshName, lookup);
                 }
                 if (shapeGroupAllName != null) {
-                    lookup = new Map();
-                    lookup.set(boxName, this.collisionOfShapeGroupAllAndShape);
-                    lookup.set(sphereName, this.collisionOfShapeGroupAllAndShape);
+                    lookup = new Map([
+                        [boxName, this.collisionOfShapeGroupAllAndShape],
+                        [sphereName, this.collisionOfShapeGroupAllAndShape]
+                    ]);
                     lookupOfLookups.set(shapeGroupAllName, lookup);
                 }
                 if (shapeInverseName != null) {
-                    lookup = new Map();
-                    lookup.set(boxName, this.collisionOfShapeInverseAndShape);
-                    lookup.set(meshName, this.collisionOfShapeInverseAndShape);
-                    lookup.set(sphereName, this.collisionOfShapeInverseAndShape);
+                    lookup = new Map([
+                        [boxName, this.collisionOfShapeInverseAndShape],
+                        [meshName, this.collisionOfShapeInverseAndShape],
+                        [sphereName, this.collisionOfShapeInverseAndShape]
+                    ]);
                     lookupOfLookups.set(shapeInverseName, lookup);
                 }
                 if (sphereName != null) {
-                    lookup = new Map();
-                    lookup.set(boxName, this.collisionOfSphereAndBox);
-                    lookup.set(boxRotatedName, this.collisionOfSphereAndBoxRotated);
-                    lookup.set(mapLocatedName, this.collisionOfSphereAndMapLocated);
-                    lookup.set(meshName, this.collisionOfSphereAndMesh);
-                    lookup.set(shapeGroupAllName, this.collisionOfShapeAndShapeGroupAll);
-                    lookup.set(shapeInverseName, this.collisionOfShapeAndShapeInverse);
-                    lookup.set(sphereName, this.collisionOfSpheres);
+                    lookup = new Map([
+                        [boxName, this.collisionOfSphereAndBox],
+                        [boxRotatedName, this.collisionOfSphereAndBoxRotated],
+                        [mapLocatedName, this.collisionOfSphereAndMapLocated],
+                        [meshName, this.collisionOfSphereAndMesh],
+                        [shapeGroupAllName, this.collisionOfShapeAndShapeGroupAll],
+                        [shapeInverseName, this.collisionOfShapeAndShapeInverse],
+                        [sphereName, this.collisionOfSpheres]
+                    ]);
                     lookupOfLookups.set(sphereName, lookup);
                 }
                 return lookupOfLookups;
@@ -137,10 +150,14 @@ var ThisCouldBeBetter;
             collisionOfEntities(entityColliding, entityCollidedWith, collisionOut) {
                 var collider0 = entityColliding.collidable().collider;
                 var collider1 = entityCollidedWith.collidable().collider;
-                return this.collisionOfColliders(collider0, collider1, collisionOut);
+                collisionOut = this.collisionOfColliders(collider0, collider1, collisionOut);
+                var entitiesColliding = collisionOut.entitiesColliding;
+                entitiesColliding.push(entityColliding);
+                entitiesColliding.push(entityCollidedWith);
+                return collisionOut;
             }
             collisionOfColliders(collider0, collider1, collisionOut) {
-                collisionOut.isActive = false;
+                collisionOut.clear();
                 // Prevents having to add some composite shapes, for example, Shell.
                 while (collider0.collider != null) {
                     collider0 = collider0.collider();
@@ -153,14 +170,14 @@ var ThisCouldBeBetter;
                 var collideLookup = this.colliderTypeNamesToCollisionFindLookup.get(collider0TypeName);
                 if (collideLookup == null) {
                     if (this.throwErrorIfCollidersCannotBeCollided) {
-                        throw "Error!  Colliders of types cannot be collided: " + collider0TypeName + "," + collider1TypeName;
+                        throw ("Error!  Colliders of types cannot be collided: " + collider0TypeName + "," + collider1TypeName);
                     }
                 }
                 else {
                     var collisionMethod = collideLookup.get(collider1TypeName);
                     if (collisionMethod == null) {
                         if (this.throwErrorIfCollidersCannotBeCollided) {
-                            throw "Error!  Colliders of types cannot be collided: " + collider0TypeName + "," + collider1TypeName;
+                            throw ("Error!  Colliders of types cannot be collided: " + collider0TypeName + "," + collider1TypeName);
                         }
                     }
                     else {
@@ -179,8 +196,8 @@ var ThisCouldBeBetter;
                         var doCollide = this.doEntitiesCollide(entity0, entity1);
                         if (doCollide) {
                             var collision = GameFramework.Collision.create();
-                            collision.collidables.push(entity0);
-                            collision.collidables.push(entity1);
+                            collision.entitiesColliding.push(entity0);
+                            collision.entitiesColliding.push(entity1);
                             returnValues.push(collision);
                         }
                     }
@@ -209,14 +226,14 @@ var ThisCouldBeBetter;
                 var doCollideLookup = this.colliderTypeNamesToDoCollideLookup.get(collider0TypeName);
                 if (doCollideLookup == null) {
                     if (this.throwErrorIfCollidersCannotBeCollided) {
-                        throw "Error: Colliders of types cannot be collided: " + collider0TypeName + ", " + collider1TypeName;
+                        throw ("Error: Colliders of types cannot be collided: " + collider0TypeName + ", " + collider1TypeName);
                     }
                 }
                 else {
                     var collisionMethod = doCollideLookup.get(collider1TypeName);
                     if (collisionMethod == null) {
                         if (this.throwErrorIfCollidersCannotBeCollided) {
-                            throw "Error: Colliders of types cannot be collided: " + collider0TypeName + ", " + collider1TypeName;
+                            throw ("Error: Colliders of types cannot be collided: " + collider0TypeName + ", " + collider1TypeName);
                         }
                     }
                     else {
@@ -238,14 +255,14 @@ var ThisCouldBeBetter;
                 var doesContainLookup = this.colliderTypeNamesToDoesContainLookup.get(collider0TypeName);
                 if (doesContainLookup == null) {
                     if (this.throwErrorIfCollidersCannotBeCollided) {
-                        throw "Error: Colliders of types cannot be collided: " + collider0TypeName + ", " + collider1TypeName;
+                        throw ("Error: Colliders of types cannot be collided: " + collider0TypeName + ", " + collider1TypeName);
                     }
                 }
                 else {
                     var doesColliderContainOther = doesContainLookup.get(collider1TypeName);
                     if (doesColliderContainOther == null) {
                         if (this.throwErrorIfCollidersCannotBeCollided) {
-                            throw "Error: Colliders of types cannot be collided: " + collider0TypeName + ", " + collider1TypeName;
+                            throw ("Error: Colliders of types cannot be collided: " + collider0TypeName + ", " + collider1TypeName);
                         }
                     }
                     else {
@@ -342,13 +359,17 @@ var ThisCouldBeBetter;
                 }
                 return collision;
             }
+            collisionOfBoxAndBoxRotated(box, boxRotated, collision, shouldCalculatePos) {
+                // hack
+                return this.collisionOfBoxAndSphere(box, boxRotated.sphereSwept(), collision, shouldCalculatePos);
+            }
             collisionOfBoxAndMapLocated(box, mapLocated, collision) {
                 var doBoundsCollide = this.doBoxAndBoxCollide(mapLocated.box, box);
                 if (doBoundsCollide == false) {
                     return collision;
                 }
                 var map = mapLocated.map;
-                var cell = map.cellPrototype.clone();
+                var cell = map.cellCreate();
                 var cellPosAbsolute = GameFramework.Coords.create();
                 var cellPosInCells = GameFramework.Coords.create();
                 var mapSizeInCells = map.sizeInCells;
@@ -422,6 +443,9 @@ var ThisCouldBeBetter;
                     collision = this.collisionOfBoxAndBox(box, boxCircumscribedAroundSphere, collision);
                 }
                 return collision;
+            }
+            collisionOfBoxRotatedAndBox(boxRotated, box, collision, shouldCalculatePos) {
+                return this.collisionOfBoxAndBoxRotated(box, boxRotated, collision, shouldCalculatePos);
             }
             collisionOfBoxRotatedAndSphere(boxRotated, sphere, collision, shouldCalculatePos) {
                 if (collision == null) {
@@ -584,13 +608,16 @@ var ThisCouldBeBetter;
             collisionOfMapLocatedAndBox(mapLocated, box, collision) {
                 return this.collisionOfBoxAndMapLocated(box, mapLocated, collision);
             }
+            collisionOfMapLocatedAndMapLocated(mapLocated0, mapLocated1, collision) {
+                return collision; // todo
+            }
             collisionOfMapLocatedAndSphere(mapLocated, sphere, collision) {
                 var doBoundsCollide = this.doBoxAndSphereCollide(mapLocated.box, sphere);
                 if (doBoundsCollide == false) {
                     return collision;
                 }
                 var map = mapLocated.map;
-                var cell = map.cellPrototype.clone();
+                var cell = map.cellCreate();
                 var cellPosAbsolute = GameFramework.Coords.create();
                 var cellPosInCells = GameFramework.Coords.create();
                 var mapSizeInCells = map.sizeInCells;
@@ -854,8 +881,8 @@ var ThisCouldBeBetter;
                 }
                 var map0 = mapLocated0.map;
                 var map1 = mapLocated1.map;
-                var cell0 = map0.cellPrototype.clone();
-                var cell1 = map1.cellPrototype.clone();
+                var cell0 = map0.cellCreate();
+                var cell1 = map1.cellCreate();
                 var cell0PosAbsolute = GameFramework.Coords.create();
                 var cell0PosInCells = GameFramework.Coords.create();
                 var cell1PosInCells = GameFramework.Coords.create();
@@ -906,7 +933,7 @@ var ThisCouldBeBetter;
                     return false;
                 }
                 var map = mapLocated.map;
-                var cell = map.cellPrototype.clone();
+                var cell = map.cellCreate();
                 var cellPosAbsolute = GameFramework.Coords.create();
                 var cellPosInCells = GameFramework.Coords.create();
                 var mapSizeInCells = map.sizeInCells;

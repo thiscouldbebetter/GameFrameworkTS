@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Plane
+export class Plane implements ShapeBase
 {
 	normal: Coords;
 	distanceFromOrigin: number;
@@ -58,6 +58,36 @@ export class Plane
 	{
 		return point.overwriteWith(this.normal).multiplyScalar(this.distanceFromOrigin);
 	}
+
+	pointOnPlaneNearestPos(posToCheck: Coords): Coords
+	{
+		var distanceToPoint = this.distanceToPointAlongNormal(posToCheck);
+		return this.normal.clone().multiplyScalar(distanceToPoint).invert().add(posToCheck);
+	}
+
+	// Clonable.
+
+	clone(): Plane
+	{
+		return new Plane(this.normal.clone(), this.distanceFromOrigin);
+	}
+
+	overwriteWith(other: Plane): Plane
+	{
+		this.normal.overwriteWith(other.normal);
+		this.distanceFromOrigin = other.distanceFromOrigin;
+		return this;
+	}
+
+	// ShapeBase.
+
+	locate(loc: Disposition): ShapeBase { throw("Not implemented!"); }
+
+	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords { throw("Not implemented!"); }
+
+	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords { throw("Not implemented!"); }
+
+	toBox(boxOut: Box): Box { throw("Not implemented!"); }
 }
 
 }

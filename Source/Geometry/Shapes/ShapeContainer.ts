@@ -2,14 +2,51 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ShapeContainer
+export class ShapeContainer implements ShapeBase
 {
-	shape: any;
+	shape: ShapeBase;
 
-	constructor(shape: any)
+	constructor(shape: ShapeBase)
 	{
 		this.shape = shape;
 	}
+
+	// Clonable.
+
+	clone(): ShapeBase
+	{
+		return new ShapeContainer(this.shape.clone());
+	}
+
+	overwriteWith(other: ShapeContainer)
+	{
+		this.shape.overwriteWith(other.shape);
+		return this;
+	}
+
+	// ShapeBase.
+
+	locate(loc: Disposition): ShapeBase
+	{
+		this.shape.locate(loc);
+		return this;
+	}
+
+	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
+	{
+		return this.shape.normalAtPos(posToCheck, normalOut);
+	}
+
+	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords
+	{
+		return this.shape.surfacePointNearPos(posToCheck, surfacePointOut);
+	}
+
+	toBox(boxOut: Box): Box
+	{
+		return this.shape.toBox(boxOut);
+	}
+
 }
 
 }

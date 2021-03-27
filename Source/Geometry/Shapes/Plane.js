@@ -23,6 +23,24 @@ var ThisCouldBeBetter;
             pointClosestToOrigin(point) {
                 return point.overwriteWith(this.normal).multiplyScalar(this.distanceFromOrigin);
             }
+            pointOnPlaneNearestPos(posToCheck) {
+                var distanceToPoint = this.distanceToPointAlongNormal(posToCheck);
+                return this.normal.clone().multiplyScalar(distanceToPoint).invert().add(posToCheck);
+            }
+            // Clonable.
+            clone() {
+                return new Plane(this.normal.clone(), this.distanceFromOrigin);
+            }
+            overwriteWith(other) {
+                this.normal.overwriteWith(other.normal);
+                this.distanceFromOrigin = other.distanceFromOrigin;
+                return this;
+            }
+            // ShapeBase.
+            locate(loc) { throw ("Not implemented!"); }
+            normalAtPos(posToCheck, normalOut) { throw ("Not implemented!"); }
+            surfacePointNearPos(posToCheck, surfacePointOut) { throw ("Not implemented!"); }
+            toBox(boxOut) { throw ("Not implemented!"); }
         }
         GameFramework.Plane = Plane;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

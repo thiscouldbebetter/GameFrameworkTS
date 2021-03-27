@@ -881,13 +881,13 @@ export class PlaceBuilderDemo // Main.
 		var terrainsByName = ArrayHelper.addLookupsByName(terrains);
 		var terrainsByCodeChar: any = ArrayHelper.addLookups(terrains, (x: Terrain) => x.codeChar);
 
-		var map = new MapOfCells
+		var map = new MapOfCells<any>
 		(
 			"Terrarium",
 			mapSizeInCells,
 			mapCellSize,
-			new MapCell(), // cellPrototype
-			(map: MapOfCells, cellPosInCells: any, cellToOverwrite: MapCell) => // cellAtPosInCells
+			null, // cellCreate
+			(map: MapOfCells<any>, cellPosInCells: any, cellToOverwrite: MapCell) => // cellAtPosInCells
 			{
 				if (cellPosInCells.isInRangeMax(map.sizeInCellsMinusOnes))
 				{
@@ -908,7 +908,7 @@ export class PlaceBuilderDemo // Main.
 			mapCellSource
 		);
 
-		var mapAndCellPosToEntity = (map: MapOfCells, cellPosInCells: any) =>
+		var mapAndCellPosToEntity = (map: MapOfCells<any>, cellPosInCells: any) =>
 		{
 			var cellVisuals = [];
 
@@ -1830,7 +1830,7 @@ export class PlaceBuilderDemo // Main.
 		var itemArmorCollider = new Sphere(Coords.create(), entityDimension / 2);
 		var collidable = new Collidable(0, itemArmorCollider, null, null);
 		var box = new Box(Coords.create(), Coords.create() ).ofPoints(path.points);
-		box.center = collidable.collider.center;
+		box.center = itemArmorCollider.center;
 		var boundable = new Boundable(box);
 
 		var itemArmorEntityDefn = new Entity
@@ -1864,7 +1864,7 @@ export class PlaceBuilderDemo // Main.
 		var itemArrowCollider = new Sphere(Coords.create(), entityDimensionHalf);
 
 		var collidable = new Collidable(0, itemArrowCollider, null, null);
-		var bounds = new Box(collidable.collider.center, arrowSize);
+		var bounds = new Box( itemArrowCollider.center, arrowSize);
 		var boundable = new Boundable(bounds);
 
 		var roundsPerPile = 5;
@@ -1931,7 +1931,7 @@ export class PlaceBuilderDemo // Main.
 				]);
 
 				var userDirection = userVel.clone().normalize();
-				var userRadius = entityUser.collidable().collider.radius;
+				var userRadius = (entityUser.collidable().collider as Sphere).radius;
 				var projectilePos = userPos.clone().add
 				(
 					userDirection.clone().multiplyScalar(userRadius + projectileDimension).double()
@@ -2089,7 +2089,7 @@ export class PlaceBuilderDemo // Main.
 			var projectileVisual = itemArrowDefn.visual;
 
 			var userDirection = userVel.clone().normalize();
-			var userRadius = entityUser.collidable().collider.radius;
+			var userRadius = (entityUser.collidable().collider as Sphere).radius;
 			var projectilePos = userPos.clone().add
 			(
 				userDirection.clone().multiplyScalar(userRadius + projectileDimension).double()
@@ -2869,7 +2869,7 @@ export class PlaceBuilderDemo // Main.
 			userTirable.staminaSubtract(staminaToFire);
 
 			var userDirection = userVel.clone().normalize();
-			var userRadius = entityUser.collidable().collider.radius;
+			var userRadius = (entityUser.collidable().collider as Sphere).radius;
 			var projectileDimension = 1.5;
 
 			var projectilePos = userPos.clone().add
@@ -2940,7 +2940,7 @@ export class PlaceBuilderDemo // Main.
 				}
 				else
 				{
-					throw "Unrecognized damage type: " + damageTypeName;
+					throw("Unrecognized damage type: " + damageTypeName);
 				}
 				var effectAndChance: [Effect, number] = [ effect, 1 ];
 				effectsAndChances = [ effectAndChance ];

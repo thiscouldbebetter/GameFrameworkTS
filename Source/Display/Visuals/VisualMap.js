@@ -12,7 +12,7 @@ var ThisCouldBeBetter;
                     (shouldConvertToImage == null ? true : shouldConvertToImage);
                 // Helper variables.
                 this._cameraPos = GameFramework.Coords.create();
-                this._cell = this.map.cellPrototype.clone();
+                this._cell = this.map.cellCreate();
                 this._cellPosEnd = GameFramework.Coords.create();
                 this._cellPosInCells = GameFramework.Coords.create();
                 this._cellPosStart = GameFramework.Coords.create();

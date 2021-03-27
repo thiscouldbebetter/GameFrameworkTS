@@ -4,21 +4,21 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Collision {
-            constructor(pos, distanceToCollision, colliders) {
+            constructor(pos, distanceToCollision, colliders, entitiesColliding) {
                 this.pos = pos || GameFramework.Coords.create();
                 this.distanceToCollision = distanceToCollision;
-                this.collidables = [];
-                this.colliders = colliders || [];
+                this.colliders = colliders || new Array();
+                this.entitiesColliding = entitiesColliding || new Array();
                 this.collidersByName = new Map();
                 this.normals = [GameFramework.Coords.create(), GameFramework.Coords.create()];
                 this.isActive = false;
             }
             static create() {
-                return new Collision(null, null, null);
+                return new Collision(null, null, null, null);
             }
             clear() {
                 this.isActive = false;
-                GameFramework.ArrayHelper.clear(this.collidables);
+                GameFramework.ArrayHelper.clear(this.entitiesColliding);
                 GameFramework.ArrayHelper.clear(this.colliders);
                 this.collidersByName.clear();
                 return this;
