@@ -16,7 +16,7 @@ var ThisCouldBeBetter;
                 this.transformLocate.loc.overwriteWith(drawableLoc);
                 this.verticesAsPathTransformed.overwriteWith(this.verticesAsPath);
                 GameFramework.Transforms.applyTransformToCoordsMany(this.transformLocate, this.verticesAsPathTransformed.points);
-                display.drawPolygon(this.verticesAsPathTransformed.points, GameFramework.Color.systemColorGet(this.colorFill), GameFramework.Color.systemColorGet(this.colorBorder));
+                display.drawPolygon(this.verticesAsPathTransformed.points, this.colorFill, this.colorBorder);
             }
             // Clonable.
             clone() {

@@ -190,13 +190,13 @@ export class PlaceBuilderDemo_Movers
 			"Carnivore",
 			[
 				new Actor(carnivoreActivity),
-				new Animatable(null, null, null),
-				new Collidable(0, carnivoreCollider, null, null),
+				Animatable.create(),
+				Collidable.fromCollider(carnivoreCollider),
 				new Constrainable([constraintSpeedMax1]),
-				new Drawable(carnivoreVisual, null),
-				// new DrawableCamera(),
+				Drawable.fromVisual(carnivoreVisual),
 				new Killable(10, null, carnivoreDie),
-				new Locatable(new Disposition(Coords.create(), null, null) )
+				Locatable.create(),
+				Movable.create()
 			]
 		);
 
@@ -335,16 +335,16 @@ export class PlaceBuilderDemo_Movers
 			enemyTypeName + (damageTypeName || "Normal"),
 			[
 				new Actor(enemyActivity),
-				new Animatable(null, null, null),
+				Animatable.create(),
 				new Constrainable([new Constraint_SpeedMaxXY(speedMax)]),
-				new Collidable(0, enemyCollider, null, null),
+				Collidable.fromCollider(enemyCollider),
 				new Damager(new Damage(10, damageTypeName, null)),
-				new Drawable(enemyVisual, null),
-				// new DrawableCamera(),
+				Drawable.fromVisual(enemyVisual),
 				new Effectable([]),
 				new Enemy(weapon),
 				enemyKillable,
-				new Locatable(new Disposition(Coords.create(), null, null)),
+				Locatable.create(),
+				Movable.create(),
 				enemyPerceptor
 			]
 		);
@@ -625,10 +625,10 @@ export class PlaceBuilderDemo_Movers
 		(
 			"Projectile",
 			[
-				new Drawable(new VisualCircle(2, Color.byName("Red"), null, null), true),
+				Drawable.fromVisual(VisualCircle.fromRadiusAndColorFill(2, Color.byName("Red"))),
 				new Ephemeral(32, null),
 				new Killable(1, null, null),
-				new Locatable(null),
+				Locatable.create(),
 				new Movable(3, 3, null)
 			]
 		);
@@ -691,7 +691,6 @@ export class PlaceBuilderDemo_Movers
 				collisionHelper.collideEntitiesBackUp(eFriendly, eOther);
 			};
 		var collidable = new Collidable(0, friendlyCollider, [ Collidable.name ], friendlyCollide);
-		//var collidable = new Collidable(friendlyCollider, null, null);
 
 		var visualEyeRadius = entityDimension * .75 / 2;
 		var visualBuilder = new VisualBuilder();
@@ -846,13 +845,13 @@ export class PlaceBuilderDemo_Movers
 			"Friendly",
 			[
 				actor,
-				new Animatable(null, null, null),
+				Animatable.create(),
 				constrainable,
 				collidable,
-				new Drawable(friendlyVisual, null),
-				// new DrawableCamera(),
+				Drawable.fromVisual(friendlyVisual),
 				itemHolder,
-				new Locatable(null),
+				Locatable.create(),
+				Movable.create(),
 				routable,
 				new Talker("Conversation"),
 			]
@@ -1086,14 +1085,14 @@ export class PlaceBuilderDemo_Movers
 			"Grazer",
 			[
 				new Actor(grazerActivity),
-				new Animatable(null, null, null),
+				Animatable.create(),
 				grazerPhased,
-				new Collidable(0, grazerCollider, null, null),
+				Collidable.fromCollider(grazerCollider),
 				new Constrainable([constraintSpeedMax1]),
-				new Drawable(grazerVisual, null),
-				// new DrawableCamera(),
+				Drawable.fromVisual(grazerVisual),
 				new Killable(10, null, grazerDie),
-				new Locatable(new Disposition(Coords.create(), null, null) )
+				Locatable.create(),
+				Movable.create()
 			]
 		);
 
@@ -1471,14 +1470,14 @@ export class PlaceBuilderDemo_Movers
 				inputHelper.isMouseClicked(false);
 				var mousePosRelativeToCameraView = inputHelper.mouseClickPos;
 
-				var camera = place.camera();
+				var camera = place.camera().camera();
 
 				var mousePosAbsolute = mousePosRelativeToCameraView.clone().divide
 				(
-					   universe.display.scaleFactor()
+					universe.display.scaleFactor()
 				).add
 				(
-					   camera.loc.pos
+					camera.loc.pos
 				).subtract
 				(
 					camera.viewSizeHalf
@@ -1581,7 +1580,7 @@ export class PlaceBuilderDemo_Movers
 			entityDefnNamePlayer,
 			[
 				new Actor(playerActivity),
-				new Animatable(null, null, null),
+				Animatable.create(),
 				new Collidable
 				(
 					0, // ticksToWaitBetweenCollisions
@@ -1591,8 +1590,7 @@ export class PlaceBuilderDemo_Movers
 				),
 				constrainable,
 				controllable,
-				new Drawable(playerVisual, null),
-				// new DrawableCamera(),
+				Drawable.fromVisual(playerVisual),
 				new Effectable([]),
 				equipmentUser,
 				/*
@@ -1606,7 +1604,7 @@ export class PlaceBuilderDemo_Movers
 				itemCrafter,
 				itemHolder,
 				journalKeeper,
-				new Locatable(null),
+				Locatable.create(),
 				killable,
 				movable,
 				perceptible,

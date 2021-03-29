@@ -16,6 +16,8 @@ var ThisCouldBeBetter;
                 this.entitiesAlreadyCollidedWith = new Array();
                 this.isDisabled = false;
                 // Helper variables.
+                this._collisionTrackerMapCellsOccupied =
+                    new Array();
                 this._collisions = new Array();
             }
             static fromCollider(colliderAtRest) {
@@ -31,6 +33,28 @@ var ThisCouldBeBetter;
                 this.collider.overwriteWith(this.colliderAtRest);
                 this.collider.locate(entity.locatable().loc);
             }
+            collisionHandle(universe, world, place, collision) {
+                var entitiesColliding = collision.entitiesColliding;
+                var entity = entitiesColliding[0];
+                var entityOther = entitiesColliding[1];
+                this.collideEntities(universe, world, place, entity, entityOther, collision);
+                var entityOtherCollidable = entityOther.collidable();
+                entityOtherCollidable.collideEntities(universe, world, place, entityOther, entity, collision);
+            }
+            collisionsFindAndHandle(universe, world, place, entity) {
+                if (this.isDisabled == false) {
+                    var entityLoc = entity.locatable().loc;
+                    this.locPrev.overwriteWith(entityLoc);
+                    if (this.ticksUntilCanCollide > 0) {
+                        this.ticksUntilCanCollide--;
+                    }
+                    else {
+                        this.colliderLocateForEntity(entity);
+                        var collisions = this.collisionsFindForEntity(universe, world, place, entity, GameFramework.ArrayHelper.clear(this._collisions));
+                        collisions.forEach(collision => this.collisionHandle(universe, world, place, collision));
+                    }
+                }
+            }
             collisionsFindForEntity(universe, world, place, entity, collisionsSoFar) {
                 var collisionTracker = place.collisionTracker();
                 var entityBoundable = entity.boundable();
@@ -45,6 +69,8 @@ var ThisCouldBeBetter;
                 return collisionsSoFar;
             }
             collisionsFindForEntity_WithTracker(universe, world, place, entity, collisionsSoFar, collisionTracker) {
+                this._collisionTrackerMapCellsOccupied.forEach(x => GameFramework.ArrayHelper.remove(x.entitiesPresent, entity));
+                this._collisionTrackerMapCellsOccupied.length = 0;
                 collisionsSoFar = collisionTracker.entityCollidableAddAndFindCollisions(entity, universe.collisionHelper, collisionsSoFar);
                 collisionsSoFar = collisionsSoFar.filter(collision => this.entityPropertyNamesToCollideWith.some(propertyName => collision.entitiesColliding[1].propertyByName(propertyName) != null));
                 return collisionsSoFar;
@@ -68,14 +94,6 @@ var ThisCouldBeBetter;
                     }
                 }
                 return collisionsSoFar;
-            }
-            collisionHandle(universe, world, place, collision) {
-                var entitiesColliding = collision.entitiesColliding;
-                var entity = entitiesColliding[0];
-                var entityOther = entitiesColliding[1];
-                this.collideEntities(universe, world, place, entity, entityOther, collision);
-                var entityOtherCollidable = entityOther.collidable();
-                entityOtherCollidable.collideEntities(universe, world, place, entityOther, entity, collision);
             }
             doEntitiesCollide(entity0, entity1, collisionHelper) {
                 var collidable0 = entity0.collidable();
@@ -115,21 +133,25 @@ var ThisCouldBeBetter;
                 }
                 return doEntitiesCollide;
             }
+            isEntityStationary(entity) {
+                // This way causes strange glitches.  In the demo game, when you
+                // walk into view of three of the four corners of the 'Battlefield'
+                // rooms, the walls shift inward suddenly!
+                //return (entity.locatable().loc.equals(this.locPrev));
+                return (entity.movable() == null);
+            }
+            // EntityProperty.
             initialize(universe, world, place, entity) {
-                this.colliderLocateForEntity(entity);
+                if (this.isEntityStationary(entity)) {
+                    this.collisionsFindAndHandle(universe, world, place, entity);
+                }
             }
             updateForTimerTick(universe, world, place, entity) {
-                if (this.isDisabled == false) {
-                    var entityLoc = entity.locatable().loc;
-                    this.locPrev.overwriteWith(entityLoc);
-                    if (this.ticksUntilCanCollide > 0) {
-                        this.ticksUntilCanCollide--;
-                    }
-                    else {
-                        this.colliderLocateForEntity(entity);
-                        var collisions = this.collisionsFindForEntity(universe, world, place, entity, GameFramework.ArrayHelper.clear(this._collisions));
-                        collisions.forEach(collision => this.collisionHandle(universe, world, place, collision));
-                    }
+                if (this.isEntityStationary(entity)) {
+                    this.entitiesAlreadyCollidedWith.length = 0;
+                }
+                else {
+                    this.collisionsFindAndHandle(universe, world, place, entity);
                 }
             }
             // cloneable

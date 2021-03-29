@@ -10,8 +10,11 @@ var ThisCouldBeBetter;
                 this.colorBorder = colorBorder;
                 this.borderThickness = borderThickness || 1;
             }
+            static fromRadiusAndColorFill(radius, colorFill) {
+                return new VisualCircle(radius, colorFill, null, null);
+            }
             draw(universe, world, place, entity, display) {
-                display.drawCircle(entity.locatable().loc.pos, this.radius, GameFramework.Color.systemColorGet(this.colorFill), GameFramework.Color.systemColorGet(this.colorBorder), this.borderThickness);
+                display.drawCircle(entity.locatable().loc.pos, this.radius, this.colorFill, this.colorBorder, this.borderThickness);
             }
             // Clonable.
             clone() {

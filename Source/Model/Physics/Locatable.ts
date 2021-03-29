@@ -12,7 +12,12 @@ export class Locatable extends EntityProperty
 		this.loc = loc || Disposition.create();
 	}
 
-	static fromPos(pos: Coords)
+	static create(): Locatable
+	{
+		return new Locatable(null);
+	}
+
+	static fromPos(pos: Coords): Locatable
 	{
 		return new Locatable(Disposition.fromPos(pos));
 	}

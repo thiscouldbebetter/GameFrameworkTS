@@ -36,6 +36,7 @@ export class Place
 
 	draw(universe: Universe, world: World, display: Display)
 	{
+		/*
 		var entitiesDrawable = this.entitiesByPropertyName(Drawable.name);
 		for (var i = 0; i < entitiesDrawable.length; i++)
 		{
@@ -43,8 +44,10 @@ export class Place
 			var drawable = entity.drawable();
 			drawable.updateForTimerTick(universe, world, this, entity);
 		}
-		var camera = this.camera();
-		camera.drawEntitiesInView(universe, world, this, display);
+		*/
+		var cameraEntity = this.camera();
+		var camera = cameraEntity.camera();
+		camera.drawEntitiesInView(universe, world, this, cameraEntity, display);
 	}
 
 	entitiesByPropertyName(propertyName: string)
@@ -204,10 +207,9 @@ export class Place
 
 	// Entity convenience accessors.
 
-	camera(): Camera
+	camera(): Entity
 	{
-		var cameraEntity = this.entitiesByPropertyName(Camera.name)[0];
-		return (cameraEntity == null ? null : cameraEntity.camera());
+		return this.entitiesByPropertyName(Camera.name)[0];
 	}
 
 	collisionTracker(): CollisionTracker
@@ -223,32 +225,32 @@ export class Place
 		return returnValue;
 	}
 
-	drawables()
+	drawables(): Entity[]
 	{
 		return this.entitiesByPropertyName(Drawable.name);
 	}
 
-	items()
+	items(): Entity[]
 	{
 		return this.entitiesByPropertyName(Item.name);
 	}
 
-	loadables()
+	loadables(): Entity[]
 	{
 		return this.entitiesByPropertyName(Loadable.name);
 	}
 
-	movables()
+	movables(): Entity[]
 	{
 		return this.entitiesByPropertyName(Movable.name);
 	}
 
-	player()
+	player(): Entity
 	{
 		return this.entitiesByPropertyName(Playable.name)[0];
 	}
 
-	usables()
+	usables(): Entity[]
 	{
 		return this.entitiesByPropertyName(Usable.name);
 	}

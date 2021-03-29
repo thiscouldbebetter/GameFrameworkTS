@@ -17,14 +17,19 @@ export class VisualCircle implements Visual
 		this.borderThickness = borderThickness || 1;
 	}
 
+	static fromRadiusAndColorFill(radius: number, colorFill: Color): VisualCircle
+	{
+		return new VisualCircle(radius, colorFill, null, null);
+	}
+
 	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
 	{
 		display.drawCircle
 		(
 			entity.locatable().loc.pos,
 			this.radius,
-			Color.systemColorGet(this.colorFill),
-			Color.systemColorGet(this.colorBorder),
+			this.colorFill,
+			this.colorBorder,
 			this.borderThickness
 		);
 	}

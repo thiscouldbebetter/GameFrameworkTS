@@ -117,19 +117,20 @@ var ThisCouldBeBetter;
                 this.transformLocate.loc.overwriteWith(drawableLoc);
                 this.networkTransformed.overwriteWith(this.network).transform(this.transformLocate);
                 var networkTransformed = this.networkTransformed;
+                var colorCyan = GameFramework.Color.byName("Cyan");
                 var links = networkTransformed.links;
                 for (var i = 0; i < links.length; i++) {
                     var link = links[i];
                     var nodesLinked = link.nodes(networkTransformed);
                     var nodeFromPos = nodesLinked[0].pos;
                     var nodeToPos = nodesLinked[1].pos;
-                    display.drawLine(nodeFromPos, nodeToPos, "Cyan", 3); // lineThickness
+                    display.drawLine(nodeFromPos, nodeToPos, colorCyan, 3); // lineThickness
                 }
                 var nodes = networkTransformed.nodes;
                 for (var i = 0; i < nodes.length; i++) {
                     var node = nodes[i];
                     display.drawText("" + node.id, 10, // fontHeightInPixels
-                    node.pos, "Cyan", null, // colorOutline
+                    node.pos, colorCyan, null, // colorOutline
                     false, // areColorsReversed
                     false, // isCentered
                     null // widthMaxInPixels

@@ -21,7 +21,12 @@ export class Equippable extends EntityProperty
 		this.isEquipped = false;
 	}
 
-	equip(u: Universe, w: World, p: Place, eEquipmentUser: Entity, eEquippable: Entity)
+	static create(): Equippable
+	{
+		return new Equippable(null, null);
+	}
+
+	equip(u: Universe, w: World, p: Place, eEquipmentUser: Entity, eEquippable: Entity): void
 	{
 		if (this._equip != null)
 		{
@@ -30,7 +35,7 @@ export class Equippable extends EntityProperty
 		this.isEquipped = true;
 	}
 
-	unequip(u: Universe, w: World, p: Place, eEquipmentUser: Entity, eEquippable: Entity)
+	unequip(u: Universe, w: World, p: Place, eEquipmentUser: Entity, eEquippable: Entity): void
 	{
 		if (this._unequip != null)
 		{

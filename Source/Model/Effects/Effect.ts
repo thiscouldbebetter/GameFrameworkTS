@@ -115,7 +115,7 @@ class Effect_Instances
 			"Frozen",
 			20, // ticksPerCycle
 			5, // cyclesToLive
-			new VisualCircle(visualDimension, Color.byName("Cyan"), null, null),
+			VisualCircle.fromRadiusAndColorFill(visualDimension, Color.byName("Cyan")),
 			(u: Universe, w: World, p: Place, e: Entity, effect: Effect) =>
 			{
 				e.killable().damageApply(u, w, p, null, e, new Damage(1, "Cold", null) );

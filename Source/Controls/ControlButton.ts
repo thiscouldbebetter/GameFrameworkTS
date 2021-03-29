@@ -132,8 +132,8 @@ export class ControlButton extends ControlBase
 			display.drawRectangle
 			(
 				drawPos, this.size,
-				Color.systemColorGet(colorFill),
-				Color.systemColorGet(colorBorder),
+				colorFill,
+				colorBorder,
 				isHighlighted // areColorsReversed
 			);
 		}
@@ -147,8 +147,8 @@ export class ControlButton extends ControlBase
 			this.text,
 			this.fontHeightInPixels,
 			drawPos,
-			Color.systemColorGet(colorText),
-			Color.systemColorGet(colorFill),
+			colorText,
+			colorFill,
 			isHighlighted,
 			true, // isCentered
 			this.size.x // widthMaxInPixels

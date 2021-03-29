@@ -25,9 +25,8 @@ export class Selector extends EntityProperty
 		(
 			"Reticle",
 			[
-				new Locatable(null),
+				Locatable.create(),
 				new Drawable(visualReticle, false), // isVisible
-				// new DrawableCamera()
 			]
 		);
 	}

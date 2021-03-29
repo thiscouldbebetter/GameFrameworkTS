@@ -83,8 +83,7 @@ export class PlaceBuilderDemo_Emplacements
 			anvilName,
 			[
 				new Locatable(new Disposition(Coords.create(), null, null) ),
-				new Drawable(anvilVisual, null),
-				// new DrawableCamera(),
+				Drawable.fromVisual(anvilVisual),
 				anvilItemCrafter,
 				new ItemHolder([], null, null),
 				new Usable(anvilUse)
@@ -159,10 +158,9 @@ export class PlaceBuilderDemo_Emplacements
 		(
 			itemDefnName,
 			[
-				new Locatable( new Disposition(Coords.create(), null, null) ),
+				Locatable.create(),
 				collidable,
-				new Drawable(itemBoulderVisual, null),
-				// new DrawableCamera(),
+				Drawable.fromVisual(itemBoulderVisual),
 				killable
 			]
 		);
@@ -178,7 +176,10 @@ export class PlaceBuilderDemo_Emplacements
 		var campfireColor = Color.byName("Orange");
 
 		var flameVisual = VisualBuilder.Instance().flame(entityDimension);
-		var smokePuffVisual = new VisualCircle(entityDimensionHalf, Color.byName("GrayLight"), null, null);
+		var smokePuffVisual = VisualCircle.fromRadiusAndColorFill
+		(
+			entityDimensionHalf, Color.byName("GrayLight")
+		);
 		var smokeVisual = new VisualParticles
 		(
 			"Smoke",
@@ -251,11 +252,10 @@ export class PlaceBuilderDemo_Emplacements
 		(
 			campfireName,
 			[
-				new Animatable(null, null, null),
+				Animatable.create(),
 				campfireCollidable,
-				new Drawable(campfireVisual, null),
-				// new DrawableCamera(),
-				new Locatable(null)
+				Drawable.fromVisual(campfireVisual),
+				Locatable.create()
 			]
 		);
 
@@ -268,18 +268,18 @@ export class PlaceBuilderDemo_Emplacements
 		var entitySize = new Coords(1.5, 1, 0).multiplyScalar(entityDimension);
 		var visual = new VisualGroup
 		([
-			new VisualRectangle
+			VisualRectangle.fromSizeAndColorFill
 			(
-				entitySize, containerColor, null, null
+				entitySize, containerColor
 			),
-			new VisualRectangle
+			VisualRectangle.fromSizeAndColorFill
 			(
-				new Coords(1.5 * entityDimension, 1, 0), Color.byName("Gray"), null, null
+				new Coords(1.5 * entityDimension, 1, 0), Color.byName("Gray")
 			),
-			new VisualRectangle
+			VisualRectangle.fromSizeAndColorFill
 			(
 				new Coords(.5, .5, 0).multiplyScalar(entityDimension),
-				Color.byName("Gray"), null, null
+				Color.byName("Gray")
 			)
 		]);
 
@@ -303,11 +303,10 @@ export class PlaceBuilderDemo_Emplacements
 					0, // ticksToWaitBetweenCollisions
 					new Box(Coords.create(), entitySize), null, null
 				),
-				new Drawable(visual, null),
-				// new DrawableCamera(),
+				Drawable.fromVisual(visual),
 				new ItemContainer(),
 				new ItemHolder([], null, null),
-				new Locatable(null),
+				Locatable.create(),
 				new Usable
 				(
 					(universe: Universe, w: World, p: Place, entityUsing: Entity, entityOther: Entity) =>
@@ -355,8 +354,11 @@ export class PlaceBuilderDemo_Emplacements
 			),
 			new VisualOffset
 			(
-				new VisualCircle(entityDimension / 8, Color.byName("Yellow"), null, null),
-				new Coords(entityDimension / 4, 0 - entityDimension * .6, 0)
+				VisualCircle.fromRadiusAndColorFill
+				(
+					entityDimension / 8, Color.byName("Yellow")
+				),
+				Coords.fromXY(entityDimension / 4, 0 - entityDimension * .6)
 			)
 		]);
 
@@ -384,9 +386,8 @@ export class PlaceBuilderDemo_Emplacements
 			"Exit",
 			[
 				collidable,
-				new Drawable(visual, null),
-				// new DrawableCamera(),
-				new Locatable(new Disposition(Coords.create(), null, null) ),
+				Drawable.fromVisual(visual),
+				Locatable.create(),
 				new Portal(null, null, Coords.create()), // Destination must be set ouside this method.
 				new Usable
 				(
@@ -456,9 +457,8 @@ export class PlaceBuilderDemo_Emplacements
 			[
 				new ItemContainer(),
 				new ItemHolder([], null, null),
-				new Locatable( new Disposition(Coords.create(), null, null) ),
-				new Drawable(itemHoleVisual, null),
-				// new DrawableCamera(),
+				Locatable.create(),
+				Drawable.fromVisual(itemHoleVisual),
 				new Perceptible(false, () => 0, () => 0),
 				new Usable(use)
 			]
@@ -477,7 +477,7 @@ export class PlaceBuilderDemo_Emplacements
 		(
 			new Box(Coords.create(), obstacleBarSize), obstacleRotationInTurns
 		);
-		var obstacleCollidable = new Collidable(0, obstacleCollider, null, null);
+		var obstacleCollidable = Collidable.fromCollider(obstacleCollider);
 		var obstacleBounds =
 			(obstacleCollidable.collider as BoxRotated).sphereSwept().toBox(Box.create());
 		var obstacleBoundable = new Boundable(obstacleBounds);
@@ -511,8 +511,7 @@ export class PlaceBuilderDemo_Emplacements
 				obstacleBoundable,
 				obstacleCollidable,
 				new Damager(new Damage(10, null, null)),
-				new Drawable(visual, null),
-				// new DrawableCamera(),
+				Drawable.fromVisual(visual),
 				new Locatable(new Disposition(Coords.create(), null, null) )
 			]
 		);
@@ -611,9 +610,8 @@ export class PlaceBuilderDemo_Emplacements
 				obstacleBoundable,
 				obstacleCollidable,
 				new Damager(new Damage(10, null, null)),
-				new Drawable(obstacleMappedVisual, null),
-				// new DrawableCamera(),
-				new Locatable(new Disposition(Coords.create(), null, null) )
+				Drawable.fromVisual(obstacleMappedVisual),
+				Locatable.create()
 			]
 		);
 
@@ -666,8 +664,7 @@ export class PlaceBuilderDemo_Emplacements
 				new Locatable(obstacleLoc),
 				obstacleCollidable,
 				//new Damager(new Damage(10, null, null)),
-				new Drawable(obstacleRingVisual, null),
-				// new DrawableCamera()
+				Drawable.fromVisual(obstacleRingVisual),
 			]
 		);
 
@@ -708,9 +705,8 @@ export class PlaceBuilderDemo_Emplacements
 		(
 			pillowName,
 			[
-				new Locatable(new Disposition(Coords.create(), null, null) ),
+				Locatable.create(),
 				new Drawable(pillowVisual, null),
-				// new DrawableCamera(),
 				new ItemHolder([], null, null),
 				new Usable(pillowUse)
 			]
@@ -771,10 +767,9 @@ export class PlaceBuilderDemo_Emplacements
 		(
 			"Portal",
 			[
-				new Collidable(0, new Box(Coords.create(), entitySize), null, null),
-				new Drawable(visual, null),
-				// new DrawableCamera(),
-				new Locatable(new Disposition(Coords.create(), null, null) ),
+				Collidable.fromCollider(Box.fromSize(entitySize)),
+				Drawable.fromVisual(visual),
+				Locatable.create(),
 				new Portal(null, "Exit", Coords.create()),
 				new Usable(portalUse)
 			]
@@ -850,8 +845,8 @@ export class PlaceBuilderDemo_Emplacements
 			[
 				boundable,
 				collidable,
-				new Drawable(visual, null),
-				new Locatable( Disposition.create() )
+				Drawable.fromVisual(visual),
+				Locatable.create()
 			]
 		);
 
@@ -866,10 +861,10 @@ export class PlaceBuilderDemo_Emplacements
 		var colorBorder = Color.byName("Black");
 		var visualTree = new VisualGroup
 		([
-			new VisualRectangle
+			VisualRectangle.fromSizeAndColorFill
 			(
 				new Coords(1, 2, 0).multiplyScalar(entityDimension * 0.5),
-				Color.byName("Brown"), null, null
+				Color.byName("Brown")
 			),
 			new VisualOffset
 			(
@@ -917,10 +912,9 @@ export class PlaceBuilderDemo_Emplacements
 		(
 			entityName,
 			[
-				new Locatable( new Disposition(Coords.create(), null, null) ),
+				Locatable.create(),
 				collidable,
-				new Drawable(visual, null),
-				// new DrawableCamera()
+				Drawable.fromVisual(visual),
 			]
 		);
 

@@ -24,7 +24,7 @@ var ThisCouldBeBetter;
                 );
                 // Helper variables.
                 this._drawPos = GameFramework.Coords.create();
-                this._drawLoc = new GameFramework.Disposition(this._drawPos, null, null);
+                this._drawLoc = GameFramework.Disposition.fromPos(this._drawPos);
                 this._mouseClickPos = GameFramework.Coords.create();
             }
             static fromPosSizeAndItems(pos, size, items) {
@@ -218,8 +218,8 @@ var ThisCouldBeBetter;
                 var style = style || this.style(universe);
                 var colorFore = (this.isHighlighted ? style.colorFill : style.colorBorder);
                 var colorBack = (this.isHighlighted ? style.colorBorder : style.colorFill);
-                display.drawRectangle(drawPos, this.size, GameFramework.Color.systemColorGet(colorBack), // fill
-                GameFramework.Color.systemColorGet(style.colorBorder), // border
+                display.drawRectangle(drawPos, this.size, colorBack, // fill
+                style.colorBorder, // border
                 false // areColorsReversed
                 );
                 var textMarginLeft = 2;
@@ -240,12 +240,12 @@ var ThisCouldBeBetter;
                     var offsetInItems = new GameFramework.Coords(iOffset % this.widthInItems, Math.floor(iOffset / this.widthInItems), 0);
                     drawPos2.overwriteWith(this.itemSpacing()).multiply(offsetInItems).add(drawPos);
                     if (item == itemSelected) {
-                        display.drawRectangle(drawPos2, this.itemSpacing(), GameFramework.Color.systemColorGet(colorFore), // colorFill
+                        display.drawRectangle(drawPos2, this.itemSpacing(), colorFore, // colorFill
                         null, null);
                     }
                     var text = this.bindingForItemText.contextSet(item).get();
                     drawPos2.addDimensions(textMarginLeft, 0, 0);
-                    display.drawText(text, this.fontHeightInPixels, drawPos2, GameFramework.Color.systemColorGet(colorFore), GameFramework.Color.systemColorGet(colorBack), (i == this.indexOfItemSelected(null)), // areColorsReversed
+                    display.drawText(text, this.fontHeightInPixels, drawPos2, colorFore, colorBack, (i == this.indexOfItemSelected(null)), // areColorsReversed
                     false, // isCentered
                     this.size.x // widthMaxInPixels
                     );

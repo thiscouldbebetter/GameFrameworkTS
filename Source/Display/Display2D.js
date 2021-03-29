@@ -32,7 +32,7 @@ var ThisCouldBeBetter;
                 var angleStartInRadians = angleStartInTurns * Display2D.RadiansPerTurn;
                 var angleStopInRadians = angleStopInTurns * Display2D.RadiansPerTurn;
                 if (colorFill != null) {
-                    this.graphics.fillStyle = colorFill;
+                    this.graphics.fillStyle = GameFramework.Color.systemColorGet(colorFill);
                     this.graphics.beginPath();
                     this.graphics.arc(center.x, center.y, radiusInner, angleStartInRadians, angleStopInRadians);
                     drawPos.overwriteWith(center).add(new GameFramework.Polar(angleStopInTurns, radiusOuter, 0).toCoords(GameFramework.Coords.create()));
@@ -43,7 +43,7 @@ var ThisCouldBeBetter;
                     this.graphics.fill();
                 }
                 if (colorBorder != null) {
-                    this.graphics.strokeStyle = colorBorder;
+                    this.graphics.strokeStyle = GameFramework.Color.systemColorGet(colorBorder);
                     this.graphics.beginPath();
                     this.graphics.arc(center.x, center.y, radiusInner, angleStartInRadians, angleStopInRadians);
                     drawPos.overwriteWith(center).add(new GameFramework.Polar(angleStopInTurns, radiusOuter, 0).toCoords(GameFramework.Coords.create()));
@@ -63,13 +63,13 @@ var ThisCouldBeBetter;
                 this.graphics.beginPath();
                 this.graphics.arc(drawPos.x, drawPos.y, radius, 0, Display2D.RadiansPerTurn);
                 if (colorFill != null) {
-                    this.graphics.fillStyle = colorFill;
+                    this.graphics.fillStyle = GameFramework.Color.systemColorGet(colorFill);
                     this.graphics.fill();
                 }
                 if (colorBorder != null) {
                     var lineWidthToRestore = this.graphics.lineWidth;
                     this.graphics.lineWidth = borderThickness;
-                    this.graphics.strokeStyle = colorBorder;
+                    this.graphics.strokeStyle = GameFramework.Color.systemColorGet(colorBorder);
                     this.graphics.stroke();
                     this.graphics.lineWidth = lineWidthToRestore;
                 }
@@ -87,14 +87,14 @@ var ThisCouldBeBetter;
                 this.graphics.fillStyle = systemGradient;
                 this.graphics.fill();
                 if (colorBorder != null) {
-                    this.graphics.strokeStyle = colorBorder;
+                    this.graphics.strokeStyle = GameFramework.Color.systemColorGet(colorBorder);
                     this.graphics.stroke();
                 }
             }
             drawCrosshairs(center, radius, color) {
                 var drawPos = this._drawPos.overwriteWith(center);
                 this.graphics.beginPath();
-                this.graphics.strokeStyle = color;
+                this.graphics.strokeStyle = GameFramework.Color.systemColorGet(color);
                 this.graphics.moveTo(drawPos.x - radius, drawPos.y);
                 this.graphics.lineTo(drawPos.x + radius, drawPos.y);
                 this.graphics.moveTo(drawPos.x, drawPos.y - radius);
@@ -114,11 +114,11 @@ var ThisCouldBeBetter;
                 0, Math.PI * 2.0 // start, stop angle
                 );
                 if (colorFill != null) {
-                    this.graphics.fillStyle = colorFill;
+                    this.graphics.fillStyle = GameFramework.Color.systemColorGet(colorFill);
                     this.graphics.fill();
                 }
                 if (colorBorder != null) {
-                    this.graphics.strokeStyle = colorBorder;
+                    this.graphics.strokeStyle = GameFramework.Color.systemColorGet(colorBorder);
                     this.graphics.stroke();
                 }
                 this.graphics.restore();
@@ -142,7 +142,7 @@ var ThisCouldBeBetter;
             }
             drawLine(fromPos, toPos, color, lineThickness) {
                 var drawPos = this._drawPos;
-                this.graphics.strokeStyle = color;
+                this.graphics.strokeStyle = GameFramework.Color.systemColorGet(color);
                 var lineWidthToRestore = this.graphics.lineWidth;
                 if (lineThickness != null) {
                     this.graphics.lineWidth = lineThickness;
@@ -176,12 +176,12 @@ var ThisCouldBeBetter;
                 if (isClosed) {
                     this.graphics.closePath();
                 }
-                this.graphics.strokeStyle = color;
+                this.graphics.strokeStyle = GameFramework.Color.systemColorGet(color);
                 this.graphics.stroke();
                 this.graphics.lineWidth = lineWidthSaved;
             }
             drawPixel(pos, color) {
-                this.graphics.fillStyle = color;
+                this.graphics.fillStyle = GameFramework.Color.systemColorGet(color);
                 this.graphics.fillRect(pos.x, pos.y, 1, 1);
             }
             drawPolygon(vertices, colorFill, colorBorder) {
@@ -199,11 +199,11 @@ var ThisCouldBeBetter;
                 }
                 this.graphics.closePath();
                 if (colorFill != null) {
-                    this.graphics.fillStyle = colorFill;
+                    this.graphics.fillStyle = GameFramework.Color.systemColorGet(colorFill);
                     this.graphics.fill();
                 }
                 if (colorBorder != null) {
-                    this.graphics.strokeStyle = colorBorder;
+                    this.graphics.strokeStyle = GameFramework.Color.systemColorGet(colorBorder);
                     this.graphics.stroke();
                 }
             }
@@ -214,11 +214,11 @@ var ThisCouldBeBetter;
                     colorBorder = temp;
                 }
                 if (colorFill != null) {
-                    this.graphics.fillStyle = colorFill;
+                    this.graphics.fillStyle = GameFramework.Color.systemColorGet(colorFill);
                     this.graphics.fillRect(pos.x, pos.y, size.x, size.y);
                 }
                 if (colorBorder != null) {
-                    this.graphics.strokeStyle = colorBorder;
+                    this.graphics.strokeStyle = GameFramework.Color.systemColorGet(colorBorder);
                     this.graphics.strokeRect(pos.x, pos.y, size.x, size.y);
                 }
             }
@@ -241,7 +241,7 @@ var ThisCouldBeBetter;
                 if (colorFill == null) {
                     colorFill = this.colorFore;
                 }
-                this.graphics.fillStyle = colorFill;
+                this.graphics.fillStyle = GameFramework.Color.systemColorGet(colorFill);
                 var drawPos = new GameFramework.Coords(pos.x, pos.y + fontHeightInPixels, 0);
                 var textAsLines = text.split("\n");
                 for (var i = 0; i < textAsLines.length; i++) {
@@ -258,7 +258,7 @@ var ThisCouldBeBetter;
                         0);
                     }
                     if (colorOutline != null) {
-                        this.graphics.strokeStyle = colorOutline;
+                        this.graphics.strokeStyle = GameFramework.Color.systemColorGet(colorOutline);
                         this.graphics.strokeText(textTrimmed, drawPos.x, drawPos.y);
                     }
                     this.graphics.fillText(textTrimmed, drawPos.x, drawPos.y);
@@ -271,7 +271,7 @@ var ThisCouldBeBetter;
                 var angleStartInRadians = angleStartInTurns * Display2D.RadiansPerTurn;
                 var angleStopInRadians = angleStopInTurns * Display2D.RadiansPerTurn;
                 if (colorFill != null) {
-                    this.graphics.fillStyle = colorFill;
+                    this.graphics.fillStyle = GameFramework.Color.systemColorGet(colorFill);
                     this.graphics.beginPath();
                     this.graphics.moveTo(center.x, center.y);
                     drawPos.overwriteWith(center).add(new GameFramework.Polar(angleStopInTurns, radius, 0).toCoords(GameFramework.Coords.create()));
@@ -282,7 +282,7 @@ var ThisCouldBeBetter;
                     this.graphics.fill();
                 }
                 if (colorBorder != null) {
-                    this.graphics.strokeStyle = colorBorder;
+                    this.graphics.strokeStyle = GameFramework.Color.systemColorGet(colorBorder);
                     this.graphics.beginPath();
                     this.graphics.moveTo(center.x, center.y);
                     drawPos.overwriteWith(center).add(new GameFramework.Polar(angleStopInTurns, radius, 0).toCoords(GameFramework.Coords.create()));

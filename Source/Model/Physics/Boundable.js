@@ -8,9 +8,14 @@ var ThisCouldBeBetter;
                 super();
                 this.bounds = bounds;
             }
+            // EntityProperty.
+            initialize(u, w, p, e) {
+                this.updateForTimerTick(u, w, p, e);
+            }
             updateForTimerTick(u, w, p, e) {
                 this.bounds.locate(e.locatable().loc);
             }
+            // Clonable.
             clone() {
                 return new Boundable(this.bounds.clone());
             }

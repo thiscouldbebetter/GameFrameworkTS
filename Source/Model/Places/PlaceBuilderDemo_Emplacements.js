@@ -45,8 +45,7 @@ var ThisCouldBeBetter;
                 ]);
                 var itemAnvilEntityDefn = new GameFramework.Entity(anvilName, [
                     new GameFramework.Locatable(new GameFramework.Disposition(GameFramework.Coords.create(), null, null)),
-                    new GameFramework.Drawable(anvilVisual, null),
-                    // new DrawableCamera(),
+                    GameFramework.Drawable.fromVisual(anvilVisual),
                     anvilItemCrafter,
                     new GameFramework.ItemHolder([], null, null),
                     new GameFramework.Usable(anvilUse)
@@ -81,10 +80,9 @@ var ThisCouldBeBetter;
                     entityDropped.item().quantity = GameFramework.DiceRoll.roll("1d3", null);
                 });
                 var itemBoulderEntityDefn = new GameFramework.Entity(itemDefnName, [
-                    new GameFramework.Locatable(new GameFramework.Disposition(GameFramework.Coords.create(), null, null)),
+                    GameFramework.Locatable.create(),
                     collidable,
-                    new GameFramework.Drawable(itemBoulderVisual, null),
-                    // new DrawableCamera(),
+                    GameFramework.Drawable.fromVisual(itemBoulderVisual),
                     killable
                 ]);
                 return itemBoulderEntityDefn;
@@ -94,7 +92,7 @@ var ThisCouldBeBetter;
                 var campfireName = "Campfire";
                 var campfireColor = GameFramework.Color.byName("Orange");
                 var flameVisual = GameFramework.VisualBuilder.Instance().flame(entityDimension);
-                var smokePuffVisual = new GameFramework.VisualCircle(entityDimensionHalf, GameFramework.Color.byName("GrayLight"), null, null);
+                var smokePuffVisual = GameFramework.VisualCircle.fromRadiusAndColorFill(entityDimensionHalf, GameFramework.Color.byName("GrayLight"));
                 var smokeVisual = new GameFramework.VisualParticles("Smoke", null, // ticksToGenerate
                 1 / 3, // particlesPerTick
                 () => 50, // particleTicksToLiveGet
@@ -131,11 +129,10 @@ var ThisCouldBeBetter;
                 var campfireCollidable = new GameFramework.Collidable(0, // ticksToWaitBetweenCollisions
                 campfireCollider, [GameFramework.Collidable.name], campfireCollide);
                 var campfireEntityDefn = new GameFramework.Entity(campfireName, [
-                    new GameFramework.Animatable(null, null, null),
+                    GameFramework.Animatable.create(),
                     campfireCollidable,
-                    new GameFramework.Drawable(campfireVisual, null),
-                    // new DrawableCamera(),
-                    new GameFramework.Locatable(null)
+                    GameFramework.Drawable.fromVisual(campfireVisual),
+                    GameFramework.Locatable.create()
                 ]);
                 return campfireEntityDefn;
             }
@@ -143,9 +140,9 @@ var ThisCouldBeBetter;
                 var containerColor = GameFramework.Color.byName("Orange");
                 var entitySize = new GameFramework.Coords(1.5, 1, 0).multiplyScalar(entityDimension);
                 var visual = new GameFramework.VisualGroup([
-                    new GameFramework.VisualRectangle(entitySize, containerColor, null, null),
-                    new GameFramework.VisualRectangle(new GameFramework.Coords(1.5 * entityDimension, 1, 0), GameFramework.Color.byName("Gray"), null, null),
-                    new GameFramework.VisualRectangle(new GameFramework.Coords(.5, .5, 0).multiplyScalar(entityDimension), GameFramework.Color.byName("Gray"), null, null)
+                    GameFramework.VisualRectangle.fromSizeAndColorFill(entitySize, containerColor),
+                    GameFramework.VisualRectangle.fromSizeAndColorFill(new GameFramework.Coords(1.5 * entityDimension, 1, 0), GameFramework.Color.byName("Gray")),
+                    GameFramework.VisualRectangle.fromSizeAndColorFill(new GameFramework.Coords(.5, .5, 0).multiplyScalar(entityDimension), GameFramework.Color.byName("Gray"))
                 ]);
                 if (this.parent.visualsHaveText) {
                     visual.children.push(new GameFramework.VisualOffset(GameFramework.VisualText.fromTextAndColor("Container", containerColor), new GameFramework.Coords(0, 0 - entityDimension, 0)));
@@ -153,11 +150,10 @@ var ThisCouldBeBetter;
                 var containerEntityDefn = new GameFramework.Entity("Container", [
                     new GameFramework.Collidable(0, // ticksToWaitBetweenCollisions
                     new GameFramework.Box(GameFramework.Coords.create(), entitySize), null, null),
-                    new GameFramework.Drawable(visual, null),
-                    // new DrawableCamera(),
+                    GameFramework.Drawable.fromVisual(visual),
                     new GameFramework.ItemContainer(),
                     new GameFramework.ItemHolder([], null, null),
-                    new GameFramework.Locatable(null),
+                    GameFramework.Locatable.create(),
                     new GameFramework.Usable((universe, w, p, entityUsing, entityOther) => {
                         //entityOther.collidable().ticksUntilCanCollide = 50; // hack
                         var itemContainerAsControl = entityOther.itemContainer().toControl(universe, universe.display.sizeInPixels, entityUsing, entityOther, universe.venueCurrent);
@@ -179,7 +175,7 @@ var ThisCouldBeBetter;
                         new GameFramework.Coords(-0.5, -1.5, 0),
                         new GameFramework.Coords(0.5, -1.5, 0)
                     ]).transform(GameFramework.Transform_Scale.fromScalar(entityDimension)), exitColor, null),
-                    new GameFramework.VisualOffset(new GameFramework.VisualCircle(entityDimension / 8, GameFramework.Color.byName("Yellow"), null, null), new GameFramework.Coords(entityDimension / 4, 0 - entityDimension * .6, 0))
+                    new GameFramework.VisualOffset(GameFramework.VisualCircle.fromRadiusAndColorFill(entityDimension / 8, GameFramework.Color.byName("Yellow")), GameFramework.Coords.fromXY(entityDimension / 4, 0 - entityDimension * .6))
                 ]);
                 if (this.parent.visualsHaveText) {
                     visual.children.push(new GameFramework.VisualOffset(GameFramework.VisualText.fromTextAndColor("Exit", exitColor), new GameFramework.Coords(0, 0 - entityDimension * 2.5, 0)));
@@ -188,9 +184,8 @@ var ThisCouldBeBetter;
                 new GameFramework.Box(GameFramework.Coords.create(), entitySize), null, null);
                 var exitEntityDefn = new GameFramework.Entity("Exit", [
                     collidable,
-                    new GameFramework.Drawable(visual, null),
-                    // new DrawableCamera(),
-                    new GameFramework.Locatable(new GameFramework.Disposition(GameFramework.Coords.create(), null, null)),
+                    GameFramework.Drawable.fromVisual(visual),
+                    GameFramework.Locatable.create(),
                     new GameFramework.Portal(null, null, GameFramework.Coords.create()),
                     new GameFramework.Usable((u, w, p, eUsing, eUsed) => {
                         eUsed.portal().use(u, w, p, eUsing, eUsed);
@@ -224,9 +219,8 @@ var ThisCouldBeBetter;
                 var entityDefn = new GameFramework.Entity(entityName, [
                     new GameFramework.ItemContainer(),
                     new GameFramework.ItemHolder([], null, null),
-                    new GameFramework.Locatable(new GameFramework.Disposition(GameFramework.Coords.create(), null, null)),
-                    new GameFramework.Drawable(itemHoleVisual, null),
-                    // new DrawableCamera(),
+                    GameFramework.Locatable.create(),
+                    GameFramework.Drawable.fromVisual(itemHoleVisual),
                     new GameFramework.Perceptible(false, () => 0, () => 0),
                     new GameFramework.Usable(use)
                 ]);
@@ -237,7 +231,7 @@ var ThisCouldBeBetter;
                 var obstacleBarSize = new GameFramework.Coords(6, 2, 1).multiplyScalar(entityDimension);
                 var obstacleRotationInTurns = .0625;
                 var obstacleCollider = new GameFramework.BoxRotated(new GameFramework.Box(GameFramework.Coords.create(), obstacleBarSize), obstacleRotationInTurns);
-                var obstacleCollidable = new GameFramework.Collidable(0, obstacleCollider, null, null);
+                var obstacleCollidable = GameFramework.Collidable.fromCollider(obstacleCollider);
                 var obstacleBounds = obstacleCollidable.collider.sphereSwept().toBox(GameFramework.Box.create());
                 var obstacleBoundable = new GameFramework.Boundable(obstacleBounds);
                 var visualBody = new GameFramework.VisualGroup([
@@ -251,8 +245,7 @@ var ThisCouldBeBetter;
                     obstacleBoundable,
                     obstacleCollidable,
                     new GameFramework.Damager(new GameFramework.Damage(10, null, null)),
-                    new GameFramework.Drawable(visual, null),
-                    // new DrawableCamera(),
+                    GameFramework.Drawable.fromVisual(visual),
                     new GameFramework.Locatable(new GameFramework.Disposition(GameFramework.Coords.create(), null, null))
                 ]);
                 return obstacleBarEntityDefn;
@@ -305,9 +298,8 @@ var ThisCouldBeBetter;
                     obstacleBoundable,
                     obstacleCollidable,
                     new GameFramework.Damager(new GameFramework.Damage(10, null, null)),
-                    new GameFramework.Drawable(obstacleMappedVisual, null),
-                    // new DrawableCamera(),
-                    new GameFramework.Locatable(new GameFramework.Disposition(GameFramework.Coords.create(), null, null))
+                    GameFramework.Drawable.fromVisual(obstacleMappedVisual),
+                    GameFramework.Locatable.create()
                 ]);
                 return obstacleMappedEntityDefn;
             }
@@ -330,7 +322,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Locatable(obstacleLoc),
                     obstacleCollidable,
                     //new Damager(new Damage(10, null, null)),
-                    new GameFramework.Drawable(obstacleRingVisual, null),
+                    GameFramework.Drawable.fromVisual(obstacleRingVisual),
                 ]);
                 return obstacleRingEntityDefn;
             }
@@ -351,9 +343,8 @@ var ThisCouldBeBetter;
                     return ""; // todo
                 };
                 var itemPillowEntityDefn = new GameFramework.Entity(pillowName, [
-                    new GameFramework.Locatable(new GameFramework.Disposition(GameFramework.Coords.create(), null, null)),
+                    GameFramework.Locatable.create(),
                     new GameFramework.Drawable(pillowVisual, null),
-                    // new DrawableCamera(),
                     new GameFramework.ItemHolder([], null, null),
                     new GameFramework.Usable(pillowUse)
                 ]);
@@ -380,10 +371,9 @@ var ThisCouldBeBetter;
                     return null;
                 };
                 var portalEntity = new GameFramework.Entity("Portal", [
-                    new GameFramework.Collidable(0, new GameFramework.Box(GameFramework.Coords.create(), entitySize), null, null),
-                    new GameFramework.Drawable(visual, null),
-                    // new DrawableCamera(),
-                    new GameFramework.Locatable(new GameFramework.Disposition(GameFramework.Coords.create(), null, null)),
+                    GameFramework.Collidable.fromCollider(GameFramework.Box.fromSize(entitySize)),
+                    GameFramework.Drawable.fromVisual(visual),
+                    GameFramework.Locatable.create(),
                     new GameFramework.Portal(null, "Exit", GameFramework.Coords.create()),
                     new GameFramework.Usable(portalUse)
                 ]);
@@ -420,8 +410,8 @@ var ThisCouldBeBetter;
                 var entityDefn = new GameFramework.Entity(entityName, [
                     boundable,
                     collidable,
-                    new GameFramework.Drawable(visual, null),
-                    new GameFramework.Locatable(GameFramework.Disposition.create())
+                    GameFramework.Drawable.fromVisual(visual),
+                    GameFramework.Locatable.create()
                 ]);
                 return entityDefn;
             }
@@ -431,7 +421,7 @@ var ThisCouldBeBetter;
                 var color = GameFramework.Color.byName("GreenDark");
                 var colorBorder = GameFramework.Color.byName("Black");
                 var visualTree = new GameFramework.VisualGroup([
-                    new GameFramework.VisualRectangle(new GameFramework.Coords(1, 2, 0).multiplyScalar(entityDimension * 0.5), GameFramework.Color.byName("Brown"), null, null),
+                    GameFramework.VisualRectangle.fromSizeAndColorFill(new GameFramework.Coords(1, 2, 0).multiplyScalar(entityDimension * 0.5), GameFramework.Color.byName("Brown")),
                     new GameFramework.VisualOffset(new GameFramework.VisualEllipse(entityDimension, // semimajorAxis
                     entityDimension * .8, 0, // rotationInTurns
                     color, colorBorder), new GameFramework.Coords(0, -entityDimension, 0)),
@@ -448,9 +438,9 @@ var ThisCouldBeBetter;
                     u.collisionHelper.collideEntitiesBounce(e, e2);
                 });
                 var entityDefn = new GameFramework.Entity(entityName, [
-                    new GameFramework.Locatable(new GameFramework.Disposition(GameFramework.Coords.create(), null, null)),
+                    GameFramework.Locatable.create(),
                     collidable,
-                    new GameFramework.Drawable(visual, null),
+                    GameFramework.Drawable.fromVisual(visual),
                 ]);
                 return entityDefn;
             }

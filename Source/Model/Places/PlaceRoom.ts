@@ -13,7 +13,8 @@ export class PlaceRoom extends Place
 			name, defnName, size,
 			ArrayHelper.addMany
 			(
-				entities, [ CollisionTracker.fromSize(size).toEntity() ]
+				[ CollisionTracker.fromSize(size).toEntity() ], // hack - Must come before collidables.
+				entities
 			)
 		);
 		this.randomizerSeed = randomizerSeed;

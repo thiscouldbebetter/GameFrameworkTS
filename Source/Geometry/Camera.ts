@@ -18,6 +18,7 @@ export class Camera extends EntityProperty
 	constructor(viewSize: Coords, focalLength: number, loc: Disposition)
 	{
 		super();
+
 		this.viewSize = viewSize;
 		this.focalLength = focalLength;
 		this.loc = loc;
@@ -28,8 +29,7 @@ export class Camera extends EntityProperty
 		viewColliderSize.z = Number.POSITIVE_INFINITY;
 		this.viewCollider = new Box
 		(
-			this.loc.pos,
-			viewColliderSize
+			this.loc.pos, viewColliderSize
 		);
 		this.entitiesInView = new Array<Entity>();
 
@@ -182,13 +182,17 @@ export class Camera extends EntityProperty
 		return viewCoords;
 	}
 
-	drawEntitiesInView(universe: Universe, world: World, place: Place, display: Display)
+	drawEntitiesInView
+	(
+		universe: Universe, world: World, place: Place,
+		cameraEntity: Entity, display: Display
+	)
 	{
 		this.loc.pos.round(); // hack - To prevent lines between map tiles.
 
 		this.entitiesInView = this.drawEntitiesInView_1_FindEntitiesInView
 		(
-			place, universe.collisionHelper, this.entitiesInView
+			place, cameraEntity, universe.collisionHelper, this.entitiesInView
 		);
 
 		this.drawEntitiesInView_2_Draw
@@ -199,44 +203,54 @@ export class Camera extends EntityProperty
 
 	drawEntitiesInView_1_FindEntitiesInView
 	(
-		place: Place, collisionHelper: CollisionHelper, entitiesInView: Entity[]
-	)
+		place: Place, cameraEntity: Entity,
+		collisionHelper: CollisionHelper, entitiesInView: Entity[]
+	): Entity[]
 	{
-		return this.drawEntitiesInView_1_FindEntitiesInView_New
-		(
-			place, collisionHelper, entitiesInView
-		);
+		var collisionTracker = place.collisionTracker();
+		if (collisionTracker == null)
+		{
+			entitiesInView = this.drawEntitiesInView_1_FindEntitiesInView_WithoutTracker
+			(
+				place, collisionHelper, entitiesInView
+			);
+		}
+		else
+		{
+			entitiesInView = this.drawEntitiesInView_1_FindEntitiesInView_WithTracker
+			(
+				place, cameraEntity, collisionHelper, entitiesInView, collisionTracker
+			);
+		}
+
+		return entitiesInView;
 	}
 
-	drawEntitiesInView_1_FindEntitiesInView_New
+	drawEntitiesInView_1_FindEntitiesInView_WithTracker
 	(
-		place: Place, collisionHelper: CollisionHelper, entitiesInView: Entity[]
+		place: Place, cameraEntity: Entity, collisionHelper: CollisionHelper,
+		entitiesInView: Entity[], collisionTracker: CollisionTracker
 	)
 	{
-		var cameraEntity = new Entity
-		(
-			Camera.name,
-			[
-				new Boundable(this.viewCollider),
-				Collidable.fromCollider(this.viewCollider)
-			]
-		);
-		var collisionTracker = place.collisionTracker();
+		var cameraCollidable = cameraEntity.collidable();
+		//cameraCollidable.isDisabled = false;
+		cameraCollidable.entitiesAlreadyCollidedWith.length = 0;
 		var collisions = collisionTracker.entityCollidableAddAndFindCollisions
 		(
 			cameraEntity, collisionHelper, new Array<Collision>()
 		);
 		var entitiesCollidedWith = collisions.map(x => x.entitiesColliding[1]);
 		var entitiesInView = entitiesCollidedWith.filter(x => x.drawable() != null);
+		//cameraCollidable.isDisabled = true;
 
 		var drawablesAll = place.drawables();
 		var drawablesUnboundable = drawablesAll.filter(x => x.boundable() == null);
 		entitiesInView.push(...drawablesUnboundable);
 
-		return entitiesInView
+		return entitiesInView;
 	}
 
-	drawEntitiesInView_1_FindEntitiesInView_Old
+	drawEntitiesInView_1_FindEntitiesInView_WithoutTracker
 	(
 		place: Place, collisionHelper: CollisionHelper, entitiesInView: Entity[]
 	)
@@ -289,7 +303,8 @@ export class Camera extends EntityProperty
 		entitiesInView: Entity[]
 	)
 	{
-		display.drawBackground("Black", "Black");
+		var colorBlack = Color.byName("Black");
+		display.drawBackground(colorBlack, colorBlack);
 
 		this.entitiesSortByZThenY(entitiesInView);
 

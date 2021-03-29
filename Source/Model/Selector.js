@@ -11,7 +11,7 @@ var ThisCouldBeBetter;
                 GameFramework.Color.byName("White"), true // isCentered
                 );
                 this.entityForReticle = new GameFramework.Entity("Reticle", [
-                    new GameFramework.Locatable(null),
+                    GameFramework.Locatable.create(),
                     new GameFramework.Drawable(visualReticle, false),
                 ]);
             }

@@ -93,12 +93,24 @@ export class MapOfCells<T>
 		var minPosInCells = this._posInCellsMin.overwriteWith
 		(
 			box.min()
-		).divide(this.cellSize).floor();
+		).divide
+		(
+			this.cellSize
+		).floor().trimToRangeMax
+		(
+			this.sizeInCellsMinusOnes
+		);
 
 		var maxPosInCells = this._posInCellsMax.overwriteWith
 		(
 			box.max()
-		).divide(this.cellSize).ceiling();
+		).divide
+		(
+			this.cellSize
+		).floor().trimToRangeMax
+		(
+			this.sizeInCellsMinusOnes
+		);
 
 		var cellPosInCells = this._posInCells;
 		for (var y = minPosInCells.y; y <= maxPosInCells.y; y++)

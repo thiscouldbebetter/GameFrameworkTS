@@ -15,7 +15,7 @@ var ThisCouldBeBetter;
                 var drawableLoc = entity.locatable().loc;
                 var drawableOrientation = drawableLoc.orientation;
                 var drawableRotationInTurns = drawableOrientation.forward.headingInTurns();
-                display.drawEllipse(drawableLoc.pos, this.semimajorAxis, this.semiminorAxis, GameFramework.NumberHelper.wrapToRangeZeroOne(this.rotationInTurns + drawableRotationInTurns), GameFramework.Color.systemColorGet(this.colorFill), GameFramework.Color.systemColorGet(this.colorBorder));
+                display.drawEllipse(drawableLoc.pos, this.semimajorAxis, this.semiminorAxis, GameFramework.NumberHelper.wrapToRangeZeroOne(this.rotationInTurns + drawableRotationInTurns), this.colorFill, this.colorBorder);
             }
             // Clonable.
             clone() {

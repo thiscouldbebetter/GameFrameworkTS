@@ -9,6 +9,9 @@ var ThisCouldBeBetter;
                 this.visual = visual;
                 this.isVisible = (isVisible == null ? true : isVisible);
             }
+            static fromVisual(visual) {
+                return new Drawable(visual, null);
+            }
             updateForTimerTick(universe, world, place, entity) {
                 if (this.isVisible) {
                     this.visual.draw(universe, world, place, entity, universe.display);

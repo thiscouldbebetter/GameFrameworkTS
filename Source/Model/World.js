@@ -29,6 +29,7 @@ var ThisCouldBeBetter;
                 var actions = placeBuilder.actions;
                 var actionToInputsMappings = placeBuilder.actionToInputsMappings;
                 var propertyNamesToProcess = [
+                    GameFramework.Loadable.name,
                     GameFramework.Locatable.name,
                     GameFramework.ForceField.name,
                     GameFramework.CollisionTracker.name,
@@ -40,7 +41,6 @@ var ThisCouldBeBetter;
                     GameFramework.Effectable.name,
                     GameFramework.Generator.name,
                     GameFramework.ItemCrafter.name,
-                    GameFramework.Loadable.name,
                     GameFramework.Playable.name,
                     GameFramework.SkillLearner.name,
                     GameFramework.Perceptible.name,
@@ -52,7 +52,6 @@ var ThisCouldBeBetter;
                     GameFramework.Phased.name,
                     GameFramework.Starvable.name,
                     GameFramework.Tirable.name,
-                    GameFramework.Camera.name,
                 ];
                 var placeDefnDemo = new GameFramework.PlaceDefn("Demo", actions, actionToInputsMappings, propertyNamesToProcess, null, // placeInitialize
                 null // placeFinalize

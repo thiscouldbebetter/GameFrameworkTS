@@ -21,6 +21,11 @@ export class Movable extends EntityProperty
 		this._accelerate = accelerate || this.accelerateForward;
 	}
 
+	static create(): Movable
+	{
+		return new Movable(null, null, null);
+	}
+
 	accelerate(universe: Universe, world: World, place: Place, entityMovable: Entity)
 	{
 		this._accelerate(universe, world, place, entityMovable, this.accelerationPerTick);

@@ -8,6 +8,9 @@ var ThisCouldBeBetter;
                 super();
                 this.loc = loc || GameFramework.Disposition.create();
             }
+            static create() {
+                return new Locatable(null);
+            }
             static fromPos(pos) {
                 return new Locatable(GameFramework.Disposition.fromPos(pos));
             }

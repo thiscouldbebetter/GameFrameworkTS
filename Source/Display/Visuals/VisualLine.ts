@@ -46,7 +46,7 @@ export class VisualLine implements Visual
 
 		display.drawLine
 		(
-			drawPosFrom, drawPosTo, this.color.systemColor(), this.lineThickness
+			drawPosFrom, drawPosTo, this.color, this.lineThickness
 		);
 	}
 

@@ -106,7 +106,11 @@ export class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemArmor = new ItemDefn(itemArmorName, null, null, 50, 30, null, [ "Armor" ], this.itemUseEquip, itemArmorVisual);
+		var itemArmor = new ItemDefn
+		(
+			itemArmorName, null, null, 50, 30, null, [ "Armor" ],
+			this.itemUseEquip, itemArmorVisual
+		);
 
 		return itemArmor;
 	}
@@ -146,7 +150,11 @@ export class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemArmor = new ItemDefn(itemArmorName, null, null, 50, 30, null, [ "Armor" ], this.itemUseEquip, itemArmorVisual);
+		var itemArmor = new ItemDefn
+		(
+			itemArmorName, null, null, 50, 30, null, [ "Armor" ],
+			this.itemUseEquip, itemArmorVisual
+		);
 
 		return itemArmor;
 	}
@@ -209,12 +217,15 @@ export class PlaceBuilderDemo_Items
 					(
 						itemArrowName, itemArrowColor
 					),
-					new Coords(0, 0 - this.entityDimension * 1.5, 0)
+					Coords.fromXY(0, 0 - this.entityDimension * 1.5)
 				)
 			);
 		}
 
-		var itemArrow = new ItemDefn(itemArrowName, null, null, .05, 5, null, null, null, itemArrowVisual);
+		var itemArrow = new ItemDefn
+		(
+			itemArrowName, null, null, .05, 5, null, null, null, itemArrowVisual
+		);
 
 		return itemArrow;
 	}
@@ -228,26 +239,24 @@ export class PlaceBuilderDemo_Items
 			// fuse
 			new VisualOffset
 			(
-				new VisualRectangle
+				VisualRectangle.fromSizeAndColorFill
 				(
 					new Coords(.2, 1, 1).multiplyScalar(this.entityDimensionHalf),
-					Color.byName("Tan"),
-					null, // colorBorder
-					true // isCentered
+					Color.byName("Tan")
 				),
 				new Coords(0, -1, 0).multiplyScalar(this.entityDimensionHalf)
 			),
 			// body
-			new VisualCircle
+			VisualCircle.fromRadiusAndColorFill
 			(
-				this.entityDimensionHalf, itemBombColor, null, null
+				this.entityDimensionHalf, itemBombColor
 			),
 			// highlight
 			new VisualOffset
 			(
-				new VisualCircle
+				VisualCircle.fromRadiusAndColorFill
 				(
-					this.entityDimensionHalf * .3, Color.byName("Blue"), null, null
+					this.entityDimensionHalf * .3, Color.byName("Blue")
 				),
 				new Coords(-this.entityDimensionHalf / 3, -this.entityDimensionHalf / 3, 0)
 			)
@@ -276,17 +285,17 @@ export class PlaceBuilderDemo_Items
 		var itemBookColor = Color.byName("Blue");
 		var itemBookVisual = new VisualGroup
 		([
-			new VisualRectangle
+			VisualRectangle.fromSizeAndColorFill
 			(
 				new Coords(1, 1.25, 0).multiplyScalar(this.entityDimension),
-				itemBookColor, null, null
+				itemBookColor
 			),
 			new VisualOffset
 			(
-				new VisualRectangle
+				VisualRectangle.fromSizeAndColorFill
 				(
 					new Coords(.1, 1.1, 0).multiplyScalar(this.entityDimension),
-					Color.byName("White"), null, null
+					Color.byName("White")
 				),
 				new Coords(.4, 0, 0).multiplyScalar(this.entityDimension)
 			)
@@ -503,9 +512,9 @@ export class PlaceBuilderDemo_Items
 		var itemCoinColor = Color.byName("Yellow");
 		var itemCoinVisual = new VisualGroup
 		([
-			new VisualCircle
+			VisualCircle.fromRadiusAndColorFill
 			(
-				this.entityDimensionHalf, itemCoinColor, null, null
+				this.entityDimensionHalf, itemCoinColor
 			),
 			new VisualCircle
 			(
@@ -599,16 +608,16 @@ export class PlaceBuilderDemo_Items
 		var itemDoughnutVisualBody = new VisualGroup
 		([
 			// body
-			new VisualCircle
+			VisualCircle.fromRadiusAndColorFill
 			(
-				this.entityDimensionHalf, itemDoughnutColor, null, null
+				this.entityDimensionHalf, itemDoughnutColor
 			),
 			// hole
 			new VisualErase
 			(
-				new VisualCircle
+				VisualCircle.fromRadiusAndColorFill
 				(
-					this.entityDimensionHalf * .3, itemDoughnutColor, null, null
+					this.entityDimensionHalf * .3, itemDoughnutColor
 				)
 			)
 		]);
@@ -715,15 +724,15 @@ export class PlaceBuilderDemo_Items
 		var itemFruitColor = Color.byName("Orange");
 		var itemFruitVisual = new VisualGroup
 		([
-			new VisualCircle
+			VisualCircle.fromRadiusAndColorFill
 			(
-				this.entityDimensionHalf, itemFruitColor, null, null
+				this.entityDimensionHalf, itemFruitColor
 			),
 			new VisualOffset
 			(
-				new VisualCircle
+				VisualCircle.fromRadiusAndColorFill
 				(
-					this.entityDimensionHalf * .25, Color.byName("White"), null, null
+					this.entityDimensionHalf * .25, Color.byName("White")
 				),
 				new Coords(-this.entityDimensionHalf / 2, -this.entityDimensionHalf / 2, 0)
 			)
@@ -1001,24 +1010,24 @@ export class PlaceBuilderDemo_Items
 		([
 			new VisualOffset
 			(
-				new VisualCircle
+				VisualCircle.fromRadiusAndColorFill
 				(
-					this.entityDimensionHalf, itemLogColor, null, null
+					this.entityDimensionHalf, itemLogColor
 				),
-				new Coords(this.entityDimension, 0, 0)
+				Coords.fromXY(0, this.entityDimension)
 			),
-			new VisualRectangle
+			VisualRectangle.fromSizeAndColorFill
 			(
 				new Coords(this.entityDimension * 2, this.entityDimension, 0),
-				itemLogColor, null, null
+				itemLogColor
 			),
 			new VisualOffset
 			(
-				new VisualCircle
+				VisualCircle.fromRadiusAndColorFill
 				(
-					this.entityDimensionHalf, Color.byName("Tan"), null, null
+					this.entityDimensionHalf, Color.byName("Tan")
 				),
-				new Coords(-this.entityDimension, 0, 0)
+				Coords.fromXY(-this.entityDimension, 0)
 			)
 		]);
 
@@ -1045,9 +1054,9 @@ export class PlaceBuilderDemo_Items
 		var itemMeatColor = Color.byName("Red");
 		var itemMeatVisual = new VisualGroup
 		([
-			new VisualCircle
+			VisualCircle.fromRadiusAndColorFill
 			(
-				this.entityDimensionHalf, itemMeatColor, null, null
+				this.entityDimensionHalf, itemMeatColor
 			),
 			new VisualCircle
 			(
@@ -1059,7 +1068,7 @@ export class PlaceBuilderDemo_Items
 				(
 					this.entityDimensionHalf * .2, Color.byName("Pink"), Color.byName("White"), null
 				),
-				new Coords(this.entityDimensionHalf * .2, 0, 0)
+				Coords.fromXY(this.entityDimensionHalf * .2, 0)
 			)
 		]);
 
@@ -1070,7 +1079,7 @@ export class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					VisualText.fromTextAndColor(itemMeatName, itemMeatColor),
-					new Coords(0, 0 - this.entityDimension * 1.5, 0)
+					Coords.fromXY(0, 0 - this.entityDimension * 1.5)
 				)
 			);
 		}
@@ -1099,10 +1108,10 @@ export class PlaceBuilderDemo_Items
 		var itemMedicineColor = Color.byName("Red");
 		var itemMedicineVisual = new VisualGroup
 		([
-			new VisualRectangle
+			VisualRectangle.fromSizeAndColorFill
 			(
 				new Coords(1, 1, 0).multiplyScalar(this.entityDimension),
-				Color.byName("White"), null, null
+				Color.byName("White")
 			),
 			new VisualPolygon
 			(
@@ -1182,10 +1191,10 @@ export class PlaceBuilderDemo_Items
 			),
 			new VisualOffset
 			(
-				new VisualRectangle
+				VisualRectangle.fromSizeAndColorFill
 				(
 					new Coords(this.entityDimensionHalf / 2, this.entityDimensionHalf, 0),
-					colorStem, null, null
+					colorStem
 				),
 				Coords.create()
 			)
@@ -1216,10 +1225,10 @@ export class PlaceBuilderDemo_Items
 		([
 			new VisualOffset
 			(
-				new VisualRectangle
+				VisualRectangle.fromSizeAndColorFill
 				(
 					new Coords(this.entityDimension / 4, this.entityDimension, 0),
-					Color.byName("Brown"), null, null
+					Color.byName("Brown")
 				),
 				new Coords(0, 0 - this.entityDimension / 2, 0)
 			),
@@ -1265,10 +1274,10 @@ export class PlaceBuilderDemo_Items
 		var itemPotionColor = Color.byName("Red");
 		var itemPotionVisual = new VisualGroup
 		([
-			new VisualRectangle
+			VisualRectangle.fromSizeAndColorFill
 			(
 				new Coords(1, 1, 0).multiplyScalar(this.entityDimension),
-				Color.byName("White"), null, null
+				Color.byName("White")
 			),
 			new VisualPolygon
 			(
@@ -1334,10 +1343,10 @@ export class PlaceBuilderDemo_Items
 		([
 			new VisualOffset
 			(
-				new VisualRectangle
+				VisualRectangle.fromSizeAndColorFill
 				(
 					new Coords(this.entityDimension / 4, this.entityDimension, 0),
-					Color.byName("Brown"), null, null
+					Color.byName("Brown")
 				),
 				new Coords(0, 0 + this.entityDimension / 2, 0)
 			),
@@ -1551,17 +1560,17 @@ export class PlaceBuilderDemo_Items
 		([
 			new VisualOffset
 			(
-				new VisualRectangle
+				VisualRectangle.fromSizeAndColorFill
 				(
 					new Coords(this.entityDimension / 4, this.entityDimension, 0),
-					Color.byName("Brown"), null, null
+					Color.byName("Brown")
 				),
 				new Coords(0, this.entityDimension / 2, 0)
 			),
-			new VisualRectangle
+			VisualRectangle.fromSizeAndColorFill
 			(
 				new Coords(this.entityDimension, this.entityDimension / 2, 0),
-				itemToolsetColor, null, null
+				itemToolsetColor
 			)
 		]);
 
@@ -1587,10 +1596,10 @@ export class PlaceBuilderDemo_Items
 		var itemTorchName = "Torch";
 		var itemTorchColor = Color.byName("Brown");
 
-		var itemTorchVisualBody = new VisualRectangle
+		var itemTorchVisualBody = VisualRectangle.fromSizeAndColorFill
 		(
 			new Coords(this.entityDimension / 3, this.entityDimension * 1.5, 0),
-			itemTorchColor, null, null
+			itemTorchColor
 		);
 
 		var itemTorchVisualHead = new VisualEllipse

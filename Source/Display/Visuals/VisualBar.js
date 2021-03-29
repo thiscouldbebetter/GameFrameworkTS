@@ -30,7 +30,7 @@ var ThisCouldBeBetter;
                     wasVisible = true;
                     var widthCurrent = fractionCurrent * this.size.x;
                     this._sizeCurrent.x = widthCurrent;
-                    display.drawRectangle(pos, this._sizeCurrent, this.color.systemColor(), null, null);
+                    display.drawRectangle(pos, this._sizeCurrent, this.color, null, null);
                     var colorForBorder = null;
                     if (this.colorForBorderAsValueBreakGroup == null) {
                         colorForBorder = GameFramework.Color.Instances().White;
@@ -44,9 +44,9 @@ var ThisCouldBeBetter;
                         this._sizeCurrent.x = thresholdFraction * this.size.x;
                         display.drawRectangle(this._sizeCurrent, // pos
                         new GameFramework.Coords(1, this.size.y, 0), // size
-                        this.color.systemColor(), null, null);
+                        this.color, null, null);
                     }
-                    display.drawRectangle(pos, this.size, null, colorForBorder.systemColor(), null);
+                    display.drawRectangle(pos, this.size, null, colorForBorder, null);
                     pos.add(this._sizeHalf);
                     var text;
                     if (this.text == null) {
@@ -57,7 +57,7 @@ var ThisCouldBeBetter;
                         text = this.text.get();
                     }
                     display.drawText(text, this.size.y, // fontHeightInPixels
-                    pos, colorForBorder.systemColor(), "Black", // colorOutline,
+                    pos, colorForBorder, GameFramework.Color.byName("Black"), // colorOutline,
                     false, // areColorsReversed
                     true, // isCentered
                     null);

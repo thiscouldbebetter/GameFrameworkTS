@@ -116,7 +116,7 @@ export class ControlBuilder
 
 			for (var i = 0; i < numberOfOptions; i++)
 			{
-				var button = ControlButton.from8
+				var button = ControlButton.from9
 				(
 					"buttonOption" + i,
 					Coords.fromXY
@@ -129,7 +129,8 @@ export class ControlBuilder
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					optionFunctions[i]
+					optionFunctions[i],
+					universe
 				);
 
 				childControls.push(button);

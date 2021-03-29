@@ -10,6 +10,9 @@ var ThisCouldBeBetter;
                 this.speedMax = speedMax;
                 this._accelerate = accelerate || this.accelerateForward;
             }
+            static create() {
+                return new Movable(null, null, null);
+            }
             accelerate(universe, world, place, entityMovable) {
                 this._accelerate(universe, world, place, entityMovable, this.accelerationPerTick);
             }

@@ -42,7 +42,7 @@ export class VisualPath implements Visual
 		display.drawPath
 		(
 			this.verticesAsPathTransformed.points,
-			this.color.systemColor(),
+			this.color,
 			this.lineThickness,
 			this.isClosed
 		);

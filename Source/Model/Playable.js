@@ -60,10 +60,10 @@ var ThisCouldBeBetter;
                 var gameAndSettingsMenuAsControl = universe.controlBuilder.gameAndSettings(universe, tabPageSize, universe.venueCurrent, false // includeResumeButton
                 );
                 controlsForTabs.push(gameAndSettingsMenuAsControl);
-                var statusAsControl = new GameFramework.ControlContainer("Status", GameFramework.Coords.create(), // pos
+                var statusAsControl = GameFramework.ControlContainer.from4("Status", GameFramework.Coords.create(), // pos
                 size.clone().addDimensions(0, -32, 0), // size
                 // children
-                controlsForStatusFields, null, null);
+                controlsForStatusFields);
                 controlsForTabs.splice(0, 0, statusAsControl);
                 var back = () => {
                     var venueNext = venuePrev;
@@ -153,9 +153,9 @@ var ThisCouldBeBetter;
                     new GameFramework.VisualOffset(playerVisualStaminaBarPlusIcon, childSpacing.clone().double()),
                     new GameFramework.VisualOffset(playerVisualTimeBarPlusIcon, childSpacing.clone().multiplyScalar(3))
                 ]);
-                var controlPlayerStatusInfo = new GameFramework.ControlVisual("visualPlayerStatusInfo", new GameFramework.Coords(5, 2, 0).multiplyScalar(playerVisualBarSize.y), // pos
+                var controlPlayerStatusInfo = GameFramework.ControlVisual.from4("visualPlayerStatusInfo", new GameFramework.Coords(5, 2, 0).multiplyScalar(playerVisualBarSize.y), // pos
                 GameFramework.Coords.create(), // size
-                GameFramework.DataBinding.fromContext(playerVisualStatusInfo), null, null);
+                GameFramework.DataBinding.fromContext(playerVisualStatusInfo));
                 childControls.push(controlPlayerStatusInfo);
                 // Selection.
                 var selector = entity.selector();
@@ -191,7 +191,7 @@ var ThisCouldBeBetter;
                     buttonClicks[i], null, // context
                     false // canBeHeldDown
                     );
-                    var visualItemInQuickSlot = new GameFramework.ControlVisual("visualItemInQuickSlot", buttonPos.clone(), buttonSize, new GameFramework.DataBinding(i, (c) => {
+                    var visualItemInQuickSlot = GameFramework.ControlVisual.from4("visualItemInQuickSlot", buttonPos.clone(), buttonSize, new GameFramework.DataBinding(i, (c) => {
                         var returnValue = null;
                         var itemEntityEquipped = equipmentUser.itemEntityInSocketWithName("Item" + c);
                         if (itemEntityEquipped != null) {
@@ -199,8 +199,7 @@ var ThisCouldBeBetter;
                             returnValue = item.defn(world).visual;
                         }
                         return returnValue;
-                    }, null), null, null // colorBackground, colorBorder
-                    );
+                    }, null));
                     childControls.push(visualItemInQuickSlot);
                     childControls.push(button);
                     buttonPos.x += buttonSize.x + buttonMargin;

@@ -40,8 +40,7 @@ export class VisualPolygon implements Visual
 		display.drawPolygon
 		(
 			this.verticesAsPathTransformed.points,
-			Color.systemColorGet(this.colorFill),
-			Color.systemColorGet(this.colorBorder)
+			this.colorFill, this.colorBorder
 		);
 	}
 

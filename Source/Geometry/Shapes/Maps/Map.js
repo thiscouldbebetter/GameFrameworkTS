@@ -45,8 +45,8 @@ var ThisCouldBeBetter;
             }
             cellsInBoxAddToList(box, cellsInBox) {
                 GameFramework.ArrayHelper.clear(cellsInBox);
-                var minPosInCells = this._posInCellsMin.overwriteWith(box.min()).divide(this.cellSize).floor();
-                var maxPosInCells = this._posInCellsMax.overwriteWith(box.max()).divide(this.cellSize).ceiling();
+                var minPosInCells = this._posInCellsMin.overwriteWith(box.min()).divide(this.cellSize).floor().trimToRangeMax(this.sizeInCellsMinusOnes);
+                var maxPosInCells = this._posInCellsMax.overwriteWith(box.max()).divide(this.cellSize).floor().trimToRangeMax(this.sizeInCellsMinusOnes);
                 var cellPosInCells = this._posInCells;
                 for (var y = minPosInCells.y; y <= maxPosInCells.y; y++) {
                     cellPosInCells.y = y;

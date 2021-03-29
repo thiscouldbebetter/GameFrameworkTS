@@ -45,6 +45,18 @@ export class Disposition
 		return new Disposition(pos, null, null);
 	}
 
+	equals(other: Disposition): boolean
+	{
+		var returnValue = 
+		(
+			this.placeName == other.placeName
+			&& this.pos.equals(other.pos)
+			&& this.orientation.equals(other.orientation)
+		);
+
+		return returnValue;
+	}
+
 	place(world: World)
 	{
 		return world.placesByName.get(this.placeName);

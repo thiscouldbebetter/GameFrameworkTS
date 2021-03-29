@@ -19,14 +19,18 @@ var ThisCouldBeBetter;
                 return world.defn.placeDefnByName(this.defnName);
             }
             draw(universe, world, display) {
-                var entitiesDrawable = this.entitiesByPropertyName(GameFramework.Drawable.name);
-                for (var i = 0; i < entitiesDrawable.length; i++) {
+                /*
+                var entitiesDrawable = this.entitiesByPropertyName(Drawable.name);
+                for (var i = 0; i < entitiesDrawable.length; i++)
+                {
                     var entity = entitiesDrawable[i];
                     var drawable = entity.drawable();
                     drawable.updateForTimerTick(universe, world, this, entity);
                 }
-                var camera = this.camera();
-                camera.drawEntitiesInView(universe, world, this, display);
+                */
+                var cameraEntity = this.camera();
+                var camera = cameraEntity.camera();
+                camera.drawEntitiesInView(universe, world, this, cameraEntity, display);
             }
             entitiesByPropertyName(propertyName) {
                 var returnValues = this._entitiesByPropertyName.get(propertyName);
@@ -136,8 +140,7 @@ var ThisCouldBeBetter;
             }
             // Entity convenience accessors.
             camera() {
-                var cameraEntity = this.entitiesByPropertyName(GameFramework.Camera.name)[0];
-                return (cameraEntity == null ? null : cameraEntity.camera());
+                return this.entitiesByPropertyName(GameFramework.Camera.name)[0];
             }
             collisionTracker() {
                 var collisionTrackerEntity = this.entitiesByPropertyName(GameFramework.CollisionTracker.name)[0];

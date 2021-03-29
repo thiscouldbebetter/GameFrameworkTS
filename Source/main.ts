@@ -27,7 +27,7 @@ export function main()
 		displaySizesAvailable,
 		"Font", // fontName
 		10, // fontHeightInPixels
-		"Gray", "White", // colorFore, colorBack
+		Color.byName("Gray"), Color.byName("White"), // colorFore, colorBack
 		null
 	);
 

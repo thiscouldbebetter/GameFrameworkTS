@@ -76,29 +76,35 @@ var ThisCouldBeBetter;
                 viewCoords.add(this.viewSizeHalf);
                 return viewCoords;
             }
-            drawEntitiesInView(universe, world, place, display) {
+            drawEntitiesInView(universe, world, place, cameraEntity, display) {
                 this.loc.pos.round(); // hack - To prevent lines between map tiles.
-                this.entitiesInView = this.drawEntitiesInView_1_FindEntitiesInView(place, universe.collisionHelper, this.entitiesInView);
+                this.entitiesInView = this.drawEntitiesInView_1_FindEntitiesInView(place, cameraEntity, universe.collisionHelper, this.entitiesInView);
                 this.drawEntitiesInView_2_Draw(universe, world, place, display, this.entitiesInView);
             }
-            drawEntitiesInView_1_FindEntitiesInView(place, collisionHelper, entitiesInView) {
-                return this.drawEntitiesInView_1_FindEntitiesInView_New(place, collisionHelper, entitiesInView);
-            }
-            drawEntitiesInView_1_FindEntitiesInView_New(place, collisionHelper, entitiesInView) {
-                var cameraEntity = new GameFramework.Entity(Camera.name, [
-                    new GameFramework.Boundable(this.viewCollider),
-                    GameFramework.Collidable.fromCollider(this.viewCollider)
-                ]);
+            drawEntitiesInView_1_FindEntitiesInView(place, cameraEntity, collisionHelper, entitiesInView) {
                 var collisionTracker = place.collisionTracker();
+                if (collisionTracker == null) {
+                    entitiesInView = this.drawEntitiesInView_1_FindEntitiesInView_WithoutTracker(place, collisionHelper, entitiesInView);
+                }
+                else {
+                    entitiesInView = this.drawEntitiesInView_1_FindEntitiesInView_WithTracker(place, cameraEntity, collisionHelper, entitiesInView, collisionTracker);
+                }
+                return entitiesInView;
+            }
+            drawEntitiesInView_1_FindEntitiesInView_WithTracker(place, cameraEntity, collisionHelper, entitiesInView, collisionTracker) {
+                var cameraCollidable = cameraEntity.collidable();
+                //cameraCollidable.isDisabled = false;
+                cameraCollidable.entitiesAlreadyCollidedWith.length = 0;
                 var collisions = collisionTracker.entityCollidableAddAndFindCollisions(cameraEntity, collisionHelper, new Array());
                 var entitiesCollidedWith = collisions.map(x => x.entitiesColliding[1]);
                 var entitiesInView = entitiesCollidedWith.filter(x => x.drawable() != null);
+                //cameraCollidable.isDisabled = true;
                 var drawablesAll = place.drawables();
                 var drawablesUnboundable = drawablesAll.filter(x => x.boundable() == null);
                 entitiesInView.push(...drawablesUnboundable);
                 return entitiesInView;
             }
-            drawEntitiesInView_1_FindEntitiesInView_Old(place, collisionHelper, entitiesInView) {
+            drawEntitiesInView_1_FindEntitiesInView_WithoutTracker(place, collisionHelper, entitiesInView) {
                 entitiesInView.length = 0;
                 var placeEntitiesDrawable = place.drawables();
                 for (var i = 0; i < placeEntitiesDrawable.length; i++) {
@@ -127,7 +133,8 @@ var ThisCouldBeBetter;
                 return entitiesInView;
             }
             drawEntitiesInView_2_Draw(universe, world, place, display, entitiesInView) {
-                display.drawBackground("Black", "Black");
+                var colorBlack = GameFramework.Color.byName("Black");
+                display.drawBackground(colorBlack, colorBlack);
                 this.entitiesSortByZThenY(entitiesInView);
                 for (var i = 0; i < entitiesInView.length; i++) {
                     var entity = entitiesInView[i];

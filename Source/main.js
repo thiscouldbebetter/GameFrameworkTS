@@ -19,7 +19,7 @@ var ThisCouldBeBetter;
             ];
             var display = new GameFramework.Display2D(displaySizesAvailable, "Font", // fontName
             10, // fontHeightInPixels
-            "Gray", "White", // colorFore, colorBack
+            GameFramework.Color.byName("Gray"), GameFramework.Color.byName("White"), // colorFore, colorBack
             null);
             var timerHelper = new GameFramework.TimerHelper(20);
             var controlBuilder = GameFramework.ControlBuilder.default();

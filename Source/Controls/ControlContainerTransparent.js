@@ -57,7 +57,7 @@ var ThisCouldBeBetter;
                 var drawPos = this.containerInner._drawPos.overwriteWith(drawLoc.pos).add(this.containerInner.pos);
                 style = style || this.style(universe);
                 display.drawRectangle(drawPos, this.containerInner.size, null, // display.colorBack,
-                GameFramework.Color.systemColorGet(style.colorBorder), null);
+                style.colorBorder, null);
                 var children = this.containerInner.children;
                 for (var i = 0; i < children.length; i++) {
                     var child = children[i];

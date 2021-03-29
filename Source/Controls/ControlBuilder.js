@@ -51,10 +51,10 @@ var ThisCouldBeBetter;
                         - (buttonWidth * numberOfOptions)
                         - (spaceBetweenButtons * (numberOfOptions - 1))) / 2;
                     for (var i = 0; i < numberOfOptions; i++) {
-                        var button = GameFramework.ControlButton.from8("buttonOption" + i, GameFramework.Coords.fromXY(buttonMarginLeftRight + i * (buttonWidth + spaceBetweenButtons), 100), // pos
+                        var button = GameFramework.ControlButton.from9("buttonOption" + i, GameFramework.Coords.fromXY(buttonMarginLeftRight + i * (buttonWidth + spaceBetweenButtons), 100), // pos
                         buttonSize.clone(), optionNames[i], fontHeight, true, // hasBorder
                         true, // isEnabled
-                        optionFunctions[i]);
+                        optionFunctions[i], universe);
                         childControls.push(button);
                     }
                 }

@@ -10,6 +10,9 @@ var ThisCouldBeBetter;
                 this._unequip = unequip;
                 this.isEquipped = false;
             }
+            static create() {
+                return new Equippable(null, null);
+            }
             equip(u, w, p, eEquipmentUser, eEquippable) {
                 if (this._equip != null) {
                     this._equip(u, w, p, eEquipmentUser, eEquippable);

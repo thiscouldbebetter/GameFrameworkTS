@@ -55,6 +55,8 @@ export class World
 
 		var propertyNamesToProcess = 
 		[
+			Loadable.name,
+
 			Locatable.name,
 			ForceField.name,
 
@@ -69,7 +71,6 @@ export class World
 			Effectable.name,
 			Generator.name,
 			ItemCrafter.name,
-			Loadable.name,
 			Playable.name,
 			SkillLearner.name,
 			Perceptible.name,
@@ -83,7 +84,7 @@ export class World
 			Starvable.name,
 			Tirable.name,
 
-			Camera.name,
+			//Camera.name,
 		]
 
 		var placeDefnDemo = new PlaceDefn

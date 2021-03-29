@@ -97,13 +97,13 @@ var ThisCouldBeBetter;
                 };
                 var carnivoreEntityDefn = new GameFramework.Entity("Carnivore", [
                     new GameFramework.Actor(carnivoreActivity),
-                    new GameFramework.Animatable(null, null, null),
-                    new GameFramework.Collidable(0, carnivoreCollider, null, null),
+                    GameFramework.Animatable.create(),
+                    GameFramework.Collidable.fromCollider(carnivoreCollider),
                     new GameFramework.Constrainable([constraintSpeedMax1]),
-                    new GameFramework.Drawable(carnivoreVisual, null),
-                    // new DrawableCamera(),
+                    GameFramework.Drawable.fromVisual(carnivoreVisual),
                     new GameFramework.Killable(10, null, carnivoreDie),
-                    new GameFramework.Locatable(new GameFramework.Disposition(GameFramework.Coords.create(), null, null))
+                    GameFramework.Locatable.create(),
+                    GameFramework.Movable.create()
                 ]);
                 return carnivoreEntityDefn;
             }
@@ -164,16 +164,16 @@ var ThisCouldBeBetter;
                 // todo - Remove closures.
                 var enemyEntityPrototype = new GameFramework.Entity(enemyTypeName + (damageTypeName || "Normal"), [
                     new GameFramework.Actor(enemyActivity),
-                    new GameFramework.Animatable(null, null, null),
+                    GameFramework.Animatable.create(),
                     new GameFramework.Constrainable([new GameFramework.Constraint_SpeedMaxXY(speedMax)]),
-                    new GameFramework.Collidable(0, enemyCollider, null, null),
+                    GameFramework.Collidable.fromCollider(enemyCollider),
                     new GameFramework.Damager(new GameFramework.Damage(10, damageTypeName, null)),
-                    new GameFramework.Drawable(enemyVisual, null),
-                    // new DrawableCamera(),
+                    GameFramework.Drawable.fromVisual(enemyVisual),
                     new GameFramework.Effectable([]),
                     new GameFramework.Enemy(weapon),
                     enemyKillable,
-                    new GameFramework.Locatable(new GameFramework.Disposition(GameFramework.Coords.create(), null, null)),
+                    GameFramework.Locatable.create(),
+                    GameFramework.Movable.create(),
                     enemyPerceptor
                 ]);
                 var generatorActivityPerform = (universe, world, place, actor, activity) => {
@@ -302,10 +302,10 @@ var ThisCouldBeBetter;
                 var sizeTopAsFractionOfBottom = 0;
                 var integrityMax = 20;
                 var entityProjectile = new GameFramework.Entity("Projectile", [
-                    new GameFramework.Drawable(new GameFramework.VisualCircle(2, GameFramework.Color.byName("Red"), null, null), true),
+                    GameFramework.Drawable.fromVisual(GameFramework.VisualCircle.fromRadiusAndColorFill(2, GameFramework.Color.byName("Red"))),
                     new GameFramework.Ephemeral(32, null),
                     new GameFramework.Killable(1, null, null),
-                    new GameFramework.Locatable(null),
+                    GameFramework.Locatable.create(),
                     new GameFramework.Movable(3, 3, null)
                 ]);
                 var weapon = new GameFramework.Weapon(100, // ticksToRecharge
@@ -336,7 +336,6 @@ var ThisCouldBeBetter;
                     collisionHelper.collideEntitiesBackUp(eFriendly, eOther);
                 };
                 var collidable = new GameFramework.Collidable(0, friendlyCollider, [GameFramework.Collidable.name], friendlyCollide);
-                //var collidable = new Collidable(friendlyCollider, null, null);
                 var visualEyeRadius = entityDimension * .75 / 2;
                 var visualBuilder = new GameFramework.VisualBuilder();
                 var visualEyesBlinking = visualBuilder.eyesBlinking(visualEyeRadius);
@@ -411,13 +410,13 @@ var ThisCouldBeBetter;
                 var routable = new GameFramework.Routable(route);
                 var friendlyEntityDefn = new GameFramework.Entity("Friendly", [
                     actor,
-                    new GameFramework.Animatable(null, null, null),
+                    GameFramework.Animatable.create(),
                     constrainable,
                     collidable,
-                    new GameFramework.Drawable(friendlyVisual, null),
-                    // new DrawableCamera(),
+                    GameFramework.Drawable.fromVisual(friendlyVisual),
                     itemHolder,
-                    new GameFramework.Locatable(null),
+                    GameFramework.Locatable.create(),
+                    GameFramework.Movable.create(),
                     routable,
                     new GameFramework.Talker("Conversation"),
                 ]);
@@ -533,14 +532,14 @@ var ThisCouldBeBetter;
                 ]);
                 var grazerEntityDefn = new GameFramework.Entity("Grazer", [
                     new GameFramework.Actor(grazerActivity),
-                    new GameFramework.Animatable(null, null, null),
+                    GameFramework.Animatable.create(),
                     grazerPhased,
-                    new GameFramework.Collidable(0, grazerCollider, null, null),
+                    GameFramework.Collidable.fromCollider(grazerCollider),
                     new GameFramework.Constrainable([constraintSpeedMax1]),
-                    new GameFramework.Drawable(grazerVisual, null),
-                    // new DrawableCamera(),
+                    GameFramework.Drawable.fromVisual(grazerVisual),
                     new GameFramework.Killable(10, null, grazerDie),
-                    new GameFramework.Locatable(new GameFramework.Disposition(GameFramework.Coords.create(), null, null))
+                    GameFramework.Locatable.create(),
+                    GameFramework.Movable.create()
                 ]);
                 return grazerEntityDefn;
             }
@@ -737,7 +736,7 @@ var ThisCouldBeBetter;
                         var selector = entityPlayer.selector();
                         inputHelper.isMouseClicked(false);
                         var mousePosRelativeToCameraView = inputHelper.mouseClickPos;
-                        var camera = place.camera();
+                        var camera = place.camera().camera();
                         var mousePosAbsolute = mousePosRelativeToCameraView.clone().divide(universe.display.scaleFactor()).add(camera.loc.pos).subtract(camera.viewSizeHalf).clearZ();
                         var entitiesInPlace = place.entities;
                         var range = 20;
@@ -792,14 +791,13 @@ var ThisCouldBeBetter;
                 );
                 var playerEntityDefn = new GameFramework.Entity(entityDefnNamePlayer, [
                     new GameFramework.Actor(playerActivity),
-                    new GameFramework.Animatable(null, null, null),
+                    GameFramework.Animatable.create(),
                     new GameFramework.Collidable(0, // ticksToWaitBetweenCollisions
                     playerCollider, [GameFramework.Collidable.name], // entityPropertyNamesToCollideWith
                     playerCollide),
                     constrainable,
                     controllable,
-                    new GameFramework.Drawable(playerVisual, null),
-                    // new DrawableCamera(),
+                    GameFramework.Drawable.fromVisual(playerVisual),
                     new GameFramework.Effectable([]),
                     equipmentUser,
                     /*
@@ -813,7 +811,7 @@ var ThisCouldBeBetter;
                     itemCrafter,
                     itemHolder,
                     journalKeeper,
-                    new GameFramework.Locatable(null),
+                    GameFramework.Locatable.create(),
                     killable,
                     movable,
                     perceptible,

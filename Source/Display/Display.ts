@@ -4,8 +4,8 @@ namespace ThisCouldBeBetter.GameFramework
 
 export interface Display
 {
-	colorBack: string;
-	colorFore: string;
+	colorBack: Color;
+	colorFore: Color;
 	fontHeightInPixels: number;
 	fontName: string;
 	sizeInPixels: Coords;
@@ -17,45 +17,45 @@ export interface Display
 	drawArc
 	(
 		center: Coords, radiusInner: number, radiusOuter: number,
-		angleStartInTurns: number, angleStopInTurns: number, colorFill: string,
-		colorBorder: string
+		angleStartInTurns: number, angleStopInTurns: number, colorFill: Color,
+		colorBorder: Color
 	): void;
-	drawBackground(colorBack: string, colorBorder: string): void;
-	drawCircle(center: Coords, radius: number, colorFill: string, colorBorder: string, borderThickness: number): void;
-	drawCircleWithGradient(center: Coords, radius: number, gradientFill: ValueBreakGroup, colorBorder: string): void;
-	drawCrosshairs(center: Coords, radius: number, color: string): void;
+	drawBackground(colorBack: Color, colorBorder: Color): void;
+	drawCircle(center: Coords, radius: number, colorFill: Color, colorBorder: Color, borderThickness: number): void;
+	drawCircleWithGradient(center: Coords, radius: number, gradientFill: ValueBreakGroup, colorBorder: Color): void;
+	drawCrosshairs(center: Coords, radius: number, color: Color): void;
 	drawEllipse
 	(
 		center: Coords, semimajorAxis: number, semiminorAxis: number,
-		rotationInTurns: number, colorFill: string, colorBorder: string
+		rotationInTurns: number, colorFill: Color, colorBorder: Color
 	): void;
 	drawImage(imageToDraw: Image2, pos: Coords): void;
 	drawImagePartial(imageToDraw: Image2, pos: Coords, regionToDrawAsBox: Box): void;
 	drawImagePartialScaled(imageToDraw: Image2, pos: Coords, regionToDrawAsBox: Box, sizeToDraw: Coords): void;
 	drawImageScaled(imageToDraw: Image2, pos: Coords, size: Coords): void;
-	drawLine(fromPos: Coords, toPos: Coords, color: string, lineThickness: number): void;
+	drawLine(fromPos: Coords, toPos: Coords, color: Color, lineThickness: number): void;
 	drawMeshWithOrientation(mesh: MeshTextured, meshOrientation: Orientation): void;
-	drawPath(vertices: Coords[], color: string, lineThickness: number, isClosed: boolean): void;
-	drawPixel(pos: Coords, color: string): void;
-	drawPolygon(vertices: Coords[], colorFill: string, colorBorder: string): void;
+	drawPath(vertices: Coords[], color: Color, lineThickness: number, isClosed: boolean): void;
+	drawPixel(pos: Coords, color: Color): void;
+	drawPolygon(vertices: Coords[], colorFill: Color, colorBorder: Color): void;
 	drawRectangle
 	(
-		pos: Coords, size: Coords, colorFill: string, colorBorder: string, areColorsReversed: boolean
+		pos: Coords, size: Coords, colorFill: Color, colorBorder: Color, areColorsReversed: boolean
 	): void;
 	drawRectangleCentered
 	(
-		pos: Coords, size: Coords, colorFill: string, colorBorder: string
+		pos: Coords, size: Coords, colorFill: Color, colorBorder: Color
 	): void;
 	drawText
 	(
 		text: string, fontHeightInPixels: number, pos: Coords,
-		colorFill: string, colorOutline: string, areColorsReversed: boolean,
+		colorFill: Color, colorOutline: Color, areColorsReversed: boolean,
 		isCentered: boolean, widthMaxInPixels: number
 	): void;
 	drawWedge
 	(
 		center: Coords, radius: number, angleStartInTurns: number,
-		angleStopInTurns: number, colorFill: string, colorBorder: string
+		angleStopInTurns: number, colorFill: Color, colorBorder: Color
 	): void;
 	eraseModeSet(value: boolean): void;
 	fontSet(fontName: string, fontHeightInPixels: number): void;

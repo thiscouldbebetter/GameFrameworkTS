@@ -211,9 +211,9 @@ var ThisCouldBeBetter;
                         var itemToDropDefn = itemToDrop.defn(world);
                         var itemLocatable = itemEntityToDrop.locatable();
                         if (itemLocatable == null) {
-                            itemLocatable = new GameFramework.Locatable(null);
+                            itemLocatable = GameFramework.Locatable.create();
                             itemEntityToDrop.propertyAddForPlace(itemLocatable, place);
-                            itemEntityToDrop.propertyAddForPlace(new GameFramework.Drawable(itemToDropDefn.visual, null), place);
+                            itemEntityToDrop.propertyAddForPlace(GameFramework.Drawable.fromVisual(itemToDropDefn.visual), place);
                             // todo - Other properties: Collidable, etc.
                         }
                         var posToDropAt = itemLocatable.loc.pos;

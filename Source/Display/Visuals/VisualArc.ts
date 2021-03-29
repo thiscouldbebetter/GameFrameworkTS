@@ -47,8 +47,7 @@ export class VisualArc implements Visual
 			drawPos, // center
 			this.radiusInner, this.radiusOuter,
 			wedgeAngleMin, wedgeAngleMax,
-			Color.systemColorGet(this.colorFill),
-			Color.systemColorGet(this.colorBorder)
+			this.colorFill, this.colorBorder
 		);
 	}
 

@@ -46,8 +46,8 @@ var ThisCouldBeBetter;
                     false),
                     new GameFramework.ControlList("listEntries", new GameFramework.Coords(10, 15, 0), // pos
                     new GameFramework.Coords(85, 110, 0), // size
-                    new GameFramework.DataBinding(this.journal.entries, null, null), // items
-                    new GameFramework.DataBinding(null, (c) => c.toString(universe), null), // bindingForItemText
+                    GameFramework.DataBinding.fromContext(this.journal.entries), // items
+                    GameFramework.DataBinding.fromGet((c) => c.toString(universe)), // bindingForItemText
                     fontHeightSmall, new GameFramework.DataBinding(this, (c) => c.journalEntrySelected, (c, v) => {
                         c.journalEntrySelected = v;
                         c.isJournalEntrySelectedEditable = false;
@@ -111,10 +111,10 @@ var ThisCouldBeBetter;
                     new GameFramework.ControlLabel("labelEntrySelectedTimeRecorded", new GameFramework.Coords(145, 15, 0), // pos
                     new GameFramework.Coords(100, 15, 0), // size
                     false, // isTextCentered
-                    new GameFramework.DataBinding(this, (c) => {
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => {
                         var entry = c.journalEntrySelected;
                         return (entry == null ? "-" : entry.timeRecordedAsStringH_M_S(universe));
-                    }, null), fontHeightSmall),
+                    }), fontHeightSmall),
                     new GameFramework.ControlTextBox("textTitle", new GameFramework.Coords(105, 25, 0), // pos
                     new GameFramework.Coords(85, 10, 0), // size
                     new GameFramework.DataBinding(this, (c) => {
@@ -165,12 +165,12 @@ var ThisCouldBeBetter;
                     new GameFramework.Coords(100, 25, 0), // size
                     true, // isTextCentered
                     "Journal", fontHeightLarge));
-                    childControls.push(new GameFramework.ControlButton("buttonDone", new GameFramework.Coords(170, 115, 0), // pos
+                    childControls.push(GameFramework.ControlButton.from8("buttonDone", new GameFramework.Coords(170, 115, 0), // pos
                     buttonSize.clone(), "Done", fontHeightSmall, true, // hasBorder
                     true, // isEnabled
-                    back, // click
-                    null, null));
-                    var titleHeight = new GameFramework.Coords(0, 15, 0);
+                    back // click
+                    ));
+                    var titleHeight = GameFramework.Coords.fromXY(0, 15);
                     sizeBase.add(titleHeight);
                     returnValue.size.add(titleHeight);
                     returnValue.shiftChildPositions(titleHeight);

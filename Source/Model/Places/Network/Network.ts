@@ -205,6 +205,8 @@ export class VisualNetwork implements Visual
 
 		var networkTransformed = this.networkTransformed;
 
+		var colorCyan = Color.byName("Cyan");
+
 		var links = networkTransformed.links;
 		for (var i = 0; i < links.length; i++)
 		{
@@ -212,7 +214,7 @@ export class VisualNetwork implements Visual
 			var nodesLinked = link.nodes(networkTransformed);
 			var nodeFromPos = nodesLinked[0].pos;
 			var nodeToPos = nodesLinked[1].pos;
-			display.drawLine(nodeFromPos, nodeToPos, "Cyan", 3); // lineThickness
+			display.drawLine(nodeFromPos, nodeToPos, colorCyan, 3); // lineThickness
 		}
 
 		var nodes = networkTransformed.nodes;
@@ -224,7 +226,7 @@ export class VisualNetwork implements Visual
 				"" + node.id,
 				10, // fontHeightInPixels
 				node.pos,
-				"Cyan",
+				colorCyan,
 				null, // colorOutline
 				false, // areColorsReversed
 				false, // isCentered

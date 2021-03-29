@@ -23,6 +23,12 @@ var ThisCouldBeBetter;
             static fromPos(pos) {
                 return new Disposition(pos, null, null);
             }
+            equals(other) {
+                var returnValue = (this.placeName == other.placeName
+                    && this.pos.equals(other.pos)
+                    && this.orientation.equals(other.orientation));
+                return returnValue;
+            }
             place(world) {
                 return world.placesByName.get(this.placeName);
             }

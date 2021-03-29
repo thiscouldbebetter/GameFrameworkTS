@@ -131,14 +131,13 @@ export class Playable extends EntityProperty
 		);
 		controlsForTabs.push(gameAndSettingsMenuAsControl);
 
-		var statusAsControl = new ControlContainer
+		var statusAsControl = ControlContainer.from4
 		(
 			"Status",
 			Coords.create(), // pos
 			size.clone().addDimensions(0, -32, 0), // size
 			// children
-			controlsForStatusFields,
-			null, null
+			controlsForStatusFields
 		);
 		controlsForTabs.splice(0, 0, statusAsControl);
 
@@ -342,13 +341,12 @@ export class Playable extends EntityProperty
 			)
 		]);
 
-		var controlPlayerStatusInfo = new ControlVisual
+		var controlPlayerStatusInfo = ControlVisual.from4
 		(
 			"visualPlayerStatusInfo",
 			new Coords(5, 2, 0).multiplyScalar(playerVisualBarSize.y), // pos
 			Coords.create(), // size
-			DataBinding.fromContext(playerVisualStatusInfo),
-			null, null
+			DataBinding.fromContext(playerVisualStatusInfo)
 		);
 
 		childControls.push(controlPlayerStatusInfo);
@@ -420,7 +418,7 @@ export class Playable extends EntityProperty
 				false // canBeHeldDown
 			);
 
-			var visualItemInQuickSlot = new ControlVisual
+			var visualItemInQuickSlot = ControlVisual.from4
 			(
 				"visualItemInQuickSlot",
 				buttonPos.clone(),
@@ -441,8 +439,7 @@ export class Playable extends EntityProperty
 						return returnValue;
 					},
 					null
-				),
-				null, null // colorBackground, colorBorder
+				)
 			);
 
 			childControls.push(visualItemInQuickSlot);

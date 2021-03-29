@@ -95,13 +95,8 @@ export class JournalKeeper extends EntityProperty
 				"listEntries",
 				new Coords(10, 15, 0), // pos
 				new Coords(85, 110, 0), // size
-				new DataBinding(this.journal.entries, null, null), // items
-				new DataBinding
-				(
-					null,
-					(c: JournalEntry) => c.toString(universe),
-					null
-				), // bindingForItemText
+				DataBinding.fromContext(this.journal.entries), // items
+				DataBinding.fromGet( (c: JournalEntry) => c.toString(universe) ), // bindingForItemText
 				fontHeightSmall,
 				new DataBinding
 				(
@@ -244,15 +239,14 @@ export class JournalKeeper extends EntityProperty
 				new Coords(145, 15, 0), // pos
 				new Coords(100, 15, 0), // size
 				false, // isTextCentered
-				new DataBinding
+				DataBinding.fromContextAndGet
 				(
 					this,
 					(c: JournalKeeper) =>
 					{
 						var entry = c.journalEntrySelected;
 						return (entry == null ? "-" : entry.timeRecordedAsStringH_M_S(universe));
-					},
-					null
+					}
 				),
 				fontHeightSmall
 			),
@@ -376,7 +370,7 @@ export class JournalKeeper extends EntityProperty
 			);
 			childControls.push
 			(
-				new ControlButton
+				ControlButton.from8
 				(
 					"buttonDone",
 					new Coords(170, 115, 0), // pos
@@ -385,11 +379,10 @@ export class JournalKeeper extends EntityProperty
 					fontHeightSmall,
 					true, // hasBorder
 					true, // isEnabled
-					back, // click
-					null, null
+					back // click
 				)
 			);
-			var titleHeight = new Coords(0, 15, 0);
+			var titleHeight = Coords.fromXY(0, 15);
 			sizeBase.add(titleHeight);
 			returnValue.size.add(titleHeight);
 			returnValue.shiftChildPositions(titleHeight);

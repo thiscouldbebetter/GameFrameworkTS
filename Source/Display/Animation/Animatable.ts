@@ -24,7 +24,12 @@ export class Animatable extends EntityProperty
 		this.ticksStartedByAnimationName = new Map();
 	}
 
-	animationStartByName(name: string, world: World)
+	static create(): Animatable
+	{
+		return new Animatable(null, null, null);
+	}
+
+	animationStartByName(name: string, world: World): void
 	{
 		if (this.ticksStartedByAnimationName.has(name) == false)
 		{
@@ -32,7 +37,7 @@ export class Animatable extends EntityProperty
 		}
 	}
 
-	animationStopByName(name: string)
+	animationStopByName(name: string): void
 	{
 		this.ticksStartedByAnimationName.delete(name);
 	}
@@ -46,7 +51,7 @@ export class Animatable extends EntityProperty
 		return this.ticksStartedByAnimationName.get(animationName);
 	}
 
-	animationDefnsRunning()
+	animationDefnsRunning(): AnimationDefn[]
 	{
 		var animationsRunningNames = this.animationsRunningNames();
 		var returnValues = animationsRunningNames.map
@@ -56,7 +61,7 @@ export class Animatable extends EntityProperty
 		return returnValues;
 	}
 
-	animationsRunningNames()
+	animationsRunningNames(): string[]
 	{
 		var animationsRunningNames = Array.from
 		(
@@ -68,17 +73,17 @@ export class Animatable extends EntityProperty
 		return animationsRunningNames;
 	}
 
-	animationsStopAll()
+	animationsStopAll(): void
 	{
 		this.ticksStartedByAnimationName.clear();
 	}
 
-	transformableReset()
+	transformableReset(): void
 	{
 		this.transformableTransformed.overwriteWith(this.transformableAtRest);
 	}
 
-	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity)
+	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity): void
 	{
 		var animationDefnsRunning = this.animationDefnsRunning();
 		for (var i = 0; i < animationDefnsRunning.length; i++)
@@ -102,12 +107,12 @@ export class Animatable extends EntityProperty
 
 	// Clonable.
 
-	clone()
+	clone(): Animatable
 	{
 		return this; // todo
 	}
 
-	overwriteWith(other: Animatable)
+	overwriteWith(other: Animatable): Animatable
 	{
 		return this; // todo
 	}

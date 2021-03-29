@@ -11,6 +11,9 @@ var ThisCouldBeBetter;
                 this.transformableTransformed = transformableTransformed;
                 this.ticksStartedByAnimationName = new Map();
             }
+            static create() {
+                return new Animatable(null, null, null);
+            }
             animationStartByName(name, world) {
                 if (this.ticksStartedByAnimationName.has(name) == false) {
                     this.ticksStartedByAnimationName.set(name, world.timerTicksSoFar);

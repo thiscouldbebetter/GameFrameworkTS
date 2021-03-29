@@ -350,11 +350,11 @@ export class ItemHolder extends EntityProperty
 				var itemLocatable = itemEntityToDrop.locatable();
 				if (itemLocatable == null)
 				{
-					itemLocatable = new Locatable(null);
+					itemLocatable = Locatable.create();
 					itemEntityToDrop.propertyAddForPlace(itemLocatable, place);
 					itemEntityToDrop.propertyAddForPlace
 					(
-						new Drawable(itemToDropDefn.visual, null), place
+						Drawable.fromVisual(itemToDropDefn.visual), place
 					);
 					// todo - Other properties: Collidable, etc.
 				}

@@ -116,7 +116,7 @@ var ThisCouldBeBetter;
                     itemArrowVisualHead
                 ]);
                 if (this.parent.visualsHaveText) {
-                    itemArrowVisual.children.push(new GameFramework.VisualOffset(GameFramework.VisualText.fromTextAndColor(itemArrowName, itemArrowColor), new GameFramework.Coords(0, 0 - this.entityDimension * 1.5, 0)));
+                    itemArrowVisual.children.push(new GameFramework.VisualOffset(GameFramework.VisualText.fromTextAndColor(itemArrowName, itemArrowColor), GameFramework.Coords.fromXY(0, 0 - this.entityDimension * 1.5)));
                 }
                 var itemArrow = new GameFramework.ItemDefn(itemArrowName, null, null, .05, 5, null, null, null, itemArrowVisual);
                 return itemArrow;
@@ -126,13 +126,11 @@ var ThisCouldBeBetter;
                 var itemBombColor = GameFramework.Color.byName("BlueDark");
                 var itemBombVisual = new GameFramework.VisualGroup([
                     // fuse
-                    new GameFramework.VisualOffset(new GameFramework.VisualRectangle(new GameFramework.Coords(.2, 1, 1).multiplyScalar(this.entityDimensionHalf), GameFramework.Color.byName("Tan"), null, // colorBorder
-                    true // isCentered
-                    ), new GameFramework.Coords(0, -1, 0).multiplyScalar(this.entityDimensionHalf)),
+                    new GameFramework.VisualOffset(GameFramework.VisualRectangle.fromSizeAndColorFill(new GameFramework.Coords(.2, 1, 1).multiplyScalar(this.entityDimensionHalf), GameFramework.Color.byName("Tan")), new GameFramework.Coords(0, -1, 0).multiplyScalar(this.entityDimensionHalf)),
                     // body
-                    new GameFramework.VisualCircle(this.entityDimensionHalf, itemBombColor, null, null),
+                    GameFramework.VisualCircle.fromRadiusAndColorFill(this.entityDimensionHalf, itemBombColor),
                     // highlight
-                    new GameFramework.VisualOffset(new GameFramework.VisualCircle(this.entityDimensionHalf * .3, GameFramework.Color.byName("Blue"), null, null), new GameFramework.Coords(-this.entityDimensionHalf / 3, -this.entityDimensionHalf / 3, 0))
+                    new GameFramework.VisualOffset(GameFramework.VisualCircle.fromRadiusAndColorFill(this.entityDimensionHalf * .3, GameFramework.Color.byName("Blue")), new GameFramework.Coords(-this.entityDimensionHalf / 3, -this.entityDimensionHalf / 3, 0))
                 ]);
                 if (this.parent.visualsHaveText) {
                     itemBombVisual.children.push(new GameFramework.VisualOffset(GameFramework.VisualText.fromTextAndColor(itemBombName, itemBombColor), new GameFramework.Coords(0, 0 - this.entityDimension * 2, 0)));
@@ -144,8 +142,8 @@ var ThisCouldBeBetter;
                 var itemBookName = "Book";
                 var itemBookColor = GameFramework.Color.byName("Blue");
                 var itemBookVisual = new GameFramework.VisualGroup([
-                    new GameFramework.VisualRectangle(new GameFramework.Coords(1, 1.25, 0).multiplyScalar(this.entityDimension), itemBookColor, null, null),
-                    new GameFramework.VisualOffset(new GameFramework.VisualRectangle(new GameFramework.Coords(.1, 1.1, 0).multiplyScalar(this.entityDimension), GameFramework.Color.byName("White"), null, null), new GameFramework.Coords(.4, 0, 0).multiplyScalar(this.entityDimension))
+                    GameFramework.VisualRectangle.fromSizeAndColorFill(new GameFramework.Coords(1, 1.25, 0).multiplyScalar(this.entityDimension), itemBookColor),
+                    new GameFramework.VisualOffset(GameFramework.VisualRectangle.fromSizeAndColorFill(new GameFramework.Coords(.1, 1.1, 0).multiplyScalar(this.entityDimension), GameFramework.Color.byName("White")), new GameFramework.Coords(.4, 0, 0).multiplyScalar(this.entityDimension))
                 ]);
                 if (this.parent.visualsHaveText) {
                     itemBookVisual.children.push(new GameFramework.VisualOffset(GameFramework.VisualText.fromTextAndColor(itemBookName, itemBookColor), new GameFramework.Coords(0, 0 - this.entityDimension * 1.5, 0)));
@@ -242,7 +240,7 @@ var ThisCouldBeBetter;
                 var itemCoinName = "Coin";
                 var itemCoinColor = GameFramework.Color.byName("Yellow");
                 var itemCoinVisual = new GameFramework.VisualGroup([
-                    new GameFramework.VisualCircle(this.entityDimensionHalf, itemCoinColor, null, null),
+                    GameFramework.VisualCircle.fromRadiusAndColorFill(this.entityDimensionHalf, itemCoinColor),
                     new GameFramework.VisualCircle(this.entityDimensionHalf * .75, null, GameFramework.Color.byName("Gray"), null)
                 ]);
                 if (this.parent.visualsHaveText) {
@@ -279,9 +277,9 @@ var ThisCouldBeBetter;
                 var itemDoughnutColor = GameFramework.Color.byName("Orange");
                 var itemDoughnutVisualBody = new GameFramework.VisualGroup([
                     // body
-                    new GameFramework.VisualCircle(this.entityDimensionHalf, itemDoughnutColor, null, null),
+                    GameFramework.VisualCircle.fromRadiusAndColorFill(this.entityDimensionHalf, itemDoughnutColor),
                     // hole
-                    new GameFramework.VisualErase(new GameFramework.VisualCircle(this.entityDimensionHalf * .3, itemDoughnutColor, null, null))
+                    new GameFramework.VisualErase(GameFramework.VisualCircle.fromRadiusAndColorFill(this.entityDimensionHalf * .3, itemDoughnutColor))
                 ]);
                 var itemDoughnutVisual = new GameFramework.VisualBuffered(new GameFramework.Coords(1, 1, 0).multiplyScalar(this.entityDimension * 1.2), itemDoughnutVisualBody);
                 if (this.parent.visualsHaveText) {
@@ -329,8 +327,8 @@ var ThisCouldBeBetter;
                 var itemFruitName = "Fruit";
                 var itemFruitColor = GameFramework.Color.byName("Orange");
                 var itemFruitVisual = new GameFramework.VisualGroup([
-                    new GameFramework.VisualCircle(this.entityDimensionHalf, itemFruitColor, null, null),
-                    new GameFramework.VisualOffset(new GameFramework.VisualCircle(this.entityDimensionHalf * .25, GameFramework.Color.byName("White"), null, null), new GameFramework.Coords(-this.entityDimensionHalf / 2, -this.entityDimensionHalf / 2, 0))
+                    GameFramework.VisualCircle.fromRadiusAndColorFill(this.entityDimensionHalf, itemFruitColor),
+                    new GameFramework.VisualOffset(GameFramework.VisualCircle.fromRadiusAndColorFill(this.entityDimensionHalf * .25, GameFramework.Color.byName("White")), new GameFramework.Coords(-this.entityDimensionHalf / 2, -this.entityDimensionHalf / 2, 0))
                 ]);
                 if (this.parent.visualsHaveText) {
                     itemFruitVisual.children.push(new GameFramework.VisualOffset(GameFramework.VisualText.fromTextAndColor(itemFruitName, itemFruitColor), new GameFramework.Coords(0, 0 - this.entityDimension, 0)));
@@ -456,9 +454,9 @@ var ThisCouldBeBetter;
                 var itemLogName = "Log";
                 var itemLogColor = GameFramework.Color.byName("Brown");
                 var itemLogVisual = new GameFramework.VisualGroup([
-                    new GameFramework.VisualOffset(new GameFramework.VisualCircle(this.entityDimensionHalf, itemLogColor, null, null), new GameFramework.Coords(this.entityDimension, 0, 0)),
-                    new GameFramework.VisualRectangle(new GameFramework.Coords(this.entityDimension * 2, this.entityDimension, 0), itemLogColor, null, null),
-                    new GameFramework.VisualOffset(new GameFramework.VisualCircle(this.entityDimensionHalf, GameFramework.Color.byName("Tan"), null, null), new GameFramework.Coords(-this.entityDimension, 0, 0))
+                    new GameFramework.VisualOffset(GameFramework.VisualCircle.fromRadiusAndColorFill(this.entityDimensionHalf, itemLogColor), GameFramework.Coords.fromXY(0, this.entityDimension)),
+                    GameFramework.VisualRectangle.fromSizeAndColorFill(new GameFramework.Coords(this.entityDimension * 2, this.entityDimension, 0), itemLogColor),
+                    new GameFramework.VisualOffset(GameFramework.VisualCircle.fromRadiusAndColorFill(this.entityDimensionHalf, GameFramework.Color.byName("Tan")), GameFramework.Coords.fromXY(-this.entityDimension, 0))
                 ]);
                 if (this.parent.visualsHaveText) {
                     itemLogVisual.children.push(new GameFramework.VisualOffset(GameFramework.VisualText.fromTextAndColor(itemLogName, itemLogColor), new GameFramework.Coords(0, 0 - this.entityDimension, 0)));
@@ -470,12 +468,12 @@ var ThisCouldBeBetter;
                 var itemMeatName = "Meat";
                 var itemMeatColor = GameFramework.Color.byName("Red");
                 var itemMeatVisual = new GameFramework.VisualGroup([
-                    new GameFramework.VisualCircle(this.entityDimensionHalf, itemMeatColor, null, null),
+                    GameFramework.VisualCircle.fromRadiusAndColorFill(this.entityDimensionHalf, itemMeatColor),
                     new GameFramework.VisualCircle(this.entityDimensionHalf * .9, null, GameFramework.Color.byName("White"), null),
-                    new GameFramework.VisualOffset(new GameFramework.VisualCircle(this.entityDimensionHalf * .2, GameFramework.Color.byName("Pink"), GameFramework.Color.byName("White"), null), new GameFramework.Coords(this.entityDimensionHalf * .2, 0, 0))
+                    new GameFramework.VisualOffset(new GameFramework.VisualCircle(this.entityDimensionHalf * .2, GameFramework.Color.byName("Pink"), GameFramework.Color.byName("White"), null), GameFramework.Coords.fromXY(this.entityDimensionHalf * .2, 0))
                 ]);
                 if (this.parent.visualsHaveText) {
-                    itemMeatVisual.children.push(new GameFramework.VisualOffset(GameFramework.VisualText.fromTextAndColor(itemMeatName, itemMeatColor), new GameFramework.Coords(0, 0 - this.entityDimension * 1.5, 0)));
+                    itemMeatVisual.children.push(new GameFramework.VisualOffset(GameFramework.VisualText.fromTextAndColor(itemMeatName, itemMeatColor), GameFramework.Coords.fromXY(0, 0 - this.entityDimension * 1.5)));
                 }
                 var itemMeat = new GameFramework.ItemDefn(itemMeatName, null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize
                 ["Consumable"], // categoryNames
@@ -493,7 +491,7 @@ var ThisCouldBeBetter;
                 var itemMedicineName = "Medicine";
                 var itemMedicineColor = GameFramework.Color.byName("Red");
                 var itemMedicineVisual = new GameFramework.VisualGroup([
-                    new GameFramework.VisualRectangle(new GameFramework.Coords(1, 1, 0).multiplyScalar(this.entityDimension), GameFramework.Color.byName("White"), null, null),
+                    GameFramework.VisualRectangle.fromSizeAndColorFill(new GameFramework.Coords(1, 1, 0).multiplyScalar(this.entityDimension), GameFramework.Color.byName("White")),
                     new GameFramework.VisualPolygon(new GameFramework.Path([
                         new GameFramework.Coords(-0.5, -0.2, 0),
                         new GameFramework.Coords(-0.2, -0.2, 0),
@@ -535,7 +533,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Coords(-1, 0, 0), // directionMin
                     .5, // angleSpannedInTurns
                     colorCap, null), new GameFramework.Coords(0, -this.entityDimensionHalf / 2, 0)),
-                    new GameFramework.VisualOffset(new GameFramework.VisualRectangle(new GameFramework.Coords(this.entityDimensionHalf / 2, this.entityDimensionHalf, 0), colorStem, null, null), GameFramework.Coords.create())
+                    new GameFramework.VisualOffset(GameFramework.VisualRectangle.fromSizeAndColorFill(new GameFramework.Coords(this.entityDimensionHalf / 2, this.entityDimensionHalf, 0), colorStem), GameFramework.Coords.create())
                 ]);
                 if (this.parent.visualsHaveText) {
                     itemMushroomVisual.children.push(new GameFramework.VisualOffset(GameFramework.VisualText.fromTextAndColor(itemMushroomName, colorCap), new GameFramework.Coords(0, 0 - this.entityDimensionHalf * 3, 0)));
@@ -547,7 +545,7 @@ var ThisCouldBeBetter;
                 var itemPickName = "Pick";
                 var itemPickColor = GameFramework.Color.byName("Gray");
                 var itemPickVisual = new GameFramework.VisualGroup([
-                    new GameFramework.VisualOffset(new GameFramework.VisualRectangle(new GameFramework.Coords(this.entityDimension / 4, this.entityDimension, 0), GameFramework.Color.byName("Brown"), null, null), new GameFramework.Coords(0, 0 - this.entityDimension / 2, 0)),
+                    new GameFramework.VisualOffset(GameFramework.VisualRectangle.fromSizeAndColorFill(new GameFramework.Coords(this.entityDimension / 4, this.entityDimension, 0), GameFramework.Color.byName("Brown")), new GameFramework.Coords(0, 0 - this.entityDimension / 2, 0)),
                     new GameFramework.VisualPolygon(new GameFramework.Path([
                         new GameFramework.Coords(0.75, -1, 0),
                         new GameFramework.Coords(-0.75, -1, 0),
@@ -566,7 +564,7 @@ var ThisCouldBeBetter;
                 var itemPotionName = "Potion";
                 var itemPotionColor = GameFramework.Color.byName("Red");
                 var itemPotionVisual = new GameFramework.VisualGroup([
-                    new GameFramework.VisualRectangle(new GameFramework.Coords(1, 1, 0).multiplyScalar(this.entityDimension), GameFramework.Color.byName("White"), null, null),
+                    GameFramework.VisualRectangle.fromSizeAndColorFill(new GameFramework.Coords(1, 1, 0).multiplyScalar(this.entityDimension), GameFramework.Color.byName("White")),
                     new GameFramework.VisualPolygon(new GameFramework.Path([
                         new GameFramework.Coords(-0.5, -0.2, 0),
                         new GameFramework.Coords(-0.2, -0.2, 0),
@@ -602,7 +600,7 @@ var ThisCouldBeBetter;
                 var itemShovelName = "Shovel";
                 var itemShovelColor = GameFramework.Color.byName("Gray");
                 var itemShovelVisual = new GameFramework.VisualGroup([
-                    new GameFramework.VisualOffset(new GameFramework.VisualRectangle(new GameFramework.Coords(this.entityDimension / 4, this.entityDimension, 0), GameFramework.Color.byName("Brown"), null, null), new GameFramework.Coords(0, 0 + this.entityDimension / 2, 0)),
+                    new GameFramework.VisualOffset(GameFramework.VisualRectangle.fromSizeAndColorFill(new GameFramework.Coords(this.entityDimension / 4, this.entityDimension, 0), GameFramework.Color.byName("Brown")), new GameFramework.Coords(0, 0 + this.entityDimension / 2, 0)),
                     new GameFramework.VisualPolygon(new GameFramework.Path([
                         new GameFramework.Coords(0.5, 1.5, 0),
                         new GameFramework.Coords(0, 1.75, 0),
@@ -707,8 +705,8 @@ var ThisCouldBeBetter;
                 var itemToolsetName = "Toolset";
                 var itemToolsetColor = GameFramework.Color.byName("Gray");
                 var itemToolsetVisual = new GameFramework.VisualGroup([
-                    new GameFramework.VisualOffset(new GameFramework.VisualRectangle(new GameFramework.Coords(this.entityDimension / 4, this.entityDimension, 0), GameFramework.Color.byName("Brown"), null, null), new GameFramework.Coords(0, this.entityDimension / 2, 0)),
-                    new GameFramework.VisualRectangle(new GameFramework.Coords(this.entityDimension, this.entityDimension / 2, 0), itemToolsetColor, null, null)
+                    new GameFramework.VisualOffset(GameFramework.VisualRectangle.fromSizeAndColorFill(new GameFramework.Coords(this.entityDimension / 4, this.entityDimension, 0), GameFramework.Color.byName("Brown")), new GameFramework.Coords(0, this.entityDimension / 2, 0)),
+                    GameFramework.VisualRectangle.fromSizeAndColorFill(new GameFramework.Coords(this.entityDimension, this.entityDimension / 2, 0), itemToolsetColor)
                 ]);
                 if (this.parent.visualsHaveText) {
                     itemToolsetVisual.children.push(new GameFramework.VisualOffset(GameFramework.VisualText.fromTextAndColor(itemToolsetName, itemToolsetColor), new GameFramework.Coords(0, 0 - this.entityDimension, 0)));
@@ -719,7 +717,7 @@ var ThisCouldBeBetter;
             torch() {
                 var itemTorchName = "Torch";
                 var itemTorchColor = GameFramework.Color.byName("Brown");
-                var itemTorchVisualBody = new GameFramework.VisualRectangle(new GameFramework.Coords(this.entityDimension / 3, this.entityDimension * 1.5, 0), itemTorchColor, null, null);
+                var itemTorchVisualBody = GameFramework.VisualRectangle.fromSizeAndColorFill(new GameFramework.Coords(this.entityDimension / 3, this.entityDimension * 1.5, 0), itemTorchColor);
                 var itemTorchVisualHead = new GameFramework.VisualEllipse(this.entityDimensionHalf * .65, // semimajorAxis
                 this.entityDimensionHalf * .45, .25, // rotationInTurns
                 GameFramework.Color.byName("Tan"), null // colorBorder

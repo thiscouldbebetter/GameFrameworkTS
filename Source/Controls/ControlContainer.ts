@@ -284,7 +284,7 @@ export class ControlContainer extends ControlBase
 		}
 	}
 
-	mouseClick(mouseClickPos: Coords)
+	mouseClick(mouseClickPos: Coords): boolean
 	{
 		mouseClickPos = this._mouseClickPos.overwriteWith
 		(
@@ -400,7 +400,7 @@ export class ControlContainer extends ControlBase
 
 	// drawable
 
-	draw(universe: Universe, display: Display, drawLoc: Disposition, style: ControlStyle)
+	draw(universe: Universe, display: Display, drawLoc: Disposition, style: ControlStyle): void
 	{
 		drawLoc = this._drawLoc.overwriteWith(drawLoc);
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
@@ -409,8 +409,8 @@ export class ControlContainer extends ControlBase
 		display.drawRectangle
 		(
 			drawPos, this.size,
-			Color.systemColorGet(style.colorBackground),
-			Color.systemColorGet(style.colorBorder),
+			style.colorBackground,
+			style.colorBorder,
 			null
 		);
 

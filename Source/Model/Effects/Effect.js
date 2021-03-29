@@ -53,7 +53,7 @@ var ThisCouldBeBetter;
                 });
                 this.Frozen = new Effect("Frozen", 20, // ticksPerCycle
                 5, // cyclesToLive
-                new GameFramework.VisualCircle(visualDimension, GameFramework.Color.byName("Cyan"), null, null), (u, w, p, e, effect) => {
+                GameFramework.VisualCircle.fromRadiusAndColorFill(visualDimension, GameFramework.Color.byName("Cyan")), (u, w, p, e, effect) => {
                     e.killable().damageApply(u, w, p, null, e, new GameFramework.Damage(1, "Cold", null));
                 });
                 this.Healing = new Effect("Healing", 40, // ticksPerCycle

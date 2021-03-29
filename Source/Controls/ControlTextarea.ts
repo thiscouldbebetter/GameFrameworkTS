@@ -46,7 +46,7 @@ export class ControlTextarea extends ControlBase
 
 		// Helper variables.
 		this._drawPos = Coords.create();
-		this._drawLoc = new Disposition(this._drawPos, null, null);
+		this._drawLoc = Disposition.fromPos(this._drawPos);
 		this._mouseClickPos = Coords.create();
 	}
 
@@ -294,8 +294,8 @@ export class ControlTextarea extends ControlBase
 		(
 			drawPos,
 			this.size,
-			Color.systemColorGet(colorBack), // fill
-			Color.systemColorGet(style.colorBorder), // border
+			colorBack, // fill
+			style.colorBorder, // border
 			false // areColorsReversed
 		);
 
@@ -338,8 +338,8 @@ export class ControlTextarea extends ControlBase
 				line,
 				this.fontHeightInPixels,
 				drawPos2,
-				Color.systemColorGet(colorFore),
-				Color.systemColorGet(colorBack),
+				colorFore,
+				colorBack,
 				false, // areColorsReversed
 				false, // isCentered
 				this.size.x // widthMaxInPixels

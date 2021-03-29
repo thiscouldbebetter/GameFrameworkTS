@@ -14,6 +14,11 @@ export class Drawable extends EntityProperty
 		this.isVisible = (isVisible == null ? true : isVisible);
 	}
 
+	static fromVisual(visual: Visual): Drawable
+	{
+		return new Drawable(visual, null);
+	}
+
 	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity)
 	{
 		if (this.isVisible)
