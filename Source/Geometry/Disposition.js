@@ -18,10 +18,10 @@ var ThisCouldBeBetter;
                 this.timeOffsetInTicks = 0;
             }
             static create() {
-                return new Disposition(null, null, null);
+                return new Disposition(GameFramework.Coords.create(), GameFramework.Orientation.default(), null);
             }
             static fromPos(pos) {
-                return new Disposition(pos, null, null);
+                return new Disposition(pos, GameFramework.Orientation.default(), null);
             }
             equals(other) {
                 var returnValue = (this.placeName == other.placeName

@@ -14,7 +14,7 @@ var ThisCouldBeBetter;
                 this.isActive = false;
             }
             static create() {
-                return new Collision(null, null, null, null);
+                return new Collision(GameFramework.Coords.create(), 0, new Array(), new Array());
             }
             clear() {
                 this.isActive = false;

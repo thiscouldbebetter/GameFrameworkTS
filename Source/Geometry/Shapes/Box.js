@@ -13,7 +13,7 @@ var ThisCouldBeBetter;
                 this._range = new GameFramework.RangeExtent(0, 0);
             }
             static create() {
-                return new Box(null, null);
+                return new Box(GameFramework.Coords.create(), GameFramework.Coords.create());
             }
             static fromMinAndMax(min, max) {
                 var center = min.clone().add(max).half();

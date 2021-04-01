@@ -22,6 +22,11 @@ export class Image2
 
 	// static methods
 
+	static create()
+	{
+		return new Image2(null, null);
+	}
+
 	static fromSystemImage(name: string, systemImage: any)
 	{
 		var returnValue = new Image2
@@ -41,7 +46,7 @@ export class Image2
 
 	clone()
 	{
-		var returnValue = new Image2(null, null);
+		var returnValue = Image2.create();
 
 		returnValue.name = name;
 		returnValue.sourcePath = this.sourcePath;

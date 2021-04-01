@@ -27,7 +27,7 @@ export class Box implements ShapeBase
 
 	static create()
 	{
-		return new Box(null, null);
+		return new Box(Coords.create(), Coords.create());
 	}
 
 	static fromMinAndMax(min: Coords, max: Coords): Box

@@ -533,9 +533,10 @@ var ThisCouldBeBetter;
                     collisions = [];
                 }
                 var meshFaces = mesh.faces();
+                var collision = GameFramework.Collision.create();
                 for (var i = 0; i < meshFaces.length; i++) {
                     var meshFace = meshFaces[i];
-                    var collision = this.collisionOfEdgeAndFace(edge, meshFace, null);
+                    var collision = this.collisionOfEdgeAndFace(edge, meshFace, collision);
                     if (collision != null && collision.isActive) {
                         collision.colliders.push(mesh);
                         collision.collidersByName.set(GameFramework.Mesh.name, mesh);
@@ -844,7 +845,7 @@ var ThisCouldBeBetter;
                     var faceNormal = facePlane.normal;
                     var faceDotEdge = faceNormal.dotProduct(edgeDirection);
                     if (faceDotEdge < 0) {
-                        returnValue = this.doEdgeAndFaceCollide(edge, face, null);
+                        returnValue = this.doEdgeAndFaceCollide(edge, face, this._collision);
                         if (returnValue == true) {
                             break;
                         }

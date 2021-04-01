@@ -182,7 +182,7 @@ export class Profile
 			(
 				universe,
 				size,
-				new DataBinding(message, null, null),
+				DataBinding.fromContext(message),
 				() => // acknowledge
 				{
 					var venueNext: Venue = universe.controlBuilder.game
@@ -269,7 +269,7 @@ export class Profile
 					(
 						universe,
 						size,
-						new DataBinding(message, null, null),
+						DataBinding.fromContext(message),
 						() => // acknowledge
 						{
 							var venueNext: Venue = universe.controlBuilder.game
@@ -301,7 +301,7 @@ export class Profile
 			(
 				universe,
 				size,
-				new DataBinding("Ready to load from file...", null, null),
+				DataBinding.fromContext("Ready to load from file..."),
 				() => // acknowledge
 				{
 					var callback = (fileContentsAsString: string) =>
@@ -433,16 +433,15 @@ export class Profile
 					fontHeight
 				),
 
-				new ControlList
+				ControlList.from10
 				(
 					"listSaveStates",
 					Coords.fromXY(10, 35), // pos
 					Coords.fromXY(110, 75), // size
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						universe.profile,
-						(c: Profile) => c.saveStates,
-						null
+						(c: Profile) => c.saveStates
 					), // items
 					DataBinding.fromGet
 					(
@@ -457,15 +456,14 @@ export class Profile
 					(
 						universe.profile,
 						(c: Profile) => c.saveStateSelected(),
-						(c: Profile, v: SaveState) => { c.saveStateNameSelected = v.name; }
+						(c: Profile, v: SaveState) => c.saveStateNameSelected = v.name
 					), // bindingForOptionSelected
 					DataBinding.fromGet( (c: string) => c ), // value
 					null,
-					(isLoadNotSave ? loadSelectedSlotFromLocalStorage: saveToLocalStorageOverwritingSlotSelected), // confirm
-					null
+					(isLoadNotSave ? loadSelectedSlotFromLocalStorage: saveToLocalStorageOverwritingSlotSelected) // confirm
 				),
 
-				new ControlButton
+				ControlButton.from8
 				(
 					"buttonNew",
 					Coords.fromXY(10, 120), // pos
@@ -474,8 +472,7 @@ export class Profile
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					(isLoadNotSave ? loadNewWorld : saveToLocalStorageAsNewSlot), // click
-					null, null
+					(isLoadNotSave ? loadNewWorld : saveToLocalStorageAsNewSlot) // click
 				),
 
 				new ControlButton
@@ -487,17 +484,16 @@ export class Profile
 					fontHeight,
 					true, // hasBorder
 					// isEnabled
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						universe.profile,
-						(c: Profile) => (c.saveStateNameSelected != null),
-						null
+						(c: Profile) => (c.saveStateNameSelected != null)
 					),
 					(isLoadNotSave ? loadSelectedSlotFromLocalStorage : saveToLocalStorageOverwritingSlotSelected), // click
 					null, null
 				),
 
-				new ControlButton
+				ControlButton.from8
 				(
 					"buttonFile",
 					Coords.fromXY(70, 120), // pos
@@ -506,17 +502,15 @@ export class Profile
 					fontHeight,
 					true, // hasBorder
 					// isEnabled
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						universe.profile,
 						(c: Profile) => (c.saveStateNameSelected != null),
-						null
 					),
-					(isLoadNotSave ? loadFromFile : saveToFilesystem), // click
-					null, null
+					(isLoadNotSave ? loadFromFile : saveToFilesystem) // click
 				),
 
-				new ControlButton
+				ControlButton.from8
 				(
 					"buttonDelete",
 					Coords.fromXY(100, 120), // pos
@@ -525,22 +519,20 @@ export class Profile
 					fontHeight,
 					true, // hasBorder
 					// isEnabled
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						universe.profile,
-						(c: Profile) => (c.saveStateNameSelected != null),
-						null
+						(c: Profile) => (c.saveStateNameSelected != null)
 					),
-					deleteSaveSelected, // click
-					null, null
+					deleteSaveSelected // click
 				),
 
-				new ControlVisual
+				ControlVisual.from5
 				(
 					"visualSnapshot",
 					Coords.fromXY(130, 35),
 					visualThumbnailSize,
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						universe.profile,
 						(c: Profile) =>
@@ -559,11 +551,9 @@ export class Profile
 								: new VisualImageImmediate(saveStateImageSnapshot, true) // isScaled
 							);
 							return returnValue;
-						},
-						null
+						}
 					),
-					Color.byName("White"),
-					null // colorBorder
+					Color.byName("White")
 				),
 
 				new ControlLabel
@@ -572,15 +562,14 @@ export class Profile
 					Coords.fromXY(130, 80), // pos
 					Coords.fromXY(120, buttonHeightBase), // size
 					false, // isTextCentered
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						universe.profile,
 						(c: Profile) =>
 						{
 							var saveState = c.saveStateSelected();
 							return (saveState == null ? "" : saveState.placeName);
-						},
-						null
+						}
 					),
 					fontHeight
 				),
@@ -591,15 +580,14 @@ export class Profile
 					Coords.fromXY(130, 90), // pos
 					Coords.fromXY(120, buttonHeightBase), // size
 					false, // isTextCentered
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						universe.profile,
 						(c: Profile) =>
 						{
 							var saveState = c.saveStateSelected();
 							return (saveState == null ? "" : saveState.timePlayingAsString);
-						},
-						null
+						}
 					),
 					fontHeight
 				),
@@ -610,7 +598,7 @@ export class Profile
 					Coords.fromXY(130, 100), // pos
 					Coords.fromXY(120, buttonHeightBase), // size
 					false, // isTextCentered
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						universe.profile,
 						(c: Profile) =>
@@ -628,8 +616,7 @@ export class Profile
 								)
 							);
 							return returnValue;
-						},
-						null
+						}
 					),
 					fontHeight
 				),
@@ -640,30 +627,31 @@ export class Profile
 					Coords.fromXY(130, 110), // pos
 					Coords.fromXY(120, buttonHeightBase), // size
 					false, // isTextCentered
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						universe.profile,
 						(c: Profile) =>
 						{
 							var saveState = c.saveStateSelected();
 							return (saveState == null ? "" : saveState.timeSaved.toStringHH_MM_SS());
-						},
-						null
+						}
 					),
 					fontHeight
 				),
 
-				new ControlButton
+				ControlButton.from8
 				(
 					"buttonBack",
-					Coords.fromXY(sizeBase.x - 10 - 25, sizeBase.y - 10 - 15), // pos
+					Coords.fromXY
+					(
+						sizeBase.x - 10 - 25, sizeBase.y - 10 - 15
+					), // pos
 					Coords.fromXY(25, 15), // size
 					"Back",
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					back, // click
-					null, null
+					back // click
 				),
 			],
 			null, null
@@ -687,7 +675,7 @@ export class Profile
 		var fontHeight = controlBuilder.fontHeightInPixelsBase;
 		var buttonHeightBase = controlBuilder.buttonHeightBase;
 
-		var returnValue = new ControlContainer
+		var returnValue = ControlContainer.from4
 		(
 			"containerProfileNew",
 			Coords.create(), // pos
@@ -712,15 +700,15 @@ export class Profile
 					new DataBinding
 					(
 						universe.profile,
-						(c: Profile) => { return c.name; },
-						(c: Profile, v: string) => { c.name = v; },
+						(c: Profile) => c.name,
+						(c: Profile, v: string) => c.name = v
 					), // text
 					fontHeight,
 					null, // charCountMax
-					new DataBinding(true, null, null) // isEnabled
+					DataBinding.fromContext(true) // isEnabled
 				),
 
-				new ControlButton
+				ControlButton.from8
 				(
 					"buttonCreate",
 					Coords.fromXY(50, 80), // pos
@@ -729,11 +717,10 @@ export class Profile
 					fontHeight,
 					true, // hasBorder
 					// isEnabled
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						universe.profile,
-						(c: Profile) => { return c.name.length > 0; },
-						null
+						(c: Profile) => { return c.name.length > 0; }
 					),
 					() => // click
 					{
@@ -765,11 +752,10 @@ export class Profile
 						).toVenue();
 						venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
-					},
-					null, null
+					}
 				),
 
-				new ControlButton
+				ControlButton.from8
 				(
 					"buttonCancel",
 					Coords.fromXY(105, 80), // pos
@@ -786,11 +772,9 @@ export class Profile
 						).toVenue();
 						venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
 						universe.venueNext = venueNext;
-					},
-					null, null
+					}
 				),
-			],
-			null, null
+			]
 		);
 
 		returnValue.scalePosAndSize(scaleMultiplier);
@@ -952,8 +936,8 @@ export class Profile
 					new DataBinding
 					(
 						universe,
-						(c: Universe) => { return c.profile; },
-						(c: Universe, v: Profile) => { c.profile = v; }
+						(c: Universe) => c.profile,
+						(c: Universe, v: Profile) => c.profile = v
 					), // bindingForOptionSelected
 					DataBinding.fromGet( (c: Profile) => c ), // value
 					null, // bindingForIsEnabled
@@ -982,11 +966,10 @@ export class Profile
 					fontHeight,
 					true, // hasBorder
 					// isEnabled
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						universe,
-						(c: Universe) => { return (c.profile != null); },
-						null
+						(c: Universe) => { return (c.profile != null); }
 					),
 					select // click
 				),
@@ -1000,7 +983,7 @@ export class Profile
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					skip, // click
+					skip // click
 				),
 
 				ControlButton.from8

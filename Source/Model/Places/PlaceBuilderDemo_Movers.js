@@ -251,7 +251,7 @@ var ThisCouldBeBetter;
                     new GameFramework.VisualOffset(visualEyesBlinkingWithBrows, new GameFramework.Coords(-1, 0, 0).multiplyScalar(visualEyeRadius)),
                     new GameFramework.VisualOffset(visualEyesBlinkingWithBrows, new GameFramework.Coords(0, -1, 0).multiplyScalar(visualEyeRadius))
                 ], null);
-                var visualEffect = new GameFramework.VisualAnchor(new GameFramework.VisualDynamic((u, w, d, e) => e.effectable().effectsAsVisual()), null, GameFramework.Orientation.Instances().ForwardXDownZ);
+                var visualEffect = new GameFramework.VisualAnchor(new GameFramework.VisualDynamic((u, w, p, e) => e.effectable().effectsAsVisual()), null, GameFramework.Orientation.Instances().ForwardXDownZ);
                 var visualStatusInfo = new GameFramework.VisualOffset(new GameFramework.VisualStack(new GameFramework.Coords(0, 0 - entityDimension, 0), // childSpacing
                 [
                     visualEffect
@@ -576,7 +576,7 @@ var ThisCouldBeBetter;
                 null, // colorForBorderAsValueBreakGroup
                 null // text
                 );
-                var playerVisualEffect = new GameFramework.VisualAnchor(new GameFramework.VisualDynamic((u, w, d, e) => e.effectable().effectsAsVisual()), null, GameFramework.Orientation.Instances().ForwardXDownZ);
+                var playerVisualEffect = new GameFramework.VisualAnchor(new GameFramework.VisualDynamic((u, w, p, e) => e.effectable().effectsAsVisual()), null, GameFramework.Orientation.Instances().ForwardXDownZ);
                 var playerVisualsForStatusInfo = [
                     playerVisualHealthBar,
                     playerVisualSatietyBar,

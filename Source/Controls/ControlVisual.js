@@ -21,6 +21,9 @@ var ThisCouldBeBetter;
             static from4(name, pos, size, visual) {
                 return new ControlVisual(name, pos, size, visual, null, null);
             }
+            static from5(name, pos, size, visual, colorBackground) {
+                return new ControlVisual(name, pos, size, visual, colorBackground, null);
+            }
             actionHandle(actionName, universe) {
                 return false;
             }

@@ -15,6 +15,12 @@ var ThisCouldBeBetter;
                     this.itemEntityAdd(itemEntity);
                 }
             }
+            static create() {
+                return new ItemHolder(null, null, null);
+            }
+            static fromItemEntities(itemEntities) {
+                return new ItemHolder(itemEntities, null, null);
+            }
             // Instance methods.
             clear() {
                 this.itemEntities.length = 0;
@@ -167,6 +173,9 @@ var ThisCouldBeBetter;
                     this.itemSubtract(itemToTransfer);
                 }
             }
+            items() {
+                return this.itemEntities.map(x => x.item());
+            }
             itemsByDefnName(defnName) {
                 return this.itemEntitiesByDefnName(defnName).map(x => x.item());
             }
@@ -189,7 +198,7 @@ var ThisCouldBeBetter;
                 if (size == null) {
                     size = universe.display.sizeDefault().clone();
                 }
-                var sizeBase = new GameFramework.Coords(200, 135, 1);
+                var sizeBase = GameFramework.Coords.fromXY(200, 135);
                 var fontHeight = 10;
                 var fontHeightSmall = fontHeight * .6;
                 var fontHeightLarge = fontHeight * 1.5;
@@ -281,114 +290,105 @@ var ThisCouldBeBetter;
                 var sort = () => {
                     itemHolder.itemEntities.sort((x, y) => (x.item().defnName > y.item().defnName ? 1 : -1));
                 };
-                var buttonSize = new GameFramework.Coords(20, 10, 0);
+                var buttonSize = GameFramework.Coords.fromXY(20, 10);
                 var visualNone = new GameFramework.VisualNone();
                 var childControls = [
-                    new GameFramework.ControlLabel("labelItemsHeld", new GameFramework.Coords(10, 5, 0), // pos
-                    new GameFramework.Coords(70, 25, 0), // size
+                    new GameFramework.ControlLabel("labelItemsHeld", GameFramework.Coords.fromXY(10, 5), // pos
+                    GameFramework.Coords.fromXY(70, 25), // size
                     false, // isTextCentered
                     "Items Held:", fontHeightSmall),
-                    new GameFramework.ControlList("listItems", new GameFramework.Coords(10, 15, 0), // pos
-                    new GameFramework.Coords(70, 100, 0), // size
-                    new GameFramework.DataBinding(this.itemEntities, null, null), // items
-                    new GameFramework.DataBinding(null, (c) => c.item().toString(world), null), // bindingForItemText
-                    fontHeightSmall, new GameFramework.DataBinding(this, (c) => c.itemEntitySelected, (c, v) => { c.itemEntitySelected = v; }), // bindingForItemSelected
+                    GameFramework.ControlList.from10("listItems", GameFramework.Coords.fromXY(10, 15), // pos
+                    GameFramework.Coords.fromXY(70, 100), // size
+                    GameFramework.DataBinding.fromContext(this.itemEntities), // items
+                    GameFramework.DataBinding.fromGet((c) => c.item().toString(world)), // bindingForItemText
+                    fontHeightSmall, new GameFramework.DataBinding(this, (c) => c.itemEntitySelected, (c, v) => c.itemEntitySelected = v), // bindingForItemSelected
                     GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
                     GameFramework.DataBinding.fromContext(true), // isEnabled
                     (universe) => // confirm
                      {
                         use();
-                    }, null),
-                    new GameFramework.ControlLabel("infoWeight", new GameFramework.Coords(10, 115, 0), // pos
-                    new GameFramework.Coords(100, 25, 0), // size
+                    }),
+                    new GameFramework.ControlLabel("infoWeight", GameFramework.Coords.fromXY(10, 115), // pos
+                    GameFramework.Coords.fromXY(100, 25), // size
                     false, // isTextCentered
-                    new GameFramework.DataBinding(this, (c) => "Weight: " + c.massOfAllItemsOverMax(world), null), fontHeightSmall),
-                    new GameFramework.ControlButton("buttonUp", new GameFramework.Coords(85, 15, 0), // pos
-                    new GameFramework.Coords(15, 10, 0), // size
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => "Weight: " + c.massOfAllItemsOverMax(world)), fontHeightSmall),
+                    GameFramework.ControlButton.from8("buttonUp", GameFramework.Coords.fromXY(85, 15), // pos
+                    GameFramework.Coords.fromXY(15, 10), // size
                     "Up", fontHeightSmall, true, // hasBorder
-                    new GameFramework.DataBinding(this, (c) => {
-                        var returnValue = (c.itemEntitySelected != null
-                            && c.itemEntities.indexOf(c.itemEntitySelected) > 0);
-                        return returnValue;
-                    }, null), // isEnabled
-                    up, // click
-                    null, null),
-                    new GameFramework.ControlButton("buttonDown", new GameFramework.Coords(85, 30, 0), // pos
-                    new GameFramework.Coords(15, 10, 0), // size
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => c.itemEntitySelected != null
+                        && c.itemEntities.indexOf(c.itemEntitySelected) > 0), // isEnabled
+                    up // click
+                    ),
+                    GameFramework.ControlButton.from8("buttonDown", GameFramework.Coords.fromXY(85, 30), // pos
+                    GameFramework.Coords.fromXY(15, 10), // size
                     "Down", fontHeightSmall, true, // hasBorder
-                    new GameFramework.DataBinding(this, (c) => {
-                        var returnValue = (c.itemEntitySelected != null
-                            && c.itemEntities.indexOf(c.itemEntitySelected) < c.itemEntities.length - 1);
-                        return returnValue;
-                    }, null), // isEnabled
-                    down, null, null),
-                    new GameFramework.ControlButton("buttonSplit", new GameFramework.Coords(85, 45, 0), // pos
-                    new GameFramework.Coords(15, 10, 0), // size
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => c.itemEntitySelected != null
+                        && c.itemEntities.indexOf(c.itemEntitySelected) < c.itemEntities.length - 1), // isEnabled
+                    down),
+                    GameFramework.ControlButton.from8("buttonSplit", GameFramework.Coords.fromXY(85, 45), // pos
+                    GameFramework.Coords.fromXY(15, 10), // size
                     "Split", fontHeightSmall, true, // hasBorder
-                    new GameFramework.DataBinding(this, (c) => {
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => {
                         var itemEntity = c.itemEntitySelected;
                         var returnValue = (itemEntity != null
                             && (itemEntity.item().quantity > 1));
                         return returnValue;
-                    }, null), // isEnabled
-                    split, null, null),
-                    new GameFramework.ControlButton("buttonJoin", new GameFramework.Coords(85, 60, 0), // pos
-                    new GameFramework.Coords(15, 10, 0), // size
+                    }), // isEnabled
+                    split),
+                    GameFramework.ControlButton.from8("buttonJoin", GameFramework.Coords.fromXY(85, 60), // pos
+                    GameFramework.Coords.fromXY(15, 10), // size
                     "Join", fontHeightSmall, true, // hasBorder
-                    new GameFramework.DataBinding(this, (c) => {
-                        var returnValue = (c.itemEntitySelected != null
-                            &&
-                                (c.itemEntities.filter((x) => x.item().defnName == c.itemEntitySelected.item().defnName).length > 1));
-                        return returnValue;
-                    }, null), // isEnabled
-                    join, null, null),
-                    new GameFramework.ControlButton("buttonSort", new GameFramework.Coords(85, 75, 0), // pos
-                    new GameFramework.Coords(15, 10, 0), // size
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => c.itemEntitySelected != null
+                        &&
+                            (c.itemEntities.filter((x) => x.item().defnName == c.itemEntitySelected.item().defnName).length > 1)), // isEnabled
+                    join),
+                    GameFramework.ControlButton.from8("buttonSort", GameFramework.Coords.fromXY(85, 75), // pos
+                    GameFramework.Coords.fromXY(15, 10), // size
                     "Sort", fontHeightSmall, true, // hasBorder
-                    new GameFramework.DataBinding(this, (c) => (c.itemEntities.length > 1), null), // isEnabled
-                    sort, null, null),
-                    new GameFramework.ControlLabel("labelItemSelected", new GameFramework.Coords(150, 10, 0), // pos
-                    new GameFramework.Coords(100, 15, 0), // size
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.itemEntities.length > 1)), // isEnabled
+                    sort),
+                    new GameFramework.ControlLabel("labelItemSelected", GameFramework.Coords.fromXY(150, 10), // pos
+                    GameFramework.Coords.fromXY(100, 15), // size
                     true, // isTextCentered
                     "Item Selected:", fontHeightSmall),
-                    new GameFramework.ControlLabel("infoItemSelected", new GameFramework.Coords(150, 20, 0), // pos
-                    new GameFramework.Coords(200, 15, 0), // size
+                    new GameFramework.ControlLabel("infoItemSelected", GameFramework.Coords.fromXY(150, 20), // pos
+                    GameFramework.Coords.fromXY(200, 15), // size
                     true, // isTextCentered
-                    new GameFramework.DataBinding(this, (c) => {
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => {
                         var i = c.itemEntitySelected;
                         return (i == null ? "-" : i.item().toString(world));
-                    }, null), // text
+                    }), // text
                     fontHeightSmall),
-                    new GameFramework.ControlVisual("visualImage", new GameFramework.Coords(125, 25, 0), // pos
-                    new GameFramework.Coords(50, 50, 0), // size
-                    new GameFramework.DataBinding(this, (c) => {
+                    GameFramework.ControlVisual.from5("visualImage", GameFramework.Coords.fromXY(125, 25), // pos
+                    GameFramework.Coords.fromXY(50, 50), // size
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => {
                         var i = c.itemEntitySelected;
                         return (i == null ? visualNone : i.item().defn(world).visual);
-                    }, null), GameFramework.Color.byName("Black"), // colorBackground
-                    null),
-                    new GameFramework.ControlLabel("infoStatus", new GameFramework.Coords(150, 115, 0), // pos
-                    new GameFramework.Coords(200, 15, 0), // size
+                    }), GameFramework.Color.byName("Black") // colorBackground
+                    ),
+                    new GameFramework.ControlLabel("infoStatus", GameFramework.Coords.fromXY(150, 115), // pos
+                    GameFramework.Coords.fromXY(200, 15), // size
                     true, // isTextCentered
-                    new GameFramework.DataBinding(this, (c) => c.statusMessage, null), // text
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => c.statusMessage), // text
                     fontHeightSmall),
-                    new GameFramework.ControlButton("buttonUse", new GameFramework.Coords(132.5, 95, 0), // pos
-                    new GameFramework.Coords(15, 10, 0), // size
+                    GameFramework.ControlButton.from8("buttonUse", GameFramework.Coords.fromXY(132.5, 95), // pos
+                    GameFramework.Coords.fromXY(15, 10), // size
                     "Use", fontHeightSmall, true, // hasBorder
-                    new GameFramework.DataBinding(this, (c) => {
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => {
                         var itemEntity = c.itemEntitySelected;
                         return (itemEntity != null && itemEntity.item().isUsable(world));
-                    }, null), // isEnabled
+                    }), // isEnabled
                     (universe) => {
                         use();
-                    }, null, null),
-                    new GameFramework.ControlButton("buttonDrop", new GameFramework.Coords(152.5, 95, 0), // pos
-                    new GameFramework.Coords(15, 10, 0), // size
+                    }),
+                    GameFramework.ControlButton.from8("buttonDrop", GameFramework.Coords.fromXY(152.5, 95), // pos
+                    GameFramework.Coords.fromXY(15, 10), // size
                     "Drop", fontHeightSmall, true, // hasBorder
                     new GameFramework.DataBinding(this, (c) => (c.itemEntitySelected != null), null), // isEnabled
                     (universe) => // click
                      {
                         drop();
-                    }, null, null)
+                    })
                 ];
                 var returnValue = new GameFramework.ControlContainer("Items", GameFramework.Coords.create(), // pos
                 sizeBase.clone(), // size
@@ -433,16 +433,16 @@ var ThisCouldBeBetter;
                 ]);
                 if (includeTitleAndDoneButton) {
                     childControls.splice(0, // indexToInsertAt
-                    0, new GameFramework.ControlLabel("labelItems", new GameFramework.Coords(100, -5, 0), // pos
-                    new GameFramework.Coords(100, 25, 0), // size
+                    0, new GameFramework.ControlLabel("labelItems", GameFramework.Coords.fromXY(100, -5), // pos
+                    GameFramework.Coords.fromXY(100, 25), // size
                     true, // isTextCentered
                     "Items", fontHeightLarge));
-                    childControls.push(new GameFramework.ControlButton("buttonDone", new GameFramework.Coords(170, 115, 0), // pos
+                    childControls.push(GameFramework.ControlButton.from8("buttonDone", GameFramework.Coords.fromXY(170, 115), // pos
                     buttonSize.clone(), "Done", fontHeightSmall, true, // hasBorder
                     true, // isEnabled
-                    back, // click
-                    null, null));
-                    var titleHeight = new GameFramework.Coords(0, 15, 0);
+                    back // click
+                    ));
+                    var titleHeight = GameFramework.Coords.fromXY(0, 15);
                     sizeBase.add(titleHeight);
                     returnValue.size.add(titleHeight);
                     returnValue.shiftChildPositions(titleHeight);

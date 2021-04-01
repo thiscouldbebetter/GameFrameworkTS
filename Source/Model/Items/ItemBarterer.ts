@@ -15,8 +15,8 @@ export class ItemBarterer extends EntityProperty
 	constructor()
 	{
 		super();
-		this.itemHolderCustomerOffer = new ItemHolder(null, null, null);
-		this.itemHolderStoreOffer = new ItemHolder(null, null, null);
+		this.itemHolderCustomerOffer = ItemHolder.create();
+		this.itemHolderStoreOffer = ItemHolder.create();
 		this.statusMessage = "Choose items to trade and click the 'Offer' button.";
 		this.patience = 10;
 
@@ -91,9 +91,9 @@ export class ItemBarterer extends EntityProperty
 
 		var fontHeight = 10;
 		var margin = fontHeight * 1.5;
-		var buttonSize = new Coords(4, 2, 0).multiplyScalar(fontHeight);
-		var buttonSizeSmall = new Coords(2, 2, 0).multiplyScalar(fontHeight);
-		var listSize = new Coords((size.x - margin * 3) / 2, 80, 0);
+		var buttonSize = Coords.fromXY(4, 2).multiplyScalar(fontHeight);
+		var buttonSizeSmall = Coords.fromXY(2, 2).multiplyScalar(fontHeight);
+		var listSize = Coords.fromXY((size.x - margin * 3) / 2, 80);
 
 		var itemBarterer = this;
 		var itemHolderCustomer = entityCustomer.itemHolder();
@@ -197,8 +197,8 @@ export class ItemBarterer extends EntityProperty
 				new ControlLabel
 				(
 					"labelStoreName",
-					new Coords(margin, margin - fontHeight / 2, 0), // pos
-					new Coords(listSize.x, 25, 0), // size
+					Coords.fromXY(margin, margin - fontHeight / 2), // pos
+					Coords.fromXY(listSize.x, 25), // size
 					false, // isTextCentered
 					entityStore.name + ":",
 					fontHeight
@@ -207,22 +207,17 @@ export class ItemBarterer extends EntityProperty
 				new ControlList
 				(
 					"listStoreItems",
-					new Coords(margin, margin + fontHeight, 0), // pos
+					Coords.fromXY(margin, margin + fontHeight), // pos
 					listSize.clone(),
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						itemHolderStore,
 						(c: ItemHolder) =>
-						{
-							return c.itemEntities;//.filter(x => x.item().defnName != itemDefnNameCurrency);
-						},
-						null
+							c.itemEntities //.filter(x => x.item().defnName != itemDefnNameCurrency)
 					), // items
-					new DataBinding
+					DataBinding.fromGet
 					(
-						null,
-						(c: Entity) => { return c.item().toString(world); },
-						null
+						(c: Entity) => c.item().toString(world)
 					), // bindingForItemText
 					fontHeight,
 					new DataBinding
@@ -237,62 +232,56 @@ export class ItemBarterer extends EntityProperty
 					null
 				),
 
-				new ControlButton
+				ControlButton.from8
 				(
 					"buttonStoreOffer",
-					new Coords
+					Coords.fromXY
 					(
 						listSize.x - buttonSizeSmall.x * 2,
-						margin * 2 + fontHeight + listSize.y,
-						0
+						margin * 2 + fontHeight + listSize.y
 					), // pos
 					buttonSizeSmall.clone(),
 					"v",
 					fontHeight,
 					true, // hasBorder
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						this,
-						(c: ItemBarterer) => itemHolderStore.itemEntitySelected != null,
-						null
+						(c: ItemBarterer) => itemHolderStore.itemEntitySelected != null
 					), // isEnabled
-					itemOfferStore, // click
-					null, null
+					itemOfferStore // click
 				),
 
-				new ControlButton
+				ControlButton.from8
 				(
 					"buttonStoreUnoffer",
-					new Coords
+					Coords.fromXY
 					(
 						margin + listSize.x - buttonSizeSmall.x,
-						margin * 2 + fontHeight + listSize.y,
-						0
+						margin * 2 + fontHeight + listSize.y
 					), // pos
 					buttonSizeSmall.clone(),
 					"^",
 					fontHeight,
 					true, // hasBorder
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						this,
-						(c: ItemBarterer) => c.itemHolderStoreOffer.itemEntitySelected != null,
-						null
+						(c: ItemBarterer) =>
+							c.itemHolderStoreOffer.itemEntitySelected != null
 					), // isEnabled
-					itemUnofferStore, // click
-					null, null
+					itemUnofferStore // click
 				),
 
 				new ControlLabel
 				(
 					"labelItemsOfferedStore",
-					new Coords
+					Coords.fromXY
 					(
 						margin,
-						margin * 2 + fontHeight + listSize.y + buttonSize.y - fontHeight / 2,
-						0
+						margin * 2 + fontHeight + listSize.y + buttonSize.y - fontHeight / 2
 					), // pos
-					new Coords(100, 15, 0), // size
+					Coords.fromXY(100, 15), // size
 					false, // isTextCentered
 					"Offered:",
 					fontHeight
@@ -301,27 +290,23 @@ export class ItemBarterer extends EntityProperty
 				new ControlList
 				(
 					"listItemsOfferedByStore",
-					new Coords
+					Coords.fromXY
 					(
 						margin,
-						margin * 2 + fontHeight * 2 + listSize.y + buttonSize.y,
-						0
+						margin * 2 + fontHeight * 2 + listSize.y + buttonSize.y
 					), // pos
 					listSize.clone(),
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						this,
 						(c: ItemBarterer) =>
 						{
 							return c.itemHolderStoreOffer.itemEntities;
-						},
-						null
+						}
 					), // items
-					new DataBinding
+					DataBinding.fromGet
 					(
-						null,
-						(c: Entity) => { return c.item().toString(world); },
-						null
+						(c: Entity) => { return c.item().toString(world); }
 					), // bindingForItemText
 					fontHeight,
 					new DataBinding
@@ -339,8 +324,11 @@ export class ItemBarterer extends EntityProperty
 				new ControlLabel
 				(
 					"labelCustomerName",
-					new Coords(size.x - margin - listSize.x, margin - fontHeight / 2, 0), // pos
-					new Coords(85, 25, 0), // size
+					Coords.fromXY
+					(
+						size.x - margin - listSize.x, margin - fontHeight / 2
+					), // pos
+					Coords.fromXY(85, 25), // size
 					false, // isTextCentered
 					entityCustomer.name + ":",
 					fontHeight
@@ -349,29 +337,29 @@ export class ItemBarterer extends EntityProperty
 				new ControlList
 				(
 					"listCustomerItems",
-					new Coords(size.x - margin - listSize.x, margin + fontHeight, 0), // pos
+					Coords.fromXY
+					(
+						size.x - margin - listSize.x, margin + fontHeight
+					), // pos
 					listSize.clone(),
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						itemHolderCustomer,
 						(c: ItemHolder) =>
 						{
 							return c.itemEntities;//.filter(x => x.item().defnName != itemDefnNameCurrency);
-						},
-						null
+						}
 					), // items
-					new DataBinding
+					DataBinding.fromGet
 					(
-						null,
-						(c: Entity) => { return c.item().toString(world); },
-						null
+						(c: Entity) => c.item().toString(world)
 					), // bindingForItemText
 					fontHeight,
 					new DataBinding
 					(
 						itemHolderCustomer,
-						(c: ItemHolder) => { return c.itemEntitySelected; },
-						(c: ItemHolder, v: Entity) => { c.itemEntitySelected = v; }
+						(c: ItemHolder) => c.itemEntitySelected,
+						(c: ItemHolder, v: Entity) => c.itemEntitySelected = v
 					), // bindingForItemSelected
 					DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
 					DataBinding.fromContext(true), // isEnabled
@@ -379,88 +367,77 @@ export class ItemBarterer extends EntityProperty
 					null
 				),
 
-				new ControlButton
+				ControlButton.from8
 				(
 					"buttonCustomerOffer",
-					new Coords
+					Coords.fromXY
 					(
 						size.x - margin * 2 - buttonSizeSmall.x * 2,
-						margin * 2 + fontHeight + listSize.y,
-						0
+						margin * 2 + fontHeight + listSize.y
 					), // pos
 					buttonSizeSmall.clone(),
 					"v",
 					fontHeight,
 					true, // hasBorder
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						this,
-						(c: ItemBarterer) => itemHolderCustomer.itemEntitySelected != null,
-						null
+						(c: ItemBarterer) => itemHolderCustomer.itemEntitySelected != null
 					), // isEnabled
-					itemOfferCustomer, // click
-					null, null
+					itemOfferCustomer // click
 				),
 
-				new ControlButton
+				ControlButton.from8
 				(
 					"buttonCustomerUnoffer",
-					new Coords
+					Coords.fromXY
 					(
 						size.x - margin - buttonSizeSmall.x,
-						margin * 2 + fontHeight + listSize.y,
-						0
+						margin * 2 + fontHeight + listSize.y
 					), // pos
 					buttonSizeSmall.clone(),
 					"^",
 					fontHeight,
 					true, // hasBorder
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						this,
-						(c: ItemBarterer) => c.itemHolderCustomerOffer.itemEntitySelected != null,
-						null
+						(c: ItemBarterer) => c.itemHolderCustomerOffer.itemEntitySelected != null
 					), // isEnabled
-					itemUnofferCustomer, // click
-					null, null
+					itemUnofferCustomer // click
 				),
 
 				new ControlLabel
 				(
 					"labelItemsOfferedCustomer",
-					new Coords
+					Coords.fromXY
 					(
 						size.x - margin - listSize.x,
-						margin * 2 + fontHeight + listSize.y + buttonSize.y - fontHeight / 2,
-						null
+						margin * 2 + fontHeight + listSize.y + buttonSize.y - fontHeight / 2
 					), // pos
-					new Coords(100, 15, null), // size
+					Coords.fromXY(100, 15), // size
 					false, // isTextCentered
 					"Offered:",
 					fontHeight
 				),
 
-				new ControlList
+				ControlList.from10
 				(
 					"listItemsOfferedByCustomer",
-					new Coords
+					Coords.fromXY
 					(
 						size.x - margin - listSize.x,
-						margin * 2 + fontHeight * 2 + listSize.y + buttonSize.y,
-						0
+						margin * 2 + fontHeight * 2 + listSize.y + buttonSize.y
 					), // pos
 					listSize.clone(),
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						this,
-						(c: ItemBarterer) => c.itemHolderCustomerOffer.itemEntities,
-						null
+						(c: ItemBarterer) => c.itemHolderCustomerOffer.itemEntities
 					), // items
-					new DataBinding
+					DataBinding.fromGet
 					(
-						null,
-						(c: Entity) => c.item().toString(world),
-						null
+						(c: Entity) => c.item().toString(world)
 					), // bindingForItemText
 					fontHeight,
 					new DataBinding
@@ -471,80 +448,72 @@ export class ItemBarterer extends EntityProperty
 					), // bindingForItemSelected
 					DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
 					DataBinding.fromContext(true), // isEnabled
-					itemOfferCustomer,
-					null
+					itemOfferCustomer
 				),
 
 				new ControlLabel
 				(
 					"infoStatus",
-					new Coords(size.x / 2, size.y - margin * 2 - buttonSize.y, 0), // pos
-					new Coords(size.x, fontHeight, 0), // size
+					Coords.fromXY(size.x / 2, size.y - margin * 2 - buttonSize.y), // pos
+					Coords.fromXY(size.x, fontHeight), // size
 					true, // isTextCentered
-					new DataBinding(this, c => c.statusMessage, null),
+					DataBinding.fromContextAndGet(this, c => c.statusMessage),
 					fontHeight
 				),
 
-				new ControlButton
+				ControlButton.from8
 				(
 					"buttonReset",
-					new Coords(margin, size.y - margin - buttonSize.y, 0), // pos
+					Coords.fromXY(margin, size.y - margin - buttonSize.y), // pos
 					buttonSize.clone(),
 					"Reset",
 					fontHeight,
 					true, // hasBorder
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						this,
-						(c: ItemBarterer) => c.isAnythingBeingOffered(),
-						null
+						(c: ItemBarterer) => c.isAnythingBeingOffered()
 					), // isEnabled
 					() => // click
 					{
 						itemBarterer.reset(entityCustomer, entityStore);
-					},
-					null, null
+					}
 				),
 
-				new ControlButton
+				ControlButton.from8
 				(
 					"buttonOffer",
-					new Coords
+					Coords.fromXY
 					(
 						(size.x - buttonSize.x) / 2,
-						size.y - margin - buttonSize.y,
-						0
+						size.y - margin - buttonSize.y
 					), // pos
 					buttonSize.clone(),
 					"Offer",
 					fontHeight,
 					true, // hasBorder
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						this,
 						(c: ItemBarterer) => { return c.isAnythingBeingOffered(); },
-						null
 					), // isEnabled
-					offer, // click
-					null, null
+					offer // click
 				),
 
-				new ControlButton
+				ControlButton.from8
 				(
 					"buttonDone",
-					new Coords
+					Coords.fromXY
 					(
 						size.x - margin - buttonSize.x,
-						size.y - margin - buttonSize.y,
-						null
+						size.y - margin - buttonSize.y
 					), // pos
 					buttonSize.clone(),
 					"Done",
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					back, // click
-					null, null
+					back // click
 				)
 			],
 

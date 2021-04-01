@@ -29,7 +29,7 @@ var ThisCouldBeBetter;
             }
             static fromPosSizeAndItems(pos, size, items) {
                 var returnValue = new ControlList("", // name,
-                pos, size, items, new GameFramework.DataBinding(null, null, null), // bindingForItemText,
+                pos, size, items, GameFramework.DataBinding.fromContext(null), // bindingForItemText,
                 10, // fontHeightInPixels,
                 null, // bindingForItemSelected,
                 null, // bindingForItemValue,
@@ -54,6 +54,12 @@ var ThisCouldBeBetter;
             }
             static from8(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected, bindingForItemValue) {
                 return new ControlList(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected, bindingForItemValue, null, null, null);
+            }
+            static from9(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected, bindingForItemValue, bindingForIsEnabled) {
+                return new ControlList(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected, bindingForItemValue, bindingForIsEnabled, null, null);
+            }
+            static from10(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected, bindingForItemValue, bindingForIsEnabled, confirm) {
+                return new ControlList(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected, bindingForItemValue, bindingForIsEnabled, confirm, null);
             }
             actionHandle(actionNameToHandle, universe) {
                 var wasActionHandled = false;

@@ -44,6 +44,21 @@ export class PlaceDefn
 		);
 	}
 
+	static from4
+	(
+		name: string,
+		actions: Action[],
+		actionToInputsMappings: ActionToInputsMapping[],
+		propertyNamesToProcess: string[]
+	): PlaceDefn
+	{
+		return new PlaceDefn
+		(
+			name, actions, actionToInputsMappings, propertyNamesToProcess,
+			null, null
+		);
+	}
+
 	actionToInputsMappingsEdit()
 	{
 		ArrayHelper.overwriteWith

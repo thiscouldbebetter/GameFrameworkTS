@@ -34,7 +34,10 @@ export class Collision
 
 	static create()
 	{
-		return new Collision(null, null, null, null);
+		return new Collision
+		(
+			Coords.create(), 0, new Array<ShapeBase>(), new Array<Entity>()
+		);
 	}
 
 	clear()

@@ -503,7 +503,7 @@ export class ControlBuilder
 
 	gameAndSettings1(universe: Universe)
 	{
-		return this.gameAndSettings(universe, null, null, null);
+		return this.gameAndSettings(universe, null, null, true);
 	}
 
 	gameAndSettings
@@ -958,7 +958,7 @@ export class ControlBuilder
 					"imageOpening",
 					this._zeroes.clone(),
 					this.sizeBase.clone(), // size
-					new DataBinding<any,Visual>(visual, null, null),
+					DataBinding.fromContext<Visual>(visual),
 					null, null // colors
 				),
 
@@ -1053,14 +1053,8 @@ export class ControlBuilder
 						(c: SoundHelper, v: number) => { c.musicVolume = v; }
 					), // valueSelected
 					SoundHelper.controlSelectOptionsVolume(), // options
-					new DataBinding
-					(
-						null, (c: any) => c.value, null
-					), // bindingForOptionValues,
-					new DataBinding
-					(
-						null, (c: any) => { return c.text; }, null
-					), // bindingForOptionText
+					DataBinding.fromGet((c: any) => c.value), // bindingForOptionValues,
+					DataBinding.fromGet((c: any) => { return c.text; }), // bindingForOptionText
 					fontHeight
 				),
 
@@ -1209,11 +1203,32 @@ export class ControlBuilder
 
 		var controlsForSlides: any[] = [];
 
+		var nextDefn = (slideIndexNext: number) => // click
+		{
+			var venueNext;
+			if (slideIndexNext < controlsForSlides.length)
+			{
+				var controlForSlideNext = controlsForSlides[slideIndexNext];
+				venueNext = controlForSlideNext.toVenue();
+			}
+			else
+			{
+				venueNext = venueAfterSlideshow;
+			}
+			venueNext = controlBuilder.venueTransitionalFromTo
+			(
+				universe.venueCurrent, venueNext
+			);
+			universe.venueNext = venueNext;
+		};
+
 		for (var i = 0; i < imageNamesAndMessagesForSlides.length; i++)
 		{
 			var imageNameAndMessage = imageNamesAndMessagesForSlides[i];
 			var imageName = imageNameAndMessage[0];
 			var message = imageNameAndMessage[1];
+
+			var next = nextDefn.bind(this, i + 1);
 
 			var containerSlide = ControlContainer.from4
 			(
@@ -1227,9 +1242,9 @@ export class ControlBuilder
 						"imageSlide",
 						this._zeroes,
 						this.sizeBase.clone(), // size
-						new DataBinding<any,Visual>
+						DataBinding.fromContext<Visual>
 						(
-							new VisualImageFromLibrary(imageName), null, null
+							new VisualImageFromLibrary(imageName)
 						),
 						null, null
 					),
@@ -1253,24 +1268,7 @@ export class ControlBuilder
 						this.fontHeightInPixelsBase,
 						false, // hasBorder
 						true, // isEnabled
-						function(slideIndexNext: number) // click
-						{
-							var venueNext;
-							if (slideIndexNext < controlsForSlides.length)
-							{
-								var controlForSlideNext = controlsForSlides[slideIndexNext];
-								venueNext = controlForSlideNext.toVenue();
-							}
-							else
-							{
-								venueNext = venueAfterSlideshow;
-							}
-							venueNext = controlBuilder.venueTransitionalFromTo
-							(
-								universe.venueCurrent, venueNext
-							);
-							universe.venueNext = venueNext;
-						}.bind(this, i + 1)
+						next
 					)
 				],
 			);
@@ -1304,11 +1302,8 @@ export class ControlBuilder
 			var venueTask = new VenueTask
 			(
 				venueMessage,
-				() => // perform
-				{
-					var result = Profile.toControlProfileSelect(universe, null, universe.venueCurrent);
-					return result;
-				},
+				() =>
+					Profile.toControlProfileSelect(universe, null, universe.venueCurrent),
 				(universe: Universe, result: any) => // done
 				{
 					var venueProfileSelect = result.toVenue();
@@ -1352,7 +1347,7 @@ export class ControlBuilder
 					"imageTitle",
 					this._zeroes.clone(),
 					this.sizeBase.clone(), // size
-					new DataBinding<any,Visual>(visual, null, null),
+					DataBinding.fromContext<Visual>(visual),
 					null, null // colors
 				),
 
@@ -1681,11 +1676,10 @@ export class ControlBuilder
 					"listSaveStates",
 					Coords.fromXY(30, 50), // pos
 					Coords.fromXY(140, 50), // size
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						universe.profile,
-						(c: Profile) => c.saveStates,
-						null
+						(c: Profile) => c.saveStates
 					), // items
 					DataBinding.fromGet( (c: SaveState) => c.name ), // bindingForOptionText
 					fontHeight,

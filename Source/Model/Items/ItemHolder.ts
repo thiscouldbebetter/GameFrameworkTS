@@ -29,6 +29,16 @@ export class ItemHolder extends EntityProperty
 		}
 	}
 
+	static create(): ItemHolder
+	{
+		return new ItemHolder(null, null, null);
+	}
+
+	static fromItemEntities(itemEntities: Entity[]): ItemHolder
+	{
+		return new ItemHolder(itemEntities, null, null);
+	}
+
 	// Instance methods.
 
 	clear()
@@ -277,6 +287,11 @@ export class ItemHolder extends EntityProperty
 		}
 	}
 
+	items()
+	{
+		return this.itemEntities.map(x => x.item());
+	}
+
 	itemsByDefnName(defnName: string)
 	{
 		return this.itemEntitiesByDefnName(defnName).map(x => x.item());
@@ -320,7 +335,7 @@ export class ItemHolder extends EntityProperty
 			size = universe.display.sizeDefault().clone();
 		}
 
-		var sizeBase = new Coords(200, 135, 1);
+		var sizeBase = Coords.fromXY(200, 135);
 
 		var fontHeight = 10;
 		var fontHeightSmall = fontHeight * .6;
@@ -448,7 +463,7 @@ export class ItemHolder extends EntityProperty
 			);
 		};
 
-		var buttonSize = new Coords(20, 10, 0);
+		var buttonSize = Coords.fromXY(20, 10);
 		var visualNone = new VisualNone();
 
 		var childControls =
@@ -456,117 +471,97 @@ export class ItemHolder extends EntityProperty
 			new ControlLabel
 			(
 				"labelItemsHeld",
-				new Coords(10, 5, 0), // pos
-				new Coords(70, 25, 0), // size
+				Coords.fromXY(10, 5), // pos
+				Coords.fromXY(70, 25), // size
 				false, // isTextCentered
 				"Items Held:",
 				fontHeightSmall
 			),
 
-			new ControlList
+			ControlList.from10
 			(
 				"listItems",
-				new Coords(10, 15, 0), // pos
-				new Coords(70, 100, 0), // size
-				new DataBinding(this.itemEntities, null, null), // items
-				new DataBinding
+				Coords.fromXY(10, 15), // pos
+				Coords.fromXY(70, 100), // size
+				DataBinding.fromContext(this.itemEntities), // items
+				DataBinding.fromGet
 				(
-					null,
-					(c: Entity) => c.item().toString(world),
-					null
+					(c: Entity) => c.item().toString(world)
 				), // bindingForItemText
 				fontHeightSmall,
 				new DataBinding
 				(
 					this,
 					(c: ItemHolder) => c.itemEntitySelected,
-					(c: ItemHolder, v: Entity) => { c.itemEntitySelected = v; }
+					(c: ItemHolder, v: Entity) => c.itemEntitySelected = v
 				), // bindingForItemSelected
 				DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
 				DataBinding.fromContext(true), // isEnabled
 				(universe: Universe) => // confirm
 				{
 					use();
-				},
-				null
+				}
 			),
 
 			new ControlLabel
 			(
 				"infoWeight",
-				new Coords(10, 115, 0), // pos
-				new Coords(100, 25, 0), // size
+				Coords.fromXY(10, 115), // pos
+				Coords.fromXY(100, 25), // size
 				false, // isTextCentered
-				new DataBinding
+				DataBinding.fromContextAndGet
 				(
 					this,
-					(c: ItemHolder) => "Weight: " + c.massOfAllItemsOverMax(world) ,
-					null
+					(c: ItemHolder) => "Weight: " + c.massOfAllItemsOverMax(world)
 				),
 				fontHeightSmall
 			),
 
-			new ControlButton
+			ControlButton.from8
 			(
 				"buttonUp",
-				new Coords(85, 15, 0), // pos
-				new Coords(15, 10, 0), // size
+				Coords.fromXY(85, 15), // pos
+				Coords.fromXY(15, 10), // size
 				"Up",
 				fontHeightSmall,
 				true, // hasBorder
-				new DataBinding
+				DataBinding.fromContextAndGet
 				(
 					this,
 					(c: ItemHolder) =>
-					{
-						var returnValue =
-						(
-							c.itemEntitySelected != null
-							&& c.itemEntities.indexOf(c.itemEntitySelected) > 0
-						);
-						return returnValue;
-					},
-					null
+						c.itemEntitySelected != null
+						&& c.itemEntities.indexOf(c.itemEntitySelected) > 0
 				), // isEnabled
-				up, // click
-				null, null
+				up // click
 			),
 
-			new ControlButton
+			ControlButton.from8
 			(
 				"buttonDown",
-				new Coords(85, 30, 0), // pos
-				new Coords(15, 10, 0), // size
+				Coords.fromXY(85, 30), // pos
+				Coords.fromXY(15, 10), // size
 				"Down",
 				fontHeightSmall,
 				true, // hasBorder
-				new DataBinding
+				DataBinding.fromContextAndGet
 				(
 					this,
 					(c: ItemHolder) =>
-					{
-						var returnValue =
-						(
-							c.itemEntitySelected != null
-							&& c.itemEntities.indexOf(c.itemEntitySelected) < c.itemEntities.length - 1
-						);
-						return returnValue;
-					},
-					null
+						c.itemEntitySelected != null
+						&& c.itemEntities.indexOf(c.itemEntitySelected) < c.itemEntities.length - 1
 				), // isEnabled
-				down,
-				null, null
+				down
 			),
 
-			new ControlButton
+			ControlButton.from8
 			(
 				"buttonSplit",
-				new Coords(85, 45, 0), // pos
-				new Coords(15, 10, 0), // size
+				Coords.fromXY(85, 45), // pos
+				Coords.fromXY(15, 10), // size
 				"Split",
 				fontHeightSmall,
 				true, // hasBorder
-				new DataBinding
+				DataBinding.fromContextAndGet
 				(
 					this,
 					(c: ItemHolder) =>
@@ -578,68 +573,56 @@ export class ItemHolder extends EntityProperty
 							&& (itemEntity.item().quantity > 1)
 						);
 						return returnValue;
-					},
-					null
+					}
 				), // isEnabled
-				split,
-				null, null
+				split
 			),
 
-			new ControlButton
+			ControlButton.from8
 			(
 				"buttonJoin",
-				new Coords(85, 60, 0), // pos
-				new Coords(15, 10, 0), // size
+				Coords.fromXY(85, 60), // pos
+				Coords.fromXY(15, 10), // size
 				"Join",
 				fontHeightSmall,
 				true, // hasBorder
-				new DataBinding
+				DataBinding.fromContextAndGet
 				(
 					this,
 					(c: ItemHolder) => 
-					{
-						var returnValue =
+						c.itemEntitySelected != null
+						&&
 						(
-							c.itemEntitySelected != null
-							&&
+							c.itemEntities.filter
 							(
-								c.itemEntities.filter
-								(
-									(x: Entity) => x.item().defnName == c.itemEntitySelected.item().defnName
-								).length > 1
-							)
-						);
-						return returnValue;
-					},
-					null
+								(x: Entity) => x.item().defnName == c.itemEntitySelected.item().defnName
+							).length > 1
+						)
 				), // isEnabled
-				join,
-				null, null
+				join
 			),
 
-			new ControlButton
+			ControlButton.from8
 			(
 				"buttonSort",
-				new Coords(85, 75, 0), // pos
-				new Coords(15, 10, 0), // size
+				Coords.fromXY(85, 75), // pos
+				Coords.fromXY(15, 10), // size
 				"Sort",
 				fontHeightSmall,
 				true, // hasBorder
-				new DataBinding
+				DataBinding.fromContextAndGet
 				(
 					this,
-					(c: ItemHolder) => (c.itemEntities.length > 1),
-					null
+					(c: ItemHolder) => (c.itemEntities.length > 1)
 				), // isEnabled
-				sort,
-				null, null
+				sort
 			),
 
 			new ControlLabel
 			(
 				"labelItemSelected",
-				new Coords(150, 10, 0), // pos
-				new Coords(100, 15, 0), // size
+				Coords.fromXY(150, 10), // pos
+				Coords.fromXY(100, 15), // size
 				true, // isTextCentered
 				"Item Selected:",
 				fontHeightSmall
@@ -648,86 +631,80 @@ export class ItemHolder extends EntityProperty
 			new ControlLabel
 			(
 				"infoItemSelected",
-				new Coords(150, 20, 0), // pos
-				new Coords(200, 15, 0), // size
+				Coords.fromXY(150, 20), // pos
+				Coords.fromXY(200, 15), // size
 				true, // isTextCentered
-				new DataBinding
+				DataBinding.fromContextAndGet
 				(
 					this,
 					(c: ItemHolder) =>
 					{
 						var i = c.itemEntitySelected;
 						return (i == null ? "-" : i.item().toString(world));
-					},
-					null
+					}
 				), // text
 				fontHeightSmall
 			),
 
-			new ControlVisual
+			ControlVisual.from5
 			(
 				"visualImage",
-				new Coords(125, 25, 0), // pos
-				new Coords(50, 50, 0), // size
-				new DataBinding
+				Coords.fromXY(125, 25), // pos
+				Coords.fromXY(50, 50), // size
+				DataBinding.fromContextAndGet
 				(
 					this,
 					(c: ItemHolder) =>
 					{
 						var i = c.itemEntitySelected;
 						return (i == null ? visualNone : i.item().defn(world).visual);
-					},
-					null
+					}
 				),
-				Color.byName("Black"), // colorBackground
-				null
+				Color.byName("Black") // colorBackground
 			),
 
 			new ControlLabel
 			(
 				"infoStatus",
-				new Coords(150, 115, 0), // pos
-				new Coords(200, 15, 0), // size
+				Coords.fromXY(150, 115), // pos
+				Coords.fromXY(200, 15), // size
 				true, // isTextCentered
-				new DataBinding
+				DataBinding.fromContextAndGet
 				(
 					this,
-					(c: ItemHolder) => c.statusMessage,
-					null
+					(c: ItemHolder) => c.statusMessage
 				), // text
 				fontHeightSmall
 			),
 
-			new ControlButton
+			ControlButton.from8
 			(
 				"buttonUse",
-				new Coords(132.5, 95, 0), // pos
-				new Coords(15, 10, 0), // size
+				Coords.fromXY(132.5, 95), // pos
+				Coords.fromXY(15, 10), // size
 				"Use",
 				fontHeightSmall,
 				true, // hasBorder
-				new DataBinding
+				DataBinding.fromContextAndGet
 				(
 					this,
 					(c: ItemHolder) =>
 					{
 						var itemEntity = c.itemEntitySelected;
 						return (itemEntity != null && itemEntity.item().isUsable(world));
-					},
-					null
+					}
 				), // isEnabled
 				(universe: Universe) => 
 				{
 					use();
-				},
-				null, null
+				}
 			),
 
-			new ControlButton
+			ControlButton.from8
 			(
 				"buttonDrop",
-				new Coords(152.5, 95, 0), // pos
-				new Coords(15, 10, 0), // size
+				Coords.fromXY(152.5, 95), // pos
+				Coords.fromXY(15, 10), // size
 				"Drop",
 				fontHeightSmall,
 				true, // hasBorder
@@ -740,8 +717,7 @@ export class ItemHolder extends EntityProperty
 				(universe: Universe) => // click
 				{
 					drop();
-				},
-				null, null
+				}
 			)
 		];
 
@@ -808,8 +784,8 @@ export class ItemHolder extends EntityProperty
 				new ControlLabel
 				(
 					"labelItems",
-					new Coords(100, -5, 0), // pos
-					new Coords(100, 25, 0), // size
+					Coords.fromXY(100, -5), // pos
+					Coords.fromXY(100, 25), // size
 					true, // isTextCentered
 					"Items",
 					fontHeightLarge
@@ -817,20 +793,19 @@ export class ItemHolder extends EntityProperty
 			);
 			childControls.push
 			(
-				new ControlButton
+				ControlButton.from8
 				(
 					"buttonDone",
-					new Coords(170, 115, 0), // pos
+					Coords.fromXY(170, 115), // pos
 					buttonSize.clone(),
 					"Done",
 					fontHeightSmall,
 					true, // hasBorder
 					true, // isEnabled
-					back, // click
-					null, null
+					back // click
 				)
 			);
-			var titleHeight = new Coords(0, 15, 0);
+			var titleHeight = Coords.fromXY(0, 15);
 			sizeBase.add(titleHeight);
 			returnValue.size.add(titleHeight);
 			returnValue.shiftChildPositions(titleHeight);

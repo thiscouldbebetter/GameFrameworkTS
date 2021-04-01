@@ -163,7 +163,7 @@ var ThisCouldBeBetter;
                         + " all men are created equal. ";
                     var size = universe.display.sizeInPixels.clone();
                     var fontHeight = 10;
-                    var textarea = new GameFramework.ControlTextarea("textareaContents", size.clone().half().half(), size.clone().half(), GameFramework.DataBinding.fromContext(text), fontHeight, new GameFramework.DataBinding(false, null, null) // isEnabled
+                    var textarea = new GameFramework.ControlTextarea("textareaContents", size.clone().half().half(), size.clone().half(), GameFramework.DataBinding.fromContext(text), fontHeight, GameFramework.DataBinding.fromContext(false) // isEnabled
                     );
                     var button = new GameFramework.ControlButton("buttonDone", new GameFramework.Coords(size.x / 4, 3 * size.y / 4 + fontHeight, 1), new GameFramework.Coords(size.x / 2, fontHeight * 2, 1), "Done", fontHeight, true, // hasBorder
                     true, // isEnabled

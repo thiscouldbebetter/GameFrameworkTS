@@ -945,10 +945,12 @@ export class CollisionHelper
 		}
 
 		var meshFaces = mesh.faces();
+		var collision = Collision.create();
 		for (var i = 0; i < meshFaces.length; i++)
 		{
 			var meshFace = meshFaces[i];
-			var collision = this.collisionOfEdgeAndFace(edge, meshFace, null);
+			var collision =
+				this.collisionOfEdgeAndFace(edge, meshFace, collision);
 			if (collision != null && collision.isActive)
 			{
 				collision.colliders.push(mesh);
@@ -1471,7 +1473,7 @@ export class CollisionHelper
 
 			if (faceDotEdge < 0)
 			{
-				returnValue = this.doEdgeAndFaceCollide(edge, face, null);
+				returnValue = this.doEdgeAndFaceCollide(edge, face, this._collision);
 				if (returnValue == true)
 				{
 					break;

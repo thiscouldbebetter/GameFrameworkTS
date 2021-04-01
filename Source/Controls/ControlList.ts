@@ -30,8 +30,10 @@ export class ControlList extends ControlBase
 		items: DataBinding<any, any[]>,
 		bindingForItemText: DataBinding<any, string>,
 		fontHeightInPixels: number,
-		bindingForItemSelected: DataBinding<any, any>, bindingForItemValue: DataBinding<any, any>,
-		bindingForIsEnabled: DataBinding<any, boolean>, confirm: (u: Universe) => void,
+		bindingForItemSelected: DataBinding<any, any>,
+		bindingForItemValue: DataBinding<any, any>,
+		bindingForIsEnabled: DataBinding<any, boolean>,
+		confirm: (u: Universe) => void,
 		widthInItems: number
 	)
 	{
@@ -74,7 +76,7 @@ export class ControlList extends ControlBase
 			pos,
 			size,
 			items,
-			new DataBinding(null, null, null), // bindingForItemText,
+			DataBinding.fromContext(null), // bindingForItemText,
 			10, // fontHeightInPixels,
 			null, // bindingForItemSelected,
 			null, // bindingForItemValue,
@@ -116,7 +118,7 @@ export class ControlList extends ControlBase
 		items: DataBinding<any, any[]>,
 		bindingForItemText: DataBinding<any, string>,
 		fontHeightInPixels: number
-	)
+	): ControlList
 	{
 		return new ControlList
 		(
@@ -134,7 +136,7 @@ export class ControlList extends ControlBase
 		bindingForItemText: DataBinding<any, string>,
 		fontHeightInPixels: number,
 		bindingForItemSelected: DataBinding<any, any>,
-	)
+	): ControlList
 	{
 		return new ControlList
 		(
@@ -153,12 +155,55 @@ export class ControlList extends ControlBase
 		fontHeightInPixels: number,
 		bindingForItemSelected: DataBinding<any, any>,
 		bindingForItemValue: DataBinding<any, any>,
-	)
+	): ControlList
 	{
 		return new ControlList
 		(
 			name, pos, size, items, bindingForItemText, fontHeightInPixels,
 			bindingForItemSelected, bindingForItemValue, null, null, null
+		);
+	}
+
+	static from9
+	(
+		name: string,
+		pos: Coords,
+		size: Coords,
+		items: DataBinding<any, any[]>,
+		bindingForItemText: DataBinding<any, string>,
+		fontHeightInPixels: number,
+		bindingForItemSelected: DataBinding<any, any>,
+		bindingForItemValue: DataBinding<any, any>,
+		bindingForIsEnabled: DataBinding<any, boolean>
+	): ControlList
+	{
+		return new ControlList
+		(
+			name, pos, size, items, bindingForItemText, fontHeightInPixels,
+			bindingForItemSelected, bindingForItemValue, bindingForIsEnabled,
+			null, null
+		);
+	}
+
+	static from10
+	(
+		name: string,
+		pos: Coords,
+		size: Coords,
+		items: DataBinding<any, any[]>,
+		bindingForItemText: DataBinding<any, string>,
+		fontHeightInPixels: number,
+		bindingForItemSelected: DataBinding<any, any>,
+		bindingForItemValue: DataBinding<any, any>,
+		bindingForIsEnabled: DataBinding<any, boolean>,
+		confirm: (u: Universe) => void
+	): ControlList
+	{
+		return new ControlList
+		(
+			name, pos, size, items, bindingForItemText, fontHeightInPixels,
+			bindingForItemSelected, bindingForItemValue, bindingForIsEnabled,
+			confirm, null
 		);
 	}
 

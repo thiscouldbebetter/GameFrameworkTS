@@ -37,12 +37,12 @@ export class Disposition
 
 	static create()
 	{
-		return new Disposition(null, null, null);
+		return new Disposition(Coords.create(), Orientation.default(), null);
 	}
 
 	static fromPos(pos: Coords)
 	{
-		return new Disposition(pos, null, null);
+		return new Disposition(pos, Orientation.default(), null);
 	}
 
 	equals(other: Disposition): boolean

@@ -16,7 +16,7 @@ var ThisCouldBeBetter;
                 if (size == null) {
                     size = universe.display.sizeDefault().clone();
                 }
-                var sizeBase = new GameFramework.Coords(200, 135, 1);
+                var sizeBase = GameFramework.Coords.fromXY(200, 135);
                 var fontHeight = 10;
                 var fontHeightSmall = fontHeight * .6;
                 var fontHeightLarge = fontHeight * 1.5;
@@ -25,17 +25,16 @@ var ThisCouldBeBetter;
                     venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
                     universe.venueNext = venueNext;
                 };
-                var buttonSize = new GameFramework.Coords(20, 10, 0);
+                var buttonSize = GameFramework.Coords.fromXY(20, 10);
                 var childControls = [
-                    new GameFramework.ControlLabel("labelJournalEntries", new GameFramework.Coords(10, 5, 0), // pos
-                    new GameFramework.Coords(70, 25, 0), // size
+                    new GameFramework.ControlLabel("labelJournalEntries", GameFramework.Coords.fromXY(10, 5), // pos
+                    GameFramework.Coords.fromXY(70, 25), // size
                     false, // isTextCentered
                     "Journal Entries:", fontHeightSmall),
-                    new GameFramework.ControlButton("buttonEntryNew", new GameFramework.Coords(65, 5, 0), // pos
-                    new GameFramework.Coords(30, 8, 0), // size
+                    new GameFramework.ControlButton("buttonEntryNew", GameFramework.Coords.fromXY(65, 5), // pos
+                    GameFramework.Coords.fromXY(30, 8), // size
                     "New", fontHeightSmall, true, // hasBorder,
-                    new GameFramework.DataBinding(this, (c) => true, // todo
-                    null), // isEnabled
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => true), // isEnabled
                     () => {
                         var journal = journalKeeper.journal;
                         var entryNew = new GameFramework.JournalEntry(world.timerTicksSoFar, "-", // title
@@ -43,9 +42,10 @@ var ThisCouldBeBetter;
                         journal.entries.push(entryNew);
                     }, // click
                     null, // context
-                    false),
-                    new GameFramework.ControlList("listEntries", new GameFramework.Coords(10, 15, 0), // pos
-                    new GameFramework.Coords(85, 110, 0), // size
+                    false // canBeHeldDown
+                    ),
+                    new GameFramework.ControlList("listEntries", GameFramework.Coords.fromXY(10, 15), // pos
+                    GameFramework.Coords.fromXY(85, 110), // size
                     GameFramework.DataBinding.fromContext(this.journal.entries), // items
                     GameFramework.DataBinding.fromGet((c) => c.toString(universe)), // bindingForItemText
                     fontHeightSmall, new GameFramework.DataBinding(this, (c) => c.journalEntrySelected, (c, v) => {
@@ -58,35 +58,34 @@ var ThisCouldBeBetter;
                      {
                         // todo
                     }, null),
-                    new GameFramework.ControlLabel("labelEntrySelected", new GameFramework.Coords(105, 5, 0), // pos
-                    new GameFramework.Coords(100, 15, 0), // size
+                    new GameFramework.ControlLabel("labelEntrySelected", GameFramework.Coords.fromXY(105, 5), // pos
+                    GameFramework.Coords.fromXY(100, 15), // size
                     false, // isTextCentered
                     "Entry Selected:", fontHeightSmall),
-                    new GameFramework.ControlButton("buttonEntrySelectedEdit", new GameFramework.Coords(146, 5, 0), // pos
-                    new GameFramework.Coords(15, 8, 0), // size
+                    new GameFramework.ControlButton("buttonEntrySelectedEdit", GameFramework.Coords.fromXY(146, 5), // pos
+                    GameFramework.Coords.fromXY(15, 8), // size
                     "Lock", fontHeightSmall, true, // hasBorder,
-                    new GameFramework.DataBinding(this, (c) => (c.journalEntrySelected != null
-                        && c.isJournalEntrySelectedEditable), null), // isEnabled
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.journalEntrySelected != null
+                        && c.isJournalEntrySelectedEditable)), // isEnabled
                     () => {
                         journalKeeper.isJournalEntrySelectedEditable = false;
                     }, // click
                     null, // context
                     false),
-                    new GameFramework.ControlButton("buttonEntrySelectedEdit", new GameFramework.Coords(164, 5, 0), // pos
-                    new GameFramework.Coords(15, 8, 0), // size
+                    new GameFramework.ControlButton("buttonEntrySelectedEdit", GameFramework.Coords.fromXY(164, 5), // pos
+                    GameFramework.Coords.fromXY(15, 8), // size
                     "Edit", fontHeightSmall, true, // hasBorder,
-                    new GameFramework.DataBinding(this, (c) => (c.journalEntrySelected != null
-                        && c.isJournalEntrySelectedEditable == false), null), // isEnabled
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.journalEntrySelected != null
+                        && c.isJournalEntrySelectedEditable == false)), // isEnabled
                     () => {
                         journalKeeper.isJournalEntrySelectedEditable = true;
                     }, // click
                     null, // context
                     false),
-                    new GameFramework.ControlButton("buttonEntrySelectedDelete", new GameFramework.Coords(182, 5, 0), // pos
-                    new GameFramework.Coords(8, 8, 0), // size
+                    new GameFramework.ControlButton("buttonEntrySelectedDelete", GameFramework.Coords.fromXY(182, 5), // pos
+                    GameFramework.Coords.fromXY(8, 8), // size
                     "X", fontHeightSmall, true, // hasBorder,
-                    new GameFramework.DataBinding(this, (c) => c.journalEntrySelected != null, // todo
-                    null), // isEnabled
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.journalEntrySelected != null)), // isEnabled
                     () => {
                         var controlConfirm = universe.controlBuilder.confirmAndReturnToVenue(universe, universe.display.sizeInPixels, // size
                         "Are you sure you want to delete this entry?", universe.venueCurrent, () => // confirm
@@ -104,19 +103,19 @@ var ThisCouldBeBetter;
                     null, // context
                     false // canBeHeldDown
                     ),
-                    new GameFramework.ControlLabel("labelEntrySelectedTimeRecorded", new GameFramework.Coords(105, 15, 0), // pos
-                    new GameFramework.Coords(100, 15, 0), // size
+                    new GameFramework.ControlLabel("labelEntrySelectedTimeRecorded", GameFramework.Coords.fromXY(105, 15), // pos
+                    GameFramework.Coords.fromXY(100, 15), // size
                     false, // isTextCentered
-                    new GameFramework.DataBinding("Time Recorded:", null, null), fontHeightSmall),
-                    new GameFramework.ControlLabel("labelEntrySelectedTimeRecorded", new GameFramework.Coords(145, 15, 0), // pos
-                    new GameFramework.Coords(100, 15, 0), // size
+                    GameFramework.DataBinding.fromContext("Time Recorded:"), fontHeightSmall),
+                    new GameFramework.ControlLabel("labelEntrySelectedTimeRecorded", GameFramework.Coords.fromXY(145, 15), // pos
+                    GameFramework.Coords.fromXY(100, 15), // size
                     false, // isTextCentered
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => {
                         var entry = c.journalEntrySelected;
                         return (entry == null ? "-" : entry.timeRecordedAsStringH_M_S(universe));
                     }), fontHeightSmall),
-                    new GameFramework.ControlTextBox("textTitle", new GameFramework.Coords(105, 25, 0), // pos
-                    new GameFramework.Coords(85, 10, 0), // size
+                    new GameFramework.ControlTextBox("textTitle", GameFramework.Coords.fromXY(105, 25), // pos
+                    GameFramework.Coords.fromXY(85, 10), // size
                     new GameFramework.DataBinding(this, (c) => {
                         var j = c.journalEntrySelected;
                         return (j == null ? "" : j.title);
@@ -127,10 +126,10 @@ var ThisCouldBeBetter;
                         }
                     }), // text
                     fontHeightSmall, 32, // charCountMax
-                    new GameFramework.DataBinding(this, (c) => (c.journalEntrySelected != null && c.isJournalEntrySelectedEditable), null) // isEnabled
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.journalEntrySelected != null && c.isJournalEntrySelectedEditable)) // isEnabled
                     ),
-                    new GameFramework.ControlTextarea("textareaEntryBody", new GameFramework.Coords(105, 40, 0), // pos
-                    new GameFramework.Coords(85, 70, 0), // size
+                    new GameFramework.ControlTextarea("textareaEntryBody", GameFramework.Coords.fromXY(105, 40), // pos
+                    GameFramework.Coords.fromXY(85, 70), // size
                     new GameFramework.DataBinding(this, (c) => {
                         var j = c.journalEntrySelected;
                         return (j == null ? "" : j.body);
@@ -140,16 +139,14 @@ var ThisCouldBeBetter;
                             journalEntry.body = v;
                         }
                     }), // text
-                    fontHeightSmall, new GameFramework.DataBinding(this, (c) => {
-                        return (c.journalEntrySelected != null && c.isJournalEntrySelectedEditable);
-                    }, null) // isEnabled
+                    fontHeightSmall, GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.journalEntrySelected != null && c.isJournalEntrySelectedEditable)) // isEnabled
                     ),
-                    new GameFramework.ControlLabel("infoStatus", new GameFramework.Coords(150, 120, 0), // pos
-                    new GameFramework.Coords(200, 15, 0), // size
+                    new GameFramework.ControlLabel("infoStatus", GameFramework.Coords.fromXY(150, 120), // pos
+                    GameFramework.Coords.fromXY(200, 15), // size
                     true, // isTextCentered
-                    new GameFramework.DataBinding(this, (c) => {
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => {
                         return c.statusMessage;
-                    }, null), // text
+                    }), // text
                     fontHeightSmall)
                 ];
                 var returnValue = new GameFramework.ControlContainer("Notes", GameFramework.Coords.create(), // pos
@@ -161,11 +158,11 @@ var ThisCouldBeBetter;
                 ]);
                 if (includeTitleAndDoneButton) {
                     childControls.splice(0, // indexToInsertAt
-                    0, new GameFramework.ControlLabel("labelTitle", new GameFramework.Coords(100, -5, 0), // pos
-                    new GameFramework.Coords(100, 25, 0), // size
+                    0, new GameFramework.ControlLabel("labelTitle", GameFramework.Coords.fromXY(100, -5), // pos
+                    GameFramework.Coords.fromXY(100, 25), // size
                     true, // isTextCentered
                     "Journal", fontHeightLarge));
-                    childControls.push(GameFramework.ControlButton.from8("buttonDone", new GameFramework.Coords(170, 115, 0), // pos
+                    childControls.push(GameFramework.ControlButton.from8("buttonDone", GameFramework.Coords.fromXY(170, 115), // pos
                     buttonSize.clone(), "Done", fontHeightSmall, true, // hasBorder
                     true, // isEnabled
                     back // click

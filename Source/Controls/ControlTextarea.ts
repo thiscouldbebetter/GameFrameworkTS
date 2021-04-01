@@ -40,7 +40,10 @@ export class ControlTextarea extends ControlBase
 			new Coords(scrollbarWidth, this.size.y, 0), // size
 			this.fontHeightInPixels,
 			this.lineSpacing, // itemHeight
-			new DataBinding(this, (c: ControlTextarea) => c.textAsLines(), null),
+			DataBinding.fromContextAndGet
+			(
+				this, (c: ControlTextarea) => c.textAsLines()
+			),
 			0 // sliderPosInItems
 		);
 

@@ -194,11 +194,11 @@ export class SkillLearner extends EntityProperty
 		var margin = 20;
 		var labelHeightLarge = labelHeight * 2;
 
-		size = size.clone().add(new Coords(0, 30, 0)); // hack
+		size = size.clone().addDimensions(0, 30, 0); // hack
 
-		var listSize = new Coords
+		var listSize = Coords.fromXY
 		(
-			(size.x - margin * 3) / 2, 150, 0
+			(size.x - margin * 3) / 2, 150
 		); 
 
 		var defns = universe.world.defn;
@@ -206,7 +206,7 @@ export class SkillLearner extends EntityProperty
 		var skillsAll = defns.defnArraysByTypeName.get(Skill.name); // todo - Just use the -ByName lookup.
 		var skillsAllByName = defns.defnsByNameByTypeName.get(Skill.name);
 
-		var returnValue = new ControlContainer
+		var returnValue = ControlContainer.from4
 		(
 			"Skills", // name,
 			Coords.create(), // pos,
@@ -216,58 +216,49 @@ export class SkillLearner extends EntityProperty
 				new ControlLabel
 				(
 					"labelSkillsKnown", // name,
-					new Coords(margin, 40, 0), // pos,
-					new Coords(size.x - margin * 2, labelHeight, 0), // size,
+					Coords.fromXY(margin, 40), // pos,
+					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
 					false, // isTextCentered,
 					"Skills Known:", //text
 					labelHeight // fontHeightInPixels
 				),
 
-				new ControlList
+				ControlList.from6
 				(
 					"listSkillsKnown",
-					new Coords(margin, 60, 0), // pos
+					Coords.fromXY(margin, 60), // pos
 					listSize,
 					// items
-					new DataBinding
-					(
-						this.skillsKnownNames, null, null
-					),
-					new DataBinding(null, null, null), // bindingForItemText
-					labelHeight, // fontHeightInPixels
-					null, null,
-					DataBinding.fromContext(true), // isEnabled
-					null, null
+					DataBinding.fromContext(this.skillsKnownNames),
+					DataBinding.fromContext(null), // bindingForItemText
+					labelHeight // fontHeightInPixels
 				),
 
 				new ControlLabel
 				(
 					"labelSkillsAvailable", // name,
-					new Coords(size.x - margin - listSize.x, 40, 0), // pos,
-					new Coords(size.x - margin * 2, labelHeight, 0), // size,
+					Coords.fromXY(size.x - margin - listSize.x, 40), // pos,
+					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
 					false, // isTextCentered,
-					new DataBinding("Skills Available:", null, null), // text
+					DataBinding.fromContext("Skills Available:"), // text
 					labelHeight // fontHeightInPixels
 				),
 
-				new ControlList
+				ControlList.from10
 				(
 					"listSkillsAvailable", // name,
-					new Coords(size.x - margin - listSize.x, 60, 0), // pos,
+					Coords.fromXY(size.x - margin - listSize.x, 60), // pos,
 					listSize,
 					// items,
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						this,
 						(c: SkillLearner) =>
-						{
-							return c.skillsAvailableToLearn(skillsAll);
-						},
-						null
+							c.skillsAvailableToLearn(skillsAll)
 					),
-					new DataBinding
+					DataBinding.fromGet
 					(
-						null, (c: Skill) => c.name, null
+						(c: Skill) => c.name
 					), // bindingForItemText
 					labelHeight, // fontHeightInPixels
 					new DataBinding
@@ -289,106 +280,97 @@ export class SkillLearner extends EntityProperty
 					{
 						skillLearner.skillBeingLearnedName =
 							skillLearner.skillSelectedName;
-					}, // confirm
-					null
+					} // confirm
 				),
 
-				new ControlLabel
+				ControlLabel.from5
 				(
 					"labelSkillSelected", // name,
-					new Coords(margin, 220, 0), // pos,
-					new Coords(size.x - margin * 2, labelHeight, 0), // size,
+					Coords.fromXY(margin, 220), // pos,
+					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
 					false, // isTextCentered,
-					"Selected:", // text
-					null
+					"Selected:" // text
 				),
 
-				new ControlLabel
+				ControlLabel.from5
 				(
 					"labelSkillSelected", // name,
-					new Coords(80, 220, 0), // pos,
-					new Coords(size.x - margin * 2, labelHeight, 0), // size,
+					Coords.fromXY(80, 220), // pos,
+					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
 					false, // isTextCentered,
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
-						this, (c: SkillLearner) => (c.skillSelectedName || "-"), null
-					),
-					null
+						this, (c: SkillLearner) => (c.skillSelectedName || "-")
+					)
 				),
 
 				new ControlLabel
 				(
 					"labelSkillSelectedDescription", // name,
-					new Coords(margin, 232, 0), // pos,
-					new Coords(size.x - margin * 2, labelHeight, 0), // size,
+					Coords.fromXY(margin, 232), // pos,
+					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
 					false, // isTextCentered,
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						this,
 						(c: SkillLearner) =>
 						{
 							var skill = c.skillSelected(skillsAllByName);
 							return (skill == null ? "-" : skill.description);
-						},
-						null
+						}
 					),
 					null
 				),
 
-				new ControlLabel
+				ControlLabel.from5
 				(
 					"labelSkillBeingLearned", // name,
-					new Coords(margin, size.y - margin - labelHeight * 2, 0), // pos,
-					new Coords(size.x - margin * 2, labelHeight, 0), // size,
+					Coords.fromXY(margin, size.y - margin - labelHeight * 2), // pos,
+					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
 					false, // isTextCentered,
-					"Skill Being Learned:", // text
-					null
+					"Skill Being Learned:" // text
 				),
 
 				new ControlLabel
 				(
 					"textSkillBeingLearned", // name,
-					new Coords(145, size.y - margin - labelHeight * 2, 0), // pos,
-					new Coords(size.x - margin * 2, labelHeight, 0), // size,
+					Coords.fromXY(145, size.y - margin - labelHeight * 2), // pos,
+					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
 					false, // isTextCentered,
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						this,
 						(c: SkillLearner) =>
 						{
 							return (c.skillBeingLearnedName || "-");
-						},
-						null
+						}
 					),
 					null
 				),
 
-				new ControlLabel
+				ControlLabel.from5
 				(
 					"labelLearningAccumulated", // name,
-					new Coords(margin, size.y - margin - labelHeight, 0), // pos,
-					new Coords(size.x - margin * 2, labelHeight, 0), // size,
+					Coords.fromXY(margin, size.y - margin - labelHeight), // pos,
+					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
 					false, // isTextCentered,
-					"Learning Accumulated:", // text
-					null
+					"Learning Accumulated:" // text
 				),
 
-				new ControlLabel
+				ControlLabel.from5
 				(
 					"textLearningAccumulated", // name,
-					new Coords(145, size.y - margin - labelHeight, 0), // pos,
-					new Coords(30, labelHeight, 0), // size,
+					Coords.fromXY(145, size.y - margin - labelHeight), // pos,
+					Coords.fromXY(30, labelHeight), // size,
 					false, // isTextCentered,
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						this,
-						(c: SkillLearner) => c.learningAccumulatedOverRequired(skillsAllByName),
-						null
-					), // text
-					null
+						(c: SkillLearner) =>
+							c.learningAccumulatedOverRequired(skillsAllByName)
+					) // text
 				),
-			],
-			null, null
+			]
 		);
 
 		if (includeTitle)
@@ -399,8 +381,8 @@ export class SkillLearner extends EntityProperty
 				new ControlLabel
 				(
 					"labelSkills",
-					new Coords(200, 20, 0), // pos
-					new Coords(120, 25, 0), // size
+					Coords.fromXY(200, 20), // pos
+					Coords.fromXY(120, 25), // size
 					true, // isTextCentered
 					"Skills",
 					labelHeightLarge
@@ -409,7 +391,7 @@ export class SkillLearner extends EntityProperty
 		}
 		else
 		{
-			var titleHeightInverted = new Coords(0, -30, 0);
+			var titleHeightInverted = Coords.fromXY(0, -30);
 			returnValue.size.add(titleHeightInverted);
 			returnValue.shiftChildPositions(titleHeightInverted);
 		}

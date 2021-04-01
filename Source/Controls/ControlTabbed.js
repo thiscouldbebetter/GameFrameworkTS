@@ -257,7 +257,7 @@ var ThisCouldBeBetter;
                     if (i == this.childSelectedIndex) {
                         button.isHighlighted = true;
                     }
-                    button.draw(universe, display, drawLoc, null);
+                    button.draw(universe, display, drawLoc, style);
                 }
                 var child = this.childSelected();
                 if (child != null) {

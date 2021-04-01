@@ -361,7 +361,7 @@ var ThisCouldBeBetter;
                         new GameFramework.Coords(0, -1, 0),
                         new GameFramework.Coords(0.5, -0.5, 0)
                     ]).transform(GameFramework.Transform_Scale.fromScalar(entityDimension)), GameFramework.Color.byName(baseColor), null),
-                    new GameFramework.VisualOffset(new GameFramework.VisualDynamic((u, w, d, e) => {
+                    new GameFramework.VisualOffset(new GameFramework.VisualDynamic((u, w, p, e) => {
                         var baseColor = GameFramework.Color.byName("Brown");
                         return GameFramework.VisualText.fromTextAndColor(e.portal().destinationPlaceName, baseColor);
                     }), new GameFramework.Coords(0, entityDimension, 0))

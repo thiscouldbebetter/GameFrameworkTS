@@ -15,7 +15,7 @@ var ThisCouldBeBetter;
                 this._cells = new Array();
             }
             static fromSize(size) {
-                return new CollisionTracker(size, null);
+                return new CollisionTracker(size, GameFramework.Coords.fromXY(4, 4));
             }
             entityCollidableAddAndFindCollisions(entity, collisionHelper, collisionsSoFar) {
                 collisionsSoFar.length = 0;

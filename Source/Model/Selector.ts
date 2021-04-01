@@ -16,7 +16,7 @@ export class Selector extends EntityProperty
 
 		var visualReticle = new VisualRectangle
 		(
-			new Coords(20, 20, 0),
+			Coords.fromXY(20, 20),
 			null, // colorFill
 			Color.byName("White"),
 			true // isCentered
@@ -71,7 +71,7 @@ export class Selector extends EntityProperty
 				new ControlLabel
 				(
 					"labelSelected",
-					new Coords(1, 0, 0).multiplyScalar(margin), // pos
+					Coords.fromXY(1, 0).multiplyScalar(margin), // pos
 					labelSize,
 					false, // isTextCentered
 					"Selected:",
@@ -81,15 +81,14 @@ export class Selector extends EntityProperty
 				new ControlLabel
 				(
 					"textEntitySelectedName",
-					new Coords(1, 1.5, 0).multiplyScalar(margin), // pos
+					Coords.fromXY(1, 1.5).multiplyScalar(margin), // pos
 					labelSize,
 					false, // isTextCentered
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						this,
 						(c: Selector) =>
-							(c.entitiesSelected.length == 0 ? "-" : c.entitiesSelected[0].name),
-						null
+							(c.entitiesSelected.length == 0 ? "-" : c.entitiesSelected[0].name)
 					),
 					fontHeightInPixels
 				)

@@ -19,7 +19,7 @@ export class ItemCrafter extends EntityProperty
 
 		this.recipesAvailable = recipesAvailable || [];
 
-		this.itemHolderStaged = new ItemHolder([], null, null);
+		this.itemHolderStaged = ItemHolder.create();
 		this.recipeAvailableSelected = null;
 		this.recipeInProgressTicksSoFar = 0;
 		this.recipeQueuedSelected = null;
@@ -144,7 +144,7 @@ export class ItemCrafter extends EntityProperty
 			size = universe.display.sizeDefault().clone();
 		}
 
-		var sizeBase = new Coords(200, 135, 1);
+		var sizeBase = Coords.fromXY(200, 135);
 
 		var fontHeight = 10;
 		var fontHeightSmall = fontHeight * 0.6;
@@ -186,8 +186,8 @@ export class ItemCrafter extends EntityProperty
 				new ControlLabel
 				(
 					"labelRecipes",
-					new Coords(10, 5, 0), // pos
-					new Coords(70, 25, 0), // size
+					Coords.fromXY(10, 5), // pos
+					Coords.fromXY(70, 25), // size
 					false, // isTextCentered
 					"Recipes:",
 					fontHeightSmall
@@ -196,19 +196,16 @@ export class ItemCrafter extends EntityProperty
 				new ControlList
 				(
 					"listRecipes",
-					new Coords(10, 15, 0), // pos
-					new Coords(85, 100, 0), // size
-					new DataBinding
+					Coords.fromXY(10, 15), // pos
+					Coords.fromXY(85, 100), // size
+					DataBinding.fromContextAndGet
 					(
 						this,
-						(c: ItemCrafter) => c.recipesAvailable,
-						null
+						(c: ItemCrafter) => c.recipesAvailable
 					), // items
-					new DataBinding
+					DataBinding.fromGet
 					(
-						null,
-						(c: CraftingRecipe) => c.name,
-						null
+						(c: CraftingRecipe) => c.name
 					), // bindingForItemText
 					fontHeightSmall,
 					new DataBinding
@@ -229,8 +226,8 @@ export class ItemCrafter extends EntityProperty
 				new ControlLabel
 				(
 					"labelRecipeSelected",
-					new Coords(105, 5, 0), // pos
-					new Coords(70, 25, 0), // size
+					Coords.fromXY(105, 5), // pos
+					Coords.fromXY(70, 25), // size
 					false, // isTextCentered
 					"Recipe Selected:",
 					fontHeightSmall
@@ -239,17 +236,16 @@ export class ItemCrafter extends EntityProperty
 				new ControlButton
 				(
 					"buttonCraft",
-					new Coords(170, 5, 0), // pos
-					new Coords(20, 10, 0), // size
+					Coords.fromXY(170, 5), // pos
+					Coords.fromXY(20, 10), // size
 					"Craft",
 					fontHeightSmall,
 					true, // hasBorder
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						this,
 						(c: ItemCrafter) =>
-							c.isRecipeAvailableSelectedFulfilled(entityCrafter.itemHolder()),
-						null
+							c.isRecipeAvailableSelectedFulfilled(entityCrafter.itemHolder())
 					), // isEnabled
 					addToQueue, // click
 					null, null
@@ -258,10 +254,10 @@ export class ItemCrafter extends EntityProperty
 				new ControlLabel
 				(
 					"infoRecipeSelected",
-					new Coords(105, 10, 0), // pos
-					new Coords(75, 25, 0), // size
+					Coords.fromXY(105, 10), // pos
+					Coords.fromXY(75, 25), // size
 					false, // isTextCentered
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						this,
 						(c: ItemCrafter) =>
@@ -269,8 +265,7 @@ export class ItemCrafter extends EntityProperty
 								(c.recipeAvailableSelected == null)
 								? "-"
 								: c.recipeAvailableSelected.nameAndSecondsToCompleteAsString(universe)
-							),
-						null
+							)
 					),
 					fontHeightSmall
 				),
@@ -278,9 +273,9 @@ export class ItemCrafter extends EntityProperty
 				new ControlList
 				(
 					"listItemsInRecipe",
-					new Coords(105, 20, 0), // pos
-					new Coords(85, 25, 0), // size
-					new DataBinding
+					Coords.fromXY(105, 20), // pos
+					Coords.fromXY(85, 25), // size
+					DataBinding.fromContextAndGet
 					(
 						this,
 						(c: ItemCrafter) =>
@@ -288,14 +283,11 @@ export class ItemCrafter extends EntityProperty
 								c.recipeAvailableSelected == null
 								? []
 								: c.recipeAvailableSelected.itemsInHeldOverRequiredForItemHolder(itemHolder)
-							),
-						null
+							)
 					), // items
-					new DataBinding
+					DataBinding.fromGet
 					(
-						null,
-						(c: string) => c,
-						null
+						(c: string) => c
 					), // bindingForItemText
 					fontHeightSmall,
 					null, // bindingForItemSelected
@@ -306,61 +298,56 @@ export class ItemCrafter extends EntityProperty
 				new ControlLabel
 				(
 					"labelCrafting",
-					new Coords(105, 50, 0), // pos
-					new Coords(75, 25, 0), // size
+					Coords.fromXY(105, 50), // pos
+					Coords.fromXY(75, 25), // size
 					false, // isTextCentered
 					DataBinding.fromContext("Crafting:"),
 					fontHeightSmall
 				),
 
-				new ControlButton
+				ControlButton.from8
 				(
 					"buttonCancel",
-					new Coords(170, 50, 0), // pos
-					new Coords(20, 10, 0), // size
+					Coords.fromXY(170, 50), // pos
+					Coords.fromXY(20, 10), // size
 					"Cancel",
 					fontHeightSmall,
 					true, // hasBorder
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						this,
-						(c: ItemCrafter) => (c.recipesQueued.length > 0),
-						null
+						(c: ItemCrafter) => (c.recipesQueued.length > 0)
 					), // isEnabled
-					crafter.recipeInProgressCancel, // click
-					null, null
+					crafter.recipeInProgressCancel // click
 				),
 
 				new ControlLabel
 				(
 					"infoCrafting",
-					new Coords(105, 55, 0), // pos
-					new Coords(75, 25, 0), // size
+					Coords.fromXY(105, 55), // pos
+					Coords.fromXY(75, 25), // size
 					false, // isTextCentered
-					new DataBinding(
+					DataBinding.fromContextAndGet
+					(
 						this,
-						(c: ItemCrafter) => ( c.recipeProgressAsString(universe) ),
-						null
+						(c: ItemCrafter) => c.recipeProgressAsString(universe)
 					),
 					fontHeightSmall
 				),
 
-				new ControlList
+				ControlList.from8
 				(
 					"listCraftingsQueued",
-					new Coords(105, 65, 0), // pos
-					new Coords(85, 35, 0), // size
-					new DataBinding
+					Coords.fromXY(105, 65), // pos
+					Coords.fromXY(85, 35), // size
+					DataBinding.fromContextAndGet
 					(
 						this,
-						(c: ItemCrafter) => c.recipesQueued,
-						null
+						(c: ItemCrafter) => c.recipesQueued
 					), // items
-					new DataBinding
+					DataBinding.fromGet
 					(
-						null,
-						(c: CraftingRecipe) => c.name,
-						null
+						(c: CraftingRecipe) => c.name
 					), // bindingForItemText
 					fontHeightSmall,
 					new DataBinding
@@ -369,21 +356,19 @@ export class ItemCrafter extends EntityProperty
 						(c: ItemCrafter) => c.recipeQueuedSelected,
 						(c: ItemCrafter, v: CraftingRecipe) => { c.recipeQueuedSelected = v; }
 					), // bindingForItemSelected
-					DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
-					null, null, null
+					DataBinding.fromGet( (c: Entity) => c ) // bindingForItemValue
 				),
 
 				new ControlLabel
 				(
 					"infoStatus",
-					new Coords(100, 125, 0), // pos
-					new Coords(200, 15, 0), // size
+					Coords.fromXY(100, 125), // pos
+					Coords.fromXY(200, 15), // size
 					true, // isTextCentered
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						this,
-						(c: ItemCrafter) => c.statusMessage,
-						null
+						(c: ItemCrafter) => c.statusMessage
 					), // text
 					fontHeightSmall
 				)
@@ -407,8 +392,8 @@ export class ItemCrafter extends EntityProperty
 				new ControlLabel
 				(
 					"labelCrafting",
-					new Coords(100, -5, 0), // pos
-					new Coords(100, 25, 0), // size
+					Coords.fromXY(100, -5), // pos
+					Coords.fromXY(100, 25), // size
 					true, // isTextCentered
 					"Craft",
 					fontHeightLarge
@@ -417,21 +402,20 @@ export class ItemCrafter extends EntityProperty
 
 			returnValue.children.push
 			(
-				new ControlButton
+				ControlButton.from8
 				(
 					"buttonDone",
-					new Coords(170, 115, 0), // pos
-					new Coords(20, 10, 0), // size
+					Coords.fromXY(170, 115), // pos
+					Coords.fromXY(20, 10), // size
 					"Done",
 					fontHeightSmall,
 					true, // hasBorder
 					true, // isEnabled
-					back, // click
-					null, null
+					back // click
 				)
 			);
 
-			var titleHeight = new Coords(0, 15, 0);
+			var titleHeight = Coords.fromXY(0, 15);
 			sizeBase.add(titleHeight);
 			returnValue.size.add(titleHeight);
 			returnValue.shiftChildPositions(titleHeight);

@@ -743,7 +743,7 @@ export class PlaceBuilderDemo_Emplacements
 			(
 				new VisualDynamic
 				(
-					(u: Universe, w: World, d: Display, e: Entity) =>
+					(u: Universe, w: World, p: Place, e: Entity) =>
 					{
 						var baseColor = Color.byName("Brown");
 						return VisualText.fromTextAndColor

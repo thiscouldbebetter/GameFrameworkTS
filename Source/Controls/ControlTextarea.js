@@ -15,7 +15,7 @@ var ThisCouldBeBetter;
                 this.scrollbar = new GameFramework.ControlScrollbar(new GameFramework.Coords(this.size.x - scrollbarWidth, 0, 0), // pos
                 new GameFramework.Coords(scrollbarWidth, this.size.y, 0), // size
                 this.fontHeightInPixels, this.lineSpacing, // itemHeight
-                new GameFramework.DataBinding(this, (c) => c.textAsLines(), null), 0 // sliderPosInItems
+                GameFramework.DataBinding.fromContextAndGet(this, (c) => c.textAsLines()), 0 // sliderPosInItems
                 );
                 // Helper variables.
                 this._drawPos = GameFramework.Coords.create();

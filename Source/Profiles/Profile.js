@@ -106,7 +106,7 @@ var ThisCouldBeBetter;
                 };
                 var saveToLocalStorageDone = (wasSaveSuccessful) => {
                     var message = (wasSaveSuccessful ? "Game saved successfully." : "Save failed due to errors.");
-                    var controlMessage = universe.controlBuilder.message(universe, size, new GameFramework.DataBinding(message, null, null), () => // acknowledge
+                    var controlMessage = universe.controlBuilder.message(universe, size, GameFramework.DataBinding.fromContext(message), () => // acknowledge
                      {
                         var venueNext = universe.controlBuilder.game(universe, null, universe.venueCurrent).toVenue();
                         venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
@@ -142,7 +142,7 @@ var ThisCouldBeBetter;
                         var wasSaveSuccessful = (worldCompressedAsBytes != null);
                         var message = (wasSaveSuccessful ? "Save ready: choose location on dialog." : "Save failed due to errors.");
                         new GameFramework.FileHelper().saveBytesToFileWithName(worldCompressedAsBytes, universe.world.name + ".json.lzw");
-                        var controlMessage = universe.controlBuilder.message(universe, size, new GameFramework.DataBinding(message, null, null), () => // acknowledge
+                        var controlMessage = universe.controlBuilder.message(universe, size, GameFramework.DataBinding.fromContext(message), () => // acknowledge
                          {
                             var venueNext = universe.controlBuilder.game(universe, null, universe.venueCurrent).toVenue();
                             venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
@@ -156,7 +156,7 @@ var ThisCouldBeBetter;
                 var loadFromFile = () => // click
                  {
                     var venueFileUpload = new GameFramework.VenueFileUpload(null, null);
-                    var controlMessageReadyToLoad = controlBuilder.message(universe, size, new GameFramework.DataBinding("Ready to load from file...", null, null), () => // acknowledge
+                    var controlMessageReadyToLoad = controlBuilder.message(universe, size, GameFramework.DataBinding.fromContext("Ready to load from file..."), () => // acknowledge
                      {
                         var callback = (fileContentsAsString) => {
                             var worldAsStringCompressed = fileContentsAsString;
@@ -228,42 +228,42 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(150, 25), // size
                     true, // isTextCentered
                     "Choose a State to " + (isLoadNotSave ? "Restore" : "Overwrite") + ":", fontHeight),
-                    new GameFramework.ControlList("listSaveStates", GameFramework.Coords.fromXY(10, 35), // pos
+                    GameFramework.ControlList.from10("listSaveStates", GameFramework.Coords.fromXY(10, 35), // pos
                     GameFramework.Coords.fromXY(110, 75), // size
-                    new GameFramework.DataBinding(universe.profile, (c) => c.saveStates, null), // items
+                    GameFramework.DataBinding.fromContextAndGet(universe.profile, (c) => c.saveStates), // items
                     GameFramework.DataBinding.fromGet((c) => {
                         var timeSaved = c.timeSaved;
                         return (timeSaved == null ? "-" : timeSaved.toStringYYYY_MM_DD_HH_MM_SS());
                     }), // bindingForOptionText
-                    fontHeight, new GameFramework.DataBinding(universe.profile, (c) => c.saveStateSelected(), (c, v) => { c.saveStateNameSelected = v.name; }), // bindingForOptionSelected
+                    fontHeight, new GameFramework.DataBinding(universe.profile, (c) => c.saveStateSelected(), (c, v) => c.saveStateNameSelected = v.name), // bindingForOptionSelected
                     GameFramework.DataBinding.fromGet((c) => c), // value
-                    null, (isLoadNotSave ? loadSelectedSlotFromLocalStorage : saveToLocalStorageOverwritingSlotSelected), // confirm
-                    null),
-                    new GameFramework.ControlButton("buttonNew", GameFramework.Coords.fromXY(10, 120), // pos
+                    null, (isLoadNotSave ? loadSelectedSlotFromLocalStorage : saveToLocalStorageOverwritingSlotSelected) // confirm
+                    ),
+                    GameFramework.ControlButton.from8("buttonNew", GameFramework.Coords.fromXY(10, 120), // pos
                     GameFramework.Coords.fromXY(25, buttonHeightBase), // size
                     "New", fontHeight, true, // hasBorder
                     true, // isEnabled
-                    (isLoadNotSave ? loadNewWorld : saveToLocalStorageAsNewSlot), // click
-                    null, null),
+                    (isLoadNotSave ? loadNewWorld : saveToLocalStorageAsNewSlot) // click
+                    ),
                     new GameFramework.ControlButton("buttonSelect", GameFramework.Coords.fromXY(40, 120), // pos
                     GameFramework.Coords.fromXY(25, buttonHeightBase), // size
                     (isLoadNotSave ? "Load" : "Save"), fontHeight, true, // hasBorder
                     // isEnabled
-                    new GameFramework.DataBinding(universe.profile, (c) => (c.saveStateNameSelected != null), null), (isLoadNotSave ? loadSelectedSlotFromLocalStorage : saveToLocalStorageOverwritingSlotSelected), // click
+                    GameFramework.DataBinding.fromContextAndGet(universe.profile, (c) => (c.saveStateNameSelected != null)), (isLoadNotSave ? loadSelectedSlotFromLocalStorage : saveToLocalStorageOverwritingSlotSelected), // click
                     null, null),
-                    new GameFramework.ControlButton("buttonFile", GameFramework.Coords.fromXY(70, 120), // pos
+                    GameFramework.ControlButton.from8("buttonFile", GameFramework.Coords.fromXY(70, 120), // pos
                     GameFramework.Coords.fromXY(25, buttonHeightBase), // size
                     "File", fontHeight, true, // hasBorder
                     // isEnabled
-                    new GameFramework.DataBinding(universe.profile, (c) => (c.saveStateNameSelected != null), null), (isLoadNotSave ? loadFromFile : saveToFilesystem), // click
-                    null, null),
-                    new GameFramework.ControlButton("buttonDelete", GameFramework.Coords.fromXY(100, 120), // pos
+                    GameFramework.DataBinding.fromContextAndGet(universe.profile, (c) => (c.saveStateNameSelected != null)), (isLoadNotSave ? loadFromFile : saveToFilesystem) // click
+                    ),
+                    GameFramework.ControlButton.from8("buttonDelete", GameFramework.Coords.fromXY(100, 120), // pos
                     GameFramework.Coords.fromXY(20, buttonHeightBase), // size
                     "X", fontHeight, true, // hasBorder
                     // isEnabled
-                    new GameFramework.DataBinding(universe.profile, (c) => (c.saveStateNameSelected != null), null), deleteSaveSelected, // click
-                    null, null),
-                    new GameFramework.ControlVisual("visualSnapshot", GameFramework.Coords.fromXY(130, 35), visualThumbnailSize, new GameFramework.DataBinding(universe.profile, (c) => {
+                    GameFramework.DataBinding.fromContextAndGet(universe.profile, (c) => (c.saveStateNameSelected != null)), deleteSaveSelected // click
+                    ),
+                    GameFramework.ControlVisual.from5("visualSnapshot", GameFramework.Coords.fromXY(130, 35), visualThumbnailSize, GameFramework.DataBinding.fromContextAndGet(universe.profile, (c) => {
                         var saveState = c.saveStateSelected();
                         var saveStateImageSnapshot = (saveState == null
                             ? null
@@ -273,26 +273,25 @@ var ThisCouldBeBetter;
                             : new GameFramework.VisualImageImmediate(saveStateImageSnapshot, true) // isScaled
                         );
                         return returnValue;
-                    }, null), GameFramework.Color.byName("White"), null // colorBorder
-                    ),
+                    }), GameFramework.Color.byName("White")),
                     new GameFramework.ControlLabel("labelPlaceName", GameFramework.Coords.fromXY(130, 80), // pos
                     GameFramework.Coords.fromXY(120, buttonHeightBase), // size
                     false, // isTextCentered
-                    new GameFramework.DataBinding(universe.profile, (c) => {
+                    GameFramework.DataBinding.fromContextAndGet(universe.profile, (c) => {
                         var saveState = c.saveStateSelected();
                         return (saveState == null ? "" : saveState.placeName);
-                    }, null), fontHeight),
+                    }), fontHeight),
                     new GameFramework.ControlLabel("labelTimePlaying", GameFramework.Coords.fromXY(130, 90), // pos
                     GameFramework.Coords.fromXY(120, buttonHeightBase), // size
                     false, // isTextCentered
-                    new GameFramework.DataBinding(universe.profile, (c) => {
+                    GameFramework.DataBinding.fromContextAndGet(universe.profile, (c) => {
                         var saveState = c.saveStateSelected();
                         return (saveState == null ? "" : saveState.timePlayingAsString);
-                    }, null), fontHeight),
+                    }), fontHeight),
                     new GameFramework.ControlLabel("labelDateSaved", GameFramework.Coords.fromXY(130, 100), // pos
                     GameFramework.Coords.fromXY(120, buttonHeightBase), // size
                     false, // isTextCentered
-                    new GameFramework.DataBinding(universe.profile, (c) => {
+                    GameFramework.DataBinding.fromContextAndGet(universe.profile, (c) => {
                         var saveState = c.saveStateSelected();
                         var returnValue = (saveState == null
                             ? ""
@@ -301,20 +300,20 @@ var ThisCouldBeBetter;
                                     ? ""
                                     : saveState.timeSaved.toStringYYYY_MM_DD()));
                         return returnValue;
-                    }, null), fontHeight),
+                    }), fontHeight),
                     new GameFramework.ControlLabel("labelTimeSaved", GameFramework.Coords.fromXY(130, 110), // pos
                     GameFramework.Coords.fromXY(120, buttonHeightBase), // size
                     false, // isTextCentered
-                    new GameFramework.DataBinding(universe.profile, (c) => {
+                    GameFramework.DataBinding.fromContextAndGet(universe.profile, (c) => {
                         var saveState = c.saveStateSelected();
                         return (saveState == null ? "" : saveState.timeSaved.toStringHH_MM_SS());
-                    }, null), fontHeight),
-                    new GameFramework.ControlButton("buttonBack", GameFramework.Coords.fromXY(sizeBase.x - 10 - 25, sizeBase.y - 10 - 15), // pos
+                    }), fontHeight),
+                    GameFramework.ControlButton.from8("buttonBack", GameFramework.Coords.fromXY(sizeBase.x - 10 - 25, sizeBase.y - 10 - 15), // pos
                     GameFramework.Coords.fromXY(25, 15), // size
                     "Back", fontHeight, true, // hasBorder
                     true, // isEnabled
-                    back, // click
-                    null, null),
+                    back // click
+                    ),
                 ], null, null);
                 returnValue.scalePosAndSize(scaleMultiplier);
                 return returnValue;
@@ -328,7 +327,7 @@ var ThisCouldBeBetter;
                 var scaleMultiplier = size.clone().divide(sizeBase);
                 var fontHeight = controlBuilder.fontHeightInPixelsBase;
                 var buttonHeightBase = controlBuilder.buttonHeightBase;
-                var returnValue = new GameFramework.ControlContainer("containerProfileNew", GameFramework.Coords.create(), // pos
+                var returnValue = GameFramework.ControlContainer.from4("containerProfileNew", GameFramework.Coords.create(), // pos
                 sizeBase.clone(), // size
                 // children
                 [
@@ -338,15 +337,15 @@ var ThisCouldBeBetter;
                     "Profile Name:", fontHeight),
                     new GameFramework.ControlTextBox("textBoxName", GameFramework.Coords.fromXY(50, 50), // pos
                     GameFramework.Coords.fromXY(100, 20), // size
-                    new GameFramework.DataBinding(universe.profile, (c) => { return c.name; }, (c, v) => { c.name = v; }), // text
+                    new GameFramework.DataBinding(universe.profile, (c) => c.name, (c, v) => c.name = v), // text
                     fontHeight, null, // charCountMax
-                    new GameFramework.DataBinding(true, null, null) // isEnabled
+                    GameFramework.DataBinding.fromContext(true) // isEnabled
                     ),
-                    new GameFramework.ControlButton("buttonCreate", GameFramework.Coords.fromXY(50, 80), // pos
+                    GameFramework.ControlButton.from8("buttonCreate", GameFramework.Coords.fromXY(50, 80), // pos
                     GameFramework.Coords.fromXY(45, buttonHeightBase), // size
                     "Create", fontHeight, true, // hasBorder
                     // isEnabled
-                    new GameFramework.DataBinding(universe.profile, (c) => { return c.name.length > 0; }, null), () => // click
+                    GameFramework.DataBinding.fromContextAndGet(universe.profile, (c) => { return c.name.length > 0; }), () => // click
                      {
                         var venueControls = universe.venueCurrent;
                         var controlRootAsContainer = venueControls.controlRoot;
@@ -368,8 +367,8 @@ var ThisCouldBeBetter;
                         var venueNext = Profile.toControlSaveStateLoad(universe, null, universe.venueCurrent).toVenue();
                         venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
                         universe.venueNext = venueNext;
-                    }, null, null),
-                    new GameFramework.ControlButton("buttonCancel", GameFramework.Coords.fromXY(105, 80), // pos
+                    }),
+                    GameFramework.ControlButton.from8("buttonCancel", GameFramework.Coords.fromXY(105, 80), // pos
                     GameFramework.Coords.fromXY(45, buttonHeightBase), // size
                     "Cancel", fontHeight, true, // hasBorder
                     true, // isEnabled
@@ -378,8 +377,8 @@ var ThisCouldBeBetter;
                         var venueNext = Profile.toControlProfileSelect(universe, null, universe.venueCurrent).toVenue();
                         venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
                         universe.venueNext = venueNext;
-                    }, null, null),
-                ], null, null);
+                    }),
+                ]);
                 returnValue.scalePosAndSize(scaleMultiplier);
                 return returnValue;
             }
@@ -471,7 +470,7 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(140, 40), // size
                     GameFramework.DataBinding.fromContext(profiles), // items
                     GameFramework.DataBinding.fromGet((c) => c.name), // bindingForItemText
-                    fontHeight, new GameFramework.DataBinding(universe, (c) => { return c.profile; }, (c, v) => { c.profile = v; }), // bindingForOptionSelected
+                    fontHeight, new GameFramework.DataBinding(universe, (c) => c.profile, (c, v) => c.profile = v), // bindingForOptionSelected
                     GameFramework.DataBinding.fromGet((c) => c), // value
                     null, // bindingForIsEnabled
                     select, // confirm
@@ -487,13 +486,14 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(35, buttonHeightBase), // size
                     "Select", fontHeight, true, // hasBorder
                     // isEnabled
-                    new GameFramework.DataBinding(universe, (c) => { return (c.profile != null); }, null), select // click
+                    GameFramework.DataBinding.fromContextAndGet(universe, (c) => { return (c.profile != null); }), select // click
                     ),
                     GameFramework.ControlButton.from8("buttonSkip", GameFramework.Coords.fromXY(110, 95), // pos
                     GameFramework.Coords.fromXY(35, buttonHeightBase), // size
                     "Skip", fontHeight, true, // hasBorder
                     true, // isEnabled
-                    skip),
+                    skip // click
+                    ),
                     GameFramework.ControlButton.from8("buttonDelete", GameFramework.Coords.fromXY(150, 95), // pos
                     GameFramework.Coords.fromXY(20, buttonHeightBase), // size
                     "X", fontHeight, true, // hasBorder

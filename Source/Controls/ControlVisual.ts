@@ -46,6 +46,15 @@ export class ControlVisual extends ControlBase
 		return new ControlVisual(name, pos, size, visual, null, null);
 	}
 
+	static from5
+	(
+		name: string, pos: Coords, size: Coords,
+		visual: DataBinding<any, Visual>, colorBackground: Color
+	)
+	{
+		return new ControlVisual(name, pos, size, visual, colorBackground, null);
+	}
+
 	actionHandle(actionName: string, universe: Universe): boolean
 	{
 		return false;

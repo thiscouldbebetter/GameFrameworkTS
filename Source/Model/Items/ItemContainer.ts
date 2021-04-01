@@ -56,12 +56,11 @@ export class ItemContainer extends EntityProperty
 
 		var fontHeight = 10;
 		var margin = fontHeight * 1.5;
-		var buttonSize = new Coords(2, 2, 0).multiplyScalar(fontHeight);
-		var listSize = new Coords
+		var buttonSize = Coords.fromXY(2, 2).multiplyScalar(fontHeight);
+		var listSize = Coords.fromXY
 		(
 			(size.x - margin * 4 - buttonSize.x) / 2,
-			size.y - margin * 4 - fontHeight * 2,
-			0
+			size.y - margin * 4 - fontHeight * 2
 		);
 
 		var itemContainer = this;
@@ -97,8 +96,8 @@ export class ItemContainer extends EntityProperty
 				new ControlLabel
 				(
 					"labelContainerName",
-					new Coords(margin, margin, 0), // pos
-					new Coords(listSize.x, 25, 0), // size
+					Coords.fromXY(margin, margin), // pos
+					Coords.fromXY(listSize.x, 25), // size
 					false, // isTextCentered
 					entityContainer.name + ":",
 					fontHeight
@@ -107,29 +106,26 @@ export class ItemContainer extends EntityProperty
 				new ControlList
 				(
 					"listContainerItems",
-					new Coords(margin, margin * 2, 0), // pos
+					Coords.fromXY(margin, margin * 2), // pos
 					listSize.clone(),
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						itemHolderContainer,
 						(c: ItemHolder) =>
 						{
 							return c.itemEntities;
-						},
-						null
+						}
 					), // items
-					new DataBinding
+					DataBinding.fromGet
 					(
-						null,
-						(c: Entity) => c.item().toString(world),
-						null
+						(c: Entity) => c.item().toString(world)
 					), // bindingForItemText
 					fontHeight,
 					new DataBinding
 					(
 						itemHolderContainer,
 						(c: ItemHolder) => c.itemEntitySelected,
-						(c: ItemHolder, v: Entity) => { c.itemEntitySelected = v; }
+						(c: ItemHolder, v: Entity) => c.itemEntitySelected = v
 					), // bindingForItemSelected
 					DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
 					DataBinding.fromContext(true), // isEnabled
@@ -137,47 +133,43 @@ export class ItemContainer extends EntityProperty
 					null
 				),
 
-				new ControlButton
+				ControlButton.from8
 				(
 					"buttonGet",
-					new Coords
+					Coords.fromXY
 					(
 						(size.x - buttonSize.x) / 2,
-						(size.y - buttonSize.y - margin) / 2,
-						0
+						(size.y - buttonSize.y - margin) / 2
 					), // pos
 					buttonSize.clone(),
 					">",
 					fontHeight,
 					true, // hasBorder
 					DataBinding.fromContext(true), // isEnabled
-					get, // click
-					null, null
+					get // click
 				),
 
-				new ControlButton
+				ControlButton.from8
 				(
 					"buttonPut",
-					new Coords
+					Coords.fromXY
 					(
 						(size.x - buttonSize.x) / 2,
-						(size.y + buttonSize.y + margin) / 2,
-						0
+						(size.y + buttonSize.y + margin) / 2
 					), // pos
 					buttonSize.clone(),
 					"<",
 					fontHeight,
 					true, // hasBorder
 					DataBinding.fromContext(true), // isEnabled
-					put, // click
-					null, null
+					put // click
 				),
 
 				new ControlLabel
 				(
 					"labelGetterPutterName",
-					new Coords(size.x - margin - listSize.x, margin, 0), // pos
-					new Coords(85, 25, 0), // size
+					Coords.fromXY(size.x - margin - listSize.x, margin), // pos
+					Coords.fromXY(85, 25), // size
 					false, // isTextCentered
 					entityGetterPutter.name + ":",
 					fontHeight
@@ -186,22 +178,19 @@ export class ItemContainer extends EntityProperty
 				new ControlList
 				(
 					"listOtherItems",
-					new Coords(size.x - margin - listSize.x, margin * 2, 0), // pos
+					Coords.fromXY(size.x - margin - listSize.x, margin * 2), // pos
 					listSize.clone(),
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						itemHolderGetterPutter,
 						(c: ItemHolder) =>
 						{
 							return c.itemEntities;//.filter(x => x.item().defnName != itemDefnNameCurrency);
-						},
-						null
+						}
 					), // items
-					new DataBinding
+					DataBinding.fromGet
 					(
-						null,
-						(c: Entity) => c.item().toString(world),
-						null
+						(c: Entity) => c.item().toString(world)
 					), // bindingForItemText
 					fontHeight,
 					new DataBinding
@@ -219,17 +208,21 @@ export class ItemContainer extends EntityProperty
 				new ControlLabel
 				(
 					"infoStatus",
-					new Coords(size.x / 2, size.y - margin - fontHeight, 0), // pos
-					new Coords(size.x, fontHeight, 0), // size
+					Coords.fromXY(size.x / 2, size.y - margin - fontHeight), // pos
+					Coords.fromXY(size.x, fontHeight), // size
 					true, // isTextCentered
-					new DataBinding(this, c => c.statusMessage, null),
+					DataBinding.fromContextAndGet(this, c => c.statusMessage),
 					fontHeight
 				),
 
 				new ControlButton
 				(
 					"buttonDone",
-					new Coords(size.x - margin - buttonSize.x, size.y - margin - buttonSize.y, 0), // pos
+					Coords.fromXY
+					(
+						size.x - margin - buttonSize.x,
+						size.y - margin - buttonSize.y
+					), // pos
 					buttonSize.clone(),
 					"Done",
 					fontHeight,

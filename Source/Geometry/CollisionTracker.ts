@@ -32,7 +32,7 @@ export class CollisionTracker extends EntityProperty
 
 	static fromSize(size: Coords): CollisionTracker
 	{
-		return new CollisionTracker(size, null);
+		return new CollisionTracker(size, Coords.fromXY(4, 4));
 	}
 
 	entityCollidableAddAndFindCollisions

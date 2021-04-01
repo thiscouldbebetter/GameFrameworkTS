@@ -16,7 +16,7 @@ var ThisCouldBeBetter;
                     var itemEntityToTransfer = itemHolderFrom.itemEntitySelected;
                     var itemToTransfer = itemEntityToTransfer.item();
                     var tradeValue = itemToTransfer.defn(world).tradeValue;
-                    var itemCurrencyNeeded = new GameFramework.Item(this.itemDefnNameCurrency, 0);
+                    var itemCurrencyNeeded = new GameFramework.Item(this.itemDefnNameCurrency, tradeValue);
                     var itemDefnCurrency = itemCurrencyNeeded.defn(world);
                     itemCurrencyNeeded.quantity = Math.ceil(tradeValue / itemDefnCurrency.tradeValue);
                     if (itemHolderTo.hasItem(itemCurrencyNeeded)) {
@@ -46,8 +46,8 @@ var ThisCouldBeBetter;
                 }
                 var fontHeight = 10;
                 var margin = fontHeight * 1.5;
-                var buttonSize = new GameFramework.Coords(4, 2, 0).multiplyScalar(fontHeight);
-                var listSize = new GameFramework.Coords((size.x - margin * 3) / 2, size.y - margin * 4 - buttonSize.y - fontHeight, 0);
+                var buttonSize = GameFramework.Coords.fromXY(4, 2).multiplyScalar(fontHeight);
+                var listSize = GameFramework.Coords.fromXY((size.x - margin * 3) / 2, size.y - margin * 4 - buttonSize.y - fontHeight);
                 var itemBarterer = this;
                 var itemHolderCustomer = entityCustomer.itemHolder();
                 var itemHolderStore = entityStore.itemHolder();
@@ -67,53 +67,51 @@ var ThisCouldBeBetter;
                 size.clone(), 
                 // children
                 [
-                    new GameFramework.ControlLabel("labelStoreName", new GameFramework.Coords(margin, margin, 0), // pos
-                    new GameFramework.Coords(listSize.x, 25, 0), // size
+                    new GameFramework.ControlLabel("labelStoreName", GameFramework.Coords.fromXY(margin, margin), // pos
+                    GameFramework.Coords.fromXY(listSize.x, 25), // size
                     false, // isTextCentered
                     entityStore.name + ":", fontHeight),
-                    new GameFramework.ControlList("listStoreItems", new GameFramework.Coords(margin, margin * 2, 0), // pos
-                    listSize.clone(), new GameFramework.DataBinding(itemHolderStore, (c) => {
-                        return c.itemEntities; //.filter(x => x.item().defnName != itemDefnNameCurrency);
-                    }, null), // items
-                    new GameFramework.DataBinding(null, (c) => { return c.item().toString(world); }, null), // bindingForItemText
-                    fontHeight, new GameFramework.DataBinding(itemHolderStore, (c) => { return c.itemEntitySelected; }, (c, v) => { c.itemEntitySelected = v; }), // bindingForItemSelected
+                    new GameFramework.ControlList("listStoreItems", GameFramework.Coords.fromXY(margin, margin * 2), // pos
+                    listSize.clone(), GameFramework.DataBinding.fromContextAndGet(itemHolderStore, (c) => c.itemEntities //.filter(x => x.item().defnName != itemDefnNameCurrency)
+                    ), // items
+                    GameFramework.DataBinding.fromGet((c) => c.item().toString(world)), // bindingForItemText
+                    fontHeight, new GameFramework.DataBinding(itemHolderStore, (c) => c.itemEntitySelected, (c, v) => c.itemEntitySelected = v), // bindingForItemSelected
                     GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
                     GameFramework.DataBinding.fromContext(true), // isEnabled
                     buy, // confirm
                     null),
-                    new GameFramework.ControlLabel("labelCustomerName", new GameFramework.Coords(size.x - margin - listSize.x, margin, 1), // pos
-                    new GameFramework.Coords(85, 25, 1), // size
+                    new GameFramework.ControlLabel("labelCustomerName", GameFramework.Coords.fromXY(size.x - margin - listSize.x, margin), // pos
+                    GameFramework.Coords.fromXY(85, 25), // size
                     false, // isTextCentered
                     entityCustomer.name + ":", fontHeight),
-                    new GameFramework.ControlButton("buttonBuy", new GameFramework.Coords(size.x / 2 - buttonSize.x - margin / 2, size.y - margin - buttonSize.y, 1), // pos
+                    GameFramework.ControlButton.from8("buttonBuy", GameFramework.Coords.fromXY(size.x / 2 - buttonSize.x - margin / 2, size.y - margin - buttonSize.y), // pos
                     buttonSize.clone(), "Buy", fontHeight, true, // hasBorder
                     GameFramework.DataBinding.fromContext(true), // isEnabled
-                    buy, // click
-                    null, null),
-                    new GameFramework.ControlList("listCustomerItems", new GameFramework.Coords(size.x - margin - listSize.x, margin * 2, 1), // pos
-                    listSize.clone(), new GameFramework.DataBinding(itemHolderCustomer, (c) => {
-                        return c.itemEntities; //.filter(x => x.item().defnName != itemDefnNameCurrency);
-                    }, null), // items
-                    new GameFramework.DataBinding(null, (c) => { return c.item().toString(world); }, null), // bindingForItemText
-                    fontHeight, new GameFramework.DataBinding(itemHolderCustomer, (c) => { return c.itemEntitySelected; }, (c, v) => { c.itemEntitySelected = v; }), // bindingForItemSelected
+                    buy // click
+                    ),
+                    GameFramework.ControlList.from10("listCustomerItems", GameFramework.Coords.fromXY(size.x - margin - listSize.x, margin * 2), // pos
+                    listSize.clone(), GameFramework.DataBinding.fromContextAndGet(itemHolderCustomer, (c) => c.itemEntities //.filter(x => x.item().defnName != itemDefnNameCurrency)
+                    ), // items
+                    GameFramework.DataBinding.fromGet((c) => c.item().toString(world)), // bindingForItemText
+                    fontHeight, new GameFramework.DataBinding(itemHolderCustomer, (c) => c.itemEntitySelected, (c, v) => c.itemEntitySelected = v), // bindingForItemSelected
                     GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
                     GameFramework.DataBinding.fromContext(true), // isEnabled
-                    sell, // confirm
-                    null),
-                    new GameFramework.ControlButton("buttonSell", new GameFramework.Coords(size.x / 2 + margin / 2, size.y - margin - buttonSize.y, 0), // pos
+                    sell // confirm
+                    ),
+                    GameFramework.ControlButton.from8("buttonSell", GameFramework.Coords.fromXY(size.x / 2 + margin / 2, size.y - margin - buttonSize.y), // pos
                     buttonSize.clone(), "Sell", fontHeight, true, // hasBorder
                     GameFramework.DataBinding.fromContext(true), // isEnabled
-                    sell, // click
-                    null, null),
-                    new GameFramework.ControlLabel("infoStatus", new GameFramework.Coords(size.x / 2, size.y - margin * 2 - buttonSize.y, 0), // pos
-                    new GameFramework.Coords(size.x, fontHeight, 0), // size
+                    sell // click
+                    ),
+                    new GameFramework.ControlLabel("infoStatus", GameFramework.Coords.fromXY(size.x / 2, size.y - margin * 2 - buttonSize.y), // pos
+                    GameFramework.Coords.fromXY(size.x, fontHeight), // size
                     true, // isTextCentered
-                    new GameFramework.DataBinding(this, c => c.statusMessage, null), fontHeight),
-                    new GameFramework.ControlButton("buttonDone", new GameFramework.Coords(size.x - margin - buttonSize.x, size.y - margin - buttonSize.y, 0), // pos
+                    GameFramework.DataBinding.fromContextAndGet(this, c => c.statusMessage), fontHeight),
+                    GameFramework.ControlButton.from8("buttonDone", GameFramework.Coords.fromXY(size.x - margin - buttonSize.x, size.y - margin - buttonSize.y), // pos
                     buttonSize.clone(), "Done", fontHeight, true, // hasBorder
                     true, // isEnabled
-                    back, // click
-                    null, null)
+                    back // click
+                    )
                 ], [new GameFramework.Action("Back", back)], [new GameFramework.ActionToInputsMapping("Back", [GameFramework.Input.Names().Escape], true)]);
                 return returnValue;
             }

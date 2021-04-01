@@ -500,7 +500,7 @@ export class PlaceBuilderDemo_Movers
 		(
 			new VisualDynamic
 			(
-				(u: Universe, w: World, d: Display, e: Entity) =>
+				(u: Universe, w: World, p: Place, e: Entity) =>
 					e.effectable().effectsAsVisual()
 			),
 			null, Orientation.Instances().ForwardXDownZ
@@ -1172,7 +1172,7 @@ export class PlaceBuilderDemo_Movers
 		(
 			new VisualDynamic
 			(
-				(u: Universe, w: World, d: Display, e: Entity) =>
+				(u: Universe, w: World, p: Place, e: Entity) =>
 					e.effectable().effectsAsVisual()
 			),
 			null, Orientation.Instances().ForwardXDownZ

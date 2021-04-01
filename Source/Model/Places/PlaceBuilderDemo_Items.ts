@@ -343,7 +343,7 @@ export class PlaceBuilderDemo_Items
 					size.clone().half(),
 					DataBinding.fromContext(text),
 					fontHeight,
-					new DataBinding(false, null, null) // isEnabled
+					DataBinding.fromContext(false) // isEnabled
 				);
 				var button = new ControlButton
 				(

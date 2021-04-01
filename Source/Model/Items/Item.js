@@ -19,7 +19,6 @@ var ThisCouldBeBetter;
                 return this.quantity * this.defn(world).mass;
             }
             toEntity() {
-                // todo
                 return new GameFramework.Entity(this.defnName, [this]);
             }
             toString(world) {
@@ -32,7 +31,7 @@ var ThisCouldBeBetter;
                 var returnValue = null;
                 var defn = this.defn(world);
                 if (defn.use != null) {
-                    returnValue = defn.use(universe, world, place, userEntity, itemEntity, this);
+                    returnValue = defn.use(universe, world, place, userEntity, itemEntity);
                 }
                 return returnValue;
             }

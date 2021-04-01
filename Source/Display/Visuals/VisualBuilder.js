@@ -198,7 +198,7 @@ var ThisCouldBeBetter;
                 var lineThickness = 2;
                 var circleWithEyesAndLegs = this.circleWithEyesAndLegs(circleRadius, circleColor, eyeRadius, visualEyes);
                 var visualNone = new GameFramework.VisualNone();
-                var visualWieldable = new GameFramework.VisualDynamic((u, w, d, e) => {
+                var visualWieldable = new GameFramework.VisualDynamic((u, w, p, e) => {
                     var equipmentUser = e.equipmentUser();
                     var entityWieldableEquipped = equipmentUser.itemEntityInSocketWithName("Wielding");
                     var itemDrawable = entityWieldableEquipped.drawable();

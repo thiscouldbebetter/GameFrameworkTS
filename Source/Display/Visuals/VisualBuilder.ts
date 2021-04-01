@@ -411,7 +411,7 @@ export class VisualBuilder
 		var visualNone = new VisualNone();
 		var visualWieldable: Visual = new VisualDynamic
 		(
-			(u: Universe, w: World, d: Display, e: Entity) => 
+			(u: Universe, w: World, p: Place, e: Entity) =>
 			{
 				var equipmentUser = e.equipmentUser();
 				var entityWieldableEquipped =
