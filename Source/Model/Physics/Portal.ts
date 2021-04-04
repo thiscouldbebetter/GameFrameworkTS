@@ -71,8 +71,8 @@ export class Portal extends EntityProperty
 			entityToTransportLoc.vel.overwriteWith(this.velocityToApply);
 		}
 
-		placeToDepart.entitiesToRemove.push(entityToTransport);
-		destinationPlace.entitiesToSpawn.push(entityToTransport);
+		placeToDepart.entityToRemoveAdd(entityToTransport);
+		destinationPlace.entityToSpawnAdd(entityToTransport);
 	}
 
 	clone()

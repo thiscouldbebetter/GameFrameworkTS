@@ -201,7 +201,7 @@ var ThisCouldBeBetter;
                         enemyPosToStartAt.multiplyScalar(1.1);
                         enemyPosToStartAt.add(placeSizeHalf);
                         enemyEntityToPlace.locatable().loc.pos.overwriteWith(enemyPosToStartAt);
-                        place.entitiesToSpawn.push(enemyEntityToPlace);
+                        place.entityToSpawnAdd(enemyEntityToPlace);
                     }
                 };
                 var generatorActivityDefn = new GameFramework.ActivityDefn("Generate" + enemyEntityPrototype.name, generatorActivityPerform);

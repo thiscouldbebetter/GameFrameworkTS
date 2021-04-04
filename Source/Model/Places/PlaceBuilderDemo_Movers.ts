@@ -402,7 +402,7 @@ export class PlaceBuilderDemo_Movers
 
 				enemyEntityToPlace.locatable().loc.pos.overwriteWith(enemyPosToStartAt);
 
-				place.entitiesToSpawn.push(enemyEntityToPlace);
+				place.entityToSpawnAdd(enemyEntityToPlace);
 			}
 		};
 

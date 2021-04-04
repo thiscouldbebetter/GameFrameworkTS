@@ -44,7 +44,7 @@ var ThisCouldBeBetter;
                             var occupantLoc = this.entityOccupant.locatable().loc;
                             occupantLoc.pos.overwriteWith(vehicleLoc.pos);
                             occupantLoc.vel.clear();
-                            place.entitiesToSpawn.push(this.entityOccupant);
+                            place.entityToSpawnAdd(this.entityOccupant);
                             this.entityOccupant = null;
                         }
                     }

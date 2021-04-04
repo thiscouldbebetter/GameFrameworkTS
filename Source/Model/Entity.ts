@@ -22,7 +22,7 @@ export class Entity
 		}
 	}
 
-	finalize(universe: Universe, world: World, place: Place)
+	finalize(universe: Universe, world: World, place: Place): Entity
 	{
 		var entityProperties = this.properties;
 		for (var p = 0; p < entityProperties.length; p++)
@@ -33,9 +33,10 @@ export class Entity
 				property.finalize(universe, world, place, this);
 			}
 		}
+		return this;
 	}
 
-	initialize(universe: Universe, world: World, place: Place)
+	initialize(universe: Universe, world: World, place: Place): Entity
 	{
 		var entityProperties = this.properties;
 		for (var p = 0; p < entityProperties.length; p++)
@@ -46,14 +47,15 @@ export class Entity
 				property.initialize(universe, world, place, this);
 			}
 		}
+		return this;
 	}
 
-	propertyAdd(propertyToAdd: EntityProperty)
+	propertyAdd(propertyToAdd: EntityProperty): Entity
 	{
-		this.propertyAddForPlace(propertyToAdd, null);
+		return this.propertyAddForPlace(propertyToAdd, null);
 	}
 
-	propertyAddForPlace(propertyToAdd: EntityProperty, place: Place)
+	propertyAddForPlace(propertyToAdd: EntityProperty, place: Place): Entity
 	{
 		this.properties.push(propertyToAdd);
 		this.propertiesByName.set(propertyToAdd.constructor.name, propertyToAdd);
@@ -63,14 +65,15 @@ export class Entity
 			var entitiesWithProperty = place.entitiesByPropertyName(propertyName);
 			entitiesWithProperty.push(this);
 		}
+		return this;
 	}
 
-	propertyByName(name: string)
+	propertyByName(name: string): EntityProperty
 	{
 		return this.propertiesByName.get(name);
 	}
 
-	propertyRemoveForPlace(propertyToRemove: EntityProperty, place: Place)
+	propertyRemoveForPlace(propertyToRemove: EntityProperty, place: Place): Entity
 	{
 		ArrayHelper.remove(this.properties, propertyToRemove);
 		this.propertiesByName.delete(propertyToRemove.constructor.name);
@@ -83,9 +86,23 @@ export class Entity
 		return this;
 	}
 
+	updateForTimerTick(universe: Universe, world: World, place: Place): Entity
+	{
+		var entityProperties = this.properties;
+		for (var p = 0; p < entityProperties.length; p++)
+		{
+			var property = entityProperties[p];
+			if (property.finalize != null)
+			{
+				property.finalize(universe, world, place, this);
+			}
+		}
+		return this;
+	}
+
 	// Cloneable.
 
-	clone()
+	clone(): Entity
 	{
 		var nameCloned = this.name; // + IDHelper.Instance().idNext();
 		var propertiesCloned = [];

@@ -33,6 +33,16 @@ export class Wedge implements ShapeBase
 		this.rayDirectionMinAsPolar = new Polar(0, 1, 0);
 	}
 
+	angleAsRangeExtent(): RangeExtent
+	{
+		var angleStartInTurns = this.directionMin.headingInTurns();
+		return new RangeExtent
+		(
+			angleStartInTurns,
+			angleStartInTurns + this.angleSpannedInTurns
+		);
+	}
+
 	angleInTurnsMax()
 	{
 		var returnValue = NumberHelper.wrapToRangeMinMax

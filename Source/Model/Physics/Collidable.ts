@@ -50,6 +50,15 @@ export class Collidable extends EntityProperty
 		return new Collidable(null, colliderAtRest, null, null);
 	}
 
+	static fromColliderAndCollideEntities
+	(
+		colliderAtRest: ShapeBase,
+		collideEntities: (u: Universe, w: World, p: Place, e0: Entity, e1: Entity, c: Collision) => void
+	): Collidable
+	{
+		return new Collidable(null, colliderAtRest, null, collideEntities);
+	}
+
 	collideEntities(u: Universe, w: World, p: Place, e0: Entity, e1: Entity, c: Collision): Collision
 	{
 		if (this._collideEntities != null)
@@ -282,9 +291,10 @@ export class Collidable extends EntityProperty
 
 	isEntityStationary(entity: Entity): boolean
 	{
-		// This way causes strange glitches.  In the demo game, when you
-		// walk into view of three of the four corners of the 'Battlefield'
-		// rooms, the walls shift inward suddenly!
+		// This way would be better, but it causes strange glitches. 
+		// In the demo game, when you walk into view of three
+		// of the four corners of the 'Battlefield' rooms,
+		// the walls shift inward suddenly!
 		//return (entity.locatable().loc.equals(this.locPrev));
 
 		return (entity.movable() == null);

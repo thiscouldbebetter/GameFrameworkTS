@@ -36,15 +36,9 @@ export class Place
 
 	draw(universe: Universe, world: World, display: Display)
 	{
-		/*
-		var entitiesDrawable = this.entitiesByPropertyName(Drawable.name);
-		for (var i = 0; i < entitiesDrawable.length; i++)
-		{
-			var entity = entitiesDrawable[i];
-			var drawable = entity.drawable();
-			drawable.updateForTimerTick(universe, world, this, entity);
-		}
-		*/
+		var colorBlack = Color.byName("Black");
+		display.drawBackground(colorBlack, colorBlack);
+
 		var cameraEntity = this.camera();
 		var camera = cameraEntity.camera();
 		camera.drawEntitiesInView(universe, world, this, cameraEntity, display);
@@ -70,6 +64,16 @@ export class Place
 			this.entityRemove(entity);
 		}
 		this.entitiesToRemove.length = 0;
+	}
+
+	entitiesToRemoveAdd(entitiesToRemove: Entity[]): void
+	{
+		this.entitiesToRemove.push(...entitiesToRemove);
+	}
+
+	entitiesToSpawnAdd(entitiesToSpawn: Entity[]): void
+	{
+		this.entitiesToSpawn.push(...entitiesToSpawn);
 	}
 
 	entitiesSpawn(universe: Universe, world: World)
@@ -123,6 +127,16 @@ export class Place
 		}
 
 		entity.initialize(universe, world, this);
+	}
+
+	entityToRemoveAdd(entityToRemove: Entity): void
+	{
+		this.entitiesToRemove.push(entityToRemove);
+	}
+
+	entityToSpawnAdd(entityToSpawn: Entity): void
+	{
+		this.entitiesToSpawn.push(entityToSpawn);
 	}
 
 	finalize(universe: Universe, world: World)

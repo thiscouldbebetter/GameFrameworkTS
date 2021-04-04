@@ -42,8 +42,8 @@ var ThisCouldBeBetter;
                 if (this.velocityToApply != null) {
                     entityToTransportLoc.vel.overwriteWith(this.velocityToApply);
                 }
-                placeToDepart.entitiesToRemove.push(entityToTransport);
-                destinationPlace.entitiesToSpawn.push(entityToTransport);
+                placeToDepart.entityToRemoveAdd(entityToTransport);
+                destinationPlace.entityToSpawnAdd(entityToTransport);
             }
             clone() {
                 return new Portal(this.destinationPlaceName, this.destinationEntityName, this.velocityToApply == null ? null : this.velocityToApply.clone());

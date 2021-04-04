@@ -19,15 +19,8 @@ var ThisCouldBeBetter;
                 return world.defn.placeDefnByName(this.defnName);
             }
             draw(universe, world, display) {
-                /*
-                var entitiesDrawable = this.entitiesByPropertyName(Drawable.name);
-                for (var i = 0; i < entitiesDrawable.length; i++)
-                {
-                    var entity = entitiesDrawable[i];
-                    var drawable = entity.drawable();
-                    drawable.updateForTimerTick(universe, world, this, entity);
-                }
-                */
+                var colorBlack = GameFramework.Color.byName("Black");
+                display.drawBackground(colorBlack, colorBlack);
                 var cameraEntity = this.camera();
                 var camera = cameraEntity.camera();
                 camera.drawEntitiesInView(universe, world, this, cameraEntity, display);
@@ -46,6 +39,12 @@ var ThisCouldBeBetter;
                     this.entityRemove(entity);
                 }
                 this.entitiesToRemove.length = 0;
+            }
+            entitiesToRemoveAdd(entitiesToRemove) {
+                this.entitiesToRemove.push(...entitiesToRemove);
+            }
+            entitiesToSpawnAdd(entitiesToSpawn) {
+                this.entitiesToSpawn.push(...entitiesToSpawn);
             }
             entitiesSpawn(universe, world) {
                 for (var i = 0; i < this.entitiesToSpawn.length; i++) {
@@ -82,6 +81,12 @@ var ThisCouldBeBetter;
                     entitiesWithProperty.push(entity);
                 }
                 entity.initialize(universe, world, this);
+            }
+            entityToRemoveAdd(entityToRemove) {
+                this.entitiesToRemove.push(entityToRemove);
+            }
+            entityToSpawnAdd(entityToSpawn) {
+                this.entitiesToSpawn.push(entityToSpawn);
             }
             finalize(universe, world) {
                 this.entitiesRemove();

@@ -319,6 +319,11 @@ export class Coords
 		return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
 	}
 
+	magnitudeXY(): number
+	{
+		return Math.sqrt(this.x * this.x + this.y * this.y);
+	}
+
 	multiply(other: Coords): Coords
 	{
 		this.x *= other.x;

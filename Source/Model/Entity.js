@@ -22,6 +22,7 @@ var ThisCouldBeBetter;
                         property.finalize(universe, world, place, this);
                     }
                 }
+                return this;
             }
             initialize(universe, world, place) {
                 var entityProperties = this.properties;
@@ -31,9 +32,10 @@ var ThisCouldBeBetter;
                         property.initialize(universe, world, place, this);
                     }
                 }
+                return this;
             }
             propertyAdd(propertyToAdd) {
-                this.propertyAddForPlace(propertyToAdd, null);
+                return this.propertyAddForPlace(propertyToAdd, null);
             }
             propertyAddForPlace(propertyToAdd, place) {
                 this.properties.push(propertyToAdd);
@@ -43,6 +45,7 @@ var ThisCouldBeBetter;
                     var entitiesWithProperty = place.entitiesByPropertyName(propertyName);
                     entitiesWithProperty.push(this);
                 }
+                return this;
             }
             propertyByName(name) {
                 return this.propertiesByName.get(name);
@@ -54,6 +57,16 @@ var ThisCouldBeBetter;
                     var propertyName = propertyToRemove.constructor.name;
                     var entitiesWithProperty = place.entitiesByPropertyName(propertyName);
                     GameFramework.ArrayHelper.remove(entitiesWithProperty, this);
+                }
+                return this;
+            }
+            updateForTimerTick(universe, world, place) {
+                var entityProperties = this.properties;
+                for (var p = 0; p < entityProperties.length; p++) {
+                    var property = entityProperties[p];
+                    if (property.finalize != null) {
+                        property.finalize(universe, world, place, this);
+                    }
                 }
                 return this;
             }

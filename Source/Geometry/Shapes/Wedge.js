@@ -11,6 +11,10 @@ var ThisCouldBeBetter;
                 // Helper variable.
                 this.rayDirectionMinAsPolar = new GameFramework.Polar(0, 1, 0);
             }
+            angleAsRangeExtent() {
+                var angleStartInTurns = this.directionMin.headingInTurns();
+                return new GameFramework.RangeExtent(angleStartInTurns, angleStartInTurns + this.angleSpannedInTurns);
+            }
             angleInTurnsMax() {
                 var returnValue = GameFramework.NumberHelper.wrapToRangeMinMax(this.angleInTurnsMin() + this.angleSpannedInTurns, 0, 1);
                 return returnValue;

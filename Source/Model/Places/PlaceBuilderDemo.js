@@ -596,7 +596,6 @@ var ThisCouldBeBetter;
                 this.entities.push(cameraEntity);
                 return cameraEntity;
             }
-            ;
             build_Exterior(placePos, placeNamesToIncludePortalsTo) {
                 var entityDefns = this.entityDefnsByName;
                 var entities = this.entities;
@@ -680,7 +679,7 @@ var ThisCouldBeBetter;
                 var cameraPos = viewSizeHalf.clone();
                 var cameraLoc = new GameFramework.Disposition(cameraPos, GameFramework.Orientation.Instances().ForwardZDownY.clone(), null);
                 var camera = new GameFramework.Camera(cameraViewSize, cameraHeightAbovePlayfield, // focalLength
-                cameraLoc);
+                cameraLoc, GameFramework.Locatable.entitiesSortByZThenY);
                 var cameraBoundable = new GameFramework.Boundable(camera.viewCollider);
                 var cameraCollidable = GameFramework.Collidable.fromCollider(camera.viewCollider);
                 var cameraConstrainable = new GameFramework.Constrainable([
@@ -791,7 +790,7 @@ var ThisCouldBeBetter;
                         GameFramework.Drawable.fromVisual(itemKeyVisual),
                     ]);
                     var place = GameFramework.ArrayHelper.random(places, this.randomizer);
-                    place.entitiesToSpawn.push(itemKeyEntity);
+                    place.entityToSpawnAdd(itemKeyEntity);
                 }
             }
             entityBuildLoader(entityDefn, entityCount, entityPosRange, randomizer) {
@@ -802,7 +801,7 @@ var ThisCouldBeBetter;
                     var randomizer = new GameFramework.RandomizerLCG(placeAsPlaceRoom.randomizerSeed, null, null, null);
                     var entityPosRange = new GameFramework.Box(place.size.clone().half(), place.size.clone());
                     var entitiesCreated = placeBuilder.entitiesBuildFromDefnAndCount(entityDefn, entityCount, null, entityPosRange, randomizer);
-                    place.entitiesToSpawn.push(...entitiesCreated);
+                    place.entitiesToSpawnAdd(entitiesCreated);
                 }, (u, w, p, e) => // unload
                  {
                     p.entitiesToRemove.push(...p.entities.filter(x => x.name.startsWith("Mine")));
@@ -1104,7 +1103,7 @@ var ThisCouldBeBetter;
                             new GameFramework.Ephemeral(8, null),
                             entityDying.locatable()
                         ]);
-                        p.entitiesToSpawn.push(explosionEntity);
+                        p.entityToSpawnAdd(explosionEntity);
                     };
                     var projectileEntity = new GameFramework.Entity("ProjectileBomb", [
                         new GameFramework.Ephemeral(64, projectileDie),
@@ -1114,7 +1113,7 @@ var ThisCouldBeBetter;
                         GameFramework.Drawable.fromVisual(projectileVisual),
                         GameFramework.Equippable.create()
                     ]);
-                    p.entitiesToSpawn.push(projectileEntity);
+                    p.entityToSpawnAdd(projectileEntity);
                 });
                 var itemBombEntityDefn = new GameFramework.Entity(itemDefnBombName, [
                     new GameFramework.Item(itemDefnBombName, 1),
@@ -1196,7 +1195,7 @@ var ThisCouldBeBetter;
                             GameFramework.Drawable.fromVisual(visualStrike),
                             entityKillable.locatable()
                         ]);
-                        place.entitiesToSpawn.push(entityStrike);
+                        place.entityToSpawnAdd(entityStrike);
                     });
                     var projectileEntity = new GameFramework.Entity("ProjectileArrow", [
                         new GameFramework.Damager(new GameFramework.Damage(10, null, null)),
@@ -1207,7 +1206,7 @@ var ThisCouldBeBetter;
                         projectileCollider, [GameFramework.Killable.name], projectileCollide),
                         GameFramework.Drawable.fromVisual(projectileVisual),
                     ]);
-                    p.entitiesToSpawn.push(projectileEntity);
+                    p.entityToSpawnAdd(projectileEntity);
                 };
                 var itemBowDevice = new GameFramework.Device("Bow", 10, // ticksToCharge
                 (u, w, p, entity) => // initialize
@@ -1637,7 +1636,7 @@ var ThisCouldBeBetter;
                             GameFramework.Drawable.fromVisual(visualStrike),
                             entityKillable.locatable()
                         ]);
-                        place.entitiesToSpawn.push(entityStrike);
+                        place.entityToSpawnAdd(entityStrike);
                     });
                     var effectsAndChances = new Array();
                     if (damageTypeName != null) {
@@ -1663,7 +1662,7 @@ var ThisCouldBeBetter;
                         new GameFramework.Collidable(0, projectileCollider, [GameFramework.Killable.name], projectileCollide),
                         GameFramework.Drawable.fromVisual(projectileVisual)
                     ]);
-                    place.entitiesToSpawn.push(projectileEntity);
+                    place.entityToSpawnAdd(projectileEntity);
                 };
                 var itemSwordDevice = new GameFramework.Device(itemDefnName, 10, // ticksToCharge
                 null, // init

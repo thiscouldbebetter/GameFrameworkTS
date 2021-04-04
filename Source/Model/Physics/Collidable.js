@@ -23,6 +23,9 @@ var ThisCouldBeBetter;
             static fromCollider(colliderAtRest) {
                 return new Collidable(null, colliderAtRest, null, null);
             }
+            static fromColliderAndCollideEntities(colliderAtRest, collideEntities) {
+                return new Collidable(null, colliderAtRest, null, collideEntities);
+            }
             collideEntities(u, w, p, e0, e1, c) {
                 if (this._collideEntities != null) {
                     this._collideEntities(u, w, p, e0, e1, c);
@@ -134,9 +137,10 @@ var ThisCouldBeBetter;
                 return doEntitiesCollide;
             }
             isEntityStationary(entity) {
-                // This way causes strange glitches.  In the demo game, when you
-                // walk into view of three of the four corners of the 'Battlefield'
-                // rooms, the walls shift inward suddenly!
+                // This way would be better, but it causes strange glitches. 
+                // In the demo game, when you walk into view of three
+                // of the four corners of the 'Battlefield' rooms,
+                // the walls shift inward suddenly!
                 //return (entity.locatable().loc.equals(this.locPrev));
                 return (entity.movable() == null);
             }

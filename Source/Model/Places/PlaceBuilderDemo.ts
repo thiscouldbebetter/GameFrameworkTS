@@ -1054,7 +1054,7 @@ export class PlaceBuilderDemo // Main.
 		var cameraEntity = this.entityBuildCamera(cameraViewSize, placeSize);
 		this.entities.push(cameraEntity);
 		return cameraEntity;
-	};
+	}
 
 	build_Exterior(placePos: Coords, placeNamesToIncludePortalsTo: string[])
 	{
@@ -1194,7 +1194,8 @@ export class PlaceBuilderDemo // Main.
 		(
 			cameraViewSize,
 			cameraHeightAbovePlayfield, // focalLength
-			cameraLoc
+			cameraLoc,
+			Locatable.entitiesSortByZThenY
 		);
 		var cameraBoundable = new Boundable(camera.viewCollider);
 		var cameraCollidable = Collidable.fromCollider(camera.viewCollider);
@@ -1428,7 +1429,7 @@ export class PlaceBuilderDemo // Main.
 
 			var place = ArrayHelper.random(places, this.randomizer);
 
-			place.entitiesToSpawn.push(itemKeyEntity);
+			place.entityToSpawnAdd(itemKeyEntity);
 		}
 	}
 
@@ -1446,9 +1447,9 @@ export class PlaceBuilderDemo // Main.
 				(
 					entityDefn, entityCount, null, entityPosRange, randomizer
 				);
-				place.entitiesToSpawn.push
+				place.entitiesToSpawnAdd
 				(
-					...entitiesCreated
+					entitiesCreated
 				);
 			},
 			(u: Universe, w: World, p: Place, e: Entity) => // unload
@@ -1982,7 +1983,7 @@ export class PlaceBuilderDemo // Main.
 							entityDying.locatable()
 						]
 					);
-					p.entitiesToSpawn.push(explosionEntity);
+					p.entityToSpawnAdd(explosionEntity);
 				}
 
 				var projectileEntity = new Entity
@@ -2004,7 +2005,7 @@ export class PlaceBuilderDemo // Main.
 					]
 				);
 
-				p.entitiesToSpawn.push(projectileEntity);
+				p.entityToSpawnAdd(projectileEntity);
 			}
 		);
 
@@ -2135,7 +2136,7 @@ export class PlaceBuilderDemo // Main.
 							entityKillable.locatable()
 						]
 					);
-					place.entitiesToSpawn.push(entityStrike);
+					place.entityToSpawnAdd(entityStrike);
 				}
 			);
 
@@ -2158,7 +2159,7 @@ export class PlaceBuilderDemo // Main.
 				]
 			);
 
-			p.entitiesToSpawn.push(projectileEntity);
+			p.entityToSpawnAdd(projectileEntity);
 		};
 
 		var itemBowDevice = new Device
@@ -2902,7 +2903,7 @@ export class PlaceBuilderDemo // Main.
 							entityKillable.locatable()
 						]
 					);
-					place.entitiesToSpawn.push(entityStrike);
+					place.entityToSpawnAdd(entityStrike);
 				}
 			);
 
@@ -2944,7 +2945,7 @@ export class PlaceBuilderDemo // Main.
 				]
 			);
 
-			place.entitiesToSpawn.push(projectileEntity);
+			place.entityToSpawnAdd(projectileEntity);
 		}
 
 		var itemSwordDevice = new Device

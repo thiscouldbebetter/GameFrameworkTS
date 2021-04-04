@@ -16,7 +16,7 @@ var ThisCouldBeBetter;
             // Place implementation.
             initialize(universe, world) {
                 var zoneStart = this.zoneGetByName(this.zoneStartName);
-                this.entitiesToSpawn.push(...zoneStart.entities);
+                this.entitiesToSpawnAdd(zoneStart.entities);
                 super.initialize(universe, world);
             }
             updateForTimerTick(universe, world) {
@@ -40,7 +40,7 @@ var ThisCouldBeBetter;
                     zonesToInitialize.forEach(zone => {
                         zone.entities.forEach(entity => {
                             entity.locatable().loc.pos.add(zone.bounds.min());
-                            this.entitiesToSpawn.push(entity);
+                            this.entityToSpawnAdd(entity);
                         });
                     });
                     this.zoneCentralAndNeighbors = zoneCentralAndNeighborsNext;

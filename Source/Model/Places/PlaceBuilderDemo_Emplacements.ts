@@ -482,6 +482,17 @@ export class PlaceBuilderDemo_Emplacements
 			(obstacleCollidable.collider as BoxRotated).sphereSwept().toBox(Box.create());
 		var obstacleBoundable = new Boundable(obstacleBounds);
 
+		var obstacleLoc = new Disposition
+		(
+			Coords.create(),
+			new Orientation
+			(
+				Coords.create().fromHeadingInTurns(obstacleRotationInTurns),
+				new Coords(0, 0, 1)
+			),
+			null
+		);
+
 		var visualBody = new VisualGroup
 		([
 			new VisualRectangle
@@ -502,7 +513,7 @@ export class PlaceBuilderDemo_Emplacements
 			);
 		}
 
-		var visual = new VisualRotate(obstacleRotationInTurns, visualBody);
+		var visual = new VisualRotate(visualBody);
 
 		var obstacleBarEntityDefn = new Entity
 		(
@@ -512,7 +523,7 @@ export class PlaceBuilderDemo_Emplacements
 				obstacleCollidable,
 				new Damager(new Damage(10, null, null)),
 				Drawable.fromVisual(visual),
-				new Locatable(new Disposition(Coords.create(), null, null) )
+				new Locatable(obstacleLoc)
 			]
 		);
 

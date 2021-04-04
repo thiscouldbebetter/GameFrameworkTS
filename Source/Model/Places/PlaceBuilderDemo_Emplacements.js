@@ -234,19 +234,20 @@ var ThisCouldBeBetter;
                 var obstacleCollidable = GameFramework.Collidable.fromCollider(obstacleCollider);
                 var obstacleBounds = obstacleCollidable.collider.sphereSwept().toBox(GameFramework.Box.create());
                 var obstacleBoundable = new GameFramework.Boundable(obstacleBounds);
+                var obstacleLoc = new GameFramework.Disposition(GameFramework.Coords.create(), new GameFramework.Orientation(GameFramework.Coords.create().fromHeadingInTurns(obstacleRotationInTurns), new GameFramework.Coords(0, 0, 1)), null);
                 var visualBody = new GameFramework.VisualGroup([
                     new GameFramework.VisualRectangle(obstacleCollider.box.size, obstacleColor, obstacleColor, null)
                 ]);
                 if (this.parent.visualsHaveText) {
                     visualBody.children.push(new GameFramework.VisualOffset(GameFramework.VisualText.fromTextAndColor("Bar", obstacleColor), new GameFramework.Coords(0, 0 - obstacleCollider.box.size.y, 0)));
                 }
-                var visual = new GameFramework.VisualRotate(obstacleRotationInTurns, visualBody);
+                var visual = new GameFramework.VisualRotate(visualBody);
                 var obstacleBarEntityDefn = new GameFramework.Entity("Bar", [
                     obstacleBoundable,
                     obstacleCollidable,
                     new GameFramework.Damager(new GameFramework.Damage(10, null, null)),
                     GameFramework.Drawable.fromVisual(visual),
-                    new GameFramework.Locatable(new GameFramework.Disposition(GameFramework.Coords.create(), null, null))
+                    new GameFramework.Locatable(obstacleLoc)
                 ]);
                 return obstacleBarEntityDefn;
             }

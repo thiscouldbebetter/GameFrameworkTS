@@ -4,11 +4,12 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Camera extends GameFramework.EntityProperty {
-            constructor(viewSize, focalLength, loc) {
+            constructor(viewSize, focalLength, loc, entitiesInViewSort) {
                 super();
                 this.viewSize = viewSize;
                 this.focalLength = focalLength;
                 this.loc = loc;
+                this._entitiesInViewSort = entitiesInViewSort;
                 this.viewSizeHalf = this.viewSize.clone().clearZ().half();
                 var viewColliderSize = this.viewSize.clone();
                 viewColliderSize.z = Number.POSITIVE_INFINITY;
@@ -133,9 +134,7 @@ var ThisCouldBeBetter;
                 return entitiesInView;
             }
             drawEntitiesInView_2_Draw(universe, world, place, display, entitiesInView) {
-                var colorBlack = GameFramework.Color.byName("Black");
-                display.drawBackground(colorBlack, colorBlack);
-                this.entitiesSortByZThenY(entitiesInView);
+                this.entitiesInViewSort(entitiesInView);
                 for (var i = 0; i < entitiesInView.length; i++) {
                     var entity = entitiesInView[i];
                     var visual = entity.drawable().visual;
@@ -146,20 +145,18 @@ var ThisCouldBeBetter;
                     entityPos.overwriteWith(this._posSaved);
                 }
             }
-            entitiesSortByZThenY(entitiesToSort) {
-                entitiesToSort.sort((a, b) => {
-                    var aPos = a.locatable().loc.pos;
-                    var bPos = b.locatable().loc.pos;
-                    var returnValue;
-                    if (aPos.z != bPos.z) {
-                        returnValue = bPos.z - aPos.z;
-                    }
-                    else {
-                        returnValue = aPos.y - bPos.y;
-                    }
-                    return returnValue;
-                });
-                return entitiesToSort;
+            entitiesInViewSort(entitiesToSort) {
+                var entitiesSorted = null;
+                if (this._entitiesInViewSort == null) {
+                    entitiesSorted = entitiesToSort;
+                }
+                else {
+                    entitiesSorted = this._entitiesInViewSort(entitiesToSort);
+                }
+                return entitiesSorted;
+            }
+            toEntity() {
+                return new GameFramework.Entity(Camera.name, [this]);
             }
             updateForTimerTick() {
                 // Do nothing.  Rendering is done in Place.draw().

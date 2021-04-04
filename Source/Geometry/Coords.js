@@ -200,6 +200,9 @@ var ThisCouldBeBetter;
             magnitude() {
                 return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
             }
+            magnitudeXY() {
+                return Math.sqrt(this.x * this.x + this.y * this.y);
+            }
             multiply(other) {
                 this.x *= other.x;
                 this.y *= other.y;
