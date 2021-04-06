@@ -21,8 +21,16 @@ export interface Display
 		colorBorder: Color
 	): void;
 	drawBackground(colorBack: Color, colorBorder: Color): void;
-	drawCircle(center: Coords, radius: number, colorFill: Color, colorBorder: Color, borderThickness: number): void;
-	drawCircleWithGradient(center: Coords, radius: number, gradientFill: ValueBreakGroup, colorBorder: Color): void;
+	drawCircle
+	(
+		center: Coords, radius: number, colorFill: Color, colorBorder: Color,
+		borderThickness: number
+	): void;
+	drawCircleWithGradient
+	(
+		center: Coords, radius: number, gradientFill: ValueBreakGroup,
+		colorBorder: Color
+	): void;
 	drawCrosshairs(center: Coords, radius: number, color: Color): void;
 	drawEllipse
 	(
@@ -30,12 +38,21 @@ export interface Display
 		rotationInTurns: number, colorFill: Color, colorBorder: Color
 	): void;
 	drawImage(imageToDraw: Image2, pos: Coords): void;
-	drawImagePartial(imageToDraw: Image2, pos: Coords, regionToDrawAsBox: Box): void;
-	drawImagePartialScaled(imageToDraw: Image2, pos: Coords, regionToDrawAsBox: Box, sizeToDraw: Coords): void;
+	drawImagePartial
+	(
+		imageToDraw: Image2, pos: Coords, regionToDrawAsBox: Box
+	): void;
+	drawImagePartialScaled
+	(
+		imageToDraw: Image2, pos: Coords, regionToDrawAsBox: Box, sizeToDraw: Coords
+	): void;
 	drawImageScaled(imageToDraw: Image2, pos: Coords, size: Coords): void;
 	drawLine(fromPos: Coords, toPos: Coords, color: Color, lineThickness: number): void;
 	drawMeshWithOrientation(mesh: MeshTextured, meshOrientation: Orientation): void;
-	drawPath(vertices: Coords[], color: Color, lineThickness: number, isClosed: boolean): void;
+	drawPath
+	(
+		vertices: Coords[], color: Color, lineThickness: number, isClosed: boolean
+	): void;
 	drawPixel(pos: Coords, color: Color): void;
 	drawPolygon(vertices: Coords[], colorFill: Color, colorBorder: Color): void;
 	drawRectangle
