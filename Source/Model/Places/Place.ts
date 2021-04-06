@@ -2,12 +2,13 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Place
+export class Place //
 {
 	name: string;
 	defnName: string;
 	size: Coords;
 	entities: Entity[];
+	entitiesById: Map<number, Entity>;
 	entitiesByName: Map<string, Entity>;
 
 	_entitiesByPropertyName: Map<string, Entity[]>;
@@ -21,6 +22,7 @@ export class Place
 		this.defnName = defnName;
 		this.size = size;
 		this.entities = [];
+		this.entitiesById = new Map<number, Entity>();
 		this.entitiesByName = new Map<string, Entity>();
 
 		this._entitiesByPropertyName = new Map<string, Entity[]>();
@@ -40,8 +42,22 @@ export class Place
 		display.drawBackground(colorBlack, colorBlack);
 
 		var cameraEntity = this.camera();
-		var camera = cameraEntity.camera();
-		camera.drawEntitiesInView(universe, world, this, cameraEntity, display);
+		if (cameraEntity == null)
+		{
+			var drawables = this.drawables();
+			drawables.forEach
+			(
+				(x: Entity) =>
+				{
+					x.drawable().updateForTimerTick(universe, world, this, x);
+				}
+			)
+		}
+		else
+		{
+			var camera = cameraEntity.camera();
+			camera.drawEntitiesInView(universe, world, this, cameraEntity, display);
+		}
 	}
 
 	entitiesByPropertyName(propertyName: string)
@@ -99,6 +115,7 @@ export class Place
 			ArrayHelper.remove(entitiesWithProperty, entity);
 		}
 		ArrayHelper.remove(this.entities, entity);
+		this.entitiesById.delete(entity.id);
 		this.entitiesByName.delete(entity.name);
 	}
 
@@ -115,6 +132,7 @@ export class Place
 		}
 
 		this.entities.push(entity);
+		this.entitiesById.set(entity.id, entity);
 		this.entitiesByName.set(entity.name, entity);
 
 		var entityProperties = entity.properties;

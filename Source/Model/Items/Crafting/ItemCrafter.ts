@@ -218,7 +218,7 @@ export class ItemCrafter extends EntityProperty
 					(
 						null, (c: CraftingRecipe) => c, null
 					), // bindingForItemValue
-					DataBinding.fromContext(true), // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					addToQueue, // confirm
 					null
 				),

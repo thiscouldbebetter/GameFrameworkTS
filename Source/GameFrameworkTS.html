@@ -1,6 +1,13 @@
 <html>
 <body>
 
+<!--
+This file is nearly identical to Demo/Demo.html,
+and mainly exists to satisfy the standard structure
+for repositories hosted at github.com/thiscouldbebetter,
+so it can be published on thiscouldbebetter.github.io.
+-->
+
 <script type="text/javascript" src="Helpers/ArrayHelper.js"></script>
 <script type="text/javascript" src="Helpers/ByteHelper.js"></script>
 <script type="text/javascript" src="Helpers/NumberHelper.js"></script>
@@ -37,7 +44,7 @@
 <script type="text/javascript" src="Display/VenueFader.js"></script>
 <script type="text/javascript" src="Display/VenueLayered.js"></script>
 
-<script type="text/javascript" src="Display/Animation/Animatable.js"></script>
+<script type="text/javascript" src="Display/Animation/Animatable2.js"></script>
 
 <script type="text/javascript" src="Display/Visuals/Transform_Colorize.js"></script>
 <script type="text/javascript" src="Display/Visuals/VisualAnchor.js"></script>
@@ -96,6 +103,8 @@
 <script type="text/javascript" src="Geometry/Constraints/Constraint_Gravity.js"></script>
 <script type="text/javascript" src="Geometry/Constraints/Constraint_SpeedMaxXY.js"></script>
 
+<script type="text/javascript" src="Geometry/Network/Network.js"></script>
+
 <script type="text/javascript" src="Geometry/Shapes/Arc.js"></script>
 <script type="text/javascript" src="Geometry/Shapes/Box.js"></script>
 <script type="text/javascript" src="Geometry/Shapes/BoxRotated.js"></script>
@@ -152,8 +161,7 @@
 
 <script type="text/javascript" src="Model/Entity.js"></script>
 <script type="text/javascript" src="Model/EntityBuilder.js"></script>
-<script type="text/javascript" src="Model/Generator.js"></script>
-<script type="text/javascript" src="Model/Goal.js"></script>
+<script type="text/javascript" src="Model/EntityGenerator.js"></script>
 <script type="text/javascript" src="Model/Loadable.js"></script>
 <script type="text/javascript" src="Model/Playable.js"></script>
 <script type="text/javascript" src="Model/Routable.js"></script>
@@ -224,16 +232,8 @@
 <script type="text/javascript" src="Model/Physics/Vehicle.js"></script>
 
 <script type="text/javascript" src="Model/Places/Place.js"></script>
-<script type="text/javascript" src="Model/Places/PlaceBuilderDemo.js"></script>
-<script type="text/javascript" src="Model/Places/PlaceBuilderDemo_Actions.js"></script>
-<script type="text/javascript" src="Model/Places/PlaceBuilderDemo_Emplacements.js"></script>
-<script type="text/javascript" src="Model/Places/PlaceBuilderDemo_Items.js"></script>
-<script type="text/javascript" src="Model/Places/PlaceBuilderDemo_Movers.js"></script>
 <script type="text/javascript" src="Model/Places/PlaceDefn.js"></script>
-<script type="text/javascript" src="Model/Places/PlaceRoom.js"></script>
 <script type="text/javascript" src="Model/Places/PlaceZoned.js"></script>
-
-<script type="text/javascript" src="Model/Places/Network/Network.js"></script>
 
 <script type="text/javascript" src="Model/Skills/Skill.js"></script>
 <script type="text/javascript" src="Model/Skills/SkillLearner.js"></script>
@@ -287,12 +287,24 @@
 <script type="text/javascript" src="Utility/ValueBreakGroup.js"></script>
 <script type="text/javascript" src="Utility/VenueTask.js"></script>
 
-<script type="text/javascript" src="main.js"></script>
+<script type="text/javascript" src="Imports.js"></script>
+
+<script type="text/javascript" src="Demo/Model/WorldDemo.js"></script>
+
+<script type="text/javascript" src="Demo/Model/EntityProperties/Goal.js"></script>
+
+<script type="text/javascript" src="Demo/Model/Places/PlaceBuilderDemo.js"></script>
+<script type="text/javascript" src="Demo/Model/Places/PlaceBuilderDemo_Actions.js"></script>
+<script type="text/javascript" src="Demo/Model/Places/PlaceBuilderDemo_Emplacements.js"></script>
+<script type="text/javascript" src="Demo/Model/Places/PlaceBuilderDemo_Items.js"></script>
+<script type="text/javascript" src="Demo/Model/Places/PlaceBuilderDemo_Movers.js"></script>
+<script type="text/javascript" src="Demo/Model/Places/PlaceRoom.js"></script>
+
+<script type="text/javascript" src="Demo/GameDemo.js"></script>
 
 <script type="text/javascript">
-var GameFramework = ThisCouldBeBetter.GameFramework;
-var main = GameFramework.main;
-main();
+var contentDirectoryPath = "../Content/";
+new GameDemo(contentDirectoryPath).main();
 </script>
 
 </body>

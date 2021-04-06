@@ -43,7 +43,7 @@ var ThisCouldBeBetter;
                 return wasClickHandled;
             }
             mouseMove(mouseMovePos) {
-                this.containerInner.mouseMove(mouseMovePos);
+                return this.containerInner.mouseMove(mouseMovePos);
             }
             scalePosAndSize(scaleFactor) {
                 return this.containerInner.scalePosAndSize(scaleFactor);

@@ -157,7 +157,7 @@ var ThisCouldBeBetter;
                         c.skillSelectedName = skillName;
                     }), // bindingForItemSelected
                     null, // bindingForItemValue
-                    GameFramework.DataBinding.fromContext(true), // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     (u) => {
                         skillLearner.skillBeingLearnedName =
                             skillLearner.skillSelectedName;

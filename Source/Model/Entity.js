@@ -3,8 +3,10 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Entity {
+        class Entity //
+         {
             constructor(name, properties) {
+                this.id = GameFramework.IDHelper.Instance().idNext();
                 this.name = name;
                 this.properties = properties;
                 this.propertiesByName = new Map();
@@ -85,7 +87,7 @@ var ThisCouldBeBetter;
             }
             // Convenience methods for properties.
             actor() { return this.propertyByName(GameFramework.Actor.name); }
-            animatable() { return this.propertyByName(GameFramework.Animatable.name); }
+            animatable() { return this.propertyByName(GameFramework.Animatable2.name); }
             boundable() { return this.propertyByName(GameFramework.Boundable.name); }
             camera() { return this.propertyByName(GameFramework.Camera.name); }
             collidable() { return this.propertyByName(GameFramework.Collidable.name); }

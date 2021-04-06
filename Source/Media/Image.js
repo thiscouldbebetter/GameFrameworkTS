@@ -24,7 +24,7 @@ var ThisCouldBeBetter;
             // instance methods
             clone() {
                 var returnValue = Image2.create();
-                returnValue.name = name;
+                returnValue.name = this.name;
                 returnValue.sourcePath = this.sourcePath;
                 returnValue.sizeInPixels = this.sizeInPixels.clone();
                 returnValue.systemImage = this.systemImage;

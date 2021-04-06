@@ -65,17 +65,17 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromGet((c) => c.item().toString(world)), // bindingForItemText
                     fontHeight, new GameFramework.DataBinding(itemHolderContainer, (c) => c.itemEntitySelected, (c, v) => c.itemEntitySelected = v), // bindingForItemSelected
                     GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
-                    GameFramework.DataBinding.fromContext(true), // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     get, // confirm
                     null),
                     GameFramework.ControlButton.from8("buttonGet", GameFramework.Coords.fromXY((size.x - buttonSize.x) / 2, (size.y - buttonSize.y - margin) / 2), // pos
                     buttonSize.clone(), ">", fontHeight, true, // hasBorder
-                    GameFramework.DataBinding.fromContext(true), // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     get // click
                     ),
                     GameFramework.ControlButton.from8("buttonPut", GameFramework.Coords.fromXY((size.x - buttonSize.x) / 2, (size.y + buttonSize.y + margin) / 2), // pos
                     buttonSize.clone(), "<", fontHeight, true, // hasBorder
-                    GameFramework.DataBinding.fromContext(true), // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     put // click
                     ),
                     new GameFramework.ControlLabel("labelGetterPutterName", GameFramework.Coords.fromXY(size.x - margin - listSize.x, margin), // pos
@@ -89,7 +89,7 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromGet((c) => c.item().toString(world)), // bindingForItemText
                     fontHeight, new GameFramework.DataBinding(itemHolderGetterPutter, (c) => c.itemEntitySelected, (c, v) => { c.itemEntitySelected = v; }), // bindingForItemSelected
                     GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
-                    GameFramework.DataBinding.fromContext(true), // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     put, // confirm
                     null),
                     new GameFramework.ControlLabel("infoStatus", GameFramework.Coords.fromXY(size.x / 2, size.y - margin - fontHeight), // pos

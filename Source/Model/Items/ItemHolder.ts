@@ -496,7 +496,7 @@ export class ItemHolder extends EntityProperty
 					(c: ItemHolder, v: Entity) => c.itemEntitySelected = v
 				), // bindingForItemSelected
 				DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
-				DataBinding.fromContext(true), // isEnabled
+				DataBinding.fromTrue(), // isEnabled
 				(universe: Universe) => // confirm
 				{
 					use();

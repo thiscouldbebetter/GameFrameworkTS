@@ -227,7 +227,7 @@ export class ItemBarterer extends EntityProperty
 						(c: ItemHolder, v: Entity) => { c.itemEntitySelected = v; }
 					), // bindingForItemSelected
 					DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
-					DataBinding.fromContext(true), // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					itemOfferStore,
 					null
 				),
@@ -316,7 +316,7 @@ export class ItemBarterer extends EntityProperty
 						(c: ItemHolder, v: Entity) => { c.itemEntitySelected = v; }
 					), // bindingForItemSelected
 					DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
-					DataBinding.fromContext(true), // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					itemUnofferStore,
 					null
 				),
@@ -362,7 +362,7 @@ export class ItemBarterer extends EntityProperty
 						(c: ItemHolder, v: Entity) => c.itemEntitySelected = v
 					), // bindingForItemSelected
 					DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
-					DataBinding.fromContext(true), // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					itemOfferCustomer,
 					null
 				),
@@ -447,7 +447,7 @@ export class ItemBarterer extends EntityProperty
 						(c: ItemHolder, v: Entity) => { c.itemEntitySelected = v; }
 					), // bindingForItemSelected
 					DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
-					DataBinding.fromContext(true), // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					itemOfferCustomer
 				),
 

@@ -1700,7 +1700,7 @@ export class ControlBuilder
 					"Load",
 					fontHeight,
 					true, // hasBorder
-					DataBinding.fromContext(true), // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					() => // click
 					{
 						var controlConfirm = universe.controlBuilder.confirm

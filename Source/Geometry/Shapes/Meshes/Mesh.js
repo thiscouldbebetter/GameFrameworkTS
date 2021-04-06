@@ -45,7 +45,7 @@ var ThisCouldBeBetter;
                     new Mesh_FaceBuilder([2, 3, 7, 6]),
                     new Mesh_FaceBuilder([3, 0, 4, 7]),
                     new Mesh_FaceBuilder([0, 3, 2, 1]),
-                    new Mesh_FaceBuilder([4, 5, 6, 7]),
+                    new Mesh_FaceBuilder([4, 5, 6, 7]), // bottom
                 ];
                 var returnValue = new Mesh(box.center, vertexOffsets, faceBuilders);
                 return returnValue;

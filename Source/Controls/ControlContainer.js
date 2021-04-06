@@ -199,6 +199,7 @@ var ThisCouldBeBetter;
                         }
                     }
                 }
+                return false; // wasMoveHandled
             }
             scalePosAndSize(scaleFactor) {
                 this.pos.multiply(scaleFactor);

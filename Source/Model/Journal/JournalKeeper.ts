@@ -111,7 +111,7 @@ export class JournalKeeper extends EntityProperty
 					}
 				), // bindingForItemSelected
 				DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
-				DataBinding.fromContext(true), // isEnabled
+				DataBinding.fromTrue(), // isEnabled
 				(universe: Universe) => // confirm
 				{
 					// todo

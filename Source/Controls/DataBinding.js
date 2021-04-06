@@ -18,6 +18,9 @@ var ThisCouldBeBetter;
             static fromGet(get) {
                 return new DataBinding(null, get, null);
             }
+            static fromTrue() {
+                return DataBinding.fromContext(true);
+            }
             contextSet(value) {
                 this.context = value;
                 return this;

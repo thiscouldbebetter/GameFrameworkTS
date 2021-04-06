@@ -10,10 +10,12 @@ var ThisCouldBeBetter;
                 for (var i = 0; i < defnArrays.length; i++) {
                     var defnsOfType = defnArrays[i];
                     var defnsByName = GameFramework.ArrayHelper.addLookupsByName(defnsOfType);
-                    var itemFirst = defnsOfType[0];
-                    var itemTypeName = itemFirst.constructor.name;
-                    this.defnArraysByTypeName.set(itemTypeName, defnsOfType);
-                    this.defnsByNameByTypeName.set(itemTypeName, defnsByName);
+                    if (defnsOfType.length > 0) {
+                        var itemFirst = defnsOfType[0];
+                        var itemTypeName = itemFirst.constructor.name;
+                        this.defnArraysByTypeName.set(itemTypeName, defnsOfType);
+                        this.defnsByNameByTypeName.set(itemTypeName, defnsByName);
+                    }
                 }
             }
             // Convenience methods.

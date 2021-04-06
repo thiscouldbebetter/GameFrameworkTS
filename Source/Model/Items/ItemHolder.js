@@ -303,7 +303,7 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromGet((c) => c.item().toString(world)), // bindingForItemText
                     fontHeightSmall, new GameFramework.DataBinding(this, (c) => c.itemEntitySelected, (c, v) => c.itemEntitySelected = v), // bindingForItemSelected
                     GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
-                    GameFramework.DataBinding.fromContext(true), // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     (universe) => // confirm
                      {
                         use();

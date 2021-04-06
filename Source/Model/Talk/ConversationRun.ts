@@ -216,7 +216,7 @@ export class ConversationRun
 							c.scopeCurrent.talkNodeForOptionSelected = v
 					), // bindingForItemSelected
 					new DataBinding(null, null, null), // bindingForItemValue
-					DataBinding.fromContext(true), // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					(universe: Universe) => // confirm
 					{
 						next();

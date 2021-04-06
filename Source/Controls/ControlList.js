@@ -10,7 +10,7 @@ var ThisCouldBeBetter;
                 this.bindingForItemText = bindingForItemText;
                 this.bindingForItemSelected = bindingForItemSelected;
                 this.bindingForItemValue = bindingForItemValue;
-                this.bindingForIsEnabled = bindingForIsEnabled || GameFramework.DataBinding.fromContext(true);
+                this.bindingForIsEnabled = bindingForIsEnabled || GameFramework.DataBinding.fromTrue();
                 this.confirm = confirm;
                 this.widthInItems = widthInItems || 1;
                 var itemSpacingY = 1.2 * this.fontHeightInPixels; // hack
@@ -33,7 +33,7 @@ var ThisCouldBeBetter;
                 10, // fontHeightInPixels,
                 null, // bindingForItemSelected,
                 null, // bindingForItemValue,
-                GameFramework.DataBinding.fromContext(true), // isEnabled
+                GameFramework.DataBinding.fromTrue(), // isEnabled
                 null, null);
                 return returnValue;
             }
@@ -42,7 +42,7 @@ var ThisCouldBeBetter;
                 pos, size, items, bindingForItemText, 10, // fontHeightInPixels,
                 null, // bindingForItemSelected,
                 null, // bindingForItemValue,
-                GameFramework.DataBinding.fromContext(true), // isEnabled
+                GameFramework.DataBinding.fromTrue(), // isEnabled
                 null, null);
                 return returnValue;
             }
@@ -209,13 +209,14 @@ var ThisCouldBeBetter;
             }
             mouseEnter() { }
             mouseExit() { }
-            mouseMove(movePos) { }
+            mouseMove(movePos) { return false; }
             scalePosAndSize(scaleFactor) {
                 this.pos.multiply(scaleFactor);
                 this.size.multiply(scaleFactor);
                 this.fontHeightInPixels *= scaleFactor.y;
                 this._itemSpacing.multiply(scaleFactor);
                 this.scrollbar.scalePosAndSize(scaleFactor);
+                return this;
             }
             // drawable
             draw(universe, display, drawLoc, style) {

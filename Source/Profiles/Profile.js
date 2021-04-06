@@ -339,7 +339,7 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(100, 20), // size
                     new GameFramework.DataBinding(universe.profile, (c) => c.name, (c, v) => c.name = v), // text
                     fontHeight, null, // charCountMax
-                    GameFramework.DataBinding.fromContext(true) // isEnabled
+                    GameFramework.DataBinding.fromTrue() // isEnabled
                     ),
                     GameFramework.ControlButton.from8("buttonCreate", GameFramework.Coords.fromXY(50, 80), // pos
                     GameFramework.Coords.fromXY(45, buttonHeightBase), // size

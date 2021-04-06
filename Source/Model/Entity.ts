@@ -2,14 +2,16 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Entity
+export class Entity //
 {
+	id: number;
 	name: string;
 	properties: EntityProperty[];
 	propertiesByName: Map<string, EntityProperty>;
 
 	constructor(name: string, properties: EntityProperty[])
 	{
+		this.id = IDHelper.Instance().idNext();
 		this.name = name;
 		this.properties = properties;
 
@@ -123,7 +125,7 @@ export class Entity
 	// Convenience methods for properties.
 
 	actor(): Actor { return this.propertyByName(Actor.name) as Actor; }
-	animatable(): Animatable { return this.propertyByName(Animatable.name) as Animatable; }
+	animatable(): Animatable2 { return this.propertyByName(Animatable2.name) as Animatable2; }
 	boundable(): Boundable { return this.propertyByName(Boundable.name) as Boundable; }
 	camera(): Camera { return this.propertyByName(Camera.name) as Camera; }
 	collidable(): Collidable { return this.propertyByName(Collidable.name) as Collidable; }

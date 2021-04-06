@@ -128,7 +128,7 @@ export class ItemContainer extends EntityProperty
 						(c: ItemHolder, v: Entity) => c.itemEntitySelected = v
 					), // bindingForItemSelected
 					DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
-					DataBinding.fromContext(true), // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					get, // confirm
 					null
 				),
@@ -145,7 +145,7 @@ export class ItemContainer extends EntityProperty
 					">",
 					fontHeight,
 					true, // hasBorder
-					DataBinding.fromContext(true), // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					get // click
 				),
 
@@ -161,7 +161,7 @@ export class ItemContainer extends EntityProperty
 					"<",
 					fontHeight,
 					true, // hasBorder
-					DataBinding.fromContext(true), // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					put // click
 				),
 
@@ -200,7 +200,7 @@ export class ItemContainer extends EntityProperty
 						(c: ItemHolder, v: Entity) => { c.itemEntitySelected = v; }
 					), // bindingForItemSelected
 					DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
-					DataBinding.fromContext(true), // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					put, // confirm
 					null
 				),

@@ -77,7 +77,7 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromGet((c) => c.item().toString(world)), // bindingForItemText
                     fontHeight, new GameFramework.DataBinding(itemHolderStore, (c) => c.itemEntitySelected, (c, v) => c.itemEntitySelected = v), // bindingForItemSelected
                     GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
-                    GameFramework.DataBinding.fromContext(true), // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     buy, // confirm
                     null),
                     new GameFramework.ControlLabel("labelCustomerName", GameFramework.Coords.fromXY(size.x - margin - listSize.x, margin), // pos
@@ -86,7 +86,7 @@ var ThisCouldBeBetter;
                     entityCustomer.name + ":", fontHeight),
                     GameFramework.ControlButton.from8("buttonBuy", GameFramework.Coords.fromXY(size.x / 2 - buttonSize.x - margin / 2, size.y - margin - buttonSize.y), // pos
                     buttonSize.clone(), "Buy", fontHeight, true, // hasBorder
-                    GameFramework.DataBinding.fromContext(true), // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     buy // click
                     ),
                     GameFramework.ControlList.from10("listCustomerItems", GameFramework.Coords.fromXY(size.x - margin - listSize.x, margin * 2), // pos
@@ -95,12 +95,12 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromGet((c) => c.item().toString(world)), // bindingForItemText
                     fontHeight, new GameFramework.DataBinding(itemHolderCustomer, (c) => c.itemEntitySelected, (c, v) => c.itemEntitySelected = v), // bindingForItemSelected
                     GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
-                    GameFramework.DataBinding.fromContext(true), // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     sell // confirm
                     ),
                     GameFramework.ControlButton.from8("buttonSell", GameFramework.Coords.fromXY(size.x / 2 + margin / 2, size.y - margin - buttonSize.y), // pos
                     buttonSize.clone(), "Sell", fontHeight, true, // hasBorder
-                    GameFramework.DataBinding.fromContext(true), // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     sell // click
                     ),
                     new GameFramework.ControlLabel("infoStatus", GameFramework.Coords.fromXY(size.x / 2, size.y - margin * 2 - buttonSize.y), // pos

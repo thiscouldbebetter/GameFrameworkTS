@@ -3,12 +3,14 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Place {
+        class Place //
+         {
             constructor(name, defnName, size, entities) {
                 this.name = name;
                 this.defnName = defnName;
                 this.size = size;
                 this.entities = [];
+                this.entitiesById = new Map();
                 this.entitiesByName = new Map();
                 this._entitiesByPropertyName = new Map();
                 this.entitiesToSpawn = entities.slice();
@@ -22,8 +24,16 @@ var ThisCouldBeBetter;
                 var colorBlack = GameFramework.Color.byName("Black");
                 display.drawBackground(colorBlack, colorBlack);
                 var cameraEntity = this.camera();
-                var camera = cameraEntity.camera();
-                camera.drawEntitiesInView(universe, world, this, cameraEntity, display);
+                if (cameraEntity == null) {
+                    var drawables = this.drawables();
+                    drawables.forEach((x) => {
+                        x.drawable().updateForTimerTick(universe, world, this, x);
+                    });
+                }
+                else {
+                    var camera = cameraEntity.camera();
+                    camera.drawEntitiesInView(universe, world, this, cameraEntity, display);
+                }
             }
             entitiesByPropertyName(propertyName) {
                 var returnValues = this._entitiesByPropertyName.get(propertyName);
@@ -62,6 +72,7 @@ var ThisCouldBeBetter;
                     GameFramework.ArrayHelper.remove(entitiesWithProperty, entity);
                 }
                 GameFramework.ArrayHelper.remove(this.entities, entity);
+                this.entitiesById.delete(entity.id);
                 this.entitiesByName.delete(entity.name);
             }
             entitySpawn(universe, world, entity) {
@@ -72,6 +83,7 @@ var ThisCouldBeBetter;
                     entity.name += universe.idHelper.idNext();
                 }
                 this.entities.push(entity);
+                this.entitiesById.set(entity.id, entity);
                 this.entitiesByName.set(entity.name, entity);
                 var entityProperties = entity.properties;
                 for (var i = 0; i < entityProperties.length; i++) {

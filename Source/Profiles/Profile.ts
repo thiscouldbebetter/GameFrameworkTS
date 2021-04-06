@@ -705,7 +705,7 @@ export class Profile
 					), // text
 					fontHeight,
 					null, // charCountMax
-					DataBinding.fromContext(true) // isEnabled
+					DataBinding.fromTrue() // isEnabled
 				),
 
 				ControlButton.from8

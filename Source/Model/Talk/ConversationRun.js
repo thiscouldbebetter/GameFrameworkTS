@@ -93,7 +93,7 @@ var ThisCouldBeBetter;
                     new GameFramework.DataBinding(null, // context
                     (c) => { return c.text; }, null), fontHeightShort, new GameFramework.DataBinding(conversationRun, (c) => c.scopeCurrent.talkNodeForOptionSelected, (c, v) => c.scopeCurrent.talkNodeForOptionSelected = v), // bindingForItemSelected
                     new GameFramework.DataBinding(null, null, null), // bindingForItemValue
-                    GameFramework.DataBinding.fromContext(true), // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     (universe) => // confirm
                      {
                         next();

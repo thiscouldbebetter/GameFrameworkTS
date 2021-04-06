@@ -792,7 +792,7 @@ var ThisCouldBeBetter;
                     GameFramework.ControlButton.from8("buttonLoadFromServer", GameFramework.Coords.fromXY(30, 105), // pos
                     GameFramework.Coords.fromXY(40, this.buttonHeightBase), // size
                     "Load", fontHeight, true, // hasBorder
-                    GameFramework.DataBinding.fromContext(true), // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     () => // click
                      {
                         var controlConfirm = universe.controlBuilder.confirm(universe, size, "Abandon the current game?", confirm, cancel);

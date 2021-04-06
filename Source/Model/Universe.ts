@@ -49,8 +49,7 @@ export class Universe
 		this.display = display;
 		this.mediaLibrary = mediaLibrary;
 		this.controlBuilder = controlBuilder;
-		this._worldCreate =
-			worldCreate || ( (u: Universe) => World.create(u) );
+		this._worldCreate = worldCreate;
 
 		this.collisionHelper = new CollisionHelper();
 		this.displayRecorder = new DisplayRecorder 
@@ -101,7 +100,7 @@ export class Universe
 
 	// instance methods
 
-	initialize(callback: any)
+	initialize(callback: (u: Universe) => void)
 	{
 		this.mediaLibrary.waitForItemsAllToLoad
 		(

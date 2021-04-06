@@ -21,7 +21,7 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.create(),
                     new GameFramework.Coords(this.sizeInCellsMinusOnes.x, 0, 0),
                     new GameFramework.Coords(this.sizeInCellsMinusOnes.x, this.sizeInCellsMinusOnes.y, 0),
-                    new GameFramework.Coords(0, this.sizeInCellsMinusOnes.y, 0),
+                    new GameFramework.Coords(0, this.sizeInCellsMinusOnes.y, 0), // sw
                 ];
                 for (var i = 0; i < cornerCellPositions.length; i++) {
                     var cornerPos = cornerCellPositions[i];

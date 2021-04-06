@@ -12,7 +12,7 @@ var ThisCouldBeBetter;
                 );
                 this.entityForReticle = new GameFramework.Entity("Reticle", [
                     GameFramework.Locatable.create(),
-                    new GameFramework.Drawable(visualReticle, false),
+                    new GameFramework.Drawable(visualReticle, false), // isVisible
                 ]);
             }
             entitiesDeselectAll() {

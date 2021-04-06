@@ -28,7 +28,7 @@ export class WebGLContext
 
 	initGL(canvas: HTMLCanvasElement)
 	{
-		var gl = canvas.getContext("experimental-webgl");
+		var gl: any = canvas.getContext("experimental-webgl");
 		/*
 		gl.viewportWidth = canvas.width;
 		gl.viewportHeight = canvas.height;

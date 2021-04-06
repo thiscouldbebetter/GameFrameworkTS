@@ -16,10 +16,13 @@ export class WorldDefn
 		{
 			var defnsOfType = defnArrays[i];
 			var defnsByName = ArrayHelper.addLookupsByName(defnsOfType);
-			var itemFirst = defnsOfType[0];
-			var itemTypeName = itemFirst.constructor.name;
-			this.defnArraysByTypeName.set(itemTypeName, defnsOfType);
-			this.defnsByNameByTypeName.set(itemTypeName, defnsByName);
+			if (defnsOfType.length > 0)
+			{
+				var itemFirst = defnsOfType[0];
+				var itemTypeName = itemFirst.constructor.name;
+				this.defnArraysByTypeName.set(itemTypeName, defnsOfType);
+				this.defnsByNameByTypeName.set(itemTypeName, defnsByName);
+			}
 		}
 	}
 

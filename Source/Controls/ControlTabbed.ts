@@ -334,7 +334,7 @@ export class ControlTabbed extends ControlBase
 	mouseEnter() {}
 	mouseExit() {}
 
-	mouseMove(mouseMovePos: Coords)
+	mouseMove(mouseMovePos: Coords): boolean
 	{
 		var mouseMovePos = this._mouseMovePos.overwriteWith
 		(

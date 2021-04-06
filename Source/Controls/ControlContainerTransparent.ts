@@ -18,17 +18,17 @@ export class ControlContainerTransparent extends ControlBase
 
 	// instance methods
 
-	actionToInputsMappings()
+	actionToInputsMappings(): ActionToInputsMapping[]
 	{
 		return this.containerInner.actionToInputsMappings();
 	}
 
-	childWithFocus()
+	childWithFocus(): ControlBase
 	{
 		return this.containerInner.childWithFocus();
 	}
 
-	childWithFocusNextInDirection(direction: number)
+	childWithFocusNextInDirection(direction: number): ControlBase
 	{
 		return this.containerInner.childWithFocusNextInDirection(direction);
 	}
@@ -36,7 +36,7 @@ export class ControlContainerTransparent extends ControlBase
 	childrenAtPosAddToList
 	(
 		posToCheck: Coords, listToAddTo: ControlBase[], addFirstChildOnly: boolean
-	)
+	): ControlBase[]
 	{
 		return this.containerInner.childrenAtPosAddToList
 		(
@@ -44,17 +44,17 @@ export class ControlContainerTransparent extends ControlBase
 		);
 	}
 
-	actionHandle(actionNameToHandle: string, universe: Universe)
+	actionHandle(actionNameToHandle: string, universe: Universe): boolean
 	{
 		return this.containerInner.actionHandle(actionNameToHandle, universe);
 	}
 
-	isEnabled()
+	isEnabled(): boolean
 	{
 		return true; // todo
 	}
 
-	mouseClick(mouseClickPos: Coords)
+	mouseClick(mouseClickPos: Coords): boolean
 	{
 		var childrenContainingPos = this.containerInner.childrenAtPosAddToList
 		(
@@ -80,19 +80,19 @@ export class ControlContainerTransparent extends ControlBase
 		return wasClickHandled;
 	}
 
-	mouseMove(mouseMovePos: Coords)
+	mouseMove(mouseMovePos: Coords): boolean
 	{
-		this.containerInner.mouseMove(mouseMovePos);
+		return this.containerInner.mouseMove(mouseMovePos);
 	}
 
-	scalePosAndSize(scaleFactor: Coords)
+	scalePosAndSize(scaleFactor: Coords): ControlBase
 	{
 		return this.containerInner.scalePosAndSize(scaleFactor);
 	}
 
 	// drawable
 
-	draw(universe: Universe, display: Display, drawLoc: Disposition, style: ControlStyle)
+	draw(universe: Universe, display: Display, drawLoc: Disposition, style: ControlStyle): void
 	{
 		if (this.isVisible() == false)
 		{

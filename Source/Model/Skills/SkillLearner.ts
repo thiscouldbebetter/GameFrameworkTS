@@ -275,7 +275,7 @@ export class SkillLearner extends EntityProperty
 						}
 					), // bindingForItemSelected
 					null, // bindingForItemValue
-					DataBinding.fromContext(true), // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					(u: Universe) => 
 					{
 						skillLearner.skillBeingLearnedName =

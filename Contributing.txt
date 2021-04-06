@@ -1,0 +1,12 @@
+Contributing to the This Could Be Better Game Framework
+=======================================================
+
+As of this writing, pull requests targeting this repository are not 
+solicited and will not be accepted.
+
+However, users should feel free, indeed encouraged, to file bug reports 
+using the Issues section of the repository on Github.
+
+The repository is also being released under the MIT License, so 
+would-be contributors may simply fork it and modify that fork as 
+desired.

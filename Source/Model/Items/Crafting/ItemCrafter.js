@@ -121,7 +121,7 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromGet((c) => c.name), // bindingForItemText
                     fontHeightSmall, new GameFramework.DataBinding(this, (c) => c.recipeAvailableSelected, (c, v) => { c.recipeAvailableSelected = v; }), // bindingForItemSelected
                     new GameFramework.DataBinding(null, (c) => c, null), // bindingForItemValue
-                    GameFramework.DataBinding.fromContext(true), // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     addToQueue, // confirm
                     null),
                     new GameFramework.ControlLabel("labelRecipeSelected", GameFramework.Coords.fromXY(105, 5), // pos

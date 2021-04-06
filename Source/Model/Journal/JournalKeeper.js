@@ -53,7 +53,7 @@ var ThisCouldBeBetter;
                         c.isJournalEntrySelectedEditable = false;
                     }), // bindingForItemSelected
                     GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
-                    GameFramework.DataBinding.fromContext(true), // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     (universe) => // confirm
                      {
                         // todo

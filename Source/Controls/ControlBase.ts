@@ -39,7 +39,7 @@ export class ControlBase
 	mouseClick(x: Coords): boolean { return false; }
 	mouseEnter(): void { this.isHighlighted = true; }
 	mouseExit(): void { this.isHighlighted = false; }
-	mouseMove(x: Coords): void {}
+	mouseMove(x: Coords): boolean { return false; }
 	scalePosAndSize(x: Coords): void {}
 	style(universe: Universe)
 	{

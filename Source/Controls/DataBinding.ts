@@ -30,6 +30,11 @@ export class DataBinding<C, V>
 		return new DataBinding(null, get, null);
 	}
 
+	static fromTrue()
+	{
+		return DataBinding.fromContext<boolean>(true);
+	}
+
 	contextSet(value: C): DataBinding<C, V>
 	{
 		this.context = value;

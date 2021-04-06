@@ -146,7 +146,7 @@ export class ItemStore extends EntityProperty
 						(c: ItemHolder, v: Entity) => c.itemEntitySelected = v
 					), // bindingForItemSelected
 					DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
-					DataBinding.fromContext(true), // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					buy, // confirm
 					null
 				),
@@ -172,7 +172,7 @@ export class ItemStore extends EntityProperty
 					"Buy",
 					fontHeight,
 					true, // hasBorder
-					DataBinding.fromContext(true), // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					buy // click
 				),
 
@@ -198,7 +198,7 @@ export class ItemStore extends EntityProperty
 						(c: ItemHolder, v: Entity) => c.itemEntitySelected = v
 					), // bindingForItemSelected
 					DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
-					DataBinding.fromContext(true), // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					sell // confirm
 				),
 
@@ -214,7 +214,7 @@ export class ItemStore extends EntityProperty
 					"Sell",
 					fontHeight,
 					true, // hasBorder
-					DataBinding.fromContext(true), // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					sell // click
 				),
 

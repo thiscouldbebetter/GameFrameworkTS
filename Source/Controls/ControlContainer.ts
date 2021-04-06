@@ -69,7 +69,7 @@ export class ControlContainer extends ControlBase
 		pos: Coords,
 		size: Coords,
 		children: ControlBase[]
-	)
+	): ControlContainer
 	{
 		return new ControlContainer
 		(
@@ -81,7 +81,7 @@ export class ControlContainer extends ControlBase
 
 	// actions
 
-	actionHandle(actionNameToHandle: string, universe: Universe)
+	actionHandle(actionNameToHandle: string, universe: Universe): boolean
 	{
 		var wasActionHandled = false;
 
@@ -154,28 +154,28 @@ export class ControlContainer extends ControlBase
 		return wasActionHandled;
 	}
 
-	actionToInputsMappings()
+	actionToInputsMappings(): ActionToInputsMapping[]
 	{
 		return this._actionToInputsMappings;
 	}
 
-	childAdd(childToAdd: ControlBase)
+	childAdd(childToAdd: ControlBase): void
 	{
 		this.children.push(childToAdd);
 		this.childrenByName.set(childToAdd.name, childToAdd);
 	}
 
-	childByName(childName: string)
+	childByName(childName: string): ControlBase
 	{
 		return this.childrenByName.get(childName);
 	}
 
-	childWithFocus()
+	childWithFocus(): ControlBase
 	{
 		return (this.indexOfChildWithFocus == null ? null : this.children[this.indexOfChildWithFocus] );
 	}
 
-	childWithFocusNextInDirection(direction: number)
+	childWithFocusNextInDirection(direction: number): ControlBase
 	{
 		if (this.indexOfChildWithFocus == null)
 		{
@@ -237,7 +237,7 @@ export class ControlContainer extends ControlBase
 	childrenAtPosAddToList
 	(
 		posToCheck: Coords, listToAddTo: ControlBase[], addFirstChildOnly: boolean
-	)
+	): ControlBase[]
 	{
 		posToCheck = this._posToCheck.overwriteWith(posToCheck).clearZ();
 
@@ -264,7 +264,7 @@ export class ControlContainer extends ControlBase
 		return listToAddTo;
 	}
 
-	focusGain()
+	focusGain(): void
 	{
 		this.indexOfChildWithFocus = null;
 		var childWithFocus = this.childWithFocusNextInDirection(1);
@@ -274,7 +274,7 @@ export class ControlContainer extends ControlBase
 		}
 	}
 
-	focusLose()
+	focusLose(): void
 	{
 		var childWithFocus = this.childWithFocus();
 		if (childWithFocus != null)
@@ -318,7 +318,7 @@ export class ControlContainer extends ControlBase
 		return wasClickHandled;
 	}
 
-	mouseMove(mouseMovePos: Coords)
+	mouseMove(mouseMovePos: Coords): boolean
 	{
 		var temp = this.childrenContainingPosPrev;
 		this.childrenContainingPosPrev = this.childrenContainingPos;
@@ -361,6 +361,8 @@ export class ControlContainer extends ControlBase
 				}
 			}
 		}
+
+		return false; // wasMoveHandled
 	}
 
 	scalePosAndSize(scaleFactor: Coords)
@@ -400,7 +402,11 @@ export class ControlContainer extends ControlBase
 
 	// drawable
 
-	draw(universe: Universe, display: Display, drawLoc: Disposition, style: ControlStyle): void
+	draw
+	(
+		universe: Universe, display: Display, drawLoc: Disposition, 
+		style: ControlStyle
+	): void
 	{
 		drawLoc = this._drawLoc.overwriteWith(drawLoc);
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);

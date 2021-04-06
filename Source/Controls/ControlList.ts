@@ -42,7 +42,7 @@ export class ControlList extends ControlBase
 		this.bindingForItemText = bindingForItemText;
 		this.bindingForItemSelected = bindingForItemSelected;
 		this.bindingForItemValue = bindingForItemValue;
-		this.bindingForIsEnabled = bindingForIsEnabled || DataBinding.fromContext(true);
+		this.bindingForIsEnabled = bindingForIsEnabled || DataBinding.fromTrue();
 		this.confirm = confirm;
 		this.widthInItems = widthInItems || 1;
 
@@ -80,7 +80,7 @@ export class ControlList extends ControlBase
 			10, // fontHeightInPixels,
 			null, // bindingForItemSelected,
 			null, // bindingForItemValue,
-			DataBinding.fromContext(true), // isEnabled
+			DataBinding.fromTrue(), // isEnabled
 			null, null
 		);
 
@@ -103,7 +103,7 @@ export class ControlList extends ControlBase
 			10, // fontHeightInPixels,
 			null, // bindingForItemSelected,
 			null, // bindingForItemValue,
-			DataBinding.fromContext(true), // isEnabled
+			DataBinding.fromTrue(), // isEnabled
 			null, null
 		);
 
@@ -207,7 +207,7 @@ export class ControlList extends ControlBase
 		);
 	}
 
-	actionHandle(actionNameToHandle: string, universe: Universe)
+	actionHandle(actionNameToHandle: string, universe: Universe): boolean
 	{
 		var wasActionHandled = false;
 		var controlActionNames = ControlActionNames.Instances();
@@ -232,17 +232,17 @@ export class ControlList extends ControlBase
 		return wasActionHandled;
 	}
 
-	indexOfFirstItemVisible()
+	indexOfFirstItemVisible(): number
 	{
 		return this.indexOfFirstRowVisible() * this.widthInItems;
 	}
 
-	indexOfFirstRowVisible()
+	indexOfFirstRowVisible(): number
 	{
 		return this.scrollbar.sliderPosInItems();
 	}
 
-	indexOfItemSelected(valueToSet: number)
+	indexOfItemSelected(valueToSet: number): number
 	{
 		var returnValue = valueToSet;
 		var items = this.items();
@@ -262,24 +262,24 @@ export class ControlList extends ControlBase
 		return returnValue;
 	}
 
-	indexOfLastItemVisible()
+	indexOfLastItemVisible(): number
 	{
 		return this.indexOfLastRowVisible() * this.widthInItems;
 	}
 
-	indexOfLastRowVisible()
+	indexOfLastRowVisible(): number
 	{
 		var rowCountVisible = Math.floor(this.scrollbar.windowSizeInItems) - 1;
 		var returnValue = this.indexOfFirstRowVisible() + rowCountVisible;
 		return returnValue;
 	}
 
-	isEnabled()
+	isEnabled(): boolean
 	{
 		return (this.bindingForIsEnabled == null ? true : this.bindingForIsEnabled.get());
 	}
 
-	itemSelected(itemToSet: any)
+	itemSelected(itemToSet: any): any
 	{
 		var returnValue = itemToSet;
 
@@ -319,7 +319,7 @@ export class ControlList extends ControlBase
 		return returnValue;
 	}
 
-	itemSelectedNextInDirection(direction: number)
+	itemSelectedNextInDirection(direction: number): any
 	{
 		var items = this.items();
 		var numberOfItems = items.length;
@@ -368,7 +368,7 @@ export class ControlList extends ControlBase
 		return returnValue;
 	}
 
-	itemSpacing()
+	itemSpacing(): Coords
 	{
 		var scrollbarWidthVisible = (this.scrollbar.isVisible() ? this.scrollbar.size.x : 0);
 		return this._itemSpacing.overwriteWithDimensions
@@ -379,12 +379,12 @@ export class ControlList extends ControlBase
 		);
 	}
 
-	items()
+	items(): any[]
 	{
 		return (this._items.get == null ? this._items : this._items.get());
 	}
 
-	mouseClick(clickPos: Coords)
+	mouseClick(clickPos: Coords): boolean
 	{
 		clickPos = this._mouseClickPos.overwriteWith(clickPos);
 
@@ -432,24 +432,30 @@ export class ControlList extends ControlBase
 		return true; // wasActionHandled
 	}
 
-	mouseEnter() {}
+	mouseEnter(): void {}
 
-	mouseExit() {}
+	mouseExit(): void {}
 
-	mouseMove(movePos: Coords) {}
+	mouseMove(movePos: Coords): boolean { return false; }
 
-	scalePosAndSize(scaleFactor: Coords)
+	scalePosAndSize(scaleFactor: Coords): ControlBase
 	{
 		this.pos.multiply(scaleFactor);
 		this.size.multiply(scaleFactor);
 		this.fontHeightInPixels *= scaleFactor.y;
 		this._itemSpacing.multiply(scaleFactor);
 		this.scrollbar.scalePosAndSize(scaleFactor);
+
+		return this;
 	}
 
 	// drawable
 
-	draw(universe: Universe, display: Display, drawLoc: Disposition, style: ControlStyle)
+	draw
+	(
+		universe: Universe, display: Display, drawLoc: Disposition,
+		style: ControlStyle
+	): void
 	{
 		drawLoc = this._drawLoc.overwriteWith(drawLoc);
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
