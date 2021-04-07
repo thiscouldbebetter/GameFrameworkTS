@@ -14,8 +14,8 @@ var ThisCouldBeBetter;
                 }
                 return ActivityDefn._instances;
             }
-            perform(u, w, p, e, a) {
-                this._perform(u, w, p, e, a);
+            perform(u, w, p, e) {
+                this._perform(u, w, p, e);
             }
         }
         GameFramework.ActivityDefn = ActivityDefn;
@@ -23,13 +23,14 @@ var ThisCouldBeBetter;
             constructor() {
                 this.DoNothing = new ActivityDefn("DoNothing", 
                 // perform
-                (u, w, p, e, a) => { });
+                (u, w, p, e) => { });
                 this.Simultaneous = new ActivityDefn("Simultaneous", 
                 // perform
-                (u, w, p, e, a) => {
-                    var childActivities = a.target;
+                (u, w, p, e) => {
+                    var activity = e.actor().activity;
+                    var childActivities = activity.target;
                     childActivities = childActivities.filter(x => x.isDone == false);
-                    a.target = childActivities;
+                    activity.target = childActivities;
                     for (var i = 0; i < childActivities.length; i++) {
                         var childActivity = childActivities[i];
                         childActivity.perform(u, w, p, e);

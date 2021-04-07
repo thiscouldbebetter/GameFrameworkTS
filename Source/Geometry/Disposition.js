@@ -26,6 +26,11 @@ var ThisCouldBeBetter;
             static fromPos(pos) {
                 return new Disposition(pos, GameFramework.Orientation.default(), null);
             }
+            static fromPosAndVel(pos, vel) {
+                var returnValue = Disposition.fromPos(pos);
+                returnValue.vel = vel;
+                return returnValue;
+            }
             equals(other) {
                 var returnValue = (this.placeName == other.placeName
                     && this.pos.equals(other.pos)

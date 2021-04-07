@@ -16,23 +16,28 @@ export class Activity
 		this.isDone = false;
 	}
 
-	defn(world: World)
+	static fromDefnName(defnName: string): Activity
+	{
+		return new Activity(defnName, null);
+	}
+
+	defn(world: World): ActivityDefn
 	{
 		return world.defn.activityDefnByName(this.defnName);
 	}
 
-	defnNameAndTargetSet(defnName: string, target: any)
+	defnNameAndTargetSet(defnName: string, target: any): Activity
 	{
 		this.defnName = defnName;
 		this.target = target;
 		return this;
 	}
 
-	perform(u: Universe, w: World, p: Place, e: Entity)
+	perform(u: Universe, w: World, p: Place, e: Entity): void
 	{
 		if (this.defnName != null)
 		{
-			this.defn(w).perform(u, w, p, e, this);
+			this.defn(w).perform(u, w, p, e);
 		}
 	}
 }

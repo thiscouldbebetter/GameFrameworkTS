@@ -15,8 +15,9 @@ export class Enemy extends EntityProperty
 	static activityDefnBuild()
 	{
 		var enemyActivityPerform =
-			(universe: Universe, world: World, place: Place, actor: Entity, activity: Activity) =>
+			(universe: Universe, world: World, place: Place, actor: Entity) =>
 		{
+			var activity = actor.actor().activity;
 			var actorLocatable = actor.locatable();
 
 			var entityToTargetPrefix = "Player";

@@ -15,7 +15,17 @@ export class Actor extends EntityProperty
 		this.actions = [];
 	}
 
-	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity)
+	static fromActivityDefnName(activityDefnName: string): Actor
+	{
+		var activity = Activity.fromDefnName(activityDefnName);
+		var returnValue = new Actor(activity);
+		return returnValue;
+	}
+
+	updateForTimerTick
+	(
+		universe: Universe, world: World, place: Place, entity: Entity
+	): void
 	{
 		this.activity.perform(universe, world, place, entity);
 	}

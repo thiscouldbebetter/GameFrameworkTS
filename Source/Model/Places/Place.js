@@ -135,7 +135,8 @@ var ThisCouldBeBetter;
             updateForTimerTick(universe, world) {
                 this.entitiesRemove();
                 this.entitiesSpawn(universe, world);
-                var propertyNamesToProcess = this.defn(world).propertyNamesToProcess;
+                var placeDefn = this.defn(world);
+                var propertyNamesToProcess = placeDefn.propertyNamesToProcess;
                 for (var p = 0; p < propertyNamesToProcess.length; p++) {
                     var propertyName = propertyNamesToProcess[p];
                     var entitiesWithProperty = this.entitiesByPropertyName(propertyName);

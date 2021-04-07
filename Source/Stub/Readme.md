@@ -1,7 +1,7 @@
 Game Stub
 =========
 
-This repository implements the stub of a game using the This Could Be Better Game Framework and implemented in TypeScript.  This file should be heavily edited to reflect the details of the new game.
+This repository implements the stub of a game in TypeScript using the This Could Be Better Game Framework.  See /Documentation/Creating_a_New_Game_from_Stubs.md for instructions.  This file should be heavily edited to reflect the details of the new game.  
 
 
 Building

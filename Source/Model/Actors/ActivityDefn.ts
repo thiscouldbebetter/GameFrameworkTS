@@ -5,12 +5,12 @@ namespace ThisCouldBeBetter.GameFramework
 export class ActivityDefn
 {
 	name: string;
-	_perform: (u: Universe, w: World, p: Place, e: Entity, a: Activity) => void;
+	_perform: (u: Universe, w: World, p: Place, e: Entity) => void;
 
 	constructor
 	(
 		name: string,
-		perform: (u: Universe, w: World, p: Place, e: Entity, a: Activity) => void
+		perform: (u: Universe, w: World, p: Place, e: Entity) => void
 	)
 	{
 		this.name = name;
@@ -27,9 +27,9 @@ export class ActivityDefn
 		return ActivityDefn._instances;
 	}
 
-	perform(u: Universe, w: World, p: Place, e: Entity, a: Activity)
+	perform(u: Universe, w: World, p: Place, e: Entity)
 	{
-		this._perform(u, w, p, e, a);
+		this._perform(u, w, p, e);
 	}
 }
 
@@ -47,7 +47,7 @@ class ActivityDefn_Instances
 		(
 			"DoNothing",
 			// perform
-			(u: Universe, w: World, p: Place, e: Entity, a: Activity) =>
+			(u: Universe, w: World, p: Place, e: Entity) =>
 			{}
 		);
 
@@ -55,11 +55,12 @@ class ActivityDefn_Instances
 		(
 			"Simultaneous",
 			// perform
-			(u: Universe, w: World, p: Place, e: Entity, a: Activity) =>
+			(u: Universe, w: World, p: Place, e: Entity) =>
 			{
-				var childActivities = a.target as Activity[];
+				var activity = e.actor().activity;
+				var childActivities = activity.target as Activity[];
 				childActivities = childActivities.filter(x => x.isDone == false);
-				a.target = childActivities;
+				activity.target = childActivities;
 				for (var i = 0; i < childActivities.length; i++)
 				{
 					var childActivity = childActivities[i];

@@ -9,6 +9,11 @@ var ThisCouldBeBetter;
                 this.activity = activity;
                 this.actions = [];
             }
+            static fromActivityDefnName(activityDefnName) {
+                var activity = GameFramework.Activity.fromDefnName(activityDefnName);
+                var returnValue = new Actor(activity);
+                return returnValue;
+            }
             updateForTimerTick(universe, world, place, entity) {
                 this.activity.perform(universe, world, place, entity);
             }

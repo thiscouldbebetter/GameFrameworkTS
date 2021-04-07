@@ -9,7 +9,8 @@ var ThisCouldBeBetter;
                 this.weapon = weapon;
             }
             static activityDefnBuild() {
-                var enemyActivityPerform = (universe, world, place, actor, activity) => {
+                var enemyActivityPerform = (universe, world, place, actor) => {
+                    var activity = actor.actor().activity;
                     var actorLocatable = actor.locatable();
                     var entityToTargetPrefix = "Player";
                     var targetsPreferred = place.entities.filter(x => x.name.startsWith(entityToTargetPrefix));

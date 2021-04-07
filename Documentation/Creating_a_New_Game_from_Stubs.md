@@ -1,5 +1,5 @@
-Creating a New Stub Game with the This Could Be Better Game Framework
-=====================================================================
+Creating a New Game from Stubs with the This Could Be Better Game Framework
+===========================================================================
 
 The TypeScript code in this repository represents a template, or "stub", of a game that uses the This Could Be Better Game Framework.  It is intended as the simplest possible starting point for new game development.  For a much more in-depth example of a game, see the Demo directory in the parent directory.
 
@@ -55,4 +55,4 @@ At the very least, it is advisable to rename the .ts files and the classes decla
 
 Note that any added class files added will need to be referenced within the .html file as well.
 
-This topic warrants an entire development guide, but no such guide exists as of this writing.  In the meantime, again, the "/Source/Demo/" directory provides some usage examples.
+This topic warrants an entire development guide.  A partial guide is available at /Documentation/Development_Guide.txt.  Also, again, the "/Source/Demo/" directory provides a wealth of usage examples.

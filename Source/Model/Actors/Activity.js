@@ -9,6 +9,9 @@ var ThisCouldBeBetter;
                 this.target = target;
                 this.isDone = false;
             }
+            static fromDefnName(defnName) {
+                return new Activity(defnName, null);
+            }
             defn(world) {
                 return world.defn.activityDefnByName(this.defnName);
             }
@@ -19,7 +22,7 @@ var ThisCouldBeBetter;
             }
             perform(u, w, p, e) {
                 if (this.defnName != null) {
-                    this.defn(w).perform(u, w, p, e, this);
+                    this.defn(w).perform(u, w, p, e);
                 }
             }
         }

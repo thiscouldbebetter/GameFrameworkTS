@@ -11,6 +11,11 @@ var ThisCouldBeBetter;
                 this.verticesAsPathTransformed = this.verticesAsPath.clone();
                 this.transformLocate = new GameFramework.Transform_Locate(null);
             }
+            static fromVerticesAndColorFill(vertices, colorFill) {
+                var verticesAsPath = new GameFramework.Path(vertices);
+                var returnValue = new VisualPolygon(verticesAsPath, colorFill, null);
+                return returnValue;
+            }
             draw(universe, world, place, entity, display) {
                 var drawableLoc = entity.locatable().loc;
                 this.transformLocate.loc.overwriteWith(drawableLoc);

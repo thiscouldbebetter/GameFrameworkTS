@@ -8,19 +8,25 @@ class PlaceStub extends Place
 			PlaceStub.name,
 			PlaceStub.defnBuild().name,
 			Coords.fromXY(400, 300), // size
-			[] // places
+			[] // entities
 		);
 	}
 
 	static defnBuild(): PlaceDefn
 	{
 		var actions = new Array<Action>();
-		var mappings = new Array<ActionToInputsMapping>();
-		var propertyNames = new Array<string>();
+		var actionToInputsMappings = new Array<ActionToInputsMapping>();
+		var entityPropertyNamesToProcess =
+		[
+			// todo
+		];
 
 		return PlaceDefn.from4
 		(
-			PlaceStub.name, actions, mappings, propertyNames
+			PlaceStub.name,
+			actions,
+			actionToInputsMappings,
+			entityPropertyNamesToProcess
 		);
 	}
 }

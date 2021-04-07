@@ -50,6 +50,13 @@ export class Disposition
 		return new Disposition(pos, Orientation.default(), null);
 	}
 
+	static fromPosAndVel(pos: Coords, vel: Coords): Disposition
+	{
+		var returnValue = Disposition.fromPos(pos);
+		returnValue.vel = vel;
+		return returnValue;
+	}
+
 	equals(other: Disposition): boolean
 	{
 		var returnValue = 

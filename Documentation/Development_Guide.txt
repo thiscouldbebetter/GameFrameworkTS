@@ -1,0 +1,187 @@
+This Could Be Better Game Framework Development Guide
+=====================================================
+
+This guide illustrates the creation of a new game from scratch using the This Could Be Better Game Framework.
+
+First, download a copy of the GameFrameworkTS repository by running this command:
+
+	git clone https://github.com/thiscouldbebetter/GameFrameworkTS
+
+Then, within the repository, locate the "Source/Stub" directory.
+
+Copy the contents the Stub directory to any convenient locatation outside of the original GameFrameworkTS repository.
+
+Rename the Stub directory to "DefenderClone".
+
+In the newly renamed DefenderClone directory, open the Source directory.
+
+In the Source directory, rename the file "GameStub.html" to "DefenderClone.html".
+
+Still in the Source directory, rename the file "PlaceStub.ts" to "PlaceLevel.ts".
+
+Still in the Source directory, open the file "Game.ts" in a text editor, locate the call to Universe.create(), change the first argument from "GameStub" to "DefenderClone", and save.
+
+Open the newly renamed file PlaceLevel.ts in a text editor, replace all instances of the text "PlaceStub" with "PlaceLevel", and save.
+
+Still in the Source directory, open the file "WorldGame.ts" in a text editor.  Locate the constructor, and change the first argument to the super() constructor from "GameStub" to "DefenderClone".  Replace all instances of the text "PlaceStub" with "PlaceLevel".  Save the file.
+
+From the Source directory, run the command "tsc" to compile the program.  Wait for the command to complete, and verify that no errors are displayed.
+
+Open the file DefenderClone.html in a web browser that runs JavaScript.  Click the "Start" button on the opening and title screens to dismiss 
+ them, then click the "Skip" button.  Verify that a black screen is displayed.
+
+That blank void is pretty boring.  Let's add some ground.
+
+Within the Source directory, create a new directory named "Model".
+
+Within the newly created Model directory, create a new file named "Planet.ts", containing the text below:
+
+	class Planet extends Entity
+	{
+		constructor(name: string, size: Coords, horizonHeight: number)
+		{
+			super
+			(
+				name,
+				[
+					Drawable.fromVisual
+					(
+						VisualRectangle.fromSizeAndColorFill
+						(
+							Coords.fromXY(size.x, horizonHeight),
+							Color.Instances().GreenDark
+						)
+					),
+
+					Locatable.fromPos
+					(
+						Coords.fromXY(size.x / 2, size.y - horizonHeight / 2)
+					),
+				]
+			);
+		}
+	}
+
+Back in the Source directory, open the file PlaceLevel.ts in a text editor.  Locate the constructor, and within it, the array being passed as the "entities" argument of the super() constructor.  Within that array, add the following text, then save the file.
+
+	new Planet("Planet0", Coords.fromXY(400, 300), 50),
+
+From the Source directory, run the command "tsc" to compile the program.  Wait for the command to complete, and verify that no errors are displayed.
+
+In the web browser, refresh DefenderClone.html and start the game again.  Verify that a green field, representing the ground, appears at the bottom of the screen.
+
+Now there's some ground, but ground by itself is almost as boring as a void.  Let's add a spaceship.
+
+Back in the Model directory, create a new file name "Ship.ts", containing the text below:
+
+	class Ship extends Entity
+	{
+		constructor(name: string, pos: Coords)
+		{
+			super
+			(
+				name,
+				[
+					Drawable.fromVisual
+					(
+						VisualPolygon.fromVerticesAndColorFill
+						(
+							[
+								Coords.fromXY(0, 0),
+								Coords.fromXY(10, 5),
+								Coords.fromXY(0, 10),
+							],
+							Color.Instances().Gray
+						)
+					),
+
+					Locatable.fromPos(pos),
+				]
+			);
+		}
+	}
+
+Back in the Source directory, open the file PlaceLevel.ts in a text editor again.  Within the array being passed as the "entities" argument of the super() constructor, add the following text, then save the file.
+
+	new Ship("Ship0", Coords.fromXY(100, 100))
+
+Compile the program again, then refresh DefenderClone.html and start the game.  Verify that a gray triangle pointing right, representing a spaceship, now appears above the ground.
+
+Now there's a spaceship, which should be exciting.  But it doesn't move.  So it's still pretty boring.  Let's make it move.
+
+Open Ship.ts in a text editor and replace the line "Locatable.fromPos(pos)" with the following text:
+
+	new Locatable
+	(
+		Disposition.fromPosAndVel
+		(
+			Coords.fromXY(100, 100), // pos
+			Coords.fromXY(1, 0) // vel
+		)
+	)
+
+Compile the program again, then refresh DefenderClone.html and start the game.  The same gray, triangular spaceship still appears, but now it... still doesn't move.  What gives?  Well, the problem is that PlaceLevel isn't updating the Locatable property on the Ship entity each tick of the timer.
+
+To fix that, open PlaceLevel.ts in a text editor, locate the static defnBuild() method within it, and replace the line where the variable entityPropertyNamesToProcess is declared as an empty array with the following text:
+
+	var entityPropertyNamesToProcess =
+	[
+		Locatable.name
+	];
+
+Compile the program again, then refresh DefenderClone.html and start the game.  The same gray, triangular spaceship still appears, but now it moves.  It moves all the way to the right side of the screen, then disappears, never to return.
+
+This is somewhat more interesting than when it was stationary.  It would be more interesting if the ship accelerated and decelerated to stay in view.  To make that work, we need to give it the Actor property. 
+
+In PlaceLevel.ts, add a new line to the array of strings being assigned to the entityPropertyNamesToProcess variable:
+
+	var entityPropertyNamesToProcess =
+	[
+		Locatable.name,
+		Actor.name
+	];
+
+Open WorldGame.ts and replace the .defnBuild() method with the following text:
+
+	static defnBuild(): WorldDefn
+	{
+		var activityDefnShuttle = new ActivityDefn
+		(
+			"DoSpaceshipStuff",
+			// perform
+			(universe: Universe, world: World, place: Place, entity: Entity) => void
+			{
+				var placeWidthHalf = place.size.x / 2;
+
+				var ship = entity as Ship;
+				var shipLoc = ship.locatable().loc;
+				var shipPos = shipLoc.pos;
+				var shipAccel = shipLoc.accel;
+				var accelerationPerTick = 0.1;
+				if (shipPos.x > placeWidthHalf)
+				{
+					shipAccel.x = 0 - accelerationPerTick
+				}
+				else
+				{
+					shipAccel.x = accelerationPerTick;
+				}
+			}
+		);
+
+		return new WorldDefn
+		([
+			[ PlaceLevel.defnBuild() ],
+			[ activityDefnShuttle ]
+		]);
+	}
+
+In Ship.ts, add a new entry to the array of entity properties, right below the Locatable instance:
+
+	Actor.fromActivityDefnName("DoSpaceshipStuff"),
+
+Compile the program again, then refresh DefenderClone.html and start the game.  The spaceship now accelerates toward the right side of the screen if it's on the left half of the screen, and accelerates toward the left side of the screen if it's on the right side of the screen.
+
+However, the little triangle always faces to the right.  Really, it should point left if it's accelerating to the left, because that's how spaceships work.
+
+[ To be continued... ]
