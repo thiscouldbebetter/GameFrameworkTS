@@ -112,8 +112,9 @@ class PlaceBuilderDemo_Movers
 		}
 
 		var carnivoreActivityPerform =
-			(universe: Universe, world: World, place: Place, entityActor: Entity, activity: Activity) =>
+			(universe: Universe, world: World, place: Place, entityActor: Entity) =>
 		{
+			var activity = entityActor.actor().activity;
 			var targetPos = activity.target;
 			if (targetPos == null)
 			{
@@ -347,8 +348,9 @@ class PlaceBuilderDemo_Movers
 		);
 
 		var generatorActivityPerform =
-			(universe: Universe, world: World, place: Place, actor: Entity, activity: Activity) => 
+			(universe: Universe, world: World, place: Place, actor: Entity) =>
 		{
+			var activity = actor.actor().activity;
 			var enemyCount = place.entitiesByPropertyName(Enemy.name).filter
 			(
 				x => x.name.startsWith(enemyEntityPrototype.name)
@@ -770,8 +772,9 @@ class PlaceBuilderDemo_Movers
 		);
 
 		var friendlyActivityPerform =
-			(universe: Universe, world: World, place: Place, entityActor: Entity, activity: Activity) =>
+			(universe: Universe, world: World, place: Place, entityActor: Entity) =>
 		{
+			var activity = entityActor.actor().activity;
 			var targetPos = activity.target;
 			if (targetPos == null)
 			{
@@ -882,7 +885,7 @@ class PlaceBuilderDemo_Movers
 			null
 		);
 
-		var grazerVisualBodyJuvenile = 
+		var grazerVisualBodyJuvenile =
 			new VisualEllipse
 			(
 				grazerDimension * .75, // semimajorAxis
@@ -896,7 +899,7 @@ class PlaceBuilderDemo_Movers
 			grazerVisualBodyJuvenile, visualEyesDirectional
 		]);
 
-		var grazerVisualBodyAdult = 
+		var grazerVisualBodyAdult =
 			new VisualEllipse
 			(
 				grazerDimension, // semimajorAxis
@@ -910,7 +913,7 @@ class PlaceBuilderDemo_Movers
 			grazerVisualBodyAdult, visualEyesDirectional
 		]);
 
-		var grazerVisualBodyElder = 
+		var grazerVisualBodyElder =
 			new VisualEllipse
 			(
 				grazerDimension, // semimajorAxis
@@ -924,7 +927,7 @@ class PlaceBuilderDemo_Movers
 			grazerVisualBodyElder, visualEyesDirectional
 		]);
 
-		var grazerVisualDead = 
+		var grazerVisualDead =
 			new VisualEllipse
 			(
 				grazerDimension, // semimajorAxis
@@ -969,8 +972,9 @@ class PlaceBuilderDemo_Movers
 		}
 
 		var grazerActivityPerform =
-			(universe: Universe, world: World, place: Place, entityActor: Entity, activity: Activity) =>
+			(universe: Universe, world: World, place: Place, entityActor: Entity) =>
 		{
+			var activity = entityActor.actor().activity;
 			var targetPos = activity.target;
 			if (targetPos == null)
 			{
@@ -1046,7 +1050,7 @@ class PlaceBuilderDemo_Movers
 				new Phase
 				(
 					"Juvenile",
-					0, 
+					0,
 					(u: Universe, w: World, p: Place, e: Entity) => {}
 				),
 				new Phase
@@ -1457,7 +1461,7 @@ class PlaceBuilderDemo_Movers
 		var controllable = this.entityDefnBuildPlayer_Controllable();
 
 		var playerActivityPerform =
-			(universe: Universe, world: World, place: Place, entityPlayer: Entity, activity: Activity) =>
+			(universe: Universe, world: World, place: Place, entityPlayer: Entity) =>
 		{
 			var inputHelper = universe.inputHelper;
 			if (inputHelper.isMouseClicked(null))
@@ -1528,8 +1532,10 @@ class PlaceBuilderDemo_Movers
 		);
 
 		var playerActivityWaitPerform =
-			(universe: Universe, world: World, place: Place, entityPlayer: Entity, activity: Activity) =>
+			(universe: Universe, world: World, place: Place, entityPlayer: Entity) =>
 		{
+			var activity = entityPlayer.actor().activity;
+
 			var drawable = entityPlayer.drawable();
 
 			var ticksToWait = activity.target as number;
@@ -1620,7 +1626,7 @@ class PlaceBuilderDemo_Movers
 	{
 		var toControlMenu = Playable.toControlMenu;
 		var toControlWorldOverlay = Playable.toControlWorldOverlay;
-		var toControl = 
+		var toControl =
 			(universe: Universe, size: Coords, entity: Entity, venuePrev: Venue, isMenu: boolean) =>
 			{
 				var returnValue;

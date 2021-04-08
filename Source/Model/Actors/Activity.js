@@ -22,7 +22,8 @@ var ThisCouldBeBetter;
             }
             perform(u, w, p, e) {
                 if (this.defnName != null) {
-                    this.defn(w).perform(u, w, p, e);
+                    var defn = this.defn(w);
+                    defn.perform(u, w, p, e);
                 }
             }
         }

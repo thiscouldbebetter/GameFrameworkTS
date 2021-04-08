@@ -2,13 +2,24 @@
 class PlaceStub extends Place {
     constructor() {
         super(PlaceStub.name, PlaceStub.defnBuild().name, Coords.fromXY(400, 300), // size
-        [] // places
-        );
+        // entities
+        [
+            new Entity("UserInputListener", [
+                Actor.fromActivityDefnName("HandleUserInput")
+            ])
+        ]);
     }
     static defnBuild() {
-        var actions = new Array();
-        var mappings = new Array();
-        var propertyNames = new Array();
-        return PlaceDefn.from4(PlaceStub.name, actions, mappings, propertyNames);
+        var actionShowMenu = Action.Instances().ShowMenu;
+        var actions = [
+            actionShowMenu
+        ];
+        var actionToInputsMappings = [
+            ActionToInputsMapping.fromActionAndInputName(actionShowMenu.name, Input.Names().Escape)
+        ];
+        var entityPropertyNamesToProcess = [
+        // todo
+        ];
+        return PlaceDefn.from4(PlaceStub.name, actions, actionToInputsMappings, entityPropertyNamesToProcess);
     }
 }

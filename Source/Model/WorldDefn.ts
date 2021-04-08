@@ -28,29 +28,39 @@ export class WorldDefn
 
 	// Convenience methods.
 
-	actionDefnByName(defnName: string)
+	actionByName(defnName: string)
 	{
-		return this.defnsByNameByTypeName.get(Action.name).get(defnName);
+		var defnsByName = this.defnsByNameByTypeName.get(Action.name)
+		var returnValue = defnsByName.get(defnName);
+		return returnValue;
 	}
 
 	activityDefnByName(defnName: string)
 	{
-		return this.defnsByNameByTypeName.get(ActivityDefn.name).get(defnName);
+		var defnsByName = this.defnsByNameByTypeName.get(ActivityDefn.name)
+		var returnValue = defnsByName.get(defnName);
+		return returnValue;
 	}
 
 	entityDefnByName(defnName: string)
 	{
-		return this.defnsByNameByTypeName.get(Entity.name).get(defnName);
+		var defnsByName = this.defnsByNameByTypeName.get(Entity.name)
+		var returnValue = defnsByName.get(defnName);
+		return returnValue;
 	}
 
 	itemDefnByName(defnName: string)
 	{
-		return this.defnsByNameByTypeName.get(ItemDefn.name).get(defnName);
+		var defnsByName = this.defnsByNameByTypeName.get(ItemDefn.name)
+		var returnValue = defnsByName.get(defnName);
+		return returnValue;
 	}
 
 	placeDefnByName(defnName: string)
 	{
-		return this.defnsByNameByTypeName.get(PlaceDefn.name).get(defnName);
+		var defnsByName = this.defnsByNameByTypeName.get(PlaceDefn.name)
+		var returnValue = defnsByName.get(defnName);
+		return returnValue;
 	}
 
 }

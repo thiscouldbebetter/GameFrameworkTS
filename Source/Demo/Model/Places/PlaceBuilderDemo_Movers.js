@@ -50,7 +50,8 @@ class PlaceBuilderDemo_Movers {
         if (this.parent.visualsHaveText) {
             carnivoreVisual.children.push(new VisualOffset(VisualText.fromTextAndColor("Carnivore", carnivoreColor), new Coords(0, 0 - carnivoreDimension * 2, 0)));
         }
-        var carnivoreActivityPerform = (universe, world, place, entityActor, activity) => {
+        var carnivoreActivityPerform = (universe, world, place, entityActor) => {
+            var activity = entityActor.actor().activity;
             var targetPos = activity.target;
             if (targetPos == null) {
                 var moversInPlace = place.movables();
@@ -172,7 +173,8 @@ class PlaceBuilderDemo_Movers {
             Movable.create(),
             enemyPerceptor
         ]);
-        var generatorActivityPerform = (universe, world, place, actor, activity) => {
+        var generatorActivityPerform = (universe, world, place, actor) => {
+            var activity = actor.actor().activity;
             var enemyCount = place.entitiesByPropertyName(Enemy.name).filter(x => x.name.startsWith(enemyEntityPrototype.name)).length;
             var enemyCountMax = 1;
             if (enemyCount < enemyCountMax) {
@@ -366,7 +368,8 @@ class PlaceBuilderDemo_Movers {
             friendlyVisualGroup.children.push(new VisualOffset(VisualText.fromTextAndColor("Talker", friendlyColor), new Coords(0, 0 - friendlyDimension * 2, 0)));
         }
         var friendlyVisual = new VisualAnchor(friendlyVisualGroup, null, Orientation.Instances().ForwardXDownZ);
-        var friendlyActivityPerform = (universe, world, place, entityActor, activity) => {
+        var friendlyActivityPerform = (universe, world, place, entityActor) => {
+            var activity = entityActor.actor().activity;
             var targetPos = activity.target;
             if (targetPos == null) {
                 var randomizer = universe.randomizer;
@@ -473,7 +476,8 @@ class PlaceBuilderDemo_Movers {
         if (this.parent.visualsHaveText) {
             grazerVisual.children.push(new VisualOffset(VisualText.fromTextAndColor("Grazer", grazerColor), new Coords(0, 0 - grazerDimension * 2, 0)));
         }
-        var grazerActivityPerform = (universe, world, place, entityActor, activity) => {
+        var grazerActivityPerform = (universe, world, place, entityActor) => {
+            var activity = entityActor.actor().activity;
             var targetPos = activity.target;
             if (targetPos == null) {
                 var itemsInPlace = place.items();
@@ -726,7 +730,7 @@ class PlaceBuilderDemo_Movers {
             ])
         ]);
         var controllable = this.entityDefnBuildPlayer_Controllable();
-        var playerActivityPerform = (universe, world, place, entityPlayer, activity) => {
+        var playerActivityPerform = (universe, world, place, entityPlayer) => {
             var inputHelper = universe.inputHelper;
             if (inputHelper.isMouseClicked(null)) {
                 var selector = entityPlayer.selector();
@@ -758,7 +762,8 @@ class PlaceBuilderDemo_Movers {
         this.parent.activityDefns.push(playerActivityDefn);
         var playerActivity = new Activity(playerActivityDefn.name, null);
         playerActivity = new Activity(ActivityDefn.Instances().Simultaneous.name, [playerActivity]);
-        var playerActivityWaitPerform = (universe, world, place, entityPlayer, activity) => {
+        var playerActivityWaitPerform = (universe, world, place, entityPlayer) => {
+            var activity = entityPlayer.actor().activity;
             var drawable = entityPlayer.drawable();
             var ticksToWait = activity.target;
             if (ticksToWait == null) {

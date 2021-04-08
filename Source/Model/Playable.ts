@@ -441,7 +441,7 @@ export class Playable extends EntityProperty
 			childControls.push(button);
 
 			buttonPos.x += buttonSize.x + buttonMargin;
-		} 
+		}
 
 		var controlOverlayContainer = new ControlContainer
 		(

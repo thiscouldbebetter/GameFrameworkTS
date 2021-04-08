@@ -63,7 +63,7 @@ export class Skill
 			new Skill
 			(
 				"RunningFaster", 8, [ "Running" ],
-				"Like running, but faster." 
+				"Like running, but faster."
 			),
 
 			new Skill

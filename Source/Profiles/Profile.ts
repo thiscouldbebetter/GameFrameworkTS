@@ -445,7 +445,7 @@ export class Profile
 					), // items
 					DataBinding.fromGet
 					(
-						(c: SaveState) => 
+						(c: SaveState) =>
 						{
 							var timeSaved = c.timeSaved;
 							return (timeSaved == null ? "-" : timeSaved.toStringYYYY_MM_DD_HH_MM_SS() )
@@ -608,7 +608,7 @@ export class Profile
 							(
 								saveState == null
 								? ""
-								: 
+								:
 								(
 									saveState.timeSaved == null
 									? ""
@@ -743,7 +743,7 @@ export class Profile
 						}
 						profileNames.push(profileName);
 						storageHelper.save("ProfileNames", profileNames);
-						storageHelper.save(profileName, profile); 
+						storageHelper.save(profileName, profile);
 
 						universe.profile = profile;
 						var venueNext: Venue = Profile.toControlSaveStateLoad

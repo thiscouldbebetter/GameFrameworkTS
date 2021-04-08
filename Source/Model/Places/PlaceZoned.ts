@@ -78,7 +78,7 @@ export class PlaceZoned extends Place
 				{
 					zone.entities.forEach
 					(
-						entity => 
+						entity =>
 						{
 							entity.locatable().loc.pos.subtract(zone.bounds.min());
 							this.entitiesToRemove.push(entity);
@@ -93,7 +93,7 @@ export class PlaceZoned extends Place
 				{
 					zone.entities.forEach
 					(
-						entity => 
+						entity =>
 						{
 							entity.locatable().loc.pos.add(zone.bounds.min());
 							this.entityToSpawnAdd(entity);

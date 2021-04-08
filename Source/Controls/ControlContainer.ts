@@ -404,7 +404,7 @@ export class ControlContainer extends ControlBase
 
 	draw
 	(
-		universe: Universe, display: Display, drawLoc: Disposition, 
+		universe: Universe, display: Display, drawLoc: Disposition,
 		style: ControlStyle
 	): void
 	{

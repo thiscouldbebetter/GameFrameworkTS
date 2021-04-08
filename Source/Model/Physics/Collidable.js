@@ -137,7 +137,7 @@ var ThisCouldBeBetter;
                 return doEntitiesCollide;
             }
             isEntityStationary(entity) {
-                // This way would be better, but it causes strange glitches. 
+                // This way would be better, but it causes strange glitches.
                 // In the demo game, when you walk into view of three
                 // of the four corners of the 'Battlefield' rooms,
                 // the walls shift inward suddenly!

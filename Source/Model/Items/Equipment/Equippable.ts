@@ -54,7 +54,7 @@ export class Equippable extends EntityProperty
 	overwriteWith(other: Equippable)
 	{
 		return this;
-	} 
+	}
 }
 
 }

@@ -39,6 +39,7 @@ class ActivityDefn_Instances
 	_AllByName: Map<string, ActivityDefn>;
 
 	DoNothing: ActivityDefn;
+	HandleUserInput: ActivityDefn;
 	Simultaneous: ActivityDefn;
 
 	constructor()
@@ -49,6 +50,31 @@ class ActivityDefn_Instances
 			// perform
 			(u: Universe, w: World, p: Place, e: Entity) =>
 			{}
+		);
+
+		this.HandleUserInput = new ActivityDefn
+		(
+			"HandleUserInput",
+			(universe: Universe, world: World, place: Place, entity: Entity) =>
+			{
+				var inputHelper = universe.inputHelper;
+
+				var placeDefn = place.defn(world);
+				var actionsByName = placeDefn.actionsByName;
+				var actionToInputsMappingsByInputName =
+					placeDefn.actionToInputsMappingsByInputName;
+
+				var actionsToPerform = inputHelper.actionsFromInput
+				(
+					actionsByName, actionToInputsMappingsByInputName
+				);
+
+				for (var i = 0; i < actionsToPerform.length; i++)
+				{
+					var action = actionsToPerform[i];
+					action.perform(universe, world, place, entity);
+				}
+			}
 		);
 
 		this.Simultaneous = new ActivityDefn
@@ -72,6 +98,7 @@ class ActivityDefn_Instances
 		this._All =
 		[
 			this.DoNothing,
+			this.HandleUserInput,
 			this.Simultaneous
 		];
 

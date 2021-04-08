@@ -116,7 +116,7 @@ export class VisualBar implements Visual
 			(
 				text,
 				this.size.y, // fontHeightInPixels
-				pos, 
+				pos,
 				colorForBorder,
 				Color.byName("Black"), // colorOutline,
 				false, // areColorsReversed

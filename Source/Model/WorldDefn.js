@@ -19,20 +19,30 @@ var ThisCouldBeBetter;
                 }
             }
             // Convenience methods.
-            actionDefnByName(defnName) {
-                return this.defnsByNameByTypeName.get(GameFramework.Action.name).get(defnName);
+            actionByName(defnName) {
+                var defnsByName = this.defnsByNameByTypeName.get(GameFramework.Action.name);
+                var returnValue = defnsByName.get(defnName);
+                return returnValue;
             }
             activityDefnByName(defnName) {
-                return this.defnsByNameByTypeName.get(GameFramework.ActivityDefn.name).get(defnName);
+                var defnsByName = this.defnsByNameByTypeName.get(GameFramework.ActivityDefn.name);
+                var returnValue = defnsByName.get(defnName);
+                return returnValue;
             }
             entityDefnByName(defnName) {
-                return this.defnsByNameByTypeName.get(GameFramework.Entity.name).get(defnName);
+                var defnsByName = this.defnsByNameByTypeName.get(GameFramework.Entity.name);
+                var returnValue = defnsByName.get(defnName);
+                return returnValue;
             }
             itemDefnByName(defnName) {
-                return this.defnsByNameByTypeName.get(GameFramework.ItemDefn.name).get(defnName);
+                var defnsByName = this.defnsByNameByTypeName.get(GameFramework.ItemDefn.name);
+                var returnValue = defnsByName.get(defnName);
+                return returnValue;
             }
             placeDefnByName(defnName) {
-                return this.defnsByNameByTypeName.get(GameFramework.PlaceDefn.name).get(defnName);
+                var defnsByName = this.defnsByNameByTypeName.get(GameFramework.PlaceDefn.name);
+                var returnValue = defnsByName.get(defnName);
+                return returnValue;
             }
         }
         GameFramework.WorldDefn = WorldDefn;

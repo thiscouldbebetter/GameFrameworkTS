@@ -235,7 +235,7 @@ export class Collidable extends EntityProperty
 
 		var doEntitiesCollide = false;
 
-		var canCollidablesCollideYet = 
+		var canCollidablesCollideYet =
 			(
 				collidable0.ticksUntilCanCollide <= 0
 				&& collidable1.ticksUntilCanCollide <= 0
@@ -291,7 +291,7 @@ export class Collidable extends EntityProperty
 
 	isEntityStationary(entity: Entity): boolean
 	{
-		// This way would be better, but it causes strange glitches. 
+		// This way would be better, but it causes strange glitches.
 		// In the demo game, when you walk into view of three
 		// of the four corners of the 'Battlefield' rooms,
 		// the walls shift inward suddenly!

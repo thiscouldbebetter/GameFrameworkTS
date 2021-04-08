@@ -589,7 +589,7 @@ export class ItemHolder extends EntityProperty
 				DataBinding.fromContextAndGet
 				(
 					this,
-					(c: ItemHolder) => 
+					(c: ItemHolder) =>
 						c.itemEntitySelected != null
 						&&
 						(
@@ -694,7 +694,7 @@ export class ItemHolder extends EntityProperty
 						return (itemEntity != null && itemEntity.item().isUsable(world));
 					}
 				), // isEnabled
-				(universe: Universe) => 
+				(universe: Universe) =>
 				{
 					use();
 				}

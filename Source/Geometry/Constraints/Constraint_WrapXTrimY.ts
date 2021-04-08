@@ -3,20 +3,15 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Constraint_WrapXTrimY implements Constraint
 {
-	target: Coords;
-
-	constructor(target: Coords)
+	constrain(universe: Universe, world: World, place: Place, entity: Entity): void
 	{
-		this.target = target;
-	}
+		var min = Coords.Instances().Zeroes;
+		var max = place.size;
 
-	constrain(universe: Universe, world: World, place: Place, entity: Entity)
-	{
 		var entityLoc = entity.locatable().loc;
 		var entityPos = entityLoc.pos;
-		var max = this.target;
 
-		while (entityPos.x < 0)
+		while (entityPos.x < min.x)
 		{
 			entityPos.x += max.x;
 		}
@@ -25,9 +20,9 @@ export class Constraint_WrapXTrimY implements Constraint
 			entityPos.x -= max.x;
 		}
 
-		if (entityPos.y < 0)
+		if (entityPos.y < min.y)
 		{
-			entityPos.y = 0;
+			entityPos.y = min.y;
 		}
 		else if (entityPos.y > max.y)
 		{

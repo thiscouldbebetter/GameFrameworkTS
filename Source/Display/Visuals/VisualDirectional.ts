@@ -24,7 +24,18 @@ export class VisualDirectional implements Visual
 		this.numberOfDirections = this.visualsForDirections.length;
 	}
 
-	headingInTurnsGetForEntity(entity: Entity)
+	static fromVisuals
+	(
+		visualForNoDirection: Visual, visualsForDirections: Visual[],
+	): VisualDirectional
+	{
+		return new VisualDirectional
+		(
+			visualForNoDirection, visualsForDirections, null
+		);
+	}
+
+	headingInTurnsGetForEntity(entity: Entity): number
 	{
 		var returnValue: number = null;
 
@@ -43,7 +54,11 @@ export class VisualDirectional implements Visual
 
 	// Visual.
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	draw
+	(
+		universe: Universe, world: World, place: Place, entity: Entity,
+		display: Display
+	): void
 	{
 		var headingInTurns = this.headingInTurnsGetForEntity(entity);
 		var visualForHeading;

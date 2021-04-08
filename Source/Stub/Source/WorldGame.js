@@ -4,7 +4,14 @@ class WorldGame extends World {
         super("GameStub", DateTime.now(), WorldGame.defnBuild(), [new PlaceStub()]);
     }
     static defnBuild() {
-        return new WorldDefn([[PlaceStub.defnBuild()]]);
+        return new WorldDefn([
+            [
+                ActivityDefn.Instances().HandleUserInput
+            ],
+            [
+                PlaceStub.defnBuild()
+            ]
+        ]);
     }
     toControl() {
         return new ControlNone();

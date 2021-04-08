@@ -138,7 +138,7 @@ export class ControlTextBox extends ControlBase
 
 			if (this.numberOfCharsMax == null || text.length < this.numberOfCharsMax)
 			{
-				var textEdited = 
+				var textEdited =
 					text.substr(0, this.cursorPos)
 						+ actionNameToHandle
 						+ text.substr(this.cursorPos);

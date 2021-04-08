@@ -14,7 +14,15 @@ class WorldGame extends World
 
 	static defnBuild(): WorldDefn
 	{
-		return new WorldDefn( [ [ PlaceStub.defnBuild() ] ] );
+		return new WorldDefn
+		([
+			[
+				ActivityDefn.Instances().HandleUserInput
+			],
+			[
+				PlaceStub.defnBuild()
+			]
+		]);
 	}
 
 	toControl(): ControlBase

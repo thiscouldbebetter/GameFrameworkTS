@@ -199,7 +199,7 @@ export class SkillLearner extends EntityProperty
 		var listSize = Coords.fromXY
 		(
 			(size.x - margin * 3) / 2, 150
-		); 
+		);
 
 		var defns = universe.world.defn;
 		var skillLearner = this;
@@ -276,7 +276,7 @@ export class SkillLearner extends EntityProperty
 					), // bindingForItemSelected
 					null, // bindingForItemValue
 					DataBinding.fromTrue(), // isEnabled
-					(u: Universe) => 
+					(u: Universe) =>
 					{
 						skillLearner.skillBeingLearnedName =
 							skillLearner.skillSelectedName;

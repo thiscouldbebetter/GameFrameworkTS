@@ -136,7 +136,7 @@ export class ControlTextarea extends ControlBase
 
 			if (this.charCountMax == null || text.length < this.charCountMax)
 			{
-				var textEdited = 
+				var textEdited =
 					text.substr(0, this.cursorPos)
 						+ actionNameToHandle
 						+ text.substr(this.cursorPos)

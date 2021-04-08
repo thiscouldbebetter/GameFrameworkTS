@@ -34,7 +34,7 @@ export class EquipmentUser extends EntityProperty
 
 		var socketFound = sockets.filter
 		(
-			(socket: EquipmentSocket) => 
+			(socket: EquipmentSocket) =>
 			{
 				var socketDefn = socket.defn(socketDefnGroup);
 				var isItemAllowedInSocket = socketDefn.categoriesAllowedNames.some
@@ -300,7 +300,7 @@ export class EquipmentUser extends EntityProperty
 
 		var listHeight = 100;
 
-		var equipItemSelectedToSocketDefault = () => 
+		var equipItemSelectedToSocketDefault = () =>
 		{
 			var itemEntityToEquip = equipmentUser.itemEntitySelected;
 
@@ -334,7 +334,7 @@ export class EquipmentUser extends EntityProperty
 			null
 		);
 
-		var equipItemSelectedToSocketSelected = () => 
+		var equipItemSelectedToSocketSelected = () =>
 		{
 			var itemEntityToEquip = equipmentUser.itemEntitySelected;
 
@@ -358,7 +358,7 @@ export class EquipmentUser extends EntityProperty
 			equipmentUser.statusMessage = message;
 		};
 
-		var equipItemSelectedInQuickSlot = (quickSlotNumber: number) => 
+		var equipItemSelectedInQuickSlot = (quickSlotNumber: number) =>
 		{
 			equipmentUser.equipItemEntityInSocketWithName
 			(
@@ -454,7 +454,7 @@ export class EquipmentUser extends EntityProperty
 
 				buttonEquip,
 
-				buttonUnequip, 
+				buttonUnequip,
 
 				new ControlLabel
 				(

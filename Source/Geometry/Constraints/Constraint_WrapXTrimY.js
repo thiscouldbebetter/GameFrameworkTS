@@ -4,21 +4,19 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Constraint_WrapXTrimY {
-            constructor(target) {
-                this.target = target;
-            }
             constrain(universe, world, place, entity) {
+                var min = GameFramework.Coords.Instances().Zeroes;
+                var max = place.size;
                 var entityLoc = entity.locatable().loc;
                 var entityPos = entityLoc.pos;
-                var max = this.target;
-                while (entityPos.x < 0) {
+                while (entityPos.x < min.x) {
                     entityPos.x += max.x;
                 }
                 while (entityPos.x >= max.x) {
                     entityPos.x -= max.x;
                 }
-                if (entityPos.y < 0) {
-                    entityPos.y = 0;
+                if (entityPos.y < min.y) {
+                    entityPos.y = min.y;
                 }
                 else if (entityPos.y > max.y) {
                     entityPos.y = max.y;

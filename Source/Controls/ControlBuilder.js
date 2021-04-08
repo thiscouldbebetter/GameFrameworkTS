@@ -221,7 +221,7 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             gameAndSettings1(universe) {
-                return this.gameAndSettings(universe, null, null, true);
+                return this.gameAndSettings(universe, null, universe.venueCurrent, true);
             }
             gameAndSettings(universe, size, venuePrev, includeResumeButton) {
                 var controlBuilder = this;

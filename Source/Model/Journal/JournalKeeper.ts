@@ -274,7 +274,7 @@ export class JournalKeeper extends EntityProperty
 				DataBinding.fromContextAndGet
 				(
 					this,
-					(c: JournalKeeper) => 
+					(c: JournalKeeper) =>
 						(c.journalEntrySelected != null && c.isJournalEntrySelectedEditable)
 				) // isEnabled
 			),
@@ -305,7 +305,7 @@ export class JournalKeeper extends EntityProperty
 				DataBinding.fromContextAndGet
 				(
 					this,
-					(c: JournalKeeper) => 
+					(c: JournalKeeper) =>
 						(c.journalEntrySelected != null && c.isJournalEntrySelectedEditable)
 				) // isEnabled
 			),

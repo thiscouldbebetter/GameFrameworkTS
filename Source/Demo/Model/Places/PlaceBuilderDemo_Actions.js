@@ -204,7 +204,8 @@ class PlaceBuilderDemo_Actions {
     activityDefnItemPickUpBuild() {
         var activityDefnItemPickUp = new ActivityDefn("ItemPickUp", 
         // perform
-        (universe, world, place, entityPickingUp, activity) => {
+        (universe, world, place, entityPickingUp) => {
+            var activity = entityPickingUp.actor().activity;
             var itemEntityGettingPickedUp = activity.target;
             var entityPickingUpLocatable = entityPickingUp.locatable();
             var itemLocatable = itemEntityGettingPickedUp.locatable();

@@ -302,9 +302,11 @@ class PlaceBuilderDemo_Actions
 		var inactivateFalse = false;
 		var inactivateTrue = true;
 
+		var actions = Action.Instances();
+
 		var actionToInputsMappings =
 		[
-			new ActionToInputsMapping("ShowMenu", [ inputNames.Escape, inputNames.Tab ], inactivateFalse),
+			new ActionToInputsMapping(actions.ShowMenuPlayer.name, [ inputNames.Escape, inputNames.Tab ], inactivateFalse),
 
 			new ActionToInputsMapping("MoveDown", 	[ inputNames.ArrowDown, inputNames.GamepadMoveDown + "0" ], inactivateFalse),
 			new ActionToInputsMapping("MoveLeft", 	[ inputNames.ArrowLeft, inputNames.GamepadMoveLeft + "0" ], inactivateFalse),
@@ -351,8 +353,9 @@ class PlaceBuilderDemo_Actions
 		(
 			"ItemPickUp",
 			// perform
-			(universe: Universe, world: World, place: Place, entityPickingUp: Entity, activity: Activity) =>
+			(universe: Universe, world: World, place: Place, entityPickingUp: Entity) =>
 			{
+				var activity = entityPickingUp.actor().activity;
 				var itemEntityGettingPickedUp = activity.target as Entity;
 
 				var entityPickingUpLocatable = entityPickingUp.locatable();

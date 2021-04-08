@@ -8,7 +8,7 @@ export class ConversationRun
 	quit: () => void;
 	entityPlayer: Entity;
 	entityTalker: Entity;
- 
+
 	scopeCurrent: ConversationScope;
 	talkNodesForTranscript: TalkNode[];
 	variablesByName: Map<string, any>;
@@ -196,7 +196,7 @@ export class ConversationRun
 					DataBinding.fromContextAndGet
 					(
 						conversationRun,
-						(c: ConversationRun) => 
+						(c: ConversationRun) =>
 							c.scopeCurrent.talkNodesForOptionsActive()
 					),
 					// bindingForItemText
@@ -212,7 +212,7 @@ export class ConversationRun
 						conversationRun,
 						(c: ConversationRun) =>
 							c.scopeCurrent.talkNodeForOptionSelected,
-						(c: ConversationRun, v: TalkNode) => 
+						(c: ConversationRun, v: TalkNode) =>
 							c.scopeCurrent.talkNodeForOptionSelected = v
 					), // bindingForItemSelected
 					new DataBinding(null, null, null), // bindingForItemValue

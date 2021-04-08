@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export interface Constraint 
+export interface Constraint
 {
 	constrain: (universe: Universe, world: World, place: Place, entity: Entity) => void;
 }

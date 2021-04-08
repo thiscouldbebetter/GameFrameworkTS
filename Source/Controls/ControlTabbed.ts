@@ -68,7 +68,7 @@ export class ControlTabbed extends ControlBase
 					buttonsForChildren.forEach(x => x.isHighlighted = false);
 					this.childSelectedIndex = buttonsForChildren.indexOf(b); // hack
 					b.isHighlighted = true;
-				} 
+				}
 			);
 			button.context = button; // hack
 			buttonsForChildren.push(button);

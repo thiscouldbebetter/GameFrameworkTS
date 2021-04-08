@@ -331,7 +331,7 @@ class PlaceBuilderDemo // Main.
 					(
 						zoneSize
 					).floor().toStringXY()
-				) 
+				)
 		);
 
 		var entityCamera = this.build_Camera(this.cameraViewSize, place.size);
@@ -686,7 +686,7 @@ class PlaceBuilderDemo // Main.
 		var terrainNameToVisuals = (terrainName: string) =>
 		{
 			var imageName = "Terrain-" + terrainName;
-			var terrainVisualImageCombined = 
+			var terrainVisualImageCombined =
 				new VisualImageFromLibrary(imageName);
 			var imageSizeInPixels =
 				terrainVisualImageCombined.image(universe).sizeInPixels;

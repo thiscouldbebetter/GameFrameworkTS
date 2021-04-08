@@ -370,7 +370,7 @@ export class VisualBuilder
 				}
 				else
 				{
-					var headingCount = 4; 
+					var headingCount = 4;
 					var headingIndex =
 						Math.floor(entityForwardInTurns * headingCount); // todo
 					var entitySpeed = entityLoc.vel.magnitude();
@@ -551,7 +551,7 @@ export class VisualBuilder
 			{
 				var itemEntityWielded =
 					e.equipmentUser().itemEntityInSocketWithName("Wielding");
-				var returnValue = 
+				var returnValue =
 					(itemEntityWielded == null ? "Hidden" : "Visible");
 				return [ returnValue ];
 			}

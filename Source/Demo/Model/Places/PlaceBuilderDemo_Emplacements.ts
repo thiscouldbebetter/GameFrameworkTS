@@ -388,7 +388,7 @@ class PlaceBuilderDemo_Emplacements
 				new Portal(null, null, Coords.create()), // Destination must be set ouside this method.
 				new Usable
 				(
-					(u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) => 
+					(u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) =>
 					{
 						eUsed.portal().use(u, w, p, eUsing, eUsed);
 						return null;

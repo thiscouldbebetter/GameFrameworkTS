@@ -19,7 +19,7 @@ var ThisCouldBeBetter;
                 this.world.initialize(universe);
                 var soundHelper = universe.soundHelper;
                 soundHelper.soundWithNamePlayAsMusic(universe, "Music_Music");
-                this.venueControls = new GameFramework.VenueControls(this.world.toControl(universe), true // ignoreKeyboardAndGamepadInputs 
+                this.venueControls = new GameFramework.VenueControls(this.world.toControl(universe), true // ignoreKeyboardAndGamepadInputs
                 );
             }
             updateForTimerTick(universe) {

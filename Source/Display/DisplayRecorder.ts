@@ -7,7 +7,7 @@ export class DisplayRecorder
 	ticksPerFrame: number;
 	bufferSizeInFrames: number;
 	isCircular: boolean;
- 
+
 	framesRecordedAsArrayBuffers: ArrayBuffer[];
 	isRecording: boolean;
 
@@ -94,7 +94,7 @@ export class DisplayRecorder
 			framesRecordedAsTarFile.entries.push(displayAsTarFileEntry);
 		}
 
-		var script = 
+		var script =
 			"#!/bin/sh"
 			+ "\n\n"
 			+ "# The PNG files in this TAR file, once extracted, "

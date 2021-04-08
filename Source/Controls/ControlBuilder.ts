@@ -503,7 +503,7 @@ export class ControlBuilder
 
 	gameAndSettings1(universe: Universe)
 	{
-		return this.gameAndSettings(universe, null, null, true);
+		return this.gameAndSettings(universe, null, universe.venueCurrent, true);
 	}
 
 	gameAndSettings
@@ -708,7 +708,7 @@ export class ControlBuilder
 					DataBinding.fromContextAndGet
 					(
 						placeDefn,
-						(c: PlaceDefn) => 
+						(c: PlaceDefn) =>
 						{
 							var i = c.actionToInputsMappingSelected;
 							return (i == null ? "-" : i.inputNames.join(", "));
@@ -864,7 +864,7 @@ export class ControlBuilder
 					DataBinding.fromContextAndGet
 					(
 						placeDefn,
-						(c: PlaceDefn) => 
+						(c: PlaceDefn) =>
 						{
 							var mappings = c.actionToInputsMappingsEdited;
 							var doAnyActionsLackInputs = mappings.some
@@ -1705,7 +1705,7 @@ export class ControlBuilder
 					{
 						var controlConfirm = universe.controlBuilder.confirm
 						(
-							universe, size, "Abandon the current game?", 
+							universe, size, "Abandon the current game?",
 							confirm, cancel
 						);
 						var venueConfirm = controlConfirm.toVenue();
@@ -1729,7 +1729,7 @@ export class ControlBuilder
 					{
 						var venueFileUpload = new VenueFileUpload(null, null);
 
-						var controlMessageReadyToLoad = 
+						var controlMessageReadyToLoad =
 							universe.controlBuilder.message
 							(
 								universe,
@@ -1768,7 +1768,7 @@ export class ControlBuilder
 								null
 							);
 
-						var venueMessageReadyToLoad = 
+						var venueMessageReadyToLoad =
 							controlMessageReadyToLoad.toVenue();
 
 						var controlMessageCancelled = universe.controlBuilder.message

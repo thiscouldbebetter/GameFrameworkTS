@@ -1234,7 +1234,7 @@ export class CollisionHelper
 		var distanceBetweenCenters =
 			displacementFromSphere0CenterTo1.magnitude();
 
-		var distanceToRadicalCenter = 
+		var distanceToRadicalCenter =
 		(
 			distanceBetweenCenters * distanceBetweenCenters
 			+ sphere0Radius * sphere0Radius

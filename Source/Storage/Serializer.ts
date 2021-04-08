@@ -22,7 +22,7 @@ export class Serializer
 		var typeNames = new Array<string>();
 		nodeRoot.wrap(typeNames, new Map<string, number>(), [], []);
 
-		nodeRoot["typeNames"] = typeNames; 
+		nodeRoot["typeNames"] = typeNames;
 
 		var nodeRootSerialized = JSON.stringify
 		(

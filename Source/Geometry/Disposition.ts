@@ -59,7 +59,7 @@ export class Disposition
 
 	equals(other: Disposition): boolean
 	{
-		var returnValue = 
+		var returnValue =
 		(
 			this.placeName == other.placeName
 			&& this.pos.equals(other.pos)

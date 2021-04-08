@@ -52,7 +52,7 @@ export class Universe
 		this._worldCreate = worldCreate;
 
 		this.collisionHelper = new CollisionHelper();
-		this.displayRecorder = new DisplayRecorder 
+		this.displayRecorder = new DisplayRecorder
 		(
 			1, // ticksPerFrame
 			100, // bufferSizeInFrames - 5 seconds at 20 fps.
