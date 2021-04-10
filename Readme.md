@@ -5,6 +5,7 @@ The TypeScript code in this repository implements a video game framework and dem
 
 <img src="Screenshots/Recording-Gameplay.gif"></img>
 
+
 Running
 -------
 
@@ -47,3 +48,14 @@ Screenshots
 ![Container](/Screenshots/Screenshot-Container.png?raw=true "Container")
 ![Bartering](/Screenshots/Screenshot-Bartering.png?raw=true "Bartering")
 ![Store](/Screenshots/Screenshot-Store.png?raw=true "Store")
+
+
+Documentation
+-------------
+
+A high-level overview of the architecture of the framework is available at <a href="Documentation/Architecture.md">Documentation/Architecture.md</a>.
+
+A quick-start guide for creating a new game from the supplied stub game is available at <a href="Documentation/Creating_a_New_Game_from_Stubs.md">Documentation/Creating_a_New_Game_from_Stubs.md</a>.
+
+A partial Development Guide illustrating the creation of a new game from the supplied stub game is available at <a href="Documentation/Development_Guide/Development_Guide.md">Documentation/Development_Guide/Development_Guide.md</a>.
+
