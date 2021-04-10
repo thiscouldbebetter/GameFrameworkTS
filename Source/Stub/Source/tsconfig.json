@@ -57,5 +57,10 @@
 
   },
 
-  "exclude" : [ "Framework/Source/Demo", "Framework/Source/Stub" ]
+  "exclude" :
+  [
+    "Framework/Source/Imports.ts",
+    "Framework/Source/Demo",
+    "Framework/Source/Stub"
+  ]
 }

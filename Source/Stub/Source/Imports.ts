@@ -14,7 +14,8 @@ import ArrayHelper = gf.ArrayHelper;
 import NumberHelper = gf.NumberHelper;
 import StringHelper = gf.StringHelper;
 
-// hack
+// Entity.
+import Entity = gf.Entity;
 import EntityProperty = gf.EntityProperty;
 
 // Controls.
@@ -48,41 +49,15 @@ import DisplayRecorder = gf.DisplayRecorder;
 import VenueFader = gf.VenueFader;
 import VenueLayered = gf.VenueLayered;
 import Visual = gf.Visual;
-import VisualAnchor = gf.VisualAnchor;
-import VisualArc = gf.VisualArc;
-import VisualBar = gf.VisualBar;
-import VisualBuffered = gf.VisualBuffered;
-import VisualBuilder = gf.VisualBuilder;
-import VisualCircle = gf.VisualCircle;
-import VisualCircleGradient = gf.VisualCircleGradient;
-import VisualDirectional = gf.VisualDirectional;
-import VisualDynamic = gf.VisualDynamic;
-import VisualEllipse = gf.VisualEllipse;
-import VisualErase = gf.VisualErase;
+
+// Display - Visuals.
+
 import VisualGroup = gf.VisualGroup;
 import VisualImageFromLibrary = gf.VisualImageFromLibrary;
-import VisualImageImmediate = gf.VisualImageImmediate;
 import VisualImageScaled = gf.VisualImageScaled;
-import VisualImageScaledPartial = gf.VisualImageScaledPartial;
-import VisualJump2D = gf.VisualJump2D;
-import VisualLine = gf.VisualLine;
-import VisualMap = gf.VisualMap;
 import VisualNone = gf.VisualNone;
-import VisualOffset = gf.VisualOffset;
-import VisualParticles = gf.VisualParticles;
-import VisualPath = gf.VisualPath;
-import VisualPolars = gf.VisualPolars;
-import VisualPolygon = gf.VisualPolygon;
-import VisualRectangle = gf.VisualRectangle;
-import VisualRepeating = gf.VisualRepeating;
-import VisualRotate = gf.VisualRotate;
-import VisualSelect = gf.VisualSelect;
-import VisualStack = gf.VisualStack;
-import VisualText = gf.VisualText;
 
 // Display - Visuals - Animation.
-import Animatable2 = gf.Animatable2; // Possibly conflicts with a built-in class?
-import VisualAnimation = gf.VisualAnimation;
 
 // Geometry.
 import Camera = gf.Camera;
@@ -98,17 +73,6 @@ import RangeExtent = gf.RangeExtent;
 import Rotation = gf.Rotation;
 
 // Geometry - Constraints.
-import Constraint_AttachToEntityWithName = gf.Constraint_AttachToEntityWithName;
-import Constraint_Conditional = gf.Constraint_Conditional;
-import Constraint_ContainInBox = gf.Constraint_ContainInBox;
-import Constraint_ContainInHemispace = gf.Constraint_ContainInHemispace;
-import Constraint_FrictionDry = gf.Constraint_FrictionDry;
-import Constraint_FrictionXY = gf.Constraint_FrictionXY;
-import Constraint_Gravity = gf.Constraint_Gravity;
-import Constraint_SpeedMaxXY = gf.Constraint_SpeedMaxXY;
-import Constraint_TrimToRange = gf.Constraint_TrimToRange;
-import Constraint_WrapToRange = gf.Constraint_WrapToRange;
-import Constraint_WrapXTrimY = gf.Constraint_WrapXTrimY;
 
 // Geometry - Network.
 import Network = gf.Network;
@@ -174,7 +138,6 @@ import VideoHelper = gf.VideoHelper;
 import VisualSound = gf.VisualSound;
 
 // Model.
-import Entity = gf.Entity;
 import EntityBuilder = gf.EntityBuilder;
 import EntityGenerator = gf.EntityGenerator;
 import Loadable = gf.Loadable;
@@ -216,46 +179,27 @@ import ItemHolder = gf.ItemHolder;
 import ItemStore = gf.ItemStore;
 
 // Model - Items - Crafting.
-import CraftingRecipe = gf.CraftingRecipe;
-import ItemCrafter = gf.ItemCrafter;
 
 // Model - Items - Equipment.
-import EquipmentSocket = gf.EquipmentSocket;
-import EquipmentSocketDefn = gf.EquipmentSocketDefn;
-import EquipmentSocketDefnGroup = gf.EquipmentSocketDefnGroup;
-import EquipmentUser = gf.EquipmentUser;
-import Equippable = gf.Equippable;
 
 // Model - Journal.
-import Journal = gf.Journal;
-import JournalEntry = gf.JournalEntry;
-import JournalKeeper = gf.JournalKeeper;
 
 // Model - Maps.
 import Terrain = gf.Terrain;
 
 // Model - Mortality.
-import Ephemeral = gf.Ephemeral;
-import Phase = gf.Phase;
-import Phased = gf.Phased;
-import Starvable = gf.Starvable;
-import Tirable = gf.Tirable;
 
 // Model - Perception.
-import Perceptible = gf.Perceptible;
-import Perceptor = gf.Perceptor;
 
 // Model - Physics.
 import Boundable = gf.Boundable;
 import Collidable = gf.Collidable;
 import Constrainable = gf.Constrainable;
-import ForceField = gf.ForceField;
 import Locatable = gf.Locatable;
 import Movable = gf.Movable;
 import Obstacle = gf.Obstacle;
 import Portal = gf.Portal;
 import Traversable = gf.Traversable;
-import Vehicle = gf.Vehicle;
 
 // Model - Places.
 import Place = gf.Place;
@@ -264,17 +208,8 @@ import PlaceZoned = gf.PlaceZoned;
 import Zone = gf.Zone;
 
 // Model - Skills.
-import Skill = gf.Skill;
-import SkillLearner = gf.SkillLearner;
 
 // Model - Talk.
-import ConversationDefn = gf.ConversationDefn;
-import ConversationRun = gf.ConversationRun;
-import ConversationScope = gf.ConversationScope;
-import TalkNode = gf.TalkNode;
-import TalkNodeDefn = gf.TalkNodeDefn;
-import Talker = gf.Talker;
-import WordBubble = gf.WordBubble;
 
 // Model - Routable.
 import Routable = gf.Routable;
@@ -282,12 +217,8 @@ import Route = gf.Route;
 import RouteNode = gf.RouteNode;
 
 // Model - Time.
-import Idleable = gf.Idleable;
-import Recurrent = gf.Recurrent;
 
 // Model - Usables.
-import Device = gf.Device;
-import Usable = gf.Usable;
 
 // Profiles.
 import Profile = gf.Profile;
@@ -305,7 +236,6 @@ import CompressorLZW = gf.CompressorLZW;
 
 // Utility.
 import DateTime = gf.DateTime;
-import DiceRoll = gf.DiceRoll;
 import IDHelper = gf.IDHelper;
 import PlatformHelper = gf.PlatformHelper;
 import Randomizer = gf.Randomizer;
@@ -318,4 +248,3 @@ import ValueBreakGroup = gf.ValueBreakGroup;
 import VenueTask = gf.VenueTask;
 
 // Utility - Network.
-import Networ = gf.Network;

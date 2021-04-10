@@ -1,5 +1,5 @@
 
-class GameStub
+class Game
 {
 	contentDirectoryPath: string;
 
