@@ -30,9 +30,9 @@ class PlaceStub extends Place
 
 		var actionToInputsMappings =
 		[
-			ActionToInputsMapping.fromActionAndInputName
+			new ActionToInputsMapping
 			(
-				actionDisplayRecorderStartStop.name, "~"
+				actionDisplayRecorderStartStop.name, [ "~" ], true // inactivate
 			),
 
 			ActionToInputsMapping.fromActionAndInputName
@@ -45,6 +45,7 @@ class PlaceStub extends Place
 		[
 			Actor.name,
 			Collidable.name,
+			Constrainable.name,
 			Locatable.name
 		];
 

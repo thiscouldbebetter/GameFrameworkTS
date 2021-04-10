@@ -16,12 +16,14 @@ class PlaceStub extends Place {
         ];
         var inputNames = Input.Names();
         var actionToInputsMappings = [
-            ActionToInputsMapping.fromActionAndInputName(actionDisplayRecorderStartStop.name, "~"),
+            new ActionToInputsMapping(actionDisplayRecorderStartStop.name, ["~"], true // inactivate
+            ),
             ActionToInputsMapping.fromActionAndInputName(actionShowMenu.name, inputNames.Escape)
         ];
         var entityPropertyNamesToProcess = [
             Actor.name,
             Collidable.name,
+            Constrainable.name,
             Locatable.name
         ];
         return PlaceDefn.from4(PlaceStub.name, actions, actionToInputsMappings, entityPropertyNamesToProcess);
