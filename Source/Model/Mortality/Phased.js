@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Phased extends GameFramework.EntityProperty {
+        class Phased {
             constructor(tickBorn, phases) {
-                super();
                 this.tickBorn = tickBorn;
                 this.phases = phases;
             }
@@ -23,6 +22,8 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
             updateForTimerTick(u, w, p, e) {
                 var ticksSinceBorn = w.timerTicksSoFar - this.tickBorn;
                 for (var i = 0; i < this.phases.length; i++) {

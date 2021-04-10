@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class SkillLearner extends GameFramework.EntityProperty {
+        class SkillLearner {
             constructor(skillBeingLearnedName, learningAccumulated, skillsKnownNames) {
-                super();
                 this.skillBeingLearnedName = skillBeingLearnedName;
                 this.learningAccumulated = learningAccumulated || 0;
                 this.skillsKnownNames = skillsKnownNames || [];
@@ -102,7 +101,9 @@ var ThisCouldBeBetter;
                 var returnValue = skillsAllByName.get(this.skillBeingLearnedName);
                 return returnValue;
             }
-            // entity
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
             updateForTimerTick(universe, world, place, entity) {
                 // Do nothing.
             }

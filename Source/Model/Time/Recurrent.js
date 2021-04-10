@@ -3,15 +3,17 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Recurrent extends GameFramework.EntityProperty {
+        class Recurrent {
             constructor(ticksPerRecurrence, timesToRecur, recur) {
-                super();
                 this.ticksPerRecurrence = ticksPerRecurrence;
                 this.timesToRecur = timesToRecur;
                 this.recur = recur;
                 this.timesRecurredSoFar = 0;
                 this.ticksUntilRecurrence = this.ticksPerRecurrence;
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
             updateForTimerTick(universe, world, place, entity) {
                 if (this.timesRecurredSoFar < this.timesToRecur) {
                     this.ticksUntilRecurrence--;

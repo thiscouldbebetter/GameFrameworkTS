@@ -2,31 +2,35 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Routable extends EntityProperty
+export class Routable implements EntityProperty
 {
 	route: Route;
 
 	constructor(route: Route)
 	{
-		super();
 		this.route = route;
 	}
 
 	// EntityProperty.
 
-	initialize(u: Universe, w: World, p: Place, e: Entity)
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+
+	initialize(u: Universe, w: World, p: Place, e: Entity): void
 	{
 		this.route.bounds = Box.fromMinAndMax(Coords.create(), p.size.clone());
 	}
 
+	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
+
+
 	// Clonable.
 
-	clone()
+	clone(): Routable
 	{
 		return this; // todo
 	}
 
-	overwriteWith(other: Routable)
+	overwriteWith(other: Routable): Routable
 	{
 		return this; // todo
 	}
@@ -60,7 +64,7 @@ export class Route
 		this._tempPos = Coords.create();
 	}
 
-	calculate()
+	calculate(): void
 	{
 		var startPos = this.startPos.clone();
 		var goalPos = this.goalPos.clone();
@@ -159,7 +163,7 @@ export class Route
 		}
 	}
 
-	neighborsForNode(nodeCentral: RouteNode, goalPos: Coords)
+	neighborsForNode(nodeCentral: RouteNode, goalPos: Coords): RouteNode[]
 	{
 		var returnValues = new Array<RouteNode>();
 		var nodeCentralPos = nodeCentral.pos;

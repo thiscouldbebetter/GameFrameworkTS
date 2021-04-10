@@ -8,8 +8,7 @@ var ThisCouldBeBetter;
                 this.targetEntityName = targetEntityName;
             }
             constrain(universe, world, place, entityToConstrain) {
-                var targetEntityName = this.targetEntityName;
-                var targetEntity = place.entitiesByName.get(targetEntityName);
+                var targetEntity = place.entityByName(this.targetEntityName);
                 if (targetEntity != null) {
                     var targetPos = targetEntity.locatable().loc.pos;
                     entityToConstrain.locatable().loc.pos.overwriteWith(targetPos);

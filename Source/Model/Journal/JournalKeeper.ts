@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class JournalKeeper extends EntityProperty
+export class JournalKeeper implements EntityProperty
 {
 	journal: Journal;
 
@@ -12,9 +12,14 @@ export class JournalKeeper extends EntityProperty
 
 	constructor(journal: Journal)
 	{
-		super();
 		this.journal = journal;
 	}
+
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
 
 	// Controls.
 
@@ -22,7 +27,7 @@ export class JournalKeeper extends EntityProperty
 	(
 		universe: Universe, size: Coords, entityJournalKeeper: Entity,
 		venuePrev: Venue, includeTitleAndDoneButton: boolean
-	)
+	): ControlBase
 	{
 		var world = universe.world;
 		var journalKeeper = entityJournalKeeper.journalKeeper();

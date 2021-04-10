@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class ItemHolder extends GameFramework.EntityProperty {
+        class ItemHolder {
             constructor(itemEntities, massMax, reachRadius) {
-                super();
                 this.itemEntities = [];
                 this.massMax = massMax;
                 this.reachRadius = reachRadius || 20;
@@ -192,7 +191,11 @@ var ThisCouldBeBetter;
                 );
                 return tradeValueTotal;
             }
-            // controls
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
+            updateForTimerTick(u, w, p, e) { }
+            // Controllable.
             toControl(universe, size, entityItemHolder, venuePrev, includeTitleAndDoneButton) {
                 this.statusMessage = "Use, drop, and sort items.";
                 if (size == null) {

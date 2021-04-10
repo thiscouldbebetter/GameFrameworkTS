@@ -1,4 +1,4 @@
-"use strict";
+im"use strict";
 
 // Classes from the framework must be imported here
 // so that they can be referenced without using the namespace.
@@ -106,9 +106,9 @@ import Constraint_FrictionDry = gf.Constraint_FrictionDry;
 import Constraint_FrictionXY = gf.Constraint_FrictionXY;
 import Constraint_Gravity = gf.Constraint_Gravity;
 import Constraint_SpeedMaxXY = gf.Constraint_SpeedMaxXY;
-import Constraint_TrimToRange = gf.Constraint_TrimToRange;
-import Constraint_WrapToRange = gf.Constraint_WrapToRange;
-import Constraint_WrapXTrimY = gf.Constraint_WrapXTrimY;
+import Constraint_TrimToPlaceSize = gf.Constraint_TrimToPlaceSize;
+import Constraint_WrapToPlaceSize = gf.Constraint_WrapToPlaceSize;
+import Constraint_WrapToPlaceSizeXTrimY = gf.Constraint_WrapToPlaceSizeXTrimY;
 
 // Geometry - Network.
 import Network = gf.Network;

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Loadable extends EntityProperty
+export class Loadable implements EntityProperty
 {
 	isLoaded: boolean;
 	_load: (universe: Universe, world: World, place: Place, entity: Entity) => void;
@@ -14,7 +14,6 @@ export class Loadable extends EntityProperty
 		unload: (universe: Universe, world: World, place: Place, entity: Entity) => void
 	)
 	{
-		super();
 		this.isLoaded = false;
 		this._load = load;
 		this._unload = unload;

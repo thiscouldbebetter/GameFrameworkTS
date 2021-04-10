@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Starvable extends GameFramework.EntityProperty {
+        class Starvable {
             constructor(satietyMax, satietyLostPerTick, starve) {
-                super();
                 this.satietyMax = satietyMax;
                 this.satietyLostPerTick = satietyLostPerTick;
                 this._starve = starve;
@@ -26,6 +25,9 @@ var ThisCouldBeBetter;
             isStarving() {
                 return (this.satiety <= 0);
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
             updateForTimerTick(universe, world, place, entityStarvable) {
                 if (this.isStarving()) {
                     this.starve(universe, world, place, entityStarvable);

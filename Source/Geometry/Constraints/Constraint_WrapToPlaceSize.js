@@ -3,16 +3,12 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Constraint_TrimToRange {
-            constructor(target) {
-                this.target = target;
-            }
+        class Constraint_WrapToPlaceSize {
             constrain(universe, world, place, entity) {
-                var targetSize = this.target;
                 var entityLoc = entity.locatable().loc;
-                entityLoc.pos.trimToRangeMax(targetSize);
+                entityLoc.pos.wrapToRangeMax(place.size);
             }
         }
-        GameFramework.Constraint_TrimToRange = Constraint_TrimToRange;
+        GameFramework.Constraint_WrapToPlaceSize = Constraint_WrapToPlaceSize;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
 })(ThisCouldBeBetter || (ThisCouldBeBetter = {}));

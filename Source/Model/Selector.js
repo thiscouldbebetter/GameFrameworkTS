@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Selector extends GameFramework.EntityProperty {
+        class Selector {
             constructor() {
-                super();
                 this.entitiesSelected = new Array();
                 var visualReticle = new GameFramework.VisualRectangle(GameFramework.Coords.fromXY(20, 20), null, // colorFill
                 GameFramework.Color.byName("White"), true // isCentered
@@ -47,6 +46,8 @@ var ThisCouldBeBetter;
                 return this._control;
             }
             // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
             updateForTimerTick(u, w, p, entitySelector) {
                 var entitySelected = this.entitiesSelected[0];
                 var isEntitySelected = (entitySelected != null);

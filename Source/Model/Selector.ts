@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Selector extends EntityProperty
+export class Selector implements EntityProperty
 {
 	entitiesSelected: Entity[];
 
@@ -11,7 +11,6 @@ export class Selector extends EntityProperty
 
 	constructor()
 	{
-		super();
 		this.entitiesSelected = new Array<Entity>();
 
 		var visualReticle = new VisualRectangle
@@ -31,31 +30,31 @@ export class Selector extends EntityProperty
 		);
 	}
 
-	entitiesDeselectAll()
+	entitiesDeselectAll(): void
 	{
 		this.entitiesSelected.length = 0;
 	}
 
-	entitySelect(entityToSelect: Entity)
+	entitySelect(entityToSelect: Entity): void
 	{
 		this.entitiesSelected.push(entityToSelect);
 	}
 
 	// Clonable.
 
-	clone()
+	clone(): Selector
 	{
 		return this;
 	}
 
-	overwriteWith(other: Selector)
+	overwriteWith(other: Selector): Selector
 	{
 		return this;
 	}
 
 	// Controllable.
 
-	toControl(size: Coords, pos: Coords)
+	toControl(size: Coords, pos: Coords): ControlBase
 	{
 		var fontHeightInPixels = 12;
 		var margin = fontHeightInPixels / 2;
@@ -106,7 +105,10 @@ export class Selector extends EntityProperty
 
 	// EntityProperty.
 
-	updateForTimerTick(u: Universe, w: World, p: Place, entitySelector: Entity)
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+
+	updateForTimerTick(u: Universe, w: World, p: Place, entitySelector: Entity): void
 	{
 		var entitySelected = this.entitiesSelected[0];
 		var isEntitySelected = (entitySelected != null);

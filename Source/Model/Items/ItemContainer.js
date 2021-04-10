@@ -3,7 +3,7 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class ItemContainer extends GameFramework.EntityProperty {
+        class ItemContainer {
             transfer(world, entityFrom, entityTo, messagePrefix) {
                 var itemHolderFrom = entityFrom.itemHolder();
                 var itemHolderTo = entityTo.itemHolder();
@@ -26,6 +26,10 @@ var ThisCouldBeBetter;
                     }
                 }
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
+            updateForTimerTick(u, w, p, e) { }
             // Controllable.
             toControl(universe, size, entityGetterPutter, entityContainer, venuePrev) {
                 if (size == null) {

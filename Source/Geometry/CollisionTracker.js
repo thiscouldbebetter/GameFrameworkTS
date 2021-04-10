@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class CollisionTracker extends GameFramework.EntityProperty {
+        class CollisionTracker {
             constructor(size, collisionMapSizeInCells) {
-                super();
                 collisionMapSizeInCells =
                     collisionMapSizeInCells || GameFramework.Coords.fromXY(1, 1).multiplyScalar(4);
                 var collisionMapCellSize = size.clone().divide(collisionMapSizeInCells);

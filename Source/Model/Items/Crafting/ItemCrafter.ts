@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ItemCrafter extends EntityProperty
+export class ItemCrafter implements EntityProperty
 {
 	recipesAvailable: CraftingRecipe[];
 
@@ -15,8 +15,6 @@ export class ItemCrafter extends EntityProperty
 
 	constructor(recipesAvailable: CraftingRecipe[])
 	{
-		super();
-
 		this.recipesAvailable = recipesAvailable || [];
 
 		this.itemHolderStaged = ItemHolder.create();
@@ -27,7 +25,7 @@ export class ItemCrafter extends EntityProperty
 		this.statusMessage = "-";
 	}
 
-	isRecipeAvailableSelectedFulfilled(itemHolder: ItemHolder)
+	isRecipeAvailableSelectedFulfilled(itemHolder: ItemHolder): boolean
 	{
 		var returnValue =
 		(
@@ -39,7 +37,7 @@ export class ItemCrafter extends EntityProperty
 		return returnValue;
 	}
 
-	isRecipeInProgressFulfilled()
+	isRecipeInProgressFulfilled(): boolean
 	{
 		var recipeInProgress = this.recipesQueued[0];
 		var returnValue =
@@ -52,17 +50,17 @@ export class ItemCrafter extends EntityProperty
 		return returnValue;
 	}
 
-	recipeInProgressCancel()
+	recipeInProgressCancel(): void
 	{
 		// todo
 	}
 
-	recipeInProgressSecondsSoFar(universe: Universe)
+	recipeInProgressSecondsSoFar(universe: Universe): number
 	{
 		return this.recipeInProgressTicksSoFar / universe.timerHelper.ticksPerSecond;
 	}
 
-	recipeInProgressFinish(entityCrafter: Entity)
+	recipeInProgressFinish(entityCrafter: Entity): void
 	{
 		var recipe = this.recipesQueued[0];
 
@@ -78,7 +76,7 @@ export class ItemCrafter extends EntityProperty
 		this.recipesQueued.splice(0, 1);
 	}
 
-	recipeProgressAsString(universe: Universe)
+	recipeProgressAsString(universe: Universe): string
 	{
 		var returnValue = null;
 		var recipeInProgress = this.recipesQueued[0];
@@ -99,9 +97,15 @@ export class ItemCrafter extends EntityProperty
 		return returnValue;
 	}
 
-	// venue
+	// EntityProperty.
 
-	updateForTimerTick(universe: Universe, world: World, place: Place, entityCrafter: Entity)
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+
+	updateForTimerTick
+	(
+		universe: Universe, world: World, place: Place, entityCrafter: Entity
+	): void
 	{
 		if (this.recipesQueued.length > 0)
 		{
@@ -135,7 +139,7 @@ export class ItemCrafter extends EntityProperty
 		entityItemHolder: Entity,
 		venuePrev: Venue,
 		includeTitleAndDoneButton: boolean
-	)
+	): ControlBase
 	{
 		this.statusMessage = "Select a recipe and click Craft.";
 
@@ -429,7 +433,7 @@ export class ItemCrafter extends EntityProperty
 
 	// cloneable
 
-	clone()
+	clone(): ItemCrafter
 	{
 		return new ItemCrafter(ArrayHelper.clone(this.recipesAvailable) );
 	}

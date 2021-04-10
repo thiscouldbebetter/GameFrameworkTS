@@ -3,15 +3,17 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class EntityGenerator extends GameFramework.EntityProperty {
+        class EntityGenerator {
             constructor(entityToGenerate, ticksToGenerate, entitiesGeneratedMax) {
-                super();
                 this.entityToGenerate = entityToGenerate;
                 this.ticksToGenerate = ticksToGenerate;
                 this.entitiesGeneratedMax = entitiesGeneratedMax || 1;
                 this.entitiesGenerated = new Array();
                 this.tickLastGenerated = 0 - this.ticksToGenerate;
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
             updateForTimerTick(universe, world, place, entityGenerator) {
                 var placeEntitiesByName = place.entitiesByName;
                 var entitiesGeneratedCountBefore = this.entitiesGenerated.length;

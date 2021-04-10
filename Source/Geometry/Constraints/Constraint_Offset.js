@@ -4,12 +4,11 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Constraint_Offset {
-            constructor(target) {
-                this.target = target;
+            constructor(offset) {
+                this.offset = offset;
             }
             constrain(universe, world, place, entity) {
-                var targetOffset = this.target;
-                entity.locatable().loc.pos.add(targetOffset);
+                entity.locatable().loc.pos.add(this.offset);
             }
         }
         GameFramework.Constraint_Offset = Constraint_Offset;

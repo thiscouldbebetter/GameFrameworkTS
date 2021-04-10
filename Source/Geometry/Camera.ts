@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Camera extends EntityProperty
+export class Camera implements EntityProperty
 {
 	viewSize: Coords;
 	focalLength: number;
@@ -22,8 +22,6 @@ export class Camera extends EntityProperty
 		entitiesInViewSort: (e: Entity[]) => Entity[]
 	)
 	{
-		super();
-
 		this.viewSize = viewSize;
 		this.focalLength = focalLength;
 		this.loc = loc;
@@ -350,7 +348,12 @@ export class Camera extends EntityProperty
 		return new Entity(Camera.name, [ this ] );
 	}
 
-	updateForTimerTick(): void
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+
+	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void
 	{
 		// Do nothing.  Rendering is done in Place.draw().
 	}

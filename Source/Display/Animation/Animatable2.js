@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Animatable2 extends GameFramework.EntityProperty {
+        class Animatable2 {
             constructor(animationDefnGroup, transformableAtRest, transformableTransformed) {
-                super();
                 this.animationDefnGroup = animationDefnGroup;
                 this.transformableAtRest = transformableAtRest;
                 this.transformableTransformed = transformableTransformed;
@@ -43,6 +42,9 @@ var ThisCouldBeBetter;
             transformableReset() {
                 this.transformableTransformed.overwriteWith(this.transformableAtRest);
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
             updateForTimerTick(universe, world, place, entity) {
                 var animationDefnsRunning = this.animationDefnsRunning();
                 for (var i = 0; i < animationDefnsRunning.length; i++) {

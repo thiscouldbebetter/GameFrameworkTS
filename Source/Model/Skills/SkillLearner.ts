@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class SkillLearner extends EntityProperty
+export class SkillLearner implements EntityProperty
 {
 	skillBeingLearnedName: string;
 	learningAccumulated: number;
@@ -10,20 +10,23 @@ export class SkillLearner extends EntityProperty
 
 	skillSelectedName: string;
 
-	constructor(skillBeingLearnedName: string, learningAccumulated: number, skillsKnownNames: string[])
+	constructor
+	(
+		skillBeingLearnedName: string, learningAccumulated: number,
+		skillsKnownNames: string[]
+	)
 	{
-		super();
 		this.skillBeingLearnedName = skillBeingLearnedName;
 		this.learningAccumulated = learningAccumulated || 0;
 		this.skillsKnownNames = skillsKnownNames || [];
 	}
 
-	isLearningInProgress()
+	isLearningInProgress(): boolean
 	{
 		return (this.learningAccumulated > 0);
 	}
 
-	isSkillBeingLearned()
+	isSkillBeingLearned(): boolean
 	{
 		return (this.skillBeingLearnedName != null);
 	}
@@ -43,7 +46,10 @@ export class SkillLearner extends EntityProperty
 		return skillCheapest;
 	}
 
-	learningIncrement(skillsAll: Skill[], skillsByName: Map<string, Skill>, amountToIncrement: number)
+	learningIncrement
+	(
+		skillsAll: Skill[], skillsByName: Map<string, Skill>, amountToIncrement: number
+	): any
 	{
 		var message = null;
 
@@ -80,12 +86,12 @@ export class SkillLearner extends EntityProperty
 		return message;
 	}
 
-	learningAccumulatedOverRequired(skillsAllByName: Map<string,Skill>)
+	learningAccumulatedOverRequired(skillsAllByName: Map<string,Skill>): string
 	{
 		return this.learningAccumulated + "/" + this.learningRequired(skillsAllByName);
 	}
 
-	learningRequired(skillsAllByName: Map<string, Skill>)
+	learningRequired(skillsAllByName: Map<string, Skill>): number
 	{
 		var skillBeingLearned = this.skillBeingLearned(skillsAllByName);
 		var returnValue =
@@ -97,12 +103,12 @@ export class SkillLearner extends EntityProperty
 		return returnValue;
 	}
 
-	skillSelected(skillsAllByName: Map<string, Skill>)
+	skillSelected(skillsAllByName: Map<string, Skill>): Skill
 	{
 		return (this.skillSelectedName == null ? null : skillsAllByName.get(this.skillSelectedName));
 	}
 
-	skillsAvailableToLearn(skillsAll: Skill[])
+	skillsAvailableToLearn(skillsAll: Skill[]): Skill[]
 	{
 		var skillsUnknown = [];
 
@@ -156,7 +162,7 @@ export class SkillLearner extends EntityProperty
 		return skillsUnknownWithKnownPrerequisites;
 	}
 
-	skillsKnown(skillsAllByName: Map<string, Skill>)
+	skillsKnown(skillsAllByName: Map<string, Skill>): Skill[]
 	{
 		var returnValues = [];
 
@@ -170,14 +176,17 @@ export class SkillLearner extends EntityProperty
 		return returnValues;
 	}
 
-	skillBeingLearned(skillsAllByName: Map<string, Skill>)
+	skillBeingLearned(skillsAllByName: Map<string, Skill>): Skill
 	{
 		var returnValue = skillsAllByName.get(this.skillBeingLearnedName);
 
 		return returnValue;
 	}
 
-	// entity
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
 
 	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity)
 	{
@@ -186,7 +195,11 @@ export class SkillLearner extends EntityProperty
 
 	// controls
 
-	toControl(universe: Universe, size: Coords, entity: Entity, venueToReturnTo: Venue, includeTitle: boolean)
+	toControl
+	(
+		universe: Universe, size: Coords, entity: Entity,
+		venueToReturnTo: Venue, includeTitle: boolean
+	): ControlBase
 	{
 		var display = universe.display;
 		//var size = display.sizeInPixels.clone();

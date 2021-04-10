@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Tirable extends EntityProperty
+export class Tirable implements EntityProperty
 {
 	staminaMaxAfterSleep: number;
 	staminaRecoveredPerTick: number;
@@ -22,7 +22,6 @@ export class Tirable extends EntityProperty
 		fallAsleep: (u: Universe, w: World, p: Place, e: Entity) => void
 	)
 	{
-		super();
 		this.staminaMaxAfterSleep = staminaMaxAfterSleep;
 		this.staminaRecoveredPerTick = staminaRecoveredPerTick;
 		this.staminaMaxLostPerTick = staminaMaxLostPerTick;
@@ -33,7 +32,7 @@ export class Tirable extends EntityProperty
 		this.staminaMaxRemainingBeforeSleep = this.staminaMaxAfterSleep;
 	}
 
-	fallAsleep(u: Universe, w: World, p: Place, e: Entity)
+	fallAsleep(u: Universe, w: World, p: Place, e: Entity): void
 	{
 		var staminaMaxToRecover =
 			this.staminaMaxAfterSleep - this.staminaMaxRemainingBeforeSleep;
@@ -49,12 +48,12 @@ export class Tirable extends EntityProperty
 		}
 	}
 
-	isExhausted()
+	isExhausted(): boolean
 	{
 		return (this.staminaMaxRemainingBeforeSleep <= 0);
 	}
 
-	staminaAdd(amountToAdd: number)
+	staminaAdd(amountToAdd: number): void
 	{
 		this.stamina += amountToAdd;
 		this.stamina = NumberHelper.trimToRangeMax
@@ -63,12 +62,20 @@ export class Tirable extends EntityProperty
 		);
 	}
 
-	staminaSubtract(amountToSubtract: number)
+	staminaSubtract(amountToSubtract: number): void
 	{
 		this.staminaAdd(0 - amountToSubtract);
 	}
 
-	updateForTimerTick(universe: Universe, world: World, place: Place, entityStarvable: Entity)
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+
+	updateForTimerTick
+	(
+		universe: Universe, world: World, place: Place, entityStarvable: Entity
+	): void
 	{
 		if (this.isExhausted())
 		{
@@ -83,7 +90,7 @@ export class Tirable extends EntityProperty
 
 	// cloneable
 
-	clone()
+	clone(): Tirable
 	{
 		return new Tirable
 		(

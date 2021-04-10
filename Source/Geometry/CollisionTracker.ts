@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class CollisionTracker extends EntityProperty
+export class CollisionTracker implements EntityProperty
 {
 	collisionMap: MapOfCells<CollisionTrackerMapCell>;
 
@@ -10,8 +10,6 @@ export class CollisionTracker extends EntityProperty
 
 	constructor(size: Coords, collisionMapSizeInCells: Coords)
 	{
-		super();
-
 		collisionMapSizeInCells =
 			collisionMapSizeInCells || Coords.fromXY(1, 1).multiplyScalar(4);
 

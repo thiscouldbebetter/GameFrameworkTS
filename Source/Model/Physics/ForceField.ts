@@ -2,19 +2,18 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ForceField extends EntityProperty
+export class ForceField implements EntityProperty
 {
 	accelerationToApply: Coords;
 	velocityToApply: Coords;
 
 	constructor(accelerationToApply: Coords, velocityToApply: Coords)
 	{
-		super();
 		this.accelerationToApply = accelerationToApply;
 		this.velocityToApply = velocityToApply;
 	}
 
-	applyToEntity(entityToApplyTo: Entity)
+	applyToEntity(entityToApplyTo: Entity): void
 	{
 		var entityLoc = entityToApplyTo.locatable().loc;
 
@@ -31,7 +30,7 @@ export class ForceField extends EntityProperty
 
 	// Clonable.
 
-	clone()
+	clone(): ForceField
 	{
 		return new ForceField
 		(
@@ -40,7 +39,7 @@ export class ForceField extends EntityProperty
 		);
 	}
 
-	overwriteWith(other: ForceField)
+	overwriteWith(other: ForceField): ForceField
 	{
 		if (this.accelerationToApply != null)
 		{
@@ -52,6 +51,12 @@ export class ForceField extends EntityProperty
 		}
 		return this;
 	}
+
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
 }
 
 }

@@ -103,7 +103,17 @@ export class Place //
 		this.entitiesToSpawn.length = 0;
 	}
 
-	entityRemove(entity: Entity)
+	entityById(entityId: number): Entity
+	{
+		return this.entitiesById.get(entityId);
+	}
+
+	entityByName(entityName: string): Entity
+	{
+		return this.entitiesByName.get(entityName);
+	}
+
+	entityRemove(entity: Entity): void
 	{
 		var entityProperties = entity.properties;
 		for (var p = 0; p < entityProperties.length; p++)

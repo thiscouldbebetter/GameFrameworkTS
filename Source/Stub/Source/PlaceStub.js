@@ -10,7 +10,7 @@ class PlaceStub extends Place {
         ]);
     }
     static defnBuild() {
-        var actionShowMenu = Action.Instances().ShowMenu;
+        var actionShowMenu = Action.Instances().ShowMenuSettings;
         var actions = [
             actionShowMenu
         ];

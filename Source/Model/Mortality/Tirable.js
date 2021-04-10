@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Tirable extends GameFramework.EntityProperty {
+        class Tirable {
             constructor(staminaMaxAfterSleep, staminaRecoveredPerTick, staminaMaxLostPerTick, staminaMaxRecoveredPerTickOfSleep, fallAsleep) {
-                super();
                 this.staminaMaxAfterSleep = staminaMaxAfterSleep;
                 this.staminaRecoveredPerTick = staminaRecoveredPerTick;
                 this.staminaMaxLostPerTick = staminaMaxLostPerTick;
@@ -32,6 +31,9 @@ var ThisCouldBeBetter;
             staminaSubtract(amountToSubtract) {
                 this.staminaAdd(0 - amountToSubtract);
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
             updateForTimerTick(universe, world, place, entityStarvable) {
                 if (this.isExhausted()) {
                     this.fallAsleep(universe, world, place, entityStarvable);

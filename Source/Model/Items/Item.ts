@@ -2,14 +2,13 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Item extends EntityProperty
+export class Item implements EntityProperty
 {
 	defnName: string;
 	quantity: number;
 
 	constructor(defnName: string, quantity: number)
 	{
-		super();
 		this.defnName = defnName;
 		this.quantity = quantity;
 	}
@@ -44,7 +43,11 @@ export class Item extends EntityProperty
 		return this.quantity * this.defn(world).tradeValue;
 	}
 
-	use(universe: Universe, world: World, place: Place, userEntity: Entity, itemEntity: Entity): any
+	use
+	(
+		universe: Universe, world: World, place: Place,
+		userEntity: Entity, itemEntity: Entity
+	): any
 	{
 		var returnValue = null;
 		var defn = this.defn(world);
@@ -64,6 +67,12 @@ export class Item extends EntityProperty
 	{
 		return new Item(this.defnName, this.quantity);
 	}
+
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
 }
 
 }

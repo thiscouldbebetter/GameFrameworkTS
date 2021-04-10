@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ItemBarterer extends EntityProperty
+export class ItemBarterer implements EntityProperty
 {
 	itemHolderCustomerOffer: ItemHolder;
 	itemHolderStoreOffer: ItemHolder;
@@ -14,7 +14,6 @@ export class ItemBarterer extends EntityProperty
 
 	constructor()
 	{
-		super();
 		this.itemHolderCustomerOffer = ItemHolder.create();
 		this.itemHolderStoreOffer = ItemHolder.create();
 		this.statusMessage = "Choose items to trade and click the 'Offer' button.";
@@ -23,7 +22,7 @@ export class ItemBarterer extends EntityProperty
 		this.patienceMax = 10;
 	}
 
-	isAnythingBeingOffered()
+	isAnythingBeingOffered(): boolean
 	{
 		var returnValue =
 		(
@@ -33,7 +32,7 @@ export class ItemBarterer extends EntityProperty
 		return returnValue;
 	}
 
-	isOfferProfitableEnough(world: World)
+	isOfferProfitableEnough(world: World): boolean
 	{
 		var profitMarginForStore = this.profitMarginOfOfferForStore(world);
 
@@ -42,7 +41,7 @@ export class ItemBarterer extends EntityProperty
 		return isOfferProfitableToStore;
 	}
 
-	profitMarginOfOfferForStore(world: World)
+	profitMarginOfOfferForStore(world: World): number
 	{
 		var valueOfferedByCustomer = this.itemHolderCustomerOffer.tradeValueOfAllItems(world);
 		var valueOfferedByStore = this.itemHolderStoreOffer.tradeValueOfAllItems(world);
@@ -52,18 +51,18 @@ export class ItemBarterer extends EntityProperty
 		return profitMarginForStore;
 	}
 
-	patienceAdd(patienceToAdd: number)
+	patienceAdd(patienceToAdd: number): void
 	{
 		this.patience = NumberHelper.trimToRangeMax(this.patience + patienceToAdd, this.patienceMax);
 	}
 
-	reset(entityCustomer: Entity, entityStore: Entity)
+	reset(entityCustomer: Entity, entityStore: Entity): void
 	{
 		this.itemHolderCustomerOffer.itemEntitiesAllTransferTo(entityCustomer.itemHolder() );
 		this.itemHolderStoreOffer.itemEntitiesAllTransferTo(entityStore.itemHolder() );
 	}
 
-	trade(entityCustomer: Entity, entityStore: Entity)
+	trade(entityCustomer: Entity, entityStore: Entity): void
 	{
 		this.itemHolderCustomerOffer.itemEntitiesAllTransferTo(entityStore.itemHolder());
 		this.itemHolderStoreOffer.itemEntitiesAllTransferTo(entityCustomer.itemHolder());
@@ -80,9 +79,19 @@ export class ItemBarterer extends EntityProperty
 		}
 	}
 
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
+
 	// Controls.
 
-	toControl(universe: Universe, size: Coords, entityCustomer: Entity, entityStore: Entity, venuePrev: Venue)
+	toControl
+	(
+		universe: Universe, size: Coords, entityCustomer: Entity,
+		entityStore: Entity, venuePrev: Venue
+	): ControlBase
 	{
 		if (size == null)
 		{

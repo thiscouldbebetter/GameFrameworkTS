@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Idleable extends EntityProperty
+export class Idleable implements EntityProperty
 {
 	ticksUntilIdle: number;
 	_idle: (u: Universe, w: World, p: Place, e: Entity) => void;
@@ -11,13 +11,12 @@ export class Idleable extends EntityProperty
 
 	constructor(ticksUntilIdle: number, idle: (u: Universe, w: World, p: Place, e: Entity) => void)
 	{
-		super();
 		this.ticksUntilIdle = ticksUntilIdle;
 		this._idle = idle;
 		this.tickLastActionPerformed = 0;
 	}
 
-	idle(universe: Universe, world: World, place: Place, entity: Entity)
+	idle(universe: Universe, world: World, place: Place, entity: Entity): void
 	{
 		if (this._idle != null)
 		{
@@ -25,17 +24,22 @@ export class Idleable extends EntityProperty
 		}
 	}
 
-	isIdle(world: World)
+	isIdle(world: World): boolean
 	{
 		return this.ticksSinceLastAction(world) >= this.ticksUntilIdle;
 	}
 
-	ticksSinceLastAction(world: World)
+	ticksSinceLastAction(world: World): number
 	{
 		return world.timerTicksSoFar - this.tickLastActionPerformed;
 	}
 
-	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity)
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+
+	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity): void
 	{
 		var actor = entity.actor();
 		var actorIsActing = actor.actions.length > 0;

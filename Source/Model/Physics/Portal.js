@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Portal extends GameFramework.EntityProperty {
+        class Portal {
             constructor(destinationPlaceName, destinationEntityName, velocityToApply) {
-                super();
                 this.destinationPlaceName = destinationPlaceName;
                 this.destinationEntityName = destinationEntityName;
                 this.velocityToApply = velocityToApply;
@@ -48,6 +47,10 @@ var ThisCouldBeBetter;
             clone() {
                 return new Portal(this.destinationPlaceName, this.destinationEntityName, this.velocityToApply == null ? null : this.velocityToApply.clone());
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
+            updateForTimerTick(u, w, p, e) { }
         }
         GameFramework.Portal = Portal;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

@@ -14,7 +14,11 @@ export class VisualArc implements Visual
 	_drawPos: Coords;
 	_polar: Polar;
 
-	constructor(radiusOuter: number, radiusInner: number, directionMin: Coords, angleSpannedInTurns: number, colorFill: Color, colorBorder: Color)
+	constructor
+	(
+		radiusOuter: number, radiusInner: number, directionMin: Coords,
+		angleSpannedInTurns: number, colorFill: Color, colorBorder: Color
+	)
 	{
 		this.radiusOuter = radiusOuter;
 		this.radiusInner = radiusInner;
@@ -25,10 +29,14 @@ export class VisualArc implements Visual
 
 		// helper variables
 		this._drawPos = Coords.create();
-		this._polar = new Polar(0, 0, 0);
+		this._polar = Polar.create();
 	}
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	draw
+	(
+		universe: Universe, world: World, place: Place, entity: Entity,
+		display: Display
+	): void
 	{
 		var drawableLoc = entity.locatable().loc;
 		var drawPos = this._drawPos.overwriteWith

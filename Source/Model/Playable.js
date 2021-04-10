@@ -3,7 +3,7 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Playable extends GameFramework.EntityProperty {
+        class Playable {
             static toControlMenu(universe, size, entity, venuePrev) {
                 var controlsForTabs = new Array();
                 var fontHeight = 12;
@@ -210,6 +210,10 @@ var ThisCouldBeBetter;
                 controlOverlayTransparent.styleName = GameFramework.ControlStyle.Instances().Dark.name;
                 return controlOverlayTransparent;
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
+            updateForTimerTick(u, w, p, e) { }
         }
         GameFramework.Playable = Playable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

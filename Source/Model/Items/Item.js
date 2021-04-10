@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Item extends GameFramework.EntityProperty {
+        class Item {
             constructor(defnName, quantity) {
-                super();
                 this.defnName = defnName;
                 this.quantity = quantity;
             }
@@ -39,6 +38,10 @@ var ThisCouldBeBetter;
             clone() {
                 return new Item(this.defnName, this.quantity);
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
+            updateForTimerTick(u, w, p, e) { }
         }
         GameFramework.Item = Item;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

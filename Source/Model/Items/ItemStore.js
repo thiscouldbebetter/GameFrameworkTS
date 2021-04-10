@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class ItemStore extends GameFramework.EntityProperty {
+        class ItemStore {
             constructor(itemDefnNameCurrency) {
-                super();
                 this.itemDefnNameCurrency = itemDefnNameCurrency;
                 this.statusMessage = "-";
             }
@@ -39,6 +38,10 @@ var ThisCouldBeBetter;
                 venueNext = GameFramework.VenueFader.fromVenueTo(venueNext);
                 universe.venueNext = venueNext;
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
+            updateForTimerTick(u, w, p, e) { }
             // Controllable.
             toControl(universe, size, entityCustomer, entityStore, venuePrev) {
                 if (size == null) {

@@ -4,17 +4,16 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Constraint_Offset implements Constraint
 {
-	target: Coords;
+	offset: Coords;
 
-	constructor(target: Coords)
+	constructor(offset: Coords)
 	{
-		this.target = target;
+		this.offset = offset;
 	}
 
 	constrain(universe: Universe, world: World, place: Place, entity: Entity)
 	{
-		var targetOffset = this.target;
-		entity.locatable().loc.pos.add(targetOffset);
+		entity.locatable().loc.pos.add(this.offset);
 	}
 }
 

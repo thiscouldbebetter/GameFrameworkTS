@@ -8,23 +8,11 @@ class PlaceBuilderDemo_Actions {
         var actionsAll = Action.Instances();
         var actions = [
             actionsAll.DoNothing,
-            actionsAll.ShowMenu,
-            new Action("MoveDown", (universe, world, place, actor) => // perform
-             {
-                actor.movable().accelerateInDirection(universe, world, place, actor, Coords.Instances().ZeroOneZero);
-            }),
-            new Action("MoveLeft", (universe, world, place, actor) => // perform
-             {
-                actor.movable().accelerateInDirection(universe, world, place, actor, Coords.Instances().MinusOneZeroZero);
-            }),
-            new Action("MoveRight", (universe, world, place, actor) => // perform
-             {
-                actor.movable().accelerateInDirection(universe, world, place, actor, Coords.Instances().OneZeroZero);
-            }),
-            new Action("MoveUp", (universe, world, place, actor) => // perform
-             {
-                actor.movable().accelerateInDirection(universe, world, place, actor, Coords.Instances().ZeroMinusOneZero);
-            }),
+            actionsAll.ShowMenuPlayer,
+            Movable.actionAccelerateDown(),
+            Movable.actionAccelerateLeft(),
+            Movable.actionAccelerateRight(),
+            Movable.actionAccelerateUp(),
             new Action("Fire", (universe, world, place, actor) => // perform
              {
                 var equipmentUser = actor.equipmentUser();
@@ -167,12 +155,13 @@ class PlaceBuilderDemo_Actions {
         var inputNames = Input.Names();
         var inactivateFalse = false;
         var inactivateTrue = true;
+        var actions = Action.Instances();
         var actionToInputsMappings = [
-            new ActionToInputsMapping("ShowMenu", [inputNames.Escape, inputNames.Tab], inactivateFalse),
-            new ActionToInputsMapping("MoveDown", [inputNames.ArrowDown, inputNames.GamepadMoveDown + "0"], inactivateFalse),
-            new ActionToInputsMapping("MoveLeft", [inputNames.ArrowLeft, inputNames.GamepadMoveLeft + "0"], inactivateFalse),
-            new ActionToInputsMapping("MoveRight", [inputNames.ArrowRight, inputNames.GamepadMoveRight + "0"], inactivateFalse),
-            new ActionToInputsMapping("MoveUp", [inputNames.ArrowUp, inputNames.GamepadMoveUp + "0"], inactivateFalse),
+            new ActionToInputsMapping(actions.ShowMenuPlayer.name, [inputNames.Escape, inputNames.Tab], inactivateFalse),
+            new ActionToInputsMapping(Movable.actionAccelerateDown().name, [inputNames.ArrowDown, inputNames.GamepadMoveDown + "0"], inactivateFalse),
+            new ActionToInputsMapping(Movable.actionAccelerateLeft().name, [inputNames.ArrowLeft, inputNames.GamepadMoveLeft + "0"], inactivateFalse),
+            new ActionToInputsMapping(Movable.actionAccelerateRight().name, [inputNames.ArrowRight, inputNames.GamepadMoveRight + "0"], inactivateFalse),
+            new ActionToInputsMapping(Movable.actionAccelerateUp().name, [inputNames.ArrowUp, inputNames.GamepadMoveUp + "0"], inactivateFalse),
             new ActionToInputsMapping("Fire", ["f", inputNames.Enter, inputNames.GamepadButton0 + "0"], inactivateTrue),
             new ActionToInputsMapping("Hide", ["h", inputNames.GamepadButton0 + "3"], inactivateFalse),
             new ActionToInputsMapping("Jump", [inputNames.Space, inputNames.GamepadButton0 + "1"], inactivateTrue),

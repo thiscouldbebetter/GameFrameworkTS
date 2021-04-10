@@ -2,19 +2,18 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Phased extends EntityProperty
+export class Phased implements EntityProperty
 {
 	tickBorn: number;
 	phases: Phase[];
 
 	constructor(tickBorn: number, phases: Phase[])
 	{
-		super();
 		this.tickBorn = tickBorn;
 		this.phases = phases;
 	}
 
-	phaseCurrent(world: World)
+	phaseCurrent(world: World): Phase
 	{
 		var returnValue = null;
 
@@ -35,6 +34,9 @@ export class Phased extends EntityProperty
 
 	// EntityProperty.
 
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+
 	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity)
 	{
 		var ticksSinceBorn = w.timerTicksSoFar - this.tickBorn;
@@ -52,12 +54,12 @@ export class Phased extends EntityProperty
 
 	// Clonable.
 
-	clone()
+	clone(): Phased
 	{
 		return new Phased(this.tickBorn, ArrayHelper.clone(this.phases));
 	}
 
-	overwriteWith(other: Phased)
+	overwriteWith(other: Phased): Phased
 	{
 		ArrayHelper.overwriteWith(this.phases, other.phases);
 		this.tickBorn = other.tickBorn;
@@ -78,12 +80,12 @@ export class Phase
 		this.updateToRun = updateToRun;
 	}
 
-	clone()
+	clone(): Phase
 	{
 		return this;
 	}
 
-	overwriteWith(other: Phase)
+	overwriteWith(other: Phase): Phase
 	{
 		return this;
 	}

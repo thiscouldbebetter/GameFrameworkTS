@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Equippable extends GameFramework.EntityProperty {
+        class Equippable {
             constructor(equip, unequip) {
-                super();
                 this._equip = equip;
                 this._unequip = unequip;
                 this.isEquipped = false;
@@ -32,6 +31,10 @@ var ThisCouldBeBetter;
             overwriteWith(other) {
                 return this;
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
+            updateForTimerTick(u, w, p, e) { }
         }
         GameFramework.Equippable = Equippable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

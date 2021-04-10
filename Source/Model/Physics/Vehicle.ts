@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Vehicle extends EntityProperty
+export class Vehicle implements EntityProperty
 {
 	accelerationPerTick: number;
 	speedMax: number;
@@ -16,7 +16,6 @@ export class Vehicle extends EntityProperty
 		accelerationPerTick: number, speedMax: number, steeringAngleInTurns: number
 	)
 	{
-		super();
 		this.accelerationPerTick = accelerationPerTick;
 		this.speedMax = speedMax;
 		this.steeringAngleInTurns = steeringAngleInTurns;
@@ -25,7 +24,15 @@ export class Vehicle extends EntityProperty
 		this.steeringDirection = 0;
 	}
 
-	updateForTimerTick(universe: Universe, world: World, place: Place, entityVehicle: Entity)
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+
+	updateForTimerTick
+	(
+		universe: Universe, world: World, place: Place, entityVehicle: Entity
+	): void
 	{
 		if (this.entityOccupant != null)
 		{

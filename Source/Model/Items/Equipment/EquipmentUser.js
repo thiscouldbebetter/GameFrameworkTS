@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class EquipmentUser extends GameFramework.EntityProperty {
+        class EquipmentUser {
             constructor(socketDefnGroup) {
-                super();
                 this.socketGroup = new GameFramework.EquipmentSocketGroup(socketDefnGroup);
             }
             equipEntityWithItem(universe, world, place, entityEquipmentUser, itemEntityToEquip) {
@@ -144,6 +143,10 @@ var ThisCouldBeBetter;
                 }
                 this.unequipItemsNoLongerHeld(actor);
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
+            updateForTimerTick(u, w, p, e) { }
             // control
             toControl(universe, size, entityEquipmentUser, venuePrev, includeTitleAndDoneButton) {
                 this.statusMessage = "Equip items in available slots.";

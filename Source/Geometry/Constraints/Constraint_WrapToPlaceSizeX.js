@@ -3,16 +3,14 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Constraint_WrapToRange {
-            constructor(target) {
-                this.target = target;
-            }
+        class Constraint_WrapToPlaceSizeX {
             constrain(universe, world, place, entity) {
-                var targetRange = this.target;
+                var placeSize = place.size;
                 var entityLoc = entity.locatable().loc;
-                entityLoc.pos.wrapToRangeMax(targetRange);
+                var entityPos = entityLoc.pos;
+                entityPos.x = GameFramework.NumberHelper.wrapToRangeMax(entityPos.x, placeSize.x);
             }
         }
-        GameFramework.Constraint_WrapToRange = Constraint_WrapToRange;
+        GameFramework.Constraint_WrapToPlaceSizeX = Constraint_WrapToPlaceSizeX;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
 })(ThisCouldBeBetter || (ThisCouldBeBetter = {}));

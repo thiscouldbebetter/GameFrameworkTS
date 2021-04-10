@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Collidable extends EntityProperty
+export class Collidable implements EntityProperty
 {
 	ticksToWaitBetweenCollisions: number;
 	colliderAtRest: any;
@@ -26,7 +26,6 @@ export class Collidable extends EntityProperty
 		collideEntities: (u: Universe, w: World, p: Place, e0: Entity, e1: Entity, c: Collision) => void
 	)
 	{
-		super();
 		this.ticksToWaitBetweenCollisions = ticksToWaitBetweenCollisions || 0;
 		this.colliderAtRest = colliderAtRest;
 		this.entityPropertyNamesToCollideWith = entityPropertyNamesToCollideWith || [];
@@ -301,6 +300,8 @@ export class Collidable extends EntityProperty
 	}
 
 	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
 
 	initialize(universe: Universe, world: World, place: Place, entity: Entity)
 	{

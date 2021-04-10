@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ItemHolder extends EntityProperty
+export class ItemHolder implements EntityProperty
 {
 	itemEntities: Entity[];
 	massMax: number;
@@ -16,7 +16,6 @@ export class ItemHolder extends EntityProperty
 		itemEntities: Entity[], massMax: number, reachRadius: number
 	)
 	{
-		super();
 		this.itemEntities = [];
 		this.massMax = massMax;
 		this.reachRadius = reachRadius || 20;
@@ -41,14 +40,17 @@ export class ItemHolder extends EntityProperty
 
 	// Instance methods.
 
-	clear()
+	clear(): void
 	{
 		this.itemEntities.length = 0;
 		this.itemEntitySelected = null;
 		this.statusMessage = "";
 	}
 
-	equipItemInNumberedSlot(universe: Universe, entityItemHolder: Entity, slotNumber: number)
+	equipItemInNumberedSlot
+	(
+		universe: Universe, entityItemHolder: Entity, slotNumber: number
+	): void
 	{
 		var entityItemToEquip = this.itemEntitySelected;
 		if (entityItemToEquip != null)
@@ -67,29 +69,32 @@ export class ItemHolder extends EntityProperty
 		}
 	}
 
-	hasItem(itemToCheck: Item)
+	hasItem(itemToCheck: Item): boolean
 	{
 		return this.hasItemWithDefnNameAndQuantity(itemToCheck.defnName, itemToCheck.quantity);
 	}
 
-	hasItemWithDefnNameAndQuantity(defnName: string, quantityToCheck: number)
+	hasItemWithDefnNameAndQuantity
+	(
+		defnName: string, quantityToCheck: number
+	): boolean
 	{
 		var itemExistingQuantity = this.itemQuantityByDefnName(defnName);
 		var returnValue = (itemExistingQuantity >= quantityToCheck);
 		return returnValue;
 	}
 
-	itemEntitiesAdd(itemEntitiesToAdd: Entity[])
+	itemEntitiesAdd(itemEntitiesToAdd: Entity[]): void
 	{
 		itemEntitiesToAdd.forEach(x => this.itemEntityAdd(x));
 	}
 
-	itemEntitiesAllTransferTo(other: ItemHolder)
+	itemEntitiesAllTransferTo(other: ItemHolder): void
 	{
 		this.itemEntitiesTransferTo(this.itemEntities, other);
 	}
 
-	itemEntitiesByDefnName(defnName: string)
+	itemEntitiesByDefnName(defnName: string): Entity[]
 	{
 		return this.itemEntities.filter
 		(
@@ -97,7 +102,10 @@ export class ItemHolder extends EntityProperty
 		);
 	}
 
-	itemEntitiesTransferTo(itemEntitiesToTransfer: Entity[], other: ItemHolder)
+	itemEntitiesTransferTo
+	(
+		itemEntitiesToTransfer: Entity[], other: ItemHolder
+	): void
 	{
 		if (itemEntitiesToTransfer == this.itemEntities)
 		{
@@ -112,7 +120,7 @@ export class ItemHolder extends EntityProperty
 		}
 	}
 
-	itemEntitiesWithDefnNameJoin(defnName: string)
+	itemEntitiesWithDefnNameJoin(defnName: string): Entity
 	{
 		var itemEntitiesMatching = this.itemEntities.filter(x => x.item().defnName == defnName);
 		var itemEntityJoined = itemEntitiesMatching[0];
@@ -129,7 +137,7 @@ export class ItemHolder extends EntityProperty
 		return itemEntityJoined;
 	}
 
-	itemEntityAdd(itemEntityToAdd: Entity)
+	itemEntityAdd(itemEntityToAdd: Entity): void
 	{
 		var itemToAdd = itemEntityToAdd.item();
 		var itemDefnName = itemToAdd.defnName;
@@ -144,7 +152,10 @@ export class ItemHolder extends EntityProperty
 		}
 	}
 
-	itemEntityFindClosest(universe: Universe, world: World, place: Place, entityItemHolder: Entity)
+	itemEntityFindClosest
+	(
+		universe: Universe, world: World, place: Place, entityItemHolder: Entity
+	): Entity
 	{
 		var entityItemsInPlace = place.items();
 		var entityItemClosest = entityItemsInPlace.filter
@@ -165,7 +176,7 @@ export class ItemHolder extends EntityProperty
 	(
 		universe: Universe, world: World, place: Place,
 		entityItemHolder: Entity, entityItemToPickUp: Entity
-	)
+	): boolean
 	{
 		var massAlreadyHeld = this.massOfAllItems(world);
 		var massOfItem = entityItemToPickUp.item().mass(world);
@@ -178,13 +189,13 @@ export class ItemHolder extends EntityProperty
 	(
 		universe: Universe, world: World, place: Place,
 		entityItemHolder: Entity, entityItemToPickUp: Entity
-	)
+	): void
 	{
 		this.itemEntityAdd(entityItemToPickUp);
 		place.entitiesToRemove.push(entityItemToPickUp);
 	}
 
-	itemEntityRemove(itemEntityToRemove: Entity)
+	itemEntityRemove(itemEntityToRemove: Entity): void
 	{
 		var doesExist = this.itemEntities.indexOf(itemEntityToRemove) >= 0;
 		if (doesExist)
@@ -193,7 +204,10 @@ export class ItemHolder extends EntityProperty
 		}
 	}
 
-	itemEntitySplit(itemEntityToSplit: Entity, quantityToSplit: number)
+	itemEntitySplit
+	(
+		itemEntityToSplit: Entity, quantityToSplit: number
+	): Entity
 	{
 		var itemEntitySplitted = null;
 
@@ -226,7 +240,7 @@ export class ItemHolder extends EntityProperty
 		return itemEntitySplitted;
 	}
 
-	itemEntityTransferTo(itemEntity: Entity, other: ItemHolder)
+	itemEntityTransferTo(itemEntity: Entity, other: ItemHolder): void
 	{
 		other.itemEntityAdd(itemEntity);
 		ArrayHelper.remove(this.itemEntities, itemEntity);
@@ -236,13 +250,13 @@ export class ItemHolder extends EntityProperty
 		}
 	}
 
-	itemEntityTransferSingleTo(itemEntity: Entity, other: ItemHolder)
+	itemEntityTransferSingleTo(itemEntity: Entity, other: ItemHolder): void
 	{
 		var itemEntitySingle = this.itemEntitySplit(itemEntity, 1);
 		this.itemEntityTransferTo(itemEntitySingle, other);
 	}
 
-	itemQuantityByDefnName(defnName: string)
+	itemQuantityByDefnName(defnName: string): number
 	{
 		return this.itemsByDefnName(defnName).map
 		(
@@ -253,12 +267,18 @@ export class ItemHolder extends EntityProperty
 		);
 	}
 
-	itemSubtract(itemToSubtract: Item)
+	itemSubtract(itemToSubtract: Item): void
 	{
-		this.itemSubtractDefnNameAndQuantity(itemToSubtract.defnName, itemToSubtract.quantity);
+		this.itemSubtractDefnNameAndQuantity
+		(
+			itemToSubtract.defnName, itemToSubtract.quantity
+		);
 	}
 
-	itemSubtractDefnNameAndQuantity(itemDefnName: string, quantityToSubtract: number)
+	itemSubtractDefnNameAndQuantity
+	(
+		itemDefnName: string, quantityToSubtract: number
+	): void
 	{
 		this.itemEntitiesWithDefnNameJoin(itemDefnName);
 		var itemExisting = this.itemsByDefnName(itemDefnName)[0];
@@ -273,7 +293,7 @@ export class ItemHolder extends EntityProperty
 		}
 	}
 
-	itemTransferTo(itemToTransfer: Item, other: ItemHolder)
+	itemTransferTo(itemToTransfer: Item, other: ItemHolder): void
 	{
 		var itemDefnName = itemToTransfer.defnName;
 		this.itemEntitiesWithDefnNameJoin(itemDefnName);
@@ -287,17 +307,17 @@ export class ItemHolder extends EntityProperty
 		}
 	}
 
-	items()
+	items(): Item[]
 	{
 		return this.itemEntities.map(x => x.item());
 	}
 
-	itemsByDefnName(defnName: string)
+	itemsByDefnName(defnName: string): Item[]
 	{
 		return this.itemEntitiesByDefnName(defnName).map(x => x.item());
 	}
 
-	massOfAllItems(world: World)
+	massOfAllItems(world: World): number
 	{
 		var massTotal = this.itemEntities.reduce
 		(
@@ -308,12 +328,12 @@ export class ItemHolder extends EntityProperty
 		return massTotal;
 	}
 
-	massOfAllItemsOverMax(world: World)
+	massOfAllItemsOverMax(world: World): string
 	{
 		return "" + Math.ceil(this.massOfAllItems(world)) + "/" + this.massMax;
 	}
 
-	tradeValueOfAllItems(world: World)
+	tradeValueOfAllItems(world: World): number
 	{
 		var tradeValueTotal = this.itemEntities.reduce
 		(
@@ -324,9 +344,19 @@ export class ItemHolder extends EntityProperty
 		return tradeValueTotal;
 	}
 
-	// controls
+	// EntityProperty.
 
-	toControl(universe: Universe, size: Coords, entityItemHolder: Entity, venuePrev: Venue, includeTitleAndDoneButton: boolean)
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
+
+	// Controllable.
+
+	toControl
+	(
+		universe: Universe, size: Coords, entityItemHolder: Entity,
+		venuePrev: Venue, includeTitleAndDoneButton: boolean
+	): ControlBase
 	{
 		this.statusMessage = "Use, drop, and sort items.";
 
@@ -819,7 +849,7 @@ export class ItemHolder extends EntityProperty
 
 	// cloneable
 
-	clone()
+	clone(): ItemHolder
 	{
 		return new ItemHolder
 		(

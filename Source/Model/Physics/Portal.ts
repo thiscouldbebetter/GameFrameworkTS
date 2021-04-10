@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Portal extends EntityProperty
+export class Portal implements EntityProperty
 {
 	destinationPlaceName: string;
 	destinationEntityName: string;
@@ -14,13 +14,16 @@ export class Portal extends EntityProperty
 		velocityToApply: Coords
 	)
 	{
-		super();
 		this.destinationPlaceName = destinationPlaceName;
 		this.destinationEntityName = destinationEntityName;
 		this.velocityToApply = velocityToApply;
 	}
 
-	use(universe: Universe, world: World, placeToDepart: Place, entityToTransport: Entity, entityPortal: Entity)
+	use
+	(
+		universe: Universe, world: World, placeToDepart: Place,
+		entityToTransport: Entity, entityPortal: Entity
+	): void
 	{
 		var entityPortalCollidable = entityPortal.collidable();
 		entityPortalCollidable.ticksUntilCanCollide = 40; // hack
@@ -47,7 +50,11 @@ export class Portal extends EntityProperty
 		universe.venueNext = venueMessage;
 	}
 
-	transport(universe: Universe, world: World, placeToDepart: Place, entityToTransport: Entity, entityPortal: Entity)
+	transport
+	(
+		universe: Universe, world: World, placeToDepart: Place,
+		entityToTransport: Entity, entityPortal: Entity
+	): void
 	{
 		var destinationPlace = world.placesByName.get(this.destinationPlaceName);
 		destinationPlace.initialize(universe, world);
@@ -75,7 +82,7 @@ export class Portal extends EntityProperty
 		destinationPlace.entityToSpawnAdd(entityToTransport);
 	}
 
-	clone()
+	clone(): Portal
 	{
 		return new Portal
 		(
@@ -84,6 +91,12 @@ export class Portal extends EntityProperty
 			this.velocityToApply == null ? null : this.velocityToApply.clone()
 		);
 	}
+
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
 }
 
 }

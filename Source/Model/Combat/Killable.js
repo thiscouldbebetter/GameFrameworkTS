@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Killable extends GameFramework.EntityProperty {
+        class Killable {
             constructor(integrityMax, damageApply, die) {
-                super();
                 this.integrityMax = integrityMax;
                 this._damageApply = damageApply;
                 this._die = die;
@@ -40,6 +39,9 @@ var ThisCouldBeBetter;
             isAlive() {
                 return (this.integrity > 0);
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
             updateForTimerTick(universe, world, place, entityKillable) {
                 if (this.isAlive() == false) {
                     place.entitiesToRemove.push(entityKillable);

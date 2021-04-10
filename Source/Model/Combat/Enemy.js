@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Enemy extends GameFramework.EntityProperty {
+        class Enemy {
             constructor(weapon) {
-                super();
                 this.weapon = weapon;
             }
             static activityDefnBuild() {
@@ -57,6 +56,10 @@ var ThisCouldBeBetter;
                 var enemyActivityDefn = new GameFramework.ActivityDefn("Enemy", enemyActivityPerform);
                 return enemyActivityDefn;
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
+            updateForTimerTick(u, w, p, e) { }
         }
         GameFramework.Enemy = Enemy;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Camera extends GameFramework.EntityProperty {
+        class Camera {
             constructor(viewSize, focalLength, loc, entitiesInViewSort) {
-                super();
                 this.viewSize = viewSize;
                 this.focalLength = focalLength;
                 this.loc = loc;
@@ -158,7 +157,10 @@ var ThisCouldBeBetter;
             toEntity() {
                 return new GameFramework.Entity(Camera.name, [this]);
             }
-            updateForTimerTick() {
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
+            updateForTimerTick(u, w, p, e) {
                 // Do nothing.  Rendering is done in Place.draw().
             }
         }

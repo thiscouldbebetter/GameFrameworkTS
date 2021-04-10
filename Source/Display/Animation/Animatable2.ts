@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Animatable2 extends EntityProperty
+export class Animatable2 implements EntityProperty
 {
 	animationDefnGroup: AnimationDefnGroup;
 	transformableAtRest: any;
@@ -16,7 +16,6 @@ export class Animatable2 extends EntityProperty
 		transformableTransformed: any
 	)
 	{
-		super();
 		this.animationDefnGroup = animationDefnGroup;
 		this.transformableAtRest = transformableAtRest;
 		this.transformableTransformed = transformableTransformed;
@@ -82,6 +81,11 @@ export class Animatable2 extends EntityProperty
 	{
 		this.transformableTransformed.overwriteWith(this.transformableAtRest);
 	}
+
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
 
 	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity): void
 	{

@@ -13,7 +13,7 @@ var ThisCouldBeBetter;
                 this.colorBorder = colorBorder;
                 // helper variables
                 this._drawPos = GameFramework.Coords.create();
-                this._polar = new GameFramework.Polar(0, 0, 0);
+                this._polar = GameFramework.Polar.create();
             }
             draw(universe, world, place, entity, display) {
                 var drawableLoc = entity.locatable().loc;

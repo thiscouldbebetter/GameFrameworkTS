@@ -1011,11 +1011,11 @@ class PlaceBuilderDemo_Items
 				(
 					this.entityDimensionHalf, itemLogColor
 				),
-				Coords.fromXY(0, this.entityDimension)
+				Coords.fromXY(this.entityDimension, 0)
 			),
 			VisualRectangle.fromSizeAndColorFill
 			(
-				new Coords(this.entityDimension * 2, this.entityDimension, 0),
+				Coords.fromXY(this.entityDimension * 2, this.entityDimension),
 				itemLogColor
 			),
 			new VisualOffset

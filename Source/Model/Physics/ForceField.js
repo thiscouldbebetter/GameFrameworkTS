@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class ForceField extends GameFramework.EntityProperty {
+        class ForceField {
             constructor(accelerationToApply, velocityToApply) {
-                super();
                 this.accelerationToApply = accelerationToApply;
                 this.velocityToApply = velocityToApply;
             }
@@ -31,6 +30,10 @@ var ThisCouldBeBetter;
                 }
                 return this;
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
+            updateForTimerTick(u, w, p, e) { }
         }
         GameFramework.ForceField = ForceField;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

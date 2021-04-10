@@ -63,6 +63,12 @@ var ThisCouldBeBetter;
                 }
                 this.entitiesToSpawn.length = 0;
             }
+            entityById(entityId) {
+                return this.entitiesById.get(entityId);
+            }
+            entityByName(entityName) {
+                return this.entitiesByName.get(entityName);
+            }
             entityRemove(entity) {
                 var entityProperties = entity.properties;
                 for (var p = 0; p < entityProperties.length; p++) {

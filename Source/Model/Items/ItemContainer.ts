@@ -2,11 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ItemContainer extends EntityProperty
+export class ItemContainer implements EntityProperty
 {
 	statusMessage: string;
 
-	transfer(world: World, entityFrom: Entity, entityTo: Entity, messagePrefix: string)
+	transfer
+	(
+		world: World, entityFrom: Entity, entityTo: Entity, messagePrefix: string
+	): void
 	{
 		var itemHolderFrom = entityFrom.itemHolder();
 		var itemHolderTo = entityTo.itemHolder();
@@ -41,13 +44,19 @@ export class ItemContainer extends EntityProperty
 		}
 	}
 
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
+
 	// Controllable.
 
 	toControl
 	(
 		universe: Universe, size: Coords,
 		entityGetterPutter: Entity, entityContainer: Entity, venuePrev: Venue
-	)
+	): ControlBase
 	{
 		if (size == null)
 		{

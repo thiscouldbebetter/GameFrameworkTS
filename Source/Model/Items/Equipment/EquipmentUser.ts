@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class EquipmentUser extends EntityProperty
+export class EquipmentUser implements EntityProperty
 {
 	socketGroup: EquipmentSocketGroup;
 	socketDefnGroup: EquipmentSocketDefnGroup;
@@ -13,7 +13,6 @@ export class EquipmentUser extends EntityProperty
 
 	constructor(socketDefnGroup: EquipmentSocketDefnGroup)
 	{
-		super();
 		this.socketGroup = new EquipmentSocketGroup(socketDefnGroup);
 	}
 
@@ -21,7 +20,7 @@ export class EquipmentUser extends EntityProperty
 	(
 		universe: Universe, world: World, place: Place,
 		entityEquipmentUser: Entity, itemEntityToEquip: Entity
-	)
+	): any
 	{
 		if (itemEntityToEquip == null)
 		{
@@ -72,7 +71,7 @@ export class EquipmentUser extends EntityProperty
 		entityEquipmentUser: Entity,
 		itemEntityToEquip: Entity,
 		includeSocketNameInMessage: boolean
-	)
+	): void
 	{
 		var itemToEquipDefnName = itemEntityToEquip.item().defnName;
 		var socketFound = null;
@@ -117,7 +116,7 @@ export class EquipmentUser extends EntityProperty
 		itemEntityToEquip: Entity,
 		socketName: string,
 		includeSocketNameInMessage: boolean
-	)
+	): any
 	{
 		if (itemEntityToEquip == null) { return "Nothing to equip!"; }
 
@@ -166,18 +165,18 @@ export class EquipmentUser extends EntityProperty
 		return message;
 	}
 
-	itemEntityInSocketWithName(socketName: string)
+	itemEntityInSocketWithName(socketName: string): Entity
 	{
 		var socket = this.socketByName(socketName);
 		return socket.itemEntityEquipped;
 	}
 
-	socketByName(socketName: string)
+	socketByName(socketName: string): EquipmentSocket
 	{
 		return this.socketGroup.socketsByDefnName.get(socketName);
 	}
 
-	unequipItemFromSocketWithName(world: World, socketName: string)
+	unequipItemFromSocketWithName(world: World, socketName: string): any
 	{
 		var message;
 		var socketToUnequipFrom = this.socketGroup.socketsByDefnName.get(socketName);
@@ -203,7 +202,7 @@ export class EquipmentUser extends EntityProperty
 		return message;
 	}
 
-	unequipItemsNoLongerHeld(entityEquipmentUser: Entity)
+	unequipItemsNoLongerHeld(entityEquipmentUser: Entity): void
 	{
 		var itemHolder = entityEquipmentUser.itemHolder();
 		var itemEntitiesHeld = itemHolder.itemEntities;
@@ -227,7 +226,7 @@ export class EquipmentUser extends EntityProperty
 		}
 	}
 
-	unequipItemEntity(itemEntityToUnequip: Entity)
+	unequipItemEntity(itemEntityToUnequip: Entity): void
 	{
 		var socket = this.socketGroup.sockets.filter
 		(
@@ -239,7 +238,10 @@ export class EquipmentUser extends EntityProperty
 		}
 	}
 
-	useItemInSocketNumbered(universe: Universe, world: World, place: Place, actor: Entity, socketNumber: number)
+	useItemInSocketNumbered
+	(
+		universe: Universe, world: World, place: Place, actor: Entity, socketNumber: number
+	): void
 	{
 		var equipmentUser = actor.equipmentUser();
 		var socketName = "Item" + socketNumber;
@@ -252,13 +254,19 @@ export class EquipmentUser extends EntityProperty
 		this.unequipItemsNoLongerHeld(actor);
 	}
 
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
+
 	// control
 
 	toControl
 	(
 		universe: Universe, size: Coords, entityEquipmentUser: Entity,
 		venuePrev: Venue, includeTitleAndDoneButton: boolean
-	)
+	): ControlBase
 	{
 		this.statusMessage = "Equip items in available slots.";
 

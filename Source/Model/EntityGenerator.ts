@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class EntityGenerator extends EntityProperty
+export class EntityGenerator implements EntityProperty
 {
 	entityToGenerate: Entity;
 	ticksToGenerate: number;
@@ -17,7 +17,6 @@ export class EntityGenerator extends EntityProperty
 		entitiesGeneratedMax: number
 	)
 	{
-		super();
 		this.entityToGenerate = entityToGenerate;
 		this.ticksToGenerate = ticksToGenerate;
 		this.entitiesGeneratedMax = entitiesGeneratedMax || 1;
@@ -26,7 +25,15 @@ export class EntityGenerator extends EntityProperty
 		this.tickLastGenerated = 0 - this.ticksToGenerate;
 	}
 
-	updateForTimerTick(universe: Universe, world: World, place: Place, entityGenerator: Entity)
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+
+	updateForTimerTick
+	(
+		universe: Universe, world: World, place: Place, entityGenerator: Entity
+	): void
 	{
 		var placeEntitiesByName = place.entitiesByName;
 
@@ -61,7 +68,7 @@ export class EntityGenerator extends EntityProperty
 
 	// Clonable.
 
-	clone()
+	clone(): EntityGenerator
 	{
 		return new EntityGenerator
 		(
@@ -69,7 +76,7 @@ export class EntityGenerator extends EntityProperty
 		);
 	}
 
-	overwriteWith(other: EntityGenerator)
+	overwriteWith(other: EntityGenerator): EntityGenerator
 	{
 		this.entityToGenerate = other.entityToGenerate; // todo
 		this.ticksToGenerate = other.ticksToGenerate;

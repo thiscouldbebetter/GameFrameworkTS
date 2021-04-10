@@ -43,6 +43,11 @@ var ThisCouldBeBetter;
                 this.z += z;
                 return this;
             }
+            addXY(x, y) {
+                this.x += x;
+                this.y += y;
+                return this;
+            }
             ceiling() {
                 this.x = Math.ceil(this.x);
                 this.y = Math.ceil(this.y);

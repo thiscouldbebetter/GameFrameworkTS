@@ -450,8 +450,8 @@ class PlaceBuilderDemo_Items {
         var itemLogName = "Log";
         var itemLogColor = Color.byName("Brown");
         var itemLogVisual = new VisualGroup([
-            new VisualOffset(VisualCircle.fromRadiusAndColorFill(this.entityDimensionHalf, itemLogColor), Coords.fromXY(0, this.entityDimension)),
-            VisualRectangle.fromSizeAndColorFill(new Coords(this.entityDimension * 2, this.entityDimension, 0), itemLogColor),
+            new VisualOffset(VisualCircle.fromRadiusAndColorFill(this.entityDimensionHalf, itemLogColor), Coords.fromXY(this.entityDimension, 0)),
+            VisualRectangle.fromSizeAndColorFill(Coords.fromXY(this.entityDimension * 2, this.entityDimension), itemLogColor),
             new VisualOffset(VisualCircle.fromRadiusAndColorFill(this.entityDimensionHalf, Color.byName("Tan")), Coords.fromXY(-this.entityDimension, 0))
         ]);
         if (this.parent.visualsHaveText) {

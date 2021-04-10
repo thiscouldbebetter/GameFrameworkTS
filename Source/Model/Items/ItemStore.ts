@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ItemStore extends EntityProperty
+export class ItemStore implements EntityProperty
 {
 	itemDefnNameCurrency: string;
 
@@ -10,12 +10,14 @@ export class ItemStore extends EntityProperty
 
 	constructor(itemDefnNameCurrency: string)
 	{
-		super();
 		this.itemDefnNameCurrency = itemDefnNameCurrency;
 		this.statusMessage = "-";
 	}
 
-	transfer(world: World, entityFrom: Entity, entityTo: Entity, messagePrefix: string)
+	transfer
+	(
+		world: World, entityFrom: Entity, entityTo: Entity, messagePrefix: string
+	): void
 	{
 		var itemHolderFrom = entityFrom.itemHolder();
 		var itemHolderTo = entityTo.itemHolder();
@@ -51,7 +53,11 @@ export class ItemStore extends EntityProperty
 		}
 	}
 
-	use(universe: Universe, world: World, place: Place, entityUsing: Entity, entityUsed: Entity)
+	use
+	(
+		universe: Universe, world: World, place: Place,
+		entityUsing: Entity, entityUsed: Entity
+	): void
 	{
 		//entityUsed.collidable().ticksUntilCanCollide = 50; // hack
 		var storeAsControl = entityUsed.itemStore().toControl
@@ -65,9 +71,19 @@ export class ItemStore extends EntityProperty
 		universe.venueNext = venueNext;
 	}
 
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
+
 	// Controllable.
 
-	toControl(universe: Universe, size: Coords, entityCustomer: Entity, entityStore: Entity, venuePrev: Venue)
+	toControl
+	(
+		universe: Universe, size: Coords, entityCustomer: Entity,
+		entityStore: Entity, venuePrev: Venue
+	): ControlBase
 	{
 		if (size == null)
 		{

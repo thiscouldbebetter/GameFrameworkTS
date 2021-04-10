@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Playable extends EntityProperty
+export class Playable implements EntityProperty
 {
 	static toControlMenu
 	(
@@ -161,7 +161,10 @@ export class Playable extends EntityProperty
 		return returnValue;
 	}
 
-	static toControlWorldOverlay(universe: Universe, size: Coords, entity: Entity)
+	static toControlWorldOverlay
+	(
+		universe: Universe, size: Coords, entity: Entity
+	): ControlBase
 	{
 		var world = universe.world;
 		var place = world.placeCurrent;
@@ -458,6 +461,12 @@ export class Playable extends EntityProperty
 
 		return controlOverlayTransparent;
 	}
+
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
 
 }
 

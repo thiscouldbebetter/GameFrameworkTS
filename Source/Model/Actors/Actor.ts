@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Actor extends EntityProperty
+export class Actor implements EntityProperty
 {
 	activity: Activity;
 
@@ -10,7 +10,6 @@ export class Actor extends EntityProperty
 
 	constructor(activity: Activity)
 	{
-		super();
 		this.activity = activity;
 		this.actions = [];
 	}
@@ -21,6 +20,11 @@ export class Actor extends EntityProperty
 		var returnValue = new Actor(activity);
 		return returnValue;
 	}
+
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
 
 	updateForTimerTick
 	(

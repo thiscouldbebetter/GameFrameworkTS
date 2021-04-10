@@ -3,11 +3,14 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class JournalKeeper extends GameFramework.EntityProperty {
+        class JournalKeeper {
             constructor(journal) {
-                super();
                 this.journal = journal;
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
+            updateForTimerTick(u, w, p, e) { }
             // Controls.
             toControl(universe, size, entityJournalKeeper, venuePrev, includeTitleAndDoneButton) {
                 var world = universe.world;

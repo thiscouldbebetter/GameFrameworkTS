@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class ItemCrafter extends GameFramework.EntityProperty {
+        class ItemCrafter {
             constructor(recipesAvailable) {
-                super();
                 this.recipesAvailable = recipesAvailable || [];
                 this.itemHolderStaged = GameFramework.ItemHolder.create();
                 this.recipeAvailableSelected = null;
@@ -61,7 +60,9 @@ var ThisCouldBeBetter;
                 }
                 return returnValue;
             }
-            // venue
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
             updateForTimerTick(universe, world, place, entityCrafter) {
                 if (this.recipesQueued.length > 0) {
                     var recipeInProgress = this.recipesQueued[0];

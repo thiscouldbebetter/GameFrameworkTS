@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Collidable extends GameFramework.EntityProperty {
+        class Collidable {
             constructor(ticksToWaitBetweenCollisions, colliderAtRest, entityPropertyNamesToCollideWith, collideEntities) {
-                super();
                 this.ticksToWaitBetweenCollisions = ticksToWaitBetweenCollisions || 0;
                 this.colliderAtRest = colliderAtRest;
                 this.entityPropertyNamesToCollideWith = entityPropertyNamesToCollideWith || [];
@@ -145,6 +144,7 @@ var ThisCouldBeBetter;
                 return (entity.movable() == null);
             }
             // EntityProperty.
+            finalize(u, w, p, e) { }
             initialize(universe, world, place, entity) {
                 if (this.isEntityStationary(entity)) {
                     this.collisionsFindAndHandle(universe, world, place, entity);

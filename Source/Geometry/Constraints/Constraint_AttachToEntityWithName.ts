@@ -13,8 +13,7 @@ export class Constraint_AttachToEntityWithName implements Constraint
 
 	constrain(universe: Universe, world: World, place: Place, entityToConstrain: Entity)
 	{
-		var targetEntityName = this.targetEntityName;
-		var targetEntity = place.entitiesByName.get(targetEntityName);
+		var targetEntity = place.entityByName(this.targetEntityName);
 		if (targetEntity != null)
 		{
 			var targetPos = targetEntity.locatable().loc.pos;

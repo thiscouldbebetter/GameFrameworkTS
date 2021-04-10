@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class ItemBarterer extends GameFramework.EntityProperty {
+        class ItemBarterer {
             constructor() {
-                super();
                 this.itemHolderCustomerOffer = GameFramework.ItemHolder.create();
                 this.itemHolderStoreOffer = GameFramework.ItemHolder.create();
                 this.statusMessage = "Choose items to trade and click the 'Offer' button.";
@@ -47,6 +46,10 @@ var ThisCouldBeBetter;
                     }
                 }
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
+            updateForTimerTick(u, w, p, e) { }
             // Controls.
             toControl(universe, size, entityCustomer, entityStore, venuePrev) {
                 if (size == null) {

@@ -10,20 +10,14 @@ class PlaceStub extends Place
 			Coords.fromXY(400, 300), // size
 			 // entities
 			[
-				new Entity
-				(
-					"UserInputListener",
-					[
-						Actor.fromActivityDefnName("HandleUserInput")
-					]
-				)
+				new UserInputListener()
 			]
 		);
 	}
 
 	static defnBuild(): PlaceDefn
 	{
-		var actionShowMenu = Action.Instances().ShowMenu;
+		var actionShowMenu = Action.Instances().ShowMenuSettings;
 
 		var actions =
 		[

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ItemDefn extends EntityProperty
+export class ItemDefn implements EntityProperty
 {
 	name: string;
 	appearance: string;
@@ -27,7 +27,6 @@ export class ItemDefn extends EntityProperty
 		visual: Visual
 	)
 	{
-		super();
 		this.name = name;
 
 		this.appearance = appearance || name;
@@ -40,12 +39,15 @@ export class ItemDefn extends EntityProperty
 		this.visual = visual;
 	}
 
-	static new1(name: string)
+	static new1(name: string): ItemDefn
 	{
 		return new ItemDefn(name, null, null, null, null, null, null, null, null);
 	}
 
-	static fromNameCategoryNameAndUse(name: string, categoryName: string, use: any)
+	static fromNameCategoryNameAndUse
+	(
+		name: string, categoryName: string, use: any
+	): ItemDefn
 	{
 		var returnValue = ItemDefn.new1(name);
 		returnValue.categoryNames = [ categoryName ];
@@ -53,14 +55,14 @@ export class ItemDefn extends EntityProperty
 		return returnValue;
 	}
 
-	static fromNameAndUse(name: string, use: any)
+	static fromNameAndUse(name: string, use: any): ItemDefn
 	{
 		var returnValue = ItemDefn.new1(name);
 		returnValue.use = use;
 		return returnValue;
 	}
 
-	use(u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity)
+	use(u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity): any
 	{
 		var returnValue;
 		if (this._use == null)
@@ -71,8 +73,15 @@ export class ItemDefn extends EntityProperty
 		{
 			returnValue = this._use(u, w, p, eUsing, eUsed);
 		}
+
 		return returnValue;
 	}
+
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
 }
 
 }
