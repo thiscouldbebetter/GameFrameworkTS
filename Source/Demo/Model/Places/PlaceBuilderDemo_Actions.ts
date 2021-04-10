@@ -17,6 +17,9 @@ class PlaceBuilderDemo_Actions
 		var actions =
 		[
 			actionsAll.DoNothing,
+
+			DisplayRecorder.actionStartStop(),
+
 			actionsAll.ShowMenuPlayer,
 
 			Movable.actionAccelerateDown(),
@@ -139,24 +142,6 @@ class PlaceBuilderDemo_Actions
 								Color.byName("Red")
 							)
 						);
-					}
-				}
-			),
-
-			new Action
-			(
-				"Recording Start/Stop",
-				(universe: Universe, world: World, place: Place, actor: Entity) => // perform
-				{
-					var recorder = universe.displayRecorder;
-					if (recorder.isRecording)
-					{
-						recorder.stop();
-						recorder.framesRecordedDownload(universe);
-					}
-					else
-					{
-						recorder.start();
 					}
 				}
 			),

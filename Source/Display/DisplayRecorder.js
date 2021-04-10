@@ -12,6 +12,19 @@ var ThisCouldBeBetter;
                 this.isRecording = false;
                 this.shouldDownload = false;
             }
+            static actionStartStop() {
+                return new GameFramework.Action("Recording Start/Stop", DisplayRecorder.actionStartStopPerform);
+            }
+            static actionStartStopPerform(universe, world, place, actor) {
+                var recorder = universe.displayRecorder;
+                if (recorder.isRecording) {
+                    recorder.stop();
+                    recorder.framesRecordedDownload(universe);
+                }
+                else {
+                    recorder.start();
+                }
+            }
             clear() {
                 this.framesRecordedAsArrayBuffers.length = 0;
             }
@@ -62,11 +75,21 @@ var ThisCouldBeBetter;
                 framesRecordedAsTarFile.entries.push(scriptAsTarFileEntry);
                 framesRecordedAsTarFile.downloadAs(fileNameToSaveAs);
             }
+            logStartOrStop() {
+                var startedOrStoppedText = (this.isRecording ? "started" : "stopped");
+                var logMessage = DisplayRecorder.name + " " + startedOrStoppedText
+                    + ", ticksPerFrame: " + this.ticksPerFrame
+                    + ", bufferSizeInFrames:" + this.bufferSizeInFrames
+                    + ", isCircular: " + this.isCircular;
+                console.log(logMessage);
+            }
             start() {
                 this.isRecording = true;
+                this.logStartOrStop();
             }
             stop() {
                 this.isRecording = false;
+                this.logStartOrStop();
             }
             updateForTimerTick(universe) {
                 if (this.isRecording && universe.timerHelper.ticksSoFar % this.ticksPerFrame == 0) {

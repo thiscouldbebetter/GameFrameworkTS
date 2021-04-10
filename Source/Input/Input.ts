@@ -36,7 +36,6 @@ class Input_Names
 	ArrowRight: string;
 	ArrowUp: string;
 	Backspace: string;
-	Backtick: string;
 	Control: string;
 	Enter: string;
 	Escape: string;

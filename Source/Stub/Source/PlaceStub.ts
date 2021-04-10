@@ -17,24 +17,35 @@ class PlaceStub extends Place
 
 	static defnBuild(): PlaceDefn
 	{
+		var actionDisplayRecorderStartStop = DisplayRecorder.actionStartStop();
 		var actionShowMenu = Action.Instances().ShowMenuSettings;
 
 		var actions =
 		[
+			actionDisplayRecorderStartStop,
 			actionShowMenu
 		];
+
+		var inputNames = Input.Names();
 
 		var actionToInputsMappings =
 		[
 			ActionToInputsMapping.fromActionAndInputName
 			(
-				actionShowMenu.name, Input.Names().Escape
+				actionDisplayRecorderStartStop.name, "~"
+			),
+
+			ActionToInputsMapping.fromActionAndInputName
+			(
+				actionShowMenu.name, inputNames.Escape
 			)
 		];
 
 		var entityPropertyNamesToProcess: string[] =
 		[
-			// todo
+			Actor.name,
+			Collidable.name,
+			Locatable.name
 		];
 
 		return PlaceDefn.from4

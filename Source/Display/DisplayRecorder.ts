@@ -28,6 +28,31 @@ export class DisplayRecorder
 		this.shouldDownload = false;
 	}
 
+	static actionStartStop(): Action
+	{
+		return new Action
+		(
+			"Recording Start/Stop", DisplayRecorder.actionStartStopPerform
+		)
+	}
+
+	static actionStartStopPerform
+	(
+		universe: Universe, world: World, place: Place, actor: Entity
+	)
+	{
+		var recorder = universe.displayRecorder;
+		if (recorder.isRecording)
+		{
+			recorder.stop();
+			recorder.framesRecordedDownload(universe);
+		}
+		else
+		{
+			recorder.start();
+		}
+	}
+
 	clear()
 	{
 		this.framesRecordedAsArrayBuffers.length = 0;
@@ -110,14 +135,30 @@ export class DisplayRecorder
 		framesRecordedAsTarFile.downloadAs(fileNameToSaveAs);
 	}
 
+	logStartOrStop(): void
+	{
+		var startedOrStoppedText =
+			(this.isRecording ? "started" : "stopped");
+
+		var logMessage =
+			DisplayRecorder.name + " " + startedOrStoppedText
+			+ ", ticksPerFrame: " + this.ticksPerFrame
+			+ ", bufferSizeInFrames:" + this.bufferSizeInFrames
+			+ ", isCircular: " + this.isCircular;
+
+		console.log(logMessage);
+	}
+
 	start()
 	{
 		this.isRecording = true;
+		this.logStartOrStop();
 	}
 
 	stop()
 	{
 		this.isRecording = false;
+		this.logStartOrStop();
 	}
 
 	updateForTimerTick(universe: Universe)

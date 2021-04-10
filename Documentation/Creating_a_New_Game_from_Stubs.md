@@ -9,13 +9,9 @@ Setup
 
 The stub game template is expected to be used to create a game with a particular file structure.  Follow these steps to create a Git repository for a new stub game:
 
-* Open a File Explorer window.
-* In any desired location (but outside an existing Git repository), create a new directory and name it after the new game, for example, "MyGame".
-* Copy the contents of this Stub directory to the new game directory.
-* Open a command prompt window.
-* Run the command "git init" to convert the new directory into a Git repository.
-* Run the command "git submodule add https://github.com/thiscouldbebetter/GameFrameworkTS Framework" to add the This Could Be Better Game Framework as a Git submodule.
-* Rename the file "Imports.ts-Renamed.txt" to "Imports.ts".  Renaming the file was necessary to avoid conflicts when compiling the larger project from the parent directory.
+* If you have not already done so, make sure that the "git" command is installed.
+* Copy this Stub directory and its contents to any desired directory outside of an existing Git repository.
+* From within the Stub directory, run the command "./Setup-Git-Init_Repo_and_Add_Framework_Submodule.sh" to start a script that converts the new directory into a Git repository and adds the Framework repository to it as a submodule.
 * Delete the file "GameStub-RunsInPlace.html", which exists only to demonstrate the stub game's functionality without actually copying it elsewhere.
 
 
@@ -51,8 +47,8 @@ To actually implement a game based on the stub, add or modify files in the follo
 * Source/WorldGame.ts - Represents a game world and everything in it.  This is approximately equivalent to a "save game".
 * Source/PlaceStub.ts - Represents a "location" in the game, containing a list of "entities".  See the Architecture guide for details on how Places and Entites are designed.
 
-At the very least, it is advisable to rename the .ts files and the classes declared within them to something more meaningful to the actual game rather than "Stub".  Note that this will require corresponding changes in the .html file.
+At the very least, it is advisable to rename the .ts files and the classes declared within them to something more meaningful to the actual game rather than "Stub".  Note that this will require corresponding changes in the .html file.  The corresponding .js files of renamed .ts files should also be deleted.
 
-Note that any added class files added will need to be referenced within the .html file as well.
+Note that any added class files will need to be referenced within the .html file as well.  If those classes come from the framework, they also need to be added to Imports.ts to allow them to be used in other code without qualifying them with their namespace every time.
 
-This topic warrants an entire development guide.  A partial guide is available at /Documentation/Development_Guide.txt.  Also, again, the "/Source/Demo/" directory provides a wealth of usage examples.
+This topic warrants an entire development guide.  A partial, step-by-step tutorial is available at /Documentation/Development_Guide/Development_Guide.txt in the GameFrameworkTS repository.  Also, again, the "/Source/Demo/" directory provides a wealth of usage examples.

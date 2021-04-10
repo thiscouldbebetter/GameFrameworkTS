@@ -11,6 +11,7 @@ import RandomizerLCG = gf.RandomizerLCG;
 
 // Helpers.
 import ArrayHelper = gf.ArrayHelper;
+import ByteHelper = gf.ByteHelper;
 import NumberHelper = gf.NumberHelper;
 import StringHelper = gf.StringHelper;
 
@@ -231,8 +232,16 @@ import VenueFileUpload = gf.VenueFileUpload;
 
 // Storage - Compressor.
 import BitStream = gf.BitStream;
+import ByteStreamFromBytes = gf.ByteStreamFromBytes;
 import ByteStreamFromString = gf.ByteStreamFromString;
 import CompressorLZW = gf.CompressorLZW;
+
+// Storage - TarFile.
+var TarFile = gf.TarFile;
+var TarFileEntry = gf.TarFileEntry;
+var TarFileEntryHeader = gf.TarFileEntryHeader;
+var TarFileTypeFlag = gf.TarFileTypeFlag;
+
 
 // Utility.
 import DateTime = gf.DateTime;

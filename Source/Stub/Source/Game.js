@@ -1,5 +1,5 @@
 "use strict";
-class GameStub {
+class Game {
     constructor(contentDirectoryPath) {
         this.contentDirectoryPath = contentDirectoryPath;
     }

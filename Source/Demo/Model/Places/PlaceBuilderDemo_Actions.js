@@ -8,6 +8,7 @@ class PlaceBuilderDemo_Actions {
         var actionsAll = Action.Instances();
         var actions = [
             actionsAll.DoNothing,
+            DisplayRecorder.actionStartStop(),
             actionsAll.ShowMenuPlayer,
             Movable.actionAccelerateDown(),
             Movable.actionAccelerateLeft(),
@@ -77,17 +78,6 @@ class PlaceBuilderDemo_Actions {
                 else {
                     var message = "Can't pick up!";
                     place.entitySpawn(universe, world, universe.entityBuilder.messageFloater(message, entityActor.locatable().loc.pos, Color.byName("Red")));
-                }
-            }),
-            new Action("Recording Start/Stop", (universe, world, place, actor) => // perform
-             {
-                var recorder = universe.displayRecorder;
-                if (recorder.isRecording) {
-                    recorder.stop();
-                    recorder.framesRecordedDownload(universe);
-                }
-                else {
-                    recorder.start();
                 }
             }),
             new Action("Run", (universe, world, place, actor) => // perform
