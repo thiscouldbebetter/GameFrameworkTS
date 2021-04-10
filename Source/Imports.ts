@@ -1,4 +1,4 @@
-im"use strict";
+"use strict";
 
 // Classes from the framework must be imported here
 // so that they can be referenced without using the namespace.

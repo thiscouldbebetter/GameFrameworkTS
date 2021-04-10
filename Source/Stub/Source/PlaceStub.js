@@ -4,9 +4,7 @@ class PlaceStub extends Place {
         super(PlaceStub.name, PlaceStub.defnBuild().name, Coords.fromXY(400, 300), // size
         // entities
         [
-            new Entity("UserInputListener", [
-                Actor.fromActivityDefnName("HandleUserInput")
-            ])
+            new UserInputListener()
         ]);
     }
     static defnBuild() {
