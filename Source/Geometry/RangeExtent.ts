@@ -13,34 +13,49 @@ export class RangeExtent
 		this.max = max;
 	}
 
-	static create()
+	static create(): RangeExtent
 	{
 		return new RangeExtent(0, 0);
 	}
 
-	clone()
+	static _instances: RangeExtent_Instances;
+	static Instances(): RangeExtent_Instances
+	{
+		if (RangeExtent._instances == null)
+		{
+			RangeExtent._instances = new RangeExtent_Instances();
+		}
+		return RangeExtent._instances;
+	}
+
+	clone(): RangeExtent
 	{
 		return new RangeExtent(this.min, this.max);
 	}
 
-	intersectWith(other: RangeExtent)
+	contains(valueToCheck: number): boolean
+	{
+		return (valueToCheck >= this.min && valueToCheck <= this.max);
+	}
+
+	intersectWith(other: RangeExtent): RangeExtent
 	{
 		this.min = (this.min >= other.min ? this.min : other.min);
 		this.max = (this.max <= other.max ? this.max : other.max);
 		return this;
 	}
 
-	midpoint()
+	midpoint(): number
 	{
 		return (this.min + this.max) / 2;
 	}
 
-	minAndMax()
+	minAndMax(): number[]
 	{
 		return [ this.min, this.max ];
 	}
 
-	overlapsWith(other: RangeExtent)
+	overlapsWith(other: RangeExtent): boolean
 	{
 		var returnValue =
 		(
@@ -51,31 +66,31 @@ export class RangeExtent
 		return returnValue;
 	}
 
-	overwriteWith(other: RangeExtent)
+	overwriteWith(other: RangeExtent): RangeExtent
 	{
 		this.min = other.min;
 		this.max = other.max;
 		return this;
 	}
 
-	overwriteWithMinAndMax(min: number, max: number)
+	overwriteWithMinAndMax(min: number, max: number): RangeExtent
 	{
 		this.min = min;
 		this.max = max;
 		return this;
 	}
 
-	random(randomizer: Randomizer)
+	random(randomizer: Randomizer): number
 	{
 		return this.min + (this.max - this.min) * randomizer.getNextRandom();
 	}
 
-	size()
+	size(): number
 	{
 		return this.max - this.min;
 	}
 
-	subtract(other: RangeExtent)
+	subtract(other: RangeExtent): RangeExtent[]
 	{
 		var returnValues = [];
 
@@ -101,7 +116,20 @@ export class RangeExtent
 		return returnValues;
 	}
 
-	touches(other: RangeExtent)
+	trimValue(valueToTrim: number): number
+	{
+		if (valueToTrim < this.min)
+		{
+			valueToTrim = this.min;
+		}
+		else if (valueToTrim > this.max)
+		{
+			valueToTrim = this.max;
+		}
+		return valueToTrim;
+	}
+
+	touches(other: RangeExtent): boolean
 	{
 		var returnValue =
 		(
@@ -110,6 +138,34 @@ export class RangeExtent
 		);
 
 		return returnValue;
+	}
+
+	wrapValue(valueToWrap: number): number
+	{
+		var returnValue = valueToWrap;
+
+		var size = this.size();
+
+		while (returnValue < this.min)
+		{
+			returnValue += size;
+		}
+		while (returnValue > this.max)
+		{
+			returnValue -= size;
+		}
+
+		return returnValue;
+	}
+}
+
+export class RangeExtent_Instances
+{
+	ZeroToOne: RangeExtent;
+
+	constructor()
+	{
+		this.ZeroToOne = new RangeExtent(0, 1);
 	}
 }
 

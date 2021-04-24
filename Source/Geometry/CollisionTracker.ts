@@ -2,16 +2,16 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class CollisionTracker extends EntityProperty
+export class CollisionTracker implements EntityProperty
 {
 	collisionMap: MapOfCells<CollisionTrackerMapCell>;
 
+	private _cells: CollisionTrackerMapCell[];
+
 	constructor(size: Coords, collisionMapSizeInCells: Coords)
 	{
-		super();
-
 		collisionMapSizeInCells =
-			collisionMapSizeInCells || Coords.fromXY(1, 1).multiplyScalar(8);
+			collisionMapSizeInCells || Coords.fromXY(1, 1).multiplyScalar(4);
 
 		var collisionMapCellSize = size.clone().divide(collisionMapSizeInCells);
 
@@ -24,11 +24,13 @@ export class CollisionTracker extends EntityProperty
 			null, // cellAtPosInCells,
 			new Array<CollisionTrackerMapCell>() // cellSource
 		);
+
+		this._cells = new Array<CollisionTrackerMapCell>();
 	}
 
 	static fromSize(size: Coords): CollisionTracker
 	{
-		return new CollisionTracker(size, null);
+		return new CollisionTracker(size, Coords.fromXY(4, 4));
 	}
 
 	entityCollidableAddAndFindCollisions
@@ -39,33 +41,46 @@ export class CollisionTracker extends EntityProperty
 		collisionsSoFar.length = 0;
 
 		var entityBoundable = entity.boundable();
+		var entityCollidable = entity.collidable();
+
 		var entityBounds = entityBoundable.bounds;
 		var cellsToAddEntityTo = this.collisionMap.cellsInBoxAddToList
 		(
-			entityBounds, new Array<CollisionTrackerMapCell>()
+			entityBounds, ArrayHelper.clear(this._cells)
 		);
+
+		entityCollidable._collisionTrackerMapCellsOccupied.push(...cellsToAddEntityTo);
 
 		for (var c = 0; c < cellsToAddEntityTo.length; c++)
 		{
 			var cell = cellsToAddEntityTo[c];
-			var cellEntitiesPresent = cell.entitiesPresent
+			var cellEntitiesPresent = cell.entitiesPresent;
 			if (cellEntitiesPresent.length > 0)
 			{
-				var entityCollidable = entity.collidable();
 				for (var e = 0; e < cellEntitiesPresent.length; e++)
 				{
 					var entityOther = cellEntitiesPresent[e];
-					var doEntitiesCollide = entityCollidable.doEntitiesCollide
-					(
-						entity, entityOther, collisionHelper
-					);
-					if (doEntitiesCollide)
+
+					if (entityOther == entity)
 					{
-						var collision = collisionHelper.collisionOfEntities
+						// This shouldn't happen!
+						Debug.doNothing();
+					}
+					else
+					{
+						var doEntitiesCollide = entityCollidable.doEntitiesCollide
 						(
-							entity, entityOther, Collision.create()
+							entity, entityOther, collisionHelper
 						);
-						collisionsSoFar.push(collision);
+
+						if (doEntitiesCollide)
+						{
+							var collision = collisionHelper.collisionOfEntities
+							(
+								entity, entityOther, Collision.create()
+							);
+							collisionsSoFar.push(collision);
+						}
 					}
 				}
 			}
@@ -93,7 +108,13 @@ export class CollisionTracker extends EntityProperty
 	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity)
 	{
 		var cellsAll = this.collisionMap.cellSource as CollisionTrackerMapCell[];
-		cellsAll.forEach(x => x.entitiesPresent.length = 0);
+		cellsAll.forEach(x =>
+		{
+			x.entitiesPresent = x.entitiesPresent.filter
+			(
+				y => y.collidable().isEntityStationary(y)
+			)
+		});
 	}
 }
 

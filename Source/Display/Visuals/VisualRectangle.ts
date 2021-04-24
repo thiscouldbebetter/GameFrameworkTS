@@ -18,14 +18,19 @@ export class VisualRectangle implements Visual
 		this.size = size;
 		this.colorFill = colorFill;
 		this.colorBorder = colorBorder;
-		this.isCentered = (isCentered == null ? true : isCentered);
+		this.isCentered = isCentered || true;
 
 		this.sizeHalf = this.size.clone().half();
 
 		this._drawPos = Coords.create();
 	}
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	static fromSizeAndColorFill(size: Coords, colorFill: Color): VisualRectangle
+	{
+		return new VisualRectangle(size, colorFill, null, null);
+	}
+
+	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display): void
 	{
 		var drawPos = this._drawPos.overwriteWith
 		(
@@ -39,10 +44,7 @@ export class VisualRectangle implements Visual
 
 		display.drawRectangle
 		(
-			drawPos, this.size,
-			Color.systemColorGet(this.colorFill),
-			Color.systemColorGet(this.colorBorder),
-			null
+			drawPos, this.size, this.colorFill, this.colorBorder, null
 		);
 	}
 

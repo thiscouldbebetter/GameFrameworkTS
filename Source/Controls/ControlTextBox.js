@@ -14,7 +14,7 @@ var ThisCouldBeBetter;
                 // Helper variables.
                 this._drawPos = GameFramework.Coords.create();
                 this._drawPosText = GameFramework.Coords.create();
-                this._drawLoc = new GameFramework.Disposition(this._drawPos, null, null);
+                this._drawLoc = GameFramework.Disposition.fromPos(this._drawPos);
                 this._textMargin = GameFramework.Coords.create();
                 this._textSize = GameFramework.Coords.create();
             }
@@ -112,13 +112,13 @@ var ThisCouldBeBetter;
                 var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
                 var style = this.style(universe);
                 var text = this.text(null, null);
-                display.drawRectangle(drawPos, this.size, GameFramework.Color.systemColorGet(style.colorFill), GameFramework.Color.systemColorGet(style.colorBorder), this.isHighlighted // areColorsReversed
+                display.drawRectangle(drawPos, this.size, style.colorFill, style.colorBorder, this.isHighlighted // areColorsReversed
                 );
                 var textWidth = display.textWidthForFontHeight(text, this.fontHeightInPixels);
                 var textSize = this._textSize.overwriteWithDimensions(textWidth, this.fontHeightInPixels, 0);
                 var textMargin = this._textMargin.overwriteWith(this.size).subtract(textSize).half();
                 var drawPosText = this._drawPosText.overwriteWith(drawPos).add(textMargin);
-                display.drawText(text, this.fontHeightInPixels, drawPosText, GameFramework.Color.systemColorGet(style.colorBorder), GameFramework.Color.systemColorGet(style.colorFill), this.isHighlighted, false, // isCentered
+                display.drawText(text, this.fontHeightInPixels, drawPosText, style.colorBorder, style.colorFill, this.isHighlighted, false, // isCentered
                 this.size.x // widthMaxInPixels
                 );
                 if (this.isHighlighted) {
@@ -128,8 +128,9 @@ var ThisCouldBeBetter;
                     var cursorWidth = display.textWidthForFontHeight(textAtCursor, this.fontHeightInPixels);
                     drawPosText.x += cursorX;
                     display.drawRectangle(drawPosText, new GameFramework.Coords(cursorWidth, this.fontHeightInPixels, 0), // size
-                    GameFramework.Color.systemColorGet(style.colorFill), GameFramework.Color.systemColorGet(style.colorFill), null);
-                    display.drawText(textAtCursor, this.fontHeightInPixels, drawPosText, GameFramework.Color.systemColorGet(style.colorBorder), null, // colorBack
+                    style.colorFill, style.colorFill, // ?
+                    null);
+                    display.drawText(textAtCursor, this.fontHeightInPixels, drawPosText, style.colorBorder, null, // colorBack
                     false, // isHighlighted
                     false, // isCentered
                     this.size.x // widthMaxInPixels

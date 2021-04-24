@@ -9,8 +9,11 @@ var ThisCouldBeBetter;
                 this.inputNames = inputNames;
                 this.inactivateInputWhenActionPerformed = inactivateInputWhenActionPerformed;
             }
+            static fromActionAndInputName(actionName, inputName) {
+                return new ActionToInputsMapping(actionName, [inputName], false);
+            }
             action(universe) {
-                return universe.world.defn.actionDefnByName(this.actionName);
+                return universe.world.defn.actionByName(this.actionName);
             }
             // Cloneable implementation.
             clone() {
@@ -20,6 +23,7 @@ var ThisCouldBeBetter;
                 this.actionName = other.actionName;
                 this.inputNames = other.inputNames.slice();
                 this.inactivateInputWhenActionPerformed = other.inactivateInputWhenActionPerformed;
+                return this;
             }
         }
         GameFramework.ActionToInputsMapping = ActionToInputsMapping;

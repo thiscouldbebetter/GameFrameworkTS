@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Talker extends GameFramework.EntityProperty {
+        class Talker {
             constructor(conversationDefnName) {
-                super();
                 this.conversationDefnName = conversationDefnName;
             }
             talk(universe, world, place, entityTalker, entityTalkee) {
@@ -22,6 +21,10 @@ var ThisCouldBeBetter;
                 var venueNext = conversationAsControl.toVenue();
                 universe.venueNext = venueNext;
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
+            updateForTimerTick(u, w, p, e) { }
         }
         GameFramework.Talker = Talker;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

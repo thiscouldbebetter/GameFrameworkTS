@@ -11,26 +11,32 @@ var ThisCouldBeBetter;
                 this.childrenByName = GameFramework.ArrayHelper.addLookupsByName(this.children);
                 this.cancel = cancel;
                 this.childSelectedIndex = 0;
+                this.childrenContainingPos = new Array();
+                this.childrenContainingPosPrev = new Array();
                 this.isChildSelectedActive = false;
                 var marginSize = this.fontHeightInPixels;
                 var tabPaneHeight = marginSize + this.tabButtonSize.y;
-                var buttonsForChildren = [];
+                var buttonsForChildren = new Array();
                 for (var i = 0; i < this.children.length; i++) {
                     var child = this.children[i];
                     child.pos.y += tabPaneHeight;
                     var childName = child.name;
-                    var buttonPos = new GameFramework.Coords(marginSize + this.tabButtonSize.x * i, marginSize, 0);
+                    var buttonPos = GameFramework.Coords.fromXY(marginSize + this.tabButtonSize.x * i, marginSize);
                     var button = GameFramework.ControlButton.from8("button" + childName, buttonPos, this.tabButtonSize.clone(), childName, // text
                     this.fontHeightInPixels, true, // hasBorder
                     true, // isEnabled
-                    (b) => this.childSelectedIndex = buttonsForChildren.indexOf(b) // hack
-                    );
+                    (b) => // click
+                     {
+                        buttonsForChildren.forEach(x => x.isHighlighted = false);
+                        this.childSelectedIndex = buttonsForChildren.indexOf(b); // hack
+                        b.isHighlighted = true;
+                    });
                     button.context = button; // hack
                     buttonsForChildren.push(button);
                 }
                 if (this.cancel != null) {
                     this.children.push(null);
-                    var button = GameFramework.ControlButton.from8("buttonCancel", new GameFramework.Coords(this.size.x - marginSize - this.tabButtonSize.x, marginSize, 0), // pos
+                    var button = GameFramework.ControlButton.from8("buttonCancel", GameFramework.Coords.fromXY(this.size.x - marginSize - this.tabButtonSize.x, marginSize), // pos
                     this.tabButtonSize.clone(), "Done", // text
                     this.fontHeightInPixels, true, // hasBorder
                     true, // isEnabled
@@ -39,9 +45,9 @@ var ThisCouldBeBetter;
                     buttonsForChildren.push(button);
                 }
                 this.buttonsForChildren = buttonsForChildren;
+                this.buttonsForChildren[0].isHighlighted = true;
                 // Temporary variables.
                 this._childMax = GameFramework.Coords.create();
-                this._childrenContainingPos = [];
                 this._drawPos = GameFramework.Coords.create();
                 this._drawLoc = GameFramework.Disposition.fromPos(this._drawPos);
                 this._mouseClickPos = GameFramework.Coords.create();
@@ -101,6 +107,9 @@ var ThisCouldBeBetter;
                     if (isChildNextInRange == false) {
                         this.childSelectedIndex = GameFramework.NumberHelper.wrapToRangeMax(this.childSelectedIndex, this.children.length);
                     }
+                    this.buttonsForChildren.forEach(x => x.isHighlighted = false);
+                    var buttonForChild = this.buttonsForChildren[this.childSelectedIndex];
+                    buttonForChild.isHighlighted = true;
                     var child = this.children[this.childSelectedIndex];
                     if (child == null) {
                         break;
@@ -163,7 +172,7 @@ var ThisCouldBeBetter;
                     }
                 }
                 else {
-                    var childrenContainingPos = this.childrenAtPosAddToList(mouseClickPos, GameFramework.ArrayHelper.clear(this._childrenContainingPos), true // addFirstChildOnly
+                    var childrenContainingPos = this.childrenAtPosAddToList(mouseClickPos, GameFramework.ArrayHelper.clear(this.childrenContainingPos), true // addFirstChildOnly
                     );
                     var child = childrenContainingPos[0];
                     if (child != null) {
@@ -182,6 +191,31 @@ var ThisCouldBeBetter;
             mouseMove(mouseMovePos) {
                 var mouseMovePos = this._mouseMovePos.overwriteWith(mouseMovePos).subtract(this.pos);
                 var wasMoveHandled = false;
+                var temp = this.childrenContainingPosPrev;
+                this.childrenContainingPosPrev = this.childrenContainingPos;
+                this.childrenContainingPos = temp;
+                mouseMovePos = this._mouseMovePos.overwriteWith(mouseMovePos).subtract(this.pos);
+                var childrenContainingPos = this.childrenAtPosAddToList(mouseMovePos, GameFramework.ArrayHelper.clear(this.childrenContainingPos), true // addFirstChildOnly
+                );
+                for (var i = 0; i < childrenContainingPos.length; i++) {
+                    var child = childrenContainingPos[i];
+                    if (child.mouseMove != null) {
+                        child.mouseMove(mouseMovePos);
+                    }
+                    if (this.childrenContainingPosPrev.indexOf(child) == -1) {
+                        if (child.mouseEnter != null) {
+                            child.mouseEnter();
+                        }
+                    }
+                }
+                for (var i = 0; i < this.childrenContainingPosPrev.length; i++) {
+                    var child = this.childrenContainingPosPrev[i];
+                    if (childrenContainingPos.indexOf(child) == -1) {
+                        if (child.mouseExit != null) {
+                            child.mouseExit();
+                        }
+                    }
+                }
                 var child = this.childSelected();
                 if (child != null) {
                     if (child.mouseMove != null) {
@@ -216,12 +250,14 @@ var ThisCouldBeBetter;
                 drawLoc = this._drawLoc.overwriteWith(drawLoc);
                 var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
                 var style = this.style(universe);
-                display.drawRectangle(drawPos, this.size, GameFramework.Color.systemColorGet(style.colorBackground), GameFramework.Color.systemColorGet(style.colorBorder), null);
+                display.drawRectangle(drawPos, this.size, style.colorBackground, style.colorBorder, null);
                 var buttons = this.buttonsForChildren;
                 for (var i = 0; i < buttons.length; i++) {
                     var button = buttons[i];
-                    button.isHighlighted = (i == this.childSelectedIndex);
-                    button.draw(universe, display, drawLoc);
+                    if (i == this.childSelectedIndex) {
+                        button.isHighlighted = true;
+                    }
+                    button.draw(universe, display, drawLoc, style);
                 }
                 var child = this.childSelected();
                 if (child != null) {

@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class ItemDefn extends GameFramework.EntityProperty {
+        class ItemDefn {
             constructor(name, appearance, description, mass, tradeValue, stackSizeMax, categoryNames, use, visual) {
-                super();
                 this.name = name;
                 this.appearance = appearance || name;
                 this.description = description;
@@ -40,6 +39,10 @@ var ThisCouldBeBetter;
                 }
                 return returnValue;
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
+            updateForTimerTick(u, w, p, e) { }
         }
         GameFramework.ItemDefn = ItemDefn;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

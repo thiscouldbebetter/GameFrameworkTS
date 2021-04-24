@@ -13,7 +13,7 @@ var ThisCouldBeBetter;
                 this.colorBorder = colorBorder;
                 // helper variables
                 this._drawPos = GameFramework.Coords.create();
-                this._polar = new GameFramework.Polar(0, 0, 0);
+                this._polar = GameFramework.Polar.create();
             }
             draw(universe, world, place, entity, display) {
                 var drawableLoc = entity.locatable().loc;
@@ -23,7 +23,7 @@ var ThisCouldBeBetter;
                     + this._polar.fromCoords(this.directionMin).azimuthInTurns;
                 var wedgeAngleMax = wedgeAngleMin + this.angleSpannedInTurns;
                 display.drawArc(drawPos, // center
-                this.radiusInner, this.radiusOuter, wedgeAngleMin, wedgeAngleMax, GameFramework.Color.systemColorGet(this.colorFill), GameFramework.Color.systemColorGet(this.colorBorder));
+                this.radiusInner, this.radiusOuter, wedgeAngleMin, wedgeAngleMax, this.colorFill, this.colorBorder);
             }
             // Clonable.
             clone() {

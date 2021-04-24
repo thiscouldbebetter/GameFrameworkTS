@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Collidable extends EntityProperty
+export class Collidable implements EntityProperty
 {
 	ticksToWaitBetweenCollisions: number;
 	colliderAtRest: any;
@@ -15,6 +15,7 @@ export class Collidable extends EntityProperty
 	entitiesAlreadyCollidedWith: Entity[];
 	isDisabled: boolean;
 
+	_collisionTrackerMapCellsOccupied: CollisionTrackerMapCell[];
 	private _collisions: Collision[];
 
 	constructor
@@ -25,7 +26,6 @@ export class Collidable extends EntityProperty
 		collideEntities: (u: Universe, w: World, p: Place, e0: Entity, e1: Entity, c: Collision) => void
 	)
 	{
-		super();
 		this.ticksToWaitBetweenCollisions = ticksToWaitBetweenCollisions || 0;
 		this.colliderAtRest = colliderAtRest;
 		this.entityPropertyNamesToCollideWith = entityPropertyNamesToCollideWith || [];
@@ -39,12 +39,23 @@ export class Collidable extends EntityProperty
 
 		// Helper variables.
 
+		this._collisionTrackerMapCellsOccupied =
+			new Array<CollisionTrackerMapCell>();
 		this._collisions = new Array<Collision>();
 	}
 
 	static fromCollider(colliderAtRest: ShapeBase): Collidable
 	{
 		return new Collidable(null, colliderAtRest, null, null);
+	}
+
+	static fromColliderAndCollideEntities
+	(
+		colliderAtRest: ShapeBase,
+		collideEntities: (u: Universe, w: World, p: Place, e0: Entity, e1: Entity, c: Collision) => void
+	): Collidable
+	{
+		return new Collidable(null, colliderAtRest, null, collideEntities);
 	}
 
 	collideEntities(u: Universe, w: World, p: Place, e0: Entity, e1: Entity, c: Collision): Collision
@@ -60,6 +71,52 @@ export class Collidable extends EntityProperty
 	{
 		this.collider.overwriteWith(this.colliderAtRest);
 		this.collider.locate(entity.locatable().loc);
+	}
+
+	collisionHandle(universe: Universe, world: World, place: Place, collision: Collision): void
+	{
+		var entitiesColliding = collision.entitiesColliding;
+		var entity = entitiesColliding[0];
+		var entityOther = entitiesColliding[1];
+
+		this.collideEntities
+		(
+			universe, world, place, entity, entityOther, collision
+		);
+
+		var entityOtherCollidable = entityOther.collidable();
+		entityOtherCollidable.collideEntities
+		(
+			universe, world, place, entityOther, entity, collision
+		);
+	}
+
+	collisionsFindAndHandle(universe: Universe, world: World, place: Place, entity: Entity)
+	{
+		if (this.isDisabled == false)
+		{
+			var entityLoc = entity.locatable().loc;
+			this.locPrev.overwriteWith(entityLoc);
+
+			if (this.ticksUntilCanCollide > 0)
+			{
+				this.ticksUntilCanCollide--;
+			}
+			else
+			{
+				this.colliderLocateForEntity(entity);
+
+				var collisions = this.collisionsFindForEntity
+				(
+					universe, world, place, entity, ArrayHelper.clear(this._collisions)
+				);
+
+				collisions.forEach
+				(
+					collision => this.collisionHandle(universe, world, place, collision)
+				);
+			}
+		}
 	}
 
 	collisionsFindForEntity
@@ -100,6 +157,12 @@ export class Collidable extends EntityProperty
 		collisionsSoFar: Collision[], collisionTracker: CollisionTracker
 	): Collision[]
 	{
+		this._collisionTrackerMapCellsOccupied.forEach
+		(
+			x => ArrayHelper.remove(x.entitiesPresent, entity)
+		);
+		this._collisionTrackerMapCellsOccupied.length = 0;
+
 		collisionsSoFar = collisionTracker.entityCollidableAddAndFindCollisions
 		(
 			entity, universe.collisionHelper, collisionsSoFar
@@ -156,24 +219,6 @@ export class Collidable extends EntityProperty
 		return collisionsSoFar;
 	}
 
-	collisionHandle(universe: Universe, world: World, place: Place, collision: Collision): void
-	{
-		var entitiesColliding = collision.entitiesColliding;
-		var entity = entitiesColliding[0];
-		var entityOther = entitiesColliding[1];
-
-		this.collideEntities
-		(
-			universe, world, place, entity, entityOther, collision
-		);
-
-		var entityOtherCollidable = entityOther.collidable();
-		entityOtherCollidable.collideEntities
-		(
-			universe, world, place, entityOther, entity, collision
-		);
-	}
-
 	doEntitiesCollide
 	(
 		entity0: Entity, entity1: Entity, collisionHelper: CollisionHelper
@@ -189,7 +234,7 @@ export class Collidable extends EntityProperty
 
 		var doEntitiesCollide = false;
 
-		var canCollidablesCollideYet = 
+		var canCollidablesCollideYet =
 			(
 				collidable0.ticksUntilCanCollide <= 0
 				&& collidable1.ticksUntilCanCollide <= 0
@@ -243,36 +288,38 @@ export class Collidable extends EntityProperty
 		return doEntitiesCollide;
 	}
 
+	isEntityStationary(entity: Entity): boolean
+	{
+		// This way would be better, but it causes strange glitches.
+		// In the demo game, when you walk into view of three
+		// of the four corners of the 'Battlefield' rooms,
+		// the walls shift inward suddenly!
+		//return (entity.locatable().loc.equals(this.locPrev));
+
+		return (entity.movable() == null);
+	}
+
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+
 	initialize(universe: Universe, world: World, place: Place, entity: Entity)
 	{
-		this.colliderLocateForEntity(entity);
+		if (this.isEntityStationary(entity))
+		{
+			this.collisionsFindAndHandle(universe, world, place, entity);
+		}
 	}
 
 	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity)
 	{
-		if (this.isDisabled == false)
+		if (this.isEntityStationary(entity))
 		{
-			var entityLoc = entity.locatable().loc;
-			this.locPrev.overwriteWith(entityLoc);
-
-			if (this.ticksUntilCanCollide > 0)
-			{
-				this.ticksUntilCanCollide--;
-			}
-			else
-			{
-				this.colliderLocateForEntity(entity);
-
-				var collisions = this.collisionsFindForEntity
-				(
-					universe, world, place, entity, ArrayHelper.clear(this._collisions)
-				);
-
-				collisions.forEach
-				(
-					collision => this.collisionHandle(universe, world, place, collision)
-				);
-			}
+			this.entitiesAlreadyCollidedWith.length = 0;
+		}
+		else
+		{
+			this.collisionsFindAndHandle(universe, world, place, entity);
 		}
 	}
 

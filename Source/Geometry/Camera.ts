@@ -2,11 +2,12 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Camera extends EntityProperty
+export class Camera implements EntityProperty
 {
 	viewSize: Coords;
 	focalLength: number;
 	loc: Disposition;
+	_entitiesInViewSort: (e: Entity[]) => Entity[];
 
 	viewSizeHalf: Coords;
 	viewCollider: Box;
@@ -15,12 +16,16 @@ export class Camera extends EntityProperty
 	_clipPlanes: Plane[];
 	_posSaved: Coords;
 
-	constructor(viewSize: Coords, focalLength: number, loc: Disposition)
+	constructor
+	(
+		viewSize: Coords, focalLength: number, loc: Disposition,
+		entitiesInViewSort: (e: Entity[]) => Entity[]
+	)
 	{
-		super();
 		this.viewSize = viewSize;
 		this.focalLength = focalLength;
 		this.loc = loc;
+		this._entitiesInViewSort = entitiesInViewSort;
 
 		this.viewSizeHalf = this.viewSize.clone().clearZ().half();
 
@@ -28,15 +33,14 @@ export class Camera extends EntityProperty
 		viewColliderSize.z = Number.POSITIVE_INFINITY;
 		this.viewCollider = new Box
 		(
-			this.loc.pos,
-			viewColliderSize
+			this.loc.pos, viewColliderSize
 		);
 		this.entitiesInView = new Array<Entity>();
 
 		this._posSaved = Coords.create();
 	}
 
-	clipPlanes()
+	clipPlanes(): Plane[]
 	{
 		if (this._clipPlanes == null)
 		{
@@ -134,7 +138,7 @@ export class Camera extends EntityProperty
 		return this._clipPlanes;
 	}
 
-	coordsTransformViewToWorld(viewCoords: Coords, ignoreZ: boolean)
+	coordsTransformViewToWorld(viewCoords: Coords, ignoreZ: boolean): Coords
 	{
 		var cameraLoc = this.loc;
 
@@ -158,7 +162,7 @@ export class Camera extends EntityProperty
 		return worldCoords;
 	}
 
-	coordsTransformWorldToView(worldCoords: Coords)
+	coordsTransformWorldToView(worldCoords: Coords): Coords
 	{
 		var cameraPos = this.loc.pos;
 		var cameraOrientation = this.loc.orientation;
@@ -182,13 +186,17 @@ export class Camera extends EntityProperty
 		return viewCoords;
 	}
 
-	drawEntitiesInView(universe: Universe, world: World, place: Place, display: Display)
+	drawEntitiesInView
+	(
+		universe: Universe, world: World, place: Place,
+		cameraEntity: Entity, display: Display
+	): void
 	{
 		this.loc.pos.round(); // hack - To prevent lines between map tiles.
 
 		this.entitiesInView = this.drawEntitiesInView_1_FindEntitiesInView
 		(
-			place, universe.collisionHelper, this.entitiesInView
+			place, cameraEntity, universe.collisionHelper, this.entitiesInView
 		);
 
 		this.drawEntitiesInView_2_Draw
@@ -199,47 +207,57 @@ export class Camera extends EntityProperty
 
 	drawEntitiesInView_1_FindEntitiesInView
 	(
-		place: Place, collisionHelper: CollisionHelper, entitiesInView: Entity[]
-	)
+		place: Place, cameraEntity: Entity,
+		collisionHelper: CollisionHelper, entitiesInView: Entity[]
+	): Entity[]
 	{
-		return this.drawEntitiesInView_1_FindEntitiesInView_New
-		(
-			place, collisionHelper, entitiesInView
-		);
+		var collisionTracker = place.collisionTracker();
+		if (collisionTracker == null)
+		{
+			entitiesInView = this.drawEntitiesInView_1_FindEntitiesInView_WithoutTracker
+			(
+				place, collisionHelper, entitiesInView
+			);
+		}
+		else
+		{
+			entitiesInView = this.drawEntitiesInView_1_FindEntitiesInView_WithTracker
+			(
+				place, cameraEntity, collisionHelper, entitiesInView, collisionTracker
+			);
+		}
+
+		return entitiesInView;
 	}
 
-	drawEntitiesInView_1_FindEntitiesInView_New
+	drawEntitiesInView_1_FindEntitiesInView_WithTracker
 	(
-		place: Place, collisionHelper: CollisionHelper, entitiesInView: Entity[]
-	)
+		place: Place, cameraEntity: Entity, collisionHelper: CollisionHelper,
+		entitiesInView: Entity[], collisionTracker: CollisionTracker
+	): Entity[]
 	{
-		var cameraEntity = new Entity
-		(
-			Camera.name,
-			[
-				new Boundable(this.viewCollider),
-				Collidable.fromCollider(this.viewCollider)
-			]
-		);
-		var collisionTracker = place.collisionTracker();
+		var cameraCollidable = cameraEntity.collidable();
+		//cameraCollidable.isDisabled = false;
+		cameraCollidable.entitiesAlreadyCollidedWith.length = 0;
 		var collisions = collisionTracker.entityCollidableAddAndFindCollisions
 		(
 			cameraEntity, collisionHelper, new Array<Collision>()
 		);
 		var entitiesCollidedWith = collisions.map(x => x.entitiesColliding[1]);
 		var entitiesInView = entitiesCollidedWith.filter(x => x.drawable() != null);
+		//cameraCollidable.isDisabled = true;
 
 		var drawablesAll = place.drawables();
 		var drawablesUnboundable = drawablesAll.filter(x => x.boundable() == null);
 		entitiesInView.push(...drawablesUnboundable);
 
-		return entitiesInView
+		return entitiesInView;
 	}
 
-	drawEntitiesInView_1_FindEntitiesInView_Old
+	drawEntitiesInView_1_FindEntitiesInView_WithoutTracker
 	(
 		place: Place, collisionHelper: CollisionHelper, entitiesInView: Entity[]
-	)
+	): Entity[]
 	{
 		entitiesInView.length = 0;
 
@@ -287,11 +305,9 @@ export class Camera extends EntityProperty
 	(
 		universe: Universe, world: World, place: Place, display: Display,
 		entitiesInView: Entity[]
-	)
+	): void
 	{
-		display.drawBackground("Black", "Black");
-
-		this.entitiesSortByZThenY(entitiesInView);
+		this.entitiesInViewSort(entitiesInView);
 
 		for (var i = 0; i < entitiesInView.length; i++)
 		{
@@ -309,35 +325,35 @@ export class Camera extends EntityProperty
 
 			entityPos.overwriteWith(this._posSaved);
 		}
-
 	}
 
-	entitiesSortByZThenY(entitiesToSort: Entity[])
+	entitiesInViewSort(entitiesToSort: Entity[]): Entity[]
 	{
-		entitiesToSort.sort
-		(
-			(a, b) =>
-			{
-				var aPos = a.locatable().loc.pos;
-				var bPos = b.locatable().loc.pos;
-				var returnValue;
-				if (aPos.z != bPos.z)
-				{
-					returnValue = bPos.z - aPos.z;
-				}
-				else
-				{
-					returnValue = aPos.y - bPos.y;
-				}
+		var entitiesSorted = null;
 
-				return returnValue;
-			}
-		);
+		if (this._entitiesInViewSort == null)
+		{
+			entitiesSorted = entitiesToSort;
+		}
+		else
+		{
+			entitiesSorted = this._entitiesInViewSort(entitiesToSort);
+		}
 
-		return entitiesToSort;
+		return entitiesSorted;
 	}
 
-	updateForTimerTick()
+	toEntity(): Entity
+	{
+		return new Entity(Camera.name, [ this ] );
+	}
+
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+
+	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void
 	{
 		// Do nothing.  Rendering is done in Place.draw().
 	}

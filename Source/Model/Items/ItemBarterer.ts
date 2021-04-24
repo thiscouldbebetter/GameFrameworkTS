@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ItemBarterer extends EntityProperty
+export class ItemBarterer implements EntityProperty
 {
 	itemHolderCustomerOffer: ItemHolder;
 	itemHolderStoreOffer: ItemHolder;
@@ -14,9 +14,8 @@ export class ItemBarterer extends EntityProperty
 
 	constructor()
 	{
-		super();
-		this.itemHolderCustomerOffer = new ItemHolder(null, null, null);
-		this.itemHolderStoreOffer = new ItemHolder(null, null, null);
+		this.itemHolderCustomerOffer = ItemHolder.create();
+		this.itemHolderStoreOffer = ItemHolder.create();
 		this.statusMessage = "Choose items to trade and click the 'Offer' button.";
 		this.patience = 10;
 
@@ -94,6 +93,12 @@ export class ItemBarterer extends EntityProperty
 			}
 		}
 	}
+
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
 
 	// Controls.
 
@@ -254,7 +259,7 @@ export class ItemBarterer extends EntityProperty
 						(c: ItemHolder, v: Item) => c.itemSelected = v
 					), // bindingForItemSelected
 					DataBinding.fromGet( (c: Item) => c ), // bindingForItemValue
-					DataBinding.fromContext(true), // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					itemOfferStore,
 					null
 				),
@@ -342,7 +347,7 @@ export class ItemBarterer extends EntityProperty
 						(c: ItemHolder, v: Item) => c.itemSelected = v
 					), // bindingForItemSelected
 					DataBinding.fromGet( (c: Item) => c ), // bindingForItemValue
-					DataBinding.fromContext(true), // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					itemUnofferStore,
 					null
 				),
@@ -386,7 +391,7 @@ export class ItemBarterer extends EntityProperty
 						(c: ItemHolder, v: Item) => c.itemSelected = v
 					), // bindingForItemSelected
 					DataBinding.fromGet( (c: Item) => c ), // bindingForItemValue
-					DataBinding.fromContext(true), // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					itemOfferCustomer,
 					null
 				),
@@ -447,7 +452,7 @@ export class ItemBarterer extends EntityProperty
 					fontHeight
 				),
 
-				new ControlList
+				ControlList.from10
 				(
 					"listItemsOfferedByCustomer",
 					Coords.fromXY
@@ -473,9 +478,8 @@ export class ItemBarterer extends EntityProperty
 						(c: ItemHolder, v: Item) => c.itemSelected = v
 					), // bindingForItemSelected
 					DataBinding.fromGet( (c: Item) => c ), // bindingForItemValue
-					DataBinding.fromContext(true), // isEnabled
-					itemOfferCustomer,
-					null
+					DataBinding.fromTrue(), // isEnabled
+					itemOfferCustomer
 				),
 
 				new ControlLabel

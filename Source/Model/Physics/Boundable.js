@@ -3,14 +3,19 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Boundable extends GameFramework.EntityProperty {
+        class Boundable {
             constructor(bounds) {
-                super();
                 this.bounds = bounds;
+            }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) {
+                this.updateForTimerTick(u, w, p, e);
             }
             updateForTimerTick(u, w, p, e) {
                 this.bounds.locate(e.locatable().loc);
             }
+            // Clonable.
             clone() {
                 return new Boundable(this.bounds.clone());
             }

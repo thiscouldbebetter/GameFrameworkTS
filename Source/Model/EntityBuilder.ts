@@ -16,12 +16,11 @@ export class EntityBuilder
 		(
 			"Message" + text, // name
 			[
-				new Drawable(visual, null),
-				// new DrawableCamera(),
+				Drawable.fromVisual(visual),
 				new Ephemeral(ticksToLive, null),
 				new Locatable
 				(
-					new Disposition(pos, null, null).velSet
+					Disposition.fromPos(pos).velSet
 					(
 						new Coords(0, riseSpeed, 0)
 					)

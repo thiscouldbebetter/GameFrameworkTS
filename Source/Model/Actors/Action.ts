@@ -36,28 +36,45 @@ export class Action
 class Action_Instances
 {
 	DoNothing: Action;
-	ShowMenu: Action;
+	ShowMenuPlayer: Action;
+	ShowMenuSettings: Action;
 
 	constructor()
 	{
 		this.DoNothing = new Action
 		(
 			"DoNothing",
-			(u: Universe, w: World, p: Place, e: Entity) => 
+			(u: Universe, w: World, p: Place, e: Entity) =>
 			{
 				// Do nothing.
 			}
 		);
 
-		this.ShowMenu = new Action
+		this.ShowMenuPlayer = new Action
 		(
-			"ShowMenu",
-			(universe: Universe, world: World, place: Place, actor: Entity) => // perform
+			"ShowMenuPlayer",
+			// perform
+			(universe: Universe, world: World, place: Place, actor: Entity) =>
 			{
 				var control = actor.controllable().toControl
 				(
-					universe, universe.display.sizeInPixels, actor, universe.venueCurrent, true
+					universe, universe.display.sizeInPixels, actor,
+					universe.venueCurrent, true
 				);
+				var venueNext: Venue = control.toVenue();
+				venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
+				universe.venueNext = venueNext;
+			}
+		);
+
+		this.ShowMenuSettings = new Action
+		(
+			"ShowMenuSettings",
+			// perform
+			(universe: Universe, world: World, place: Place, actor: Entity) =>
+			{
+				var controlBuilder = universe.controlBuilder;
+				var control = controlBuilder.gameAndSettings1(universe);
 				var venueNext: Venue = control.toVenue();
 				venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
 				universe.venueNext = venueNext;

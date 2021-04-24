@@ -33,7 +33,7 @@ var ThisCouldBeBetter;
                         particleLoc.vel.overwriteWith(particleVel);
                         var particleTicksToLive = this.particleTicksToLiveGet();
                         var entityParticle = new GameFramework.Entity(particleName, [
-                            new GameFramework.Drawable(this.particleVisual.clone(), true),
+                            GameFramework.Drawable.fromVisual(this.particleVisual.clone()),
                             new GameFramework.Ephemeral(particleTicksToLive, null),
                             new GameFramework.Locatable(particleLoc)
                         ]);

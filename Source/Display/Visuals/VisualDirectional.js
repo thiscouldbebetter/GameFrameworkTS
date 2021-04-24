@@ -10,6 +10,9 @@ var ThisCouldBeBetter;
                 this._headingInTurnsGetForEntity = headingInTurnsGetForEntity;
                 this.numberOfDirections = this.visualsForDirections.length;
             }
+            static fromVisuals(visualForNoDirection, visualsForDirections) {
+                return new VisualDirectional(visualForNoDirection, visualsForDirections, null);
+            }
             headingInTurnsGetForEntity(entity) {
                 var returnValue = null;
                 if (this._headingInTurnsGetForEntity == null) {

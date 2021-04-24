@@ -3,15 +3,16 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Routable extends GameFramework.EntityProperty {
+        class Routable {
             constructor(route) {
-                super();
                 this.route = route;
             }
             // EntityProperty.
+            finalize(u, w, p, e) { }
             initialize(u, w, p, e) {
                 this.route.bounds = GameFramework.Box.fromMinAndMax(GameFramework.Coords.create(), p.size.clone());
             }
+            updateForTimerTick(u, w, p, e) { }
             // Clonable.
             clone() {
                 return this; // todo

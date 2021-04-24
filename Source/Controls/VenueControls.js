@@ -36,7 +36,7 @@ var ThisCouldBeBetter;
                 this._mouseMovePosPrev = GameFramework.Coords.create();
             }
             static fromControl(controlRoot) {
-                return new VenueControls(controlRoot, null);
+                return new VenueControls(controlRoot, false);
             }
             draw(universe) {
                 var display = universe.display;

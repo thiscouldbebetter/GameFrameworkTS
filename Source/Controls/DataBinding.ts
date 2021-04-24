@@ -15,9 +15,9 @@ export class DataBinding<C, V>
 		this._set = set;
 	}
 
-	static fromContext<C>(context: C): DataBinding<C, C>
+	static fromContext<C>(context: C): DataBinding<any, C>
 	{
-		return new DataBinding(context, null, null);
+		return new DataBinding<any, C>(context, null, null);
 	}
 
 	static fromContextAndGet<C, V>(context: C, get: (context: C) => V)
@@ -28,6 +28,11 @@ export class DataBinding<C, V>
 	static fromGet<C, V>(get: (context: C) => V)
 	{
 		return new DataBinding(null, get, null);
+	}
+
+	static fromTrue()
+	{
+		return DataBinding.fromContext<boolean>(true);
 	}
 
 	contextSet(value: C): DataBinding<C, V>

@@ -57,9 +57,11 @@ export class Orientation
 	equals(other: Orientation)
 	{
 		var returnValue =
+		(
 			this.forward.equals(other.forward)
 			&& this.right.equals(other.right)
-			&& this.down.equals(other.down);
+			&& this.down.equals(other.down)
+		);
 		return returnValue;
 	}
 

@@ -16,38 +16,51 @@ export class WorldDefn
 		{
 			var defnsOfType = defnArrays[i];
 			var defnsByName = ArrayHelper.addLookupsByName(defnsOfType);
-			var itemFirst = defnsOfType[0];
-			var itemTypeName = itemFirst.constructor.name;
-			this.defnArraysByTypeName.set(itemTypeName, defnsOfType);
-			this.defnsByNameByTypeName.set(itemTypeName, defnsByName);
+			if (defnsOfType.length > 0)
+			{
+				var itemFirst = defnsOfType[0];
+				var itemTypeName = itemFirst.constructor.name;
+				this.defnArraysByTypeName.set(itemTypeName, defnsOfType);
+				this.defnsByNameByTypeName.set(itemTypeName, defnsByName);
+			}
 		}
 	}
 
 	// Convenience methods.
 
-	actionDefnByName(defnName: string)
+	actionByName(defnName: string)
 	{
-		return this.defnsByNameByTypeName.get(Action.name).get(defnName);
+		var defnsByName = this.defnsByNameByTypeName.get(Action.name)
+		var returnValue = defnsByName.get(defnName);
+		return returnValue;
 	}
 
 	activityDefnByName(defnName: string)
 	{
-		return this.defnsByNameByTypeName.get(ActivityDefn.name).get(defnName);
+		var defnsByName = this.defnsByNameByTypeName.get(ActivityDefn.name)
+		var returnValue = defnsByName.get(defnName);
+		return returnValue;
 	}
 
 	entityDefnByName(defnName: string)
 	{
-		return this.defnsByNameByTypeName.get(Entity.name).get(defnName);
+		var defnsByName = this.defnsByNameByTypeName.get(Entity.name)
+		var returnValue = defnsByName.get(defnName);
+		return returnValue;
 	}
 
 	itemDefnByName(defnName: string)
 	{
-		return this.defnsByNameByTypeName.get(ItemDefn.name).get(defnName);
+		var defnsByName = this.defnsByNameByTypeName.get(ItemDefn.name)
+		var returnValue = defnsByName.get(defnName);
+		return returnValue;
 	}
 
 	placeDefnByName(defnName: string)
 	{
-		return this.defnsByNameByTypeName.get(PlaceDefn.name).get(defnName);
+		var defnsByName = this.defnsByNameByTypeName.get(PlaceDefn.name)
+		var returnValue = defnsByName.get(defnName);
+		return returnValue;
 	}
 
 }

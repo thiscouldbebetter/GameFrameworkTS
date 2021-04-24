@@ -2,14 +2,16 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Entity
+export class Entity //
 {
+	id: number;
 	name: string;
 	properties: EntityProperty[];
 	propertiesByName: Map<string, EntityProperty>;
 
 	constructor(name: string, properties: EntityProperty[])
 	{
+		this.id = IDHelper.Instance().idNext();
 		this.name = name;
 		this.properties = properties;
 
@@ -22,7 +24,7 @@ export class Entity
 		}
 	}
 
-	finalize(universe: Universe, world: World, place: Place)
+	finalize(universe: Universe, world: World, place: Place): Entity
 	{
 		var entityProperties = this.properties;
 		for (var p = 0; p < entityProperties.length; p++)
@@ -33,9 +35,10 @@ export class Entity
 				property.finalize(universe, world, place, this);
 			}
 		}
+		return this;
 	}
 
-	initialize(universe: Universe, world: World, place: Place)
+	initialize(universe: Universe, world: World, place: Place): Entity
 	{
 		var entityProperties = this.properties;
 		for (var p = 0; p < entityProperties.length; p++)
@@ -46,14 +49,15 @@ export class Entity
 				property.initialize(universe, world, place, this);
 			}
 		}
+		return this;
 	}
 
-	propertyAdd(propertyToAdd: EntityProperty)
+	propertyAdd(propertyToAdd: EntityProperty): Entity
 	{
-		this.propertyAddForPlace(propertyToAdd, null);
+		return this.propertyAddForPlace(propertyToAdd, null);
 	}
 
-	propertyAddForPlace(propertyToAdd: EntityProperty, place: Place)
+	propertyAddForPlace(propertyToAdd: EntityProperty, place: Place): Entity
 	{
 		this.properties.push(propertyToAdd);
 		this.propertiesByName.set(propertyToAdd.constructor.name, propertyToAdd);
@@ -63,14 +67,15 @@ export class Entity
 			var entitiesWithProperty = place.entitiesByPropertyName(propertyName);
 			entitiesWithProperty.push(this);
 		}
+		return this;
 	}
 
-	propertyByName(name: string)
+	propertyByName(name: string): EntityProperty
 	{
 		return this.propertiesByName.get(name);
 	}
 
-	propertyRemoveForPlace(propertyToRemove: EntityProperty, place: Place)
+	propertyRemoveForPlace(propertyToRemove: EntityProperty, place: Place): Entity
 	{
 		ArrayHelper.remove(this.properties, propertyToRemove);
 		this.propertiesByName.delete(propertyToRemove.constructor.name);
@@ -83,9 +88,23 @@ export class Entity
 		return this;
 	}
 
+	updateForTimerTick(universe: Universe, world: World, place: Place): Entity
+	{
+		var entityProperties = this.properties;
+		for (var p = 0; p < entityProperties.length; p++)
+		{
+			var property = entityProperties[p];
+			if (property.finalize != null)
+			{
+				property.finalize(universe, world, place, this);
+			}
+		}
+		return this;
+	}
+
 	// Cloneable.
 
-	clone()
+	clone(): Entity
 	{
 		var nameCloned = this.name; // + IDHelper.Instance().idNext();
 		var propertiesCloned = [];
@@ -106,7 +125,7 @@ export class Entity
 	// Convenience methods for properties.
 
 	actor(): Actor { return this.propertyByName(Actor.name) as Actor; }
-	animatable(): Animatable { return this.propertyByName(Animatable.name) as Animatable; }
+	animatable(): Animatable2 { return this.propertyByName(Animatable2.name) as Animatable2; }
 	boundable(): Boundable { return this.propertyByName(Boundable.name) as Boundable; }
 	camera(): Camera { return this.propertyByName(Camera.name) as Camera; }
 	collidable(): Collidable { return this.propertyByName(Collidable.name) as Collidable; }

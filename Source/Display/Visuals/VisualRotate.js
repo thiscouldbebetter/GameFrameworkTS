@@ -4,13 +4,14 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class VisualRotate {
-            constructor(rotationInTurns, child) {
-                this.rotationInTurns = rotationInTurns;
+            constructor(child) {
                 this.child = child;
             }
             draw(universe, world, place, entity, display) {
                 display.stateSave();
-                display.rotateTurnsAroundCenter(this.rotationInTurns, entity.locatable().loc.pos);
+                var entityLoc = entity.locatable().loc;
+                var rotationInTurns = entityLoc.orientation.forward.headingInTurns();
+                display.rotateTurnsAroundCenter(rotationInTurns, entityLoc.pos);
                 this.child.draw(universe, world, place, entity, display);
                 display.stateRestore();
             }

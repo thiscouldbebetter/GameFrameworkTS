@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Usable extends GameFramework.EntityProperty {
+        class Usable {
             constructor(use) {
-                super();
                 this._use = use;
                 this.isDisabled = false;
             }
@@ -23,6 +22,10 @@ var ThisCouldBeBetter;
                 this._use = other._use;
                 return this;
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
+            updateForTimerTick(u, w, p, e) { }
         }
         GameFramework.Usable = Usable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

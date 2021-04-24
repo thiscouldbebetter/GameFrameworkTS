@@ -21,7 +21,18 @@ export class VisualPolygon implements Visual
 		this.transformLocate = new Transform_Locate(null);
 	}
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	static fromVerticesAndColorFill(vertices: Coords[], colorFill: Color): VisualPolygon
+	{
+		var verticesAsPath = new Path(vertices);
+		var returnValue = new VisualPolygon(verticesAsPath, colorFill, null);
+		return returnValue;
+	}
+
+	draw
+	(
+		universe: Universe, world: World, place: Place, entity: Entity,
+		display: Display
+	): void
 	{
 		var drawableLoc = entity.locatable().loc;
 		this.transformLocate.loc.overwriteWith(drawableLoc);
@@ -40,8 +51,7 @@ export class VisualPolygon implements Visual
 		display.drawPolygon
 		(
 			this.verticesAsPathTransformed.points,
-			Color.systemColorGet(this.colorFill),
-			Color.systemColorGet(this.colorBorder)
+			this.colorFill, this.colorBorder
 		);
 	}
 

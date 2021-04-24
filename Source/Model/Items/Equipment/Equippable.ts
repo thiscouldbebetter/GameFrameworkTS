@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Equippable extends EntityProperty
+export class Equippable implements EntityProperty
 {
 	_equip: (u: Universe, w: World, p: Place, eEquipmentUser: Entity, eEquippable: Entity) => void;
 	_unequip: (u: Universe, w: World, p: Place, eEquipmentUser: Entity, eEquippable: Entity) => void;
@@ -15,13 +15,20 @@ export class Equippable extends EntityProperty
 		unequip: (u: Universe, w: World, p: Place, eEquipmentUser: Entity, eEquippable: Entity) => void
 	)
 	{
-		super();
 		this._equip = equip;
 		this._unequip = unequip;
 		this.isEquipped = false;
 	}
 
-	equip(u: Universe, w: World, p: Place, eEquipmentUser: Entity, eEquippable: Entity)
+	static create(): Equippable
+	{
+		return new Equippable(null, null);
+	}
+
+	equip
+	(
+		u: Universe, w: World, p: Place, eEquipmentUser: Entity, eEquippable: Entity
+	): void
 	{
 		if (this._equip != null)
 		{
@@ -30,7 +37,10 @@ export class Equippable extends EntityProperty
 		this.isEquipped = true;
 	}
 
-	unequip(u: Universe, w: World, p: Place, eEquipmentUser: Entity, eEquippable: Entity)
+	unequip
+	(
+		u: Universe, w: World, p: Place, eEquipmentUser: Entity, eEquippable: Entity
+	): void
 	{
 		if (this._unequip != null)
 		{
@@ -49,7 +59,13 @@ export class Equippable extends EntityProperty
 	overwriteWith(other: Equippable)
 	{
 		return this;
-	} 
+	}
+
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
 }
 
 }

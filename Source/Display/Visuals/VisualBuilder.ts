@@ -35,7 +35,7 @@ export class VisualBuilder
 
 		var circleWithEyes: Visual = new VisualGroup
 		([
-			new VisualCircle(circleRadius, circleColor, null, null),
+			VisualCircle.fromRadiusAndColorFill(circleRadius, circleColor),
 			visualEyesDirectional
 		]);
 
@@ -370,7 +370,7 @@ export class VisualBuilder
 				}
 				else
 				{
-					var headingCount = 4; 
+					var headingCount = 4;
 					var headingIndex =
 						Math.floor(entityForwardInTurns * headingCount); // todo
 					var entitySpeed = entityLoc.vel.magnitude();
@@ -411,7 +411,7 @@ export class VisualBuilder
 		var visualNone = new VisualNone();
 		var visualWieldable: Visual = new VisualDynamic
 		(
-			(u: Universe, w: World, d: Display, e: Entity) => 
+			(u: Universe, w: World, p: Place, e: Entity) =>
 			{
 				var equipmentUser = e.equipmentUser();
 				var entityWieldableEquipped =
@@ -551,7 +551,7 @@ export class VisualBuilder
 			{
 				var itemEntityWielded =
 					e.equipmentUser().itemEntityInSocketWithName("Wielding");
-				var returnValue = 
+				var returnValue =
 					(itemEntityWielded == null ? "Hidden" : "Visible");
 				return [ returnValue ];
 			}
@@ -573,19 +573,19 @@ export class VisualBuilder
 
 		var visualEye = new VisualGroup
 		([
-			new VisualCircle(visualEyeRadius, Color.byName("White"), null, null),
-			new VisualCircle(visualPupilRadius, Color.byName("Black"), null, null)
+			VisualCircle.fromRadiusAndColorFill(visualEyeRadius, Color.byName("White")),
+			VisualCircle.fromRadiusAndColorFill(visualPupilRadius, Color.byName("Black"))
 		]);
 
 		var visualEyes = new VisualGroup
 		([
 			new VisualOffset
 			(
-				visualEye, new Coords(-visualEyeRadius, 0, 0)
+				visualEye, Coords.fromXY(-visualEyeRadius, 0)
 			),
 			new VisualOffset
 			(
-				visualEye, new Coords(visualEyeRadius, 0, 0)
+				visualEye, Coords.fromXY(visualEyeRadius, 0)
 			)
 		]);
 
@@ -710,7 +710,7 @@ export class VisualBuilder
 				color, rayThickness
 			),
 
-			new VisualCircle(dimension / 2, color, null, null),
+			VisualCircle.fromRadiusAndColorFill(dimension / 2, color),
 		]);
 
 		return sunVisual;

@@ -107,9 +107,9 @@ export class VenueControls implements Venue
 		this._mouseMovePosPrev = Coords.create();
 	}
 
-	static fromControl(controlRoot: ControlBase)
+	static fromControl(controlRoot: ControlBase): VenueControls
 	{
-		return new VenueControls(controlRoot, null);
+		return new VenueControls(controlRoot, false);
 	}
 
 	draw(universe: Universe)

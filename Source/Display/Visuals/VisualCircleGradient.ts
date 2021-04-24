@@ -6,9 +6,9 @@ export class VisualCircleGradient implements Visual
 {
 	radius: number;
 	gradientFill: ValueBreakGroup;
-	colorBorder: string;
+	colorBorder: Color;
 
-	constructor(radius: number, gradientFill: ValueBreakGroup, colorBorder: string)
+	constructor(radius: number, gradientFill: ValueBreakGroup, colorBorder: Color)
 	{
 		this.radius = radius;
 		this.gradientFill = gradientFill;

@@ -3,13 +3,30 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Locatable extends GameFramework.EntityProperty {
+        class Locatable {
             constructor(loc) {
-                super();
                 this.loc = loc || GameFramework.Disposition.create();
+            }
+            static create() {
+                return new Locatable(null);
             }
             static fromPos(pos) {
                 return new Locatable(GameFramework.Disposition.fromPos(pos));
+            }
+            static entitiesSortByZThenY(entitiesToSort) {
+                entitiesToSort.sort((a, b) => {
+                    var aPos = a.locatable().loc.pos;
+                    var bPos = b.locatable().loc.pos;
+                    var returnValue;
+                    if (aPos.z != bPos.z) {
+                        returnValue = bPos.z - aPos.z;
+                    }
+                    else {
+                        returnValue = aPos.y - bPos.y;
+                    }
+                    return returnValue;
+                });
+                return entitiesToSort;
             }
             approachOtherWithAccelerationAndSpeedMax(locatableToApproach, accelerationPerTick, speedMax // ,distanceMin: number
             ) {
@@ -74,6 +91,9 @@ var ThisCouldBeBetter;
             clone() {
                 return new Locatable(this.loc.clone());
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
         }
         GameFramework.Locatable = Locatable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

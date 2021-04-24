@@ -3,8 +3,10 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Entity {
+        class Entity //
+         {
             constructor(name, properties) {
+                this.id = GameFramework.IDHelper.Instance().idNext();
                 this.name = name;
                 this.properties = properties;
                 this.propertiesByName = new Map();
@@ -22,6 +24,7 @@ var ThisCouldBeBetter;
                         property.finalize(universe, world, place, this);
                     }
                 }
+                return this;
             }
             initialize(universe, world, place) {
                 var entityProperties = this.properties;
@@ -31,9 +34,10 @@ var ThisCouldBeBetter;
                         property.initialize(universe, world, place, this);
                     }
                 }
+                return this;
             }
             propertyAdd(propertyToAdd) {
-                this.propertyAddForPlace(propertyToAdd, null);
+                return this.propertyAddForPlace(propertyToAdd, null);
             }
             propertyAddForPlace(propertyToAdd, place) {
                 this.properties.push(propertyToAdd);
@@ -43,6 +47,7 @@ var ThisCouldBeBetter;
                     var entitiesWithProperty = place.entitiesByPropertyName(propertyName);
                     entitiesWithProperty.push(this);
                 }
+                return this;
             }
             propertyByName(name) {
                 return this.propertiesByName.get(name);
@@ -54,6 +59,16 @@ var ThisCouldBeBetter;
                     var propertyName = propertyToRemove.constructor.name;
                     var entitiesWithProperty = place.entitiesByPropertyName(propertyName);
                     GameFramework.ArrayHelper.remove(entitiesWithProperty, this);
+                }
+                return this;
+            }
+            updateForTimerTick(universe, world, place) {
+                var entityProperties = this.properties;
+                for (var p = 0; p < entityProperties.length; p++) {
+                    var property = entityProperties[p];
+                    if (property.finalize != null) {
+                        property.finalize(universe, world, place, this);
+                    }
                 }
                 return this;
             }
@@ -72,7 +87,7 @@ var ThisCouldBeBetter;
             }
             // Convenience methods for properties.
             actor() { return this.propertyByName(GameFramework.Actor.name); }
-            animatable() { return this.propertyByName(GameFramework.Animatable.name); }
+            animatable() { return this.propertyByName(GameFramework.Animatable2.name); }
             boundable() { return this.propertyByName(GameFramework.Boundable.name); }
             camera() { return this.propertyByName(GameFramework.Camera.name); }
             collidable() { return this.propertyByName(GameFramework.Collidable.name); }

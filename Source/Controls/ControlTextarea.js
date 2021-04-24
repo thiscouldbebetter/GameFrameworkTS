@@ -15,11 +15,11 @@ var ThisCouldBeBetter;
                 this.scrollbar = new GameFramework.ControlScrollbar(new GameFramework.Coords(this.size.x - scrollbarWidth, 0, 0), // pos
                 new GameFramework.Coords(scrollbarWidth, this.size.y, 0), // size
                 this.fontHeightInPixels, this.lineSpacing, // itemHeight
-                new GameFramework.DataBinding(this, (c) => c.textAsLines(), null), 0 // sliderPosInItems
+                GameFramework.DataBinding.fromContextAndGet(this, (c) => c.textAsLines()), 0 // sliderPosInItems
                 );
                 // Helper variables.
                 this._drawPos = GameFramework.Coords.create();
-                this._drawLoc = new GameFramework.Disposition(this._drawPos, null, null);
+                this._drawLoc = GameFramework.Disposition.fromPos(this._drawPos);
                 this._mouseClickPos = GameFramework.Coords.create();
             }
             actionHandle(actionNameToHandle, universe) {
@@ -193,8 +193,8 @@ var ThisCouldBeBetter;
                 var style = style || this.style(universe);
                 var colorFore = (this.isHighlighted ? style.colorFill : style.colorBorder);
                 var colorBack = (this.isHighlighted ? style.colorBorder : style.colorFill);
-                display.drawRectangle(drawPos, this.size, GameFramework.Color.systemColorGet(colorBack), // fill
-                GameFramework.Color.systemColorGet(style.colorBorder), // border
+                display.drawRectangle(drawPos, this.size, colorBack, // fill
+                style.colorBorder, // border
                 false // areColorsReversed
                 );
                 var itemSizeY = this.lineSpacing;
@@ -219,7 +219,7 @@ var ThisCouldBeBetter;
                 var drawPos2 = new GameFramework.Coords(drawPos.x + textMarginLeft, itemPosY, 0);
                 for (var i = indexStart; i <= indexEnd; i++) {
                     var line = lines[i];
-                    display.drawText(line, this.fontHeightInPixels, drawPos2, GameFramework.Color.systemColorGet(colorFore), GameFramework.Color.systemColorGet(colorBack), false, // areColorsReversed
+                    display.drawText(line, this.fontHeightInPixels, drawPos2, colorFore, colorBack, false, // areColorsReversed
                     false, // isCentered
                     this.size.x // widthMaxInPixels
                     );

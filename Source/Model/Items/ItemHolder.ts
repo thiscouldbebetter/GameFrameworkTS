@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ItemHolder extends EntityProperty
+export class ItemHolder implements EntityProperty
 {
 	items: Item[];
 	massMax: number;
@@ -16,7 +16,6 @@ export class ItemHolder extends EntityProperty
 		items: Item[], massMax: number, reachRadius: number
 	)
 	{
-		super();
 		this.items = [];
 		this.massMax = massMax;
 		this.reachRadius = reachRadius || 20;
@@ -27,6 +26,11 @@ export class ItemHolder extends EntityProperty
 	static create(): ItemHolder
 	{
 		return new ItemHolder([], null, null);
+	}
+
+	static fromItems(items: Item[]): ItemHolder
+	{
+		return new ItemHolder(items, null, null);
 	}
 
 	// Instance methods.
@@ -43,7 +47,7 @@ export class ItemHolder extends EntityProperty
 	equipItemInNumberedSlot
 	(
 		universe: Universe, entityItemHolder: Entity, slotNumber: number
-	)
+	): void
 	{
 		var itemToEquip = this.itemSelected;
 		if (itemToEquip != null)
@@ -293,6 +297,7 @@ export class ItemHolder extends EntityProperty
 		}
 	}
 
+	/*
 	itemTransferTo2(itemToTransfer: Item, other: ItemHolder): void
 	{
 		var itemDefnName = itemToTransfer.defnName;
@@ -306,6 +311,7 @@ export class ItemHolder extends EntityProperty
 			this.itemSubtract(itemToTransfer);
 		}
 	}
+	*/
 
 	itemsByDefnName2(defnName: string): Item[]
 	{
@@ -339,13 +345,19 @@ export class ItemHolder extends EntityProperty
 		return tradeValueTotal;
 	}
 
-	// controls
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
+
+	// Controllable.
 
 	toControl
 	(
 		universe: Universe, size: Coords, entityItemHolder: Entity,
 		venuePrev: Venue, includeTitleAndDoneButton: boolean
-	)
+	): ControlBase
 	{
 		this.statusMessage = "Use, drop, and sort items.";
 
@@ -354,7 +366,7 @@ export class ItemHolder extends EntityProperty
 			size = universe.display.sizeDefault().clone();
 		}
 
-		var sizeBase = new Coords(200, 135, 1);
+		var sizeBase = Coords.fromXY(200, 135);
 
 		var fontHeight = 10;
 		var fontHeightSmall = fontHeight * .6;
@@ -384,11 +396,11 @@ export class ItemHolder extends EntityProperty
 				var itemLocatable = itemEntityToDrop.locatable();
 				if (itemLocatable == null)
 				{
-					itemLocatable = new Locatable(null);
+					itemLocatable = Locatable.create();
 					itemEntityToDrop.propertyAddForPlace(itemLocatable, place);
 					itemEntityToDrop.propertyAddForPlace
 					(
-						new Drawable(itemToDropDefn.visual, null), place
+						Drawable.fromVisual(itemToDropDefn.visual), place
 					);
 					// todo - Other properties: Collidable, etc.
 				}
@@ -496,7 +508,7 @@ export class ItemHolder extends EntityProperty
 				fontHeightSmall
 			),
 
-			new ControlList
+			ControlList.from10
 			(
 				"listItems",
 				Coords.fromXY(10, 15), // pos
@@ -514,9 +526,8 @@ export class ItemHolder extends EntityProperty
 					(c: ItemHolder, v: Item) => c.itemSelected = v
 				), // bindingForItemSelected
 				DataBinding.fromGet( (c: Item) => c ), // bindingForItemValue
-				DataBinding.fromContext(true), // isEnabled
-				use,
-				null
+				DataBinding.fromTrue(), // isEnabled
+				use
 			),
 
 			new ControlLabel
@@ -533,7 +544,7 @@ export class ItemHolder extends EntityProperty
 				fontHeightSmall
 			),
 
-			new ControlButton
+			ControlButton.from8
 			(
 				"buttonUp",
 				Coords.fromXY(85, 15), // pos
@@ -554,8 +565,7 @@ export class ItemHolder extends EntityProperty
 						return returnValue;
 					}
 				), // isEnabled
-				up, // click
-				null, null
+				up // click
 			),
 
 			ControlButton.from8
@@ -618,21 +628,15 @@ export class ItemHolder extends EntityProperty
 				DataBinding.fromContextAndGet
 				(
 					this,
-					(c: ItemHolder) => 
-					{
-						var returnValue =
+					(c: ItemHolder) =>
+						c.itemSelected != null
+						&&
 						(
-							c.itemSelected != null
-							&&
+							c.items.filter
 							(
-								c.items.filter
-								(
-									(x: Item) => x.defnName == c.itemSelected.defnName
-								).length > 1
-							)
-						);
-						return returnValue;
-					}
+								(x: Item) => x.defnName == c.itemSelected.defnName
+							).length > 1
+						)
 				), // isEnabled
 				join
 			),
@@ -681,7 +685,7 @@ export class ItemHolder extends EntityProperty
 				fontHeightSmall
 			),
 
-			new ControlVisual
+			ControlVisual.from5
 			(
 				"visualImage",
 				Coords.fromXY(125, 25), // pos
@@ -695,8 +699,7 @@ export class ItemHolder extends EntityProperty
 						return (i == null ? visualNone : i.defn(world).visual);
 					}
 				),
-				Color.byName("Black"), // colorBackground
-				null
+				Color.byName("Black") // colorBackground
 			),
 
 			new ControlLabel
@@ -822,7 +825,7 @@ export class ItemHolder extends EntityProperty
 			);
 			childControls.push
 			(
-				new ControlButton
+				ControlButton.from8
 				(
 					"buttonDone",
 					Coords.fromXY(170, 115), // pos
@@ -831,8 +834,7 @@ export class ItemHolder extends EntityProperty
 					fontHeightSmall,
 					true, // hasBorder
 					true, // isEnabled
-					back, // click
-					null, null
+					back // click
 				)
 			);
 			var titleHeight = Coords.fromXY(0, 15);
@@ -849,7 +851,7 @@ export class ItemHolder extends EntityProperty
 
 	// cloneable
 
-	clone()
+	clone(): ItemHolder
 	{
 		return new ItemHolder
 		(

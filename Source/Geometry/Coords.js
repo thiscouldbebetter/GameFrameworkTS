@@ -43,6 +43,11 @@ var ThisCouldBeBetter;
                 this.z += z;
                 return this;
             }
+            addXY(x, y) {
+                this.x += x;
+                this.y += y;
+                return this;
+            }
             ceiling() {
                 this.x = Math.ceil(this.x);
                 this.y = Math.ceil(this.y);
@@ -199,6 +204,9 @@ var ThisCouldBeBetter;
             }
             magnitude() {
                 return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+            }
+            magnitudeXY() {
+                return Math.sqrt(this.x * this.x + this.y * this.y);
             }
             multiply(other) {
                 this.x *= other.x;

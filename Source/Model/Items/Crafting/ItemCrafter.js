@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class ItemCrafter extends GameFramework.EntityProperty {
+        class ItemCrafter {
             constructor(recipesAvailable) {
-                super();
                 this.recipesAvailable = recipesAvailable || [];
                 this.itemHolderStaged = GameFramework.ItemHolder.create();
                 this.recipeAvailableSelected = null;
@@ -61,7 +60,9 @@ var ThisCouldBeBetter;
                 }
                 return returnValue;
             }
-            // venue
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
             updateForTimerTick(universe, world, place, entityCrafter) {
                 if (this.recipesQueued.length > 0) {
                     var recipeInProgress = this.recipesQueued[0];
@@ -85,7 +86,7 @@ var ThisCouldBeBetter;
                 if (size == null) {
                     size = universe.display.sizeDefault().clone();
                 }
-                var sizeBase = new GameFramework.Coords(200, 135, 1);
+                var sizeBase = GameFramework.Coords.fromXY(200, 135);
                 var fontHeight = 10;
                 var fontHeightSmall = fontHeight * 0.6;
                 var fontHeightLarge = fontHeight * 1.5;
@@ -121,7 +122,7 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromGet((c) => c.name), // bindingForItemText
                     fontHeightSmall, new GameFramework.DataBinding(this, (c) => c.recipeAvailableSelected, (c, v) => c.recipeAvailableSelected = v), // bindingForItemSelected
                     GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
-                    GameFramework.DataBinding.fromContext(true), // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     addToQueue, // confirm
                     null),
                     /*
@@ -206,7 +207,7 @@ var ThisCouldBeBetter;
                         fontHeightSmall
                     ),
     
-                    new ControlButton
+                    ControlButton.from8
                     (
                         "buttonCancel",
                         Coords.fromXY(170, 50), // pos
@@ -219,8 +220,7 @@ var ThisCouldBeBetter;
                             this,
                             (c: ItemCrafter) => (c.recipesQueued.length > 0)
                         ), // isEnabled
-                        crafter.recipeInProgressCancel, // click
-                        null, null
+                        crafter.recipeInProgressCancel // click
                     ),
     
                     new ControlLabel
@@ -229,9 +229,10 @@ var ThisCouldBeBetter;
                         Coords.fromXY(105, 55), // pos
                         Coords.fromXY(75, 25), // size
                         false, // isTextCentered
-                        DataBinding.fromContextAndGet(
+                        DataBinding.fromContextAndGet
+                        (
                             this,
-                            (c: ItemCrafter) => ( c.recipeProgressAsString(universe) )
+                            (c: ItemCrafter) => c.recipeProgressAsString(universe)
                         ),
                         fontHeightSmall
                     ),
@@ -246,7 +247,7 @@ var ThisCouldBeBetter;
                             this,
                             (c: ItemCrafter) => c.recipesQueued
                         ), // items
-                        new DataBinding.fromGet(
+                        DataBinding.fromGet
                         (
                             (c: CraftingRecipe) => c.name
                         ), // bindingForItemText
@@ -286,12 +287,12 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(100, 25), // size
                     true, // isTextCentered
                     "Craft", fontHeightLarge));
-                    returnValue.children.push(new GameFramework.ControlButton("buttonDone", GameFramework.Coords.fromXY(170, 115), // pos
+                    returnValue.children.push(GameFramework.ControlButton.from8("buttonDone", GameFramework.Coords.fromXY(170, 115), // pos
                     GameFramework.Coords.fromXY(20, 10), // size
                     "Done", fontHeightSmall, true, // hasBorder
                     true, // isEnabled
-                    back, // click
-                    null, null));
+                    back // click
+                    ));
                     var titleHeight = GameFramework.Coords.fromXY(0, 15);
                     sizeBase.add(titleHeight);
                     returnValue.size.add(titleHeight);

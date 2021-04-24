@@ -367,7 +367,7 @@ export class MeshBuilder
 			)
 		}
 
-		var returnMesh = this.mergeMeshes(meshesForRoom, null);
+		var returnMesh = this.mergeMeshes(meshesForRoom, new Array<string>());
 
 		returnMesh.transform
 		(
@@ -880,6 +880,7 @@ export class MeshBuilder
 		var doAnyEdgesCollideWithPlaneSoFar = false;
 
 		var collisionHelper = new CollisionHelper();
+		var collision = Collision.create();
 
 		var edges = faceToDivide.geometry.edges();
 		for (var e = 0; e < edges.length; e++)
@@ -906,10 +907,10 @@ export class MeshBuilder
 			{
 				var collision = collisionHelper.collisionOfEdgeAndPlane
 				(
-					edge, planeToDivideOn, null
+					edge, planeToDivideOn, collision
 				);
 
-				if (collision != null)
+				if (collision.isActive)
 				{
 					doAnyEdgesCollideWithPlaneSoFar = true;
 

@@ -20,7 +20,7 @@ var ThisCouldBeBetter;
                     new GameFramework.VisualOffset(visualEyes, new GameFramework.Coords(0, -1, 0).multiplyScalar(eyeRadius))
                 ], null);
                 var circleWithEyes = new GameFramework.VisualGroup([
-                    new GameFramework.VisualCircle(circleRadius, circleColor, null, null),
+                    GameFramework.VisualCircle.fromRadiusAndColorFill(circleRadius, circleColor),
                     visualEyesDirectional
                 ]);
                 circleWithEyes = new GameFramework.VisualOffset(circleWithEyes, new GameFramework.Coords(0, -circleRadius, 0));
@@ -198,7 +198,7 @@ var ThisCouldBeBetter;
                 var lineThickness = 2;
                 var circleWithEyesAndLegs = this.circleWithEyesAndLegs(circleRadius, circleColor, eyeRadius, visualEyes);
                 var visualNone = new GameFramework.VisualNone();
-                var visualWieldable = new GameFramework.VisualDynamic((u, w, d, e) => {
+                var visualWieldable = new GameFramework.VisualDynamic((u, w, p, e) => {
                     var equipmentUser = e.equipmentUser();
                     var entityWieldableEquipped = equipmentUser.itemEntityInSocketWithName("Wielding");
                     var itemDrawable = entityWieldableEquipped.drawable();
@@ -259,12 +259,12 @@ var ThisCouldBeBetter;
             eyesBlinking(visualEyeRadius) {
                 var visualPupilRadius = visualEyeRadius / 2;
                 var visualEye = new GameFramework.VisualGroup([
-                    new GameFramework.VisualCircle(visualEyeRadius, GameFramework.Color.byName("White"), null, null),
-                    new GameFramework.VisualCircle(visualPupilRadius, GameFramework.Color.byName("Black"), null, null)
+                    GameFramework.VisualCircle.fromRadiusAndColorFill(visualEyeRadius, GameFramework.Color.byName("White")),
+                    GameFramework.VisualCircle.fromRadiusAndColorFill(visualPupilRadius, GameFramework.Color.byName("Black"))
                 ]);
                 var visualEyes = new GameFramework.VisualGroup([
-                    new GameFramework.VisualOffset(visualEye, new GameFramework.Coords(-visualEyeRadius, 0, 0)),
-                    new GameFramework.VisualOffset(visualEye, new GameFramework.Coords(visualEyeRadius, 0, 0))
+                    new GameFramework.VisualOffset(visualEye, GameFramework.Coords.fromXY(-visualEyeRadius, 0)),
+                    new GameFramework.VisualOffset(visualEye, GameFramework.Coords.fromXY(visualEyeRadius, 0))
                 ]);
                 var visualEyesBlinking = new GameFramework.VisualAnimation("EyesBlinking", [50, 5], // ticksToHoldFrames
                 [visualEyes, new GameFramework.VisualNone()], null);
@@ -321,7 +321,7 @@ var ThisCouldBeBetter;
                     new GameFramework.VisualLine(new GameFramework.Coords(0, -dimension, 0), new GameFramework.Coords(0, dimension, 0), color, rayThickness),
                     new GameFramework.VisualLine(new GameFramework.Coords(-dimensionOblique, -dimensionOblique, 0), new GameFramework.Coords(dimensionOblique, dimensionOblique, 0), color, rayThickness),
                     new GameFramework.VisualLine(new GameFramework.Coords(-dimensionOblique, dimensionOblique, 0), new GameFramework.Coords(dimensionOblique, -dimensionOblique, 0), color, rayThickness),
-                    new GameFramework.VisualCircle(dimension / 2, color, null, null),
+                    GameFramework.VisualCircle.fromRadiusAndColorFill(dimension / 2, color),
                 ]);
                 return sunVisual;
             }

@@ -44,7 +44,7 @@ export class VenueLayered implements Venue
 				display.drawRectangle
 				(
 					Coords.Instances().Zeroes, display.sizeInPixels,
-					this.colorToOverlayBetweenChildren.systemColor(), null, null
+					this.colorToOverlayBetweenChildren, null, null
 				);
 			}
 		}

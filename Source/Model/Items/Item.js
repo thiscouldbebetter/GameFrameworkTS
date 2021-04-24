@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Item extends GameFramework.EntityProperty {
+        class Item {
             constructor(defnName, quantity) {
-                super();
                 this.defnName = defnName;
                 this.quantity = quantity;
             }
@@ -19,7 +18,6 @@ var ThisCouldBeBetter;
                 return this.quantity * this.defn(world).mass;
             }
             toEntity() {
-                // todo
                 return new GameFramework.Entity(this.defnName, [this]);
             }
             toString(world) {
@@ -32,7 +30,7 @@ var ThisCouldBeBetter;
                 var returnValue = null;
                 var defn = this.defn(world);
                 if (defn.use != null) {
-                    returnValue = defn.use(universe, world, place, userEntity, itemEntity, this);
+                    returnValue = defn.use(universe, world, place, userEntity, itemEntity);
                 }
                 return returnValue;
             }
@@ -40,6 +38,10 @@ var ThisCouldBeBetter;
             clone() {
                 return new Item(this.defnName, this.quantity);
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
+            updateForTimerTick(u, w, p, e) { }
         }
         GameFramework.Item = Item;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

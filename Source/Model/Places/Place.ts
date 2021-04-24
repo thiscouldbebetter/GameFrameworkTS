@@ -2,12 +2,13 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Place
+export class Place //
 {
 	name: string;
 	defnName: string;
 	size: Coords;
 	entities: Entity[];
+	entitiesById: Map<number, Entity>;
 	entitiesByName: Map<string, Entity>;
 
 	_entitiesByPropertyName: Map<string, Entity[]>;
@@ -21,6 +22,7 @@ export class Place
 		this.defnName = defnName;
 		this.size = size;
 		this.entities = [];
+		this.entitiesById = new Map<number, Entity>();
 		this.entitiesByName = new Map<string, Entity>();
 
 		this._entitiesByPropertyName = new Map<string, Entity[]>();
@@ -36,15 +38,26 @@ export class Place
 
 	draw(universe: Universe, world: World, display: Display)
 	{
-		var entitiesDrawable = this.entitiesByPropertyName(Drawable.name);
-		for (var i = 0; i < entitiesDrawable.length; i++)
+		var colorBlack = Color.byName("Black");
+		display.drawBackground(colorBlack, colorBlack);
+
+		var cameraEntity = this.camera();
+		if (cameraEntity == null)
 		{
-			var entity = entitiesDrawable[i];
-			var drawable = entity.drawable();
-			drawable.updateForTimerTick(universe, world, this, entity);
+			var drawables = this.drawables();
+			drawables.forEach
+			(
+				(x: Entity) =>
+				{
+					x.drawable().updateForTimerTick(universe, world, this, x);
+				}
+			)
 		}
-		var camera = this.camera();
-		camera.drawEntitiesInView(universe, world, this, display);
+		else
+		{
+			var camera = cameraEntity.camera();
+			camera.drawEntitiesInView(universe, world, this, cameraEntity, display);
+		}
 	}
 
 	entitiesByPropertyName(propertyName: string)
@@ -69,6 +82,16 @@ export class Place
 		this.entitiesToRemove.length = 0;
 	}
 
+	entitiesToRemoveAdd(entitiesToRemove: Entity[]): void
+	{
+		this.entitiesToRemove.push(...entitiesToRemove);
+	}
+
+	entitiesToSpawnAdd(entitiesToSpawn: Entity[]): void
+	{
+		this.entitiesToSpawn.push(...entitiesToSpawn);
+	}
+
 	entitiesSpawn(universe: Universe, world: World)
 	{
 		for (var i = 0; i < this.entitiesToSpawn.length; i++)
@@ -80,7 +103,17 @@ export class Place
 		this.entitiesToSpawn.length = 0;
 	}
 
-	entityRemove(entity: Entity)
+	entityById(entityId: number): Entity
+	{
+		return this.entitiesById.get(entityId);
+	}
+
+	entityByName(entityName: string): Entity
+	{
+		return this.entitiesByName.get(entityName);
+	}
+
+	entityRemove(entity: Entity): void
 	{
 		var entityProperties = entity.properties;
 		for (var p = 0; p < entityProperties.length; p++)
@@ -92,6 +125,7 @@ export class Place
 			ArrayHelper.remove(entitiesWithProperty, entity);
 		}
 		ArrayHelper.remove(this.entities, entity);
+		this.entitiesById.delete(entity.id);
 		this.entitiesByName.delete(entity.name);
 	}
 
@@ -108,6 +142,7 @@ export class Place
 		}
 
 		this.entities.push(entity);
+		this.entitiesById.set(entity.id, entity);
 		this.entitiesByName.set(entity.name, entity);
 
 		var entityProperties = entity.properties;
@@ -120,6 +155,16 @@ export class Place
 		}
 
 		entity.initialize(universe, world, this);
+	}
+
+	entityToRemoveAdd(entityToRemove: Entity): void
+	{
+		this.entitiesToRemove.push(entityToRemove);
+	}
+
+	entityToSpawnAdd(entityToSpawn: Entity): void
+	{
+		this.entitiesToSpawn.push(entityToSpawn);
 	}
 
 	finalize(universe: Universe, world: World)
@@ -172,7 +217,8 @@ export class Place
 
 		this.entitiesSpawn(universe, world);
 
-		var propertyNamesToProcess = this.defn(world).propertyNamesToProcess;
+		var placeDefn = this.defn(world);
+		var propertyNamesToProcess = placeDefn.propertyNamesToProcess;
 		for (var p = 0; p < propertyNamesToProcess.length; p++)
 		{
 			var propertyName = propertyNamesToProcess[p];
@@ -204,10 +250,9 @@ export class Place
 
 	// Entity convenience accessors.
 
-	camera(): Camera
+	camera(): Entity
 	{
-		var cameraEntity = this.entitiesByPropertyName(Camera.name)[0];
-		return (cameraEntity == null ? null : cameraEntity.camera());
+		return this.entitiesByPropertyName(Camera.name)[0];
 	}
 
 	collisionTracker(): CollisionTracker
@@ -223,32 +268,32 @@ export class Place
 		return returnValue;
 	}
 
-	drawables()
+	drawables(): Entity[]
 	{
 		return this.entitiesByPropertyName(Drawable.name);
 	}
 
-	items()
+	items(): Entity[]
 	{
 		return this.entitiesByPropertyName(Item.name);
 	}
 
-	loadables()
+	loadables(): Entity[]
 	{
 		return this.entitiesByPropertyName(Loadable.name);
 	}
 
-	movables()
+	movables(): Entity[]
 	{
 		return this.entitiesByPropertyName(Movable.name);
 	}
 
-	player()
+	player(): Entity
 	{
 		return this.entitiesByPropertyName(Playable.name)[0];
 	}
 
-	usables()
+	usables(): Entity[]
 	{
 		return this.entitiesByPropertyName(Usable.name);
 	}

@@ -3,15 +3,17 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Vehicle extends GameFramework.EntityProperty {
+        class Vehicle {
             constructor(accelerationPerTick, speedMax, steeringAngleInTurns) {
-                super();
                 this.accelerationPerTick = accelerationPerTick;
                 this.speedMax = speedMax;
                 this.steeringAngleInTurns = steeringAngleInTurns;
                 this.entityOccupant = null;
                 this.steeringDirection = 0;
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
             updateForTimerTick(universe, world, place, entityVehicle) {
                 if (this.entityOccupant != null) {
                     var placeDefn = place.defn(world);
@@ -44,7 +46,7 @@ var ThisCouldBeBetter;
                             var occupantLoc = this.entityOccupant.locatable().loc;
                             occupantLoc.pos.overwriteWith(vehicleLoc.pos);
                             occupantLoc.vel.clear();
-                            place.entitiesToSpawn.push(this.entityOccupant);
+                            place.entityToSpawnAdd(this.entityOccupant);
                             this.entityOccupant = null;
                         }
                     }

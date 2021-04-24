@@ -25,7 +25,7 @@ var ThisCouldBeBetter;
                     polar.azimuthInTurns =
                         GameFramework.NumberHelper.wrapToRangeZeroOne(polar.azimuthInTurns + drawableHeadingInTurns);
                     polar.toCoords(toPos).add(fromPos);
-                    display.drawLine(fromPos, toPos, this.color.systemColor(), this.lineThickness);
+                    display.drawLine(fromPos, toPos, this.color, this.lineThickness);
                     fromPos.overwriteWith(toPos);
                 }
             }

@@ -40,40 +40,37 @@ export class WordBubble
 		var sizeBase = size.clone();
 
 		var margin = 8;
-		var marginSize = new Coords(1, 1, 0).multiplyScalar(margin);
-		var containerSize = new Coords
+		var marginSize = Coords.fromXY(1, 1).multiplyScalar(margin);
+		var containerSize = Coords.fromXY
 		(
 			sizeBase.x - margin * 2,
-			(sizeBase.y - margin * 4) / 3,
-			0
+			(sizeBase.y - margin * 4) / 3
 		);
 
-		var portraitSize = new Coords(1, 1, 0).multiplyScalar
+		var portraitSize = Coords.fromXY(1, 1).multiplyScalar
 		(
 			containerSize.y - margin * 2
 		);
 
-		var wordPaneSize = new Coords
+		var wordPaneSize = Coords.fromXY
 		(
 			containerSize.x - portraitSize.x - margin * 3,
-			portraitSize.y,
-			0
+			portraitSize.y
 		);
 
 		var fontHeight = margin;
 
-		var buttonSize = new Coords(3, 1.2, 0).multiplyScalar(fontHeight);
+		var buttonSize = Coords.fromXY(3, 1.2).multiplyScalar(fontHeight);
 
 		var wordBubble = this;
 
-		var containerWordBubble = new ControlContainer
+		var containerWordBubble = ControlContainer.from4
 		(
 			"containerWordBubble",
-			new Coords
+			Coords.fromXY
 			(
 				margin,
-				sizeBase.y - margin - containerSize.y,
-				0
+				sizeBase.y - margin - containerSize.y
 			), // pos
 			containerSize,
 			// children
@@ -91,43 +88,39 @@ export class WordBubble
 				new ControlLabel
 				(
 					"labelSlideText",
-					new Coords
+					Coords.fromXY
 					(
-						portraitSize.x + margin, 0, 0
+						portraitSize.x + margin, 0
 					).add
 					(
 						marginSize
 					),
 					wordPaneSize, // size
 					false, // isTextCentered,
-					new DataBinding
+					DataBinding.fromContextAndGet
 					(
 						this,
-						(c: WordBubble) => c.statementCurrent(),
-						null
+						(c: WordBubble) => c.statementCurrent()
 					),
 					fontHeight
 				),
 
-				new ControlButton
+				ControlButton.from8
 				(
 					"buttonNext",
-					new Coords
+					Coords.fromXY
 					(
 						containerSize.x - marginSize.x - buttonSize.x,
-						containerSize.y - marginSize.y - buttonSize.y,
-						0
+						containerSize.y - marginSize.y - buttonSize.y
 					),
 					buttonSize,
 					"Next",
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					() => wordBubble.statementAdvance(universe),
-					null, null
+					() => wordBubble.statementAdvance(universe)
 				)
-			],
-			null, null
+			]
 		);
 
 		return containerWordBubble;

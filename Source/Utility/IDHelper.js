@@ -14,8 +14,11 @@ var ThisCouldBeBetter;
                 return IDHelper._instance;
             }
             idNext() {
-                var returnValue = "_" + this._idNext;
+                var returnValue = this._idNext;
                 this._idNext++;
+                if (this._idNext >= Number.MAX_SAFE_INTEGER) {
+                    throw ("IDHelper is out of IDs!");
+                }
                 return returnValue;
             }
         }

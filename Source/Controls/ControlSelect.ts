@@ -152,8 +152,8 @@ export class ControlSelect extends ControlBase
 		display.drawRectangle
 		(
 			drawPos, this.size,
-			Color.systemColorGet(style.colorFill),
-			Color.systemColorGet(style.colorBorder),
+			style.colorFill,
+			style.colorBorder,
 			this.isHighlighted // areColorsReversed
 		);
 
@@ -172,8 +172,8 @@ export class ControlSelect extends ControlBase
 			text,
 			this.fontHeightInPixels,
 			drawPos,
-			Color.systemColorGet(style.colorBorder),
-			Color.systemColorGet(style.colorFill),
+			style.colorBorder,
+			style.colorFill,
 			this.isHighlighted,
 			true, // isCentered
 			this.size.x // widthMaxInPixels

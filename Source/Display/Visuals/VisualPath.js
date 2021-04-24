@@ -17,7 +17,7 @@ var ThisCouldBeBetter;
                 this.transformTranslate.displacement.overwriteWith(drawablePos);
                 this.verticesAsPathTransformed.overwriteWith(this.verticesAsPath);
                 GameFramework.Transforms.applyTransformToCoordsMany(this.transformTranslate, this.verticesAsPathTransformed.points);
-                display.drawPath(this.verticesAsPathTransformed.points, this.color.systemColor(), this.lineThickness, this.isClosed);
+                display.drawPath(this.verticesAsPathTransformed.points, this.color, this.lineThickness, this.isClosed);
             }
             // Clonable.
             clone() {

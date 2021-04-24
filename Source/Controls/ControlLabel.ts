@@ -103,8 +103,8 @@ export class ControlLabel extends ControlBase
 					textLine,
 					this.fontHeightInPixels,
 					drawPos,
-					Color.systemColorGet(style.colorBorder),
-					Color.systemColorGet(style.colorFill), // colorOutline
+					style.colorBorder,
+					style.colorFill, // colorOutline
 					null, // areColorsReversed
 					this.isTextCentered,
 					widthMaxInPixels

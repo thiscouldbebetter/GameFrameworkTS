@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Usable extends EntityProperty
+export class Usable implements EntityProperty
 {
 	_use: (u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) => string;
 
@@ -10,7 +10,6 @@ export class Usable extends EntityProperty
 
 	constructor(use: (u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) => string)
 	{
-		super();
 		this._use = use;
 
 		this.isDisabled = false;
@@ -38,6 +37,12 @@ export class Usable extends EntityProperty
 		this._use = other._use;
 		return this;
 	}
+
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
 }
 
 }

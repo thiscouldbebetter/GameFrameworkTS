@@ -2,66 +2,77 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Item extends EntityProperty
+export class Item implements EntityProperty
 {
 	defnName: string;
 	quantity: number;
 
 	constructor(defnName: string, quantity: number)
 	{
-		super();
 		this.defnName = defnName;
 		this.quantity = quantity;
 	}
 
-	defn(world: World)
+	defn(world: World): ItemDefn
 	{
 		return world.defn.itemDefnByName(this.defnName);
 	}
 
-	isUsable(world: World)
+	isUsable(world: World): boolean
 	{
 		return (this.defn(world).use != null);
 	}
 
-	mass(world: World)
+	mass(world: World): number
 	{
 		return this.quantity * this.defn(world).mass;
 	}
 
-	toEntity()
+	toEntity(): Entity
 	{
-		// todo
 		return new Entity(this.defnName, [ this ]);
 	}
 
-	toString(world: World)
+	toString(world: World): string
 	{
 		return this.defn(world).appearance + " (" + this.quantity + ")";
 	}
 
-	tradeValue(world: World)
+	tradeValue(world: World): number
 	{
 		return this.quantity * this.defn(world).tradeValue;
 	}
 
-	use(universe: Universe, world: World, place: Place, userEntity: Entity, itemEntity: Entity)
+	use
+	(
+		universe: Universe, world: World, place: Place,
+		userEntity: Entity, itemEntity: Entity
+	): any
 	{
 		var returnValue = null;
 		var defn = this.defn(world);
 		if (defn.use != null)
 		{
-			returnValue = defn.use(universe, world, place, userEntity, itemEntity, this);
+			returnValue = defn.use
+			(
+				universe, world, place, userEntity, itemEntity
+			);
 		}
 		return returnValue;
 	}
 
 	// cloneable
 
-	clone()
+	clone(): Item
 	{
 		return new Item(this.defnName, this.quantity);
 	}
+
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
 }
 
 }

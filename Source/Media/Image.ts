@@ -22,7 +22,12 @@ export class Image2
 
 	// static methods
 
-	static fromSystemImage(name: string, systemImage: any)
+	static create(): Image2
+	{
+		return new Image2(null, null);
+	}
+
+	static fromSystemImage(name: string, systemImage: any): Image2
 	{
 		var returnValue = new Image2
 		(
@@ -39,9 +44,9 @@ export class Image2
 
 	// instance methods
 
-	clone()
+	clone(): Image2
 	{
-		var returnValue = new Image2(null, null);
+		var returnValue = Image2.create();
 
 		returnValue.name = this.name;
 		returnValue.sourcePath = this.sourcePath;
@@ -52,7 +57,7 @@ export class Image2
 		return returnValue;
 	}
 
-	load()
+	load(): Image2
 	{
 		if (this.sourcePath != null)
 		{
@@ -74,7 +79,7 @@ export class Image2
 		return this;
 	}
 
-	unload()
+	unload(): Image2
 	{
 		this.systemImage = null;
 		return this;

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Constrainable extends EntityProperty
+export class Constrainable implements EntityProperty
 {
 	constraints: Constraint[];
 
@@ -10,13 +10,25 @@ export class Constrainable extends EntityProperty
 
 	constructor(constraints: Constraint[])
 	{
-		super();
-		this.constraints = constraints;
+		this.constraints = constraints || [];
 		this._constraintsByClassName =
 			ArrayHelper.addLookups(this.constraints, x => x.constructor.name);
 	}
 
-	static constrain(universe: Universe, world: World, place: Place, entity: Entity)
+	static create(): Constrainable
+	{
+		return new Constrainable([]);
+	}
+
+	static fromConstraint(constraint: Constraint): Constrainable
+	{
+		return new Constrainable( [ constraint ] );
+	}
+
+	constrain
+	(
+		universe: Universe, world: World, place: Place, entity: Entity
+	): void
 	{
 		var constrainable = entity.constrainable();
 		var constraints = constrainable.constraints;
@@ -27,19 +39,38 @@ export class Constrainable extends EntityProperty
 		}
 	}
 
-	constraintByClassName(constraintClassName: string)
+	constraintAdd(constraintToAdd: Constraint): void
+	{
+		this.constraints.push(constraintToAdd);
+		this._constraintsByClassName.set
+		(
+			constraintToAdd.constructor.name, constraintToAdd
+		);
+	}
+
+	constraintByClassName(constraintClassName: string): Constraint
 	{
 		return this._constraintsByClassName.get(constraintClassName);
 	}
 
-	initialize(universe: Universe, world: World, place: Place, entity: Entity)
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+
+	initialize
+	(
+		universe: Universe, world: World, place: Place, entity: Entity
+	): void
 	{
 		this.updateForTimerTick(universe, world, place, entity);
 	}
 
-	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity)
+	updateForTimerTick
+	(
+		universe: Universe, world: World, place: Place, entity: Entity
+	): void
 	{
-		Constrainable.constrain(universe, world, place, entity);
+		this.constrain(universe, world, place, entity);
 	}
 }
 

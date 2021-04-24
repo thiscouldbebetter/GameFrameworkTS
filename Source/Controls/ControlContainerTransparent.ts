@@ -115,7 +115,7 @@ export class ControlContainerTransparent extends ControlBase
 		(
 			drawPos, this.containerInner.size,
 			null, // display.colorBack,
-			Color.systemColorGet(style.colorBorder), null
+			style.colorBorder, null
 		);
 
 		var children = this.containerInner.children;

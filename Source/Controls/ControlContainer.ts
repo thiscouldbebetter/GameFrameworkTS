@@ -362,7 +362,7 @@ export class ControlContainer extends ControlBase
 			}
 		}
 
-		return false;
+		return false; // wasMoveHandled
 	}
 
 	scalePosAndSize(scaleFactor: Coords): ControlBase
@@ -415,8 +415,8 @@ export class ControlContainer extends ControlBase
 		display.drawRectangle
 		(
 			drawPos, this.size,
-			Color.systemColorGet(style.colorBackground),
-			Color.systemColorGet(style.colorBorder),
+			style.colorBackground,
+			style.colorBorder,
 			null
 		);
 

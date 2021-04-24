@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ItemStore extends EntityProperty
+export class ItemStore implements EntityProperty
 {
 	itemDefnNameCurrency: string;
 
@@ -10,12 +10,14 @@ export class ItemStore extends EntityProperty
 
 	constructor(itemDefnNameCurrency: string)
 	{
-		super();
 		this.itemDefnNameCurrency = itemDefnNameCurrency;
 		this.statusMessage = "-";
 	}
 
-	transfer(world: World, entityFrom: Entity, entityTo: Entity, messagePrefix: string)
+	transfer
+	(
+		world: World, entityFrom: Entity, entityTo: Entity, messagePrefix: string
+	): void
 	{
 		var itemHolderFrom = entityFrom.itemHolder();
 		var itemHolderTo = entityTo.itemHolder();
@@ -24,7 +26,7 @@ export class ItemStore extends EntityProperty
 		{
 			var itemToTransfer = itemHolderFrom.itemSelected;
 			var tradeValue = itemToTransfer.defn(world).tradeValue;
-			var itemCurrencyNeeded = new Item(this.itemDefnNameCurrency, 0);
+			var itemCurrencyNeeded = new Item(this.itemDefnNameCurrency, tradeValue);
 			var itemDefnCurrency = itemCurrencyNeeded.defn(world);
 			itemCurrencyNeeded.quantity = Math.ceil(tradeValue / itemDefnCurrency.tradeValue);
 			if (itemHolderTo.hasItem(itemCurrencyNeeded))
@@ -50,7 +52,11 @@ export class ItemStore extends EntityProperty
 		}
 	}
 
-	use(universe: Universe, world: World, place: Place, entityUsing: Entity, entityUsed: Entity)
+	use
+	(
+		universe: Universe, world: World, place: Place,
+		entityUsing: Entity, entityUsed: Entity
+	): void
 	{
 		//entityUsed.collidable().ticksUntilCanCollide = 50; // hack
 		var storeAsControl = entityUsed.itemStore().toControl
@@ -64,9 +70,19 @@ export class ItemStore extends EntityProperty
 		universe.venueNext = venueNext;
 	}
 
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
+
 	// Controllable.
 
-	toControl(universe: Universe, size: Coords, entityCustomer: Entity, entityStore: Entity, venuePrev: Venue)
+	toControl
+	(
+		universe: Universe, size: Coords, entityCustomer: Entity,
+		entityStore: Entity, venuePrev: Venue
+	): ControlBase
 	{
 		if (size == null)
 		{
@@ -75,12 +91,11 @@ export class ItemStore extends EntityProperty
 
 		var fontHeight = 10;
 		var margin = fontHeight * 1.5;
-		var buttonSize = new Coords(4, 2, 0).multiplyScalar(fontHeight);
-		var listSize = new Coords
+		var buttonSize = Coords.fromXY(4, 2).multiplyScalar(fontHeight);
+		var listSize = Coords.fromXY
 		(
 			(size.x - margin * 3) / 2,
-			size.y - margin * 4 - buttonSize.y - fontHeight,
-			0
+			size.y - margin * 4 - buttonSize.y - fontHeight
 		);
 
 		var itemBarterer = this;
@@ -123,7 +138,7 @@ export class ItemStore extends EntityProperty
 					fontHeight
 				),
 
-				new ControlList
+				ControlList.from10
 				(
 					"listStoreItems",
 					Coords.fromXY(margin, margin * 2), // pos
@@ -146,9 +161,8 @@ export class ItemStore extends EntityProperty
 						(c: ItemHolder, v: Item) => c.itemSelected = v
 					), // bindingForItemSelected
 					DataBinding.fromGet( (c: Item) => c ), // bindingForItemValue
-					DataBinding.fromContext(true), // isEnabled
-					buy, // confirm
-					null
+					DataBinding.fromTrue(), // isEnabled
+					buy // confirm
 				),
 
 				new ControlLabel
@@ -173,11 +187,11 @@ export class ItemStore extends EntityProperty
 					"Buy",
 					fontHeight,
 					true, // hasBorder
-					DataBinding.fromContext(true), // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					buy // click
 				),
 
-				new ControlList
+				ControlList.from10
 				(
 					"listCustomerItems",
 					Coords.fromXY(size.x - margin - listSize.x, margin * 2), // pos
@@ -200,9 +214,8 @@ export class ItemStore extends EntityProperty
 						(c: ItemHolder, v: Item) => c.itemSelected = v
 					), // bindingForItemSelected
 					DataBinding.fromGet( (c: Item) => c ), // bindingForItemValue
-					DataBinding.fromContext(true), // isEnabled
-					sell, // confirm
-					null
+					DataBinding.fromTrue(), // isEnabled
+					sell // confirm
 				),
 
 				ControlButton.from8
@@ -217,7 +230,7 @@ export class ItemStore extends EntityProperty
 					"Sell",
 					fontHeight,
 					true, // hasBorder
-					DataBinding.fromContext(true), // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					sell // click
 				),
 
@@ -227,7 +240,7 @@ export class ItemStore extends EntityProperty
 					Coords.fromXY(size.x / 2, size.y - margin * 2 - buttonSize.y), // pos
 					Coords.fromXY(size.x, fontHeight), // size
 					true, // isTextCentered
-					new DataBinding(this, c => c.statusMessage, null),
+					DataBinding.fromContextAndGet(this, c => c.statusMessage),
 					fontHeight
 				),
 

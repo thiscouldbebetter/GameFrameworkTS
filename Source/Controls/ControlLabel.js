@@ -49,7 +49,7 @@ var ThisCouldBeBetter;
                     var widthMaxInPixels = (this.size == null ? null : this.size.x);
                     for (var i = 0; i < textAsLines.length; i++) {
                         var textLine = textAsLines[i];
-                        display.drawText(textLine, this.fontHeightInPixels, drawPos, GameFramework.Color.systemColorGet(style.colorBorder), GameFramework.Color.systemColorGet(style.colorFill), // colorOutline
+                        display.drawText(textLine, this.fontHeightInPixels, drawPos, style.colorBorder, style.colorFill, // colorOutline
                         null, // areColorsReversed
                         this.isTextCentered, widthMaxInPixels);
                         drawPos.y += this.fontHeightInPixels;

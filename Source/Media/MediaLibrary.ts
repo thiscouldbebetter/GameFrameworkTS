@@ -59,36 +59,46 @@ export class MediaLibrary
 		var fonts = new Array<Font>();
 		var textStrings = new Array<TextString>();
 
-		var typesAndArraysByFileExtension = new Map<string,Array<any>>
+		var imageTypeDirectoryNameAndArray = [ Image2, "Images", images ];
+		var soundTypeDirectoryNameAndArray = [ Sound, "Audio", sounds ];
+		var textStringTypeDirectoryNameAndArray = [ TextString, "Text", textStrings ];
+
+		var typesDirectoryNamesAndArraysByFileExtension = new Map<string,Array<any>>
 		([
-			[ "jpg", [ Image2, images ] ],
-			[ "png", [ Image2, images ] ],
-			[ "svg", [ Image2, images ] ],
+			[ "jpg", imageTypeDirectoryNameAndArray ],
+			[ "png", imageTypeDirectoryNameAndArray ],
+			[ "svg", imageTypeDirectoryNameAndArray ],
 
-			[ "mp3", [ Sound, sounds ] ],
-			[ "wav", [ Sound, sounds ] ],
+			[ "mp3", soundTypeDirectoryNameAndArray ],
+			[ "wav", soundTypeDirectoryNameAndArray ],
 
-			[ "webm", [ Video, videos ] ],
+			[ "webm", [ Video, "Video", videos ] ],
 
-			[ "ttf", [ Font, fonts ] ],
+			[ "ttf", [ Font, "Fonts", fonts ] ],
 
-			[ "json", [ TextString, textStrings ] ],
-			[ "txt", [ TextString, textStrings ] ],
+			[ "json", textStringTypeDirectoryNameAndArray ],
+			[ "txt", textStringTypeDirectoryNameAndArray ],
 		]);
 
 		for (var i = 0; i < mediaFilePaths.length; i++)
 		{
 			var filePath = mediaFilePaths[i];
+
+			var fileExtension = filePath.substr(filePath.lastIndexOf(".") + 1);
+			var typeDirectoryNameAndArray =
+				typesDirectoryNamesAndArraysByFileExtension.get(fileExtension);
+			var mediaType = typeDirectoryNameAndArray[0];
+			var mediaDirectoryName = typeDirectoryNameAndArray[1];
+			var mediaArray = typeDirectoryNameAndArray[2];
+
 			var filePathParts = filePath.split("/");
-			filePathParts.splice(0, 3); // Remove "../Content/[mediaType]/"
+			var filePathPartIndexForMediaType =
+				filePathParts.indexOf(mediaDirectoryName);
+			filePathParts.splice(0, filePathPartIndexForMediaType + 1);
 			var fileName = filePathParts.join("_");
 			var fileStemAndExtension = fileName.split(".");
 			var fileStem = fileStemAndExtension[0];
-			var fileExtension = fileStemAndExtension[1];
-			var typeAndArray =
-				typesAndArraysByFileExtension.get(fileExtension);
-			var mediaType = typeAndArray[0];
-			var mediaArray = typeAndArray[1];
+
 			var mediaObject = new mediaType(fileStem, filePath);
 			mediaArray.push(mediaObject);
 		}

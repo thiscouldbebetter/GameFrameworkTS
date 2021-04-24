@@ -11,12 +11,18 @@ var ThisCouldBeBetter;
                 this.colorBorder = colorBorder;
                 // Helper variables.
                 this._drawPos = GameFramework.Coords.create();
-                this._locatable = new GameFramework.Locatable(new GameFramework.Disposition(this._drawPos, null, null));
+                this._locatable = GameFramework.Locatable.fromPos(this._drawPos);
                 this._locatableEntity = new GameFramework.Entity("_drawableEntity", [
                     this._locatable,
-                    new GameFramework.Drawable(new GameFramework.VisualNone(), null)
+                    GameFramework.Drawable.fromVisual(new GameFramework.VisualNone())
                 ]);
                 this._sizeHalf = GameFramework.Coords.create();
+            }
+            static from4(name, pos, size, visual) {
+                return new ControlVisual(name, pos, size, visual, null, null);
+            }
+            static from5(name, pos, size, visual, colorBackground) {
+                return new ControlVisual(name, pos, size, visual, colorBackground, null);
             }
             actionHandle(actionName, universe) {
                 return false;
@@ -41,7 +47,7 @@ var ThisCouldBeBetter;
                     var style = style || this.style(universe);
                     var colorFill = this.colorBackground || GameFramework.Color.Instances()._Transparent;
                     var colorBorder = this.colorBorder || style.colorBorder;
-                    display.drawRectangle(drawPos, this.size, GameFramework.Color.systemColorGet(colorFill), GameFramework.Color.systemColorGet(colorBorder), null);
+                    display.drawRectangle(drawPos, this.size, colorFill, colorBorder, null);
                     var locatableEntity = this._locatableEntity;
                     locatableEntity.locatable().loc.pos.overwriteWith(drawPos);
                     drawPos.add(this._sizeHalf.overwriteWith(this.size).half());

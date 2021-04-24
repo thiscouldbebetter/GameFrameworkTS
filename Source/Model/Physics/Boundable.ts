@@ -2,20 +2,30 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Boundable extends EntityProperty
+export class Boundable implements EntityProperty
 {
 	bounds: any;
 
 	constructor(bounds: any)
 	{
-		super();
 		this.bounds = bounds;
 	}
 
-	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity)
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+
+	initialize(u: Universe, w: World, p: Place, e: Entity): void
+	{
+		this.updateForTimerTick(u, w, p, e);
+	}
+
+	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void
 	{
 		this.bounds.locate(e.locatable().loc);
 	}
+
+	// Clonable.
 
 	clone(): Boundable
 	{

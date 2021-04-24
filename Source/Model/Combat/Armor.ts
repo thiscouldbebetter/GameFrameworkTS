@@ -2,15 +2,21 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Armor extends EntityProperty
+export class Armor implements EntityProperty
 {
 	damageMultiplier: number;
 
 	constructor(damageMultiplier: number)
 	{
-		super();
 		this.damageMultiplier = damageMultiplier;
 	}
+
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
+
 }
 
 }

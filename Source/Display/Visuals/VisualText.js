@@ -20,7 +20,7 @@ var ThisCouldBeBetter;
             }
             draw(universe, world, place, entity, display) {
                 var text = this.text(universe, world, place, entity, display);
-                display.drawText(text, this.heightInPixels, entity.locatable().loc.pos, GameFramework.Color.systemColorGet(this.colorFill), GameFramework.Color.systemColorGet(this.colorBorder), false, // areColorsReversed
+                display.drawText(text, this.heightInPixels, entity.locatable().loc.pos, this.colorFill, this.colorBorder, false, // areColorsReversed
                 true, // isCentered
                 null // widthMaxInPixels
                 );

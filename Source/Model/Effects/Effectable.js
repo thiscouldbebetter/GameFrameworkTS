@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Effectable extends GameFramework.EntityProperty {
+        class Effectable {
             constructor(effects) {
-                super();
                 this.effects = effects || new Array();
             }
             effectAdd(effectToAdd) {
@@ -17,6 +16,9 @@ var ThisCouldBeBetter;
                     : new GameFramework.VisualGroup(this.effects.map(x => x.visual)));
                 return returnValue;
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
             updateForTimerTick(u, w, p, e) {
                 for (var i = 0; i < this.effects.length; i++) {
                     var effect = this.effects[i];

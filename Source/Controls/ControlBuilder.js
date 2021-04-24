@@ -51,10 +51,10 @@ var ThisCouldBeBetter;
                         - (buttonWidth * numberOfOptions)
                         - (spaceBetweenButtons * (numberOfOptions - 1))) / 2;
                     for (var i = 0; i < numberOfOptions; i++) {
-                        var button = GameFramework.ControlButton.from8("buttonOption" + i, GameFramework.Coords.fromXY(buttonMarginLeftRight + i * (buttonWidth + spaceBetweenButtons), 100), // pos
+                        var button = GameFramework.ControlButton.from9("buttonOption" + i, GameFramework.Coords.fromXY(buttonMarginLeftRight + i * (buttonWidth + spaceBetweenButtons), 100), // pos
                         buttonSize.clone(), optionNames[i], fontHeight, true, // hasBorder
                         true, // isEnabled
-                        optionFunctions[i]);
+                        optionFunctions[i], universe);
                         childControls.push(button);
                     }
                 }
@@ -221,7 +221,7 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             gameAndSettings1(universe) {
-                return this.gameAndSettings(universe, null, null, null);
+                return this.gameAndSettings(universe, null, universe.venueCurrent, true);
             }
             gameAndSettings(universe, size, venuePrev, includeResumeButton) {
                 var controlBuilder = this;
@@ -434,7 +434,7 @@ var ThisCouldBeBetter;
                 // children
                 [
                     new GameFramework.ControlVisual("imageOpening", this._zeroes.clone(), this.sizeBase.clone(), // size
-                    new GameFramework.DataBinding(visual, null, null), null, null // colors
+                    GameFramework.DataBinding.fromContext(visual), null, null // colors
                     ),
                     GameFramework.ControlButton.from8("buttonStart", GameFramework.Coords.fromXY(75, 120), // pos
                     GameFramework.Coords.fromXY(50, fontHeight * 2), // size
@@ -484,8 +484,8 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(30, buttonHeight), // size
                     new GameFramework.DataBinding(universe.soundHelper, (c) => { return c.musicVolume; }, (c, v) => { c.musicVolume = v; }), // valueSelected
                     GameFramework.SoundHelper.controlSelectOptionsVolume(), // options
-                    new GameFramework.DataBinding(null, (c) => c.value, null), // bindingForOptionValues,
-                    new GameFramework.DataBinding(null, (c) => { return c.text; }, null), // bindingForOptionText
+                    GameFramework.DataBinding.fromGet((c) => c.value), // bindingForOptionValues,
+                    GameFramework.DataBinding.fromGet((c) => { return c.text; }), // bindingForOptionText
                     fontHeight),
                     new GameFramework.ControlLabel("labelSoundVolume", GameFramework.Coords.fromXY(105, row1PosY + labelPadding), // pos
                     GameFramework.Coords.fromXY(75, buttonHeight), // size
@@ -559,16 +559,30 @@ var ThisCouldBeBetter;
                 }
                 var scaleMultiplier = this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
                 var controlsForSlides = [];
+                var nextDefn = (slideIndexNext) => // click
+                 {
+                    var venueNext;
+                    if (slideIndexNext < controlsForSlides.length) {
+                        var controlForSlideNext = controlsForSlides[slideIndexNext];
+                        venueNext = controlForSlideNext.toVenue();
+                    }
+                    else {
+                        venueNext = venueAfterSlideshow;
+                    }
+                    venueNext = controlBuilder.venueTransitionalFromTo(universe.venueCurrent, venueNext);
+                    universe.venueNext = venueNext;
+                };
                 for (var i = 0; i < imageNamesAndMessagesForSlides.length; i++) {
                     var imageNameAndMessage = imageNamesAndMessagesForSlides[i];
                     var imageName = imageNameAndMessage[0];
                     var message = imageNameAndMessage[1];
+                    var next = nextDefn.bind(this, i + 1);
                     var containerSlide = GameFramework.ControlContainer.from4("containerSlide_" + i, this._zeroes, // pos
                     this.sizeBase.clone(), // size
                     // children
                     [
                         new GameFramework.ControlVisual("imageSlide", this._zeroes, this.sizeBase.clone(), // size
-                        new GameFramework.DataBinding(new GameFramework.VisualImageFromLibrary(imageName), null, null), null, null),
+                        GameFramework.DataBinding.fromContext(new GameFramework.VisualImageFromLibrary(imageName)), null, null),
                         new GameFramework.ControlLabel("labelSlideText", GameFramework.Coords.fromXY(100, this.fontHeightInPixelsBase * 2), // pos
                         this.sizeBase.clone(), // size
                         true, // isTextCentered,
@@ -577,18 +591,7 @@ var ThisCouldBeBetter;
                         GameFramework.Coords.fromXY(50, 40), // size
                         "Next", this.fontHeightInPixelsBase, false, // hasBorder
                         true, // isEnabled
-                        function (slideIndexNext) {
-                            var venueNext;
-                            if (slideIndexNext < controlsForSlides.length) {
-                                var controlForSlideNext = controlsForSlides[slideIndexNext];
-                                venueNext = controlForSlideNext.toVenue();
-                            }
-                            else {
-                                venueNext = venueAfterSlideshow;
-                            }
-                            venueNext = controlBuilder.venueTransitionalFromTo(universe.venueCurrent, venueNext);
-                            universe.venueNext = venueNext;
-                        }.bind(this, i + 1))
+                        next)
                     ]);
                     containerSlide.scalePosAndSize(scaleMultiplier);
                     controlsForSlides.push(containerSlide);
@@ -604,11 +607,7 @@ var ThisCouldBeBetter;
                 var fontHeight = this.fontHeightInPixelsBase;
                 var start = () => {
                     var venueMessage = GameFramework.VenueMessage.fromText("Loading profiles...");
-                    var venueTask = new GameFramework.VenueTask(venueMessage, () => // perform
-                     {
-                        var result = GameFramework.Profile.toControlProfileSelect(universe, null, universe.venueCurrent);
-                        return result;
-                    }, (universe, result) => // done
+                    var venueTask = new GameFramework.VenueTask(venueMessage, () => GameFramework.Profile.toControlProfileSelect(universe, null, universe.venueCurrent), (universe, result) => // done
                      {
                         var venueProfileSelect = result.toVenue();
                         universe.venueNext = controlBuilder.venueTransitionalFromTo(universe.venueCurrent, venueProfileSelect);
@@ -626,7 +625,7 @@ var ThisCouldBeBetter;
                 // children
                 [
                     new GameFramework.ControlVisual("imageTitle", this._zeroes.clone(), this.sizeBase.clone(), // size
-                    new GameFramework.DataBinding(visual, null, null), null, null // colors
+                    GameFramework.DataBinding.fromContext(visual), null, null // colors
                     ),
                     GameFramework.ControlButton.from8("buttonStart", GameFramework.Coords.fromXY(75, 120), // pos
                     GameFramework.Coords.fromXY(50, fontHeight * 2), // size
@@ -786,14 +785,14 @@ var ThisCouldBeBetter;
                     "Select a Save:", fontHeight),
                     GameFramework.ControlList.from8("listSaveStates", GameFramework.Coords.fromXY(30, 50), // pos
                     GameFramework.Coords.fromXY(140, 50), // size
-                    new GameFramework.DataBinding(universe.profile, (c) => c.saveStates, null), // items
+                    GameFramework.DataBinding.fromContextAndGet(universe.profile, (c) => c.saveStates), // items
                     GameFramework.DataBinding.fromGet((c) => c.name), // bindingForOptionText
                     fontHeight, new GameFramework.DataBinding(universe.profile, (c) => c.saveStateSelected(), (c, v) => { c.saveStateNameSelected = v.name; }), // bindingForOptionSelected
                     GameFramework.DataBinding.fromGet((c) => c)),
                     GameFramework.ControlButton.from8("buttonLoadFromServer", GameFramework.Coords.fromXY(30, 105), // pos
                     GameFramework.Coords.fromXY(40, this.buttonHeightBase), // size
                     "Load", fontHeight, true, // hasBorder
-                    GameFramework.DataBinding.fromContext(true), // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     () => // click
                      {
                         var controlConfirm = universe.controlBuilder.confirm(universe, size, "Abandon the current game?", confirm, cancel);

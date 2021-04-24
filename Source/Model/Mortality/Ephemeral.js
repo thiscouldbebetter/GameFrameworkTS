@@ -3,12 +3,14 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Ephemeral extends GameFramework.EntityProperty {
+        class Ephemeral {
             constructor(ticksToLive, expire) {
-                super();
                 this.ticksToLive = ticksToLive;
                 this.expire = expire;
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
             updateForTimerTick(universe, world, place, entityEphemeral) {
                 this.ticksToLive--;
                 if (this.ticksToLive <= 0) {

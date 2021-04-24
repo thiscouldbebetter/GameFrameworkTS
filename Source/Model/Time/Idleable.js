@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Idleable extends GameFramework.EntityProperty {
+        class Idleable {
             constructor(ticksUntilIdle, idle) {
-                super();
                 this.ticksUntilIdle = ticksUntilIdle;
                 this._idle = idle;
                 this.tickLastActionPerformed = 0;
@@ -21,6 +20,9 @@ var ThisCouldBeBetter;
             ticksSinceLastAction(world) {
                 return world.timerTicksSoFar - this.tickLastActionPerformed;
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
             updateForTimerTick(universe, world, place, entity) {
                 var actor = entity.actor();
                 var actorIsActing = actor.actions.length > 0;

@@ -35,22 +35,46 @@ export class Disposition
 		this.timeOffsetInTicks = 0;
 	}
 
-	static create()
+	static create(): Disposition
 	{
-		return new Disposition(null, null, null);
+		return new Disposition(Coords.create(), Orientation.default(), null);
 	}
 
-	static fromPos(pos: Coords)
+	static fromOrientation(orientation: Orientation): Disposition
 	{
-		return new Disposition(pos, null, null);
+		return new Disposition(Coords.create(), orientation, null);
 	}
 
-	place(world: World)
+	static fromPos(pos: Coords): Disposition
+	{
+		return new Disposition(pos, Orientation.default(), null);
+	}
+
+	static fromPosAndVel(pos: Coords, vel: Coords): Disposition
+	{
+		var returnValue = Disposition.fromPos(pos);
+		returnValue.vel = vel;
+		return returnValue;
+	}
+
+	equals(other: Disposition): boolean
+	{
+		var returnValue =
+		(
+			this.placeName == other.placeName
+			&& this.pos.equals(other.pos)
+			&& this.orientation.equals(other.orientation)
+		);
+
+		return returnValue;
+	}
+
+	place(world: World): Place
 	{
 		return world.placesByName.get(this.placeName);
 	}
 
-	velSet(value: Coords)
+	velSet(value: Coords): Disposition
 	{
 		this.vel.overwriteWith(value);
 		return this;
@@ -58,7 +82,7 @@ export class Disposition
 
 	// cloneable
 
-	clone()
+	clone(): Disposition
 	{
 		var returnValue = new Disposition
 		(
@@ -75,7 +99,7 @@ export class Disposition
 		return returnValue;
 	}
 
-	overwriteWith(other: Disposition)
+	overwriteWith(other: Disposition): Disposition
 	{
 		this.placeName = other.placeName;
 		this.pos.overwriteWith(other.pos);
@@ -88,7 +112,7 @@ export class Disposition
 
 	// strings
 
-	toString()
+	toString(): string
 	{
 		return this.pos.clone().round().toString();
 	}

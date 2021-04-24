@@ -8,16 +8,19 @@ var ThisCouldBeBetter;
                 this.size = size;
                 this.colorFill = colorFill;
                 this.colorBorder = colorBorder;
-                this.isCentered = (isCentered == null ? true : isCentered);
+                this.isCentered = isCentered || true;
                 this.sizeHalf = this.size.clone().half();
                 this._drawPos = GameFramework.Coords.create();
+            }
+            static fromSizeAndColorFill(size, colorFill) {
+                return new VisualRectangle(size, colorFill, null, null);
             }
             draw(universe, world, place, entity, display) {
                 var drawPos = this._drawPos.overwriteWith(entity.locatable().loc.pos);
                 if (this.isCentered) {
                     drawPos.subtract(this.sizeHalf);
                 }
-                display.drawRectangle(drawPos, this.size, GameFramework.Color.systemColorGet(this.colorFill), GameFramework.Color.systemColorGet(this.colorBorder), null);
+                display.drawRectangle(drawPos, this.size, this.colorFill, this.colorBorder, null);
             }
             // Clonable.
             clone() {

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class JournalKeeper extends EntityProperty
+export class JournalKeeper implements EntityProperty
 {
 	journal: Journal;
 
@@ -12,9 +12,14 @@ export class JournalKeeper extends EntityProperty
 
 	constructor(journal: Journal)
 	{
-		super();
 		this.journal = journal;
 	}
+
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
 
 	// Controls.
 
@@ -22,7 +27,7 @@ export class JournalKeeper extends EntityProperty
 	(
 		universe: Universe, size: Coords, entityJournalKeeper: Entity,
 		venuePrev: Venue, includeTitleAndDoneButton: boolean
-	)
+	): ControlBase
 	{
 		var world = universe.world;
 		var journalKeeper = entityJournalKeeper.journalKeeper();
@@ -34,7 +39,7 @@ export class JournalKeeper extends EntityProperty
 			size = universe.display.sizeDefault().clone();
 		}
 
-		var sizeBase = new Coords(200, 135, 1);
+		var sizeBase = Coords.fromXY(200, 135);
 
 		var fontHeight = 10;
 		var fontHeightSmall = fontHeight * .6;
@@ -47,15 +52,15 @@ export class JournalKeeper extends EntityProperty
 			universe.venueNext = venueNext;
 		};
 
-		var buttonSize = new Coords(20, 10, 0);
+		var buttonSize = Coords.fromXY(20, 10);
 
 		var childControls: ControlBase[] =
 		[
 			new ControlLabel
 			(
 				"labelJournalEntries",
-				new Coords(10, 5, 0), // pos
-				new Coords(70, 25, 0), // size
+				Coords.fromXY(10, 5), // pos
+				Coords.fromXY(70, 25), // size
 				false, // isTextCentered
 				"Journal Entries:",
 				fontHeightSmall
@@ -64,16 +69,15 @@ export class JournalKeeper extends EntityProperty
 			new ControlButton
 			(
 				"buttonEntryNew",
-				new Coords(65, 5, 0), // pos
-				new Coords(30, 8, 0), // size
+				Coords.fromXY(65, 5), // pos
+				Coords.fromXY(30, 8), // size
 				"New",
 				fontHeightSmall,
 				true, // hasBorder,
-				new DataBinding
+				DataBinding.fromContextAndGet
 				(
 					this,
-					(c: JournalKeeper) => true, // todo
-					null
+					(c: JournalKeeper) => true
 				), // isEnabled
 				() =>
 				{
@@ -87,20 +91,18 @@ export class JournalKeeper extends EntityProperty
 					journal.entries.push(entryNew);
 				}, // click
 				null, // context
-				false, // canBeHeldDown
+				false // canBeHeldDown
 			),
 
 			new ControlList
 			(
 				"listEntries",
-				new Coords(10, 15, 0), // pos
-				new Coords(85, 110, 0), // size
-				new DataBinding(this.journal.entries, null, null), // items
-				new DataBinding
+				Coords.fromXY(10, 15), // pos
+				Coords.fromXY(85, 110), // size
+				DataBinding.fromContext(this.journal.entries), // items
+				DataBinding.fromGet
 				(
-					null,
-					(c: JournalEntry) => c.toString(universe),
-					null
+					(c: JournalEntry) => c.toString(universe)
 				), // bindingForItemText
 				fontHeightSmall,
 				new DataBinding
@@ -114,7 +116,7 @@ export class JournalKeeper extends EntityProperty
 					}
 				), // bindingForItemSelected
 				DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
-				DataBinding.fromContext(true), // isEnabled
+				DataBinding.fromTrue(), // isEnabled
 				(universe: Universe) => // confirm
 				{
 					// todo
@@ -125,8 +127,8 @@ export class JournalKeeper extends EntityProperty
 			new ControlLabel
 			(
 				"labelEntrySelected",
-				new Coords(105, 5, 0), // pos
-				new Coords(100, 15, 0), // size
+				Coords.fromXY(105, 5), // pos
+				Coords.fromXY(100, 15), // size
 				false, // isTextCentered
 				"Entry Selected:",
 				fontHeightSmall
@@ -135,20 +137,19 @@ export class JournalKeeper extends EntityProperty
 			new ControlButton
 			(
 				"buttonEntrySelectedEdit",
-				new Coords(146, 5, 0), // pos
-				new Coords(15, 8, 0), // size
+				Coords.fromXY(146, 5), // pos
+				Coords.fromXY(15, 8), // size
 				"Lock",
 				fontHeightSmall,
 				true, // hasBorder,
-				new DataBinding
+				DataBinding.fromContextAndGet
 				(
 					this,
 					(c: JournalKeeper) =>
 					(
 						c.journalEntrySelected != null
 						&& c.isJournalEntrySelectedEditable
-					),
-					null
+					)
 				), // isEnabled
 				() =>
 				{
@@ -161,20 +162,19 @@ export class JournalKeeper extends EntityProperty
 			new ControlButton
 			(
 				"buttonEntrySelectedEdit",
-				new Coords(164, 5, 0), // pos
-				new Coords(15, 8, 0), // size
+				Coords.fromXY(164, 5), // pos
+				Coords.fromXY(15, 8), // size
 				"Edit",
 				fontHeightSmall,
 				true, // hasBorder,
-				new DataBinding
+				DataBinding.fromContextAndGet
 				(
 					this,
 					(c: JournalKeeper) =>
 					(
 						c.journalEntrySelected != null
 						&& c.isJournalEntrySelectedEditable == false
-					),
-					null
+					)
 				), // isEnabled
 				() =>
 				{
@@ -187,16 +187,15 @@ export class JournalKeeper extends EntityProperty
 			new ControlButton
 			(
 				"buttonEntrySelectedDelete",
-				new Coords(182, 5, 0), // pos
-				new Coords(8, 8, 0), // size
+				Coords.fromXY(182, 5), // pos
+				Coords.fromXY(8, 8), // size
 				"X",
 				fontHeightSmall,
 				true, // hasBorder,
-				new DataBinding
+				DataBinding.fromContextAndGet
 				(
 					this,
-					(c: JournalKeeper) => c.journalEntrySelected != null, // todo
-					null
+					(c: JournalKeeper) => (c.journalEntrySelected != null)
 				), // isEnabled
 				() =>
 				{
@@ -228,31 +227,27 @@ export class JournalKeeper extends EntityProperty
 			new ControlLabel
 			(
 				"labelEntrySelectedTimeRecorded",
-				new Coords(105, 15, 0), // pos
-				new Coords(100, 15, 0), // size
+				Coords.fromXY(105, 15), // pos
+				Coords.fromXY(100, 15), // size
 				false, // isTextCentered
-				new DataBinding
-				(
-					"Time Recorded:", null, null
-				),
+				DataBinding.fromContext("Time Recorded:"),
 				fontHeightSmall
 			),
 
 			new ControlLabel
 			(
 				"labelEntrySelectedTimeRecorded",
-				new Coords(145, 15, 0), // pos
-				new Coords(100, 15, 0), // size
+				Coords.fromXY(145, 15), // pos
+				Coords.fromXY(100, 15), // size
 				false, // isTextCentered
-				new DataBinding
+				DataBinding.fromContextAndGet
 				(
 					this,
 					(c: JournalKeeper) =>
 					{
 						var entry = c.journalEntrySelected;
 						return (entry == null ? "-" : entry.timeRecordedAsStringH_M_S(universe));
-					},
-					null
+					}
 				),
 				fontHeightSmall
 			),
@@ -260,8 +255,8 @@ export class JournalKeeper extends EntityProperty
 			new ControlTextBox
 			(
 				"textTitle",
-				new Coords(105, 25, 0), // pos
-				new Coords(85, 10, 0), // size
+				Coords.fromXY(105, 25), // pos
+				Coords.fromXY(85, 10), // size
 				new DataBinding
 				(
 					this,
@@ -281,20 +276,19 @@ export class JournalKeeper extends EntityProperty
 				), // text
 				fontHeightSmall,
 				32, // charCountMax
-				new DataBinding
+				DataBinding.fromContextAndGet
 				(
 					this,
-					(c: JournalKeeper) => 
-						(c.journalEntrySelected != null && c.isJournalEntrySelectedEditable),
-					null
+					(c: JournalKeeper) =>
+						(c.journalEntrySelected != null && c.isJournalEntrySelectedEditable)
 				) // isEnabled
 			),
 
 			new ControlTextarea
 			(
 				"textareaEntryBody",
-				new Coords(105, 40, 0), // pos
-				new Coords(85, 70, 0), // size
+				Coords.fromXY(105, 40), // pos
+				Coords.fromXY(85, 70), // size
 				new DataBinding
 				(
 					this,
@@ -313,31 +307,27 @@ export class JournalKeeper extends EntityProperty
 					}
 				), // text
 				fontHeightSmall,
-				new DataBinding
+				DataBinding.fromContextAndGet
 				(
 					this,
-					(c: JournalKeeper) => 
-					{
-						return (c.journalEntrySelected != null && c.isJournalEntrySelectedEditable);
-					},
-					null
+					(c: JournalKeeper) =>
+						(c.journalEntrySelected != null && c.isJournalEntrySelectedEditable)
 				) // isEnabled
 			),
 
 			new ControlLabel
 			(
 				"infoStatus",
-				new Coords(150, 120, 0), // pos
-				new Coords(200, 15, 0), // size
+				Coords.fromXY(150, 120), // pos
+				Coords.fromXY(200, 15), // size
 				true, // isTextCentered
-				new DataBinding
+				DataBinding.fromContextAndGet
 				(
 					this,
 					(c: JournalKeeper) =>
 					{
 						return c.statusMessage;
-					},
-					null
+					}
 				), // text
 				fontHeightSmall
 			)
@@ -367,8 +357,8 @@ export class JournalKeeper extends EntityProperty
 				new ControlLabel
 				(
 					"labelTitle",
-					new Coords(100, -5, 0), // pos
-					new Coords(100, 25, 0), // size
+					Coords.fromXY(100, -5), // pos
+					Coords.fromXY(100, 25), // size
 					true, // isTextCentered
 					"Journal",
 					fontHeightLarge
@@ -376,20 +366,19 @@ export class JournalKeeper extends EntityProperty
 			);
 			childControls.push
 			(
-				new ControlButton
+				ControlButton.from8
 				(
 					"buttonDone",
-					new Coords(170, 115, 0), // pos
+					Coords.fromXY(170, 115), // pos
 					buttonSize.clone(),
 					"Done",
 					fontHeightSmall,
 					true, // hasBorder
 					true, // isEnabled
-					back, // click
-					null, null
+					back // click
 				)
 			);
-			var titleHeight = new Coords(0, 15, 0);
+			var titleHeight = Coords.fromXY(0, 15);
 			sizeBase.add(titleHeight);
 			returnValue.size.add(titleHeight);
 			returnValue.shiftChildPositions(titleHeight);

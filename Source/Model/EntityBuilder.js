@@ -12,10 +12,9 @@ var ThisCouldBeBetter;
                 pos.z--;
                 var messageEntity = new GameFramework.Entity("Message" + text, // name
                 [
-                    new GameFramework.Drawable(visual, null),
-                    // new DrawableCamera(),
+                    GameFramework.Drawable.fromVisual(visual),
                     new GameFramework.Ephemeral(ticksToLive, null),
-                    new GameFramework.Locatable(new GameFramework.Disposition(pos, null, null).velSet(new GameFramework.Coords(0, riseSpeed, 0))),
+                    new GameFramework.Locatable(GameFramework.Disposition.fromPos(pos).velSet(new GameFramework.Coords(0, riseSpeed, 0))),
                 ]);
                 return messageEntity;
             }

@@ -15,14 +15,22 @@ export class ActionToInputsMapping
 		this.inactivateInputWhenActionPerformed = inactivateInputWhenActionPerformed;
 	}
 
-	action(universe: Universe)
+	static fromActionAndInputName
+	(
+		actionName: string, inputName: string
+	): ActionToInputsMapping
 	{
-		return universe.world.defn.actionDefnByName(this.actionName);
+		return new ActionToInputsMapping(actionName, [ inputName ], false);
+	}
+
+	action(universe: Universe): Action
+	{
+		return universe.world.defn.actionByName(this.actionName);
 	}
 
 	// Cloneable implementation.
 
-	clone()
+	clone(): ActionToInputsMapping
 	{
 		return new ActionToInputsMapping
 		(
@@ -30,11 +38,12 @@ export class ActionToInputsMapping
 		);
 	}
 
-	overwriteWith(other: ActionToInputsMapping)
+	overwriteWith(other: ActionToInputsMapping): ActionToInputsMapping
 	{
 		this.actionName = other.actionName;
 		this.inputNames = other.inputNames.slice();
 		this.inactivateInputWhenActionPerformed = other.inactivateInputWhenActionPerformed;
+		return this;
 	}
 }
 

@@ -2,11 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ItemContainer extends EntityProperty
+export class ItemContainer implements EntityProperty
 {
 	statusMessage: string;
 
-	transfer(world: World, entityFrom: Entity, entityTo: Entity, messagePrefix: string)
+	transfer
+	(
+		world: World, entityFrom: Entity, entityTo: Entity, messagePrefix: string
+	): void
 	{
 		var itemHolderFrom = entityFrom.itemHolder();
 		var itemHolderTo = entityTo.itemHolder();
@@ -40,13 +43,19 @@ export class ItemContainer extends EntityProperty
 		}
 	}
 
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
+
 	// Controllable.
 
 	toControl
 	(
 		universe: Universe, size: Coords,
 		entityGetterPutter: Entity, entityContainer: Entity, venuePrev: Venue
-	)
+	): ControlBase
 	{
 		if (size == null)
 		{
@@ -124,7 +133,7 @@ export class ItemContainer extends EntityProperty
 						(c: ItemHolder, v: Item) => c.itemSelected = v
 					), // bindingForItemSelected
 					DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
-					DataBinding.fromContext(true), // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					get, // confirm
 					null
 				),
@@ -141,7 +150,7 @@ export class ItemContainer extends EntityProperty
 					">",
 					fontHeight,
 					true, // hasBorder
-					DataBinding.fromContext(true), // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					get // click
 				),
 
@@ -157,7 +166,7 @@ export class ItemContainer extends EntityProperty
 					"<",
 					fontHeight,
 					true, // hasBorder
-					DataBinding.fromContext(true), // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					put // click
 				),
 
@@ -195,7 +204,7 @@ export class ItemContainer extends EntityProperty
 							c.itemSelected = v
 					), // bindingForItemSelected
 					DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
-					DataBinding.fromContext(true), // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					put, // confirm
 					null
 				),
@@ -203,10 +212,7 @@ export class ItemContainer extends EntityProperty
 				new ControlLabel
 				(
 					"infoStatus",
-					Coords.fromXY
-					(
-						size.x / 2, size.y - margin - fontHeight
-					), // pos
+					Coords.fromXY(size.x / 2, size.y - margin - fontHeight), // pos
 					Coords.fromXY(size.x, fontHeight), // size
 					true, // isTextCentered
 					DataBinding.fromContextAndGet(this, c => c.statusMessage),

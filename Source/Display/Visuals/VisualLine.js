@@ -21,7 +21,7 @@ var ThisCouldBeBetter;
                 this._transformLocate.transformCoords(drawPosFrom);
                 var drawPosTo = this._drawPosTo.overwriteWith(this.toPos);
                 this._transformLocate.transformCoords(drawPosTo);
-                display.drawLine(drawPosFrom, drawPosTo, this.color.systemColor(), this.lineThickness);
+                display.drawLine(drawPosFrom, drawPosTo, this.color, this.lineThickness);
             }
             // Clonable.
             clone() {

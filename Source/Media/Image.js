@@ -11,6 +11,9 @@ var ThisCouldBeBetter;
                 this.load();
             }
             // static methods
+            static create() {
+                return new Image2(null, null);
+            }
             static fromSystemImage(name, systemImage) {
                 var returnValue = new Image2(name, systemImage.src);
                 returnValue.systemImage = systemImage;
@@ -20,7 +23,7 @@ var ThisCouldBeBetter;
             }
             // instance methods
             clone() {
-                var returnValue = new Image2(null, null);
+                var returnValue = Image2.create();
                 returnValue.name = this.name;
                 returnValue.sourcePath = this.sourcePath;
                 returnValue.sizeInPixels = this.sizeInPixels.clone();

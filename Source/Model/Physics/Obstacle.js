@@ -3,10 +3,7 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Obstacle extends GameFramework.EntityProperty {
-            constructor() {
-                super();
-            }
+        class Obstacle {
             collide(u, w, p, e, eOther) {
                 var collisionHelper = u.collisionHelper;
                 collisionHelper.collideEntitiesBounce(e, eOther);
@@ -19,6 +16,10 @@ var ThisCouldBeBetter;
             overwriteWith(other) {
                 return this;
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
+            updateForTimerTick(u, w, p, e) { }
         }
         GameFramework.Obstacle = Obstacle;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

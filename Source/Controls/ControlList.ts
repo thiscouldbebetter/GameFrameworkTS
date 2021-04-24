@@ -30,8 +30,10 @@ export class ControlList extends ControlBase
 		items: DataBinding<any, any[]>,
 		bindingForItemText: DataBinding<any, string>,
 		fontHeightInPixels: number,
-		bindingForItemSelected: DataBinding<any, any>, bindingForItemValue: DataBinding<any, any>,
-		bindingForIsEnabled: DataBinding<any, boolean>, confirm: (u: Universe) => void,
+		bindingForItemSelected: DataBinding<any, any>,
+		bindingForItemValue: DataBinding<any, any>,
+		bindingForIsEnabled: DataBinding<any, boolean>,
+		confirm: (u: Universe) => void,
 		widthInItems: number
 	)
 	{
@@ -40,7 +42,7 @@ export class ControlList extends ControlBase
 		this.bindingForItemText = bindingForItemText;
 		this.bindingForItemSelected = bindingForItemSelected;
 		this.bindingForItemValue = bindingForItemValue;
-		this.bindingForIsEnabled = bindingForIsEnabled || DataBinding.fromContext(true);
+		this.bindingForIsEnabled = bindingForIsEnabled || DataBinding.fromTrue();
 		this.confirm = confirm;
 		this.widthInItems = widthInItems || 1;
 
@@ -62,7 +64,7 @@ export class ControlList extends ControlBase
 
 		// Helper variables.
 		this._drawPos = Coords.create();
-		this._drawLoc = new Disposition(this._drawPos, null, null);
+		this._drawLoc = Disposition.fromPos(this._drawPos);
 		this._mouseClickPos = Coords.create();
 	}
 
@@ -74,11 +76,11 @@ export class ControlList extends ControlBase
 			pos,
 			size,
 			items,
-			new DataBinding(null, null, null), // bindingForItemText,
+			DataBinding.fromContext(null), // bindingForItemText,
 			10, // fontHeightInPixels,
 			null, // bindingForItemSelected,
 			null, // bindingForItemValue,
-			DataBinding.fromContext(true), // isEnabled
+			DataBinding.fromTrue(), // isEnabled
 			null, null
 		);
 
@@ -101,7 +103,7 @@ export class ControlList extends ControlBase
 			10, // fontHeightInPixels,
 			null, // bindingForItemSelected,
 			null, // bindingForItemValue,
-			DataBinding.fromContext(true), // isEnabled
+			DataBinding.fromTrue(), // isEnabled
 			null, null
 		);
 
@@ -116,7 +118,7 @@ export class ControlList extends ControlBase
 		items: DataBinding<any, any[]>,
 		bindingForItemText: DataBinding<any, string>,
 		fontHeightInPixels: number
-	)
+	): ControlList
 	{
 		return new ControlList
 		(
@@ -134,7 +136,7 @@ export class ControlList extends ControlBase
 		bindingForItemText: DataBinding<any, string>,
 		fontHeightInPixels: number,
 		bindingForItemSelected: DataBinding<any, any>,
-	)
+	): ControlList
 	{
 		return new ControlList
 		(
@@ -153,7 +155,7 @@ export class ControlList extends ControlBase
 		fontHeightInPixels: number,
 		bindingForItemSelected: DataBinding<any, any>,
 		bindingForItemValue: DataBinding<any, any>,
-	)
+	): ControlList
 	{
 		return new ControlList
 		(
@@ -162,7 +164,50 @@ export class ControlList extends ControlBase
 		);
 	}
 
-	actionHandle(actionNameToHandle: string, universe: Universe)
+	static from9
+	(
+		name: string,
+		pos: Coords,
+		size: Coords,
+		items: DataBinding<any, any[]>,
+		bindingForItemText: DataBinding<any, string>,
+		fontHeightInPixels: number,
+		bindingForItemSelected: DataBinding<any, any>,
+		bindingForItemValue: DataBinding<any, any>,
+		bindingForIsEnabled: DataBinding<any, boolean>
+	): ControlList
+	{
+		return new ControlList
+		(
+			name, pos, size, items, bindingForItemText, fontHeightInPixels,
+			bindingForItemSelected, bindingForItemValue, bindingForIsEnabled,
+			null, null
+		);
+	}
+
+	static from10
+	(
+		name: string,
+		pos: Coords,
+		size: Coords,
+		items: DataBinding<any, any[]>,
+		bindingForItemText: DataBinding<any, string>,
+		fontHeightInPixels: number,
+		bindingForItemSelected: DataBinding<any, any>,
+		bindingForItemValue: DataBinding<any, any>,
+		bindingForIsEnabled: DataBinding<any, boolean>,
+		confirm: (u: Universe) => void
+	): ControlList
+	{
+		return new ControlList
+		(
+			name, pos, size, items, bindingForItemText, fontHeightInPixels,
+			bindingForItemSelected, bindingForItemValue, bindingForIsEnabled,
+			confirm, null
+		);
+	}
+
+	actionHandle(actionNameToHandle: string, universe: Universe): boolean
 	{
 		var wasActionHandled = false;
 		var controlActionNames = ControlActionNames.Instances();
@@ -187,17 +232,17 @@ export class ControlList extends ControlBase
 		return wasActionHandled;
 	}
 
-	indexOfFirstItemVisible()
+	indexOfFirstItemVisible(): number
 	{
 		return this.indexOfFirstRowVisible() * this.widthInItems;
 	}
 
-	indexOfFirstRowVisible()
+	indexOfFirstRowVisible(): number
 	{
 		return this.scrollbar.sliderPosInItems();
 	}
 
-	indexOfItemSelected(valueToSet: number)
+	indexOfItemSelected(valueToSet: number): number
 	{
 		var returnValue = valueToSet;
 		var items = this.items();
@@ -217,24 +262,24 @@ export class ControlList extends ControlBase
 		return returnValue;
 	}
 
-	indexOfLastItemVisible()
+	indexOfLastItemVisible(): number
 	{
 		return this.indexOfLastRowVisible() * this.widthInItems;
 	}
 
-	indexOfLastRowVisible()
+	indexOfLastRowVisible(): number
 	{
 		var rowCountVisible = Math.floor(this.scrollbar.windowSizeInItems) - 1;
 		var returnValue = this.indexOfFirstRowVisible() + rowCountVisible;
 		return returnValue;
 	}
 
-	isEnabled()
+	isEnabled(): boolean
 	{
 		return (this.bindingForIsEnabled == null ? true : this.bindingForIsEnabled.get());
 	}
 
-	itemSelected(itemToSet: any)
+	itemSelected(itemToSet: any): any
 	{
 		var returnValue = itemToSet;
 
@@ -274,7 +319,7 @@ export class ControlList extends ControlBase
 		return returnValue;
 	}
 
-	itemSelectedNextInDirection(direction: number)
+	itemSelectedNextInDirection(direction: number): any
 	{
 		var items = this.items();
 		var numberOfItems = items.length;
@@ -323,7 +368,7 @@ export class ControlList extends ControlBase
 		return returnValue;
 	}
 
-	itemSpacing()
+	itemSpacing(): Coords
 	{
 		var scrollbarWidthVisible = (this.scrollbar.isVisible() ? this.scrollbar.size.x : 0);
 		return this._itemSpacing.overwriteWithDimensions
@@ -334,12 +379,12 @@ export class ControlList extends ControlBase
 		);
 	}
 
-	items()
+	items(): any[]
 	{
 		return (this._items.get == null ? this._items : this._items.get());
 	}
 
-	mouseClick(clickPos: Coords)
+	mouseClick(clickPos: Coords): boolean
 	{
 		clickPos = this._mouseClickPos.overwriteWith(clickPos);
 
@@ -387,24 +432,30 @@ export class ControlList extends ControlBase
 		return true; // wasActionHandled
 	}
 
-	mouseEnter() {}
+	mouseEnter(): void {}
 
-	mouseExit() {}
+	mouseExit(): void {}
 
-	mouseMove(movePos: Coords): boolean { return true; }
+	mouseMove(movePos: Coords): boolean { return false; }
 
-	scalePosAndSize(scaleFactor: Coords)
+	scalePosAndSize(scaleFactor: Coords): ControlBase
 	{
 		this.pos.multiply(scaleFactor);
 		this.size.multiply(scaleFactor);
 		this.fontHeightInPixels *= scaleFactor.y;
 		this._itemSpacing.multiply(scaleFactor);
 		this.scrollbar.scalePosAndSize(scaleFactor);
+
+		return this;
 	}
 
 	// drawable
 
-	draw(universe: Universe, display: Display, drawLoc: Disposition, style: ControlStyle)
+	draw
+	(
+		universe: Universe, display: Display, drawLoc: Disposition,
+		style: ControlStyle
+	): void
 	{
 		drawLoc = this._drawLoc.overwriteWith(drawLoc);
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
@@ -417,8 +468,8 @@ export class ControlList extends ControlBase
 		(
 			drawPos,
 			this.size,
-			Color.systemColorGet(colorBack), // fill
-			Color.systemColorGet(style.colorBorder), // border
+			colorBack, // fill
+			style.colorBorder, // border
 			false // areColorsReversed
 		);
 
@@ -471,7 +522,7 @@ export class ControlList extends ControlBase
 				(
 					drawPos2,
 					this.itemSpacing(),
-					Color.systemColorGet(colorFore), // colorFill
+					colorFore, // colorFill
 					null, null
 				);
 			}
@@ -491,8 +542,8 @@ export class ControlList extends ControlBase
 				text,
 				this.fontHeightInPixels,
 				drawPos2,
-				Color.systemColorGet(colorFore),
-				Color.systemColorGet(colorBack),
+				colorFore,
+				colorBack,
 				(i == this.indexOfItemSelected(null)), // areColorsReversed
 				false, // isCentered
 				this.size.x // widthMaxInPixels

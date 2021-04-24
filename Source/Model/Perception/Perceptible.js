@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Perceptible extends GameFramework.EntityProperty {
+        class Perceptible {
             constructor(isHiding, visibility, audibility) {
-                super();
                 this.isHiding = isHiding;
                 this.visibility = visibility;
                 this.audibility = audibility;
@@ -45,6 +44,9 @@ var ThisCouldBeBetter;
                 var isInHearing = (audibilityAdjusted >= hearingThreshold);
                 return isInHearing;
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
             updateForTimerTick(u, w, p, entity) {
                 if (this.isHiding != this._isHidingPrev) {
                     this._isHidingPrev = this.isHiding;

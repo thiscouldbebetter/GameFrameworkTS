@@ -10,27 +10,39 @@ var ThisCouldBeBetter;
                 for (var i = 0; i < defnArrays.length; i++) {
                     var defnsOfType = defnArrays[i];
                     var defnsByName = GameFramework.ArrayHelper.addLookupsByName(defnsOfType);
-                    var itemFirst = defnsOfType[0];
-                    var itemTypeName = itemFirst.constructor.name;
-                    this.defnArraysByTypeName.set(itemTypeName, defnsOfType);
-                    this.defnsByNameByTypeName.set(itemTypeName, defnsByName);
+                    if (defnsOfType.length > 0) {
+                        var itemFirst = defnsOfType[0];
+                        var itemTypeName = itemFirst.constructor.name;
+                        this.defnArraysByTypeName.set(itemTypeName, defnsOfType);
+                        this.defnsByNameByTypeName.set(itemTypeName, defnsByName);
+                    }
                 }
             }
             // Convenience methods.
-            actionDefnByName(defnName) {
-                return this.defnsByNameByTypeName.get(GameFramework.Action.name).get(defnName);
+            actionByName(defnName) {
+                var defnsByName = this.defnsByNameByTypeName.get(GameFramework.Action.name);
+                var returnValue = defnsByName.get(defnName);
+                return returnValue;
             }
             activityDefnByName(defnName) {
-                return this.defnsByNameByTypeName.get(GameFramework.ActivityDefn.name).get(defnName);
+                var defnsByName = this.defnsByNameByTypeName.get(GameFramework.ActivityDefn.name);
+                var returnValue = defnsByName.get(defnName);
+                return returnValue;
             }
             entityDefnByName(defnName) {
-                return this.defnsByNameByTypeName.get(GameFramework.Entity.name).get(defnName);
+                var defnsByName = this.defnsByNameByTypeName.get(GameFramework.Entity.name);
+                var returnValue = defnsByName.get(defnName);
+                return returnValue;
             }
             itemDefnByName(defnName) {
-                return this.defnsByNameByTypeName.get(GameFramework.ItemDefn.name).get(defnName);
+                var defnsByName = this.defnsByNameByTypeName.get(GameFramework.ItemDefn.name);
+                var returnValue = defnsByName.get(defnName);
+                return returnValue;
             }
             placeDefnByName(defnName) {
-                return this.defnsByNameByTypeName.get(GameFramework.PlaceDefn.name).get(defnName);
+                var defnsByName = this.defnsByNameByTypeName.get(GameFramework.PlaceDefn.name);
+                var returnValue = defnsByName.get(defnName);
+                return returnValue;
             }
         }
         GameFramework.WorldDefn = WorldDefn;

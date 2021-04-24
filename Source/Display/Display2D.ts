@@ -7,8 +7,8 @@ export class Display2D implements Display
 	sizesAvailable: Coords[];
 	fontName: string;
 	fontHeightInPixels: number
-	colorFore: string;
-	colorBack: string;
+	colorFore: Color;
+	colorBack: Color;
 	isInvisible: boolean
 
 	canvas: HTMLCanvasElement;
@@ -25,7 +25,7 @@ export class Display2D implements Display
 	constructor
 	(
 		sizesAvailable: Coords[], fontName: string, fontHeightInPixels: number,
-		colorFore: string, colorBack: string, isInvisible: boolean)
+		colorFore: Color, colorBack: Color, isInvisible: boolean)
 	{
 		this.sizesAvailable = sizesAvailable;
 		this._sizeDefault = this.sizesAvailable[0];
@@ -68,8 +68,8 @@ export class Display2D implements Display
 	drawArc
 	(
 		center: Coords, radiusInner: number, radiusOuter: number,
-		angleStartInTurns: number, angleStopInTurns: number, colorFill: string,
-		colorBorder: string
+		angleStartInTurns: number, angleStopInTurns: number, colorFill: Color,
+		colorBorder: Color
 	)
 	{
 		var drawPos = this._drawPos.overwriteWith(center);
@@ -78,7 +78,7 @@ export class Display2D implements Display
 
 		if (colorFill != null)
 		{
-			this.graphics.fillStyle = colorFill;
+			this.graphics.fillStyle = Color.systemColorGet(colorFill);
 
 			this.graphics.beginPath();
 			this.graphics.arc
@@ -105,7 +105,7 @@ export class Display2D implements Display
 
 		if (colorBorder != null)
 		{
-			this.graphics.strokeStyle = colorBorder;
+			this.graphics.strokeStyle = Color.systemColorGet(colorBorder);
 			this.graphics.beginPath();
 			this.graphics.arc
 			(
@@ -130,7 +130,7 @@ export class Display2D implements Display
 		}
 	}
 
-	drawBackground(colorBack: string, colorBorder: string)
+	drawBackground(colorBack: Color, colorBorder: Color)
 	{
 		this.drawRectangle
 		(
@@ -144,8 +144,8 @@ export class Display2D implements Display
 
 	drawCircle
 	(
-		center: Coords, radius: number, colorFill: string,
-		colorBorder: string, borderThickness: number
+		center: Coords, radius: number, colorFill: Color,
+		colorBorder: Color, borderThickness: number
 	)
 	{
 		var drawPos = this._drawPos.overwriteWith(center);
@@ -160,7 +160,7 @@ export class Display2D implements Display
 
 		if (colorFill != null)
 		{
-			this.graphics.fillStyle = colorFill;
+			this.graphics.fillStyle = Color.systemColorGet(colorFill);
 			this.graphics.fill();
 		}
 
@@ -169,14 +169,14 @@ export class Display2D implements Display
 			var lineWidthToRestore = this.graphics.lineWidth;
 
 			this.graphics.lineWidth = borderThickness;
-			this.graphics.strokeStyle = colorBorder;
+			this.graphics.strokeStyle = Color.systemColorGet(colorBorder);
 			this.graphics.stroke();
 
 			this.graphics.lineWidth = lineWidthToRestore;
 		}
 	}
 
-	drawCircleWithGradient(center: Coords, radius: number, gradientFill: ValueBreakGroup, colorBorder: string)
+	drawCircleWithGradient(center: Coords, radius: number, gradientFill: ValueBreakGroup, colorBorder: Color)
 	{
 		this.graphics.beginPath();
 		this.graphics.arc
@@ -205,16 +205,16 @@ export class Display2D implements Display
 
 		if (colorBorder != null)
 		{
-			this.graphics.strokeStyle = colorBorder;
+			this.graphics.strokeStyle = Color.systemColorGet(colorBorder);
 			this.graphics.stroke();
 		}
 	}
 
-	drawCrosshairs(center: Coords, radius: number, color: string)
+	drawCrosshairs(center: Coords, radius: number, color: Color)
 	{
 		var drawPos = this._drawPos.overwriteWith(center);
 		this.graphics.beginPath();
-		this.graphics.strokeStyle = color;
+		this.graphics.strokeStyle = Color.systemColorGet(color);
 		this.graphics.moveTo(drawPos.x - radius, drawPos.y);
 		this.graphics.lineTo(drawPos.x + radius, drawPos.y);
 		this.graphics.moveTo(drawPos.x, drawPos.y - radius);
@@ -225,7 +225,7 @@ export class Display2D implements Display
 	drawEllipse
 	(
 		center: Coords, semimajorAxis: number, semiminorAxis: number,
-		rotationInTurns: number, colorFill: string, colorBorder: string
+		rotationInTurns: number, colorFill: Color, colorBorder: Color
 	)
 	{
 		this.graphics.save();
@@ -248,13 +248,13 @@ export class Display2D implements Display
 
 		if (colorFill != null)
 		{
-			this.graphics.fillStyle = colorFill;
+			this.graphics.fillStyle = Color.systemColorGet(colorFill);
 			this.graphics.fill();
 		}
 
 		if (colorBorder != null)
 		{
-			this.graphics.strokeStyle = colorBorder;
+			this.graphics.strokeStyle = Color.systemColorGet(colorBorder);
 			this.graphics.stroke();
 		}
 
@@ -297,11 +297,11 @@ export class Display2D implements Display
 		this.graphics.drawImage(imageToDraw.systemImage, pos.x, pos.y, size.x, size.y);
 	}
 
-	drawLine(fromPos: Coords, toPos: Coords, color: string, lineThickness: number)
+	drawLine(fromPos: Coords, toPos: Coords, color: Color, lineThickness: number)
 	{
 		var drawPos = this._drawPos;
 
-		this.graphics.strokeStyle = color;
+		this.graphics.strokeStyle = Color.systemColorGet(color);
 		var lineWidthToRestore = this.graphics.lineWidth;
 		if (lineThickness != null)
 		{
@@ -326,7 +326,7 @@ export class Display2D implements Display
 		// todo
 	}
 
-	drawPath(vertices: Coords[], color: string, lineThickness: number, isClosed: boolean)
+	drawPath(vertices: Coords[], color: Color, lineThickness: number, isClosed: boolean)
 	{
 		var lineWidthSaved = this.graphics.lineWidth;
 
@@ -355,23 +355,23 @@ export class Display2D implements Display
 			this.graphics.closePath();
 		}
 
-		this.graphics.strokeStyle = color;
+		this.graphics.strokeStyle = Color.systemColorGet(color);
 
 		this.graphics.stroke();
 
 		this.graphics.lineWidth = lineWidthSaved;
 	}
 
-	drawPixel(pos: Coords, color: string)
+	drawPixel(pos: Coords, color: Color)
 	{
-		this.graphics.fillStyle = color;
+		this.graphics.fillStyle = Color.systemColorGet(color);
 		this.graphics.fillRect
 		(
 			pos.x, pos.y, 1, 1
 		);
 	}
 
-	drawPolygon(vertices: Coords[], colorFill: string, colorBorder: string)
+	drawPolygon(vertices: Coords[], colorFill: Color, colorBorder: Color)
 	{
 		this.graphics.beginPath();
 
@@ -395,20 +395,20 @@ export class Display2D implements Display
 
 		if (colorFill != null)
 		{
-			this.graphics.fillStyle = colorFill;
+			this.graphics.fillStyle = Color.systemColorGet(colorFill);
 			this.graphics.fill();
 		}
 
 		if (colorBorder != null)
 		{
-			this.graphics.strokeStyle = colorBorder;
+			this.graphics.strokeStyle = Color.systemColorGet(colorBorder);
 			this.graphics.stroke();
 		}
 	}
 
 	drawRectangle
 	(
-		pos: Coords, size: Coords, colorFill: string, colorBorder: string, areColorsReversed: boolean
+		pos: Coords, size: Coords, colorFill: Color, colorBorder: Color, areColorsReversed: boolean
 	)
 	{
 		if (areColorsReversed)
@@ -420,7 +420,7 @@ export class Display2D implements Display
 
 		if (colorFill != null)
 		{
-			this.graphics.fillStyle = colorFill;
+			this.graphics.fillStyle = Color.systemColorGet(colorFill);
 			this.graphics.fillRect
 			(
 				pos.x, pos.y,
@@ -430,7 +430,7 @@ export class Display2D implements Display
 
 		if (colorBorder != null)
 		{
-			this.graphics.strokeStyle = colorBorder;
+			this.graphics.strokeStyle = Color.systemColorGet(colorBorder);
 			this.graphics.strokeRect
 			(
 				pos.x, pos.y,
@@ -441,7 +441,7 @@ export class Display2D implements Display
 
 	drawRectangleCentered
 	(
-		pos: Coords, size: Coords, colorFill: string, colorBorder: string
+		pos: Coords, size: Coords, colorFill: Color, colorBorder: Color
 	)
 	{
 		var sizeHalf = this._sizeHalf.overwriteWith(size).half();
@@ -454,8 +454,8 @@ export class Display2D implements Display
 		text: string,
 		fontHeightInPixels: number,
 		pos: Coords,
-		colorFill: string,
-		colorOutline: string,
+		colorFill: Color,
+		colorOutline: Color,
 		areColorsReversed: boolean,
 		isCentered: boolean,
 		widthMaxInPixels: number
@@ -481,7 +481,7 @@ export class Display2D implements Display
 			colorFill = this.colorFore;
 		}
 
-		this.graphics.fillStyle = colorFill;
+		this.graphics.fillStyle = Color.systemColorGet(colorFill);
 
 		var drawPos = new Coords(pos.x, pos.y + fontHeightInPixels, 0);
 
@@ -510,13 +510,13 @@ export class Display2D implements Display
 				(
 					0 - textWidthInPixels / 2,
 					0 - (fontHeightInPixels / 2) * 1.2, // hack
-					0)
-				;
+					0
+				);
 			}
 
 			if (colorOutline != null)
 			{
-				this.graphics.strokeStyle = colorOutline;
+				this.graphics.strokeStyle = Color.systemColorGet(colorOutline);
 				this.graphics.strokeText(textTrimmed, drawPos.x, drawPos.y);
 			}
 
@@ -531,7 +531,7 @@ export class Display2D implements Display
 	drawWedge
 	(
 		center: Coords, radius: number, angleStartInTurns: number,
-		angleStopInTurns: number, colorFill: string, colorBorder: string
+		angleStopInTurns: number, colorFill: Color, colorBorder: Color
 	)
 	{
 		var drawPos = this._drawPos.overwriteWith(center);
@@ -540,7 +540,7 @@ export class Display2D implements Display
 
 		if (colorFill != null)
 		{
-			this.graphics.fillStyle = colorFill;
+			this.graphics.fillStyle = Color.systemColorGet(colorFill);
 
 			this.graphics.beginPath();
 			this.graphics.moveTo(center.x, center.y);
@@ -562,7 +562,7 @@ export class Display2D implements Display
 
 		if (colorBorder != null)
 		{
-			this.graphics.strokeStyle = colorBorder;
+			this.graphics.strokeStyle = Color.systemColorGet(colorBorder);
 			this.graphics.beginPath();
 			this.graphics.moveTo(center.x, center.y);
 			drawPos.overwriteWith(center).add

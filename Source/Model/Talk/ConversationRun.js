@@ -82,34 +82,34 @@ var ThisCouldBeBetter;
                     new GameFramework.ControlLabel("labelSpeaker", new GameFramework.Coords(marginSize.x * 2 + portraitSize.x, marginSize.y + portraitSize.y / 2 - labelHeight / 2, 0), // pos
                     size, // size
                     false, // isTextCentered
-                    new GameFramework.DataBinding(conversationRun, (c) => { return c.scopeCurrent.displayTextCurrent; }, null), fontHeight),
+                    GameFramework.DataBinding.fromContextAndGet(conversationRun, (c) => c.scopeCurrent.displayTextCurrent), fontHeight),
                     new GameFramework.ControlLabel("labelResponse", new GameFramework.Coords(marginSize.x, marginSize.y * 2 + portraitSize.y - fontHeight / 2, 0), size, // size
                     false, // isTextCentered
                     "Response:", fontHeight),
-                    new GameFramework.ControlList("listResponses", new GameFramework.Coords(marginSize.x, marginSize.y * 3 + portraitSize.y, 0), listSize, 
+                    GameFramework.ControlList.from10("listResponses", new GameFramework.Coords(marginSize.x, marginSize.y * 3 + portraitSize.y, 0), listSize, 
                     // items
-                    new GameFramework.DataBinding(conversationRun, (c) => { return c.scopeCurrent.talkNodesForOptionsActive(); }, null), 
+                    GameFramework.DataBinding.fromContextAndGet(conversationRun, (c) => c.scopeCurrent.talkNodesForOptionsActive()), 
                     // bindingForItemText
                     new GameFramework.DataBinding(null, // context
-                    (c) => { return c.text; }, null), fontHeightShort, new GameFramework.DataBinding(conversationRun, (c) => c.scopeCurrent.talkNodeForOptionSelected, (c, v) => { c.scopeCurrent.talkNodeForOptionSelected = v; }), // bindingForItemSelected
+                    (c) => { return c.text; }, null), fontHeightShort, new GameFramework.DataBinding(conversationRun, (c) => c.scopeCurrent.talkNodeForOptionSelected, (c, v) => c.scopeCurrent.talkNodeForOptionSelected = v), // bindingForItemSelected
                     new GameFramework.DataBinding(null, null, null), // bindingForItemValue
-                    GameFramework.DataBinding.fromContext(true), // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     (universe) => // confirm
                      {
                         next();
-                    }, null),
-                    new GameFramework.ControlButton("buttonNext", new GameFramework.Coords(size.x - marginSize.x - buttonSize.x, size.y - marginSize.y * 3 - buttonSize.y * 3, 0), buttonSize.clone(), "Next", fontHeight, true, // hasBorder
+                    }),
+                    GameFramework.ControlButton.from8("buttonNext", GameFramework.Coords.fromXY(size.x - marginSize.x - buttonSize.x, size.y - marginSize.y * 3 - buttonSize.y * 3), buttonSize.clone(), "Next", fontHeight, true, // hasBorder
                     true, // isEnabled
-                    next, // click
-                    null, null),
-                    new GameFramework.ControlButton("buttonTranscript", new GameFramework.Coords(size.x - marginSize.x - buttonSize.x, size.y - marginSize.y * 2 - buttonSize.y * 2, 0), buttonSize.clone(), "Log", fontHeight, true, // hasBorder
+                    next // click
+                    ),
+                    GameFramework.ControlButton.from8("buttonTranscript", new GameFramework.Coords(size.x - marginSize.x - buttonSize.x, size.y - marginSize.y * 2 - buttonSize.y * 2, 0), buttonSize.clone(), "Log", fontHeight, true, // hasBorder
                     true, // isEnabled
-                    viewLog, // click
-                    null, null),
-                    new GameFramework.ControlButton("buttonDone", new GameFramework.Coords(size.x - marginSize.x - buttonSize.x, size.y - marginSize.y - buttonSize.y, 0), buttonSize.clone(), "Done", fontHeight, true, // hasBorder
+                    viewLog // click
+                    ),
+                    GameFramework.ControlButton.from8("buttonDone", GameFramework.Coords.fromXY(size.x - marginSize.x - buttonSize.x, size.y - marginSize.y - buttonSize.y), buttonSize.clone(), "Done", fontHeight, true, // hasBorder
                     true, // isEnabled
-                    back, // click
-                    null, null),
+                    back // click
+                    ),
                 ], // children
                 [
                     new GameFramework.Action("Back", back),
@@ -130,14 +130,14 @@ var ThisCouldBeBetter;
                 var marginWidth = 25;
                 var labelHeight = fontHeight;
                 var buttonHeight = 25;
-                var marginSize = new GameFramework.Coords(1, 1, 0).multiplyScalar(marginWidth);
-                var listSize = new GameFramework.Coords(size.x * .75, size.y - labelHeight - marginSize.y * 3, 0);
-                var returnValue = new GameFramework.ControlContainer("containerConversation", GameFramework.Coords.create(), // pos
+                var marginSize = GameFramework.Coords.fromXY(1, 1).multiplyScalar(marginWidth);
+                var listSize = GameFramework.Coords.fromXY(size.x * .75, size.y - labelHeight - marginSize.y * 3);
+                var returnValue = GameFramework.ControlContainer.from4("containerConversation", GameFramework.Coords.create(), // pos
                 size, 
                 // children
                 [
-                    new GameFramework.ControlButton("buttonBack", marginSize, // pos
-                    new GameFramework.Coords(1, 1, 0).multiplyScalar(buttonHeight), // size
+                    GameFramework.ControlButton.from8("buttonBack", marginSize, // pos
+                    GameFramework.Coords.fromXY(1, 1).multiplyScalar(buttonHeight), // size
                     "<", fontHeight, true, // hasBorder
                     true, // isEnabled
                     (universe) => // click
@@ -145,16 +145,16 @@ var ThisCouldBeBetter;
                         var venueNext = venueToReturnTo;
                         venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
                         universe.venueNext = venueNext;
-                    }, null, null),
-                    new GameFramework.ControlLabel("labelTranscript", new GameFramework.Coords(size.x / 2, marginSize.y, 0), // pos
+                    }),
+                    new GameFramework.ControlLabel("labelTranscript", GameFramework.Coords.fromXY(size.x / 2, marginSize.y), // pos
                     size, // size
                     true, // isTextCentered
                     "Transcript", fontHeight),
-                    new GameFramework.ControlList("listEntries", new GameFramework.Coords((size.x - listSize.x) / 2, marginSize.y * 2 + labelHeight, 0), listSize, 
+                    GameFramework.ControlList.from6("listEntries", GameFramework.Coords.fromXY((size.x - listSize.x) / 2, marginSize.y * 2 + labelHeight), listSize, 
                     // items
-                    new GameFramework.DataBinding(conversationRun, (c) => { return c.talkNodesForTranscript; }, null), new GameFramework.DataBinding(null, (c) => { return c.textForTranscript(conversationDefn); }, null), // bindingForItemText
-                    fontHeightShort, null, null, null, null, null),
-                ], null, null);
+                    GameFramework.DataBinding.fromContextAndGet(conversationRun, (c) => c.talkNodesForTranscript), GameFramework.DataBinding.fromGet((c) => c.textForTranscript(conversationDefn)), // bindingForItemText
+                    fontHeightShort),
+                ]);
                 return returnValue;
             }
         }

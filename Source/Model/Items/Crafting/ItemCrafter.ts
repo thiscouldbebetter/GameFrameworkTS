@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ItemCrafter extends EntityProperty
+export class ItemCrafter implements EntityProperty
 {
 	recipesAvailable: CraftingRecipe[];
 
@@ -15,8 +15,6 @@ export class ItemCrafter extends EntityProperty
 
 	constructor(recipesAvailable: CraftingRecipe[])
 	{
-		super();
-
 		this.recipesAvailable = recipesAvailable || [];
 
 		this.itemHolderStaged = ItemHolder.create();
@@ -99,7 +97,10 @@ export class ItemCrafter extends EntityProperty
 		return returnValue;
 	}
 
-	// venue
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
 
 	updateForTimerTick
 	(
@@ -147,7 +148,7 @@ export class ItemCrafter extends EntityProperty
 			size = universe.display.sizeDefault().clone();
 		}
 
-		var sizeBase = new Coords(200, 135, 1);
+		var sizeBase = Coords.fromXY(200, 135);
 
 		var fontHeight = 10;
 		var fontHeightSmall = fontHeight * 0.6;
@@ -222,7 +223,7 @@ export class ItemCrafter extends EntityProperty
 					(
 						(c: CraftingRecipe) => c
 					), // bindingForItemValue
-					DataBinding.fromContext(true), // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					addToQueue, // confirm
 					null
 				),
@@ -309,7 +310,7 @@ export class ItemCrafter extends EntityProperty
 					fontHeightSmall
 				),
 
-				new ControlButton
+				ControlButton.from8
 				(
 					"buttonCancel",
 					Coords.fromXY(170, 50), // pos
@@ -322,8 +323,7 @@ export class ItemCrafter extends EntityProperty
 						this,
 						(c: ItemCrafter) => (c.recipesQueued.length > 0)
 					), // isEnabled
-					crafter.recipeInProgressCancel, // click
-					null, null
+					crafter.recipeInProgressCancel // click
 				),
 
 				new ControlLabel
@@ -332,9 +332,10 @@ export class ItemCrafter extends EntityProperty
 					Coords.fromXY(105, 55), // pos
 					Coords.fromXY(75, 25), // size
 					false, // isTextCentered
-					DataBinding.fromContextAndGet(
+					DataBinding.fromContextAndGet
+					(
 						this,
-						(c: ItemCrafter) => ( c.recipeProgressAsString(universe) )
+						(c: ItemCrafter) => c.recipeProgressAsString(universe)
 					),
 					fontHeightSmall
 				),
@@ -349,7 +350,7 @@ export class ItemCrafter extends EntityProperty
 						this,
 						(c: ItemCrafter) => c.recipesQueued
 					), // items
-					new DataBinding.fromGet(
+					DataBinding.fromGet
 					(
 						(c: CraftingRecipe) => c.name
 					), // bindingForItemText
@@ -408,7 +409,7 @@ export class ItemCrafter extends EntityProperty
 
 			returnValue.children.push
 			(
-				new ControlButton
+				ControlButton.from8
 				(
 					"buttonDone",
 					Coords.fromXY(170, 115), // pos
@@ -417,8 +418,7 @@ export class ItemCrafter extends EntityProperty
 					fontHeightSmall,
 					true, // hasBorder
 					true, // isEnabled
-					back, // click
-					null, null
+					back // click
 				)
 			);
 

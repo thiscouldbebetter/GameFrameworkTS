@@ -5,35 +5,72 @@ namespace ThisCouldBeBetter.GameFramework
 export class Activity
 {
 	defnName: string;
-	target: any;
-	isDone: boolean;
+	targetsByName: Map<string, any>;
 
-	constructor(defnName: string, target: any)
+	constructor(defnName: string, targetsByName: Map<string,any>)
 	{
 		this.defnName = defnName;
-		this.target = target;
-
-		this.isDone = false;
+		this.targetsByName = targetsByName || new Map<string,any>([]);
 	}
 
-	defn(world: World)
+	static fromDefnName(defnName: string): Activity
+	{
+		return new Activity(defnName, null);
+	}
+
+	static fromDefnNameAndTarget(defnName: string, target: any): Activity
+	{
+		return new Activity
+		(
+			defnName,
+			new Map<string,any>
+			([
+				[ defnName, target ]
+			])
+		);
+	}
+
+	defn(world: World): ActivityDefn
 	{
 		return world.defn.activityDefnByName(this.defnName);
 	}
 
-	defnNameAndTargetSet(defnName: string, target: any)
+	defnNameAndTargetSet(defnName: string, target: any): Activity
 	{
 		this.defnName = defnName;
-		this.target = target;
+		this.targetSet(target);
 		return this;
 	}
 
-	perform(u: Universe, w: World, p: Place, e: Entity)
+	perform(u: Universe, w: World, p: Place, e: Entity): void
 	{
 		if (this.defnName != null)
 		{
-			this.defn(w).perform(u, w, p, e, this);
+			var defn = this.defn(w);
+			defn.perform(u, w, p, e);
 		}
+	}
+
+	target(): any
+	{
+		return this.targetByName(this.defnName);
+	}
+
+	targetByName(targetName: string): any
+	{
+		return this.targetsByName.get(targetName);
+	}
+
+	targetSet(value: any): Activity
+	{
+		this.targetsByName.set(this.defnName, value);
+		return this;
+	}
+
+	targetSetByName(name: string, value: any): Activity
+	{
+		this.targetsByName.set(name, value);
+		return this;
 	}
 }
 

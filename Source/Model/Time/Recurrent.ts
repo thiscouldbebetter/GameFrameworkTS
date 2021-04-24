@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Recurrent extends EntityProperty
+export class Recurrent implements EntityProperty
 {
 	ticksPerRecurrence: number;
 	timesToRecur: number;
@@ -13,7 +13,6 @@ export class Recurrent extends EntityProperty
 
 	constructor(ticksPerRecurrence: number, timesToRecur: number, recur: any)
 	{
-		super();
 		this.ticksPerRecurrence = ticksPerRecurrence;
 		this.timesToRecur = timesToRecur;
 		this.recur = recur;
@@ -22,7 +21,12 @@ export class Recurrent extends EntityProperty
 		this.ticksUntilRecurrence = this.ticksPerRecurrence;
 	}
 
-	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity)
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+
+	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity): void
 	{
 		if (this.timesRecurredSoFar < this.timesToRecur)
 		{
@@ -38,7 +42,7 @@ export class Recurrent extends EntityProperty
 
 	// cloneable
 
-	clone()
+	clone(): Recurrent
 	{
 		return new Recurrent(this.ticksPerRecurrence, this.timesToRecur, this.recur);
 	}

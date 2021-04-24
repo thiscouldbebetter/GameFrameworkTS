@@ -72,6 +72,13 @@ export class Coords
 		return this;
 	}
 
+	addXY(x: number, y: number): Coords
+	{
+		this.x += x;
+		this.y += y;
+		return this;
+	}
+
 	ceiling(): Coords
 	{
 		this.x = Math.ceil(this.x);
@@ -317,6 +324,11 @@ export class Coords
 	magnitude(): number
 	{
 		return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+	}
+
+	magnitudeXY(): number
+	{
+		return Math.sqrt(this.x * this.x + this.y * this.y);
 	}
 
 	multiply(other: Coords): Coords

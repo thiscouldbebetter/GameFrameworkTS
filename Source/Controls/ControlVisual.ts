@@ -26,16 +26,33 @@ export class ControlVisual extends ControlBase
 
 		// Helper variables.
 		this._drawPos = Coords.create();
-		this._locatable = new Locatable(new Disposition(this._drawPos, null, null));
+		this._locatable = Locatable.fromPos(this._drawPos);
 		this._locatableEntity = new Entity
 		(
 			"_drawableEntity",
 			[
 				this._locatable,
-				new Drawable(new VisualNone(), null)
+				Drawable.fromVisual(new VisualNone())
 			]
 		);
 		this._sizeHalf = Coords.create();
+	}
+
+	static from4
+	(
+		name: string, pos: Coords, size: Coords, visual: DataBinding<any, Visual>
+	)
+	{
+		return new ControlVisual(name, pos, size, visual, null, null);
+	}
+
+	static from5
+	(
+		name: string, pos: Coords, size: Coords,
+		visual: DataBinding<any, Visual>, colorBackground: Color
+	)
+	{
+		return new ControlVisual(name, pos, size, visual, colorBackground, null);
 	}
 
 	actionHandle(actionName: string, universe: Universe): boolean
@@ -43,7 +60,7 @@ export class ControlVisual extends ControlBase
 		return false;
 	}
 
-	isEnabled()
+	isEnabled(): boolean
 	{
 		return false;
 	}
@@ -53,7 +70,7 @@ export class ControlVisual extends ControlBase
 		return false;
 	}
 
-	scalePosAndSize(scaleFactors: Coords)
+	scalePosAndSize(scaleFactors: Coords): ControlBase
 	{
 		this.pos.multiply(scaleFactors);
 		this.size.multiply(scaleFactors);
@@ -63,7 +80,7 @@ export class ControlVisual extends ControlBase
 
 	// drawable
 
-	draw(universe: Universe, display: Display, drawLoc: Disposition, style: ControlStyle)
+	draw(universe: Universe, display: Display, drawLoc: Disposition, style: ControlStyle): void
 	{
 		var visualToDraw = this.visual.get();
 		if (visualToDraw != null)
@@ -76,8 +93,8 @@ export class ControlVisual extends ControlBase
 			display.drawRectangle
 			(
 				drawPos, this.size,
-				Color.systemColorGet(colorFill),
-				Color.systemColorGet(colorBorder),
+				colorFill,
+				colorBorder,
 				null
 			);
 

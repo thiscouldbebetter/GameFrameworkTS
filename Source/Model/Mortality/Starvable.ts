@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Starvable extends EntityProperty
+export class Starvable implements EntityProperty
 {
 	satietyMax: number;
 	satietyLostPerTick: number;
@@ -17,7 +17,6 @@ export class Starvable extends EntityProperty
 		starve: (u: Universe, w: World, p: Place, e: Entity) => void
 	)
 	{
-		super();
 		this.satietyMax = satietyMax;
 		this.satietyLostPerTick = satietyLostPerTick;
 		this._starve = starve;
@@ -25,7 +24,7 @@ export class Starvable extends EntityProperty
 		this.satiety = this.satietyMax;
 	}
 
-	starve(u: Universe, w: World, p: Place, e: Entity)
+	starve(u: Universe, w: World, p: Place, e: Entity): void
 	{
 		if (this._starve != null)
 		{
@@ -33,7 +32,7 @@ export class Starvable extends EntityProperty
 		}
 	}
 
-	satietyAdd(amountToAdd: number)
+	satietyAdd(amountToAdd: number): void
 	{
 		this.satiety += amountToAdd;
 		this.satiety = NumberHelper.trimToRangeMax
@@ -42,17 +41,25 @@ export class Starvable extends EntityProperty
 		);
 	}
 
-	satietySubtract(amountToSubtract: number)
+	satietySubtract(amountToSubtract: number): void
 	{
 		this.satietyAdd(0 - amountToSubtract);
 	}
 
-	isStarving()
+	isStarving(): boolean
 	{
 		return (this.satiety <= 0);
 	}
 
-	updateForTimerTick(universe: Universe, world: World, place: Place, entityStarvable: Entity)
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+
+	updateForTimerTick
+	(
+		universe: Universe, world: World, place: Place, entityStarvable: Entity
+	): void
 	{
 		if (this.isStarving())
 		{
@@ -66,7 +73,7 @@ export class Starvable extends EntityProperty
 
 	// cloneable
 
-	clone()
+	clone(): Starvable
 	{
 		return new Starvable(this.satietyMax, this.satietyLostPerTick, this._starve);
 	}

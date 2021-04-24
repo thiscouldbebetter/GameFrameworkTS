@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Killable extends EntityProperty
+export class Killable implements EntityProperty
 {
 	integrityMax: number;
 	_damageApply: (u: Universe, w: World, p: Place, eDamager: Entity, eKillable: Entity, damageToApply: Damage) => number;
@@ -17,7 +17,6 @@ export class Killable extends EntityProperty
 		die: (u: Universe, w: World, p: Place, e: Entity) => void
 	)
 	{
-		super();
 		this.integrityMax = integrityMax;
 		this._damageApply = damageApply;
 		this._die = die;
@@ -25,7 +24,11 @@ export class Killable extends EntityProperty
 		this.integrity = this.integrityMax;
 	}
 
-	damageApply(universe: Universe, world: World, place: Place, entityDamager: Entity, entityKillable: Entity, damageToApply: Damage): number
+	damageApply
+	(
+		universe: Universe, world: World, place: Place, entityDamager: Entity,
+		entityKillable: Entity, damageToApply: Damage
+	): number
 	{
 		var damageApplied;
 		if (this._damageApply == null)
@@ -40,7 +43,7 @@ export class Killable extends EntityProperty
 		return damageApplied;
 	}
 
-	die(u: Universe, w: World, p: Place, e: Entity)
+	die(u: Universe, w: World, p: Place, e: Entity): void
 	{
 		if (this._die != null)
 		{
@@ -48,7 +51,7 @@ export class Killable extends EntityProperty
 		}
 	}
 
-	integrityAdd(amountToAdd: number)
+	integrityAdd(amountToAdd: number): void
 	{
 		this.integrity += amountToAdd;
 		this.integrity = NumberHelper.trimToRangeMax
@@ -58,20 +61,25 @@ export class Killable extends EntityProperty
 		);
 	}
 
-	integritySubtract(amountToSubtract: number)
+	integritySubtract(amountToSubtract: number): void
 	{
 		this.integrityAdd(0 - amountToSubtract);
 	}
 
-	kill()
+	kill(): void
 	{
 		this.integrity = 0;
 	}
 
-	isAlive()
+	isAlive(): boolean
 	{
 		return (this.integrity > 0);
 	}
+
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
 
 	updateForTimerTick(universe: Universe, world: World, place: Place, entityKillable: Entity)
 	{
@@ -84,10 +92,11 @@ export class Killable extends EntityProperty
 
 	// cloneable
 
-	clone()
+	clone(): Killable
 	{
 		return new Killable(this.integrityMax, this._damageApply, this._die);
 	}
+
 }
 
 }

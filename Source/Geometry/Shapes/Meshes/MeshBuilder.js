@@ -170,7 +170,7 @@ var ThisCouldBeBetter;
                     var faceDown = faceOrientation.down;
                     mesh.transformFaceTextures(new GameFramework.Transform_Scale(new GameFramework.Coords(faceTangent.dotProduct(roomSize), faceDown.dotProduct(roomSize), 0).absolute().multiplyScalar(.2)));
                 }
-                var returnMesh = this.mergeMeshes(meshesForRoom, null);
+                var returnMesh = this.mergeMeshes(meshesForRoom, new Array());
                 returnMesh.transform(new GameFramework.Transform_Scale(roomSize)).transform(new GameFramework.Transform_Translate(new GameFramework.Coords(0, 0, -roomSize.z)));
                 return returnMesh;
             }
@@ -450,6 +450,7 @@ var ThisCouldBeBetter;
                 var verticesInFaceDivided = verticesInFacesDivided[facesDividedIndex];
                 var doAnyEdgesCollideWithPlaneSoFar = false;
                 var collisionHelper = new GameFramework.CollisionHelper();
+                var collision = GameFramework.Collision.create();
                 var edges = faceToDivide.geometry.edges();
                 for (var e = 0; e < edges.length; e++) {
                     var edge = edges[e];
@@ -458,8 +459,8 @@ var ThisCouldBeBetter;
                     var distanceOfVertex0AbovePlane = planeToDivideOn.distanceToPointAlongNormal(vertex0);
                     var distanceOfVertex1AbovePlane = planeToDivideOn.distanceToPointAlongNormal(edge.vertices[1]);
                     if (distanceOfVertex0AbovePlane * distanceOfVertex1AbovePlane < 0) {
-                        var collision = collisionHelper.collisionOfEdgeAndPlane(edge, planeToDivideOn, null);
-                        if (collision != null) {
+                        var collision = collisionHelper.collisionOfEdgeAndPlane(edge, planeToDivideOn, collision);
+                        if (collision.isActive) {
                             doAnyEdgesCollideWithPlaneSoFar = true;
                             verticesInFaceDivided.push(collision.pos);
                             facesDividedIndex = 1 - facesDividedIndex;

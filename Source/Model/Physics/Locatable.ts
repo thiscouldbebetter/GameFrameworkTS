@@ -2,19 +2,48 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Locatable extends EntityProperty
+export class Locatable implements EntityProperty
 {
 	loc: Disposition;
 
 	constructor(loc: Disposition)
 	{
-		super();
 		this.loc = loc || Disposition.create();
 	}
 
-	static fromPos(pos: Coords)
+	static create(): Locatable
+	{
+		return new Locatable(null);
+	}
+
+	static fromPos(pos: Coords): Locatable
 	{
 		return new Locatable(Disposition.fromPos(pos));
+	}
+
+	static entitiesSortByZThenY(entitiesToSort: Entity[]): Entity[]
+	{
+		entitiesToSort.sort
+		(
+			(a, b) =>
+			{
+				var aPos = a.locatable().loc.pos;
+				var bPos = b.locatable().loc.pos;
+				var returnValue;
+				if (aPos.z != bPos.z)
+				{
+					returnValue = bPos.z - aPos.z;
+				}
+				else
+				{
+					returnValue = aPos.y - bPos.y;
+				}
+
+				return returnValue;
+			}
+		);
+
+		return entitiesToSort;
 	}
 
 	approachOtherWithAccelerationAndSpeedMax
@@ -114,10 +143,16 @@ export class Locatable extends EntityProperty
 
 	// Clonable.
 
-	clone()
+	clone(): Locatable
 	{
 		return new Locatable(this.loc.clone());
 	}
+
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+
 }
 
 }

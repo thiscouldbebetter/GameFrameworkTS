@@ -11,8 +11,17 @@ var ThisCouldBeBetter;
             static create() {
                 return new RangeExtent(0, 0);
             }
+            static Instances() {
+                if (RangeExtent._instances == null) {
+                    RangeExtent._instances = new RangeExtent_Instances();
+                }
+                return RangeExtent._instances;
+            }
             clone() {
                 return new RangeExtent(this.min, this.max);
+            }
+            contains(valueToCheck) {
+                return (valueToCheck >= this.min && valueToCheck <= this.max);
             }
             intersectWith(other) {
                 this.min = (this.min >= other.min ? this.min : other.min);
@@ -63,12 +72,38 @@ var ThisCouldBeBetter;
                 }
                 return returnValues;
             }
+            trimValue(valueToTrim) {
+                if (valueToTrim < this.min) {
+                    valueToTrim = this.min;
+                }
+                else if (valueToTrim > this.max) {
+                    valueToTrim = this.max;
+                }
+                return valueToTrim;
+            }
             touches(other) {
                 var returnValue = (this.min <= other.max
                     && this.max >= other.min);
                 return returnValue;
             }
+            wrapValue(valueToWrap) {
+                var returnValue = valueToWrap;
+                var size = this.size();
+                while (returnValue < this.min) {
+                    returnValue += size;
+                }
+                while (returnValue > this.max) {
+                    returnValue -= size;
+                }
+                return returnValue;
+            }
         }
         GameFramework.RangeExtent = RangeExtent;
+        class RangeExtent_Instances {
+            constructor() {
+                this.ZeroToOne = new RangeExtent(0, 1);
+            }
+        }
+        GameFramework.RangeExtent_Instances = RangeExtent_Instances;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
 })(ThisCouldBeBetter || (ThisCouldBeBetter = {}));

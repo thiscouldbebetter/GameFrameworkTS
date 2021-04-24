@@ -31,9 +31,9 @@ var ThisCouldBeBetter;
                 return new Orientation(this.forward.clone(), this.down.clone());
             }
             equals(other) {
-                var returnValue = this.forward.equals(other.forward)
+                var returnValue = (this.forward.equals(other.forward)
                     && this.right.equals(other.right)
-                    && this.down.equals(other.down);
+                    && this.down.equals(other.down));
                 return returnValue;
             }
             forwardSet(value) {

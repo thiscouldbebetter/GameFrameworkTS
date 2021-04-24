@@ -49,15 +49,18 @@ Sound - Effects from Builtin JS AudioContext
 
 Visuals - Non-Linear Animation System
 
+
 Fixes
 -----
 
-Controls - ControlTabbed - Mouse Support
+Drawables - Bar in SE corner not showing.
 
 Items - Bowstring Direction Doesn't Change with Player
 
 Movers - Collisions - Rocks and Trees Not Blocking Vertically
+
 Places - Map Tiles - Fix Overlapping
 Places - Portals - Between Rooms Start Player Outside
+Places - Portals - Portal from Second Room Back to First Not Working.
 
 Storage - Fix Load World From File

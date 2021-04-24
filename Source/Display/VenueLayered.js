@@ -26,7 +26,7 @@ var ThisCouldBeBetter;
                     child.draw(universe);
                     if (this.colorToOverlayBetweenChildren != null) {
                         var display = universe.display;
-                        display.drawRectangle(GameFramework.Coords.Instances().Zeroes, display.sizeInPixels, this.colorToOverlayBetweenChildren.systemColor(), null, null);
+                        display.drawRectangle(GameFramework.Coords.Instances().Zeroes, display.sizeInPixels, this.colorToOverlayBetweenChildren, null, null);
                     }
                 }
             }

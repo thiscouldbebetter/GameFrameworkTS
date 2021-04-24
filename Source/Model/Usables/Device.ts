@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Device extends EntityProperty
+export class Device implements EntityProperty
 {
 	name: string;
 	_initialize: (u: Universe, w: World, p: Place, e: Entity) => void;
@@ -18,9 +18,9 @@ export class Device extends EntityProperty
 		ticksToCharge: number,
 		initialize: (u: Universe, w: World, p: Place, e: Entity) => void,
 		update: (u: Universe, w: World, p: Place, e: Entity) => void,
-		use: (u: Universe, w: World, p: Place, eUser: Entity, eDevice: Entity) => void)
+		use: (u: Universe, w: World, p: Place, eUser: Entity, eDevice: Entity) => void
+	)
 	{
-		super();
 		this.name = name;
 		this.ticksToCharge = ticksToCharge;
 		this._initialize = initialize;
@@ -30,7 +30,12 @@ export class Device extends EntityProperty
 		this.tickLastUsed = 0 - this.ticksToCharge;
 	}
 
-	initialize(u: Universe, w: World, p: Place, e: Entity)
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
+
+	initialize(u: Universe, w: World, p: Place, e: Entity): void
 	{
 		if (this._initialize != null)
 		{
@@ -38,7 +43,7 @@ export class Device extends EntityProperty
 		}
 	}
 
-	use(u: Universe, w: World, p: Place, eUser: Entity, eDevice: Entity)
+	use(u: Universe, w: World, p: Place, eUser: Entity, eDevice: Entity): void
 	{
 		var tickCurrent = w.timerTicksSoFar;
 		var ticksSinceUsed = tickCurrent - this.tickLastUsed;
@@ -51,7 +56,7 @@ export class Device extends EntityProperty
 
 	// clonable
 
-	clone()
+	clone(): Device
 	{
 		return new Device(this.name, this.ticksToCharge, this._initialize, this.update, this.use);
 	}

@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Device extends GameFramework.EntityProperty {
+        class Device {
             constructor(name, ticksToCharge, initialize, update, use) {
-                super();
                 this.name = name;
                 this.ticksToCharge = ticksToCharge;
                 this._initialize = initialize;
@@ -13,6 +12,9 @@ var ThisCouldBeBetter;
                 this.use = use;
                 this.tickLastUsed = 0 - this.ticksToCharge;
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            updateForTimerTick(u, w, p, e) { }
             initialize(u, w, p, e) {
                 if (this._initialize != null) {
                     this._initialize(u, w, p, e);

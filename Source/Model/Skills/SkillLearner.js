@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class SkillLearner extends GameFramework.EntityProperty {
+        class SkillLearner {
             constructor(skillBeingLearnedName, learningAccumulated, skillsKnownNames) {
-                super();
                 this.skillBeingLearnedName = skillBeingLearnedName;
                 this.learningAccumulated = learningAccumulated || 0;
                 this.skillsKnownNames = skillsKnownNames || [];
@@ -102,7 +101,9 @@ var ThisCouldBeBetter;
                 var returnValue = skillsAllByName.get(this.skillBeingLearnedName);
                 return returnValue;
             }
-            // entity
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
             updateForTimerTick(universe, world, place, entity) {
                 // Do nothing.
             }
@@ -113,45 +114,42 @@ var ThisCouldBeBetter;
                 var labelHeight = display.fontHeightInPixels * 1.2;
                 var margin = 20;
                 var labelHeightLarge = labelHeight * 2;
-                size = size.clone().add(new GameFramework.Coords(0, 30, 0)); // hack
-                var listSize = new GameFramework.Coords((size.x - margin * 3) / 2, 150, 0);
+                size = size.clone().addDimensions(0, 30, 0); // hack
+                var listSize = GameFramework.Coords.fromXY((size.x - margin * 3) / 2, 150);
                 var defns = universe.world.defn;
                 var skillLearner = this;
                 var skillsAll = defns.defnArraysByTypeName.get(GameFramework.Skill.name); // todo - Just use the -ByName lookup.
                 var skillsAllByName = defns.defnsByNameByTypeName.get(GameFramework.Skill.name);
-                var returnValue = new GameFramework.ControlContainer("Skills", // name,
+                var returnValue = GameFramework.ControlContainer.from4("Skills", // name,
                 GameFramework.Coords.create(), // pos,
                 size.clone(), 
                 // children
                 [
                     new GameFramework.ControlLabel("labelSkillsKnown", // name,
-                    new GameFramework.Coords(margin, 40, 0), // pos,
-                    new GameFramework.Coords(size.x - margin * 2, labelHeight, 0), // size,
+                    GameFramework.Coords.fromXY(margin, 40), // pos,
+                    GameFramework.Coords.fromXY(size.x - margin * 2, labelHeight), // size,
                     false, // isTextCentered,
                     "Skills Known:", //text
                     labelHeight // fontHeightInPixels
                     ),
-                    new GameFramework.ControlList("listSkillsKnown", new GameFramework.Coords(margin, 60, 0), // pos
+                    GameFramework.ControlList.from6("listSkillsKnown", GameFramework.Coords.fromXY(margin, 60), // pos
                     listSize, 
                     // items
-                    new GameFramework.DataBinding(this.skillsKnownNames, null, null), new GameFramework.DataBinding(null, null, null), // bindingForItemText
-                    labelHeight, // fontHeightInPixels
-                    null, null, GameFramework.DataBinding.fromContext(true), // isEnabled
-                    null, null),
-                    new GameFramework.ControlLabel("labelSkillsAvailable", // name,
-                    new GameFramework.Coords(size.x - margin - listSize.x, 40, 0), // pos,
-                    new GameFramework.Coords(size.x - margin * 2, labelHeight, 0), // size,
-                    false, // isTextCentered,
-                    new GameFramework.DataBinding("Skills Available:", null, null), // text
+                    GameFramework.DataBinding.fromContext(this.skillsKnownNames), GameFramework.DataBinding.fromContext(null), // bindingForItemText
                     labelHeight // fontHeightInPixels
                     ),
-                    new GameFramework.ControlList("listSkillsAvailable", // name,
-                    new GameFramework.Coords(size.x - margin - listSize.x, 60, 0), // pos,
+                    new GameFramework.ControlLabel("labelSkillsAvailable", // name,
+                    GameFramework.Coords.fromXY(size.x - margin - listSize.x, 40), // pos,
+                    GameFramework.Coords.fromXY(size.x - margin * 2, labelHeight), // size,
+                    false, // isTextCentered,
+                    GameFramework.DataBinding.fromContext("Skills Available:"), // text
+                    labelHeight // fontHeightInPixels
+                    ),
+                    GameFramework.ControlList.from10("listSkillsAvailable", // name,
+                    GameFramework.Coords.fromXY(size.x - margin - listSize.x, 60), // pos,
                     listSize, 
                     // items,
-                    new GameFramework.DataBinding(this, (c) => {
-                        return c.skillsAvailableToLearn(skillsAll);
-                    }, null), new GameFramework.DataBinding(null, (c) => c.name, null), // bindingForItemText
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => c.skillsAvailableToLearn(skillsAll)), GameFramework.DataBinding.fromGet((c) => c.name), // bindingForItemText
                     labelHeight, // fontHeightInPixels
                     new GameFramework.DataBinding(this, (c) => {
                         return c.skillSelected(skillsAllByName);
@@ -160,65 +158,65 @@ var ThisCouldBeBetter;
                         c.skillSelectedName = skillName;
                     }), // bindingForItemSelected
                     null, // bindingForItemValue
-                    GameFramework.DataBinding.fromContext(true), // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     (u) => {
                         skillLearner.skillBeingLearnedName =
                             skillLearner.skillSelectedName;
-                    }, // confirm
-                    null),
-                    new GameFramework.ControlLabel("labelSkillSelected", // name,
-                    new GameFramework.Coords(margin, 220, 0), // pos,
-                    new GameFramework.Coords(size.x - margin * 2, labelHeight, 0), // size,
+                    } // confirm
+                    ),
+                    GameFramework.ControlLabel.from5("labelSkillSelected", // name,
+                    GameFramework.Coords.fromXY(margin, 220), // pos,
+                    GameFramework.Coords.fromXY(size.x - margin * 2, labelHeight), // size,
                     false, // isTextCentered,
-                    "Selected:", // text
-                    null),
-                    new GameFramework.ControlLabel("labelSkillSelected", // name,
-                    new GameFramework.Coords(80, 220, 0), // pos,
-                    new GameFramework.Coords(size.x - margin * 2, labelHeight, 0), // size,
+                    "Selected:" // text
+                    ),
+                    GameFramework.ControlLabel.from5("labelSkillSelected", // name,
+                    GameFramework.Coords.fromXY(80, 220), // pos,
+                    GameFramework.Coords.fromXY(size.x - margin * 2, labelHeight), // size,
                     false, // isTextCentered,
-                    new GameFramework.DataBinding(this, (c) => (c.skillSelectedName || "-"), null), null),
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.skillSelectedName || "-"))),
                     new GameFramework.ControlLabel("labelSkillSelectedDescription", // name,
-                    new GameFramework.Coords(margin, 232, 0), // pos,
-                    new GameFramework.Coords(size.x - margin * 2, labelHeight, 0), // size,
+                    GameFramework.Coords.fromXY(margin, 232), // pos,
+                    GameFramework.Coords.fromXY(size.x - margin * 2, labelHeight), // size,
                     false, // isTextCentered,
-                    new GameFramework.DataBinding(this, (c) => {
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => {
                         var skill = c.skillSelected(skillsAllByName);
                         return (skill == null ? "-" : skill.description);
-                    }, null), null),
-                    new GameFramework.ControlLabel("labelSkillBeingLearned", // name,
-                    new GameFramework.Coords(margin, size.y - margin - labelHeight * 2, 0), // pos,
-                    new GameFramework.Coords(size.x - margin * 2, labelHeight, 0), // size,
+                    }), null),
+                    GameFramework.ControlLabel.from5("labelSkillBeingLearned", // name,
+                    GameFramework.Coords.fromXY(margin, size.y - margin - labelHeight * 2), // pos,
+                    GameFramework.Coords.fromXY(size.x - margin * 2, labelHeight), // size,
                     false, // isTextCentered,
-                    "Skill Being Learned:", // text
-                    null),
+                    "Skill Being Learned:" // text
+                    ),
                     new GameFramework.ControlLabel("textSkillBeingLearned", // name,
-                    new GameFramework.Coords(145, size.y - margin - labelHeight * 2, 0), // pos,
-                    new GameFramework.Coords(size.x - margin * 2, labelHeight, 0), // size,
+                    GameFramework.Coords.fromXY(145, size.y - margin - labelHeight * 2), // pos,
+                    GameFramework.Coords.fromXY(size.x - margin * 2, labelHeight), // size,
                     false, // isTextCentered,
-                    new GameFramework.DataBinding(this, (c) => {
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => {
                         return (c.skillBeingLearnedName || "-");
-                    }, null), null),
-                    new GameFramework.ControlLabel("labelLearningAccumulated", // name,
-                    new GameFramework.Coords(margin, size.y - margin - labelHeight, 0), // pos,
-                    new GameFramework.Coords(size.x - margin * 2, labelHeight, 0), // size,
+                    }), null),
+                    GameFramework.ControlLabel.from5("labelLearningAccumulated", // name,
+                    GameFramework.Coords.fromXY(margin, size.y - margin - labelHeight), // pos,
+                    GameFramework.Coords.fromXY(size.x - margin * 2, labelHeight), // size,
                     false, // isTextCentered,
-                    "Learning Accumulated:", // text
-                    null),
-                    new GameFramework.ControlLabel("textLearningAccumulated", // name,
-                    new GameFramework.Coords(145, size.y - margin - labelHeight, 0), // pos,
-                    new GameFramework.Coords(30, labelHeight, 0), // size,
+                    "Learning Accumulated:" // text
+                    ),
+                    GameFramework.ControlLabel.from5("textLearningAccumulated", // name,
+                    GameFramework.Coords.fromXY(145, size.y - margin - labelHeight), // pos,
+                    GameFramework.Coords.fromXY(30, labelHeight), // size,
                     false, // isTextCentered,
-                    new GameFramework.DataBinding(this, (c) => c.learningAccumulatedOverRequired(skillsAllByName), null), // text
-                    null),
-                ], null, null);
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => c.learningAccumulatedOverRequired(skillsAllByName)) // text
+                    ),
+                ]);
                 if (includeTitle) {
-                    returnValue.children.splice(0, 0, new GameFramework.ControlLabel("labelSkills", new GameFramework.Coords(200, 20, 0), // pos
-                    new GameFramework.Coords(120, 25, 0), // size
+                    returnValue.children.splice(0, 0, new GameFramework.ControlLabel("labelSkills", GameFramework.Coords.fromXY(200, 20), // pos
+                    GameFramework.Coords.fromXY(120, 25), // size
                     true, // isTextCentered
                     "Skills", labelHeightLarge));
                 }
                 else {
-                    var titleHeightInverted = new GameFramework.Coords(0, -30, 0);
+                    var titleHeightInverted = GameFramework.Coords.fromXY(0, -30);
                     returnValue.size.add(titleHeightInverted);
                     returnValue.shiftChildPositions(titleHeightInverted);
                 }

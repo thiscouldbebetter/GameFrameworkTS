@@ -2,21 +2,21 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Enemy extends EntityProperty
+export class Enemy implements EntityProperty
 {
 	weapon: Weapon;
 
 	constructor(weapon: Weapon)
 	{
-		super();
 		this.weapon = weapon;
 	}
 
 	static activityDefnBuild()
 	{
 		var enemyActivityPerform =
-			(universe: Universe, world: World, place: Place, actor: Entity, activity: Activity) =>
+			(universe: Universe, world: World, place: Place, actor: Entity) =>
 		{
+			var activity = actor.actor().activity;
 			var actorLocatable = actor.locatable();
 
 			var entityToTargetPrefix = "Player";
@@ -65,7 +65,7 @@ export class Enemy extends EntityProperty
 				}
 				else
 				{
-					var targetPosExisting = activity.target;
+					var targetPosExisting = activity.target() as Coords;
 					if (targetPosExisting == null)
 					{
 						targetPosToApproach =
@@ -78,10 +78,10 @@ export class Enemy extends EntityProperty
 				}
 			}
 
-			activity.target = targetPosToApproach;
+			activity.targetSet(targetPosToApproach);
 
 			// hack
-			var targetLocatable = new Locatable(new Disposition(targetPosToApproach, null, null));
+			var targetLocatable = Locatable.fromPos(targetPosToApproach);
 
 			var enemy = actor.enemy();
 			var weapon = enemy.weapon;
@@ -102,6 +102,11 @@ export class Enemy extends EntityProperty
 		return enemyActivityDefn;
 	}
 
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
 }
 
 }

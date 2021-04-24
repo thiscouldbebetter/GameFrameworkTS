@@ -36,28 +36,33 @@ var ThisCouldBeBetter;
                 var videos = new Array();
                 var fonts = new Array();
                 var textStrings = new Array();
-                var typesAndArraysByFileExtension = new Map([
-                    ["jpg", [GameFramework.Image2, images]],
-                    ["png", [GameFramework.Image2, images]],
-                    ["svg", [GameFramework.Image2, images]],
-                    ["mp3", [GameFramework.Sound, sounds]],
-                    ["wav", [GameFramework.Sound, sounds]],
-                    ["webm", [GameFramework.Video, videos]],
-                    ["ttf", [GameFramework.Font, fonts]],
-                    ["json", [GameFramework.TextString, textStrings]],
-                    ["txt", [GameFramework.TextString, textStrings]],
+                var imageTypeDirectoryNameAndArray = [GameFramework.Image2, "Images", images];
+                var soundTypeDirectoryNameAndArray = [GameFramework.Sound, "Audio", sounds];
+                var textStringTypeDirectoryNameAndArray = [GameFramework.TextString, "Text", textStrings];
+                var typesDirectoryNamesAndArraysByFileExtension = new Map([
+                    ["jpg", imageTypeDirectoryNameAndArray],
+                    ["png", imageTypeDirectoryNameAndArray],
+                    ["svg", imageTypeDirectoryNameAndArray],
+                    ["mp3", soundTypeDirectoryNameAndArray],
+                    ["wav", soundTypeDirectoryNameAndArray],
+                    ["webm", [GameFramework.Video, "Video", videos]],
+                    ["ttf", [GameFramework.Font, "Fonts", fonts]],
+                    ["json", textStringTypeDirectoryNameAndArray],
+                    ["txt", textStringTypeDirectoryNameAndArray],
                 ]);
                 for (var i = 0; i < mediaFilePaths.length; i++) {
                     var filePath = mediaFilePaths[i];
+                    var fileExtension = filePath.substr(filePath.lastIndexOf(".") + 1);
+                    var typeDirectoryNameAndArray = typesDirectoryNamesAndArraysByFileExtension.get(fileExtension);
+                    var mediaType = typeDirectoryNameAndArray[0];
+                    var mediaDirectoryName = typeDirectoryNameAndArray[1];
+                    var mediaArray = typeDirectoryNameAndArray[2];
                     var filePathParts = filePath.split("/");
-                    filePathParts.splice(0, 3); // Remove "../Content/[mediaType]/"
+                    var filePathPartIndexForMediaType = filePathParts.indexOf(mediaDirectoryName);
+                    filePathParts.splice(0, filePathPartIndexForMediaType + 1);
                     var fileName = filePathParts.join("_");
                     var fileStemAndExtension = fileName.split(".");
                     var fileStem = fileStemAndExtension[0];
-                    var fileExtension = fileStemAndExtension[1];
-                    var typeAndArray = typesAndArraysByFileExtension.get(fileExtension);
-                    var mediaType = typeAndArray[0];
-                    var mediaArray = typeAndArray[1];
                     var mediaObject = new mediaType(fileStem, filePath);
                     mediaArray.push(mediaObject);
                 }

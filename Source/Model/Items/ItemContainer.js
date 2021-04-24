@@ -3,7 +3,7 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class ItemContainer extends GameFramework.EntityProperty {
+        class ItemContainer {
             transfer(world, entityFrom, entityTo, messagePrefix) {
                 var itemHolderFrom = entityFrom.itemHolder();
                 var itemHolderTo = entityTo.itemHolder();
@@ -25,6 +25,10 @@ var ThisCouldBeBetter;
                     }
                 }
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
+            updateForTimerTick(u, w, p, e) { }
             // Controllable.
             toControl(universe, size, entityGetterPutter, entityContainer, venuePrev) {
                 if (size == null) {
@@ -62,17 +66,17 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromGet((c) => c.toString(world)), // bindingForItemText
                     fontHeight, new GameFramework.DataBinding(itemHolderContainer, (c) => c.itemSelected, (c, v) => c.itemSelected = v), // bindingForItemSelected
                     GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
-                    GameFramework.DataBinding.fromContext(true), // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     get, // confirm
                     null),
                     GameFramework.ControlButton.from8("buttonGet", GameFramework.Coords.fromXY((size.x - buttonSize.x) / 2, (size.y - buttonSize.y - margin) / 2), // pos
                     buttonSize.clone(), ">", fontHeight, true, // hasBorder
-                    GameFramework.DataBinding.fromContext(true), // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     get // click
                     ),
                     GameFramework.ControlButton.from8("buttonPut", GameFramework.Coords.fromXY((size.x - buttonSize.x) / 2, (size.y + buttonSize.y + margin) / 2), // pos
                     buttonSize.clone(), "<", fontHeight, true, // hasBorder
-                    GameFramework.DataBinding.fromContext(true), // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     put // click
                     ),
                     new GameFramework.ControlLabel("labelGetterPutterName", GameFramework.Coords.fromXY(size.x - margin - listSize.x, margin), // pos
@@ -85,7 +89,7 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromGet((c) => c.toString()), // bindingForItemText
                     fontHeight, new GameFramework.DataBinding(itemHolderGetterPutter, (c) => c.itemSelected, (c, v) => c.itemSelected = v), // bindingForItemSelected
                     GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
-                    GameFramework.DataBinding.fromContext(true), // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     put, // confirm
                     null),
                     new GameFramework.ControlLabel("infoStatus", GameFramework.Coords.fromXY(size.x / 2, size.y - margin - fontHeight), // pos

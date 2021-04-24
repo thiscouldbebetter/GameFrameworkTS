@@ -3,12 +3,15 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Perceptor extends GameFramework.EntityProperty {
+        class Perceptor {
             constructor(sightThreshold, hearingThreshold) {
-                super();
                 this.sightThreshold = sightThreshold;
                 this.hearingThreshold = hearingThreshold;
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
+            updateForTimerTick(u, w, p, e) { }
         }
         GameFramework.Perceptor = Perceptor;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

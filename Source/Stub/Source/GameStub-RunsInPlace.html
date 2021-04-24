@@ -1,0 +1,173 @@
+<html>
+<body>
+
+<!-- This is the same as GameStub.html, except that it runs when opened
+from within the repository. -->
+
+<script type="text/javascript" src="../../Helpers/ArrayHelper.js"></script>
+<script type="text/javascript" src="../../Helpers/ByteHelper.js"></script>
+<script type="text/javascript" src="../../Helpers/NumberHelper.js"></script>
+<script type="text/javascript" src="../../Helpers/StringHelper.js"></script>
+
+<script type="text/javascript" src="../../Model/Entity.js"></script>
+<script type="text/javascript" src="../../Model/EntityProperty.js"></script>
+
+<script type="text/javascript" src="../../Controls/ControlActionNames.js"></script>
+<script type="text/javascript" src="../../Controls/ControlBase.js"></script>
+<script type="text/javascript" src="../../Controls/ControlBuilder.js"></script>
+<script type="text/javascript" src="../../Controls/ControlButton.js"></script>
+<script type="text/javascript" src="../../Controls/ControlContainer.js"></script>
+<script type="text/javascript" src="../../Controls/ControlLabel.js"></script>
+<script type="text/javascript" src="../../Controls/ControlList.js"></script>
+<script type="text/javascript" src="../../Controls/ControlNone.js"></script>
+<script type="text/javascript" src="../../Controls/ControlScrollbar.js"></script>
+<script type="text/javascript" src="../../Controls/ControlSelect.js"></script>
+<script type="text/javascript" src="../../Controls/ControlSelectOption.js"></script>
+<script type="text/javascript" src="../../Controls/ControlStyle.js"></script>
+<script type="text/javascript" src="../../Controls/ControlTextBox.js"></script>
+<script type="text/javascript" src="../../Controls/ControlVisual.js"></script>
+<script type="text/javascript" src="../../Controls/DataBinding.js"></script>
+<script type="text/javascript" src="../../Controls/VenueControls.js"></script>
+<script type="text/javascript" src="../../Controls/VenueMessage.js"></script>
+
+<script type="text/javascript" src="../../Display/Color.js"></script>
+<script type="text/javascript" src="../../Display/Display2D.js"></script>
+<script type="text/javascript" src="../../Display/DisplayRecorder.js"></script>
+<script type="text/javascript" src="../../Display/Drawable.js"></script>
+<script type="text/javascript" src="../../Display/VenueFader.js"></script>
+<script type="text/javascript" src="../../Display/VenueLayered.js"></script>
+
+<script type="text/javascript" src="../../Display/Animation/Animatable2.js"></script>
+
+<script type="text/javascript" src="../../Display/Visuals/VisualCircle.js"></script>
+<script type="text/javascript" src="../../Display/Visuals/VisualDirectional.js"></script>
+<script type="text/javascript" src="../../Display/Visuals/VisualDynamic.js"></script>
+<script type="text/javascript" src="../../Display/Visuals/VisualGroup.js"></script>
+<script type="text/javascript" src="../../Display/Visuals/VisualImageFromLibrary.js"></script>
+<script type="text/javascript" src="../../Display/Visuals/VisualImageScaled.js"></script>
+<script type="text/javascript" src="../../Display/Visuals/VisualNone.js"></script>
+<script type="text/javascript" src="../../Display/Visuals/VisualOffset.js"></script>
+<script type="text/javascript" src="../../Display/Visuals/VisualPolygon.js"></script>
+<script type="text/javascript" src="../../Display/Visuals/VisualRectangle.js"></script>
+<script type="text/javascript" src="../../Display/Visuals/VisualRotate.js"></script>
+<script type="text/javascript" src="../../Display/Visuals/VisualText.js"></script>
+
+<script type="text/javascript" src="../../Display/Visuals/Animation/VisualAnimation.js"></script>
+
+<script type="text/javascript" src="../../Geometry/Camera.js"></script>
+<script type="text/javascript" src="../../Geometry/Collision.js"></script>
+<script type="text/javascript" src="../../Geometry/CollisionHelper.js"></script>
+<script type="text/javascript" src="../../Geometry/Coords.js"></script>
+<script type="text/javascript" src="../../Geometry/Disposition.js"></script>
+<script type="text/javascript" src="../../Geometry/Orientation.js"></script>
+<script type="text/javascript" src="../../Geometry/RangeExtent.js"></script>
+<script type="text/javascript" src="../../Geometry/Rotation.js"></script>
+<script type="text/javascript" src="../../Geometry/Polar.js"></script>
+
+<script type="text/javascript" src="../../Geometry/Constraints/Constraint_AttachToEntityWithName.js"></script>
+
+<script type="text/javascript" src="../../Geometry/Shapes/Arc.js"></script>
+<script type="text/javascript" src="../../Geometry/Shapes/Box.js"></script>
+<script type="text/javascript" src="../../Geometry/Shapes/BoxRotated.js"></script>
+<script type="text/javascript" src="../../Geometry/Shapes/Edge.js"></script>
+<script type="text/javascript" src="../../Geometry/Shapes/Face.js"></script>
+<script type="text/javascript" src="../../Geometry/Shapes/Plane.js"></script>
+<script type="text/javascript" src="../../Geometry/Shapes/ShapeContainer.js"></script>
+<script type="text/javascript" src="../../Geometry/Shapes/ShapeGroupAny.js"></script>
+<script type="text/javascript" src="../../Geometry/Shapes/ShapeGroupAll.js"></script>
+<script type="text/javascript" src="../../Geometry/Shapes/ShapeHelper.js"></script>
+<script type="text/javascript" src="../../Geometry/Shapes/ShapeInverse.js"></script>
+<script type="text/javascript" src="../../Geometry/Shapes/Shell.js"></script>
+<script type="text/javascript" src="../../Geometry/Shapes/Sphere.js"></script>
+<script type="text/javascript" src="../../Geometry/Shapes/Wedge.js"></script>
+
+<script type="text/javascript" src="../../Geometry/Shapes/Maps/MapLocated.js"></script>
+
+<script type="text/javascript" src="../../Geometry/Shapes/Meshes/Mesh.js"></script>
+
+<script type="text/javascript" src="../../Geometry/Transforms/Transform_Locate.js"></script>
+<script type="text/javascript" src="../../Geometry/Transforms/Transform_Orient.js"></script>
+<script type="text/javascript" src="../../Geometry/Transforms/Transform_Translate.js"></script>
+<script type="text/javascript" src="../../Geometry/Transforms/Transforms.js"></script>
+
+<script type="text/javascript" src="../../Input/ActionToInputsMapping.js"></script>
+<script type="text/javascript" src="../../Input/Input.js"></script>
+<script type="text/javascript" src="../../Input/InputHelper.js"></script>
+<script type="text/javascript" src="../../Input/UserInputListener.js"></script>
+
+<script type="text/javascript" src="../../Media/Font.js"></script>
+<script type="text/javascript" src="../../Media/Image.js"></script>
+<script type="text/javascript" src="../../Media/MediaLibrary.js"></script>
+<script type="text/javascript" src="../../Media/Sound.js"></script>
+<script type="text/javascript" src="../../Media/SoundHelper.js"></script>
+<script type="text/javascript" src="../../Media/TextString.js"></script>
+<script type="text/javascript" src="../../Media/VenueVideo.js"></script>
+<script type="text/javascript" src="../../Media/Video.js"></script>
+<script type="text/javascript" src="../../Media/VideoHelper.js"></script>
+<script type="text/javascript" src="../../Media/VisualSound.js"></script>
+
+<script type="text/javascript" src="../../Model/EntityBuilder.js"></script>
+<script type="text/javascript" src="../../Model/Universe.js"></script>
+<script type="text/javascript" src="../../Model/VenueWorld.js"></script>
+<script type="text/javascript" src="../../Model/World.js"></script>
+<script type="text/javascript" src="../../Model/WorldDefn.js"></script>
+
+<script type="text/javascript" src="../../Model/Actors/Action.js"></script>
+<script type="text/javascript" src="../../Model/Actors/Activity.js"></script>
+<script type="text/javascript" src="../../Model/Actors/ActivityDefn.js"></script>
+<script type="text/javascript" src="../../Model/Actors/Actor.js"></script>
+
+<script type="text/javascript" src="../../Model/Places/Place.js"></script>
+<script type="text/javascript" src="../../Model/Places/PlaceDefn.js"></script>
+
+<script type="text/javascript" src="../../Model/Actors/Action.js"></script>
+
+<script type="text/javascript" src="../../Model/Physics/Boundable.js"></script>
+<script type="text/javascript" src="../../Model/Physics/Collidable.js"></script>
+<script type="text/javascript" src="../../Model/Physics/Constrainable.js"></script>
+<script type="text/javascript" src="../../Model/Physics/Locatable.js"></script>
+<script type="text/javascript" src="../../Model/Physics/Movable.js"></script>
+
+<script type="text/javascript" src="../../Model/Places/Place.js"></script>
+
+<script type="text/javascript" src="../../Profiles/Profile.js"></script>
+
+<script type="text/javascript" src="../../Storage/FileHelper.js"></script>
+<script type="text/javascript" src="../../Storage/Serializer.js"></script>
+<script type="text/javascript" src="../../Storage/StorageHelper.js"></script>
+<script type="text/javascript" src="../../Storage/VenueFileUpload.js"></script>
+
+<script type="text/javascript" src="../../Storage/Compressor/BitStream.js"></script>
+<script type="text/javascript" src="../../Storage/Compressor/ByteStreamFromBytes.js"></script>
+<script type="text/javascript" src="../../Storage/Compressor/ByteStreamFromString.js"></script>
+<script type="text/javascript" src="../../Storage/Compressor/CompressorLZW.js"></script>
+
+<script type="text/javascript" src="../../Storage/TarFiles/TarFile.js"></script>
+<script type="text/javascript" src="../../Storage/TarFiles/TarFileEntry.js"></script>
+<script type="text/javascript" src="../../Storage/TarFiles/TarFileEntryHeader.js"></script>
+<script type="text/javascript" src="../../Storage/TarFiles/TarFileTypeFlag.js"></script>
+
+<script type="text/javascript" src="../../Utility/DateTime.js"></script>
+<script type="text/javascript" src="../../Utility/IDHelper.js"></script>
+<script type="text/javascript" src="../../Utility/PlatformHelper.js"></script>
+<script type="text/javascript" src="../../Utility/RandomizerSystem.js"></script>
+<script type="text/javascript" src="../../Utility/Reference.js"></script>
+<script type="text/javascript" src="../../Utility/TimerHelper.js"></script>
+<script type="text/javascript" src="../../Utility/URLParser.js"></script>
+<script type="text/javascript" src="../../Utility/VenueTask.js"></script>
+
+<script type="text/javascript" src="../../Imports.js"></script>
+
+<script type="text/javascript" src="PlaceStub.js"></script>
+<script type="text/javascript" src="WorldGame.js"></script>
+
+<script type="text/javascript" src="Game.js"></script>
+
+<script type="text/javascript">
+var contentDirectoryPath = "../Content/";
+new Game(contentDirectoryPath).main();
+</script>
+
+</body>
+</html>
+

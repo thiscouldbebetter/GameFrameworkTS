@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Perceptible extends EntityProperty
+export class Perceptible implements EntityProperty
 {
 	isHiding: boolean;
 	visibility: (u: Universe, w: World, p: Place, e: Entity) => number;
@@ -18,8 +18,6 @@ export class Perceptible extends EntityProperty
 		audibility: (u: Universe, w: World, p: Place, e: Entity) => number
 	)
 	{
-		super();
-
 		this.isHiding = isHiding;
 		this.visibility = visibility;
 		this.audibility = audibility;
@@ -28,7 +26,11 @@ export class Perceptible extends EntityProperty
 		this._isHidingPrev = null;
 	}
 
-	canBeSeen(u: Universe, w: World, p: Place, entityPerceptible: Entity, entityPerceptor: Entity)
+	canBeSeen
+	(
+		u: Universe, w: World, p: Place, entityPerceptible: Entity,
+		entityPerceptor: Entity
+	): boolean
 	{
 		var perceptibleLoc = entityPerceptible.locatable().loc;
 		var perceptiblePos = perceptibleLoc.pos;
@@ -53,7 +55,11 @@ export class Perceptible extends EntityProperty
 		return isInSight;
 	}
 
-	canBeHeard(u: Universe, w: World, p: Place, entityPerceptible: Entity, entityPerceptor: Entity)
+	canBeHeard
+	(
+		u: Universe, w: World, p: Place, entityPerceptible: Entity,
+		entityPerceptor: Entity
+	): boolean
 	{
 		var perceptibleLoc = entityPerceptible.locatable().loc;
 		var perceptiblePos = perceptibleLoc.pos;
@@ -72,7 +78,12 @@ export class Perceptible extends EntityProperty
 		return isInHearing;
 	}
 
-	updateForTimerTick(u: Universe, w: World, p: Place, entity: Entity)
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+
+	updateForTimerTick(u: Universe, w: World, p: Place, entity: Entity): void
 	{
 		if (this.isHiding != this._isHidingPrev)
 		{

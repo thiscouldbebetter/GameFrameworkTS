@@ -139,7 +139,7 @@ var ThisCouldBeBetter;
                     var scriptExpression = talkNode.next;
                     var scriptToRunAsString = "( function(u, cr) { return " + scriptExpression + "; } )";
                     var scriptToRun = eval(scriptToRunAsString);
-                    var scriptResult = scriptToRun(conversationRun);
+                    var scriptResult = scriptToRun(universe, conversationRun);
                     conversationRun.variableSet(variableName, scriptResult);
                     scope.talkNodeAdvance(conversationRun);
                     conversationRun.update(universe); // hack
@@ -161,7 +161,7 @@ var ThisCouldBeBetter;
                     var scriptExpression = talkNode.next;
                     var scriptToRunAsString = "( function(u, cr) { " + scriptExpression + " = " + variableValue + "; } )";
                     var scriptToRun = eval(scriptToRunAsString);
-                    scriptToRun(conversationRun);
+                    scriptToRun(universe, conversationRun);
                     scope.talkNodeAdvance(conversationRun);
                     conversationRun.update(universe); // hack
                 }, null // activate

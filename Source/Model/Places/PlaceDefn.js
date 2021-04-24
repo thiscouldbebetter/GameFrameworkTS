@@ -16,6 +16,9 @@ var ThisCouldBeBetter;
                 this.actionToInputsMappingsEdited = GameFramework.ArrayHelper.clone(this.actionToInputsMappings);
                 this.actionToInputsMappingsByInputName = GameFramework.ArrayHelper.addLookupsMultiple(this.actionToInputsMappings, (x) => x.inputNames);
             }
+            static from4(name, actions, actionToInputsMappings, propertyNamesToProcess) {
+                return new PlaceDefn(name, actions, actionToInputsMappings, propertyNamesToProcess, null, null);
+            }
             actionToInputsMappingsEdit() {
                 GameFramework.ArrayHelper.overwriteWith(this.actionToInputsMappingsEdited, this.actionToInputsMappings);
                 this.actionToInputsMappingSelected = null;

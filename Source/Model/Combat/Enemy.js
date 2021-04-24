@@ -3,13 +3,13 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Enemy extends GameFramework.EntityProperty {
+        class Enemy {
             constructor(weapon) {
-                super();
                 this.weapon = weapon;
             }
             static activityDefnBuild() {
-                var enemyActivityPerform = (universe, world, place, actor, activity) => {
+                var enemyActivityPerform = (universe, world, place, actor) => {
+                    var activity = actor.actor().activity;
                     var actorLocatable = actor.locatable();
                     var entityToTargetPrefix = "Player";
                     var targetsPreferred = place.entities.filter(x => x.name.startsWith(entityToTargetPrefix));
@@ -30,7 +30,7 @@ var ThisCouldBeBetter;
                                 targetPreferredInHearing.locatable().loc.pos.clone();
                         }
                         else {
-                            var targetPosExisting = activity.target;
+                            var targetPosExisting = activity.target();
                             if (targetPosExisting == null) {
                                 targetPosToApproach =
                                     GameFramework.Coords.create().randomize(universe.randomizer).multiply(place.size);
@@ -40,9 +40,9 @@ var ThisCouldBeBetter;
                             }
                         }
                     }
-                    activity.target = targetPosToApproach;
+                    activity.targetSet(targetPosToApproach);
                     // hack
-                    var targetLocatable = new GameFramework.Locatable(new GameFramework.Disposition(targetPosToApproach, null, null));
+                    var targetLocatable = GameFramework.Locatable.fromPos(targetPosToApproach);
                     var enemy = actor.enemy();
                     var weapon = enemy.weapon;
                     var distanceToApproach = (weapon == null ? 4 : weapon.range);
@@ -56,6 +56,10 @@ var ThisCouldBeBetter;
                 var enemyActivityDefn = new GameFramework.ActivityDefn("Enemy", enemyActivityPerform);
                 return enemyActivityDefn;
             }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
+            updateForTimerTick(u, w, p, e) { }
         }
         GameFramework.Enemy = Enemy;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

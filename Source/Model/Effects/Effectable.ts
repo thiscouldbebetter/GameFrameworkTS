@@ -2,22 +2,21 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Effectable extends EntityProperty
+export class Effectable implements EntityProperty
 {
 	effects: Effect[];
 
 	constructor(effects: Effect[])
 	{
-		super();
 		this.effects = effects || new Array<Effect>();
 	}
 
-	effectAdd(effectToAdd: Effect)
+	effectAdd(effectToAdd: Effect): void
 	{
 		this.effects.push(effectToAdd);
 	}
 
-	effectsAsVisual()
+	effectsAsVisual(): Visual
 	{
 		var returnValue =
 		(
@@ -28,7 +27,12 @@ export class Effectable extends EntityProperty
 		return returnValue;
 	}
 
-	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity)
+	// EntityProperty.
+
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+
+	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void
 	{
 		for (var i = 0; i < this.effects.length; i++)
 		{

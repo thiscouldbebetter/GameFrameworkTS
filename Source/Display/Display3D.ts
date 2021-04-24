@@ -8,8 +8,8 @@ export class Display3D implements Display
 	sizesAvailable: Coords[];
 	fontName: string;
 	fontHeightInPixels: number;
-	colorFore: string;
-	colorBack: string;
+	colorFore: Color;
+	colorBack: Color;
 
 	canvas: HTMLCanvasElement;
 	lighting: Lighting;
@@ -29,7 +29,7 @@ export class Display3D implements Display
 	_scaleFactor: Coords;
 	_display2DOverlay: Display;
 
-	constructor(sizeInPixels: Coords, fontName: string, fontHeightInPixels: number, colorFore: string, colorBack: string)
+	constructor(sizeInPixels: Coords, fontName: string, fontHeightInPixels: number, colorFore: Color, colorBack: Color)
 	{
 		this.sizeInPixels = sizeInPixels;
 		this.sizesAvailable = [ this.sizeInPixels ];
@@ -103,7 +103,7 @@ export class Display3D implements Display
 		return this;
 	}
 
-	drawCrosshairs(center: Coords, radius: number, color: string)
+	drawCrosshairs(center: Coords, radius: number, color: Color)
 	{
 		this._display2DOverlay.drawCrosshairs(center, radius, color);
 	}
@@ -111,7 +111,7 @@ export class Display3D implements Display
 	drawEllipse
 	(
 		center: Coords, semimajorAxis: number, semiminorAxis: number,
-		rotationInTurns: number, colorFill: string, colorBorder: string
+		rotationInTurns: number, colorFill: Color, colorBorder: Color
 	)
 	{
 		this._display2DOverlay.drawEllipse
@@ -361,7 +361,7 @@ export class Display3D implements Display
 		this.drawMesh(mesh);
 	}
 
-	drawPixel(pos: Coords, color: string): void
+	drawPixel(pos: Coords, color: Color): void
 	{
 		this._display2DOverlay.drawPixel(pos, color);
 	}
@@ -434,22 +434,22 @@ export class Display3D implements Display
 	drawArc
 	(
 		center: Coords, radiusInner: number, radiusOuter: number,
-		angleStartInTurns: number, angleStopInTurns: number, colorFill: string,
-		colorBorder: string
+		angleStartInTurns: number, angleStopInTurns: number, colorFill: Color,
+		colorBorder: Color
 	)
 	{
 		this._display2DOverlay.drawArc(center, radiusInner, radiusOuter, angleStartInTurns, angleStopInTurns, colorFill, colorBorder);
 	}
 
-	drawBackground(colorBack: string, colorBorder: string)
+	drawBackground(colorBack: Color, colorBorder: Color)
 	{
 		this._display2DOverlay.drawBackground(colorBack, colorBorder);
 	}
 
 	drawCircle
 	(
-		center: Coords, radius: number, colorFill: string,
-		colorBorder: string, borderThickness: number
+		center: Coords, radius: number, colorFill: Color,
+		colorBorder: Color, borderThickness: number
 	)
 	{
 		this._display2DOverlay.drawCircle
@@ -458,7 +458,7 @@ export class Display3D implements Display
 		);
 	}
 
-	drawCircleWithGradient(center: Coords, radius: number, gradientFill: ValueBreakGroup, colorBorder: string)
+	drawCircleWithGradient(center: Coords, radius: number, gradientFill: ValueBreakGroup, colorBorder: Color)
 	{
 		this._display2DOverlay.drawCircleWithGradient(center, radius, gradientFill, colorBorder);
 	}
@@ -483,17 +483,17 @@ export class Display3D implements Display
 		this._display2DOverlay.drawImageScaled(imageToDraw, pos, size);
 	}
 
-	drawLine(fromPos: Coords, toPos: Coords, color: string, lineThickness: number)
+	drawLine(fromPos: Coords, toPos: Coords, color: Color, lineThickness: number)
 	{
 		this._display2DOverlay.drawLine(fromPos, toPos, color, lineThickness);
 	}
 
-	drawPath(vertices: Coords[], color: string, lineThickness: number, isClosed: boolean)
+	drawPath(vertices: Coords[], color: Color, lineThickness: number, isClosed: boolean)
 	{
 		this._display2DOverlay.drawPath(vertices, color, lineThickness, isClosed);
 	}
 
-	drawPolygon(vertices: Coords[], colorFill: string, colorBorder: string)
+	drawPolygon(vertices: Coords[], colorFill: Color, colorBorder: Color)
 	{
 		this._display2DOverlay.drawPolygon(vertices, colorFill, colorBorder);
 	}
@@ -502,8 +502,8 @@ export class Display3D implements Display
 	(
 		pos: Coords,
 		size : Coords,
-		colorFill: string,
-		colorBorder: string,
+		colorFill: Color,
+		colorBorder: Color,
 		areColorsReversed: boolean
 	)
 	{
@@ -515,7 +515,7 @@ export class Display3D implements Display
 
 	drawRectangleCentered
 	(
-		pos: Coords, size: Coords, colorFill: string, colorBorder: string
+		pos: Coords, size: Coords, colorFill: Color, colorBorder: Color
 	)
 	{
 		this._display2DOverlay.drawRectangleCentered(pos, size, colorFill, colorBorder);
@@ -526,8 +526,8 @@ export class Display3D implements Display
 		text: string,
 		fontHeightInPixels: number,
 		pos: Coords,
-		colorFill: string,
-		colorOutline: string,
+		colorFill: Color,
+		colorOutline: Color,
 		areColorsReversed: boolean,
 		isCentered: boolean,
 		widthMaxInPixels: number
@@ -549,7 +549,7 @@ export class Display3D implements Display
 	drawWedge
 	(
 		center: Coords, radius: number, angleStartInTurns: number,
-		angleStopInTurns: number, colorFill: string, colorBorder: string
+		angleStopInTurns: number, colorFill: Color, colorBorder: Color
 	)
 	{
 		this._display2DOverlay.drawWedge
