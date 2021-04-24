@@ -76,7 +76,7 @@ var ThisCouldBeBetter;
                         if (itemEntityToPickUp == null) {
                             return;
                         }
-                        var canPickUp = itemHolder.itemEntityCanPickUp(universe, world, place, entityActor, itemEntityToPickUp);
+                        var canPickUp = itemHolder.itemCanPickUp(universe, world, place, itemEntityToPickUp.item());
                         if (canPickUp) {
                             var actor = entityActor.actor();
                             var activity = actor.activity;
@@ -219,6 +219,7 @@ var ThisCouldBeBetter;
                     if (distance < 1) {
                         activity.isDone = true;
                         var itemHolder = entityPickingUp.itemHolder();
+                        var itemEntityGettingPickedUp = itemEntityGettingPickedUp;
                         itemHolder.itemEntityPickUp(universe, world, place, entityPickingUp, itemEntityGettingPickedUp);
                         var equipmentUser = entityPickingUp.equipmentUser();
                         if (equipmentUser != null) {

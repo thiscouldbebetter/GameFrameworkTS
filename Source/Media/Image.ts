@@ -43,7 +43,7 @@ export class Image2
 	{
 		var returnValue = new Image2(null, null);
 
-		returnValue.name = name;
+		returnValue.name = this.name;
 		returnValue.sourcePath = this.sourcePath;
 		returnValue.sizeInPixels = this.sizeInPixels.clone();
 		returnValue.systemImage = this.systemImage;

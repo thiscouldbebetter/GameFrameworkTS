@@ -114,16 +114,17 @@ var ThisCouldBeBetter;
             }
             unequipItemsNoLongerHeld(entityEquipmentUser) {
                 var itemHolder = entityEquipmentUser.itemHolder();
-                var itemEntitiesHeld = itemHolder.itemEntities;
+                var itemsHeld = itemHolder.items;
                 var sockets = this.socketGroup.sockets;
                 for (var i = 0; i < sockets.length; i++) {
                     var socket = sockets[i];
                     var socketItemEntity = socket.itemEntityEquipped;
                     if (socketItemEntity != null) {
-                        var socketItemDefnName = socketItemEntity.item().defnName;
-                        if (itemEntitiesHeld.indexOf(socketItemEntity) == -1) {
-                            var itemEntityOfSameType = itemEntitiesHeld.filter(x => x.item().defnName == socketItemDefnName)[0];
-                            socket.itemEntityEquipped = itemEntityOfSameType;
+                        var socketItem = socketItemEntity.item();
+                        var socketItemDefnName = socketItem.defnName;
+                        if (itemsHeld.indexOf(socketItem) == -1) {
+                            var itemOfSameType = itemsHeld.filter(x => x.defnName == socketItemDefnName)[0];
+                            socket.itemEntityEquipped = itemOfSameType.toEntity();
                         }
                     }
                 }
@@ -170,7 +171,7 @@ var ThisCouldBeBetter;
                         }
                     }
                 }
-                var itemEntitiesEquippable = itemHolder.itemEntities.filter(x => x.equippable() != null);
+                var itemEntitiesEquippable = itemHolder.itemEntities().filter(x => x.equippable() != null);
                 var world = universe.world;
                 var place = world.placeCurrent;
                 var listHeight = 100;

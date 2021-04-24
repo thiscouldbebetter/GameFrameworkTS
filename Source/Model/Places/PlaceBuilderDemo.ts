@@ -96,8 +96,9 @@ export class PlaceBuilderDemo // Main.
 
 		var container = this.entityBuildFromDefn(entityDefns.get("Container"), entityPosRange, randomizer);
 		var itemEntityOre = this.entityBuildFromDefn(entityDefns.get("Iron Ore"), entityPosRange, randomizer);
-		itemEntityOre.item().quantity = 3; // For crafting.
-		container.itemHolder().itemEntityAdd(itemEntityOre);
+		var itemOre = itemEntityOre.item();
+		itemOre.quantity = 3; // For crafting.
+		container.itemHolder().itemAdd(itemOre);
 		this.entities.push(container);
 
 		var randomizerSeed = this.randomizer.getNextRandom();
@@ -1776,7 +1777,7 @@ export class PlaceBuilderDemo // Main.
 						new Item("Bow", 1),
 						new Item("Key", 10),
 						new Item("Medicine", 100)
-					].map(x => x.toEntity()),
+					],
 					null, // weightMax
 					null // reachRadius
 				),
@@ -2083,8 +2084,7 @@ export class PlaceBuilderDemo // Main.
 
 			var projectileDimension = 1.5;
 
-			var itemEntityArrow = userAsItemHolder.itemEntitiesByDefnName("Arrow")[0];
-			var itemArrow = itemEntityArrow.item();
+			var itemArrow = userAsItemHolder.itemsByDefnName("Arrow")[0];
 			var itemArrowDefn = itemArrow.defn(world);
 			var projectileVisual = itemArrowDefn.visual;
 
@@ -2783,7 +2783,7 @@ export class PlaceBuilderDemo // Main.
 				)[0];
 				if (holeInRange != null)
 				{
-					var isHoleEmpty = (holeInRange.itemHolder().itemEntities.length == 0);
+					var isHoleEmpty = (holeInRange.itemHolder().items.length == 0);
 					if (isHoleEmpty)
 					{
 						p.entitiesToRemove.push(holeInRange);

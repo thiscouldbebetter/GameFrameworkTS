@@ -26,9 +26,9 @@ export class WebGLContext
 
 	// instance methods
 
-	initGL(canvas: HTMLCanvasElement)
+	initGL(canvas: HTMLCanvasElement): WebGLRenderingContext
 	{
-		var gl = canvas.getContext("experimental-webgl");
+		var gl = canvas.getContext("experimental-webgl") as WebGLRenderingContext;
 		/*
 		gl.viewportWidth = canvas.width;
 		gl.viewportHeight = canvas.height;

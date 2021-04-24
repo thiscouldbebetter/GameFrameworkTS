@@ -59,21 +59,8 @@ export class PlaceBuilderDemo_Emplacements
 					new Item("Toolset", 1)
 				],
 				[
-					new Entity
-					(
-						"", // name
-						[
-							new Item("Enhanced Armor", 1),
-							new Armor(.3)
-						]
-					),
-					new Entity
-					(
-						"", // name
-						[
-							new Item("Toolset", 1)
-						]
-					)
+					new Item("Enhanced Armor", 1),
+					new Item("Toolset", 1)
 				]
 			)
 		]);

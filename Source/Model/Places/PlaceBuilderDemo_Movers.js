@@ -402,7 +402,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Item("Iron", 3),
                     new GameFramework.Item("Key", 1),
                     new GameFramework.Item("Medicine", 4),
-                ].map(x => x.toEntity()), null, // weightMax
+                ], null, // weightMax
                 null // reachRadius
                 );
                 var route = new GameFramework.Route(GameFramework.Direction.Instances()._ByHeading, // neighborOffsets
@@ -653,7 +653,7 @@ var ThisCouldBeBetter;
                 var journalKeeper = new GameFramework.JournalKeeper(journal);
                 var itemHolder = new GameFramework.ItemHolder([
                     new GameFramework.Item("Coin", 100),
-                ].map(x => x.toEntity()), 100, // weightMax
+                ], 100, // weightMax
                 20 // reachRadius
                 );
                 var killable = new GameFramework.Killable(50, // integrity
@@ -713,10 +713,7 @@ var ThisCouldBeBetter;
                     [
                         new GameFramework.Item("Iron Ore", 3),
                     ], [
-                        new GameFramework.Entity("Iron", // name
-                        [
-                            new GameFramework.Item("Iron", 1),
-                        ])
+                        new GameFramework.Item("Iron", 1),
                     ]),
                     new GameFramework.CraftingRecipe("Potion", 0, // ticksToComplete
                     [
@@ -724,10 +721,7 @@ var ThisCouldBeBetter;
                         new GameFramework.Item("Flower", 1),
                         new GameFramework.Item("Mushroom", 1)
                     ], [
-                        new GameFramework.Entity("Potion", // name
-                        [
-                            new GameFramework.Item("Potion", 1),
-                        ])
+                        new GameFramework.Item("Potion", 1),
                     ])
                 ]);
                 var controllable = this.entityDefnBuildPlayer_Controllable();

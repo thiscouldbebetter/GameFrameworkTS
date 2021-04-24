@@ -234,7 +234,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Coords(-doorwayWidthHalf, 1, wt),
                     new GameFramework.Coords(doorwayWidthHalf, 1, wt),
                     new GameFramework.Coords(doorwayWidthHalf, -doorwayHeight, wt),
-                    new GameFramework.Coords(-doorwayWidthHalf, -doorwayHeight, wt),
+                    new GameFramework.Coords(-doorwayWidthHalf, -doorwayHeight, wt), // tl - 15
                 ], 
                 // vertexIndicesForFaces
                 [
@@ -244,7 +244,8 @@ var ThisCouldBeBetter;
                     new GameFramework.Mesh_FaceBuilder([8, 9, 10, 11]),
                     // doorframe
                     new GameFramework.Mesh_FaceBuilder([5, 12, 15, 0]),
-                    new GameFramework.Mesh_FaceBuilder([1, 14, 13, 8]),
+                    new GameFramework.Mesh_FaceBuilder([1, 14, 13, 8]), // right
+                    // todo - top - Hard to see currently.
                 ]);
                 var doorwayWidth = doorwayWidthHalf * 2;
                 var doorwayWidthReversed = 1 - doorwayWidth;
@@ -292,6 +293,7 @@ var ThisCouldBeBetter;
                         new GameFramework.Coords(1, 0, 0),
                         GameFramework.Coords.create(),
                     ]).transform(transformScaleSidesDoorframe),
+                    // todo - top
                 ];
                 var returnMeshTextured = new GameFramework.MeshTextured(returnMesh, [material], faceTextures, null).transformFaceTextures(new GameFramework.Transform_Scale(new GameFramework.Coords(1, 1, 1).multiplyScalar(2)));
                 return returnMeshTextured;
@@ -323,7 +325,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Mesh_FaceBuilder([4, 0, 1, 5]),
                     new GameFramework.Mesh_FaceBuilder([6, 2, 3, 7]),
                     new GameFramework.Mesh_FaceBuilder([0, 3, 2, 1]),
-                    new GameFramework.Mesh_FaceBuilder([5, 6, 7, 4]),
+                    new GameFramework.Mesh_FaceBuilder([5, 6, 7, 4]), // bottom
                 ]);
                 return returnMesh;
             }

@@ -32,15 +32,8 @@ var ThisCouldBeBetter;
                         new GameFramework.Item("Iron", 1),
                         new GameFramework.Item("Toolset", 1)
                     ], [
-                        new GameFramework.Entity("", // name
-                        [
-                            new GameFramework.Item("Enhanced Armor", 1),
-                            new GameFramework.Armor(.3)
-                        ]),
-                        new GameFramework.Entity("", // name
-                        [
-                            new GameFramework.Item("Toolset", 1)
-                        ])
+                        new GameFramework.Item("Enhanced Armor", 1),
+                        new GameFramework.Item("Toolset", 1)
                     ])
                 ]);
                 var itemAnvilEntityDefn = new GameFramework.Entity(anvilName, [
@@ -331,6 +324,7 @@ var ThisCouldBeBetter;
                     obstacleCollidable,
                     //new Damager(new Damage(10, null, null)),
                     new GameFramework.Drawable(obstacleRingVisual, null),
+                    // new DrawableCamera()
                 ]);
                 return obstacleRingEntityDefn;
             }
@@ -451,6 +445,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Locatable(new GameFramework.Disposition(GameFramework.Coords.create(), null, null)),
                     collidable,
                     new GameFramework.Drawable(visual, null),
+                    // new DrawableCamera()
                 ]);
                 return entityDefn;
             }

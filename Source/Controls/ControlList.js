@@ -203,7 +203,7 @@ var ThisCouldBeBetter;
             }
             mouseEnter() { }
             mouseExit() { }
-            mouseMove(movePos) { }
+            mouseMove(movePos) { return true; }
             scalePosAndSize(scaleFactor) {
                 this.pos.multiply(scaleFactor);
                 this.size.multiply(scaleFactor);

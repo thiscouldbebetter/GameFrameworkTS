@@ -57,8 +57,9 @@ var ThisCouldBeBetter;
                 this.entities.push(ring);
                 var container = this.entityBuildFromDefn(entityDefns.get("Container"), entityPosRange, randomizer);
                 var itemEntityOre = this.entityBuildFromDefn(entityDefns.get("Iron Ore"), entityPosRange, randomizer);
-                itemEntityOre.item().quantity = 3; // For crafting.
-                container.itemHolder().itemEntityAdd(itemEntityOre);
+                var itemOre = itemEntityOre.item();
+                itemOre.quantity = 3; // For crafting.
+                container.itemHolder().itemAdd(itemOre);
                 this.entities.push(container);
                 var randomizerSeed = this.randomizer.getNextRandom();
                 var place = new GameFramework.PlaceRoom(this.name, "Demo", size, this.entities, randomizerSeed);
@@ -701,6 +702,7 @@ var ThisCouldBeBetter;
                 var entityBackgroundBottom = new GameFramework.Entity("BackgroundBottom", [
                     new GameFramework.Locatable(new GameFramework.Disposition(new GameFramework.Coords(0, 0, camera.focalLength), null, null)),
                     new GameFramework.Drawable(visualBackgroundBottom, null),
+                    // new DrawableCamera()
                 ]);
                 returnValues.push(entityBackgroundBottom);
                 visualBackgroundCellSize =
@@ -712,6 +714,7 @@ var ThisCouldBeBetter;
                 var entityBackgroundTop = new GameFramework.Entity("BackgroundTop", [
                     new GameFramework.Locatable(null),
                     new GameFramework.Drawable(visualBackgroundTop, null),
+                    // new DrawableCamera()
                 ]);
                 returnValues.push(entityBackgroundTop);
                 return returnValues;
@@ -786,6 +789,7 @@ var ThisCouldBeBetter;
                         new GameFramework.Locatable(new GameFramework.Disposition(itemKeyPos, null, null)),
                         new GameFramework.Collidable(0, itemKeyCollider, null, null),
                         new GameFramework.Drawable(itemKeyVisual, null),
+                        // new DrawableCamera()
                     ]);
                     var place = GameFramework.ArrayHelper.random(places, this.randomizer);
                     place.entitiesToSpawn.push(itemKeyEntity);
@@ -976,7 +980,7 @@ var ThisCouldBeBetter;
                         new GameFramework.Item("Bow", 1),
                         new GameFramework.Item("Key", 10),
                         new GameFramework.Item("Medicine", 100)
-                    ].map(x => x.toEntity()), null, // weightMax
+                    ], null, // weightMax
                     null // reachRadius
                     ),
                     new GameFramework.Locatable(null),
@@ -1021,6 +1025,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Item(itemDefnArmorName, 1),
                     new GameFramework.Locatable(null),
                     new GameFramework.Drawable(itemArmorVisual, null),
+                    // new DrawableCamera()
                 ]);
                 return itemArmorEntityDefn;
             }
@@ -1138,6 +1143,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Locatable(null),
                     new GameFramework.Collidable(0, itemBookCollider, null, null),
                     new GameFramework.Drawable(itemBookVisual, null),
+                    // new DrawableCamera()
                 ]);
                 return itemBookEntityDefn;
             }
@@ -1170,8 +1176,7 @@ var ThisCouldBeBetter;
                         return;
                     }
                     var projectileDimension = 1.5;
-                    var itemEntityArrow = userAsItemHolder.itemEntitiesByDefnName("Arrow")[0];
-                    var itemArrow = itemEntityArrow.item();
+                    var itemArrow = userAsItemHolder.itemsByDefnName("Arrow")[0];
                     var itemArrowDefn = itemArrow.defn(world);
                     var projectileVisual = itemArrowDefn.visual;
                     var userDirection = userVel.clone().normalize();
@@ -1209,6 +1214,7 @@ var ThisCouldBeBetter;
                         new GameFramework.Collidable(0, // ticksToWaitBetweenCollisions
                         projectileCollider, [GameFramework.Killable.name], projectileCollide),
                         new GameFramework.Drawable(projectileVisual, null),
+                        // new DrawableCamera()
                     ]);
                     p.entitiesToSpawn.push(projectileEntity);
                 };
@@ -1241,6 +1247,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Locatable(null),
                     new GameFramework.Collidable(0, itemBreadCollider, null, null),
                     new GameFramework.Drawable(itemBreadVisual, null),
+                    // new DrawableCamera()
                 ]);
                 return itemBreadEntityDefn;
             }
@@ -1323,6 +1330,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Locatable(null),
                     new GameFramework.Collidable(0, itemCoinCollider, null, null),
                     new GameFramework.Drawable(itemCoinVisual, null),
+                    // new DrawableCamera()
                 ]);
                 return itemCoinEntityDefn;
             }
@@ -1350,6 +1358,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Locatable(null),
                     new GameFramework.Collidable(0, itemDoughnutCollider, null, null),
                     new GameFramework.Drawable(itemDoughnutVisual, null),
+                    // new DrawableCamera()
                 ]);
                 return itemDoughnutEntityDefn;
             }
@@ -1363,6 +1372,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Locatable(null),
                     new GameFramework.Collidable(0, collider, null, null),
                     new GameFramework.Drawable(visual, null),
+                    // new DrawableCamera()
                 ]);
                 return entityDefn;
             }
@@ -1376,6 +1386,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Locatable(null),
                     new GameFramework.Collidable(0, itemFruitCollider, null, null),
                     new GameFramework.Drawable(itemFruitVisual, null),
+                    // new DrawableCamera(),
                 ]);
                 return itemFruitEntityDefn;
             }
@@ -1399,6 +1410,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Locatable(null),
                     new GameFramework.Collidable(0, itemGrassCollider, null, null),
                     new GameFramework.Drawable(itemGrassVisual, null),
+                    // new DrawableCamera()
                 ]);
                 return itemGrassEntityDefn;
             }
@@ -1412,6 +1424,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Locatable(null),
                     new GameFramework.Collidable(0, itemHeartCollider, null, null),
                     new GameFramework.Drawable(itemHeartVisual, null),
+                    // new DrawableCamera()
                 ]);
                 return itemHeartEntityDefn;
             }
@@ -1425,6 +1438,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Locatable(null),
                     new GameFramework.Collidable(0, itemIronCollider, null, null),
                     new GameFramework.Drawable(itemIronVisual, null),
+                    // new DrawableCamera()
                 ]);
                 return itemIronEntityDefn;
             }
@@ -1438,6 +1452,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Locatable(null),
                     new GameFramework.Collidable(0, itemOreCollider, null, null),
                     new GameFramework.Drawable(itemOreVisual, null),
+                    // new DrawableCamera()
                 ]);
                 return itemOreEntityDefn;
             }
@@ -1451,6 +1466,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Locatable(null),
                     new GameFramework.Collidable(0, itemLogCollider, null, null),
                     new GameFramework.Drawable(itemLogVisual, null),
+                    // new DrawableCamera()
                 ]);
                 return itemLogEntityDefn;
             }
@@ -1495,6 +1511,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Locatable(null),
                     new GameFramework.Collidable(0, itemMushroomCollider, null, null),
                     new GameFramework.Drawable(itemMushroomVisual, null),
+                    // new DrawableCamera()
                 ]);
                 return itemMushroomEntityDefn;
             }
@@ -1548,6 +1565,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Locatable(null),
                     new GameFramework.Collidable(0, itemPotionCollider, null, null),
                     new GameFramework.Drawable(itemPotionVisual, null),
+                    // new DrawableCamera()
                 ]);
                 return itemPotionEntityDefn;
             }
@@ -1564,7 +1582,7 @@ var ThisCouldBeBetter;
                     var rangeMax = 20; // todo
                     var holeInRange = holesInPlace.filter(x => x.locatable().distanceFromEntity(eUser) < rangeMax)[0];
                     if (holeInRange != null) {
-                        var isHoleEmpty = (holeInRange.itemHolder().itemEntities.length == 0);
+                        var isHoleEmpty = (holeInRange.itemHolder().items.length == 0);
                         if (isHoleEmpty) {
                             p.entitiesToRemove.push(holeInRange);
                         }
@@ -1673,6 +1691,7 @@ var ThisCouldBeBetter;
                         new GameFramework.Locatable(projectileLoc),
                         new GameFramework.Collidable(0, projectileCollider, [GameFramework.Killable.name], projectileCollide),
                         new GameFramework.Drawable(projectileVisual, null),
+                        // new DrawableCamera()
                     ]);
                     place.entitiesToSpawn.push(projectileEntity);
                 };
@@ -1702,6 +1721,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Locatable(null),
                     new GameFramework.Collidable(0, itemToolsetCollider, null, null),
                     new GameFramework.Drawable(itemToolsetVisual, null),
+                    // new DrawableCamera()
                 ]);
                 return itemToolsetEntityDefn;
             }
@@ -1715,6 +1735,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Locatable(null),
                     new GameFramework.Collidable(0, itemTorchCollider, null, null),
                     new GameFramework.Drawable(itemTorchVisual, null),
+                    // new DrawableCamera()
                 ]);
                 return itemTorchEntityDefn;
             }
@@ -1727,6 +1748,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Locatable(null),
                     new GameFramework.Collidable(0, itemWeightCollider, null, null),
                     new GameFramework.Drawable(itemWeightVisual, null),
+                    // new DrawableCamera()
                 ]);
                 return itemWeightEntityDefn;
             }

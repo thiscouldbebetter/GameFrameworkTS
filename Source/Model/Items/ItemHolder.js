@@ -4,32 +4,33 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ItemHolder extends GameFramework.EntityProperty {
-            constructor(itemEntities, massMax, reachRadius) {
+            constructor(items, massMax, reachRadius) {
                 super();
-                this.itemEntities = [];
+                this.items = [];
                 this.massMax = massMax;
                 this.reachRadius = reachRadius || 20;
-                itemEntities = itemEntities || [];
-                for (var i = 0; i < itemEntities.length; i++) {
-                    var itemEntity = itemEntities[i];
-                    this.itemEntityAdd(itemEntity);
-                }
+                this.itemsAdd(items || []);
+            }
+            static create() {
+                return new ItemHolder([], null, null);
             }
             // Instance methods.
             clear() {
-                this.itemEntities.length = 0;
-                this.itemEntitySelected = null;
+                this.items.length = 0;
+                this.itemSelected = null;
                 this.statusMessage = "";
+                return this;
             }
             equipItemInNumberedSlot(universe, entityItemHolder, slotNumber) {
-                var entityItemToEquip = this.itemEntitySelected;
-                if (entityItemToEquip != null) {
+                var itemToEquip = this.itemSelected;
+                if (itemToEquip != null) {
                     var world = universe.world;
                     var place = world.placeCurrent;
                     var equipmentUser = entityItemHolder.equipmentUser();
                     var socketName = "Item" + slotNumber;
                     var includeSocketNameInMessage = true;
-                    var message = equipmentUser.equipItemEntityInSocketWithName(universe, world, place, entityItemHolder, entityItemToEquip, socketName, includeSocketNameInMessage);
+                    var itemEntityToEquip = itemToEquip.toEntity();
+                    var message = equipmentUser.equipItemEntityInSocketWithName(universe, world, place, entityItemHolder, itemEntityToEquip, socketName, includeSocketNameInMessage);
                     this.statusMessage = message;
                 }
             }
@@ -41,48 +42,49 @@ var ThisCouldBeBetter;
                 var returnValue = (itemExistingQuantity >= quantityToCheck);
                 return returnValue;
             }
-            itemEntitiesAdd(itemEntitiesToAdd) {
-                itemEntitiesToAdd.forEach(x => this.itemEntityAdd(x));
+            itemEntities() {
+                return this.items.map(x => x.toEntity());
             }
-            itemEntitiesAllTransferTo(other) {
-                this.itemEntitiesTransferTo(this.itemEntities, other);
+            itemsAdd(itemsToAdd) {
+                itemsToAdd.forEach((x) => this.itemAdd(x));
             }
-            itemEntitiesByDefnName(defnName) {
-                return this.itemEntities.filter(x => x.item().defnName == defnName);
+            itemsAllTransferTo(other) {
+                this.itemsTransferTo(this.items, other);
             }
-            itemEntitiesTransferTo(itemEntitiesToTransfer, other) {
-                if (itemEntitiesToTransfer == this.itemEntities) {
+            itemsByDefnName(defnName) {
+                return this.items.filter(x => x.defnName == defnName);
+            }
+            itemsTransferTo(itemsToTransfer, other) {
+                if (itemsToTransfer == this.items) {
                     // Create a new array to avoid modifying the one being looped through.
-                    itemEntitiesToTransfer = new Array();
-                    itemEntitiesToTransfer.push(...this.itemEntities);
+                    itemsToTransfer = new Array();
+                    itemsToTransfer.push(...this.items);
                 }
-                for (var i = 0; i < itemEntitiesToTransfer.length; i++) {
-                    var itemEntity = itemEntitiesToTransfer[i];
-                    this.itemEntityTransferTo(itemEntity, other);
+                for (var i = 0; i < itemsToTransfer.length; i++) {
+                    var item = itemsToTransfer[i];
+                    this.itemTransferTo(item, other);
                 }
             }
-            itemEntitiesWithDefnNameJoin(defnName) {
-                var itemEntitiesMatching = this.itemEntities.filter(x => x.item().defnName == defnName);
-                var itemEntityJoined = itemEntitiesMatching[0];
-                if (itemEntityJoined != null) {
-                    var itemJoined = itemEntityJoined.item();
-                    for (var i = 1; i < itemEntitiesMatching.length; i++) {
-                        var itemEntityToJoin = itemEntitiesMatching[i];
-                        itemJoined.quantity += itemEntityToJoin.item().quantity;
-                        GameFramework.ArrayHelper.remove(this.itemEntities, itemEntityToJoin);
+            itemsWithDefnNameJoin(defnName) {
+                var itemsMatching = this.items.filter(x => x.defnName == defnName);
+                var itemJoined = itemsMatching[0];
+                if (itemJoined != null) {
+                    for (var i = 1; i < itemsMatching.length; i++) {
+                        var itemToJoin = itemsMatching[i];
+                        itemJoined.quantity += itemToJoin.quantity;
+                        GameFramework.ArrayHelper.remove(this.items, itemToJoin);
                     }
                 }
-                return itemEntityJoined;
+                return itemJoined;
             }
-            itemEntityAdd(itemEntityToAdd) {
-                var itemToAdd = itemEntityToAdd.item();
+            itemAdd(itemToAdd) {
                 var itemDefnName = itemToAdd.defnName;
-                var itemEntityExisting = this.itemEntitiesByDefnName(itemDefnName)[0];
-                if (itemEntityExisting == null) {
-                    this.itemEntities.push(itemEntityToAdd);
+                var itemExisting = this.itemsByDefnName(itemDefnName)[0];
+                if (itemExisting == null) {
+                    this.items.push(itemToAdd);
                 }
                 else {
-                    itemEntityExisting.item().quantity += itemToAdd.quantity;
+                    itemExisting.quantity += itemToAdd.quantity;
                 }
             }
             itemEntityFindClosest(universe, world, place, entityItemHolder) {
@@ -91,54 +93,55 @@ var ThisCouldBeBetter;
                     - b.locatable().distanceFromEntity(entityItemHolder))[0];
                 return entityItemClosest;
             }
-            itemEntityCanPickUp(universe, world, place, entityItemHolder, entityItemToPickUp) {
+            itemCanPickUp(universe, world, place, itemToPickUp) {
                 var massAlreadyHeld = this.massOfAllItems(world);
-                var massOfItem = entityItemToPickUp.item().mass(world);
+                var massOfItem = itemToPickUp.mass(world);
                 var massAfterPickup = massAlreadyHeld + massOfItem;
                 var canPickUp = (massAfterPickup <= this.massMax);
                 return canPickUp;
             }
-            itemEntityPickUp(universe, world, place, entityItemHolder, entityItemToPickUp) {
-                this.itemEntityAdd(entityItemToPickUp);
-                place.entitiesToRemove.push(entityItemToPickUp);
+            itemEntityPickUp(universe, world, place, entityItemHolder, itemEntityToPickUp) {
+                var itemToPickUp = itemEntityToPickUp.item();
+                this.itemAdd(itemToPickUp);
+                place.entitiesToRemove.push(itemEntityToPickUp);
             }
-            itemEntityRemove(itemEntityToRemove) {
-                var doesExist = this.itemEntities.indexOf(itemEntityToRemove) >= 0;
+            itemRemove(itemToRemove) {
+                var doesExist = this.items.indexOf(itemToRemove) >= 0;
                 if (doesExist) {
-                    GameFramework.ArrayHelper.remove(this.itemEntities, itemEntityToRemove);
+                    GameFramework.ArrayHelper.remove(this.items, itemToRemove);
                 }
             }
-            itemEntitySplit(itemEntityToSplit, quantityToSplit) {
-                var itemEntitySplitted = null;
-                var itemToSplit = itemEntityToSplit.item();
+            itemSplit(itemToSplit, quantityToSplit) {
+                var itemSplitted = null;
                 if (itemToSplit.quantity <= 1) {
-                    itemEntitySplitted = itemEntityToSplit;
+                    itemSplitted = itemToSplit;
                 }
                 else {
-                    quantityToSplit = quantityToSplit || Math.floor(itemToSplit.quantity / 2);
+                    quantityToSplit =
+                        quantityToSplit || Math.floor(itemToSplit.quantity / 2);
                     if (quantityToSplit >= itemToSplit.quantity) {
-                        itemEntitySplitted = itemEntityToSplit;
+                        itemSplitted = itemToSplit;
                     }
                     else {
                         itemToSplit.quantity -= quantityToSplit;
-                        itemEntitySplitted = itemEntityToSplit.clone();
-                        itemEntitySplitted.item().quantity = quantityToSplit;
+                        itemSplitted = itemToSplit.clone();
+                        itemSplitted.quantity = quantityToSplit;
                         // Add with no join.
-                        GameFramework.ArrayHelper.insertElementAfterOther(this.itemEntities, itemEntitySplitted, itemEntityToSplit);
+                        GameFramework.ArrayHelper.insertElementAfterOther(this.items, itemSplitted, itemToSplit);
                     }
                 }
-                return itemEntitySplitted;
+                return itemSplitted;
             }
-            itemEntityTransferTo(itemEntity, other) {
-                other.itemEntityAdd(itemEntity);
-                GameFramework.ArrayHelper.remove(this.itemEntities, itemEntity);
-                if (this.itemEntitySelected == itemEntity) {
-                    this.itemEntitySelected = null;
+            itemTransferTo(item, other) {
+                other.itemAdd(item);
+                GameFramework.ArrayHelper.remove(this.items, item);
+                if (this.itemSelected == item) {
+                    this.itemSelected = null;
                 }
             }
-            itemEntityTransferSingleTo(itemEntity, other) {
-                var itemEntitySingle = this.itemEntitySplit(itemEntity, 1);
-                this.itemEntityTransferTo(itemEntitySingle, other);
+            itemTransferSingleTo(item, other) {
+                var itemSingle = this.itemSplit(item, 1);
+                this.itemTransferTo(itemSingle, other);
             }
             itemQuantityByDefnName(defnName) {
                 return this.itemsByDefnName(defnName).map(y => y.quantity).reduce((a, b) => a + b, 0);
@@ -147,31 +150,31 @@ var ThisCouldBeBetter;
                 this.itemSubtractDefnNameAndQuantity(itemToSubtract.defnName, itemToSubtract.quantity);
             }
             itemSubtractDefnNameAndQuantity(itemDefnName, quantityToSubtract) {
-                this.itemEntitiesWithDefnNameJoin(itemDefnName);
+                this.itemsWithDefnNameJoin(itemDefnName);
                 var itemExisting = this.itemsByDefnName(itemDefnName)[0];
                 if (itemExisting != null) {
                     itemExisting.quantity -= quantityToSubtract;
                     if (itemExisting.quantity <= 0) {
-                        var itemEntityExisting = this.itemEntitiesByDefnName(itemDefnName)[0];
-                        GameFramework.ArrayHelper.remove(this.itemEntities, itemEntityExisting);
+                        var itemExisting = this.itemsByDefnName(itemDefnName)[0];
+                        GameFramework.ArrayHelper.remove(this.items, itemExisting);
                     }
                 }
             }
-            itemTransferTo(itemToTransfer, other) {
+            itemTransferTo2(itemToTransfer, other) {
                 var itemDefnName = itemToTransfer.defnName;
-                this.itemEntitiesWithDefnNameJoin(itemDefnName);
-                var itemEntityExisting = this.itemEntitiesByDefnName(itemDefnName)[0];
-                if (itemEntityExisting != null) {
-                    var itemEntityToTransfer = this.itemEntitySplit(itemEntityExisting, itemToTransfer.quantity);
-                    other.itemEntityAdd(itemEntityToTransfer.clone());
+                this.itemsWithDefnNameJoin(itemDefnName);
+                var itemExisting = this.itemsByDefnName(itemDefnName)[0];
+                if (itemExisting != null) {
+                    var itemToTransfer = this.itemSplit(itemExisting, itemToTransfer.quantity);
+                    other.itemAdd(itemToTransfer.clone());
                     this.itemSubtract(itemToTransfer);
                 }
             }
-            itemsByDefnName(defnName) {
-                return this.itemEntitiesByDefnName(defnName).map(x => x.item());
+            itemsByDefnName2(defnName) {
+                return this.itemsByDefnName(defnName);
             }
             massOfAllItems(world) {
-                var massTotal = this.itemEntities.reduce((sumSoFar, itemEntity) => sumSoFar + itemEntity.item().mass(world), 0 // sumSoFar
+                var massTotal = this.items.reduce((sumSoFar, item) => sumSoFar + item.mass(world), 0 // sumSoFar
                 );
                 return massTotal;
             }
@@ -179,7 +182,7 @@ var ThisCouldBeBetter;
                 return "" + Math.ceil(this.massOfAllItems(world)) + "/" + this.massMax;
             }
             tradeValueOfAllItems(world) {
-                var tradeValueTotal = this.itemEntities.reduce((sumSoFar, itemEntity) => sumSoFar + itemEntity.item().tradeValue(world), 0 // sumSoFar
+                var tradeValueTotal = this.items.reduce((sumSoFar, item) => sumSoFar + item.tradeValue(world), 0 // sumSoFar
                 );
                 return tradeValueTotal;
             }
@@ -201,7 +204,7 @@ var ThisCouldBeBetter;
                     universe.venueNext = venueNext;
                 };
                 var drop = () => {
-                    var itemEntityToKeep = itemHolder.itemEntitySelected;
+                    var itemEntityToKeep = itemHolder.itemSelected.toEntity();
                     if (itemEntityToKeep != null) {
                         var world = universe.world;
                         var place = world.placeCurrent;
@@ -226,7 +229,7 @@ var ThisCouldBeBetter;
                         place.entitySpawn(universe, world, itemEntityToDrop);
                         itemHolder.itemSubtract(itemToDrop);
                         if (itemEntityToKeep.item().quantity == 0) {
-                            itemHolder.itemEntitySelected = null;
+                            itemHolder.itemSelected = null;
                         }
                         itemHolder.statusMessage = itemToDropDefn.appearance + " dropped.";
                         var equipmentUser = entityItemHolder.equipmentUser();
@@ -236,7 +239,7 @@ var ThisCouldBeBetter;
                     }
                 };
                 var use = () => {
-                    var itemEntityToUse = itemHolder.itemEntitySelected;
+                    var itemEntityToUse = itemHolder.itemSelected.toEntity();
                     if (itemEntityToUse != null) {
                         var itemToUse = itemEntityToUse.item();
                         if (itemToUse.use != null) {
@@ -246,149 +249,142 @@ var ThisCouldBeBetter;
                             itemHolder.statusMessage =
                                 itemToUse.use(universe, world, place, user, itemEntityToUse);
                             if (itemToUse.quantity <= 0) {
-                                itemHolder.itemEntitySelected = null;
+                                itemHolder.itemSelected = null;
                             }
                         }
                     }
                 };
                 var up = () => {
-                    var itemEntityToMove = itemHolder.itemEntitySelected;
-                    var itemEntitiesAll = itemHolder.itemEntities;
-                    var index = itemEntitiesAll.indexOf(itemEntityToMove);
+                    var itemToMove = itemHolder.itemSelected;
+                    var itemsAll = itemHolder.items;
+                    var index = itemsAll.indexOf(itemToMove);
                     if (index > 0) {
-                        itemEntitiesAll.splice(index, 1);
-                        itemEntitiesAll.splice(index - 1, 0, itemEntityToMove);
+                        itemsAll.splice(index, 1);
+                        itemsAll.splice(index - 1, 0, itemToMove);
                     }
                 };
                 var down = () => {
-                    var itemEntityToMove = itemHolder.itemEntitySelected;
-                    var itemEntitiesAll = itemHolder.itemEntities;
-                    var index = itemEntitiesAll.indexOf(itemEntityToMove);
-                    if (index < itemEntitiesAll.length - 1) {
-                        itemEntitiesAll.splice(index, 1);
-                        itemEntitiesAll.splice(index + 1, 0, itemEntityToMove);
+                    var itemToMove = itemHolder.itemSelected;
+                    var itemsAll = itemHolder.items;
+                    var index = itemsAll.indexOf(itemToMove);
+                    if (index < itemsAll.length - 1) {
+                        itemsAll.splice(index, 1);
+                        itemsAll.splice(index + 1, 0, itemToMove);
                     }
                 };
                 var split = (universe) => {
-                    itemHolder.itemEntitySplit(itemHolder.itemEntitySelected, null);
+                    itemHolder.itemSplit(itemHolder.itemSelected, null);
                 };
                 var join = () => {
-                    var itemEntityToJoin = itemHolder.itemEntitySelected;
-                    var itemToJoin = itemEntityToJoin.item();
-                    var itemEntityJoined = itemHolder.itemEntitiesWithDefnNameJoin(itemToJoin.defnName);
-                    itemHolder.itemEntitySelected = itemEntityJoined;
+                    var itemToJoin = itemHolder.itemSelected;
+                    var itemJoined = itemHolder.itemsWithDefnNameJoin(itemToJoin.defnName);
+                    itemHolder.itemSelected = itemJoined;
                 };
                 var sort = () => {
-                    itemHolder.itemEntities.sort((x, y) => (x.item().defnName > y.item().defnName ? 1 : -1));
+                    itemHolder.items.sort((x, y) => (x.defnName > y.defnName ? 1 : -1));
                 };
-                var buttonSize = new GameFramework.Coords(20, 10, 0);
+                var buttonSize = GameFramework.Coords.fromXY(20, 10);
                 var visualNone = new GameFramework.VisualNone();
                 var childControls = [
-                    new GameFramework.ControlLabel("labelItemsHeld", new GameFramework.Coords(10, 5, 0), // pos
-                    new GameFramework.Coords(70, 25, 0), // size
+                    new GameFramework.ControlLabel("labelItemsHeld", GameFramework.Coords.fromXY(10, 5), // pos
+                    GameFramework.Coords.fromXY(70, 25), // size
                     false, // isTextCentered
                     "Items Held:", fontHeightSmall),
-                    new GameFramework.ControlList("listItems", new GameFramework.Coords(10, 15, 0), // pos
-                    new GameFramework.Coords(70, 100, 0), // size
-                    new GameFramework.DataBinding(this.itemEntities, null, null), // items
-                    new GameFramework.DataBinding(null, (c) => c.item().toString(world), null), // bindingForItemText
-                    fontHeightSmall, new GameFramework.DataBinding(this, (c) => c.itemEntitySelected, (c, v) => { c.itemEntitySelected = v; }), // bindingForItemSelected
+                    new GameFramework.ControlList("listItems", GameFramework.Coords.fromXY(10, 15), // pos
+                    GameFramework.Coords.fromXY(70, 100), // size
+                    GameFramework.DataBinding.fromContext(this.items), // items
+                    GameFramework.DataBinding.fromGet((c) => c.toString(world)), // bindingForItemText
+                    fontHeightSmall, new GameFramework.DataBinding(this, (c) => c.itemSelected, (c, v) => c.itemSelected = v), // bindingForItemSelected
                     GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
                     GameFramework.DataBinding.fromContext(true), // isEnabled
-                    (universe) => // confirm
-                     {
-                        use();
-                    }, null),
-                    new GameFramework.ControlLabel("infoWeight", new GameFramework.Coords(10, 115, 0), // pos
-                    new GameFramework.Coords(100, 25, 0), // size
+                    use, null),
+                    new GameFramework.ControlLabel("infoWeight", GameFramework.Coords.fromXY(10, 115), // pos
+                    GameFramework.Coords.fromXY(100, 25), // size
                     false, // isTextCentered
-                    new GameFramework.DataBinding(this, (c) => "Weight: " + c.massOfAllItemsOverMax(world), null), fontHeightSmall),
-                    new GameFramework.ControlButton("buttonUp", new GameFramework.Coords(85, 15, 0), // pos
-                    new GameFramework.Coords(15, 10, 0), // size
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => "Weight: " + c.massOfAllItemsOverMax(world)), fontHeightSmall),
+                    new GameFramework.ControlButton("buttonUp", GameFramework.Coords.fromXY(85, 15), // pos
+                    GameFramework.Coords.fromXY(15, 10), // size
                     "Up", fontHeightSmall, true, // hasBorder
-                    new GameFramework.DataBinding(this, (c) => {
-                        var returnValue = (c.itemEntitySelected != null
-                            && c.itemEntities.indexOf(c.itemEntitySelected) > 0);
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => {
+                        var returnValue = (c.itemSelected != null
+                            && c.items.indexOf(c.itemSelected) > 0);
                         return returnValue;
-                    }, null), // isEnabled
+                    }), // isEnabled
                     up, // click
                     null, null),
-                    new GameFramework.ControlButton("buttonDown", new GameFramework.Coords(85, 30, 0), // pos
-                    new GameFramework.Coords(15, 10, 0), // size
+                    GameFramework.ControlButton.from8("buttonDown", GameFramework.Coords.fromXY(85, 30), // pos
+                    GameFramework.Coords.fromXY(15, 10), // size
                     "Down", fontHeightSmall, true, // hasBorder
-                    new GameFramework.DataBinding(this, (c) => {
-                        var returnValue = (c.itemEntitySelected != null
-                            && c.itemEntities.indexOf(c.itemEntitySelected) < c.itemEntities.length - 1);
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => {
+                        var returnValue = (c.itemSelected != null
+                            && c.items.indexOf(c.itemSelected) < c.items.length - 1);
                         return returnValue;
-                    }, null), // isEnabled
-                    down, null, null),
-                    new GameFramework.ControlButton("buttonSplit", new GameFramework.Coords(85, 45, 0), // pos
-                    new GameFramework.Coords(15, 10, 0), // size
+                    }), // isEnabled
+                    down),
+                    GameFramework.ControlButton.from8("buttonSplit", GameFramework.Coords.fromXY(85, 45), // pos
+                    GameFramework.Coords.fromXY(15, 10), // size
                     "Split", fontHeightSmall, true, // hasBorder
-                    new GameFramework.DataBinding(this, (c) => {
-                        var itemEntity = c.itemEntitySelected;
-                        var returnValue = (itemEntity != null
-                            && (itemEntity.item().quantity > 1));
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => {
+                        var item = c.itemSelected;
+                        var returnValue = (item != null
+                            && (item.quantity > 1));
                         return returnValue;
-                    }, null), // isEnabled
-                    split, null, null),
-                    new GameFramework.ControlButton("buttonJoin", new GameFramework.Coords(85, 60, 0), // pos
-                    new GameFramework.Coords(15, 10, 0), // size
+                    }), // isEnabled
+                    split),
+                    GameFramework.ControlButton.from8("buttonJoin", GameFramework.Coords.fromXY(85, 60), // pos
+                    GameFramework.Coords.fromXY(15, 10), // size
                     "Join", fontHeightSmall, true, // hasBorder
-                    new GameFramework.DataBinding(this, (c) => {
-                        var returnValue = (c.itemEntitySelected != null
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => {
+                        var returnValue = (c.itemSelected != null
                             &&
-                                (c.itemEntities.filter((x) => x.item().defnName == c.itemEntitySelected.item().defnName).length > 1));
+                                (c.items.filter((x) => x.defnName == c.itemSelected.defnName).length > 1));
                         return returnValue;
-                    }, null), // isEnabled
-                    join, null, null),
-                    new GameFramework.ControlButton("buttonSort", new GameFramework.Coords(85, 75, 0), // pos
-                    new GameFramework.Coords(15, 10, 0), // size
+                    }), // isEnabled
+                    join),
+                    GameFramework.ControlButton.from8("buttonSort", GameFramework.Coords.fromXY(85, 75), // pos
+                    GameFramework.Coords.fromXY(15, 10), // size
                     "Sort", fontHeightSmall, true, // hasBorder
-                    new GameFramework.DataBinding(this, (c) => (c.itemEntities.length > 1), null), // isEnabled
-                    sort, null, null),
-                    new GameFramework.ControlLabel("labelItemSelected", new GameFramework.Coords(150, 10, 0), // pos
-                    new GameFramework.Coords(100, 15, 0), // size
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.itemEntities.length > 1)), // isEnabled
+                    sort),
+                    new GameFramework.ControlLabel("labelItemSelected", GameFramework.Coords.fromXY(150, 10), // pos
+                    GameFramework.Coords.fromXY(100, 15), // size
                     true, // isTextCentered
                     "Item Selected:", fontHeightSmall),
-                    new GameFramework.ControlLabel("infoItemSelected", new GameFramework.Coords(150, 20, 0), // pos
-                    new GameFramework.Coords(200, 15, 0), // size
+                    new GameFramework.ControlLabel("infoItemSelected", GameFramework.Coords.fromXY(150, 20), // pos
+                    GameFramework.Coords.fromXY(200, 15), // size
                     true, // isTextCentered
-                    new GameFramework.DataBinding(this, (c) => {
-                        var i = c.itemEntitySelected;
-                        return (i == null ? "-" : i.item().toString(world));
-                    }, null), // text
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => {
+                        var i = c.itemSelected;
+                        return (i == null ? "-" : i.toString(world));
+                    }), // text
                     fontHeightSmall),
-                    new GameFramework.ControlVisual("visualImage", new GameFramework.Coords(125, 25, 0), // pos
-                    new GameFramework.Coords(50, 50, 0), // size
-                    new GameFramework.DataBinding(this, (c) => {
-                        var i = c.itemEntitySelected;
-                        return (i == null ? visualNone : i.item().defn(world).visual);
-                    }, null), GameFramework.Color.byName("Black"), // colorBackground
+                    new GameFramework.ControlVisual("visualImage", GameFramework.Coords.fromXY(125, 25), // pos
+                    GameFramework.Coords.fromXY(50, 50), // size
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => {
+                        var i = c.itemSelected;
+                        return (i == null ? visualNone : i.defn(world).visual);
+                    }), GameFramework.Color.byName("Black"), // colorBackground
                     null),
-                    new GameFramework.ControlLabel("infoStatus", new GameFramework.Coords(150, 115, 0), // pos
-                    new GameFramework.Coords(200, 15, 0), // size
+                    new GameFramework.ControlLabel("infoStatus", GameFramework.Coords.fromXY(150, 115), // pos
+                    GameFramework.Coords.fromXY(200, 15), // size
                     true, // isTextCentered
-                    new GameFramework.DataBinding(this, (c) => c.statusMessage, null), // text
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => c.statusMessage), // text
                     fontHeightSmall),
-                    new GameFramework.ControlButton("buttonUse", new GameFramework.Coords(132.5, 95, 0), // pos
-                    new GameFramework.Coords(15, 10, 0), // size
+                    GameFramework.ControlButton.from8("buttonUse", GameFramework.Coords.fromXY(132.5, 95), // pos
+                    GameFramework.Coords.fromXY(15, 10), // size
                     "Use", fontHeightSmall, true, // hasBorder
-                    new GameFramework.DataBinding(this, (c) => {
-                        var itemEntity = c.itemEntitySelected;
-                        return (itemEntity != null && itemEntity.item().isUsable(world));
-                    }, null), // isEnabled
-                    (universe) => {
-                        use();
-                    }, null, null),
-                    new GameFramework.ControlButton("buttonDrop", new GameFramework.Coords(152.5, 95, 0), // pos
-                    new GameFramework.Coords(15, 10, 0), // size
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => {
+                        var item = c.itemSelected;
+                        return (item != null && item.isUsable(world));
+                    }), // isEnabled
+                    use // click
+                    ),
+                    GameFramework.ControlButton.from8("buttonDrop", GameFramework.Coords.fromXY(152.5, 95), // pos
+                    GameFramework.Coords.fromXY(15, 10), // size
                     "Drop", fontHeightSmall, true, // hasBorder
-                    new GameFramework.DataBinding(this, (c) => (c.itemEntitySelected != null), null), // isEnabled
-                    (universe) => // click
-                     {
-                        drop();
-                    }, null, null)
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.itemSelected != null)), // isEnabled
+                    drop // click
+                    )
                 ];
                 var returnValue = new GameFramework.ControlContainer("Items", GameFramework.Coords.create(), // pos
                 sizeBase.clone(), // size
@@ -401,7 +397,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Action("Sort", sort),
                     new GameFramework.Action("Drop", drop),
                     new GameFramework.Action("Use", use),
-                    new GameFramework.Action("Item0", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 0)),
+                    new GameFramework.Action("Item0", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, null)),
                     new GameFramework.Action("Item1", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 1)),
                     new GameFramework.Action("Item2", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 2)),
                     new GameFramework.Action("Item3", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 3)),
@@ -433,16 +429,16 @@ var ThisCouldBeBetter;
                 ]);
                 if (includeTitleAndDoneButton) {
                     childControls.splice(0, // indexToInsertAt
-                    0, new GameFramework.ControlLabel("labelItems", new GameFramework.Coords(100, -5, 0), // pos
-                    new GameFramework.Coords(100, 25, 0), // size
+                    0, new GameFramework.ControlLabel("labelItems", GameFramework.Coords.fromXY(100, -5), // pos
+                    GameFramework.Coords.fromXY(100, 25), // size
                     true, // isTextCentered
                     "Items", fontHeightLarge));
-                    childControls.push(new GameFramework.ControlButton("buttonDone", new GameFramework.Coords(170, 115, 0), // pos
+                    childControls.push(new GameFramework.ControlButton("buttonDone", GameFramework.Coords.fromXY(170, 115), // pos
                     buttonSize.clone(), "Done", fontHeightSmall, true, // hasBorder
                     true, // isEnabled
                     back, // click
                     null, null));
-                    var titleHeight = new GameFramework.Coords(0, 15, 0);
+                    var titleHeight = GameFramework.Coords.fromXY(0, 15);
                     sizeBase.add(titleHeight);
                     returnValue.size.add(titleHeight);
                     returnValue.shiftChildPositions(titleHeight);
@@ -453,7 +449,7 @@ var ThisCouldBeBetter;
             }
             // cloneable
             clone() {
-                return new ItemHolder(GameFramework.ArrayHelper.clone(this.itemEntities), this.massMax, this.reachRadius);
+                return new ItemHolder(GameFramework.ArrayHelper.clone(this.items), this.massMax, this.reachRadius);
             }
         }
         GameFramework.ItemHolder = ItemHolder;

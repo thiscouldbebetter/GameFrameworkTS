@@ -828,7 +828,7 @@ export class PlaceBuilderDemo_Movers
 				new Item("Iron", 3),
 				new Item("Key", 1),
 				new Item("Medicine", 4),
-			].map(x => x.toEntity()),
+			],
 			null, // weightMax
 			null // reachRadius
 		);
@@ -1320,7 +1320,7 @@ export class PlaceBuilderDemo_Movers
 		(
 			[
 				new Item("Coin", 100),
-			].map(x => x.toEntity() ),
+			],
 			100, // weightMax
 			20 // reachRadius
 		);
@@ -1427,13 +1427,7 @@ export class PlaceBuilderDemo_Movers
 					new Item("Iron Ore", 3),
 				],
 				[
-					new Entity
-					(
-						"Iron", // name
-						[
-							new Item("Iron", 1),
-						]
-					)
+					new Item("Iron", 1),
 				]
 			),
 
@@ -1447,13 +1441,7 @@ export class PlaceBuilderDemo_Movers
 					new Item("Mushroom", 1)
 				],
 				[
-					new Entity
-					(
-						"Potion", // name
-						[
-							new Item("Potion", 1),
-						]
-					)
+					new Item("Potion", 1),
 				]
 			)
 		]);

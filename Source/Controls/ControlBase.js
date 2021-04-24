@@ -24,7 +24,7 @@ var ThisCouldBeBetter;
             mouseClick(x) { return false; }
             mouseEnter() { this.isHighlighted = true; }
             mouseExit() { this.isHighlighted = false; }
-            mouseMove(x) { }
+            mouseMove(x) { return false; }
             scalePosAndSize(x) { }
             style(universe) {
                 var returnValue = (this.styleName == null

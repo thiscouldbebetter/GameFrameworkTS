@@ -148,9 +148,9 @@ export class PlaceBuilderDemo_Actions
 						return;
 					}
 
-					var canPickUp = itemHolder.itemEntityCanPickUp
+					var canPickUp = itemHolder.itemCanPickUp
 					(
-						universe, world, place, entityActor, itemEntityToPickUp
+						universe, world, place, itemEntityToPickUp.item()
 					);
 
 					if (canPickUp)
@@ -373,9 +373,11 @@ export class PlaceBuilderDemo_Actions
 					activity.isDone = true;
 
 					var itemHolder = entityPickingUp.itemHolder();
+					var itemEntityGettingPickedUp = itemEntityGettingPickedUp;
 					itemHolder.itemEntityPickUp
 					(
-						universe, world, place, entityPickingUp, itemEntityGettingPickedUp
+						universe, world, place, entityPickingUp,
+						itemEntityGettingPickedUp
 					);
 
 					var equipmentUser = entityPickingUp.equipmentUser();

@@ -391,7 +391,7 @@ export class ControlList extends ControlBase
 
 	mouseExit() {}
 
-	mouseMove(movePos: Coords) {}
+	mouseMove(movePos: Coords): boolean { return true; }
 
 	scalePosAndSize(scaleFactor: Coords)
 	{

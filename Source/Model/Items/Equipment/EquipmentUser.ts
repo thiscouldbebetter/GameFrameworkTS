@@ -21,7 +21,7 @@ export class EquipmentUser extends EntityProperty
 	(
 		universe: Universe, world: World, place: Place,
 		entityEquipmentUser: Entity, itemEntityToEquip: Entity
-	)
+	): string
 	{
 		if (itemEntityToEquip == null)
 		{
@@ -72,7 +72,7 @@ export class EquipmentUser extends EntityProperty
 		entityEquipmentUser: Entity,
 		itemEntityToEquip: Entity,
 		includeSocketNameInMessage: boolean
-	)
+	): void
 	{
 		var itemToEquipDefnName = itemEntityToEquip.item().defnName;
 		var socketFound = null;
@@ -117,7 +117,7 @@ export class EquipmentUser extends EntityProperty
 		itemEntityToEquip: Entity,
 		socketName: string,
 		includeSocketNameInMessage: boolean
-	)
+	): string
 	{
 		if (itemEntityToEquip == null) { return "Nothing to equip!"; }
 
@@ -166,18 +166,18 @@ export class EquipmentUser extends EntityProperty
 		return message;
 	}
 
-	itemEntityInSocketWithName(socketName: string)
+	itemEntityInSocketWithName(socketName: string): Entity
 	{
 		var socket = this.socketByName(socketName);
 		return socket.itemEntityEquipped;
 	}
 
-	socketByName(socketName: string)
+	socketByName(socketName: string): EquipmentSocket
 	{
 		return this.socketGroup.socketsByDefnName.get(socketName);
 	}
 
-	unequipItemFromSocketWithName(world: World, socketName: string)
+	unequipItemFromSocketWithName(world: World, socketName: string): string
 	{
 		var message;
 		var socketToUnequipFrom = this.socketGroup.socketsByDefnName.get(socketName);
@@ -203,10 +203,10 @@ export class EquipmentUser extends EntityProperty
 		return message;
 	}
 
-	unequipItemsNoLongerHeld(entityEquipmentUser: Entity)
+	unequipItemsNoLongerHeld(entityEquipmentUser: Entity): void
 	{
 		var itemHolder = entityEquipmentUser.itemHolder();
-		var itemEntitiesHeld = itemHolder.itemEntities;
+		var itemsHeld = itemHolder.items;
 		var sockets = this.socketGroup.sockets;
 		for (var i = 0; i < sockets.length; i++)
 		{
@@ -214,20 +214,21 @@ export class EquipmentUser extends EntityProperty
 			var socketItemEntity = socket.itemEntityEquipped;
 			if (socketItemEntity != null)
 			{
-				var socketItemDefnName = socketItemEntity.item().defnName;
-				if (itemEntitiesHeld.indexOf(socketItemEntity) == -1)
+				var socketItem = socketItemEntity.item();
+				var socketItemDefnName = socketItem.defnName;
+				if (itemsHeld.indexOf(socketItem) == -1)
 				{
-					var itemEntityOfSameType = itemEntitiesHeld.filter
+					var itemOfSameType = itemsHeld.filter
 					(
-						x => x.item().defnName == socketItemDefnName
+						x => x.defnName == socketItemDefnName
 					)[0];
-					socket.itemEntityEquipped = itemEntityOfSameType;
+					socket.itemEntityEquipped = itemOfSameType.toEntity();
 				}
 			}
 		}
 	}
 
-	unequipItemEntity(itemEntityToUnequip: Entity)
+	unequipItemEntity(itemEntityToUnequip: Entity): void
 	{
 		var socket = this.socketGroup.sockets.filter
 		(
@@ -239,7 +240,11 @@ export class EquipmentUser extends EntityProperty
 		}
 	}
 
-	useItemInSocketNumbered(universe: Universe, world: World, place: Place, actor: Entity, socketNumber: number)
+	useItemInSocketNumbered
+	(
+		universe: Universe, world: World, place: Place, actor: Entity,
+		socketNumber: number
+	): void
 	{
 		var equipmentUser = actor.equipmentUser();
 		var socketName = "Item" + socketNumber;
@@ -258,7 +263,7 @@ export class EquipmentUser extends EntityProperty
 	(
 		universe: Universe, size: Coords, entityEquipmentUser: Entity,
 		venuePrev: Venue, includeTitleAndDoneButton: boolean
-	)
+	): ControlBase
 	{
 		this.statusMessage = "Equip items in available slots.";
 
@@ -293,7 +298,10 @@ export class EquipmentUser extends EntityProperty
 				}
 			}
 		}
-		var itemEntitiesEquippable = itemHolder.itemEntities.filter(x => x.equippable() != null)
+		var itemEntitiesEquippable = itemHolder.itemEntities().filter
+		(
+			x => x.equippable() != null
+		);
 
 		var world = universe.world;
 		var place = world.placeCurrent;
@@ -387,7 +395,10 @@ export class EquipmentUser extends EntityProperty
 		var unequipFromSocketSelected = () =>
 		{
 			var socketToUnequipFrom = equipmentUser.socketSelected;
-			var message = equipmentUser.unequipItemFromSocketWithName(world, socketToUnequipFrom.defnName);
+			var message = equipmentUser.unequipItemFromSocketWithName
+			(
+				world, socketToUnequipFrom.defnName
+			);
 			equipmentUser.statusMessage = message;
 		};
 
