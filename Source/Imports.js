@@ -265,5 +265,3 @@ var URLParser = gf.URLParser;
 var ValueBreak = gf.ValueBreak;
 var ValueBreakGroup = gf.ValueBreakGroup;
 var VenueTask = gf.VenueTask;
-// Utility - Network.
-var Networ = gf.Network;

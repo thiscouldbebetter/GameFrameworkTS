@@ -28,7 +28,20 @@ export class World
 		this.placeNext = this.places[0];
 	}
 
-	draw(universe: Universe)
+	static default(): World
+	{
+		return new World
+		(
+			"name",
+			DateTime.now(),
+			WorldDefn.default(),
+			[
+				Place.default()
+			] // places
+		);
+	}
+
+	draw(universe: Universe): void
 	{
 		if (this.placeCurrent != null)
 		{
@@ -36,7 +49,7 @@ export class World
 		}
 	}
 
-	initialize(universe: Universe)
+	initialize(universe: Universe): void
 	{
 		if (this.placeNext != null)
 		{
@@ -54,22 +67,22 @@ export class World
 		}
 	}
 
-	timePlayingAsStringShort(universe: Universe)
+	timePlayingAsStringShort(universe: Universe): string
 	{
 		return universe.timerHelper.ticksToStringH_M_S(this.timerTicksSoFar);
 	}
 
-	timePlayingAsStringLong(universe: Universe)
+	timePlayingAsStringLong(universe: Universe): string
 	{
 		return universe.timerHelper.ticksToStringHours_Minutes_Seconds(this.timerTicksSoFar);
 	}
 
-	toVenue()
+	toVenue(): VenueWorld
 	{
 		return new VenueWorld(this);
 	}
 
-	updateForTimerTick(universe: Universe)
+	updateForTimerTick(universe: Universe): void
 	{
 		if (this.placeNext != null)
 		{
@@ -87,7 +100,7 @@ export class World
 
 	// Controls.
 
-	toControl(universe: Universe)
+	toControl(universe: Universe): ControlBase
 	{
 		return this.placeCurrent.toControl(universe, this);
 	}

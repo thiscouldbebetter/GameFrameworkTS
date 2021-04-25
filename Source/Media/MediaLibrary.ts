@@ -21,17 +21,21 @@ export class MediaLibrary
 
 	timer: any;
 
-	constructor(images: Image2[], sounds: Sound[], videos: Video[], fonts: Font[], textStrings: TextString[])
+	constructor
+	(
+		images: Image2[], sounds: Sound[], videos: Video[],
+		fonts: Font[], textStrings: TextString[]
+	)
 	{
-		this.images = images;
+		this.images = images || [];
 		this.imagesByName = ArrayHelper.addLookupsByName(this.images);
-		this.sounds = sounds;
+		this.sounds = sounds || [];
 		this.soundsByName = ArrayHelper.addLookupsByName(this.sounds);
-		this.videos = videos;
+		this.videos = videos || [];
 		this.videosByName = ArrayHelper.addLookupsByName(this.videos);
-		this.fonts = fonts;
+		this.fonts = fonts || [];
 		this.fontsByName = ArrayHelper.addLookupsByName(this.fonts);
-		this.textStrings = textStrings;
+		this.textStrings = textStrings || [];
 		this.textStringsByName = ArrayHelper.addLookupsByName(this.textStrings);
 
 		this.collectionsAll =
@@ -51,7 +55,12 @@ export class MediaLibrary
 		this.collectionsByName.set("TextStrings", this.textStringsByName);
 	}
 
-	static fromFilePaths(mediaFilePaths: string[])
+	static default()
+	{
+		return MediaLibrary.fromFilePaths([]);
+	}
+
+	static fromFilePaths(mediaFilePaths: string[]): MediaLibrary
 	{
 		var images = new Array<Image2>();
 		var sounds = new Array<Sound>();
@@ -116,7 +125,7 @@ export class MediaLibrary
 		contentPath: string, imageFileNames: string[], effectFileNames: string[],
 		musicFileNames: string[], videoFileNames: string[], fontFileNames: string[],
 		textStringFileNames: string[]
-	)
+	): MediaLibrary
 	{
 		var mediaTypesPathsAndFileNames =
 		[
@@ -170,7 +179,7 @@ export class MediaLibrary
 
 	// Instance methods.
 
-	areAllItemsLoaded()
+	areAllItemsLoaded(): boolean
 	{
 		var areAllItemsLoadedSoFar = true;
 
@@ -196,7 +205,10 @@ export class MediaLibrary
 		return areAllItemsLoadedSoFar;
 	}
 
-	waitForItemToLoad(collectionName: string, itemName: string, callback: any)
+	waitForItemToLoad
+	(
+		collectionName: string, itemName: string, callback: ()=>void
+	): void
 	{
 		var itemToLoad = this.collectionsByName.get(collectionName).get(itemName);
 		this.timer = setInterval
@@ -206,16 +218,16 @@ export class MediaLibrary
 		);
 	}
 
-	waitForItemToLoad_TimerTick(itemToLoad: any, callback: any)
+	waitForItemToLoad_TimerTick(itemToLoad: any, callback: ()=>void ): void
 	{
 		if (itemToLoad.isLoaded)
 		{
 			clearInterval(this.timer);
-			callback.call();
+			callback();
 		}
 	}
 
-	waitForItemsAllToLoad(callback: any)
+	waitForItemsAllToLoad(callback: ()=>void): void
 	{
 		this.timer = setInterval
 		(
@@ -224,18 +236,18 @@ export class MediaLibrary
 		);
 	}
 
-	waitForItemsAllToLoad_TimerTick(callback: any)
+	waitForItemsAllToLoad_TimerTick(callback: ()=>void)
 	{
 		if (this.areAllItemsLoaded())
 		{
 			clearInterval(this.timer);
-			callback.call();
+			callback();
 		}
 	}
 
 	// accessors
 
-	imagesAdd(images: Image2[])
+	imagesAdd(images: Image2[]): void
 	{
 		for (var i = 0; i < images.length; i++)
 		{
@@ -248,27 +260,27 @@ export class MediaLibrary
 		}
 	}
 
-	fontGetByName(name: string)
+	fontGetByName(name: string): Font
 	{
 		return this.fontsByName.get(name);
 	}
 
-	imageGetByName(name: string)
+	imageGetByName(name: string): Image2
 	{
 		return this.imagesByName.get(name);
 	}
 
-	soundGetByName(name: string)
+	soundGetByName(name: string): Sound
 	{
 		return this.soundsByName.get(name);
 	}
 
-	textStringGetByName(name: string)
+	textStringGetByName(name: string): TextString
 	{
 		return this.textStringsByName.get(name);
 	}
 
-	videoGetByName(name: string)
+	videoGetByName(name: string): Video
 	{
 		return this.videosByName.get(name);
 	}

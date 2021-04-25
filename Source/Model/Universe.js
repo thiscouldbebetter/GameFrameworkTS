@@ -31,11 +31,13 @@ var ThisCouldBeBetter;
                 returnValue.debuggingMode = debuggingMode;
                 return returnValue;
             }
+            static default() {
+                var universe = Universe.create("Default", "0.0.0", // version
+                new GameFramework.TimerHelper(20), GameFramework.Display2D.fromSize(GameFramework.Coords.fromXY(200, 150)), GameFramework.MediaLibrary.default(), GameFramework.ControlBuilder.default(), () => GameFramework.World.default());
+                return universe;
+            }
             // instance methods
             initialize(callback) {
-                this.mediaLibrary.waitForItemsAllToLoad(this.initialize_MediaLibraryLoaded.bind(this, callback));
-            }
-            initialize_MediaLibraryLoaded(callback) {
                 this.platformHelper.initialize(this);
                 this.storageHelper = new GameFramework.StorageHelper(GameFramework.StringHelper.replaceAll(this.name, " ", "_") + "_", this.serializer, new GameFramework.CompressorLZW());
                 this.display.initialize(this);
@@ -47,7 +49,8 @@ var ThisCouldBeBetter;
                 this.venueNext = venueControlsOpening;
                 this.inputHelper = new GameFramework.InputHelper();
                 this.inputHelper.initialize(this);
-                callback(this);
+                var universe = this;
+                this.mediaLibrary.waitForItemsAllToLoad(() => callback(universe));
             }
             reset() {
                 // hack

@@ -7,10 +7,11 @@ var gf = ThisCouldBeBetter.GameFramework;
 var RandomizerLCG = gf.RandomizerLCG;
 // Helpers.
 var ArrayHelper = gf.ArrayHelper;
+var ByteHelper = gf.ByteHelper;
 var NumberHelper = gf.NumberHelper;
 var StringHelper = gf.StringHelper;
-// hack
-var EntityProperty = gf.EntityProperty;
+// Entity.
+var Entity = gf.Entity;
 // Controls.
 var ControlActionNames = gf.ControlActionNames;
 var ControlBase = gf.ControlBase;
@@ -35,46 +36,16 @@ var VenueMessage = gf.VenueMessage;
 // Display.
 var Color = gf.Color;
 var Drawable = gf.Drawable;
-var Display = gf.Display;
 var Display2D = gf.Display2D;
 var DisplayRecorder = gf.DisplayRecorder;
 var VenueFader = gf.VenueFader;
 var VenueLayered = gf.VenueLayered;
-var Visual = gf.Visual;
-var VisualAnchor = gf.VisualAnchor;
-var VisualArc = gf.VisualArc;
-var VisualBar = gf.VisualBar;
-var VisualBuffered = gf.VisualBuffered;
-var VisualBuilder = gf.VisualBuilder;
-var VisualCircle = gf.VisualCircle;
-var VisualCircleGradient = gf.VisualCircleGradient;
-var VisualDirectional = gf.VisualDirectional;
-var VisualDynamic = gf.VisualDynamic;
-var VisualEllipse = gf.VisualEllipse;
-var VisualErase = gf.VisualErase;
+// Display - Visuals.
 var VisualGroup = gf.VisualGroup;
 var VisualImageFromLibrary = gf.VisualImageFromLibrary;
-var VisualImageImmediate = gf.VisualImageImmediate;
 var VisualImageScaled = gf.VisualImageScaled;
-var VisualImageScaledPartial = gf.VisualImageScaledPartial;
-var VisualJump2D = gf.VisualJump2D;
-var VisualLine = gf.VisualLine;
-var VisualMap = gf.VisualMap;
 var VisualNone = gf.VisualNone;
-var VisualOffset = gf.VisualOffset;
-var VisualParticles = gf.VisualParticles;
-var VisualPath = gf.VisualPath;
-var VisualPolars = gf.VisualPolars;
-var VisualPolygon = gf.VisualPolygon;
-var VisualRectangle = gf.VisualRectangle;
-var VisualRepeating = gf.VisualRepeating;
-var VisualRotate = gf.VisualRotate;
-var VisualSelect = gf.VisualSelect;
-var VisualStack = gf.VisualStack;
-var VisualText = gf.VisualText;
 // Display - Visuals - Animation.
-var Animatable2 = gf.Animatable2; // Possibly conflicts with a built-in class?
-var VisualAnimation = gf.VisualAnimation;
 // Geometry.
 var Camera = gf.Camera;
 var Collision = gf.Collision;
@@ -88,17 +59,6 @@ var Polar = gf.Polar;
 var RangeExtent = gf.RangeExtent;
 var Rotation = gf.Rotation;
 // Geometry - Constraints.
-var Constraint_AttachToEntityWithName = gf.Constraint_AttachToEntityWithName;
-var Constraint_Conditional = gf.Constraint_Conditional;
-var Constraint_ContainInBox = gf.Constraint_ContainInBox;
-var Constraint_ContainInHemispace = gf.Constraint_ContainInHemispace;
-var Constraint_FrictionDry = gf.Constraint_FrictionDry;
-var Constraint_FrictionXY = gf.Constraint_FrictionXY;
-var Constraint_Gravity = gf.Constraint_Gravity;
-var Constraint_SpeedMaxXY = gf.Constraint_SpeedMaxXY;
-var Constraint_TrimToRange = gf.Constraint_TrimToRange;
-var Constraint_WrapToRange = gf.Constraint_WrapToRange;
-var Constraint_WrapXTrimY = gf.Constraint_WrapXTrimY;
 // Geometry - Network.
 var Network = gf.Network;
 // Geometry - Shapes.
@@ -109,11 +69,8 @@ var Cylinder = gf.Cylinder;
 var Edge = gf.Edge;
 var Face = gf.Face;
 var Hemispace = gf.Hemispace;
-var Path = gf.Path;
-var PathBuilder = gf.PathBuilder;
 var Plane = gf.Plane;
 var Ray = gf.Ray;
-var ShapeBase = gf.ShapeBase;
 var ShapeContainer = gf.ShapeContainer;
 var ShapeGroupAll = gf.ShapeGroupAll;
 var ShapeGroupAny = gf.ShapeGroupAny;
@@ -121,14 +78,10 @@ var ShapeInverse = gf.ShapeInverse;
 var Shell = gf.Shell;
 var Sphere = gf.Sphere;
 var Wedge = gf.Wedge;
-// Geometry - Shapes - Map.
-var MapCell = gf.MapCell;
 var MapLocated = gf.MapLocated;
 var MapOfCells = gf.MapOfCells;
 // Geometry - Shapes - Meshes.
 var Mesh = gf.Mesh;
-// Geometry - Transforms.
-var Transform = gf.Transform;
 var Transform_Dynamic = gf.Transform_Dynamic;
 var Transform_Locate = gf.Transform_Locate;
 var Transform_Multiple = gf.Transform_Multiple;
@@ -137,7 +90,6 @@ var Transform_Rotate2D = gf.Transform_Rotate2D;
 var Transform_RotateRight = gf.Transform_RotateRight;
 var Transform_Scale = gf.Transform_Scale;
 var Transform_Translate = gf.Transform_Translate;
-var Transformable = gf.Transformable;
 var Transforms = gf.Transforms;
 // Input.
 var ActionToInputsMapping = gf.ActionToInputsMapping;
@@ -156,16 +108,13 @@ var Video = gf.Video;
 var VideoHelper = gf.VideoHelper;
 var VisualSound = gf.VisualSound;
 // Model.
-var Entity = gf.Entity;
 var EntityBuilder = gf.EntityBuilder;
 var EntityGenerator = gf.EntityGenerator;
 var Loadable = gf.Loadable;
-var Namable = gf.Namable;
 var Playable = gf.Playable;
 var Selector = gf.Selector;
 var Universe = gf.Universe;
 var UniverseWorldPlaceEntities = gf.UniverseWorldPlaceEntities;
-var Venue = gf.Venue;
 var VenueWorld = gf.VenueWorld;
 var World = gf.World;
 var WorldDefn = gf.WorldDefn;
@@ -193,66 +142,34 @@ var ItemDefn = gf.ItemDefn;
 var ItemHolder = gf.ItemHolder;
 var ItemStore = gf.ItemStore;
 // Model - Items - Crafting.
-var CraftingRecipe = gf.CraftingRecipe;
-var ItemCrafter = gf.ItemCrafter;
 // Model - Items - Equipment.
-var EquipmentSocket = gf.EquipmentSocket;
-var EquipmentSocketDefn = gf.EquipmentSocketDefn;
-var EquipmentSocketDefnGroup = gf.EquipmentSocketDefnGroup;
-var EquipmentUser = gf.EquipmentUser;
-var Equippable = gf.Equippable;
 // Model - Journal.
-var Journal = gf.Journal;
-var JournalEntry = gf.JournalEntry;
-var JournalKeeper = gf.JournalKeeper;
 // Model - Maps.
 var Terrain = gf.Terrain;
 // Model - Mortality.
-var Ephemeral = gf.Ephemeral;
-var Phase = gf.Phase;
-var Phased = gf.Phased;
-var Starvable = gf.Starvable;
-var Tirable = gf.Tirable;
 // Model - Perception.
-var Perceptible = gf.Perceptible;
-var Perceptor = gf.Perceptor;
 // Model - Physics.
 var Boundable = gf.Boundable;
 var Collidable = gf.Collidable;
 var Constrainable = gf.Constrainable;
-var ForceField = gf.ForceField;
 var Locatable = gf.Locatable;
 var Movable = gf.Movable;
 var Obstacle = gf.Obstacle;
 var Portal = gf.Portal;
 var Traversable = gf.Traversable;
-var Vehicle = gf.Vehicle;
 // Model - Places.
 var Place = gf.Place;
 var PlaceDefn = gf.PlaceDefn;
 var PlaceZoned = gf.PlaceZoned;
 var Zone = gf.Zone;
 // Model - Skills.
-var Skill = gf.Skill;
-var SkillLearner = gf.SkillLearner;
 // Model - Talk.
-var ConversationDefn = gf.ConversationDefn;
-var ConversationRun = gf.ConversationRun;
-var ConversationScope = gf.ConversationScope;
-var TalkNode = gf.TalkNode;
-var TalkNodeDefn = gf.TalkNodeDefn;
-var Talker = gf.Talker;
-var WordBubble = gf.WordBubble;
 // Model - Routable.
 var Routable = gf.Routable;
 var Route = gf.Route;
 var RouteNode = gf.RouteNode;
 // Model - Time.
-var Idleable = gf.Idleable;
-var Recurrent = gf.Recurrent;
 // Model - Usables.
-var Device = gf.Device;
-var Usable = gf.Usable;
 // Profiles.
 var Profile = gf.Profile;
 // Storage.
@@ -262,14 +179,18 @@ var StorageHelper = gf.StorageHelper;
 var VenueFileUpload = gf.VenueFileUpload;
 // Storage - Compressor.
 var BitStream = gf.BitStream;
+var ByteStreamFromBytes = gf.ByteStreamFromBytes;
 var ByteStreamFromString = gf.ByteStreamFromString;
 var CompressorLZW = gf.CompressorLZW;
+// Storage - TarFile.
+var TarFile = gf.TarFile;
+var TarFileEntry = gf.TarFileEntry;
+var TarFileEntryHeader = gf.TarFileEntryHeader;
+var TarFileTypeFlag = gf.TarFileTypeFlag;
 // Utility.
 var DateTime = gf.DateTime;
-var DiceRoll = gf.DiceRoll;
 var IDHelper = gf.IDHelper;
 var PlatformHelper = gf.PlatformHelper;
-var Randomizer = gf.Randomizer;
 var RandomizerSystem = gf.RandomizerSystem;
 var Reference = gf.Reference;
 var TimerHelper = gf.TimerHelper;
@@ -277,5 +198,3 @@ var URLParser = gf.URLParser;
 var ValueBreak = gf.ValueBreak;
 var ValueBreakGroup = gf.ValueBreakGroup;
 var VenueTask = gf.VenueTask;
-// Utility - Network.
-var Networ = gf.Network;

@@ -5,15 +5,15 @@ var ThisCouldBeBetter;
     (function (GameFramework) {
         class MediaLibrary {
             constructor(images, sounds, videos, fonts, textStrings) {
-                this.images = images;
+                this.images = images || [];
                 this.imagesByName = GameFramework.ArrayHelper.addLookupsByName(this.images);
-                this.sounds = sounds;
+                this.sounds = sounds || [];
                 this.soundsByName = GameFramework.ArrayHelper.addLookupsByName(this.sounds);
-                this.videos = videos;
+                this.videos = videos || [];
                 this.videosByName = GameFramework.ArrayHelper.addLookupsByName(this.videos);
-                this.fonts = fonts;
+                this.fonts = fonts || [];
                 this.fontsByName = GameFramework.ArrayHelper.addLookupsByName(this.fonts);
-                this.textStrings = textStrings;
+                this.textStrings = textStrings || [];
                 this.textStringsByName = GameFramework.ArrayHelper.addLookupsByName(this.textStrings);
                 this.collectionsAll =
                     [
@@ -29,6 +29,9 @@ var ThisCouldBeBetter;
                 this.collectionsByName.set("Videos", this.videosByName);
                 this.collectionsByName.set("Fonts", this.fontsByName);
                 this.collectionsByName.set("TextStrings", this.textStringsByName);
+            }
+            static default() {
+                return MediaLibrary.fromFilePaths([]);
             }
             static fromFilePaths(mediaFilePaths) {
                 var images = new Array();
@@ -131,7 +134,7 @@ var ThisCouldBeBetter;
             waitForItemToLoad_TimerTick(itemToLoad, callback) {
                 if (itemToLoad.isLoaded) {
                     clearInterval(this.timer);
-                    callback.call();
+                    callback();
                 }
             }
             waitForItemsAllToLoad(callback) {
@@ -141,7 +144,7 @@ var ThisCouldBeBetter;
             waitForItemsAllToLoad_TimerTick(callback) {
                 if (this.areAllItemsLoaded()) {
                     clearInterval(this.timer);
-                    callback.call();
+                    callback();
                 }
             }
             // accessors

@@ -5,6 +5,7 @@ var ThisCouldBeBetter;
     (function (GameFramework) {
         class WorldDefn {
             constructor(defnArrays) {
+                defnArrays = defnArrays || [];
                 this.defnArraysByTypeName = new Map();
                 this.defnsByNameByTypeName = new Map();
                 for (var i = 0; i < defnArrays.length; i++) {
@@ -17,6 +18,9 @@ var ThisCouldBeBetter;
                         this.defnsByNameByTypeName.set(itemTypeName, defnsByName);
                     }
                 }
+            }
+            static default() {
+                return new WorldDefn(null);
             }
             // Convenience methods.
             actionByName(defnName) {

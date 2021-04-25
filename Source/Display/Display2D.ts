@@ -43,7 +43,12 @@ export class Display2D implements Display
 		this._zeroes = Coords.Instances().Zeroes;
 	}
 
-	static fromSizeAndIsInvisible(size: Coords, isInvisible: boolean)
+	static fromSize(size: Coords): Display2D
+	{
+		return new Display2D([size], null, null, null, null, false);
+	}
+
+	static fromSizeAndIsInvisible(size: Coords, isInvisible: boolean): Display2D
 	{
 		return new Display2D([size], null, null, null, null, isInvisible);
 	}
@@ -52,7 +57,7 @@ export class Display2D implements Display
 
 	static RadiansPerTurn = Math.PI * 2.0;
 
-	clear()
+	clear(): void
 	{
 		this.graphics.clearRect
 		(
@@ -70,7 +75,7 @@ export class Display2D implements Display
 		center: Coords, radiusInner: number, radiusOuter: number,
 		angleStartInTurns: number, angleStopInTurns: number, colorFill: Color,
 		colorBorder: Color
-	)
+	): void
 	{
 		var drawPos = this._drawPos.overwriteWith(center);
 		var angleStartInRadians = angleStartInTurns * Display2D.RadiansPerTurn;
@@ -130,7 +135,7 @@ export class Display2D implements Display
 		}
 	}
 
-	drawBackground(colorBack: Color, colorBorder: Color)
+	drawBackground(colorBack: Color, colorBorder: Color): void
 	{
 		this.drawRectangle
 		(
@@ -146,7 +151,7 @@ export class Display2D implements Display
 	(
 		center: Coords, radius: number, colorFill: Color,
 		colorBorder: Color, borderThickness: number
-	)
+	): void
 	{
 		var drawPos = this._drawPos.overwriteWith(center);
 
@@ -176,7 +181,11 @@ export class Display2D implements Display
 		}
 	}
 
-	drawCircleWithGradient(center: Coords, radius: number, gradientFill: ValueBreakGroup, colorBorder: Color)
+	drawCircleWithGradient
+	(
+		center: Coords, radius: number, gradientFill: ValueBreakGroup,
+		colorBorder: Color
+	): void
 	{
 		this.graphics.beginPath();
 		this.graphics.arc
@@ -210,7 +219,7 @@ export class Display2D implements Display
 		}
 	}
 
-	drawCrosshairs(center: Coords, radius: number, color: Color)
+	drawCrosshairs(center: Coords, radius: number, color: Color): void
 	{
 		var drawPos = this._drawPos.overwriteWith(center);
 		this.graphics.beginPath();
@@ -226,7 +235,7 @@ export class Display2D implements Display
 	(
 		center: Coords, semimajorAxis: number, semiminorAxis: number,
 		rotationInTurns: number, colorFill: Color, colorBorder: Color
-	)
+	): void
 	{
 		this.graphics.save();
 
@@ -261,12 +270,15 @@ export class Display2D implements Display
 		this.graphics.restore();
 	}
 
-	drawImage(imageToDraw: Image2, pos: Coords)
+	drawImage(imageToDraw: Image2, pos: Coords): void
 	{
 		this.graphics.drawImage(imageToDraw.systemImage, pos.x, pos.y);
 	}
 
-	drawImagePartial(imageToDraw: Image2, pos: Coords, regionToDrawAsBox: Box)
+	drawImagePartial
+	(
+		imageToDraw: Image2, pos: Coords, regionToDrawAsBox: Box
+	): void
 	{
 		this.drawImagePartialScaled(imageToDraw, pos, regionToDrawAsBox, null);
 	}
@@ -274,7 +286,7 @@ export class Display2D implements Display
 	drawImagePartialScaled
 	(
 		imageToDraw: Image2, pos: Coords, regionToDrawAsBox: Box, sizeToDraw: Coords
-	)
+	): void
 	{
 		var sourcePos = regionToDrawAsBox.min();
 		var sourceSize = regionToDrawAsBox.size;
@@ -292,12 +304,15 @@ export class Display2D implements Display
 		);
 	}
 
-	drawImageScaled(imageToDraw: Image2, pos: Coords, size: Coords)
+	drawImageScaled(imageToDraw: Image2, pos: Coords, size: Coords): void
 	{
 		this.graphics.drawImage(imageToDraw.systemImage, pos.x, pos.y, size.x, size.y);
 	}
 
-	drawLine(fromPos: Coords, toPos: Coords, color: Color, lineThickness: number)
+	drawLine
+	(
+		fromPos: Coords, toPos: Coords, color: Color, lineThickness: number
+	): void
 	{
 		var drawPos = this._drawPos;
 
@@ -321,12 +336,18 @@ export class Display2D implements Display
 		this.graphics.lineWidth = lineWidthToRestore;
 	}
 
-	drawMeshWithOrientation(mesh: MeshTextured, meshOrientation: Orientation)
+	drawMeshWithOrientation
+	(
+		mesh: MeshTextured, meshOrientation: Orientation
+	): void
 	{
 		// todo
 	}
 
-	drawPath(vertices: Coords[], color: Color, lineThickness: number, isClosed: boolean)
+	drawPath
+	(
+		vertices: Coords[], color: Color, lineThickness: number, isClosed: boolean
+	): void
 	{
 		var lineWidthSaved = this.graphics.lineWidth;
 
@@ -362,7 +383,7 @@ export class Display2D implements Display
 		this.graphics.lineWidth = lineWidthSaved;
 	}
 
-	drawPixel(pos: Coords, color: Color)
+	drawPixel(pos: Coords, color: Color): void
 	{
 		this.graphics.fillStyle = Color.systemColorGet(color);
 		this.graphics.fillRect
@@ -371,7 +392,10 @@ export class Display2D implements Display
 		);
 	}
 
-	drawPolygon(vertices: Coords[], colorFill: Color, colorBorder: Color)
+	drawPolygon
+	(
+		vertices: Coords[], colorFill: Color, colorBorder: Color
+	): void
 	{
 		this.graphics.beginPath();
 
@@ -408,8 +432,9 @@ export class Display2D implements Display
 
 	drawRectangle
 	(
-		pos: Coords, size: Coords, colorFill: Color, colorBorder: Color, areColorsReversed: boolean
-	)
+		pos: Coords, size: Coords, colorFill: Color, colorBorder: Color,
+		areColorsReversed: boolean
+	): void
 	{
 		if (areColorsReversed)
 		{
@@ -442,7 +467,7 @@ export class Display2D implements Display
 	drawRectangleCentered
 	(
 		pos: Coords, size: Coords, colorFill: Color, colorBorder: Color
-	)
+	): void
 	{
 		var sizeHalf = this._sizeHalf.overwriteWith(size).half();
 		var posAdjusted = this._drawPos.overwriteWith(pos).subtract(sizeHalf);
@@ -459,7 +484,7 @@ export class Display2D implements Display
 		areColorsReversed: boolean,
 		isCentered: boolean,
 		widthMaxInPixels: number
-	)
+	): void
 	{
 		var fontToRestore = this.graphics.font;
 		if (fontHeightInPixels == null)
@@ -532,7 +557,7 @@ export class Display2D implements Display
 	(
 		center: Coords, radius: number, angleStartInTurns: number,
 		angleStopInTurns: number, colorFill: Color, colorBorder: Color
-	)
+	): void
 	{
 		var drawPos = this._drawPos.overwriteWith(center);
 		var angleStartInRadians = angleStartInTurns * Display2D.RadiansPerTurn;
@@ -582,7 +607,7 @@ export class Display2D implements Display
 		}
 	}
 
-	eraseModeSet(value: boolean)
+	eraseModeSet(value: boolean): void
 	{
 		if (value)
 		{
@@ -594,7 +619,7 @@ export class Display2D implements Display
 		}
 	}
 
-	fontSet(fontName: string, fontHeightInPixels: number)
+	fontSet(fontName: string, fontHeightInPixels: number): void
 	{
 		if (fontName != this.fontName || fontHeightInPixels != this.fontHeightInPixels)
 		{
@@ -604,14 +629,14 @@ export class Display2D implements Display
 		}
 	}
 
-	flush() {}
+	flush(): void {}
 
-	hide(universe: Universe)
+	hide(universe: Universe): void
 	{
 		universe.platformHelper.platformableRemove(this);
 	}
 
-	initialize(universe: Universe)
+	initialize(universe: Universe): Display
 	{
 		if (this.isInvisible)
 		{
@@ -639,7 +664,10 @@ export class Display2D implements Display
 		return this;
 	}
 
-	rotateTurnsAroundCenter(turnsToRotate: number, centerOfRotation: Coords)
+	rotateTurnsAroundCenter
+	(
+		turnsToRotate: number, centerOfRotation: Coords
+	): void
 	{
 		var graphics = this.graphics;
 
@@ -651,12 +679,12 @@ export class Display2D implements Display
 		graphics.translate(0 - centerOfRotation.x, 0 - centerOfRotation.y);
 	}
 
-	sizeDefault()
+	sizeDefault(): Coords
 	{
 		return this._sizeDefault;
 	}
 
-	scaleFactor()
+	scaleFactor(): Coords
 	{
 		if (this._scaleFactor == null)
 		{
@@ -666,17 +694,20 @@ export class Display2D implements Display
 		return this._scaleFactor;
 	}
 
-	stateRestore()
+	stateRestore(): void
 	{
 		this.graphics.restore();
 	}
 
-	stateSave()
+	stateSave(): void
 	{
 		this.graphics.save();
 	}
 
-	textWidthForFontHeight(textToMeasure: string, fontHeightInPixels: number): number
+	textWidthForFontHeight
+	(
+		textToMeasure: string, fontHeightInPixels: number
+	): number
 	{
 		var fontToRestore = this.graphics.font;
 		this.fontSet(null, fontHeightInPixels);
@@ -685,14 +716,14 @@ export class Display2D implements Display
 		return returnValue;
 	}
 
-	toImage()
+	toImage(): Image2
 	{
 		return Image2.fromSystemImage("[fromDisplay]", this.canvas);
 	}
 
 	// platformable
 
-	toDomElement()
+	toDomElement(): HTMLElement
 	{
 		if (this.canvas == null)
 		{

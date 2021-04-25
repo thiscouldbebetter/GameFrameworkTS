@@ -39,17 +39,17 @@ export class ControlBuilder
 		this._scaleMultiplier = Coords.create();
 	}
 
-	static default()
+	static default(): ControlBuilder
 	{
 		return new ControlBuilder(null, null);
 	}
 
-	styleByName(styleName: string)
+	styleByName(styleName: string): ControlStyle
 	{
 		return this.stylesByName.get(styleName);
 	}
 
-	styleDefault()
+	styleDefault(): ControlStyle
 	{
 		return this.styles[0];
 	}
@@ -61,7 +61,7 @@ export class ControlBuilder
 		universe: Universe, size: Coords, message: DataBinding<any, string>,
 		optionNames: Array<string>, optionFunctions: Array<any>,
 		showMessageOnly: boolean
-	)
+	): ControlBase
 	{
 		size = size || universe.display.sizeDefault();
 		showMessageOnly = showMessageOnly || false;
@@ -175,12 +175,18 @@ export class ControlBuilder
 
 	choiceList
 	(
-		universe: Universe, size: Coords, message: string,
-		options: any, bindingForOptionText: DataBinding<any,any>,
-		buttonSelectText: string, select: any
-	)
+		universe: Universe,
+		size: Coords,
+		message: string,
+		options: DataBinding<any,any[]>,
+		bindingForOptionText: DataBinding<any,any>,
+		buttonSelectText: string,
+		select: (u: Universe, itemSelected: any) => void
+	): ControlBase
 	{
 		// todo - Variable sizes.
+
+		size = size || universe.display.sizeDefault();
 
 		var marginWidth = 10;
 		var marginSize = Coords.fromXY(1, 1).multiplyScalar(marginWidth);
@@ -253,7 +259,7 @@ export class ControlBuilder
 	(
 		universe: Universe, size: Coords, message: string,
 		confirm: () => void, cancel: () => void
-	)
+	): ControlBase
 	{
 		return this.choice
 		(
@@ -266,7 +272,7 @@ export class ControlBuilder
 	(
 		universe: Universe, size: Coords, message: string,
 		venuePrev: Venue, confirm: () => void, cancel: () => void
-	)
+	): ControlBase
 	{
 		var controlBuilder = this;
 
@@ -302,7 +308,7 @@ export class ControlBuilder
 		);
 	}
 
-	game(universe: Universe, size: Coords, venuePrev: Venue)
+	game(universe: Universe, size: Coords, venuePrev: Venue): ControlBase
 	{
 		var controlBuilder = this;
 
@@ -501,7 +507,7 @@ export class ControlBuilder
 		return returnValue;
 	}
 
-	gameAndSettings1(universe: Universe)
+	gameAndSettings1(universe: Universe): ControlBase
 	{
 		return this.gameAndSettings(universe, null, universe.venueCurrent, true);
 	}
@@ -509,7 +515,7 @@ export class ControlBuilder
 	gameAndSettings
 	(
 		universe: Universe, size: Coords, venuePrev: Venue, includeResumeButton: boolean
-	)
+	): ControlBase
 	{
 		var controlBuilder = this;
 
@@ -633,7 +639,7 @@ export class ControlBuilder
 		return returnValue;
 	}
 
-	inputs (universe: Universe, size: Coords, venuePrev: Venue)
+	inputs(universe: Universe, size: Coords, venuePrev: Venue): ControlBase
 	{
 		var controlBuilder = this;
 
@@ -647,10 +653,12 @@ export class ControlBuilder
 
 		var fontHeight = this.fontHeightInPixelsBase;
 
+
 		var world = universe.world;
-		var placeCurrentDefnName = "Demo"; // hack
-		var placeDefn = world.defn.placeDefnByName(placeCurrentDefnName);
-		placeDefn.actionToInputsMappingsEdit();
+
+		// hack - Should do ALL placeDefns, not just the current one.
+		var placeCurrent = world.placeCurrent;
+		var placeDefn = placeCurrent.defn(world);
 
 		var returnValue = ControlContainer.from4
 		(
@@ -897,7 +905,7 @@ export class ControlBuilder
 	(
 		universe: Universe, size: Coords, message: DataBinding<any, string>,
 		acknowledge: () => void, showMessageOnly: boolean
-	)
+	): ControlBase
 	{
 		var optionNames = [];
 		var optionFunctions = [];
@@ -914,7 +922,7 @@ export class ControlBuilder
 		);
 	}
 
-	opening(universe: Universe, size: Coords)
+	opening(universe: Universe, size: Coords): ControlBase
 	{
 		var controlBuilder = this;
 
@@ -988,7 +996,7 @@ export class ControlBuilder
 		return returnValue;
 	}
 
-	settings(universe: Universe, size: Coords, venuePrev: Venue)
+	settings(universe: Universe, size: Coords, venuePrev: Venue): ControlBase
 	{
 		var controlBuilder = this;
 
@@ -1049,8 +1057,8 @@ export class ControlBuilder
 					new DataBinding
 					(
 						universe.soundHelper,
-						(c: SoundHelper) => { return c.musicVolume; },
-						(c: SoundHelper, v: number) => { c.musicVolume = v; }
+						(c: SoundHelper) => c.musicVolume,
+						(c: SoundHelper, v: number) => c.musicVolume = v
 					), // valueSelected
 					SoundHelper.controlSelectOptionsVolume(), // options
 					DataBinding.fromGet((c: any) => c.value), // bindingForOptionValues,
@@ -1125,7 +1133,8 @@ export class ControlBuilder
 							controlRootAsContainer.childrenByName.get("selectDisplaySize") as ControlSelect;
 						var displaySizeSpecified = selectDisplaySize.optionSelected();
 
-						var display = universe.display as Display2D;
+						var displayAsDisplay = universe.display;
+						var display = displayAsDisplay as Display2D;
 						var platformHelper = universe.platformHelper;
 						platformHelper.platformableRemove(display);
 						display.sizeInPixels = displaySizeSpecified;
@@ -1189,7 +1198,12 @@ export class ControlBuilder
 		return returnValue;
 	}
 
-	slideshow(universe: Universe, size: Coords, imageNamesAndMessagesForSlides: any, venueAfterSlideshow: any)
+	slideshow
+	(
+		universe: Universe, size: Coords,
+		imageNamesAndMessagesForSlides: string[][],
+		venueAfterSlideshow: Venue
+	): ControlBase
 	{
 		var controlBuilder = this;
 
@@ -1281,7 +1295,7 @@ export class ControlBuilder
 		return controlsForSlides[0];
 	}
 
-	title(universe: Universe, size: Coords)
+	title(universe: Universe, size: Coords): ControlBase
 	{
 		var controlBuilder = this;
 
@@ -1377,7 +1391,7 @@ export class ControlBuilder
 		return returnValue;
 	}
 
-	worldDetail(universe: Universe, size: Coords, venuePrev: Venue)
+	worldDetail(universe: Universe, size: Coords, venuePrev: Venue): ControlBase
 	{
 		var controlBuilder = this;
 
@@ -1573,7 +1587,7 @@ export class ControlBuilder
 		return returnValue;
 	}
 
-	worldLoad(universe: Universe, size: Coords)
+	worldLoad(universe: Universe, size: Coords): ControlBase
 	{
 		var controlBuilder = this;
 

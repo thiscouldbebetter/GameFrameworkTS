@@ -98,17 +98,28 @@ export class Universe
 		return returnValue;
 	}
 
+	static default()
+	{
+		var universe = Universe.create
+		(
+			"Default",
+			"0.0.0", // version
+			new TimerHelper(20),
+			Display2D.fromSize
+			(
+				Coords.fromXY(200, 150)
+			),
+			MediaLibrary.default(),
+			ControlBuilder.default(),
+			() => World.default()
+		);
+
+		return universe;
+	}
+
 	// instance methods
 
 	initialize(callback: (u: Universe) => void)
-	{
-		this.mediaLibrary.waitForItemsAllToLoad
-		(
-			this.initialize_MediaLibraryLoaded.bind(this, callback)
-		);
-	}
-
-	initialize_MediaLibraryLoaded(callback: (u: Universe) => void)
 	{
 		this.platformHelper.initialize(this);
 		this.storageHelper = new StorageHelper
@@ -139,7 +150,11 @@ export class Universe
 		this.inputHelper = new InputHelper();
 		this.inputHelper.initialize(this);
 
-		callback(this);
+		var universe = this;
+		this.mediaLibrary.waitForItemsAllToLoad
+		(
+			() => callback(universe)
+		);
 	}
 
 	reset()

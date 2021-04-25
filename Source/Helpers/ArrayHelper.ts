@@ -62,6 +62,49 @@ export class ArrayHelper
 		return array;
 	}
 
+	static areEqual(array0: any[], array1: any[]): boolean
+	{
+		var areArraysEqual = true;
+
+		if (array0.length != array1.length)
+		{
+			areArraysEqual = false;
+		}
+		else
+		{
+			for (var i = 0; i < array0.length; i++)
+			{
+				var element0 = array0[i];
+				var element1 = array1[i];
+				if (element0 == element1)
+				{
+					// Do nothing.
+				}
+				else if
+				(
+					element0.equals != null
+					&& element1.equals != null
+					&& element0.equals(element1)
+				)
+				{
+					// Do nothing.
+				}
+				else
+				{
+					var element0AsJson = JSON.stringify(element0);
+					var element1AsJson = JSON.stringify(element1);
+					if (element0AsJson != element1AsJson)
+					{
+						areArraysEqual = false;
+						break;
+					}
+				}
+			}
+		}
+
+		return areArraysEqual;
+	}
+
 	static clear(array: any)
 	{
 		array.length = 0;

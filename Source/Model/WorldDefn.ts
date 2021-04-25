@@ -9,6 +9,8 @@ export class WorldDefn
 
 	constructor(defnArrays: any[])
 	{
+		defnArrays = defnArrays || [];
+
 		this.defnArraysByTypeName = new Map<string, any[]>();
 		this.defnsByNameByTypeName = new Map<string, Map<string, any>>();
 
@@ -26,40 +28,45 @@ export class WorldDefn
 		}
 	}
 
+	static default(): WorldDefn
+	{
+		return new WorldDefn(null);
+	}
+
 	// Convenience methods.
 
-	actionByName(defnName: string)
+	actionByName(defnName: string): Action
 	{
-		var defnsByName = this.defnsByNameByTypeName.get(Action.name)
-		var returnValue = defnsByName.get(defnName);
+		var defnsByName = this.defnsByNameByTypeName.get(Action.name);
+		var returnValue = defnsByName.get(defnName) as Action;
 		return returnValue;
 	}
 
-	activityDefnByName(defnName: string)
+	activityDefnByName(defnName: string): ActivityDefn
 	{
-		var defnsByName = this.defnsByNameByTypeName.get(ActivityDefn.name)
-		var returnValue = defnsByName.get(defnName);
+		var defnsByName = this.defnsByNameByTypeName.get(ActivityDefn.name);
+		var returnValue = defnsByName.get(defnName) as ActivityDefn;
 		return returnValue;
 	}
 
-	entityDefnByName(defnName: string)
+	entityDefnByName(defnName: string): Entity
 	{
-		var defnsByName = this.defnsByNameByTypeName.get(Entity.name)
-		var returnValue = defnsByName.get(defnName);
+		var defnsByName = this.defnsByNameByTypeName.get(Entity.name);
+		var returnValue = defnsByName.get(defnName) as Entity;
 		return returnValue;
 	}
 
-	itemDefnByName(defnName: string)
+	itemDefnByName(defnName: string): ItemDefn
 	{
-		var defnsByName = this.defnsByNameByTypeName.get(ItemDefn.name)
-		var returnValue = defnsByName.get(defnName);
+		var defnsByName = this.defnsByNameByTypeName.get(ItemDefn.name);
+		var returnValue = defnsByName.get(defnName) as ItemDefn;
 		return returnValue;
 	}
 
-	placeDefnByName(defnName: string)
+	placeDefnByName(defnName: string): PlaceDefn
 	{
-		var defnsByName = this.defnsByNameByTypeName.get(PlaceDefn.name)
-		var returnValue = defnsByName.get(defnName);
+		var defnsByName = this.defnsByNameByTypeName.get(PlaceDefn.name);
+		var returnValue = defnsByName.get(defnName) as PlaceDefn;
 		return returnValue;
 	}
 

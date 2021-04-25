@@ -15,20 +15,35 @@ export class Profile
 		this.saveStateNameSelected = null;
 	}
 
-	saveStateSelected()
+	static anonymous(): Profile
+	{
+		var now = DateTime.now();
+		var nowAsString = now.toStringMMDD_HHMM_SS();
+		var profileName = "Anon-" + nowAsString;
+		var profile = new Profile(profileName, []);
+		return profile;
+	}
+
+	saveStateSelected(): SaveState
 	{
 		return this.saveStates.filter(x => x.name == this.saveStateNameSelected)[0];
 	}
 
 	// controls
 
-	static toControlSaveStateLoad(universe: Universe, size: Coords, venuePrev: Venue)
+	static toControlSaveStateLoad
+	(
+		universe: Universe, size: Coords, venuePrev: Venue
+	): ControlBase
 	{
 		var isLoadNotSave = true;
 		return Profile.toControlSaveStateLoadOrSave(universe, size, venuePrev, isLoadNotSave);
 	}
 
-	static toControlSaveStateSave(universe: Universe, size: Coords, venuePrev: Venue)
+	static toControlSaveStateSave
+	(
+		universe: Universe, size: Coords, venuePrev: Venue
+	): ControlBase
 	{
 		var isLoadNotSave = false;
 		return Profile.toControlSaveStateLoadOrSave(universe, size, venuePrev, isLoadNotSave);
@@ -37,7 +52,7 @@ export class Profile
 	static toControlSaveStateLoadOrSave
 	(
 		universe: Universe, size: Coords, venuePrev: Venue, isLoadNotSave: boolean
-	)
+	): ControlBase
 	{
 		if (size == null)
 		{
@@ -118,15 +133,21 @@ export class Profile
 			var timePlayingAsString = world.timePlayingAsStringShort(universe);
 
 			var displaySize = universe.display.sizeInPixels;
-			var displayFull = new Display2D([ displaySize ], null, null, null, null, true); // isInvisible
+			var displayFull = Display2D.fromSizeAndIsInvisible(displaySize, true);
 			displayFull.initialize(universe);
 			place.draw(universe, world, displayFull);
 			var imageSnapshotFull = displayFull.toImage();
 
 			var imageSizeThumbnail = visualThumbnailSize.clone();
-			var displayThumbnail = new Display2D([ imageSizeThumbnail ], null, null, null, null, true);
+			var displayThumbnail = Display2D.fromSizeAndIsInvisible
+			(
+				imageSizeThumbnail, true
+			);
 			displayThumbnail.initialize(universe);
-			displayThumbnail.drawImageScaled(imageSnapshotFull, Coords.Instances().Zeroes, imageSizeThumbnail);
+			displayThumbnail.drawImageScaled
+			(
+				imageSnapshotFull, Coords.Instances().Zeroes, imageSizeThumbnail
+			);
 			var imageThumbnailFromDisplay = displayThumbnail.toImage();
 			var imageThumbnailAsDataUrl = imageThumbnailFromDisplay.systemImage.toDataURL();
 			var imageThumbnail = new Image2("Snapshot", imageThumbnailAsDataUrl).unload();
@@ -175,7 +196,9 @@ export class Profile
 		{
 			var message =
 			(
-				wasSaveSuccessful ? "Game saved successfully." : "Save failed due to errors."
+				wasSaveSuccessful
+				? "Game saved successfully."
+				: "Save failed due to errors."
 			);
 
 			var controlMessage = universe.controlBuilder.message
@@ -395,7 +418,7 @@ export class Profile
 				null // cancel
 			);
 
-			var venueNext: Venue = controlConfirm.toControls();
+			var venueNext: Venue = controlConfirm.toVenue();
 			venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
 			universe.venueNext = venueNext;
 		};
@@ -662,7 +685,7 @@ export class Profile
 		return returnValue;
 	}
 
-	static toControlProfileNew(universe: Universe, size: Coords)
+	static toControlProfileNew(universe: Universe, size: Coords): ControlBase
 	{
 		if (size == null)
 		{
@@ -782,7 +805,10 @@ export class Profile
 		return returnValue;
 	}
 
-	static toControlProfileSelect(universe: Universe, size: Coords, venuePrev: Venue)
+	static toControlProfileSelect
+	(
+		universe: Universe, size: Coords, venuePrev: Venue
+	): ControlBase
 	{
 		if (size == null)
 		{
@@ -856,10 +882,7 @@ export class Profile
 				{
 					universe.world = world;
 
-					var now = DateTime.now();
-					var nowAsString = now.toStringMMDD_HHMM_SS();
-					var profileName = "Anon-" + nowAsString;
-					var profile = new Profile(profileName, []);
+					var profile = Profile.anonymous();
 					universe.profile = profile;
 
 					var venueNext: Venue = universe.world.toVenue();

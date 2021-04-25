@@ -17,6 +17,12 @@ var ThisCouldBeBetter;
                 this.entitiesToRemove = [];
                 this.isLoaded = false;
             }
+            static default() {
+                return new Place("Default", "Default", // defnName,
+                GameFramework.Coords.fromXY(1, 1), // size
+                [] // entities
+                );
+            }
             defn(world) {
                 return world.defn.placeDefnByName(this.defnName);
             }

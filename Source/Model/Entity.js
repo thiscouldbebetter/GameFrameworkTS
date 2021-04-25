@@ -85,6 +85,12 @@ var ThisCouldBeBetter;
                 var returnValue = new Entity(nameCloned, propertiesCloned);
                 return returnValue;
             }
+            // Equatable.
+            equals(other) {
+                var areAllPropertiesEqual = GameFramework.ArrayHelper.areEqual(this.properties, other.properties);
+                var areEntitiesEqual = (this.name == other.name && areAllPropertiesEqual);
+                return areEntitiesEqual;
+            }
             // Convenience methods for properties.
             actor() { return this.propertyByName(GameFramework.Actor.name); }
             animatable() { return this.propertyByName(GameFramework.Animatable2.name); }

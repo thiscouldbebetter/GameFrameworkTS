@@ -40,6 +40,17 @@ export class Camera implements EntityProperty
 		this._posSaved = Coords.create();
 	}
 
+	static default(): Camera
+	{
+		return new Camera
+		(
+			new Coords(400, 300, 1000), // viewSize
+			150, // focalLength
+			Disposition.fromPos(new Coords(0, 0, -150) ),
+			null // entitiesInViewSort
+		);
+	}
+
 	clipPlanes(): Plane[]
 	{
 		if (this._clipPlanes == null)

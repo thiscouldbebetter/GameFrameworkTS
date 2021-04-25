@@ -18,6 +18,9 @@ var ThisCouldBeBetter;
                 this._sizeHalf = GameFramework.Coords.create();
                 this._zeroes = GameFramework.Coords.Instances().Zeroes;
             }
+            static fromSize(size) {
+                return new Display2D([size], null, null, null, null, false);
+            }
             static fromSizeAndIsInvisible(size, isInvisible) {
                 return new Display2D([size], null, null, null, null, isInvisible);
             }

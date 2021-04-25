@@ -9,6 +9,13 @@ var ThisCouldBeBetter;
                 this.saveStates = saveStates;
                 this.saveStateNameSelected = null;
             }
+            static anonymous() {
+                var now = GameFramework.DateTime.now();
+                var nowAsString = now.toStringMMDD_HHMM_SS();
+                var profileName = "Anon-" + nowAsString;
+                var profile = new Profile(profileName, []);
+                return profile;
+            }
             saveStateSelected() {
                 return this.saveStates.filter(x => x.name == this.saveStateNameSelected)[0];
             }
@@ -70,12 +77,12 @@ var ThisCouldBeBetter;
                     var placeName = place.name;
                     var timePlayingAsString = world.timePlayingAsStringShort(universe);
                     var displaySize = universe.display.sizeInPixels;
-                    var displayFull = new GameFramework.Display2D([displaySize], null, null, null, null, true); // isInvisible
+                    var displayFull = GameFramework.Display2D.fromSizeAndIsInvisible(displaySize, true);
                     displayFull.initialize(universe);
                     place.draw(universe, world, displayFull);
                     var imageSnapshotFull = displayFull.toImage();
                     var imageSizeThumbnail = visualThumbnailSize.clone();
-                    var displayThumbnail = new GameFramework.Display2D([imageSizeThumbnail], null, null, null, null, true);
+                    var displayThumbnail = GameFramework.Display2D.fromSizeAndIsInvisible(imageSizeThumbnail, true);
                     displayThumbnail.initialize(universe);
                     displayThumbnail.drawImageScaled(imageSnapshotFull, GameFramework.Coords.Instances().Zeroes, imageSizeThumbnail);
                     var imageThumbnailFromDisplay = displayThumbnail.toImage();
@@ -105,7 +112,9 @@ var ThisCouldBeBetter;
                     return wasSaveSuccessful;
                 };
                 var saveToLocalStorageDone = (wasSaveSuccessful) => {
-                    var message = (wasSaveSuccessful ? "Game saved successfully." : "Save failed due to errors.");
+                    var message = (wasSaveSuccessful
+                        ? "Game saved successfully."
+                        : "Save failed due to errors.");
                     var controlMessage = universe.controlBuilder.message(universe, size, GameFramework.DataBinding.fromContext(message), () => // acknowledge
                      {
                         var venueNext = universe.controlBuilder.game(universe, null, universe.venueCurrent).toVenue();
@@ -208,7 +217,7 @@ var ThisCouldBeBetter;
                         + saveStateSelected.timeSaved.toStringYYYY_MM_DD_HH_MM_SS()
                         + "\"?", universe.venueCurrent, deleteSaveSelectedConfirm, null // cancel
                     );
-                    var venueNext = controlConfirm.toControls();
+                    var venueNext = controlConfirm.toVenue();
                     venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
                     universe.venueNext = venueNext;
                 };
@@ -426,10 +435,7 @@ var ThisCouldBeBetter;
                     }, (universe, world) => // done
                      {
                         universe.world = world;
-                        var now = GameFramework.DateTime.now();
-                        var nowAsString = now.toStringMMDD_HHMM_SS();
-                        var profileName = "Anon-" + nowAsString;
-                        var profile = new Profile(profileName, []);
+                        var profile = Profile.anonymous();
                         universe.profile = profile;
                         var venueNext = universe.world.toVenue();
                         venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);

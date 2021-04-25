@@ -31,12 +31,23 @@ export class Place //
 		this.isLoaded = false;
 	}
 
-	defn(world: World)
+	static default(): Place
+	{
+		return new Place
+		(
+			"Default",
+			"Default", // defnName,
+			Coords.fromXY(1, 1), // size
+			[] // entities
+		);
+	}
+
+	defn(world: World): PlaceDefn
 	{
 		return world.defn.placeDefnByName(this.defnName);
 	}
 
-	draw(universe: Universe, world: World, display: Display)
+	draw(universe: Universe, world: World, display: Display): void
 	{
 		var colorBlack = Color.byName("Black");
 		display.drawBackground(colorBlack, colorBlack);
@@ -60,7 +71,7 @@ export class Place //
 		}
 	}
 
-	entitiesByPropertyName(propertyName: string)
+	entitiesByPropertyName(propertyName: string): Entity[]
 	{
 		var returnValues = this._entitiesByPropertyName.get(propertyName);
 		if (returnValues == null)
@@ -72,7 +83,7 @@ export class Place //
 		return returnValues;
 	}
 
-	entitiesRemove()
+	entitiesRemove(): void
 	{
 		for (var i = 0; i < this.entitiesToRemove.length; i++)
 		{
@@ -92,7 +103,7 @@ export class Place //
 		this.entitiesToSpawn.push(...entitiesToSpawn);
 	}
 
-	entitiesSpawn(universe: Universe, world: World)
+	entitiesSpawn(universe: Universe, world: World): void
 	{
 		for (var i = 0; i < this.entitiesToSpawn.length; i++)
 		{
@@ -129,7 +140,7 @@ export class Place //
 		this.entitiesByName.delete(entity.name);
 	}
 
-	entitySpawn(universe: Universe, world: World, entity: Entity)
+	entitySpawn(universe: Universe, world: World, entity: Entity): void
 	{
 		if (entity.name == null)
 		{
@@ -167,7 +178,7 @@ export class Place //
 		this.entitiesToSpawn.push(entityToSpawn);
 	}
 
-	finalize(universe: Universe, world: World)
+	finalize(universe: Universe, world: World): void
 	{
 		this.entitiesRemove();
 		universe.inputHelper.inputsRemoveAll();
@@ -178,7 +189,7 @@ export class Place //
 		}
 	}
 
-	initialize(universe: Universe, world: World)
+	initialize(universe: Universe, world: World): void
 	{
 		var defn = this.defn(world);
 		defn.placeInitialize(universe, world, this);
@@ -191,7 +202,7 @@ export class Place //
 		}
 	}
 
-	load(universe: Universe, world: World)
+	load(universe: Universe, world: World): void
 	{
 		if (this.isLoaded == false)
 		{
@@ -201,7 +212,7 @@ export class Place //
 		}
 	}
 
-	unload(universe: Universe, world: World)
+	unload(universe: Universe, world: World): void
 	{
 		if (this.isLoaded)
 		{
@@ -211,7 +222,7 @@ export class Place //
 		}
 	}
 
-	updateForTimerTick(universe: Universe, world: World)
+	updateForTimerTick(universe: Universe, world: World): void
 	{
 		this.entitiesRemove();
 
@@ -237,7 +248,7 @@ export class Place //
 
 	// Controls.
 
-	toControl(universe: Universe, world: World)
+	toControl(universe: Universe, world: World): ControlBase
 	{
 		var player = this.player();
 		var playerControllable = player.controllable();

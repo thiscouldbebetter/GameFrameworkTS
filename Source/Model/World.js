@@ -13,6 +13,12 @@ var ThisCouldBeBetter;
                 this.placesByName = GameFramework.ArrayHelper.addLookupsByName(this.places);
                 this.placeNext = this.places[0];
             }
+            static default() {
+                return new World("name", GameFramework.DateTime.now(), GameFramework.WorldDefn.default(), [
+                    GameFramework.Place.default()
+                ] // places
+                );
+            }
             draw(universe) {
                 if (this.placeCurrent != null) {
                     this.placeCurrent.draw(universe, this, universe.display);

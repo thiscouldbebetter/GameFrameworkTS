@@ -16,6 +16,12 @@ var ThisCouldBeBetter;
                 this.entitiesInView = new Array();
                 this._posSaved = GameFramework.Coords.create();
             }
+            static default() {
+                return new Camera(new GameFramework.Coords(400, 300, 1000), // viewSize
+                150, // focalLength
+                GameFramework.Disposition.fromPos(new GameFramework.Coords(0, 0, -150)), null // entitiesInViewSort
+                );
+            }
             clipPlanes() {
                 if (this._clipPlanes == null) {
                     this._clipPlanes =

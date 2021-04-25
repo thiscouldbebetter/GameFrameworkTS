@@ -122,6 +122,19 @@ export class Entity //
 		return returnValue;
 	}
 
+	// Equatable.
+
+	equals(other: Entity): boolean
+	{
+		var areAllPropertiesEqual =
+			ArrayHelper.areEqual(this.properties, other.properties);
+
+		var areEntitiesEqual =
+			(this.name == other.name && areAllPropertiesEqual);
+
+		return areEntitiesEqual;
+	}
+
 	// Convenience methods for properties.
 
 	actor(): Actor { return this.propertyByName(Actor.name) as Actor; }

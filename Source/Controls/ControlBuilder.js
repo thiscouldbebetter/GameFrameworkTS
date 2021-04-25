@@ -82,6 +82,7 @@ var ThisCouldBeBetter;
             }
             choiceList(universe, size, message, options, bindingForOptionText, buttonSelectText, select) {
                 // todo - Variable sizes.
+                size = size || universe.display.sizeDefault();
                 var marginWidth = 10;
                 var marginSize = GameFramework.Coords.fromXY(1, 1).multiplyScalar(marginWidth);
                 var fontHeight = 20;
@@ -292,9 +293,9 @@ var ThisCouldBeBetter;
                 var scaleMultiplier = this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
                 var fontHeight = this.fontHeightInPixelsBase;
                 var world = universe.world;
-                var placeCurrentDefnName = "Demo"; // hack
-                var placeDefn = world.defn.placeDefnByName(placeCurrentDefnName);
-                placeDefn.actionToInputsMappingsEdit();
+                // hack - Should do ALL placeDefns, not just the current one.
+                var placeCurrent = world.placeCurrent;
+                var placeDefn = placeCurrent.defn(world);
                 var returnValue = GameFramework.ControlContainer.from4("containerGameControls", this._zeroes, // pos
                 this.sizeBase.clone(), // size
                 // children
@@ -482,7 +483,7 @@ var ThisCouldBeBetter;
                     "Music:", fontHeight),
                     new GameFramework.ControlSelect("selectMusicVolume", GameFramework.Coords.fromXY(70, row1PosY), // pos
                     GameFramework.Coords.fromXY(30, buttonHeight), // size
-                    new GameFramework.DataBinding(universe.soundHelper, (c) => { return c.musicVolume; }, (c, v) => { c.musicVolume = v; }), // valueSelected
+                    new GameFramework.DataBinding(universe.soundHelper, (c) => c.musicVolume, (c, v) => c.musicVolume = v), // valueSelected
                     GameFramework.SoundHelper.controlSelectOptionsVolume(), // options
                     GameFramework.DataBinding.fromGet((c) => c.value), // bindingForOptionValues,
                     GameFramework.DataBinding.fromGet((c) => { return c.text; }), // bindingForOptionText
@@ -519,7 +520,8 @@ var ThisCouldBeBetter;
                         var controlRootAsContainer = venueControls.controlRoot;
                         var selectDisplaySize = controlRootAsContainer.childrenByName.get("selectDisplaySize");
                         var displaySizeSpecified = selectDisplaySize.optionSelected();
-                        var display = universe.display;
+                        var displayAsDisplay = universe.display;
+                        var display = displayAsDisplay;
                         var platformHelper = universe.platformHelper;
                         platformHelper.platformableRemove(display);
                         display.sizeInPixels = displaySizeSpecified;

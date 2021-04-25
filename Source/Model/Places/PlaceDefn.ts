@@ -6,13 +6,13 @@ export class PlaceDefn
 {
 	name: string;
 	actions: Action[];
-	actionsByName: any;
+	actionsByName: Map<string,Action>;
 	actionToInputsMappings: ActionToInputsMapping[];
 	propertyNamesToProcess: string[];
 	_placeInitialize: (universe: Universe, world: World, place: Place) => void;
 	_placeFinalize: (universe: Universe, world: World, place: Place) => void;
 
-	actionToInputsMappingsByInputName: any;
+	actionToInputsMappingsByInputName: Map<string,ActionToInputsMapping>;
 	actionToInputsMappingSelected: ActionToInputsMapping;
 	actionToInputsMappingsDefault: ActionToInputsMapping[];
 	actionToInputsMappingsEdited: ActionToInputsMapping[];
@@ -44,6 +44,19 @@ export class PlaceDefn
 		);
 	}
 
+	static default(): PlaceDefn
+	{
+		return new PlaceDefn
+		(
+			"Default", // name,
+			[], // actions,
+			[], // actionToInputsMappings,
+			[], // propertyNamesToProcess,
+			null, // placeInitialize
+			null // placeFinalize
+		);
+	}
+
 	static from4
 	(
 		name: string,
@@ -55,11 +68,11 @@ export class PlaceDefn
 		return new PlaceDefn
 		(
 			name, actions, actionToInputsMappings, propertyNamesToProcess,
-			null, null
+			null, null // placeInitialize, placeFinalize
 		);
 	}
 
-	actionToInputsMappingsEdit()
+	actionToInputsMappingsEdit(): void
 	{
 		ArrayHelper.overwriteWith
 		(
@@ -70,7 +83,7 @@ export class PlaceDefn
 		this.actionToInputsMappingSelected = null;
 	}
 
-	actionToInputsMappingsRestoreDefaults()
+	actionToInputsMappingsRestoreDefaults(): void
 	{
 		ArrayHelper.overwriteWith
 		(
@@ -79,7 +92,7 @@ export class PlaceDefn
 		);
 	}
 
-	actionToInputsMappingsSave()
+	actionToInputsMappingsSave(): void
 	{
 		this.actionToInputsMappings = ArrayHelper.clone
 		(
@@ -91,7 +104,7 @@ export class PlaceDefn
 		);
 	}
 
-	placeFinalize(universe: Universe, world: World, place: Place)
+	placeFinalize(universe: Universe, world: World, place: Place): void
 	{
 		if (this._placeFinalize != null)
 		{
@@ -99,7 +112,7 @@ export class PlaceDefn
 		}
 	}
 
-	placeInitialize(universe: Universe, world: World, place: Place)
+	placeInitialize(universe: Universe, world: World, place: Place): void
 	{
 		if (this._placeInitialize != null)
 		{
