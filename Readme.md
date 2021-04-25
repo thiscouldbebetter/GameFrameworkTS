@@ -59,3 +59,8 @@ A quick-start guide for creating a new game from the supplied stub game is avail
 
 A partial Development Guide illustrating the creation of a new game from the supplied stub game is available at <a href="Documentation/Development_Guide/Development_Guide.md">Documentation/Development_Guide/Development_Guide.md</a>.
 
+
+Testing
+-------
+
+An automated testing framework is provided in the Tests directory, along with a test suite that uses it.  As of this writing, the test suite incorporates only a few test fixtures.  To run the tests, open Tests/Tests.html in a web browser that runs JavaScript.  To add a new fixture to the test suite, implement a new subclass of the TestFixture class in the Tests/Test directory, then modify the script at the bottom of Tests.html to include the new fixture.  To recompile the tests after changes, run the command "tsc" from within the Tests directory.
