@@ -82,17 +82,22 @@
         "affectsGlobalScope": true
       },
       "./Assert.ts": {
-        "version": "9ae9027c8f7ed8eeb4b9df889a4b0e6c4c61f9bfc19e9d1c841ae1df6f612ddf",
-        "signature": "af8de32737579f9c80d9c7307d2cc179138d6e94ed3c6fe513b0133ff2bc226d",
+        "version": "fdbf417ecefc78e7fa9a72fc235fc388224257f50fabd187b8aff3a82edb39bc",
+        "signature": "901ad32ca491b0eb33ac7e17964d0e9ee4c51553b31a99a0c9a212424ed3755e",
+        "affectsGlobalScope": true
+      },
+      "./Imports.ts": {
+        "version": "42023097d5f6792e183b3835d5260eb508c5eda7d875b79efc8039d319b39f09",
+        "signature": "d6cad5326de4eb0e541525b86848cf4ebac268c9d70d7567248e556d6d326f5c",
         "affectsGlobalScope": true
       },
       "./TestFixture.ts": {
-        "version": "eed4b006c0737a0f55f0a9ce966e895908c7b42111df68d53e49415fda0a43a4",
+        "version": "e0cff5797d66210539eadd324f72580e2832a54c85467677d72cfad429b044f3",
         "signature": "6f6f748993e8d51b616d38988e385b71b964475c6ec6788572de214a5a0cadac",
         "affectsGlobalScope": true
       },
       "./TestSuite.ts": {
-        "version": "e452c180e70a3b64585deaf3d82643b7694a3a30c1c084963823aee92768514e",
+        "version": "a31ea00289af271ca2cf185d6064da8a0c5a8a746091061664a8761f99c1d0ae",
         "signature": "aac38589a63055bb530d44b4419afd827e0ad6ef5488c5bae8f5982a7ec8de6b",
         "affectsGlobalScope": true
       },
@@ -111,9 +116,14 @@
         "signature": "c8a0f7e11ef7f03adbbdf297e66f99afecbbbb7a1488c3d863d3b677b2475ef9",
         "affectsGlobalScope": true
       },
-      "../Source/Imports.ts": {
-        "version": "de0714e6162883b2eea0c1fc21308821d4419ad2af065ca2d2b34d0c28b501ba",
-        "signature": "bd4d8ad842fdc2b1daf391565f49a7bbf984de9e7f48042cfe9e550c1edcc0bc",
+      "./Tests/Geometry/Collisions/CollisionHelperTests.ts": {
+        "version": "c5fc191d7df08ebedfbb1c20835f11667fa01a0ffd62aa68eda0e3d8657af047",
+        "signature": "00a3507eefe61c55569a60655b1a7ced48e66c0735345e80d76ae5896de57d47",
+        "affectsGlobalScope": true
+      },
+      "./Tests/Geometry/Constraints/ConstraintTests.ts": {
+        "version": "88ea207c8ee05c43a2dfb6fcac3eb28e5d7a9a791e205f7e2b38b8538c79c7a2",
+        "signature": "a18c585c461593fa19a017772b66f8f10f6ecb8b0c836c6260378b7dfedfb63a",
         "affectsGlobalScope": true
       },
       "../Source/Controls/ControlActionNames.ts": {
@@ -581,24 +591,9 @@
         "signature": "ad8ccaf4108ace577a084c90cc8ce955bdeddda57c2ce880bd5082786419dab8",
         "affectsGlobalScope": true
       },
-      "../Source/Geometry/Collision.ts": {
-        "version": "deaf0230dcf1301a15a0963d120641e3a4ab5dccf9523989959142c1069c9aab",
-        "signature": "5dcac48e0a9db853efb594be710eb349b1546e0920d2e95e3b8c96778109abe1",
-        "affectsGlobalScope": true
-      },
-      "../Source/Geometry/CollisionHelper.ts": {
-        "version": "e8de8a8ebdd384cb530884b3320eb4810ef71ae285742f33202b7976b510159a",
-        "signature": "2390b51b7e2c7a03f0b9cf8db3ef2b1d4f95936b9d8d84a4594c1b225f56d396",
-        "affectsGlobalScope": true
-      },
-      "../Source/Geometry/CollisionTracker.ts": {
-        "version": "b1b3f7d1d107a64e7c3ce8000da2ee75f442d5d6fce53995b6ab6870f888fcca",
-        "signature": "e38f8ad04af89747f55ea56c4472b9b9896ed143a2bb1adecd91302c16d30341",
-        "affectsGlobalScope": true
-      },
       "../Source/Geometry/Coords.ts": {
-        "version": "b90de4c7d4af0292741a4a308973154a971cb79e933a761b4a94c1649d859e22",
-        "signature": "36aedb236e7b9f7f68089d1966d81b88490ddc17f6c91dbb7d0406bd8989d526",
+        "version": "4881e8e64ceeabe2a1c14f52804efd1411b891e62dcdc560b86effc5c312e710",
+        "signature": "9b33c80b4739726e1f7ae626a61fe892e1e9cd06ef5c4d00f7791b5e93a0c816",
         "affectsGlobalScope": true
       },
       "../Source/Geometry/Direction.ts": {
@@ -634,6 +629,21 @@
       "../Source/Geometry/Rotation.ts": {
         "version": "583432ecd614eff6be78d789c36a60dab3930943f105084749986d52bc02512d",
         "signature": "e8754cb4d06aa4094e5fd23102520bacb6e9b18d99e8ad433bd9d954dcbbcff8",
+        "affectsGlobalScope": true
+      },
+      "../Source/Geometry/Collisions/Collision.ts": {
+        "version": "558b4e58009154e55b9ed533612c1eaae19ca143a5ccad4057ddf3b7f92e1b69",
+        "signature": "e83ce591bc31f65ba48f255cd08cd61086572f8293fcb9a5feb7314399f111db",
+        "affectsGlobalScope": true
+      },
+      "../Source/Geometry/Collisions/CollisionHelper.ts": {
+        "version": "486b3613937b0fc4bb6618fc7201066775f05961f53ddf4403d78fd01a49cf4c",
+        "signature": "f3a8eec2cdbe363b184583541d5064959297482ba4bf79e367c074be31020126",
+        "affectsGlobalScope": true
+      },
+      "../Source/Geometry/Collisions/CollisionTracker.ts": {
+        "version": "b1b3f7d1d107a64e7c3ce8000da2ee75f442d5d6fce53995b6ab6870f888fcca",
+        "signature": "e38f8ad04af89747f55ea56c4472b9b9896ed143a2bb1adecd91302c16d30341",
         "affectsGlobalScope": true
       },
       "../Source/Geometry/Constraints/Constraint.ts": {
@@ -1392,8 +1402,8 @@
         "affectsGlobalScope": true
       },
       "../Source/Model/Physics/Constrainable.ts": {
-        "version": "83073b574fe089e0564bbf2f00f716814abc2a3ca39b0b2cc6657692c0518ae1",
-        "signature": "c88f9ff8a68b47f68cf4a0ec9b62f4c6c4c69f3a5c55897e2d45da91df39a7b8",
+        "version": "dfcf1524515a7919586ed604c5134313bc9cf1719c4eff5e6d6cbbfb74f4282b",
+        "signature": "20301a57301120f0e64918bc9169113e39f0768ef74b9b5bc281250ac4eb6310",
         "affectsGlobalScope": true
       },
       "../Source/Model/Physics/ForceField.ts": {
@@ -1432,7 +1442,7 @@
         "affectsGlobalScope": true
       },
       "../Source/Model/Places/Place.ts": {
-        "version": "0716e9a90a396bd2380dc81bceca05ac7c25cae5a5b7e8ed403fa80eb1ce4094",
+        "version": "d17b81d25cca9fded4c1d157d302dafb30cf925470e753c0f22237e09b13bf2c",
         "signature": "9627d7fc0155c46191bf42fd533898af7a175fa11a5006cb6d68aa78a8185d64",
         "affectsGlobalScope": true
       },
@@ -1793,9 +1803,9 @@
       "../Source/Display/Visuals/VisualTransform.ts",
       "../Source/Display/WebGLContext.ts",
       "../Source/Geometry/Camera.ts",
-      "../Source/Geometry/Collision.ts",
-      "../Source/Geometry/CollisionHelper.ts",
-      "../Source/Geometry/CollisionTracker.ts",
+      "../Source/Geometry/Collisions/Collision.ts",
+      "../Source/Geometry/Collisions/CollisionHelper.ts",
+      "../Source/Geometry/Collisions/CollisionTracker.ts",
       "../Source/Geometry/Constraints/Constraint.ts",
       "../Source/Geometry/Constraints/Constraint_AttachToEntityWithId.ts",
       "../Source/Geometry/Constraints/Constraint_AttachToEntityWithName.ts",
@@ -1881,7 +1891,6 @@
       "../Source/Helpers/ByteHelper.ts",
       "../Source/Helpers/NumberHelper.ts",
       "../Source/Helpers/StringHelper.ts",
-      "../Source/Imports.ts",
       "../Source/Input/ActionToInputsMapping.ts",
       "../Source/Input/Input.ts",
       "../Source/Input/InputHelper.ts",
@@ -2015,11 +2024,14 @@
       "../Source/Utility/ValueBreakGroup.ts",
       "../Source/Utility/VenueTask.ts",
       "./Assert.ts",
+      "./Imports.ts",
       "./Mocks/MockEnvironment.ts",
       "./TestFixture.ts",
       "./TestSuite.ts",
       "./Tests/Controls/ControlBuilderTests.ts",
       "./Tests/Geometry/CameraTests.ts",
+      "./Tests/Geometry/Collisions/CollisionHelperTests.ts",
+      "./Tests/Geometry/Constraints/ConstraintTests.ts",
       "../../../../../../../usr/local/lib/node_modules/typescript/lib/lib.dom.d.ts",
       "../../../../../../../usr/local/lib/node_modules/typescript/lib/lib.dom.iterable.d.ts",
       "../../../../../../../usr/local/lib/node_modules/typescript/lib/lib.es2015.collection.d.ts",

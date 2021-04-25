@@ -147,7 +147,7 @@ var ThisCouldBeBetter;
                 return lookupOfLookups;
             }
             // instance methods
-            collisionClosest(collisionsToCheck) {
+            collisionActiveClosest(collisionsToCheck) {
                 var returnValue = collisionsToCheck.filter(x => x.isActive).sort((x, y) => x.distanceToCollision - y.distanceToCollision)[0];
                 return returnValue;
             }
@@ -698,13 +698,18 @@ var ThisCouldBeBetter;
                 var sphere1Radius = sphere1.radius;
                 var displacementFromSphere0CenterTo1 = this._displacement.overwriteWith(sphere1Center).subtract(sphere0Center);
                 var distanceBetweenCenters = displacementFromSphere0CenterTo1.magnitude();
-                var distanceToRadicalCenter = (distanceBetweenCenters * distanceBetweenCenters
-                    + sphere0Radius * sphere0Radius
-                    - sphere1Radius * sphere1Radius)
-                    / (2 * distanceBetweenCenters);
-                var directionFromSphere0CenterTo1 = displacementFromSphere0CenterTo1.divideScalar(distanceBetweenCenters);
-                var displacementFromSphereCenter0ToRadicalCenter = directionFromSphere0CenterTo1.multiplyScalar(distanceToRadicalCenter);
-                collision.pos.overwriteWith(displacementFromSphereCenter0ToRadicalCenter).add(sphere0Center);
+                if (distanceBetweenCenters == 0) {
+                    collision.pos.overwriteWith(sphere0Center);
+                }
+                else {
+                    var distanceToRadicalCenter = (distanceBetweenCenters * distanceBetweenCenters
+                        + sphere0Radius * sphere0Radius
+                        - sphere1Radius * sphere1Radius)
+                        / (2 * distanceBetweenCenters);
+                    var directionFromSphere0CenterTo1 = displacementFromSphere0CenterTo1.divideScalar(distanceBetweenCenters);
+                    var displacementFromSphereCenter0ToRadicalCenter = directionFromSphere0CenterTo1.multiplyScalar(distanceToRadicalCenter);
+                    collision.pos.overwriteWith(displacementFromSphereCenter0ToRadicalCenter).add(sphere0Center);
+                }
                 return collision;
             }
             // doXAndYCollide

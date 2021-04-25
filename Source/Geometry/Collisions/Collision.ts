@@ -32,7 +32,7 @@ export class Collision
 		this.isActive = false;
 	}
 
-	static create()
+	static create(): Collision
 	{
 		return new Collision
 		(
@@ -40,7 +40,12 @@ export class Collision
 		);
 	}
 
-	clear()
+	static fromPosAndDistance(pos: Coords, distance: number): Collision
+	{
+		return new Collision(pos, distance, [], []);
+	}
+
+	clear(): Collision
 	{
 		this.isActive = false;
 		ArrayHelper.clear(this.entitiesColliding);
@@ -49,7 +54,7 @@ export class Collision
 		return this;
 	}
 
-	equals(other: Collision)
+	equals(other: Collision): boolean
 	{
 		var returnValue =
 		(

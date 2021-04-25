@@ -58,5 +58,5 @@
   },
 
   "include" : [ ".", "../Source/" ],
-  "exclude" : [ "../Source/Stub/" ]
+  "exclude" : [ "../Source/Stub/", "../Source/Imports.ts" ]
 }

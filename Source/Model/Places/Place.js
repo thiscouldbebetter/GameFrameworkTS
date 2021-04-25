@@ -19,7 +19,7 @@ var ThisCouldBeBetter;
             }
             static default() {
                 return new Place("Default", "Default", // defnName,
-                GameFramework.Coords.fromXY(1, 1), // size
+                GameFramework.Coords.fromXY(1, 1).multiplyScalar(1000), // size
                 [] // entities
                 );
             }

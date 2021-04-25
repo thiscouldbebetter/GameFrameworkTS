@@ -226,7 +226,7 @@ export class CollisionHelper
 
 	// instance methods
 
-	collisionClosest(collisionsToCheck: Collision[]): Collision
+	collisionActiveClosest(collisionsToCheck: Collision[]): Collision
 	{
 		var returnValue = collisionsToCheck.filter
 		(
@@ -1234,26 +1234,33 @@ export class CollisionHelper
 		var distanceBetweenCenters =
 			displacementFromSphere0CenterTo1.magnitude();
 
-		var distanceToRadicalCenter =
-		(
-			distanceBetweenCenters * distanceBetweenCenters
-			+ sphere0Radius * sphere0Radius
-			- sphere1Radius * sphere1Radius
-		)
-		/ (2 * distanceBetweenCenters);
+		if (distanceBetweenCenters == 0)
+		{
+			collision.pos.overwriteWith(sphere0Center);
+		}
+		else
+		{
+			var distanceToRadicalCenter =
+			(
+				distanceBetweenCenters * distanceBetweenCenters
+				+ sphere0Radius * sphere0Radius
+				- sphere1Radius * sphere1Radius
+			)
+			/ (2 * distanceBetweenCenters);
 
-		var directionFromSphere0CenterTo1 =
-			displacementFromSphere0CenterTo1.divideScalar(distanceBetweenCenters);
-		var displacementFromSphereCenter0ToRadicalCenter =
-			directionFromSphere0CenterTo1.multiplyScalar(distanceToRadicalCenter);
+			var directionFromSphere0CenterTo1 =
+				displacementFromSphere0CenterTo1.divideScalar(distanceBetweenCenters);
+			var displacementFromSphereCenter0ToRadicalCenter =
+				directionFromSphere0CenterTo1.multiplyScalar(distanceToRadicalCenter);
 
-		collision.pos.overwriteWith
-		(
-			displacementFromSphereCenter0ToRadicalCenter
-		).add
-		(
-			sphere0Center
-		);
+			collision.pos.overwriteWith
+			(
+				displacementFromSphereCenter0ToRadicalCenter
+			).add
+			(
+				sphere0Center
+			);
+		}
 
 		return collision;
 	}

@@ -16,6 +16,9 @@ var ThisCouldBeBetter;
             static create() {
                 return new Collision(GameFramework.Coords.create(), 0, new Array(), new Array());
             }
+            static fromPosAndDistance(pos, distance) {
+                return new Collision(pos, distance, [], []);
+            }
             clear() {
                 this.isActive = false;
                 GameFramework.ArrayHelper.clear(this.entitiesColliding);

@@ -25,6 +25,12 @@ export class Constrainable implements EntityProperty
 		return new Constrainable( [ constraint ] );
 	}
 
+	clear(): Constrainable
+	{
+		this.constraints.length = 0;
+		return this;
+	}
+
 	constrain
 	(
 		universe: Universe, world: World, place: Place, entity: Entity
@@ -39,13 +45,14 @@ export class Constrainable implements EntityProperty
 		}
 	}
 
-	constraintAdd(constraintToAdd: Constraint): void
+	constraintAdd(constraintToAdd: Constraint): Constrainable
 	{
 		this.constraints.push(constraintToAdd);
 		this._constraintsByClassName.set
 		(
 			constraintToAdd.constructor.name, constraintToAdd
 		);
+		return this;
 	}
 
 	constraintByClassName(constraintClassName: string): Constraint

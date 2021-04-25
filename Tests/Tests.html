@@ -84,9 +84,6 @@ so it can be published on thiscouldbebetter.github.io.
 <script type="text/javascript" src="../Source/Display/Visuals/Animation/VisualAnimation.js"></script>
 
 <script type="text/javascript" src="../Source/Geometry/Camera.js"></script>
-<script type="text/javascript" src="../Source/Geometry/Collision.js"></script>
-<script type="text/javascript" src="../Source/Geometry/CollisionHelper.js"></script>
-<script type="text/javascript" src="../Source/Geometry/CollisionTracker.js"></script>
 <script type="text/javascript" src="../Source/Geometry/Coords.js"></script>
 <script type="text/javascript" src="../Source/Geometry/Direction.js"></script>
 <script type="text/javascript" src="../Source/Geometry/Disposition.js"></script>
@@ -96,13 +93,26 @@ so it can be published on thiscouldbebetter.github.io.
 <script type="text/javascript" src="../Source/Geometry/RangeExtent.js"></script>
 <script type="text/javascript" src="../Source/Geometry/Rotation.js"></script>
 
+<script type="text/javascript" src="../Source/Geometry/Collisions/Collision.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Collisions/CollisionHelper.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Collisions/CollisionTracker.js"></script>
+
+<script type="text/javascript" src="../Source/Geometry/Constraints/Constraint_AttachToEntityWithId.js"></script>
 <script type="text/javascript" src="../Source/Geometry/Constraints/Constraint_AttachToEntityWithName.js"></script>
 <script type="text/javascript" src="../Source/Geometry/Constraints/Constraint_Conditional.js"></script>
 <script type="text/javascript" src="../Source/Geometry/Constraints/Constraint_ContainInBox.js"></script>
 <script type="text/javascript" src="../Source/Geometry/Constraints/Constraint_ContainInHemispace.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Constraints/Constraint_FrictionDry.js"></script>
 <script type="text/javascript" src="../Source/Geometry/Constraints/Constraint_FrictionXY.js"></script>
 <script type="text/javascript" src="../Source/Geometry/Constraints/Constraint_Gravity.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Constraints/Constraint_Offset.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Constraints/Constraint_OrientToward.js"></script>
 <script type="text/javascript" src="../Source/Geometry/Constraints/Constraint_SpeedMaxXY.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Constraints/Constraint_StopBelowSpeedMin.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Constraints/Constraint_TrimToPlaceSize.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Constraints/Constraint_WrapToPlaceSize.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Constraints/Constraint_WrapToPlaceSizeX.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Constraints/Constraint_WrapToPlaceSizeXTrimY.js"></script>
 
 <script type="text/javascript" src="../Source/Geometry/Network/Network.js"></script>
 
@@ -288,10 +298,6 @@ so it can be published on thiscouldbebetter.github.io.
 <script type="text/javascript" src="../Source/Utility/ValueBreakGroup.js"></script>
 <script type="text/javascript" src="../Source/Utility/VenueTask.js"></script>
 
-<script type="text/javascript" src="../Source/Imports.js"></script>
-
-<script type="text/javascript" src="../Source/Demo/Model/WorldDemo.js"></script>
-
 <script type="text/javascript" src="../Source/Demo/Model/EntityProperties/Goal.js"></script>
 
 <script type="text/javascript" src="../Source/Demo/Model/Places/PlaceBuilderDemo.js"></script>
@@ -299,7 +305,6 @@ so it can be published on thiscouldbebetter.github.io.
 <script type="text/javascript" src="../Source/Demo/Model/Places/PlaceBuilderDemo_Emplacements.js"></script>
 <script type="text/javascript" src="../Source/Demo/Model/Places/PlaceBuilderDemo_Items.js"></script>
 <script type="text/javascript" src="../Source/Demo/Model/Places/PlaceBuilderDemo_Movers.js"></script>
-<script type="text/javascript" src="../Source/Demo/Model/Places/PlaceRoom.js"></script>
 
 <script type="text/javascript" src="../Source/Demo/GameDemo.js"></script>
 
@@ -307,21 +312,33 @@ so it can be published on thiscouldbebetter.github.io.
 <script type="text/javascript" src="TestFixture.js"></script>
 <script type="text/javascript" src="TestSuite.js"></script>
 
+<script type="text/javascript" src="Imports.js"></script>
+
 <script type="text/javascript" src="Mocks/MockEnvironment.js"></script>
 
 <script type="text/javascript" src="Tests/Controls/ControlBuilderTests.js"></script>
 
 <script type="text/javascript" src="Tests/Geometry/CameraTests.js"></script>
 
+<script type="text/javascript" src="Tests/Geometry/Collisions/CollisionHelperTests.js"></script>
+
+<script type="text/javascript" src="Tests/Geometry/Constraints/ConstraintTests.js"></script>
+
 <script type="text/javascript">
 
 	var testSuite = new TestSuite
 	([
-		// Controls
+		// Controls.
 		new ControlBuilderTests(),
 
-		// Geometry
-		new CameraTests()
+		// Geometry.
+		new CameraTests(),
+
+		// Geometry - Collisions.
+		new CollisionHelperTests(),
+
+		// Geometry - Constraints.
+		new ConstraintTests()
 	]);
 
 	testSuite.run();

@@ -15,6 +15,10 @@ var ThisCouldBeBetter;
             static fromConstraint(constraint) {
                 return new Constrainable([constraint]);
             }
+            clear() {
+                this.constraints.length = 0;
+                return this;
+            }
             constrain(universe, world, place, entity) {
                 var constrainable = entity.constrainable();
                 var constraints = constrainable.constraints;
@@ -26,6 +30,7 @@ var ThisCouldBeBetter;
             constraintAdd(constraintToAdd) {
                 this.constraints.push(constraintToAdd);
                 this._constraintsByClassName.set(constraintToAdd.constructor.name, constraintToAdd);
+                return this;
             }
             constraintByClassName(constraintClassName) {
                 return this._constraintsByClassName.get(constraintClassName);

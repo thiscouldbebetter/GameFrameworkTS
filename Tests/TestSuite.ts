@@ -13,7 +13,7 @@ class TestSuite
 		document.write
 		(
 			"Running test suite containing "
-			+ this.testFixtures.length + " test fixtures.<br />"
+			+ this.testFixtures.length + " test fixtures.<br /><br />"
 		);
 
 		this.testFixtures.forEach(testFixture =>
@@ -21,6 +21,10 @@ class TestSuite
 			testFixture.run();
 		});
 
-		document.write("All test fixtures in suite have been run.<br />");
+		document.write
+		(
+			"All " + this.testFixtures.length
+			+ " test fixtures in suite have been run.<br />"
+		);
 	}
 }

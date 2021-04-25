@@ -37,7 +37,7 @@ export class Place //
 		(
 			"Default",
 			"Default", // defnName,
-			Coords.fromXY(1, 1), // size
+			Coords.fromXY(1, 1).multiplyScalar(1000), // size
 			[] // entities
 		);
 	}

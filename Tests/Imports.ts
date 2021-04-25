@@ -94,12 +94,13 @@ import Polar = gf.Polar;
 import RangeExtent = gf.RangeExtent;
 import Rotation = gf.Rotation;
 
-// Geometry - Collisions.
+// Geometry - Collision.
 import Collision = gf.Collision;
 import CollisionHelper = gf.CollisionHelper;
 import CollisionTracker = gf.CollisionTracker;
 
 // Geometry - Constraints.
+import Constraint_AttachToEntityWithId = gf.Constraint_AttachToEntityWithId;
 import Constraint_AttachToEntityWithName = gf.Constraint_AttachToEntityWithName;
 import Constraint_Conditional = gf.Constraint_Conditional;
 import Constraint_ContainInBox = gf.Constraint_ContainInBox;
@@ -107,9 +108,13 @@ import Constraint_ContainInHemispace = gf.Constraint_ContainInHemispace;
 import Constraint_FrictionDry = gf.Constraint_FrictionDry;
 import Constraint_FrictionXY = gf.Constraint_FrictionXY;
 import Constraint_Gravity = gf.Constraint_Gravity;
+import Constraint_Offset = gf.Constraint_Offset;
+import Constraint_OrientToward = gf.Constraint_OrientToward;
 import Constraint_SpeedMaxXY = gf.Constraint_SpeedMaxXY;
+import Constraint_StopBelowSpeedMin = gf.Constraint_StopBelowSpeedMin;
 import Constraint_TrimToPlaceSize = gf.Constraint_TrimToPlaceSize;
 import Constraint_WrapToPlaceSize = gf.Constraint_WrapToPlaceSize;
+import Constraint_WrapToPlaceSizeX = gf.Constraint_WrapToPlaceSizeX;
 import Constraint_WrapToPlaceSizeXTrimY = gf.Constraint_WrapToPlaceSizeXTrimY;
 
 // Geometry - Network.

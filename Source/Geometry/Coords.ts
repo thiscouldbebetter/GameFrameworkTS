@@ -222,6 +222,11 @@ export class Coords
 		return (this.x == other.x && this.y == other.y && this.z == other.z);
 	}
 
+	equalsWithinError(other: Coords, errorMax: number): boolean
+	{
+		return (this.clone().subtract(other).magnitude() <= errorMax);
+	}
+
 	equalsXY(other: Coords): boolean
 	{
 		return (this.x == other.x && this.y == other.y);
