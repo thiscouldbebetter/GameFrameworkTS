@@ -13,12 +13,12 @@ export class ShapeGroupAll implements ShapeBase
 
 	// Clonable.
 
-	clone()
+	clone(): ShapeGroupAll
 	{
 		return new ShapeGroupAll(ArrayHelper.clone(this.shapes));
 	}
 
-	overwriteWith(other: ShapeGroupAll)
+	overwriteWith(other: ShapeGroupAll): ShapeGroupAll
 	{
 		ArrayHelper.overwriteWith(this.shapes, other.shapes);
 		return this;
@@ -46,6 +46,13 @@ export class ShapeGroupAll implements ShapeBase
 		throw("Not implemented!");
 	}
 
+	// Transformable.
+
+	transform(transformToApply: Transform): Transformable
+	{
+		this.shapes.forEach( (x: ShapeBase) => x.transform(transformToApply));
+		return this;
+	}
 }
 
 }

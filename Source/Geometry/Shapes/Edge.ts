@@ -13,44 +13,39 @@ export class Edge implements ShapeBase
 
 	constructor(vertices: Coords[])
 	{
-		this.vertices = vertices;
+		this.vertices = vertices || [ Coords.create(), Coords.create() ];
 
 		this._direction = Coords.create();
 		this._displacement = Coords.create();
 		this._transverse = Coords.create();
 	}
 
-	box()
+	static create(): Edge
 	{
-		if (this._box == null)
-		{
-			this._box = new Box(Coords.create(), Coords.create());
-		}
-		this._box.ofPoints(this.vertices);
-		return this._box;
+		return new Edge(null);
 	}
 
-	direction()
+	direction(): Coords
 	{
 		return this._direction.overwriteWith(this.displacement()).normalize();
 	}
 
-	equals(other: Edge)
+	equals(other: Edge): boolean
 	{
 		return ArrayHelper.equals(this.vertices, other.vertices);
 	}
 
-	displacement()
+	displacement(): Coords
 	{
 		return this._displacement.overwriteWith(this.vertices[1]).subtract(this.vertices[0]);
 	}
 
-	length()
+	length(): number
 	{
 		return this.displacement().magnitude();
 	}
 
-	projectOntoOther(other: Edge)
+	projectOntoOther(other: Edge): Edge
 	{
 		var otherVertices = other.vertices;
 		var otherVertex0 = otherVertices[0];
@@ -72,26 +67,26 @@ export class Edge implements ShapeBase
 		return this;
 	}
 
-	transverse(faceNormal: Coords)
+	transverse(faceNormal: Coords): Coords
 	{
 		return this._transverse.overwriteWith(this.direction()).crossProduct(faceNormal);
 	}
 
 	// string
 
-	toString()
+	toString(): string
 	{
 		return this.vertices.toString();
 	}
 
 	// Cloneable.
 
-	clone()
+	clone(): Edge
 	{
 		return new Edge(ArrayHelper.clone(this.vertices));
 	}
 
-	overwriteWith(other: Edge)
+	overwriteWith(other: Edge): Edge
 	{
 		ArrayHelper.overwriteWith(this.vertices, other.vertices);
 		return this;
@@ -109,6 +104,10 @@ export class Edge implements ShapeBase
 	{
 		return boxOut.ofPoints(this.vertices);
 	}
+
+	// Transformable.
+
+	transform(transformToApply: Transform): Transformable { throw("Not implemented!");  }
 }
 
 }

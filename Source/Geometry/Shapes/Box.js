@@ -196,14 +196,6 @@ var ThisCouldBeBetter;
             toString() {
                 return this.min().toString() + ":" + this.max().toString();
             }
-            // transformable
-            coordsGroupToTranslate() {
-                return [this.center];
-            }
-            transform(transformToApply) {
-                GameFramework.Transforms.applyTransformToCoordsMany(transformToApply, this.coordsGroupToTranslate());
-                return this;
-            }
             // ShapeBase.
             dimensionForSurfaceClosestToPoint(posToCheck, displacementOverSizeHalf) {
                 var greatestAbsoluteDisplacementDimensionSoFar = -1;
@@ -234,6 +226,14 @@ var ThisCouldBeBetter;
             }
             toBox(boxOut) {
                 return boxOut.overwriteWith(this);
+            }
+            // transformable
+            coordsGroupToTranslate() {
+                return [this.center];
+            }
+            transform(transformToApply) {
+                GameFramework.Transforms.applyTransformToCoordsMany(transformToApply, this.coordsGroupToTranslate());
+                return this;
             }
         }
         GameFramework.Box = Box;

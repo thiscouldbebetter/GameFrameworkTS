@@ -21,19 +21,19 @@ export class Arc implements ShapeBase
 		]);
 	}
 
-	collider()
+	collider(): ShapeGroupAll
 	{
 		return this._collider;
 	}
 
 	// cloneable
 
-	clone()
+	clone(): Arc
 	{
 		return new Arc(this.shell.clone(), this.wedge.clone());
 	}
 
-	overwriteWith(other: Arc)
+	overwriteWith(other: Arc): Arc
 	{
 		this.shell.overwriteWith(other.shell);
 		this.wedge.overwriteWith(other.wedge);
@@ -42,7 +42,7 @@ export class Arc implements ShapeBase
 
 	// transformable
 
-	coordsGroupToTranslate()
+	coordsGroupToTranslate(): Coords[]
 	{
 		return [ this.shell.sphereOuter.center, this.wedge.vertex ];
 	}
@@ -56,12 +56,12 @@ export class Arc implements ShapeBase
 		return ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
 	}
 
-	normalAtPos(posToCheck: Coords, normalOut: Coords)
+	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
 	{
 		return this.shell.normalAtPos(posToCheck, normalOut);
 	}
 
-	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords)
+	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords
 	{
 		return surfacePointOut.overwriteWith(posToCheck); // todo
 	}
@@ -71,6 +71,9 @@ export class Arc implements ShapeBase
 		return this.shell.toBox(boxOut);
 	}
 
+	// Transformable.
+
+	transform(transformToApply: Transform): Transformable { throw("Not implemented!");  }
 }
 
 }

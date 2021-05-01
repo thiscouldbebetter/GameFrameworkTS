@@ -7,7 +7,9 @@ export class Sphere implements ShapeBase
 	center: Coords;
 	radius: number;
 
-	_displacement: Coords;
+	private _centerAsArray: Coords[];
+	private _displacement: Coords;
+	private _pointRandom: Coords;
 
 	constructor(center: Coords, radius: number)
 	{
@@ -15,6 +17,7 @@ export class Sphere implements ShapeBase
 		this.radius = radius;
 
 		// Helper variables.
+		this._centerAsArray = [ this.center ];
 		this._displacement = Coords.create();
 	}
 
@@ -29,7 +32,19 @@ export class Sphere implements ShapeBase
 
 	pointRandom()
 	{
-		return new Polar(0, this.radius, 0).random(null).toCoords(Coords.create()).add(this.center);
+		return new Polar
+		(
+			0, this.radius, 0
+		).random
+		(
+			null
+		).toCoords
+		(
+			this._pointRandom
+		).add
+		(
+			this.center
+		);
 	}
 
 	// cloneable
@@ -44,13 +59,6 @@ export class Sphere implements ShapeBase
 		this.center.overwriteWith(other.center);
 		this.radius = other.radius;
 		return this;
-	}
-
-	// transformable
-
-	coordsGroupToTranslate()
-	{
-		return [ this.center ];
 	}
 
 	// ShapeBase.
@@ -82,6 +90,18 @@ export class Sphere implements ShapeBase
 		var diameter = this.radius * 2;
 		boxOut.size.overwriteWithDimensions(diameter, diameter, diameter);
 		return boxOut;
+	}
+
+	// Transformable.
+
+	coordsGroupToTranslate(): Coords[]
+	{
+		return this._centerAsArray;
+	}
+
+	transform(transformToApply: Transform): Transformable
+	{
+		throw("Not implemented!");
 	}
 }
 

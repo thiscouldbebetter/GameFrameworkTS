@@ -24,24 +24,24 @@ export class Shell implements ShapeBase
 		]);
 	}
 
-	center()
+	center(): Coords
 	{
 		return this.sphereOuter.center;
 	}
 
-	collider()
+	collider(): ShapeGroupAll
 	{
 		return this._collider;
 	}
 
 	// cloneable
 
-	clone()
+	clone(): Shell
 	{
 		return new Shell(this.sphereOuter.clone(), this.radiusInner);
 	}
 
-	overwriteWith(other: Shell)
+	overwriteWith(other: Shell): Shell
 	{
 		this.sphereOuter.overwriteWith(other.sphereOuter);
 		this.radiusInner = other.radiusInner;
@@ -55,7 +55,7 @@ export class Shell implements ShapeBase
 		return ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
 	}
 
-	normalAtPos(posToCheck: Coords, normalOut: Coords)
+	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
 	{
 		var displacementFromCenter =
 			normalOut.overwriteWith(posToCheck).subtract(this.center());
@@ -73,7 +73,7 @@ export class Shell implements ShapeBase
 		return normalOut;
 	}
 
-	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords)
+	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords
 	{
 		return surfacePointOut.overwriteWith(posToCheck); // todo
 	}
@@ -83,6 +83,9 @@ export class Shell implements ShapeBase
 		return this.sphereOuter.toBox(boxOut);
 	}
 
+	// Transformable.
+
+	transform(transformToApply: Transform): Transformable { throw("Not implemented!");  }
 }
 
 }

@@ -27,6 +27,8 @@ var ThisCouldBeBetter;
                 return this.shape.surfacePointNearPos(posToCheck, surfacePointOut);
             }
             toBox(boxOut) { throw ("Not implemented!"); }
+            // Transformable.
+            transform(transformToApply) { throw ("Not implemented!"); }
         }
         GameFramework.ShapeInverse = ShapeInverse;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

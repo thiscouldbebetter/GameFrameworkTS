@@ -5,17 +5,13 @@ var ThisCouldBeBetter;
     (function (GameFramework) {
         class Edge {
             constructor(vertices) {
-                this.vertices = vertices;
+                this.vertices = vertices || [GameFramework.Coords.create(), GameFramework.Coords.create()];
                 this._direction = GameFramework.Coords.create();
                 this._displacement = GameFramework.Coords.create();
                 this._transverse = GameFramework.Coords.create();
             }
-            box() {
-                if (this._box == null) {
-                    this._box = new GameFramework.Box(GameFramework.Coords.create(), GameFramework.Coords.create());
-                }
-                this._box.ofPoints(this.vertices);
-                return this._box;
+            static create() {
+                return new Edge(null);
             }
             direction() {
                 return this._direction.overwriteWith(this.displacement()).normalize();
@@ -63,6 +59,8 @@ var ThisCouldBeBetter;
             toBox(boxOut) {
                 return boxOut.ofPoints(this.vertices);
             }
+            // Transformable.
+            transform(transformToApply) { throw ("Not implemented!"); }
         }
         GameFramework.Edge = Edge;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

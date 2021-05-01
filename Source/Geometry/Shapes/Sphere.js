@@ -8,6 +8,7 @@ var ThisCouldBeBetter;
                 this.center = center;
                 this.radius = radius;
                 // Helper variables.
+                this._centerAsArray = [this.center];
                 this._displacement = GameFramework.Coords.create();
             }
             containsOther(other) {
@@ -17,7 +18,7 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             pointRandom() {
-                return new GameFramework.Polar(0, this.radius, 0).random(null).toCoords(GameFramework.Coords.create()).add(this.center);
+                return new GameFramework.Polar(0, this.radius, 0).random(null).toCoords(this._pointRandom).add(this.center);
             }
             // cloneable
             clone() {
@@ -27,10 +28,6 @@ var ThisCouldBeBetter;
                 this.center.overwriteWith(other.center);
                 this.radius = other.radius;
                 return this;
-            }
-            // transformable
-            coordsGroupToTranslate() {
-                return [this.center];
             }
             // ShapeBase.
             locate(loc) {
@@ -47,6 +44,13 @@ var ThisCouldBeBetter;
                 var diameter = this.radius * 2;
                 boxOut.size.overwriteWithDimensions(diameter, diameter, diameter);
                 return boxOut;
+            }
+            // Transformable.
+            coordsGroupToTranslate() {
+                return this._centerAsArray;
+            }
+            transform(transformToApply) {
+                throw ("Not implemented!");
             }
         }
         GameFramework.Sphere = Sphere;

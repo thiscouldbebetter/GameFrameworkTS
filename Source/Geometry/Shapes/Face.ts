@@ -134,7 +134,10 @@ export class Face implements ShapeBase
 
 	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords { throw("Not implemented!"); }
 
-	toBox(boxOut: Box): Box { throw("Not implemented!"); }
+	toBox(boxOut: Box): Box
+	{
+		return boxOut.ofPoints(this.vertices);
+	}
 
 	// Transformable.
 

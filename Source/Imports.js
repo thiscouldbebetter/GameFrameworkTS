@@ -73,9 +73,6 @@ var Animatable2 = gf.Animatable2; // Possibly conflicts with a built-in class?
 var VisualAnimation = gf.VisualAnimation;
 // Geometry.
 var Camera = gf.Camera;
-var Collision = gf.Collision;
-var CollisionHelper = gf.CollisionHelper;
-var CollisionTracker = gf.CollisionTracker;
 var Coords = gf.Coords;
 var Direction = gf.Direction;
 var Disposition = gf.Disposition;
@@ -83,6 +80,10 @@ var Orientation = gf.Orientation;
 var Polar = gf.Polar;
 var RangeExtent = gf.RangeExtent;
 var Rotation = gf.Rotation;
+// Geometry - Collisions.
+var Collision = gf.Collision;
+var CollisionHelper = gf.CollisionHelper;
+var CollisionTracker = gf.CollisionTracker;
 // Geometry - Constraints.
 var Constraint_AttachToEntityWithName = gf.Constraint_AttachToEntityWithName;
 var Constraint_Conditional = gf.Constraint_Conditional;

@@ -13,12 +13,12 @@ export class ShapeContainer implements ShapeBase
 
 	// Clonable.
 
-	clone(): ShapeBase
+	clone(): ShapeContainer
 	{
 		return new ShapeContainer(this.shape.clone());
 	}
 
-	overwriteWith(other: ShapeContainer)
+	overwriteWith(other: ShapeContainer): ShapeContainer
 	{
 		this.shape.overwriteWith(other.shape);
 		return this;
@@ -46,6 +46,10 @@ export class ShapeContainer implements ShapeBase
 	{
 		return this.shape.toBox(boxOut);
 	}
+
+	// Transformable.
+
+	transform(transformToApply: Transform): Transformable { throw("Not implemented!");  }
 
 }
 

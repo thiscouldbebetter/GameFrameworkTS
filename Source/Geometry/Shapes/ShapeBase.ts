@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export interface ShapeBase extends Clonable<ShapeBase>
+export interface ShapeBase extends Clonable<ShapeBase>, Transformable
 {
 	locate(loc: Disposition): ShapeBase;
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords;

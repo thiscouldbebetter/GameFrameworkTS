@@ -55,6 +55,13 @@ export class MapLocated implements ShapeBase
 	}
 
 	toBox(boxOut: Box): Box { throw("Not implemented!"); }
+
+	// Transformable.
+
+	transform(transformToApply: Transform): Transformable
+	{
+		throw("Not implemented!");
+	}
 }
 
 }

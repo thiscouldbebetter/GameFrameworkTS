@@ -316,19 +316,6 @@ export class Box implements ShapeBase
 		return this.min().toString() + ":" + this.max().toString();
 	}
 
-	// transformable
-
-	coordsGroupToTranslate()
-	{
-		return [ this.center ];
-	}
-
-	transform(transformToApply: Transform)
-	{
-		Transforms.applyTransformToCoordsMany(transformToApply, this.coordsGroupToTranslate());
-		return this;
-	}
-
 	// ShapeBase.
 
 	dimensionForSurfaceClosestToPoint(posToCheck: Coords, displacementOverSizeHalf: Coords)
@@ -394,6 +381,18 @@ export class Box implements ShapeBase
 		return boxOut.overwriteWith(this);
 	}
 
+	// transformable
+
+	coordsGroupToTranslate(): Coords[]
+	{
+		return [ this.center ];
+	}
+
+	transform(transformToApply: Transform): Transformable
+	{
+		Transforms.applyTransformToCoordsMany(transformToApply, this.coordsGroupToTranslate());
+		return this;
+	}
 }
 
 }

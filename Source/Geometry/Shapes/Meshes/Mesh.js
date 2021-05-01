@@ -187,7 +187,10 @@ var ThisCouldBeBetter;
             }
             overwriteWith(other) {
                 GameFramework.ArrayHelper.overwriteWith(this.vertexIndices, other.vertexIndices);
+                return this;
             }
+            // Transformable.
+            transform(transformToApply) { throw ("Not implemented!"); }
         }
         GameFramework.Mesh_FaceBuilder = Mesh_FaceBuilder;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

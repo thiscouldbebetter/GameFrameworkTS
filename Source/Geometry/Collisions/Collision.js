@@ -3,7 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Collision {
+        class Collision //
+         {
             constructor(pos, distanceToCollision, colliders, entitiesColliding) {
                 this.pos = pos || GameFramework.Coords.create();
                 this.distanceToCollision = distanceToCollision;

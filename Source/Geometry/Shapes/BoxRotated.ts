@@ -13,7 +13,7 @@ export class BoxRotated implements ShapeBase
 		this.angleInTurns = angleInTurns;
 	}
 
-	sphereSwept()
+	sphereSwept(): Sphere
 	{
 		return new Sphere(this.box.center, this.box.sizeHalf().magnitude());
 	}
@@ -25,7 +25,7 @@ export class BoxRotated implements ShapeBase
 		return ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
 	}
 
-	normalAtPos(posToCheck: Coords, normalOut: Coords)
+	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
 	{
 		// todo - Adapt or call Box.normalAtPos() instead.
 
@@ -73,33 +73,35 @@ export class BoxRotated implements ShapeBase
 		return normalOut;
 	}
 
-	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords)
+	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords
 	{
 		return surfacePointOut.overwriteWith(posToCheck); // todo
 	}
 
 	toBox(boxOut: Box): Box { throw("Not implemented!"); }
 
-	// cloneable
+	// Clonable.
 
-	clone()
+	clone(): BoxRotated
 	{
 		return new BoxRotated(this.box.clone(), this.angleInTurns);
 	}
 
-	overwriteWith(other: BoxRotated)
+	overwriteWith(other: BoxRotated): BoxRotated
 	{
 		this.box.overwriteWith(other.box);
 		this.angleInTurns = other.angleInTurns;
 		return this;
 	}
 
-	// transformable
+	// Transformable.
 
-	coordsGroupToTranslate()
+	coordsGroupToTranslate(): Coords[]
 	{
 		return [ this.box.center ];
 	}
+
+	transform(transformToApply: Transform): Transformable { throw("Not implemented!");  }
 }
 
 }

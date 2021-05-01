@@ -32,6 +32,10 @@ var ThisCouldBeBetter;
                 return surfacePointOut.overwriteWith(posToCheck); // todo
             }
             toBox(boxOut) { throw ("Not implemented!"); }
+            // Transformable.
+            transform(transformToApply) {
+                throw ("Not implemented!");
+            }
         }
         GameFramework.MapLocated = MapLocated;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

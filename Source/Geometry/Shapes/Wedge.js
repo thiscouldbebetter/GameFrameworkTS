@@ -85,6 +85,8 @@ var ThisCouldBeBetter;
                 throw ("Not implemented!");
             }
             toBox(boxOut) { throw ("Not implemented!"); }
+            // Transformable.
+            transform(transformToApply) { throw ("Not implemented!"); }
         }
         GameFramework.Wedge = Wedge;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

@@ -81,6 +81,14 @@ export class Hemispace implements ShapeBase
 	{
 		throw("Not implemented!");
 	}
+
+	// Transformable.
+
+	transform(transformToApply: Transform): Transformable
+	{
+		this.plane.transform(transformToApply);
+		return this;
+	}
 }
 
 }

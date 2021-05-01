@@ -10,13 +10,17 @@ export class CollisionHelper
 	colliderTypeNamesToCollisionFindLookup: Map<string, Map<string, any> >;
 
 	_box: Box;
+	_box2: Box;
 	_collision: Collision;
 	_displacement: Coords;
+	_edge: Edge;
 	_polar: Polar;
 	_pos: Coords;
 	_range: RangeExtent;
 	_range2: RangeExtent;
 	_size: Coords;
+	_vel: Coords;
+	_vel2: Coords;
 
 	constructor()
 	{
@@ -28,13 +32,17 @@ export class CollisionHelper
 
 		// Helper variables.
 		this._box = Box.create();
+		this._box2 = Box.create();
 		this._collision = Collision.create();
 		this._displacement = Coords.create();
+		this._edge = Edge.create();
 		this._polar = Polar.create();
 		this._pos = Coords.create();
 		this._range = RangeExtent.create();
 		this._range2 = RangeExtent.create();
 		this._size = Coords.create();
+		this._vel = Coords.create();
+		this._vel2 = Coords.create();
 	}
 
 	// constructor helpers
@@ -468,8 +476,10 @@ export class CollisionHelper
 		var speed1 = vel1.magnitude();
 		var speedMax = Math.max(speed0, speed1);
 
-		var vel0InvertedNormalized = vel0.clone().invert().normalize();
-		var vel1InvertedNormalized = vel1.clone().invert().normalize();
+		var vel0InvertedNormalized =
+			this._vel.overwriteWith(vel0).invert().normalize();
+		var vel1InvertedNormalized =
+			this._vel2.overwriteWith(vel1).invert().normalize();
 
 		var distanceBackedUpSoFar = 0;
 
@@ -540,7 +550,10 @@ export class CollisionHelper
 			);
 
 			vel0.add(vel0Bounce);
-			entity0Loc.orientation.forwardSet(vel0.clone().normalize());
+			entity0Loc.orientation.forwardSet
+			(
+				this._vel.overwriteWith(vel0).normalize()
+			);
 		}
 
 		if (vel1DotNormal0 < 0)
@@ -553,7 +566,10 @@ export class CollisionHelper
 				multiplierOfRestitution
 			);
 			vel1.add(vel1Bounce);
-			entity1Loc.orientation.forwardSet(vel1.clone().normalize());
+			entity1Loc.orientation.forwardSet
+			(
+				this._vel.overwriteWith(vel1).normalize()
+			);
 		}
 	}
 
@@ -847,14 +863,17 @@ export class CollisionHelper
 		}
 		collision.clear();
 
-		var edge0Bounds = edge0.box();
-		var edge1Bounds = edge1.box();
+		var edge0Bounds = edge0.toBox(this._box);
+		var edge1Bounds = edge1.toBox(this._box2);
 
 		var doBoundsOverlap = edge0Bounds.overlapsWithXY(edge1Bounds);
 
 		if (doBoundsOverlap)
 		{
-			var edge0ProjectedOntoEdge1 = edge0.clone().projectOntoOther(edge1);
+			var edge0ProjectedOntoEdge1 = this._edge.overwriteWith(
+				edge0
+			).projectOntoOther(edge1);
+
 			var edgeProjectedVertices = edge0ProjectedOntoEdge1.vertices;
 			var edgeProjectedVertex0 = edgeProjectedVertices[0];
 			var edgeProjectedVertex1 = edgeProjectedVertices[1];

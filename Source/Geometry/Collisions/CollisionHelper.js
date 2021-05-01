@@ -11,13 +11,17 @@ var ThisCouldBeBetter;
                 this.colliderTypeNamesToCollisionFindLookup = this.collisionFindLookupBuild();
                 // Helper variables.
                 this._box = GameFramework.Box.create();
+                this._box2 = GameFramework.Box.create();
                 this._collision = GameFramework.Collision.create();
                 this._displacement = GameFramework.Coords.create();
+                this._edge = GameFramework.Edge.create();
                 this._polar = GameFramework.Polar.create();
                 this._pos = GameFramework.Coords.create();
                 this._range = GameFramework.RangeExtent.create();
                 this._range2 = GameFramework.RangeExtent.create();
                 this._size = GameFramework.Coords.create();
+                this._vel = GameFramework.Coords.create();
+                this._vel2 = GameFramework.Coords.create();
             }
             // constructor helpers
             collisionFindLookupBuild() {
@@ -289,8 +293,8 @@ var ThisCouldBeBetter;
                 var speed0 = vel0.magnitude();
                 var speed1 = vel1.magnitude();
                 var speedMax = Math.max(speed0, speed1);
-                var vel0InvertedNormalized = vel0.clone().invert().normalize();
-                var vel1InvertedNormalized = vel1.clone().invert().normalize();
+                var vel0InvertedNormalized = this._vel.overwriteWith(vel0).invert().normalize();
+                var vel1InvertedNormalized = this._vel2.overwriteWith(vel1).invert().normalize();
                 var distanceBackedUpSoFar = 0;
                 while (this.doEntitiesCollide(entity0, entity1) && distanceBackedUpSoFar < speedMax) {
                     distanceBackedUpSoFar++;
@@ -327,12 +331,12 @@ var ThisCouldBeBetter;
                 if (vel0DotNormal1 < 0) {
                     var vel0Bounce = normal1.multiplyScalar(0 - vel0DotNormal1).multiplyScalar(multiplierOfRestitution);
                     vel0.add(vel0Bounce);
-                    entity0Loc.orientation.forwardSet(vel0.clone().normalize());
+                    entity0Loc.orientation.forwardSet(this._vel.overwriteWith(vel0).normalize());
                 }
                 if (vel1DotNormal0 < 0) {
                     var vel1Bounce = normal0.multiplyScalar(0 - vel1DotNormal0).multiplyScalar(multiplierOfRestitution);
                     vel1.add(vel1Bounce);
-                    entity1Loc.orientation.forwardSet(vel1.clone().normalize());
+                    entity1Loc.orientation.forwardSet(this._vel.overwriteWith(vel1).normalize());
                 }
             }
             collideEntitiesSeparate(entity0, entity1) {
@@ -486,11 +490,11 @@ var ThisCouldBeBetter;
                     collision = GameFramework.Collision.create();
                 }
                 collision.clear();
-                var edge0Bounds = edge0.box();
-                var edge1Bounds = edge1.box();
+                var edge0Bounds = edge0.toBox(this._box);
+                var edge1Bounds = edge1.toBox(this._box2);
                 var doBoundsOverlap = edge0Bounds.overlapsWithXY(edge1Bounds);
                 if (doBoundsOverlap) {
-                    var edge0ProjectedOntoEdge1 = edge0.clone().projectOntoOther(edge1);
+                    var edge0ProjectedOntoEdge1 = this._edge.overwriteWith(edge0).projectOntoOther(edge1);
                     var edgeProjectedVertices = edge0ProjectedOntoEdge1.vertices;
                     var edgeProjectedVertex0 = edgeProjectedVertices[0];
                     var edgeProjectedVertex1 = edgeProjectedVertices[1];

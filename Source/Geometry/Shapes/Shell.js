@@ -50,6 +50,8 @@ var ThisCouldBeBetter;
             toBox(boxOut) {
                 return this.sphereOuter.toBox(boxOut);
             }
+            // Transformable.
+            transform(transformToApply) { throw ("Not implemented!"); }
         }
         GameFramework.Shell = Shell;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

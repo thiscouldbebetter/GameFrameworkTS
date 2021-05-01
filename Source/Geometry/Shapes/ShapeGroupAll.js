@@ -28,6 +28,11 @@ var ThisCouldBeBetter;
             toBox(boxOut) {
                 throw ("Not implemented!");
             }
+            // Transformable.
+            transform(transformToApply) {
+                this.shapes.forEach((x) => x.transform(transformToApply));
+                return this;
+            }
         }
         GameFramework.ShapeGroupAll = ShapeGroupAll;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

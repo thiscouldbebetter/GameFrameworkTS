@@ -44,6 +44,11 @@ var ThisCouldBeBetter;
             toBox(boxOut) {
                 throw ("Not implemented!");
             }
+            // Transformable.
+            transform(transformToApply) {
+                this.plane.transform(transformToApply);
+                return this;
+            }
         }
         GameFramework.Hemispace = Hemispace;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

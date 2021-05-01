@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Collision
+export class Collision //
 {
 	pos: Coords;
 	distanceToCollision: number;

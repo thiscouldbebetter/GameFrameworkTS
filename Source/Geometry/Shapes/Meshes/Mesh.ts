@@ -21,14 +21,14 @@ export class Mesh implements ShapeBase
 
 	// static methods
 
-	static boxOfSize(center: Coords, size: Coords)
+	static boxOfSize(center: Coords, size: Coords): Mesh
 	{
 		var box = new Box(center, size);
 		var returnValue = Mesh.fromBox(box);
 		return returnValue;
 	}
 
-	static cubeUnit(center: Coords)
+	static cubeUnit(center: Coords): Mesh
 	{
 		if (center == null)
 		{
@@ -39,7 +39,7 @@ export class Mesh implements ShapeBase
 		return returnValue;
 	}
 
-	static fromBox(box: Box)
+	static fromBox(box: Box): Mesh
 	{
 		var sizeHalf = box.sizeHalf();
 		var min = new Coords(-sizeHalf.x, -sizeHalf.y, -sizeHalf.z);
@@ -80,7 +80,7 @@ export class Mesh implements ShapeBase
 		return returnValue;
 	}
 
-	static fromFace(center: Coords, faceToExtrude: Face, thickness: number)
+	static fromFace(center: Coords, faceToExtrude: Face, thickness: number): Mesh
 	{
 		var faceVertices = faceToExtrude.vertices;
 		var numberOfFaceVertices = faceVertices.length;
@@ -156,7 +156,7 @@ export class Mesh implements ShapeBase
 
 	// instance methods
 
-	box()
+	box(): Box
 	{
 		if (this._box == null)
 		{
@@ -171,7 +171,7 @@ export class Mesh implements ShapeBase
 		return null; // todo
 	}
 
-	faces()
+	faces(): Face[]
 	{
 		var vertices = this.vertices();
 
@@ -228,7 +228,7 @@ export class Mesh implements ShapeBase
 
 	// clonable
 
-	clone()
+	clone(): Mesh
 	{
 		return new Mesh
 		(
@@ -238,7 +238,7 @@ export class Mesh implements ShapeBase
 		);
 	}
 
-	overwriteWith(other: Mesh)
+	overwriteWith(other: Mesh): Mesh
 	{
 		this.center.overwriteWith(other.center);
 		ArrayHelper.overwriteWith(this.vertexOffsets, other.vertexOffsets);
@@ -248,7 +248,7 @@ export class Mesh implements ShapeBase
 
 	// transformable
 
-	coordsGroupToTranslate()
+	coordsGroupToTranslate(): Coords[]
 	{
 		return [ this.center ];
 	}
@@ -260,12 +260,12 @@ export class Mesh implements ShapeBase
 		return ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
 	}
 
-	normalAtPos(posToCheck: Coords, normalOut: Coords)
+	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
 	{
 		return this.box().normalAtPos(posToCheck, normalOut);
 	}
 
-	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords)
+	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords
 	{
 		return surfacePointOut.overwriteWith(posToCheck); // todo
 	}
@@ -285,7 +285,7 @@ export class Mesh_FaceBuilder
 		this.vertexIndices = vertexIndices;
 	}
 
-	toFace(meshVertices: Coords[])
+	toFace(meshVertices: Coords[]): Face
 	{
 		var faceVertices: Coords[] = [];
 		for (var vi = 0; vi < this.vertexIndices.length; vi++)
@@ -298,7 +298,7 @@ export class Mesh_FaceBuilder
 		return returnValue;
 	}
 
-	vertexIndicesShift(offset: number)
+	vertexIndicesShift(offset: number): void
 	{
 		for (var i = 0; i < this.vertexIndices.length; i++)
 		{
@@ -310,15 +310,21 @@ export class Mesh_FaceBuilder
 
 	// clonable
 
-	clone()
+	clone(): Mesh_FaceBuilder
 	{
 		return new Mesh_FaceBuilder(this.vertexIndices.slice());
 	}
 
-	overwriteWith(other: Mesh_FaceBuilder)
+	overwriteWith(other: Mesh_FaceBuilder): Mesh_FaceBuilder
 	{
 		ArrayHelper.overwriteWith(this.vertexIndices, other.vertexIndices);
+		return this;
 	}
+
+	// Transformable.
+
+	transform(transformToApply: Transform): Transformable { throw("Not implemented!");  }
+
 }
 
 }

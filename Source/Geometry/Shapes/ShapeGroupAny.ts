@@ -70,6 +70,14 @@ export class ShapeGroupAny implements ShapeBase
 	}
 
 	toBox(boxOut: Box): Box { throw("Not implemented!"); }
+
+	// Transformable.
+
+	transform(transformToApply: Transform): Transformable
+	{
+		this.shapes.forEach( (x: ShapeBase) => x.transform(transformToApply));
+		return this;
+	}
 }
 
 }

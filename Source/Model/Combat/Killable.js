@@ -10,6 +10,9 @@ var ThisCouldBeBetter;
                 this._die = die;
                 this.integrity = this.integrityMax;
             }
+            static fromIntegrityMax(integrityMax) {
+                return new Killable(integrityMax, null, null);
+            }
             damageApply(universe, world, place, entityDamager, entityKillable, damageToApply) {
                 var damageApplied;
                 if (this._damageApply == null) {

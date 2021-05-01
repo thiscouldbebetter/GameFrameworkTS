@@ -24,6 +24,11 @@ export class Killable implements EntityProperty
 		this.integrity = this.integrityMax;
 	}
 
+	static fromIntegrityMax(integrityMax: number): Killable
+	{
+		return new Killable(integrityMax, null, null);
+	}
+
 	damageApply
 	(
 		universe: Universe, world: World, place: Place, entityDamager: Entity,
