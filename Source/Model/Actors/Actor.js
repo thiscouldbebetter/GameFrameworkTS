@@ -8,6 +8,9 @@ var ThisCouldBeBetter;
                 this.activity = activity;
                 this.actions = [];
             }
+            static create() {
+                return new Actor(null);
+            }
             static fromActivityDefnName(activityDefnName) {
                 var activity = GameFramework.Activity.fromDefnName(activityDefnName);
                 var returnValue = new Actor(activity);

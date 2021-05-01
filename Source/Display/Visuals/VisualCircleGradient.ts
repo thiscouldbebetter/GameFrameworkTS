@@ -8,14 +8,21 @@ export class VisualCircleGradient implements Visual
 	gradientFill: ValueBreakGroup;
 	colorBorder: Color;
 
-	constructor(radius: number, gradientFill: ValueBreakGroup, colorBorder: Color)
+	constructor
+	(
+		radius: number, gradientFill: ValueBreakGroup, colorBorder: Color
+	)
 	{
 		this.radius = radius;
 		this.gradientFill = gradientFill;
 		this.colorBorder = colorBorder;
 	}
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	draw
+	(
+		universe: Universe, world: World, place: Place, entity: Entity,
+		display: Display
+	): void
 	{
 		display.drawCircleWithGradient
 		(
@@ -25,12 +32,12 @@ export class VisualCircleGradient implements Visual
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualCircleGradient
 	{
 		return this; // todo
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualCircleGradient): VisualCircleGradient
 	{
 		return this; // todo
 	}

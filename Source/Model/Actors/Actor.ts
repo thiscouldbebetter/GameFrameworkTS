@@ -14,6 +14,11 @@ export class Actor implements EntityProperty
 		this.actions = [];
 	}
 
+	static create(): Actor
+	{
+		return new Actor(null);
+	}
+
 	static fromActivityDefnName(activityDefnName: string): Actor
 	{
 		var activity = Activity.fromDefnName(activityDefnName);
