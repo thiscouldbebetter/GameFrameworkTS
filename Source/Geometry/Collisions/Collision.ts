@@ -75,6 +75,24 @@ export class Collision //
 
 		return returnValue;
 	}
+
+	clone(): Collision
+	{
+		var returnValue = new Collision
+		(
+			this.pos.clone(),
+			this.distanceToCollision,
+			this.colliders,
+			this.entitiesColliding
+		);
+
+		// hack
+		returnValue.collidersByName = this.collidersByName;
+		returnValue.normals = ArrayHelper.clone(this.normals);
+		returnValue.isActive = this.isActive;
+
+		return returnValue;
+	}
 }
 
 }

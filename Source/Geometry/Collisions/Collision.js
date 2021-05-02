@@ -24,7 +24,9 @@ var ThisCouldBeBetter;
                 this.isActive = false;
                 GameFramework.ArrayHelper.clear(this.entitiesColliding);
                 GameFramework.ArrayHelper.clear(this.colliders);
+                GameFramework.ArrayHelper.clear(this.normals);
                 this.collidersByName.clear();
+                this.distanceToCollision = null;
                 return this;
             }
             equals(other) {
@@ -35,6 +37,14 @@ var ThisCouldBeBetter;
                                 (this.pos.equals(other.pos)
                                     && this.distanceToCollision == other.distanceToCollision
                                     && GameFramework.ArrayHelper.equals(this.colliders, other.colliders))));
+                return returnValue;
+            }
+            clone() {
+                var returnValue = new Collision(this.pos.clone(), this.distanceToCollision, this.colliders, this.entitiesColliding);
+                // hack
+                returnValue.collidersByName = this.collidersByName;
+                returnValue.normals = GameFramework.ArrayHelper.clone(this.normals);
+                returnValue.isActive = this.isActive;
                 return returnValue;
             }
         }

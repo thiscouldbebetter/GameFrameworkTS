@@ -540,11 +540,11 @@ var ThisCouldBeBetter;
                 var collision = GameFramework.Collision.create();
                 for (var i = 0; i < meshFaces.length; i++) {
                     var meshFace = meshFaces[i];
-                    var collision = this.collisionOfEdgeAndFace(edge, meshFace, collision);
-                    if (collision != null && collision.isActive) {
+                    collision = this.collisionOfEdgeAndFace(edge, meshFace, collision.clear());
+                    if (collision.isActive) {
                         collision.colliders.push(mesh);
                         collision.collidersByName.set(GameFramework.Mesh.name, mesh);
-                        collisions.push(collision);
+                        collisions.push(collision.clone());
                         if (stopAfterFirst) {
                             break;
                         }
