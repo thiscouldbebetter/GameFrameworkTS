@@ -964,19 +964,18 @@ export class CollisionHelper
 		}
 
 		var meshFaces = mesh.faces();
-		var collision = Collision.create();
 		for (var i = 0; i < meshFaces.length; i++)
 		{
 			var meshFace = meshFaces[i];
-			collision = this.collisionOfEdgeAndFace
+			var collision = this.collisionOfEdgeAndFace
 			(
-				edge, meshFace, collision.clear()
+				edge, meshFace, Collision.create()
 			);
 			if (collision.isActive)
 			{
 				collision.colliders.push(mesh);
 				collision.collidersByName.set(Mesh.name, mesh);
-				collisions.push(collision.clone());
+				collisions.push(collision);
 				if (stopAfterFirst)
 				{
 					break;

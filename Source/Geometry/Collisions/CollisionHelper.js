@@ -537,14 +537,13 @@ var ThisCouldBeBetter;
                     collisions = [];
                 }
                 var meshFaces = mesh.faces();
-                var collision = GameFramework.Collision.create();
                 for (var i = 0; i < meshFaces.length; i++) {
                     var meshFace = meshFaces[i];
-                    collision = this.collisionOfEdgeAndFace(edge, meshFace, collision.clear());
+                    var collision = this.collisionOfEdgeAndFace(edge, meshFace, GameFramework.Collision.create());
                     if (collision.isActive) {
                         collision.colliders.push(mesh);
                         collision.collidersByName.set(GameFramework.Mesh.name, mesh);
-                        collisions.push(collision.clone());
+                        collisions.push(collision);
                         if (stopAfterFirst) {
                             break;
                         }
