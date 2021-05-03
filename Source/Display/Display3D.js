@@ -177,7 +177,7 @@ var ThisCouldBeBetter;
                 this.tempMatrix1 = GameFramework.Matrix.buildZeroes();
                 return this;
             }
-            lightingSet(todo) {
+            lightingSet(lightingToSet) {
                 var webGLContext = this.webGLContext;
                 var gl = webGLContext.gl;
                 var shaderProgram = webGLContext.shaderProgram;

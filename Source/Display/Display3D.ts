@@ -52,7 +52,7 @@ export class Display3D implements Display
 
 	// methods
 
-	cameraSet(camera: Camera)
+	cameraSet(camera: Camera): void
 	{
 		var cameraLoc = camera.loc;
 
@@ -85,7 +85,7 @@ export class Display3D implements Display
 		);
 	}
 
-	clear()
+	clear(): void
 	{
 		var webGLContext = this.webGLContext;
 		var gl = webGLContext.gl;
@@ -103,7 +103,7 @@ export class Display3D implements Display
 		return this;
 	}
 
-	drawCrosshairs(center: Coords, radius: number, color: Color)
+	drawCrosshairs(center: Coords, radius: number, color: Color): void
 	{
 		this._display2DOverlay.drawCrosshairs(center, radius, color);
 	}
@@ -112,7 +112,7 @@ export class Display3D implements Display
 	(
 		center: Coords, semimajorAxis: number, semiminorAxis: number,
 		rotationInTurns: number, colorFill: Color, colorBorder: Color
-	)
+	): void
 	{
 		this._display2DOverlay.drawEllipse
 		(
@@ -120,7 +120,7 @@ export class Display3D implements Display
 		);
 	}
 
-	drawMesh(mesh: MeshTextured)
+	drawMesh(mesh: MeshTextured): void
 	{
 		var webGLContext = this.webGLContext;
 		var gl = webGLContext.gl;
@@ -325,7 +325,10 @@ export class Display3D implements Display
 		} // end for each material
 	}
 
-	drawMeshWithOrientation(mesh: MeshTextured, meshOrientation: Orientation)
+	drawMeshWithOrientation
+	(
+		mesh: MeshTextured, meshOrientation: Orientation
+	): void
 	{
 		var matrixOrient = this.matrixOrient;
 
@@ -366,7 +369,7 @@ export class Display3D implements Display
 		this._display2DOverlay.drawPixel(pos, color);
 	}
 
-	initialize(universe: Universe)
+	initialize(universe: Universe): Display
 	{
 		this._display2DOverlay.initialize(universe);
 
@@ -402,7 +405,7 @@ export class Display3D implements Display
 		return this;
 	}
 
-	lightingSet(todo: Lighting)
+	lightingSet(lightingToSet: Lighting): void
 	{
 		var webGLContext = this.webGLContext;
 		var gl = webGLContext.gl;
@@ -436,12 +439,12 @@ export class Display3D implements Display
 		center: Coords, radiusInner: number, radiusOuter: number,
 		angleStartInTurns: number, angleStopInTurns: number, colorFill: Color,
 		colorBorder: Color
-	)
+	): void
 	{
 		this._display2DOverlay.drawArc(center, radiusInner, radiusOuter, angleStartInTurns, angleStopInTurns, colorFill, colorBorder);
 	}
 
-	drawBackground(colorBack: Color, colorBorder: Color)
+	drawBackground(colorBack: Color, colorBorder: Color): void
 	{
 		this._display2DOverlay.drawBackground(colorBack, colorBorder);
 	}
@@ -450,7 +453,7 @@ export class Display3D implements Display
 	(
 		center: Coords, radius: number, colorFill: Color,
 		colorBorder: Color, borderThickness: number
-	)
+	): void
 	{
 		this._display2DOverlay.drawCircle
 		(
@@ -458,42 +461,55 @@ export class Display3D implements Display
 		);
 	}
 
-	drawCircleWithGradient(center: Coords, radius: number, gradientFill: ValueBreakGroup, colorBorder: Color)
+	drawCircleWithGradient
+	(
+		center: Coords, radius: number, gradientFill: ValueBreakGroup,
+		colorBorder: Color
+	): void
 	{
 		this._display2DOverlay.drawCircleWithGradient(center, radius, gradientFill, colorBorder);
 	}
 
-	drawImage(imageToDraw: Image2, pos: Coords)
+	drawImage(imageToDraw: Image2, pos: Coords): void
 	{
 		this._display2DOverlay.drawImage(imageToDraw, pos);
 	}
 
-	drawImagePartial(imageToDraw: Image2, pos: Coords, boxToShow: Box)
+	drawImagePartial(imageToDraw: Image2, pos: Coords, boxToShow: Box): void
 	{
 		this._display2DOverlay.drawImagePartial(imageToDraw, pos, boxToShow);
 	}
 
-	drawImagePartialScaled(imageToDraw: Image2, pos: Coords, regionToDrawAsBox: Box, sizeToDraw: Coords)
+	drawImagePartialScaled
+	(
+		imageToDraw: Image2, pos: Coords, regionToDrawAsBox: Box, sizeToDraw: Coords
+	): void
 	{
 		this._display2DOverlay.drawImagePartialScaled(imageToDraw, pos, regionToDrawAsBox, sizeToDraw);
 	}
 
-	drawImageScaled(imageToDraw: Image2, pos: Coords, size: Coords)
+	drawImageScaled(imageToDraw: Image2, pos: Coords, size: Coords): void
 	{
 		this._display2DOverlay.drawImageScaled(imageToDraw, pos, size);
 	}
 
-	drawLine(fromPos: Coords, toPos: Coords, color: Color, lineThickness: number)
+	drawLine
+	(
+		fromPos: Coords, toPos: Coords, color: Color, lineThickness: number
+	): void
 	{
 		this._display2DOverlay.drawLine(fromPos, toPos, color, lineThickness);
 	}
 
-	drawPath(vertices: Coords[], color: Color, lineThickness: number, isClosed: boolean)
+	drawPath
+	(
+		vertices: Coords[], color: Color, lineThickness: number, isClosed: boolean
+	): void
 	{
 		this._display2DOverlay.drawPath(vertices, color, lineThickness, isClosed);
 	}
 
-	drawPolygon(vertices: Coords[], colorFill: Color, colorBorder: Color)
+	drawPolygon(vertices: Coords[], colorFill: Color, colorBorder: Color): void
 	{
 		this._display2DOverlay.drawPolygon(vertices, colorFill, colorBorder);
 	}
@@ -505,7 +521,7 @@ export class Display3D implements Display
 		colorFill: Color,
 		colorBorder: Color,
 		areColorsReversed: boolean
-	)
+	): void
 	{
 		this._display2DOverlay.drawRectangle
 		(
@@ -516,7 +532,7 @@ export class Display3D implements Display
 	drawRectangleCentered
 	(
 		pos: Coords, size: Coords, colorFill: Color, colorBorder: Color
-	)
+	): void
 	{
 		this._display2DOverlay.drawRectangleCentered(pos, size, colorFill, colorBorder);
 	}
@@ -531,7 +547,7 @@ export class Display3D implements Display
 		areColorsReversed: boolean,
 		isCentered: boolean,
 		widthMaxInPixels: number
-	)
+	): void
 	{
 		this._display2DOverlay.drawText
 		(
@@ -550,7 +566,7 @@ export class Display3D implements Display
 	(
 		center: Coords, radius: number, angleStartInTurns: number,
 		angleStopInTurns: number, colorFill: Color, colorBorder: Color
-	)
+	): void
 	{
 		this._display2DOverlay.drawWedge
 		(
@@ -558,43 +574,43 @@ export class Display3D implements Display
 		);
 	}
 
-	eraseModeSet(value: boolean)
+	eraseModeSet(value: boolean): void
 	{
 		this._display2DOverlay.eraseModeSet(value);
 	}
 
-	fontSet(fontName: string, fontHeightInPixels: number)
+	fontSet(fontName: string, fontHeightInPixels: number): void
 	{
 		this._display2DOverlay.fontSet(fontName, fontHeightInPixels);
 	}
 
-	flush() {}
+	flush(): void {}
 
-	hide() {}
+	hide(): void {}
 
 	rotateTurnsAroundCenter(turnsToRotate: number, centerOfRotation: Coords)
 	{
 		this._display2DOverlay.rotateTurnsAroundCenter(turnsToRotate, centerOfRotation);
 	}
 
-	scaleFactor()
+	scaleFactor(): Coords
 	{
 		return this._scaleFactor;
 	}
 
 	show(): void {}
 
-	sizeDefault()
+	sizeDefault(): Coords
 	{
 		return this._sizeDefault;
 	}
 
-	stateRestore()
+	stateRestore(): void
 	{
 		this._display2DOverlay.stateRestore();
 	}
 
-	stateSave()
+	stateSave(): void
 	{
 		this._display2DOverlay.stateSave();
 	}
@@ -611,7 +627,7 @@ export class Display3D implements Display
 
 	// platformable
 
-	toDomElement()
+	toDomElement(): HTMLElement
 	{
 		var returnValue = document.createElement("div");
 		returnValue.appendChild(this.canvas);

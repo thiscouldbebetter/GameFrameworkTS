@@ -2,10 +2,10 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Action
+export class Action //
 {
 	name: string;
-	perform: (u: Universe, w: World, p: Place, e: Entity) => void;
+	_perform: (u: Universe, w: World, p: Place, e: Entity) => void;
 
 	constructor
 	(
@@ -15,6 +15,11 @@ export class Action
 	{
 		this.name = name;
 		this.perform = perform;
+	}
+
+	perform(u: Universe, w: World, p: Place, e: Entity): void
+	{
+		this._perform(u, w, p, e);
 	}
 
 	performForUniverse(universe: Universe)

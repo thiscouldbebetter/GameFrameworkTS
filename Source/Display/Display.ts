@@ -57,7 +57,8 @@ export interface Display
 	drawPolygon(vertices: Coords[], colorFill: Color, colorBorder: Color): void;
 	drawRectangle
 	(
-		pos: Coords, size: Coords, colorFill: Color, colorBorder: Color, areColorsReversed: boolean
+		pos: Coords, size: Coords, colorFill: Color, colorBorder: Color,
+		areColorsReversed: boolean
 	): void;
 	drawRectangleCentered
 	(
@@ -79,12 +80,18 @@ export interface Display
 	flush(): void;
 	hide(universe: Universe): void;
 	initialize(universe: Universe): Display;
-	rotateTurnsAroundCenter(turnsToRotate: number, centerOfRotation: Coords): void;
+	rotateTurnsAroundCenter
+	(
+		turnsToRotate: number, centerOfRotation: Coords
+	): void;
 	sizeDefault(): Coords;
 	scaleFactor(): Coords;
 	stateRestore(): void;
 	stateSave(): void;
-	textWidthForFontHeight(textToMeasure: string, fontHeightInPixels: number): number;
+	textWidthForFontHeight
+	(
+		textToMeasure: string, fontHeightInPixels: number
+	): number;
 	toImage(): Image2;
 	toDomElement(): HTMLElement;
 }

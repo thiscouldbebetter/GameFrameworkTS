@@ -441,7 +441,8 @@ var ThisCouldBeBetter;
                 var faceToDivideVertices = faceToDivide.geometry.vertices;
                 for (var v = 0; v < faceToDivideVertices.length; v++) {
                     var vertex = faceToDivideVertices[v];
-                    distanceOfVertexAbovePlane = planeToDivideOn.distanceToPointAlongNormal(vertex);
+                    distanceOfVertexAbovePlane =
+                        planeToDivideOn.distanceToPointAlongNormal(vertex);
                     if (distanceOfVertexAbovePlane != 0) {
                         break;
                     }
@@ -464,12 +465,13 @@ var ThisCouldBeBetter;
                             doAnyEdgesCollideWithPlaneSoFar = true;
                             verticesInFaceDivided.push(collision.pos);
                             facesDividedIndex = 1 - facesDividedIndex;
-                            verticesInFaceDivided = verticesInFacesDivided[facesDividedIndex];
+                            verticesInFaceDivided =
+                                verticesInFacesDivided[facesDividedIndex];
                             verticesInFaceDivided.push(collision.pos);
                         }
                     }
                 }
-                if (doAnyEdgesCollideWithPlaneSoFar == true) {
+                if (doAnyEdgesCollideWithPlaneSoFar) {
                     for (var i = 0; i < verticesInFacesDivided.length; i++) {
                         var verticesInFace = verticesInFacesDivided[i];
                         if (verticesInFace.length > 2) {

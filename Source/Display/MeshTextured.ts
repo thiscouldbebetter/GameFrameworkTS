@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class MeshTextured implements Transformable
+export class MeshTextured implements ShapeBase
 {
 	geometry: Mesh;
 	materials: Material[];
@@ -13,7 +13,11 @@ export class MeshTextured implements Transformable
 	_faceIndicesByMaterialName: Map<string, number[]>;
 	_faces: FaceTextured[];
 
-	constructor(geometry: Mesh, materials: Material[], faceTextures: MeshTexturedFaceTexture[], vertexGroups: VertexGroup[])
+	constructor
+	(
+		geometry: Mesh, materials: Material[],
+		faceTextures: MeshTexturedFaceTexture[], vertexGroups: VertexGroup[]
+	)
 	{
 		this.geometry = geometry;
 		this.materials = materials;
@@ -22,7 +26,7 @@ export class MeshTextured implements Transformable
 		this.vertexGroups = vertexGroups;
 	}
 
-	static fromMeshAndMaterials(geometry: Mesh, materials: Material[])
+	static fromMeshAndMaterials(geometry: Mesh, materials: Material[]): MeshTextured
 	{
 		return new MeshTextured(geometry, materials, null, null);
 	}
@@ -47,7 +51,7 @@ export class MeshTextured implements Transformable
 		return this._faces;
 	}
 
-	faceTexturesBuild()
+	faceTexturesBuild(): MeshTextured
 	{
 		var materialName = this.materials[0].name;
 
@@ -74,7 +78,7 @@ export class MeshTextured implements Transformable
 		return this;
 	}
 
-	faceIndicesByMaterialName()
+	faceIndicesByMaterialName(): Map<string, number[]>
 	{
 		if (this._faceIndicesByMaterialName == null)
 		{
@@ -103,14 +107,14 @@ export class MeshTextured implements Transformable
 		return this._faceIndicesByMaterialName;
 	}
 
-	transform(transformToApply: Transform)
+	transform(transformToApply: Transform): MeshTextured
 	{
 		this.geometry.transform(transformToApply);
 
 		return this;
 	}
 
-	transformFaceTextures(transformToApply: Transform)
+	transformFaceTextures(transformToApply: Transform): MeshTextured
 	{
 		for (var i = 0; i < this.faceTextures.length; i++)
 		{
@@ -123,7 +127,7 @@ export class MeshTextured implements Transformable
 
 	// cloneable
 
-	clone()
+	clone(): MeshTextured
 	{
 		return new MeshTextured
 		(
@@ -134,11 +138,33 @@ export class MeshTextured implements Transformable
 		);
 	}
 
-	overwriteWith(other: MeshTextured)
+	overwriteWith(other): MeshTextured
 	{
 		this.geometry.overwriteWith(other.geometry);
 		// todo
 		return this;
+	}
+
+	// ShapeBase.
+
+	locate(loc: Disposition): ShapeBase
+	{
+		throw("Not implemented!");
+	}
+
+	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
+	{
+		throw("Not implemented!");
+	}
+
+	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords
+	{
+		throw("Not implemented!");
+	}
+
+	toBox(boxOut: Box): Box
+	{
+		throw("Not implemented!");
 	}
 }
 
@@ -153,7 +179,7 @@ export class MeshTexturedFaceTexture
 		this.textureUVs = textureUVs;
 	}
 
-	clone()
+	clone(): MeshTexturedFaceTexture
 	{
 		return new MeshTexturedFaceTexture
 		(
@@ -163,7 +189,7 @@ export class MeshTexturedFaceTexture
 
 	// Transformable.
 
-	transform(transformToApply: Transform)
+	transform(transformToApply: Transform): MeshTexturedFaceTexture
 	{
 		for (var i = 0; i < this.textureUVs.length; i++)
 		{

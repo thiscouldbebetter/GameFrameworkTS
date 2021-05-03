@@ -4,7 +4,7 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class MeshBuilder
 {
-	biped(material: Material, heightInPixels: number)
+	biped(material: Material, heightInPixels: number): MeshTextured
 	{
 		var heightOver2 = heightInPixels / 2;
 		var heightOver3 = heightInPixels / 3;
@@ -164,7 +164,7 @@ export class MeshBuilder
 		return returnValue;
 	}
 
-	box(material: Material, size: Coords, pos: Coords)
+	box(material: Material, size: Coords, pos: Coords): MeshTextured
 	{
 		var returnMesh = this.unitCube(material);
 
@@ -181,7 +181,10 @@ export class MeshBuilder
 		return returnMesh;
 	}
 
-	grid(sizeInCells: Coords, cellSize: Coords, material: Material)
+	grid
+	(
+		sizeInCells: Coords, cellSize: Coords, material: Material
+	): MeshTextured
 	{
 		var vertexPositions = [];
 		var vertexPosInCells = Coords.create();
@@ -274,10 +277,11 @@ export class MeshBuilder
 
 	room
 	(
-		roomSize: Coords, neighborOffsets: Coords[], connectedToNeighbors: boolean[],
-		materialWall: Material, materialFloor: Material, doorwayWidthScaleFactor: number,
+		roomSize: Coords, neighborOffsets: Coords[],
+		connectedToNeighbors: boolean[], materialWall: Material,
+		materialFloor: Material, doorwayWidthScaleFactor: number,
 		wallThickness: number
-	)
+	): MeshTextured
 	{
 		doorwayWidthScaleFactor = doorwayWidthScaleFactor || 1;
 		wallThickness = wallThickness || 0;
@@ -303,7 +307,10 @@ export class MeshBuilder
 			var connectedToNeighbor = connectedToNeighbors[i];
 			if (connectedToNeighbor)
 			{
-				meshForWall = this.room_WallWithDoorway(materialWall, doorwayWidthScaleFactor, wallThickness);
+				meshForWall = this.room_WallWithDoorway
+				(
+					materialWall, doorwayWidthScaleFactor, wallThickness
+				);
 				wallDisplacement = wallNormal.clone().multiplyScalar(1 - wallThickness);
 			}
 			else
@@ -312,7 +319,8 @@ export class MeshBuilder
 				wallDisplacement = wallNormal.clone();
 			}
 
-			var wallOrientation = new Orientation(wallNormal.clone(), down.clone());
+			var wallOrientation =
+				new Orientation(wallNormal.clone(), down.clone());
 
 			meshForWall.transform
 			(
@@ -341,7 +349,10 @@ export class MeshBuilder
 			var face = mesh.geometry.faces()[0];
 			var faceNormal = face.plane().normal;
 
-			var faceOrientationDown = ( faceNormal.z == 0 ? down : new Coords(1, 0, 0) );
+			var faceOrientationDown =
+			(
+				faceNormal.z == 0 ? down : new Coords(1, 0, 0)
+			);
 			var faceOrientation = new Orientation
 			(
 				faceNormal, faceOrientationDown
@@ -380,7 +391,7 @@ export class MeshBuilder
 		return returnMesh;
 	}
 
-	room_Ceiling(material: Material)
+	room_Ceiling(material: Material): MeshTextured
 	{
 		var returnMesh = this.unitSquare
 		(
@@ -405,7 +416,7 @@ export class MeshBuilder
 		return returnMesh;
 	}
 
-	room_Floor(material: Material)
+	room_Floor(material: Material): MeshTextured
 	{
 		var returnMesh = this.unitSquare
 		(
@@ -424,7 +435,7 @@ export class MeshBuilder
 		return returnMesh;
 	}
 
-	room_Wall(material: Material)
+	room_Wall(material: Material): MeshTextured
 	{
 		var returnMesh = new Mesh
 		(
@@ -466,7 +477,10 @@ export class MeshBuilder
 		return returnMeshTextured;
 	}
 
-	room_WallWithDoorway(material: Material, doorwayWidthScaleFactor: number, wallThickness: number)
+	room_WallWithDoorway
+	(
+		material: Material, doorwayWidthScaleFactor: number, wallThickness: number
+	): MeshTextured
 	{
 		var doorwayHeight = 0.5;
 		var doorwayWidthHalf = doorwayHeight * doorwayWidthScaleFactor / 2;
@@ -618,14 +632,15 @@ export class MeshBuilder
 		return returnMeshTextured;
 	}
 
-	unitCube(material: Material)
+	unitCube(material: Material): MeshTextured
 	{
 		var returnMesh = this.unitCube_Geometry();
-		var returnMeshTextured = MeshTextured.fromMeshAndMaterials(returnMesh, [ material ]);
+		var returnMeshTextured =
+			MeshTextured.fromMeshAndMaterials(returnMesh, [ material ]);
 		return returnMeshTextured;
 	}
 
-	unitCube_Geometry()
+	unitCube_Geometry(): Mesh
 	{
 		var returnMesh = new Mesh
 		(
@@ -660,7 +675,7 @@ export class MeshBuilder
 		return returnMesh;
 	}
 
-	unitRing(material: Material, numberOfVertices: number)
+	unitRing(material: Material, numberOfVertices: number): MeshTextured
 	{
 		var vertices: Coords[] = [];
 		var vertexIndicesForFace: number[] = [];
@@ -684,12 +699,13 @@ export class MeshBuilder
 			[ new Mesh_FaceBuilder(vertexIndicesForFace) ]
 		);
 
-		var returnMeshTextured = MeshTextured.fromMeshAndMaterials(returnMesh, [ material ]);
+		var returnMeshTextured =
+			MeshTextured.fromMeshAndMaterials(returnMesh, [ material ]);
 
 		return returnMeshTextured;
 	}
 
-	unitSquare(material: Material)
+	unitSquare(material: Material): MeshTextured
 	{
 		var returnMesh = new Mesh
 		(
@@ -731,7 +747,10 @@ export class MeshBuilder
 		return returnMeshTextured;
 	}
 
-	clipFaceAgainstPlanes(faceToClip: FaceTextured, planesToClipAgainst: Plane[])
+	clipFaceAgainstPlanes
+	(
+		faceToClip: FaceTextured, planesToClipAgainst: Plane[]
+	): MeshTextured
 	{
 		for (var p = 0; p < planesToClipAgainst.length; p++)
 		{
@@ -750,7 +769,10 @@ export class MeshBuilder
 		return faceToClip;
 	}
 
-	mergeMeshes(meshesToMerge: MeshTextured[], vertexGroupNames: string[])
+	mergeMeshes
+	(
+		meshesToMerge: MeshTextured[], vertexGroupNames: string[]
+	): MeshTextured
 	{
 		var verticesMerged: Coords[] = [];
 		var faceBuildersMerged: Mesh_FaceBuilder[] = [];
@@ -845,7 +867,10 @@ export class MeshBuilder
 		return returnMeshTextured;
 	}
 
-	splitFaceByPlaneFrontAndBack(faceToDivide: FaceTextured, planeToDivideOn: Plane): FaceTextured[]
+	splitFaceByPlaneFrontAndBack
+	(
+		faceToDivide: FaceTextured, planeToDivideOn: Plane
+	): FaceTextured[]
 	{
 		var returnValues = new Array<FaceTextured>();
 
@@ -862,10 +887,8 @@ export class MeshBuilder
 		{
 			var vertex = faceToDivideVertices[v];
 
-			distanceOfVertexAbovePlane = planeToDivideOn.distanceToPointAlongNormal
-			(
-				vertex
-			);
+			distanceOfVertexAbovePlane =
+				planeToDivideOn.distanceToPointAlongNormal(vertex);
 
 			if (distanceOfVertexAbovePlane != 0)
 			{
@@ -875,7 +898,8 @@ export class MeshBuilder
 
 		var facesDividedIndex = (distanceOfVertexAbovePlane > 0 ? 0 : 1);
 
-		var verticesInFaceDivided = verticesInFacesDivided[facesDividedIndex];
+		var verticesInFaceDivided =
+			verticesInFacesDivided[facesDividedIndex];
 
 		var doAnyEdgesCollideWithPlaneSoFar = false;
 
@@ -893,15 +917,14 @@ export class MeshBuilder
 				vertex0
 			);
 
-			var distanceOfVertex0AbovePlane = planeToDivideOn.distanceToPointAlongNormal
-			(
-				vertex0
-			);
+			var distanceOfVertex0AbovePlane =
+				planeToDivideOn.distanceToPointAlongNormal(vertex0);
 
-			var distanceOfVertex1AbovePlane = planeToDivideOn.distanceToPointAlongNormal
-			(
-				edge.vertices[1]
-			);
+			var distanceOfVertex1AbovePlane =
+				planeToDivideOn.distanceToPointAlongNormal
+				(
+					edge.vertices[1]
+				);
 
 			if (distanceOfVertex0AbovePlane * distanceOfVertex1AbovePlane < 0)
 			{
@@ -920,17 +943,15 @@ export class MeshBuilder
 					);
 
 					facesDividedIndex = 1 - facesDividedIndex;
-					verticesInFaceDivided = verticesInFacesDivided[facesDividedIndex];
+					verticesInFaceDivided =
+						verticesInFacesDivided[facesDividedIndex];
 
-					verticesInFaceDivided.push
-					(
-						collision.pos
-					);
+					verticesInFaceDivided.push(collision.pos);
 				}
 			}
 		}
 
-		if (doAnyEdgesCollideWithPlaneSoFar == true)
+		if (doAnyEdgesCollideWithPlaneSoFar)
 		{
 			for (var i = 0; i < verticesInFacesDivided.length; i++)
 			{

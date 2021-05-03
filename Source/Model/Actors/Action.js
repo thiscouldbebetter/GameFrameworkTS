@@ -3,10 +3,14 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Action {
+        class Action //
+         {
             constructor(name, perform) {
                 this.name = name;
                 this.perform = perform;
+            }
+            perform(u, w, p, e) {
+                this._perform(u, w, p, e);
             }
             performForUniverse(universe) {
                 this.perform(universe, null, null, null);
