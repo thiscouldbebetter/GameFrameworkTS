@@ -1,7 +1,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class World
+export class World //
 {
 	name: string;
 	dateCreated: DateTime;

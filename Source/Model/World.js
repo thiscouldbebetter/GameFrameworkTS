@@ -3,7 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class World {
+        class World //
+         {
             constructor(name, dateCreated, defn, places) {
                 this.name = name;
                 this.dateCreated = dateCreated;

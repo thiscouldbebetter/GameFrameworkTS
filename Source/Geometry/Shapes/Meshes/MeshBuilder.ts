@@ -750,7 +750,7 @@ export class MeshBuilder
 	clipFaceAgainstPlanes
 	(
 		faceToClip: FaceTextured, planesToClipAgainst: Plane[]
-	): MeshTextured
+	): FaceTextured
 	{
 		for (var p = 0; p < planesToClipAgainst.length; p++)
 		{

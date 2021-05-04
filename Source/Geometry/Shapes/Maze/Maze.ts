@@ -12,7 +12,10 @@ export class Maze
 	sizeInPixels: Coords;
 	cells: MazeCell[];
 
-	constructor(cellSizeInPixels: Coords, sizeInCells: Coords, neighborOffsets: Coords[])
+	constructor
+	(
+		cellSizeInPixels: Coords, sizeInCells: Coords, neighborOffsets: Coords[]
+	)
 	{
 		this.cellSizeInPixels = cellSizeInPixels;
 		this.sizeInCells = sizeInCells;
@@ -40,7 +43,7 @@ export class Maze
 
 	// static methods
 
-	generateRandom(randomizer: Randomizer)
+	generateRandom(randomizer: Randomizer): Maze
 	{
 		var sizeInCells = this.sizeInCells;
 
@@ -61,10 +64,11 @@ export class Maze
 				{
 					cellPos.x = x;
 
-					var numberOfCellsInNetworkMerged = this.generateRandom_ConnectCellToRandomNeighbor
-					(
-						randomizer, cellPos, cellPosNeighbor
-					);
+					var numberOfCellsInNetworkMerged =
+						this.generateRandom_ConnectCellToRandomNeighbor
+						(
+							randomizer, cellPos, cellPosNeighbor
+						);
 
 					if (numberOfCellsInNetworkMerged > numberOfCellsInLargestNetworkSoFar)
 					{
@@ -82,7 +86,7 @@ export class Maze
 		randomizer: Randomizer,
 		cellPos: Coords,
 		cellPosNeighbor: Coords
-	)
+	): number
 	{
 		var sizeInCellsMinusOnes = this.sizeInCellsMinusOnes;
 		var neighborOffsets = this.neighborOffsets;
@@ -140,13 +144,13 @@ export class Maze
 
 	// instance methods
 
-	cellAtPos(cellPos: Coords)
+	cellAtPos(cellPos: Coords): MazeCell
 	{
 		var cellIndex = this.indexOfCellAtPos(cellPos);
 		return this.cells[cellIndex];
 	}
 
-	indexOfCellAtPos(cellPos: Coords)
+	indexOfCellAtPos(cellPos: Coords): number
 	{
 		var cellIndex = cellPos.y * this.sizeInCells.x + cellPos.x;
 

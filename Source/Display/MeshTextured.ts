@@ -138,7 +138,7 @@ export class MeshTextured implements ShapeBase
 		);
 	}
 
-	overwriteWith(other): MeshTextured
+	overwriteWith(other: MeshTextured): MeshTextured
 	{
 		this.geometry.overwriteWith(other.geometry);
 		// todo
