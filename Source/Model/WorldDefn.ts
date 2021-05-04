@@ -7,7 +7,7 @@ export class WorldDefn
 	defnArraysByTypeName: Map<string, any[]>;
 	defnsByNameByTypeName: Map<string, Map<string, any>>;
 
-	constructor(defnArrays: any[])
+	constructor(defnArrays: any[][])
 	{
 		defnArrays = defnArrays || [];
 

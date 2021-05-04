@@ -14,7 +14,7 @@ export class Action //
 	)
 	{
 		this.name = name;
-		this.perform = perform;
+		this._perform = perform;
 	}
 
 	perform(u: Universe, w: World, p: Place, e: Entity): void
@@ -22,13 +22,13 @@ export class Action //
 		this._perform(u, w, p, e);
 	}
 
-	performForUniverse(universe: Universe)
+	performForUniverse(universe: Universe): void
 	{
 		this.perform(universe, null, null, null);
 	}
 
 	static _instances: Action_Instances;
-	static Instances()
+	static Instances(): Action_Instances
 	{
 		if (Action._instances == null)
 		{

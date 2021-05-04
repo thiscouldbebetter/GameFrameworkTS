@@ -7,7 +7,7 @@ var ThisCouldBeBetter;
          {
             constructor(name, perform) {
                 this.name = name;
-                this.perform = perform;
+                this._perform = perform;
             }
             perform(u, w, p, e) {
                 this._perform(u, w, p, e);
