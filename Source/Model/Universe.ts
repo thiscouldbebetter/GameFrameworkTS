@@ -27,7 +27,7 @@ export class Universe
 	storageHelper: StorageHelper;
 	videoHelper: VideoHelper;
 
-	debuggingMode: boolean;
+	debuggingModeName: string;
 	profile: Profile;
 	venueNext: Venue;
 	venueCurrent: Venue;
@@ -91,9 +91,9 @@ export class Universe
 			worldCreate
 		);
 
-		var debuggingMode =
+		var debuggingModeName =
 			URLParser.fromWindow().queryStringParameters["debug"];
-		returnValue.debuggingMode = debuggingMode;
+		returnValue.debuggingModeName = debuggingModeName;
 
 		return returnValue;
 	}

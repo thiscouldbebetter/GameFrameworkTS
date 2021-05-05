@@ -27,8 +27,8 @@ var ThisCouldBeBetter;
             // static methods
             static create(name, version, timerHelper, display, mediaLibrary, controlBuilder, worldCreate) {
                 var returnValue = new Universe(name, version, timerHelper, display, mediaLibrary, controlBuilder, worldCreate);
-                var debuggingMode = GameFramework.URLParser.fromWindow().queryStringParameters["debug"];
-                returnValue.debuggingMode = debuggingMode;
+                var debuggingModeName = GameFramework.URLParser.fromWindow().queryStringParameters["debug"];
+                returnValue.debuggingModeName = debuggingModeName;
                 return returnValue;
             }
             static default() {

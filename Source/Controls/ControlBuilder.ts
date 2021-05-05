@@ -1260,7 +1260,7 @@ export class ControlBuilder
 						(
 							new VisualImageFromLibrary(imageName)
 						),
-						null, null
+						null, null // colorBackground, colorBorder
 					),
 
 					new ControlLabel
@@ -1270,7 +1270,7 @@ export class ControlBuilder
 						this.sizeBase.clone(), // size
 						true, // isTextCentered,
 						message,
-						this.fontHeightInPixelsBase * 2
+						this.fontHeightInPixelsBase * 1.5
 					),
 
 					ControlButton.from8

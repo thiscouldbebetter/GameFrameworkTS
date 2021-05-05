@@ -584,11 +584,12 @@ var ThisCouldBeBetter;
                     // children
                     [
                         new GameFramework.ControlVisual("imageSlide", this._zeroes, this.sizeBase.clone(), // size
-                        GameFramework.DataBinding.fromContext(new GameFramework.VisualImageFromLibrary(imageName)), null, null),
+                        GameFramework.DataBinding.fromContext(new GameFramework.VisualImageFromLibrary(imageName)), null, null // colorBackground, colorBorder
+                        ),
                         new GameFramework.ControlLabel("labelSlideText", GameFramework.Coords.fromXY(100, this.fontHeightInPixelsBase * 2), // pos
                         this.sizeBase.clone(), // size
                         true, // isTextCentered,
-                        message, this.fontHeightInPixelsBase * 2),
+                        message, this.fontHeightInPixelsBase * 1.5),
                         GameFramework.ControlButton.from8("buttonNext", GameFramework.Coords.fromXY(75, 120), // pos
                         GameFramework.Coords.fromXY(50, 40), // size
                         "Next", this.fontHeightInPixelsBase, false, // hasBorder

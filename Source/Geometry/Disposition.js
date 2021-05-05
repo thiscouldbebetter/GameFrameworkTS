@@ -26,6 +26,9 @@ var ThisCouldBeBetter;
             static fromPos(pos) {
                 return new Disposition(pos, GameFramework.Orientation.default(), null);
             }
+            static fromPosAndOrientation(pos, orientation) {
+                return new Disposition(pos, orientation, null);
+            }
             static fromPosAndVel(pos, vel) {
                 var returnValue = Disposition.fromPos(pos);
                 returnValue.vel = vel;
