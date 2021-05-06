@@ -7,7 +7,7 @@ var ThisCouldBeBetter;
             constructor(styles, venueTransitionalFromTo) {
                 this.styles = styles || GameFramework.ControlStyle.Instances()._All;
                 this.venueTransitionalFromTo =
-                    venueTransitionalFromTo || ((vFrom, vTo) => GameFramework.VenueFader.fromVenuesToAndFrom(vTo, vFrom));
+                    venueTransitionalFromTo || this.venueFaderFromTo;
                 this.stylesByName = GameFramework.ArrayHelper.addLookupsByName(this.styles);
                 this.fontHeightInPixelsBase = 10;
                 this.buttonHeightBase = this.fontHeightInPixelsBase * 2;
@@ -25,6 +25,13 @@ var ThisCouldBeBetter;
             }
             styleDefault() {
                 return this.styles[0];
+            }
+            venueFaderFromTo(vFrom, vTo) {
+                if (vTo.constructor.name == GameFramework.VenueFader.name) {
+                    vTo = vTo.venueToFadeTo();
+                }
+                var returnValue = GameFramework.VenueFader.fromVenuesToAndFrom(vTo, vFrom);
+                return returnValue;
             }
             // Controls.
             choice(universe, size, message, optionNames, optionFunctions, showMessageOnly) {
@@ -574,28 +581,35 @@ var ThisCouldBeBetter;
                     venueNext = controlBuilder.venueTransitionalFromTo(universe.venueCurrent, venueNext);
                     universe.venueNext = venueNext;
                 };
+                var skip = () => {
+                    universe.venueNext = controlBuilder.venueTransitionalFromTo(universe.venueCurrent, venueAfterSlideshow);
+                };
                 for (var i = 0; i < imageNamesAndMessagesForSlides.length; i++) {
                     var imageNameAndMessage = imageNamesAndMessagesForSlides[i];
                     var imageName = imageNameAndMessage[0];
                     var message = imageNameAndMessage[1];
                     var next = nextDefn.bind(this, i + 1);
-                    var containerSlide = GameFramework.ControlContainer.from4("containerSlide_" + i, this._zeroes, // pos
+                    var containerSlide = new GameFramework.ControlContainer("containerSlide_" + i, this._zeroes, // pos
                     this.sizeBase.clone(), // size
                     // children
                     [
                         new GameFramework.ControlVisual("imageSlide", this._zeroes, this.sizeBase.clone(), // size
-                        GameFramework.DataBinding.fromContext(new GameFramework.VisualImageFromLibrary(imageName)), null, null // colorBackground, colorBorder
+                        GameFramework.DataBinding.fromContext(new GameFramework.VisualImageScaled(new GameFramework.VisualImageFromLibrary(imageName), this.sizeBase.clone().multiply(scaleMultiplier) // sizeToDrawScaled
+                        )), null, null // colorBackground, colorBorder
                         ),
                         new GameFramework.ControlLabel("labelSlideText", GameFramework.Coords.fromXY(100, this.fontHeightInPixelsBase * 2), // pos
                         this.sizeBase.clone(), // size
                         true, // isTextCentered,
-                        message, this.fontHeightInPixelsBase * 1.5),
+                        message, this.fontHeightInPixelsBase),
                         GameFramework.ControlButton.from8("buttonNext", GameFramework.Coords.fromXY(75, 120), // pos
                         GameFramework.Coords.fromXY(50, 40), // size
                         "Next", this.fontHeightInPixelsBase, false, // hasBorder
                         true, // isEnabled
                         next)
-                    ]);
+                    ], [
+                        new GameFramework.Action(GameFramework.ControlActionNames.Instances().ControlCancel, skip),
+                        new GameFramework.Action(GameFramework.ControlActionNames.Instances().ControlConfirm, next)
+                    ], null);
                     containerSlide.scalePosAndSize(scaleMultiplier);
                     controlsForSlides.push(containerSlide);
                 }

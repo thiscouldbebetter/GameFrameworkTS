@@ -40,25 +40,25 @@ export class VenueFader implements Venue
 			(backgroundColor == null ? Color.Instances().Black : backgroundColor);
 	}
 
-	static fromVenueTo(venueToFadeTo: Venue)
+	static fromVenueTo(venueToFadeTo: Venue): VenueFader
 	{
 		return new VenueFader(venueToFadeTo, null, null, null);
 	}
 
-	static fromVenuesToAndFrom(venueToFadeTo: Venue, venueToFadeFrom: Venue)
+	static fromVenuesToAndFrom(venueToFadeTo: Venue, venueToFadeFrom: Venue): VenueFader
 	{
 		return new VenueFader(venueToFadeTo, venueToFadeFrom, null, null)
 	}
 
-	finalize(universe: Universe) {}
+	finalize(universe: Universe): void {}
 
-	initialize(universe: Universe)
+	initialize(universe: Universe): void
 	{
 		var venueToFadeTo = this.venueToFadeTo();
 		venueToFadeTo.initialize(universe);
 	}
 
-	updateForTimerTick(universe: Universe)
+	updateForTimerTick(universe: Universe): void
 	{
 		this.draw(universe);
 
@@ -123,17 +123,17 @@ export class VenueFader implements Venue
 		);
 	}
 
-	venueToFadeTo()
+	venueToFadeTo(): Venue
 	{
 		return this.venuesToFadeFromAndTo[1];
 	}
 
-	venueCurrent()
+	venueCurrent(): Venue
 	{
 		return this.venuesToFadeFromAndTo[this.venueIndexCurrent];
 	}
 
-	draw(universe: Universe)
+	draw(universe: Universe): void
 	{
 		var venueCurrent = this.venueCurrent();
 		if (venueCurrent != null)

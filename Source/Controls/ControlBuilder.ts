@@ -24,7 +24,7 @@ export class ControlBuilder
 	{
 		this.styles = styles || ControlStyle.Instances()._All;
 		this.venueTransitionalFromTo =
-			venueTransitionalFromTo || ( (vFrom: Venue, vTo: Venue) => VenueFader.fromVenuesToAndFrom(vTo, vFrom) );
+			venueTransitionalFromTo || this.venueFaderFromTo;
 
 		this.stylesByName = ArrayHelper.addLookupsByName(this.styles);
 
@@ -52,6 +52,16 @@ export class ControlBuilder
 	styleDefault(): ControlStyle
 	{
 		return this.styles[0];
+	}
+
+	venueFaderFromTo(vFrom: Venue, vTo: Venue): VenueFader
+	{
+		if (vTo.constructor.name == VenueFader.name)
+		{
+			vTo = (vTo as VenueFader).venueToFadeTo();
+		}
+		var returnValue = VenueFader.fromVenuesToAndFrom(vTo, vFrom);
+		return returnValue;
 	}
 
 	// Controls.
@@ -1236,6 +1246,14 @@ export class ControlBuilder
 			universe.venueNext = venueNext;
 		};
 
+		var skip = () =>
+		{
+			universe.venueNext = controlBuilder.venueTransitionalFromTo
+			(
+				universe.venueCurrent, venueAfterSlideshow
+			);
+		};
+
 		for (var i = 0; i < imageNamesAndMessagesForSlides.length; i++)
 		{
 			var imageNameAndMessage = imageNamesAndMessagesForSlides[i];
@@ -1244,7 +1262,7 @@ export class ControlBuilder
 
 			var next = nextDefn.bind(this, i + 1);
 
-			var containerSlide = ControlContainer.from4
+			var containerSlide = new ControlContainer
 			(
 				"containerSlide_" + i,
 				this._zeroes, // pos
@@ -1258,7 +1276,11 @@ export class ControlBuilder
 						this.sizeBase.clone(), // size
 						DataBinding.fromContext<Visual>
 						(
-							new VisualImageFromLibrary(imageName)
+							new VisualImageScaled
+							(
+								new VisualImageFromLibrary(imageName),
+								this.sizeBase.clone().multiply(scaleMultiplier) // sizeToDrawScaled
+							)
 						),
 						null, null // colorBackground, colorBorder
 					),
@@ -1270,7 +1292,7 @@ export class ControlBuilder
 						this.sizeBase.clone(), // size
 						true, // isTextCentered,
 						message,
-						this.fontHeightInPixelsBase * 1.5
+						this.fontHeightInPixelsBase
 					),
 
 					ControlButton.from8
@@ -1285,6 +1307,14 @@ export class ControlBuilder
 						next
 					)
 				],
+
+				[
+					new Action( ControlActionNames.Instances().ControlCancel, skip ),
+					new Action( ControlActionNames.Instances().ControlConfirm, next )
+				],
+
+				null
+
 			);
 
 			containerSlide.scalePosAndSize(scaleMultiplier);

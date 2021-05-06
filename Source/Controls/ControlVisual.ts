@@ -92,15 +92,14 @@ export class ControlVisual extends ControlBase
 			var colorBorder = this.colorBorder || style.colorBorder;
 			display.drawRectangle
 			(
-				drawPos, this.size,
-				colorFill,
-				colorBorder,
-				null
+				drawPos, this.size, colorFill, colorBorder, null
 			);
 
+			this._sizeHalf.overwriteWith(this.size).half();
+			drawPos.add(this._sizeHalf);
 			var locatableEntity = this._locatableEntity;
 			locatableEntity.locatable().loc.pos.overwriteWith(drawPos);
-			drawPos.add(this._sizeHalf.overwriteWith(this.size).half());
+
 			var world = universe.world;
 			var place = (world == null ? null : world.placeCurrent);
 			visualToDraw.draw(universe, world, place, locatableEntity, display);
