@@ -25,10 +25,15 @@ export class Orientation
 
 	static default()
 	{
-		return new Orientation(new Coords(1, 0, 0), new Coords(0, 0, 1));
+		return new Orientation(new Coords(1, 0, 0), new Coords(0, 0, 1) );
 	}
 
-	default()
+	static fromForward(forward: Coords): Orientation
+	{
+		return new Orientation(forward, new Coords(0, 0, 1) ); 
+	}
+
+	default(): void
 	{
 		var coordsInstances = Coords.Instances();
 		this.forwardDownSet(coordsInstances.OneZeroZero, coordsInstances.ZeroZeroOne);
@@ -37,7 +42,7 @@ export class Orientation
 	// instances
 
 	static _instances: Orientation_Instances;
-	static Instances()
+	static Instances(): Orientation_Instances
 	{
 		if (Orientation._instances == null)
 		{
@@ -49,12 +54,12 @@ export class Orientation
 
 	// methods
 
-	clone()
+	clone(): Orientation
 	{
 		return new Orientation(this.forward.clone(), this.down.clone());
 	}
 
-	equals(other: Orientation)
+	equals(other: Orientation): boolean
 	{
 		var returnValue =
 		(
@@ -65,20 +70,20 @@ export class Orientation
 		return returnValue;
 	}
 
-	forwardSet(value: Coords)
+	forwardSet(value: Coords): Orientation
 	{
 		this.forward.overwriteWith(value);
 		return this.orthogonalize();
 	}
 
-	forwardDownSet(forward: Coords, down: Coords)
+	forwardDownSet(forward: Coords, down: Coords): Orientation
 	{
 		this.forward.overwriteWith(forward);
 		this.down.overwriteWith(down);
 		return this.orthogonalize();
 	}
 
-	orthogonalize()
+	orthogonalize(): Orientation
 	{
 		this.forward.normalize();
 		this.right.overwriteWith(this.down).crossProduct(this.forward).normalize();
@@ -86,7 +91,7 @@ export class Orientation
 		return this;
 	}
 
-	overwriteWith(other: Orientation)
+	overwriteWith(other: Orientation): Orientation
 	{
 		this.forward.overwriteWith(other.forward);
 		this.right.overwriteWith(other.right);
@@ -94,7 +99,7 @@ export class Orientation
 		return this;
 	}
 
-	projectCoords(coordsToProject: Coords)
+	projectCoords(coordsToProject: Coords): Coords
 	{
 		coordsToProject.overwriteWithDimensions
 		(
@@ -105,7 +110,7 @@ export class Orientation
 		return coordsToProject;
 	}
 
-	unprojectCoords(coordsToUnproject: Coords)
+	unprojectCoords(coordsToUnproject: Coords): Coords
 	{
 		var returnValue = Coords.create();
 
@@ -126,7 +131,7 @@ export class Orientation
 		return coordsToUnproject.overwriteWith(returnValue);
 	}
 
-	projectCoordsRDF(coordsToProject: Coords)
+	projectCoordsRDF(coordsToProject: Coords): Coords
 	{
 		coordsToProject.overwriteWithDimensions
 		(
@@ -137,7 +142,7 @@ export class Orientation
 		return coordsToProject;
 	}
 
-	unprojectCoordsRDF(coordsToUnproject: Coords)
+	unprojectCoordsRDF(coordsToUnproject: Coords): Coords
 	{
 		var returnValue = Coords.create();
 

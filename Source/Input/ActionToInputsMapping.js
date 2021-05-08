@@ -7,7 +7,8 @@ var ThisCouldBeBetter;
             constructor(actionName, inputNames, inactivateInputWhenActionPerformed) {
                 this.actionName = actionName;
                 this.inputNames = inputNames;
-                this.inactivateInputWhenActionPerformed = inactivateInputWhenActionPerformed;
+                this.inactivateInputWhenActionPerformed =
+                    inactivateInputWhenActionPerformed;
             }
             static fromActionAndInputName(actionName, inputName) {
                 return new ActionToInputsMapping(actionName, [inputName], false);
@@ -22,7 +23,8 @@ var ThisCouldBeBetter;
             overwriteWith(other) {
                 this.actionName = other.actionName;
                 this.inputNames = other.inputNames.slice();
-                this.inactivateInputWhenActionPerformed = other.inactivateInputWhenActionPerformed;
+                this.inactivateInputWhenActionPerformed =
+                    other.inactivateInputWhenActionPerformed;
                 return this;
             }
         }

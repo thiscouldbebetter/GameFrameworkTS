@@ -16,6 +16,9 @@ var ThisCouldBeBetter;
             static default() {
                 return new Orientation(new GameFramework.Coords(1, 0, 0), new GameFramework.Coords(0, 0, 1));
             }
+            static fromForward(forward) {
+                return new Orientation(forward, new GameFramework.Coords(0, 0, 1));
+            }
             default() {
                 var coordsInstances = GameFramework.Coords.Instances();
                 this.forwardDownSet(coordsInstances.OneZeroZero, coordsInstances.ZeroZeroOne);

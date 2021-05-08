@@ -171,6 +171,7 @@ export class Entity //
 	perceptor(): Perceptor { return this.propertyByName(Perceptor.name) as Perceptor; }
 	playable(): Playable { return this.propertyByName(Playable.name) as Playable; }
 	portal(): Portal { return this.propertyByName(Portal.name) as Portal; }
+	projectileGenerator(): ProjectileGenerator { return this.propertyByName(ProjectileGenerator.name) as ProjectileGenerator; }
 	selector(): Selector { return this.propertyByName(Selector.name) as Selector; }
 	skillLearner(): SkillLearner { return this.propertyByName(SkillLearner.name) as SkillLearner; }
 	starvable(): Starvable { return this.propertyByName(Starvable.name) as Starvable; }

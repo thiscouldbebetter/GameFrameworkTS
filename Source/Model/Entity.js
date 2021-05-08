@@ -126,6 +126,7 @@ var ThisCouldBeBetter;
             perceptor() { return this.propertyByName(GameFramework.Perceptor.name); }
             playable() { return this.propertyByName(GameFramework.Playable.name); }
             portal() { return this.propertyByName(GameFramework.Portal.name); }
+            projectileGenerator() { return this.propertyByName(GameFramework.ProjectileGenerator.name); }
             selector() { return this.propertyByName(GameFramework.Selector.name); }
             skillLearner() { return this.propertyByName(GameFramework.SkillLearner.name); }
             starvable() { return this.propertyByName(GameFramework.Starvable.name); }

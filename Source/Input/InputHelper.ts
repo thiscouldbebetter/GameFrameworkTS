@@ -11,7 +11,7 @@ export class InputHelper implements Platformable
 	mouseMovePosPrev: Coords;
 
 	gamepadsConnected: any;
-	inputNamesLookup: string[];
+	inputNamesLookup: Map<string, string>;
 	inputsPressed: Input[];
 	inputsPressedByName: Map<string, Input>;
 	keysToPreventDefaultsFor: string[];
@@ -46,7 +46,7 @@ export class InputHelper implements Platformable
 	(
 		actionsByName: Map<string, Action>,
 		actionToInputsMappingsByInputName: Map<string, ActionToInputsMapping>
-	)
+	): Action[]
 	{
 		var returnValues = new Array<Action>();
 
@@ -78,7 +78,7 @@ export class InputHelper implements Platformable
 		return returnValues;
 	}
 
-	initialize(universe: Universe)
+	initialize(universe: Universe): void
 	{
 		this.inputsPressed = [];
 		this.gamepadsConnected = [];
@@ -99,9 +99,9 @@ export class InputHelper implements Platformable
 		this.gamepadsCheck();
 	}
 
-	inputAdd(inputPressedName: string)
+	inputAdd(inputPressedName: string): void
 	{
-		if (this.inputsPressedByName.get(inputPressedName) == null)
+		if (this.inputsPressedByName.has(inputPressedName) == false)
 		{
 			var inputPressed = new Input(inputPressedName);
 			this.inputsPressedByName.set(inputPressedName, inputPressed);
@@ -109,7 +109,7 @@ export class InputHelper implements Platformable
 		}
 	}
 
-	inputRemove(inputReleasedName: string)
+	inputRemove(inputReleasedName: string): void
 	{
 		if (this.inputsPressedByName.has(inputReleasedName))
 		{
@@ -119,12 +119,12 @@ export class InputHelper implements Platformable
 		}
 	}
 
-	inputsActive()
+	inputsActive(): Input[]
 	{
 		return this.inputsPressed.filter( (x) => x.isActive );
 	}
 
-	inputsRemoveAll()
+	inputsRemoveAll(): void
 	{
 		for (var i = 0; i < this.inputsPressed.length; i++)
 		{
@@ -133,7 +133,7 @@ export class InputHelper implements Platformable
 		}
 	}
 
-	isMouseClicked(value: boolean)
+	isMouseClicked(value: boolean): boolean
 	{
 		var returnValue = false;
 
@@ -159,12 +159,12 @@ export class InputHelper implements Platformable
 		return returnValue;
 	}
 
-	updateForTimerTick(universe: Universe)
+	updateForTimerTick(universe: Universe): void
 	{
 		this.updateForTimerTick_Gamepads(universe);
 	}
 
-	updateForTimerTick_Gamepads(universe: Universe)
+	updateForTimerTick_Gamepads(universe: Universe): void
 	{
 		var systemGamepads = this.systemGamepads();
 		var inputNames = Input.Names();
@@ -232,7 +232,7 @@ export class InputHelper implements Platformable
 
 	// events - keyboard
 
-	handleEventKeyDown(event: any)
+	handleEventKeyDown(event: any): void
 	{
 		var inputPressed = event.key;
 
@@ -257,7 +257,7 @@ export class InputHelper implements Platformable
 		this.inputAdd(inputPressed);
 	}
 
-	handleEventKeyUp(event: any)
+	handleEventKeyUp(event: any): void
 	{
 		var inputReleased = event.key;
 		if (inputReleased == " ")
@@ -278,7 +278,7 @@ export class InputHelper implements Platformable
 
 	// events - mouse
 
-	handleEventMouseDown(event: any)
+	handleEventMouseDown(event: any): void
 	{
 		var canvas = event.target;
 		var canvasBox = canvas.getBoundingClientRect();
@@ -291,7 +291,7 @@ export class InputHelper implements Platformable
 		this.inputAdd(Input.Names().MouseClick);
 	}
 
-	handleEventMouseMove(event: any)
+	handleEventMouseMove(event: any): void
 	{
 		var canvas = event.target;
 		var canvasBox = canvas.getBoundingClientRect();
@@ -310,14 +310,14 @@ export class InputHelper implements Platformable
 		}
 	}
 
-	handleEventMouseUp(event: any)
+	handleEventMouseUp(event: any): void
 	{
 		this.inputRemove(Input.Names().MouseClick);
 	}
 
 	// gamepads
 
-	gamepadsCheck()
+	gamepadsCheck(): void
 	{
 		var systemGamepads = this.systemGamepads();
 		for (var i = 0; i < systemGamepads.length; i++)
@@ -331,7 +331,7 @@ export class InputHelper implements Platformable
 		}
 	}
 
-	systemGamepads()
+	systemGamepads(): any
 	{
 		return navigator.getGamepads();
 	}

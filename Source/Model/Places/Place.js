@@ -173,11 +173,14 @@ var ThisCouldBeBetter;
                 return this.entitiesByPropertyName(GameFramework.Camera.name)[0];
             }
             collisionTracker() {
-                var collisionTrackerEntity = this.entitiesByPropertyName(GameFramework.CollisionTracker.name)[0];
-                var returnValueAsProperty = (collisionTrackerEntity == null
-                    ? null
-                    : collisionTrackerEntity.propertyByName(GameFramework.CollisionTracker.name));
-                var returnValue = returnValueAsProperty;
+                var returnValue = null;
+                if (typeof (GameFramework.CollisionTracker) != "undefined") {
+                    var collisionTrackerEntity = this.entitiesByPropertyName(GameFramework.CollisionTracker.name)[0];
+                    var returnValueAsProperty = (collisionTrackerEntity == null
+                        ? null
+                        : collisionTrackerEntity.propertyByName(GameFramework.CollisionTracker.name));
+                    returnValue = returnValueAsProperty;
+                }
                 return returnValue;
             }
             drawables() {

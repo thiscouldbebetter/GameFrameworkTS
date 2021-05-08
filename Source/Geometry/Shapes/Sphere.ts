@@ -21,7 +21,12 @@ export class Sphere implements ShapeBase
 		this._displacement = Coords.create();
 	}
 
-	containsOther(other: Sphere)
+	static fromRadius(radius: number): Sphere
+	{
+		return new Sphere(Coords.create(), radius);
+	}
+
+	containsOther(other: Sphere): boolean
 	{
 		var displacementOfOther =
 			this._displacement.overwriteWith(other.center).subtract(this.center);
@@ -30,7 +35,7 @@ export class Sphere implements ShapeBase
 		return returnValue;
 	}
 
-	pointRandom()
+	pointRandom(): Coords
 	{
 		return new Polar
 		(
@@ -49,12 +54,12 @@ export class Sphere implements ShapeBase
 
 	// cloneable
 
-	clone()
+	clone(): Sphere
 	{
 		return new Sphere(this.center.clone(), this.radius);
 	}
 
-	overwriteWith(other: Sphere)
+	overwriteWith(other: Sphere): Sphere
 	{
 		this.center.overwriteWith(other.center);
 		this.radius = other.radius;
@@ -80,7 +85,7 @@ export class Sphere implements ShapeBase
 		).normalize();
 	}
 
-	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords)
+	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords
 	{
 		return surfacePointOut.overwriteWith(posToCheck); // todo
 	}

@@ -16,7 +16,10 @@ var ThisCouldBeBetter;
             damageApply(universe, world, place, entityDamager, entityKillable, damageToApply) {
                 var damageApplied;
                 if (this._damageApply == null) {
-                    damageApplied = (damageToApply == null ? entityDamager.damager().damagePerHit.amount : damageToApply.amount);
+                    damageApplied =
+                        (damageToApply == null
+                            ? entityDamager.damager().damagePerHit.amount
+                            : damageToApply.amount);
                     entityKillable.killable().integritySubtract(damageApplied);
                 }
                 else {
@@ -47,7 +50,7 @@ var ThisCouldBeBetter;
             initialize(u, w, p, e) { }
             updateForTimerTick(universe, world, place, entityKillable) {
                 if (this.isAlive() == false) {
-                    place.entitiesToRemove.push(entityKillable);
+                    place.entityToRemoveAdd(entityKillable);
                     this.die(universe, world, place, entityKillable);
                 }
             }

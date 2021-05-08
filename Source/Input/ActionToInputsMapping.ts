@@ -8,11 +8,16 @@ export class ActionToInputsMapping
 	inputNames: string[];
 	inactivateInputWhenActionPerformed: boolean;
 
-	constructor(actionName: string, inputNames: string[], inactivateInputWhenActionPerformed: boolean)
+	constructor
+	(
+		actionName: string, inputNames: string[],
+		inactivateInputWhenActionPerformed: boolean
+	)
 	{
 		this.actionName = actionName;
 		this.inputNames = inputNames;
-		this.inactivateInputWhenActionPerformed = inactivateInputWhenActionPerformed;
+		this.inactivateInputWhenActionPerformed =
+			inactivateInputWhenActionPerformed;
 	}
 
 	static fromActionAndInputName
@@ -34,7 +39,9 @@ export class ActionToInputsMapping
 	{
 		return new ActionToInputsMapping
 		(
-			this.actionName, this.inputNames.slice(), this.inactivateInputWhenActionPerformed
+			this.actionName,
+			this.inputNames.slice(),
+			this.inactivateInputWhenActionPerformed
 		);
 	}
 
@@ -42,7 +49,8 @@ export class ActionToInputsMapping
 	{
 		this.actionName = other.actionName;
 		this.inputNames = other.inputNames.slice();
-		this.inactivateInputWhenActionPerformed = other.inactivateInputWhenActionPerformed;
+		this.inactivateInputWhenActionPerformed =
+			other.inactivateInputWhenActionPerformed;
 		return this;
 	}
 }

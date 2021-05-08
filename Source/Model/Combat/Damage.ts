@@ -12,10 +12,15 @@ export class Damage
 	{
 		this.amount = amount;
 		this.typeName = typeName;
-		this.effectsAndChances = effectsAndChances;
+		this.effectsAndChances = effectsAndChances || [];
 	}
 
-	effectsOccurring(randomizer: Randomizer)
+	static fromAmount(amount: number): Damage
+	{
+		return new Damage(amount, null, null);
+	}
+
+	effectsOccurring(randomizer: Randomizer): Effect[]
 	{
 		var effectsOccurring = new Array<Effect>();
 
@@ -37,12 +42,12 @@ export class Damage
 		return effectsOccurring;
 	}
 
-	toString()
+	toString(): string
 	{
 		return this.amount + " " + (this.typeName || "");
 	}
 
-	type()
+	type(): DamageType
 	{
 		return DamageType.byName(this.typeName);
 	}

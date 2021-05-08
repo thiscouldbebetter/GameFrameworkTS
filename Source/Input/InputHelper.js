@@ -58,7 +58,7 @@ var ThisCouldBeBetter;
                 this.gamepadsCheck();
             }
             inputAdd(inputPressedName) {
-                if (this.inputsPressedByName.get(inputPressedName) == null) {
+                if (this.inputsPressedByName.has(inputPressedName) == false) {
                     var inputPressed = new GameFramework.Input(inputPressedName);
                     this.inputsPressedByName.set(inputPressedName, inputPressed);
                     this.inputsPressed.push(inputPressed);

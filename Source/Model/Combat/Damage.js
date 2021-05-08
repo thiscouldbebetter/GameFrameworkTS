@@ -7,7 +7,10 @@ var ThisCouldBeBetter;
             constructor(amount, typeName, effectsAndChances) {
                 this.amount = amount;
                 this.typeName = typeName;
-                this.effectsAndChances = effectsAndChances;
+                this.effectsAndChances = effectsAndChances || [];
+            }
+            static fromAmount(amount) {
+                return new Damage(amount, null, null);
             }
             effectsOccurring(randomizer) {
                 var effectsOccurring = new Array();

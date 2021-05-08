@@ -5,7 +5,11 @@ namespace ThisCouldBeBetter.GameFramework
 export class Killable implements EntityProperty
 {
 	integrityMax: number;
-	_damageApply: (u: Universe, w: World, p: Place, eDamager: Entity, eKillable: Entity, damageToApply: Damage) => number;
+	_damageApply:
+	(
+		u: Universe, w: World, p: Place, eDamager: Entity,
+		eKillable: Entity, damageToApply: Damage
+	) => number;
 	_die: (u: Universe, w: World, p: Place, e: Entity) => void;
 
 	integrity: number;
@@ -13,7 +17,11 @@ export class Killable implements EntityProperty
 	constructor
 	(
 		integrityMax: number,
-		damageApply: (u: Universe, w: World, p: Place, eDamager: Entity, eKillable: Entity, damageToApply: Damage) => number,
+		damageApply:
+		(
+			u: Universe, w: World, p: Place, eDamager: Entity,
+			eKillable: Entity, damageToApply: Damage
+		) => number,
 		die: (u: Universe, w: World, p: Place, e: Entity) => void
 	)
 	{
@@ -38,12 +46,21 @@ export class Killable implements EntityProperty
 		var damageApplied;
 		if (this._damageApply == null)
 		{
-			damageApplied = (damageToApply == null ? entityDamager.damager().damagePerHit.amount : damageToApply.amount);
+			damageApplied =
+			(
+				damageToApply == null
+				? entityDamager.damager().damagePerHit.amount
+				: damageToApply.amount
+			);
 			entityKillable.killable().integritySubtract(damageApplied);
 		}
 		else
 		{
-			damageApplied = this._damageApply(universe, world, place, entityDamager, entityKillable, damageToApply);
+			damageApplied = this._damageApply
+			(
+				universe, world, place, entityDamager, entityKillable,
+				damageToApply
+			);
 		}
 		return damageApplied;
 	}
@@ -86,11 +103,14 @@ export class Killable implements EntityProperty
 	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
 	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
 
-	updateForTimerTick(universe: Universe, world: World, place: Place, entityKillable: Entity)
+	updateForTimerTick
+	(
+		universe: Universe, world: World, place: Place, entityKillable: Entity
+	): void
 	{
 		if (this.isAlive() == false)
 		{
-			place.entitiesToRemove.push(entityKillable);
+			place.entityToRemoveAdd(entityKillable);
 			this.die(universe, world, place, entityKillable);
 		}
 	}

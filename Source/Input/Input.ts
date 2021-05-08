@@ -52,7 +52,7 @@ class Input_Names
 	Tab: string;
 
 	_All: string[];
-	_AllByName: any;
+	_AllByName: Map<string, string>;
 
 	constructor()
 	{

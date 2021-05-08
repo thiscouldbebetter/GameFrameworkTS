@@ -718,6 +718,96 @@ This guide illustrates the creation of a new game from scratch using the This Co
 9. Adding Weapons
 -----------------
 
-9.1. Right now, there's nothing you can do about aliens kidnapping your people, because your ship has no weapons.  You just have to sit and watch as the people you swore to protect are abducted by aliens with clearly nefarious intent.  How does it feel?  Feels bad, right?
+9.1. Right now, there's nothing you can do about aliens kidnapping your people, because your ship has no weapons.  You just have to sit and watch as the people you swore to protect are abducted by aliens with clearly nefarious intent.  How does it feel?  Feels bad, right?  
+
+So let's give this kitten some claws.  (The kitten is your spaceship.  The claws are, like, plasma blasters.)
+
+9.2. To give your spaceship the ability to fire bullets, open Ship.ts and add these lines and add this to the list of entity properties in the constructor, remembering to add a comma to separate array elements:
+
+	new ProjectileGenerator
+	(
+		"Bullet",
+		2, // radius
+		5, // distanceInitial
+		4, // speed
+		128, // ticksToLive
+		Damage.fromAmount(1),
+		VisualCircle.fromRadiusAndColorFill
+		(
+			2, Color.byName("Yellow")
+		)
+	)
+
+9.3. Now your ship could technically generate bullets, only there's no ActionToInputsMapping to detect when you want to fire them, and even if there were, there's no Action to map that mapping to.  To add the Action and its mapping, open PlaceLevel.ts and, in the .defnBuild() method, add this line to the end of the "actions" array:
+
+	ProjectileGenerator.actionFire()
+
+9.4. And these lines to the end of "actionsToInputMappings" array:
+
+	new ActionToInputsMapping
+	(
+		ProjectileGenerator.actionFire().name,
+		[ inputNames.Space ],
+		true // inactivateInputWhenActionPerformed
+	)
+
+(As always, remember to delimit these new array elements from the existing ones with commas.)
+
+9.5. You'll also need to add the ProjectileGenerator class to Imports.ts, like this:
+
+	import ProjectileGenerator = gf.ProjectileGenerator;
+
+9.6. And also add it to DefenderClone.html, as shown below.  Actually, you may want to add references to several related classes while you're at it:
+
+	<script type="text/javascript" src="Framework/Source/Model/Combat/Damage.js"></script>
+	<script type="text/javascript" src="Framework/Source/Model/Combat/Damager.js"></script>
+	<script type="text/javascript" src="Framework/Source/Model/Combat/Killable.js"></script>
+	<script type="text/javascript" src="Framework/Source/Model/Combat/ProjectileGenerator.js"></script>
+
+	<script type="text/javascript" src="Framework/Source/Model/Mortality/Ephemeral.js"></script>
+
+9.7. Re-compile the game and refresh the web browser.  The good news is, your spaceship will now shoot bullets when you press the spacebar!
+
+<img src="Screenshot-9-Spaceship_Fires_Bullet.gif" />
+
+
+10. Making Weapons Work
+-----------------------
+
+10.1. The bad news is, those bullets don't do anything yet.  Even if you manage to hit the Raider with them, they'll just pass harmlessly through it, because right now it's pretty much immortal.  It's too dumb to die!
+
+10.2. So let's make it mortal.  Open Raider.ts and add the following lines to the array of entity properties being declared in the constructor.  You could add them at the end of the array, or make things a bit neater and add them in alphabetical order.  Whichever you choose, be sure to add commas in the proper places.
+
+	Collidable.fromCollider(Sphere.fromRadius(4) ),
+
+	Killable.fromIntegrityMax(1),
+
+These lines make the Raider collidable, which means that your bullets can hit it, and killable, which means that when you bullets hit it they can hurt it.
+
+10.3. However, in order for Collidables and Killables to be processed correctly, they'll need to be added to the list of property types that PlaceLevel understands.  Open PlaceLevel.ts and replace the existing declaration of the entityPropertyNamesToProcess array with the following:
+
+	var entityPropertyNamesToProcess =
+	[
+		Locatable.name,
+		Constrainable.name,
+		Collidable.name,
+		Actor.name,
+		Ephemeral.name,
+		Killable.name
+	];
+
+10.4 Re-compile the game and refresh the web browser.  Now your bullets can destroy the Raider, which is good, because otherwise what's the point of bullets, man?
+
+<img src="Screenshot-10-Bullet_Destroys_Raider.gif" />
+
+
+11. Giving the Ground Some Weight
+---------------------------------
+
+11.1. You can now save the habitat, and, by extension, the day.  However, there's still a few problems to fix.
+
+First of all, when your ship flies into the ground, nothing happens.  When you fly real spaceships into the ground, they explode.  Just ask NASA.  Actually, you could probably ask anyone.
+
+Second, when you destroy the Raider after it picks up the Habitat and lifts it into the air, the Habitat should fall back to the ground.  As it stands, it sort of falls already, for some strange reason, but then it just passes through the ground and disappears.  It should probably go splat too, at least if it's dropped from high enough.  But even if we don't want it to splat just yet, it should at least stop when it hits the ground.
 
 [To be continued.]

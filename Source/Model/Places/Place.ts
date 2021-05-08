@@ -268,14 +268,19 @@ export class Place //
 
 	collisionTracker(): CollisionTracker
 	{
-		var collisionTrackerEntity = this.entitiesByPropertyName(CollisionTracker.name)[0];
-		var returnValueAsProperty =
-		(
-			collisionTrackerEntity == null
-			? null
-			: collisionTrackerEntity.propertyByName(CollisionTracker.name)
-		);
-		var returnValue = returnValueAsProperty as CollisionTracker;
+		var returnValue: CollisionTracker = null;
+ 
+		if (typeof(CollisionTracker) != "undefined")
+		{
+			var collisionTrackerEntity = this.entitiesByPropertyName(CollisionTracker.name)[0];
+			var returnValueAsProperty =
+			(
+				collisionTrackerEntity == null
+				? null
+				: collisionTrackerEntity.propertyByName(CollisionTracker.name)
+			);
+			returnValue = returnValueAsProperty as CollisionTracker;
+		}
 		return returnValue;
 	}
 

@@ -11,6 +11,9 @@ var ThisCouldBeBetter;
                 this._centerAsArray = [this.center];
                 this._displacement = GameFramework.Coords.create();
             }
+            static fromRadius(radius) {
+                return new Sphere(GameFramework.Coords.create(), radius);
+            }
             containsOther(other) {
                 var displacementOfOther = this._displacement.overwriteWith(other.center).subtract(this.center);
                 var distanceOfOther = displacementOfOther.magnitude();
