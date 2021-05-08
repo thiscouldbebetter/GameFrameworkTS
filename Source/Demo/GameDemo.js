@@ -36,19 +36,21 @@ class GameDemo {
         var textStringDirectoryPath = contentDirectoryPath + "Text/";
         var videoDirectoryPath = contentDirectoryPath + "Video/";
         var mediaFilePaths = [
+            imageDirectoryPath + "Opening.png",
+            imageDirectoryPath + "Producer.png",
+            imageDirectoryPath + "Title.png",
             imageDirectoryPath + "Anvil.svg",
             imageDirectoryPath + "Car.png",
             imageDirectoryPath + "Friendly.png",
             imageDirectoryPath + "Grass.svg",
             imageDirectoryPath + "Grain.svg",
-            imageDirectoryPath + "Opening.png",
             imageDirectoryPath + "Pillow.svg",
             imageDirectoryPath + "Terrain-Sand.png",
-            imageDirectoryPath + "Title.png",
             imageDirectoryPath + "Zap.svg",
             soundEffectDirectoryPath + "Sound.wav",
             soundEffectDirectoryPath + "Clang.wav",
             soundMusicDirectoryPath + "Music.mp3",
+            soundMusicDirectoryPath + "Producer.mp3",
             soundMusicDirectoryPath + "Title.mp3",
             videoDirectoryPath + "Movie.webm",
             fontDirectoryPath + "Font.ttf",

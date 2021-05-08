@@ -71,11 +71,13 @@ class Game
 		var mediaFilePaths =
 		[
 			imageDirectoryPath + "Opening.png",
+			imageDirectoryPath + "Producer.png",
 			imageDirectoryPath + "Title.png",
 
 			soundEffectDirectoryPath + "Sound.wav",
 
 			soundMusicDirectoryPath + "Music.mp3",
+			soundMusicDirectoryPath + "Producer.mp3",
 			soundMusicDirectoryPath + "Title.mp3",
 
 			videoDirectoryPath + "Movie.webm",

@@ -946,14 +946,14 @@ export class ControlBuilder
 
 		var fontHeight = this.fontHeightInPixelsBase;
 
-		var start = () =>
+		var goToNextVenue = () =>
 		{
-			var title = this.title(universe, size);
+			var venueNext = this.producer(universe, size).toVenue();
 
-			var venueTitle = title.toVenue();
-
-			universe.venueNext =
-				controlBuilder.venueTransitionalFromTo(universe.venueCurrent, venueTitle);
+			universe.venueNext = controlBuilder.venueTransitionalFromTo
+			(
+				universe.venueCurrent, venueNext
+			);
 		};
 
 		var visual = new VisualGroup
@@ -962,7 +962,12 @@ export class ControlBuilder
 			(
 				new VisualImageFromLibrary("Opening"), size
 			)
+			// Note: Sound won't work on the opening screen,
+			// because the user has to interact somehow
+			// before the browser will play sound.
 		]);
+
+		var controlActionNames = ControlActionNames.Instances();
 
 		var returnValue = new ControlContainer
 		(
@@ -989,13 +994,90 @@ export class ControlBuilder
 					fontHeight * 2,
 					false, // hasBorder
 					true, // isEnabled
-					start // click
+					goToNextVenue // click
 				)
 			], // end children
 
 			[
-				new Action( ControlActionNames.Instances().ControlCancel, start ),
-				new Action( ControlActionNames.Instances().ControlConfirm, start )
+				new Action( controlActionNames.ControlCancel, goToNextVenue ),
+				new Action( controlActionNames.ControlConfirm, goToNextVenue )
+			],
+
+			null
+		);
+
+		returnValue.scalePosAndSize(scaleMultiplier);
+
+		return returnValue;
+	}
+
+	producer(universe: Universe, size: Coords): ControlBase
+	{
+		var controlBuilder = this;
+
+		if (size == null)
+		{
+			size = universe.display.sizeDefault();
+		}
+
+		var scaleMultiplier =
+			this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
+
+		var fontHeight = this.fontHeightInPixelsBase;
+
+		var goToVenueNext = () =>
+		{
+			var venueTitle = this.title(universe, size).toVenue();
+
+			universe.venueNext = controlBuilder.venueTransitionalFromTo
+			(
+				universe.venueCurrent, venueTitle
+			);
+		};
+
+		var visual = new VisualGroup
+		([
+			new VisualImageScaled
+			(
+				new VisualImageFromLibrary("Producer"), size
+			),
+			new VisualSound("Music_Producer", true) // isMusic
+		]);
+
+		var controlActionNames = ControlActionNames.Instances();
+
+		var returnValue = new ControlContainer
+		(
+			"containerProducer",
+			this._zeroes, // pos
+			this.sizeBase.clone(), // size
+			// children
+			[
+				new ControlVisual
+				(
+					"imageProducer",
+					this._zeroes.clone(),
+					this.sizeBase.clone(), // size
+					DataBinding.fromContext<Visual>(visual),
+					null, null // colors
+				),
+
+				ControlButton.from8
+				(
+					"buttonStart",
+					Coords.fromXY(75, 120), // pos
+					Coords.fromXY(50, fontHeight * 2), // size
+					"Start",
+					fontHeight * 2,
+					false, // hasBorder
+					true, // isEnabled
+					goToVenueNext // click
+				)
+			], // end children
+
+			[
+				new Action( controlActionNames.ControlCancel, goToVenueNext ),
+				new Action( controlActionNames.ControlConfirm, goToVenueNext )
 			],
 
 			null
@@ -1370,14 +1452,9 @@ export class ControlBuilder
 			new VisualImageScaled
 			(
 				new VisualImageFromLibrary("Title"), size
-			)
+			),
+			new VisualSound("Music_Title", true) // isMusic
 		]);
-
-		var soundNameMusic = "Music_Title";
-		visual.children.push
-		(
-			new VisualSound(soundNameMusic, true) // isMusic
-		);
 
 		var returnValue = new ControlContainer
 		(

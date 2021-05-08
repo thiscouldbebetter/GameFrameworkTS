@@ -428,15 +428,17 @@ var ThisCouldBeBetter;
                 }
                 var scaleMultiplier = this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
                 var fontHeight = this.fontHeightInPixelsBase;
-                var start = () => {
-                    var title = this.title(universe, size);
-                    var venueTitle = title.toVenue();
-                    universe.venueNext =
-                        controlBuilder.venueTransitionalFromTo(universe.venueCurrent, venueTitle);
+                var goToNextVenue = () => {
+                    var venueNext = this.producer(universe, size).toVenue();
+                    universe.venueNext = controlBuilder.venueTransitionalFromTo(universe.venueCurrent, venueNext);
                 };
                 var visual = new GameFramework.VisualGroup([
                     new GameFramework.VisualImageScaled(new GameFramework.VisualImageFromLibrary("Opening"), size)
+                    // Note: Sound won't work on the opening screen,
+                    // because the user has to interact somehow
+                    // before the browser will play sound.
                 ]);
+                var controlActionNames = GameFramework.ControlActionNames.Instances();
                 var returnValue = new GameFramework.ControlContainer("containerOpening", this._zeroes, // pos
                 this.sizeBase.clone(), // size
                 // children
@@ -448,12 +450,49 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(50, fontHeight * 2), // size
                     "Start", fontHeight * 2, false, // hasBorder
                     true, // isEnabled
-                    start // click
+                    goToNextVenue // click
                     )
                 ], // end children
                 [
-                    new GameFramework.Action(GameFramework.ControlActionNames.Instances().ControlCancel, start),
-                    new GameFramework.Action(GameFramework.ControlActionNames.Instances().ControlConfirm, start)
+                    new GameFramework.Action(controlActionNames.ControlCancel, goToNextVenue),
+                    new GameFramework.Action(controlActionNames.ControlConfirm, goToNextVenue)
+                ], null);
+                returnValue.scalePosAndSize(scaleMultiplier);
+                return returnValue;
+            }
+            producer(universe, size) {
+                var controlBuilder = this;
+                if (size == null) {
+                    size = universe.display.sizeDefault();
+                }
+                var scaleMultiplier = this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
+                var fontHeight = this.fontHeightInPixelsBase;
+                var goToVenueNext = () => {
+                    var venueTitle = this.title(universe, size).toVenue();
+                    universe.venueNext = controlBuilder.venueTransitionalFromTo(universe.venueCurrent, venueTitle);
+                };
+                var visual = new GameFramework.VisualGroup([
+                    new GameFramework.VisualImageScaled(new GameFramework.VisualImageFromLibrary("Producer"), size),
+                    new GameFramework.VisualSound("Music_Producer", true) // isMusic
+                ]);
+                var controlActionNames = GameFramework.ControlActionNames.Instances();
+                var returnValue = new GameFramework.ControlContainer("containerProducer", this._zeroes, // pos
+                this.sizeBase.clone(), // size
+                // children
+                [
+                    new GameFramework.ControlVisual("imageProducer", this._zeroes.clone(), this.sizeBase.clone(), // size
+                    GameFramework.DataBinding.fromContext(visual), null, null // colors
+                    ),
+                    GameFramework.ControlButton.from8("buttonStart", GameFramework.Coords.fromXY(75, 120), // pos
+                    GameFramework.Coords.fromXY(50, fontHeight * 2), // size
+                    "Start", fontHeight * 2, false, // hasBorder
+                    true, // isEnabled
+                    goToVenueNext // click
+                    )
+                ], // end children
+                [
+                    new GameFramework.Action(controlActionNames.ControlCancel, goToVenueNext),
+                    new GameFramework.Action(controlActionNames.ControlConfirm, goToVenueNext)
                 ], null);
                 returnValue.scalePosAndSize(scaleMultiplier);
                 return returnValue;
@@ -632,11 +671,9 @@ var ThisCouldBeBetter;
                     universe.venueNext = controlBuilder.venueTransitionalFromTo(universe.venueCurrent, venueTask);
                 };
                 var visual = new GameFramework.VisualGroup([
-                    new GameFramework.VisualImageScaled(new GameFramework.VisualImageFromLibrary("Title"), size)
+                    new GameFramework.VisualImageScaled(new GameFramework.VisualImageFromLibrary("Title"), size),
+                    new GameFramework.VisualSound("Music_Title", true) // isMusic
                 ]);
-                var soundNameMusic = "Music_Title";
-                visual.children.push(new GameFramework.VisualSound(soundNameMusic, true) // isMusic
-                );
                 var returnValue = new GameFramework.ControlContainer("containerTitle", this._zeroes, // pos
                 this.sizeBase.clone(), // size
                 // children
