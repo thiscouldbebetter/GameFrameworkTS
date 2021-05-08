@@ -93,6 +93,7 @@ var ThisCouldBeBetter;
                 this.Black = new Color("Black", "k", [0, 0, 0, 1]);
                 this.Blue = new Color("Blue", "b", [0, 0, 1, 1]);
                 this.BlueDark = new Color("BlueDark", "B", [0, 0, .5, 1]);
+                this.BlueLight = new Color("BlueLight", "$", [.5, .5, 1, 1]);
                 this.Brown = new Color("Brown", "O", [0.5, 0.25, 0, 1]);
                 this.Cyan = new Color("Cyan", "c", [0, 1, 1, 1]);
                 this.Gray = new Color("Gray", "a", [0.5, 0.5, 0.5, 1]);
@@ -118,6 +119,7 @@ var ThisCouldBeBetter;
                         this.Black,
                         this.Blue,
                         this.BlueDark,
+                        this.BlueLight,
                         this.Brown,
                         this.Cyan,
                         this.Gray,
