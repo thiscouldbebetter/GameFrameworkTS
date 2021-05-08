@@ -93,7 +93,7 @@ export class Enemy implements EntityProperty
 
 			if (distanceToTarget <= distanceToApproach)
 			{
-				activity.target = null;
+				activity.targetClear();
 			}
 		};
 

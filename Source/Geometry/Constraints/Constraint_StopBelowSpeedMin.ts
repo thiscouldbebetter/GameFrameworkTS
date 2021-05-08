@@ -11,7 +11,7 @@ export class Constraint_StopBelowSpeedMin implements Constraint
 		this.target = target;
 	}
 
-	constrain(universe: Universe, world: World, place: Place, entity: Entity)
+	constrain(universe: Universe, world: World, place: Place, entity: Entity): void
 	{
 		var targetSpeedMin = this.target;
 		var entityLoc = entity.locatable().loc;

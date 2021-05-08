@@ -11,7 +11,7 @@ export class Constraint_FrictionDry implements Constraint
 		this.target = target;
 	}
 
-	constrain(universe: Universe, world: World, place: Place, entity: Entity)
+	constrain(universe: Universe, world: World, place: Place, entity: Entity): void
 	{
 		var targetFrictionCoefficient = this.target;
 		var frictionMagnitude = targetFrictionCoefficient;

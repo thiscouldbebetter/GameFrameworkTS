@@ -36,8 +36,16 @@ var ThisCouldBeBetter;
             targetByName(targetName) {
                 return this.targetsByName.get(targetName);
             }
+            targetClear() {
+                this.targetClearByName(this.defnName);
+                return this;
+            }
+            targetClearByName(name) {
+                this.targetsByName.delete(name);
+                return this;
+            }
             targetSet(value) {
-                this.targetsByName.set(this.defnName, value);
+                this.targetSetByName(this.defnName, value);
                 return this;
             }
             targetSetByName(name, value) {

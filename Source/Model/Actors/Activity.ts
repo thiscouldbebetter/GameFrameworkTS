@@ -61,9 +61,21 @@ export class Activity
 		return this.targetsByName.get(targetName);
 	}
 
+	targetClear(): Activity
+	{
+		this.targetClearByName(this.defnName);
+		return this;
+	}
+
+	targetClearByName(name: string): Activity
+	{
+		this.targetsByName.delete(name);
+		return this;
+	}
+
 	targetSet(value: any): Activity
 	{
-		this.targetsByName.set(this.defnName, value);
+		this.targetSetByName(this.defnName, value);
 		return this;
 	}
 

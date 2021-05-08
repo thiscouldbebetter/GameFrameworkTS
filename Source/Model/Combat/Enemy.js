@@ -50,7 +50,7 @@ var ThisCouldBeBetter;
                     (targetLocatable, .1, 1 //, distanceToApproach
                     );
                     if (distanceToTarget <= distanceToApproach) {
-                        activity.target = null;
+                        activity.targetClear();
                     }
                 };
                 var enemyActivityDefn = new GameFramework.ActivityDefn("Enemy", enemyActivityPerform);
