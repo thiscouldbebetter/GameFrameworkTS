@@ -125,6 +125,7 @@ import InputHelper = gf.InputHelper;
 import UserInputListener = gf.UserInputListener;
 
 // Media.
+import Audible = gf.Audible;
 import Font = gf.Font;
 import Image2 = gf.Image2;  // Name conflicts with a built-in class.
 import MediaLibrary = gf.MediaLibrary;

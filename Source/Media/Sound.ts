@@ -8,7 +8,6 @@ export class Sound
 	sourcePath: string;
 
 	offsetInSeconds: number;
-	isPlaying: boolean;
 	isRepeating: boolean;
 
 	domElement: any;
@@ -19,10 +18,9 @@ export class Sound
 		this.sourcePath = sourcePath;
 
 		this.offsetInSeconds = 0;
-		this.isPlaying = false;
 	}
 
-	domElementBuild(universe: Universe, volume: number)
+	domElementBuild(universe: Universe, volume: number): any
 	{
 		this.domElement = document.createElement("audio");
 		this.domElement.sound = this;
@@ -42,42 +40,33 @@ export class Sound
 		return this.domElement;
 	}
 
-	pause(universe: Universe)
+	pause(universe: Universe): void
 	{
 		var offsetInSeconds = this.domElement.currentTime;
 		this.stop(universe);
 		this.offsetInSeconds = offsetInSeconds;
 	}
 
-	play(universe: Universe, volume: number)
+	play(universe: Universe, volume: number): void
 	{
-		if (this.isPlaying == false)
-		{
-			this.isPlaying = true;
+		this.domElementBuild(universe, volume);
+		this.domElement.currentTime = this.offsetInSeconds;
 
-			this.domElementBuild(universe, volume);
-			this.domElement.currentTime = this.offsetInSeconds;
-
-			universe.platformHelper.platformableAdd(this);
-		}
+		universe.platformHelper.platformableAdd(this);
 	}
 
-	reset()
+	reset(): void
 	{
 		this.offsetInSeconds = 0;
 	}
 
-	stop(universe: Universe)
+	stop(universe: Universe): void
 	{
-		if (this.isPlaying)
-		{
-			this.isPlaying = false;
-			universe.platformHelper.platformableRemove(this);
-			this.offsetInSeconds = 0;
-		}
+		universe.platformHelper.platformableRemove(this);
+		this.offsetInSeconds = 0;
 	}
 
-	stopOrRepeat(universe: Universe)
+	stopOrRepeat(universe: Universe): void
 	{
 		if (this.isRepeating == false)
 		{
@@ -87,7 +76,7 @@ export class Sound
 
 	// platformable
 
-	toDomElement()
+	toDomElement(): any
 	{
 		return this.domElement;
 	}

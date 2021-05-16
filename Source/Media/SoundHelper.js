@@ -45,17 +45,21 @@ var ThisCouldBeBetter;
                 sound.isRepeating = false;
                 sound.play(universe, this.soundVolume);
             }
-            soundWithNamePlayAsMusic(universe, soundName) {
-                var sound = this.soundsByName.get(soundName);
-                sound.isRepeating = true;
+            soundWithNamePlayAsMusic(universe, soundToPlayName) {
+                var soundToPlay = this.soundsByName.get(soundToPlayName);
+                soundToPlay.isRepeating = true;
                 var soundAlreadyPlaying = this.soundForMusic;
-                if (soundAlreadyPlaying != null) {
-                    if (soundAlreadyPlaying.name != soundName) {
-                        soundAlreadyPlaying.stop(universe);
-                    }
+                if (soundAlreadyPlaying == null) {
+                    soundToPlay.play(universe, this.musicVolume);
                 }
-                sound.play(universe, this.musicVolume);
-                this.soundForMusic = sound;
+                else if (soundAlreadyPlaying.name != soundToPlayName) {
+                    soundAlreadyPlaying.stop(universe);
+                    soundToPlay.play(universe, this.musicVolume);
+                }
+                this.soundForMusic = soundToPlay;
+            }
+            soundsAllStop(universe) {
+                this.sounds.forEach(x => x.stop(universe));
             }
         }
         GameFramework.SoundHelper = SoundHelper;

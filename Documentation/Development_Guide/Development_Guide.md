@@ -727,15 +727,25 @@ So let's give this kitten some claws.  (The kitten is your spaceship.  The claws
 	new ProjectileGenerator
 	(
 		"Bullet",
-		2, // radius
-		5, // distanceInitial
-		4, // speed
-		128, // ticksToLive
-		Damage.fromAmount(1),
-		VisualCircle.fromRadiusAndColorFill
-		(
-			2, Color.byName("Yellow")
-		)
+		[
+			ProjectileGeneration.fromVisual
+			(
+				VisualSound.default()
+			),
+
+			new ProjectileGeneration
+			(
+				2, // radius
+				5, // distanceInitial
+				4, // speed
+				128, // ticksToLive
+				Damage.fromAmount(1),
+				VisualCircle.fromRadiusAndColorFill
+				(
+					2, Color.byName("Yellow")
+				)
+			)
+		]
 	)
 
 9.3. Now your ship could technically generate bullets, only there's no ActionToInputsMapping to detect when you want to fire them, and even if there were, there's no Action to map that mapping to.  To add the Action and its mapping, open PlaceLevel.ts and, in the .defnBuild() method, add this line to the end of the "actions" array:

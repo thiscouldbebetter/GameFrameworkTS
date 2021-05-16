@@ -14,7 +14,12 @@ var ThisCouldBeBetter;
                 platformable.toDomElement(this).style.display = "none";
             }
             platformableRemove(platformable) {
-                this.divMain.removeChild(platformable.toDomElement(this));
+                var platformableAsDomElement = platformable.toDomElement(this);
+                if (platformableAsDomElement != null) {
+                    if (platformableAsDomElement.parentElement == this.divMain) {
+                        this.divMain.removeChild(platformableAsDomElement);
+                    }
+                }
             }
             platformableShow(platformable) {
                 platformable.toDomElement(this).style.display = null;
@@ -22,12 +27,13 @@ var ThisCouldBeBetter;
             initialize(universe) {
                 var divMain = this.divMain;
                 if (divMain == null) {
-                    divMain = document.createElement("div");
+                    var d = document;
+                    divMain = d.createElement("div");
                     divMain.id = "divMain";
                     divMain.style.position = "absolute";
                     divMain.style.left = "50%";
                     divMain.style.top = "50%";
-                    document.body.appendChild(divMain);
+                    d.body.appendChild(divMain);
                     this.divMain = divMain;
                 }
                 var display = universe.display;

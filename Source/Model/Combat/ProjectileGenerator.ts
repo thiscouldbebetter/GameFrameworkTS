@@ -4,26 +4,12 @@ namespace ThisCouldBeBetter.GameFramework
 export class ProjectileGenerator implements EntityProperty
 {
 	name: string;
-	radius: number;
-	distanceInitial: number;
-	speed: number;
-	ticksToLive: number;
-	damage: Damage;
-	visual: Visual;
+	projectileGenerations: ProjectileGeneration[];
 
-	constructor
-	(
-		name: string, radius: number, distanceInitial: number, speed: number,
-		ticksToLive: number, damage: Damage, visual: Visual
-	)
+	constructor(name: string, projectileGenerations: ProjectileGeneration[])
 	{
 		this.name = name;
-		this.radius = radius;
-		this.distanceInitial = distanceInitial;
-		this.speed = speed;
-		this.ticksToLive = ticksToLive;
-		this.damage = damage;
-		this.visual = visual;
+		this.projectileGenerations = projectileGenerations;
 	}
 
 	static actionFire(): Action
@@ -35,14 +21,65 @@ export class ProjectileGenerator implements EntityProperty
 			(universe: Universe, world: World, place: Place, entityActor: Entity) =>
 			{
 				var projectileGenerator = entityActor.projectileGenerator();
-				var projectileEntity =
-					projectileGenerator.projectileFromEntity(entityActor);
-				place.entityToSpawnAdd(projectileEntity);
+				var projectileEntities =
+					projectileGenerator.projectileEntitiesFromEntityFiring(entityActor);
+				place.entitiesToSpawnAdd(projectileEntities);
 			}
 		)
 	}
 
-	projectileFromEntity(entityFiring: Entity): Entity
+	projectileEntitiesFromEntityFiring(entityFiring: Entity): Entity[]
+	{
+		var returnValues = this.projectileGenerations.map
+		(
+			x => x.projectileEntityFromEntityFiring(entityFiring)
+		);
+		return returnValues;
+	}
+
+	// EntityProperty.
+	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
+}
+
+export class ProjectileGeneration
+{
+	radius: number;
+	distanceInitial: number;
+	speed: number;
+	ticksToLive: number;
+	damage: Damage;
+	visual: Visual;
+
+	constructor
+	(
+		radius: number, distanceInitial: number, speed: number,
+		ticksToLive: number, damage: Damage, visual: Visual
+	)
+	{
+		this.radius = radius;
+		this.distanceInitial = distanceInitial;
+		this.speed = speed;
+		this.ticksToLive = ticksToLive;
+		this.damage = damage;
+		this.visual = visual;
+	}
+
+	static fromVisual(visual: Visual)
+	{
+		return new ProjectileGeneration
+		(
+			0, // radius
+			0, // distanceInitial,
+			0, // speed
+			1, // ticksToLive
+			null, // damage
+			visual
+		);
+	}
+
+	projectileEntityFromEntityFiring(entityFiring: Entity): Entity
 	{
 		var userLoc = entityFiring.locatable().loc;
 		var userPos = userLoc.pos;
@@ -72,7 +109,7 @@ export class ProjectileGenerator implements EntityProperty
 			0, projectileCollider, [ Collidable.name ], this.collide
 		);
 		var projectileDamager = new Damager(this.damage);
-		var projectileDrawable = Drawable.fromVisual(this.visual);
+		var projectileDrawable = Drawable.fromVisual(this.visual); // hack
 		var projectileEphemeral = new Ephemeral(this.ticksToLive, null);
 		var projectileKillable = Killable.fromIntegrityMax(1);
 		var projectileLocatable = new Locatable(projectileLoc);
@@ -80,8 +117,9 @@ export class ProjectileGenerator implements EntityProperty
 
 		var projectileEntity = new Entity
 		(
-			this.name,
+			entityFiring.name + "_Projectile",
 			[
+				new Audible(),
 				projectileCollidable,
 				projectileDamager,
 				projectileDrawable,
@@ -118,12 +156,6 @@ export class ProjectileGenerator implements EntityProperty
 			}
 		}
 	}
-
-	// EntityProperty.
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
-	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
-
 }
 
 }

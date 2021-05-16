@@ -6,7 +6,7 @@ var ThisCouldBeBetter;
         class Drawable {
             constructor(visual, isVisible) {
                 this.visual = visual;
-                this.isVisible = (isVisible == null ? true : isVisible);
+                this.isVisible = isVisible || true;
             }
             static fromVisual(visual) {
                 return new Drawable(visual, null);

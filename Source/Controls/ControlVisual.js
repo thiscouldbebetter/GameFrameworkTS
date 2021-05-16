@@ -11,9 +11,9 @@ var ThisCouldBeBetter;
                 this.colorBorder = colorBorder;
                 // Helper variables.
                 this._drawPos = GameFramework.Coords.create();
-                this._locatable = GameFramework.Locatable.fromPos(this._drawPos);
-                this._locatableEntity = new GameFramework.Entity("_drawableEntity", [
-                    this._locatable,
+                this._entity = new GameFramework.Entity(this.name, [
+                    new GameFramework.Audible(),
+                    GameFramework.Locatable.fromPos(this._drawPos),
                     GameFramework.Drawable.fromVisual(new GameFramework.VisualNone())
                 ]);
                 this._sizeHalf = GameFramework.Coords.create();
@@ -50,11 +50,11 @@ var ThisCouldBeBetter;
                     display.drawRectangle(drawPos, this.size, colorFill, colorBorder, null);
                     this._sizeHalf.overwriteWith(this.size).half();
                     drawPos.add(this._sizeHalf);
-                    var locatableEntity = this._locatableEntity;
-                    locatableEntity.locatable().loc.pos.overwriteWith(drawPos);
+                    var entity = this._entity;
+                    entity.locatable().loc.pos.overwriteWith(drawPos);
                     var world = universe.world;
                     var place = (world == null ? null : world.placeCurrent);
-                    visualToDraw.draw(universe, world, place, locatableEntity, display);
+                    visualToDraw.draw(universe, world, place, entity, display);
                 }
             }
         }

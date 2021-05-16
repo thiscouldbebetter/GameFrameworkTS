@@ -8,21 +8,35 @@ var ThisCouldBeBetter;
                 this.soundNameToPlay = soundNameToPlay;
                 this.isMusic = isMusic;
             }
+            static default() {
+                return new VisualSound("Effects_Sound", false);
+            }
+            static fromSoundName(soundName) {
+                return new VisualSound(soundName, false); // isMusic
+            }
             draw(universe, world, place, entity, display) {
                 var soundHelper = universe.soundHelper;
-                if (this.isMusic) {
-                    soundHelper.soundWithNamePlayAsMusic(universe, this.soundNameToPlay);
-                }
-                else {
-                    soundHelper.soundWithNamePlayAsEffect(universe, this.soundNameToPlay);
+                var audible = entity.audible();
+                if (audible != null) {
+                    if (audible.hasBeenHeard == false) {
+                        if (this.isMusic) {
+                            soundHelper.soundWithNamePlayAsMusic(universe, this.soundNameToPlay);
+                        }
+                        else {
+                            soundHelper.soundWithNamePlayAsEffect(universe, this.soundNameToPlay);
+                        }
+                        audible.hasBeenHeard = true;
+                    }
                 }
             }
             // Clonable.
             clone() {
-                return this; // todo
+                return new VisualSound(this.soundNameToPlay, this.isMusic);
             }
             overwriteWith(other) {
-                return this; // todo
+                this.soundNameToPlay = other.soundNameToPlay;
+                this.isMusic = other.isMusic;
+                return this;
             }
             // Transformable.
             transform(transformToApply) {

@@ -428,7 +428,8 @@ var ThisCouldBeBetter;
                 }
                 var scaleMultiplier = this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
                 var fontHeight = this.fontHeightInPixelsBase;
-                var goToNextVenue = () => {
+                var goToVenueNext = () => {
+                    universe.soundHelper.soundsAllStop(universe);
                     var venueNext = this.producer(universe, size).toVenue();
                     universe.venueNext = controlBuilder.venueTransitionalFromTo(universe.venueCurrent, venueNext);
                 };
@@ -446,16 +447,16 @@ var ThisCouldBeBetter;
                     new GameFramework.ControlVisual("imageOpening", this._zeroes.clone(), this.sizeBase.clone(), // size
                     GameFramework.DataBinding.fromContext(visual), null, null // colors
                     ),
-                    GameFramework.ControlButton.from8("buttonStart", GameFramework.Coords.fromXY(75, 120), // pos
+                    GameFramework.ControlButton.from8("buttonNext", GameFramework.Coords.fromXY(75, 120), // pos
                     GameFramework.Coords.fromXY(50, fontHeight * 2), // size
-                    "Start", fontHeight * 2, false, // hasBorder
+                    "Next", fontHeight * 2, false, // hasBorder
                     true, // isEnabled
-                    goToNextVenue // click
+                    goToVenueNext // click
                     )
                 ], // end children
                 [
-                    new GameFramework.Action(controlActionNames.ControlCancel, goToNextVenue),
-                    new GameFramework.Action(controlActionNames.ControlConfirm, goToNextVenue)
+                    new GameFramework.Action(controlActionNames.ControlCancel, goToVenueNext),
+                    new GameFramework.Action(controlActionNames.ControlConfirm, goToVenueNext)
                 ], null);
                 returnValue.scalePosAndSize(scaleMultiplier);
                 return returnValue;
@@ -468,12 +469,13 @@ var ThisCouldBeBetter;
                 var scaleMultiplier = this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
                 var fontHeight = this.fontHeightInPixelsBase;
                 var goToVenueNext = () => {
+                    universe.soundHelper.soundsAllStop(universe);
                     var venueTitle = this.title(universe, size).toVenue();
                     universe.venueNext = controlBuilder.venueTransitionalFromTo(universe.venueCurrent, venueTitle);
                 };
                 var visual = new GameFramework.VisualGroup([
                     new GameFramework.VisualImageScaled(new GameFramework.VisualImageFromLibrary("Producer"), size),
-                    new GameFramework.VisualSound("Music_Producer", true) // isMusic
+                    new GameFramework.VisualSound("Music_Producer", false) // repeat
                 ]);
                 var controlActionNames = GameFramework.ControlActionNames.Instances();
                 var returnValue = new GameFramework.ControlContainer("containerProducer", this._zeroes, // pos
@@ -483,9 +485,9 @@ var ThisCouldBeBetter;
                     new GameFramework.ControlVisual("imageProducer", this._zeroes.clone(), this.sizeBase.clone(), // size
                     GameFramework.DataBinding.fromContext(visual), null, null // colors
                     ),
-                    GameFramework.ControlButton.from8("buttonStart", GameFramework.Coords.fromXY(75, 120), // pos
+                    GameFramework.ControlButton.from8("buttonNext", GameFramework.Coords.fromXY(75, 120), // pos
                     GameFramework.Coords.fromXY(50, fontHeight * 2), // size
-                    "Start", fontHeight * 2, false, // hasBorder
+                    "Next", fontHeight * 2, false, // hasBorder
                     true, // isEnabled
                     goToVenueNext // click
                     )

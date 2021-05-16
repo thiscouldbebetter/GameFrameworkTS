@@ -9,8 +9,7 @@ export class ControlVisual extends ControlBase
 	colorBorder: Color;
 
 	_drawPos: Coords;
-	_locatable: Locatable;
-	_locatableEntity: Entity;
+	_entity: Entity;
 	_sizeHalf: Coords;
 
 	constructor(
@@ -26,12 +25,12 @@ export class ControlVisual extends ControlBase
 
 		// Helper variables.
 		this._drawPos = Coords.create();
-		this._locatable = Locatable.fromPos(this._drawPos);
-		this._locatableEntity = new Entity
+		this._entity = new Entity
 		(
-			"_drawableEntity",
+			this.name,
 			[
-				this._locatable,
+				new Audible(),
+				Locatable.fromPos(this._drawPos),
 				Drawable.fromVisual(new VisualNone())
 			]
 		);
@@ -97,12 +96,12 @@ export class ControlVisual extends ControlBase
 
 			this._sizeHalf.overwriteWith(this.size).half();
 			drawPos.add(this._sizeHalf);
-			var locatableEntity = this._locatableEntity;
-			locatableEntity.locatable().loc.pos.overwriteWith(drawPos);
+			var entity = this._entity;
+			entity.locatable().loc.pos.overwriteWith(drawPos);
 
 			var world = universe.world;
 			var place = (world == null ? null : world.placeCurrent);
-			visualToDraw.draw(universe, world, place, locatableEntity, display);
+			visualToDraw.draw(universe, world, place, entity, display);
 		}
 	}
 }

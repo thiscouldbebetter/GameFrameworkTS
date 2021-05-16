@@ -10,7 +10,7 @@ export class Drawable implements EntityProperty
 	constructor(visual: Visual, isVisible: boolean)
 	{
 		this.visual = visual;
-		this.isVisible = (isVisible == null ? true : isVisible);
+		this.isVisible = isVisible || true;
 	}
 
 	static fromVisual(visual: Visual): Drawable
@@ -18,7 +18,10 @@ export class Drawable implements EntityProperty
 		return new Drawable(visual, null);
 	}
 
-	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity): void
+	updateForTimerTick
+	(
+		universe: Universe, world: World, place: Place, entity: Entity
+	): void
 	{
 		if (this.isVisible)
 		{

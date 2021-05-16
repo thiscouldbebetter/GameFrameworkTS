@@ -8,7 +8,7 @@ export class PlatformHelper
 
 	divMain: any;
 
-	platformableAdd(platformable: Platformable)
+	platformableAdd(platformable: Platformable): void
 	{
 		var platformableAsDomElement = platformable.toDomElement(this);
 		if (platformableAsDomElement != null)
@@ -17,32 +17,40 @@ export class PlatformHelper
 		}
 	}
 
-	platformableHide(platformable: Platformable)
+	platformableHide(platformable: Platformable): void
 	{
 		platformable.toDomElement(this).style.display = "none";
 	}
 
-	platformableRemove(platformable: Platformable)
+	platformableRemove(platformable: Platformable): void
 	{
-		this.divMain.removeChild(platformable.toDomElement(this));
+		var platformableAsDomElement = platformable.toDomElement(this);
+		if (platformableAsDomElement != null)
+		{
+			if (platformableAsDomElement.parentElement == this.divMain)
+			{
+				this.divMain.removeChild(platformableAsDomElement);
+			}
+		}
 	}
 
-	platformableShow(platformable: Platformable)
+	platformableShow(platformable: Platformable): void
 	{
 		platformable.toDomElement(this).style.display = null;
 	}
 
-	initialize(universe: Universe)
+	initialize(universe: Universe): void
 	{
 		var divMain = this.divMain;
 		if (divMain == null)
 		{
-			divMain = document.createElement("div");
+			var d = document;
+			divMain = d.createElement("div");
 			divMain.id = "divMain";
 			divMain.style.position = "absolute";
 			divMain.style.left = "50%";
 			divMain.style.top = "50%";
-			document.body.appendChild(divMain);
+			d.body.appendChild(divMain);
 			this.divMain = divMain;
 		}
 		var display = universe.display;

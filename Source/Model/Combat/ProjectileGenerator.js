@@ -4,8 +4,31 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ProjectileGenerator {
-            constructor(name, radius, distanceInitial, speed, ticksToLive, damage, visual) {
+            constructor(name, projectileGenerations) {
                 this.name = name;
+                this.projectileGenerations = projectileGenerations;
+            }
+            static actionFire() {
+                return new GameFramework.Action("Fire", 
+                // perform
+                (universe, world, place, entityActor) => {
+                    var projectileGenerator = entityActor.projectileGenerator();
+                    var projectileEntities = projectileGenerator.projectileEntitiesFromEntityFiring(entityActor);
+                    place.entitiesToSpawnAdd(projectileEntities);
+                });
+            }
+            projectileEntitiesFromEntityFiring(entityFiring) {
+                var returnValues = this.projectileGenerations.map(x => x.projectileEntityFromEntityFiring(entityFiring));
+                return returnValues;
+            }
+            // EntityProperty.
+            finalize(u, w, p, e) { }
+            initialize(u, w, p, e) { }
+            updateForTimerTick(u, w, p, e) { }
+        }
+        GameFramework.ProjectileGenerator = ProjectileGenerator;
+        class ProjectileGeneration {
+            constructor(radius, distanceInitial, speed, ticksToLive, damage, visual) {
                 this.radius = radius;
                 this.distanceInitial = distanceInitial;
                 this.speed = speed;
@@ -13,16 +36,15 @@ var ThisCouldBeBetter;
                 this.damage = damage;
                 this.visual = visual;
             }
-            static actionFire() {
-                return new GameFramework.Action("Fire", 
-                // perform
-                (universe, world, place, entityActor) => {
-                    var projectileGenerator = entityActor.projectileGenerator();
-                    var projectileEntity = projectileGenerator.projectileFromEntity(entityActor);
-                    place.entityToSpawnAdd(projectileEntity);
-                });
+            static fromVisual(visual) {
+                return new ProjectileGeneration(0, // radius
+                0, // distanceInitial,
+                0, // speed
+                1, // ticksToLive
+                null, // damage
+                visual);
             }
-            projectileFromEntity(entityFiring) {
+            projectileEntityFromEntityFiring(entityFiring) {
                 var userLoc = entityFiring.locatable().loc;
                 var userPos = userLoc.pos;
                 var userVel = userLoc.vel;
@@ -37,12 +59,13 @@ var ThisCouldBeBetter;
                 var projectileCollider = new GameFramework.Sphere(GameFramework.Coords.create(), this.radius);
                 var projectileCollidable = new GameFramework.Collidable(0, projectileCollider, [GameFramework.Collidable.name], this.collide);
                 var projectileDamager = new GameFramework.Damager(this.damage);
-                var projectileDrawable = GameFramework.Drawable.fromVisual(this.visual);
+                var projectileDrawable = GameFramework.Drawable.fromVisual(this.visual); // hack
                 var projectileEphemeral = new GameFramework.Ephemeral(this.ticksToLive, null);
                 var projectileKillable = GameFramework.Killable.fromIntegrityMax(1);
                 var projectileLocatable = new GameFramework.Locatable(projectileLoc);
                 var projectileMovable = GameFramework.Movable.create();
-                var projectileEntity = new GameFramework.Entity(this.name, [
+                var projectileEntity = new GameFramework.Entity(entityFiring.name + "_Projectile", [
+                    new GameFramework.Audible(),
                     projectileCollidable,
                     projectileDamager,
                     projectileDrawable,
@@ -64,11 +87,7 @@ var ThisCouldBeBetter;
                     }
                 }
             }
-            // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(u, w, p, e) { }
         }
-        GameFramework.ProjectileGenerator = ProjectileGenerator;
+        GameFramework.ProjectileGeneration = ProjectileGeneration;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
 })(ThisCouldBeBetter || (ThisCouldBeBetter = {}));

@@ -8,7 +8,6 @@ var ThisCouldBeBetter;
                 this.name = name;
                 this.sourcePath = sourcePath;
                 this.offsetInSeconds = 0;
-                this.isPlaying = false;
             }
             domElementBuild(universe, volume) {
                 this.domElement = document.createElement("audio");
@@ -28,22 +27,16 @@ var ThisCouldBeBetter;
                 this.offsetInSeconds = offsetInSeconds;
             }
             play(universe, volume) {
-                if (this.isPlaying == false) {
-                    this.isPlaying = true;
-                    this.domElementBuild(universe, volume);
-                    this.domElement.currentTime = this.offsetInSeconds;
-                    universe.platformHelper.platformableAdd(this);
-                }
+                this.domElementBuild(universe, volume);
+                this.domElement.currentTime = this.offsetInSeconds;
+                universe.platformHelper.platformableAdd(this);
             }
             reset() {
                 this.offsetInSeconds = 0;
             }
             stop(universe) {
-                if (this.isPlaying) {
-                    this.isPlaying = false;
-                    universe.platformHelper.platformableRemove(this);
-                    this.offsetInSeconds = 0;
-                }
+                universe.platformHelper.platformableRemove(this);
+                this.offsetInSeconds = 0;
             }
             stopOrRepeat(universe) {
                 if (this.isRepeating == false) {

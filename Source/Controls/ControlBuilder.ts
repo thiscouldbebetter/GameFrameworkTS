@@ -946,8 +946,10 @@ export class ControlBuilder
 
 		var fontHeight = this.fontHeightInPixelsBase;
 
-		var goToNextVenue = () =>
+		var goToVenueNext = () =>
 		{
+			universe.soundHelper.soundsAllStop(universe);
+
 			var venueNext = this.producer(universe, size).toVenue();
 
 			universe.venueNext = controlBuilder.venueTransitionalFromTo
@@ -987,20 +989,20 @@ export class ControlBuilder
 
 				ControlButton.from8
 				(
-					"buttonStart",
+					"buttonNext",
 					Coords.fromXY(75, 120), // pos
 					Coords.fromXY(50, fontHeight * 2), // size
-					"Start",
+					"Next",
 					fontHeight * 2,
 					false, // hasBorder
 					true, // isEnabled
-					goToNextVenue // click
+					goToVenueNext // click
 				)
 			], // end children
 
 			[
-				new Action( controlActionNames.ControlCancel, goToNextVenue ),
-				new Action( controlActionNames.ControlConfirm, goToNextVenue )
+				new Action( controlActionNames.ControlCancel, goToVenueNext ),
+				new Action( controlActionNames.ControlConfirm, goToVenueNext )
 			],
 
 			null
@@ -1027,6 +1029,8 @@ export class ControlBuilder
 
 		var goToVenueNext = () =>
 		{
+			universe.soundHelper.soundsAllStop(universe);
+
 			var venueTitle = this.title(universe, size).toVenue();
 
 			universe.venueNext = controlBuilder.venueTransitionalFromTo
@@ -1041,7 +1045,7 @@ export class ControlBuilder
 			(
 				new VisualImageFromLibrary("Producer"), size
 			),
-			new VisualSound("Music_Producer", true) // isMusic
+			new VisualSound("Music_Producer", false) // repeat
 		]);
 
 		var controlActionNames = ControlActionNames.Instances();
@@ -1064,10 +1068,10 @@ export class ControlBuilder
 
 				ControlButton.from8
 				(
-					"buttonStart",
+					"buttonNext",
 					Coords.fromXY(75, 120), // pos
 					Coords.fromXY(50, fontHeight * 2), // size
-					"Start",
+					"Next",
 					fontHeight * 2,
 					false, // hasBorder
 					true, // isEnabled

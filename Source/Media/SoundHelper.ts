@@ -23,7 +23,7 @@ export class SoundHelper
 		this.soundForMusic = null;
 	}
 
-	static controlSelectOptionsVolume()
+	static controlSelectOptionsVolume(): ControlSelectOption[]
 	{
 		var returnValue =
 		[
@@ -45,7 +45,7 @@ export class SoundHelper
 
 	// instance methods
 
-	audioContext()
+	audioContext(): AudioContext
 	{
 		if (this._audioContext == null)
 		{
@@ -55,7 +55,7 @@ export class SoundHelper
 		return this._audioContext;
 	}
 
-	reset()
+	reset(): void
 	{
 		for (var i = 0; i < this.sounds.length; i++)
 		{
@@ -64,30 +64,36 @@ export class SoundHelper
 		}
 	}
 
-	soundWithNamePlayAsEffect(universe: Universe, soundName: string)
+	soundWithNamePlayAsEffect(universe: Universe, soundName: string): void
 	{
 		var sound = this.soundsByName.get(soundName);
 		sound.isRepeating = false;
 		sound.play(universe, this.soundVolume);
 	}
 
-	soundWithNamePlayAsMusic(universe: Universe, soundName: string)
+	soundWithNamePlayAsMusic(universe: Universe, soundToPlayName: string): void
 	{
-		var sound = this.soundsByName.get(soundName);
-		sound.isRepeating = true;
+		var soundToPlay = this.soundsByName.get(soundToPlayName);
+		soundToPlay.isRepeating = true;
 
 		var soundAlreadyPlaying = this.soundForMusic;
 
-		if (soundAlreadyPlaying != null)
+		if (soundAlreadyPlaying == null)
 		{
-			if (soundAlreadyPlaying.name != soundName)
-			{
-				soundAlreadyPlaying.stop(universe);
-			}
+			soundToPlay.play(universe, this.musicVolume);
+		}
+		else if (soundAlreadyPlaying.name != soundToPlayName)
+		{
+			soundAlreadyPlaying.stop(universe);
+			soundToPlay.play(universe, this.musicVolume);
 		}
 
-		sound.play(universe, this.musicVolume);
-		this.soundForMusic = sound;
+		this.soundForMusic = soundToPlay;
+	}
+
+	soundsAllStop(universe: Universe): void
+	{
+		this.sounds.forEach(x => x.stop(universe));
 	}
 }
 

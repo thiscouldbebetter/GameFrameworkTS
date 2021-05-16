@@ -94,6 +94,7 @@ var ThisCouldBeBetter;
             // Convenience methods for properties.
             actor() { return this.propertyByName(GameFramework.Actor.name); }
             animatable() { return this.propertyByName(GameFramework.Animatable2.name); }
+            audible() { return this.propertyByName(GameFramework.Audible.name); }
             boundable() { return this.propertyByName(GameFramework.Boundable.name); }
             camera() { return this.propertyByName(GameFramework.Camera.name); }
             collidable() { return this.propertyByName(GameFramework.Collidable.name); }

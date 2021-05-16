@@ -139,6 +139,7 @@ export class Entity //
 
 	actor(): Actor { return this.propertyByName(Actor.name) as Actor; }
 	animatable(): Animatable2 { return this.propertyByName(Animatable2.name) as Animatable2; }
+	audible(): Audible { return this.propertyByName(Audible.name) as Audible; }
 	boundable(): Boundable { return this.propertyByName(Boundable.name) as Boundable; }
 	camera(): Camera { return this.propertyByName(Camera.name) as Camera; }
 	collidable(): Collidable { return this.propertyByName(Collidable.name) as Collidable; }
