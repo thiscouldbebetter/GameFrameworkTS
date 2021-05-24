@@ -53,6 +53,14 @@ export class MapOfCells<T>
 		this._posInCellsMin = Coords.create();
 	}
 
+	static fromNameSizeInCellsAndCellSize<T>
+	(
+		name: string, sizeInCells: Coords, cellSize: Coords
+	): MapOfCells<T>
+	{
+		return new MapOfCells(name, sizeInCells, cellSize, null, null, null);
+	}
+
 	cellAtPos(pos: Coords): T
 	{
 		this._posInCells.overwriteWith(pos).divide(this.cellSize).floor();

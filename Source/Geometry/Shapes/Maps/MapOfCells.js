@@ -21,6 +21,9 @@ var ThisCouldBeBetter;
                 this._posInCellsMax = GameFramework.Coords.create();
                 this._posInCellsMin = GameFramework.Coords.create();
             }
+            static fromNameSizeInCellsAndCellSize(name, sizeInCells, cellSize) {
+                return new MapOfCells(name, sizeInCells, cellSize, null, null, null);
+            }
             cellAtPos(pos) {
                 this._posInCells.overwriteWith(pos).divide(this.cellSize).floor();
                 return this.cellAtPosInCells(this._posInCells);

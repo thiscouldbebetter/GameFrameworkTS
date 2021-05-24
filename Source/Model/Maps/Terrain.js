@@ -4,12 +4,12 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Terrain {
-            constructor(name, codeChar, level, traversable, visuals) {
+            constructor(name, code, level, traversable, visual) {
                 this.name = name;
-                this.codeChar = codeChar;
+                this.code = code;
                 this.level = level;
                 this.traversable = traversable;
-                this.visuals = visuals;
+                this.visual = visual;
             }
         }
         GameFramework.Terrain = Terrain;

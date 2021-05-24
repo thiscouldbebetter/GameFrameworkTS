@@ -5,18 +5,18 @@ namespace ThisCouldBeBetter.GameFramework
 export class ImageBuilder
 {
 	colors: Color[];
-	colorsByCodeChar: any;
+	colorsByCode: Map<string,Color>;
 
 	constructor(colors: Color[])
 	{
 		this.colors = colors;
-		this.colorsByCodeChar =
+		this.colorsByCode =
 			ArrayHelper.addLookups(this.colors, x => x.code);
 	}
 
 	// static methods
 
-	buildImageFromStrings(name: string, stringsForPixels: string[])
+	buildImageFromStrings(name: string, stringsForPixels: string[]): Image2
 	{
 		return this.buildImageFromStringsScaled
 		(
@@ -24,9 +24,12 @@ export class ImageBuilder
 		);
 	}
 
-	buildImagesFromStringArrays(name: string, stringArraysForImagePixels: string[][])
+	buildImagesFromStringArrays
+	(
+		name: string, stringArraysForImagePixels: string[][]
+	): Image2[]
 	{
-		var returnValue = [];
+		var returnValue = new Array<Image2>();
 
 		for (var i = 0; i < stringArraysForImagePixels.length; i++)
 		{
@@ -38,7 +41,10 @@ export class ImageBuilder
 		return returnValue;
 	}
 
-	buildImageFromStringsScaled(name: string, scaleFactor: Coords, stringsForPixels: string[])
+	buildImageFromStringsScaled
+	(
+		name: string, scaleFactor: Coords, stringsForPixels: string[]
+	): Image2
 	{
 		var sizeInPixels = new Coords
 		(
@@ -53,7 +59,7 @@ export class ImageBuilder
 
 		var pixelPos = Coords.create();
 		var colorForPixel;
-		var colors = this.colorsByCodeChar;
+		var colors = this.colorsByCode;
 
 		for (var y = 0; y < sizeInPixels.y; y++)
 		{
@@ -93,7 +99,10 @@ export class ImageBuilder
 		return returnValue;
 	}
 
-	copyRegionFromImage(imageToCopyFrom: Image2, regionPos: Coords, regionSize: Coords)
+	copyRegionFromImage
+	(
+		imageToCopyFrom: Image2, regionPos: Coords, regionSize: Coords
+	): Image2
 	{
 		var canvas = document.createElement("canvas");
 		canvas.id = "region_" + regionPos.x + "_" + regionPos.y;
@@ -129,12 +138,11 @@ export class ImageBuilder
 		return returnValue;
 	}
 
-	sliceImageIntoTiles(imageToSlice: Image2, sizeInTiles: Coords)
+	sliceImageIntoTiles(imageToSlice: Image2, sizeInTiles: Coords): Image2[][]
 	{
-		var returnImages = [];
+		var returnImages = new Array<Image2[]>();
 
-		var systemImageToSlice =
-			imageToSlice.systemImage;
+		var systemImageToSlice = imageToSlice.systemImage;
 
 		var imageToSliceSize = imageToSlice.sizeInPixels;
 		var tileSize = imageToSliceSize.clone().divide(sizeInTiles);
@@ -146,7 +154,7 @@ export class ImageBuilder
 		{
 			tilePos.y = y;
 
-			var returnImageRow = [];
+			var returnImageRow = new Array<Image2>();
 
 			for (var x = 0; x < sizeInTiles.x; x++)
 			{

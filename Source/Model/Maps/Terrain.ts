@@ -5,18 +5,22 @@ namespace ThisCouldBeBetter.GameFramework
 export class Terrain
 {
 	name: string;
-	codeChar: string;
+	code: string;
 	level: number;
 	traversable: Traversable;
-	visuals: Visual[];
+	visual: Visual;
 
-	constructor(name: string, codeChar: string, level: number, traversable: Traversable, visuals: Visual[])
+	constructor
+	(
+		name: string, code: string, level: number, traversable: Traversable,
+		visual: Visual
+	)
 	{
 		this.name = name;
-		this.codeChar = codeChar;
+		this.code = code;
 		this.level = level;
 		this.traversable = traversable;
-		this.visuals = visuals;
+		this.visual = visual;
 	}
 }
 

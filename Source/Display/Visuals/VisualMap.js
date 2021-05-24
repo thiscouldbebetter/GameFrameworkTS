@@ -4,15 +4,15 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class VisualMap {
-            constructor(map, visualLookup, cameraGet, shouldConvertToImage) {
+            constructor(map, visualsByName, cameraGet, shouldConvertToImage) {
                 this.map = map;
-                this.visualLookup = visualLookup;
+                this.visualsByName = visualsByName;
                 this.cameraGet = cameraGet;
                 this.shouldConvertToImage =
                     (shouldConvertToImage == null ? true : shouldConvertToImage);
                 // Helper variables.
                 this._cameraPos = GameFramework.Coords.create();
-                this._cell = this.map.cellCreate();
+                //this._cell = this.map.cellCreate();
                 this._cellPosEnd = GameFramework.Coords.create();
                 this._cellPosInCells = GameFramework.Coords.create();
                 this._cellPosStart = GameFramework.Coords.create();
@@ -49,7 +49,7 @@ var ThisCouldBeBetter;
                     cellPosStart.overwriteWith(boundsVisible.min()).trimToRangeMax(this.sizeInCells);
                     cellPosEnd.overwriteWith(boundsVisible.max()).trimToRangeMax(this.sizeInCells);
                 }
-                var displayForImage = new GameFramework.Display2D([this.map.size], null, null, null, null, null);
+                var displayForImage = GameFramework.Display2D.fromSize(this.map.size);
                 displayForImage.toDomElement();
                 this.draw_ConvertToImage_Cells(universe, world, place, entity, display, cellPosStart, cellPosEnd, displayForImage);
                 var image = GameFramework.Image2.fromSystemImage("Map", displayForImage.canvas);
@@ -67,7 +67,7 @@ var ThisCouldBeBetter;
                         cellPosInCells.x = x;
                         var cell = this.map.cellAtPosInCells(cellPosInCells);
                         var cellVisualName = cell.visualName;
-                        var cellVisual = this.visualLookup.get(cellVisualName);
+                        var cellVisual = this.visualsByName.get(cellVisualName);
                         drawPos.overwriteWith(cellPosInCells);
                         if (this.cameraGet == null) {
                             drawPos.multiply(cellSizeInPixels);
