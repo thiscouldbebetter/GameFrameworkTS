@@ -25,6 +25,11 @@ export class Edge implements ShapeBase
 		return new Edge(null);
 	}
 
+	static fromVertex0And1(vertex0: Coords, vertex1: Coords): Edge
+	{
+		return new Edge( [ vertex0, vertex1 ] );
+	}
+
 	direction(): Coords
 	{
 		return this._direction.overwriteWith(this.displacement()).normalize();
@@ -94,11 +99,11 @@ export class Edge implements ShapeBase
 
 	// ShapeBase.
 
-	locate(loc: Disposition): ShapeBase { throw("Not implemented!"); }
+	locate(loc: Disposition): ShapeBase { throw new Error("Not implemented!"); }
 
-	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords { throw("Not implemented!"); }
+	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords { throw new Error("Not implemented!"); }
 
-	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords { throw("Not implemented!"); }
+	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords { throw new Error("Not implemented!"); }
 
 	toBox(boxOut: Box): Box
 	{
@@ -107,7 +112,7 @@ export class Edge implements ShapeBase
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable { throw("Not implemented!");  }
+	transform(transformToApply: Transform): Transformable { throw new Error("Not implemented!");  }
 }
 
 }

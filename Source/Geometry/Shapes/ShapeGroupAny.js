@@ -19,10 +19,10 @@ var ThisCouldBeBetter;
             }
             // ShapeBase.
             locate(loc) {
-                throw ("Not implemented!");
+                throw new Error("Not implemented!");
             }
             normalAtPos(posToCheck, normalOut) {
-                throw ("Not implemented!");
+                throw new Error("Not implemented!");
             }
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 var distanceMinSoFar = Number.POSITIVE_INFINITY;
@@ -37,7 +37,7 @@ var ThisCouldBeBetter;
                 }
                 return surfacePointOut;
             }
-            toBox(boxOut) { throw ("Not implemented!"); }
+            toBox(boxOut) { throw new Error("Not implemented!"); }
             // Transformable.
             transform(transformToApply) {
                 this.shapes.forEach((x) => x.transform(transformToApply));

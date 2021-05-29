@@ -11,6 +11,12 @@ var ThisCouldBeBetter;
                 // Helper variable.
                 this.rayDirectionMinAsPolar = new GameFramework.Polar(0, 1, 0);
             }
+            static default() {
+                return new Wedge(GameFramework.Coords.create(), // vertex
+                new GameFramework.Coords(1, 0, 0), // directionMin
+                .5 // angleSpannedInTurns
+                );
+            }
             angleAsRangeExtent() {
                 var angleStartInTurns = this.directionMin.headingInTurns();
                 return new GameFramework.RangeExtent(angleStartInTurns, angleStartInTurns + this.angleSpannedInTurns);
@@ -67,6 +73,12 @@ var ThisCouldBeBetter;
             clone() {
                 return new Wedge(this.vertex.clone(), this.directionMin.clone(), this.angleSpannedInTurns);
             }
+            equals(other) {
+                var returnValue = (this.vertex.equals(other.vertex)
+                    && this.directionMin.equals(other.directionMin)
+                    && this.angleSpannedInTurns == other.angleSpannedInTurns);
+                return returnValue;
+            }
             overwriteWith(other) {
                 this.vertex.overwriteWith(other.vertex);
                 this.directionMin.overwriteWith(other.directionMin);
@@ -79,14 +91,14 @@ var ThisCouldBeBetter;
                 return this;
             }
             normalAtPos(posToCheck, normalOut) {
-                throw ("Not implemented!");
+                throw new Error("Not implemented!");
             }
             surfacePointNearPos(posToCheck, surfacePointOut) {
-                throw ("Not implemented!");
+                throw new Error("Not implemented!");
             }
-            toBox(boxOut) { throw ("Not implemented!"); }
+            toBox(boxOut) { throw new Error("Not implemented!"); }
             // Transformable.
-            transform(transformToApply) { throw ("Not implemented!"); }
+            transform(transformToApply) { throw new Error("Not implemented!"); }
         }
         GameFramework.Wedge = Wedge;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

@@ -83,16 +83,16 @@ var ThisCouldBeBetter;
             }
             // ShapeBase.
             locate(loc) {
-                throw ("Not implemented!");
+                throw new Error("Not implemented!");
             }
             normalAtPos(posToCheck, normalOut) {
-                throw ("Not implemented!");
+                throw new Error("Not implemented!");
             }
             surfacePointNearPos(posToCheck, surfacePointOut) {
-                throw ("Not implemented!");
+                throw new Error("Not implemented!");
             }
             toBox(boxOut) {
-                throw ("Not implemented!");
+                throw new Error("Not implemented!");
             }
         }
         GameFramework.MeshTextured = MeshTextured;

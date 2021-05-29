@@ -18,13 +18,28 @@ var ThisCouldBeBetter;
                 }
                 return Coords._instances;
             }
-            // methods
+            // Static methods.
             static create() {
+                return new Coords(0, 0, 0);
+            }
+            static default() {
+                // Same as create().
                 return new Coords(0, 0, 0);
             }
             static fromXY(x, y) {
                 return new Coords(x, y, 0);
             }
+            static ones() {
+                return new Coords(1, 1, 1);
+            }
+            static twos() {
+                return new Coords(2, 2, 2);
+            }
+            static zeroes() {
+                // Same as create().
+                return new Coords(0, 0, 0);
+            }
+            // Instance methods.
             absolute() {
                 this.x = Math.abs(this.x);
                 this.y = Math.abs(this.y);
@@ -141,7 +156,11 @@ var ThisCouldBeBetter;
                 return (this.x == other.x && this.y == other.y && this.z == other.z);
             }
             equalsWithinError(other, errorMax) {
+                // Because in JavaScript, 1.1 - 1.0 = 0.10000000000000009.
                 return (this.clone().subtract(other).magnitude() <= errorMax);
+            }
+            equalsWithinOneBillionth(other) {
+                return this.equalsWithinError(other, 0.000000001);
             }
             equalsXY(other) {
                 return (this.x == other.x && this.y == other.y);
@@ -275,6 +294,12 @@ var ThisCouldBeBetter;
                 this.x = Math.round(this.x);
                 this.y = Math.round(this.y);
                 this.z = Math.round(this.z);
+                return this;
+            }
+            roundToDecimalPlaces(numberOfPlaces) {
+                this.x = GameFramework.NumberHelper.roundToDecimalPlaces(this.x, numberOfPlaces);
+                this.y = GameFramework.NumberHelper.roundToDecimalPlaces(this.y, numberOfPlaces);
+                this.z = GameFramework.NumberHelper.roundToDecimalPlaces(this.z, numberOfPlaces);
                 return this;
             }
             subtract(other) {

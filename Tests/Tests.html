@@ -159,6 +159,7 @@ so it can be published on thiscouldbebetter.github.io.
 <script type="text/javascript" src="../Source/Input/UserInputListener.js"></script>
 <script type="text/javascript" src="../Source/Input/VenueInputCapture.js"></script>
 
+<script type="text/javascript" src="../Source/Media/Audible.js"></script>
 <script type="text/javascript" src="../Source/Media/Font.js"></script>
 <script type="text/javascript" src="../Source/Media/Image.js"></script>
 <script type="text/javascript" src="../Source/Media/MediaLibrary.js"></script>
@@ -324,6 +325,11 @@ so it can be published on thiscouldbebetter.github.io.
 
 <script type="text/javascript" src="Tests/Geometry/Constraints/ConstraintTests.js"></script>
 
+<script type="text/javascript" src="Tests/Geometry/Shapes/ArcTests.js"></script>
+<script type="text/javascript" src="Tests/Geometry/Shapes/BoxTests.js"></script>
+
+<script type="text/javascript" src="Tests/Storage/Compressor/CompressorLZWTests.js"></script>
+
 <script type="text/javascript">
 
 	var testSuite = new TestSuite
@@ -338,7 +344,14 @@ so it can be published on thiscouldbebetter.github.io.
 		new CollisionHelperTests(),
 
 		// Geometry - Constraints.
-		new ConstraintTests()
+		new ConstraintTests(),
+
+		// Geometry - Shapes.
+		new ArcTests(),
+		new BoxTests(),
+
+		// Storage - CompressorLZW.
+		new CompressorLZWTests()
 	]);
 
 	testSuite.run();

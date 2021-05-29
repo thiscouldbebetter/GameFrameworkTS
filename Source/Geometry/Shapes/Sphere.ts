@@ -21,9 +21,19 @@ export class Sphere implements ShapeBase
 		this._displacement = Coords.create();
 	}
 
+	static default(): Sphere
+	{
+		return new Sphere(Coords.create(), 1);
+	}
+
 	static fromRadius(radius: number): Sphere
 	{
 		return new Sphere(Coords.create(), radius);
+	}
+
+	static fromRadiusAndCenter(radius: number, center: Coords): Sphere
+	{
+		return new Sphere(center, radius);
 	}
 
 	containsOther(other: Sphere): boolean
@@ -57,6 +67,11 @@ export class Sphere implements ShapeBase
 	clone(): Sphere
 	{
 		return new Sphere(this.center.clone(), this.radius);
+	}
+
+	equals(other: Sphere): boolean
+	{
+		return (this.center.equals(other.center) && this.radius == other.radius);
 	}
 
 	overwriteWith(other: Sphere): Sphere
@@ -106,7 +121,7 @@ export class Sphere implements ShapeBase
 
 	transform(transformToApply: Transform): Transformable
 	{
-		throw("Not implemented!");
+		throw new Error("Not implemented!");
 	}
 }
 

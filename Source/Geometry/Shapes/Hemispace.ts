@@ -61,7 +61,7 @@ export class Hemispace implements ShapeBase
 
 	locate(loc: Disposition): ShapeBase
 	{
-		throw("Not implemented!");
+		throw new Error("Not implemented!");
 	}
 
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
@@ -79,7 +79,7 @@ export class Hemispace implements ShapeBase
 
 	toBox(boxOut: Box): Box
 	{
-		throw("Not implemented!");
+		throw new Error("Not implemented!");
 	}
 
 	// Transformable.

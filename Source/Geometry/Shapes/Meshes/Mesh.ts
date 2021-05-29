@@ -323,7 +323,7 @@ export class Mesh_FaceBuilder
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable { throw("Not implemented!");  }
+	transform(transformToApply: Transform): Transformable { throw new Error("Not implemented!");  }
 
 }
 

@@ -54,13 +54,13 @@ export class MapLocated implements ShapeBase
 		return surfacePointOut.overwriteWith(posToCheck); // todo
 	}
 
-	toBox(boxOut: Box): Box { throw("Not implemented!"); }
+	toBox(boxOut: Box): Box { throw new Error("Not implemented!"); }
 
 	// Transformable.
 
 	transform(transformToApply: Transform): Transformable
 	{
-		throw("Not implemented!");
+		throw new Error("Not implemented!");
 	}
 }
 

@@ -21,6 +21,21 @@ export class Arc implements ShapeBase
 		]);
 	}
 
+	static default(): Arc
+	{
+		return new Arc(Shell.default(), Wedge.default() );
+	}
+	
+	static fromShellAndWedge(shell: Shell, wedge: Wedge): Arc
+	{
+		return new Arc(shell, wedge);
+	}
+
+	center(): Coords
+	{
+		return this.shell.center();
+	}
+
 	collider(): ShapeGroupAll
 	{
 		return this._collider;
@@ -33,6 +48,17 @@ export class Arc implements ShapeBase
 		return new Arc(this.shell.clone(), this.wedge.clone());
 	}
 
+	equals(other: Arc): boolean
+	{
+		var returnValue =
+		(
+			this.shell.equals(other.shell)
+			&& this.wedge.equals(other.wedge)
+		);
+
+		return returnValue;
+	}
+
 	overwriteWith(other: Arc): Arc
 	{
 		this.shell.overwriteWith(other.shell);
@@ -40,11 +66,11 @@ export class Arc implements ShapeBase
 		return this;
 	}
 
-	// transformable
+	// Transformable.
 
 	coordsGroupToTranslate(): Coords[]
 	{
-		return [ this.shell.sphereOuter.center, this.wedge.vertex ];
+		return [ this.shell.center(), this.wedge.vertex ];
 	}
 
 	// ShapeBase.
@@ -73,7 +99,10 @@ export class Arc implements ShapeBase
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable { throw("Not implemented!");  }
+	transform(transformToApply: Transform): Transformable
+	{
+		throw new Error("Not implemented!");
+	}
 }
 
 }

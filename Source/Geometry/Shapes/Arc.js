@@ -12,6 +12,15 @@ var ThisCouldBeBetter;
                     this.wedge
                 ]);
             }
+            static default() {
+                return new Arc(GameFramework.Shell.default(), GameFramework.Wedge.default());
+            }
+            static fromShellAndWedge(shell, wedge) {
+                return new Arc(shell, wedge);
+            }
+            center() {
+                return this.shell.center();
+            }
             collider() {
                 return this._collider;
             }
@@ -19,14 +28,19 @@ var ThisCouldBeBetter;
             clone() {
                 return new Arc(this.shell.clone(), this.wedge.clone());
             }
+            equals(other) {
+                var returnValue = (this.shell.equals(other.shell)
+                    && this.wedge.equals(other.wedge));
+                return returnValue;
+            }
             overwriteWith(other) {
                 this.shell.overwriteWith(other.shell);
                 this.wedge.overwriteWith(other.wedge);
                 return this;
             }
-            // transformable
+            // Transformable.
             coordsGroupToTranslate() {
-                return [this.shell.sphereOuter.center, this.wedge.vertex];
+                return [this.shell.center(), this.wedge.vertex];
             }
             // ShapeBase.
             locate(loc) {
@@ -44,7 +58,9 @@ var ThisCouldBeBetter;
                 return this.shell.toBox(boxOut);
             }
             // Transformable.
-            transform(transformToApply) { throw ("Not implemented!"); }
+            transform(transformToApply) {
+                throw new Error("Not implemented!");
+            }
         }
         GameFramework.Arc = Arc;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

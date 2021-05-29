@@ -11,8 +11,14 @@ var ThisCouldBeBetter;
                 this._centerAsArray = [this.center];
                 this._displacement = GameFramework.Coords.create();
             }
+            static default() {
+                return new Sphere(GameFramework.Coords.create(), 1);
+            }
             static fromRadius(radius) {
                 return new Sphere(GameFramework.Coords.create(), radius);
+            }
+            static fromRadiusAndCenter(radius, center) {
+                return new Sphere(center, radius);
             }
             containsOther(other) {
                 var displacementOfOther = this._displacement.overwriteWith(other.center).subtract(this.center);
@@ -26,6 +32,9 @@ var ThisCouldBeBetter;
             // cloneable
             clone() {
                 return new Sphere(this.center.clone(), this.radius);
+            }
+            equals(other) {
+                return (this.center.equals(other.center) && this.radius == other.radius);
             }
             overwriteWith(other) {
                 this.center.overwriteWith(other.center);
@@ -53,7 +62,7 @@ var ThisCouldBeBetter;
                 return this._centerAsArray;
             }
             transform(transformToApply) {
-                throw ("Not implemented!");
+                throw new Error("Not implemented!");
             }
         }
         GameFramework.Sphere = Sphere;

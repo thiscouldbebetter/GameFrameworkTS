@@ -65,9 +65,13 @@ var ThisCouldBeBetter;
                 return this;
             }
             // ShapeBase.
-            locate(loc) { throw ("Not implemented!"); }
-            normalAtPos(posToCheck, normalOut) { throw ("Not implemented!"); }
-            surfacePointNearPos(posToCheck, surfacePointOut) { throw ("Not implemented!"); }
+            locate(loc) {
+                throw new Error("Not implemented!");
+            }
+            normalAtPos(posToCheck, normalOut) {
+                throw new Error("Not implemented!");
+            }
+            surfacePointNearPos(posToCheck, surfacePointOut) { throw new Error("Not implemented!"); }
             toBox(boxOut) {
                 return boxOut.ofPoints(this.vertices);
             }

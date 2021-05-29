@@ -13,7 +13,14 @@ var ThisCouldBeBetter;
                 this._range = new GameFramework.RangeExtent(0, 0);
             }
             static create() {
-                return new Box(GameFramework.Coords.create(), GameFramework.Coords.create());
+                return Box.fromCenterAndSize(GameFramework.Coords.create(), GameFramework.Coords.create());
+            }
+            static default() {
+                return Box.fromCenterAndSize(GameFramework.Coords.zeroes(), GameFramework.Coords.ones());
+            }
+            static fromCenterAndSize(center, size) {
+                // This takes the same arguments as the constructor.
+                return new Box(center, size);
             }
             static fromMinAndMax(min, max) {
                 var center = min.clone().add(max).half();
@@ -26,6 +33,10 @@ var ThisCouldBeBetter;
             }
             static fromSize(size) {
                 return new Box(GameFramework.Coords.create(), size);
+            }
+            static fromSizeAndCenter(size, center) {
+                // Same arguments as the constructor, but different order.
+                return new Box(center, size);
             }
             // Static methods.
             static doBoxesInSetsOverlap(boxSet0, boxSet1) {
@@ -144,6 +155,11 @@ var ThisCouldBeBetter;
                 var returnValue = rangeThis.overlapsWith(rangeOther);
                 return returnValue;
             }
+            randomize(randomizer) {
+                this.center.randomize(randomizer);
+                this.size.randomize(randomizer);
+                return this;
+            }
             rangeForDimension(dimensionIndex, rangeOut) {
                 rangeOut.min = this.min().dimensionGet(dimensionIndex);
                 rangeOut.max = this.max().dimensionGet(dimensionIndex);
@@ -183,9 +199,14 @@ var ThisCouldBeBetter;
                 }
                 return this._vertices;
             }
-            // cloneable
+            // Clonable.
             clone() {
                 return new Box(this.center.clone(), this.size.clone());
+            }
+            equals(other) {
+                var returnValue = (this.center.equals(other.center)
+                    && this.size.equals(other.size));
+                return returnValue;
             }
             overwriteWith(other) {
                 this.center.overwriteWith(other.center);

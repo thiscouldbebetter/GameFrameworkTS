@@ -33,7 +33,7 @@ var ThisCouldBeBetter;
             }
             // ShapeBase.
             locate(loc) {
-                throw ("Not implemented!");
+                throw new Error("Not implemented!");
             }
             normalAtPos(posToCheck, normalOut) {
                 return this.plane.normal;
@@ -42,7 +42,7 @@ var ThisCouldBeBetter;
                 return surfacePointOut.overwriteWith(this.plane.pointOnPlaneNearestPos(posToCheck));
             }
             toBox(boxOut) {
-                throw ("Not implemented!");
+                throw new Error("Not implemented!");
             }
             // Transformable.
             transform(transformToApply) {

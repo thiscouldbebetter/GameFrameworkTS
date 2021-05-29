@@ -190,7 +190,7 @@ var ThisCouldBeBetter;
                 return this;
             }
             // Transformable.
-            transform(transformToApply) { throw ("Not implemented!"); }
+            transform(transformToApply) { throw new Error("Not implemented!"); }
         }
         GameFramework.Mesh_FaceBuilder = Mesh_FaceBuilder;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

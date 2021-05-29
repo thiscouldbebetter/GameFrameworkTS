@@ -13,6 +13,9 @@ var ThisCouldBeBetter;
             static create() {
                 return new Edge(null);
             }
+            static fromVertex0And1(vertex0, vertex1) {
+                return new Edge([vertex0, vertex1]);
+            }
             direction() {
                 return this._direction.overwriteWith(this.displacement()).normalize();
             }
@@ -53,14 +56,14 @@ var ThisCouldBeBetter;
                 return this;
             }
             // ShapeBase.
-            locate(loc) { throw ("Not implemented!"); }
-            normalAtPos(posToCheck, normalOut) { throw ("Not implemented!"); }
-            surfacePointNearPos(posToCheck, surfacePointOut) { throw ("Not implemented!"); }
+            locate(loc) { throw new Error("Not implemented!"); }
+            normalAtPos(posToCheck, normalOut) { throw new Error("Not implemented!"); }
+            surfacePointNearPos(posToCheck, surfacePointOut) { throw new Error("Not implemented!"); }
             toBox(boxOut) {
                 return boxOut.ofPoints(this.vertices);
             }
             // Transformable.
-            transform(transformToApply) { throw ("Not implemented!"); }
+            transform(transformToApply) { throw new Error("Not implemented!"); }
         }
         GameFramework.Edge = Edge;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

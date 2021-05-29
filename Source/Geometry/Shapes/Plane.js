@@ -37,13 +37,13 @@ var ThisCouldBeBetter;
                 return this;
             }
             // ShapeBase.
-            locate(loc) { throw ("Not implemented!"); }
-            normalAtPos(posToCheck, normalOut) { throw ("Not implemented!"); }
-            surfacePointNearPos(posToCheck, surfacePointOut) { throw ("Not implemented!"); }
-            toBox(boxOut) { throw ("Not implemented!"); }
+            locate(loc) { throw new Error("Not implemented!"); }
+            normalAtPos(posToCheck, normalOut) { throw new Error("Not implemented!"); }
+            surfacePointNearPos(posToCheck, surfacePointOut) { throw new Error("Not implemented!"); }
+            toBox(boxOut) { throw new Error("Not implemented!"); }
             // Transformable.
             transform(transformToApply) {
-                throw ("Not implemented!");
+                throw new Error("Not implemented!");
             }
         }
         GameFramework.Plane = Plane;

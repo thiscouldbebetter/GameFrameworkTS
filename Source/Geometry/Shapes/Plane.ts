@@ -81,19 +81,19 @@ export class Plane implements ShapeBase
 
 	// ShapeBase.
 
-	locate(loc: Disposition): ShapeBase { throw("Not implemented!"); }
+	locate(loc: Disposition): ShapeBase { throw new Error("Not implemented!"); }
 
-	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords { throw("Not implemented!"); }
+	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords { throw new Error("Not implemented!"); }
 
-	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords { throw("Not implemented!"); }
+	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords { throw new Error("Not implemented!"); }
 
-	toBox(boxOut: Box): Box { throw("Not implemented!"); }
+	toBox(boxOut: Box): Box { throw new Error("Not implemented!"); }
 
 	// Transformable.
 
 	transform(transformToApply: Transform): Transformable
 	{
-		throw("Not implemented!");
+		throw new Error("Not implemented!");
 	}
 }
 

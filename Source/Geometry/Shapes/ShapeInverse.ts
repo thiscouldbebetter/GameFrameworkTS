@@ -42,11 +42,11 @@ export class ShapeInverse implements ShapeBase
 		return this.shape.surfacePointNearPos(posToCheck, surfacePointOut);
 	}
 
-	toBox(boxOut: Box): Box { throw("Not implemented!"); }
+	toBox(boxOut: Box): Box { throw new Error("Not implemented!"); }
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable { throw("Not implemented!");  }
+	transform(transformToApply: Transform): Transformable { throw new Error("Not implemented!");  }
 
 }
 

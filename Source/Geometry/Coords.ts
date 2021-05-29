@@ -36,10 +36,16 @@ export class Coords
 		return Coords._instances;
 	}
 
-	// methods
+	// Static methods.
 
 	static create(): Coords
 	{
+		return new Coords(0, 0, 0);
+	}
+
+	static default(): Coords
+	{
+		// Same as create().
 		return new Coords(0, 0, 0);
 	}
 
@@ -47,6 +53,24 @@ export class Coords
 	{
 		return new Coords(x, y, 0);
 	}
+
+	static ones(): Coords
+	{
+		return new Coords(1, 1, 1);
+	}
+
+	static twos(): Coords
+	{
+		return new Coords(2, 2, 2);
+	}
+
+	static zeroes(): Coords
+	{
+		// Same as create().
+		return new Coords(0, 0, 0);
+	}
+
+	// Instance methods.
 
 	absolute(): Coords
 	{
@@ -224,7 +248,13 @@ export class Coords
 
 	equalsWithinError(other: Coords, errorMax: number): boolean
 	{
+		// Because in JavaScript, 1.1 - 1.0 = 0.10000000000000009.
 		return (this.clone().subtract(other).magnitude() <= errorMax);
+	}
+
+	equalsWithinOneBillionth(other: Coords): boolean
+	{
+		return this.equalsWithinError(other, 0.000000001);
 	}
 
 	equalsXY(other: Coords): boolean
@@ -423,6 +453,14 @@ export class Coords
 		this.x = Math.round(this.x);
 		this.y = Math.round(this.y);
 		this.z = Math.round(this.z);
+		return this;
+	}
+
+	roundToDecimalPlaces(numberOfPlaces: number)
+	{
+		this.x = NumberHelper.roundToDecimalPlaces(this.x, numberOfPlaces);
+		this.y = NumberHelper.roundToDecimalPlaces(this.y, numberOfPlaces);
+		this.z = NumberHelper.roundToDecimalPlaces(this.z, numberOfPlaces);
 		return this;
 	}
 

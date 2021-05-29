@@ -78,7 +78,7 @@ export class BoxRotated implements ShapeBase
 		return surfacePointOut.overwriteWith(posToCheck); // todo
 	}
 
-	toBox(boxOut: Box): Box { throw("Not implemented!"); }
+	toBox(boxOut: Box): Box { throw new Error("Not implemented!"); }
 
 	// Clonable.
 
@@ -101,7 +101,7 @@ export class BoxRotated implements ShapeBase
 		return [ this.box.center ];
 	}
 
-	transform(transformToApply: Transform): Transformable { throw("Not implemented!");  }
+	transform(transformToApply: Transform): Transformable { throw new Error("Not implemented!");  }
 }
 
 }

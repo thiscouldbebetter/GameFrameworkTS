@@ -25,9 +25,20 @@ export class Box implements ShapeBase
 		this._range = new RangeExtent(0, 0);
 	}
 
-	static create()
+	static create(): Box
 	{
-		return new Box(Coords.create(), Coords.create());
+		return Box.fromCenterAndSize(Coords.create(), Coords.create());
+	}
+
+	static default(): Box
+	{
+		return Box.fromCenterAndSize(Coords.zeroes(), Coords.ones() );
+	}
+
+	static fromCenterAndSize(center: Coords, size: Coords): Box
+	{
+		// This takes the same arguments as the constructor.
+		return new Box(center, size);
 	}
 
 	static fromMinAndMax(min: Coords, max: Coords): Box
@@ -48,9 +59,15 @@ export class Box implements ShapeBase
 		return new Box(Coords.create(), size);
 	}
 
+	static fromSizeAndCenter(size: Coords, center: Coords): Box
+	{
+		// Same arguments as the constructor, but different order.
+		return new Box(center, size);
+	}
+
 	// Static methods.
 
-	static doBoxesInSetsOverlap(boxSet0: Box[], boxSet1: Box[])
+	static doBoxesInSetsOverlap(boxSet0: Box[], boxSet1: Box[]): boolean
 	{
 		var doAnyBoxOverlapSoFar = false;
 
@@ -79,24 +96,24 @@ export class Box implements ShapeBase
 
 	// Instance methods.
 
-	containsOther(other: Box)
+	containsOther(other: Box): boolean
 	{
 		return ( this.containsPoint(other.min()) && this.containsPoint(other.max()) );
 	}
 
-	containsPoint(pointToCheck: Coords)
+	containsPoint(pointToCheck: Coords): boolean
 	{
 		return pointToCheck.isInRangeMinMax(this.min(), this.max());
 	}
 
-	fromMinAndMax(min: Coords, max: Coords)
+	fromMinAndMax(min: Coords, max: Coords): Box
 	{
 		this.center.overwriteWith(min).add(max).half();
 		this.size.overwriteWith(max).subtract(min);
 		return this;
 	}
 
-	intersectWith(other: Box)
+	intersectWith(other: Box): Box
 	{
 		var thisMinDimensions = this.min().dimensions();
 		var thisMaxDimensions = this.max().dimensions();
@@ -144,23 +161,23 @@ export class Box implements ShapeBase
 		return returnValue;
 	}
 
-	locate(loc: Disposition)
+	locate(loc: Disposition): Box
 	{
 		this.center.overwriteWith(loc.pos);
 		return this;
 	}
 
-	max()
+	max(): Coords
 	{
 		return this._max.overwriteWith(this.center).add(this.sizeHalf());
 	}
 
-	min()
+	min(): Coords
 	{
 		return this._min.overwriteWith(this.center).subtract(this.sizeHalf());
 	}
 
-	ofPoints(points: Coords[])
+	ofPoints(points: Coords[]): Box
 	{
 		var point0 = points[0];
 		var minSoFar = this._min.overwriteWith(point0);
@@ -204,7 +221,7 @@ export class Box implements ShapeBase
 		return this;
 	}
 
-	overlapsWith(other: Box)
+	overlapsWith(other: Box): boolean
 	{
 		var returnValue =
 		(
@@ -215,7 +232,7 @@ export class Box implements ShapeBase
 		return returnValue;
 	}
 
-	overlapsWithXY(other: Box)
+	overlapsWithXY(other: Box): boolean
 	{
 		var returnValue =
 		(
@@ -225,7 +242,7 @@ export class Box implements ShapeBase
 		return returnValue;
 	}
 
-	overlapsWithOtherInDimension(other: Box, dimensionIndex: number)
+	overlapsWithOtherInDimension(other: Box, dimensionIndex: number): boolean
 	{
 		var rangeThis = this.rangeForDimension(dimensionIndex, this._range);
 		var rangeOther = other.rangeForDimension(dimensionIndex, other._range);
@@ -233,25 +250,33 @@ export class Box implements ShapeBase
 		return returnValue;
 	}
 
-	rangeForDimension(dimensionIndex: number, rangeOut: RangeExtent)
+	randomize(randomizer: Randomizer): Box
+	{
+		this.center.randomize(randomizer);
+		this.size.randomize(randomizer);
+
+		return this;
+	}
+
+	rangeForDimension(dimensionIndex: number, rangeOut: RangeExtent): RangeExtent
 	{
 		rangeOut.min = this.min().dimensionGet(dimensionIndex);
 		rangeOut.max = this.max().dimensionGet(dimensionIndex);
 		return rangeOut;
 	}
 
-	sizeHalf()
+	sizeHalf(): Coords
 	{
 		return this._sizeHalf.overwriteWith(this.size).half();
 	}
 
-	sizeOverwriteWith(sizeOther: Coords)
+	sizeOverwriteWith(sizeOther: Coords): Box
 	{
 		this.size.overwriteWith(sizeOther);
 		return this;
 	}
 
-	touches(other: Box)
+	touches(other: Box): boolean
 	{
 		var returnValue =
 		(
@@ -262,7 +287,7 @@ export class Box implements ShapeBase
 		return returnValue;
 	}
 
-	touchesXY(other: Box)
+	touchesXY(other: Box): boolean
 	{
 		var returnValue =
 		(
@@ -272,7 +297,7 @@ export class Box implements ShapeBase
 		return returnValue;
 	}
 
-	touchesOtherInDimension(other: Box, dimensionIndex: number)
+	touchesOtherInDimension(other: Box, dimensionIndex: number): boolean
 	{
 		var rangeThis = this.rangeForDimension(dimensionIndex, this._range);
 		var rangeOther = other.rangeForDimension(dimensionIndex, other._range);
@@ -280,12 +305,12 @@ export class Box implements ShapeBase
 		return returnValue;
 	}
 
-	trimCoords(coordsToTrim: Coords)
+	trimCoords(coordsToTrim: Coords): Coords
 	{
 		return coordsToTrim.trimToRangeMinMax(this.min(), this.max());
 	}
 
-	vertices()
+	vertices(): Coords[]
 	{
 		if (this._vertices == null)
 		{
@@ -295,14 +320,25 @@ export class Box implements ShapeBase
 		return this._vertices;
 	}
 
-	// cloneable
+	// Clonable.
 
-	clone()
+	clone(): Box
 	{
 		return new Box(this.center.clone(), this.size.clone());
 	}
 
-	overwriteWith(other: Box)
+	equals(other: Box): boolean
+	{
+		var returnValue =
+		(
+			this.center.equals(other.center)
+			&& this.size.equals(other.size)
+		);
+
+		return returnValue;
+	}
+
+	overwriteWith(other: Box): Box
 	{
 		this.center.overwriteWith(other.center);
 		this.size.overwriteWith(other.size);
@@ -311,14 +347,17 @@ export class Box implements ShapeBase
 
 	// string
 
-	toString()
+	toString(): string
 	{
 		return this.min().toString() + ":" + this.max().toString();
 	}
 
 	// ShapeBase.
 
-	dimensionForSurfaceClosestToPoint(posToCheck: Coords, displacementOverSizeHalf: Coords)
+	dimensionForSurfaceClosestToPoint
+	(
+		posToCheck: Coords, displacementOverSizeHalf: Coords
+	): number
 	{
 		var greatestAbsoluteDisplacementDimensionSoFar = -1;
 		var dimensionIndex = null;
@@ -371,7 +410,7 @@ export class Box implements ShapeBase
 		return normalOut;
 	}
 
-	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords)
+	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords
 	{
 		return surfacePointOut.overwriteWith(posToCheck); // todo
 	}

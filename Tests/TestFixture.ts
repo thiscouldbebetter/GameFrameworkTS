@@ -34,10 +34,11 @@ class TestFixture
 			}
 			catch (ex)
 			{
-				document.write("Test failed: " + test.name + "<br />");
+				document.write("Test failed: " + test.name + "<br /><br />");
 				document.write
 				(
-					"Error: '" + ex.message + "', at " + ex.stack + "<br />"
+					ex.stack + "<br />"
+					+ "<br /><br />"
 				);
 			}
 		});

@@ -13,7 +13,7 @@ class Assert
 				"Expected: " + JSON.stringify(objectExpected)
 				+ ", but was: " + JSON.stringify(objectActual) + "."
 
-			throw(errorMessage);
+			throw new Error(errorMessage);
 		}
 	}
 
@@ -35,7 +35,7 @@ class Assert
 	{
 		if (valueToTest != false)
 		{
-			throw("Expected: false, but was: " + valueToTest + ".");
+			throw new Error("Expected: false, but was: " + valueToTest + ".");
 		}
 	}
 
@@ -43,7 +43,15 @@ class Assert
 	{
 		if (valueToTest == null)
 		{
-			throw("Expected: not null, but was: null.");
+			throw new Error("Expected: not null, but was: null.");
+		}
+	}
+
+	static isNull(valueToTest: any): void
+	{
+		if (valueToTest != null)
+		{
+			throw new Error("Expected: null, but was: not null.");
 		}
 	}
 
@@ -51,7 +59,20 @@ class Assert
 	{
 		if (valueToTest != true)
 		{
-			throw("Expected: true, but was: " + valueToTest + ".");
+			throw new Error("Expected: true, but was: " + valueToTest + ".");
+		}
+	}
+
+	static throwsError(functionToTest: Function): void
+	{
+		try
+		{
+			functionToTest();
+			throw new Error("Expected an error to be thrown, but none was.")
+		}
+		catch (ex)
+		{
+			// Do nothing.
 		}
 	}
 

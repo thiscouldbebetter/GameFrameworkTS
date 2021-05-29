@@ -46,7 +46,7 @@ var ThisCouldBeBetter;
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 return surfacePointOut.overwriteWith(posToCheck); // todo
             }
-            toBox(boxOut) { throw ("Not implemented!"); }
+            toBox(boxOut) { throw new Error("Not implemented!"); }
             // Clonable.
             clone() {
                 return new BoxRotated(this.box.clone(), this.angleInTurns);
@@ -60,7 +60,7 @@ var ThisCouldBeBetter;
             coordsGroupToTranslate() {
                 return [this.box.center];
             }
-            transform(transformToApply) { throw ("Not implemented!"); }
+            transform(transformToApply) { throw new Error("Not implemented!"); }
         }
         GameFramework.BoxRotated = BoxRotated;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

@@ -5,7 +5,7 @@ class Assert {
         if (areExpectedAndActualEqual == false) {
             var errorMessage = "Expected: " + JSON.stringify(objectExpected)
                 + ", but was: " + JSON.stringify(objectActual) + ".";
-            throw (errorMessage);
+            throw new Error(errorMessage);
         }
     }
     static areNotEqual(objectExpected, objectActual) {
@@ -17,17 +17,31 @@ class Assert {
     }
     static isFalse(valueToTest) {
         if (valueToTest != false) {
-            throw ("Expected: false, but was: " + valueToTest + ".");
+            throw new Error("Expected: false, but was: " + valueToTest + ".");
         }
     }
     static isNotNull(valueToTest) {
         if (valueToTest == null) {
-            throw ("Expected: not null, but was: null.");
+            throw new Error("Expected: not null, but was: null.");
+        }
+    }
+    static isNull(valueToTest) {
+        if (valueToTest != null) {
+            throw new Error("Expected: null, but was: not null.");
         }
     }
     static isTrue(valueToTest) {
         if (valueToTest != true) {
-            throw ("Expected: true, but was: " + valueToTest + ".");
+            throw new Error("Expected: true, but was: " + valueToTest + ".");
+        }
+    }
+    static throwsError(functionToTest) {
+        try {
+            functionToTest();
+            throw new Error("Expected an error to be thrown, but none was.");
+        }
+        catch (ex) {
+            // Do nothing.
         }
     }
     // Helper methods.

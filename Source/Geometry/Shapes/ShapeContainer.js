@@ -30,7 +30,7 @@ var ThisCouldBeBetter;
                 return this.shape.toBox(boxOut);
             }
             // Transformable.
-            transform(transformToApply) { throw ("Not implemented!"); }
+            transform(transformToApply) { throw new Error("Not implemented!"); }
         }
         GameFramework.ShapeContainer = ShapeContainer;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

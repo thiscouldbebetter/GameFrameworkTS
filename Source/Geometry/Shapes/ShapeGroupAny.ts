@@ -34,12 +34,12 @@ export class ShapeGroupAny implements ShapeBase
 
 	locate(loc: Disposition): ShapeBase
 	{
-		throw("Not implemented!");
+		throw new Error("Not implemented!");
 	}
 
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
 	{
-		throw("Not implemented!");
+		throw new Error("Not implemented!");
 	}
 
 	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords
@@ -69,7 +69,7 @@ export class ShapeGroupAny implements ShapeBase
 		return surfacePointOut;
 	}
 
-	toBox(boxOut: Box): Box { throw("Not implemented!"); }
+	toBox(boxOut: Box): Box { throw new Error("Not implemented!"); }
 
 	// Transformable.
 

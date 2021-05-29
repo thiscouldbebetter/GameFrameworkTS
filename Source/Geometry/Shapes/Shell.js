@@ -13,6 +13,10 @@ var ThisCouldBeBetter;
                     new GameFramework.ShapeInverse(new GameFramework.ShapeContainer(this.sphereInner))
                 ]);
             }
+            static default() {
+                var sphereOuter = GameFramework.Sphere.default();
+                return new Shell(sphereOuter, sphereOuter.radius / 2);
+            }
             center() {
                 return this.sphereOuter.center;
             }
@@ -22,6 +26,11 @@ var ThisCouldBeBetter;
             // cloneable
             clone() {
                 return new Shell(this.sphereOuter.clone(), this.radiusInner);
+            }
+            equals(other) {
+                var returnValue = (this.sphereOuter.equals(other.sphereOuter)
+                    && this.radiusInner == other.radiusInner);
+                return returnValue;
             }
             overwriteWith(other) {
                 this.sphereOuter.overwriteWith(other.sphereOuter);
@@ -51,7 +60,7 @@ var ThisCouldBeBetter;
                 return this.sphereOuter.toBox(boxOut);
             }
             // Transformable.
-            transform(transformToApply) { throw ("Not implemented!"); }
+            transform(transformToApply) { throw new Error("Not implemented!"); }
         }
         GameFramework.Shell = Shell;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

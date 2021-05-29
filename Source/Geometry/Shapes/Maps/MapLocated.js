@@ -31,10 +31,10 @@ var ThisCouldBeBetter;
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 return surfacePointOut.overwriteWith(posToCheck); // todo
             }
-            toBox(boxOut) { throw ("Not implemented!"); }
+            toBox(boxOut) { throw new Error("Not implemented!"); }
             // Transformable.
             transform(transformToApply) {
-                throw ("Not implemented!");
+                throw new Error("Not implemented!");
             }
         }
         GameFramework.MapLocated = MapLocated;

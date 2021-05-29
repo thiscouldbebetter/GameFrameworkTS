@@ -33,6 +33,16 @@ export class Wedge implements ShapeBase
 		this.rayDirectionMinAsPolar = new Polar(0, 1, 0);
 	}
 
+	static default()
+	{
+		return new Wedge
+		(
+			Coords.create(), // vertex
+			new Coords(1, 0, 0), // directionMin
+			.5 // angleSpannedInTurns
+		);
+	}
+
 	angleAsRangeExtent(): RangeExtent
 	{
 		var angleStartInTurns = this.directionMin.headingInTurns();
@@ -43,7 +53,7 @@ export class Wedge implements ShapeBase
 		);
 	}
 
-	angleInTurnsMax()
+	angleInTurnsMax(): number
 	{
 		var returnValue = NumberHelper.wrapToRangeMinMax
 		(
@@ -54,7 +64,7 @@ export class Wedge implements ShapeBase
 		return returnValue;
 	}
 
-	angleInTurnsMin()
+	angleInTurnsMin(): number
 	{
 		return this.rayDirectionMinAsPolar.fromCoords
 		(
@@ -62,7 +72,7 @@ export class Wedge implements ShapeBase
 		).azimuthInTurns;
 	}
 
-	collider()
+	collider(): any
 	{
 		if (this._collider == null)
 		{
@@ -147,12 +157,24 @@ export class Wedge implements ShapeBase
 
 	// Clonable.
 
-	clone()
+	clone(): Wedge
 	{
 		return new Wedge(this.vertex.clone(), this.directionMin.clone(), this.angleSpannedInTurns);
 	}
 
-	overwriteWith(other: Wedge)
+	equals(other: Wedge): boolean
+	{
+		var returnValue =
+		(
+			this.vertex.equals(other.vertex)
+			&& this.directionMin.equals(other.directionMin)
+			&& this.angleSpannedInTurns == other.angleSpannedInTurns
+		);
+
+		return returnValue;
+	}
+
+	overwriteWith(other: Wedge): Wedge
 	{
 		this.vertex.overwriteWith(other.vertex);
 		this.directionMin.overwriteWith(other.directionMin);
@@ -170,19 +192,19 @@ export class Wedge implements ShapeBase
 
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
 	{
-		throw("Not implemented!");
+		throw new Error("Not implemented!");
 	}
 
 	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords
 	{
-		throw("Not implemented!");
+		throw new Error("Not implemented!");
 	}
 
-	toBox(boxOut: Box): Box { throw("Not implemented!"); }
+	toBox(boxOut: Box): Box { throw new Error("Not implemented!"); }
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable { throw("Not implemented!");  }
+	transform(transformToApply: Transform): Transformable { throw new Error("Not implemented!");  }
 
 }
 

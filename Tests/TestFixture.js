@@ -18,8 +18,9 @@ class TestFixture {
                 testsPassedCount++;
             }
             catch (ex) {
-                document.write("Test failed: " + test.name + "<br />");
-                document.write("Error: '" + ex.message + "', at " + ex.stack + "<br />");
+                document.write("Test failed: " + test.name + "<br /><br />");
+                document.write(ex.stack + "<br />"
+                    + "<br /><br />");
             }
         });
         var testsFailedCount = tests.length - testsPassedCount;

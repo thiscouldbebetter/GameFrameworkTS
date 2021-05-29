@@ -5,6 +5,24 @@ class CollisionHelperTests extends TestFixture {
         var mockEnvironment = new MockEnvironment();
         var universe = mockEnvironment.universe;
         this._collisionHelper = universe.collisionHelper;
+        // Test colliders.
+        this._boxOfSide1AtOrigin = Box.fromCenterAndSize(new Coords(0, 0, 0), // center
+        new Coords(1, 1, 1) // size
+        );
+        this._boxOfSide2AtOrigin = Box.fromCenterAndSize(new Coords(0, 0, 0), // center
+        new Coords(1, 1, 1).double() // size
+        );
+        this._boxOfSide3AtOrigin = Box.fromCenterAndSize(new Coords(0, 0, 0), // center
+        new Coords(1, 1, 1).multiplyScalar(3) // size
+        );
+        this._boxOfSide1AtX1 = Box.fromCenterAndSize(new Coords(1, 0, 0), // center
+        new Coords(1, 1, 1) // size
+        );
+        this._boxOfSide1AtX2 = Box.fromCenterAndSize(new Coords(2, 0, 0), // origin
+        new Coords(1, 1, 1) // size
+        );
+        this._sphereOfRadius1AtOrigin = Sphere.fromRadiusAndCenter(1, new Coords(0, 0, 0) // center
+        );
     }
     tests() {
         var tests = [
@@ -12,15 +30,14 @@ class CollisionHelperTests extends TestFixture {
             this.collisionOfEntities,
             this.collisionOfColliders,
             /*
-            // todo - These tests not yet implemented.
-
+            // todo - Some tests not yet implemented.
             this.collisionsOfEntitiesCollidableInSets,
+            */
             this.doEntitiesCollide,
             this.doCollidersCollide,
             this.doesColliderContainOther,
-
             // Shapes.
-
+            /*
             // collideEntitiesXAndY
 
             this.collideEntitiesBackUp,
@@ -28,43 +45,41 @@ class CollisionHelperTests extends TestFixture {
             this.collideEntitiesBounce,
             this.collideEntitiesBlockOrBounce,
             this.collideEntitiesSeparate,
-
+            */
             // collisionOfXAndY
-
             this.collisionOfBoxAndBox,
-            this.collisionOfBoxAndBoxRotated,
-            this.collisionOfBoxAndMapLocated,
-            this.collisionOfBoxAndMesh,
+            // this.collisionOfBoxAndBoxRotated,
+            // this.collisionOfBoxAndMapLocated,
+            // this.collisionOfBoxAndMesh,
             this.collisionOfBoxAndSphere,
-            this.collisionOfBoxRotatedAndBox,
-            this.collisionOfBoxRotatedAndBoxRotated,
-            this.collisionOfBoxRotatedAndMapLocated,
-            this.collisionOfBoxRotatedAndSphere,
+            // this.collisionOfBoxRotatedAndBox,
+            // this.collisionOfBoxRotatedAndBoxRotated,
+            // this.collisionOfBoxRotatedAndMapLocated,
+            // this.collisionOfBoxRotatedAndSphere,
             this.collisionOfEdgeAndEdge,
-            this.collisionOfEdgeAndFace,
-            this.collisionsOfEdgeAndMesh,
-            this.collisionOfEdgeAndPlane,
-            this.collisionOfHemispaceAndBox,
-            this.collisionOfHemispaceAndSphere,
-            this.collisionOfMapLocatedAndBox,
-            this.collisionOfMapLocatedAndBoxRotated,
-            this.collisionOfMapLocatedAndMapLocated,
-            this.collisionOfMapLocatedAndSphere,
-            this.collisionOfMeshAndBox,
-            this.collisionOfMeshAndSphere,
-            this.collisionOfShapeAndShapeGroupAll,
-            this.collisionOfShapeAndShapeInverse,
-            this.collisionOfShapeGroupAllAndShape,
-            this.collisionOfShapeInverseAndShape,
-            this.collisionOfSphereAndBox,
-            this.collisionOfSphereAndBoxRotated,
-            this.collisionOfSphereAndMapLocated,
-            this.collisionOfSphereAndMesh,
-            this.collisionOfSpheres,
-
+            // this.collisionOfEdgeAndFace,
+            // this.collisionsOfEdgeAndMesh,
+            // this.collisionOfEdgeAndPlane,
+            // this.collisionOfHemispaceAndBox,
+            // this.collisionOfHemispaceAndSphere,
+            // this.collisionOfMapLocatedAndBox,
+            // this.collisionOfMapLocatedAndBoxRotated,
+            // this.collisionOfMapLocatedAndMapLocated,
+            // this.collisionOfMapLocatedAndSphere,
+            // this.collisionOfMeshAndBox,
+            // this.collisionOfMeshAndSphere,
+            // this.collisionOfShapeAndShapeGroupAll,
+            // this.collisionOfShapeAndShapeInverse,
+            // this.collisionOfShapeGroupAllAndShape,
+            // this.collisionOfShapeInverseAndShape,
+            // this.collisionOfSphereAndBox,
+            // this.collisionOfSphereAndBoxRotated,
+            // this.collisionOfSphereAndMapLocated,
+            // this.collisionOfSphereAndMesh,
+            // this.collisionOfSpheres,
             // doXAndYCollide
-
             this.doBoxAndBoxCollide,
+            /*
             this.doBoxAndBoxRotatedCollide,
             this.doBoxAndCylinderCollide,
             this.doBoxAndHemispaceCollide,
@@ -174,16 +189,26 @@ class CollisionHelperTests extends TestFixture {
         // entitiesCollidable0: Entity[], entitiesCollidable1: Entity[]
     }
     doEntitiesCollide() {
-        // todo
-        // entity0: Entity, entity1: Entity
+        var entity0 = new Entity("Entity0", [
+            Collidable.fromCollider(this._boxOfSide1AtOrigin)
+        ]);
+        var entity1 = new Entity("Entity1", [
+            Collidable.fromCollider(this._boxOfSide2AtOrigin)
+        ]);
+        var doEntitiesCollide = this._collisionHelper.doEntitiesCollide(entity0, entity1);
+        Assert.isTrue(doEntitiesCollide);
     }
     doCollidersCollide() {
-        // todo
-        // collider0: any, collider1: any
+        var collider0 = this._boxOfSide1AtOrigin;
+        var collider1 = this._boxOfSide2AtOrigin;
+        var doCollidersCollide = this._collisionHelper.doCollidersCollide(collider0, collider1);
+        Assert.isTrue(doCollidersCollide);
     }
     doesColliderContainOther() {
-        // todo
-        // collider0: any, collider1: any
+        var colliderContained = this._boxOfSide1AtOrigin;
+        var colliderContaining = this._boxOfSide2AtOrigin;
+        Assert.isTrue(this._collisionHelper.doesColliderContainOther(colliderContaining, colliderContained));
+        Assert.isFalse(this._collisionHelper.doesColliderContainOther(colliderContained, colliderContaining));
     }
     // Shapes.
     // collideEntitiesXAndY
@@ -209,8 +234,8 @@ class CollisionHelperTests extends TestFixture {
     }
     // collisionOfXAndY
     collisionOfBoxAndBox() {
-        // todo
-        // box1: Box, box2: Box, collision: Collision
+        var collision = this._collisionHelper.collisionOfBoxAndBox(this._boxOfSide1AtOrigin, this._boxOfSide2AtOrigin, Collision.create());
+        Assert.isTrue(collision.isActive);
     }
     collisionOfBoxAndBoxRotated() {
         // todo
@@ -225,8 +250,9 @@ class CollisionHelperTests extends TestFixture {
         // box: Box, mesh: Mesh, collision: Collision
     }
     collisionOfBoxAndSphere() {
-        // todo
-        // box: Box, sphere: Sphere, collision: Collision, shouldCalculatePos: boolean
+        var collision = this._collisionHelper.collisionOfBoxAndSphere(this._boxOfSide1AtOrigin, this._sphereOfRadius1AtOrigin, Collision.create(), true // shouldCalculatePos
+        );
+        Assert.isTrue(collision.isActive);
     }
     collisionOfBoxRotatedAndBox() {
         // todo
@@ -245,8 +271,10 @@ class CollisionHelperTests extends TestFixture {
         // boxRotated: BoxRotated, sphere: Sphere, collision: Collision, shouldCalculatePos: boolean
     }
     collisionOfEdgeAndEdge() {
-        // todo
-        // edge0: Edge, edge1: Edge, collision: Collision
+        var edge0 = Edge.fromVertex0And1(Coords.fromXY(0, 0), Coords.fromXY(1, 1));
+        var edge1 = Edge.fromVertex0And1(Coords.fromXY(0, 1), Coords.fromXY(1, 0));
+        var collision = this._collisionHelper.collisionOfEdgeAndEdge(edge0, edge1, Collision.create());
+        Assert.isTrue(collision.isActive);
     }
     collisionOfEdgeAndFace() {
         // todo
@@ -328,13 +356,26 @@ class CollisionHelperTests extends TestFixture {
         // sphere: Sphere, mesh: Mesh, collision: Collision): Collision
     }
     collisionOfSpheres() {
-        // todo
-        // sphere0: Sphere, sphere1: Sphere, collision: Collision): Collision
+        var sphere0 = Sphere.fromRadiusAndCenter(1, new Coords(0, 0, 0));
+        var sphere1 = Sphere.fromRadiusAndCenter(1, new Coords(1, 0, 0));
+        var collision = this._collisionHelper.collisionOfSpheres(sphere0, sphere1, Collision.create());
+        Assert.isTrue(collision.isActive);
     }
     // doXAndYCollide
     doBoxAndBoxCollide() {
-        // todo
-        // box0: Box, box1: Box): boolean
+        // First, three concentric boxes at origin all collide with each other.
+        var doBoxesCollide = this._collisionHelper.doBoxAndBoxCollide(this._boxOfSide1AtOrigin, this._boxOfSide2AtOrigin);
+        Assert.isTrue(doBoxesCollide);
+        doBoxesCollide = this._collisionHelper.doBoxAndBoxCollide(this._boxOfSide1AtOrigin, this._boxOfSide3AtOrigin);
+        Assert.isTrue(doBoxesCollide);
+        doBoxesCollide = this._collisionHelper.doBoxAndBoxCollide(this._boxOfSide2AtOrigin, this._boxOfSide3AtOrigin);
+        Assert.isTrue(doBoxesCollide);
+        // These boxes touch, but don't collide.
+        doBoxesCollide = this._collisionHelper.doBoxAndBoxCollide(this._boxOfSide1AtOrigin, this._boxOfSide1AtX1);
+        Assert.isFalse(doBoxesCollide);
+        // These boxes don't even touch, much less collide
+        doBoxesCollide = this._collisionHelper.doBoxAndBoxCollide(this._boxOfSide1AtOrigin, this._boxOfSide1AtX2);
+        Assert.isFalse(doBoxesCollide);
     }
     doBoxAndBoxRotatedCollide() {
         // todo
@@ -511,12 +552,22 @@ class CollisionHelperTests extends TestFixture {
         // todo - hemispace: Hemispace, sphere: Sphere): boolean
     }
     doesSphereContainBox() {
-        // todo - sphere: Sphere, box: Box): boolean
+        var sphere = Sphere.fromRadiusAndCenter(2, new Coords(0, 0, 0));
+        var box = Box.fromSizeAndCenter(new Coords(1, 1, 1), new Coords(0, 0, 0));
+        var doesSphereContainBox = this._collisionHelper.doesSphereContainBox(sphere, box);
+        Assert.isTrue(doesSphereContainBox);
     }
     doesSphereContainHemispace() {
-        // todo - sphere: Sphere, hemispace: Hemispace): boolean
+        var sphere = Sphere.fromRadiusAndCenter(1, new Coords(0, 0, 0));
+        var hemispace = new Hemispace(new Plane(new Coords(1, 0, 0), 0));
+        var doesSphereContainHemispace = this._collisionHelper.doesSphereContainHemispace(sphere, hemispace);
+        // A hemispace infinitely large, so no sphere will ever contain it.
+        Assert.isFalse(doesSphereContainHemispace);
     }
     doesSphereContainSphere() {
-        // todo - sphere0: Sphere, sphere1: Sphere): boolean
+        var sphereContained = Sphere.fromRadiusAndCenter(1, new Coords(0, 0, 0));
+        var sphereContaining = Sphere.fromRadiusAndCenter(2, new Coords(0, 0, 0));
+        Assert.isTrue(this._collisionHelper.doesSphereContainSphere(sphereContaining, sphereContained));
+        Assert.isFalse(this._collisionHelper.doesSphereContainSphere(sphereContained, sphereContaining));
     }
 }
