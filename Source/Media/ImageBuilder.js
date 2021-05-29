@@ -6,7 +6,7 @@ var ThisCouldBeBetter;
         class ImageBuilder {
             constructor(colors) {
                 this.colors = colors;
-                this.colorsByCodeChar =
+                this.colorsByCode =
                     GameFramework.ArrayHelper.addLookups(this.colors, x => x.code);
             }
             // static methods
@@ -14,7 +14,7 @@ var ThisCouldBeBetter;
                 return this.buildImageFromStringsScaled(name, GameFramework.Coords.Instances().Ones, stringsForPixels);
             }
             buildImagesFromStringArrays(name, stringArraysForImagePixels) {
-                var returnValue = [];
+                var returnValue = new Array();
                 for (var i = 0; i < stringArraysForImagePixels.length; i++) {
                     var stringsForImagePixels = stringArraysForImagePixels[i];
                     var image = this.buildImageFromStrings(name + i, stringsForImagePixels);
@@ -30,7 +30,7 @@ var ThisCouldBeBetter;
                 var graphics = canvas.getContext("2d");
                 var pixelPos = GameFramework.Coords.create();
                 var colorForPixel;
-                var colors = this.colorsByCodeChar;
+                var colors = this.colorsByCode;
                 for (var y = 0; y < sizeInPixels.y; y++) {
                     var stringForPixelRow = stringsForPixels[y];
                     pixelPos.y = y * scaleFactor.y;
@@ -72,7 +72,7 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             sliceImageIntoTiles(imageToSlice, sizeInTiles) {
-                var returnImages = [];
+                var returnImages = new Array();
                 var systemImageToSlice = imageToSlice.systemImage;
                 var imageToSliceSize = imageToSlice.sizeInPixels;
                 var tileSize = imageToSliceSize.clone().divide(sizeInTiles);
@@ -80,7 +80,7 @@ var ThisCouldBeBetter;
                 var sourcePos = GameFramework.Coords.create();
                 for (var y = 0; y < sizeInTiles.y; y++) {
                     tilePos.y = y;
-                    var returnImageRow = [];
+                    var returnImageRow = new Array();
                     for (var x = 0; x < sizeInTiles.x; x++) {
                         tilePos.x = x;
                         var canvas = document.createElement("canvas");

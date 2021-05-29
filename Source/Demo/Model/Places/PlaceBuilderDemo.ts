@@ -457,7 +457,7 @@ class PlaceBuilderDemo // Main.
 			new Coords(0, -1, 0), new Coords(1, -1, 0)
 		];
 
-		var colorToTerrainVisualsByName = (colorName: string) =>
+		var colorToTerrainVisualByName = (colorName: string) =>
 		{
 			var color = Color.byName(colorName);
 			var borderWidthAsFraction = .25;
@@ -679,12 +679,14 @@ class PlaceBuilderDemo // Main.
 			var visualsInOrder =
 				visualNamesInOrder.map( (x: string) => visualsByName.get(x));
 
-			return visualsInOrder;
+			var visualsAsGroup = new VisualGroup(visualsInOrder);
+
+			return visualsAsGroup;
 		};
 
 		var universe = this.universe;
 
-		var terrainNameToVisuals = (terrainName: string) =>
+		var terrainNameToVisual = (terrainName: string) =>
 		{
 			var imageName = "Terrain-" + terrainName;
 			var terrainVisualImageCombined =
@@ -864,21 +866,23 @@ class PlaceBuilderDemo // Main.
 				terrainVisualETop
 			];
 
-			return terrainVisuals;
+			var terrainVisualsAsGroup = new VisualGroup(terrainVisuals);
+
+			return terrainVisualsAsGroup;
 		}
 
 		var terrains =
 		[
-						//name, codeChar, level, isBlocking, visual
-			new Terrain("Water", 	"~", 0, new Traversable(true), colorToTerrainVisualsByName("Blue")),
-			new Terrain("Sand", 	".", 1, new Traversable(false), terrainNameToVisuals("Sand") ),
-			new Terrain("Grass", 	":", 2, new Traversable(false), colorToTerrainVisualsByName("Green")),
-			new Terrain("Trees", 	"Q", 3, new Traversable(false), colorToTerrainVisualsByName("GreenDark")),
-			new Terrain("Rock", 	"A", 4, new Traversable(false), colorToTerrainVisualsByName("Gray")),
-			new Terrain("Snow", 	"*", 5, new Traversable(false), colorToTerrainVisualsByName("White")),
+			//name, codeChar, level, isBlocking, visual
+			new Terrain("Water", 	"~", 0, new Traversable(true), colorToTerrainVisualByName("Blue")),
+			new Terrain("Sand", 	".", 1, new Traversable(false), terrainNameToVisual("Sand") ),
+			new Terrain("Grass", 	":", 2, new Traversable(false), colorToTerrainVisualByName("Green")),
+			new Terrain("Trees", 	"Q", 3, new Traversable(false), colorToTerrainVisualByName("GreenDark")),
+			new Terrain("Rock", 	"A", 4, new Traversable(false), colorToTerrainVisualByName("Gray")),
+			new Terrain("Snow", 	"*", 5, new Traversable(false), colorToTerrainVisualByName("White")),
 		]
 		var terrainsByName = ArrayHelper.addLookupsByName(terrains);
-		var terrainsByCodeChar: any = ArrayHelper.addLookups(terrains, (x: Terrain) => x.codeChar);
+		var terrainsByCode = ArrayHelper.addLookups(terrains, (x: Terrain) => x.code);
 
 		var map = new MapOfCells<any>
 		(
@@ -891,9 +895,9 @@ class PlaceBuilderDemo // Main.
 				if (cellPosInCells.isInRangeMax(map.sizeInCellsMinusOnes))
 				{
 					var cellCode = map.cellSource[cellPosInCells.y][cellPosInCells.x];
-					var cellTerrain = (terrainsByCodeChar.get(cellCode) || terrains[0]);
+					var cellTerrain = (terrainsByCode.get(cellCode) || terrains[0]);
 					var cellVisualName = cellTerrain.name;
-					var cellIsBlocking = cellTerrain.isBlocking;
+					var cellIsBlocking = cellTerrain.traversable.isBlocking;
 					var cellToOverwriteAsAny: any = cellToOverwrite;
 					cellToOverwriteAsAny.visualName = cellVisualName;
 					cellToOverwriteAsAny.isBlocking = cellIsBlocking;
@@ -907,14 +911,14 @@ class PlaceBuilderDemo // Main.
 			mapCellSource
 		);
 
-		var mapAndCellPosToEntity = (map: MapOfCells<any>, cellPosInCells: any) =>
+		var mapAndCellPosToEntity = (map: MapOfCells<any>, cellPosInCells: Coords) =>
 		{
 			var cellVisuals = [];
 
 			var cell = map.cellAtPosInCells(cellPosInCells);
 			var cellTerrain = terrainsByName.get(cell.visualName);
 
-			var cellTerrainVisuals = cellTerrain.visuals;
+			var cellTerrainVisuals = (cellTerrain.visual as VisualGroup).children;
 			cellVisuals.push(cellTerrainVisuals[0]);
 
 			var cellPosInPixels = cellPosInCells.clone().multiply(map.cellSize);
@@ -998,7 +1002,8 @@ class PlaceBuilderDemo // Main.
 					var neighborTerrainToUse = neighborTerrains[neighborIndexToUse];
 					var borderVisualIndex =
 						1 + ( (n - 1) / 2) * borderTypeCount + borderTypeIndex;
-					var visualForBorder = neighborTerrainToUse.visuals[borderVisualIndex];
+					var visualForBorder =
+						(neighborTerrainToUse.visual as VisualGroup).children[borderVisualIndex];
 					cellVisuals.push(visualForBorder);
 				}
 			}
