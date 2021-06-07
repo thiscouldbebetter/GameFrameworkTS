@@ -29,7 +29,7 @@ var ThisCouldBeBetter;
             }
             overwriteWith(other) {
                 var otherAsVisualPolygon = other;
-                GameFramework.ArrayHelper.overwriteWith(this.verticesAsPath, otherAsVisualPolygon.verticesAsPath);
+                this.verticesAsPath.overwriteWith(otherAsVisualPolygon.verticesAsPath);
                 if (this.colorFill != null) {
                     this.colorFill.overwriteWith(otherAsVisualPolygon.colorFill);
                 }

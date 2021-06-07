@@ -65,6 +65,10 @@ export class Universe
 		this.serializer = new Serializer();
 
 		this.venueNext = null;
+
+		var debuggingModeName =
+			URLParser.fromWindow().queryStringParameterByName("debug");
+		this.debuggingModeName = debuggingModeName;
 	}
 
 	// static methods
@@ -78,7 +82,7 @@ export class Universe
 		mediaLibrary: MediaLibrary,
 		controlBuilder: ControlBuilder,
 		worldCreate: (u: Universe) => World
-	)
+	): Universe
 	{
 		var returnValue = new Universe
 		(
@@ -91,14 +95,10 @@ export class Universe
 			worldCreate
 		);
 
-		var debuggingModeName =
-			URLParser.fromWindow().queryStringParameters["debug"];
-		returnValue.debuggingModeName = debuggingModeName;
-
 		return returnValue;
 	}
 
-	static default()
+	static default(): Universe
 	{
 		var universe = Universe.create
 		(
@@ -119,7 +119,7 @@ export class Universe
 
 	// instance methods
 
-	initialize(callback: (u: Universe) => void)
+	initialize(callback: (u: Universe) => void): void
 	{
 		this.platformHelper.initialize(this);
 		this.storageHelper = new StorageHelper
@@ -135,17 +135,26 @@ export class Universe
 		this.soundHelper = new SoundHelper(this.mediaLibrary.sounds);
 		this.videoHelper = new VideoHelper(this.mediaLibrary.videos);
 
-		var venueControlsOpening: Venue = this.controlBuilder.opening
-		(
-			this, this.display.sizeInPixels,
-		).toVenue();
+		var venueInitial: Venue = null;
 
-		venueControlsOpening = VenueFader.fromVenuesToAndFrom
+		if (this.debuggingModeName == "SkipOpening")
+		{
+			venueInitial = Profile.venueWorldGenerate(this);
+		}
+		else
+		{
+			venueInitial = this.controlBuilder.opening
+			(
+				this, this.display.sizeInPixels,
+			).toVenue();
+		}
+
+		venueInitial = VenueFader.fromVenuesToAndFrom
 		(
-			venueControlsOpening, venueControlsOpening
+			venueInitial, venueInitial
 		);
 
-		this.venueNext = venueControlsOpening;
+		this.venueNext = venueInitial;
 
 		this.inputHelper = new InputHelper();
 		this.inputHelper.initialize(this);
@@ -157,18 +166,18 @@ export class Universe
 		);
 	}
 
-	reset()
+	reset(): void
 	{
 		// hack
 		this.soundHelper.reset();
 	}
 
-	start()
+	start(): void
 	{
 		this.timerHelper.initialize(this.updateForTimerTick.bind(this));
 	}
 
-	updateForTimerTick()
+	updateForTimerTick(): void
 	{
 		this.inputHelper.updateForTimerTick(this);
 
@@ -196,7 +205,7 @@ export class Universe
 		this.displayRecorder.updateForTimerTick(this);
 	}
 
-	worldCreate()
+	worldCreate(): World
 	{
 		return this._worldCreate(this);
 	}

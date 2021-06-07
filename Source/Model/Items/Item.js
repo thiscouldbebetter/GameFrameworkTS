@@ -18,9 +18,11 @@ var ThisCouldBeBetter;
                 return this.quantity * this.defn(world).mass;
             }
             toEntity(u, w, p, e) {
-                var defn = this.defn(w);
-                var returnValue = defn.toEntity(u, w, p, e, this);
-                return returnValue;
+                if (this._entity == null) {
+                    var defn = this.defn(w);
+                    this._entity = defn.toEntity(u, w, p, e, this);
+                }
+                return this._entity;
             }
             toString(world) {
                 return this.defn(world).appearance + " (" + this.quantity + ")";

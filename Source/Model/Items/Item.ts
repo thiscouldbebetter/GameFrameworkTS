@@ -7,6 +7,8 @@ export class Item implements EntityProperty
 	defnName: string;
 	quantity: number;
 
+	_entity: Entity;
+
 	constructor(defnName: string, quantity: number)
 	{
 		this.defnName = defnName;
@@ -30,9 +32,12 @@ export class Item implements EntityProperty
 
 	toEntity(u: Universe, w: World, p: Place, e: Entity): Entity
 	{
-		var defn = this.defn(w);
-		var returnValue = defn.toEntity(u, w, p, e, this);
-		return returnValue;
+		if (this._entity == null)
+		{
+			var defn = this.defn(w);
+			this._entity = defn.toEntity(u, w, p, e, this);
+		}
+		return this._entity;
 	}
 
 	toString(world: World): string

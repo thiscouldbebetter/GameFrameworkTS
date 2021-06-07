@@ -857,46 +857,6 @@ export class Profile
 			}
 		};
 
-		var skip = () =>
-		{
-			var messageAsDataBinding = new DataBinding
-			(
-				null, // Will be set below.
-				(c: VenueTask) => "Generating world...",
-				null
-			);
-
-			var venueMessage = VenueMessage.fromMessage
-			(
-				messageAsDataBinding
-			);
-
-			var venueTask = new VenueTask
-			(
-				venueMessage,
-				() => // perform
-				{
-					return universe.worldCreate();
-				},
-				(universe: Universe, world: World) => // done
-				{
-					universe.world = world;
-
-					var profile = Profile.anonymous();
-					universe.profile = profile;
-
-					var venueNext: Venue = universe.world.toVenue();
-					venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-					universe.venueNext = venueNext;
-				}
-			);
-
-			messageAsDataBinding.contextSet(venueTask);
-
-			universe.venueNext = VenueFader.fromVenuesToAndFrom(venueTask, universe.venueCurrent);
-
-		};
-
 		var deleteProfileConfirm = () =>
 		{
 			var profileSelected = universe.profile;
@@ -1006,7 +966,11 @@ export class Profile
 					fontHeight,
 					true, // hasBorder
 					true, // isEnabled
-					skip // click
+					// click
+					() =>
+					{
+						universe.venueNext = Profile.venueWorldGenerate(universe);
+					}
 				),
 
 				ControlButton.from8
@@ -1044,6 +1008,45 @@ export class Profile
 
 		return returnValue;
 	}
+
+	static venueWorldGenerate(universe: Universe): Venue
+	{
+		var messageAsDataBinding = DataBinding.fromGet
+		(
+			(c: VenueTask) => "Generating world...",
+		);
+
+		var venueMessage =
+			VenueMessage.fromMessage(messageAsDataBinding);
+
+		var venueTask = new VenueTask
+		(
+			venueMessage,
+			() => universe.worldCreate(), // perform
+			(universe: Universe, world: World) => // done
+			{
+				universe.world = world;
+
+				var profile = Profile.anonymous();
+				universe.profile = profile;
+
+				var venueNext: Venue = universe.world.toVenue();
+				venueNext = VenueFader.fromVenuesToAndFrom
+				(
+					venueNext, universe.venueCurrent
+				);
+				universe.venueNext = venueNext;
+			}
+		);
+
+		messageAsDataBinding.contextSet(venueTask);
+
+		var returnValue =
+			VenueFader.fromVenuesToAndFrom(venueTask, universe.venueCurrent);
+
+		return returnValue;
+	}
+
 }
 
 }

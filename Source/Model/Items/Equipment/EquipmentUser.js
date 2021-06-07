@@ -7,6 +7,24 @@ var ThisCouldBeBetter;
             constructor(socketDefnGroup) {
                 this.socketGroup = new GameFramework.EquipmentSocketGroup(socketDefnGroup);
             }
+            equipAll(universe, world, place, entityEquipmentUser) {
+                var itemHolder = entityEquipmentUser.itemHolder();
+                var itemsNotYetEquipped = itemHolder.items;
+                var sockets = this.socketGroup.sockets;
+                for (var s = 0; s < sockets.length; s++) {
+                    var socket = sockets[s];
+                    if (socket.itemEntityEquipped == null) {
+                        var socketDefn = socket.defn(this.socketGroup.defnGroup);
+                        var categoriesEquippableNames = socketDefn.categoriesAllowedNames;
+                        var itemsEquippable = itemsNotYetEquipped.filter((x) => GameFramework.ArrayHelper.intersectArrays(x.defn(world).categoryNames, categoriesEquippableNames).length > 0);
+                        if (itemsEquippable.length > 0) {
+                            var itemToEquip = itemsEquippable[0];
+                            var itemToEquipAsEntity = itemToEquip.toEntity(universe, world, place, entityEquipmentUser);
+                            this.equipItemEntityInSocketWithName(universe, world, place, entityEquipmentUser, itemToEquipAsEntity, socket.defnName, true);
+                        }
+                    }
+                }
+            }
             equipEntityWithItem(universe, world, place, entityEquipmentUser, itemEntityToEquip) {
                 if (itemEntityToEquip == null) {
                     return null;

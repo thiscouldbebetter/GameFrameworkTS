@@ -23,12 +23,12 @@ var ThisCouldBeBetter;
                 this.randomizer = new GameFramework.RandomizerSystem();
                 this.serializer = new GameFramework.Serializer();
                 this.venueNext = null;
+                var debuggingModeName = GameFramework.URLParser.fromWindow().queryStringParameterByName("debug");
+                this.debuggingModeName = debuggingModeName;
             }
             // static methods
             static create(name, version, timerHelper, display, mediaLibrary, controlBuilder, worldCreate) {
                 var returnValue = new Universe(name, version, timerHelper, display, mediaLibrary, controlBuilder, worldCreate);
-                var debuggingModeName = GameFramework.URLParser.fromWindow().queryStringParameters["debug"];
-                returnValue.debuggingModeName = debuggingModeName;
                 return returnValue;
             }
             static default() {
@@ -44,9 +44,15 @@ var ThisCouldBeBetter;
                 this.platformHelper.platformableAdd(this.display);
                 this.soundHelper = new GameFramework.SoundHelper(this.mediaLibrary.sounds);
                 this.videoHelper = new GameFramework.VideoHelper(this.mediaLibrary.videos);
-                var venueControlsOpening = this.controlBuilder.opening(this, this.display.sizeInPixels).toVenue();
-                venueControlsOpening = GameFramework.VenueFader.fromVenuesToAndFrom(venueControlsOpening, venueControlsOpening);
-                this.venueNext = venueControlsOpening;
+                var venueInitial = null;
+                if (this.debuggingModeName == "SkipOpening") {
+                    venueInitial = GameFramework.Profile.venueWorldGenerate(this);
+                }
+                else {
+                    venueInitial = this.controlBuilder.opening(this, this.display.sizeInPixels).toVenue();
+                }
+                venueInitial = GameFramework.VenueFader.fromVenuesToAndFrom(venueInitial, venueInitial);
+                this.venueNext = venueInitial;
                 this.inputHelper = new GameFramework.InputHelper();
                 this.inputHelper.initialize(this);
                 var universe = this;

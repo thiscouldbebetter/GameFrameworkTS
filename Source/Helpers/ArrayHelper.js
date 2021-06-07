@@ -131,6 +131,17 @@ var ThisCouldBeBetter;
                 array.splice(index, 0, element);
                 return array;
             }
+            static intersectArrays(array0, array1) {
+                var elementsInBothArrays = new Array();
+                for (var i = 0; i < array0.length; i++) {
+                    var element = array0[i];
+                    var isElementInArray1 = (array1.indexOf(element) >= 0);
+                    if (isElementInArray1) {
+                        elementsInBothArrays.push(element);
+                    }
+                }
+                return elementsInBothArrays;
+            }
             static overwriteWith(array, other) {
                 for (var i = 0; i < array.length; i++) {
                     var elementThis = array[i];

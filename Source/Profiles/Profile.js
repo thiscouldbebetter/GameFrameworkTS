@@ -425,25 +425,6 @@ var ThisCouldBeBetter;
                         universe.venueNext = venueNext;
                     }
                 };
-                var skip = () => {
-                    var messageAsDataBinding = new GameFramework.DataBinding(null, // Will be set below.
-                    (c) => "Generating world...", null);
-                    var venueMessage = GameFramework.VenueMessage.fromMessage(messageAsDataBinding);
-                    var venueTask = new GameFramework.VenueTask(venueMessage, () => // perform
-                     {
-                        return universe.worldCreate();
-                    }, (universe, world) => // done
-                     {
-                        universe.world = world;
-                        var profile = Profile.anonymous();
-                        universe.profile = profile;
-                        var venueNext = universe.world.toVenue();
-                        venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-                        universe.venueNext = venueNext;
-                    });
-                    messageAsDataBinding.contextSet(venueTask);
-                    universe.venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueTask, universe.venueCurrent);
-                };
                 var deleteProfileConfirm = () => {
                     var profileSelected = universe.profile;
                     var storageHelper = universe.storageHelper;
@@ -498,8 +479,10 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(35, buttonHeightBase), // size
                     "Skip", fontHeight, true, // hasBorder
                     true, // isEnabled
-                    skip // click
-                    ),
+                    // click
+                    () => {
+                        universe.venueNext = Profile.venueWorldGenerate(universe);
+                    }),
                     GameFramework.ControlButton.from8("buttonDelete", GameFramework.Coords.fromXY(150, 95), // pos
                     GameFramework.Coords.fromXY(20, buttonHeightBase), // size
                     "X", fontHeight, true, // hasBorder
@@ -518,6 +501,23 @@ var ThisCouldBeBetter;
                     }),
                 ]);
                 returnValue.scalePosAndSize(scaleMultiplier);
+                return returnValue;
+            }
+            static venueWorldGenerate(universe) {
+                var messageAsDataBinding = GameFramework.DataBinding.fromGet((c) => "Generating world...");
+                var venueMessage = GameFramework.VenueMessage.fromMessage(messageAsDataBinding);
+                var venueTask = new GameFramework.VenueTask(venueMessage, () => universe.worldCreate(), // perform
+                (universe, world) => // done
+                 {
+                    universe.world = world;
+                    var profile = Profile.anonymous();
+                    universe.profile = profile;
+                    var venueNext = universe.world.toVenue();
+                    venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
+                    universe.venueNext = venueNext;
+                });
+                messageAsDataBinding.contextSet(venueTask);
+                var returnValue = GameFramework.VenueFader.fromVenuesToAndFrom(venueTask, universe.venueCurrent);
                 return returnValue;
             }
         }

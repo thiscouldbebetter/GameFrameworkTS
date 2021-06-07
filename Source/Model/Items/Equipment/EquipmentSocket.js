@@ -13,7 +13,7 @@ var ThisCouldBeBetter;
             }
             toString(world) {
                 var itemEntityEquippedAsString = (this.itemEntityEquipped == null
-                    ? " [empty] "
+                    ? "[empty]"
                     : this.itemEntityEquipped.item().toString(world));
                 var returnValue = this.defnName + ": " + itemEntityEquippedAsString;
                 return returnValue;

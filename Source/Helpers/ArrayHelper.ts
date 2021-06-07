@@ -185,13 +185,30 @@ export class ArrayHelper
 		return array;
 	}
 
-	static insertElementAt(array: any, element: any, index: number)
+	static insertElementAt(array: any[], element: any, index: number)
 	{
 		array.splice(index, 0, element);
 		return array;
 	}
 
-	static overwriteWith(array: any, other: any)
+	static intersectArrays(array0: any[], array1: any[]): any[]
+	{
+		var elementsInBothArrays = new Array<any>();
+
+		for (var i = 0; i < array0.length; i++)
+		{
+			var element = array0[i];
+
+			var isElementInArray1 = (array1.indexOf(element) >= 0);
+			if (isElementInArray1)
+			{
+				elementsInBothArrays.push(element);
+			}
+		}
+		return elementsInBothArrays;
+	}
+
+	static overwriteWith(array: any[], other: any[])
 	{
 		for (var i = 0; i < array.length; i++)
 		{

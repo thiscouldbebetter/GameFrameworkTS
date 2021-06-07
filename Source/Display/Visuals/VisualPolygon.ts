@@ -70,7 +70,7 @@ export class VisualPolygon implements Visual
 	overwriteWith(other: Visual): Visual
 	{
 		var otherAsVisualPolygon = other as VisualPolygon
-		ArrayHelper.overwriteWith(this.verticesAsPath, otherAsVisualPolygon.verticesAsPath);
+		this.verticesAsPath.overwriteWith(otherAsVisualPolygon.verticesAsPath);
 		if (this.colorFill != null)
 		{
 			this.colorFill.overwriteWith(otherAsVisualPolygon.colorFill);
