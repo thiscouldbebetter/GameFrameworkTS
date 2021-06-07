@@ -1912,7 +1912,7 @@ class PlaceBuilderDemo // Main.
 			{
 				// todo
 			},
-			(u: Universe, world: World, p: Place, entityUser: Entity, entityDevice: Entity) => // use
+			(u: Universe, w: World, p: Place, entityUser: Entity, entityDevice: Entity) => // use
 			{
 				var userAsItemHolder = entityUser.itemHolder();
 				var hasAmmo = userAsItemHolder.hasItemWithDefnNameAndQuantity("Bomb", 1);
@@ -1922,7 +1922,10 @@ class PlaceBuilderDemo // Main.
 				}
 
 				userAsItemHolder.itemSubtractDefnNameAndQuantity("Bomb", 1);
-				entityUser.equipmentUser().unequipItemsNoLongerHeld(entityUser);
+				entityUser.equipmentUser().unequipItemsNoLongerHeld
+				(
+					u, w, p, entityUser
+				);
 
 				var userLoc = entityUser.locatable().loc;
 				var userPos = userLoc.pos;
@@ -2059,10 +2062,10 @@ class PlaceBuilderDemo // Main.
 
 		var itemBowCollider = new Sphere(Coords.create(), entityDimension / 2);
 
-		var itemBowUse = (u: Universe, world: World, p: Place, entityUser: Entity, entityDevice: Entity) => // use
+		var itemBowUse = (u: Universe, w: World, p: Place, entityUser: Entity, entityDevice: Entity) => // use
 		{
 			var device = entityDevice.device();
-			var tickCurrent = world.timerTicksSoFar;
+			var tickCurrent = w.timerTicksSoFar;
 			var ticksSinceUsed = tickCurrent - device.tickLastUsed;
 			if (ticksSinceUsed < device.ticksToCharge)
 			{
@@ -2077,7 +2080,10 @@ class PlaceBuilderDemo // Main.
 			}
 
 			userAsItemHolder.itemSubtractDefnNameAndQuantity("Arrow", 1);
-			entityUser.equipmentUser().unequipItemsNoLongerHeld(entityUser);
+			entityUser.equipmentUser().unequipItemsNoLongerHeld
+			(
+				u, w, p, entityUser
+			);
 
 			device.tickLastUsed = tickCurrent;
 
@@ -2090,7 +2096,7 @@ class PlaceBuilderDemo // Main.
 			var projectileDimension = 1.5;
 
 			var itemArrow = userAsItemHolder.itemsByDefnName("Arrow")[0];
-			var itemArrowDefn = itemArrow.defn(world);
+			var itemArrowDefn = itemArrow.defn(w);
 			var projectileVisual = itemArrowDefn.visual;
 
 			var userDirection = userVel.clone().normalize();

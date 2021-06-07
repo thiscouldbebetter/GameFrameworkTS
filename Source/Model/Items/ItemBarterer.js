@@ -34,7 +34,7 @@ var ThisCouldBeBetter;
                 this.itemHolderCustomerOffer.itemsAllTransferTo(entityCustomer.itemHolder());
                 this.itemHolderStoreOffer.itemsAllTransferTo(entityStore.itemHolder());
             }
-            trade(entityCustomer, entityStore) {
+            trade(universe, world, place, entityCustomer, entityStore) {
                 this.itemHolderCustomerOffer.itemsAllTransferTo(entityStore.itemHolder());
                 this.itemHolderStoreOffer.itemsAllTransferTo(entityCustomer.itemHolder());
                 var entities = [entityCustomer, entityStore];
@@ -42,7 +42,7 @@ var ThisCouldBeBetter;
                     var entity = entities[i];
                     var entityEquipmentUser = entity.equipmentUser();
                     if (entityEquipmentUser != null) {
-                        entityEquipmentUser.unequipItemsNoLongerHeld(entity);
+                        entityEquipmentUser.unequipItemsNoLongerHeld(universe, world, place, entity);
                     }
                 }
             }
@@ -100,7 +100,7 @@ var ThisCouldBeBetter;
                         var isCustomerDonatingToStore = (profitMargin == Number.POSITIVE_INFINITY);
                         if (isCustomerDonatingToStore) {
                             itemBarterer.statusMessage = "Very well, I accept your gift.";
-                            itemBarterer.trade(entityCustomer, entityStore);
+                            itemBarterer.trade(universe, universe.world, universe.world.placeCurrent, entityCustomer, entityStore);
                             itemBarterer.patienceAdd(1);
                         }
                         else {
@@ -111,7 +111,7 @@ var ThisCouldBeBetter;
                         var isOfferAccepted = itemBarterer.isOfferProfitableEnough(world);
                         if (isOfferAccepted) {
                             itemBarterer.statusMessage = "It's a deal!";
-                            itemBarterer.trade(entityCustomer, entityStore);
+                            itemBarterer.trade(universe, universe.world, universe.world.placeCurrent, entityCustomer, entityStore);
                             itemBarterer.patienceAdd(1);
                         }
                         else {

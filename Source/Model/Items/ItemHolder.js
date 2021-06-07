@@ -31,7 +31,7 @@ var ThisCouldBeBetter;
                     var equipmentUser = entityItemHolder.equipmentUser();
                     var socketName = "Item" + slotNumber;
                     var includeSocketNameInMessage = true;
-                    var itemEntityToEquip = itemToEquip.toEntity();
+                    var itemEntityToEquip = itemToEquip.toEntity(universe, world, place, entityItemHolder);
                     var message = equipmentUser.equipItemEntityInSocketWithName(universe, world, place, entityItemHolder, itemEntityToEquip, socketName, includeSocketNameInMessage);
                     this.statusMessage = message;
                 }
@@ -44,8 +44,8 @@ var ThisCouldBeBetter;
                 var returnValue = (itemExistingQuantity >= quantityToCheck);
                 return returnValue;
             }
-            itemEntities() {
-                return this.items.map(x => x.toEntity());
+            itemEntities(u, w, p, e) {
+                return this.items.map(x => x.toEntity(u, w, p, e));
             }
             itemsAdd(itemsToAdd) {
                 itemsToAdd.forEach((x) => this.itemAdd(x));
@@ -105,7 +105,7 @@ var ThisCouldBeBetter;
             itemEntityPickUp(universe, world, place, entityItemHolder, itemEntityToPickUp) {
                 var itemToPickUp = itemEntityToPickUp.item();
                 this.itemAdd(itemToPickUp);
-                place.entitiesToRemove.push(itemEntityToPickUp);
+                place.entityToRemoveAdd(itemEntityToPickUp);
             }
             itemRemove(itemToRemove) {
                 var doesExist = this.items.indexOf(itemToRemove) >= 0;
@@ -203,7 +203,7 @@ var ThisCouldBeBetter;
                 if (size == null) {
                     size = universe.display.sizeDefault().clone();
                 }
-                var sizeBase = GameFramework.Coords.fromXY(200, 135);
+                var sizeBase = new GameFramework.Coords(200, 135, 1);
                 var fontHeight = 10;
                 var fontHeightSmall = fontHeight * .6;
                 var fontHeightLarge = fontHeight * 1.5;
@@ -215,19 +215,22 @@ var ThisCouldBeBetter;
                     universe.venueNext = venueNext;
                 };
                 var drop = () => {
-                    var itemEntityToKeep = itemHolder.itemSelected.toEntity();
-                    if (itemEntityToKeep != null) {
+                    if (itemHolder.itemSelected == null) {
+                        return;
+                    }
+                    var itemToKeep = itemHolder.itemSelected;
+                    if (itemToKeep != null) {
                         var world = universe.world;
                         var place = world.placeCurrent;
-                        var itemEntityToDrop = itemEntityToKeep.clone();
-                        var itemToDrop = itemEntityToDrop.item();
+                        var itemToDrop = itemToKeep.clone();
                         itemToDrop.quantity = 1;
                         var itemToDropDefn = itemToDrop.defn(world);
+                        var itemEntityToDrop = itemToDrop.toEntity(universe, world, place, entityItemHolder);
                         var itemLocatable = itemEntityToDrop.locatable();
                         if (itemLocatable == null) {
                             itemLocatable = GameFramework.Locatable.create();
-                            itemEntityToDrop.propertyAddForPlace(itemLocatable, place);
-                            itemEntityToDrop.propertyAddForPlace(GameFramework.Drawable.fromVisual(itemToDropDefn.visual), place);
+                            itemEntityToDrop.propertyAdd(itemLocatable);
+                            itemEntityToDrop.propertyAdd(GameFramework.Drawable.fromVisual(itemToDropDefn.visual));
                             // todo - Other properties: Collidable, etc.
                         }
                         var posToDropAt = itemLocatable.loc.pos;
@@ -235,22 +238,23 @@ var ThisCouldBeBetter;
                         posToDropAt.overwriteWith(holderPos);
                         var collidable = itemEntityToDrop.collidable();
                         if (collidable != null) {
-                            collidable.ticksUntilCanCollide = collidable.ticksToWaitBetweenCollisions;
+                            collidable.ticksUntilCanCollide =
+                                collidable.ticksToWaitBetweenCollisions;
                         }
                         place.entitySpawn(universe, world, itemEntityToDrop);
                         itemHolder.itemSubtract(itemToDrop);
-                        if (itemEntityToKeep.item().quantity == 0) {
+                        if (itemToKeep.quantity == 0) {
                             itemHolder.itemSelected = null;
                         }
                         itemHolder.statusMessage = itemToDropDefn.appearance + " dropped.";
                         var equipmentUser = entityItemHolder.equipmentUser();
                         if (equipmentUser != null) {
-                            equipmentUser.unequipItemEntity(itemEntityToKeep);
+                            equipmentUser.unequipItemsNoLongerHeld(universe, world, world.placeCurrent, entityItemHolder);
                         }
                     }
                 };
                 var use = () => {
-                    var itemEntityToUse = itemHolder.itemSelected.toEntity();
+                    var itemEntityToUse = itemHolder.itemSelected.toEntity(universe, universe.world, universe.world.placeCurrent, entityItemHolder);
                     if (itemEntityToUse != null) {
                         var itemToUse = itemEntityToUse.item();
                         if (itemToUse.use != null) {
@@ -296,7 +300,27 @@ var ThisCouldBeBetter;
                 };
                 var buttonSize = GameFramework.Coords.fromXY(20, 10);
                 var visualNone = new GameFramework.VisualNone();
+                /*
+                // todo
+                var controlVisualBackground = ControlVisual.from4
+                (
+                    "imageBackground",
+                    Coords.zeroes(),
+                    sizeBase.clone(), // size
+                    DataBinding.fromContext<Visual>
+                    (
+                        new VisualGroup
+                        ([
+                            new VisualImageScaled
+                            (
+                                new VisualImageFromLibrary("Title"), size
+                            )
+                        ])
+                    )
+                );
+                */
                 var childControls = [
+                    //controlVisualBackground,
                     new GameFramework.ControlLabel("labelItemsHeld", GameFramework.Coords.fromXY(10, 5), // pos
                     GameFramework.Coords.fromXY(70, 25), // size
                     false, // isTextCentered

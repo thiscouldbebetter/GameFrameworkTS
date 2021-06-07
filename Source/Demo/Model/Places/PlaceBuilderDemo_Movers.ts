@@ -1026,7 +1026,7 @@ class PlaceBuilderDemo_Movers
 				)[0];
 				if (itemGrassInReach != null)
 				{
-					place.entitiesToRemove.push(itemGrassInReach);
+					place.entityToRemoveAdd(itemGrassInReach);
 				}
 				activity.targetSet(null);
 			}
@@ -1449,75 +1449,12 @@ class PlaceBuilderDemo_Movers
 
 		var controllable = this.entityDefnBuildPlayer_Controllable();
 
-		var playerActivityPerform =
-			(universe: Universe, world: World, place: Place, entityPlayer: Entity) =>
-		{
-			var inputHelper = universe.inputHelper;
-			if (inputHelper.isMouseClicked(null))
-			{
-				var selector = entityPlayer.selector();
-
-				inputHelper.isMouseClicked(false);
-				var mousePosRelativeToCameraView = inputHelper.mouseClickPos;
-
-				var camera = place.camera().camera();
-
-				var mousePosAbsolute = mousePosRelativeToCameraView.clone().divide
-				(
-					universe.display.scaleFactor()
-				).add
-				(
-					camera.loc.pos
-				).subtract
-				(
-					camera.viewSizeHalf
-				).clearZ();
-
-				var entitiesInPlace = place.entities;
-				var range = 20;
-				var entityToSelect = entitiesInPlace.filter
-				(
-					x =>
-						(
-							selector.entitiesSelected.indexOf(x) == -1
-							&& x.locatable() != null
-							&& x.locatable().distanceFromPos(mousePosAbsolute) < range
-						)
-				).sort
-				(
-					(a: Entity, b: Entity) =>
-						a.locatable().distanceFromPos(mousePosAbsolute)
-						- b.locatable().distanceFromPos(mousePosAbsolute)
-				)[0];
-
-				selector.entitiesDeselectAll();
-				if (entityToSelect != null)
-				{
-					selector.entitySelect(entityToSelect);
-				}
-			}
-
-			var placeDefn = place.defn(world);
-			var actionsByName = placeDefn.actionsByName;
-			var actionToInputsMappingsByInputName = placeDefn.actionToInputsMappingsByInputName;
-			var actionsToPerform = inputHelper.actionsFromInput
-			(
-				actionsByName, actionToInputsMappingsByInputName
-			);
-			for (var i = 0; i < actionsToPerform.length; i++)
-			{
-				var action = actionsToPerform[i];
-				action.perform(universe, world, place, entityPlayer);
-			}
-		};
-
-		var playerActivityDefn = new ActivityDefn("Player", playerActivityPerform);
-		this.parent.activityDefns.push(playerActivityDefn);
-		var playerActivity = Activity.fromDefnNameAndTarget
+		var playerActivityDefn = new ActivityDefn
 		(
-			ActivityDefn.Instances().Simultaneous.name,
-			[ playerActivityDefn.name ]
+			"Player", this.entityDefnBuildPlayer_PlayerActivityPerform
 		);
+		this.parent.activityDefns.push(playerActivityDefn);
+		var playerActivity = Activity.fromDefnName(playerActivityDefn.name);
 
 		var playerActivityWaitPerform =
 			(universe: Universe, world: World, place: Place, entityPlayer: Entity) =>
@@ -1608,6 +1545,116 @@ class PlaceBuilderDemo_Movers
 		);
 
 		return playerEntityDefn;
+	}
+
+	entityDefnBuildPlayer_PlayerActivityPerform
+	(
+		universe: Universe, world: World, place: Place, entityPlayer: Entity
+	): void
+	{
+		var inputHelper = universe.inputHelper;
+		if (inputHelper.isMouseClicked(null))
+		{
+			var selector = entityPlayer.selector();
+
+			inputHelper.isMouseClicked(false);
+			var mousePosRelativeToCameraView = inputHelper.mouseClickPos;
+
+			var camera = place.camera().camera();
+
+			var mousePosAbsolute = mousePosRelativeToCameraView.clone().divide
+			(
+				universe.display.scaleFactor()
+			).add
+			(
+				camera.loc.pos
+			).subtract
+			(
+				camera.viewSizeHalf
+			).clearZ();
+
+			var entitiesInPlace = place.entities;
+			var range = 20;
+			var entityToSelect = entitiesInPlace.filter
+			(
+				x =>
+					(
+						selector.entitiesSelected.indexOf(x) == -1
+						&& x.locatable() != null
+						&& x.locatable().distanceFromPos(mousePosAbsolute) < range
+					)
+			).sort
+			(
+				(a: Entity, b: Entity) =>
+					a.locatable().distanceFromPos(mousePosAbsolute)
+					- b.locatable().distanceFromPos(mousePosAbsolute)
+			)[0];
+
+			selector.entitiesDeselectAll();
+			if (entityToSelect != null)
+			{
+				selector.entitySelect(entityToSelect);
+			}
+		}
+
+		var placeDefn = place.defn(world);
+		var actionsByName = placeDefn.actionsByName;
+		var actionToInputsMappingsByInputName = placeDefn.actionToInputsMappingsByInputName;
+		var actionsToPerform = inputHelper.actionsFromInput
+		(
+			actionsByName, actionToInputsMappingsByInputName
+		);
+		for (var i = 0; i < actionsToPerform.length; i++)
+		{
+			var action = actionsToPerform[i];
+			action.perform(universe, world, place, entityPlayer);
+		}
+
+		var activity = entityPlayer.actor().activity;
+		var itemEntityToPickUp = activity.targetByName("ItemEntityToPickUp");
+		if (itemEntityToPickUp != null)
+		{
+			var entityPickingUp = entityPlayer;
+			var itemEntityGettingPickedUp = itemEntityToPickUp;
+
+			var entityPickingUpLocatable = entityPickingUp.locatable();
+
+			var itemLocatable = itemEntityGettingPickedUp.locatable();
+			var distance =
+				itemLocatable.approachOtherWithAccelerationAndSpeedMax //ToDistance
+				(
+					entityPickingUpLocatable, .5, 4 //, 1
+				);
+			itemLocatable.loc.orientation.default(); // hack
+
+			if (distance < 1)
+			{
+				activity.targetClearByName("ItemEntityToPickUp");
+
+				var itemHolder = entityPickingUp.itemHolder();
+				itemHolder.itemEntityPickUp
+				(
+					universe, world, place, entityPickingUp,
+					itemEntityGettingPickedUp
+				);
+
+				var equipmentUser = entityPickingUp.equipmentUser();
+				if (equipmentUser != null)
+				{
+					equipmentUser.equipItemEntityInFirstOpenQuickSlot
+					(
+						universe, world, place, entityPickingUp,
+						itemEntityGettingPickedUp, true // includeSocketNameInMessage
+					);
+					equipmentUser.unequipItemsNoLongerHeld
+					(
+						universe, world, place, entityPickingUp
+					);
+				}
+			}
+
+
+		}
 	}
 
 	entityDefnBuildPlayer_Controllable()

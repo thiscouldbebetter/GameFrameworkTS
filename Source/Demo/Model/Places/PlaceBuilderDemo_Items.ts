@@ -74,11 +74,11 @@ class PlaceBuilderDemo_Items
 		var itemArmorColor = Color.byName("GreenDark");
 		var path = new Path
 		([
-			new Coords(0, 0.5, 0),
-			new Coords(-.5, 0, 0),
-			new Coords(-.5, -.5, 0),
-			new Coords(.5, -.5, 0),
-			new Coords(.5, 0, 0),
+			Coords.fromXY(0, 0.5),
+			Coords.fromXY(-.5, 0),
+			Coords.fromXY(-.5, -.5),
+			Coords.fromXY(.5, -.5),
+			Coords.fromXY(.5, 0),
 		]).transform
 		(
 			Transform_Scale.fromScalar(this.entityDimension)
@@ -98,7 +98,7 @@ class PlaceBuilderDemo_Items
 					(
 						itemArmorName, itemArmorColor
 					),
-					new Coords(0, 0 - this.entityDimension, 0)
+					Coords.fromXY(0, 0 - this.entityDimension)
 				)
 			);
 		}
@@ -106,7 +106,7 @@ class PlaceBuilderDemo_Items
 		var itemArmor = new ItemDefn
 		(
 			itemArmorName, null, null, 50, 30, null, [ "Armor" ],
-			this.itemUseEquip, itemArmorVisual
+			this.itemUseEquip, itemArmorVisual, null
 		);
 
 		return itemArmor;
@@ -118,11 +118,11 @@ class PlaceBuilderDemo_Items
 		var itemArmorColor = Color.byName("GreenDark");
 		var path = new Path
 		([
-			new Coords(0, 0.5, 0),
-			new Coords(-.5, 0, 0),
-			new Coords(-.5, -.5, 0),
-			new Coords(.5, -.5, 0),
-			new Coords(.5, 0, 0),
+			Coords.fromXY(0, 0.5),
+			Coords.fromXY(-.5, 0),
+			Coords.fromXY(-.5, -.5),
+			Coords.fromXY(.5, -.5),
+			Coords.fromXY(.5, 0),
 		]).transform
 		(
 			Transform_Scale.fromScalar(this.entityDimension)
@@ -142,7 +142,7 @@ class PlaceBuilderDemo_Items
 					(
 						itemArmorName, itemArmorColor
 					),
-					new Coords(0, 0 - this.entityDimension, 0)
+					Coords.fromXY(0, 0 - this.entityDimension)
 				)
 			);
 		}
@@ -150,7 +150,7 @@ class PlaceBuilderDemo_Items
 		var itemArmor = new ItemDefn
 		(
 			itemArmorName, null, null, 50, 30, null, [ "Armor" ],
-			this.itemUseEquip, itemArmorVisual
+			this.itemUseEquip, itemArmorVisual, null
 		);
 
 		return itemArmor;
@@ -163,14 +163,14 @@ class PlaceBuilderDemo_Items
 
 		var itemArrowVisualShaft = new VisualLine
 		(
-			new Coords(-5, 0, 0), new Coords(5, 0, 0), Color.byName("Brown"), 1 // lineThickness
+			Coords.fromXY(-5, 0), Coords.fromXY(5, 0), Color.byName("Brown"), 1 // lineThickness
 		);
 
 		var pathHead = new Path
 		([
-			new Coords(1, 0, 0),
-			new Coords(0.5, .25, 0),
-			new Coords(0.5, -.25, 0),
+			Coords.fromXY(1, 0),
+			Coords.fromXY(0.5, .25),
+			Coords.fromXY(0.5, -.25),
 		]).transform
 		(
 			Transform_Scale.fromScalar(this.entityDimension)
@@ -183,11 +183,11 @@ class PlaceBuilderDemo_Items
 		var pathTail = new Path
 		([
 			Coords.create(),
-			new Coords(-.5, .25, 0),
-			new Coords(-.75, .25, 0),
-			new Coords(-.5, 0, 0),
-			new Coords(-.75, -.25, 0),
-			new Coords(-.5, -.25, 0),
+			Coords.fromXY(-.5, .25),
+			Coords.fromXY(-.75, .25),
+			Coords.fromXY(-.5, 0),
+			Coords.fromXY(-.75, -.25),
+			Coords.fromXY(-.5, -.25),
 		]).transform
 		(
 			Transform_Scale.fromScalar(this.entityDimension)
@@ -219,9 +219,9 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemArrow = new ItemDefn
+		var itemArrow = ItemDefn.fromNameMassValueAndVisual
 		(
-			itemArrowName, null, null, .05, 5, null, null, null, itemArrowVisual
+			itemArrowName, .05, 5, itemArrowVisual
 		);
 
 		return itemArrow;
@@ -241,7 +241,7 @@ class PlaceBuilderDemo_Items
 					new Coords(.2, 1, 1).multiplyScalar(this.entityDimensionHalf),
 					Color.byName("Tan")
 				),
-				new Coords(0, -1, 0).multiplyScalar(this.entityDimensionHalf)
+				Coords.fromXY(0, -1).multiplyScalar(this.entityDimensionHalf)
 			),
 			// body
 			VisualCircle.fromRadiusAndColorFill
@@ -255,7 +255,7 @@ class PlaceBuilderDemo_Items
 				(
 					this.entityDimensionHalf * .3, Color.byName("Blue")
 				),
-				new Coords(-this.entityDimensionHalf / 3, -this.entityDimensionHalf / 3, 0)
+				Coords.fromXY(-this.entityDimensionHalf / 3, -this.entityDimensionHalf / 3)
 			)
 		]);
 
@@ -266,12 +266,16 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					VisualText.fromTextAndColor(itemBombName, itemBombColor),
-					new Coords(0, 0 - this.entityDimension * 2, 0)
+					Coords.fromXY(0, 0 - this.entityDimension * 2)
 				)
 			);
 		}
 
-		var itemBomb = new ItemDefn(itemBombName, null, null, 5, 10, null, [ "Wieldable" ], this.itemUseEquip, itemBombVisual);
+		var itemBomb = new ItemDefn
+		(
+			itemBombName, null, null, 5, 10, null, [ "Wieldable" ],
+			this.itemUseEquip, itemBombVisual, null
+		);
 
 		return itemBomb;
 	}
@@ -284,17 +288,17 @@ class PlaceBuilderDemo_Items
 		([
 			VisualRectangle.fromSizeAndColorFill
 			(
-				new Coords(1, 1.25, 0).multiplyScalar(this.entityDimension),
+				Coords.fromXY(1, 1.25).multiplyScalar(this.entityDimension),
 				itemBookColor
 			),
 			new VisualOffset
 			(
 				VisualRectangle.fromSizeAndColorFill
 				(
-					new Coords(.1, 1.1, 0).multiplyScalar(this.entityDimension),
+					Coords.fromXY(.1, 1.1).multiplyScalar(this.entityDimension),
 					Color.byName("White")
 				),
-				new Coords(.4, 0, 0).multiplyScalar(this.entityDimension)
+				Coords.fromXY(.4, 0).multiplyScalar(this.entityDimension)
 			)
 		]);
 
@@ -308,72 +312,75 @@ class PlaceBuilderDemo_Items
 					(
 						itemBookName, itemBookColor
 					),
-					new Coords(0, 0 - this.entityDimension * 1.5, 0)
+					Coords.fromXY(0, 0 - this.entityDimension * 1.5)
 				)
 			);
 		}
+
+		var itemBookUse = (universe: Universe, world: World, place: Place, entityUser: Entity, entityItem: Entity) => // use
+		{
+			var venuePrev = universe.venueCurrent;
+			var back = () =>
+			{
+				var venueNext: Venue = venuePrev;
+				venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
+				universe.venueNext = venueNext;
+			};
+
+			var text =
+				"Fourscore and seven years ago, our fathers brought forth upon this continent "
+				+ "a new nation, conceived in liberty, and dedicated to the proposition that "
+				+ " all men are created equal. ";
+			var size = universe.display.sizeInPixels.clone();
+			var fontHeight = 10;
+			var textarea = new ControlTextarea
+			(
+				"textareaContents",
+				size.clone().half().half(),
+				size.clone().half(),
+				DataBinding.fromContext(text),
+				fontHeight,
+				DataBinding.fromContext<boolean>(false) // isEnabled
+			);
+			var button = new ControlButton
+			(
+				"buttonDone",
+				Coords.fromXY(size.x / 4, 3 * size.y / 4 + fontHeight),
+				Coords.fromXY(size.x / 2, fontHeight * 2),
+				"Done",
+				fontHeight,
+				true, // hasBorder
+				true, // isEnabled
+				back, // click
+				null, null
+			);
+			var container = new ControlContainer
+			(
+				"containerBook",
+				Coords.create(),
+				size.clone(),
+				[ textarea, button ], // children
+				[
+					new Action( ControlActionNames.Instances().ControlCancel, back ),
+					new Action( ControlActionNames.Instances().ControlConfirm, back )
+				],
+				null
+			);
+
+			var venueNext: Venue = container.toVenue();
+			venueNext = VenueFader.fromVenueTo(venueNext);
+			universe.venueNext = venueNext;
+
+			return "";
+		};
 
 		var itemBook = new ItemDefn
 		(
 			itemBookName, null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize
 			null, // categoryNames
-			(universe: Universe, world: World, place: Place, entityUser: Entity, entityItem: Entity) => // use
-			{
-				var venuePrev = universe.venueCurrent;
-				var back = () =>
-				{
-					var venueNext: Venue = venuePrev;
-					venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-					universe.venueNext = venueNext;
-				};
-
-				var text =
-					"Fourscore and seven years ago, our fathers brought forth upon this continent "
-					+ "a new nation, conceived in liberty, and dedicated to the proposition that "
-					+ " all men are created equal. ";
-				var size = universe.display.sizeInPixels.clone();
-				var fontHeight = 10;
-				var textarea = new ControlTextarea
-				(
-					"textareaContents",
-					size.clone().half().half(),
-					size.clone().half(),
-					DataBinding.fromContext(text),
-					fontHeight,
-					DataBinding.fromContext<boolean>(false) // isEnabled
-				);
-				var button = new ControlButton
-				(
-					"buttonDone",
-					new Coords(size.x / 4, 3 * size.y / 4 + fontHeight, 1),
-					new Coords(size.x / 2, fontHeight * 2, 1),
-					"Done",
-					fontHeight,
-					true, // hasBorder
-					true, // isEnabled
-					back, // click
-					null, null
-				);
-				var container = new ControlContainer
-				(
-					"containerBook",
-					Coords.create(),
-					size.clone(),
-					[ textarea, button ], // children
-					[
-						new Action( ControlActionNames.Instances().ControlCancel, back ),
-						new Action( ControlActionNames.Instances().ControlConfirm, back )
-					],
-					null
-				);
-
-				var venueNext: Venue = container.toVenue();
-				venueNext = VenueFader.fromVenueTo(venueNext);
-				universe.venueNext = venueNext;
-
-				return "";
-			},
-			itemBookVisual
+			itemBookUse,
+			itemBookVisual,
+			null
 		);
 
 		return itemBook;
@@ -388,10 +395,10 @@ class PlaceBuilderDemo_Items
 		(
 			new Path
 			([
-				new Coords(0, -this.entityDimension, 0),
-				new Coords(1, -this.entityDimension, 0),
-				new Coords(1, this.entityDimension, 0),
-				new Coords(0, this.entityDimension, 0),
+				Coords.fromXY(0, -this.entityDimension),
+				Coords.fromXY(1, -this.entityDimension),
+				Coords.fromXY(1, this.entityDimension),
+				Coords.fromXY(0, this.entityDimension),
 			]),
 			Color.byName("White"),
 			null
@@ -401,7 +408,7 @@ class PlaceBuilderDemo_Items
 		(
 			this.entityDimension, // radiusOuter
 			this.entityDimension - 3, // radiusInner
-			new Coords(0, -1, 0), // directionMin
+			Coords.fromXY(0, -1), // directionMin
 			.5, // angleSpannedInTurns
 			itemBowColor,
 			null
@@ -423,12 +430,16 @@ class PlaceBuilderDemo_Items
 					(
 						itemBowName, itemBowColor
 					),
-					new Coords(0, 0 - this.entityDimension * 2, 0)
+					Coords.fromXY(0, 0 - this.entityDimension * 2)
 				)
 			);
 		}
 
-		var itemBow = new ItemDefn(itemBowName, null, null, 5, 100, null, [ "Wieldable" ], this.itemUseEquip, itemBowVisual);
+		var itemBow = new ItemDefn
+		(
+			itemBowName, null, null, 5, 100, null, [ "Wieldable" ],
+			this.itemUseEquip, itemBowVisual, null
+		);
 
 		return itemBow;
 	}
@@ -463,13 +474,13 @@ class PlaceBuilderDemo_Items
 			new VisualOffset
 			(
 				itemBreadVisualCut,
-				new Coords(-this.entityDimensionHalf * 0.75, 0, 0)
+				Coords.fromXY(-this.entityDimensionHalf * 0.75, 0)
 			),
 
 			new VisualOffset
 			(
 				itemBreadVisualCut,
-				new Coords(this.entityDimensionHalf * 0.75, 0, 0)
+				Coords.fromXY(this.entityDimensionHalf * 0.75, 0)
 			)
 		]);
 
@@ -480,7 +491,7 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					VisualText.fromTextAndColor(itemBreadName, itemBreadColor),
-					new Coords(0, 0 - this.entityDimension * 1.5, 0)
+					Coords.fromXY(0, 0 - this.entityDimension * 1.5)
 				)
 			);
 		}
@@ -497,7 +508,8 @@ class PlaceBuilderDemo_Items
 				var message = "You eat the bread.";
 				return message;
 			},
-			itemBreadVisual
+			itemBreadVisual,
+			null // toEntity
 		);
 
 		return itemBread;
@@ -526,12 +538,15 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					VisualText.fromTextAndColor(itemCoinName, itemCoinColor),
-					new Coords(0, 0 - this.entityDimension, 0)
+					Coords.fromXY(0, 0 - this.entityDimension)
 				)
 			);
 		}
 
-		var itemCoin = new ItemDefn(itemCoinName, null, null, .01, 1, null, null, null, itemCoinVisual);
+		var itemCoin = ItemDefn.fromNameMassValueAndVisual
+		(
+			itemCoinName, .01, 1, itemCoinVisual
+		);
 
 		return itemCoin;
 	}
@@ -546,15 +561,15 @@ class PlaceBuilderDemo_Items
 			(
 				new Path
 				([
-					new Coords(1, 0, 0),
-					new Coords(0, 1, 0),
-					new Coords(-1, 0, 0),
-					new Coords(0, -1, 0)
+					Coords.fromXY(1, 0),
+					Coords.fromXY(0, 1),
+					Coords.fromXY(-1, 0),
+					Coords.fromXY(0, -1)
 				]).transform
 				(
 					new Transform_Scale
 					(
-						new Coords(1, 1, 1).multiplyScalar(this.entityDimension / 2)
+						Coords.ones().multiplyScalar(this.entityDimension / 2)
 					)
 				),
 				itemCrystalColor,
@@ -564,15 +579,15 @@ class PlaceBuilderDemo_Items
 			(
 				new Path
 				([
-					new Coords(1, 0, 0),
-					new Coords(0, 1, 0),
-					new Coords(-1, 0, 0),
-					new Coords(0, -1, 0)
+					Coords.fromXY(1, 0),
+					Coords.fromXY(0, 1),
+					Coords.fromXY(-1, 0),
+					Coords.fromXY(0, -1)
 				]).transform
 				(
 					new Transform_Scale
 					(
-						new Coords(1, 1, 1).multiplyScalar(this.entityDimension / 4)
+						Coords.ones().multiplyScalar(this.entityDimension / 4)
 					)
 				),
 				Color.byName("White"),
@@ -587,17 +602,20 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					VisualText.fromTextAndColor(itemCrystalName, itemCrystalColor),
-					new Coords(0, 0 - this.entityDimension, 0)
+					Coords.fromXY(0, 0 - this.entityDimension)
 				)
 			);
 		}
 
-		var itemCrystal = new ItemDefn(itemCrystalName, null, null, .1, 1, null, null, null, itemCrystalVisual);
+		var itemCrystal = ItemDefn.fromNameMassValueAndVisual
+		(
+			itemCrystalName, .1, 1, itemCrystalVisual
+		);
 
 		return itemCrystal;
 	}
 
-	doughnut()
+	doughnut(): ItemDefn
 	{
 		var itemDoughnutName = "Doughnut";
 		var itemDoughnutColor = Color.byName("Orange");
@@ -621,7 +639,7 @@ class PlaceBuilderDemo_Items
 
 		var itemDoughnutVisual = new VisualBuffered
 		(
-			new Coords(1, 1, 0).multiplyScalar(this.entityDimension * 1.2),
+			Coords.fromXY(1, 1).multiplyScalar(this.entityDimension * 1.2),
 			itemDoughnutVisualBody
 		)
 
@@ -632,7 +650,7 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					VisualText.fromTextAndColor(itemDoughnutName, itemDoughnutColor),
-					new Coords(0, 0 - this.entityDimension * 2, 0)
+					Coords.fromXY(0, 0 - this.entityDimension * 2)
 				)
 			);
 		}
@@ -649,13 +667,13 @@ class PlaceBuilderDemo_Items
 				var message = "You eat the doughnut.";
 				return message;
 			},
-			itemDoughnutVisual
+			itemDoughnutVisual, null // toEntity
 		);
 
 		return itemDoughnut;
 	}
 
-	flower()
+	flower(): ItemDefn
 	{
 		var itemFlowerName = "Flower";
 		var colorFlower = Color.byName("Pink");
@@ -667,30 +685,30 @@ class PlaceBuilderDemo_Items
 				(
 					this.entityDimensionHalf * 2, // radiusOuter
 					this.entityDimensionHalf * 2 - 2, // radiusInner
-					new Coords(-1, 1, 0).normalize(), // directionMin
+					Coords.fromXY(-1, 1).normalize(), // directionMin
 					.25, // angleSpannedInTurns
 					Color.byName("GreenDark"),
 					null
 				),
-				new Coords(.5, 1.75, 0).multiplyScalar(this.entityDimensionHalf)
+				Coords.fromXY(.5, 1.75).multiplyScalar(this.entityDimensionHalf)
 			),
 			new VisualPolygon
 			(
 				new Path
 				([
-					new Coords(1, 0, 0),
-					new Coords(.3, .3, 0),
-					new Coords(0, 1, 0),
-					new Coords(-.3, .3, 0),
-					new Coords(-1, 0, 0),
-					new Coords(-.3, -.3, 0),
-					new Coords(0, -1, 0),
-					new Coords(.3, -.3, 0)
+					Coords.fromXY(1, 0),
+					Coords.fromXY(.3, .3),
+					Coords.fromXY(0, 1),
+					Coords.fromXY(-.3, .3),
+					Coords.fromXY(-1, 0),
+					Coords.fromXY(-.3, -.3),
+					Coords.fromXY(0, -1),
+					Coords.fromXY(.3, -.3)
 				]).transform
 				(
 					new Transform_Scale
 					(
-						new Coords(1, 1, 1).multiplyScalar(this.entityDimensionHalf)
+						Coords.ones().multiplyScalar(this.entityDimensionHalf)
 					)
 				),
 				colorFlower,
@@ -705,12 +723,15 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					VisualText.fromTextAndColor(itemFlowerName, colorFlower),
-					new Coords(0, 0 - this.entityDimensionHalf * 2, 0)
+					Coords.fromXY(0, 0 - this.entityDimensionHalf * 2)
 				)
 			);
 		}
 
-		var itemFlower = new ItemDefn(itemFlowerName, null, null, .01, 1, null, null, null, itemFlowerVisual);
+		var itemFlower = ItemDefn.fromNameMassValueAndVisual
+		(
+			itemFlowerName, .01, 1, itemFlowerVisual
+		);
 
 		return itemFlower;
 	}
@@ -731,7 +752,7 @@ class PlaceBuilderDemo_Items
 				(
 					this.entityDimensionHalf * .25, Color.byName("White")
 				),
-				new Coords(-this.entityDimensionHalf / 2, -this.entityDimensionHalf / 2, 0)
+				Coords.fromXY(-this.entityDimensionHalf / 2, -this.entityDimensionHalf / 2)
 			)
 		]);
 
@@ -742,7 +763,7 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					VisualText.fromTextAndColor(itemFruitName, itemFruitColor),
-					new Coords(0, 0 - this.entityDimension, 0)
+					Coords.fromXY(0, 0 - this.entityDimension)
 				)
 			);
 		}
@@ -759,7 +780,8 @@ class PlaceBuilderDemo_Items
 				var message = "You eat the fruit.";
 				return message;
 			},
-			itemFruitVisual
+			itemFruitVisual,
+			null // toEntity
 		);
 
 		return itemFruit;
@@ -776,15 +798,15 @@ class PlaceBuilderDemo_Items
 				new VisualImageScaled
 				(
 					new VisualImageFromLibrary("Grain"),
-					new Coords(.3, 1, 0).multiplyScalar(this.entityDimension * 2) // sizeScaled
+					Coords.fromXY(.3, 1).multiplyScalar(this.entityDimension * 2) // sizeScaled
 				),
-				new Coords(-.075, -1.2, 0).multiplyScalar(this.entityDimension)
+				Coords.fromXY(-.075, -1.2).multiplyScalar(this.entityDimension)
 			),
 			*/
 			new VisualImageScaled
 			(
 				new VisualImageFromLibrary("Grass"),
-				new Coords(1, 1, 0).multiplyScalar(this.entityDimension * 2) // sizeScaled
+				Coords.fromXY(1, 1).multiplyScalar(this.entityDimension * 2) // sizeScaled
 			),
 		]);
 
@@ -795,12 +817,15 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					VisualText.fromTextAndColor(itemGrassName, Color.byName("GreenDark")),
-					new Coords(0, 0 - this.entityDimensionHalf * 3, 0)
+					Coords.fromXY(0, 0 - this.entityDimensionHalf * 3)
 				)
 			);
 		}
 
-		var itemGrass = new ItemDefn(itemGrassName, null, null, .01, 1, null, null, null, itemGrassVisual);
+		var itemGrass = ItemDefn.fromNameMassValueAndVisual
+		(
+			itemGrassName, .01, 1, itemGrassVisual
+		);
 
 		return itemGrass;
 	}
@@ -818,12 +843,12 @@ class PlaceBuilderDemo_Items
 				(
 					entityDimensionQuarter, // radiusOuter
 					0, // radiusInner
-					new Coords(-1, 0, 0), // directionMin
+					Coords.fromXY(-1, 0), // directionMin
 					.5, // angleSpannedInTurns
 					itemHeartColor,
 					null
 				),
-				new Coords(-entityDimensionQuarter, 0, 0)
+				Coords.fromXY(-entityDimensionQuarter, 0)
 			),
 
 			new VisualOffset
@@ -832,21 +857,21 @@ class PlaceBuilderDemo_Items
 				(
 					entityDimensionQuarter, // radiusOuter
 					0, // radiusInner
-					new Coords(-1, 0, 0), // directionMin
+					Coords.fromXY(-1, 0), // directionMin
 					.5, // angleSpannedInTurns
 					itemHeartColor,
 					null
 				),
-				new Coords(entityDimensionQuarter, 0, 0)
+				Coords.fromXY(entityDimensionQuarter, 0)
 			),
 
 			new VisualPolygon
 			(
 				new Path
 				([
-					new Coords(-1.1, 0, 0),
-					new Coords(1.1, 0, 0),
-					new Coords(0, 1.3, 0),
+					Coords.fromXY(-1.1, 0),
+					Coords.fromXY(1.1, 0),
+					Coords.fromXY(0, 1.3),
 				]).transform
 				(
 					Transform_Scale.fromScalar(this.entityDimensionHalf)
@@ -863,17 +888,20 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					VisualText.fromTextAndColor(itemHeartName, itemHeartColor),
-					new Coords(0, 0 - this.entityDimension * 1.5, 0)
+					Coords.fromXY(0, 0 - this.entityDimension * 1.5)
 				)
 			);
 		}
 
 		var itemHeartVisualShifted = new VisualOffset
 		(
-			itemHeartVisual, new Coords(0, -entityDimensionQuarter, 0)
+			itemHeartVisual, Coords.fromXY(0, -entityDimensionQuarter)
 		);
 
-		var itemHeart = new ItemDefn(itemHeartName, null, null, 10, 1, null, null, null, itemHeartVisualShifted);
+		var itemHeart = ItemDefn.fromNameMassValueAndVisual
+		(
+			itemHeartName, 10, 1, itemHeartVisualShifted
+		);
 
 		return itemHeart;
 	}
@@ -888,10 +916,10 @@ class PlaceBuilderDemo_Items
 			(
 				new Path
 				([
-					new Coords(-0.5, 0.4, 0),
-					new Coords(0.5, 0.4, 0),
-					new Coords(0.2, -0.4, 0),
-					new Coords(-0.2, -0.4, 0),
+					Coords.fromXY(-0.5, 0.4),
+					Coords.fromXY(0.5, 0.4),
+					Coords.fromXY(0.2, -0.4),
+					Coords.fromXY(-0.2, -0.4),
 				]).transform
 				(
 					Transform_Scale.fromScalar(this.entityDimension)
@@ -908,12 +936,15 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					VisualText.fromTextAndColor(itemIronName, itemIronColor),
-					new Coords(0, 0 - this.entityDimension, 0)
+					Coords.fromXY(0, 0 - this.entityDimension)
 				)
 			);
 		}
 
-		var itemIron = new ItemDefn(itemIronName, null, null, 10, 5, null, null, null, itemIronVisual);
+		var itemIron = ItemDefn.fromNameMassValueAndVisual
+		(
+			itemIronName, 10, 5, itemIronVisual
+		);
 
 		return itemIron;
 	}
@@ -928,7 +959,7 @@ class PlaceBuilderDemo_Items
 			(
 				this.entityDimension / 2, // radiusOuter
 				0, // radiusInner
-				new Coords(-1, 0, 0), // directionMin
+				Coords.fromXY(-1, 0), // directionMin
 				.5, // angleSpannedInTurns
 				itemIronOreColor,
 				null
@@ -942,12 +973,15 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					VisualText.fromTextAndColor(itemIronOreName, itemIronOreColor),
-					new Coords(0, 0 - this.entityDimension * 1.5, 0)
+					Coords.fromXY(0, 0 - this.entityDimension * 1.5)
 				)
 			);
 		}
 
-		var itemIronOre = new ItemDefn(itemIronOreName, null, null, 10, 1, null, null, null, itemIronOreVisual);
+		var itemIronOre = ItemDefn.fromNameMassValueAndVisual
+		(
+			itemIronOreName, 10, 1, itemIronOreVisual
+		);
 
 		return itemIronOre;
 	}
@@ -978,7 +1012,7 @@ class PlaceBuilderDemo_Items
 					itemKeyColor,
 					this.entityDimensionHalf / 2 // lineThickness
 				),
-				new Coords(this.entityDimensionHalf, 0, 0)
+				Coords.fromXY(this.entityDimensionHalf, 0)
 			),
 		]);
 
@@ -989,12 +1023,15 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					VisualText.fromTextAndColor(itemKeyName, itemKeyColor),
-					new Coords(0, 0 - this.entityDimension * 2, 0)
+					Coords.fromXY(0, 0 - this.entityDimension * 2)
 				)
 			);
 		}
 
-		var itemKey = new ItemDefn(itemKeyName, null, null, .1, 5, null, null, null, itemKeyVisual);
+		var itemKey = ItemDefn.fromNameMassValueAndVisual
+		(
+			itemKeyName, .1, 5, itemKeyVisual
+		);
 
 		return itemKey;
 	}
@@ -1035,12 +1072,15 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					VisualText.fromTextAndColor(itemLogName, itemLogColor),
-					new Coords(0, 0 - this.entityDimension, 0)
+					Coords.fromXY(0, 0 - this.entityDimension)
 				)
 			);
 		}
 
-		var itemLog = new ItemDefn(itemLogName, null, null, 10, 1, null, null, null, itemLogVisual);
+		var itemLog = ItemDefn.fromNameMassValueAndVisual
+		(
+			itemLogName, 10, 1, itemLogVisual
+		);
 
 		return itemLog;
 	}
@@ -1093,7 +1133,8 @@ class PlaceBuilderDemo_Items
 				var message = "You eat the meat.";
 				return message;
 			},
-			itemMeatVisual
+			itemMeatVisual,
+			null
 		);
 
 		return itemMeat;
@@ -1107,25 +1148,25 @@ class PlaceBuilderDemo_Items
 		([
 			VisualRectangle.fromSizeAndColorFill
 			(
-				new Coords(1, 1, 0).multiplyScalar(this.entityDimension),
+				Coords.fromXY(1, 1).multiplyScalar(this.entityDimension),
 				Color.byName("White")
 			),
 			new VisualPolygon
 			(
 				new Path
 				([
-					new Coords(-0.5, -0.2, 0),
-					new Coords(-0.2, -0.2, 0),
-					new Coords(-0.2, -0.5, 0),
-					new Coords(0.2, -0.5, 0),
-					new Coords(0.2, -0.2, 0),
-					new Coords(0.5, -0.2, 0),
-					new Coords(0.5, 0.2, 0),
-					new Coords(0.2, 0.2, 0),
-					new Coords(0.2, 0.5, 0),
-					new Coords(-0.2, 0.5, 0),
-					new Coords(-0.2, 0.2, 0),
-					new Coords(-0.5, 0.2, 0)
+					Coords.fromXY(-0.5, -0.2),
+					Coords.fromXY(-0.2, -0.2),
+					Coords.fromXY(-0.2, -0.5),
+					Coords.fromXY(0.2, -0.5),
+					Coords.fromXY(0.2, -0.2),
+					Coords.fromXY(0.5, -0.2),
+					Coords.fromXY(0.5, 0.2),
+					Coords.fromXY(0.2, 0.2),
+					Coords.fromXY(0.2, 0.5),
+					Coords.fromXY(-0.2, 0.5),
+					Coords.fromXY(-0.2, 0.2),
+					Coords.fromXY(-0.5, 0.2)
 				]).transform
 				(
 					Transform_Scale.fromScalar(this.entityDimension)
@@ -1142,7 +1183,7 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					VisualText.fromTextAndColor(itemMedicineName, itemMedicineColor),
-					new Coords(0, 0 - this.entityDimension, 0)
+					Coords.fromXY(0, 0 - this.entityDimension)
 				)
 			);
 		}
@@ -1160,7 +1201,8 @@ class PlaceBuilderDemo_Items
 				var message = "You use the medicine.";
 				return message;
 			},
-			itemMedicineVisual
+			itemMedicineVisual,
+			null
 		);
 
 		return itemMedicine;
@@ -1179,18 +1221,18 @@ class PlaceBuilderDemo_Items
 				(
 					this.entityDimensionHalf, // radiusOuter
 					0, // radiusInner
-					new Coords(-1, 0, 0), // directionMin
+					Coords.fromXY(-1, 0), // directionMin
 					.5, // angleSpannedInTurns
 					colorCap,
 					null
 				),
-				new Coords(0, -this.entityDimensionHalf / 2, 0)
+				Coords.fromXY(0, -this.entityDimensionHalf / 2)
 			),
 			new VisualOffset
 			(
 				VisualRectangle.fromSizeAndColorFill
 				(
-					new Coords(this.entityDimensionHalf / 2, this.entityDimensionHalf, 0),
+					Coords.fromXY(this.entityDimensionHalf / 2, this.entityDimensionHalf),
 					colorStem
 				),
 				Coords.create()
@@ -1204,12 +1246,15 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					VisualText.fromTextAndColor(itemMushroomName, colorCap),
-					new Coords(0, 0 - this.entityDimensionHalf * 3, 0)
+					Coords.fromXY(0, 0 - this.entityDimensionHalf * 3)
 				)
 			);
 		}
 
-		var itemMushroom = new ItemDefn(itemMushroomName, null, null, .01, 1, null, null, null, itemMushroomVisual);
+		var itemMushroom = ItemDefn.fromNameMassValueAndVisual
+		(
+			itemMushroomName, .01, 1, itemMushroomVisual
+		);
 
 		return itemMushroom;
 	}
@@ -1224,19 +1269,19 @@ class PlaceBuilderDemo_Items
 			(
 				VisualRectangle.fromSizeAndColorFill
 				(
-					new Coords(this.entityDimension / 4, this.entityDimension, 0),
+					Coords.fromXY(this.entityDimension / 4, this.entityDimension),
 					Color.byName("Brown")
 				),
-				new Coords(0, 0 - this.entityDimension / 2, 0)
+				Coords.fromXY(0, 0 - this.entityDimension / 2)
 			),
 			new VisualPolygon
 			(
 				new Path
 				([
-					new Coords(0.75, -1, 0),
-					new Coords(-0.75, -1, 0),
-					new Coords(-0.5, -1.4, 0),
-					new Coords(0.5, -1.4, 0)
+					Coords.fromXY(0.75, -1),
+					Coords.fromXY(-0.75, -1),
+					Coords.fromXY(-0.5, -1.4),
+					Coords.fromXY(0.5, -1.4)
 				]).transform
 				(
 					Transform_Scale.fromScalar(this.entityDimension)
@@ -1253,12 +1298,16 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					VisualText.fromTextAndColor(itemPickName, itemPickColor),
-					new Coords(0, 0 - this.entityDimension * 2, 0)
+					Coords.fromXY(0, 0 - this.entityDimension * 2)
 				)
 			);
 		}
 
-		var itemPick = new ItemDefn(itemPickName, null, null, 1, 30, null, [ "Wieldable" ], this.itemUseEquip, itemPickVisual);
+		var itemPick = new ItemDefn
+		(
+			itemPickName, null, null, 1, 30, null, [ "Wieldable" ],
+			this.itemUseEquip, itemPickVisual, null
+		);
 
 		return itemPick;
 	}
@@ -1273,25 +1322,25 @@ class PlaceBuilderDemo_Items
 		([
 			VisualRectangle.fromSizeAndColorFill
 			(
-				new Coords(1, 1, 0).multiplyScalar(this.entityDimension),
+				Coords.fromXY(1, 1).multiplyScalar(this.entityDimension),
 				Color.byName("White")
 			),
 			new VisualPolygon
 			(
 				new Path
 				([
-					new Coords(-0.5, -0.2, 0),
-					new Coords(-0.2, -0.2, 0),
-					new Coords(-0.2, -0.5, 0),
-					new Coords(0.2, -0.5, 0),
-					new Coords(0.2, -0.2, 0),
-					new Coords(0.5, -0.2, 0),
-					new Coords(0.5, 0.2, 0),
-					new Coords(0.2, 0.2, 0),
-					new Coords(0.2, 0.5, 0),
-					new Coords(-0.2, 0.5, 0),
-					new Coords(-0.2, 0.2, 0),
-					new Coords(-0.5, 0.2, 0)
+					Coords.fromXY(-0.5, -0.2),
+					Coords.fromXY(-0.2, -0.2),
+					Coords.fromXY(-0.2, -0.5),
+					Coords.fromXY(0.2, -0.5),
+					Coords.fromXY(0.2, -0.2),
+					Coords.fromXY(0.5, -0.2),
+					Coords.fromXY(0.5, 0.2),
+					Coords.fromXY(0.2, 0.2),
+					Coords.fromXY(0.2, 0.5),
+					Coords.fromXY(-0.2, 0.5),
+					Coords.fromXY(-0.2, 0.2),
+					Coords.fromXY(-0.5, 0.2)
 				]).transform
 				(
 					Transform_Scale.fromScalar(this.entityDimension)
@@ -1308,7 +1357,7 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					VisualText.fromTextAndColor(itemPotionName, itemPotionColor),
-					new Coords(0, 0 - this.entityDimension, 0)
+					Coords.fromXY(0, 0 - this.entityDimension)
 				)
 			);
 		}
@@ -1326,7 +1375,8 @@ class PlaceBuilderDemo_Items
 				var message = "You use the medicine.";
 				return message;
 			},
-			itemPotionVisual
+			itemPotionVisual,
+			null
 		);
 
 		return itemPotion;
@@ -1342,20 +1392,20 @@ class PlaceBuilderDemo_Items
 			(
 				VisualRectangle.fromSizeAndColorFill
 				(
-					new Coords(this.entityDimension / 4, this.entityDimension, 0),
+					Coords.fromXY(this.entityDimension / 4, this.entityDimension),
 					Color.byName("Brown")
 				),
-				new Coords(0, 0 + this.entityDimension / 2, 0)
+				Coords.fromXY(0, 0 + this.entityDimension / 2)
 			),
 			new VisualPolygon
 			(
 				new Path
 				([
-					new Coords(0.5, 1.5, 0),
-					new Coords(0, 1.75, 0),
-					new Coords(-0.5, 1.5, 0),
-					new Coords(-0.5, 1.0, 0),
-					new Coords(0.5, 1.0, 0)
+					Coords.fromXY(0.5, 1.5),
+					Coords.fromXY(0, 1.75),
+					Coords.fromXY(-0.5, 1.5),
+					Coords.fromXY(-0.5, 1.0),
+					Coords.fromXY(0.5, 1.0)
 				]).transform
 				(
 					Transform_Scale.fromScalar(this.entityDimension)
@@ -1375,12 +1425,16 @@ class PlaceBuilderDemo_Items
 					(
 						itemShovelName, itemShovelColor
 					),
-					new Coords(0, 0 - this.entityDimension * 2, 0)
+					Coords.fromXY(0, 0 - this.entityDimension * 2)
 				)
 			);
 		}
 
-		var itemShovel = new ItemDefn(itemShovelName, null, null, 1, 30, null, [ "Wieldable" ], this.itemUseEquip, itemShovelVisual);
+		var itemShovel = new ItemDefn
+		(
+			itemShovelName, null, null, 1, 30, null, [ "Wieldable" ],
+			this.itemUseEquip, itemShovelVisual, null
+		);
 
 		return itemShovel;
 	}
@@ -1395,11 +1449,11 @@ class PlaceBuilderDemo_Items
 			(
 				new Path
 				([
-					new Coords(0, .5, 0),
-					new Coords(1, .5, 0),
-					new Coords(.5, 0, 0),
-					new Coords(.5, -.5, 0),
-					new Coords(0, -.5, 0),
+					Coords.fromXY(0, .5),
+					Coords.fromXY(1, .5),
+					Coords.fromXY(.5, 0),
+					Coords.fromXY(.5, -.5),
+					Coords.fromXY(0, -.5),
 				]).transform
 				(
 					Transform_Scale.fromScalar(this.entityDimension)
@@ -1412,11 +1466,11 @@ class PlaceBuilderDemo_Items
 			(
 				new Path
 				([
-					new Coords(-.1, .5, 0),
-					new Coords(-1.1, .5, 0),
-					new Coords(-.6, 0, 0),
-					new Coords(-.6, -.5, 0),
-					new Coords(-.1, -.5, 0),
+					Coords.fromXY(-.1, .5),
+					Coords.fromXY(-1.1, .5),
+					Coords.fromXY(-.6, 0),
+					Coords.fromXY(-.6, -.5),
+					Coords.fromXY(-.1, -.5),
 				]).transform
 				(
 					Transform_Scale.fromScalar(this.entityDimension)
@@ -1433,14 +1487,15 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					VisualText.fromTextAndColor(itemSpeedBootsName, itemAccessoryColor),
-					new Coords(0, 0 - this.entityDimension * 2, 0)
+					Coords.fromXY(0, 0 - this.entityDimension * 2)
 				)
 			);
 		}
 
 		var itemSpeedBoots = new ItemDefn
 		(
-			itemSpeedBootsName, null, null, 10, 30, null, [ "Accessory" ], this.itemUseEquip, itemSpeedBootsVisual
+			itemSpeedBootsName, null, null, 10, 30, null, [ "Accessory" ],
+			this.itemUseEquip, itemSpeedBootsVisual, null
 		);
 
 		return itemSpeedBoots;
@@ -1449,7 +1504,11 @@ class PlaceBuilderDemo_Items
 	sword()
 	{
 		var itemSwordVisual = this.sword_Visual(Color.byName("GrayLight"));
-		var itemSword = new ItemDefn("Sword", null, null, 10, 100, null, [ "Wieldable" ], this.itemUseEquip, itemSwordVisual);
+		var itemSword = new ItemDefn
+		(
+			"Sword", null, null, 10, 100, null, [ "Wieldable" ],
+			this.itemUseEquip, itemSwordVisual, null
+		);
 		return itemSword;
 	}
 
@@ -1460,24 +1519,24 @@ class PlaceBuilderDemo_Items
 		var itemSwordVisualBladePath = new Path
 		([
 			// blade
-			new Coords(-0.4, 0.2, 0),
-			new Coords(.9, 0.2, 0),
-			new Coords(1.1, 0, 0),
-			new Coords(.9, -0.2, 0),
-			new Coords(-0.4, -0.2, 0),
+			Coords.fromXY(-0.4, 0.2),
+			Coords.fromXY(.9, 0.2),
+			Coords.fromXY(1.1, 0),
+			Coords.fromXY(.9, -0.2),
+			Coords.fromXY(-0.4, -0.2),
 		]);
 
 		var itemSwordVisualHiltPath = new Path
 		([
 			// hilt
-			new Coords(-0.4, -0.5, 0),
-			new Coords(-0.8, -0.5, 0),
-			new Coords(-0.8, -0.2, 0),
-			new Coords(-1.1, -0.2, 0),
-			new Coords(-1.1, 0.2, 0),
-			new Coords(-0.8, 0.2, 0),
-			new Coords(-0.8, 0.5, 0),
-			new Coords(-0.4, 0.5, 0)
+			Coords.fromXY(-0.4, -0.5),
+			Coords.fromXY(-0.8, -0.5),
+			Coords.fromXY(-0.8, -0.2),
+			Coords.fromXY(-1.1, -0.2),
+			Coords.fromXY(-1.1, 0.2),
+			Coords.fromXY(-0.8, 0.2),
+			Coords.fromXY(-0.8, 0.5),
+			Coords.fromXY(-0.4, 0.5)
 		]);
 
 		var transform = new Transform_Multiple
@@ -1517,7 +1576,7 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					VisualText.fromTextAndColor("Sword", bladeColor),
-					new Coords(0, 0 - this.entityDimension * 2, 0)
+					Coords.fromXY(0, 0 - this.entityDimension * 2)
 				)
 			);
 		}
@@ -1532,7 +1591,8 @@ class PlaceBuilderDemo_Items
 		var itemSwordVisual = this.sword_Visual(bladeColor);
 		var itemSword = new ItemDefn
 		(
-			"Sword" + damageTypeName, null, null, 10, 100, null, [ "Wieldable" ], this.itemUseEquip, itemSwordVisual
+			"Sword" + damageTypeName, null, null, 10, 100, null,
+			[ "Wieldable" ], this.itemUseEquip, itemSwordVisual, null
 		);
 		return itemSword;
 	}
@@ -1544,7 +1604,8 @@ class PlaceBuilderDemo_Items
 		var itemSwordVisual = this.sword_Visual(bladeColor);
 		var itemSword = new ItemDefn
 		(
-			"Sword" + damageTypeName, null, null, 10, 100, null, [ "Wieldable" ], this.itemUseEquip, itemSwordVisual
+			"Sword" + damageTypeName, null, null, 10, 100, null,
+			[ "Wieldable" ], this.itemUseEquip, itemSwordVisual, null
 		);
 		return itemSword;
 	}
@@ -1559,14 +1620,14 @@ class PlaceBuilderDemo_Items
 			(
 				VisualRectangle.fromSizeAndColorFill
 				(
-					new Coords(this.entityDimension / 4, this.entityDimension, 0),
+					Coords.fromXY(this.entityDimension / 4, this.entityDimension),
 					Color.byName("Brown")
 				),
-				new Coords(0, this.entityDimension / 2, 0)
+				Coords.fromXY(0, this.entityDimension / 2)
 			),
 			VisualRectangle.fromSizeAndColorFill
 			(
-				new Coords(this.entityDimension, this.entityDimension / 2, 0),
+				Coords.fromXY(this.entityDimension, this.entityDimension / 2),
 				itemToolsetColor
 			)
 		]);
@@ -1578,12 +1639,15 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					VisualText.fromTextAndColor(itemToolsetName, itemToolsetColor),
-					new Coords(0, 0 - this.entityDimension, 0)
+					Coords.fromXY(0, 0 - this.entityDimension)
 				)
 			);
 		}
 
-		var itemToolset = new ItemDefn(itemToolsetName, null, null, 1, 30, null, null, null, itemToolsetVisual);
+		var itemToolset = ItemDefn.fromNameMassValueAndVisual
+		(
+			itemToolsetName, 1, 30, itemToolsetVisual
+		);
 
 		return itemToolset;
 	}
@@ -1595,7 +1659,7 @@ class PlaceBuilderDemo_Items
 
 		var itemTorchVisualBody = VisualRectangle.fromSizeAndColorFill
 		(
-			new Coords(this.entityDimension / 3, this.entityDimension * 1.5, 0),
+			Coords.fromXY(this.entityDimension / 3, this.entityDimension * 1.5),
 			itemTorchColor
 		);
 
@@ -1622,13 +1686,13 @@ class PlaceBuilderDemo_Items
 			new VisualOffset
 			(
 				itemTorchVisualHead,
-				new Coords(0, 0 - this.entityDimension * .75, 0)
+				Coords.fromXY(0, 0 - this.entityDimension * .75)
 			),
 
 			new VisualOffset
 			(
 				itemTorchVisualFlame,
-				new Coords(0, 0 - this.entityDimension * .7, 0)
+				Coords.fromXY(0, 0 - this.entityDimension * .7)
 			)
 		]);
 
@@ -1639,7 +1703,7 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					VisualText.fromTextAndColor(itemTorchName, itemTorchColor),
-					new Coords(0, 0 - this.entityDimension * 1.5, 0)
+					Coords.fromXY(0, 0 - this.entityDimension * 1.5)
 				)
 			);
 		}
@@ -1649,7 +1713,7 @@ class PlaceBuilderDemo_Items
 			itemTorchName, null, null, 1, 4, null, // name, appearance, descripton, mass, value, stackSize
 			[ "Wieldable", "Consumable" ], // categoryNames
 			null, // use
-			itemTorchVisual
+			itemTorchVisual, null
 		);
 
 		return itemTorch;
@@ -1665,7 +1729,8 @@ class PlaceBuilderDemo_Items
 			{
 				return "There is no response but static.";
 			},
-			new VisualNone() // todo
+			new VisualNone(), // todo
+			null
 		);
 
 		return itemWalkieTalkie;
@@ -1683,26 +1748,26 @@ class PlaceBuilderDemo_Items
 				(
 					this.entityDimensionHalf, // radiusOuter
 					this.entityDimensionHalf / 2, // radiusInner
-					new Coords(-1, 0, 0).normalize(), // directionMin
+					Coords.fromXY(-1, 0).normalize(), // directionMin
 					.5, // angleSpannedInTurns
 					itemWeightColor,
 					null
 				),
-				new Coords(0, -1, 0).multiplyScalar(this.entityDimensionHalf)
+				Coords.fromXY(0, -1).multiplyScalar(this.entityDimensionHalf)
 			),
 			new VisualPolygon
 			(
 				new Path
 				([
-					new Coords(-.75, .5, 0),
-					new Coords(-.5, -.5, 0),
-					new Coords(.5, -.5, 0),
-					new Coords(.75, .5, 0)
+					Coords.fromXY(-.75, .5),
+					Coords.fromXY(-.5, -.5),
+					Coords.fromXY(.5, -.5),
+					Coords.fromXY(.75, .5)
 				]).transform
 				(
 					new Transform_Scale
 					(
-						new Coords(1, 1, 1).multiplyScalar(this.entityDimension)
+						Coords.ones().multiplyScalar(this.entityDimension)
 					)
 				),
 				itemWeightColor,
@@ -1717,12 +1782,15 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					VisualText.fromTextAndColor(itemWeightName, itemWeightColor),
-					new Coords(0, 0 - this.entityDimension * 2, 0)
+					Coords.fromXY(0, 0 - this.entityDimension * 2)
 				)
 			);
 		}
 
-		var itemWeight = new ItemDefn(itemWeightName, null, null, 2000, 5, null, null, null, itemWeightVisual);
+		var itemWeight = ItemDefn.fromNameMassValueAndVisual
+		(
+			itemWeightName, 2000, 5, itemWeightVisual
+		);
 
 		return itemWeight;
 	}

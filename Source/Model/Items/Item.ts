@@ -28,9 +28,11 @@ export class Item implements EntityProperty
 		return this.quantity * this.defn(world).mass;
 	}
 
-	toEntity(): Entity
+	toEntity(u: Universe, w: World, p: Place, e: Entity): Entity
 	{
-		return new Entity(this.defnName, [ this ]);
+		var defn = this.defn(w);
+		var returnValue = defn.toEntity(u, w, p, e, this);
+		return returnValue;
 	}
 
 	toString(world: World): string

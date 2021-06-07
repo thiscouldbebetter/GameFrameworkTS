@@ -13,6 +13,7 @@ export class ItemDefn implements EntityProperty
 	categoryNames: string[];
 	_use: (u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) => string;
 	visual: Visual;
+	_toEntity: (u: Universe, w: World, p: Place, e: Entity, i: Item) => Entity;
 
 	constructor
 	(
@@ -24,7 +25,8 @@ export class ItemDefn implements EntityProperty
 		stackSizeMax: number,
 		categoryNames: string[],
 		use: (u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) => string,
-		visual: Visual
+		visual: Visual,
+		toEntity: (u: Universe, w: World, p: Place, e: Entity, i: Item) => Entity
 	)
 	{
 		this.name = name;
@@ -37,28 +39,64 @@ export class ItemDefn implements EntityProperty
 		this.categoryNames = categoryNames || [];
 		this._use = use;
 		this.visual = visual;
+		this._toEntity = toEntity;
 	}
 
-	static new1(name: string): ItemDefn
+	static fromName(name: string): ItemDefn
 	{
-		return new ItemDefn(name, null, null, null, null, null, null, null, null);
+		return new ItemDefn
+		(
+			name, null, null, null, null, null, null, null, null, null
+		);
 	}
 
 	static fromNameCategoryNameAndUse
 	(
-		name: string, categoryName: string, use: any
+		name: string,
+		categoryName: string,
+		use: (u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) => string
 	): ItemDefn
 	{
-		var returnValue = ItemDefn.new1(name);
+		var returnValue = ItemDefn.fromName(name);
 		returnValue.categoryNames = [ categoryName ];
 		returnValue.use = use;
 		return returnValue;
 	}
 
-	static fromNameAndUse(name: string, use: any): ItemDefn
+	static fromNameAndUse
+	(
+		name: string,
+		use: (u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) => string
+	): ItemDefn
 	{
-		var returnValue = ItemDefn.new1(name);
+		var returnValue = ItemDefn.fromName(name);
 		returnValue.use = use;
+		return returnValue;
+	}
+
+	static fromNameMassValueAndVisual
+	(
+		name: string, mass: number, tradeValue: number, visual: Visual
+	): ItemDefn
+	{
+		return new ItemDefn
+		(
+			name, null, null, mass, tradeValue, null, null, null, visual, null
+		);
+	}
+
+	toEntity(u: Universe, w: World, p: Place, e: Entity, item: Item): Entity
+	{
+		var returnValue;
+		if (this._toEntity == null)
+		{
+			returnValue = new Entity(this.name, [ item ]);
+		}
+		else
+		{
+			returnValue = this._toEntity.call(this, u, w, p, e, item);
+		}
+
 		return returnValue;
 	}
 

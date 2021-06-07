@@ -26,7 +26,7 @@ export class Ephemeral implements EntityProperty
 		this.ticksToLive--;
 		if (this.ticksToLive <= 0)
 		{
-			place.entitiesToRemove.push(entityEphemeral);
+			place.entityToRemoveAdd(entityEphemeral);
 			if (this.expire != null)
 			{
 				this.expire(universe, world, place, entityEphemeral);

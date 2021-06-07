@@ -1467,13 +1467,12 @@ export class ControlBuilder
 			this.sizeBase.clone(), // size
 			// children
 			[
-				new ControlVisual
+				ControlVisual.from4
 				(
 					"imageTitle",
 					this._zeroes.clone(),
 					this.sizeBase.clone(), // size
-					DataBinding.fromContext<Visual>(visual),
-					null, null // colors
+					DataBinding.fromContext<Visual>(visual)
 				),
 
 				ControlButton.from8

@@ -5,8 +5,8 @@ namespace ThisCouldBeBetter.GameFramework
 export class ControlTabbed extends ControlBase
 {
 	tabButtonSize: Coords;
-	children: ControlBase[];
-	childrenByName: Map<string,ControlBase>;
+	childrenForTabs: ControlBase[];
+	childrenForTabsByName: Map<string,ControlBase>;
 	cancel: (u: Universe) => void;
 
 	buttonsForChildren: ControlButton[];
@@ -25,14 +25,15 @@ export class ControlTabbed extends ControlBase
 	constructor
 	(
 		name: string, pos: Coords, size: Coords, tabButtonSize: Coords,
-		children: ControlBase[], fontHeightInPixels: number,
+		childrenForTabs: ControlBase[], fontHeightInPixels: number,
 		cancel: (u: Universe) => void
 	)
 	{
 		super(name, pos, size, fontHeightInPixels);
 		this.tabButtonSize = tabButtonSize;
-		this.children = children;
-		this.childrenByName = ArrayHelper.addLookupsByName(this.children);
+		this.childrenForTabs = childrenForTabs;
+		this.childrenForTabsByName =
+			ArrayHelper.addLookupsByName(this.childrenForTabs);
 		this.cancel = cancel;
 
 		this.childSelectedIndex = 0;
@@ -44,15 +45,27 @@ export class ControlTabbed extends ControlBase
 		var tabPaneHeight = marginSize + this.tabButtonSize.y;
 		var buttonsForChildren = new Array<ControlButton>();
 
-		for (var i = 0; i < this.children.length; i++)
+		var buttonForTabClick = (b: ControlButton) => // click
 		{
-			var child = this.children[i];
+			buttonsForChildren.forEach(x => x.isHighlighted = false);
+			var buttonIndex = buttonsForChildren.indexOf(b); // hack
+			this.childSelectedIndex = buttonIndex;
+			this.isChildSelectedActive = true;
+			b.isHighlighted = true;
+		}
+
+		for (var i = 0; i < this.childrenForTabs.length; i++)
+		{
+			var child = this.childrenForTabs[i];
 
 			child.pos.y += tabPaneHeight;
 
 			var childName = child.name;
 
-			var buttonPos = Coords.fromXY(marginSize + this.tabButtonSize.x * i, marginSize);
+			var buttonPos = Coords.fromXY
+			(
+				marginSize + this.tabButtonSize.x * i, marginSize
+			);
 
 			var button = ControlButton.from8
 			(
@@ -63,12 +76,7 @@ export class ControlTabbed extends ControlBase
 				this.fontHeightInPixels,
 				true, // hasBorder
 				true, // isEnabled
-				(b: any) => // click
-				{
-					buttonsForChildren.forEach(x => x.isHighlighted = false);
-					this.childSelectedIndex = buttonsForChildren.indexOf(b); // hack
-					b.isHighlighted = true;
-				}
+				buttonForTabClick
 			);
 			button.context = button; // hack
 			buttonsForChildren.push(button);
@@ -76,7 +84,7 @@ export class ControlTabbed extends ControlBase
 
 		if (this.cancel != null)
 		{
-			this.children.push(null);
+			this.childrenForTabs.push(null);
 			var button = ControlButton.from8
 			(
 				"buttonCancel",
@@ -108,7 +116,7 @@ export class ControlTabbed extends ControlBase
 
 	// actions
 
-	actionHandle(actionNameToHandle: string, universe: Universe)
+	actionHandle(actionNameToHandle: string, universe: Universe): boolean
 	{
 		var wasActionHandled = false;
 
@@ -170,12 +178,18 @@ export class ControlTabbed extends ControlBase
 		return wasActionHandled;
 	}
 
-	childSelected()
+	childSelected(): ControlBase
 	{
-		return (this.childSelectedIndex == null ? null : this.children[this.childSelectedIndex] );
+		var returnValue =
+		(
+			this.childSelectedIndex == null
+			? null
+			: this.childrenForTabs[this.childSelectedIndex]
+		);
+		return returnValue;
 	}
 
-	childSelectNextInDirection(direction: number)
+	childSelectNextInDirection(direction: number): ControlBase
 	{
 		while (true)
 		{
@@ -183,7 +197,7 @@ export class ControlTabbed extends ControlBase
 
 			var isChildNextInRange = NumberHelper.isInRangeMinMax
 			(
-				this.childSelectedIndex, 0, this.children.length - 1
+				this.childSelectedIndex, 0, this.childrenForTabs.length - 1
 			);
 
 			if (isChildNextInRange == false)
@@ -191,7 +205,7 @@ export class ControlTabbed extends ControlBase
 				this.childSelectedIndex = NumberHelper.wrapToRangeMax
 				(
 					this.childSelectedIndex,
-					this.children.length
+					this.childrenForTabs.length
 				);
 			}
 
@@ -199,7 +213,7 @@ export class ControlTabbed extends ControlBase
 			var buttonForChild = this.buttonsForChildren[this.childSelectedIndex];
 			buttonForChild.isHighlighted = true;
 
-			var child = this.children[this.childSelectedIndex];
+			var child = this.childrenForTabs[this.childSelectedIndex];
 			if (child == null)
 			{
 				break;
@@ -219,7 +233,7 @@ export class ControlTabbed extends ControlBase
 		return returnValue;
 	}
 
-	childWithFocus()
+	childWithFocus(): ControlBase
 	{
 		return this.childSelected();
 	}
@@ -227,33 +241,34 @@ export class ControlTabbed extends ControlBase
 	childrenAtPosAddToList
 	(
 		posToCheck: Coords, listToAddTo: ControlBase[], addFirstChildOnly: boolean
-	)
+	): ControlBase[]
 	{
 		posToCheck = this._posToCheck.overwriteWith(posToCheck).clearZ();
 
-		var childGroups = [ this.children, this.buttonsForChildren ];
-		for (var g = 0; g < childGroups.length; g++)
+		var childrenActive = [];
+		childrenActive.push(...this.buttonsForChildren);
+		var childSelectedAsContainer = this.childSelected() as ControlContainer;
+		if (childSelectedAsContainer != null)
 		{
-			var children = childGroups[g];
-			for (var i = children.length - 1; i >= 0; i--)
-			{
-				var child = children[i];
-				if (child != null)
-				{
-					var doesChildContainPos = posToCheck.isInRangeMinMax
-					(
-						child.pos,
-						this._childMax.overwriteWith(child.pos).add(child.size)
-					);
+			childrenActive.push(childSelectedAsContainer);
+		}
 
-					if (doesChildContainPos)
+		for (var i = childrenActive.length - 1; i >= 0; i--)
+		{
+			var child = childrenActive[i];
+			if (child != null)
+			{
+				var childMax =
+					this._childMax.overwriteWith(child.pos).add(child.size);
+				var doesChildContainPos =
+					posToCheck.isInRangeMinMax(child.pos, childMax);
+
+				if (doesChildContainPos)
+				{
+					listToAddTo.push(child);
+					if (addFirstChildOnly)
 					{
-						listToAddTo.push(child);
-						if (addFirstChildOnly)
-						{
-							g = childGroups.length;
-							break;
-						}
+						break;
 					}
 				}
 			}
@@ -262,7 +277,7 @@ export class ControlTabbed extends ControlBase
 		return listToAddTo;
 	}
 
-	focusGain()
+	focusGain(): void
 	{
 		this.childSelectedIndex = null;
 		var childSelected = this.childSelectNextInDirection(1);
@@ -272,7 +287,7 @@ export class ControlTabbed extends ControlBase
 		}
 	}
 
-	focusLose()
+	focusLose(): void
 	{
 		var childSelected = this.childSelected();
 		if (childSelected != null)
@@ -282,7 +297,7 @@ export class ControlTabbed extends ControlBase
 		}
 	}
 
-	mouseClick(mouseClickPos: Coords)
+	mouseClick(mouseClickPos: Coords): boolean
 	{
 		var mouseClickPos = this._mouseClickPos.overwriteWith
 		(
@@ -294,9 +309,15 @@ export class ControlTabbed extends ControlBase
 
 		var wasClickHandled = false;
 
-		if (this.isChildSelectedActive)
+		var childrenContainingPos = this.childrenAtPosAddToList
+		(
+			mouseClickPos,
+			ArrayHelper.clear(this.childrenContainingPos),
+			true // addFirstChildOnly
+		);
+		var child = childrenContainingPos[0];
+		if (child != null)
 		{
-			var child = this.childSelected();
 			if (child.mouseClick != null)
 			{
 				var wasClickHandledByChild = child.mouseClick(mouseClickPos);
@@ -306,33 +327,12 @@ export class ControlTabbed extends ControlBase
 				}
 			}
 		}
-		else
-		{
-			var childrenContainingPos = this.childrenAtPosAddToList
-			(
-				mouseClickPos,
-				ArrayHelper.clear(this.childrenContainingPos),
-				true // addFirstChildOnly
-			);
-			var child = childrenContainingPos[0];
-			if (child != null)
-			{
-				if (child.mouseClick != null)
-				{
-					var wasClickHandledByChild = child.mouseClick(mouseClickPos);
-					if (wasClickHandledByChild)
-					{
-						wasClickHandled = true;
-					}
-				}
-			}
-		}
 
 		return wasClickHandled;
 	}
 
-	mouseEnter() {}
-	mouseExit() {}
+	mouseEnter(): void {}
+	mouseExit(): void {}
 
 	mouseMove(mouseMovePos: Coords): boolean
 	{
@@ -350,7 +350,8 @@ export class ControlTabbed extends ControlBase
 		this.childrenContainingPosPrev = this.childrenContainingPos;
 		this.childrenContainingPos = temp;
 
-		mouseMovePos = this._mouseMovePos.overwriteWith(mouseMovePos).subtract(this.pos);
+		mouseMovePos =
+			this._mouseMovePos.overwriteWith(mouseMovePos).subtract(this.pos);
 
 		var childrenContainingPos = this.childrenAtPosAddToList
 		(
@@ -404,14 +405,14 @@ export class ControlTabbed extends ControlBase
 		return wasMoveHandled;
 	}
 
-	scalePosAndSize(scaleFactor: Coords)
+	scalePosAndSize(scaleFactor: Coords): ControlTabbed
 	{
 		this.pos.multiply(scaleFactor);
 		this.size.multiply(scaleFactor);
 
-		for (var i = 0; i < this.children.length; i++)
+		for (var i = 0; i < this.childrenForTabs.length; i++)
 		{
-			var child = this.children[i];
+			var child = this.childrenForTabs[i];
 			if (child.scalePosAndSize == null)
 			{
 				child.pos.multiply(scaleFactor);
@@ -432,7 +433,10 @@ export class ControlTabbed extends ControlBase
 
 	// drawable
 
-	draw(universe: Universe, display: Display, drawLoc: Disposition, style: ControlStyle)
+	draw
+	(
+		universe: Universe, display: Display, drawLoc: Disposition, style: ControlStyle
+	): void
 	{
 		drawLoc = this._drawLoc.overwriteWith(drawLoc);
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);

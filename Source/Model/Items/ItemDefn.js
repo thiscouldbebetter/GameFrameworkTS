@@ -4,7 +4,7 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ItemDefn {
-            constructor(name, appearance, description, mass, tradeValue, stackSizeMax, categoryNames, use, visual) {
+            constructor(name, appearance, description, mass, tradeValue, stackSizeMax, categoryNames, use, visual, toEntity) {
                 this.name = name;
                 this.appearance = appearance || name;
                 this.description = description;
@@ -14,19 +14,33 @@ var ThisCouldBeBetter;
                 this.categoryNames = categoryNames || [];
                 this._use = use;
                 this.visual = visual;
+                this._toEntity = toEntity;
             }
-            static new1(name) {
-                return new ItemDefn(name, null, null, null, null, null, null, null, null);
+            static fromName(name) {
+                return new ItemDefn(name, null, null, null, null, null, null, null, null, null);
             }
             static fromNameCategoryNameAndUse(name, categoryName, use) {
-                var returnValue = ItemDefn.new1(name);
+                var returnValue = ItemDefn.fromName(name);
                 returnValue.categoryNames = [categoryName];
                 returnValue.use = use;
                 return returnValue;
             }
             static fromNameAndUse(name, use) {
-                var returnValue = ItemDefn.new1(name);
+                var returnValue = ItemDefn.fromName(name);
                 returnValue.use = use;
+                return returnValue;
+            }
+            static fromNameMassValueAndVisual(name, mass, tradeValue, visual) {
+                return new ItemDefn(name, null, null, mass, tradeValue, null, null, null, visual, null);
+            }
+            toEntity(u, w, p, e, item) {
+                var returnValue;
+                if (this._toEntity == null) {
+                    returnValue = new GameFramework.Entity(this.name, [item]);
+                }
+                else {
+                    returnValue = this._toEntity.call(this, u, w, p, e, item);
+                }
                 return returnValue;
             }
             use(u, w, p, eUsing, eUsed) {

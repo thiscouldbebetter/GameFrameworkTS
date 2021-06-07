@@ -10,7 +10,7 @@ class PlaceBuilderDemo_Actions
 
 	// actions
 
-	actionsBuild()
+	actionsBuild(): Action[]
 	{
 		var actionsAll = Action.Instances();
 
@@ -114,24 +114,10 @@ class PlaceBuilderDemo_Actions
 					{
 						var actor = entityActor.actor();
 						var activity = actor.activity;
-						// hack
-						if (activity.defnName == ActivityDefn.Instances().Simultaneous.name)
-						{
-							var childDefnNames = activity.target() as string[];
-							var activityDefnName = "ItemPickUp";
-							var childPickUpExists = childDefnNames.some
-							(
-								(x: string) => x == activityDefnName
-							);
-							if (childPickUpExists == false)
-							{
-								childDefnNames.push(activityDefnName);
-								activity.targetSetByName
-								(
-									activityDefnName, itemEntityToPickUp
-								);
-							}
-						}
+						activity.targetSetByName
+						(
+							"ItemEntityToPickUp", itemEntityToPickUp
+						);
 					}
 					else
 					{
@@ -241,7 +227,7 @@ class PlaceBuilderDemo_Actions
 		return actions;
 	}
 
-	actionToInputsMappingsBuild()
+	actionToInputsMappingsBuild(): ActionToInputsMapping[]
 	{
 		var inputNames = Input.Names();
 
@@ -285,60 +271,11 @@ class PlaceBuilderDemo_Actions
 		return actionToInputsMappings;
 	}
 
-	activityDefnsBuild()
+	activityDefnsBuild(): ActivityDefn[]
 	{
 		var activityDefns = [];
 		activityDefns.push(...ActivityDefn.Instances()._All);
-		activityDefns.push(this.activityDefnItemPickUpBuild());
 		return activityDefns;
 	}
 
-	activityDefnItemPickUpBuild()
-	{
-		var activityDefnItemPickUp = new ActivityDefn
-		(
-			"ItemPickUp",
-			// perform
-			(universe: Universe, world: World, place: Place, entityPickingUp: Entity) =>
-			{
-				var activity = entityPickingUp.actor().activity;
-				var itemEntityGettingPickedUp =
-					activity.targetByName("ItemPickUp") as Entity;
-
-				var entityPickingUpLocatable = entityPickingUp.locatable();
-
-				var itemLocatable = itemEntityGettingPickedUp.locatable();
-				var distance =
-					itemLocatable.approachOtherWithAccelerationAndSpeedMax //ToDistance
-					(
-						entityPickingUpLocatable, .5, 4 //, 1
-					);
-				itemLocatable.loc.orientation.default(); // hack
-
-				if (distance < 1)
-				{
-					var itemHolder = entityPickingUp.itemHolder();
-					var itemEntityGettingPickedUp = itemEntityGettingPickedUp;
-					itemHolder.itemEntityPickUp
-					(
-						universe, world, place, entityPickingUp,
-						itemEntityGettingPickedUp
-					);
-
-					var equipmentUser = entityPickingUp.equipmentUser();
-					if (equipmentUser != null)
-					{
-						equipmentUser.equipItemEntityInFirstOpenQuickSlot
-						(
-							universe, world, place, entityPickingUp,
-							itemEntityGettingPickedUp, true // includeSocketNameInMessage
-						);
-						equipmentUser.unequipItemsNoLongerHeld(entityPickingUp);
-					}
-				}
-			}
-		);
-
-		return activityDefnItemPickUp;
-	}
 }

@@ -37,7 +37,10 @@ export class ItemContainer implements EntityProperty
 			var equipmentUser = entityFrom.equipmentUser();
 			if (equipmentUser != null)
 			{
-				equipmentUser.unequipItemsNoLongerHeld(entityFrom);
+				equipmentUser.unequipItemsNoLongerHeld
+				(
+					null, world, world.placeCurrent, entityFrom
+				);
 			}
 
 		}

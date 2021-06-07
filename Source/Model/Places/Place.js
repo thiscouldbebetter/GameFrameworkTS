@@ -92,7 +92,7 @@ var ThisCouldBeBetter;
                     entity.name = "Entity";
                 }
                 if (this.entitiesByName.has(entity.name)) {
-                    entity.name += universe.idHelper.idNext();
+                    entity.name += entity.id;
                 }
                 this.entities.push(entity);
                 this.entitiesById.set(entity.id, entity);

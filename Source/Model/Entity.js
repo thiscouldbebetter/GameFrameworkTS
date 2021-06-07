@@ -43,9 +43,11 @@ var ThisCouldBeBetter;
                 this.properties.push(propertyToAdd);
                 this.propertiesByName.set(propertyToAdd.constructor.name, propertyToAdd);
                 if (place != null) {
-                    var propertyName = propertyToAdd.constructor.name;
-                    var entitiesWithProperty = place.entitiesByPropertyName(propertyName);
-                    entitiesWithProperty.push(this);
+                    if (place.entities.indexOf(this) >= 0) {
+                        var propertyName = propertyToAdd.constructor.name;
+                        var entitiesWithProperty = place.entitiesByPropertyName(propertyName);
+                        entitiesWithProperty.push(this);
+                    }
                 }
                 return this;
             }

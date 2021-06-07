@@ -149,7 +149,7 @@ export class Place //
 
 		if (this.entitiesByName.has(entity.name))
 		{
-			entity.name += universe.idHelper.idNext();
+			entity.name += entity.id;
 		}
 
 		this.entities.push(entity);

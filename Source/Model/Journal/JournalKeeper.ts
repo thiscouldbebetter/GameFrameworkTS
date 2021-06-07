@@ -39,7 +39,7 @@ export class JournalKeeper implements EntityProperty
 			size = universe.display.sizeDefault().clone();
 		}
 
-		var sizeBase = Coords.fromXY(200, 135);
+		var sizeBase = new Coords(200, 135, 1);
 
 		var fontHeight = 10;
 		var fontHeightSmall = fontHeight * .6;

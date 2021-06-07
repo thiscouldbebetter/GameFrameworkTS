@@ -202,7 +202,10 @@ export class EquipmentUser implements EntityProperty
 		return message;
 	}
 
-	unequipItemsNoLongerHeld(entityEquipmentUser: Entity): void
+	unequipItemsNoLongerHeld
+	(
+		universe: Universe, world: World, place: Place, entityEquipmentUser: Entity
+	): void
 	{
 		var itemHolder = entityEquipmentUser.itemHolder();
 		var itemsHeld = itemHolder.items;
@@ -217,21 +220,31 @@ export class EquipmentUser implements EntityProperty
 				var socketItemDefnName = socketItem.defnName;
 				if (itemsHeld.indexOf(socketItem) == -1)
 				{
-					var itemOfSameType = itemsHeld.filter
+					var itemOfSameTypeStillHeld = itemsHeld.filter
 					(
 						x => x.defnName == socketItemDefnName
 					)[0];
-					socket.itemEntityEquipped = itemOfSameType.toEntity();
+					if (itemOfSameTypeStillHeld == null)
+					{
+						socket.itemEntityEquipped = null;
+					}
+					else
+					{
+						socket.itemEntityEquipped = itemOfSameTypeStillHeld.toEntity
+						(
+							universe, world, place, entityEquipmentUser
+						);
+					}
 				}
 			}
 		}
 	}
 
-	unequipItemEntity(itemEntityToUnequip: Entity): void
+	unequipItem(itemToUnequip: Item): void
 	{
 		var socket = this.socketGroup.sockets.filter
 		(
-			x => x.itemEntityEquipped == itemEntityToUnequip
+			x => x.itemEntityEquipped.item() == itemToUnequip
 		)[0];
 		if (socket != null)
 		{
@@ -253,7 +266,7 @@ export class EquipmentUser implements EntityProperty
 			var itemEquipped = entityItemEquipped.item();
 			itemEquipped.use(universe, world, place, actor, entityItemEquipped);
 		}
-		this.unequipItemsNoLongerHeld(actor);
+		this.unequipItemsNoLongerHeld(universe, world, place, actor);
 	}
 
 	// EntityProperty.
@@ -277,7 +290,7 @@ export class EquipmentUser implements EntityProperty
 			size = universe.display.sizeDefault().clone();
 		}
 
-		var sizeBase = Coords.fromXY(200, 135);
+		var sizeBase = new Coords(200, 135, 1);
 
 		var fontHeight = 10;
 		var fontHeightSmall = fontHeight * .6;
@@ -303,7 +316,15 @@ export class EquipmentUser implements EntityProperty
 				}
 			}
 		}
-		var itemEntitiesEquippable = itemHolder.itemEntities().filter
+
+		var world = universe.world;
+		var place = world.placeCurrent;
+
+		var itemEntities = itemHolder.itemEntities
+		(
+			universe, world, place, entityEquipmentUser
+		);
+		var itemEntitiesEquippable = itemEntities.filter
 		(
 			x => x.equippable() != null
 		);

@@ -46,6 +46,20 @@ export class TextString
 			text.isLoaded = true;
 		};
 		xmlHttpRequest.send();
+
+		/*
+		fetch(this.sourcePath).then
+		(
+			response => response.json()
+		).then
+		(
+			data =>
+			{
+				text.value = data;
+				text.isLoaded = true;
+			}
+		);
+		*/
 	}
 }
 

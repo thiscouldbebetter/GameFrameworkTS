@@ -680,9 +680,8 @@ var ThisCouldBeBetter;
                 this.sizeBase.clone(), // size
                 // children
                 [
-                    new GameFramework.ControlVisual("imageTitle", this._zeroes.clone(), this.sizeBase.clone(), // size
-                    GameFramework.DataBinding.fromContext(visual), null, null // colors
-                    ),
+                    GameFramework.ControlVisual.from4("imageTitle", this._zeroes.clone(), this.sizeBase.clone(), // size
+                    GameFramework.DataBinding.fromContext(visual)),
                     GameFramework.ControlButton.from8("buttonStart", GameFramework.Coords.fromXY(75, 120), // pos
                     GameFramework.Coords.fromXY(50, fontHeight * 2), // size
                     "Start", fontHeight * 2, false, // hasBorder

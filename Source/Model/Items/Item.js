@@ -17,8 +17,10 @@ var ThisCouldBeBetter;
             mass(world) {
                 return this.quantity * this.defn(world).mass;
             }
-            toEntity() {
-                return new GameFramework.Entity(this.defnName, [this]);
+            toEntity(u, w, p, e) {
+                var defn = this.defn(w);
+                var returnValue = defn.toEntity(u, w, p, e, this);
+                return returnValue;
             }
             toString(world) {
                 return this.defn(world).appearance + " (" + this.quantity + ")";

@@ -71,7 +71,10 @@ export class ItemBarterer implements EntityProperty
 		);
 	}
 
-	trade(entityCustomer: Entity, entityStore: Entity): void
+	trade(
+		universe: Universe, world: World, place: Place,
+		entityCustomer: Entity, entityStore: Entity
+	): void
 	{
 		this.itemHolderCustomerOffer.itemsAllTransferTo
 		(
@@ -89,7 +92,10 @@ export class ItemBarterer implements EntityProperty
 			var entityEquipmentUser = entity.equipmentUser();
 			if (entityEquipmentUser != null)
 			{
-				entityEquipmentUser.unequipItemsNoLongerHeld(entity);
+				entityEquipmentUser.unequipItemsNoLongerHeld
+				(
+					universe, world, place, entity
+				);
 			}
 		}
 	}
@@ -194,7 +200,11 @@ export class ItemBarterer implements EntityProperty
 				if (isCustomerDonatingToStore)
 				{
 					itemBarterer.statusMessage = "Very well, I accept your gift.";
-					itemBarterer.trade(entityCustomer, entityStore);
+					itemBarterer.trade
+					(
+						universe, universe.world, universe.world.placeCurrent,
+						entityCustomer, entityStore
+					);
 					itemBarterer.patienceAdd(1);
 				}
 				else
@@ -208,7 +218,11 @@ export class ItemBarterer implements EntityProperty
 				if (isOfferAccepted)
 				{
 					itemBarterer.statusMessage = "It's a deal!";
-					itemBarterer.trade(entityCustomer, entityStore);
+					itemBarterer.trade
+					(
+						universe, universe.world, universe.world.placeCurrent,
+						entityCustomer, entityStore
+					);
 					itemBarterer.patienceAdd(1);
 				}
 				else

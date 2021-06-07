@@ -86,7 +86,7 @@ var ThisCouldBeBetter;
                 if (size == null) {
                     size = universe.display.sizeDefault().clone();
                 }
-                var sizeBase = GameFramework.Coords.fromXY(200, 135);
+                var sizeBase = new GameFramework.Coords(200, 135, 1);
                 var fontHeight = 10;
                 var fontHeightSmall = fontHeight * 0.6;
                 var fontHeightLarge = fontHeight * 1.5;

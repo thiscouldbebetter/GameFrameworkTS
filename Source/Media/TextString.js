@@ -26,6 +26,19 @@ var ThisCouldBeBetter;
                     text.isLoaded = true;
                 };
                 xmlHttpRequest.send();
+                /*
+                fetch(this.sourcePath).then
+                (
+                    response => response.json()
+                ).then
+                (
+                    data =>
+                    {
+                        text.value = data;
+                        text.isLoaded = true;
+                    }
+                );
+                */
             }
         }
         GameFramework.TextString = TextString;
