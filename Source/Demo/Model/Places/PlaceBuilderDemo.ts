@@ -1823,7 +1823,7 @@ class PlaceBuilderDemo // Main.
 				Locatable.create(),
 				Collidable.fromCollider(itemAccessoryCollider),
 				Drawable.fromVisual(itemAccessoryVisual),
-				Equippable.create()
+				Equippable.default()
 			]
 		);
 
@@ -1849,7 +1849,7 @@ class PlaceBuilderDemo // Main.
 				new Armor(.5),
 				boundable,
 				collidable,
-				Equippable.create(),
+				Equippable.default(),
 				new Item(itemDefnArmorName, 1),
 				Locatable.create(),
 				Drawable.fromVisual(itemArmorVisual),
@@ -2007,7 +2007,7 @@ class PlaceBuilderDemo // Main.
 						),
 						new Constrainable([new Constraint_FrictionXY(.03, .5)]),
 						Drawable.fromVisual(projectileVisual),
-						Equippable.create()
+						Equippable.default()
 					]
 				);
 
@@ -2024,7 +2024,7 @@ class PlaceBuilderDemo // Main.
 				Collidable.fromCollider(itemBombCollider),
 				itemBombDevice,
 				Drawable.fromVisual(itemBombVisual),
-				Equippable.create()
+				Equippable.default()
 			]
 		);
 
@@ -2193,7 +2193,7 @@ class PlaceBuilderDemo // Main.
 				Locatable.create(),
 				Collidable.fromCollider(itemBowCollider),
 				Drawable.fromVisual(itemBowVisual),
-				Equippable.create(),
+				Equippable.default(),
 				itemBowDevice
 			]
 		);
@@ -2624,7 +2624,7 @@ class PlaceBuilderDemo // Main.
 				Locatable.create(),
 				Collidable.fromCollider(itemMedicineCollider),
 				Drawable.fromVisual(itemMedicineVisual),
-				Equippable.create()
+				Equippable.default()
 			]
 		);
 
@@ -2691,7 +2691,7 @@ class PlaceBuilderDemo // Main.
 				Collidable.fromCollider(itemPickCollider),
 				itemPickDevice,
 				Drawable.fromVisual(itemPickVisual),
-				Equippable.create()
+				Equippable.default()
 			]
 		);
 
@@ -2802,7 +2802,7 @@ class PlaceBuilderDemo // Main.
 				Collidable.fromCollider(itemShovelCollider),
 				itemShovelDevice,
 				Drawable.fromVisual(itemShovelVisual),
-				Equippable.create()
+				Equippable.default()
 			]
 		);
 
@@ -2984,7 +2984,7 @@ class PlaceBuilderDemo // Main.
 				Collidable.fromCollider(itemSwordCollider),
 				Drawable.fromVisual(itemSwordVisual),
 				itemSwordDevice,
-				Equippable.create()
+				Equippable.default()
 			]
 		);
 

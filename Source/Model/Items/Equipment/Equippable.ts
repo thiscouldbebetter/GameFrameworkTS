@@ -20,7 +20,7 @@ export class Equippable implements EntityProperty
 		this.isEquipped = false;
 	}
 
-	static create(): Equippable
+	static default(): Equippable
 	{
 		return new Equippable(null, null);
 	}
