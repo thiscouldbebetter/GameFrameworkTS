@@ -895,8 +895,8 @@ class PlaceBuilderDemo // Main.
                     wallObstacle
                 ]);
                 if (damagePerHit > 0) {
-                    var damager = new Damager(new Damage(10, null, null));
-                    wallEntity.propertyAddForPlace(damager, null);
+                    var damager = new Damager(Damage.fromAmount(10));
+                    wallEntity.propertyAdd(damager);
                 }
                 entities.push(wallEntity);
             }
@@ -1097,7 +1097,7 @@ class PlaceBuilderDemo // Main.
                 };
                 var explosionEntity = new Entity("BombExplosion", [
                     new Collidable(0, explosionCollider, [Killable.name], explosionCollide),
-                    new Damager(new Damage(20, null, null)),
+                    new Damager(Damage.fromAmount(20)),
                     Drawable.fromVisual(explosionVisual),
                     new Ephemeral(8, null),
                     entityDying.locatable()
@@ -1196,7 +1196,7 @@ class PlaceBuilderDemo // Main.
                 place.entityToSpawnAdd(entityStrike);
             });
             var projectileEntity = new Entity("ProjectileArrow", [
-                new Damager(new Damage(10, null, null)),
+                new Damager(Damage.fromAmount(10)),
                 new Ephemeral(32, null),
                 killable,
                 new Locatable(projectileLoc),
@@ -1651,7 +1651,7 @@ class PlaceBuilderDemo // Main.
                 var effectAndChance = [effect, 1];
                 effectsAndChances = [effectAndChance];
             }
-            var projectileDamager = new Damager(new Damage(10, damageTypeName, effectsAndChances));
+            var projectileDamager = new Damager(new Damage(DiceRoll.fromOffset(10), damageTypeName, effectsAndChances));
             var projectileEntity = new Entity("ProjectileSword", [
                 projectileDamager,
                 new Ephemeral(8, null),

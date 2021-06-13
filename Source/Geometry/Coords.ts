@@ -59,6 +59,11 @@ export class Coords
 		return new Coords(1, 1, 1);
 	}
 
+	static random(randomizer: Randomizer)
+	{
+		return Coords.default().randomize(randomizer);
+	}
+
 	static twos(): Coords
 	{
 		return new Coords(2, 2, 2);
@@ -432,7 +437,7 @@ export class Coords
 	{
 		if (randomizer == null)
 		{
-			randomizer = new RandomizerSystem();
+			randomizer = RandomizerSystem.Instance();
 		}
 		this.x = randomizer.getNextRandom();
 		this.y = randomizer.getNextRandom();

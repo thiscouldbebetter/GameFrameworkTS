@@ -49,6 +49,7 @@ var VisualDynamic = gf.VisualDynamic;
 var VisualEllipse = gf.VisualEllipse;
 var VisualErase = gf.VisualErase;
 var VisualGroup = gf.VisualGroup;
+var VisualImageMock = gf.VisualImageMock;
 var VisualImageFromLibrary = gf.VisualImageFromLibrary;
 var VisualImageImmediate = gf.VisualImageImmediate;
 var VisualImageScaled = gf.VisualImageScaled;
@@ -122,6 +123,8 @@ var ShapeInverse = gf.ShapeInverse;
 var Shell = gf.Shell;
 var Sphere = gf.Sphere;
 var Wedge = gf.Wedge;
+// Geometry - Shapes - Map.
+var MapCell = gf.MapCell;
 var MapLocated = gf.MapLocated;
 var MapOfCells = gf.MapOfCells;
 // Geometry - Shapes - Meshes.
@@ -259,6 +262,10 @@ var BitStream = gf.BitStream;
 var ByteStreamFromBytes = gf.ByteStreamFromBytes;
 var ByteStreamFromString = gf.ByteStreamFromString;
 var CompressorLZW = gf.CompressorLZW;
+// Tests.
+var Assert = gf.Assert;
+var TestFixture = gf.TestFixture;
+var TestSuite = gf.TestSuite;
 // Utility.
 var DateTime = gf.DateTime;
 var DiceRoll = gf.DiceRoll;

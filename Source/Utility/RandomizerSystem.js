@@ -4,7 +4,12 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class RandomizerSystem {
-            // Uses the built-in JavaScript randomizer.
+            static Instance() {
+                if (RandomizerSystem._instance == null) {
+                    RandomizerSystem._instance = new RandomizerSystem();
+                }
+                return RandomizerSystem._instance;
+            }
             getNextRandom() {
                 return Math.random();
             }

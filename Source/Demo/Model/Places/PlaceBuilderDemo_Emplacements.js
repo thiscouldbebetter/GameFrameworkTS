@@ -234,7 +234,7 @@ class PlaceBuilderDemo_Emplacements {
         var obstacleBarEntityDefn = new Entity("Bar", [
             obstacleBoundable,
             obstacleCollidable,
-            new Damager(new Damage(10, null, null)),
+            new Damager(Damage.fromAmount(10)),
             Drawable.fromVisual(visual),
             new Locatable(obstacleLoc)
         ]);
@@ -287,7 +287,7 @@ class PlaceBuilderDemo_Emplacements {
         var obstacleMappedEntityDefn = new Entity(entityDefnName, [
             obstacleBoundable,
             obstacleCollidable,
-            new Damager(new Damage(10, null, null)),
+            new Damager(Damage.fromAmount(10)),
             Drawable.fromVisual(obstacleMappedVisual),
             Locatable.create()
         ]);
@@ -311,7 +311,7 @@ class PlaceBuilderDemo_Emplacements {
         var obstacleRingEntityDefn = new Entity("Ring", [
             new Locatable(obstacleLoc),
             obstacleCollidable,
-            //new Damager(new Damage(10, null, null)),
+            //new Damager(Damage.fromAmount(10)),
             Drawable.fromVisual(obstacleRingVisual),
         ]);
         return obstacleRingEntityDefn;

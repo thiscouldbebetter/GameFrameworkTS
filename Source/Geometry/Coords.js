@@ -32,6 +32,9 @@ var ThisCouldBeBetter;
             static ones() {
                 return new Coords(1, 1, 1);
             }
+            static random(randomizer) {
+                return Coords.default().randomize(randomizer);
+            }
             static twos() {
                 return new Coords(2, 2, 2);
             }
@@ -277,7 +280,7 @@ var ThisCouldBeBetter;
             }
             randomize(randomizer) {
                 if (randomizer == null) {
-                    randomizer = new GameFramework.RandomizerSystem();
+                    randomizer = GameFramework.RandomizerSystem.Instance();
                 }
                 this.x = randomizer.getNextRandom();
                 this.y = randomizer.getNextRandom();
