@@ -97,6 +97,7 @@ var Input = gf.Input;
 var InputHelper = gf.InputHelper;
 var UserInputListener = gf.UserInputListener;
 // Media.
+var Audible = gf.Audible;
 var Font = gf.Font;
 var Image2 = gf.Image2; // Name conflicts with a built-in class.
 var MediaLibrary = gf.MediaLibrary;

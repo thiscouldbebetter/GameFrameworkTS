@@ -30,6 +30,9 @@ var ThisCouldBeBetter;
             image(universe) {
                 return this.visualImage.image(universe);
             }
+            sizeInPixels(universe) {
+                return this.sizeToDraw;
+            }
             // Clonable.
             clone() {
                 return this; // todo

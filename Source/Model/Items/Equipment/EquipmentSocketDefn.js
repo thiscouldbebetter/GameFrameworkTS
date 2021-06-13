@@ -3,7 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class EquipmentSocketDefn {
+        class EquipmentSocketDefn //
+         {
             constructor(name, categoriesAllowedNames) {
                 this.name = name;
                 this.categoriesAllowedNames = categoriesAllowedNames;

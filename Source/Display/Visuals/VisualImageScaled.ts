@@ -19,7 +19,10 @@ export class VisualImageScaled implements VisualImage
 		this._posSaved = Coords.create();
 	}
 
-	static manyFromSizeAndVisuals(sizeToDraw: Coords, visualsToScale: VisualImage[])
+	static manyFromSizeAndVisuals
+	(
+		sizeToDraw: Coords, visualsToScale: VisualImage[]
+	): VisualImageScaled[]
 	{
 		var returnValues = [];
 		for (var i = 0; i < visualsToScale.length; i++)
@@ -31,7 +34,11 @@ export class VisualImageScaled implements VisualImage
 		return returnValues;
 	}
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	draw
+	(
+		universe: Universe, world: World, place: Place, entity: Entity,
+		display: Display
+	): void
 	{
 		var image = this.visualImage.image(universe);
 		var entityPos = entity.locatable().loc.pos;
@@ -44,6 +51,11 @@ export class VisualImageScaled implements VisualImage
 	image(universe: Universe): Image2
 	{
 		return this.visualImage.image(universe);
+	}
+
+	sizeInPixels(universe: Universe): Coords
+	{
+		return this.sizeToDraw;
 	}
 
 	// Clonable.

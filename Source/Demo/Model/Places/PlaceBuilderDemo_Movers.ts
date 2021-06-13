@@ -336,7 +336,7 @@ class PlaceBuilderDemo_Movers
 				Animatable2.create(),
 				new Constrainable([new Constraint_SpeedMaxXY(speedMax)]),
 				Collidable.fromCollider(enemyCollider),
-				new Damager(new Damage(10, damageTypeName, null)),
+				new Damager(Damage.fromAmountAndTypeName(10, damageTypeName)),
 				Drawable.fromVisual(enemyVisual),
 				new Effectable([]),
 				new Enemy(weapon),

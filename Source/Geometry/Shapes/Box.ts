@@ -250,6 +250,20 @@ export class Box implements ShapeBase
 		return returnValue;
 	}
 
+	posRandom(randomizer: Randomizer): Coords
+	{
+		var min = this.min();
+		var offset = Coords.default().randomize
+		(
+			randomizer
+		).multiply
+		(
+			this.size
+		);
+		var pos = offset.add(min);
+		return pos;
+	}
+
 	randomize(randomizer: Randomizer): Box
 	{
 		this.center.randomize(randomizer);

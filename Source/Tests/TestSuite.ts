@@ -1,5 +1,7 @@
+namespace ThisCouldBeBetter.GameFramework
+{
 
-class TestSuite
+export class TestSuite
 {
 	testFixtures: TestFixture[];
 
@@ -27,4 +29,6 @@ class TestSuite
 			+ " test fixtures in suite have been run.<br />"
 		);
 	}
+}
+
 }

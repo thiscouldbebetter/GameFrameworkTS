@@ -60,6 +60,8 @@ import VisualDynamic = gf.VisualDynamic;
 import VisualEllipse = gf.VisualEllipse;
 import VisualErase = gf.VisualErase;
 import VisualGroup = gf.VisualGroup;
+import VisualImage = gf.VisualImage;
+import VisualImageMock = gf.VisualImageMock;
 import VisualImageFromLibrary = gf.VisualImageFromLibrary;
 import VisualImageImmediate = gf.VisualImageImmediate;
 import VisualImageScaled = gf.VisualImageScaled;
@@ -310,6 +312,12 @@ import BitStream = gf.BitStream;
 import ByteStreamFromBytes = gf.ByteStreamFromBytes;
 import ByteStreamFromString = gf.ByteStreamFromString;
 import CompressorLZW = gf.CompressorLZW;
+
+// Tests.
+
+import Assert = gf.Assert;
+import TestFixture = gf.TestFixture;
+import TestSuite = gf.TestSuite;
 
 // Utility.
 import DateTime = gf.DateTime;

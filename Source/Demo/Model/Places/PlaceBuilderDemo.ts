@@ -1607,8 +1607,8 @@ class PlaceBuilderDemo // Main.
 
 				if (damagePerHit > 0)
 				{
-					var damager = new Damager(new Damage(10, null, null));
-					wallEntity.propertyAddForPlace(damager, null);
+					var damager = new Damager(Damage.fromAmount(10));
+					wallEntity.propertyAdd(damager);
 				}
 
 				entities.push(wallEntity);
@@ -1983,7 +1983,7 @@ class PlaceBuilderDemo // Main.
 						"BombExplosion",
 						[
 							new Collidable(0, explosionCollider, [ Killable.name ], explosionCollide),
-							new Damager(new Damage(20, null, null)),
+							new Damager(Damage.fromAmount(20)),
 							Drawable.fromVisual(explosionVisual),
 							new Ephemeral(8, null),
 							entityDying.locatable()
@@ -2152,7 +2152,7 @@ class PlaceBuilderDemo // Main.
 			(
 				"ProjectileArrow",
 				[
-					new Damager(new Damage(10, null, null)),
+					new Damager(Damage.fromAmount(10)),
 					new Ephemeral(32, null),
 					killable,
 					new Locatable( projectileLoc ),
@@ -2935,7 +2935,13 @@ class PlaceBuilderDemo // Main.
 				effectsAndChances = [ effectAndChance ];
 			}
 
-			var projectileDamager = new Damager(new Damage(10, damageTypeName, effectsAndChances ));
+			var projectileDamager = new Damager
+			(
+				new Damage
+				(
+					DiceRoll.fromOffset(10), damageTypeName, effectsAndChances
+				)
+			);
 
 			var projectileEntity = new Entity
 			(

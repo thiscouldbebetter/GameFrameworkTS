@@ -505,7 +505,7 @@ class PlaceBuilderDemo_Emplacements
 			[
 				obstacleBoundable,
 				obstacleCollidable,
-				new Damager(new Damage(10, null, null)),
+				new Damager(Damage.fromAmount(10)),
 				Drawable.fromVisual(visual),
 				new Locatable(obstacleLoc)
 			]
@@ -604,7 +604,7 @@ class PlaceBuilderDemo_Emplacements
 			[
 				obstacleBoundable,
 				obstacleCollidable,
-				new Damager(new Damage(10, null, null)),
+				new Damager(Damage.fromAmount(10)),
 				Drawable.fromVisual(obstacleMappedVisual),
 				Locatable.create()
 			]
@@ -658,7 +658,7 @@ class PlaceBuilderDemo_Emplacements
 			[
 				new Locatable(obstacleLoc),
 				obstacleCollidable,
-				//new Damager(new Damage(10, null, null)),
+				//new Damager(Damage.fromAmount(10)),
 				Drawable.fromVisual(obstacleRingVisual),
 			]
 		);

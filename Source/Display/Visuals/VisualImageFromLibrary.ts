@@ -18,7 +18,10 @@ export class VisualImageFromLibrary implements VisualImage
 
 	// static methods
 
-	static manyFromImages(images: Image2[], imageSizeScaled: Coords)
+	static manyFromImages
+	(
+		images: Image2[], imageSizeScaled: Coords
+	): VisualImageFromLibrary[]
 	{
 		var returnValues = [];
 
@@ -39,9 +42,18 @@ export class VisualImageFromLibrary implements VisualImage
 		return universe.mediaLibrary.imageGetByName(this.imageName);
 	}
 
+	sizeInPixels(universe: Universe): Coords
+	{
+		return this.image(universe).sizeInPixels;
+	}
+
 	// visual
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	draw
+	(
+		universe: Universe, world: World, place: Place, entity: Entity,
+		display: Display
+	): void
 	{
 		var image = this.image(universe);
 		var imageSize = image.sizeInPixels;

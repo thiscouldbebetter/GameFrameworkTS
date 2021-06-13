@@ -60,6 +60,7 @@ import VisualDynamic = gf.VisualDynamic;
 import VisualEllipse = gf.VisualEllipse;
 import VisualErase = gf.VisualErase;
 import VisualGroup = gf.VisualGroup;
+import VisualImage = gf.VisualImage;
 import VisualImageFromLibrary = gf.VisualImageFromLibrary;
 import VisualImageImmediate = gf.VisualImageImmediate;
 import VisualImageScaled = gf.VisualImageScaled;
@@ -143,6 +144,7 @@ import MapOfCells = gf.MapOfCells;
 
 // Geometry - Shapes - Meshes.
 import Mesh = gf.Mesh;
+import MeshTextured = gf.MeshTextured;
 
 // Geometry - Transforms.
 import Transform = gf.Transform;
@@ -166,6 +168,7 @@ import UserInputListener = gf.UserInputListener;
 // Media.
 import Font = gf.Font;
 import Image2 = gf.Image2;  // Name conflicts with a built-in class.
+import ImageBuilder = gf.ImageBuilder;
 import MediaLibrary = gf.MediaLibrary;
 import Sound = gf.Sound;
 import SoundHelper = gf.SoundHelper;
@@ -212,6 +215,7 @@ import Effectable = gf.Effectable;
 // Model - Items.
 import Item = gf.Item;
 import ItemBarterer = gf.ItemBarterer;
+import ItemCategory = gf.ItemCategory;
 import ItemContainer = gf.ItemContainer;
 import ItemDefn = gf.ItemDefn;
 import ItemHolder = gf.ItemHolder;

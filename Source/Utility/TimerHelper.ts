@@ -22,35 +22,38 @@ export class TimerHelper
 		);
 	}
 
-	initialize(handleEventTimerTick: any)
+	initialize(handleEventTimerTick: any): void
 	{
 		this.handleEventTimerTick = handleEventTimerTick;
 
 		this.ticksSoFar = 0;
 
-		this.timer = setInterval
-		(
-			this.tick.bind(this), this.millisecondsPerTick
-		);
+		if (this.ticksPerSecond > 0)
+		{
+			this.timer = setInterval
+			(
+				this.tick.bind(this), this.millisecondsPerTick
+			);
+		}
 	}
 
-	tick()
+	tick(): void
 	{
 		this.handleEventTimerTick();
 		this.ticksSoFar++;
 	}
 
-	ticksToStringH_M_S(ticksToConvert: number)
+	ticksToStringH_M_S(ticksToConvert: number): string
 	{
 		return this.ticksToString(ticksToConvert, " h ", " m ", " s");
 	}
 
-	ticksToStringHColonMColonS(ticksToConvert: number)
+	ticksToStringHColonMColonS(ticksToConvert: number): string
 	{
 		return this.ticksToString(ticksToConvert, ":", ":", "");
 	}
 
-	ticksToStringHours_Minutes_Seconds(ticksToConvert: number)
+	ticksToStringHours_Minutes_Seconds(ticksToConvert: number): string
 	{
 		return this.ticksToString(ticksToConvert, " hours ", " minutes ", " seconds");
 	}
@@ -59,7 +62,7 @@ export class TimerHelper
 	(
 		ticksToConvert: number, unitStringHours: string,
 		unitStringMinutes: string, unitStringSeconds: string
-	)
+	): string
 	{
 		var secondsTotal = Math.floor
 		(

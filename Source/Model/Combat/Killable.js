@@ -16,11 +16,13 @@ var ThisCouldBeBetter;
             damageApply(universe, world, place, entityDamager, entityKillable, damageToApply) {
                 var damageApplied;
                 if (this._damageApply == null) {
+                    var randomizer = universe.randomizer;
                     damageApplied =
                         (damageToApply == null
-                            ? entityDamager.damager().damagePerHit.amount
-                            : damageToApply.amount);
-                    entityKillable.killable().integritySubtract(damageApplied);
+                            ? entityDamager.damager().damagePerHit.amount(randomizer)
+                            : damageToApply.amount(randomizer));
+                    var killable = entityKillable.killable();
+                    killable.integritySubtract(damageApplied);
                 }
                 else {
                     damageApplied = this._damageApply(universe, world, place, entityDamager, entityKillable, damageToApply);

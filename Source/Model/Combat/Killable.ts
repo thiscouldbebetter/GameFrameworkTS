@@ -46,13 +46,17 @@ export class Killable implements EntityProperty
 		var damageApplied;
 		if (this._damageApply == null)
 		{
+			var randomizer = universe.randomizer;
+
 			damageApplied =
 			(
 				damageToApply == null
-				? entityDamager.damager().damagePerHit.amount
-				: damageToApply.amount
+				? entityDamager.damager().damagePerHit.amount(randomizer)
+				: damageToApply.amount(randomizer)
 			);
-			entityKillable.killable().integritySubtract(damageApplied);
+
+			var killable = entityKillable.killable();
+			killable.integritySubtract(damageApplied);
 		}
 		else
 		{

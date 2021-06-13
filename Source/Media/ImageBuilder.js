@@ -9,6 +9,9 @@ var ThisCouldBeBetter;
                 this.colorsByCode =
                     GameFramework.ArrayHelper.addLookups(this.colors, x => x.code);
             }
+            static default() {
+                return new ImageBuilder(GameFramework.Color.Instances()._All);
+            }
             // static methods
             buildImageFromStrings(name, stringsForPixels) {
                 return this.buildImageFromStringsScaled(name, GameFramework.Coords.Instances().Ones, stringsForPixels);

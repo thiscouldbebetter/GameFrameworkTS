@@ -201,6 +201,11 @@ class BoxTests extends TestFixture {
         doBoxesOverlap = boxOfSize1AtOrigin.overlapsWithOtherInDimension(boxOfSize1AtXHalfZTen, 2);
         Assert.isFalse(doBoxesOverlap);
     }
+    posRandom(randomizer) {
+        var min = this.min();
+        var pos = min.clone().add(Coords.default().randomize(randomizer).multiply(this.size));
+        return pos;
+    }
     randomize() {
         var sizeBefore = Coords.ones();
         var centerBefore = Coords.zeroes();

@@ -26,9 +26,18 @@ export class VisualImageImmediate implements VisualImage
 		return this._image;
 	}
 
+	sizeInPixels(universe: Universe): Coords
+	{
+		return this.image(universe).sizeInPixels;
+	}
+
 	// visual
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	draw
+	(
+		universe: Universe, world: World, place: Place, entity: Entity,
+		display: Display
+	): void
 	{
 		var image = this.image(universe);
 		var imageSize = image.sizeInPixels;

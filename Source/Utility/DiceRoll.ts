@@ -4,79 +4,107 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class DiceRoll
 {
-	expression: string;
+	numberOfDice: number;
+	sidesPerDie: number;
+	offset: number
 
-	constructor(expression: string)
+	constructor(numberOfDice: number, sidesPerDie: number, offset: number)
 	{
-		this.expression = expression;
+		this.numberOfDice = numberOfDice;
+		this.sidesPerDie = sidesPerDie;
+		this.offset = offset;
+	}
+
+	static fromExpression(expression: string): DiceRoll
+	{
+		var numberOfDiceAndRemainderAsStrings = expression.split("d");
+		var numberOfDiceAsString = numberOfDiceAndRemainderAsStrings[0];
+		var numberOfDice = parseInt(numberOfDiceAsString);
+
+		var expressionRemainder = numberOfDiceAndRemainderAsStrings[1];
+
+		var sidesPerDie = 0;
+		var offset = 0;
+
+		var expressionHasPlus = (expressionRemainder.indexOf("+") >= 0);
+		var expressionHasMinus = (expressionRemainder.indexOf("-") >= 0);
+
+		if (expressionHasPlus)
+		{
+			var sidesPerDieAndOffsetMagnitudeAsStrings =
+				expressionRemainder.split("+");
+
+			var sidesPerDieAsString =
+				sidesPerDieAndOffsetMagnitudeAsStrings[0];
+			var offsetMagnitudeAsString =
+				sidesPerDieAndOffsetMagnitudeAsStrings[1];
+
+			sidesPerDie = parseInt(sidesPerDieAsString);
+			var offsetMagnitude = parseInt(offsetMagnitudeAsString);
+			offset = offsetMagnitude;
+		}
+		else if (expressionHasMinus)
+		{
+			var sidesPerDieAndOffsetMagnitudeAsStrings =
+				expressionRemainder.split("-");
+
+			var sidesPerDieAsString =
+				sidesPerDieAndOffsetMagnitudeAsStrings[0];
+			var offsetMagnitudeAsString =
+				sidesPerDieAndOffsetMagnitudeAsStrings[1];
+
+			sidesPerDie = parseInt(sidesPerDieAsString);
+			var offsetMagnitude = parseInt(offsetMagnitudeAsString);
+			offset = 0 - offsetMagnitude;
+		}
+		else
+		{
+			var sidesPerDieAsString = expressionRemainder;
+			sidesPerDie = parseInt(sidesPerDieAsString);
+		}
+
+		return new DiceRoll(numberOfDice, sidesPerDie, offset);
+	}
+
+	static fromOffset(offset: number): DiceRoll
+	{
+		return new DiceRoll(0, 0, offset);
 	}
 
 	// static methods
 
-	static roll(expression: string, randomizer: Randomizer)
+	static roll(expression: string, randomizer: Randomizer): number
 	{
-		var diceRoll = DiceRoll.Instance;
-		diceRoll.overwriteWithExpression(expression)
+		var diceRoll = DiceRoll.fromExpression(expression);
 		var returnValue = diceRoll.roll(randomizer);
 		return returnValue;
 	}
 
-	// instances
-
-	static Instance = new DiceRoll("1");
-
-	// instance methods
-
-	overwriteWithExpression(expression: string)
+	roll(randomizer: Randomizer): number
 	{
-		this.expression = expression;
-
-		return this;
-	}
-
-	roll(randomizer: Randomizer)
-	{
-		var expression = this.expression;
-
 		var totalSoFar = 0;
 
-		var terms =
-		(
-			expression.indexOf("+") < 0
-			? [expression]
-			: expression.split("+")
-		);
-
-		for (var t = 0; t < terms.length; t++)
+		for (var d = 0; d < this.numberOfDice; d++)
 		{
-			var term = terms[t];
+			var randomNumber =
+			(
+				randomizer == null
+				? Math.random()
+				: randomizer.getNextRandom()
+			);
 
-			if (term.indexOf("d") < 0)
-			{
-				var valueConstant = parseInt(term);
-				totalSoFar += valueConstant;
-			}
-			else
-			{
-				var tokens = term.split("d");
-				var numberOfDice = parseInt(tokens[0]);
-				var sidesPerDie = parseInt(tokens[1]);
+			var valueRolledOnDie =
+				1
+				+ Math.floor
+				(
+					randomNumber
+					* this.sidesPerDie
+				);
 
-				for (var i = 0; i < numberOfDice; i++)
-				{
-					var randomNumber = (randomizer == null ? Math.random() : randomizer.getNextRandom());
-					var valueRolledOnDie =
-						1
-						+ Math.floor
-						(
-							randomNumber
-							* sidesPerDie
-						);
-
-					totalSoFar += valueRolledOnDie;
-				}
-			}
+			totalSoFar += valueRolledOnDie;
 		}
+
+		totalSoFar += this.offset;
 
 		return totalSoFar;
 	}

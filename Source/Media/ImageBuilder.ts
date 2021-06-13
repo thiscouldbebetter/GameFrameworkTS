@@ -14,6 +14,11 @@ export class ImageBuilder
 			ArrayHelper.addLookups(this.colors, x => x.code);
 	}
 
+	static default(): ImageBuilder
+	{
+		return new ImageBuilder(Color.Instances()._All);
+	}
+
 	// static methods
 
 	buildImageFromStrings(name: string, stringsForPixels: string[]): Image2

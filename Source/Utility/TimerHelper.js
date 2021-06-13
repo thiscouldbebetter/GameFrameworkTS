@@ -12,7 +12,9 @@ var ThisCouldBeBetter;
             initialize(handleEventTimerTick) {
                 this.handleEventTimerTick = handleEventTimerTick;
                 this.ticksSoFar = 0;
-                this.timer = setInterval(this.tick.bind(this), this.millisecondsPerTick);
+                if (this.ticksPerSecond > 0) {
+                    this.timer = setInterval(this.tick.bind(this), this.millisecondsPerTick);
+                }
             }
             tick() {
                 this.handleEventTimerTick();

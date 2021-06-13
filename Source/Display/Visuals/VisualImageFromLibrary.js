@@ -23,6 +23,9 @@ var ThisCouldBeBetter;
             image(universe) {
                 return universe.mediaLibrary.imageGetByName(this.imageName);
             }
+            sizeInPixels(universe) {
+                return this.image(universe).sizeInPixels;
+            }
             // visual
             draw(universe, world, place, entity, display) {
                 var image = this.image(universe);

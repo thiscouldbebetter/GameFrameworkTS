@@ -1,5 +1,8 @@
 
-class Assert
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class Assert
 {
 	static areEqual(objectExpected: any, objectActual: any): void
 	{
@@ -106,4 +109,6 @@ class Assert
 
 		return areExpectedAndActualEqual;
 	}
+}
+
 }

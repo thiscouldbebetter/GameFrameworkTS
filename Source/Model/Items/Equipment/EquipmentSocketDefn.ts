@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class EquipmentSocketDefn
+export class EquipmentSocketDefn //
 {
 	name: string;
 	categoriesAllowedNames: string[];

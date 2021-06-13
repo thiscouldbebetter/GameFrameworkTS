@@ -1,5 +1,8 @@
 
-class TestFixture
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class TestFixture
 {
 	name: string;
 
@@ -57,4 +60,6 @@ class TestFixture
 		);
 
 	}
+}
+
 }

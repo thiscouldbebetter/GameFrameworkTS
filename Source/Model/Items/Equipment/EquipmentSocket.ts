@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class EquipmentSocket
+export class EquipmentSocket //
 {
 	defnName: string;
 	itemEntityEquipped: Entity;
@@ -13,12 +13,12 @@ export class EquipmentSocket
 		this.itemEntityEquipped = itemEntityEquipped;
 	}
 
-	defn(defnGroup: EquipmentSocketDefnGroup)
+	defn(defnGroup: EquipmentSocketDefnGroup): EquipmentSocketDefn
 	{
 		return defnGroup.socketDefnsByName.get(this.defnName);
 	}
 
-	toString(world: World)
+	toString(world: World): string
 	{
 		var itemEntityEquippedAsString =
 		(
@@ -28,6 +28,11 @@ export class EquipmentSocket
 		);
 		var returnValue = this.defnName + ": " + itemEntityEquippedAsString;
 		return returnValue;
+	}
+
+	unequip(): void
+	{
+		this.itemEntityEquipped = null;
 	}
 }
 

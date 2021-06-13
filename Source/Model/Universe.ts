@@ -207,7 +207,8 @@ export class Universe
 
 	worldCreate(): World
 	{
-		return this._worldCreate(this);
+		this.world = this._worldCreate(this);
+		return this.world;
 	}
 }
 

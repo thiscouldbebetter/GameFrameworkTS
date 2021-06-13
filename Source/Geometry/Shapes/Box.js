@@ -155,6 +155,12 @@ var ThisCouldBeBetter;
                 var returnValue = rangeThis.overlapsWith(rangeOther);
                 return returnValue;
             }
+            posRandom(randomizer) {
+                var min = this.min();
+                var offset = GameFramework.Coords.default().randomize(randomizer).multiply(this.size);
+                var pos = offset.add(min);
+                return pos;
+            }
             randomize(randomizer) {
                 this.center.randomize(randomizer);
                 this.size.randomize(randomizer);

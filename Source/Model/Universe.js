@@ -82,7 +82,8 @@ var ThisCouldBeBetter;
                 this.displayRecorder.updateForTimerTick(this);
             }
             worldCreate() {
-                return this._worldCreate(this);
+                this.world = this._worldCreate(this);
+                return this.world;
             }
         }
         GameFramework.Universe = Universe;

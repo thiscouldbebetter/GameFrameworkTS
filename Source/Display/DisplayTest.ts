@@ -1,0 +1,233 @@
+
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class DisplayTest implements Display
+{
+	sizesAvailable: Coords[];
+	fontName: string;
+	fontHeightInPixels: number
+	colorFore: Color;
+	colorBack: Color;
+	isInvisible: boolean
+
+	sizeInPixels: Coords;
+	sizeInPixelsHalf: Coords;
+
+	constructor
+	(
+		sizesAvailable: Coords[], fontName: string, fontHeightInPixels: number,
+		colorFore: Color, colorBack: Color, isInvisible: boolean)
+	{
+		this.sizesAvailable = sizesAvailable;
+		this.fontName = fontName;
+		this.fontHeightInPixels = fontHeightInPixels || 10;
+		this.colorFore = colorFore;
+		this.colorBack = colorBack;
+		this.isInvisible = isInvisible || false;
+
+		this.sizeInPixels = this.sizesAvailable[0].clone();
+		this.sizeInPixelsHalf = this.sizeInPixels.clone().half();
+	}
+
+	static default(): DisplayTest
+	{
+		return DisplayTest.fromSize(Coords.fromXY(100, 100));
+	}
+
+	static fromSize(size: Coords): DisplayTest
+	{
+		return new DisplayTest([size], null, null, null, null, false);
+	}
+
+	static fromSizeAndIsInvisible(size: Coords, isInvisible: boolean): DisplayTest
+	{
+		return new DisplayTest([size], null, null, null, null, isInvisible);
+	}
+
+	clear(): void {}
+
+	displayToUse(): Display
+	{
+		return this;
+	}
+
+	drawArc
+	(
+		center: Coords, radiusInner: number, radiusOuter: number,
+		angleStartInTurns: number, angleStopInTurns: number, colorFill: Color,
+		colorBorder: Color
+	): void
+	{}
+
+	drawBackground(colorBack: Color, colorBorder: Color): void
+	{}
+
+	drawCircle
+	(
+		center: Coords, radius: number, colorFill: Color,
+		colorBorder: Color, borderThickness: number
+	): void
+	{}
+
+	drawCircleWithGradient
+	(
+		center: Coords, radius: number, gradientFill: ValueBreakGroup,
+		colorBorder: Color
+	): void
+	{}
+
+	drawCrosshairs(center: Coords, radius: number, color: Color): void
+	{}
+
+	drawEllipse
+	(
+		center: Coords, semimajorAxis: number, semiminorAxis: number,
+		rotationInTurns: number, colorFill: Color, colorBorder: Color
+	): void
+	{}
+
+	drawImage(imageToDraw: Image2, pos: Coords): void
+	{}
+
+	drawImagePartial
+	(
+		imageToDraw: Image2, pos: Coords, regionToDrawAsBox: Box
+	): void
+	{}
+
+	drawImagePartialScaled
+	(
+		imageToDraw: Image2, pos: Coords, regionToDrawAsBox: Box, sizeToDraw: Coords
+	): void
+	{}
+
+	drawImageScaled(imageToDraw: Image2, pos: Coords, size: Coords): void
+	{}
+
+	drawLine
+	(
+		fromPos: Coords, toPos: Coords, color: Color, lineThickness: number
+	): void
+	{}
+
+	drawMeshWithOrientation
+	(
+		mesh: MeshTextured, meshOrientation: Orientation
+	): void
+	{}
+
+	drawPath
+	(
+		vertices: Coords[], color: Color, lineThickness: number, isClosed: boolean
+	): void
+	{}
+
+	drawPixel(pos: Coords, color: Color): void
+	{}
+
+	drawPolygon
+	(
+		vertices: Coords[], colorFill: Color, colorBorder: Color
+	): void
+	{}
+
+	drawRectangle
+	(
+		pos: Coords, size: Coords, colorFill: Color, colorBorder: Color,
+		areColorsReversed: boolean
+	): void
+	{}
+
+	drawRectangleCentered
+	(
+		pos: Coords, size: Coords, colorFill: Color, colorBorder: Color
+	): void
+	{}
+
+	drawText
+	(
+		text: string,
+		fontHeightInPixels: number,
+		pos: Coords,
+		colorFill: Color,
+		colorOutline: Color,
+		areColorsReversed: boolean,
+		isCentered: boolean,
+		widthMaxInPixels: number
+	): void
+	{}
+
+	drawWedge
+	(
+		center: Coords, radius: number, angleStartInTurns: number,
+		angleStopInTurns: number, colorFill: Color, colorBorder: Color
+	): void
+	{}
+
+	eraseModeSet(value: boolean): void
+	{}
+
+	fontSet(fontName: string, fontHeightInPixels: number): void
+	{}
+
+	flush(): void {}
+
+	hide(universe: Universe): void
+	{}
+
+	initialize(universe: Universe): Display
+	{
+		return this;
+	}
+
+	rotateTurnsAroundCenter
+	(
+		turnsToRotate: number, centerOfRotation: Coords
+	): void
+	{}
+
+	sizeDefault(): Coords
+	{
+		return this.sizesAvailable[0];
+	}
+
+	scaleFactor(): Coords
+	{
+		return Coords.ones();
+	}
+
+	stateRestore(): void
+	{}
+
+	stateSave(): void
+	{}
+
+	textWidthForFontHeight
+	(
+		textToMeasure: string, fontHeightInPixels: number
+	): number
+	{
+		return fontHeightInPixels * textToMeasure.length;
+	}
+
+	toImage(): Image2
+	{
+		return null;
+	}
+
+	// platformable
+
+	toDomElement(): HTMLElement
+	{
+		if (this._domElement == null)
+		{
+			this._domElement = document.createElement("div");
+		}
+
+		return this._domElement;
+	}
+	private _domElement: HTMLElement;
+}
+
+}

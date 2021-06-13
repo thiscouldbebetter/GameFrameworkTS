@@ -4,20 +4,43 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Damage
 {
-	amount: number;
+	amountAsDiceRoll: DiceRoll;
 	typeName: string;
 	effectsAndChances: [Effect, number][];
 
-	constructor(amount: number, typeName: string, effectsAndChances: [Effect, number][])
+	constructor
+	(
+		amountAsDiceRoll: DiceRoll,
+		typeName: string,
+		effectsAndChances: [Effect, number][]
+	)
 	{
-		this.amount = amount;
+		this.amountAsDiceRoll = amountAsDiceRoll;
 		this.typeName = typeName;
 		this.effectsAndChances = effectsAndChances || [];
 	}
 
 	static fromAmount(amount: number): Damage
 	{
-		return new Damage(amount, null, null);
+		var amountAsDiceRoll = DiceRoll.fromOffset(amount);
+		return new Damage(amountAsDiceRoll, null, null);
+	}
+
+	static fromAmountAndTypeName(amount: number, typeName: string): Damage
+	{
+		var amountAsDiceRoll = DiceRoll.fromOffset(amount);
+		return new Damage(amountAsDiceRoll, typeName, null);
+	}
+
+	static fromAmountAsDiceRoll(amountAsDiceRoll: DiceRoll): Damage
+	{
+		return new Damage(amountAsDiceRoll, null, null);
+	}
+
+	amount(randomizer: Randomizer): number
+	{
+		var valueRolled = this.amountAsDiceRoll.roll(randomizer);
+		return valueRolled;
 	}
 
 	effectsOccurring(randomizer: Randomizer): Effect[]

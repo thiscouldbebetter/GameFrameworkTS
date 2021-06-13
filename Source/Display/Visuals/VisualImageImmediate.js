@@ -14,6 +14,9 @@ var ThisCouldBeBetter;
             image(universe) {
                 return this._image;
             }
+            sizeInPixels(universe) {
+                return this.image(universe).sizeInPixels;
+            }
             // visual
             draw(universe, world, place, entity, display) {
                 var image = this.image(universe);

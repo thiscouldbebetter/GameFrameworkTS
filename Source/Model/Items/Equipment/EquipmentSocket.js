@@ -3,7 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class EquipmentSocket {
+        class EquipmentSocket //
+         {
             constructor(defnName, itemEntityEquipped) {
                 this.defnName = defnName;
                 this.itemEntityEquipped = itemEntityEquipped;
@@ -17,6 +18,9 @@ var ThisCouldBeBetter;
                     : this.itemEntityEquipped.item().toString(world));
                 var returnValue = this.defnName + ": " + itemEntityEquippedAsString;
                 return returnValue;
+            }
+            unequip() {
+                this.itemEntityEquipped = null;
             }
         }
         GameFramework.EquipmentSocket = EquipmentSocket;

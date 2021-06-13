@@ -121,6 +121,7 @@ var MapLocated = gf.MapLocated;
 var MapOfCells = gf.MapOfCells;
 // Geometry - Shapes - Meshes.
 var Mesh = gf.Mesh;
+var MeshTextured = gf.MeshTextured;
 var Transform_Dynamic = gf.Transform_Dynamic;
 var Transform_Locate = gf.Transform_Locate;
 var Transform_Multiple = gf.Transform_Multiple;
@@ -138,6 +139,7 @@ var UserInputListener = gf.UserInputListener;
 // Media.
 var Font = gf.Font;
 var Image2 = gf.Image2; // Name conflicts with a built-in class.
+var ImageBuilder = gf.ImageBuilder;
 var MediaLibrary = gf.MediaLibrary;
 var Sound = gf.Sound;
 var SoundHelper = gf.SoundHelper;
@@ -177,6 +179,7 @@ var Effectable = gf.Effectable;
 // Model - Items.
 var Item = gf.Item;
 var ItemBarterer = gf.ItemBarterer;
+var ItemCategory = gf.ItemCategory;
 var ItemContainer = gf.ItemContainer;
 var ItemDefn = gf.ItemDefn;
 var ItemHolder = gf.ItemHolder;

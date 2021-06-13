@@ -4,13 +4,25 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Damage {
-            constructor(amount, typeName, effectsAndChances) {
-                this.amount = amount;
+            constructor(amountAsDiceRoll, typeName, effectsAndChances) {
+                this.amountAsDiceRoll = amountAsDiceRoll;
                 this.typeName = typeName;
                 this.effectsAndChances = effectsAndChances || [];
             }
             static fromAmount(amount) {
-                return new Damage(amount, null, null);
+                var amountAsDiceRoll = GameFramework.DiceRoll.fromOffset(amount);
+                return new Damage(amountAsDiceRoll, null, null);
+            }
+            static fromAmountAndTypeName(amount, typeName) {
+                var amountAsDiceRoll = GameFramework.DiceRoll.fromOffset(amount);
+                return new Damage(amountAsDiceRoll, typeName, null);
+            }
+            static fromAmountAsDiceRoll(amountAsDiceRoll) {
+                return new Damage(amountAsDiceRoll, null, null);
+            }
+            amount(randomizer) {
+                var valueRolled = this.amountAsDiceRoll.roll(randomizer);
+                return valueRolled;
             }
             effectsOccurring(randomizer) {
                 var effectsOccurring = new Array();
