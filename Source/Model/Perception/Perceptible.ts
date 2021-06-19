@@ -5,8 +5,8 @@ namespace ThisCouldBeBetter.GameFramework
 export class Perceptible implements EntityProperty
 {
 	isHiding: boolean;
-	visibility: (u: Universe, w: World, p: Place, e: Entity) => number;
-	audibility: (u: Universe, w: World, p: Place, e: Entity) => number;
+	visibility: (uwpe: UniverseWorldPlaceEntities) => number;
+	audibility: (uwpe: UniverseWorldPlaceEntities) => number;
 
 	_displacement: Coords;
 	_isHidingPrev: boolean;
@@ -14,8 +14,8 @@ export class Perceptible implements EntityProperty
 	constructor
 	(
 		isHiding: boolean,
-		visibility: (u: Universe, w: World, p: Place, e: Entity) => number,
-		audibility: (u: Universe, w: World, p: Place, e: Entity) => number
+		visibility: (uwpe: UniverseWorldPlaceEntities) => number,
+		audibility: (uwpe: UniverseWorldPlaceEntities) => number
 	)
 	{
 		this.isHiding = isHiding;
@@ -26,12 +26,11 @@ export class Perceptible implements EntityProperty
 		this._isHidingPrev = null;
 	}
 
-	canBeSeen
-	(
-		u: Universe, w: World, p: Place, entityPerceptible: Entity,
-		entityPerceptor: Entity
-	): boolean
+	canBeSeen(uwpe: UniverseWorldPlaceEntities): boolean
 	{
+		var entityPerceptible = uwpe.entity;
+		var entityPerceptor = uwpe.entity2;
+
 		var perceptibleLoc = entityPerceptible.locatable().loc;
 		var perceptiblePos = perceptibleLoc.pos;
 		var displacement = this._displacement;
@@ -46,7 +45,7 @@ export class Perceptible implements EntityProperty
 		{
 			var visibilityBase = entityPerceptible.perceptible().visibility
 			(
-				u, w, p, entityPerceptible
+				uwpe
 			);
 			var visibilityAdjusted = visibilityBase / Math.abs(distance);
 			var sightThreshold = entityPerceptor.perceptor().sightThreshold;
@@ -55,12 +54,11 @@ export class Perceptible implements EntityProperty
 		return isInSight;
 	}
 
-	canBeHeard
-	(
-		u: Universe, w: World, p: Place, entityPerceptible: Entity,
-		entityPerceptor: Entity
-	): boolean
+	canBeHeard(uwpe: UniverseWorldPlaceEntities): boolean
 	{
+		var entityPerceptible = uwpe.entity;
+		var entityPerceptor = uwpe.entity2;
+
 		var perceptibleLoc = entityPerceptible.locatable().loc;
 		var perceptiblePos = perceptibleLoc.pos;
 		var displacement = this._displacement;
@@ -68,10 +66,8 @@ export class Perceptible implements EntityProperty
 		var perceptorPos = perceptorLoc.pos;
 		displacement.overwriteWith(perceptiblePos).subtract(perceptorPos);
 		var distance = displacement.magnitude();
-		var audibilityBase = entityPerceptible.perceptible().audibility
-		(
-			u, w, p, entityPerceptible
-		);
+		var audibilityBase =
+			entityPerceptible.perceptible().audibility(uwpe);
 		var audibilityAdjusted = audibilityBase / (distance * distance);
 		var hearingThreshold = entityPerceptor.perceptor().hearingThreshold;
 		var isInHearing = (audibilityAdjusted >= hearingThreshold);
@@ -80,30 +76,21 @@ export class Perceptible implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
-	updateForTimerTick(u: Universe, w: World, p: Place, entity: Entity): void
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this.isHiding != this._isHidingPrev)
 		{
 			this._isHidingPrev = this.isHiding;
 
-			if (this.isHiding)
+			var entity = uwpe.entity;
+			entity.drawable().isVisible = (this.isHiding == false);
+			var usable = entity.usable();
+			if (usable != null)
 			{
-				entity.drawable().isVisible = false;
-				if (entity.usable() != null)
-				{
-					entity.usable().isDisabled = true;
-				}
-			}
-			else
-			{
-				entity.drawable().isVisible = true;
-				if (entity.usable() != null)
-				{
-					entity.usable().isDisabled = false;
-				}
+				usable.isDisabled = this.isHiding;
 			}
 		}
 	}

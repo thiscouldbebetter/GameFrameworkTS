@@ -8,9 +8,9 @@ var ThisCouldBeBetter;
                 this.journal = journal;
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(u, w, p, e) { }
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) { }
             // Controls.
             toControl(universe, size, entityJournalKeeper, venuePrev, includeTitleAndDoneButton) {
                 var world = universe.world;

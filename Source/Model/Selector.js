@@ -46,9 +46,9 @@ var ThisCouldBeBetter;
                 return this._control;
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(u, w, p, entitySelector) {
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) {
                 var entitySelected = this.entitiesSelected[0];
                 var isEntitySelected = (entitySelected != null);
                 this._control._isVisible = isEntitySelected;
@@ -56,7 +56,8 @@ var ThisCouldBeBetter;
                     var reticleLoc = this.entityForReticle.locatable().loc;
                     reticleLoc.overwriteWith(entitySelected.locatable().loc);
                     reticleLoc.pos.z--;
-                    this.entityForReticle.drawable().updateForTimerTick(u, w, p, this.entityForReticle);
+                    var uwpeReticle = uwpe.clone().entitySet(this.entityForReticle);
+                    this.entityForReticle.drawable().updateForTimerTick(uwpeReticle);
                 }
             }
         }

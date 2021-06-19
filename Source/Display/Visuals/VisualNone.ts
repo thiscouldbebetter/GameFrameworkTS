@@ -6,7 +6,7 @@ export class VisualNone implements Visual
 {
 	static Instance: VisualNone = new VisualNone();
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		// do nothing
 	}

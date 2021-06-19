@@ -29,8 +29,10 @@ export class VisualJump2D implements Visual
 
 	// Visual.
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display)
 	{
+		var world = uwpe.world;
+		var entity = uwpe.entity;
 		var entityPos = entity.locatable().loc.pos;
 		var entityPosZ = entityPos.z;
 		var camera = world.placeCurrent.camera().camera(); // hack
@@ -38,14 +40,14 @@ export class VisualJump2D implements Visual
 		var height = 0 - entityPosZ;
 		if (height <= 0)
 		{
-			this.visualJumper.draw(universe, world, place, entity, display);
+			this.visualJumper.draw(uwpe, display);
 		}
 		else
 		{
-			this.visualShadow.draw(universe, world, place, entity, display);
+			this.visualShadow.draw(uwpe, display);
 			this._posSaved.overwriteWith(entityPos);
 			entityPos.y -= height;
-			this.visualJumper.draw(universe, world, place, entity, display);
+			this.visualJumper.draw(uwpe, display);
 			entityPos.overwriteWith(this._posSaved);
 		}
 	}

@@ -31,8 +31,9 @@ var ThisCouldBeBetter;
                     var equipmentUser = entityItemHolder.equipmentUser();
                     var socketName = "Item" + slotNumber;
                     var includeSocketNameInMessage = true;
-                    var itemEntityToEquip = itemToEquip.toEntity(universe, world, place, entityItemHolder);
-                    var message = equipmentUser.equipItemEntityInSocketWithName(universe, world, place, entityItemHolder, itemEntityToEquip, socketName, includeSocketNameInMessage);
+                    var itemEntityToEquip = itemToEquip.toEntity(new GameFramework.UniverseWorldPlaceEntities(universe, world, place, entityItemHolder, null));
+                    var uwpe = new GameFramework.UniverseWorldPlaceEntities(universe, world, place, entityItemHolder, itemEntityToEquip);
+                    var message = equipmentUser.equipItemEntityInSocketWithName(uwpe, socketName, includeSocketNameInMessage);
                     this.statusMessage = message;
                 }
             }
@@ -44,8 +45,8 @@ var ThisCouldBeBetter;
                 var returnValue = (itemExistingQuantity >= quantityToCheck);
                 return returnValue;
             }
-            itemEntities(u, w, p, e) {
-                return this.items.map(x => x.toEntity(u, w, p, e));
+            itemEntities(uwpe) {
+                return this.items.map(x => x.toEntity(uwpe));
             }
             itemsAdd(itemsToAdd) {
                 itemsToAdd.forEach((x) => this.itemAdd(x));
@@ -89,7 +90,9 @@ var ThisCouldBeBetter;
                     itemExisting.quantity += itemToAdd.quantity;
                 }
             }
-            itemEntityFindClosest(universe, world, place, entityItemHolder) {
+            itemEntityFindClosest(uwpe) {
+                var place = uwpe.place;
+                var entityItemHolder = uwpe.entity;
                 var entityItemsInPlace = place.items();
                 var entityItemClosest = entityItemsInPlace.filter(x => x.locatable().distanceFromEntity(entityItemHolder) < this.reachRadius).sort((a, b) => a.locatable().distanceFromEntity(entityItemHolder)
                     - b.locatable().distanceFromEntity(entityItemHolder))[0];
@@ -102,7 +105,9 @@ var ThisCouldBeBetter;
                 var canPickUp = (massAfterPickup <= this.massMax);
                 return canPickUp;
             }
-            itemEntityPickUp(universe, world, place, entityItemHolder, itemEntityToPickUp) {
+            itemEntityPickUp(uwpe) {
+                var place = uwpe.place;
+                var itemEntityToPickUp = uwpe.entity2;
                 var itemToPickUp = itemEntityToPickUp.item();
                 this.itemAdd(itemToPickUp);
                 place.entityToRemoveAdd(itemEntityToPickUp);
@@ -194,15 +199,16 @@ var ThisCouldBeBetter;
                 return tradeValueTotal;
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(u, w, p, e) { }
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) { }
             // Controllable.
             toControl(universe, size, entityItemHolder, venuePrev, includeTitleAndDoneButton) {
                 this.statusMessage = "Use, drop, and sort items.";
                 if (size == null) {
                     size = universe.display.sizeDefault().clone();
                 }
+                var uwpe = new GameFramework.UniverseWorldPlaceEntities(universe, universe.world, universe.world.placeCurrent, entityItemHolder, null);
                 var sizeBase = new GameFramework.Coords(200, 135, 1);
                 var fontHeight = 10;
                 var fontHeightSmall = fontHeight * .6;
@@ -225,7 +231,7 @@ var ThisCouldBeBetter;
                         var itemToDrop = itemToKeep.clone();
                         itemToDrop.quantity = 1;
                         var itemToDropDefn = itemToDrop.defn(world);
-                        var itemEntityToDrop = itemToDrop.toEntity(universe, world, place, entityItemHolder);
+                        var itemEntityToDrop = itemToDrop.toEntity(uwpe);
                         var itemLocatable = itemEntityToDrop.locatable();
                         if (itemLocatable == null) {
                             itemLocatable = GameFramework.Locatable.create();
@@ -241,7 +247,7 @@ var ThisCouldBeBetter;
                             collidable.ticksUntilCanCollide =
                                 collidable.ticksToWaitBetweenCollisions;
                         }
-                        place.entitySpawn(universe, world, itemEntityToDrop);
+                        place.entitySpawn(new GameFramework.UniverseWorldPlaceEntities(universe, world, place, itemEntityToDrop, null));
                         itemHolder.itemSubtract(itemToDrop);
                         if (itemToKeep.quantity == 0) {
                             itemHolder.itemSelected = null;
@@ -249,20 +255,17 @@ var ThisCouldBeBetter;
                         itemHolder.statusMessage = itemToDropDefn.appearance + " dropped.";
                         var equipmentUser = entityItemHolder.equipmentUser();
                         if (equipmentUser != null) {
-                            equipmentUser.unequipItemsNoLongerHeld(universe, world, world.placeCurrent, entityItemHolder);
+                            equipmentUser.unequipItemsNoLongerHeld(uwpe);
                         }
                     }
                 };
                 var use = () => {
-                    var itemEntityToUse = itemHolder.itemSelected.toEntity(universe, universe.world, universe.world.placeCurrent, entityItemHolder);
+                    var itemEntityToUse = itemHolder.itemSelected.toEntity(uwpe);
                     if (itemEntityToUse != null) {
                         var itemToUse = itemEntityToUse.item();
                         if (itemToUse.use != null) {
-                            var world = universe.world;
-                            var place = world.placeCurrent;
-                            var user = entityItemHolder;
                             itemHolder.statusMessage =
-                                itemToUse.use(universe, world, place, user, itemEntityToUse);
+                                itemToUse.use(uwpe);
                             if (itemToUse.quantity <= 0) {
                                 itemHolder.itemSelected = null;
                             }
@@ -287,7 +290,7 @@ var ThisCouldBeBetter;
                         itemsAll.splice(index + 1, 0, itemToMove);
                     }
                 };
-                var split = (universe) => {
+                var split = (uwpe) => {
                     itemHolder.itemSplit(itemHolder.itemSelected, null);
                 };
                 var join = () => {

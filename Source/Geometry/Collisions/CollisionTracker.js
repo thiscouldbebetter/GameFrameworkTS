@@ -50,9 +50,9 @@ var ThisCouldBeBetter;
                 return new GameFramework.Entity(CollisionTracker.name, [this]);
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(universe, world, place, entity) {
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) {
                 var cellsAll = this.collisionMap.cellSource;
                 cellsAll.forEach(x => {
                     x.entitiesPresent = x.entitiesPresent.filter(y => y.collidable().isEntityStationary(y));

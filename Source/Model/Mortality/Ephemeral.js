@@ -9,14 +9,15 @@ var ThisCouldBeBetter;
                 this.expire = expire;
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(universe, world, place, entityEphemeral) {
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) {
                 this.ticksToLive--;
                 if (this.ticksToLive <= 0) {
-                    place.entityToRemoveAdd(entityEphemeral);
+                    var entityEphemeral = uwpe.entity;
+                    uwpe.place.entityToRemoveAdd(entityEphemeral);
                     if (this.expire != null) {
-                        this.expire(universe, world, place, entityEphemeral);
+                        this.expire(uwpe);
                     }
                 }
             }

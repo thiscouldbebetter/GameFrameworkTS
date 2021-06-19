@@ -7,9 +7,9 @@ var ThisCouldBeBetter;
             constructor(targetSpeedMax) {
                 this.targetSpeedMax = targetSpeedMax;
             }
-            constrain(universe, world, place, entity) {
+            constrain(uwpe) {
                 var targetSpeedMax = this.targetSpeedMax;
-                var entityLoc = entity.locatable().loc;
+                var entityLoc = uwpe.entity.locatable().loc;
                 var entityVel = entityLoc.vel;
                 var zSaved = entityVel.z;
                 entityVel.z = 0;

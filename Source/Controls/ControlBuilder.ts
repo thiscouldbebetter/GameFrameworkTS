@@ -913,8 +913,11 @@ export class ControlBuilder
 
 	message
 	(
-		universe: Universe, size: Coords, message: DataBinding<any, string>,
-		acknowledge: () => void, showMessageOnly: boolean
+		universe: Universe,
+		size: Coords,
+		message: DataBinding<any, string>,
+		acknowledge: ()=>void,
+		showMessageOnly: boolean
 	): ControlBase
 	{
 		var optionNames = [];

@@ -170,7 +170,8 @@ var ThisCouldBeBetter;
                 var buttonMargin = (size.x - buttonWidthAll) / (itemQuickSlotCount + 1);
                 var buttonPos = GameFramework.Coords.fromXY(buttonMargin, size.y - margin - buttonSize.y);
                 var useItemInQuickSlot = (slotNumber) => {
-                    equipmentUser.useItemInSocketNumbered(universe, world, place, entity, slotNumber);
+                    var uwpe = new GameFramework.UniverseWorldPlaceEntities(universe, universe.world, place, entity, null);
+                    equipmentUser.useItemInSocketNumbered(uwpe, slotNumber);
                 };
                 var buttonClicks = [
                     () => useItemInQuickSlot(0),
@@ -211,9 +212,9 @@ var ThisCouldBeBetter;
                 return controlOverlayTransparent;
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(u, w, p, e) { }
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) { }
         }
         GameFramework.Playable = Playable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

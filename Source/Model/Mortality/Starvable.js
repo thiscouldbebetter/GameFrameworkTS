@@ -10,9 +10,9 @@ var ThisCouldBeBetter;
                 this._starve = starve;
                 this.satiety = this.satietyMax;
             }
-            starve(u, w, p, e) {
+            starve(uwpe) {
                 if (this._starve != null) {
-                    this._starve(u, w, p, e);
+                    this._starve(uwpe);
                 }
             }
             satietyAdd(amountToAdd) {
@@ -26,11 +26,11 @@ var ThisCouldBeBetter;
                 return (this.satiety <= 0);
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(universe, world, place, entityStarvable) {
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) {
                 if (this.isStarving()) {
-                    this.starve(universe, world, place, entityStarvable);
+                    this.starve(uwpe);
                 }
                 else {
                     this.satiety -= this.satietyLostPerTick;

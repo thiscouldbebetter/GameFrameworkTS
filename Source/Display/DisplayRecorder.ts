@@ -38,9 +38,10 @@ export class DisplayRecorder
 
 	static actionStartStopPerform
 	(
-		universe: Universe, world: World, place: Place, actor: Entity
-	)
+		uwpe: UniverseWorldPlaceEntities
+	): void
 	{
+		var universe = uwpe.universe;
 		var recorder = universe.displayRecorder;
 		if (recorder.isRecording)
 		{
@@ -53,12 +54,12 @@ export class DisplayRecorder
 		}
 	}
 
-	clear()
+	clear(): void
 	{
 		this.framesRecordedAsArrayBuffers.length = 0;
 	}
 
-	frameRecord(display: Display)
+	frameRecord(display: Display): void
 	{
 		var recorder = this;
 
@@ -86,10 +87,9 @@ export class DisplayRecorder
 				reader.readAsArrayBuffer(displayAsBlob);
 			}
 		);
-
 	}
 
-	framesRecordedDownload(universe: Universe)
+	framesRecordedDownload(universe: Universe): void
 	{
 		var universeName = universe.name.split(" ").join("_");
 		var fileNameToSaveAs = universeName + "-Recording.tar";
@@ -149,19 +149,19 @@ export class DisplayRecorder
 		console.log(logMessage);
 	}
 
-	start()
+	start(): void
 	{
 		this.isRecording = true;
 		this.logStartOrStop();
 	}
 
-	stop()
+	stop(): void
 	{
 		this.isRecording = false;
 		this.logStartOrStop();
 	}
 
-	updateForTimerTick(universe: Universe)
+	updateForTimerTick(universe: Universe): void
 	{
 		if (this.isRecording && universe.timerHelper.ticksSoFar % this.ticksPerFrame == 0)
 		{

@@ -8,11 +8,8 @@ var ThisCouldBeBetter;
                 this._use = use;
                 this.isDisabled = false;
             }
-            use(u, w, p, eUsing, eUsed) {
-                if (this.isDisabled) {
-                    return null;
-                }
-                return this._use(u, w, p, eUsing, eUsed);
+            use(uwpe) {
+                return (this.isDisabled ? null : this._use(uwpe));
             }
             // Clonable.
             clone() {
@@ -23,9 +20,9 @@ var ThisCouldBeBetter;
                 return this;
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(u, w, p, e) { }
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) { }
         }
         GameFramework.Usable = Usable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

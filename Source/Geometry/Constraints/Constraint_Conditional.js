@@ -8,10 +8,10 @@ var ThisCouldBeBetter;
                 this.shouldChildApply = shouldChildApply;
                 this.child = child;
             }
-            constrain(universe, world, place, entity) {
-                var willChildApply = this.shouldChildApply(universe, world, place, entity);
+            constrain(uwpe) {
+                var willChildApply = this.shouldChildApply(uwpe);
                 if (willChildApply) {
-                    this.child.constrain(universe, world, place, entity);
+                    this.child.constrain(uwpe);
                 }
             }
         }

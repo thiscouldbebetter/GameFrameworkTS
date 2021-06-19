@@ -8,7 +8,7 @@ export class Effect
 	ticksPerCycle: number;
 	cyclesToLive: number;
 	visual: Visual;
-	_updateForCycle: (u: Universe, w: World, p: Place, entity: Entity, effect: Effect) => any;
+	_updateForCycle: (uwpe: UniverseWorldPlaceEntities, effect: Effect) => any;
 
 	ticksSoFar: number;
 
@@ -18,7 +18,7 @@ export class Effect
 		ticksPerCycle: number,
 		cyclesToLive: number,
 		visual: Visual,
-		updateForCycle: (u: Universe, w: World, p: Place, e: Entity, effect: Effect) => any
+		updateForCycle: (uwpe: UniverseWorldPlaceEntities, effect: Effect) => any
 	)
 	{
 		this.name = name;
@@ -39,22 +39,22 @@ export class Effect
 		return Effect._instances;
 	}
 
-	isCycleComplete()
+	isCycleComplete(): boolean
 	{
 		return (this.ticksSoFar % this.ticksPerCycle == 0);
 	}
 
-	isDone()
+	isDone(): boolean
 	{
 		return (this.ticksSoFar >= this.ticksToLive());
 	}
 
-	ticksToLive()
+	ticksToLive(): number
 	{
 		return this.ticksPerCycle * this.cyclesToLive;
 	}
 
-	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): any
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): any
 	{
 		var returnValue = null;
 
@@ -62,7 +62,7 @@ export class Effect
 		{
 			if (this.isCycleComplete())
 			{
-				returnValue = this._updateForCycle(u, w, p, e, this);
+				returnValue = this._updateForCycle(uwpe, this);
 			}
 		}
 
@@ -104,10 +104,12 @@ class Effect_Instances
 			20, // ticksPerCycle
 			5, // cyclesToLive
 			VisualBuilder.Instance().flame(visualDimension),
-			(u: Universe, w: World, p: Place, e: Entity, effect: Effect) =>
+			(uwpe: UniverseWorldPlaceEntities, effect: Effect) =>
 			{
 				var damage = Damage.fromAmountAndTypeName(1, "Heat");
-				e.killable().damageApply(u, w, p, null, e, damage );
+				var e = uwpe.entity;
+				uwpe.entity2 = e;
+				e.killable().damageApply(uwpe, damage );
 			}
 		);
 
@@ -117,10 +119,12 @@ class Effect_Instances
 			20, // ticksPerCycle
 			5, // cyclesToLive
 			VisualCircle.fromRadiusAndColorFill(visualDimension, Color.byName("Cyan")),
-			(u: Universe, w: World, p: Place, e: Entity, effect: Effect) =>
+			(uwpe: UniverseWorldPlaceEntities, effect: Effect) =>
 			{
 				var damage = Damage.fromAmountAndTypeName(1, "Cold");
-				e.killable().damageApply(u, w, p, null, e, damage );
+				var e = uwpe.entity;
+				uwpe.entity2 = e;
+				e.killable().damageApply(uwpe, damage );
 			}
 		);
 
@@ -152,10 +156,12 @@ class Effect_Instances
 				Color.byName("Red"),
 				null
 			),
-			(u: Universe, w: World, p: Place, e: Entity, effect: Effect) =>
+			(uwpe: UniverseWorldPlaceEntities, effect: Effect) =>
 			{
 				var damage = Damage.fromAmountAndTypeName(-1, "Healing");
-				e.killable().damageApply(u, w, p, null, e, damage );
+				var e = uwpe.entity;
+				uwpe.entity2 = e;
+				e.killable().damageApply(uwpe, damage);
 			}
 		);
 

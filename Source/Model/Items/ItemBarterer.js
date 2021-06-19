@@ -34,7 +34,9 @@ var ThisCouldBeBetter;
                 this.itemHolderCustomerOffer.itemsAllTransferTo(entityCustomer.itemHolder());
                 this.itemHolderStoreOffer.itemsAllTransferTo(entityStore.itemHolder());
             }
-            trade(universe, world, place, entityCustomer, entityStore) {
+            trade(uwpe) {
+                var entityStore = uwpe.entity;
+                var entityCustomer = uwpe.entity;
                 this.itemHolderCustomerOffer.itemsAllTransferTo(entityStore.itemHolder());
                 this.itemHolderStoreOffer.itemsAllTransferTo(entityCustomer.itemHolder());
                 var entities = [entityCustomer, entityStore];
@@ -42,19 +44,20 @@ var ThisCouldBeBetter;
                     var entity = entities[i];
                     var entityEquipmentUser = entity.equipmentUser();
                     if (entityEquipmentUser != null) {
-                        entityEquipmentUser.unequipItemsNoLongerHeld(universe, world, place, entity);
+                        entityEquipmentUser.unequipItemsNoLongerHeld(uwpe);
                     }
                 }
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(u, w, p, e) { }
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) { }
             // Controls.
             toControl(universe, size, entityCustomer, entityStore, venuePrev) {
                 if (size == null) {
                     size = universe.display.sizeDefault();
                 }
+                var uwpe = new GameFramework.UniverseWorldPlaceEntities(universe, universe.world, universe.world.placeCurrent, entityCustomer, entityStore);
                 var fontHeight = 10;
                 var margin = fontHeight * 1.5;
                 var buttonSize = GameFramework.Coords.fromXY(4, 2).multiplyScalar(fontHeight);
@@ -100,7 +103,7 @@ var ThisCouldBeBetter;
                         var isCustomerDonatingToStore = (profitMargin == Number.POSITIVE_INFINITY);
                         if (isCustomerDonatingToStore) {
                             itemBarterer.statusMessage = "Very well, I accept your gift.";
-                            itemBarterer.trade(universe, universe.world, universe.world.placeCurrent, entityCustomer, entityStore);
+                            itemBarterer.trade(uwpe);
                             itemBarterer.patienceAdd(1);
                         }
                         else {
@@ -111,7 +114,7 @@ var ThisCouldBeBetter;
                         var isOfferAccepted = itemBarterer.isOfferProfitableEnough(world);
                         if (isOfferAccepted) {
                             itemBarterer.statusMessage = "It's a deal!";
-                            itemBarterer.trade(universe, universe.world, universe.world.placeCurrent, entityCustomer, entityStore);
+                            itemBarterer.trade(uwpe);
                             itemBarterer.patienceAdd(1);
                         }
                         else {

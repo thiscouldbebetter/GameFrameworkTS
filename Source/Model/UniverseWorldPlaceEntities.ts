@@ -12,8 +12,8 @@ export class UniverseWorldPlaceEntities
 
 	constructor
 	(
-		universe: Universe, world: World, place: Place,
-		entity: Entity, entity2: Entity
+		universe: Universe, world: World, place: Place, entity: Entity,
+		entity2: Entity
 	)
 	{
 		this.universe = universe;
@@ -23,16 +23,58 @@ export class UniverseWorldPlaceEntities
 		this.entity2 = entity2;
 	}
 
-	static create()
+	static create(): UniverseWorldPlaceEntities
 	{
 		return new UniverseWorldPlaceEntities(null, null, null, null, null);
+	}
+
+	static fromUniverse(universe: Universe): UniverseWorldPlaceEntities
+	{
+		return new UniverseWorldPlaceEntities(universe, null, null, null, null);
+	}
+
+	static fromUniverseAndWorld
+	(
+		universe: Universe, world: World
+	): UniverseWorldPlaceEntities
+	{
+		return new UniverseWorldPlaceEntities(universe, world, null, null, null);
+	}
+
+	static fromUniverseWorldAndPlace
+	(
+		universe: Universe, world: World, place: Place
+	): UniverseWorldPlaceEntities
+	{
+		return new UniverseWorldPlaceEntities(universe, world, place, null, null);
+	}
+
+	entitiesSet(entity: Entity, entity2: Entity): UniverseWorldPlaceEntities
+	{
+		this.entity = entity;
+		this.entity2 = entity2;
+		return this;
+	}
+
+	entitiesSwap(): UniverseWorldPlaceEntities
+	{
+		var temp = this.entity;
+		this.entity = this.entity2;
+		this.entity2 = temp;
+		return this;
+	}
+
+	entitySet(entity: Entity): UniverseWorldPlaceEntities
+	{
+		this.entity = entity;
+		return this;
 	}
 
 	fieldsSet
 	(
 		universe: Universe, world: World, place: Place,
 		entity: Entity, entity2: Entity
-	)
+	): UniverseWorldPlaceEntities
 	{
 		this.universe = universe;
 		this.world = world;
@@ -41,6 +83,27 @@ export class UniverseWorldPlaceEntities
 		this.entity2 = entity2;
 		return this;
 	}
+
+	// Clonable.
+
+	clone(): UniverseWorldPlaceEntities
+	{
+		return new UniverseWorldPlaceEntities
+		(
+			this.universe, this.world, this.place, this.entity, this.entity2
+		);
+	}
+
+	overwriteWith(other: UniverseWorldPlaceEntities): UniverseWorldPlaceEntities
+	{
+		this.universe = other.universe;
+		this.world = other.world;
+		this.place = other.place;
+		this.entity = other.entity;
+		this.entity2 = other.entity2;
+		return this;
+	}
+
 }
 
 }

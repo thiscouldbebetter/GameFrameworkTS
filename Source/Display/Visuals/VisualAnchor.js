@@ -12,7 +12,8 @@ var ThisCouldBeBetter;
                 this._posSaved = GameFramework.Coords.create();
                 this._orientationSaved = new GameFramework.Orientation(null, null);
             }
-            draw(universe, world, place, entity, display) {
+            draw(uwpe, display) {
+                var entity = uwpe.entity;
                 var drawableLoc = entity.locatable().loc;
                 var drawablePos = drawableLoc.pos;
                 var drawableOrientation = drawableLoc.orientation;
@@ -24,7 +25,7 @@ var ThisCouldBeBetter;
                 if (this.orientationToAnchorAt != null) {
                     drawableOrientation.overwriteWith(this.orientationToAnchorAt);
                 }
-                this.child.draw(universe, world, place, entity, display);
+                this.child.draw(uwpe, display);
                 drawablePos.overwriteWith(this._posSaved);
                 drawableOrientation.overwriteWith(this._orientationSaved);
             }

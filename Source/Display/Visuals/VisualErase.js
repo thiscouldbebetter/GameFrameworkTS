@@ -7,10 +7,10 @@ var ThisCouldBeBetter;
             constructor(child) {
                 this.child = child;
             }
-            draw(universe, world, place, entity, display) {
+            draw(uwpe, display) {
                 display.stateSave();
                 display.eraseModeSet(true);
-                this.child.draw(universe, world, place, entity, display);
+                this.child.draw(uwpe, display);
                 display.eraseModeSet(false);
                 display.stateRestore();
             }

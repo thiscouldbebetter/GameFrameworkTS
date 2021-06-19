@@ -24,29 +24,31 @@ export class Entity //
 		}
 	}
 
-	finalize(universe: Universe, world: World, place: Place): Entity
+	finalize(uwpe: UniverseWorldPlaceEntities): Entity
 	{
+		uwpe.entity = this;
 		var entityProperties = this.properties;
 		for (var p = 0; p < entityProperties.length; p++)
 		{
 			var property = entityProperties[p];
 			if (property.finalize != null)
 			{
-				property.finalize(universe, world, place, this);
+				property.finalize(uwpe);
 			}
 		}
 		return this;
 	}
 
-	initialize(universe: Universe, world: World, place: Place): Entity
+	initialize(uwpe: UniverseWorldPlaceEntities): Entity
 	{
+		uwpe.entity = this;
 		var entityProperties = this.properties;
 		for (var p = 0; p < entityProperties.length; p++)
 		{
 			var property = entityProperties[p];
 			if (property.initialize != null)
 			{
-				property.initialize(universe, world, place, this);
+				property.initialize(uwpe);
 			}
 		}
 		return this;
@@ -91,15 +93,17 @@ export class Entity //
 		return this;
 	}
 
-	updateForTimerTick(universe: Universe, world: World, place: Place): Entity
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): Entity
 	{
+		uwpe.entity = this;
+
 		var entityProperties = this.properties;
 		for (var p = 0; p < entityProperties.length; p++)
 		{
 			var property = entityProperties[p];
 			if (property.finalize != null)
 			{
-				property.finalize(universe, world, place, this);
+				property.finalize(uwpe);
 			}
 		}
 		return this;

@@ -15,19 +15,21 @@ var ThisCouldBeBetter;
             static fromAccelerationAndSpeedMax(accelerationPerTick, speedMax) {
                 return new Movable(accelerationPerTick, speedMax, null);
             }
-            accelerate(universe, world, place, entityMovable) {
-                this._accelerate(universe, world, place, entityMovable, this.accelerationPerTick);
+            accelerate(uwpe) {
+                this._accelerate(uwpe, this.accelerationPerTick);
             }
-            accelerateForward(universe, world, place, entityMovable, accelerationPerTick) {
+            accelerateForward(uwpe) {
+                var entityMovable = uwpe.entity;
                 var entityLoc = entityMovable.locatable().loc;
-                entityLoc.accel.overwriteWith(entityLoc.orientation.forward).multiplyScalar(entityMovable.movable().accelerationPerTick);
+                entityLoc.accel.overwriteWith(entityLoc.orientation.forward).multiplyScalar(this.accelerationPerTick);
             }
-            accelerateInDirection(universe, world, place, entity, directionToMove) {
+            accelerateInDirection(uwpe, directionToMove) {
+                var entity = uwpe.entity;
                 var entityLoc = entity.locatable().loc;
                 var isEntityStandingOnGround = (entityLoc.pos.z >= 0 && entityLoc.vel.z >= 0);
                 if (isEntityStandingOnGround) {
                     entityLoc.orientation.forwardSet(directionToMove);
-                    entity.movable().accelerate(universe, world, place, entity);
+                    entity.movable().accelerate(uwpe);
                 }
             }
             // Clonable.
@@ -35,36 +37,40 @@ var ThisCouldBeBetter;
                 return this;
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(u, w, p, e) { }
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) { }
             // Actions.
             static actionAccelerateDown() {
                 return new GameFramework.Action("AccelerateDown", 
                 // perform
-                (universe, world, place, actor) => {
-                    actor.movable().accelerateInDirection(universe, world, place, actor, GameFramework.Coords.Instances().ZeroOneZero);
+                (uwpe) => {
+                    var actor = uwpe.entity;
+                    actor.movable().accelerateInDirection(uwpe, GameFramework.Coords.Instances().ZeroOneZero);
                 });
             }
             static actionAccelerateLeft() {
                 return new GameFramework.Action("AccelerateLeft", 
                 // perform
-                (universe, world, place, actor) => {
-                    actor.movable().accelerateInDirection(universe, world, place, actor, GameFramework.Coords.Instances().MinusOneZeroZero);
+                (uwpe) => {
+                    var actor = uwpe.entity;
+                    actor.movable().accelerateInDirection(uwpe, GameFramework.Coords.Instances().MinusOneZeroZero);
                 });
             }
             static actionAccelerateRight() {
                 return new GameFramework.Action("AccelerateRight", 
                 // perform
-                (universe, world, place, actor) => {
-                    actor.movable().accelerateInDirection(universe, world, place, actor, GameFramework.Coords.Instances().OneZeroZero);
+                (uwpe) => {
+                    var actor = uwpe.entity;
+                    actor.movable().accelerateInDirection(uwpe, GameFramework.Coords.Instances().OneZeroZero);
                 });
             }
             static actionAccelerateUp() {
                 return new GameFramework.Action("AccelerateUp", 
                 // perform
-                (universe, world, place, actor) => {
-                    actor.movable().accelerateInDirection(universe, world, place, actor, GameFramework.Coords.Instances().ZeroMinusOneZero);
+                (uwpe) => {
+                    var actor = uwpe.entity;
+                    actor.movable().accelerateInDirection(uwpe, GameFramework.Coords.Instances().ZeroMinusOneZero);
                 });
             }
         }

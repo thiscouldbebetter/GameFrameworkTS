@@ -22,8 +22,9 @@ export class VisualAnchor implements Visual
 		this._orientationSaved = new Orientation(null, null);
 	}
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display)
 	{
+		var entity = uwpe.entity;
 		var drawableLoc = entity.locatable().loc;
 		var drawablePos = drawableLoc.pos;
 		var drawableOrientation = drawableLoc.orientation;
@@ -40,7 +41,7 @@ export class VisualAnchor implements Visual
 			drawableOrientation.overwriteWith(this.orientationToAnchorAt);
 		}
 
-		this.child.draw(universe, world, place, entity, display);
+		this.child.draw(uwpe, display);
 
 		drawablePos.overwriteWith(this._posSaved);
 		drawableOrientation.overwriteWith(this._orientationSaved);

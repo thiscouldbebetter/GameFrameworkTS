@@ -13,7 +13,10 @@ export class VenueControls implements Venue
 	_mouseMovePos: Coords;
 	_mouseMovePosPrev: Coords;
 
-	constructor(controlRoot: ControlBase, ignoreKeyboardAndGamepadInputs: boolean)
+	constructor
+	(
+		controlRoot: ControlBase, ignoreKeyboardAndGamepadInputs: boolean
+	)
 	{
 		this.controlRoot = controlRoot;
 		ignoreKeyboardAndGamepadInputs = ignoreKeyboardAndGamepadInputs || false;
@@ -42,13 +45,20 @@ export class VenueControls implements Venue
 			new ActionToInputsMapping
 			(
 				controlActionNames.ControlIncrement,
-				ArrayHelper.addMany( [inputNames.ArrowDown], buildGamepadInputs(inputNames.GamepadMoveDown) ),
+				ArrayHelper.addMany(
+					[inputNames.ArrowDown],
+					buildGamepadInputs(inputNames.GamepadMoveDown)
+				),
 				inactivate
 			),
 			new ActionToInputsMapping
 			(
 				controlActionNames.ControlPrev,
-				ArrayHelper.addMany( [inputNames.ArrowLeft], buildGamepadInputs(inputNames.GamepadMoveLeft) ),
+				ArrayHelper.addMany
+				(
+					[inputNames.ArrowLeft],
+					buildGamepadInputs(inputNames.GamepadMoveLeft)
+				),
 				inactivate
 			),
 			new ActionToInputsMapping
@@ -57,26 +67,42 @@ export class VenueControls implements Venue
 				ArrayHelper.addMany
 				(
 					[inputNames.ArrowRight],
-					ArrayHelper.addMany( [inputNames.ArrowRight, inputNames.Tab], buildGamepadInputs(inputNames.GamepadMoveRight) )
+					ArrayHelper.addMany
+					(
+						[inputNames.ArrowRight, inputNames.Tab],
+						buildGamepadInputs(inputNames.GamepadMoveRight)
+					)
 				),
 				inactivate
 			),
 			new ActionToInputsMapping
 			(
 				controlActionNames.ControlDecrement,
-				ArrayHelper.addMany( [inputNames.ArrowUp], buildGamepadInputs(inputNames.GamepadMoveUp) ),
+				ArrayHelper.addMany
+				(
+					[inputNames.ArrowUp],
+					buildGamepadInputs(inputNames.GamepadMoveUp)
+				),
 				inactivate
 			),
 			new ActionToInputsMapping
 			(
 				controlActionNames.ControlConfirm,
-				ArrayHelper.addMany( [inputNames.Enter], buildGamepadInputs(inputNames.GamepadButton1) ),
+				ArrayHelper.addMany
+				(
+					[inputNames.Enter],
+					buildGamepadInputs(inputNames.GamepadButton1)
+				),
 				inactivate
 			),
 			new ActionToInputsMapping
 			(
 				controlActionNames.ControlCancel,
-				ArrayHelper.addMany( [inputNames.Escape], buildGamepadInputs(inputNames.GamepadButton0) ),
+				ArrayHelper.addMany
+				(
+					[inputNames.Escape],
+					buildGamepadInputs(inputNames.GamepadButton0)
+				),
 				inactivate
 			)
 		);

@@ -7,11 +7,11 @@ var ThisCouldBeBetter;
             constructor(targetEntityId) {
                 this.targetEntityId = targetEntityId;
             }
-            constrain(universe, world, place, entityToConstrain) {
-                var targetEntity = place.entityById(this.targetEntityId);
+            constrain(uwpe) {
+                var targetEntity = uwpe.place.entityById(this.targetEntityId);
                 if (targetEntity != null) {
                     var targetPos = targetEntity.locatable().loc.pos;
-                    entityToConstrain.locatable().loc.pos.overwriteWith(targetPos);
+                    uwpe.entity.locatable().loc.pos.overwriteWith(targetPos);
                 }
             }
         }

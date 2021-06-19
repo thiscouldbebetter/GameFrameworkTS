@@ -11,11 +11,11 @@ export class VisualErase implements Visual
 		this.child = child;
 	}
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display)
 	{
 		display.stateSave();
 		display.eraseModeSet(true);
-		this.child.draw(universe, world, place, entity, display);
+		this.child.draw(uwpe, display);
 		display.eraseModeSet(false);
 		display.stateRestore();
 	}

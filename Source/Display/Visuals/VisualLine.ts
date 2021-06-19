@@ -27,8 +27,9 @@ export class VisualLine implements Visual
 		this._transformLocate = new Transform_Locate(null);
 	}
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
+		var entity = uwpe.entity;
 		var loc = entity.locatable().loc;
 		this._transformLocate.loc = loc;
 

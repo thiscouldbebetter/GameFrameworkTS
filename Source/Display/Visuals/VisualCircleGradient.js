@@ -9,7 +9,8 @@ var ThisCouldBeBetter;
                 this.gradientFill = gradientFill;
                 this.colorBorder = colorBorder;
             }
-            draw(universe, world, place, entity, display) {
+            draw(uwpe, display) {
+                var entity = uwpe.entity;
                 display.drawCircleWithGradient(entity.locatable().loc.pos, this.radius, this.gradientFill, this.colorBorder);
             }
             // Clonable.

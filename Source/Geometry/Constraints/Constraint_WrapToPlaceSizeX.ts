@@ -3,8 +3,11 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Constraint_WrapToPlaceSizeX implements Constraint
 {
-	constrain(universe: Universe, world: World, place: Place, entity: Entity): void
+	constrain(uwpe: UniverseWorldPlaceEntities): void
 	{
+		var place = uwpe.place;
+		var entity = uwpe.entity;
+
 		var placeSize = place.size;
 
 		var entityLoc = entity.locatable().loc;

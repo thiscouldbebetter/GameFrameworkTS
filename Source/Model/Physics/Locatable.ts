@@ -51,7 +51,7 @@ export class Locatable implements EntityProperty
 		locatableToApproach: Locatable,
 		accelerationPerTick: number,
 		speedMax: number// ,distanceMin: number
-	)
+	): number
 	{
 		accelerationPerTick = accelerationPerTick || .1;
 		speedMax = speedMax || 1;
@@ -68,65 +68,64 @@ export class Locatable implements EntityProperty
 		var targetPosRelative = targetPos.clone().subtract(actorPos);
 		var distanceToTarget = targetPosRelative.magnitude();
 
-		/*
-		if (distanceToTarget <= distanceMin)
-		{
-			distanceToTarget = 0;
-			actorPos.overwriteWith(targetPos);
-		}
-		else
-		{
-		*/
 
-			actorVel.trimToMagnitudeMax(speedMax);
+		actorVel.trimToMagnitudeMax(speedMax);
 
-			// hack
-			var ticksToApproach = Math.sqrt(2 * distanceToTarget / accelerationPerTick);
-			var targetVelRelative = targetLoc.vel.clone().subtract(actorVel);
-			var targetPosRelativeProjected = targetVelRelative.multiplyScalar
-			(
-				ticksToApproach
-			).add
-			(
-				targetPosRelative
-			);
+		// hack
+		var ticksToApproach =
+			Math.sqrt(2 * distanceToTarget / accelerationPerTick);
+		var targetVelRelative = targetLoc.vel.clone().subtract(actorVel);
+		var targetPosRelativeProjected = targetVelRelative.multiplyScalar
+		(
+			ticksToApproach
+		).add
+		(
+			targetPosRelative
+		);
 
-			actorLoc.accel.overwriteWith
-			(
-				targetPosRelativeProjected
-			).normalize().multiplyScalar(accelerationPerTick).clearZ();
+		actorLoc.accel.overwriteWith
+		(
+			targetPosRelativeProjected
+		).normalize().multiplyScalar(accelerationPerTick).clearZ();
 
-			actorOri.forwardSet(actorLoc.accel.clone().normalize());
-		//}
+		actorOri.forwardSet(actorLoc.accel.clone().normalize());
 
 		return distanceToTarget;
 	}
 
-	distanceFromEntity(entity: Entity)
+	distanceFromEntity(entity: Entity): number
 	{
 		return this.distanceFromPos(entity.locatable().loc.pos);
 	}
 
-	distanceFromPos(posToCheck: Coords)
+	distanceFromPos(posToCheck: Coords): number
 	{
 		return this.loc.pos.clone().subtract(posToCheck).magnitude();
 	}
 
-	entitySpawnWithDefnName(universe: Universe, world: World, place: Place, entitySpawning: Entity, entityToSpawnDefnName: string)
+	entitySpawnWithDefnName
+	(
+		uwpe: UniverseWorldPlaceEntities, entityToSpawnDefnName: string
+	): Entity
 	{
-		var entityDefnToSpawn = world.defn.entityDefnByName(entityToSpawnDefnName);
+		var world = uwpe.world;
+		var place = uwpe.place;
+		var entitySpawning = uwpe.entity;
+
+		var entityDefnToSpawn =
+			world.defn.entityDefnByName(entityToSpawnDefnName);
 		var entityToSpawn = entityDefnToSpawn.clone();
 		var loc = entityToSpawn.locatable().loc;
 		loc.overwriteWith(entitySpawning.locatable().loc);
 		loc.accel.clear();
 		loc.vel.clear();
-		place.entitySpawn(universe, world, entityToSpawn);
+		place.entitySpawn(uwpe);
 		return entityToSpawn;
 	}
 
 	// EntityProperty.
 
-	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity)
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var loc = this.loc;
 
@@ -150,8 +149,8 @@ export class Locatable implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
 }
 

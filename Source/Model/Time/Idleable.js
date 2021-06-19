@@ -9,9 +9,9 @@ var ThisCouldBeBetter;
                 this._idle = idle;
                 this.tickLastActionPerformed = 0;
             }
-            idle(universe, world, place, entity) {
+            idle(uwpe) {
                 if (this._idle != null) {
-                    this._idle(universe, world, place, entity);
+                    this._idle(uwpe);
                 }
             }
             isIdle(world) {
@@ -21,16 +21,18 @@ var ThisCouldBeBetter;
                 return world.timerTicksSoFar - this.tickLastActionPerformed;
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(universe, world, place, entity) {
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) {
+                var world = uwpe.world;
+                var entity = uwpe.entity;
                 var actor = entity.actor();
                 var actorIsActing = actor.actions.length > 0;
                 if (actorIsActing) {
                     this.tickLastActionPerformed = world.timerTicksSoFar;
                 }
                 else if (this.isIdle(world)) {
-                    this.idle(universe, world, place, entity);
+                    this.idle(uwpe);
                 }
             }
         }

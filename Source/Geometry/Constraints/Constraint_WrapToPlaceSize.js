@@ -4,7 +4,9 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Constraint_WrapToPlaceSize {
-            constrain(universe, world, place, entity) {
+            constrain(uwpe) {
+                var place = uwpe.place;
+                var entity = uwpe.entity;
                 var entityLoc = entity.locatable().loc;
                 entityLoc.pos.wrapToRangeMax(place.size);
             }

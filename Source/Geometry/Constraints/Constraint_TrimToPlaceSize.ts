@@ -4,10 +4,10 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Constraint_TrimToPlaceSize implements Constraint
 {
-	constrain(universe: Universe, world: World, place: Place, entity: Entity)
+	constrain(uwpe: UniverseWorldPlaceEntities): void
 	{
-		var entityLoc = entity.locatable().loc;
-		entityLoc.pos.trimToRangeMax(place.size);
+		var entityLoc = uwpe.entity.locatable().loc;
+		entityLoc.pos.trimToRangeMax(uwpe.place.size);
 	}
 }
 

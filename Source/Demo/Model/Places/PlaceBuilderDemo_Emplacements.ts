@@ -28,8 +28,12 @@ class PlaceBuilderDemo_Emplacements
 				)
 			);
 		}
-		var anvilUse = (universe: Universe, w: World, p: Place, entityUsing: Entity, entityUsed: Entity) =>
+		var anvilUse = (uwpe: UniverseWorldPlaceEntities) =>
 		{
+			var universe = uwpe.universe;
+			var entityUsing = uwpe.entity;
+			var entityUsed = uwpe.entity2;
+
 			var itemCrafter = entityUsed.itemCrafter();
 			var itemCrafterAsControls = itemCrafter.toControl
 			(
@@ -118,8 +122,11 @@ class PlaceBuilderDemo_Emplacements
 			collider,
 			[ Collidable.name ], // entityPropertyNamesToCollideWith,
 			// collideEntities
-			(u: Universe, w: World, p: Place, e: Entity, e2: Entity) =>
+			(uwpe: UniverseWorldPlaceEntities) =>
 			{
+				var u = uwpe.universe;
+				var e = uwpe.entity;
+				var e2 = uwpe.entity2;
 				u.collisionHelper.collideEntitiesBounce(e, e2);
 			}
 		);
@@ -128,11 +135,12 @@ class PlaceBuilderDemo_Emplacements
 		(
 			1, // integrityMax
 			null, // damageApply
-			(u: Universe, w: World, p: Place, entityDying: Entity) =>
+			(uwpe: UniverseWorldPlaceEntities) =>
 			{
+				var entityDying = uwpe.entity;
 				var entityDropped = entityDying.locatable().entitySpawnWithDefnName
 				(
-					u, w, p, entityDying, "Iron Ore"
+					uwpe, "Iron Ore"
 				);
 				entityDropped.item().quantity = DiceRoll.roll("1d3", null);
 			}
@@ -215,8 +223,9 @@ class PlaceBuilderDemo_Emplacements
 		}
 
 		var campfireCollider = new Sphere(Coords.create(), entityDimensionHalf);
-		var campfireCollide = (u: Universe, w: World, p: Place, entityCampfire: Entity, entityOther: Entity) =>
+		var campfireCollide = (uwpe: UniverseWorldPlaceEntities) =>
 		{
+			var entityOther = uwpe.entity2;
 			var entityOtherEffectable = entityOther.effectable();
 			if (entityOtherEffectable != null)
 			{
@@ -293,10 +302,14 @@ class PlaceBuilderDemo_Emplacements
 				Locatable.create(),
 				new Usable
 				(
-					(universe: Universe, w: World, p: Place, entityUsing: Entity, entityOther: Entity) =>
+					(uwpe: UniverseWorldPlaceEntities) =>
 					{
+						var universe = uwpe.universe;
+						var entityUsing = uwpe.entity;
+						var entityOther = uwpe.entity2;
 						//entityOther.collidable().ticksUntilCanCollide = 50; // hack
-						var itemContainerAsControl = entityOther.itemContainer().toControl
+						var itemContainer = entityOther.itemContainer();
+						var itemContainerAsControl = itemContainer.toControl
 						(
 							universe, universe.display.sizeInPixels,
 							entityUsing, entityOther,
@@ -375,9 +388,10 @@ class PlaceBuilderDemo_Emplacements
 				new Portal(null, null, Coords.create()), // Destination must be set ouside this method.
 				new Usable
 				(
-					(u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) =>
+					(uwpe: UniverseWorldPlaceEntities) =>
 					{
-						eUsed.portal().use(u, w, p, eUsing, eUsed);
+						var eUsed = uwpe.entity2;
+						eUsed.portal().use(uwpe);
 						return null;
 					}
 				)
@@ -423,8 +437,11 @@ class PlaceBuilderDemo_Emplacements
 			);
 		}
 
-		var use = (u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity): any =>
+		var use = (uwpe: UniverseWorldPlaceEntities): any =>
 		{
+			var u = uwpe.universe;
+			var eUsing = uwpe.entity;
+			var eUsed = uwpe.entity2;
 			var itemContainerAsControl = eUsed.itemContainer().toControl
 			(
 				u, u.display.sizeInPixels, eUsing, eUsed, u.venueCurrent
@@ -686,10 +703,13 @@ class PlaceBuilderDemo_Emplacements
 				)
 			);
 		}
-		var pillowUse = (universe: Universe, w: World, p: Place, entityUsing: Entity, entityUsed: Entity) =>
+		var pillowUse = (uwpe: UniverseWorldPlaceEntities) =>
 		{
+			var universe = uwpe.universe;
+			var entityUsing = uwpe.entity;
+
 			var tirable = entityUsing.tirable();
-			tirable.fallAsleep(universe, w, p, entityUsing);
+			tirable.fallAsleep(uwpe);
 			var venueNext = universe.venueCurrent;
 			venueNext = VenueFader.fromVenuesToAndFrom(venueNext, venueNext);
 			universe.venueNext = venueNext;
@@ -738,8 +758,9 @@ class PlaceBuilderDemo_Emplacements
 			(
 				new VisualDynamic
 				(
-					(u: Universe, w: World, p: Place, e: Entity) =>
+					(uwpe: UniverseWorldPlaceEntities) =>
 					{
+						var e = uwpe.entity;
 						var baseColor = Color.byName("Brown");
 						return VisualText.fromTextAndColor
 						(
@@ -752,9 +773,10 @@ class PlaceBuilderDemo_Emplacements
 			)
 		]);
 
-		var portalUse = (u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity): any =>
+		var portalUse = (uwpe: UniverseWorldPlaceEntities): any =>
 		{
-			eUsed.portal().use(u, w, p, eUsing, eUsed);
+			var eUsed = uwpe.entity2;
+			eUsed.portal().use(uwpe);
 			return null;
 		};
 
@@ -820,9 +842,12 @@ class PlaceBuilderDemo_Emplacements
 			collider,
 			[ Movable.name ], // entityPropertyNamesToCollideWith,
 			// collideEntities
-			(u: Universe, w: World, p: Place, e: Entity, e2: Entity) =>
+			(uwpe: UniverseWorldPlaceEntities, c: Collision) =>
 			{
-				u.collisionHelper.collideEntitiesBounce(e, e2);
+				var universe = uwpe.universe;
+				var e = uwpe.entity;
+				var e2 = uwpe.entity2;
+				universe.collisionHelper.collideEntitiesBounce(e, e2);
 			}
 		);
 
@@ -897,8 +922,11 @@ class PlaceBuilderDemo_Emplacements
 			collider,
 			[ Collidable.name ], // entityPropertyNamesToCollideWith,
 			// collideEntities
-			(u: Universe, w: World, p: Place, e: Entity, e2: Entity) =>
+			(uwpe: UniverseWorldPlaceEntities, c: Collision) =>
 			{
+				var u = uwpe.universe;
+				var e = uwpe.entity;
+				var e2 = uwpe.entity2;
 				u.collisionHelper.collideEntitiesBounce(e, e2);
 			}
 		);

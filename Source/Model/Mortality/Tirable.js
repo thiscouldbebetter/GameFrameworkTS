@@ -13,12 +13,13 @@ var ThisCouldBeBetter;
                 this.stamina = this.staminaMaxAfterSleep;
                 this.staminaMaxRemainingBeforeSleep = this.staminaMaxAfterSleep;
             }
-            fallAsleep(u, w, p, e) {
+            fallAsleep(uwpe) {
                 var staminaMaxToRecover = this.staminaMaxAfterSleep - this.staminaMaxRemainingBeforeSleep;
                 var ticksToRecover = Math.ceil(staminaMaxToRecover / this.staminaMaxRecoveredPerTickOfSleep);
-                w.timerTicksSoFar += ticksToRecover;
+                var world = uwpe.world;
+                world.timerTicksSoFar += ticksToRecover;
                 if (this._fallAsleep != null) {
-                    this._fallAsleep(u, w, p, e);
+                    this._fallAsleep(uwpe);
                 }
             }
             isExhausted() {
@@ -32,11 +33,11 @@ var ThisCouldBeBetter;
                 this.staminaAdd(0 - amountToSubtract);
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(universe, world, place, entityStarvable) {
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) {
                 if (this.isExhausted()) {
-                    this.fallAsleep(universe, world, place, entityStarvable);
+                    this.fallAsleep(uwpe);
                 }
                 else {
                     this.staminaMaxRemainingBeforeSleep -= this.staminaMaxLostPerTick;

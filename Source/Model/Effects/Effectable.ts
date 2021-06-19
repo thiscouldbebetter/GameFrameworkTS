@@ -29,15 +29,15 @@ export class Effectable implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
-	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		for (var i = 0; i < this.effects.length; i++)
 		{
 			var effect = this.effects[i];
-			effect.updateForTimerTick(u, w, p, e);
+			effect.updateForTimerTick(uwpe);
 		}
 		this.effects = this.effects.filter(x => x.isDone() == false);
 	}

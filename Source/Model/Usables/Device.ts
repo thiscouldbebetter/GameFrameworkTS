@@ -5,9 +5,9 @@ namespace ThisCouldBeBetter.GameFramework
 export class Device implements EntityProperty
 {
 	name: string;
-	_initialize: (u: Universe, w: World, p: Place, e: Entity) => void;
-	update: (u: Universe, w: World, p: Place, e: Entity) => void;
-	_use: (u: Universe, w: World, p: Place, eUser: Entity, eDevice: Entity) => void;
+	_initialize: (uwpe: UniverseWorldPlaceEntities) => void;
+	update: (uwpe: UniverseWorldPlaceEntities) => void;
+	_use: (uwpe: UniverseWorldPlaceEntities) => void;
 
 	tickLastUsed: number;
 	ticksToCharge: number;
@@ -16,9 +16,9 @@ export class Device implements EntityProperty
 	(
 		name: string,
 		ticksToCharge: number,
-		initialize: (u: Universe, w: World, p: Place, e: Entity) => void,
-		update: (u: Universe, w: World, p: Place, e: Entity) => void,
-		use: (u: Universe, w: World, p: Place, eUser: Entity, eDevice: Entity) => void
+		initialize: (uwpe: UniverseWorldPlaceEntities) => void,
+		update: (uwpe: UniverseWorldPlaceEntities) => void,
+		use: (uwpe: UniverseWorldPlaceEntities) => void
 	)
 	{
 		this.name = name;
@@ -32,25 +32,26 @@ export class Device implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 
-	initialize(u: Universe, w: World, p: Place, e: Entity): void
+	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this._initialize != null)
 		{
-			this._initialize(u, w, p, e);
+			this._initialize(uwpe);
 		}
 	}
 
-	use(u: Universe, w: World, p: Place, eUser: Entity, eDevice: Entity): void
+	use(uwpe: UniverseWorldPlaceEntities): void
 	{
-		var tickCurrent = w.timerTicksSoFar;
+		var world = uwpe.world;
+		var tickCurrent = world.timerTicksSoFar;
 		var ticksSinceUsed = tickCurrent - this.tickLastUsed;
 		if (ticksSinceUsed >= this.ticksToCharge)
 		{
 			this.tickLastUsed = tickCurrent;
-			this._use(u, w, p, eUser, eDevice);
+			this._use(uwpe);
 		}
 	}
 

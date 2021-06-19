@@ -11,7 +11,9 @@ var ThisCouldBeBetter;
                 this.sizeToDrawHalf = this.sizeToDraw.clone().half();
                 this._posSaved = GameFramework.Coords.create();
             }
-            draw(universe, world, place, entity, display) {
+            draw(uwpe, display) {
+                var universe = uwpe.universe;
+                var entity = uwpe.entity;
                 var image = this.visualImageToExtractFrom.image(universe);
                 var entityPos = entity.locatable().loc.pos;
                 this._posSaved.overwriteWith(entityPos);

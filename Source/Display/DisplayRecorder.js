@@ -15,7 +15,8 @@ var ThisCouldBeBetter;
             static actionStartStop() {
                 return new GameFramework.Action("Recording Start/Stop", DisplayRecorder.actionStartStopPerform);
             }
-            static actionStartStopPerform(universe, world, place, actor) {
+            static actionStartStopPerform(uwpe) {
+                var universe = uwpe.universe;
                 var recorder = universe.displayRecorder;
                 if (recorder.isRecording) {
                     recorder.stop();

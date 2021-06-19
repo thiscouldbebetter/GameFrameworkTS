@@ -6,13 +6,13 @@ export class Movable implements EntityProperty
 {
 	accelerationPerTick: number;
 	speedMax: number;
-	_accelerate: (u: Universe, w: World, p: Place, e: Entity, a: number) => void;
+	_accelerate: (uwpe: UniverseWorldPlaceEntities, a: number) => void;
 
 	constructor
 	(
 		accelerationPerTick: number,
 		speedMax: number,
-		accelerate: (u: Universe, w: World, p: Place, e: Entity, a: number) => void
+		accelerate: (uwpe: UniverseWorldPlaceEntities, a: number) => void
 	)
 	{
 		this.accelerationPerTick = accelerationPerTick;
@@ -35,41 +35,38 @@ export class Movable implements EntityProperty
 
 	accelerate
 	(
-		universe: Universe, world: World, place: Place, entityMovable: Entity
+		uwpe: UniverseWorldPlaceEntities
 	): void
 	{
-		this._accelerate(universe, world, place, entityMovable, this.accelerationPerTick);
+		this._accelerate(uwpe, this.accelerationPerTick);
 	}
 
-	accelerateForward
-	(
-		universe: Universe, world: World, place: Place, entityMovable: Entity,
-		accelerationPerTick: number
-	): void
+	accelerateForward(uwpe: UniverseWorldPlaceEntities): void
 	{
+		var entityMovable = uwpe.entity;
 		var entityLoc = entityMovable.locatable().loc;
 		entityLoc.accel.overwriteWith
 		(
 			entityLoc.orientation.forward
 		).multiplyScalar
 		(
-			entityMovable.movable().accelerationPerTick
+			this.accelerationPerTick
 		);
 	}
 
 	accelerateInDirection
 	(
-		universe: Universe, world: World, place: Place, entity: Entity,
-		directionToMove: Coords
+		uwpe: UniverseWorldPlaceEntities, directionToMove: Coords
 	): void
 	{
+		var entity = uwpe.entity;
 		var entityLoc = entity.locatable().loc;
 		var isEntityStandingOnGround =
 			(entityLoc.pos.z >= 0 && entityLoc.vel.z >= 0);
 		if (isEntityStandingOnGround)
 		{
 			entityLoc.orientation.forwardSet(directionToMove);
-			entity.movable().accelerate(universe, world, place, entity);
+			entity.movable().accelerate(uwpe);
 		}
 	}
 
@@ -82,9 +79,9 @@ export class Movable implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
-	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 
 	// Actions.
 
@@ -94,11 +91,12 @@ export class Movable implements EntityProperty
 		(
 			"AccelerateDown",
 			// perform
-			(universe: Universe, world: World, place: Place, actor: Entity) =>
+			(uwpe: UniverseWorldPlaceEntities) =>
 			{
+				var actor = uwpe.entity;
 				actor.movable().accelerateInDirection
 				(
-					universe, world, place, actor, Coords.Instances().ZeroOneZero
+					uwpe, Coords.Instances().ZeroOneZero
 				);
 			}
 		)
@@ -110,11 +108,12 @@ export class Movable implements EntityProperty
 		(
 			"AccelerateLeft",
 			// perform
-			(universe: Universe, world: World, place: Place, actor: Entity) =>
+			(uwpe: UniverseWorldPlaceEntities) =>
 			{
+				var actor = uwpe.entity;
 				actor.movable().accelerateInDirection
 				(
-					universe, world, place, actor, Coords.Instances().MinusOneZeroZero
+					uwpe, Coords.Instances().MinusOneZeroZero
 				);
 			}
 		);
@@ -126,11 +125,12 @@ export class Movable implements EntityProperty
 		(
 			"AccelerateRight",
 			// perform
-			(universe: Universe, world: World, place: Place, actor: Entity) =>
+			(uwpe: UniverseWorldPlaceEntities) =>
 			{
+				var actor = uwpe.entity;
 				actor.movable().accelerateInDirection
 				(
-					universe, world, place, actor, Coords.Instances().OneZeroZero
+					uwpe, Coords.Instances().OneZeroZero
 				);
 			}
 		);
@@ -142,11 +142,12 @@ export class Movable implements EntityProperty
 		(
 			"AccelerateUp",
 			// perform
-			(universe: Universe, world: World, place: Place, actor: Entity) =>
+			(uwpe: UniverseWorldPlaceEntities) =>
 			{
+				var actor = uwpe.entity;
 				actor.movable().accelerateInDirection
 				(
-					universe, world, place, actor, Coords.Instances().ZeroMinusOneZero
+					uwpe, Coords.Instances().ZeroMinusOneZero
 				);
 			}
 		);

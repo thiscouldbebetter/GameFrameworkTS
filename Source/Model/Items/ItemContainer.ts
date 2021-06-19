@@ -37,9 +37,13 @@ export class ItemContainer implements EntityProperty
 			var equipmentUser = entityFrom.equipmentUser();
 			if (equipmentUser != null)
 			{
+				var uwpe = new UniverseWorldPlaceEntities
+				(
+					null, world, null, entityFrom, entityTo
+				);
 				equipmentUser.unequipItemsNoLongerHeld
 				(
-					null, world, world.placeCurrent, entityFrom
+					uwpe
 				);
 			}
 
@@ -48,9 +52,9 @@ export class ItemContainer implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
-	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 
 	// Controllable.
 
@@ -196,7 +200,7 @@ export class ItemContainer implements EntityProperty
 					), // items
 					DataBinding.fromGet
 					(
-						(c: Entity) => c.toString()
+						(c: Entity) => c.item().toString(world)
 					), // bindingForItemText
 					fontHeight,
 					new DataBinding

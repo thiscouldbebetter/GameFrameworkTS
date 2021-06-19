@@ -24,10 +24,10 @@ var ThisCouldBeBetter;
                 this.targetSet(target);
                 return this;
             }
-            perform(u, w, p, e) {
+            perform(uwpe) {
                 if (this.defnName != null) {
-                    var defn = this.defn(w);
-                    defn.perform(u, w, p, e);
+                    var defn = this.defn(uwpe.world);
+                    defn.perform(uwpe);
                 }
             }
             target() {

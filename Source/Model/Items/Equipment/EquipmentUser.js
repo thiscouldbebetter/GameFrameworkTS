@@ -7,7 +7,9 @@ var ThisCouldBeBetter;
             constructor(socketDefnGroup) {
                 this.socketGroup = new GameFramework.EquipmentSocketGroup(socketDefnGroup);
             }
-            equipAll(universe, world, place, entityEquipmentUser) {
+            equipAll(uwpe) {
+                var world = uwpe.world;
+                var entityEquipmentUser = uwpe.entity;
                 var itemHolder = entityEquipmentUser.itemHolder();
                 var itemsNotYetEquipped = itemHolder.items;
                 var sockets = this.socketGroup.sockets;
@@ -19,13 +21,17 @@ var ThisCouldBeBetter;
                         var itemsEquippable = itemsNotYetEquipped.filter((x) => GameFramework.ArrayHelper.intersectArrays(x.defn(world).categoryNames, categoriesEquippableNames).length > 0);
                         if (itemsEquippable.length > 0) {
                             var itemToEquip = itemsEquippable[0];
-                            var itemToEquipAsEntity = itemToEquip.toEntity(universe, world, place, entityEquipmentUser);
-                            this.equipItemEntityInSocketWithName(universe, world, place, entityEquipmentUser, itemToEquipAsEntity, socket.defnName, true);
+                            var itemToEquipAsEntity = itemToEquip.toEntity(uwpe);
+                            uwpe.entity2 = itemToEquipAsEntity;
+                            this.equipItemEntityInSocketWithName(uwpe, socket.defnName, true // ?
+                            );
                         }
                     }
                 }
             }
-            equipEntityWithItem(universe, world, place, entityEquipmentUser, itemEntityToEquip) {
+            equipEntityWithItem(uwpe) {
+                var world = uwpe.world;
+                var itemEntityToEquip = uwpe.entity2;
                 if (itemEntityToEquip == null) {
                     return null;
                 }
@@ -44,11 +50,12 @@ var ThisCouldBeBetter;
                 }
                 else {
                     var socketFoundName = socketFound.defnName;
-                    message = this.equipItemEntityInSocketWithName(universe, world, place, entityEquipmentUser, itemEntityToEquip, socketFoundName, false);
+                    message = this.equipItemEntityInSocketWithName(uwpe, socketFoundName, false);
                 }
                 return message;
             }
-            equipItemEntityInFirstOpenQuickSlot(universe, world, place, entityEquipmentUser, itemEntityToEquip, includeSocketNameInMessage) {
+            equipItemEntityInFirstOpenQuickSlot(uwpe, includeSocketNameInMessage) {
+                var itemEntityToEquip = uwpe.entity2;
                 var itemToEquipDefnName = itemEntityToEquip.item().defnName;
                 var socketFound = null;
                 var itemQuickSlotCount = 10;
@@ -67,10 +74,12 @@ var ThisCouldBeBetter;
                     }
                 }
                 if (socketFound != null) {
-                    this.equipItemEntityInSocketWithName(universe, world, place, entityEquipmentUser, itemEntityToEquip, socketFound.defnName, includeSocketNameInMessage);
+                    this.equipItemEntityInSocketWithName(uwpe, socketFound.defnName, includeSocketNameInMessage);
                 }
             }
-            equipItemEntityInSocketWithName(universe, world, place, entityEquipmentUser, itemEntityToEquip, socketName, includeSocketNameInMessage) {
+            equipItemEntityInSocketWithName(uwpe, socketName, includeSocketNameInMessage) {
+                var world = uwpe.world;
+                var itemEntityToEquip = uwpe.entity2;
                 if (itemEntityToEquip == null) {
                     return "Nothing to equip!";
                 }
@@ -84,14 +93,14 @@ var ThisCouldBeBetter;
                 }
                 else if (socket.itemEntityEquipped == itemEntityToEquip) {
                     if (equippable != null) {
-                        equippable.unequip(universe, world, place, entityEquipmentUser, itemEntityToEquip);
+                        equippable.unequip(uwpe);
                     }
                     socket.itemEntityEquipped = null;
                     message += " unequipped.";
                 }
                 else {
                     if (equippable != null) {
-                        equippable.equip(universe, world, place, entityEquipmentUser, itemEntityToEquip);
+                        equippable.equip(uwpe);
                     }
                     socket.itemEntityEquipped = itemEntityToEquip;
                     message += " equipped";
@@ -129,7 +138,8 @@ var ThisCouldBeBetter;
                 }
                 return message;
             }
-            unequipItemsNoLongerHeld(universe, world, place, entityEquipmentUser) {
+            unequipItemsNoLongerHeld(uwpe) {
+                var entityEquipmentUser = uwpe.entity;
                 var itemHolder = entityEquipmentUser.itemHolder();
                 var itemsHeld = itemHolder.items;
                 var sockets = this.socketGroup.sockets;
@@ -145,7 +155,7 @@ var ThisCouldBeBetter;
                                 socket.itemEntityEquipped = null;
                             }
                             else {
-                                socket.itemEntityEquipped = itemOfSameTypeStillHeld.toEntity(universe, world, place, entityEquipmentUser);
+                                socket.itemEntityEquipped = itemOfSameTypeStillHeld.toEntity(uwpe);
                             }
                         }
                     }
@@ -157,20 +167,22 @@ var ThisCouldBeBetter;
                     socket.itemEntityEquipped = null;
                 }
             }
-            useItemInSocketNumbered(universe, world, place, actor, socketNumber) {
+            useItemInSocketNumbered(uwpe, socketNumber) {
+                var actor = uwpe.entity;
                 var equipmentUser = actor.equipmentUser();
                 var socketName = "Item" + socketNumber;
                 var entityItemEquipped = equipmentUser.itemEntityInSocketWithName(socketName);
                 if (entityItemEquipped != null) {
                     var itemEquipped = entityItemEquipped.item();
-                    itemEquipped.use(universe, world, place, actor, entityItemEquipped);
+                    uwpe.entity2 = entityItemEquipped;
+                    itemEquipped.use(uwpe);
                 }
-                this.unequipItemsNoLongerHeld(universe, world, place, actor);
+                this.unequipItemsNoLongerHeld(uwpe);
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(u, w, p, e) { }
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) { }
             // control
             toControl(universe, size, entityEquipmentUser, venuePrev, includeTitleAndDoneButton) {
                 this.statusMessage = "Equip items in available slots.";
@@ -199,14 +211,16 @@ var ThisCouldBeBetter;
                 }
                 var world = universe.world;
                 var place = world.placeCurrent;
-                var itemEntities = itemHolder.itemEntities(universe, world, place, entityEquipmentUser);
+                var uwpe = new GameFramework.UniverseWorldPlaceEntities(universe, world, place, entityEquipmentUser, null);
+                var itemEntities = itemHolder.itemEntities(uwpe);
                 var itemEntitiesEquippable = itemEntities.filter(x => x.equippable() != null);
                 var world = universe.world;
                 var place = world.placeCurrent;
                 var listHeight = 100;
                 var equipItemSelectedToSocketDefault = () => {
                     var itemEntityToEquip = equipmentUser.itemEntitySelected;
-                    var message = equipmentUser.equipEntityWithItem(universe, world, place, entityEquipmentUser, itemEntityToEquip);
+                    uwpe.entity2 = itemEntityToEquip;
+                    var message = equipmentUser.equipEntityWithItem(uwpe);
                     equipmentUser.statusMessage = message;
                 };
                 var listEquippables = new GameFramework.ControlList("listEquippables", GameFramework.Coords.fromXY(10, 15), // pos
@@ -219,19 +233,21 @@ var ThisCouldBeBetter;
                 equipItemSelectedToSocketDefault, null);
                 var equipItemSelectedToSocketSelected = () => {
                     var itemEntityToEquip = equipmentUser.itemEntitySelected;
+                    uwpe.entity2 = itemEntityToEquip;
                     var message;
                     var socketSelected = equipmentUser.socketSelected;
                     if (socketSelected == null) {
-                        message = equipmentUser.equipEntityWithItem(universe, world, place, entityEquipmentUser, itemEntityToEquip);
+                        message = equipmentUser.equipEntityWithItem(uwpe);
                     }
                     else {
-                        message = equipmentUser.equipItemEntityInSocketWithName(universe, world, place, entityEquipmentUser, itemEntityToEquip, socketSelected.defnName, true // includeSocketNameInMessage
+                        message = equipmentUser.equipItemEntityInSocketWithName(uwpe, socketSelected.defnName, true // includeSocketNameInMessage
                         );
                     }
                     equipmentUser.statusMessage = message;
                 };
                 var equipItemSelectedInQuickSlot = (quickSlotNumber) => {
-                    equipmentUser.equipItemEntityInSocketWithName(universe, universe.world, universe.world.placeCurrent, entityEquipmentUser, equipmentUser.itemEntitySelected, "Item" + quickSlotNumber, // socketName
+                    uwpe.entity2 = equipmentUser.itemEntitySelected;
+                    equipmentUser.equipItemEntityInSocketWithName(uwpe, "Item" + quickSlotNumber, // socketName
                     true // includeSocketNameInMessage
                     );
                 };

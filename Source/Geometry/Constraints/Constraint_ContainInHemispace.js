@@ -8,7 +8,8 @@ var ThisCouldBeBetter;
                 this.hemispaceToContainWithin = hemispaceToContainWithin;
                 this._coordsTemp = GameFramework.Coords.create();
             }
-            constrain(universe, world, place, entity) {
+            constrain(uwpe) {
+                var entity = uwpe.entity;
                 var hemispace = this.hemispaceToContainWithin;
                 var plane = hemispace.plane;
                 var loc = entity.locatable().loc;

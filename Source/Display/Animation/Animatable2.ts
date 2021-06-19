@@ -41,7 +41,7 @@ export class Animatable2 implements EntityProperty
 		this.ticksStartedByAnimationName.delete(name);
 	}
 
-	animationWithNameStartIfNecessary(animationName: string, world: World)
+	animationWithNameStartIfNecessary(animationName: string, world: World): number
 	{
 		if (this.ticksStartedByAnimationName.has(animationName) == false)
 		{
@@ -84,11 +84,12 @@ export class Animatable2 implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
-	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity): void
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
+		var world = uwpe.world;
 		var animationDefnsRunning = this.animationDefnsRunning();
 		for (var i = 0; i < animationDefnsRunning.length; i++)
 		{

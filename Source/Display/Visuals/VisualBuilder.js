@@ -164,7 +164,8 @@ var ThisCouldBeBetter;
                     ["FacingUpWalking", visualLegsFacingUpWalking]
                 ]), 
                 // selectChildNames
-                (u, w, p, e, d) => {
+                (uwpe, d) => {
+                    var e = uwpe.entity;
                     var entityLoc = e.locatable().loc;
                     var entityForward = entityLoc.orientation.forward;
                     var entityForwardInTurns = entityForward.headingInTurns();
@@ -198,7 +199,9 @@ var ThisCouldBeBetter;
                 var lineThickness = 2;
                 var circleWithEyesAndLegs = this.circleWithEyesAndLegs(circleRadius, circleColor, eyeRadius, visualEyes);
                 var visualNone = new GameFramework.VisualNone();
-                var visualWieldable = new GameFramework.VisualDynamic((u, w, p, e) => {
+                var visualWieldable = new GameFramework.VisualDynamic((uwpe) => {
+                    var w = uwpe.world;
+                    var e = uwpe.entity;
                     var equipmentUser = e.equipmentUser();
                     var entityWieldableEquipped = equipmentUser.itemEntityInSocketWithName("Wielding");
                     var itemDrawable = entityWieldableEquipped.drawable();
@@ -244,8 +247,9 @@ var ThisCouldBeBetter;
                 var visualWielding = new GameFramework.VisualSelect(new Map([
                     ["Visible", visualArmAndWieldableDirectionalOffset],
                     ["Hidden", visualNone]
-                ]), (u, w, p, e, d) => // selectChildNames
+                ]), (uwpe, d) => // selectChildNames
                  {
+                    var e = uwpe.entity;
                     var itemEntityWielded = e.equipmentUser().itemEntityInSocketWithName("Wielding");
                     var returnValue = (itemEntityWielded == null ? "Hidden" : "Visible");
                     return [returnValue];

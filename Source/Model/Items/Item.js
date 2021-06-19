@@ -17,10 +17,10 @@ var ThisCouldBeBetter;
             mass(world) {
                 return this.quantity * this.defn(world).mass;
             }
-            toEntity(u, w, p, e) {
+            toEntity(uwpe) {
                 if (this._entity == null) {
-                    var defn = this.defn(w);
-                    this._entity = defn.toEntity(u, w, p, e, this);
+                    var defn = this.defn(uwpe.world);
+                    this._entity = defn.toEntity(uwpe, this);
                 }
                 return this._entity;
             }
@@ -30,11 +30,11 @@ var ThisCouldBeBetter;
             tradeValue(world) {
                 return this.quantity * this.defn(world).tradeValue;
             }
-            use(universe, world, place, userEntity, itemEntity) {
+            use(uwpe) {
                 var returnValue = null;
-                var defn = this.defn(world);
+                var defn = this.defn(uwpe.world);
                 if (defn.use != null) {
-                    returnValue = defn.use(universe, world, place, userEntity, itemEntity);
+                    returnValue = defn.use(uwpe);
                 }
                 return returnValue;
             }
@@ -43,9 +43,9 @@ var ThisCouldBeBetter;
                 return new Item(this.defnName, this.quantity);
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(u, w, p, e) { }
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) { }
         }
         GameFramework.Item = Item;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

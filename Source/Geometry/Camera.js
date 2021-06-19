@@ -82,10 +82,12 @@ var ThisCouldBeBetter;
                 viewCoords.add(this.viewSizeHalf);
                 return viewCoords;
             }
-            drawEntitiesInView(universe, world, place, cameraEntity, display) {
+            drawEntitiesInView(uwpe, cameraEntity, display) {
+                var universe = uwpe.universe;
+                var place = uwpe.place;
                 this.loc.pos.round(); // hack - To prevent lines between map tiles.
                 this.entitiesInView = this.drawEntitiesInView_1_FindEntitiesInView(place, cameraEntity, universe.collisionHelper, this.entitiesInView);
-                this.drawEntitiesInView_2_Draw(universe, world, place, display, this.entitiesInView);
+                this.drawEntitiesInView_2_Draw(uwpe, display, this.entitiesInView);
             }
             drawEntitiesInView_1_FindEntitiesInView(place, cameraEntity, collisionHelper, entitiesInView) {
                 var collisionTracker = place.collisionTracker();
@@ -138,15 +140,16 @@ var ThisCouldBeBetter;
                 }
                 return entitiesInView;
             }
-            drawEntitiesInView_2_Draw(universe, world, place, display, entitiesInView) {
+            drawEntitiesInView_2_Draw(uwpe, display, entitiesInView) {
                 this.entitiesInViewSort(entitiesInView);
                 for (var i = 0; i < entitiesInView.length; i++) {
                     var entity = entitiesInView[i];
+                    uwpe.entity = entity;
                     var visual = entity.drawable().visual;
                     var entityPos = entity.locatable().loc.pos;
                     this._posSaved.overwriteWith(entityPos);
                     this.coordsTransformWorldToView(entityPos);
-                    visual.draw(universe, world, place, entity, display);
+                    visual.draw(uwpe, display);
                     entityPos.overwriteWith(this._posSaved);
                 }
             }
@@ -164,9 +167,9 @@ var ThisCouldBeBetter;
                 return new GameFramework.Entity(Camera.name, [this]);
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(u, w, p, e) {
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) {
                 // Do nothing.  Rendering is done in Place.draw().
             }
         }

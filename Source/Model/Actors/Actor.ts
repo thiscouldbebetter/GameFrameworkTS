@@ -28,15 +28,12 @@ export class Actor implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
-	updateForTimerTick
-	(
-		universe: Universe, world: World, place: Place, entity: Entity
-	): void
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
-		this.activity.perform(universe, world, place, entity);
+		this.activity.perform(uwpe);
 	}
 }
 

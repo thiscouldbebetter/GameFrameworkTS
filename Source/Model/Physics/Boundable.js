@@ -8,11 +8,12 @@ var ThisCouldBeBetter;
                 this.bounds = bounds;
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) {
-                this.updateForTimerTick(u, w, p, e);
+            finalize(uwpe) { }
+            initialize(uwpe) {
+                this.updateForTimerTick(uwpe);
             }
-            updateForTimerTick(u, w, p, e) {
+            updateForTimerTick(uwpe) {
+                var e = uwpe.entity;
                 this.bounds.locate(e.locatable().loc);
             }
             // Clonable.

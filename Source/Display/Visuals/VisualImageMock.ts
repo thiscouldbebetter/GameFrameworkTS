@@ -20,11 +20,7 @@ export class VisualImageMock implements VisualImage
 
 	// Visual.
 
-	draw
-	(
-		universe: Universe, world: World, place: Place, entity: Entity,
-		display: Display
-	): void
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{}
 
 	clone(): Visual { return this; }

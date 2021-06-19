@@ -18,12 +18,13 @@ export class VisualOffset implements Visual
 		this._posSaved = Coords.create();
 	}
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
+		var entity = uwpe.entity;
 		var drawablePos = entity.locatable().loc.pos;
 		this._posSaved.overwriteWith(drawablePos);
 		drawablePos.add(this.offset);
-		this.child.draw(universe, world, place, entity, display);
+		this.child.draw(uwpe, display);
 		drawablePos.overwriteWith(this._posSaved);
 	}
 

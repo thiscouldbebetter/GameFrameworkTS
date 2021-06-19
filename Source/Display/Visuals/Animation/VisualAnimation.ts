@@ -97,12 +97,15 @@ export class VisualAnimation implements Visual
 
 	// Visual.
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
+		var world = uwpe.world;
+		var entity = uwpe.entity;
+
 		var animatable = entity.animatable();
 		var tickStarted = animatable.animationWithNameStartIfNecessary(this.name, world);
 		var frameCurrent = this.frameCurrent(world, tickStarted);
-		frameCurrent.draw(universe, world, place, entity, display);
+		frameCurrent.draw(uwpe, display);
 	}
 
 	// Clonable.

@@ -40,14 +40,14 @@ var ThisCouldBeBetter;
                 this.actionToInputsMappings = GameFramework.ArrayHelper.clone(this.actionToInputsMappingsEdited);
                 this.actionToInputsMappingsByInputName = GameFramework.ArrayHelper.addLookupsMultiple(this.actionToInputsMappings, (x) => x.inputNames);
             }
-            placeFinalize(universe, world, place) {
+            placeFinalize(uwpe) {
                 if (this._placeFinalize != null) {
-                    this._placeFinalize(universe, world, place);
+                    this._placeFinalize(uwpe);
                 }
             }
-            placeInitialize(universe, world, place) {
+            placeInitialize(uwpe) {
                 if (this._placeInitialize != null) {
-                    this._placeInitialize(universe, world, place);
+                    this._placeInitialize(uwpe);
                 }
             }
         }

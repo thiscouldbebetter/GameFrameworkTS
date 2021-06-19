@@ -11,9 +11,9 @@ export class Constraint_Offset implements Constraint
 		this.offset = offset;
 	}
 
-	constrain(universe: Universe, world: World, place: Place, entity: Entity)
+	constrain(uwpe: UniverseWorldPlaceEntities): void
 	{
-		entity.locatable().loc.pos.add(this.offset);
+		uwpe.entity.locatable().loc.pos.add(this.offset);
 	}
 }
 

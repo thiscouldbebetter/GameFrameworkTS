@@ -16,22 +16,24 @@ var ThisCouldBeBetter;
                     this.propertiesByName.set(propertyName, property);
                 }
             }
-            finalize(universe, world, place) {
+            finalize(uwpe) {
+                uwpe.entity = this;
                 var entityProperties = this.properties;
                 for (var p = 0; p < entityProperties.length; p++) {
                     var property = entityProperties[p];
                     if (property.finalize != null) {
-                        property.finalize(universe, world, place, this);
+                        property.finalize(uwpe);
                     }
                 }
                 return this;
             }
-            initialize(universe, world, place) {
+            initialize(uwpe) {
+                uwpe.entity = this;
                 var entityProperties = this.properties;
                 for (var p = 0; p < entityProperties.length; p++) {
                     var property = entityProperties[p];
                     if (property.initialize != null) {
-                        property.initialize(universe, world, place, this);
+                        property.initialize(uwpe);
                     }
                 }
                 return this;
@@ -64,12 +66,13 @@ var ThisCouldBeBetter;
                 }
                 return this;
             }
-            updateForTimerTick(universe, world, place) {
+            updateForTimerTick(uwpe) {
+                uwpe.entity = this;
                 var entityProperties = this.properties;
                 for (var p = 0; p < entityProperties.length; p++) {
                     var property = entityProperties[p];
                     if (property.finalize != null) {
-                        property.finalize(universe, world, place, this);
+                        property.finalize(uwpe);
                     }
                 }
                 return this;

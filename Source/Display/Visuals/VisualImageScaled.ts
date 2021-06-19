@@ -34,12 +34,10 @@ export class VisualImageScaled implements VisualImage
 		return returnValues;
 	}
 
-	draw
-	(
-		universe: Universe, world: World, place: Place, entity: Entity,
-		display: Display
-	): void
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
+		var universe = uwpe.universe;
+		var entity = uwpe.entity;
 		var image = this.visualImage.image(universe);
 		var entityPos = entity.locatable().loc.pos;
 		this._posSaved.overwriteWith(entityPos);

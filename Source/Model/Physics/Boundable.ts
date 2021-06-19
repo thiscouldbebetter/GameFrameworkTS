@@ -13,15 +13,16 @@ export class Boundable implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 
-	initialize(u: Universe, w: World, p: Place, e: Entity): void
+	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
-		this.updateForTimerTick(u, w, p, e);
+		this.updateForTimerTick(uwpe);
 	}
 
-	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
+		var e = uwpe.entity;
 		this.bounds.locate(e.locatable().loc);
 	}
 

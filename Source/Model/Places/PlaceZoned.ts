@@ -40,14 +40,14 @@ export class PlaceZoned extends Place
 
 	// Place implementation.
 
-	initialize(universe: Universe, world: World)
+	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var zoneStart = this.zoneGetByName(this.zoneStartName);
 		this.entitiesToSpawnAdd(zoneStart.entities);
-		super.initialize(universe, world);
+		super.initialize(uwpe);
 	}
 
-	updateForTimerTick(universe: Universe, world: World)
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var entityToFollow = this.entitiesByName.get(this.entityToFollowName);
 		var entityToFollowPos = entityToFollow.locatable().loc.pos;
@@ -105,7 +105,7 @@ export class PlaceZoned extends Place
 			this.zoneCentralAndNeighbors = zoneCentralAndNeighborsNext;
 		}
 
-		super.updateForTimerTick(universe, world);
+		super.updateForTimerTick(uwpe);
 	}
 }
 

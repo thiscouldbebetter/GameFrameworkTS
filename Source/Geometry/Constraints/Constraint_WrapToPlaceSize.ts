@@ -4,8 +4,11 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Constraint_WrapToPlaceSize implements Constraint
 {
-	constrain(universe: Universe, world: World, place: Place, entity: Entity)
+	constrain(uwpe: UniverseWorldPlaceEntities): void
 	{
+		var place = uwpe.place;
+		var entity = uwpe.entity;
+
 		var entityLoc = entity.locatable().loc;
 		entityLoc.pos.wrapToRangeMax(place.size);
 	}

@@ -7,7 +7,8 @@ var ThisCouldBeBetter;
             constructor(target) {
                 this.target = target;
             }
-            constrain(universe, world, place, entity) {
+            constrain(uwpe) {
+                var entity = uwpe.entity;
                 var targetFrictionCoefficient = this.target;
                 var frictionMagnitude = targetFrictionCoefficient;
                 var entityLoc = entity.locatable().loc;

@@ -25,13 +25,14 @@ export class VisualBuffered implements Visual
 		this.displayForBuffer.initialize(null);
 	}
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display)
 	{
+		var entity = uwpe.entity;
 		var drawPos = entity.locatable().loc.pos;
 		this._posSaved.overwriteWith(drawPos);
 
 		drawPos.overwriteWith(this.sizeHalf);
-		this.child.draw(universe, world, place, entity, this.displayForBuffer);
+		this.child.draw(uwpe, this.displayForBuffer);
 
 		drawPos.overwriteWith(this._posSaved);
 		drawPos.subtract(this.sizeHalf);

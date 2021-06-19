@@ -11,16 +11,13 @@ export class Constraint_AttachToEntityWithId implements Constraint
 		this.targetEntityId = targetEntityId;
 	}
 
-	constrain
-	(
-		universe: Universe, world: World, place: Place, entityToConstrain: Entity
-	): void
+	constrain(uwpe: UniverseWorldPlaceEntities): void
 	{
-		var targetEntity = place.entityById(this.targetEntityId);
+		var targetEntity = uwpe.place.entityById(this.targetEntityId);
 		if (targetEntity != null)
 		{
 			var targetPos = targetEntity.locatable().loc.pos;
-			entityToConstrain.locatable().loc.pos.overwriteWith(targetPos);
+			uwpe.entity.locatable().loc.pos.overwriteWith(targetPos);
 		}
 	}
 }

@@ -7,10 +7,9 @@ export class Killable implements EntityProperty
 	integrityMax: number;
 	_damageApply:
 	(
-		u: Universe, w: World, p: Place, eDamager: Entity,
-		eKillable: Entity, damageToApply: Damage
+		uwpe: UniverseWorldPlaceEntities, damageToApply: Damage
 	) => number;
-	_die: (u: Universe, w: World, p: Place, e: Entity) => void;
+	_die: (uwpe: UniverseWorldPlaceEntities) => void;
 
 	integrity: number;
 
@@ -19,10 +18,9 @@ export class Killable implements EntityProperty
 		integrityMax: number,
 		damageApply:
 		(
-			u: Universe, w: World, p: Place, eDamager: Entity,
-			eKillable: Entity, damageToApply: Damage
+			uwpe: UniverseWorldPlaceEntities, damageToApply: Damage
 		) => number,
-		die: (u: Universe, w: World, p: Place, e: Entity) => void
+		die: (uwpe: UniverseWorldPlaceEntities) => void
 	)
 	{
 		this.integrityMax = integrityMax;
@@ -39,10 +37,13 @@ export class Killable implements EntityProperty
 
 	damageApply
 	(
-		universe: Universe, world: World, place: Place, entityDamager: Entity,
-		entityKillable: Entity, damageToApply: Damage
+		uwpe: UniverseWorldPlaceEntities, damageToApply: Damage
 	): number
 	{
+		var universe = uwpe.universe;
+		var entityKillable = uwpe.entity;
+		var entityDamager = uwpe.entity2;
+
 		var damageApplied;
 		if (this._damageApply == null)
 		{
@@ -60,20 +61,16 @@ export class Killable implements EntityProperty
 		}
 		else
 		{
-			damageApplied = this._damageApply
-			(
-				universe, world, place, entityDamager, entityKillable,
-				damageToApply
-			);
+			damageApplied = this._damageApply(uwpe, damageToApply);
 		}
 		return damageApplied;
 	}
 
-	die(u: Universe, w: World, p: Place, e: Entity): void
+	die(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this._die != null)
 		{
-			this._die(u, w, p, e);
+			this._die(uwpe);
 		}
 	}
 
@@ -104,18 +101,20 @@ export class Killable implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
 	updateForTimerTick
 	(
-		universe: Universe, world: World, place: Place, entityKillable: Entity
+		uwpe: UniverseWorldPlaceEntities
 	): void
 	{
 		if (this.isAlive() == false)
 		{
+			var place = uwpe.place;
+			var entityKillable = uwpe.entity;
 			place.entityToRemoveAdd(entityKillable);
-			this.die(universe, world, place, entityKillable);
+			this.die(uwpe);
 		}
 	}
 

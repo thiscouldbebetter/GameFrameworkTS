@@ -10,8 +10,9 @@ export class Constraint_Gravity implements Constraint
 		this.accelerationPerTick = accelerationPerTick;
 	}
 
-	constrain(universe: Universe, world: World, place: Place, entity: Entity)
+	constrain(uwpe: UniverseWorldPlaceEntities): void
 	{
+		var entity = uwpe.entity;
 		var loc = entity.locatable().loc;
 		if (loc.pos.z < 0) // hack
 		{

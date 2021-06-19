@@ -15,7 +15,7 @@ var ThisCouldBeBetter;
                 this.ticksSoFar = 0;
                 this.particleEntities = [];
             }
-            draw(universe, world, place, entity, display) {
+            draw(uwpe, display) {
                 if (this.ticksSoFar < this.ticksToGenerate || this.ticksToGenerate == null) {
                     var particleCountThisTick;
                     if (this.particlesPerTick >= 1) {
@@ -25,6 +25,7 @@ var ThisCouldBeBetter;
                         var ticksPerParticle = 1 / this.particlesPerTick;
                         particleCountThisTick = (this.ticksSoFar % ticksPerParticle == 0 ? 1 : 0);
                     }
+                    var entity = uwpe.entity;
                     for (var i = 0; i < particleCountThisTick; i++) {
                         var entityGeneratingLoc = entity.locatable().loc;
                         var particleName = "Particle" + this.name + "-" + this.ticksSoFar + "-" + i;
@@ -41,6 +42,7 @@ var ThisCouldBeBetter;
                     }
                     this.ticksSoFar++;
                 }
+                var uwpeForParticles = uwpe.clone();
                 this.particleEntities.forEach(particleEntity => {
                     var loc = particleEntity.locatable().loc;
                     loc.pos.add(loc.vel);
@@ -50,8 +52,9 @@ var ThisCouldBeBetter;
                     }
                     else {
                         ephemeral.ticksToLive--;
-                        particleEntity.drawable().visual.draw(universe, world, place, particleEntity, display);
-                        this.transformToApplyEachTick.transform(particleEntity.drawable().visual);
+                        var particleVisual = particleEntity.drawable().visual;
+                        particleVisual.draw(uwpeForParticles.entitySet(particleEntity), display);
+                        this.transformToApplyEachTick.transform(particleVisual);
                     }
                 });
             }

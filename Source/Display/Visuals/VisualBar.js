@@ -18,8 +18,9 @@ var ThisCouldBeBetter;
                 this._sizeCurrent = this.size.clone();
                 this._sizeHalf = this.size.clone().half();
             }
-            draw(universe, world, place, entity, display) {
+            draw(uwpe, display) {
                 var wasVisible = false;
+                var entity = uwpe.entity;
                 var pos = this._drawPos.overwriteWith(entity.locatable().loc.pos).subtract(this._sizeHalf);
                 var _amountCurrent = this.amountCurrent.contextSet(entity).get();
                 var _amountMax = this.amountMax.contextSet(entity).get();

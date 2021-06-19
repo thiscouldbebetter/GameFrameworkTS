@@ -16,8 +16,9 @@ export class VisualControl implements Visual
 		this._drawLoc = new Disposition(Coords.create(), null, null);
 	}
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
+		var universe = uwpe.universe;
 		var display = universe.display;
 		var drawLoc = this._drawLoc;
 		drawLoc.pos.clear();

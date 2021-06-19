@@ -17,9 +17,9 @@ export class JournalKeeper implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
-	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 
 	// Controls.
 

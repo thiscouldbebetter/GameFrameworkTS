@@ -14,7 +14,9 @@ var ThisCouldBeBetter;
             static fromSoundName(soundName) {
                 return new VisualSound(soundName, false); // isMusic
             }
-            draw(universe, world, place, entity, display) {
+            draw(uwpe, display) {
+                var universe = uwpe.universe;
+                var entity = uwpe.entity;
                 var soundHelper = universe.soundHelper;
                 var audible = entity.audible();
                 if (audible != null) {

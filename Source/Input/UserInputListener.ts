@@ -29,9 +29,13 @@ export class UserInputListener extends Entity
 
 	static activityDefnHandleUserInputPerform
 	(
-		universe: Universe, world: World, place: Place, entity: Entity
+		uwpe: UniverseWorldPlaceEntities
 	): void
 	{
+		var universe = uwpe.universe;
+		var world = uwpe.world;
+		var place = uwpe.place;
+
 		var inputHelper = universe.inputHelper;
 
 		var placeDefn = place.defn(world);
@@ -47,7 +51,7 @@ export class UserInputListener extends Entity
 		for (var i = 0; i < actionsToPerform.length; i++)
 		{
 			var action = actionsToPerform[i];
-			action.perform(universe, world, place, entity);
+			action.perform(uwpe);
 		}
 	}
 

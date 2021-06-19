@@ -19,20 +19,21 @@ var ThisCouldBeBetter;
                 this._drawPos = GameFramework.Coords.create();
                 this._posSaved = GameFramework.Coords.create();
             }
-            draw(universe, world, place, entity, display) {
+            draw(uwpe, display) {
                 if (this.shouldConvertToImage) {
                     if (this.visualImage == null) {
-                        this.draw_ConvertToImage(universe, world, place, entity, display);
+                        this.draw_ConvertToImage(uwpe, display);
                     }
-                    this.visualImage.draw(universe, world, place, entity, display);
+                    this.visualImage.draw(uwpe, display);
                 }
                 else {
                     var cellPosStart = this._cellPosStart.clear();
                     var cellPosEnd = this._cellPosEnd.overwriteWith(this.map.sizeInCells);
-                    this.draw_ConvertToImage_Cells(universe, world, place, entity, display, cellPosStart, cellPosEnd, display);
+                    this.draw_ConvertToImage_Cells(uwpe, display, cellPosStart, cellPosEnd, display);
                 }
             }
-            draw_ConvertToImage(universe, world, place, entity, display) {
+            draw_ConvertToImage(uwpe, display) {
+                var entity = uwpe.entity;
                 var mapSizeInCells = this.map.sizeInCells;
                 var drawablePos = entity.locatable().loc.pos;
                 this._posSaved.overwriteWith(drawablePos);
@@ -43,7 +44,7 @@ var ThisCouldBeBetter;
                     cellPosEnd.overwriteWith(mapSizeInCells);
                 }
                 else {
-                    var camera = this.cameraGet(universe, world, display, entity);
+                    var camera = this.cameraGet(uwpe);
                     this._cameraPos.overwriteWith(camera.loc.pos);
                     var boundsVisible = camera.viewCollider;
                     cellPosStart.overwriteWith(boundsVisible.min()).trimToRangeMax(this.sizeInCells);
@@ -51,12 +52,13 @@ var ThisCouldBeBetter;
                 }
                 var displayForImage = GameFramework.Display2D.fromSize(this.map.size);
                 displayForImage.toDomElement();
-                this.draw_ConvertToImage_Cells(universe, world, place, entity, display, cellPosStart, cellPosEnd, displayForImage);
+                this.draw_ConvertToImage_Cells(uwpe, display, cellPosStart, cellPosEnd, displayForImage);
                 var image = GameFramework.Image2.fromSystemImage("Map", displayForImage.canvas);
                 this.visualImage = new GameFramework.VisualImageImmediate(image, false); // isScaled
                 drawablePos.overwriteWith(this._posSaved);
             }
-            draw_ConvertToImage_Cells(universe, world, place, entity, display, cellPosStart, cellPosEnd, displayForImage) {
+            draw_ConvertToImage_Cells(uwpe, display, cellPosStart, cellPosEnd, displayForImage) {
+                var entity = uwpe.entity;
                 var drawPos = this._drawPos;
                 var drawablePos = entity.locatable().loc.pos;
                 var cellPosInCells = this._cellPosInCells;
@@ -76,7 +78,7 @@ var ThisCouldBeBetter;
                             drawPos.subtract(this._cameraPos).multiply(cellSizeInPixels).add(display.displayToUse().sizeInPixelsHalf);
                         }
                         drawablePos.overwriteWith(drawPos);
-                        cellVisual.draw(universe, world, place, entity, displayForImage);
+                        cellVisual.draw(uwpe, displayForImage);
                     }
                 }
                 return displayForImage;

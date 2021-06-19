@@ -38,7 +38,7 @@ export class VisualParticles implements Visual
 		this.particleEntities = [];
 	}
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		if (this.ticksSoFar < this.ticksToGenerate || this.ticksToGenerate == null)
 		{
@@ -52,6 +52,8 @@ export class VisualParticles implements Visual
 				var ticksPerParticle = 1 / this.particlesPerTick;
 				particleCountThisTick = (this.ticksSoFar % ticksPerParticle == 0 ? 1 : 0);
 			}
+
+			var entity = uwpe.entity;
 
 			for (var i = 0; i < particleCountThisTick; i++)
 			{
@@ -80,6 +82,7 @@ export class VisualParticles implements Visual
 			this.ticksSoFar++;
 		}
 
+		var uwpeForParticles = uwpe.clone();
 		this.particleEntities.forEach(particleEntity => {
 
 			var loc = particleEntity.locatable().loc;
@@ -93,11 +96,11 @@ export class VisualParticles implements Visual
 			else
 			{
 				ephemeral.ticksToLive--;
-				particleEntity.drawable().visual.draw
-				(
-					universe, world, place, particleEntity, display
+				var particleVisual = particleEntity.drawable().visual;
+				particleVisual.draw(
+					uwpeForParticles.entitySet(particleEntity), display
 				);
-				this.transformToApplyEachTick.transform(particleEntity.drawable().visual);
+				this.transformToApplyEachTick.transform(particleVisual);
 			}
 		});
 	}

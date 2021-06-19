@@ -30,7 +30,10 @@ var ThisCouldBeBetter;
                     }
                 }
             }
-            use(universe, world, place, entityUsing, entityUsed) {
+            use(uwpe) {
+                var universe = uwpe.universe;
+                var entityUsing = uwpe.entity;
+                var entityUsed = uwpe.entity2;
                 //entityUsed.collidable().ticksUntilCanCollide = 50; // hack
                 var storeAsControl = entityUsed.itemStore().toControl(universe, universe.display.sizeInPixels, entityUsing, entityUsed, universe.venueCurrent);
                 var venueNext = storeAsControl.toVenue();
@@ -38,9 +41,9 @@ var ThisCouldBeBetter;
                 universe.venueNext = venueNext;
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(u, w, p, e) { }
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) { }
             // Controllable.
             toControl(universe, size, entityCustomer, entityStore, venuePrev) {
                 if (size == null) {

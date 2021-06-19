@@ -101,11 +101,11 @@ export class CollisionTracker implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity) {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 
-	initialize(u: Universe, w: World, p: Place, e: Entity) {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
-	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity)
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var cellsAll = this.collisionMap.cellSource as CollisionTrackerMapCell[];
 		cellsAll.forEach(x =>

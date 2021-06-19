@@ -9,8 +9,8 @@ export class PlaceDefn
 	actionsByName: Map<string,Action>;
 	actionToInputsMappings: ActionToInputsMapping[];
 	propertyNamesToProcess: string[];
-	_placeInitialize: (universe: Universe, world: World, place: Place) => void;
-	_placeFinalize: (universe: Universe, world: World, place: Place) => void;
+	_placeInitialize: (uwpe: UniverseWorldPlaceEntities) => void;
+	_placeFinalize: (uwpe: UniverseWorldPlaceEntities) => void;
 
 	actionToInputsMappingsByInputName: Map<string,ActionToInputsMapping>;
 	actionToInputsMappingSelected: ActionToInputsMapping;
@@ -23,8 +23,8 @@ export class PlaceDefn
 		actions: Action[],
 		actionToInputsMappings: ActionToInputsMapping[],
 		propertyNamesToProcess: string[],
-		placeInitialize: (universe: Universe, world: World, place: Place) => void,
-		placeFinalize: (universe: Universe, world: World, place: Place) => void
+		placeInitialize: (uwpe: UniverseWorldPlaceEntities) => void,
+		placeFinalize: (uwpe: UniverseWorldPlaceEntities) => void
 	)
 	{
 		this.name = name;
@@ -104,19 +104,19 @@ export class PlaceDefn
 		);
 	}
 
-	placeFinalize(universe: Universe, world: World, place: Place): void
+	placeFinalize(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this._placeFinalize != null)
 		{
-			this._placeFinalize(universe, world, place);
+			this._placeFinalize(uwpe);
 		}
 	}
 
-	placeInitialize(universe: Universe, world: World, place: Place): void
+	placeInitialize(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this._placeInitialize != null)
 		{
-			this._placeInitialize(universe, world, place);
+			this._placeInitialize(uwpe);
 		}
 	}
 }

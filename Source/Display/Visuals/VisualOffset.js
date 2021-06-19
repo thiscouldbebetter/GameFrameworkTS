@@ -10,11 +10,12 @@ var ThisCouldBeBetter;
                 // Helper variables.
                 this._posSaved = GameFramework.Coords.create();
             }
-            draw(universe, world, place, entity, display) {
+            draw(uwpe, display) {
+                var entity = uwpe.entity;
                 var drawablePos = entity.locatable().loc.pos;
                 this._posSaved.overwriteWith(drawablePos);
                 drawablePos.add(this.offset);
-                this.child.draw(universe, world, place, entity, display);
+                this.child.draw(uwpe, display);
                 drawablePos.overwriteWith(this._posSaved);
             }
             // Clonable.

@@ -61,13 +61,14 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(universe, world, place, entityCrafter) {
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) {
                 if (this.recipesQueued.length > 0) {
                     var recipeInProgress = this.recipesQueued[0];
                     if (this.isRecipeInProgressFulfilled()) {
                         if (this.recipeInProgressTicksSoFar >= recipeInProgress.ticksToComplete) {
+                            var entityCrafter = uwpe.entity;
                             this.recipeInProgressFinish(entityCrafter);
                         }
                         else {

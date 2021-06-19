@@ -11,12 +11,12 @@ export class VisualGroup implements Visual
 		this.children = children;
 	}
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		for (var i = 0; i < this.children.length; i++)
 		{
 			var child = this.children[i];
-			child.draw(universe, world, place, entity, display);
+			child.draw(uwpe, display);
 		}
 	}
 

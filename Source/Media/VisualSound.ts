@@ -27,8 +27,11 @@ export class VisualSound implements Visual
 		return new VisualSound(soundName, false); // isMusic
 	}
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display): void
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
+		var universe = uwpe.universe;
+		var entity = uwpe.entity;
+
 		var soundHelper = universe.soundHelper;
 
 		var audible = entity.audible();

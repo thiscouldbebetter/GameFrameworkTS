@@ -13,7 +13,10 @@ var ThisCouldBeBetter;
             static fromIntegrityMax(integrityMax) {
                 return new Killable(integrityMax, null, null);
             }
-            damageApply(universe, world, place, entityDamager, entityKillable, damageToApply) {
+            damageApply(uwpe, damageToApply) {
+                var universe = uwpe.universe;
+                var entityKillable = uwpe.entity;
+                var entityDamager = uwpe.entity2;
                 var damageApplied;
                 if (this._damageApply == null) {
                     var randomizer = universe.randomizer;
@@ -25,13 +28,13 @@ var ThisCouldBeBetter;
                     killable.integritySubtract(damageApplied);
                 }
                 else {
-                    damageApplied = this._damageApply(universe, world, place, entityDamager, entityKillable, damageToApply);
+                    damageApplied = this._damageApply(uwpe, damageToApply);
                 }
                 return damageApplied;
             }
-            die(u, w, p, e) {
+            die(uwpe) {
                 if (this._die != null) {
-                    this._die(u, w, p, e);
+                    this._die(uwpe);
                 }
             }
             integrityAdd(amountToAdd) {
@@ -48,12 +51,14 @@ var ThisCouldBeBetter;
                 return (this.integrity > 0);
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(universe, world, place, entityKillable) {
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) {
                 if (this.isAlive() == false) {
+                    var place = uwpe.place;
+                    var entityKillable = uwpe.entity;
                     place.entityToRemoveAdd(entityKillable);
-                    this.die(universe, world, place, entityKillable);
+                    this.die(uwpe);
                 }
             }
             // cloneable

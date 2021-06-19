@@ -11,7 +11,9 @@ var ThisCouldBeBetter;
             static actionFire() {
                 return new GameFramework.Action("Fire", 
                 // perform
-                (universe, world, place, entityActor) => {
+                (uwpe) => {
+                    var place = uwpe.place;
+                    var entityActor = uwpe.entity;
                     var projectileGenerator = entityActor.projectileGenerator();
                     var projectileEntities = projectileGenerator.projectileEntitiesFromEntityFiring(entityActor);
                     place.entitiesToSpawnAdd(projectileEntities);
@@ -22,9 +24,9 @@ var ThisCouldBeBetter;
                 return returnValues;
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(u, w, p, e) { }
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) { }
         }
         GameFramework.ProjectileGenerator = ProjectileGenerator;
         class ProjectileGeneration {
@@ -76,11 +78,13 @@ var ThisCouldBeBetter;
                 ]);
                 return projectileEntity;
             }
-            collide(universe, world, place, entityProjectile, entityOther) {
+            collide(uwpe) {
+                var entityProjectile = uwpe.entity;
+                var entityOther = uwpe.entity2;
                 var targetKillable = entityOther.killable();
                 if (targetKillable != null) {
                     var damageToApply = entityProjectile.damager().damagePerHit;
-                    targetKillable.damageApply(universe, world, place, entityProjectile, entityOther, damageToApply);
+                    targetKillable.damageApply(uwpe, damageToApply);
                     var projectileKillable = entityProjectile.killable();
                     if (projectileKillable != null) {
                         projectileKillable.kill();

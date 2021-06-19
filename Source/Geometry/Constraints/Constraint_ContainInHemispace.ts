@@ -14,8 +14,10 @@ export class Constraint_ContainInHemispace implements Constraint
 		this._coordsTemp = Coords.create();
 	}
 
-	constrain(universe: Universe, world: World, place: Place, entity: Entity)
+	constrain(uwpe: UniverseWorldPlaceEntities): void
 	{
+		var entity = uwpe.entity;
+
 		var hemispace = this.hemispaceToContainWithin;
 		var plane = hemispace.plane;
 		var loc = entity.locatable().loc;

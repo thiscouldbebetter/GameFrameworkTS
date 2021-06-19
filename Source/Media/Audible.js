@@ -16,9 +16,9 @@ var ThisCouldBeBetter;
                 return this;
             }
             // EntityProperty.
-            updateForTimerTick(u, w, p, e) { }
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
+            updateForTimerTick(uwpe) { }
+            finalize(uwpe) { }
+            initialize(uwpe) { }
         }
         GameFramework.Audible = Audible;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

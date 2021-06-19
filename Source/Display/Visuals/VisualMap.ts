@@ -6,7 +6,7 @@ export class VisualMap implements Visual
 {
 	map: MapOfCells<any>;
 	visualsByName: Map<string, Visual>;
-	cameraGet: (universe: Universe, world: World, display: Display, entity: Entity) => Camera;
+	cameraGet: (uwpe: UniverseWorldPlaceEntities)=>Camera;
 	shouldConvertToImage: boolean;
 
 	visualImage: VisualImage;
@@ -42,11 +42,7 @@ export class VisualMap implements Visual
 		this._posSaved = Coords.create();
 	}
 
-	draw
-	(
-		universe: Universe, world: World, place: Place, entity: Entity,
-		display: Display
-	): void
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		if (this.shouldConvertToImage)
 		{
@@ -54,11 +50,11 @@ export class VisualMap implements Visual
 			{
 				this.draw_ConvertToImage
 				(
-					universe, world, place, entity, display
+					uwpe, display
 				);
 			}
 
-			this.visualImage.draw(universe, world, place, entity, display);
+			this.visualImage.draw(uwpe, display);
 		}
 		else
 		{
@@ -67,18 +63,14 @@ export class VisualMap implements Visual
 				this._cellPosEnd.overwriteWith(this.map.sizeInCells);
 			this.draw_ConvertToImage_Cells
 			(
-				universe, world, place, entity, display, cellPosStart,
-				cellPosEnd, display
+				uwpe, display, cellPosStart, cellPosEnd, display
 			);
 		}
 	}
 
-	draw_ConvertToImage
-	(
-		universe: Universe, world: World, place: Place, entity: Entity,
-		display: Display
-	): void
+	draw_ConvertToImage(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
+		var entity = uwpe.entity;
 		var mapSizeInCells = this.map.sizeInCells;
 		var drawablePos = entity.locatable().loc.pos;
 		this._posSaved.overwriteWith(drawablePos);
@@ -93,7 +85,7 @@ export class VisualMap implements Visual
 		}
 		else
 		{
-			var camera = this.cameraGet(universe, world, display, entity);
+			var camera = this.cameraGet(uwpe);
 			this._cameraPos.overwriteWith(camera.loc.pos);
 			var boundsVisible = camera.viewCollider;
 			cellPosStart.overwriteWith
@@ -111,7 +103,7 @@ export class VisualMap implements Visual
 
 		this.draw_ConvertToImage_Cells
 		(
-			universe, world, place, entity, display, cellPosStart,
+			uwpe, display, cellPosStart,
 			cellPosEnd, displayForImage
 		);
 
@@ -126,11 +118,13 @@ export class VisualMap implements Visual
 
 	draw_ConvertToImage_Cells
 	(
-		universe: Universe, world: World, place: Place, entity: Entity,
+		uwpe: UniverseWorldPlaceEntities,
 		display: Display, cellPosStart: Coords, cellPosEnd: Coords,
 		displayForImage: Display
 	): Display
 	{
+		var entity = uwpe.entity;
+
 		var drawPos = this._drawPos;
 		var drawablePos = entity.locatable().loc.pos;
 		var cellPosInCells = this._cellPosInCells;
@@ -179,7 +173,7 @@ export class VisualMap implements Visual
 
 				drawablePos.overwriteWith(drawPos);
 
-				cellVisual.draw(universe, world, place, entity, displayForImage);
+				cellVisual.draw(uwpe, displayForImage);
 			}
 		}
 

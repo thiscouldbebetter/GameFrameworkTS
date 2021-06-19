@@ -18,7 +18,9 @@ var ThisCouldBeBetter;
                 return this.image(universe).sizeInPixels;
             }
             // visual
-            draw(universe, world, place, entity, display) {
+            draw(uwpe, display) {
+                var universe = uwpe.universe;
+                var entity = uwpe.entity;
                 var image = this.image(universe);
                 var imageSize = image.sizeInPixels;
                 var drawPos = this._drawPos.clear().subtract(imageSize).half().add(entity.locatable().loc.pos);

@@ -22,16 +22,17 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(u, w, p, e) {
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) {
+                var w = uwpe.world;
                 var ticksSinceBorn = w.timerTicksSoFar - this.tickBorn;
                 for (var i = 0; i < this.phases.length; i++) {
                     var phase = this.phases[i];
                     var tickToRunAt = phase.tickToRunAt;
                     if (ticksSinceBorn == tickToRunAt) {
                         var updateToRun = phase.updateToRun;
-                        updateToRun(u, w, p, e);
+                        updateToRun(uwpe);
                     }
                 }
             }

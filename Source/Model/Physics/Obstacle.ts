@@ -4,8 +4,11 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Obstacle implements EntityProperty
 {
-	collide(u: Universe, w: World, p: Place, e: Entity, eOther: Entity): void
+	collide(uwpe: UniverseWorldPlaceEntities): void
 	{
+		var u = uwpe.universe;
+		var e = uwpe.entity;
+		var eOther = uwpe.entity2;
 		var collisionHelper = u.collisionHelper;
 		collisionHelper.collideEntitiesBounce(e, eOther);
 		collisionHelper.collideEntitiesSeparate(eOther, e);
@@ -25,9 +28,9 @@ export class Obstacle implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
-	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 }
 
 }

@@ -14,7 +14,8 @@ var ThisCouldBeBetter;
             static fromSemiaxesAndColorFill(semiaxisHorizontal, semiaxisVertical, colorFill) {
                 return new VisualEllipse(semiaxisHorizontal, semiaxisVertical, null, colorFill, null);
             }
-            draw(universe, world, place, entity, display) {
+            draw(uwpe, display) {
+                var entity = uwpe.entity;
                 var drawableLoc = entity.locatable().loc;
                 var drawableOrientation = drawableLoc.orientation;
                 var drawableRotationInTurns = drawableOrientation.forward.headingInTurns();

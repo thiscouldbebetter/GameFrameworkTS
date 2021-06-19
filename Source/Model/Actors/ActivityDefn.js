@@ -14,8 +14,8 @@ var ThisCouldBeBetter;
                 }
                 return ActivityDefn._instances;
             }
-            perform(u, w, p, e) {
-                this._perform(u, w, p, e);
+            perform(uwpe) {
+                this._perform(uwpe);
             }
         }
         GameFramework.ActivityDefn = ActivityDefn;
@@ -23,17 +23,19 @@ var ThisCouldBeBetter;
             constructor() {
                 this.DoNothing = new ActivityDefn("DoNothing", 
                 // perform
-                (u, w, p, e) => { });
+                (uwpe) => { });
                 this.HandleUserInput = GameFramework.UserInputListener.activityDefnHandleUserInput();
                 this.Simultaneous = new ActivityDefn("Simultaneous", 
                 // perform
-                (u, w, p, e) => {
+                (uwpe) => {
+                    var w = uwpe.world;
+                    var e = uwpe.entity;
                     var activity = e.actor().activity;
                     var childDefnNames = activity.target();
                     for (var i = 0; i < childDefnNames.length; i++) {
                         var childDefnName = childDefnNames[i];
                         var childDefn = w.defn.activityDefnByName(childDefnName);
-                        childDefn.perform(u, w, p, e);
+                        childDefn.perform(uwpe);
                     }
                 });
                 this._All =

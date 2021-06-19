@@ -30,8 +30,9 @@ class PlaceBuilderDemo_Actions
 			new Action
 			(
 				"Fire",
-				(universe: Universe, world: World, place: Place, actor: Entity) => // perform
+				(uwpe: UniverseWorldPlaceEntities) => // perform
 				{
+					var actor = uwpe.entity;
 					var equipmentUser = actor.equipmentUser();
 					var entityWieldableEquipped = equipmentUser.itemEntityInSocketWithName("Wielding");
 					var actorHasWieldableEquipped = (entityWieldableEquipped != null);
@@ -39,7 +40,8 @@ class PlaceBuilderDemo_Actions
 					if (actorHasWieldableEquipped)
 					{
 						var deviceWieldable = entityWieldableEquipped.device();
-						deviceWieldable.use(universe, world, place, actor, entityWieldableEquipped);
+						uwpe.entity2 = entityWieldableEquipped;
+						deviceWieldable.use(uwpe);
 					}
 				}
 			),
@@ -47,8 +49,9 @@ class PlaceBuilderDemo_Actions
 			new Action
 			(
 				"Hide",
-				(universe: Universe, world: World, place: Place, actor: Entity) => // perform
+				(uwpe: UniverseWorldPlaceEntities) => // perform
 				{
+					var actor = uwpe.entity;
 					var learner = actor.skillLearner();
 					var knowsHowToHide = learner.skillsKnownNames.indexOf("Hiding") >= 0;
 					if (knowsHowToHide)
@@ -70,8 +73,9 @@ class PlaceBuilderDemo_Actions
 			new Action
 			(
 				"Jump",
-				(universe: Universe, world: World, place: Place, actor: Entity) => // perform
+				(uwpe: UniverseWorldPlaceEntities) => // perform
 				{
+					var actor = uwpe.entity;
 					var learner = actor.skillLearner();
 					var canJump = learner.skillsKnownNames.indexOf("Jumping") >= 0;
 					if (canJump)
@@ -92,12 +96,17 @@ class PlaceBuilderDemo_Actions
 			new Action
 			(
 				"Pick Up",
-				(universe: Universe, world: World, place: Place, entityActor: Entity) => // perform
+				(uwpe: UniverseWorldPlaceEntities) => // perform
 				{
+					var universe = uwpe.universe;
+					var world = uwpe.world;
+					var place = uwpe.place;
+					var entityActor = uwpe.entity;
+
 					var itemHolder = entityActor.itemHolder();
 					var itemEntityToPickUp = itemHolder.itemEntityFindClosest
 					(
-						universe, world, place, entityActor
+						uwpe
 					);
 
 					if (itemEntityToPickUp == null)
@@ -122,7 +131,7 @@ class PlaceBuilderDemo_Actions
 					else
 					{
 						var message = "Can't pick up!";
-						place.entitySpawn
+						place.entitySpawn2
 						(
 							universe, world,
 							universe.entityBuilder.messageFloater
@@ -139,8 +148,9 @@ class PlaceBuilderDemo_Actions
 			new Action
 			(
 				"Run",
-				(universe: Universe, world: World, place: Place, actor: Entity) => // perform
+				(uwpe: UniverseWorldPlaceEntities) => // perform
 				{
+					var actor = uwpe.entity;
 					var learner = actor.skillLearner();
 					var knowsHowToRun = learner.skillsKnownNames.indexOf("Running") >= 0;
 					// knowsHowToRun = true; // debug
@@ -165,8 +175,9 @@ class PlaceBuilderDemo_Actions
 			new Action
 			(
 				"Sneak",
-				(universe: Universe, world: World, place: Place, actor: Entity) => // perform
+				(uwpe: UniverseWorldPlaceEntities) => // perform
 				{
+					var actor = uwpe.entity;
 					// var learner = actor.skillLearner();
 					// var knowsHowToSneak = learner.skillsKnownNames.indexOf("Sneaking") >= 0;
 					var knowsHowToSneak = true; // debug
@@ -187,8 +198,10 @@ class PlaceBuilderDemo_Actions
 			new Action
 			(
 				"Use",
-				(universe: Universe, world: World, place: Place, actor: Entity) => // perform
+				(uwpe: UniverseWorldPlaceEntities) => // perform
 				{
+					var actor = uwpe.entity;
+					var place = uwpe.place;
 					var entityUsablesInPlace = place.usables();
 					var actorPos = actor.locatable().loc.pos;
 					var radiusOfReach = 20; // todo
@@ -199,7 +212,8 @@ class PlaceBuilderDemo_Actions
 					if (entityUsablesWithinReach.length > 0)
 					{
 						var entityToUse = entityUsablesWithinReach[0];
-						entityToUse.usable().use(universe, world, place, actor, entityToUse);
+						uwpe.entity2 = entityToUse;
+						entityToUse.usable().use(uwpe);
 					}
 				}
 			),
@@ -207,21 +221,22 @@ class PlaceBuilderDemo_Actions
 			new Action
 			(
 				"Wait",
-				(universe: Universe, world: World, place: Place, actor: Entity) => // perform
+				(uwpe: UniverseWorldPlaceEntities) => // perform
 				{
+					var actor = uwpe.entity;
 					actor.actor().activity.defnName = "Wait";
 				}
 			),
-			new Action("Item0", (u: Universe, w: World, p: Place, e: Entity) => e.equipmentUser().useItemInSocketNumbered(u, w, p, e, 0)),
-			new Action("Item1", (u: Universe, w: World, p: Place, e: Entity) => e.equipmentUser().useItemInSocketNumbered(u, w, p, e, 1)),
-			new Action("Item2", (u: Universe, w: World, p: Place, e: Entity) => e.equipmentUser().useItemInSocketNumbered(u, w, p, e, 2)),
-			new Action("Item3", (u: Universe, w: World, p: Place, e: Entity) => e.equipmentUser().useItemInSocketNumbered(u, w, p, e, 3)),
-			new Action("Item4", (u: Universe, w: World, p: Place, e: Entity) => e.equipmentUser().useItemInSocketNumbered(u, w, p, e, 4)),
-			new Action("Item5", (u: Universe, w: World, p: Place, e: Entity) => e.equipmentUser().useItemInSocketNumbered(u, w, p, e, 5)),
-			new Action("Item6", (u: Universe, w: World, p: Place, e: Entity) => e.equipmentUser().useItemInSocketNumbered(u, w, p, e, 6)),
-			new Action("Item7", (u: Universe, w: World, p: Place, e: Entity) => e.equipmentUser().useItemInSocketNumbered(u, w, p, e, 7)),
-			new Action("Item8", (u: Universe, w: World, p: Place, e: Entity) => e.equipmentUser().useItemInSocketNumbered(u, w, p, e, 8)),
-			new Action("Item9", (u: Universe, w: World, p: Place, e: Entity) => e.equipmentUser().useItemInSocketNumbered(u, w, p, e, 9)),
+			new Action("Item0", (uwpe: UniverseWorldPlaceEntities) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 0)),
+			new Action("Item1", (uwpe: UniverseWorldPlaceEntities) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 1)),
+			new Action("Item2", (uwpe: UniverseWorldPlaceEntities) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 2)),
+			new Action("Item3", (uwpe: UniverseWorldPlaceEntities) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 3)),
+			new Action("Item4", (uwpe: UniverseWorldPlaceEntities) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 4)),
+			new Action("Item5", (uwpe: UniverseWorldPlaceEntities) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 5)),
+			new Action("Item6", (uwpe: UniverseWorldPlaceEntities) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 6)),
+			new Action("Item7", (uwpe: UniverseWorldPlaceEntities) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 7)),
+			new Action("Item8", (uwpe: UniverseWorldPlaceEntities) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 8)),
+			new Action("Item9", (uwpe: UniverseWorldPlaceEntities) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 9)),
 		];
 
 		return actions;

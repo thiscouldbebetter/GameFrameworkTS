@@ -5,12 +5,12 @@ namespace ThisCouldBeBetter.GameFramework
 export class ActivityDefn
 {
 	name: string;
-	_perform: (u: Universe, w: World, p: Place, e: Entity) => void;
+	_perform: (uwpe: UniverseWorldPlaceEntities) => void;
 
 	constructor
 	(
 		name: string,
-		perform: (u: Universe, w: World, p: Place, e: Entity) => void
+		perform: (uwpe: UniverseWorldPlaceEntities) => void
 	)
 	{
 		this.name = name;
@@ -27,9 +27,9 @@ export class ActivityDefn
 		return ActivityDefn._instances;
 	}
 
-	perform(u: Universe, w: World, p: Place, e: Entity)
+	perform(uwpe: UniverseWorldPlaceEntities)
 	{
-		this._perform(u, w, p, e);
+		this._perform(uwpe);
 	}
 }
 
@@ -48,7 +48,7 @@ class ActivityDefn_Instances
 		(
 			"DoNothing",
 			// perform
-			(u: Universe, w: World, p: Place, e: Entity) =>
+			(uwpe: UniverseWorldPlaceEntities) =>
 			{}
 		);
 
@@ -58,15 +58,17 @@ class ActivityDefn_Instances
 		(
 			"Simultaneous",
 			// perform
-			(u: Universe, w: World, p: Place, e: Entity) =>
+			(uwpe: UniverseWorldPlaceEntities) =>
 			{
+				var w = uwpe.world;
+				var e = uwpe.entity;
 				var activity = e.actor().activity;
 				var childDefnNames = activity.target() as string[];
 				for (var i = 0; i < childDefnNames.length; i++)
 				{
 					var childDefnName = childDefnNames[i];
 					var childDefn = w.defn.activityDefnByName(childDefnName);
-					childDefn.perform(u, w, p, e);
+					childDefn.perform(uwpe);
 				}
 			}
 		);

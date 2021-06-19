@@ -30,12 +30,12 @@ export class Item implements EntityProperty
 		return this.quantity * this.defn(world).mass;
 	}
 
-	toEntity(u: Universe, w: World, p: Place, e: Entity): Entity
+	toEntity(uwpe: UniverseWorldPlaceEntities): Entity
 	{
 		if (this._entity == null)
 		{
-			var defn = this.defn(w);
-			this._entity = defn.toEntity(u, w, p, e, this);
+			var defn = this.defn(uwpe.world);
+			this._entity = defn.toEntity(uwpe, this);
 		}
 		return this._entity;
 	}
@@ -50,19 +50,15 @@ export class Item implements EntityProperty
 		return this.quantity * this.defn(world).tradeValue;
 	}
 
-	use
-	(
-		universe: Universe, world: World, place: Place,
-		userEntity: Entity, itemEntity: Entity
-	): any
+	use(uwpe: UniverseWorldPlaceEntities): any
 	{
 		var returnValue = null;
-		var defn = this.defn(world);
+		var defn = this.defn(uwpe.world);
 		if (defn.use != null)
 		{
 			returnValue = defn.use
 			(
-				universe, world, place, userEntity, itemEntity
+				uwpe
 			);
 		}
 		return returnValue;
@@ -77,9 +73,9 @@ export class Item implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
-	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 }
 
 }

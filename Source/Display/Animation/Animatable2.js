@@ -43,9 +43,10 @@ var ThisCouldBeBetter;
                 this.transformableTransformed.overwriteWith(this.transformableAtRest);
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(universe, world, place, entity) {
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) {
+                var world = uwpe.world;
                 var animationDefnsRunning = this.animationDefnsRunning();
                 for (var i = 0; i < animationDefnsRunning.length; i++) {
                     var animationDefn = animationDefnsRunning[i];

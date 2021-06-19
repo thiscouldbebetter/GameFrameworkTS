@@ -23,7 +23,8 @@ var ThisCouldBeBetter;
                     this._endPosInCells.addDimensions(1, 1, 0);
                 }
             }
-            draw(universe, world, place, entity, display) {
+            draw(uwpe, display) {
+                var entity = uwpe.entity;
                 var drawPos = entity.locatable().loc.pos;
                 this._drawablePosToRestore.overwriteWith(drawPos);
                 var drawPosWrapped = this._drawPosWrapped.overwriteWith(drawPos).wrapToRangeMax(this.cellSize);
@@ -33,7 +34,7 @@ var ThisCouldBeBetter;
                     for (var x = this._startPosInCells.x; x < this._endPosInCells.x; x++) {
                         cellPos.x = x;
                         drawPos.overwriteWith(this._drawOffset.overwriteWith(cellPos).multiply(this.cellSize)).add(drawPosWrapped);
-                        this.child.draw(universe, world, place, entity, display);
+                        this.child.draw(uwpe, display);
                     }
                 }
                 drawPos.overwriteWith(this._drawablePosToRestore);

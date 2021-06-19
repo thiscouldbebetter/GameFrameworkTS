@@ -15,7 +15,8 @@ var ThisCouldBeBetter;
             static fromSizeAndColorFill(size, colorFill) {
                 return new VisualRectangle(size, colorFill, null, null);
             }
-            draw(universe, world, place, entity, display) {
+            draw(uwpe, display) {
+                var entity = uwpe.entity;
                 var drawPos = this._drawPos.overwriteWith(entity.locatable().loc.pos);
                 if (this.isCentered) {
                     drawPos.subtract(this.sizeHalf);

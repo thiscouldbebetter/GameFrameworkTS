@@ -7,8 +7,8 @@ var ThisCouldBeBetter;
             constructor(offset) {
                 this.offset = offset;
             }
-            constrain(universe, world, place, entity) {
-                entity.locatable().loc.pos.add(this.offset);
+            constrain(uwpe) {
+                uwpe.entity.locatable().loc.pos.add(this.offset);
             }
         }
         GameFramework.Constraint_Offset = Constraint_Offset;

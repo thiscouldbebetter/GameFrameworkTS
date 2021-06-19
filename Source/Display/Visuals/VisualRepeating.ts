@@ -48,8 +48,10 @@ export class VisualRepeating implements Visual
 		}
 	}
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
+		var entity = uwpe.entity;
+
 		var drawPos = entity.locatable().loc.pos;
 
 		this._drawablePosToRestore.overwriteWith(drawPos);
@@ -80,7 +82,7 @@ export class VisualRepeating implements Visual
 					drawPosWrapped
 				);
 
-				this.child.draw(universe, world, place, entity, display);
+				this.child.draw(uwpe, display);
 			}
 		}
 

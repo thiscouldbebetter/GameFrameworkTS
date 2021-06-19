@@ -16,7 +16,8 @@ var ThisCouldBeBetter;
                 var returnValue = new VisualPolygon(verticesAsPath, colorFill, null);
                 return returnValue;
             }
-            draw(universe, world, place, entity, display) {
+            draw(uwpe, display) {
+                var entity = uwpe.entity;
                 var drawableLoc = entity.locatable().loc;
                 this.transformLocate.loc.overwriteWith(drawableLoc);
                 this.verticesAsPathTransformed.overwriteWith(this.verticesAsPath);

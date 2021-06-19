@@ -22,7 +22,8 @@ var ThisCouldBeBetter;
                 return this;
             }
             // Visual.
-            draw(universe, world, place, entity, display) {
+            draw(uwpe, display) {
+                var entity = uwpe.entity;
                 display.drawMeshWithOrientation(this.mesh, entity.locatable().loc.orientation);
             }
         }

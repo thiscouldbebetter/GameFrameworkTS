@@ -185,10 +185,10 @@ export class SkillLearner implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
-	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity)
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		// Do nothing.
 	}

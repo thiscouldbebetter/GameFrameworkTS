@@ -23,10 +23,10 @@ export class Recurrent implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
-	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity): void
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this.timesRecurredSoFar < this.timesToRecur)
 		{
@@ -35,7 +35,7 @@ export class Recurrent implements EntityProperty
 			{
 				this.ticksUntilRecurrence = this.ticksPerRecurrence;
 				this.timesRecurredSoFar++;
-				this.recur(universe, world, place, entity);
+				this.recur(uwpe);
 			}
 		}
 	}

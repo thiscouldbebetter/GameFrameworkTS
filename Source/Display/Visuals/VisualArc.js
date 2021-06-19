@@ -15,7 +15,8 @@ var ThisCouldBeBetter;
                 this._drawPos = GameFramework.Coords.create();
                 this._polar = GameFramework.Polar.create();
             }
-            draw(universe, world, place, entity, display) {
+            draw(uwpe, display) {
+                var entity = uwpe.entity;
                 var drawableLoc = entity.locatable().loc;
                 var drawPos = this._drawPos.overwriteWith(drawableLoc.pos);
                 var drawableAngleInTurns = drawableLoc.orientation.forward.headingInTurns();

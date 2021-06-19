@@ -52,12 +52,11 @@ export class ItemStore implements EntityProperty
 		}
 	}
 
-	use
-	(
-		universe: Universe, world: World, place: Place,
-		entityUsing: Entity, entityUsed: Entity
-	): void
+	use(uwpe: UniverseWorldPlaceEntities): void
 	{
+		var universe = uwpe.universe;
+		var entityUsing = uwpe.entity;
+		var entityUsed = uwpe.entity2;
 		//entityUsed.collidable().ticksUntilCanCollide = 50; // hack
 		var storeAsControl = entityUsed.itemStore().toControl
 		(
@@ -72,9 +71,9 @@ export class ItemStore implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
-	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 
 	// Controllable.
 

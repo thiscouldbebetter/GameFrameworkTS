@@ -13,8 +13,10 @@ export class Constraint_FrictionXY implements Constraint
 		this.speedBelowWhichToStop = speedBelowWhichToStop || 0;
 	}
 
-	constrain(universe: Universe, world: World, place: Place, entity: Entity)
+	constrain(uwpe: UniverseWorldPlaceEntities): void
 	{
+		var entity = uwpe.entity;
+
 		var targetFrictionCoefficient = this.target;
 		var entityLoc = entity.locatable().loc;
 		var entityVel = entityLoc.vel;

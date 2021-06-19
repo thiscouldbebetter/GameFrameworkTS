@@ -7,8 +7,8 @@ var ThisCouldBeBetter;
             constructor(boxToContainWithin) {
                 this.boxToContainWithin = boxToContainWithin;
             }
-            constrain(universe, world, place, entity) {
-                this.boxToContainWithin.trimCoords(entity.locatable().loc.pos);
+            constrain(uwpe) {
+                this.boxToContainWithin.trimCoords(uwpe.entity.locatable().loc.pos);
             }
         }
         GameFramework.Constraint_ContainInBox = Constraint_ContainInBox;

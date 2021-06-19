@@ -12,7 +12,8 @@ var ThisCouldBeBetter;
                 this.verticesAsPathTransformed = this.verticesAsPath.clone();
                 this.transformTranslate = new GameFramework.Transform_Translate(GameFramework.Coords.create());
             }
-            draw(universe, world, place, entity, display) {
+            draw(uwpe, display) {
+                var entity = uwpe.entity;
                 var drawablePos = entity.locatable().loc.pos;
                 this.transformTranslate.displacement.overwriteWith(drawablePos);
                 this.verticesAsPathTransformed.overwriteWith(this.verticesAsPath);

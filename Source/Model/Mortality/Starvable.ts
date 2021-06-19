@@ -6,7 +6,7 @@ export class Starvable implements EntityProperty
 {
 	satietyMax: number;
 	satietyLostPerTick: number;
-	_starve: (u: Universe, w: World, p: Place, e: Entity) => void;
+	_starve: (uwpe: UniverseWorldPlaceEntities) => void;
 
 	satiety: number;
 
@@ -14,7 +14,7 @@ export class Starvable implements EntityProperty
 	(
 		satietyMax: number,
 		satietyLostPerTick: number,
-		starve: (u: Universe, w: World, p: Place, e: Entity) => void
+		starve: (uwpe: UniverseWorldPlaceEntities) => void
 	)
 	{
 		this.satietyMax = satietyMax;
@@ -24,11 +24,11 @@ export class Starvable implements EntityProperty
 		this.satiety = this.satietyMax;
 	}
 
-	starve(u: Universe, w: World, p: Place, e: Entity): void
+	starve(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this._starve != null)
 		{
-			this._starve(u, w, p, e);
+			this._starve(uwpe);
 		}
 	}
 
@@ -53,17 +53,17 @@ export class Starvable implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
 	updateForTimerTick
 	(
-		universe: Universe, world: World, place: Place, entityStarvable: Entity
+		uwpe: UniverseWorldPlaceEntities
 	): void
 	{
 		if (this.isStarving())
 		{
-			this.starve(universe, world, place, entityStarvable);
+			this.starve(uwpe);
 		}
 		else
 		{

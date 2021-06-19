@@ -27,14 +27,15 @@ export class VisualInvisible implements Visual
 
 	// Transformable.
 
-	transform(transformToApply: Transform)
+	transform(transformToApply: Transform): VisualInvisible
 	{
-		return transformToApply.transform(this.child);
+		transformToApply.transform(this.child);
+		return this;
 	}
 
 	// Visual.
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		// Do nothing.
 	}

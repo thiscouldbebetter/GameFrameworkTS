@@ -9,24 +9,30 @@ var ThisCouldBeBetter;
                 this.destinationEntityName = destinationEntityName;
                 this.velocityToApply = velocityToApply;
             }
-            use(universe, world, placeToDepart, entityToTransport, entityPortal) {
+            use(uwpe) {
+                var universe = uwpe.universe;
+                var entityPortal = uwpe.entity2;
                 var entityPortalCollidable = entityPortal.collidable();
                 entityPortalCollidable.ticksUntilCanCollide = 40; // hack
                 var portal = entityPortal.portal();
                 var venueCurrent = universe.venueCurrent;
                 var messageBoxSize = universe.display.sizeDefault();
-                var venueMessage = new GameFramework.VenueMessage(GameFramework.DataBinding.fromContext("Portal to: " + portal.destinationPlaceName), (universe) => // acknowledge
-                 {
-                    portal.transport(universe, universe.world, universe.world.placeCurrent, entityToTransport, entityPortal);
+                var messageText = GameFramework.DataBinding.fromContext("Portal to: " + portal.destinationPlaceName);
+                var acknowledge = () => {
+                    portal.transport(uwpe);
                     universe.venueNext = GameFramework.VenueFader.fromVenueTo(venueCurrent);
-                }, venueCurrent, // venuePrev
+                };
+                var venueMessage = new GameFramework.VenueMessage(messageText, acknowledge, venueCurrent, // venuePrev
                 messageBoxSize, true // showMessageOnly
                 );
                 universe.venueNext = venueMessage;
             }
-            transport(universe, world, placeToDepart, entityToTransport, entityPortal) {
+            transport(uwpe) {
+                var world = uwpe.world;
+                var placeToDepart = uwpe.place;
+                var entityToTransport = uwpe.entity;
                 var destinationPlace = world.placesByName.get(this.destinationPlaceName);
-                destinationPlace.initialize(universe, world);
+                destinationPlace.initialize(uwpe);
                 var destinationEntity = destinationPlace.entitiesByName.get(this.destinationEntityName);
                 var destinationCollidable = destinationEntity.collidable();
                 if (destinationCollidable != null) {
@@ -48,9 +54,9 @@ var ThisCouldBeBetter;
                 return new Portal(this.destinationPlaceName, this.destinationEntityName, this.velocityToApply == null ? null : this.velocityToApply.clone());
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(u, w, p, e) { }
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) { }
         }
         GameFramework.Portal = Portal;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

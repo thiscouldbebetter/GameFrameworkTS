@@ -54,12 +54,9 @@ export class VisualDirectional implements Visual
 
 	// Visual.
 
-	draw
-	(
-		universe: Universe, world: World, place: Place, entity: Entity,
-		display: Display
-	): void
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
+		var entity = uwpe.entity;
 		var headingInTurns = this.headingInTurnsGetForEntity(entity);
 		var visualForHeading;
 
@@ -80,7 +77,7 @@ export class VisualDirectional implements Visual
 			visualForHeading = this.visualsForDirections[direction];
 		}
 
-		visualForHeading.draw(universe, world, place, entity, display);
+		visualForHeading.draw(uwpe, display);
 	}
 
 	// Clonable.

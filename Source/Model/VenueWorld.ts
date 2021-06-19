@@ -15,20 +15,24 @@ export class VenueWorld implements Venue
 		this.world = world;
 	}
 
-	draw(universe: Universe)
+	draw(universe: Universe): void
 	{
 		this.world.draw(universe);
 	}
 
-	finalize(universe: Universe)
+	finalize(universe: Universe): void
 	{
 		universe.soundHelper.soundForMusic.pause(universe);
 	}
 
-	initialize(universe: Universe)
+	initialize(universe: Universe): void
 	{
 		universe.world = this.world;
-		this.world.initialize(universe);
+		var uwpe = UniverseWorldPlaceEntities.fromUniverseAndWorld
+		(
+			universe, this.world
+		);
+		this.world.initialize(uwpe);
 
 		var soundHelper = universe.soundHelper;
 		soundHelper.soundWithNamePlayAsMusic(universe, "Music_Music");
@@ -40,10 +44,14 @@ export class VenueWorld implements Venue
 		);
 	}
 
-	updateForTimerTick(universe: Universe)
+	updateForTimerTick(universe: Universe): void
 	{
-		this.world.updateForTimerTick(universe);
-		this.draw(universe);
+		var uwpe = UniverseWorldPlaceEntities.fromUniverseAndWorld
+		(
+			universe, this.world
+		);
+		this.world.updateForTimerTick(uwpe);
+		this.draw(uwpe.universe);
 		this.venueControls.updateForTimerTick(universe);
 	}
 }

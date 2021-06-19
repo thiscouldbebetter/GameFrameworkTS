@@ -14,7 +14,8 @@ var ThisCouldBeBetter;
                 this._drawPosTo = GameFramework.Coords.create();
                 this._transformLocate = new GameFramework.Transform_Locate(null);
             }
-            draw(universe, world, place, entity, display) {
+            draw(uwpe, display) {
+                var entity = uwpe.entity;
                 var loc = entity.locatable().loc;
                 this._transformLocate.loc = loc;
                 var drawPosFrom = this._drawPosFrom.overwriteWith(this.fromPos);

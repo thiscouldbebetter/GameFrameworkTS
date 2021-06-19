@@ -4,7 +4,7 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Constraint_None {
-            constrain(universe, world, place, entity) {
+            constrain(uwpe) {
                 // Do nothing.
             }
         }

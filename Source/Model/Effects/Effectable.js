@@ -17,12 +17,12 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(u, w, p, e) {
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) {
                 for (var i = 0; i < this.effects.length; i++) {
                     var effect = this.effects[i];
-                    effect.updateForTimerTick(u, w, p, e);
+                    effect.updateForTimerTick(uwpe);
                 }
                 this.effects = this.effects.filter(x => x.isDone() == false);
             }

@@ -22,8 +22,11 @@ export class VisualImageScaledPartial implements Visual
 		this._posSaved = Coords.create();
 	}
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display)
 	{
+		var universe = uwpe.universe;
+		var entity = uwpe.entity;
+
 		var image = this.visualImageToExtractFrom.image(universe);
 		var entityPos = entity.locatable().loc.pos;
 		this._posSaved.overwriteWith(entityPos);

@@ -18,8 +18,11 @@ export class ProjectileGenerator implements EntityProperty
 		(
 			"Fire",
 			// perform
-			(universe: Universe, world: World, place: Place, entityActor: Entity) =>
+			(uwpe: UniverseWorldPlaceEntities) =>
 			{
+				var place = uwpe.place;
+				var entityActor = uwpe.entity;
+
 				var projectileGenerator = entityActor.projectileGenerator();
 				var projectileEntities =
 					projectileGenerator.projectileEntitiesFromEntityFiring(entityActor);
@@ -38,9 +41,9 @@ export class ProjectileGenerator implements EntityProperty
 	}
 
 	// EntityProperty.
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
-	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 }
 
 export class ProjectileGeneration
@@ -133,21 +136,15 @@ export class ProjectileGeneration
 		return projectileEntity;
 	}
 
-	collide
-	(
-		universe: Universe, world: World, place: Place,
-		entityProjectile: Entity, entityOther: Entity
-	): void
+	collide(uwpe: UniverseWorldPlaceEntities): void
 	{
+		var entityProjectile = uwpe.entity;
+		var entityOther = uwpe.entity2;
 		var targetKillable = entityOther.killable();
 		if (targetKillable != null)
 		{
 			var damageToApply = entityProjectile.damager().damagePerHit;
-			targetKillable.damageApply
-			(
-				universe, world, place, entityProjectile, entityOther,
-				damageToApply
-			);
+			targetKillable.damageApply(uwpe, damageToApply);
 
 			var projectileKillable = entityProjectile.killable();
 			if (projectileKillable != null)

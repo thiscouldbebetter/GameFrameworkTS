@@ -9,7 +9,8 @@ var ThisCouldBeBetter;
                 // Helper variables.
                 this._drawLoc = new GameFramework.Disposition(GameFramework.Coords.create(), null, null);
             }
-            draw(universe, world, place, entity, display) {
+            draw(uwpe, display) {
+                var universe = uwpe.universe;
                 var display = universe.display;
                 var drawLoc = this._drawLoc;
                 drawLoc.pos.clear();

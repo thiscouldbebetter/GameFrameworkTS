@@ -4,17 +4,17 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class VisualDynamic implements Visual
 {
-	methodForVisual: (u: Universe, w: World, p: Place, e: Entity) => Visual;
+	methodForVisual: (uwpe: UniverseWorldPlaceEntities) => Visual;
 
-	constructor(methodForVisual: (u: Universe, w: World, p: Place, e: Entity) => Visual)
+	constructor(methodForVisual: (uwpe: UniverseWorldPlaceEntities) => Visual)
 	{
 		this.methodForVisual = methodForVisual;
 	}
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
-		var visual = this.methodForVisual.call(this, universe, world, display, entity);
-		visual.draw(universe, world, place, entity, display);
+		var visual = this.methodForVisual.call(this, uwpe);
+		visual.draw(uwpe, display);
 	}
 
 	// Clonable.

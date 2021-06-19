@@ -42,9 +42,10 @@ class PlaceBuilderDemo_Items {
         ];
         return itemDefns;
     }
-    itemUseEquip(universe, world, place, entityUser, entityItem) {
+    itemUseEquip(uwpe) {
+        var entityUser = uwpe.entity;
         var equipmentUser = entityUser.equipmentUser();
-        var message = equipmentUser.equipEntityWithItem(universe, world, place, entityUser, entityItem);
+        var message = equipmentUser.equipEntityWithItem(uwpe);
         return message;
     }
     // Items.
@@ -144,8 +145,9 @@ class PlaceBuilderDemo_Items {
         if (this.parent.visualsHaveText) {
             itemBookVisual.children.push(new VisualOffset(VisualText.fromTextAndColor(itemBookName, itemBookColor), Coords.fromXY(0, 0 - this.entityDimension * 1.5)));
         }
-        var itemBookUse = (universe, world, place, entityUser, entityItem) => // use
+        var itemBookUse = (uwpe) => // use
          {
+            var universe = uwpe.universe;
             var venuePrev = universe.venueCurrent;
             var back = () => {
                 var venueNext = venuePrev;
@@ -223,8 +225,10 @@ class PlaceBuilderDemo_Items {
         }
         var itemBread = new ItemDefn(itemBreadName, null, null, 1, 4, null, // name, appearance, descripton, mass, value, stackSize
         ["Consumable"], // categoryNames
-        (universe, world, place, entityUser, entityItem) => // use
+        (uwpe) => // use
          {
+            var entityUser = uwpe.entity;
+            var entityItem = uwpe.entity2;
             entityUser.starvable().satietyAdd(10);
             var item = entityItem.item();
             entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
@@ -285,8 +289,10 @@ class PlaceBuilderDemo_Items {
         }
         var itemDoughnut = new ItemDefn(itemDoughnutName, null, null, 1, 4, null, // name, appearance, descripton, mass, value, stackSize
         ["Consumable"], // categoryNames
-        (universe, world, place, entityUser, entityItem) => // use
+        (uwpe) => // use
          {
+            var entityUser = uwpe.entity;
+            var entityItem = uwpe.entity2;
             entityUser.starvable().satietyAdd(2);
             var item = entityItem.item();
             entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
@@ -334,8 +340,10 @@ class PlaceBuilderDemo_Items {
         }
         var itemFruit = new ItemDefn(itemFruitName, null, null, .25, 6, null, // name, appearance, descripton, mass, value, stackSize
         ["Consumable"], // categoryNames
-        (universe, world, place, entityUser, entityItem) => // use
+        (uwpe) => // use
          {
+            var entityUser = uwpe.entity;
+            var entityItem = uwpe.entity2;
             entityUser.starvable().satietyAdd(5);
             var item = entityItem.item();
             entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
@@ -477,8 +485,10 @@ class PlaceBuilderDemo_Items {
         }
         var itemMeat = new ItemDefn(itemMeatName, null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize
         ["Consumable"], // categoryNames
-        (universe, world, place, entityUser, entityItem) => // use
+        (uwpe) => // use
          {
+            var entityUser = uwpe.entity;
+            var entityItem = uwpe.entity2;
             entityUser.starvable().satietyAdd(20);
             var item = entityItem.item();
             entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
@@ -512,8 +522,10 @@ class PlaceBuilderDemo_Items {
         }
         var itemMedicine = new ItemDefn(itemMedicineName, null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize
         ["Consumable"], // categoryNames
-        (universe, world, place, entityUser, entityItem) => // use
+        (uwpe) => // use
          {
+            var entityUser = uwpe.entity;
+            var entityItem = uwpe.entity2;
             var effectToApply = Effect.Instances().Healing;
             entityUser.effectable().effectAdd(effectToApply);
             var item = entityItem.item();
@@ -585,8 +597,10 @@ class PlaceBuilderDemo_Items {
         }
         var itemPotion = new ItemDefn(itemPotionName, null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize
         ["Consumable"], // categoryNames
-        (universe, world, place, entityUser, entityItem) => // use
+        (uwpe) => // use
          {
+            var entityUser = uwpe.entity;
+            var entityItem = uwpe.entity2;
             var effectToApply = Effect.Instances().Healing;
             entityUser.effectable().effectAdd(effectToApply);
             var item = entityItem.item();
@@ -739,7 +753,7 @@ class PlaceBuilderDemo_Items {
     }
     walkieTalkie() {
         var itemWalkieTalkie = new ItemDefn("Walkie-Talkie", null, null, 2, 10, null, [], // categoryNames
-        (universe, world, place, entityUser, entityItem) => // use
+        (uwpe) => // use
          {
             return "There is no response but static.";
         }, new VisualNone(), // todo

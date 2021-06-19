@@ -9,29 +9,29 @@ var ThisCouldBeBetter;
                 this._load = load;
                 this._unload = unload;
             }
-            finalize(universe, world, place, entity) {
-                this.unload(universe, world, place, entity);
+            finalize(uwpe) {
+                this.unload(uwpe);
             }
-            initialize(universe, world, place, entity) {
-                this.load(universe, world, place, entity);
+            initialize(uwpe) {
+                this.load(uwpe);
             }
-            load(universe, world, place, entity) {
+            load(uwpe) {
                 if (this.isLoaded == false) {
                     if (this._load != null) {
-                        this._load(universe, world, place, entity);
+                        this._load(uwpe);
                     }
                     this.isLoaded = true;
                 }
             }
-            unload(universe, world, place, entity) {
+            unload(uwpe) {
                 if (this.isLoaded) {
                     if (this._unload != null) {
-                        this._unload(universe, world, place, entity);
+                        this._unload(uwpe);
                     }
                     this.isLoaded = false;
                 }
             }
-            updateForTimerTick(universe, world, place, entity) {
+            updateForTimerTick(uwpe) {
                 // Do nothing.
             }
         }

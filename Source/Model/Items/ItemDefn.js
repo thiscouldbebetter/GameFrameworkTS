@@ -33,30 +33,30 @@ var ThisCouldBeBetter;
             static fromNameMassValueAndVisual(name, mass, tradeValue, visual) {
                 return new ItemDefn(name, null, null, mass, tradeValue, null, null, null, visual, null);
             }
-            toEntity(u, w, p, e, item) {
+            toEntity(uwpe, item) {
                 var returnValue;
                 if (this._toEntity == null) {
                     returnValue = new GameFramework.Entity(this.name, [item]);
                 }
                 else {
-                    returnValue = this._toEntity.call(this, u, w, p, e, item);
+                    returnValue = this._toEntity.call(this, uwpe, item);
                 }
                 return returnValue;
             }
-            use(u, w, p, eUsing, eUsed) {
+            use(uwpe) {
                 var returnValue;
                 if (this._use == null) {
                     returnValue = "Can't use " + this.appearance + ".";
                 }
                 else {
-                    returnValue = this._use(u, w, p, eUsing, eUsed);
+                    returnValue = this._use(uwpe);
                 }
                 return returnValue;
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(u, w, p, e) { }
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) { }
         }
         GameFramework.ItemDefn = ItemDefn;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

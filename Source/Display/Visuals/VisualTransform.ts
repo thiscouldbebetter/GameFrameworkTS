@@ -40,11 +40,11 @@ export class VisualTransform implements Visual
 
 	// Visual.
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		this._childTransformed.overwriteWith(this.child);
 		this.transformToApply.transform(this._childTransformed);
-		this._childTransformed.draw(universe, world, place, entity, display);
+		this._childTransformed.draw(uwpe, display);
 	}
 }
 

@@ -11,10 +11,10 @@ export class Constraint_SpeedMaxXY implements Constraint
 		this.targetSpeedMax = targetSpeedMax;
 	}
 
-	constrain(universe: Universe, world: World, place: Place, entity: Entity)
+	constrain(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var targetSpeedMax = this.targetSpeedMax;
-		var entityLoc = entity.locatable().loc;
+		var entityLoc = uwpe.entity.locatable().loc;
 		var entityVel = entityLoc.vel;
 		var zSaved = entityVel.z;
 		entityVel.z = 0;

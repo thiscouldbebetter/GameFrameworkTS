@@ -18,14 +18,11 @@ export class Drawable implements EntityProperty
 		return new Drawable(visual, null);
 	}
 
-	updateForTimerTick
-	(
-		universe: Universe, world: World, place: Place, entity: Entity
-	): void
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this.isVisible)
 		{
-			this.visual.draw(universe, world, place, entity, universe.display);
+			this.visual.draw(uwpe, uwpe.universe.display);
 		}
 	}
 
@@ -38,8 +35,8 @@ export class Drawable implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
 }
 

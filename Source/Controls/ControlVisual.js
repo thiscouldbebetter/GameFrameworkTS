@@ -54,7 +54,8 @@ var ThisCouldBeBetter;
                     entity.locatable().loc.pos.overwriteWith(drawPos);
                     var world = universe.world;
                     var place = (world == null ? null : world.placeCurrent);
-                    visualToDraw.draw(universe, world, place, entity, display);
+                    var uwpe = new GameFramework.UniverseWorldPlaceEntities(universe, world, place, entity, null);
+                    visualToDraw.draw(uwpe, display);
                 }
             }
         }

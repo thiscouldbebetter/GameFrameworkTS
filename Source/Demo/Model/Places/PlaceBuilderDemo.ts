@@ -433,13 +433,16 @@ class PlaceBuilderDemo // Main.
 		this.entities.push(exit);
 
 		var cellCollider = new Box(mapCellSizeHalf.clone(), mapCellSize);
-		var cellCollide = (u: Universe, w: World, p: Place, e0: Entity, e1: Entity) =>
+		var cellCollide = (uwpe: UniverseWorldPlaceEntities) =>
 		{
+			var e0 = uwpe.entity;
 			var traversable = e0.traversable();
 			if (traversable != null)
 			{
 				if (traversable.isBlocking)
 				{
+					var u = uwpe.universe;
+					var e1 = uwpe.entity2;
 					u.collisionHelper.collideEntitiesBounce(e0, e1);
 				}
 			}
@@ -452,9 +455,9 @@ class PlaceBuilderDemo // Main.
 		var neighborOffsets =
 		[
 			// e, se, s, sw, w, nw, n, ne
-			new Coords(1, 0, 0), new Coords(1, 1, 0), new Coords(0, 1, 0),
-			new Coords(-1, 1, 0), new Coords(-1, 0, 0), new Coords(-1, -1, 0),
-			new Coords(0, -1, 0), new Coords(1, -1, 0)
+			Coords.fromXY(1, 0), Coords.fromXY(1, 1), Coords.fromXY(0, 1),
+			Coords.fromXY(-1, 1), Coords.fromXY(-1, 0), Coords.fromXY(-1, -1),
+			Coords.fromXY(0, -1), Coords.fromXY(1, -1)
 		];
 
 		var colorToTerrainVisualByName = (colorName: string) =>
@@ -1059,7 +1062,10 @@ class PlaceBuilderDemo // Main.
 		return cameraEntity;
 	}
 
-	build_Exterior(placePos: Coords, placeNamesToIncludePortalsTo: string[])
+	build_Exterior
+	(
+		placePos: Coords, placeNamesToIncludePortalsTo: string[]
+	): void
 	{
 		var entityDefns = this.entityDefnsByName;
 		var entities = this.entities;
@@ -1139,7 +1145,10 @@ class PlaceBuilderDemo // Main.
 		entities.push(entityRing);
 	}
 
-	build_Interior(name: string, size: Coords, placeNameToReturnTo: string)
+	build_Interior
+	(
+		name: string, size: Coords, placeNameToReturnTo: string
+	): void
 	{
 		this.name = name;
 		this.size = size;
@@ -1154,7 +1163,10 @@ class PlaceBuilderDemo // Main.
 		this.build_Camera(this.cameraViewSize, this.size);
 	}
 
-	build_SizeWallsAndMargins(namePrefix: string, placePos: Coords, areNeighborsConnectedESWN: boolean[])
+	build_SizeWallsAndMargins
+	(
+		namePrefix: string, placePos: Coords, areNeighborsConnectedESWN: boolean[]
+	): void
 	{
 		this.size = this.size.clearZ();
 
@@ -1174,7 +1186,7 @@ class PlaceBuilderDemo // Main.
 
 	// Constructor helpers.
 
-	entityBuildCamera(cameraViewSize: Coords, placeSize: Coords)
+	entityBuildCamera(cameraViewSize: Coords, placeSize: Coords): Entity
 	{
 		var viewSizeHalf = cameraViewSize.clone().half();
 
@@ -1223,7 +1235,7 @@ class PlaceBuilderDemo // Main.
 		return cameraEntity;
 	}
 
-	entityBuildBackground(camera: Camera)
+	entityBuildBackground(camera: Camera): Entity[]
 	{
 		var returnValues = [];
 
@@ -1278,7 +1290,7 @@ class PlaceBuilderDemo // Main.
 		return returnValues;
 	}
 
-	entityBuildExit(placeNameToReturnTo: string)
+	entityBuildExit(placeNameToReturnTo: string): Entity
 	{
 		var entityPosRange = new Box(this.size.clone().half(), this.size.clone().subtract(this.marginSize) );
 		var exit = this.entityBuildFromDefn(this.entityDefnsByName.get("Exit"), entityPosRange, this.randomizer);
@@ -1286,6 +1298,7 @@ class PlaceBuilderDemo // Main.
 		exitPortal.destinationPlaceName = placeNameToReturnTo;
 		exitPortal.destinationEntityName = this.name;
 		this.entities.push(exit);
+		return exit;
 	}
 
 	entitiesAllGround()
@@ -1300,7 +1313,7 @@ class PlaceBuilderDemo // Main.
 	(
 		entityDefn: Entity, entityCount: number, itemQuantityPerEntity: number,
 		posRange: Box, randomizer: Randomizer
-	)
+	): Entity[]
 	{
 		var returnEntities = [];
 
@@ -1349,8 +1362,9 @@ class PlaceBuilderDemo // Main.
 
 	entityBuildGoal
 	(
-		entities: Entity[], entityDimension: number, entitySize: Coords, numberOfKeysToUnlockGoal: number
-	)
+		entities: Entity[], entityDimension: number, entitySize: Coords,
+		numberOfKeysToUnlockGoal: number
+	): Entity
 	{
 		var itemKeyColor = Color.byName("Yellow");
 		var goalPos = Coords.create().randomize(this.randomizer).multiplyScalar
@@ -1403,8 +1417,9 @@ class PlaceBuilderDemo // Main.
 
 	entityBuildKeys
 	(
-		places: Place[], entityDimension: number, numberOfKeysToUnlockGoal: number, marginSize: Coords
-	)
+		places: Place[], entityDimension: number,
+		numberOfKeysToUnlockGoal: number, marginSize: Coords
+	): void
 	{
 		var entityDimensionHalf = entityDimension / 2;
 		var sizeMinusMargins = marginSize.clone().double().invert().add(this.size);
@@ -1436,13 +1451,18 @@ class PlaceBuilderDemo // Main.
 		}
 	}
 
-	entityBuildLoader(entityDefn: Entity, entityCount: number, entityPosRange: Box, randomizer: Randomizer)
+	entityBuildLoader
+	(
+		entityDefn: Entity, entityCount: number, entityPosRange: Box,
+		randomizer: Randomizer
+	): Entity
 	{
 		var placeBuilder = this;
 		var loadable = new Loadable
 		(
-			(u: Universe, w: World, place: Place, e: Entity) => // load
+			(uwpe: UniverseWorldPlaceEntities) => // load
 			{
+				var place = uwpe.place;
 				var placeAsPlaceRoom = place as PlaceRoom;
 				var randomizer = new RandomizerLCG(placeAsPlaceRoom.randomizerSeed, null, null, null);
 				var entityPosRange = new Box(place.size.clone().half(), place.size.clone());
@@ -1455,9 +1475,16 @@ class PlaceBuilderDemo // Main.
 					entitiesCreated
 				);
 			},
-			(u: Universe, w: World, p: Place, e: Entity) => // unload
+			(uwpe: UniverseWorldPlaceEntities) => // unload
 			{
-				p.entitiesToRemove.push(...p.entities.filter(x => x.name.startsWith("Mine")));
+				var p = uwpe.place;
+				p.entitiesToRemove.push
+				(
+					...p.entities.filter
+					(
+						(x: Entity) => x.name.startsWith("Mine")
+					)
+				);
 			}
 		);
 
@@ -1498,24 +1525,28 @@ class PlaceBuilderDemo // Main.
 		];
 
 		var portalCollide =
-			(u: Universe, w: World, p: Place, ePortal: Entity, eOther: Entity) =>
+			(uwpe: UniverseWorldPlaceEntities) =>
 			{
+				var eOther = uwpe.entity2;
 				if (eOther.playable() != null)
 				{
+					var ePortal = uwpe.entity;
 					var usable = ePortal.usable();
 					if (usable == null)
 					{
 						var portal = ePortal.portal();
-						portal.use(u, w, p, eOther, ePortal);
+						portal.use(uwpe);
 					}
 				}
 			};
 
 		var forceFieldCollide =
-			(u: Universe, w: World, p: Place, ePortal: Entity, eOther: Entity) =>
+			(uwpe: UniverseWorldPlaceEntities) =>
 			{
+				var eOther = uwpe.entity2;
 				if (eOther.playable() != null)
 				{
+					var ePortal = uwpe.entity;
 					var forceField = ePortal.forceField();
 					if (forceField != null)
 					{
@@ -1700,8 +1731,12 @@ class PlaceBuilderDemo // Main.
 					20, // ticksPerRecurrence
 					1, // timesToRecur
 					// recur
-					(u: Universe, w: World, p: Place, e: Entity) =>
+					(uwpe: UniverseWorldPlaceEntities) =>
 					{
+						var u = uwpe.universe;
+						var p = uwpe.place;
+						var e = uwpe.entity;
+
 						var player = p.player();
 						var playerItemHolder = player.itemHolder();
 						var itemRadio = new Item("Walkie-Talkie", 1);
@@ -1793,9 +1828,10 @@ class PlaceBuilderDemo // Main.
 				Locatable.create(),
 				new Usable
 				(
-					(u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) =>
+					(uwpe: UniverseWorldPlaceEntities) =>
 					{
-						eUsed.itemStore().use(u, w, p, eUsing, eUsed);
+						var eUsed = uwpe.entity2;
+						eUsed.itemStore().use(uwpe);
 						return null;
 					}
 				)
@@ -1904,16 +1940,19 @@ class PlaceBuilderDemo // Main.
 		(
 			"Bomb",
 			10, // ticksToCharge
-			(u: Universe, w: World, p: Place, entity: Entity) => // initialize
+			(uwpe: UniverseWorldPlaceEntities) => // initialize
 			{
 				// todo
 			},
-			(u: Universe, w: World, p: Place, e: Entity) => // update
+			(uwpe: UniverseWorldPlaceEntities) => // update
 			{
 				// todo
 			},
-			(u: Universe, w: World, p: Place, entityUser: Entity, entityDevice: Entity) => // use
+			(uwpe: UniverseWorldPlaceEntities) => // use
 			{
+				var entityUser = uwpe.entity;
+				var entityDevice = uwpe.entity2;
+
 				var userAsItemHolder = entityUser.itemHolder();
 				var hasAmmo = userAsItemHolder.hasItemWithDefnNameAndQuantity("Bomb", 1);
 				if (hasAmmo == false)
@@ -1924,7 +1963,7 @@ class PlaceBuilderDemo // Main.
 				userAsItemHolder.itemSubtractDefnNameAndQuantity("Bomb", 1);
 				entityUser.equipmentUser().unequipItemsNoLongerHeld
 				(
-					u, w, p, entityUser
+					uwpe
 				);
 
 				var userLoc = entityUser.locatable().loc;
@@ -1966,15 +2005,16 @@ class PlaceBuilderDemo // Main.
 						explosionRadius, Color.byName("Yellow")
 					);
 					var explosionCollider = new Sphere(Coords.create(), explosionRadius);
-					var explosionCollide = (universe: Universe, world: World, place: Place, entityProjectile: Entity, entityOther: Entity) =>
+					var explosionCollide = (uwpe: UniverseWorldPlaceEntities) =>
 					{
+						var entityProjectile = uwpe.entity;
+						var entityOther = uwpe.entity2;
 						var killable = entityOther.killable();
 						if (killable != null)
 						{
 							killable.damageApply
 							(
-								universe, world, place, entityProjectile,
-								entityOther, entityProjectile.damager().damagePerHit
+								uwpe, entityProjectile.damager().damagePerHit
 							);
 						}
 					};
@@ -1989,7 +2029,7 @@ class PlaceBuilderDemo // Main.
 							entityDying.locatable()
 						]
 					);
-					p.entityToSpawnAdd(explosionEntity);
+					uwpe.place.entityToSpawnAdd(explosionEntity);
 				}
 
 				var projectileEntity = new Entity
@@ -2011,7 +2051,7 @@ class PlaceBuilderDemo // Main.
 					]
 				);
 
-				p.entityToSpawnAdd(projectileEntity);
+				uwpe.place.entityToSpawnAdd(projectileEntity);
 			}
 		);
 
@@ -2062,8 +2102,13 @@ class PlaceBuilderDemo // Main.
 
 		var itemBowCollider = new Sphere(Coords.create(), entityDimension / 2);
 
-		var itemBowUse = (u: Universe, w: World, p: Place, entityUser: Entity, entityDevice: Entity) => // use
+		var itemBowUse = (uwpe: UniverseWorldPlaceEntities) => // use
 		{
+			var w = uwpe.world;
+			var p = uwpe.place;
+			var entityUser = uwpe.entity;
+			var entityDevice = uwpe.entity2;
+
 			var device = entityDevice.device();
 			var tickCurrent = w.timerTicksSoFar;
 			var ticksSinceUsed = tickCurrent - device.tickLastUsed;
@@ -2082,7 +2127,7 @@ class PlaceBuilderDemo // Main.
 			userAsItemHolder.itemSubtractDefnNameAndQuantity("Arrow", 1);
 			entityUser.equipmentUser().unequipItemsNoLongerHeld
 			(
-				u, w, p, entityUser
+				uwpe
 			);
 
 			device.tickLastUsed = tickCurrent;
@@ -2115,14 +2160,16 @@ class PlaceBuilderDemo // Main.
 			var projectileCollider =
 				new Sphere(Coords.create(), projectileDimension);
 
-			var projectileCollide = (universe: Universe, world: World, place: Place, entityProjectile: Entity, entityOther: Entity) =>
+			var projectileCollide = (uwpe: UniverseWorldPlaceEntities) =>
 			{
+				var entityProjectile = uwpe.entity;
+				var entityOther = uwpe.entity2;
 				var killable = entityOther.killable();
 				if (killable != null)
 				{
 					killable.damageApply
 					(
-						universe, world, place, entityProjectile, entityOther, null
+						uwpe, null
 					);
 					entityProjectile.killable().integrity = 0;
 				}
@@ -2133,8 +2180,9 @@ class PlaceBuilderDemo // Main.
 			(
 				1, // integrityMax
 				null, // damageApply
-				(universe: Universe, world: World, place: Place, entityKillable: Entity) => // die
+				(uwpe: UniverseWorldPlaceEntities) => // die
 				{
+					var entityKillable = uwpe.entity;
 					var entityStrike = new Entity
 					(
 						"ArrowStrike",
@@ -2144,7 +2192,7 @@ class PlaceBuilderDemo // Main.
 							entityKillable.locatable()
 						]
 					);
-					place.entityToSpawnAdd(entityStrike);
+					uwpe.place.entityToSpawnAdd(entityStrike);
 				}
 			);
 
@@ -2174,11 +2222,11 @@ class PlaceBuilderDemo // Main.
 		(
 			"Bow",
 			10, // ticksToCharge
-			(u: Universe, w: World, p: Place, entity: Entity) => // initialize
+			(uwpe: UniverseWorldPlaceEntities) => // initialize
 			{
 				// todo
 			},
-			(u: Universe, w: World, p: Place, e: Entity) => // update
+			(uwpe: UniverseWorldPlaceEntities) => // update
 			{
 				// todo
 			},
@@ -2283,19 +2331,22 @@ class PlaceBuilderDemo // Main.
 
 		var carCollider = new Sphere(Coords.create(), entityDimension / 2);
 
-		var carCollide = (universe: Universe, world: World, place: Place, entityVehicle: Entity, entityOther: Entity) =>
+		var carCollide = (uwpe: UniverseWorldPlaceEntities) =>
 		{
+			var entityVehicle = uwpe.entity;
+			var entityOther = uwpe.entity2;
 			if (entityOther.portal() != null)
 			{
 				var usable = entityOther.usable();
 				if (usable == null)
 				{
 					var portal = entityOther.portal();
-					portal.use(universe, world, place, entityVehicle, entityOther);
+					portal.use(uwpe);
 				}
 			}
 			else
 			{
+				var universe = uwpe.universe;
 				universe.collisionHelper.collideEntitiesBlock(entityVehicle, entityOther);
 			}
 		};
@@ -2311,8 +2362,12 @@ class PlaceBuilderDemo // Main.
 		//carLoc.spin = new Rotation(Coords.Instances().ZeroZeroOne, new Reference(.01));
 		var carUsable = new Usable
 		(
-			(u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity): string =>
+			(uwpe: UniverseWorldPlaceEntities): string =>
 			{
+				var p = uwpe.place;
+				var eUsing = uwpe.entity;
+				var eUsed = uwpe.entity2;
+
 				var vehicle = eUsed.propertiesByName.get(Vehicle.name) as Vehicle;
 				vehicle.entityOccupant = eUsing;
 				p.entitiesToRemove.push(eUsing);
@@ -2665,15 +2720,19 @@ class PlaceBuilderDemo // Main.
 		(
 			"Pick",
 			10, // ticksToCharge
-			null, // initialize: (u: Universe, w: World, p: Place, e: Entity) => void,
-			null, // update: (u: Universe, w: World, p: Place, e: Entity) => void,
-			(u: Universe, w: World, p: Place, eUser: Entity, eDevice: Entity) => // use
+			null, // initialize: (uwpe: UniverseWorldPlaceEntities) => void,
+			null, // update: (uwpe: UniverseWorldPlaceEntities) => void,
+			(uwpe: UniverseWorldPlaceEntities) => // use
 			{
-				var bouldersInPlace = p.entities.filter(x => x.name.startsWith("Boulder"));
+				var p = uwpe.place;
+				var eUser = uwpe.entity;
+
+				var bouldersInPlace =
+					p.entities.filter(x => x.name.startsWith("Boulder"));
 				var rangeMax = 20; // todo
 				var boulderInRange = bouldersInPlace.filter
 				(
-					x => x.locatable().distanceFromEntity(eUser) < rangeMax
+					(x: Entity) => x.locatable().distanceFromEntity(eUser) < rangeMax
 				)[0];
 				if (boulderInRange != null)
 				{
@@ -2762,10 +2821,13 @@ class PlaceBuilderDemo // Main.
 		(
 			"Shovel",
 			10, // ticksToCharge
-			null, // initialize: (u: Universe, w: World, p: Place, e: Entity) => void,
-			null, // update: (u: Universe, w: World, p: Place, e: Entity) => void,
-			(u: Universe, w: World, p: Place, eUser: Entity, eDevice: Entity) => // use
+			null, // initialize: (uwpe: UniverseWorldPlaceEntities) => void,
+			null, // update: (uwpe: UniverseWorldPlaceEntities) => void,
+			(uwpe: UniverseWorldPlaceEntities) => // use
 			{
+				var p = uwpe.place;
+				var eUser = uwpe.entity;
+
 				var holesInPlace = p.entities.filter(x => x.name.startsWith("Hole"));
 				var rangeMax = 20; // todo
 				var holeInRange = holesInPlace.filter
@@ -2788,7 +2850,7 @@ class PlaceBuilderDemo // Main.
 				}
 				else
 				{
-					eUser.locatable().entitySpawnWithDefnName(u, w, p, eUser, "Hole");
+					eUser.locatable().entitySpawnWithDefnName(uwpe, "Hole");
 				}
 			}
 		);
@@ -2829,8 +2891,14 @@ class PlaceBuilderDemo // Main.
 		var itemSwordCollider = new Sphere(Coords.create(), entityDimension / 2);
 
 		var itemSwordDeviceUse =
-			(universe: Universe, world: World, place: Place, entityUser: Entity, entityDevice: Entity) => // use
+			(uwpe: UniverseWorldPlaceEntities) => // use
 		{
+			var universe = uwpe.universe;
+			var world = uwpe.world;
+			var place = uwpe.place;
+			var entityUser = uwpe.entity;
+			var entityDevice = uwpe.entity2;
+
 			var userLoc = entityUser.locatable().loc;
 			var userPos = userLoc.pos;
 			var userVel = userLoc.vel;
@@ -2842,7 +2910,7 @@ class PlaceBuilderDemo // Main.
 			if (userTirable.stamina < staminaToFire)
 			{
 				var message = "Too tired!";
-				place.entitySpawn
+				place.entitySpawn2
 				(
 					universe, world,
 					universe.entityBuilder.messageFloater
@@ -2881,15 +2949,17 @@ class PlaceBuilderDemo // Main.
 			var projectileCollider =
 				new Sphere(Coords.create(), projectileDimension);
 
-			var projectileCollide = (universe: Universe, world: World, place: Place, entityProjectile: Entity, entityOther: Entity) =>
+			var projectileCollide = (uwpe: UniverseWorldPlaceEntities) =>
 			{
+				var entityProjectile = uwpe.entity;
+				var entityOther = uwpe.entity2;
 				var killable = entityOther.killable();
 				if (killable != null)
 				{
 					var damageToApply = entityProjectile.damager().damagePerHit;
 					killable.damageApply
 					(
-						universe, world, place, entityProjectile, entityOther, damageToApply
+						uwpe, damageToApply
 					);
 					entityProjectile.killable().integrity = 0;
 				}
@@ -2900,8 +2970,9 @@ class PlaceBuilderDemo // Main.
 			(
 				1, // integrityMax
 				null, // damageApply
-				(universe: Universe, world: World, place: Place, entityKillable: Entity) => // die
+				(uwpe: UniverseWorldPlaceEntities) => // die
 				{
+					var entityKillable = uwpe.entity;
 					var entityStrike = new Entity
 					(
 						"SwordStrike",

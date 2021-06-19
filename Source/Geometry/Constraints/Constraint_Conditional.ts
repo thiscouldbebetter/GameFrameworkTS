@@ -4,21 +4,25 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Constraint_Conditional implements Constraint
 {
-	shouldChildApply: (u: Universe, w: World, p: Place, e: Entity) => boolean;
+	shouldChildApply: (uwpe: UniverseWorldPlaceEntities) => boolean;
 	child: Constraint;
 
-	constructor(shouldChildApply: (u: Universe, w: World, p: Place, e: Entity) => boolean, child: Constraint)
+	constructor
+	(
+		shouldChildApply: (uwpe: UniverseWorldPlaceEntities)=>boolean,
+		child: Constraint
+	)
 	{
 		this.shouldChildApply = shouldChildApply;
 		this.child = child;
 	}
 
-	constrain(universe: Universe, world: World, place: Place, entity: Entity)
+	constrain(uwpe: UniverseWorldPlaceEntities): void
 	{
-		var willChildApply = this.shouldChildApply(universe, world, place, entity);
+		var willChildApply = this.shouldChildApply(uwpe);
 		if (willChildApply)
 		{
-			this.child.constrain(universe, world, place, entity);
+			this.child.constrain(uwpe);
 		}
 	}
 }

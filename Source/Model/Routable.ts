@@ -13,15 +13,15 @@ export class Routable implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 
-	initialize(u: Universe, w: World, p: Place, e: Entity): void
+	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
-		this.route.bounds = Box.fromMinAndMax(Coords.create(), p.size.clone());
+		this.route.bounds =
+			Box.fromMinAndMax(Coords.create(), uwpe.place.size.clone());
 	}
 
-	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
-
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 
 	// Clonable.
 

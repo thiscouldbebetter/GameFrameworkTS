@@ -17,10 +17,10 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(universe, world, place, entity) {
-                this.activity.perform(universe, world, place, entity);
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) {
+                this.activity.perform(uwpe);
             }
         }
         GameFramework.Actor = Actor;

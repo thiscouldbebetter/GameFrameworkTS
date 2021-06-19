@@ -14,18 +14,21 @@ class PlaceBuilderDemo_Actions {
             Movable.actionAccelerateLeft(),
             Movable.actionAccelerateRight(),
             Movable.actionAccelerateUp(),
-            new Action("Fire", (universe, world, place, actor) => // perform
+            new Action("Fire", (uwpe) => // perform
              {
+                var actor = uwpe.entity;
                 var equipmentUser = actor.equipmentUser();
                 var entityWieldableEquipped = equipmentUser.itemEntityInSocketWithName("Wielding");
                 var actorHasWieldableEquipped = (entityWieldableEquipped != null);
                 if (actorHasWieldableEquipped) {
                     var deviceWieldable = entityWieldableEquipped.device();
-                    deviceWieldable.use(universe, world, place, actor, entityWieldableEquipped);
+                    uwpe.entity2 = entityWieldableEquipped;
+                    deviceWieldable.use(uwpe);
                 }
             }),
-            new Action("Hide", (universe, world, place, actor) => // perform
+            new Action("Hide", (uwpe) => // perform
              {
+                var actor = uwpe.entity;
                 var learner = actor.skillLearner();
                 var knowsHowToHide = learner.skillsKnownNames.indexOf("Hiding") >= 0;
                 if (knowsHowToHide) {
@@ -39,8 +42,9 @@ class PlaceBuilderDemo_Actions {
                     }
                 }
             }),
-            new Action("Jump", (universe, world, place, actor) => // perform
+            new Action("Jump", (uwpe) => // perform
              {
+                var actor = uwpe.entity;
                 var learner = actor.skillLearner();
                 var canJump = learner.skillsKnownNames.indexOf("Jumping") >= 0;
                 if (canJump) {
@@ -54,10 +58,14 @@ class PlaceBuilderDemo_Actions {
                     }
                 }
             }),
-            new Action("Pick Up", (universe, world, place, entityActor) => // perform
+            new Action("Pick Up", (uwpe) => // perform
              {
+                var universe = uwpe.universe;
+                var world = uwpe.world;
+                var place = uwpe.place;
+                var entityActor = uwpe.entity;
                 var itemHolder = entityActor.itemHolder();
-                var itemEntityToPickUp = itemHolder.itemEntityFindClosest(universe, world, place, entityActor);
+                var itemEntityToPickUp = itemHolder.itemEntityFindClosest(uwpe);
                 if (itemEntityToPickUp == null) {
                     return;
                 }
@@ -69,11 +77,12 @@ class PlaceBuilderDemo_Actions {
                 }
                 else {
                     var message = "Can't pick up!";
-                    place.entitySpawn(universe, world, universe.entityBuilder.messageFloater(message, entityActor.locatable().loc.pos, Color.byName("Red")));
+                    place.entitySpawn2(universe, world, universe.entityBuilder.messageFloater(message, entityActor.locatable().loc.pos, Color.byName("Red")));
                 }
             }),
-            new Action("Run", (universe, world, place, actor) => // perform
+            new Action("Run", (uwpe) => // perform
              {
+                var actor = uwpe.entity;
                 var learner = actor.skillLearner();
                 var knowsHowToRun = learner.skillsKnownNames.indexOf("Running") >= 0;
                 // knowsHowToRun = true; // debug
@@ -90,8 +99,9 @@ class PlaceBuilderDemo_Actions {
                     }
                 }
             }),
-            new Action("Sneak", (universe, world, place, actor) => // perform
+            new Action("Sneak", (uwpe) => // perform
              {
+                var actor = uwpe.entity;
                 // var learner = actor.skillLearner();
                 // var knowsHowToSneak = learner.skillsKnownNames.indexOf("Sneaking") >= 0;
                 var knowsHowToSneak = true; // debug
@@ -105,31 +115,35 @@ class PlaceBuilderDemo_Actions {
                     }
                 }
             }),
-            new Action("Use", (universe, world, place, actor) => // perform
+            new Action("Use", (uwpe) => // perform
              {
+                var actor = uwpe.entity;
+                var place = uwpe.place;
                 var entityUsablesInPlace = place.usables();
                 var actorPos = actor.locatable().loc.pos;
                 var radiusOfReach = 20; // todo
                 var entityUsablesWithinReach = entityUsablesInPlace.filter(x => x.locatable().loc.pos.clone().subtract(actorPos).magnitude() < radiusOfReach);
                 if (entityUsablesWithinReach.length > 0) {
                     var entityToUse = entityUsablesWithinReach[0];
-                    entityToUse.usable().use(universe, world, place, actor, entityToUse);
+                    uwpe.entity2 = entityToUse;
+                    entityToUse.usable().use(uwpe);
                 }
             }),
-            new Action("Wait", (universe, world, place, actor) => // perform
+            new Action("Wait", (uwpe) => // perform
              {
+                var actor = uwpe.entity;
                 actor.actor().activity.defnName = "Wait";
             }),
-            new Action("Item0", (u, w, p, e) => e.equipmentUser().useItemInSocketNumbered(u, w, p, e, 0)),
-            new Action("Item1", (u, w, p, e) => e.equipmentUser().useItemInSocketNumbered(u, w, p, e, 1)),
-            new Action("Item2", (u, w, p, e) => e.equipmentUser().useItemInSocketNumbered(u, w, p, e, 2)),
-            new Action("Item3", (u, w, p, e) => e.equipmentUser().useItemInSocketNumbered(u, w, p, e, 3)),
-            new Action("Item4", (u, w, p, e) => e.equipmentUser().useItemInSocketNumbered(u, w, p, e, 4)),
-            new Action("Item5", (u, w, p, e) => e.equipmentUser().useItemInSocketNumbered(u, w, p, e, 5)),
-            new Action("Item6", (u, w, p, e) => e.equipmentUser().useItemInSocketNumbered(u, w, p, e, 6)),
-            new Action("Item7", (u, w, p, e) => e.equipmentUser().useItemInSocketNumbered(u, w, p, e, 7)),
-            new Action("Item8", (u, w, p, e) => e.equipmentUser().useItemInSocketNumbered(u, w, p, e, 8)),
-            new Action("Item9", (u, w, p, e) => e.equipmentUser().useItemInSocketNumbered(u, w, p, e, 9)),
+            new Action("Item0", (uwpe) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 0)),
+            new Action("Item1", (uwpe) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 1)),
+            new Action("Item2", (uwpe) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 2)),
+            new Action("Item3", (uwpe) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 3)),
+            new Action("Item4", (uwpe) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 4)),
+            new Action("Item5", (uwpe) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 5)),
+            new Action("Item6", (uwpe) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 6)),
+            new Action("Item7", (uwpe) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 7)),
+            new Action("Item8", (uwpe) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 8)),
+            new Action("Item9", (uwpe) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 9)),
         ];
         return actions;
     }

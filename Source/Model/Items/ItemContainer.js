@@ -21,14 +21,15 @@ var ThisCouldBeBetter;
                             + " " + itemToTransfer.defnName + ".";
                     var equipmentUser = entityFrom.equipmentUser();
                     if (equipmentUser != null) {
-                        equipmentUser.unequipItemsNoLongerHeld(null, world, world.placeCurrent, entityFrom);
+                        var uwpe = new GameFramework.UniverseWorldPlaceEntities(null, world, null, entityFrom, entityTo);
+                        equipmentUser.unequipItemsNoLongerHeld(uwpe);
                     }
                 }
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(u, w, p, e) { }
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) { }
             // Controllable.
             toControl(universe, size, entityGetterPutter, entityContainer, venuePrev) {
                 if (size == null) {
@@ -86,7 +87,7 @@ var ThisCouldBeBetter;
                     new GameFramework.ControlList("listOtherItems", GameFramework.Coords.fromXY(size.x - margin - listSize.x, margin * 2), // pos
                     listSize.clone(), GameFramework.DataBinding.fromContextAndGet(itemHolderGetterPutter, (c) => c.items //.filter(x => x.item().defnName != itemDefnNameCurrency);
                     ), // items
-                    GameFramework.DataBinding.fromGet((c) => c.toString()), // bindingForItemText
+                    GameFramework.DataBinding.fromGet((c) => c.item().toString(world)), // bindingForItemText
                     fontHeight, new GameFramework.DataBinding(itemHolderGetterPutter, (c) => c.itemSelected, (c, v) => c.itemSelected = v), // bindingForItemSelected
                     GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
                     GameFramework.DataBinding.fromTrue(), // isEnabled

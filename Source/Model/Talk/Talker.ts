@@ -11,12 +11,12 @@ export class Talker implements EntityProperty
 		this.conversationDefnName = conversationDefnName;
 	}
 
-	talk
-	(
-		universe: Universe, world: World, place: Place,
-		entityTalker: Entity, entityTalkee: Entity
-	): void
+	talk(uwpe: UniverseWorldPlaceEntities): void
 	{
+		var universe = uwpe.universe;
+		var entityTalker = uwpe.entity;
+		var entityTalkee = uwpe.entity2;
+
 		var conversationDefnAsJSON =
 			universe.mediaLibrary.textStringGetByName(this.conversationDefnName).value;
 		var conversationDefn = ConversationDefn.deserialize(conversationDefnAsJSON);
@@ -42,9 +42,9 @@ export class Talker implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
-	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 
 }
 

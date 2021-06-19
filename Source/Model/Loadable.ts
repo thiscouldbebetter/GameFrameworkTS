@@ -5,13 +5,13 @@ namespace ThisCouldBeBetter.GameFramework
 export class Loadable implements EntityProperty
 {
 	isLoaded: boolean;
-	_load: (universe: Universe, world: World, place: Place, entity: Entity) => void;
-	_unload: (universe: Universe, world: World, place: Place, entity: Entity) => void;
+	_load: (uwpe: UniverseWorldPlaceEntities) => void;
+	_unload: (uwpe: UniverseWorldPlaceEntities) => void;
 
 	constructor
 	(
-		load: (universe: Universe, world: World, place: Place, entity: Entity) => void,
-		unload: (universe: Universe, world: World, place: Place, entity: Entity) => void
+		load: (uwpe: UniverseWorldPlaceEntities) => void,
+		unload: (uwpe: UniverseWorldPlaceEntities) => void
 	)
 	{
 		this.isLoaded = false;
@@ -19,41 +19,41 @@ export class Loadable implements EntityProperty
 		this._unload = unload;
 	}
 
-	finalize(universe: Universe, world: World, place: Place, entity: Entity)
+	finalize(uwpe: UniverseWorldPlaceEntities): void
 	{
-		this.unload(universe, world, place, entity);
+		this.unload(uwpe);
 	}
 
-	initialize(universe: Universe, world: World, place: Place, entity: Entity)
+	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
-		this.load(universe, world, place, entity);
+		this.load(uwpe);
 	}
 
-	load(universe: Universe, world: World, place: Place, entity: Entity)
+	load(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this.isLoaded == false)
 		{
 			if (this._load != null)
 			{
-				this._load(universe, world, place, entity);
+				this._load(uwpe);
 			}
 			this.isLoaded = true;
 		}
 	}
 
-	unload(universe: Universe, world: World, place: Place, entity: Entity)
+	unload(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this.isLoaded)
 		{
 			if (this._unload != null)
 			{
-				this._unload(universe, world, place, entity);
+				this._unload(uwpe);
 			}
 			this.isLoaded = false;
 		}
 	}
 
-	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity)
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		// Do nothing.
 	}

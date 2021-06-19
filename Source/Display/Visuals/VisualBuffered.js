@@ -12,11 +12,12 @@ var ThisCouldBeBetter;
                 this._posSaved = GameFramework.Coords.create();
                 this.displayForBuffer.initialize(null);
             }
-            draw(universe, world, place, entity, display) {
+            draw(uwpe, display) {
+                var entity = uwpe.entity;
                 var drawPos = entity.locatable().loc.pos;
                 this._posSaved.overwriteWith(drawPos);
                 drawPos.overwriteWith(this.sizeHalf);
-                this.child.draw(universe, world, place, entity, this.displayForBuffer);
+                this.child.draw(uwpe, this.displayForBuffer);
                 drawPos.overwriteWith(this._posSaved);
                 drawPos.subtract(this.sizeHalf);
                 display.drawImage(this.displayForBuffer.toImage(), drawPos);

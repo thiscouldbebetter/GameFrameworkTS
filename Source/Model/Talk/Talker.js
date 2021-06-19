@@ -7,7 +7,10 @@ var ThisCouldBeBetter;
             constructor(conversationDefnName) {
                 this.conversationDefnName = conversationDefnName;
             }
-            talk(universe, world, place, entityTalker, entityTalkee) {
+            talk(uwpe) {
+                var universe = uwpe.universe;
+                var entityTalker = uwpe.entity;
+                var entityTalkee = uwpe.entity2;
                 var conversationDefnAsJSON = universe.mediaLibrary.textStringGetByName(this.conversationDefnName).value;
                 var conversationDefn = GameFramework.ConversationDefn.deserialize(conversationDefnAsJSON);
                 var venueToReturnTo = universe.venueCurrent;
@@ -22,9 +25,9 @@ var ThisCouldBeBetter;
                 universe.venueNext = venueNext;
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(u, w, p, e) { }
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) { }
         }
         GameFramework.Talker = Talker;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

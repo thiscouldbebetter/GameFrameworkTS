@@ -26,16 +26,18 @@ export class Vehicle implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
-	updateForTimerTick
-	(
-		universe: Universe, world: World, place: Place, entityVehicle: Entity
-	): void
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this.entityOccupant != null)
 		{
+			var universe = uwpe.universe;
+			var world = uwpe.world;
+			var place = uwpe.place;
+			var entityVehicle = uwpe.entity;
+
 			var placeDefn = place.defn(world);
 			var actionsByName = placeDefn.actionsByName;
 			var inputHelper = universe.inputHelper;

@@ -12,15 +12,15 @@ var ThisCouldBeBetter;
                 this.ticksUntilRecurrence = this.ticksPerRecurrence;
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(universe, world, place, entity) {
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) {
                 if (this.timesRecurredSoFar < this.timesToRecur) {
                     this.ticksUntilRecurrence--;
                     if (this.ticksUntilRecurrence <= 0) {
                         this.ticksUntilRecurrence = this.ticksPerRecurrence;
                         this.timesRecurredSoFar++;
-                        this.recur(universe, world, place, entity);
+                        this.recur(uwpe);
                     }
                 }
             }

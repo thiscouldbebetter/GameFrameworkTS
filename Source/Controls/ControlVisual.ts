@@ -79,7 +79,11 @@ export class ControlVisual extends ControlBase
 
 	// drawable
 
-	draw(universe: Universe, display: Display, drawLoc: Disposition, style: ControlStyle): void
+	draw
+	(
+		universe: Universe, display: Display, drawLoc: Disposition,
+		style: ControlStyle
+	): void
 	{
 		var visualToDraw = this.visual.get();
 		if (visualToDraw != null)
@@ -101,7 +105,11 @@ export class ControlVisual extends ControlBase
 
 			var world = universe.world;
 			var place = (world == null ? null : world.placeCurrent);
-			visualToDraw.draw(universe, world, place, entity, display);
+			var uwpe = new UniverseWorldPlaceEntities
+			(
+				universe, world, place, entity, null
+			);
+			visualToDraw.draw(uwpe, display);
 		}
 	}
 }

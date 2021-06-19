@@ -5,22 +5,22 @@ namespace ThisCouldBeBetter.GameFramework
 export class Idleable implements EntityProperty
 {
 	ticksUntilIdle: number;
-	_idle: (u: Universe, w: World, p: Place, e: Entity) => void;
+	_idle: (uwpe: UniverseWorldPlaceEntities) => void;
 
 	tickLastActionPerformed: number;
 
-	constructor(ticksUntilIdle: number, idle: (u: Universe, w: World, p: Place, e: Entity) => void)
+	constructor(ticksUntilIdle: number, idle: (uwpe: UniverseWorldPlaceEntities) => void)
 	{
 		this.ticksUntilIdle = ticksUntilIdle;
 		this._idle = idle;
 		this.tickLastActionPerformed = 0;
 	}
 
-	idle(universe: Universe, world: World, place: Place, entity: Entity): void
+	idle(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this._idle != null)
 		{
-			this._idle(universe, world, place, entity);
+			this._idle(uwpe);
 		}
 	}
 
@@ -36,11 +36,13 @@ export class Idleable implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
-	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity): void
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
+		var world = uwpe.world;
+		var entity = uwpe.entity;
 		var actor = entity.actor();
 		var actorIsActing = actor.actions.length > 0;
 		if (actorIsActing)
@@ -49,7 +51,7 @@ export class Idleable implements EntityProperty
 		}
 		else if (this.isIdle(world))
 		{
-			this.idle(universe, world, place, entity);
+			this.idle(uwpe);
 		}
 	}
 }

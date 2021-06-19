@@ -105,10 +105,10 @@ export class Selector implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
-	updateForTimerTick(u: Universe, w: World, p: Place, entitySelector: Entity): void
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var entitySelected = this.entitiesSelected[0];
 		var isEntitySelected = (entitySelected != null);
@@ -118,7 +118,8 @@ export class Selector implements EntityProperty
 			var reticleLoc = this.entityForReticle.locatable().loc;
 			reticleLoc.overwriteWith(entitySelected.locatable().loc);
 			reticleLoc.pos.z--;
-			this.entityForReticle.drawable().updateForTimerTick(u, w, p, this.entityForReticle);
+			var uwpeReticle = uwpe.clone().entitySet(this.entityForReticle);
+			this.entityForReticle.drawable().updateForTimerTick(uwpeReticle);
 		}
 	}
 }

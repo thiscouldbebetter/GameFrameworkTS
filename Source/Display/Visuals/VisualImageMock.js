@@ -12,7 +12,7 @@ var ThisCouldBeBetter;
                 return this;
             }
             // Visual.
-            draw(universe, world, place, entity, display) { }
+            draw(uwpe, display) { }
             clone() { return this; }
             overwriteWith(x) { return this; }
             // VisualImage.

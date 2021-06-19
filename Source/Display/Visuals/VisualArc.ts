@@ -32,12 +32,10 @@ export class VisualArc implements Visual
 		this._polar = Polar.create();
 	}
 
-	draw
-	(
-		universe: Universe, world: World, place: Place, entity: Entity,
-		display: Display
-	): void
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
+		var entity = uwpe.entity;
+
 		var drawableLoc = entity.locatable().loc;
 		var drawPos = this._drawPos.overwriteWith
 		(

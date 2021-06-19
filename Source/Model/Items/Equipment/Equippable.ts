@@ -4,15 +4,15 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Equippable implements EntityProperty
 {
-	_equip: (u: Universe, w: World, p: Place, eEquipmentUser: Entity, eEquippable: Entity) => void;
-	_unequip: (u: Universe, w: World, p: Place, eEquipmentUser: Entity, eEquippable: Entity) => void;
+	_equip: (uwpe: UniverseWorldPlaceEntities) => void;
+	_unequip: (uwpe: UniverseWorldPlaceEntities) => void;
 
 	isEquipped: boolean;
 
 	constructor
 	(
-		equip: (u: Universe, w: World, p: Place, eEquipmentUser: Entity, eEquippable: Entity) => void,
-		unequip: (u: Universe, w: World, p: Place, eEquipmentUser: Entity, eEquippable: Entity) => void
+		equip: (uwpe: UniverseWorldPlaceEntities) => void,
+		unequip: (uwpe: UniverseWorldPlaceEntities) => void
 	)
 	{
 		this._equip = equip;
@@ -25,26 +25,20 @@ export class Equippable implements EntityProperty
 		return new Equippable(null, null);
 	}
 
-	equip
-	(
-		u: Universe, w: World, p: Place, eEquipmentUser: Entity, eEquippable: Entity
-	): void
+	equip(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this._equip != null)
 		{
-			this._equip(u, w, p, eEquipmentUser, eEquippable);
+			this._equip(uwpe);
 		}
 		this.isEquipped = true;
 	}
 
-	unequip
-	(
-		u: Universe, w: World, p: Place, eEquipmentUser: Entity, eEquippable: Entity
-	): void
+	unequip(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this._unequip != null)
 		{
-			this._unequip(u, w, p, eEquipmentUser, eEquippable);
+			this._unequip(uwpe);
 		}
 		this.isEquipped = false;
 	}
@@ -63,9 +57,9 @@ export class Equippable implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
-	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 }
 
 }

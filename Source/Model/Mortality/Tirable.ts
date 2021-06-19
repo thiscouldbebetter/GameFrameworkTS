@@ -8,7 +8,7 @@ export class Tirable implements EntityProperty
 	staminaRecoveredPerTick: number;
 	staminaMaxLostPerTick: number;
 	staminaMaxRecoveredPerTickOfSleep: number;
-	_fallAsleep: (u: Universe, w: World, p: Place, e: Entity) => void;
+	_fallAsleep: (uwpe: UniverseWorldPlaceEntities) => void;
 
 	staminaMaxRemainingBeforeSleep: number;
 	stamina: number;
@@ -19,7 +19,7 @@ export class Tirable implements EntityProperty
 		staminaRecoveredPerTick: number,
 		staminaMaxLostPerTick: number,
 		staminaMaxRecoveredPerTickOfSleep: number,
-		fallAsleep: (u: Universe, w: World, p: Place, e: Entity) => void
+		fallAsleep: (uwpe: UniverseWorldPlaceEntities) => void
 	)
 	{
 		this.staminaMaxAfterSleep = staminaMaxAfterSleep;
@@ -32,7 +32,7 @@ export class Tirable implements EntityProperty
 		this.staminaMaxRemainingBeforeSleep = this.staminaMaxAfterSleep;
 	}
 
-	fallAsleep(u: Universe, w: World, p: Place, e: Entity): void
+	fallAsleep(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var staminaMaxToRecover =
 			this.staminaMaxAfterSleep - this.staminaMaxRemainingBeforeSleep;
@@ -40,11 +40,12 @@ export class Tirable implements EntityProperty
 		(
 			staminaMaxToRecover / this.staminaMaxRecoveredPerTickOfSleep
 		);
-		w.timerTicksSoFar += ticksToRecover;
+		var world = uwpe.world;
+		world.timerTicksSoFar += ticksToRecover;
 
 		if (this._fallAsleep != null)
 		{
-			this._fallAsleep(u, w, p, e);
+			this._fallAsleep(uwpe);
 		}
 	}
 
@@ -69,17 +70,14 @@ export class Tirable implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
-	updateForTimerTick
-	(
-		universe: Universe, world: World, place: Place, entityStarvable: Entity
-	): void
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this.isExhausted())
 		{
-			this.fallAsleep(universe, world, place, entityStarvable);
+			this.fallAsleep(uwpe);
 		}
 		else
 		{

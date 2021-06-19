@@ -16,15 +16,17 @@ var ThisCouldBeBetter;
             }
             initialize(universe) {
                 universe.world = this.world;
-                this.world.initialize(universe);
+                var uwpe = GameFramework.UniverseWorldPlaceEntities.fromUniverseAndWorld(universe, this.world);
+                this.world.initialize(uwpe);
                 var soundHelper = universe.soundHelper;
                 soundHelper.soundWithNamePlayAsMusic(universe, "Music_Music");
                 this.venueControls = new GameFramework.VenueControls(this.world.toControl(universe), true // ignoreKeyboardAndGamepadInputs
                 );
             }
             updateForTimerTick(universe) {
-                this.world.updateForTimerTick(universe);
-                this.draw(universe);
+                var uwpe = GameFramework.UniverseWorldPlaceEntities.fromUniverseAndWorld(universe, this.world);
+                this.world.updateForTimerTick(uwpe);
+                this.draw(uwpe.universe);
                 this.venueControls.updateForTimerTick(universe);
             }
         }

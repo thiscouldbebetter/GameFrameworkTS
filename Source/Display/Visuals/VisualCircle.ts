@@ -22,8 +22,9 @@ export class VisualCircle implements Visual
 		return new VisualCircle(radius, colorFill, null, null);
 	}
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
+		var entity = uwpe.entity;
 		display.drawCircle
 		(
 			entity.locatable().loc.pos,

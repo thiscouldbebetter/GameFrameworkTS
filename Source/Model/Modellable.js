@@ -8,9 +8,9 @@ var ThisCouldBeBetter;
                 this.model = model;
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(universe, world, place, entity) {
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) {
                 // Do nothing.
             }
         }

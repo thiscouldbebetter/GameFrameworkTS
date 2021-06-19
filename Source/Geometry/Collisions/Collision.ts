@@ -50,7 +50,7 @@ export class Collision //
 		this.isActive = false;
 		ArrayHelper.clear(this.entitiesColliding);
 		ArrayHelper.clear(this.colliders);
-		ArrayHelper.clear(this.normals);
+		this.normals.forEach(x => x.clear());
 		this.collidersByName.clear();
 		this.distanceToCollision = null;
 		return this;

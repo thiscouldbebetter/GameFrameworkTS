@@ -27,11 +27,11 @@ var ThisCouldBeBetter;
             ticksToLive() {
                 return this.ticksPerCycle * this.cyclesToLive;
             }
-            updateForTimerTick(u, w, p, e) {
+            updateForTimerTick(uwpe) {
                 var returnValue = null;
                 if (this._updateForCycle != null) {
                     if (this.isCycleComplete()) {
-                        returnValue = this._updateForCycle(u, w, p, e, this);
+                        returnValue = this._updateForCycle(uwpe, this);
                     }
                 }
                 this.ticksSoFar++;
@@ -48,15 +48,19 @@ var ThisCouldBeBetter;
                 var visualDimension = 5;
                 this.Burning = new Effect("Burning", 20, // ticksPerCycle
                 5, // cyclesToLive
-                GameFramework.VisualBuilder.Instance().flame(visualDimension), (u, w, p, e, effect) => {
+                GameFramework.VisualBuilder.Instance().flame(visualDimension), (uwpe, effect) => {
                     var damage = GameFramework.Damage.fromAmountAndTypeName(1, "Heat");
-                    e.killable().damageApply(u, w, p, null, e, damage);
+                    var e = uwpe.entity;
+                    uwpe.entity2 = e;
+                    e.killable().damageApply(uwpe, damage);
                 });
                 this.Frozen = new Effect("Frozen", 20, // ticksPerCycle
                 5, // cyclesToLive
-                GameFramework.VisualCircle.fromRadiusAndColorFill(visualDimension, GameFramework.Color.byName("Cyan")), (u, w, p, e, effect) => {
+                GameFramework.VisualCircle.fromRadiusAndColorFill(visualDimension, GameFramework.Color.byName("Cyan")), (uwpe, effect) => {
                     var damage = GameFramework.Damage.fromAmountAndTypeName(1, "Cold");
-                    e.killable().damageApply(u, w, p, null, e, damage);
+                    var e = uwpe.entity;
+                    uwpe.entity2 = e;
+                    e.killable().damageApply(uwpe, damage);
                 });
                 this.Healing = new Effect("Healing", 40, // ticksPerCycle
                 10, // cyclesToLive
@@ -73,9 +77,11 @@ var ThisCouldBeBetter;
                     new GameFramework.Coords(-0.2, 0.5, 0),
                     new GameFramework.Coords(-0.2, 0.2, 0),
                     new GameFramework.Coords(-0.5, 0.2, 0)
-                ]).transform(GameFramework.Transform_Scale.fromScalar(visualDimension * 1.5)), GameFramework.Color.byName("Red"), null), (u, w, p, e, effect) => {
+                ]).transform(GameFramework.Transform_Scale.fromScalar(visualDimension * 1.5)), GameFramework.Color.byName("Red"), null), (uwpe, effect) => {
                     var damage = GameFramework.Damage.fromAmountAndTypeName(-1, "Healing");
-                    e.killable().damageApply(u, w, p, null, e, damage);
+                    var e = uwpe.entity;
+                    uwpe.entity2 = e;
+                    e.killable().damageApply(uwpe, damage);
                 });
                 this._All =
                     [

@@ -11,9 +11,9 @@ var ThisCouldBeBetter;
             static fromVisual(visual) {
                 return new Drawable(visual, null);
             }
-            updateForTimerTick(universe, world, place, entity) {
+            updateForTimerTick(uwpe) {
                 if (this.isVisible) {
-                    this.visual.draw(universe, world, place, entity, universe.display);
+                    this.visual.draw(uwpe, uwpe.universe.display);
                 }
             }
             // cloneable
@@ -21,8 +21,8 @@ var ThisCouldBeBetter;
                 return new Drawable(this.visual, this.isVisible);
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
+            finalize(uwpe) { }
+            initialize(uwpe) { }
         }
         GameFramework.Drawable = Drawable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

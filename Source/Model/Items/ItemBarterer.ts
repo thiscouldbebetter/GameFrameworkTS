@@ -71,11 +71,11 @@ export class ItemBarterer implements EntityProperty
 		);
 	}
 
-	trade(
-		universe: Universe, world: World, place: Place,
-		entityCustomer: Entity, entityStore: Entity
-	): void
+	trade(uwpe: UniverseWorldPlaceEntities): void
 	{
+		var entityStore = uwpe.entity;
+		var entityCustomer = uwpe.entity;
+
 		this.itemHolderCustomerOffer.itemsAllTransferTo
 		(
 			entityStore.itemHolder()
@@ -94,7 +94,7 @@ export class ItemBarterer implements EntityProperty
 			{
 				entityEquipmentUser.unequipItemsNoLongerHeld
 				(
-					universe, world, place, entity
+					uwpe
 				);
 			}
 		}
@@ -102,9 +102,9 @@ export class ItemBarterer implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
-	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 
 	// Controls.
 
@@ -118,6 +118,12 @@ export class ItemBarterer implements EntityProperty
 		{
 			size = universe.display.sizeDefault();
 		}
+
+		var uwpe = new UniverseWorldPlaceEntities
+		(
+			universe, universe.world, universe.world.placeCurrent,
+			entityCustomer, entityStore
+		);
 
 		var fontHeight = 10;
 		var margin = fontHeight * 1.5;
@@ -200,11 +206,7 @@ export class ItemBarterer implements EntityProperty
 				if (isCustomerDonatingToStore)
 				{
 					itemBarterer.statusMessage = "Very well, I accept your gift.";
-					itemBarterer.trade
-					(
-						universe, universe.world, universe.world.placeCurrent,
-						entityCustomer, entityStore
-					);
+					itemBarterer.trade(uwpe);
 					itemBarterer.patienceAdd(1);
 				}
 				else
@@ -218,11 +220,7 @@ export class ItemBarterer implements EntityProperty
 				if (isOfferAccepted)
 				{
 					itemBarterer.statusMessage = "It's a deal!";
-					itemBarterer.trade
-					(
-						universe, universe.world, universe.world.placeCurrent,
-						entityCustomer, entityStore
-					);
+					itemBarterer.trade(uwpe);
 					itemBarterer.patienceAdd(1);
 				}
 				else

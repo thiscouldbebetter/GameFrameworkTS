@@ -11,8 +11,11 @@ export class Constraint_OrientToward implements Constraint
 		this.targetEntityName = targetEntityName;
 	}
 
-	constrain(universe: Universe, world: World, place: Place, entity: Entity)
+	constrain(uwpe: UniverseWorldPlaceEntities): void
 	{
+		var place = uwpe.place;
+		var entity = uwpe.entity;
+
 		var targetEntityName = this.targetEntityName;
 
 		var constrainableLoc = entity.locatable().loc;

@@ -63,11 +63,13 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             // Visual.
-            draw(universe, world, place, entity, display) {
+            draw(uwpe, display) {
+                var world = uwpe.world;
+                var entity = uwpe.entity;
                 var animatable = entity.animatable();
                 var tickStarted = animatable.animationWithNameStartIfNecessary(this.name, world);
                 var frameCurrent = this.frameCurrent(world, tickStarted);
-                frameCurrent.draw(universe, world, place, entity, display);
+                frameCurrent.draw(uwpe, display);
             }
             // Clonable.
             clone() {

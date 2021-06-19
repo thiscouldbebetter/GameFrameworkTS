@@ -18,10 +18,11 @@ var ThisCouldBeBetter;
             }
             // Transformable.
             transform(transformToApply) {
-                return transformToApply.transform(this.child);
+                transformToApply.transform(this.child);
+                return this;
             }
             // Visual.
-            draw(universe, world, place, entity, display) {
+            draw(uwpe, display) {
                 // Do nothing.
             }
         }

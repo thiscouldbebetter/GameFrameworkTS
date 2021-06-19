@@ -13,7 +13,8 @@ var ThisCouldBeBetter;
             static fromRadiusAndColorFill(radius, colorFill) {
                 return new VisualCircle(radius, colorFill, null, null);
             }
-            draw(universe, world, place, entity, display) {
+            draw(uwpe, display) {
+                var entity = uwpe.entity;
                 display.drawCircle(entity.locatable().loc.pos, this.radius, this.colorFill, this.colorBorder, this.borderThickness);
             }
             // Clonable.

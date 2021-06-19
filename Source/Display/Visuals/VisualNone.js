@@ -4,7 +4,7 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class VisualNone {
-            draw(universe, world, place, entity, display) {
+            draw(uwpe, display) {
                 // do nothing
             }
             // Clonable.

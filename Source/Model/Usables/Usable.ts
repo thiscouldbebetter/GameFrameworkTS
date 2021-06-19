@@ -4,35 +4,30 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Usable implements EntityProperty
 {
-	_use: (u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) => string;
+	_use: (uwpe: UniverseWorldPlaceEntities) => string;
 
 	isDisabled: boolean;
 
-	constructor(use: (u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) => string)
+	constructor(use: (uwpe: UniverseWorldPlaceEntities) => string)
 	{
 		this._use = use;
 
 		this.isDisabled = false;
 	}
 
-	use(u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity): string
+	use(uwpe: UniverseWorldPlaceEntities): string
 	{
-		if (this.isDisabled)
-		{
-			return null;
-		}
-
-		return this._use(u, w, p, eUsing, eUsed);
+		return (this.isDisabled ? null : this._use(uwpe));
 	}
 
 	// Clonable.
 
-	clone()
+	clone(): Usable
 	{
 		return new Usable(this._use);
 	}
 
-	overwriteWith(other: Usable)
+	overwriteWith(other: Usable): Usable
 	{
 		this._use = other._use;
 		return this;
@@ -40,9 +35,9 @@ export class Usable implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
-	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 }
 
 }

@@ -9,12 +9,13 @@ var ThisCouldBeBetter;
                 this.children = children;
                 this._posSaved = GameFramework.Coords.create();
             }
-            draw(universe, world, place, entity, display) {
+            draw(uwpe, display) {
+                var entity = uwpe.entity;
                 var drawPos = entity.locatable().loc.pos;
                 this._posSaved.overwriteWith(drawPos);
                 for (var i = 0; i < this.children.length; i++) {
                     var child = this.children[i];
-                    var wasChildVisible = child.draw(universe, world, place, entity, display);
+                    var wasChildVisible = child.draw(uwpe, display);
                     if (wasChildVisible) {
                         drawPos.add(this.childSpacing);
                     }

@@ -12,10 +12,14 @@ var ThisCouldBeBetter;
                 this.steeringDirection = 0;
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(universe, world, place, entityVehicle) {
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) {
                 if (this.entityOccupant != null) {
+                    var universe = uwpe.universe;
+                    var world = uwpe.world;
+                    var place = uwpe.place;
+                    var entityVehicle = uwpe.entity;
                     var placeDefn = place.defn(world);
                     var actionsByName = placeDefn.actionsByName;
                     var inputHelper = universe.inputHelper;

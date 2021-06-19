@@ -25,16 +25,18 @@ var ThisCouldBeBetter;
                     this.placeCurrent.draw(universe, this, universe.display);
                 }
             }
-            initialize(universe) {
+            initialize(uwpe) {
+                uwpe.world = this;
                 if (this.placeNext != null) {
                     if (this.placeCurrent != null) {
-                        this.placeCurrent.finalize(universe, this);
+                        this.placeCurrent.finalize(uwpe);
                     }
                     this.placeCurrent = this.placeNext;
                     this.placeNext = null;
                 }
                 if (this.placeCurrent != null) {
-                    this.placeCurrent.initialize(universe, this);
+                    uwpe.place = this.placeCurrent;
+                    this.placeCurrent.initialize(uwpe);
                 }
             }
             timePlayingAsStringShort(universe) {
@@ -46,16 +48,18 @@ var ThisCouldBeBetter;
             toVenue() {
                 return new GameFramework.VenueWorld(this);
             }
-            updateForTimerTick(universe) {
+            updateForTimerTick(uwpe) {
+                uwpe.world = this;
                 if (this.placeNext != null) {
                     if (this.placeCurrent != null) {
-                        this.placeCurrent.finalize(universe, this);
+                        this.placeCurrent.finalize(uwpe);
                     }
                     this.placeCurrent = this.placeNext;
                     this.placeNext = null;
-                    this.placeCurrent.initialize(universe, this);
+                    uwpe.place = this.placeCurrent;
+                    this.placeCurrent.initialize(uwpe);
                 }
-                this.placeCurrent.updateForTimerTick(universe, this);
+                this.placeCurrent.updateForTimerTick(uwpe);
                 this.timerTicksSoFar++;
             }
             // Controls.

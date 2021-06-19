@@ -31,17 +31,15 @@ export class Constrainable implements EntityProperty
 		return this;
 	}
 
-	constrain
-	(
-		universe: Universe, world: World, place: Place, entity: Entity
-	): void
+	constrain(uwpe: UniverseWorldPlaceEntities): void
 	{
+		var entity = uwpe.entity;
 		var constrainable = entity.constrainable();
 		var constraints = constrainable.constraints;
 		for (var i = 0; i < constraints.length; i++)
 		{
 			var constraint = constraints[i];
-			constraint.constrain(universe, world, place, entity);
+			constraint.constrain(uwpe);
 		}
 	}
 
@@ -62,22 +60,16 @@ export class Constrainable implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 
-	initialize
-	(
-		universe: Universe, world: World, place: Place, entity: Entity
-	): void
+	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
-		this.updateForTimerTick(universe, world, place, entity);
+		this.updateForTimerTick(uwpe);
 	}
 
-	updateForTimerTick
-	(
-		universe: Universe, world: World, place: Place, entity: Entity
-	): void
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
-		this.constrain(universe, world, place, entity);
+		this.constrain(uwpe);
 	}
 }
 

@@ -24,7 +24,7 @@ var ThisCouldBeBetter;
                 this.isActive = false;
                 GameFramework.ArrayHelper.clear(this.entitiesColliding);
                 GameFramework.ArrayHelper.clear(this.colliders);
-                GameFramework.ArrayHelper.clear(this.normals);
+                this.normals.forEach(x => x.clear());
                 this.collidersByName.clear();
                 this.distanceToCollision = null;
                 return this;

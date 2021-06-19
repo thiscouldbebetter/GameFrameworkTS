@@ -14,12 +14,12 @@ var ThisCouldBeBetter;
                 this.zoneCentralAndNeighbors = [];
             }
             // Place implementation.
-            initialize(universe, world) {
+            initialize(uwpe) {
                 var zoneStart = this.zoneGetByName(this.zoneStartName);
                 this.entitiesToSpawnAdd(zoneStart.entities);
-                super.initialize(universe, world);
+                super.initialize(uwpe);
             }
-            updateForTimerTick(universe, world) {
+            updateForTimerTick(uwpe) {
                 var entityToFollow = this.entitiesByName.get(this.entityToFollowName);
                 var entityToFollowPos = entityToFollow.locatable().loc.pos;
                 var zoneCentralCurrent = this.zoneAtPos(entityToFollowPos);
@@ -45,7 +45,7 @@ var ThisCouldBeBetter;
                     });
                     this.zoneCentralAndNeighbors = zoneCentralAndNeighborsNext;
                 }
-                super.updateForTimerTick(universe, world);
+                super.updateForTimerTick(uwpe);
             }
         }
         GameFramework.PlaceZoned = PlaceZoned;

@@ -23,8 +23,9 @@ export class VisualPath implements Visual
 		this.transformTranslate = new Transform_Translate(Coords.create());
 	}
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
+		var entity = uwpe.entity;
 		var drawablePos = entity.locatable().loc.pos;
 		this.transformTranslate.displacement.overwriteWith(drawablePos);
 

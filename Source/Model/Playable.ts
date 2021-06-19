@@ -380,9 +380,14 @@ export class Playable implements EntityProperty
 
 		var useItemInQuickSlot = (slotNumber: number) =>
 		{
+			var uwpe = new UniverseWorldPlaceEntities
+			(
+				universe, universe.world, place,
+				entity, null
+			);
 			equipmentUser.useItemInSocketNumbered
 			(
-				universe, world, place, entity, slotNumber
+				uwpe, slotNumber
 			);
 		};
 		var buttonClicks =
@@ -464,9 +469,9 @@ export class Playable implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
-	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 
 }
 

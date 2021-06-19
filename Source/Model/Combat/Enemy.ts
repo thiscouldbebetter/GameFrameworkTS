@@ -13,9 +13,13 @@ export class Enemy implements EntityProperty
 
 	static activityDefnBuild()
 	{
-		var enemyActivityPerform =
-			(universe: Universe, world: World, place: Place, actor: Entity) =>
+		var enemyActivityPerform = (uwpe: UniverseWorldPlaceEntities) =>
 		{
+			var universe = uwpe.universe;
+			var world = uwpe.world;
+			var place = uwpe.place;
+			var actor = uwpe.entity;
+
 			var activity = actor.actor().activity;
 			var actorLocatable = actor.locatable();
 
@@ -39,7 +43,13 @@ export class Enemy implements EntityProperty
 			(
 				x =>
 					x.perceptible() == null
-					|| x.perceptible().canBeSeen(universe, world, place, x, actor)
+					|| x.perceptible().canBeSeen
+					(
+						new UniverseWorldPlaceEntities
+						(
+							universe, world, place, x, actor
+						)
+					)
 			).sort(sortClosest)[0];
 
 			var targetPosToApproach;
@@ -55,7 +65,7 @@ export class Enemy implements EntityProperty
 				(
 					x =>
 						x.perceptible() == null
-						|| x.perceptible().canBeHeard(universe, world, place, x, actor)
+						|| x.perceptible().canBeHeard(uwpe.entitiesSet(x, actor))
 				).sort(sortClosest)[0];
 
 				if (targetPreferredInHearing != null)
@@ -104,9 +114,9 @@ export class Enemy implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
-	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 }
 
 }

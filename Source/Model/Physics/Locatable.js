@@ -41,15 +41,6 @@ var ThisCouldBeBetter;
                 var actorVel = actorLoc.vel;
                 var targetPosRelative = targetPos.clone().subtract(actorPos);
                 var distanceToTarget = targetPosRelative.magnitude();
-                /*
-                if (distanceToTarget <= distanceMin)
-                {
-                    distanceToTarget = 0;
-                    actorPos.overwriteWith(targetPos);
-                }
-                else
-                {
-                */
                 actorVel.trimToMagnitudeMax(speedMax);
                 // hack
                 var ticksToApproach = Math.sqrt(2 * distanceToTarget / accelerationPerTick);
@@ -57,7 +48,6 @@ var ThisCouldBeBetter;
                 var targetPosRelativeProjected = targetVelRelative.multiplyScalar(ticksToApproach).add(targetPosRelative);
                 actorLoc.accel.overwriteWith(targetPosRelativeProjected).normalize().multiplyScalar(accelerationPerTick).clearZ();
                 actorOri.forwardSet(actorLoc.accel.clone().normalize());
-                //}
                 return distanceToTarget;
             }
             distanceFromEntity(entity) {
@@ -66,18 +56,21 @@ var ThisCouldBeBetter;
             distanceFromPos(posToCheck) {
                 return this.loc.pos.clone().subtract(posToCheck).magnitude();
             }
-            entitySpawnWithDefnName(universe, world, place, entitySpawning, entityToSpawnDefnName) {
+            entitySpawnWithDefnName(uwpe, entityToSpawnDefnName) {
+                var world = uwpe.world;
+                var place = uwpe.place;
+                var entitySpawning = uwpe.entity;
                 var entityDefnToSpawn = world.defn.entityDefnByName(entityToSpawnDefnName);
                 var entityToSpawn = entityDefnToSpawn.clone();
                 var loc = entityToSpawn.locatable().loc;
                 loc.overwriteWith(entitySpawning.locatable().loc);
                 loc.accel.clear();
                 loc.vel.clear();
-                place.entitySpawn(universe, world, entityToSpawn);
+                place.entitySpawn(uwpe);
                 return entityToSpawn;
             }
             // EntityProperty.
-            updateForTimerTick(universe, world, place, entity) {
+            updateForTimerTick(uwpe) {
                 var loc = this.loc;
                 loc.vel.add(loc.accel);
                 loc.accel.clear();
@@ -92,8 +85,8 @@ var ThisCouldBeBetter;
                 return new Locatable(this.loc.clone());
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
+            finalize(uwpe) { }
+            initialize(uwpe) { }
         }
         GameFramework.Locatable = Locatable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

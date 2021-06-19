@@ -8,7 +8,11 @@ var ThisCouldBeBetter;
                 this.weapon = weapon;
             }
             static activityDefnBuild() {
-                var enemyActivityPerform = (universe, world, place, actor) => {
+                var enemyActivityPerform = (uwpe) => {
+                    var universe = uwpe.universe;
+                    var world = uwpe.world;
+                    var place = uwpe.place;
+                    var actor = uwpe.entity;
                     var activity = actor.actor().activity;
                     var actorLocatable = actor.locatable();
                     var entityToTargetPrefix = "Player";
@@ -16,7 +20,7 @@ var ThisCouldBeBetter;
                     var displacement = GameFramework.Coords.create();
                     var sortClosest = (a, b) => displacement.overwriteWith(a.locatable().loc.pos).subtract(b.locatable().loc.pos).magnitude();
                     var targetPreferredInSight = targetsPreferred.filter(x => x.perceptible() == null
-                        || x.perceptible().canBeSeen(universe, world, place, x, actor)).sort(sortClosest)[0];
+                        || x.perceptible().canBeSeen(new GameFramework.UniverseWorldPlaceEntities(universe, world, place, x, actor))).sort(sortClosest)[0];
                     var targetPosToApproach;
                     if (targetPreferredInSight != null) {
                         targetPosToApproach =
@@ -24,7 +28,7 @@ var ThisCouldBeBetter;
                     }
                     else {
                         var targetPreferredInHearing = targetsPreferred.filter(x => x.perceptible() == null
-                            || x.perceptible().canBeHeard(universe, world, place, x, actor)).sort(sortClosest)[0];
+                            || x.perceptible().canBeHeard(uwpe.entitiesSet(x, actor))).sort(sortClosest)[0];
                         if (targetPreferredInHearing != null) {
                             targetPosToApproach =
                                 targetPreferredInHearing.locatable().loc.pos.clone();
@@ -57,9 +61,9 @@ var ThisCouldBeBetter;
                 return enemyActivityDefn;
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(u, w, p, e) { }
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) { }
         }
         GameFramework.Enemy = Enemy;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

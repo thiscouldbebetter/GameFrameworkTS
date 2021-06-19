@@ -13,7 +13,8 @@ var ThisCouldBeBetter;
                 this._fromPos = GameFramework.Coords.create();
                 this._toPos = GameFramework.Coords.create();
             }
-            draw(universe, world, place, entity, display) {
+            draw(uwpe, display) {
+                var entity = uwpe.entity;
                 var drawableLoc = entity.locatable().loc;
                 var drawablePos = drawableLoc.pos;
                 var drawableHeadingInTurns = drawableLoc.orientation.forward.headingInTurns();

@@ -27,18 +27,19 @@ var ThisCouldBeBetter;
                 return world.defn.placeDefnByName(this.defnName);
             }
             draw(universe, world, display) {
+                var uwpe = GameFramework.UniverseWorldPlaceEntities.fromUniverseWorldAndPlace(universe, world, this);
                 var colorBlack = GameFramework.Color.byName("Black");
                 display.drawBackground(colorBlack, colorBlack);
                 var cameraEntity = this.camera();
                 if (cameraEntity == null) {
                     var drawables = this.drawables();
                     drawables.forEach((x) => {
-                        x.drawable().updateForTimerTick(universe, world, this, x);
+                        x.drawable().updateForTimerTick(uwpe.entitySet(x));
                     });
                 }
                 else {
                     var camera = cameraEntity.camera();
-                    camera.drawEntitiesInView(universe, world, this, cameraEntity, display);
+                    camera.drawEntitiesInView(uwpe, cameraEntity, display);
                 }
             }
             entitiesByPropertyName(propertyName) {
@@ -62,10 +63,12 @@ var ThisCouldBeBetter;
             entitiesToSpawnAdd(entitiesToSpawn) {
                 this.entitiesToSpawn.push(...entitiesToSpawn);
             }
-            entitiesSpawn(universe, world) {
+            entitiesSpawn(uwpe) {
+                uwpe.place = this;
                 for (var i = 0; i < this.entitiesToSpawn.length; i++) {
                     var entity = this.entitiesToSpawn[i];
-                    this.entitySpawn(universe, world, entity);
+                    uwpe.entity = entity;
+                    this.entitySpawn(uwpe);
                 }
                 this.entitiesToSpawn.length = 0;
             }
@@ -87,7 +90,9 @@ var ThisCouldBeBetter;
                 this.entitiesById.delete(entity.id);
                 this.entitiesByName.delete(entity.name);
             }
-            entitySpawn(universe, world, entity) {
+            entitySpawn(uwpe) {
+                uwpe.place = this;
+                var entity = uwpe.entity;
                 if (entity.name == null) {
                     entity.name = "Entity";
                 }
@@ -104,7 +109,10 @@ var ThisCouldBeBetter;
                     var entitiesWithProperty = this.entitiesByPropertyName(propertyName);
                     entitiesWithProperty.push(entity);
                 }
-                entity.initialize(universe, world, this);
+                entity.initialize(uwpe);
+            }
+            entitySpawn2(universe, world, entity) {
+                this.entitySpawn(new GameFramework.UniverseWorldPlaceEntities(universe, world, this, entity, null));
             }
             entityToRemoveAdd(entityToRemove) {
                 this.entitiesToRemove.push(entityToRemove);
@@ -112,41 +120,49 @@ var ThisCouldBeBetter;
             entityToSpawnAdd(entityToSpawn) {
                 this.entitiesToSpawn.push(entityToSpawn);
             }
-            finalize(universe, world) {
+            finalize(uwpe) {
+                uwpe.place = this;
+                var universe = uwpe.universe;
                 this.entitiesRemove();
                 universe.inputHelper.inputsRemoveAll();
                 for (var i = 0; i < this.entities.length; i++) {
                     var entity = this.entities[i];
-                    entity.finalize(universe, world, this);
+                    entity.finalize(uwpe);
                 }
             }
-            initialize(universe, world) {
+            initialize(uwpe) {
+                uwpe.place = this;
+                var world = uwpe.world;
                 var defn = this.defn(world);
-                defn.placeInitialize(universe, world, this);
-                this.entitiesSpawn(universe, world);
+                defn.placeInitialize(uwpe);
+                this.entitiesSpawn(uwpe);
                 this.entitiesToSpawn.length = 0;
                 for (var i = 0; i < this.entities.length; i++) {
                     var entity = this.entities[i];
-                    entity.initialize(universe, world, this);
+                    entity.initialize(uwpe);
                 }
             }
-            load(universe, world) {
+            load(uwpe) {
                 if (this.isLoaded == false) {
                     var loadables = this.loadables();
-                    loadables.forEach(x => x.loadable().load(universe, world, this, x));
+                    uwpe.place = this;
+                    loadables.forEach(x => x.loadable().load(uwpe.entitySet(x)));
                     this.isLoaded = true;
                 }
             }
-            unload(universe, world) {
+            unload(uwpe) {
                 if (this.isLoaded) {
                     var loadables = this.loadables();
-                    loadables.forEach(x => x.loadable().unload(universe, world, this, x));
+                    uwpe.place = this;
+                    loadables.forEach(x => x.loadable().unload(uwpe.entitySet(x)));
                     this.isLoaded = false;
                 }
             }
-            updateForTimerTick(universe, world) {
+            updateForTimerTick(uwpe) {
+                var world = uwpe.world;
                 this.entitiesRemove();
-                this.entitiesSpawn(universe, world);
+                this.entitiesSpawn(uwpe);
+                uwpe.place = this;
                 var placeDefn = this.defn(world);
                 var propertyNamesToProcess = placeDefn.propertyNamesToProcess;
                 for (var p = 0; p < propertyNamesToProcess.length; p++) {
@@ -156,7 +172,8 @@ var ThisCouldBeBetter;
                         for (var i = 0; i < entitiesWithProperty.length; i++) {
                             var entity = entitiesWithProperty[i];
                             var entityProperty = entity.propertiesByName.get(propertyName);
-                            entityProperty.updateForTimerTick(universe, world, this, entity);
+                            uwpe.entity = entity;
+                            entityProperty.updateForTimerTick(uwpe);
                         }
                     }
                 }

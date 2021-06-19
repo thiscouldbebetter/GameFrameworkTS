@@ -5,7 +5,7 @@ namespace ThisCouldBeBetter.GameFramework
 export class VenueMessage implements Venue
 {
 	messageToShow: DataBinding<any, string>;
-	acknowledge: any;
+	acknowledge: ()=>void;
 	venuePrev: Venue;
 	_sizeInPixels: Coords;
 	showMessageOnly: boolean;
@@ -14,8 +14,11 @@ export class VenueMessage implements Venue
 
 	constructor
 	(
-		messageToShow: DataBinding<any, string>, acknowledge: any, venuePrev: Venue,
-		sizeInPixels: Coords, showMessageOnly: boolean
+		messageToShow: DataBinding<any, string>,
+		acknowledge: ()=>void,
+		venuePrev: Venue,
+		sizeInPixels: Coords,
+		showMessageOnly: boolean
 	)
 	{
 		this.messageToShow = messageToShow;

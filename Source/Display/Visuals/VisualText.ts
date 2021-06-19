@@ -42,13 +42,11 @@ export class VisualText implements Visual
 		);
 	}
 
-	draw
-	(
-		universe: Universe, world: World, place: Place,
-		entity: Entity, display: Display
-	)
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
-		var text = this.text(universe, world, place, entity, display);
+		var entity = uwpe.entity;
+
+		var text = this.text(uwpe, display);
 		display.drawText
 		(
 			text,
@@ -62,17 +60,13 @@ export class VisualText implements Visual
 		);
 	}
 
-	text
-	(
-		universe: Universe, world: World, place: Place,
-		entity: Entity, display: Display
-	)
+	text(uwpe: UniverseWorldPlaceEntities, display: Display)
 	{
 		if (this.shouldTextContextBeReset)
 		{
-			this._universeWorldPlaceEntities.fieldsSet
+			this._universeWorldPlaceEntities.overwriteWith
 			(
-				universe, world, place, entity, null
+				uwpe
 			);
 			this._text.contextSet(this._universeWorldPlaceEntities);
 		}

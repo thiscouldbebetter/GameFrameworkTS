@@ -190,8 +190,10 @@ export class VisualNetwork implements Visual
 		this.transformLocate = new Transform_Locate(null);
 	}
 
-	draw(u: Universe, w: World, p: Place, e: Entity, display: Display)
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display)
 	{
+		var e = uwpe.entity;
+
 		var drawableLoc = e.locatable().loc;
 		this.transformLocate.loc.overwriteWith(drawableLoc);
 

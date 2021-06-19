@@ -7,12 +7,13 @@ var ThisCouldBeBetter;
             constructor(child) {
                 this.child = child;
             }
-            draw(universe, world, place, entity, display) {
+            draw(uwpe, display) {
+                var entity = uwpe.entity;
                 display.stateSave();
                 var entityLoc = entity.locatable().loc;
                 var rotationInTurns = entityLoc.orientation.forward.headingInTurns();
                 display.rotateTurnsAroundCenter(rotationInTurns, entityLoc.pos);
-                this.child.draw(universe, world, place, entity, display);
+                this.child.draw(uwpe, display);
                 display.stateRestore();
             }
             // Clonable.

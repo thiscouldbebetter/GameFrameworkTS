@@ -4,9 +4,9 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Constraint_TrimToPlaceSize {
-            constrain(universe, world, place, entity) {
-                var entityLoc = entity.locatable().loc;
-                entityLoc.pos.trimToRangeMax(place.size);
+            constrain(uwpe) {
+                var entityLoc = uwpe.entity.locatable().loc;
+                entityLoc.pos.trimToRangeMax(uwpe.place.size);
             }
         }
         GameFramework.Constraint_TrimToPlaceSize = Constraint_TrimToPlaceSize;

@@ -8,7 +8,8 @@ var ThisCouldBeBetter;
                 this.target = target;
                 this.speedBelowWhichToStop = speedBelowWhichToStop || 0;
             }
-            constrain(universe, world, place, entity) {
+            constrain(uwpe) {
+                var entity = uwpe.entity;
                 var targetFrictionCoefficient = this.target;
                 var entityLoc = entity.locatable().loc;
                 var entityVel = entityLoc.vel;

@@ -27,14 +27,15 @@ export class EntityGenerator implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
-	updateForTimerTick
-	(
-		universe: Universe, world: World, place: Place, entityGenerator: Entity
-	): void
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
+		var world = uwpe.world;
+		var place = uwpe.place;
+		var entityGenerator = uwpe.entity;
+
 		var placeEntitiesByName = place.entitiesByName;
 
 		var entitiesGeneratedCountBefore = this.entitiesGenerated.length;
@@ -61,7 +62,8 @@ export class EntityGenerator implements EntityProperty
 					entityGenerator.locatable().loc
 				);
 				this.entitiesGenerated.push(entityGenerated);
-				place.entitySpawn(universe, world, entityGenerated);
+				var uwpe2 = uwpe.clone().entitySet(entityGenerated);
+				place.entitySpawn(uwpe2);
 			}
 		}
 	}

@@ -49,12 +49,10 @@ export class VisualImageFromLibrary implements VisualImage
 
 	// visual
 
-	draw
-	(
-		universe: Universe, world: World, place: Place, entity: Entity,
-		display: Display
-	): void
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
+		var universe = uwpe.universe;
+		var entity = uwpe.entity;
 		var image = this.image(universe);
 		var imageSize = image.sizeInPixels;
 		var drawPos = this._drawPos.clear().subtract(imageSize).half().add

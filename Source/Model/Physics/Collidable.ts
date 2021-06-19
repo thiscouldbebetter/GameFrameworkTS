@@ -7,7 +7,7 @@ export class Collidable implements EntityProperty
 	ticksToWaitBetweenCollisions: number;
 	colliderAtRest: any;
 	entityPropertyNamesToCollideWith: string[];
-	_collideEntities: (u: Universe, w: World, p: Place, e0: Entity, e1: Entity, c: Collision) => void;
+	_collideEntities: (uwpe: UniverseWorldPlaceEntities, c: Collision) => void;
 
 	collider: ShapeBase;
 	locPrev: Disposition;
@@ -23,7 +23,7 @@ export class Collidable implements EntityProperty
 		ticksToWaitBetweenCollisions: number,
 		colliderAtRest: ShapeBase,
 		entityPropertyNamesToCollideWith: string[],
-		collideEntities: (u: Universe, w: World, p: Place, e0: Entity, e1: Entity, c: Collision) => void
+		collideEntities: (uwpe: UniverseWorldPlaceEntities, c: Collision) => void
 	)
 	{
 		this.ticksToWaitBetweenCollisions = ticksToWaitBetweenCollisions || 0;
@@ -52,19 +52,22 @@ export class Collidable implements EntityProperty
 	static fromColliderAndCollideEntities
 	(
 		colliderAtRest: ShapeBase,
-		collideEntities: (u: Universe, w: World, p: Place, e0: Entity, e1: Entity, c: Collision) => void
+		collideEntities: (uwpe: UniverseWorldPlaceEntities, c: Collision)=>void
 	): Collidable
 	{
 		return new Collidable(null, colliderAtRest, null, collideEntities);
 	}
 
-	collideEntities(u: Universe, w: World, p: Place, e0: Entity, e1: Entity, c: Collision): Collision
+	collideEntities
+	(
+		uwpe: UniverseWorldPlaceEntities, collision: Collision
+	): Collision
 	{
 		if (this._collideEntities != null)
 		{
-			this._collideEntities(u, w, p, e0, e1, c);
+			this._collideEntities(uwpe, collision);
 		}
-		return c;
+		return collision;
 	}
 
 	colliderLocateForEntity(entity: Entity): void
@@ -73,28 +76,32 @@ export class Collidable implements EntityProperty
 		this.collider.locate(entity.locatable().loc);
 	}
 
-	collisionHandle(universe: Universe, world: World, place: Place, collision: Collision): void
+	collisionHandle(uwpe: UniverseWorldPlaceEntities, collision: Collision): void
 	{
 		var entitiesColliding = collision.entitiesColliding;
 		var entity = entitiesColliding[0];
 		var entityOther = entitiesColliding[1];
 
+		uwpe.entity = entity;
+		uwpe.entity2 = entityOther;
+
 		this.collideEntities
 		(
-			universe, world, place, entity, entityOther, collision
+			uwpe, collision
 		);
 
 		var entityOtherCollidable = entityOther.collidable();
 		entityOtherCollidable.collideEntities
 		(
-			universe, world, place, entityOther, entity, collision
+			uwpe.clone().entitiesSwap(), collision
 		);
 	}
 
-	collisionsFindAndHandle(universe: Universe, world: World, place: Place, entity: Entity)
+	collisionsFindAndHandle(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this.isDisabled == false)
 		{
+			var entity = uwpe.entity;
 			var entityLoc = entity.locatable().loc;
 			this.locPrev.overwriteWith(entityLoc);
 
@@ -108,12 +115,12 @@ export class Collidable implements EntityProperty
 
 				var collisions = this.collisionsFindForEntity
 				(
-					universe, world, place, entity, ArrayHelper.clear(this._collisions)
+					uwpe, ArrayHelper.clear(this._collisions)
 				);
 
 				collisions.forEach
 				(
-					collision => this.collisionHandle(universe, world, place, collision)
+					collision => this.collisionHandle(uwpe, collision)
 				);
 			}
 		}
@@ -121,10 +128,12 @@ export class Collidable implements EntityProperty
 
 	collisionsFindForEntity
 	(
-		universe: Universe, world: World, place: Place, entity: Entity,
-		collisionsSoFar: Collision[]
+		uwpe: UniverseWorldPlaceEntities, collisionsSoFar: Collision[]
 	): Collision[]
 	{
+		var place = uwpe.place;
+		var entity = uwpe.entity;
+
 		var collisionTracker = place.collisionTracker();
 		var entityBoundable = entity.boundable();
 
@@ -137,14 +146,14 @@ export class Collidable implements EntityProperty
 		{
 			collisionsSoFar = this.collisionsFindForEntity_WithoutTracker
 			(
-				universe, world, place, entity, collisionsSoFar
+				uwpe, collisionsSoFar
 			);
 		}
 		else
 		{
 			collisionsSoFar = this.collisionsFindForEntity_WithTracker
 			(
-				universe, world, place, entity, collisionsSoFar, collisionTracker
+				uwpe, collisionsSoFar, collisionTracker
 			);
 		}
 
@@ -153,10 +162,13 @@ export class Collidable implements EntityProperty
 
 	collisionsFindForEntity_WithTracker
 	(
-		universe: Universe, world: World, place: Place, entity: Entity,
+		uwpe: UniverseWorldPlaceEntities,
 		collisionsSoFar: Collision[], collisionTracker: CollisionTracker
 	): Collision[]
 	{
+		var universe = uwpe.universe;
+		var entity = uwpe.entity;
+
 		this._collisionTrackerMapCellsOccupied.forEach
 		(
 			x => ArrayHelper.remove(x.entitiesPresent, entity)
@@ -181,10 +193,14 @@ export class Collidable implements EntityProperty
 
 	collisionsFindForEntity_WithoutTracker
 	(
-		universe: Universe, world: World, place: Place, entity: Entity,
+		uwpe: UniverseWorldPlaceEntities,
 		collisionsSoFar: Collision[]
 	): Collision[]
 	{
+		var universe = uwpe.universe;
+		var place = uwpe.place;
+		var entity = uwpe.entity;
+
 		var collisionHelper = universe.collisionHelper;
 
 		for (var p = 0; p < this.entityPropertyNamesToCollideWith.length; p++)
@@ -301,31 +317,31 @@ export class Collidable implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 
-	initialize(universe: Universe, world: World, place: Place, entity: Entity)
+	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
-		if (this.isEntityStationary(entity))
+		if (this.isEntityStationary(uwpe.entity))
 		{
-			this.collisionsFindAndHandle(universe, world, place, entity);
+			this.collisionsFindAndHandle(uwpe);
 		}
 	}
 
-	updateForTimerTick(universe: Universe, world: World, place: Place, entity: Entity)
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
-		if (this.isEntityStationary(entity))
+		if (this.isEntityStationary(uwpe.entity))
 		{
 			this.entitiesAlreadyCollidedWith.length = 0;
 		}
 		else
 		{
-			this.collisionsFindAndHandle(universe, world, place, entity);
+			this.collisionsFindAndHandle(uwpe);
 		}
 	}
 
 	// cloneable
 
-	clone()
+	clone(): Collidable
 	{
 		return new Collidable
 		(

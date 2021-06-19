@@ -11,8 +11,10 @@ export class VisualRotate implements Visual
 		this.child = child;
 	}
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
+		var entity = uwpe.entity;
+
 		display.stateSave();
 
 		var entityLoc = entity.locatable().loc;
@@ -23,7 +25,7 @@ export class VisualRotate implements Visual
 			rotationInTurns, entityLoc.pos
 		);
 
-		this.child.draw(universe, world, place, entity, display);
+		this.child.draw(uwpe, display);
 
 		display.stateRestore();
 	}

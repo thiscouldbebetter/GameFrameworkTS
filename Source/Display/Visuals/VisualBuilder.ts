@@ -358,8 +358,9 @@ export class VisualBuilder
 				[ "FacingUpWalking", visualLegsFacingUpWalking ]
 			]),
 			// selectChildNames
-			(u: Universe, w: World, p: Place, e: Entity, d: Display) =>
+			(uwpe: UniverseWorldPlaceEntities, d: Display) =>
 			{
+				var e = uwpe.entity;
 				var entityLoc = e.locatable().loc;
 				var entityForward = entityLoc.orientation.forward;
 				var entityForwardInTurns = entityForward.headingInTurns();
@@ -411,8 +412,11 @@ export class VisualBuilder
 		var visualNone = new VisualNone();
 		var visualWieldable: Visual = new VisualDynamic
 		(
-			(u: Universe, w: World, p: Place, e: Entity) =>
+			(uwpe: UniverseWorldPlaceEntities) =>
 			{
+				var w = uwpe.world;
+				var e = uwpe.entity;
+
 				var equipmentUser = e.equipmentUser();
 				var entityWieldableEquipped =
 					equipmentUser.itemEntityInSocketWithName("Wielding");
@@ -547,8 +551,9 @@ export class VisualBuilder
 				[ "Visible", visualArmAndWieldableDirectionalOffset ],
 				[ "Hidden", visualNone ]
 			]),
-			(u: Universe, w: World, p: Place, e: Entity, d: Display) => // selectChildNames
+			(uwpe: UniverseWorldPlaceEntities, d: Display) => // selectChildNames
 			{
+				var e = uwpe.entity;
 				var itemEntityWielded =
 					e.equipmentUser().itemEntityInSocketWithName("Wielding");
 				var returnValue =

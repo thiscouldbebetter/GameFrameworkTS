@@ -49,13 +49,15 @@ export class World //
 		}
 	}
 
-	initialize(universe: Universe): void
+	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
+		uwpe.world = this;
+
 		if (this.placeNext != null)
 		{
 			if (this.placeCurrent != null)
 			{
-				this.placeCurrent.finalize(universe, this);
+				this.placeCurrent.finalize(uwpe);
 			}
 			this.placeCurrent = this.placeNext;
 			this.placeNext = null;
@@ -63,7 +65,8 @@ export class World //
 
 		if (this.placeCurrent != null)
 		{
-			this.placeCurrent.initialize(universe, this);
+			uwpe.place = this.placeCurrent;
+			this.placeCurrent.initialize(uwpe);
 		}
 	}
 
@@ -82,19 +85,21 @@ export class World //
 		return new VenueWorld(this);
 	}
 
-	updateForTimerTick(universe: Universe): void
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
+		uwpe.world = this;
 		if (this.placeNext != null)
 		{
 			if (this.placeCurrent != null)
 			{
-				this.placeCurrent.finalize(universe, this);
+				this.placeCurrent.finalize(uwpe);
 			}
 			this.placeCurrent = this.placeNext;
 			this.placeNext = null;
-			this.placeCurrent.initialize(universe, this);
+			uwpe.place = this.placeCurrent;
+			this.placeCurrent.initialize(uwpe);
 		}
-		this.placeCurrent.updateForTimerTick(universe, this);
+		this.placeCurrent.updateForTimerTick(uwpe);
 		this.timerTicksSoFar++;
 	}
 

@@ -42,12 +42,12 @@ export class Activity
 		return this;
 	}
 
-	perform(u: Universe, w: World, p: Place, e: Entity): void
+	perform(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this.defnName != null)
 		{
-			var defn = this.defn(w);
-			defn.perform(u, w, p, e);
+			var defn = this.defn(uwpe.world);
+			defn.perform(uwpe);
 		}
 	}
 

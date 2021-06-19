@@ -99,13 +99,10 @@ export class ItemCrafter implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
-	updateForTimerTick
-	(
-		universe: Universe, world: World, place: Place, entityCrafter: Entity
-	): void
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this.recipesQueued.length > 0)
 		{
@@ -114,6 +111,7 @@ export class ItemCrafter implements EntityProperty
 			{
 				if (this.recipeInProgressTicksSoFar >= recipeInProgress.ticksToComplete)
 				{
+					var entityCrafter = uwpe.entity;
 					this.recipeInProgressFinish(entityCrafter);
 				}
 				else

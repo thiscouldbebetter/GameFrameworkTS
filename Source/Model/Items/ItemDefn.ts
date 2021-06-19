@@ -11,9 +11,9 @@ export class ItemDefn implements EntityProperty
 	tradeValue: number;
 	stackSizeMax: number;
 	categoryNames: string[];
-	_use: (u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) => string;
+	_use: (uwpe: UniverseWorldPlaceEntities) => string;
 	visual: Visual;
-	_toEntity: (u: Universe, w: World, p: Place, e: Entity, i: Item) => Entity;
+	_toEntity: (uwpe: UniverseWorldPlaceEntities, i: Item) => Entity;
 
 	constructor
 	(
@@ -24,9 +24,9 @@ export class ItemDefn implements EntityProperty
 		tradeValue: number,
 		stackSizeMax: number,
 		categoryNames: string[],
-		use: (u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) => string,
+		use: (uwpe: UniverseWorldPlaceEntities) => string,
 		visual: Visual,
-		toEntity: (u: Universe, w: World, p: Place, e: Entity, i: Item) => Entity
+		toEntity: (uwpe: UniverseWorldPlaceEntities, i: Item) => Entity
 	)
 	{
 		this.name = name;
@@ -54,7 +54,7 @@ export class ItemDefn implements EntityProperty
 	(
 		name: string,
 		categoryName: string,
-		use: (u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) => string
+		use: (uwpe: UniverseWorldPlaceEntities) => string
 	): ItemDefn
 	{
 		var returnValue = ItemDefn.fromName(name);
@@ -66,7 +66,7 @@ export class ItemDefn implements EntityProperty
 	static fromNameAndUse
 	(
 		name: string,
-		use: (u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity) => string
+		use: (uwpe: UniverseWorldPlaceEntities) => string
 	): ItemDefn
 	{
 		var returnValue = ItemDefn.fromName(name);
@@ -85,7 +85,7 @@ export class ItemDefn implements EntityProperty
 		);
 	}
 
-	toEntity(u: Universe, w: World, p: Place, e: Entity, item: Item): Entity
+	toEntity(uwpe: UniverseWorldPlaceEntities, item: Item): Entity
 	{
 		var returnValue;
 		if (this._toEntity == null)
@@ -94,13 +94,13 @@ export class ItemDefn implements EntityProperty
 		}
 		else
 		{
-			returnValue = this._toEntity.call(this, u, w, p, e, item);
+			returnValue = this._toEntity.call(this, uwpe, item);
 		}
 
 		return returnValue;
 	}
 
-	use(u: Universe, w: World, p: Place, eUsing: Entity, eUsed: Entity): any
+	use(uwpe: UniverseWorldPlaceEntities): any
 	{
 		var returnValue;
 		if (this._use == null)
@@ -109,7 +109,7 @@ export class ItemDefn implements EntityProperty
 		}
 		else
 		{
-			returnValue = this._use(u, w, p, eUsing, eUsed);
+			returnValue = this._use(uwpe);
 		}
 
 		return returnValue;
@@ -117,9 +117,9 @@ export class ItemDefn implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
-	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 }
 
 }

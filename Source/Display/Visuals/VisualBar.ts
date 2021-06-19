@@ -46,13 +46,19 @@ export class VisualBar implements Visual
 		this._sizeHalf = this.size.clone().half();
 	}
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display): any
 	{
 		var wasVisible = false;
 
-		var pos = this._drawPos.overwriteWith(entity.locatable().loc.pos).subtract(this._sizeHalf);
-		var _amountCurrent: number = this.amountCurrent.contextSet(entity).get() as number;
-		var _amountMax: number = this.amountMax.contextSet(entity).get() as number;
+		var entity = uwpe.entity;
+		var pos = this._drawPos.overwriteWith
+		(
+			entity.locatable().loc.pos
+		).subtract(this._sizeHalf);
+		var _amountCurrent: number =
+			this.amountCurrent.contextSet(entity).get() as number;
+		var _amountMax: number =
+			this.amountMax.contextSet(entity).get() as number;
 		var fractionCurrent = _amountCurrent / _amountMax;
 
 		var shouldShow =

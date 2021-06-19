@@ -15,21 +15,19 @@ export class Ephemeral implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
-	updateForTimerTick
-	(
-		universe: Universe, world: World, place: Place, entityEphemeral: Entity
-	): void
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		this.ticksToLive--;
 		if (this.ticksToLive <= 0)
 		{
-			place.entityToRemoveAdd(entityEphemeral);
+			var entityEphemeral = uwpe.entity;
+			uwpe.place.entityToRemoveAdd(entityEphemeral);
 			if (this.expire != null)
 			{
-				this.expire(universe, world, place, entityEphemeral);
+				this.expire(uwpe);
 			}
 		}
 	}

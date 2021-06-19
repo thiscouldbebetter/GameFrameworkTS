@@ -49,6 +49,10 @@ export class Place //
 
 	draw(universe: Universe, world: World, display: Display): void
 	{
+		var uwpe = UniverseWorldPlaceEntities.fromUniverseWorldAndPlace
+		(
+			universe, world, this
+		);
 		var colorBlack = Color.byName("Black");
 		display.drawBackground(colorBlack, colorBlack);
 
@@ -60,14 +64,14 @@ export class Place //
 			(
 				(x: Entity) =>
 				{
-					x.drawable().updateForTimerTick(universe, world, this, x);
+					x.drawable().updateForTimerTick(uwpe.entitySet(x) );
 				}
 			)
 		}
 		else
 		{
 			var camera = cameraEntity.camera();
-			camera.drawEntitiesInView(universe, world, this, cameraEntity, display);
+			camera.drawEntitiesInView(uwpe, cameraEntity, display);
 		}
 	}
 
@@ -103,12 +107,14 @@ export class Place //
 		this.entitiesToSpawn.push(...entitiesToSpawn);
 	}
 
-	entitiesSpawn(universe: Universe, world: World): void
+	entitiesSpawn(uwpe: UniverseWorldPlaceEntities): void
 	{
+		uwpe.place = this;
 		for (var i = 0; i < this.entitiesToSpawn.length; i++)
 		{
 			var entity = this.entitiesToSpawn[i];
-			this.entitySpawn(universe, world, entity);
+			uwpe.entity = entity;
+			this.entitySpawn(uwpe);
 		}
 
 		this.entitiesToSpawn.length = 0;
@@ -140,8 +146,12 @@ export class Place //
 		this.entitiesByName.delete(entity.name);
 	}
 
-	entitySpawn(universe: Universe, world: World, entity: Entity): void
+	entitySpawn(uwpe: UniverseWorldPlaceEntities): void
 	{
+		uwpe.place = this;
+
+		var entity = uwpe.entity;
+
 		if (entity.name == null)
 		{
 			entity.name = "Entity";
@@ -165,7 +175,15 @@ export class Place //
 			entitiesWithProperty.push(entity);
 		}
 
-		entity.initialize(universe, world, this);
+		entity.initialize(uwpe);
+	}
+
+	entitySpawn2(universe: Universe, world: World, entity: Entity): void
+	{
+		this.entitySpawn
+		(
+			new UniverseWorldPlaceEntities(universe, world, this, entity, null)
+		);
 	}
 
 	entityToRemoveAdd(entityToRemove: Entity): void
@@ -178,55 +196,65 @@ export class Place //
 		this.entitiesToSpawn.push(entityToSpawn);
 	}
 
-	finalize(universe: Universe, world: World): void
+	finalize(uwpe: UniverseWorldPlaceEntities): void
 	{
+		uwpe.place = this;
+		var universe = uwpe.universe;
 		this.entitiesRemove();
 		universe.inputHelper.inputsRemoveAll();
 		for (var i = 0; i < this.entities.length; i++)
 		{
 			var entity = this.entities[i];
-			entity.finalize(universe, world, this);
+			entity.finalize(uwpe);
 		}
 	}
 
-	initialize(universe: Universe, world: World): void
+	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
+		uwpe.place = this;
+		var world = uwpe.world;
 		var defn = this.defn(world);
-		defn.placeInitialize(universe, world, this);
-		this.entitiesSpawn(universe, world);
+		defn.placeInitialize(uwpe);
+		this.entitiesSpawn(uwpe);
 		this.entitiesToSpawn.length = 0;
 		for (var i = 0; i < this.entities.length; i++)
 		{
 			var entity = this.entities[i];
-			entity.initialize(universe, world, this);
+			entity.initialize(uwpe);
 		}
 	}
 
-	load(universe: Universe, world: World): void
+	load(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this.isLoaded == false)
 		{
 			var loadables = this.loadables();
-			loadables.forEach(x => x.loadable().load(universe, world, this, x));
+			uwpe.place = this;
+			loadables.forEach(x => x.loadable().load(uwpe.entitySet(x) ) );
 			this.isLoaded = true;
 		}
 	}
 
-	unload(universe: Universe, world: World): void
+	unload(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this.isLoaded)
 		{
 			var loadables = this.loadables();
-			loadables.forEach(x => x.loadable().unload(universe, world, this, x));
+			uwpe.place = this;
+			loadables.forEach(x => x.loadable().unload(uwpe.entitySet(x) ) );
 			this.isLoaded = false;
 		}
 	}
 
-	updateForTimerTick(universe: Universe, world: World): void
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
+		var world = uwpe.world;
+
 		this.entitiesRemove();
 
-		this.entitiesSpawn(universe, world);
+		this.entitiesSpawn(uwpe);
+
+		uwpe.place = this;
 
 		var placeDefn = this.defn(world);
 		var propertyNamesToProcess = placeDefn.propertyNamesToProcess;
@@ -240,7 +268,8 @@ export class Place //
 				{
 					var entity = entitiesWithProperty[i];
 					var entityProperty = entity.propertiesByName.get(propertyName);
-					entityProperty.updateForTimerTick(universe, world, this, entity);
+					uwpe.entity = entity;
+					entityProperty.updateForTimerTick(uwpe);
 				}
 			}
 		}

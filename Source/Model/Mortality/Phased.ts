@@ -34,11 +34,12 @@ export class Phased implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
-	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity)
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities)
 	{
+		var w = uwpe.world;
 		var ticksSinceBorn = w.timerTicksSoFar - this.tickBorn;
 		for (var i = 0; i < this.phases.length; i++)
 		{
@@ -47,7 +48,7 @@ export class Phased implements EntityProperty
 			if (ticksSinceBorn == tickToRunAt)
 			{
 				var updateToRun = phase.updateToRun;
-				updateToRun(u, w, p, e);
+				updateToRun(uwpe);
 			}
 		}
 	}

@@ -19,12 +19,13 @@ var ThisCouldBeBetter;
                 this.constraints.length = 0;
                 return this;
             }
-            constrain(universe, world, place, entity) {
+            constrain(uwpe) {
+                var entity = uwpe.entity;
                 var constrainable = entity.constrainable();
                 var constraints = constrainable.constraints;
                 for (var i = 0; i < constraints.length; i++) {
                     var constraint = constraints[i];
-                    constraint.constrain(universe, world, place, entity);
+                    constraint.constrain(uwpe);
                 }
             }
             constraintAdd(constraintToAdd) {
@@ -36,12 +37,12 @@ var ThisCouldBeBetter;
                 return this._constraintsByClassName.get(constraintClassName);
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(universe, world, place, entity) {
-                this.updateForTimerTick(universe, world, place, entity);
+            finalize(uwpe) { }
+            initialize(uwpe) {
+                this.updateForTimerTick(uwpe);
             }
-            updateForTimerTick(universe, world, place, entity) {
-                this.constrain(universe, world, place, entity);
+            updateForTimerTick(uwpe) {
+                this.constrain(uwpe);
             }
         }
         GameFramework.Constrainable = Constrainable;

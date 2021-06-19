@@ -19,30 +19,30 @@ export class Portal implements EntityProperty
 		this.velocityToApply = velocityToApply;
 	}
 
-	use
-	(
-		universe: Universe, world: World, placeToDepart: Place,
-		entityToTransport: Entity, entityPortal: Entity
-	): void
+	use(uwpe: UniverseWorldPlaceEntities): void
 	{
+		var universe = uwpe.universe;
+		var entityPortal = uwpe.entity2;
+
 		var entityPortalCollidable = entityPortal.collidable();
 		entityPortalCollidable.ticksUntilCanCollide = 40; // hack
 
 		var portal = entityPortal.portal();
 		var venueCurrent = universe.venueCurrent;
 		var messageBoxSize = universe.display.sizeDefault();
+		var messageText =
+			DataBinding.fromContext("Portal to: " + portal.destinationPlaceName);
+
+		var acknowledge = () =>
+		{
+			portal.transport(uwpe);
+			universe.venueNext = VenueFader.fromVenueTo(venueCurrent);
+		};
+
 		var venueMessage = new VenueMessage
 		(
-			DataBinding.fromContext("Portal to: " + portal.destinationPlaceName),
-			(universe: Universe) => // acknowledge
-			{
-				portal.transport
-				(
-					universe, universe.world, universe.world.placeCurrent,
-					entityToTransport, entityPortal
-				);
-				universe.venueNext = VenueFader.fromVenueTo(venueCurrent);
-			},
+			messageText,
+			acknowledge,
 			venueCurrent, // venuePrev
 			messageBoxSize,
 			true // showMessageOnly
@@ -50,15 +50,16 @@ export class Portal implements EntityProperty
 		universe.venueNext = venueMessage;
 	}
 
-	transport
-	(
-		universe: Universe, world: World, placeToDepart: Place,
-		entityToTransport: Entity, entityPortal: Entity
-	): void
+	transport(uwpe: UniverseWorldPlaceEntities): void
 	{
+		var world = uwpe.world;
+		var placeToDepart = uwpe.place;
+		var entityToTransport = uwpe.entity;
+
 		var destinationPlace = world.placesByName.get(this.destinationPlaceName);
-		destinationPlace.initialize(universe, world);
-		var destinationEntity = destinationPlace.entitiesByName.get(this.destinationEntityName);
+		destinationPlace.initialize(uwpe);
+		var destinationEntity =
+			destinationPlace.entitiesByName.get(this.destinationEntityName);
 		var destinationCollidable = destinationEntity.collidable();
 		if (destinationCollidable != null)
 		{
@@ -94,9 +95,9 @@ export class Portal implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
-	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 }
 
 }

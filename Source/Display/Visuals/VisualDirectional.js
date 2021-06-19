@@ -25,7 +25,8 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             // Visual.
-            draw(universe, world, place, entity, display) {
+            draw(uwpe, display) {
+                var entity = uwpe.entity;
                 var headingInTurns = this.headingInTurnsGetForEntity(entity);
                 var visualForHeading;
                 if (headingInTurns == null) {
@@ -35,7 +36,7 @@ var ThisCouldBeBetter;
                     var direction = GameFramework.NumberHelper.wrapToRangeMinMax(Math.round(headingInTurns * this.numberOfDirections), 0, this.numberOfDirections);
                     visualForHeading = this.visualsForDirections[direction];
                 }
-                visualForHeading.draw(universe, world, place, entity, display);
+                visualForHeading.draw(uwpe, display);
             }
             // Clonable.
             clone() {

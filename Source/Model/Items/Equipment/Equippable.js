@@ -12,15 +12,15 @@ var ThisCouldBeBetter;
             static default() {
                 return new Equippable(null, null);
             }
-            equip(u, w, p, eEquipmentUser, eEquippable) {
+            equip(uwpe) {
                 if (this._equip != null) {
-                    this._equip(u, w, p, eEquipmentUser, eEquippable);
+                    this._equip(uwpe);
                 }
                 this.isEquipped = true;
             }
-            unequip(u, w, p, eEquipmentUser, eEquippable) {
+            unequip(uwpe) {
                 if (this._unequip != null) {
-                    this._unequip(u, w, p, eEquipmentUser, eEquippable);
+                    this._unequip(uwpe);
                 }
                 this.isEquipped = false;
             }
@@ -32,9 +32,9 @@ var ThisCouldBeBetter;
                 return this;
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(u, w, p, e) { }
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) { }
         }
         GameFramework.Equippable = Equippable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

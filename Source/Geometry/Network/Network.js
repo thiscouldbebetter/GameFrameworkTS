@@ -112,7 +112,8 @@ var ThisCouldBeBetter;
                 this.networkTransformed = this.network.clone();
                 this.transformLocate = new GameFramework.Transform_Locate(null);
             }
-            draw(u, w, p, e, display) {
+            draw(uwpe, display) {
+                var e = uwpe.entity;
                 var drawableLoc = e.locatable().loc;
                 this.transformLocate.loc.overwriteWith(drawableLoc);
                 this.networkTransformed.overwriteWith(this.network).transform(this.transformLocate);

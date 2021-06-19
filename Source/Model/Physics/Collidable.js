@@ -25,26 +25,29 @@ var ThisCouldBeBetter;
             static fromColliderAndCollideEntities(colliderAtRest, collideEntities) {
                 return new Collidable(null, colliderAtRest, null, collideEntities);
             }
-            collideEntities(u, w, p, e0, e1, c) {
+            collideEntities(uwpe, collision) {
                 if (this._collideEntities != null) {
-                    this._collideEntities(u, w, p, e0, e1, c);
+                    this._collideEntities(uwpe, collision);
                 }
-                return c;
+                return collision;
             }
             colliderLocateForEntity(entity) {
                 this.collider.overwriteWith(this.colliderAtRest);
                 this.collider.locate(entity.locatable().loc);
             }
-            collisionHandle(universe, world, place, collision) {
+            collisionHandle(uwpe, collision) {
                 var entitiesColliding = collision.entitiesColliding;
                 var entity = entitiesColliding[0];
                 var entityOther = entitiesColliding[1];
-                this.collideEntities(universe, world, place, entity, entityOther, collision);
+                uwpe.entity = entity;
+                uwpe.entity2 = entityOther;
+                this.collideEntities(uwpe, collision);
                 var entityOtherCollidable = entityOther.collidable();
-                entityOtherCollidable.collideEntities(universe, world, place, entityOther, entity, collision);
+                entityOtherCollidable.collideEntities(uwpe.clone().entitiesSwap(), collision);
             }
-            collisionsFindAndHandle(universe, world, place, entity) {
+            collisionsFindAndHandle(uwpe) {
                 if (this.isDisabled == false) {
+                    var entity = uwpe.entity;
                     var entityLoc = entity.locatable().loc;
                     this.locPrev.overwriteWith(entityLoc);
                     if (this.ticksUntilCanCollide > 0) {
@@ -52,32 +55,39 @@ var ThisCouldBeBetter;
                     }
                     else {
                         this.colliderLocateForEntity(entity);
-                        var collisions = this.collisionsFindForEntity(universe, world, place, entity, GameFramework.ArrayHelper.clear(this._collisions));
-                        collisions.forEach(collision => this.collisionHandle(universe, world, place, collision));
+                        var collisions = this.collisionsFindForEntity(uwpe, GameFramework.ArrayHelper.clear(this._collisions));
+                        collisions.forEach(collision => this.collisionHandle(uwpe, collision));
                     }
                 }
             }
-            collisionsFindForEntity(universe, world, place, entity, collisionsSoFar) {
+            collisionsFindForEntity(uwpe, collisionsSoFar) {
+                var place = uwpe.place;
+                var entity = uwpe.entity;
                 var collisionTracker = place.collisionTracker();
                 var entityBoundable = entity.boundable();
                 if (collisionTracker == null
                     || entityBoundable == null
                     || entityBoundable.bounds.constructor.name != GameFramework.Box.name) {
-                    collisionsSoFar = this.collisionsFindForEntity_WithoutTracker(universe, world, place, entity, collisionsSoFar);
+                    collisionsSoFar = this.collisionsFindForEntity_WithoutTracker(uwpe, collisionsSoFar);
                 }
                 else {
-                    collisionsSoFar = this.collisionsFindForEntity_WithTracker(universe, world, place, entity, collisionsSoFar, collisionTracker);
+                    collisionsSoFar = this.collisionsFindForEntity_WithTracker(uwpe, collisionsSoFar, collisionTracker);
                 }
                 return collisionsSoFar;
             }
-            collisionsFindForEntity_WithTracker(universe, world, place, entity, collisionsSoFar, collisionTracker) {
+            collisionsFindForEntity_WithTracker(uwpe, collisionsSoFar, collisionTracker) {
+                var universe = uwpe.universe;
+                var entity = uwpe.entity;
                 this._collisionTrackerMapCellsOccupied.forEach(x => GameFramework.ArrayHelper.remove(x.entitiesPresent, entity));
                 this._collisionTrackerMapCellsOccupied.length = 0;
                 collisionsSoFar = collisionTracker.entityCollidableAddAndFindCollisions(entity, universe.collisionHelper, collisionsSoFar);
                 collisionsSoFar = collisionsSoFar.filter(collision => this.entityPropertyNamesToCollideWith.some(propertyName => collision.entitiesColliding[1].propertyByName(propertyName) != null));
                 return collisionsSoFar;
             }
-            collisionsFindForEntity_WithoutTracker(universe, world, place, entity, collisionsSoFar) {
+            collisionsFindForEntity_WithoutTracker(uwpe, collisionsSoFar) {
+                var universe = uwpe.universe;
+                var place = uwpe.place;
+                var entity = uwpe.entity;
                 var collisionHelper = universe.collisionHelper;
                 for (var p = 0; p < this.entityPropertyNamesToCollideWith.length; p++) {
                     var entityPropertyName = this.entityPropertyNamesToCollideWith[p];
@@ -144,18 +154,18 @@ var ThisCouldBeBetter;
                 return (entity.movable() == null);
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(universe, world, place, entity) {
-                if (this.isEntityStationary(entity)) {
-                    this.collisionsFindAndHandle(universe, world, place, entity);
+            finalize(uwpe) { }
+            initialize(uwpe) {
+                if (this.isEntityStationary(uwpe.entity)) {
+                    this.collisionsFindAndHandle(uwpe);
                 }
             }
-            updateForTimerTick(universe, world, place, entity) {
-                if (this.isEntityStationary(entity)) {
+            updateForTimerTick(uwpe) {
+                if (this.isEntityStationary(uwpe.entity)) {
                     this.entitiesAlreadyCollidedWith.length = 0;
                 }
                 else {
-                    this.collisionsFindAndHandle(universe, world, place, entity);
+                    this.collisionsFindAndHandle(uwpe);
                 }
             }
             // cloneable

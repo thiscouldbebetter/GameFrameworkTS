@@ -17,8 +17,9 @@ export class VisualStack implements Visual
 		this._posSaved = Coords.create();
 	}
 
-	draw(universe: Universe, world: World, place: Place, entity: Entity, display: Display)
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display)
 	{
+		var entity = uwpe.entity;
 		var drawPos = entity.locatable().loc.pos;
 		this._posSaved.overwriteWith(drawPos);
 
@@ -26,7 +27,7 @@ export class VisualStack implements Visual
 		{
 			var child = this.children[i];
 			var wasChildVisible =
-				child.draw(universe, world, place, entity, display) as boolean;
+				child.draw(uwpe, display) as boolean;
 			if (wasChildVisible)
 			{
 				drawPos.add(this.childSpacing);

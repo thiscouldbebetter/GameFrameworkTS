@@ -16,12 +16,11 @@ export class EquipmentUser implements EntityProperty
 		this.socketGroup = new EquipmentSocketGroup(socketDefnGroup);
 	}
 
-	equipAll
-	(
-		universe: Universe, world: World, place: Place,
-		entityEquipmentUser: Entity
-	)
+	equipAll(uwpe: UniverseWorldPlaceEntities): void
 	{
+		var world = uwpe.world;
+		var entityEquipmentUser = uwpe.entity;
+
 		var itemHolder = entityEquipmentUser.itemHolder();
 		var itemsNotYetEquipped = itemHolder.items;
 		var sockets = this.socketGroup.sockets;
@@ -46,24 +45,23 @@ export class EquipmentUser implements EntityProperty
 					var itemToEquip = itemsEquippable[0];
 					var itemToEquipAsEntity = itemToEquip.toEntity
 					(
-						universe, world, place, entityEquipmentUser
+						uwpe
 					);
+					uwpe.entity2 = itemToEquipAsEntity;
 					this.equipItemEntityInSocketWithName
 					(
-						universe, world, place, entityEquipmentUser,
-						itemToEquipAsEntity, socket.defnName, true
+						uwpe, socket.defnName, true // ?
 					);
 				}
 			}
 		}
 	}
 
-	equipEntityWithItem
-	(
-		universe: Universe, world: World, place: Place,
-		entityEquipmentUser: Entity, itemEntityToEquip: Entity
-	): any
+	equipEntityWithItem(uwpe: UniverseWorldPlaceEntities): any
 	{
+		var world = uwpe.world;
+		var itemEntityToEquip = uwpe.entity2;
+
 		if (itemEntityToEquip == null)
 		{
 			return null;
@@ -97,8 +95,7 @@ export class EquipmentUser implements EntityProperty
 
 			message = this.equipItemEntityInSocketWithName
 			(
-				universe, world, place, entityEquipmentUser,
-				itemEntityToEquip, socketFoundName, false
+				uwpe, socketFoundName, false
 			);
 		}
 
@@ -107,14 +104,10 @@ export class EquipmentUser implements EntityProperty
 
 	equipItemEntityInFirstOpenQuickSlot
 	(
-		universe: Universe,
-		world: World,
-		place: Place,
-		entityEquipmentUser: Entity,
-		itemEntityToEquip: Entity,
-		includeSocketNameInMessage: boolean
+		uwpe: UniverseWorldPlaceEntities, includeSocketNameInMessage: boolean
 	): void
 	{
+		var itemEntityToEquip = uwpe.entity2;
 		var itemToEquipDefnName = itemEntityToEquip.item().defnName;
 		var socketFound = null;
 
@@ -142,25 +135,25 @@ export class EquipmentUser implements EntityProperty
 		{
 			this.equipItemEntityInSocketWithName
 			(
-				universe, world, place, entityEquipmentUser,
-				itemEntityToEquip, socketFound.defnName,
-				includeSocketNameInMessage
+				uwpe, socketFound.defnName, includeSocketNameInMessage
 			);
 		}
 	}
 
 	equipItemEntityInSocketWithName
 	(
-		universe: Universe,
-		world: World,
-		place: Place,
-		entityEquipmentUser: Entity,
-		itemEntityToEquip: Entity,
+		uwpe: UniverseWorldPlaceEntities,
 		socketName: string,
 		includeSocketNameInMessage: boolean
 	): any
 	{
-		if (itemEntityToEquip == null) { return "Nothing to equip!"; }
+		var world = uwpe.world;
+		var itemEntityToEquip = uwpe.entity2;
+
+		if (itemEntityToEquip == null)
+		{
+			return "Nothing to equip!";
+		}
 
 		var itemToEquip = itemEntityToEquip.item();
 		var itemDefn = itemToEquip.defn(world);
@@ -178,10 +171,7 @@ export class EquipmentUser implements EntityProperty
 		{
 			if (equippable != null)
 			{
-				equippable.unequip
-				(
-					universe, world, place, entityEquipmentUser, itemEntityToEquip
-				);
+				equippable.unequip(uwpe);
 			}
 			socket.itemEntityEquipped = null;
 			message += " unequipped."
@@ -190,10 +180,7 @@ export class EquipmentUser implements EntityProperty
 		{
 			if (equippable != null)
 			{
-				equippable.equip
-				(
-					universe, world, place, entityEquipmentUser, itemEntityToEquip
-				);
+				equippable.equip(uwpe);
 			}
 			socket.itemEntityEquipped = itemEntityToEquip;
 			message += " equipped";
@@ -244,11 +231,9 @@ export class EquipmentUser implements EntityProperty
 		return message;
 	}
 
-	unequipItemsNoLongerHeld
-	(
-		universe: Universe, world: World, place: Place, entityEquipmentUser: Entity
-	): void
+	unequipItemsNoLongerHeld(uwpe: UniverseWorldPlaceEntities): void
 	{
+		var entityEquipmentUser = uwpe.entity;
 		var itemHolder = entityEquipmentUser.itemHolder();
 		var itemsHeld = itemHolder.items;
 		var sockets = this.socketGroup.sockets;
@@ -274,7 +259,7 @@ export class EquipmentUser implements EntityProperty
 					{
 						socket.itemEntityEquipped = itemOfSameTypeStillHeld.toEntity
 						(
-							universe, world, place, entityEquipmentUser
+							uwpe
 						);
 					}
 				}
@@ -296,26 +281,27 @@ export class EquipmentUser implements EntityProperty
 
 	useItemInSocketNumbered
 	(
-		universe: Universe, world: World, place: Place, actor: Entity,
-		socketNumber: number
+		uwpe: UniverseWorldPlaceEntities, socketNumber: number
 	): void
 	{
+		var actor = uwpe.entity;
 		var equipmentUser = actor.equipmentUser();
 		var socketName = "Item" + socketNumber;
 		var entityItemEquipped = equipmentUser.itemEntityInSocketWithName(socketName);
 		if (entityItemEquipped != null)
 		{
 			var itemEquipped = entityItemEquipped.item();
-			itemEquipped.use(universe, world, place, actor, entityItemEquipped);
+			uwpe.entity2 = entityItemEquipped;
+			itemEquipped.use(uwpe);
 		}
-		this.unequipItemsNoLongerHeld(universe, world, place, actor);
+		this.unequipItemsNoLongerHeld(uwpe);
 	}
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
-	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 
 	// control
 
@@ -362,9 +348,14 @@ export class EquipmentUser implements EntityProperty
 		var world = universe.world;
 		var place = world.placeCurrent;
 
+		var uwpe = new UniverseWorldPlaceEntities
+		(
+			universe, world, place, entityEquipmentUser, null
+		);
+
 		var itemEntities = itemHolder.itemEntities
 		(
-			universe, world, place, entityEquipmentUser
+			uwpe
 		);
 		var itemEntitiesEquippable = itemEntities.filter
 		(
@@ -379,11 +370,8 @@ export class EquipmentUser implements EntityProperty
 		var equipItemSelectedToSocketDefault = () =>
 		{
 			var itemEntityToEquip = equipmentUser.itemEntitySelected;
-
-			var message = equipmentUser.equipEntityWithItem
-			(
-				universe, world, place, entityEquipmentUser, itemEntityToEquip
-			);
+			uwpe.entity2 = itemEntityToEquip;
+			var message = equipmentUser.equipEntityWithItem(uwpe);
 			equipmentUser.statusMessage = message;
 		};
 
@@ -413,6 +401,7 @@ export class EquipmentUser implements EntityProperty
 		var equipItemSelectedToSocketSelected = () =>
 		{
 			var itemEntityToEquip = equipmentUser.itemEntitySelected;
+			uwpe.entity2 = itemEntityToEquip;
 
 			var message;
 			var socketSelected = equipmentUser.socketSelected;
@@ -420,14 +409,14 @@ export class EquipmentUser implements EntityProperty
 			{
 				message = equipmentUser.equipEntityWithItem
 				(
-					universe, world, place, entityEquipmentUser, itemEntityToEquip
+					uwpe
 				);
 			}
 			else
 			{
 				message = equipmentUser.equipItemEntityInSocketWithName
 				(
-					universe, world, place, entityEquipmentUser, itemEntityToEquip,
+					uwpe,
 					socketSelected.defnName, true // includeSocketNameInMessage
 				)
 			}
@@ -436,10 +425,10 @@ export class EquipmentUser implements EntityProperty
 
 		var equipItemSelectedInQuickSlot = (quickSlotNumber: number) =>
 		{
+			uwpe.entity2 = equipmentUser.itemEntitySelected;
 			equipmentUser.equipItemEntityInSocketWithName
 			(
-				universe, universe.world, universe.world.placeCurrent,
-				entityEquipmentUser, equipmentUser.itemEntitySelected,
+				uwpe,
 				"Item" + quickSlotNumber, // socketName
 				true // includeSocketNameInMessage
 			);

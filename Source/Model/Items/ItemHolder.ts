@@ -59,12 +59,18 @@ export class ItemHolder implements EntityProperty
 			var includeSocketNameInMessage = true;
 			var itemEntityToEquip = itemToEquip.toEntity
 			(
-				universe, world, place, entityItemHolder
+				new UniverseWorldPlaceEntities
+				(
+					universe, world, place, entityItemHolder, null
+				)
+			);
+			var uwpe = new UniverseWorldPlaceEntities
+			(
+				universe, world, place, entityItemHolder, itemEntityToEquip
 			);
 			var message = equipmentUser.equipItemEntityInSocketWithName
 			(
-				universe, world, place, entityItemHolder, itemEntityToEquip,
-				socketName, includeSocketNameInMessage
+				uwpe, socketName, includeSocketNameInMessage
 			);
 			this.statusMessage = message;
 		}
@@ -88,9 +94,9 @@ export class ItemHolder implements EntityProperty
 		return returnValue;
 	}
 
-	itemEntities(u: Universe, w: World, p: Place, e: Entity): Entity[]
+	itemEntities(uwpe: UniverseWorldPlaceEntities): Entity[]
 	{
-		return this.items.map(x => x.toEntity(u, w, p, e));
+		return this.items.map(x => x.toEntity(uwpe));
 	}
 
 	itemsAdd(itemsToAdd: Item[]): void
@@ -161,12 +167,11 @@ export class ItemHolder implements EntityProperty
 		}
 	}
 
-	itemEntityFindClosest
-	(
-		universe: Universe, world: World, place: Place,
-		entityItemHolder: Entity
-	): Entity
+	itemEntityFindClosest(uwpe: UniverseWorldPlaceEntities): Entity
 	{
+		var place = uwpe.place;
+		var entityItemHolder = uwpe.entity;
+
 		var entityItemsInPlace = place.items();
 		var entityItemClosest = entityItemsInPlace.filter
 		(
@@ -196,10 +201,11 @@ export class ItemHolder implements EntityProperty
 
 	itemEntityPickUp
 	(
-		universe: Universe, world: World, place: Place,
-		entityItemHolder: Entity, itemEntityToPickUp: Entity
+		uwpe: UniverseWorldPlaceEntities
 	): void
 	{
+		var place = uwpe.place;
+		var itemEntityToPickUp = uwpe.entity2;
 		var itemToPickUp = itemEntityToPickUp.item();
 		this.itemAdd(itemToPickUp);
 		place.entityToRemoveAdd(itemEntityToPickUp);
@@ -350,9 +356,9 @@ export class ItemHolder implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
-	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 
 	// Controllable.
 
@@ -368,6 +374,12 @@ export class ItemHolder implements EntityProperty
 		{
 			size = universe.display.sizeDefault().clone();
 		}
+
+		var uwpe = new UniverseWorldPlaceEntities
+		(
+			universe, universe.world, universe.world.placeCurrent,
+			entityItemHolder, null
+		);
 
 		var sizeBase = new Coords(200, 135, 1);
 
@@ -401,10 +413,7 @@ export class ItemHolder implements EntityProperty
 				itemToDrop.quantity = 1;
 				var itemToDropDefn = itemToDrop.defn(world);
 
-				var itemEntityToDrop = itemToDrop.toEntity
-				(
-					universe, world, place, entityItemHolder
-				);
+				var itemEntityToDrop = itemToDrop.toEntity(uwpe);
 				var itemLocatable = itemEntityToDrop.locatable();
 				if (itemLocatable == null)
 				{
@@ -428,7 +437,13 @@ export class ItemHolder implements EntityProperty
 						collidable.ticksToWaitBetweenCollisions;
 				}
 
-				place.entitySpawn(universe, world, itemEntityToDrop);
+				place.entitySpawn
+				(
+					new UniverseWorldPlaceEntities
+					(
+						universe, world, place, itemEntityToDrop, null
+					)
+				);
 				itemHolder.itemSubtract(itemToDrop);
 				if (itemToKeep.quantity == 0)
 				{
@@ -442,7 +457,7 @@ export class ItemHolder implements EntityProperty
 				{
 					equipmentUser.unequipItemsNoLongerHeld
 					(
-						universe, world, world.placeCurrent, entityItemHolder
+						uwpe
 					);
 				}
 			}
@@ -452,18 +467,15 @@ export class ItemHolder implements EntityProperty
 		{
 			var itemEntityToUse = itemHolder.itemSelected.toEntity
 			(
-				universe, universe.world, universe.world.placeCurrent, entityItemHolder
+				uwpe
 			);
 			if (itemEntityToUse != null)
 			{
 				var itemToUse = itemEntityToUse.item();
 				if (itemToUse.use != null)
 				{
-					var world = universe.world;
-					var place = world.placeCurrent;
-					var user = entityItemHolder;
 					itemHolder.statusMessage =
-						itemToUse.use(universe, world, place, user, itemEntityToUse);
+						itemToUse.use(uwpe);
 					if (itemToUse.quantity <= 0)
 					{
 						itemHolder.itemSelected = null;
@@ -496,7 +508,7 @@ export class ItemHolder implements EntityProperty
 			}
 		};
 
-		var split = (universe: Universe) =>
+		var split = (uwpe: UniverseWorldPlaceEntities) =>
 		{
 			itemHolder.itemSplit(itemHolder.itemSelected, null);
 		};

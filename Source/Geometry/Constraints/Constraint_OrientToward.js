@@ -7,7 +7,9 @@ var ThisCouldBeBetter;
             constructor(targetEntityName) {
                 this.targetEntityName = targetEntityName;
             }
-            constrain(universe, world, place, entity) {
+            constrain(uwpe) {
+                var place = uwpe.place;
+                var entity = uwpe.entity;
                 var targetEntityName = this.targetEntityName;
                 var constrainableLoc = entity.locatable().loc;
                 var constrainablePos = constrainableLoc.pos;

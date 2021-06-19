@@ -13,19 +13,20 @@ var ThisCouldBeBetter;
                 this.tickLastUsed = 0 - this.ticksToCharge;
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            updateForTimerTick(u, w, p, e) { }
-            initialize(u, w, p, e) {
+            finalize(uwpe) { }
+            updateForTimerTick(uwpe) { }
+            initialize(uwpe) {
                 if (this._initialize != null) {
-                    this._initialize(u, w, p, e);
+                    this._initialize(uwpe);
                 }
             }
-            use(u, w, p, eUser, eDevice) {
-                var tickCurrent = w.timerTicksSoFar;
+            use(uwpe) {
+                var world = uwpe.world;
+                var tickCurrent = world.timerTicksSoFar;
                 var ticksSinceUsed = tickCurrent - this.tickLastUsed;
                 if (ticksSinceUsed >= this.ticksToCharge) {
                     this.tickLastUsed = tickCurrent;
-                    this._use(u, w, p, eUser, eDevice);
+                    this._use(uwpe);
                 }
             }
             // clonable

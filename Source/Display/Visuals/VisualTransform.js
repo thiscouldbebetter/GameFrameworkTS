@@ -23,10 +23,10 @@ var ThisCouldBeBetter;
                 return this.child.transform(transformToApply);
             }
             // Visual.
-            draw(universe, world, place, entity, display) {
+            draw(uwpe, display) {
                 this._childTransformed.overwriteWith(this.child);
                 this.transformToApply.transform(this._childTransformed);
-                this._childTransformed.draw(universe, world, place, entity, display);
+                this._childTransformed.draw(uwpe, display);
             }
         }
         GameFramework.VisualTransform = VisualTransform;

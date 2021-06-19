@@ -7,9 +7,9 @@ var ThisCouldBeBetter;
             constructor(methodForVisual) {
                 this.methodForVisual = methodForVisual;
             }
-            draw(universe, world, place, entity, display) {
-                var visual = this.methodForVisual.call(this, universe, world, display, entity);
-                visual.draw(universe, world, place, entity, display);
+            draw(uwpe, display) {
+                var visual = this.methodForVisual.call(this, uwpe);
+                visual.draw(uwpe, display);
             }
             // Clonable.
             clone() {

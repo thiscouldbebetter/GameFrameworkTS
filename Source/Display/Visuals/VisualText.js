@@ -18,16 +18,17 @@ var ThisCouldBeBetter;
                 colorFill, null // colorBorder
                 );
             }
-            draw(universe, world, place, entity, display) {
-                var text = this.text(universe, world, place, entity, display);
+            draw(uwpe, display) {
+                var entity = uwpe.entity;
+                var text = this.text(uwpe, display);
                 display.drawText(text, this.heightInPixels, entity.locatable().loc.pos, this.colorFill, this.colorBorder, false, // areColorsReversed
                 true, // isCentered
                 null // widthMaxInPixels
                 );
             }
-            text(universe, world, place, entity, display) {
+            text(uwpe, display) {
                 if (this.shouldTextContextBeReset) {
-                    this._universeWorldPlaceEntities.fieldsSet(universe, world, place, entity, null);
+                    this._universeWorldPlaceEntities.overwriteWith(uwpe);
                     this._text.contextSet(this._universeWorldPlaceEntities);
                 }
                 var returnValue = this._text.get();

@@ -199,10 +199,13 @@ export class Camera implements EntityProperty
 
 	drawEntitiesInView
 	(
-		universe: Universe, world: World, place: Place,
+		uwpe: UniverseWorldPlaceEntities,
 		cameraEntity: Entity, display: Display
 	): void
 	{
+		var universe = uwpe.universe;
+		var place = uwpe.place;
+
 		this.loc.pos.round(); // hack - To prevent lines between map tiles.
 
 		this.entitiesInView = this.drawEntitiesInView_1_FindEntitiesInView
@@ -212,7 +215,7 @@ export class Camera implements EntityProperty
 
 		this.drawEntitiesInView_2_Draw
 		(
-			universe, world, place, display, this.entitiesInView
+			uwpe, display, this.entitiesInView
 		);
 	}
 
@@ -314,7 +317,7 @@ export class Camera implements EntityProperty
 
 	drawEntitiesInView_2_Draw
 	(
-		universe: Universe, world: World, place: Place, display: Display,
+		uwpe: UniverseWorldPlaceEntities, display: Display,
 		entitiesInView: Entity[]
 	): void
 	{
@@ -323,6 +326,7 @@ export class Camera implements EntityProperty
 		for (var i = 0; i < entitiesInView.length; i++)
 		{
 			var entity = entitiesInView[i];
+			uwpe.entity = entity;
 
 			var visual = entity.drawable().visual;
 
@@ -332,7 +336,7 @@ export class Camera implements EntityProperty
 
 			this.coordsTransformWorldToView(entityPos);
 
-			visual.draw(universe, world, place, entity, display);
+			visual.draw(uwpe, display);
 
 			entityPos.overwriteWith(this._posSaved);
 		}
@@ -361,10 +365,10 @@ export class Camera implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(u: Universe, w: World, p: Place, e: Entity): void {}
-	initialize(u: Universe, w: World, p: Place, e: Entity): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
-	updateForTimerTick(u: Universe, w: World, p: Place, e: Entity): void
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		// Do nothing.  Rendering is done in Place.draw().
 	}

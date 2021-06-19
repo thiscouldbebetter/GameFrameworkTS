@@ -12,9 +12,12 @@ var ThisCouldBeBetter;
                 this.tickLastGenerated = 0 - this.ticksToGenerate;
             }
             // EntityProperty.
-            finalize(u, w, p, e) { }
-            initialize(u, w, p, e) { }
-            updateForTimerTick(universe, world, place, entityGenerator) {
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) {
+                var world = uwpe.world;
+                var place = uwpe.place;
+                var entityGenerator = uwpe.entity;
                 var placeEntitiesByName = place.entitiesByName;
                 var entitiesGeneratedCountBefore = this.entitiesGenerated.length;
                 this.entitiesGenerated = this.entitiesGenerated.filter(e => placeEntitiesByName.has(e.name));
@@ -29,7 +32,8 @@ var ThisCouldBeBetter;
                         var entityGenerated = this.entityToGenerate.clone();
                         entityGenerated.locatable().loc.overwriteWith(entityGenerator.locatable().loc);
                         this.entitiesGenerated.push(entityGenerated);
-                        place.entitySpawn(universe, world, entityGenerated);
+                        var uwpe2 = uwpe.clone().entitySet(entityGenerated);
+                        place.entitySpawn(uwpe2);
                     }
                 }
             }

@@ -7,7 +7,8 @@ var ThisCouldBeBetter;
             constructor(accelerationPerTick) {
                 this.accelerationPerTick = accelerationPerTick;
             }
-            constrain(universe, world, place, entity) {
+            constrain(uwpe) {
+                var entity = uwpe.entity;
                 var loc = entity.locatable().loc;
                 if (loc.pos.z < 0) // hack
                  {

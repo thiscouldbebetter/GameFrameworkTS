@@ -5,26 +5,26 @@ namespace ThisCouldBeBetter.GameFramework
 export class Action //
 {
 	name: string;
-	_perform: (u: Universe, w: World, p: Place, e: Entity) => void;
+	_perform: (uwpe: UniverseWorldPlaceEntities) => void;
 
 	constructor
 	(
 		name: string,
-		perform: (u: Universe, w: World, p: Place, e: Entity) => void
+		perform: (uwpe: UniverseWorldPlaceEntities) => void
 	)
 	{
 		this.name = name;
 		this._perform = perform;
 	}
 
-	perform(u: Universe, w: World, p: Place, e: Entity): void
+	perform(uwpe: UniverseWorldPlaceEntities): void
 	{
-		this._perform(u, w, p, e);
+		this._perform(uwpe);
 	}
 
 	performForUniverse(universe: Universe): void
 	{
-		this.perform(universe, null, null, null);
+		this.perform(UniverseWorldPlaceEntities.fromUniverse(universe) );
 	}
 
 	static _instances: Action_Instances;
@@ -49,7 +49,7 @@ class Action_Instances
 		this.DoNothing = new Action
 		(
 			"DoNothing",
-			(u: Universe, w: World, p: Place, e: Entity) =>
+			(uwpe: UniverseWorldPlaceEntities) =>
 			{
 				// Do nothing.
 			}
@@ -59,8 +59,10 @@ class Action_Instances
 		(
 			"ShowMenuPlayer",
 			// perform
-			(universe: Universe, world: World, place: Place, actor: Entity) =>
+			(uwpe: UniverseWorldPlaceEntities) =>
 			{
+				var universe = uwpe.universe;
+				var actor = uwpe.entity;
 				var control = actor.controllable().toControl
 				(
 					universe, universe.display.sizeInPixels, actor,
@@ -76,8 +78,9 @@ class Action_Instances
 		(
 			"ShowMenuSettings",
 			// perform
-			(universe: Universe, world: World, place: Place, actor: Entity) =>
+			(uwpe: UniverseWorldPlaceEntities) =>
 			{
+				var universe = uwpe.universe;
 				var controlBuilder = universe.controlBuilder;
 				var control = controlBuilder.gameAndSettings1(universe);
 				var venueNext: Venue = control.toVenue();
