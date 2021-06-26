@@ -5,11 +5,11 @@ var ThisCouldBeBetter;
     (function (GameFramework) {
         class Movable {
             constructor(accelerationPerTick, speedMax, accelerate) {
-                this.accelerationPerTick = accelerationPerTick;
-                this.speedMax = speedMax;
+                this.accelerationPerTick = accelerationPerTick || .1;
+                this.speedMax = speedMax || 3;
                 this._accelerate = accelerate || this.accelerateForward;
             }
-            static create() {
+            static default() {
                 return new Movable(null, null, null);
             }
             static fromAccelerationAndSpeedMax(accelerationPerTick, speedMax) {
@@ -72,6 +72,30 @@ var ThisCouldBeBetter;
                     var actor = uwpe.entity;
                     actor.movable().accelerateInDirection(uwpe, GameFramework.Coords.Instances().ZeroMinusOneZero);
                 });
+            }
+            // Activities.
+            static activityDefnWanderBuild() {
+                var returnValue = new GameFramework.ActivityDefn("Wander", (uwpe) => {
+                    var entityActor = uwpe.entity;
+                    var actor = entityActor.actor();
+                    var activity = actor.activity;
+                    var targetEntity = activity.target();
+                    if (targetEntity == null) {
+                        var place = uwpe.place;
+                        var randomizer = uwpe.universe.randomizer;
+                        var targetPos = GameFramework.Coords.create().randomize(randomizer).multiply(place.size);
+                        targetEntity = new GameFramework.Entity("Target", [GameFramework.Locatable.fromPos(targetPos)]);
+                        activity.targetSet(targetEntity);
+                    }
+                    var movable = entityActor.movable();
+                    var actorLocatable = entityActor.locatable();
+                    var targetLocatable = targetEntity.locatable();
+                    var distanceToTarget = actorLocatable.approachOtherWithAccelerationAndSpeedMax(targetLocatable, movable.accelerationPerTick, movable.speedMax);
+                    if (distanceToTarget < movable.speedMax) {
+                        activity.targetSet(null);
+                    }
+                });
+                return returnValue;
             }
         }
         GameFramework.Movable = Movable;

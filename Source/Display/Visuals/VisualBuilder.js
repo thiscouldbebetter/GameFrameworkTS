@@ -277,16 +277,16 @@ var ThisCouldBeBetter;
             flame(dimension) {
                 var dimensionHalf = dimension / 2;
                 var flameVisualStatic = new GameFramework.VisualGroup([
-                    new GameFramework.VisualPolygon(new GameFramework.Path([
+                    GameFramework.VisualPolygon.fromPathAndColorFill(new GameFramework.Path([
                         new GameFramework.Coords(0, -dimension * 2, 0),
                         new GameFramework.Coords(dimension, 0, 0),
                         new GameFramework.Coords(-dimension, 0, 0),
-                    ]), GameFramework.Color.byName("Orange"), null),
-                    new GameFramework.VisualPolygon(new GameFramework.Path([
+                    ]), GameFramework.Color.byName("Orange")),
+                    GameFramework.VisualPolygon.fromPathAndColorFill(new GameFramework.Path([
                         new GameFramework.Coords(0, -dimension, 0),
                         new GameFramework.Coords(dimensionHalf, 0, 0),
                         new GameFramework.Coords(-dimensionHalf, 0, 0),
-                    ]), GameFramework.Color.byName("Yellow"), null)
+                    ]), GameFramework.Color.byName("Yellow"))
                 ]);
                 var flameVisualStaticSmall = flameVisualStatic.clone().transform(new GameFramework.Transform_Scale(new GameFramework.Coords(1, .8, 1)));
                 var flameVisualStaticLarge = flameVisualStatic.clone().transform(new GameFramework.Transform_Scale(new GameFramework.Coords(1, 1.2, 1)));
@@ -305,7 +305,7 @@ var ThisCouldBeBetter;
                 var dimensionHalf = dimension / 2;
                 var color = GameFramework.Color.byName("Cyan");
                 var visual = new GameFramework.VisualGroup([
-                    new GameFramework.VisualPolygon(new GameFramework.Path([
+                    GameFramework.VisualPolygon.fromPathAndColors(new GameFramework.Path([
                         new GameFramework.Coords(-1, -1, 0),
                         new GameFramework.Coords(1, -1, 0),
                         new GameFramework.Coords(1, 1, 0),

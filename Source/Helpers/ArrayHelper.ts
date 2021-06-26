@@ -3,13 +3,13 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class ArrayHelper
 {
-	static add(array: any[], element: any)
+	static add(array: any[], element: any): any[]
 	{
 		array.push(element);
 		return array;
 	}
 
-	static addMany(array: any[], elements: any[])
+	static addMany(array: any[], elements: any[]): any[]
 	{
 		for (var i = 0; i < elements.length; i++)
 		{
@@ -19,7 +19,10 @@ export class ArrayHelper
 		return array;
 	}
 
-	static addLookups<K, E>(array: E[], getKeyForElement: (e: E) => K ): Map<K, E>
+	static addLookups<K, E>
+	(
+		array: E[], getKeyForElement: (e: E) => K
+	): Map<K, E>
 	{
 		var returnLookup = new Map<K, E>();
 		for (var i = 0; i < array.length; i++)
@@ -36,7 +39,10 @@ export class ArrayHelper
 		return ArrayHelper.addLookups(array, (element: E) => element.name);
 	}
 
-	static addLookupsMultiple<K, E>(array: any, getKeysForElement: (e:E) => Array<K> ): Map<K, E>
+	static addLookupsMultiple<K, E>
+	(
+		array: any, getKeysForElement: (e:E) => Array<K>
+	): Map<K, E>
 	{
 		var returnLookup = new Map<K, E>();
 		for (var i = 0; i < array.length; i++)
@@ -52,7 +58,7 @@ export class ArrayHelper
 		return returnLookup;
 	}
 
-	static append(array: any, other: any)
+	static append(array: any[], other: any[]): any[]
 	{
 		for (var i = 0; i < other.length; i++)
 		{
@@ -130,25 +136,26 @@ export class ArrayHelper
 		return returnValue;
 	}
 
-	static concatenateAll(arrays: any)
+	static flattenArrayOfArrays(arrayOfArrays: any[][]): any[]
 	{
-		var childrenConcatenated: any = [];
+		var arrayFlattened: any[] = [];
 
-		for (var i = 0; i < arrays.length; i++)
+		for (var i = 0; i < arrayOfArrays.length; i++)
 		{
-			var childArray = arrays[i];
-			childrenConcatenated = childrenConcatenated.concat(childArray);
+			var childArray = arrayOfArrays[i];
+			arrayFlattened =
+				arrayFlattened.concat(childArray);
 		}
 
-		return childrenConcatenated;
+		return arrayFlattened;
 	}
 
-	static contains(array: any, elementToFind: any)
+	static contains(array: any, elementToFind: any): boolean
 	{
 		return (array.indexOf(elementToFind) >= 0);
 	}
 
-	static equals(array: any[], other: any[])
+	static equals(array: any[], other: any[]): boolean
 	{
 		var areEqualSoFar;
 
@@ -171,7 +178,10 @@ export class ArrayHelper
 		return areEqualSoFar;
 	}
 
-	static insertElementAfterOther(array: any, elementToInsert: any, other: any)
+	static insertElementAfterOther
+	(
+		array: any[], elementToInsert: any, other: any
+	): any[]
 	{
 		var index = array.indexOf(other);
 		if (index >= 0)
@@ -185,7 +195,10 @@ export class ArrayHelper
 		return array;
 	}
 
-	static insertElementAt(array: any[], element: any, index: number)
+	static insertElementAt
+	(
+		array: any[], element: any, index: number
+	): any[]
 	{
 		array.splice(index, 0, element);
 		return array;
@@ -208,7 +221,7 @@ export class ArrayHelper
 		return elementsInBothArrays;
 	}
 
-	static overwriteWith(array: any[], other: any[])
+	static overwriteWith(array: any[], other: any[]): any[]
 	{
 		for (var i = 0; i < array.length; i++)
 		{
@@ -227,7 +240,7 @@ export class ArrayHelper
 		return array;
 	}
 
-	static prepend(array: any, other: any)
+	static prepend(array: any, other: any): any[]
 	{
 		for (var i = 0; i < other.length; i++)
 		{
@@ -237,12 +250,12 @@ export class ArrayHelper
 		return array;
 	}
 
-	static random(array: any, randomizer: Randomizer)
+	static random(array: any, randomizer: Randomizer): any
 	{
 		return array[ Math.floor(randomizer.getNextRandom() * array.length) ];
 	}
 
-	static remove(array: any, elementToRemove: any)
+	static remove(array: any[], elementToRemove: any): any[]
 	{
 		var indexToRemoveAt = array.indexOf(elementToRemove);
 		if (indexToRemoveAt >= 0)
@@ -252,7 +265,7 @@ export class ArrayHelper
 		return array;
 	}
 
-	static removeAt(array: any, index: number)
+	static removeAt(array: any, index: number): any[]
 	{
 		array.splice(index, 1);
 		return array;

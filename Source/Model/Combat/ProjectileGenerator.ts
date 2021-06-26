@@ -116,7 +116,7 @@ export class ProjectileGeneration
 		var projectileEphemeral = new Ephemeral(this.ticksToLive, null);
 		var projectileKillable = Killable.fromIntegrityMax(1);
 		var projectileLocatable = new Locatable(projectileLoc);
-		var projectileMovable = Movable.create();
+		var projectileMovable = Movable.default();
 
 		var projectileEntity = new Entity
 		(

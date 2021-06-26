@@ -35,7 +35,7 @@ class PlaceStub extends Place
 				actionDisplayRecorderStartStop.name, [ "~" ], true // inactivate
 			),
 
-			ActionToInputsMapping.fromActionAndInputName
+			ActionToInputsMapping.fromActionNameAndInputName
 			(
 				actionShowMenu.name, inputNames.Escape
 			)

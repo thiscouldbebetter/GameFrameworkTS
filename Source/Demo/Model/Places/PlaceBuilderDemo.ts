@@ -1229,7 +1229,7 @@ class PlaceBuilderDemo // Main.
 				cameraCollidable,
 				cameraConstrainable,
 				new Locatable(cameraLoc),
-				Movable.create()
+				Movable.default()
 			]
 		);
 		return cameraEntity;
@@ -1682,7 +1682,7 @@ class PlaceBuilderDemo // Main.
 					[
 						collidable,
 						locatable,
-						Movable.create(), // hack - For CollisionTracker.
+						Movable.default(), // hack - For CollisionTracker.
 						portal
 					]
 				);
@@ -1708,7 +1708,7 @@ class PlaceBuilderDemo // Main.
 						forceFieldCollidable,
 						forceField,
 						locatable,
-						Movable.create() // hack - For CollisionTracker.
+						Movable.default() // hack - For CollisionTracker.
 					]
 				);
 
@@ -2765,7 +2765,7 @@ class PlaceBuilderDemo // Main.
 		var itemPotionColor = Color.byName("Blue");
 		var itemPotionVisual = new VisualGroup
 		([
-			new VisualPolygon
+			VisualPolygon.fromPathAndColors
 			(
 				new Path
 				([

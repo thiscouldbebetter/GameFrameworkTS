@@ -610,7 +610,7 @@ export class VisualBuilder
 		var dimensionHalf = dimension / 2;
 		var flameVisualStatic = new VisualGroup
 		([
-			new VisualPolygon
+			VisualPolygon.fromPathAndColorFill
 			(
 				new Path
 				([
@@ -618,10 +618,9 @@ export class VisualBuilder
 					new Coords(dimension, 0, 0),
 					new Coords(-dimension, 0, 0),
 				]),
-				Color.byName("Orange"),
-				null
+				Color.byName("Orange")
 			),
-			new VisualPolygon
+			VisualPolygon.fromPathAndColorFill
 			(
 				new Path
 				([
@@ -629,8 +628,7 @@ export class VisualBuilder
 					new Coords(dimensionHalf, 0, 0),
 					new Coords(-dimensionHalf, 0, 0),
 				]),
-				Color.byName("Yellow"),
-				null
+				Color.byName("Yellow")
 			)
 		]);
 
@@ -667,7 +665,7 @@ export class VisualBuilder
 		var color = Color.byName("Cyan");
 		var visual = new VisualGroup
 		([
-			new VisualPolygon
+			VisualPolygon.fromPathAndColors
 			(
 				new Path
 				([

@@ -39,7 +39,6 @@ class ActivityDefn_Instances
 	_AllByName: Map<string, ActivityDefn>;
 
 	DoNothing: ActivityDefn;
-	HandleUserInput: ActivityDefn;
 	Simultaneous: ActivityDefn;
 
 	constructor()
@@ -51,8 +50,6 @@ class ActivityDefn_Instances
 			(uwpe: UniverseWorldPlaceEntities) =>
 			{}
 		);
-
-		this.HandleUserInput = UserInputListener.activityDefnHandleUserInput();
 
 		this.Simultaneous = new ActivityDefn
 		(
@@ -76,7 +73,6 @@ class ActivityDefn_Instances
 		this._All =
 		[
 			this.DoNothing,
-			this.HandleUserInput,
 			this.Simultaneous
 		];
 

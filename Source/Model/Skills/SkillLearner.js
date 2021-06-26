@@ -9,6 +9,9 @@ var ThisCouldBeBetter;
                 this.learningAccumulated = learningAccumulated || 0;
                 this.skillsKnownNames = skillsKnownNames || [];
             }
+            static default() {
+                return new SkillLearner(null, null, null);
+            }
             isLearningInProgress() {
                 return (this.learningAccumulated > 0);
             }
@@ -57,7 +60,10 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             skillSelected(skillsAllByName) {
-                return (this.skillSelectedName == null ? null : skillsAllByName.get(this.skillSelectedName));
+                var returnValue = (this.skillSelectedName == null
+                    ? null
+                    : skillsAllByName.get(this.skillSelectedName));
+                return returnValue;
             }
             skillsAvailableToLearn(skillsAll) {
                 var skillsUnknown = [];
@@ -210,7 +216,9 @@ var ThisCouldBeBetter;
                     ),
                 ]);
                 if (includeTitle) {
-                    returnValue.children.splice(0, 0, new GameFramework.ControlLabel("labelSkills", GameFramework.Coords.fromXY(200, 20), // pos
+                    returnValue.children.splice(0, // indexToInsertAt
+                    0, // elementsToDelete
+                    new GameFramework.ControlLabel("labelSkills", GameFramework.Coords.fromXY(200, 20), // pos
                     GameFramework.Coords.fromXY(120, 25), // size
                     true, // isTextCentered
                     "Skills", labelHeightLarge));

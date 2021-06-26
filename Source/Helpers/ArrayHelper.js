@@ -91,13 +91,14 @@ var ThisCouldBeBetter;
                 }
                 return returnValue;
             }
-            static concatenateAll(arrays) {
-                var childrenConcatenated = [];
-                for (var i = 0; i < arrays.length; i++) {
-                    var childArray = arrays[i];
-                    childrenConcatenated = childrenConcatenated.concat(childArray);
+            static flattenArrayOfArrays(arrayOfArrays) {
+                var arrayFlattened = [];
+                for (var i = 0; i < arrayOfArrays.length; i++) {
+                    var childArray = arrayOfArrays[i];
+                    arrayFlattened =
+                        arrayFlattened.concat(childArray);
                 }
-                return childrenConcatenated;
+                return arrayFlattened;
             }
             static contains(array, elementToFind) {
                 return (array.indexOf(elementToFind) >= 0);

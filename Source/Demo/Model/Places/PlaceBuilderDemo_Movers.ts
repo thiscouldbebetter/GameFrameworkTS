@@ -35,7 +35,7 @@ class PlaceBuilderDemo_Movers
 
 		var carnivoreVisualBody = new VisualGroup
 		([
-			new VisualPolygon
+			VisualPolygon.fromPathAndColorFill
 			(
 				new Path
 				([
@@ -55,8 +55,7 @@ class PlaceBuilderDemo_Movers
 						)
 					])
 				),
-				carnivoreColor,
-				null // colorBorder
+				carnivoreColor
 			),
 			new VisualOffset
 			(
@@ -202,7 +201,7 @@ class PlaceBuilderDemo_Movers
 				Drawable.fromVisual(carnivoreVisual),
 				new Killable(10, null, carnivoreDie),
 				Locatable.create(),
-				Movable.create()
+				Movable.default()
 			]
 		);
 
@@ -369,7 +368,7 @@ class PlaceBuilderDemo_Movers
 				new Enemy(weapon),
 				enemyKillable,
 				Locatable.create(),
-				Movable.create(),
+				Movable.default(),
 				enemyPerceptor
 			]
 		);
@@ -560,7 +559,7 @@ class PlaceBuilderDemo_Movers
 
 		var visualBody = new VisualAnchor
 		(
-			new VisualPolygon
+			VisualPolygon.fromPathAndColors
 			(
 				new Path(enemyVertices),
 				enemyColor,
@@ -900,7 +899,7 @@ class PlaceBuilderDemo_Movers
 				Drawable.fromVisual(friendlyVisual),
 				itemHolder,
 				Locatable.create(),
-				Movable.create(),
+				Movable.default(),
 				routable,
 				new Talker("Conversation"),
 			]
@@ -1031,8 +1030,10 @@ class PlaceBuilderDemo_Movers
 			if (targetPos == null)
 			{
 				var itemsInPlace = place.items();
-				var itemsGrassInPlace =
-					itemsInPlace.filter((x: Entity) => x.item().defnName == "Grass");
+				var itemsGrassInPlace = itemsInPlace.filter
+				(
+					(x: Entity) => x.item().defnName == "Grass"
+				);
 				if (itemsGrassInPlace.length == 0)
 				{
 					var randomizer = universe.randomizer;
@@ -1153,7 +1154,7 @@ class PlaceBuilderDemo_Movers
 				Drawable.fromVisual(grazerVisual),
 				new Killable(10, null, grazerDie),
 				Locatable.create(),
-				Movable.create()
+				Movable.default()
 			]
 		);
 
@@ -1624,7 +1625,7 @@ class PlaceBuilderDemo_Movers
 
 	entityDefnBuildPlayer_PlayerActivityPerform
 	(
-		uwpe: UniverseWorldPlaceEntities
+		uwpe: UniverseWorldPlaceEntitiese
 	): void
 	{
 		var universe = uwpe.universe;
@@ -1635,51 +1636,16 @@ class PlaceBuilderDemo_Movers
 		var inputHelper = universe.inputHelper;
 		if (inputHelper.isMouseClicked(null))
 		{
-			var selector = entityPlayer.selector();
-
 			inputHelper.isMouseClicked(false);
-			var mousePosRelativeToCameraView = inputHelper.mouseClickPos;
 
-			var camera = place.camera().camera();
-
-			var mousePosAbsolute = mousePosRelativeToCameraView.clone().divide
-			(
-				universe.display.scaleFactor()
-			).add
-			(
-				camera.loc.pos
-			).subtract
-			(
-				camera.viewSizeHalf
-			).clearZ();
-
-			var entitiesInPlace = place.entities;
-			var range = 20;
-			var entityToSelect = entitiesInPlace.filter
-			(
-				x =>
-					(
-						selector.entitiesSelected.indexOf(x) == -1
-						&& x.locatable() != null
-						&& x.locatable().distanceFromPos(mousePosAbsolute) < range
-					)
-			).sort
-			(
-				(a: Entity, b: Entity) =>
-					a.locatable().distanceFromPos(mousePosAbsolute)
-					- b.locatable().distanceFromPos(mousePosAbsolute)
-			)[0];
-
-			selector.entitiesDeselectAll();
-			if (entityToSelect != null)
-			{
-				selector.entitySelect(entityToSelect);
-			}
+			var selector = entityPlayer.selector();
+			selector.entityAtMouseClickPosSelect(uwpe);
 		}
 
 		var placeDefn = place.defn(world);
 		var actionsByName = placeDefn.actionsByName;
-		var actionToInputsMappingsByInputName = placeDefn.actionToInputsMappingsByInputName;
+		var actionToInputsMappingsByInputName =
+			placeDefn.actionToInputsMappingsByInputName;
 		var actionsToPerform = inputHelper.actionsFromInput
 		(
 			actionsByName, actionToInputsMappingsByInputName
@@ -1702,7 +1668,7 @@ class PlaceBuilderDemo_Movers
 
 			var itemLocatable = itemEntityGettingPickedUp.locatable();
 			var distance =
-				itemLocatable.approachOtherWithAccelerationAndSpeedMax //ToDistance
+				itemLocatable.approachOtherWithAccelerationAndSpeedMax
 				(
 					entityPickingUpLocatable, .5, 4 //, 1
 				);
@@ -1725,18 +1691,13 @@ class PlaceBuilderDemo_Movers
 					(
 						uwpe, true // includeSocketNameInMessage
 					);
-					equipmentUser.unequipItemsNoLongerHeld
-					(
-						uwpe
-					);
+					equipmentUser.unequipItemsNoLongerHeld(uwpe);
 				}
 			}
-
-
 		}
 	}
 
-	entityDefnBuildPlayer_Controllable()
+	entityDefnBuildPlayer_Controllable(): Controllable
 	{
 		var toControlMenu = Playable.toControlMenu;
 		var toControlWorldOverlay = Playable.toControlWorldOverlay;

@@ -4,21 +4,64 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Selector {
-            constructor() {
+            constructor(reticleDimension) {
+                this.reticleDimension = reticleDimension;
                 this.entitiesSelected = new Array();
-                var visualReticle = new GameFramework.VisualRectangle(GameFramework.Coords.fromXY(20, 20), null, // colorFill
-                GameFramework.Color.byName("White"), true // isCentered
-                );
-                this.entityForReticle = new GameFramework.Entity("Reticle", [
-                    GameFramework.Locatable.create(),
-                    new GameFramework.Drawable(visualReticle, false), // isVisible
+                var visualReticle = new GameFramework.VisualGroup([
+                    new GameFramework.VisualCircle(this.reticleDimension / 2, // radius
+                    null, // colorFill
+                    GameFramework.Color.Instances().White, // colorBorder
+                    1 // borderWidth
+                    ),
+                    // todo - Crosshairs.
                 ]);
+                this.entityForReticle = new GameFramework.Entity("Reticle", [
+                    GameFramework.Drawable.fromVisualAndIsVisible(visualReticle, false),
+                    GameFramework.Locatable.create()
+                ]);
+            }
+            static fromReticleDimension(reticleDimension) {
+                return new Selector(reticleDimension);
+            }
+            static actionEntityAtMouseClickPosSelect() {
+                return new GameFramework.Action("Recording Start/Stop", Selector.actionEntityAtMouseClickPosSelectPerform);
+            }
+            static actionEntityAtMouseClickPosSelectPerform(uwpe) {
+                var selector = uwpe.entity.selector();
+                selector.entityAtMouseClickPosSelect(uwpe);
             }
             entitiesDeselectAll() {
                 this.entitiesSelected.length = 0;
             }
             entitySelect(entityToSelect) {
                 this.entitiesSelected.push(entityToSelect);
+            }
+            entityAtMouseClickPosSelect(uwpe) {
+                var universe = uwpe.universe;
+                var place = uwpe.place;
+                var inputHelper = universe.inputHelper;
+                var mousePosRelativeToCameraView = inputHelper.mouseClickPos;
+                var mousePosAbsolute = mousePosRelativeToCameraView.clone();
+                var cameraEntity = place.camera();
+                if (cameraEntity != null) {
+                    var camera = cameraEntity.camera();
+                    mousePosAbsolute.divide(universe.display.scaleFactor()).add(camera.loc.pos).subtract(camera.viewSizeHalf).clearZ();
+                }
+                var entitiesInPlace = place.entities;
+                var range = this.reticleDimension / 2;
+                var entityToSelect = entitiesInPlace.filter(x => {
+                    var locatable = x.locatable();
+                    var entityNotAlreadySelectedInRange = (this.entitiesSelected.indexOf(x) == -1
+                        && locatable != null
+                        && locatable.distanceFromPos(mousePosAbsolute) < range);
+                    return entityNotAlreadySelectedInRange;
+                }).sort((a, b) => a.locatable().distanceFromPos(mousePosAbsolute)
+                    - b.locatable().distanceFromPos(mousePosAbsolute))[0];
+                this.entitiesDeselectAll();
+                if (entityToSelect != null) {
+                    this.entitySelect(entityToSelect);
+                }
+                return entityToSelect;
             }
             // Clonable.
             clone() {
@@ -31,7 +74,7 @@ var ThisCouldBeBetter;
             toControl(size, pos) {
                 var fontHeightInPixels = 12;
                 var margin = fontHeightInPixels / 2;
-                var labelSize = new GameFramework.Coords(size.x, fontHeightInPixels, 0);
+                var labelSize = GameFramework.Coords.fromXY(size.x, fontHeightInPixels);
                 var selectionAsContainer = new GameFramework.ControlContainer("visualPlayerSelection", pos, // pos
                 size, [
                     new GameFramework.ControlLabel("labelSelected", GameFramework.Coords.fromXY(1, 0).multiplyScalar(margin), // pos
@@ -39,7 +82,9 @@ var ThisCouldBeBetter;
                     "Selected:", fontHeightInPixels),
                     new GameFramework.ControlLabel("textEntitySelectedName", GameFramework.Coords.fromXY(1, 1.5).multiplyScalar(margin), // pos
                     labelSize, false, // isTextCentered
-                    GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.entitiesSelected.length == 0 ? "-" : c.entitiesSelected[0].name)), fontHeightInPixels)
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.entitiesSelected.length == 0
+                        ? "-"
+                        : c.entitiesSelected[0].name)), fontHeightInPixels)
                 ], null, null);
                 var controlSelection = new GameFramework.ControlContainerTransparent(selectionAsContainer);
                 this._control = controlSelection;

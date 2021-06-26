@@ -7,32 +7,67 @@ export class VisualPolygon implements Visual
 	verticesAsPath: Path;
 	colorFill: Color;
 	colorBorder: Color;
+	shouldUseEntityOrientation: boolean;
 
 	verticesAsPathTransformed: Path;
 	transformLocate: Transform_Locate;
 
-	constructor(verticesAsPath: Path, colorFill: Color, colorBorder: Color)
+	constructor
+	(
+		verticesAsPath: Path, colorFill: Color, colorBorder: Color,
+		shouldUseEntityOrientation: boolean
+	)
 	{
 		this.verticesAsPath = verticesAsPath;
 		this.colorFill = colorFill;
 		this.colorBorder = colorBorder;
+		this.shouldUseEntityOrientation =
+			shouldUseEntityOrientation || false;
 
 		this.verticesAsPathTransformed = this.verticesAsPath.clone();
 		this.transformLocate = new Transform_Locate(null);
 	}
 
-	static fromVerticesAndColorFill(vertices: Coords[], colorFill: Color): VisualPolygon
+	static fromPathAndColorFill
+	(
+		path: Path, colorFill: Color
+	): VisualPolygon
+	{
+		var returnValue = new VisualPolygon
+		(
+			path, colorFill, null, null // shouldUseEntityOrientation
+		);
+		return returnValue;
+	}
+
+	static fromPathAndColors
+	(
+		verticesAsPath: Path, colorFill: Color, colorBorder: Color
+	): VisualPolygon
+	{
+		return new VisualPolygon(verticesAsPath, colorFill, colorBorder, null);
+	}
+
+	static fromVerticesAndColorFill
+	(
+		vertices: Coords[], colorFill: Color
+	): VisualPolygon
 	{
 		var verticesAsPath = new Path(vertices);
-		var returnValue = new VisualPolygon(verticesAsPath, colorFill, null);
-		return returnValue;
+		return VisualPolygon.fromPathAndColorFill(verticesAsPath, colorFill);
 	}
 
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var entity = uwpe.entity;
+
 		var drawableLoc = entity.locatable().loc;
+
 		this.transformLocate.loc.overwriteWith(drawableLoc);
+		if (this.shouldUseEntityOrientation == false)
+		{
+			this.transformLocate.loc.orientation.default();
+		}
 
 		this.verticesAsPathTransformed.overwriteWith
 		(
@@ -54,17 +89,18 @@ export class VisualPolygon implements Visual
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualPolygon
 	{
 		return new VisualPolygon
 		(
 			this.verticesAsPath.clone(),
 			ClonableHelper.clone(this.colorFill),
-			ClonableHelper.clone(this.colorBorder)
+			ClonableHelper.clone(this.colorBorder),
+			this.shouldUseEntityOrientation
 		);
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualPolygon): VisualPolygon
 	{
 		var otherAsVisualPolygon = other as VisualPolygon
 		this.verticesAsPath.overwriteWith(otherAsVisualPolygon.verticesAsPath);
@@ -76,6 +112,7 @@ export class VisualPolygon implements Visual
 		{
 			this.colorBorder.overwriteWith(otherAsVisualPolygon.colorBorder);
 		}
+		this.shouldUseEntityOrientation = other.shouldUseEntityOrientation;
 		return this;
 	}
 

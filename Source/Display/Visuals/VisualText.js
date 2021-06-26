@@ -18,6 +18,11 @@ var ThisCouldBeBetter;
                 colorFill, null // colorBorder
                 );
             }
+            static fromTextAndColors(text, colorFill, colorBorder) {
+                return new VisualText(GameFramework.DataBinding.fromContext(text), false, // shouldTextContextBeReset
+                null, // heightInPixels
+                colorFill, colorBorder);
+            }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
                 var text = this.text(uwpe, display);

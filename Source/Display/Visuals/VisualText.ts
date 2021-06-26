@@ -42,6 +42,21 @@ export class VisualText implements Visual
 		);
 	}
 
+	static fromTextAndColors
+	(
+		text: string, colorFill: Color, colorBorder: Color
+	): VisualText
+	{
+		return new VisualText
+		(
+			DataBinding.fromContext(text),
+			false, // shouldTextContextBeReset
+			null, // heightInPixels
+			colorFill,
+			colorBorder
+		);
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var entity = uwpe.entity;

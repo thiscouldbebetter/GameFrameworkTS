@@ -12,13 +12,20 @@ export class UserInputListener extends Entity
 			[
 				Actor.fromActivityDefnName
 				(
-					ActivityDefn.Instances().HandleUserInput.name
-				)
+					UserInputListener.activityDefnHandleUserInputBuild().name
+				),
+
+				Drawable.fromVisual
+				(
+					UserInputListener.visualBuild()
+				),
+
+				Selector.fromReticleDimension(20)
 			]
 		);
 	}
 
-	static activityDefnHandleUserInput(): ActivityDefn
+	static activityDefnHandleUserInputBuild(): ActivityDefn
 	{
 		return new ActivityDefn
 		(
@@ -55,6 +62,24 @@ export class UserInputListener extends Entity
 		}
 	}
 
+	static visualBuild(): Visual
+	{
+		var returnValue = new VisualSelect
+		(
+			// childrenByNames
+			new Map<string, Visual>
+			([
+				[ "None", new VisualNone() ]
+			]),
+			// selectChildNames
+			(uwpe: UniverseWorldPlaceEntities, d: Display) =>
+			{
+				return [ "None" ];
+			}
+		);
+
+		return returnValue;
+	}
 }
 
 }

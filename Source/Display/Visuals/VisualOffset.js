@@ -10,6 +10,9 @@ var ThisCouldBeBetter;
                 // Helper variables.
                 this._posSaved = GameFramework.Coords.create();
             }
+            static fromOffsetAndChild(offset, child) {
+                return new VisualOffset(child, offset);
+            }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
                 var drawablePos = entity.locatable().loc.pos;

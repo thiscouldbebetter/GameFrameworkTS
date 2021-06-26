@@ -133,7 +133,7 @@ class Effect_Instances
 			"Healing",
 			40, // ticksPerCycle
 			10, // cyclesToLive
-			new VisualPolygon
+			VisualPolygon.fromPathAndColorFill
 			(
 				new Path
 				([
@@ -153,8 +153,7 @@ class Effect_Instances
 				(
 					Transform_Scale.fromScalar(visualDimension * 1.5)
 				),
-				Color.byName("Red"),
-				null
+				Color.byName("Red")
 			),
 			(uwpe: UniverseWorldPlaceEntities, effect: Effect) =>
 			{

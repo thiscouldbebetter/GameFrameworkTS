@@ -18,6 +18,11 @@ export class VisualOffset implements Visual
 		this._posSaved = Coords.create();
 	}
 
+	static fromOffsetAndChild(offset: Coords, child: Visual): VisualOffset
+	{
+		return new VisualOffset(child, offset);
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var entity = uwpe.entity;

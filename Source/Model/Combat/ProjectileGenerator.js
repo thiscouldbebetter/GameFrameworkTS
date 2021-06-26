@@ -65,7 +65,7 @@ var ThisCouldBeBetter;
                 var projectileEphemeral = new GameFramework.Ephemeral(this.ticksToLive, null);
                 var projectileKillable = GameFramework.Killable.fromIntegrityMax(1);
                 var projectileLocatable = new GameFramework.Locatable(projectileLoc);
-                var projectileMovable = GameFramework.Movable.create();
+                var projectileMovable = GameFramework.Movable.default();
                 var projectileEntity = new GameFramework.Entity(entityFiring.name + "_Projectile", [
                     new GameFramework.Audible(),
                     projectileCollidable,

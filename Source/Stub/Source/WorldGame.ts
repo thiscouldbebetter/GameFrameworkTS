@@ -17,7 +17,7 @@ class WorldGame extends World
 		return new WorldDefn
 		([
 			[
-				ActivityDefn.Instances().HandleUserInput
+				UserInputListener.activityDefnHandleUserInputBuild()
 			],
 			[
 				PlaceStub.defnBuild()

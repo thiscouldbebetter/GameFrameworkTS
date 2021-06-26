@@ -64,7 +64,7 @@ var ThisCouldBeBetter;
                 });
                 this.Healing = new Effect("Healing", 40, // ticksPerCycle
                 10, // cyclesToLive
-                new GameFramework.VisualPolygon(new GameFramework.Path([
+                GameFramework.VisualPolygon.fromPathAndColorFill(new GameFramework.Path([
                     new GameFramework.Coords(-0.5, -0.2, 0),
                     new GameFramework.Coords(-0.2, -0.2, 0),
                     new GameFramework.Coords(-0.2, -0.5, 0),
@@ -77,7 +77,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Coords(-0.2, 0.5, 0),
                     new GameFramework.Coords(-0.2, 0.2, 0),
                     new GameFramework.Coords(-0.5, 0.2, 0)
-                ]).transform(GameFramework.Transform_Scale.fromScalar(visualDimension * 1.5)), GameFramework.Color.byName("Red"), null), (uwpe, effect) => {
+                ]).transform(GameFramework.Transform_Scale.fromScalar(visualDimension * 1.5)), GameFramework.Color.byName("Red")), (uwpe, effect) => {
                     var damage = GameFramework.Damage.fromAmountAndTypeName(-1, "Healing");
                     var e = uwpe.entity;
                     uwpe.entity2 = e;

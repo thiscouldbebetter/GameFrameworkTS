@@ -155,7 +155,10 @@ export class Color_Instances
 	GrayLighter: Color;
 	Green: Color;
 	GreenDark: Color;
+	GreenDarker: Color;
 	GreenLight: Color;
+	GreenMediumDark: Color;
+	GreenMediumLight: Color;
 	Orange: Color;
 	Pink: Color;
 	Red: Color;
@@ -187,7 +190,10 @@ export class Color_Instances
 		this.GrayLighter = new Color("GrayLighter","-", [0.825, 0.825, 0.825, 1] );
 		this.Green = new Color("Green",	"g", [0, 1, 0, 1] );
 		this.GreenDark = new Color("GreenDark", "G", [0, .5, 0, 1] );
-		this.GreenLight = new Color("GreenLight", "%", [0, .5, 0, 1] );
+		this.GreenDarker = new Color("GreenDarker", "", [0, .25, 0, 1] );
+		this.GreenLight = new Color("GreenLight", "%", [.5, 1, .5, 1] );
+		this.GreenMediumDark = new Color("GreenMediumDark", "", [0, .75, 0, 1] );
+		this.GreenMediumLight = new Color("GreenMediumLight", "", [.25, 1, .25, 1] );
 		this.Orange = new Color("Orange", "o", [1, 0.5, 0, 1] );
 		this.Pink = new Color("Pink", "p", [1, 0.5, 0.5, 1] );
 		this.Red = new Color("Red", "r", [1, 0, 0, 1] );
@@ -215,6 +221,10 @@ export class Color_Instances
 			this.GrayLighter,
 			this.Green,
 			this.GreenDark,
+			this.GreenDarker,
+			this.GreenLight,
+			this.GreenMediumDark,
+			this.GreenMediumLight,
 			this.Orange,
 			this.Pink,
 			this.Red,

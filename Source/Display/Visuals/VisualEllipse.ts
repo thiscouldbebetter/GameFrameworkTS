@@ -9,11 +9,13 @@ export class VisualEllipse implements Visual
 	rotationInTurns: number;
 	colorFill: Color;
 	colorBorder: Color;
+	shouldUseEntityOrientation: boolean
 
 	constructor
 	(
 		semiaxisHorizontal: number, semiaxisVertical: number,
-		rotationInTurns: number, colorFill: Color, colorBorder: Color
+		rotationInTurns: number, colorFill: Color, colorBorder: Color,
+		shouldUseEntityOrientation: boolean
 	)
 	{
 		this.semiaxisHorizontal = semiaxisHorizontal;
@@ -21,6 +23,7 @@ export class VisualEllipse implements Visual
 		this.rotationInTurns = rotationInTurns || 0;
 		this.colorFill = colorFill;
 		this.colorBorder = colorBorder;
+		this.shouldUseEntityOrientation = shouldUseEntityOrientation || false;
 	}
 
 	static fromSemiaxesAndColorFill
@@ -30,7 +33,7 @@ export class VisualEllipse implements Visual
 	{
 		return new VisualEllipse
 		(
-			semiaxisHorizontal, semiaxisVertical, null, colorFill, null
+			semiaxisHorizontal, semiaxisVertical, null, colorFill, null, null
 		)
 	}
 
@@ -38,16 +41,24 @@ export class VisualEllipse implements Visual
 	{
 		var entity = uwpe.entity;
 		var drawableLoc = entity.locatable().loc;
-		var drawableOrientation = drawableLoc.orientation;
-		var drawableRotationInTurns =
-			drawableOrientation.forward.headingInTurns();
+
+		var rotationInTurns = this.rotationInTurns;
+
+		if (this.shouldUseEntityOrientation)
+		{
+			var drawableOrientation = drawableLoc.orientation;
+			var drawableRotationInTurns =
+				drawableOrientation.forward.headingInTurns();
+			rotationInTurns += + drawableRotationInTurns;
+		}
+
 		display.drawEllipse
 		(
 			drawableLoc.pos,
 			this.semiaxisHorizontal, this.semiaxisVertical,
 			NumberHelper.wrapToRangeZeroOne
 			(
-				this.rotationInTurns + drawableRotationInTurns
+				rotationInTurns
 			),
 			this.colorFill,
 			this.colorBorder
@@ -56,13 +67,28 @@ export class VisualEllipse implements Visual
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualEllipse
 	{
-		return this; // todo
+		return new VisualEllipse
+		(
+			this.semiaxisHorizontal,
+			this.semiaxisVertical,
+			this.rotationInTurns,
+			this.colorFill,
+			this.colorBorder,
+			this.shouldUseEntityOrientation
+		);
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualEllipse): VisualEllipse
 	{
+		this.semiaxisHorizontal = other.semiaxisHorizontal;
+		this.semiaxisVertical = other.semiaxisVertical;
+		this.rotationInTurns = other.rotationInTurns;
+		this.colorFill = other.colorFill;
+		this.colorBorder = other.colorBorder;
+		this.shouldUseEntityOrientation = other.shouldUseEntityOrientation;
+
 		return this; // todo
 	}
 

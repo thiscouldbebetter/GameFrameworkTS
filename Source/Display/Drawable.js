@@ -11,6 +11,9 @@ var ThisCouldBeBetter;
             static fromVisual(visual) {
                 return new Drawable(visual, null);
             }
+            static fromVisualAndIsVisible(visual, isVisible) {
+                return new Drawable(visual, isVisible);
+            }
             updateForTimerTick(uwpe) {
                 if (this.isVisible) {
                     this.visual.draw(uwpe, uwpe.universe.display);

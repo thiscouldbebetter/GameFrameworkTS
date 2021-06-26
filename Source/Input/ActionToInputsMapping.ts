@@ -20,7 +20,7 @@ export class ActionToInputsMapping
 			inactivateInputWhenActionPerformed;
 	}
 
-	static fromActionAndInputName
+	static fromActionNameAndInputName
 	(
 		actionName: string, inputName: string
 	): ActionToInputsMapping

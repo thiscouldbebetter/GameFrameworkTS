@@ -6,10 +6,12 @@ var ThisCouldBeBetter;
         class UserInputListener extends GameFramework.Entity {
             constructor() {
                 super(UserInputListener.name, [
-                    GameFramework.Actor.fromActivityDefnName(GameFramework.ActivityDefn.Instances().HandleUserInput.name)
+                    GameFramework.Actor.fromActivityDefnName(UserInputListener.activityDefnHandleUserInputBuild().name),
+                    GameFramework.Drawable.fromVisual(UserInputListener.visualBuild()),
+                    GameFramework.Selector.fromReticleDimension(20)
                 ]);
             }
-            static activityDefnHandleUserInput() {
+            static activityDefnHandleUserInputBuild() {
                 return new GameFramework.ActivityDefn("HandleUserInput", UserInputListener.activityDefnHandleUserInputPerform);
             }
             static activityDefnHandleUserInputPerform(uwpe) {
@@ -25,6 +27,18 @@ var ThisCouldBeBetter;
                     var action = actionsToPerform[i];
                     action.perform(uwpe);
                 }
+            }
+            static visualBuild() {
+                var returnValue = new GameFramework.VisualSelect(
+                // childrenByNames
+                new Map([
+                    ["None", new GameFramework.VisualNone()]
+                ]), 
+                // selectChildNames
+                (uwpe, d) => {
+                    return ["None"];
+                });
+                return returnValue;
             }
         }
         GameFramework.UserInputListener = UserInputListener;

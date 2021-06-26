@@ -83,7 +83,7 @@ class PlaceBuilderDemo_Items
 		);
 		var itemArmorVisual = new VisualGroup
 		([
-			new VisualPolygon(path, itemArmorColor, null)
+			VisualPolygon.fromPathAndColorFill(path, itemArmorColor)
 		]);
 
 		if (this.parent.visualsHaveText)
@@ -127,7 +127,7 @@ class PlaceBuilderDemo_Items
 		);
 		var itemArmorVisual = new VisualGroup
 		([
-			new VisualPolygon(path, itemArmorColor, null)
+			VisualPolygon.fromPathAndColorFill(path, itemArmorColor)
 		]);
 
 		if (this.parent.visualsHaveText)
@@ -173,9 +173,9 @@ class PlaceBuilderDemo_Items
 		(
 			Transform_Scale.fromScalar(this.entityDimension)
 		);
-		var itemArrowVisualHead = new VisualPolygon
+		var itemArrowVisualHead = VisualPolygon.fromPathAndColorFill
 		(
-			pathHead, itemArrowColor, null
+			pathHead, itemArrowColor
 		);
 
 		var pathTail = new Path
@@ -190,9 +190,9 @@ class PlaceBuilderDemo_Items
 		(
 			Transform_Scale.fromScalar(this.entityDimension)
 		);
-		var itemArrowVisualTail = new VisualPolygon
+		var itemArrowVisualTail = VisualPolygon.fromPathAndColorFill
 		(
-			pathTail, Color.byName("White"), null
+			pathTail, Color.byName("White")
 		);
 
 		var itemArrowVisual = new VisualGroup
@@ -391,7 +391,7 @@ class PlaceBuilderDemo_Items
 		var itemBowName = "Bow";
 		var itemBowColor = Color.byName("Brown");
 
-		var itemBowVisualString = new VisualPolygon
+		var itemBowVisualString = VisualPolygon.fromPathAndColorFill
 		(
 			new Path
 			([
@@ -400,8 +400,7 @@ class PlaceBuilderDemo_Items
 				Coords.fromXY(1, this.entityDimension),
 				Coords.fromXY(0, this.entityDimension),
 			]),
-			Color.byName("White"),
-			null
+			Color.byName("White")
 		);
 
 		var itemBowVisualBody = new VisualArc
@@ -559,7 +558,7 @@ class PlaceBuilderDemo_Items
 		var itemCrystalColor = Color.byName("Cyan");
 		var itemCrystalVisual = new VisualGroup
 		([
-			new VisualPolygon
+			VisualPolygon.fromPathAndColors
 			(
 				new Path
 				([
@@ -577,7 +576,7 @@ class PlaceBuilderDemo_Items
 				itemCrystalColor,
 				Color.byName("White")
 			),
-			new VisualPolygon
+			VisualPolygon.fromPathAndColorFill
 			(
 				new Path
 				([
@@ -592,8 +591,7 @@ class PlaceBuilderDemo_Items
 						Coords.ones().multiplyScalar(this.entityDimension / 4)
 					)
 				),
-				Color.byName("White"),
-				null
+				Color.byName("White")
 			)
 		]);
 
@@ -696,7 +694,7 @@ class PlaceBuilderDemo_Items
 				),
 				Coords.fromXY(.5, 1.75).multiplyScalar(this.entityDimensionHalf)
 			),
-			new VisualPolygon
+			new VisualPolygon.fromPathAndColors
 			(
 				new Path
 				([
@@ -871,7 +869,7 @@ class PlaceBuilderDemo_Items
 				Coords.fromXY(entityDimensionQuarter, 0)
 			),
 
-			new VisualPolygon
+			VisualPolygon.fromPathAndColorFill
 			(
 				new Path
 				([
@@ -882,8 +880,7 @@ class PlaceBuilderDemo_Items
 				(
 					Transform_Scale.fromScalar(this.entityDimensionHalf)
 				),
-				itemHeartColor,
-				null
+				itemHeartColor
 			)
 		]);
 
@@ -918,7 +915,7 @@ class PlaceBuilderDemo_Items
 		var itemIronColor = Color.byName("Gray");
 		var itemIronVisual = new VisualGroup
 		([
-			new VisualPolygon
+			VisualPolygon.fromPathAndColorFill
 			(
 				new Path
 				([
@@ -930,8 +927,7 @@ class PlaceBuilderDemo_Items
 				(
 					Transform_Scale.fromScalar(this.entityDimension)
 				),
-				itemIronColor,
-				null
+				itemIronColor
 			)
 		]);
 
@@ -1159,7 +1155,7 @@ class PlaceBuilderDemo_Items
 				Coords.fromXY(1, 1).multiplyScalar(this.entityDimension),
 				Color.byName("White")
 			),
-			new VisualPolygon
+			VisualPolygon.fromPathAndColorFill
 			(
 				new Path
 				([
@@ -1179,8 +1175,7 @@ class PlaceBuilderDemo_Items
 				(
 					Transform_Scale.fromScalar(this.entityDimension)
 				),
-				itemMedicineColor,
-				null
+				itemMedicineColor
 			)
 		]);
 
@@ -1284,7 +1279,7 @@ class PlaceBuilderDemo_Items
 				),
 				Coords.fromXY(0, 0 - this.entityDimension / 2)
 			),
-			new VisualPolygon
+			VisualPolygon.fromPathAndColorFill
 			(
 				new Path
 				([
@@ -1296,8 +1291,7 @@ class PlaceBuilderDemo_Items
 				(
 					Transform_Scale.fromScalar(this.entityDimension)
 				),
-				itemPickColor,
-				null
+				itemPickColor
 			)
 		]);
 
@@ -1335,7 +1329,7 @@ class PlaceBuilderDemo_Items
 				Coords.fromXY(1, 1).multiplyScalar(this.entityDimension),
 				Color.byName("White")
 			),
-			new VisualPolygon
+			VisualPolygon.fromPathAndColorFill
 			(
 				new Path
 				([
@@ -1355,8 +1349,7 @@ class PlaceBuilderDemo_Items
 				(
 					Transform_Scale.fromScalar(this.entityDimension)
 				),
-				itemPotionColor,
-				null
+				itemPotionColor
 			)
 		]);
 
@@ -1409,7 +1402,7 @@ class PlaceBuilderDemo_Items
 				),
 				Coords.fromXY(0, 0 + this.entityDimension / 2)
 			),
-			new VisualPolygon
+			VisualPolygon.fromPathAndColorFill
 			(
 				new Path
 				([
@@ -1422,8 +1415,7 @@ class PlaceBuilderDemo_Items
 				(
 					Transform_Scale.fromScalar(this.entityDimension)
 				),
-				itemShovelColor,
-				null
+				itemShovelColor
 			)
 		]);
 
@@ -1457,7 +1449,7 @@ class PlaceBuilderDemo_Items
 		var itemAccessoryColor = Color.byName("Orange");
 		var itemSpeedBootsVisual = new VisualGroup
 		([
-			new VisualPolygon
+			VisualPolygon.fromPathAndColorFill
 			(
 				new Path
 				([
@@ -1470,11 +1462,10 @@ class PlaceBuilderDemo_Items
 				(
 					Transform_Scale.fromScalar(this.entityDimension)
 				),
-				itemAccessoryColor,
-				null
+				itemAccessoryColor
 			),
 
-			new VisualPolygon
+			VisualPolygon.fromPathAndColorFill
 			(
 				new Path
 				([
@@ -1487,8 +1478,7 @@ class PlaceBuilderDemo_Items
 				(
 					Transform_Scale.fromScalar(this.entityDimension)
 				),
-				itemAccessoryColor,
-				null
+				itemAccessoryColor
 			)
 		]);
 
@@ -1564,11 +1554,10 @@ class PlaceBuilderDemo_Items
 			null // colorBorder
 		);
 
-		var itemSwordVisualHilt = new VisualPolygon //Located
+		var itemSwordVisualHilt = VisualPolygon.fromPathAndColorFill
 		(
 			itemSwordVisualHiltPath.transform(transform),
-			hiltColor,
-			null // colorBorder
+			hiltColor
 		);
 
 		var itemSwordVisualBody = new VisualGroup
@@ -1767,7 +1756,7 @@ class PlaceBuilderDemo_Items
 				),
 				Coords.fromXY(0, -1).multiplyScalar(this.entityDimensionHalf)
 			),
-			new VisualPolygon
+			VisualPolygon.fromPathAndColorFill
 			(
 				new Path
 				([
@@ -1782,8 +1771,7 @@ class PlaceBuilderDemo_Items
 						Coords.ones().multiplyScalar(this.entityDimension)
 					)
 				),
-				itemWeightColor,
-				null
+				itemWeightColor
 			)
 		]);
 

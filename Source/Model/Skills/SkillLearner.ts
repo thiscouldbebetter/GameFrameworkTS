@@ -12,13 +12,19 @@ export class SkillLearner implements EntityProperty
 
 	constructor
 	(
-		skillBeingLearnedName: string, learningAccumulated: number,
+		skillBeingLearnedName: string,
+		learningAccumulated: number,
 		skillsKnownNames: string[]
 	)
 	{
 		this.skillBeingLearnedName = skillBeingLearnedName;
 		this.learningAccumulated = learningAccumulated || 0;
 		this.skillsKnownNames = skillsKnownNames || [];
+	}
+
+	static default(): SkillLearner
+	{
+		return new SkillLearner(null, null, null);
 	}
 
 	isLearningInProgress(): boolean
@@ -48,7 +54,8 @@ export class SkillLearner implements EntityProperty
 
 	learningIncrement
 	(
-		skillsAll: Skill[], skillsByName: Map<string, Skill>, amountToIncrement: number
+		skillsAll: Skill[], skillsByName: Map<string, Skill>,
+		amountToIncrement: number
 	): any
 	{
 		var message = null;
@@ -86,7 +93,10 @@ export class SkillLearner implements EntityProperty
 		return message;
 	}
 
-	learningAccumulatedOverRequired(skillsAllByName: Map<string,Skill>): string
+	learningAccumulatedOverRequired
+	(
+		skillsAllByName: Map<string,Skill>
+	): string
 	{
 		return this.learningAccumulated + "/" + this.learningRequired(skillsAllByName);
 	}
@@ -105,7 +115,14 @@ export class SkillLearner implements EntityProperty
 
 	skillSelected(skillsAllByName: Map<string, Skill>): Skill
 	{
-		return (this.skillSelectedName == null ? null : skillsAllByName.get(this.skillSelectedName));
+		var returnValue =
+		(
+			this.skillSelectedName == null
+			? null
+			: skillsAllByName.get(this.skillSelectedName)
+		);
+
+		return returnValue;
 	}
 
 	skillsAvailableToLearn(skillsAll: Skill[]): Skill[]
@@ -390,7 +407,8 @@ export class SkillLearner implements EntityProperty
 		{
 			returnValue.children.splice
 			(
-				0, 0,
+				0, // indexToInsertAt
+				0, // elementsToDelete
 				new ControlLabel
 				(
 					"labelSkills",

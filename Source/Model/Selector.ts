@@ -5,29 +5,61 @@ namespace ThisCouldBeBetter.GameFramework
 export class Selector implements EntityProperty
 {
 	entitiesSelected: Entity[];
+	reticleDimension: number;
 
 	_control: ControlBase;
 	entityForReticle: Entity;
 
-	constructor()
+	constructor(reticleDimension: number)
 	{
+		this.reticleDimension = reticleDimension;
+
 		this.entitiesSelected = new Array<Entity>();
 
-		var visualReticle = new VisualRectangle
+		var visualReticle = new VisualGroup
 		(
-			Coords.fromXY(20, 20),
-			null, // colorFill
-			Color.byName("White"),
-			true // isCentered
+			[
+				new VisualCircle
+				(
+					this.reticleDimension / 2, // radius
+					null, // colorFill
+					Color.Instances().White, // colorBorder
+					1 // borderWidth
+				),
+				// todo - Crosshairs.
+			]
 		);
 		this.entityForReticle = new Entity
 		(
 			"Reticle",
 			[
-				Locatable.create(),
-				new Drawable(visualReticle, false), // isVisible
+				Drawable.fromVisualAndIsVisible(visualReticle, false),
+				Locatable.create()
 			]
 		);
+	}
+
+	static fromReticleDimension(reticleDimension: number): Selector
+	{
+		return new Selector(reticleDimension);
+	}
+
+	static actionEntityAtMouseClickPosSelect(): Action
+	{
+		return new Action
+		(
+			"Recording Start/Stop",
+			Selector.actionEntityAtMouseClickPosSelectPerform
+		)
+	}
+
+	static actionEntityAtMouseClickPosSelectPerform
+	(
+		uwpe: UniverseWorldPlaceEntities
+	): void
+	{
+		var selector = uwpe.entity.selector();
+		selector.entityAtMouseClickPosSelect(uwpe);
 	}
 
 	entitiesDeselectAll(): void
@@ -38,6 +70,68 @@ export class Selector implements EntityProperty
 	entitySelect(entityToSelect: Entity): void
 	{
 		this.entitiesSelected.push(entityToSelect);
+	}
+
+	entityAtMouseClickPosSelect
+	(
+		uwpe: UniverseWorldPlaceEntities
+	): Entity 
+	{
+		var universe = uwpe.universe;
+		var place = uwpe.place;
+
+		var inputHelper = universe.inputHelper;
+		var mousePosRelativeToCameraView = inputHelper.mouseClickPos;
+
+		var mousePosAbsolute = mousePosRelativeToCameraView.clone();
+
+		var cameraEntity = place.camera();
+
+		if (cameraEntity != null)
+		{
+			var camera = cameraEntity.camera();
+
+			mousePosAbsolute.divide
+			(
+				universe.display.scaleFactor()
+			).add
+			(
+				camera.loc.pos
+			).subtract
+			(
+				camera.viewSizeHalf
+			).clearZ();
+		}
+
+		var entitiesInPlace = place.entities;
+		var range = this.reticleDimension / 2;
+		var entityToSelect = entitiesInPlace.filter
+		(
+			x =>
+			{
+				var locatable = x.locatable();
+				var entityNotAlreadySelectedInRange =
+				(
+					this.entitiesSelected.indexOf(x) == -1
+					&& locatable != null
+					&& locatable.distanceFromPos(mousePosAbsolute) < range
+				);
+				return entityNotAlreadySelectedInRange;
+			}
+		).sort
+		(
+			(a: Entity, b: Entity) =>
+				a.locatable().distanceFromPos(mousePosAbsolute)
+				- b.locatable().distanceFromPos(mousePosAbsolute)
+		)[0];
+
+		this.entitiesDeselectAll();
+		if (entityToSelect != null)
+		{
+			this.entitySelect(entityToSelect);
+		}
+
+		return entityToSelect;
 	}
 
 	// Clonable.
@@ -59,7 +153,7 @@ export class Selector implements EntityProperty
 		var fontHeightInPixels = 12;
 		var margin = fontHeightInPixels / 2;
 
-		var labelSize = new Coords(size.x, fontHeightInPixels, 0);
+		var labelSize = Coords.fromXY(size.x, fontHeightInPixels);
 
 		var selectionAsContainer = new ControlContainer
 		(
@@ -87,7 +181,11 @@ export class Selector implements EntityProperty
 					(
 						this,
 						(c: Selector) =>
-							(c.entitiesSelected.length == 0 ? "-" : c.entitiesSelected[0].name)
+							(
+								c.entitiesSelected.length == 0
+								? "-"
+								: c.entitiesSelected[0].name
+							)
 					),
 					fontHeightInPixels
 				)

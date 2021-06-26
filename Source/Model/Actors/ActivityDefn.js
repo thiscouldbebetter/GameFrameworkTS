@@ -24,7 +24,6 @@ var ThisCouldBeBetter;
                 this.DoNothing = new ActivityDefn("DoNothing", 
                 // perform
                 (uwpe) => { });
-                this.HandleUserInput = GameFramework.UserInputListener.activityDefnHandleUserInput();
                 this.Simultaneous = new ActivityDefn("Simultaneous", 
                 // perform
                 (uwpe) => {
@@ -41,7 +40,6 @@ var ThisCouldBeBetter;
                 this._All =
                     [
                         this.DoNothing,
-                        this.HandleUserInput,
                         this.Simultaneous
                     ];
                 this._AllByName = GameFramework.ArrayHelper.addLookupsByName(this._All);

@@ -10,7 +10,7 @@ var ThisCouldBeBetter;
                 this.inactivateInputWhenActionPerformed =
                     inactivateInputWhenActionPerformed;
             }
-            static fromActionAndInputName(actionName, inputName) {
+            static fromActionNameAndInputName(actionName, inputName) {
                 return new ActionToInputsMapping(actionName, [inputName], false);
             }
             action(universe) {

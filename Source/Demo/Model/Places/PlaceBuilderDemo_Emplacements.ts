@@ -334,7 +334,7 @@ class PlaceBuilderDemo_Emplacements
 
 		var visual = new VisualGroup
 		([
-			new VisualPolygon
+			VisualPolygon.fromPathAndColorFill
 			(
 				new Path
 				([
@@ -346,8 +346,7 @@ class PlaceBuilderDemo_Emplacements
 				(
 					Transform_Scale.fromScalar(entityDimension)
 				),
-				exitColor,
-				null
+				exitColor
 			),
 			new VisualOffset
 			(
@@ -408,7 +407,7 @@ class PlaceBuilderDemo_Emplacements
 		var itemHoleColor = Color.byName("Brown");
 		var itemHoleVisual = new VisualGroup
 		([
-			new VisualPolygon
+			VisualPolygon.fromPathAndColorFill
 			(
 				new Path
 				([
@@ -420,8 +419,7 @@ class PlaceBuilderDemo_Emplacements
 				(
 					Transform_Scale.fromScalar(entityDimension)
 				),
-				itemHoleColor,
-				null
+				itemHoleColor
 			)
 		]);
 
@@ -738,7 +736,7 @@ class PlaceBuilderDemo_Emplacements
 
 		var visual = new VisualGroup
 		([
-			new VisualPolygon
+			VisualPolygon.fromPathAndColorFill
 			(
 				new Path
 				([
@@ -751,8 +749,7 @@ class PlaceBuilderDemo_Emplacements
 				(
 					Transform_Scale.fromScalar(entityDimension)
 				),
-				Color.byName(baseColor),
-				null
+				Color.byName(baseColor)
 			),
 			new VisualOffset
 			(
@@ -804,7 +801,7 @@ class PlaceBuilderDemo_Emplacements
 		([
 			new VisualPolygon
 			(
-				new Path
+				Path.fromPathAndColorFill
 				([
 					new Coords(-1, 0, 0),
 					new Coords(-1, -0.1, 0),
@@ -818,8 +815,7 @@ class PlaceBuilderDemo_Emplacements
 				(
 					Transform_Scale.fromScalar(entityDimension * 0.75)
 				),
-				color,
-				null
+				color
 			),
 		]);
 		if (this.parent.visualsHaveText)
