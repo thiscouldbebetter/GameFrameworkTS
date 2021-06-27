@@ -18,7 +18,7 @@ class PlaceStub extends Place {
         var actionToInputsMappings = [
             new ActionToInputsMapping(actionDisplayRecorderStartStop.name, ["~"], true // inactivate
             ),
-            ActionToInputsMapping.fromActionAndInputName(actionShowMenu.name, inputNames.Escape)
+            ActionToInputsMapping.fromActionNameAndInputName(actionShowMenu.name, inputNames.Escape)
         ];
         var entityPropertyNamesToProcess = [
             Actor.name,
