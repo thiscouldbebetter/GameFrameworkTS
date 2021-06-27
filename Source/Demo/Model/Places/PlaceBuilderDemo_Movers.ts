@@ -1002,7 +1002,7 @@ class PlaceBuilderDemo_Movers
 			(uwpe: UniverseWorldPlaceEntities) =>
 			{
 				var phased = uwpe.entity.phased();
-				var phase = phased.phaseCurrent(uwpe.world);
+				var phase = phased.phaseCurrent();
 				return [ phase.name ];
 			}
 		);
@@ -1109,30 +1109,31 @@ class PlaceBuilderDemo_Movers
 
 		var grazerPhased = new Phased
 		(
-			0, // tickBorn
+			0, // phaseCurrentIndex
+			0, // ticksOnPhaseCurrent
 			[
 				new Phase
 				(
 					"Juvenile",
-					0,
+					500, // durationInTicks
 					(uwpe: UniverseWorldPlaceEntities) => {}
 				),
 				new Phase
 				(
 					"Adult",
-					500,
+					2500, // durationInTicks
 					(uwpe: UniverseWorldPlaceEntities) => {}
 				),
 				new Phase
 				(
 					"Elder",
-					3000,
+					1000, // durationInTicks
 					(uwpe: UniverseWorldPlaceEntities) => {}
 				),
 				new Phase
 				(
 					"Dead",
-					4000,
+					301, // durationInTicks
 					(uwpe: UniverseWorldPlaceEntities) =>
 					{
 						var p = uwpe.place;

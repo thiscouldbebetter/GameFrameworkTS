@@ -103,9 +103,21 @@ export class Display3D implements Display
 		return this;
 	}
 
-	drawCrosshairs(center: Coords, radius: number, color: Color): void
+	drawCrosshairs
+	(
+		center: Coords,
+		numberOfLines: number,
+		radiusOuter: number,
+		radiusInner: number,
+		color: Color,
+		lineThickness: number
+	): void
 	{
-		this._display2DOverlay.drawCrosshairs(center, radius, color);
+		this._display2DOverlay.drawCrosshairs
+		(
+			center, numberOfLines, radiusOuter, radiusInner, color,
+			lineThickness
+		);
 	}
 
 	drawEllipse

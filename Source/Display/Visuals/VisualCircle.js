@@ -13,6 +13,9 @@ var ThisCouldBeBetter;
             static fromRadiusAndColorFill(radius, colorFill) {
                 return new VisualCircle(radius, colorFill, null, null);
             }
+            static fromRadiusAndColors(radius, colorFill, colorBorder) {
+                return new VisualCircle(radius, colorFill, colorBorder, null);
+            }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
                 display.drawCircle(entity.locatable().loc.pos, this.radius, this.colorFill, this.colorBorder, this.borderThickness);

@@ -44,6 +44,14 @@ var ThisCouldBeBetter;
             updateForTimerTick(uwpe) {
                 this.constrain(uwpe);
             }
+            // Clonable.
+            clone() {
+                return new Constrainable(GameFramework.ArrayHelper.clone(this.constraints));
+            }
+            overwriteWith(other) {
+                GameFramework.ArrayHelper.overwriteWith(this.constraints, other.constraints);
+                return this;
+            }
         }
         GameFramework.Constrainable = Constrainable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

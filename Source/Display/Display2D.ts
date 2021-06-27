@@ -219,16 +219,44 @@ export class Display2D implements Display
 		}
 	}
 
-	drawCrosshairs(center: Coords, radius: number, color: Color): void
+	drawCrosshairs
+	(
+		center: Coords,
+		numberOfLines: number,
+		radiusOuter: number,
+		radiusInner: number,
+		color: Color,
+		lineThickness: number
+	): void
 	{
-		var drawPos = this._drawPos.overwriteWith(center);
-		this.graphics.beginPath();
-		this.graphics.strokeStyle = Color.systemColorGet(color);
-		this.graphics.moveTo(drawPos.x - radius, drawPos.y);
-		this.graphics.lineTo(drawPos.x + radius, drawPos.y);
-		this.graphics.moveTo(drawPos.x, drawPos.y - radius);
-		this.graphics.lineTo(drawPos.x, drawPos.y + radius);
-		this.graphics.stroke();
+		var drawPos = this._drawPos;
+
+		var g = this.graphics;
+
+		g.beginPath();
+		g.strokeStyle = Color.systemColorGet(color);
+		g.lineWidth = lineThickness;
+
+		var polarForLine = Polar.default();
+		var offset = Coords.create();
+
+		for (var i = 0; i < numberOfLines; i++)
+		{
+			polarForLine.azimuthInTurns = NumberHelper.wrapToRangeMax
+			(
+				.75 + i / numberOfLines, 1
+			);
+
+			polarForLine.radius = radiusInner;
+			drawPos.overwriteWith(center).add(polarForLine.toCoords(offset));
+			g.moveTo(drawPos.x, drawPos.y);
+
+			polarForLine.radius = radiusOuter;
+			drawPos.overwriteWith(center).add(polarForLine.toCoords(offset));
+			g.lineTo(drawPos.x, drawPos.y);
+		}
+
+		g.stroke();
 	}
 
 	drawEllipse

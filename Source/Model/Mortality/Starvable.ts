@@ -18,10 +18,15 @@ export class Starvable implements EntityProperty
 	)
 	{
 		this.satietyMax = satietyMax;
-		this.satietyLostPerTick = satietyLostPerTick;
+		this.satietyLostPerTick = satietyLostPerTick || 1;
 		this._starve = starve;
 
 		this.satiety = this.satietyMax;
+	}
+
+	static fromSatietyMax(satietyMax: number): Starvable
+	{
+		return new Starvable(satietyMax, null, null);
 	}
 
 	starve(uwpe: UniverseWorldPlaceEntities): void
@@ -68,6 +73,10 @@ export class Starvable implements EntityProperty
 		else
 		{
 			this.satiety -= this.satietyLostPerTick;
+			if (this.satiety < 0)
+			{
+				this.satiety = 0;
+			}
 		}
 	}
 

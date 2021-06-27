@@ -147,6 +147,12 @@ export class Locatable implements EntityProperty
 		return new Locatable(this.loc.clone());
 	}
 
+	overwriteWith(other: Locatable): Locatable
+	{
+		this.loc.overwriteWith(other.loc);
+		return this;
+	}
+
 	// EntityProperty.
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}

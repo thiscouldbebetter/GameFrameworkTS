@@ -4,49 +4,66 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Selector implements EntityProperty
 {
-	reticleDimension: number;
+	cursorDimension: number;
 	_entitySelect: (uwpe: UniverseWorldPlaceEntities) => void;
 	_entityDeselect: (uwpe: UniverseWorldPlaceEntities) => void;
 
 	entitiesSelected: Entity[];
 
 	_control: ControlBase;
-	entityForReticle: Entity;
+	entityForCursor: Entity;
+	entityForHalo: Entity;
 
 	constructor
 	(
-		reticleDimension: number,
+		cursorDimension: number,
 		entitySelect: (uwpe: UniverseWorldPlaceEntities) => void,
 		entityDeselect: (uwpe: UniverseWorldPlaceEntities) => void
 	)
 	{
-		this.reticleDimension = reticleDimension;
+		this.cursorDimension = cursorDimension;
 		this._entitySelect = entitySelect;
 		this._entityDeselect = entityDeselect;
 
 		this.entitiesSelected = new Array<Entity>();
 
-		var visualReticle = new VisualGroup
+		var cursorRadius = this.cursorDimension / 2;
+		var visualCursor = new VisualGroup
 		(
 			[
 				new VisualCircle
 				(
-					this.reticleDimension / 2, // radius
+					cursorRadius, // radius
 					null, // colorFill
 					Color.Instances().White, // colorBorder
 					1 // borderWidth
 				),
-				// todo - Crosshairs.
+				VisualCrosshairs.fromRadiiOuterAndInner
+				(
+					cursorRadius, cursorRadius / 2
+				)
 			]
 		);
-		this.entityForReticle = new Entity
+
+		this.entityForCursor = new Entity
 		(
-			"Reticle",
+			"Cursor",
 			[
-				Drawable.fromVisualAndIsVisible(visualReticle, false),
+				Drawable.fromVisualAndIsVisible(visualCursor, false),
 				Locatable.create()
 			]
 		);
+
+		var visualHalo = visualCursor;
+		this.entityForHalo = new Entity
+		(
+			"Halo",
+			[
+				Drawable.fromVisualAndIsVisible(visualHalo, false),
+				Locatable.create()
+			]
+		);
+
 	}
 
 	static default(): Selector
@@ -54,9 +71,9 @@ export class Selector implements EntityProperty
 		return new Selector(20, null, null);
 	}
 
-	static fromReticleDimension(reticleDimension: number): Selector
+	static fromCursorDimension(cursorDimension: number): Selector
 	{
-		return new Selector(reticleDimension, null, null);
+		return new Selector(cursorDimension, null, null);
 	}
 
 	static actionEntityAtMouseClickPosSelect(): Action
@@ -77,9 +94,12 @@ export class Selector implements EntityProperty
 		selector.entityAtMouseClickPosSelect(uwpe);
 	}
 
-	entitiesDeselectAll(): void
+	entitiesDeselectAll(uwpe: UniverseWorldPlaceEntities): void
 	{
-		this.entitiesSelected.length = 0;
+		this.entitiesSelected.forEach
+		(
+			(x: Entity) => this.entityDeselect(uwpe.entity2Set(x) )
+		);
 	}
 
 	entityDeselect(uwpe: UniverseWorldPlaceEntities): void
@@ -121,34 +141,12 @@ export class Selector implements EntityProperty
 		uwpe: UniverseWorldPlaceEntities
 	): Entity 
 	{
-		var universe = uwpe.universe;
 		var place = uwpe.place;
 
-		var inputHelper = universe.inputHelper;
-		var mousePosRelativeToCameraView = inputHelper.mouseClickPos;
-
-		var mousePosAbsolute = mousePosRelativeToCameraView.clone();
-
-		var cameraEntity = place.camera();
-
-		if (cameraEntity != null)
-		{
-			var camera = cameraEntity.camera();
-
-			mousePosAbsolute.divide
-			(
-				universe.display.scaleFactor()
-			).add
-			(
-				camera.loc.pos
-			).subtract
-			(
-				camera.viewSizeHalf
-			).clearZ();
-		}
+		var mousePosAbsolute = this.mouseClickPosAbsoluteGet(uwpe);
 
 		var entitiesInPlace = place.entities;
-		var range = this.reticleDimension / 2;
+		var range = this.cursorDimension / 2;
 		var entityToSelect = entitiesInPlace.filter
 		(
 			x =>
@@ -169,7 +167,7 @@ export class Selector implements EntityProperty
 				- b.locatable().distanceFromPos(mousePosAbsolute)
 		)[0];
 
-		this.entitiesDeselectAll();
+		this.entitiesDeselectAll(uwpe);
 		if (entityToSelect != null)
 		{
 			uwpe.entity2 = entityToSelect;
@@ -179,19 +177,66 @@ export class Selector implements EntityProperty
 		return entityToSelect;
 	}
 
+	mouseClickPosAbsoluteGet(uwpe: UniverseWorldPlaceEntities): Coords
+	{
+		return this.mousePosConvertToAbsolute
+		(
+			uwpe,
+			uwpe.universe.inputHelper.mouseClickPos
+		);
+	}
+
+	mouseMovePosAbsoluteGet(uwpe: UniverseWorldPlaceEntities): Coords
+	{
+		return this.mousePosConvertToAbsolute
+		(
+			uwpe,
+			uwpe.universe.inputHelper.mouseMovePos
+		);
+	}
+
+	mousePosConvertToAbsolute
+	(
+		uwpe: UniverseWorldPlaceEntities,
+		mousePosRelativeToCameraView: Coords
+	): Coords
+	{
+		var mousePosAbsolute = mousePosRelativeToCameraView.clone();
+
+		var cameraEntity = uwpe.place.camera();
+
+		if (cameraEntity != null)
+		{
+			var camera = cameraEntity.camera();
+
+			mousePosAbsolute.divide
+			(
+				uwpe.universe.display.scaleFactor()
+			).add
+			(
+				camera.loc.pos
+			).subtract
+			(
+				camera.viewSizeHalf
+			).clearZ();
+		}
+
+		return mousePosAbsolute;
+	} 
+
 	// Clonable.
 
 	clone(): Selector
 	{
 		return new Selector
 		(
-			this.reticleDimension, this._entitySelect, this._entityDeselect
+			this.cursorDimension, this._entitySelect, this._entityDeselect
 		);
 	}
 
 	overwriteWith(other: Selector): Selector
 	{
-		this.reticleDimension = other.reticleDimension;
+		this.cursorDimension = other.cursorDimension;
 		this._entitySelect = other._entitySelect;
 		return this;
 	}
@@ -208,7 +253,7 @@ export class Selector implements EntityProperty
 		var selectionAsContainer = new ControlContainer
 		(
 			"visualPlayerSelection",
-			pos, // pos
+			pos,
 			size,
 			[
 				new ControlLabel
@@ -258,21 +303,30 @@ export class Selector implements EntityProperty
 	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var place = uwpe.place;
-		place.entityToSpawnAdd(this.entityForReticle);
+		place.entityToSpawnAdd(this.entityForCursor);
 	}
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
+		var cursorPos = this.entityForCursor.locatable().loc.pos;
+		var mousePosAbsolute = this.mouseMovePosAbsoluteGet(uwpe);
+		cursorPos.overwriteWith(mousePosAbsolute);
+
 		var entitySelected = this.entitiesSelected[0];
 		var isEntitySelected = (entitySelected != null);
-		this._control._isVisible = isEntitySelected;
 		if (isEntitySelected)
 		{
-			var reticleLoc = this.entityForReticle.locatable().loc;
-			reticleLoc.overwriteWith(entitySelected.locatable().loc);
-			reticleLoc.pos.z--;
-			var uwpeReticle = uwpe.clone().entitySet(this.entityForReticle);
-			this.entityForReticle.drawable().updateForTimerTick(uwpeReticle);
+			var haloLoc = this.entityForHalo.locatable().loc;
+			var entitySelectedLoc = entitySelected.locatable().loc
+			haloLoc.overwriteWith(entitySelectedLoc);
+			haloLoc.pos.z--;
+			var uwpeHalo = uwpe.clone().entitySet(this.entityForHalo);
+			this.entityForHalo.drawable().updateForTimerTick(uwpeHalo);
+		}
+
+		if (this._control != null)
+		{
+			this._control._isVisible = isEntitySelected;
 		}
 	}
 }

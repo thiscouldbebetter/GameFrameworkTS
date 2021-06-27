@@ -30,6 +30,13 @@ export class Activity
 		);
 	}
 
+	clear(): Activity
+	{
+		this.defnName = ActivityDefn.Instances().DoNothing.name;
+		this.targetClear();
+		return this;
+	}
+
 	defn(world: World): ActivityDefn
 	{
 		return world.defn.activityDefnByName(this.defnName);
@@ -82,6 +89,19 @@ export class Activity
 	targetSetByName(name: string, value: any): Activity
 	{
 		this.targetsByName.set(name, value);
+		return this;
+	}
+
+	// Clonable.
+
+	clone(): Activity
+	{
+		return Activity.fromDefnName(this.defnName);
+	}
+
+	overwriteWith(other: Activity): Activity
+	{
+		this.defnName = other.defnName;
 		return this;
 	}
 }

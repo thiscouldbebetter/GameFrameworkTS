@@ -8,7 +8,7 @@ var ThisCouldBeBetter;
                 super(UserInputListener.name, [
                     GameFramework.Actor.fromActivityDefnName(UserInputListener.activityDefnHandleUserInputBuild().name),
                     GameFramework.Drawable.fromVisual(UserInputListener.visualBuild()),
-                    GameFramework.Selector.fromReticleDimension(20)
+                    GameFramework.Selector.fromCursorDimension(20)
                 ]);
             }
             static activityDefnHandleUserInputBuild() {

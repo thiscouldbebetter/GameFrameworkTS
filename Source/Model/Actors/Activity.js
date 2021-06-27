@@ -16,6 +16,11 @@ var ThisCouldBeBetter;
                     [defnName, target]
                 ]));
             }
+            clear() {
+                this.defnName = GameFramework.ActivityDefn.Instances().DoNothing.name;
+                this.targetClear();
+                return this;
+            }
             defn(world) {
                 return world.defn.activityDefnByName(this.defnName);
             }
@@ -50,6 +55,14 @@ var ThisCouldBeBetter;
             }
             targetSetByName(name, value) {
                 this.targetsByName.set(name, value);
+                return this;
+            }
+            // Clonable.
+            clone() {
+                return Activity.fromDefnName(this.defnName);
+            }
+            overwriteWith(other) {
+                this.defnName = other.defnName;
                 return this;
             }
         }

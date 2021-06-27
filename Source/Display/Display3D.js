@@ -37,8 +37,8 @@ var ThisCouldBeBetter;
             displayToUse() {
                 return this;
             }
-            drawCrosshairs(center, radius, color) {
-                this._display2DOverlay.drawCrosshairs(center, radius, color);
+            drawCrosshairs(center, numberOfLines, radiusOuter, radiusInner, color, lineThickness) {
+                this._display2DOverlay.drawCrosshairs(center, numberOfLines, radiusOuter, radiusInner, color, lineThickness);
             }
             drawEllipse(center, semimajorAxis, semiminorAxis, rotationInTurns, colorFill, colorBorder) {
                 this._display2DOverlay.drawEllipse(center, semimajorAxis, semiminorAxis, rotationInTurns, colorFill, colorBorder);

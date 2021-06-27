@@ -22,6 +22,14 @@ export class VisualCircle implements Visual
 		return new VisualCircle(radius, colorFill, null, null);
 	}
 
+	static fromRadiusAndColors
+	(
+		radius: number, colorFill: Color, colorBorder: Color
+	): VisualCircle
+	{
+		return new VisualCircle(radius, colorFill, colorBorder, null);
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var entity = uwpe.entity;

@@ -12,6 +12,9 @@ var ThisCouldBeBetter;
             static create() {
                 return new Polar(0, 0, 0);
             }
+            static default() {
+                return new Polar(0, 1, 0);
+            }
             // instance methods
             addToAzimuthInTurns(turnsToAdd) {
                 this.azimuthInTurns += turnsToAdd;

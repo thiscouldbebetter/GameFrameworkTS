@@ -16,7 +16,10 @@ export class Actor implements EntityProperty
 
 	static create(): Actor
 	{
-		return new Actor(null);
+		return Actor.fromActivityDefnName
+		(
+			ActivityDefn.Instances().DoNothing.name
+		);
 	}
 
 	static fromActivityDefnName(activityDefnName: string): Actor
@@ -34,6 +37,19 @@ export class Actor implements EntityProperty
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		this.activity.perform(uwpe);
+	}
+
+	// Clonable.
+
+	clone(): Actor
+	{
+		return new Actor(this.activity.clone());
+	}
+
+	overwriteWith(other: Actor): Actor
+	{
+		this.activity.overwriteWith(other.activity);
+		return this;
 	}
 }
 

@@ -94,15 +94,24 @@ var ThisCouldBeBetter;
                     this.graphics.stroke();
                 }
             }
-            drawCrosshairs(center, radius, color) {
-                var drawPos = this._drawPos.overwriteWith(center);
-                this.graphics.beginPath();
-                this.graphics.strokeStyle = GameFramework.Color.systemColorGet(color);
-                this.graphics.moveTo(drawPos.x - radius, drawPos.y);
-                this.graphics.lineTo(drawPos.x + radius, drawPos.y);
-                this.graphics.moveTo(drawPos.x, drawPos.y - radius);
-                this.graphics.lineTo(drawPos.x, drawPos.y + radius);
-                this.graphics.stroke();
+            drawCrosshairs(center, numberOfLines, radiusOuter, radiusInner, color, lineThickness) {
+                var drawPos = this._drawPos;
+                var g = this.graphics;
+                g.beginPath();
+                g.strokeStyle = GameFramework.Color.systemColorGet(color);
+                g.lineWidth = lineThickness;
+                var polarForLine = GameFramework.Polar.default();
+                var offset = GameFramework.Coords.create();
+                for (var i = 0; i < numberOfLines; i++) {
+                    polarForLine.azimuthInTurns = GameFramework.NumberHelper.wrapToRangeMax(.75 + i / numberOfLines, 1);
+                    polarForLine.radius = radiusInner;
+                    drawPos.overwriteWith(center).add(polarForLine.toCoords(offset));
+                    g.moveTo(drawPos.x, drawPos.y);
+                    polarForLine.radius = radiusOuter;
+                    drawPos.overwriteWith(center).add(polarForLine.toCoords(offset));
+                    g.lineTo(drawPos.x, drawPos.y);
+                }
+                g.stroke();
             }
             drawEllipse(center, semimajorAxis, semiminorAxis, rotationInTurns, colorFill, colorBorder) {
                 this.graphics.save();

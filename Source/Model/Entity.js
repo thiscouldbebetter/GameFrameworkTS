@@ -84,7 +84,8 @@ var ThisCouldBeBetter;
                 for (var i = 0; i < this.properties.length; i++) {
                     var property = this.properties[i];
                     var propertyAsAny = property;
-                    var propertyCloned = (propertyAsAny.clone == null ? propertyAsAny : propertyAsAny.clone());
+                    var propertyCloned = (propertyAsAny.clone == null ?
+                        propertyAsAny : propertyAsAny.clone());
                     propertiesCloned.push(propertyCloned);
                 }
                 var returnValue = new Entity(nameCloned, propertiesCloned);

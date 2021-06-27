@@ -20,7 +20,7 @@ export class UserInputListener extends Entity
 					UserInputListener.visualBuild()
 				),
 
-				Selector.fromReticleDimension(20)
+				Selector.fromCursorDimension(20)
 			]
 		);
 	}

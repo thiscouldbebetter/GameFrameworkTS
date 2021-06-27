@@ -119,7 +119,11 @@ export class Entity //
 		{
 			var property = this.properties[i];
 			var propertyAsAny = property as any;
-			var propertyCloned = (propertyAsAny.clone == null ? propertyAsAny : propertyAsAny.clone()) as EntityProperty;
+			var propertyCloned =
+			(
+				propertyAsAny.clone == null ?
+				propertyAsAny : propertyAsAny.clone()
+			) as EntityProperty;
 			propertiesCloned.push(propertyCloned);
 		}
 		var returnValue = new Entity

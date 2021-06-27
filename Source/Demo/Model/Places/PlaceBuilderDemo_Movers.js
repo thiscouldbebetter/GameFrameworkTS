@@ -495,7 +495,7 @@ class PlaceBuilderDemo_Movers {
             ["Dead", grazerVisualDead] // todo
         ]), (uwpe) => {
             var phased = uwpe.entity.phased();
-            var phase = phased.phaseCurrent(uwpe.world);
+            var phase = phased.phaseCurrent();
             return [phase.name];
         });
         var grazerVisual = new VisualGroup([
@@ -550,12 +550,17 @@ class PlaceBuilderDemo_Movers {
             var entityDying = uwpe.entity;
             entityDying.locatable().entitySpawnWithDefnName(uwpe, "Meat");
         };
-        var grazerPhased = new Phased(0, // tickBorn
+        var grazerPhased = new Phased(0, // phaseCurrentIndex
+        0, // ticksOnPhaseCurrent
         [
-            new Phase("Juvenile", 0, (uwpe) => { }),
-            new Phase("Adult", 500, (uwpe) => { }),
-            new Phase("Elder", 3000, (uwpe) => { }),
-            new Phase("Dead", 4000, (uwpe) => {
+            new Phase("Juvenile", 500, // durationInTicks
+            (uwpe) => { }),
+            new Phase("Adult", 2500, // durationInTicks
+            (uwpe) => { }),
+            new Phase("Elder", 1000, // durationInTicks
+            (uwpe) => { }),
+            new Phase("Dead", 301, // durationInTicks
+            (uwpe) => {
                 var p = uwpe.place;
                 var e = uwpe.entity;
                 e.propertyRemoveForPlace(e.actor(), p);

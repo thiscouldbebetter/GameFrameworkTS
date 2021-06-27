@@ -34,8 +34,12 @@ var ThisCouldBeBetter;
                 this.entity2 = temp;
                 return this;
             }
-            entitySet(entity) {
-                this.entity = entity;
+            entitySet(value) {
+                this.entity = value;
+                return this;
+            }
+            entity2Set(value) {
+                this.entity2 = value;
                 return this;
             }
             fieldsSet(universe, world, place, entity, entity2) {

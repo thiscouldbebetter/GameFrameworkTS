@@ -74,6 +74,19 @@ export class Movable implements EntityProperty
 
 	clone(): Movable
 	{
+		return new Movable
+		(
+			this.accelerationPerTick,
+			this.speedMax,
+			this._accelerate
+		);
+	}
+
+	overwriteWith(other: Movable): Movable
+	{
+		this.accelerationPerTick = other.accelerationPerTick;
+		this.speedMax = other.speedMax;
+		this._accelerate = other._accelerate;
 		return this;
 	}
 

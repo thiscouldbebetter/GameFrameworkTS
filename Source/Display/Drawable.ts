@@ -10,7 +10,11 @@ export class Drawable implements EntityProperty
 	constructor(visual: Visual, isVisible: boolean)
 	{
 		this.visual = visual;
-		this.isVisible = isVisible || true;
+		this.isVisible = isVisible;
+		if (this.isVisible == null)
+		{
+			this.isVisible = true;
+		}
 	}
 
 	static fromVisual(visual: Visual): Drawable
@@ -36,6 +40,13 @@ export class Drawable implements EntityProperty
 	clone(): Drawable
 	{
 		return new Drawable(this.visual, this.isVisible);
+	}
+
+	overwriteWith(other: Drawable): Drawable
+	{
+		this.visual.overwriteWith(other.visual);
+		this.isVisible = other.isVisible;
+		return this;
 	}
 
 	// EntityProperty.

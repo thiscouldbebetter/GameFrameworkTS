@@ -20,6 +20,11 @@ export class Polar
 		return new Polar(0, 0, 0);
 	}
 
+	static default()
+	{
+		return new Polar(0, 1, 0);
+	}
+
 	// constants
 
 	static DegreesPerTurn = 360;

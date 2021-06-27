@@ -9,7 +9,7 @@ var ThisCouldBeBetter;
                 this.actions = [];
             }
             static create() {
-                return new Actor(null);
+                return Actor.fromActivityDefnName(GameFramework.ActivityDefn.Instances().DoNothing.name);
             }
             static fromActivityDefnName(activityDefnName) {
                 var activity = GameFramework.Activity.fromDefnName(activityDefnName);
@@ -21,6 +21,14 @@ var ThisCouldBeBetter;
             initialize(uwpe) { }
             updateForTimerTick(uwpe) {
                 this.activity.perform(uwpe);
+            }
+            // Clonable.
+            clone() {
+                return new Actor(this.activity.clone());
+            }
+            overwriteWith(other) {
+                this.activity.overwriteWith(other.activity);
+                return this;
             }
         }
         GameFramework.Actor = Actor;

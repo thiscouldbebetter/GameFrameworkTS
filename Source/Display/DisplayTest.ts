@@ -77,7 +77,15 @@ export class DisplayTest implements Display
 	): void
 	{}
 
-	drawCrosshairs(center: Coords, radius: number, color: Color): void
+	drawCrosshairs
+	(
+		center: Coords,
+		numberOfLines: number,
+		radiusOuter: number,
+		radiusInner: number,
+		color: Color,
+		lineThickness: number
+	): void
 	{}
 
 	drawEllipse

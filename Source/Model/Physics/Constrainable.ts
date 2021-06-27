@@ -71,6 +71,19 @@ export class Constrainable implements EntityProperty
 	{
 		this.constrain(uwpe);
 	}
+
+	// Clonable.
+
+	clone(): Constrainable
+	{
+		return new Constrainable(ArrayHelper.clone(this.constraints));
+	}
+
+	overwriteWith(other: Constrainable): Constrainable
+	{
+		ArrayHelper.overwriteWith(this.constraints, other.constraints);
+		return this;
+	}
 }
 
 }

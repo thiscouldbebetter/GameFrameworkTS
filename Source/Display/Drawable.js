@@ -6,7 +6,10 @@ var ThisCouldBeBetter;
         class Drawable {
             constructor(visual, isVisible) {
                 this.visual = visual;
-                this.isVisible = isVisible || true;
+                this.isVisible = isVisible;
+                if (this.isVisible == null) {
+                    this.isVisible = true;
+                }
             }
             static fromVisual(visual) {
                 return new Drawable(visual, null);
@@ -22,6 +25,11 @@ var ThisCouldBeBetter;
             // cloneable
             clone() {
                 return new Drawable(this.visual, this.isVisible);
+            }
+            overwriteWith(other) {
+                this.visual.overwriteWith(other.visual);
+                this.isVisible = other.isVisible;
+                return this;
             }
             // EntityProperty.
             finalize(uwpe) { }

@@ -6,9 +6,12 @@ var ThisCouldBeBetter;
         class Starvable {
             constructor(satietyMax, satietyLostPerTick, starve) {
                 this.satietyMax = satietyMax;
-                this.satietyLostPerTick = satietyLostPerTick;
+                this.satietyLostPerTick = satietyLostPerTick || 1;
                 this._starve = starve;
                 this.satiety = this.satietyMax;
+            }
+            static fromSatietyMax(satietyMax) {
+                return new Starvable(satietyMax, null, null);
             }
             starve(uwpe) {
                 if (this._starve != null) {
@@ -34,6 +37,9 @@ var ThisCouldBeBetter;
                 }
                 else {
                     this.satiety -= this.satietyLostPerTick;
+                    if (this.satiety < 0) {
+                        this.satiety = 0;
+                    }
                 }
             }
             // cloneable

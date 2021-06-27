@@ -84,6 +84,10 @@ var ThisCouldBeBetter;
             clone() {
                 return new Locatable(this.loc.clone());
             }
+            overwriteWith(other) {
+                this.loc.overwriteWith(other.loc);
+                return this;
+            }
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }

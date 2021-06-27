@@ -4,29 +4,35 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Selector {
-            constructor(reticleDimension, entitySelect, entityDeselect) {
-                this.reticleDimension = reticleDimension;
+            constructor(cursorDimension, entitySelect, entityDeselect) {
+                this.cursorDimension = cursorDimension;
                 this._entitySelect = entitySelect;
                 this._entityDeselect = entityDeselect;
                 this.entitiesSelected = new Array();
-                var visualReticle = new GameFramework.VisualGroup([
-                    new GameFramework.VisualCircle(this.reticleDimension / 2, // radius
+                var cursorRadius = this.cursorDimension / 2;
+                var visualCursor = new GameFramework.VisualGroup([
+                    new GameFramework.VisualCircle(cursorRadius, // radius
                     null, // colorFill
                     GameFramework.Color.Instances().White, // colorBorder
                     1 // borderWidth
                     ),
-                    // todo - Crosshairs.
+                    GameFramework.VisualCrosshairs.fromRadiiOuterAndInner(cursorRadius, cursorRadius / 2)
                 ]);
-                this.entityForReticle = new GameFramework.Entity("Reticle", [
-                    GameFramework.Drawable.fromVisualAndIsVisible(visualReticle, false),
+                this.entityForCursor = new GameFramework.Entity("Cursor", [
+                    GameFramework.Drawable.fromVisualAndIsVisible(visualCursor, false),
+                    GameFramework.Locatable.create()
+                ]);
+                var visualHalo = visualCursor;
+                this.entityForHalo = new GameFramework.Entity("Halo", [
+                    GameFramework.Drawable.fromVisualAndIsVisible(visualHalo, false),
                     GameFramework.Locatable.create()
                 ]);
             }
             static default() {
                 return new Selector(20, null, null);
             }
-            static fromReticleDimension(reticleDimension) {
-                return new Selector(reticleDimension, null, null);
+            static fromCursorDimension(cursorDimension) {
+                return new Selector(cursorDimension, null, null);
             }
             static actionEntityAtMouseClickPosSelect() {
                 return new GameFramework.Action("Recording Start/Stop", Selector.actionEntityAtMouseClickPosSelectPerform);
@@ -35,8 +41,8 @@ var ThisCouldBeBetter;
                 var selector = uwpe.entity.selector();
                 selector.entityAtMouseClickPosSelect(uwpe);
             }
-            entitiesDeselectAll() {
-                this.entitiesSelected.length = 0;
+            entitiesDeselectAll(uwpe) {
+                this.entitiesSelected.forEach((x) => this.entityDeselect(uwpe.entity2Set(x)));
             }
             entityDeselect(uwpe) {
                 var entityToDeselect = uwpe.entity2;
@@ -61,18 +67,10 @@ var ThisCouldBeBetter;
                 }
             }
             entityAtMouseClickPosSelect(uwpe) {
-                var universe = uwpe.universe;
                 var place = uwpe.place;
-                var inputHelper = universe.inputHelper;
-                var mousePosRelativeToCameraView = inputHelper.mouseClickPos;
-                var mousePosAbsolute = mousePosRelativeToCameraView.clone();
-                var cameraEntity = place.camera();
-                if (cameraEntity != null) {
-                    var camera = cameraEntity.camera();
-                    mousePosAbsolute.divide(universe.display.scaleFactor()).add(camera.loc.pos).subtract(camera.viewSizeHalf).clearZ();
-                }
+                var mousePosAbsolute = this.mouseClickPosAbsoluteGet(uwpe);
                 var entitiesInPlace = place.entities;
-                var range = this.reticleDimension / 2;
+                var range = this.cursorDimension / 2;
                 var entityToSelect = entitiesInPlace.filter(x => {
                     var locatable = x.locatable();
                     var entityNotAlreadySelectedInRange = (this.entitiesSelected.indexOf(x) == -1
@@ -81,19 +79,34 @@ var ThisCouldBeBetter;
                     return entityNotAlreadySelectedInRange;
                 }).sort((a, b) => a.locatable().distanceFromPos(mousePosAbsolute)
                     - b.locatable().distanceFromPos(mousePosAbsolute))[0];
-                this.entitiesDeselectAll();
+                this.entitiesDeselectAll(uwpe);
                 if (entityToSelect != null) {
                     uwpe.entity2 = entityToSelect;
                     this.entitySelect(uwpe);
                 }
                 return entityToSelect;
             }
+            mouseClickPosAbsoluteGet(uwpe) {
+                return this.mousePosConvertToAbsolute(uwpe, uwpe.universe.inputHelper.mouseClickPos);
+            }
+            mouseMovePosAbsoluteGet(uwpe) {
+                return this.mousePosConvertToAbsolute(uwpe, uwpe.universe.inputHelper.mouseMovePos);
+            }
+            mousePosConvertToAbsolute(uwpe, mousePosRelativeToCameraView) {
+                var mousePosAbsolute = mousePosRelativeToCameraView.clone();
+                var cameraEntity = uwpe.place.camera();
+                if (cameraEntity != null) {
+                    var camera = cameraEntity.camera();
+                    mousePosAbsolute.divide(uwpe.universe.display.scaleFactor()).add(camera.loc.pos).subtract(camera.viewSizeHalf).clearZ();
+                }
+                return mousePosAbsolute;
+            }
             // Clonable.
             clone() {
-                return new Selector(this.reticleDimension, this._entitySelect, this._entityDeselect);
+                return new Selector(this.cursorDimension, this._entitySelect, this._entityDeselect);
             }
             overwriteWith(other) {
-                this.reticleDimension = other.reticleDimension;
+                this.cursorDimension = other.cursorDimension;
                 this._entitySelect = other._entitySelect;
                 return this;
             }
@@ -102,8 +115,7 @@ var ThisCouldBeBetter;
                 var fontHeightInPixels = 12;
                 var margin = fontHeightInPixels / 2;
                 var labelSize = GameFramework.Coords.fromXY(size.x, fontHeightInPixels);
-                var selectionAsContainer = new GameFramework.ControlContainer("visualPlayerSelection", pos, // pos
-                size, [
+                var selectionAsContainer = new GameFramework.ControlContainer("visualPlayerSelection", pos, size, [
                     new GameFramework.ControlLabel("labelSelected", GameFramework.Coords.fromXY(1, 0).multiplyScalar(margin), // pos
                     labelSize, false, // isTextCentered
                     "Selected:", fontHeightInPixels),
@@ -121,18 +133,24 @@ var ThisCouldBeBetter;
             finalize(uwpe) { }
             initialize(uwpe) {
                 var place = uwpe.place;
-                place.entityToSpawnAdd(this.entityForReticle);
+                place.entityToSpawnAdd(this.entityForCursor);
             }
             updateForTimerTick(uwpe) {
+                var cursorPos = this.entityForCursor.locatable().loc.pos;
+                var mousePosAbsolute = this.mouseMovePosAbsoluteGet(uwpe);
+                cursorPos.overwriteWith(mousePosAbsolute);
                 var entitySelected = this.entitiesSelected[0];
                 var isEntitySelected = (entitySelected != null);
-                this._control._isVisible = isEntitySelected;
                 if (isEntitySelected) {
-                    var reticleLoc = this.entityForReticle.locatable().loc;
-                    reticleLoc.overwriteWith(entitySelected.locatable().loc);
-                    reticleLoc.pos.z--;
-                    var uwpeReticle = uwpe.clone().entitySet(this.entityForReticle);
-                    this.entityForReticle.drawable().updateForTimerTick(uwpeReticle);
+                    var haloLoc = this.entityForHalo.locatable().loc;
+                    var entitySelectedLoc = entitySelected.locatable().loc;
+                    haloLoc.overwriteWith(entitySelectedLoc);
+                    haloLoc.pos.z--;
+                    var uwpeHalo = uwpe.clone().entitySet(this.entityForHalo);
+                    this.entityForHalo.drawable().updateForTimerTick(uwpeHalo);
+                }
+                if (this._control != null) {
+                    this._control._isVisible = isEntitySelected;
                 }
             }
         }

@@ -31,7 +31,7 @@ var ThisCouldBeBetter;
             drawBackground(colorBack, colorBorder) { }
             drawCircle(center, radius, colorFill, colorBorder, borderThickness) { }
             drawCircleWithGradient(center, radius, gradientFill, colorBorder) { }
-            drawCrosshairs(center, radius, color) { }
+            drawCrosshairs(center, numberOfLines, radiusOuter, radiusInner, color, lineThickness) { }
             drawEllipse(center, semimajorAxis, semiminorAxis, rotationInTurns, colorFill, colorBorder) { }
             drawImage(imageToDraw, pos) { }
             drawImagePartial(imageToDraw, pos, regionToDrawAsBox) { }

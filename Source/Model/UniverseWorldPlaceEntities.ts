@@ -7,8 +7,8 @@ export class UniverseWorldPlaceEntities
 	universe: Universe;
 	world: World;
 	place: Place;
-	entity: Entity;
-	entity2: Entity;
+	entity: Entity; // Usually the entity acting.
+	entity2: Entity; // Usually the entity acted upon.
 
 	constructor
 	(
@@ -64,9 +64,15 @@ export class UniverseWorldPlaceEntities
 		return this;
 	}
 
-	entitySet(entity: Entity): UniverseWorldPlaceEntities
+	entitySet(value: Entity): UniverseWorldPlaceEntities
 	{
-		this.entity = entity;
+		this.entity = value;
+		return this;
+	}
+
+	entity2Set(value: Entity): UniverseWorldPlaceEntities
+	{
+		this.entity2 = value;
 		return this;
 	}
 
