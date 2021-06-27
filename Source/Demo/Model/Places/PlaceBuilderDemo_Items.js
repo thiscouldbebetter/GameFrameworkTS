@@ -60,7 +60,7 @@ class PlaceBuilderDemo_Items {
             Coords.fromXY(.5, 0),
         ]).transform(Transform_Scale.fromScalar(this.entityDimension));
         var itemArmorVisual = new VisualGroup([
-            new VisualPolygon(path, itemArmorColor, null)
+            VisualPolygon.fromPathAndColorFill(path, itemArmorColor)
         ]);
         if (this.parent.visualsHaveText) {
             itemArmorVisual.children.push(new VisualOffset(VisualText.fromTextAndColor(itemArmorName, itemArmorColor), Coords.fromXY(0, 0 - this.entityDimension)));
@@ -79,7 +79,7 @@ class PlaceBuilderDemo_Items {
             Coords.fromXY(.5, 0),
         ]).transform(Transform_Scale.fromScalar(this.entityDimension));
         var itemArmorVisual = new VisualGroup([
-            new VisualPolygon(path, itemArmorColor, null)
+            VisualPolygon.fromPathAndColorFill(path, itemArmorColor)
         ]);
         if (this.parent.visualsHaveText) {
             itemArmorVisual.children.push(new VisualOffset(VisualText.fromTextAndColor(itemArmorName, itemArmorColor), Coords.fromXY(0, 0 - this.entityDimension)));
@@ -97,7 +97,7 @@ class PlaceBuilderDemo_Items {
             Coords.fromXY(0.5, .25),
             Coords.fromXY(0.5, -.25),
         ]).transform(Transform_Scale.fromScalar(this.entityDimension));
-        var itemArrowVisualHead = new VisualPolygon(pathHead, itemArrowColor, null);
+        var itemArrowVisualHead = VisualPolygon.fromPathAndColorFill(pathHead, itemArrowColor);
         var pathTail = new Path([
             Coords.create(),
             Coords.fromXY(-.5, .25),
@@ -106,7 +106,7 @@ class PlaceBuilderDemo_Items {
             Coords.fromXY(-.75, -.25),
             Coords.fromXY(-.5, -.25),
         ]).transform(Transform_Scale.fromScalar(this.entityDimension));
-        var itemArrowVisualTail = new VisualPolygon(pathTail, Color.byName("White"), null);
+        var itemArrowVisualTail = VisualPolygon.fromPathAndColorFill(pathTail, Color.byName("White"));
         var itemArrowVisual = new VisualGroup([
             itemArrowVisualTail,
             itemArrowVisualShaft,
@@ -183,12 +183,12 @@ class PlaceBuilderDemo_Items {
     bow() {
         var itemBowName = "Bow";
         var itemBowColor = Color.byName("Brown");
-        var itemBowVisualString = new VisualPolygon(new Path([
+        var itemBowVisualString = VisualPolygon.fromPathAndColorFill(new Path([
             Coords.fromXY(0, -this.entityDimension),
             Coords.fromXY(1, -this.entityDimension),
             Coords.fromXY(1, this.entityDimension),
             Coords.fromXY(0, this.entityDimension),
-        ]), Color.byName("White"), null);
+        ]), Color.byName("White"));
         var itemBowVisualBody = new VisualArc(this.entityDimension, // radiusOuter
         this.entityDimension - 3, // radiusInner
         Coords.fromXY(0, -1), // directionMin
@@ -209,12 +209,14 @@ class PlaceBuilderDemo_Items {
         var itemBreadColor = Color.byName("Orange");
         var itemBreadVisualCut = new VisualEllipse(this.entityDimension * .15, // semimajorAxis
         this.entityDimensionHalf * .15, .25, // rotationInTurns
-        Color.byName("Tan"), null // colorBorder
+        Color.byName("Tan"), null, // colorBorder
+        false // shouldUseEntityOrientation
         );
         var itemBreadVisual = new VisualGroup([
             new VisualEllipse(this.entityDimensionHalf * 1.5, // semimajorAxis
             this.entityDimensionHalf * .75, 0, // rotationInTurns
-            itemBreadColor, null // colorBorder
+            itemBreadColor, null, // colorBorder
+            false // shouldUseEntityOrientation
             ),
             itemBreadVisualCut,
             new VisualOffset(itemBreadVisualCut, Coords.fromXY(-this.entityDimensionHalf * 0.75, 0)),
@@ -255,18 +257,18 @@ class PlaceBuilderDemo_Items {
         var itemCrystalName = "Crystal";
         var itemCrystalColor = Color.byName("Cyan");
         var itemCrystalVisual = new VisualGroup([
-            new VisualPolygon(new Path([
+            VisualPolygon.fromPathAndColors(new Path([
                 Coords.fromXY(1, 0),
                 Coords.fromXY(0, 1),
                 Coords.fromXY(-1, 0),
                 Coords.fromXY(0, -1)
             ]).transform(new Transform_Scale(Coords.ones().multiplyScalar(this.entityDimension / 2))), itemCrystalColor, Color.byName("White")),
-            new VisualPolygon(new Path([
+            VisualPolygon.fromPathAndColorFill(new Path([
                 Coords.fromXY(1, 0),
                 Coords.fromXY(0, 1),
                 Coords.fromXY(-1, 0),
                 Coords.fromXY(0, -1)
-            ]).transform(new Transform_Scale(Coords.ones().multiplyScalar(this.entityDimension / 4))), Color.byName("White"), null)
+            ]).transform(new Transform_Scale(Coords.ones().multiplyScalar(this.entityDimension / 4))), Color.byName("White"))
         ]);
         if (this.parent.visualsHaveText) {
             itemCrystalVisual.children.push(new VisualOffset(VisualText.fromTextAndColor(itemCrystalName, itemCrystalColor), Coords.fromXY(0, 0 - this.entityDimension)));
@@ -311,7 +313,7 @@ class PlaceBuilderDemo_Items {
             Coords.fromXY(-1, 1).normalize(), // directionMin
             .25, // angleSpannedInTurns
             Color.byName("GreenDark"), null), Coords.fromXY(.5, 1.75).multiplyScalar(this.entityDimensionHalf)),
-            new VisualPolygon(new Path([
+            VisualPolygon.fromPathAndColors(new Path([
                 Coords.fromXY(1, 0),
                 Coords.fromXY(.3, .3),
                 Coords.fromXY(0, 1),
@@ -391,11 +393,11 @@ class PlaceBuilderDemo_Items {
             Coords.fromXY(-1, 0), // directionMin
             .5, // angleSpannedInTurns
             itemHeartColor, null), Coords.fromXY(entityDimensionQuarter, 0)),
-            new VisualPolygon(new Path([
+            VisualPolygon.fromPathAndColorFill(new Path([
                 Coords.fromXY(-1.1, 0),
                 Coords.fromXY(1.1, 0),
                 Coords.fromXY(0, 1.3),
-            ]).transform(Transform_Scale.fromScalar(this.entityDimensionHalf)), itemHeartColor, null)
+            ]).transform(Transform_Scale.fromScalar(this.entityDimensionHalf)), itemHeartColor)
         ]);
         if (this.parent.visualsHaveText) {
             itemHeartVisual.children.push(new VisualOffset(VisualText.fromTextAndColor(itemHeartName, itemHeartColor), Coords.fromXY(0, 0 - this.entityDimension * 1.5)));
@@ -408,12 +410,12 @@ class PlaceBuilderDemo_Items {
         var itemIronName = "Iron";
         var itemIronColor = Color.byName("Gray");
         var itemIronVisual = new VisualGroup([
-            new VisualPolygon(new Path([
+            VisualPolygon.fromPathAndColorFill(new Path([
                 Coords.fromXY(-0.5, 0.4),
                 Coords.fromXY(0.5, 0.4),
                 Coords.fromXY(0.2, -0.4),
                 Coords.fromXY(-0.2, -0.4),
-            ]).transform(Transform_Scale.fromScalar(this.entityDimension)), itemIronColor, null)
+            ]).transform(Transform_Scale.fromScalar(this.entityDimension)), itemIronColor)
         ]);
         if (this.parent.visualsHaveText) {
             itemIronVisual.children.push(new VisualOffset(VisualText.fromTextAndColor(itemIronName, itemIronColor), Coords.fromXY(0, 0 - this.entityDimension)));
@@ -502,7 +504,7 @@ class PlaceBuilderDemo_Items {
         var itemMedicineColor = Color.byName("Red");
         var itemMedicineVisual = new VisualGroup([
             VisualRectangle.fromSizeAndColorFill(Coords.fromXY(1, 1).multiplyScalar(this.entityDimension), Color.byName("White")),
-            new VisualPolygon(new Path([
+            VisualPolygon.fromPathAndColorFill(new Path([
                 Coords.fromXY(-0.5, -0.2),
                 Coords.fromXY(-0.2, -0.2),
                 Coords.fromXY(-0.2, -0.5),
@@ -515,7 +517,7 @@ class PlaceBuilderDemo_Items {
                 Coords.fromXY(-0.2, 0.5),
                 Coords.fromXY(-0.2, 0.2),
                 Coords.fromXY(-0.5, 0.2)
-            ]).transform(Transform_Scale.fromScalar(this.entityDimension)), itemMedicineColor, null)
+            ]).transform(Transform_Scale.fromScalar(this.entityDimension)), itemMedicineColor)
         ]);
         if (this.parent.visualsHaveText) {
             itemMedicineVisual.children.push(new VisualOffset(VisualText.fromTextAndColor(itemMedicineName, itemMedicineColor), Coords.fromXY(0, 0 - this.entityDimension)));
@@ -558,12 +560,12 @@ class PlaceBuilderDemo_Items {
         var itemPickColor = Color.byName("Gray");
         var itemPickVisual = new VisualGroup([
             new VisualOffset(VisualRectangle.fromSizeAndColorFill(Coords.fromXY(this.entityDimension / 4, this.entityDimension), Color.byName("Brown")), Coords.fromXY(0, 0 - this.entityDimension / 2)),
-            new VisualPolygon(new Path([
+            VisualPolygon.fromPathAndColorFill(new Path([
                 Coords.fromXY(0.75, -1),
                 Coords.fromXY(-0.75, -1),
                 Coords.fromXY(-0.5, -1.4),
                 Coords.fromXY(0.5, -1.4)
-            ]).transform(Transform_Scale.fromScalar(this.entityDimension)), itemPickColor, null)
+            ]).transform(Transform_Scale.fromScalar(this.entityDimension)), itemPickColor)
         ]);
         if (this.parent.visualsHaveText) {
             itemPickVisual.children.push(new VisualOffset(VisualText.fromTextAndColor(itemPickName, itemPickColor), Coords.fromXY(0, 0 - this.entityDimension * 2)));
@@ -577,7 +579,7 @@ class PlaceBuilderDemo_Items {
         var itemPotionColor = Color.byName("Red");
         var itemPotionVisual = new VisualGroup([
             VisualRectangle.fromSizeAndColorFill(Coords.fromXY(1, 1).multiplyScalar(this.entityDimension), Color.byName("White")),
-            new VisualPolygon(new Path([
+            VisualPolygon.fromPathAndColorFill(new Path([
                 Coords.fromXY(-0.5, -0.2),
                 Coords.fromXY(-0.2, -0.2),
                 Coords.fromXY(-0.2, -0.5),
@@ -590,7 +592,7 @@ class PlaceBuilderDemo_Items {
                 Coords.fromXY(-0.2, 0.5),
                 Coords.fromXY(-0.2, 0.2),
                 Coords.fromXY(-0.5, 0.2)
-            ]).transform(Transform_Scale.fromScalar(this.entityDimension)), itemPotionColor, null)
+            ]).transform(Transform_Scale.fromScalar(this.entityDimension)), itemPotionColor)
         ]);
         if (this.parent.visualsHaveText) {
             itemPotionVisual.children.push(new VisualOffset(VisualText.fromTextAndColor(itemPotionName, itemPotionColor), Coords.fromXY(0, 0 - this.entityDimension)));
@@ -615,13 +617,13 @@ class PlaceBuilderDemo_Items {
         var itemShovelColor = Color.byName("Gray");
         var itemShovelVisual = new VisualGroup([
             new VisualOffset(VisualRectangle.fromSizeAndColorFill(Coords.fromXY(this.entityDimension / 4, this.entityDimension), Color.byName("Brown")), Coords.fromXY(0, 0 + this.entityDimension / 2)),
-            new VisualPolygon(new Path([
+            VisualPolygon.fromPathAndColorFill(new Path([
                 Coords.fromXY(0.5, 1.5),
                 Coords.fromXY(0, 1.75),
                 Coords.fromXY(-0.5, 1.5),
                 Coords.fromXY(-0.5, 1.0),
                 Coords.fromXY(0.5, 1.0)
-            ]).transform(Transform_Scale.fromScalar(this.entityDimension)), itemShovelColor, null)
+            ]).transform(Transform_Scale.fromScalar(this.entityDimension)), itemShovelColor)
         ]);
         if (this.parent.visualsHaveText) {
             itemShovelVisual.children.push(new VisualOffset(VisualText.fromTextAndColor(itemShovelName, itemShovelColor), Coords.fromXY(0, 0 - this.entityDimension * 2)));
@@ -633,20 +635,20 @@ class PlaceBuilderDemo_Items {
         var itemSpeedBootsName = "Speed Boots";
         var itemAccessoryColor = Color.byName("Orange");
         var itemSpeedBootsVisual = new VisualGroup([
-            new VisualPolygon(new Path([
+            VisualPolygon.fromPathAndColorFill(new Path([
                 Coords.fromXY(0, .5),
                 Coords.fromXY(1, .5),
                 Coords.fromXY(.5, 0),
                 Coords.fromXY(.5, -.5),
                 Coords.fromXY(0, -.5),
-            ]).transform(Transform_Scale.fromScalar(this.entityDimension)), itemAccessoryColor, null),
-            new VisualPolygon(new Path([
+            ]).transform(Transform_Scale.fromScalar(this.entityDimension)), itemAccessoryColor),
+            VisualPolygon.fromPathAndColorFill(new Path([
                 Coords.fromXY(-.1, .5),
                 Coords.fromXY(-1.1, .5),
                 Coords.fromXY(-.6, 0),
                 Coords.fromXY(-.6, -.5),
                 Coords.fromXY(-.1, -.5),
-            ]).transform(Transform_Scale.fromScalar(this.entityDimension)), itemAccessoryColor, null)
+            ]).transform(Transform_Scale.fromScalar(this.entityDimension)), itemAccessoryColor)
         ]);
         if (this.parent.visualsHaveText) {
             itemSpeedBootsVisual.children.push(new VisualOffset(VisualText.fromTextAndColor(itemSpeedBootsName, itemAccessoryColor), Coords.fromXY(0, 0 - this.entityDimension * 2)));
@@ -685,10 +687,10 @@ class PlaceBuilderDemo_Items {
             new Transform_RotateRight(3) // quarter-turns
         ]);
         var itemSwordVisualBlade = new VisualPolygon //Located
-        (itemSwordVisualBladePath.transform(transform), bladeColor, null // colorBorder
+        (itemSwordVisualBladePath.transform(transform), bladeColor, null, // colorBorder
+        true // shouldUseEntityOrientation
         );
-        var itemSwordVisualHilt = new VisualPolygon //Located
-        (itemSwordVisualHiltPath.transform(transform), hiltColor, null // colorBorder
+        var itemSwordVisualHilt = new VisualPolygon(itemSwordVisualHiltPath.transform(transform), hiltColor, null, true // shouldUseEntityOrientation
         );
         var itemSwordVisualBody = new VisualGroup([
             itemSwordVisualBlade, itemSwordVisualHilt
@@ -734,7 +736,8 @@ class PlaceBuilderDemo_Items {
         var itemTorchVisualBody = VisualRectangle.fromSizeAndColorFill(Coords.fromXY(this.entityDimension / 3, this.entityDimension * 1.5), itemTorchColor);
         var itemTorchVisualHead = new VisualEllipse(this.entityDimensionHalf * .65, // semimajorAxis
         this.entityDimensionHalf * .45, .25, // rotationInTurns
-        Color.byName("Tan"), null // colorBorder
+        Color.byName("Tan"), null, // colorBorder
+        false // shouldUseEntityOrientation
         );
         var itemTorchVisualFlame = VisualBuilder.Instance().flame(this.entityDimensionHalf * .6);
         var itemTorchVisual = new VisualGroup([
@@ -769,12 +772,12 @@ class PlaceBuilderDemo_Items {
             Coords.fromXY(-1, 0).normalize(), // directionMin
             .5, // angleSpannedInTurns
             itemWeightColor, null), Coords.fromXY(0, -1).multiplyScalar(this.entityDimensionHalf)),
-            new VisualPolygon(new Path([
+            VisualPolygon.fromPathAndColorFill(new Path([
                 Coords.fromXY(-.75, .5),
                 Coords.fromXY(-.5, -.5),
                 Coords.fromXY(.5, -.5),
                 Coords.fromXY(.75, .5)
-            ]).transform(new Transform_Scale(Coords.ones().multiplyScalar(this.entityDimension))), itemWeightColor, null)
+            ]).transform(new Transform_Scale(Coords.ones().multiplyScalar(this.entityDimension))), itemWeightColor)
         ]);
         if (this.parent.visualsHaveText) {
             itemWeightVisual.children.push(new VisualOffset(VisualText.fromTextAndColor(itemWeightName, itemWeightColor), Coords.fromXY(0, 0 - this.entityDimension * 2)));

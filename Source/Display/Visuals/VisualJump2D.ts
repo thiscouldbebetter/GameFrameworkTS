@@ -10,7 +10,11 @@ export class VisualJump2D implements Visual
 
 	_posSaved: Coords;
 
-	constructor(visualJumper: Visual, visualShadow: Visual, cameraFactory: () => Camera)
+	constructor
+	(
+		visualJumper: Visual, visualShadow: Visual,
+		cameraFactory: () => Camera
+	)
 	{
 		this.visualJumper = visualJumper;
 		this.visualShadow = visualShadow;
@@ -20,7 +24,7 @@ export class VisualJump2D implements Visual
 
 	// Transformable.
 
-	transform(transformToApply: Transform)
+	transform(transformToApply: Transform): VisualJump2D
 	{
 		transformToApply.transform(this.visualJumper);
 		transformToApply.transform(this.visualShadow);
@@ -29,7 +33,7 @@ export class VisualJump2D implements Visual
 
 	// Visual.
 
-	draw(uwpe: UniverseWorldPlaceEntities, display: Display)
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var world = uwpe.world;
 		var entity = uwpe.entity;
@@ -58,7 +62,8 @@ export class VisualJump2D implements Visual
 	{
 		return new VisualJump2D
 		(
-			this.visualJumper.clone(), this.visualShadow.clone(), this.cameraFactory
+			this.visualJumper.clone(), this.visualShadow.clone(),
+			this.cameraFactory
 		);
 	}
 

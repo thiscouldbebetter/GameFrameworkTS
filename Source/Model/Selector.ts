@@ -49,6 +49,11 @@ export class Selector implements EntityProperty
 		);
 	}
 
+	static default(): Selector
+	{
+		return new Selector(20, null, null);
+	}
+
 	static fromReticleDimension(reticleDimension: number): Selector
 	{
 		return new Selector(reticleDimension, null, null);

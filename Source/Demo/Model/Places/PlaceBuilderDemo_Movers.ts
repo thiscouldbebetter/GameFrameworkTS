@@ -749,7 +749,8 @@ class PlaceBuilderDemo_Movers
 				friendlyDimension * .8,
 				.25, // rotationInTurns
 				friendlyColor,
-				null // colorBorder
+				null, // colorBorder
+				false // shouldUseEntityOrientation
 			),
 
 			new VisualOffset
@@ -940,7 +941,8 @@ class PlaceBuilderDemo_Movers
 				grazerDimension * .6,
 				0, // rotationInTurns
 				grazerColor,
-				null // colorBorder
+				null, // colorBorder
+				true // shouldUseEntityOrientation
 			);
 		var grazerVisualJuvenile = new VisualGroup
 		([
@@ -954,7 +956,8 @@ class PlaceBuilderDemo_Movers
 				grazerDimension * .8,
 				0, // rotationInTurns
 				grazerColor,
-				null // colorBorder
+				null, // colorBorder
+				true // shouldUseEntityOrientation
 			);
 		var grazerVisualAdult = new VisualGroup
 		([
@@ -968,7 +971,8 @@ class PlaceBuilderDemo_Movers
 				grazerDimension * .8,
 				0, // rotationInTurns
 				Color.byName("GrayLight"),
-				null // colorBorder
+				null, // colorBorder
+				true, // shouldUseEntityOrientation
 			);
 		var grazerVisualElder = new VisualGroup
 		([
@@ -982,7 +986,8 @@ class PlaceBuilderDemo_Movers
 				grazerDimension * .8,
 				0, // rotationInTurns
 				Color.byName("GrayLight"),
-				null
+				null,
+				true // shouldUseEntityOrientation
 			);
 
 		var grazerVisualSelect = new VisualSelect
@@ -1197,10 +1202,12 @@ class PlaceBuilderDemo_Movers
 		var playerVisualBodyJumpable = new VisualJump2D
 		(
 			playerVisualBodyHidable,
+			// visualShadow
 			new VisualEllipse
 			(
 				playerHeadRadius, playerHeadRadius / 2, 0,
-				Color.byName("GrayDark"), Color.byName("Black")
+				Color.byName("GrayDark"), Color.byName("Black"),
+				false // shouldUseEntityOrientation
 			),
 			null
 		);
@@ -1613,7 +1620,7 @@ class PlaceBuilderDemo_Movers
 				movable,
 				perceptible,
 				new Playable(),
-				new Selector(),
+				Selector.default(),
 				SkillLearner.default(),
 				starvable,
 				tirable
@@ -1625,7 +1632,7 @@ class PlaceBuilderDemo_Movers
 
 	entityDefnBuildPlayer_PlayerActivityPerform
 	(
-		uwpe: UniverseWorldPlaceEntitiese
+		uwpe: UniverseWorldPlaceEntities
 	): void
 	{
 		var universe = uwpe.universe;

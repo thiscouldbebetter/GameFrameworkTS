@@ -22,6 +22,9 @@ var ThisCouldBeBetter;
                     GameFramework.Locatable.create()
                 ]);
             }
+            static default() {
+                return new Selector(20, null, null);
+            }
             static fromReticleDimension(reticleDimension) {
                 return new Selector(reticleDimension, null, null);
             }

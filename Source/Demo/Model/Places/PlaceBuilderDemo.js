@@ -694,7 +694,7 @@ class PlaceBuilderDemo // Main.
             cameraCollidable,
             cameraConstrainable,
             new Locatable(cameraLoc),
-            Movable.create()
+            Movable.default()
         ]);
         return cameraEntity;
     }
@@ -924,7 +924,7 @@ class PlaceBuilderDemo // Main.
                 var portalEntity = new Entity("PortalToNeighbor" + i, [
                     collidable,
                     locatable,
-                    Movable.create(),
+                    Movable.default(),
                     portal
                 ]);
                 entities.push(portalEntity);
@@ -934,7 +934,7 @@ class PlaceBuilderDemo // Main.
                     forceFieldCollidable,
                     forceField,
                     locatable,
-                    Movable.create() // hack - For CollisionTracker.
+                    Movable.default() // hack - For CollisionTracker.
                 ]);
                 entities.push(forceFieldEntity);
             }
@@ -1551,7 +1551,7 @@ class PlaceBuilderDemo // Main.
         var itemDefnPotionName = "Potion";
         var itemPotionColor = Color.byName("Blue");
         var itemPotionVisual = new VisualGroup([
-            new VisualPolygon(new Path([
+            VisualPolygon.fromPathAndColors(new Path([
                 new Coords(1, 1, 0),
                 new Coords(-1, 1, 0),
                 new Coords(-.2, 0, 0),

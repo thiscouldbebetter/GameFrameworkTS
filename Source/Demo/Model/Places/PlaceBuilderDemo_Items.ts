@@ -454,7 +454,8 @@ class PlaceBuilderDemo_Items
 			this.entityDimensionHalf * .15,
 			.25, // rotationInTurns
 			Color.byName("Tan"),
-			null // colorBorder
+			null, // colorBorder
+			false // shouldUseEntityOrientation
 		);
 
 		var itemBreadVisual = new VisualGroup
@@ -465,7 +466,8 @@ class PlaceBuilderDemo_Items
 				this.entityDimensionHalf * .75,
 				0, // rotationInTurns
 				itemBreadColor,
-				null // colorBorder
+				null, // colorBorder
+				false // shouldUseEntityOrientation
 			),
 
 			itemBreadVisualCut,
@@ -694,7 +696,7 @@ class PlaceBuilderDemo_Items
 				),
 				Coords.fromXY(.5, 1.75).multiplyScalar(this.entityDimensionHalf)
 			),
-			new VisualPolygon.fromPathAndColors
+			VisualPolygon.fromPathAndColors
 			(
 				new Path
 				([
@@ -1551,13 +1553,16 @@ class PlaceBuilderDemo_Items
 		(
 			itemSwordVisualBladePath.transform(transform),
 			bladeColor,
-			null // colorBorder
+			null, // colorBorder
+			true // shouldUseEntityOrientation
 		);
 
-		var itemSwordVisualHilt = VisualPolygon.fromPathAndColorFill
+		var itemSwordVisualHilt = new VisualPolygon
 		(
 			itemSwordVisualHiltPath.transform(transform),
-			hiltColor
+			hiltColor,
+			null,
+			true // shouldUseEntityOrientation
 		);
 
 		var itemSwordVisualBody = new VisualGroup
@@ -1670,7 +1675,8 @@ class PlaceBuilderDemo_Items
 			this.entityDimensionHalf * .45,
 			.25, // rotationInTurns
 			Color.byName("Tan"),
-			null // colorBorder
+			null, // colorBorder
+			false // shouldUseEntityOrientation
 		);
 
 		var itemTorchVisualFlame =

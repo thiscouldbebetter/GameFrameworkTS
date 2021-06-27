@@ -19,7 +19,7 @@ class PlaceBuilderDemo_Movers {
             new VisualOffset(visualEyes, new Coords(0, -1, 0).multiplyScalar(visualEyeRadius))
         ], null);
         var carnivoreVisualBody = new VisualGroup([
-            new VisualPolygon(new Path([
+            VisualPolygon.fromPathAndColorFill(new Path([
                 new Coords(-2, -1, 0),
                 new Coords(-0.5, 0, 0),
                 new Coords(0.5, 0, 0),
@@ -28,8 +28,7 @@ class PlaceBuilderDemo_Movers {
             ]).transform(new Transform_Multiple([
                 new Transform_Translate(new Coords(0, -0.5, 0)),
                 new Transform_Scale(new Coords(1, 1, 1).multiplyScalar(entityDimension))
-            ])), carnivoreColor, null // colorBorder
-            ),
+            ])), carnivoreColor),
             new VisualOffset(visualEyesDirectional, Coords.create()),
         ]);
         var carnivoreVisualNormal = new VisualAnchor(carnivoreVisualBody, null, // posToAnchorAt
@@ -104,7 +103,7 @@ class PlaceBuilderDemo_Movers {
             Drawable.fromVisual(carnivoreVisual),
             new Killable(10, null, carnivoreDie),
             Locatable.create(),
-            Movable.create()
+            Movable.default()
         ]);
         return carnivoreEntityDefn;
     }
@@ -184,7 +183,7 @@ class PlaceBuilderDemo_Movers {
             new Enemy(weapon),
             enemyKillable,
             Locatable.create(),
-            Movable.create(),
+            Movable.default(),
             enemyPerceptor
         ]);
         var generatorActivityPerform = (uwpe) => {
@@ -274,7 +273,7 @@ class PlaceBuilderDemo_Movers {
             visualEffect
         ]), new Coords(0, 0 - entityDimension * 2, 0) // offset
         );
-        var visualBody = new VisualAnchor(new VisualPolygon(new Path(enemyVertices), enemyColor, Color.byName("Red") // colorBorder
+        var visualBody = new VisualAnchor(VisualPolygon.fromPathAndColors(new Path(enemyVertices), enemyColor, Color.byName("Red") // colorBorder
         ), null, // posToAnchorAt
         Orientation.Instances().ForwardXDownZ.clone());
         var visualArms = new VisualDirectional(new VisualNone(), [
@@ -362,7 +361,8 @@ class PlaceBuilderDemo_Movers {
         var friendlyVisualNormal = new VisualGroup([
             new VisualEllipse(friendlyDimension, // semimajorAxis
             friendlyDimension * .8, .25, // rotationInTurns
-            friendlyColor, null // colorBorder
+            friendlyColor, null, // colorBorder
+            false // shouldUseEntityOrientation
             ),
             new VisualOffset(visualEyesBlinking, new Coords(0, -friendlyDimension / 3, 0)),
             new VisualOffset(new VisualArc(friendlyDimension / 2, // radiusOuter
@@ -440,7 +440,7 @@ class PlaceBuilderDemo_Movers {
             Drawable.fromVisual(friendlyVisual),
             itemHolder,
             Locatable.create(),
-            Movable.create(),
+            Movable.default(),
             routable,
             new Talker("Conversation"),
         ]);
@@ -463,28 +463,31 @@ class PlaceBuilderDemo_Movers {
         ], null);
         var grazerVisualBodyJuvenile = new VisualEllipse(grazerDimension * .75, // semimajorAxis
         grazerDimension * .6, 0, // rotationInTurns
-        grazerColor, null // colorBorder
+        grazerColor, null, // colorBorder
+        true // shouldUseEntityOrientation
         );
         var grazerVisualJuvenile = new VisualGroup([
             grazerVisualBodyJuvenile, visualEyesDirectional
         ]);
         var grazerVisualBodyAdult = new VisualEllipse(grazerDimension, // semimajorAxis
         grazerDimension * .8, 0, // rotationInTurns
-        grazerColor, null // colorBorder
+        grazerColor, null, // colorBorder
+        true // shouldUseEntityOrientation
         );
         var grazerVisualAdult = new VisualGroup([
             grazerVisualBodyAdult, visualEyesDirectional
         ]);
         var grazerVisualBodyElder = new VisualEllipse(grazerDimension, // semimajorAxis
         grazerDimension * .8, 0, // rotationInTurns
-        Color.byName("GrayLight"), null // colorBorder
-        );
+        Color.byName("GrayLight"), null, // colorBorder
+        true);
         var grazerVisualElder = new VisualGroup([
             grazerVisualBodyElder, visualEyesDirectional
         ]);
         var grazerVisualDead = new VisualEllipse(grazerDimension, // semimajorAxis
         grazerDimension * .8, 0, // rotationInTurns
-        Color.byName("GrayLight"), null);
+        Color.byName("GrayLight"), null, true // shouldUseEntityOrientation
+        );
         var grazerVisualSelect = new VisualSelect(new Map([
             ["Juvenile", grazerVisualJuvenile],
             ["Adult", grazerVisualAdult],
@@ -570,7 +573,7 @@ class PlaceBuilderDemo_Movers {
             Drawable.fromVisual(grazerVisual),
             new Killable(10, null, grazerDie),
             Locatable.create(),
-            Movable.create()
+            Movable.default()
         ]);
         return grazerEntityDefn;
     }
@@ -594,7 +597,10 @@ class PlaceBuilderDemo_Movers {
             var e = uwpe.entity;
             return [(e.perceptible().isHiding ? "Hidden" : "Normal")];
         });
-        var playerVisualBodyJumpable = new VisualJump2D(playerVisualBodyHidable, new VisualEllipse(playerHeadRadius, playerHeadRadius / 2, 0, Color.byName("GrayDark"), Color.byName("Black")), null);
+        var playerVisualBodyJumpable = new VisualJump2D(playerVisualBodyHidable, 
+        // visualShadow
+        new VisualEllipse(playerHeadRadius, playerHeadRadius / 2, 0, Color.byName("GrayDark"), Color.byName("Black"), false // shouldUseEntityOrientation
+        ), null);
         var playerVisualBarSize = new Coords(entityDimension * 3, entityDimension * 0.8, 0);
         var playerVisualHealthBar = new VisualBar("H", // abbreviation
         playerVisualBarSize, Color.Instances().Red, DataBinding.fromGet((c) => c.killable().integrity), null, // amountThreshold
@@ -825,8 +831,8 @@ class PlaceBuilderDemo_Movers {
             movable,
             perceptible,
             new Playable(),
-            new Selector(),
-            new SkillLearner(null, null, null),
+            Selector.default(),
+            SkillLearner.default(),
             starvable,
             tirable
         ]);
@@ -839,21 +845,9 @@ class PlaceBuilderDemo_Movers {
         var entityPlayer = uwpe.entity;
         var inputHelper = universe.inputHelper;
         if (inputHelper.isMouseClicked(null)) {
-            var selector = entityPlayer.selector();
             inputHelper.isMouseClicked(false);
-            var mousePosRelativeToCameraView = inputHelper.mouseClickPos;
-            var camera = place.camera().camera();
-            var mousePosAbsolute = mousePosRelativeToCameraView.clone().divide(universe.display.scaleFactor()).add(camera.loc.pos).subtract(camera.viewSizeHalf).clearZ();
-            var entitiesInPlace = place.entities;
-            var range = 20;
-            var entityToSelect = entitiesInPlace.filter(x => (selector.entitiesSelected.indexOf(x) == -1
-                && x.locatable() != null
-                && x.locatable().distanceFromPos(mousePosAbsolute) < range)).sort((a, b) => a.locatable().distanceFromPos(mousePosAbsolute)
-                - b.locatable().distanceFromPos(mousePosAbsolute))[0];
-            selector.entitiesDeselectAll();
-            if (entityToSelect != null) {
-                selector.entitySelect(entityToSelect);
-            }
+            var selector = entityPlayer.selector();
+            selector.entityAtMouseClickPosSelect(uwpe);
         }
         var placeDefn = place.defn(world);
         var actionsByName = placeDefn.actionsByName;
@@ -871,8 +865,7 @@ class PlaceBuilderDemo_Movers {
             uwpe.entity2 = itemEntityGettingPickedUp;
             var entityPickingUpLocatable = entityPickingUp.locatable();
             var itemLocatable = itemEntityGettingPickedUp.locatable();
-            var distance = itemLocatable.approachOtherWithAccelerationAndSpeedMax //ToDistance
-            (entityPickingUpLocatable, .5, 4 //, 1
+            var distance = itemLocatable.approachOtherWithAccelerationAndSpeedMax(entityPickingUpLocatable, .5, 4 //, 1
             );
             itemLocatable.loc.orientation.default(); // hack
             if (distance < 1) {
