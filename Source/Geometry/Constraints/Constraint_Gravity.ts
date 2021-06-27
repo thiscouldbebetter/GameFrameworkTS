@@ -19,6 +19,18 @@ export class Constraint_Gravity implements Constraint
 			loc.accel.add(this.accelerationPerTick);
 		}
 	}
+
+	// Clonable.
+
+	clone(): Constraint
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: Constraint): Constraint
+	{
+		return this; // todo
+	}
 }
 
 }

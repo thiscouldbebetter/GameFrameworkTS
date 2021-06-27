@@ -4,8 +4,10 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Selector {
-            constructor(reticleDimension) {
+            constructor(reticleDimension, entitySelect, entityDeselect) {
                 this.reticleDimension = reticleDimension;
+                this._entitySelect = entitySelect;
+                this._entityDeselect = entityDeselect;
                 this.entitiesSelected = new Array();
                 var visualReticle = new GameFramework.VisualGroup([
                     new GameFramework.VisualCircle(this.reticleDimension / 2, // radius
@@ -21,7 +23,7 @@ var ThisCouldBeBetter;
                 ]);
             }
             static fromReticleDimension(reticleDimension) {
-                return new Selector(reticleDimension);
+                return new Selector(reticleDimension, null, null);
             }
             static actionEntityAtMouseClickPosSelect() {
                 return new GameFramework.Action("Recording Start/Stop", Selector.actionEntityAtMouseClickPosSelectPerform);
@@ -33,8 +35,27 @@ var ThisCouldBeBetter;
             entitiesDeselectAll() {
                 this.entitiesSelected.length = 0;
             }
-            entitySelect(entityToSelect) {
+            entityDeselect(uwpe) {
+                var entityToDeselect = uwpe.entity2;
+                GameFramework.ArrayHelper.remove(this.entitiesSelected, entityToDeselect);
+                if (this._entityDeselect != null) {
+                    this._entityDeselect(uwpe);
+                }
+                var selectable = entityToDeselect.selectable();
+                if (selectable != null) {
+                    selectable.deselect(uwpe);
+                }
+            }
+            entitySelect(uwpe) {
+                var entityToSelect = uwpe.entity2;
                 this.entitiesSelected.push(entityToSelect);
+                if (this._entitySelect != null) {
+                    this._entitySelect(uwpe);
+                }
+                var selectable = entityToSelect.selectable();
+                if (selectable != null) {
+                    selectable.select(uwpe);
+                }
             }
             entityAtMouseClickPosSelect(uwpe) {
                 var universe = uwpe.universe;
@@ -59,15 +80,18 @@ var ThisCouldBeBetter;
                     - b.locatable().distanceFromPos(mousePosAbsolute))[0];
                 this.entitiesDeselectAll();
                 if (entityToSelect != null) {
-                    this.entitySelect(entityToSelect);
+                    uwpe.entity2 = entityToSelect;
+                    this.entitySelect(uwpe);
                 }
                 return entityToSelect;
             }
             // Clonable.
             clone() {
-                return this;
+                return new Selector(this.reticleDimension, this._entitySelect, this._entityDeselect);
             }
             overwriteWith(other) {
+                this.reticleDimension = other.reticleDimension;
+                this._entitySelect = other._entitySelect;
                 return this;
             }
             // Controllable.
@@ -92,7 +116,10 @@ var ThisCouldBeBetter;
             }
             // EntityProperty.
             finalize(uwpe) { }
-            initialize(uwpe) { }
+            initialize(uwpe) {
+                var place = uwpe.place;
+                place.entityToSpawnAdd(this.entityForReticle);
+            }
             updateForTimerTick(uwpe) {
                 var entitySelected = this.entitiesSelected[0];
                 var isEntitySelected = (entitySelected != null);

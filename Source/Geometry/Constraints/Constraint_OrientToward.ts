@@ -36,6 +36,18 @@ export class Constraint_OrientToward implements Constraint
 
 		constrainableOrientation.forwardSet(constrainableForward);
 	}
+
+	// Clonable.
+
+	clone(): Constraint
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: Constraint): Constraint
+	{
+		return this; // todo
+	}
 }
 
 }

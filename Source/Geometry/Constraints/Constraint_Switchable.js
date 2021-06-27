@@ -3,25 +3,26 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Constraint_Conditional {
-            constructor(shouldChildApply, child) {
-                this.shouldChildApply = shouldChildApply;
+        class Constraint_Switchable {
+            constructor(isActive, child) {
+                this.isActive = isActive;
                 this.child = child;
             }
             constrain(uwpe) {
-                var willChildApply = this.shouldChildApply(uwpe);
-                if (willChildApply) {
+                if (this.isActive) {
                     this.child.constrain(uwpe);
                 }
             }
             // Clonable.
             clone() {
-                return this; // todo
+                return new Constraint_Switchable(this.isActive, this.child.clone());
             }
             overwriteWith(other) {
-                return this; // todo
+                this.isActive = other.isActive;
+                this.child.overwriteWith(other.child);
+                return this;
             }
         }
-        GameFramework.Constraint_Conditional = Constraint_Conditional;
+        GameFramework.Constraint_Switchable = Constraint_Switchable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
 })(ThisCouldBeBetter || (ThisCouldBeBetter = {}));

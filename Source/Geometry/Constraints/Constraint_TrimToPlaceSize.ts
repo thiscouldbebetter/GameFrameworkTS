@@ -9,6 +9,19 @@ export class Constraint_TrimToPlaceSize implements Constraint
 		var entityLoc = uwpe.entity.locatable().loc;
 		entityLoc.pos.trimToRangeMax(uwpe.place.size);
 	}
+
+	// Clonable.
+
+	clone(): Constraint
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: Constraint): Constraint
+	{
+		return this; // todo
+	}
+
 }
 
 }

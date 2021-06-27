@@ -1614,7 +1614,7 @@ class PlaceBuilderDemo_Movers
 				perceptible,
 				new Playable(),
 				new Selector(),
-				new SkillLearner(null, null, null),
+				SkillLearner.default(),
 				starvable,
 				tirable
 			]

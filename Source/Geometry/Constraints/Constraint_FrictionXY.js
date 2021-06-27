@@ -25,6 +25,13 @@ var ThisCouldBeBetter;
                 }
                 entityVel.z = entityVelZSaved;
             }
+            // Clonable.
+            clone() {
+                return this; // todo
+            }
+            overwriteWith(other) {
+                return this; // todo
+            }
         }
         GameFramework.Constraint_FrictionXY = Constraint_FrictionXY;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

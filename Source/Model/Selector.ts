@@ -4,15 +4,25 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Selector implements EntityProperty
 {
-	entitiesSelected: Entity[];
 	reticleDimension: number;
+	_entitySelect: (uwpe: UniverseWorldPlaceEntities) => void;
+	_entityDeselect: (uwpe: UniverseWorldPlaceEntities) => void;
+
+	entitiesSelected: Entity[];
 
 	_control: ControlBase;
 	entityForReticle: Entity;
 
-	constructor(reticleDimension: number)
+	constructor
+	(
+		reticleDimension: number,
+		entitySelect: (uwpe: UniverseWorldPlaceEntities) => void,
+		entityDeselect: (uwpe: UniverseWorldPlaceEntities) => void
+	)
 	{
 		this.reticleDimension = reticleDimension;
+		this._entitySelect = entitySelect;
+		this._entityDeselect = entityDeselect;
 
 		this.entitiesSelected = new Array<Entity>();
 
@@ -41,7 +51,7 @@ export class Selector implements EntityProperty
 
 	static fromReticleDimension(reticleDimension: number): Selector
 	{
-		return new Selector(reticleDimension);
+		return new Selector(reticleDimension, null, null);
 	}
 
 	static actionEntityAtMouseClickPosSelect(): Action
@@ -67,9 +77,38 @@ export class Selector implements EntityProperty
 		this.entitiesSelected.length = 0;
 	}
 
-	entitySelect(entityToSelect: Entity): void
+	entityDeselect(uwpe: UniverseWorldPlaceEntities): void
 	{
+		var entityToDeselect = uwpe.entity2;
+		ArrayHelper.remove(this.entitiesSelected, entityToDeselect);
+
+		if (this._entityDeselect != null)
+		{
+			this._entityDeselect(uwpe);
+		}
+
+		var selectable = entityToDeselect.selectable();
+		if (selectable != null)
+		{
+			selectable.deselect(uwpe);
+		}
+	}
+
+	entitySelect(uwpe: UniverseWorldPlaceEntities): void
+	{
+		var entityToSelect = uwpe.entity2;
 		this.entitiesSelected.push(entityToSelect);
+
+		if (this._entitySelect != null)
+		{
+			this._entitySelect(uwpe);
+		}
+
+		var selectable = entityToSelect.selectable();
+		if (selectable != null)
+		{
+			selectable.select(uwpe);
+		}
 	}
 
 	entityAtMouseClickPosSelect
@@ -128,7 +167,8 @@ export class Selector implements EntityProperty
 		this.entitiesDeselectAll();
 		if (entityToSelect != null)
 		{
-			this.entitySelect(entityToSelect);
+			uwpe.entity2 = entityToSelect;
+			this.entitySelect(uwpe);
 		}
 
 		return entityToSelect;
@@ -138,11 +178,16 @@ export class Selector implements EntityProperty
 
 	clone(): Selector
 	{
-		return this;
+		return new Selector
+		(
+			this.reticleDimension, this._entitySelect, this._entityDeselect
+		);
 	}
 
 	overwriteWith(other: Selector): Selector
 	{
+		this.reticleDimension = other.reticleDimension;
+		this._entitySelect = other._entitySelect;
 		return this;
 	}
 
@@ -203,8 +248,13 @@ export class Selector implements EntityProperty
 
 	// EntityProperty.
 
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+	finalize(uwpe: UniverseWorldPlaceEntities): void{}
+
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		var place = uwpe.place;
+		place.entityToSpawnAdd(this.entityForReticle);
+	}
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{

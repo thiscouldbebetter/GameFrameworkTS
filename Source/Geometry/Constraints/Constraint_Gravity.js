@@ -15,6 +15,13 @@ var ThisCouldBeBetter;
                     loc.accel.add(this.accelerationPerTick);
                 }
             }
+            // Clonable.
+            clone() {
+                return this; // todo
+            }
+            overwriteWith(other) {
+                return this; // todo
+            }
         }
         GameFramework.Constraint_Gravity = Constraint_Gravity;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

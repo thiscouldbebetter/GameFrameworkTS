@@ -20,6 +20,19 @@ export class Constraint_AttachToEntityWithId implements Constraint
 			uwpe.entity.locatable().loc.pos.overwriteWith(targetPos);
 		}
 	}
+
+	// Clonable.
+
+	clone(): Constraint
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: Constraint): Constraint
+	{
+		return this; // todo
+	}
+
 }
 
 }

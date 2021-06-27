@@ -15,6 +15,18 @@ export class Constraint_Offset implements Constraint
 	{
 		uwpe.entity.locatable().loc.pos.add(this.offset);
 	}
+
+	// Clonable.
+
+	clone(): Constraint
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: Constraint): Constraint
+	{
+		return this; // todo
+	}
 }
 
 }

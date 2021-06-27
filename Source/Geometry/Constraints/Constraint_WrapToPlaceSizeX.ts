@@ -15,6 +15,19 @@ export class Constraint_WrapToPlaceSizeX implements Constraint
 
 		entityPos.x = NumberHelper.wrapToRangeMax(entityPos.x, placeSize.x);
 	}
+
+	// Clonable.
+
+	clone(): Constraint
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: Constraint): Constraint
+	{
+		return this; // todo
+	}
+
 }
 
 }

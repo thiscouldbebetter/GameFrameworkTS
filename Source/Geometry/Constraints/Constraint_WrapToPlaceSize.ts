@@ -12,6 +12,19 @@ export class Constraint_WrapToPlaceSize implements Constraint
 		var entityLoc = entity.locatable().loc;
 		entityLoc.pos.wrapToRangeMax(place.size);
 	}
+
+	// Clonable.
+
+	clone(): Constraint
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: Constraint): Constraint
+	{
+		return this; // todo
+	}
+
 }
 
 }

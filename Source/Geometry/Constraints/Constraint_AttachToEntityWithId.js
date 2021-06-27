@@ -14,6 +14,13 @@ var ThisCouldBeBetter;
                     uwpe.entity.locatable().loc.pos.overwriteWith(targetPos);
                 }
             }
+            // Clonable.
+            clone() {
+                return this; // todo
+            }
+            overwriteWith(other) {
+                return this; // todo
+            }
         }
         GameFramework.Constraint_AttachToEntityWithId = Constraint_AttachToEntityWithId;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

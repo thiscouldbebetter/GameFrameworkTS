@@ -33,6 +33,13 @@ var ThisCouldBeBetter;
                     }
                 }
             }
+            // Clonable.
+            clone() {
+                return this; // todo
+            }
+            overwriteWith(other) {
+                return this; // todo
+            }
         }
         GameFramework.Constraint_ContainInHemispace = Constraint_ContainInHemispace;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

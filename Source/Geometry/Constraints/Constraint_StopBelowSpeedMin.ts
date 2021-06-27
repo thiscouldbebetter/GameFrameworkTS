@@ -22,6 +22,19 @@ export class Constraint_StopBelowSpeedMin implements Constraint
 			entityVel.clear();
 		}
 	}
+
+	// Clonable.
+
+	clone(): Constraint
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: Constraint): Constraint
+	{
+		return this; // todo
+	}
+
 }
 
 }

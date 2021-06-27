@@ -37,6 +37,19 @@ export class Constraint_FrictionXY implements Constraint
 		}
 		entityVel.z = entityVelZSaved;
 	}
+
+	// Clonable.
+
+	clone(): Constraint
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: Constraint): Constraint
+	{
+		return this; // todo
+	}
+
 }
 
 }

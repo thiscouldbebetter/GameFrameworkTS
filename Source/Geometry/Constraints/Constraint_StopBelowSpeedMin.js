@@ -16,6 +16,13 @@ var ThisCouldBeBetter;
                     entityVel.clear();
                 }
             }
+            // Clonable.
+            clone() {
+                return this; // todo
+            }
+            overwriteWith(other) {
+                return this; // todo
+            }
         }
         GameFramework.Constraint_StopBelowSpeedMin = Constraint_StopBelowSpeedMin;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

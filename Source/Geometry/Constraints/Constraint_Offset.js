@@ -10,6 +10,13 @@ var ThisCouldBeBetter;
             constrain(uwpe) {
                 uwpe.entity.locatable().loc.pos.add(this.offset);
             }
+            // Clonable.
+            clone() {
+                return this; // todo
+            }
+            overwriteWith(other) {
+                return this; // todo
+            }
         }
         GameFramework.Constraint_Offset = Constraint_Offset;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

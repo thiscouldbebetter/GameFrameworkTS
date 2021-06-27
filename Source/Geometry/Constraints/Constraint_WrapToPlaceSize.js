@@ -10,6 +10,13 @@ var ThisCouldBeBetter;
                 var entityLoc = entity.locatable().loc;
                 entityLoc.pos.wrapToRangeMax(place.size);
             }
+            // Clonable.
+            clone() {
+                return this; // todo
+            }
+            overwriteWith(other) {
+                return this; // todo
+            }
         }
         GameFramework.Constraint_WrapToPlaceSize = Constraint_WrapToPlaceSize;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

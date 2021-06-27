@@ -33,6 +33,19 @@ export class Constraint_FrictionDry implements Constraint
 			);
 		}
 	}
+
+	// Clonable.
+
+	clone(): Constraint
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: Constraint): Constraint
+	{
+		return this; // todo
+	}
+
 }
 
 }

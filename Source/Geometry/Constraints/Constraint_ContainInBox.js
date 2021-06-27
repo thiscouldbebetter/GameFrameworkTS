@@ -10,6 +10,13 @@ var ThisCouldBeBetter;
             constrain(uwpe) {
                 this.boxToContainWithin.trimCoords(uwpe.entity.locatable().loc.pos);
             }
+            // Clonable.
+            clone() {
+                return this; // todo
+            }
+            overwriteWith(other) {
+                return this; // todo
+            }
         }
         GameFramework.Constraint_ContainInBox = Constraint_ContainInBox;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

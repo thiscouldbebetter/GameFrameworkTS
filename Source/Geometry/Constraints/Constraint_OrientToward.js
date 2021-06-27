@@ -20,6 +20,13 @@ var ThisCouldBeBetter;
                 constrainableForward.overwriteWith(targetPos).subtract(constrainablePos).normalize();
                 constrainableOrientation.forwardSet(constrainableForward);
             }
+            // Clonable.
+            clone() {
+                return this; // todo
+            }
+            overwriteWith(other) {
+                return this; // todo
+            }
         }
         GameFramework.Constraint_OrientToward = Constraint_OrientToward;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

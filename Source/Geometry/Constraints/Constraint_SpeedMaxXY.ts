@@ -25,6 +25,18 @@ export class Constraint_SpeedMaxXY implements Constraint
 		}
 		entityVel.z = zSaved;
 	}
+
+	// Clonable.
+
+	clone(): Constraint
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: Constraint): Constraint
+	{
+		return this; // todo
+	}
 }
 
 }

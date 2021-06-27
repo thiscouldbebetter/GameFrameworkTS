@@ -19,6 +19,13 @@ var ThisCouldBeBetter;
                 }
                 entityVel.z = zSaved;
             }
+            // Clonable.
+            clone() {
+                return this; // todo
+            }
+            overwriteWith(other) {
+                return this; // todo
+            }
         }
         GameFramework.Constraint_SpeedMaxXY = Constraint_SpeedMaxXY;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

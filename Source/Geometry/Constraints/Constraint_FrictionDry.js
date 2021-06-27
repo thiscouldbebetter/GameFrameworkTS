@@ -22,6 +22,13 @@ var ThisCouldBeBetter;
                     entityVel.add(entityDirection.multiplyScalar(-frictionMagnitude));
                 }
             }
+            // Clonable.
+            clone() {
+                return this; // todo
+            }
+            overwriteWith(other) {
+                return this; // todo
+            }
         }
         GameFramework.Constraint_FrictionDry = Constraint_FrictionDry;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

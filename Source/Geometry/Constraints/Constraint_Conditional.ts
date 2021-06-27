@@ -25,6 +25,18 @@ export class Constraint_Conditional implements Constraint
 			this.child.constrain(uwpe);
 		}
 	}
+
+	// Clonable.
+
+	clone(): Constraint
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: Constraint): Constraint
+	{
+		return this; // todo
+	}
 }
 
 }
