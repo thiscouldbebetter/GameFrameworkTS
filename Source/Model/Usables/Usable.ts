@@ -2,22 +2,22 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Usable implements EntityProperty
+export class Usable implements EntityProperty<Usable>
 {
-	_use: (uwpe: UniverseWorldPlaceEntities) => string;
+	_use: (uwpe: UniverseWorldPlaceEntities) => void;
 
 	isDisabled: boolean;
 
-	constructor(use: (uwpe: UniverseWorldPlaceEntities) => string)
+	constructor(use: (uwpe: UniverseWorldPlaceEntities) => void)
 	{
 		this._use = use;
 
 		this.isDisabled = false;
 	}
 
-	use(uwpe: UniverseWorldPlaceEntities): string
+	use(uwpe: UniverseWorldPlaceEntities): void
 	{
-		return (this.isDisabled ? null : this._use(uwpe));
+		this._use(uwpe);
 	}
 
 	// Clonable.
@@ -38,6 +38,10 @@ export class Usable implements EntityProperty
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
+
+	// Equatable
+
+	equals(other: Usable): boolean { return false; } // todo
 }
 
 }

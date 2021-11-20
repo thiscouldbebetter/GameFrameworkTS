@@ -2,15 +2,17 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualCircleGradient implements Visual
+export class VisualCircleGradient implements Visual<VisualCircleGradient>
 {
 	radius: number;
-	gradientFill: ValueBreakGroup;
+	gradientFill: ValueBreakGroup<Color>;
 	colorBorder: Color;
 
 	constructor
 	(
-		radius: number, gradientFill: ValueBreakGroup, colorBorder: Color
+		radius: number,
+		gradientFill: ValueBreakGroup<Color>,
+		colorBorder: Color
 	)
 	{
 		this.radius = radius;
@@ -42,7 +44,7 @@ export class VisualCircleGradient implements Visual
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualCircleGradient
 	{
 		return this; // todo
 	}

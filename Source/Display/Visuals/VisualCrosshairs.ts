@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualCrosshairs implements Visual
+export class VisualCrosshairs implements Visual<VisualCrosshairs>
 {
 	numberOfLines: number;
 	radiusOuter: number;
@@ -65,7 +65,7 @@ export class VisualCrosshairs implements Visual
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualCrosshairs
 	{
 		return this; // todo
 	}

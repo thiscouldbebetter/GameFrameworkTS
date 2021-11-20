@@ -11,7 +11,7 @@ class PlaceBuilderDemo_Emplacements
 	entityDefnBuildAnvil(entityDimension: number): Entity
 	{
 		var anvilName = "Anvil";
-		var anvilVisual: Visual = new VisualImageScaled
+		var anvilVisual: VisualBase = new VisualImageScaled
 		(
 			new VisualImageFromLibrary(anvilName),
 			Coords.fromXY(1, 1).multiplyScalar(entityDimension * 2) // sizeScaled
@@ -182,9 +182,10 @@ class PlaceBuilderDemo_Emplacements
 			() => Coords.fromXY(.33, -1.5).add(Coords.fromXY(Math.random() - 0.5, 0) ),
 			new Transform_Dynamic
 			(
-				(transformable: Transformable) =>
+				(transformable: TransformableBase) =>
 				{
-					var transformableAsVisualCircle = transformable as VisualCircle;
+					var transformableAsVisualCircle =
+						transformable as VisualCircle;
 					transformableAsVisualCircle.radius *= 1.02;
 					var color = transformableAsVisualCircle.colorFill.clone();
 					color.alpha(color.alpha(null) * .95);
@@ -435,7 +436,7 @@ class PlaceBuilderDemo_Emplacements
 			);
 		}
 
-		var use = (uwpe: UniverseWorldPlaceEntities): any =>
+		var use = (uwpe: UniverseWorldPlaceEntities): void =>
 		{
 			var u = uwpe.universe;
 			var eUsing = uwpe.entity;
@@ -447,7 +448,6 @@ class PlaceBuilderDemo_Emplacements
 			var venueNext: Venue = itemContainerAsControl.toVenue();
 			venueNext = VenueFader.fromVenuesToAndFrom(venueNext, null);
 			u.venueNext = venueNext;
-			return null;
 		}
 
 		var entityDefn = new Entity
@@ -532,7 +532,7 @@ class PlaceBuilderDemo_Emplacements
 	entityDefnBuildObstacleMine(entityDimension: number): Entity
 	{
 		var obstacleColor = Color.byName("Red");
-		var obstacleMappedCellSource =
+		var obstacleMappedCellSourceAsStrings =
 		[
 			"....xxxx....",
 			".....xx.....",
@@ -547,35 +547,30 @@ class PlaceBuilderDemo_Emplacements
 			".....xx.....",
 			"....xxxx....",
 		];
+		var obstacleMappedCellSource = new MapOfCellsCellSourceObstacle
+		(
+			obstacleMappedCellSourceAsStrings
+		);
+
 		var obstacleMappedSizeInCells = new Coords
 		(
-			obstacleMappedCellSource[0].length,
-			obstacleMappedCellSource.length,
+			obstacleMappedCellSourceAsStrings[0].length,
+			obstacleMappedCellSourceAsStrings.length,
 			1
 		);
 
 		var obstacleMappedCellSize = new Coords(2, 2, 1);
 
 		var entityDefnName = "Mine";
-		var obstacleMappedMap = new MapOfCells<any>
+		var obstacleMappedMap = new MapOfCells
 		(
 			entityDefnName,
 			obstacleMappedSizeInCells,
 			obstacleMappedCellSize,
-			null, // cellCreate
-			(map: MapOfCells<any>, cellPosInCells: any, cellToOverwrite: any) => // cellAtPosInCells
-			{
-				var cellCode = map.cellSource[cellPosInCells.y][cellPosInCells.x];
-				var cellVisualName = (cellCode == "x" ? "Blocking" : "Open");
-				var cellIsBlocking = (cellCode == "x");
-				cellToOverwrite.visualName = cellVisualName;
-				cellToOverwrite.isBlocking = cellIsBlocking;
-				return cellToOverwrite;
-			},
 			obstacleMappedCellSource
 		);
 
-		var obstacleMappedVisualLookup = new Map<string, Visual>
+		var obstacleMappedVisualLookup = new Map<string, VisualBase>
 		([
 			[ "Blocking", new VisualRectangle(obstacleMappedCellSize, obstacleColor, null, false) ], // isCentered
 			[ "Open", new VisualNone() ]
@@ -684,7 +679,7 @@ class PlaceBuilderDemo_Emplacements
 	entityDefnBuildPillow(entityDimension: number): Entity
 	{
 		var pillowName = "Pillow";
-		var pillowVisual: Visual = new VisualImageScaled
+		var pillowVisual: VisualBase = new VisualImageScaled
 		(
 			new VisualImageFromLibrary(pillowName),
 			Coords.fromXY(1, .75).multiplyScalar(entityDimension * 2) // sizeScaled
@@ -770,11 +765,10 @@ class PlaceBuilderDemo_Emplacements
 			)
 		]);
 
-		var portalUse = (uwpe: UniverseWorldPlaceEntities): any =>
+		var portalUse = (uwpe: UniverseWorldPlaceEntities) =>
 		{
 			var eUsed = uwpe.entity2;
 			eUsed.portal().use(uwpe);
-			return null;
 		};
 
 		var portalEntity = new Entity
@@ -943,4 +937,79 @@ class PlaceBuilderDemo_Emplacements
 
 		return entityDefn;
 	}
+}
+
+class MapCellObstacle implements Clonable<MapCellObstacle>
+{
+	isBlocking: boolean;
+	visualName: string;
+
+	constructor(isBlocking: boolean, visualName: string)
+	{
+		this.isBlocking = isBlocking;
+		this.visualName = visualName;
+	}
+
+	static default(): MapCellObstacle
+	{
+		return new MapCellObstacle(false, null);
+	}
+
+	// Clonable.
+
+	clone(): MapCellObstacle
+	{
+		return new MapCellObstacle(this.isBlocking, this.visualName);
+	}
+
+	overwriteWith(other: MapCellObstacle)
+	{
+		this.isBlocking = other.isBlocking;
+		this.visualName = other.visualName;
+		return this;
+	}
+}
+
+class MapOfCellsCellSourceObstacle
+	implements MapOfCellsCellSource<MapCellObstacle>
+{
+	cellsAsStrings: string[];
+
+	constructor(cellsAsStrings: string[])
+	{
+		this.cellsAsStrings = cellsAsStrings;
+	}
+
+	cellAtPosInCells
+	(
+		map: MapOfCells<MapCellObstacle>,
+		cellPosInCells: Coords,
+		cellToOverwrite: MapCellObstacle
+	): MapCellObstacle
+	{
+		var cellCode = this.cellsAsStrings[cellPosInCells.y][cellPosInCells.x];
+		var cellVisualName = (cellCode == "x" ? "Blocking" : "Open");
+		var cellIsBlocking = (cellCode == "x");
+		cellToOverwrite.visualName = cellVisualName;
+		cellToOverwrite.isBlocking = cellIsBlocking;
+		return cellToOverwrite;
+	}
+
+	cellCreate(): MapCellObstacle
+	{
+		return MapCellObstacle.default();
+	}
+
+	// Clonable.
+
+	clone(): MapOfCellsCellSourceObstacle { return this; }
+
+	overwriteWith
+	(
+		other: MapOfCellsCellSourceObstacle
+	): MapOfCellsCellSourceObstacle
+	{
+		return this;
+	}
+
 }

@@ -7,14 +7,20 @@ export class World //
 	dateCreated: DateTime;
 	defn: WorldDefn;
 	places: Place[];
-	placesByName: any;
+	placesByName: Map<string, Place>;
 
 	dateSaved: DateTime;
 	timerTicksSoFar: number;
 	placeCurrent: Place;
 	placeNext: Place;
 
-	constructor(name: string, dateCreated: DateTime, defn: WorldDefn, places: Place[])
+	constructor
+	(
+		name: string,
+		dateCreated: DateTime,
+		defn: WorldDefn,
+		places: Place[]
+	)
 	{
 		this.name = name;
 		this.dateCreated = dateCreated;

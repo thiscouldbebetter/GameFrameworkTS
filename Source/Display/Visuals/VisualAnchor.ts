@@ -2,16 +2,21 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualAnchor implements Visual
+export class VisualAnchor implements Visual<VisualAnchor>
 {
-	child: Visual;
+	child: VisualBase;
 	posToAnchorAt: Coords;
 	orientationToAnchorAt: Orientation;
 
 	_posSaved: Coords;
 	_orientationSaved: Orientation;
 
-	constructor(child: Visual, posToAnchorAt: Coords, orientationToAnchorAt: Orientation)
+	constructor
+	(
+		child: VisualBase,
+		posToAnchorAt: Coords,
+		orientationToAnchorAt: Orientation
+	)
 	{
 		this.child = child;
 		this.posToAnchorAt = posToAnchorAt;
@@ -49,19 +54,19 @@ export class VisualAnchor implements Visual
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualAnchor
 	{
 		return this; // todo
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualAnchor): VisualAnchor
 	{
 		return this; // todo
 	}
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualAnchor
 	{
 		return this; // todo
 	}

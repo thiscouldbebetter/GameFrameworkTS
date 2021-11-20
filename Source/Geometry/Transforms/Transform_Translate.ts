@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Transform_Translate implements Transform
+export class Transform_Translate implements Transform<Transform_Translate>
 {
 	displacement: Coords;
 
@@ -11,7 +11,7 @@ export class Transform_Translate implements Transform
 		this.displacement = displacement;
 	}
 
-	displacementSet(value: Coords)
+	displacementSet(value: Coords): Transform_Translate
 	{
 		this.displacement.overwriteWith(value);
 		return this;
@@ -19,17 +19,22 @@ export class Transform_Translate implements Transform
 
 	// transform
 
-	overwriteWith(other: Transform)
+	clone(): Transform_Translate
 	{
 		return this; // todo
 	}
 
-	transform(transformable: Transformable): Transformable
+	overwriteWith(other: Transform_Translate): Transform_Translate
+	{
+		return this; // todo
+	}
+
+	transform(transformable: TransformableBase): TransformableBase
 	{
 		return transformable.transform(this);
 	}
 
-	transformCoords(coordsToTransform: Coords)
+	transformCoords(coordsToTransform: Coords): Coords
 	{
 		return coordsToTransform.add(this.displacement);
 	}

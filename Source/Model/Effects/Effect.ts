@@ -7,7 +7,7 @@ export class Effect
 	name: string;
 	ticksPerCycle: number;
 	cyclesToLive: number;
-	visual: Visual;
+	visual: VisualBase;
 	_updateForCycle: (uwpe: UniverseWorldPlaceEntities, effect: Effect) => any;
 
 	ticksSoFar: number;
@@ -17,7 +17,7 @@ export class Effect
 		name: string,
 		ticksPerCycle: number,
 		cyclesToLive: number,
-		visual: Visual,
+		visual: VisualBase,
 		updateForCycle: (uwpe: UniverseWorldPlaceEntities, effect: Effect) => any
 	)
 	{
@@ -54,7 +54,7 @@ export class Effect
 		return this.ticksPerCycle * this.cyclesToLive;
 	}
 
-	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): any
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): unknown
 	{
 		var returnValue = null;
 

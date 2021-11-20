@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Constrainable implements EntityProperty
+export class Constrainable implements EntityProperty<Constrainable>
 {
 	constraints: Constraint[];
 
@@ -84,6 +84,11 @@ export class Constrainable implements EntityProperty
 		ArrayHelper.overwriteWith(this.constraints, other.constraints);
 		return this;
 	}
+
+	// Equatable
+
+	equals(other: Constrainable): boolean { return false; } // todo
+
 }
 
 }

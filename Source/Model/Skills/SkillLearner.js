@@ -47,7 +47,7 @@ var ThisCouldBeBetter;
                         this.learningAccumulated = 0;
                     }
                 }
-                return message;
+                this.statusMessage = message;
             }
             learningAccumulatedOverRequired(skillsAllByName) {
                 return this.learningAccumulated + "/" + this.learningRequired(skillsAllByName);
@@ -113,6 +113,8 @@ var ThisCouldBeBetter;
             updateForTimerTick(uwpe) {
                 // Do nothing.
             }
+            // Equatable
+            equals(other) { return false; } // todo
             // controls
             toControl(universe, size, entity, venueToReturnTo, includeTitle) {
                 var display = universe.display;
@@ -135,7 +137,7 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(margin, 40), // pos,
                     GameFramework.Coords.fromXY(size.x - margin * 2, labelHeight), // size,
                     false, // isTextCentered,
-                    "Skills Known:", //text
+                    GameFramework.DataBinding.fromContext("Skills Known:"), //text
                     labelHeight // fontHeightInPixels
                     ),
                     GameFramework.ControlList.from6("listSkillsKnown", GameFramework.Coords.fromXY(margin, 60), // pos
@@ -174,7 +176,7 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(margin, 220), // pos,
                     GameFramework.Coords.fromXY(size.x - margin * 2, labelHeight), // size,
                     false, // isTextCentered,
-                    "Selected:" // text
+                    GameFramework.DataBinding.fromContext("Selected:") // text
                     ),
                     GameFramework.ControlLabel.from5("labelSkillSelected", // name,
                     GameFramework.Coords.fromXY(80, 220), // pos,
@@ -193,7 +195,7 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(margin, size.y - margin - labelHeight * 2), // pos,
                     GameFramework.Coords.fromXY(size.x - margin * 2, labelHeight), // size,
                     false, // isTextCentered,
-                    "Skill Being Learned:" // text
+                    GameFramework.DataBinding.fromContext("Skill Being Learned:") // text
                     ),
                     new GameFramework.ControlLabel("textSkillBeingLearned", // name,
                     GameFramework.Coords.fromXY(145, size.y - margin - labelHeight * 2), // pos,
@@ -206,7 +208,7 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(margin, size.y - margin - labelHeight), // pos,
                     GameFramework.Coords.fromXY(size.x - margin * 2, labelHeight), // size,
                     false, // isTextCentered,
-                    "Learning Accumulated:" // text
+                    GameFramework.DataBinding.fromContext("Learning Accumulated:") // text
                     ),
                     GameFramework.ControlLabel.from5("textLearningAccumulated", // name,
                     GameFramework.Coords.fromXY(145, size.y - margin - labelHeight), // pos,
@@ -221,7 +223,7 @@ var ThisCouldBeBetter;
                     new GameFramework.ControlLabel("labelSkills", GameFramework.Coords.fromXY(200, 20), // pos
                     GameFramework.Coords.fromXY(120, 25), // size
                     true, // isTextCentered
-                    "Skills", labelHeightLarge));
+                    GameFramework.DataBinding.fromContext("Skills"), labelHeightLarge));
                 }
                 else {
                     var titleHeightInverted = GameFramework.Coords.fromXY(0, -30);

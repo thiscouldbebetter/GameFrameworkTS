@@ -12,6 +12,9 @@ var ThisCouldBeBetter;
                 return this;
             }
             // transform
+            clone() {
+                return this; // todo
+            }
             overwriteWith(other) {
                 return this; // todo
             }

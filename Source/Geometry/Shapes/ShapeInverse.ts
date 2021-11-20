@@ -24,7 +24,13 @@ export class ShapeInverse implements ShapeBase
 		return this;
 	}
 
+	// Equatable
+
+	equals(other: ShapeBase) { return false; } // todo
+
 	// ShapeBase.
+
+	collider(): ShapeBase { return null; }
 
 	locate(loc: Disposition): ShapeBase
 	{
@@ -46,7 +52,7 @@ export class ShapeInverse implements ShapeBase
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable { throw new Error("Not implemented!");  }
+	transform(transformToApply: TransformBase): ShapeInverse { throw new Error("Not implemented!");  }
 
 }
 

@@ -12,8 +12,7 @@ var ThisCouldBeBetter;
                 return new VisualInvisible(this.child.clone());
             }
             overwriteWith(other) {
-                var otherAsVisualInvisible = other;
-                this.child.overwriteWith(otherAsVisualInvisible.child);
+                this.child.overwriteWith(other.child);
                 return this;
             }
             // Transformable.

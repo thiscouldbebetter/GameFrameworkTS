@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Damager implements EntityProperty
+export class Damager implements EntityProperty<Damager>
 {
 	damagePerHit: Damage;
 
@@ -16,6 +16,10 @@ export class Damager implements EntityProperty
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
+
+	// Equatable
+
+	equals(other: Damager): boolean { return false; } // todo
 }
 
 }

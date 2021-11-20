@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Killable implements EntityProperty
+export class Killable implements EntityProperty<Killable>
 {
 	integrityMax: number;
 	_damageApply:
@@ -118,13 +118,16 @@ export class Killable implements EntityProperty
 		}
 	}
 
-	// cloneable
+	// Clonable.
 
 	clone(): Killable
 	{
 		return new Killable(this.integrityMax, this._damageApply, this._die);
 	}
 
+	// Equatable
+
+	equals(other: Killable): boolean { return false; } // todo
 }
 
 }

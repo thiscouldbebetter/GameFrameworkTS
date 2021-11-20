@@ -20,6 +20,8 @@ export class BoxRotated implements ShapeBase
 
 	// ShapeBase.
 
+	collider(): ShapeBase { return null; }
+
 	locate(loc: Disposition): ShapeBase
 	{
 		return ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
@@ -94,6 +96,10 @@ export class BoxRotated implements ShapeBase
 		return this;
 	}
 
+	// Equatable
+
+	equals(other: ShapeBase) { return false; } // todo
+
 	// Transformable.
 
 	coordsGroupToTranslate(): Coords[]
@@ -101,7 +107,7 @@ export class BoxRotated implements ShapeBase
 		return [ this.box.center ];
 	}
 
-	transform(transformToApply: Transform): Transformable { throw new Error("Not implemented!");  }
+	transform(transformToApply: TransformBase): BoxRotated { throw new Error("Not implemented!");  }
 }
 
 }

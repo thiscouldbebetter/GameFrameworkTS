@@ -83,6 +83,15 @@ export class CraftingRecipe
 			ArrayHelper.clone(this.itemsOut)
 		);
 	}
+
+	overwriteWith(other: CraftingRecipe): CraftingRecipe
+	{
+		this.name = other.name;
+		this.ticksToComplete = other.ticksToComplete;
+		ArrayHelper.overwriteWith(this.itemsIn, other.itemsIn);
+		ArrayHelper.overwriteWith(this.itemsOut, other.itemsOut);
+		return this;
+	}
 }
 
 }

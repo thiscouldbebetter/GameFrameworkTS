@@ -2,12 +2,13 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Transform_MeshPoseWithSkeleton implements Transform
+export class Transform_MeshPoseWithSkeleton
+	implements Transform<Transform_MeshPoseWithSkeleton>
 {
 	meshAtRest: MeshTextured;
 	skeletonAtRest: Skeleton;
 	boneInfluences: BoneInfluence[];
-	boneInfluencesByName: any;
+	boneInfluencesByName: Map<string, BoneInfluence>;
 	skeletonPosed: Skeleton;
 
 	_orientation: Orientation;
@@ -35,12 +36,20 @@ export class Transform_MeshPoseWithSkeleton implements Transform
 		this._vertex = Coords.create();
 	}
 
-	overwriteWith(other: Transform): Transform
+	clone(): Transform_MeshPoseWithSkeleton
+	{
+		return this;
+	}
+
+	overwriteWith
+	(
+		other: Transform_MeshPoseWithSkeleton
+	): Transform_MeshPoseWithSkeleton
 	{
 		return this; // todo
 	}
 
-	transform(transformable: Transformable): Transformable
+	transform(transformable: TransformableBase): TransformableBase
 	{
 		this.transformMesh(transformable as MeshTextured);
 		return transformable;

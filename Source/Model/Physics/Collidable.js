@@ -172,6 +172,8 @@ var ThisCouldBeBetter;
             clone() {
                 return new Collidable(this.ticksToWaitBetweenCollisions, this.colliderAtRest.clone(), this.entityPropertyNamesToCollideWith, this._collideEntities);
             }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.Collidable = Collidable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

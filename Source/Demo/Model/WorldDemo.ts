@@ -28,7 +28,7 @@ class WorldDemo extends World
 
 		var propertyNamesToProcess =
 		[
-			Loadable.name,
+			LoadableProperty.name,
 
 			Locatable.name,
 			ForceField.name,

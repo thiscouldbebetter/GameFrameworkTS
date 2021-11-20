@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualSound implements Visual
+export class VisualSound implements Visual<VisualSound>
 {
 	// Yes, obviously sounds aren't really visual.
 
@@ -69,7 +69,7 @@ export class VisualSound implements Visual
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualSound
 	{
 		return this; // todo
 	}

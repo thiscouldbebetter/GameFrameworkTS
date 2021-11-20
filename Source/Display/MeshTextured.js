@@ -72,7 +72,7 @@ var ThisCouldBeBetter;
                 }
                 return this;
             }
-            // cloneable
+            // Clonable.
             clone() {
                 return new MeshTextured(this.geometry.clone(), this.materials, GameFramework.ArrayHelper.clone(this.faceTextures), GameFramework.ArrayHelper.clone(this.vertexGroups));
             }
@@ -81,7 +81,10 @@ var ThisCouldBeBetter;
                 // todo
                 return this;
             }
+            // Equatable
+            equals(other) { return false; } // todo
             // ShapeBase.
+            collider() { return null; }
             locate(loc) {
                 throw new Error("Not implemented!");
             }
@@ -101,8 +104,14 @@ var ThisCouldBeBetter;
                 this.materialName = materialName;
                 this.textureUVs = textureUVs;
             }
+            // Clonable.
             clone() {
                 return new MeshTexturedFaceTexture(this.materialName, GameFramework.ArrayHelper.clone(this.textureUVs));
+            }
+            overwriteWith(other) {
+                this.materialName = other.materialName;
+                GameFramework.ArrayHelper.overwriteWith(this.textureUVs, other.textureUVs);
+                return this;
             }
             // Transformable.
             transform(transformToApply) {

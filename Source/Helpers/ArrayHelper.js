@@ -58,9 +58,26 @@ var ThisCouldBeBetter;
                         if (element0 == element1) {
                             // Do nothing.
                         }
-                        else if (element0.equals != null
-                            && element1.equals != null
-                            && element0.equals(element1)) {
+                        else if (element0.equals(element1)) {
+                            // Do nothing.
+                        }
+                        else {
+                            areArraysEqual = false;
+                        }
+                    }
+                }
+                return areArraysEqual;
+            }
+            static areEqualNonEquatable(array0, array1) {
+                var areArraysEqual = true;
+                if (array0.length != array1.length) {
+                    areArraysEqual = false;
+                }
+                else {
+                    for (var i = 0; i < array0.length; i++) {
+                        var element0 = array0[i];
+                        var element1 = array1[i];
+                        if (element0 == element1) {
                             // Do nothing.
                         }
                         else {
@@ -80,19 +97,19 @@ var ThisCouldBeBetter;
                 return array;
             }
             static clone(array) {
-                var returnValue = null;
+                var returnValues = null;
                 if (array != null) {
-                    returnValue = [];
+                    returnValues = new Array();
                     for (var i = 0; i < array.length; i++) {
                         var element = array[i];
                         var elementCloned = element.clone();
-                        returnValue.push(elementCloned);
+                        returnValues.push(elementCloned);
                     }
                 }
-                return returnValue;
+                return returnValues;
             }
             static flattenArrayOfArrays(arrayOfArrays) {
-                var arrayFlattened = [];
+                var arrayFlattened = new Array();
                 for (var i = 0; i < arrayOfArrays.length; i++) {
                     var childArray = arrayOfArrays[i];
                     arrayFlattened =
@@ -147,12 +164,14 @@ var ThisCouldBeBetter;
                 for (var i = 0; i < array.length; i++) {
                     var elementThis = array[i];
                     var elementOther = other[i];
-                    if (elementThis.overwriteWith == null) {
-                        array[i] = elementOther;
-                    }
-                    else {
-                        elementThis.overwriteWith(elementOther);
-                    }
+                    elementThis.overwriteWith(elementOther);
+                }
+                return array;
+            }
+            static overwriteWithNonClonables(array, other) {
+                for (var i = 0; i < array.length; i++) {
+                    var elementOther = other[i];
+                    array[i] = elementOther;
                 }
                 return array;
             }

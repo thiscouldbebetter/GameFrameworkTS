@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualPolars implements Visual
+export class VisualPolars implements Visual<VisualPolars>
 {
 	polars: Polar[];
 	color: Color;
@@ -54,19 +54,19 @@ export class VisualPolars implements Visual
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualPolars
 	{
 		return this; // todo
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualPolars): VisualPolars
 	{
 		return this; // todo
 	}
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualPolars
 	{
 		return this; // todo
 	}

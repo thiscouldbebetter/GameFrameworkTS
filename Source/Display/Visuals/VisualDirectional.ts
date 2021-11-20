@@ -2,18 +2,18 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualDirectional implements Visual
+export class VisualDirectional implements Visual<VisualDirectional>
 {
-	visualForNoDirection: Visual;
-	visualsForDirections: Visual[];
+	visualForNoDirection: VisualBase;
+	visualsForDirections: VisualBase[];
 	_headingInTurnsGetForEntity: (e: Entity) => number;
 
 	numberOfDirections: number;
 
 	constructor
 	(
-		visualForNoDirection: Visual,
-		visualsForDirections: Visual[],
+		visualForNoDirection: VisualBase,
+		visualsForDirections: VisualBase[],
 		headingInTurnsGetForEntity: (e: Entity) => number
 	)
 	{
@@ -26,7 +26,7 @@ export class VisualDirectional implements Visual
 
 	static fromVisuals
 	(
-		visualForNoDirection: Visual, visualsForDirections: Visual[],
+		visualForNoDirection: VisualBase, visualsForDirections: VisualBase[],
 	): VisualDirectional
 	{
 		return new VisualDirectional
@@ -82,19 +82,19 @@ export class VisualDirectional implements Visual
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualDirectional
 	{
 		return this; // todo
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualDirectional): VisualDirectional
 	{
 		return this; // todo
 	}
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualDirectional
 	{
 		return this; // todo
 	}

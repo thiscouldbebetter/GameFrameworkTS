@@ -159,7 +159,7 @@ var ThisCouldBeBetter;
                 else if (inputPressed == "_") {
                     inputPressed = "__";
                 }
-                else if (isNaN(inputPressed) == false) {
+                else if (parseFloat(inputPressed) == null) {
                     inputPressed = "_" + inputPressed;
                 }
                 this.inputAdd(inputPressed);
@@ -172,7 +172,7 @@ var ThisCouldBeBetter;
                 else if (inputReleased == "_") {
                     inputReleased = "__";
                 }
-                else if (isNaN(inputReleased) == false) {
+                else if (parseFloat(inputReleased) == null) {
                     inputReleased = "_" + inputReleased;
                 }
                 this.inputRemove(inputReleased);
@@ -203,7 +203,7 @@ var ThisCouldBeBetter;
                 for (var i = 0; i < systemGamepads.length; i++) {
                     var systemGamepad = systemGamepads[i];
                     if (systemGamepad != null) {
-                        var gamepad = new Gamepad(); // todo
+                        var gamepad = new InputGamepad(i, systemGamepad); // todo
                         this.gamepadsConnected.push(gamepad);
                     }
                 }
@@ -215,13 +215,30 @@ var ThisCouldBeBetter;
             toDomElement(platformHelper) {
                 document.body.onkeydown = this.handleEventKeyDown.bind(this);
                 document.body.onkeyup = this.handleEventKeyUp.bind(this);
-                var divMain = (platformHelper == null ? document.getElementById("divMain") : platformHelper.divMain);
+                var divMain = (platformHelper == null
+                    ? document.getElementById("divMain")
+                    : platformHelper.divMain);
                 divMain.onmousedown = this.handleEventMouseDown.bind(this);
                 divMain.onmouseup = this.handleEventMouseUp.bind(this);
-                divMain.onmousemove = (this.isMouseMovementTracked ? this.handleEventMouseMove.bind(this) : null);
+                divMain.onmousemove =
+                    (this.isMouseMovementTracked
+                        ? this.handleEventMouseMove.bind(this)
+                        : null);
                 return null;
             }
         }
         GameFramework.InputHelper = InputHelper;
+        class InputGamepad {
+            constructor(index, systemGamepad) {
+                this.index = index;
+                this.systemGamepad = systemGamepad;
+                this.buttonsPressed = new Array();
+                this.axisDisplacements = new Array();
+            }
+            updateFromSystemGamepad(systemGamepad) {
+                // todo
+            }
+        }
+        GameFramework.InputGamepad = InputGamepad;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
 })(ThisCouldBeBetter || (ThisCouldBeBetter = {}));

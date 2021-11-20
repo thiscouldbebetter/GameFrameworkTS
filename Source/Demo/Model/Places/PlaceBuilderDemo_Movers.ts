@@ -84,7 +84,7 @@ class PlaceBuilderDemo_Movers
 					(
 						"Blinking",
 						[ 5 ],// , 5 ], // ticksToHoldFrames
-						new Array<Visual>
+						new Array<VisualBase>
 						(
 							//new VisualNone(),
 							carnivoreVisualNormal
@@ -117,11 +117,12 @@ class PlaceBuilderDemo_Movers
 			var entityActor = uwpe.entity;
 
 			var activity = entityActor.actor().activity;
-			var targetPos = activity.target() as Coords;
-			if (targetPos == null)
+			var targetEntity = activity.targetEntity();
+			if (targetEntity == null)
 			{
 				var moversInPlace = place.movables();
-				var grazersInPlace = moversInPlace.filter(x => x.name.startsWith("Grazer"));
+				var grazersInPlace =
+					moversInPlace.filter(x => x.name.startsWith("Grazer"));
 				if (grazersInPlace.length == 0)
 				{
 					var randomizer = universe.randomizer;
@@ -132,8 +133,11 @@ class PlaceBuilderDemo_Movers
 				{
 					targetPos = grazersInPlace[0].locatable().loc.pos;
 				}
-				activity.targetSet(targetPos);
+				targetEntity = Locatable.fromPos(targetPos).toEntity();
+				activity.targetEntitySet(targetEntity);
 			}
+
+			var targetPos = targetEntity.locatable().loc.pos;
 
 			var actorLoc = entityActor.locatable().loc;
 			var actorPos = actorLoc.pos;
@@ -173,7 +177,7 @@ class PlaceBuilderDemo_Movers
 				{
 					grazerInReach.killable().integrity = 0;
 				}
-				activity.targetSet(null);
+				activity.targetEntitySet(null);
 			}
 		};
 
@@ -322,10 +326,12 @@ class PlaceBuilderDemo_Movers
 			var defns = world.defn;
 			var skillsAll = defns.defnArraysByTypeName.get(Skill.name); // todo - Just use the "-ByName" lookup.
 			var skillsByName = defns.defnsByNameByTypeName.get(Skill.name);
-			var learningMessage = learner.learningIncrement
+			learner.statusMessage = null;
+			learner.learningIncrement
 			(
 				skillsAll, skillsByName, 1
 			);
+			var learningMessage = learner.statusMessage;
 			if (learningMessage != null)
 			{
 				place.entitySpawn
@@ -334,7 +340,8 @@ class PlaceBuilderDemo_Movers
 					(
 						universe.entityBuilder.messageFloater
 						(
-							learningMessage, entityPlayer.locatable().loc.pos,
+							learningMessage,
+							entityPlayer.locatable().loc.pos,
 							Color.byName("Green")
 						)
 					)
@@ -387,21 +394,25 @@ class PlaceBuilderDemo_Movers
 			var enemyCountMax = 1;
 			if (enemyCount < enemyCountMax)
 			{
-				var ticksDelayedSoFar = activity.target() as number;
-				if (ticksDelayedSoFar == null)
+				var targetEntity = activity.targetEntity();
+				if (targetEntity == null)
 				{
-					ticksDelayedSoFar = 0;
+					var ticksToDelay = 200;
+					targetEntity = new Ephemeral(ticksToDelay, null).toEntity(); // hack
 				}
-				ticksDelayedSoFar++;
-				var ticksToDelay = 200;
-				if (ticksDelayedSoFar < ticksToDelay)
+
+				var targetEphemeral = targetEntity.ephemeral();
+				var ticksToDelayRemaining = targetEphemeral.ticksToLive;
+
+				ticksToDelayRemaining--;
+				if (ticksToDelayRemaining > 0)
 				{
-					activity.targetSet(ticksDelayedSoFar);
+					targetEphemeral.ticksToLive--;
 					return;
 				}
 				else
 				{
-					activity.targetSet(null);
+					activity.targetEntityClear();
 				}
 
 				var enemyEntityToPlace = enemyEntityPrototype.clone();
@@ -787,7 +798,7 @@ class PlaceBuilderDemo_Movers
 					(
 						"Blinking",
 						[ 5 ],// , 5 ], // ticksToHoldFrames
-						new Array<Visual>
+						new Array<VisualBase>
 						(
 							//new VisualNone(),
 							friendlyVisualNormal
@@ -824,17 +835,20 @@ class PlaceBuilderDemo_Movers
 			var place = uwpe.place;
 			var entityActor = uwpe.entity;
 			var activity = entityActor.actor().activity;
-			var targetPos = activity.target() as Coords;
-			if (targetPos == null)
+			var targetEntity = activity.targetEntity();
+			if (targetEntity == null)
 			{
 				var randomizer = universe.randomizer;
-				targetPos =
+				var targetPos =
 					Coords.create().randomize(randomizer).multiply(place.size);
-				activity.targetSet(targetPos);
+				targetEntity = Locatable.fromPos(targetPos).toEntity();
+				activity.targetEntitySet(targetEntity);
 			}
 
 			var actorLoc = entityActor.locatable().loc;
 			var actorPos = actorLoc.pos;
+
+			var targetPos = targetEntity.locatable().loc.pos;
 
 			var distanceToTarget = targetPos.clone().subtract
 			(
@@ -856,7 +870,7 @@ class PlaceBuilderDemo_Movers
 			else
 			{
 				actorPos.overwriteWith(targetPos);
-				activity.targetSet(null);
+				activity.targetEntityClear();
 			}
 		};
 
@@ -992,7 +1006,7 @@ class PlaceBuilderDemo_Movers
 
 		var grazerVisualSelect = new VisualSelect
 		(
-			new Map<string,Visual>
+			new Map<string,VisualBase>
 			([
 				[ "Juvenile", grazerVisualJuvenile ],
 				[ "Adult", grazerVisualAdult ],
@@ -1031,9 +1045,11 @@ class PlaceBuilderDemo_Movers
 			var entityActor = uwpe.entity;
 
 			var activity = entityActor.actor().activity;
-			var targetPos = activity.target() as Coords;
-			if (targetPos == null)
+			var targetEntity = activity.targetEntity();
+			if (targetEntity == null)
 			{
+				var targetPos: Coords = null;
+
 				var itemsInPlace = place.items();
 				var itemsGrassInPlace = itemsInPlace.filter
 				(
@@ -1049,12 +1065,15 @@ class PlaceBuilderDemo_Movers
 				{
 					targetPos = itemsGrassInPlace[0].locatable().loc.pos;
 				}
-				activity.targetSet(targetPos);
+
+				targetEntity = Locatable.fromPos(targetPos).toEntity();
+				activity.targetEntitySet(targetEntity);
 			}
 
 			var actorLoc = entityActor.locatable().loc;
 			var actorPos = actorLoc.pos;
 
+			var targetPos = targetEntity.locatable().loc.pos;
 			var distanceToTarget = targetPos.clone().subtract
 			(
 				actorPos
@@ -1090,7 +1109,7 @@ class PlaceBuilderDemo_Movers
 				{
 					place.entityToRemoveAdd(itemGrassInReach);
 				}
-				activity.targetSet(null);
+				activity.targetEntityClear();
 			}
 		};
 
@@ -1178,7 +1197,7 @@ class PlaceBuilderDemo_Movers
 		var playerCollider = new Sphere(Coords.create(), playerHeadRadius);
 		var playerColor = Color.byName("Gray");
 
-		var playerVisualBodyNormal: Visual = visualBuilder.circleWithEyesAndLegsAndArms
+		var playerVisualBodyNormal: VisualBase = visualBuilder.circleWithEyesAndLegsAndArms
 		(
 			playerHeadRadius, playerColor, visualEyeRadius, visualEyesBlinking
 		);
@@ -1189,7 +1208,7 @@ class PlaceBuilderDemo_Movers
 		var playerVisualBodyHidable = new VisualSelect
 		(
 			// childrenByName
-			new Map<string, Visual>
+			new Map<string, VisualBase>
 			([
 				[ "Normal", playerVisualBodyNormal ],
 				[ "Hidden", playerVisualBodyHidden ]
@@ -1226,14 +1245,21 @@ class PlaceBuilderDemo_Movers
 			null, // colorForBorderAsValueBreakGroup
 			null // text
 		);
+
 		var playerVisualSatietyBar = new VisualBar
 		(
 			"F", // abbreviation
 			playerVisualBarSize,
 			Color.Instances().Brown,
-			DataBinding.fromGet( (c: Entity) => c.starvable().satiety ),
+			DataBinding.fromGet
+			(
+				(c: Entity) => { return c.starvable().satiety; }
+			),
 			null, // amountThreshold
-			DataBinding.fromGet( (c: Entity) => c.starvable().satietyMax ),
+			DataBinding.fromGet
+			(
+				(c: Entity) => { return c.starvable().satietyMax; }
+			),
 			.5, // fractionBelowWhichToShow
 			null, // colorForBorderAsValueBreakGroup
 			null // text
@@ -1249,7 +1275,7 @@ class PlaceBuilderDemo_Movers
 			null, Orientation.Instances().ForwardXDownZ
 		);
 
-		var playerVisualsForStatusInfo: Visual[] =
+		var playerVisualsForStatusInfo: VisualBase[] =
 		[
 			playerVisualHealthBar,
 			playerVisualSatietyBar,
@@ -1547,8 +1573,8 @@ class PlaceBuilderDemo_Movers
 
 			var drawable = entityPlayer.drawable();
 
-			var ticksToWait = activity.target() as number;
-			if (ticksToWait == null)
+			var targetEntity = activity.targetEntity();
+			if (targetEntity == null)
 			{
 				drawable.visual = new VisualGroup
 				([
@@ -1563,19 +1589,26 @@ class PlaceBuilderDemo_Movers
 					)
 				]);
 				ticksToWait = 60; // 3 seconds.
-			}
-			else if (ticksToWait > 0)
-			{
-				ticksToWait--;
+				targetEntity = new Ephemeral(ticksToWait, null).toEntity();
+				activity.targetEntitySet(targetEntity);
 			}
 			else
 			{
-				ticksToWait = null;
-				activity.defnName = "Player";
-				drawable.visual =
-					(drawable.visual as VisualGroup).children[0];
+				var targetEphemeral = targetEntity.ephemeral();
+				var ticksToWait = targetEphemeral.ticksToLive;
+				if (ticksToWait > 0)
+				{
+					ticksToWait--;
+					targetEphemeral.ticksToLive = ticksToWait;
+				}
+				else
+				{
+					activity.defnName = "Player";
+					drawable.visual =
+						(drawable.visual as VisualGroup).children[0];
+					activity.targetEntityClear();
+				}
 			}
-			activity.targetSet(ticksToWait);
 		};
 		var playerActivityDefnWait = new ActivityDefn("Wait", playerActivityWaitPerform);
 		this.parent.activityDefns.push(playerActivityDefnWait);
@@ -1665,7 +1698,8 @@ class PlaceBuilderDemo_Movers
 		}
 
 		var activity = entityPlayer.actor().activity;
-		var itemEntityToPickUp = activity.targetByName("ItemEntityToPickUp");
+		var itemEntityToPickUp =
+			activity.targetEntityByName("ItemEntityToPickUp");
 		if (itemEntityToPickUp != null)
 		{
 			var entityPickingUp = entityPlayer;
@@ -1684,7 +1718,7 @@ class PlaceBuilderDemo_Movers
 
 			if (distance < 1)
 			{
-				activity.targetClearByName("ItemEntityToPickUp");
+				activity.targetEntityClearByName("ItemEntityToPickUp");
 
 				var itemHolder = entityPickingUp.itemHolder();
 				itemHolder.itemEntityPickUp
@@ -1710,8 +1744,18 @@ class PlaceBuilderDemo_Movers
 		var toControlMenu = Playable.toControlMenu;
 		var toControlWorldOverlay = Playable.toControlWorldOverlay;
 		var toControl =
-			(universe: Universe, size: Coords, entity: Entity, venuePrev: Venue, isMenu: boolean) =>
+			//(universe: Universe, size: Coords, entity: Entity, venuePrev: Venue, isMenu: boolean) =>
+			(uwpe: UniverseWorldPlaceEntities) =>
 			{
+				var universe = uwpe.universe;
+				var size = universe.display.sizeInPixels;
+				var entity = uwpe.entity;
+				var venuePrev = universe.venueCurrent;
+				var isMenu = universe.inputHelper.inputsPressed.some
+				(
+					x => x.name == "Escape" || x.name == "Tab" // hack
+				);
+
 				var returnValue;
 				if (isMenu)
 				{

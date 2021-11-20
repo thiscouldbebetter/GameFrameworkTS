@@ -2,11 +2,11 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualGroup implements Visual
+export class VisualGroup implements Visual<VisualGroup>
 {
-	children: Visual[];
+	children: VisualBase[];
 
-	constructor(children: Visual[])
+	constructor(children: VisualBase[])
 	{
 		this.children = children;
 	}
@@ -22,21 +22,20 @@ export class VisualGroup implements Visual
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualGroup
 	{
 		return new VisualGroup(ArrayHelper.clone(this.children) );
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualGroup): VisualGroup
 	{
-		var otherAsVisualGroup = other as VisualGroup;
-		ArrayHelper.overwriteWith(this.children, otherAsVisualGroup.children);
+		ArrayHelper.overwriteWith(this.children, other.children);
 		return this;
 	}
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualGroup
 	{
 		this.children.forEach(x => transformToApply.transform(x));
 		return this;

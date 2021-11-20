@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Vehicle implements EntityProperty
+export class Vehicle implements EntityProperty<Vehicle>
 {
 	accelerationPerTick: number;
 	speedMax: number;
@@ -119,6 +119,11 @@ export class Vehicle implements EntityProperty
 			);
 		}
 	}
+
+	// Equatable
+
+	equals(other: Vehicle): boolean { return false; } // todo
+
 }
 
 }

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualBar implements Visual
+export class VisualBar implements Visual<VisualBar>
 {
 	abbreviation: string;
 	size: Coords;
@@ -11,7 +11,7 @@ export class VisualBar implements Visual
 	amountThreshold: DataBinding<Entity, number>;
 	amountMax: DataBinding<Entity, number>;
 	fractionBelowWhichToShow: number;
-	colorForBorderAsValueBreakGroup: ValueBreakGroup;
+	colorForBorderAsValueBreakGroup: ValueBreakGroup<Color>;
 	text: DataBinding<any, string>;
 
 	_drawPos: Coords;
@@ -27,7 +27,7 @@ export class VisualBar implements Visual
 		amountThreshold: DataBinding<Entity, number>,
 		amountMax: DataBinding<Entity, number>,
 		fractionBelowWhichToShow: number,
-		colorForBorderAsValueBreakGroup: ValueBreakGroup,
+		colorForBorderAsValueBreakGroup: ValueBreakGroup<Color>,
 		text: DataBinding<any, string>
 	)
 	{
@@ -46,9 +46,9 @@ export class VisualBar implements Visual
 		this._sizeHalf = this.size.clone().half();
 	}
 
-	draw(uwpe: UniverseWorldPlaceEntities, display: Display): any
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
-		var wasVisible = false;
+		//var wasVisible = false;
 
 		var entity = uwpe.entity;
 		var pos = this._drawPos.overwriteWith
@@ -69,7 +69,7 @@ export class VisualBar implements Visual
 
 		if (shouldShow)
 		{
-			wasVisible = true;
+			//wasVisible = true;
 
 			var widthCurrent = fractionCurrent * this.size.x;
 			this._sizeCurrent.x = widthCurrent;
@@ -131,24 +131,24 @@ export class VisualBar implements Visual
 			);
 		}
 
-		return wasVisible;
+		//return wasVisible;
 	}
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualBar
 	{
 		return this; // todo
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualBar): VisualBar
 	{
 		return this; // todo
 	}
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualBar
 	{
 		return this; // todo
 	}

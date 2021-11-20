@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ItemCrafter implements EntityProperty
+export class ItemCrafter implements EntityProperty<ItemCrafter>
 {
 	recipesAvailable: CraftingRecipe[];
 
@@ -191,7 +191,7 @@ export class ItemCrafter implements EntityProperty
 					Coords.fromXY(10, 5), // pos
 					Coords.fromXY(70, 25), // size
 					false, // isTextCentered
-					"Recipes:",
+					DataBinding.fromContext("Recipes:"),
 					fontHeightSmall
 				),
 
@@ -233,7 +233,7 @@ export class ItemCrafter implements EntityProperty
 					Coords.fromXY(105, 5), // pos
 					Coords.fromXY(70, 25), // size
 					false, // isTextCentered
-					"Recipe Selected:",
+					DataBinding.fromContext("Recipe Selected:"),
 					fontHeightSmall
 				),
 
@@ -400,7 +400,7 @@ export class ItemCrafter implements EntityProperty
 					Coords.fromXY(100, -5), // pos
 					Coords.fromXY(100, 25), // size
 					true, // isTextCentered
-					"Craft",
+					DataBinding.fromContext("Craft"),
 					fontHeightLarge
 				)
 			);
@@ -415,7 +415,7 @@ export class ItemCrafter implements EntityProperty
 					"Done",
 					fontHeightSmall,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					back // click
 				)
 			);
@@ -432,12 +432,16 @@ export class ItemCrafter implements EntityProperty
 		return returnValue;
 	}
 
-	// cloneable
+	// Clonable.
 
 	clone(): ItemCrafter
 	{
 		return new ItemCrafter(ArrayHelper.clone(this.recipesAvailable) );
 	}
+
+	// Equatable
+
+	equals(other: ItemCrafter): boolean { return false; } // todo
 }
 
 }

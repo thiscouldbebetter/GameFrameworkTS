@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Locatable implements EntityProperty
+export class Locatable implements EntityProperty<Locatable>
 {
 	loc: Disposition;
 
@@ -123,6 +123,11 @@ export class Locatable implements EntityProperty
 		return entityToSpawn;
 	}
 
+	toEntity(): Entity
+	{
+		return new Entity(Locatable.name, [ this ] );
+	}
+
 	// EntityProperty.
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
@@ -157,6 +162,10 @@ export class Locatable implements EntityProperty
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+
+	// Equatable
+
+	equals(other: Locatable): boolean { return false; } // todo
 
 }
 

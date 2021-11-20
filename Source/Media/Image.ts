@@ -2,14 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Image2
+export class Image2 implements MediaItemBase
 {
 	name: string;
 	sourcePath: string;
 	isLoaded: boolean;
 
 	sizeInPixels: Coords;
-	systemImage: any;
+	systemImage: any; // Could be HTMLImageElement OR HTMLCanvasElement?
 
 	constructor(name: string, sourcePath: string)
 	{
@@ -66,7 +66,7 @@ export class Image2
 			var imgElement = document.createElement("img");
 			imgElement.onload = (event) =>
 			{
-				var imgLoaded: any = event.target;
+				var imgLoaded = event.target as HTMLImageElement;
 				image.isLoaded = true;
 				image.systemImage = imgLoaded;
 				image.sizeInPixels = new Coords

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Perceptor implements EntityProperty
+export class Perceptor implements EntityProperty<Perceptor>
 {
 	sightThreshold: number;
 	hearingThreshold: number;
@@ -18,6 +18,11 @@ export class Perceptor implements EntityProperty
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
+
+	// Equatable
+
+	equals(other: Perceptor): boolean { return false; } // todo
+
 }
 
 }

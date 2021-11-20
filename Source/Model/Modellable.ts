@@ -2,11 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Modellable implements EntityProperty
-{
-	model: any;
+export interface ModellableBase extends EntityPropertyBase
+{}
 
-	constructor(model: any)
+export class Modellable<TModel> implements EntityProperty<Modellable<TModel>>
+{
+	model: TModel;
+
+	constructor(model: TModel)
 	{
 		this.model = model;
 	}
@@ -20,6 +23,11 @@ export class Modellable implements EntityProperty
 	{
 		// Do nothing.
 	}
+
+	// Equatable
+
+	equals(other: Modellable<TModel>): boolean { return false; } // todo
+
 }
 
 }

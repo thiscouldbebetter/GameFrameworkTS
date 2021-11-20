@@ -7,8 +7,13 @@ var ThisCouldBeBetter;
             constructor(focalLength) {
                 this.focalLength = focalLength;
             }
+            // Clonable.
+            clone() {
+                return new Transform_Perspective(this.focalLength);
+            }
             overwriteWith(other) {
-                return this; // todo
+                this.focalLength = other.focalLength;
+                return this;
             }
             transform(transformable) {
                 return transformable; // todo

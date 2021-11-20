@@ -64,6 +64,8 @@ var ThisCouldBeBetter;
             overwriteWith(other) {
                 return this; // todo
             }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.Animatable2 = Animatable2;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

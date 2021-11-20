@@ -12,9 +12,6 @@ var ThisCouldBeBetter;
             distanceToPointAlongNormal(point) {
                 return point.dotProduct(this.normal) - this.distanceFromOrigin;
             }
-            equals(other) {
-                return (this.normal.equals(other.normal) && this.distanceFromOrigin == other.distanceFromOrigin);
-            }
             fromPoints(point0, point1, point2) {
                 this.normal.overwriteWith(point1).subtract(point0).crossProduct(this._displacementFromPoint0To2.overwriteWith(point2).subtract(point0)).normalize();
                 this.distanceFromOrigin = point0.dotProduct(this.normal);
@@ -36,7 +33,14 @@ var ThisCouldBeBetter;
                 this.distanceFromOrigin = other.distanceFromOrigin;
                 return this;
             }
+            // Equatable
+            equals(other) {
+                var returnValue = (this.normal.equals(other.normal)
+                    && this.distanceFromOrigin == other.distanceFromOrigin);
+                return returnValue;
+            }
             // ShapeBase.
+            collider() { return null; }
             locate(loc) { throw new Error("Not implemented!"); }
             normalAtPos(posToCheck, normalOut) { throw new Error("Not implemented!"); }
             surfacePointNearPos(posToCheck, surfacePointOut) { throw new Error("Not implemented!"); }

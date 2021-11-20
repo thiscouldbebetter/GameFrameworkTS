@@ -58,19 +58,19 @@ export class VisualImageScaled implements VisualImage
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualImageScaled
 	{
 		return this; // todo
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualImageScaled): VisualImageScaled
 	{
 		return this; // todo
 	}
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualImageScaled
 	{
 		return this; // todo
 	}

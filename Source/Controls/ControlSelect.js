@@ -11,12 +11,12 @@ var ThisCouldBeBetter;
                 this.bindingForOptionValues = bindingForOptionValues;
                 this.bindingForOptionText = bindingForOptionText;
                 this.indexOfOptionSelected = null;
-                var valueSelected = this.valueSelected();
-                var options = this.options();
-                for (var i = 0; i < options.length; i++) {
-                    var option = options[i];
+                var valueSelectedActualized = this.valueSelected();
+                var optionsActualized = this.options();
+                for (var i = 0; i < optionsActualized.length; i++) {
+                    var option = optionsActualized[i];
                     var optionValue = this.bindingForOptionValues.contextSet(option).get();
-                    if (optionValue == valueSelected) {
+                    if (optionValue == valueSelectedActualized) {
                         this.indexOfOptionSelected = i;
                         break;
                     }
@@ -53,15 +53,10 @@ var ThisCouldBeBetter;
                 var valueToSelect = (optionSelected == null
                     ? null
                     : this.bindingForOptionValues.contextSet(optionSelected).get());
-                if (this._valueSelected != null && this._valueSelected.constructor.name == GameFramework.DataBinding.name) {
-                    this._valueSelected.set(valueToSelect);
-                }
-                else {
-                    this._valueSelected = valueToSelect;
-                }
+                this._valueSelected.set(valueToSelect);
             }
             options() {
-                return (this._options.get == null ? this._options : this._options.get());
+                return this._options.get();
             }
             scalePosAndSize(scaleFactor) {
                 this.pos.multiply(scaleFactor);
@@ -69,9 +64,7 @@ var ThisCouldBeBetter;
                 this.fontHeightInPixels *= scaleFactor.y;
             }
             valueSelected() {
-                var returnValue = (this._valueSelected == null
-                    ? null
-                    : (this._valueSelected.get == null ? this._valueSelected : this._valueSelected.get()));
+                var returnValue = this._valueSelected.get();
                 return returnValue;
             }
             // drawable

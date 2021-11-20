@@ -7,13 +7,15 @@ var ThisCouldBeBetter;
             constructor(transformableToOverwriteWith) {
                 this.transformableToOverwriteWith = transformableToOverwriteWith;
             }
+            clone() {
+                return this; // todo
+            }
             overwriteWith(other) {
                 return this; // todo
             }
             transform(transformable) {
-                // todo
-                //transformable.overwriteWith(this.transformableToOverwriteWith);
-                return this;
+                transformable.overwriteWith(this.transformableToOverwriteWith);
+                return transformable;
             }
             transformCoords(coordsToTransform) {
                 return coordsToTransform;

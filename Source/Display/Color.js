@@ -62,13 +62,12 @@ var ThisCouldBeBetter;
             overwriteWith(other) {
                 this.name = other.name;
                 this.code = other.code;
-                GameFramework.ArrayHelper.overwriteWith(this.componentsRGBA, other.componentsRGBA);
+                GameFramework.ArrayHelper.overwriteWithNonClonables(this.componentsRGBA, other.componentsRGBA);
                 this._systemColor = null;
                 return this;
             }
             // Interpolatable.
-            interpolateWith(otherAsAny, fractionOfProgressTowardOther) {
-                var other = otherAsAny;
+            interpolateWith(other, fractionOfProgressTowardOther) {
                 var componentsRGBAThis = this.componentsRGBA;
                 var componentsRGBAOther = other.componentsRGBA;
                 var componentsRGBAInterpolated = new Array();

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Effectable implements EntityProperty
+export class Effectable implements EntityProperty<Effectable>
 {
 	effects: Effect[];
 
@@ -16,7 +16,7 @@ export class Effectable implements EntityProperty
 		this.effects.push(effectToAdd);
 	}
 
-	effectsAsVisual(): Visual
+	effectsAsVisual(): VisualBase
 	{
 		var returnValue =
 		(
@@ -41,6 +41,10 @@ export class Effectable implements EntityProperty
 		}
 		this.effects = this.effects.filter(x => x.isDone() == false);
 	}
+
+	// Equatable
+
+	equals(other: Effectable): boolean { return false; } // todo
 }
 
 }

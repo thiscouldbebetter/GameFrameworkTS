@@ -6,9 +6,9 @@ export class TimerHelper
 {
 	ticksPerSecond: number;
 	millisecondsPerTick: number;
-	timer: any;
+	systemTimerHandle: number;
 
-	handleEventTimerTick: any;
+	handleEventTimerTick: () => void;
 	ticksSoFar: number;
 
 	constructor(ticksPerSecond: number)
@@ -22,7 +22,7 @@ export class TimerHelper
 		);
 	}
 
-	initialize(handleEventTimerTick: any): void
+	initialize(handleEventTimerTick: () => void): void
 	{
 		this.handleEventTimerTick = handleEventTimerTick;
 
@@ -30,7 +30,7 @@ export class TimerHelper
 
 		if (this.ticksPerSecond > 0)
 		{
-			this.timer = setInterval
+			this.systemTimerHandle = setInterval
 			(
 				this.tick.bind(this), this.millisecondsPerTick
 			);

@@ -2,11 +2,11 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualRotate implements Visual
+export class VisualRotate implements Visual<VisualRotate>
 {
-	child: Visual;
+	child: VisualBase;
 
-	constructor(child: Visual)
+	constructor(child: VisualBase)
 	{
 		this.child = child;
 	}
@@ -32,19 +32,19 @@ export class VisualRotate implements Visual
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualRotate
 	{
 		return this; // todo
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualRotate): VisualRotate
 	{
 		return this; // todo
 	}
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualRotate
 	{
 		return this; // todo
 	}

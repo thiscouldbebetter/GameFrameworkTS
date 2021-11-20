@@ -7,7 +7,7 @@ var ThisCouldBeBetter;
             constructor() {
                 this.networkID = MazeCellNetwork.MaxIDSoFar;
                 MazeCellNetwork.MaxIDSoFar++;
-                this.cells = [];
+                this.cells = new Array();
             }
             static mergeNetworks(network0, network1) {
                 var networkMerged = new MazeCellNetwork();

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualPolygon implements Visual
+export class VisualPolygon implements Visual<VisualPolygon>
 {
 	verticesAsPath: Path;
 	colorFill: Color;
@@ -118,7 +118,7 @@ export class VisualPolygon implements Visual
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualPolygon
 	{
 		this.verticesAsPath.transform(transformToApply);
 		return this;

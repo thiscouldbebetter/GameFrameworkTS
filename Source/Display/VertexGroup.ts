@@ -13,11 +13,21 @@ export class VertexGroup
 		this.vertexIndices = vertexIndices;
 	}
 
-	// cloneable
+	// Clonable.
 
-	clone()
+	clone(): VertexGroup
 	{
 		return new VertexGroup(this.name, this.vertexIndices.slice());
+	}
+
+	overwriteWith(other: VertexGroup): VertexGroup
+	{
+		this.name = other.name;
+		ArrayHelper.overwriteWithNonClonables
+		(
+			this.vertexIndices, other.vertexIndices
+		);
+		return this;
 	}
 }
 

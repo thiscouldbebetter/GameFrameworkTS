@@ -57,7 +57,13 @@ export class Hemispace implements ShapeBase
 		return this;
 	}
 
+	// Equatable
+
+	equals(other: ShapeBase) { return false; } // todo
+
 	// ShapeBase.
+
+	collider(): ShapeBase { return null; }
 
 	locate(loc: Disposition): ShapeBase
 	{
@@ -84,7 +90,7 @@ export class Hemispace implements ShapeBase
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): Hemispace
 	{
 		this.plane.transform(transformToApply);
 		return this;

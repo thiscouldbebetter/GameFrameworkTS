@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Transform_RotateRight implements Transform
+export class Transform_RotateRight implements Transform<Transform_RotateRight>
 {
 	quarterTurnsToRotate: number;
 
@@ -11,18 +11,23 @@ export class Transform_RotateRight implements Transform
 		this.quarterTurnsToRotate = quarterTurnsToRotate;
 	}
 
-	overwriteWith(other: Transform)
+	clone(): Transform_RotateRight
 	{
-		this.quarterTurnsToRotate = (other as Transform_RotateRight).quarterTurnsToRotate;
+		return new Transform_RotateRight(this.quarterTurnsToRotate);
+	}
+
+	overwriteWith(other: Transform_RotateRight): Transform_RotateRight
+	{
+		this.quarterTurnsToRotate = other.quarterTurnsToRotate;
 		return this;
 	}
 
-	transform(transformable: Transformable): Transformable
+	transform(transformable: TransformableBase): TransformableBase
 	{
 		return transformable.transform(this);
 	}
 
-	transformCoords(coordsToTransform: Coords)
+	transformCoords(coordsToTransform: Coords): Coords
 	{
 		for (var i = 0; i < this.quarterTurnsToRotate; i++)
 		{

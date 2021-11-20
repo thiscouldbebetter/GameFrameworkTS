@@ -89,7 +89,7 @@ export class Profile
 				var messageAsDataBinding = DataBinding.fromContextAndGet
 				(
 					null, // Will be set below.
-					(c: VenueTask) => "Loading game..."
+					(c: VenueTask<SaveState>) => "Loading game..."
 				);
 
 				var venueMessage = VenueMessage.fromMessage
@@ -104,7 +104,7 @@ export class Profile
 					{
 						return universe.storageHelper.load(saveStateNameSelected);
 					},
-					(universe: Universe, saveStateSelected: SaveState) => // done
+					(saveStateSelected: SaveState) => // done
 					{
 						var worldSelected = saveStateSelected.world;
 						universe.world = worldSelected;
@@ -120,7 +120,7 @@ export class Profile
 			}
 		};
 
-		var saveToLocalStorage = (saveState: SaveState) =>
+		var saveToLocalStorage = (): boolean =>
 		{
 			var profile = universe.profile;
 			var world = universe.world;
@@ -234,7 +234,7 @@ export class Profile
 			var messageAsDataBinding = DataBinding.fromContextAndGet
 			(
 				null, // context - Set below.
-				(c: VenueTask) => "Saving game..."
+				(c: VenueTask<boolean>) => "Saving game..."
 			);
 
 			var venueMessage = VenueMessage.fromMessage
@@ -245,10 +245,10 @@ export class Profile
 			var venueTask = new VenueTask
 			(
 				venueMessage,
-				saveToLocalStorage,
-				(universe: Universe, result: any) => // done
+				() => saveToLocalStorage(),
+				(wasSaveSuccessful: boolean) => // done
 				{
-					saveToLocalStorageDone(result);
+					saveToLocalStorageDone(wasSaveSuccessful);
 				}
 			);
 			messageAsDataBinding.contextSet(venueTask);
@@ -275,7 +275,7 @@ export class Profile
 
 					return worldCompressedAsBytes;
 				},
-				(universe: Universe, worldCompressedAsBytes: number[]) => // done
+				(worldCompressedAsBytes: number[]) => // done
 				{
 					var wasSaveSuccessful = (worldCompressedAsBytes != null);
 					var message =
@@ -442,7 +442,10 @@ export class Profile
 					Coords.fromXY(100, 10), // pos
 					Coords.fromXY(120, fontHeight), // size
 					true, // isTextCentered
-					"Profile: " + universe.profile.name,
+					DataBinding.fromContext
+					(
+						"Profile: " + universe.profile.name
+					),
 					fontHeight
 				),
 
@@ -452,7 +455,11 @@ export class Profile
 					Coords.fromXY(100, 20), // pos
 					Coords.fromXY(150, 25), // size
 					true, // isTextCentered
-					"Choose a State to " + (isLoadNotSave ? "Restore" : "Overwrite") + ":",
+					DataBinding.fromContext
+					(
+						"Choose a State to "
+						+ (isLoadNotSave ? "Restore" : "Overwrite") + ":"
+					),
 					fontHeight
 				),
 
@@ -481,7 +488,7 @@ export class Profile
 						(c: Profile) => c.saveStateSelected(),
 						(c: Profile, v: SaveState) => c.saveStateNameSelected = v.name
 					), // bindingForOptionSelected
-					DataBinding.fromGet( (c: string) => c ), // value
+					DataBinding.fromGet( (v: SaveState) => v.name ), // value
 					null,
 					(isLoadNotSave ? loadSelectedSlotFromLocalStorage: saveToLocalStorageOverwritingSlotSelected) // confirm
 				),
@@ -494,7 +501,7 @@ export class Profile
 					"New",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					(isLoadNotSave ? loadNewWorld : saveToLocalStorageAsNewSlot) // click
 				),
 
@@ -513,7 +520,7 @@ export class Profile
 						(c: Profile) => (c.saveStateNameSelected != null)
 					),
 					(isLoadNotSave ? loadSelectedSlotFromLocalStorage : saveToLocalStorageOverwritingSlotSelected), // click
-					null, null
+					false // canBeHeldDown
 				),
 
 				ControlButton.from8
@@ -673,7 +680,7 @@ export class Profile
 					"Back",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					back // click
 				),
 			],
@@ -711,7 +718,7 @@ export class Profile
 					Coords.fromXY(100, 40), // pos
 					Coords.fromXY(100, 20), // size
 					true, // isTextCentered
-					"Profile Name:",
+					DataBinding.fromContext("Profile Name:"),
 					fontHeight
 				),
 
@@ -749,8 +756,9 @@ export class Profile
 					{
 						var venueControls = universe.venueCurrent as VenueControls;
 						var controlRootAsContainer = venueControls.controlRoot as ControlContainer;
-						var textBoxName = controlRootAsContainer.childrenByName.get("textBoxName") as ControlTextBox;
-						var profileName = textBoxName.text(null, universe);
+						var textBoxName =
+							controlRootAsContainer.childrenByName.get("textBoxName") as ControlTextBox<any>;
+						var profileName = textBoxName.text(null);
 						if (profileName == "")
 						{
 							return;
@@ -786,7 +794,7 @@ export class Profile
 					"Cancel",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					() => // click
 					{
 						var venueNext: Venue = Profile.toControlProfileSelect
@@ -843,7 +851,7 @@ export class Profile
 			var venueControls = universe.venueCurrent as VenueControls;
 			var controlRootAsContainer = venueControls.controlRoot as ControlContainer;
 			var listProfiles =
-				controlRootAsContainer.childrenByName.get("listProfiles") as ControlList;
+				controlRootAsContainer.childrenByName.get("listProfiles") as ControlList<Universe, Profile, string>;
 			var profileSelected = listProfiles.itemSelected(null);
 			universe.profile = profileSelected;
 			if (profileSelected != null)
@@ -904,17 +912,23 @@ export class Profile
 					Coords.fromXY(100, 40), // pos
 					Coords.fromXY(100, 25), // size
 					true, // isTextCentered
-					"Select a Profile:",
+					DataBinding.fromContext("Select a Profile:"),
 					fontHeight
 				),
 
-				new ControlList
+				new ControlList<Universe, Profile, string>
 				(
 					"listProfiles",
 					Coords.fromXY(30, 50), // pos
 					Coords.fromXY(140, 40), // size
-					DataBinding.fromContext(profiles), // items
-					DataBinding.fromGet( (c: Profile) => c.name ), // bindingForItemText
+					DataBinding.fromGet
+					(
+						(c: Universe) => profiles
+					), // items
+					DataBinding.fromGet
+					(
+						(c: Profile) => c.name
+					), // bindingForItemText
 					fontHeight,
 					new DataBinding
 					(
@@ -922,7 +936,7 @@ export class Profile
 						(c: Universe) => c.profile,
 						(c: Universe, v: Profile) => c.profile = v
 					), // bindingForOptionSelected
-					DataBinding.fromGet( (c: Profile) => c ), // value
+					DataBinding.fromGet( (c: Profile) => c.name ), // value
 					null, // bindingForIsEnabled
 					select, // confirm
 					null // widthInItems
@@ -936,7 +950,7 @@ export class Profile
 					"New",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					create // click
 				),
 
@@ -965,7 +979,7 @@ export class Profile
 					"Skip",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					// click
 					() =>
 					{
@@ -981,7 +995,7 @@ export class Profile
 					"X",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					deleteProfile // click
 				),
 
@@ -993,7 +1007,7 @@ export class Profile
 					"Back",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					() => // click
 					{
 						var venueNext = venuePrev;
@@ -1013,7 +1027,7 @@ export class Profile
 	{
 		var messageAsDataBinding = DataBinding.fromGet
 		(
-			(c: VenueTask) => "Generating world...",
+			(c: VenueTask<World>) => "Generating world...",
 		);
 
 		var venueMessage =
@@ -1023,7 +1037,7 @@ export class Profile
 		(
 			venueMessage,
 			() => universe.worldCreate(), // perform
-			(universe: Universe, world: World) => // done
+			(world: World) => // done
 			{
 				universe.world = world;
 

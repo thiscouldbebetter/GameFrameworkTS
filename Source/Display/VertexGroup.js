@@ -8,9 +8,14 @@ var ThisCouldBeBetter;
                 this.name = name;
                 this.vertexIndices = vertexIndices;
             }
-            // cloneable
+            // Clonable.
             clone() {
                 return new VertexGroup(this.name, this.vertexIndices.slice());
+            }
+            overwriteWith(other) {
+                this.name = other.name;
+                GameFramework.ArrayHelper.overwriteWithNonClonables(this.vertexIndices, other.vertexIndices);
+                return this;
             }
         }
         GameFramework.VertexGroup = VertexGroup;

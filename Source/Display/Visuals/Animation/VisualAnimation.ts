@@ -2,16 +2,22 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualAnimation implements Visual
+export class VisualAnimation implements Visual<VisualAnimation>
 {
 	name: string;
 	ticksToHoldFrames: number[];
-	frames: Visual[];
+	frames: VisualBase[];
 	isRepeating: boolean;
 
 	ticksToComplete: number;
 
-	constructor(name: string, ticksToHoldFrames: number[], frames: Visual[], isRepeating: boolean)
+	constructor
+	(
+		name: string,
+		ticksToHoldFrames: number[],
+		frames: VisualBase[],
+		isRepeating: boolean
+	)
 	{
 		this.name = name;
 		this.ticksToHoldFrames = ticksToHoldFrames;
@@ -110,19 +116,19 @@ export class VisualAnimation implements Visual
 
 	// Clonable.
 
-	clone()
+	clone(): VisualAnimation
 	{
 		return this; // todo
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualAnimation): VisualAnimation
 	{
 		return this; // todo
 	}
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualAnimation
 	{
 		return this; // todo
 	}

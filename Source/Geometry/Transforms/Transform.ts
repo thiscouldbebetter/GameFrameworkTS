@@ -2,11 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export interface Transform
+export interface TransformBase
 {
-	overwriteWith(x: Transform): Transform;
-	transform(x: Transformable): Transformable;
+	transform(x: TransformableBase): TransformableBase;
 	transformCoords(x: Coords): Coords;
+}
+
+export interface Transform<T extends TransformBase> extends Clonable<T>
+{
 }
 
 }

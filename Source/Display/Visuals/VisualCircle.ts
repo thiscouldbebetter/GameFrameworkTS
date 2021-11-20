@@ -2,14 +2,20 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualCircle implements Visual
+export class VisualCircle implements Visual<VisualCircle>
 {
 	radius: number;
 	colorFill: Color;
 	colorBorder: Color;
 	borderThickness: number;
 
-	constructor(radius: number, colorFill: Color, colorBorder: Color, borderThickness: number)
+	constructor
+	(
+		radius: number,
+		colorFill: Color,
+		colorBorder: Color,
+		borderThickness: number
+	)
 	{
 		this.radius = radius;
 		this.colorFill = colorFill;
@@ -45,7 +51,7 @@ export class VisualCircle implements Visual
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualCircle
 	{
 		return new VisualCircle
 		(
@@ -53,9 +59,8 @@ export class VisualCircle implements Visual
 		);
 	}
 
-	overwriteWith(otherAsVisual: Visual): Visual
+	overwriteWith(other: VisualCircle): VisualCircle
 	{
-		var other = otherAsVisual as VisualCircle;
 		this.radius = other.radius;
 		this.colorFill = other.colorFill;
 		this.colorBorder = other.colorBorder;
@@ -65,7 +70,7 @@ export class VisualCircle implements Visual
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualCircle
 	{
 		return this; // todo
 	}

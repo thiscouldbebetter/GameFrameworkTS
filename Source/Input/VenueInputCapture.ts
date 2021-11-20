@@ -4,12 +4,16 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class VenueInputCapture implements Venue
 {
-	venueToReturnTo: any;
-	functionToPassInputCapturedTo: any;
+	venueToReturnTo: Venue;
+	functionToPassInputCapturedTo: (inputCaptured: Input) => void;
 
 	isFirstTime: boolean;
 
-	constructor(venueToReturnTo: Venue, functionToPassInputCapturedTo: any)
+	constructor
+	(
+		venueToReturnTo: Venue,
+		functionToPassInputCapturedTo: (inputCaptured: Input) => void
+	)
 	{
 		this.venueToReturnTo = venueToReturnTo;
 		this.functionToPassInputCapturedTo = functionToPassInputCapturedTo;
@@ -17,16 +21,16 @@ export class VenueInputCapture implements Venue
 		this.isFirstTime = true;
 	}
 
-	draw(universe: Universe)
+	draw(universe: Universe): void
 	{
 		// Do nothing.
 	}
 
-	finalize(universe: Universe) {}
+	finalize(universe: Universe): void {}
 
-	initialize(universe: Universe) {}
+	initialize(universe: Universe): void {}
 
-	updateForTimerTick(universe: Universe)
+	updateForTimerTick(universe: Universe): void
 	{
 		var inputHelper = universe.inputHelper;
 

@@ -104,12 +104,17 @@ class TalkNodeDefn_Instances
 		this.JumpIfFalse = new TalkNodeDefn
 		(
 			"JumpIfFalse",
-			(universe: Universe, conversationRun: ConversationRun, scope: ConversationScope, talkNode: TalkNode) => // execute
+			(
+				universe: Universe,
+				conversationRun: ConversationRun,
+				scope: ConversationScope,
+				talkNode: TalkNode
+			) => // execute
 			{
 				var variableName = talkNode.text;
 				var talkNodeNameToJumpTo = talkNode.next;
 				var variableValue = conversationRun.variableByName(variableName);
-				if (variableValue == true)
+				if ((variableValue as boolean) == true)
 				{
 					scope.talkNodeAdvance(conversationRun);
 				}
@@ -134,7 +139,7 @@ class TalkNodeDefn_Instances
 				var variableName = talkNode.text;
 				var talkNodeNameToJumpTo = talkNode.next;
 				var variableValue = conversationRun.variableByName(variableName);
-				if (variableValue == true)
+				if ((variableValue as boolean) == true)
 				{
 					scope.talkNodeCurrent = conversationRun.defn.talkNodeByName
 					(
@@ -274,7 +279,12 @@ class TalkNodeDefn_Instances
 		this.VariableSet = new TalkNodeDefn
 		(
 			"VariableSet",
-			(universe: Universe, conversationRun: ConversationRun, scope: ConversationScope, talkNode: TalkNode) => // execute
+			(
+				universe: Universe,
+				conversationRun: ConversationRun,
+				scope: ConversationScope,
+				talkNode: TalkNode
+			) => // execute
 			{
 				var variableName = talkNode.text;
 				var variableValue = talkNode.next;

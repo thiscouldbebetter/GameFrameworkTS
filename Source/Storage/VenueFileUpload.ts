@@ -33,9 +33,9 @@ export class VenueFileUpload implements Venue
 
 	// venue
 
-	draw(universe: Universe) {}
+	draw(universe: Universe): void {}
 
-	finalize(universe: Universe)
+	finalize(universe: Universe): void
 	{
 		var platformHelper = universe.platformHelper;
 		platformHelper.platformableRemove(this);
@@ -45,7 +45,7 @@ export class VenueFileUpload implements Venue
 		platformHelper.platformableShow(display);
 	}
 
-	initialize(universe: Universe)
+	initialize(universe: Universe): void
 	{
 		var display = universe.display;
 
@@ -93,7 +93,7 @@ export class VenueFileUpload implements Venue
 		inputFileUpload.focus();
 	}
 
-	updateForTimerTick(universe: Universe)
+	updateForTimerTick(universe: Universe): void
 	{
 		var inputHelper = universe.inputHelper;
 		var inputsPressed = inputHelper.inputsPressed;
@@ -119,12 +119,12 @@ export class VenueFileUpload implements Venue
 
 	// events
 
-	buttonCancel_Clicked(universe: Universe, event: any)
+	buttonCancel_Clicked(universe: Universe, event: Event): void
 	{
 		universe.venueNext = this.venueNextIfCancelled;
 	}
 
-	buttonLoad_Clicked(universe: Universe, event: any)
+	buttonLoad_Clicked(universe: Universe, event: Event): void
 	{
 		var inputFileUpload = this.domElement.getElementsByTagName("input")[0];
 		var fileToLoad = inputFileUpload.files[0];
@@ -136,7 +136,7 @@ export class VenueFileUpload implements Venue
 
 	// platformable
 
-	toDomElement()
+	toDomElement(): HTMLElement
 	{
 		return this.domElement;
 	}

@@ -2,8 +2,10 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export interface ShapeBase extends Clonable<ShapeBase>, Transformable
+export interface ShapeBase
+	extends Clonable<ShapeBase>, Equatable<ShapeBase>, Transformable<ShapeBase>
 {
+	collider(): ShapeBase;
 	locate(loc: Disposition): ShapeBase;
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords;
 	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords;

@@ -167,10 +167,10 @@ var ThisCouldBeBetter;
             collisionOfColliders(collider0, collider1, collisionOut) {
                 collisionOut.clear();
                 // Prevents having to add some composite shapes, for example, Shell.
-                while (collider0.collider != null) {
+                while (collider0.collider() != null) {
                     collider0 = collider0.collider();
                 }
-                while (collider1.collider != null) {
+                while (collider1.collider() != null) {
                     collider1 = collider1.collider();
                 }
                 var collider0TypeName = collider0.constructor.name;
@@ -223,10 +223,10 @@ var ThisCouldBeBetter;
             }
             doCollidersCollide(collider0, collider1) {
                 var returnValue = false;
-                while (collider0.collider != null) {
+                while (collider0.collider() != null) {
                     collider0 = collider0.collider();
                 }
-                while (collider1.collider != null) {
+                while (collider1.collider() != null) {
                     collider1 = collider1.collider();
                 }
                 var collider0TypeName = collider0.constructor.name;
@@ -252,10 +252,10 @@ var ThisCouldBeBetter;
             }
             doesColliderContainOther(collider0, collider1) {
                 var returnValue = false;
-                while (collider0.collider != null) {
+                while (collider0.collider() != null) {
                     collider0 = collider0.collider();
                 }
-                while (collider1.collider != null) {
+                while (collider1.collider() != null) {
                     collider1 = collider1.collider();
                 }
                 var collider0TypeName = collider0.constructor.name;

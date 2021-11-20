@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualEllipse implements Visual
+export class VisualEllipse implements Visual<VisualEllipse>
 {
 	semiaxisHorizontal: number;
 	semiaxisVertical: number;
@@ -94,7 +94,7 @@ export class VisualEllipse implements Visual
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualEllipse
 	{
 		return this; // todo
 	}

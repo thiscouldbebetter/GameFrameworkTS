@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Transform_Camera implements Transform
+export class Transform_Camera implements Transform<Transform_Camera>
 {
 	_camera: Camera;
 
@@ -33,12 +33,14 @@ export class Transform_Camera implements Transform
 		);
 	}
 
-	overwriteWith(other: Transform)
+	clone(): Transform_Camera { return this; } // todo
+
+	overwriteWith(other: Transform_Camera): Transform_Camera
 	{
 		return this; // todo
 	}
 
-	transform(transformable: Transformable): Transformable
+	transform(transformable: TransformableBase): TransformableBase
 	{
 		return transformable; // todo
 	}

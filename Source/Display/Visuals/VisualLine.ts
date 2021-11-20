@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualLine implements Visual
+export class VisualLine implements Visual<VisualLine>
 {
 	fromPos: Coords;
 	toPos: Coords;
@@ -53,7 +53,7 @@ export class VisualLine implements Visual
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualLine
 	{
 		return new VisualLine
 		(
@@ -62,9 +62,8 @@ export class VisualLine implements Visual
 		);
 	}
 
-	overwriteWith(otherAsVisual: Visual): Visual
+	overwriteWith(other: VisualLine): VisualLine
 	{
-		var other = otherAsVisual as VisualLine;
 		this.fromPos.overwriteWith(other.fromPos);
 		this.toPos.overwriteWith(other.toPos);
 		this.color.overwriteWith(other.color);
@@ -74,7 +73,7 @@ export class VisualLine implements Visual
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualLine
 	{
 		transformToApply.transformCoords(this.fromPos);
 		transformToApply.transformCoords(this.toPos);

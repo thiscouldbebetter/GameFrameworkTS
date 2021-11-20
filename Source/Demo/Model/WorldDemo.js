@@ -15,7 +15,7 @@ class WorldDemo extends World {
         var actions = placeBuilder.actions;
         var actionToInputsMappings = placeBuilder.actionToInputsMappings;
         var propertyNamesToProcess = [
-            Loadable.name,
+            LoadableProperty.name,
             Locatable.name,
             ForceField.name,
             CollisionTracker.name,

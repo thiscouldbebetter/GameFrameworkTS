@@ -2,8 +2,10 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Transform_OrientRDF implements Transform
+export class Transform_OrientRDF implements Transform<Transform_OrientRDF>
 {
+	// "RDF" = "right, down, forward".
+ 
 	orientation: Orientation;
 
 	_components: Coords[];
@@ -16,17 +18,22 @@ export class Transform_OrientRDF implements Transform
 		this._components = [ Coords.create(), Coords.create(), Coords.create() ];
 	}
 
-	overwriteWith(other: Transform)
+	clone(): Transform_OrientRDF
 	{
 		return this; // todo
 	}
 
-	transform(transformable: Transformable): Transformable
+	overwriteWith(other: Transform_OrientRDF): Transform_OrientRDF
+	{
+		return this; // todo
+	}
+
+	transform(transformable: TransformableBase): TransformableBase
 	{
 		return transformable.transform(this);
 	}
 
-	transformCoords(coordsToTransform: Coords)
+	transformCoords(coordsToTransform: Coords): Coords
 	{
 		var components = this._components;
 		var ori = this.orientation;

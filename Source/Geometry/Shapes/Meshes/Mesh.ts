@@ -12,7 +12,12 @@ export class Mesh implements ShapeBase
 	_faces: Face[];
 	_vertices: Coords[];
 
-	constructor(center: Coords, vertexOffsets: Coords[], faceBuilders: Mesh_FaceBuilder[])
+	constructor
+	(
+		center: Coords,
+		vertexOffsets: Coords[],
+		faceBuilders: Mesh_FaceBuilder[]
+	)
 	{
 		this.center = center;
 		this.vertexOffsets = vertexOffsets;
@@ -213,7 +218,7 @@ export class Mesh implements ShapeBase
 
 	// transformable
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): Mesh
 	{
 		for (var v = 0; v < this.vertexOffsets.length; v++)
 		{
@@ -246,6 +251,10 @@ export class Mesh implements ShapeBase
 		return this;
 	}
 
+	// Equatable
+
+	equals(other: ShapeBase) { return false; } // todo
+
 	// transformable
 
 	coordsGroupToTranslate(): Coords[]
@@ -254,6 +263,8 @@ export class Mesh implements ShapeBase
 	}
 
 	// ShapeBase.
+
+	collider(): ShapeBase { return null; }
 
 	locate(loc: Disposition): ShapeBase
 	{
@@ -317,13 +328,16 @@ export class Mesh_FaceBuilder
 
 	overwriteWith(other: Mesh_FaceBuilder): Mesh_FaceBuilder
 	{
-		ArrayHelper.overwriteWith(this.vertexIndices, other.vertexIndices);
+		ArrayHelper.overwriteWithNonClonables
+		(
+			this.vertexIndices, other.vertexIndices
+		);
 		return this;
 	}
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable { throw new Error("Not implemented!");  }
+	transform(transformToApply: TransformBase): Mesh_FaceBuilder { throw new Error("Not implemented!");  }
 
 }
 

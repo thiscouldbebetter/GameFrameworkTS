@@ -19,9 +19,6 @@ var ThisCouldBeBetter;
             direction() {
                 return this._direction.overwriteWith(this.displacement()).normalize();
             }
-            equals(other) {
-                return GameFramework.ArrayHelper.equals(this.vertices, other.vertices);
-            }
             displacement() {
                 return this._displacement.overwriteWith(this.vertices[1]).subtract(this.vertices[0]);
             }
@@ -55,7 +52,12 @@ var ThisCouldBeBetter;
                 GameFramework.ArrayHelper.overwriteWith(this.vertices, other.vertices);
                 return this;
             }
+            // Equatable
+            equals(other) {
+                return GameFramework.ArrayHelper.equals(this.vertices, other.vertices);
+            }
             // ShapeBase.
+            collider() { return null; }
             locate(loc) { throw new Error("Not implemented!"); }
             normalAtPos(posToCheck, normalOut) { throw new Error("Not implemented!"); }
             surfacePointNearPos(posToCheck, surfacePointOut) { throw new Error("Not implemented!"); }

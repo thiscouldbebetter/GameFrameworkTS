@@ -153,7 +153,8 @@ var VisualSound = gf.VisualSound;
 var Entity = gf.Entity;
 var EntityBuilder = gf.EntityBuilder;
 var EntityGenerator = gf.EntityGenerator;
-var Loadable = gf.Loadable;
+var LoadableProperty = gf.LoadableProperty;
+var NamableProperty = gf.NamableProperty;
 var Playable = gf.Playable;
 var Selectable = gf.Selectable;
 var Selector = gf.Selector;
@@ -259,7 +260,6 @@ var BitStream = gf.BitStream;
 var ByteStreamFromBytes = gf.ByteStreamFromBytes;
 var ByteStreamFromString = gf.ByteStreamFromString;
 var CompressorLZW = gf.CompressorLZW;
-// Utility.
 var DateTime = gf.DateTime;
 var DiceRoll = gf.DiceRoll;
 var IDHelper = gf.IDHelper;

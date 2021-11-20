@@ -2,15 +2,20 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VenueTask implements Venue
+export class VenueTask<TResult> implements Venue
 {
-	venueInner: any;
-	perform: any;
-	done: any;
+	venueInner: Venue;
+	perform: () => TResult;
+	done: (result: TResult) => void;
 
 	timeStarted: Date;
 
-	constructor(venueInner: any, perform: any, done: any)
+	constructor
+	(
+		venueInner: Venue,
+		perform: () => TResult,
+		done: (result: TResult) => void
+	)
 	{
 		this.venueInner = venueInner;
 		this.perform = perform;
@@ -25,7 +30,8 @@ export class VenueTask implements Venue
 		if (this.timeStarted != null)
 		{
 			var now = new Date();
-			var millisecondsSinceStarted = now.getTime() - this.timeStarted.getTime();
+			var millisecondsSinceStarted =
+				now.getTime() - this.timeStarted.getTime();
 			returnValue = Math.floor(millisecondsSinceStarted / 1000);
 		}
 		return returnValue;
@@ -48,17 +54,17 @@ export class VenueTask implements Venue
 
 		this.timeStarted = new Date();
 
-		var timer = setInterval
+		var timerHandle = setInterval
 		(
 			() => { this.draw(universe), 1000 }
 		)
 
 		// todo - Make this asynchronous.
-		var result = this.perform(universe);
+		var result = this.perform();
 
-		clearInterval(timer);
+		clearInterval(timerHandle);
 
-		this.done(universe, result);
+		this.done(result);
 	}
 }
 

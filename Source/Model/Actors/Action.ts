@@ -65,8 +65,7 @@ class Action_Instances
 				var actor = uwpe.entity;
 				var control = actor.controllable().toControl
 				(
-					universe, universe.display.sizeInPixels, actor,
-					universe.venueCurrent, true
+					uwpe
 				);
 				var venueNext: Venue = control.toVenue();
 				venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);

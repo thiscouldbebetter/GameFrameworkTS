@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualArc implements Visual
+export class VisualArc implements Visual<VisualArc>
 {
 	radiusOuter: number;
 	radiusInner: number;
@@ -59,7 +59,7 @@ export class VisualArc implements Visual
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualArc
 	{
 		return new VisualArc
 		(
@@ -71,9 +71,8 @@ export class VisualArc implements Visual
 		)
 	}
 
-	overwriteWith(otherAsVisual: Visual): Visual
+	overwriteWith(other: VisualArc): VisualArc
 	{
-		var other = otherAsVisual as VisualArc;
 		this.radiusOuter = other.radiusOuter;
 		this.radiusInner = other.radiusInner;
 		this.directionMin.overwriteWith(other.directionMin);
@@ -88,7 +87,7 @@ export class VisualArc implements Visual
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualArc
 	{
 		transformToApply.transformCoords(this.directionMin);
 		return this;

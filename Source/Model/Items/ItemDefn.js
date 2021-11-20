@@ -44,19 +44,20 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             use(uwpe) {
-                var returnValue;
                 if (this._use == null) {
-                    returnValue = "Can't use " + this.appearance + ".";
+                    var itemHolder = uwpe.entity.itemHolder();
+                    itemHolder.statusMessage = "Can't use " + this.appearance + ".";
                 }
                 else {
-                    returnValue = this._use(uwpe);
+                    this._use(uwpe);
                 }
-                return returnValue;
             }
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }
             updateForTimerTick(uwpe) { }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.ItemDefn = ItemDefn;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

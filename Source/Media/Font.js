@@ -20,6 +20,7 @@ var ThisCouldBeBetter;
                 document.head.appendChild(fontAsStyleElement);
                 this.isLoaded = true;
             }
+            unload() { } // todo
         }
         GameFramework.Font = Font;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Routable implements EntityProperty
+export class Routable implements EntityProperty<Routable>
 {
 	route: Route;
 
@@ -34,6 +34,11 @@ export class Routable implements EntityProperty
 	{
 		return this; // todo
 	}
+
+	// Equatable
+
+	equals(other: Routable): boolean { return false; } // todo
+
 }
 
 export class Route

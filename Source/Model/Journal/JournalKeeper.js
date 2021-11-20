@@ -11,6 +11,8 @@ var ThisCouldBeBetter;
             finalize(uwpe) { }
             initialize(uwpe) { }
             updateForTimerTick(uwpe) { }
+            // Equatable
+            equals(other) { return false; } // todo
             // Controls.
             toControl(universe, size, entityJournalKeeper, venuePrev, includeTitleAndDoneButton) {
                 var world = universe.world;
@@ -33,23 +35,22 @@ var ThisCouldBeBetter;
                     new GameFramework.ControlLabel("labelJournalEntries", GameFramework.Coords.fromXY(10, 5), // pos
                     GameFramework.Coords.fromXY(70, 25), // size
                     false, // isTextCentered
-                    "Journal Entries:", fontHeightSmall),
+                    GameFramework.DataBinding.fromContext("Journal Entries:"), fontHeightSmall),
                     new GameFramework.ControlButton("buttonEntryNew", GameFramework.Coords.fromXY(65, 5), // pos
                     GameFramework.Coords.fromXY(30, 8), // size
                     "New", fontHeightSmall, true, // hasBorder,
-                    GameFramework.DataBinding.fromContextAndGet(this, (c) => true), // isEnabled
+                    GameFramework.DataBinding.fromTrueWithContext(this), // isEnabled
                     () => {
                         var journal = journalKeeper.journal;
                         var entryNew = new GameFramework.JournalEntry(world.timerTicksSoFar, "-", // title
                         "");
                         journal.entries.push(entryNew);
                     }, // click
-                    null, // context
                     false // canBeHeldDown
                     ),
                     new GameFramework.ControlList("listEntries", GameFramework.Coords.fromXY(10, 15), // pos
                     GameFramework.Coords.fromXY(85, 110), // size
-                    GameFramework.DataBinding.fromContext(this.journal.entries), // items
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => c.journal.entries), // items
                     GameFramework.DataBinding.fromGet((c) => c.toString(universe)), // bindingForItemText
                     fontHeightSmall, new GameFramework.DataBinding(this, (c) => c.journalEntrySelected, (c, v) => {
                         c.journalEntrySelected = v;
@@ -64,7 +65,7 @@ var ThisCouldBeBetter;
                     new GameFramework.ControlLabel("labelEntrySelected", GameFramework.Coords.fromXY(105, 5), // pos
                     GameFramework.Coords.fromXY(100, 15), // size
                     false, // isTextCentered
-                    "Entry Selected:", fontHeightSmall),
+                    GameFramework.DataBinding.fromContext("Entry Selected:"), fontHeightSmall),
                     new GameFramework.ControlButton("buttonEntrySelectedEdit", GameFramework.Coords.fromXY(146, 5), // pos
                     GameFramework.Coords.fromXY(15, 8), // size
                     "Lock", fontHeightSmall, true, // hasBorder,
@@ -73,7 +74,6 @@ var ThisCouldBeBetter;
                     () => {
                         journalKeeper.isJournalEntrySelectedEditable = false;
                     }, // click
-                    null, // context
                     false),
                     new GameFramework.ControlButton("buttonEntrySelectedEdit", GameFramework.Coords.fromXY(164, 5), // pos
                     GameFramework.Coords.fromXY(15, 8), // size
@@ -83,7 +83,6 @@ var ThisCouldBeBetter;
                     () => {
                         journalKeeper.isJournalEntrySelectedEditable = true;
                     }, // click
-                    null, // context
                     false),
                     new GameFramework.ControlButton("buttonEntrySelectedDelete", GameFramework.Coords.fromXY(182, 5), // pos
                     GameFramework.Coords.fromXY(8, 8), // size
@@ -103,7 +102,6 @@ var ThisCouldBeBetter;
                         venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
                         universe.venueNext = venueNext;
                     }, // click
-                    null, // context
                     false // canBeHeldDown
                     ),
                     new GameFramework.ControlLabel("labelEntrySelectedTimeRecorded", GameFramework.Coords.fromXY(105, 15), // pos
@@ -164,10 +162,10 @@ var ThisCouldBeBetter;
                     0, new GameFramework.ControlLabel("labelTitle", GameFramework.Coords.fromXY(100, -5), // pos
                     GameFramework.Coords.fromXY(100, 25), // size
                     true, // isTextCentered
-                    "Journal", fontHeightLarge));
+                    GameFramework.DataBinding.fromContext("Journal"), fontHeightLarge));
                     childControls.push(GameFramework.ControlButton.from8("buttonDone", GameFramework.Coords.fromXY(170, 115), // pos
                     buttonSize.clone(), "Done", fontHeightSmall, true, // hasBorder
-                    true, // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     back // click
                     ));
                     var titleHeight = GameFramework.Coords.fromXY(0, 15);

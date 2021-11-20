@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Transform_Animate
+export class Transform_Animate implements Transform<Transform_Animate>
 {
 	animationDefn: AnimationDefn;
 	ticksSinceStarted: number;
@@ -13,7 +13,7 @@ export class Transform_Animate
 		this.ticksSinceStarted = ticksSinceStarted;
 	}
 
-	frameCurrent()
+	frameCurrent(): AnimationKeyframe
 	{
 		var returnValue = null;
 
@@ -55,12 +55,14 @@ export class Transform_Animate
 		return returnValue;
 	}
 
-	overwriteWith(other: Transform_Animate)
+	clone(): Transform_Animate { return this; } // todo
+
+	overwriteWith(other: Transform_Animate): Transform_Animate
 	{
 		return this; // todo
 	}
 
-	transform(transformable: any)
+	transform<T extends Transformable<T>>(transformable: T): T 
 	{
 		var frameCurrent = this.frameCurrent();
 
@@ -75,7 +77,7 @@ export class Transform_Animate
 		return transformable;
 	}
 
-	transformCoords(coordsToTransform: Coords)
+	transformCoords(coordsToTransform: Coords): Coords
 	{
 		return coordsToTransform;
 	}

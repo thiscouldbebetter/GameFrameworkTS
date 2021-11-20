@@ -33,15 +33,17 @@ var ThisCouldBeBetter;
             clone() {
                 return new Sphere(this.center.clone(), this.radius);
             }
-            equals(other) {
-                return (this.center.equals(other.center) && this.radius == other.radius);
-            }
             overwriteWith(other) {
                 this.center.overwriteWith(other.center);
                 this.radius = other.radius;
                 return this;
             }
+            // Equatable.
+            equals(other) {
+                return (this.center.equals(other.center) && this.radius == other.radius);
+            }
             // ShapeBase.
+            collider() { return null; }
             locate(loc) {
                 this.center.overwriteWith(loc.pos);
                 return this;

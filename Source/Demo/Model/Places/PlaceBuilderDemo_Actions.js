@@ -73,7 +73,7 @@ class PlaceBuilderDemo_Actions {
                 if (canPickUp) {
                     var actor = entityActor.actor();
                     var activity = actor.activity;
-                    activity.targetSetByName("ItemEntityToPickUp", itemEntityToPickUp);
+                    activity.targetEntitySetByName("ItemEntityToPickUp", itemEntityToPickUp);
                 }
                 else {
                     var message = "Can't pick up!";

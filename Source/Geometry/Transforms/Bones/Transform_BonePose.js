@@ -10,9 +10,6 @@ var ThisCouldBeBetter;
                 this.propertyName = this.boneName;
             }
             // instance methods
-            clone() {
-                return new Transform_BonePose(this.boneName, this.cyclesToRotateAroundAxesDownRightForward);
-            }
             interpolateWith(other, fractionOfProgressTowardOther) {
                 var otherAsBonePose = other;
                 var cyclesToRotateAroundAxesDownRightForwardInterpolated = [];
@@ -25,6 +22,9 @@ var ThisCouldBeBetter;
                 }
                 var returnValue = new Transform_BonePose(this.boneName, cyclesToRotateAroundAxesDownRightForwardInterpolated);
                 return returnValue;
+            }
+            clone() {
+                return new Transform_BonePose(this.boneName, this.cyclesToRotateAroundAxesDownRightForward);
             }
             overwriteWith(other) {
                 return this; // todo

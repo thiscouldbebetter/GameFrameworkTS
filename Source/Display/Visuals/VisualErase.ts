@@ -2,11 +2,11 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualErase implements Visual
+export class VisualErase implements Visual<VisualErase>
 {
-	child: Visual;
+	child: VisualBase;
 
-	constructor(child: Visual)
+	constructor(child: VisualBase)
 	{
 		this.child = child;
 	}
@@ -22,19 +22,19 @@ export class VisualErase implements Visual
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualErase
 	{
 		return this; // todo
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualErase): VisualErase
 	{
 		return this; // todo
 	}
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualErase
 	{
 		return this; // todo
 	}

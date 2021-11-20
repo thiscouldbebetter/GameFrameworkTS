@@ -2,12 +2,12 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Drawable implements EntityProperty
+export class Drawable implements EntityProperty<Drawable>
 {
-	visual: Visual;
+	visual: VisualBase;
 	isVisible: boolean;
 
-	constructor(visual: Visual, isVisible: boolean)
+	constructor(visual: VisualBase, isVisible: boolean)
 	{
 		this.visual = visual;
 		this.isVisible = isVisible;
@@ -17,12 +17,12 @@ export class Drawable implements EntityProperty
 		}
 	}
 
-	static fromVisual(visual: Visual): Drawable
+	static fromVisual(visual: VisualBase): Drawable
 	{
 		return new Drawable(visual, null);
 	}
 
-	static fromVisualAndIsVisible(visual: Visual, isVisible: boolean): Drawable
+	static fromVisualAndIsVisible(visual: VisualBase, isVisible: boolean): Drawable
 	{
 		return new Drawable(visual, isVisible);
 	}
@@ -53,6 +53,10 @@ export class Drawable implements EntityProperty
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+
+	// Equatable
+
+	equals(other: Drawable): boolean { return false; } // todo
 
 }
 

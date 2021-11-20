@@ -11,6 +11,7 @@ var ThisCouldBeBetter;
                 this.transformPerspective = new GameFramework.Transform_Perspective(camera.focalLength);
                 this.transformViewCenter = new GameFramework.Transform_Translate(camera.viewSizeHalf);
             }
+            clone() { return this; } // todo
             overwriteWith(other) {
                 return this; // todo
             }

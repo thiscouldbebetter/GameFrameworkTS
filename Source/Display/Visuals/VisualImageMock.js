@@ -13,6 +13,7 @@ var ThisCouldBeBetter;
             }
             // Visual.
             draw(uwpe, display) { }
+            // Clonable.
             clone() { return this; }
             overwriteWith(x) { return this; }
             // VisualImage.

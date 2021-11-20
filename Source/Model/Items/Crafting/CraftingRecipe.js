@@ -43,6 +43,13 @@ var ThisCouldBeBetter;
             clone() {
                 return new CraftingRecipe(this.name, this.ticksToComplete, GameFramework.ArrayHelper.clone(this.itemsIn), GameFramework.ArrayHelper.clone(this.itemsOut));
             }
+            overwriteWith(other) {
+                this.name = other.name;
+                this.ticksToComplete = other.ticksToComplete;
+                GameFramework.ArrayHelper.overwriteWith(this.itemsIn, other.itemsIn);
+                GameFramework.ArrayHelper.overwriteWith(this.itemsOut, other.itemsOut);
+                return this;
+            }
         }
         GameFramework.CraftingRecipe = CraftingRecipe;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

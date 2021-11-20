@@ -2,26 +2,35 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Transform_Dynamic implements Transform
+export class Transform_Dynamic implements Transform<Transform_Dynamic>
 {
-	transformTransformable: (t: Transformable) => Transformable;
+	transformTransformable: (t: TransformableBase) => TransformableBase;
 
-	constructor(transformTransformable: (t: Transformable) => Transformable)
+	constructor
+	(
+		transformTransformable: (t: TransformableBase) => TransformableBase
+	)
 	{
 		this.transformTransformable = transformTransformable;
 	}
 
-	overwriteWith(other: Transform)
+	// Clonable.
+
+	clone(): Transform_Dynamic { return this; } // todo
+
+	overwriteWith(other: Transform_Dynamic): Transform_Dynamic
 	{
 		return this;
 	}
 
-	transform(transformable: Transformable): Transformable
+	// TransformBase.
+
+	transform(transformable: TransformableBase): TransformableBase
 	{
 		return this.transformTransformable(transformable);
 	}
 
-	transformCoords(coordsToTransform: Coords)
+	transformCoords(coordsToTransform: Coords): Coords
 	{
 		return coordsToTransform; // todo
 	}

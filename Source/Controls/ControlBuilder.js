@@ -58,10 +58,10 @@ var ThisCouldBeBetter;
                         - (buttonWidth * numberOfOptions)
                         - (spaceBetweenButtons * (numberOfOptions - 1))) / 2;
                     for (var i = 0; i < numberOfOptions; i++) {
-                        var button = GameFramework.ControlButton.from9("buttonOption" + i, GameFramework.Coords.fromXY(buttonMarginLeftRight + i * (buttonWidth + spaceBetweenButtons), 100), // pos
+                        var button = GameFramework.ControlButton.from8("buttonOption" + i, GameFramework.Coords.fromXY(buttonMarginLeftRight + i * (buttonWidth + spaceBetweenButtons), 100), // pos
                         buttonSize.clone(), optionNames[i], fontHeight, true, // hasBorder
-                        true, // isEnabled
-                        optionFunctions[i], universe);
+                        GameFramework.DataBinding.fromTrue(), // isEnabled
+                        optionFunctions[i]);
                         childControls.push(button);
                     }
                 }
@@ -79,11 +79,15 @@ var ThisCouldBeBetter;
                             new GameFramework.Action(controlActionNames.ControlConfirm, acknowledge),
                         ];
                 }
-                var returnValue = new GameFramework.ControlContainer("containerChoice", containerPosScaled, containerSizeScaled, childControls, actions, null //?
+                var controlContainer = new GameFramework.ControlContainer("containerChoice", containerPosScaled, containerSizeScaled, childControls, actions, null //?
                 );
-                returnValue.scalePosAndSize(scaleMultiplier);
+                controlContainer.scalePosAndSize(scaleMultiplier);
+                var returnValue = null;
                 if (showMessageOnly) {
-                    returnValue = new GameFramework.ControlContainerTransparent(returnValue);
+                    returnValue = new GameFramework.ControlContainerTransparent(controlContainer);
+                }
+                else {
+                    returnValue = controlContainer;
                 }
                 return returnValue;
             }
@@ -101,18 +105,17 @@ var ThisCouldBeBetter;
                 );
                 var returnValue = GameFramework.ControlContainer.from4("containerChoice", GameFramework.Coords.create(), size, [
                     new GameFramework.ControlLabel("labelMessage", GameFramework.Coords.fromXY(size.x / 2, marginSize.y + fontHeight / 2), labelSize, true, // isTextCentered
-                    message, fontHeight),
+                    GameFramework.DataBinding.fromContext(message), fontHeight),
                     listOptions,
                     new GameFramework.ControlButton("buttonSelect", GameFramework.Coords.fromXY(marginSize.x, size.y - marginSize.y - buttonSize.y), buttonSize, buttonSelectText, fontHeight, true, // hasBorder
-                    true, // isEnabled,
+                    GameFramework.DataBinding.fromTrue(), // isEnabled,
                     () => // click
                      {
                         var itemSelected = listOptions.itemSelected(null);
                         if (itemSelected != null) {
                             select(universe, itemSelected);
                         }
-                    }, universe, // context
-                    false // canBeHeldDown
+                    }, false // canBeHeldDown
                     ),
                 ]);
                 return returnValue;
@@ -167,7 +170,7 @@ var ThisCouldBeBetter;
                 [
                     GameFramework.ControlButton.from8("buttonSave", GameFramework.Coords.fromXY(posX, row0PosY), // pos
                     buttonSize.clone(), "Save", fontHeight, true, // hasBorder
-                    true, // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     () => // click
                      {
                         var venueNext = GameFramework.Profile.toControlSaveStateSave(universe, size, universe.venueCurrent).toVenue();
@@ -176,7 +179,7 @@ var ThisCouldBeBetter;
                     }),
                     GameFramework.ControlButton.from8("buttonLoad", GameFramework.Coords.fromXY(posX, row1PosY), // pos
                     buttonSize.clone(), "Load", fontHeight, true, // hasBorder
-                    true, // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     () => // click
                      {
                         var venueNext = GameFramework.Profile.toControlSaveStateLoad(universe, null, universe.venueCurrent).toVenue();
@@ -185,7 +188,7 @@ var ThisCouldBeBetter;
                     }),
                     GameFramework.ControlButton.from8("buttonAbout", GameFramework.Coords.fromXY(posX, row2PosY), // pos
                     buttonSize.clone(), "About", fontHeight, true, // hasBorder
-                    true, // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     () => // click
                      {
                         var venueCurrent = universe.venueCurrent;
@@ -200,7 +203,7 @@ var ThisCouldBeBetter;
                     }),
                     GameFramework.ControlButton.from8("buttonQuit", GameFramework.Coords.fromXY(posX, row3PosY), // pos
                     buttonSize.clone(), "Quit", fontHeight, true, // hasBorder
-                    true, // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     () => // click
                      {
                         var controlConfirm = universe.controlBuilder.confirm(universe, size, "Are you sure you want to quit?", () => // confirm
@@ -221,7 +224,7 @@ var ThisCouldBeBetter;
                     }),
                     GameFramework.ControlButton.from8("buttonBack", GameFramework.Coords.fromXY(posX, row4PosY), // pos
                     buttonSize.clone(), "Back", fontHeight, true, // hasBorder
-                    true, // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     back // click
                     ),
                 ], [new GameFramework.Action("Back", back)], [new GameFramework.ActionToInputsMapping("Back", ["Escape"], true)]);
@@ -255,7 +258,7 @@ var ThisCouldBeBetter;
                     GameFramework.ControlButton.from8("buttonGame", GameFramework.Coords.fromXY(margin.x, row0PosY), // pos
                     GameFramework.Coords.fromXY(buttonWidth, buttonHeight), // size
                     "Game", fontHeight, true, // hasBorder
-                    true, // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     () => // click
                      {
                         var venueNext = controlBuilder.game(universe, null, universe.venueCurrent).toVenue();
@@ -265,7 +268,7 @@ var ThisCouldBeBetter;
                     GameFramework.ControlButton.from8("buttonSettings", GameFramework.Coords.fromXY(margin.x, row1PosY), // pos
                     GameFramework.Coords.fromXY(buttonWidth, buttonHeight), // size
                     "Settings", fontHeight, true, // hasBorder
-                    true, // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     () => // click
                      {
                         var venueNext = controlBuilder.settings(universe, null, universe.venueCurrent).toVenue(), venueNext = controlBuilder.venueTransitionalFromTo(universe.venueCurrent, venueNext);
@@ -283,7 +286,7 @@ var ThisCouldBeBetter;
                     var buttonResume = GameFramework.ControlButton.from8("buttonResume", GameFramework.Coords.fromXY(margin.x, row2PosY), // pos
                     GameFramework.Coords.fromXY(buttonWidth, buttonHeight), // size
                     "Resume", fontHeight, true, // hasBorder
-                    true, // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     back);
                     returnValue.children.push(buttonResume);
                     returnValue.actions.push(new GameFramework.Action("Back", back));
@@ -310,18 +313,18 @@ var ThisCouldBeBetter;
                     new GameFramework.ControlLabel("labelActions", GameFramework.Coords.fromXY(100, 15), // pos
                     GameFramework.Coords.fromXY(100, 20), // size
                     true, // isTextCentered
-                    "Actions:", fontHeight),
+                    GameFramework.DataBinding.fromContext("Actions:"), fontHeight),
                     GameFramework.ControlList.from8("listActions", GameFramework.Coords.fromXY(50, 25), // pos
                     GameFramework.Coords.fromXY(100, 40), // size
-                    GameFramework.DataBinding.fromContext(placeDefn.actionToInputsMappingsEdited), // items
-                    GameFramework.DataBinding.fromGet((c) => { return c.actionName; }), // bindingForItemText
+                    GameFramework.DataBinding.fromGet((c) => placeDefn.actionToInputsMappingsEdited), // items
+                    GameFramework.DataBinding.fromGet((c) => c.actionName), // bindingForItemText
                     fontHeight, new GameFramework.DataBinding(placeDefn, (c) => c.actionToInputsMappingSelected, (c, v) => { c.actionToInputsMappingSelected = v; }), // bindingForItemSelected
                     GameFramework.DataBinding.fromGet((c) => c) // bindingForItemValue
                     ),
                     new GameFramework.ControlLabel("labelInput", GameFramework.Coords.fromXY(100, 70), // pos
                     GameFramework.Coords.fromXY(100, 15), // size
                     true, // isTextCentered
-                    "Inputs:", fontHeight),
+                    GameFramework.DataBinding.fromContext("Inputs:"), fontHeight),
                     new GameFramework.ControlLabel("infoInput", GameFramework.Coords.fromXY(100, 80), // pos
                     GameFramework.Coords.fromXY(200, 15), // size
                     true, // isTextCentered
@@ -344,7 +347,7 @@ var ThisCouldBeBetter;
                     GameFramework.ControlButton.from8("buttonAdd", GameFramework.Coords.fromXY(80, 90), // pos
                     GameFramework.Coords.fromXY(45, 15), // size
                     "Add", fontHeight, true, // hasBorder
-                    GameFramework.DataBinding.fromContextAndGet(placeDefn, (c) => { return c.actionToInputsMappingSelected != null; }), // isEnabled
+                    GameFramework.DataBinding.fromContextAndGet(placeDefn, (c) => (c.actionToInputsMappingSelected != null)), // isEnabled
                     () => // click
                      {
                         var mappingSelected = placeDefn.actionToInputsMappingSelected;
@@ -371,7 +374,7 @@ var ThisCouldBeBetter;
                     GameFramework.ControlButton.from8("buttonRestoreDefaultsAll", GameFramework.Coords.fromXY(50, 110), // pos
                     GameFramework.Coords.fromXY(100, 15), // size
                     "Default All", fontHeight, true, // hasBorder
-                    true, // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     () => {
                         var venueInputs = universe.venueCurrent;
                         var controlConfirm = universe.controlBuilder.confirmAndReturnToVenue(universe, size, "Are you sure you want to restore defaults?", venueInputs, () => // confirm
@@ -386,7 +389,7 @@ var ThisCouldBeBetter;
                     GameFramework.ControlButton.from8("buttonCancel", GameFramework.Coords.fromXY(50, 130), // pos
                     GameFramework.Coords.fromXY(45, 15), // size
                     "Cancel", fontHeight, true, // hasBorder
-                    true, // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     () => // click
                      {
                         var venueNext = venuePrev;
@@ -450,7 +453,7 @@ var ThisCouldBeBetter;
                     GameFramework.ControlButton.from8("buttonNext", GameFramework.Coords.fromXY(75, 120), // pos
                     GameFramework.Coords.fromXY(50, fontHeight * 2), // size
                     "Next", fontHeight * 2, false, // hasBorder
-                    true, // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     goToVenueNext // click
                     )
                 ], // end children
@@ -488,7 +491,7 @@ var ThisCouldBeBetter;
                     GameFramework.ControlButton.from8("buttonNext", GameFramework.Coords.fromXY(75, 120), // pos
                     GameFramework.Coords.fromXY(50, fontHeight * 2), // size
                     "Next", fontHeight * 2, false, // hasBorder
-                    true, // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     goToVenueNext // click
                     )
                 ], // end children
@@ -528,45 +531,46 @@ var ThisCouldBeBetter;
                     new GameFramework.ControlLabel("labelMusicVolume", GameFramework.Coords.fromXY(30, row1PosY + labelPadding), // pos
                     GameFramework.Coords.fromXY(75, buttonHeight), // size
                     false, // isTextCentered
-                    "Music:", fontHeight),
+                    GameFramework.DataBinding.fromContext("Music:"), fontHeight),
                     new GameFramework.ControlSelect("selectMusicVolume", GameFramework.Coords.fromXY(70, row1PosY), // pos
                     GameFramework.Coords.fromXY(30, buttonHeight), // size
                     new GameFramework.DataBinding(universe.soundHelper, (c) => c.musicVolume, (c, v) => c.musicVolume = v), // valueSelected
-                    GameFramework.SoundHelper.controlSelectOptionsVolume(), // options
+                    GameFramework.DataBinding.fromContextAndGet(universe.soundHelper, (c) => c.controlSelectOptionsVolume()), // options
                     GameFramework.DataBinding.fromGet((c) => c.value), // bindingForOptionValues,
-                    GameFramework.DataBinding.fromGet((c) => { return c.text; }), // bindingForOptionText
+                    GameFramework.DataBinding.fromGet((c) => c.text), // bindingForOptionText
                     fontHeight),
                     new GameFramework.ControlLabel("labelSoundVolume", GameFramework.Coords.fromXY(105, row1PosY + labelPadding), // pos
                     GameFramework.Coords.fromXY(75, buttonHeight), // size
                     false, // isTextCentered
-                    "Sound:", fontHeight),
+                    GameFramework.DataBinding.fromContext("Sound:"), fontHeight),
                     new GameFramework.ControlSelect("selectSoundVolume", GameFramework.Coords.fromXY(140, row1PosY), // pos
                     GameFramework.Coords.fromXY(30, buttonHeight), // size
                     new GameFramework.DataBinding(universe.soundHelper, (c) => c.soundVolume, (c, v) => { c.soundVolume = v; }), // valueSelected
-                    GameFramework.SoundHelper.controlSelectOptionsVolume(), // options
+                    GameFramework.DataBinding.fromContextAndGet(universe.soundHelper, (c) => c.controlSelectOptionsVolume()), // options
                     GameFramework.DataBinding.fromGet((c) => c.value), // bindingForOptionValues,
                     GameFramework.DataBinding.fromGet((c) => c.text), // bindingForOptionText
                     fontHeight),
                     new GameFramework.ControlLabel("labelDisplaySize", GameFramework.Coords.fromXY(30, row2PosY + labelPadding), // pos
                     GameFramework.Coords.fromXY(75, buttonHeight), // size
                     false, // isTextCentered
-                    "Display:", fontHeight),
+                    GameFramework.DataBinding.fromContext("Display:"), fontHeight),
                     new GameFramework.ControlSelect("selectDisplaySize", GameFramework.Coords.fromXY(70, row2PosY), // pos
                     GameFramework.Coords.fromXY(65, buttonHeight), // size
-                    universe.display.sizeInPixels, // valueSelected
+                    GameFramework.DataBinding.fromContextAndGet(universe.display, (c) => c.sizeInPixels), // valueSelected
                     // options
-                    universe.display.sizesAvailable, GameFramework.DataBinding.fromGet((c) => c), // bindingForOptionValues,
+                    GameFramework.DataBinding.fromContextAndGet(universe.display, (c) => c.sizesAvailable), GameFramework.DataBinding.fromGet((c) => c), // bindingForOptionValues,
                     GameFramework.DataBinding.fromGet((c) => c.toStringXY()), // bindingForOptionText
                     fontHeight),
                     GameFramework.ControlButton.from8("buttonDisplaySizeChange", GameFramework.Coords.fromXY(140, row2PosY), // pos
                     GameFramework.Coords.fromXY(30, buttonHeight), // size
                     "Change", fontHeight, true, // hasBorder
-                    true, // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     () => // click
                      {
                         var venueControls = universe.venueCurrent;
                         var controlRootAsContainer = venueControls.controlRoot;
-                        var selectDisplaySize = controlRootAsContainer.childrenByName.get("selectDisplaySize");
+                        var selectDisplaySizeAsControl = controlRootAsContainer.childrenByName.get("selectDisplaySize");
+                        var selectDisplaySize = selectDisplaySizeAsControl;
                         var displaySizeSpecified = selectDisplaySize.optionSelected();
                         var displayAsDisplay = universe.display;
                         var display = displayAsDisplay;
@@ -583,7 +587,7 @@ var ThisCouldBeBetter;
                     GameFramework.ControlButton.from8("buttonInputs", GameFramework.Coords.fromXY(70, row3PosY), // pos
                     GameFramework.Coords.fromXY(65, buttonHeight), // size
                     "Inputs", fontHeight, true, // hasBorder
-                    true, // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     () => // click
                      {
                         var venueCurrent = universe.venueCurrent;
@@ -595,7 +599,7 @@ var ThisCouldBeBetter;
                     GameFramework.ControlButton.from8("buttonDone", GameFramework.Coords.fromXY(70, row4PosY), // pos
                     GameFramework.Coords.fromXY(65, buttonHeight), // size
                     "Done", fontHeight, true, // hasBorder
-                    true, // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     back // click
                     ),
                 ], [new GameFramework.Action("Back", back)], [new GameFramework.ActionToInputsMapping("Back", ["Escape"], true)]);
@@ -608,7 +612,7 @@ var ThisCouldBeBetter;
                     size = universe.display.sizeDefault();
                 }
                 var scaleMultiplier = this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
-                var controlsForSlides = [];
+                var controlsForSlides = new Array();
                 var nextDefn = (slideIndexNext) => // click
                  {
                     var venueNext;
@@ -641,11 +645,11 @@ var ThisCouldBeBetter;
                         new GameFramework.ControlLabel("labelSlideText", GameFramework.Coords.fromXY(100, this.fontHeightInPixelsBase * 2), // pos
                         this.sizeBase.clone(), // size
                         true, // isTextCentered,
-                        message, this.fontHeightInPixelsBase),
+                        GameFramework.DataBinding.fromContext(message), this.fontHeightInPixelsBase),
                         GameFramework.ControlButton.from8("buttonNext", GameFramework.Coords.fromXY(75, 120), // pos
                         GameFramework.Coords.fromXY(50, 40), // size
                         "Next", this.fontHeightInPixelsBase, false, // hasBorder
-                        true, // isEnabled
+                        GameFramework.DataBinding.fromTrue(), // isEnabled
                         next)
                     ], [
                         new GameFramework.Action(GameFramework.ControlActionNames.Instances().ControlCancel, skip),
@@ -665,7 +669,7 @@ var ThisCouldBeBetter;
                 var fontHeight = this.fontHeightInPixelsBase;
                 var start = () => {
                     var venueMessage = GameFramework.VenueMessage.fromText("Loading profiles...");
-                    var venueTask = new GameFramework.VenueTask(venueMessage, () => GameFramework.Profile.toControlProfileSelect(universe, null, universe.venueCurrent), (universe, result) => // done
+                    var venueTask = new GameFramework.VenueTask(venueMessage, () => GameFramework.Profile.toControlProfileSelect(universe, null, universe.venueCurrent), (result) => // done
                      {
                         var venueProfileSelect = result.toVenue();
                         universe.venueNext = controlBuilder.venueTransitionalFromTo(universe.venueCurrent, venueProfileSelect);
@@ -685,7 +689,7 @@ var ThisCouldBeBetter;
                     GameFramework.ControlButton.from8("buttonStart", GameFramework.Coords.fromXY(75, 120), // pos
                     GameFramework.Coords.fromXY(50, fontHeight * 2), // size
                     "Start", fontHeight * 2, false, // hasBorder
-                    true, // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     start // click
                     )
                 ], // end children
@@ -713,23 +717,24 @@ var ThisCouldBeBetter;
                     new GameFramework.ControlLabel("labelProfileName", GameFramework.Coords.fromXY(100, 40), // pos
                     GameFramework.Coords.fromXY(100, 20), // size
                     true, // isTextCentered
-                    "Profile: " + universe.profile.name, fontHeight),
+                    GameFramework.DataBinding.fromContext("Profile: " + universe.profile.name), fontHeight),
                     new GameFramework.ControlLabel("labelWorldName", GameFramework.Coords.fromXY(100, 55), // pos
                     GameFramework.Coords.fromXY(150, 25), // size
                     true, // isTextCentered
-                    "World: " + world.name, fontHeight),
+                    GameFramework.DataBinding.fromContext("World: " + world.name), fontHeight),
                     new GameFramework.ControlLabel("labelStartDate", GameFramework.Coords.fromXY(100, 70), // pos
                     GameFramework.Coords.fromXY(150, 25), // size
                     true, // isTextCentered
-                    "Started:" + dateCreated.toStringTimestamp(), fontHeight),
+                    GameFramework.DataBinding.fromContext("Started:" + dateCreated.toStringTimestamp()), fontHeight),
                     new GameFramework.ControlLabel("labelSavedDate", GameFramework.Coords.fromXY(100, 85), // pos
                     GameFramework.Coords.fromXY(150, 25), // size
                     true, // isTextCentered
-                    "Saved:" + (dateSaved == null ? "[never]" : dateSaved.toStringTimestamp()), fontHeight),
+                    GameFramework.DataBinding.fromContext("Saved:"
+                        + (dateSaved == null ? "[never]" : dateSaved.toStringTimestamp())), fontHeight),
                     GameFramework.ControlButton.from8("buttonStart", GameFramework.Coords.fromXY(50, 100), // pos
                     GameFramework.Coords.fromXY(100, this.buttonHeightBase), // size
                     "Start", fontHeight, true, // hasBorder
-                    true, // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     () => // click
                      {
                         var world = universe.world;
@@ -757,7 +762,7 @@ var ThisCouldBeBetter;
                     GameFramework.ControlButton.from8("buttonBack", GameFramework.Coords.fromXY(10, 10), // pos
                     GameFramework.Coords.fromXY(15, 15), // size
                     "<", fontHeight, true, // hasBorder
-                    true, // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     () => // click
                      {
                         var venueNext = venuePrev;
@@ -767,7 +772,7 @@ var ThisCouldBeBetter;
                     GameFramework.ControlButton.from8("buttonDelete", GameFramework.Coords.fromXY(180, 10), // pos
                     GameFramework.Coords.fromXY(15, 15), // size
                     "x", fontHeight, true, // hasBorder
-                    true, // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     () => // click
                      {
                         var saveState = universe.profile.saveStateSelected();
@@ -811,7 +816,7 @@ var ThisCouldBeBetter;
                         var profile = universe.profile;
                         var saveStateSelected = profile.saveStateSelected;
                         return storageHelper.load(saveStateSelected.name);
-                    }, (universe, saveStateReloaded) => // done
+                    }, (saveStateReloaded) => // done
                      {
                         universe.world = saveStateReloaded.world;
                         var venueNext = universe.controlBuilder.worldLoad(universe, null).toVenue();
@@ -833,17 +838,17 @@ var ThisCouldBeBetter;
                     new GameFramework.ControlLabel("labelProfileName", GameFramework.Coords.fromXY(100, 25), // pos
                     GameFramework.Coords.fromXY(120, 25), // size
                     true, // isTextCentered
-                    "Profile: " + universe.profile.name, fontHeight),
+                    GameFramework.DataBinding.fromContext("Profile: " + universe.profile.name), fontHeight),
                     new GameFramework.ControlLabel("labelSelectASave", GameFramework.Coords.fromXY(100, 40), // pos
                     GameFramework.Coords.fromXY(100, 25), // size
                     true, // isTextCentered
-                    "Select a Save:", fontHeight),
+                    GameFramework.DataBinding.fromContext("Select a Save:"), fontHeight),
                     GameFramework.ControlList.from8("listSaveStates", GameFramework.Coords.fromXY(30, 50), // pos
                     GameFramework.Coords.fromXY(140, 50), // size
                     GameFramework.DataBinding.fromContextAndGet(universe.profile, (c) => c.saveStates), // items
                     GameFramework.DataBinding.fromGet((c) => c.name), // bindingForOptionText
-                    fontHeight, new GameFramework.DataBinding(universe.profile, (c) => c.saveStateSelected(), (c, v) => { c.saveStateNameSelected = v.name; }), // bindingForOptionSelected
-                    GameFramework.DataBinding.fromGet((c) => c)),
+                    fontHeight, new GameFramework.DataBinding(universe.profile, (c) => c.saveStateSelected(), (c, v) => c.saveStateNameSelected = v.name), // bindingForOptionSelected
+                    GameFramework.DataBinding.fromGet((v) => v.name)),
                     GameFramework.ControlButton.from8("buttonLoadFromServer", GameFramework.Coords.fromXY(30, 105), // pos
                     GameFramework.Coords.fromXY(40, this.buttonHeightBase), // size
                     "Load", fontHeight, true, // hasBorder
@@ -857,13 +862,13 @@ var ThisCouldBeBetter;
                     GameFramework.ControlButton.from8("buttonLoadFromFile", GameFramework.Coords.fromXY(80, 105), // pos
                     GameFramework.Coords.fromXY(40, this.buttonHeightBase), // size
                     "Load File", fontHeight, true, // hasBorder
-                    true, // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     () => // click
                      {
                         var venueFileUpload = new GameFramework.VenueFileUpload(null, null);
                         var controlMessageReadyToLoad = universe.controlBuilder.message(universe, size, GameFramework.DataBinding.fromContext("Ready to load from file..."), () => // acknowledge
                          {
-                            function callback(fileContentsAsString) {
+                            var callback = (fileContentsAsString) => {
                                 var worldAsStringCompressed = fileContentsAsString;
                                 var compressor = universe.storageHelper.compressor;
                                 var worldSerialized = compressor.decompressString(worldAsStringCompressed);
@@ -872,7 +877,7 @@ var ThisCouldBeBetter;
                                 var venueNext = controlBuilder.game(universe, size, universe.venueCurrent).toVenue();
                                 venueNext = controlBuilder.venueTransitionalFromTo(universe.venueCurrent, venueNext);
                                 universe.venueNext = venueNext;
-                            }
+                            };
                             var inputFile = venueFileUpload.toDomElement().getElementsByTagName("input")[0];
                             var fileToLoad = inputFile.files[0];
                             new GameFramework.FileHelper().loadFileAsBinaryString(fileToLoad, callback, null // contextForCallback
@@ -894,7 +899,7 @@ var ThisCouldBeBetter;
                     GameFramework.ControlButton.from8("buttonReturn", GameFramework.Coords.fromXY(130, 105), // pos
                     GameFramework.Coords.fromXY(40, this.buttonHeightBase), // size
                     "Return", fontHeight, true, // hasBorder
-                    true, // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     () => // click
                      {
                         var venueGame = controlBuilder.game(universe, size, universe.venueCurrent).toVenue();

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualText implements Visual
+export class VisualText implements Visual<VisualText>
 {
 	_text: DataBinding<any, string>;
 	shouldTextContextBeReset: boolean;
@@ -93,19 +93,19 @@ export class VisualText implements Visual
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualText
 	{
 		return this; // todo
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualText): VisualText
 	{
 		return this; // todo
 	}
 
 	// transformable
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualText
 	{
 		return this; // todo
 	}

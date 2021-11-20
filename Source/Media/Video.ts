@@ -2,12 +2,12 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Video
+export class Video implements MediaItemBase
 {
 	name: string;
 	sourcePath: string;
 
-	domElement: any;
+	domElement: HTMLVideoElement;
 	isFinished: boolean;
 
 	_size: Coords;
@@ -20,7 +20,7 @@ export class Video
 		this._size = null;
 	}
 
-	toDomElement(platformHelper: PlatformHelper)
+	toDomElement(platformHelper: PlatformHelper): HTMLElement
 	{
 		if (this.domElement == null)
 		{
@@ -28,7 +28,7 @@ export class Video
 		}
 
 		this.domElement.src = this.sourcePath;
-		this.domElement.video = this;
+		//this.domElement.video = this;
 		this.domElement.autoplay = true;
 		this.domElement.onended = this.stop.bind(this, platformHelper);
 
@@ -39,18 +39,24 @@ export class Video
 		return this.domElement;
 	}
 
-	play(universe: Universe)
+	play(universe: Universe): void
 	{
 		this.isFinished = false;
 		this._size = universe.display.sizeInPixels;
 		universe.platformHelper.platformableAdd(this);
 	}
 
-	stop(platformHelper: PlatformHelper)
+	stop(platformHelper: PlatformHelper): void
 	{
 		platformHelper.platformableRemove(this);
 		this.isFinished = true;
 	}
+
+	// Loadable.
+
+	isLoaded: boolean;
+	load(): void {}
+	unload(): void {}
 }
 
 }

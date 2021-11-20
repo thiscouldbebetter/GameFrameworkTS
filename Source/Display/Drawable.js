@@ -34,6 +34,8 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.Drawable = Drawable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

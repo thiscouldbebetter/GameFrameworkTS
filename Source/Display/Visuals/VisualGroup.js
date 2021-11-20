@@ -18,8 +18,7 @@ var ThisCouldBeBetter;
                 return new VisualGroup(GameFramework.ArrayHelper.clone(this.children));
             }
             overwriteWith(other) {
-                var otherAsVisualGroup = other;
-                GameFramework.ArrayHelper.overwriteWith(this.children, otherAsVisualGroup.children);
+                GameFramework.ArrayHelper.overwriteWith(this.children, other.children);
                 return this;
             }
             // Transformable.

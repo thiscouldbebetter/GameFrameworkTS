@@ -14,7 +14,8 @@ var ThisCouldBeBetter;
                     [
                         new GameFramework.ActionToInputsMapping(controlActionNames.ControlCancel, [inputNames.Escape, inputNames.GamepadButton0 + "0"], true),
                     ];
-                this.actionToInputsMappingsByInputName = GameFramework.ArrayHelper.addLookupsMultiple(this.actionToInputsMappings, (x) => x.inputNames);
+                this.actionToInputsMappingsByInputName =
+                    GameFramework.ArrayHelper.addLookupsMultiple(this.actionToInputsMappings, (x) => x.inputNames);
             }
             draw() {
                 // do nothing

@@ -27,6 +27,8 @@ var ThisCouldBeBetter;
             finalize(uwpe) { }
             initialize(uwpe) { }
             updateForTimerTick(uwpe) { }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.ProjectileGenerator = ProjectileGenerator;
         class ProjectileGeneration {

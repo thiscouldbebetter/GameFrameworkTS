@@ -2,14 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualOffset implements Visual
+export class VisualOffset implements Visual<VisualOffset>
 {
-	child: Visual;
+	child: VisualBase;
 	offset: Coords;
 
 	_posSaved: Coords;
 
-	constructor(child: Visual, offset: Coords)
+	constructor(child: VisualBase, offset: Coords)
 	{
 		this.child = child;
 		this.offset = offset;
@@ -18,7 +18,7 @@ export class VisualOffset implements Visual
 		this._posSaved = Coords.create();
 	}
 
-	static fromOffsetAndChild(offset: Coords, child: Visual): VisualOffset
+	static fromOffsetAndChild(offset: Coords, child: VisualBase): VisualOffset
 	{
 		return new VisualOffset(child, offset);
 	}
@@ -35,19 +35,19 @@ export class VisualOffset implements Visual
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualOffset
 	{
 		return this; // todo
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualOffset): VisualOffset
 	{
 		return this; // todo
 	}
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualOffset
 	{
 		return this; // todo
 	}

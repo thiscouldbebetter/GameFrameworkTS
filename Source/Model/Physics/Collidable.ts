@@ -2,10 +2,10 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Collidable implements EntityProperty
+export class Collidable implements EntityProperty<Collidable>
 {
 	ticksToWaitBetweenCollisions: number;
-	colliderAtRest: any;
+	colliderAtRest: ShapeBase;
 	entityPropertyNamesToCollideWith: string[];
 	_collideEntities: (uwpe: UniverseWorldPlaceEntities, c: Collision) => void;
 
@@ -351,6 +351,11 @@ export class Collidable implements EntityProperty
 			this._collideEntities
 		);
 	}
+
+	// Equatable
+
+	equals(other: Collidable): boolean { return false; } // todo
+
 }
 
 }

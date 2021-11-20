@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Transform_Rotate2D implements Transform
+export class Transform_Rotate2D implements Transform<Transform_Rotate2D>
 {
 	turnsToRotate: number;
 
@@ -15,17 +15,27 @@ export class Transform_Rotate2D implements Transform
 		this._polar = new Polar(0, 1, 0);
 	}
 
-	overwriteWith(other: Transform)
+	// Clonable.
+
+	clone(): Transform_Rotate2D
 	{
+		return new Transform_Rotate2D(this.turnsToRotate);
+	}
+
+	overwriteWith(other: Transform_Rotate2D): Transform_Rotate2D
+	{
+		this.turnsToRotate = other.turnsToRotate;
 		return this; // todo
 	}
 
-	transform(transformable: Transformable): Transformable
+	// Transform.
+
+	transform(transformable: TransformableBase): TransformableBase
 	{
 		return transformable; // todo
 	}
 
-	transformCoords(coordsToTransform: Coords)
+	transformCoords(coordsToTransform: Coords): Coords
 	{
 		this._polar.fromCoords
 		(

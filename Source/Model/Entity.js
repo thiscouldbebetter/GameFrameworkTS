@@ -80,7 +80,7 @@ var ThisCouldBeBetter;
             // Cloneable.
             clone() {
                 var nameCloned = this.name; // + IDHelper.Instance().idNext();
-                var propertiesCloned = [];
+                var propertiesCloned = new Array();
                 for (var i = 0; i < this.properties.length; i++) {
                     var property = this.properties[i];
                     var propertyAsAny = property;
@@ -123,9 +123,10 @@ var ThisCouldBeBetter;
             itemStore() { return this.propertyByName(GameFramework.ItemStore.name); }
             journalKeeper() { return this.propertyByName(GameFramework.JournalKeeper.name); }
             killable() { return this.propertyByName(GameFramework.Killable.name); }
-            loadable() { return this.propertyByName(GameFramework.Loadable.name); }
+            loadable() { return this.propertyByName(GameFramework.LoadableProperty.name); }
             locatable() { return this.propertyByName(GameFramework.Locatable.name); }
             movable() { return this.propertyByName(GameFramework.Movable.name); }
+            namable() { return this.propertyByName(GameFramework.NamableProperty.name); }
             obstacle() { return this.propertyByName(GameFramework.Obstacle.name); }
             phased() { return this.propertyByName(GameFramework.Phased.name); }
             recurrent() { return this.propertyByName(GameFramework.Recurrent.name); }

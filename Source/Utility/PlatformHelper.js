@@ -37,8 +37,8 @@ var ThisCouldBeBetter;
                     this.divMain = divMain;
                 }
                 var display = universe.display;
-                divMain.style.marginLeft = 0 - display.sizeInPixels.x / 2;
-                divMain.style.marginTop = 0 - display.sizeInPixels.y / 2;
+                divMain.style.marginLeft = "" + (0 - display.sizeInPixels.x / 2);
+                divMain.style.marginTop = "" + (0 - display.sizeInPixels.y / 2);
             }
         }
         GameFramework.PlatformHelper = PlatformHelper;

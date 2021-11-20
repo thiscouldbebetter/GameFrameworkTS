@@ -2,7 +2,8 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Transform_OrientForCamera implements Transform
+export class Transform_OrientForCamera
+	implements Transform<Transform_OrientForCamera>
 {
 	orientation: Orientation;
 
@@ -11,17 +12,23 @@ export class Transform_OrientForCamera implements Transform
 		this.orientation = orientation;
 	}
 
-	overwriteWith(other: Transform)
+	clone(): Transform_OrientForCamera
 	{
+		return new Transform_OrientForCamera(this.orientation.clone());
+	}
+
+	overwriteWith(other: Transform_OrientForCamera): Transform_OrientForCamera
+	{
+		this.orientation.overwriteWith(other.orientation);
 		return this; // todo
 	}
 
-	transform(transformable: Transformable): Transformable
+	transform(transformable: TransformableBase): TransformableBase
 	{
 		return transformable; // todo
 	}
 
-	transformCoords(coordsToTransform: Coords)
+	transformCoords(coordsToTransform: Coords): Coords
 	{
 		coordsToTransform.overwriteWithDimensions
 		(

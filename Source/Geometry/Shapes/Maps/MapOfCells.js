@@ -4,13 +4,11 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class MapOfCells {
-            constructor(name, sizeInCells, cellSize, cellCreate, cellAtPosInCells, cellSource) {
+            constructor(name, sizeInCells, cellSize, cellSource) {
                 this.name = name;
                 this.sizeInCells = sizeInCells;
                 this.cellSize = cellSize;
-                this.cellCreate = cellCreate || this.cellCreateDefault;
-                this._cellAtPosInCells = cellAtPosInCells || this.cellAtPosInCellsDefault;
-                this.cellSource = cellSource || new Array();
+                this.cellSource = cellSource;
                 this.sizeInCellsMinusOnes = this.sizeInCells.clone().subtract(GameFramework.Coords.Instances().Ones);
                 this.size = this.sizeInCells.clone().multiply(this.cellSize);
                 this.sizeHalf = this.size.clone().half();
@@ -22,26 +20,17 @@ var ThisCouldBeBetter;
                 this._posInCellsMin = GameFramework.Coords.create();
             }
             static fromNameSizeInCellsAndCellSize(name, sizeInCells, cellSize) {
-                return new MapOfCells(name, sizeInCells, cellSize, null, null, null);
+                return new MapOfCells(name, sizeInCells, cellSize, null);
             }
             cellAtPos(pos) {
                 this._posInCells.overwriteWith(pos).divide(this.cellSize).floor();
                 return this.cellAtPosInCells(this._posInCells);
             }
             cellAtPosInCells(cellPosInCells) {
-                return this._cellAtPosInCells(this, cellPosInCells, this._cell);
+                return this.cellSource.cellAtPosInCells(this, cellPosInCells, this._cell);
             }
-            cellAtPosInCellsDefault(map, cellPosInCells, cell) {
-                var cellIndex = cellPosInCells.y * this.sizeInCells.x + cellPosInCells.x;
-                var cell = this.cellSource[cellIndex];
-                if (cell == null) {
-                    cell = this.cellCreate();
-                    this.cellSource[cellIndex] = cell;
-                }
-                return cell;
-            }
-            cellCreateDefault() {
-                return {};
+            cellCreate() {
+                return this.cellSource.cellCreate();
             }
             cellsCount() {
                 return this.sizeInCells.x * this.sizeInCells.y;
@@ -78,7 +67,7 @@ var ThisCouldBeBetter;
             }
             // cloneable
             clone() {
-                return new MapOfCells(this.name, this.sizeInCells, this.cellSize, this.cellCreate, this._cellAtPosInCells, this.cellSource);
+                return new MapOfCells(this.name, this.sizeInCells, this.cellSize, this.cellSource);
             }
             overwriteWith(other) {
                 this.cellSource.overwriteWith(other.cellSource);
@@ -86,5 +75,27 @@ var ThisCouldBeBetter;
             }
         }
         GameFramework.MapOfCells = MapOfCells;
+        class MapOfCellsCellSourceArray {
+            constructor(cells, cellCreate) {
+                this.cells = cells;
+                this._cellCreate = cellCreate;
+            }
+            cellAtPosInCells(map, posInCells, cellToOverwrite) {
+                var cellIndex = posInCells.y * map.sizeInCells.x + posInCells.x;
+                var cellFound = this.cells[cellIndex];
+                cellToOverwrite.overwriteWith(cellFound);
+                return cellToOverwrite;
+            }
+            cellCreate() {
+                return this._cellCreate();
+            }
+            clone() {
+                return this; // todo
+            }
+            overwriteWith(other) {
+                return this; // todo
+            }
+        }
+        GameFramework.MapOfCellsCellSourceArray = MapOfCellsCellSourceArray;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
 })(ThisCouldBeBetter || (ThisCouldBeBetter = {}));

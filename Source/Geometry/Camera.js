@@ -172,6 +172,8 @@ var ThisCouldBeBetter;
             updateForTimerTick(uwpe) {
                 // Do nothing.  Rendering is done in Place.draw().
             }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.Camera = Camera;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

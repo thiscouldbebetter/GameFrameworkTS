@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Font
+export class Font implements MediaItemBase
 {
 	name: string;
 	sourcePath: string;
@@ -17,7 +17,7 @@ export class Font
 		this.load();
 	}
 
-	load()
+	load(): void
 	{
 		var fontAsStyleElement = document.createElement("style");
 		fontAsStyleElement.innerHTML = 
@@ -28,6 +28,8 @@ export class Font
 		document.head.appendChild(fontAsStyleElement);
 		this.isLoaded = true;
 	}
+
+	unload(): void {} // todo
 }
 
 }

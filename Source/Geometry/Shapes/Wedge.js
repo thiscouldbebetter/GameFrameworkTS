@@ -73,17 +73,18 @@ var ThisCouldBeBetter;
             clone() {
                 return new Wedge(this.vertex.clone(), this.directionMin.clone(), this.angleSpannedInTurns);
             }
-            equals(other) {
-                var returnValue = (this.vertex.equals(other.vertex)
-                    && this.directionMin.equals(other.directionMin)
-                    && this.angleSpannedInTurns == other.angleSpannedInTurns);
-                return returnValue;
-            }
             overwriteWith(other) {
                 this.vertex.overwriteWith(other.vertex);
                 this.directionMin.overwriteWith(other.directionMin);
                 this.angleSpannedInTurns = other.angleSpannedInTurns;
                 return this;
+            }
+            // Equatable.
+            equals(other) {
+                var returnValue = (this.vertex.equals(other.vertex)
+                    && this.directionMin.equals(other.directionMin)
+                    && this.angleSpannedInTurns == other.angleSpannedInTurns);
+                return returnValue;
             }
             // ShapeBase.
             locate(loc) {

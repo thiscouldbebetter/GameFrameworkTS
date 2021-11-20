@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Bone
+export class Bone implements Treeable<Bone>
 {
 	name: string;
 	length: number;
@@ -12,7 +12,14 @@ export class Bone
 
 	parentName: string;
 
-	constructor(name: string, length: number, orientation: Orientation, children: Bone[], isVisible: boolean)
+	constructor
+	(
+		name: string,
+		length: number,
+		orientation: Orientation,
+		children: Bone[],
+		isVisible: boolean
+	)
 	{
 		this.name = name;
 		this.length = length;
@@ -29,7 +36,7 @@ export class Bone
 
 	// instance methods
 
-	pos(bonesByName: any)
+	pos(bonesByName: Map<string, Bone>): Coords
 	{
 		var returnValue = Coords.create();
 
@@ -53,7 +60,7 @@ export class Bone
 
 	// cloneable
 
-	clone()
+	clone(): Bone
 	{
 		// hack - test
 		var orientationCloned = this.orientation.clone();
@@ -70,7 +77,7 @@ export class Bone
 		return returnValue;
 	}
 
-	overwriteWith(other: Bone)
+	overwriteWith(other: Bone): Bone
 	{
 		this.orientation.overwriteWith(other.orientation);
 		ArrayHelper.overwriteWith(this.children, other.children);
@@ -79,7 +86,7 @@ export class Bone
 
 	// transformable
 
-	transform(transformToApply: Transform)
+	transform(transformToApply: TransformBase): Bone
 	{
 		var axes = this.orientation.axes;
 		for (var i = 0; i < axes.length; i++)
@@ -87,6 +94,7 @@ export class Bone
 			var axis = axes[i];
 			transformToApply.transformCoords(axis);
 		}
+		return this;
 	}
 }
 

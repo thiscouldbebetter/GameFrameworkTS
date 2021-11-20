@@ -21,28 +21,29 @@ var ThisCouldBeBetter;
             center() {
                 return this.shell.center();
             }
-            collider() {
-                return this._collider;
-            }
             // cloneable
             clone() {
                 return new Arc(this.shell.clone(), this.wedge.clone());
-            }
-            equals(other) {
-                var returnValue = (this.shell.equals(other.shell)
-                    && this.wedge.equals(other.wedge));
-                return returnValue;
             }
             overwriteWith(other) {
                 this.shell.overwriteWith(other.shell);
                 this.wedge.overwriteWith(other.wedge);
                 return this;
             }
+            // Equatable.
+            equals(other) {
+                var returnValue = (this.shell.equals(other.shell)
+                    && this.wedge.equals(other.wedge));
+                return returnValue;
+            }
             // Transformable.
             coordsGroupToTranslate() {
                 return [this.shell.center(), this.wedge.vertex];
             }
             // ShapeBase.
+            collider() {
+                return this._collider;
+            }
             locate(loc) {
                 var directionMin = this.wedge.directionMin;
                 directionMin.overwriteWith(loc.orientation.forward);

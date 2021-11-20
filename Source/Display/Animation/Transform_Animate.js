@@ -29,6 +29,7 @@ var ThisCouldBeBetter;
                 returnValue = keyframe.interpolateWith(keyframeNext, fractionOfProgressFromKeyframeToNext);
                 return returnValue;
             }
+            clone() { return this; } // todo
             overwriteWith(other) {
                 return this; // todo
             }

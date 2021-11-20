@@ -2,17 +2,17 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualBuffered implements Visual
+export class VisualBuffered implements Visual<VisualBuffered>
 {
 	size: Coords;
-	child: Visual;
+	child: VisualBase;
 
 	displayForBuffer: Display2D;
 	sizeHalf: Coords;
 
 	_posSaved: Coords;
 
-	constructor(size: Coords, child: Visual)
+	constructor(size: Coords, child: VisualBase)
 	{
 		this.size = size;
 		this.child = child;
@@ -43,19 +43,19 @@ export class VisualBuffered implements Visual
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualBuffered
 	{
 		return this; // todo
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualBuffered): VisualBuffered
 	{
 		return this; // todo
 	}
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualBuffered
 	{
 		return this; // todo
 	}

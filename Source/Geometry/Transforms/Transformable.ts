@@ -2,9 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export interface Transformable
+export interface TransformableBase extends Clonable<TransformableBase>
 {
-	transform(t: Transform): Transformable;
+	transform(transformToApply: TransformBase): TransformableBase;
+}
+
+export interface Transformable<T extends TransformableBase> extends Clonable<T>
+{
+	transform(transformToApply: TransformBase): T;
 }
 
 }

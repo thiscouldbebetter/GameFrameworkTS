@@ -2,10 +2,10 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualMap implements Visual
+export class VisualMap implements Visual<VisualMap>
 {
 	map: MapOfCells<any>;
-	visualsByName: Map<string, Visual>;
+	visualsByName: Map<string, VisualBase>;
 	cameraGet: (uwpe: UniverseWorldPlaceEntities)=>Camera;
 	shouldConvertToImage: boolean;
 
@@ -13,7 +13,6 @@ export class VisualMap implements Visual
 	sizeInCells: Coords;
 
 	private _cameraPos: Coords;
-	//private _cell: any;
 	private _cellPosEnd: Coords;
 	private _cellPosInCells: Coords;
 	private _cellPosStart: Coords;
@@ -22,8 +21,10 @@ export class VisualMap implements Visual
 
 	constructor
 	(
-		map: MapOfCells<any>, visualsByName: Map<string, Visual>,
-		cameraGet: () => Camera, shouldConvertToImage: boolean
+		map: MapOfCells<any>,
+		visualsByName: Map<string, VisualBase>,
+		cameraGet: () => Camera,
+		shouldConvertToImage: boolean
 	)
 	{
 		this.map = map;
@@ -182,19 +183,19 @@ export class VisualMap implements Visual
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualMap
 	{
 		return this; // todo
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualMap): VisualMap
 	{
 		return this; // todo
 	}
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualMap
 	{
 		return this; // todo
 	}

@@ -17,11 +17,14 @@ var ThisCouldBeBetter;
                 this.loc.overwriteWith(other.loc);
                 return this;
             }
+            // Equatable
+            equals(other) { return false; } // todo
             // translatable
             coordsGroupToTranslate() {
                 return [this.loc.pos];
             }
-            // Shape.
+            // ShapeBase.
+            collider() { return null; }
             locate(loc) {
                 return GameFramework.ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
             }

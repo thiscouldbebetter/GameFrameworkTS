@@ -2,11 +2,11 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ControlTextBox extends ControlBase
+export class ControlTextBox<TContext> extends ControlBase
 {
-	_text: any;
+	_text: DataBinding<TContext, string>;
 	numberOfCharsMax: number;
-	_isEnabled: DataBinding<any,boolean>;
+	_isEnabled: DataBinding<TContext,boolean>;
 
 	cursorPos: number;
 
@@ -18,9 +18,13 @@ export class ControlTextBox extends ControlBase
 
 	constructor
 	(
-		name: string, pos: Coords, size: Coords, text: any,
-		fontHeightInPixels: number, numberOfCharsMax: number,
-		isEnabled: DataBinding<any,boolean>
+		name: string,
+		pos: Coords,
+		size: Coords,
+		text: DataBinding<TContext,string>,
+		fontHeightInPixels: number,
+		numberOfCharsMax: number,
+		isEnabled: DataBinding<TContext,boolean>
 	)
 	{
 		super(name, pos, size, fontHeightInPixels);
@@ -39,28 +43,21 @@ export class ControlTextBox extends ControlBase
 		this._textSize = Coords.create();
 	}
 
-	text(value: any, universe: Universe)
+	text(value: string): string
 	{
 		if (value != null)
 		{
-			if (this._text.set == null)
-			{
-				this._text = value;
-			}
-			else
-			{
-				this._text.set(value);
-			}
+			this._text.set(value);
 		}
 
-		return (this._text.get == null ? this._text : this._text.get(universe) );
+		return this._text.get();
 	}
 
 	// events
 
 	actionHandle(actionNameToHandle: string, universe: Universe): boolean
 	{
-		var text = this.text(null, null);
+		var text = this.text(null);
 
 		var controlActionNames = ControlActionNames.Instances();
 		if
@@ -69,7 +66,7 @@ export class ControlTextBox extends ControlBase
 			|| actionNameToHandle == Input.Names().Backspace
 		)
 		{
-			this.text(text.substr(0, text.length - 1), null);
+			this.text(text.substr(0, text.length - 1));
 
 			this.cursorPos = NumberHelper.wrapToRangeMinMax
 			(
@@ -78,7 +75,10 @@ export class ControlTextBox extends ControlBase
 		}
 		else if (actionNameToHandle == controlActionNames.ControlConfirm)
 		{
-			this.cursorPos = NumberHelper.wrapToRangeMinMax(this.cursorPos + 1, 0, text.length + 1);
+			this.cursorPos = NumberHelper.wrapToRangeMinMax
+			(
+				this.cursorPos + 1, 0, text.length + 1
+			);
 		}
 		else if
 		(
@@ -87,18 +87,33 @@ export class ControlTextBox extends ControlBase
 		)
 		{
 			// This is a bit counterintuitive.
-			var direction = (actionNameToHandle == controlActionNames.ControlIncrement ? -1 : 1);
+			var direction =
+			(
+				actionNameToHandle == controlActionNames.ControlIncrement
+				? -1
+				: 1
+			);
 
 			var charCodeAtCursor =
 			(
-				this.cursorPos < text.length ? text.charCodeAt(this.cursorPos) : "A".charCodeAt(0) - 1
+				this.cursorPos < text.length
+				? text.charCodeAt(this.cursorPos)
+				: "A".charCodeAt(0) - 1
 			);
 
-			if (charCodeAtCursor == "Z".charCodeAt(0) && direction == 1)
+			if 
+			(
+				charCodeAtCursor == "Z".charCodeAt(0)
+				&& direction == 1
+			)
 			{
 				charCodeAtCursor = "a".charCodeAt(0);
 			}
-			else if (charCodeAtCursor == "a".charCodeAt(0) && direction == -1)
+			else if 
+			(
+				charCodeAtCursor == "a".charCodeAt(0)
+				&& direction == -1
+			)
 			{
 				charCodeAtCursor = "Z".charCodeAt(0);
 			}
@@ -120,10 +135,16 @@ export class ControlTextBox extends ControlBase
 				+ charAtCursor
 				+ text.substr(this.cursorPos + 1);
 
-			this.text(textEdited, null);
+			this.text(textEdited);
 		}
-		else if (actionNameToHandle.length == 1 || actionNameToHandle.startsWith("_") ) // printable character
+		else if 
+		(
+			actionNameToHandle.length == 1
+			|| actionNameToHandle.startsWith("_")
+		)
 		{
+			// Printable character.
+
 			if (actionNameToHandle.startsWith("_"))
 			{
 				if (actionNameToHandle == "_")
@@ -136,14 +157,18 @@ export class ControlTextBox extends ControlBase
 				}
 			}
 
-			if (this.numberOfCharsMax == null || text.length < this.numberOfCharsMax)
+			if
+			(
+				this.numberOfCharsMax == null
+				|| text.length < this.numberOfCharsMax
+			)
 			{
 				var textEdited =
 					text.substr(0, this.cursorPos)
 						+ actionNameToHandle
 						+ text.substr(this.cursorPos);
 
-				text = this.text(textEdited, null);
+				text = this.text(textEdited);
 
 				this.cursorPos = NumberHelper.wrapToRangeMinMax
 				(
@@ -155,24 +180,24 @@ export class ControlTextBox extends ControlBase
 		return true; // wasActionHandled
 	}
 
-	focusGain()
+	focusGain(): void
 	{
 		this.isHighlighted = true;
-		this.cursorPos = this.text(null, null).length;
+		this.cursorPos = this.text(null).length;
 	}
 
-	focusLose()
+	focusLose(): void
 	{
 		this.isHighlighted = false;
 		this.cursorPos = null;
 	}
 
-	isEnabled()
+	isEnabled(): boolean
 	{
-		return (this._isEnabled.get());
+		return this._isEnabled.get();
 	}
 
-	mouseClick(mouseClickPos: Coords)
+	mouseClick(mouseClickPos: Coords): boolean
 	{
 		var parent = this.parent;
 		var parentAsContainer = parent as ControlContainer;
@@ -182,7 +207,7 @@ export class ControlTextBox extends ControlBase
 		return true;
 	}
 
-	scalePosAndSize(scaleFactor: Coords)
+	scalePosAndSize(scaleFactor: Coords): ControlTextBox<TContext>
 	{
 		this.pos.multiply(scaleFactor);
 		this.size.multiply(scaleFactor);
@@ -192,12 +217,13 @@ export class ControlTextBox extends ControlBase
 
 	// drawable
 
-	draw(universe: Universe, display: Display, drawLoc: Disposition)
+	draw(universe: Universe, display: Display, drawLoc: Disposition): void
 	{
-		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
+		var drawPos =
+			this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 		var style = this.style(universe);
 
-		var text = this.text(null, null);
+		var text = this.text(null);
 
 		display.drawRectangle
 		(

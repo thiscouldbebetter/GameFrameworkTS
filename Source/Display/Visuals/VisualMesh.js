@@ -12,8 +12,7 @@ var ThisCouldBeBetter;
                 return new VisualMesh(this.mesh.clone());
             }
             overwriteWith(other) {
-                var otherAsVisualMesh = other;
-                this.mesh.overwriteWith(otherAsVisualMesh.mesh);
+                this.mesh.overwriteWith(other.mesh);
                 return this;
             }
             // Transformable.

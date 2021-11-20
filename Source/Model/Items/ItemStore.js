@@ -44,6 +44,8 @@ var ThisCouldBeBetter;
             finalize(uwpe) { }
             initialize(uwpe) { }
             updateForTimerTick(uwpe) { }
+            // Equatable
+            equals(other) { return false; } // todo
             // Controllable.
             toControl(universe, size, entityCustomer, entityStore, venuePrev) {
                 if (size == null) {
@@ -75,7 +77,7 @@ var ThisCouldBeBetter;
                     new GameFramework.ControlLabel("labelStoreName", GameFramework.Coords.fromXY(margin, margin), // pos
                     GameFramework.Coords.fromXY(listSize.x, 25), // size
                     false, // isTextCentered
-                    entityStore.name + ":", fontHeight),
+                    GameFramework.DataBinding.fromContext(entityStore.name + ":"), fontHeight),
                     GameFramework.ControlList.from10("listStoreItems", GameFramework.Coords.fromXY(margin, margin * 2), // pos
                     listSize.clone(), GameFramework.DataBinding.fromContextAndGet(itemHolderStore, (c) => c.items //.filter(x => x.item().defnName != itemDefnNameCurrency);
                     ), // items
@@ -88,7 +90,7 @@ var ThisCouldBeBetter;
                     new GameFramework.ControlLabel("labelCustomerName", GameFramework.Coords.fromXY(size.x - margin - listSize.x, margin), // pos
                     GameFramework.Coords.fromXY(85, 25), // size
                     false, // isTextCentered
-                    entityCustomer.name + ":", fontHeight),
+                    GameFramework.DataBinding.fromContext(entityCustomer.name + ":"), fontHeight),
                     GameFramework.ControlButton.from8("buttonBuy", GameFramework.Coords.fromXY(size.x / 2 - buttonSize.x - margin / 2, size.y - margin - buttonSize.y), // pos
                     buttonSize.clone(), "Buy", fontHeight, true, // hasBorder
                     GameFramework.DataBinding.fromTrue(), // isEnabled
@@ -114,7 +116,7 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromContextAndGet(this, c => c.statusMessage), fontHeight),
                     GameFramework.ControlButton.from8("buttonDone", GameFramework.Coords.fromXY(size.x - margin - buttonSize.x, size.y - margin - buttonSize.y), // pos
                     buttonSize.clone(), "Done", fontHeight, true, // hasBorder
-                    true, // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     back // click
                     )
                 ], [new GameFramework.Action("Back", back)], [new GameFramework.ActionToInputsMapping("Back", [GameFramework.Input.Names().Escape], true)]);

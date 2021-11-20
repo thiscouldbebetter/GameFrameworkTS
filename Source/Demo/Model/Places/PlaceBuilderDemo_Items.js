@@ -45,8 +45,7 @@ class PlaceBuilderDemo_Items {
     itemUseEquip(uwpe) {
         var entityUser = uwpe.entity;
         var equipmentUser = entityUser.equipmentUser();
-        var message = equipmentUser.equipEntityWithItem(uwpe);
-        return message;
+        equipmentUser.equipEntityWithItem(uwpe);
     }
     // Items.
     armor() {
@@ -159,12 +158,13 @@ class PlaceBuilderDemo_Items {
                 + " all men are created equal. ";
             var size = universe.display.sizeInPixels.clone();
             var fontHeight = 10;
-            var textarea = new ControlTextarea("textareaContents", size.clone().half().half(), size.clone().half(), DataBinding.fromContext(text), fontHeight, DataBinding.fromContext(false) // isEnabled
+            var textarea = new ControlTextarea("textareaContents", size.clone().half().half(), size.clone().half(), DataBinding.fromContext(text), fontHeight, DataBinding.fromFalseWithContext(text) // isEnabled
             );
             var button = new ControlButton("buttonDone", Coords.fromXY(size.x / 4, 3 * size.y / 4 + fontHeight), Coords.fromXY(size.x / 2, fontHeight * 2), "Done", fontHeight, true, // hasBorder
-            true, // isEnabled
+            DataBinding.fromTrue(), // isEnabled
             back, // click
-            null, null);
+            false // canBeHeldDown
+            );
             var container = new ControlContainer("containerBook", Coords.create(), size.clone(), [textarea, button], // children
             [
                 new Action(ControlActionNames.Instances().ControlCancel, back),
@@ -233,9 +233,9 @@ class PlaceBuilderDemo_Items {
             var entityItem = uwpe.entity2;
             entityUser.starvable().satietyAdd(10);
             var item = entityItem.item();
-            entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
-            var message = "You eat the bread.";
-            return message;
+            var itemHolder = entityUser.itemHolder();
+            itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
+            itemHolder.statusMessage += "You eat the bread.";
         }, itemBreadVisual, null // toEntity
         );
         return itemBread;
@@ -297,9 +297,9 @@ class PlaceBuilderDemo_Items {
             var entityItem = uwpe.entity2;
             entityUser.starvable().satietyAdd(2);
             var item = entityItem.item();
-            entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
-            var message = "You eat the doughnut.";
-            return message;
+            var itemHolder = entityUser.itemHolder();
+            itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
+            itemHolder.statusMessage = "You eat the doughnut.";
         }, itemDoughnutVisual, null // toEntity
         );
         return itemDoughnut;
@@ -348,9 +348,9 @@ class PlaceBuilderDemo_Items {
             var entityItem = uwpe.entity2;
             entityUser.starvable().satietyAdd(5);
             var item = entityItem.item();
-            entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
-            var message = "You eat the fruit.";
-            return message;
+            var itemHolder = entityUser.itemHolder();
+            itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
+            itemHolder.statusMessage = "You eat the fruit.";
         }, itemFruitVisual, null // toEntity
         );
         return itemFruit;
@@ -493,9 +493,9 @@ class PlaceBuilderDemo_Items {
             var entityItem = uwpe.entity2;
             entityUser.starvable().satietyAdd(20);
             var item = entityItem.item();
-            entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
-            var message = "You eat the meat.";
-            return message;
+            var itemHolder = entityUser.itemHolder();
+            itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
+            itemHolder.statusMessage = "You eat the meat.";
         }, itemMeatVisual, null);
         return itemMeat;
     }
@@ -531,9 +531,9 @@ class PlaceBuilderDemo_Items {
             var effectToApply = Effect.Instances().Healing;
             entityUser.effectable().effectAdd(effectToApply);
             var item = entityItem.item();
-            entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
-            var message = "You use the medicine.";
-            return message;
+            var itemHolder = entityUser.itemHolder();
+            itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
+            itemHolder.statusMessage = "You use the medicine.";
         }, itemMedicineVisual, null);
         return itemMedicine;
     }

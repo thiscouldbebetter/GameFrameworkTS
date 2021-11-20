@@ -2,10 +2,10 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ControlLabel extends ControlBase
+export class ControlLabel<TContext> extends ControlBase
 {
 	isTextCentered: boolean;
-	_text: any;
+	_text: DataBinding<TContext,string>;
 
 	parent: ControlBase;
 
@@ -13,8 +13,12 @@ export class ControlLabel extends ControlBase
 
 	constructor
 	(
-		name: string, pos: Coords, size: Coords, isTextCentered: boolean,
-		text: any, fontHeightInPixels: number
+		name: string,
+		pos: Coords,
+		size: Coords,
+		isTextCentered: boolean,
+		text: DataBinding<TContext,string>,
+		fontHeightInPixels: number
 	)
 	{
 		super(name, pos, size, fontHeightInPixels);
@@ -26,7 +30,11 @@ export class ControlLabel extends ControlBase
 		this._drawPos = Coords.create();
 	}
 
-	static fromPosAndText(pos: Coords, text: any)
+	static fromPosAndText<TContext>
+	(
+		pos: Coords,
+		text: DataBinding<TContext,string>
+	): ControlLabel<TContext>
 	{
 		return new ControlLabel
 		(
@@ -39,11 +47,14 @@ export class ControlLabel extends ControlBase
 		);
 	}
 
-	static from5
+	static from5<TContext>
 	(
-		name: string, pos: Coords, size: Coords, isTextCentered: boolean,
-		text: any
-	)
+		name: string,
+		pos: Coords,
+		size: Coords,
+		isTextCentered: boolean,
+		text: DataBinding<TContext,string>
+	): ControlLabel<TContext>
 	{
 		return new ControlLabel
 		(
@@ -56,12 +67,12 @@ export class ControlLabel extends ControlBase
 		);
 	}
 
-	actionHandle(actionName: string)
+	actionHandle(actionName: string): boolean
 	{
 		return false; // wasActionHandled
 	}
 
-	isEnabled()
+	isEnabled(): boolean
 	{
 		return false;
 	}
@@ -71,21 +82,27 @@ export class ControlLabel extends ControlBase
 		return false;
 	}
 
-	scalePosAndSize(scaleFactor: Coords)
+	scalePosAndSize(scaleFactor: Coords): void
 	{
 		this.pos.multiply(scaleFactor);
 		this.size.multiply(scaleFactor);
 		this.fontHeightInPixels *= scaleFactor.y;
 	}
 
-	text()
+	text(): string
 	{
-		return (this._text.get == null ? this._text : this._text.get() );
+		return this._text.get();
 	}
 
 	// drawable
 
-	draw(universe: Universe, display: Display, drawLoc: Disposition, style: ControlStyle)
+	draw
+	(
+		universe: Universe,
+		display: Display,
+		drawLoc: Disposition,
+		style: ControlStyle
+	): void
 	{
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 		var style = style || this.style(universe);

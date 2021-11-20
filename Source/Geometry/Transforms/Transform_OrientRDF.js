@@ -9,6 +9,9 @@ var ThisCouldBeBetter;
                 // Helper variables.
                 this._components = [GameFramework.Coords.create(), GameFramework.Coords.create(), GameFramework.Coords.create()];
             }
+            clone() {
+                return this; // todo
+            }
             overwriteWith(other) {
                 return this; // todo
             }

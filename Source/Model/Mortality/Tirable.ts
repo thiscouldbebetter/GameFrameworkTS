@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Tirable implements EntityProperty
+export class Tirable implements EntityProperty<Tirable>
 {
 	staminaMaxAfterSleep: number;
 	staminaRecoveredPerTick: number;
@@ -99,6 +99,11 @@ export class Tirable implements EntityProperty
 			this._fallAsleep
 		);
 	}
+
+	// Equatable
+
+	equals(other: Tirable): boolean { return false; } // todo
+
 }
 
 }

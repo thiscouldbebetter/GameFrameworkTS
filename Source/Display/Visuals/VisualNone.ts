@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualNone implements Visual
+export class VisualNone implements Visual<VisualNone>
 {
 	static Instance: VisualNone = new VisualNone();
 
@@ -13,19 +13,19 @@ export class VisualNone implements Visual
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualNone
 	{
 		return this; // todo
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualNone): VisualNone
 	{
 		return this; // todo
 	}
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualNone
 	{
 		return this; // todo
 	}

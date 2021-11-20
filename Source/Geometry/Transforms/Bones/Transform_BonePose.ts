@@ -19,16 +19,11 @@ export class Transform_BonePose implements Transform_Interpolatable
 
 	// instance methods
 
-	clone()
-	{
-		return new Transform_BonePose
-		(
-			this.boneName,
-			this.cyclesToRotateAroundAxesDownRightForward
-		);
-	}
-
-	interpolateWith(other: Transform_Interpolatable, fractionOfProgressTowardOther: number): Transform_Interpolatable
+	interpolateWith
+	(
+		other: Transform_Interpolatable,
+		fractionOfProgressTowardOther: number
+	): Transform_Interpolatable
 	{
 		var otherAsBonePose = other as Transform_BonePose;
 		var cyclesToRotateAroundAxesDownRightForwardInterpolated = [];
@@ -53,16 +48,26 @@ export class Transform_BonePose implements Transform_Interpolatable
 		return returnValue;
 	}
 
-	overwriteWith(other: Transform)
+	clone(): Transform_BonePose
+	{
+		return new Transform_BonePose
+		(
+			this.boneName,
+			this.cyclesToRotateAroundAxesDownRightForward
+		);
+	}
+
+	overwriteWith(other: Transform_BonePose): Transform_BonePose
 	{
 		return this; // todo
 	}
 
-	transform(transformableToTransform: Transformable): Transformable
+	transform(transformableToTransform: TransformableBase): TransformableBase
 	{
-		var skeletonToTransform: any = transformableToTransform;
+		var skeletonToTransform = transformableToTransform as Skeleton;
 
-		var boneToTransform = skeletonToTransform.bonesAllByName.get(this.boneName);
+		var boneToTransform =
+			skeletonToTransform.bonesAllByName.get(this.boneName);
 		var boneOrientation = boneToTransform.orientation;
 
 		var axesToRotateAround =

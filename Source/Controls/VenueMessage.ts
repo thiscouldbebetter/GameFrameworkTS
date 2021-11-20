@@ -2,10 +2,10 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VenueMessage implements Venue
+export class VenueMessage<TContext> implements Venue
 {
-	messageToShow: DataBinding<any, string>;
-	acknowledge: ()=>void;
+	messageToShow: DataBinding<TContext, string>;
+	acknowledge: () => void;
 	venuePrev: Venue;
 	_sizeInPixels: Coords;
 	showMessageOnly: boolean;
@@ -14,8 +14,8 @@ export class VenueMessage implements Venue
 
 	constructor
 	(
-		messageToShow: DataBinding<any, string>,
-		acknowledge: ()=>void,
+		messageToShow: DataBinding<TContext, string>,
+		acknowledge: () => void,
 		venuePrev: Venue,
 		sizeInPixels: Coords,
 		showMessageOnly: boolean
@@ -28,46 +28,52 @@ export class VenueMessage implements Venue
 		this.showMessageOnly = showMessageOnly || false;
 	}
 
-	static fromMessage(message: DataBinding<any,string>)
+	static fromMessage<TContext>
+	(
+		message: DataBinding<TContext, string>
+	): VenueMessage<TContext>
 	{
 		return VenueMessage.fromMessageAndAcknowledge(message, null);
 	}
 
-	static fromMessageAndAcknowledge
+	static fromMessageAndAcknowledge<TContext>
 	(
-		messageToShow: DataBinding<any, string>, acknowledge: any
-	)
+		messageToShow: DataBinding<TContext, string>, acknowledge: () => void
+	): VenueMessage<TContext>
 	{
-		return new VenueMessage(messageToShow, acknowledge, null, null, null);
+		return new VenueMessage<TContext>(messageToShow, acknowledge, null, null, null);
 	}
 
-	static fromText(message: string)
+	static fromText<TContext>(message: string): VenueMessage<TContext>
 	{
-		return VenueMessage.fromMessage(DataBinding.fromContext(message));
+		return VenueMessage.fromMessage<TContext>
+		(
+			DataBinding.fromGet( (c: TContext) => message)
+		);
 	}
 
 	// instance methods
 
-	draw(universe: Universe)
+	draw(universe: Universe): void
 	{
 		this.venueInner(universe).draw(universe);
 	}
 
-	finalize(universe: Universe) {}
+	finalize(universe: Universe): void {}
 
-	initialize(universe: Universe) {}
+	initialize(universe: Universe): void {}
 
-	updateForTimerTick(universe: Universe)
+	updateForTimerTick(universe: Universe): void
 	{
 		this.venueInner(universe).updateForTimerTick(universe);
 	}
 
-	sizeInPixels(universe: Universe)
+	sizeInPixels(universe: Universe): Coords
 	{
 		return (this._sizeInPixels == null ? universe.display.sizeInPixels : this._sizeInPixels);
 	}
 
-	venueInner(universe: Universe)
+	venueInner(universe: Universe): Venue
 	{
 		if (this._venueInner == null)
 		{

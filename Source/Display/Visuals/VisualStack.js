@@ -14,8 +14,9 @@ var ThisCouldBeBetter;
                 var drawPos = entity.locatable().loc.pos;
                 this._posSaved.overwriteWith(drawPos);
                 for (var i = 0; i < this.children.length; i++) {
-                    var child = this.children[i];
-                    var wasChildVisible = child.draw(uwpe, display);
+                    //var child = this.children[i];
+                    var wasChildVisible = true; // hack
+                    // child.draw(uwpe, display);
                     if (wasChildVisible) {
                         drawPos.add(this.childSpacing);
                     }
@@ -27,9 +28,8 @@ var ThisCouldBeBetter;
                 return new VisualStack(this.childSpacing.clone(), GameFramework.ArrayHelper.clone(this.children));
             }
             overwriteWith(other) {
-                var otherAsVisualStack = other;
-                this.childSpacing.overwriteWith(otherAsVisualStack.childSpacing);
-                GameFramework.ArrayHelper.overwriteWith(this.children, otherAsVisualStack.children);
+                this.childSpacing.overwriteWith(other.childSpacing);
+                GameFramework.ArrayHelper.overwriteWith(this.children, other.children);
                 return this;
             }
             // Transformable.

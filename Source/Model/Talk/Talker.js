@@ -28,6 +28,8 @@ var ThisCouldBeBetter;
             finalize(uwpe) { }
             initialize(uwpe) { }
             updateForTimerTick(uwpe) { }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.Talker = Talker;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

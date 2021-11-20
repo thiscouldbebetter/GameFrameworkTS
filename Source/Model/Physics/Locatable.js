@@ -69,6 +69,9 @@ var ThisCouldBeBetter;
                 place.entitySpawn(uwpe);
                 return entityToSpawn;
             }
+            toEntity() {
+                return new GameFramework.Entity(Locatable.name, [this]);
+            }
             // EntityProperty.
             updateForTimerTick(uwpe) {
                 var loc = this.loc;
@@ -91,6 +94,8 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.Locatable = Locatable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

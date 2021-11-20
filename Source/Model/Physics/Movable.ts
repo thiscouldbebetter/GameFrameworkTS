@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Movable implements EntityProperty
+export class Movable implements EntityProperty<Movable>
 {
 	accelerationPerTick: number;
 	speedMax: number;
@@ -96,6 +96,10 @@ export class Movable implements EntityProperty
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 
+	// Equatable
+
+	equals(other: Movable): boolean { return false; } // todo
+
 	// Actions.
 
 	static actionAccelerateDown(): Action
@@ -179,7 +183,7 @@ export class Movable implements EntityProperty
 
 				var actor = entityActor.actor();
 				var activity = actor.activity;
-				var targetEntity = activity.target() as Entity;
+				var targetEntity = activity.targetEntity();
 				if (targetEntity == null)
 				{
 					var place = uwpe.place;
@@ -193,11 +197,8 @@ export class Movable implements EntityProperty
 						place.size
 					);
 
-					targetEntity = new Entity
-					(
-						"Target", [ Locatable.fromPos(targetPos) ]
-					);
-					activity.targetSet(targetEntity);
+					targetEntity = Locatable.fromPos(targetPos).toEntity();
+					activity.targetEntitySet(targetEntity);
 				}
 
 				var movable = entityActor.movable();
@@ -213,7 +214,7 @@ export class Movable implements EntityProperty
 
 				if (distanceToTarget < movable.speedMax)
 				{
-					activity.targetSet(null);
+					activity.targetEntityClear();
 				}
 			}
 		);

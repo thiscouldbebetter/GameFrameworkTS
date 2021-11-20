@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ItemHolder implements EntityProperty
+export class ItemHolder implements EntityProperty<ItemHolder>
 {
 	items: Item[];
 	massMax: number;
@@ -68,11 +68,10 @@ export class ItemHolder implements EntityProperty
 			(
 				universe, world, place, entityItemHolder, itemEntityToEquip
 			);
-			var message = equipmentUser.equipItemEntityInSocketWithName
+			equipmentUser.equipItemEntityInSocketWithName
 			(
 				uwpe, socketName, includeSocketNameInMessage
 			);
-			this.statusMessage = message;
 		}
 	}
 
@@ -360,6 +359,10 @@ export class ItemHolder implements EntityProperty
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 
+	// Equatable
+
+	equals(other: ItemHolder): boolean { return false; } // todo
+
 	// Controllable.
 
 	toControl
@@ -474,8 +477,7 @@ export class ItemHolder implements EntityProperty
 				var itemToUse = itemEntityToUse.item();
 				if (itemToUse.use != null)
 				{
-					itemHolder.statusMessage =
-						itemToUse.use(uwpe);
+					itemToUse.use(uwpe);
 					if (itemToUse.quantity <= 0)
 					{
 						itemHolder.itemSelected = null;
@@ -508,7 +510,7 @@ export class ItemHolder implements EntityProperty
 			}
 		};
 
-		var split = (uwpe: UniverseWorldPlaceEntities) =>
+		var split = () =>
 		{
 			itemHolder.itemSplit(itemHolder.itemSelected, null);
 		};
@@ -562,7 +564,7 @@ export class ItemHolder implements EntityProperty
 				Coords.fromXY(10, 5), // pos
 				Coords.fromXY(70, 25), // size
 				false, // isTextCentered
-				"Items Held:",
+				DataBinding.fromContext("Items Held:"),
 				fontHeightSmall
 			),
 
@@ -571,7 +573,10 @@ export class ItemHolder implements EntityProperty
 				"listItems",
 				Coords.fromXY(10, 15), // pos
 				Coords.fromXY(70, 100), // size
-				DataBinding.fromContext(this.items), // items
+				DataBinding.fromContextAndGet
+				(
+					this, (c: ItemHolder) => c.items
+				), // items
 				DataBinding.fromGet
 				(
 					(c: Item) => c.toString(world)
@@ -721,7 +726,7 @@ export class ItemHolder implements EntityProperty
 				Coords.fromXY(150, 10), // pos
 				Coords.fromXY(100, 15), // size
 				true, // isTextCentered
-				"Item Selected:",
+				DataBinding.fromContext("Item Selected:"),
 				fontHeightSmall
 			),
 
@@ -877,7 +882,7 @@ export class ItemHolder implements EntityProperty
 					Coords.fromXY(100, -5), // pos
 					Coords.fromXY(100, 25), // size
 					true, // isTextCentered
-					"Items",
+					DataBinding.fromContext("Items"),
 					fontHeightLarge
 				)
 			);
@@ -891,7 +896,7 @@ export class ItemHolder implements EntityProperty
 					"Done",
 					fontHeightSmall,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					back // click
 				)
 			);

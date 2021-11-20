@@ -116,7 +116,7 @@ var ThisCouldBeBetter;
                     new GameFramework.ControlLabel("labelRecipes", GameFramework.Coords.fromXY(10, 5), // pos
                     GameFramework.Coords.fromXY(70, 25), // size
                     false, // isTextCentered
-                    "Recipes:", fontHeightSmall),
+                    GameFramework.DataBinding.fromContext("Recipes:"), fontHeightSmall),
                     new GameFramework.ControlList("listRecipes", GameFramework.Coords.fromXY(10, 15), // pos
                     GameFramework.Coords.fromXY(85, 100), // size
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => c.recipesAvailable), // items
@@ -133,7 +133,7 @@ var ThisCouldBeBetter;
                         Coords.fromXY(105, 5), // pos
                         Coords.fromXY(70, 25), // size
                         false, // isTextCentered
-                        "Recipe Selected:",
+                        DataBinding.fromContext("Recipe Selected:"),
                         fontHeightSmall
                     ),
     
@@ -287,11 +287,11 @@ var ThisCouldBeBetter;
                     returnValue.children.splice(0, 0, new GameFramework.ControlLabel("labelCrafting", GameFramework.Coords.fromXY(100, -5), // pos
                     GameFramework.Coords.fromXY(100, 25), // size
                     true, // isTextCentered
-                    "Craft", fontHeightLarge));
+                    GameFramework.DataBinding.fromContext("Craft"), fontHeightLarge));
                     returnValue.children.push(GameFramework.ControlButton.from8("buttonDone", GameFramework.Coords.fromXY(170, 115), // pos
                     GameFramework.Coords.fromXY(20, 10), // size
                     "Done", fontHeightSmall, true, // hasBorder
-                    true, // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     back // click
                     ));
                     var titleHeight = GameFramework.Coords.fromXY(0, 15);
@@ -303,10 +303,12 @@ var ThisCouldBeBetter;
                 returnValue.scalePosAndSize(scaleMultiplier);
                 return returnValue;
             }
-            // cloneable
+            // Clonable.
             clone() {
                 return new ItemCrafter(GameFramework.ArrayHelper.clone(this.recipesAvailable));
             }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.ItemCrafter = ItemCrafter;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

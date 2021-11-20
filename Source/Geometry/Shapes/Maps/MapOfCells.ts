@@ -2,21 +2,19 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class MapOfCells<T>
+export class MapOfCells<TCell extends Clonable<TCell>>
 {
 	name: string;
 	sizeInCells: Coords;
 	cellSize: Coords;
-	cellCreate: () => T;
-	_cellAtPosInCells: (map: MapOfCells<T>, posInCells: Coords, cell: T) => T;
-	cellSource: any;
+	cellSource: MapOfCellsCellSource<TCell>;
 
 	cellSizeHalf: Coords;
 	size: Coords;
 	sizeHalf: Coords;
 	sizeInCellsMinusOnes: Coords;
 
-	_cell: T;
+	_cell: TCell;
 	_posInCells: Coords;
 	_posInCellsMax: Coords;
 	_posInCellsMin: Coords;
@@ -26,17 +24,13 @@ export class MapOfCells<T>
 		name: string,
 		sizeInCells: Coords,
 		cellSize: Coords,
-		cellCreate: () => T,
-		cellAtPosInCells: (map: MapOfCells<T>, posInCells: Coords, cell: T) => T,
-		cellSource: any
+		cellSource: MapOfCellsCellSource<TCell>
 	)
 	{
 		this.name = name;
 		this.sizeInCells = sizeInCells;
 		this.cellSize = cellSize;
-		this.cellCreate = cellCreate || this.cellCreateDefault;
-		this._cellAtPosInCells = cellAtPosInCells || this.cellAtPosInCellsDefault;
-		this.cellSource = cellSource || new Array<T>();
+		this.cellSource = cellSource;
 
 		this.sizeInCellsMinusOnes = this.sizeInCells.clone().subtract
 		(
@@ -53,40 +47,28 @@ export class MapOfCells<T>
 		this._posInCellsMin = Coords.create();
 	}
 
-	static fromNameSizeInCellsAndCellSize<T>
+	static fromNameSizeInCellsAndCellSize<TCell extends Clonable<TCell>>
 	(
 		name: string, sizeInCells: Coords, cellSize: Coords
-	): MapOfCells<T>
+	): MapOfCells<TCell>
 	{
-		return new MapOfCells(name, sizeInCells, cellSize, null, null, null);
+		return new MapOfCells(name, sizeInCells, cellSize, null);
 	}
 
-	cellAtPos(pos: Coords): T
+	cellAtPos(pos: Coords): TCell
 	{
 		this._posInCells.overwriteWith(pos).divide(this.cellSize).floor();
 		return this.cellAtPosInCells(this._posInCells);
 	}
 
-	cellAtPosInCells(cellPosInCells: Coords): T
+	cellAtPosInCells(cellPosInCells: Coords): TCell
 	{
-		return this._cellAtPosInCells(this, cellPosInCells, this._cell);
+		return this.cellSource.cellAtPosInCells(this, cellPosInCells, this._cell);
 	}
 
-	cellAtPosInCellsDefault(map: MapOfCells<T>, cellPosInCells: Coords, cell: T): T
+	cellCreate(): TCell
 	{
-		var cellIndex = cellPosInCells.y * this.sizeInCells.x + cellPosInCells.x;
-		var cell = this.cellSource[cellIndex] as T;
-		if (cell == null)
-		{
-			cell = this.cellCreate();
-			this.cellSource[cellIndex] = cell;
-		}
-		return cell;
-	}
-
-	cellCreateDefault(): any
-	{
-		return {};
+		return this.cellSource.cellCreate();
 	}
 
 	cellsCount(): number
@@ -94,7 +76,7 @@ export class MapOfCells<T>
 		return this.sizeInCells.x * this.sizeInCells.y;
 	}
 
-	cellsInBoxAddToList(box: Box, cellsInBox: T[]): T[]
+	cellsInBoxAddToList(box: Box, cellsInBox: TCell[]): TCell[]
 	{
 		ArrayHelper.clear(cellsInBox);
 
@@ -137,7 +119,10 @@ export class MapOfCells<T>
 		return cellsInBox;
 	}
 
-	cellsAsEntities(mapAndCellPosToEntity: (m: MapOfCells<T>, p: Coords) => Entity): Entity[]
+	cellsAsEntities
+	(
+		mapAndCellPosToEntity: (m: MapOfCells<TCell>, p: Coords) => Entity
+	): Entity[]
 	{
 		var returnValues = new Array<Entity>();
 
@@ -164,24 +149,76 @@ export class MapOfCells<T>
 
 	// cloneable
 
-	clone(): MapOfCells<T>
+	clone(): MapOfCells<TCell>
 	{
-		return new MapOfCells<T>
+		return new MapOfCells
 		(
 			this.name,
 			this.sizeInCells,
 			this.cellSize,
-			this.cellCreate,
-			this._cellAtPosInCells,
 			this.cellSource
 		);
 	}
 
-	overwriteWith(other: MapOfCells<T>): MapOfCells<T>
+	overwriteWith
+	(
+		other: MapOfCells<TCell>
+	): MapOfCells<TCell>
 	{
 		this.cellSource.overwriteWith(other.cellSource);
 		return this;
 	}
+}
+
+export interface MapOfCellsCellSource<TCell extends Clonable<TCell> >
+	extends Clonable<MapOfCellsCellSource<TCell> >
+{
+	cellAtPosInCells
+	(
+		map: MapOfCells<TCell>, posInCells: Coords, cellToOverwrite: TCell
+	): TCell;
+
+	cellCreate(): TCell;
+}
+
+export class MapOfCellsCellSourceArray<TCell extends Clonable<TCell>>
+	implements MapOfCellsCellSource<TCell>
+{
+	cells: TCell[];
+	_cellCreate: () => TCell;
+
+	constructor(cells: TCell[], cellCreate: () => TCell)
+	{
+		this.cells = cells;
+		this._cellCreate = cellCreate;
+	}
+
+	cellAtPosInCells
+	(
+		map: MapOfCells<TCell>, posInCells: Coords, cellToOverwrite: TCell
+	): TCell
+	{
+		var cellIndex = posInCells.y * map.sizeInCells.x + posInCells.x;
+		var cellFound = this.cells[cellIndex];
+		cellToOverwrite.overwriteWith(cellFound);
+		return cellToOverwrite;
+	}
+
+	cellCreate(): TCell
+	{
+		return this._cellCreate();
+	}
+
+	clone(): MapOfCellsCellSource<TCell>
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: MapOfCellsCellSource<TCell>): MapOfCellsCellSource<TCell>
+	{
+		return this; // todo
+	}
+
 }
 
 }

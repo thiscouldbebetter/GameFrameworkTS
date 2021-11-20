@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Talker implements EntityProperty
+export class Talker implements EntityProperty<Talker>
 {
 	conversationDefnName: string;
 
@@ -45,6 +45,10 @@ export class Talker implements EntityProperty
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
+
+	// Equatable
+
+	equals(other: Talker): boolean { return false; } // todo
 
 }
 

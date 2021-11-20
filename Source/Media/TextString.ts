@@ -2,13 +2,12 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class TextString
+export class TextString implements MediaItemBase
 {
 	name: string;
 	sourcePath: string;
 
 	value: string;
-	isLoaded: boolean;
 
 	constructor(name: string, sourcePath: string)
 	{
@@ -34,7 +33,9 @@ export class TextString
 
 	// instance methods
 
-	load()
+	isLoaded: boolean;
+
+	load(): void
 	{
 		var text = this;
 
@@ -61,6 +62,8 @@ export class TextString
 		);
 		*/
 	}
+
+	unload(): void {}
 }
 
 }

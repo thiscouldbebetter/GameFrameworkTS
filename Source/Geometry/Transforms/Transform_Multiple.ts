@@ -2,21 +2,26 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Transform_Multiple implements Transform
+export class Transform_Multiple implements Transform<Transform_Multiple>
 {
-	transforms: Transform[];
+	transforms: TransformBase[];
 
-	constructor(transforms: Transform[])
+	constructor(transforms: TransformBase[])
 	{
 		this.transforms = transforms;
 	}
 
-	overwriteWith(other: Transform)
+	clone(): Transform_Multiple
+	{
+		return new Transform_Multiple(this.transforms); // todo
+	}
+
+	overwriteWith(other: Transform_Multiple): Transform_Multiple
 	{
 		return this; // todo
 	}
 
-	transform(transformable: Transformable): Transformable
+	transform(transformable: TransformableBase): TransformableBase
 	{
 		for (var i = 0; i < this.transforms.length; i++)
 		{

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Actor implements EntityProperty
+export class Actor implements EntityProperty<Actor>
 {
 	activity: Activity;
 
@@ -51,6 +51,11 @@ export class Actor implements EntityProperty
 		this.activity.overwriteWith(other.activity);
 		return this;
 	}
+
+	// Equatable
+
+	equals(other: Actor): boolean { return false; } // todo
+
 }
 
 }

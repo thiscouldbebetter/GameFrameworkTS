@@ -1,5 +1,5 @@
 
-class Goal implements EntityProperty
+class Goal implements EntityProperty<Goal>
 {
 	numberOfKeysToUnlock: number;
 
@@ -14,4 +14,7 @@ class Goal implements EntityProperty
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 
+	// Equatable
+
+	equals(other: Goal): boolean { return false; } // todo
 }

@@ -341,6 +341,15 @@ export class Box implements ShapeBase
 		return new Box(this.center.clone(), this.size.clone());
 	}
 
+	overwriteWith(other: Box): Box
+	{
+		this.center.overwriteWith(other.center);
+		this.size.overwriteWith(other.size);
+		return this;
+	}
+
+	// Equatable
+
 	equals(other: Box): boolean
 	{
 		var returnValue =
@@ -352,13 +361,6 @@ export class Box implements ShapeBase
 		return returnValue;
 	}
 
-	overwriteWith(other: Box): Box
-	{
-		this.center.overwriteWith(other.center);
-		this.size.overwriteWith(other.size);
-		return this;
-	}
-
 	// string
 
 	toString(): string
@@ -367,6 +369,8 @@ export class Box implements ShapeBase
 	}
 
 	// ShapeBase.
+
+	collider(): ShapeBase { return null; }
 
 	dimensionForSurfaceClosestToPoint
 	(
@@ -441,9 +445,12 @@ export class Box implements ShapeBase
 		return [ this.center ];
 	}
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): Box
 	{
-		Transforms.applyTransformToCoordsMany(transformToApply, this.coordsGroupToTranslate());
+		Transforms.applyTransformToCoordsMany
+		(
+			transformToApply, this.coordsGroupToTranslate()
+		);
 		return this;
 	}
 }

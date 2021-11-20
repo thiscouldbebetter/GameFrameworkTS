@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Traversable implements EntityProperty
+export class Traversable implements EntityProperty<Traversable>
 {
 	isBlocking: boolean
 
@@ -16,6 +16,11 @@ export class Traversable implements EntityProperty
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
+
+	// Equatable
+
+	equals(other: Traversable): boolean { return false; } // todo
+
 }
 
 }

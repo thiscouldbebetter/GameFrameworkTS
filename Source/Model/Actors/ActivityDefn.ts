@@ -60,7 +60,8 @@ class ActivityDefn_Instances
 				var w = uwpe.world;
 				var e = uwpe.entity;
 				var activity = e.actor().activity;
-				var childDefnNames = activity.target() as string[];
+				var targetEntity = activity.targetEntity();
+				var childDefnNames = targetEntity.namable().name.split(";");
 				for (var i = 0; i < childDefnNames.length; i++)
 				{
 					var childDefnName = childDefnNames[i];

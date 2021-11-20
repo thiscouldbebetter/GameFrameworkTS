@@ -44,6 +44,7 @@ var ThisCouldBeBetter;
                     var axis = axes[i];
                     transformToApply.transformCoords(axis);
                 }
+                return this;
             }
         }
         GameFramework.Bone = Bone;

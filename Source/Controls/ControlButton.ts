@@ -2,13 +2,12 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ControlButton extends ControlBase
+export class ControlButton<TContext> extends ControlBase
 {
 	text: string;
 	hasBorder: boolean;
-	_isEnabled: any;
-	click: any;
-	context: any;
+	_isEnabled: DataBinding<TContext, boolean>;
+	click: () => void;
 	canBeHeldDown: boolean;
 
 	_drawLoc: Disposition;
@@ -22,9 +21,8 @@ export class ControlButton extends ControlBase
 		text: string,
 		fontHeightInPixels: number,
 		hasBorder: boolean,
-		isEnabled: any,
-		click: any,
-		context: any,
+		isEnabled: DataBinding<TContext, boolean>,
+		click: () => void,
 		canBeHeldDown: boolean
 	)
 	{
@@ -33,7 +31,6 @@ export class ControlButton extends ControlBase
 		this.hasBorder = hasBorder;
 		this._isEnabled = isEnabled;
 		this.click = click;
-		this.context = context;
 		this.canBeHeldDown = (canBeHeldDown == null ? false : canBeHeldDown);
 
 		// Helper variables.
@@ -41,7 +38,7 @@ export class ControlButton extends ControlBase
 		this._sizeHalf = Coords.create();
 	}
 
-	static from8
+	static from8<TContext>
 	(
 		name: string,
 		pos: Coords,
@@ -49,64 +46,44 @@ export class ControlButton extends ControlBase
 		text: string,
 		fontHeightInPixels: number,
 		hasBorder: boolean,
-		isEnabled: any,
-		click: any
+		isEnabled: DataBinding<TContext, boolean>,
+		click: () => void
 	)
 	{
 		return new ControlButton
 		(
 			name, pos, size, text, fontHeightInPixels, hasBorder,
-			isEnabled, click, null, null
+			isEnabled, click, false // canBeHeldDown
 		);
 	}
 
-	static from9
-	(
-		name: string,
-		pos: Coords,
-		size: Coords,
-		text: string,
-		fontHeightInPixels: number,
-		hasBorder: boolean,
-		isEnabled: any,
-		click: any,
-		context: any
-	)
-	{
-		return new ControlButton
-		(
-			name, pos, size, text, fontHeightInPixels, hasBorder,
-			isEnabled, click, context, null
-		);
-	}
-
-	actionHandle(actionNameToHandle: string, universe: Universe)
+	actionHandle(actionNameToHandle: string, universe: Universe): boolean
 	{
 		if (actionNameToHandle == ControlActionNames.Instances().ControlConfirm)
 		{
-			this.click(this.context);
+			this.click();
 		}
 
 		return (this.canBeHeldDown == false); // wasActionHandled
 	}
 
-	isEnabled()
+	isEnabled(): boolean
 	{
-		return (this._isEnabled.get == null ? this._isEnabled : this._isEnabled.get() );
+		return this._isEnabled.get();
 	}
 
 	// events
 
-	mouseClick(clickPos: Coords)
+	mouseClick(clickPos: Coords): boolean
 	{
 		if (this.isEnabled())
 		{
-			this.click(this.context);
+			this.click();
 		}
 		return (this.canBeHeldDown == false); // wasClickHandled
 	}
 
-	scalePosAndSize(scaleFactor: Coords)
+	scalePosAndSize(scaleFactor: Coords): void
 	{
 		this.pos.multiply(scaleFactor);
 		this.size.multiply(scaleFactor);
@@ -115,7 +92,10 @@ export class ControlButton extends ControlBase
 
 	// drawable
 
-	draw(universe: Universe, display: Display, drawLoc: Disposition, style: ControlStyle)
+	draw
+	(
+		universe: Universe, display: Display, drawLoc: Disposition, style: ControlStyle
+	): void
 	{
 		var drawPos = this._drawLoc.overwriteWith(drawLoc).pos;
 		drawPos.add(this.pos);

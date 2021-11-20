@@ -264,17 +264,20 @@ export class CollisionHelper
 		return collisionOut;
 	}
 
-	collisionOfColliders(collider0: any, collider1: any, collisionOut: Collision): Collision
+	collisionOfColliders
+	(
+		collider0: ShapeBase, collider1: ShapeBase, collisionOut: Collision
+	): Collision
 	{
 		collisionOut.clear();
 
 		// Prevents having to add some composite shapes, for example, Shell.
-		while (collider0.collider != null)
+		while (collider0.collider() != null)
 		{
 			collider0 = collider0.collider();
 		}
 
-		while (collider1.collider != null)
+		while (collider1.collider() != null)
 		{
 			collider1 = collider1.collider();
 		}
@@ -358,16 +361,16 @@ export class CollisionHelper
 		return doCollidersCollide;
 	}
 
-	doCollidersCollide(collider0: any, collider1: any): boolean
+	doCollidersCollide(collider0: ShapeBase, collider1: ShapeBase): boolean
 	{
 		var returnValue = false;
 
-		while (collider0.collider != null)
+		while (collider0.collider() != null)
 		{
 			collider0 = collider0.collider();
 		}
 
-		while (collider1.collider != null)
+		while (collider1.collider() != null)
 		{
 			collider1 = collider1.collider();
 		}
@@ -406,16 +409,16 @@ export class CollisionHelper
 		return returnValue;
 	}
 
-	doesColliderContainOther(collider0: any, collider1: any)
+	doesColliderContainOther(collider0: ShapeBase, collider1: ShapeBase): boolean
 	{
 		var returnValue = false;
 
-		while (collider0.collider != null)
+		while (collider0.collider() != null)
 		{
 			collider0 = collider0.collider();
 		}
 
-		while (collider1.collider != null)
+		while (collider1.collider() != null)
 		{
 			collider1 = collider1.collider();
 		}
@@ -640,7 +643,7 @@ export class CollisionHelper
 		}
 
 		var map = mapLocated.map;
-		var cell: any = map.cellCreate();
+		var cell = map.cellCreate();
 		var cellPosAbsolute = Coords.create();
 		var cellPosInCells = Coords.create();
 		var mapSizeInCells = map.sizeInCells;
@@ -1145,7 +1148,7 @@ export class CollisionHelper
 		}
 
 		var map = mapLocated.map;
-		var cell: any = map.cellCreate();
+		var cell = map.cellCreate();
 		var cellPosAbsolute = Coords.create();
 		var cellPosInCells = Coords.create();
 		var mapSizeInCells = map.sizeInCells;
@@ -1205,12 +1208,18 @@ export class CollisionHelper
 		return collisionOut; // todo
 	}
 
-	collisionOfShapeGroupAllAndShape(shapeGroupAll: ShapeGroupAll, shape: any, collisionOut: Collision): Collision
+	collisionOfShapeGroupAllAndShape
+	(
+		shapeGroupAll: ShapeGroupAll, shape: ShapeBase, collisionOut: Collision
+	): Collision
 	{
 		return this.collisionOfShapeAndShapeGroupAll(shape, shapeGroupAll, collisionOut);
 	}
 
-	collisionOfShapeInverseAndShape(shapeInverse: ShapeInverse, shape: any, collisionOut: Collision): Collision
+	collisionOfShapeInverseAndShape
+	(
+		shapeInverse: ShapeInverse, shape: ShapeBase, collisionOut: Collision
+	): Collision
 	{
 		return this.collisionOfShapeAndShapeInverse(shape, shapeInverse, collisionOut);
 	}
@@ -1746,7 +1755,7 @@ export class CollisionHelper
 		}
 
 		var map = mapLocated.map;
-		var cell: any = map.cellCreate();
+		var cell = map.cellCreate();
 		var cellPosAbsolute = Coords.create();
 		var cellPosInCells = Coords.create();
 		var mapSizeInCells = map.sizeInCells;

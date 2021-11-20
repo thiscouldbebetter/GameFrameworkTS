@@ -15,7 +15,7 @@ export class Serializer
 		return returnValue;
 	}
 
-	serialize(objectToSerialize: any, prettyPrint: boolean)
+	serialize<T>(objectToSerialize: T, prettyPrint: boolean)
 	{
 		var nodeRoot: any = new SerializerNode(objectToSerialize);
 

@@ -15,7 +15,10 @@ var ThisCouldBeBetter;
                 this.shape.overwriteWith(other.shape);
                 return this;
             }
+            // Equatable
+            equals(other) { return false; } // todo
             // ShapeBase.
+            collider() { return null; }
             locate(loc) {
                 this.shape.locate(loc);
                 return this;

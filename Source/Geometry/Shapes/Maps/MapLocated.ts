@@ -19,25 +19,31 @@ export class MapLocated implements ShapeBase
 
 	// cloneable
 
-	clone()
+	clone(): MapLocated
 	{
 		return new MapLocated(this.map, this.loc.clone());
 	}
 
-	overwriteWith(other: MapLocated)
+	overwriteWith(other: MapLocated): MapLocated
 	{
 		this.loc.overwriteWith(other.loc);
 		return this;
 	}
 
+	// Equatable
+
+	equals(other: ShapeBase) { return false; } // todo
+
 	// translatable
 
-	coordsGroupToTranslate()
+	coordsGroupToTranslate(): Coords[]
 	{
 		return [ this.loc.pos ];
 	}
 
-	// Shape.
+	// ShapeBase.
+
+	collider(): ShapeBase { return null; }
 
 	locate(loc: Disposition): ShapeBase
 	{
@@ -58,7 +64,7 @@ export class MapLocated implements ShapeBase
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): MapLocated
 	{
 		throw new Error("Not implemented!");
 	}

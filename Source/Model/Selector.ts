@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Selector implements EntityProperty
+export class Selector implements EntityProperty<Selector>
 {
 	cursorDimension: number;
 	_entitySelect: (uwpe: UniverseWorldPlaceEntities) => void;
@@ -241,6 +241,10 @@ export class Selector implements EntityProperty
 		return this;
 	}
 
+	// Equatable
+
+	equals(other: Selector): boolean { return false; } // todo
+
 	// Controllable.
 
 	toControl(size: Coords, pos: Coords): ControlBase
@@ -262,7 +266,7 @@ export class Selector implements EntityProperty
 					Coords.fromXY(1, 0).multiplyScalar(margin), // pos
 					labelSize,
 					false, // isTextCentered
-					"Selected:",
+					DataBinding.fromContext("Selected:"),
 					fontHeightInPixels
 				),
 

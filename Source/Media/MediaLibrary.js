@@ -79,7 +79,7 @@ var ThisCouldBeBetter;
                     [GameFramework.Sound, "Audio/Music", musicFileNames],
                     [GameFramework.Video, "Video", videoFileNames],
                     [GameFramework.Font, "Fonts", fontFileNames],
-                    [GameFramework.TextString, "Text", textStringFileNames],
+                    [GameFramework.TextString, "Text", textStringFileNames]
                 ];
                 var mediaCollectionsByPath = new Map();
                 for (var t = 0; t < mediaTypesPathsAndFileNames.length; t++) {
@@ -87,7 +87,7 @@ var ThisCouldBeBetter;
                     var mediaType = mediaTypePathAndFileNames[0];
                     var mediaPath = mediaTypePathAndFileNames[1];
                     var mediaFileNames = mediaTypePathAndFileNames[2];
-                    var mediaCollection = [];
+                    var mediaCollection = new Array();
                     var filePathRoot = contentPath + mediaPath + "/";
                     for (var i = 0; i < mediaFileNames.length; i++) {
                         var fileName = mediaFileNames[i];
@@ -128,22 +128,22 @@ var ThisCouldBeBetter;
             }
             waitForItemToLoad(collectionName, itemName, callback) {
                 var itemToLoad = this.collectionsByName.get(collectionName).get(itemName);
-                this.timer = setInterval(this.waitForItemToLoad_TimerTick.bind(this, itemToLoad, callback), 100 // milliseconds
+                this.timerHandle = setInterval(this.waitForItemToLoad_TimerTick.bind(this, itemToLoad, callback), 100 // milliseconds
                 );
             }
             waitForItemToLoad_TimerTick(itemToLoad, callback) {
                 if (itemToLoad.isLoaded) {
-                    clearInterval(this.timer);
+                    clearInterval(this.timerHandle);
                     callback();
                 }
             }
             waitForItemsAllToLoad(callback) {
-                this.timer = setInterval(this.waitForItemsAllToLoad_TimerTick.bind(this, callback), 100 // milliseconds
+                this.timerHandle = setInterval(this.waitForItemsAllToLoad_TimerTick.bind(this, callback), 100 // milliseconds
                 );
             }
             waitForItemsAllToLoad_TimerTick(callback) {
                 if (this.areAllItemsLoaded()) {
-                    clearInterval(this.timer);
+                    clearInterval(this.timerHandle);
                     callback();
                 }
             }

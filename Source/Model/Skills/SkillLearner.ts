@@ -2,13 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class SkillLearner implements EntityProperty
+export class SkillLearner implements EntityProperty<SkillLearner>
 {
 	skillBeingLearnedName: string;
 	learningAccumulated: number;
 	skillsKnownNames: string[];
 
 	skillSelectedName: string;
+	statusMessage: string;
 
 	constructor
 	(
@@ -56,7 +57,7 @@ export class SkillLearner implements EntityProperty
 	(
 		skillsAll: Skill[], skillsByName: Map<string, Skill>,
 		amountToIncrement: number
-	): any
+	): void
 	{
 		var message = null;
 
@@ -90,7 +91,7 @@ export class SkillLearner implements EntityProperty
 			}
 		}
 
-		return message;
+		this.statusMessage = message;
 	}
 
 	learningAccumulatedOverRequired
@@ -210,12 +211,19 @@ export class SkillLearner implements EntityProperty
 		// Do nothing.
 	}
 
+	// Equatable
+
+	equals(other: SkillLearner): boolean { return false; } // todo
+
 	// controls
 
 	toControl
 	(
-		universe: Universe, size: Coords, entity: Entity,
-		venueToReturnTo: Venue, includeTitle: boolean
+		universe: Universe,
+		size: Coords,
+		entity: Entity,
+		venueToReturnTo: Venue,
+		includeTitle: boolean
 	): ControlBase
 	{
 		var display = universe.display;
@@ -234,7 +242,8 @@ export class SkillLearner implements EntityProperty
 		var defns = universe.world.defn;
 		var skillLearner = this;
 		var skillsAll = defns.defnArraysByTypeName.get(Skill.name); // todo - Just use the -ByName lookup.
-		var skillsAllByName = defns.defnsByNameByTypeName.get(Skill.name);
+		var skillsAllByName =
+			defns.defnsByNameByTypeName.get(Skill.name) as Map<string, Skill>;
 
 		var returnValue = ControlContainer.from4
 		(
@@ -249,7 +258,7 @@ export class SkillLearner implements EntityProperty
 					Coords.fromXY(margin, 40), // pos,
 					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
 					false, // isTextCentered,
-					"Skills Known:", //text
+					DataBinding.fromContext("Skills Known:"), //text
 					labelHeight // fontHeightInPixels
 				),
 
@@ -319,7 +328,7 @@ export class SkillLearner implements EntityProperty
 					Coords.fromXY(margin, 220), // pos,
 					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
 					false, // isTextCentered,
-					"Selected:" // text
+					DataBinding.fromContext("Selected:") // text
 				),
 
 				ControlLabel.from5
@@ -358,7 +367,7 @@ export class SkillLearner implements EntityProperty
 					Coords.fromXY(margin, size.y - margin - labelHeight * 2), // pos,
 					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
 					false, // isTextCentered,
-					"Skill Being Learned:" // text
+					DataBinding.fromContext("Skill Being Learned:") // text
 				),
 
 				new ControlLabel
@@ -384,7 +393,7 @@ export class SkillLearner implements EntityProperty
 					Coords.fromXY(margin, size.y - margin - labelHeight), // pos,
 					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
 					false, // isTextCentered,
-					"Learning Accumulated:" // text
+					DataBinding.fromContext("Learning Accumulated:") // text
 				),
 
 				ControlLabel.from5
@@ -415,7 +424,7 @@ export class SkillLearner implements EntityProperty
 					Coords.fromXY(200, 20), // pos
 					Coords.fromXY(120, 25), // size
 					true, // isTextCentered
-					"Skills",
+					DataBinding.fromContext("Skills"),
 					labelHeightLarge
 				)
 			);

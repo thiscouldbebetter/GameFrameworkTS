@@ -19,6 +19,8 @@ var ThisCouldBeBetter;
             updateForTimerTick(uwpe) { }
             finalize(uwpe) { }
             initialize(uwpe) { }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.Audible = Audible;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

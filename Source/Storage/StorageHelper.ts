@@ -70,7 +70,7 @@ export class StorageHelper
 		return returnValue;
 	}
 
-	save(propertyName: string, valueToSave: any)
+	save<T>(propertyName: string, valueToSave: T)
 	{
 		var valueToSaveSerialized = this.serializer.serialize
 		(

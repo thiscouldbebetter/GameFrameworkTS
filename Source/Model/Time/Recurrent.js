@@ -28,6 +28,8 @@ var ThisCouldBeBetter;
             clone() {
                 return new Recurrent(this.ticksPerRecurrence, this.timesToRecur, this.recur);
             }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.Recurrent = Recurrent;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

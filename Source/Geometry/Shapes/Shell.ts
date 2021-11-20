@@ -35,17 +35,21 @@ export class Shell implements ShapeBase
 		return this.sphereOuter.center;
 	}
 
-	collider(): ShapeGroupAll
-	{
-		return this._collider;
-	}
-
 	// cloneable
 
 	clone(): Shell
 	{
 		return new Shell(this.sphereOuter.clone(), this.radiusInner);
 	}
+
+	overwriteWith(other: Shell): Shell
+	{
+		this.sphereOuter.overwriteWith(other.sphereOuter);
+		this.radiusInner = other.radiusInner;
+		return this;
+	}
+
+	// Equatable
 
 	equals(other: Shell): boolean
 	{
@@ -58,14 +62,12 @@ export class Shell implements ShapeBase
 		return returnValue;
 	}
 
-	overwriteWith(other: Shell): Shell
-	{
-		this.sphereOuter.overwriteWith(other.sphereOuter);
-		this.radiusInner = other.radiusInner;
-		return this;
-	}
-
 	// ShapeBase.
+
+	collider(): ShapeBase
+	{
+		return this._collider;
+	}
 
 	locate(loc: Disposition): ShapeBase
 	{
@@ -102,7 +104,7 @@ export class Shell implements ShapeBase
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable { throw new Error("Not implemented!");  }
+	transform(transformToApply: TransformBase): Shell { throw new Error("Not implemented!");  }
 }
 
 }

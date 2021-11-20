@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ItemDefn implements EntityProperty
+export class ItemDefn implements EntityProperty<ItemDefn>
 {
 	name: string;
 	appearance: string;
@@ -11,8 +11,8 @@ export class ItemDefn implements EntityProperty
 	tradeValue: number;
 	stackSizeMax: number;
 	categoryNames: string[];
-	_use: (uwpe: UniverseWorldPlaceEntities) => string;
-	visual: Visual;
+	_use: (uwpe: UniverseWorldPlaceEntities) => void;
+	visual: VisualBase;
 	_toEntity: (uwpe: UniverseWorldPlaceEntities, i: Item) => Entity;
 
 	constructor
@@ -24,8 +24,8 @@ export class ItemDefn implements EntityProperty
 		tradeValue: number,
 		stackSizeMax: number,
 		categoryNames: string[],
-		use: (uwpe: UniverseWorldPlaceEntities) => string,
-		visual: Visual,
+		use: (uwpe: UniverseWorldPlaceEntities) => void,
+		visual: VisualBase,
 		toEntity: (uwpe: UniverseWorldPlaceEntities, i: Item) => Entity
 	)
 	{
@@ -76,7 +76,7 @@ export class ItemDefn implements EntityProperty
 
 	static fromNameMassValueAndVisual
 	(
-		name: string, mass: number, tradeValue: number, visual: Visual
+		name: string, mass: number, tradeValue: number, visual: VisualBase
 	): ItemDefn
 	{
 		return new ItemDefn
@@ -100,19 +100,17 @@ export class ItemDefn implements EntityProperty
 		return returnValue;
 	}
 
-	use(uwpe: UniverseWorldPlaceEntities): any
+	use(uwpe: UniverseWorldPlaceEntities)
 	{
-		var returnValue;
 		if (this._use == null)
 		{
-			returnValue = "Can't use " + this.appearance + ".";
+			var itemHolder = uwpe.entity.itemHolder();
+			itemHolder.statusMessage = "Can't use " + this.appearance + ".";
 		}
 		else
 		{
-			returnValue = this._use(uwpe);
+			this._use(uwpe);
 		}
-
-		return returnValue;
 	}
 
 	// EntityProperty.
@@ -120,6 +118,11 @@ export class ItemDefn implements EntityProperty
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
+
+	// Equatable
+
+	equals(other: ItemDefn): boolean { return false; } // todo
+
 }
 
 }

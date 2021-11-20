@@ -36,17 +36,21 @@ export class Arc implements ShapeBase
 		return this.shell.center();
 	}
 
-	collider(): ShapeGroupAll
-	{
-		return this._collider;
-	}
-
 	// cloneable
 
 	clone(): Arc
 	{
 		return new Arc(this.shell.clone(), this.wedge.clone());
 	}
+
+	overwriteWith(other: Arc): Arc
+	{
+		this.shell.overwriteWith(other.shell);
+		this.wedge.overwriteWith(other.wedge);
+		return this;
+	}
+
+	// Equatable.
 
 	equals(other: Arc): boolean
 	{
@@ -59,13 +63,6 @@ export class Arc implements ShapeBase
 		return returnValue;
 	}
 
-	overwriteWith(other: Arc): Arc
-	{
-		this.shell.overwriteWith(other.shell);
-		this.wedge.overwriteWith(other.wedge);
-		return this;
-	}
-
 	// Transformable.
 
 	coordsGroupToTranslate(): Coords[]
@@ -74,6 +71,11 @@ export class Arc implements ShapeBase
 	}
 
 	// ShapeBase.
+
+	collider(): ShapeGroupAll
+	{
+		return this._collider;
+	}
 
 	locate(loc: Disposition): ShapeBase
 	{
@@ -99,7 +101,7 @@ export class Arc implements ShapeBase
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): Arc
 	{
 		throw new Error("Not implemented!");
 	}

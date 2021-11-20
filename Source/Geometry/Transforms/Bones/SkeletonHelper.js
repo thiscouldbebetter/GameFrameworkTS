@@ -96,14 +96,15 @@ var ThisCouldBeBetter;
                 var vertices = meshAtRest.geometry.vertices();
                 var bones = skeletonAtRest.bonesAll;
                 var boneInfluences = new Array();
-                var boneNameToInfluenceLookup = {};
+                var boneNameToInfluenceLookup = new Map();
+                var bonesAllByName = skeletonAtRest.bonesAllByName;
                 for (var v = 0; v < vertices.length; v++) {
                     var vertex = vertices[v];
                     var distanceLeastSoFar = Number.POSITIVE_INFINITY;
                     var indexOfBoneClosestSoFar = null;
                     for (var b = 0; b < bones.length; b++) {
                         var bone = bones[b];
-                        var displacement = vertex.clone().subtract(bone.pos(bones).add(bone.orientation.forward.clone().multiplyScalar(bone.length)));
+                        var displacement = vertex.clone().subtract(bone.pos(bonesAllByName).add(bone.orientation.forward.clone().multiplyScalar(bone.length)));
                         var distance = displacement.magnitude();
                         if (distance < distanceLeastSoFar) {
                             distanceLeastSoFar = distance;
@@ -112,10 +113,10 @@ var ThisCouldBeBetter;
                     }
                     var boneClosest = bones[indexOfBoneClosestSoFar];
                     var boneClosestName = boneClosest.name;
-                    var boneInfluence = boneNameToInfluenceLookup[boneClosestName];
+                    var boneInfluence = boneNameToInfluenceLookup.get(boneClosestName);
                     if (boneInfluence == null) {
                         boneInfluence = new GameFramework.BoneInfluence(boneClosestName, new Array());
-                        boneNameToInfluenceLookup[boneClosestName] = boneInfluence;
+                        boneNameToInfluenceLookup.set(boneClosestName, boneInfluence);
                         boneInfluences.push(boneInfluence);
                     }
                     boneInfluence.vertexIndicesControlled.push(v);

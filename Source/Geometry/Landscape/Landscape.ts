@@ -6,13 +6,16 @@ export class LandscapeMap
 {
 	name: string;
 	depthMax: number;
-	terrainSet: any;
+	terrainSet: LandscapeTerrainSet;
 
 	sizeInCells: Coords;
 	sizeInCellsMinusOnes: Coords;
-	cellAltitudes: any;
+	cellAltitudes: number[];
 
-	constructor(name: string, depthMax: number, terrainSet: any)
+	constructor
+	(
+		name: string, depthMax: number, terrainSet: LandscapeTerrainSet
+	)
 	{
 		this.name = name;
 		this.depthMax = depthMax;
@@ -22,18 +25,18 @@ export class LandscapeMap
 		this.sizeInCells = new Coords(dimensionInCells, dimensionInCells, 0);
 		this.sizeInCellsMinusOnes = this.sizeInCells.clone().add
 		(
-			new Coords(-1, -1, 0)
+			Coords.fromXY(-1, -1)
 		)
 
-		this.cellAltitudes = [];
+		this.cellAltitudes = new Array<number>();
 	}
 
-	indexOfCellAtPos(cellPos: Coords)
+	indexOfCellAtPos(cellPos: Coords): number
 	{
 		return cellPos.y * this.sizeInCells.x + cellPos.x;
 	}
 
-	generateRandom()
+	generateRandom(): void
 	{
 		var cornerCellPositions =
 		[
@@ -79,7 +82,7 @@ export class LandscapeMap
 		childPos: Coords,
 		neighborDatas: NeighborData[],
 		d: number
-	)
+	): void
 	{
 		var stepSizeInCells = Math.pow(2, this.depthMax - d);
 		var stepSizeInCellsHalf = stepSizeInCells / 2;
@@ -110,9 +113,13 @@ export class LandscapeMap
 
 	generateRandom_2
 	(
-		parentPos: Coords, childPos: Coords, neighborDatas: NeighborData[],
-		stepSizeInCells: number, stepSizeInCellsHalf: number, altitudeVariationRange: any
-	)
+		parentPos: Coords,
+		childPos: Coords,
+		neighborDatas: NeighborData[],
+		stepSizeInCells: number,
+		stepSizeInCellsHalf: number,
+		altitudeVariationRange: number
+	): void
 	{
 		var parentIndex = this.indexOfCellAtPos(parentPos);
 		var parentAltitude = this.cellAltitudes[parentIndex];
@@ -190,7 +197,7 @@ export class LandscapeMap
 		}
 	}
 
-	toImage()
+	toImage(): HTMLElement
 	{
 		var canvas = document.createElement("canvas");
 		canvas.width = this.sizeInCells.x;
@@ -266,10 +273,10 @@ class NeighborData
 export class LandscapeTerrain
 {
 	name: string;
-	color: any;
+	color: string;
 	altitudeStart: number;
 
-	constructor(name: string, color: any, altitudeStart: number)
+	constructor(name: string, color: string, altitudeStart: number)
 	{
 		this.name = name;
 		this.color = color;
@@ -280,15 +287,15 @@ export class LandscapeTerrain
 export class LandscapeTerrainSet
 {
 	name: string;
-	terrains: any;
+	terrains: LandscapeTerrain[];
 
-	constructor(name: string, terrains: any)
+	constructor(name: string, terrains: LandscapeTerrain[])
 	{
 		this.name = name;
 		this.terrains = terrains;
 	}
 
-	getTerrainForAltitude(altitudeToGet: number)
+	getTerrainForAltitude(altitudeToGet: number): LandscapeTerrain
 	{
 		var returnValue = null;
 

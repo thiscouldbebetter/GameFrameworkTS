@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class EquipmentUser implements EntityProperty
+export class EquipmentUser implements EntityProperty<EquipmentUser>
 {
 	socketGroup: EquipmentSocketGroup;
 	socketDefnGroup: EquipmentSocketDefnGroup;
@@ -57,7 +57,7 @@ export class EquipmentUser implements EntityProperty
 		}
 	}
 
-	equipEntityWithItem(uwpe: UniverseWorldPlaceEntities): any
+	equipEntityWithItem(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var world = uwpe.world;
 		var itemEntityToEquip = uwpe.entity2;
@@ -84,22 +84,19 @@ export class EquipmentUser implements EntityProperty
 			}
 		)[0];
 
-		var message = "";
 		if (socketFound == null)
 		{
-			message = "Can't equip " + itemDefn.name + ".";
+			this.statusMessage = "Can't equip " + itemDefn.name + ".";
 		}
 		else
 		{
 			var socketFoundName = socketFound.defnName;
 
-			message = this.equipItemEntityInSocketWithName
+			this.equipItemEntityInSocketWithName
 			(
 				uwpe, socketFoundName, false
 			);
 		}
-
-		return message;
 	}
 
 	equipItemEntityInFirstOpenQuickSlot
@@ -145,53 +142,56 @@ export class EquipmentUser implements EntityProperty
 		uwpe: UniverseWorldPlaceEntities,
 		socketName: string,
 		includeSocketNameInMessage: boolean
-	): any
+	): void
 	{
 		var world = uwpe.world;
 		var itemEntityToEquip = uwpe.entity2;
+		var message;
 
 		if (itemEntityToEquip == null)
 		{
-			return "Nothing to equip!";
-		}
-
-		var itemToEquip = itemEntityToEquip.item();
-		var itemDefn = itemToEquip.defn(world);
-		var equippable = itemEntityToEquip.equippable();
-
-		var message = itemDefn.appearance;
-
-		var socket = this.socketByName(socketName);
-
-		if (socket == null)
-		{
-			message += " cannot be equipped."
-		}
-		else if (socket.itemEntityEquipped == itemEntityToEquip)
-		{
-			if (equippable != null)
-			{
-				equippable.unequip(uwpe);
-			}
-			socket.itemEntityEquipped = null;
-			message += " unequipped."
+			message = "Nothing to equip!";
 		}
 		else
 		{
-			if (equippable != null)
+			var itemToEquip = itemEntityToEquip.item();
+			var itemDefn = itemToEquip.defn(world);
+			var equippable = itemEntityToEquip.equippable();
+
+			message = itemDefn.appearance;
+
+			var socket = this.socketByName(socketName);
+
+			if (socket == null)
 			{
-				equippable.equip(uwpe);
+				message += " cannot be equipped."
 			}
-			socket.itemEntityEquipped = itemEntityToEquip;
-			message += " equipped";
-			if (includeSocketNameInMessage)
+			else if (socket.itemEntityEquipped == itemEntityToEquip)
 			{
-				message += " as " + socket.defnName
+				if (equippable != null)
+				{
+					equippable.unequip(uwpe);
+				}
+				socket.itemEntityEquipped = null;
+				message += " unequipped."
 			}
-			message += ".";
+			else
+			{
+				if (equippable != null)
+				{
+					equippable.equip(uwpe);
+				}
+				socket.itemEntityEquipped = itemEntityToEquip;
+				message += " equipped";
+				if (includeSocketNameInMessage)
+				{
+					message += " as " + socket.defnName
+				}
+				message += ".";
+			}
 		}
 
-		return message;
+		this.statusMessage = message;
 	}
 
 	itemEntityInSocketWithName(socketName: string): Entity
@@ -205,7 +205,7 @@ export class EquipmentUser implements EntityProperty
 		return this.socketGroup.socketsByDefnName.get(socketName);
 	}
 
-	unequipItemFromSocketWithName(world: World, socketName: string): any
+	unequipItemFromSocketWithName(world: World, socketName: string): void
 	{
 		var message;
 		var socketToUnequipFrom = this.socketGroup.socketsByDefnName.get(socketName);
@@ -228,7 +228,8 @@ export class EquipmentUser implements EntityProperty
 				message = itemDefn.appearance + " unequipped."
 			}
 		}
-		return message;
+
+		this.statusMessage = message;
 	}
 
 	unequipItemsNoLongerHeld(uwpe: UniverseWorldPlaceEntities): void
@@ -371,8 +372,7 @@ export class EquipmentUser implements EntityProperty
 		{
 			var itemEntityToEquip = equipmentUser.itemEntitySelected;
 			uwpe.entity2 = itemEntityToEquip;
-			var message = equipmentUser.equipEntityWithItem(uwpe);
-			equipmentUser.statusMessage = message;
+			equipmentUser.equipEntityWithItem(uwpe);
 		};
 
 		var listEquippables = new ControlList
@@ -380,7 +380,10 @@ export class EquipmentUser implements EntityProperty
 			"listEquippables",
 			Coords.fromXY(10, 15), // pos
 			Coords.fromXY(70, listHeight), // size
-			DataBinding.fromContext(itemEntitiesEquippable), // items
+			DataBinding.fromContextAndGet
+			(
+				this, (c: EquipmentUser) => itemEntitiesEquippable
+			), // items
 			DataBinding.fromGet
 			(
 				(c: Entity) => c.item().toString(world),
@@ -403,24 +406,19 @@ export class EquipmentUser implements EntityProperty
 			var itemEntityToEquip = equipmentUser.itemEntitySelected;
 			uwpe.entity2 = itemEntityToEquip;
 
-			var message;
 			var socketSelected = equipmentUser.socketSelected;
 			if (socketSelected == null)
 			{
-				message = equipmentUser.equipEntityWithItem
-				(
-					uwpe
-				);
+				equipmentUser.equipEntityWithItem(uwpe);
 			}
 			else
 			{
-				message = equipmentUser.equipItemEntityInSocketWithName
+				equipmentUser.equipItemEntityInSocketWithName
 				(
 					uwpe,
 					socketSelected.defnName, true // includeSocketNameInMessage
 				)
 			}
-			equipmentUser.statusMessage = message;
 		};
 
 		var equipItemSelectedInQuickSlot = (quickSlotNumber: number) =>
@@ -442,18 +440,17 @@ export class EquipmentUser implements EntityProperty
 			">", // text
 			fontHeight * 0.8,
 			true, // hasBorder
-			true, // isEnabled - todo
+			DataBinding.fromTrue(), // isEnabled - todo
 			equipItemSelectedToSocketSelected
 		);
 
 		var unequipFromSocketSelected = () =>
 		{
 			var socketToUnequipFrom = equipmentUser.socketSelected;
-			var message = equipmentUser.unequipItemFromSocketWithName
+			equipmentUser.unequipItemFromSocketWithName
 			(
 				world, socketToUnequipFrom.defnName
 			);
-			equipmentUser.statusMessage = message;
 		};
 
 		var buttonUnequip = ControlButton.from8
@@ -464,7 +461,7 @@ export class EquipmentUser implements EntityProperty
 			"<", // text
 			fontHeight * 0.8,
 			true, // hasBorder
-			true, // isEnabled - todo
+			DataBinding.fromTrue(), // isEnabled - todo
 			unequipFromSocketSelected
 		);
 
@@ -473,7 +470,11 @@ export class EquipmentUser implements EntityProperty
 			"listEquipped",
 			Coords.fromXY(100, 15), // pos
 			Coords.fromXY(90, listHeight), // size
-			DataBinding.fromContext(sockets), // items
+			DataBinding.fromContextAndGet
+			(
+				this,
+				(c: EquipmentUser) => c.socketGroup.sockets
+			), // items
 			DataBinding.fromGet
 			(
 				(c: EquipmentSocket) => c.toString(world),
@@ -485,7 +486,7 @@ export class EquipmentUser implements EntityProperty
 				(c: EquipmentUser) => c.socketSelected,
 				(c: EquipmentUser, v: EquipmentSocket) => c.socketSelected = v
 			), // bindingForItemSelected
-			DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
+			DataBinding.fromGet( (c: EquipmentSocket) => c ), // bindingForItemValue
 			null, // bindingForIsEnabled
 			unequipFromSocketSelected, // confirm
 			null
@@ -514,7 +515,7 @@ export class EquipmentUser implements EntityProperty
 					Coords.fromXY(10, 5), // pos
 					Coords.fromXY(70, 25), // size
 					false, // isTextCentered
-					"Equippable:",
+					DataBinding.fromContext("Equippable:"),
 					fontHeightSmall
 				),
 
@@ -530,7 +531,7 @@ export class EquipmentUser implements EntityProperty
 					Coords.fromXY(100, 5), // pos
 					Coords.fromXY(100, 25), // size
 					false, // isTextCentered
-					"Equipped:",
+					DataBinding.fromContext("Equipped:"),
 					fontHeightSmall
 				),
 
@@ -594,7 +595,7 @@ export class EquipmentUser implements EntityProperty
 					Coords.fromXY(100, -5), // pos
 					Coords.fromXY(100, 25), // size
 					true, // isTextCentered
-					"Equip",
+					DataBinding.fromContext("Equip"),
 					fontHeightLarge
 				)
 			);
@@ -608,7 +609,7 @@ export class EquipmentUser implements EntityProperty
 					"Done",
 					fontHeightSmall,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					back // click
 				)
 			);
@@ -624,6 +625,11 @@ export class EquipmentUser implements EntityProperty
 
 		return returnValue;
 	}
+
+	// Equatable
+
+	equals(other: EquipmentUser): boolean { return false; } // todo
+
 }
 
 }

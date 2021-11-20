@@ -4,29 +4,30 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Activity {
-            constructor(defnName, targetsByName) {
+            constructor(defnName, targetEntitiesByName) {
                 this.defnName = defnName;
-                this.targetsByName = targetsByName || new Map([]);
+                this.targetEntitiesByName =
+                    targetEntitiesByName || new Map([]);
             }
             static fromDefnName(defnName) {
                 return new Activity(defnName, null);
             }
-            static fromDefnNameAndTarget(defnName, target) {
+            static fromDefnNameAndTargetEntity(defnName, target) {
                 return new Activity(defnName, new Map([
                     [defnName, target]
                 ]));
             }
             clear() {
                 this.defnName = GameFramework.ActivityDefn.Instances().DoNothing.name;
-                this.targetClear();
+                this.targetEntityClear();
                 return this;
             }
             defn(world) {
                 return world.defn.activityDefnByName(this.defnName);
             }
-            defnNameAndTargetSet(defnName, target) {
+            defnNameAndTargetEntitySet(defnName, targetEntity) {
                 this.defnName = defnName;
-                this.targetSet(target);
+                this.targetEntitySet(targetEntity);
                 return this;
             }
             perform(uwpe) {
@@ -35,26 +36,26 @@ var ThisCouldBeBetter;
                     defn.perform(uwpe);
                 }
             }
-            target() {
-                return this.targetByName(this.defnName);
+            targetEntity() {
+                return this.targetEntityByName(this.defnName);
             }
-            targetByName(targetName) {
-                return this.targetsByName.get(targetName);
+            targetEntityByName(targetEntityName) {
+                return this.targetEntitiesByName.get(targetEntityName);
             }
-            targetClear() {
-                this.targetClearByName(this.defnName);
+            targetEntityClear() {
+                this.targetEntityClearByName(this.defnName);
                 return this;
             }
-            targetClearByName(name) {
-                this.targetsByName.delete(name);
+            targetEntityClearByName(name) {
+                this.targetEntitiesByName.delete(name);
                 return this;
             }
-            targetSet(value) {
-                this.targetSetByName(this.defnName, value);
+            targetEntitySet(value) {
+                this.targetEntitySetByName(this.defnName, value);
                 return this;
             }
-            targetSetByName(name, value) {
-                this.targetsByName.set(name, value);
+            targetEntitySetByName(name, value) {
+                this.targetEntitiesByName.set(name, value);
                 return this;
             }
             // Clonable.

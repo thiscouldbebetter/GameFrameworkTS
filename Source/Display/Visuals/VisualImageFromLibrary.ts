@@ -64,19 +64,19 @@ export class VisualImageFromLibrary implements VisualImage
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualImageFromLibrary
 	{
 		return this; // todo
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualImageFromLibrary): VisualImageFromLibrary
 	{
 		return this; // todo
 	}
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualImageFromLibrary
 	{
 		return this; // todo
 	}

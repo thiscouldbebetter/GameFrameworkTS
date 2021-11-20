@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Color implements Interpolatable
+export class Color implements Interpolatable<Color>
 {
 	name: string;
 	code: string;
@@ -105,16 +105,18 @@ export class Color implements Interpolatable
 	{
 		this.name = other.name;
 		this.code = other.code;
-		ArrayHelper.overwriteWith(this.componentsRGBA, other.componentsRGBA);
+		ArrayHelper.overwriteWithNonClonables
+		(
+			this.componentsRGBA, other.componentsRGBA
+		);
 		this._systemColor = null;
 		return this;
 	}
 
 	// Interpolatable.
 
-	interpolateWith(otherAsAny: any, fractionOfProgressTowardOther: number)
+	interpolateWith(other: Color, fractionOfProgressTowardOther: number): Color
 	{
-		var other = otherAsAny as Color;
 		var componentsRGBAThis = this.componentsRGBA;
 		var componentsRGBAOther = other.componentsRGBA;
 		var componentsRGBAInterpolated = new Array<number>();

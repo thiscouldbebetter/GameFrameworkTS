@@ -209,21 +209,23 @@ var ThisCouldBeBetter;
             clone() {
                 return new Box(this.center.clone(), this.size.clone());
             }
-            equals(other) {
-                var returnValue = (this.center.equals(other.center)
-                    && this.size.equals(other.size));
-                return returnValue;
-            }
             overwriteWith(other) {
                 this.center.overwriteWith(other.center);
                 this.size.overwriteWith(other.size);
                 return this;
+            }
+            // Equatable
+            equals(other) {
+                var returnValue = (this.center.equals(other.center)
+                    && this.size.equals(other.size));
+                return returnValue;
             }
             // string
             toString() {
                 return this.min().toString() + ":" + this.max().toString();
             }
             // ShapeBase.
+            collider() { return null; }
             dimensionForSurfaceClosestToPoint(posToCheck, displacementOverSizeHalf) {
                 var greatestAbsoluteDisplacementDimensionSoFar = -1;
                 var dimensionIndex = null;

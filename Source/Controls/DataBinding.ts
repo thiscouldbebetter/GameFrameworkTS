@@ -2,55 +2,104 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class DataBinding<C, V>
+export class DataBinding<TContext, TValue>
 {
-	context: C;
-	_get: (context: C) => V;
-	_set: (context: C, value: V) => void;
+	context: TContext;
+	_get: (context: TContext) => TValue;
+	_set: (context: TContext, value: TValue) => void;
 
-	constructor(context: C, get: (context: C) => V, set: (context: C, value: V) => void)
+	constructor
+	(
+		context: TContext,
+		get: (context: TContext) => TValue,
+		set: (context: TContext, value: TValue) => void
+	)
 	{
 		this.context = context;
 		this._get = get;
 		this._set = set;
 	}
 
-	static fromContext<C>(context: C): DataBinding<any, C>
+	static fromBooleanWithContext<TContext>
+	(
+		value: boolean,
+		context: TContext
+	): DataBinding<TContext,boolean>
 	{
-		return new DataBinding<any, C>(context, null, null);
+		return DataBinding.fromContextAndGet<TContext,boolean>
+		(
+			context,
+			(context: TContext) => value
+		);
 	}
 
-	static fromContextAndGet<C, V>(context: C, get: (context: C) => V)
+	static fromContext<TContext>
+	(
+		context: TContext
+	): DataBinding<TContext, TContext>
+	{
+		return new DataBinding<TContext, TContext>
+		(
+			context, 
+			(contextGet: TContext) => context,
+			null // set
+		);
+	}
+
+	static fromContextAndGet<TContext, TValue>
+	(
+		context: TContext,
+		get: (context: TContext) => TValue
+	): DataBinding<TContext,TValue>
 	{
 		return new DataBinding(context, get, null);
 	}
 
-	static fromGet<C, V>(get: (context: C) => V)
+	static fromFalseWithContext<TContext>
+	(
+		context: TContext
+	): DataBinding<TContext,boolean>
+	{
+		return DataBinding.fromBooleanWithContext(false, context);
+	}
+
+	static fromGet<TContext, TValue>
+	(
+		get: (context: TContext) => TValue
+	): DataBinding<TContext,TValue>
 	{
 		return new DataBinding(null, get, null);
 	}
 
-	static fromTrue()
+	static fromTrue<TContext>(): DataBinding<TContext,boolean>
 	{
-		return DataBinding.fromContext<boolean>(true);
+		return DataBinding.fromBooleanWithContext<TContext>(true, null);
 	}
 
-	contextSet(value: C): DataBinding<C, V>
+	static fromTrueWithContext<TContext>
+	(
+		context: TContext
+	): DataBinding<TContext,boolean>
 	{
-		this.context = value;
+		return DataBinding.fromBooleanWithContext(true, context);
+	}
+
+	contextSet(context: TContext): DataBinding<TContext, TValue>
+	{
+		this.context = context;
 		return this;
 	}
 
 	get()
 	{
-		return (this._get == null ? this.context : this._get(this.context) );
+		return this._get(this.context);
 	}
 
-	set(value: V)
+	set(value: TValue)
 	{
 		if (this._set == null)
 		{
-			this.context = (value as any) as C;
+			this.context = (value as any) as TContext;
 		}
 		else
 		{

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Selectable implements EntityProperty
+export class Selectable implements EntityProperty<Selectable>
 {
 	_select: (uwpe: UniverseWorldPlaceEntities) => void;
 	_deselect: (uwpe: UniverseWorldPlaceEntities) => void;
@@ -52,6 +52,11 @@ export class Selectable implements EntityProperty
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
+
+	// Equatable
+
+	equals(other: Selectable): boolean { return false; } // todo
+
 }
 
 }

@@ -8,6 +8,7 @@ var ThisCouldBeBetter;
                 this.ticksToLive = ticksToLive;
                 this.expire = expire;
             }
+            toEntity() { return new GameFramework.Entity(Ephemeral.name, [this]); }
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }
@@ -21,10 +22,12 @@ var ThisCouldBeBetter;
                     }
                 }
             }
-            // cloneable
+            // Clonable.
             clone() {
                 return new Ephemeral(this.ticksToLive, this.expire);
             }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.Ephemeral = Ephemeral;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

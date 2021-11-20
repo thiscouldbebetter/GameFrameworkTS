@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class JournalKeeper implements EntityProperty
+export class JournalKeeper implements EntityProperty<JournalKeeper>
 {
 	journal: Journal;
 
@@ -20,6 +20,10 @@ export class JournalKeeper implements EntityProperty
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
+
+	// Equatable
+
+	equals(other: JournalKeeper): boolean { return false; } // todo
 
 	// Controls.
 
@@ -62,7 +66,7 @@ export class JournalKeeper implements EntityProperty
 				Coords.fromXY(10, 5), // pos
 				Coords.fromXY(70, 25), // size
 				false, // isTextCentered
-				"Journal Entries:",
+				DataBinding.fromContext("Journal Entries:"),
 				fontHeightSmall
 			),
 
@@ -74,11 +78,7 @@ export class JournalKeeper implements EntityProperty
 				"New",
 				fontHeightSmall,
 				true, // hasBorder,
-				DataBinding.fromContextAndGet
-				(
-					this,
-					(c: JournalKeeper) => true
-				), // isEnabled
+				DataBinding.fromTrueWithContext(this), // isEnabled
 				() =>
 				{
 					var journal = journalKeeper.journal;
@@ -90,7 +90,6 @@ export class JournalKeeper implements EntityProperty
 					);
 					journal.entries.push(entryNew);
 				}, // click
-				null, // context
 				false // canBeHeldDown
 			),
 
@@ -99,7 +98,11 @@ export class JournalKeeper implements EntityProperty
 				"listEntries",
 				Coords.fromXY(10, 15), // pos
 				Coords.fromXY(85, 110), // size
-				DataBinding.fromContext(this.journal.entries), // items
+				DataBinding.fromContextAndGet
+				(
+					this,
+					(c: JournalKeeper) => c.journal.entries
+				), // items
 				DataBinding.fromGet
 				(
 					(c: JournalEntry) => c.toString(universe)
@@ -115,7 +118,7 @@ export class JournalKeeper implements EntityProperty
 						c.isJournalEntrySelectedEditable = false;
 					}
 				), // bindingForItemSelected
-				DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
+				DataBinding.fromGet( (c: JournalEntry) => c ), // bindingForItemValue
 				DataBinding.fromTrue(), // isEnabled
 				(universe: Universe) => // confirm
 				{
@@ -130,7 +133,7 @@ export class JournalKeeper implements EntityProperty
 				Coords.fromXY(105, 5), // pos
 				Coords.fromXY(100, 15), // size
 				false, // isTextCentered
-				"Entry Selected:",
+				DataBinding.fromContext("Entry Selected:"),
 				fontHeightSmall
 			),
 
@@ -155,7 +158,6 @@ export class JournalKeeper implements EntityProperty
 				{
 					journalKeeper.isJournalEntrySelectedEditable = false;
 				}, // click
-				null, // context
 				false, // canBeHeldDown
 			),
 
@@ -180,7 +182,6 @@ export class JournalKeeper implements EntityProperty
 				{
 					journalKeeper.isJournalEntrySelectedEditable = true;
 				}, // click
-				null, // context
 				false, // canBeHeldDown
 			),
 
@@ -220,7 +221,6 @@ export class JournalKeeper implements EntityProperty
 					universe.venueNext = venueNext;
 
 				}, // click
-				null, // context
 				false // canBeHeldDown
 			),
 
@@ -360,7 +360,7 @@ export class JournalKeeper implements EntityProperty
 					Coords.fromXY(100, -5), // pos
 					Coords.fromXY(100, 25), // size
 					true, // isTextCentered
-					"Journal",
+					DataBinding.fromContext("Journal"),
 					fontHeightLarge
 				)
 			);
@@ -374,7 +374,7 @@ export class JournalKeeper implements EntityProperty
 					"Done",
 					fontHeightSmall,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					back // click
 				)
 			);

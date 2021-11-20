@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Enemy implements EntityProperty
+export class Enemy implements EntityProperty<Enemy>
 {
 	weapon: Weapon;
 
@@ -11,7 +11,7 @@ export class Enemy implements EntityProperty
 		this.weapon = weapon;
 	}
 
-	static activityDefnBuild()
+	static activityDefnBuild(): ActivityDefn
 	{
 		var enemyActivityPerform = (uwpe: UniverseWorldPlaceEntities) =>
 		{
@@ -75,20 +75,22 @@ export class Enemy implements EntityProperty
 				}
 				else
 				{
-					var targetPosExisting = activity.target() as Coords;
-					if (targetPosExisting == null)
+					var targetEntity = activity.targetEntity();
+					if (targetEntity == null)
 					{
 						targetPosToApproach =
 							Coords.create().randomize(universe.randomizer).multiply(place.size);
 					}
 					else
 					{
+						var targetPosExisting = targetEntity.locatable().loc.pos;
 						targetPosToApproach = targetPosExisting;
 					}
 				}
 			}
 
-			activity.targetSet(targetPosToApproach);
+			targetEntity = Locatable.fromPos(targetPosToApproach).toEntity();
+			activity.targetEntitySet(targetEntity);
 
 			// hack
 			var targetLocatable = Locatable.fromPos(targetPosToApproach);
@@ -103,7 +105,7 @@ export class Enemy implements EntityProperty
 
 			if (distanceToTarget <= distanceToApproach)
 			{
-				activity.targetClear();
+				activity.targetEntityClear();
 			}
 		};
 
@@ -117,6 +119,10 @@ export class Enemy implements EntityProperty
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
+
+	// Equatable
+
+	equals(other: Enemy): boolean { return false; } // todo
 }
 
 }

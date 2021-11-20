@@ -13,6 +13,8 @@ var ThisCouldBeBetter;
             updateForTimerTick(uwpe) {
                 // Do nothing.
             }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.Modellable = Modellable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

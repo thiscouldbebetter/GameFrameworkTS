@@ -18,24 +18,19 @@ var ThisCouldBeBetter;
                 this._textMargin = GameFramework.Coords.create();
                 this._textSize = GameFramework.Coords.create();
             }
-            text(value, universe) {
+            text(value) {
                 if (value != null) {
-                    if (this._text.set == null) {
-                        this._text = value;
-                    }
-                    else {
-                        this._text.set(value);
-                    }
+                    this._text.set(value);
                 }
-                return (this._text.get == null ? this._text : this._text.get(universe));
+                return this._text.get();
             }
             // events
             actionHandle(actionNameToHandle, universe) {
-                var text = this.text(null, null);
+                var text = this.text(null);
                 var controlActionNames = GameFramework.ControlActionNames.Instances();
                 if (actionNameToHandle == controlActionNames.ControlCancel
                     || actionNameToHandle == GameFramework.Input.Names().Backspace) {
-                    this.text(text.substr(0, text.length - 1), null);
+                    this.text(text.substr(0, text.length - 1));
                     this.cursorPos = GameFramework.NumberHelper.wrapToRangeMinMax(this.cursorPos - 1, 0, text.length + 1);
                 }
                 else if (actionNameToHandle == controlActionNames.ControlConfirm) {
@@ -44,12 +39,18 @@ var ThisCouldBeBetter;
                 else if (actionNameToHandle == controlActionNames.ControlIncrement
                     || actionNameToHandle == controlActionNames.ControlDecrement) {
                     // This is a bit counterintuitive.
-                    var direction = (actionNameToHandle == controlActionNames.ControlIncrement ? -1 : 1);
-                    var charCodeAtCursor = (this.cursorPos < text.length ? text.charCodeAt(this.cursorPos) : "A".charCodeAt(0) - 1);
-                    if (charCodeAtCursor == "Z".charCodeAt(0) && direction == 1) {
+                    var direction = (actionNameToHandle == controlActionNames.ControlIncrement
+                        ? -1
+                        : 1);
+                    var charCodeAtCursor = (this.cursorPos < text.length
+                        ? text.charCodeAt(this.cursorPos)
+                        : "A".charCodeAt(0) - 1);
+                    if (charCodeAtCursor == "Z".charCodeAt(0)
+                        && direction == 1) {
                         charCodeAtCursor = "a".charCodeAt(0);
                     }
-                    else if (charCodeAtCursor == "a".charCodeAt(0) && direction == -1) {
+                    else if (charCodeAtCursor == "a".charCodeAt(0)
+                        && direction == -1) {
                         charCodeAtCursor = "Z".charCodeAt(0);
                     }
                     else {
@@ -60,10 +61,11 @@ var ThisCouldBeBetter;
                     var textEdited = text.substr(0, this.cursorPos)
                         + charAtCursor
                         + text.substr(this.cursorPos + 1);
-                    this.text(textEdited, null);
+                    this.text(textEdited);
                 }
-                else if (actionNameToHandle.length == 1 || actionNameToHandle.startsWith("_")) // printable character
-                 {
+                else if (actionNameToHandle.length == 1
+                    || actionNameToHandle.startsWith("_")) {
+                    // Printable character.
                     if (actionNameToHandle.startsWith("_")) {
                         if (actionNameToHandle == "_") {
                             actionNameToHandle = " ";
@@ -72,11 +74,12 @@ var ThisCouldBeBetter;
                             actionNameToHandle = actionNameToHandle.substr(1);
                         }
                     }
-                    if (this.numberOfCharsMax == null || text.length < this.numberOfCharsMax) {
+                    if (this.numberOfCharsMax == null
+                        || text.length < this.numberOfCharsMax) {
                         var textEdited = text.substr(0, this.cursorPos)
                             + actionNameToHandle
                             + text.substr(this.cursorPos);
-                        text = this.text(textEdited, null);
+                        text = this.text(textEdited);
                         this.cursorPos = GameFramework.NumberHelper.wrapToRangeMinMax(this.cursorPos + 1, 0, text.length + 1);
                     }
                 }
@@ -84,14 +87,14 @@ var ThisCouldBeBetter;
             }
             focusGain() {
                 this.isHighlighted = true;
-                this.cursorPos = this.text(null, null).length;
+                this.cursorPos = this.text(null).length;
             }
             focusLose() {
                 this.isHighlighted = false;
                 this.cursorPos = null;
             }
             isEnabled() {
-                return (this._isEnabled.get());
+                return this._isEnabled.get();
             }
             mouseClick(mouseClickPos) {
                 var parent = this.parent;
@@ -111,7 +114,7 @@ var ThisCouldBeBetter;
             draw(universe, display, drawLoc) {
                 var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
                 var style = this.style(universe);
-                var text = this.text(null, null);
+                var text = this.text(null);
                 display.drawRectangle(drawPos, this.size, style.colorFill, style.colorBorder, this.isHighlighted // areColorsReversed
                 );
                 var textWidth = display.textWidthForFontHeight(text, this.fontHeightInPixels);

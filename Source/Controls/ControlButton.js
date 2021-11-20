@@ -4,37 +4,34 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ControlButton extends GameFramework.ControlBase {
-            constructor(name, pos, size, text, fontHeightInPixels, hasBorder, isEnabled, click, context, canBeHeldDown) {
+            constructor(name, pos, size, text, fontHeightInPixels, hasBorder, isEnabled, click, canBeHeldDown) {
                 super(name, pos, size, fontHeightInPixels);
                 this.text = text;
                 this.hasBorder = hasBorder;
                 this._isEnabled = isEnabled;
                 this.click = click;
-                this.context = context;
                 this.canBeHeldDown = (canBeHeldDown == null ? false : canBeHeldDown);
                 // Helper variables.
                 this._drawLoc = GameFramework.Disposition.create();
                 this._sizeHalf = GameFramework.Coords.create();
             }
             static from8(name, pos, size, text, fontHeightInPixels, hasBorder, isEnabled, click) {
-                return new ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isEnabled, click, null, null);
-            }
-            static from9(name, pos, size, text, fontHeightInPixels, hasBorder, isEnabled, click, context) {
-                return new ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isEnabled, click, context, null);
+                return new ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isEnabled, click, false // canBeHeldDown
+                );
             }
             actionHandle(actionNameToHandle, universe) {
                 if (actionNameToHandle == GameFramework.ControlActionNames.Instances().ControlConfirm) {
-                    this.click(this.context);
+                    this.click();
                 }
                 return (this.canBeHeldDown == false); // wasActionHandled
             }
             isEnabled() {
-                return (this._isEnabled.get == null ? this._isEnabled : this._isEnabled.get());
+                return this._isEnabled.get();
             }
             // events
             mouseClick(clickPos) {
                 if (this.isEnabled()) {
-                    this.click(this.context);
+                    this.click();
                 }
                 return (this.canBeHeldDown == false); // wasClickHandled
             }

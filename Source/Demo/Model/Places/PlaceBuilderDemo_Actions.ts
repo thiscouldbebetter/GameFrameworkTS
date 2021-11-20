@@ -123,7 +123,7 @@ class PlaceBuilderDemo_Actions
 					{
 						var actor = entityActor.actor();
 						var activity = actor.activity;
-						activity.targetSetByName
+						activity.targetEntitySetByName
 						(
 							"ItemEntityToPickUp", itemEntityToPickUp
 						);

@@ -2,11 +2,11 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualDynamic implements Visual
+export class VisualDynamic implements Visual<VisualDynamic>
 {
-	methodForVisual: (uwpe: UniverseWorldPlaceEntities) => Visual;
+	methodForVisual: (uwpe: UniverseWorldPlaceEntities) => VisualBase;
 
-	constructor(methodForVisual: (uwpe: UniverseWorldPlaceEntities) => Visual)
+	constructor(methodForVisual: (uwpe: UniverseWorldPlaceEntities) => VisualBase)
 	{
 		this.methodForVisual = methodForVisual;
 	}
@@ -19,19 +19,19 @@ export class VisualDynamic implements Visual
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualDynamic
 	{
 		return this; // todo
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualDynamic): VisualDynamic
 	{
 		return this; // todo
 	}
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualDynamic
 	{
 		return this; // todo
 	}

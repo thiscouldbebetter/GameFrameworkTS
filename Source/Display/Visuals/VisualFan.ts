@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualFan implements Visual
+export class VisualFan implements Visual<VisualFan>
 {
 	radius: number;
 	angleStartInTurns: number;
@@ -55,7 +55,7 @@ export class VisualFan implements Visual
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualFan
 	{
 		return new VisualFan
 		(
@@ -67,9 +67,8 @@ export class VisualFan implements Visual
 		)
 	}
 
-	overwriteWith(otherAsVisual: Visual): Visual
+	overwriteWith(other: VisualFan): VisualFan
 	{
-		var other = otherAsVisual as VisualFan;
 		this.radius = other.radius;
 		this.angleStartInTurns = other.angleStartInTurns;
 		this.angleSpannedInTurns = other.angleSpannedInTurns;
@@ -83,7 +82,7 @@ export class VisualFan implements Visual
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualFan
 	{
 		return this;
 	}

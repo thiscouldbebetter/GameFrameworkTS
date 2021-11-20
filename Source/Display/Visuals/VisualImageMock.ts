@@ -13,7 +13,7 @@ export class VisualImageMock implements VisualImage
 
 	// Transform.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualImageMock
 	{
 		return this;
 	}
@@ -23,8 +23,11 @@ export class VisualImageMock implements VisualImage
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{}
 
-	clone(): Visual { return this; }
-	overwriteWith(x: Visual): Visual { return this; }
+	// Clonable.
+
+	clone(): VisualImageMock { return this; }
+
+	overwriteWith(x: VisualImageMock): VisualImageMock { return this; }
 
 	// VisualImage.
 

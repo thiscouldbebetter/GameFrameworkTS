@@ -33,6 +33,8 @@ var ThisCouldBeBetter;
             clone() {
                 return new Device(this.name, this.ticksToCharge, this._initialize, this.update, this.use);
             }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.Device = Device;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

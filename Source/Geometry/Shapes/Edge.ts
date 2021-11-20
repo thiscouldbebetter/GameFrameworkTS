@@ -35,11 +35,6 @@ export class Edge implements ShapeBase
 		return this._direction.overwriteWith(this.displacement()).normalize();
 	}
 
-	equals(other: Edge): boolean
-	{
-		return ArrayHelper.equals(this.vertices, other.vertices);
-	}
-
 	displacement(): Coords
 	{
 		return this._displacement.overwriteWith(this.vertices[1]).subtract(this.vertices[0]);
@@ -97,7 +92,16 @@ export class Edge implements ShapeBase
 		return this;
 	}
 
+	// Equatable
+
+	equals(other: Edge): boolean
+	{
+		return ArrayHelper.equals(this.vertices, other.vertices);
+	}
+
 	// ShapeBase.
+
+	collider(): ShapeBase { return null; }
 
 	locate(loc: Disposition): ShapeBase { throw new Error("Not implemented!"); }
 
@@ -112,7 +116,7 @@ export class Edge implements ShapeBase
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable { throw new Error("Not implemented!");  }
+	transform(transformToApply: TransformBase): Edge { throw new Error("Not implemented!");  }
 }
 
 }

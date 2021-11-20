@@ -7,7 +7,7 @@ export class Texture
 	name: string;
 	image: Image2;
 
-	systemTexture: any;
+	systemTexture: WebGLTexture;
 
 	constructor(name: string, image: Image2)
 	{
@@ -17,7 +17,7 @@ export class Texture
 
 	// methods
 
-	initializeForWebGLContext(webGLContext: WebGLContext)
+	initializeForWebGLContext(webGLContext: WebGLContext): void
 	{
 		var gl = webGLContext.gl;
 

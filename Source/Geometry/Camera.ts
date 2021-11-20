@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Camera implements EntityProperty
+export class Camera implements EntityProperty<Camera>
 {
 	viewSize: Coords;
 	focalLength: number;
@@ -372,6 +372,11 @@ export class Camera implements EntityProperty
 	{
 		// Do nothing.  Rendering is done in Place.draw().
 	}
+
+	// Equatable
+
+	equals(other: Camera): boolean { return false; } // todo
+
 }
 
 }

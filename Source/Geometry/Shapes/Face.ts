@@ -15,7 +15,7 @@ export class Face implements ShapeBase
 		this.vertices = vertices;
 	}
 
-	box()
+	box(): Box
 	{
 		if (this._box == null)
 		{
@@ -25,7 +25,7 @@ export class Face implements ShapeBase
 		return this._box;
 	}
 
-	containsPoint(pointToCheck: Coords)
+	containsPoint(pointToCheck: Coords): boolean
 	{
 		var face = this;
 
@@ -67,7 +67,7 @@ export class Face implements ShapeBase
 		return isPosWithinAllEdgesOfFaceSoFar;
 	}
 
-	edges()
+	edges(): Edge[]
 	{
 		if (this._edges == null)
 		{
@@ -91,12 +91,7 @@ export class Face implements ShapeBase
 		return this._edges;
 	}
 
-	equals(other: Face)
-	{
-		return ArrayHelper.equals(this.vertices, other.vertices);
-	}
-
-	plane()
+	plane(): Plane
 	{
 		if (this._plane == null)
 		{
@@ -115,18 +110,27 @@ export class Face implements ShapeBase
 
 	// Cloneable.
 
-	clone()
+	clone(): Face
 	{
 		return new Face(ArrayHelper.clone(this.vertices));
 	}
 
-	overwriteWith(other: Face)
+	overwriteWith(other: Face): Face
 	{
 		ArrayHelper.overwriteWith(this.vertices, other.vertices);
 		return this;
 	}
 
+	// Equatable
+
+	equals(other: Face): boolean
+	{
+		return ArrayHelper.equals(this.vertices, other.vertices);
+	}
+
 	// ShapeBase.
+
+	collider(): ShapeBase { return null; }
 
 	locate(loc: Disposition): ShapeBase
 	{
@@ -147,7 +151,7 @@ export class Face implements ShapeBase
 
 	// Transformable.
 
-	transform(transformToApply: Transform)
+	transform(transformToApply: TransformBase): Face
 	{
 		Transforms.applyTransformToCoordsMany(transformToApply, this.vertices);
 		return this;

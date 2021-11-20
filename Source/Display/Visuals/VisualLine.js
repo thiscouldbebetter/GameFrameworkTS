@@ -28,8 +28,7 @@ var ThisCouldBeBetter;
             clone() {
                 return new VisualLine(this.fromPos.clone(), this.toPos.clone(), this.color.clone(), this.lineThickness);
             }
-            overwriteWith(otherAsVisual) {
-                var other = otherAsVisual;
+            overwriteWith(other) {
                 this.fromPos.overwriteWith(other.fromPos);
                 this.toPos.overwriteWith(other.toPos);
                 this.color.overwriteWith(other.color);

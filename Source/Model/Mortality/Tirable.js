@@ -48,6 +48,8 @@ var ThisCouldBeBetter;
             clone() {
                 return new Tirable(this.staminaMaxAfterSleep, this.staminaRecoveredPerTick, this.staminaMaxLostPerTick, this.staminaMaxRecoveredPerTickOfSleep, this._fallAsleep);
             }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.Tirable = Tirable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

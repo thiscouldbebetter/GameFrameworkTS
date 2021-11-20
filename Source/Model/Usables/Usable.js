@@ -9,7 +9,7 @@ var ThisCouldBeBetter;
                 this.isDisabled = false;
             }
             use(uwpe) {
-                return (this.isDisabled ? null : this._use(uwpe));
+                this._use(uwpe);
             }
             // Clonable.
             clone() {
@@ -23,6 +23,8 @@ var ThisCouldBeBetter;
             finalize(uwpe) { }
             initialize(uwpe) { }
             updateForTimerTick(uwpe) { }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.Usable = Usable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

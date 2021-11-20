@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualControl implements Visual
+export class VisualControl implements Visual<VisualControl>
 {
 	controlRoot: ControlBase;
 
@@ -27,19 +27,19 @@ export class VisualControl implements Visual
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualControl
 	{
 		return this; // todo
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualControl): VisualControl
 	{
 		return this; // todo
 	}
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualControl
 	{
 		return this; // todo
 	}

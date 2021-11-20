@@ -5,9 +5,9 @@ namespace ThisCouldBeBetter.GameFramework
 export class Rotation
 {
 	axis: Coords;
-	angleInTurnsRef: Reference;
+	angleInTurnsRef: Reference<number>;
 
-	constructor(axis: Coords, angleInTurnsRef: Reference)
+	constructor(axis: Coords, angleInTurnsRef: Reference<number>)
 	{
 		this.axis = axis;
 		this.angleInTurnsRef = angleInTurnsRef;

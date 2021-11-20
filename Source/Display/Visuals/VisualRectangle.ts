@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualRectangle implements Visual
+export class VisualRectangle implements Visual<VisualRectangle>
 {
 	size: Coords;
 	colorFill: Color;
@@ -51,19 +51,19 @@ export class VisualRectangle implements Visual
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualRectangle
 	{
 		return this; // todo
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualRectangle): VisualRectangle
 	{
 		return this; // todo
 	}
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualRectangle
 	{
 		return this; // todo
 	}

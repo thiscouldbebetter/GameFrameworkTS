@@ -13,16 +13,17 @@ var ThisCouldBeBetter;
                 var controlsForStatusFields = [
                     new GameFramework.ControlLabel("labelProfile", GameFramework.Coords.fromXY(marginX, labelSize.y), // pos
                     labelSize.clone(), false, // isTextCentered
-                    "Profile: " + universe.profile.name, fontHeight),
+                    GameFramework.DataBinding.fromContext("Profile: " + universe.profile.name), fontHeight),
                     new GameFramework.ControlLabel("labelTimePlaying", GameFramework.Coords.fromXY(marginX, labelSize.y * 2), // pos
                     labelSize.clone(), false, // isTextCentered
-                    "Time Playing: " + timePlayingAsString, fontHeight)
+                    GameFramework.DataBinding.fromContext("Time Playing: " + timePlayingAsString), fontHeight)
                 ];
                 var killable = entity.killable();
                 if (killable != null) {
                     var labelHealth = new GameFramework.ControlLabel("labelHealth", GameFramework.Coords.fromXY(marginX, labelSize.y * 3), // pos
                     labelSize.clone(), false, // isTextCentered
-                    "Health: " + entity.killable().integrity + "/" + entity.killable().integrityMax, fontHeight);
+                    GameFramework.DataBinding.fromContext("Health: " + entity.killable().integrity
+                        + "/" + entity.killable().integrityMax), fontHeight);
                     controlsForStatusFields.push(labelHealth);
                 }
                 var tabButtonSize = GameFramework.Coords.fromXY(36, 20);
@@ -49,7 +50,8 @@ var ThisCouldBeBetter;
                     controlsForTabs.push(skillLearnerAsControl);
                     var labelExperience = new GameFramework.ControlLabel("labelExperience", GameFramework.Coords.fromXY(marginX, labelSize.y * 4), // pos
                     labelSize.clone(), false, // isTextCentered
-                    "Experience: " + entity.skillLearner().learningAccumulated, fontHeight);
+                    GameFramework.DataBinding.fromContext("Experience: "
+                        + entity.skillLearner().learningAccumulated), fontHeight);
                     controlsForStatusFields.push(labelExperience);
                 }
                 var journalKeeper = entity.journalKeeper();
@@ -71,7 +73,8 @@ var ThisCouldBeBetter;
                     universe.venueNext = venueNext;
                 };
                 var returnValue = new GameFramework.ControlTabbed("tabbedItems", GameFramework.Coords.create(), // pos
-                size, tabButtonSize, controlsForTabs, fontHeight, back);
+                size, tabButtonSize, controlsForTabs, fontHeight, back, entity // context
+                );
                 return returnValue;
             }
             static toControlWorldOverlay(universe, size, entity) {
@@ -136,8 +139,8 @@ var ThisCouldBeBetter;
                     return returnValue;
                 };
                 var playerVisualTimeBar = new GameFramework.VisualBar(null, // "T", // abbreviation
-                playerVisualBarSize, GameFramework.Color.Instances().Cyan, GameFramework.DataBinding.fromGet((c) => world.timerTicksSoFar % timerTicksPerGameDay), null, // threshold
-                GameFramework.DataBinding.fromGet((c) => timerTicksPerGameDay), null, // fractionBelowWhichToShow
+                playerVisualBarSize, GameFramework.Color.Instances().Cyan, GameFramework.DataBinding.fromContextAndGet(entity, (c) => world.timerTicksSoFar % timerTicksPerGameDay), null, // threshold
+                GameFramework.DataBinding.fromContextAndGet(entity, (c) => timerTicksPerGameDay), null, // fractionBelowWhichToShow
                 null, // colorForBorderAsValueBreakGroup
                 // text
                 GameFramework.DataBinding.fromContextAndGet(world, (c) => ticksToHH_MM(c.timerTicksSoFar)));
@@ -188,9 +191,8 @@ var ThisCouldBeBetter;
                 for (var i = 0; i < itemQuickSlotCount; i++) {
                     var buttonText = "\n   " + i;
                     var button = new GameFramework.ControlButton("buttonItemQuickSlot" + i, buttonPos.clone(), buttonSize, buttonText, fontHeightInPixels, false, // hasBorder
-                    true, // isEnabled,
-                    buttonClicks[i], null, // context
-                    false // canBeHeldDown
+                    GameFramework.DataBinding.fromTrue(), // isEnabled,
+                    buttonClicks[i], false // canBeHeldDown
                     );
                     var visualItemInQuickSlot = GameFramework.ControlVisual.from4("visualItemInQuickSlot", buttonPos.clone(), buttonSize, GameFramework.DataBinding.fromContextAndGet(i, (c) => {
                         var returnValue = null;
@@ -215,6 +217,8 @@ var ThisCouldBeBetter;
             finalize(uwpe) { }
             initialize(uwpe) { }
             updateForTimerTick(uwpe) { }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.Playable = Playable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

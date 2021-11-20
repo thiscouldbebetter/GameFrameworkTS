@@ -25,7 +25,10 @@ export class TarFileEntry
 		return entry;
 	}
 
-	static fileNew(fileName: string, fileContentsAsBytes: number[]): TarFileEntry
+	static fileNew
+	(
+		fileName: string, fileContentsAsBytes: number[]
+	): TarFileEntry
 	{
 		var header = TarFileEntryHeader.fileNew(fileName, fileContentsAsBytes);
 
@@ -34,7 +37,10 @@ export class TarFileEntry
 		return entry;
 	}
 
-	static fromBytes(chunkAsBytes: number[], reader: ByteStream): TarFileEntry
+	static fromBytes
+	(
+		chunkAsBytes: number[], reader: ByteStream
+	): TarFileEntry
 	{
 		var chunkSize = TarFile.ChunkSize;
 
@@ -92,7 +98,7 @@ export class TarFileEntry
 
 	// instance methods
 
-	download(event: any)
+	download(event: Event): void
 	{
 		new FileHelper().saveBytesToFileWithName
 		(
@@ -101,7 +107,7 @@ export class TarFileEntry
 		);
 	}
 
-	remove(event: any)
+	remove(event: Event): void
 	{
 		alert("Not yet implemented!"); // todo
 	}

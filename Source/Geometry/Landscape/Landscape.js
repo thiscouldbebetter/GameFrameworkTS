@@ -10,8 +10,8 @@ var ThisCouldBeBetter;
                 this.terrainSet = terrainSet;
                 var dimensionInCells = Math.pow(2, this.depthMax) + 1;
                 this.sizeInCells = new GameFramework.Coords(dimensionInCells, dimensionInCells, 0);
-                this.sizeInCellsMinusOnes = this.sizeInCells.clone().add(new GameFramework.Coords(-1, -1, 0));
-                this.cellAltitudes = [];
+                this.sizeInCellsMinusOnes = this.sizeInCells.clone().add(GameFramework.Coords.fromXY(-1, -1));
+                this.cellAltitudes = new Array();
             }
             indexOfCellAtPos(cellPos) {
                 return cellPos.y * this.sizeInCells.x + cellPos.x;

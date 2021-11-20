@@ -141,11 +141,14 @@ var ThisCouldBeBetter;
                 GameFramework.ArrayHelper.overwriteWith(this.faceBuilders, other.faceBuilders);
                 return this;
             }
+            // Equatable
+            equals(other) { return false; } // todo
             // transformable
             coordsGroupToTranslate() {
                 return [this.center];
             }
             // ShapeBase.
+            collider() { return null; }
             locate(loc) {
                 return GameFramework.ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
             }
@@ -186,7 +189,7 @@ var ThisCouldBeBetter;
                 return new Mesh_FaceBuilder(this.vertexIndices.slice());
             }
             overwriteWith(other) {
-                GameFramework.ArrayHelper.overwriteWith(this.vertexIndices, other.vertexIndices);
+                GameFramework.ArrayHelper.overwriteWithNonClonables(this.vertexIndices, other.vertexIndices);
                 return this;
             }
             // Transformable.

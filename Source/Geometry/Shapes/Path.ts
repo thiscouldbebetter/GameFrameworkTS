@@ -13,12 +13,12 @@ export class Path
 
 	// Clonable.
 
-	clone()
+	clone(): Path
 	{
 		return new Path(ArrayHelper.clone(this.points) );
 	}
 
-	overwriteWith(other: Path)
+	overwriteWith(other: Path): Path
 	{
 		ArrayHelper.overwriteWith(this.points, other.points);
 		return this;
@@ -26,7 +26,7 @@ export class Path
 
 	// Transformable.
 
-	transform(transformToApply: Transform)
+	transform(transformToApply: TransformBase): Path
 	{
 		Transforms.applyTransformToCoordsMany(transformToApply, this.points);
 		return this;

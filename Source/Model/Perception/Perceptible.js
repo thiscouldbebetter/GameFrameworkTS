@@ -72,6 +72,8 @@ var ThisCouldBeBetter;
                 this.audibility = other.audibility;
                 return this;
             }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.Perceptible = Perceptible;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

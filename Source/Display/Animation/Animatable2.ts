@@ -2,18 +2,18 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Animatable2 implements EntityProperty
+export class Animatable2 implements EntityProperty<Animatable2>
 {
 	animationDefnGroup: AnimationDefnGroup;
-	transformableAtRest: any;
-	transformableTransformed: any;
+	transformableAtRest: TransformableBase;
+	transformableTransformed: TransformableBase;
 	ticksStartedByAnimationName: Map<string,number>;
 
 	constructor
 	(
 		animationDefnGroup: AnimationDefnGroup,
-		transformableAtRest: any,
-		transformableTransformed: any
+		transformableAtRest: TransformableBase,
+		transformableTransformed: TransformableBase
 	)
 	{
 		this.animationDefnGroup = animationDefnGroup;
@@ -121,6 +121,10 @@ export class Animatable2 implements EntityProperty
 	{
 		return this; // todo
 	}
+
+	// Equatable
+
+	equals(other: Animatable2): boolean { return false; } // todo
 }
 
 }

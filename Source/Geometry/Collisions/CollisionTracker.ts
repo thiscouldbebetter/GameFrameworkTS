@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class CollisionTracker implements EntityProperty
+export class CollisionTracker implements EntityProperty<CollisionTracker>
 {
 	collisionMap: MapOfCells<CollisionTrackerMapCell>;
 
@@ -15,17 +15,19 @@ export class CollisionTracker implements EntityProperty
 
 		var collisionMapCellSize = size.clone().divide(collisionMapSizeInCells);
 
+		this._cells = new Array<CollisionTrackerMapCell>();
+
 		this.collisionMap = new MapOfCells
 		(
 			CollisionTracker.name,
 			collisionMapSizeInCells,
 			collisionMapCellSize,
-			() => new CollisionTrackerMapCell(),
-			null, // cellAtPosInCells,
-			new Array<CollisionTrackerMapCell>() // cellSource
+			new MapOfCellsCellSourceArray<CollisionTrackerMapCell>
+			(
+				this._cells,
+				() => new CollisionTrackerMapCell()
+			) // cellSource
 		);
-
-		this._cells = new Array<CollisionTrackerMapCell>();
 	}
 
 	static fromSize(size: Coords): CollisionTracker
@@ -43,7 +45,7 @@ export class CollisionTracker implements EntityProperty
 		var entityBoundable = entity.boundable();
 		var entityCollidable = entity.collidable();
 
-		var entityBounds = entityBoundable.bounds;
+		var entityBounds = entityBoundable.bounds as Box;
 		var cellsToAddEntityTo = this.collisionMap.cellsInBoxAddToList
 		(
 			entityBounds, ArrayHelper.clear(this._cells)
@@ -107,7 +109,7 @@ export class CollisionTracker implements EntityProperty
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
-		var cellsAll = this.collisionMap.cellSource as CollisionTrackerMapCell[];
+		var cellsAll = this._cells;
 		cellsAll.forEach(x =>
 		{
 			x.entitiesPresent = x.entitiesPresent.filter
@@ -116,15 +118,29 @@ export class CollisionTracker implements EntityProperty
 			)
 		});
 	}
+
+	// Equatable
+
+	equals(other: CollisionTracker): boolean { return false; } // todo
 }
 
-export class CollisionTrackerMapCell implements MapCell
+export class CollisionTrackerMapCell
+	implements MapCell, Clonable<CollisionTrackerMapCell>
 {
 	entitiesPresent: Entity[];
 
 	constructor()
 	{
 		this.entitiesPresent = new Array<Entity>();
+	}
+
+	// Clonable.
+
+	clone(): CollisionTrackerMapCell { return this; } // todo
+
+	overwriteWith(other: CollisionTrackerMapCell): CollisionTrackerMapCell
+	{
+		return this; // todo
 	}
 }
 

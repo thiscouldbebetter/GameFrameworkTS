@@ -2,11 +2,11 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualRepeating implements Visual
+export class VisualRepeating implements Visual<VisualRepeating>
 {
 	cellSize: Coords;
 	viewSize: Coords;
-	child: Visual;
+	child: VisualBase;
 	expandViewStartAndEndByCell: boolean;
 
 	viewSizeInCells: Coords;
@@ -18,7 +18,11 @@ export class VisualRepeating implements Visual
 	_endPosInCells: Coords;
 	_startPosInCells: Coords;
 
-	constructor(cellSize: Coords, viewSize: Coords, child: Visual, expandViewStartAndEndByCell: boolean)
+	constructor
+	(
+		cellSize: Coords, viewSize: Coords, child: VisualBase,
+		expandViewStartAndEndByCell: boolean
+	)
 	{
 		this.cellSize = cellSize;
 		this.viewSize = viewSize;
@@ -91,19 +95,19 @@ export class VisualRepeating implements Visual
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualRepeating
 	{
 		return this; // todo
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualRepeating): VisualRepeating
 	{
 		return this; // todo
 	}
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualRepeating
 	{
 		return this; // todo
 	}

@@ -10,7 +10,9 @@ var ThisCouldBeBetter;
                 this.bindingForItemText = bindingForItemText;
                 this.bindingForItemSelected = bindingForItemSelected;
                 this.bindingForItemValue = bindingForItemValue;
-                this.bindingForIsEnabled = bindingForIsEnabled || GameFramework.DataBinding.fromTrue();
+                this.bindingForIsEnabled =
+                    bindingForIsEnabled
+                        || GameFramework.DataBinding.fromTrueWithContext(null);
                 this.confirm = confirm;
                 this.widthInItems = widthInItems || 1;
                 var itemSpacingY = 1.2 * this.fontHeightInPixels; // hack
@@ -110,7 +112,10 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             isEnabled() {
-                return (this.bindingForIsEnabled == null ? true : this.bindingForIsEnabled.get());
+                var returnValue = (this.bindingForIsEnabled == null
+                    ? true
+                    : this.bindingForIsEnabled.get());
+                return returnValue;
             }
             itemSelected(itemToSet) {
                 var returnValue = itemToSet;
@@ -119,7 +124,10 @@ var ThisCouldBeBetter;
                         returnValue = this._itemSelected;
                     }
                     else {
-                        returnValue = (this.bindingForItemSelected.get == null ? this._itemSelected : this.bindingForItemSelected.get());
+                        returnValue =
+                            (this.bindingForItemSelected.get == null
+                                ? this._itemSelected
+                                : this.bindingForItemSelected.get());
                     }
                 }
                 else {
@@ -131,8 +139,9 @@ var ThisCouldBeBetter;
                         }
                         else {
                             valueToSet = this.bindingForItemValue.contextSet(this._itemSelected).get();
+                            this.bindingForItemValue.set(valueToSet);
                         }
-                        this.bindingForItemSelected.set(valueToSet);
+                        this.bindingForItemSelected.set(itemToSet);
                     }
                 }
                 return returnValue;
@@ -174,7 +183,7 @@ var ThisCouldBeBetter;
                 return this._itemSpacing.overwriteWithDimensions((this.size.x - scrollbarWidthVisible) / this.widthInItems, this._itemSpacing.y, 0);
             }
             items() {
-                return (this._items.get == null ? this._items : this._items.get());
+                return this._items.get();
             }
             mouseClick(clickPos) {
                 clickPos = this._mouseClickPos.overwriteWith(clickPos);
@@ -183,7 +192,8 @@ var ThisCouldBeBetter;
                     if (clickPos.y - this.pos.y <= this.scrollbar.handleSize.y) {
                         this.scrollbar.scrollUp();
                     }
-                    else if (clickPos.y - this.pos.y >= this.scrollbar.size.y - this.scrollbar.handleSize.y) {
+                    else if (clickPos.y - this.pos.y
+                        >= this.scrollbar.size.y - this.scrollbar.handleSize.y) {
                         this.scrollbar.scrollDown();
                     }
                 }

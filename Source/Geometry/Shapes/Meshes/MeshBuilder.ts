@@ -382,7 +382,7 @@ export class MeshBuilder
 
 		returnMesh.transform
 		(
-			new Transform_Scale(roomSize) as Transform
+			new Transform_Scale(roomSize)
 		).transform
 		(
 			new Transform_Translate(new Coords(0, 0, -roomSize.z))
@@ -542,17 +542,17 @@ export class MeshBuilder
 		var transformScaleSides = new Transform_Scale
 		(
 			new Coords(doorwayWidthReversedHalf, .5, 0)
-		) as Transform;
+		);
 
 		var transformScaleTop = new Transform_Scale
 		(
 			new Coords(doorwayWidthHalf, doorwayHeightReversed, 0)
-		) as Transform;
+		);
 
 		var transformScaleSidesDoorframe = new Transform_Scale
 		(
 			new Coords(wallThickness, doorwayHeight, 0)
-		) as Transform;
+		);
 
 		var materialName = material.name;
 

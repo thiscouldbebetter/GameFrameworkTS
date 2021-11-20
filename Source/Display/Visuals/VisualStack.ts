@@ -2,14 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualStack implements Visual
+export class VisualStack implements Visual<VisualStack>
 {
 	childSpacing: Coords;
-	children: Visual[];
+	children: VisualBase[];
 
 	private _posSaved: Coords;
 
-	constructor(childSpacing: Coords, children: Visual[])
+	constructor(childSpacing: Coords, children: VisualBase[])
 	{
 		this.childSpacing = childSpacing;
 		this.children = children;
@@ -25,9 +25,9 @@ export class VisualStack implements Visual
 
 		for (var i = 0; i < this.children.length; i++)
 		{
-			var child = this.children[i];
-			var wasChildVisible =
-				child.draw(uwpe, display) as boolean;
+			//var child = this.children[i];
+			var wasChildVisible = true; // hack
+				// child.draw(uwpe, display);
 			if (wasChildVisible)
 			{
 				drawPos.add(this.childSpacing);
@@ -39,22 +39,24 @@ export class VisualStack implements Visual
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualStack
 	{
-		return new VisualStack(this.childSpacing.clone(), ArrayHelper.clone(this.children));
+		return new VisualStack
+		(
+			this.childSpacing.clone(), ArrayHelper.clone(this.children)
+		);
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualStack): VisualStack
 	{
-		var otherAsVisualStack = other as VisualStack;
-		this.childSpacing.overwriteWith(otherAsVisualStack.childSpacing);
-		ArrayHelper.overwriteWith(this.children, otherAsVisualStack.children);
+		this.childSpacing.overwriteWith(other.childSpacing);
+		ArrayHelper.overwriteWith(this.children, other.children);
 		return this;
 	}
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualStack
 	{
 		this.children.forEach(x => transformToApply.transform(x));
 		return this;

@@ -13,7 +13,7 @@ export class Network
 		this.links = links;
 	}
 
-	static random(nodeCount: number, randomizer: Randomizer)
+	static random(nodeCount: number, randomizer: Randomizer): Network
 	{
 		var nodes = [];
 
@@ -34,9 +34,9 @@ export class Network
 		return returnValue;
 	}
 
-	nodesAllLinkClosest()
+	nodesAllLinkClosest(): Network
 	{
-		this.links = [];
+		this.links = new Array<NetworkLink>();
 		var nodesNotYetLinked = this.nodes.slice();
 		var nodesAlreadyLinked = [ nodesNotYetLinked[0] ];
 		nodesNotYetLinked.splice(0, 1);
@@ -89,12 +89,12 @@ export class Network
 		return this;
 	}
 
-	clone()
+	clone(): Network
 	{
 		return new Network(ArrayHelper.clone(this.nodes), ArrayHelper.clone(this.links));
 	}
 
-	overwriteWith(other: Network)
+	overwriteWith(other: Network): Network
 	{
 		ArrayHelper.overwriteWith(this.nodes, other.nodes);
 		ArrayHelper.overwriteWith(this.links, other.links);
@@ -103,7 +103,7 @@ export class Network
 
 	// Transformable.
 
-	transform(transformToApply: Transform)
+	transform(transformToApply: TransformBase): Network
 	{
 		this.nodes.forEach
 		(
@@ -136,14 +136,14 @@ class NetworkLink
 
 	// Clonable.
 
-	clone()
+	clone(): NetworkLink
 	{
 		return new NetworkLink(this.nodeIds.slice());
 	}
 
-	overwriteWith(other: NetworkLink)
+	overwriteWith(other: NetworkLink): NetworkLink
 	{
-		ArrayHelper.overwriteWith(this.nodeIds, other.nodeIds);
+		ArrayHelper.overwriteWithNonClonables(this.nodeIds, other.nodeIds);
 		this._nodes = null;
 		return this;
 	}
@@ -162,12 +162,12 @@ class NetworkNode
 
 	// Clonable.
 
-	clone()
+	clone(): NetworkNode
 	{
 		return new NetworkNode(this.id, this.pos.clone());
 	}
 
-	overwriteWith(other: NetworkNode)
+	overwriteWith(other: NetworkNode): NetworkNode
 	{
 		this.id = other.id;
 		this.pos.overwriteWith(other.pos);
@@ -175,7 +175,7 @@ class NetworkNode
 	}
 }
 
-export class VisualNetwork implements Visual
+export class VisualNetwork implements Visual<VisualNetwork>
 {
 	network: Network;
 
@@ -239,19 +239,19 @@ export class VisualNetwork implements Visual
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualNetwork
 	{
 		return this; // todo
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualNetwork): VisualNetwork
 	{
 		return this; // todo
 	}
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualNetwork
 	{
 		return this; // todo
 	}

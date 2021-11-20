@@ -1,7 +1,8 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ProjectileGenerator implements EntityProperty
+export class ProjectileGenerator
+	implements EntityProperty<ProjectileGenerator>
 {
 	name: string;
 	projectileGenerations: ProjectileGeneration[];
@@ -44,6 +45,11 @@ export class ProjectileGenerator implements EntityProperty
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
+
+	// Equatable
+
+	equals(other: ProjectileGenerator): boolean { return false; } // todo
+
 }
 
 export class ProjectileGeneration
@@ -53,12 +59,16 @@ export class ProjectileGeneration
 	speed: number;
 	ticksToLive: number;
 	damage: Damage;
-	visual: Visual;
+	visual: VisualBase;
 
 	constructor
 	(
-		radius: number, distanceInitial: number, speed: number,
-		ticksToLive: number, damage: Damage, visual: Visual
+		radius: number,
+		distanceInitial: number,
+		speed: number,
+		ticksToLive: number,
+		damage: Damage,
+		visual: VisualBase
 	)
 	{
 		this.radius = radius;
@@ -69,7 +79,7 @@ export class ProjectileGeneration
 		this.visual = visual;
 	}
 
-	static fromVisual(visual: Visual)
+	static fromVisual(visual: VisualBase)
 	{
 		return new ProjectileGeneration
 		(

@@ -46,6 +46,8 @@ var ThisCouldBeBetter;
             finalize(uwpe) { }
             initialize(uwpe) { }
             updateForTimerTick(uwpe) { }
+            // Equatable
+            equals(other) { return false; } // todo
             // Actions.
             static actionAccelerateDown() {
                 return new GameFramework.Action("AccelerateDown", 
@@ -85,20 +87,20 @@ var ThisCouldBeBetter;
                     var entityActor = uwpe.entity;
                     var actor = entityActor.actor();
                     var activity = actor.activity;
-                    var targetEntity = activity.target();
+                    var targetEntity = activity.targetEntity();
                     if (targetEntity == null) {
                         var place = uwpe.place;
                         var randomizer = uwpe.universe.randomizer;
                         var targetPos = GameFramework.Coords.create().randomize(randomizer).multiply(place.size);
-                        targetEntity = new GameFramework.Entity("Target", [GameFramework.Locatable.fromPos(targetPos)]);
-                        activity.targetSet(targetEntity);
+                        targetEntity = GameFramework.Locatable.fromPos(targetPos).toEntity();
+                        activity.targetEntitySet(targetEntity);
                     }
                     var movable = entityActor.movable();
                     var actorLocatable = entityActor.locatable();
                     var targetLocatable = targetEntity.locatable();
                     var distanceToTarget = actorLocatable.approachOtherWithAccelerationAndSpeedMax(targetLocatable, movable.accelerationPerTick, movable.speedMax);
                     if (distanceToTarget < movable.speedMax) {
-                        activity.targetSet(null);
+                        activity.targetEntityClear();
                     }
                 });
                 return returnValue;

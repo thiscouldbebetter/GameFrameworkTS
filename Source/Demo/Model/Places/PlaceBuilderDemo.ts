@@ -359,7 +359,7 @@ class PlaceBuilderDemo // Main.
 
 		// todo
 
-		var mapCellSource =
+		var mapCellSourceAsStrings = 
 		[
 			/*
 			"................................",
@@ -412,11 +412,11 @@ class PlaceBuilderDemo // Main.
 			"~~~~~~~~~~~~~~........::::::::::",
 			"~~~~~~~~~~~~........::::::::::::",
 			"~~~~~~~~~~~~.......:::::::::::::",
-		];
+		]
 		var mapSizeInCells = new Coords
 		(
-			mapCellSource[0].length,
-			mapCellSource.length,
+			mapCellSourceAsStrings[0].length,
+			mapCellSourceAsStrings.length,
 			1
 		);
 		var mapCellSize = size.clone().divide(mapSizeInCells).ceiling();
@@ -460,7 +460,7 @@ class PlaceBuilderDemo // Main.
 			Coords.fromXY(0, -1), Coords.fromXY(1, -1)
 		];
 
-		var colorToTerrainVisualByName = (colorName: string) =>
+		var colorToTerrainVisualByName = (colorName: string): VisualBase =>
 		{
 			var color = Color.byName(colorName);
 			var borderWidthAsFraction = .25;
@@ -479,7 +479,7 @@ class PlaceBuilderDemo // Main.
 
 			var isCenteredFalse = false;
 
-			var visualsByName = new Map<string,Visual>
+			var visualsByName = new Map<string,VisualBase>
 			([
 				[ "Center", new VisualRectangle(mapCellSize, color, null, isCenteredFalse) ],
 
@@ -705,7 +705,7 @@ class PlaceBuilderDemo // Main.
 				imageSizeInPixels.clone().half(),
 				tileSizeInPixels
 			);
-			var terrainVisualCenter: Visual = new VisualImageScaledPartial
+			var terrainVisualCenter: VisualBase = new VisualImageScaledPartial
 			(
 				terrainVisualImageCombined,
 				tileCenterBounds,
@@ -731,7 +731,7 @@ class PlaceBuilderDemo // Main.
 					tileOffsetInTilesHalf.clone().multiply(tileSizeInPixelsHalf),
 					tileSizeInPixelsHalf
 				);
-				var terrainVisual: Visual = new VisualImageScaledPartial
+				var terrainVisual: VisualBase = new VisualImageScaledPartial
 				(
 					terrainVisualImageCombined,
 					terrainVisualBounds,
@@ -885,32 +885,18 @@ class PlaceBuilderDemo // Main.
 			new Terrain("Snow", 	"*", 5, new Traversable(false), colorToTerrainVisualByName("White")),
 		]
 		var terrainsByName = ArrayHelper.addLookupsByName(terrains);
-		var terrainsByCode = ArrayHelper.addLookups(terrains, (x: Terrain) => x.code);
 
-		var map = new MapOfCells<any>
+		var mapCellSource = new MapOfCellsCellSourceTerrain
+		(
+			terrains,
+			mapCellSourceAsStrings
+		);
+
+		var map = new MapOfCells
 		(
 			"Terrarium",
 			mapSizeInCells,
 			mapCellSize,
-			null, // cellCreate
-			(map: MapOfCells<any>, cellPosInCells: any, cellToOverwrite: MapCell) => // cellAtPosInCells
-			{
-				if (cellPosInCells.isInRangeMax(map.sizeInCellsMinusOnes))
-				{
-					var cellCode = map.cellSource[cellPosInCells.y][cellPosInCells.x];
-					var cellTerrain = (terrainsByCode.get(cellCode) || terrains[0]);
-					var cellVisualName = cellTerrain.name;
-					var cellIsBlocking = cellTerrain.traversable.isBlocking;
-					var cellToOverwriteAsAny: any = cellToOverwrite;
-					cellToOverwriteAsAny.visualName = cellVisualName;
-					cellToOverwriteAsAny.isBlocking = cellIsBlocking;
-				}
-				else
-				{
-					cellToOverwrite = null;
-				}
-				return cellToOverwrite;
-			},
 			mapCellSource
 		);
 
@@ -1458,7 +1444,7 @@ class PlaceBuilderDemo // Main.
 	): Entity
 	{
 		var placeBuilder = this;
-		var loadable = new Loadable
+		var loadable = new LoadableProperty
 		(
 			(uwpe: UniverseWorldPlaceEntities) => // load
 			{
@@ -1720,7 +1706,7 @@ class PlaceBuilderDemo // Main.
 		return wallThickness;
 	}
 
-	entityBuildRadioMessage(visualForPortrait: Visual, message: string)
+	entityBuildRadioMessage(visualForPortrait: VisualBase, message: string)
 	{
 		return new Entity
 		(
@@ -1997,14 +1983,16 @@ class PlaceBuilderDemo // Main.
 
 				// todo
 				var projectileCollide = null;
-				var projectileDie = (u: Universe, w: World, p: Place, entityDying: Entity) =>
+				var projectileDie = (uwpe: UniverseWorldPlaceEntities) =>
 				{
 					var explosionRadius = 32;
 					var explosionVisual = VisualCircle.fromRadiusAndColorFill
 					(
 						explosionRadius, Color.byName("Yellow")
 					);
+
 					var explosionCollider = new Sphere(Coords.create(), explosionRadius);
+
 					var explosionCollide = (uwpe: UniverseWorldPlaceEntities) =>
 					{
 						var entityProjectile = uwpe.entity;
@@ -2018,6 +2006,9 @@ class PlaceBuilderDemo // Main.
 							);
 						}
 					};
+
+					var entityDying = uwpe.entity;
+
 					var explosionEntity = new Entity
 					(
 						"BombExplosion",
@@ -2276,7 +2267,7 @@ class PlaceBuilderDemo // Main.
 		entityDimension *= .75
 		var defnName = "Car";
 
-		var frames = new Array<Visual>();
+		var frames = new Array<VisualBase>();
 		var frameSizeScaled = new Coords(4, 3, 0).multiplyScalar(entityDimension);
 
 		var visualTileset = new VisualImageFromLibrary("Car");
@@ -3208,4 +3199,63 @@ class PlaceBuilderDemo // Main.
 		];
 		return entityDefns;
 	}
+}
+
+class MapOfCellsCellSourceTerrain
+	implements MapOfCellsCellSource<MapCellObstacle>
+{
+	terrains: Terrain[];
+	terrainsByCode: Map<string, Terrain>;
+	cellsAsStrings: string[];
+
+	constructor(terrains: Terrain[], cellsAsStrings: string[])
+	{
+		this.terrains = terrains;
+		this.terrainsByCode =
+			new Map(this.terrains.map(x => [x.code, x] ) );
+		this.cellsAsStrings = cellsAsStrings;
+	}
+
+	cellCreate(): MapCellObstacle
+	{
+		return MapCellObstacle.default();
+	}
+
+	cellAtPosInCells
+	(
+		map: MapOfCells<MapCellObstacle>,
+		cellPosInCells: Coords,
+		cellToOverwrite: MapCellObstacle
+	)
+	{
+		if (cellPosInCells.isInRangeMax(map.sizeInCellsMinusOnes))
+		{
+			var cellCode =
+				this.cellsAsStrings[cellPosInCells.y][cellPosInCells.x];
+			var cellTerrain =
+				(this.terrainsByCode.get(cellCode) || this.terrains[0]);
+			var cellVisualName = cellTerrain.name;
+			var cellIsBlocking = cellTerrain.traversable.isBlocking;
+			cellToOverwrite.visualName = cellVisualName;
+			cellToOverwrite.isBlocking = cellIsBlocking;
+		}
+		else
+		{
+			cellToOverwrite = null;
+		}
+		return cellToOverwrite;
+	}
+
+	// Clonable.
+
+	clone(): MapOfCellsCellSourceTerrain { return this; }
+
+	overwriteWith
+	(
+		other: MapOfCellsCellSourceTerrain
+	): MapOfCellsCellSourceTerrain
+	{
+		return this;
+	}
+
 }

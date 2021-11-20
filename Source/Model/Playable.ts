@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Playable implements EntityProperty
+export class Playable implements EntityProperty<Playable>
 {
 	static toControlMenu
 	(
@@ -26,7 +26,10 @@ export class Playable implements EntityProperty
 				Coords.fromXY(marginX, labelSize.y), // pos
 				labelSize.clone(),
 				false, // isTextCentered
-				"Profile: " + universe.profile.name,
+				DataBinding.fromContext
+				(
+					"Profile: " + universe.profile.name
+				),
 				fontHeight
 			),
 
@@ -36,7 +39,10 @@ export class Playable implements EntityProperty
 				Coords.fromXY(marginX, labelSize.y * 2), // pos
 				labelSize.clone(),
 				false, // isTextCentered
-				"Time Playing: " + timePlayingAsString,
+				DataBinding.fromContext
+				(
+					"Time Playing: " + timePlayingAsString
+				),
 				fontHeight
 			)
 		];
@@ -50,7 +56,11 @@ export class Playable implements EntityProperty
 				Coords.fromXY(marginX, labelSize.y * 3), // pos
 				labelSize.clone(),
 				false, // isTextCentered
-				"Health: " + entity.killable().integrity + "/" + entity.killable().integrityMax,
+				DataBinding.fromContext
+				(
+					"Health: " + entity.killable().integrity
+					+ "/" + entity.killable().integrityMax
+				),
 				fontHeight
 			);
 			controlsForStatusFields.push(labelHealth);
@@ -109,7 +119,11 @@ export class Playable implements EntityProperty
 				Coords.fromXY(marginX, labelSize.y * 4), // pos
 				labelSize.clone(),
 				false, // isTextCentered
-				"Experience: " + entity.skillLearner().learningAccumulated,
+				DataBinding.fromContext
+				(
+					"Experience: "
+					+ entity.skillLearner().learningAccumulated
+				),
 				fontHeight
 			);
 			controlsForStatusFields.push(labelExperience);
@@ -148,7 +162,7 @@ export class Playable implements EntityProperty
 			universe.venueNext = venueNext;
 		};
 
-		var returnValue = new ControlTabbed
+		var returnValue = new ControlTabbed<Entity>
 		(
 			"tabbedItems",
 			Coords.create(), // pos
@@ -156,7 +170,8 @@ export class Playable implements EntityProperty
 			tabButtonSize,
 			controlsForTabs,
 			fontHeight,
-			back
+			back,
+			entity // context
 		);
 		return returnValue;
 	}
@@ -212,9 +227,9 @@ export class Playable implements EntityProperty
 			null, // "F", // abbreviation
 			playerVisualBarSize,
 			Color.Instances().Brown,
-			DataBinding.fromGet((c: any) => starvable.satiety),
+			DataBinding.fromGet((c: Entity) => starvable.satiety),
 			null, // amountThreshold
-			DataBinding.fromGet((c: any) => starvable.satietyMax),
+			DataBinding.fromGet( (c: Entity) => starvable.satietyMax ),
 			null, // fractionBelowWhichToShow
 			null, // colorForBorderAsValueBreakGroup
 			null // text
@@ -238,9 +253,18 @@ export class Playable implements EntityProperty
 			null, // "S", // abbreviation
 			playerVisualBarSize,
 			Color.Instances().Yellow,
-			DataBinding.fromGet( (c: any) => tirable.stamina),
-			DataBinding.fromGet( (c: any) => tirable.staminaMaxRemainingBeforeSleep),
-			DataBinding.fromGet( (c: any) => tirable.staminaMaxAfterSleep),
+			DataBinding.fromGet
+			(
+				(c: Entity) => tirable.stamina
+			),
+			DataBinding.fromGet
+			(
+				(c: Entity) => tirable.staminaMaxRemainingBeforeSleep
+			),
+			DataBinding.fromGet
+			(
+				(c: Entity) => tirable.staminaMaxAfterSleep,
+			),
 			null, // fractionBelowWhichToShow
 			null, // colorForBorderAsValueBreakGroup
 			null // text
@@ -288,14 +312,16 @@ export class Playable implements EntityProperty
 			null, // "T", // abbreviation
 			playerVisualBarSize,
 			Color.Instances().Cyan,
-			DataBinding.fromGet
+			DataBinding.fromContextAndGet
 			(
-				(c: any) => world.timerTicksSoFar % timerTicksPerGameDay
+				entity,
+				(c: Entity) => world.timerTicksSoFar % timerTicksPerGameDay
 			),
 			null, // threshold
-			DataBinding.fromGet
+			DataBinding.fromContextAndGet
 			(
-				(c: any) => timerTicksPerGameDay
+				entity,
+				(c: Entity) => timerTicksPerGameDay
 			),
 			null, // fractionBelowWhichToShow
 			null, // colorForBorderAsValueBreakGroup
@@ -320,7 +346,7 @@ export class Playable implements EntityProperty
 
 		var childSpacing = Coords.fromXY(0, playerVisualBarSize.y * 2);
 
-		var playerVisualStatusInfo: Visual = new VisualGroup
+		var playerVisualStatusInfo: VisualBase = new VisualGroup
 		([
 			playerVisualHealthBarPlusIcon,
 			new VisualOffset
@@ -416,9 +442,8 @@ export class Playable implements EntityProperty
 				buttonText,
 				fontHeightInPixels,
 				false, // hasBorder
-				true, // isEnabled,
+				DataBinding.fromTrue(), // isEnabled,
 				buttonClicks[i],
-				null, // context
 				false // canBeHeldDown
 			);
 
@@ -473,6 +498,9 @@ export class Playable implements EntityProperty
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 
+	// Equatable
+
+	equals(other: Playable): boolean { return false; } // todo
 }
 
 }

@@ -4,7 +4,7 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class EntityBuilder
 {
-	messageFloater(text: string, pos: Coords, color: Color)
+	messageFloater(text: string, pos: Coords, color: Color): Entity
 	{
 		var ticksToLive = 32;
 		var riseSpeed = -1;

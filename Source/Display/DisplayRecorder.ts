@@ -73,7 +73,7 @@ export class DisplayRecorder
 		var displayAsCanvas = displayAsImage.systemImage;
 		displayAsCanvas.toBlob
 		(
-			(displayAsBlob: any) =>
+			(displayAsBlob: Blob) =>
 			{
 				var reader = new FileReader();
 				reader.onload = () =>

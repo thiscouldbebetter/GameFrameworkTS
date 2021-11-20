@@ -475,7 +475,9 @@ export class Display3D implements Display
 
 	drawCircleWithGradient
 	(
-		center: Coords, radius: number, gradientFill: ValueBreakGroup,
+		center: Coords,
+		radius: number,
+		gradientFill: ValueBreakGroup<Color>,
 		colorBorder: Color
 	): void
 	{

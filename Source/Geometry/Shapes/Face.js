@@ -46,9 +46,6 @@ var ThisCouldBeBetter;
                 }
                 return this._edges;
             }
-            equals(other) {
-                return GameFramework.ArrayHelper.equals(this.vertices, other.vertices);
-            }
             plane() {
                 if (this._plane == null) {
                     this._plane = new GameFramework.Plane(GameFramework.Coords.create(), 0);
@@ -64,7 +61,12 @@ var ThisCouldBeBetter;
                 GameFramework.ArrayHelper.overwriteWith(this.vertices, other.vertices);
                 return this;
             }
+            // Equatable
+            equals(other) {
+                return GameFramework.ArrayHelper.equals(this.vertices, other.vertices);
+            }
             // ShapeBase.
+            collider() { return null; }
             locate(loc) {
                 throw new Error("Not implemented!");
             }

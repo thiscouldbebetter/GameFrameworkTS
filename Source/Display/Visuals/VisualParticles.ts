@@ -2,15 +2,15 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualParticles implements Visual
+export class VisualParticles implements Visual<VisualParticles>
 {
 	name: string;
 	ticksToGenerate: number;
 	particlesPerTick: number;
 	particleTicksToLiveGet: () => number;
 	particleVelocityGet: () => Coords;
-	transformToApplyEachTick: Transform;
-	particleVisual: Visual;
+	transformToApplyEachTick: TransformBase;
+	particleVisual: VisualBase;
 
 	ticksSoFar: number;
 	particleEntities: Entity[];
@@ -22,8 +22,8 @@ export class VisualParticles implements Visual
 		particlesPerTick: number,
 		particleTicksToLiveGet: () => number,
 		particleVelocityGet: () => Coords,
-		transformToApplyEachTick: Transform,
-		particleVisual: Visual
+		transformToApplyEachTick: TransformBase,
+		particleVisual: VisualBase
 	)
 	{
 		this.name = name;
@@ -107,19 +107,19 @@ export class VisualParticles implements Visual
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualParticles
 	{
 		return this; // todo
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualParticles): VisualParticles
 	{
 		return this; // todo
 	}
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualParticles
 	{
 		return this; // todo
 	}

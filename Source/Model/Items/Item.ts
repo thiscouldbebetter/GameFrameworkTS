@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Item implements EntityProperty
+export class Item implements EntityProperty<Item>
 {
 	defnName: string;
 	quantity: number;
@@ -50,18 +50,11 @@ export class Item implements EntityProperty
 		return this.quantity * this.defn(world).tradeValue;
 	}
 
-	use(uwpe: UniverseWorldPlaceEntities): any
+	use(uwpe: UniverseWorldPlaceEntities): void
 	{
-		var returnValue = null;
+		uwpe.entity2 = this.toEntity(uwpe);
 		var defn = this.defn(uwpe.world);
-		if (defn.use != null)
-		{
-			returnValue = defn.use
-			(
-				uwpe
-			);
-		}
-		return returnValue;
+		defn.use(uwpe);
 	}
 
 	// cloneable
@@ -71,11 +64,23 @@ export class Item implements EntityProperty
 		return new Item(this.defnName, this.quantity);
 	}
 
+	overwriteWith(other: Item): Item
+	{
+		this.defnName = other.defnName;
+		this.quantity = other.quantity;
+		return this;
+	}
+
 	// EntityProperty.
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
+
+	// Equatable
+
+	equals(other: Item): boolean { return false; } // todo
+
 }
 
 }

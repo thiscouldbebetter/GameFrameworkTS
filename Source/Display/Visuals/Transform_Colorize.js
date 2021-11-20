@@ -8,16 +8,16 @@ var ThisCouldBeBetter;
                 this.colorFill = colorFill;
                 this.colorBorder = colorBorder;
             }
+            clone() { return this; } // todo
             overwriteWith(other) {
                 return this; // todo
             }
             transform(transformable) {
-                var transformableAsAny = transformable;
-                if (transformableAsAny.colorFill == null) {
+                var transformableAsColorable = transformable;
+                if (transformableAsColorable == null) {
                     transformable.transform(this);
                 }
                 else {
-                    var transformableAsColorable = transformableAsAny;
                     var colorFill = transformableAsColorable.colorFill;
                     var colorBorder = transformableAsColorable.colorBorder;
                     if (colorFill != null && this.colorFill != null) {

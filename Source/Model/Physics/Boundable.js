@@ -24,6 +24,8 @@ var ThisCouldBeBetter;
                 this.bounds.overwriteWith(other.bounds);
                 return this;
             }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.Boundable = Boundable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

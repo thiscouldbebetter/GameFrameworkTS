@@ -14,13 +14,13 @@ var ThisCouldBeBetter;
                 return new VisualTransform(this.transformToApply, this.child.clone());
             }
             overwriteWith(other) {
-                var otherAsVisualTransform = other;
-                this.child.overwriteWith(otherAsVisualTransform.child);
+                this.child.overwriteWith(other.child);
                 return this;
             }
             // Transformable.
             transform(transformToApply) {
-                return this.child.transform(transformToApply);
+                transformToApply.transform(this.child);
+                return this;
             }
             // Visual.
             draw(uwpe, display) {

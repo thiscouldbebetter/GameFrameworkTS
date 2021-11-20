@@ -7,6 +7,9 @@ var ThisCouldBeBetter;
             constructor(quarterTurnsToRotate) {
                 this.quarterTurnsToRotate = quarterTurnsToRotate;
             }
+            clone() {
+                return new Transform_RotateRight(this.quarterTurnsToRotate);
+            }
             overwriteWith(other) {
                 this.quarterTurnsToRotate = other.quarterTurnsToRotate;
                 return this;

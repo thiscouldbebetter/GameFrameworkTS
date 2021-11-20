@@ -24,8 +24,7 @@ var ThisCouldBeBetter;
             clone() {
                 return new VisualCircle(this.radius, this.colorFill, this.colorBorder, this.borderThickness);
             }
-            overwriteWith(otherAsVisual) {
-                var other = otherAsVisual;
+            overwriteWith(other) {
                 this.radius = other.radius;
                 this.colorFill = other.colorFill;
                 this.colorBorder = other.colorBorder;

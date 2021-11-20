@@ -6,10 +6,10 @@ export class Entity //
 {
 	id: number;
 	name: string;
-	properties: EntityProperty[];
-	propertiesByName: Map<string, EntityProperty>;
+	properties: EntityPropertyBase[];
+	propertiesByName: Map<string, EntityPropertyBase>;
 
-	constructor(name: string, properties: EntityProperty[])
+	constructor(name: string, properties: EntityPropertyBase[])
 	{
 		this.id = IDHelper.Instance().idNext();
 		this.name = name;
@@ -54,12 +54,15 @@ export class Entity //
 		return this;
 	}
 
-	propertyAdd(propertyToAdd: EntityProperty): Entity
+	propertyAdd(propertyToAdd: EntityPropertyBase): Entity
 	{
 		return this.propertyAddForPlace(propertyToAdd, null);
 	}
 
-	propertyAddForPlace(propertyToAdd: EntityProperty, place: Place): Entity
+	propertyAddForPlace
+	(
+		propertyToAdd: EntityPropertyBase, place: Place
+	): Entity
 	{
 		this.properties.push(propertyToAdd);
 		this.propertiesByName.set(propertyToAdd.constructor.name, propertyToAdd);
@@ -75,12 +78,15 @@ export class Entity //
 		return this;
 	}
 
-	propertyByName(name: string): EntityProperty
+	propertyByName(name: string): EntityPropertyBase
 	{
 		return this.propertiesByName.get(name);
 	}
 
-	propertyRemoveForPlace(propertyToRemove: EntityProperty, place: Place): Entity
+	propertyRemoveForPlace
+	(
+		propertyToRemove: EntityPropertyBase, place: Place
+	): Entity
 	{
 		ArrayHelper.remove(this.properties, propertyToRemove);
 		this.propertiesByName.delete(propertyToRemove.constructor.name);
@@ -114,7 +120,7 @@ export class Entity //
 	clone(): Entity
 	{
 		var nameCloned = this.name; // + IDHelper.Instance().idNext();
-		var propertiesCloned = [];
+		var propertiesCloned = new Array<EntityPropertyBase>();
 		for (var i = 0; i < this.properties.length; i++)
 		{
 			var property = this.properties[i];
@@ -123,7 +129,7 @@ export class Entity //
 			(
 				propertyAsAny.clone == null ?
 				propertyAsAny : propertyAsAny.clone()
-			) as EntityProperty;
+			) as EntityPropertyBase;
 			propertiesCloned.push(propertyCloned);
 		}
 		var returnValue = new Entity
@@ -151,7 +157,7 @@ export class Entity //
 	actor(): Actor { return this.propertyByName(Actor.name) as Actor; }
 	animatable(): Animatable2 { return this.propertyByName(Animatable2.name) as Animatable2; }
 	audible(): Audible { return this.propertyByName(Audible.name) as Audible; }
-	boundable(): Boundable { return this.propertyByName(Boundable.name) as Boundable; }
+	boundable(): BoundableBase { return this.propertyByName(Boundable.name) as BoundableBase; }
 	camera(): Camera { return this.propertyByName(Camera.name) as Camera; }
 	collidable(): Collidable { return this.propertyByName(Collidable.name) as Collidable; }
 	constrainable(): Constrainable { return this.propertyByName(Constrainable.name) as Constrainable; }
@@ -173,9 +179,10 @@ export class Entity //
 	itemStore(): ItemStore { return this.propertyByName(ItemStore.name) as ItemStore; }
 	journalKeeper(): JournalKeeper { return this.propertyByName(JournalKeeper.name) as JournalKeeper; }
 	killable(): Killable { return this.propertyByName(Killable.name) as Killable; }
-	loadable(): Loadable { return this.propertyByName(Loadable.name) as Loadable; }
+	loadable(): LoadableProperty { return this.propertyByName(LoadableProperty.name) as LoadableProperty; }
 	locatable(): Locatable { return this.propertyByName(Locatable.name) as Locatable; }
 	movable(): Movable { return this.propertyByName(Movable.name) as Movable; }
+	namable(): NamableProperty { return this.propertyByName(NamableProperty.name) as NamableProperty; }
 	obstacle(): Obstacle { return this.propertyByName(Obstacle.name) as Obstacle; }
 	phased(): Phased { return this.propertyByName(Phased.name) as Phased; }
 	recurrent(): Recurrent { return this.propertyByName(Recurrent.name) as Recurrent; }

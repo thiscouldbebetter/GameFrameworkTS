@@ -3,7 +3,7 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Loadable {
+        class LoadableProperty {
             constructor(load, unload) {
                 this.isLoaded = false;
                 this._load = load;
@@ -34,7 +34,9 @@ var ThisCouldBeBetter;
             updateForTimerTick(uwpe) {
                 // Do nothing.
             }
+            // Equatable
+            equals(other) { return false; } // todo
         }
-        GameFramework.Loadable = Loadable;
+        GameFramework.LoadableProperty = LoadableProperty;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
 })(ThisCouldBeBetter || (ThisCouldBeBetter = {}));

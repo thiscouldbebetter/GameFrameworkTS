@@ -2,9 +2,9 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export interface Interpolatable
+export interface Interpolatable<T extends Interpolatable<T>>
 {
-	interpolateWith(otherAsAny: any, fractionOfProgressTowardOther: number): any;
+	interpolateWith(other: T, fractionOfProgressTowardOther: number): T;
 }
 
 }

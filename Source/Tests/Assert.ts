@@ -4,12 +4,13 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Assert
 {
-	static areEqual(objectExpected: any, objectActual: any): void
+	static areEqual<T extends Equatable<T>>(objectExpected: T, objectActual: T): void
 	{
 		var areExpectedAndActualEqual = this.areObjectsEqual
 		(
 			objectExpected, objectActual
 		);
+
 		if (areExpectedAndActualEqual == false)
 		{
 			var errorMessage = 
@@ -20,7 +21,10 @@ export class Assert
 		}
 	}
 
-	static areNotEqual(objectExpected: any, objectActual: any): void
+	static areNotEqual<T extends Equatable<T>>
+	(
+		objectExpected: T, objectActual: T
+	): void
 	{
 		var areExpectedAndActualEqual = this.areObjectsEqual
 		(
@@ -42,7 +46,7 @@ export class Assert
 		}
 	}
 
-	static isNotNull(valueToTest: any): void
+	static isNotNull<T>(valueToTest: T): void
 	{
 		if (valueToTest == null)
 		{
@@ -50,7 +54,7 @@ export class Assert
 		}
 	}
 
-	static isNull(valueToTest: any): void
+	static isNull<T>(valueToTest: T): void
 	{
 		if (valueToTest != null)
 		{
@@ -81,7 +85,10 @@ export class Assert
 
 	// Helper methods.
 
-	private static areObjectsEqual(objectExpected: any, objectActual: any): boolean
+	private static areObjectsEqual<T extends Equatable<T>>
+	(
+		objectExpected: T, objectActual: T
+	): boolean
 	{
 		var areExpectedAndActualEqual;
 
@@ -91,9 +98,7 @@ export class Assert
 		}
 		else if
 		(
-			objectExpected.equals != null
-			&& objectActual.equals != null
-			&& objectExpected.equals(objectActual)
+			objectExpected.equals(objectActual)
 		)
 		{
 			areExpectedAndActualEqual = true;

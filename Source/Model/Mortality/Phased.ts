@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Phased implements EntityProperty
+export class Phased implements EntityProperty<Phased>
 {
 	phaseCurrentIndex: number;
 	ticksOnPhaseCurrent: number;
@@ -106,6 +106,11 @@ export class Phased implements EntityProperty
 		this.ticksOnPhaseCurrent = other.ticksOnPhaseCurrent;
 		return this;
 	}
+
+	// Equatable
+
+	equals(other: Phased): boolean { return false; } // todo
+
 }
 
 export class Phase

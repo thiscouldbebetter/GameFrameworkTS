@@ -21,6 +21,8 @@ var ThisCouldBeBetter;
             overwriteWith(other) {
                 return this; // todo
             }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.Routable = Routable;
         class Route {

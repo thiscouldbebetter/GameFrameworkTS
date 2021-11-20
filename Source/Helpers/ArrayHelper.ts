@@ -3,13 +3,13 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class ArrayHelper
 {
-	static add(array: any[], element: any): any[]
+	static add<T>(array: T[], element: T): T[]
 	{
 		array.push(element);
 		return array;
 	}
 
-	static addMany(array: any[], elements: any[]): any[]
+	static addMany<T>(array: T[], elements: T[]): T[]
 	{
 		for (var i = 0; i < elements.length; i++)
 		{
@@ -41,7 +41,7 @@ export class ArrayHelper
 
 	static addLookupsMultiple<K, E>
 	(
-		array: any, getKeysForElement: (e:E) => Array<K>
+		array: E[], getKeysForElement: (e:E) => Array<K>
 	): Map<K, E>
 	{
 		var returnLookup = new Map<K, E>();
@@ -58,7 +58,7 @@ export class ArrayHelper
 		return returnLookup;
 	}
 
-	static append(array: any[], other: any[]): any[]
+	static append<T>(array: T[], other: T[]): T[]
 	{
 		for (var i = 0; i < other.length; i++)
 		{
@@ -68,7 +68,10 @@ export class ArrayHelper
 		return array;
 	}
 
-	static areEqual(array0: any[], array1: any[]): boolean
+	static areEqual<T extends Equatable<T>>
+	(
+		array0: T[], array1: T[]
+	): boolean
 	{
 		var areArraysEqual = true;
 
@@ -82,16 +85,44 @@ export class ArrayHelper
 			{
 				var element0 = array0[i];
 				var element1 = array1[i];
+
 				if (element0 == element1)
 				{
 					// Do nothing.
 				}
-				else if
-				(
-					element0.equals != null
-					&& element1.equals != null
-					&& element0.equals(element1)
-				)
+				else if (element0.equals(element1))
+				{
+					// Do nothing.
+				}
+				else
+				{
+					areArraysEqual = false;
+				}
+			}
+		}
+
+		return areArraysEqual;
+	}
+
+	static areEqualNonEquatable<T>
+	(
+		array0: T[], array1: T[]
+	): boolean
+	{
+		var areArraysEqual = true;
+
+		if (array0.length != array1.length)
+		{
+			areArraysEqual = false;
+		}
+		else
+		{
+			for (var i = 0; i < array0.length; i++)
+			{
+				var element0 = array0[i];
+				var element1 = array1[i];
+
+				if (element0 == element1)
 				{
 					// Do nothing.
 				}
@@ -111,34 +142,34 @@ export class ArrayHelper
 		return areArraysEqual;
 	}
 
-	static clear(array: any)
+	static clear<T>(array: T[])
 	{
 		array.length = 0;
 		return array;
 	}
 
-	static clone(array: any)
+	static clone<T extends Clonable<T>>(array: T[])
 	{
-		var returnValue: any = null;
+		var returnValues: T[] = null;
 
 		if (array != null)
 		{
-			returnValue = [];
+			returnValues = new Array<T>();
 
 			for (var i = 0; i < array.length; i++)
 			{
 				var element = array[i];
 				var elementCloned = element.clone();
-				returnValue.push(elementCloned);
+				returnValues.push(elementCloned);
 			}
 		}
 
-		return returnValue;
+		return returnValues;
 	}
 
-	static flattenArrayOfArrays(arrayOfArrays: any[][]): any[]
+	static flattenArrayOfArrays<T>(arrayOfArrays: T[][]): T[]
 	{
-		var arrayFlattened: any[] = [];
+		var arrayFlattened = new Array<T>();
 
 		for (var i = 0; i < arrayOfArrays.length; i++)
 		{
@@ -150,12 +181,15 @@ export class ArrayHelper
 		return arrayFlattened;
 	}
 
-	static contains(array: any, elementToFind: any): boolean
+	static contains<T>(array: T[], elementToFind: T): boolean
 	{
 		return (array.indexOf(elementToFind) >= 0);
 	}
 
-	static equals(array: any[], other: any[]): boolean
+	static equals<T extends Equatable<T>>
+	(
+		array: T[], other: T[]
+	): boolean
 	{
 		var areEqualSoFar;
 
@@ -178,10 +212,10 @@ export class ArrayHelper
 		return areEqualSoFar;
 	}
 
-	static insertElementAfterOther
+	static insertElementAfterOther<T>
 	(
-		array: any[], elementToInsert: any, other: any
-	): any[]
+		array: T[], elementToInsert: T, other: T
+	): T[]
 	{
 		var index = array.indexOf(other);
 		if (index >= 0)
@@ -195,18 +229,18 @@ export class ArrayHelper
 		return array;
 	}
 
-	static insertElementAt
+	static insertElementAt<T>
 	(
-		array: any[], element: any, index: number
-	): any[]
+		array: T[], element: T, index: number
+	): T[]
 	{
 		array.splice(index, 0, element);
 		return array;
 	}
 
-	static intersectArrays(array0: any[], array1: any[]): any[]
+	static intersectArrays<T>(array0: T[], array1: T[]): T[]
 	{
-		var elementsInBothArrays = new Array<any>();
+		var elementsInBothArrays = new Array<T>();
 
 		for (var i = 0; i < array0.length; i++)
 		{
@@ -221,26 +255,36 @@ export class ArrayHelper
 		return elementsInBothArrays;
 	}
 
-	static overwriteWith(array: any[], other: any[]): any[]
+	static overwriteWith<T extends Clonable<T>>
+	(
+		array: T[], other: T[]
+	): T[]
 	{
 		for (var i = 0; i < array.length; i++)
 		{
 			var elementThis = array[i];
 			var elementOther = other[i];
-			if (elementThis.overwriteWith == null)
-			{
-				array[i] = elementOther;
-			}
-			else
-			{
-				elementThis.overwriteWith(elementOther);
-			}
+			elementThis.overwriteWith(elementOther);
 		}
 
 		return array;
 	}
 
-	static prepend(array: any, other: any): any[]
+	static overwriteWithNonClonables<T>
+	(
+		array: T[], other: T[]
+	): T[]
+	{
+		for (var i = 0; i < array.length; i++)
+		{
+			var elementOther = other[i];
+			array[i] = elementOther;
+		}
+
+		return array;
+	}
+
+	static prepend<T>(array: T[], other: T[]): T[]
 	{
 		for (var i = 0; i < other.length; i++)
 		{
@@ -250,12 +294,12 @@ export class ArrayHelper
 		return array;
 	}
 
-	static random(array: any, randomizer: Randomizer): any
+	static random<T>(array: T[], randomizer: Randomizer): T
 	{
 		return array[ Math.floor(randomizer.getNextRandom() * array.length) ];
 	}
 
-	static remove(array: any[], elementToRemove: any): any[]
+	static remove<T>(array: T[], elementToRemove: T): T[]
 	{
 		var indexToRemoveAt = array.indexOf(elementToRemove);
 		if (indexToRemoveAt >= 0)
@@ -265,7 +309,7 @@ export class ArrayHelper
 		return array;
 	}
 
-	static removeAt(array: any, index: number): any[]
+	static removeAt<T>(array: T[], index: number): T[]
 	{
 		array.splice(index, 1);
 		return array;

@@ -10,7 +10,7 @@ export class InputHelper implements Platformable
 	mouseMovePosNext: Coords;
 	mouseMovePosPrev: Coords;
 
-	gamepadsConnected: any;
+	gamepadsConnected: InputGamepad[];
 	inputNamesLookup: Map<string, string>;
 	inputsPressed: Input[];
 	inputsPressedByName: Map<string, Input>;
@@ -232,7 +232,7 @@ export class InputHelper implements Platformable
 
 	// events - keyboard
 
-	handleEventKeyDown(event: any): void
+	handleEventKeyDown(event: KeyboardEvent): void
 	{
 		var inputPressed = event.key;
 
@@ -249,7 +249,7 @@ export class InputHelper implements Platformable
 		{
 			inputPressed = "__";
 		}
-		else if (isNaN(inputPressed) == false)
+		else if (parseFloat(inputPressed) == null)
 		{
 			inputPressed = "_" + inputPressed;
 		}
@@ -257,7 +257,7 @@ export class InputHelper implements Platformable
 		this.inputAdd(inputPressed);
 	}
 
-	handleEventKeyUp(event: any): void
+	handleEventKeyUp(event: KeyboardEvent): void
 	{
 		var inputReleased = event.key;
 		if (inputReleased == " ")
@@ -268,7 +268,7 @@ export class InputHelper implements Platformable
 		{
 			inputReleased = "__";
 		}
-		else if (isNaN(inputReleased) == false)
+		else if (parseFloat(inputReleased) == null)
 		{
 			inputReleased = "_" + inputReleased;
 		}
@@ -278,9 +278,9 @@ export class InputHelper implements Platformable
 
 	// events - mouse
 
-	handleEventMouseDown(event: any): void
+	handleEventMouseDown(event: MouseEvent): void
 	{
-		var canvas = event.target;
+		var canvas = event.target as HTMLCanvasElement;
 		var canvasBox = canvas.getBoundingClientRect();
 		this.mouseClickPos.overwriteWithDimensions
 		(
@@ -291,9 +291,9 @@ export class InputHelper implements Platformable
 		this.inputAdd(Input.Names().MouseClick);
 	}
 
-	handleEventMouseMove(event: any): void
+	handleEventMouseMove(event: MouseEvent): void
 	{
-		var canvas = event.target;
+		var canvas = event.target as HTMLCanvasElement;
 		var canvasBox = canvas.getBoundingClientRect();
 		this.mouseMovePosNext.overwriteWithDimensions
 		(
@@ -310,7 +310,7 @@ export class InputHelper implements Platformable
 		}
 	}
 
-	handleEventMouseUp(event: any): void
+	handleEventMouseUp(event: MouseEvent): void
 	{
 		this.inputRemove(Input.Names().MouseClick);
 	}
@@ -325,28 +325,60 @@ export class InputHelper implements Platformable
 			var systemGamepad = systemGamepads[i];
 			if (systemGamepad != null)
 			{
-				var gamepad = new Gamepad(); // todo
+				var gamepad = new InputGamepad(i, systemGamepad); // todo
 				this.gamepadsConnected.push(gamepad);
 			}
 		}
 	}
 
-	systemGamepads(): any
+	systemGamepads(): Gamepad[]
 	{
 		return navigator.getGamepads();
 	}
 
 	// Platformable.
 
-	toDomElement(platformHelper: PlatformHelper): any
+	toDomElement(platformHelper: PlatformHelper): HTMLElement
 	{
 		document.body.onkeydown = this.handleEventKeyDown.bind(this);
 		document.body.onkeyup = this.handleEventKeyUp.bind(this);
-		var divMain = (platformHelper == null ? document.getElementById("divMain") : platformHelper.divMain);
+		var divMain =
+		(
+			platformHelper == null
+			? document.getElementById("divMain")
+			: platformHelper.divMain
+		);
 		divMain.onmousedown = this.handleEventMouseDown.bind(this);
 		divMain.onmouseup = this.handleEventMouseUp.bind(this);
-		divMain.onmousemove = (this.isMouseMovementTracked ? this.handleEventMouseMove.bind(this) : null);
+		divMain.onmousemove =
+		(
+			this.isMouseMovementTracked
+			? this.handleEventMouseMove.bind(this)
+			: null
+		);
 		return null;
+	}
+}
+
+export class InputGamepad
+{
+	index: number
+	systemGamepad: Gamepad;
+	buttonsPressed: unknown[];
+	axisDisplacements: unknown[];
+
+	constructor(index: number, systemGamepad: Gamepad)
+	{
+		this.index = index;
+		this.systemGamepad = systemGamepad;
+
+		this.buttonsPressed = new Array<any>();
+		this.axisDisplacements = new Array<number>();
+	}
+
+	updateFromSystemGamepad(systemGamepad: Gamepad): void
+	{
+		// todo
 	}
 }
 

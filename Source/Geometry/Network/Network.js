@@ -22,7 +22,7 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             nodesAllLinkClosest() {
-                this.links = [];
+                this.links = new Array();
                 var nodesNotYetLinked = this.nodes.slice();
                 var nodesAlreadyLinked = [nodesNotYetLinked[0]];
                 nodesNotYetLinked.splice(0, 1);
@@ -86,7 +86,7 @@ var ThisCouldBeBetter;
                 return new NetworkLink(this.nodeIds.slice());
             }
             overwriteWith(other) {
-                GameFramework.ArrayHelper.overwriteWith(this.nodeIds, other.nodeIds);
+                GameFramework.ArrayHelper.overwriteWithNonClonables(this.nodeIds, other.nodeIds);
                 this._nodes = null;
                 return this;
             }

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ItemStore implements EntityProperty
+export class ItemStore implements EntityProperty<ItemStore>
 {
 	itemDefnNameCurrency: string;
 
@@ -75,6 +75,10 @@ export class ItemStore implements EntityProperty
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 
+	// Equatable
+
+	equals(other: ItemStore): boolean { return false; } // todo
+
 	// Controllable.
 
 	toControl
@@ -133,7 +137,7 @@ export class ItemStore implements EntityProperty
 					Coords.fromXY(margin, margin), // pos
 					Coords.fromXY(listSize.x, 25), // size
 					false, // isTextCentered
-					entityStore.name + ":",
+					DataBinding.fromContext(entityStore.name + ":"),
 					fontHeight
 				),
 
@@ -170,7 +174,7 @@ export class ItemStore implements EntityProperty
 					Coords.fromXY(size.x - margin - listSize.x, margin), // pos
 					Coords.fromXY(85, 25), // size
 					false, // isTextCentered
-					entityCustomer.name + ":",
+					DataBinding.fromContext(entityCustomer.name + ":"),
 					fontHeight
 				),
 
@@ -255,7 +259,7 @@ export class ItemStore implements EntityProperty
 					"Done",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					back // click
 				)
 			],

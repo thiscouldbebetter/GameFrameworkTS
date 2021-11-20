@@ -16,7 +16,7 @@ var ThisCouldBeBetter;
                 this.handleSize.clone(), // size
                 "-", // text
                 this.fontHeightInPixels, true, // hasBorder
-                true, // isEnabled
+                GameFramework.DataBinding.fromTrue(), // isEnabled
                 this.scrollUp // click
                 );
                 this.buttonScrollDown = GameFramework.ControlButton.from8("buttonScrollDown", // name
@@ -24,7 +24,7 @@ var ThisCouldBeBetter;
                 this.handleSize.clone(), // size
                 "+", // text
                 this.fontHeightInPixels, true, // hasBorder
-                true, // isEnabled
+                GameFramework.DataBinding.fromTrue(), // isEnabled
                 this.scrollDown // click
                 );
                 // Helper variables.
@@ -37,7 +37,7 @@ var ThisCouldBeBetter;
                 return this.windowSizeInItems < this.items().length;
             }
             items() {
-                return (this._items.get == null ? this._items : this._items.get());
+                return this._items.get();
             }
             mouseClick(pos) {
                 return false;

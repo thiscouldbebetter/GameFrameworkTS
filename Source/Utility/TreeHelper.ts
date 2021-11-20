@@ -6,7 +6,10 @@ export class TreeHelper
 {
 	// Static class.
 
-	static addNodeAndAllDescendantsToList(node: any, listToAddTo: any[])
+	static addNodeAndAllDescendantsToList<T extends Treeable<T>>
+	(
+		node: T, listToAddTo: T[]
+	): T[]
 	{
 		listToAddTo.push(node);
 		for (var i = 0; i < node.children.length; i++)

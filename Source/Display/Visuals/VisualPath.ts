@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualPath implements Visual
+export class VisualPath implements Visual<VisualPath>
 {
 	verticesAsPath: Path;
 	color: Color;
@@ -12,7 +12,10 @@ export class VisualPath implements Visual
 	verticesAsPathTransformed: Path;
 	transformTranslate: Transform_Translate;
 
-	constructor(verticesAsPath: Path, color: Color, lineThickness: number, isClosed: boolean)
+	constructor
+	(
+		verticesAsPath: Path, color: Color, lineThickness: number, isClosed: boolean
+	)
 	{
 		this.verticesAsPath = verticesAsPath;
 		this.color = color;
@@ -51,19 +54,19 @@ export class VisualPath implements Visual
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualPath
 	{
 		return this; // todo
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualPath): VisualPath
 	{
 		return this; // todo
 	}
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualPath
 	{
 		return this; // todo
 	}

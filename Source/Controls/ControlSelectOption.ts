@@ -2,14 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ControlSelectOption
+export class ControlSelectOption<T>
 {
-	value: any;
-	text: any;
+	value: T;
+	text: string;
 
 	fontHeightInPixels: number;
 
-	constructor(value: any, text: any)
+	constructor(value: T, text: string)
 	{
 		this.value = value;
 		this.text = text;

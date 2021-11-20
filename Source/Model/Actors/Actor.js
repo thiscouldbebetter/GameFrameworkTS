@@ -30,6 +30,8 @@ var ThisCouldBeBetter;
                 this.activity.overwriteWith(other.activity);
                 return this;
             }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.Actor = Actor;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

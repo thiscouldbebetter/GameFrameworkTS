@@ -9,8 +9,7 @@ var ThisCouldBeBetter;
                 this.transforms = transforms;
                 this.transformsByPropertyName = GameFramework.ArrayHelper.addLookups(this.transforms, (x) => x.propertyName);
             }
-            interpolateWith(otherAsAny, fractionOfProgressTowardOther) {
-                var other = otherAsAny;
+            interpolateWith(other, fractionOfProgressTowardOther) {
                 var transformsInterpolated = [];
                 for (var i = 0; i < this.transforms.length; i++) {
                     var transformThis = this.transforms[i];

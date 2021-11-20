@@ -281,9 +281,14 @@ export class Place //
 	{
 		var player = this.player();
 		var playerControllable = player.controllable();
+		var uwpe = new UniverseWorldPlaceEntities
+		(
+			universe, world, world.placeCurrent, player, null
+		);
 		var returnValue = playerControllable.toControl
 		(
-			universe, universe.display.sizeInPixels, player, null, false
+			//universe, universe.display.sizeInPixels, player, null, false
+			uwpe
 		);
 		return returnValue;
 	}
@@ -325,7 +330,7 @@ export class Place //
 
 	loadables(): Entity[]
 	{
-		return this.entitiesByPropertyName(Loadable.name);
+		return this.entitiesByPropertyName(LoadableProperty.name);
 	}
 
 	movables(): Entity[]

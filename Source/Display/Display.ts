@@ -28,7 +28,9 @@ export interface Display
 	): void;
 	drawCircleWithGradient
 	(
-		center: Coords, radius: number, gradientFill: ValueBreakGroup,
+		center: Coords,
+		radius: number,
+		gradientFill: ValueBreakGroup<Color>,
 		colorBorder: Color
 	): void;
 	drawCrosshairs

@@ -44,15 +44,13 @@ var ThisCouldBeBetter;
                     var isItemAllowedInSocket = socketDefn.categoriesAllowedNames.some((y) => itemDefn.categoryNames.indexOf(y) >= 0);
                     return isItemAllowedInSocket;
                 })[0];
-                var message = "";
                 if (socketFound == null) {
-                    message = "Can't equip " + itemDefn.name + ".";
+                    this.statusMessage = "Can't equip " + itemDefn.name + ".";
                 }
                 else {
                     var socketFoundName = socketFound.defnName;
-                    message = this.equipItemEntityInSocketWithName(uwpe, socketFoundName, false);
+                    this.equipItemEntityInSocketWithName(uwpe, socketFoundName, false);
                 }
-                return message;
             }
             equipItemEntityInFirstOpenQuickSlot(uwpe, includeSocketNameInMessage) {
                 var itemEntityToEquip = uwpe.entity2;
@@ -80,36 +78,39 @@ var ThisCouldBeBetter;
             equipItemEntityInSocketWithName(uwpe, socketName, includeSocketNameInMessage) {
                 var world = uwpe.world;
                 var itemEntityToEquip = uwpe.entity2;
+                var message;
                 if (itemEntityToEquip == null) {
-                    return "Nothing to equip!";
-                }
-                var itemToEquip = itemEntityToEquip.item();
-                var itemDefn = itemToEquip.defn(world);
-                var equippable = itemEntityToEquip.equippable();
-                var message = itemDefn.appearance;
-                var socket = this.socketByName(socketName);
-                if (socket == null) {
-                    message += " cannot be equipped.";
-                }
-                else if (socket.itemEntityEquipped == itemEntityToEquip) {
-                    if (equippable != null) {
-                        equippable.unequip(uwpe);
-                    }
-                    socket.itemEntityEquipped = null;
-                    message += " unequipped.";
+                    message = "Nothing to equip!";
                 }
                 else {
-                    if (equippable != null) {
-                        equippable.equip(uwpe);
+                    var itemToEquip = itemEntityToEquip.item();
+                    var itemDefn = itemToEquip.defn(world);
+                    var equippable = itemEntityToEquip.equippable();
+                    message = itemDefn.appearance;
+                    var socket = this.socketByName(socketName);
+                    if (socket == null) {
+                        message += " cannot be equipped.";
                     }
-                    socket.itemEntityEquipped = itemEntityToEquip;
-                    message += " equipped";
-                    if (includeSocketNameInMessage) {
-                        message += " as " + socket.defnName;
+                    else if (socket.itemEntityEquipped == itemEntityToEquip) {
+                        if (equippable != null) {
+                            equippable.unequip(uwpe);
+                        }
+                        socket.itemEntityEquipped = null;
+                        message += " unequipped.";
                     }
-                    message += ".";
+                    else {
+                        if (equippable != null) {
+                            equippable.equip(uwpe);
+                        }
+                        socket.itemEntityEquipped = itemEntityToEquip;
+                        message += " equipped";
+                        if (includeSocketNameInMessage) {
+                            message += " as " + socket.defnName;
+                        }
+                        message += ".";
+                    }
                 }
-                return message;
+                this.statusMessage = message;
             }
             itemEntityInSocketWithName(socketName) {
                 var socket = this.socketByName(socketName);
@@ -136,7 +137,7 @@ var ThisCouldBeBetter;
                         message = itemDefn.appearance + " unequipped.";
                     }
                 }
-                return message;
+                this.statusMessage = message;
             }
             unequipItemsNoLongerHeld(uwpe) {
                 var entityEquipmentUser = uwpe.entity;
@@ -220,12 +221,11 @@ var ThisCouldBeBetter;
                 var equipItemSelectedToSocketDefault = () => {
                     var itemEntityToEquip = equipmentUser.itemEntitySelected;
                     uwpe.entity2 = itemEntityToEquip;
-                    var message = equipmentUser.equipEntityWithItem(uwpe);
-                    equipmentUser.statusMessage = message;
+                    equipmentUser.equipEntityWithItem(uwpe);
                 };
                 var listEquippables = new GameFramework.ControlList("listEquippables", GameFramework.Coords.fromXY(10, 15), // pos
                 GameFramework.Coords.fromXY(70, listHeight), // size
-                GameFramework.DataBinding.fromContext(itemEntitiesEquippable), // items
+                GameFramework.DataBinding.fromContextAndGet(this, (c) => itemEntitiesEquippable), // items
                 GameFramework.DataBinding.fromGet((c) => c.item().toString(world)), // bindingForItemText
                 fontHeightSmall, new GameFramework.DataBinding(this, (c) => c.itemEntitySelected, (c, v) => c.itemEntitySelected = v), // bindingForItemSelected
                 GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
@@ -234,16 +234,14 @@ var ThisCouldBeBetter;
                 var equipItemSelectedToSocketSelected = () => {
                     var itemEntityToEquip = equipmentUser.itemEntitySelected;
                     uwpe.entity2 = itemEntityToEquip;
-                    var message;
                     var socketSelected = equipmentUser.socketSelected;
                     if (socketSelected == null) {
-                        message = equipmentUser.equipEntityWithItem(uwpe);
+                        equipmentUser.equipEntityWithItem(uwpe);
                     }
                     else {
-                        message = equipmentUser.equipItemEntityInSocketWithName(uwpe, socketSelected.defnName, true // includeSocketNameInMessage
+                        equipmentUser.equipItemEntityInSocketWithName(uwpe, socketSelected.defnName, true // includeSocketNameInMessage
                         );
                     }
-                    equipmentUser.statusMessage = message;
                 };
                 var equipItemSelectedInQuickSlot = (quickSlotNumber) => {
                     uwpe.entity2 = equipmentUser.itemEntitySelected;
@@ -255,22 +253,21 @@ var ThisCouldBeBetter;
                 GameFramework.Coords.fromXY(10, 10), // size
                 ">", // text
                 fontHeight * 0.8, true, // hasBorder
-                true, // isEnabled - todo
+                GameFramework.DataBinding.fromTrue(), // isEnabled - todo
                 equipItemSelectedToSocketSelected);
                 var unequipFromSocketSelected = () => {
                     var socketToUnequipFrom = equipmentUser.socketSelected;
-                    var message = equipmentUser.unequipItemFromSocketWithName(world, socketToUnequipFrom.defnName);
-                    equipmentUser.statusMessage = message;
+                    equipmentUser.unequipItemFromSocketWithName(world, socketToUnequipFrom.defnName);
                 };
                 var buttonUnequip = GameFramework.ControlButton.from8("buttonEquip", GameFramework.Coords.fromXY(85, 65), // pos
                 GameFramework.Coords.fromXY(10, 10), // size
                 "<", // text
                 fontHeight * 0.8, true, // hasBorder
-                true, // isEnabled - todo
+                GameFramework.DataBinding.fromTrue(), // isEnabled - todo
                 unequipFromSocketSelected);
                 var listEquipped = new GameFramework.ControlList("listEquipped", GameFramework.Coords.fromXY(100, 15), // pos
                 GameFramework.Coords.fromXY(90, listHeight), // size
-                GameFramework.DataBinding.fromContext(sockets), // items
+                GameFramework.DataBinding.fromContextAndGet(this, (c) => c.socketGroup.sockets), // items
                 GameFramework.DataBinding.fromGet((c) => c.toString(world)), // bindingForItemText
                 fontHeightSmall, new GameFramework.DataBinding(this, (c) => c.socketSelected, (c, v) => c.socketSelected = v), // bindingForItemSelected
                 GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
@@ -289,14 +286,14 @@ var ThisCouldBeBetter;
                     new GameFramework.ControlLabel("labelEquippable", GameFramework.Coords.fromXY(10, 5), // pos
                     GameFramework.Coords.fromXY(70, 25), // size
                     false, // isTextCentered
-                    "Equippable:", fontHeightSmall),
+                    GameFramework.DataBinding.fromContext("Equippable:"), fontHeightSmall),
                     listEquippables,
                     buttonEquip,
                     buttonUnequip,
                     new GameFramework.ControlLabel("labelEquipped", GameFramework.Coords.fromXY(100, 5), // pos
                     GameFramework.Coords.fromXY(100, 25), // size
                     false, // isTextCentered
-                    "Equipped:", fontHeightSmall),
+                    GameFramework.DataBinding.fromContext("Equipped:"), fontHeightSmall),
                     listEquipped,
                     new GameFramework.ControlLabel("infoStatus", GameFramework.Coords.fromXY(sizeBase.x / 2, 125), // pos
                     GameFramework.Coords.fromXY(sizeBase.x, 15), // size
@@ -333,11 +330,11 @@ var ThisCouldBeBetter;
                     childControls.splice(0, 0, new GameFramework.ControlLabel("labelEquipment", GameFramework.Coords.fromXY(100, -5), // pos
                     GameFramework.Coords.fromXY(100, 25), // size
                     true, // isTextCentered
-                    "Equip", fontHeightLarge));
+                    GameFramework.DataBinding.fromContext("Equip"), fontHeightLarge));
                     childControls.push(GameFramework.ControlButton.from8("buttonDone", GameFramework.Coords.fromXY(170, 115), // pos
                     GameFramework.Coords.fromXY(20, 10), // size
                     "Done", fontHeightSmall, true, // hasBorder
-                    true, // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     back // click
                     ));
                     var titleHeight = GameFramework.Coords.fromXY(0, 15);
@@ -349,6 +346,8 @@ var ThisCouldBeBetter;
                 returnValue.scalePosAndSize(scaleMultiplier);
                 return returnValue;
             }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.EquipmentUser = EquipmentUser;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

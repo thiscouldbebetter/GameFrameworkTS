@@ -33,8 +33,7 @@ var ThisCouldBeBetter;
                     var includeSocketNameInMessage = true;
                     var itemEntityToEquip = itemToEquip.toEntity(new GameFramework.UniverseWorldPlaceEntities(universe, world, place, entityItemHolder, null));
                     var uwpe = new GameFramework.UniverseWorldPlaceEntities(universe, world, place, entityItemHolder, itemEntityToEquip);
-                    var message = equipmentUser.equipItemEntityInSocketWithName(uwpe, socketName, includeSocketNameInMessage);
-                    this.statusMessage = message;
+                    equipmentUser.equipItemEntityInSocketWithName(uwpe, socketName, includeSocketNameInMessage);
                 }
             }
             hasItem(itemToCheck) {
@@ -202,6 +201,8 @@ var ThisCouldBeBetter;
             finalize(uwpe) { }
             initialize(uwpe) { }
             updateForTimerTick(uwpe) { }
+            // Equatable
+            equals(other) { return false; } // todo
             // Controllable.
             toControl(universe, size, entityItemHolder, venuePrev, includeTitleAndDoneButton) {
                 this.statusMessage = "Use, drop, and sort items.";
@@ -264,8 +265,7 @@ var ThisCouldBeBetter;
                     if (itemEntityToUse != null) {
                         var itemToUse = itemEntityToUse.item();
                         if (itemToUse.use != null) {
-                            itemHolder.statusMessage =
-                                itemToUse.use(uwpe);
+                            itemToUse.use(uwpe);
                             if (itemToUse.quantity <= 0) {
                                 itemHolder.itemSelected = null;
                             }
@@ -290,7 +290,7 @@ var ThisCouldBeBetter;
                         itemsAll.splice(index + 1, 0, itemToMove);
                     }
                 };
-                var split = (uwpe) => {
+                var split = () => {
                     itemHolder.itemSplit(itemHolder.itemSelected, null);
                 };
                 var join = () => {
@@ -327,10 +327,10 @@ var ThisCouldBeBetter;
                     new GameFramework.ControlLabel("labelItemsHeld", GameFramework.Coords.fromXY(10, 5), // pos
                     GameFramework.Coords.fromXY(70, 25), // size
                     false, // isTextCentered
-                    "Items Held:", fontHeightSmall),
+                    GameFramework.DataBinding.fromContext("Items Held:"), fontHeightSmall),
                     GameFramework.ControlList.from10("listItems", GameFramework.Coords.fromXY(10, 15), // pos
                     GameFramework.Coords.fromXY(70, 100), // size
-                    GameFramework.DataBinding.fromContext(this.items), // items
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => c.items), // items
                     GameFramework.DataBinding.fromGet((c) => c.toString(world)), // bindingForItemText
                     fontHeightSmall, new GameFramework.DataBinding(this, (c) => c.itemSelected, (c, v) => c.itemSelected = v), // bindingForItemSelected
                     GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
@@ -384,7 +384,7 @@ var ThisCouldBeBetter;
                     new GameFramework.ControlLabel("labelItemSelected", GameFramework.Coords.fromXY(150, 10), // pos
                     GameFramework.Coords.fromXY(100, 15), // size
                     true, // isTextCentered
-                    "Item Selected:", fontHeightSmall),
+                    GameFramework.DataBinding.fromContext("Item Selected:"), fontHeightSmall),
                     new GameFramework.ControlLabel("infoItemSelected", GameFramework.Coords.fromXY(150, 20), // pos
                     GameFramework.Coords.fromXY(200, 15), // size
                     true, // isTextCentered
@@ -467,10 +467,10 @@ var ThisCouldBeBetter;
                     0, new GameFramework.ControlLabel("labelItems", GameFramework.Coords.fromXY(100, -5), // pos
                     GameFramework.Coords.fromXY(100, 25), // size
                     true, // isTextCentered
-                    "Items", fontHeightLarge));
+                    GameFramework.DataBinding.fromContext("Items"), fontHeightLarge));
                     childControls.push(GameFramework.ControlButton.from8("buttonDone", GameFramework.Coords.fromXY(170, 115), // pos
                     buttonSize.clone(), "Done", fontHeightSmall, true, // hasBorder
-                    true, // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     back // click
                     ));
                     var titleHeight = GameFramework.Coords.fromXY(0, 15);

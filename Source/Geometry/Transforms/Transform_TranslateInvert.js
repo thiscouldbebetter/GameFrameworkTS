@@ -7,8 +7,12 @@ var ThisCouldBeBetter;
             constructor(displacement) {
                 this.displacement = displacement;
             }
+            clone() {
+                return new Transform_TranslateInvert(this.displacement.clone());
+            }
             overwriteWith(other) {
-                return this; // todo
+                this.displacement.overwriteWith(other.displacement);
+                return this;
             }
             transform(transformable) {
                 return transformable; // todo

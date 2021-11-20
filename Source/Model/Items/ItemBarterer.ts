@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ItemBarterer implements EntityProperty
+export class ItemBarterer implements EntityProperty<ItemBarterer>
 {
 	itemHolderCustomerOffer: ItemHolder;
 	itemHolderStoreOffer: ItemHolder;
@@ -105,6 +105,10 @@ export class ItemBarterer implements EntityProperty
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
+
+	// Equatable
+
+	equals(other: ItemBarterer): boolean { return false; } // todo
 
 	// Controls.
 
@@ -244,7 +248,7 @@ export class ItemBarterer implements EntityProperty
 					Coords.fromXY(margin, margin - fontHeight / 2), // pos
 					Coords.fromXY(listSize.x, 25), // size
 					false, // isTextCentered
-					entityStore.name + ":",
+					DataBinding.fromContext(entityStore.name + ":"),
 					fontHeight
 				),
 
@@ -324,11 +328,12 @@ export class ItemBarterer implements EntityProperty
 					Coords.fromXY
 					(
 						margin,
-						margin * 2 + fontHeight + listSize.y + buttonSize.y - fontHeight / 2
+						margin * 2 + fontHeight + listSize.y
+						+ buttonSize.y - fontHeight / 2
 					), // pos
 					Coords.fromXY(100, 15), // size
 					false, // isTextCentered
-					"Offered:",
+					DataBinding.fromContext("Offered:"),
 					fontHeight
 				),
 
@@ -343,9 +348,8 @@ export class ItemBarterer implements EntityProperty
 					listSize.clone(),
 					DataBinding.fromContextAndGet
 					(
-						this,
-						(c: ItemBarterer) =>
-							c.itemHolderStoreOffer.items
+						this.itemHolderStoreOffer,
+						(c: ItemHolder) => c.items
 					), // items
 					DataBinding.fromGet
 					(
@@ -373,7 +377,7 @@ export class ItemBarterer implements EntityProperty
 					), // pos
 					Coords.fromXY(85, 25), // size
 					false, // isTextCentered
-					entityCustomer.name + ":",
+					DataBinding.fromContext(entityCustomer.name + ":"),
 					fontHeight
 				),
 
@@ -460,7 +464,7 @@ export class ItemBarterer implements EntityProperty
 					), // pos
 					Coords.fromXY(100, 15), // size
 					false, // isTextCentered
-					"Offered:",
+					DataBinding.fromContext("Offered:"),
 					fontHeight
 				),
 
@@ -485,9 +489,11 @@ export class ItemBarterer implements EntityProperty
 					fontHeight,
 					new DataBinding
 					(
-						this.itemHolderCustomerOffer,
-						(c: ItemHolder) => c.itemSelected,
-						(c: ItemHolder, v: Item) => c.itemSelected = v
+						this,
+						(c: ItemBarterer) =>
+							c.itemHolderCustomerOffer.itemSelected,
+						(c: ItemBarterer, v: Item) =>
+							c.itemHolderCustomerOffer.itemSelected = v
 					), // bindingForItemSelected
 					DataBinding.fromGet( (c: Item) => c ), // bindingForItemValue
 					DataBinding.fromTrue(), // isEnabled
@@ -553,7 +559,7 @@ export class ItemBarterer implements EntityProperty
 					"Done",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					back // click
 				)
 			],

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class EntityGenerator implements EntityProperty
+export class EntityGenerator implements EntityProperty<EntityGenerator>
 {
 	entityToGenerate: Entity;
 	ticksToGenerate: number;
@@ -85,6 +85,11 @@ export class EntityGenerator implements EntityProperty
 		this.entitiesGeneratedMax = other.entitiesGeneratedMax;
 		return this;
 	}
+
+	// Equatable
+
+	equals(other: EntityGenerator): boolean { return false; } // todo
+
 }
 
 }

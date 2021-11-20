@@ -219,7 +219,6 @@ class PlaceBuilderDemo_Emplacements {
             var venueNext = itemContainerAsControl.toVenue();
             venueNext = VenueFader.fromVenuesToAndFrom(venueNext, null);
             u.venueNext = venueNext;
-            return null;
         };
         var entityDefn = new Entity(entityName, [
             new ItemContainer(),
@@ -258,7 +257,7 @@ class PlaceBuilderDemo_Emplacements {
     }
     entityDefnBuildObstacleMine(entityDimension) {
         var obstacleColor = Color.byName("Red");
-        var obstacleMappedCellSource = [
+        var obstacleMappedCellSourceAsStrings = [
             "....xxxx....",
             ".....xx.....",
             ".....xx.....",
@@ -272,19 +271,11 @@ class PlaceBuilderDemo_Emplacements {
             ".....xx.....",
             "....xxxx....",
         ];
-        var obstacleMappedSizeInCells = new Coords(obstacleMappedCellSource[0].length, obstacleMappedCellSource.length, 1);
+        var obstacleMappedCellSource = new MapOfCellsCellSourceObstacle(obstacleMappedCellSourceAsStrings);
+        var obstacleMappedSizeInCells = new Coords(obstacleMappedCellSourceAsStrings[0].length, obstacleMappedCellSourceAsStrings.length, 1);
         var obstacleMappedCellSize = new Coords(2, 2, 1);
         var entityDefnName = "Mine";
-        var obstacleMappedMap = new MapOfCells(entityDefnName, obstacleMappedSizeInCells, obstacleMappedCellSize, null, // cellCreate
-        (map, cellPosInCells, cellToOverwrite) => // cellAtPosInCells
-         {
-            var cellCode = map.cellSource[cellPosInCells.y][cellPosInCells.x];
-            var cellVisualName = (cellCode == "x" ? "Blocking" : "Open");
-            var cellIsBlocking = (cellCode == "x");
-            cellToOverwrite.visualName = cellVisualName;
-            cellToOverwrite.isBlocking = cellIsBlocking;
-            return cellToOverwrite;
-        }, obstacleMappedCellSource);
+        var obstacleMappedMap = new MapOfCells(entityDefnName, obstacleMappedSizeInCells, obstacleMappedCellSize, obstacleMappedCellSource);
         var obstacleMappedVisualLookup = new Map([
             ["Blocking", new VisualRectangle(obstacleMappedCellSize, obstacleColor, null, false)],
             ["Open", new VisualNone()]
@@ -378,7 +369,6 @@ class PlaceBuilderDemo_Emplacements {
         var portalUse = (uwpe) => {
             var eUsed = uwpe.entity2;
             eUsed.portal().use(uwpe);
-            return null;
         };
         var portalEntity = new Entity("Portal", [
             Collidable.fromCollider(Box.fromSize(entitySize)),
@@ -460,5 +450,44 @@ class PlaceBuilderDemo_Emplacements {
             Drawable.fromVisual(visual),
         ]);
         return entityDefn;
+    }
+}
+class MapCellObstacle {
+    constructor(isBlocking, visualName) {
+        this.isBlocking = isBlocking;
+        this.visualName = visualName;
+    }
+    static default() {
+        return new MapCellObstacle(false, null);
+    }
+    // Clonable.
+    clone() {
+        return new MapCellObstacle(this.isBlocking, this.visualName);
+    }
+    overwriteWith(other) {
+        this.isBlocking = other.isBlocking;
+        this.visualName = other.visualName;
+        return this;
+    }
+}
+class MapOfCellsCellSourceObstacle {
+    constructor(cellsAsStrings) {
+        this.cellsAsStrings = cellsAsStrings;
+    }
+    cellAtPosInCells(map, cellPosInCells, cellToOverwrite) {
+        var cellCode = this.cellsAsStrings[cellPosInCells.y][cellPosInCells.x];
+        var cellVisualName = (cellCode == "x" ? "Blocking" : "Open");
+        var cellIsBlocking = (cellCode == "x");
+        cellToOverwrite.visualName = cellVisualName;
+        cellToOverwrite.isBlocking = cellIsBlocking;
+        return cellToOverwrite;
+    }
+    cellCreate() {
+        return MapCellObstacle.default();
+    }
+    // Clonable.
+    clone() { return this; }
+    overwriteWith(other) {
+        return this;
     }
 }

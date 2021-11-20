@@ -12,6 +12,7 @@ var ThisCouldBeBetter;
                 return new GameFramework.Sphere(this.box.center, this.box.sizeHalf().magnitude());
             }
             // ShapeBase.
+            collider() { return null; }
             locate(loc) {
                 return GameFramework.ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
             }
@@ -56,6 +57,8 @@ var ThisCouldBeBetter;
                 this.angleInTurns = other.angleInTurns;
                 return this;
             }
+            // Equatable
+            equals(other) { return false; } // todo
             // Transformable.
             coordsGroupToTranslate() {
                 return [this.box.center];

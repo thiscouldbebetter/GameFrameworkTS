@@ -2,6 +2,9 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
+export interface MediaItemBase extends Loadable
+{}
+
 export class MediaLibrary
 {
 	images: Image2[];
@@ -16,10 +19,10 @@ export class MediaLibrary
 	fontsByName: Map<string, Font>;
 	textStringsByName: Map<string, TextString>;
 
-	collectionsAll: any[];
-	collectionsByName: Map<string, Map<string, any>>;
+	collectionsAll: MediaItemBase[][];
+	collectionsByName: Map<string, Map<string, MediaItemBase>>;
 
-	timer: any;
+	timerHandle: number;
 
 	constructor
 	(
@@ -47,7 +50,7 @@ export class MediaLibrary
 			this.textStrings
 		];
 
-		this.collectionsByName = new Map<string, Map<string, any> >();
+		this.collectionsByName = new Map<string, Map<string, MediaItemBase> >();
 		this.collectionsByName.set("Images", this.imagesByName);
 		this.collectionsByName.set("Sounds", this.soundsByName);
 		this.collectionsByName.set("Videos", this.videosByName);
@@ -127,25 +130,25 @@ export class MediaLibrary
 		textStringFileNames: string[]
 	): MediaLibrary
 	{
-		var mediaTypesPathsAndFileNames =
+		var mediaTypesPathsAndFileNames: [any, string, string[] ][] =
 		[
 			[ Image2, "Images", imageFileNames ],
 			[ Sound, "Audio/Effects", effectFileNames ],
 			[ Sound, "Audio/Music", musicFileNames ],
 			[ Video, "Video", videoFileNames ],
 			[ Font, "Fonts", fontFileNames ],
-			[ TextString, "Text", textStringFileNames ],
+			[ TextString, "Text", textStringFileNames ]
 		];
 
-		var mediaCollectionsByPath = new Map<string, any>();
+		var mediaCollectionsByPath = new Map<string, MediaItemBase[]>();
 
 		for (var t = 0; t < mediaTypesPathsAndFileNames.length; t++)
 		{
-			var mediaTypePathAndFileNames: any = mediaTypesPathsAndFileNames[t];
+			var mediaTypePathAndFileNames = mediaTypesPathsAndFileNames[t];
 			var mediaType: any = mediaTypePathAndFileNames[0];
 			var mediaPath: string = mediaTypePathAndFileNames[1];
 			var mediaFileNames: string[] = mediaTypePathAndFileNames[2];
-			var mediaCollection: any = [];
+			var mediaCollection = new Array<MediaItemBase>();
 
 			var filePathRoot = contentPath + mediaPath + "/";
 			for (var i = 0; i < mediaFileNames.length; i++)
@@ -160,12 +163,12 @@ export class MediaLibrary
 			mediaCollectionsByPath.set(mediaPath, mediaCollection);
 		}
 
-		var images: any = mediaCollectionsByPath.get("Images");
-		var soundEffects: any = mediaCollectionsByPath.get("Audio/Effects");
-		var soundMusics: any = mediaCollectionsByPath.get("Audio/Music");
-		var videos: any = mediaCollectionsByPath.get("Video");
-		var fonts: any = mediaCollectionsByPath.get("Fonts");
-		var textStrings: any = mediaCollectionsByPath.get("Text");
+		var images = mediaCollectionsByPath.get("Images") as Image2[];
+		var soundEffects = mediaCollectionsByPath.get("Audio/Effects") as Sound[];
+		var soundMusics = mediaCollectionsByPath.get("Audio/Music") as Sound[];
+		var videos = mediaCollectionsByPath.get("Video") as Video[];
+		var fonts = mediaCollectionsByPath.get("Fonts") as Font[];
+		var textStrings = mediaCollectionsByPath.get("Text") as TextString[];
 
 		var sounds = soundEffects.concat(soundMusics);
 
@@ -211,25 +214,28 @@ export class MediaLibrary
 	): void
 	{
 		var itemToLoad = this.collectionsByName.get(collectionName).get(itemName);
-		this.timer = setInterval
+		this.timerHandle = setInterval
 		(
 			this.waitForItemToLoad_TimerTick.bind(this, itemToLoad, callback),
 			100 // milliseconds
 		);
 	}
 
-	waitForItemToLoad_TimerTick(itemToLoad: any, callback: ()=>void ): void
+	waitForItemToLoad_TimerTick
+	(
+		itemToLoad: MediaItemBase, callback: () => void
+	): void
 	{
 		if (itemToLoad.isLoaded)
 		{
-			clearInterval(this.timer);
+			clearInterval(this.timerHandle);
 			callback();
 		}
 	}
 
 	waitForItemsAllToLoad(callback: ()=>void): void
 	{
-		this.timer = setInterval
+		this.timerHandle = setInterval
 		(
 			this.waitForItemsAllToLoad_TimerTick.bind(this, callback),
 			100 // milliseconds
@@ -240,7 +246,7 @@ export class MediaLibrary
 	{
 		if (this.areAllItemsLoaded())
 		{
-			clearInterval(this.timer);
+			clearInterval(this.timerHandle);
 			callback();
 		}
 	}

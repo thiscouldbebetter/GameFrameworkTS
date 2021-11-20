@@ -28,11 +28,11 @@ var ThisCouldBeBetter;
             updateForTimerTick(universe) {
                 this.venueInner.updateForTimerTick(universe);
                 this.timeStarted = new Date();
-                var timer = setInterval(() => { this.draw(universe), 1000; });
+                var timerHandle = setInterval(() => { this.draw(universe), 1000; });
                 // todo - Make this asynchronous.
-                var result = this.perform(universe);
-                clearInterval(timer);
-                this.done(universe, result);
+                var result = this.perform();
+                clearInterval(timerHandle);
+                this.done(result);
             }
         }
         GameFramework.VenueTask = VenueTask;

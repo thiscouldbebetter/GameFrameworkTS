@@ -15,15 +15,21 @@ export class ConversationScope
 	talkNodeForOptionSelected: TalkNode;
 
 	_talkNodesForOptionsActive: TalkNode[];
-	_emptyArray: any[];
+	_emptyArray: TalkNode[];
 
-	constructor(parent: ConversationScope, talkNodeCurrent: TalkNode, talkNodesForOptions: TalkNode[])
+	constructor
+	(
+		parent: ConversationScope,
+		talkNodeCurrent: TalkNode,
+		talkNodesForOptions: TalkNode[]
+	)
 	{
 		this.parent = parent;
 		this.talkNodeCurrent = talkNodeCurrent;
 		this.isPromptingForResponse = false;
 		this.talkNodesForOptions = talkNodesForOptions;
-		this.talkNodesForOptionsByName = ArrayHelper.addLookupsByName(this.talkNodesForOptions);
+		this.talkNodesForOptionsByName =
+			ArrayHelper.addLookupsByName(this.talkNodesForOptions);
 
 		this.displayTextCurrent = "[conversation begins]";
 		this.talkNodeForOptionSelected = null;
@@ -32,7 +38,7 @@ export class ConversationScope
 		this.haveOptionsBeenUpdated = true;
 	}
 
-	talkNodeAdvance(conversationRun: ConversationRun)
+	talkNodeAdvance(conversationRun: ConversationRun): ConversationScope
 	{
 		var conversationDefn = conversationRun.defn;
 		var defnTalkNodes = conversationDefn.talkNodes;
@@ -42,7 +48,7 @@ export class ConversationScope
 		return this;
 	}
 
-	talkNodesForOptionsActive()
+	talkNodesForOptionsActive(): TalkNode[]
 	{
 		var returnValues;
 		if (this.isPromptingForResponse == false)
@@ -72,7 +78,7 @@ export class ConversationScope
 		return returnValues;
 	}
 
-	update(universe: Universe, conversationRun: ConversationRun)
+	update(universe: Universe, conversationRun: ConversationRun): void
 	{
 		this.haveOptionsBeenUpdated = true;
 		this.talkNodeCurrent.execute(universe, conversationRun, this);

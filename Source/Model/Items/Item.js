@@ -31,21 +31,25 @@ var ThisCouldBeBetter;
                 return this.quantity * this.defn(world).tradeValue;
             }
             use(uwpe) {
-                var returnValue = null;
+                uwpe.entity2 = this.toEntity(uwpe);
                 var defn = this.defn(uwpe.world);
-                if (defn.use != null) {
-                    returnValue = defn.use(uwpe);
-                }
-                return returnValue;
+                defn.use(uwpe);
             }
             // cloneable
             clone() {
                 return new Item(this.defnName, this.quantity);
             }
+            overwriteWith(other) {
+                this.defnName = other.defnName;
+                this.quantity = other.quantity;
+                return this;
+            }
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }
             updateForTimerTick(uwpe) { }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.Item = Item;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

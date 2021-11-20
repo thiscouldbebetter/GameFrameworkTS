@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Starvable implements EntityProperty
+export class Starvable implements EntityProperty<Starvable>
 {
 	satietyMax: number;
 	satietyLostPerTick: number;
@@ -86,6 +86,11 @@ export class Starvable implements EntityProperty
 	{
 		return new Starvable(this.satietyMax, this.satietyLostPerTick, this._starve);
 	}
+
+	// Equatable
+
+	equals(other: Starvable): boolean { return false; } // todo
+
 }
 
 }

@@ -2,26 +2,30 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ControlTextarea extends ControlBase
+export class ControlTextarea<TContext> extends ControlBase
 {
-	_text: DataBinding<any, string>;
-	_isEnabled: DataBinding<any, boolean>;
+	_text: DataBinding<TContext, string>;
+	_isEnabled: DataBinding<TContext, boolean>;
 
 	charCountMax: number;
 	cursorPos: number;
 	lineSpacing: number;
-	scrollbar: ControlScrollbar;
+	scrollbar: ControlScrollbar<ControlTextarea<TContext>, string>;
 
 	_drawPos: Coords;
 	_drawLoc: Disposition;
 	_indexOfLineSelected: number;
 	_mouseClickPos: Coords;
-	_textAsLines: any;
+	_textAsLines: string[];
 
 	constructor
 	(
-		name: string, pos: Coords, size: Coords, text: DataBinding<any, string>,
-		fontHeightInPixels: number, isEnabled: DataBinding<any, boolean>
+		name: string,
+		pos: Coords,
+		size: Coords,
+		text: DataBinding<TContext, string>,
+		fontHeightInPixels: number,
+		isEnabled: DataBinding<TContext, boolean>
 	)
 	{
 		super(name, pos, size, fontHeightInPixels);
@@ -34,15 +38,17 @@ export class ControlTextarea extends ControlBase
 		this.lineSpacing = 1.2 * this.fontHeightInPixels; // hack
 
 		var scrollbarWidth = this.lineSpacing;
-		this.scrollbar = new ControlScrollbar
+		var thisAsControlTextarea = this as ControlTextarea<TContext>;
+		this.scrollbar = new ControlScrollbar<ControlTextarea<TContext>, string>
 		(
-			new Coords(this.size.x - scrollbarWidth, 0, 0), // pos
-			new Coords(scrollbarWidth, this.size.y, 0), // size
+			Coords.fromXY(this.size.x - scrollbarWidth, 0), // pos
+			Coords.fromXY(scrollbarWidth, this.size.y), // size
 			this.fontHeightInPixels,
 			this.lineSpacing, // itemHeight
 			DataBinding.fromContextAndGet
 			(
-				this, (c: ControlTextarea) => c.textAsLines()
+				thisAsControlTextarea,
+				(c: ControlTextarea<TContext>) => c.textAsLines()
 			),
 			0 // sliderPosInItems
 		);
@@ -153,29 +159,34 @@ export class ControlTextarea extends ControlBase
 		return true; // wasActionHandled
 	}
 
-	focusGain()
+	focusGain(): void
 	{
 		this.isHighlighted = true;
 		this.cursorPos = this.text(null).length;
 	}
 
-	focusLose()
+	focusLose(): void
 	{
 		this.isHighlighted = false;
 		this.cursorPos = null;
 	}
 
-	indexOfFirstLineVisible()
+	indexOfFirstLineVisible(): number
 	{
 		return this.scrollbar.sliderPosInItems();
 	}
 
-	indexOfLastLineVisible()
+	indexOfLastLineVisible(): number
 	{
-		return this.indexOfFirstLineVisible() + Math.floor(this.scrollbar.windowSizeInItems) - 1;
+		var returnValue =
+		(
+			this.indexOfFirstLineVisible()
+			+ Math.floor(this.scrollbar.windowSizeInItems) - 1
+		);
+		return returnValue;
 	}
 
-	indexOfLineSelected(valueToSet: number)
+	indexOfLineSelected(valueToSet: number): number
 	{
 		var returnValue = valueToSet;
 		if (valueToSet == null)
@@ -189,12 +200,12 @@ export class ControlTextarea extends ControlBase
 		return returnValue;
 	}
 
-	isEnabled()
+	isEnabled(): boolean
 	{
 		return (this._isEnabled.get());
 	}
 
-	text(value: string)
+	text(value: string): string
 	{
 		if (value != null)
 		{
@@ -204,7 +215,7 @@ export class ControlTextarea extends ControlBase
 		return this._text.get();
 	}
 
-	textAsLines()
+	textAsLines(): string[]
 	{
 		this._textAsLines = [];
 
@@ -223,7 +234,7 @@ export class ControlTextarea extends ControlBase
 		return this._textAsLines;
 	}
 
-	mouseClick(clickPos: Coords)
+	mouseClick(clickPos: Coords): boolean
 	{
 		clickPos = this._mouseClickPos.overwriteWith(clickPos);
 
@@ -273,7 +284,7 @@ export class ControlTextarea extends ControlBase
 		return true; // wasActionHandled
 	}
 
-	scalePosAndSize(scaleFactor: Coords)
+	scalePosAndSize(scaleFactor: Coords): void
 	{
 		this.pos.multiply(scaleFactor);
 		this.size.multiply(scaleFactor);
@@ -284,7 +295,13 @@ export class ControlTextarea extends ControlBase
 
 	// drawable
 
-	draw(universe: Universe, display: Display, drawLoc: Disposition, style: ControlStyle)
+	draw
+	(
+		universe: Universe,
+		display: Display,
+		drawLoc: Disposition,
+		style: ControlStyle
+	): void
 	{
 		drawLoc = this._drawLoc.overwriteWith(drawLoc);
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);

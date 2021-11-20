@@ -2,21 +2,21 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Reference
+export class Reference<T>
 {
-	value: any;
+	value: T;
 
-	constructor(value: any)
+	constructor(value: T)
 	{
 		this.value = value;
 	}
 
-	get()
+	get(): T
 	{
 		return this.value;
 	}
 
-	set(valueToSet: any)
+	set(valueToSet: T): T
 	{
 		this.value = valueToSet;
 		return this.value;

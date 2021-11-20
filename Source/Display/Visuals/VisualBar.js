@@ -19,7 +19,7 @@ var ThisCouldBeBetter;
                 this._sizeHalf = this.size.clone().half();
             }
             draw(uwpe, display) {
-                var wasVisible = false;
+                //var wasVisible = false;
                 var entity = uwpe.entity;
                 var pos = this._drawPos.overwriteWith(entity.locatable().loc.pos).subtract(this._sizeHalf);
                 var _amountCurrent = this.amountCurrent.contextSet(entity).get();
@@ -28,7 +28,7 @@ var ThisCouldBeBetter;
                 var shouldShow = (this.fractionBelowWhichToShow == null
                     || fractionCurrent < this.fractionBelowWhichToShow);
                 if (shouldShow) {
-                    wasVisible = true;
+                    //wasVisible = true;
                     var widthCurrent = fractionCurrent * this.size.x;
                     this._sizeCurrent.x = widthCurrent;
                     display.drawRectangle(pos, this._sizeCurrent, this.color, null, null);
@@ -63,7 +63,7 @@ var ThisCouldBeBetter;
                     true, // isCentered
                     null);
                 }
-                return wasVisible;
+                //return wasVisible;
             }
             // Clonable.
             clone() {

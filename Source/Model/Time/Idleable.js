@@ -35,6 +35,8 @@ var ThisCouldBeBetter;
                     this.idle(uwpe);
                 }
             }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.Idleable = Idleable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

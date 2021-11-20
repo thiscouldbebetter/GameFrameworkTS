@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualImageScaledPartial implements Visual
+export class VisualImageScaledPartial implements Visual<VisualImageScaledPartial>
 {
 	visualImageToExtractFrom: VisualImage;
 	regionToDrawAsBox: Box;
@@ -40,19 +40,19 @@ export class VisualImageScaledPartial implements Visual
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualImageScaledPartial
 	{
 		return this; // todo
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualImageScaledPartial): VisualImageScaledPartial
 	{
 		return this; // todo
 	}
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualImageScaledPartial
 	{
 		return this; // todo
 	}

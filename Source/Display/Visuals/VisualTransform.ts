@@ -2,14 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualTransform implements Visual
+export class VisualTransform implements Visual<VisualTransform>
 {
-	transformToApply: Transform;
-	child: Visual;
+	transformToApply: TransformBase;
+	child: VisualBase;
 
-	_childTransformed: Visual;
+	_childTransformed: VisualBase;
 
-	constructor(transformToApply: Transform, child: Visual)
+	constructor(transformToApply: TransformBase, child: VisualBase)
 	{
 		this.transformToApply = transformToApply;
 		this.child = child;
@@ -19,23 +19,23 @@ export class VisualTransform implements Visual
 
 	// Cloneable.
 
-	clone(): Visual
+	clone(): VisualTransform
 	{
 		return new VisualTransform(this.transformToApply, this.child.clone());
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualTransform): VisualTransform
 	{
-		var otherAsVisualTransform = other as VisualTransform;
-		this.child.overwriteWith(otherAsVisualTransform.child);
+		this.child.overwriteWith(other.child);
 		return this;
 	}
 
 	// Transformable.
 
-	transform(transformToApply: Transform)
+	transform(transformToApply: TransformBase): VisualTransform
 	{
-		return this.child.transform(transformToApply);
+		transformToApply.transform(this.child);
+		return this;
 	}
 
 	// Visual.

@@ -61,10 +61,12 @@ var ThisCouldBeBetter;
                     this.die(uwpe);
                 }
             }
-            // cloneable
+            // Clonable.
             clone() {
                 return new Killable(this.integrityMax, this._damageApply, this._die);
             }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.Killable = Killable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

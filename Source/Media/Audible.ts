@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Audible implements EntityProperty
+export class Audible implements EntityProperty<Audible>
 {
 	hasBeenHeard: boolean;
 
@@ -28,6 +28,11 @@ export class Audible implements EntityProperty
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+
+	// Equatable
+
+	equals(other: Audible): boolean { return false; } // todo
+
 }
 
 }

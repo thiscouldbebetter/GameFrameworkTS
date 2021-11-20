@@ -8,7 +8,7 @@ export class Skeleton
 	boneRoot: Bone;
 
 	bonesAll: Bone[];
-	bonesAllByName: any;
+	bonesAllByName: Map<string, Bone>;
 
 	constructor(name: string, boneRoot: Bone)
 	{
@@ -23,7 +23,7 @@ export class Skeleton
 		this.bonesAllByName = ArrayHelper.addLookupsByName(this.bonesAll);
 	}
 
-	equals(other: Skeleton)
+	equals(other: Skeleton): boolean
 	{
 		var returnValue = true;
 
@@ -43,7 +43,7 @@ export class Skeleton
 
 	// cloneable
 
-	clone()
+	clone(): Skeleton
 	{
 		return new Skeleton
 		(
@@ -52,7 +52,7 @@ export class Skeleton
 		);
 	}
 
-	overwriteWith(other: Skeleton)
+	overwriteWith(other: Skeleton): Skeleton
 	{
 		for (var i = 0; i < this.bonesAll.length; i++)
 		{
@@ -65,13 +65,14 @@ export class Skeleton
 
 	// transformable
 
-	transform(transformToApply: Transform)
+	transform(transformToApply: TransformBase): Skeleton
 	{
 		for (var i = 0; i < this.bonesAll.length; i++)
 		{
 			var bone = this.bonesAll[i];
 			bone.transform(transformToApply);
 		}
+		return this;
 	}
 }
 

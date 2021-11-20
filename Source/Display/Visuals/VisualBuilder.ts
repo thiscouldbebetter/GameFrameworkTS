@@ -16,7 +16,8 @@ export class VisualBuilder
 
 	circleWithEyes
 	(
-		circleRadius: number, circleColor: Color, eyeRadius: number, visualEyes: Visual
+		circleRadius: number, circleColor: Color, eyeRadius: number,
+		visualEyes: VisualBase
 	)
 	{
 		visualEyes = visualEyes || this.eyesBlinking(eyeRadius);
@@ -33,7 +34,7 @@ export class VisualBuilder
 			null
 		);
 
-		var circleWithEyes: Visual = new VisualGroup
+		var circleWithEyes: VisualBase = new VisualGroup
 		([
 			VisualCircle.fromRadiusAndColorFill(circleRadius, circleColor),
 			visualEyesDirectional
@@ -46,10 +47,12 @@ export class VisualBuilder
 
 	circleWithEyesAndLegs
 	(
-		circleRadius: number, circleColor: Color, eyeRadius: number, visualEyes: Visual
+		circleRadius: number, circleColor: Color, eyeRadius: number,
+		visualEyes: VisualBase
 	)
 	{
-		var circleWithEyes = this.circleWithEyes(circleRadius, circleColor, eyeRadius, visualEyes);
+		var circleWithEyes =
+			this.circleWithEyes(circleRadius, circleColor, eyeRadius, visualEyes);
 
 		var lineThickness = 2;
 		var spaceBetweenLegsHalf = eyeRadius * .75;
@@ -345,7 +348,7 @@ export class VisualBuilder
 		var visualLegsDirectional = new VisualSelect
 		(
 			// childrenByName
-			new Map<string, Visual>
+			new Map<string, VisualBase>
 			([
 				[ "FacingRightStanding", visualLegsFacingRightStanding ],
 				[ "FacingDownStanding", visualLegsFacingDownStanding ],
@@ -402,15 +405,19 @@ export class VisualBuilder
 
 	circleWithEyesAndLegsAndArms
 	(
-		circleRadius: number, circleColor: Color, eyeRadius: number, visualEyes: Visual
+		circleRadius: number, circleColor: Color, eyeRadius: number,
+		visualEyes: VisualBase
 	)
 	{
 		var lineThickness = 2;
 
-		var circleWithEyesAndLegs = this.circleWithEyesAndLegs(circleRadius, circleColor, eyeRadius, visualEyes);
+		var circleWithEyesAndLegs = this.circleWithEyesAndLegs
+		(
+			circleRadius, circleColor, eyeRadius, visualEyes
+		);
 
 		var visualNone = new VisualNone();
-		var visualWieldable: Visual = new VisualDynamic
+		var visualWieldable: VisualBase = new VisualDynamic
 		(
 			(uwpe: UniverseWorldPlaceEntities) =>
 			{
@@ -546,7 +553,7 @@ export class VisualBuilder
 
 		var visualWielding = new VisualSelect
 		(
-			new Map<string, Visual>
+			new Map<string, VisualBase>
 			([
 				[ "Visible", visualArmAndWieldableDirectionalOffset ],
 				[ "Hidden", visualNone ]

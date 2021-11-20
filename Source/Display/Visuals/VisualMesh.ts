@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualMesh implements Visual
+export class VisualMesh implements Visual<VisualMesh>
 {
 	private mesh: MeshTextured;
 
@@ -13,21 +13,20 @@ export class VisualMesh implements Visual
 
 	// Cloneable.
 
-	clone(): Visual
+	clone(): VisualMesh
 	{
 		return new VisualMesh(this.mesh.clone());
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualMesh): VisualMesh
 	{
-		var otherAsVisualMesh = other as VisualMesh;
-		this.mesh.overwriteWith(otherAsVisualMesh.mesh);
+		this.mesh.overwriteWith(other.mesh);
 		return this;
 	}
 
 	// Transformable.
 
-	transform(transformToApply: Transform)
+	transform(transformToApply: TransformBase): VisualMesh
 	{
 		transformToApply.transform(this.mesh);
 		return this;

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ForceField implements EntityProperty
+export class ForceField implements EntityProperty<ForceField>
 {
 	accelerationToApply: Coords;
 	velocityToApply: Coords;
@@ -57,6 +57,11 @@ export class ForceField implements EntityProperty
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
+
+	// Equatable
+
+	equals(other: ForceField): boolean { return false; } // todo
+
 }
 
 }

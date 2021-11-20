@@ -54,8 +54,8 @@ class PlaceBuilderDemo_Movers {
             var place = uwpe.place;
             var entityActor = uwpe.entity;
             var activity = entityActor.actor().activity;
-            var targetPos = activity.target();
-            if (targetPos == null) {
+            var targetEntity = activity.targetEntity();
+            if (targetEntity == null) {
                 var moversInPlace = place.movables();
                 var grazersInPlace = moversInPlace.filter(x => x.name.startsWith("Grazer"));
                 if (grazersInPlace.length == 0) {
@@ -66,8 +66,10 @@ class PlaceBuilderDemo_Movers {
                 else {
                     targetPos = grazersInPlace[0].locatable().loc.pos;
                 }
-                activity.targetSet(targetPos);
+                targetEntity = Locatable.fromPos(targetPos).toEntity();
+                activity.targetEntitySet(targetEntity);
             }
+            var targetPos = targetEntity.locatable().loc.pos;
             var actorLoc = entityActor.locatable().loc;
             var actorPos = actorLoc.pos;
             var distanceToTarget = targetPos.clone().subtract(actorPos).magnitude();
@@ -84,7 +86,7 @@ class PlaceBuilderDemo_Movers {
                 if (grazerInReach != null) {
                     grazerInReach.killable().integrity = 0;
                 }
-                activity.targetSet(null);
+                activity.targetEntitySet(null);
             }
         };
         var carnivoreActivityDefn = new ActivityDefn("Carnivore", carnivoreActivityPerform);
@@ -162,7 +164,9 @@ class PlaceBuilderDemo_Movers {
             var defns = world.defn;
             var skillsAll = defns.defnArraysByTypeName.get(Skill.name); // todo - Just use the "-ByName" lookup.
             var skillsByName = defns.defnsByNameByTypeName.get(Skill.name);
-            var learningMessage = learner.learningIncrement(skillsAll, skillsByName, 1);
+            learner.statusMessage = null;
+            learner.learningIncrement(skillsAll, skillsByName, 1);
+            var learningMessage = learner.statusMessage;
             if (learningMessage != null) {
                 place.entitySpawn(uwpe.clone().entitySet(universe.entityBuilder.messageFloater(learningMessage, entityPlayer.locatable().loc.pos, Color.byName("Green"))));
             }
@@ -194,18 +198,20 @@ class PlaceBuilderDemo_Movers {
             var enemyCount = place.entitiesByPropertyName(Enemy.name).filter(x => x.name.startsWith(enemyEntityPrototype.name)).length;
             var enemyCountMax = 1;
             if (enemyCount < enemyCountMax) {
-                var ticksDelayedSoFar = activity.target();
-                if (ticksDelayedSoFar == null) {
-                    ticksDelayedSoFar = 0;
+                var targetEntity = activity.targetEntity();
+                if (targetEntity == null) {
+                    var ticksToDelay = 200;
+                    targetEntity = new Ephemeral(ticksToDelay, null).toEntity(); // hack
                 }
-                ticksDelayedSoFar++;
-                var ticksToDelay = 200;
-                if (ticksDelayedSoFar < ticksToDelay) {
-                    activity.targetSet(ticksDelayedSoFar);
+                var targetEphemeral = targetEntity.ephemeral();
+                var ticksToDelayRemaining = targetEphemeral.ticksToLive;
+                ticksToDelayRemaining--;
+                if (ticksToDelayRemaining > 0) {
+                    targetEphemeral.ticksToLive--;
                     return;
                 }
                 else {
-                    activity.targetSet(null);
+                    activity.targetEntityClear();
                 }
                 var enemyEntityToPlace = enemyEntityPrototype.clone();
                 var placeSizeHalf = place.size.clone().half();
@@ -395,15 +401,16 @@ class PlaceBuilderDemo_Movers {
             var place = uwpe.place;
             var entityActor = uwpe.entity;
             var activity = entityActor.actor().activity;
-            var targetPos = activity.target();
-            if (targetPos == null) {
+            var targetEntity = activity.targetEntity();
+            if (targetEntity == null) {
                 var randomizer = universe.randomizer;
-                targetPos =
-                    Coords.create().randomize(randomizer).multiply(place.size);
-                activity.targetSet(targetPos);
+                var targetPos = Coords.create().randomize(randomizer).multiply(place.size);
+                targetEntity = Locatable.fromPos(targetPos).toEntity();
+                activity.targetEntitySet(targetEntity);
             }
             var actorLoc = entityActor.locatable().loc;
             var actorPos = actorLoc.pos;
+            var targetPos = targetEntity.locatable().loc.pos;
             var distanceToTarget = targetPos.clone().subtract(actorPos).magnitude();
             if (distanceToTarget >= 2) {
                 var accelerationPerTick = .5;
@@ -411,7 +418,7 @@ class PlaceBuilderDemo_Movers {
             }
             else {
                 actorPos.overwriteWith(targetPos);
-                activity.targetSet(null);
+                activity.targetEntityClear();
             }
         };
         var friendlyActivityDefn = new ActivityDefn("Friendly", friendlyActivityPerform);
@@ -509,8 +516,9 @@ class PlaceBuilderDemo_Movers {
             var place = uwpe.place;
             var entityActor = uwpe.entity;
             var activity = entityActor.actor().activity;
-            var targetPos = activity.target();
-            if (targetPos == null) {
+            var targetEntity = activity.targetEntity();
+            if (targetEntity == null) {
+                var targetPos = null;
                 var itemsInPlace = place.items();
                 var itemsGrassInPlace = itemsInPlace.filter((x) => x.item().defnName == "Grass");
                 if (itemsGrassInPlace.length == 0) {
@@ -521,10 +529,12 @@ class PlaceBuilderDemo_Movers {
                 else {
                     targetPos = itemsGrassInPlace[0].locatable().loc.pos;
                 }
-                activity.targetSet(targetPos);
+                targetEntity = Locatable.fromPos(targetPos).toEntity();
+                activity.targetEntitySet(targetEntity);
             }
             var actorLoc = entityActor.locatable().loc;
             var actorPos = actorLoc.pos;
+            var targetPos = targetEntity.locatable().loc.pos;
             var distanceToTarget = targetPos.clone().subtract(actorPos).magnitude();
             if (distanceToTarget >= 2) {
                 actorLoc.vel.overwriteWith(targetPos).subtract(actorPos).normalize();
@@ -539,7 +549,7 @@ class PlaceBuilderDemo_Movers {
                 if (itemGrassInReach != null) {
                     place.entityToRemoveAdd(itemGrassInReach);
                 }
-                activity.targetSet(null);
+                activity.targetEntityClear();
             }
         };
         var grazerActivityDefn = new ActivityDefn("Grazer", grazerActivityPerform);
@@ -614,8 +624,8 @@ class PlaceBuilderDemo_Movers {
         null // text
         );
         var playerVisualSatietyBar = new VisualBar("F", // abbreviation
-        playerVisualBarSize, Color.Instances().Brown, DataBinding.fromGet((c) => c.starvable().satiety), null, // amountThreshold
-        DataBinding.fromGet((c) => c.starvable().satietyMax), .5, // fractionBelowWhichToShow
+        playerVisualBarSize, Color.Instances().Brown, DataBinding.fromGet((c) => { return c.starvable().satiety; }), null, // amountThreshold
+        DataBinding.fromGet((c) => { return c.starvable().satietyMax; }), .5, // fractionBelowWhichToShow
         null, // colorForBorderAsValueBreakGroup
         null // text
         );
@@ -784,24 +794,30 @@ class PlaceBuilderDemo_Movers {
             var entityPlayer = uwpe.entity;
             var activity = entityPlayer.actor().activity;
             var drawable = entityPlayer.drawable();
-            var ticksToWait = activity.target();
-            if (ticksToWait == null) {
+            var targetEntity = activity.targetEntity();
+            if (targetEntity == null) {
                 drawable.visual = new VisualGroup([
                     drawable.visual,
                     new VisualOffset(VisualText.fromTextAndColor("Waiting", Color.byName("Gray")), new Coords(0, -entityDimension * 3, 0))
                 ]);
                 ticksToWait = 60; // 3 seconds.
-            }
-            else if (ticksToWait > 0) {
-                ticksToWait--;
+                targetEntity = new Ephemeral(ticksToWait, null).toEntity();
+                activity.targetEntitySet(targetEntity);
             }
             else {
-                ticksToWait = null;
-                activity.defnName = "Player";
-                drawable.visual =
-                    drawable.visual.children[0];
+                var targetEphemeral = targetEntity.ephemeral();
+                var ticksToWait = targetEphemeral.ticksToLive;
+                if (ticksToWait > 0) {
+                    ticksToWait--;
+                    targetEphemeral.ticksToLive = ticksToWait;
+                }
+                else {
+                    activity.defnName = "Player";
+                    drawable.visual =
+                        drawable.visual.children[0];
+                    activity.targetEntityClear();
+                }
             }
-            activity.targetSet(ticksToWait);
         };
         var playerActivityDefnWait = new ActivityDefn("Wait", playerActivityWaitPerform);
         this.parent.activityDefns.push(playerActivityDefnWait);
@@ -863,7 +879,7 @@ class PlaceBuilderDemo_Movers {
             action.perform(uwpe);
         }
         var activity = entityPlayer.actor().activity;
-        var itemEntityToPickUp = activity.targetByName("ItemEntityToPickUp");
+        var itemEntityToPickUp = activity.targetEntityByName("ItemEntityToPickUp");
         if (itemEntityToPickUp != null) {
             var entityPickingUp = entityPlayer;
             var itemEntityGettingPickedUp = itemEntityToPickUp;
@@ -874,7 +890,7 @@ class PlaceBuilderDemo_Movers {
             );
             itemLocatable.loc.orientation.default(); // hack
             if (distance < 1) {
-                activity.targetClearByName("ItemEntityToPickUp");
+                activity.targetEntityClearByName("ItemEntityToPickUp");
                 var itemHolder = entityPickingUp.itemHolder();
                 itemHolder.itemEntityPickUp(uwpe);
                 var equipmentUser = entityPickingUp.equipmentUser();
@@ -889,7 +905,15 @@ class PlaceBuilderDemo_Movers {
     entityDefnBuildPlayer_Controllable() {
         var toControlMenu = Playable.toControlMenu;
         var toControlWorldOverlay = Playable.toControlWorldOverlay;
-        var toControl = (universe, size, entity, venuePrev, isMenu) => {
+        var toControl = 
+        //(universe: Universe, size: Coords, entity: Entity, venuePrev: Venue, isMenu: boolean) =>
+        (uwpe) => {
+            var universe = uwpe.universe;
+            var size = universe.display.sizeInPixels;
+            var entity = uwpe.entity;
+            var venuePrev = universe.venueCurrent;
+            var isMenu = universe.inputHelper.inputsPressed.some(x => x.name == "Escape" || x.name == "Tab" // hack
+            );
             var returnValue;
             if (isMenu) {
                 returnValue = toControlMenu(universe, size, entity, venuePrev);

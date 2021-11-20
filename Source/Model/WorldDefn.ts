@@ -11,8 +11,8 @@ export class WorldDefn
 	{
 		defnArrays = defnArrays || [];
 
-		this.defnArraysByTypeName = new Map<string, any[]>();
-		this.defnsByNameByTypeName = new Map<string, Map<string, any>>();
+		this.defnArraysByTypeName = new Map<string, unknown[]>();
+		this.defnsByNameByTypeName = new Map<string, Map<string, unknown>>();
 
 		for (var i = 0; i < defnArrays.length; i++)
 		{

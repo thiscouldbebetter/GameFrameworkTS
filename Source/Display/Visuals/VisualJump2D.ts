@@ -2,17 +2,18 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualJump2D implements Visual
+export class VisualJump2D implements Visual<VisualJump2D>
 {
-	visualJumper: Visual;
-	visualShadow: Visual;
+	visualJumper: VisualBase;
+	visualShadow: VisualBase;
 	cameraFactory: () => Camera;
 
 	_posSaved: Coords;
 
 	constructor
 	(
-		visualJumper: Visual, visualShadow: Visual,
+		visualJumper: VisualBase,
+		visualShadow: VisualBase,
 		cameraFactory: () => Camera
 	)
 	{
@@ -24,7 +25,7 @@ export class VisualJump2D implements Visual
 
 	// Transformable.
 
-	transform(transformToApply: Transform): VisualJump2D
+	transform(transformToApply: TransformBase): VisualJump2D
 	{
 		transformToApply.transform(this.visualJumper);
 		transformToApply.transform(this.visualShadow);
@@ -58,7 +59,7 @@ export class VisualJump2D implements Visual
 
 	// Cloneable.
 
-	clone(): Visual
+	clone(): VisualJump2D
 	{
 		return new VisualJump2D
 		(
@@ -67,7 +68,7 @@ export class VisualJump2D implements Visual
 		);
 	}
 
-	overwriteWith(other: VisualJump2D): Visual
+	overwriteWith(other: VisualJump2D): VisualJump2D
 	{
 		this.visualJumper.overwriteWith(other.visualJumper);
 		this.visualShadow.overwriteWith(other.visualShadow);

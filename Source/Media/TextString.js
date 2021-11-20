@@ -16,7 +16,6 @@ var ThisCouldBeBetter;
                 returnValue.value = value;
                 return returnValue;
             }
-            // instance methods
             load() {
                 var text = this;
                 var xmlHttpRequest = new XMLHttpRequest();
@@ -40,6 +39,7 @@ var ThisCouldBeBetter;
                 );
                 */
             }
+            unload() { }
         }
         GameFramework.TextString = TextString;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

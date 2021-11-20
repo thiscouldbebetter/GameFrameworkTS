@@ -202,7 +202,7 @@ class PlaceBuilderDemo // Main.
         this.entitiesAllGround();
         this.build_Camera(this.cameraViewSize, this.size);
         // todo
-        var mapCellSource = [
+        var mapCellSourceAsStrings = [
             /*
             "................................",
             "................................",
@@ -254,7 +254,7 @@ class PlaceBuilderDemo // Main.
             "~~~~~~~~~~~~........::::::::::::",
             "~~~~~~~~~~~~.......:::::::::::::",
         ];
-        var mapSizeInCells = new Coords(mapCellSource[0].length, mapCellSource.length, 1);
+        var mapSizeInCells = new Coords(mapCellSourceAsStrings[0].length, mapCellSourceAsStrings.length, 1);
         var mapCellSize = size.clone().divide(mapSizeInCells).ceiling();
         var mapCellSizeHalf = mapCellSize.clone().half();
         var entityExitPosRange = new Box(mapCellSize.clone().half(), null);
@@ -480,24 +480,8 @@ class PlaceBuilderDemo // Main.
             new Terrain("Snow", "*", 5, new Traversable(false), colorToTerrainVisualByName("White")),
         ];
         var terrainsByName = ArrayHelper.addLookupsByName(terrains);
-        var terrainsByCode = ArrayHelper.addLookups(terrains, (x) => x.code);
-        var map = new MapOfCells("Terrarium", mapSizeInCells, mapCellSize, null, // cellCreate
-        (map, cellPosInCells, cellToOverwrite) => // cellAtPosInCells
-         {
-            if (cellPosInCells.isInRangeMax(map.sizeInCellsMinusOnes)) {
-                var cellCode = map.cellSource[cellPosInCells.y][cellPosInCells.x];
-                var cellTerrain = (terrainsByCode.get(cellCode) || terrains[0]);
-                var cellVisualName = cellTerrain.name;
-                var cellIsBlocking = cellTerrain.traversable.isBlocking;
-                var cellToOverwriteAsAny = cellToOverwrite;
-                cellToOverwriteAsAny.visualName = cellVisualName;
-                cellToOverwriteAsAny.isBlocking = cellIsBlocking;
-            }
-            else {
-                cellToOverwrite = null;
-            }
-            return cellToOverwrite;
-        }, mapCellSource);
+        var mapCellSource = new MapOfCellsCellSourceTerrain(terrains, mapCellSourceAsStrings);
+        var map = new MapOfCells("Terrarium", mapSizeInCells, mapCellSize, mapCellSource);
         var mapAndCellPosToEntity = (map, cellPosInCells) => {
             var cellVisuals = [];
             var cell = map.cellAtPosInCells(cellPosInCells);
@@ -798,7 +782,7 @@ class PlaceBuilderDemo // Main.
     }
     entityBuildLoader(entityDefn, entityCount, entityPosRange, randomizer) {
         var placeBuilder = this;
-        var loadable = new Loadable((uwpe) => // load
+        var loadable = new LoadableProperty((uwpe) => // load
          {
             var place = uwpe.place;
             var placeAsPlaceRoom = place;
@@ -1101,7 +1085,7 @@ class PlaceBuilderDemo // Main.
             var projectileCollider = new Sphere(Coords.create(), projectileDimension);
             // todo
             var projectileCollide = null;
-            var projectileDie = (u, w, p, entityDying) => {
+            var projectileDie = (uwpe) => {
                 var explosionRadius = 32;
                 var explosionVisual = VisualCircle.fromRadiusAndColorFill(explosionRadius, Color.byName("Yellow"));
                 var explosionCollider = new Sphere(Coords.create(), explosionRadius);
@@ -1113,6 +1097,7 @@ class PlaceBuilderDemo // Main.
                         killable.damageApply(uwpe, entityProjectile.damager().damagePerHit);
                     }
                 };
+                var entityDying = uwpe.entity;
                 var explosionEntity = new Entity("BombExplosion", [
                     new Collidable(0, explosionCollider, [Killable.name], explosionCollide),
                     new Damager(Damage.fromAmount(20)),
@@ -1824,5 +1809,35 @@ class PlaceBuilderDemo // Main.
             this.entityDefnBuildWeight(entityDimension),
         ];
         return entityDefns;
+    }
+}
+class MapOfCellsCellSourceTerrain {
+    constructor(terrains, cellsAsStrings) {
+        this.terrains = terrains;
+        this.terrainsByCode =
+            new Map(this.terrains.map(x => [x.code, x]));
+        this.cellsAsStrings = cellsAsStrings;
+    }
+    cellCreate() {
+        return MapCellObstacle.default();
+    }
+    cellAtPosInCells(map, cellPosInCells, cellToOverwrite) {
+        if (cellPosInCells.isInRangeMax(map.sizeInCellsMinusOnes)) {
+            var cellCode = this.cellsAsStrings[cellPosInCells.y][cellPosInCells.x];
+            var cellTerrain = (this.terrainsByCode.get(cellCode) || this.terrains[0]);
+            var cellVisualName = cellTerrain.name;
+            var cellIsBlocking = cellTerrain.traversable.isBlocking;
+            cellToOverwrite.visualName = cellVisualName;
+            cellToOverwrite.isBlocking = cellIsBlocking;
+        }
+        else {
+            cellToOverwrite = null;
+        }
+        return cellToOverwrite;
+    }
+    // Clonable.
+    clone() { return this; }
+    overwriteWith(other) {
+        return this;
     }
 }

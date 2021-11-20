@@ -24,7 +24,13 @@ export class ShapeGroupAll implements ShapeBase
 		return this;
 	}
 
+	// Equatable
+
+	equals(other: ShapeBase) { return false; } // todo
+
 	// ShapeBase.
+
+	collider(): ShapeBase { return null; }
 
 	locate(loc: Disposition): ShapeBase
 	{
@@ -48,7 +54,7 @@ export class ShapeGroupAll implements ShapeBase
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): ShapeGroupAll
 	{
 		this.shapes.forEach( (x: ShapeBase) => x.transform(transformToApply));
 		return this;

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Transform_Colorize implements Transform
+export class Transform_Colorize implements Transform<Transform_Colorize>
 {
 	colorFill: Color;
 	colorBorder: Color;
@@ -13,21 +13,22 @@ export class Transform_Colorize implements Transform
 		this.colorBorder = colorBorder;
 	}
 
-	overwriteWith(other: Transform)
+	clone(): Transform_Colorize { return this; } // todo
+
+	overwriteWith(other: Transform_Colorize): Transform_Colorize
 	{
 		return this; // todo
 	}
 
-	transform(transformable: Transformable): Transformable
+	transform(transformable: TransformableBase): TransformableBase
 	{
-		var transformableAsAny: any = transformable;
-		if (transformableAsAny.colorFill == null)
+		var transformableAsColorable = transformable as Transformable_Colorable;
+		if (transformableAsColorable == null)
 		{
 			transformable.transform(this);
 		}
 		else
 		{
-			var transformableAsColorable = transformableAsAny as Colorable;
 			var colorFill = transformableAsColorable.colorFill;
 			var colorBorder = transformableAsColorable.colorBorder;
 

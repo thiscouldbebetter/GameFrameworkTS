@@ -6,7 +6,7 @@ export class PlatformHelper
 {
 	// This class is meant to encapsulate interactions with the DOM ("Domain Object Model").
 
-	divMain: any;
+	divMain: HTMLDivElement;
 
 	platformableAdd(platformable: Platformable): void
 	{
@@ -54,14 +54,14 @@ export class PlatformHelper
 			this.divMain = divMain;
 		}
 		var display = universe.display;
-		divMain.style.marginLeft = 0 - display.sizeInPixels.x / 2;
-		divMain.style.marginTop = 0 - display.sizeInPixels.y / 2;
+		divMain.style.marginLeft = "" + (0 - display.sizeInPixels.x / 2);
+		divMain.style.marginTop = "" + (0 - display.sizeInPixels.y / 2);
 	}
 }
 
 export interface Platformable
 {
-	toDomElement: (ph: PlatformHelper) => any;
+	toDomElement: (ph: PlatformHelper) => HTMLElement;
 }
 
 }

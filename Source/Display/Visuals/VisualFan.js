@@ -28,8 +28,7 @@ var ThisCouldBeBetter;
             clone() {
                 return new VisualFan(this.radius, this.angleStartInTurns, this.angleSpannedInTurns, this.colorFill.clone(), (this.colorBorder == null ? null : this.colorBorder.clone()));
             }
-            overwriteWith(otherAsVisual) {
-                var other = otherAsVisual;
+            overwriteWith(other) {
                 this.radius = other.radius;
                 this.angleStartInTurns = other.angleStartInTurns;
                 this.angleSpannedInTurns = other.angleSpannedInTurns;

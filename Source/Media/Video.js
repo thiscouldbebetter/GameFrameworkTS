@@ -14,7 +14,7 @@ var ThisCouldBeBetter;
                     this.domElement = document.createElement("video");
                 }
                 this.domElement.src = this.sourcePath;
-                this.domElement.video = this;
+                //this.domElement.video = this;
                 this.domElement.autoplay = true;
                 this.domElement.onended = this.stop.bind(this, platformHelper);
                 var displaySize = this._size;
@@ -31,6 +31,8 @@ var ThisCouldBeBetter;
                 platformHelper.platformableRemove(this);
                 this.isFinished = true;
             }
+            load() { }
+            unload() { }
         }
         GameFramework.Video = Video;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

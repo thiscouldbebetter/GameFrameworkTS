@@ -8,10 +8,9 @@ var ThisCouldBeBetter;
                 collisionMapSizeInCells =
                     collisionMapSizeInCells || GameFramework.Coords.fromXY(1, 1).multiplyScalar(4);
                 var collisionMapCellSize = size.clone().divide(collisionMapSizeInCells);
-                this.collisionMap = new GameFramework.MapOfCells(CollisionTracker.name, collisionMapSizeInCells, collisionMapCellSize, () => new CollisionTrackerMapCell(), null, // cellAtPosInCells,
-                new Array() // cellSource
-                );
                 this._cells = new Array();
+                this.collisionMap = new GameFramework.MapOfCells(CollisionTracker.name, collisionMapSizeInCells, collisionMapCellSize, new GameFramework.MapOfCellsCellSourceArray(this._cells, () => new CollisionTrackerMapCell()) // cellSource
+                );
             }
             static fromSize(size) {
                 return new CollisionTracker(size, GameFramework.Coords.fromXY(4, 4));
@@ -53,16 +52,23 @@ var ThisCouldBeBetter;
             finalize(uwpe) { }
             initialize(uwpe) { }
             updateForTimerTick(uwpe) {
-                var cellsAll = this.collisionMap.cellSource;
+                var cellsAll = this._cells;
                 cellsAll.forEach(x => {
                     x.entitiesPresent = x.entitiesPresent.filter(y => y.collidable().isEntityStationary(y));
                 });
             }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.CollisionTracker = CollisionTracker;
         class CollisionTrackerMapCell {
             constructor() {
                 this.entitiesPresent = new Array();
+            }
+            // Clonable.
+            clone() { return this; } // todo
+            overwriteWith(other) {
+                return this; // todo
             }
         }
         GameFramework.CollisionTrackerMapCell = CollisionTrackerMapCell;

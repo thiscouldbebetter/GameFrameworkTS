@@ -25,11 +25,6 @@ export class Plane implements ShapeBase
 		) - this.distanceFromOrigin;
 	}
 
-	equals(other: Plane)
-	{
-		return (this.normal.equals(other.normal) && this.distanceFromOrigin == other.distanceFromOrigin);
-	}
-
 	fromPoints(point0: Coords, point1: Coords, point2: Coords)
 	{
 		this.normal.overwriteWith
@@ -79,7 +74,22 @@ export class Plane implements ShapeBase
 		return this;
 	}
 
+	// Equatable
+
+	equals(other: Plane): boolean
+	{
+		var returnValue =
+		(
+			this.normal.equals(other.normal)
+			&& this.distanceFromOrigin == other.distanceFromOrigin
+		);
+
+		return returnValue;
+	}
+
 	// ShapeBase.
+
+	collider(): ShapeBase { return null; }
 
 	locate(loc: Disposition): ShapeBase { throw new Error("Not implemented!"); }
 
@@ -91,7 +101,7 @@ export class Plane implements ShapeBase
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): Plane
 	{
 		throw new Error("Not implemented!");
 	}

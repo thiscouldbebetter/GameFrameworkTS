@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Transform_Orient implements Transform
+export class Transform_Orient implements Transform<Transform_Orient>
 {
 	orientation: Orientation;
 
@@ -15,17 +15,23 @@ export class Transform_Orient implements Transform
 		this._components = [ Coords.create(), Coords.create(), Coords.create() ];
 	}
 
-	overwriteWith(other: Transform)
+	clone(): Transform_Orient
 	{
-		return this; // todo
+		return new Transform_Orient(this.orientation.clone());
 	}
 
-	transform(transformable: Transformable): Transformable
+	overwriteWith(other: Transform_Orient): Transform_Orient
+	{
+		this.orientation.overwriteWith(other.orientation);
+		return this;
+	}
+
+	transform(transformable: TransformableBase): TransformableBase
 	{
 		return transformable.transform(this);
 	}
 
-	transformCoords(coordsToTransform: Coords)
+	transformCoords(coordsToTransform: Coords): Coords
 	{
 		var components = this._components;
 		var ori = this.orientation;

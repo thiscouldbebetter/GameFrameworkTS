@@ -34,17 +34,19 @@ var ThisCouldBeBetter;
                                 targetPreferredInHearing.locatable().loc.pos.clone();
                         }
                         else {
-                            var targetPosExisting = activity.target();
-                            if (targetPosExisting == null) {
+                            var targetEntity = activity.targetEntity();
+                            if (targetEntity == null) {
                                 targetPosToApproach =
                                     GameFramework.Coords.create().randomize(universe.randomizer).multiply(place.size);
                             }
                             else {
+                                var targetPosExisting = targetEntity.locatable().loc.pos;
                                 targetPosToApproach = targetPosExisting;
                             }
                         }
                     }
-                    activity.targetSet(targetPosToApproach);
+                    targetEntity = GameFramework.Locatable.fromPos(targetPosToApproach).toEntity();
+                    activity.targetEntitySet(targetEntity);
                     // hack
                     var targetLocatable = GameFramework.Locatable.fromPos(targetPosToApproach);
                     var enemy = actor.enemy();
@@ -54,7 +56,7 @@ var ThisCouldBeBetter;
                     (targetLocatable, .1, 1 //, distanceToApproach
                     );
                     if (distanceToTarget <= distanceToApproach) {
-                        activity.targetClear();
+                        activity.targetEntityClear();
                     }
                 };
                 var enemyActivityDefn = new GameFramework.ActivityDefn("Enemy", enemyActivityPerform);
@@ -64,6 +66,8 @@ var ThisCouldBeBetter;
             finalize(uwpe) { }
             initialize(uwpe) { }
             updateForTimerTick(uwpe) { }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.Enemy = Enemy;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

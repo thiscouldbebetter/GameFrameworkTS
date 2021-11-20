@@ -31,7 +31,10 @@ var ThisCouldBeBetter;
                 this.plane.overwriteWith(other.plane);
                 return this;
             }
+            // Equatable
+            equals(other) { return false; } // todo
             // ShapeBase.
+            collider() { return null; }
             locate(loc) {
                 throw new Error("Not implemented!");
             }

@@ -41,6 +41,7 @@ var ThisCouldBeBetter;
                     var bone = this.bonesAll[i];
                     bone.transform(transformToApply);
                 }
+                return this;
             }
         }
         GameFramework.Skeleton = Skeleton;

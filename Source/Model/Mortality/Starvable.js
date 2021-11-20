@@ -46,6 +46,8 @@ var ThisCouldBeBetter;
             clone() {
                 return new Starvable(this.satietyMax, this.satietyLostPerTick, this._starve);
             }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.Starvable = Starvable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

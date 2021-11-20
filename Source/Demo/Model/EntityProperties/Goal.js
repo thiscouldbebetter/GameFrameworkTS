@@ -7,4 +7,6 @@ class Goal {
     finalize(uwpe) { }
     initialize(uwpe) { }
     updateForTimerTick(uwpe) { }
+    // Equatable
+    equals(other) { return false; } // todo
 }

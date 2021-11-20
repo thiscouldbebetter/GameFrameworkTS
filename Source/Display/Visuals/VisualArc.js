@@ -30,8 +30,7 @@ var ThisCouldBeBetter;
             clone() {
                 return new VisualArc(this.radiusOuter, this.radiusInner, this.directionMin.clone(), this.angleSpannedInTurns, this.colorFill.clone(), (this.colorBorder == null ? null : this.colorBorder.clone()));
             }
-            overwriteWith(otherAsVisual) {
-                var other = otherAsVisual;
+            overwriteWith(other) {
                 this.radiusOuter = other.radiusOuter;
                 this.radiusInner = other.radiusInner;
                 this.directionMin.overwriteWith(other.directionMin);

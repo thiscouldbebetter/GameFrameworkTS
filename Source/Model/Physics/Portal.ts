@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Portal implements EntityProperty
+export class Portal implements EntityProperty<Portal>
 {
 	destinationPlaceName: string;
 	destinationEntityName: string;
@@ -98,6 +98,11 @@ export class Portal implements EntityProperty
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
+
+	// Equatable
+
+	equals(other: Portal): boolean { return false; } // todo
+
 }
 
 }

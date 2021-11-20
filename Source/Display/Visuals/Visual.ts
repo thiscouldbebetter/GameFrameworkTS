@@ -2,12 +2,12 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export interface Visual extends Transformable
+export interface VisualBase extends Clonable<VisualBase>, Transformable<VisualBase>
 {
-	draw(uwpe: UniverseWorldPlaceEntities, display: Display): any;
-
-	clone(): Visual;
-	overwriteWith(x: Visual): Visual;
+	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void;
 }
+
+export interface Visual<T extends VisualBase> extends Clonable<T>, Transformable<T>
+{}
 
 }

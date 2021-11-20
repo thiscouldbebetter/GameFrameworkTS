@@ -62,12 +62,12 @@ export class UserInputListener extends Entity
 		}
 	}
 
-	static visualBuild(): Visual
+	static visualBuild(): VisualBase
 	{
 		var returnValue = new VisualSelect
 		(
 			// childrenByNames
-			new Map<string, Visual>
+			new Map<string, VisualBase>
 			([
 				[ "None", new VisualNone() ]
 			]),

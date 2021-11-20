@@ -2,14 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualSelect implements Visual
+export class VisualSelect implements Visual<VisualSelect>
 {
-	childrenByName: Map<string, Visual>;
+	childrenByName: Map<string, VisualBase>;
 	selectChildNames: (uwpe: UniverseWorldPlaceEntities, d: Display) => string[];
 
 	constructor
 	(
-		childrenByName: Map<string, Visual>,
+		childrenByName: Map<string, VisualBase>,
 		selectChildNames: (uwpe: UniverseWorldPlaceEntities, d: Display) => string[]
 	)
 	{
@@ -33,19 +33,19 @@ export class VisualSelect implements Visual
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualSelect
 	{
 		return this; // todo
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualSelect): VisualSelect
 	{
 		return this; // todo
 	}
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualSelect
 	{
 		return this; // todo
 	}

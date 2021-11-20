@@ -66,6 +66,8 @@ var ThisCouldBeBetter;
                     vehicleVel.trimToMagnitudeMax(this.speedMax);
                 }
             }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.Vehicle = Vehicle;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

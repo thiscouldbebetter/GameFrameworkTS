@@ -69,11 +69,6 @@ export class Sphere implements ShapeBase
 		return new Sphere(this.center.clone(), this.radius);
 	}
 
-	equals(other: Sphere): boolean
-	{
-		return (this.center.equals(other.center) && this.radius == other.radius);
-	}
-
 	overwriteWith(other: Sphere): Sphere
 	{
 		this.center.overwriteWith(other.center);
@@ -81,7 +76,16 @@ export class Sphere implements ShapeBase
 		return this;
 	}
 
+	// Equatable.
+
+	equals(other: Sphere): boolean
+	{
+		return (this.center.equals(other.center) && this.radius == other.radius);
+	}
+
 	// ShapeBase.
+
+	collider(): ShapeBase { return null; }
 
 	locate(loc: Disposition): ShapeBase
 	{
@@ -119,7 +123,7 @@ export class Sphere implements ShapeBase
 		return this._centerAsArray;
 	}
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): Sphere
 	{
 		throw new Error("Not implemented!");
 	}

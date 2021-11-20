@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Perceptible implements EntityProperty
+export class Perceptible implements EntityProperty<Perceptible>
 {
 	isHiding: boolean;
 	visibility: (uwpe: UniverseWorldPlaceEntities) => number;
@@ -109,6 +109,11 @@ export class Perceptible implements EntityProperty
 		this.audibility = other.audibility;
 		return this;
 	}
+
+	// Equatable
+
+	equals(other: Perceptible): boolean { return false; } // todo
+
 }
 
 }

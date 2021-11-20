@@ -5,18 +5,21 @@ namespace ThisCouldBeBetter.GameFramework
 export class MazeCellNetwork
 {
 	networkID: number;
-	cells: any;
+	cells: MazeCell[];
 
 	constructor()
 	{
 		this.networkID = MazeCellNetwork.MaxIDSoFar;
 		MazeCellNetwork.MaxIDSoFar++;
-		this.cells = [];
+		this.cells = new Array<MazeCell>();
 	}
 
 	static MaxIDSoFar = 0;
 
-	static mergeNetworks(network0: MazeCellNetwork, network1: MazeCellNetwork)
+	static mergeNetworks
+	(
+		network0: MazeCellNetwork, network1: MazeCellNetwork
+	): MazeCellNetwork
 	{
 		var networkMerged = new MazeCellNetwork();
 

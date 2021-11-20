@@ -15,8 +15,10 @@ export class MeshTextured implements ShapeBase
 
 	constructor
 	(
-		geometry: Mesh, materials: Material[],
-		faceTextures: MeshTexturedFaceTexture[], vertexGroups: VertexGroup[]
+		geometry: Mesh,
+		materials: Material[],
+		faceTextures: MeshTexturedFaceTexture[],
+		vertexGroups: VertexGroup[]
 	)
 	{
 		this.geometry = geometry;
@@ -107,14 +109,14 @@ export class MeshTextured implements ShapeBase
 		return this._faceIndicesByMaterialName;
 	}
 
-	transform(transformToApply: Transform): MeshTextured
+	transform(transformToApply: TransformBase): MeshTextured
 	{
 		this.geometry.transform(transformToApply);
 
 		return this;
 	}
 
-	transformFaceTextures(transformToApply: Transform): MeshTextured
+	transformFaceTextures(transformToApply: TransformBase): MeshTextured
 	{
 		for (var i = 0; i < this.faceTextures.length; i++)
 		{
@@ -125,7 +127,7 @@ export class MeshTextured implements ShapeBase
 		return this;
 	}
 
-	// cloneable
+	// Clonable.
 
 	clone(): MeshTextured
 	{
@@ -145,7 +147,13 @@ export class MeshTextured implements ShapeBase
 		return this;
 	}
 
+	// Equatable
+
+	equals(other: ShapeBase) { return false; } // todo
+
 	// ShapeBase.
+
+	collider(): ShapeBase { return null; }
 
 	locate(loc: Disposition): ShapeBase
 	{
@@ -179,6 +187,8 @@ export class MeshTexturedFaceTexture
 		this.textureUVs = textureUVs;
 	}
 
+	// Clonable.
+
 	clone(): MeshTexturedFaceTexture
 	{
 		return new MeshTexturedFaceTexture
@@ -186,10 +196,17 @@ export class MeshTexturedFaceTexture
 			this.materialName, ArrayHelper.clone(this.textureUVs)
 		);
 	}
+	
+	overwriteWith(other: MeshTexturedFaceTexture): MeshTexturedFaceTexture
+	{
+		this.materialName = other.materialName;
+		ArrayHelper.overwriteWith(this.textureUVs, other.textureUVs);
+		return this;
+	}
 
 	// Transformable.
 
-	transform(transformToApply: Transform): MeshTexturedFaceTexture
+	transform(transformToApply: TransformBase): MeshTexturedFaceTexture
 	{
 		for (var i = 0; i < this.textureUVs.length; i++)
 		{

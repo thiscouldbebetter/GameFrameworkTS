@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ItemContainer implements EntityProperty
+export class ItemContainer implements EntityProperty<ItemContainer>
 {
 	statusMessage: string;
 
@@ -55,6 +55,10 @@ export class ItemContainer implements EntityProperty
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
+
+	// Equatable
+
+	equals(other: ItemContainer): boolean { return false; } // todo
 
 	// Controllable.
 
@@ -114,7 +118,7 @@ export class ItemContainer implements EntityProperty
 					Coords.fromXY(margin, margin), // pos
 					Coords.fromXY(listSize.x, 25), // size
 					false, // isTextCentered
-					entityContainer.name + ":",
+					DataBinding.fromContext(entityContainer.name + ":"),
 					fontHeight
 				),
 
@@ -139,7 +143,7 @@ export class ItemContainer implements EntityProperty
 						(c: ItemHolder) => c.itemSelected,
 						(c: ItemHolder, v: Item) => c.itemSelected = v
 					), // bindingForItemSelected
-					DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
+					DataBinding.fromGet( (c: Item) => c ), // bindingForItemValue
 					DataBinding.fromTrue(), // isEnabled
 					get, // confirm
 					null
@@ -183,7 +187,7 @@ export class ItemContainer implements EntityProperty
 					Coords.fromXY(size.x - margin - listSize.x, margin), // pos
 					Coords.fromXY(85, 25), // size
 					false, // isTextCentered
-					entityGetterPutter.name + ":",
+					DataBinding.fromContext(entityGetterPutter.name + ":"),
 					fontHeight
 				),
 
@@ -200,7 +204,7 @@ export class ItemContainer implements EntityProperty
 					), // items
 					DataBinding.fromGet
 					(
-						(c: Entity) => c.item().toString(world)
+						(c: Item) => c.toString(world)
 					), // bindingForItemText
 					fontHeight,
 					new DataBinding
@@ -210,7 +214,7 @@ export class ItemContainer implements EntityProperty
 						(c: ItemHolder, v: Item) =>
 							c.itemSelected = v
 					), // bindingForItemSelected
-					DataBinding.fromGet( (c: Entity) => c ), // bindingForItemValue
+					DataBinding.fromGet( (c: Item) => c ), // bindingForItemValue
 					DataBinding.fromTrue(), // isEnabled
 					put, // confirm
 					null
@@ -238,7 +242,7 @@ export class ItemContainer implements EntityProperty
 					"Done",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					back // click
 				)
 			],

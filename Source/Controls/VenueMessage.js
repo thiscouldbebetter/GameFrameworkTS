@@ -18,7 +18,7 @@ var ThisCouldBeBetter;
                 return new VenueMessage(messageToShow, acknowledge, null, null, null);
             }
             static fromText(message) {
-                return VenueMessage.fromMessage(GameFramework.DataBinding.fromContext(message));
+                return VenueMessage.fromMessage(GameFramework.DataBinding.fromGet((c) => message));
             }
             // instance methods
             draw(universe) {

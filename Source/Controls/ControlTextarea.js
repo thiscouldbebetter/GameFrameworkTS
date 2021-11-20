@@ -12,10 +12,11 @@ var ThisCouldBeBetter;
                 this.cursorPos = null;
                 this.lineSpacing = 1.2 * this.fontHeightInPixels; // hack
                 var scrollbarWidth = this.lineSpacing;
-                this.scrollbar = new GameFramework.ControlScrollbar(new GameFramework.Coords(this.size.x - scrollbarWidth, 0, 0), // pos
-                new GameFramework.Coords(scrollbarWidth, this.size.y, 0), // size
+                var thisAsControlTextarea = this;
+                this.scrollbar = new GameFramework.ControlScrollbar(GameFramework.Coords.fromXY(this.size.x - scrollbarWidth, 0), // pos
+                GameFramework.Coords.fromXY(scrollbarWidth, this.size.y), // size
                 this.fontHeightInPixels, this.lineSpacing, // itemHeight
-                GameFramework.DataBinding.fromContextAndGet(this, (c) => c.textAsLines()), 0 // sliderPosInItems
+                GameFramework.DataBinding.fromContextAndGet(thisAsControlTextarea, (c) => c.textAsLines()), 0 // sliderPosInItems
                 );
                 // Helper variables.
                 this._drawPos = GameFramework.Coords.create();
@@ -110,7 +111,9 @@ var ThisCouldBeBetter;
                 return this.scrollbar.sliderPosInItems();
             }
             indexOfLastLineVisible() {
-                return this.indexOfFirstLineVisible() + Math.floor(this.scrollbar.windowSizeInItems) - 1;
+                var returnValue = (this.indexOfFirstLineVisible()
+                    + Math.floor(this.scrollbar.windowSizeInItems) - 1);
+                return returnValue;
             }
             indexOfLineSelected(valueToSet) {
                 var returnValue = valueToSet;

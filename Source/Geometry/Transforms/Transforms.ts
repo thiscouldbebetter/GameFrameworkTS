@@ -6,7 +6,8 @@ export class Transforms
 {
 	static applyTransformToCoordsArrays
 	(
-		transformToApply: Transform, coordsArraysToTransform: Coords[][]
+		transformToApply: TransformBase,
+		coordsArraysToTransform: Coords[][]
 	)
 	{
 		if (coordsArraysToTransform == null)
@@ -21,7 +22,10 @@ export class Transforms
 		}
 	}
 
-	static applyTransformToCoordsMany(transformToApply: Transform, coordsSetToTransform: Coords[])
+	static applyTransformToCoordsMany
+	(
+		transformToApply: TransformBase, coordsSetToTransform: Coords[]
+	)
 	{
 		for (var i = 0; i < coordsSetToTransform.length; i++)
 		{

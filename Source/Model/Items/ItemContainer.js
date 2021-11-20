@@ -30,6 +30,8 @@ var ThisCouldBeBetter;
             finalize(uwpe) { }
             initialize(uwpe) { }
             updateForTimerTick(uwpe) { }
+            // Equatable
+            equals(other) { return false; } // todo
             // Controllable.
             toControl(universe, size, entityGetterPutter, entityContainer, venuePrev) {
                 if (size == null) {
@@ -61,7 +63,7 @@ var ThisCouldBeBetter;
                     new GameFramework.ControlLabel("labelContainerName", GameFramework.Coords.fromXY(margin, margin), // pos
                     GameFramework.Coords.fromXY(listSize.x, 25), // size
                     false, // isTextCentered
-                    entityContainer.name + ":", fontHeight),
+                    GameFramework.DataBinding.fromContext(entityContainer.name + ":"), fontHeight),
                     new GameFramework.ControlList("listContainerItems", GameFramework.Coords.fromXY(margin, margin * 2), // pos
                     listSize.clone(), GameFramework.DataBinding.fromContextAndGet(itemHolderContainer, (c) => c.items), // items
                     GameFramework.DataBinding.fromGet((c) => c.toString(world)), // bindingForItemText
@@ -83,11 +85,11 @@ var ThisCouldBeBetter;
                     new GameFramework.ControlLabel("labelGetterPutterName", GameFramework.Coords.fromXY(size.x - margin - listSize.x, margin), // pos
                     GameFramework.Coords.fromXY(85, 25), // size
                     false, // isTextCentered
-                    entityGetterPutter.name + ":", fontHeight),
+                    GameFramework.DataBinding.fromContext(entityGetterPutter.name + ":"), fontHeight),
                     new GameFramework.ControlList("listOtherItems", GameFramework.Coords.fromXY(size.x - margin - listSize.x, margin * 2), // pos
                     listSize.clone(), GameFramework.DataBinding.fromContextAndGet(itemHolderGetterPutter, (c) => c.items //.filter(x => x.item().defnName != itemDefnNameCurrency);
                     ), // items
-                    GameFramework.DataBinding.fromGet((c) => c.item().toString(world)), // bindingForItemText
+                    GameFramework.DataBinding.fromGet((c) => c.toString(world)), // bindingForItemText
                     fontHeight, new GameFramework.DataBinding(itemHolderGetterPutter, (c) => c.itemSelected, (c, v) => c.itemSelected = v), // bindingForItemSelected
                     GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
                     GameFramework.DataBinding.fromTrue(), // isEnabled
@@ -99,7 +101,7 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromContextAndGet(this, c => c.statusMessage), fontHeight),
                     GameFramework.ControlButton.from8("buttonDone", GameFramework.Coords.fromXY(size.x - margin - buttonSize.x, size.y - margin - buttonSize.y), // pos
                     buttonSize.clone(), "Done", fontHeight, true, // hasBorder
-                    true, // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     back // click
                     )
                 ], [new GameFramework.Action("Back", back)], [new GameFramework.ActionToInputsMapping("Back", [GameFramework.Input.Names().Escape], true)]);

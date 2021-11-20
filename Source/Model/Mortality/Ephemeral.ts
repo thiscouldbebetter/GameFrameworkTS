@@ -2,16 +2,22 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Ephemeral implements EntityProperty
+export class Ephemeral implements EntityProperty<Ephemeral>
 {
 	ticksToLive: number;
-	expire: any;
+	expire: (uwpe: UniverseWorldPlaceEntities) => void;
 
-	constructor(ticksToLive: number, expire: any)
+	constructor
+	(
+		ticksToLive: number,
+		expire: (uwpe: UniverseWorldPlaceEntities) => void
+	)
 	{
 		this.ticksToLive = ticksToLive;
 		this.expire = expire;
 	}
+
+	toEntity(): Entity { return new Entity(Ephemeral.name, [ this ] ); }
 
 	// EntityProperty.
 
@@ -32,12 +38,17 @@ export class Ephemeral implements EntityProperty
 		}
 	}
 
-	// cloneable
+	// Clonable.
 
 	clone(): Ephemeral
 	{
 		return new Ephemeral(this.ticksToLive, this.expire);
 	}
+
+	// Equatable
+
+	equals(other: Ephemeral): boolean { return false; } // todo
+
 }
 
 }

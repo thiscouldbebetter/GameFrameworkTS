@@ -47,6 +47,8 @@ var ThisCouldBeBetter;
                 this.entitiesGeneratedMax = other.entitiesGeneratedMax;
                 return this;
             }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.EntityGenerator = EntityGenerator;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

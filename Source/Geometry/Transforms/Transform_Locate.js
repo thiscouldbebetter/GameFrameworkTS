@@ -9,8 +9,12 @@ var ThisCouldBeBetter;
                 this.transformOrient = new GameFramework.Transform_Orient(null);
                 this.transformTranslate = new GameFramework.Transform_Translate(null);
             }
+            clone() {
+                return new Transform_Locate(this.loc.clone());
+            }
             overwriteWith(other) {
-                return this; // todo
+                this.loc.overwriteWith(other.loc);
+                return this;
             }
             transform(transformable) {
                 return transformable.transform(this);

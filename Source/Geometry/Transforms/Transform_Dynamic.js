@@ -7,9 +7,12 @@ var ThisCouldBeBetter;
             constructor(transformTransformable) {
                 this.transformTransformable = transformTransformable;
             }
+            // Clonable.
+            clone() { return this; } // todo
             overwriteWith(other) {
                 return this;
             }
+            // TransformBase.
             transform(transformable) {
                 return this.transformTransformable(transformable);
             }

@@ -20,24 +20,25 @@ var ThisCouldBeBetter;
             center() {
                 return this.sphereOuter.center;
             }
-            collider() {
-                return this._collider;
-            }
             // cloneable
             clone() {
                 return new Shell(this.sphereOuter.clone(), this.radiusInner);
-            }
-            equals(other) {
-                var returnValue = (this.sphereOuter.equals(other.sphereOuter)
-                    && this.radiusInner == other.radiusInner);
-                return returnValue;
             }
             overwriteWith(other) {
                 this.sphereOuter.overwriteWith(other.sphereOuter);
                 this.radiusInner = other.radiusInner;
                 return this;
             }
+            // Equatable
+            equals(other) {
+                var returnValue = (this.sphereOuter.equals(other.sphereOuter)
+                    && this.radiusInner == other.radiusInner);
+                return returnValue;
+            }
             // ShapeBase.
+            collider() {
+                return this._collider;
+            }
             locate(loc) {
                 return GameFramework.ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
             }

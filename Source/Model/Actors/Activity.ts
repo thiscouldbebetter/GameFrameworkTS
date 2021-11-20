@@ -5,12 +5,17 @@ namespace ThisCouldBeBetter.GameFramework
 export class Activity
 {
 	defnName: string;
-	targetsByName: Map<string, any>;
+	targetEntitiesByName: Map<string, Entity>;
 
-	constructor(defnName: string, targetsByName: Map<string,any>)
+	constructor
+	(
+		defnName: string,
+		targetEntitiesByName: Map<string, Entity>
+	)
 	{
 		this.defnName = defnName;
-		this.targetsByName = targetsByName || new Map<string,any>([]);
+		this.targetEntitiesByName =
+			targetEntitiesByName || new Map<string, Entity>([]);
 	}
 
 	static fromDefnName(defnName: string): Activity
@@ -18,7 +23,10 @@ export class Activity
 		return new Activity(defnName, null);
 	}
 
-	static fromDefnNameAndTarget(defnName: string, target: any): Activity
+	static fromDefnNameAndTargetEntity
+	(
+		defnName: string, target: Entity
+	): Activity
 	{
 		return new Activity
 		(
@@ -33,7 +41,7 @@ export class Activity
 	clear(): Activity
 	{
 		this.defnName = ActivityDefn.Instances().DoNothing.name;
-		this.targetClear();
+		this.targetEntityClear();
 		return this;
 	}
 
@@ -42,10 +50,13 @@ export class Activity
 		return world.defn.activityDefnByName(this.defnName);
 	}
 
-	defnNameAndTargetSet(defnName: string, target: any): Activity
+	defnNameAndTargetEntitySet
+	(
+		defnName: string, targetEntity: Entity
+	): Activity
 	{
 		this.defnName = defnName;
-		this.targetSet(target);
+		this.targetEntitySet(targetEntity);
 		return this;
 	}
 
@@ -58,37 +69,37 @@ export class Activity
 		}
 	}
 
-	target(): any
+	targetEntity(): Entity
 	{
-		return this.targetByName(this.defnName);
+		return this.targetEntityByName(this.defnName);
 	}
 
-	targetByName(targetName: string): any
+	targetEntityByName(targetEntityName: string): Entity
 	{
-		return this.targetsByName.get(targetName);
+		return this.targetEntitiesByName.get(targetEntityName);
 	}
 
-	targetClear(): Activity
+	targetEntityClear(): Activity
 	{
-		this.targetClearByName(this.defnName);
+		this.targetEntityClearByName(this.defnName);
 		return this;
 	}
 
-	targetClearByName(name: string): Activity
+	targetEntityClearByName(name: string): Activity
 	{
-		this.targetsByName.delete(name);
+		this.targetEntitiesByName.delete(name);
 		return this;
 	}
 
-	targetSet(value: any): Activity
+	targetEntitySet(value: Entity): Activity
 	{
-		this.targetSetByName(this.defnName, value);
+		this.targetEntitySetByName(this.defnName, value);
 		return this;
 	}
 
-	targetSetByName(name: string, value: any): Activity
+	targetEntitySetByName(name: string, value: Entity): Activity
 	{
-		this.targetsByName.set(name, value);
+		this.targetEntitiesByName.set(name, value);
 		return this;
 	}
 

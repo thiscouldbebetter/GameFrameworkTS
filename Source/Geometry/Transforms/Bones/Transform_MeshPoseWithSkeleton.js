@@ -14,6 +14,9 @@ var ThisCouldBeBetter;
                 this._orientation = new GameFramework.Orientation(GameFramework.Coords.create(), GameFramework.Coords.create());
                 this._vertex = GameFramework.Coords.create();
             }
+            clone() {
+                return this;
+            }
             overwriteWith(other) {
                 return this; // todo
             }

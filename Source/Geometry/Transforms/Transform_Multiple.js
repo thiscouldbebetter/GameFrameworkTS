@@ -7,6 +7,9 @@ var ThisCouldBeBetter;
             constructor(transforms) {
                 this.transforms = transforms;
             }
+            clone() {
+                return new Transform_Multiple(this.transforms); // todo
+            }
             overwriteWith(other) {
                 return this; // todo
             }

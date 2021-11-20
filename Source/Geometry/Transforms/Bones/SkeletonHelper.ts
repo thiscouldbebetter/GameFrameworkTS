@@ -397,7 +397,8 @@ export class SkeletonHelper
 		var bones = skeletonAtRest.bonesAll;
 
 		var boneInfluences = new Array<BoneInfluence>();
-		var boneNameToInfluenceLookup: any = {};
+		var boneNameToInfluenceLookup = new Map<string, BoneInfluence>();
+		var bonesAllByName = skeletonAtRest.bonesAllByName;
 
 		for (var v = 0; v < vertices.length; v++)
 		{
@@ -412,7 +413,7 @@ export class SkeletonHelper
 
 				var displacement = vertex.clone().subtract
 				(
-					bone.pos(bones).add
+					bone.pos(bonesAllByName).add
 					(
 						bone.orientation.forward.clone().multiplyScalar
 						(
@@ -433,11 +434,12 @@ export class SkeletonHelper
 			var boneClosest = bones[indexOfBoneClosestSoFar];
 			var boneClosestName = boneClosest.name;
 
-			var boneInfluence = boneNameToInfluenceLookup[boneClosestName];
+			var boneInfluence =
+				boneNameToInfluenceLookup.get(boneClosestName);
 			if (boneInfluence == null)
 			{
 				boneInfluence = new BoneInfluence(boneClosestName, new Array<number>());
-				boneNameToInfluenceLookup[boneClosestName] = boneInfluence;
+				boneNameToInfluenceLookup.set(boneClosestName, boneInfluence);
 				boneInfluences.push(boneInfluence);
 			}
 

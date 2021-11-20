@@ -56,19 +56,19 @@ export class VisualImageImmediate implements VisualImage
 
 	// Clonable.
 
-	clone(): Visual
+	clone(): VisualImageImmediate
 	{
 		return this; // todo
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualImageImmediate): VisualImageImmediate
 	{
 		return this; // todo
 	}
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable
+	transform(transformToApply: TransformBase): VisualImageImmediate
 	{
 		return this; // todo
 	}

@@ -21,7 +21,7 @@ export class Wedge implements ShapeBase
 	shapeGroupAll: ShapeGroupAll;
 	shapeGroupAny: ShapeGroupAny;
 
-	_collider: any;
+	_collider: ShapeBase;
 
 	constructor(vertex: Coords, directionMin: Coords, angleSpannedInTurns: number)
 	{
@@ -72,7 +72,7 @@ export class Wedge implements ShapeBase
 		).azimuthInTurns;
 	}
 
-	collider(): any
+	collider(): ShapeBase
 	{
 		if (this._collider == null)
 		{
@@ -162,6 +162,16 @@ export class Wedge implements ShapeBase
 		return new Wedge(this.vertex.clone(), this.directionMin.clone(), this.angleSpannedInTurns);
 	}
 
+	overwriteWith(other: Wedge): Wedge
+	{
+		this.vertex.overwriteWith(other.vertex);
+		this.directionMin.overwriteWith(other.directionMin);
+		this.angleSpannedInTurns = other.angleSpannedInTurns;
+		return this;
+	}
+
+	// Equatable.
+
 	equals(other: Wedge): boolean
 	{
 		var returnValue =
@@ -172,14 +182,6 @@ export class Wedge implements ShapeBase
 		);
 
 		return returnValue;
-	}
-
-	overwriteWith(other: Wedge): Wedge
-	{
-		this.vertex.overwriteWith(other.vertex);
-		this.directionMin.overwriteWith(other.directionMin);
-		this.angleSpannedInTurns = other.angleSpannedInTurns;
-		return this;
 	}
 
 	// ShapeBase.
@@ -204,7 +206,7 @@ export class Wedge implements ShapeBase
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable { throw new Error("Not implemented!");  }
+	transform(transformToApply: TransformBase): Wedge { throw new Error("Not implemented!");  }
 
 }
 

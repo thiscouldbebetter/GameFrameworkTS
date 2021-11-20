@@ -50,6 +50,7 @@ import VenueLayered = gf.VenueLayered;
 import Visual = gf.Visual;
 import VisualAnchor = gf.VisualAnchor;
 import VisualArc = gf.VisualArc;
+import VisualBase = gf.VisualBase;
 import VisualBar = gf.VisualBar;
 import VisualBuffered = gf.VisualBuffered;
 import VisualBuilder = gf.VisualBuilder;
@@ -142,6 +143,7 @@ import Wedge = gf.Wedge;
 import MapCell = gf.MapCell;
 import MapLocated = gf.MapLocated;
 import MapOfCells = gf.MapOfCells;
+import MapOfCellsCellSource = gf.MapOfCellsCellSource;
 
 // Geometry - Shapes - Meshes.
 import Mesh = gf.Mesh;
@@ -149,6 +151,7 @@ import MeshTextured = gf.MeshTextured;
 
 // Geometry - Transforms.
 import Transform = gf.Transform;
+import TransformBase = gf.TransformBase;
 import Transform_Dynamic = gf.Transform_Dynamic;
 import Transform_Locate = gf.Transform_Locate;
 import Transform_Multiple = gf.Transform_Multiple;
@@ -158,6 +161,7 @@ import Transform_RotateRight = gf.Transform_RotateRight;
 import Transform_Scale = gf.Transform_Scale;
 import Transform_Translate = gf.Transform_Translate;
 import Transformable = gf.Transformable;
+import TransformableBase = gf.TransformableBase;
 import Transforms = gf.Transforms;
 
 // Input.
@@ -183,8 +187,8 @@ import VisualSound = gf.VisualSound;
 import Entity = gf.Entity;
 import EntityBuilder = gf.EntityBuilder;
 import EntityGenerator = gf.EntityGenerator;
-import Loadable = gf.Loadable;
-import Namable = gf.Namable;
+import LoadableProperty = gf.LoadableProperty;
+import NamableProperty = gf.NamableProperty;
 import Playable = gf.Playable;
 import Selectable = gf.Selectable;
 import Selector = gf.Selector;
@@ -313,14 +317,19 @@ import ByteStreamFromString = gf.ByteStreamFromString;
 import CompressorLZW = gf.CompressorLZW;
 
 // Utility.
+import Clonable = gf.Clonable;
 import DateTime = gf.DateTime;
 import DiceRoll = gf.DiceRoll;
+import Equatable = gf.Equatable;
 import IDHelper = gf.IDHelper;
+import Loadable = gf.Loadable;
+import Namable = gf.Namable;
 import PlatformHelper = gf.PlatformHelper;
 import Randomizer = gf.Randomizer;
 import RandomizerSystem = gf.RandomizerSystem;
 import Reference = gf.Reference;
 import TimerHelper = gf.TimerHelper;
+import Treeable = gf.Treeable;
 import URLParser = gf.URLParser;
 import ValueBreak = gf.ValueBreak;
 import ValueBreakGroup = gf.ValueBreakGroup;

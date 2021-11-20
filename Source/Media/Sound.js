@@ -11,7 +11,7 @@ var ThisCouldBeBetter;
             }
             domElementBuild(universe, volume) {
                 this.domElement = document.createElement("audio");
-                this.domElement.sound = this;
+                //this.domElement.sound = this;
                 this.domElement.autoplay = true;
                 this.domElement.onended = this.stopOrRepeat.bind(this, universe);
                 this.domElement.loop = this.isRepeating;
@@ -43,6 +43,8 @@ var ThisCouldBeBetter;
                     this.stop(universe);
                 }
             }
+            load() { }
+            unload() { }
             // platformable
             toDomElement() {
                 return this.domElement;

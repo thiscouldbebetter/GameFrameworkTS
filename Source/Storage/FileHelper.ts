@@ -4,35 +4,56 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class FileHelper
 {
-	loadFileAsBinaryString(systemFileToLoad: any, callback: any, contextForCallback: any)
+	loadFileAsBinaryString
+	(
+		systemFileToLoad: File, callback: any, contextForCallback: any
+	): void
 	{
 		var fileReader = new FileReader();
 		fileReader.onload = (event) =>
 		{
-			this.loadFile_FileLoaded(event, callback, contextForCallback, systemFileToLoad.name);
+			this.loadFile_FileLoaded
+			(
+				event, callback, contextForCallback, systemFileToLoad.name
+			);
 		}
 		fileReader.readAsBinaryString(systemFileToLoad);
 	}
 
-	loadFileAsText(systemFileToLoad: any, callback: any, contextForCallback: any)
+	loadFileAsText
+	(
+		systemFileToLoad: File, callback: any, contextForCallback: any
+	): void
 	{
 		var fileReader = new FileReader();
-		fileReader.onload = (event) =>
+		fileReader.onload = (event: ProgressEvent) =>
 		{
-			this.loadFile_FileLoaded(event, callback, contextForCallback, systemFileToLoad.name);
+			this.loadFile_FileLoaded
+			(
+				event, callback, contextForCallback, systemFileToLoad.name
+			);
 		}
 		fileReader.readAsText(systemFileToLoad);
 	}
 
-	loadFile_FileLoaded(fileLoadedEvent: any, callback: any, contextForCallback: any, fileName: string)
+	loadFile_FileLoaded
+	(
+		fileLoadedEvent: ProgressEvent,
+		callback: any,
+		contextForCallback: any,
+		fileName: string
+	)
 	{
-		var fileReader = fileLoadedEvent.target;
+		var fileReader = fileLoadedEvent.target as FileReader;
 		var contentsOfFileLoaded = fileReader.result;
 
 		callback.call(contextForCallback, contentsOfFileLoaded);
 	}
 
-	saveBinaryStringToFileWithName(fileAsBinaryString: string, fileName: string)
+	saveBinaryStringToFileWithName
+	(
+		fileAsBinaryString: string, fileName: string
+	): void
 	{
 		var fileAsArrayBuffer = new ArrayBuffer(fileAsBinaryString.length);
 		var fileAsArrayUnsigned = new Uint8Array(fileAsArrayBuffer);
@@ -51,7 +72,7 @@ export class FileHelper
 		link.click();
 	}
 
-	saveBytesToFileWithName(fileAsBytes: number[], fileName: string)
+	saveBytesToFileWithName(fileAsBytes: number[], fileName: string): void
 	{
 		var fileAsArrayBuffer = new ArrayBuffer(fileAsBytes.length);
 		var fileAsArrayUnsigned = new Uint8Array(fileAsArrayBuffer);
@@ -70,7 +91,10 @@ export class FileHelper
 		link.click();
 	}
 
-	saveTextStringToFileWithName(textToSave: string, fileNameToSaveAs: string)
+	saveTextStringToFileWithName
+	(
+		textToSave: string, fileNameToSaveAs: string
+	): void
 	{
 		var blobTypeAsLookup: any = {};
 		blobTypeAsLookup["type"] = "text/plain";

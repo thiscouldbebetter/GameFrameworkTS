@@ -8,8 +8,12 @@ var ThisCouldBeBetter;
                 this.orientation = orientation;
                 this._components = [GameFramework.Coords.create(), GameFramework.Coords.create(), GameFramework.Coords.create()];
             }
+            clone() {
+                return new Transform_Orient(this.orientation.clone());
+            }
             overwriteWith(other) {
-                return this; // todo
+                this.orientation.overwriteWith(other.orientation);
+                return this;
             }
             transform(transformable) {
                 return transformable.transform(this);

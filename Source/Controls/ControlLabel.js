@@ -37,7 +37,7 @@ var ThisCouldBeBetter;
                 this.fontHeightInPixels *= scaleFactor.y;
             }
             text() {
-                return (this._text.get == null ? this._text : this._text.get());
+                return this._text.get();
             }
             // drawable
             draw(universe, display, drawLoc, style) {

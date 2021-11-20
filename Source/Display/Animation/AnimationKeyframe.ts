@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class AnimationKeyframe implements Interpolatable
+export class AnimationKeyframe implements Interpolatable<AnimationKeyframe>
 {
 	frameIndex: number;
 	transforms: Transform_Interpolatable[];
@@ -15,10 +15,12 @@ export class AnimationKeyframe implements Interpolatable
 		this.transformsByPropertyName = ArrayHelper.addLookups(this.transforms, (x: Transform_Interpolatable) => x.propertyName );
 	}
 
-	interpolateWith(otherAsAny: any, fractionOfProgressTowardOther: number)
+	interpolateWith
+	(
+		other: AnimationKeyframe,
+		fractionOfProgressTowardOther: number
+	)
 	{
-		var other = otherAsAny as AnimationKeyframe;
-
 		var transformsInterpolated = [];
 
 		for (var i = 0; i < this.transforms.length; i++)

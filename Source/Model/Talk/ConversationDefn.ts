@@ -5,14 +5,21 @@ namespace ThisCouldBeBetter.GameFramework
 export class ConversationDefn
 {
 	name: string;
-	visualPortrait: Visual;
+	visualPortrait: VisualBase;
 	contentTextStringName: string;
 	talkNodeDefns: TalkNodeDefn[];
 	talkNodeDefnsByName: Map<string, TalkNodeDefn>;
 	talkNodes: TalkNode[];
 	talkNodesByName: Map<string, TalkNode>;
 
-	constructor(name: string, visualPortrait: Visual, contentTextStringName: string, talkNodeDefns: TalkNodeDefn[], talkNodes: TalkNode[])
+	constructor
+	(
+		name: string,
+		visualPortrait: VisualBase,
+		contentTextStringName: string,
+		talkNodeDefns: TalkNodeDefn[],
+		talkNodes: TalkNode[]
+	)
 	{
 		this.name = name;
 		this.visualPortrait = visualPortrait;

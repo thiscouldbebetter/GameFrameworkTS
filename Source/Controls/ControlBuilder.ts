@@ -68,8 +68,11 @@ export class ControlBuilder
 
 	choice
 	(
-		universe: Universe, size: Coords, message: DataBinding<any, string>,
-		optionNames: Array<string>, optionFunctions: Array<any>,
+		universe: Universe,
+		size: Coords,
+		message: DataBinding<any, string>,
+		optionNames: Array<string>,
+		optionFunctions: Array<any>,
 		showMessageOnly: boolean
 	): ControlBase
 	{
@@ -110,7 +113,7 @@ export class ControlBuilder
 			fontHeight
 		);
 
-		var childControls: any[] = [ labelMessage ];
+		var childControls: ControlBase[] = [ labelMessage ];
 
 		if (showMessageOnly == false)
 		{
@@ -126,7 +129,7 @@ export class ControlBuilder
 
 			for (var i = 0; i < numberOfOptions; i++)
 			{
-				var button = ControlButton.from9
+				var button = ControlButton.from8
 				(
 					"buttonOption" + i,
 					Coords.fromXY
@@ -138,9 +141,8 @@ export class ControlBuilder
 					optionNames[i],
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
-					optionFunctions[i],
-					universe
+					DataBinding.fromTrue(), // isEnabled
+					optionFunctions[i]
 				);
 
 				childControls.push(button);
@@ -163,7 +165,7 @@ export class ControlBuilder
 			];
 		}
 
-		var returnValue: any = new ControlContainer
+		var controlContainer = new ControlContainer
 		(
 			"containerChoice",
 			containerPosScaled,
@@ -173,25 +175,31 @@ export class ControlBuilder
 			null //?
 		);
 
-		returnValue.scalePosAndSize(scaleMultiplier);
+		controlContainer.scalePosAndSize(scaleMultiplier);
+
+		var returnValue: ControlBase = null;
 
 		if (showMessageOnly)
 		{
-			returnValue = new ControlContainerTransparent(returnValue);
+			returnValue = new ControlContainerTransparent(controlContainer);
+		}
+		else
+		{
+			returnValue = controlContainer;
 		}
 
 		return returnValue;
 	}
 
-	choiceList
+	choiceList<TContext, TItem>
 	(
 		universe: Universe,
 		size: Coords,
 		message: string,
-		options: DataBinding<any,any[]>,
-		bindingForOptionText: DataBinding<any,any>,
+		options: DataBinding<TContext,TItem[]>,
+		bindingForOptionText: DataBinding<TItem,string>,
 		buttonSelectText: string,
-		select: (u: Universe, itemSelected: any) => void
+		select: (u: Universe, itemSelected: TItem) => void
 	): ControlBase
 	{
 		// todo - Variable sizes.
@@ -233,7 +241,7 @@ export class ControlBuilder
 					Coords.fromXY(size.x / 2, marginSize.y + fontHeight / 2),
 					labelSize,
 					true, // isTextCentered
-					message,
+					DataBinding.fromContext(message),
 					fontHeight
 				),
 
@@ -247,7 +255,7 @@ export class ControlBuilder
 					buttonSelectText,
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled,
+					DataBinding.fromTrue(), // isEnabled,
 					() => // click
 					{
 						var itemSelected = listOptions.itemSelected(null);
@@ -256,7 +264,6 @@ export class ControlBuilder
 							select(universe, itemSelected);
 						}
 					},
-					universe, // context
 					false // canBeHeldDown
 				),
 			]
@@ -373,7 +380,7 @@ export class ControlBuilder
 					"Save",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					() => // click
 					{
 						var venueNext: Venue = Profile.toControlSaveStateSave
@@ -396,7 +403,7 @@ export class ControlBuilder
 					"Load",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					() => // click
 					{
 						var venueNext: Venue = Profile.toControlSaveStateLoad
@@ -419,7 +426,7 @@ export class ControlBuilder
 					"About",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					() => // click
 					{
 						var venueCurrent = universe.venueCurrent;
@@ -454,7 +461,7 @@ export class ControlBuilder
 					"Quit",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					() => // click
 					{
 						var controlConfirm = universe.controlBuilder.confirm
@@ -501,7 +508,7 @@ export class ControlBuilder
 					"Back",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					back // click
 				),
 			],
@@ -570,7 +577,7 @@ export class ControlBuilder
 					"Game",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					() => // click
 					{
 						var venueNext: Venue =
@@ -591,7 +598,7 @@ export class ControlBuilder
 					"Settings",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					() => // click
 					{
 						var venueNext: Venue = controlBuilder.settings
@@ -630,7 +637,7 @@ export class ControlBuilder
 				"Resume",
 				fontHeight,
 				true, // hasBorder
-				true, // isEnabled
+				DataBinding.fromTrue(), // isEnabled
 				back
 			);
 
@@ -683,7 +690,7 @@ export class ControlBuilder
 					Coords.fromXY(100, 15), // pos
 					Coords.fromXY(100, 20), // size
 					true, // isTextCentered
-					"Actions:",
+					DataBinding.fromContext("Actions:"),
 					fontHeight
 				),
 
@@ -692,10 +699,13 @@ export class ControlBuilder
 					"listActions",
 					Coords.fromXY(50, 25), // pos
 					Coords.fromXY(100, 40), // size
-					DataBinding.fromContext(placeDefn.actionToInputsMappingsEdited), // items
 					DataBinding.fromGet
 					(
-						(c: ActionToInputsMapping) => { return c.actionName; }
+						(c: PlaceDefn) => placeDefn.actionToInputsMappingsEdited
+					), // items
+					DataBinding.fromGet
+					(
+						(c: ActionToInputsMapping) => c.actionName
 					), // bindingForItemText
 					fontHeight,
 					new DataBinding
@@ -713,7 +723,7 @@ export class ControlBuilder
 					Coords.fromXY(100, 70), // pos
 					Coords.fromXY(100, 15), // size
 					true, // isTextCentered
-					"Inputs:",
+					DataBinding.fromContext("Inputs:"),
 					fontHeight
 				),
 
@@ -769,7 +779,7 @@ export class ControlBuilder
 					DataBinding.fromContextAndGet
 					(
 						placeDefn,
-						(c: PlaceDefn) => { return c.actionToInputsMappingSelected != null}
+						(c: PlaceDefn) => (c.actionToInputsMappingSelected != null)
 					), // isEnabled
 					() => // click
 					{
@@ -779,7 +789,7 @@ export class ControlBuilder
 							var venueInputCapture = new VenueInputCapture
 							(
 								universe.venueCurrent,
-								(inputCaptured: any) =>
+								(inputCaptured: Input) =>
 								{
 									var inputName = inputCaptured.name;
 									mappingSelected.inputNames.push(inputName);
@@ -825,7 +835,7 @@ export class ControlBuilder
 					"Default All",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					() =>
 					{
 						var venueInputs = universe.venueCurrent;
@@ -858,7 +868,7 @@ export class ControlBuilder
 					"Cancel",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					() => // click
 					{
 						var venueNext: Venue = venuePrev;
@@ -961,7 +971,7 @@ export class ControlBuilder
 			);
 		};
 
-		var visual = new VisualGroup
+		var visual: VisualBase = new VisualGroup
 		([
 			new VisualImageScaled
 			(
@@ -986,7 +996,7 @@ export class ControlBuilder
 					"imageOpening",
 					this._zeroes.clone(),
 					this.sizeBase.clone(), // size
-					DataBinding.fromContext<Visual>(visual),
+					DataBinding.fromContext(visual),
 					null, null // colors
 				),
 
@@ -998,7 +1008,7 @@ export class ControlBuilder
 					"Next",
 					fontHeight * 2,
 					false, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					goToVenueNext // click
 				)
 			], // end children
@@ -1042,7 +1052,7 @@ export class ControlBuilder
 			);
 		};
 
-		var visual = new VisualGroup
+		var visual: VisualBase = new VisualGroup
 		([
 			new VisualImageScaled
 			(
@@ -1065,7 +1075,7 @@ export class ControlBuilder
 					"imageProducer",
 					this._zeroes.clone(),
 					this.sizeBase.clone(), // size
-					DataBinding.fromContext<Visual>(visual),
+					DataBinding.fromContext(visual),
 					null, null // colors
 				),
 
@@ -1077,7 +1087,7 @@ export class ControlBuilder
 					"Next",
 					fontHeight * 2,
 					false, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					goToVenueNext // click
 				)
 			], // end children
@@ -1144,7 +1154,7 @@ export class ControlBuilder
 					Coords.fromXY(30, row1PosY + labelPadding), // pos
 					Coords.fromXY(75, buttonHeight), // size
 					false, // isTextCentered
-					"Music:",
+					DataBinding.fromContext("Music:"),
 					fontHeight
 				),
 
@@ -1159,9 +1169,19 @@ export class ControlBuilder
 						(c: SoundHelper) => c.musicVolume,
 						(c: SoundHelper, v: number) => c.musicVolume = v
 					), // valueSelected
-					SoundHelper.controlSelectOptionsVolume(), // options
-					DataBinding.fromGet((c: any) => c.value), // bindingForOptionValues,
-					DataBinding.fromGet((c: any) => { return c.text; }), // bindingForOptionText
+					DataBinding.fromContextAndGet
+					(
+						universe.soundHelper,
+						(c: SoundHelper) => c.controlSelectOptionsVolume()
+					), // options
+					DataBinding.fromGet
+					(
+						(c: ControlSelectOption<number>) => c.value
+					), // bindingForOptionValues,
+					DataBinding.fromGet
+					(
+						(c: ControlSelectOption<number>) => c.text
+					), // bindingForOptionText
 					fontHeight
 				),
 
@@ -1171,7 +1191,7 @@ export class ControlBuilder
 					Coords.fromXY(105, row1PosY + labelPadding), // pos
 					Coords.fromXY(75, buttonHeight), // size
 					false, // isTextCentered
-					"Sound:",
+					DataBinding.fromContext("Sound:"),
 					fontHeight
 				),
 
@@ -1186,9 +1206,19 @@ export class ControlBuilder
 						(c: SoundHelper) => c.soundVolume,
 						(c: SoundHelper, v: number) => { c.soundVolume = v; }
 					), // valueSelected
-					SoundHelper.controlSelectOptionsVolume(), // options
-					DataBinding.fromGet( (c: ControlSelectOption) => c.value ), // bindingForOptionValues,
-					DataBinding.fromGet( (c: ControlSelectOption) => c.text ), // bindingForOptionText
+					DataBinding.fromContextAndGet
+					(
+						universe.soundHelper,
+						(c: SoundHelper) => c.controlSelectOptionsVolume()
+					), // options
+					DataBinding.fromGet
+					(
+						(c: ControlSelectOption<number>) => c.value
+					), // bindingForOptionValues,
+					DataBinding.fromGet
+					(
+						(c: ControlSelectOption<number>) => c.text
+					), // bindingForOptionText
 					fontHeight
 				),
 
@@ -1198,18 +1228,26 @@ export class ControlBuilder
 					Coords.fromXY(30, row2PosY + labelPadding), // pos
 					Coords.fromXY(75, buttonHeight), // size
 					false, // isTextCentered
-					"Display:",
+					DataBinding.fromContext("Display:"),
 					fontHeight
 				),
 
-				new ControlSelect
+				new ControlSelect<Display, Coords, Coords>
 				(
 					"selectDisplaySize",
 					Coords.fromXY(70, row2PosY), // pos
 					Coords.fromXY(65, buttonHeight), // size
-					universe.display.sizeInPixels, // valueSelected
+					DataBinding.fromContextAndGet
+					(
+						universe.display,
+						(c: Display) => c.sizeInPixels
+					), // valueSelected
 					// options
-					universe.display.sizesAvailable,
+					DataBinding.fromContextAndGet
+					(
+						universe.display,
+						(c: Display) => c.sizesAvailable
+					),
 					DataBinding.fromGet( (c: Coords) => c ), // bindingForOptionValues,
 					DataBinding.fromGet( (c: Coords) => c.toStringXY() ), // bindingForOptionText
 					fontHeight
@@ -1223,13 +1261,16 @@ export class ControlBuilder
 					"Change",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					() => // click
 					{
 						var venueControls = universe.venueCurrent as VenueControls;
-						var controlRootAsContainer = venueControls.controlRoot as ControlContainer;
+						var controlRootAsContainer =
+							venueControls.controlRoot as ControlContainer;
+						var selectDisplaySizeAsControl =
+							controlRootAsContainer.childrenByName.get("selectDisplaySize");
 						var selectDisplaySize =
-							controlRootAsContainer.childrenByName.get("selectDisplaySize") as ControlSelect;
+							selectDisplaySizeAsControl as ControlSelect<Coords, Coords, Coords>;
 						var displaySizeSpecified = selectDisplaySize.optionSelected();
 
 						var displayAsDisplay = universe.display;
@@ -1261,7 +1302,7 @@ export class ControlBuilder
 					"Inputs",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					() => // click
 					{
 						var venueCurrent = universe.venueCurrent;
@@ -1281,7 +1322,7 @@ export class ControlBuilder
 					"Done",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					back // click
 				),
 			],
@@ -1314,7 +1355,7 @@ export class ControlBuilder
 		var scaleMultiplier =
 			this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
 
-		var controlsForSlides: any[] = [];
+		var controlsForSlides = new Array<ControlBase>();
 
 		var nextDefn = (slideIndexNext: number) => // click
 		{
@@ -1363,13 +1404,13 @@ export class ControlBuilder
 						"imageSlide",
 						this._zeroes,
 						this.sizeBase.clone(), // size
-						DataBinding.fromContext<Visual>
+						DataBinding.fromContext
 						(
 							new VisualImageScaled
 							(
 								new VisualImageFromLibrary(imageName),
 								this.sizeBase.clone().multiply(scaleMultiplier) // sizeToDrawScaled
-							)
+							) as VisualBase
 						),
 						null, null // colorBackground, colorBorder
 					),
@@ -1380,7 +1421,7 @@ export class ControlBuilder
 						Coords.fromXY(100, this.fontHeightInPixelsBase * 2), // pos
 						this.sizeBase.clone(), // size
 						true, // isTextCentered,
-						message,
+						DataBinding.fromContext(message),
 						this.fontHeightInPixelsBase
 					),
 
@@ -1392,7 +1433,7 @@ export class ControlBuilder
 						"Next",
 						this.fontHeightInPixelsBase,
 						false, // hasBorder
-						true, // isEnabled
+						DataBinding.fromTrue(), // isEnabled
 						next
 					)
 				],
@@ -1437,7 +1478,7 @@ export class ControlBuilder
 				venueMessage,
 				() =>
 					Profile.toControlProfileSelect(universe, null, universe.venueCurrent),
-				(universe: Universe, result: any) => // done
+				(result: ControlBase) => // done
 				{
 					var venueProfileSelect = result.toVenue();
 
@@ -1454,7 +1495,7 @@ export class ControlBuilder
 			);
 		};
 
-		var visual = new VisualGroup
+		var visual: VisualBase = new VisualGroup
 		([
 			new VisualImageScaled
 			(
@@ -1475,7 +1516,7 @@ export class ControlBuilder
 					"imageTitle",
 					this._zeroes.clone(),
 					this.sizeBase.clone(), // size
-					DataBinding.fromContext<Visual>(visual)
+					DataBinding.fromContext(visual)
 				),
 
 				ControlButton.from8
@@ -1486,7 +1527,7 @@ export class ControlBuilder
 					"Start",
 					fontHeight * 2,
 					false, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					start // click
 				)
 			], // end children
@@ -1536,7 +1577,10 @@ export class ControlBuilder
 					Coords.fromXY(100, 40), // pos
 					Coords.fromXY(100, 20), // size
 					true, // isTextCentered
-					"Profile: " + universe.profile.name,
+					DataBinding.fromContext
+					(
+						"Profile: " + universe.profile.name
+					),
 					fontHeight
 				),
 				new ControlLabel
@@ -1545,7 +1589,7 @@ export class ControlBuilder
 					Coords.fromXY(100, 55), // pos
 					Coords.fromXY(150, 25), // size
 					true, // isTextCentered
-					"World: " + world.name,
+					DataBinding.fromContext("World: " + world.name),
 					fontHeight
 				),
 				new ControlLabel
@@ -1554,7 +1598,10 @@ export class ControlBuilder
 					Coords.fromXY(100, 70), // pos
 					Coords.fromXY(150, 25), // size
 					true, // isTextCentered
-					"Started:" + dateCreated.toStringTimestamp(),
+					DataBinding.fromContext
+					(
+						"Started:" + dateCreated.toStringTimestamp()
+					),
 					fontHeight
 				),
 				new ControlLabel
@@ -1563,7 +1610,11 @@ export class ControlBuilder
 					Coords.fromXY(100, 85), // pos
 					Coords.fromXY(150, 25), // size
 					true, // isTextCentered
-					"Saved:" + (dateSaved == null ? "[never]" : dateSaved.toStringTimestamp()),
+					DataBinding.fromContext
+					(
+						"Saved:"
+						+ (dateSaved == null ? "[never]" : dateSaved.toStringTimestamp())
+					),
 					fontHeight
 				),
 
@@ -1575,7 +1626,7 @@ export class ControlBuilder
 					"Start",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					() => // click
 					{
 						var world = universe.world;
@@ -1633,7 +1684,7 @@ export class ControlBuilder
 					"<",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					() => // click
 					{
 						var venueNext = venuePrev;
@@ -1653,7 +1704,7 @@ export class ControlBuilder
 					"x",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					() => // click
 					{
 						var saveState = universe.profile.saveStateSelected();
@@ -1721,7 +1772,7 @@ export class ControlBuilder
 			var messageAsDataBinding = DataBinding.fromContextAndGet
 			(
 				null, // Will be set below.
-				(c: VenueTask) => "Loading game..."
+				(c: VenueTask<SaveState>) => "Loading game..."
 			);
 
 			var venueMessage = VenueMessage.fromMessage
@@ -1738,7 +1789,7 @@ export class ControlBuilder
 					var saveStateSelected = profile.saveStateSelected;
 					return storageHelper.load(saveStateSelected.name);
 				},
-				(universe: Universe, saveStateReloaded: SaveState) => // done
+				(saveStateReloaded: SaveState) => // done
 				{
 					universe.world = saveStateReloaded.world;
 					var venueNext: Venue = universe.controlBuilder.worldLoad
@@ -1784,7 +1835,10 @@ export class ControlBuilder
 					Coords.fromXY(100, 25), // pos
 					Coords.fromXY(120, 25), // size
 					true, // isTextCentered
-					"Profile: " + universe.profile.name,
+					DataBinding.fromContext
+					(
+						"Profile: " + universe.profile.name
+					),
 					fontHeight
 				),
 
@@ -1794,7 +1848,7 @@ export class ControlBuilder
 					Coords.fromXY(100, 40), // pos
 					Coords.fromXY(100, 25), // size
 					true, // isTextCentered
-					"Select a Save:",
+					DataBinding.fromContext("Select a Save:"),
 					fontHeight
 				),
 
@@ -1814,9 +1868,10 @@ export class ControlBuilder
 					(
 						universe.profile,
 						(c: Profile) => c.saveStateSelected(),
-						(c: Profile, v: SaveState) => { c.saveStateNameSelected = v.name; }
+						(c: Profile, v: SaveState) =>
+							c.saveStateNameSelected = v.name
 					), // bindingForOptionSelected
-					DataBinding.fromGet( (c: string) => c ), // value
+					DataBinding.fromGet( (v: SaveState) => v.name ), // value
 				),
 
 				ControlButton.from8
@@ -1851,7 +1906,7 @@ export class ControlBuilder
 					"Load File",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					() => // click
 					{
 						var venueFileUpload = new VenueFileUpload(null, null);
@@ -1864,12 +1919,16 @@ export class ControlBuilder
 								DataBinding.fromContext("Ready to load from file..."),
 								() => // acknowledge
 								{
-									function callback(fileContentsAsString: string)
+									var callback = (fileContentsAsString: string) =>
 									{
-										var worldAsStringCompressed = fileContentsAsString;
-										var compressor = universe.storageHelper.compressor;
-										var worldSerialized = compressor.decompressString(worldAsStringCompressed);
-										var worldDeserialized = universe.serializer.deserialize(worldSerialized);
+										var worldAsStringCompressed =
+											fileContentsAsString;
+										var compressor =
+											universe.storageHelper.compressor;
+										var worldSerialized =
+											compressor.decompressString(worldAsStringCompressed);
+										var worldDeserialized =
+											universe.serializer.deserialize(worldSerialized);
 										universe.world = worldDeserialized;
 
 										var venueNext: Venue = controlBuilder.game
@@ -1935,7 +1994,7 @@ export class ControlBuilder
 					"Return",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					() => // click
 					{
 						var venueGame = controlBuilder.game

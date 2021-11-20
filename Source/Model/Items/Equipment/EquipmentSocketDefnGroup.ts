@@ -6,7 +6,7 @@ export class EquipmentSocketDefnGroup
 {
 	name: string;
 	socketDefns: EquipmentSocketDefn[];
-	socketDefnsByName: any;
+	socketDefnsByName: Map<string, EquipmentSocketDefn>;
 
 	constructor(name: string, socketDefns: EquipmentSocketDefn[])
 	{

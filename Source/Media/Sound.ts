@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Sound
+export class Sound implements MediaItemBase
 {
 	name: string;
 	sourcePath: string;
@@ -10,7 +10,7 @@ export class Sound
 	offsetInSeconds: number;
 	isRepeating: boolean;
 
-	domElement: any;
+	domElement: HTMLAudioElement;
 
 	constructor(name: string, sourcePath: string)
 	{
@@ -20,10 +20,10 @@ export class Sound
 		this.offsetInSeconds = 0;
 	}
 
-	domElementBuild(universe: Universe, volume: number): any
+	domElementBuild(universe: Universe, volume: number): HTMLAudioElement
 	{
 		this.domElement = document.createElement("audio");
-		this.domElement.sound = this;
+		//this.domElement.sound = this;
 		this.domElement.autoplay = true;
 		this.domElement.onended = this.stopOrRepeat.bind(this, universe);
 		this.domElement.loop = this.isRepeating;
@@ -74,9 +74,15 @@ export class Sound
 		}
 	}
 
+	// Loadable.
+
+	isLoaded: boolean;
+	load(): void {}
+	unload(): void {}
+
 	// platformable
 
-	toDomElement(): any
+	toDomElement(): HTMLAudioElement
 	{
 		return this.domElement;
 	}

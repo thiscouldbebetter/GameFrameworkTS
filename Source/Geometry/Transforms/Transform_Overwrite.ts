@@ -2,25 +2,29 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Transform_Overwrite implements Transform
+export class Transform_Overwrite implements Transform<Transform_Overwrite>
 {
-	transformableToOverwriteWith: Transformable;
+	transformableToOverwriteWith: TransformableBase;
 
-	constructor(transformableToOverwriteWith: Transformable)
+	constructor(transformableToOverwriteWith: TransformableBase)
 	{
 		this.transformableToOverwriteWith = transformableToOverwriteWith;
 	}
 
-	overwriteWith(other: Transform): Transform
+	clone(): Transform_Overwrite
 	{
 		return this; // todo
 	}
 
-	transform(transformable: Transformable): Transformable
+	overwriteWith(other: Transform_Overwrite): Transform_Overwrite
 	{
-		// todo
-		//transformable.overwriteWith(this.transformableToOverwriteWith);
-		return this;
+		return this; // todo
+	}
+
+	transform(transformable: TransformableBase): TransformableBase
+	{
+		transformable.overwriteWith(this.transformableToOverwriteWith);
+		return transformable;
 	}
 
 	transformCoords(coordsToTransform: Coords): Coords

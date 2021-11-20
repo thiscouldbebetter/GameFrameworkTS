@@ -8,9 +8,15 @@ var ThisCouldBeBetter;
                 this.turnsToRotate = turnsToRotate;
                 this._polar = new GameFramework.Polar(0, 1, 0);
             }
+            // Clonable.
+            clone() {
+                return new Transform_Rotate2D(this.turnsToRotate);
+            }
             overwriteWith(other) {
+                this.turnsToRotate = other.turnsToRotate;
                 return this; // todo
             }
+            // Transform.
             transform(transformable) {
                 return transformable; // todo
             }

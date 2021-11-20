@@ -9,24 +9,34 @@ var ThisCouldBeBetter;
                 this._get = get;
                 this._set = set;
             }
+            static fromBooleanWithContext(value, context) {
+                return DataBinding.fromContextAndGet(context, (context) => value);
+            }
             static fromContext(context) {
-                return new DataBinding(context, null, null);
+                return new DataBinding(context, (contextGet) => context, null // set
+                );
             }
             static fromContextAndGet(context, get) {
                 return new DataBinding(context, get, null);
+            }
+            static fromFalseWithContext(context) {
+                return DataBinding.fromBooleanWithContext(false, context);
             }
             static fromGet(get) {
                 return new DataBinding(null, get, null);
             }
             static fromTrue() {
-                return DataBinding.fromContext(true);
+                return DataBinding.fromBooleanWithContext(true, null);
             }
-            contextSet(value) {
-                this.context = value;
+            static fromTrueWithContext(context) {
+                return DataBinding.fromBooleanWithContext(true, context);
+            }
+            contextSet(context) {
+                this.context = context;
                 return this;
             }
             get() {
-                return (this._get == null ? this.context : this._get(this.context));
+                return this._get(this.context);
             }
             set(value) {
                 if (this._set == null) {

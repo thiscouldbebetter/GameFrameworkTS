@@ -52,6 +52,8 @@ var ThisCouldBeBetter;
                 GameFramework.ArrayHelper.overwriteWith(this.constraints, other.constraints);
                 return this;
             }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.Constrainable = Constrainable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

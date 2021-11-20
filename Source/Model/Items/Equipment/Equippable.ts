@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Equippable implements EntityProperty
+export class Equippable implements EntityProperty<Equippable>
 {
 	_equip: (uwpe: UniverseWorldPlaceEntities) => void;
 	_unequip: (uwpe: UniverseWorldPlaceEntities) => void;
@@ -60,6 +60,11 @@ export class Equippable implements EntityProperty
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
+
+	// Equatable
+
+	equals(other: Equippable): boolean { return false; } // todo
+
 }
 
 }

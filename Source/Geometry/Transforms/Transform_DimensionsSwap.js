@@ -7,6 +7,7 @@ var ThisCouldBeBetter;
             constructor(dimensionIndices) {
                 this.dimensionIndices = dimensionIndices;
             }
+            clone() { return this; } // todo
             overwriteWith(other) {
                 return this; // todo
             }

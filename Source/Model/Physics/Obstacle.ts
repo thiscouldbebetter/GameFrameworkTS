@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Obstacle implements EntityProperty
+export class Obstacle implements EntityProperty<Obstacle>
 {
 	collide(uwpe: UniverseWorldPlaceEntities): void
 	{
@@ -31,6 +31,10 @@ export class Obstacle implements EntityProperty
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
+
+	// Equatable
+
+	equals(other: Obstacle): boolean { return false; } // todo
 }
 
 }

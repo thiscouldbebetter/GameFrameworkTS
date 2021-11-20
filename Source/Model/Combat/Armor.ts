@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Armor implements EntityProperty
+export class Armor implements EntityProperty<Armor>
 {
 	damageMultiplier: number;
 
@@ -17,6 +17,9 @@ export class Armor implements EntityProperty
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 
+	// Equatable
+
+	equals(other: Armor): boolean { return false; } // todo
 }
 
 }

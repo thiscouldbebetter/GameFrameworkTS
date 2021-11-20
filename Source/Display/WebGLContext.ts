@@ -128,7 +128,7 @@ export class WebGLContext
 
 	buildShaderProgram_Compile
 	(
-		gl: WebGLRenderingContext, fragmentShader: any, vertexShader: any
+		gl: WebGLRenderingContext, fragmentShader: any, vertexShader: unknown
 	)
 	{
 		var shaderProgram = gl.createProgram();

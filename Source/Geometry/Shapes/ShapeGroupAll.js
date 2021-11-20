@@ -15,7 +15,10 @@ var ThisCouldBeBetter;
                 GameFramework.ArrayHelper.overwriteWith(this.shapes, other.shapes);
                 return this;
             }
+            // Equatable
+            equals(other) { return false; } // todo
             // ShapeBase.
+            collider() { return null; }
             locate(loc) {
                 throw new Error("Not implemented!");
             }

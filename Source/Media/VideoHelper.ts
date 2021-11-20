@@ -5,7 +5,7 @@ namespace ThisCouldBeBetter.GameFramework
 export class VideoHelper
 {
 	videos: Video[];
-	videosByName: any;
+	videosByName: Map<string, Video>;
 
 	constructor(videos: Video[])
 	{

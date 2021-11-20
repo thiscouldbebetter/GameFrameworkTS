@@ -182,7 +182,10 @@ var ThisCouldBeBetter;
             toControl(universe, world) {
                 var player = this.player();
                 var playerControllable = player.controllable();
-                var returnValue = playerControllable.toControl(universe, universe.display.sizeInPixels, player, null, false);
+                var uwpe = new GameFramework.UniverseWorldPlaceEntities(universe, world, world.placeCurrent, player, null);
+                var returnValue = playerControllable.toControl(
+                //universe, universe.display.sizeInPixels, player, null, false
+                uwpe);
                 return returnValue;
             }
             // Entity convenience accessors.
@@ -207,7 +210,7 @@ var ThisCouldBeBetter;
                 return this.entitiesByPropertyName(GameFramework.Item.name);
             }
             loadables() {
-                return this.entitiesByPropertyName(GameFramework.Loadable.name);
+                return this.entitiesByPropertyName(GameFramework.LoadableProperty.name);
             }
             movables() {
                 return this.entitiesByPropertyName(GameFramework.Movable.name);

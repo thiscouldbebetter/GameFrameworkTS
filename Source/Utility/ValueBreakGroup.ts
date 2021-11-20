@@ -2,18 +2,22 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ValueBreakGroup
+export class ValueBreakGroup<T extends Interpolatable<T>>
 {
-	stops: ValueBreak[];
+	stops: ValueBreak<T>[];
 	interpolationMode: InterpolationMode;
 
-	constructor(stops: ValueBreak[], interpolationMode: InterpolationMode)
+	constructor
+	(
+		stops: ValueBreak<T>[],
+		interpolationMode: InterpolationMode
+	)
 	{
 		this.stops = stops;
 		this.interpolationMode = interpolationMode;
 	}
 
-	valueAtPosition(positionToCheck: number)
+	valueAtPosition(positionToCheck: number): T
 	{
 		var returnValue = null;
 
@@ -36,8 +40,8 @@ export class ValueBreakGroup
 
 		if (this.interpolationMode != null)
 		{
-			var stopPrevValue = stopPrev.value as Interpolatable;
-			var stopValue = stop.value as Interpolatable;
+			var stopPrevValue = stopPrev.value;
+			var stopValue = stop.value;
 			var positionOfStopThisMinusPrev = stop.position - stopPrev.position;
 			var positionToCheckMinusStopPrev = positionToCheck - stopPrev.position;
 			var fraction = positionToCheckMinusStopPrev / positionOfStopThisMinusPrev;
@@ -54,12 +58,12 @@ export class ValueBreakGroup
 	}
 }
 
-export class ValueBreak
+export class ValueBreak<T extends Interpolatable<T>>
 {
 	position: number;
-	value: any;
+	value: T;
 
-	constructor(position: number, value: any)
+	constructor(position: number, value: T)
 	{
 		this.position = position;
 		this.value = value;

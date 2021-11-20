@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export interface Colorable
+export interface Transformable_Colorable extends TransformableBase
 {
 	colorBorder: Color;
 	colorFill: Color;

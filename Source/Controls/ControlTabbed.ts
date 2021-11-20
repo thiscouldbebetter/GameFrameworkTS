@@ -2,14 +2,15 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ControlTabbed extends ControlBase
+export class ControlTabbed<TContext> extends ControlBase
 {
 	tabButtonSize: Coords;
 	childrenForTabs: ControlBase[];
 	childrenForTabsByName: Map<string,ControlBase>;
-	cancel: (u: Universe) => void;
+	cancel: () => void;
+	context: TContext;
 
-	buttonsForChildren: ControlButton[];
+	buttonsForChildren: ControlButton<TContext>[];
 	childSelectedIndex: number;
 	childrenContainingPos: ControlBase[];
 	childrenContainingPosPrev: ControlBase[];
@@ -24,9 +25,14 @@ export class ControlTabbed extends ControlBase
 
 	constructor
 	(
-		name: string, pos: Coords, size: Coords, tabButtonSize: Coords,
-		childrenForTabs: ControlBase[], fontHeightInPixels: number,
-		cancel: (u: Universe) => void
+		name: string,
+		pos: Coords,
+		size: Coords,
+		tabButtonSize: Coords,
+		childrenForTabs: ControlBase[],
+		fontHeightInPixels: number,
+		cancel: () => void,
+		context: TContext
 	)
 	{
 		super(name, pos, size, fontHeightInPixels);
@@ -35,6 +41,7 @@ export class ControlTabbed extends ControlBase
 		this.childrenForTabsByName =
 			ArrayHelper.addLookupsByName(this.childrenForTabs);
 		this.cancel = cancel;
+		this.context = context;
 
 		this.childSelectedIndex = 0;
 		this.childrenContainingPos = new Array<ControlBase>();
@@ -43,9 +50,9 @@ export class ControlTabbed extends ControlBase
 
 		var marginSize = this.fontHeightInPixels;
 		var tabPaneHeight = marginSize + this.tabButtonSize.y;
-		var buttonsForChildren = new Array<ControlButton>();
+		var buttonsForChildren = new Array<ControlButton<TContext>>();
 
-		var buttonForTabClick = (b: ControlButton) => // click
+		var buttonForTabClick = (b: ControlButton<TContext>) => // click
 		{
 			buttonsForChildren.forEach(x => x.isHighlighted = false);
 			var buttonIndex = buttonsForChildren.indexOf(b); // hack
@@ -75,10 +82,13 @@ export class ControlTabbed extends ControlBase
 				childName, // text
 				this.fontHeightInPixels,
 				true, // hasBorder
-				true, // isEnabled
-				buttonForTabClick
+				DataBinding.fromTrueWithContext(this.context), // isEnabled
+				null // click
 			);
-			button.context = button; // hack
+			button.click = () =>
+			{
+				buttonForTabClick(button)
+			}
 			buttonsForChildren.push(button);
 		}
 
@@ -88,12 +98,16 @@ export class ControlTabbed extends ControlBase
 			var button = ControlButton.from8
 			(
 				"buttonCancel",
-				Coords.fromXY(this.size.x - marginSize - this.tabButtonSize.x, marginSize), // pos
+				Coords.fromXY
+				(
+					this.size.x - marginSize - this.tabButtonSize.x,
+					marginSize
+				), // pos
 				this.tabButtonSize.clone(),
 				"Done", // text
 				this.fontHeightInPixels,
 				true, // hasBorder
-				true, // isEnabled
+				DataBinding.fromTrueWithContext(this.context), // isEnabled
 				this.cancel // click
 			);
 			buttonsForChildren.push(button);
@@ -145,7 +159,7 @@ export class ControlTabbed extends ControlBase
 			{
 				if (childSelected == null)
 				{
-					this.cancel(universe);
+					this.cancel();
 				}
 				else
 				{
@@ -170,7 +184,7 @@ export class ControlTabbed extends ControlBase
 			{
 				if (this.cancel != null)
 				{
-					this.cancel(universe);
+					this.cancel();
 				}
 			}
 		}
@@ -405,7 +419,7 @@ export class ControlTabbed extends ControlBase
 		return wasMoveHandled;
 	}
 
-	scalePosAndSize(scaleFactor: Coords): ControlTabbed
+	scalePosAndSize(scaleFactor: Coords): ControlTabbed<TContext>
 	{
 		this.pos.multiply(scaleFactor);
 		this.size.multiply(scaleFactor);

@@ -43,7 +43,7 @@ var ThisCouldBeBetter;
                     false, // isTextCentered,
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => c.statementCurrent()), fontHeight),
                     GameFramework.ControlButton.from8("buttonNext", GameFramework.Coords.fromXY(containerSize.x - marginSize.x - buttonSize.x, containerSize.y - marginSize.y - buttonSize.y), buttonSize, "Next", fontHeight, true, // hasBorder
-                    true, // isEnabled
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
                     () => wordBubble.statementAdvance(universe))
                 ]);
                 return containerWordBubble;

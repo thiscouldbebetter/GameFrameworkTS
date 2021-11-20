@@ -8,7 +8,7 @@ export class VenueVideo implements Venue
 	venueNext: Venue;
 
 	actionToInputsMappings: ActionToInputsMapping[];
-	actionToInputsMappingsByInputName: any;
+	actionToInputsMappingsByInputName: Map<string, ActionToInputsMapping>;
 	hasVideoBeenStarted: boolean;
 	video: Video;
 
@@ -23,13 +23,20 @@ export class VenueVideo implements Venue
 		var controlActionNames = ControlActionNames.Instances();
 		this.actionToInputsMappings =
 		[
-			new ActionToInputsMapping(controlActionNames.ControlCancel, [ inputNames.Escape, inputNames.GamepadButton0 + "0"], true),
+			new ActionToInputsMapping
+			(
+				controlActionNames.ControlCancel,
+				[ inputNames.Escape, inputNames.GamepadButton0 + "0"],
+				true
+			),
 		];
 
-		this.actionToInputsMappingsByInputName = ArrayHelper.addLookupsMultiple
-		(
-			this.actionToInputsMappings, (x: ActionToInputsMapping) => x.inputNames
-		);
+		this.actionToInputsMappingsByInputName =
+			ArrayHelper.addLookupsMultiple
+			(
+				this.actionToInputsMappings,
+				(x: ActionToInputsMapping) => x.inputNames
+			);
 	}
 
 	draw()

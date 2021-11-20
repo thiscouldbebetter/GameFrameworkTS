@@ -2,12 +2,12 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ControlSelect extends ControlBase
+export class ControlSelect<TContext, TItem, TValue> extends ControlBase
 {
-	_valueSelected: any;
-	_options: any;
-	bindingForOptionValues: DataBinding<any, any>;
-	bindingForOptionText: DataBinding<any, string>;
+	_valueSelected: DataBinding<TContext, TValue>;
+	_options: DataBinding<TContext, TItem[]>;
+	bindingForOptionValues: DataBinding<TItem, TValue>;
+	bindingForOptionText: DataBinding<TItem, string>;
 
 	indexOfOptionSelected: number;
 
@@ -19,10 +19,10 @@ export class ControlSelect extends ControlBase
 		name: string,
 		pos: Coords,
 		size: Coords,
-		valueSelected: any,
-		options: any,
-		bindingForOptionValues: DataBinding<any, any>,
-		bindingForOptionText: DataBinding<any, string>,
+		valueSelected: DataBinding<TContext, TValue>,
+		options: DataBinding<TContext, TItem[]>,
+		bindingForOptionValues: DataBinding<TItem, TValue>,
+		bindingForOptionText: DataBinding<TItem, string>,
 		fontHeightInPixels: number
 	)
 	{
@@ -33,17 +33,17 @@ export class ControlSelect extends ControlBase
 		this.bindingForOptionText = bindingForOptionText;
 
 		this.indexOfOptionSelected = null;
-		var valueSelected = this.valueSelected();
-		var options = this.options();
-		for (var i = 0; i < options.length; i++)
+		var valueSelectedActualized = this.valueSelected();
+		var optionsActualized = this.options();
+		for (var i = 0; i < optionsActualized.length; i++)
 		{
-			var option = options[i];
+			var option = optionsActualized[i];
 			var optionValue = this.bindingForOptionValues.contextSet
 			(
 				option
 			).get();
 
-			if (optionValue == valueSelected)
+			if (optionValue == valueSelectedActualized)
 			{
 				this.indexOfOptionSelected = i;
 				break;
@@ -55,7 +55,7 @@ export class ControlSelect extends ControlBase
 		this._sizeHalf = Coords.create();
 	}
 
-	actionHandle(actionNameToHandle: string, universe: Universe)
+	actionHandle(actionNameToHandle: string, universe: Universe): boolean
 	{
 		var controlActionNames = ControlActionNames.Instances();
 		if (actionNameToHandle == controlActionNames.ControlDecrement)
@@ -73,13 +73,13 @@ export class ControlSelect extends ControlBase
 		return true; // wasActionHandled
 	}
 
-	mouseClick(clickPos: Coords)
+	mouseClick(clickPos: Coords): boolean
 	{
 		this.optionSelectedNextInDirection(1);
 		return true; // wasClickHandled
 	}
 
-	optionSelected()
+	optionSelected(): TItem
 	{
 		var optionSelected =
 		(
@@ -90,7 +90,7 @@ export class ControlSelect extends ControlBase
 		return optionSelected;
 	}
 
-	optionSelectedNextInDirection(direction: number)
+	optionSelectedNextInDirection(direction: number): void
 	{
 		var options = this.options();
 
@@ -107,43 +107,30 @@ export class ControlSelect extends ControlBase
 			: this.bindingForOptionValues.contextSet(optionSelected).get()
 		);
 
-		if (this._valueSelected != null && this._valueSelected.constructor.name == DataBinding.name)
-		{
-			this._valueSelected.set(valueToSelect);
-		}
-		else
-		{
-			this._valueSelected = valueToSelect;
-		}
+		this._valueSelected.set(valueToSelect);
 	}
 
-	options()
+	options(): TItem[]
 	{
-		return (this._options.get == null ? this._options : this._options.get() );
+		return this._options.get();
 	}
 
-	scalePosAndSize(scaleFactor: Coords)
+	scalePosAndSize(scaleFactor: Coords): void
 	{
 		this.pos.multiply(scaleFactor);
 		this.size.multiply(scaleFactor);
 		this.fontHeightInPixels *= scaleFactor.y;
 	}
 
-	valueSelected()
+	valueSelected(): TValue
 	{
-		var returnValue =
-		(
-			this._valueSelected == null
-			? null
-			: (this._valueSelected.get == null ? this._valueSelected : this._valueSelected.get() )
-		);
-
+		var returnValue = this._valueSelected.get();
 		return returnValue;
 	}
 
 	// drawable
 
-	draw(universe: Universe, display: Display, drawLoc: Disposition)
+	draw(universe: Universe, display: Display, drawLoc: Disposition): void
 	{
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 

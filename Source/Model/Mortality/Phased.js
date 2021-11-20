@@ -60,6 +60,8 @@ var ThisCouldBeBetter;
                 this.ticksOnPhaseCurrent = other.ticksOnPhaseCurrent;
                 return this;
             }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.Phased = Phased;
         class Phase {

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Device implements EntityProperty
+export class Device implements EntityProperty<Device>
 {
 	name: string;
 	_initialize: (uwpe: UniverseWorldPlaceEntities) => void;
@@ -59,8 +59,17 @@ export class Device implements EntityProperty
 
 	clone(): Device
 	{
-		return new Device(this.name, this.ticksToCharge, this._initialize, this.update, this.use);
+		return new Device
+		(
+			this.name, this.ticksToCharge, this._initialize, this.update,
+			this.use
+		);
 	}
+
+	// Equatable
+
+	equals(other: Device): boolean { return false; } // todo
+
 }
 
 }

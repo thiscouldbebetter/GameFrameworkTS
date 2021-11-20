@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Transform_Perspective implements Transform
+export class Transform_Perspective implements Transform<Transform_Perspective>
 {
 	focalLength: number;
 
@@ -11,17 +11,25 @@ export class Transform_Perspective implements Transform
 		this.focalLength = focalLength;
 	}
 
-	overwriteWith(other: Transform)
+	// Clonable.
+
+	clone(): Transform_Perspective
 	{
-		return this; // todo
+		return new Transform_Perspective(this.focalLength);
 	}
 
-	transform(transformable: Transformable): Transformable
+	overwriteWith(other: Transform_Perspective): Transform_Perspective
+	{
+		this.focalLength = other.focalLength;
+		return this;
+	}
+
+	transform(transformable: TransformableBase): TransformableBase
 	{
 		return transformable; // todo
 	}
 
-	transformCoords(coordsToTransform: Coords)
+	transformCoords(coordsToTransform: Coords): Coords
 	{
 		var distanceAlongCameraForward = coordsToTransform.z;
 

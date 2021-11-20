@@ -11,11 +11,11 @@ export class ConversationRun
 
 	scopeCurrent: ConversationScope;
 	talkNodesForTranscript: TalkNode[];
-	variablesByName: Map<string, any>;
+	variablesByName: Map<string, unknown>;
 
 	p: Entity;
 	t: Entity;
-	vars: Map<string, any>;
+	vars: Map<string, unknown>;
 
 	constructor
 	(
@@ -42,7 +42,7 @@ export class ConversationRun
 
 		this.talkNodesForTranscript = [];
 
-		this.variablesByName = new Map<string, any>();
+		this.variablesByName = new Map<string, unknown>();
 
 		this.next(null);
 
@@ -54,7 +54,7 @@ export class ConversationRun
 
 	// instance methods
 
-	next(universe: Universe)
+	next(universe: Universe): void
 	{
 		var responseSelected = this.scopeCurrent.talkNodeForOptionSelected;
 		if (responseSelected != null)
@@ -67,24 +67,24 @@ export class ConversationRun
 		this.update(universe);
 	}
 
-	update(universe: Universe)
+	update(universe: Universe): void
 	{
 		this.scopeCurrent.update(universe, this);
 	}
 
-	variableByName(variableName: string)
+	variableByName(variableName: string): unknown
 	{
 		return this.variablesByName.get(variableName);
 	}
 
-	variableSet(variableName: string, variableValue: any)
+	variableSet(variableName: string, variableValue: unknown): void
 	{
 		this.variablesByName.set(variableName, variableValue);
 	}
 
 	// controls
 
-	toControl(size: Coords, universe: Universe)
+	toControl(size: Coords, universe: Universe): ControlBase
 	{
 		var conversationRun = this;
 		var conversationDefn = conversationRun.defn;
@@ -178,7 +178,7 @@ export class ConversationRun
 					),
 					size, // size
 					false, // isTextCentered
-					"Response:",
+					DataBinding.fromContext("Response:"),
 					fontHeight
 				),
 
@@ -235,7 +235,7 @@ export class ConversationRun
 					"Next",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					next // click
 				),
 
@@ -252,7 +252,7 @@ export class ConversationRun
 					"Log",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					viewLog // click
 				),
 
@@ -268,7 +268,7 @@ export class ConversationRun
 					"Done",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
+					DataBinding.fromTrue(), // isEnabled
 					back // click
 				),
 
@@ -290,7 +290,10 @@ export class ConversationRun
 		return returnValue;
 	}
 
-	toControlTranscript(size: Coords, universe: Universe, venueToReturnTo: Venue)
+	toControlTranscript
+	(
+		size: Coords, universe: Universe, venueToReturnTo: Venue
+	): ControlBase
 	{
 		var conversationRun = this;
 		var conversationDefn = conversationRun.defn;
@@ -323,8 +326,8 @@ export class ConversationRun
 					"<",
 					fontHeight,
 					true, // hasBorder
-					true, // isEnabled
-					(universe: Universe) => // click
+					DataBinding.fromTrue(), // isEnabled
+					() => // click
 					{
 						var venueNext = venueToReturnTo;
 						venueNext = VenueFader.fromVenuesToAndFrom
@@ -344,7 +347,7 @@ export class ConversationRun
 					), // pos
 					size, // size
 					true, // isTextCentered
-					"Transcript",
+					DataBinding.fromContext("Transcript"),
 					fontHeight
 				),
 

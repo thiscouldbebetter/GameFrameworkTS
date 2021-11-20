@@ -56,17 +56,16 @@ class PlaceBuilderDemo_Items
 
 	}
 
-	itemUseEquip(uwpe: UniverseWorldPlaceEntities): string
+	itemUseEquip(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var entityUser = uwpe.entity;
 		var equipmentUser = entityUser.equipmentUser();
-		var message = equipmentUser.equipEntityWithItem(uwpe);
-		return message;
+		equipmentUser.equipEntityWithItem(uwpe);
 	}
 
 	// Items.
 
-	armor()
+	armor(): ItemDefn
 	{
 		var itemArmorName = "Armor";
 		var itemArmorColor = Color.byName("GreenDark");
@@ -110,7 +109,7 @@ class PlaceBuilderDemo_Items
 		return itemArmor;
 	}
 
-	armorEnhanced()
+	armorEnhanced(): ItemDefn
 	{
 		var itemArmorName = "Enhanced Armor";
 		var itemArmorColor = Color.byName("GreenDark");
@@ -154,7 +153,7 @@ class PlaceBuilderDemo_Items
 		return itemArmor;
 	}
 
-	arrow()
+	arrow(): ItemDefn
 	{
 		var itemArrowName = "Arrow";
 		var itemArrowColor = new Color(null, null, [0, .5, .5, 1]);
@@ -225,7 +224,7 @@ class PlaceBuilderDemo_Items
 		return itemArrow;
 	}
 
-	bomb()
+	bomb(): ItemDefn
 	{
 		var itemBombName = "Bomb";
 		var itemBombColor = Color.byName("BlueDark");
@@ -278,7 +277,7 @@ class PlaceBuilderDemo_Items
 		return itemBomb;
 	}
 
-	book()
+	book(): ItemDefn
 	{
 		var itemBookName = "Book";
 		var itemBookColor = Color.byName("Blue");
@@ -340,7 +339,7 @@ class PlaceBuilderDemo_Items
 				size.clone().half(),
 				DataBinding.fromContext(text),
 				fontHeight,
-				DataBinding.fromContext<boolean>(false) // isEnabled
+				DataBinding.fromFalseWithContext(text) // isEnabled
 			);
 			var button = new ControlButton
 			(
@@ -350,9 +349,9 @@ class PlaceBuilderDemo_Items
 				"Done",
 				fontHeight,
 				true, // hasBorder
-				true, // isEnabled
+				DataBinding.fromTrue(), // isEnabled
 				back, // click
-				null, null
+				false // canBeHeldDown
 			);
 			var container = new ControlContainer
 			(
@@ -386,7 +385,7 @@ class PlaceBuilderDemo_Items
 		return itemBook;
 	}
 
-	bow()
+	bow(): ItemDefn
 	{
 		var itemBowName = "Bow";
 		var itemBowColor = Color.byName("Brown");
@@ -443,7 +442,7 @@ class PlaceBuilderDemo_Items
 		return itemBow;
 	}
 
-	bread()
+	bread(): ItemDefn
 	{
 		var itemBreadName = "Bread";
 		var itemBreadColor = Color.byName("Orange");
@@ -507,9 +506,9 @@ class PlaceBuilderDemo_Items
 				var entityItem = uwpe.entity2;
 				entityUser.starvable().satietyAdd(10);
 				var item = entityItem.item();
-				entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
-				var message = "You eat the bread.";
-				return message;
+				var itemHolder = entityUser.itemHolder();
+				itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
+				itemHolder.statusMessage += "You eat the bread.";
 			},
 			itemBreadVisual,
 			null // toEntity
@@ -518,7 +517,7 @@ class PlaceBuilderDemo_Items
 		return itemBread;
 	}
 
-	coin()
+	coin(): ItemDefn
 	{
 		var itemCoinName = "Coin";
 		var itemCoinColor = Color.byName("Yellow");
@@ -554,7 +553,7 @@ class PlaceBuilderDemo_Items
 		return itemCoin;
 	}
 
-	crystal()
+	crystal(): ItemDefn
 	{
 		var itemCrystalName = "Crystal";
 		var itemCrystalColor = Color.byName("Cyan");
@@ -667,9 +666,9 @@ class PlaceBuilderDemo_Items
 				var entityItem = uwpe.entity2;
 				entityUser.starvable().satietyAdd(2);
 				var item = entityItem.item();
-				entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
-				var message = "You eat the doughnut.";
-				return message;
+				var itemHolder = entityUser.itemHolder();
+				itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
+				itemHolder.statusMessage = "You eat the doughnut.";
 			},
 			itemDoughnutVisual, null // toEntity
 		);
@@ -740,7 +739,7 @@ class PlaceBuilderDemo_Items
 		return itemFlower;
 	}
 
-	fruit()
+	fruit(): ItemDefn
 	{
 		var itemFruitName = "Fruit";
 		var itemFruitColor = Color.byName("Orange");
@@ -782,9 +781,9 @@ class PlaceBuilderDemo_Items
 				var entityItem = uwpe.entity2;
 				entityUser.starvable().satietyAdd(5);
 				var item = entityItem.item();
-				entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
-				var message = "You eat the fruit.";
-				return message;
+				var itemHolder = entityUser.itemHolder();
+				itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
+				itemHolder.statusMessage = "You eat the fruit.";
 			},
 			itemFruitVisual,
 			null // toEntity
@@ -793,7 +792,7 @@ class PlaceBuilderDemo_Items
 		return itemFruit;
 	}
 
-	grass()
+	grass(): ItemDefn
 	{
 		var itemGrassName = "Grass";
 		var itemGrassVisual = new VisualGroup
@@ -836,7 +835,7 @@ class PlaceBuilderDemo_Items
 		return itemGrass;
 	}
 
-	heart()
+	heart(): ItemDefn
 	{
 		var entityDimensionQuarter = this.entityDimensionHalf / 2;
 		var itemHeartName = "Heart";
@@ -911,7 +910,7 @@ class PlaceBuilderDemo_Items
 		return itemHeart;
 	}
 
-	iron()
+	iron(): ItemDefn
 	{
 		var itemIronName = "Iron";
 		var itemIronColor = Color.byName("Gray");
@@ -953,7 +952,7 @@ class PlaceBuilderDemo_Items
 		return itemIron;
 	}
 
-	ironOre()
+	ironOre(): ItemDefn
 	{
 		var itemIronOreName = "Iron Ore";
 		var itemIronOreColor = Color.byName("Gray");
@@ -990,7 +989,7 @@ class PlaceBuilderDemo_Items
 		return itemIronOre;
 	}
 
-	key()
+	key(): ItemDefn
 	{
 		var itemKeyName = "Key";
 		var itemKeyColor = Color.byName("Yellow");
@@ -1040,7 +1039,7 @@ class PlaceBuilderDemo_Items
 		return itemKey;
 	}
 
-	log()
+	log(): ItemDefn
 	{
 		var itemLogName = "Log";
 		var itemLogColor = Color.byName("Brown");
@@ -1089,7 +1088,7 @@ class PlaceBuilderDemo_Items
 		return itemLog;
 	}
 
-	meat()
+	meat(): ItemDefn
 	{
 		var itemMeatName = "Meat";
 		var itemMeatColor = Color.byName("Red");
@@ -1135,9 +1134,9 @@ class PlaceBuilderDemo_Items
 				var entityItem = uwpe.entity2;
 				entityUser.starvable().satietyAdd(20);
 				var item = entityItem.item();
-				entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
-				var message = "You eat the meat.";
-				return message;
+				var itemHolder = entityUser.itemHolder();
+				itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
+				itemHolder.statusMessage = "You eat the meat.";
 			},
 			itemMeatVisual,
 			null
@@ -1146,7 +1145,7 @@ class PlaceBuilderDemo_Items
 		return itemMeat;
 	}
 
-	medicine()
+	medicine(): ItemDefn
 	{
 		var itemMedicineName = "Medicine";
 		var itemMedicineColor = Color.byName("Red");
@@ -1204,9 +1203,9 @@ class PlaceBuilderDemo_Items
 				var effectToApply = Effect.Instances().Healing;
 				entityUser.effectable().effectAdd(effectToApply);
 				var item = entityItem.item();
-				entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
-				var message = "You use the medicine.";
-				return message;
+				var itemHolder = entityUser.itemHolder();
+				itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
+				itemHolder.statusMessage = "You use the medicine.";
 			},
 			itemMedicineVisual,
 			null
@@ -1215,7 +1214,7 @@ class PlaceBuilderDemo_Items
 		return itemMedicine;
 	}
 
-	mushroom()
+	mushroom(): ItemDefn
 	{
 		var itemMushroomName = "Mushroom";
 		var colorStem = Color.byName("Gray");
@@ -1266,7 +1265,7 @@ class PlaceBuilderDemo_Items
 		return itemMushroom;
 	}
 
-	pick()
+	pick(): ItemDefn
 	{
 		var itemPickName = "Pick";
 		var itemPickColor = Color.byName("Gray");
@@ -1318,7 +1317,7 @@ class PlaceBuilderDemo_Items
 		return itemPick;
 	}
 
-	potion()
+	potion(): ItemDefn
 	{
 		// todo - Same as medicine right now.
 
@@ -1389,7 +1388,7 @@ class PlaceBuilderDemo_Items
 		return itemPotion;
 	}
 
-	shovel()
+	shovel(): ItemDefn
 	{
 		var itemShovelName = "Shovel";
 		var itemShovelColor = Color.byName("Gray");
@@ -1445,7 +1444,7 @@ class PlaceBuilderDemo_Items
 		return itemShovel;
 	}
 
-	speedBoots()
+	speedBoots(): ItemDefn
 	{
 		var itemSpeedBootsName = "Speed Boots";
 		var itemAccessoryColor = Color.byName("Orange");
@@ -1505,7 +1504,7 @@ class PlaceBuilderDemo_Items
 		return itemSpeedBoots;
 	}
 
-	sword()
+	sword(): ItemDefn
 	{
 		var itemSwordVisual = this.sword_Visual(Color.byName("GrayLight"));
 		var itemSword = new ItemDefn
@@ -1516,7 +1515,7 @@ class PlaceBuilderDemo_Items
 		return itemSword;
 	}
 
-	sword_Visual(bladeColor: Color)
+	sword_Visual(bladeColor: Color): VisualBase
 	{
 		var hiltColor = Color.fromRGB(0, .5, .5);
 
@@ -1590,7 +1589,7 @@ class PlaceBuilderDemo_Items
 		return itemSwordVisual;
 	}
 
-	swordCold()
+	swordCold(): ItemDefn
 	{
 		var bladeColor = Color.byName("Cyan");
 		var damageTypeName = "Cold";
@@ -1603,7 +1602,7 @@ class PlaceBuilderDemo_Items
 		return itemSword;
 	}
 
-	swordHeat()
+	swordHeat(): ItemDefn
 	{
 		var bladeColor = Color.byName("Yellow");
 		var damageTypeName = "Heat";
@@ -1616,7 +1615,7 @@ class PlaceBuilderDemo_Items
 		return itemSword;
 	}
 
-	toolset()
+	toolset(): ItemDefn
 	{
 		var itemToolsetName = "Toolset";
 		var itemToolsetColor = Color.byName("Gray");
@@ -1658,7 +1657,7 @@ class PlaceBuilderDemo_Items
 		return itemToolset;
 	}
 
-	torch()
+	torch(): ItemDefn
 	{
 		var itemTorchName = "Torch";
 		var itemTorchColor = Color.byName("Brown");
@@ -1726,7 +1725,7 @@ class PlaceBuilderDemo_Items
 		return itemTorch;
 	}
 
-	walkieTalkie()
+	walkieTalkie(): ItemDefn
 	{
 		var itemWalkieTalkie = new ItemDefn
 		(
@@ -1743,7 +1742,7 @@ class PlaceBuilderDemo_Items
 		return itemWalkieTalkie;
 	}
 
-	weight()
+	weight(): ItemDefn
 	{
 		var itemWeightName = "Weight";
 		var itemWeightColor = Color.byName("Blue");

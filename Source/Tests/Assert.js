@@ -54,9 +54,7 @@ var ThisCouldBeBetter;
                 if (objectExpected == objectActual) {
                     areExpectedAndActualEqual = true;
                 }
-                else if (objectExpected.equals != null
-                    && objectActual.equals != null
-                    && objectExpected.equals(objectActual)) {
+                else if (objectExpected.equals(objectActual)) {
                     areExpectedAndActualEqual = true;
                 }
                 else {

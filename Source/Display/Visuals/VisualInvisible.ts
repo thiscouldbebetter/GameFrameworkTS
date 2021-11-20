@@ -2,32 +2,31 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualInvisible implements Visual
+export class VisualInvisible implements Visual<VisualInvisible>
 {
-	private child: Visual;
+	private child: VisualBase;
 
-	constructor(child: Visual)
+	constructor(child: VisualBase)
 	{
 		this.child = child;
 	}
 
 	// Cloneable.
 
-	clone(): Visual
+	clone(): VisualInvisible
 	{
 		return new VisualInvisible(this.child.clone());
 	}
 
-	overwriteWith(other: Visual): Visual
+	overwriteWith(other: VisualInvisible): VisualInvisible
 	{
-		var otherAsVisualInvisible = other as VisualInvisible;
-		this.child.overwriteWith(otherAsVisualInvisible.child);
+		this.child.overwriteWith(other.child);
 		return this;
 	}
 
 	// Transformable.
 
-	transform(transformToApply: Transform): VisualInvisible
+	transform(transformToApply: TransformBase): VisualInvisible
 	{
 		transformToApply.transform(this.child);
 		return this;

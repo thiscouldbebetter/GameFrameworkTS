@@ -9,7 +9,8 @@ var ThisCouldBeBetter;
                 this.talkNodeCurrent = talkNodeCurrent;
                 this.isPromptingForResponse = false;
                 this.talkNodesForOptions = talkNodesForOptions;
-                this.talkNodesForOptionsByName = GameFramework.ArrayHelper.addLookupsByName(this.talkNodesForOptions);
+                this.talkNodesForOptionsByName =
+                    GameFramework.ArrayHelper.addLookupsByName(this.talkNodesForOptions);
                 this.displayTextCurrent = "[conversation begins]";
                 this.talkNodeForOptionSelected = null;
                 this._talkNodesForOptionsActive = [];

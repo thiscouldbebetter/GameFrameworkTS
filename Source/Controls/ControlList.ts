@@ -2,24 +2,24 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ControlList extends ControlBase
+export class ControlList<TContext, TItem, TValue> extends ControlBase
 {
-	_items: any;
-	bindingForItemText: DataBinding<any, string>;
-	bindingForItemSelected: DataBinding<any, any>;
-	bindingForItemValue: DataBinding<any, any>;
-	bindingForIsEnabled: DataBinding<any, boolean>;
+	_items: DataBinding<TContext, TItem[]>;
+	bindingForItemText: DataBinding<TItem, string>;
+	bindingForItemSelected: DataBinding<TContext, TItem>;
+	bindingForItemValue: DataBinding<TItem, TValue>;
+	bindingForIsEnabled: DataBinding<TContext, boolean>;
 	confirm: (u: Universe) => void;
 	widthInItems: number;
 
 	isHighlighted: boolean;
 	_itemSpacing: Coords;
 	parent: ControlBase;
-	scrollbar: ControlScrollbar;
+	scrollbar: ControlScrollbar<TContext, TItem>;
 
 	_drawLoc: Disposition;
 	_drawPos: Coords;
-	_itemSelected: any;
+	_itemSelected: TItem;
 	_mouseClickPos: Coords;
 
 	constructor
@@ -27,12 +27,12 @@ export class ControlList extends ControlBase
 		name: string,
 		pos: Coords,
 		size: Coords,
-		items: DataBinding<any, any[]>,
-		bindingForItemText: DataBinding<any, string>,
+		items: DataBinding<TContext, TItem[]>,
+		bindingForItemText: DataBinding<TItem, string>,
 		fontHeightInPixels: number,
-		bindingForItemSelected: DataBinding<any, any>,
-		bindingForItemValue: DataBinding<any, any>,
-		bindingForIsEnabled: DataBinding<any, boolean>,
+		bindingForItemSelected: DataBinding<TContext, TItem>,
+		bindingForItemValue: DataBinding<TItem, TValue>,
+		bindingForIsEnabled: DataBinding<TContext, boolean>,
 		confirm: (u: Universe) => void,
 		widthInItems: number
 	)
@@ -42,7 +42,9 @@ export class ControlList extends ControlBase
 		this.bindingForItemText = bindingForItemText;
 		this.bindingForItemSelected = bindingForItemSelected;
 		this.bindingForItemValue = bindingForItemValue;
-		this.bindingForIsEnabled = bindingForIsEnabled || DataBinding.fromTrue();
+		this.bindingForIsEnabled =
+			bindingForIsEnabled
+			|| DataBinding.fromTrueWithContext<TContext>(null);
 		this.confirm = confirm;
 		this.widthInItems = widthInItems || 1;
 
@@ -68,9 +70,14 @@ export class ControlList extends ControlBase
 		this._mouseClickPos = Coords.create();
 	}
 
-	static fromPosSizeAndItems(pos: Coords, size: Coords, items: DataBinding<any, any[]>)
+	static fromPosSizeAndItems<TContext, TItem, TValue>
+	(
+		pos: Coords,
+		size: Coords,
+		items: DataBinding<TContext, TItem[]>
+	): ControlList<TContext, TItem, TValue>
 	{
-		var returnValue = new ControlList
+		var returnValue = new ControlList<TContext, TItem, TValue>
 		(
 			"", // name,
 			pos,
@@ -87,13 +94,15 @@ export class ControlList extends ControlBase
 		return returnValue;
 	}
 
-	static fromPosSizeItemsAndBindingForItemText
+	static fromPosSizeItemsAndBindingForItemText<TContext, TItem, TValue>
 	(
-		pos: Coords, size: Coords, items: DataBinding<any, any[]>,
-		bindingForItemText: DataBinding<any, string>
+		pos: Coords,
+		size: Coords,
+		items: DataBinding<TContext, TItem[]>,
+		bindingForItemText: DataBinding<TItem, string>
 	)
 	{
-		var returnValue = new ControlList
+		var returnValue = new ControlList<TContext, TItem, TValue>
 		(
 			"", // name,
 			pos,
@@ -110,74 +119,74 @@ export class ControlList extends ControlBase
 		return returnValue;
 	}
 
-	static from6
+	static from6<TContext, TItem, TValue>
 	(
 		name: string,
 		pos: Coords,
 		size: Coords,
-		items: DataBinding<any, any[]>,
-		bindingForItemText: DataBinding<any, string>,
+		items: DataBinding<TContext, TItem[]>,
+		bindingForItemText: DataBinding<TItem, string>,
 		fontHeightInPixels: number
-	): ControlList
+	): ControlList<TContext, TItem, TValue>
 	{
-		return new ControlList
+		return new ControlList<TContext, TItem, TValue>
 		(
 			name, pos, size, items, bindingForItemText, fontHeightInPixels,
 			null, null, null, null, null
 		);
 	}
 
-	static from7
+	static from7<TContext, TItem, TValue>
 	(
 		name: string,
 		pos: Coords,
 		size: Coords,
-		items: DataBinding<any, any[]>,
-		bindingForItemText: DataBinding<any, string>,
+		items: DataBinding<TContext, TItem[]>,
+		bindingForItemText: DataBinding<TItem, string>,
 		fontHeightInPixels: number,
-		bindingForItemSelected: DataBinding<any, any>,
-	): ControlList
+		bindingForItemSelected: DataBinding<TContext, TItem>,
+	): ControlList<TContext, TItem, TValue>
 	{
-		return new ControlList
+		return new ControlList<TContext, TItem, TValue>
 		(
 			name, pos, size, items, bindingForItemText, fontHeightInPixels,
 			bindingForItemSelected, null, null, null, null
 		);
 	}
 
-	static from8
+	static from8<TContext, TItem, TValue>
 	(
 		name: string,
 		pos: Coords,
 		size: Coords,
-		items: DataBinding<any, any[]>,
-		bindingForItemText: DataBinding<any, string>,
+		items: DataBinding<TContext, TItem[]>,
+		bindingForItemText: DataBinding<TItem, string>,
 		fontHeightInPixels: number,
-		bindingForItemSelected: DataBinding<any, any>,
-		bindingForItemValue: DataBinding<any, any>,
-	): ControlList
+		bindingForItemSelected: DataBinding<TContext, TItem>,
+		bindingForItemValue: DataBinding<TItem, TValue>,
+	): ControlList<TContext, TItem, TValue>
 	{
-		return new ControlList
+		return new ControlList<TContext, TItem, TValue>
 		(
 			name, pos, size, items, bindingForItemText, fontHeightInPixels,
 			bindingForItemSelected, bindingForItemValue, null, null, null
 		);
 	}
 
-	static from9
+	static from9<TContext, TItem, TValue>
 	(
 		name: string,
 		pos: Coords,
 		size: Coords,
-		items: DataBinding<any, any[]>,
-		bindingForItemText: DataBinding<any, string>,
+		items: DataBinding<TContext, TItem[]>,
+		bindingForItemText: DataBinding<TItem, string>,
 		fontHeightInPixels: number,
-		bindingForItemSelected: DataBinding<any, any>,
-		bindingForItemValue: DataBinding<any, any>,
-		bindingForIsEnabled: DataBinding<any, boolean>
-	): ControlList
+		bindingForItemSelected: DataBinding<TContext, TItem>,
+		bindingForItemValue: DataBinding<TItem, TValue>,
+		bindingForIsEnabled: DataBinding<TContext, boolean>
+	): ControlList<TContext, TItem, TValue>
 	{
-		return new ControlList
+		return new ControlList<TContext, TItem, TValue>
 		(
 			name, pos, size, items, bindingForItemText, fontHeightInPixels,
 			bindingForItemSelected, bindingForItemValue, bindingForIsEnabled,
@@ -185,21 +194,21 @@ export class ControlList extends ControlBase
 		);
 	}
 
-	static from10
+	static from10<TContext, TItem, TValue>
 	(
 		name: string,
 		pos: Coords,
 		size: Coords,
-		items: DataBinding<any, any[]>,
-		bindingForItemText: DataBinding<any, string>,
+		items: DataBinding<TContext, TItem[]>,
+		bindingForItemText: DataBinding<TItem, string>,
 		fontHeightInPixels: number,
-		bindingForItemSelected: DataBinding<any, any>,
-		bindingForItemValue: DataBinding<any, any>,
-		bindingForIsEnabled: DataBinding<any, boolean>,
+		bindingForItemSelected: DataBinding<TContext, TItem>,
+		bindingForItemValue: DataBinding<TItem, TValue>,
+		bindingForIsEnabled: DataBinding<TContext, boolean>,
 		confirm: (u: Universe) => void
-	): ControlList
+	): ControlList<TContext, TItem, TValue>
 	{
-		return new ControlList
+		return new ControlList<TContext, TItem, TValue>
 		(
 			name, pos, size, items, bindingForItemText, fontHeightInPixels,
 			bindingForItemSelected, bindingForItemValue, bindingForIsEnabled,
@@ -276,10 +285,17 @@ export class ControlList extends ControlBase
 
 	isEnabled(): boolean
 	{
-		return (this.bindingForIsEnabled == null ? true : this.bindingForIsEnabled.get());
+		var returnValue =
+		(
+			this.bindingForIsEnabled == null
+			? true
+			: this.bindingForIsEnabled.get()
+		);
+
+		return returnValue;
 	}
 
-	itemSelected(itemToSet: any): any
+	itemSelected(itemToSet: TItem): TItem
 	{
 		var returnValue = itemToSet;
 
@@ -291,7 +307,12 @@ export class ControlList extends ControlBase
 			}
 			else
 			{
-				returnValue = (this.bindingForItemSelected.get == null ? this._itemSelected : this.bindingForItemSelected.get() );
+				returnValue =
+				(
+					this.bindingForItemSelected.get == null
+					? this._itemSelected
+					: this.bindingForItemSelected.get()
+				);
 			}
 		}
 		else
@@ -311,15 +332,16 @@ export class ControlList extends ControlBase
 					(
 						this._itemSelected
 					).get();
+					this.bindingForItemValue.set(valueToSet);
 				}
-				this.bindingForItemSelected.set(valueToSet);
+				this.bindingForItemSelected.set(itemToSet);
 			}
 		}
 
 		return returnValue;
 	}
 
-	itemSelectedNextInDirection(direction: number): any
+	itemSelectedNextInDirection(direction: number): TItem
 	{
 		var items = this.items();
 		var numberOfItems = items.length;
@@ -348,7 +370,10 @@ export class ControlList extends ControlBase
 			);
 		}
 
-		var itemToSelect = (indexOfItemSelected == null ? null : items[indexOfItemSelected]);
+		var itemToSelect =
+		(
+			indexOfItemSelected == null ? null : items[indexOfItemSelected]
+		);
 		this.itemSelected(itemToSelect);
 
 		var indexOfFirstItemVisible = this.indexOfFirstItemVisible();
@@ -370,7 +395,8 @@ export class ControlList extends ControlBase
 
 	itemSpacing(): Coords
 	{
-		var scrollbarWidthVisible = (this.scrollbar.isVisible() ? this.scrollbar.size.x : 0);
+		var scrollbarWidthVisible =
+			(this.scrollbar.isVisible() ? this.scrollbar.size.x : 0);
 		return this._itemSpacing.overwriteWithDimensions
 		(
 			(this.size.x - scrollbarWidthVisible) / this.widthInItems,
@@ -379,9 +405,9 @@ export class ControlList extends ControlBase
 		);
 	}
 
-	items(): any[]
+	items(): TItem[]
 	{
-		return (this._items.get == null ? this._items : this._items.get());
+		return this._items.get();
 	}
 
 	mouseClick(clickPos: Coords): boolean
@@ -396,7 +422,11 @@ export class ControlList extends ControlBase
 			{
 				this.scrollbar.scrollUp();
 			}
-			else if (clickPos.y - this.pos.y >= this.scrollbar.size.y - this.scrollbar.handleSize.y)
+			else if
+			(
+				clickPos.y - this.pos.y
+				>= this.scrollbar.size.y - this.scrollbar.handleSize.y
+			)
 			{
 				this.scrollbar.scrollDown();
 			}

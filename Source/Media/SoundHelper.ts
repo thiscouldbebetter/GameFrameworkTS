@@ -12,6 +12,8 @@ export class SoundHelper
 	soundForMusic: Sound;
 	_audioContext: AudioContext;
 
+	_controlSelectOptionsVolume: ControlSelectOption<number>[];
+
 	constructor(sounds: Sound[])
 	{
 		this.sounds = sounds;
@@ -23,24 +25,27 @@ export class SoundHelper
 		this.soundForMusic = null;
 	}
 
-	static controlSelectOptionsVolume(): ControlSelectOption[]
+	controlSelectOptionsVolume(): ControlSelectOption<number>[]
 	{
-		var returnValue =
-		[
-			new ControlSelectOption(1, "100%"),
-			new ControlSelectOption(0, "0%"),
-			new ControlSelectOption(.1, "10%"),
-			new ControlSelectOption(.2, "20%"),
-			new ControlSelectOption(.3, "30%"),
-			new ControlSelectOption(.4, "40%"),
-			new ControlSelectOption(.5, "50%"),
-			new ControlSelectOption(.6, "60%"),
-			new ControlSelectOption(.7, "70%"),
-			new ControlSelectOption(.8, "80%"),
-			new ControlSelectOption(.9, "90%"),
-		];
+		if (this._controlSelectOptionsVolume == null)
+		{
+			this._controlSelectOptionsVolume =
+			[
+				new ControlSelectOption<number>(1, "100%"),
+				new ControlSelectOption<number>(0, "0%"),
+				new ControlSelectOption<number>(.1, "10%"),
+				new ControlSelectOption<number>(.2, "20%"),
+				new ControlSelectOption<number>(.3, "30%"),
+				new ControlSelectOption<number>(.4, "40%"),
+				new ControlSelectOption<number>(.5, "50%"),
+				new ControlSelectOption<number>(.6, "60%"),
+				new ControlSelectOption<number>(.7, "70%"),
+				new ControlSelectOption<number>(.8, "80%"),
+				new ControlSelectOption<number>(.9, "90%"),
+			];
+		};
 
-		return returnValue;
+		return this._controlSelectOptionsVolume;
 	}
 
 	// instance methods

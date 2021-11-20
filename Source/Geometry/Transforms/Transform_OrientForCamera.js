@@ -7,7 +7,11 @@ var ThisCouldBeBetter;
             constructor(orientation) {
                 this.orientation = orientation;
             }
+            clone() {
+                return new Transform_OrientForCamera(this.orientation.clone());
+            }
             overwriteWith(other) {
+                this.orientation.overwriteWith(other.orientation);
                 return this; // todo
             }
             transform(transformable) {

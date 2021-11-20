@@ -24,7 +24,13 @@ export class ShapeContainer implements ShapeBase
 		return this;
 	}
 
+	// Equatable
+
+	equals(other: ShapeBase) { return false; } // todo
+
 	// ShapeBase.
+
+	collider(): ShapeBase { return null; }
 
 	locate(loc: Disposition): ShapeBase
 	{
@@ -49,7 +55,7 @@ export class ShapeContainer implements ShapeBase
 
 	// Transformable.
 
-	transform(transformToApply: Transform): Transformable { throw new Error("Not implemented!");  }
+	transform(transformToApply: TransformBase): ShapeContainer { throw new Error("Not implemented!");  }
 
 }
 

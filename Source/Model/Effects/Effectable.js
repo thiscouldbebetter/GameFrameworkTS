@@ -26,6 +26,8 @@ var ThisCouldBeBetter;
                 }
                 this.effects = this.effects.filter(x => x.isDone() == false);
             }
+            // Equatable
+            equals(other) { return false; } // todo
         }
         GameFramework.Effectable = Effectable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

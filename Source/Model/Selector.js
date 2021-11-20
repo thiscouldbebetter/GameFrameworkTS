@@ -110,6 +110,8 @@ var ThisCouldBeBetter;
                 this._entitySelect = other._entitySelect;
                 return this;
             }
+            // Equatable
+            equals(other) { return false; } // todo
             // Controllable.
             toControl(size, pos) {
                 var fontHeightInPixels = 12;
@@ -118,7 +120,7 @@ var ThisCouldBeBetter;
                 var selectionAsContainer = new GameFramework.ControlContainer("visualPlayerSelection", pos, size, [
                     new GameFramework.ControlLabel("labelSelected", GameFramework.Coords.fromXY(1, 0).multiplyScalar(margin), // pos
                     labelSize, false, // isTextCentered
-                    "Selected:", fontHeightInPixels),
+                    GameFramework.DataBinding.fromContext("Selected:"), fontHeightInPixels),
                     new GameFramework.ControlLabel("textEntitySelectedName", GameFramework.Coords.fromXY(1, 1.5).multiplyScalar(margin), // pos
                     labelSize, false, // isTextCentered
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.entitiesSelected.length == 0

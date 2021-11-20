@@ -2,14 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ControlScrollbar extends ControlBase
+export class ControlScrollbar<TContext, TItem> extends ControlBase
 {
 	itemHeight: number;
-	_items: any;
+	_items: DataBinding<TContext, TItem[]>;
 	_sliderPosInItems: number;
 
-	buttonScrollDown: ControlButton;
-	buttonScrollUp: ControlButton;
+	buttonScrollDown: ControlButton<TContext>;
+	buttonScrollUp: ControlButton<TContext>;
 	handleSize: Coords;
 	windowSizeInItems: number;
 
@@ -17,8 +17,12 @@ export class ControlScrollbar extends ControlBase
 
 	constructor
 	(
-		pos: Coords, size: Coords, fontHeightInPixels: number,
-		itemHeight: number, items: any, sliderPosInItems: number
+		pos: Coords,
+		size: Coords,
+		fontHeightInPixels: number,
+		itemHeight: number,
+		items: DataBinding<TContext, TItem[]>,
+		sliderPosInItems: number
 	)
 	{
 		super(null, pos, size, fontHeightInPixels);
@@ -38,7 +42,7 @@ export class ControlScrollbar extends ControlBase
 			"-", // text
 			this.fontHeightInPixels,
 			true, // hasBorder
-			true, // isEnabled
+			DataBinding.fromTrue(), // isEnabled
 			this.scrollUp // click
 		);
 
@@ -50,7 +54,7 @@ export class ControlScrollbar extends ControlBase
 			"+", // text
 			this.fontHeightInPixels,
 			true, // hasBorder
-			true, // isEnabled
+			DataBinding.fromTrue(), // isEnabled
 			this.scrollDown // click
 		);
 
@@ -58,19 +62,19 @@ export class ControlScrollbar extends ControlBase
 		this._drawPos = Coords.create();
 	}
 
-	actionHandle(actionNameToHandle: string, universe: Universe)
+	actionHandle(actionNameToHandle: string, universe: Universe): boolean
 	{
 		return true;
 	}
 
-	isVisible()
+	isVisible(): boolean
 	{
 		return this.windowSizeInItems < this.items().length
 	}
 
-	items()
+	items(): TItem[]
 	{
-		return (this._items.get == null ? this._items : this._items.get());
+		return this._items.get();
 	}
 
 	mouseClick(pos: Coords): boolean
@@ -78,7 +82,7 @@ export class ControlScrollbar extends ControlBase
 		return false;
 	}
 
-	scalePosAndSize(scaleFactor: Coords)
+	scalePosAndSize(scaleFactor: Coords): void
 	{
 		this.pos.multiply(scaleFactor);
 		this.size.multiply(scaleFactor);
@@ -88,7 +92,7 @@ export class ControlScrollbar extends ControlBase
 		this.buttonScrollDown.scalePosAndSize(scaleFactor);
 	}
 
-	scrollDown()
+	scrollDown(): void
 	{
 		var sliderPosInItems = NumberHelper.trimToRangeMinMax
 		(
@@ -98,7 +102,7 @@ export class ControlScrollbar extends ControlBase
 		this._sliderPosInItems = sliderPosInItems;
 	}
 
-	scrollUp()
+	scrollUp(): void
 	{
 		var sliderPosInItems = NumberHelper.trimToRangeMinMax
 		(
@@ -108,7 +112,7 @@ export class ControlScrollbar extends ControlBase
 		this._sliderPosInItems = sliderPosInItems;
 	}
 
-	slideSizeInPixels()
+	slideSizeInPixels(): Coords
 	{
 		var slideSizeInPixels = new Coords
 		(
@@ -120,17 +124,17 @@ export class ControlScrollbar extends ControlBase
 		return slideSizeInPixels;
 	}
 
-	sliderPosInItems()
+	sliderPosInItems(): number
 	{
 		return this._sliderPosInItems;
 	}
 
-	sliderMaxInItems()
+	sliderMaxInItems(): number
 	{
 		return this.items().length - Math.floor(this.windowSizeInItems);
 	}
 
-	sliderPosInPixels()
+	sliderPosInPixels(): Coords
 	{
 		var sliderPosInPixels = new Coords
 		(
@@ -145,7 +149,7 @@ export class ControlScrollbar extends ControlBase
 		return sliderPosInPixels;
 	}
 
-	sliderSizeInPixels()
+	sliderSizeInPixels(): Coords
 	{
 		var sliderSizeInPixels = this.slideSizeInPixels().multiply
 		(
@@ -157,7 +161,13 @@ export class ControlScrollbar extends ControlBase
 
 	// drawable
 
-	draw(universe: Universe, display: Display, drawLoc: Disposition, style: ControlStyle)
+	draw
+	(
+		universe: Universe,
+		display: Display,
+		drawLoc: Disposition,
+		style: ControlStyle
+	): void
 	{
 		if (this.isVisible())
 		{

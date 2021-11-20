@@ -4,8 +4,8 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class SoundFromAudioContext
 {
-	gain: any;
-	oscillator: any;
+	gain: GainNode;
+	oscillator: OscillatorNode;
 
 	constructor()
 	{
