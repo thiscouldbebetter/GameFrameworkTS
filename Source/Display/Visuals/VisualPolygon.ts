@@ -22,7 +22,7 @@ export class VisualPolygon implements Visual<VisualPolygon>
 		this.colorFill = colorFill;
 		this.colorBorder = colorBorder;
 		this.shouldUseEntityOrientation =
-			shouldUseEntityOrientation || false;
+			shouldUseEntityOrientation || true;
 
 		this.verticesAsPathTransformed = this.verticesAsPath.clone();
 		this.transformLocate = new Transform_Locate(null);

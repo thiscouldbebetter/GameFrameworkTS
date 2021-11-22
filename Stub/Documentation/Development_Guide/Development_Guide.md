@@ -17,21 +17,23 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 1.4. Now we need to decide what to call our new game.  Let's make a clone of the classic arcade game Defender, in which the player controls a spaceship tasked with protecting the population of a planet from alien abduction.  Rename the Stub directory to "DefenderClone".
 
-1.5. From within the newly renamed DefenderClone directory, run the following command to run a script that converts the directory into Git repository and add the framework as a submodule:
+1.5. From within the newly renamed DefenderClone directory, run the following command to run a script that converts the directory into Git repository and add the framework as a submodule (or, if running on a Windows machine, run the .bat equivalent):
 
-	./Setup-Git-Init_Repo_and_Add_Framework_Submodule.sh
+	./Setup-Git-Init\_Repo\_and\_Add\_Framework\_Submodule.sh
 
-1.6. In the DefenderClone directory, open the Source directory.
+1.6. Delete the file "./Setup-Git-Init\_Repo\_and\_Add\_Framework\_Submodule.sh" and its .bat equivalent, as they will no longer be needed.  
 
-1.7. Delete the files "GameStub-RunsInPlace.html" and "./Setup-Git-Init_Repo_and_Add_Framework_Submodule.sh", as they will no longer be needed.  Also delete all the existing ".js" files, since we'll be renaming one of the corresponding ".ts" files and we don't want the .js file with the old name hanging around forever.
+1.7. In the DefenderClone directory, open the Source directory.
 
-1.8. In the Source directory, rename the file "GameStub.html" to "DefenderClone.html".  
+1.8. Delete the files "GameStub-RunsInPlace.html" and "./Setup-Git-Init_Repo_and_Add_Framework_Submodule.sh", as they will no longer be needed.  Also, delete all the existing ".js" files in the directory, since we'll be renaming one of the corresponding ".ts" files and if we don't delete it, the .js file with the old name will just hang around forever.
 
-1.9. Still in the Source directory, open the file "Game.ts" in a text editor, locate the call to Universe.create(), change the first argument from "GameStub" to "DefenderClone", and save.  This string will be used to name any saved game files.
+1.9. In the Source directory, rename the file "GameStub.html" to "DefenderClone.html".  
 
-1.10. Most of the gameplay in classic arcade games take place on "levels", so let's rename the PlaceStub class accordingly.  Still in the Source directory, rename the file "PlaceStub.ts" to "PlaceLevel.ts".
+1.10. Still in the Source directory, open the file "Game.ts" in a text editor, locate the call to Universe.create(), change the first argument from "GameStub" to "DefenderClone", and save.  This string will be used to name any saved game files.
 
-1.11. Open the newly renamed file PlaceLevel.ts in a text editor, replace all instances of the text "Stub" with "Level", and save.  When you're done, it should look like this:
+1.11. Most of the gameplay in classic arcade games take place on "levels", so let's rename the PlaceStub class accordingly.  Still in the Source directory, rename the file "PlaceStub.ts" to "PlaceLevel.ts".
+
+1.12. Open the newly renamed file PlaceLevel.ts in a text editor, replace all instances of the text "Stub" with "Level" (there are four of them), and save.  When you're done, it should look like this:
 
 	class PlaceLevel extends Place
 	{
@@ -44,8 +46,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 				Coords.fromXY(400, 300), // size
 				 // entities
 				[
-					new UserInputListener(),
-					new Planet("Planet0", Coords.fromXY(400, 300), 50)
+					new UserInputListener()
 				]
 			);
 		}
@@ -70,7 +71,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 					actionDisplayRecorderStartStop.name, [ "~" ], true // inactivate
 				),
 
-				ActionToInputsMapping.fromActionAndInputName
+				ActionToInputsMapping.fromActionNameAndInputName
 				(
 					actionShowMenu.name, inputNames.Escape
 				)
@@ -80,6 +81,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 			[
 				Actor.name,
 				Collidable.name,
+				Constrainable.name,
 				Locatable.name
 			];
 
@@ -93,7 +95,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 		}
 	}
 
-1.12. Still in the Source directory, open the file "WorldGame.ts" in a text editor.  Locate the constructor, and change the first argument to the super() constructor from "GameStub" to "DefenderClone".  Replace both instances of the text "PlaceStub" with "PlaceLevel".  Save the file.  When you're done, it should look like the following:
+1.13. Still in the Source directory, open the file "WorldGame.ts" in a text editor.  Locate the constructor, and change the first argument to the super() constructor from "GameStub" to "DefenderClone".  Replace both instances of the text "PlaceStub" with "PlaceLevel".  Save the file.  When you're done, it should look like the following:
 
 	class WorldGame extends World
 	{
@@ -127,13 +129,13 @@ This guide illustrates the creation of a new game from scratch using the This Co
 		}
 	}
 
-1.13. From the Source directory, run the command "tsc" to compile the program.  Wait for the command to complete, and verify that no errors are displayed.
+1.14. From the Source directory, run the command "tsc" to compile the program.  Wait for the command to complete, and verify that no errors are displayed and that a .js file is generated for each of the .ts files in the Source directory.
 
-1.14. Open the file "DefenderClone.html" in a text editor.  This is the file that hosts your program, and it contains references to every class file you use in your program.  Change the reference to "PlaceStub.js" to instead reference "PlaceLevel.js".  You'll need to add a corresponding entry to this file every time you start using a new class.  The edited line for the reference to PlaceLevel will look like this.
+1.15. Open the file "DefenderClone.html" in a text editor.  This is the file that hosts your program, and it contains references to every class file you use in your program.  Change the reference to "PlaceStub.js" to instead reference "PlaceLevel.js".  You'll need to add a corresponding entry to this file every time you start using a new class.  The edited line for the reference to PlaceLevel will look like this.
 
 	<script type="text/javascript" src="PlaceLevel.js"></script>
 
-1.15. Open the file DefenderClone.html in a web browser that runs JavaScript.  Click the "Start" button on the opening and title screens to dismiss 
+1.15. Open the file DefenderClone.html in a web browser that runs JavaScript.  Click the "Start" buttons on the opening, producer, and title screens to dismiss 
  them, then click the "Skip" button to skip creation of a player profile.  A black screen will displayed.  If you'd like, you can press the Escape key to see some game and settings menus.
  
 <img src="Screenshot-1-Blank.png" />
@@ -180,7 +182,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 2.6. Because we just added a reference to a class from the framework, we need to update Imports.ts accordingly.  This file "imports" classes from the framework so that you don't have to put "ThisCouldBeBetter.GameFramework." in front of every single class name every time you use it, which would get tedious pretty quickly.
 
-2.7. Open Imports.ts in a text editor and locate the existing line:
+2.7. Back in the Source directory, open Imports.ts in a text editor and locate the existing line:
 
 	import VisualNone = gf.VisualNone;
 
@@ -206,7 +208,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 2.14. Now that we've declared the Planet class and added references to it and to the VisualRectangle class that we need to draw it, we'll add an instance of Planet to PlaceLevel.
 
-2.15. Back in the Source directory, open the file PlaceLevel.ts in a text editor.  Locate the constructor, and within it, the array being passed as the "entities" argument of the super() constructor.  Within that array, and after the existing "new UserInputListener()" element, add the following text, making sure to add commas between array entries as appropriate, then save the file.
+2.15. Back in the Source directory, open the file PlaceLevel.ts in a text editor.  Locate the constructor, and within it, the array being passed as the "entities" argument of the super() constructor.  Within that array, locate the existing "new UserInputListener()" element, add a comma after it, add the following text on the line below, then save the file.
 
 	new Planet("Planet0", Coords.fromXY(400, 300), 50)
 
@@ -269,7 +271,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 3.7. (For extra credit, you could move those references to the Path class somewhere else in the Import.ts and DefenderClone.html files, like maybe where all the other things in the "Geometry/Shapes" directory are referenced.  And for extra extra credit, maybe put it in alphabetical order in there!  But putting it next to VisualPolygon is good enough for now.)
 
-3.8. Now that the Ship class is defined and referenced, let's create an instance of it and add it to the entity collection of our PlaceLevel instance.  Back in the Source directory, open the file PlaceLevel.ts in a text editor again.  Within the array being passed as the "entities" argument of the super() constructor, add the following line, then make sure the commas between array elements are correct and save the file.
+3.8. Now that the Ship class is defined and referenced, let's create an instance of it and add it to the entity collection of our PlaceLevel instance.  Back in the Source directory, open the file PlaceLevel.ts in a text editor again.  Within the array being passed as the "entities" argument of the super() constructor, add the following line, then make sure that there are commas between all the array elements and save the file.
 
 	new Ship("Ship0", Coords.fromXY(100, 100))
 
@@ -281,9 +283,9 @@ This guide illustrates the creation of a new game from scratch using the This Co
 4. Making the Ship Move
 -----------------------
 
-4.1. Now there's a spaceship, which should be exciting.  But it doesn't move.  So it's still pretty boring for a spaceship.  More of a spaceblimp.  Let's make it move.
+4.1. Now there's a spaceship, which should be exciting.  But it doesn't move.  So it's still pretty boring for a spaceship.  More of a spaceblimp.  Except even blimps move a little bit.  Let's make it move.
 
-4.2. To make it move, we'll assign it a velocity to go along with its position.  Open Ship.ts in a text editor and replace the line "Locatable.fromPos(pos)" with the following text:
+4.2. To make it move, we'll assign it a velocity to go along with its position.  Open Ship.ts in a text editor, replace the line "Locatable.fromPos(pos)" with the following text, and save:
 
 	new Locatable
 	(
@@ -311,7 +313,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 		new Constraint_WrapToPlaceSizeXTrimY()
 	)
 
-5.3. Since Constraint_WrapToPlaceSizeXTrimY is a previously unused class from the framework, we'll need to add references to it in DefenderClone.html and Imports.ts.  The line to be added to Imports.ts looks like this, and it can be added just after the recently added reference to the Path class:
+5.3. Since Constraint_WrapToPlaceSizeXTrimY is a previously unused class from the framework, we'll need to add references to it in DefenderClone.html and Imports.ts.  The line to be added to Imports.ts looks like this, and it can be added just after the recently added reference to the Path class (or someplace better if desired):
 
 	import Constraint_WrapToPlaceSizeXTrimY = gf.Constraint_WrapToPlaceSizeXTrimY;
 
@@ -329,7 +331,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 6.1. Now the ship wraps to stay in view continuously, so the view stays interesting.  It would be more interesting still if the ship changed speed and direction.  To make that work, we need to give it the Actor property. 
 
-6.2. To define the ActivityDefn for the ship's behavior, open Ship.ts and add the following method:
+6.2. To define the ActivityDefn for the ship's behavior, open Ship.ts and add the following method after the constructor:
 
 	static activityDefnDoSpaceshipStuffBuild(): ActivityDefn
 	{
@@ -337,8 +339,11 @@ This guide illustrates the creation of a new game from scratch using the This Co
 		(
 			"DoSpaceshipStuff",
 			// perform
-			(universe: Universe, world: World, place: Place, entity: Entity) =>
+			(uwpe: UniverseWorldPlaceEntities) =>
 			{
+				var place = uwpe.place;
+				var entity = uwpe.entity;
+
 				var placeWidthHalf = place.size.x / 2;
 
 				var ship = entity as Ship;
@@ -372,7 +377,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 		return new WorldDefn
 		([
 			[
-				ActivityDefn.Instances().HandleUserInput,
+				UserInputListener.activityDefnHandleUserInputBuild(),
 				Ship.activityDefnDoSpaceshipStuffBuild()
 			],
 			[
@@ -389,7 +394,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 <img src="Screenshot-6-Ship-Accelerating.gif" />
 
-6.6. Furthermore, our spaceship faces to the right when it's accelerating right, and to the left when it's accelerating left.  Ordinarily, we'd need to modify the Visual for the Ship for this to work, but since we're using a VisualPolygon, it automatically transforms the visual based on the Ship's orientation.  And we already added the code to set the Ship's orientation, in the same place where we're setting the acceleration, that is, in Ship.activityDefnDoSpaceshipStuffBuild().  Nice!
+6.6. Furthermore, our spaceship faces to the right when it's accelerating right, and to the left when it's accelerating left.  Ordinarily, we'd need to modify the Visual for the Ship for this to work, but since we're using a VisualPolygon, by default it automatically transforms the visual based on the Ship's orientation.  And we already added the code to set the Ship's orientation, in the same place where we're setting the acceleration, that is, in Ship.activityDefnDoSpaceshipStuffBuild().  Nice!
 
 
 7. Letting the User Control the Ship
@@ -421,24 +426,24 @@ This guide illustrates the creation of a new game from scratch using the This Co
 			actionDisplayRecorderStartStop.name, [ "~" ], true // inactivate
 		),
 
-		ActionToInputsMapping.fromActionAndInputName
+		ActionToInputsMapping.fromActionNameAndInputName
 		(
 			actionShowMenu.name, inputNames.Escape
 		),
 
-		ActionToInputsMapping.fromActionAndInputName
+		ActionToInputsMapping.fromActionNameAndInputName
 		(
 			Movable.actionAccelerateDown().name, inputNames.ArrowDown
 		),
-		ActionToInputsMapping.fromActionAndInputName
+		ActionToInputsMapping.fromActionNameAndInputName
 		(
 			Movable.actionAccelerateLeft().name, inputNames.ArrowLeft
 		),
-		ActionToInputsMapping.fromActionAndInputName
+		ActionToInputsMapping.fromActionNameAndInputName
 		(
 			Movable.actionAccelerateRight().name, inputNames.ArrowRight
 		),
-		ActionToInputsMapping.fromActionAndInputName
+		ActionToInputsMapping.fromActionNameAndInputName
 		(
 			Movable.actionAccelerateUp().name, inputNames.ArrowUp
 		)
@@ -450,7 +455,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 	Actor.fromActivityDefnName
 	(
-		ActivityDefn.Instances().HandleUserInput.name
+		UserInputListener.activityDefnHandleUserInputBuild().name
 	),
 
 	Movable.fromAccelerationAndSpeedMax(0.2, 2)
@@ -461,7 +466,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 7.8. Now that the Ship entity is listening for user input, we no longer need that instance of UserInputListener() that came built-in to the stub code.  Two entities listening and reacting to the same input might get weird.  Open PlaceLevel.ts again and, in the constructor, remove the line "new UserInputListener()" from the list of entities being passed to the super() call.
 
-7.9. After compiling the program and refreshing the web browser, use the arrow keys to cause the spaceship to acelerate up, down, left, and right.  You're a driver, you're a winner.
+7.9. After compiling the program, refreshing the web browser, and starting the game, use the arrow keys to cause the spaceship to acelerate up, down, left, and right.  You're a driver, you're a winner.
 
 <img src="Screenshot-7-Ship-Maneuvering.gif" />
 
@@ -566,20 +571,21 @@ This guide illustrates the creation of a new game from scratch using the This Co
 			);
 		}
 
-		static activityDefnPerform
-		(
-			universe: Universe, world: World, place: Place, entity: Entity
-		): void
+		static activityDefnPerform(uwpe: UniverseWorldPlaceEntities): void
 		{
+			var universe = uwpe.universe;
+			var place = uwpe.place;
+			var entity = uwpe.entity;
+
 			var raider = entity as Raider;
 
 			var raiderPos = raider.locatable().loc.pos;
 
 			var raiderActor = raider.actor();
 			var raiderActivity = raiderActor.activity;
-			var target = raiderActivity.target;
+			var targetEntity = raiderActivity.targetEntity();
 
-			if (target == null)
+			if (targetEntity == null)
 			{
 				var placeLevel = place as PlaceLevel;
 				var habitats = placeLevel.habitats();
@@ -589,15 +595,15 @@ This guide illustrates the creation of a new game from scratch using the This Co
 				}
 				else
 				{
-					target = ArrayHelper.random
+					targetEntity = ArrayHelper.random
 					(
 						habitats, universe.randomizer
 					);
-					raiderActivity.target = target;
+					raiderActivity.targetEntitySet(targetEntity);
 				}
 			}
 
-			var targetPos = target.locatable().loc.pos;
+			var targetPos = targetEntity.locatable().loc.pos;
 			var displacementToTarget = raider._displacement.overwriteWith
 			(
 				targetPos
@@ -623,9 +629,9 @@ This guide illustrates the creation of a new game from scratch using the This Co
 				raiderPos.overwriteWith(targetPos);
 				if (raider.habitatCaptured == null)
 				{
-					raider.habitatCaptured = target;
+					raider.habitatCaptured = targetEntity;
 
-					var targetConstrainable = target.constrainable();
+					var targetConstrainable = targetEntity.constrainable();
 
 					var constraintAttach =
 						new Constraint_AttachToEntityWithId(raider.id);
@@ -635,7 +641,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 						new Constraint_Offset(Coords.fromXY(0, 10));
 					targetConstrainable.constraintAdd(constraintOffset);
 
-					target = new Entity
+					targetEntity = new Entity
 					(
 						"EscapePoint",
 						[
@@ -648,7 +654,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 							)
 						]
 					);
-					raiderActivity.target = target;
+					raiderActivity.targetEntitySet(targetEntity);
 				}
 				else
 				{
@@ -663,7 +669,6 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 	import Constraint_AttachToEntityWithId = gf.Constraint_AttachToEntityWithId;
 	import Constraint_Offset = gf.Constraint_Offset;
-	import Constraint_WrapToPlaceSizeX = gf.Constraint_WrapToPlaceSizeX;
 	import Constraint_WrapToPlaceSizeX = gf.Constraint_WrapToPlaceSizeX;
 	import VisualEllipse = gf.VisualEllipse;
 	import VisualFan = gf.VisualFan;
@@ -691,7 +696,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 		return new WorldDefn
 		([
 			[
-				ActivityDefn.Instances().HandleUserInput,
+				UserInputListener.activityDefnHandleUserInputBuild(),
 				Raider.activityDefnBuild()
 			],
 			[
@@ -700,7 +705,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 		]);
 	}
 
-8.8. Finally, we need to the reference the newly declared Habitat and Raider classes, but since they're not from the framework, and thus are not part of any namespace, and thus don't need to be imported, we can leave Imports.ts alone.  We only have to add references to them in DefenderClone.html.  Probably these should go right after the recently added ones for Place and Ship:
+8.8. Finally, we need to the reference the newly declared Habitat and Raider classes, but since they're not from the framework, and thus are not part of any namespace, and thus don't need to be imported, we can leave Imports.ts alone.  We only have to add references to them in DefenderClone.html.  Probably these should go right after the recently added ones for Planet and Ship:
 
 	<script type="text/javascript" src="Model/Habitat.js"></script>
 	<script type="text/javascript" src="Model/Raider.js"></script>
@@ -722,7 +727,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 So let's give this kitten some claws.  (The kitten is your spaceship.  The claws are, like, plasma blasters.)
 
-9.2. To give your spaceship the ability to fire bullets, open Ship.ts and add these lines and add this to the list of entity properties in the constructor, remembering to add a comma to separate array elements:
+9.2. To give your spaceship the ability to fire bullets, open Ship.ts and add these lines to the list of entity properties in the constructor, remembering to add a comma to separate array elements:
 
 	new ProjectileGenerator
 	(
@@ -748,7 +753,7 @@ So let's give this kitten some claws.  (The kitten is your spaceship.  The claws
 		]
 	)
 
-9.3. Now your ship could technically generate bullets, only there's no ActionToInputsMapping to detect when you want to fire them, and even if there were, there's no Action to map that mapping to.  To add the Action and its mapping, open PlaceLevel.ts and, in the .defnBuild() method, add this line to the end of the "actions" array:
+9.3. Now your ship has a gun, but no trigger.  That is to say, it could technically generate bullets, only there's no ActionToInputsMapping to detect when you want to fire them, and even if there were, there's no Action to map that mapping to.  To add the Action and its mapping, open PlaceLevel.ts and, in the .defnBuild() method, add this line to the end of the "actions" array:
 
 	ProjectileGenerator.actionFire()
 
@@ -763,9 +768,13 @@ So let's give this kitten some claws.  (The kitten is your spaceship.  The claws
 
 (As always, remember to delimit these new array elements from the existing ones with commas.)
 
-9.5. You'll also need to add the ProjectileGenerator class to Imports.ts, like this:
+9.5. You'll also need to add the ProjectileGenerator class and some supporting classes to Imports.ts, like this:
 
 	import ProjectileGenerator = gf.ProjectileGenerator;
+	import ProjectileGeneration = gf.ProjectileGeneration;
+	import VisualCircle = gf.VisualCircle;
+	import Ephemeral = gf.Ephemeral;
+	import DiceRoll = gf.DiceRoll;
 
 9.6. And also add it to DefenderClone.html, as shown below.  Actually, you may want to add references to several related classes while you're at it:
 
@@ -775,6 +784,8 @@ So let's give this kitten some claws.  (The kitten is your spaceship.  The claws
 	<script type="text/javascript" src="Framework/Source/Model/Combat/ProjectileGenerator.js"></script>
 
 	<script type="text/javascript" src="Framework/Source/Model/Mortality/Ephemeral.js"></script>
+
+	<script type="text/javascript" src="Framework/Source/Utility/DiceRoll.js"></script>
 
 9.7. Re-compile the game and refresh the web browser.  The good news is, your spaceship will now shoot bullets when you press the spacebar!
 
@@ -806,7 +817,7 @@ These lines make the Raider collidable, which means that your bullets can hit it
 		Killable.name
 	];
 
-10.4 Re-compile the game and refresh the web browser.  Now your bullets can destroy the Raider, which is good, because otherwise what's the point of bullets, man?
+10.4 Re-compile the game and refresh the web browser.  Now your bullets can destroy the Raider, which is good, because otherwise what's the point of bullets, man? [TODO - The raider doesn't die.]
 
 <img src="Screenshot-10-Bullet_Destroys_Raider.gif" />
 
