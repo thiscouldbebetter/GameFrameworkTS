@@ -9,7 +9,7 @@ var ThisCouldBeBetter;
                 this.colorFill = colorFill;
                 this.colorBorder = colorBorder;
                 this.shouldUseEntityOrientation =
-                    shouldUseEntityOrientation || false;
+                    shouldUseEntityOrientation || true;
                 this.verticesAsPathTransformed = this.verticesAsPath.clone();
                 this.transformLocate = new GameFramework.Transform_Locate(null);
             }

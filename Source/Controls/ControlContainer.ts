@@ -400,7 +400,7 @@ export class ControlContainer extends ControlBase
 		}
 	}
 
-	// drawable
+	// Drawable.
 
 	draw
 	(
@@ -412,12 +412,12 @@ export class ControlContainer extends ControlBase
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 		style = style || this.style(universe);
 
-		display.drawRectangle
+		style.drawBoxOfSizeAtPosWithColorsToDisplay
 		(
-			drawPos, this.size,
-			style.colorBackground,
-			style.colorBorder,
-			null
+			this.size, drawPos,
+			style.colorBackground(), style.colorBorder(),
+			false, // isHighlighted,
+			display
 		);
 
 		var children = this.children;

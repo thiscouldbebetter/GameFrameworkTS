@@ -73,7 +73,8 @@ var ThisCouldBeBetter;
                 var range = this.cursorDimension / 2;
                 var entityToSelect = entitiesInPlace.filter(x => {
                     var locatable = x.locatable();
-                    var entityNotAlreadySelectedInRange = (this.entitiesSelected.indexOf(x) == -1
+                    var entityNotAlreadySelectedInRange = (x != this.entityForCursor
+                        && this.entitiesSelected.indexOf(x) == -1
                         && locatable != null
                         && locatable.distanceFromPos(mousePosAbsolute) < range);
                     return entityNotAlreadySelectedInRange;

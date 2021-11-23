@@ -83,16 +83,16 @@ var ThisCouldBeBetter;
             draw(universe, display, drawLoc, style) {
                 if (this.isVisible()) {
                     style = style || this.style(universe);
-                    var colorFore = (this.isHighlighted ? style.colorFill : style.colorBorder);
-                    var colorBack = (this.isHighlighted ? style.colorBorder : style.colorFill);
+                    var colorFore = (this.isHighlighted ? style.colorFill() : style.colorBorder());
+                    var colorBack = (this.isHighlighted ? style.colorBorder() : style.colorFill());
                     var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
-                    display.drawRectangle(drawPos, this.size, colorFore, null, null);
+                    display.drawRectangle(drawPos, this.size, colorFore, null);
                     drawLoc.pos.add(this.pos);
                     this.buttonScrollDown.draw(universe, display, drawLoc, style);
                     this.buttonScrollUp.draw(universe, display, drawLoc, style);
                     var sliderPosInPixels = this.sliderPosInPixels().add(drawPos);
                     var sliderSizeInPixels = this.sliderSizeInPixels();
-                    display.drawRectangle(sliderPosInPixels, sliderSizeInPixels, colorBack, colorFore, null);
+                    display.drawRectangle(sliderPosInPixels, sliderSizeInPixels, colorBack, colorFore);
                 }
             }
         }

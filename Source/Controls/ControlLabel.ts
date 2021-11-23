@@ -120,9 +120,8 @@ export class ControlLabel<TContext> extends ControlBase
 					textLine,
 					this.fontHeightInPixels,
 					drawPos,
-					style.colorBorder,
-					style.colorFill, // colorOutline
-					null, // areColorsReversed
+					style.colorBorder(),
+					style.colorFill(), // colorOutline
 					this.isTextCentered,
 					widthMaxInPixels
 				);

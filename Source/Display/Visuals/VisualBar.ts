@@ -75,7 +75,7 @@ export class VisualBar implements Visual<VisualBar>
 			this._sizeCurrent.x = widthCurrent;
 			display.drawRectangle
 			(
-				pos, this._sizeCurrent, this.color, null, null
+				pos, this._sizeCurrent, this.color, null
 			);
 
 			var colorForBorder: Color = null;
@@ -97,13 +97,13 @@ export class VisualBar implements Visual<VisualBar>
 				(
 					this._sizeCurrent, // pos
 					new Coords(1, this.size.y, 0), // size
-					this.color, null, null
+					this.color, null // colorBorder
 				)
 			}
 
 			display.drawRectangle
 			(
-				pos, this.size, null, colorForBorder, null
+				pos, this.size, null, colorForBorder
 			);
 
 			pos.add(this._sizeHalf);
@@ -125,7 +125,6 @@ export class VisualBar implements Visual<VisualBar>
 				pos,
 				colorForBorder,
 				Color.byName("Black"), // colorOutline,
-				false, // areColorsReversed
 				true, // isCentered
 				null, // widthMaxInPixels
 			);

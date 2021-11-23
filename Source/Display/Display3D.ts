@@ -533,13 +533,12 @@ export class Display3D implements Display
 		pos: Coords,
 		size : Coords,
 		colorFill: Color,
-		colorBorder: Color,
-		areColorsReversed: boolean
+		colorBorder: Color
 	): void
 	{
 		this._display2DOverlay.drawRectangle
 		(
-			pos, size, colorFill, colorBorder, areColorsReversed
+			pos, size, colorFill, colorBorder
 		);
 	}
 
@@ -551,6 +550,19 @@ export class Display3D implements Display
 		this._display2DOverlay.drawRectangleCentered(pos, size, colorFill, colorBorder);
 	}
 
+	drawRectangleWithRoundedCorners
+	(
+		pos: Coords, size: Coords,
+		colorFill: Color, colorBorder: Color,
+		cornerRadius: number
+	): void
+	{
+		this._display2DOverlay.drawRectangleWithRoundedCorners
+		(
+			pos, size, colorFill, colorBorder, cornerRadius
+		);
+	}
+
 	drawText
 	(
 		text: string,
@@ -558,7 +570,6 @@ export class Display3D implements Display
 		pos: Coords,
 		colorFill: Color,
 		colorOutline: Color,
-		areColorsReversed: boolean,
 		isCentered: boolean,
 		widthMaxInPixels: number
 	): void
@@ -570,7 +581,6 @@ export class Display3D implements Display
 			pos,
 			colorFill,
 			colorOutline,
-			areColorsReversed,
 			isCentered,
 			widthMaxInPixels
 		);

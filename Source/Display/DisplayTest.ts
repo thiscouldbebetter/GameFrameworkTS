@@ -144,14 +144,20 @@ export class DisplayTest implements Display
 
 	drawRectangle
 	(
-		pos: Coords, size: Coords, colorFill: Color, colorBorder: Color,
-		areColorsReversed: boolean
+		pos: Coords, size: Coords, colorFill: Color, colorBorder: Color
 	): void
 	{}
 
 	drawRectangleCentered
 	(
 		pos: Coords, size: Coords, colorFill: Color, colorBorder: Color
+	): void
+	{}
+
+	drawRectangleWithRoundedCorners
+	(
+		pos: Coords, size: Coords, colorFill: Color, colorBorder: Color,
+		cornerRadius: number
 	): void
 	{}
 
@@ -162,7 +168,6 @@ export class DisplayTest implements Display
 		pos: Coords,
 		colorFill: Color,
 		colorOutline: Color,
-		areColorsReversed: boolean,
 		isCentered: boolean,
 		widthMaxInPixels: number
 	): void

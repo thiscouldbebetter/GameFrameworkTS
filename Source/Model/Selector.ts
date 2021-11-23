@@ -154,7 +154,8 @@ export class Selector implements EntityProperty<Selector>
 				var locatable = x.locatable();
 				var entityNotAlreadySelectedInRange =
 				(
-					this.entitiesSelected.indexOf(x) == -1
+					x != this.entityForCursor
+					&& this.entitiesSelected.indexOf(x) == -1
 					&& locatable != null
 					&& locatable.distanceFromPos(mousePosAbsolute) < range
 				);

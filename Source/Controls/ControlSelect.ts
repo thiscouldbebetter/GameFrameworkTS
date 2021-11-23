@@ -139,9 +139,8 @@ export class ControlSelect<TContext, TItem, TValue> extends ControlBase
 		display.drawRectangle
 		(
 			drawPos, this.size,
-			style.colorFill,
-			style.colorBorder,
-			this.isHighlighted // areColorsReversed
+			(this.isHighlighted ? style.colorBorder() : style.colorFill()),
+			(this.isHighlighted ? style.colorFill() : style.colorBorder())
 		);
 
 		drawPos.add(this._sizeHalf.overwriteWith(this.size).half());
@@ -159,9 +158,8 @@ export class ControlSelect<TContext, TItem, TValue> extends ControlBase
 			text,
 			this.fontHeightInPixels,
 			drawPos,
-			style.colorBorder,
-			style.colorFill,
-			this.isHighlighted,
+			(this.isHighlighted ? style.colorFill() : style.colorBorder()),
+			(this.isHighlighted ? style.colorBorder() : style.colorFill()),
 			true, // isCentered
 			this.size.x // widthMaxInPixels
 		);

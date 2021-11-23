@@ -47,15 +47,14 @@ var ThisCouldBeBetter;
                 var isEnabled = this.isEnabled();
                 var isHighlighted = this.isHighlighted && isEnabled;
                 style = style || this.style(universe);
-                var colorFill = style.colorFill;
-                var colorBorder = style.colorBorder;
+                var colorFill = style.colorFill();
+                var colorBorder = style.colorBorder();
                 if (this.hasBorder) {
-                    display.drawRectangle(drawPos, this.size, colorFill, colorBorder, isHighlighted // areColorsReversed
-                    );
+                    style.drawBoxOfSizeAtPosWithColorsToDisplay(this.size, drawPos, colorFill, colorBorder, isHighlighted, display);
                 }
                 drawPos.add(this._sizeHalf.overwriteWith(this.size).half());
-                var colorText = (isEnabled ? colorBorder : style.colorDisabled);
-                display.drawText(this.text, this.fontHeightInPixels, drawPos, colorText, colorFill, isHighlighted, true, // isCentered
+                var colorText = (isEnabled ? colorBorder : style.colorDisabled());
+                display.drawText(this.text, this.fontHeightInPixels, drawPos, (isHighlighted ? colorFill : colorText), (isHighlighted ? colorText : colorFill), true, // isCentered
                 this.size.x // widthMaxInPixels
                 );
             }

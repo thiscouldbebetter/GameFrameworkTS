@@ -40,12 +40,16 @@ class GameDemo
 
 		var timerHelper = new TimerHelper(20);
 
-		var controlBuilder = ControlBuilder.default();
+		var controlBuilder = ControlBuilder.fromStyles
+		([
+			ControlStyle.Instances().Rounded,
+			ControlStyle.Instances().Dark
+		]);
 
 		var universe = Universe.create
 		(
 			"Game Framework Demo Game",
-			"0.0.0-20210406-1530", // version
+			"0.0.0-20211122", // version
 			timerHelper,
 			display,
 			mediaLibrary,

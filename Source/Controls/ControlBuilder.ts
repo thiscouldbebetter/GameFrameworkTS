@@ -44,6 +44,11 @@ export class ControlBuilder
 		return new ControlBuilder(null, null);
 	}
 
+	static fromStyles(styles: ControlStyle[]): ControlBuilder
+	{
+		return new ControlBuilder( styles, null);
+	}
+
 	styleByName(styleName: string): ControlStyle
 	{
 		return this.stylesByName.get(styleName);

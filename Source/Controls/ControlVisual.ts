@@ -92,10 +92,10 @@ export class ControlVisual extends ControlBase
 			var style = style || this.style(universe);
 
 			var colorFill = this.colorBackground || Color.Instances()._Transparent;
-			var colorBorder = this.colorBorder || style.colorBorder;
+			var colorBorder = this.colorBorder || style.colorBorder();
 			display.drawRectangle
 			(
-				drawPos, this.size, colorFill, colorBorder, null
+				drawPos, this.size, colorFill, colorBorder
 			);
 
 			this._sizeHalf.overwriteWith(this.size).half();

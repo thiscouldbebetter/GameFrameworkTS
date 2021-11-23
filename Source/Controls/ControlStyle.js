@@ -4,12 +4,10 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ControlStyle {
-            constructor(name, colorBackground, colorFill, colorBorder, colorDisabled) {
+            constructor(name, colorScheme, drawBoxOfSizeAtPosWithColorsToDisplay) {
                 this.name = name;
-                this.colorBackground = colorBackground;
-                this.colorFill = colorFill;
-                this.colorBorder = colorBorder;
-                this.colorDisabled = colorDisabled;
+                this.colorScheme = colorScheme;
+                this._drawBoxOfSizeAtPosWithColorsToDisplay = drawBoxOfSizeAtPosWithColorsToDisplay;
             }
             static Instances() {
                 if (ControlStyle._instances == null) {
@@ -20,23 +18,53 @@ var ThisCouldBeBetter;
             static byName(styleName) {
                 return ControlStyle.Instances()._AllByName.get(styleName);
             }
+            clone() {
+                return new ControlStyle(this.name, this.colorScheme.clone(), this._drawBoxOfSizeAtPosWithColorsToDisplay);
+            }
+            drawBoxOfSizeAtPosWithColorsToDisplay(size, pos, colorFill, colorBorder, isHighlighted, display) {
+                if (this._drawBoxOfSizeAtPosWithColorsToDisplay == null) {
+                    if (isHighlighted) {
+                        var temp = colorFill;
+                        colorFill = colorBorder;
+                        colorBorder = temp;
+                    }
+                    display.drawRectangle(pos, size, colorFill, colorBorder);
+                }
+                else {
+                    this._drawBoxOfSizeAtPosWithColorsToDisplay(size, pos, colorFill, colorBorder, isHighlighted, display);
+                }
+            }
+            // Colors.
+            colorBackground() { return this.colorScheme.colorBackground; }
+            colorBorder() { return this.colorScheme.colorBorder; }
+            colorDisabled() { return this.colorScheme.colorDisabled; }
+            colorFill() { return this.colorScheme.colorFill; }
         }
         GameFramework.ControlStyle = ControlStyle;
         class ControlStyle_Instances {
             constructor() {
                 this.Default = new ControlStyle("Default", // name
-                GameFramework.Color.fromRGB(240 / 255, 240 / 255, 240 / 255), // colorBackground
-                GameFramework.Color.byName("White"), // colorFill
-                GameFramework.Color.byName("Gray"), // colorBorder
-                GameFramework.Color.byName("GrayLight") // colorDisabled
+                GameFramework.ControlColorScheme.Instances().Default, null // drawBoxOfSizeAtPosToDisplay
                 );
                 this.Dark = new ControlStyle("Dark", // name
-                GameFramework.Color.byName("GrayDark"), // colorBackground
-                GameFramework.Color.byName("Black"), // colorFill
-                GameFramework.Color.byName("White"), // colorBorder
-                GameFramework.Color.byName("GrayLight") // colorDisabled
+                GameFramework.ControlColorScheme.Instances().Dark, null // drawBoxOfSizeAtPosToDisplay
                 );
-                this._All = [this.Default, this.Dark];
+                var rounded = this.Default.clone();
+                var cornerRadius = 5;
+                rounded._drawBoxOfSizeAtPosWithColorsToDisplay =
+                    (size, pos, colorFill, colorBorder, isHighlighted, display) => {
+                        if (isHighlighted) {
+                            var temp = colorFill;
+                            colorFill = colorBorder;
+                            colorBorder = temp;
+                        }
+                        display.drawRectangleWithRoundedCorners(pos, size, colorFill, colorBorder, cornerRadius);
+                    };
+                this.Rounded = rounded;
+                this._All =
+                    [
+                        this.Default, this.Dark, this.Rounded
+                    ];
                 this._AllByName = GameFramework.ArrayHelper.addLookupsByName(this._All);
             }
         }

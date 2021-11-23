@@ -230,7 +230,6 @@ export class VisualNetwork implements Visual<VisualNetwork>
 				node.pos,
 				colorCyan,
 				null, // colorOutline
-				false, // areColorsReversed
 				false, // isCentered
 				null // widthMaxInPixels
 			);

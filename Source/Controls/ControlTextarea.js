@@ -194,11 +194,10 @@ var ThisCouldBeBetter;
                 drawLoc = this._drawLoc.overwriteWith(drawLoc);
                 var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
                 var style = style || this.style(universe);
-                var colorFore = (this.isHighlighted ? style.colorFill : style.colorBorder);
-                var colorBack = (this.isHighlighted ? style.colorBorder : style.colorFill);
+                var colorFore = (this.isHighlighted ? style.colorFill() : style.colorBorder());
+                var colorBack = (this.isHighlighted ? style.colorBorder() : style.colorFill());
                 display.drawRectangle(drawPos, this.size, colorBack, // fill
-                style.colorBorder, // border
-                false // areColorsReversed
+                style.colorBorder() // border
                 );
                 var itemSizeY = this.lineSpacing;
                 var textMarginLeft = 2;
@@ -222,8 +221,7 @@ var ThisCouldBeBetter;
                 var drawPos2 = new GameFramework.Coords(drawPos.x + textMarginLeft, itemPosY, 0);
                 for (var i = indexStart; i <= indexEnd; i++) {
                     var line = lines[i];
-                    display.drawText(line, this.fontHeightInPixels, drawPos2, colorFore, colorBack, false, // areColorsReversed
-                    false, // isCentered
+                    display.drawText(line, this.fontHeightInPixels, drawPos2, colorFore, colorBack, false, // isCentered
                     this.size.x // widthMaxInPixels
                     );
                     drawPos2.y += itemSizeY;

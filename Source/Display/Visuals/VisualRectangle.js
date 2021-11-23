@@ -21,7 +21,7 @@ var ThisCouldBeBetter;
                 if (this.isCentered) {
                     drawPos.subtract(this.sizeHalf);
                 }
-                display.drawRectangle(drawPos, this.size, this.colorFill, this.colorBorder, null);
+                display.drawRectangle(drawPos, this.size, this.colorFill, this.colorBorder);
             }
             // Clonable.
             clone() {

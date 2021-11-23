@@ -220,14 +220,17 @@ var ThisCouldBeBetter;
             drawPolygon(vertices, colorFill, colorBorder) {
                 this._display2DOverlay.drawPolygon(vertices, colorFill, colorBorder);
             }
-            drawRectangle(pos, size, colorFill, colorBorder, areColorsReversed) {
-                this._display2DOverlay.drawRectangle(pos, size, colorFill, colorBorder, areColorsReversed);
+            drawRectangle(pos, size, colorFill, colorBorder) {
+                this._display2DOverlay.drawRectangle(pos, size, colorFill, colorBorder);
             }
             drawRectangleCentered(pos, size, colorFill, colorBorder) {
                 this._display2DOverlay.drawRectangleCentered(pos, size, colorFill, colorBorder);
             }
-            drawText(text, fontHeightInPixels, pos, colorFill, colorOutline, areColorsReversed, isCentered, widthMaxInPixels) {
-                this._display2DOverlay.drawText(text, fontHeightInPixels, pos, colorFill, colorOutline, areColorsReversed, isCentered, widthMaxInPixels);
+            drawRectangleWithRoundedCorners(pos, size, colorFill, colorBorder, cornerRadius) {
+                this._display2DOverlay.drawRectangleWithRoundedCorners(pos, size, colorFill, colorBorder, cornerRadius);
+            }
+            drawText(text, fontHeightInPixels, pos, colorFill, colorOutline, isCentered, widthMaxInPixels) {
+                this._display2DOverlay.drawText(text, fontHeightInPixels, pos, colorFill, colorOutline, isCentered, widthMaxInPixels);
             }
             drawWedge(center, radius, angleStartInTurns, angleStopInTurns, colorFill, colorBorder) {
                 this._display2DOverlay.drawWedge(center, radius, angleStartInTurns, angleStopInTurns, colorFill, colorBorder);

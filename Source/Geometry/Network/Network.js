@@ -132,7 +132,6 @@ var ThisCouldBeBetter;
                     var node = nodes[i];
                     display.drawText("" + node.id, 10, // fontHeightInPixels
                     node.pos, colorCyan, null, // colorOutline
-                    false, // areColorsReversed
                     false, // isCentered
                     null // widthMaxInPixels
                     );

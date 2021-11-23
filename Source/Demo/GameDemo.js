@@ -22,8 +22,11 @@ class GameDemo {
         Color.byName("Gray"), Color.byName("White"), // colorFore, colorBack
         null);
         var timerHelper = new TimerHelper(20);
-        var controlBuilder = ControlBuilder.default();
-        var universe = Universe.create("Game Framework Demo Game", "0.0.0-20210406-1530", // version
+        var controlBuilder = ControlBuilder.fromStyles([
+            ControlStyle.Instances().Rounded,
+            ControlStyle.Instances().Dark
+        ]);
+        var universe = Universe.create("Game Framework Demo Game", "0.0.0-20211122", // version
         timerHelper, display, mediaLibrary, controlBuilder, WorldDemo.create);
         universe.initialize(() => universe.start());
     }

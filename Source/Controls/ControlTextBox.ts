@@ -224,14 +224,6 @@ export class ControlTextBox<TContext> extends ControlBase
 		var style = this.style(universe);
 
 		var text = this.text(null);
-
-		display.drawRectangle
-		(
-			drawPos, this.size,
-			style.colorFill, style.colorBorder,
-			this.isHighlighted // areColorsReversed
-		);
-
 		var textWidth =
 			display.textWidthForFontHeight(text, this.fontHeightInPixels);
 		var textSize =
@@ -241,20 +233,40 @@ export class ControlTextBox<TContext> extends ControlBase
 		var drawPosText =
 			this._drawPosText.overwriteWith(drawPos).add(textMargin);
 
-		display.drawText
+		style.drawBoxOfSizeAtPosWithColorsToDisplay
 		(
-			text,
-			this.fontHeightInPixels,
-			drawPosText,
-			style.colorBorder,
-			style.colorFill,
+			this.size, drawPos,
+			style.colorFill(), style.colorBorder(),
 			this.isHighlighted,
-			false, // isCentered
-			this.size.x // widthMaxInPixels
+			display
 		);
 
-		if (this.isHighlighted)
+		if (this.isHighlighted == false)
 		{
+			display.drawText
+			(
+				text,
+				this.fontHeightInPixels,
+				drawPosText,
+				style.colorFill(),
+				style.colorBorder(),
+				false, // isCentered
+				this.size.x // widthMaxInPixels
+			);
+		}
+		else
+		{
+			display.drawText
+			(
+				text,
+				this.fontHeightInPixels,
+				drawPosText,
+				style.colorBorder(),
+				style.colorFill(),
+				false, // isCentered
+				this.size.x // widthMaxInPixels
+			);
+
 			var textBeforeCursor = text.substr(0, this.cursorPos);
 			var textAtCursor = text.substr(this.cursorPos, 1);
 			var cursorX = display.textWidthForFontHeight
@@ -267,13 +279,14 @@ export class ControlTextBox<TContext> extends ControlBase
 			);
 			drawPosText.x += cursorX;
 
-			display.drawRectangle
+			style.drawBoxOfSizeAtPosWithColorsToDisplay
 			(
+				Coords.fromXY(cursorWidth, this.fontHeightInPixels), // size
 				drawPosText,
-				new Coords(cursorWidth, this.fontHeightInPixels, 0), // size
-				style.colorFill,
-				style.colorFill, // ?
-				null
+				style.colorFill(),
+				style.colorFill(), // ?
+				this.isHighlighted,
+				display
 			);
 
 			display.drawText
@@ -281,9 +294,8 @@ export class ControlTextBox<TContext> extends ControlBase
 				textAtCursor,
 				this.fontHeightInPixels,
 				drawPosText,
-				style.colorBorder,
+				style.colorBorder(),
 				null, // colorBack
-				false, // isHighlighted
 				false, // isCentered
 				this.size.x // widthMaxInPixels
 			);

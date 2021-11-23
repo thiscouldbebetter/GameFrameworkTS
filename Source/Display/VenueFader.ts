@@ -119,7 +119,7 @@ export class VenueFader implements Venue
 			Coords.create(),
 			display.sizeDefault(), // Scaled automatically.
 			fadeColor,
-			null, null
+			null
 		);
 	}
 

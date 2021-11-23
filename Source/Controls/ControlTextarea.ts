@@ -307,16 +307,15 @@ export class ControlTextarea<TContext> extends ControlBase
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 
 		var style = style || this.style(universe);
-		var colorFore = (this.isHighlighted ? style.colorFill : style.colorBorder);
-		var colorBack = (this.isHighlighted ? style.colorBorder : style.colorFill);
+		var colorFore = (this.isHighlighted ? style.colorFill() : style.colorBorder());
+		var colorBack = (this.isHighlighted ? style.colorBorder() : style.colorFill());
 
 		display.drawRectangle
 		(
 			drawPos,
 			this.size,
 			colorBack, // fill
-			style.colorBorder, // border
-			false // areColorsReversed
+			style.colorBorder() // border
 		);
 
 		var itemSizeY = this.lineSpacing;
@@ -360,7 +359,6 @@ export class ControlTextarea<TContext> extends ControlBase
 				drawPos2,
 				colorFore,
 				colorBack,
-				false, // areColorsReversed
 				false, // isCentered
 				this.size.x // widthMaxInPixels
 			);

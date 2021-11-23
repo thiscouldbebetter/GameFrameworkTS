@@ -20,6 +20,9 @@ var ThisCouldBeBetter;
             static default() {
                 return new ControlBuilder(null, null);
             }
+            static fromStyles(styles) {
+                return new ControlBuilder(styles, null);
+            }
             styleByName(styleName) {
                 return this.stylesByName.get(styleName);
             }

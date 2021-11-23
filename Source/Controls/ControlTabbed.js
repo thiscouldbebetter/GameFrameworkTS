@@ -19,14 +19,6 @@ var ThisCouldBeBetter;
                 var marginSize = this.fontHeightInPixels;
                 var tabPaneHeight = marginSize + this.tabButtonSize.y;
                 var buttonsForChildren = new Array();
-                var buttonForTabClick = (b) => // click
-                 {
-                    buttonsForChildren.forEach(x => x.isHighlighted = false);
-                    var buttonIndex = buttonsForChildren.indexOf(b); // hack
-                    this.childSelectedIndex = buttonIndex;
-                    this.isChildSelectedActive = true;
-                    b.isHighlighted = true;
-                };
                 for (var i = 0; i < this.childrenForTabs.length; i++) {
                     var child = this.childrenForTabs[i];
                     child.pos.y += tabPaneHeight;
@@ -35,12 +27,58 @@ var ThisCouldBeBetter;
                     var button = GameFramework.ControlButton.from8("button" + childName, buttonPos, this.tabButtonSize.clone(), childName, // text
                     this.fontHeightInPixels, true, // hasBorder
                     GameFramework.DataBinding.fromTrueWithContext(this.context), // isEnabled
-                    null // click
+                    null // click - Assigned below.
                     );
-                    button.click = () => {
-                        buttonForTabClick(button);
-                    };
                     buttonsForChildren.push(button);
+                }
+                var buttonForTabClick = (b) => // click
+                 {
+                    buttonsForChildren.forEach(x => x.isHighlighted = false);
+                    var buttonIndex = buttonsForChildren.indexOf(b); // hack
+                    this.childSelectedIndex = buttonIndex;
+                    this.isChildSelectedActive = true;
+                    b.isHighlighted = true;
+                };
+                // hack - This loop is being unrolled,
+                // because when these anonymous functions are assigned in a loop,
+                // for each variable declared within the loop,
+                // the anonymous function only sees the value
+                // from the final iteration of the loop.
+                var buttonsForChildrenCount = buttonsForChildren.length;
+                if (buttonsForChildrenCount > 0) {
+                    buttonsForChildren[0].click = () => {
+                        buttonForTabClick(buttonsForChildren[0]);
+                    };
+                }
+                if (buttonsForChildrenCount > 1) {
+                    buttonsForChildren[1].click = () => {
+                        buttonForTabClick(buttonsForChildren[1]);
+                    };
+                }
+                if (buttonsForChildrenCount > 2) {
+                    buttonsForChildren[2].click = () => {
+                        buttonForTabClick(buttonsForChildren[2]);
+                    };
+                }
+                if (buttonsForChildrenCount > 3) {
+                    buttonsForChildren[3].click = () => {
+                        buttonForTabClick(buttonsForChildren[3]);
+                    };
+                }
+                if (buttonsForChildrenCount > 4) {
+                    buttonsForChildren[4].click = () => {
+                        buttonForTabClick(buttonsForChildren[4]);
+                    };
+                }
+                if (buttonsForChildrenCount > 5) {
+                    buttonsForChildren[5].click = () => {
+                        buttonForTabClick(buttonsForChildren[5]);
+                    };
+                }
+                if (buttonsForChildrenCount > 6) {
+                    buttonsForChildren[6].click = () => {
+                        buttonForTabClick(buttonsForChildren[6]);
+                    };
                 }
                 if (this.cancel != null) {
                     this.childrenForTabs.push(null);
@@ -253,7 +291,7 @@ var ThisCouldBeBetter;
                 drawLoc = this._drawLoc.overwriteWith(drawLoc);
                 var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
                 var style = this.style(universe);
-                display.drawRectangle(drawPos, this.size, style.colorBackground, style.colorBorder, null);
+                display.drawRectangle(drawPos, this.size, style.colorBackground(), style.colorBorder());
                 var buttons = this.buttonsForChildren;
                 for (var i = 0; i < buttons.length; i++) {
                     var button = buttons[i];

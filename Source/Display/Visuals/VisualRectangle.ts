@@ -45,7 +45,7 @@ export class VisualRectangle implements Visual<VisualRectangle>
 
 		display.drawRectangle
 		(
-			drawPos, this.size, this.colorFill, this.colorBorder, null
+			drawPos, this.size, this.colorFill, this.colorBorder
 		);
 	}
 

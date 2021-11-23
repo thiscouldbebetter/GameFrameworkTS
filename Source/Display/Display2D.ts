@@ -16,6 +16,7 @@ export class Display2D implements Display
 	sizeInPixelsHalf: Coords;
 	graphics: CanvasRenderingContext2D;
 
+	_curveControlPos: Coords;
 	_drawPos: Coords;
 	_scaleFactor: Coords;
 	_sizeDefault: Coords;
@@ -38,6 +39,7 @@ export class Display2D implements Display
 
 		// Helper variables.
 
+		this._curveControlPos = Coords.create();
 		this._drawPos = Coords.create();
 		this._sizeHalf = Coords.create();
 		this._zeroes = Coords.Instances().Zeroes;
@@ -142,8 +144,7 @@ export class Display2D implements Display
 			this._zeroes,
 			this.sizeDefault(), // Automatic scaling.
 			colorBack || this.colorBack,
-			colorBorder || this.colorFore,
-			null
+			colorBorder || this.colorFore
 		);
 	}
 
@@ -462,17 +463,9 @@ export class Display2D implements Display
 
 	drawRectangle
 	(
-		pos: Coords, size: Coords, colorFill: Color, colorBorder: Color,
-		areColorsReversed: boolean
+		pos: Coords, size: Coords, colorFill: Color, colorBorder: Color
 	): void
 	{
-		if (areColorsReversed)
-		{
-			var temp = colorFill;
-			colorFill = colorBorder;
-			colorBorder = temp;
-		}
-
 		if (colorFill != null)
 		{
 			this.graphics.fillStyle = Color.systemColorGet(colorFill);
@@ -501,7 +494,65 @@ export class Display2D implements Display
 	{
 		var sizeHalf = this._sizeHalf.overwriteWith(size).half();
 		var posAdjusted = this._drawPos.overwriteWith(pos).subtract(sizeHalf);
-		this.drawRectangle(posAdjusted, size, colorFill, colorBorder, null);
+		this.drawRectangle(posAdjusted, size, colorFill, colorBorder);
+	}
+
+	drawRectangleWithRoundedCorners
+	(
+		pos: Coords, size: Coords,
+		colorFill: Color, colorBorder: Color,
+		cornerRadius: number
+	): void
+	{
+		var drawPos = this._drawPos;
+		var curveControlPos = this._curveControlPos;
+
+		this.graphics.beginPath();
+
+		drawPos.overwriteWith(pos).addXY(cornerRadius, 0);
+		this.graphics.moveTo(drawPos.x, drawPos.y);
+
+		drawPos.addXY(size.x - cornerRadius * 2, 0);
+		this.graphics.lineTo(drawPos.x, drawPos.y)
+
+		curveControlPos.overwriteWith(drawPos).addXY(cornerRadius, 0);
+		drawPos.addXY(cornerRadius, cornerRadius);
+		this.graphics.quadraticCurveTo(curveControlPos.x, curveControlPos.y, drawPos.x, drawPos.y);
+
+		drawPos.addXY(0, size.y - cornerRadius * 2);
+		this.graphics.lineTo(drawPos.x, drawPos.y);
+
+		curveControlPos.overwriteWith(drawPos).addXY(0, cornerRadius);
+		drawPos.addXY(0 - cornerRadius, cornerRadius);
+		this.graphics.quadraticCurveTo(curveControlPos.x, curveControlPos.y, drawPos.x, drawPos.y);
+
+		drawPos.addXY(0 - (size.x - cornerRadius * 2), 0);
+		this.graphics.lineTo(drawPos.x, drawPos.y)
+
+		curveControlPos.overwriteWith(drawPos).addXY(0 - cornerRadius, 0);		
+		drawPos.addXY(0 - cornerRadius, 0 - cornerRadius);
+		this.graphics.quadraticCurveTo(curveControlPos.x, curveControlPos.y, drawPos.x, drawPos.y);
+
+		drawPos.addXY(0, 0 - (size.y - cornerRadius * 2) );
+		this.graphics.lineTo(drawPos.x, drawPos.y);
+
+		curveControlPos.overwriteWith(drawPos).addXY(0, 0 - cornerRadius);
+		drawPos.addXY(cornerRadius, 0 - cornerRadius );
+		this.graphics.quadraticCurveTo(curveControlPos.x, curveControlPos.y, drawPos.x, drawPos.y);
+
+		this.graphics.closePath();
+
+		if (colorFill != null)
+		{
+			this.graphics.fillStyle = Color.systemColorGet(colorFill);
+			this.graphics.fill();
+		}
+
+		if (colorBorder != null)
+		{
+			this.graphics.strokeStyle = Color.systemColorGet(colorBorder);
+			this.graphics.stroke();
+		}
 	}
 
 	drawText
@@ -511,7 +562,6 @@ export class Display2D implements Display
 		pos: Coords,
 		colorFill: Color,
 		colorOutline: Color,
-		areColorsReversed: boolean,
 		isCentered: boolean,
 		widthMaxInPixels: number
 	): void
@@ -523,13 +573,6 @@ export class Display2D implements Display
 		}
 
 		this.fontSet(null, fontHeightInPixels);
-
-		if (areColorsReversed)
-		{
-			var temp = colorFill;
-			colorFill = colorOutline;
-			colorOutline = temp;
-		}
 
 		if (colorFill == null)
 		{

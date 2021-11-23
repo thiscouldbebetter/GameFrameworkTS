@@ -225,12 +225,13 @@ var ThisCouldBeBetter;
                     child.pos.add(displacement);
                 }
             }
-            // drawable
+            // Drawable.
             draw(universe, display, drawLoc, style) {
                 drawLoc = this._drawLoc.overwriteWith(drawLoc);
                 var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
                 style = style || this.style(universe);
-                display.drawRectangle(drawPos, this.size, style.colorBackground, style.colorBorder, null);
+                style.drawBoxOfSizeAtPosWithColorsToDisplay(this.size, drawPos, style.colorBackground(), style.colorBorder(), false, // isHighlighted,
+                display);
                 var children = this.children;
                 for (var i = 0; i < children.length; i++) {
                     var child = children[i];

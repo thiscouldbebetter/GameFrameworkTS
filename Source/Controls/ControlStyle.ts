@@ -5,22 +5,25 @@ namespace ThisCouldBeBetter.GameFramework
 export class ControlStyle
 {
 	name: string;
-	colorBackground: Color;
-	colorFill: Color;
-	colorBorder: Color;
-	colorDisabled: Color;
+	colorScheme: ControlColorScheme;
+	_drawBoxOfSizeAtPosWithColorsToDisplay:
+		(size: Coords, pos: Coords, colorFill: Color, colorBorder: Color, isHighlighted: boolean, display: Display) => void;
 
-	constructor(name: string, colorBackground: Color, colorFill: Color, colorBorder: Color, colorDisabled: Color)
+	constructor
+	(
+		name: string,
+		colorScheme: ControlColorScheme,
+		drawBoxOfSizeAtPosWithColorsToDisplay:
+			(size: Coords, pos: Coords, colorFill: Color, colorBorder: Color, isHighlighted: boolean, display: Display) => void
+	)
 	{
 		this.name = name;
-		this.colorBackground = colorBackground;
-		this.colorFill = colorFill;
-		this.colorBorder = colorBorder;
-		this.colorDisabled = colorDisabled;
+		this.colorScheme = colorScheme;
+		this._drawBoxOfSizeAtPosWithColorsToDisplay = drawBoxOfSizeAtPosWithColorsToDisplay;
 	}
 
 	static _instances: ControlStyle_Instances;
-	static Instances()
+	static Instances(): ControlStyle_Instances
 	{
 		if (ControlStyle._instances == null)
 		{
@@ -29,16 +32,65 @@ export class ControlStyle
 		return ControlStyle._instances;
 	}
 
-	static byName(styleName: string)
+	static byName(styleName: string): ControlStyle
 	{
 		return ControlStyle.Instances()._AllByName.get(styleName);
 	}
+
+	clone(): ControlStyle
+	{
+		return new ControlStyle
+		(
+			this.name,
+			this.colorScheme.clone(),
+			this._drawBoxOfSizeAtPosWithColorsToDisplay
+		);
+	}
+
+	drawBoxOfSizeAtPosWithColorsToDisplay
+	(
+		size: Coords, pos: Coords,
+		colorFill: Color, colorBorder: Color,
+		isHighlighted: boolean,
+		display: Display
+	): void
+	{
+		if (this._drawBoxOfSizeAtPosWithColorsToDisplay == null)
+		{
+			if (isHighlighted)
+			{
+				var temp = colorFill;
+				colorFill = colorBorder;
+				colorBorder = temp;
+			}
+
+			display.drawRectangle(pos, size, colorFill, colorBorder);
+		}
+		else
+		{
+			this._drawBoxOfSizeAtPosWithColorsToDisplay
+			(
+				size, pos, colorFill, colorBorder, isHighlighted, display
+			);
+		}
+	}
+
+	// Colors.
+
+	colorBackground(): Color { return this.colorScheme.colorBackground; }
+
+	colorBorder(): Color { return this.colorScheme.colorBorder; }
+
+	colorDisabled(): Color { return this.colorScheme.colorDisabled; }
+
+	colorFill(): Color { return this.colorScheme.colorFill; }
 }
 
 export class ControlStyle_Instances
 {
 	Default: ControlStyle;
 	Dark: ControlStyle;
+	Rounded: ControlStyle;
 
 	_All: ControlStyle[];
 	_AllByName: Map<string, ControlStyle>;
@@ -48,22 +100,45 @@ export class ControlStyle_Instances
 		this.Default = new ControlStyle
 		(
 			"Default", // name
-			Color.fromRGB(240/255, 240/255, 240/255), // colorBackground
-			Color.byName("White"), // colorFill
-			Color.byName("Gray"), // colorBorder
-			Color.byName("GrayLight") // colorDisabled
+			ControlColorScheme.Instances().Default,
+			null // drawBoxOfSizeAtPosToDisplay
 		);
 
 		this.Dark = new ControlStyle
 		(
 			"Dark", // name
-			Color.byName("GrayDark"), // colorBackground
-			Color.byName("Black"), // colorFill
-			Color.byName("White"), // colorBorder
-			Color.byName("GrayLight") // colorDisabled
+			ControlColorScheme.Instances().Dark,
+			null // drawBoxOfSizeAtPosToDisplay
 		);
 		
-		this._All = [ this.Default, this.Dark ];
+		var rounded = this.Default.clone();
+		var cornerRadius = 5;
+		rounded._drawBoxOfSizeAtPosWithColorsToDisplay =
+			(
+				size: Coords, pos: Coords,
+				colorFill: Color, colorBorder: Color,
+				isHighlighted: boolean,
+				display: Display
+			) =>
+			{
+				if (isHighlighted)
+				{
+					var temp = colorFill;
+					colorFill = colorBorder;
+					colorBorder = temp;
+				}
+
+				display.drawRectangleWithRoundedCorners
+				(
+					pos, size, colorFill, colorBorder, cornerRadius
+				);
+			};
+		this.Rounded = rounded;
+		
+		this._All =
+		[
+			this.Default, this.Dark, this.Rounded
+		];
 
 		this._AllByName = ArrayHelper.addLookupsByName(this._All);
 	}

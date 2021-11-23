@@ -42,9 +42,10 @@ var ThisCouldBeBetter;
             drawPath(vertices, color, lineThickness, isClosed) { }
             drawPixel(pos, color) { }
             drawPolygon(vertices, colorFill, colorBorder) { }
-            drawRectangle(pos, size, colorFill, colorBorder, areColorsReversed) { }
+            drawRectangle(pos, size, colorFill, colorBorder) { }
             drawRectangleCentered(pos, size, colorFill, colorBorder) { }
-            drawText(text, fontHeightInPixels, pos, colorFill, colorOutline, areColorsReversed, isCentered, widthMaxInPixels) { }
+            drawRectangleWithRoundedCorners(pos, size, colorFill, colorBorder, cornerRadius) { }
+            drawText(text, fontHeightInPixels, pos, colorFill, colorOutline, isCentered, widthMaxInPixels) { }
             drawWedge(center, radius, angleStartInTurns, angleStopInTurns, colorFill, colorBorder) { }
             eraseModeSet(value) { }
             fontSet(fontName, fontHeightInPixels) { }

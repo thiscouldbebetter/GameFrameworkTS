@@ -63,17 +63,22 @@ export interface Display
 	drawPolygon(vertices: Coords[], colorFill: Color, colorBorder: Color): void;
 	drawRectangle
 	(
-		pos: Coords, size: Coords, colorFill: Color, colorBorder: Color,
-		areColorsReversed: boolean
+		pos: Coords, size: Coords, colorFill: Color, colorBorder: Color
 	): void;
 	drawRectangleCentered
 	(
 		pos: Coords, size: Coords, colorFill: Color, colorBorder: Color
 	): void;
+	drawRectangleWithRoundedCorners
+	(
+		pos: Coords, size: Coords,
+		colorFill: Color, colorBorder: Color,
+		cornerRadius: number
+	): void;
 	drawText
 	(
 		text: string, fontHeightInPixels: number, pos: Coords,
-		colorFill: Color, colorOutline: Color, areColorsReversed: boolean,
+		colorFill: Color, colorOutline: Color,
 		isCentered: boolean, widthMaxInPixels: number
 	): void;
 	drawWedge

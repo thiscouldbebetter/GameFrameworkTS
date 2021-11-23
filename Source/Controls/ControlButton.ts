@@ -104,32 +104,28 @@ export class ControlButton<TContext> extends ControlBase
 		var isHighlighted = this.isHighlighted && isEnabled;
 
 		style = style || this.style(universe);
-		var colorFill = style.colorFill;
-		var colorBorder = style.colorBorder;
+		var colorFill = style.colorFill();
+		var colorBorder = style.colorBorder();
 
 		if (this.hasBorder)
 		{
-			display.drawRectangle
+			style.drawBoxOfSizeAtPosWithColorsToDisplay
 			(
-				drawPos, this.size,
-				colorFill,
-				colorBorder,
-				isHighlighted // areColorsReversed
+				this.size, drawPos, colorFill, colorBorder, isHighlighted, display
 			);
 		}
 
 		drawPos.add(this._sizeHalf.overwriteWith(this.size).half());
 
-		var colorText = (isEnabled ? colorBorder : style.colorDisabled);
+		var colorText = (isEnabled ? colorBorder : style.colorDisabled());
 
 		display.drawText
 		(
 			this.text,
 			this.fontHeightInPixels,
 			drawPos,
-			colorText,
-			colorFill,
-			isHighlighted,
+			(isHighlighted ? colorFill : colorText),
+			(isHighlighted ? colorText : colorFill),
 			true, // isCentered
 			this.size.x // widthMaxInPixels
 		);

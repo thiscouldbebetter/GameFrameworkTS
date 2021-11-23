@@ -14,6 +14,7 @@ var ThisCouldBeBetter;
                 this.colorBack = colorBack;
                 this.isInvisible = isInvisible || false;
                 // Helper variables.
+                this._curveControlPos = GameFramework.Coords.create();
                 this._drawPos = GameFramework.Coords.create();
                 this._sizeHalf = GameFramework.Coords.create();
                 this._zeroes = GameFramework.Coords.Instances().Zeroes;
@@ -59,7 +60,7 @@ var ThisCouldBeBetter;
             }
             drawBackground(colorBack, colorBorder) {
                 this.drawRectangle(this._zeroes, this.sizeDefault(), // Automatic scaling.
-                colorBack || this.colorBack, colorBorder || this.colorFore, null);
+                colorBack || this.colorBack, colorBorder || this.colorFore);
             }
             drawCircle(center, radius, colorFill, colorBorder, borderThickness) {
                 var drawPos = this._drawPos.overwriteWith(center);
@@ -219,12 +220,7 @@ var ThisCouldBeBetter;
                     this.graphics.stroke();
                 }
             }
-            drawRectangle(pos, size, colorFill, colorBorder, areColorsReversed) {
-                if (areColorsReversed) {
-                    var temp = colorFill;
-                    colorFill = colorBorder;
-                    colorBorder = temp;
-                }
+            drawRectangle(pos, size, colorFill, colorBorder) {
                 if (colorFill != null) {
                     this.graphics.fillStyle = GameFramework.Color.systemColorGet(colorFill);
                     this.graphics.fillRect(pos.x, pos.y, size.x, size.y);
@@ -237,19 +233,50 @@ var ThisCouldBeBetter;
             drawRectangleCentered(pos, size, colorFill, colorBorder) {
                 var sizeHalf = this._sizeHalf.overwriteWith(size).half();
                 var posAdjusted = this._drawPos.overwriteWith(pos).subtract(sizeHalf);
-                this.drawRectangle(posAdjusted, size, colorFill, colorBorder, null);
+                this.drawRectangle(posAdjusted, size, colorFill, colorBorder);
             }
-            drawText(text, fontHeightInPixels, pos, colorFill, colorOutline, areColorsReversed, isCentered, widthMaxInPixels) {
+            drawRectangleWithRoundedCorners(pos, size, colorFill, colorBorder, cornerRadius) {
+                var drawPos = this._drawPos;
+                var curveControlPos = this._curveControlPos;
+                this.graphics.beginPath();
+                drawPos.overwriteWith(pos).addXY(cornerRadius, 0);
+                this.graphics.moveTo(drawPos.x, drawPos.y);
+                drawPos.addXY(size.x - cornerRadius * 2, 0);
+                this.graphics.lineTo(drawPos.x, drawPos.y);
+                curveControlPos.overwriteWith(drawPos).addXY(cornerRadius, 0);
+                drawPos.addXY(cornerRadius, cornerRadius);
+                this.graphics.quadraticCurveTo(curveControlPos.x, curveControlPos.y, drawPos.x, drawPos.y);
+                drawPos.addXY(0, size.y - cornerRadius * 2);
+                this.graphics.lineTo(drawPos.x, drawPos.y);
+                curveControlPos.overwriteWith(drawPos).addXY(0, cornerRadius);
+                drawPos.addXY(0 - cornerRadius, cornerRadius);
+                this.graphics.quadraticCurveTo(curveControlPos.x, curveControlPos.y, drawPos.x, drawPos.y);
+                drawPos.addXY(0 - (size.x - cornerRadius * 2), 0);
+                this.graphics.lineTo(drawPos.x, drawPos.y);
+                curveControlPos.overwriteWith(drawPos).addXY(0 - cornerRadius, 0);
+                drawPos.addXY(0 - cornerRadius, 0 - cornerRadius);
+                this.graphics.quadraticCurveTo(curveControlPos.x, curveControlPos.y, drawPos.x, drawPos.y);
+                drawPos.addXY(0, 0 - (size.y - cornerRadius * 2));
+                this.graphics.lineTo(drawPos.x, drawPos.y);
+                curveControlPos.overwriteWith(drawPos).addXY(0, 0 - cornerRadius);
+                drawPos.addXY(cornerRadius, 0 - cornerRadius);
+                this.graphics.quadraticCurveTo(curveControlPos.x, curveControlPos.y, drawPos.x, drawPos.y);
+                this.graphics.closePath();
+                if (colorFill != null) {
+                    this.graphics.fillStyle = GameFramework.Color.systemColorGet(colorFill);
+                    this.graphics.fill();
+                }
+                if (colorBorder != null) {
+                    this.graphics.strokeStyle = GameFramework.Color.systemColorGet(colorBorder);
+                    this.graphics.stroke();
+                }
+            }
+            drawText(text, fontHeightInPixels, pos, colorFill, colorOutline, isCentered, widthMaxInPixels) {
                 var fontToRestore = this.graphics.font;
                 if (fontHeightInPixels == null) {
                     fontHeightInPixels = this.fontHeightInPixels;
                 }
                 this.fontSet(null, fontHeightInPixels);
-                if (areColorsReversed) {
-                    var temp = colorFill;
-                    colorFill = colorOutline;
-                    colorOutline = temp;
-                }
                 if (colorFill == null) {
                     colorFill = this.colorFore;
                 }

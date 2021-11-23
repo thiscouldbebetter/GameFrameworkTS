@@ -233,12 +233,9 @@ var ThisCouldBeBetter;
                 drawLoc = this._drawLoc.overwriteWith(drawLoc);
                 var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
                 var style = style || this.style(universe);
-                var colorFore = (this.isHighlighted ? style.colorFill : style.colorBorder);
-                var colorBack = (this.isHighlighted ? style.colorBorder : style.colorFill);
-                display.drawRectangle(drawPos, this.size, colorBack, // fill
-                style.colorBorder, // border
-                false // areColorsReversed
-                );
+                var colorFore = style.colorBorder();
+                var colorBack = style.colorFill();
+                style.drawBoxOfSizeAtPosWithColorsToDisplay(this.size, drawPos, colorBack, colorFore, this.isHighlighted, display);
                 var textMarginLeft = 2;
                 var items = this.items();
                 if (items == null) {
@@ -257,13 +254,12 @@ var ThisCouldBeBetter;
                     var offsetInItems = new GameFramework.Coords(iOffset % this.widthInItems, Math.floor(iOffset / this.widthInItems), 0);
                     drawPos2.overwriteWith(this.itemSpacing()).multiply(offsetInItems).add(drawPos);
                     if (item == itemSelected) {
-                        display.drawRectangle(drawPos2, this.itemSpacing(), colorFore, // colorFill
-                        null, null);
+                        style.drawBoxOfSizeAtPosWithColorsToDisplay(this.itemSpacing(), drawPos2, colorFore, colorBack, this.isHighlighted, display);
                     }
                     var text = this.bindingForItemText.contextSet(item).get();
                     drawPos2.addDimensions(textMarginLeft, 0, 0);
-                    display.drawText(text, this.fontHeightInPixels, drawPos2, colorFore, colorBack, (i == this.indexOfItemSelected(null)), // areColorsReversed
-                    false, // isCentered
+                    var areColorsReversed = (i == this.indexOfItemSelected(null));
+                    display.drawText(text, this.fontHeightInPixels, drawPos2, (areColorsReversed ? colorBack : colorFore), (areColorsReversed ? colorFore : colorBack), false, // isCentered
                     this.size.x // widthMaxInPixels
                     );
                 }

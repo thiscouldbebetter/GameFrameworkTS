@@ -491,16 +491,15 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 
 		var style = style || this.style(universe);
-		var colorFore = (this.isHighlighted ? style.colorFill : style.colorBorder);
-		var colorBack = (this.isHighlighted ? style.colorBorder : style.colorFill);
+		var colorFore = style.colorBorder();
+		var colorBack = style.colorFill();
 
-		display.drawRectangle
+		style.drawBoxOfSizeAtPosWithColorsToDisplay
 		(
-			drawPos,
-			this.size,
-			colorBack, // fill
-			style.colorBorder, // border
-			false // areColorsReversed
+			this.size, drawPos,
+			colorBack, colorFore,
+			this.isHighlighted,
+			display
 		);
 
 		var textMarginLeft = 2;
@@ -548,12 +547,12 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 
 			if (item == itemSelected)
 			{
-				display.drawRectangle
+				style.drawBoxOfSizeAtPosWithColorsToDisplay
 				(
-					drawPos2,
-					this.itemSpacing(),
-					colorFore, // colorFill
-					null, null
+					this.itemSpacing(), drawPos2,
+					colorFore, colorBack,
+					this.isHighlighted,
+					display
 				);
 			}
 
@@ -567,14 +566,15 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 				textMarginLeft, 0, 0
 			);
 
+			var areColorsReversed = (i == this.indexOfItemSelected(null));
+
 			display.drawText
 			(
 				text,
 				this.fontHeightInPixels,
 				drawPos2,
-				colorFore,
-				colorBack,
-				(i == this.indexOfItemSelected(null)), // areColorsReversed
+				(areColorsReversed ? colorBack : colorFore),
+				(areColorsReversed ? colorFore : colorBack),
 				false, // isCentered
 				this.size.x // widthMaxInPixels
 			);

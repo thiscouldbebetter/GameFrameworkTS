@@ -71,14 +71,13 @@ var ThisCouldBeBetter;
             draw(universe, display, drawLoc) {
                 var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
                 var style = this.style(universe);
-                display.drawRectangle(drawPos, this.size, style.colorFill, style.colorBorder, this.isHighlighted // areColorsReversed
-                );
+                display.drawRectangle(drawPos, this.size, (this.isHighlighted ? style.colorBorder() : style.colorFill()), (this.isHighlighted ? style.colorFill() : style.colorBorder()));
                 drawPos.add(this._sizeHalf.overwriteWith(this.size).half());
                 var optionSelected = this.optionSelected();
                 var text = (optionSelected == null
                     ? "-"
                     : this.bindingForOptionText.contextSet(optionSelected).get());
-                display.drawText(text, this.fontHeightInPixels, drawPos, style.colorBorder, style.colorFill, this.isHighlighted, true, // isCentered
+                display.drawText(text, this.fontHeightInPixels, drawPos, (this.isHighlighted ? style.colorFill() : style.colorBorder()), (this.isHighlighted ? style.colorBorder() : style.colorFill()), true, // isCentered
                 this.size.x // widthMaxInPixels
                 );
             }

@@ -52,15 +52,6 @@ export class ControlTabbed<TContext> extends ControlBase
 		var tabPaneHeight = marginSize + this.tabButtonSize.y;
 		var buttonsForChildren = new Array<ControlButton<TContext>>();
 
-		var buttonForTabClick = (b: ControlButton<TContext>) => // click
-		{
-			buttonsForChildren.forEach(x => x.isHighlighted = false);
-			var buttonIndex = buttonsForChildren.indexOf(b); // hack
-			this.childSelectedIndex = buttonIndex;
-			this.isChildSelectedActive = true;
-			b.isHighlighted = true;
-		}
-
 		for (var i = 0; i < this.childrenForTabs.length; i++)
 		{
 			var child = this.childrenForTabs[i];
@@ -83,13 +74,75 @@ export class ControlTabbed<TContext> extends ControlBase
 				this.fontHeightInPixels,
 				true, // hasBorder
 				DataBinding.fromTrueWithContext(this.context), // isEnabled
-				null // click
+				null // click - Assigned below.
 			);
-			button.click = () =>
-			{
-				buttonForTabClick(button)
-			}
+
 			buttonsForChildren.push(button);
+		}
+
+		var buttonForTabClick = (b: ControlButton<TContext>) => // click
+		{
+			buttonsForChildren.forEach(x => x.isHighlighted = false);
+			var buttonIndex = buttonsForChildren.indexOf(b); // hack
+			this.childSelectedIndex = buttonIndex;
+			this.isChildSelectedActive = true;
+			b.isHighlighted = true;
+		}
+
+		// hack - This loop is being unrolled,
+		// because when these anonymous functions are assigned in a loop,
+		// for each variable declared within the loop,
+		// the anonymous function only sees the value
+		// from the final iteration of the loop.
+		var buttonsForChildrenCount = buttonsForChildren.length;
+		if (buttonsForChildrenCount > 0)
+		{
+			buttonsForChildren[0].click = () =>
+			{
+				buttonForTabClick(buttonsForChildren[0])
+			};
+		}
+		if (buttonsForChildrenCount > 1)
+		{
+			buttonsForChildren[1].click = () =>
+			{
+				buttonForTabClick(buttonsForChildren[1])
+			};
+		}
+		if (buttonsForChildrenCount > 2)
+		{
+			buttonsForChildren[2].click = () =>
+			{
+				buttonForTabClick(buttonsForChildren[2])
+			};
+		}
+		if (buttonsForChildrenCount > 3)
+		{
+			buttonsForChildren[3].click = () =>
+			{
+				buttonForTabClick(buttonsForChildren[3])
+			};
+		}
+		if (buttonsForChildrenCount > 4)
+		{
+			buttonsForChildren[4].click = () =>
+			{
+				buttonForTabClick(buttonsForChildren[4])
+			};
+		}
+		if (buttonsForChildrenCount > 5)
+		{
+			buttonsForChildren[5].click = () =>
+			{
+				buttonForTabClick(buttonsForChildren[5])
+			};
+		}
+		if (buttonsForChildrenCount > 6)
+		{
+			buttonsForChildren[6].click = () =>
+			{
+				buttonForTabClick(buttonsForChildren[6])
+			};
 		}
 
 		if (this.cancel != null)
@@ -459,9 +512,8 @@ export class ControlTabbed<TContext> extends ControlBase
 		display.drawRectangle
 		(
 			drawPos, this.size,
-			style.colorBackground,
-			style.colorBorder,
-			null
+			style.colorBackground(),
+			style.colorBorder()
 		);
 
 		var buttons = this.buttonsForChildren;
