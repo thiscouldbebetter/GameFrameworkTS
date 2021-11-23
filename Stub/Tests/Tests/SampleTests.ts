@@ -5,7 +5,7 @@ class SampleTests extends TestFixture
 	{
 		var returnValues =
 		[
-			alwaysPass
+			this.alwaysPass
 		];
 
 		return returnValues;
