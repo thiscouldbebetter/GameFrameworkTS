@@ -509,7 +509,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 		}
 	}
 
-8.3. Next, we'll create the villain, which we'll call a "Raider".  Still in the Model directory, create a new file named Raider.ts, containing the following text.  This class is quite a bit more complex than the previous one, since the Raider has to actually move around and kidnap people and stuff, while all the Habitat has to do is sit there looking vulnerable.
+8.3. Next, we'll create the villain, which we'll call a "Raider".  Still in the Model directory, create a new file named Raider.ts, containing the following text.  This class is quite a bit more complex than the previous one, since the raider has to actually move around and kidnap people and stuff, while all the Habitat has to do is sit there looking vulnerable.
 
 	class Raider extends Entity
 	{
@@ -633,13 +633,16 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 					var targetConstrainable = targetEntity.constrainable();
 
-					var constraintAttach =
-						new Constraint_AttachToEntityWithId(raider.id);
-					targetConstrainable.constraintAdd(constraintAttach);
+					var constraintToAddToTarget = new Constraint_Multiple
+					([
+						new Constraint_AttachToEntityWithId(raider.id),
+						new Constraint_Transform
+						(
+							new Transform_Translate(Coords.fromXY(0, 10) )
+						)
+					]);
 
-					var constraintOffset =
-						new Constraint_Offset(Coords.fromXY(0, 10));
-					targetConstrainable.constraintAdd(constraintOffset);
+					targetConstrainable.constraintAdd(constraintToAddToTarget);
 
 					targetEntity = new Entity
 					(
@@ -663,12 +666,14 @@ This guide illustrates the creation of a new game from scratch using the This Co
 				}
 			}
 		}
+
 	}
 
-8.4. The Raider class uses the previously unreferenced framework classes Constraint_AttachToEntityWithId, Constraint_Offset, Constraint_WrapToPlaceSizeX, VisualEllipse, and VisualFan, which are new to our program and so will need to be referenced in Imports.ts, like this:
+8.4. The Raider class uses the previously unreferenced framework classes Constraint_AttachToEntityWithId, Constraint_Multiple, Constraint_Transform, Constraint_WrapToPlaceSizeX, VisualEllipse, and VisualFan, which are new to our program and so will need to be referenced in Imports.ts, like this:
 
 	import Constraint_AttachToEntityWithId = gf.Constraint_AttachToEntityWithId;
-	import Constraint_Offset = gf.Constraint_Offset;
+	import Constraint_Multiple = gf.Constraint_Multiple;
+	import Constraint_Transform = gf.Constraint_Transform;
 	import Constraint_WrapToPlaceSizeX = gf.Constraint_WrapToPlaceSizeX;
 	import VisualEllipse = gf.VisualEllipse;
 	import VisualFan = gf.VisualFan;
@@ -676,7 +681,8 @@ This guide illustrates the creation of a new game from scratch using the This Co
 8.5. And of course in DefenderClone.html, like this:
 
 	<script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_AttachToEntityWithId.js"></script>
-	<script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_Offset.js"></script>
+	<script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_Multiple.js"></script>
+	<script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_Transform.js"></script>
 	<script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_WrapToPlaceSizeX.js"></script>
 
 	<script type="text/javascript" src="Framework/Source/Display/Visuals/VisualEllipse.js"></script>
@@ -710,12 +716,12 @@ This guide illustrates the creation of a new game from scratch using the This Co
 	<script type="text/javascript" src="Model/Habitat.js"></script>
 	<script type="text/javascript" src="Model/Raider.js"></script>
 
-8.9. Now we'll add one Habitat and one Raider to the level.  Open PlaceLevel.ts, and, in the constructor, add these two lines to bottom of the array of Entities being passed to the super() call.  Make sure to separate all the array elements with commas as appropriate:
+8.9. Now we'll add one habitat and one raider to the level.  Open PlaceLevel.ts, and, in the constructor, add these two lines to bottom of the array of Entities being passed to the super() call.  Make sure to separate all the array elements with commas as appropriate:
 
 	new Habitat(Coords.fromXY(150, 250) ),
 	new Raider(Coords.fromXY(200, -50) )
 
-8.10. Finally, re-compile the game, refresh the web browser, and start the game.  Now a civilian Habitat appears on the ground.  An alien Raider will descend from the top of the screen, pick up the Habitat, carry it back up to the top of the screen, and disappear forever.  Tragic!
+8.10. Finally, re-compile the game, refresh the web browser, and start the game.  Now a civilian habitat appears on the ground.  An alien raider will descend from the top of the screen, pick up the habitat, carry it back up to the top of the screen, and disappear forever.  Tragic!
 
 <img src="Screenshot-8-Raider_Takes_Habitat.gif" />
 
@@ -795,7 +801,7 @@ So let's give this kitten some claws.  (The kitten is your spaceship.  The claws
 10. Making Weapons Work
 -----------------------
 
-10.1. The bad news is, those bullets don't do anything yet.  Even if you manage to hit the Raider with them, they'll just pass harmlessly through it, because right now it's pretty much immortal.  It's too dumb to die!
+10.1. The bad news is, those bullets don't do anything yet.  Even if you manage to hit the raider with them, they'll just pass harmlessly through it, because right now it's pretty much immortal.  It's too dumb to die!
 
 10.2. So let's make it mortal.  Open Raider.ts and add the following lines to the array of entity properties being declared in the constructor.  You could add them at the end of the array, or make things a bit neater and add them in alphabetical order.  Whichever you choose, be sure to add commas in the proper places.
 
@@ -803,7 +809,7 @@ So let's give this kitten some claws.  (The kitten is your spaceship.  The claws
 
 	Killable.fromIntegrityMax(1),
 
-These lines make the Raider collidable, which means that your bullets can hit it, and killable, which means that when you bullets hit it they can hurt it.
+These lines make the raider collidable, which means that your bullets can hit it, and killable, which means that when you bullets hit it they can hurt it.
 
 10.3. However, in order for Collidables and Killables to be processed correctly, they'll need to be added to the list of property types that PlaceLevel understands.  Open PlaceLevel.ts and replace the existing declaration of the entityPropertyNamesToProcess array with the following:
 
@@ -817,7 +823,7 @@ These lines make the Raider collidable, which means that your bullets can hit it
 		Killable.name
 	];
 
-10.4 Re-compile the game and refresh the web browser.  Now your bullets can destroy the Raider, which is good, because otherwise what's the point of bullets, man? [TODO - The raider doesn't die.]
+10.4 Re-compile the game and refresh the web browser.  Now your bullets can destroy the Raider, which is good, because otherwise what's the point of bullets, man?
 
 <img src="Screenshot-10-Bullet_Destroys_Raider.gif" />
 
@@ -829,6 +835,203 @@ These lines make the Raider collidable, which means that your bullets can hit it
 
 First of all, when your ship flies into the ground, nothing happens.  When you fly real spaceships into the ground, they explode.  Just ask NASA.  Actually, you could probably ask anyone.
 
-Second, when you destroy the Raider after it picks up the Habitat and lifts it into the air, the Habitat should fall back to the ground.  As it stands, it sort of falls already, for some strange reason, but then it just passes through the ground and disappears.  It should probably go splat too, at least if it's dropped from high enough.  But even if we don't want it to splat just yet, it should at least stop when it hits the ground.
+Second, when you destroy the raider after it picks up the Habitat and lifts it into the air, the habitat, being a massive object in a planetary gravity field, should fall back to the ground.  And actually, it does fall!  Just not on purpose, and not because of gravity.  And it then falls right through the ground and keeps falling forever, which really hurts the fidelity of the simulation.
 
-[To be continued.]
+11.2. Before we fix the problem of the habitat not falling when it should, we have to fix the problem of the habitat falling when it shouldn't.  It's falling because of the constraint that the raider set on it when it picked it up isn't cleared when the raider is destroyed.  That constraint basically moves the habitat to wherever the raider is and then moves it a little bit down from there.  Now that the raider's been destroyed, the habitat can't copy the raider's position like before, and so it just keeps moving it down from wherever it currently is.
+
+To fix it, we need to modify the Killable property on the Raider entity so that it clears the constraint it added on the habitat when it dies.
+
+Open Raider.ts, locate the place in the constructor where the existing Killable property is being built, replace it with the following, and save:
+
+	Killable.fromIntegrityMaxAndDie
+	(
+		1, // integrityMax
+		(uwpe: UniverseWorldPlaceEntities) => // die
+		{
+			var raider = uwpe.entity;
+			var habitatCaptured = raider.habitatCaptured;
+			if (habitatCaptured != null)
+			{
+				var constraints =
+					habitatCaptured.constrainable().constraints;
+				constraints.length = constraints.length - 1;
+			}
+		}
+	)
+
+Now when you destroy the raider after it's picked up the habitat, the habitat will just float there eerily instead of falling.  This may not seem like progress, but it is, because now at least the habitat's not falling for the wrong reasons.
+
+11.3. Now let's make the habitat fall for the right reasons.  To do that, we'll add more constraints on it.  One constraint will make it subject to gravity, and another will keep it from passing through the planet surface like a ghost.
+
+Open Habitat.ts, then, in the constructor, locate where the existing Constrainable is being created, and replace it with the following:
+
+	Constrainable.fromConstraints
+	([
+		new Constraint_Gravity(Coords.fromXY(0, .03)),
+		new Constraint_ContainInHemispace
+		(
+			new Hemispace
+			(
+				new Plane(new Coords(0, 1, 0), 250)
+			)
+		)
+	]),
+
+(Now, "hemispace" is a fancy word, but it just means that half of all space that lies on one side of a given plane.  In this case, the plane in question is the ground, and we're constraining the habitat so that it can only occupy the half of space that lies above the plane of the ground, that is, the sky.  Actually, technically we're constraining it so that it can only occupy the half of space below a plane whose normal points downward into the ground, but that's semantics.)
+
+Every tick, the first new constraint will accelerate the habitat downward, and the second will prevent it from tunnelling into the surface of the planet.
+
+11.4. Your spaceship should also not tunnel into the surface of the planet, at least not without consequences.  For now, open Ship.ts, locate the existing Constrainable in its constructor, and replace it with the following:
+
+	Constrainable.fromConstraints
+	([
+		new Constraint_WrapToPlaceSizeXTrimY(),
+		new Constraint_ContainInHemispace
+		(
+			new Hemispace
+			(
+				new Plane(new Coords(0, 1, 0), 250)
+			)
+		)
+	]),
+
+The new constraint is exactly the same as the one for the habitat.
+
+11.5. Since the new code makes use of the previously unreferenced classes Constraint_ContainInHemispace, Constraint_Gravity, and Hemispace, we'll need to add those references to the Imports.ts file:
+
+	import Constraint_ContainInHemispace = gf.Constraint_ContainInHemispace;
+	import Constraint_Gravity = gf.Constraint_Gravity;
+	import Hemispace = gf.Hemispace;
+
+And also to the DefenderClone.html file:
+
+	<script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_ContainInHemispace.js"></script>
+	<script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_Gravity.js"></script>
+	<script type="text/javascript" src="Framework/Source/Geometry/Shapes/Hemispace.js"></script>
+
+11.6. Recompile and restart the game.  Let the raider grab the habitat and carry it up a short distance, then shoot the raider.  The habitat will slowly fall back to the planet surface.  Also, you shouldn't be able to fly your ship below the surface of the planet, although you can still smack into it as fast as you want with no consequences.  One thing at a time.
+
+
+12. Adding Win and Lose Conditions
+----------------------------------
+
+12.1. The program we've written so far is closer to being a real game than ever, but it still lacks some things.  For one thing, there's no way to lose, which might appeal to certain people.  But then again, there's no way to win, other than whatever feeling of satisfaction you can derive from a single habitat not being destroyed by alien raiders.  But, having growing up in our modern go-go culture, most players would prefer more external validation.
+
+So let's add some.  We'll add some code that checks each tick to see if there are no more raiders, in which case the player wins, or if there are no more habitats, in which case, the player loses.  In either case, a message will be displayed that explains what just happened, and the game will return to the title screen.
+
+Open Ship.ts, and, in the constructor, at the end of the list of properties, insert the text below (remembering to add a comma at the end of the preceding property declaration) and save:
+
+	new Triggerable
+	([
+		new Trigger
+		(
+			"Lose",
+			(uwpe: UniverseWorldPlaceEntities) => // isTriggered
+			{
+				var level = uwpe.place as PlaceLevel;
+				var areAllTheHabitatsGone = (level.habitats().length == 0);
+				return areAllTheHabitatsGone;
+			}, 
+			(uwpe: UniverseWorldPlaceEntities) => // reactToBeingTriggered
+			{
+				uwpe.universe.venueNext = VenueMessage.fromMessageAndAcknowledge
+				(
+					DataBinding.fromContext("You lose!"),
+					() => // acknowledge
+					{
+						universe.venueNext = universe.controlBuilder.title
+						(
+							universe, universe.display.sizeInPixels,
+						).toVenue();
+					}
+				)
+			}
+		),
+
+		new Trigger
+		(
+			"Win",
+			(uwpe: UniverseWorldPlaceEntities) => // isTriggered
+			{
+				var level = uwpe.place as PlaceLevel;
+				var areAllTheRaidersGone = (level.raiders().length == 0);
+				return areAllTheRaidersGone;
+			}, 
+			(uwpe: UniverseWorldPlaceEntities) => // reactToBeingTriggered
+			{
+				var universe = uwpe.universe;
+				universe.venueNext = VenueMessage.fromMessageAndAcknowledge
+				(
+					DataBinding.fromContext("You win!"),
+					() => // acknowledge
+					{
+						universe.venueNext = universe.controlBuilder.title
+						(
+							universe, universe.display.sizeInPixels,
+						).toVenue();
+					}
+				)
+			}
+		)
+	])
+
+12.2. Since the new code uses the previously unreferenced classes Trigger and Triggerable, it will be necessary to add them to Imports.ts:
+
+	import Trigger = gf.Trigger;
+	import Triggerable = gf.Triggerable;
+
+And also to DefenderClone.html:
+
+	<script type="text/javascript" src="Framework/Source/Model/Trigger.js"></script>
+	<script type="text/javascript" src="Framework/Source/Model/Triggerable.js"></script>
+
+12.3. It will also be necessary to add Triggerable to the list of entity properties that the PlaceLevel class handles.  Open PlaceLevel.ts, locate the existing entityPropertyNamesToProcess declaration, and replace it with the following:
+
+	var entityPropertyNamesToProcess =
+	[
+		Locatable.name,
+		Constrainable.name,
+		Collidable.name,
+		Actor.name,
+		Ephemeral.name,
+		Killable.name,
+		Triggerable.name
+	];
+
+Also, you'll need to add this method at the end of the PlaceLevel class, right below the existing .habitats() method, so that it can tell how many raiders are left:
+
+	raiders(): Raider[]
+	{
+		return this.entities.filter(x => x.constructor.name == Raider.name) as Raider[];
+	}
+
+12.4. Save the changes, recompile, and restart.  Now, when you blow up the raider, or when the raider takes the habitat off the top of the screen, you'll see either a win or lose message.  When you click the button to dismiss the message dialog, the game will end and return to the title screen.
+
+
+13. Conclusion
+--------------
+
+13.1. Well, it's technically a game at this point, albeit not much of one.  Here's some future features that might make the game more fun:
+
+* Add appropriate visual and sound effects when things happen.
+* Destroy the player's ship when it runs into a raider.
+* Give the player multiple lives.
+* Let the raiders shoot bullets.
+* Add more habitats to protect.
+* Require the player to catch a habitat as it falls, or else it explodes on impact.
+* Generate more raiders, on a timer.
+* Make the planet bigger than a single screen and implement scrolling.
+* Add a minimap to show the parts of the planet that are not currently on screen.
+* Add some on-screen controls to show how many raiders, habitats, bullets, and lives are left.
+* Transition to a new and harder level when the player wins the current level.
+* Make ammuntion limited and add reloading by picking up bullets.
+* Make the surface of the planet a little less boring to look at.
+
+The framework contains features to support all these features, though it might not be easy to figure out how.  To be continued!
+
+
+
+
+
+
+

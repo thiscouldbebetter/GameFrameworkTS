@@ -4,7 +4,7 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Constraint_AttachToEntityWithId implements Constraint
 {
-	targetEntityId: number
+	targetEntityId: number;
 
 	constructor(targetEntityId: number)
 	{

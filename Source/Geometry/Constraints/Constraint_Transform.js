@@ -1,0 +1,24 @@
+"use strict";
+var ThisCouldBeBetter;
+(function (ThisCouldBeBetter) {
+    var GameFramework;
+    (function (GameFramework) {
+        class Constraint_Transform {
+            constructor(transformToApply) {
+                this.transformToApply = transformToApply;
+            }
+            constrain(uwpe) {
+                var constrainablePos = uwpe.entity.locatable().loc.pos;
+                this.transformToApply.transformCoords(constrainablePos);
+            }
+            // Clonable.
+            clone() {
+                return this; // todo
+            }
+            overwriteWith(other) {
+                return this; // todo
+            }
+        }
+        GameFramework.Constraint_Transform = Constraint_Transform;
+    })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
+})(ThisCouldBeBetter || (ThisCouldBeBetter = {}));

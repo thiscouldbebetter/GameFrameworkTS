@@ -15,7 +15,7 @@ export class Hemispace implements ShapeBase
 		this._displacement = Coords.create();
 	}
 
-	containsPoint(pointToCheck: Coords)
+	containsPoint(pointToCheck: Coords): boolean
 	{
 		var distanceOfPointAbovePlane =
 			pointToCheck.dotProduct(this.plane.normal)
@@ -24,7 +24,7 @@ export class Hemispace implements ShapeBase
 		return returnValue;
 	}
 
-	trimCoords(coordsToTrim: Coords)
+	trimCoords(coordsToTrim: Coords): Coords
 	{
 		var distanceOfPointAbovePlane =
 			this.plane.distanceToPointAlongNormal(coordsToTrim);

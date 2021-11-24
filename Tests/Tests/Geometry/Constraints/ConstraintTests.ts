@@ -43,10 +43,11 @@ class ConstraintTests extends TestFixture
 			this.frictionDry,
 			this.frictionXY,
 			this.gravity,
-			this.offset,
+			this.multiple,
 			this.orientToward,
 			this.speedMaxXY,
 			this.stopBelowSpeedMin,
+			this.transform,
 			this.trimToPlaceSize,
 			this.wrapToPlaceSize,
 			this.wrapToPlaceSizeX,
@@ -274,12 +275,25 @@ class ConstraintTests extends TestFixture
 		Assert.isTrue(isAccelZGreaterAfterConstraint);
 	}
 
-	offset(): void
+	multiple(): void
 	{
 		var posBeforeConstraint = this._entityToConstrainLoc.pos.clone();
 
-		var offsetToApply = new Coords(1, 2, 3);
-		var constraint = new Constraint_Offset(offsetToApply);
+		var offsetsToApply = 
+		[
+			new Coords(1, 2, 3),
+			new Coords(4, 5, 6)
+		];
+		var transformsToApply = offsetsToApply.map
+		(
+			x => new Transform_Translate(x);
+		);
+		var childConstraints = transformsToApply.map
+		(
+			x => new Constraint_Transform(x);
+		);
+		var constraint = new Constraint_Multiple(childConstraints);
+
 		this._constrainable.clear().constraintAdd(constraint);
 
 		constraint.constrain
@@ -291,8 +305,9 @@ class ConstraintTests extends TestFixture
 
 		Assert.areNotEqual(posBeforeConstraint, posAfterConstraint);
 
-		var posAfterConstraintExpected =
-			posBeforeConstraint.clone().add(offsetToApply);
+		var posAfterConstraintExpected = posBeforeConstraint.clone();
+		offsetsToApply.forEach(x => posAfterConstraintExpected.add(x) );
+
 		Assert.areEqual(posAfterConstraintExpected, posAfterConstraint);
 	}
 
@@ -401,6 +416,29 @@ class ConstraintTests extends TestFixture
 		);
 		var speedAfterConstraint = entityVel.magnitude();
 		Assert.isTrue(speedAfterConstraint == 0);
+	}
+
+	transform(): void
+	{
+		var posBeforeConstraint = this._entityToConstrainLoc.pos.clone();
+
+		var offsetToApply = new Coords(1, 2, 3);
+		var transformToApply = new Transform_Translate(offsetToApply);
+		var constraint = new Constraint_Transform(transformToApply);
+		this._constrainable.clear().constraintAdd(constraint);
+
+		constraint.constrain
+		(
+			this._universe, this._world, this._place, this._entityToConstrain
+		);
+
+		var posAfterConstraint = this._entityToConstrainLoc.pos.clone();
+
+		Assert.areNotEqual(posBeforeConstraint, posAfterConstraint);
+
+		var posAfterConstraintExpected =
+			posBeforeConstraint.clone().add(offsetToApply);
+		Assert.areEqual(posAfterConstraintExpected, posAfterConstraint);
 	}
 
 	trimToPlaceSize(): void

@@ -25,6 +25,11 @@ export class Constrainable implements EntityProperty<Constrainable>
 		return new Constrainable( [ constraint ] );
 	}
 
+	static fromConstraints(constraints: Constraint[]): Constrainable
+	{
+		return new Constrainable(constraints);
+	}
+
 	clear(): Constrainable
 	{
 		this.constraints.length = 0;
