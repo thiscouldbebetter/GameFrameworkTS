@@ -48,6 +48,11 @@ export class ShapeGroupAny implements ShapeBase
 		throw new Error("Not implemented!");
 	}
 
+	pointRandom(randomizer: Randomizer): Coords
+	{
+		return null; // todo
+	}
+
 	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords
 	{
 		var distanceMinSoFar = Number.POSITIVE_INFINITY;

@@ -41,6 +41,9 @@ var ThisCouldBeBetter;
             normalAtPos(posToCheck, normalOut) {
                 return this.plane.normal;
             }
+            pointRandom(randomizer) {
+                return null; // todo
+            }
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 return surfacePointOut.overwriteWith(this.plane.pointOnPlaneNearestPos(posToCheck));
             }

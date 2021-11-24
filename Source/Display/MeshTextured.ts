@@ -165,6 +165,11 @@ export class MeshTextured implements ShapeBase
 		throw new Error("Not implemented!");
 	}
 
+	pointRandom(randomizer: Randomizer): Coords
+	{
+		return null; // todo
+	}
+
 	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords
 	{
 		throw new Error("Not implemented!");

@@ -155,12 +155,6 @@ var ThisCouldBeBetter;
                 var returnValue = rangeThis.overlapsWith(rangeOther);
                 return returnValue;
             }
-            posRandom(randomizer) {
-                var min = this.min();
-                var offset = GameFramework.Coords.default().randomize(randomizer).multiply(this.size);
-                var pos = offset.add(min);
-                return pos;
-            }
             randomize(randomizer) {
                 this.center.randomize(randomizer);
                 this.size.randomize(randomizer);
@@ -249,6 +243,12 @@ var ThisCouldBeBetter;
                 var multiplier = (displacementDimensionOverSizeHalf > 0 ? 1 : -1);
                 normalOut.clear().dimensionSet(dimensionIndex, 1).multiplyScalar(multiplier);
                 return normalOut;
+            }
+            pointRandom(randomizer) {
+                var min = this.min();
+                var offset = GameFramework.Coords.default().randomize(randomizer).multiply(this.size);
+                var pos = offset.add(min);
+                return pos;
             }
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 return surfacePointOut.overwriteWith(posToCheck); // todo

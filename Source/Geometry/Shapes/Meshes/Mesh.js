@@ -155,6 +155,9 @@ var ThisCouldBeBetter;
             normalAtPos(posToCheck, normalOut) {
                 return this.box().normalAtPos(posToCheck, normalOut);
             }
+            pointRandom(randomizer) {
+                return null; // todo
+            }
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 return surfacePointOut.overwriteWith(posToCheck); // todo
             }

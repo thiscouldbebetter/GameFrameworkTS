@@ -75,6 +75,11 @@ export class BoxRotated implements ShapeBase
 		return normalOut;
 	}
 
+	pointRandom(randomizer: Randomizer): Coords
+	{
+		return null; // todo
+	}
+
 	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords
 	{
 		return surfacePointOut.overwriteWith(posToCheck); // todo

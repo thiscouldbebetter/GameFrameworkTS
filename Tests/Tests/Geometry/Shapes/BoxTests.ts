@@ -318,14 +318,9 @@ class BoxTests extends TestFixture
 		Assert.isFalse(doBoxesOverlap);
 	}
 
-	posRandom(randomizer: Random): Coords
+	pointRandom(randomizer: Random): Coords
 	{
-		var min = this.min();
-		var pos = min.clone().add
-		(
-			Coords.default().randomize(randomizer).multiply(this.size)
-		);
-		return pos;
+		Assert.isTrue(true); // todo
 	}
 
 	randomize(): void

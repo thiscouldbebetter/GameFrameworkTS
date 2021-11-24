@@ -13,6 +13,9 @@ var ThisCouldBeBetter;
             static fromIntegrityMax(integrityMax) {
                 return new Killable(integrityMax, null, null);
             }
+            static fromIntegrityMaxAndDie(integrityMax, die) {
+                return new Killable(integrityMax, null, die);
+            }
             damageApply(uwpe, damageToApply) {
                 var universe = uwpe.universe;
                 var entityDamager = uwpe.entity;

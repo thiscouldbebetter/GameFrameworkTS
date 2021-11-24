@@ -31,6 +31,9 @@ var ThisCouldBeBetter;
             normalAtPos(posToCheck, normalOut) {
                 return normalOut.overwriteWith(posToCheck).subtract(this.loc.pos).normalize();
             }
+            pointRandom(randomizer) {
+                return null; // todo
+            }
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 return surfacePointOut.overwriteWith(posToCheck); // todo
             }

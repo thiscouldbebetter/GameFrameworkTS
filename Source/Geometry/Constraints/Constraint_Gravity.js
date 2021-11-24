@@ -10,10 +10,7 @@ var ThisCouldBeBetter;
             constrain(uwpe) {
                 var entity = uwpe.entity;
                 var loc = entity.locatable().loc;
-                if (loc.pos.z < 0) // hack
-                 {
-                    loc.accel.add(this.accelerationPerTick);
-                }
+                loc.accel.add(this.accelerationPerTick);
             }
             // Clonable.
             clone() {

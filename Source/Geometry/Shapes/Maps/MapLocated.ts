@@ -55,6 +55,11 @@ export class MapLocated implements ShapeBase
 		return normalOut.overwriteWith(posToCheck).subtract(this.loc.pos).normalize();
 	}
 
+	pointRandom(randomizer: Randomizer): Coords
+	{
+		return null; // todo
+	}
+
 	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords)
 	{
 		return surfacePointOut.overwriteWith(posToCheck); // todo

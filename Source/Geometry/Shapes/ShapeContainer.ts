@@ -43,6 +43,11 @@ export class ShapeContainer implements ShapeBase
 		return this.shape.normalAtPos(posToCheck, normalOut);
 	}
 
+	pointRandom(randomizer: Randomizer): Coords
+	{
+		return null; // todo
+	}
+
 	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords
 	{
 		return this.shape.surfacePointNearPos(posToCheck, surfacePointOut);

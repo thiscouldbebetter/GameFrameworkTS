@@ -107,6 +107,11 @@ export class Edge implements ShapeBase
 
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords { throw new Error("Not implemented!"); }
 
+	pointRandom(randomizer: Randomizer): Coords
+	{
+		return null; // todo
+	}
+
 	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords { throw new Error("Not implemented!"); }
 
 	toBox(boxOut: Box): Box

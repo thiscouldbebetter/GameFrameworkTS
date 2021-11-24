@@ -276,6 +276,11 @@ export class Mesh implements ShapeBase
 		return this.box().normalAtPos(posToCheck, normalOut);
 	}
 
+	pointRandom(randomizer: Randomizer): Coords
+	{
+		return null; // todo
+	}
+
 	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords
 	{
 		return surfacePointOut.overwriteWith(posToCheck); // todo

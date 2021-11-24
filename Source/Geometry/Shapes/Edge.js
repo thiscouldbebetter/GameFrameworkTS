@@ -60,6 +60,9 @@ var ThisCouldBeBetter;
             collider() { return null; }
             locate(loc) { throw new Error("Not implemented!"); }
             normalAtPos(posToCheck, normalOut) { throw new Error("Not implemented!"); }
+            pointRandom(randomizer) {
+                return null; // todo
+            }
             surfacePointNearPos(posToCheck, surfacePointOut) { throw new Error("Not implemented!"); }
             toBox(boxOut) {
                 return boxOut.ofPoints(this.vertices);

@@ -44,6 +44,9 @@ var ThisCouldBeBetter;
                 }
                 return normalOut;
             }
+            pointRandom(randomizer) {
+                return null; // todo
+            }
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 return surfacePointOut.overwriteWith(posToCheck); // todo
             }

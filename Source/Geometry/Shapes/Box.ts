@@ -250,20 +250,6 @@ export class Box implements ShapeBase
 		return returnValue;
 	}
 
-	posRandom(randomizer: Randomizer): Coords
-	{
-		var min = this.min();
-		var offset = Coords.default().randomize
-		(
-			randomizer
-		).multiply
-		(
-			this.size
-		);
-		var pos = offset.add(min);
-		return pos;
-	}
-
 	randomize(randomizer: Randomizer): Box
 	{
 		this.center.randomize(randomizer);
@@ -426,6 +412,20 @@ export class Box implements ShapeBase
 		normalOut.clear().dimensionSet(dimensionIndex, 1).multiplyScalar(multiplier);
 
 		return normalOut;
+	}
+
+	pointRandom(randomizer: Randomizer): Coords
+	{
+		var min = this.min();
+		var offset = Coords.default().randomize
+		(
+			randomizer
+		).multiply
+		(
+			this.size
+		);
+		var pos = offset.add(min);
+		return pos;
 	}
 
 	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords

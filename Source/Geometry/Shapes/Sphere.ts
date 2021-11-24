@@ -45,7 +45,7 @@ export class Sphere implements ShapeBase
 		return returnValue;
 	}
 
-	pointRandom(): Coords
+	pointRandom(randomizer: Randomizer): Coords
 	{
 		return new Polar
 		(

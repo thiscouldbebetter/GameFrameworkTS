@@ -15,6 +15,9 @@ var ThisCouldBeBetter;
             static fromConstraint(constraint) {
                 return new Constrainable([constraint]);
             }
+            static fromConstraints(constraints) {
+                return new Constrainable(constraints);
+            }
             clear() {
                 this.constraints.length = 0;
                 return this;

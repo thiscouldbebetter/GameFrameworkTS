@@ -74,6 +74,11 @@ export class Plane implements ShapeBase
 		return this;
 	}
 
+	pointRandom(randomizer: Randomizer): Coords
+	{
+		return null; // todo
+	}
+
 	// Equatable
 
 	equals(other: Plane): boolean

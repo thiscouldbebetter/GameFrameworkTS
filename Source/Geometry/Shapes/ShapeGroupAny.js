@@ -27,6 +27,9 @@ var ThisCouldBeBetter;
             normalAtPos(posToCheck, normalOut) {
                 throw new Error("Not implemented!");
             }
+            pointRandom(randomizer) {
+                return null; // todo
+            }
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 var distanceMinSoFar = Number.POSITIVE_INFINITY;
                 for (var i = 0; i < this.shapes.length; i++) {

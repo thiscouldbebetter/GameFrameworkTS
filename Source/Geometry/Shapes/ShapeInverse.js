@@ -26,6 +26,9 @@ var ThisCouldBeBetter;
             normalAtPos(posToCheck, normalOut) {
                 return this.shape.normalAtPos(posToCheck, normalOut).invert();
             }
+            pointRandom(randomizer) {
+                return null; // todo
+            }
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 return this.shape.surfacePointNearPos(posToCheck, surfacePointOut);
             }

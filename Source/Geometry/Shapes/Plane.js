@@ -33,6 +33,9 @@ var ThisCouldBeBetter;
                 this.distanceFromOrigin = other.distanceFromOrigin;
                 return this;
             }
+            pointRandom(randomizer) {
+                return null; // todo
+            }
             // Equatable
             equals(other) {
                 var returnValue = (this.normal.equals(other.normal)

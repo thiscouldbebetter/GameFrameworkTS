@@ -25,6 +25,9 @@ var ThisCouldBeBetter;
             normalAtPos(posToCheck, normalOut) {
                 throw new Error("Not implemented!");
             }
+            pointRandom(randomizer) {
+                return null; // todo
+            }
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 throw new Error("Not implemented!");
             }
