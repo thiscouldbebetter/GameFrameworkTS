@@ -153,6 +153,7 @@ var VisualSound = gf.VisualSound;
 var Entity = gf.Entity;
 var EntityBuilder = gf.EntityBuilder;
 var EntityGenerator = gf.EntityGenerator;
+var EntityPropertyFromValue = gf.EntityPropertyFromValue;
 var LoadableProperty = gf.LoadableProperty;
 var NamableProperty = gf.NamableProperty;
 var Playable = gf.Playable;

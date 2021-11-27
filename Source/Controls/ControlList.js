@@ -29,16 +29,6 @@ var ThisCouldBeBetter;
                 this._drawLoc = GameFramework.Disposition.fromPos(this._drawPos);
                 this._mouseClickPos = GameFramework.Coords.create();
             }
-            static fromPosSizeAndItems(pos, size, items) {
-                var returnValue = new ControlList("", // name,
-                pos, size, items, GameFramework.DataBinding.fromContext(null), // bindingForItemText,
-                10, // fontHeightInPixels,
-                null, // bindingForItemSelected,
-                null, // bindingForItemValue,
-                GameFramework.DataBinding.fromTrue(), // isEnabled
-                null, null);
-                return returnValue;
-            }
             static fromPosSizeItemsAndBindingForItemText(pos, size, items, bindingForItemText) {
                 var returnValue = new ControlList("", // name,
                 pos, size, items, bindingForItemText, 10, // fontHeightInPixels,

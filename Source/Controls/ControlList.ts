@@ -70,30 +70,6 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 		this._mouseClickPos = Coords.create();
 	}
 
-	static fromPosSizeAndItems<TContext, TItem, TValue>
-	(
-		pos: Coords,
-		size: Coords,
-		items: DataBinding<TContext, TItem[]>
-	): ControlList<TContext, TItem, TValue>
-	{
-		var returnValue = new ControlList<TContext, TItem, TValue>
-		(
-			"", // name,
-			pos,
-			size,
-			items,
-			DataBinding.fromContext(null), // bindingForItemText,
-			10, // fontHeightInPixels,
-			null, // bindingForItemSelected,
-			null, // bindingForItemValue,
-			DataBinding.fromTrue(), // isEnabled
-			null, null
-		);
-
-		return returnValue;
-	}
-
 	static fromPosSizeItemsAndBindingForItemText<TContext, TItem, TValue>
 	(
 		pos: Coords,

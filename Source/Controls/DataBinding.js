@@ -13,7 +13,7 @@ var ThisCouldBeBetter;
                 return DataBinding.fromContextAndGet(context, (context) => value);
             }
             static fromContext(context) {
-                return new DataBinding(context, (contextGet) => context, null // set
+                return new DataBinding(context, (contextGet) => contextGet, null // set
                 );
             }
             static fromContextAndGet(context, get) {

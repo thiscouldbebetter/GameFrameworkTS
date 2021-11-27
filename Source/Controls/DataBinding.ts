@@ -41,7 +41,7 @@ export class DataBinding<TContext, TValue>
 		return new DataBinding<TContext, TContext>
 		(
 			context, 
-			(contextGet: TContext) => context,
+			(contextGet: TContext) => contextGet,
 			null // set
 		);
 	}
