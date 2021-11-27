@@ -90,6 +90,12 @@ export class UniverseWorldPlaceEntities
 		return this;
 	}
 
+	placeSet(value: Place): UniverseWorldPlaceEntities
+	{
+		this.place = value;
+		return this;
+	}
+
 	// Clonable.
 
 	clone(): UniverseWorldPlaceEntities

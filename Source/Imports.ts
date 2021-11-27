@@ -16,6 +16,7 @@ import StringHelper = gf.StringHelper;
 
 // hack
 import EntityProperty = gf.EntityProperty;
+import EntityPropertyBase = gf.EntityPropertyBase;
 
 // Controls.
 import ControlActionNames = gf.ControlActionNames;
@@ -187,6 +188,7 @@ import VisualSound = gf.VisualSound;
 import Entity = gf.Entity;
 import EntityBuilder = gf.EntityBuilder;
 import EntityGenerator = gf.EntityGenerator;
+import EntityPropertyFromValue = gf.EntityPropertyFromValue;
 import LoadableProperty = gf.LoadableProperty;
 import NamableProperty = gf.NamableProperty;
 import Playable = gf.Playable;
