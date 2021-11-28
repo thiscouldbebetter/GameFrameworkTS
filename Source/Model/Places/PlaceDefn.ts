@@ -28,12 +28,14 @@ export class PlaceDefn
 	)
 	{
 		this.name = name;
-		this.actions = actions;
-		this.actionsByName = ArrayHelper.addLookupsByName(this.actions);
-		this.actionToInputsMappingsDefault = actionToInputsMappings;
+
+		this.actions = actions || [];
+		this.actionToInputsMappingsDefault = actionToInputsMappings || [];
 		this.propertyNamesToProcess = propertyNamesToProcess;
 		this._placeInitialize = placeInitialize;
 		this._placeFinalize = placeFinalize;
+
+		this.actionsByName = ArrayHelper.addLookupsByName(this.actions);
 
 		this.actionToInputsMappings = ArrayHelper.clone(this.actionToInputsMappingsDefault);
 		this.actionToInputsMappingsEdited = ArrayHelper.clone(this.actionToInputsMappings);

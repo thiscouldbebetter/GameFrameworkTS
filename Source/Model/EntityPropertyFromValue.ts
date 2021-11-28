@@ -21,6 +21,11 @@ export class EntityPropertyFromValue<TValue>
 		);
 	}
 
+	static valueFromEntity<TValue>(entity: Entity): TValue
+	{
+		return (entity.properties[0] as EntityPropertyFromValue<TValue>).value;
+	}
+
 	// Clonable.
 
 	clone(): EntityPropertyFromValue<TValue>

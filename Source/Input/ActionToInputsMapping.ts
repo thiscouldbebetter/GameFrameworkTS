@@ -10,7 +10,8 @@ export class ActionToInputsMapping
 
 	constructor
 	(
-		actionName: string, inputNames: string[],
+		actionName: string,
+		inputNames: string[],
 		inactivateInputWhenActionPerformed: boolean
 	)
 	{

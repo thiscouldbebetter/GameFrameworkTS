@@ -198,12 +198,12 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 		var controlActionNames = ControlActionNames.Instances();
 		if (actionNameToHandle == controlActionNames.ControlIncrement)
 		{
-			this.itemSelectedNextInDirection(1);
+			this.itemSelectNextInDirection(1);
 			wasActionHandled = true;
 		}
 		else if (actionNameToHandle == controlActionNames.ControlDecrement)
 		{
-			this.itemSelectedNextInDirection(-1);
+			this.itemSelectNextInDirection(-1);
 			wasActionHandled = true;
 		}
 		else if (actionNameToHandle == controlActionNames.ControlConfirm)
@@ -227,22 +227,13 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 		return this.scrollbar.sliderPosInItems();
 	}
 
-	indexOfItemSelected(valueToSet: number): number
+	indexOfItemSelected(): number
 	{
-		var returnValue = valueToSet;
 		var items = this.items();
-		if (valueToSet == null)
+		var returnValue = items.indexOf(this.itemSelected());
+		if (returnValue == -1)
 		{
-			returnValue = items.indexOf(this.itemSelected(null));
-			if (returnValue == -1)
-			{
-				returnValue = null;
-			}
-		}
-		else
-		{
-			var itemToSelect = items[valueToSet];
-			this.itemSelected(itemToSelect);
+			returnValue = null;
 		}
 		return returnValue;
 	}
@@ -271,58 +262,68 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 		return returnValue;
 	}
 
-	itemSelected(itemToSet: TItem): TItem
+	itemSelect(itemToSet: TItem): TItem
 	{
 		var returnValue = itemToSet;
 
-		if (itemToSet == null)
+		this._itemSelected = itemToSet;
+
+		if (this.bindingForItemSelected != null)
 		{
-			if (this.bindingForItemSelected == null)
+			var valueToSet;
+			if (this.bindingForItemValue == null)
 			{
-				returnValue = this._itemSelected;
+				valueToSet = this._itemSelected;
 			}
 			else
 			{
-				returnValue =
+				valueToSet = this.bindingForItemValue.contextSet
 				(
-					this.bindingForItemSelected.get == null
-					? this._itemSelected
-					: this.bindingForItemSelected.get()
-				);
+					this._itemSelected
+				).get();
+				this.bindingForItemValue.set(valueToSet);
 			}
-		}
-		else
-		{
-			this._itemSelected = itemToSet;
-
-			if (this.bindingForItemSelected != null)
-			{
-				var valueToSet;
-				if (this.bindingForItemValue == null)
-				{
-					valueToSet = this._itemSelected;
-				}
-				else
-				{
-					valueToSet = this.bindingForItemValue.contextSet
-					(
-						this._itemSelected
-					).get();
-					this.bindingForItemValue.set(valueToSet);
-				}
-				this.bindingForItemSelected.set(itemToSet);
-			}
+			this.bindingForItemSelected.set(itemToSet);
 		}
 
 		return returnValue;
 	}
 
-	itemSelectedNextInDirection(direction: number): TItem
+	itemSelectByIndex(itemToSelectIndex: number): TItem
+	{
+		var items = this.items();
+		var itemToSelect = items[itemToSelectIndex];
+		var returnValue = this.itemSelect(itemToSelect);
+		return returnValue;
+	}
+
+	itemSelected(): TItem
+	{
+		var returnValue;
+
+		if (this.bindingForItemSelected == null)
+		{
+			returnValue = this._itemSelected;
+		}
+		else
+		{
+			returnValue =
+			(
+				this.bindingForItemSelected.get == null
+				? this._itemSelected
+				: this.bindingForItemSelected.get()
+			);
+		}
+
+		return returnValue;
+	}
+
+	itemSelectNextInDirection(direction: number): TItem
 	{
 		var items = this.items();
 		var numberOfItems = items.length;
 
-		var indexOfItemSelected = this.indexOfItemSelected(null);
+		var indexOfItemSelected = this.indexOfItemSelected();
 
 		if (indexOfItemSelected == null)
 		{
@@ -350,12 +351,12 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 		(
 			indexOfItemSelected == null ? null : items[indexOfItemSelected]
 		);
-		this.itemSelected(itemToSelect);
+		this.itemSelect(itemToSelect);
 
 		var indexOfFirstItemVisible = this.indexOfFirstItemVisible();
 		var indexOfLastItemVisible = this.indexOfLastItemVisible();
 
-		var indexOfItemSelected = this.indexOfItemSelected(null);
+		var indexOfItemSelected = this.indexOfItemSelected();
 		if (indexOfItemSelected < indexOfFirstItemVisible)
 		{
 			this.scrollbar.scrollUp();
@@ -365,7 +366,7 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 			this.scrollbar.scrollDown();
 		}
 
-		var returnValue = this.itemSelected(null);
+		var returnValue = this.itemSelected();
 		return returnValue;
 	}
 
@@ -420,7 +421,7 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 			var items = this.items();
 			if (indexOfItemClicked < items.length)
 			{
-				var indexOfItemSelectedOld = this.indexOfItemSelected(null);
+				var indexOfItemSelectedOld = this.indexOfItemSelected();
 				if (indexOfItemClicked == indexOfItemSelectedOld)
 				{
 					if (this.confirm != null)
@@ -430,7 +431,7 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 				}
 				else
 				{
-					this.indexOfItemSelected(indexOfItemClicked);
+					this.itemSelectByIndex(indexOfItemClicked);
 				}
 			}
 		}
@@ -494,7 +495,7 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 			indexEnd = items.length - 1;
 		}
 
-		var itemSelected = this.itemSelected(null);
+		var itemSelected = this.itemSelected();
 
 		var drawPos2 = Coords.create();
 
@@ -542,7 +543,14 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 				textMarginLeft, 0, 0
 			);
 
-			var areColorsReversed = (i == this.indexOfItemSelected(null));
+			var isItemSelected = (i == this.indexOfItemSelected());;
+
+			var areColorsReversed =
+			(
+				(this.isHighlighted && !isItemSelected)
+				||
+				(isItemSelected && !this.isHighlighted)
+			);
 
 			display.drawText
 			(

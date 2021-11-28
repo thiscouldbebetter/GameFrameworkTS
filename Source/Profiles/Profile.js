@@ -419,7 +419,7 @@ var ThisCouldBeBetter;
                     var venueControls = universe.venueCurrent;
                     var controlRootAsContainer = venueControls.controlRoot;
                     var listProfiles = controlRootAsContainer.childrenByName.get("listProfiles");
-                    var profileSelected = listProfiles.itemSelected(null);
+                    var profileSelected = listProfiles.itemSelected();
                     universe.profile = profileSelected;
                     if (profileSelected != null) {
                         var venueNext = Profile.toControlSaveStateLoad(universe, null, universe.venueCurrent).toVenue();

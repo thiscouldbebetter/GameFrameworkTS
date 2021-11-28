@@ -57,11 +57,11 @@ var ThisCouldBeBetter;
                 var wasActionHandled = false;
                 var controlActionNames = GameFramework.ControlActionNames.Instances();
                 if (actionNameToHandle == controlActionNames.ControlIncrement) {
-                    this.itemSelectedNextInDirection(1);
+                    this.itemSelectNextInDirection(1);
                     wasActionHandled = true;
                 }
                 else if (actionNameToHandle == controlActionNames.ControlDecrement) {
-                    this.itemSelectedNextInDirection(-1);
+                    this.itemSelectNextInDirection(-1);
                     wasActionHandled = true;
                 }
                 else if (actionNameToHandle == controlActionNames.ControlConfirm) {
@@ -78,18 +78,11 @@ var ThisCouldBeBetter;
             indexOfFirstRowVisible() {
                 return this.scrollbar.sliderPosInItems();
             }
-            indexOfItemSelected(valueToSet) {
-                var returnValue = valueToSet;
+            indexOfItemSelected() {
                 var items = this.items();
-                if (valueToSet == null) {
-                    returnValue = items.indexOf(this.itemSelected(null));
-                    if (returnValue == -1) {
-                        returnValue = null;
-                    }
-                }
-                else {
-                    var itemToSelect = items[valueToSet];
-                    this.itemSelected(itemToSelect);
+                var returnValue = items.indexOf(this.itemSelected());
+                if (returnValue == -1) {
+                    returnValue = null;
                 }
                 return returnValue;
             }
@@ -107,39 +100,45 @@ var ThisCouldBeBetter;
                     : this.bindingForIsEnabled.get());
                 return returnValue;
             }
-            itemSelected(itemToSet) {
+            itemSelect(itemToSet) {
                 var returnValue = itemToSet;
-                if (itemToSet == null) {
-                    if (this.bindingForItemSelected == null) {
-                        returnValue = this._itemSelected;
+                this._itemSelected = itemToSet;
+                if (this.bindingForItemSelected != null) {
+                    var valueToSet;
+                    if (this.bindingForItemValue == null) {
+                        valueToSet = this._itemSelected;
                     }
                     else {
-                        returnValue =
-                            (this.bindingForItemSelected.get == null
-                                ? this._itemSelected
-                                : this.bindingForItemSelected.get());
+                        valueToSet = this.bindingForItemValue.contextSet(this._itemSelected).get();
+                        this.bindingForItemValue.set(valueToSet);
                     }
-                }
-                else {
-                    this._itemSelected = itemToSet;
-                    if (this.bindingForItemSelected != null) {
-                        var valueToSet;
-                        if (this.bindingForItemValue == null) {
-                            valueToSet = this._itemSelected;
-                        }
-                        else {
-                            valueToSet = this.bindingForItemValue.contextSet(this._itemSelected).get();
-                            this.bindingForItemValue.set(valueToSet);
-                        }
-                        this.bindingForItemSelected.set(itemToSet);
-                    }
+                    this.bindingForItemSelected.set(itemToSet);
                 }
                 return returnValue;
             }
-            itemSelectedNextInDirection(direction) {
+            itemSelectByIndex(itemToSelectIndex) {
+                var items = this.items();
+                var itemToSelect = items[itemToSelectIndex];
+                var returnValue = this.itemSelect(itemToSelect);
+                return returnValue;
+            }
+            itemSelected() {
+                var returnValue;
+                if (this.bindingForItemSelected == null) {
+                    returnValue = this._itemSelected;
+                }
+                else {
+                    returnValue =
+                        (this.bindingForItemSelected.get == null
+                            ? this._itemSelected
+                            : this.bindingForItemSelected.get());
+                }
+                return returnValue;
+            }
+            itemSelectNextInDirection(direction) {
                 var items = this.items();
                 var numberOfItems = items.length;
-                var indexOfItemSelected = this.indexOfItemSelected(null);
+                var indexOfItemSelected = this.indexOfItemSelected();
                 if (indexOfItemSelected == null) {
                     if (numberOfItems > 0) {
                         if (direction == 1) {
@@ -155,17 +154,17 @@ var ThisCouldBeBetter;
                     indexOfItemSelected = GameFramework.NumberHelper.trimToRangeMinMax(indexOfItemSelected + direction, 0, numberOfItems - 1);
                 }
                 var itemToSelect = (indexOfItemSelected == null ? null : items[indexOfItemSelected]);
-                this.itemSelected(itemToSelect);
+                this.itemSelect(itemToSelect);
                 var indexOfFirstItemVisible = this.indexOfFirstItemVisible();
                 var indexOfLastItemVisible = this.indexOfLastItemVisible();
-                var indexOfItemSelected = this.indexOfItemSelected(null);
+                var indexOfItemSelected = this.indexOfItemSelected();
                 if (indexOfItemSelected < indexOfFirstItemVisible) {
                     this.scrollbar.scrollUp();
                 }
                 else if (indexOfItemSelected > indexOfLastItemVisible) {
                     this.scrollbar.scrollDown();
                 }
-                var returnValue = this.itemSelected(null);
+                var returnValue = this.itemSelected();
                 return returnValue;
             }
             itemSpacing() {
@@ -194,14 +193,14 @@ var ThisCouldBeBetter;
                     var indexOfItemClicked = rowOfItemClicked * this.widthInItems + clickOffsetInItems.x;
                     var items = this.items();
                     if (indexOfItemClicked < items.length) {
-                        var indexOfItemSelectedOld = this.indexOfItemSelected(null);
+                        var indexOfItemSelectedOld = this.indexOfItemSelected();
                         if (indexOfItemClicked == indexOfItemSelectedOld) {
                             if (this.confirm != null) {
                                 this.confirm(null); // todo
                             }
                         }
                         else {
-                            this.indexOfItemSelected(indexOfItemClicked);
+                            this.itemSelectByIndex(indexOfItemClicked);
                         }
                     }
                 }
@@ -236,7 +235,7 @@ var ThisCouldBeBetter;
                 if (indexEnd >= items.length) {
                     indexEnd = items.length - 1;
                 }
-                var itemSelected = this.itemSelected(null);
+                var itemSelected = this.itemSelected();
                 var drawPos2 = GameFramework.Coords.create();
                 for (var i = indexStart; i <= indexEnd; i++) {
                     var item = items[i];
@@ -248,7 +247,11 @@ var ThisCouldBeBetter;
                     }
                     var text = this.bindingForItemText.contextSet(item).get();
                     drawPos2.addDimensions(textMarginLeft, 0, 0);
-                    var areColorsReversed = (i == this.indexOfItemSelected(null));
+                    var isItemSelected = (i == this.indexOfItemSelected());
+                    ;
+                    var areColorsReversed = ((this.isHighlighted && !isItemSelected)
+                        ||
+                            (isItemSelected && !this.isHighlighted));
                     display.drawText(text, this.fontHeightInPixels, drawPos2, (areColorsReversed ? colorBack : colorFore), (areColorsReversed ? colorFore : colorBack), false, // isCentered
                     this.size.x // widthMaxInPixels
                     );

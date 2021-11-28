@@ -4,69 +4,84 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class WorldDefn
 {
-	defnArraysByTypeName: Map<string, any[]>;
-	defnsByNameByTypeName: Map<string, Map<string, any>>;
+	actions: Action[];
+	activityDefns: ActivityDefn[];
+	entityDefns: Entity[];
+	itemDefns: ItemDefn[];
+	placeDefns: PlaceDefn[];
+	skills: Skill[];
 
-	constructor(defnArrays: any[][])
+	actionsByName: Map<string, Action>;
+	activityDefnsByName: Map<string, ActivityDefn>;
+	entityDefnsByName: Map<string, Entity>;
+	itemDefnsByName: Map<string, ItemDefn>;
+	placeDefnsByName: Map<string, PlaceDefn>;
+	skillsByName: Map<string, Skill>;
+
+	constructor
+	(
+		actions: Action[],
+		activityDefns: ActivityDefn[],
+		entityDefns: Entity[],
+		itemDefns: ItemDefn[],
+		placeDefns: PlaceDefn[],
+		skills: Skill[]
+	)
 	{
-		defnArrays = defnArrays || [];
+		this.actions = actions || [];
+		this.activityDefns = activityDefns || [];
+		this.entityDefns = entityDefns || [];
+		this.itemDefns = itemDefns || [];
+		this.placeDefns = placeDefns || [];
+		this.skills = skills || [];
 
-		this.defnArraysByTypeName = new Map<string, unknown[]>();
-		this.defnsByNameByTypeName = new Map<string, Map<string, unknown>>();
-
-		for (var i = 0; i < defnArrays.length; i++)
-		{
-			var defnsOfType = defnArrays[i];
-			var defnsByName = ArrayHelper.addLookupsByName(defnsOfType);
-			if (defnsOfType.length > 0)
-			{
-				var itemFirst = defnsOfType[0];
-				var itemTypeName = itemFirst.constructor.name;
-				this.defnArraysByTypeName.set(itemTypeName, defnsOfType);
-				this.defnsByNameByTypeName.set(itemTypeName, defnsByName);
-			}
-		}
+		this.actionsByName = ArrayHelper.addLookupsByName(this.actions);
+		this.activityDefnsByName = ArrayHelper.addLookupsByName(this.activityDefns);
+		this.entityDefnsByName = ArrayHelper.addLookupsByName(this.entityDefns);
+		this.itemDefnsByName = ArrayHelper.addLookupsByName(this.itemDefns);
+		this.placeDefnsByName = ArrayHelper.addLookupsByName(this.placeDefns);
+		this.skillsByName = ArrayHelper.addLookupsByName(this.skills);
 	}
 
 	static default(): WorldDefn
 	{
-		return new WorldDefn(null);
+		return new WorldDefn(null, null, null, null, null, null);
+	}
+
+	static fromPlaceDefns(placeDefns: PlaceDefn[]): WorldDefn
+	{
+		return new WorldDefn([], [], [], [], placeDefns, []);
 	}
 
 	// Convenience methods.
 
 	actionByName(defnName: string): Action
 	{
-		var defnsByName = this.defnsByNameByTypeName.get(Action.name);
-		var returnValue = defnsByName.get(defnName) as Action;
+		var returnValue = this.actionsByName.get(defnName);
 		return returnValue;
 	}
 
 	activityDefnByName(defnName: string): ActivityDefn
 	{
-		var defnsByName = this.defnsByNameByTypeName.get(ActivityDefn.name);
-		var returnValue = defnsByName.get(defnName) as ActivityDefn;
+		var returnValue = this.activityDefnsByName.get(defnName);
 		return returnValue;
 	}
 
 	entityDefnByName(defnName: string): Entity
 	{
-		var defnsByName = this.defnsByNameByTypeName.get(Entity.name);
-		var returnValue = defnsByName.get(defnName) as Entity;
+		var returnValue = this.entityDefnsByName.get(defnName);
 		return returnValue;
 	}
 
 	itemDefnByName(defnName: string): ItemDefn
 	{
-		var defnsByName = this.defnsByNameByTypeName.get(ItemDefn.name);
-		var returnValue = defnsByName.get(defnName) as ItemDefn;
+		var returnValue = this.itemDefnsByName.get(defnName);
 		return returnValue;
 	}
 
 	placeDefnByName(defnName: string): PlaceDefn
 	{
-		var defnsByName = this.defnsByNameByTypeName.get(PlaceDefn.name);
-		var returnValue = defnsByName.get(defnName) as PlaceDefn;
+		var returnValue = this.placeDefnsByName.get(defnName);
 		return returnValue;
 	}
 

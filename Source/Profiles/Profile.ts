@@ -852,7 +852,7 @@ export class Profile
 			var controlRootAsContainer = venueControls.controlRoot as ControlContainer;
 			var listProfiles =
 				controlRootAsContainer.childrenByName.get("listProfiles") as ControlList<Universe, Profile, string>;
-			var profileSelected = listProfiles.itemSelected(null);
+			var profileSelected = listProfiles.itemSelected();
 			universe.profile = profileSelected;
 			if (profileSelected != null)
 			{

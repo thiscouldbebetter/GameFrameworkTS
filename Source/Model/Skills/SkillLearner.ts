@@ -241,9 +241,8 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 
 		var defns = universe.world.defn;
 		var skillLearner = this;
-		var skillsAll = defns.defnArraysByTypeName.get(Skill.name); // todo - Just use the -ByName lookup.
-		var skillsAllByName =
-			defns.defnsByNameByTypeName.get(Skill.name) as Map<string, Skill>;
+		var skillsAll = defns.skills;
+		var skillsAllByName = defns.skillsByName;
 
 		var returnValue = ControlContainer.from4
 		(

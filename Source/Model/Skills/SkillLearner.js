@@ -126,8 +126,8 @@ var ThisCouldBeBetter;
                 var listSize = GameFramework.Coords.fromXY((size.x - margin * 3) / 2, 150);
                 var defns = universe.world.defn;
                 var skillLearner = this;
-                var skillsAll = defns.defnArraysByTypeName.get(GameFramework.Skill.name); // todo - Just use the -ByName lookup.
-                var skillsAllByName = defns.defnsByNameByTypeName.get(GameFramework.Skill.name);
+                var skillsAll = defns.skills;
+                var skillsAllByName = defns.skillsByName;
                 var returnValue = GameFramework.ControlContainer.from4("Skills", // name,
                 GameFramework.Coords.create(), // pos,
                 size.clone(), 

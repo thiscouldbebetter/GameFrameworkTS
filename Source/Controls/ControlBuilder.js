@@ -114,7 +114,7 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromTrue(), // isEnabled,
                     () => // click
                      {
-                        var itemSelected = listOptions.itemSelected(null);
+                        var itemSelected = listOptions.itemSelected();
                         if (itemSelected != null) {
                             select(universe, itemSelected);
                         }

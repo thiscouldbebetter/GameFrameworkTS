@@ -10,6 +10,9 @@ var ThisCouldBeBetter;
             static entityFromValue(value) {
                 return new GameFramework.Entity(EntityPropertyFromValue.name, [new EntityPropertyFromValue(value)]);
             }
+            static valueFromEntity(entity) {
+                return entity.properties[0].value;
+            }
             // Clonable.
             clone() {
                 return new EntityPropertyFromValue(this.value);

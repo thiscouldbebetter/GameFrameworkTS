@@ -21,13 +21,14 @@ export class Talker implements EntityProperty<Talker>
 			universe.mediaLibrary.textStringGetByName(this.conversationDefnName).value;
 		var conversationDefn = ConversationDefn.deserialize(conversationDefnAsJSON);
 		var venueToReturnTo = universe.venueCurrent;
+		var conversationQuit = () => // quit
+		{
+			universe.venueNext = venueToReturnTo;
+		};
 		var conversation = new ConversationRun
 		(
 			conversationDefn,
-			() => // quit
-			{
-				universe.venueNext = venueToReturnTo;
-			},
+			conversationQuit,
 			entityTalkee,
 			entityTalker // entityTalker
 		);

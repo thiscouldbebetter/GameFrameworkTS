@@ -90,9 +90,8 @@ var ThisCouldBeBetter;
                     // items
                     GameFramework.DataBinding.fromContextAndGet(conversationRun, (c) => c.scopeCurrent.talkNodesForOptionsActive()), 
                     // bindingForItemText
-                    new GameFramework.DataBinding(null, // context
-                    (c) => { return c.text; }, null), fontHeightShort, new GameFramework.DataBinding(conversationRun, (c) => c.scopeCurrent.talkNodeForOptionSelected, (c, v) => c.scopeCurrent.talkNodeForOptionSelected = v), // bindingForItemSelected
-                    new GameFramework.DataBinding(null, null, null), // bindingForItemValue
+                    GameFramework.DataBinding.fromGet((c) => c.text), fontHeightShort, new GameFramework.DataBinding(conversationRun, (c) => c.scopeCurrent.talkNodeForOptionSelected, (c, v) => c.scopeCurrent.talkNodeForOptionSelected = v), // bindingForItemSelected
+                    GameFramework.DataBinding.fromGet((c) => c.name), // bindingForItemValue
                     GameFramework.DataBinding.fromTrue(), // isEnabled
                     (universe) => // confirm
                      {

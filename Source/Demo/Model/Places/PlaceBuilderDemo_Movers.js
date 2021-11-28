@@ -162,8 +162,8 @@ class PlaceBuilderDemo_Movers {
             var entityPlayer = place.player();
             var learner = entityPlayer.skillLearner();
             var defns = world.defn;
-            var skillsAll = defns.defnArraysByTypeName.get(Skill.name); // todo - Just use the "-ByName" lookup.
-            var skillsByName = defns.defnsByNameByTypeName.get(Skill.name);
+            var skillsAll = defns.skills;
+            var skillsByName = defns.skillsByName;
             learner.statusMessage = null;
             learner.learningIncrement(skillsAll, skillsByName, 1);
             var learningMessage = learner.statusMessage;

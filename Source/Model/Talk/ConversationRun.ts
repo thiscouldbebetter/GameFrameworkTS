@@ -200,11 +200,9 @@ export class ConversationRun
 							c.scopeCurrent.talkNodesForOptionsActive()
 					),
 					// bindingForItemText
-					new DataBinding
+					DataBinding.fromGet
 					(
-						null, // context
-						(c: TalkNode) => { return c.text; },
-						null
+						(c: TalkNode) => c.text
 					),
 					fontHeightShort,
 					new DataBinding
@@ -215,7 +213,10 @@ export class ConversationRun
 						(c: ConversationRun, v: TalkNode) =>
 							c.scopeCurrent.talkNodeForOptionSelected = v
 					), // bindingForItemSelected
-					new DataBinding(null, null, null), // bindingForItemValue
+					DataBinding.fromGet
+					(
+						(c: TalkNode) => c.name
+					), // bindingForItemValue
 					DataBinding.fromTrue(), // isEnabled
 					(universe: Universe) => // confirm
 					{
