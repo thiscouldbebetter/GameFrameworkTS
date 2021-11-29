@@ -67,6 +67,11 @@ export class ConversationRun
 		this.update(universe);
 	}
 
+	toVenue(universe: Universe): Venue
+	{
+		return this.toControl(universe.display.sizeInPixels, universe).toVenue();
+	}
+
 	update(universe: Universe): void
 	{
 		this.scopeCurrent.update(universe, this);
