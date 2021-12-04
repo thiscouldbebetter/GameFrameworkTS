@@ -42,7 +42,7 @@ var ThisCouldBeBetter;
                 this.storageHelper = new GameFramework.StorageHelper(GameFramework.StringHelper.replaceAll(this.name, " ", "_") + "_", this.serializer, new GameFramework.CompressorLZW());
                 this.display.initialize(this);
                 this.platformHelper.platformableAdd(this.display);
-                this.soundHelper = new GameFramework.SoundHelper(this.mediaLibrary.sounds);
+                this.soundHelper = new GameFramework.SoundHelperLive(this.mediaLibrary.sounds);
                 this.videoHelper = new GameFramework.VideoHelper(this.mediaLibrary.videos);
                 var venueInitial = null;
                 if (this.debuggingModeName == "SkipOpening") {

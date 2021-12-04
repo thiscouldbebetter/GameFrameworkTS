@@ -3,7 +3,7 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Sound {
+        class SoundFromFile {
             constructor(name, sourcePath) {
                 this.name = name;
                 this.sourcePath = sourcePath;
@@ -34,6 +34,9 @@ var ThisCouldBeBetter;
             reset() {
                 this.offsetInSeconds = 0;
             }
+            seek(offsetInSeconds) {
+                this.offsetInSeconds = offsetInSeconds;
+            }
             stop(universe) {
                 universe.platformHelper.platformableRemove(this);
                 this.offsetInSeconds = 0;
@@ -50,6 +53,6 @@ var ThisCouldBeBetter;
                 return this.domElement;
             }
         }
-        GameFramework.Sound = Sound;
+        GameFramework.SoundFromFile = SoundFromFile;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
 })(ThisCouldBeBetter || (ThisCouldBeBetter = {}));

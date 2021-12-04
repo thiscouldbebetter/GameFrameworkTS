@@ -3,7 +3,7 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class SoundHelper {
+        class SoundHelperLive {
             constructor(sounds) {
                 this.sounds = sounds;
                 this.soundsByName = GameFramework.ArrayHelper.addLookupsByName(this.sounds);
@@ -41,7 +41,7 @@ var ThisCouldBeBetter;
             reset() {
                 for (var i = 0; i < this.sounds.length; i++) {
                     var sound = this.sounds[i];
-                    sound.offsetInSeconds = 0;
+                    sound.seek(0);
                 }
             }
             soundWithNamePlayAsEffect(universe, soundName) {
@@ -66,6 +66,6 @@ var ThisCouldBeBetter;
                 this.sounds.forEach(x => x.stop(universe));
             }
         }
-        GameFramework.SoundHelper = SoundHelper;
+        GameFramework.SoundHelperLive = SoundHelperLive;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
 })(ThisCouldBeBetter || (ThisCouldBeBetter = {}));

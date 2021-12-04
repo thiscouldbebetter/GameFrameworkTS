@@ -40,7 +40,7 @@ var ThisCouldBeBetter;
                 var fonts = new Array();
                 var textStrings = new Array();
                 var imageTypeDirectoryNameAndArray = [GameFramework.Image2, "Images", images];
-                var soundTypeDirectoryNameAndArray = [GameFramework.Sound, "Audio", sounds];
+                var soundTypeDirectoryNameAndArray = [GameFramework.SoundFromFile, "Audio", sounds];
                 var textStringTypeDirectoryNameAndArray = [GameFramework.TextString, "Text", textStrings];
                 var typesDirectoryNamesAndArraysByFileExtension = new Map([
                     ["jpg", imageTypeDirectoryNameAndArray],
@@ -75,8 +75,8 @@ var ThisCouldBeBetter;
             static fromFileNamesByCategory(contentPath, imageFileNames, effectFileNames, musicFileNames, videoFileNames, fontFileNames, textStringFileNames) {
                 var mediaTypesPathsAndFileNames = [
                     [GameFramework.Image2, "Images", imageFileNames],
-                    [GameFramework.Sound, "Audio/Effects", effectFileNames],
-                    [GameFramework.Sound, "Audio/Music", musicFileNames],
+                    [GameFramework.SoundFromFile, "Audio/Effects", effectFileNames],
+                    [GameFramework.SoundFromFile, "Audio/Music", musicFileNames],
                     [GameFramework.Video, "Video", videoFileNames],
                     [GameFramework.Font, "Fonts", fontFileNames],
                     [GameFramework.TextString, "Text", textStringFileNames]
@@ -154,6 +154,15 @@ var ThisCouldBeBetter;
                     if (this.imagesByName.get(image.name) == null) {
                         this.images.push(image);
                         this.imagesByName.set(image.name, image);
+                    }
+                }
+            }
+            soundsAdd(sounds) {
+                for (var i = 0; i < sounds.length; i++) {
+                    var sound = sounds[i];
+                    if (this.soundsByName.get(sound.name) == null) {
+                        this.sounds.push(sound);
+                        this.soundsByName.set(sound.name, sound);
                     }
                 }
             }

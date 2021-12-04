@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export interface MediaItemBase extends Loadable
+export interface MediaItemBase extends Loadable, Namable
 {}
 
 export class MediaLibrary
@@ -72,7 +72,7 @@ export class MediaLibrary
 		var textStrings = new Array<TextString>();
 
 		var imageTypeDirectoryNameAndArray = [ Image2, "Images", images ];
-		var soundTypeDirectoryNameAndArray = [ Sound, "Audio", sounds ];
+		var soundTypeDirectoryNameAndArray = [ SoundFromFile, "Audio", sounds ];
 		var textStringTypeDirectoryNameAndArray = [ TextString, "Text", textStrings ];
 
 		var typesDirectoryNamesAndArraysByFileExtension = new Map<string,Array<any>>
@@ -125,16 +125,20 @@ export class MediaLibrary
 
 	static fromFileNamesByCategory
 	(
-		contentPath: string, imageFileNames: string[], effectFileNames: string[],
-		musicFileNames: string[], videoFileNames: string[], fontFileNames: string[],
+		contentPath: string,
+		imageFileNames: string[],
+		effectFileNames: string[],
+		musicFileNames: string[],
+		videoFileNames: string[],
+		fontFileNames: string[],
 		textStringFileNames: string[]
 	): MediaLibrary
 	{
 		var mediaTypesPathsAndFileNames: [any, string, string[] ][] =
 		[
 			[ Image2, "Images", imageFileNames ],
-			[ Sound, "Audio/Effects", effectFileNames ],
-			[ Sound, "Audio/Music", musicFileNames ],
+			[ SoundFromFile, "Audio/Effects", effectFileNames ],
+			[ SoundFromFile, "Audio/Music", musicFileNames ],
 			[ Video, "Video", videoFileNames ],
 			[ Font, "Fonts", fontFileNames ],
 			[ TextString, "Text", textStringFileNames ]
@@ -262,6 +266,19 @@ export class MediaLibrary
 			{
 				this.images.push(image);
 				this.imagesByName.set(image.name, image);
+			}
+		}
+	}
+
+	soundsAdd(sounds: Sound[]): void
+	{
+		for (var i = 0; i < sounds.length; i++)
+		{
+			var sound = sounds[i];
+			if (this.soundsByName.get(sound.name) == null)
+			{
+				this.sounds.push(sound);
+				this.soundsByName.set(sound.name, sound);
 			}
 		}
 	}

@@ -2,7 +2,16 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Sound implements MediaItemBase
+export interface Sound extends MediaItemBase
+{
+	isRepeating: boolean;
+	pause(universe: Universe): void;
+	play(universe: Universe, volume: number): void;
+	seek(offsetInSeconds: number): void;
+	stop(universe: Universe): void;
+}
+
+export class SoundFromFile implements Sound
 {
 	name: string;
 	sourcePath: string;
@@ -58,6 +67,11 @@ export class Sound implements MediaItemBase
 	reset(): void
 	{
 		this.offsetInSeconds = 0;
+	}
+
+	seek(offsetInSeconds: number): void
+	{
+		this.offsetInSeconds = offsetInSeconds;
 	}
 
 	stop(universe: Universe): void

@@ -176,6 +176,7 @@ import Image2 = gf.Image2;  // Name conflicts with a built-in class.
 import MediaLibrary = gf.MediaLibrary;
 import Sound = gf.Sound;
 import SoundHelper = gf.SoundHelper;
+import SoundHelperLive = gf.SoundHelperLive;
 import TextString = gf.TextString;
 import VenueVideo = gf.VenueVideo;
 import Video = gf.Video;

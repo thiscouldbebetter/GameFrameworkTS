@@ -2,7 +2,20 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class SoundHelper
+export interface SoundHelper
+{
+	audioContext(): AudioContext;
+	controlSelectOptionsVolume(): ControlSelectOption<number>[];
+	musicVolume: number;
+	reset(): void;
+	soundForMusic: Sound;
+	soundVolume: number;
+	soundWithNamePlayAsEffect(universe: Universe, soundName: string): void;
+	soundWithNamePlayAsMusic(universe: Universe, soundName: string): void;
+	soundsAllStop(universe: Universe): void;
+}
+
+export class SoundHelperLive
 {
 	sounds: Sound[];
 
@@ -65,7 +78,7 @@ export class SoundHelper
 		for (var i = 0; i < this.sounds.length; i++)
 		{
 			var sound = this.sounds[i];
-			sound.offsetInSeconds = 0;
+			sound.seek(0);
 		}
 	}
 

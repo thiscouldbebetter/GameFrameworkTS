@@ -132,7 +132,7 @@ export class Universe
 		this.display.initialize(this);
 		this.platformHelper.platformableAdd(this.display);
 
-		this.soundHelper = new SoundHelper(this.mediaLibrary.sounds);
+		this.soundHelper = new SoundHelperLive(this.mediaLibrary.sounds);
 		this.videoHelper = new VideoHelper(this.mediaLibrary.videos);
 
 		var venueInitial: Venue = null;
