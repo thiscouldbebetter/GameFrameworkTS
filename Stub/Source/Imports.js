@@ -111,7 +111,6 @@ var VisualSound = gf.VisualSound;
 // Model.
 var EntityBuilder = gf.EntityBuilder;
 var EntityGenerator = gf.EntityGenerator;
-var Loadable = gf.Loadable;
 var Playable = gf.Playable;
 var Selector = gf.Selector;
 var Universe = gf.Universe;

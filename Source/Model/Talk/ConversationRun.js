@@ -33,6 +33,9 @@ var ThisCouldBeBetter;
                 }
                 this.update(universe);
             }
+            toVenue(universe) {
+                return this.toControl(universe.display.sizeInPixels, universe).toVenue();
+            }
             update(universe) {
                 this.scopeCurrent.update(universe, this);
             }

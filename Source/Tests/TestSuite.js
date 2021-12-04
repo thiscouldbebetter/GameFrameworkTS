@@ -8,13 +8,19 @@ var ThisCouldBeBetter;
                 this.testFixtures = testFixtures;
             }
             run() {
-                document.write("Running test suite containing "
+                this.write("Running test suite containing "
                     + this.testFixtures.length + " test fixtures.<br /><br />");
                 this.testFixtures.forEach(testFixture => {
                     testFixture.run();
                 });
-                document.write("All " + this.testFixtures.length
+                this.write("All " + this.testFixtures.length
                     + " test fixtures in suite have been run.<br />");
+            }
+            write(messageToWrite) {
+                var d = document;
+                var messageAsDomElement = d.createElement("span");
+                messageAsDomElement.innerHTML = messageToWrite;
+                d.body.appendChild(messageAsDomElement);
             }
         }
         GameFramework.TestSuite = TestSuite;

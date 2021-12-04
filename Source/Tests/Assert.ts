@@ -4,6 +4,18 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Assert
 {
+	static areNumbersEqual(numberExpected: number, numberActual: number): void
+	{
+		if (numberActual != numberExpected)
+		{
+			var errorMessage = 
+				"Expected: " + numberExpected
+				+ ", but was: " + numberActual + "."
+
+			throw new Error(errorMessage);
+		}
+	}
+
 	static areEqual<T extends Equatable<T>>(objectExpected: T, objectActual: T): void
 	{
 		var areExpectedAndActualEqual = this.areObjectsEqual

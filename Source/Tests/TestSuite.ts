@@ -12,7 +12,7 @@ export class TestSuite
 
 	run(): void
 	{
-		document.write
+		this.write
 		(
 			"Running test suite containing "
 			+ this.testFixtures.length + " test fixtures.<br /><br />"
@@ -23,11 +23,19 @@ export class TestSuite
 			testFixture.run();
 		});
 
-		document.write
+		this.write
 		(
 			"All " + this.testFixtures.length
 			+ " test fixtures in suite have been run.<br />"
 		);
+	}
+
+	write(messageToWrite: string): void
+	{
+		var d = document;
+		var messageAsDomElement = d.createElement("span");
+		messageAsDomElement.innerHTML = messageToWrite;
+		d.body.appendChild(messageAsDomElement);
 	}
 }
 

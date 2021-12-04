@@ -21,7 +21,7 @@ export class TestFixture
 		var tests = this.tests();
 		var testCount = tests.length;
 
-		document.write
+		this.writeInfo
 		(
 			"Test fixture '" + this.name
 			+ "', containing " + testCount + " tests, running.<br />"
@@ -37,8 +37,8 @@ export class TestFixture
 			}
 			catch (ex)
 			{
-				document.write("Test failed: " + test.name + "<br /><br />");
-				document.write
+				this.writeError("Test failed: " + test.name + "<br /><br />");
+				this.writeError
 				(
 					ex.stack + "<br />"
 					+ "<br /><br />"
@@ -48,18 +48,47 @@ export class TestFixture
 
 		var testsFailedCount = tests.length - testsPassedCount;
 
-		document.write
-		(
-			"All "
-			+ tests.length
-			+ " tests in fixture '" + this.name + "' complete.  "
-			+ testsPassedCount
-			+ " passed, "
-			+ testsFailedCount
-			+ " failed.<br /><br />"
-		);
+		var results = 
+			"All tests in fixture '" + this.name + "' complete.  "
+			+ testsPassedCount + "/" + tests.length
+			+ " passed. ";
 
+		this.writeInfo(results);
+
+		if (testsFailedCount > 0)
+		{
+			var results =
+				testsFailedCount
+				+ " tests failed!"
+
+			this.writeError(results);
+		}
+
+		this.writeInfo("<br /><br />");
 	}
+
+	writeMessageInColor(messageToWrite: string, color: string): void
+	{
+		var d = document;
+		var messageAsDomElement = d.createElement("span");
+		if (color != null)
+		{
+			messageAsDomElement.style.color = color;
+		}
+		messageAsDomElement.innerHTML = messageToWrite;
+		d.body.appendChild(messageAsDomElement);
+	}
+
+	writeError(messageToWrite: string): void
+	{
+		this.writeMessageInColor(messageToWrite, "Red");
+	}
+
+	writeInfo(messageToWrite: string): void
+	{
+		this.writeMessageInColor(messageToWrite, null);
+	}
+
 }
 
 }

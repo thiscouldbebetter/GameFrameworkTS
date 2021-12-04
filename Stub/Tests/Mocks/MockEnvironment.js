@@ -11,7 +11,7 @@ class MockEnvironment {
         ]);
         universe.initialize(() => { });
         universe.profile = Profile.anonymous();
-        universe.world.initialize(universe);
+        universe.world.initialize(UniverseWorldPlaceEntities.fromUniverse(universe));
         return universe;
     }
 }
