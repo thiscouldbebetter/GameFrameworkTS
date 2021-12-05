@@ -39,6 +39,41 @@ var ThisCouldBeBetter;
                 }
                 this.writeInfo("<br /><br />");
             }
+            toDomElement() {
+                var d = document;
+                var testFixtureAsDomElement = d.createElement("div");
+                var nameAsDomElement = d.createElement("h2");
+                nameAsDomElement.innerHTML = TestFixture.name + " " + this.name;
+                testFixtureAsDomElement.appendChild(nameAsDomElement);
+                var divTests = d.createElement("div");
+                var testFixture = this;
+                this.tests().forEach(x => {
+                    var testName = x.name;
+                    var divTest = d.createElement("div");
+                    var labelName = d.createElement("label");
+                    labelName.innerHTML = testName;
+                    divTest.appendChild(labelName);
+                    var labelStatus = d.createElement("label");
+                    labelStatus.id = "labelStatus" + testName;
+                    labelStatus.innerHTML = "";
+                    var buttonRun = d.createElement("button");
+                    buttonRun.onclick = () => {
+                        try {
+                            x.call(testFixture);
+                            labelStatus.innerHTML = "Passed.";
+                        }
+                        catch (err) {
+                            labelStatus.innerHTML = "Failed.";
+                        }
+                    };
+                    buttonRun.innerHTML = "Run";
+                    divTest.appendChild(buttonRun);
+                    divTest.appendChild(labelStatus);
+                    divTests.appendChild(divTest);
+                });
+                testFixtureAsDomElement.appendChild(divTests);
+                return testFixtureAsDomElement;
+            }
             writeMessageInColor(messageToWrite, color) {
                 var d = document;
                 var messageAsDomElement = d.createElement("span");

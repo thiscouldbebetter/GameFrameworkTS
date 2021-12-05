@@ -30,6 +30,26 @@ export class TestSuite
 		);
 	}
 
+	toDomElement(): HTMLDivElement
+	{
+		var d = document;
+
+		var testSuiteAsDomElement = d.createElement("div");
+
+		var nameAsDomElement = d.createElement("h1");
+		nameAsDomElement.innerHTML = TestSuite.name;
+		testSuiteAsDomElement.appendChild(nameAsDomElement);
+
+		var divTestFixtures = d.createElement("div");
+		this.testFixtures.forEach
+		(
+			x => divTestFixtures.appendChild(x.toDomElement() )
+		);
+		testSuiteAsDomElement.appendChild(divTestFixtures);
+
+		return testSuiteAsDomElement;
+	}
+
 	write(messageToWrite: string): void
 	{
 		var d = document;
