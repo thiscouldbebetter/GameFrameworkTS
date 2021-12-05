@@ -39,6 +39,11 @@ var ThisCouldBeBetter;
             hasItem(itemToCheck) {
                 return this.hasItemWithDefnNameAndQuantity(itemToCheck.defnName, itemToCheck.quantity);
             }
+            hasItems(itemsToCheck) {
+                var isMissingAtLeastOneItem = itemsToCheck.some(x => this.hasItem(x) == false);
+                var hasAllItems = (isMissingAtLeastOneItem == false);
+                return hasAllItems;
+            }
             hasItemWithDefnNameAndQuantity(defnName, quantityToCheck) {
                 var itemExistingQuantity = this.itemQuantityByDefnName(defnName);
                 var returnValue = (itemExistingQuantity >= quantityToCheck);
@@ -116,6 +121,9 @@ var ThisCouldBeBetter;
                 if (doesExist) {
                     GameFramework.ArrayHelper.remove(this.items, itemToRemove);
                 }
+            }
+            itemsRemove(itemsToRemove) {
+                itemsToRemove.forEach(x => this.itemRemove(x));
             }
             itemSplit(itemToSplit, quantityToSplit) {
                 var itemSplitted = null;

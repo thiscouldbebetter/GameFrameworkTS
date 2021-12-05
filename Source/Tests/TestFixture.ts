@@ -76,6 +76,10 @@ export class TestFixture
 		nameAsDomElement.innerHTML = TestFixture.name + " " + this.name;
 		testFixtureAsDomElement.appendChild(nameAsDomElement);
 
+		var headingTestsInFixture = d.createElement("h3");
+		headingTestsInFixture.innerHTML = "Tests in Fixture:";
+		testFixtureAsDomElement.appendChild(headingTestsInFixture);
+
 		var divTests = d.createElement("div");
 
 		var testFixture = this;
@@ -106,7 +110,8 @@ export class TestFixture
 					}
 					catch (err)
 					{
-						labelStatus.innerHTML = "Failed.";
+						var errAsString = err.message + err.stack;
+						labelStatus.innerHTML = "Failed: " + errAsString;
 					}
 				};
 				buttonRun.innerHTML = "Run";

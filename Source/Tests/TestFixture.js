@@ -45,6 +45,9 @@ var ThisCouldBeBetter;
                 var nameAsDomElement = d.createElement("h2");
                 nameAsDomElement.innerHTML = TestFixture.name + " " + this.name;
                 testFixtureAsDomElement.appendChild(nameAsDomElement);
+                var headingTestsInFixture = d.createElement("h3");
+                headingTestsInFixture.innerHTML = "Tests in Fixture:";
+                testFixtureAsDomElement.appendChild(headingTestsInFixture);
                 var divTests = d.createElement("div");
                 var testFixture = this;
                 this.tests().forEach(x => {
@@ -63,7 +66,8 @@ var ThisCouldBeBetter;
                             labelStatus.innerHTML = "Passed.";
                         }
                         catch (err) {
-                            labelStatus.innerHTML = "Failed.";
+                            var errAsString = err.message + err.stack;
+                            labelStatus.innerHTML = "Failed: " + errAsString;
                         }
                     };
                     buttonRun.innerHTML = "Run";

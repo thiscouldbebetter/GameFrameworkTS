@@ -3,10 +3,12 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class TestSuite
 {
+	name: string;
 	testFixtures: TestFixture[];
 
-	constructor(testFixtures: TestFixture[])
+	constructor(name: string, testFixtures: TestFixture[])
 	{
+		this.name = name;
 		this.testFixtures = testFixtures;
 	}
 
@@ -14,7 +16,7 @@ export class TestSuite
 	{
 		this.write
 		(
-			"Running test suite containing "
+			"Running test suite " + this.name + ", containing "
 			+ this.testFixtures.length + " test fixtures.<br /><br />"
 		);
 
@@ -37,7 +39,7 @@ export class TestSuite
 		var testSuiteAsDomElement = d.createElement("div");
 
 		var nameAsDomElement = d.createElement("h1");
-		nameAsDomElement.innerHTML = TestSuite.name;
+		nameAsDomElement.innerHTML = TestSuite.name + " " + this.name;
 		testSuiteAsDomElement.appendChild(nameAsDomElement);
 
 		var divTestFixtures = d.createElement("div");

@@ -4,11 +4,12 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class TestSuite {
-            constructor(testFixtures) {
+            constructor(name, testFixtures) {
+                this.name = name;
                 this.testFixtures = testFixtures;
             }
             run() {
-                this.write("Running test suite containing "
+                this.write("Running test suite " + this.name + ", containing "
                     + this.testFixtures.length + " test fixtures.<br /><br />");
                 this.testFixtures.forEach(testFixture => {
                     testFixture.run();
@@ -20,7 +21,7 @@ var ThisCouldBeBetter;
                 var d = document;
                 var testSuiteAsDomElement = d.createElement("div");
                 var nameAsDomElement = d.createElement("h1");
-                nameAsDomElement.innerHTML = TestSuite.name;
+                nameAsDomElement.innerHTML = TestSuite.name + " " + this.name;
                 testSuiteAsDomElement.appendChild(nameAsDomElement);
                 var divTestFixtures = d.createElement("div");
                 this.testFixtures.forEach(x => divTestFixtures.appendChild(x.toDomElement()));

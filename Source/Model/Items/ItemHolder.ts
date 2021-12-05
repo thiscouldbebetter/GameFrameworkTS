@@ -83,6 +83,16 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 		);
 	}
 
+	hasItems(itemsToCheck: Item[]): boolean
+	{
+		var isMissingAtLeastOneItem =
+			itemsToCheck.some(x => this.hasItem(x) == false);
+
+		var hasAllItems = (isMissingAtLeastOneItem == false);
+
+		return hasAllItems;
+	}
+
 	hasItemWithDefnNameAndQuantity
 	(
 		defnName: string, quantityToCheck: number
@@ -217,6 +227,11 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 		{
 			ArrayHelper.remove(this.items, itemToRemove);
 		}
+	}
+
+	itemsRemove(itemsToRemove: Item[]): void
+	{
+		itemsToRemove.forEach(x => this.itemRemove(x));
 	}
 
 	itemSplit(itemToSplit: Item, quantityToSplit: number): Item
