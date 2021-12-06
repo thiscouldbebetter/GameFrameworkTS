@@ -50,6 +50,12 @@ export class Activity
 		return world.defn.activityDefnByName(this.defnName);
 	}
 
+	defnNameSet(defnName: string): Activity
+	{
+		this.defnName = defnName;
+		return this;
+	}
+
 	defnNameAndTargetEntitySet
 	(
 		defnName: string, targetEntity: Entity
@@ -60,6 +66,12 @@ export class Activity
 		return this;
 	}
 
+	doNothing(): void
+	{
+		this.defnNameSet(ActivityDefn.Instances().DoNothing.name);
+		this.targetEntitiesClearAll();
+	}
+
 	perform(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this.defnName != null)
@@ -67,6 +79,12 @@ export class Activity
 			var defn = this.defn(uwpe.world);
 			defn.perform(uwpe);
 		}
+	}
+
+	targetEntitiesClearAll(): Activity
+	{
+		this.targetEntitiesByName.clear();
+		return this;
 	}
 
 	targetEntity(): Entity

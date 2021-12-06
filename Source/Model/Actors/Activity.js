@@ -25,16 +25,28 @@ var ThisCouldBeBetter;
             defn(world) {
                 return world.defn.activityDefnByName(this.defnName);
             }
+            defnNameSet(defnName) {
+                this.defnName = defnName;
+                return this;
+            }
             defnNameAndTargetEntitySet(defnName, targetEntity) {
                 this.defnName = defnName;
                 this.targetEntitySet(targetEntity);
                 return this;
+            }
+            doNothing() {
+                this.defnNameSet(GameFramework.ActivityDefn.Instances().DoNothing.name);
+                this.targetEntitiesClearAll();
             }
             perform(uwpe) {
                 if (this.defnName != null) {
                     var defn = this.defn(uwpe.world);
                     defn.perform(uwpe);
                 }
+            }
+            targetEntitiesClearAll() {
+                this.targetEntitiesByName.clear();
+                return this;
             }
             targetEntity() {
                 return this.targetEntityByName(this.defnName);
