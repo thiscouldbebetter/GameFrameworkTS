@@ -4,13 +4,6 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Assert {
-            static areNumbersEqual(numberExpected, numberActual) {
-                if (numberActual != numberExpected) {
-                    var errorMessage = "Expected: " + numberExpected
-                        + ", but was: " + numberActual + ".";
-                    throw new Error(errorMessage);
-                }
-            }
             static areEqual(objectExpected, objectActual) {
                 var areExpectedAndActualEqual = this.areObjectsEqual(objectExpected, objectActual);
                 if (areExpectedAndActualEqual == false) {
@@ -24,6 +17,20 @@ var ThisCouldBeBetter;
                 if (areExpectedAndActualEqual) {
                     var errorMessage = "The objects were equal, which was not expected.";
                     throw (errorMessage);
+                }
+            }
+            static areNumbersEqual(numberExpected, numberActual) {
+                if (numberActual != numberExpected) {
+                    var errorMessage = "Expected: " + numberExpected
+                        + ", but was: " + numberActual + ".";
+                    throw new Error(errorMessage);
+                }
+            }
+            static areStringsEqual(stringExpected, stringActual) {
+                if (stringActual != stringExpected) {
+                    var errorMessage = "Expected: " + stringExpected
+                        + ", but was: " + stringActual + ".";
+                    throw new Error(errorMessage);
                 }
             }
             static isFalse(valueToTest) {

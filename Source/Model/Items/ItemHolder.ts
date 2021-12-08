@@ -93,6 +93,11 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 		return hasAllItems;
 	}
 
+	hasItemWithDefnName(defnName: string): boolean
+	{
+		return this.hasItemWithDefnNameAndQuantity(defnName, 1);
+	}
+
 	hasItemWithDefnNameAndQuantity
 	(
 		defnName: string, quantityToCheck: number
@@ -103,9 +108,162 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 		return returnValue;
 	}
 
+	itemAdd(itemToAdd: Item): void
+	{
+		var itemDefnName = itemToAdd.defnName;
+		var itemExisting = this.itemsByDefnName(itemDefnName)[0];
+		if (itemExisting == null)
+		{
+			this.items.push(itemToAdd);
+		}
+		else
+		{
+			itemExisting.quantity += itemToAdd.quantity;
+		}
+	}
+
+	itemCanPickUp
+	(
+		universe: Universe, world: World, place: Place, itemToPickUp: Item
+	): boolean
+	{
+		var massAlreadyHeld = this.massOfAllItems(world);
+		var massOfItem = itemToPickUp.mass(world);
+		var massAfterPickup = massAlreadyHeld + massOfItem;
+		var canPickUp = (massAfterPickup <= this.massMax);
+		return canPickUp;
+	}
+
 	itemEntities(uwpe: UniverseWorldPlaceEntities): Entity[]
 	{
 		return this.items.map(x => x.toEntity(uwpe));
+	}
+
+	itemEntityFindClosest(uwpe: UniverseWorldPlaceEntities): Entity
+	{
+		var place = uwpe.place;
+		var entityItemHolder = uwpe.entity;
+
+		var entityItemsInPlace = place.items();
+		var entityItemClosest = entityItemsInPlace.filter
+		(
+			x =>
+				x.locatable().distanceFromEntity(entityItemHolder) < this.reachRadius
+		).sort
+		(
+			(a, b) =>
+				a.locatable().distanceFromEntity(entityItemHolder)
+				- b.locatable().distanceFromEntity(entityItemHolder)
+		)[0];
+
+		return entityItemClosest;
+	}
+
+	itemEntityPickUp
+	(
+		uwpe: UniverseWorldPlaceEntities
+	): void
+	{
+		var place = uwpe.place;
+		var itemEntityToPickUp = uwpe.entity2;
+		var itemToPickUp = itemEntityToPickUp.item();
+		this.itemAdd(itemToPickUp);
+		place.entityToRemoveAdd(itemEntityToPickUp);
+	}
+
+	itemQuantityByDefnName(defnName: string): number
+	{
+		return this.itemsByDefnName(defnName).map
+		(
+			y => y.quantity
+		).reduce
+		(
+			(a,b) => a + b, 0
+		);
+	}
+
+	itemRemove(itemToRemove: Item): void
+	{
+		var doesExist = this.items.indexOf(itemToRemove) >= 0;
+		if (doesExist)
+		{
+			ArrayHelper.remove(this.items, itemToRemove);
+		}
+	}
+
+	itemSplit(itemToSplit: Item, quantityToSplit: number): Item
+	{
+		var itemSplitted = null;
+
+		if (itemToSplit.quantity <= 1)
+		{
+			itemSplitted = itemToSplit;
+		}
+		else
+		{
+			quantityToSplit =
+				quantityToSplit || Math.floor(itemToSplit.quantity / 2);
+			if (quantityToSplit >= itemToSplit.quantity)
+			{
+				itemSplitted = itemToSplit;
+			}
+			else
+			{
+				itemToSplit.quantity -= quantityToSplit;
+
+				itemSplitted = itemToSplit.clone();
+				itemSplitted.quantity = quantityToSplit;
+				// Add with no join.
+				ArrayHelper.insertElementAfterOther
+				(
+					this.items, itemSplitted, itemToSplit
+				);
+			}
+		}
+
+		return itemSplitted;
+	}
+
+	itemTransferTo(item: Item, other: ItemHolder): void
+	{
+		other.itemAdd(item);
+		ArrayHelper.remove(this.items, item);
+		if (this.itemSelected == item)
+		{
+			this.itemSelected = null;
+		}
+	}
+
+	itemTransferSingleTo(item: Item, other: ItemHolder): void
+	{
+		var itemSingle = this.itemSplit(item, 1);
+		this.itemTransferTo(itemSingle, other);
+	}
+
+	itemSubtract(itemToSubtract: Item): void
+	{
+		this.itemSubtractDefnNameAndQuantity
+		(
+			itemToSubtract.defnName, itemToSubtract.quantity
+		);
+	}
+
+	itemSubtractDefnNameAndQuantity
+	(
+		itemDefnName: string, quantityToSubtract: number
+	): void
+	{
+		this.itemsWithDefnNameJoin(itemDefnName);
+		var itemExisting = this.itemsByDefnName(itemDefnName)[0];
+		if (itemExisting != null)
+		{
+			itemExisting.quantity -= quantityToSubtract;
+			if (itemExisting.quantity <= 0)
+			{
+				var itemExisting = this.itemsByDefnName(itemDefnName)[0];
+				ArrayHelper.remove(this.items, itemExisting);
+			}
+		}
 	}
 
 	itemsAdd(itemsToAdd: Item[]): void
@@ -162,162 +320,9 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 		return itemJoined;
 	}
 
-	itemAdd(itemToAdd: Item): void
-	{
-		var itemDefnName = itemToAdd.defnName;
-		var itemExisting = this.itemsByDefnName(itemDefnName)[0];
-		if (itemExisting == null)
-		{
-			this.items.push(itemToAdd);
-		}
-		else
-		{
-			itemExisting.quantity += itemToAdd.quantity;
-		}
-	}
-
-	itemEntityFindClosest(uwpe: UniverseWorldPlaceEntities): Entity
-	{
-		var place = uwpe.place;
-		var entityItemHolder = uwpe.entity;
-
-		var entityItemsInPlace = place.items();
-		var entityItemClosest = entityItemsInPlace.filter
-		(
-			x =>
-				x.locatable().distanceFromEntity(entityItemHolder) < this.reachRadius
-		).sort
-		(
-			(a, b) =>
-				a.locatable().distanceFromEntity(entityItemHolder)
-				- b.locatable().distanceFromEntity(entityItemHolder)
-		)[0];
-
-		return entityItemClosest;
-	}
-
-	itemCanPickUp
-	(
-		universe: Universe, world: World, place: Place, itemToPickUp: Item
-	): boolean
-	{
-		var massAlreadyHeld = this.massOfAllItems(world);
-		var massOfItem = itemToPickUp.mass(world);
-		var massAfterPickup = massAlreadyHeld + massOfItem;
-		var canPickUp = (massAfterPickup <= this.massMax);
-		return canPickUp;
-	}
-
-	itemEntityPickUp
-	(
-		uwpe: UniverseWorldPlaceEntities
-	): void
-	{
-		var place = uwpe.place;
-		var itemEntityToPickUp = uwpe.entity2;
-		var itemToPickUp = itemEntityToPickUp.item();
-		this.itemAdd(itemToPickUp);
-		place.entityToRemoveAdd(itemEntityToPickUp);
-	}
-
-	itemRemove(itemToRemove: Item): void
-	{
-		var doesExist = this.items.indexOf(itemToRemove) >= 0;
-		if (doesExist)
-		{
-			ArrayHelper.remove(this.items, itemToRemove);
-		}
-	}
-
 	itemsRemove(itemsToRemove: Item[]): void
 	{
 		itemsToRemove.forEach(x => this.itemRemove(x));
-	}
-
-	itemSplit(itemToSplit: Item, quantityToSplit: number): Item
-	{
-		var itemSplitted = null;
-
-		if (itemToSplit.quantity <= 1)
-		{
-			itemSplitted = itemToSplit;
-		}
-		else
-		{
-			quantityToSplit =
-				quantityToSplit || Math.floor(itemToSplit.quantity / 2);
-			if (quantityToSplit >= itemToSplit.quantity)
-			{
-				itemSplitted = itemToSplit;
-			}
-			else
-			{
-				itemToSplit.quantity -= quantityToSplit;
-
-				itemSplitted = itemToSplit.clone();
-				itemSplitted.quantity = quantityToSplit;
-				// Add with no join.
-				ArrayHelper.insertElementAfterOther
-				(
-					this.items, itemSplitted, itemToSplit
-				);
-			}
-		}
-
-		return itemSplitted;
-	}
-
-	itemTransferTo(item: Item, other: ItemHolder): void
-	{
-		other.itemAdd(item);
-		ArrayHelper.remove(this.items, item);
-		if (this.itemSelected == item)
-		{
-			this.itemSelected = null;
-		}
-	}
-
-	itemTransferSingleTo(item: Item, other: ItemHolder): void
-	{
-		var itemSingle = this.itemSplit(item, 1);
-		this.itemTransferTo(itemSingle, other);
-	}
-
-	itemQuantityByDefnName(defnName: string): number
-	{
-		return this.itemsByDefnName(defnName).map
-		(
-			y => y.quantity
-		).reduce
-		(
-			(a,b) => a + b, 0
-		);
-	}
-
-	itemSubtract(itemToSubtract: Item): void
-	{
-		this.itemSubtractDefnNameAndQuantity
-		(
-			itemToSubtract.defnName, itemToSubtract.quantity
-		);
-	}
-
-	itemSubtractDefnNameAndQuantity
-	(
-		itemDefnName: string, quantityToSubtract: number
-	): void
-	{
-		this.itemsWithDefnNameJoin(itemDefnName);
-		var itemExisting = this.itemsByDefnName(itemDefnName)[0];
-		if (itemExisting != null)
-		{
-			itemExisting.quantity -= quantityToSubtract;
-			if (itemExisting.quantity <= 0)
-			{
-				var itemExisting = this.itemsByDefnName(itemDefnName)[0];
-				ArrayHelper.remove(this.items, itemExisting);
-			}
-		}
 	}
 
 	/*

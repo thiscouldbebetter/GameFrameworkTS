@@ -4,18 +4,6 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Assert
 {
-	static areNumbersEqual(numberExpected: number, numberActual: number): void
-	{
-		if (numberActual != numberExpected)
-		{
-			var errorMessage = 
-				"Expected: " + numberExpected
-				+ ", but was: " + numberActual + "."
-
-			throw new Error(errorMessage);
-		}
-	}
-
 	static areEqual<T extends Equatable<T>>(objectExpected: T, objectActual: T): void
 	{
 		var areExpectedAndActualEqual = this.areObjectsEqual
@@ -47,6 +35,30 @@ export class Assert
 			var errorMessage = 
 				"The objects were equal, which was not expected.";
 			throw(errorMessage);
+		}
+	}
+
+	static areNumbersEqual(numberExpected: number, numberActual: number): void
+	{
+		if (numberActual != numberExpected)
+		{
+			var errorMessage = 
+				"Expected: " + numberExpected
+				+ ", but was: " + numberActual + "."
+
+			throw new Error(errorMessage);
+		}
+	}
+
+	static areStringsEqual(stringExpected: string, stringActual: string): void
+	{
+		if (stringActual != stringExpected)
+		{
+			var errorMessage = 
+				"Expected: " + stringExpected
+				+ ", but was: " + stringActual + "."
+
+			throw new Error(errorMessage);
 		}
 	}
 

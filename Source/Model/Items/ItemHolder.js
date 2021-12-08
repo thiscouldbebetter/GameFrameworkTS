@@ -44,45 +44,13 @@ var ThisCouldBeBetter;
                 var hasAllItems = (isMissingAtLeastOneItem == false);
                 return hasAllItems;
             }
+            hasItemWithDefnName(defnName) {
+                return this.hasItemWithDefnNameAndQuantity(defnName, 1);
+            }
             hasItemWithDefnNameAndQuantity(defnName, quantityToCheck) {
                 var itemExistingQuantity = this.itemQuantityByDefnName(defnName);
                 var returnValue = (itemExistingQuantity >= quantityToCheck);
                 return returnValue;
-            }
-            itemEntities(uwpe) {
-                return this.items.map(x => x.toEntity(uwpe));
-            }
-            itemsAdd(itemsToAdd) {
-                itemsToAdd.forEach((x) => this.itemAdd(x));
-            }
-            itemsAllTransferTo(other) {
-                this.itemsTransferTo(this.items, other);
-            }
-            itemsByDefnName(defnName) {
-                return this.items.filter(x => x.defnName == defnName);
-            }
-            itemsTransferTo(itemsToTransfer, other) {
-                if (itemsToTransfer == this.items) {
-                    // Create a new array to avoid modifying the one being looped through.
-                    itemsToTransfer = new Array();
-                    itemsToTransfer.push(...this.items);
-                }
-                for (var i = 0; i < itemsToTransfer.length; i++) {
-                    var item = itemsToTransfer[i];
-                    this.itemTransferTo(item, other);
-                }
-            }
-            itemsWithDefnNameJoin(defnName) {
-                var itemsMatching = this.items.filter(x => x.defnName == defnName);
-                var itemJoined = itemsMatching[0];
-                if (itemJoined != null) {
-                    for (var i = 1; i < itemsMatching.length; i++) {
-                        var itemToJoin = itemsMatching[i];
-                        itemJoined.quantity += itemToJoin.quantity;
-                        GameFramework.ArrayHelper.remove(this.items, itemToJoin);
-                    }
-                }
-                return itemJoined;
             }
             itemAdd(itemToAdd) {
                 var itemDefnName = itemToAdd.defnName;
@@ -94,6 +62,16 @@ var ThisCouldBeBetter;
                     itemExisting.quantity += itemToAdd.quantity;
                 }
             }
+            itemCanPickUp(universe, world, place, itemToPickUp) {
+                var massAlreadyHeld = this.massOfAllItems(world);
+                var massOfItem = itemToPickUp.mass(world);
+                var massAfterPickup = massAlreadyHeld + massOfItem;
+                var canPickUp = (massAfterPickup <= this.massMax);
+                return canPickUp;
+            }
+            itemEntities(uwpe) {
+                return this.items.map(x => x.toEntity(uwpe));
+            }
             itemEntityFindClosest(uwpe) {
                 var place = uwpe.place;
                 var entityItemHolder = uwpe.entity;
@@ -102,13 +80,6 @@ var ThisCouldBeBetter;
                     - b.locatable().distanceFromEntity(entityItemHolder))[0];
                 return entityItemClosest;
             }
-            itemCanPickUp(universe, world, place, itemToPickUp) {
-                var massAlreadyHeld = this.massOfAllItems(world);
-                var massOfItem = itemToPickUp.mass(world);
-                var massAfterPickup = massAlreadyHeld + massOfItem;
-                var canPickUp = (massAfterPickup <= this.massMax);
-                return canPickUp;
-            }
             itemEntityPickUp(uwpe) {
                 var place = uwpe.place;
                 var itemEntityToPickUp = uwpe.entity2;
@@ -116,14 +87,14 @@ var ThisCouldBeBetter;
                 this.itemAdd(itemToPickUp);
                 place.entityToRemoveAdd(itemEntityToPickUp);
             }
+            itemQuantityByDefnName(defnName) {
+                return this.itemsByDefnName(defnName).map(y => y.quantity).reduce((a, b) => a + b, 0);
+            }
             itemRemove(itemToRemove) {
                 var doesExist = this.items.indexOf(itemToRemove) >= 0;
                 if (doesExist) {
                     GameFramework.ArrayHelper.remove(this.items, itemToRemove);
                 }
-            }
-            itemsRemove(itemsToRemove) {
-                itemsToRemove.forEach(x => this.itemRemove(x));
             }
             itemSplit(itemToSplit, quantityToSplit) {
                 var itemSplitted = null;
@@ -157,9 +128,6 @@ var ThisCouldBeBetter;
                 var itemSingle = this.itemSplit(item, 1);
                 this.itemTransferTo(itemSingle, other);
             }
-            itemQuantityByDefnName(defnName) {
-                return this.itemsByDefnName(defnName).map(y => y.quantity).reduce((a, b) => a + b, 0);
-            }
             itemSubtract(itemToSubtract) {
                 this.itemSubtractDefnNameAndQuantity(itemToSubtract.defnName, itemToSubtract.quantity);
             }
@@ -173,6 +141,41 @@ var ThisCouldBeBetter;
                         GameFramework.ArrayHelper.remove(this.items, itemExisting);
                     }
                 }
+            }
+            itemsAdd(itemsToAdd) {
+                itemsToAdd.forEach((x) => this.itemAdd(x));
+            }
+            itemsAllTransferTo(other) {
+                this.itemsTransferTo(this.items, other);
+            }
+            itemsByDefnName(defnName) {
+                return this.items.filter(x => x.defnName == defnName);
+            }
+            itemsTransferTo(itemsToTransfer, other) {
+                if (itemsToTransfer == this.items) {
+                    // Create a new array to avoid modifying the one being looped through.
+                    itemsToTransfer = new Array();
+                    itemsToTransfer.push(...this.items);
+                }
+                for (var i = 0; i < itemsToTransfer.length; i++) {
+                    var item = itemsToTransfer[i];
+                    this.itemTransferTo(item, other);
+                }
+            }
+            itemsWithDefnNameJoin(defnName) {
+                var itemsMatching = this.items.filter(x => x.defnName == defnName);
+                var itemJoined = itemsMatching[0];
+                if (itemJoined != null) {
+                    for (var i = 1; i < itemsMatching.length; i++) {
+                        var itemToJoin = itemsMatching[i];
+                        itemJoined.quantity += itemToJoin.quantity;
+                        GameFramework.ArrayHelper.remove(this.items, itemToJoin);
+                    }
+                }
+                return itemJoined;
+            }
+            itemsRemove(itemsToRemove) {
+                itemsToRemove.forEach(x => this.itemRemove(x));
             }
             /*
             itemTransferTo2(itemToTransfer: Item, other: ItemHolder): void
