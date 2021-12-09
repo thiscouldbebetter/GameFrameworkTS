@@ -100,6 +100,11 @@ export class ItemDefn implements EntityProperty<ItemDefn>
 		return returnValue;
 	}
 
+	toItem(): Item
+	{
+		return new Item(this.name, 1);
+	}
+
 	use(uwpe: UniverseWorldPlaceEntities)
 	{
 		if (this._use == null)

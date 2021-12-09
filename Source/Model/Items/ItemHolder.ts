@@ -134,6 +134,69 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 		return canPickUp;
 	}
 
+	itemDrop(uwpe: UniverseWorldPlaceEntities): void
+	{
+		var world = uwpe.world;
+		var place = uwpe.place;
+		var entityItemHolder = uwpe.entity;
+		var itemEntityToKeep = uwpe.entity2;
+
+		if (itemEntityToKeep != null)
+		{
+			var itemToKeep = itemEntityToKeep.item();
+
+			var itemToDrop = itemToKeep.clone();
+			itemToDrop.quantity = 1;
+			var itemToDropDefn = itemToDrop.defn(world);
+
+			var itemEntityToDrop = itemToDrop.toEntity(uwpe);
+			var itemLocatable = itemEntityToDrop.locatable();
+			if (itemLocatable == null)
+			{
+				itemLocatable = Locatable.create();
+				itemEntityToDrop.propertyAdd(itemLocatable);
+				itemEntityToDrop.propertyAdd
+				(
+					Drawable.fromVisual(itemToDropDefn.visual)
+				);
+				// todo - Other properties: Collidable, etc.
+			}
+
+			var posToDropAt = itemLocatable.loc.pos;
+			var holderPos = entityItemHolder.locatable().loc.pos;
+			posToDropAt.overwriteWith(holderPos);
+
+			var collidable = itemEntityToDrop.collidable();
+			if (collidable != null)
+			{
+				collidable.ticksUntilCanCollide =
+					collidable.ticksToWaitBetweenCollisions;
+			}
+
+			place.entitySpawn
+			(
+				uwpe.clone().entitiesSwap()
+			);
+			this.itemSubtract(itemToDrop);
+			if (itemToKeep.quantity == 0)
+			{
+				this.itemSelected = null;
+			}
+
+			this.statusMessage = itemToDropDefn.appearance + " dropped."
+
+			var equipmentUser = entityItemHolder.equipmentUser();
+			if (equipmentUser != null)
+			{
+				equipmentUser.unequipItemsNoLongerHeld
+				(
+					uwpe
+				);
+			}
+		}
+	}
+
+
 	itemEntities(uwpe: UniverseWorldPlaceEntities): Entity[]
 	{
 		return this.items.map(x => x.toEntity(uwpe));
@@ -422,68 +485,14 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 
 		var drop = () =>
 		{
-			if (itemHolder.itemSelected == null)
+			if (itemHolder.itemSelected != null)
 			{
-				return;
-			}
-			var itemToKeep = itemHolder.itemSelected;
-			if (itemToKeep != null)
-			{
-				var world = universe.world;
-				var place = world.placeCurrent;
-
-				var itemToDrop = itemToKeep.clone();
-				itemToDrop.quantity = 1;
-				var itemToDropDefn = itemToDrop.defn(world);
-
-				var itemEntityToDrop = itemToDrop.toEntity(uwpe);
-				var itemLocatable = itemEntityToDrop.locatable();
-				if (itemLocatable == null)
-				{
-					itemLocatable = Locatable.create();
-					itemEntityToDrop.propertyAdd(itemLocatable);
-					itemEntityToDrop.propertyAdd
-					(
-						Drawable.fromVisual(itemToDropDefn.visual)
-					);
-					// todo - Other properties: Collidable, etc.
-				}
-
-				var posToDropAt = itemLocatable.loc.pos;
-				var holderPos = entityItemHolder.locatable().loc.pos;
-				posToDropAt.overwriteWith(holderPos);
-
-				var collidable = itemEntityToDrop.collidable();
-				if (collidable != null)
-				{
-					collidable.ticksUntilCanCollide =
-						collidable.ticksToWaitBetweenCollisions;
-				}
-
-				place.entitySpawn
+				itemHolder.itemDrop
 				(
-					new UniverseWorldPlaceEntities
-					(
-						universe, world, place, itemEntityToDrop, null
-					)
+					uwpe.entity2Set(itemHolder.itemSelected.toEntity(uwpe))
 				);
-				itemHolder.itemSubtract(itemToDrop);
-				if (itemToKeep.quantity == 0)
-				{
-					itemHolder.itemSelected = null;
-				}
-
-				itemHolder.statusMessage = itemToDropDefn.appearance + " dropped."
-
-				var equipmentUser = entityItemHolder.equipmentUser();
-				if (equipmentUser != null)
-				{
-					equipmentUser.unequipItemsNoLongerHeld
-					(
-						uwpe
-					);
-				}
 			}
+			
 		};
 
 		var use = () =>
