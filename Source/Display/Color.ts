@@ -145,6 +145,7 @@ export class Color_Instances
 {
 	_Transparent: Color;
 	Black: Color;
+	BlackHalfTransparent: Color;
 	Blue: Color;
 	BlueDark: Color;
 	BlueLight: Color;
@@ -180,6 +181,7 @@ export class Color_Instances
 		this._Transparent = new Color("Transparent", ".", [0, 0, 0, 0] );
 
 		this.Black = new Color("Black", "k", [0, 0, 0, 1] );
+		this.BlackHalfTransparent = new Color("Black", "k", [0, 0, 0, .5] );
 		this.Blue = new Color("Blue", "b", [0, 0, 1, 1] );
 		this.BlueDark = new Color("BlueDark", "B", [0, 0, .5, 1] );
 		this.BlueLight = new Color("BlueLight", "$", [.5, .5, 1, 1] );
@@ -211,6 +213,7 @@ export class Color_Instances
 			this._Transparent,
 
 			this.Black,
+			this.BlackHalfTransparent,
 			this.Blue,
 			this.BlueDark,
 			this.BlueLight,

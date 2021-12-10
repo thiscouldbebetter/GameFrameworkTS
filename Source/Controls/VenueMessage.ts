@@ -38,17 +38,30 @@ export class VenueMessage<TContext> implements Venue
 
 	static fromMessageAndAcknowledge<TContext>
 	(
-		messageToShow: DataBinding<TContext, string>, acknowledge: () => void
+		messageToShow: DataBinding<TContext, string>,
+		acknowledge: () => void
 	): VenueMessage<TContext>
 	{
 		return new VenueMessage<TContext>(messageToShow, acknowledge, null, null, null);
 	}
 
-	static fromText<TContext>(message: string): VenueMessage<TContext>
+	static fromText<TContext>(text: string): VenueMessage<TContext>
 	{
 		return VenueMessage.fromMessage<TContext>
 		(
-			DataBinding.fromGet( (c: TContext) => message)
+			DataBinding.fromGet( (c: TContext) => text )
+		);
+	}
+
+	static fromTextAndAcknowledge<TContext>
+	(
+		text: string, acknowledge: () => void
+	): VenueMessage<TContext>
+	{
+		return VenueMessage.fromMessageAndAcknowledge
+		(
+			DataBinding.fromGet( (c: TContext) => text ),
+			acknowledge
 		);
 	}
 
