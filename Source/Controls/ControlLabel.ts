@@ -17,7 +17,7 @@ export class ControlLabel<TContext> extends ControlBase
 		pos: Coords,
 		size: Coords,
 		isTextCentered: boolean,
-		text: DataBinding<TContext,string>,
+		text: DataBinding<TContext, string>,
 		fontHeightInPixels: number
 	)
 	{
@@ -30,10 +30,11 @@ export class ControlLabel<TContext> extends ControlBase
 		this._drawPos = Coords.create();
 	}
 
-	static fromPosAndText<TContext>
+	static fromPosHeightAndText<TContext>
 	(
 		pos: Coords,
-		text: DataBinding<TContext,string>
+		fontHeightInPixels: number,
+		text: DataBinding<TContext, string>
 	): ControlLabel<TContext>
 	{
 		return new ControlLabel
@@ -43,27 +44,7 @@ export class ControlLabel<TContext> extends ControlBase
 			null, // size
 			false, // isTextCentered
 			text,
-			10 // fontHeightInPixels
-		);
-	}
-
-	static from5<TContext>
-	(
-		name: string,
-		pos: Coords,
-		size: Coords,
-		isTextCentered: boolean,
-		text: DataBinding<TContext,string>
-	): ControlLabel<TContext>
-	{
-		return new ControlLabel
-		(
-			name,
-			pos,
-			size,
-			isTextCentered,
-			text,
-			null // fontHeightInPixels
+			fontHeightInPixels
 		);
 	}
 

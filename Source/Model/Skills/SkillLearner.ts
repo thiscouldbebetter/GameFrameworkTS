@@ -231,6 +231,7 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 		var labelHeight = display.fontHeightInPixels * 1.2;
 		var margin = 20;
 		var labelHeightLarge = labelHeight * 2;
+		var fontHeightInPixels = margin / 2;
 
 		size = size.clone().addDimensions(0, 30, 0); // hack
 
@@ -321,16 +322,17 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 					} // confirm
 				),
 
-				ControlLabel.from5
+				new ControlLabel
 				(
 					"labelSkillSelected", // name,
 					Coords.fromXY(margin, 220), // pos,
 					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
 					false, // isTextCentered,
-					DataBinding.fromContext("Selected:") // text
+					DataBinding.fromContext("Selected:"), // text
+					fontHeightInPixels
 				),
 
-				ControlLabel.from5
+				new ControlLabel
 				(
 					"labelSkillSelected", // name,
 					Coords.fromXY(80, 220), // pos,
@@ -339,7 +341,8 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 					DataBinding.fromContextAndGet
 					(
 						this, (c: SkillLearner) => (c.skillSelectedName || "-")
-					)
+					),
+					fontHeightInPixels
 				),
 
 				new ControlLabel
@@ -357,16 +360,17 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 							return (skill == null ? "-" : skill.description);
 						}
 					),
-					null
+					fontHeightInPixels
 				),
 
-				ControlLabel.from5
+				new ControlLabel
 				(
 					"labelSkillBeingLearned", // name,
 					Coords.fromXY(margin, size.y - margin - labelHeight * 2), // pos,
 					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
 					false, // isTextCentered,
-					DataBinding.fromContext("Skill Being Learned:") // text
+					DataBinding.fromContext("Skill Being Learned:"), // text
+					fontHeightInPixels
 				),
 
 				new ControlLabel
@@ -383,19 +387,20 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 							return (c.skillBeingLearnedName || "-");
 						}
 					),
-					null
+					fontHeightInPixels
 				),
 
-				ControlLabel.from5
+				new ControlLabel
 				(
 					"labelLearningAccumulated", // name,
 					Coords.fromXY(margin, size.y - margin - labelHeight), // pos,
 					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
 					false, // isTextCentered,
-					DataBinding.fromContext("Learning Accumulated:") // text
+					DataBinding.fromContext("Learning Accumulated:"), // text
+					fontHeightInPixels
 				),
 
-				ControlLabel.from5
+				new ControlLabel
 				(
 					"textLearningAccumulated", // name,
 					Coords.fromXY(145, size.y - margin - labelHeight), // pos,
@@ -406,7 +411,8 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 						this,
 						(c: SkillLearner) =>
 							c.learningAccumulatedOverRequired(skillsAllByName)
-					) // text
+					), // text
+					fontHeightInPixels
 				),
 			]
 		);
