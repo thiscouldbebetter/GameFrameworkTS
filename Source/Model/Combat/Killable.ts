@@ -93,6 +93,11 @@ export class Killable implements EntityProperty<Killable>
 		);
 	}
 
+	integrityCurrentOverMax(): string
+	{
+		return this.integrity + "/" + this.integrityMax;
+	}
+
 	integritySubtract(amountToSubtract: number): void
 	{
 		this.integrityAdd(0 - amountToSubtract);

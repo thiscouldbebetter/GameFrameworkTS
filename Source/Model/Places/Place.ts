@@ -287,7 +287,7 @@ export class Place //
 		);
 		var returnValue = playerControllable.toControl
 		(
-			uwpe, null
+			uwpe, null, null
 		);
 		return returnValue;
 	}

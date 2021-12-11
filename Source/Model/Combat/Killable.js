@@ -44,6 +44,9 @@ var ThisCouldBeBetter;
                 this.integrity += amountToAdd;
                 this.integrity = GameFramework.NumberHelper.trimToRangeMax(this.integrity, this.integrityMax);
             }
+            integrityCurrentOverMax() {
+                return this.integrity + "/" + this.integrityMax;
+            }
             integritySubtract(amountToSubtract) {
                 this.integrityAdd(0 - amountToSubtract);
             }

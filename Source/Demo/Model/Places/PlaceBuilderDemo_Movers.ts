@@ -1727,7 +1727,6 @@ class PlaceBuilderDemo_Movers
 		var toControlMenu = Playable.toControlMenu;
 		var toControlWorldOverlay = Playable.toControlWorldOverlay;
 		var toControl =
-			//(universe: Universe, size: Coords, entity: Entity, venuePrev: Venue, isMenu: boolean) =>
 			(uwpe: UniverseWorldPlaceEntities) =>
 			{
 				var universe = uwpe.universe;

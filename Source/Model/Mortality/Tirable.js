@@ -13,6 +13,14 @@ var ThisCouldBeBetter;
                 this.stamina = this.staminaMaxAfterSleep;
                 this.staminaMaxRemainingBeforeSleep = this.staminaMaxAfterSleep;
             }
+            static default() {
+                return new Tirable(1, // staminaMaxAfterSleep
+                0, // staminaRecoveredPerTick
+                0, // staminaMaxLostPerTick
+                1, // staminaMaxRecoveredPerTickOfSleep
+                (uwpe) => { } // fallAsleep
+                );
+            }
             fallAsleep(uwpe) {
                 var staminaMaxToRecover = this.staminaMaxAfterSleep - this.staminaMaxRemainingBeforeSleep;
                 var ticksToRecover = Math.ceil(staminaMaxToRecover / this.staminaMaxRecoveredPerTickOfSleep);

@@ -6,12 +6,19 @@ export class Controllable implements EntityProperty<Controllable>
 {
 	toControl:
 	(
-		uwpe: UniverseWorldPlaceEntities, controlTypeName: string
+		uwpe: UniverseWorldPlaceEntities,
+		size: Coords,
+		controlTypeName: string
 	) => ControlBase;
 
 	constructor
 	(
-		toControl: (uwpe: UniverseWorldPlaceEntities, controlTypeName: string) => ControlBase
+		toControl:
+		(
+			uwpe: UniverseWorldPlaceEntities,
+			size: Coords,
+			controlTypeName: string
+		) => ControlBase
 	)
 	{
 		this.toControl = toControl;
