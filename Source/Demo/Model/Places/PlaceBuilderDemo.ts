@@ -11,6 +11,7 @@ class PlaceBuilderDemo // Main.
 	entities: Entity[];
 	entityDefns: Entity[];
 	entityDefnsByName: Map<string,Entity>;
+	entityDimension: number;
 	fontHeight: number;
 	itemDefns: ItemDefn[];
 	itemDefnsByName: Map<string, ItemDefn>;
@@ -24,17 +25,22 @@ class PlaceBuilderDemo // Main.
 	itemsBuilder: PlaceBuilderDemo_Items;
 	moversBuilder: PlaceBuilderDemo_Movers;
 
-	constructor(universe: Universe, randomizer: Randomizer, cameraViewSize: Coords)
+	constructor
+	(
+		universe: Universe,
+		randomizer: Randomizer,
+		cameraViewSize: Coords
+	)
 	{
 		this.universe = universe;
 		this.randomizer = randomizer || RandomizerLCG.default();
 		this.visualsHaveText = false;
 
-		var entityDimension = 10;
+		this.entityDimension = 10;
 
 		this.actionsBuilder = new PlaceBuilderDemo_Actions(this);
 		this.emplacementsBuilder = new PlaceBuilderDemo_Emplacements(this);
-		this.itemsBuilder = new PlaceBuilderDemo_Items(this, entityDimension);
+		this.itemsBuilder = new PlaceBuilderDemo_Items(this);
 		this.moversBuilder = new PlaceBuilderDemo_Movers(this);
 
 		this.actions = this.actionsBuilder.actionsBuild();
@@ -46,7 +52,7 @@ class PlaceBuilderDemo // Main.
 		this.itemDefns = this.itemsBuilder.itemDefnsBuild();
 		this.itemDefnsByName = ArrayHelper.addLookupsByName(this.itemDefns);
 
-		this.entityDefns = this.entityDefnsBuild(entityDimension);
+		this.entityDefns = this.entityDefnsBuild();
 		this.entityDefnsByName = ArrayHelper.addLookupsByName(this.entityDefns);
 
 		this.fontHeight = 10;
@@ -120,8 +126,7 @@ class PlaceBuilderDemo // Main.
 		this.build_Exterior(placePos, placeNamesToIncludePortalsTo);
 		if (isGoal)
 		{
-			var entityDimension = 10;
-			this.build_Goal(entityDimension);
+			this.build_Goal();
 		}
 		this.entitiesAllGround();
 		var entityCamera = this.build_Camera(this.cameraViewSize, this.size);
@@ -1105,7 +1110,7 @@ class PlaceBuilderDemo // Main.
 		entities.push( this.entityBuildFromDefn( entityDefns.get("Store"), entityPosRange, randomizer) );
 	}
 
-	build_Goal(entityDimension: number)
+	build_Goal(): void
 	{
 		var entityDefns = this.entityDefnsByName;
 		var entities = this.entities;
@@ -1113,13 +1118,17 @@ class PlaceBuilderDemo // Main.
 		var entityDefns = this.entityDefnsByName;
 		var entities = this.entities;
 
-		var entitySize = new Coords(1, 1, 1).multiplyScalar(entityDimension);
+		var entitySize = Coords.ones().multiplyScalar(this.entityDimension);
 		var numberOfKeysToUnlockGoal = 5;
 		var goalEntity = this.entityBuildGoal
 		(
-			entities, entityDimension, entitySize, numberOfKeysToUnlockGoal
+			entities, entitySize, numberOfKeysToUnlockGoal
 		);
-		var entityPosRange = new Box(this.size.clone().half(), this.size.clone().subtract(this.marginSize) );
+		var entityPosRange = new Box
+		(
+			this.size.clone().half(),
+			this.size.clone().subtract(this.marginSize)
+		);
 		var entityRing = this.entityBuildFromDefn
 		(
 			entityDefns.get("Ring"), entityPosRange, this.randomizer
@@ -1348,11 +1357,14 @@ class PlaceBuilderDemo // Main.
 
 	entityBuildGoal
 	(
-		entities: Entity[], entityDimension: number, entitySize: Coords,
+		entities: Entity[], entitySize: Coords,
 		numberOfKeysToUnlockGoal: number
 	): Entity
 	{
+		var fontHeight = this.entityDimension;
+
 		var itemKeyColor = Color.byName("Yellow");
+
 		var goalPos = Coords.create().randomize(this.randomizer).multiplyScalar
 		(
 			.5
@@ -1365,12 +1377,13 @@ class PlaceBuilderDemo // Main.
 		);
 		var goalLoc = Disposition.fromPos(goalPos);
 		var goalColor = Color.byName("GreenDark");
+
 		var goalVisual = new VisualGroup
 		([
 			VisualRectangle.fromSizeAndColorFill(entitySize, goalColor),
-			VisualText.fromTextAndColor
+			VisualText.fromTextHeightAndColor
 			(
-				"" + numberOfKeysToUnlockGoal, itemKeyColor
+				"" + numberOfKeysToUnlockGoal, fontHeight, itemKeyColor
 			)
 		]);
 		if (this.visualsHaveText)
@@ -1379,8 +1392,11 @@ class PlaceBuilderDemo // Main.
 			(
 				new VisualOffset
 				(
-					VisualText.fromTextAndColor("Exit", goalColor),
-					new Coords(0, 0 - entityDimension * 2, 0)
+					VisualText.fromTextHeightAndColor
+					(
+						"Exit", fontHeight, goalColor
+					),
+					Coords.fromXY(0, 0 - this.entityDimension * 2)
 				)
 			);
 		}
@@ -1403,11 +1419,12 @@ class PlaceBuilderDemo // Main.
 
 	entityBuildKeys
 	(
-		places: Place[], entityDimension: number,
-		numberOfKeysToUnlockGoal: number, marginSize: Coords
+		places: Place[],
+		numberOfKeysToUnlockGoal: number,
+		marginSize: Coords
 	): void
 	{
-		var entityDimensionHalf = entityDimension / 2;
+		var entityDimensionHalf = this.entityDimension / 2;
 		var sizeMinusMargins = marginSize.clone().double().invert().add(this.size);
 
 		var itemDefnKeyName = "Key";
@@ -1759,36 +1776,43 @@ class PlaceBuilderDemo // Main.
 		);
 	}
 
-	entityDefnBuildStore(entityDimension: number): Entity
+	entityDefnBuildStore(): Entity
 	{
 		var storeColor = Color.byName("Brown");
-		var entitySize = new Coords(1, 1, 1).multiplyScalar(entityDimension);
+
+		var entitySize = Coords.ones().multiplyScalar(this.entityDimension);
+
 		var visual = new VisualGroup
 		([
 			VisualRectangle.fromSizeAndColorFill
 			(
-				new Coords(1, 1.5, 0).multiplyScalar(entityDimension),
+				Coords.fromXY(1, 1.5).multiplyScalar(this.entityDimension),
 				storeColor
 			),
 			new VisualOffset
 			(
 				VisualRectangle.fromSizeAndColorFill
 				(
-					new Coords(1.1, .2, 0).multiplyScalar(entityDimension),
+					Coords.fromXY(1.1, .2).multiplyScalar(this.entityDimension),
 					Color.byName("Gray")
 				),
-				new Coords(0, -.75, 0).multiplyScalar(entityDimension)
+				Coords.fromXY(0, -.75).multiplyScalar(this.entityDimension)
 			),
 		]);
 
 		if (this.visualsHaveText)
 		{
+			var fontHeight = this.entityDimension;
+
 			visual.children.push
 			(
 				new VisualOffset
 				(
-					VisualText.fromTextAndColor("Store", storeColor),
-					new Coords(0, 0 - entityDimension * 2, 0)
+					VisualText.fromTextHeightAndColor
+					(
+						"Store", fontHeight, storeColor
+					),
+					Coords.fromXY(0, 0 - this.entityDimension * 2)
 				)
 			);
 		}
@@ -1797,7 +1821,9 @@ class PlaceBuilderDemo // Main.
 		(
 			"Store",
 			[
-				Collidable.fromCollider(new Box(Coords.create(), entitySize)),
+				Collidable.fromCollider(
+					new Box(Coords.create(), entitySize)
+				),
 				Drawable.fromVisual(visual),
 				new ItemStore("Coin"),
 				new ItemHolder
@@ -1829,9 +1855,9 @@ class PlaceBuilderDemo // Main.
 
 	// Entity definitions.
 
-	entityDefnBuildAccessory(entityDimension: number): Entity
+	entityDefnBuildAccessory(): Entity
 	{
-		var entityDimensionHalf = entityDimension / 2;
+		var entityDimensionHalf = this.entityDimension / 2;
 
 		var itemDefnAccessoryName = "Speed Boots";
 		var itemAccessoryVisual = this.itemDefnsByName.get(itemDefnAccessoryName).visual;
@@ -1852,13 +1878,16 @@ class PlaceBuilderDemo // Main.
 		return itemAccessoryEntityDefn;
 	}
 
-	entityDefnBuildArmor(entityDimension: number): Entity
+	entityDefnBuildArmor(): Entity
 	{
 		var itemDefnArmorName = "Armor";
 		var itemDefn = this.itemDefnsByName.get(itemDefnArmorName);
 		var itemArmorVisual = itemDefn.visual;
 		var path = ((itemArmorVisual as VisualGroup).children[0] as VisualPolygon).verticesAsPath;
-		var itemArmorCollider = new Sphere(Coords.create(), entityDimension / 2);
+		var itemArmorCollider = new Sphere
+		(
+			Coords.create(), this.entityDimension / 2
+		);
 		var collidable = Collidable.fromCollider(itemArmorCollider);
 		var box = new Box(Coords.create(), Coords.create() ).ofPoints(path.points);
 		box.center = itemArmorCollider.center;
@@ -1881,15 +1910,15 @@ class PlaceBuilderDemo // Main.
 		return itemArmorEntityDefn;
 	}
 
-	entityDefnBuildArrow(entityDimension: number): Entity
+	entityDefnBuildArrow(): Entity
 	{
-		var entityDimensionHalf = entityDimension / 2;
+		var entityDimensionHalf = this.entityDimension / 2;
 
 		var itemDefnArrowName = "Arrow";
 
 		var itemArrowVisual = this.itemDefnsByName.get(itemDefnArrowName).visual;
 
-		var arrowSize = new Coords(1, 1, 1);
+		var arrowSize = Coords.ones();
 
 		var itemArrowCollider = new Sphere(Coords.create(), entityDimensionHalf);
 
@@ -1914,9 +1943,9 @@ class PlaceBuilderDemo // Main.
 		return itemArrowEntityDefn;
 	}
 
-	entityDefnBuildBomb(entityDimension: number): Entity
+	entityDefnBuildBomb(): Entity
 	{
-		var entityDimensionHalf = entityDimension / 2;
+		var entityDimensionHalf = this.entityDimension / 2;
 
 		var itemDefnBombName = "Bomb";
 		var itemBombVisual = this.itemDefnsByName.get(itemDefnBombName).visual;
@@ -2062,9 +2091,9 @@ class PlaceBuilderDemo // Main.
 		return itemBombEntityDefn;
 	}
 
-	entityDefnBuildBook(entityDimension: number): Entity
+	entityDefnBuildBook(): Entity
 	{
-		var entityDimensionHalf = entityDimension / 2;
+		var entityDimensionHalf = this.entityDimension / 2;
 
 		var itemDefnBookName = "Book";
 		var itemBookVisual = this.itemDefnsByName.get(itemDefnBookName).visual;
@@ -2084,14 +2113,13 @@ class PlaceBuilderDemo // Main.
 		return itemBookEntityDefn;
 	}
 
-	entityDefnBuildBow(entityDimension: number): Entity
+	entityDefnBuildBow(): Entity
 	{
-		entityDimension = entityDimension * 2;
 		var itemDefnName = "Bow";
 
 		var itemBowVisual = this.itemDefnsByName.get(itemDefnName).visual;
 
-		var itemBowCollider = new Sphere(Coords.create(), entityDimension / 2);
+		var itemBowCollider = new Sphere(Coords.create(), this.entityDimension);
 
 		var itemBowUse = (uwpe: UniverseWorldPlaceEntities) => // use
 		{
@@ -2240,9 +2268,9 @@ class PlaceBuilderDemo // Main.
 		return itemBowEntityDefn;
 	}
 
-	entityDefnBuildBread(entityDimension: number): Entity
+	entityDefnBuildBread(): Entity
 	{
-		var entityDimensionHalf = entityDimension / 2;
+		var entityDimensionHalf = this.entityDimension / 2;
 
 		var itemDefnBreadName = "Bread";
 		var itemBreadVisual = this.itemDefnsByName.get(itemDefnBreadName).visual;
@@ -2262,9 +2290,9 @@ class PlaceBuilderDemo // Main.
 		return itemBreadEntityDefn;
 	}
 
-	entityDefnBuildCar(entityDimension: number): Entity
+	entityDefnBuildCar(): Entity
 	{
-		entityDimension *= .75
+		var entityDimension = this.entityDimension * .75;
 		var defnName = "Car";
 
 		var frames = new Array<VisualBase>();
@@ -2314,8 +2342,11 @@ class PlaceBuilderDemo // Main.
 			(
 				new VisualOffset
 				(
-					VisualText.fromTextAndColor(defnName, Color.byName("Blue")),
-					new Coords(0, 0 - entityDimension * 2.5, 0)
+					VisualText.fromTextHeightAndColor
+					(
+						defnName, entityDimension, Color.byName("Blue")
+					),
+					Coords.fromXY(0, 0 - entityDimension * 2.5)
 				)
 			);
 		}
@@ -2389,13 +2420,14 @@ class PlaceBuilderDemo // Main.
 		return carEntityDefn;
 	}
 
-	entityDefnBuildCoin(entityDimension: number): Entity
+	entityDefnBuildCoin(): Entity
 	{
-		var entityDimensionHalf = entityDimension / 2;
+		var entityDimensionHalf = this.entityDimension / 2;
 
 		var itemDefnCoinName = "Coin";
 		var itemCoinVisual = this.itemDefnsByName.get(itemDefnCoinName).visual;
-		var itemCoinCollider = new Sphere(Coords.create(), entityDimensionHalf);
+		var itemCoinCollider =
+			new Sphere(Coords.create(), entityDimensionHalf);
 
 		var itemCoinEntityDefn = new Entity
 		(
@@ -2411,9 +2443,9 @@ class PlaceBuilderDemo // Main.
 		return itemCoinEntityDefn;
 	}
 
-	entityDefnBuildCrystal(entityDimension: number): Entity
+	entityDefnBuildCrystal(): Entity
 	{
-		var entityDimensionHalf = entityDimension / 2;
+		var entityDimensionHalf = this.entityDimension / 2;
 
 		var itemDefnCrystalName = "Crystal";
 		var itemCrystalVisual = this.itemDefnsByName.get(itemDefnCrystalName).visual;
@@ -2433,9 +2465,9 @@ class PlaceBuilderDemo // Main.
 		return itemCrystalEntityDefn;
 	}
 
-	entityDefnBuildDoughnut(entityDimension: number): Entity
+	entityDefnBuildDoughnut(): Entity
 	{
-		var entityDimensionHalf = entityDimension / 2;
+		var entityDimensionHalf = this.entityDimension / 2;
 
 		var itemDefnDoughnutName = "Doughnut";
 		var itemDoughnutVisual = this.itemDefnsByName.get(itemDefnDoughnutName).visual;
@@ -2455,9 +2487,9 @@ class PlaceBuilderDemo // Main.
 		return itemDoughnutEntityDefn;
 	}
 
-	entityDefnBuildFlower(entityDimension: number): Entity
+	entityDefnBuildFlower(): Entity
 	{
-		entityDimension *= .5;
+		var entityDimension = this.entityDimension * .5;
 		var itemDefnName = "Flower";
 		var visual = this.itemDefnsByName.get(itemDefnName).visual;
 		var collider = new Sphere(Coords.create(), entityDimension);
@@ -2476,9 +2508,9 @@ class PlaceBuilderDemo // Main.
 		return entityDefn;
 	}
 
-	entityDefnBuildFruit(entityDimension: number): Entity
+	entityDefnBuildFruit(): Entity
 	{
-		var entityDimensionHalf = entityDimension / 2;
+		var entityDimensionHalf = this.entityDimension / 2;
 
 		var itemDefnFruitName = "Fruit";
 		var itemFruitVisual = this.itemDefnsByName.get(itemDefnFruitName).visual;
@@ -2519,9 +2551,9 @@ class PlaceBuilderDemo // Main.
 		return entityDefnGenerator;
 	}
 
-	entityDefnBuildGrass(entityDimension: number): Entity
+	entityDefnBuildGrass(): Entity
 	{
-		entityDimension /= 2;
+		var entityDimension = this.entityDimension / 2;
 		var itemDefnName = "Grass";
 
 		var itemGrassVisual = this.itemDefnsByName.get(itemDefnName).visual;
@@ -2542,9 +2574,9 @@ class PlaceBuilderDemo // Main.
 		return itemGrassEntityDefn;
 	}
 
-	entityDefnBuildHeart(entityDimension: number): Entity
+	entityDefnBuildHeart(): Entity
 	{
-		var entityDimensionHalf = entityDimension / 2;
+		var entityDimensionHalf = this.entityDimension / 2;
 
 		var itemDefnHeartName = "Heart";
 		var itemHeartVisual = this.itemDefnsByName.get(itemDefnHeartName).visual;
@@ -2564,9 +2596,9 @@ class PlaceBuilderDemo // Main.
 		return itemHeartEntityDefn;
 	}
 
-	entityDefnBuildIron(entityDimension: number): Entity
+	entityDefnBuildIron(): Entity
 	{
-		var entityDimensionHalf = entityDimension / 2;
+		var entityDimensionHalf = this.entityDimension / 2;
 
 		var itemDefnIronName = "Iron";
 		var itemIronVisual = this.itemDefnsByName.get(itemDefnIronName).visual;
@@ -2586,13 +2618,14 @@ class PlaceBuilderDemo // Main.
 		return itemIronEntityDefn;
 	}
 
-	entityDefnBuildIronOre(entityDimension: number): Entity
+	entityDefnBuildIronOre(): Entity
 	{
-		var entityDimensionHalf = entityDimension / 2;
+		var entityDimensionHalf = this.entityDimension / 2;
 
 		var itemDefnOreName = "Iron Ore";
 		var itemOreVisual = this.itemDefnsByName.get(itemDefnOreName).visual;
-		var itemOreCollider = new Sphere(Coords.create(), entityDimensionHalf);
+		var itemOreCollider =
+			new Sphere(Coords.create(), entityDimensionHalf);
 
 		var itemOreEntityDefn = new Entity
 		(
@@ -2608,9 +2641,9 @@ class PlaceBuilderDemo // Main.
 		return itemOreEntityDefn;
 	}
 
-	entityDefnBuildLog(entityDimension: number): Entity
+	entityDefnBuildLog(): Entity
 	{
-		var entityDimensionHalf = entityDimension / 2;
+		var entityDimensionHalf = this.entityDimension / 2;
 
 		var itemDefnLogName = "Log";
 		var itemLogVisual = this.itemDefnsByName.get(itemDefnLogName).visual;
@@ -2630,9 +2663,9 @@ class PlaceBuilderDemo // Main.
 		return itemLogEntityDefn;
 	}
 
-	entityDefnBuildMeat(entityDimension: number): Entity
+	entityDefnBuildMeat(): Entity
 	{
-		var entityDimensionHalf = entityDimension / 2;
+		var entityDimensionHalf = this.entityDimension / 2;
 
 		var itemDefnMeatName = "Meat";
 		var itemMeatDefn = this.itemDefnsByName.get(itemDefnMeatName);
@@ -2654,9 +2687,9 @@ class PlaceBuilderDemo // Main.
 		return itemMeatEntityDefn;
 	}
 
-	entityDefnBuildMedicine(entityDimension: number): Entity
+	entityDefnBuildMedicine(): Entity
 	{
-		var entityDimensionHalf = entityDimension / 2;
+		var entityDimensionHalf = this.entityDimension / 2;
 
 		var itemDefnMedicineName = "Medicine";
 		var itemMedicineVisual = this.itemDefnsByName.get(itemDefnMedicineName).visual;
@@ -2677,9 +2710,9 @@ class PlaceBuilderDemo // Main.
 		return itemMedicineEntityDefn;
 	}
 
-	entityDefnBuildMushroom(entityDimension: number): Entity
+	entityDefnBuildMushroom(): Entity
 	{
-		entityDimension /= 2;
+		var entityDimension = this.entityDimension / 2;
 		var itemDefnName = "Mushroom";
 
 		var itemMushroomVisual = this.itemDefnsByName.get(itemDefnName).visual;
@@ -2700,12 +2733,13 @@ class PlaceBuilderDemo // Main.
 		return itemMushroomEntityDefn;
 	}
 
-	entityDefnBuildPick(entityDimension: number): Entity
+	entityDefnBuildPick(): Entity
 	{
 		var itemDefnName = "Pick";
 		var itemPickVisual = this.itemDefnsByName.get(itemDefnName).visual;
 
-		var itemPickCollider = new Sphere(Coords.create(), entityDimension / 2);
+		var itemPickCollider =
+			new Sphere(Coords.create(), this.entityDimension / 2);
 
 		var itemPickDevice = new Device
 		(
@@ -2748,9 +2782,9 @@ class PlaceBuilderDemo // Main.
 		return itemPickEntityDefn;
 	}
 
-	entityDefnBuildPotion(entityDimension: number): Entity
+	entityDefnBuildPotion(): Entity
 	{
-		var entityDimensionHalf = entityDimension / 2;
+		var entityDimensionHalf = this.entityDimension / 2;
 
 		var itemDefnPotionName = "Potion";
 		var itemPotionColor = Color.byName("Blue");
@@ -2760,32 +2794,39 @@ class PlaceBuilderDemo // Main.
 			(
 				new Path
 				([
-					new Coords(1, 1, 0),
-					new Coords(-1, 1, 0),
-					new Coords(-.2, 0, 0),
-					new Coords(-.2, -.5, 0),
-					new Coords(.2, -.5, 0),
-					new Coords(.2, 0, 0)
+					Coords.fromXY(1, 1),
+					Coords.fromXY(-1, 1),
+					Coords.fromXY(-.2, 0),
+					Coords.fromXY(-.2, -.5),
+					Coords.fromXY(.2, -.5),
+					Coords.fromXY(.2, 0)
 				]).transform
 				(
-					Transform_Scale.fromScalar(entityDimension)
+					Transform_Scale.fromScalar(this.entityDimension)
 				),
 				itemPotionColor,
 				Color.byName("White")
 			)
 		]);
+
 		if (this.visualsHaveText)
 		{
 			itemPotionVisual.children.push
 			(
 				new VisualOffset
 				(
-					VisualText.fromTextAndColor(itemDefnPotionName, itemPotionColor),
-					new Coords(0, 0 - entityDimension, 0)
+					VisualText.fromTextHeightAndColor
+					(
+						itemDefnPotionName,
+						this.entityDimension,
+						itemPotionColor
+					),
+					Coords.fromXY(0, 0 - this.entityDimension)
 				)
 			);
 		}
-		var itemPotionCollider = new Sphere(Coords.create(), entityDimensionHalf);
+		var itemPotionCollider =
+			new Sphere(Coords.create(), entityDimensionHalf);
 
 		var itemPotionEntityDefn = new Entity
 		(
@@ -2801,12 +2842,13 @@ class PlaceBuilderDemo // Main.
 		return itemPotionEntityDefn;
 	}
 
-	entityDefnBuildShovel(entityDimension: number): Entity
+	entityDefnBuildShovel(): Entity
 	{
 		var itemDefnName = "Shovel";
 		var itemShovelVisual = this.itemDefnsByName.get(itemDefnName).visual;
 
-		var itemShovelCollider = new Sphere(Coords.create(), entityDimension / 2);
+		var itemShovelCollider =
+			new Sphere(Coords.create(), this.entityDimension / 2);
 
 		var itemShovelDevice = new Device
 		(
@@ -2862,7 +2904,7 @@ class PlaceBuilderDemo // Main.
 		return itemShovelEntityDefn;
 	}
 
-	entityDefnBuildSword(entityDimension: number, damageTypeName: string): Entity
+	entityDefnBuildSword(damageTypeName: string): Entity
 	{
 		var itemDefnName = "Sword";
 
@@ -2879,7 +2921,8 @@ class PlaceBuilderDemo // Main.
 			itemDefnName += damageTypeName;
 		}
 
-		var itemSwordCollider = new Sphere(Coords.create(), entityDimension / 2);
+		var itemSwordCollider =
+			new Sphere(Coords.create(), this.entityDimension / 2);
 
 		var itemSwordDeviceUse =
 			(uwpe: UniverseWorldPlaceEntities) => // use
@@ -2907,6 +2950,7 @@ class PlaceBuilderDemo // Main.
 					universe.entityBuilder.messageFloater
 					(
 						message,
+						10, // fontHeightInPixels
 						userPos.clone(),
 						Color.byName("Red")
 					)
@@ -3040,7 +3084,10 @@ class PlaceBuilderDemo // Main.
 
 		itemSwordVisual.transform
 		(
-			new Transform_Translate(new Coords(0, -1.1 * entityDimension, 0))
+			new Transform_Translate
+			(
+				Coords.fromXY(0, -1.1 * this.entityDimension)
+			)
 		);
 
 		var itemSwordEntityDefn = new Entity
@@ -3059,13 +3106,13 @@ class PlaceBuilderDemo // Main.
 		return itemSwordEntityDefn;
 	}
 
-	entityDefnBuildToolset(entityDimension: number)
+	entityDefnBuildToolset(): Entity
 	{
 		var itemDefnName = "Toolset";
 
 		var itemToolsetVisual = this.itemDefnsByName.get(itemDefnName).visual;
 
-		var itemToolsetCollider = new Sphere(Coords.create(), entityDimension / 2);
+		var itemToolsetCollider = new Sphere(Coords.create(), this.entityDimension / 2);
 
 		var itemToolsetEntityDefn = new Entity
 		(
@@ -3081,13 +3128,13 @@ class PlaceBuilderDemo // Main.
 		return itemToolsetEntityDefn;
 	}
 
-	entityDefnBuildTorch(entityDimension: number)
+	entityDefnBuildTorch(): Entity
 	{
 		var itemDefnName = "Torch";
 
 		var itemTorchVisual = this.itemDefnsByName.get(itemDefnName).visual;
 
-		var itemTorchCollider = new Sphere(Coords.create(), entityDimension / 2);
+		var itemTorchCollider = new Sphere(Coords.create(), this.entityDimension / 2);
 
 		var itemTorchEntityDefn = new Entity
 		(
@@ -3104,13 +3151,14 @@ class PlaceBuilderDemo // Main.
 		return itemTorchEntityDefn;
 	}
 
-	entityDefnBuildWeight(entityDimension: number)
+	entityDefnBuildWeight(): Entity
 	{
 		var itemDefnName = "Weight";
 
 		var itemWeightVisual = this.itemDefnsByName.get(itemDefnName).visual;
 
-		var itemWeightCollider = new Sphere(Coords.create(), entityDimension / 2);
+		var itemWeightCollider =
+			new Sphere(Coords.create(), this.entityDimension / 2);
 
 		var itemWeightEntityDefn = new Entity
 		(
@@ -3126,78 +3174,103 @@ class PlaceBuilderDemo // Main.
 		return itemWeightEntityDefn;
 	}
 
-	entityDefnsBuild(entityDimension: number): Entity[]
+	entityDefnsBuild(): Entity[]
 	{
-		var entityDefnFlower = this.entityDefnBuildFlower(entityDimension);
-		var entityDefnGrass = this.entityDefnBuildGrass(entityDimension);
-		var entityDefnMushroom = this.entityDefnBuildMushroom(entityDimension);
+		var entityDefnFlower = this.entityDefnBuildFlower();
+		var entityDefnGrass = this.entityDefnBuildGrass();
+		var entityDefnMushroom = this.entityDefnBuildMushroom();
 		var eb = this.emplacementsBuilder;
 		var mb = this.moversBuilder;
 
 		var entityDefns =
 		[
-			eb.entityDefnBuildAnvil(entityDimension),
-			eb.entityDefnBuildBoulder(entityDimension),
-			eb.entityDefnBuildCampfire(entityDimension),
-			eb.entityDefnBuildContainer(entityDimension),
-			eb.entityDefnBuildExit(entityDimension),
-			eb.entityDefnBuildHole(entityDimension),
-			eb.entityDefnBuildPortal(entityDimension),
-			eb.entityDefnBuildObstacleBar(entityDimension),
-			eb.entityDefnBuildObstacleMine(entityDimension),
-			eb.entityDefnBuildObstacleRing(entityDimension),
-			eb.entityDefnBuildPillow(entityDimension),
-			eb.entityDefnBuildTree(entityDimension),
-			eb.entityDefnBuildTrafficCone(entityDimension),
+			eb.entityDefnBuildAnvil(),
+			eb.entityDefnBuildBoulder(),
+			eb.entityDefnBuildCampfire(),
+			eb.entityDefnBuildContainer(),
+			eb.entityDefnBuildExit(),
+			eb.entityDefnBuildHole(),
+			eb.entityDefnBuildPortal(),
+			eb.entityDefnBuildObstacleBar(),
+			eb.entityDefnBuildObstacleMine(),
+			eb.entityDefnBuildObstacleRing(),
+			eb.entityDefnBuildPillow(),
+			eb.entityDefnBuildTree(),
+			eb.entityDefnBuildTrafficCone(),
 
-			mb.entityDefnBuildEnemyGeneratorChaser(entityDimension, null),
-			mb.entityDefnBuildEnemyGeneratorChaser(entityDimension, "Cold"),
-			mb.entityDefnBuildEnemyGeneratorChaser(entityDimension, "Heat"),
-			mb.entityDefnBuildEnemyGeneratorRunner(entityDimension, null),
-			mb.entityDefnBuildEnemyGeneratorShooter(entityDimension, null),
-			mb.entityDefnBuildEnemyGeneratorTank(entityDimension, null),
+			mb.entityDefnBuildEnemyGeneratorChaser(null),
+			mb.entityDefnBuildEnemyGeneratorChaser("Cold"),
+			mb.entityDefnBuildEnemyGeneratorChaser("Heat"),
+			mb.entityDefnBuildEnemyGeneratorRunner(null),
+			mb.entityDefnBuildEnemyGeneratorShooter(null),
+			mb.entityDefnBuildEnemyGeneratorTank(null),
 
-			mb.entityDefnBuildCarnivore(entityDimension),
-			mb.entityDefnBuildFriendly(entityDimension),
-			mb.entityDefnBuildGrazer(entityDimension),
-			mb.entityDefnBuildPlayer(entityDimension, this.cameraViewSize),
+			mb.entityDefnBuildCarnivore(),
+			mb.entityDefnBuildFriendly(),
+			mb.entityDefnBuildGrazer(),
+			mb.entityDefnBuildPlayer(this.cameraViewSize),
 
-			this.entityDefnBuildAccessory(entityDimension),
-			this.entityDefnBuildArmor(entityDimension),
-			this.entityDefnBuildArrow(entityDimension),
-			this.entityDefnBuildBomb(entityDimension),
-			this.entityDefnBuildBook(entityDimension),
-			this.entityDefnBuildBow(entityDimension),
-			this.entityDefnBuildBread(entityDimension),
-			this.entityDefnBuildCar(entityDimension),
-			this.entityDefnBuildCoin(entityDimension),
-			this.entityDefnBuildCrystal(entityDimension),
-			this.entityDefnBuildDoughnut(entityDimension),
+			this.entityDefnBuildAccessory(),
+			this.entityDefnBuildArmor(),
+			this.entityDefnBuildArrow(),
+			this.entityDefnBuildBomb(),
+			this.entityDefnBuildBook(),
+			this.entityDefnBuildBow(),
+			this.entityDefnBuildBread(),
+			this.entityDefnBuildCar(),
+			this.entityDefnBuildCoin(),
+			this.entityDefnBuildCrystal(),
+			this.entityDefnBuildDoughnut(),
 			entityDefnFlower,
-			this.entityDefnBuildFruit(entityDimension),
+			this.entityDefnBuildFruit(),
 			this.entityDefnBuildGenerator(entityDefnFlower),
-			this.entityDefnBuildHeart(entityDimension),
-			this.entityDefnBuildIron(entityDimension),
-			this.entityDefnBuildIronOre(entityDimension),
-			this.entityDefnBuildLog(entityDimension),
-			this.entityDefnBuildMedicine(entityDimension),
-			this.entityDefnBuildMeat(entityDimension),
+			this.entityDefnBuildHeart(),
+			this.entityDefnBuildIron(),
+			this.entityDefnBuildIronOre(),
+			this.entityDefnBuildLog(),
+			this.entityDefnBuildMedicine(),
+			this.entityDefnBuildMeat(),
 			entityDefnMushroom,
 			this.entityDefnBuildGenerator(entityDefnMushroom),
 			entityDefnGrass,
 			this.entityDefnBuildGenerator(entityDefnGrass),
-			this.entityDefnBuildPick(entityDimension),
-			this.entityDefnBuildPotion(entityDimension),
-			this.entityDefnBuildShovel(entityDimension),
-			this.entityDefnBuildStore(entityDimension),
-			this.entityDefnBuildSword(entityDimension, null),
-			this.entityDefnBuildSword(entityDimension, "Cold"),
-			this.entityDefnBuildSword(entityDimension, "Heat"),
-			this.entityDefnBuildToolset(entityDimension),
-			this.entityDefnBuildTorch(entityDimension),
-			this.entityDefnBuildWeight(entityDimension),
+			this.entityDefnBuildPick(),
+			this.entityDefnBuildPotion(),
+			this.entityDefnBuildShovel(),
+			this.entityDefnBuildStore(),
+			this.entityDefnBuildSword(null),
+			this.entityDefnBuildSword("Cold"),
+			this.entityDefnBuildSword("Heat"),
+			this.entityDefnBuildToolset(),
+			this.entityDefnBuildTorch(),
+			this.entityDefnBuildWeight(),
 		];
 		return entityDefns;
+	}
+
+	// Helpers.
+
+	textWithColorAddToVisual
+	(
+		text: string, color: Color, visual: VisualGroup
+	): void
+	{
+		if (this.visualsHaveText)
+		{
+			visual.children.push
+			(
+				new VisualOffset
+				(
+					VisualText.fromTextHeightAndColor
+					(
+						text,
+						this.entityDimension,
+						color
+					),
+					Coords.fromXY(0, 0 - this.entityDimension)
+				)
+			);
+		}
 	}
 }
 
@@ -3257,5 +3330,4 @@ class MapOfCellsCellSourceTerrain
 	{
 		return this;
 	}
-
 }

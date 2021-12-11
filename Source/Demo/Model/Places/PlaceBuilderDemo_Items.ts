@@ -6,10 +6,10 @@ class PlaceBuilderDemo_Items
 
 	entityDimensionHalf: number;
 
-	constructor(parent: PlaceBuilderDemo, entityDimension: number)
+	constructor(parent: PlaceBuilderDemo)
 	{
 		this.parent = parent;
-		this.entityDimension = entityDimension;
+		this.entityDimension = this.parent.entityDimension;
 
 		this.entityDimensionHalf = this.entityDimension / 2;
 	}
@@ -85,20 +85,10 @@ class PlaceBuilderDemo_Items
 			VisualPolygon.fromPathAndColorFill(path, itemArmorColor)
 		]);
 
-		if (this.parent.visualsHaveText)
-		{
-			itemArmorVisual.children.push
-			(
-				new VisualOffset
-				(
-					VisualText.fromTextAndColor
-					(
-						itemArmorName, itemArmorColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension)
-				)
-			);
-		}
+		this.parent.textWithColorAddToVisual
+		(
+			itemArmorName, itemArmorColor, itemArmorVisual
+		);
 
 		var itemArmor = new ItemDefn
 		(
@@ -135,9 +125,9 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
-					VisualText.fromTextAndColor
+					VisualText.fromTextHeightAndColor
 					(
-						itemArmorName, itemArmorColor
+						itemArmorName, this.entityDimension, itemArmorColor
 					),
 					Coords.fromXY(0, 0 - this.entityDimension)
 				)
@@ -207,9 +197,9 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
-					VisualText.fromTextAndColor
+					VisualText.fromTextHeightAndColor
 					(
-						itemArrowName, itemArrowColor
+						itemArrowName,  this.entityDimension, itemArrowColor
 					),
 					Coords.fromXY(0, 0 - this.entityDimension * 1.5)
 				)
@@ -262,7 +252,10 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
-					VisualText.fromTextAndColor(itemBombName, itemBombColor),
+					VisualText.fromTextHeightAndColor
+					(
+						itemBombName,  this.entityDimension, itemBombColor
+					),
 					Coords.fromXY(0, 0 - this.entityDimension * 2)
 				)
 			);
@@ -305,9 +298,9 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
-					VisualText.fromTextAndColor
+					VisualText.fromTextHeightAndColor
 					(
-						itemBookName, itemBookColor
+						itemBookName, this.entityDimension, itemBookColor
 					),
 					Coords.fromXY(0, 0 - this.entityDimension * 1.5)
 				)
@@ -424,9 +417,9 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
-					VisualText.fromTextAndColor
+					VisualText.fromTextHeightAndColor
 					(
-						itemBowName, itemBowColor
+						itemBowName,  this.entityDimension, itemBowColor
 					),
 					Coords.fromXY(0, 0 - this.entityDimension * 2)
 				)
@@ -490,7 +483,10 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
-					VisualText.fromTextAndColor(itemBreadName, itemBreadColor),
+					VisualText.fromTextHeightAndColor
+					(
+						itemBreadName,  this.entityDimension, itemBreadColor
+					),
 					Coords.fromXY(0, 0 - this.entityDimension * 1.5)
 				)
 			);
@@ -539,7 +535,10 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
-					VisualText.fromTextAndColor(itemCoinName, itemCoinColor),
+					VisualText.fromTextHeightAndColor
+					(
+						itemCoinName, this.entityDimension, itemCoinColor
+					),
 					Coords.fromXY(0, 0 - this.entityDimension)
 				)
 			);
@@ -602,7 +601,10 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
-					VisualText.fromTextAndColor(itemCrystalName, itemCrystalColor),
+					VisualText.fromTextHeightAndColor
+					(
+						itemCrystalName, this.entityDimension, itemCrystalColor
+					),
 					Coords.fromXY(0, 0 - this.entityDimension)
 				)
 			);
@@ -650,7 +652,10 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
-					VisualText.fromTextAndColor(itemDoughnutName, itemDoughnutColor),
+					VisualText.fromTextHeightAndColor
+					(
+						itemDoughnutName, this.entityDimension, itemDoughnutColor
+					),
 					Coords.fromXY(0, 0 - this.entityDimension * 2)
 				)
 			);
@@ -725,7 +730,10 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
-					VisualText.fromTextAndColor(itemFlowerName, colorFlower),
+					VisualText.fromTextHeightAndColor
+					(
+						itemFlowerName, this.entityDimension, colorFlower
+					),
 					Coords.fromXY(0, 0 - this.entityDimensionHalf * 2)
 				)
 			);
@@ -765,7 +773,10 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
-					VisualText.fromTextAndColor(itemFruitName, itemFruitColor),
+					VisualText.fromTextHeightAndColor
+					(
+						itemFruitName, this.entityDimension, itemFruitColor
+					),
 					Coords.fromXY(0, 0 - this.entityDimension)
 				)
 			);
@@ -821,7 +832,10 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
-					VisualText.fromTextAndColor(itemGrassName, Color.byName("GreenDark")),
+					VisualText.fromTextHeightAndColor
+					(
+						itemGrassName, this.entityDimension, Color.byName("GreenDark")
+					),
 					Coords.fromXY(0, 0 - this.entityDimensionHalf * 3)
 				)
 			);
@@ -891,7 +905,10 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
-					VisualText.fromTextAndColor(itemHeartName, itemHeartColor),
+					VisualText.fromTextHeightAndColor
+					(
+						itemHeartName, this.entityDimension, itemHeartColor
+					),
 					Coords.fromXY(0, 0 - this.entityDimension * 1.5)
 				)
 			);
@@ -938,7 +955,12 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
-					VisualText.fromTextAndColor(itemIronName, itemIronColor),
+					VisualText.fromTextHeightAndColor
+					(
+						itemIronName,
+						this.entityDimension,
+						itemIronColor
+					),
 					Coords.fromXY(0, 0 - this.entityDimension)
 				)
 			);
@@ -975,7 +997,12 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
-					VisualText.fromTextAndColor(itemIronOreName, itemIronOreColor),
+					VisualText.fromTextHeightAndColor
+					(
+						itemIronOreName,
+						this.entityDimension, 
+						itemIronOreColor
+					),
 					Coords.fromXY(0, 0 - this.entityDimension * 1.5)
 				)
 			);
@@ -1025,7 +1052,10 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
-					VisualText.fromTextAndColor(itemKeyName, itemKeyColor),
+					VisualText.fromTextHeightAndColor
+					(
+						itemKeyName, this.entityDimension, itemKeyColor
+					),
 					Coords.fromXY(0, 0 - this.entityDimension * 2)
 				)
 			);
@@ -1074,7 +1104,10 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
-					VisualText.fromTextAndColor(itemLogName, itemLogColor),
+					VisualText.fromTextHeightAndColor
+					(
+						itemLogName, this.entityDimension, itemLogColor
+					),
 					Coords.fromXY(0, 0 - this.entityDimension)
 				)
 			);
@@ -1106,7 +1139,9 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualCircle
 				(
-					this.entityDimensionHalf * .2, Color.byName("Pink"), Color.byName("White"), null
+					this.entityDimensionHalf * .2,
+					Color.byName("Pink"),
+					Color.byName("White"), null // ?
 				),
 				Coords.fromXY(this.entityDimensionHalf * .2, 0)
 			)
@@ -1118,7 +1153,10 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
-					VisualText.fromTextAndColor(itemMeatName, itemMeatColor),
+					VisualText.fromTextHeightAndColor
+					(
+						itemMeatName, this.entityDimension, itemMeatColor
+					),
 					Coords.fromXY(0, 0 - this.entityDimension * 1.5)
 				)
 			);
@@ -1180,17 +1218,10 @@ class PlaceBuilderDemo_Items
 			)
 		]);
 
-		if (this.parent.visualsHaveText)
-		{
-			itemMedicineVisual.children.push
-			(
-				new VisualOffset
-				(
-					VisualText.fromTextAndColor(itemMedicineName, itemMedicineColor),
-					Coords.fromXY(0, 0 - this.entityDimension)
-				)
-			);
-		}
+		this.parent.textWithColorAddToVisual
+		(
+			itemMedicineName, itemMedicineColor, itemMedicineVisual
+		);
 
 		var itemMedicine = new ItemDefn
 		(
@@ -1245,17 +1276,10 @@ class PlaceBuilderDemo_Items
 			)
 		]);
 
-		if (this.parent.visualsHaveText)
-		{
-			itemMushroomVisual.children.push
-			(
-				new VisualOffset
-				(
-					VisualText.fromTextAndColor(itemMushroomName, colorCap),
-					Coords.fromXY(0, 0 - this.entityDimensionHalf * 3)
-				)
-			);
-		}
+		this.parent.textWithColorAddToVisual
+		(
+			itemMushroomName, colorCap, itemMushroomVisual
+		);
 
 		var itemMushroom = ItemDefn.fromNameMassValueAndVisual
 		(
@@ -1302,7 +1326,10 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
-					VisualText.fromTextAndColor(itemPickName, itemPickColor),
+					VisualText.fromTextHeightAndColor
+					(
+						itemPickName,  this.entityDimension, itemPickColor
+					),
 					Coords.fromXY(0, 0 - this.entityDimension * 2)
 				)
 			);
@@ -1360,7 +1387,10 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
-					VisualText.fromTextAndColor(itemPotionName, itemPotionColor),
+					VisualText.fromTextHeightAndColor
+					(
+						itemPotionName, this.entityDimension, itemPotionColor
+					),
 					Coords.fromXY(0, 0 - this.entityDimension)
 				)
 			);
@@ -1420,20 +1450,10 @@ class PlaceBuilderDemo_Items
 			)
 		]);
 
-		if (this.parent.visualsHaveText)
-		{
-			itemShovelVisual.children.push
-			(
-				new VisualOffset
-				(
-					VisualText.fromTextAndColor
-					(
-						itemShovelName, itemShovelColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension * 2)
-				)
-			);
-		}
+		this.parent.textWithColorAddToVisual
+		(
+			itemShovelName, itemShovelColor, itemShovelVisual
+		);
 
 		var itemShovel = new ItemDefn
 		(
@@ -1489,7 +1509,10 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
-					VisualText.fromTextAndColor(itemSpeedBootsName, itemAccessoryColor),
+					VisualText.fromTextHeightAndColor
+					(
+						itemSpeedBootsName,  this.entityDimension, itemAccessoryColor
+					),
 					Coords.fromXY(0, 0 - this.entityDimension * 2)
 				)
 			);
@@ -1580,7 +1603,10 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
-					VisualText.fromTextAndColor("Sword", bladeColor),
+					VisualText.fromTextHeightAndColor
+					(
+						"Sword",  this.entityDimension, bladeColor
+					),
 					Coords.fromXY(0, 0 - this.entityDimension * 2)
 				)
 			);
@@ -1632,22 +1658,19 @@ class PlaceBuilderDemo_Items
 			),
 			VisualRectangle.fromSizeAndColorFill
 			(
-				Coords.fromXY(this.entityDimension, this.entityDimension / 2),
+				Coords.fromXY
+				(
+					this.entityDimension,
+					this.entityDimension / 2
+				),
 				itemToolsetColor
 			)
 		]);
 
-		if (this.parent.visualsHaveText)
-		{
-			itemToolsetVisual.children.push
-			(
-				new VisualOffset
-				(
-					VisualText.fromTextAndColor(itemToolsetName, itemToolsetColor),
-					Coords.fromXY(0, 0 - this.entityDimension)
-				)
-			);
-		}
+		this.parent.textWithColorAddToVisual
+		(
+			itemToolsetName, itemToolsetColor, itemToolsetVisual
+		);
 
 		var itemToolset = ItemDefn.fromNameMassValueAndVisual
 		(
@@ -1702,17 +1725,10 @@ class PlaceBuilderDemo_Items
 			)
 		]);
 
-		if (this.parent.visualsHaveText)
-		{
-			itemTorchVisual.children.push
-			(
-				new VisualOffset
-				(
-					VisualText.fromTextAndColor(itemTorchName, itemTorchColor),
-					Coords.fromXY(0, 0 - this.entityDimension * 1.5)
-				)
-			);
-		}
+		this.parent.textWithColorAddToVisual
+		(
+			itemTorchName, itemTorchColor, itemTorchVisual
+		);
 
 		var itemTorch = new ItemDefn
 		(
@@ -1780,17 +1796,10 @@ class PlaceBuilderDemo_Items
 			)
 		]);
 
-		if (this.parent.visualsHaveText)
-		{
-			itemWeightVisual.children.push
-			(
-				new VisualOffset
-				(
-					VisualText.fromTextAndColor(itemWeightName, itemWeightColor),
-					Coords.fromXY(0, 0 - this.entityDimension * 2)
-				)
-			);
-		}
+		this.parent.textWithColorAddToVisual
+		(
+			itemWeightName, itemWeightColor, itemWeightVisual
+		);
 
 		var itemWeight = ItemDefn.fromNameMassValueAndVisual
 		(

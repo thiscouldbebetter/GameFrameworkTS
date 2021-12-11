@@ -15,14 +15,12 @@ export class VisualText implements Visual<VisualText>
 	constructor
 	(
 		text: DataBinding<any, string>,
-		shouldTextContextBeReset: boolean,
 		heightInPixels: number,
 		colorFill: Color,
 		colorBorder: Color
 	)
 	{
 		this._text = text;
-		this.shouldTextContextBeReset = shouldTextContextBeReset || false;
 		this.heightInPixels = heightInPixels || 10;
 		this.colorFill = colorFill;
 		this.colorBorder = colorBorder;
@@ -30,27 +28,28 @@ export class VisualText implements Visual<VisualText>
 		this._universeWorldPlaceEntities = UniverseWorldPlaceEntities.create();
 	}
 
-	static fromTextAndColor(text: string, colorFill: Color): VisualText
+	static fromTextHeightAndColor(
+		text: string, heightInPixels: number, colorFill: Color
+	): VisualText
 	{
 		return new VisualText
 		(
 			DataBinding.fromContext(text),
-			false, // shouldTextContextBeReset
 			null, // heightInPixels
 			colorFill,
 			null // colorBorder
 		);
 	}
 
-	static fromTextAndColors
+	static fromTextHeightAndColors
 	(
-		text: string, colorFill: Color, colorBorder: Color
+		text: string, heightInPixels: number,
+		colorFill: Color, colorBorder: Color
 	): VisualText
 	{
 		return new VisualText
 		(
 			DataBinding.fromContext(text),
-			false, // shouldTextContextBeReset
 			null, // heightInPixels
 			colorFill,
 			colorBorder
@@ -76,15 +75,6 @@ export class VisualText implements Visual<VisualText>
 
 	text(uwpe: UniverseWorldPlaceEntities, display: Display)
 	{
-		if (this.shouldTextContextBeReset)
-		{
-			this._universeWorldPlaceEntities.overwriteWith
-			(
-				uwpe
-			);
-			this._text.contextSet(this._universeWorldPlaceEntities);
-		}
-
 		var returnValue = this._text.get();
 
 		return returnValue;

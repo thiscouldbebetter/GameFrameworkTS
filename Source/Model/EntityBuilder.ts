@@ -4,11 +4,19 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class EntityBuilder
 {
-	messageFloater(text: string, pos: Coords, color: Color): Entity
+	messageFloater
+	(
+		text: string,
+		fontHeightInPixels: number,
+		pos: Coords, color: Color
+	): Entity
 	{
 		var ticksToLive = 32;
 		var riseSpeed = -1;
-		var visual = VisualText.fromTextAndColor(text, color);
+		var visual = VisualText.fromTextHeightAndColor
+		(
+			text, fontHeightInPixels, color
+		);
 		pos = pos.clone();
 		pos.z--;
 

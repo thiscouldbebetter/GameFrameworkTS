@@ -137,6 +137,7 @@ class PlaceBuilderDemo_Actions
 							universe.entityBuilder.messageFloater
 							(
 								message,
+								this.parent.entityDimension, // fontHeightInPixels
 								entityActor.locatable().loc.pos,
 								Color.byName("Red")
 							)

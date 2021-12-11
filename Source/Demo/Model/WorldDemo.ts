@@ -8,7 +8,7 @@ class WorldDemo extends World
 
 	// static methods
 
-	static create(universe: Universe)
+	static create(universe: Universe): WorldDemo
 	{
 		var now = DateTime.now();
 		var nowAsString = now.toStringMMDD_HHMM_SS();
@@ -135,9 +135,8 @@ class WorldDemo extends World
 		placeBuilder.entityBuildKeys
 		(
 			places,
-			10, //entityDimension,
 			5, //numberOfKeysToUnlockGoal,
-			new Coords(20, 20, 0) // marginSize
+			Coords.fromXY(20, 20) // marginSize
 		);
 
 		var placeBattlefield0 = places[0];
