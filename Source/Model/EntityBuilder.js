@@ -4,10 +4,10 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class EntityBuilder {
-            messageFloater(text, pos, color) {
+            messageFloater(text, fontHeightInPixels, pos, color) {
                 var ticksToLive = 32;
                 var riseSpeed = -1;
-                var visual = GameFramework.VisualText.fromTextAndColor(text, color);
+                var visual = GameFramework.VisualText.fromTextHeightAndColor(text, fontHeightInPixels, color);
                 pos = pos.clone();
                 pos.z--;
                 var messageEntity = new GameFramework.Entity("Message" + text, // name

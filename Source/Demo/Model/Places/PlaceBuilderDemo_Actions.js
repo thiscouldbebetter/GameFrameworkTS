@@ -77,7 +77,8 @@ class PlaceBuilderDemo_Actions {
                 }
                 else {
                     var message = "Can't pick up!";
-                    place.entitySpawn2(universe, world, universe.entityBuilder.messageFloater(message, entityActor.locatable().loc.pos, Color.byName("Red")));
+                    place.entitySpawn2(universe, world, universe.entityBuilder.messageFloater(message, this.parent.entityDimension, // fontHeightInPixels
+                    entityActor.locatable().loc.pos, Color.byName("Red")));
                 }
             }),
             new Action("Run", (uwpe) => // perform

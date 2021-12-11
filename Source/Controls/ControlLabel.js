@@ -11,16 +11,11 @@ var ThisCouldBeBetter;
                 // Helper variables.
                 this._drawPos = GameFramework.Coords.create();
             }
-            static fromPosAndText(pos, text) {
+            static fromPosHeightAndText(pos, fontHeightInPixels, text) {
                 return new ControlLabel(null, //name
                 pos, null, // size
                 false, // isTextCentered
-                text, 10 // fontHeightInPixels
-                );
-            }
-            static from5(name, pos, size, isTextCentered, text) {
-                return new ControlLabel(name, pos, size, isTextCentered, text, null // fontHeightInPixels
-                );
+                text, fontHeightInPixels);
             }
             actionHandle(actionName) {
                 return false; // wasActionHandled

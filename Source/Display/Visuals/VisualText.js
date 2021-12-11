@@ -4,23 +4,20 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class VisualText {
-            constructor(text, shouldTextContextBeReset, heightInPixels, colorFill, colorBorder) {
+            constructor(text, heightInPixels, colorFill, colorBorder) {
                 this._text = text;
-                this.shouldTextContextBeReset = shouldTextContextBeReset || false;
                 this.heightInPixels = heightInPixels || 10;
                 this.colorFill = colorFill;
                 this.colorBorder = colorBorder;
                 this._universeWorldPlaceEntities = GameFramework.UniverseWorldPlaceEntities.create();
             }
-            static fromTextAndColor(text, colorFill) {
-                return new VisualText(GameFramework.DataBinding.fromContext(text), false, // shouldTextContextBeReset
-                null, // heightInPixels
+            static fromTextHeightAndColor(text, heightInPixels, colorFill) {
+                return new VisualText(GameFramework.DataBinding.fromContext(text), null, // heightInPixels
                 colorFill, null // colorBorder
                 );
             }
-            static fromTextAndColors(text, colorFill, colorBorder) {
-                return new VisualText(GameFramework.DataBinding.fromContext(text), false, // shouldTextContextBeReset
-                null, // heightInPixels
+            static fromTextHeightAndColors(text, heightInPixels, colorFill, colorBorder) {
+                return new VisualText(GameFramework.DataBinding.fromContext(text), null, // heightInPixels
                 colorFill, colorBorder);
             }
             draw(uwpe, display) {
@@ -31,10 +28,6 @@ var ThisCouldBeBetter;
                 );
             }
             text(uwpe, display) {
-                if (this.shouldTextContextBeReset) {
-                    this._universeWorldPlaceEntities.overwriteWith(uwpe);
-                    this._text.contextSet(this._universeWorldPlaceEntities);
-                }
                 var returnValue = this._text.get();
                 return returnValue;
             }

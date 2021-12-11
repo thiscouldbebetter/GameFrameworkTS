@@ -69,6 +69,44 @@ var ThisCouldBeBetter;
                 var canPickUp = (massAfterPickup <= this.massMax);
                 return canPickUp;
             }
+            itemDrop(uwpe) {
+                var world = uwpe.world;
+                var place = uwpe.place;
+                var entityItemHolder = uwpe.entity;
+                var itemEntityToKeep = uwpe.entity2;
+                if (itemEntityToKeep != null) {
+                    var itemToKeep = itemEntityToKeep.item();
+                    var itemToDrop = itemToKeep.clone();
+                    itemToDrop.quantity = 1;
+                    var itemToDropDefn = itemToDrop.defn(world);
+                    var itemEntityToDrop = itemToDrop.toEntity(uwpe);
+                    var itemLocatable = itemEntityToDrop.locatable();
+                    if (itemLocatable == null) {
+                        itemLocatable = GameFramework.Locatable.create();
+                        itemEntityToDrop.propertyAdd(itemLocatable);
+                        itemEntityToDrop.propertyAdd(GameFramework.Drawable.fromVisual(itemToDropDefn.visual));
+                        // todo - Other properties: Collidable, etc.
+                    }
+                    var posToDropAt = itemLocatable.loc.pos;
+                    var holderPos = entityItemHolder.locatable().loc.pos;
+                    posToDropAt.overwriteWith(holderPos);
+                    var collidable = itemEntityToDrop.collidable();
+                    if (collidable != null) {
+                        collidable.ticksUntilCanCollide =
+                            collidable.ticksToWaitBetweenCollisions;
+                    }
+                    place.entitySpawn(uwpe.clone().entitiesSwap());
+                    this.itemSubtract(itemToDrop);
+                    if (itemToKeep.quantity == 0) {
+                        this.itemSelected = null;
+                    }
+                    this.statusMessage = itemToDropDefn.appearance + " dropped.";
+                    var equipmentUser = entityItemHolder.equipmentUser();
+                    if (equipmentUser != null) {
+                        equipmentUser.unequipItemsNoLongerHeld(uwpe);
+                    }
+                }
+            }
             itemEntities(uwpe) {
                 return this.items.map(x => x.toEntity(uwpe));
             }
@@ -233,42 +271,8 @@ var ThisCouldBeBetter;
                     universe.venueNext = venueNext;
                 };
                 var drop = () => {
-                    if (itemHolder.itemSelected == null) {
-                        return;
-                    }
-                    var itemToKeep = itemHolder.itemSelected;
-                    if (itemToKeep != null) {
-                        var world = universe.world;
-                        var place = world.placeCurrent;
-                        var itemToDrop = itemToKeep.clone();
-                        itemToDrop.quantity = 1;
-                        var itemToDropDefn = itemToDrop.defn(world);
-                        var itemEntityToDrop = itemToDrop.toEntity(uwpe);
-                        var itemLocatable = itemEntityToDrop.locatable();
-                        if (itemLocatable == null) {
-                            itemLocatable = GameFramework.Locatable.create();
-                            itemEntityToDrop.propertyAdd(itemLocatable);
-                            itemEntityToDrop.propertyAdd(GameFramework.Drawable.fromVisual(itemToDropDefn.visual));
-                            // todo - Other properties: Collidable, etc.
-                        }
-                        var posToDropAt = itemLocatable.loc.pos;
-                        var holderPos = entityItemHolder.locatable().loc.pos;
-                        posToDropAt.overwriteWith(holderPos);
-                        var collidable = itemEntityToDrop.collidable();
-                        if (collidable != null) {
-                            collidable.ticksUntilCanCollide =
-                                collidable.ticksToWaitBetweenCollisions;
-                        }
-                        place.entitySpawn(new GameFramework.UniverseWorldPlaceEntities(universe, world, place, itemEntityToDrop, null));
-                        itemHolder.itemSubtract(itemToDrop);
-                        if (itemToKeep.quantity == 0) {
-                            itemHolder.itemSelected = null;
-                        }
-                        itemHolder.statusMessage = itemToDropDefn.appearance + " dropped.";
-                        var equipmentUser = entityItemHolder.equipmentUser();
-                        if (equipmentUser != null) {
-                            equipmentUser.unequipItemsNoLongerHeld(uwpe);
-                        }
+                    if (itemHolder.itemSelected != null) {
+                        itemHolder.itemDrop(uwpe.entity2Set(itemHolder.itemSelected.toEntity(uwpe)));
                     }
                 };
                 var use = () => {

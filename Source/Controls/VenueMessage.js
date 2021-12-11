@@ -17,8 +17,11 @@ var ThisCouldBeBetter;
             static fromMessageAndAcknowledge(messageToShow, acknowledge) {
                 return new VenueMessage(messageToShow, acknowledge, null, null, null);
             }
-            static fromText(message) {
-                return VenueMessage.fromMessage(GameFramework.DataBinding.fromGet((c) => message));
+            static fromText(text) {
+                return VenueMessage.fromMessage(GameFramework.DataBinding.fromGet((c) => text));
+            }
+            static fromTextAndAcknowledge(text, acknowledge) {
+                return VenueMessage.fromMessageAndAcknowledge(GameFramework.DataBinding.fromGet((c) => text), acknowledge);
             }
             // instance methods
             draw(universe) {

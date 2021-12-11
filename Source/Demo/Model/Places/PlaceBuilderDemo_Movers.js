@@ -2,32 +2,33 @@
 class PlaceBuilderDemo_Movers {
     constructor(parent) {
         this.parent = parent;
+        this.entityDimension = this.parent.entityDimension;
     }
-    entityDefnBuildCarnivore(entityDimension) {
+    entityDefnBuildCarnivore() {
         var carnivoreColor = Color.byName("GrayDark");
-        var carnivoreDimension = entityDimension;
+        var carnivoreDimension = this.entityDimension;
         var constraintSpeedMax1 = new Constraint_SpeedMaxXY(1);
         var carnivoreCollider = new Sphere(Coords.create(), carnivoreDimension);
-        var visualEyeRadius = entityDimension * .75 / 2;
+        var visualEyeRadius = this.entityDimension * .75 / 2;
         var visualBuilder = new VisualBuilder();
         var visualEyes = visualBuilder.eyesBlinking(visualEyeRadius);
         var visualEyesDirectional = new VisualDirectional(visualEyes, // visualForNoDirection
         [
-            new VisualOffset(visualEyes, new Coords(1, 0, 0).multiplyScalar(visualEyeRadius)),
-            new VisualOffset(visualEyes, new Coords(0, 1, 0).multiplyScalar(visualEyeRadius)),
-            new VisualOffset(visualEyes, new Coords(-1, 0, 0).multiplyScalar(visualEyeRadius)),
-            new VisualOffset(visualEyes, new Coords(0, -1, 0).multiplyScalar(visualEyeRadius))
+            new VisualOffset(visualEyes, Coords.fromXY(1, 0).multiplyScalar(visualEyeRadius)),
+            new VisualOffset(visualEyes, Coords.fromXY(0, 1).multiplyScalar(visualEyeRadius)),
+            new VisualOffset(visualEyes, Coords.fromXY(-1, 0).multiplyScalar(visualEyeRadius)),
+            new VisualOffset(visualEyes, Coords.fromXY(0, -1).multiplyScalar(visualEyeRadius))
         ], null);
         var carnivoreVisualBody = new VisualGroup([
             VisualPolygon.fromPathAndColorFill(new Path([
-                new Coords(-2, -1, 0),
-                new Coords(-0.5, 0, 0),
-                new Coords(0.5, 0, 0),
-                new Coords(2, -1, 0),
-                new Coords(0, 2, 0),
+                Coords.fromXY(-2, -1),
+                Coords.fromXY(-0.5, 0),
+                Coords.fromXY(0.5, 0),
+                Coords.fromXY(2, -1),
+                Coords.fromXY(0, 2),
             ]).transform(new Transform_Multiple([
-                new Transform_Translate(new Coords(0, -0.5, 0)),
-                new Transform_Scale(new Coords(1, 1, 1).multiplyScalar(entityDimension))
+                new Transform_Translate(Coords.fromXY(0, -0.5)),
+                new Transform_Scale(Coords.ones().multiplyScalar(this.entityDimension))
             ])), carnivoreColor),
             new VisualOffset(visualEyesDirectional, Coords.create()),
         ]);
@@ -46,9 +47,7 @@ class PlaceBuilderDemo_Movers {
             ], false // isRepeating
             ),
         ]);
-        if (this.parent.visualsHaveText) {
-            carnivoreVisual.children.push(new VisualOffset(VisualText.fromTextAndColor("Carnivore", carnivoreColor), new Coords(0, 0 - carnivoreDimension * 2, 0)));
-        }
+        this.parent.textWithColorAddToVisual("Carnivore", carnivoreColor, carnivoreVisual);
         var carnivoreActivityPerform = (uwpe) => {
             var universe = uwpe.universe;
             var place = uwpe.place;
@@ -109,8 +108,8 @@ class PlaceBuilderDemo_Movers {
         ]);
         return carnivoreEntityDefn;
     }
-    entityDefnBuildEnemyGenerator(enemyTypeName, entityDimension, sizeTopAsFractionOfBottom, damageTypeName, integrityMax, speedMax, weapon) {
-        var enemyVisual = this.entityDefnBuildEnemyGenerator_Visual(enemyTypeName, entityDimension, sizeTopAsFractionOfBottom, damageTypeName);
+    entityDefnBuildEnemyGenerator(enemyTypeName, sizeTopAsFractionOfBottom, damageTypeName, integrityMax, speedMax, weapon) {
+        var enemyVisual = this.entityDefnBuildEnemyGenerator_Visual(enemyTypeName, sizeTopAsFractionOfBottom, damageTypeName);
         var enemyVisualBody = enemyVisual.children[1];
         var enemyVisualBodyPolygon = enemyVisualBody.child;
         var enemyVertices = enemyVisualBodyPolygon.verticesAsPath.points;
@@ -144,7 +143,8 @@ class PlaceBuilderDemo_Movers {
             var randomizer = universe.randomizer;
             var effectsToApply = damageToApply.effectsOccurring(randomizer);
             effectsToApply.forEach(effect => effectable.effectAdd(effect.clone()));
-            place.entitySpawn(uwpe.clone().entitySet(universe.entityBuilder.messageFloater("" + damageApplied.toString(), eKillable.locatable().loc.pos, Color.byName("Red"))));
+            place.entitySpawn(uwpe.clone().entitySet(universe.entityBuilder.messageFloater("" + damageApplied.toString(), this.entityDimension, // fontHeightInPixels
+            eKillable.locatable().loc.pos, Color.byName("Red"))));
             var damageAmount = damageApplied.amount(randomizer);
             return damageAmount;
         };
@@ -168,7 +168,8 @@ class PlaceBuilderDemo_Movers {
             learner.learningIncrement(skillsAll, skillsByName, 1);
             var learningMessage = learner.statusMessage;
             if (learningMessage != null) {
-                place.entitySpawn(uwpe.clone().entitySet(universe.entityBuilder.messageFloater(learningMessage, entityPlayer.locatable().loc.pos, Color.byName("Green"))));
+                place.entitySpawn(uwpe.clone().entitySet(universe.entityBuilder.messageFloater(learningMessage, this.entityDimension, // fontHeightInPixels
+                entityPlayer.locatable().loc.pos, Color.byName("Green"))));
             }
         };
         var enemyKillable = new Killable(integrityMax, enemyDamageApply, enemyDie);
@@ -232,7 +233,7 @@ class PlaceBuilderDemo_Movers {
         ]);
         return enemyGeneratorEntityDefn;
     }
-    entityDefnBuildEnemyGenerator_Visual(enemyTypeName, entityDimension, sizeTopAsFractionOfBottom, damageTypeName) {
+    entityDefnBuildEnemyGenerator_Visual(enemyTypeName, sizeTopAsFractionOfBottom, damageTypeName) {
         var enemyColor;
         var damageTypes = DamageType.Instances();
         if (damageTypeName == null) {
@@ -244,10 +245,10 @@ class PlaceBuilderDemo_Movers {
         else if (damageTypeName == damageTypes.Heat.name) {
             enemyColor = Color.byName("Yellow");
         }
-        var visualEyeRadius = entityDimension * .75 / 2;
+        var visualEyeRadius = this.entityDimension * .75 / 2;
         var visualBuilder = new VisualBuilder();
         var visualEyesBlinking = visualBuilder.eyesBlinking(visualEyeRadius);
-        var enemyDimension = entityDimension * 2;
+        var enemyDimension = this.entityDimension * 2;
         var enemyVertices = [
             Coords.fromXY(-sizeTopAsFractionOfBottom, -1),
             Coords.fromXY(sizeTopAsFractionOfBottom, -1),
@@ -274,10 +275,10 @@ class PlaceBuilderDemo_Movers {
         var visualEyesWithBrowsDirectional = new VisualDirectional(visualEyesBlinking, // visualForNoDirection
         offsets.map(offset => new VisualOffset(visualEyesBlinkingWithBrows, offset.multiplyScalar(visualEyeRadius))), null);
         var visualEffect = new VisualAnchor(new VisualDynamic((uwpe) => uwpe.entity.effectable().effectsAsVisual()), null, Orientation.Instances().ForwardXDownZ);
-        var visualStatusInfo = new VisualOffset(new VisualStack(new Coords(0, 0 - entityDimension, 0), // childSpacing
+        var visualStatusInfo = new VisualOffset(new VisualStack(Coords.fromXY(0, 0 - this.entityDimension), // childSpacing
         [
             visualEffect
-        ]), new Coords(0, 0 - entityDimension * 2, 0) // offset
+        ]), Coords.fromXY(0, 0 - this.entityDimension * 2) // offset
         );
         var visualBody = new VisualAnchor(VisualPolygon.fromPathAndColors(new Path(enemyVertices), enemyColor, Color.byName("Red") // colorBorder
         ), null, // posToAnchorAt
@@ -294,31 +295,31 @@ class PlaceBuilderDemo_Movers {
             visualEyesWithBrowsDirectional,
             visualStatusInfo
         ]);
-        if (this.parent.visualsHaveText) {
-            enemyVisual.children.push(new VisualOffset(VisualText.fromTextAndColor(enemyTypeName, enemyColor), new Coords(0, 0 - enemyDimension, 0)));
-        }
+        this.parent.textWithColorAddToVisual(enemyTypeName, enemyColor, enemyVisual);
         return enemyVisual;
     }
-    entityDefnBuildEnemyGeneratorChaser(entityDimension, damageTypeName) {
+    entityDefnBuildEnemyGeneratorChaser(damageTypeName) {
         var enemyTypeName = "Chaser";
         var speedMax = 1;
         var sizeTopAsFractionOfBottom = .5;
         var integrityMax = 20;
         var weapon = null;
-        var returnValue = this.entityDefnBuildEnemyGenerator(enemyTypeName, entityDimension, sizeTopAsFractionOfBottom, damageTypeName, integrityMax, speedMax, weapon);
+        var returnValue = this.entityDefnBuildEnemyGenerator(enemyTypeName, sizeTopAsFractionOfBottom, damageTypeName, integrityMax, speedMax, weapon);
         return returnValue;
     }
-    entityDefnBuildEnemyGeneratorRunner(entityDimension, damageTypeName) {
-        entityDimension *= .75;
+    entityDefnBuildEnemyGeneratorRunner(damageTypeName) {
+        var entityDimensionOriginal = this.entityDimension;
+        this.entityDimension *= .75;
         var enemyTypeName = "Runner";
         var speedMax = 2;
         var sizeTopAsFractionOfBottom = .5;
         var integrityMax = 10;
         var weapon = null;
-        var returnValue = this.entityDefnBuildEnemyGenerator(enemyTypeName, entityDimension, sizeTopAsFractionOfBottom, damageTypeName, integrityMax, speedMax, weapon);
+        var returnValue = this.entityDefnBuildEnemyGenerator(enemyTypeName, sizeTopAsFractionOfBottom, damageTypeName, integrityMax, speedMax, weapon);
+        this.entityDimension = entityDimensionOriginal;
         return returnValue;
     }
-    entityDefnBuildEnemyGeneratorShooter(entityDimension, damageTypeName) {
+    entityDefnBuildEnemyGeneratorShooter(damageTypeName) {
         var enemyTypeName = "Shooter";
         var speedMax = 1;
         var sizeTopAsFractionOfBottom = 0;
@@ -332,21 +333,21 @@ class PlaceBuilderDemo_Movers {
         ]);
         var weapon = new Weapon(100, // ticksToRecharge
         entityProjectile);
-        var returnValue = this.entityDefnBuildEnemyGenerator(enemyTypeName, entityDimension, sizeTopAsFractionOfBottom, damageTypeName, integrityMax, speedMax, weapon);
+        var returnValue = this.entityDefnBuildEnemyGenerator(enemyTypeName, sizeTopAsFractionOfBottom, damageTypeName, integrityMax, speedMax, weapon);
         return returnValue;
     }
-    entityDefnBuildEnemyGeneratorTank(entityDimension, damageTypeName) {
+    entityDefnBuildEnemyGeneratorTank(damageTypeName) {
         var enemyTypeName = "Tank";
         var speedMax = .5;
         var sizeTopAsFractionOfBottom = 1;
         var integrityMax = 40;
         var weapon = null;
-        var returnValue = this.entityDefnBuildEnemyGenerator(enemyTypeName, entityDimension, sizeTopAsFractionOfBottom, damageTypeName, integrityMax, speedMax, weapon);
+        var returnValue = this.entityDefnBuildEnemyGenerator(enemyTypeName, sizeTopAsFractionOfBottom, damageTypeName, integrityMax, speedMax, weapon);
         return returnValue;
     }
-    entityDefnBuildFriendly(entityDimension) {
+    entityDefnBuildFriendly() {
         var friendlyColor = Color.byName("GreenDark");
-        var friendlyDimension = entityDimension;
+        var friendlyDimension = this.entityDimension;
         var constraintSpeedMax1 = new Constraint_SpeedMaxXY(1);
         var constrainable = new Constrainable([constraintSpeedMax1]);
         var friendlyCollider = new Sphere(Coords.create(), friendlyDimension);
@@ -361,7 +362,7 @@ class PlaceBuilderDemo_Movers {
             collisionHelper.collideEntitiesBackUp(eFriendly, eOther);
         };
         var collidable = new Collidable(0, friendlyCollider, [Collidable.name], friendlyCollide);
-        var visualEyeRadius = entityDimension * .75 / 2;
+        var visualEyeRadius = this.entityDimension * .75 / 2;
         var visualBuilder = new VisualBuilder();
         var visualEyesBlinking = visualBuilder.eyesBlinking(visualEyeRadius);
         var friendlyVisualNormal = new VisualGroup([
@@ -392,9 +393,7 @@ class PlaceBuilderDemo_Movers {
             ], false // isRepeating
             )
         ]);
-        if (this.parent.visualsHaveText) {
-            friendlyVisualGroup.children.push(new VisualOffset(VisualText.fromTextAndColor("Talker", friendlyColor), new Coords(0, 0 - friendlyDimension * 2, 0)));
-        }
+        this.parent.textWithColorAddToVisual("Talker", friendlyColor, friendlyVisualGroup);
         var friendlyVisual = new VisualAnchor(friendlyVisualGroup, null, Orientation.Instances().ForwardXDownZ);
         var friendlyActivityPerform = (uwpe) => {
             var universe = uwpe.universe;
@@ -453,12 +452,12 @@ class PlaceBuilderDemo_Movers {
         ]);
         return friendlyEntityDefn;
     }
-    entityDefnBuildGrazer(entityDimension) {
+    entityDefnBuildGrazer() {
         var grazerColor = Color.byName("Brown");
-        var grazerDimension = entityDimension;
+        var grazerDimension = this.entityDimension;
         var constraintSpeedMax1 = new Constraint_SpeedMaxXY(1);
         var grazerCollider = new Sphere(Coords.create(), grazerDimension);
-        var visualEyeRadius = entityDimension * .75 / 2;
+        var visualEyeRadius = this.entityDimension * .75 / 2;
         var visualBuilder = new VisualBuilder();
         var visualEyes = visualBuilder.eyesBlinking(visualEyeRadius);
         var visualEyesDirectional = new VisualDirectional(visualEyes, // visualForNoDirection
@@ -508,9 +507,7 @@ class PlaceBuilderDemo_Movers {
         var grazerVisual = new VisualGroup([
             grazerVisualSelect
         ]);
-        if (this.parent.visualsHaveText) {
-            grazerVisual.children.push(new VisualOffset(VisualText.fromTextAndColor("Grazer", grazerColor), new Coords(0, 0 - grazerDimension * 2, 0)));
-        }
+        this.parent.textWithColorAddToVisual("Grazer", grazerColor, grazerVisual);
         var grazerActivityPerform = (uwpe) => {
             var universe = uwpe.universe;
             var place = uwpe.place;
@@ -592,12 +589,12 @@ class PlaceBuilderDemo_Movers {
         ]);
         return grazerEntityDefn;
     }
-    entityDefnBuildPlayer(entityDimension, displaySize) {
+    entityDefnBuildPlayer(displaySize) {
         var entityDefnNamePlayer = "Player";
-        var visualEyeRadius = entityDimension * .75 / 2;
+        var visualEyeRadius = this.entityDimension * .75 / 2;
         var visualBuilder = new VisualBuilder();
         var visualEyesBlinking = visualBuilder.eyesBlinking(visualEyeRadius);
-        var playerHeadRadius = entityDimension * .75;
+        var playerHeadRadius = this.entityDimension * .75;
         var playerCollider = new Sphere(Coords.create(), playerHeadRadius);
         var playerColor = Color.byName("Gray");
         var playerVisualBodyNormal = visualBuilder.circleWithEyesAndLegsAndArms(playerHeadRadius, playerColor, visualEyeRadius, visualEyesBlinking);
@@ -616,7 +613,7 @@ class PlaceBuilderDemo_Movers {
         // visualShadow
         new VisualEllipse(playerHeadRadius, playerHeadRadius / 2, 0, Color.byName("GrayDark"), Color.byName("Black"), false // shouldUseEntityOrientation
         ), null);
-        var playerVisualBarSize = new Coords(entityDimension * 3, entityDimension * 0.8, 0);
+        var playerVisualBarSize = Coords.fromXY(this.entityDimension * 3, this.entityDimension * 0.8);
         var playerVisualHealthBar = new VisualBar("H", // abbreviation
         playerVisualBarSize, Color.Instances().Red, DataBinding.fromGet((c) => c.killable().integrity), null, // amountThreshold
         DataBinding.fromGet((c) => c.killable().integrityMax), 1, // fractionBelowWhichToShow
@@ -636,10 +633,10 @@ class PlaceBuilderDemo_Movers {
             playerVisualEffect
         ];
         if (this.parent.visualsHaveText) {
-            playerVisualsForStatusInfo.splice(0, 0, VisualText.fromTextAndColor(entityDefnNamePlayer, playerColor));
+            playerVisualsForStatusInfo.splice(0, 0, VisualText.fromTextHeightAndColor(entityDefnNamePlayer, this.entityDimension, playerColor));
         }
-        var playerVisualStatusInfo = new VisualOffset(new VisualStack(new Coords(0, 0 - entityDimension, 0), // childSpacing
-        playerVisualsForStatusInfo), new Coords(0, 0 - entityDimension * 2, 0) // offset
+        var playerVisualStatusInfo = new VisualOffset(new VisualStack(Coords.fromXY(0, 0 - this.entityDimension), // childSpacing
+        playerVisualsForStatusInfo), Coords.fromXY(0, 0 - this.entityDimension * 2) // offset
         );
         var playerVisual = new VisualGroup([
             playerVisualBodyJumpable, playerVisualStatusInfo
@@ -728,7 +725,8 @@ class PlaceBuilderDemo_Movers {
             entityKillable.killable().integritySubtract(damageAmount);
             var damageAmountAsString = "" + (damageAmount > 0 ? "" : "+") + (0 - damageAmount);
             var messageColorName = (damageAmount > 0 ? "Red" : "Green");
-            var messageEntity = universe.entityBuilder.messageFloater(damageAmountAsString, entityKillable.locatable().loc.pos, Color.byName(messageColorName));
+            var messageEntity = universe.entityBuilder.messageFloater(damageAmountAsString, this.entityDimension, // fontHeightInPixels
+            entityKillable.locatable().loc.pos, Color.byName(messageColorName));
             uwpe.entity = messageEntity;
             place.entitySpawn(uwpe);
             return damageAmount;
@@ -798,7 +796,7 @@ class PlaceBuilderDemo_Movers {
             if (targetEntity == null) {
                 drawable.visual = new VisualGroup([
                     drawable.visual,
-                    new VisualOffset(VisualText.fromTextAndColor("Waiting", Color.byName("Gray")), new Coords(0, -entityDimension * 3, 0))
+                    new VisualOffset(VisualText.fromTextHeightAndColor("Waiting", this.entityDimension, Color.byName("Gray")), Coords.fromXY(0, 0 - this.entityDimension * 3))
                 ]);
                 ticksToWait = 60; // 3 seconds.
                 targetEntity = new Ephemeral(ticksToWait, null).toEntity();

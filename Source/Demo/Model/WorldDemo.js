@@ -78,9 +78,8 @@ class WorldDemo extends World {
                 places.push(placeBattlefield);
             }
         }
-        placeBuilder.entityBuildKeys(places, 10, //entityDimension,
-        5, //numberOfKeysToUnlockGoal,
-        new Coords(20, 20, 0) // marginSize
+        placeBuilder.entityBuildKeys(places, 5, //numberOfKeysToUnlockGoal,
+        Coords.fromXY(20, 20) // marginSize
         );
         var placeBattlefield0 = places[0];
         var placeBase = placeBuilder.buildBase(displaySize.clone(), // size

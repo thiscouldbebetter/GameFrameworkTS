@@ -43,6 +43,9 @@ var ThisCouldBeBetter;
                 }
                 return returnValue;
             }
+            toItem() {
+                return new GameFramework.Item(this.name, 1);
+            }
             use(uwpe) {
                 if (this._use == null) {
                     var itemHolder = uwpe.entity.itemHolder();
