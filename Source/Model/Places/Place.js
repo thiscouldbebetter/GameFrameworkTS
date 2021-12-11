@@ -183,9 +183,7 @@ var ThisCouldBeBetter;
                 var player = this.player();
                 var playerControllable = player.controllable();
                 var uwpe = new GameFramework.UniverseWorldPlaceEntities(universe, world, world.placeCurrent, player, null);
-                var returnValue = playerControllable.toControl(
-                //universe, universe.display.sizeInPixels, player, null, false
-                uwpe);
+                var returnValue = playerControllable.toControl(uwpe, null);
                 return returnValue;
             }
             // Entity convenience accessors.

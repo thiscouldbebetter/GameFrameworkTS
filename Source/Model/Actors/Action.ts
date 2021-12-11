@@ -65,7 +65,7 @@ class Action_Instances
 				var actor = uwpe.entity;
 				var control = actor.controllable().toControl
 				(
-					uwpe
+					uwpe, "ShowMenuPlayer"
 				);
 				var venueNext: Venue = control.toVenue();
 				venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);

@@ -287,8 +287,7 @@ export class Place //
 		);
 		var returnValue = playerControllable.toControl
 		(
-			//universe, universe.display.sizeInPixels, player, null, false
-			uwpe
+			uwpe, null
 		);
 		return returnValue;
 	}

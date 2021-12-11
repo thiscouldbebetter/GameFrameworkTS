@@ -33,7 +33,7 @@ var ThisCouldBeBetter;
                 (uwpe) => {
                     var universe = uwpe.universe;
                     var actor = uwpe.entity;
-                    var control = actor.controllable().toControl(uwpe);
+                    var control = actor.controllable().toControl(uwpe, "ShowMenuPlayer");
                     var venueNext = control.toVenue();
                     venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
                     universe.venueNext = venueNext;

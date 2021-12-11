@@ -4,9 +4,15 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Controllable implements EntityProperty<Controllable>
 {
-	toControl: (uwpe: UniverseWorldPlaceEntities) => ControlBase;
+	toControl:
+	(
+		uwpe: UniverseWorldPlaceEntities, controlTypeName: string
+	) => ControlBase;
 
-	constructor(toControl: (uwpe: UniverseWorldPlaceEntities)=>ControlBase)
+	constructor
+	(
+		toControl: (uwpe: UniverseWorldPlaceEntities, controlTypeName: string) => ControlBase
+	)
 	{
 		this.toControl = toControl;
 	}
