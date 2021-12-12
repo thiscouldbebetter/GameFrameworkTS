@@ -187,11 +187,7 @@ export class Universe
 
 		if (this.venueNext != null)
 		{
-			if
-			(
-				this.venueCurrent != null
-				&& this.venueCurrent.finalize != null
-			)
+			if (this.venueCurrent != null)
 			{
 				this.venueCurrent.finalize(this);
 			}
@@ -199,10 +195,7 @@ export class Universe
 			this.venueCurrent = this.venueNext;
 			this.venueNext = null;
 
-			if (this.venueCurrent.initialize != null)
-			{
-				this.venueCurrent.initialize(this);
-			}
+			this.venueCurrent.initialize(this);
 		}
 		this.venueCurrent.updateForTimerTick(this);
 
@@ -219,7 +212,7 @@ export class Universe
 
 	worldCreate(): World
 	{
-		this.world = this.worldCreator.worldCreate(this);
+		this.world = this.worldCreator.worldCreate(this, this.worldCreator);
 		return this.world;
 	}
 }

@@ -121,12 +121,12 @@ var ThisCouldBeBetter;
                 var drawPosText = this._drawPosText.overwriteWith(drawPos).add(textMargin);
                 style.drawBoxOfSizeAtPosWithColorsToDisplay(this.size, drawPos, style.colorFill(), style.colorBorder(), this.isHighlighted, display);
                 if (this.isHighlighted == false) {
-                    display.drawText(text, this.fontHeightInPixels, drawPosText, style.colorFill(), style.colorBorder(), false, // isCentered
+                    display.drawText(text, this.fontHeightInPixels, drawPosText, style.colorBorder(), style.colorFill(), false, // isCentered
                     this.size.x // widthMaxInPixels
                     );
                 }
                 else {
-                    display.drawText(text, this.fontHeightInPixels, drawPosText, style.colorBorder(), style.colorFill(), false, // isCentered
+                    display.drawText(text, this.fontHeightInPixels, drawPosText, style.colorFill(), style.colorBorder(), false, // isCentered
                     this.size.x // widthMaxInPixels
                     );
                     var textBeforeCursor = text.substr(0, this.cursorPos);

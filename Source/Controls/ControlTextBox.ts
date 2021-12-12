@@ -248,8 +248,8 @@ export class ControlTextBox<TContext> extends ControlBase
 				text,
 				this.fontHeightInPixels,
 				drawPosText,
-				style.colorFill(),
 				style.colorBorder(),
+				style.colorFill(),
 				false, // isCentered
 				this.size.x // widthMaxInPixels
 			);
@@ -261,8 +261,8 @@ export class ControlTextBox<TContext> extends ControlBase
 				text,
 				this.fontHeightInPixels,
 				drawPosText,
-				style.colorBorder(),
 				style.colorFill(),
+				style.colorBorder(),
 				false, // isCentered
 				this.size.x // widthMaxInPixels
 			);

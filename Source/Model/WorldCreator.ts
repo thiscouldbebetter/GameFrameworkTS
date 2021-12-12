@@ -3,17 +3,20 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class WorldCreator
 {
-	worldCreate: (u: Universe) => World;
-	toControl: (u: Universe, wc: WorldCreator) => ControlBase
+	worldCreate: (u: Universe, wc: WorldCreator) => World;
+	toControl: (u: Universe, wc: WorldCreator) => ControlBase;
+	settings: any;
 
 	constructor
 	(
-		worldCreate: (u: Universe) => World,
+		worldCreate: (u: Universe, wc: WorldCreator) => World,
 		toControl: (u: Universe, wc: WorldCreator) => ControlBase,
+		settings: any
 	)
 	{
 		this.worldCreate = worldCreate;
 		this.toControl = toControl;
+		this.settings = settings;
 	}
 
 	static fromWorldCreate
@@ -21,7 +24,7 @@ export class WorldCreator
 		worldCreate: (u: Universe) => World
 	): WorldCreator
 	{
-		return new WorldCreator(worldCreate, null);
+		return new WorldCreator(worldCreate, null, null);
 	}
 
 	static toControlDemo
@@ -44,13 +47,40 @@ export class WorldCreator
 			[
 				new ControlLabel
 				(
-					"labelWorldCreation Settings",
+					"labelWorldCreationSettings",
 					Coords.fromXY(margin, margin), // pos
 					Coords.fromXY(size.x - margin * 2, controlHeight),
 					false, // isTextCentered
 					DataBinding.fromContext("World Creation Settings"),
 					fontHeightInPixels
 				),
+
+				new ControlLabel
+				(
+					"labelWorldName",
+					Coords.fromXY(margin, margin * 2 + controlHeight), // pos
+					Coords.fromXY(size.x - margin * 2, controlHeight),
+					false, // isTextCentered
+					DataBinding.fromContext("World Name:"),
+					fontHeightInPixels
+				),
+
+				new ControlTextBox
+				(
+					"textBoxWorldName",
+					Coords.fromXY(margin * 8, margin * 2 + controlHeight), // pos
+					Coords.fromXY(margin * 12, controlHeight), // size
+					new DataBinding
+					(
+						worldCreator,
+						(c: WorldCreator) => c.settings.name || "",
+						(c: WorldCreator, v: string) => c.settings.name = v
+					), // text
+					fontHeightInPixels,
+					64, // charCountMax
+					DataBinding.fromTrue() // isEnabled
+				),
+
 				new ControlButton
 				(
 					"buttonCreate",
@@ -76,6 +106,8 @@ export class WorldCreator
 
 		return returnControl;
 	}
+
+	// Instance methods.
 
 	toVenue(universe: Universe): Venue
 	{
@@ -107,7 +139,7 @@ export class WorldCreator
 		var venueTask = new VenueTask
 		(
 			venueMessage,
-			() => universe.worldCreate(), // perform
+			() => universe.worldCreator.worldCreate(universe, universe.worldCreator), // perform
 			(world: World) => // done
 			{
 				universe.world = world;

@@ -69,15 +69,12 @@ var ThisCouldBeBetter;
             updateForTimerTick() {
                 this.inputHelper.updateForTimerTick(this);
                 if (this.venueNext != null) {
-                    if (this.venueCurrent != null
-                        && this.venueCurrent.finalize != null) {
+                    if (this.venueCurrent != null) {
                         this.venueCurrent.finalize(this);
                     }
                     this.venueCurrent = this.venueNext;
                     this.venueNext = null;
-                    if (this.venueCurrent.initialize != null) {
-                        this.venueCurrent.initialize(this);
-                    }
+                    this.venueCurrent.initialize(this);
                 }
                 this.venueCurrent.updateForTimerTick(this);
                 this.displayRecorder.updateForTimerTick(this);
@@ -86,7 +83,7 @@ var ThisCouldBeBetter;
                 this.venueNext = this.controlBuilder.venueTransitionalFromTo(this.venueCurrent, venueToTransitionTo);
             }
             worldCreate() {
-                this.world = this.worldCreator.worldCreate(this);
+                this.world = this.worldCreator.worldCreate(this, this.worldCreator);
                 return this.world;
             }
         }
