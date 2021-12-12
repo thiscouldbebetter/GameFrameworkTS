@@ -958,7 +958,11 @@ export class Profile
 					// click
 					() =>
 					{
-						universe.venueNext = Profile.anonymous().venueWorldGenerate(universe);
+						universe.profile = Profile.anonymous();
+						universe.venueTransitionTo
+						(
+							universe.worldCreator.toVenue(universe)
+						)
 					}
 				),
 
@@ -982,7 +986,11 @@ export class Profile
 				ControlButton.from8
 				(
 					"buttonBack",
-					Coords.fromXY(sizeBase.x - 10 - 25, sizeBase.y - 10 - 20), // pos
+					Coords.fromXY
+					(
+						sizeBase.x - 10 - 25,
+						sizeBase.y - 10 - 20
+					), // pos
 					Coords.fromXY(25, 20), // size
 					"Back",
 					fontHeight,
@@ -1000,42 +1008,6 @@ export class Profile
 
 		return returnValue;
 	}
-
-	venueWorldGenerate(universe: Universe): Venue
-	{
-		var profileGeneratingWorld = this;
-
-		var messageAsDataBinding = DataBinding.fromGet
-		(
-			(c: VenueTask<World>) => "Generating world...",
-		);
-
-		var venueMessage =
-			VenueMessage.fromMessage(messageAsDataBinding);
-
-		var venueTask = new VenueTask
-		(
-			venueMessage,
-			() => universe.worldCreate(), // perform
-			(world: World) => // done
-			{
-				universe.world = world;
-
-				universe.profile = profileGeneratingWorld;
-
-				var venueNext = universe.world.toVenue();
-				universe.venueTransitionTo(venueNext);
-			}
-		);
-
-		messageAsDataBinding.contextSet(venueTask);
-
-		var returnValue =
-			universe.controlBuilder.venueTransitionalFromTo(universe.venueCurrent, venueTask);
-
-		return returnValue;
-	}
-
 }
 
 }

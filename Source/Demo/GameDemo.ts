@@ -49,12 +49,12 @@ class GameDemo
 		var universe = Universe.create
 		(
 			"Game Framework Demo Game",
-			"0.0.0-20211122", // version
+			"0.0.0-20211212", // version
 			timerHelper,
 			display,
 			mediaLibrary,
 			controlBuilder,
-			WorldDemo.create
+			WorldCreator.fromWorldCreate(WorldDemo.create)
 		);
 		universe.initialize
 		(

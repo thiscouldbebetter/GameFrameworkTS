@@ -163,6 +163,7 @@ var Universe = gf.Universe;
 var UniverseWorldPlaceEntities = gf.UniverseWorldPlaceEntities;
 var VenueWorld = gf.VenueWorld;
 var World = gf.World;
+var WorldCreator = gf.WorldCreator;
 var WorldDefn = gf.WorldDefn;
 // Model - Actors.
 var Action = gf.Action;

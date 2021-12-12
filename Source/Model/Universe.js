@@ -4,14 +4,14 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Universe {
-            constructor(name, version, timerHelper, display, mediaLibrary, controlBuilder, worldCreate) {
+            constructor(name, version, timerHelper, display, mediaLibrary, controlBuilder, worldCreator) {
                 this.name = name;
                 this.version = version;
                 this.timerHelper = timerHelper;
                 this.display = display;
                 this.mediaLibrary = mediaLibrary;
                 this.controlBuilder = controlBuilder;
-                this._worldCreate = worldCreate;
+                this.worldCreator = worldCreator;
                 this.collisionHelper = new GameFramework.CollisionHelper();
                 this.displayRecorder = new GameFramework.DisplayRecorder(1, // ticksPerFrame
                 100, // bufferSizeInFrames - 5 seconds at 20 fps.
@@ -27,13 +27,13 @@ var ThisCouldBeBetter;
                 this.debuggingModeName = debuggingModeName;
             }
             // static methods
-            static create(name, version, timerHelper, display, mediaLibrary, controlBuilder, worldCreate) {
-                var returnValue = new Universe(name, version, timerHelper, display, mediaLibrary, controlBuilder, worldCreate);
+            static create(name, version, timerHelper, display, mediaLibrary, controlBuilder, worldCreator) {
+                var returnValue = new Universe(name, version, timerHelper, display, mediaLibrary, controlBuilder, worldCreator);
                 return returnValue;
             }
             static default() {
                 var universe = Universe.create("Default", "0.0.0", // version
-                new GameFramework.TimerHelper(20), GameFramework.Display2D.fromSize(GameFramework.Coords.fromXY(200, 150)), GameFramework.MediaLibrary.default(), GameFramework.ControlBuilder.default(), () => GameFramework.World.default());
+                new GameFramework.TimerHelper(20), GameFramework.Display2D.fromSize(GameFramework.Coords.fromXY(200, 150)), GameFramework.MediaLibrary.default(), GameFramework.ControlBuilder.default(), GameFramework.WorldCreator.fromWorldCreate(() => GameFramework.World.default()));
                 return universe;
             }
             // instance methods
@@ -46,7 +46,8 @@ var ThisCouldBeBetter;
                 this.videoHelper = new GameFramework.VideoHelper(this.mediaLibrary.videos);
                 var venueInitial = null;
                 if (this.debuggingModeName == "SkipOpening") {
-                    venueInitial = GameFramework.Profile.anonymous().venueWorldGenerate(this);
+                    this.profile = GameFramework.Profile.anonymous();
+                    venueInitial = this.worldCreator.toVenue(this);
                 }
                 else {
                     venueInitial = this.controlBuilder.opening(this, this.display.sizeInPixels).toVenue();
@@ -85,7 +86,7 @@ var ThisCouldBeBetter;
                 this.venueNext = this.controlBuilder.venueTransitionalFromTo(this.venueCurrent, venueToTransitionTo);
             }
             worldCreate() {
-                this.world = this._worldCreate(this);
+                this.world = this.worldCreator.worldCreate(this);
                 return this.world;
             }
         }

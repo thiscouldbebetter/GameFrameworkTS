@@ -467,7 +467,8 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromTrue(), // isEnabled
                     // click
                     () => {
-                        universe.venueNext = Profile.anonymous().venueWorldGenerate(universe);
+                        universe.profile = Profile.anonymous();
+                        universe.venueTransitionTo(universe.worldCreator.toVenue(universe));
                     }),
                     GameFramework.ControlButton.from8("buttonDelete", GameFramework.Coords.fromXY(150, 95), // pos
                     GameFramework.Coords.fromXY(20, buttonHeightBase), // size
@@ -485,22 +486,6 @@ var ThisCouldBeBetter;
                     }),
                 ]);
                 returnValue.scalePosAndSize(scaleMultiplier);
-                return returnValue;
-            }
-            venueWorldGenerate(universe) {
-                var profileGeneratingWorld = this;
-                var messageAsDataBinding = GameFramework.DataBinding.fromGet((c) => "Generating world...");
-                var venueMessage = GameFramework.VenueMessage.fromMessage(messageAsDataBinding);
-                var venueTask = new GameFramework.VenueTask(venueMessage, () => universe.worldCreate(), // perform
-                (world) => // done
-                 {
-                    universe.world = world;
-                    universe.profile = profileGeneratingWorld;
-                    var venueNext = universe.world.toVenue();
-                    universe.venueTransitionTo(venueNext);
-                });
-                messageAsDataBinding.contextSet(venueTask);
-                var returnValue = universe.controlBuilder.venueTransitionalFromTo(universe.venueCurrent, venueTask);
                 return returnValue;
             }
         }

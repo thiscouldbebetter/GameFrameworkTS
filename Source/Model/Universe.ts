@@ -10,8 +10,7 @@ export class Universe
 	display: Display;
 	mediaLibrary: MediaLibrary;
 	controlStyle: ControlStyle;
-	_worldCreate: (u: Universe) => World;
-
+	worldCreator: WorldCreator;
 	world: World;
 
 	collisionHelper: CollisionHelper;
@@ -40,7 +39,7 @@ export class Universe
 		display: Display,
 		mediaLibrary: MediaLibrary,
 		controlBuilder: ControlBuilder,
-		worldCreate: (u:Universe)=>World
+		worldCreator: WorldCreator
 	)
 	{
 		this.name = name;
@@ -49,7 +48,7 @@ export class Universe
 		this.display = display;
 		this.mediaLibrary = mediaLibrary;
 		this.controlBuilder = controlBuilder;
-		this._worldCreate = worldCreate;
+		this.worldCreator = worldCreator;
 
 		this.collisionHelper = new CollisionHelper();
 		this.displayRecorder = new DisplayRecorder
@@ -81,7 +80,7 @@ export class Universe
 		display: Display,
 		mediaLibrary: MediaLibrary,
 		controlBuilder: ControlBuilder,
-		worldCreate: (u: Universe) => World
+		worldCreator: WorldCreator
 	): Universe
 	{
 		var returnValue = new Universe
@@ -92,7 +91,7 @@ export class Universe
 			display,
 			mediaLibrary,
 			controlBuilder,
-			worldCreate
+			worldCreator
 		);
 
 		return returnValue;
@@ -111,7 +110,11 @@ export class Universe
 			),
 			MediaLibrary.default(),
 			ControlBuilder.default(),
-			() => World.default()
+			WorldCreator.fromWorldCreate
+			(
+				() => World.default(),
+				
+			)
 		);
 
 		return universe;
@@ -139,7 +142,8 @@ export class Universe
 
 		if (this.debuggingModeName == "SkipOpening")
 		{
-			venueInitial = Profile.anonymous().venueWorldGenerate(this);
+			this.profile = Profile.anonymous();
+			venueInitial = this.worldCreator.toVenue(this);
 		}
 		else
 		{
@@ -205,7 +209,7 @@ export class Universe
 		this.displayRecorder.updateForTimerTick(this);
 	}
 
-	venueTransitionTo(venueToTransitionTo: Venue)
+	venueTransitionTo(venueToTransitionTo: Venue): void
 	{
 		this.venueNext = this.controlBuilder.venueTransitionalFromTo
 		(
@@ -215,7 +219,7 @@ export class Universe
 
 	worldCreate(): World
 	{
-		this.world = this._worldCreate(this);
+		this.world = this.worldCreator.worldCreate(this);
 		return this.world;
 	}
 }
