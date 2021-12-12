@@ -1658,9 +1658,9 @@ class PlaceBuilderDemo_Movers
 		var entityPlayer = uwpe.entity;
 
 		var inputHelper = universe.inputHelper;
-		if (inputHelper.isMouseClicked(null))
+		if (inputHelper.isMouseClicked())
 		{
-			inputHelper.isMouseClicked(false);
+			inputHelper.mouseClickedSet(false);
 
 			var selector = entityPlayer.selector();
 			selector.entityAtMouseClickPosSelect(uwpe);

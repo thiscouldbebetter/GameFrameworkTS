@@ -80,22 +80,21 @@ var ThisCouldBeBetter;
                     this.inputRemove(input.name);
                 }
             }
-            isMouseClicked(value) {
+            isMouseClicked() {
                 var returnValue = false;
                 var inputNameMouseClick = GameFramework.Input.Names().MouseClick;
-                if (value == null) {
-                    var inputPressed = this.inputsPressedByName.get(inputNameMouseClick);
-                    returnValue = (inputPressed != null && inputPressed.isActive);
+                var inputPressed = this.inputsPressedByName.get(inputNameMouseClick);
+                returnValue = (inputPressed != null && inputPressed.isActive);
+                return returnValue;
+            }
+            mouseClickedSet(value) {
+                var inputNameMouseClick = GameFramework.Input.Names().MouseClick;
+                if (value == true) {
+                    this.inputAdd(inputNameMouseClick);
                 }
                 else {
-                    if (value == true) {
-                        this.inputAdd(inputNameMouseClick);
-                    }
-                    else {
-                        this.inputRemove(inputNameMouseClick);
-                    }
+                    this.inputRemove(inputNameMouseClick);
                 }
-                return returnValue;
             }
             updateForTimerTick(universe) {
                 this.updateForTimerTick_Gamepads(universe);

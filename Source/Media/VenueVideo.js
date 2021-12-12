@@ -31,8 +31,8 @@ var ThisCouldBeBetter;
                 if (this.video.isFinished == false) {
                     var shouldVideoBeStopped = false;
                     var inputHelper = universe.inputHelper;
-                    if (inputHelper.isMouseClicked(null)) {
-                        inputHelper.isMouseClicked(false);
+                    if (inputHelper.isMouseClicked()) {
+                        inputHelper.mouseClickedSet(false);
                         shouldVideoBeStopped = true;
                     }
                     else {

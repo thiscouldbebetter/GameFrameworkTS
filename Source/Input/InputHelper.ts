@@ -133,30 +133,30 @@ export class InputHelper implements Platformable
 		}
 	}
 
-	isMouseClicked(value: boolean): boolean
+	isMouseClicked(): boolean
 	{
 		var returnValue = false;
 
 		var inputNameMouseClick = Input.Names().MouseClick;
 
-		if (value == null)
+		var inputPressed = this.inputsPressedByName.get(inputNameMouseClick);
+		returnValue = (inputPressed != null && inputPressed.isActive);
+
+		return returnValue;
+	}
+
+	mouseClickedSet(value: boolean): void
+	{
+		var inputNameMouseClick = Input.Names().MouseClick;
+
+		if (value == true)
 		{
-			var inputPressed = this.inputsPressedByName.get(inputNameMouseClick);
-			returnValue = (inputPressed != null && inputPressed.isActive);
+			this.inputAdd(inputNameMouseClick);
 		}
 		else
 		{
-			if (value == true)
-			{
-				this.inputAdd(inputNameMouseClick);
-			}
-			else
-			{
-				this.inputRemove(inputNameMouseClick);
-			}
+			this.inputRemove(inputNameMouseClick);
 		}
-
-		return returnValue;
 	}
 
 	updateForTimerTick(universe: Universe): void
