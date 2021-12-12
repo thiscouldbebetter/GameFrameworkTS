@@ -146,11 +146,7 @@ class PlaceBuilderDemo_Items {
          {
             var universe = uwpe.universe;
             var venuePrev = universe.venueCurrent;
-            var back = () => {
-                var venueNext = venuePrev;
-                venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-                universe.venueNext = venueNext;
-            };
+            var back = () => universe.venueTransitionTo(venuePrev);
             var text = "Fourscore and seven years ago, our fathers brought forth upon this continent "
                 + "a new nation, conceived in liberty, and dedicated to the proposition that "
                 + " all men are created equal. ";
@@ -169,8 +165,7 @@ class PlaceBuilderDemo_Items {
                 new Action(ControlActionNames.Instances().ControlConfirm, back)
             ], null);
             var venueNext = container.toVenue();
-            venueNext = VenueFader.fromVenueTo(venueNext);
-            universe.venueNext = venueNext;
+            universe.venueTransitionTo(venueNext);
             return "";
         };
         var itemBook = new ItemDefn(itemBookName, null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize

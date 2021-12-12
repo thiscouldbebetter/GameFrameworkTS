@@ -274,11 +274,7 @@ var ThisCouldBeBetter;
                 null, // bindingForIsEnabled
                 unequipFromSocketSelected, // confirm
                 null);
-                var back = () => {
-                    var venueNext = venuePrev;
-                    venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-                    universe.venueNext = venueNext;
-                };
+                var back = () => universe.venueTransitionTo(venuePrev);
                 var returnValue = new GameFramework.ControlContainer("Equip", GameFramework.Coords.create(), // pos
                 sizeBase.clone(), // size
                 // children

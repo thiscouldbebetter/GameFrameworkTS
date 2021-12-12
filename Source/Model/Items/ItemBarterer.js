@@ -71,9 +71,7 @@ var ThisCouldBeBetter;
                 var world = universe.world;
                 var back = () => {
                     itemBarterer.reset(entityCustomer, entityStore);
-                    var venueNext = venuePrev;
-                    venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-                    universe.venueNext = venueNext;
+                    universe.venueTransitionTo(venuePrev);
                 };
                 var itemOfferCustomer = () => {
                     if (itemHolderCustomer.itemSelected != null) {

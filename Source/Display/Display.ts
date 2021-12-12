@@ -69,6 +69,12 @@ export interface Display
 	(
 		pos: Coords, size: Coords, colorFill: Color, colorBorder: Color
 	): void;
+	drawRectangleWithBeveledCorners
+	(
+		pos: Coords, size: Coords,
+		colorFill: Color, colorBorder: Color,
+		cornerRadius: number
+	): void;
 	drawRectangleWithRoundedCorners
 	(
 		pos: Coords, size: Coords,

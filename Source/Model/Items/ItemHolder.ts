@@ -476,12 +476,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 		var itemHolder = this;
 		var world = universe.world;
 
-		var back = () =>
-		{
-			var venueNext: Venue = venuePrev;
-			venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-			universe.venueNext = venueNext;
-		};
+		var back = () => universe.venueTransitionTo(venuePrev);
 
 		var drop = () =>
 		{

@@ -44,6 +44,7 @@ var ThisCouldBeBetter;
             drawPolygon(vertices, colorFill, colorBorder) { }
             drawRectangle(pos, size, colorFill, colorBorder) { }
             drawRectangleCentered(pos, size, colorFill, colorBorder) { }
+            drawRectangleWithBeveledCorners(pos, size, colorFill, colorBorder, cornerRadius) { }
             drawRectangleWithRoundedCorners(pos, size, colorFill, colorBorder, cornerRadius) { }
             drawText(text, fontHeightInPixels, pos, colorFill, colorOutline, isCentered, widthMaxInPixels) { }
             drawWedge(center, radius, angleStartInTurns, angleStopInTurns, colorFill, colorBorder) { }

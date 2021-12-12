@@ -93,11 +93,7 @@ var ThisCouldBeBetter;
                 var fontHeightLarge = fontHeight * 1.5;
                 var itemHolder = entityItemHolder.itemHolder();
                 var crafter = this;
-                var back = () => {
-                    var venueNext = venuePrev;
-                    venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-                    universe.venueNext = venueNext;
-                };
+                var back = () => universe.venueTransitionTo(venuePrev);
                 var addToQueue = () => {
                     if (crafter.isRecipeAvailableSelectedFulfilled(entityCrafter.itemHolder())) {
                         var recipe = crafter.recipeAvailableSelected;

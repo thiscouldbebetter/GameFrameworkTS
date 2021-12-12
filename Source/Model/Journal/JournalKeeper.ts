@@ -49,12 +49,7 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 		var fontHeightSmall = fontHeight * .6;
 		var fontHeightLarge = fontHeight * 1.5;
 
-		var back = () =>
-		{
-			var venueNext: Venue = venuePrev;
-			venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-			universe.venueNext = venueNext;
-		};
+		var back = () => universe.venueTransitionTo(venuePrev);
 
 		var buttonSize = Coords.fromXY(20, 10);
 
@@ -216,9 +211,8 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 						null // cancel
 					);
 
-					var venueNext: Venue = controlConfirm.toVenue();
-					venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-					universe.venueNext = venueNext;
+					var venueNext = controlConfirm.toVenue();
+					universe.venueTransitionTo(venueNext);
 
 				}, // click
 				false // canBeHeldDown

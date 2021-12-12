@@ -116,12 +116,7 @@ export class ConversationRun
 			conversationRun.next(universe);
 		};
 
-		var back = () =>
-		{
-			var venueNext = venueToReturnTo;
-			venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-			universe.venueNext = venueNext;
-		};
+		var back = () => universe.venueTransitionTo(venueToReturnTo);
 
 		var viewLog = () =>
 		{
@@ -131,8 +126,7 @@ export class ConversationRun
 				size, universe, venueCurrent
 			);
 			var venueNext: Venue = transcriptAsControl.toVenue();
-			venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-			universe.venueNext = venueNext;
+			universe.venueTransitionTo(venueNext);
 		};
 
 		var returnValue = new ControlContainer
@@ -335,12 +329,7 @@ export class ConversationRun
 					DataBinding.fromTrue(), // isEnabled
 					() => // click
 					{
-						var venueNext = venueToReturnTo;
-						venueNext = VenueFader.fromVenuesToAndFrom
-						(
-							venueNext, universe.venueCurrent
-						);
-						universe.venueNext = venueNext;
+						universe.venueTransitionTo(venueToReturnTo);
 					}
 				),
 

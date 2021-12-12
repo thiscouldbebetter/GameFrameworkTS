@@ -46,12 +46,12 @@ var ThisCouldBeBetter;
                 this.videoHelper = new GameFramework.VideoHelper(this.mediaLibrary.videos);
                 var venueInitial = null;
                 if (this.debuggingModeName == "SkipOpening") {
-                    venueInitial = GameFramework.Profile.venueWorldGenerate(this);
+                    venueInitial = GameFramework.Profile.anonymous().venueWorldGenerate(this);
                 }
                 else {
                     venueInitial = this.controlBuilder.opening(this, this.display.sizeInPixels).toVenue();
                 }
-                venueInitial = GameFramework.VenueFader.fromVenuesToAndFrom(venueInitial, venueInitial);
+                venueInitial = this.controlBuilder.venueTransitionalFromTo(venueInitial, venueInitial);
                 this.venueNext = venueInitial;
                 this.inputHelper = new GameFramework.InputHelper();
                 this.inputHelper.initialize(this);
@@ -80,6 +80,9 @@ var ThisCouldBeBetter;
                 }
                 this.venueCurrent.updateForTimerTick(this);
                 this.displayRecorder.updateForTimerTick(this);
+            }
+            venueTransitionTo(venueToTransitionTo) {
+                this.venueNext = this.controlBuilder.venueTransitionalFromTo(this.venueCurrent, venueToTransitionTo);
             }
             worldCreate() {
                 this.world = this._worldCreate(this);

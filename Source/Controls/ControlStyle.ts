@@ -88,6 +88,7 @@ export class ControlStyle
 
 export class ControlStyle_Instances
 {
+	Beveled: ControlStyle;
 	Default: ControlStyle;
 	Dark: ControlStyle;
 	Rounded: ControlStyle;
@@ -104,13 +105,55 @@ export class ControlStyle_Instances
 			null // drawBoxOfSizeAtPosToDisplay
 		);
 
+		this.Beveled = this.beveled();
+
 		this.Dark = new ControlStyle
 		(
 			"Dark", // name
 			ControlColorScheme.Instances().Dark,
 			null // drawBoxOfSizeAtPosToDisplay
 		);
-		
+
+		this.Rounded = this.rounded();
+
+		this._All =
+		[
+			this.Default, this.Dark, this.Rounded
+		];
+
+		this._AllByName = ArrayHelper.addLookupsByName(this._All);
+	}
+
+	beveled(): ControlStyle
+	{
+		var beveled = this.Default.clone();
+		var cornerRadius = 5;
+		beveled._drawBoxOfSizeAtPosWithColorsToDisplay =
+			(
+				size: Coords, pos: Coords,
+				colorFill: Color, colorBorder: Color,
+				isHighlighted: boolean,
+				display: Display
+			) =>
+			{
+				if (isHighlighted)
+				{
+					var temp = colorFill;
+					colorFill = colorBorder;
+					colorBorder = temp;
+				}
+
+				display.drawRectangleWithBeveledCorners
+				(
+					pos, size, colorFill, colorBorder, cornerRadius
+				);
+			};
+
+		return beveled;
+	}
+
+	rounded(): ControlStyle
+	{
 		var rounded = this.Default.clone();
 		var cornerRadius = 5;
 		rounded._drawBoxOfSizeAtPosWithColorsToDisplay =
@@ -133,15 +176,10 @@ export class ControlStyle_Instances
 					pos, size, colorFill, colorBorder, cornerRadius
 				);
 			};
-		this.Rounded = rounded;
-		
-		this._All =
-		[
-			this.Default, this.Dark, this.Rounded
-		];
 
-		this._AllByName = ArrayHelper.addLookupsByName(this._All);
+		return rounded;
 	}
+
 }
 
 }

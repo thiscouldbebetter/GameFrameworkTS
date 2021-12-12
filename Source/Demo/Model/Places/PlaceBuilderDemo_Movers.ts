@@ -1329,11 +1329,9 @@ class PlaceBuilderDemo_Movers
 						DataBinding.fromContext("You win!"),
 						() => // acknowledge
 						{
-							universe.venueNext = VenueFader.fromVenuesToAndFrom
-							(
-								universe.controlBuilder.title(universe, null).toVenue(),
-								null
-							);
+							var venueNext =
+								universe.controlBuilder.title(universe, null).toVenue();
+							universe.venueTransitionTo(venueNext);
 						},
 						universe.venueCurrent, // venuePrev
 						universe.display.sizeDefault().clone(),//.half(),
@@ -1452,10 +1450,9 @@ class PlaceBuilderDemo_Movers
 					DataBinding.fromContext("You lose!"),
 					() => // acknowledge
 					{
-						universe.venueNext = VenueFader.fromVenueTo
-						(
+						var venueNext =
 							universe.controlBuilder.title(universe, null).toVenue()
-						);
+						universe.venueTransitionTo(venueNext);
 					},
 					universe.venueCurrent, // venuePrev
 					universe.display.sizeDefault().clone(),//.half(),

@@ -296,16 +296,10 @@ export class ControlBuilder
 		venuePrev: Venue, confirm: () => void, cancel: () => void
 	): ControlBase
 	{
-		var controlBuilder = this;
-
 		var confirmThenReturnToVenuePrev = () =>
 		{
 			confirm();
-			var venueNext = controlBuilder.venueTransitionalFromTo
-			(
-				universe.venueCurrent, venuePrev
-			);
-			universe.venueNext = venueNext;
+			universe.venueTransitionTo(venuePrev);
 		}
 
 		var cancelThenReturnToVenuePrev = () =>
@@ -314,11 +308,7 @@ export class ControlBuilder
 			{
 				cancel();
 			}
-			var venueNext = controlBuilder.venueTransitionalFromTo
-			(
-				universe.venueCurrent, venuePrev
-			);
-			universe.venueNext = venueNext;
+			universe.venueTransitionTo(venuePrev);
 		}
 
 		return this.choice
@@ -362,12 +352,7 @@ export class ControlBuilder
 
 		var back = () =>
 		{
-			var venueNext = venuePrev;
-			venueNext = controlBuilder.venueTransitionalFromTo
-			(
-				 universe.venueCurrent, venueNext
-			);
-			universe.venueNext = venueNext;
+			universe.venueTransitionTo(venuePrev);
 		}
 
 		var returnValue = new ControlContainer
@@ -388,15 +373,11 @@ export class ControlBuilder
 					DataBinding.fromTrue(), // isEnabled
 					() => // click
 					{
-						var venueNext: Venue = Profile.toControlSaveStateSave
+						var venueNext = Profile.toControlSaveStateSave
 						(
 							universe, size, universe.venueCurrent
 						).toVenue();
-						venueNext = controlBuilder.venueTransitionalFromTo
-						(
-							universe.venueCurrent, venueNext
-						);
-						universe.venueNext = venueNext;
+						universe.venueTransitionTo(venueNext);
 					}
 				),
 
@@ -411,15 +392,11 @@ export class ControlBuilder
 					DataBinding.fromTrue(), // isEnabled
 					() => // click
 					{
-						var venueNext: Venue = Profile.toControlSaveStateLoad
+						var venueNext = Profile.toControlSaveStateLoad
 						(
 							universe, null, universe.venueCurrent
 						).toVenue();
-						venueNext = controlBuilder.venueTransitionalFromTo
-						(
-							universe.venueCurrent, venueNext
-						);
-						universe.venueNext = venueNext;
+						universe.venueTransitionTo(venueNext);
 					}
 				),
 
@@ -435,26 +412,18 @@ export class ControlBuilder
 					() => // click
 					{
 						var venueCurrent = universe.venueCurrent;
-						var venueNext: Venue = new VenueMessage
+						var venueNext = new VenueMessage
 						(
 							DataBinding.fromContext(universe.name + "\nv" + universe.version),
 							() => // acknowledge
 							{
-								var venueNext = controlBuilder.venueTransitionalFromTo
-								(
-									null, venueCurrent
-								);
-								universe.venueNext = venueNext;
+								universe.venueTransitionTo(venueCurrent);
 							},
 							universe.venueCurrent, // venuePrev
 							size,
 							false
 						);
-						venueNext = controlBuilder.venueTransitionalFromTo
-						(
-							venueCurrent, venueNext
-						);
-						universe.venueNext = venueNext;
+						universe.venueTransitionTo(venueNext);
 					}
 				),
 
@@ -477,31 +446,19 @@ export class ControlBuilder
 							() => // confirm
 							{
 								universe.reset();
-								var venueNext: Venue =
+								var venueNext =
 									controlBuilder.title(universe, null).toVenue();
-								venueNext = controlBuilder.venueTransitionalFromTo
-								(
-									universe.venueCurrent, venueNext
-								);
-								universe.venueNext = venueNext;
+								universe.venueTransitionTo(venueNext);
 							},
 							() => // cancel
 							{
 								var venueNext = venuePrev;
-								venueNext = controlBuilder.venueTransitionalFromTo
-								(
-									universe.venueCurrent, venueNext
-								);
-								universe.venueNext = venueNext;
+								universe.venueTransitionTo(venueNext);
 							}
 						);
 
 						var venueNext: Venue = controlConfirm.toVenue();
-						venueNext = controlBuilder.venueTransitionalFromTo
-						(
-							universe.venueCurrent, venueNext
-						);
-						universe.venueNext = venueNext;
+						universe.venueTransitionTo(venueNext);
 					}
 				),
 
@@ -585,13 +542,9 @@ export class ControlBuilder
 					DataBinding.fromTrue(), // isEnabled
 					() => // click
 					{
-						var venueNext: Venue =
+						var venueNext =
 							controlBuilder.game(universe, null, universe.venueCurrent).toVenue();
-						venueNext = controlBuilder.venueTransitionalFromTo
-						(
-							universe.venueCurrent, venueNext
-						);
-						universe.venueNext = venueNext;
+						universe.venueTransitionTo(venueNext);
 					}
 				),
 
@@ -606,15 +559,11 @@ export class ControlBuilder
 					DataBinding.fromTrue(), // isEnabled
 					() => // click
 					{
-						var venueNext: Venue = controlBuilder.settings
+						var venueNext = controlBuilder.settings
 						(
 							universe, null, universe.venueCurrent
-						).toVenue(),
-						venueNext = controlBuilder.venueTransitionalFromTo
-						(
-							universe.venueCurrent, venueNext
-						);
-						universe.venueNext = venueNext;
+						).toVenue();
+						universe.venueTransitionTo(venueNext);
 					}
 				),
 			],
@@ -626,12 +575,7 @@ export class ControlBuilder
 		{
 			var back = () =>
 			{
-				var venueNext: Venue = venuePrev;
-				venueNext = controlBuilder.venueTransitionalFromTo
-				(
-					universe.venueCurrent, venueNext
-				);
-				universe.venueNext = venueNext;
+				universe.venueTransitionTo(venuePrev);
 			};
 
 			var buttonResume = ControlButton.from8
@@ -663,8 +607,6 @@ export class ControlBuilder
 
 	inputs(universe: Universe, size: Coords, venuePrev: Venue): ControlBase
 	{
-		var controlBuilder = this;
-
 		if (size == null)
 		{
 			size = universe.display.sizeDefault();
@@ -856,12 +798,8 @@ export class ControlBuilder
 							},
 							null // cancel
 						);
-						var venueNext: Venue = controlConfirm.toVenue();
-						venueNext = controlBuilder.venueTransitionalFromTo
-						(
-							universe.venueCurrent, venueNext
-						);
-						universe.venueNext = venueNext;
+						var venueNext = controlConfirm.toVenue();
+						universe.venueTransitionTo(venueNext);
 					}
 				),
 
@@ -876,12 +814,7 @@ export class ControlBuilder
 					DataBinding.fromTrue(), // isEnabled
 					() => // click
 					{
-						var venueNext: Venue = venuePrev;
-						venueNext = controlBuilder.venueTransitionalFromTo
-						(
-							universe.venueCurrent, venueNext
-						);
-						universe.venueNext = venueNext;
+						universe.venueTransitionTo(venuePrev);
 					}
 				),
 
@@ -910,12 +843,7 @@ export class ControlBuilder
 					() => // click
 					{
 						placeDefn.actionToInputsMappingsSave();
-						var venueNext: Venue = venuePrev;
-						venueNext = controlBuilder.venueTransitionalFromTo
-						(
-							universe.venueCurrent, venueNext
-						);
-						universe.venueNext = venueNext;
+						universe.venueTransitionTo(venuePrev);
 					}
 				)
 			]
@@ -952,8 +880,6 @@ export class ControlBuilder
 
 	opening(universe: Universe, size: Coords): ControlBase
 	{
-		var controlBuilder = this;
-
 		if (size == null)
 		{
 			size = universe.display.sizeDefault();
@@ -969,11 +895,7 @@ export class ControlBuilder
 			universe.soundHelper.soundsAllStop(universe);
 
 			var venueNext = this.producer(universe, size).toVenue();
-
-			universe.venueNext = controlBuilder.venueTransitionalFromTo
-			(
-				universe.venueCurrent, venueNext
-			);
+			universe.venueTransitionTo(venueNext);
 		};
 
 		var visual: VisualBase = new VisualGroup
@@ -1033,8 +955,6 @@ export class ControlBuilder
 
 	producer(universe: Universe, size: Coords): ControlBase
 	{
-		var controlBuilder = this;
-
 		if (size == null)
 		{
 			size = universe.display.sizeDefault();
@@ -1050,11 +970,7 @@ export class ControlBuilder
 			universe.soundHelper.soundsAllStop(universe);
 
 			var venueTitle = this.title(universe, size).toVenue();
-
-			universe.venueNext = controlBuilder.venueTransitionalFromTo
-			(
-				universe.venueCurrent, venueTitle
-			);
+			universe.venueTransitionTo(venueTitle);
 		};
 
 		var visual: VisualBase = new VisualGroup
@@ -1112,8 +1028,6 @@ export class ControlBuilder
 
 	settings(universe: Universe, size: Coords, venuePrev: Venue): ControlBase
 	{
-		var controlBuilder = this;
-
 		if (size == null)
 		{
 			size = universe.display.sizeDefault();
@@ -1138,12 +1052,7 @@ export class ControlBuilder
 
 		var back = () =>
 		{
-			var venueNext = venuePrev;
-			venueNext = controlBuilder.venueTransitionalFromTo
-			(
-				universe.venueCurrent, venueNext
-			);
-			universe.venueNext = venueNext;
+			universe.venueTransitionTo(venuePrev);
 		};
 
 		var returnValue = new ControlContainer
@@ -1287,15 +1196,11 @@ export class ControlBuilder
 						display.initialize(universe);
 						platformHelper.initialize(universe);
 
-						var venueNext: Venue = universe.controlBuilder.settings
+						var venueNext = universe.controlBuilder.settings
 						(
 							universe, null, universe.venueCurrent
 						).toVenue();
-						venueNext = controlBuilder.venueTransitionalFromTo
-						(
-							universe.venueCurrent, venueNext
-						);
-						universe.venueNext = venueNext;
+						universe.venueTransitionTo(venueNext);
 					}
 				),
 
@@ -1313,9 +1218,8 @@ export class ControlBuilder
 						var venueCurrent = universe.venueCurrent;
 						var controlGameControls =
 							universe.controlBuilder.inputs(universe, size, venueCurrent);
-						var venueNext: Venue = controlGameControls.toVenue();
-						venueNext = controlBuilder.venueTransitionalFromTo(venueCurrent, venueNext);
-						universe.venueNext = venueNext;
+						var venueNext = controlGameControls.toVenue();
+						universe.venueTransitionTo(venueNext);
 					}
 				),
 
@@ -1350,8 +1254,6 @@ export class ControlBuilder
 		venueAfterSlideshow: Venue
 	): ControlBase
 	{
-		var controlBuilder = this;
-
 		if (size == null)
 		{
 			size = universe.display.sizeDefault();
@@ -1374,19 +1276,12 @@ export class ControlBuilder
 			{
 				venueNext = venueAfterSlideshow;
 			}
-			venueNext = controlBuilder.venueTransitionalFromTo
-			(
-				universe.venueCurrent, venueNext
-			);
-			universe.venueNext = venueNext;
+			universe.venueTransitionTo(venueNext);
 		};
 
 		var skip = () =>
 		{
-			universe.venueNext = controlBuilder.venueTransitionalFromTo
-			(
-				universe.venueCurrent, venueAfterSlideshow
-			);
+			universe.venueTransitionTo(venueAfterSlideshow);
 		};
 
 		for (var i = 0; i < imageNamesAndMessagesForSlides.length; i++)
@@ -1462,8 +1357,6 @@ export class ControlBuilder
 
 	title(universe: Universe, size: Coords): ControlBase
 	{
-		var controlBuilder = this;
-
 		if (size == null)
 		{
 			size = universe.display.sizeDefault();
@@ -1486,18 +1379,11 @@ export class ControlBuilder
 				(result: ControlBase) => // done
 				{
 					var venueProfileSelect = result.toVenue();
-
-					universe.venueNext = controlBuilder.venueTransitionalFromTo
-					(
-						universe.venueCurrent, venueProfileSelect
-					);
+					universe.venueTransitionTo(venueProfileSelect);
 				}
 			);
 
-			universe.venueNext = controlBuilder.venueTransitionalFromTo
-			(
-				universe.venueCurrent, venueTask
-			);
+			universe.venueTransitionTo(venueTask);
 		};
 
 		var visual: VisualBase = new VisualGroup
@@ -1653,10 +1539,7 @@ export class ControlBuilder
 								DataBinding.fromContext(instructions),
 								() => // acknowledge
 								{
-									universe.venueNext = controlBuilder.venueTransitionalFromTo
-									(
-										universe.venueCurrent, venueWorld
-									);
+									universe.venueTransitionTo(venueWorld);
 								},
 								false
 							);
@@ -1673,11 +1556,7 @@ export class ControlBuilder
 							venueNext = venueMovie;
 						}
 
-						venueNext = controlBuilder.venueTransitionalFromTo
-						(
-							universe.venueCurrent, venueNext
-						);
-						universe.venueNext = venueNext;
+						universe.venueTransitionTo(venueNext);
 					}
 				),
 
@@ -1692,12 +1571,7 @@ export class ControlBuilder
 					DataBinding.fromTrue(), // isEnabled
 					() => // click
 					{
-						var venueNext = venuePrev;
-						venueNext = controlBuilder.venueTransitionalFromTo
-						(
-							universe.venueCurrent, venueNext
-						);
-						universe.venueNext = venueNext;
+						universe.venueTransitionTo(venuePrev);
 					}
 				),
 
@@ -1739,11 +1613,8 @@ export class ControlBuilder
 							null // cancel
 						);
 
-						var venueNext: Venue = controlConfirm.toVenue();
-						venueNext = controlBuilder.venueTransitionalFromTo
-						(
-							universe.venueCurrent, venueNext
-						);
+						var venueNext = controlConfirm.toVenue();
+						universe.venueTransitionTo(venueNext);
 
 						universe.venueNext = venueNext;
 					}
@@ -1797,34 +1668,23 @@ export class ControlBuilder
 				(saveStateReloaded: SaveState) => // done
 				{
 					universe.world = saveStateReloaded.world;
-					var venueNext: Venue = universe.controlBuilder.worldLoad
+					var venueNext = universe.controlBuilder.worldLoad
 					(
 						universe, null
 					).toVenue();
-					venueNext = controlBuilder.venueTransitionalFromTo
-					(
-						universe.venueCurrent, venueNext
-					);
-					universe.venueNext = venueNext;
+					universe.venueTransitionTo(venueNext);
 				}
 			);
 
 			messageAsDataBinding.contextSet(venueTask);
 
-			universe.venueNext = controlBuilder.venueTransitionalFromTo
-			(
-				universe.venueCurrent, venueTask
-			);
+			universe.venueTransitionTo(venueTask);
 		};
 
 		var cancel = () =>
 		{
-			var venueNext: Venue = controlBuilder.worldLoad(universe, null).toVenue();
-			venueNext = controlBuilder.venueTransitionalFromTo
-			(
-				universe.venueCurrent, venueNext
-			);
-			universe.venueNext = venueNext;
+			var venueNext = controlBuilder.worldLoad(universe, null).toVenue();
+			universe.venueTransitionTo(venueNext);
 		};
 
 		var returnValue = ControlContainer.from4
@@ -1896,10 +1756,7 @@ export class ControlBuilder
 							confirm, cancel
 						);
 						var venueConfirm = controlConfirm.toVenue();
-						universe.venueNext = controlBuilder.venueTransitionalFromTo
-						(
-							universe.venueCurrent, venueConfirm
-						);
+						universe.venueTransitionTo(venueConfirm);
 					}
 				),
 
@@ -1936,15 +1793,11 @@ export class ControlBuilder
 											universe.serializer.deserialize(worldSerialized);
 										universe.world = worldDeserialized;
 
-										var venueNext: Venue = controlBuilder.game
+										var venueNext = controlBuilder.game
 										(
 											universe, size, universe.venueCurrent
 										).toVenue();
-										venueNext = controlBuilder.venueTransitionalFromTo
-										(
-											universe.venueCurrent, venueNext
-										);
-										universe.venueNext = venueNext;
+										universe.venueTransitionTo(venueNext);
 									}
 
 									var inputFile = venueFileUpload.toDomElement().getElementsByTagName("input")[0];
@@ -1969,15 +1822,11 @@ export class ControlBuilder
 							DataBinding.fromContext("No file specified."),
 							() => // acknowlege
 							{
-								var venueNext: Venue = controlBuilder.game
+								var venueNext = controlBuilder.game
 								(
 									universe, size, universe.venueCurrent
 								).toVenue();
-								venueNext = controlBuilder.venueTransitionalFromTo
-								(
-									universe.venueCurrent, venueNext
-								);
-								universe.venueNext = venueNext;
+								universe.venueTransitionTo(venueNext);
 							},
 							false //?
 						);
@@ -2006,10 +1855,7 @@ export class ControlBuilder
 						(
 							universe, size, universe.venueCurrent
 						).toVenue();
-						universe.venueNext = controlBuilder.venueTransitionalFromTo
-						(
-							universe.venueCurrent, venueGame
-						);
+						universe.venueTransitionTo(venueGame);
 					}
 				),
 			]

@@ -67,11 +67,7 @@ var ThisCouldBeBetter;
                 // children
                 controlsForStatusFields);
                 controlsForTabs.splice(0, 0, statusAsControl);
-                var back = () => {
-                    var venueNext = venuePrev;
-                    venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-                    universe.venueNext = venueNext;
-                };
+                var back = () => universe.venueTransitionTo(venuePrev);
                 var returnValue = new GameFramework.ControlTabbed("tabbedItems", GameFramework.Coords.create(), // pos
                 size, tabButtonSize, controlsForTabs, fontHeight, back, entity // context
                 );

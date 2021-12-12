@@ -226,6 +226,9 @@ var ThisCouldBeBetter;
             drawRectangleCentered(pos, size, colorFill, colorBorder) {
                 this._display2DOverlay.drawRectangleCentered(pos, size, colorFill, colorBorder);
             }
+            drawRectangleWithBeveledCorners(pos, size, colorFill, colorBorder, cornerRadius) {
+                this._display2DOverlay.drawRectangleWithBeveledCorners(pos, size, colorFill, colorBorder, cornerRadius);
+            }
             drawRectangleWithRoundedCorners(pos, size, colorFill, colorBorder, cornerRadius) {
                 this._display2DOverlay.drawRectangleWithRoundedCorners(pos, size, colorFill, colorBorder, cornerRadius);
             }

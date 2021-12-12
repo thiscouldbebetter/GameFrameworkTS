@@ -312,12 +312,7 @@ class PlaceBuilderDemo_Items
 			var universe = uwpe.universe;
 
 			var venuePrev = universe.venueCurrent;
-			var back = () =>
-			{
-				var venueNext: Venue = venuePrev;
-				venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-				universe.venueNext = venueNext;
-			};
+			var back = () => universe.venueTransitionTo(venuePrev);
 
 			var text =
 				"Fourscore and seven years ago, our fathers brought forth upon this continent "
@@ -359,9 +354,8 @@ class PlaceBuilderDemo_Items
 				null
 			);
 
-			var venueNext: Venue = container.toVenue();
-			venueNext = VenueFader.fromVenueTo(venueNext);
-			universe.venueNext = venueNext;
+			var venueNext = container.toVenue();
+			universe.venueTransitionTo(venueNext);
 
 			return "";
 		};

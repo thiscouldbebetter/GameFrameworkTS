@@ -235,6 +235,37 @@ var ThisCouldBeBetter;
                 var posAdjusted = this._drawPos.overwriteWith(pos).subtract(sizeHalf);
                 this.drawRectangle(posAdjusted, size, colorFill, colorBorder);
             }
+            drawRectangleWithBeveledCorners(pos, size, colorFill, colorBorder, cornerRadius) {
+                var drawPos = this._drawPos;
+                this.graphics.beginPath();
+                drawPos.overwriteWith(pos).addXY(cornerRadius, 0);
+                this.graphics.moveTo(drawPos.x, drawPos.y);
+                drawPos.addXY(size.x - cornerRadius * 2, 0);
+                this.graphics.lineTo(drawPos.x, drawPos.y);
+                drawPos.addXY(cornerRadius, cornerRadius);
+                this.graphics.lineTo(drawPos.x, drawPos.y);
+                drawPos.addXY(0, size.y - cornerRadius * 2);
+                this.graphics.lineTo(drawPos.x, drawPos.y);
+                drawPos.addXY(0 - cornerRadius, cornerRadius);
+                this.graphics.lineTo(drawPos.x, drawPos.y);
+                drawPos.addXY(0 - (size.x - cornerRadius * 2), 0);
+                this.graphics.lineTo(drawPos.x, drawPos.y);
+                drawPos.addXY(0 - cornerRadius, 0 - cornerRadius);
+                this.graphics.lineTo(drawPos.x, drawPos.y);
+                drawPos.addXY(0, 0 - (size.y - cornerRadius * 2));
+                this.graphics.lineTo(drawPos.x, drawPos.y);
+                drawPos.addXY(cornerRadius, 0 - cornerRadius);
+                this.graphics.lineTo(drawPos.x, drawPos.y);
+                this.graphics.closePath();
+                if (colorFill != null) {
+                    this.graphics.fillStyle = GameFramework.Color.systemColorGet(colorFill);
+                    this.graphics.fill();
+                }
+                if (colorBorder != null) {
+                    this.graphics.strokeStyle = GameFramework.Color.systemColorGet(colorBorder);
+                    this.graphics.stroke();
+                }
+            }
             drawRectangleWithRoundedCorners(pos, size, colorFill, colorBorder, cornerRadius) {
                 var drawPos = this._drawPos;
                 var curveControlPos = this._curveControlPos;

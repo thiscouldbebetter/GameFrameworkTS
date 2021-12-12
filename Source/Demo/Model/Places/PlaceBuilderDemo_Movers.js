@@ -661,7 +661,8 @@ class PlaceBuilderDemo_Movers {
                 if (entityPlayer.itemHolder().hasItem(keysRequired)) {
                     var venueMessage = new VenueMessage(DataBinding.fromContext("You win!"), () => // acknowledge
                      {
-                        universe.venueNext = VenueFader.fromVenuesToAndFrom(universe.controlBuilder.title(universe, null).toVenue(), null);
+                        var venueNext = universe.controlBuilder.title(universe, null).toVenue();
+                        universe.venueTransitionTo(venueNext);
                     }, universe.venueCurrent, // venuePrev
                     universe.display.sizeDefault().clone(), //.half(),
                     true // showMessageOnly
@@ -735,7 +736,8 @@ class PlaceBuilderDemo_Movers {
             var universe = uwpe.universe;
             var venueMessage = new VenueMessage(DataBinding.fromContext("You lose!"), () => // acknowledge
              {
-                universe.venueNext = VenueFader.fromVenueTo(universe.controlBuilder.title(universe, null).toVenue());
+                var venueNext = universe.controlBuilder.title(universe, null).toVenue();
+                universe.venueTransitionTo(venueNext);
             }, universe.venueCurrent, // venuePrev
             universe.display.sizeDefault().clone(), //.half(),
             true // showMessageOnly
@@ -863,8 +865,8 @@ class PlaceBuilderDemo_Movers {
         var world = uwpe.world;
         var entityPlayer = uwpe.entity;
         var inputHelper = universe.inputHelper;
-        if (inputHelper.isMouseClicked(null)) {
-            inputHelper.isMouseClicked(false);
+        if (inputHelper.isMouseClicked()) {
+            inputHelper.mouseClickedSet(false);
             var selector = entityPlayer.selector();
             selector.entityAtMouseClickPosSelect(uwpe);
         }
@@ -903,9 +905,7 @@ class PlaceBuilderDemo_Movers {
     entityDefnBuildPlayer_Controllable() {
         var toControlMenu = Playable.toControlMenu;
         var toControlWorldOverlay = Playable.toControlWorldOverlay;
-        var toControl = 
-        //(universe: Universe, size: Coords, entity: Entity, venuePrev: Venue, isMenu: boolean) =>
-        (uwpe) => {
+        var toControl = (uwpe) => {
             var universe = uwpe.universe;
             var size = universe.display.sizeInPixels;
             var entity = uwpe.entity;

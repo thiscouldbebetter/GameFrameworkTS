@@ -155,12 +155,7 @@ export class Playable implements EntityProperty<Playable>
 		);
 		controlsForTabs.splice(0, 0, statusAsControl);
 
-		var back = () =>
-		{
-			var venueNext: Venue = venuePrev;
-			venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-			universe.venueNext = venueNext;
-		};
+		var back = () => universe.venueTransitionTo(venuePrev);
 
 		var returnValue = new ControlTabbed<Entity>
 		(

@@ -265,11 +265,7 @@ var ThisCouldBeBetter;
                 var fontHeightLarge = fontHeight * 1.5;
                 var itemHolder = this;
                 var world = universe.world;
-                var back = () => {
-                    var venueNext = venuePrev;
-                    venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-                    universe.venueNext = venueNext;
-                };
+                var back = () => universe.venueTransitionTo(venuePrev);
                 var drop = () => {
                     if (itemHolder.itemSelected != null) {
                         itemHolder.itemDrop(uwpe.entity2Set(itemHolder.itemSelected.toEntity(uwpe)));

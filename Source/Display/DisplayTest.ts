@@ -154,6 +154,13 @@ export class DisplayTest implements Display
 	): void
 	{}
 
+	drawRectangleWithBeveledCorners
+	(
+		pos: Coords, size: Coords, colorFill: Color, colorBorder: Color,
+		cornerRadius: number
+	): void
+	{}
+
 	drawRectangleWithRoundedCorners
 	(
 		pos: Coords, size: Coords, colorFill: Color, colorBorder: Color,

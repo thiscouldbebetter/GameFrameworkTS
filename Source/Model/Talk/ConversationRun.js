@@ -62,17 +62,12 @@ var ThisCouldBeBetter;
                 var next = () => {
                     conversationRun.next(universe);
                 };
-                var back = () => {
-                    var venueNext = venueToReturnTo;
-                    venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-                    universe.venueNext = venueNext;
-                };
+                var back = () => universe.venueTransitionTo(venueToReturnTo);
                 var viewLog = () => {
                     var venueCurrent = universe.venueCurrent;
                     var transcriptAsControl = conversationRun.toControlTranscript(size, universe, venueCurrent);
                     var venueNext = transcriptAsControl.toVenue();
-                    venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-                    universe.venueNext = venueNext;
+                    universe.venueTransitionTo(venueNext);
                 };
                 var returnValue = new GameFramework.ControlContainer("containerConversation", GameFramework.Coords.create(), // pos
                 size, 
@@ -144,9 +139,7 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromTrue(), // isEnabled
                     () => // click
                      {
-                        var venueNext = venueToReturnTo;
-                        venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-                        universe.venueNext = venueNext;
+                        universe.venueTransitionTo(venueToReturnTo);
                     }),
                     new GameFramework.ControlLabel("labelTranscript", GameFramework.Coords.fromXY(size.x / 2, marginSize.y), // pos
                     size, // size

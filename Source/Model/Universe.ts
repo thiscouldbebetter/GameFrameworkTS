@@ -139,7 +139,7 @@ export class Universe
 
 		if (this.debuggingModeName == "SkipOpening")
 		{
-			venueInitial = Profile.venueWorldGenerate(this);
+			venueInitial = Profile.anonymous().venueWorldGenerate(this);
 		}
 		else
 		{
@@ -149,7 +149,7 @@ export class Universe
 			).toVenue();
 		}
 
-		venueInitial = VenueFader.fromVenuesToAndFrom
+		venueInitial = this.controlBuilder.venueTransitionalFromTo
 		(
 			venueInitial, venueInitial
 		);
@@ -203,6 +203,14 @@ export class Universe
 		this.venueCurrent.updateForTimerTick(this);
 
 		this.displayRecorder.updateForTimerTick(this);
+	}
+
+	venueTransitionTo(venueToTransitionTo: Venue)
+	{
+		this.venueNext = this.controlBuilder.venueTransitionalFromTo
+		(
+			this.venueCurrent, venueToTransitionTo
+		);
 	}
 
 	worldCreate(): World

@@ -155,12 +155,7 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 		var itemHolder = entityItemHolder.itemHolder();
 		var crafter = this;
 
-		var back = () =>
-		{
-			var venueNext = venuePrev;
-			venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-			universe.venueNext = venueNext;
-		};
+		var back = () => universe.venueTransitionTo(venuePrev);
 
 		var addToQueue = () =>
 		{

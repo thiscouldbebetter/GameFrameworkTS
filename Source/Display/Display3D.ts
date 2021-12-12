@@ -550,6 +550,19 @@ export class Display3D implements Display
 		this._display2DOverlay.drawRectangleCentered(pos, size, colorFill, colorBorder);
 	}
 
+	drawRectangleWithBeveledCorners
+	(
+		pos: Coords, size: Coords,
+		colorFill: Color, colorBorder: Color,
+		cornerRadius: number
+	): void
+	{
+		this._display2DOverlay.drawRectangleWithBeveledCorners
+		(
+			pos, size, colorFill, colorBorder, cornerRadius
+		);
+	}
+
 	drawRectangleWithRoundedCorners
 	(
 		pos: Coords, size: Coords,

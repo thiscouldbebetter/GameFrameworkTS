@@ -67,9 +67,8 @@ class Action_Instances
 				(
 					uwpe, null, "ShowMenuPlayer"
 				);
-				var venueNext: Venue = control.toVenue();
-				venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-				universe.venueNext = venueNext;
+				var venueNext = control.toVenue();
+				universe.venueTransitionTo(venueNext);
 			}
 		);
 
@@ -82,9 +81,8 @@ class Action_Instances
 				var universe = uwpe.universe;
 				var controlBuilder = universe.controlBuilder;
 				var control = controlBuilder.gameAndSettings1(universe);
-				var venueNext: Venue = control.toVenue();
-				venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-				universe.venueNext = venueNext;
+				var venueNext = control.toVenue();
+				universe.venueTransitionTo(venueNext);
 			}
 		);
 	}

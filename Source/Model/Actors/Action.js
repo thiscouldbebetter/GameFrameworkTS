@@ -35,8 +35,7 @@ var ThisCouldBeBetter;
                     var actor = uwpe.entity;
                     var control = actor.controllable().toControl(uwpe, null, "ShowMenuPlayer");
                     var venueNext = control.toVenue();
-                    venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-                    universe.venueNext = venueNext;
+                    universe.venueTransitionTo(venueNext);
                 });
                 this.ShowMenuSettings = new Action("ShowMenuSettings", 
                 // perform
@@ -45,8 +44,7 @@ var ThisCouldBeBetter;
                     var controlBuilder = universe.controlBuilder;
                     var control = controlBuilder.gameAndSettings1(universe);
                     var venueNext = control.toVenue();
-                    venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-                    universe.venueNext = venueNext;
+                    universe.venueTransitionTo(venueNext);
                 });
             }
         }

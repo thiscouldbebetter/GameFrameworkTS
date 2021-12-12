@@ -492,15 +492,7 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 			null
 		);
 
-		var back = () =>
-		{
-			var venueNext = venuePrev;
-			venueNext = VenueFader.fromVenuesToAndFrom
-			(
-				venueNext, universe.venueCurrent
-			);
-			universe.venueNext = venueNext;
-		};
+		var back = () => universe.venueTransitionTo(venuePrev);
 
 		var returnValue = new ControlContainer
 		(

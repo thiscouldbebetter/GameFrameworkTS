@@ -45,11 +45,7 @@ var ThisCouldBeBetter;
                 var itemHolderGetterPutter = entityGetterPutter.itemHolder();
                 var itemHolderContainer = entityContainer.itemHolder();
                 var world = universe.world;
-                var back = () => {
-                    var venueNext = venuePrev;
-                    venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-                    universe.venueNext = venueNext;
-                };
+                var back = () => universe.venueTransitionTo(venuePrev);
                 var get = () => {
                     itemContainer.transfer(world, entityContainer, entityGetterPutter, "Took");
                 };

@@ -497,6 +497,59 @@ export class Display2D implements Display
 		this.drawRectangle(posAdjusted, size, colorFill, colorBorder);
 	}
 
+	drawRectangleWithBeveledCorners
+	(
+		pos: Coords, size: Coords,
+		colorFill: Color, colorBorder: Color,
+		cornerRadius: number
+	): void
+	{
+		var drawPos = this._drawPos;
+
+		this.graphics.beginPath();
+
+		drawPos.overwriteWith(pos).addXY(cornerRadius, 0);
+		this.graphics.moveTo(drawPos.x, drawPos.y);
+
+		drawPos.addXY(size.x - cornerRadius * 2, 0);
+		this.graphics.lineTo(drawPos.x, drawPos.y)
+
+		drawPos.addXY(cornerRadius, cornerRadius);
+		this.graphics.lineTo(drawPos.x, drawPos.y);
+
+		drawPos.addXY(0, size.y - cornerRadius * 2);
+		this.graphics.lineTo(drawPos.x, drawPos.y);
+
+		drawPos.addXY(0 - cornerRadius, cornerRadius);
+		this.graphics.lineTo(drawPos.x, drawPos.y);
+
+		drawPos.addXY(0 - (size.x - cornerRadius * 2), 0);
+		this.graphics.lineTo(drawPos.x, drawPos.y)
+
+		drawPos.addXY(0 - cornerRadius, 0 - cornerRadius);
+		this.graphics.lineTo(drawPos.x, drawPos.y);
+
+		drawPos.addXY(0, 0 - (size.y - cornerRadius * 2) );
+		this.graphics.lineTo(drawPos.x, drawPos.y);
+
+		drawPos.addXY(cornerRadius, 0 - cornerRadius );
+		this.graphics.lineTo(drawPos.x, drawPos.y);
+
+		this.graphics.closePath();
+
+		if (colorFill != null)
+		{
+			this.graphics.fillStyle = Color.systemColorGet(colorFill);
+			this.graphics.fill();
+		}
+
+		if (colorBorder != null)
+		{
+			this.graphics.strokeStyle = Color.systemColorGet(colorBorder);
+			this.graphics.stroke();
+		}
+	}
+
 	drawRectangleWithRoundedCorners
 	(
 		pos: Coords, size: Coords,

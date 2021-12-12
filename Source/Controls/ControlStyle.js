@@ -46,9 +46,32 @@ var ThisCouldBeBetter;
                 this.Default = new ControlStyle("Default", // name
                 GameFramework.ControlColorScheme.Instances().Default, null // drawBoxOfSizeAtPosToDisplay
                 );
+                this.Beveled = this.beveled();
                 this.Dark = new ControlStyle("Dark", // name
                 GameFramework.ControlColorScheme.Instances().Dark, null // drawBoxOfSizeAtPosToDisplay
                 );
+                this.Rounded = this.rounded();
+                this._All =
+                    [
+                        this.Default, this.Dark, this.Rounded
+                    ];
+                this._AllByName = GameFramework.ArrayHelper.addLookupsByName(this._All);
+            }
+            beveled() {
+                var beveled = this.Default.clone();
+                var cornerRadius = 5;
+                beveled._drawBoxOfSizeAtPosWithColorsToDisplay =
+                    (size, pos, colorFill, colorBorder, isHighlighted, display) => {
+                        if (isHighlighted) {
+                            var temp = colorFill;
+                            colorFill = colorBorder;
+                            colorBorder = temp;
+                        }
+                        display.drawRectangleWithBeveledCorners(pos, size, colorFill, colorBorder, cornerRadius);
+                    };
+                return beveled;
+            }
+            rounded() {
                 var rounded = this.Default.clone();
                 var cornerRadius = 5;
                 rounded._drawBoxOfSizeAtPosWithColorsToDisplay =
@@ -60,12 +83,7 @@ var ThisCouldBeBetter;
                         }
                         display.drawRectangleWithRoundedCorners(pos, size, colorFill, colorBorder, cornerRadius);
                     };
-                this.Rounded = rounded;
-                this._All =
-                    [
-                        this.Default, this.Dark, this.Rounded
-                    ];
-                this._AllByName = GameFramework.ArrayHelper.addLookupsByName(this._All);
+                return rounded;
             }
         }
         GameFramework.ControlStyle_Instances = ControlStyle_Instances;

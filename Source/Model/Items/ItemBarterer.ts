@@ -144,9 +144,7 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 		var back = () =>
 		{
 			itemBarterer.reset(entityCustomer, entityStore);
-			var venueNext: Venue = venuePrev;
-			venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-			universe.venueNext = venueNext;
+			universe.venueTransitionTo(venuePrev);
 		};
 
 		var itemOfferCustomer = () =>

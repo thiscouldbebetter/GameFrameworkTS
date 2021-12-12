@@ -41,8 +41,8 @@ class PlaceBuilderDemo_Emplacements
 				universe.venueCurrent,
 				true // includeTitleAndDoneButton
 			);
-			var venueNext: Venue = itemCrafterAsControls.toVenue();
-			universe.venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
+			var venueNext = itemCrafterAsControls.toVenue();
+			universe.venueTransitionTo(venueNext);
 			return "";
 		};
 		var anvilItemCrafter = new ItemCrafter
@@ -302,9 +302,8 @@ class PlaceBuilderDemo_Emplacements
 							entityUsing, entityOther,
 							universe.venueCurrent
 						);
-						var venueNext: Venue = itemContainerAsControl.toVenue();
-						venueNext = VenueFader.fromVenueTo(venueNext);
-						universe.venueNext = venueNext;
+						var venueNext = itemContainerAsControl.toVenue();
+						universe.venueTransitionTo(venueNext);
 						return null;
 					}
 				)
@@ -417,9 +416,8 @@ class PlaceBuilderDemo_Emplacements
 			(
 				u, u.display.sizeInPixels, eUsing, eUsed, u.venueCurrent
 			);
-			var venueNext: Venue = itemContainerAsControl.toVenue();
-			venueNext = VenueFader.fromVenuesToAndFrom(venueNext, null);
-			u.venueNext = venueNext;
+			var venueNext = itemContainerAsControl.toVenue();
+			u.venueTransitionTo(venueNext);
 		}
 
 		var entityDefn = new Entity

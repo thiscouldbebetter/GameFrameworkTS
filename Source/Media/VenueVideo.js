@@ -61,7 +61,7 @@ var ThisCouldBeBetter;
                     var colorBlack = GameFramework.Color.byName("Black");
                     display.drawBackground(colorBlack, colorBlack);
                     universe.platformHelper.platformableShow(display);
-                    universe.venueNext = universe.controlBuilder.venueTransitionalFromTo(this, this.venueNext);
+                    universe.venueTransitionTo(this.venueNext);
                 }
             }
         }

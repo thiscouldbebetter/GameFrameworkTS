@@ -88,12 +88,7 @@ export class ItemContainer implements EntityProperty<ItemContainer>
 
 		var world = universe.world;
 
-		var back = () =>
-		{
-			var venueNext: Venue = venuePrev;
-			venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-			universe.venueNext = venueNext;
-		};
+		var back = () => universe.venueTransitionTo(venuePrev);
 
 		var get = () =>
 		{

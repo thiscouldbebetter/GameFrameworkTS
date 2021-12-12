@@ -64,9 +64,8 @@ export class ItemStore implements EntityProperty<ItemStore>
 			entityUsing, entityUsed,
 			universe.venueCurrent
 		);
-		var venueNext: Venue = storeAsControl.toVenue();
-		venueNext = VenueFader.fromVenueTo(venueNext);
-		universe.venueNext = venueNext;
+		var venueNext = storeAsControl.toVenue();
+		universe.venueTransitionTo(venueNext);
 	}
 
 	// EntityProperty.

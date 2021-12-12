@@ -25,11 +25,7 @@ var ThisCouldBeBetter;
                 var fontHeight = 10;
                 var fontHeightSmall = fontHeight * .6;
                 var fontHeightLarge = fontHeight * 1.5;
-                var back = () => {
-                    var venueNext = venuePrev;
-                    venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-                    universe.venueNext = venueNext;
-                };
+                var back = () => universe.venueTransitionTo(venuePrev);
                 var buttonSize = GameFramework.Coords.fromXY(20, 10);
                 var childControls = [
                     new GameFramework.ControlLabel("labelJournalEntries", GameFramework.Coords.fromXY(10, 5), // pos
@@ -99,8 +95,7 @@ var ThisCouldBeBetter;
                         }, null // cancel
                         );
                         var venueNext = controlConfirm.toVenue();
-                        venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-                        universe.venueNext = venueNext;
+                        universe.venueTransitionTo(venueNext);
                     }, // click
                     false // canBeHeldDown
                     ),
