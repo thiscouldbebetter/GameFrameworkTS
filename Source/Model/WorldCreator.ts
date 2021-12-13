@@ -21,7 +21,7 @@ export class WorldCreator
 
 	static fromWorldCreate
 	(
-		worldCreate: (u: Universe) => World
+		worldCreate: (u: Universe, wc: WorldCreator) => World
 	): WorldCreator
 	{
 		return new WorldCreator(worldCreate, null, null);
