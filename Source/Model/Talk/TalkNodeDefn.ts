@@ -37,6 +37,7 @@ class TalkNodeDefn_Instances
 {
 	Activate: TalkNodeDefn;
 	Display: TalkNodeDefn;
+	DoNothing: TalkNodeDefn;
 	Goto: TalkNodeDefn;
 	JumpIfFalse: TalkNodeDefn;
 	JumpIfTrue: TalkNodeDefn;
@@ -58,15 +59,21 @@ class TalkNodeDefn_Instances
 		this.Activate = new TalkNodeDefn
 		(
 			"Activate",
-			(universe: Universe, conversationRun: ConversationRun, scope: ConversationScope, talkNode: TalkNode) => // execute
+			(
+				universe: Universe,
+				conversationRun: ConversationRun,
+				scope: ConversationScope,
+				talkNode: TalkNode
+			) => // execute
 			{
 				var talkNodeToActivateName = talkNode.next;
 				var isActiveValueToSet = (talkNode.text == "true");
 
-				var conversationDefn = conversationRun.defn;
-				var talkNodeToActivate
-					= conversationDefn.talkNodesByName.get(talkNodeToActivateName);
-				talkNodeToActivate.isActive = isActiveValueToSet;
+				conversationRun.activateOrDeactivate
+				(
+					talkNodeToActivateName, isActiveValueToSet
+				);
+
 				scope.talkNodeAdvance(conversationRun);
 				conversationRun.update(universe);
 			},
@@ -76,12 +83,32 @@ class TalkNodeDefn_Instances
 		this.Display = new TalkNodeDefn
 		(
 			"Display",
-			(universe: Universe, conversationRun: ConversationRun, scope: ConversationScope, talkNode: TalkNode) => // execute
+			(
+				universe: Universe,
+				conversationRun: ConversationRun,
+				scope: ConversationScope,
+				talkNode: TalkNode
+			) => // execute
 			{
 				scope.displayTextCurrent = talkNode.text;
-				scope.talkNodeAdvance(conversationRun);
+				scope.talkNodeNextSpecifiedOrAdvance(conversationRun);
 
 				conversationRun.talkNodesForTranscript.push(talkNode);
+			},
+			null // activate
+		);
+
+		this.DoNothing = new TalkNodeDefn
+		(
+			"DoNothing",
+			(
+				universe: Universe,
+				conversationRun: ConversationRun,
+				scope: ConversationScope,
+				talkNode: TalkNode
+			) => // execute
+			{
+				scope.talkNodeAdvance(conversationRun);
 			},
 			null // activate
 		);
@@ -89,14 +116,15 @@ class TalkNodeDefn_Instances
 		this.Goto = new TalkNodeDefn
 		(
 			"Goto",
-			(universe: Universe, conversationRun: ConversationRun, scope: ConversationScope, talkNode: TalkNode) => // execute
+			(
+				universe: Universe,
+				conversationRun: ConversationRun,
+				scope: ConversationScope,
+				talkNode: TalkNode
+			) => // execute
 			{
 				var talkNodeNameNext = talkNode.next;
-				scope.talkNodeCurrent = conversationRun.defn.talkNodeByName
-				(
-					talkNodeNameNext
-				);
-				conversationRun.update(universe);
+				conversationRun.goto(talkNodeNameNext, universe);
 			},
 			null // activate
 		);
@@ -248,12 +276,17 @@ class TalkNodeDefn_Instances
 		this.Script = new TalkNodeDefn
 		(
 			"Script",
-			(universe: Universe, conversationRun: ConversationRun, scope: ConversationScope, talkNode: TalkNode) => // execute
+			(
+				universe: Universe,
+				conversationRun: ConversationRun,
+				scope: ConversationScope,
+				talkNode: TalkNode
+			) => // execute
 			{
 				var scriptToRunAsString = "(" + talkNode.text + ")";
 				var scriptToRun = eval(scriptToRunAsString);
 				scriptToRun(universe, conversationRun);
-				scope.talkNodeAdvance(conversationRun);
+				scope.talkNodeNextSpecifiedOrAdvance(conversationRun);
 				conversationRun.update(universe); // hack
 			},
 			null // activate
@@ -316,6 +349,7 @@ class TalkNodeDefn_Instances
 		[
 			this.Activate,
 			this.Display,
+			this.DoNothing,
 			this.Goto,
 			this.JumpIfFalse,
 			this.JumpIfTrue,

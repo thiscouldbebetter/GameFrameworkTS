@@ -38,13 +38,44 @@ export class ConversationScope
 		this.haveOptionsBeenUpdated = true;
 	}
 
+	node(): TalkNode
+	{
+		// Tersely named convenience method for scripts.
+		return this.talkNodeForOptionSelected;
+	}
+
 	talkNodeAdvance(conversationRun: ConversationRun): ConversationScope
 	{
 		var conversationDefn = conversationRun.defn;
 		var defnTalkNodes = conversationDefn.talkNodes;
-		var talkNodeIndex = defnTalkNodes.indexOf(this.talkNodeCurrent);
-		var talkNodeNext = defnTalkNodes[talkNodeIndex + 1];
-		this.talkNodeCurrent = talkNodeNext;
+		var talkNodeInitial = this.talkNodeCurrent;
+		while
+		(
+			this.talkNodeCurrent == talkNodeInitial
+			|| this.talkNodeCurrent.isActive == false
+		)
+		{
+			var talkNodeIndex = defnTalkNodes.indexOf(this.talkNodeCurrent);
+			var talkNodeNext = defnTalkNodes[talkNodeIndex + 1];
+			this.talkNodeCurrent = talkNodeNext;
+		}
+		return this;
+	}
+
+	talkNodeNextSpecifiedOrAdvance(conversationRun: ConversationRun): ConversationScope
+	{
+		var conversationDefn = conversationRun.defn;
+		var nodeNextNameSpecified = this.talkNodeCurrent.next;
+		if (nodeNextNameSpecified == null)
+		{
+			this.talkNodeAdvance(conversationRun);
+		}
+		else
+		{
+			this.talkNodeCurrent =
+				conversationDefn.talkNodeByName(nodeNextNameSpecified);
+		}
+
 		return this;
 	}
 

@@ -23,9 +23,7 @@ var ThisCouldBeBetter;
                  {
                     var talkNodeToActivateName = talkNode.next;
                     var isActiveValueToSet = (talkNode.text == "true");
-                    var conversationDefn = conversationRun.defn;
-                    var talkNodeToActivate = conversationDefn.talkNodesByName.get(talkNodeToActivateName);
-                    talkNodeToActivate.isActive = isActiveValueToSet;
+                    conversationRun.activateOrDeactivate(talkNodeToActivateName, isActiveValueToSet);
                     scope.talkNodeAdvance(conversationRun);
                     conversationRun.update(universe);
                 }, null // activate
@@ -33,15 +31,19 @@ var ThisCouldBeBetter;
                 this.Display = new TalkNodeDefn("Display", (universe, conversationRun, scope, talkNode) => // execute
                  {
                     scope.displayTextCurrent = talkNode.text;
-                    scope.talkNodeAdvance(conversationRun);
+                    scope.talkNodeNextSpecifiedOrAdvance(conversationRun);
                     conversationRun.talkNodesForTranscript.push(talkNode);
+                }, null // activate
+                );
+                this.DoNothing = new TalkNodeDefn("DoNothing", (universe, conversationRun, scope, talkNode) => // execute
+                 {
+                    scope.talkNodeAdvance(conversationRun);
                 }, null // activate
                 );
                 this.Goto = new TalkNodeDefn("Goto", (universe, conversationRun, scope, talkNode) => // execute
                  {
                     var talkNodeNameNext = talkNode.next;
-                    scope.talkNodeCurrent = conversationRun.defn.talkNodeByName(talkNodeNameNext);
-                    conversationRun.update(universe);
+                    conversationRun.goto(talkNodeNameNext, universe);
                 }, null // activate
                 );
                 this.JumpIfFalse = new TalkNodeDefn("JumpIfFalse", (universe, conversationRun, scope, talkNode) => // execute
@@ -129,7 +131,7 @@ var ThisCouldBeBetter;
                     var scriptToRunAsString = "(" + talkNode.text + ")";
                     var scriptToRun = eval(scriptToRunAsString);
                     scriptToRun(universe, conversationRun);
-                    scope.talkNodeAdvance(conversationRun);
+                    scope.talkNodeNextSpecifiedOrAdvance(conversationRun);
                     conversationRun.update(universe); // hack
                 }, null // activate
                 );
@@ -170,6 +172,7 @@ var ThisCouldBeBetter;
                     [
                         this.Activate,
                         this.Display,
+                        this.DoNothing,
                         this.Goto,
                         this.JumpIfFalse,
                         this.JumpIfTrue,

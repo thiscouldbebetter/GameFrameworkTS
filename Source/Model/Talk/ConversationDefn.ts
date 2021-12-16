@@ -30,12 +30,12 @@ export class ConversationDefn
 		this.talkNodesByName = ArrayHelper.addLookupsByName(this.talkNodes);
 	}
 
-	talkNodeByName(nameOfTalkNodeToGet: string)
+	talkNodeByName(nameOfTalkNodeToGet: string): TalkNode
 	{
 		return this.talkNodesByName.get(nameOfTalkNodeToGet);
 	}
 
-	talkNodesByNames(namesOfTalkNodesToGet: string[])
+	talkNodesByNames(namesOfTalkNodesToGet: string[]): TalkNode[]
 	{
 		var returnNodes = [];
 
@@ -49,7 +49,7 @@ export class ConversationDefn
 		return returnNodes;
 	}
 
-	expandFromContentTextString(contentTextString: TextString)
+	expandFromContentTextString(contentTextString: TextString): void
 	{
 		var contentText = contentTextString.value;
 		var contentTextAsLines = contentText.split("\n");
@@ -123,7 +123,7 @@ export class ConversationDefn
 
 	// serialization
 
-	static deserialize(conversationDefnAsJSON: string)
+	static deserialize(conversationDefnAsJSON: string): ConversationDefn
 	{
 		var conversationDefn = JSON.parse(conversationDefnAsJSON);
 
@@ -178,7 +178,7 @@ export class ConversationDefn
 		return conversationDefn;
 	}
 
-	serialize()
+	serialize(): string
 	{
 		var talkNodeDefnsToRestore = this.talkNodeDefns;
 		delete this.talkNodeDefns;

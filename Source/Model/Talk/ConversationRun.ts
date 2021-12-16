@@ -54,6 +54,39 @@ export class ConversationRun
 
 	// instance methods
 
+	activate(talkNodeToActivateName: string): void
+	{
+		this.activateOrDeactivate(talkNodeToActivateName, true);
+	}
+
+	activateOrDeactivate
+	(
+		talkNodeToActivateName: string,
+		isActiveValueToSet: boolean
+	): void
+	{
+		var conversationDefn = this.defn;
+		var talkNodeToActivate
+			= conversationDefn.talkNodesByName.get(talkNodeToActivateName);
+		talkNodeToActivate.isActive = isActiveValueToSet;
+	}
+
+	deactivate(talkNodeToDeactivateName: string): void
+	{
+		this.activateOrDeactivate(talkNodeToDeactivateName, false);
+	}
+
+	goto(talkNodeNameNext: string, universe: Universe): void
+	{
+		// This convenience method is tersely named for use in scripts.
+		var scope = this.scopeCurrent;
+		scope.talkNodeCurrent = this.defn.talkNodeByName
+		(
+			talkNodeNameNext
+		);
+		this.update(universe);
+	}
+
 	next(universe: Universe): void
 	{
 		var responseSelected = this.scopeCurrent.talkNodeForOptionSelected;
@@ -67,6 +100,34 @@ export class ConversationRun
 		this.update(universe);
 	}
 
+	nodesByPrefix(nodeNamePrefix: string): TalkNode[]
+	{
+		// This convenience method is tersely named for use in scripts.
+		var nodesStartingWithPrefix = this.defn.talkNodes.filter
+		(
+			x => x.name.startsWith(nodeNamePrefix)
+		);
+		return nodesStartingWithPrefix;
+	}
+
+	player(): Entity
+	{
+		// This convenience method is tersely named for use in scripts.
+		return this.entityPlayer;
+	}
+
+	scope(): ConversationScope
+	{
+		// This convenience method is tersely named for use in scripts.
+		return this.scopeCurrent;
+	}
+
+	talker(): Entity
+	{
+		// This convenience method is tersely named for use in scripts.
+		return this.entityTalker;
+	}
+
 	toVenue(universe: Universe): Venue
 	{
 		return this.toControl(universe.display.sizeInPixels, universe).toVenue();
@@ -75,6 +136,18 @@ export class ConversationRun
 	update(universe: Universe): void
 	{
 		this.scopeCurrent.update(universe, this);
+	}
+
+	varGet(variableName: string): unknown
+	{
+		// This convenience method is tersely named for use in scripts.
+		return this.variableByName(variableName);
+	}
+
+	varSet(variableName: string, variableValue: unknown): unknown
+	{
+		// This convenience method is tersely named for use in scripts.
+		return this.variableSet(variableName, variableValue);
 	}
 
 	variableByName(variableName: string): unknown

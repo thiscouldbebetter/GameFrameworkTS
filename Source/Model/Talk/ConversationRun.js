@@ -23,6 +23,23 @@ var ThisCouldBeBetter;
                 this.vars = this.variablesByName;
             }
             // instance methods
+            activate(talkNodeToActivateName) {
+                this.activateOrDeactivate(talkNodeToActivateName, true);
+            }
+            activateOrDeactivate(talkNodeToActivateName, isActiveValueToSet) {
+                var conversationDefn = this.defn;
+                var talkNodeToActivate = conversationDefn.talkNodesByName.get(talkNodeToActivateName);
+                talkNodeToActivate.isActive = isActiveValueToSet;
+            }
+            deactivate(talkNodeToDeactivateName) {
+                this.activateOrDeactivate(talkNodeToDeactivateName, false);
+            }
+            goto(talkNodeNameNext, universe) {
+                // This convenience method is tersely named for use in scripts.
+                var scope = this.scopeCurrent;
+                scope.talkNodeCurrent = this.defn.talkNodeByName(talkNodeNameNext);
+                this.update(universe);
+            }
             next(universe) {
                 var responseSelected = this.scopeCurrent.talkNodeForOptionSelected;
                 if (responseSelected != null) {
@@ -33,11 +50,36 @@ var ThisCouldBeBetter;
                 }
                 this.update(universe);
             }
+            nodesByPrefix(nodeNamePrefix) {
+                // This convenience method is tersely named for use in scripts.
+                var nodesStartingWithPrefix = this.defn.talkNodes.filter(x => x.name.startsWith(nodeNamePrefix));
+                return nodesStartingWithPrefix;
+            }
+            player() {
+                // This convenience method is tersely named for use in scripts.
+                return this.entityPlayer;
+            }
+            scope() {
+                // This convenience method is tersely named for use in scripts.
+                return this.scopeCurrent;
+            }
+            talker() {
+                // This convenience method is tersely named for use in scripts.
+                return this.entityTalker;
+            }
             toVenue(universe) {
                 return this.toControl(universe.display.sizeInPixels, universe).toVenue();
             }
             update(universe) {
                 this.scopeCurrent.update(universe, this);
+            }
+            varGet(variableName) {
+                // This convenience method is tersely named for use in scripts.
+                return this.variableByName(variableName);
+            }
+            varSet(variableName, variableValue) {
+                // This convenience method is tersely named for use in scripts.
+                return this.variableSet(variableName, variableValue);
             }
             variableByName(variableName) {
                 return this.variablesByName.get(variableName);
