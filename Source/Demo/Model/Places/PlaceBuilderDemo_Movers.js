@@ -262,7 +262,7 @@ class PlaceBuilderDemo_Movers {
             visualEyesBlinking,
             new VisualPath(new Path([
                 // todo - Scale.
-                new Coords(-8, -8, 0), Coords.create(), new Coords(8, -8, 0)
+                Coords.fromXY(-8, -8), Coords.create(), Coords.fromXY(8, -8)
             ]), Color.byName("GrayDark"), 3, // lineThickness
             null),
         ]);
@@ -285,8 +285,8 @@ class PlaceBuilderDemo_Movers {
         Orientation.Instances().ForwardXDownZ.clone());
         var visualArms = new VisualDirectional(new VisualNone(), [
             new VisualGroup([
-                new VisualOffset(enemyVisualArm, new Coords(-enemyDimension / 4, 0, 0)),
-                new VisualOffset(enemyVisualArm, new Coords(enemyDimension / 4, 0, 0))
+                new VisualOffset(enemyVisualArm, Coords.fromXY(-enemyDimension / 4, 0)),
+                new VisualOffset(enemyVisualArm, Coords.fromXY(enemyDimension / 4, 0))
             ])
         ], null);
         var enemyVisual = new VisualGroup([
@@ -374,7 +374,7 @@ class PlaceBuilderDemo_Movers {
             new VisualOffset(visualEyesBlinking, new Coords(0, -friendlyDimension / 3, 0)),
             new VisualOffset(new VisualArc(friendlyDimension / 2, // radiusOuter
             0, // radiusInner
-            new Coords(1, 0, 0), // directionMin
+            Coords.fromXY(1, 0), // directionMin
             .5, // angleSpannedInTurns
             Color.byName("White"), null // todo
             ), new Coords(0, friendlyDimension / 3, 0) // offset

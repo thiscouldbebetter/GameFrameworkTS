@@ -8,7 +8,7 @@ var ThisCouldBeBetter;
                 this.scaleFactors = scaleFactors;
             }
             static fromScalar(scalar) {
-                return new Transform_Scale(new GameFramework.Coords(1, 1, 1).multiplyScalar(scalar));
+                return new Transform_Scale(GameFramework.Coords.ones().multiplyScalar(scalar));
             }
             clone() {
                 return new Transform_Scale(this.scaleFactors.clone());

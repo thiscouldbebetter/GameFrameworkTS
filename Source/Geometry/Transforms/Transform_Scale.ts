@@ -13,7 +13,7 @@ export class Transform_Scale implements Transform<Transform_Scale>
 
 	static fromScalar(scalar: number): Transform_Scale
 	{
-		return new Transform_Scale(new Coords(1, 1, 1).multiplyScalar(scalar));
+		return new Transform_Scale(Coords.ones().multiplyScalar(scalar));
 	}
 
 	clone(): Transform_Scale

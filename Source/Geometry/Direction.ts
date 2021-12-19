@@ -31,14 +31,14 @@ export class Direction_Instances
 
 	constructor()
 	{
-		this.E 		= new Coords(1, 0, 0);
-		this.N 		= new Coords(0, -1, 0);
-		this.NE 	= new Coords(1, -1, 0);
-		this.NW 	= new Coords(-1, -1, 0);
-		this.S 		= new Coords(0, 1, 0);
-		this.SE 	= new Coords(1, 1, 0);
-		this.SW 	= new Coords(-1, 1, 0);
-		this.W 		= new Coords(-1, 0, 0);
+		this.E 		= Coords.fromXY(1, 0);
+		this.N 		= Coords.fromXY(0, -1);
+		this.NE 	= Coords.fromXY(1, -1);
+		this.NW 	= Coords.fromXY(-1, -1);
+		this.S 		= Coords.fromXY(0, 1);
+		this.SE 	= Coords.fromXY(1, 1);
+		this.SW 	= Coords.fromXY(-1, 1);
+		this.W 		= Coords.fromXY(-1, 0);
 
 		this._ByHeading =
 		[

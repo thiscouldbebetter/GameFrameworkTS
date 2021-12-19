@@ -770,7 +770,7 @@ export class CollisionHelper
 			var boxCircumscribedAroundSphere = new Box
 			(
 				sphere.center,
-				new Coords(1, 1, 1).multiplyScalar(sphere.radius * 2)
+				Coords.ones().multiplyScalar(sphere.radius * 2)
 			);
 			collision = this.collisionOfBoxAndBox(box, boxCircumscribedAroundSphere, collision);
 		}
@@ -1997,7 +1997,7 @@ export class CollisionHelper
 	{
 		var boxForSphere = new Box
 		(
-			sphere.center, new Coords(1, 1, 1).multiplyScalar(sphere.radius * 2)
+			sphere.center, Coords.ones().multiplyScalar(sphere.radius * 2)
 		);
 
 		var returnValue = box.containsOther(boxForSphere);

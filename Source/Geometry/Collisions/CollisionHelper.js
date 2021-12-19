@@ -447,7 +447,7 @@ var ThisCouldBeBetter;
                 collision.isActive = doCollide;
                 if (doCollide && shouldCalculatePos) {
                     // todo - Fix this.
-                    var boxCircumscribedAroundSphere = new GameFramework.Box(sphere.center, new GameFramework.Coords(1, 1, 1).multiplyScalar(sphere.radius * 2));
+                    var boxCircumscribedAroundSphere = new GameFramework.Box(sphere.center, GameFramework.Coords.ones().multiplyScalar(sphere.radius * 2));
                     collision = this.collisionOfBoxAndBox(box, boxCircumscribedAroundSphere, collision);
                 }
                 return collision;
@@ -1140,7 +1140,7 @@ var ThisCouldBeBetter;
                 return false;
             }
             doesBoxContainSphere(box, sphere) {
-                var boxForSphere = new GameFramework.Box(sphere.center, new GameFramework.Coords(1, 1, 1).multiplyScalar(sphere.radius * 2));
+                var boxForSphere = new GameFramework.Box(sphere.center, GameFramework.Coords.ones().multiplyScalar(sphere.radius * 2));
                 var returnValue = box.containsOther(boxForSphere);
                 return returnValue;
             }

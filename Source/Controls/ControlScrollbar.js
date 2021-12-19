@@ -10,7 +10,7 @@ var ThisCouldBeBetter;
                 this._items = items;
                 this._sliderPosInItems = sliderPosInItems;
                 this.windowSizeInItems = Math.floor(this.size.y / itemHeight);
-                this.handleSize = new GameFramework.Coords(this.size.x, this.size.x, 0);
+                this.handleSize = GameFramework.Coords.fromXY(this.size.x, this.size.x);
                 this.buttonScrollUp = GameFramework.ControlButton.from8("buttonScrollUp", // name
                 GameFramework.Coords.create(), // pos
                 this.handleSize.clone(), // size
@@ -20,7 +20,7 @@ var ThisCouldBeBetter;
                 this.scrollUp // click
                 );
                 this.buttonScrollDown = GameFramework.ControlButton.from8("buttonScrollDown", // name
-                new GameFramework.Coords(0, this.size.y - this.handleSize.y, 0), // pos
+                GameFramework.Coords.fromXY(0, this.size.y - this.handleSize.y), // pos
                 this.handleSize.clone(), // size
                 "+", // text
                 this.fontHeightInPixels, true, // hasBorder
@@ -76,7 +76,7 @@ var ThisCouldBeBetter;
                 return sliderPosInPixels;
             }
             sliderSizeInPixels() {
-                var sliderSizeInPixels = this.slideSizeInPixels().multiply(new GameFramework.Coords(1, this.windowSizeInItems / this.items().length, 0));
+                var sliderSizeInPixels = this.slideSizeInPixels().multiply(GameFramework.Coords.fromXY(1, this.windowSizeInItems / this.items().length));
                 return sliderSizeInPixels;
             }
             // drawable

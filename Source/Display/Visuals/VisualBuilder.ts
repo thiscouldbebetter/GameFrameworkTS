@@ -26,10 +26,10 @@ export class VisualBuilder
 		(
 			visualEyes, // visualForNoDirection
 			[
-				new VisualOffset(visualEyes, new Coords(1, 0, 0).multiplyScalar(eyeRadius)),
-				new VisualOffset(visualEyes, new Coords(0, 1, 0).multiplyScalar(eyeRadius)),
-				new VisualOffset(visualEyes, new Coords(-1, 0, 0).multiplyScalar(eyeRadius)),
-				new VisualOffset(visualEyes, new Coords(0, -1, 0).multiplyScalar(eyeRadius))
+				new VisualOffset(visualEyes, Coords.fromXY(1, 0).multiplyScalar(eyeRadius)),
+				new VisualOffset(visualEyes, Coords.fromXY(0, 1).multiplyScalar(eyeRadius)),
+				new VisualOffset(visualEyes, Coords.fromXY(-1, 0).multiplyScalar(eyeRadius)),
+				new VisualOffset(visualEyes, Coords.fromXY(0, -1).multiplyScalar(eyeRadius))
 			],
 			null
 		);
@@ -40,7 +40,7 @@ export class VisualBuilder
 			visualEyesDirectional
 		]);
 
-		circleWithEyes = new VisualOffset(circleWithEyes, new Coords(0, -circleRadius, 0));
+		circleWithEyes = new VisualOffset(circleWithEyes, Coords.fromXY(0, -circleRadius));
 
 		return circleWithEyes
 	}
@@ -60,8 +60,8 @@ export class VisualBuilder
 		var legLengthHalf = legLength / 2;
 		var footLength = eyeRadius;
 		var footLengthHalf = footLength / 2;
-		var offsetLegLeft = new Coords(-spaceBetweenLegsHalf, 0, 0);
-		var offsetLegRight = new Coords(spaceBetweenLegsHalf, 0, 0);
+		var offsetLegLeft = Coords.fromXY(-spaceBetweenLegsHalf, 0);
+		var offsetLegRight = Coords.fromXY(spaceBetweenLegsHalf, 0);
 		var ticksPerStep = 2;
 		var isRepeating = true;
 
@@ -69,9 +69,9 @@ export class VisualBuilder
 		(
 			new Path
 			([
-				new Coords(0, -legLength, 0),
-				new Coords(0, legLength, 0),
-				new Coords(-footLengthHalf, legLength + footLengthHalf, 0)
+				Coords.fromXY(0, -legLength),
+				Coords.fromXY(0, legLength),
+				Coords.fromXY(-footLengthHalf, legLength + footLengthHalf)
 			]),
 			circleColor,
 			lineThickness,
@@ -82,9 +82,9 @@ export class VisualBuilder
 		(
 			new Path
 			([
-				new Coords(0, -legLength, 0),
-				new Coords(0, legLength, 0),
-				new Coords(footLengthHalf, legLength + footLengthHalf, 0)
+				Coords.fromXY(0, -legLength),
+				Coords.fromXY(0, legLength),
+				Coords.fromXY(footLengthHalf, legLength + footLengthHalf)
 			]),
 			circleColor,
 			lineThickness,
@@ -143,9 +143,9 @@ export class VisualBuilder
 		(
 			new Path
 			([
-				new Coords(0, -legLength, 0),
-				new Coords(0, legLength, 0),
-				new Coords(-footLengthHalf, legLength - footLengthHalf, 0)
+				Coords.fromXY(0, -legLength),
+				Coords.fromXY(0, legLength),
+				Coords.fromXY(-footLengthHalf, legLength - footLengthHalf)
 			]),
 			circleColor,
 			lineThickness,
@@ -156,9 +156,9 @@ export class VisualBuilder
 		(
 			new Path
 			([
-				new Coords(0, -legLength, 0),
-				new Coords(0, legLength, 0),
-				new Coords(footLengthHalf, legLength - footLengthHalf, 0)
+				Coords.fromXY(0, -legLength),
+				Coords.fromXY(0, legLength),
+				Coords.fromXY(footLengthHalf, legLength - footLengthHalf)
 			]),
 			circleColor,
 			lineThickness,
@@ -184,7 +184,7 @@ export class VisualBuilder
 						new VisualOffset
 						(
 							visualLegUpLeft,
-							new Coords(0, -legLengthHalf, 0)
+							Coords.fromXY(0, -legLengthHalf)
 						)
 					],
 					isRepeating
@@ -201,7 +201,7 @@ export class VisualBuilder
 						new VisualOffset
 						(
 							visualLegUpRight,
-							new Coords(0, -legLengthHalf, 0)
+							Coords.fromXY(0, -legLengthHalf)
 						),
 						visualLegUpRight
 					],
@@ -215,9 +215,9 @@ export class VisualBuilder
 		(
 			new Path
 			([
-				new Coords(0, -legLength, 0),
-				new Coords(0, legLength, 0),
-				new Coords(-footLength, legLength, 0)
+				Coords.fromXY(0, -legLength),
+				Coords.fromXY(0, legLength),
+				Coords.fromXY(-footLength, legLength)
 			]),
 			circleColor,
 			lineThickness,
@@ -453,7 +453,7 @@ export class VisualBuilder
 				new VisualLine
 				(
 					Coords.create(),
-					new Coords(2, 1, 0).multiplyScalar(circleRadius),
+					Coords.fromXY(2, 1).multiplyScalar(circleRadius),
 					circleColor,
 					lineThickness
 				),
@@ -463,7 +463,7 @@ export class VisualBuilder
 			new VisualOffset
 			(
 				visualWieldable,
-				new Coords(2, 1, 0).multiplyScalar(circleRadius)
+				Coords.fromXY(2, 1).multiplyScalar(circleRadius)
 			)
 		]);
 
@@ -475,7 +475,7 @@ export class VisualBuilder
 				new VisualLine
 				(
 					Coords.create(),
-					new Coords(-2, 0, 0).multiplyScalar(circleRadius),
+					Coords.fromXY(-2, 0).multiplyScalar(circleRadius),
 					circleColor,
 					lineThickness
 				),
@@ -485,7 +485,7 @@ export class VisualBuilder
 			new VisualOffset
 			(
 				visualWieldable,
-				new Coords(-2, 0, 0).multiplyScalar(circleRadius)
+				Coords.fromXY(-2, 0).multiplyScalar(circleRadius)
 			)
 		]);
 
@@ -497,7 +497,7 @@ export class VisualBuilder
 				new VisualLine
 				(
 					Coords.create(),
-					new Coords(-2, 1, 0).multiplyScalar(circleRadius),
+					Coords.fromXY(-2, 1).multiplyScalar(circleRadius),
 					circleColor,
 					lineThickness
 				),
@@ -507,7 +507,7 @@ export class VisualBuilder
 			new VisualOffset
 			(
 				visualWieldable,
-				new Coords(-2, 1, 0).multiplyScalar(circleRadius)
+				Coords.fromXY(-2, 1).multiplyScalar(circleRadius)
 			)
 		]);
 
@@ -519,7 +519,7 @@ export class VisualBuilder
 				new VisualLine
 				(
 					Coords.create(),
-					new Coords(2, 0, 0).multiplyScalar(circleRadius),
+					Coords.fromXY(2, 0).multiplyScalar(circleRadius),
 					circleColor,
 					lineThickness
 				),
@@ -529,7 +529,7 @@ export class VisualBuilder
 			new VisualOffset
 			(
 				visualWieldable,
-				new Coords(2, 0, 0).multiplyScalar(circleRadius)
+				Coords.fromXY(2, 0).multiplyScalar(circleRadius)
 			)
 		]);
 
@@ -621,9 +621,9 @@ export class VisualBuilder
 			(
 				new Path
 				([
-					new Coords(0, -dimension * 2, 0),
-					new Coords(dimension, 0, 0),
-					new Coords(-dimension, 0, 0),
+					Coords.fromXY(0, -dimension * 2),
+					Coords.fromXY(dimension, 0),
+					Coords.fromXY(-dimension, 0),
 				]),
 				Color.byName("Orange")
 			),
@@ -631,9 +631,9 @@ export class VisualBuilder
 			(
 				new Path
 				([
-					new Coords(0, -dimension, 0),
-					new Coords(dimensionHalf, 0, 0),
-					new Coords(-dimensionHalf, 0, 0),
+					Coords.fromXY(0, -dimension),
+					Coords.fromXY(dimensionHalf, 0),
+					Coords.fromXY(-dimensionHalf, 0),
 				]),
 				Color.byName("Yellow")
 			)
@@ -676,13 +676,13 @@ export class VisualBuilder
 			(
 				new Path
 				([
-					new Coords(-1, -1, 0),
-					new Coords(1, -1, 0),
-					new Coords(1, 1, 0),
-					new Coords(-1, 1, 0),
+					Coords.fromXY(-1, -1),
+					Coords.fromXY(1, -1),
+					Coords.fromXY(1, 1),
+					Coords.fromXY(-1, 1),
 				]).transform
 				(
-					new Transform_Scale(new Coords(1, 1, 1).multiplyScalar(dimensionHalf))
+					new Transform_Scale(Coords.ones().multiplyScalar(dimensionHalf))
 				),
 				null, // colorFill
 				color // border
@@ -701,22 +701,26 @@ export class VisualBuilder
 		([
 			new VisualLine
 			(
-				new Coords(-dimension, 0, 0), new Coords(dimension, 0, 0), color, rayThickness
-			),
-			new VisualLine
-			(
-				new Coords(0, -dimension, 0), new Coords(0, dimension, 0), color, rayThickness
-			),
-			new VisualLine
-			(
-				new Coords(-dimensionOblique, -dimensionOblique, 0),
-				new Coords(dimensionOblique, dimensionOblique, 0),
+				Coords.fromXY(-dimension, 0),
+				Coords.fromXY(dimension, 0),
 				color, rayThickness
 			),
 			new VisualLine
 			(
-				new Coords(-dimensionOblique, dimensionOblique, 0),
-				new Coords(dimensionOblique, -dimensionOblique, 0),
+				Coords.fromXY(0, -dimension),
+				Coords.fromXY(0, dimension),
+				color, rayThickness
+			),
+			new VisualLine
+			(
+				Coords.fromXY(-dimensionOblique, -dimensionOblique),
+				Coords.fromXY(dimensionOblique, dimensionOblique),
+				color, rayThickness
+			),
+			new VisualLine
+			(
+				Coords.fromXY(-dimensionOblique, dimensionOblique),
+				Coords.fromXY(dimensionOblique, -dimensionOblique),
 				color, rayThickness
 			),
 

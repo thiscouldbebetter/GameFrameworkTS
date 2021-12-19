@@ -115,9 +115,9 @@ var ThisCouldBeBetter;
                     var faceTextures = [];
                     var textureUVs = [
                         GameFramework.Coords.create(),
-                        new GameFramework.Coords(1, 0, 0),
-                        new GameFramework.Coords(1, 1, 0),
-                        new GameFramework.Coords(0, 1, 0),
+                        GameFramework.Coords.fromXY(1, 0),
+                        GameFramework.Coords.fromXY(1, 1),
+                        GameFramework.Coords.fromXY(0, 1),
                     ];
                     for (var y = 0; y < sizeInCells.y; y++) {
                         for (var x = 0; x < sizeInCells.x; x++) {
@@ -175,11 +175,11 @@ var ThisCouldBeBetter;
                 return returnMesh;
             }
             room_Ceiling(material) {
-                var returnMesh = this.unitSquare(material).transform(new GameFramework.Transform_Scale(new GameFramework.Coords(1, 1, -1))).transform(new GameFramework.Transform_Translate(new GameFramework.Coords(0, 0, -1))).transformFaceTextures(new GameFramework.Transform_Scale(new GameFramework.Coords(1, 1, 1).multiplyScalar(.2)));
+                var returnMesh = this.unitSquare(material).transform(new GameFramework.Transform_Scale(new GameFramework.Coords(1, 1, -1))).transform(new GameFramework.Transform_Translate(new GameFramework.Coords(0, 0, -1))).transformFaceTextures(new GameFramework.Transform_Scale(GameFramework.Coords.ones().multiplyScalar(.2)));
                 return returnMesh;
             }
             room_Floor(material) {
-                var returnMesh = this.unitSquare(material).transform(new GameFramework.Transform_Translate(new GameFramework.Coords(0, 0, 1))).transformFaceTextures(new GameFramework.Transform_Scale(new GameFramework.Coords(1, 1, 1).multiplyScalar(9)));
+                var returnMesh = this.unitSquare(material).transform(new GameFramework.Transform_Translate(new GameFramework.Coords(0, 0, 1))).transformFaceTextures(new GameFramework.Transform_Scale(GameFramework.Coords.ones().multiplyScalar(9)));
                 return returnMesh;
             }
             room_Wall(material) {
@@ -187,10 +187,10 @@ var ThisCouldBeBetter;
                 // vertices
                 [
                     // wall
-                    new GameFramework.Coords(1, -1, 0),
-                    new GameFramework.Coords(-1, -1, 0),
-                    new GameFramework.Coords(-1, 1, 0),
-                    new GameFramework.Coords(1, 1, 0),
+                    GameFramework.Coords.fromXY(1, -1),
+                    GameFramework.Coords.fromXY(-1, -1),
+                    GameFramework.Coords.fromXY(-1, 1),
+                    GameFramework.Coords.fromXY(1, 1),
                 ], 
                 // faces
                 [
@@ -259,43 +259,43 @@ var ThisCouldBeBetter;
                     // wall
                     // top
                     new GameFramework.MeshTexturedFaceTexture(materialName, [
-                        new GameFramework.Coords(0, 1, 0),
-                        new GameFramework.Coords(1, 1, 0),
-                        new GameFramework.Coords(1, 0, 0),
+                        GameFramework.Coords.fromXY(0, 1),
+                        GameFramework.Coords.fromXY(1, 1),
+                        GameFramework.Coords.fromXY(1, 0),
                         GameFramework.Coords.create(),
                     ]).transform(transformScaleTop),
                     // left
                     new GameFramework.MeshTexturedFaceTexture(materialName, [
-                        new GameFramework.Coords(0, 1, 0),
-                        new GameFramework.Coords(1, 1, 0),
-                        new GameFramework.Coords(1, 0, 0),
+                        GameFramework.Coords.fromXY(0, 1),
+                        GameFramework.Coords.fromXY(1, 1),
+                        GameFramework.Coords.fromXY(1, 0),
                         GameFramework.Coords.create(),
                     ]).transform(transformScaleSides),
                     // right
                     new GameFramework.MeshTexturedFaceTexture(materialName, [
-                        new GameFramework.Coords(0, 1, 0),
-                        new GameFramework.Coords(1, 1, 0),
-                        new GameFramework.Coords(1, 0, 0),
+                        GameFramework.Coords.fromXY(0, 1),
+                        GameFramework.Coords.fromXY(1, 1),
+                        GameFramework.Coords.fromXY(1, 0),
                         GameFramework.Coords.create(),
                     ]).transform(transformScaleSides),
                     // doorframe
                     // left
                     new GameFramework.MeshTexturedFaceTexture(materialName, [
-                        new GameFramework.Coords(0, 1, 0),
-                        new GameFramework.Coords(1, 1, 0),
-                        new GameFramework.Coords(1, 0, 0),
+                        GameFramework.Coords.fromXY(0, 1),
+                        GameFramework.Coords.fromXY(1, 1),
+                        GameFramework.Coords.fromXY(1, 0),
                         GameFramework.Coords.create(),
                     ]).transform(transformScaleSidesDoorframe),
                     // right
                     new GameFramework.MeshTexturedFaceTexture(materialName, [
-                        new GameFramework.Coords(0, 1, 0),
-                        new GameFramework.Coords(1, 1, 0),
-                        new GameFramework.Coords(1, 0, 0),
+                        GameFramework.Coords.fromXY(0, 1),
+                        GameFramework.Coords.fromXY(1, 1),
+                        GameFramework.Coords.fromXY(1, 0),
                         GameFramework.Coords.create(),
                     ]).transform(transformScaleSidesDoorframe),
                     // todo - top
                 ];
-                var returnMeshTextured = new GameFramework.MeshTextured(returnMesh, [material], faceTextures, null).transformFaceTextures(new GameFramework.Transform_Scale(new GameFramework.Coords(1, 1, 1).multiplyScalar(2)));
+                var returnMeshTextured = new GameFramework.MeshTextured(returnMesh, [material], faceTextures, null).transformFaceTextures(new GameFramework.Transform_Scale(GameFramework.Coords.ones().multiplyScalar(2)));
                 return returnMeshTextured;
             }
             unitCube(material) {
@@ -349,10 +349,10 @@ var ThisCouldBeBetter;
                 // vertices
                 [
                     // back
-                    new GameFramework.Coords(1, -1, 0),
-                    new GameFramework.Coords(1, 1, 0),
-                    new GameFramework.Coords(-1, 1, 0),
-                    new GameFramework.Coords(-1, -1, 0),
+                    GameFramework.Coords.fromXY(1, -1),
+                    GameFramework.Coords.fromXY(1, 1),
+                    GameFramework.Coords.fromXY(-1, 1),
+                    GameFramework.Coords.fromXY(-1, -1),
                 ], 
                 // vertexIndicesForFaces
                 [
@@ -362,9 +362,9 @@ var ThisCouldBeBetter;
                 var returnMeshTextured = new GameFramework.MeshTextured(returnMesh, [material], [
                     new GameFramework.MeshTexturedFaceTexture(material.name, [
                         GameFramework.Coords.create(),
-                        new GameFramework.Coords(1, 0, 0),
-                        new GameFramework.Coords(1, 1, 0),
-                        new GameFramework.Coords(0, 1, 0),
+                        GameFramework.Coords.fromXY(1, 0),
+                        GameFramework.Coords.fromXY(1, 1),
+                        GameFramework.Coords.fromXY(0, 1),
                     ])
                 ], null);
                 return returnMeshTextured;

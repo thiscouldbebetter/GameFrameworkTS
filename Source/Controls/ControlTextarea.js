@@ -165,7 +165,7 @@ var ThisCouldBeBetter;
                             this.scrollbar.pos
                         ).subtract
                         (
-                            new Coords(0, this.scrollbar.handleSize.y, 0)
+                            Coords.fromXY(0, this.scrollbar.handleSize.y)
                         );
                         */
                     }
@@ -218,7 +218,7 @@ var ThisCouldBeBetter;
                 if (indexEnd >= lines.length) {
                     indexEnd = lines.length - 1;
                 }
-                var drawPos2 = new GameFramework.Coords(drawPos.x + textMarginLeft, itemPosY, 0);
+                var drawPos2 = GameFramework.Coords.fromXY(drawPos.x + textMarginLeft, itemPosY);
                 for (var i = indexStart; i <= indexEnd; i++) {
                     var line = lines[i];
                     display.drawText(line, this.fontHeightInPixels, drawPos2, colorFore, colorBack, false, // isCenteredHorizontally

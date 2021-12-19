@@ -258,7 +258,7 @@ export class ControlTextarea<TContext> extends ControlBase
 					this.scrollbar.pos
 				).subtract
 				(
-					new Coords(0, this.scrollbar.handleSize.y, 0)
+					Coords.fromXY(0, this.scrollbar.handleSize.y)
 				);
 				*/
 			}
@@ -346,7 +346,7 @@ export class ControlTextarea<TContext> extends ControlBase
 			indexEnd = lines.length - 1;
 		}
 
-		var drawPos2 = new Coords(drawPos.x + textMarginLeft, itemPosY, 0);
+		var drawPos2 = Coords.fromXY(drawPos.x + textMarginLeft, itemPosY);
 
 		for (var i = indexStart; i <= indexEnd; i++)
 		{

@@ -245,9 +245,9 @@ export class MeshBuilder
 			var textureUVs =
 			[
 				Coords.create(),
-				new Coords(1, 0, 0),
-				new Coords(1, 1, 0),
-				new Coords(0, 1, 0),
+				Coords.fromXY(1, 0),
+				Coords.fromXY(1, 1),
+				Coords.fromXY(0, 1),
 			];
 
 			for (var y = 0; y < sizeInCells.y; y++)
@@ -410,7 +410,7 @@ export class MeshBuilder
 			)
 		).transformFaceTextures
 		(
-			new Transform_Scale(new Coords(1, 1, 1).multiplyScalar(.2))
+			new Transform_Scale(Coords.ones().multiplyScalar(.2))
 		);
 
 		return returnMesh;
@@ -429,7 +429,7 @@ export class MeshBuilder
 			)
 		).transformFaceTextures
 		(
-			new Transform_Scale(new Coords(1, 1, 1).multiplyScalar(9))
+			new Transform_Scale(Coords.ones().multiplyScalar(9))
 		);
 
 		return returnMesh;
@@ -443,10 +443,10 @@ export class MeshBuilder
 			// vertices
 			[
 				// wall
-				new Coords(1, -1, 0),
-				new Coords(-1, -1, 0),
-				new Coords(-1, 1, 0),
-				new Coords(1, 1, 0),
+				Coords.fromXY(1, -1),
+				Coords.fromXY(-1, -1),
+				Coords.fromXY(-1, 1),
+				Coords.fromXY(1, 1),
 
 			],
 			// faces
@@ -564,9 +564,9 @@ export class MeshBuilder
 			(
 				materialName,
 				[
-					new Coords(0, 1, 0),
-					new Coords(1, 1, 0),
-					new Coords(1, 0, 0),
+					Coords.fromXY(0, 1),
+					Coords.fromXY(1, 1),
+					Coords.fromXY(1, 0),
 					Coords.create(),
 				]
 			).transform(transformScaleTop),
@@ -575,9 +575,9 @@ export class MeshBuilder
 			(
 				materialName,
 				[
-					new Coords(0, 1, 0),
-					new Coords(1, 1, 0),
-					new Coords(1, 0, 0),
+					Coords.fromXY(0, 1),
+					Coords.fromXY(1, 1),
+					Coords.fromXY(1, 0),
 					Coords.create(),
 				]
 			).transform(transformScaleSides),
@@ -586,9 +586,9 @@ export class MeshBuilder
 			(
 				materialName,
 				[
-					new Coords(0, 1, 0),
-					new Coords(1, 1, 0),
-					new Coords(1, 0, 0),
+					Coords.fromXY(0, 1),
+					Coords.fromXY(1, 1),
+					Coords.fromXY(1, 0),
 					Coords.create(),
 				]
 			).transform(transformScaleSides),
@@ -598,9 +598,9 @@ export class MeshBuilder
 			(
 				materialName,
 				[
-					new Coords(0, 1, 0),
-					new Coords(1, 1, 0),
-					new Coords(1, 0, 0),
+					Coords.fromXY(0, 1),
+					Coords.fromXY(1, 1),
+					Coords.fromXY(1, 0),
 					Coords.create(),
 				]
 			).transform(transformScaleSidesDoorframe),
@@ -609,9 +609,9 @@ export class MeshBuilder
 			(
 				materialName,
 				[
-					new Coords(0, 1, 0),
-					new Coords(1, 1, 0),
-					new Coords(1, 0, 0),
+					Coords.fromXY(0, 1),
+					Coords.fromXY(1, 1),
+					Coords.fromXY(1, 0),
 					Coords.create(),
 				]
 			).transform(transformScaleSidesDoorframe),
@@ -626,7 +626,7 @@ export class MeshBuilder
 			null
 		).transformFaceTextures
 		(
-			new Transform_Scale( new Coords(1, 1, 1).multiplyScalar(2) )
+			new Transform_Scale( Coords.ones().multiplyScalar(2) )
 		);
 
 		return returnMeshTextured;
@@ -713,10 +713,10 @@ export class MeshBuilder
 			// vertices
 			[
 				// back
-				new Coords(1, -1, 0),
-				new Coords(1, 1, 0),
-				new Coords(-1, 1, 0),
-				new Coords(-1, -1, 0),
+				Coords.fromXY(1, -1),
+				Coords.fromXY(1, 1),
+				Coords.fromXY(-1, 1),
+				Coords.fromXY(-1, -1),
 			],
 			// vertexIndicesForFaces
 			[
@@ -735,9 +735,9 @@ export class MeshBuilder
 					material.name,
 					[
 						Coords.create(),
-						new Coords(1, 0, 0),
-						new Coords(1, 1, 0),
-						new Coords(0, 1, 0),
+						Coords.fromXY(1, 0),
+						Coords.fromXY(1, 1),
+						Coords.fromXY(0, 1),
 					]
 				)
 			],

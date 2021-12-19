@@ -67,9 +67,9 @@ export class MeshTextured implements ShapeBase
 				materialName,
 				[
 					Coords.create(),
-					new Coords(1, 0, 0),
-					new Coords(1, 1, 0),
-					new Coords(1, 0, 0)
+					Coords.fromXY(1, 0),
+					Coords.fromXY(1, 1),
+					Coords.fromXY(1, 0)
 				]
 			);
 			faceTextures.push(faceTexture);

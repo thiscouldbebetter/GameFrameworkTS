@@ -37,7 +37,7 @@ export class Maze
 
 		this.sizeInCellsMinusOnes = sizeInCells.clone().subtract
 		(
-			new Coords(1, 1, 1)
+			Coords.ones()
 		);
 	}
 

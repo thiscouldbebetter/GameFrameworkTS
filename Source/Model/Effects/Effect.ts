@@ -137,18 +137,18 @@ class Effect_Instances
 			(
 				new Path
 				([
-					new Coords(-0.5, -0.2, 0),
-					new Coords(-0.2, -0.2, 0),
-					new Coords(-0.2, -0.5, 0),
-					new Coords(0.2, -0.5, 0),
-					new Coords(0.2, -0.2, 0),
-					new Coords(0.5, -0.2, 0),
-					new Coords(0.5, 0.2, 0),
-					new Coords(0.2, 0.2, 0),
-					new Coords(0.2, 0.5, 0),
-					new Coords(-0.2, 0.5, 0),
-					new Coords(-0.2, 0.2, 0),
-					new Coords(-0.5, 0.2, 0)
+					Coords.fromXY(-0.5, -0.2),
+					Coords.fromXY(-0.2, -0.2),
+					Coords.fromXY(-0.2, -0.5),
+					Coords.fromXY(0.2, -0.5),
+					Coords.fromXY(0.2, -0.2),
+					Coords.fromXY(0.5, -0.2),
+					Coords.fromXY(0.5, 0.2),
+					Coords.fromXY(0.2, 0.2),
+					Coords.fromXY(0.2, 0.5),
+					Coords.fromXY(-0.2, 0.5),
+					Coords.fromXY(-0.2, 0.2),
+					Coords.fromXY(-0.5, 0.2)
 				]).transform
 				(
 					Transform_Scale.fromScalar(visualDimension * 1.5)

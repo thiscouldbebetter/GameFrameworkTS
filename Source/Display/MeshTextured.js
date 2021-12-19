@@ -36,9 +36,9 @@ var ThisCouldBeBetter;
                 for (var f = 0; f < numberOfFaces; f++) {
                     var faceTexture = new MeshTexturedFaceTexture(materialName, [
                         GameFramework.Coords.create(),
-                        new GameFramework.Coords(1, 0, 0),
-                        new GameFramework.Coords(1, 1, 0),
-                        new GameFramework.Coords(1, 0, 0)
+                        GameFramework.Coords.fromXY(1, 0),
+                        GameFramework.Coords.fromXY(1, 1),
+                        GameFramework.Coords.fromXY(1, 0)
                     ]);
                     faceTextures.push(faceTexture);
                 }

@@ -248,14 +248,14 @@ class PlaceBuilderDemo // Main.
 		var zoneSize = size;
 		var neighborOffsets =
 		[
-			new Coords(1, 0, 0),
-			new Coords(1, 1, 0),
-			new Coords(0, 1, 0),
-			new Coords(-1, 1, 0),
-			new Coords(-1, 0, 0),
-			new Coords(-1, -1, 0),
-			new Coords(0, -1, 0),
-			new Coords(1, -1, 0)
+			Coords.fromXY(1, 0),
+			Coords.fromXY(1, 1),
+			Coords.fromXY(0, 1),
+			Coords.fromXY(-1, 1),
+			Coords.fromXY(-1, 0),
+			Coords.fromXY(-1, -1),
+			Coords.fromXY(0, -1),
+			Coords.fromXY(1, -1)
 		];
 		var neighborPos = Coords.create();
 		var boxZeroes = new Box(Coords.create(), Coords.create());
@@ -475,11 +475,11 @@ class PlaceBuilderDemo // Main.
 			).ceiling();
 			var borderSizeVerticalHalf = mapCellSize.clone().multiply
 			(
-				new Coords(borderWidthAsFraction, .5, 0)
+				Coords.fromXY(borderWidthAsFraction, .5)
 			).ceiling();
 			var borderSizeHorizontalHalf = mapCellSize.clone().multiply
 			(
-				new Coords(.5, borderWidthAsFraction, 0)
+				Coords.fromXY(.5, borderWidthAsFraction)
 			).ceiling();
 
 			var isCenteredFalse = false;
@@ -550,13 +550,13 @@ class PlaceBuilderDemo // Main.
 						new VisualOffset
 						(
 							new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
-							new Coords(mapCellSize.x / 2, 0, 0)
+							Coords.fromXY(mapCellSize.x / 2, 0)
 						),
 						// e
 						new VisualOffset
 						(
 							new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
-							new Coords(mapCellSize.x - borderSizeCorner.x, 0, 0)
+							Coords.fromXY(mapCellSize.x - borderSizeCorner.x, 0)
 						),
 					])
 				],
@@ -573,7 +573,7 @@ class PlaceBuilderDemo // Main.
 					new VisualOffset
 					(
 						new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse),
-						new Coords(mapCellSize.x - borderSizeCorner.x, 0, 0)
+						Coords.fromXY(mapCellSize.x - borderSizeCorner.x, 0)
 					)
 				],
 				[
@@ -581,7 +581,7 @@ class PlaceBuilderDemo // Main.
 					new VisualOffset
 					(
 						new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse),
-						new Coords(mapCellSize.x - borderSizeCorner.x, mapCellSize.y - borderSizeCorner.y, 0)
+						Coords.fromXY(mapCellSize.x - borderSizeCorner.x, mapCellSize.y - borderSizeCorner.y)
 					)
 				],
 				[
@@ -589,7 +589,7 @@ class PlaceBuilderDemo // Main.
 					new VisualOffset
 					(
 						new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse),
-						new Coords(0, mapCellSize.y - borderSizeCorner.y, 0)
+						Coords.fromXY(0, mapCellSize.y - borderSizeCorner.y)
 					)
 				],
 
@@ -598,7 +598,7 @@ class PlaceBuilderDemo // Main.
 					new VisualOffset
 					(
 						new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
-						new Coords(mapCellSize.x - borderSizeCorner.x, 0, 0)
+						Coords.fromXY(mapCellSize.x - borderSizeCorner.x, 0)
 					)
 				],
 				[
@@ -606,7 +606,7 @@ class PlaceBuilderDemo // Main.
 					new VisualOffset
 					(
 						new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
-						new Coords(mapCellSize.x - borderSizeCorner.x, mapCellSize.y / 2, 0)
+						Coords.fromXY(mapCellSize.x - borderSizeCorner.x, mapCellSize.y / 2)
 					)
 				],
 				[
@@ -614,7 +614,7 @@ class PlaceBuilderDemo // Main.
 					new VisualOffset
 					(
 						new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
-						new Coords(mapCellSize.x / 2, mapCellSize.y - borderSizeCorner.y, 0)
+						Coords.fromXY(mapCellSize.x / 2, mapCellSize.y - borderSizeCorner.y)
 					)
 				],
 				[
@@ -630,7 +630,7 @@ class PlaceBuilderDemo // Main.
 					new VisualOffset
 					(
 						new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
-						new Coords(0, mapCellSize.y / 2, 0)
+						Coords.fromXY(0, mapCellSize.y / 2)
 					)
 				],
 				[
@@ -654,7 +654,7 @@ class PlaceBuilderDemo // Main.
 					new VisualOffset
 					(
 						new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
-						new Coords(mapCellSize.x / 2, 0, 0)
+						Coords.fromXY(mapCellSize.x / 2, 0)
 					)
 				]
 			]);
@@ -1516,15 +1516,15 @@ class PlaceBuilderDemo // Main.
 		var numberOfWalls = 4;
 		var wallThickness = 5;
 		var doorwayWidthHalf = wallThickness * 4;
-		var portalSizeWE = new Coords(.25, 1, 0).multiplyScalar(2 * doorwayWidthHalf);
-		var portalSizeNS = new Coords(1, .25, 0).multiplyScalar(2 * doorwayWidthHalf);
+		var portalSizeWE = Coords.fromXY(.25, 1).multiplyScalar(2 * doorwayWidthHalf);
+		var portalSizeNS = Coords.fromXY(1, .25).multiplyScalar(2 * doorwayWidthHalf);
 
 		var neighborOffsets =
 		[
-			new Coords(1, 0, 0),
-			new Coords(0, 1, 0),
-			new Coords(-1, 0, 0),
-			new Coords(0, -1, 0)
+			Coords.fromXY(1, 0),
+			Coords.fromXY(0, 1),
+			Coords.fromXY(-1, 0),
+			Coords.fromXY(0, -1)
 		];
 
 		var portalCollide =
@@ -2296,11 +2296,11 @@ class PlaceBuilderDemo // Main.
 		var defnName = "Car";
 
 		var frames = new Array<VisualBase>();
-		var frameSizeScaled = new Coords(4, 3, 0).multiplyScalar(entityDimension);
+		var frameSizeScaled = Coords.fromXY(4, 3).multiplyScalar(entityDimension);
 
 		var visualTileset = new VisualImageFromLibrary("Car");
-		var tileSizeInPixels = new Coords(64, 48, 0);
-		var tilesetSizeInTiles = new Coords(8, 4, 0);
+		var tileSizeInPixels = Coords.fromXY(64, 48);
+		var tilesetSizeInTiles = Coords.fromXY(8, 4);
 		var tilePosInTiles = Coords.create();
 
 		for (var y = 0; y < tilesetSizeInTiles.y; y++)

@@ -32,7 +32,7 @@ export class ControlScrollbar<TContext, TItem> extends ControlBase
 
 		this.windowSizeInItems = Math.floor(this.size.y / itemHeight);
 
-		this.handleSize = new Coords(this.size.x, this.size.x, 0);
+		this.handleSize = Coords.fromXY(this.size.x, this.size.x);
 
 		this.buttonScrollUp = ControlButton.from8
 		(
@@ -49,7 +49,7 @@ export class ControlScrollbar<TContext, TItem> extends ControlBase
 		this.buttonScrollDown = ControlButton.from8
 		(
 			"buttonScrollDown", // name
-			new Coords(0, this.size.y - this.handleSize.y, 0), // pos
+			Coords.fromXY(0, this.size.y - this.handleSize.y), // pos
 			this.handleSize.clone(), // size
 			"+", // text
 			this.fontHeightInPixels,
@@ -153,7 +153,7 @@ export class ControlScrollbar<TContext, TItem> extends ControlBase
 	{
 		var sliderSizeInPixels = this.slideSizeInPixels().multiply
 		(
-			new Coords(1, this.windowSizeInItems / this.items().length, 0)
+			Coords.fromXY(1, this.windowSizeInItems / this.items().length)
 		);
 
 		return sliderSizeInPixels;

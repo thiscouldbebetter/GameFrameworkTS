@@ -47,7 +47,7 @@ class CameraTests extends TestFixture
 
 	coordsTransformWorldToView(): void
 	{
-		var worldCoords = new Coords(0, 0, 0);
+		var worldCoords = Coords.zeroes();
 		var viewCoords =
 			this._camera.coordsTransformWorldToView(worldCoords);
 		var viewCoordsExpected = new Coords(200, 300, 0); // todo
@@ -67,7 +67,7 @@ class CameraTests extends TestFixture
 	{
 		var entityNear = new Entity
 		(
-			"EntityNear", [ Locatable.fromPos(new Coords(0, 0, 0) ) ]
+			"EntityNear", [ Locatable.fromPos(Coords.zeroes() ) ]
 		);
 
 		var entityFar = new Entity

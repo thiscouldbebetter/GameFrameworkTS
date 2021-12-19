@@ -21,37 +21,37 @@ class CollisionHelperTests extends TestFixture
 
 		this._boxOfSide1AtOrigin = Box.fromCenterAndSize
 		(
-			new Coords(0, 0, 0), // center
-			new Coords(1, 1, 1) // size
+			Coords.zeroes(), // center
+			Coords.ones() // size
 		);
 
 		this._boxOfSide2AtOrigin = Box.fromCenterAndSize
 		(
-			new Coords(0, 0, 0), // center
-			new Coords(1, 1, 1).double() // size
+			Coords.zeroes(), // center
+			Coords.ones().double() // size
 		);
 
 		this._boxOfSide3AtOrigin = Box.fromCenterAndSize
 		(
-			new Coords(0, 0, 0), // center
-			new Coords(1, 1, 1).multiplyScalar(3) // size
+			Coords.zeroes(), // center
+			Coords.ones().multiplyScalar(3) // size
 		);
 
 		this._boxOfSide1AtX1 = Box.fromCenterAndSize
 		(
 			new Coords(1, 0, 0), // center
-			new Coords(1, 1, 1) // size
+			Coords.ones() // size
 		);
 
 		this._boxOfSide1AtX2 = Box.fromCenterAndSize
 		(
 			new Coords(2, 0, 0), // origin
-			new Coords(1, 1, 1) // size
+			Coords.ones() // size
 		);
 		
 		this._sphereOfRadius1AtOrigin = Sphere.fromRadiusAndCenter
 		(
-			1, new Coords(0, 0, 0) // center
+			1, Coords.zeroes() // center
 		);
 	}
 
@@ -554,7 +554,7 @@ class CollisionHelperTests extends TestFixture
 
 	collisionOfSpheres(): void
 	{
-		var sphere0 = Sphere.fromRadiusAndCenter(1, new Coords(0, 0, 0) );
+		var sphere0 = Sphere.fromRadiusAndCenter(1, Coords.zeroes() );
 		var sphere1 = Sphere.fromRadiusAndCenter(1, new Coords(1, 0, 0) );
 
 		var collision = this._collisionHelper.collisionOfSpheres
@@ -896,8 +896,11 @@ class CollisionHelperTests extends TestFixture
 
 	doesSphereContainBox(): void
 	{
-		var sphere = Sphere.fromRadiusAndCenter(2, new Coords(0, 0, 0) );
-		var box = Box.fromSizeAndCenter(new Coords(1, 1, 1), new Coords(0, 0, 0));
+		var sphere = Sphere.fromRadiusAndCenter(2, Coords.zeroes() );
+		var box = Box.fromSizeAndCenter
+		(
+			Coords.ones(), Coords.zeroes()
+		);
 
 		var doesSphereContainBox =
 			this._collisionHelper.doesSphereContainBox(sphere, box);
@@ -907,8 +910,11 @@ class CollisionHelperTests extends TestFixture
 
 	doesSphereContainHemispace(): void
 	{
-		var sphere = Sphere.fromRadiusAndCenter(1, new Coords(0, 0, 0) );
-		var hemispace = new Hemispace(new Plane(new Coords(1, 0, 0), 0) );
+		var sphere = Sphere.fromRadiusAndCenter(1, Coords.zeroes() );
+		var hemispace = new Hemispace
+		(
+			new Plane(new Coords(1, 0, 0), 0)
+		);
 
 		var doesSphereContainHemispace =
 			this._collisionHelper.doesSphereContainHemispace(sphere, hemispace);
@@ -919,8 +925,8 @@ class CollisionHelperTests extends TestFixture
 
 	doesSphereContainSphere(): void
 	{
-		var sphereContained = Sphere.fromRadiusAndCenter(1, new Coords(0, 0, 0) );
-		var sphereContaining = Sphere.fromRadiusAndCenter(2, new Coords(0, 0, 0) );
+		var sphereContained = Sphere.fromRadiusAndCenter(1, Coords.zeroes() );
+		var sphereContaining = Sphere.fromRadiusAndCenter(2, Coords.zeroes() );
 
 		Assert.isTrue
 		(

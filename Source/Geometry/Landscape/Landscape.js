@@ -19,9 +19,9 @@ var ThisCouldBeBetter;
             generateRandom() {
                 var cornerCellPositions = [
                     GameFramework.Coords.create(),
-                    new GameFramework.Coords(this.sizeInCellsMinusOnes.x, 0, 0),
-                    new GameFramework.Coords(this.sizeInCellsMinusOnes.x, this.sizeInCellsMinusOnes.y, 0),
-                    new GameFramework.Coords(0, this.sizeInCellsMinusOnes.y, 0), // sw
+                    GameFramework.Coords.fromXY(this.sizeInCellsMinusOnes.x, 0),
+                    GameFramework.Coords.fromXY(this.sizeInCellsMinusOnes.x, this.sizeInCellsMinusOnes.y),
+                    GameFramework.Coords.fromXY(0, this.sizeInCellsMinusOnes.y), // sw
                 ];
                 for (var i = 0; i < cornerCellPositions.length; i++) {
                     var cornerPos = cornerCellPositions[i];
@@ -32,9 +32,9 @@ var ThisCouldBeBetter;
                 var childPos = GameFramework.Coords.create();
                 var neighborDatas = [
                     // directionToNeighbor, neighborIndicesContributing, altitudeVariationMultiplier
-                    new NeighborData(new GameFramework.Coords(1, 0, 0), [0], 1),
-                    new NeighborData(new GameFramework.Coords(0, 1, 0), [1], 1),
-                    new NeighborData(new GameFramework.Coords(1, 1, 0), [0, 1, 2], Math.sqrt(2)),
+                    new NeighborData(GameFramework.Coords.fromXY(1, 0), [0], 1),
+                    new NeighborData(GameFramework.Coords.fromXY(0, 1), [1], 1),
+                    new NeighborData(GameFramework.Coords.fromXY(1, 1), [0, 1, 2], Math.sqrt(2)),
                 ];
                 for (var d = 0; d < this.depthMax; d++) {
                     this.generateRandom_1(parentPos, childPos, neighborDatas, d);

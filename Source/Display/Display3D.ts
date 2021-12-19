@@ -29,7 +29,14 @@ export class Display3D implements Display
 	_scaleFactor: Coords;
 	_display2DOverlay: Display;
 
-	constructor(sizeInPixels: Coords, fontName: string, fontHeightInPixels: number, colorFore: Color, colorBack: Color)
+	constructor
+	(
+		sizeInPixels: Coords,
+		fontName: string,
+		fontHeightInPixels: number,
+		colorFore: Color,
+		colorBack: Color
+	)
 	{
 		this.sizeInPixels = sizeInPixels;
 		this.sizesAvailable = [ this.sizeInPixels ];
@@ -39,10 +46,12 @@ export class Display3D implements Display
 		this.colorBack = colorBack;
 
 		this._sizeDefault = sizeInPixels;
-		this._scaleFactor = new Coords(1, 1, 1);
+		this._scaleFactor = Coords.ones();
 		this._display2DOverlay = new Display2D
 		(
-			this.sizesAvailable, fontName, fontHeightInPixels, colorFore, colorBack, null
+			this.sizesAvailable,
+			fontName, fontHeightInPixels,
+			colorFore, colorBack, null
 		);
 	}
 
@@ -219,9 +228,9 @@ export class Display3D implements Display
 						var vertexTextureUV =
 						(
 							faceTextures == null
-							? new Coords(-1, -1, 0)
+							? Coords.fromXY(-1, -1)
 							: faceTextures[f] == null
-							? new Coords(-1, -1, 0)
+							? Coords.fromXY(-1, -1)
 							: faceTextures[f].textureUVs[vertexIndex]
 						);
 

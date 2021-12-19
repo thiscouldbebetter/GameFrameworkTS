@@ -102,7 +102,7 @@ class BoxTests extends TestFixture
 	fromMinAndMax_Static(): void
 	{
 		var min = new Coords(-1, -1, -1);
-		var max = new Coords(1, 1, 1);
+		var max = Coords.ones();
 		var boxToTest = Box.fromMinAndMax(min, max);
 
 		var boxOfSide2AtOrigin =
@@ -146,8 +146,8 @@ class BoxTests extends TestFixture
 
 	doBoxesInSetsOverlap(): void
 	{
-		var boxSize = new Coords(1, 1, 1);
-		var boxOfSide1AtOrigin = Box.fromSizeAndCenter(boxSize, new Coords(0, 0, 0) );
+		var boxSize = Coords.ones();
+		var boxOfSide1AtOrigin = Box.fromSizeAndCenter(boxSize, Coords.zeroes() );
 		var boxOfSide1AtXHalf = Box.fromSizeAndCenter(boxSize, new Coords(.5, 0, 0) );
 		var boxOfSide1AtX1 = Box.fromSizeAndCenter(boxSize, new Coords(1, 0, 0) );
 

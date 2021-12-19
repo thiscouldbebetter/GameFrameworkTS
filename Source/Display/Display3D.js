@@ -12,7 +12,7 @@ var ThisCouldBeBetter;
                 this.colorFore = colorFore;
                 this.colorBack = colorBack;
                 this._sizeDefault = sizeInPixels;
-                this._scaleFactor = new GameFramework.Coords(1, 1, 1);
+                this._scaleFactor = GameFramework.Coords.ones();
                 this._display2DOverlay = new GameFramework.Display2D(this.sizesAvailable, fontName, fontHeightInPixels, colorFore, colorBack, null);
             }
             // methods
@@ -95,9 +95,9 @@ var ThisCouldBeBetter;
                                 */
                                 vertexNormalsAsFloatArray = vertexNormalsAsFloatArray.concat(vertexNormal.dimensions());
                                 var vertexTextureUV = (faceTextures == null
-                                    ? new GameFramework.Coords(-1, -1, 0)
+                                    ? GameFramework.Coords.fromXY(-1, -1)
                                     : faceTextures[f] == null
-                                        ? new GameFramework.Coords(-1, -1, 0)
+                                        ? GameFramework.Coords.fromXY(-1, -1)
                                         : faceTextures[f].textureUVs[vertexIndex]);
                                 vertexTextureUVsAsFloatArray = vertexTextureUVsAsFloatArray.concat([
                                     vertexTextureUV.x,

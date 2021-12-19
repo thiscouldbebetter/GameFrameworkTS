@@ -41,9 +41,9 @@ export class LandscapeMap
 		var cornerCellPositions =
 		[
 			Coords.create(), // nw
-			new Coords(this.sizeInCellsMinusOnes.x, 0, 0), // ne
-			new Coords(this.sizeInCellsMinusOnes.x, this.sizeInCellsMinusOnes.y, 0), // se
-			new Coords(0, this.sizeInCellsMinusOnes.y, 0), // sw
+			Coords.fromXY(this.sizeInCellsMinusOnes.x, 0), // ne
+			Coords.fromXY(this.sizeInCellsMinusOnes.x, this.sizeInCellsMinusOnes.y), // se
+			Coords.fromXY(0, this.sizeInCellsMinusOnes.y), // sw
 		];
 
 		for (var i = 0; i < cornerCellPositions.length; i++)
@@ -59,9 +59,9 @@ export class LandscapeMap
 		var neighborDatas =
 		[
 			// directionToNeighbor, neighborIndicesContributing, altitudeVariationMultiplier
-			new NeighborData(new Coords(1, 0, 0), [0], 1),
-			new NeighborData(new Coords(0, 1, 0), [1], 1),
-			new NeighborData(new Coords(1, 1, 0), [0, 1, 2], Math.sqrt(2)),
+			new NeighborData(Coords.fromXY(1, 0), [0], 1),
+			new NeighborData(Coords.fromXY(0, 1), [1], 1),
+			new NeighborData(Coords.fromXY(1, 1), [0, 1, 2], Math.sqrt(2)),
 		];
 
 		for (var d = 0; d < this.depthMax; d++)

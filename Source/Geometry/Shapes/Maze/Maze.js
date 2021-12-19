@@ -16,7 +16,7 @@ var ThisCouldBeBetter;
                     var cell = new GameFramework.MazeCell(numberOfNeighbors);
                     this.cells.push(cell);
                 }
-                this.sizeInCellsMinusOnes = sizeInCells.clone().subtract(new GameFramework.Coords(1, 1, 1));
+                this.sizeInCellsMinusOnes = sizeInCells.clone().subtract(GameFramework.Coords.ones());
             }
             // static methods
             generateRandom(randomizer) {
