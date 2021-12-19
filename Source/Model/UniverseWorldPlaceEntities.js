@@ -54,6 +54,10 @@ var ThisCouldBeBetter;
                 this.place = value;
                 return this;
             }
+            worldSet(value) {
+                this.world = value;
+                return this;
+            }
             // Clonable.
             clone() {
                 return new UniverseWorldPlaceEntities(this.universe, this.world, this.place, this.entity, this.entity2);
