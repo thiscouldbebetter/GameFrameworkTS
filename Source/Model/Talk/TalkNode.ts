@@ -6,17 +6,24 @@ export class TalkNode
 {
 	name: string;
 	defnName: string;
-	text: string;
+	content: string;
 	next: string;
-	isActive: boolean;
+	isDisabled: boolean;
 
-	constructor(name: string, defnName: string, text: string, next: string, isActive: boolean)
+	constructor
+	(
+		name: string,
+		defnName: string,
+		content: string,
+		next: string,
+		isDisabled: boolean
+	)
 	{
 		this.name = (name == null ? TalkNode.idNext() : name);
 		this.defnName = defnName;
-		this.text = text;
+		this.content = content;
 		this.next = next;
-		this.isActive = (isActive == null ? true : isActive);
+		this.isDisabled = (isDisabled == null ? false : isDisabled);
 	}
 	// static methods
 
@@ -28,9 +35,183 @@ export class TalkNode
 		return returnValue;
 	}
 
+	static display(name: string, content: string): TalkNode
+	{
+		return new TalkNode
+		(
+			name,
+			TalkNodeDefn.Instances().Display.name,
+			content,
+			null, // next
+			false // isDisabled
+		);
+	}
+
+	static doNothing(name: string): TalkNode
+	{
+		return new TalkNode
+		(
+			name,
+			TalkNodeDefn.Instances().DoNothing.name,
+			null, // content
+			null, // next
+			false // isDisabled
+		);
+	}
+
+	static option(name: string, content: string, next: string): TalkNode
+	{
+		return new TalkNode
+		(
+			name,
+			TalkNodeDefn.Instances().Option.name,
+			content,
+			next,
+			false // isDisabled
+		);
+	}
+
+	static goto(next: string): TalkNode
+	{
+		return new TalkNode
+		(
+			null, // name,
+			TalkNodeDefn.Instances().Goto.name,
+			null, // content
+			next,
+			false // isDisabled
+		);
+	}
+
+	static pop(): TalkNode
+	{
+		return new TalkNode
+		(
+			null, // name,
+			TalkNodeDefn.Instances().Pop.name,
+			null, // content
+			null, // next
+			false // isDisabled
+		);
+	}
+
+	static prompt(): TalkNode
+	{
+		return new TalkNode
+		(
+			null, // name,
+			TalkNodeDefn.Instances().Prompt.name,
+			null, // content
+			null, // next
+			false // isDisabled
+		);
+	}
+
+	static push(next: string): TalkNode
+	{
+		return new TalkNode
+		(
+			null, // name,
+			TalkNodeDefn.Instances().Push.name,
+			null, // content
+			next,
+			false // isDisabled
+		);
+	}
+
+	static quit(): TalkNode
+	{
+		return new TalkNode
+		(
+			null, // name,
+			TalkNodeDefn.Instances().Quit.name,
+			null, // content
+			null, // next
+			false // isDisabled
+		);
+	}
+
+	static script(code: string): TalkNode
+	{
+		return new TalkNode
+		(
+			null, // name,
+			TalkNodeDefn.Instances().Script.name,
+			code,
+			null, // next
+			false // isDisabled
+		);
+	}
+
+	static _switch // "switch" is a keyword.
+	(
+		variableName: string,
+		variableValueNodeNextNamePairs: string[][]
+	): TalkNode
+	{
+		var next = variableValueNodeNextNamePairs.map
+		(
+			pair => pair.join(":")
+		).join(";");
+
+		return new TalkNode
+		(
+			null, // name,
+			TalkNodeDefn.Instances().Switch.name,
+			variableName, // content
+			next,
+			false // isDisabled
+		);
+	}
+
+	static variableLoad
+	(
+		name: string, variableName: string, variableExpression: string
+	): TalkNode
+	{
+		return new TalkNode
+		(
+			name,
+			TalkNodeDefn.Instances().VariableLoad.name,
+			variableName, // content
+			variableExpression, // next
+			false // isDisabled
+		);
+	}
+
+	static variableSet
+	(
+		variableName: string, variableValueToSet: string
+	): TalkNode
+	{
+		return new TalkNode
+		(
+			null, // name,
+			TalkNodeDefn.Instances().VariableSet.name,
+			variableName, // content
+			variableValueToSet, // next
+			false // isDisabled
+		);
+	}
+
+	static variableStore
+	(
+		name: string, variableName: string, variableExpression: string
+	): TalkNode
+	{
+		return new TalkNode
+		(
+			name,
+			TalkNodeDefn.Instances().VariableStore.name,
+			variableName, // content
+			variableExpression, // next
+			false // isDisabled
+		);
+	}
+
 	// instance methods
 
-	activate(conversationRun: ConversationRun, scope: ConversationScope)
+	activate(conversationRun: ConversationRun, scope: ConversationScope): void
 	{
 		var defn = this.defn(conversationRun.defn);
 		if (defn.activate != null)
@@ -39,22 +220,57 @@ export class TalkNode
 		}
 	}
 
-	defn(conversationDefn: ConversationDefn)
+	defn(conversationDefn: ConversationDefn): TalkNodeDefn
 	{
 		return conversationDefn.talkNodeDefnsByName.get(this.defnName);
 	}
 
-	execute(universe: Universe, conversationRun: ConversationRun, scope: ConversationScope)
+	disable(): TalkNode
+	{
+		this.isDisabled = true;
+		return this;
+	}
+
+	execute
+	(
+		universe: Universe,
+		conversationRun: ConversationRun,
+		scope: ConversationScope
+	): void
 	{
 		var defn = this.defn(conversationRun.defn);
 		defn.execute(universe, conversationRun, scope, this);
 	}
 
-	textForTranscript(conversationDefn: ConversationDefn)
+	isEnabled(): boolean
 	{
-		var speakerName = (this.defnName == "Option" ? "YOU" : "THEY" );
-		var returnValue = speakerName + ": " + this.text;
+		return (this.isDisabled == false);
+	}
+
+	textForTranscript(conversationRun: ConversationRun): string
+	{
+		var speakerName =
+		(
+			this.defnName == "Option"
+			? conversationRun.entityPlayer.name
+			: conversationRun.entityTalker.name
+		);
+		var returnValue = speakerName + ": " + this.content;
 		return returnValue;
+	}
+
+	// Clonable.
+
+	clone(): TalkNode
+	{
+		return new TalkNode
+		(
+			this.name,
+			this.defnName,
+			this.content,
+			this.next,
+			this.isDisabled
+		);
 	}
 }
 

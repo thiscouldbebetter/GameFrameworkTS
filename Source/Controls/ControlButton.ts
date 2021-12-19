@@ -115,7 +115,7 @@ export class ControlButton<TContext> extends ControlBase
 			);
 		}
 
-		drawPos.add(this._sizeHalf.overwriteWith(this.size).half());
+		// drawPos.add(this._sizeHalf.overwriteWith(this.size).half());
 
 		var colorText = (isEnabled ? colorBorder : style.colorDisabled());
 
@@ -126,8 +126,9 @@ export class ControlButton<TContext> extends ControlBase
 			drawPos,
 			(isHighlighted ? colorFill : colorText),
 			(isHighlighted ? colorText : colorFill),
-			true, // isCentered
-			this.size.x // widthMaxInPixels
+			true, // isCenteredHorizontally
+			true, // isCenteredVertically
+			this.size // sizeMaxInPixels
 		);
 	}
 }

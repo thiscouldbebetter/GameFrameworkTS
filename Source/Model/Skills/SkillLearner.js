@@ -137,7 +137,8 @@ var ThisCouldBeBetter;
                     new GameFramework.ControlLabel("labelSkillsKnown", // name,
                     GameFramework.Coords.fromXY(margin, 40), // pos,
                     GameFramework.Coords.fromXY(size.x - margin * 2, labelHeight), // size,
-                    false, // isTextCentered,
+                    false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Skills Known:"), //text
                     labelHeight // fontHeightInPixels
                     ),
@@ -150,7 +151,8 @@ var ThisCouldBeBetter;
                     new GameFramework.ControlLabel("labelSkillsAvailable", // name,
                     GameFramework.Coords.fromXY(size.x - margin - listSize.x, 40), // pos,
                     GameFramework.Coords.fromXY(size.x - margin * 2, labelHeight), // size,
-                    false, // isTextCentered,
+                    false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Skills Available:"), // text
                     labelHeight // fontHeightInPixels
                     ),
@@ -176,18 +178,21 @@ var ThisCouldBeBetter;
                     new GameFramework.ControlLabel("labelSkillSelected", // name,
                     GameFramework.Coords.fromXY(margin, 220), // pos,
                     GameFramework.Coords.fromXY(size.x - margin * 2, labelHeight), // size,
-                    false, // isTextCentered,
+                    false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Selected:"), // text
                     fontHeightInPixels),
                     new GameFramework.ControlLabel("labelSkillSelected", // name,
                     GameFramework.Coords.fromXY(80, 220), // pos,
                     GameFramework.Coords.fromXY(size.x - margin * 2, labelHeight), // size,
-                    false, // isTextCentered,
+                    false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.skillSelectedName || "-")), fontHeightInPixels),
                     new GameFramework.ControlLabel("labelSkillSelectedDescription", // name,
                     GameFramework.Coords.fromXY(margin, 232), // pos,
                     GameFramework.Coords.fromXY(size.x - margin * 2, labelHeight), // size,
-                    false, // isTextCentered,
+                    false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => {
                         var skill = c.skillSelected(skillsAllByName);
                         return (skill == null ? "-" : skill.description);
@@ -195,26 +200,30 @@ var ThisCouldBeBetter;
                     new GameFramework.ControlLabel("labelSkillBeingLearned", // name,
                     GameFramework.Coords.fromXY(margin, size.y - margin - labelHeight * 2), // pos,
                     GameFramework.Coords.fromXY(size.x - margin * 2, labelHeight), // size,
-                    false, // isTextCentered,
+                    false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Skill Being Learned:"), // text
                     fontHeightInPixels),
                     new GameFramework.ControlLabel("textSkillBeingLearned", // name,
                     GameFramework.Coords.fromXY(145, size.y - margin - labelHeight * 2), // pos,
                     GameFramework.Coords.fromXY(size.x - margin * 2, labelHeight), // size,
-                    false, // isTextCentered,
+                    false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => {
                         return (c.skillBeingLearnedName || "-");
                     }), fontHeightInPixels),
                     new GameFramework.ControlLabel("labelLearningAccumulated", // name,
                     GameFramework.Coords.fromXY(margin, size.y - margin - labelHeight), // pos,
                     GameFramework.Coords.fromXY(size.x - margin * 2, labelHeight), // size,
-                    false, // isTextCentered,
+                    false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Learning Accumulated:"), // text
                     fontHeightInPixels),
                     new GameFramework.ControlLabel("textLearningAccumulated", // name,
                     GameFramework.Coords.fromXY(145, size.y - margin - labelHeight), // pos,
                     GameFramework.Coords.fromXY(30, labelHeight), // size,
-                    false, // isTextCentered,
+                    false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => c.learningAccumulatedOverRequired(skillsAllByName)), // text
                     fontHeightInPixels),
                 ]);
@@ -223,7 +232,8 @@ var ThisCouldBeBetter;
                     0, // elementsToDelete
                     new GameFramework.ControlLabel("labelSkills", GameFramework.Coords.fromXY(200, 20), // pos
                     GameFramework.Coords.fromXY(120, 25), // size
-                    true, // isTextCentered
+                    true, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Skills"), labelHeightLarge));
                 }
                 else {

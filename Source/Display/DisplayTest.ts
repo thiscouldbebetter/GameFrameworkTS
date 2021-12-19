@@ -175,8 +175,9 @@ export class DisplayTest implements Display
 		pos: Coords,
 		colorFill: Color,
 		colorOutline: Color,
-		isCentered: boolean,
-		widthMaxInPixels: number
+		isCenteredHorizontally: boolean,
+		isCenteredVertically: boolean,
+		sizeMaxInPixels: Coords
 	): void
 	{}
 

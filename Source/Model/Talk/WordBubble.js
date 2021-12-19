@@ -40,7 +40,8 @@ var ThisCouldBeBetter;
                     null // colorBorder
                     ),
                     new GameFramework.ControlLabel("labelSlideText", GameFramework.Coords.fromXY(portraitSize.x + margin, 0).add(marginSize), wordPaneSize, // size
-                    false, // isTextCentered,
+                    false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => c.statementCurrent()), fontHeight),
                     GameFramework.ControlButton.from8("buttonNext", GameFramework.Coords.fromXY(containerSize.x - marginSize.x - buttonSize.x, containerSize.y - marginSize.y - buttonSize.y), buttonSize, "Next", fontHeight, true, // hasBorder
                     GameFramework.DataBinding.fromTrue(), // isEnabled

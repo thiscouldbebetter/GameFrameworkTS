@@ -83,7 +83,12 @@ export class VenueMessage<TContext> implements Venue
 
 	sizeInPixels(universe: Universe): Coords
 	{
-		return (this._sizeInPixels == null ? universe.display.sizeInPixels : this._sizeInPixels);
+		if (this._sizeInPixels == null)
+		{
+			this._sizeInPixels = universe.display.sizeInPixels.clone();
+		}
+
+		return this._sizeInPixels;
 	}
 
 	venueInner(universe: Universe): Venue

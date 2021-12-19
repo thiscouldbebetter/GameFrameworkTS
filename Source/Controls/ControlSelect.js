@@ -77,9 +77,9 @@ var ThisCouldBeBetter;
                 var text = (optionSelected == null
                     ? "-"
                     : this.bindingForOptionText.contextSet(optionSelected).get());
-                display.drawText(text, this.fontHeightInPixels, drawPos, (this.isHighlighted ? style.colorFill() : style.colorBorder()), (this.isHighlighted ? style.colorBorder() : style.colorFill()), true, // isCentered
-                this.size.x // widthMaxInPixels
-                );
+                display.drawText(text, this.fontHeightInPixels, drawPos, (this.isHighlighted ? style.colorFill() : style.colorBorder()), (this.isHighlighted ? style.colorBorder() : style.colorFill()), true, // isCenteredHorizontally,
+                false, // isCenteredVertically
+                this.size);
             }
         }
         GameFramework.ControlSelect = ControlSelect;

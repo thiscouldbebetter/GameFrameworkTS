@@ -8,6 +8,7 @@ export class ConversationRun
 	quit: () => void;
 	entityPlayer: Entity;
 	entityTalker: Entity;
+	contentsById: Map<string, string>;
 
 	scopeCurrent: ConversationScope;
 	talkNodesForTranscript: TalkNode[];
@@ -22,13 +23,15 @@ export class ConversationRun
 		defn: ConversationDefn,
 		quit: () => void,
 		entityPlayer: Entity,
-		entityTalker: Entity
+		entityTalker: Entity,
+		contentsById: Map<string, string>
 	)
 	{
 		this.defn = defn;
 		this.quit = quit;
 		this.entityPlayer = entityPlayer;
 		this.entityTalker = entityTalker;
+		this.contentsById = contentsById || new Map<string, string>();
 
 		var talkNodeStart = this.defn.talkNodes[0];
 
@@ -52,28 +55,28 @@ export class ConversationRun
 		this.vars = this.variablesByName;
 	}
 
-	// instance methods
+	// Instance methods.
 
-	activate(talkNodeToActivateName: string): void
+	disable(talkNodeToDisableName: string): void
 	{
-		this.activateOrDeactivate(talkNodeToActivateName, true);
+		this.enableOrDisable(talkNodeToDisableName, true);
 	}
 
-	activateOrDeactivate
+	enable(talkNodeToActivateName: string): void
+	{
+		this.enableOrDisable(talkNodeToActivateName, false);
+	}
+
+	enableOrDisable
 	(
-		talkNodeToActivateName: string,
-		isActiveValueToSet: boolean
+		talkNodeToEnableOrDisableName: string,
+		isDisabledValueToSet: boolean
 	): void
 	{
 		var conversationDefn = this.defn;
-		var talkNodeToActivate
-			= conversationDefn.talkNodesByName.get(talkNodeToActivateName);
-		talkNodeToActivate.isActive = isActiveValueToSet;
-	}
-
-	deactivate(talkNodeToDeactivateName: string): void
-	{
-		this.activateOrDeactivate(talkNodeToDeactivateName, false);
+		var talkNodeToSet =
+			conversationDefn.talkNodesByName.get(talkNodeToEnableOrDisableName);
+		talkNodeToSet.isDisabled = isDisabledValueToSet;
 	}
 
 	goto(talkNodeNameNext: string, universe: Universe): void
@@ -172,16 +175,14 @@ export class ConversationRun
 		var fontHeight = 15;
 		var fontHeightShort = fontHeight; // todo
 		var marginWidth = 15;
-		var labelHeight = fontHeight;
 		var buttonHeight = 20;
-		var marginSize = new Coords(1, 1, 0).multiplyScalar(marginWidth);
-		var buttonSize = new Coords(2, 1, 0).multiplyScalar(buttonHeight);
-		var portraitSize = new Coords(4, 4, 0).multiplyScalar(buttonHeight);
-		var listSize = new Coords
+		var marginSize = Coords.fromXY(1, 1).multiplyScalar(marginWidth);
+		var buttonSize = Coords.fromXY(2, 1).multiplyScalar(buttonHeight);
+		var portraitSize = Coords.fromXY(4, 4).multiplyScalar(buttonHeight);
+		var listSize = Coords.fromXY
 		(
 			size.x - marginSize.x * 3 - buttonSize.x,
-			size.y - portraitSize.y - marginSize.y * 4,
-			0
+			size.y - portraitSize.y - marginSize.y * 4
 		);
 
 		var next = () =>
@@ -225,11 +226,16 @@ export class ConversationRun
 					new Coords
 					(
 						marginSize.x * 2 + portraitSize.x,
-						marginSize.y + portraitSize.y / 2 - labelHeight / 2,
+						marginSize.y,
 						0
 					), // pos
-					size, // size
-					false, // isTextCentered
+					Coords.fromXY
+					(
+						size.x - marginWidth * 3 - portraitSize.x,
+						portraitSize.y
+					), // size
+					false, // isTextCenteredHorizontally
+					true, // isTextCenteredVertically
 					DataBinding.fromContextAndGet
 					(
 						conversationRun,
@@ -249,7 +255,8 @@ export class ConversationRun
 						0
 					),
 					size, // size
-					false, // isTextCentered
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext("Response:"),
 					fontHeight
 				),
@@ -274,7 +281,7 @@ export class ConversationRun
 					// bindingForItemText
 					DataBinding.fromGet
 					(
-						(c: TalkNode) => c.text
+						(c: TalkNode) => c.content
 					),
 					fontHeightShort,
 					new DataBinding
@@ -369,7 +376,6 @@ export class ConversationRun
 	): ControlBase
 	{
 		var conversationRun = this;
-		var conversationDefn = conversationRun.defn;
 
 		venueToReturnTo = universe.venueCurrent;
 		var fontHeight = 20;
@@ -414,7 +420,8 @@ export class ConversationRun
 						size.x / 2, marginSize.y
 					), // pos
 					size, // size
-					true, // isTextCentered
+					true, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext("Transcript"),
 					fontHeight
 				),
@@ -436,7 +443,7 @@ export class ConversationRun
 					),
 					DataBinding.fromGet
 					(
-						(c: TalkNode) => c.textForTranscript(conversationDefn)
+						(c: TalkNode) => c.textForTranscript(conversationRun)
 					), // bindingForItemText
 					fontHeightShort
 				),

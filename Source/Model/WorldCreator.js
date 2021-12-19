@@ -21,10 +21,12 @@ var ThisCouldBeBetter;
                 var returnControl = GameFramework.ControlContainer.from4("containerWorldCreator", GameFramework.Coords.zeroes(), // pos
                 size, [
                     new GameFramework.ControlLabel("labelWorldCreationSettings", GameFramework.Coords.fromXY(margin, margin), // pos
-                    GameFramework.Coords.fromXY(size.x - margin * 2, controlHeight), false, // isTextCentered
+                    GameFramework.Coords.fromXY(size.x - margin * 2, controlHeight), false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("World Creation Settings"), fontHeightInPixels),
                     new GameFramework.ControlLabel("labelWorldName", GameFramework.Coords.fromXY(margin, margin * 2 + controlHeight), // pos
-                    GameFramework.Coords.fromXY(size.x - margin * 2, controlHeight), false, // isTextCentered
+                    GameFramework.Coords.fromXY(size.x - margin * 2, controlHeight), false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("World Name:"), fontHeightInPixels),
                     new GameFramework.ControlTextBox("textBoxWorldName", GameFramework.Coords.fromXY(margin * 8, margin * 2 + controlHeight), // pos
                     GameFramework.Coords.fromXY(margin * 12, controlHeight), // size

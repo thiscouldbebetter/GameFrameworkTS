@@ -85,7 +85,9 @@ export interface Display
 	(
 		text: string, fontHeightInPixels: number, pos: Coords,
 		colorFill: Color, colorOutline: Color,
-		isCentered: boolean, widthMaxInPixels: number
+		isCenteredHorizontally: boolean,
+		isCenteredVertically: boolean,
+		sizeMaxInPixels: Coords
 	): void;
 	drawWedge
 	(

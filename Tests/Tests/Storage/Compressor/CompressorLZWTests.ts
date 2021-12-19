@@ -32,7 +32,7 @@ class CompressorLZWTests extends TestFixture
 
 		Assert.isTrue
 		(
-			ArrayHelper.areEqual(bytesToCompress, bytesDecompressed)
+			ArrayHelper.areEqualNonEquatable(bytesToCompress, bytesDecompressed)
 		);
 	}
 
@@ -44,7 +44,7 @@ class CompressorLZWTests extends TestFixture
 		var stringDecompressed =
 			this._compressor.decompressString(bytesCompressed);
 
-		Assert.areEqual(stringToCompress, stringDecompressed);
+		Assert.areStringsEqual(stringToCompress, stringDecompressed);
 	}
 
 }

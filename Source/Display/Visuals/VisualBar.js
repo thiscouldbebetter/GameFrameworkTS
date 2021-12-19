@@ -59,9 +59,11 @@ var ThisCouldBeBetter;
                         text = this.text.get();
                     }
                     display.drawText(text, this.size.y, // fontHeightInPixels
-                    pos, colorForBorder, GameFramework.Color.byName("Black"), // colorOutline,
-                    true, // isCentered
-                    null);
+                    pos, colorForBorder, GameFramework.Color.byName("Black"), // colorOutline
+                    true, // isCenteredHorizontally
+                    true, // isCenteredVertically
+                    null // sizeMaxInPixels
+                    );
                 }
                 //return wasVisible;
             }

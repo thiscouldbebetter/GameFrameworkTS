@@ -21,7 +21,7 @@ class CameraTests extends TestFixture {
     clipPlanes() {
         var cameraClipPlanes = this._camera.clipPlanes();
         Assert.isNotNull(cameraClipPlanes);
-        Assert.areEqual(4, cameraClipPlanes.length);
+        Assert.areNumbersEqual(4, cameraClipPlanes.length);
     }
     coordsTransformViewToWorld() {
         var viewCoords = Coords.fromXY(0, 0);
@@ -48,23 +48,23 @@ class CameraTests extends TestFixture {
         var entityFar = new Entity("EntityFar", [Locatable.fromPos(new Coords(0, 0, 100))]);
         var entitiesToSort = [entityNear, entityFar];
         var entitiesSorted = this._camera.entitiesInViewSort(ArrayHelper.clone(entitiesToSort));
-        Assert.areEqual(entitiesToSort.length, entitiesSorted.length);
+        Assert.areNumbersEqual(entitiesToSort.length, entitiesSorted.length);
         // todo - No sorting yet.
         Assert.isTrue(ArrayHelper.areEqual(entitiesToSort, entitiesSorted));
     }
     toEntity() {
         var cameraAsEntity = this._camera.toEntity();
-        Assert.areEqual(Camera.name, cameraAsEntity.name);
+        Assert.areStringsEqual(Camera.name, cameraAsEntity.name);
         Assert.isNotNull(cameraAsEntity.camera());
     }
     // EntityProperty.
     finalize() {
-        this._camera.finalize(null, null, null, null);
+        this._camera.finalize(null);
     }
     initialize() {
-        this._camera.initialize(null, null, null, null);
+        this._camera.initialize(null);
     }
     updateForTimerTick() {
-        this._camera.updateForTimerTick(null, null, null, null);
+        this._camera.updateForTimerTick(null);
     }
 }

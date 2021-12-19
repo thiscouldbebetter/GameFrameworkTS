@@ -2,11 +2,12 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ControlTextBox<TContext> extends ControlBase
+export class ControlNumber<TContext> extends ControlBase
 {
-	_text: DataBinding<TContext, string>;
-	numberOfCharsMax: number;
-	_isEnabled: DataBinding<TContext,boolean>;
+	_value: DataBinding<TContext, number>;
+	_valueMin: DataBinding<TContext, number>;
+	_valueMax: DataBinding<TContext, number>;
+	_isEnabled: DataBinding<TContext, boolean>;
 
 	cursorPos: number;
 
@@ -21,16 +22,18 @@ export class ControlTextBox<TContext> extends ControlBase
 		name: string,
 		pos: Coords,
 		size: Coords,
-		text: DataBinding<TContext,string>,
+		value: DataBinding<TContext, number>,
+		valueMin: DataBinding<TContext, number>,
+		valueMax: DataBinding<TContext, number>,
 		fontHeightInPixels: number,
-		numberOfCharsMax: number,
-		isEnabled: DataBinding<TContext,boolean>
+		isEnabled: DataBinding<TContext, boolean>,
 	)
 	{
 		super(name, pos, size, fontHeightInPixels);
-		this._text = text;
+		this._value = value;
+		this._valueMin = valueMin;
+		this._valueMax = valueMax;
 		this.fontHeightInPixels = fontHeightInPixels;
-		this.numberOfCharsMax = numberOfCharsMax;
 		this._isEnabled = isEnabled;
 
 		this.cursorPos = null;
@@ -43,21 +46,40 @@ export class ControlTextBox<TContext> extends ControlBase
 		this._textSize = Coords.create();
 	}
 
-	text(value: string): string
+	numberOfDigitsMax(): number
 	{
-		if (value != null)
-		{
-			this._text.set(value);
-		}
+		return Math.ceil
+		(
+			Math.log(this.valueMax()) / Math.log(10)
+		);
+	}
 
-		return this._text.get();
+	value(): number
+	{
+		return this._value.get();
+	}
+
+	valueMin(): number
+	{
+		return this._valueMin.get();
+	}
+
+	valueMax(): number
+	{
+		return this._valueMax.get();
+	}
+
+	valueSet(valueToSet: number): void
+	{
+		this._value.set(valueToSet);
 	}
 
 	// events
 
 	actionHandle(actionNameToHandle: string, universe: Universe): boolean
 	{
-		var text = this.text(null);
+		var value = this.value();
+		var valueAsString = value.toString();
 
 		var controlActionNames = ControlActionNames.Instances();
 		if
@@ -66,18 +88,20 @@ export class ControlTextBox<TContext> extends ControlBase
 			|| actionNameToHandle == Input.Names().Backspace
 		)
 		{
-			this.text(text.substr(0, text.length - 1));
+			valueAsString = valueAsString.substr(0, valueAsString.length - 1);
+			value = parseFloat(valueAsString);
+			this.valueSet(value);
 
 			this.cursorPos = NumberHelper.wrapToRangeMinMax
 			(
-				this.cursorPos - 1, 0, text.length + 1
+				this.cursorPos - 1, 0, valueAsString.length + 1
 			);
 		}
 		else if (actionNameToHandle == controlActionNames.ControlConfirm)
 		{
 			this.cursorPos = NumberHelper.wrapToRangeMinMax
 			(
-				this.cursorPos + 1, 0, text.length + 1
+				this.cursorPos + 1, 0, valueAsString.length + 1
 			);
 		}
 		else if
@@ -94,48 +118,19 @@ export class ControlTextBox<TContext> extends ControlBase
 				: 1
 			);
 
-			var charCodeAtCursor =
-			(
-				this.cursorPos < text.length
-				? text.charCodeAt(this.cursorPos)
-				: "A".charCodeAt(0) - 1
-			);
+			var valueOld = this.value();
+			var valueNew = valueOld + direction;
 
-			if 
-			(
-				charCodeAtCursor == "Z".charCodeAt(0)
-				&& direction == 1
-			)
+			if (valueNew < this.valueMin())
 			{
-				charCodeAtCursor = "a".charCodeAt(0);
+				valueNew = this.valueMin();
 			}
-			else if 
-			(
-				charCodeAtCursor == "a".charCodeAt(0)
-				&& direction == -1
-			)
+			else if (valueNew > this.valueMax())
 			{
-				charCodeAtCursor = "Z".charCodeAt(0);
-			}
-			else
-			{
-				charCodeAtCursor = charCodeAtCursor + direction;
+				valueNew = this.valueMax();
 			}
 
-			charCodeAtCursor = NumberHelper.wrapToRangeMinMax
-			(
-				charCodeAtCursor,
-				"A".charCodeAt(0),
-				"z".charCodeAt(0) + 1
-			);
-
-			var charAtCursor = String.fromCharCode(charCodeAtCursor);
-
-			var textEdited = text.substr(0, this.cursorPos)
-				+ charAtCursor
-				+ text.substr(this.cursorPos + 1);
-
-			this.text(textEdited);
+			this.valueSet(valueNew);
 		}
 		else if 
 		(
@@ -147,32 +142,26 @@ export class ControlTextBox<TContext> extends ControlBase
 
 			if (actionNameToHandle.startsWith("_"))
 			{
-				if (actionNameToHandle == "_")
-				{
-					actionNameToHandle = " ";
-				}
-				else
-				{
-					actionNameToHandle = actionNameToHandle.substr(1);
-				}
+				actionNameToHandle = actionNameToHandle.substr(1);
 			}
 
 			if
 			(
-				this.numberOfCharsMax == null
-				|| text.length < this.numberOfCharsMax
+				this.numberOfDigitsMax() == null
+				|| this.value.toString().length < this.numberOfDigitsMax()
 			)
 			{
-				var textEdited =
-					text.substr(0, this.cursorPos)
+				var valueAsStringEdited =
+					valueAsString.substr(0, this.cursorPos)
 						+ actionNameToHandle
-						+ text.substr(this.cursorPos);
+						+ valueAsString.substr(this.cursorPos);
 
-				text = this.text(textEdited);
+				value = parseFloat(valueAsStringEdited);
+				this.valueSet(value);
 
 				this.cursorPos = NumberHelper.wrapToRangeMinMax
 				(
-					this.cursorPos + 1, 0, text.length + 1
+					this.cursorPos + 1, 0, valueAsStringEdited.length + 1
 				);
 			}
 		}
@@ -183,7 +172,7 @@ export class ControlTextBox<TContext> extends ControlBase
 	focusGain(): void
 	{
 		this.isHighlighted = true;
-		this.cursorPos = this.text(null).length;
+		this.cursorPos = this.value.toString().length;
 	}
 
 	focusLose(): void
@@ -211,7 +200,7 @@ export class ControlTextBox<TContext> extends ControlBase
 
 	mouseExit(): void {}
 
-	scalePosAndSize(scaleFactor: Coords): ControlTextBox<TContext>
+	scalePosAndSize(scaleFactor: Coords): ControlNumber<TContext>
 	{
 		this.pos.multiply(scaleFactor);
 		this.size.multiply(scaleFactor);
@@ -227,7 +216,7 @@ export class ControlTextBox<TContext> extends ControlBase
 			this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 		var style = this.style(universe);
 
-		var text = this.text(null);
+		var text = this.value().toString();
 		var textWidth =
 			display.textWidthForFontHeight(text, this.fontHeightInPixels);
 		var textSize =

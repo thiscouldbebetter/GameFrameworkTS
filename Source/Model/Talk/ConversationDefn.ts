@@ -6,28 +6,42 @@ export class ConversationDefn
 {
 	name: string;
 	visualPortrait: VisualBase;
-	contentTextStringName: string;
 	talkNodeDefns: TalkNodeDefn[];
-	talkNodeDefnsByName: Map<string, TalkNodeDefn>;
 	talkNodes: TalkNode[];
+
+	talkNodeDefnsByName: Map<string, TalkNodeDefn>;
 	talkNodesByName: Map<string, TalkNode>;
 
 	constructor
 	(
 		name: string,
 		visualPortrait: VisualBase,
-		contentTextStringName: string,
 		talkNodeDefns: TalkNodeDefn[],
 		talkNodes: TalkNode[]
 	)
 	{
 		this.name = name;
 		this.visualPortrait = visualPortrait;
-		this.contentTextStringName = contentTextStringName;
 		this.talkNodeDefns = talkNodeDefns;
 		this.talkNodeDefnsByName = ArrayHelper.addLookupsByName(this.talkNodeDefns);
 		this.talkNodes = talkNodes;
 		this.talkNodesByName = ArrayHelper.addLookupsByName(this.talkNodes);
+	}
+
+	contentSubstitute(contentByNodeName: Map<string, string>): ConversationDefn
+	{
+		this.talkNodes.forEach(talkNode =>
+		{
+			var talkNodeName = talkNode.name;
+			if (talkNodeName != null)
+			{
+				if (contentByNodeName.has(talkNodeName))
+				{
+					talkNode.content = contentByNodeName.get(talkNodeName);
+				}
+			}
+		});
+		return this;
 	}
 
 	talkNodeByName(nameOfTalkNodeToGet: string): TalkNode
@@ -99,7 +113,9 @@ export class ConversationDefn
 			}
 			else
 			{
-				var tag = talkNodeToExpand.text;
+				throw new Error("todo");
+
+				var tag = talkNodeToExpand.content;
 				var textLinesForTag = tagToTextLinesLookup.get(tag);
 				for (var j = 0; j < textLinesForTag.length; j++)
 				{
@@ -110,7 +126,7 @@ export class ConversationDefn
 						talkNodeToExpandDefnName,
 						textLine,
 						talkNodeToExpand.next,
-						talkNodeToExpand.isActive
+						talkNodeToExpand.isDisabled
 					);
 					talkNodesExpanded.push(talkNodeExpanded);
 				}
@@ -121,7 +137,21 @@ export class ConversationDefn
 		this.talkNodesByName = ArrayHelper.addLookupsByName(this.talkNodes);
 	}
 
-	// serialization
+	// Clonable.
+
+	clone(): ConversationDefn
+	{
+		return new ConversationDefn
+		(
+			this.name,
+			this.visualPortrait,
+			this.talkNodeDefns.map(x => x.clone()),
+			this.talkNodes.map(x => x.clone())
+		)
+	}
+
+
+	// Serialization.
 
 	static deserialize(conversationDefnAsJSON: string): ConversationDefn
 	{
@@ -138,42 +168,45 @@ export class ConversationDefn
 		{
 			conversationDefn.visualPortrait = new VisualImageFromLibrary(imagePortraitName);
 		}
-		conversationDefn.contentTextStringName =
-			conversationDefn["contentTextStringName"];
 
 		var talkNodes = conversationDefn["talkNodes"];
 		for (var i = 0; i < talkNodes.length; i++)
 		{
 			var talkNode = talkNodes[i];
+			/*
 			talkNode.name = talkNode["name"];
 			talkNode.defnName = talkNode["defnName"];
 			talkNode.text = talkNode["text"];
 			talkNode.next = talkNode["next"];
-			talkNode.isActive = talkNode["isActive"];
+			talkNode.isDisabled = talkNode["isDisabled"];
+			*/
+
+			Object.setPrototypeOf(talkNode, TalkNode.prototype);
 		}
 
-		conversationDefn.__proto__ = ConversationDefn.prototype;
+		Object.setPrototypeOf(conversationDefn, ConversationDefn.prototype);
 
 		var talkNodes = conversationDefn.talkNodes;
 		for (var i = 0; i < talkNodes.length; i++)
 		{
 			var talkNode = talkNodes[i];
-			talkNode.__proto__ = TalkNode.prototype;
+
 			if (talkNode.name == null)
 			{
 				talkNode.name = TalkNode.idNext();
 			}
-			if (talkNode.isActive == null)
-			{
-				talkNode.isActive = true;
-			}
 		}
 		conversationDefn.talkNodes = talkNodes;
-		conversationDefn.talkNodesByName = ArrayHelper.addLookupsByName(talkNodes);
 
-		conversationDefn.talkNodeDefns = TalkNodeDefn.Instances()._All;
+		/*
+		conversationDefn.talkNodesByName = ArrayHelper.addLookupsByName(talkNodes);
 		conversationDefn.talkNodeDefnsByName =
 			ArrayHelper.addLookupsByName(conversationDefn.talkNodeDefns);
+		*/
+
+		conversationDefn.talkNodeDefns = TalkNodeDefn.Instances()._All;
+
+		conversationDefn = conversationDefn.clone(); // hack
 
 		return conversationDefn;
 	}

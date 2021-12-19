@@ -583,8 +583,9 @@ export class Display3D implements Display
 		pos: Coords,
 		colorFill: Color,
 		colorOutline: Color,
-		isCentered: boolean,
-		widthMaxInPixels: number
+		isCenteredHorizontally: boolean,
+		isCenteredVertically: boolean,
+		sizeMaxInPixels: Coords
 	): void
 	{
 		this._display2DOverlay.drawText
@@ -594,8 +595,9 @@ export class Display3D implements Display
 			pos,
 			colorFill,
 			colorOutline,
-			isCentered,
-			widthMaxInPixels
+			isCenteredHorizontally,
+			isCenteredVertically,
+			sizeMaxInPixels
 		);
 	}
 

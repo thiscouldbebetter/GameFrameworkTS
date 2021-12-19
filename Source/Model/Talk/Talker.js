@@ -18,7 +18,8 @@ var ThisCouldBeBetter;
                  {
                     universe.venueNext = venueToReturnTo;
                 };
-                var conversation = new GameFramework.ConversationRun(conversationDefn, conversationQuit, entityTalkee, entityTalker // entityTalker
+                var conversation = new GameFramework.ConversationRun(conversationDefn, conversationQuit, entityTalkee, entityTalker, // entityTalker
+                null // contentsById
                 );
                 var conversationSize = universe.display.sizeDefault().clone();
                 var conversationAsControl = conversation.toControl(conversationSize, universe);

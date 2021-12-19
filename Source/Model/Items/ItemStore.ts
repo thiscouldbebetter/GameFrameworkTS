@@ -135,7 +135,8 @@ export class ItemStore implements EntityProperty<ItemStore>
 					"labelStoreName",
 					Coords.fromXY(margin, margin), // pos
 					Coords.fromXY(listSize.x, 25), // size
-					false, // isTextCentered
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext(entityStore.name + ":"),
 					fontHeight
 				),
@@ -172,7 +173,8 @@ export class ItemStore implements EntityProperty<ItemStore>
 					"labelCustomerName",
 					Coords.fromXY(size.x - margin - listSize.x, margin), // pos
 					Coords.fromXY(85, 25), // size
-					false, // isTextCentered
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext(entityCustomer.name + ":"),
 					fontHeight
 				),
@@ -241,7 +243,8 @@ export class ItemStore implements EntityProperty<ItemStore>
 					"infoStatus",
 					Coords.fromXY(size.x / 2, size.y - margin * 2 - buttonSize.y), // pos
 					Coords.fromXY(size.x, fontHeight), // size
-					true, // isTextCentered
+					true, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet(this, c => c.statusMessage),
 					fontHeight
 				),

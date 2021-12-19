@@ -506,7 +506,8 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 					"labelEquippable",
 					Coords.fromXY(10, 5), // pos
 					Coords.fromXY(70, 25), // size
-					false, // isTextCentered
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext("Equippable:"),
 					fontHeightSmall
 				),
@@ -522,7 +523,8 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 					"labelEquipped",
 					Coords.fromXY(100, 5), // pos
 					Coords.fromXY(100, 25), // size
-					false, // isTextCentered
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext("Equipped:"),
 					fontHeightSmall
 				),
@@ -534,7 +536,8 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 					"infoStatus",
 					Coords.fromXY(sizeBase.x / 2, 125), // pos
 					Coords.fromXY(sizeBase.x, 15), // size
-					true, // isTextCentered
+					true, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet
 					(
 						this,
@@ -586,7 +589,8 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 					"labelEquipment",
 					Coords.fromXY(100, -5), // pos
 					Coords.fromXY(100, 25), // size
-					true, // isTextCentered
+					true, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext("Equip"),
 					fontHeightLarge
 				)

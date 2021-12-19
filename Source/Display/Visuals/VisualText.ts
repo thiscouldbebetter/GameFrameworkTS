@@ -68,8 +68,9 @@ export class VisualText implements Visual<VisualText>
 			entity.locatable().loc.pos,
 			this.colorFill,
 			this.colorBorder,
-			true, // isCentered
-			null // widthMaxInPixels
+			true, // isCenteredHorizontally
+			true, // isCenteredVertically
+			null // sizeMaxInPixels
 		);
 	}
 

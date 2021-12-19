@@ -22,7 +22,7 @@ class ArcTests extends TestFixture {
     collider() {
         var collider = this._arcDefault.collider();
         var colliderTypeName = collider.constructor.name;
-        Assert.areEqual(ShapeGroupAll.name, colliderTypeName);
+        Assert.areStringsEqual(ShapeGroupAll.name, colliderTypeName);
     }
     // Clonable.
     clone() {

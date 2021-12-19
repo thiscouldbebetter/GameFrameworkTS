@@ -201,10 +201,8 @@ class BoxTests extends TestFixture {
         doBoxesOverlap = boxOfSize1AtOrigin.overlapsWithOtherInDimension(boxOfSize1AtXHalfZTen, 2);
         Assert.isFalse(doBoxesOverlap);
     }
-    posRandom(randomizer) {
-        var min = this.min();
-        var pos = min.clone().add(Coords.default().randomize(randomizer).multiply(this.size));
-        return pos;
+    pointRandom(randomizer) {
+        Assert.isTrue(true); // todo
     }
     randomize() {
         var sizeBefore = Coords.ones();
@@ -218,11 +216,11 @@ class BoxTests extends TestFixture {
         var box = Box.fromSize(new Coords(1, 2, 3));
         var boxSize = box.size;
         var boxRangeX = box.rangeForDimension(0, RangeExtent.create());
-        Assert.areEqual(boxRangeX.size(), boxSize.x);
+        Assert.areNumbersEqual(boxRangeX.size(), boxSize.x);
         var boxRangeY = box.rangeForDimension(1, RangeExtent.create());
-        Assert.areEqual(boxRangeY.size(), boxSize.y);
+        Assert.areNumbersEqual(boxRangeY.size(), boxSize.y);
         var boxRangeZ = box.rangeForDimension(2, RangeExtent.create());
-        Assert.areEqual(boxRangeZ.size(), boxSize.z);
+        Assert.areNumbersEqual(boxRangeZ.size(), boxSize.z);
     }
     sizeHalf() {
         throw new Error("Not yet implemented!");
@@ -270,7 +268,7 @@ class BoxTests extends TestFixture {
         var boxOfSize1AtOrigin = Box.fromSize(Coords.ones());
         var boxAsString = boxOfSize1AtOrigin.toString();
         var boxAsStringExpected = "-0.5x-0.5x-0.5:0.5x0.5x0.5";
-        Assert.areEqual(boxAsStringExpected, boxAsString);
+        Assert.areStringsEqual(boxAsStringExpected, boxAsString);
     }
     // ShapeBase.
     dimensionForSurfaceClosestToPoint() {

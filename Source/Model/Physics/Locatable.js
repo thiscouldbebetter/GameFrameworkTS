@@ -95,7 +95,9 @@ var ThisCouldBeBetter;
             finalize(uwpe) { }
             initialize(uwpe) { }
             // Equatable
-            equals(other) { return false; } // todo
+            equals(other) {
+                return this.loc.equals(other.loc);
+            }
         }
         GameFramework.Locatable = Locatable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

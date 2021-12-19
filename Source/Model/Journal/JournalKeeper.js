@@ -30,7 +30,8 @@ var ThisCouldBeBetter;
                 var childControls = [
                     new GameFramework.ControlLabel("labelJournalEntries", GameFramework.Coords.fromXY(10, 5), // pos
                     GameFramework.Coords.fromXY(70, 25), // size
-                    false, // isTextCentered
+                    false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Journal Entries:"), fontHeightSmall),
                     new GameFramework.ControlButton("buttonEntryNew", GameFramework.Coords.fromXY(65, 5), // pos
                     GameFramework.Coords.fromXY(30, 8), // size
@@ -60,7 +61,8 @@ var ThisCouldBeBetter;
                     }, null),
                     new GameFramework.ControlLabel("labelEntrySelected", GameFramework.Coords.fromXY(105, 5), // pos
                     GameFramework.Coords.fromXY(100, 15), // size
-                    false, // isTextCentered
+                    false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Entry Selected:"), fontHeightSmall),
                     new GameFramework.ControlButton("buttonEntrySelectedEdit", GameFramework.Coords.fromXY(146, 5), // pos
                     GameFramework.Coords.fromXY(15, 8), // size
@@ -101,11 +103,13 @@ var ThisCouldBeBetter;
                     ),
                     new GameFramework.ControlLabel("labelEntrySelectedTimeRecorded", GameFramework.Coords.fromXY(105, 15), // pos
                     GameFramework.Coords.fromXY(100, 15), // size
-                    false, // isTextCentered
+                    false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Time Recorded:"), fontHeightSmall),
                     new GameFramework.ControlLabel("labelEntrySelectedTimeRecorded", GameFramework.Coords.fromXY(145, 15), // pos
                     GameFramework.Coords.fromXY(100, 15), // size
-                    false, // isTextCentered
+                    false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => {
                         var entry = c.journalEntrySelected;
                         return (entry == null ? "-" : entry.timeRecordedAsStringH_M_S(universe));
@@ -139,7 +143,8 @@ var ThisCouldBeBetter;
                     ),
                     new GameFramework.ControlLabel("infoStatus", GameFramework.Coords.fromXY(150, 120), // pos
                     GameFramework.Coords.fromXY(200, 15), // size
-                    true, // isTextCentered
+                    true, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => {
                         return c.statusMessage;
                     }), // text
@@ -156,7 +161,8 @@ var ThisCouldBeBetter;
                     childControls.splice(0, // indexToInsertAt
                     0, new GameFramework.ControlLabel("labelTitle", GameFramework.Coords.fromXY(100, -5), // pos
                     GameFramework.Coords.fromXY(100, 25), // size
-                    true, // isTextCentered
+                    true, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Journal"), fontHeightLarge));
                     childControls.push(GameFramework.ControlButton.from8("buttonDone", GameFramework.Coords.fromXY(170, 115), // pos
                     buttonSize.clone(), "Done", fontHeightSmall, true, // hasBorder

@@ -359,8 +359,9 @@ export class ControlTextarea<TContext> extends ControlBase
 				drawPos2,
 				colorFore,
 				colorBack,
-				false, // isCentered
-				this.size.x // widthMaxInPixels
+				false, // isCenteredHorizontally
+				false, // isCenteredVertically
+				this.size
 			);
 
 			drawPos2.y += itemSizeY;

@@ -12,13 +12,14 @@ class MockEnvironment
 	{
 		var universe = Universe.default();
 		universe.world = universe.worldCreate();
-		universe.world.defn = new WorldDefn
-		([
+		universe.world.defn = WorldDefn.fromPlaceDefns
+		(
 			[ PlaceDefn.default() ]
-		]);
+		);
 		universe.initialize(() => {});
 		universe.profile = Profile.anonymous();
-		universe.world.initialize(universe);
+		var uwpe = UniverseWorldPlaceEntities.fromUniverse(universe);
+		universe.world.initialize(uwpe);
 
 		return universe;
 	}

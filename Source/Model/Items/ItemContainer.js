@@ -58,7 +58,8 @@ var ThisCouldBeBetter;
                 [
                     new GameFramework.ControlLabel("labelContainerName", GameFramework.Coords.fromXY(margin, margin), // pos
                     GameFramework.Coords.fromXY(listSize.x, 25), // size
-                    false, // isTextCentered
+                    false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext(entityContainer.name + ":"), fontHeight),
                     new GameFramework.ControlList("listContainerItems", GameFramework.Coords.fromXY(margin, margin * 2), // pos
                     listSize.clone(), GameFramework.DataBinding.fromContextAndGet(itemHolderContainer, (c) => c.items), // items
@@ -80,7 +81,8 @@ var ThisCouldBeBetter;
                     ),
                     new GameFramework.ControlLabel("labelGetterPutterName", GameFramework.Coords.fromXY(size.x - margin - listSize.x, margin), // pos
                     GameFramework.Coords.fromXY(85, 25), // size
-                    false, // isTextCentered
+                    false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext(entityGetterPutter.name + ":"), fontHeight),
                     new GameFramework.ControlList("listOtherItems", GameFramework.Coords.fromXY(size.x - margin - listSize.x, margin * 2), // pos
                     listSize.clone(), GameFramework.DataBinding.fromContextAndGet(itemHolderGetterPutter, (c) => c.items //.filter(x => x.item().defnName != itemDefnNameCurrency);
@@ -93,7 +95,8 @@ var ThisCouldBeBetter;
                     null),
                     new GameFramework.ControlLabel("infoStatus", GameFramework.Coords.fromXY(size.x / 2, size.y - margin - fontHeight), // pos
                     GameFramework.Coords.fromXY(size.x, fontHeight), // size
-                    true, // isTextCentered
+                    true, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContextAndGet(this, c => c.statusMessage), fontHeight),
                     GameFramework.ControlButton.from8("buttonDone", GameFramework.Coords.fromXY(size.x - margin - buttonSize.x, size.y - margin - buttonSize.y), // pos
                     buttonSize.clone(), "Done", fontHeight, true, // hasBorder

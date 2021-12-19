@@ -221,9 +221,9 @@ var ThisCouldBeBetter;
                 var drawPos2 = new GameFramework.Coords(drawPos.x + textMarginLeft, itemPosY, 0);
                 for (var i = indexStart; i <= indexEnd; i++) {
                     var line = lines[i];
-                    display.drawText(line, this.fontHeightInPixels, drawPos2, colorFore, colorBack, false, // isCentered
-                    this.size.x // widthMaxInPixels
-                    );
+                    display.drawText(line, this.fontHeightInPixels, drawPos2, colorFore, colorBack, false, // isCenteredHorizontally
+                    false, // isCenteredVertically
+                    this.size);
                     drawPos2.y += itemSizeY;
                 }
                 this.scrollbar.draw(universe, display, drawLoc, style);

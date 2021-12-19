@@ -12,16 +12,19 @@ var ThisCouldBeBetter;
                 var timePlayingAsString = universe.world.timePlayingAsStringLong(universe);
                 var controlsForStatusFields = [
                     new GameFramework.ControlLabel("labelProfile", GameFramework.Coords.fromXY(marginX, labelSize.y), // pos
-                    labelSize.clone(), false, // isTextCentered
+                    labelSize.clone(), false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Profile: " + universe.profile.name), fontHeight),
                     new GameFramework.ControlLabel("labelTimePlaying", GameFramework.Coords.fromXY(marginX, labelSize.y * 2), // pos
-                    labelSize.clone(), false, // isTextCentered
+                    labelSize.clone(), false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Time Playing: " + timePlayingAsString), fontHeight)
                 ];
                 var killable = entity.killable();
                 if (killable != null) {
                     var labelHealth = new GameFramework.ControlLabel("labelHealth", GameFramework.Coords.fromXY(marginX, labelSize.y * 3), // pos
-                    labelSize.clone(), false, // isTextCentered
+                    labelSize.clone(), false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Health: " + entity.killable().integrity
                         + "/" + entity.killable().integrityMax), fontHeight);
                     controlsForStatusFields.push(labelHealth);
@@ -49,7 +52,8 @@ var ThisCouldBeBetter;
                     var skillLearnerAsControl = skillLearner.toControl(universe, tabPageSize, entity, venuePrev, includeTitleAndDoneButtonFalse);
                     controlsForTabs.push(skillLearnerAsControl);
                     var labelExperience = new GameFramework.ControlLabel("labelExperience", GameFramework.Coords.fromXY(marginX, labelSize.y * 4), // pos
-                    labelSize.clone(), false, // isTextCentered
+                    labelSize.clone(), false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Experience: "
                         + entity.skillLearner().learningAccumulated), fontHeight);
                     controlsForStatusFields.push(labelExperience);

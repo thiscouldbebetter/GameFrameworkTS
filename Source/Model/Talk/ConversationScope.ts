@@ -31,7 +31,7 @@ export class ConversationScope
 		this.talkNodesForOptionsByName =
 			ArrayHelper.addLookupsByName(this.talkNodesForOptions);
 
-		this.displayTextCurrent = "[conversation begins]";
+		this.displayTextCurrent = null;
 		this.talkNodeForOptionSelected = null;
 		this._talkNodesForOptionsActive = [];
 		this._emptyArray = [];
@@ -52,7 +52,7 @@ export class ConversationScope
 		while
 		(
 			this.talkNodeCurrent == talkNodeInitial
-			|| this.talkNodeCurrent.isActive == false
+			|| this.talkNodeCurrent.isDisabled
 		)
 		{
 			var talkNodeIndex = defnTalkNodes.indexOf(this.talkNodeCurrent);
@@ -62,7 +62,7 @@ export class ConversationScope
 		return this;
 	}
 
-	talkNodeNextSpecifiedOrAdvance(conversationRun: ConversationRun): ConversationScope
+	talkNodeNextSpecifiedOrAdvance(conversationRun: ConversationRun): TalkNode
 	{
 		var conversationDefn = conversationRun.defn;
 		var nodeNextNameSpecified = this.talkNodeCurrent.next;
@@ -76,7 +76,7 @@ export class ConversationScope
 				conversationDefn.talkNodeByName(nodeNextNameSpecified);
 		}
 
-		return this;
+		return this.talkNodeCurrent;
 	}
 
 	talkNodesForOptionsActive(): TalkNode[]
@@ -96,7 +96,7 @@ export class ConversationScope
 				for (var i = 0; i < this.talkNodesForOptions.length; i++)
 				{
 					var talkNode = this.talkNodesForOptions[i];
-					if (talkNode.isActive)
+					if (talkNode.isEnabled())
 					{
 						this._talkNodesForOptionsActive.push(talkNode);
 					}

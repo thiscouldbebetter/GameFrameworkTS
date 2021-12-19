@@ -3,8 +3,7 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Entity //
-         {
+        class Entity {
             constructor(name, properties) {
                 this.id = GameFramework.IDHelper.Instance().idNext();
                 this.name = name;
@@ -90,6 +89,9 @@ var ThisCouldBeBetter;
                 }
                 var returnValue = new Entity(nameCloned, propertiesCloned);
                 return returnValue;
+            }
+            overwriteWith(other) {
+                throw new Error("Not yet implemented!");
             }
             // Equatable.
             equals(other) {

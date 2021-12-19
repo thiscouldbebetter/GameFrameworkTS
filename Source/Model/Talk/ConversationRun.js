@@ -4,11 +4,12 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ConversationRun {
-            constructor(defn, quit, entityPlayer, entityTalker) {
+            constructor(defn, quit, entityPlayer, entityTalker, contentsById) {
                 this.defn = defn;
                 this.quit = quit;
                 this.entityPlayer = entityPlayer;
                 this.entityTalker = entityTalker;
+                this.contentsById = contentsById || new Map();
                 var talkNodeStart = this.defn.talkNodes[0];
                 this.scopeCurrent = new GameFramework.ConversationScope(null, // parent
                 talkNodeStart, 
@@ -22,17 +23,17 @@ var ThisCouldBeBetter;
                 this.t = this.entityTalker;
                 this.vars = this.variablesByName;
             }
-            // instance methods
-            activate(talkNodeToActivateName) {
-                this.activateOrDeactivate(talkNodeToActivateName, true);
+            // Instance methods.
+            disable(talkNodeToDisableName) {
+                this.enableOrDisable(talkNodeToDisableName, true);
             }
-            activateOrDeactivate(talkNodeToActivateName, isActiveValueToSet) {
+            enable(talkNodeToActivateName) {
+                this.enableOrDisable(talkNodeToActivateName, false);
+            }
+            enableOrDisable(talkNodeToEnableOrDisableName, isDisabledValueToSet) {
                 var conversationDefn = this.defn;
-                var talkNodeToActivate = conversationDefn.talkNodesByName.get(talkNodeToActivateName);
-                talkNodeToActivate.isActive = isActiveValueToSet;
-            }
-            deactivate(talkNodeToDeactivateName) {
-                this.activateOrDeactivate(talkNodeToDeactivateName, false);
+                var talkNodeToSet = conversationDefn.talkNodesByName.get(talkNodeToEnableOrDisableName);
+                talkNodeToSet.isDisabled = isDisabledValueToSet;
             }
             goto(talkNodeNameNext, universe) {
                 // This convenience method is tersely named for use in scripts.
@@ -95,12 +96,11 @@ var ThisCouldBeBetter;
                 var fontHeight = 15;
                 var fontHeightShort = fontHeight; // todo
                 var marginWidth = 15;
-                var labelHeight = fontHeight;
                 var buttonHeight = 20;
-                var marginSize = new GameFramework.Coords(1, 1, 0).multiplyScalar(marginWidth);
-                var buttonSize = new GameFramework.Coords(2, 1, 0).multiplyScalar(buttonHeight);
-                var portraitSize = new GameFramework.Coords(4, 4, 0).multiplyScalar(buttonHeight);
-                var listSize = new GameFramework.Coords(size.x - marginSize.x * 3 - buttonSize.x, size.y - portraitSize.y - marginSize.y * 4, 0);
+                var marginSize = GameFramework.Coords.fromXY(1, 1).multiplyScalar(marginWidth);
+                var buttonSize = GameFramework.Coords.fromXY(2, 1).multiplyScalar(buttonHeight);
+                var portraitSize = GameFramework.Coords.fromXY(4, 4).multiplyScalar(buttonHeight);
+                var listSize = GameFramework.Coords.fromXY(size.x - marginSize.x * 3 - buttonSize.x, size.y - portraitSize.y - marginSize.y * 4);
                 var next = () => {
                     conversationRun.next(universe);
                 };
@@ -119,18 +119,20 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromContext(conversationDefn.visualPortrait), GameFramework.Color.byName("Black"), // colorBackground
                     null // colorBorder
                     ),
-                    new GameFramework.ControlLabel("labelSpeaker", new GameFramework.Coords(marginSize.x * 2 + portraitSize.x, marginSize.y + portraitSize.y / 2 - labelHeight / 2, 0), // pos
-                    size, // size
-                    false, // isTextCentered
+                    new GameFramework.ControlLabel("labelSpeaker", new GameFramework.Coords(marginSize.x * 2 + portraitSize.x, marginSize.y, 0), // pos
+                    GameFramework.Coords.fromXY(size.x - marginWidth * 3 - portraitSize.x, portraitSize.y), // size
+                    false, // isTextCenteredHorizontally
+                    true, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContextAndGet(conversationRun, (c) => c.scopeCurrent.displayTextCurrent), fontHeight),
                     new GameFramework.ControlLabel("labelResponse", new GameFramework.Coords(marginSize.x, marginSize.y * 2 + portraitSize.y - fontHeight / 2, 0), size, // size
-                    false, // isTextCentered
+                    false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Response:"), fontHeight),
                     GameFramework.ControlList.from10("listResponses", new GameFramework.Coords(marginSize.x, marginSize.y * 3 + portraitSize.y, 0), listSize, 
                     // items
                     GameFramework.DataBinding.fromContextAndGet(conversationRun, (c) => c.scopeCurrent.talkNodesForOptionsActive()), 
                     // bindingForItemText
-                    GameFramework.DataBinding.fromGet((c) => c.text), fontHeightShort, new GameFramework.DataBinding(conversationRun, (c) => c.scopeCurrent.talkNodeForOptionSelected, (c, v) => c.scopeCurrent.talkNodeForOptionSelected = v), // bindingForItemSelected
+                    GameFramework.DataBinding.fromGet((c) => c.content), fontHeightShort, new GameFramework.DataBinding(conversationRun, (c) => c.scopeCurrent.talkNodeForOptionSelected, (c, v) => c.scopeCurrent.talkNodeForOptionSelected = v), // bindingForItemSelected
                     GameFramework.DataBinding.fromGet((c) => c.name), // bindingForItemValue
                     GameFramework.DataBinding.fromTrue(), // isEnabled
                     (universe) => // confirm
@@ -162,7 +164,6 @@ var ThisCouldBeBetter;
             }
             toControlTranscript(size, universe, venueToReturnTo) {
                 var conversationRun = this;
-                var conversationDefn = conversationRun.defn;
                 venueToReturnTo = universe.venueCurrent;
                 var fontHeight = 20;
                 var fontHeightShort = fontHeight * .6;
@@ -185,11 +186,12 @@ var ThisCouldBeBetter;
                     }),
                     new GameFramework.ControlLabel("labelTranscript", GameFramework.Coords.fromXY(size.x / 2, marginSize.y), // pos
                     size, // size
-                    true, // isTextCentered
+                    true, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Transcript"), fontHeight),
                     GameFramework.ControlList.from6("listEntries", GameFramework.Coords.fromXY((size.x - listSize.x) / 2, marginSize.y * 2 + labelHeight), listSize, 
                     // items
-                    GameFramework.DataBinding.fromContextAndGet(conversationRun, (c) => c.talkNodesForTranscript), GameFramework.DataBinding.fromGet((c) => c.textForTranscript(conversationDefn)), // bindingForItemText
+                    GameFramework.DataBinding.fromContextAndGet(conversationRun, (c) => c.talkNodesForTranscript), GameFramework.DataBinding.fromGet((c) => c.textForTranscript(conversationRun)), // bindingForItemText
                     fontHeightShort),
                 ]);
                 return returnValue;

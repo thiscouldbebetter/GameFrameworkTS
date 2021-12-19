@@ -49,20 +49,6 @@ export class CraftingRecipe
 		return areAllRequirementsFulfilledSoFar;
 	}
 
-	itemsInHeldOverRequiredForItemHolder(itemHolder: ItemHolder): string[]
-	{
-		return this.itemsIn.map
-		(
-			x =>
-				x.defnName
-				+ " ("
-				+ itemHolder.itemQuantityByDefnName(x.defnName)
-				+ "/"
-				+ x.quantity
-				+ ")"
-		);
-	}
-
 	nameAndSecondsToCompleteAsString(universe: Universe): string
 	{
 		return this.name + " (" + this.secondsToComplete(universe) + "s)";

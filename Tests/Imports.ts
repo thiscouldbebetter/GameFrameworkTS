@@ -22,6 +22,7 @@ import ControlActionNames = gf.ControlActionNames;
 import ControlBase = gf.ControlBase;
 import ControlBuilder = gf.ControlBuilder;
 import ControlButton = gf.ControlButton;
+import ControlColorSchem = gf.ControlColorScheme;
 import ControlContainer = gf.ControlContainer;
 import ControlContainerTransparent = gf.ControlContainerTransparent;
 import ControlLabel = gf.ControlLabel;
@@ -51,6 +52,7 @@ import Visual = gf.Visual;
 import VisualAnchor = gf.VisualAnchor;
 import VisualArc = gf.VisualArc;
 import VisualBar = gf.VisualBar;
+import VisualBase = gf.VisualBase;
 import VisualBuffered = gf.VisualBuffered;
 import VisualBuilder = gf.VisualBuilder;
 import VisualCircle = gf.VisualCircle;
@@ -110,10 +112,11 @@ import Constraint_ContainInHemispace = gf.Constraint_ContainInHemispace;
 import Constraint_FrictionDry = gf.Constraint_FrictionDry;
 import Constraint_FrictionXY = gf.Constraint_FrictionXY;
 import Constraint_Gravity = gf.Constraint_Gravity;
-import Constraint_Offset = gf.Constraint_Offset;
+import Constraint_Multiple = gf.Constraint_Multiple;
 import Constraint_OrientToward = gf.Constraint_OrientToward;
 import Constraint_SpeedMaxXY = gf.Constraint_SpeedMaxXY;
 import Constraint_StopBelowSpeedMin = gf.Constraint_StopBelowSpeedMin;
+import Constraint_Transform = gf.Constraint_Transform;
 import Constraint_TrimToPlaceSize = gf.Constraint_TrimToPlaceSize;
 import Constraint_WrapToPlaceSize = gf.Constraint_WrapToPlaceSize;
 import Constraint_WrapToPlaceSizeX = gf.Constraint_WrapToPlaceSizeX;
@@ -147,6 +150,7 @@ import Wedge = gf.Wedge;
 import MapCell = gf.MapCell;
 import MapLocated = gf.MapLocated;
 import MapOfCells = gf.MapOfCells;
+import MapOfCellsCellSource = gf.MapOfCellsCellSource;
 
 // Geometry - Shapes - Meshes.
 import Mesh = gf.Mesh;
@@ -162,6 +166,7 @@ import Transform_RotateRight = gf.Transform_RotateRight;
 import Transform_Scale = gf.Transform_Scale;
 import Transform_Translate = gf.Transform_Translate;
 import Transformable = gf.Transformable;
+import TransformableBase = gf.TransformableBase;
 import Transforms = gf.Transforms;
 
 // Input.
@@ -184,10 +189,12 @@ import VideoHelper = gf.VideoHelper;
 import VisualSound = gf.VisualSound;
 
 // Model.
+import Clonable = gf.Clonable;
 import Entity = gf.Entity;
 import EntityBuilder = gf.EntityBuilder;
 import EntityGenerator = gf.EntityGenerator;
 import Loadable = gf.Loadable;
+import LoadableProperty = gf.LoadableProperty;
 import Namable = gf.Namable;
 import Playable = gf.Playable;
 import Selector = gf.Selector;
@@ -197,6 +204,7 @@ import Venue = gf.Venue;
 import VenueWorld = gf.VenueWorld;
 import World = gf.World;
 import WorldDefn = gf.WorldDefn;
+import WorldCreator = gf.WorldCreator;
 
 // Model - Actors.
 import Action = gf.Action;

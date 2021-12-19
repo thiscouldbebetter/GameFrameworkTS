@@ -266,7 +266,8 @@ export class Selector implements EntityProperty<Selector>
 					"labelSelected",
 					Coords.fromXY(1, 0).multiplyScalar(margin), // pos
 					labelSize,
-					false, // isTextCentered
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext("Selected:"),
 					fontHeightInPixels
 				),
@@ -276,7 +277,8 @@ export class Selector implements EntityProperty<Selector>
 					"textEntitySelectedName",
 					Coords.fromXY(1, 1.5).multiplyScalar(margin), // pos
 					labelSize,
-					false, // isTextCentered
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet
 					(
 						this,

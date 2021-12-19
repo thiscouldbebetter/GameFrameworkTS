@@ -4,9 +4,10 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ControlLabel extends GameFramework.ControlBase {
-            constructor(name, pos, size, isTextCentered, text, fontHeightInPixels) {
+            constructor(name, pos, size, isTextCenteredHorizontally, isTextCenteredVertically, text, fontHeightInPixels) {
                 super(name, pos, size, fontHeightInPixels);
-                this.isTextCentered = isTextCentered;
+                this.isTextCenteredHorizontally = isTextCenteredHorizontally;
+                this.isTextCenteredVertically = isTextCenteredVertically;
                 this._text = text;
                 // Helper variables.
                 this._drawPos = GameFramework.Coords.create();
@@ -14,7 +15,8 @@ var ThisCouldBeBetter;
             static fromPosHeightAndText(pos, fontHeightInPixels, text) {
                 return new ControlLabel(null, //name
                 pos, null, // size
-                false, // isTextCentered
+                false, // isTextCenteredHorizontally
+                false, // isTextCenteredVertically
                 text, fontHeightInPixels);
             }
             actionHandle(actionName) {
@@ -40,14 +42,8 @@ var ThisCouldBeBetter;
                 var style = style || this.style(universe);
                 var text = this.text();
                 if (text != null) {
-                    var textAsLines = ("" + text).split("\n");
-                    var widthMaxInPixels = (this.size == null ? null : this.size.x);
-                    for (var i = 0; i < textAsLines.length; i++) {
-                        var textLine = textAsLines[i];
-                        display.drawText(textLine, this.fontHeightInPixels, drawPos, style.colorBorder(), style.colorFill(), // colorOutline
-                        this.isTextCentered, widthMaxInPixels);
-                        drawPos.y += this.fontHeightInPixels;
-                    }
+                    display.drawText(text, this.fontHeightInPixels, drawPos, style.colorBorder(), style.colorFill(), // colorOutline
+                    this.isTextCenteredHorizontally, this.isTextCenteredVertically, this.size);
                 }
             }
         }

@@ -217,13 +217,15 @@ var ThisCouldBeBetter;
                 sizeBase.clone(), // size
                 // children
                 [
-                    new GameFramework.ControlLabel("labelProfileName", GameFramework.Coords.fromXY(100, 10), // pos
-                    GameFramework.Coords.fromXY(120, fontHeight), // size
-                    true, // isTextCentered
+                    new GameFramework.ControlLabel("labelProfileName", GameFramework.Coords.fromXY(10, 10), // pos
+                    GameFramework.Coords.fromXY(sizeBase.x, fontHeight), // size
+                    true, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Profile: " + universe.profile.name), fontHeight),
-                    new GameFramework.ControlLabel("labelChooseASave", GameFramework.Coords.fromXY(100, 20), // pos
-                    GameFramework.Coords.fromXY(150, 25), // size
-                    true, // isTextCentered
+                    new GameFramework.ControlLabel("labelChooseASave", GameFramework.Coords.fromXY(10, 20), // pos
+                    GameFramework.Coords.fromXY(sizeBase.x, 25), // size
+                    true, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Choose a State to "
                         + (isLoadNotSave ? "Restore" : "Overwrite") + ":"), fontHeight),
                     GameFramework.ControlList.from10("listSaveStates", GameFramework.Coords.fromXY(10, 35), // pos
@@ -275,21 +277,24 @@ var ThisCouldBeBetter;
                     }), GameFramework.Color.byName("White")),
                     new GameFramework.ControlLabel("labelPlaceName", GameFramework.Coords.fromXY(130, 80), // pos
                     GameFramework.Coords.fromXY(120, buttonHeightBase), // size
-                    false, // isTextCentered
+                    false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContextAndGet(universe.profile, (c) => {
                         var saveState = c.saveStateSelected();
                         return (saveState == null ? "" : saveState.placeName);
                     }), fontHeight),
                     new GameFramework.ControlLabel("labelTimePlaying", GameFramework.Coords.fromXY(130, 90), // pos
                     GameFramework.Coords.fromXY(120, buttonHeightBase), // size
-                    false, // isTextCentered
+                    false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContextAndGet(universe.profile, (c) => {
                         var saveState = c.saveStateSelected();
                         return (saveState == null ? "" : saveState.timePlayingAsString);
                     }), fontHeight),
                     new GameFramework.ControlLabel("labelDateSaved", GameFramework.Coords.fromXY(130, 100), // pos
                     GameFramework.Coords.fromXY(120, buttonHeightBase), // size
-                    false, // isTextCentered
+                    false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContextAndGet(universe.profile, (c) => {
                         var saveState = c.saveStateSelected();
                         var returnValue = (saveState == null
@@ -302,7 +307,8 @@ var ThisCouldBeBetter;
                     }), fontHeight),
                     new GameFramework.ControlLabel("labelTimeSaved", GameFramework.Coords.fromXY(130, 110), // pos
                     GameFramework.Coords.fromXY(120, buttonHeightBase), // size
-                    false, // isTextCentered
+                    false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContextAndGet(universe.profile, (c) => {
                         var saveState = c.saveStateSelected();
                         return (saveState == null ? "" : saveState.timeSaved.toStringHH_MM_SS());
@@ -330,9 +336,10 @@ var ThisCouldBeBetter;
                 sizeBase.clone(), // size
                 // children
                 [
-                    new GameFramework.ControlLabel("labelName", GameFramework.Coords.fromXY(100, 40), // pos
-                    GameFramework.Coords.fromXY(100, 20), // size
-                    true, // isTextCentered
+                    new GameFramework.ControlLabel("labelName", GameFramework.Coords.fromXY(50, 35), // pos
+                    GameFramework.Coords.fromXY(100, 15), // size
+                    true, // isTextCenteredHorizontally
+                    true, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Profile Name:"), fontHeight),
                     new GameFramework.ControlTextBox("textBoxName", GameFramework.Coords.fromXY(50, 50), // pos
                     GameFramework.Coords.fromXY(100, 20), // size
@@ -435,9 +442,10 @@ var ThisCouldBeBetter;
                 sizeBase.clone(), // size
                 // children
                 [
-                    new GameFramework.ControlLabel("labelSelectAProfile", GameFramework.Coords.fromXY(100, 40), // pos
-                    GameFramework.Coords.fromXY(100, 25), // size
-                    true, // isTextCentered
+                    new GameFramework.ControlLabel("labelSelectAProfile", GameFramework.Coords.fromXY(30, 35), // pos
+                    GameFramework.Coords.fromXY(140, 15), // size
+                    true, // isTextCenteredHorizontally
+                    true, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Select a Profile:"), fontHeight),
                     new GameFramework.ControlList("listProfiles", GameFramework.Coords.fromXY(30, 50), // pos
                     GameFramework.Coords.fromXY(140, 40), // size

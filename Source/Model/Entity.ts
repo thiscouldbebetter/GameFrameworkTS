@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Entity //
+export class Entity implements Clonable<Entity>
 {
 	id: number;
 	name: string;
@@ -137,6 +137,11 @@ export class Entity //
 			nameCloned, propertiesCloned
 		);
 		return returnValue;
+	}
+
+	overwriteWith(other: Entity): Entity
+	{
+		throw new Error("Not yet implemented!");
 	}
 
 	// Equatable.

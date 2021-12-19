@@ -96,7 +96,8 @@ export class WordBubble
 						marginSize
 					),
 					wordPaneSize, // size
-					false, // isTextCentered,
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet
 					(
 						this,

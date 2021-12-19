@@ -4,7 +4,8 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class ControlLabel<TContext> extends ControlBase
 {
-	isTextCentered: boolean;
+	isTextCenteredHorizontally: boolean;
+	isTextCenteredVertically: boolean;
 	_text: DataBinding<TContext,string>;
 
 	parent: ControlBase;
@@ -16,13 +17,15 @@ export class ControlLabel<TContext> extends ControlBase
 		name: string,
 		pos: Coords,
 		size: Coords,
-		isTextCentered: boolean,
+		isTextCenteredHorizontally: boolean,
+		isTextCenteredVertically: boolean,
 		text: DataBinding<TContext, string>,
 		fontHeightInPixels: number
 	)
 	{
 		super(name, pos, size, fontHeightInPixels);
-		this.isTextCentered = isTextCentered;
+		this.isTextCenteredHorizontally = isTextCenteredHorizontally;
+		this.isTextCenteredVertically = isTextCenteredVertically;
 		this._text = text;
 
 		// Helper variables.
@@ -42,7 +45,8 @@ export class ControlLabel<TContext> extends ControlBase
 			null, //name
 			pos,
 			null, // size
-			false, // isTextCentered
+			false, // isTextCenteredHorizontally
+			false, // isTextCenteredVertically
 			text,
 			fontHeightInPixels
 		);
@@ -91,24 +95,18 @@ export class ControlLabel<TContext> extends ControlBase
 
 		if (text != null)
 		{
-			var textAsLines = ("" + text).split("\n");
-			var widthMaxInPixels = (this.size == null ? null : this.size.x);
-			for (var i = 0; i < textAsLines.length; i++)
-			{
-				var textLine = textAsLines[i];
-				display.drawText
-				(
-					textLine,
-					this.fontHeightInPixels,
-					drawPos,
-					style.colorBorder(),
-					style.colorFill(), // colorOutline
-					this.isTextCentered,
-					widthMaxInPixels
-				);
+			display.drawText
+			(
+				text,
+				this.fontHeightInPixels,
+				drawPos,
+				style.colorBorder(),
+				style.colorFill(), // colorOutline
+				this.isTextCenteredHorizontally,
+				this.isTextCenteredVertically,
+				this.size
+			);
 
-				drawPos.y += this.fontHeightInPixels;
-			}
 		}
 	}
 }

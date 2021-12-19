@@ -5,55 +5,55 @@
 		{
 			"name": "Greet",
 			"defnName": "Display",
-			"text": "Hi, I'm Professor Surly."
+			"content": "Hi, I'm Professor Surly."
 		},
 		{
 			"name": "Subject",
 			"defnName": "Display",
-			"text": "What do you want to talk about?"
+			"content": "What do you want to talk about?"
 		},
 		{
 			"defnName": "Option",
-			"text": "Let's talk about math.",
+			"content": "Let's talk about math.",
 			"next": "Math"
 		},
 		{
 			"defnName": "Option",
-			"text": "Let's talk about science.",
+			"content": "Let's talk about science.",
 			"next": "Science"
 		},
 		{
 			"name": "Subject.History",
 			"defnName": "Option",
-			"text": "Let's talk about history.",
+			"content": "Let's talk about history.",
 			"next": "History"
 		},
 		{
 			"name": "Subject.Carol",
 			"defnName": "Option",
 			"next": "TalkOver",
-			"text": "We NEED to talk about Carol.",
+			"content": "We NEED to talk about Carol.",
 			"isActive": false
 		},
 		{
 			"defnName": "Option",
 			"next": "SQLInjection",
-			"text": "'; drop database conversation_topics;"
+			"content": "'; drop database conversation_topics;"
 		},
 		{
 			"defnName": "Option",
-			"text": "Say, how do I play this game?",
+			"content": "Say, how do I play this game?",
 			"next": "Game"
 		},
 		{
 			"defnName": "Option",
-			"text": "Do you want to trade items?",
+			"content": "Do you want to trade items?",
 			"next": "Trade"
 		},
 		{
 			"defnName": "Option",
 			"next": "Quit",
-			"text": "Never mind. I hate you."
+			"content": "Never mind. I hate you."
 		},
 		{
 			"name": "SubjectPrompt",
@@ -62,11 +62,11 @@
 		{
 			"name": "Math",
 			"defnName": "Display",
-			"text": "Math is too complicated..."
+			"content": "Math is too complicated..."
 		},
 		{
 			"defnName": "Display",
-			"text": "...what with all those numbers."
+			"content": "...what with all those numbers."
 		},
 		{
 			"defnName": "Goto",
@@ -75,11 +75,11 @@
 		{
 			"name": "Science",
 			"defnName": "Display",
-			"text": "Science is way too broad a subject."
+			"content": "Science is way too broad a subject."
 		},
 		{
 			"defnName": "Display",
-			"text": "I mean, what ISN'T science, really?"
+			"content": "I mean, what ISN'T science, really?"
 		},
 		{
 			"defnName": "Goto",
@@ -91,31 +91,31 @@
 		},
 		{
 			"defnName": "Display",
-			"text": "Okay, but the past is pretty pointless."
+			"content": "Okay, but the past is pretty pointless."
 		},
 		{
 			"defnName": "Display",
-			"text": "What kind of history interests you?"
+			"content": "What kind of history interests you?"
 		},
 		{
 			"defnName": "Option",
 			"next": "History.Ancient",
-			"text": "Tell me about ancient times."
+			"content": "Tell me about ancient times."
 		},
 		{
 			"defnName": "Option",
 			"next": "History.Recent",
-			"text": "Tell me about recent events."
+			"content": "Tell me about recent events."
 		},
 		{
 			"defnName": "Option",
 			"next": "History.Carol",
-			"text": "I think we should talk about Carol."
+			"content": "I think we should talk about Carol."
 		},
 		{
 			"defnName": "Option",
 			"next": "History.NeverMind",
-			"text": "Never mind."
+			"content": "Never mind."
 		},
 		{
 			"defnName": "Prompt"
@@ -123,7 +123,7 @@
 		{
 			"name": "History.Ancient",
 			"defnName": "Display",
-			"text": "That all happened a long time ago."
+			"content": "That all happened a long time ago."
 		},
 		{
 			"defnName": "Prompt"
@@ -131,7 +131,7 @@
 		{
 			"name": "History.Recent",
 			"defnName": "Display",
-			"text": "If it's recent, is it really history?"
+			"content": "If it's recent, is it really history?"
 		},
 		{
 			"defnName": "Prompt"
@@ -139,21 +139,21 @@
 		{
 			"name": "History.Carol",
 			"defnName": "Display",
-			"text": "We are NEVER talking about Carol."
+			"content": "We are NEVER talking about Carol."
 		},
 		{
 			"defnName": "Display",
-			"text": "I don't want to talk about history anymore."
+			"content": "I don't want to talk about history anymore."
 		},
 		{
 			"defnName": "Activate",
 			"next": "Subject.History",
-			"text": false
+			"content": false
 		},
 		{
 			"defnName": "Activate",
 			"next": "Subject.Carol",
-			"text": true
+			"content": true
 		},
 		{
 			"defnName": "Pop",
@@ -162,7 +162,7 @@
 		{
 			"name": "History.NeverMind",
 			"defnName": "Display",
-			"text": "Fine, you're the one who brought it up."
+			"content": "Fine, you're the one who brought it up."
 		},
 		{
 			"defnName": "Pop",
@@ -171,11 +171,11 @@
 		{
 			"name": "SQLInjection",
 			"defnName": "Display",
-			"text": "What are you--what's happening to me?"
+			"content": "What are you--what's happening to me?"
 		},
 		{
 			"defnName": "Script",
-			"text": "function panic() { alert(\"ER-ROR!  ER-ROR!  DOES! NOT! COMPUTE!\"); }"
+			"content": "function panic() { alert(\"ER-ROR!  ER-ROR!  DOES! NOT! COMPUTE!\"); }"
 		},
 		{
 			"defnName": "Goto",
@@ -187,62 +187,62 @@
 		},
 		{
 			"defnName": "Display",
-			"text": "Well, it's kind of a moving target."
+			"content": "Well, it's kind of a moving target."
 		},
 		{
 			"defnName": "Display",
-			"text": "The rules and objectives keep changing..."
+			"content": "The rules and objectives keep changing..."
 		},
 		{
 			"defnName": "Display",
-			"text": "...to say nothing of the bugs."
+			"content": "...to say nothing of the bugs."
 		},
 		{
 			"defnName": "Display",
-			"text": "But basically, use the arrow keys to move."
+			"content": "But basically, use the arrow keys to move."
 		},
 		{
 			"defnName": "Display",
-			"text": "If you move over the exit there..."
+			"content": "If you move over the exit there..."
 		},
 		{
 			"defnName": "Display",
-			"text": "...and press E, you'll go outside."
+			"content": "...and press E, you'll go outside."
 		},
 		{
 			"defnName": "Display",
-			"text": "After that, uh, have adventures, I guess."
+			"content": "After that, uh, have adventures, I guess."
 		},
 		{
 			"defnName": "Option",
 			"next": "Game.Win",
-			"text": "How do I win?"
+			"content": "How do I win?"
 		},
 		{
 			"defnName": "Option",
 			"next": "Game.Controls",
-			"text": "What buttons do I press?"
+			"content": "What buttons do I press?"
 		},
 		{
 			"defnName": "Option",
 			"next": "Game.Mechanics",
-			"text": "Any exciting gameplay mechanics?"
+			"content": "Any exciting gameplay mechanics?"
 		},
 		{
 			"name": "Game.GoWithMe.Option",
 			"defnName": "Option",
 			"next": "Game.GoWithMe",
-			"text": "Will you go with me, to help?"
+			"content": "Will you go with me, to help?"
 		},
 		{
 			"defnName": "Option",
 			"next": "Game.Tips",
-			"text": "Got any general tips?"
+			"content": "Got any general tips?"
 		},
 		{
 			"defnName": "Option",
 			"next": "Game.NeverMind",
-			"text": "I never read the instructions!"
+			"content": "I never read the instructions!"
 		},
 		{
 			"name": "Game.Prompt",
@@ -251,23 +251,23 @@
 		{
 			"name": "Game.Win",
 			"defnName": "Display",
-			"text": "Last I heard?"
+			"content": "Last I heard?"
 		},
 		{
 			"defnName": "Display",
-			"text": "Get five keys, touch the goal."
+			"content": "Get five keys, touch the goal."
 		},
 		{
 			"defnName": "Display",
-			"text": "Whee."
+			"content": "Whee."
 		},
 		{
 			"defnName": "Display",
-			"text": "Oh, and since the latest updates..."
+			"content": "Oh, and since the latest updates..."
 		},
 		{
 			"defnName": "Display",
-			"text": "...you'll have to FIND the goal first."
+			"content": "...you'll have to FIND the goal first."
 		},
 		{
 			"defnName": "Goto",
@@ -276,35 +276,35 @@
 		{
 			"name": "Game.Controls",
 			"defnName": "Display",
-			"text": "The arrow keys move you around."
+			"content": "The arrow keys move you around."
 		},
 		{
 			"defnName": "Display",
-			"text": "The G key picks up any nearby items."
+			"content": "The G key picks up any nearby items."
 		},
 		{
 			"defnName": "Display",
-			"text": "The E key interacts with things and people."
+			"content": "The E key interacts with things and people."
 		},
 		{
 			"defnName": "Display",
-			"text": "The F key uses a weapon, if one's equipped."
+			"content": "The F key uses a weapon, if one's equipped."
 		},
 		{
 			"defnName": "Display",
-			"text": "Tab or Escape brings up the menu."
+			"content": "Tab or Escape brings up the menu."
 		},
 		{
 			"defnName": "Display",
-			"text": "Space jumps, if you've learned how."
+			"content": "Space jumps, if you've learned how."
 		},
 		{
 			"defnName": "Display",
-			"text": "There's SUPPOSED to be gamepad support..."
+			"content": "There's SUPPOSED to be gamepad support..."
 		},
 		{
 			"defnName": "Display",
-			"text": "...but it never gets tested."
+			"content": "...but it never gets tested."
 		},
 		{
 			"defnName": "Goto",
@@ -313,79 +313,79 @@
 		{
 			"name": "Game.Mechanics",
 			"defnName": "Display",
-			"text": "Not really."
+			"content": "Not really."
 		},
 		{
 			"defnName": "Display",
-			"text": "You can pick stuff up."
+			"content": "You can pick stuff up."
 		},
 		{
 			"defnName": "Display",
-			"text": "You can then see what you've picked up..."
+			"content": "You can then see what you've picked up..."
 		},
 		{
 			"defnName": "Display",
-			"text": "...by going to the status screen..."
+			"content": "...by going to the status screen..."
 		},
 		{
 			"defnName": "Display",
-			"text": "...by pressing, I think, Tab?"
+			"content": "...by pressing, I think, Tab?"
 		},
 		{
 			"defnName": "Display",
-			"text": "You can also equip things from there."
+			"content": "You can also equip things from there."
 		},
 		{
 			"defnName": "Display",
-			"text": "If you can find and equip a gun and ammo..."
+			"content": "If you can find and equip a gun and ammo..."
 		},
 		{
 			"defnName": "Display",
-			"text": "...you can shoot the red guys..."
+			"content": "...you can shoot the red guys..."
 		},
 		{
 			"defnName": "Display",
-			"text": "...but they'll just keep coming forever."
+			"content": "...but they'll just keep coming forever."
 		},
 		{
 			"defnName": "Display",
-			"text": "The status screen also has a 'craft' tab..."
+			"content": "The status screen also has a 'craft' tab..."
 		},
 		{
 			"defnName": "Display",
-			"text": "...though there aren't many recipes yet."
+			"content": "...though there aren't many recipes yet."
 		},
 		{
 			"defnName": "Display",
-			"text": "For now I think you can upgrade armor."
+			"content": "For now I think you can upgrade armor."
 		},
 		{
 			"defnName": "Display",
-			"text": "Finally, there's a tab for skills..."
+			"content": "Finally, there's a tab for skills..."
 		},
 		{
 			"defnName": "Display",
-			"text": "...like jumping and running..."
+			"content": "...like jumping and running..."
 		},
 		{
 			"defnName": "Display",
-			"text": "...which are available to learn..."
+			"content": "...which are available to learn..."
 		},
 		{
 			"defnName": "Display",
-			"text": "...provided you already know the prereqs..."
+			"content": "...provided you already know the prereqs..."
 		},
 		{
 			"defnName": "Display",
-			"text": "...and have enough experience."
+			"content": "...and have enough experience."
 		},
 		{
 			"defnName": "Display",
-			"text": "You gain experience by killing 'monsters'..."
+			"content": "You gain experience by killing 'monsters'..."
 		},
 		{
 			"defnName": "Display",
-			"text": "...that makes YOU the real monster, though."
+			"content": "...that makes YOU the real monster, though."
 		},
 		{
 			"defnName": "Goto",
@@ -394,28 +394,28 @@
 		{
 			"name": "Game.GoWithMe",
 			"defnName": "Display",
-			"text": "No, I'm pretty comfortable here."
+			"content": "No, I'm pretty comfortable here."
 		},
 		{
 			"defnName": "Display",
-			"text": "But I'll give you a walkie-talkie..."
+			"content": "But I'll give you a walkie-talkie..."
 		},
 		{
 			"defnName": "Display",
-			"text": "...so I can provide valuable insights."
+			"content": "...so I can provide valuable insights."
 		},
 		{
 			"defnName": "Script",
-			"text": "(u) => { u.world.placeCurrent.player().itemHolder().itemEntityAdd( new Entity(null, [ new Item(\"Walkie-Talkie\", 1) ] ) ); }"
+			"content": "(u) => { u.world.placeCurrent.player().itemHolder().itemEntityAdd( new Entity(null, [ new Item(\"Walkie-Talkie\", 1) ] ) ); }"
 		},
 		{
 			"defnName": "Display",
-			"text": "[You have received a walkie-talkie.]"
+			"content": "[You have received a walkie-talkie.]"
 		},
 		{
 			"defnName": "Activate",
 			"next": "Game.GoWithMe.Option",
-			"text": false
+			"content": false
 		},
 		{
 			"defnName": "Goto",
@@ -424,15 +424,15 @@
 		{
 			"name": "Game.Tips",
 			"defnName": "Display",
-			"text": "Don't touch anything red."
+			"content": "Don't touch anything red."
 		},
 		{
 			"defnName": "Display",
-			"text": "Just in the game, I mean..."
+			"content": "Just in the game, I mean..."
 		},
 		{
 			"defnName": "Display",
-			"text": "...not in, like, life."
+			"content": "...not in, like, life."
 		},
 		{
 			"defnName": "Goto",
@@ -441,7 +441,7 @@
 		{
 			"name": "Game.NeverMind",
 			"defnName": "Display",
-			"text": "You were fun.  I'll miss you."
+			"content": "You were fun.  I'll miss you."
 		},
 		{
 			"defnName": "Pop",
@@ -450,15 +450,15 @@
 		{
 			"name": "Trade",
 			"defnName": "Display",
-			"text": "I guess so.  Got anything good?"
+			"content": "I guess so.  Got anything good?"
 		},
 		{
 			"defnName": "Script",
-			"text": "function(u, cr) { u.venueNext = new ItemBarterer().toControl(u, u.display.sizeInPixels, cr.p, cr.t, u.venueCurrent).toVenue(); }"
+			"content": "function(u, cr) { u.venueNext = new ItemBarterer().toControl(u, u.display.sizeInPixels, cr.p, cr.t, u.venueCurrent).toVenue(); }"
 		},
 		{
 			"defnName": "Display",
-			"text": "Well, that was mutually enriching."
+			"content": "Well, that was mutually enriching."
 		},
 		{
 			"defnName": "Goto",
@@ -467,12 +467,12 @@
 		{
 			"name": "Quit",
 			"defnName": "Display",
-			"text": "Same to you, buddy."
+			"content": "Same to you, buddy."
 		},
 		{
 			"name": "TalkOver",
 			"defnName": "Display",
-			"text": "[This conversation is over.]"
+			"content": "[This conversation is over.]"
 		},
 		{
 			"defnName": "Quit"

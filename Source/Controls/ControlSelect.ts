@@ -160,8 +160,9 @@ export class ControlSelect<TContext, TItem, TValue> extends ControlBase
 			drawPos,
 			(this.isHighlighted ? style.colorFill() : style.colorBorder()),
 			(this.isHighlighted ? style.colorBorder() : style.colorFill()),
-			true, // isCentered
-			this.size.x // widthMaxInPixels
+			true, // isCenteredHorizontally,
+			false, // isCenteredVertically
+			this.size
 		);
 	}
 }

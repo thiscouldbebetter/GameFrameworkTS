@@ -337,7 +337,8 @@ var ThisCouldBeBetter;
                     //controlVisualBackground,
                     new GameFramework.ControlLabel("labelItemsHeld", GameFramework.Coords.fromXY(10, 5), // pos
                     GameFramework.Coords.fromXY(70, 25), // size
-                    false, // isTextCentered
+                    true, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Items Held:"), fontHeightSmall),
                     GameFramework.ControlList.from10("listItems", GameFramework.Coords.fromXY(10, 15), // pos
                     GameFramework.Coords.fromXY(70, 100), // size
@@ -349,7 +350,8 @@ var ThisCouldBeBetter;
                     use),
                     new GameFramework.ControlLabel("infoWeight", GameFramework.Coords.fromXY(10, 115), // pos
                     GameFramework.Coords.fromXY(100, 25), // size
-                    false, // isTextCentered
+                    true, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => "Weight: " + c.massOfAllItemsOverMax(world)), fontHeightSmall),
                     GameFramework.ControlButton.from8("buttonUp", GameFramework.Coords.fromXY(85, 15), // pos
                     GameFramework.Coords.fromXY(15, 10), // size
@@ -394,11 +396,13 @@ var ThisCouldBeBetter;
                     sort),
                     new GameFramework.ControlLabel("labelItemSelected", GameFramework.Coords.fromXY(150, 10), // pos
                     GameFramework.Coords.fromXY(100, 15), // size
-                    true, // isTextCentered
+                    true, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Item Selected:"), fontHeightSmall),
                     new GameFramework.ControlLabel("infoItemSelected", GameFramework.Coords.fromXY(150, 20), // pos
                     GameFramework.Coords.fromXY(200, 15), // size
-                    true, // isTextCentered
+                    true, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => {
                         var i = c.itemSelected;
                         return (i == null ? "-" : i.toString(world));
@@ -413,7 +417,8 @@ var ThisCouldBeBetter;
                     ),
                     new GameFramework.ControlLabel("infoStatus", GameFramework.Coords.fromXY(150, 115), // pos
                     GameFramework.Coords.fromXY(200, 15), // size
-                    true, // isTextCentered
+                    true, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => c.statusMessage), // text
                     fontHeightSmall),
                     GameFramework.ControlButton.from8("buttonUse", GameFramework.Coords.fromXY(132.5, 95), // pos
@@ -477,7 +482,8 @@ var ThisCouldBeBetter;
                     childControls.splice(0, // indexToInsertAt
                     0, new GameFramework.ControlLabel("labelItems", GameFramework.Coords.fromXY(100, -5), // pos
                     GameFramework.Coords.fromXY(100, 25), // size
-                    true, // isTextCentered
+                    true, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Items"), fontHeightLarge));
                     childControls.push(GameFramework.ControlButton.from8("buttonDone", GameFramework.Coords.fromXY(170, 115), // pos
                     buttonSize.clone(), "Done", fontHeightSmall, true, // hasBorder

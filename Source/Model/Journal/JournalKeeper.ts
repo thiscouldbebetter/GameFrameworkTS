@@ -60,7 +60,8 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 				"labelJournalEntries",
 				Coords.fromXY(10, 5), // pos
 				Coords.fromXY(70, 25), // size
-				false, // isTextCentered
+				false, // isTextCenteredHorizontally
+				false, // isTextCenteredVertically
 				DataBinding.fromContext("Journal Entries:"),
 				fontHeightSmall
 			),
@@ -127,7 +128,8 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 				"labelEntrySelected",
 				Coords.fromXY(105, 5), // pos
 				Coords.fromXY(100, 15), // size
-				false, // isTextCentered
+				false, // isTextCenteredHorizontally
+				false, // isTextCenteredVertically
 				DataBinding.fromContext("Entry Selected:"),
 				fontHeightSmall
 			),
@@ -223,7 +225,8 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 				"labelEntrySelectedTimeRecorded",
 				Coords.fromXY(105, 15), // pos
 				Coords.fromXY(100, 15), // size
-				false, // isTextCentered
+				false, // isTextCenteredHorizontally
+				false, // isTextCenteredVertically
 				DataBinding.fromContext("Time Recorded:"),
 				fontHeightSmall
 			),
@@ -233,7 +236,8 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 				"labelEntrySelectedTimeRecorded",
 				Coords.fromXY(145, 15), // pos
 				Coords.fromXY(100, 15), // size
-				false, // isTextCentered
+				false, // isTextCenteredHorizontally
+				false, // isTextCenteredVertically
 				DataBinding.fromContextAndGet
 				(
 					this,
@@ -314,7 +318,8 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 				"infoStatus",
 				Coords.fromXY(150, 120), // pos
 				Coords.fromXY(200, 15), // size
-				true, // isTextCentered
+				true, // isTextCenteredHorizontally
+				false, // isTextCenteredVertically
 				DataBinding.fromContextAndGet
 				(
 					this,
@@ -353,7 +358,8 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 					"labelTitle",
 					Coords.fromXY(100, -5), // pos
 					Coords.fromXY(100, 25), // size
-					true, // isTextCentered
+					true, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext("Journal"),
 					fontHeightLarge
 				)

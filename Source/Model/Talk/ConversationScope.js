@@ -11,7 +11,7 @@ var ThisCouldBeBetter;
                 this.talkNodesForOptions = talkNodesForOptions;
                 this.talkNodesForOptionsByName =
                     GameFramework.ArrayHelper.addLookupsByName(this.talkNodesForOptions);
-                this.displayTextCurrent = "[conversation begins]";
+                this.displayTextCurrent = null;
                 this.talkNodeForOptionSelected = null;
                 this._talkNodesForOptionsActive = [];
                 this._emptyArray = [];
@@ -26,7 +26,7 @@ var ThisCouldBeBetter;
                 var defnTalkNodes = conversationDefn.talkNodes;
                 var talkNodeInitial = this.talkNodeCurrent;
                 while (this.talkNodeCurrent == talkNodeInitial
-                    || this.talkNodeCurrent.isActive == false) {
+                    || this.talkNodeCurrent.isDisabled) {
                     var talkNodeIndex = defnTalkNodes.indexOf(this.talkNodeCurrent);
                     var talkNodeNext = defnTalkNodes[talkNodeIndex + 1];
                     this.talkNodeCurrent = talkNodeNext;
@@ -43,7 +43,7 @@ var ThisCouldBeBetter;
                     this.talkNodeCurrent =
                         conversationDefn.talkNodeByName(nodeNextNameSpecified);
                 }
-                return this;
+                return this.talkNodeCurrent;
             }
             talkNodesForOptionsActive() {
                 var returnValues;
@@ -56,7 +56,7 @@ var ThisCouldBeBetter;
                         this._talkNodesForOptionsActive.length = 0;
                         for (var i = 0; i < this.talkNodesForOptions.length; i++) {
                             var talkNode = this.talkNodesForOptions[i];
-                            if (talkNode.isActive) {
+                            if (talkNode.isEnabled()) {
                                 this._talkNodesForOptionsActive.push(talkNode);
                             }
                         }

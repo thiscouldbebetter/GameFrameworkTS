@@ -13,7 +13,7 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 	widthInItems: number;
 
 	isHighlighted: boolean;
-	_itemSpacing: Coords;
+	_itemSize: Coords;
 	parent: ControlBase;
 	scrollbar: ControlScrollbar<TContext, TItem>;
 
@@ -48,18 +48,18 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 		this.confirm = confirm;
 		this.widthInItems = widthInItems || 1;
 
-		var itemSpacingY = 1.2 * this.fontHeightInPixels; // hack
-		this._itemSpacing = new Coords(0, itemSpacingY, 0);
-		var scrollbarWidth = itemSpacingY;
+		var itemSizeY = 1.2 * this.fontHeightInPixels; // hack
+		this._itemSize = Coords.fromXY(size.x, itemSizeY);
+		var scrollbarWidth = itemSizeY;
 
 		this.isHighlighted = false;
 
 		this.scrollbar = new ControlScrollbar
 		(
-			new Coords(this.size.x - scrollbarWidth, 0, 0), // pos
-			new Coords(scrollbarWidth, this.size.y, 0), // size
+			Coords.fromXY(this.size.x - scrollbarWidth, 0), // pos
+			Coords.fromXY(scrollbarWidth, this.size.y), // size
 			this.fontHeightInPixels,
-			itemSpacingY, // itemHeight
+			itemSizeY, // itemHeight
 			this._items,
 			0 // value
 		);
@@ -370,14 +370,15 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 		return returnValue;
 	}
 
-	itemSpacing(): Coords
+	itemSize(): Coords
 	{
 		var scrollbarWidthVisible =
 			(this.scrollbar.isVisible() ? this.scrollbar.size.x : 0);
-		return this._itemSpacing.overwriteWithDimensions
+
+		return this._itemSize.overwriteWithDimensions
 		(
 			(this.size.x - scrollbarWidthVisible) / this.widthInItems,
-			this._itemSpacing.y,
+			this._itemSize.y,
 			0
 		);
 	}
@@ -412,7 +413,7 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 		{
 			var clickOffsetInPixels = clickPos.clone().subtract(this.pos);
 			var clickOffsetInItems =
-				clickOffsetInPixels.clone().divide(this.itemSpacing()).floor();
+				clickOffsetInPixels.clone().divide(this.itemSize()).floor();
 			var rowOfItemClicked =
 				this.indexOfFirstRowVisible() + clickOffsetInItems.y;
 			var indexOfItemClicked =
@@ -450,7 +451,7 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 		this.pos.multiply(scaleFactor);
 		this.size.multiply(scaleFactor);
 		this.fontHeightInPixels *= scaleFactor.y;
-		this._itemSpacing.multiply(scaleFactor);
+		this._itemSize.multiply(scaleFactor);
 		this.scrollbar.scalePosAndSize(scaleFactor);
 
 		return this;
@@ -513,7 +514,7 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 
 			drawPos2.overwriteWith
 			(
-				this.itemSpacing()
+				this.itemSize()
 			).multiply
 			(
 				offsetInItems
@@ -526,8 +527,10 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 			{
 				style.drawBoxOfSizeAtPosWithColorsToDisplay
 				(
-					this.itemSpacing(), drawPos2,
-					colorFore, colorBack,
+					this.itemSize(),
+					drawPos2,
+					colorFore,
+					colorBack,
 					this.isHighlighted,
 					display
 				);
@@ -552,6 +555,11 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 				(isItemSelected && !this.isHighlighted)
 			);
 
+			var textSizeMax = Coords.fromXY
+			(
+				this.itemSize().x, this.fontHeightInPixels
+			);
+
 			display.drawText
 			(
 				text,
@@ -559,8 +567,9 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 				drawPos2,
 				(areColorsReversed ? colorBack : colorFore),
 				(areColorsReversed ? colorFore : colorBack),
-				false, // isCentered
-				this.size.x // widthMaxInPixels
+				false, // isCenteredHorizontally
+				false, // isTextCenteredVertically
+				textSizeMax
 			);
 		}
 

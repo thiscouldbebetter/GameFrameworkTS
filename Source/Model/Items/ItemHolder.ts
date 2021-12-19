@@ -587,7 +587,8 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				"labelItemsHeld",
 				Coords.fromXY(10, 5), // pos
 				Coords.fromXY(70, 25), // size
-				false, // isTextCentered
+				true, // isTextCenteredHorizontally
+				false, // isTextCenteredVertically
 				DataBinding.fromContext("Items Held:"),
 				fontHeightSmall
 			),
@@ -622,7 +623,8 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				"infoWeight",
 				Coords.fromXY(10, 115), // pos
 				Coords.fromXY(100, 25), // size
-				false, // isTextCentered
+				true, // isTextCenteredHorizontally
+				false, // isTextCenteredVertically
 				DataBinding.fromContextAndGet
 				(
 					this,
@@ -749,7 +751,8 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				"labelItemSelected",
 				Coords.fromXY(150, 10), // pos
 				Coords.fromXY(100, 15), // size
-				true, // isTextCentered
+				true, // isTextCenteredHorizontally
+				false, // isTextCenteredVertically
 				DataBinding.fromContext("Item Selected:"),
 				fontHeightSmall
 			),
@@ -759,7 +762,8 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				"infoItemSelected",
 				Coords.fromXY(150, 20), // pos
 				Coords.fromXY(200, 15), // size
-				true, // isTextCentered
+				true, // isTextCenteredHorizontally
+				false, // isTextCenteredVertically
 				DataBinding.fromContextAndGet
 				(
 					this,
@@ -794,7 +798,8 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				"infoStatus",
 				Coords.fromXY(150, 115), // pos
 				Coords.fromXY(200, 15), // size
-				true, // isTextCentered
+				true, // isTextCenteredHorizontally
+				false, // isTextCenteredVertically
 				DataBinding.fromContextAndGet
 				(
 					this,
@@ -905,7 +910,8 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 					"labelItems",
 					Coords.fromXY(100, -5), // pos
 					Coords.fromXY(100, 25), // size
-					true, // isTextCentered
+					true, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext("Items"),
 					fontHeightLarge
 				)

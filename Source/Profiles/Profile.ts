@@ -418,9 +418,10 @@ export class Profile
 				new ControlLabel
 				(
 					"labelProfileName",
-					Coords.fromXY(100, 10), // pos
-					Coords.fromXY(120, fontHeight), // size
-					true, // isTextCentered
+					Coords.fromXY(10, 10), // pos
+					Coords.fromXY(sizeBase.x, fontHeight), // size
+					true, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext
 					(
 						"Profile: " + universe.profile.name
@@ -431,9 +432,10 @@ export class Profile
 				new ControlLabel
 				(
 					"labelChooseASave",
-					Coords.fromXY(100, 20), // pos
-					Coords.fromXY(150, 25), // size
-					true, // isTextCentered
+					Coords.fromXY(10, 20), // pos
+					Coords.fromXY(sizeBase.x, 25), // size
+					true, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext
 					(
 						"Choose a State to "
@@ -570,7 +572,8 @@ export class Profile
 					"labelPlaceName",
 					Coords.fromXY(130, 80), // pos
 					Coords.fromXY(120, buttonHeightBase), // size
-					false, // isTextCentered
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet
 					(
 						universe.profile,
@@ -588,7 +591,8 @@ export class Profile
 					"labelTimePlaying",
 					Coords.fromXY(130, 90), // pos
 					Coords.fromXY(120, buttonHeightBase), // size
-					false, // isTextCentered
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet
 					(
 						universe.profile,
@@ -606,7 +610,8 @@ export class Profile
 					"labelDateSaved",
 					Coords.fromXY(130, 100), // pos
 					Coords.fromXY(120, buttonHeightBase), // size
-					false, // isTextCentered
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet
 					(
 						universe.profile,
@@ -635,7 +640,8 @@ export class Profile
 					"labelTimeSaved",
 					Coords.fromXY(130, 110), // pos
 					Coords.fromXY(120, buttonHeightBase), // size
-					false, // isTextCentered
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet
 					(
 						universe.profile,
@@ -694,9 +700,10 @@ export class Profile
 				new ControlLabel
 				(
 					"labelName",
-					Coords.fromXY(100, 40), // pos
-					Coords.fromXY(100, 20), // size
-					true, // isTextCentered
+					Coords.fromXY(50, 35), // pos
+					Coords.fromXY(100, 15), // size
+					true, // isTextCenteredHorizontally
+					true, // isTextCenteredVertically
 					DataBinding.fromContext("Profile Name:"),
 					fontHeight
 				),
@@ -884,9 +891,10 @@ export class Profile
 				new ControlLabel
 				(
 					"labelSelectAProfile",
-					Coords.fromXY(100, 40), // pos
-					Coords.fromXY(100, 25), // size
-					true, // isTextCentered
+					Coords.fromXY(30, 35), // pos
+					Coords.fromXY(140, 15), // size
+					true, // isTextCenteredHorizontally
+					true, // isTextCenteredVertically
 					DataBinding.fromContext("Select a Profile:"),
 					fontHeight
 				),

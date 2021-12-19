@@ -281,19 +281,22 @@ var ThisCouldBeBetter;
                 [
                     new GameFramework.ControlLabel("labelEquippable", GameFramework.Coords.fromXY(10, 5), // pos
                     GameFramework.Coords.fromXY(70, 25), // size
-                    false, // isTextCentered
+                    false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Equippable:"), fontHeightSmall),
                     listEquippables,
                     buttonEquip,
                     buttonUnequip,
                     new GameFramework.ControlLabel("labelEquipped", GameFramework.Coords.fromXY(100, 5), // pos
                     GameFramework.Coords.fromXY(100, 25), // size
-                    false, // isTextCentered
+                    false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Equipped:"), fontHeightSmall),
                     listEquipped,
                     new GameFramework.ControlLabel("infoStatus", GameFramework.Coords.fromXY(sizeBase.x / 2, 125), // pos
                     GameFramework.Coords.fromXY(sizeBase.x, 15), // size
-                    true, // isTextCentered
+                    true, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => c.statusMessage), // text
                     fontHeightSmall)
                 ], [
@@ -325,7 +328,8 @@ var ThisCouldBeBetter;
                     var childControls = returnValue.children;
                     childControls.splice(0, 0, new GameFramework.ControlLabel("labelEquipment", GameFramework.Coords.fromXY(100, -5), // pos
                     GameFramework.Coords.fromXY(100, 25), // size
-                    true, // isTextCentered
+                    true, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Equip"), fontHeightLarge));
                     childControls.push(GameFramework.ControlButton.from8("buttonDone", GameFramework.Coords.fromXY(170, 115), // pos
                     GameFramework.Coords.fromXY(20, 10), // size

@@ -15,22 +15,29 @@ var ThisCouldBeBetter;
                 }
                 return TalkNodeDefn._instances;
             }
+            // Clonable.
+            clone() {
+                return new TalkNodeDefn(this.name, this.execute, this.activate);
+            }
         }
         GameFramework.TalkNodeDefn = TalkNodeDefn;
         class TalkNodeDefn_Instances {
             constructor() {
-                this.Activate = new TalkNodeDefn("Activate", (universe, conversationRun, scope, talkNode) => // execute
+                this.Disable = new TalkNodeDefn("Disable", (universe, conversationRun, scope, talkNode) => // execute
                  {
-                    var talkNodeToActivateName = talkNode.next;
-                    var isActiveValueToSet = (talkNode.text == "true");
-                    conversationRun.activateOrDeactivate(talkNodeToActivateName, isActiveValueToSet);
+                    var talkNodesToDisablePrefixesJoined = talkNode.content;
+                    var talkNodesToDisablePrefixes = talkNodesToDisablePrefixesJoined.split(",");
+                    var talkNodesToDisableAsArrays = talkNodesToDisablePrefixes.map(prefix => conversationRun.nodesByPrefix(prefix));
+                    var talkNodesToDisable = GameFramework.ArrayHelper.flattenArrayOfArrays(talkNodesToDisableAsArrays);
+                    talkNodesToDisable.forEach(talkNodeToDisable => conversationRun.disable(talkNodeToDisable.name));
                     scope.talkNodeAdvance(conversationRun);
                     conversationRun.update(universe);
                 }, null // activate
                 );
                 this.Display = new TalkNodeDefn("Display", (universe, conversationRun, scope, talkNode) => // execute
                  {
-                    scope.displayTextCurrent = talkNode.text;
+                    scope.displayTextCurrent =
+                        talkNode.content;
                     scope.talkNodeNextSpecifiedOrAdvance(conversationRun);
                     conversationRun.talkNodesForTranscript.push(talkNode);
                 }, null // activate
@@ -38,6 +45,18 @@ var ThisCouldBeBetter;
                 this.DoNothing = new TalkNodeDefn("DoNothing", (universe, conversationRun, scope, talkNode) => // execute
                  {
                     scope.talkNodeAdvance(conversationRun);
+                    conversationRun.update(universe);
+                }, null // activate
+                );
+                this.Enable = new TalkNodeDefn("Enable", (universe, conversationRun, scope, talkNode) => // execute
+                 {
+                    var talkNodesToEnablePrefixesJoined = talkNode.content;
+                    var talkNodesToEnablePrefixes = talkNodesToEnablePrefixesJoined.split(",");
+                    var talkNodesToEnableAsArrays = talkNodesToEnablePrefixes.map(prefix => conversationRun.nodesByPrefix(prefix));
+                    var talkNodesToEnable = GameFramework.ArrayHelper.flattenArrayOfArrays(talkNodesToEnableAsArrays);
+                    talkNodesToEnable.forEach(talkNodeToEnable => conversationRun.enable(talkNodeToEnable.name));
+                    scope.talkNodeAdvance(conversationRun);
+                    conversationRun.update(universe);
                 }, null // activate
                 );
                 this.Goto = new TalkNodeDefn("Goto", (universe, conversationRun, scope, talkNode) => // execute
@@ -48,7 +67,7 @@ var ThisCouldBeBetter;
                 );
                 this.JumpIfFalse = new TalkNodeDefn("JumpIfFalse", (universe, conversationRun, scope, talkNode) => // execute
                  {
-                    var variableName = talkNode.text;
+                    var variableName = talkNode.content;
                     var talkNodeNameToJumpTo = talkNode.next;
                     var variableValue = conversationRun.variableByName(variableName);
                     if (variableValue == true) {
@@ -62,7 +81,7 @@ var ThisCouldBeBetter;
                 );
                 this.JumpIfTrue = new TalkNodeDefn("JumpIfTrue", (universe, conversationRun, scope, talkNode) => // execute
                  {
-                    var variableName = talkNode.text;
+                    var variableName = talkNode.content;
                     var talkNodeNameToJumpTo = talkNode.next;
                     var variableValue = conversationRun.variableByName(variableName);
                     if (variableValue == true) {
@@ -96,7 +115,9 @@ var ThisCouldBeBetter;
                  {
                     var scope = scope.parent;
                     conversationRun.scopeCurrent = scope;
-                    scope.talkNodeCurrent = conversationRun.defn.talkNodeByName(talkNode.next);
+                    if (talkNode.next != null) {
+                        scope.talkNodeCurrent = conversationRun.defn.talkNodeByName(talkNode.next);
+                    }
                     conversationRun.update(universe);
                 }, null // activate
                 );
@@ -105,7 +126,7 @@ var ThisCouldBeBetter;
                     scope.isPromptingForResponse = true;
                 }, (conversationRun, scope, talkNode) => // activate
                  {
-                    var shouldClearOptions = talkNode.text;
+                    var shouldClearOptions = talkNode.content;
                     if (shouldClearOptions == "true") {
                         scope.talkNodesForOptions.length = 0;
                     }
@@ -114,9 +135,11 @@ var ThisCouldBeBetter;
                  {
                     var runDefn = conversationRun.defn;
                     var talkNodeIndex = runDefn.talkNodes.indexOf(talkNode);
-                    var talkNodeNext = runDefn.talkNodes[talkNodeIndex + 1];
+                    var talkNodeToReturnTo = runDefn.talkNodes[talkNodeIndex + 1];
+                    scope.talkNodeCurrent = talkNodeToReturnTo;
+                    var talkNodeToPushTo = runDefn.talkNodeByName(talkNode.next);
                     conversationRun.scopeCurrent = new GameFramework.ConversationScope(scope, // parent
-                    talkNodeNext, [] // options
+                    talkNodeToPushTo, [] // options
                     );
                     conversationRun.update(universe);
                 }, null // activate
@@ -128,18 +151,32 @@ var ThisCouldBeBetter;
                 );
                 this.Script = new TalkNodeDefn("Script", (universe, conversationRun, scope, talkNode) => // execute
                  {
-                    var scriptToRunAsString = "(" + talkNode.text + ")";
+                    var scriptToRunAsString = "(" + talkNode.content + ")";
                     var scriptToRun = eval(scriptToRunAsString);
                     scriptToRun(universe, conversationRun);
                     scope.talkNodeNextSpecifiedOrAdvance(conversationRun);
                     conversationRun.update(universe); // hack
                 }, null // activate
                 );
+                this.Switch = new TalkNodeDefn("Switch", (universe, conversationRun, scope, talkNode) => // execute
+                 {
+                    var variableName = talkNode.content;
+                    var variableValueActual = conversationRun.variableByName(variableName);
+                    var variableValueAndNodeNextNamePairs = talkNode.next.split(";").map(x => x.split(":"));
+                    var talkNodeNextName = variableValueAndNodeNextNamePairs.find(x => x[0] == variableValueActual)[1];
+                    conversationRun.goto(talkNodeNextName, universe);
+                }, (conversationRun, scope, talkNode) => // activate
+                 {
+                    var shouldClearOptions = talkNode.content;
+                    if (shouldClearOptions == "true") {
+                        scope.talkNodesForOptions.length = 0;
+                    }
+                });
                 this.VariableLoad = new TalkNodeDefn("VariableLoad", (universe, conversationRun, scope, talkNode) => // execute
                  {
-                    var variableName = talkNode.text;
+                    var variableName = talkNode.content;
                     var scriptExpression = talkNode.next;
-                    var scriptToRunAsString = "( function(u, cr) { return " + scriptExpression + "; } )";
+                    var scriptToRunAsString = "( (u, cr) => { return " + scriptExpression + "; } )";
                     var scriptToRun = eval(scriptToRunAsString);
                     var scriptResult = scriptToRun(universe, conversationRun);
                     conversationRun.variableSet(variableName, scriptResult);
@@ -149,7 +186,7 @@ var ThisCouldBeBetter;
                 );
                 this.VariableSet = new TalkNodeDefn("VariableSet", (universe, conversationRun, scope, talkNode) => // execute
                  {
-                    var variableName = talkNode.text;
+                    var variableName = talkNode.content;
                     var variableValue = talkNode.next;
                     conversationRun.variableSet(variableName, variableValue);
                     scope.talkNodeAdvance(conversationRun);
@@ -158,10 +195,10 @@ var ThisCouldBeBetter;
                 );
                 this.VariableStore = new TalkNodeDefn("VariableStore", (universe, conversationRun, scope, talkNode) => // execute
                  {
-                    var variableName = talkNode.text;
+                    var variableName = talkNode.content;
                     var variableValue = conversationRun.variableByName(variableName);
                     var scriptExpression = talkNode.next;
-                    var scriptToRunAsString = "( function(u, cr) { " + scriptExpression + " = " + variableValue + "; } )";
+                    var scriptToRunAsString = "( (u, cr) => { " + scriptExpression + " = " + variableValue + "; } )";
                     var scriptToRun = eval(scriptToRunAsString);
                     scriptToRun(universe, conversationRun);
                     scope.talkNodeAdvance(conversationRun);
@@ -170,9 +207,10 @@ var ThisCouldBeBetter;
                 );
                 this._All =
                     [
-                        this.Activate,
+                        this.Disable,
                         this.Display,
                         this.DoNothing,
+                        this.Enable,
                         this.Goto,
                         this.JumpIfFalse,
                         this.JumpIfTrue,
@@ -182,6 +220,7 @@ var ThisCouldBeBetter;
                         this.Push,
                         this.Quit,
                         this.Script,
+                        this.Switch,
                         this.VariableLoad,
                         this.VariableSet,
                         this.VariableStore,

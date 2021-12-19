@@ -30,7 +30,8 @@ export class Talker implements EntityProperty<Talker>
 			conversationDefn,
 			conversationQuit,
 			entityTalkee,
-			entityTalker // entityTalker
+			entityTalker, // entityTalker
+			null // contentsById
 		);
 		var conversationSize = universe.display.sizeDefault().clone();
 		var conversationAsControl =

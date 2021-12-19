@@ -75,7 +75,8 @@ var ThisCouldBeBetter;
                 [
                     new GameFramework.ControlLabel("labelStoreName", GameFramework.Coords.fromXY(margin, margin), // pos
                     GameFramework.Coords.fromXY(listSize.x, 25), // size
-                    false, // isTextCentered
+                    false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext(entityStore.name + ":"), fontHeight),
                     GameFramework.ControlList.from10("listStoreItems", GameFramework.Coords.fromXY(margin, margin * 2), // pos
                     listSize.clone(), GameFramework.DataBinding.fromContextAndGet(itemHolderStore, (c) => c.items //.filter(x => x.item().defnName != itemDefnNameCurrency);
@@ -88,7 +89,8 @@ var ThisCouldBeBetter;
                     ),
                     new GameFramework.ControlLabel("labelCustomerName", GameFramework.Coords.fromXY(size.x - margin - listSize.x, margin), // pos
                     GameFramework.Coords.fromXY(85, 25), // size
-                    false, // isTextCentered
+                    false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext(entityCustomer.name + ":"), fontHeight),
                     GameFramework.ControlButton.from8("buttonBuy", GameFramework.Coords.fromXY(size.x / 2 - buttonSize.x - margin / 2, size.y - margin - buttonSize.y), // pos
                     buttonSize.clone(), "Buy", fontHeight, true, // hasBorder
@@ -111,7 +113,8 @@ var ThisCouldBeBetter;
                     ),
                     new GameFramework.ControlLabel("infoStatus", GameFramework.Coords.fromXY(size.x / 2, size.y - margin * 2 - buttonSize.y), // pos
                     GameFramework.Coords.fromXY(size.x, fontHeight), // size
-                    true, // isTextCentered
+                    true, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContextAndGet(this, c => c.statusMessage), fontHeight),
                     GameFramework.ControlButton.from8("buttonDone", GameFramework.Coords.fromXY(size.x - margin - buttonSize.x, size.y - margin - buttonSize.y), // pos
                     buttonSize.clone(), "Done", fontHeight, true, // hasBorder

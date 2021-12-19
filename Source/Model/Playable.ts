@@ -25,7 +25,8 @@ export class Playable implements EntityProperty<Playable>
 				"labelProfile",
 				Coords.fromXY(marginX, labelSize.y), // pos
 				labelSize.clone(),
-				false, // isTextCentered
+				false, // isTextCenteredHorizontally
+				false, // isTextCenteredVertically
 				DataBinding.fromContext
 				(
 					"Profile: " + universe.profile.name
@@ -38,7 +39,8 @@ export class Playable implements EntityProperty<Playable>
 				"labelTimePlaying",
 				Coords.fromXY(marginX, labelSize.y * 2), // pos
 				labelSize.clone(),
-				false, // isTextCentered
+				false, // isTextCenteredHorizontally
+				false, // isTextCenteredVertically
 				DataBinding.fromContext
 				(
 					"Time Playing: " + timePlayingAsString
@@ -55,7 +57,8 @@ export class Playable implements EntityProperty<Playable>
 				"labelHealth",
 				Coords.fromXY(marginX, labelSize.y * 3), // pos
 				labelSize.clone(),
-				false, // isTextCentered
+				false, // isTextCenteredHorizontally
+				false, // isTextCenteredVertically
 				DataBinding.fromContext
 				(
 					"Health: " + entity.killable().integrity
@@ -118,7 +121,8 @@ export class Playable implements EntityProperty<Playable>
 				"labelExperience",
 				Coords.fromXY(marginX, labelSize.y * 4), // pos
 				labelSize.clone(),
-				false, // isTextCentered
+				false, // isTextCenteredHorizontally
+				false, // isTextCenteredVertically
 				DataBinding.fromContext
 				(
 					"Experience: "

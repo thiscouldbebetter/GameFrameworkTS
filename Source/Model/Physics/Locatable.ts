@@ -165,7 +165,10 @@ export class Locatable implements EntityProperty<Locatable>
 
 	// Equatable
 
-	equals(other: Locatable): boolean { return false; } // todo
+	equals(other: Locatable): boolean
+	{
+		return this.loc.equals(other.loc);
+	}
 
 }
 

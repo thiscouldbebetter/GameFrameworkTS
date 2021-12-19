@@ -41,16 +41,15 @@ var ThisCouldBeBetter;
                 size = size || universe.display.sizeDefault();
                 showMessageOnly = showMessageOnly || false;
                 var scaleMultiplier = this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
+                var containerSizeScaled = size.clone().clearZ().divide(scaleMultiplier);
                 var fontHeight = this.fontHeightInPixelsBase;
-                var numberOfLinesInMessageMinusOne = message.get().split("\n").length - 1;
-                var labelSize = GameFramework.Coords.fromXY(200, fontHeight * numberOfLinesInMessageMinusOne);
                 var numberOfOptions = optionNames.length;
                 if (showMessageOnly && numberOfOptions == 1) {
                     numberOfOptions = 0; // Is a single option really an option?
                 }
-                var labelPosYBase = (numberOfOptions > 0 ? 65 : 75); // hack
-                var labelPos = GameFramework.Coords.fromXY(100, labelPosYBase - fontHeight * (numberOfLinesInMessageMinusOne / 4));
-                var labelMessage = new GameFramework.ControlLabel("labelMessage", labelPos, labelSize, true, // isTextCentered
+                var buttonPosY = Math.round(this.sizeBase.y * (numberOfOptions > 0 ? (2 / 3) : 1));
+                var labelMessage = new GameFramework.ControlLabel("labelMessage", GameFramework.Coords.zeroes(), GameFramework.Coords.fromXY(containerSizeScaled.x, buttonPosY), true, // isTextCenteredHorizontally
+                true, // isTextCenteredVertically
                 message, fontHeight);
                 var childControls = [labelMessage];
                 if (showMessageOnly == false) {
@@ -61,14 +60,13 @@ var ThisCouldBeBetter;
                         - (buttonWidth * numberOfOptions)
                         - (spaceBetweenButtons * (numberOfOptions - 1))) / 2;
                     for (var i = 0; i < numberOfOptions; i++) {
-                        var button = GameFramework.ControlButton.from8("buttonOption" + i, GameFramework.Coords.fromXY(buttonMarginLeftRight + i * (buttonWidth + spaceBetweenButtons), 100), // pos
+                        var button = GameFramework.ControlButton.from8("buttonOption" + i, GameFramework.Coords.fromXY(buttonMarginLeftRight + i * (buttonWidth + spaceBetweenButtons), buttonPosY), // pos
                         buttonSize.clone(), optionNames[i], fontHeight, true, // hasBorder
                         GameFramework.DataBinding.fromTrue(), // isEnabled
                         optionFunctions[i]);
                         childControls.push(button);
                     }
                 }
-                var containerSizeScaled = size.clone().clearZ().divide(scaleMultiplier);
                 var display = universe.display;
                 var displaySize = display.sizeDefault().clone().clearZ().divide(scaleMultiplier);
                 var containerPosScaled = displaySize.clone().subtract(containerSizeScaled).half();
@@ -107,7 +105,8 @@ var ThisCouldBeBetter;
                 null // bindingForItemValue
                 );
                 var returnValue = GameFramework.ControlContainer.from4("containerChoice", GameFramework.Coords.create(), size, [
-                    new GameFramework.ControlLabel("labelMessage", GameFramework.Coords.fromXY(size.x / 2, marginSize.y + fontHeight / 2), labelSize, true, // isTextCentered
+                    new GameFramework.ControlLabel("labelMessage", GameFramework.Coords.fromXY(size.x / 2, marginSize.y + fontHeight / 2), labelSize, true, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext(message), fontHeight),
                     listOptions,
                     new GameFramework.ControlButton("buttonSelect", GameFramework.Coords.fromXY(marginSize.x, size.y - marginSize.y - buttonSize.y), buttonSize, buttonSelectText, fontHeight, true, // hasBorder
@@ -299,7 +298,8 @@ var ThisCouldBeBetter;
                 [
                     new GameFramework.ControlLabel("labelActions", GameFramework.Coords.fromXY(100, 15), // pos
                     GameFramework.Coords.fromXY(100, 20), // size
-                    true, // isTextCentered
+                    true, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Actions:"), fontHeight),
                     GameFramework.ControlList.from8("listActions", GameFramework.Coords.fromXY(50, 25), // pos
                     GameFramework.Coords.fromXY(100, 40), // size
@@ -310,11 +310,13 @@ var ThisCouldBeBetter;
                     ),
                     new GameFramework.ControlLabel("labelInput", GameFramework.Coords.fromXY(100, 70), // pos
                     GameFramework.Coords.fromXY(100, 15), // size
-                    true, // isTextCentered
+                    true, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Inputs:"), fontHeight),
                     new GameFramework.ControlLabel("infoInput", GameFramework.Coords.fromXY(100, 80), // pos
                     GameFramework.Coords.fromXY(200, 15), // size
-                    true, // isTextCentered
+                    true, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContextAndGet(placeDefn, (c) => {
                         var i = c.actionToInputsMappingSelected;
                         return (i == null ? "-" : i.inputNames.join(", "));
@@ -507,7 +509,8 @@ var ThisCouldBeBetter;
                 [
                     new GameFramework.ControlLabel("labelMusicVolume", GameFramework.Coords.fromXY(30, row1PosY + labelPadding), // pos
                     GameFramework.Coords.fromXY(75, buttonHeight), // size
-                    false, // isTextCentered
+                    false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Music:"), fontHeight),
                     new GameFramework.ControlSelect("selectMusicVolume", GameFramework.Coords.fromXY(70, row1PosY), // pos
                     GameFramework.Coords.fromXY(30, buttonHeight), // size
@@ -518,7 +521,8 @@ var ThisCouldBeBetter;
                     fontHeight),
                     new GameFramework.ControlLabel("labelSoundVolume", GameFramework.Coords.fromXY(105, row1PosY + labelPadding), // pos
                     GameFramework.Coords.fromXY(75, buttonHeight), // size
-                    false, // isTextCentered
+                    false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Sound:"), fontHeight),
                     new GameFramework.ControlSelect("selectSoundVolume", GameFramework.Coords.fromXY(140, row1PosY), // pos
                     GameFramework.Coords.fromXY(30, buttonHeight), // size
@@ -529,7 +533,8 @@ var ThisCouldBeBetter;
                     fontHeight),
                     new GameFramework.ControlLabel("labelDisplaySize", GameFramework.Coords.fromXY(30, row2PosY + labelPadding), // pos
                     GameFramework.Coords.fromXY(75, buttonHeight), // size
-                    false, // isTextCentered
+                    false, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Display:"), fontHeight),
                     new GameFramework.ControlSelect("selectDisplaySize", GameFramework.Coords.fromXY(70, row2PosY), // pos
                     GameFramework.Coords.fromXY(65, buttonHeight), // size
@@ -617,7 +622,8 @@ var ThisCouldBeBetter;
                         ),
                         new GameFramework.ControlLabel("labelSlideText", GameFramework.Coords.fromXY(100, this.fontHeightInPixelsBase * 2), // pos
                         this.sizeBase.clone(), // size
-                        true, // isTextCentered,
+                        true, // isTextCenteredHorizontally
+                        false, // isTextCenteredVertically
                         GameFramework.DataBinding.fromContext(message), this.fontHeightInPixelsBase),
                         GameFramework.ControlButton.from8("buttonNext", GameFramework.Coords.fromXY(75, 120), // pos
                         GameFramework.Coords.fromXY(50, 40), // size
@@ -677,31 +683,36 @@ var ThisCouldBeBetter;
                 if (size == null) {
                     size = universe.display.sizeDefault();
                 }
-                var scaleMultiplier = this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
+                var sizeBase = this.sizeBase;
+                var scaleMultiplier = this._scaleMultiplier.overwriteWith(size).divide(sizeBase);
                 var fontHeight = this.fontHeightInPixelsBase;
                 var world = universe.world;
                 var dateCreated = world.dateCreated;
                 var dateSaved = world.dateSaved;
                 var returnValue = GameFramework.ControlContainer.from4("containerWorldDetail", this._zeroes, // pos
-                this.sizeBase.clone(), // size
+                sizeBase.clone(), // size
                 // children
                 [
-                    new GameFramework.ControlLabel("labelProfileName", GameFramework.Coords.fromXY(100, 40), // pos
-                    GameFramework.Coords.fromXY(100, 20), // size
-                    true, // isTextCentered
+                    new GameFramework.ControlLabel("labelProfileName", GameFramework.Coords.fromXY(0, 40), // pos
+                    GameFramework.Coords.fromXY(sizeBase.x, 20), // size
+                    true, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Profile: " + universe.profile.name), fontHeight),
-                    new GameFramework.ControlLabel("labelWorldName", GameFramework.Coords.fromXY(100, 55), // pos
-                    GameFramework.Coords.fromXY(150, 25), // size
-                    true, // isTextCentered
+                    new GameFramework.ControlLabel("labelWorldName", GameFramework.Coords.fromXY(0, 55), // pos
+                    GameFramework.Coords.fromXY(sizeBase.x, 25), // size
+                    true, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("World: " + world.name), fontHeight),
-                    new GameFramework.ControlLabel("labelStartDate", GameFramework.Coords.fromXY(100, 70), // pos
-                    GameFramework.Coords.fromXY(150, 25), // size
-                    true, // isTextCentered
-                    GameFramework.DataBinding.fromContext("Started:" + dateCreated.toStringTimestamp()), fontHeight),
-                    new GameFramework.ControlLabel("labelSavedDate", GameFramework.Coords.fromXY(100, 85), // pos
-                    GameFramework.Coords.fromXY(150, 25), // size
-                    true, // isTextCentered
-                    GameFramework.DataBinding.fromContext("Saved:"
+                    new GameFramework.ControlLabel("labelStartDate", GameFramework.Coords.fromXY(0, 70), // pos
+                    GameFramework.Coords.fromXY(sizeBase.x, 25), // size
+                    true, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
+                    GameFramework.DataBinding.fromContext("Started: " + dateCreated.toStringTimestamp()), fontHeight),
+                    new GameFramework.ControlLabel("labelSavedDate", GameFramework.Coords.fromXY(0, 85), // pos
+                    GameFramework.Coords.fromXY(sizeBase.x, 25), // size
+                    true, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
+                    GameFramework.DataBinding.fromContext("Saved: "
                         + (dateSaved == null ? "[never]" : dateSaved.toStringTimestamp())), fontHeight),
                     GameFramework.ControlButton.from8("buttonStart", GameFramework.Coords.fromXY(50, 100), // pos
                     GameFramework.Coords.fromXY(100, this.buttonHeightBase), // size
@@ -804,11 +815,13 @@ var ThisCouldBeBetter;
                 [
                     new GameFramework.ControlLabel("labelProfileName", GameFramework.Coords.fromXY(100, 25), // pos
                     GameFramework.Coords.fromXY(120, 25), // size
-                    true, // isTextCentered
+                    true, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Profile: " + universe.profile.name), fontHeight),
                     new GameFramework.ControlLabel("labelSelectASave", GameFramework.Coords.fromXY(100, 40), // pos
                     GameFramework.Coords.fromXY(100, 25), // size
-                    true, // isTextCentered
+                    true, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Select a Save:"), fontHeight),
                     GameFramework.ControlList.from8("listSaveStates", GameFramework.Coords.fromXY(30, 50), // pos
                     GameFramework.Coords.fromXY(140, 50), // size

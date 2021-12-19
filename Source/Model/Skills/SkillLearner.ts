@@ -257,7 +257,8 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 					"labelSkillsKnown", // name,
 					Coords.fromXY(margin, 40), // pos,
 					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
-					false, // isTextCentered,
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext("Skills Known:"), //text
 					labelHeight // fontHeightInPixels
 				),
@@ -278,7 +279,8 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 					"labelSkillsAvailable", // name,
 					Coords.fromXY(size.x - margin - listSize.x, 40), // pos,
 					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
-					false, // isTextCentered,
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext("Skills Available:"), // text
 					labelHeight // fontHeightInPixels
 				),
@@ -327,7 +329,8 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 					"labelSkillSelected", // name,
 					Coords.fromXY(margin, 220), // pos,
 					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
-					false, // isTextCentered,
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext("Selected:"), // text
 					fontHeightInPixels
 				),
@@ -337,7 +340,8 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 					"labelSkillSelected", // name,
 					Coords.fromXY(80, 220), // pos,
 					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
-					false, // isTextCentered,
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet
 					(
 						this, (c: SkillLearner) => (c.skillSelectedName || "-")
@@ -350,7 +354,8 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 					"labelSkillSelectedDescription", // name,
 					Coords.fromXY(margin, 232), // pos,
 					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
-					false, // isTextCentered,
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet
 					(
 						this,
@@ -368,7 +373,8 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 					"labelSkillBeingLearned", // name,
 					Coords.fromXY(margin, size.y - margin - labelHeight * 2), // pos,
 					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
-					false, // isTextCentered,
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext("Skill Being Learned:"), // text
 					fontHeightInPixels
 				),
@@ -378,7 +384,8 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 					"textSkillBeingLearned", // name,
 					Coords.fromXY(145, size.y - margin - labelHeight * 2), // pos,
 					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
-					false, // isTextCentered,
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet
 					(
 						this,
@@ -395,7 +402,8 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 					"labelLearningAccumulated", // name,
 					Coords.fromXY(margin, size.y - margin - labelHeight), // pos,
 					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
-					false, // isTextCentered,
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext("Learning Accumulated:"), // text
 					fontHeightInPixels
 				),
@@ -405,7 +413,8 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 					"textLearningAccumulated", // name,
 					Coords.fromXY(145, size.y - margin - labelHeight), // pos,
 					Coords.fromXY(30, labelHeight), // size,
-					false, // isTextCentered,
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet
 					(
 						this,
@@ -428,7 +437,8 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 					"labelSkills",
 					Coords.fromXY(200, 20), // pos
 					Coords.fromXY(120, 25), // size
-					true, // isTextCentered
+					true, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext("Skills"),
 					labelHeightLarge
 				)

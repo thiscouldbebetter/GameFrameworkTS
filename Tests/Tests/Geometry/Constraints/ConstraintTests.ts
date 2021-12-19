@@ -10,6 +10,8 @@ class ConstraintTests extends TestFixture
 	_locatable: Locatable;
 	_entityToConstrainLoc: Disposition;
 
+	_uwpe: UniverseWorldPlaceEntities;
+
 	constructor()
 	{
 		super(ConstraintTests.name);
@@ -29,6 +31,12 @@ class ConstraintTests extends TestFixture
 				this._locatable
 			]
 		);
+
+		this._uwpe = new UniverseWorldPlaceEntities
+		(
+			this._universe, this._world, this._place, this._entityToConstrain, null
+		);
+
 	}
 
 	tests(): ( ()=>void )[]
@@ -70,16 +78,19 @@ class ConstraintTests extends TestFixture
 			"EntityToAttachTo",
 			[ Locatable.fromPos(entityToAttachToPos) ]
 		);
-		this._place.entitySpawn(this._universe, this._world, entityToAttachTo);
+		this._place.entitySpawn
+		(
+			new UniverseWorldPlaceEntities
+			(
+				this._universe, this._world, this._place, entityToAttachTo, null
+			)
+		);
 
 		var constraint =
 			new Constraint_AttachToEntityWithId(entityToAttachTo.id);
 		this._constrainable.clear().constraintAdd(constraint);
 
-		constraint.constrain
-		(
-			this._universe, this._world, this._place, this._entityToConstrain
-		);
+		constraint.constrain(this._uwpe);
 		this._place.entityRemove(entityToAttachTo);
 
 		var posAfterConstraint = this._entityToConstrainLoc.pos.clone();
@@ -101,16 +112,19 @@ class ConstraintTests extends TestFixture
 			"EntityToAttachTo",
 			[ Locatable.fromPos(entityToAttachToPos) ]
 		);
-		this._place.entitySpawn(this._universe, this._world, entityToAttachTo);
+		this._place.entitySpawn
+		(
+			new UniverseWorldPlaceEntities
+			(
+				this._universe, this._world, this._place, entityToAttachTo, null
+			)
+		);
 
 		var constraint =
 			new Constraint_AttachToEntityWithName(entityToAttachTo.name);
 		this._constrainable.clear().constraintAdd(constraint);
 
-		constraint.constrain
-		(
-			this._universe, this._world, this._place, this._entityToConstrain
-		);
+		constraint.constrain(this._uwpe);
 		this._place.entityRemove(entityToAttachTo);
 
 		var posAfterConstraint = this._entityToConstrainLoc.pos.clone();
@@ -141,10 +155,7 @@ class ConstraintTests extends TestFixture
 			new Constraint_ContainInBox(boxToConstrainTo);
 		this._constrainable.clear().constraintAdd(constraint);
 
-		constraint.constrain
-		(
-			this._universe, this._world, this._place, this._entityToConstrain
-		);
+		constraint.constrain(this._uwpe);
 
 		var posAfterConstraint = this._entityToConstrainLoc.pos.clone();
 
@@ -167,10 +178,7 @@ class ConstraintTests extends TestFixture
 			new Constraint_ContainInHemispace(hemispaceToConstrainTo);
 		this._constrainable.clear().constraintAdd(constraint);
 
-		constraint.constrain
-		(
-			this._universe, this._world, this._place, this._entityToConstrain
-		);
+		constraint.constrain(this._uwpe);
 
 		var posAfterConstraint = this._entityToConstrainLoc.pos.clone();
 
@@ -192,10 +200,7 @@ class ConstraintTests extends TestFixture
 		{
 			var speedBeforeConstraint = entityVel.magnitude();
 
-			constraint.constrain
-			(
-				this._universe, this._world, this._place, this._entityToConstrain
-			);
+			constraint.constrain(this._uwpe);
 
 			var speedAfterConstraint = entityVel.magnitude();
 			var isEntitySlowerAfterConstraint =
@@ -221,10 +226,7 @@ class ConstraintTests extends TestFixture
 			var speedXYBeforeConstraint = entityVel.magnitudeXY();
 			var speedZBeforeConstraint = entityVel.z;
 
-			constraint.constrain
-			(
-				this._universe, this._world, this._place, this._entityToConstrain
-			);
+			constraint.constrain(this._uwpe);
 
 			var speedXYAfterConstraint = entityVel.magnitudeXY();
 			var speedZAfterConstraint = entityVel.z;
@@ -254,10 +256,7 @@ class ConstraintTests extends TestFixture
 		var accelXYBeforeConstraint = entityAccel.magnitudeXY();
 		var accelZBeforeConstraint = entityAccel.z;
 
-		constraint.constrain
-		(
-			this._universe, this._world, this._place, this._entityToConstrain
-		);
+		constraint.constrain(this._uwpe);
 
 		var accelXYAfterConstraint = entityAccel.magnitudeXY();
 		var accelZAfterConstraint = entityAccel.z;
@@ -286,20 +285,17 @@ class ConstraintTests extends TestFixture
 		];
 		var transformsToApply = offsetsToApply.map
 		(
-			x => new Transform_Translate(x);
+			x => new Transform_Translate(x)
 		);
 		var childConstraints = transformsToApply.map
 		(
-			x => new Constraint_Transform(x);
+			x => new Constraint_Transform(x)
 		);
 		var constraint = new Constraint_Multiple(childConstraints);
 
 		this._constrainable.clear().constraintAdd(constraint);
 
-		constraint.constrain
-		(
-			this._universe, this._world, this._place, this._entityToConstrain
-		);
+		constraint.constrain(this._uwpe);
 
 		var posAfterConstraint = this._entityToConstrainLoc.pos.clone();
 
@@ -323,16 +319,19 @@ class ConstraintTests extends TestFixture
 			"EntityToAttachTo",
 			[ Locatable.fromPos(entityToOrientTowardPos) ]
 		);
-		this._place.entitySpawn(this._universe, this._world, entityToOrientToward);
+		this._place.entitySpawn
+		(
+			new UniverseWorldPlaceEntities
+			(
+				this._universe, this._world, this._place, entityToOrientToward, null
+			)
+		);
 
 		var constraint =
 			new Constraint_OrientToward(entityToOrientToward.name);
 		this._constrainable.clear().constraintAdd(constraint);
 
-		constraint.constrain
-		(
-			this._universe, this._world, this._place, this._entityToConstrain
-		);
+		constraint.constrain(this._uwpe);
 		this._place.entityRemove(entityToOrientToward);
 
 		var forwardAfterConstraint = entityOrientation.forward;
@@ -364,10 +363,7 @@ class ConstraintTests extends TestFixture
 
 		var speedZBeforeConstraint = entityVel.z;
 
-		constraint.constrain
-		(
-			this._universe, this._world, this._place, this._entityToConstrain
-		);
+		constraint.constrain(this._uwpe);
 
 		var speedXYAfterConstraint = entityVel.magnitudeXY();
 		var speedZAfterConstraint = entityVel.z;
@@ -398,10 +394,7 @@ class ConstraintTests extends TestFixture
 		(
 			speedBeforeConstraint
 		);
-		constraint.constrain
-		(
-			this._universe, this._world, this._place, this._entityToConstrain
-		);
+		constraint.constrain(this._uwpe);
 		var speedAfterConstraint = entityVel.magnitude();
 		Assert.isTrue(speedAfterConstraint == speedBeforeConstraint);
 
@@ -410,10 +403,7 @@ class ConstraintTests extends TestFixture
 		(
 			speedBeforeConstraint
 		);
-		constraint.constrain
-		(
-			this._universe, this._world, this._place, this._entityToConstrain
-		);
+		constraint.constrain(this._uwpe);
 		var speedAfterConstraint = entityVel.magnitude();
 		Assert.isTrue(speedAfterConstraint == 0);
 	}
@@ -427,10 +417,7 @@ class ConstraintTests extends TestFixture
 		var constraint = new Constraint_Transform(transformToApply);
 		this._constrainable.clear().constraintAdd(constraint);
 
-		constraint.constrain
-		(
-			this._universe, this._world, this._place, this._entityToConstrain
-		);
+		constraint.constrain(this._uwpe);
 
 		var posAfterConstraint = this._entityToConstrainLoc.pos.clone();
 
@@ -452,19 +439,13 @@ class ConstraintTests extends TestFixture
 
 		var entityPosBeforeConstraint =
 			entityPos.overwriteWith(placeSize).half().clone();
-		constraint.constrain
-		(
-			this._universe, this._world, this._place, this._entityToConstrain
-		);
+		constraint.constrain(this._uwpe);
 		var entityPosAfterConstraint = entityPos;
 		Assert.areEqual(entityPosBeforeConstraint, entityPosAfterConstraint);
 
 		var entityPosBeforeConstraint =
 			entityPos.overwriteWith(placeSize).double().clone();
-		constraint.constrain
-		(
-			this._universe, this._world, this._place, this._entityToConstrain
-		);
+		constraint.constrain(this._uwpe);
 		var entityPosAfterConstraint = entityPos;
 		Assert.areEqual(placeSize, entityPosAfterConstraint);
 	}
@@ -480,19 +461,13 @@ class ConstraintTests extends TestFixture
 
 		var entityPosBeforeConstraint =
 			entityPos.overwriteWith(placeSize).half().clone();
-		constraint.constrain
-		(
-			this._universe, this._world, this._place, this._entityToConstrain
-		);
+		constraint.constrain(this._uwpe);
 		var entityPosAfterConstraint = entityPos;
 		Assert.areEqual(entityPosBeforeConstraint, entityPosAfterConstraint);
 
 		var entityPosBeforeConstraint =
 			entityPos.overwriteWith(placeSize).double().clone();
-		constraint.constrain
-		(
-			this._universe, this._world, this._place, this._entityToConstrain
-		);
+		constraint.constrain(this._uwpe);
 		var entityPosAfterConstraint = entityPos;
 		var zeroes = Coords.create();
 		Assert.areEqual(zeroes, entityPosAfterConstraint);
@@ -509,31 +484,25 @@ class ConstraintTests extends TestFixture
 
 		var entityPosBeforeConstraint =
 			entityPos.overwriteWith(placeSize).half().clone();
-		constraint.constrain
-		(
-			this._universe, this._world, this._place, this._entityToConstrain
-		);
+		constraint.constrain(this._uwpe);
 		var entityPosAfterConstraint = entityPos;
 		Assert.areEqual(entityPosBeforeConstraint, entityPosAfterConstraint);
 
 		var entityPosBeforeConstraint =
 			entityPos.overwriteWith(placeSize).double().clone();
-		constraint.constrain
-		(
-			this._universe, this._world, this._place, this._entityToConstrain
-		);
+		constraint.constrain(this._uwpe);
 		var entityPosAfterConstraint = entityPos;
-		Assert.areEqual
+		Assert.areNumbersEqual
 		(
 			0, entityPosAfterConstraint.x
 		);
 
-		Assert.areEqual
+		Assert.areNumbersEqual
 		(
 			entityPosBeforeConstraint.y, entityPosAfterConstraint.y
 		);
 
-		Assert.areEqual
+		Assert.areNumbersEqual
 		(
 			entityPosBeforeConstraint.z, entityPosAfterConstraint.z
 		);
@@ -550,32 +519,26 @@ class ConstraintTests extends TestFixture
 
 		var entityPosBeforeConstraint =
 			entityPos.overwriteWith(placeSize).half().clone();
-		constraint.constrain
-		(
-			this._universe, this._world, this._place, this._entityToConstrain
-		);
+		constraint.constrain(this._uwpe);
 		var entityPosAfterConstraint = entityPos;
 		Assert.areEqual(entityPosBeforeConstraint, entityPosAfterConstraint);
 
 		var entityPosBeforeConstraint =
 			entityPos.overwriteWith(placeSize).double().clone();
-		constraint.constrain
-		(
-			this._universe, this._world, this._place, this._entityToConstrain
-		);
+		constraint.constrain(this._uwpe);
 		var entityPosAfterConstraint = entityPos;
 
-		Assert.areEqual
+		Assert.areNumbersEqual
 		(
 			0, entityPosAfterConstraint.x
 		);
 
-		Assert.areEqual
+		Assert.areNumbersEqual
 		(
 			placeSize.y, entityPosAfterConstraint.y
 		);
 
-		Assert.areEqual
+		Assert.areNumbersEqual
 		(
 			entityPosBeforeConstraint.z, entityPosAfterConstraint.z
 		);

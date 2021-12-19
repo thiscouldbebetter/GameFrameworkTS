@@ -112,7 +112,8 @@ export class ItemContainer implements EntityProperty<ItemContainer>
 					"labelContainerName",
 					Coords.fromXY(margin, margin), // pos
 					Coords.fromXY(listSize.x, 25), // size
-					false, // isTextCentered
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext(entityContainer.name + ":"),
 					fontHeight
 				),
@@ -181,7 +182,8 @@ export class ItemContainer implements EntityProperty<ItemContainer>
 					"labelGetterPutterName",
 					Coords.fromXY(size.x - margin - listSize.x, margin), // pos
 					Coords.fromXY(85, 25), // size
-					false, // isTextCentered
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext(entityGetterPutter.name + ":"),
 					fontHeight
 				),
@@ -220,7 +222,8 @@ export class ItemContainer implements EntityProperty<ItemContainer>
 					"infoStatus",
 					Coords.fromXY(size.x / 2, size.y - margin - fontHeight), // pos
 					Coords.fromXY(size.x, fontHeight), // size
-					true, // isTextCentered
+					true, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet(this, c => c.statusMessage),
 					fontHeight
 				),

@@ -32,7 +32,7 @@ class CameraTests extends TestFixture
 	{
 		var cameraClipPlanes = this._camera.clipPlanes();
 		Assert.isNotNull(cameraClipPlanes);
-		Assert.areEqual(4, cameraClipPlanes.length);
+		Assert.areNumbersEqual(4, cameraClipPlanes.length);
 	}
 
 	coordsTransformViewToWorld(): void
@@ -78,9 +78,9 @@ class CameraTests extends TestFixture
 		var entitiesToSort = [ entityNear, entityFar ];
 
 		var entitiesSorted =
-			this._camera.entitiesInViewSort(ArrayHelper.clone(entitiesToSort));
+			this._camera.entitiesInViewSort(ArrayHelper.clone(entitiesToSort) as Entity[]);
 
-		Assert.areEqual(entitiesToSort.length, entitiesSorted.length);
+		Assert.areNumbersEqual(entitiesToSort.length, entitiesSorted.length);
 		// todo - No sorting yet.
 		Assert.isTrue(ArrayHelper.areEqual(entitiesToSort, entitiesSorted) );
 	}
@@ -88,7 +88,7 @@ class CameraTests extends TestFixture
 	toEntity()
 	{
 		var cameraAsEntity = this._camera.toEntity();
-		Assert.areEqual(Camera.name, cameraAsEntity.name);
+		Assert.areStringsEqual(Camera.name, cameraAsEntity.name);
 		Assert.isNotNull(cameraAsEntity.camera());
 	}
 
@@ -96,16 +96,16 @@ class CameraTests extends TestFixture
 
 	finalize(): void
 	{
-		this._camera.finalize(null, null, null, null);
+		this._camera.finalize(null);
 	}
 
 	initialize(): void
 	{
-		this._camera.initialize(null, null, null, null);
+		this._camera.initialize(null);
 	}
 
 	updateForTimerTick(): void
 	{
-		this._camera.updateForTimerTick(null, null, null, null);
+		this._camera.updateForTimerTick(null);
 	}
 }

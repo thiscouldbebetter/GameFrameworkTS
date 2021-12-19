@@ -4,14 +4,24 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ConversationDefn {
-            constructor(name, visualPortrait, contentTextStringName, talkNodeDefns, talkNodes) {
+            constructor(name, visualPortrait, talkNodeDefns, talkNodes) {
                 this.name = name;
                 this.visualPortrait = visualPortrait;
-                this.contentTextStringName = contentTextStringName;
                 this.talkNodeDefns = talkNodeDefns;
                 this.talkNodeDefnsByName = GameFramework.ArrayHelper.addLookupsByName(this.talkNodeDefns);
                 this.talkNodes = talkNodes;
                 this.talkNodesByName = GameFramework.ArrayHelper.addLookupsByName(this.talkNodes);
+            }
+            contentSubstitute(contentByNodeName) {
+                this.talkNodes.forEach(talkNode => {
+                    var talkNodeName = talkNode.name;
+                    if (talkNodeName != null) {
+                        if (contentByNodeName.has(talkNodeName)) {
+                            talkNode.content = contentByNodeName.get(talkNodeName);
+                        }
+                    }
+                });
+                return this;
             }
             talkNodeByName(nameOfTalkNodeToGet) {
                 return this.talkNodesByName.get(nameOfTalkNodeToGet);
@@ -61,11 +71,12 @@ var ThisCouldBeBetter;
                         talkNodesExpanded.push(talkNodeToExpand);
                     }
                     else {
-                        var tag = talkNodeToExpand.text;
+                        throw new Error("todo");
+                        var tag = talkNodeToExpand.content;
                         var textLinesForTag = tagToTextLinesLookup.get(tag);
                         for (var j = 0; j < textLinesForTag.length; j++) {
                             var textLine = textLinesForTag[j];
-                            var talkNodeExpanded = new GameFramework.TalkNode(talkNodeToExpand.name + "_" + j, talkNodeToExpandDefnName, textLine, talkNodeToExpand.next, talkNodeToExpand.isActive);
+                            var talkNodeExpanded = new GameFramework.TalkNode(talkNodeToExpand.name + "_" + j, talkNodeToExpandDefnName, textLine, talkNodeToExpand.next, talkNodeToExpand.isDisabled);
                             talkNodesExpanded.push(talkNodeExpanded);
                         }
                     }
@@ -73,7 +84,11 @@ var ThisCouldBeBetter;
                 this.talkNodes = talkNodesExpanded;
                 this.talkNodesByName = GameFramework.ArrayHelper.addLookupsByName(this.talkNodes);
             }
-            // serialization
+            // Clonable.
+            clone() {
+                return new ConversationDefn(this.name, this.visualPortrait, this.talkNodeDefns.map(x => x.clone()), this.talkNodes.map(x => x.clone()));
+            }
+            // Serialization.
             static deserialize(conversationDefnAsJSON) {
                 var conversationDefn = JSON.parse(conversationDefnAsJSON);
                 // Additional processing to support minification.
@@ -85,34 +100,34 @@ var ThisCouldBeBetter;
                 else {
                     conversationDefn.visualPortrait = new GameFramework.VisualImageFromLibrary(imagePortraitName);
                 }
-                conversationDefn.contentTextStringName =
-                    conversationDefn["contentTextStringName"];
                 var talkNodes = conversationDefn["talkNodes"];
                 for (var i = 0; i < talkNodes.length; i++) {
                     var talkNode = talkNodes[i];
+                    /*
                     talkNode.name = talkNode["name"];
                     talkNode.defnName = talkNode["defnName"];
                     talkNode.text = talkNode["text"];
                     talkNode.next = talkNode["next"];
-                    talkNode.isActive = talkNode["isActive"];
+                    talkNode.isDisabled = talkNode["isDisabled"];
+                    */
+                    Object.setPrototypeOf(talkNode, GameFramework.TalkNode.prototype);
                 }
-                conversationDefn.__proto__ = ConversationDefn.prototype;
+                Object.setPrototypeOf(conversationDefn, ConversationDefn.prototype);
                 var talkNodes = conversationDefn.talkNodes;
                 for (var i = 0; i < talkNodes.length; i++) {
                     var talkNode = talkNodes[i];
-                    talkNode.__proto__ = GameFramework.TalkNode.prototype;
                     if (talkNode.name == null) {
                         talkNode.name = GameFramework.TalkNode.idNext();
                     }
-                    if (talkNode.isActive == null) {
-                        talkNode.isActive = true;
-                    }
                 }
                 conversationDefn.talkNodes = talkNodes;
-                conversationDefn.talkNodesByName = GameFramework.ArrayHelper.addLookupsByName(talkNodes);
-                conversationDefn.talkNodeDefns = GameFramework.TalkNodeDefn.Instances()._All;
+                /*
+                conversationDefn.talkNodesByName = ArrayHelper.addLookupsByName(talkNodes);
                 conversationDefn.talkNodeDefnsByName =
-                    GameFramework.ArrayHelper.addLookupsByName(conversationDefn.talkNodeDefns);
+                    ArrayHelper.addLookupsByName(conversationDefn.talkNodeDefns);
+                */
+                conversationDefn.talkNodeDefns = GameFramework.TalkNodeDefn.Instances()._All;
+                conversationDefn = conversationDefn.clone(); // hack
                 return conversationDefn;
             }
             serialize() {

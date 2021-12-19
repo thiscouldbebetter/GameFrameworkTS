@@ -14,6 +14,7 @@
 <script type="text/javascript" src="../Source/Controls/ControlBase.js"></script>
 <script type="text/javascript" src="../Source/Controls/ControlBuilder.js"></script>
 <script type="text/javascript" src="../Source/Controls/ControlButton.js"></script>
+<script type="text/javascript" src="../Source/Controls/ControlColorScheme.js"></script>
 <script type="text/javascript" src="../Source/Controls/ControlContainer.js"></script>
 <script type="text/javascript" src="../Source/Controls/ControlContainerTransparent.js"></script>
 <script type="text/javascript" src="../Source/Controls/ControlLabel.js"></script>
@@ -99,10 +100,11 @@
 <script type="text/javascript" src="../Source/Geometry/Constraints/Constraint_FrictionDry.js"></script>
 <script type="text/javascript" src="../Source/Geometry/Constraints/Constraint_FrictionXY.js"></script>
 <script type="text/javascript" src="../Source/Geometry/Constraints/Constraint_Gravity.js"></script>
-<script type="text/javascript" src="../Source/Geometry/Constraints/Constraint_Offset.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Constraints/Constraint_Multiple.js"></script>
 <script type="text/javascript" src="../Source/Geometry/Constraints/Constraint_OrientToward.js"></script>
 <script type="text/javascript" src="../Source/Geometry/Constraints/Constraint_SpeedMaxXY.js"></script>
 <script type="text/javascript" src="../Source/Geometry/Constraints/Constraint_StopBelowSpeedMin.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Constraints/Constraint_Transform.js"></script>
 <script type="text/javascript" src="../Source/Geometry/Constraints/Constraint_TrimToPlaceSize.js"></script>
 <script type="text/javascript" src="../Source/Geometry/Constraints/Constraint_WrapToPlaceSize.js"></script>
 <script type="text/javascript" src="../Source/Geometry/Constraints/Constraint_WrapToPlaceSizeX.js"></script>
@@ -129,7 +131,7 @@
 <script type="text/javascript" src="../Source/Geometry/Shapes/Sphere.js"></script>
 <script type="text/javascript" src="../Source/Geometry/Shapes/Wedge.js"></script>
 
-<script type="text/javascript" src="../Source/Geometry/Shapes/Maps/Map.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Shapes/Maps/MapOfCells.js"></script>
 <script type="text/javascript" src="../Source/Geometry/Shapes/Maps/MapCell.js"></script>
 <script type="text/javascript" src="../Source/Geometry/Shapes/Maps/MapLocated.js"></script>
 
@@ -176,6 +178,7 @@
 <script type="text/javascript" src="../Source/Model/UniverseWorldPlaceEntities.js"></script>
 <script type="text/javascript" src="../Source/Model/VenueWorld.js"></script>
 <script type="text/javascript" src="../Source/Model/World.js"></script>
+<script type="text/javascript" src="../Source/Model/WorldCreator.js"></script>
 <script type="text/javascript" src="../Source/Model/WorldDefn.js"></script>
 
 <script type="text/javascript" src="../Source/Model/Actors/Action.js"></script>
@@ -324,32 +327,10 @@
 
 <script type="text/javascript" src="Tests/Storage/Compressor/CompressorLZWTests.js"></script>
 
+<script type="text/javascript" src="TestRunner.js"></script>
+
 <script type="text/javascript">
-
-	var testSuite = new TestSuite
-	([
-		// Controls.
-		new ControlBuilderTests(),
-
-		// Geometry.
-		new CameraTests(),
-
-		// Geometry - Collisions.
-		new CollisionHelperTests(),
-
-		// Geometry - Constraints.
-		new ConstraintTests(),
-
-		// Geometry - Shapes.
-		new ArcTests(),
-		new BoxTests(),
-
-		// Storage - CompressorLZW.
-		new CompressorLZWTests()
-	]);
-
-	testSuite.run();
-
+	new TestRunner().run();
 </script>
 
 </body>

@@ -50,7 +50,8 @@ export class WorldCreator
 					"labelWorldCreationSettings",
 					Coords.fromXY(margin, margin), // pos
 					Coords.fromXY(size.x - margin * 2, controlHeight),
-					false, // isTextCentered
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext("World Creation Settings"),
 					fontHeightInPixels
 				),
@@ -60,7 +61,8 @@ export class WorldCreator
 					"labelWorldName",
 					Coords.fromXY(margin, margin * 2 + controlHeight), // pos
 					Coords.fromXY(size.x - margin * 2, controlHeight),
-					false, // isTextCentered
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext("World Name:"),
 					fontHeightInPixels
 				),

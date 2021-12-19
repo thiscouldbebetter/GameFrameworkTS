@@ -15,13 +15,13 @@ var ThisCouldBeBetter;
                         || GameFramework.DataBinding.fromTrueWithContext(null);
                 this.confirm = confirm;
                 this.widthInItems = widthInItems || 1;
-                var itemSpacingY = 1.2 * this.fontHeightInPixels; // hack
-                this._itemSpacing = new GameFramework.Coords(0, itemSpacingY, 0);
-                var scrollbarWidth = itemSpacingY;
+                var itemSizeY = 1.2 * this.fontHeightInPixels; // hack
+                this._itemSize = GameFramework.Coords.fromXY(size.x, itemSizeY);
+                var scrollbarWidth = itemSizeY;
                 this.isHighlighted = false;
-                this.scrollbar = new GameFramework.ControlScrollbar(new GameFramework.Coords(this.size.x - scrollbarWidth, 0, 0), // pos
-                new GameFramework.Coords(scrollbarWidth, this.size.y, 0), // size
-                this.fontHeightInPixels, itemSpacingY, // itemHeight
+                this.scrollbar = new GameFramework.ControlScrollbar(GameFramework.Coords.fromXY(this.size.x - scrollbarWidth, 0), // pos
+                GameFramework.Coords.fromXY(scrollbarWidth, this.size.y), // size
+                this.fontHeightInPixels, itemSizeY, // itemHeight
                 this._items, 0 // value
                 );
                 // Helper variables.
@@ -167,9 +167,9 @@ var ThisCouldBeBetter;
                 var returnValue = this.itemSelected();
                 return returnValue;
             }
-            itemSpacing() {
+            itemSize() {
                 var scrollbarWidthVisible = (this.scrollbar.isVisible() ? this.scrollbar.size.x : 0);
-                return this._itemSpacing.overwriteWithDimensions((this.size.x - scrollbarWidthVisible) / this.widthInItems, this._itemSpacing.y, 0);
+                return this._itemSize.overwriteWithDimensions((this.size.x - scrollbarWidthVisible) / this.widthInItems, this._itemSize.y, 0);
             }
             items() {
                 return this._items.get();
@@ -188,7 +188,7 @@ var ThisCouldBeBetter;
                 }
                 else {
                     var clickOffsetInPixels = clickPos.clone().subtract(this.pos);
-                    var clickOffsetInItems = clickOffsetInPixels.clone().divide(this.itemSpacing()).floor();
+                    var clickOffsetInItems = clickOffsetInPixels.clone().divide(this.itemSize()).floor();
                     var rowOfItemClicked = this.indexOfFirstRowVisible() + clickOffsetInItems.y;
                     var indexOfItemClicked = rowOfItemClicked * this.widthInItems + clickOffsetInItems.x;
                     var items = this.items();
@@ -213,7 +213,7 @@ var ThisCouldBeBetter;
                 this.pos.multiply(scaleFactor);
                 this.size.multiply(scaleFactor);
                 this.fontHeightInPixels *= scaleFactor.y;
-                this._itemSpacing.multiply(scaleFactor);
+                this._itemSize.multiply(scaleFactor);
                 this.scrollbar.scalePosAndSize(scaleFactor);
                 return this;
             }
@@ -241,9 +241,9 @@ var ThisCouldBeBetter;
                     var item = items[i];
                     var iOffset = i - indexStart;
                     var offsetInItems = new GameFramework.Coords(iOffset % this.widthInItems, Math.floor(iOffset / this.widthInItems), 0);
-                    drawPos2.overwriteWith(this.itemSpacing()).multiply(offsetInItems).add(drawPos);
+                    drawPos2.overwriteWith(this.itemSize()).multiply(offsetInItems).add(drawPos);
                     if (item == itemSelected) {
-                        style.drawBoxOfSizeAtPosWithColorsToDisplay(this.itemSpacing(), drawPos2, colorFore, colorBack, this.isHighlighted, display);
+                        style.drawBoxOfSizeAtPosWithColorsToDisplay(this.itemSize(), drawPos2, colorFore, colorBack, this.isHighlighted, display);
                     }
                     var text = this.bindingForItemText.contextSet(item).get();
                     drawPos2.addDimensions(textMarginLeft, 0, 0);
@@ -252,9 +252,10 @@ var ThisCouldBeBetter;
                     var areColorsReversed = ((this.isHighlighted && !isItemSelected)
                         ||
                             (isItemSelected && !this.isHighlighted));
-                    display.drawText(text, this.fontHeightInPixels, drawPos2, (areColorsReversed ? colorBack : colorFore), (areColorsReversed ? colorFore : colorBack), false, // isCentered
-                    this.size.x // widthMaxInPixels
-                    );
+                    var textSizeMax = GameFramework.Coords.fromXY(this.itemSize().x, this.fontHeightInPixels);
+                    display.drawText(text, this.fontHeightInPixels, drawPos2, (areColorsReversed ? colorBack : colorFore), (areColorsReversed ? colorFore : colorBack), false, // isCenteredHorizontally
+                    false, // isTextCenteredVertically
+                    textSizeMax);
                 }
                 this.scrollbar.draw(universe, display, drawLoc, style);
             }

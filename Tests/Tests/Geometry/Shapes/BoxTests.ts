@@ -318,7 +318,7 @@ class BoxTests extends TestFixture
 		Assert.isFalse(doBoxesOverlap);
 	}
 
-	pointRandom(randomizer: Random): Coords
+	pointRandom(randomizer: Randomizer): void
 	{
 		Assert.isTrue(true); // todo
 	}
@@ -344,13 +344,13 @@ class BoxTests extends TestFixture
 		var boxSize = box.size;
 
 		var boxRangeX = box.rangeForDimension(0, RangeExtent.create() );
-		Assert.areEqual(boxRangeX.size(), boxSize.x);
+		Assert.areNumbersEqual(boxRangeX.size(), boxSize.x);
 
 		var boxRangeY = box.rangeForDimension(1, RangeExtent.create() );
-		Assert.areEqual(boxRangeY.size(), boxSize.y);
+		Assert.areNumbersEqual(boxRangeY.size(), boxSize.y);
 
 		var boxRangeZ = box.rangeForDimension(2, RangeExtent.create() );
-		Assert.areEqual(boxRangeZ.size(), boxSize.z);
+		Assert.areNumbersEqual(boxRangeZ.size(), boxSize.z);
 	}
 
 	sizeHalf(): void
@@ -429,7 +429,7 @@ class BoxTests extends TestFixture
 		var boxAsString = boxOfSize1AtOrigin.toString();
 
 		var boxAsStringExpected = "-0.5x-0.5x-0.5:0.5x0.5x0.5";
-		Assert.areEqual(boxAsStringExpected, boxAsString);
+		Assert.areStringsEqual(boxAsStringExpected, boxAsString);
 	}
 
 	// ShapeBase.

@@ -23,8 +23,9 @@ var ThisCouldBeBetter;
             draw(uwpe, display) {
                 var entity = uwpe.entity;
                 var text = this.text(uwpe, display);
-                display.drawText(text, this.heightInPixels, entity.locatable().loc.pos, this.colorFill, this.colorBorder, true, // isCentered
-                null // widthMaxInPixels
+                display.drawText(text, this.heightInPixels, entity.locatable().loc.pos, this.colorFill, this.colorBorder, true, // isCenteredHorizontally
+                true, // isCenteredVertically
+                null // sizeMaxInPixels
                 );
             }
             text(uwpe, display) {

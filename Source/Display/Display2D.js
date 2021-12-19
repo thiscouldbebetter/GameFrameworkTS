@@ -302,7 +302,7 @@ var ThisCouldBeBetter;
                     this.graphics.stroke();
                 }
             }
-            drawText(text, fontHeightInPixels, pos, colorFill, colorOutline, isCentered, widthMaxInPixels) {
+            drawText(text, fontHeightInPixels, pos, colorFill, colorOutline, isCenteredHorizontally, isCenteredVertically, sizeMaxInPixels) {
                 var fontToRestore = this.graphics.font;
                 if (fontHeightInPixels == null) {
                     fontHeightInPixels = this.fontHeightInPixels;
@@ -312,29 +312,64 @@ var ThisCouldBeBetter;
                     colorFill = this.colorFore;
                 }
                 this.graphics.fillStyle = GameFramework.Color.systemColorGet(colorFill);
-                var drawPos = new GameFramework.Coords(pos.x, pos.y + fontHeightInPixels, 0);
-                var textAsLines = text.split("\n");
-                for (var i = 0; i < textAsLines.length; i++) {
-                    var textLine = textAsLines[i];
-                    var textTrimmed = textLine;
-                    if (widthMaxInPixels != null) {
-                        while (this.textWidthForFontHeight(textTrimmed, fontHeightInPixels) > widthMaxInPixels) {
-                            textTrimmed = textTrimmed.substr(0, textTrimmed.length - 1);
+                var drawPos = this._drawPos.overwriteWith(pos).addDimensions(0, fontHeightInPixels, 0);
+                var textAsLinesHard = text.split("\r").join("").split("\n");
+                var textAsLines = new Array();
+                var heightOfLinesSoFar = 0;
+                for (var i = 0; i < textAsLinesHard.length; i++) {
+                    var lineToWrap = textAsLinesHard[i];
+                    if (sizeMaxInPixels == null) {
+                        textAsLines.push(lineToWrap);
+                    }
+                    else {
+                        while (lineToWrap.length > 0
+                            && heightOfLinesSoFar < sizeMaxInPixels.y) {
+                            var lineTrimmedToWidth = this.drawText_StringTrimToAllowedWidth(lineToWrap, fontHeightInPixels, sizeMaxInPixels);
+                            textAsLines.push(lineTrimmedToWidth);
+                            heightOfLinesSoFar += fontHeightInPixels;
+                            lineToWrap = lineToWrap.substr(lineTrimmedToWidth.length);
                         }
                     }
-                    var textWidthInPixels = this.textWidthForFontHeight(textTrimmed, fontHeightInPixels);
-                    if (isCentered) {
-                        drawPos.addDimensions(0 - textWidthInPixels / 2, 0 - (fontHeightInPixels / 2) * 1.2, // hack
-                        0);
+                }
+                if (isCenteredHorizontally) {
+                    if (sizeMaxInPixels != null) {
+                        drawPos.x += sizeMaxInPixels.x / 2;
                     }
+                }
+                if (isCenteredVertically) {
+                    if (sizeMaxInPixels != null) {
+                        drawPos.y += sizeMaxInPixels.y / 2;
+                    }
+                    drawPos.y -=
+                        fontHeightInPixels * (textAsLines.length / 2 + 0.1);
+                }
+                for (var i = 0; i < textAsLines.length; i++) {
+                    var textLine = textAsLines[i];
+                    var textLineTrimmed = this.drawText_StringTrimToAllowedWidth(textLine, fontHeightInPixels, sizeMaxInPixels);
+                    var textWidthInPixels = this.textWidthForFontHeight(textLineTrimmed, fontHeightInPixels);
+                    var horizontalCenteringOffset = (isCenteredHorizontally
+                        ? 0 - textWidthInPixels / 2
+                        : 0);
                     if (colorOutline != null) {
                         this.graphics.strokeStyle = GameFramework.Color.systemColorGet(colorOutline);
-                        this.graphics.strokeText(textTrimmed, drawPos.x, drawPos.y);
+                        this.graphics.strokeText(textLineTrimmed, drawPos.x + horizontalCenteringOffset, drawPos.y);
                     }
-                    this.graphics.fillText(textTrimmed, drawPos.x, drawPos.y);
+                    this.graphics.fillText(textLineTrimmed, drawPos.x + horizontalCenteringOffset, drawPos.y);
                     drawPos.y += fontHeightInPixels;
                 }
                 this.graphics.font = fontToRestore;
+            }
+            drawText_StringTrimToAllowedWidth(stringToTrim, fontHeightInPixels, sizeMaxInPixels) {
+                var stringTrimmed = stringToTrim;
+                if (sizeMaxInPixels != null) {
+                    var textLineWidth = this.textWidthForFontHeight(stringTrimmed, fontHeightInPixels);
+                    while (textLineWidth > sizeMaxInPixels.x) {
+                        stringTrimmed =
+                            stringTrimmed.substr(0, stringTrimmed.length - 1);
+                        textLineWidth = this.textWidthForFontHeight(stringTrimmed, fontHeightInPixels);
+                    }
+                }
+                return stringTrimmed;
             }
             drawWedge(center, radius, angleStartInTurns, angleStopInTurns, colorFill, colorBorder) {
                 var drawPos = this._drawPos.overwriteWith(center);

@@ -139,6 +139,8 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 		includeTitleAndDoneButton: boolean
 	): ControlBase
 	{
+		var itemCrafter = this;
+
 		this.statusMessage = "Select a recipe and click Craft.";
 
 		if (size == null)
@@ -185,7 +187,8 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 					"labelRecipes",
 					Coords.fromXY(10, 5), // pos
 					Coords.fromXY(70, 25), // size
-					false, // isTextCentered
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext("Recipes:"),
 					fontHeightSmall
 				),
@@ -221,13 +224,13 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 					null
 				),
 
-				/*
 				new ControlLabel
 				(
 					"labelRecipeSelected",
 					Coords.fromXY(105, 5), // pos
 					Coords.fromXY(70, 25), // size
-					false, // isTextCentered
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext("Recipe Selected:"),
 					fontHeightSmall
 				),
@@ -247,7 +250,7 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 							c.isRecipeAvailableSelectedFulfilled(entityCrafter.itemHolder())
 					), // isEnabled
 					addToQueue, // click
-					null, null
+					null // ?
 				),
 
 				new ControlLabel
@@ -255,7 +258,8 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 					"infoRecipeSelected",
 					Coords.fromXY(105, 10), // pos
 					Coords.fromXY(75, 25), // size
-					false, // isTextCentered
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet
 					(
 						this,
@@ -281,16 +285,24 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 							(
 								c.recipeAvailableSelected == null
 								? []
-								: c.recipeAvailableSelected.itemsInHeldOverRequiredForItemHolder(itemHolder)
+								: c.recipeAvailableSelected.itemsIn
 							)
 					), // items
 					DataBinding.fromGet
 					(
-						(c: string) => c
+						(c: Item) =>
+						{
+							var recipe = itemCrafter.recipeAvailableSelected;
+							var itemInAsString =
+								"(" + c.quantity + "/"
+								+ recipe.itemsIn.find(x => x.defnName == c.defnName).quantity
+								+ ")";
+							return itemInAsString;
+						}
 					), // bindingForItemText
 					fontHeightSmall,
 					null, // bindingForItemSelected
-					DataBinding.fromGet( (c: Entity) => c ) // bindingForItemValue
+					null // bindingForItemValue
 				),
 
 				new ControlLabel
@@ -298,7 +310,8 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 					"labelCrafting",
 					Coords.fromXY(105, 50), // pos
 					Coords.fromXY(75, 25), // size
-					false, // isTextCentered
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext("Crafting:"),
 					fontHeightSmall
 				),
@@ -324,7 +337,8 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 					"infoCrafting",
 					Coords.fromXY(105, 55), // pos
 					Coords.fromXY(75, 25), // size
-					false, // isTextCentered
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet
 					(
 						this,
@@ -355,7 +369,7 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 						(c: ItemCrafter, v: CraftingRecipe) =>
 							c.recipeQueuedSelected = v
 					), // bindingForItemSelected
-					DataBinding.fromGet( (c: Entity) => c ) // bindingForItemValue
+					DataBinding.fromGet( (c: CraftingRecipe) => c ) // bindingForItemValue
 				),
 
 				new ControlLabel
@@ -363,7 +377,8 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 					"infoStatus",
 					Coords.fromXY(100, 125), // pos
 					Coords.fromXY(200, 15), // size
-					true, // isTextCentered
+					true, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet
 					(
 						this,
@@ -371,7 +386,6 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 					), // text
 					fontHeightSmall
 				)
-				*/
 
 			], // end children
 
@@ -394,7 +408,8 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 					"labelCrafting",
 					Coords.fromXY(100, -5), // pos
 					Coords.fromXY(100, 25), // size
-					true, // isTextCentered
+					true, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext("Craft"),
 					fontHeightLarge
 				)

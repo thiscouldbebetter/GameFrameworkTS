@@ -124,9 +124,10 @@ export class VisualBar implements Visual<VisualBar>
 				this.size.y, // fontHeightInPixels
 				pos,
 				colorForBorder,
-				Color.byName("Black"), // colorOutline,
-				true, // isCentered
-				null, // widthMaxInPixels
+				Color.byName("Black"), // colorOutline
+				true, // isCenteredHorizontally
+				true, // isCenteredVertically
+				null // sizeMaxInPixels
 			);
 		}
 

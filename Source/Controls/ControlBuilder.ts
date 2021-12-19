@@ -86,13 +86,8 @@ export class ControlBuilder
 
 		var scaleMultiplier =
 			this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
+		var containerSizeScaled = size.clone().clearZ().divide(scaleMultiplier);
 		var fontHeight = this.fontHeightInPixelsBase;
-
-		var numberOfLinesInMessageMinusOne = message.get().split("\n").length - 1;
-		var labelSize = Coords.fromXY
-		(
-			200, fontHeight * numberOfLinesInMessageMinusOne
-		);
 
 		var numberOfOptions = optionNames.length;
 
@@ -101,19 +96,18 @@ export class ControlBuilder
 			numberOfOptions = 0; // Is a single option really an option?
 		}
 
-		var labelPosYBase = (numberOfOptions > 0 ? 65 : 75); // hack
-
-		var labelPos = Coords.fromXY
+		var buttonPosY = Math.round
 		(
-			100, labelPosYBase - fontHeight * (numberOfLinesInMessageMinusOne / 4)
+			this.sizeBase.y * (numberOfOptions > 0 ? (2 / 3) : 1)
 		);
 
 		var labelMessage = new ControlLabel
 		(
 			"labelMessage",
-			labelPos,
-			labelSize,
-			true, // isTextCentered
+			Coords.zeroes(),
+			Coords.fromXY(containerSizeScaled.x, buttonPosY),
+			true, // isTextCenteredHorizontally
+			true, // isTextCenteredVertically
 			message,
 			fontHeight
 		);
@@ -140,7 +134,7 @@ export class ControlBuilder
 					Coords.fromXY
 					(
 						buttonMarginLeftRight + i * (buttonWidth + spaceBetweenButtons),
-						100
+						buttonPosY
 					), // pos
 					buttonSize.clone(),
 					optionNames[i],
@@ -154,7 +148,6 @@ export class ControlBuilder
 			}
 		}
 
-		var containerSizeScaled = size.clone().clearZ().divide(scaleMultiplier);
 		var display = universe.display;
 		var displaySize = display.sizeDefault().clone().clearZ().divide(scaleMultiplier);
 		var containerPosScaled = displaySize.clone().subtract(containerSizeScaled).half();
@@ -245,7 +238,8 @@ export class ControlBuilder
 					"labelMessage",
 					Coords.fromXY(size.x / 2, marginSize.y + fontHeight / 2),
 					labelSize,
-					true, // isTextCentered
+					true, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext(message),
 					fontHeight
 				),
@@ -636,7 +630,8 @@ export class ControlBuilder
 					"labelActions",
 					Coords.fromXY(100, 15), // pos
 					Coords.fromXY(100, 20), // size
-					true, // isTextCentered
+					true, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext("Actions:"),
 					fontHeight
 				),
@@ -669,7 +664,8 @@ export class ControlBuilder
 					"labelInput",
 					Coords.fromXY(100, 70), // pos
 					Coords.fromXY(100, 15), // size
-					true, // isTextCentered
+					true, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext("Inputs:"),
 					fontHeight
 				),
@@ -679,7 +675,8 @@ export class ControlBuilder
 					"infoInput",
 					Coords.fromXY(100, 80), // pos
 					Coords.fromXY(200, 15), // size
-					true, // isTextCentered
+					true, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet
 					(
 						placeDefn,
@@ -1067,7 +1064,8 @@ export class ControlBuilder
 					"labelMusicVolume",
 					Coords.fromXY(30, row1PosY + labelPadding), // pos
 					Coords.fromXY(75, buttonHeight), // size
-					false, // isTextCentered
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext("Music:"),
 					fontHeight
 				),
@@ -1104,7 +1102,8 @@ export class ControlBuilder
 					"labelSoundVolume",
 					Coords.fromXY(105, row1PosY + labelPadding), // pos
 					Coords.fromXY(75, buttonHeight), // size
-					false, // isTextCentered
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext("Sound:"),
 					fontHeight
 				),
@@ -1141,7 +1140,8 @@ export class ControlBuilder
 					"labelDisplaySize",
 					Coords.fromXY(30, row2PosY + labelPadding), // pos
 					Coords.fromXY(75, buttonHeight), // size
-					false, // isTextCentered
+					false, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext("Display:"),
 					fontHeight
 				),
@@ -1320,7 +1320,8 @@ export class ControlBuilder
 						"labelSlideText",
 						Coords.fromXY(100, this.fontHeightInPixelsBase * 2), // pos
 						this.sizeBase.clone(), // size
-						true, // isTextCentered,
+						true, // isTextCenteredHorizontally
+						false, // isTextCenteredVertically
 						DataBinding.fromContext(message),
 						this.fontHeightInPixelsBase
 					),
@@ -1445,8 +1446,9 @@ export class ControlBuilder
 			size = universe.display.sizeDefault();
 		}
 
+		var sizeBase = this.sizeBase;
 		var scaleMultiplier =
-			this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
+			this._scaleMultiplier.overwriteWith(size).divide(sizeBase);
 
 		var fontHeight = this.fontHeightInPixelsBase;
 
@@ -1459,15 +1461,16 @@ export class ControlBuilder
 		(
 			"containerWorldDetail",
 			this._zeroes, // pos
-			this.sizeBase.clone(), // size
+			sizeBase.clone(), // size
 			// children
 			[
 				new ControlLabel
 				(
 					"labelProfileName",
-					Coords.fromXY(100, 40), // pos
-					Coords.fromXY(100, 20), // size
-					true, // isTextCentered
+					Coords.fromXY(0, 40), // pos
+					Coords.fromXY(sizeBase.x, 20), // size
+					true, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext
 					(
 						"Profile: " + universe.profile.name
@@ -1477,33 +1480,36 @@ export class ControlBuilder
 				new ControlLabel
 				(
 					"labelWorldName",
-					Coords.fromXY(100, 55), // pos
-					Coords.fromXY(150, 25), // size
-					true, // isTextCentered
+					Coords.fromXY(0, 55), // pos
+					Coords.fromXY(sizeBase.x, 25), // size
+					true, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext("World: " + world.name),
 					fontHeight
 				),
 				new ControlLabel
 				(
 					"labelStartDate",
-					Coords.fromXY(100, 70), // pos
-					Coords.fromXY(150, 25), // size
-					true, // isTextCentered
+					Coords.fromXY(0, 70), // pos
+					Coords.fromXY(sizeBase.x, 25), // size
+					true, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext
 					(
-						"Started:" + dateCreated.toStringTimestamp()
+						"Started: " + dateCreated.toStringTimestamp()
 					),
 					fontHeight
 				),
 				new ControlLabel
 				(
 					"labelSavedDate",
-					Coords.fromXY(100, 85), // pos
-					Coords.fromXY(150, 25), // size
-					true, // isTextCentered
+					Coords.fromXY(0, 85), // pos
+					Coords.fromXY(sizeBase.x, 25), // size
+					true, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext
 					(
-						"Saved:"
+						"Saved: "
 						+ (dateSaved == null ? "[never]" : dateSaved.toStringTimestamp())
 					),
 					fontHeight
@@ -1699,7 +1705,8 @@ export class ControlBuilder
 					"labelProfileName",
 					Coords.fromXY(100, 25), // pos
 					Coords.fromXY(120, 25), // size
-					true, // isTextCentered
+					true, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext
 					(
 						"Profile: " + universe.profile.name
@@ -1712,7 +1719,8 @@ export class ControlBuilder
 					"labelSelectASave",
 					Coords.fromXY(100, 40), // pos
 					Coords.fromXY(100, 25), // size
-					true, // isTextCentered
+					true, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
 					DataBinding.fromContext("Select a Save:"),
 					fontHeight
 				),
