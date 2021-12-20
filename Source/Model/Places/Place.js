@@ -162,7 +162,7 @@ var ThisCouldBeBetter;
                 var world = uwpe.world;
                 this.entitiesRemove();
                 this.entitiesSpawn(uwpe);
-                uwpe.place = this;
+                uwpe.placeSet(this);
                 var placeDefn = this.defn(world);
                 var propertyNamesToProcess = placeDefn.propertyNamesToProcess;
                 for (var p = 0; p < propertyNamesToProcess.length; p++) {

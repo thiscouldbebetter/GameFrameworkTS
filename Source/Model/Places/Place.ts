@@ -254,7 +254,7 @@ export class Place //
 
 		this.entitiesSpawn(uwpe);
 
-		uwpe.place = this;
+		uwpe.placeSet(this);
 
 		var placeDefn = this.defn(world);
 		var propertyNamesToProcess = placeDefn.propertyNamesToProcess;

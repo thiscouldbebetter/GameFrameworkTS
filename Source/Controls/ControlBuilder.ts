@@ -1318,8 +1318,12 @@ export class ControlBuilder
 					new ControlLabel
 					(
 						"labelSlideText",
-						Coords.fromXY(100, this.fontHeightInPixelsBase * 2), // pos
-						this.sizeBase.clone(), // size
+						Coords.fromXY(0, this.fontHeightInPixelsBase), // pos
+						Coords.fromXY
+						(
+							this.sizeBase.x,
+							this.fontHeightInPixelsBase
+						), // size
 						true, // isTextCenteredHorizontally
 						false, // isTextCenteredVertically
 						DataBinding.fromContext(message),

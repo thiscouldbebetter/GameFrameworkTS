@@ -620,8 +620,8 @@ var ThisCouldBeBetter;
                         GameFramework.DataBinding.fromContext(new GameFramework.VisualImageScaled(new GameFramework.VisualImageFromLibrary(imageName), this.sizeBase.clone().multiply(scaleMultiplier) // sizeToDrawScaled
                         )), null, null // colorBackground, colorBorder
                         ),
-                        new GameFramework.ControlLabel("labelSlideText", GameFramework.Coords.fromXY(100, this.fontHeightInPixelsBase * 2), // pos
-                        this.sizeBase.clone(), // size
+                        new GameFramework.ControlLabel("labelSlideText", GameFramework.Coords.fromXY(0, this.fontHeightInPixelsBase), // pos
+                        GameFramework.Coords.fromXY(this.sizeBase.x, this.fontHeightInPixelsBase), // size
                         true, // isTextCenteredHorizontally
                         false, // isTextCenteredVertically
                         GameFramework.DataBinding.fromContext(message), this.fontHeightInPixelsBase),

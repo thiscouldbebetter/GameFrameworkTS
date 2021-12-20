@@ -260,19 +260,33 @@ export class Collidable implements EntityProperty<Collidable>
 		{
 			var collidable0Boundable = entity0.boundable();
 			var collidable1Boundable = entity1.boundable();
-			var isEitherUnboundableOrDoBoundsCollide =
+			
+			var isEitherUnboundable =
 			(
 				collidable0Boundable == null
 				|| collidable1Boundable == null
-				|| collisionHelper.doCollidersCollide(collidable0Boundable.bounds, collidable1Boundable.bounds)
 			);
+
+			var isEitherUnboundableOrDoBoundsCollide =
+				isEitherUnboundable;
+
+			if (isEitherUnboundable == false)
+			{
+				var doBoundsCollide = collisionHelper.doCollidersCollide
+				(
+					collidable0Boundable.bounds,
+					collidable1Boundable.bounds
+				);
+				isEitherUnboundableOrDoBoundsCollide = doBoundsCollide;
+			}
 
 			if (isEitherUnboundableOrDoBoundsCollide)
 			{
 				var collider0 = collidable0.collider;
 				var collider1 = collidable1.collider;
 
-				doEntitiesCollide = collisionHelper.doCollidersCollide(collider0, collider1);
+				doEntitiesCollide =
+					collisionHelper.doCollidersCollide(collider0, collider1);
 			}
 		}
 
