@@ -161,9 +161,7 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) {
-                if (this.isEntityStationary(uwpe.entity)) {
-                    this.collisionsFindAndHandle(uwpe);
-                }
+                this.collisionsFindAndHandle(uwpe);
             }
             updateForTimerTick(uwpe) {
                 if (this.isEntityStationary(uwpe.entity)) {

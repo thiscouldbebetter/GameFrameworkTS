@@ -23,6 +23,27 @@ var ThisCouldBeBetter;
                 });
                 return this;
             }
+            displayNodesExpandByLines() {
+                var defnNameDisplay = GameFramework.TalkNodeDefn.Instances().Display.name;
+                for (var i = 0; i < this.talkNodes.length; i++) {
+                    var talkNode = this.talkNodes[i];
+                    if (talkNode.defnName == defnNameDisplay) {
+                        var content = talkNode.content;
+                        var contentAsLines = content.split("\n");
+                        if (contentAsLines.length > 0) {
+                            talkNode.content = contentAsLines[0];
+                            var linesAfterFirst = contentAsLines.slice(1);
+                            var linesAsDisplayNodes = linesAfterFirst.map(x => GameFramework.TalkNode.display(null, x));
+                            for (var j = 0; j < linesAsDisplayNodes.length; j++) {
+                                var nodeNew = linesAsDisplayNodes[j];
+                                this.talkNodes.splice(i + j + 1, 0, nodeNew);
+                            }
+                            i += linesAsDisplayNodes.length;
+                        }
+                    }
+                }
+                return this;
+            }
             talkNodeByName(nameOfTalkNodeToGet) {
                 return this.talkNodesByName.get(nameOfTalkNodeToGet);
             }
