@@ -73,7 +73,8 @@ export class Collidable implements EntityProperty<Collidable>
 	colliderLocateForEntity(entity: Entity): void
 	{
 		this.collider.overwriteWith(this.colliderAtRest);
-		this.collider.locate(entity.locatable().loc);
+		var entityLoc = entity.locatable().loc;
+		this.collider.locate(entityLoc);
 	}
 
 	collisionHandle(uwpe: UniverseWorldPlaceEntities, collision: Collision): void
@@ -113,9 +114,10 @@ export class Collidable implements EntityProperty<Collidable>
 			{
 				this.colliderLocateForEntity(entity);
 
+				var collisions = ArrayHelper.clear(this._collisions);
 				var collisions = this.collisionsFindForEntity
 				(
-					uwpe, ArrayHelper.clear(this._collisions)
+					uwpe, collisions
 				);
 
 				collisions.forEach

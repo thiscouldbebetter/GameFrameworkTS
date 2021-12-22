@@ -33,7 +33,8 @@ var ThisCouldBeBetter;
             }
             colliderLocateForEntity(entity) {
                 this.collider.overwriteWith(this.colliderAtRest);
-                this.collider.locate(entity.locatable().loc);
+                var entityLoc = entity.locatable().loc;
+                this.collider.locate(entityLoc);
             }
             collisionHandle(uwpe, collision) {
                 var entitiesColliding = collision.entitiesColliding;
@@ -55,7 +56,8 @@ var ThisCouldBeBetter;
                     }
                     else {
                         this.colliderLocateForEntity(entity);
-                        var collisions = this.collisionsFindForEntity(uwpe, GameFramework.ArrayHelper.clear(this._collisions));
+                        var collisions = GameFramework.ArrayHelper.clear(this._collisions);
+                        var collisions = this.collisionsFindForEntity(uwpe, collisions);
                         collisions.forEach(collision => this.collisionHandle(uwpe, collision));
                     }
                 }

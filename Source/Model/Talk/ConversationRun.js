@@ -6,7 +6,7 @@ var ThisCouldBeBetter;
         class ConversationRun {
             constructor(defn, quit, entityPlayer, entityTalker, contentsById) {
                 this.defn = defn;
-                this.quit = quit;
+                this._quit = quit;
                 this.entityPlayer = entityPlayer;
                 this.entityTalker = entityTalker;
                 this.contentsById = contentsById || new Map();
@@ -60,6 +60,9 @@ var ThisCouldBeBetter;
                 // This convenience method is tersely named for use in scripts.
                 return this.entityPlayer;
             }
+            quit() {
+                this._quit();
+            }
             scope() {
                 // This convenience method is tersely named for use in scripts.
                 return this.scopeCurrent;
@@ -92,7 +95,6 @@ var ThisCouldBeBetter;
             toControl(size, universe) {
                 var conversationRun = this;
                 var conversationDefn = conversationRun.defn;
-                var venueToReturnTo = universe.venueCurrent;
                 var fontHeight = 15;
                 var fontHeightShort = fontHeight; // todo
                 var marginWidth = 15;
@@ -104,7 +106,7 @@ var ThisCouldBeBetter;
                 var next = () => {
                     conversationRun.next(universe);
                 };
-                var back = () => universe.venueTransitionTo(venueToReturnTo);
+                var back = () => this.quit();
                 var viewLog = () => {
                     var venueCurrent = universe.venueCurrent;
                     var transcriptAsControl = conversationRun.toControlTranscript(size, universe, venueCurrent);
@@ -176,6 +178,11 @@ var ThisCouldBeBetter;
                 size, 
                 // children
                 [
+                    new GameFramework.ControlLabel("labelTranscript", GameFramework.Coords.fromXY(0, marginSize.y), // pos
+                    GameFramework.Coords.fromXY(size.x, fontHeight), // size
+                    true, // isTextCenteredHorizontally
+                    false, // isTextCenteredVertically
+                    GameFramework.DataBinding.fromContext("Transcript"), fontHeight),
                     GameFramework.ControlButton.from8("buttonBack", marginSize, // pos
                     GameFramework.Coords.fromXY(1, 1).multiplyScalar(buttonHeight), // size
                     "<", fontHeight, true, // hasBorder
@@ -184,11 +191,6 @@ var ThisCouldBeBetter;
                      {
                         universe.venueTransitionTo(venueToReturnTo);
                     }),
-                    new GameFramework.ControlLabel("labelTranscript", GameFramework.Coords.fromXY(size.x / 2, marginSize.y), // pos
-                    size, // size
-                    true, // isTextCenteredHorizontally
-                    false, // isTextCenteredVertically
-                    GameFramework.DataBinding.fromContext("Transcript"), fontHeight),
                     GameFramework.ControlList.from6("listEntries", GameFramework.Coords.fromXY((size.x - listSize.x) / 2, marginSize.y * 2 + labelHeight), listSize, 
                     // items
                     GameFramework.DataBinding.fromContextAndGet(conversationRun, (c) => c.talkNodesForTranscript), GameFramework.DataBinding.fromGet((c) => c.textForTranscript(conversationRun)), // bindingForItemText

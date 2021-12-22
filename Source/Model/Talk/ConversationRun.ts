@@ -5,7 +5,7 @@ namespace ThisCouldBeBetter.GameFramework
 export class ConversationRun
 {
 	defn: ConversationDefn;
-	quit: () => void;
+	_quit: () => void;
 	entityPlayer: Entity;
 	entityTalker: Entity;
 	contentsById: Map<string, string>;
@@ -28,7 +28,7 @@ export class ConversationRun
 	)
 	{
 		this.defn = defn;
-		this.quit = quit;
+		this._quit = quit;
 		this.entityPlayer = entityPlayer;
 		this.entityTalker = entityTalker;
 		this.contentsById = contentsById || new Map<string, string>();
@@ -119,6 +119,11 @@ export class ConversationRun
 		return this.entityPlayer;
 	}
 
+	quit(): void
+	{
+		this._quit();
+	}
+
 	scope(): ConversationScope
 	{
 		// This convenience method is tersely named for use in scripts.
@@ -170,8 +175,6 @@ export class ConversationRun
 		var conversationRun = this;
 		var conversationDefn = conversationRun.defn;
 
-		var venueToReturnTo = universe.venueCurrent;
-
 		var fontHeight = 15;
 		var fontHeightShort = fontHeight; // todo
 		var marginWidth = 15;
@@ -190,7 +193,7 @@ export class ConversationRun
 			conversationRun.next(universe);
 		};
 
-		var back = () => universe.venueTransitionTo(venueToReturnTo);
+		var back = () => this.quit();
 
 		var viewLog = () =>
 		{
@@ -397,6 +400,20 @@ export class ConversationRun
 			size,
 			// children
 			[
+				new ControlLabel
+				(
+					"labelTranscript",
+					Coords.fromXY
+					(
+						0, marginSize.y
+					), // pos
+					Coords.fromXY(size.x, fontHeight), // size
+					true, // isTextCenteredHorizontally
+					false, // isTextCenteredVertically
+					DataBinding.fromContext("Transcript"),
+					fontHeight
+				),
+
 				ControlButton.from8
 				(
 					"buttonBack",
@@ -410,20 +427,6 @@ export class ConversationRun
 					{
 						universe.venueTransitionTo(venueToReturnTo);
 					}
-				),
-
-				new ControlLabel
-				(
-					"labelTranscript",
-					Coords.fromXY
-					(
-						size.x / 2, marginSize.y
-					), // pos
-					size, // size
-					true, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
-					DataBinding.fromContext("Transcript"),
-					fontHeight
 				),
 
 				ControlList.from6

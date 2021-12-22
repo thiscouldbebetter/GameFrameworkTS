@@ -33,7 +33,7 @@
 			"defnName": "Option",
 			"next": "TalkOver",
 			"content": "We NEED to talk about Carol.",
-			"isActive": false
+			"isDisabled": true
 		},
 		{
 			"defnName": "Option",
