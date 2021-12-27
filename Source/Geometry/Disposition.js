@@ -41,7 +41,7 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             place(world) {
-                return world.placesByName.get(this.placeName);
+                return world.placeByName(this.placeName);
             }
             velSet(value) {
                 this.vel.overwriteWith(value);

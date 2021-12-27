@@ -7,6 +7,7 @@ class PlaceStub extends Place
 		(
 			PlaceStub.name,
 			PlaceStub.defnBuild().name,
+			null, // parentName
 			Coords.fromXY(400, 300), // size
 			 // entities
 			[

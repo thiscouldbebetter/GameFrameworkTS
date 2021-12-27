@@ -76,6 +76,11 @@ export class World //
 		}
 	}
 
+	placeByName(placeName: string): Place
+	{
+		return this.placesByName.get(placeName);
+	}
+
 	timePlayingAsStringShort(universe: Universe): string
 	{
 		return universe.timerHelper.ticksToStringH_M_S(this.timerTicksSoFar);

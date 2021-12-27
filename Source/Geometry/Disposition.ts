@@ -79,7 +79,7 @@ export class Disposition
 
 	place(world: World): Place
 	{
-		return world.placesByName.get(this.placeName);
+		return world.placeByName(this.placeName);
 	}
 
 	velSet(value: Coords): Disposition

@@ -27,8 +27,9 @@ export class PlaceZoned extends Place
 		(
 			name,
 			defnName,
+			null, // parentName
 			size,
-			[] // entities
+			null // entities
 		);
 
 		this.entityToFollowName = entityToFollowName;
