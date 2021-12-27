@@ -113,6 +113,32 @@ var ThisCouldBeBetter;
                     var venueNext = transcriptAsControl.toVenue();
                     universe.venueTransitionTo(venueNext);
                 };
+                var buttonNext = GameFramework.ControlButton.from8("buttonNext", GameFramework.Coords.fromXY(size.x - marginSize.x - buttonSize.x, size.y - marginSize.y * 3 - buttonSize.y * 3), buttonSize.clone(), "Next", fontHeight, true, // hasBorder
+                GameFramework.DataBinding.fromTrue(), // isEnabled
+                next // click
+                );
+                var buttonTranscript = GameFramework.ControlButton.from8("buttonTranscript", new GameFramework.Coords(size.x - marginSize.x - buttonSize.x, size.y - marginSize.y * 2 - buttonSize.y * 2, 0), buttonSize.clone(), "Log", fontHeight, true, // hasBorder
+                GameFramework.DataBinding.fromTrue(), // isEnabled
+                viewLog // click
+                );
+                var buttons = [
+                    buttonNext,
+                    buttonTranscript
+                ];
+                if (this._quit != null) {
+                    var buttonLeave = GameFramework.ControlButton.from8("buttonLeave", GameFramework.Coords.fromXY(size.x - marginSize.x - buttonSize.x, size.y - marginSize.y - buttonSize.y), buttonSize.clone(), "Leave", fontHeight, true, // hasBorder
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
+                    back // click
+                    );
+                    buttons.push(buttonLeave);
+                }
+                var containerButtonsSize = GameFramework.Coords.fromXY(buttonSize.x, buttonSize.y * (buttons.length + 1) + marginSize.y * (buttons.length));
+                var containerButtonsInner = GameFramework.ControlContainer.from4("containerButtons", GameFramework.Coords.fromXY(size.x - marginSize.x * 2 - buttonSize.x, size.y - marginSize.y * 4 - buttonSize.y * 3), // pos
+                containerButtonsSize, 
+                // children
+                buttons);
+                containerButtonsInner.childrenLayOutWithSpacingVertically(marginSize);
+                var containerButtons = containerButtonsInner.toControlContainerTransparent();
                 var returnValue = new GameFramework.ControlContainer("containerConversation", GameFramework.Coords.create(), // pos
                 size, 
                 // children
@@ -141,18 +167,7 @@ var ThisCouldBeBetter;
                      {
                         next();
                     }),
-                    GameFramework.ControlButton.from8("buttonNext", GameFramework.Coords.fromXY(size.x - marginSize.x - buttonSize.x, size.y - marginSize.y * 3 - buttonSize.y * 3), buttonSize.clone(), "Next", fontHeight, true, // hasBorder
-                    GameFramework.DataBinding.fromTrue(), // isEnabled
-                    next // click
-                    ),
-                    GameFramework.ControlButton.from8("buttonTranscript", new GameFramework.Coords(size.x - marginSize.x - buttonSize.x, size.y - marginSize.y * 2 - buttonSize.y * 2, 0), buttonSize.clone(), "Log", fontHeight, true, // hasBorder
-                    GameFramework.DataBinding.fromTrue(), // isEnabled
-                    viewLog // click
-                    ),
-                    GameFramework.ControlButton.from8("buttonDone", GameFramework.Coords.fromXY(size.x - marginSize.x - buttonSize.x, size.y - marginSize.y - buttonSize.y), buttonSize.clone(), "Done", fontHeight, true, // hasBorder
-                    GameFramework.DataBinding.fromTrue(), // isEnabled
-                    back // click
-                    ),
+                    containerButtons
                 ], // children
                 [
                     new GameFramework.Action("Back", back),

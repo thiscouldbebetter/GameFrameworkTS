@@ -69,6 +69,11 @@ export class Route
 		this._tempPos = Coords.create();
 	}
 
+	static fromNeighborOffsets(neighborOffsets: Coords[]): Route
+	{
+		return new Route(neighborOffsets, null, null, null, null);
+	}
+
 	calculate(): void
 	{
 		var startPos = this.startPos.clone();

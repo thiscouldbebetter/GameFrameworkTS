@@ -41,26 +41,17 @@ var ThisCouldBeBetter;
                     wasActionHandled = true;
                     var direction = (actionNameToHandle == controlActionNames.ControlPrev ? -1 : 1);
                     if (childWithFocus == null) {
-                        childWithFocus = this.childWithFocusNextInDirection(direction);
-                        if (childWithFocus != null) {
-                            childWithFocus.focusGain();
-                        }
+                        childWithFocus = this.childFocusNextInDirection(direction);
                     }
                     else if (childWithFocus.childWithFocus() != null) {
                         childWithFocus.actionHandle(actionNameToHandle, universe);
                         if (childWithFocus.childWithFocus() == null) {
-                            childWithFocus = this.childWithFocusNextInDirection(direction);
-                            if (childWithFocus != null) {
-                                childWithFocus.focusGain();
-                            }
+                            childWithFocus = this.childFocusNextInDirection(direction);
                         }
                     }
                     else {
                         childWithFocus.focusLose();
-                        childWithFocus = this.childWithFocusNextInDirection(direction);
-                        if (childWithFocus != null) {
-                            childWithFocus.focusGain();
-                        }
+                        childWithFocus = this.childFocusNextInDirection(direction);
                     }
                 }
                 else if (this._actionToInputsMappingsByInputName.has(actionNameToHandle)) {
@@ -93,17 +84,13 @@ var ThisCouldBeBetter;
             childByName(childName) {
                 return this.childrenByName.get(childName);
             }
-            childWithFocus() {
-                return (this.indexOfChildWithFocus == null ? null : this.children[this.indexOfChildWithFocus]);
-            }
-            childWithFocusNextInDirection(direction) {
+            childFocusNextInDirection(direction) {
                 if (this.indexOfChildWithFocus == null) {
                     var iStart = (direction == 1 ? 0 : this.children.length - 1);
                     var iEnd = (direction == 1 ? this.children.length : -1);
                     for (var i = iStart; i != iEnd; i += direction) {
                         var child = this.children[i];
-                        if (child.focusGain != null
-                            && (child.isEnabled())) {
+                        if (child.isEnabled()) {
                             this.indexOfChildWithFocus = i;
                             break;
                         }
@@ -119,15 +106,20 @@ var ThisCouldBeBetter;
                         }
                         else {
                             var child = this.children[this.indexOfChildWithFocus];
-                            if (child.focusGain != null
-                                && (child.isEnabled == null || child.isEnabled())) {
+                            if (child.isEnabled()) {
                                 break;
                             }
                         }
                     } // end while (true)
                 } // end if
                 var returnValue = this.childWithFocus();
+                if (returnValue != null) {
+                    returnValue.focusGain();
+                }
                 return returnValue;
+            }
+            childWithFocus() {
+                return (this.indexOfChildWithFocus == null ? null : this.children[this.indexOfChildWithFocus]);
             }
             childrenAtPosAddToList(posToCheck, listToAddTo, addFirstChildOnly) {
                 posToCheck = this._posToCheck.overwriteWith(posToCheck).clearZ();
@@ -143,9 +135,23 @@ var ThisCouldBeBetter;
                 }
                 return listToAddTo;
             }
+            childrenLayOutWithSpacingAlongDimension(spacing, dimensionIndex) {
+                var axis = GameFramework.Coords.zeroes().dimensionSet(dimensionIndex, 1);
+                var spacingAlongAxis = spacing.clone().multiply(axis);
+                var childPos = spacing.clone();
+                for (var i = 0; i < this.children.length; i++) {
+                    var child = this.children[i];
+                    child.pos.overwriteWith(childPos);
+                    childPos.add(child.size.clone().multiply(axis)).add(spacingAlongAxis);
+                }
+                return this;
+            }
+            childrenLayOutWithSpacingVertically(spacing) {
+                return this.childrenLayOutWithSpacingAlongDimension(spacing, 1);
+            }
             focusGain() {
                 this.indexOfChildWithFocus = null;
-                var childWithFocus = this.childWithFocusNextInDirection(1);
+                var childWithFocus = this.childFocusNextInDirection(1);
                 if (childWithFocus != null) {
                     childWithFocus.focusGain();
                 }
@@ -224,6 +230,9 @@ var ThisCouldBeBetter;
                     var child = this.children[i];
                     child.pos.add(displacement);
                 }
+            }
+            toControlContainerTransparent() {
+                return new GameFramework.ControlContainerTransparent(this);
             }
             // Drawable.
             draw(universe, display, drawLoc, style) {

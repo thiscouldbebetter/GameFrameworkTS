@@ -10,13 +10,20 @@ export class ControlContainerTransparent extends ControlBase
 	{
 		super
 		(
-			containerInner.name, containerInner.pos, containerInner.size,
+			containerInner.name,
+			containerInner.pos,
+			containerInner.size,
 			containerInner.fontHeightInPixels
 		);
 		this.containerInner = containerInner;
 	}
 
 	// instance methods
+
+	actionHandle(actionNameToHandle: string, universe: Universe): boolean
+	{
+		return this.containerInner.actionHandle(actionNameToHandle, universe);
+	}
 
 	actionToInputsMappings(): ActionToInputsMapping[]
 	{
@@ -28,9 +35,9 @@ export class ControlContainerTransparent extends ControlBase
 		return this.containerInner.childWithFocus();
 	}
 
-	childWithFocusNextInDirection(direction: number): ControlBase
+	childFocusNextInDirection(direction: number): ControlBase
 	{
-		return this.containerInner.childWithFocusNextInDirection(direction);
+		return this.containerInner.childFocusNextInDirection(direction);
 	}
 
 	childrenAtPosAddToList
@@ -44,40 +51,24 @@ export class ControlContainerTransparent extends ControlBase
 		);
 	}
 
-	actionHandle(actionNameToHandle: string, universe: Universe): boolean
+	focusGain(): void
 	{
-		return this.containerInner.actionHandle(actionNameToHandle, universe);
+		this.containerInner.focusGain();
+	}
+
+	focusLose(): void
+	{
+		this.containerInner.focusLose();
 	}
 
 	isEnabled(): boolean
 	{
-		return true; // todo
+		return this.containerInner.isEnabled();
 	}
 
 	mouseClick(mouseClickPos: Coords): boolean
 	{
-		var childrenContainingPos = this.containerInner.childrenAtPosAddToList
-		(
-			mouseClickPos,
-			ArrayHelper.clear(this.containerInner.childrenContainingPos),
-			true // addFirstChildOnly
-		);
-
-		var wasClickHandled = false;
-		if (childrenContainingPos.length > 0)
-		{
-			var child = childrenContainingPos[0];
-			if (child.mouseClick != null)
-			{
-				var wasClickHandledByChild = child.mouseClick(mouseClickPos);
-				if (wasClickHandledByChild)
-				{
-					wasClickHandled = true;
-				}
-			}
-		}
-
-		return wasClickHandled;
+		return this.containerInner.mouseClick(mouseClickPos);
 	}
 
 	mouseMove(mouseMovePos: Coords): boolean
@@ -104,19 +95,12 @@ export class ControlContainerTransparent extends ControlBase
 		}
 
 		drawLoc = this.containerInner._drawLoc.overwriteWith(drawLoc);
-		var drawPos = this.containerInner._drawPos.overwriteWith(drawLoc.pos).add
+		this.containerInner._drawPos.overwriteWith(drawLoc.pos).add
 		(
 			this.containerInner.pos
 		);
 
 		style = style || this.style(universe);
-
-		display.drawRectangle
-		(
-			drawPos, this.containerInner.size,
-			null, // display.colorBack,
-			style.colorBorder()
-		);
 
 		var children = this.containerInner.children;
 		for (var i = 0; i < children.length; i++)

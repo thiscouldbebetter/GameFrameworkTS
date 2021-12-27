@@ -5,9 +5,11 @@ var ThisCouldBeBetter;
     (function (GameFramework) {
         class Collidable {
             constructor(ticksToWaitBetweenCollisions, colliderAtRest, entityPropertyNamesToCollideWith, collideEntities) {
-                this.ticksToWaitBetweenCollisions = ticksToWaitBetweenCollisions || 0;
+                this.ticksToWaitBetweenCollisions =
+                    ticksToWaitBetweenCollisions || 0;
                 this.colliderAtRest = colliderAtRest;
-                this.entityPropertyNamesToCollideWith = entityPropertyNamesToCollideWith || [];
+                this.entityPropertyNamesToCollideWith =
+                    entityPropertyNamesToCollideWith || []; // Or maybe [ Collidable.name ];
                 this._collideEntities = collideEntities;
                 this.collider = this.colliderAtRest.clone();
                 this.locPrev = GameFramework.Disposition.create();

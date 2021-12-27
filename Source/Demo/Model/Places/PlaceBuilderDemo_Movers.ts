@@ -902,7 +902,7 @@ class PlaceBuilderDemo_Movers
 				Locatable.create(),
 				Movable.default(),
 				routable,
-				new Talker("Conversation"),
+				new Talker("Conversation", null),
 			]
 		);
 

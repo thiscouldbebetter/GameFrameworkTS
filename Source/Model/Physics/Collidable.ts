@@ -26,9 +26,11 @@ export class Collidable implements EntityProperty<Collidable>
 		collideEntities: (uwpe: UniverseWorldPlaceEntities, c: Collision) => void
 	)
 	{
-		this.ticksToWaitBetweenCollisions = ticksToWaitBetweenCollisions || 0;
+		this.ticksToWaitBetweenCollisions =
+			ticksToWaitBetweenCollisions || 0;
 		this.colliderAtRest = colliderAtRest;
-		this.entityPropertyNamesToCollideWith = entityPropertyNamesToCollideWith || [];
+		this.entityPropertyNamesToCollideWith =
+			entityPropertyNamesToCollideWith || []; // Or maybe [ Collidable.name ];
 		this._collideEntities = collideEntities;
 
 		this.collider = this.colliderAtRest.clone();

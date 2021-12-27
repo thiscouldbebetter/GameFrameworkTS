@@ -5,10 +5,17 @@ namespace ThisCouldBeBetter.GameFramework
 export class Talker implements EntityProperty<Talker>
 {
 	conversationDefnName: string;
+	quit: () => void;
 
-	constructor(conversationDefnName: string)
+	constructor(conversationDefnName: string, quit: () => void)
 	{
 		this.conversationDefnName = conversationDefnName;
+		this.quit = quit;
+	}
+
+	static fromConversationDefnName(conversationDefnName: string): Talker
+	{
+		return new Talker(conversationDefnName, null);
 	}
 
 	talk(uwpe: UniverseWorldPlaceEntities): void
@@ -20,11 +27,15 @@ export class Talker implements EntityProperty<Talker>
 		var conversationDefnAsJSON =
 			universe.mediaLibrary.textStringGetByName(this.conversationDefnName).value;
 		var conversationDefn = ConversationDefn.deserialize(conversationDefnAsJSON);
-		var venueToReturnTo = universe.venueCurrent;
-		var conversationQuit = () => // quit
+		var conversationQuit = this.quit;
+		if (conversationQuit == null)
 		{
-			universe.venueNext = venueToReturnTo;
-		};
+			var venueToReturnTo = universe.venueCurrent;
+			conversationQuit = () => // quit
+			{
+				universe.venueNext = venueToReturnTo;
+			};
+		}
 		var conversation = new ConversationRun
 		(
 			conversationDefn,

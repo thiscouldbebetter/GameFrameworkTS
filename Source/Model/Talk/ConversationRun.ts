@@ -206,6 +206,93 @@ export class ConversationRun
 			universe.venueTransitionTo(venueNext);
 		};
 
+		var buttonNext = ControlButton.from8
+		(
+			"buttonNext",
+			Coords.fromXY
+			(
+				size.x - marginSize.x - buttonSize.x,
+				size.y - marginSize.y * 3 - buttonSize.y * 3
+			),
+			buttonSize.clone(),
+			"Next",
+			fontHeight,
+			true, // hasBorder
+			DataBinding.fromTrue(), // isEnabled
+			next // click
+		);
+
+		var buttonTranscript =ControlButton.from8
+		(
+			"buttonTranscript",
+			new Coords
+			(
+				size.x - marginSize.x - buttonSize.x,
+				size.y - marginSize.y * 2 - buttonSize.y * 2,
+				0
+			),
+			buttonSize.clone(),
+			"Log",
+			fontHeight,
+			true, // hasBorder
+			DataBinding.fromTrue(), // isEnabled
+			viewLog // click
+		);
+
+		var buttons =
+		[
+			buttonNext,
+			buttonTranscript
+		];
+
+		if (this._quit != null)
+		{
+			var buttonLeave = ControlButton.from8
+			(
+				"buttonLeave",
+				Coords.fromXY
+				(
+					size.x - marginSize.x - buttonSize.x,
+					size.y - marginSize.y - buttonSize.y
+				),
+				buttonSize.clone(),
+				"Leave",
+				fontHeight,
+				true, // hasBorder
+				DataBinding.fromTrue(), // isEnabled
+				back // click
+			);
+
+			buttons.push(buttonLeave);
+		}
+
+		var containerButtonsSize = Coords.fromXY
+		(
+			buttonSize.x,
+			buttonSize.y * (buttons.length + 1) + marginSize.y * (buttons.length)
+		);
+
+		var containerButtonsInner = ControlContainer.from4
+		(
+			"containerButtons",
+			Coords.fromXY
+			(
+				size.x - marginSize.x * 2 - buttonSize.x,
+				size.y - marginSize.y * 4 - buttonSize.y * 3
+			), // pos
+			containerButtonsSize,
+			// children
+			buttons
+		)
+
+		containerButtonsInner.childrenLayOutWithSpacingVertically
+		(
+			marginSize
+		);
+
+		var containerButtons =
+			containerButtonsInner.toControlContainerTransparent();
+
 		var returnValue = new ControlContainer
 		(
 			"containerConversation",
@@ -306,54 +393,7 @@ export class ConversationRun
 					}
 				),
 
-				ControlButton.from8
-				(
-					"buttonNext",
-					Coords.fromXY
-					(
-						size.x - marginSize.x - buttonSize.x,
-						size.y - marginSize.y * 3 - buttonSize.y * 3
-					),
-					buttonSize.clone(),
-					"Next",
-					fontHeight,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					next // click
-				),
-
-				ControlButton.from8
-				(
-					"buttonTranscript",
-					new Coords
-					(
-						size.x - marginSize.x - buttonSize.x,
-						size.y - marginSize.y * 2 - buttonSize.y * 2,
-						0
-					),
-					buttonSize.clone(),
-					"Log",
-					fontHeight,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					viewLog // click
-				),
-
-				ControlButton.from8
-				(
-					"buttonDone",
-					Coords.fromXY
-					(
-						size.x - marginSize.x - buttonSize.x,
-						size.y - marginSize.y - buttonSize.y
-					),
-					buttonSize.clone(),
-					"Done",
-					fontHeight,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					back // click
-				),
+				containerButtons
 
 			], // children
 

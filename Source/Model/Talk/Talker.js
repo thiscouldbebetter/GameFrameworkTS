@@ -4,8 +4,12 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Talker {
-            constructor(conversationDefnName) {
+            constructor(conversationDefnName, quit) {
                 this.conversationDefnName = conversationDefnName;
+                this.quit = quit;
+            }
+            static fromConversationDefnName(conversationDefnName) {
+                return new Talker(conversationDefnName, null);
             }
             talk(uwpe) {
                 var universe = uwpe.universe;
@@ -13,11 +17,14 @@ var ThisCouldBeBetter;
                 var entityTalkee = uwpe.entity2;
                 var conversationDefnAsJSON = universe.mediaLibrary.textStringGetByName(this.conversationDefnName).value;
                 var conversationDefn = GameFramework.ConversationDefn.deserialize(conversationDefnAsJSON);
-                var venueToReturnTo = universe.venueCurrent;
-                var conversationQuit = () => // quit
-                 {
-                    universe.venueNext = venueToReturnTo;
-                };
+                var conversationQuit = this.quit;
+                if (conversationQuit == null) {
+                    var venueToReturnTo = universe.venueCurrent;
+                    conversationQuit = () => // quit
+                     {
+                        universe.venueNext = venueToReturnTo;
+                    };
+                }
                 var conversation = new GameFramework.ConversationRun(conversationDefn, conversationQuit, entityTalkee, entityTalker, // entityTalker
                 null // contentsById
                 );
