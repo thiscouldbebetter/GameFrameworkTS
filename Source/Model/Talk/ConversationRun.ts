@@ -119,8 +119,18 @@ export class ConversationRun
 		return this.entityPlayer;
 	}
 
-	quit(): void
+	quit(universe: Universe): void
 	{
+		var nodeQuit = this.defn.talkNodes.find(x => x.defnName == "Quit");
+		if (nodeQuit != null)
+		{
+			this.scopeCurrent.talkNodeCurrent = nodeQuit;
+			this.scopeCurrent.talkNodeAdvance(this);
+			while (this.scopeCurrent.talkNodeCurrent != null)
+			{
+				this.next(universe);
+			}
+		}
 		this._quit();
 	}
 
@@ -193,7 +203,7 @@ export class ConversationRun
 			conversationRun.next(universe);
 		};
 
-		var back = () => this.quit();
+		var back = () => this.quit(universe);
 
 		var viewLog = () =>
 		{

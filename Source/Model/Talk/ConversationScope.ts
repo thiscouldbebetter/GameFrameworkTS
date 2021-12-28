@@ -51,8 +51,12 @@ export class ConversationScope
 		var talkNodeInitial = this.talkNodeCurrent;
 		while
 		(
-			this.talkNodeCurrent == talkNodeInitial
-			|| this.talkNodeCurrent.isDisabled
+			this.talkNodeCurrent != null
+			&&
+			(
+				this.talkNodeCurrent == talkNodeInitial
+				|| this.talkNodeCurrent.isDisabled
+			)
 		)
 		{
 			var talkNodeIndex = defnTalkNodes.indexOf(this.talkNodeCurrent);
@@ -112,7 +116,10 @@ export class ConversationScope
 	update(universe: Universe, conversationRun: ConversationRun): void
 	{
 		this.haveOptionsBeenUpdated = true;
-		this.talkNodeCurrent.execute(universe, conversationRun, this);
+		if (this.talkNodeCurrent != null)
+		{
+			this.talkNodeCurrent.execute(universe, conversationRun, this);
+		}
 	}
 }
 

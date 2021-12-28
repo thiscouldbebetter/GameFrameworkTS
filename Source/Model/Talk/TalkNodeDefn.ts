@@ -370,7 +370,7 @@ class TalkNodeDefn_Instances
 				talkNode: TalkNode
 			) => // execute
 			{
-				conversationRun.quit();
+				conversationRun.quit(universe);
 			},
 			null // activate
 		);

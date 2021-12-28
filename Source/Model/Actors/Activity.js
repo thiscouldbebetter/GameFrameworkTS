@@ -34,6 +34,10 @@ var ThisCouldBeBetter;
                 this.targetEntitySet(targetEntity);
                 return this;
             }
+            defnTarget(defnName, targetEntity) {
+                // Tersely-named alias.
+                return this.defnNameAndTargetEntitySet(defnName, targetEntity);
+            }
             doNothing() {
                 this.defnNameSet(GameFramework.ActivityDefn.Instances().DoNothing.name);
                 this.targetEntitiesClearAll();

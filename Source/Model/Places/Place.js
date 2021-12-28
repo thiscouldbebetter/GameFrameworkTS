@@ -3,8 +3,7 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Place //
-         {
+        class Place {
             constructor(name, defnName, parentName, size, entities) {
                 this.name = name;
                 this.defnName = defnName;
@@ -194,13 +193,17 @@ var ThisCouldBeBetter;
                     this.isLoaded = false;
                 }
             }
-            // Controls.
+            // Controllable.
             toControl(universe, world) {
                 var player = this.player();
                 var playerControllable = player.controllable();
                 var uwpe = new GameFramework.UniverseWorldPlaceEntities(universe, world, world.placeCurrent, player, null);
                 var returnValue = playerControllable.toControl(uwpe, null, null);
                 return returnValue;
+            }
+            // Equatable.
+            equals(other) {
+                return (this.name == other.name);
             }
             // Entity convenience accessors.
             camera() {

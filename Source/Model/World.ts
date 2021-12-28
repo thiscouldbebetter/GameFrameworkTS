@@ -76,6 +76,12 @@ export class World //
 		}
 	}
 
+	placeAdd(place: Place): void
+	{
+		this.places.push(place);
+		this.placesByName.set(place.name, place);
+	}
+
 	placeByName(placeName: string): Place
 	{
 		return this.placesByName.get(placeName);

@@ -14,7 +14,12 @@ export class Disposition
 	spin: Rotation;
 	timeOffsetInTicks: number;
 
-	constructor(pos: Coords, orientation: Orientation, placeName: string)
+	constructor
+	(
+		pos: Coords,
+		orientation: Orientation,
+		placeName: string
+	)
 	{
 		this.pos = pos || Coords.create();
 

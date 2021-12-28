@@ -26,6 +26,9 @@ var ThisCouldBeBetter;
                 var returnValue = (distanceOfOther + other.radius <= this.radius);
                 return returnValue;
             }
+            containsPoint(pointToCheck) {
+                return (this._displacement.overwriteWith(pointToCheck).subtract(this.center).magnitude() < this.radius);
+            }
             pointRandom(randomizer) {
                 return new GameFramework.Polar(0, this.radius, 0).random(null).toCoords(this._pointRandom).add(this.center);
             }

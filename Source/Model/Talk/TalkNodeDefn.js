@@ -146,7 +146,7 @@ var ThisCouldBeBetter;
                 );
                 this.Quit = new TalkNodeDefn("Quit", (universe, conversationRun, scope, talkNode) => // execute
                  {
-                    conversationRun.quit();
+                    conversationRun.quit(universe);
                 }, null // activate
                 );
                 this.Script = new TalkNodeDefn("Script", (universe, conversationRun, scope, talkNode) => // execute

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Place //
+export class Place implements Equatable<Place>
 {
 	name: string;
 	defnName: string;
@@ -308,7 +308,7 @@ export class Place //
 		}
 	}
 
-	// Controls.
+	// Controllable.
 
 	toControl(universe: Universe, world: World): ControlBase
 	{
@@ -323,6 +323,13 @@ export class Place //
 			uwpe, null, null
 		);
 		return returnValue;
+	}
+
+	// Equatable.
+
+	equals(other: Place)
+	{
+		return (this.name == other.name);
 	}
 
 	// Entity convenience accessors.

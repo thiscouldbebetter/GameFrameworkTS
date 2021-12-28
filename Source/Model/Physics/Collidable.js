@@ -53,11 +53,11 @@ var ThisCouldBeBetter;
                     var entity = uwpe.entity;
                     var entityLoc = entity.locatable().loc;
                     this.locPrev.overwriteWith(entityLoc);
+                    this.colliderLocateForEntity(entity);
                     if (this.ticksUntilCanCollide > 0) {
                         this.ticksUntilCanCollide--;
                     }
                     else {
-                        this.colliderLocateForEntity(entity);
                         var collisions = GameFramework.ArrayHelper.clear(this._collisions);
                         var collisions = this.collisionsFindForEntity(uwpe, collisions);
                         collisions.forEach(collision => this.collisionHandle(uwpe, collision));

@@ -60,7 +60,15 @@ var ThisCouldBeBetter;
                 // This convenience method is tersely named for use in scripts.
                 return this.entityPlayer;
             }
-            quit() {
+            quit(universe) {
+                var nodeQuit = this.defn.talkNodes.find(x => x.defnName == "Quit");
+                if (nodeQuit != null) {
+                    this.scopeCurrent.talkNodeCurrent = nodeQuit;
+                    this.scopeCurrent.talkNodeAdvance(this);
+                    while (this.scopeCurrent.talkNodeCurrent != null) {
+                        this.next(universe);
+                    }
+                }
                 this._quit();
             }
             scope() {
@@ -106,7 +114,7 @@ var ThisCouldBeBetter;
                 var next = () => {
                     conversationRun.next(universe);
                 };
-                var back = () => this.quit();
+                var back = () => this.quit(universe);
                 var viewLog = () => {
                     var venueCurrent = universe.venueCurrent;
                     var transcriptAsControl = conversationRun.toControlTranscript(size, universe, venueCurrent);

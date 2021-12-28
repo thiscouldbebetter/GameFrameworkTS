@@ -77,7 +77,7 @@ export class ControlBuilder
 		size: Coords,
 		message: DataBinding<any, string>,
 		optionNames: Array<string>,
-		optionFunctions: Array<any>,
+		optionFunctions: Array<()=>void>,
 		showMessageOnly: boolean
 	): ControlBase
 	{

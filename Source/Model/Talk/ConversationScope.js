@@ -25,8 +25,10 @@ var ThisCouldBeBetter;
                 var conversationDefn = conversationRun.defn;
                 var defnTalkNodes = conversationDefn.talkNodes;
                 var talkNodeInitial = this.talkNodeCurrent;
-                while (this.talkNodeCurrent == talkNodeInitial
-                    || this.talkNodeCurrent.isDisabled) {
+                while (this.talkNodeCurrent != null
+                    &&
+                        (this.talkNodeCurrent == talkNodeInitial
+                            || this.talkNodeCurrent.isDisabled)) {
                     var talkNodeIndex = defnTalkNodes.indexOf(this.talkNodeCurrent);
                     var talkNodeNext = defnTalkNodes[talkNodeIndex + 1];
                     this.talkNodeCurrent = talkNodeNext;
@@ -67,7 +69,9 @@ var ThisCouldBeBetter;
             }
             update(universe, conversationRun) {
                 this.haveOptionsBeenUpdated = true;
-                this.talkNodeCurrent.execute(universe, conversationRun, this);
+                if (this.talkNodeCurrent != null) {
+                    this.talkNodeCurrent.execute(universe, conversationRun, this);
+                }
             }
         }
         GameFramework.ConversationScope = ConversationScope;

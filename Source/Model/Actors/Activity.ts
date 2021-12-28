@@ -66,6 +66,15 @@ export class Activity
 		return this;
 	}
 
+	defnTarget
+	(
+		defnName: string, targetEntity: Entity
+	): Activity
+	{
+		// Tersely-named alias.
+		return this.defnNameAndTargetEntitySet(defnName, targetEntity);
+	}
+
 	doNothing(): void
 	{
 		this.defnNameSet(ActivityDefn.Instances().DoNothing.name);

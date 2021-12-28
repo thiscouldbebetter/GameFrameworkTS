@@ -39,6 +39,10 @@ var ThisCouldBeBetter;
                     this.placeCurrent.initialize(uwpe);
                 }
             }
+            placeAdd(place) {
+                this.places.push(place);
+                this.placesByName.set(place.name, place);
+            }
             placeByName(placeName) {
                 return this.placesByName.get(placeName);
             }
