@@ -97,7 +97,7 @@ var ThisCouldBeBetter;
                         var textLinesForTag = tagToTextLinesLookup.get(tag);
                         for (var j = 0; j < textLinesForTag.length; j++) {
                             var textLine = textLinesForTag[j];
-                            var talkNodeExpanded = new GameFramework.TalkNode(talkNodeToExpand.name + "_" + j, talkNodeToExpandDefnName, textLine, talkNodeToExpand.next, talkNodeToExpand.isDisabled);
+                            var talkNodeExpanded = new GameFramework.TalkNode(talkNodeToExpand.name + "_" + j, talkNodeToExpandDefnName, textLine, talkNodeToExpand.next, talkNodeToExpand._isDisabled);
                             talkNodesExpanded.push(talkNodeExpanded);
                         }
                     }
@@ -139,6 +139,11 @@ var ThisCouldBeBetter;
                     var talkNode = talkNodes[i];
                     if (talkNode.name == null) {
                         talkNode.name = GameFramework.TalkNode.idNext();
+                    }
+                    if (talkNode.isDisabled != null) {
+                        var scriptToRunAsString = "( (u, cr) => " + talkNode.isDisabled + " )";
+                        var scriptToRun = eval(scriptToRunAsString);
+                        talkNode._isDisabled = scriptToRun;
                     }
                 }
                 conversationDefn.talkNodes = talkNodes;

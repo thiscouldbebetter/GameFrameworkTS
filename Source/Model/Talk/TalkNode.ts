@@ -8,7 +8,7 @@ export class TalkNode
 	defnName: string;
 	content: string;
 	next: string;
-	isDisabled: boolean;
+	_isDisabled: (u: Universe, cr: ConversationRun) => boolean;
 
 	constructor
 	(
@@ -16,14 +16,14 @@ export class TalkNode
 		defnName: string,
 		content: string,
 		next: string,
-		isDisabled: boolean
+		isDisabled: (u: Universe, cr: ConversationRun) => boolean
 	)
 	{
 		this.name = (name == null ? TalkNode.idNext() : name);
 		this.defnName = defnName;
 		this.content = content;
 		this.next = next;
-		this.isDisabled = (isDisabled == null ? false : isDisabled);
+		this._isDisabled = isDisabled;
 	}
 	// static methods
 
@@ -43,7 +43,7 @@ export class TalkNode
 			TalkNodeDefn.Instances().Display.name,
 			content,
 			null, // next
-			false // isDisabled
+			null // isDisabled
 		);
 	}
 
@@ -55,7 +55,7 @@ export class TalkNode
 			TalkNodeDefn.Instances().DoNothing.name,
 			null, // content
 			null, // next
-			false // isDisabled
+			null // isDisabled
 		);
 	}
 
@@ -67,7 +67,7 @@ export class TalkNode
 			TalkNodeDefn.Instances().Option.name,
 			content,
 			next,
-			false // isDisabled
+			null // isDisabled
 		);
 	}
 
@@ -79,7 +79,7 @@ export class TalkNode
 			TalkNodeDefn.Instances().Goto.name,
 			null, // content
 			next,
-			false // isDisabled
+			null // isDisabled
 		);
 	}
 
@@ -91,7 +91,7 @@ export class TalkNode
 			TalkNodeDefn.Instances().Pop.name,
 			null, // content
 			null, // next
-			false // isDisabled
+			null // isDisabled
 		);
 	}
 
@@ -103,7 +103,7 @@ export class TalkNode
 			TalkNodeDefn.Instances().Prompt.name,
 			null, // content
 			null, // next
-			false // isDisabled
+			null // isDisabled
 		);
 	}
 
@@ -115,7 +115,7 @@ export class TalkNode
 			TalkNodeDefn.Instances().Push.name,
 			null, // content
 			next,
-			false // isDisabled
+			null // isDisabled
 		);
 	}
 
@@ -127,7 +127,7 @@ export class TalkNode
 			TalkNodeDefn.Instances().Quit.name,
 			null, // content
 			null, // next
-			false // isDisabled
+			null // isDisabled
 		);
 	}
 
@@ -139,7 +139,7 @@ export class TalkNode
 			TalkNodeDefn.Instances().Script.name,
 			code,
 			null, // next
-			false // isDisabled
+			null // isDisabled
 		);
 	}
 
@@ -160,7 +160,7 @@ export class TalkNode
 			TalkNodeDefn.Instances().Switch.name,
 			variableName, // content
 			next,
-			false // isDisabled
+			null // isDisabled
 		);
 	}
 
@@ -175,7 +175,7 @@ export class TalkNode
 			TalkNodeDefn.Instances().VariableLoad.name,
 			variableName, // content
 			variableExpression, // next
-			false // isDisabled
+			null // isDisabled
 		);
 	}
 
@@ -190,7 +190,7 @@ export class TalkNode
 			TalkNodeDefn.Instances().VariableSet.name,
 			variableName, // content
 			variableValueToSet, // next
-			false // isDisabled
+			null // isDisabled
 		);
 	}
 
@@ -205,7 +205,7 @@ export class TalkNode
 			TalkNodeDefn.Instances().VariableStore.name,
 			variableName, // content
 			variableExpression, // next
-			false // isDisabled
+			null // isDisabled
 		);
 	}
 
@@ -227,7 +227,7 @@ export class TalkNode
 
 	disable(): TalkNode
 	{
-		this.isDisabled = true;
+		this._isDisabled = () => true;
 		return this;
 	}
 
@@ -242,9 +242,9 @@ export class TalkNode
 		defn.execute(universe, conversationRun, scope, this);
 	}
 
-	isEnabled(): boolean
+	isEnabled(u: Universe, cr: ConversationRun): boolean
 	{
-		return (this.isDisabled == false);
+		return (this._isDisabled == null ? true : this._isDisabled(u, cr) == false);
 	}
 
 	textForTranscript(conversationRun: ConversationRun): string
@@ -269,7 +269,7 @@ export class TalkNode
 			this.defnName,
 			this.content,
 			this.next,
-			this.isDisabled
+			this._isDisabled
 		);
 	}
 }

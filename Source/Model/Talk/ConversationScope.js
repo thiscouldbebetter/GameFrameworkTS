@@ -21,25 +21,25 @@ var ThisCouldBeBetter;
                 // Tersely named convenience method for scripts.
                 return this.talkNodeForOptionSelected;
             }
-            talkNodeAdvance(conversationRun) {
+            talkNodeAdvance(universe, conversationRun) {
                 var conversationDefn = conversationRun.defn;
                 var defnTalkNodes = conversationDefn.talkNodes;
                 var talkNodeInitial = this.talkNodeCurrent;
                 while (this.talkNodeCurrent != null
                     &&
                         (this.talkNodeCurrent == talkNodeInitial
-                            || this.talkNodeCurrent.isDisabled)) {
+                            || this.talkNodeCurrent.isEnabled(universe, conversationRun) == false)) {
                     var talkNodeIndex = defnTalkNodes.indexOf(this.talkNodeCurrent);
                     var talkNodeNext = defnTalkNodes[talkNodeIndex + 1];
                     this.talkNodeCurrent = talkNodeNext;
                 }
                 return this;
             }
-            talkNodeNextSpecifiedOrAdvance(conversationRun) {
+            talkNodeNextSpecifiedOrAdvance(universe, conversationRun) {
                 var conversationDefn = conversationRun.defn;
                 var nodeNextNameSpecified = this.talkNodeCurrent.next;
                 if (nodeNextNameSpecified == null) {
-                    this.talkNodeAdvance(conversationRun);
+                    this.talkNodeAdvance(universe, conversationRun);
                 }
                 else {
                     this.talkNodeCurrent =
@@ -47,7 +47,7 @@ var ThisCouldBeBetter;
                 }
                 return this.talkNodeCurrent;
             }
-            talkNodesForOptionsActive() {
+            talkNodesForOptionsActive(universe, conversationRun) {
                 var returnValues;
                 if (this.isPromptingForResponse == false) {
                     returnValues = this._emptyArray;
@@ -58,7 +58,8 @@ var ThisCouldBeBetter;
                         this._talkNodesForOptionsActive.length = 0;
                         for (var i = 0; i < this.talkNodesForOptions.length; i++) {
                             var talkNode = this.talkNodesForOptions[i];
-                            if (talkNode.isEnabled()) {
+                            var isEnabled = talkNode.isEnabled(universe, conversationRun);
+                            if (isEnabled) {
                                 this._talkNodesForOptionsActive.push(talkNode);
                             }
                         }

@@ -17,7 +17,6 @@ var ThisCouldBeBetter;
                 []);
                 this.talkNodesForTranscript = [];
                 this.variablesByName = new Map();
-                this.next(null);
                 // Abbreviate for scripts.
                 this.p = this.entityPlayer;
                 this.t = this.entityTalker;
@@ -33,13 +32,16 @@ var ThisCouldBeBetter;
             enableOrDisable(talkNodeToEnableOrDisableName, isDisabledValueToSet) {
                 var conversationDefn = this.defn;
                 var talkNodeToSet = conversationDefn.talkNodesByName.get(talkNodeToEnableOrDisableName);
-                talkNodeToSet.isDisabled = isDisabledValueToSet;
+                talkNodeToSet._isDisabled = () => isDisabledValueToSet;
             }
             goto(talkNodeNameNext, universe) {
                 // This convenience method is tersely named for use in scripts.
                 var scope = this.scopeCurrent;
                 scope.talkNodeCurrent = this.defn.talkNodeByName(talkNodeNameNext);
                 this.update(universe);
+            }
+            initialize(universe) {
+                this.next(universe);
             }
             next(universe) {
                 var responseSelected = this.scopeCurrent.talkNodeForOptionSelected;
@@ -61,10 +63,10 @@ var ThisCouldBeBetter;
                 return this.entityPlayer;
             }
             quit(universe) {
-                var nodeQuit = this.defn.talkNodes.find(x => x.defnName == "Quit");
-                if (nodeQuit != null) {
-                    this.scopeCurrent.talkNodeCurrent = nodeQuit;
-                    this.scopeCurrent.talkNodeAdvance(this);
+                var nodeNamedFinalize = this.defn.talkNodes.find(x => x.name == "Finalize");
+                if (nodeNamedFinalize != null) {
+                    this.scopeCurrent.talkNodeCurrent = nodeNamedFinalize;
+                    this.scopeCurrent.talkNodeAdvance(universe, this);
                     while (this.scopeCurrent.talkNodeCurrent != null) {
                         this.next(universe);
                     }
@@ -166,7 +168,7 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromContext("Response:"), fontHeight),
                     GameFramework.ControlList.from10("listResponses", new GameFramework.Coords(marginSize.x, marginSize.y * 3 + portraitSize.y, 0), listSize, 
                     // items
-                    GameFramework.DataBinding.fromContextAndGet(conversationRun, (c) => c.scopeCurrent.talkNodesForOptionsActive()), 
+                    GameFramework.DataBinding.fromContextAndGet(conversationRun, (c) => c.scopeCurrent.talkNodesForOptionsActive(universe, c)), 
                     // bindingForItemText
                     GameFramework.DataBinding.fromGet((c) => c.content), fontHeightShort, new GameFramework.DataBinding(conversationRun, (c) => c.scopeCurrent.talkNodeForOptionSelected, (c, v) => c.scopeCurrent.talkNodeForOptionSelected = v), // bindingForItemSelected
                     GameFramework.DataBinding.fromGet((c) => c.name), // bindingForItemValue

@@ -47,8 +47,6 @@ export class ConversationRun
 
 		this.variablesByName = new Map<string, unknown>();
 
-		this.next(null);
-
 		// Abbreviate for scripts.
 		this.p = this.entityPlayer;
 		this.t = this.entityTalker;
@@ -76,7 +74,7 @@ export class ConversationRun
 		var conversationDefn = this.defn;
 		var talkNodeToSet =
 			conversationDefn.talkNodesByName.get(talkNodeToEnableOrDisableName);
-		talkNodeToSet.isDisabled = isDisabledValueToSet;
+		talkNodeToSet._isDisabled = () => isDisabledValueToSet;
 	}
 
 	goto(talkNodeNameNext: string, universe: Universe): void
@@ -88,6 +86,11 @@ export class ConversationRun
 			talkNodeNameNext
 		);
 		this.update(universe);
+	}
+
+	initialize(universe: Universe): void
+	{
+		this.next(universe);
 	}
 
 	next(universe: Universe): void
@@ -121,11 +124,11 @@ export class ConversationRun
 
 	quit(universe: Universe): void
 	{
-		var nodeQuit = this.defn.talkNodes.find(x => x.defnName == "Quit");
-		if (nodeQuit != null)
+		var nodeNamedFinalize = this.defn.talkNodes.find(x => x.name == "Finalize");
+		if (nodeNamedFinalize != null)
 		{
-			this.scopeCurrent.talkNodeCurrent = nodeQuit;
-			this.scopeCurrent.talkNodeAdvance(this);
+			this.scopeCurrent.talkNodeCurrent = nodeNamedFinalize;
+			this.scopeCurrent.talkNodeAdvance(universe, this);
 			while (this.scopeCurrent.talkNodeCurrent != null)
 			{
 				this.next(universe);
@@ -376,7 +379,7 @@ export class ConversationRun
 					(
 						conversationRun,
 						(c: ConversationRun) =>
-							c.scopeCurrent.talkNodesForOptionsActive()
+							c.scopeCurrent.talkNodesForOptionsActive(universe, c)
 					),
 					// bindingForItemText
 					DataBinding.fromGet
