@@ -56,7 +56,7 @@ export class Box implements ShapeBase
 
 	static fromSize(size: Coords): Box
 	{
-		return new Box(Coords.create(), size);
+		return new Box(Coords.zeroes(), size);
 	}
 
 	static fromSizeAndCenter(size: Coords, center: Coords): Box

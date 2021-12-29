@@ -13,8 +13,18 @@ export class Ephemeral implements EntityProperty<Ephemeral>
 		expire: (uwpe: UniverseWorldPlaceEntities) => void
 	)
 	{
-		this.ticksToLive = ticksToLive;
+		this.ticksToLive = ticksToLive || 100;
 		this.expire = expire;
+	}
+
+	static default(): Ephemeral
+	{
+		return Ephemeral.fromTicksToLive(100);
+	}
+
+	static fromTicksToLive(ticksToLive: number): Ephemeral
+	{
+		return new Ephemeral(ticksToLive, null);
 	}
 
 	toEntity(): Entity { return new Entity(Ephemeral.name, [ this ] ); }

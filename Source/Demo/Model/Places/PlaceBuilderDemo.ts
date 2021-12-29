@@ -454,6 +454,7 @@ class PlaceBuilderDemo // Main.
 		};
 		var cellCollidable = new Collidable
 		(
+			false, // canCollideAgainWithoutSeparating
 			0, cellCollider, [ Playable.name ], cellCollide
 		);
 
@@ -1596,6 +1597,7 @@ class PlaceBuilderDemo // Main.
 			var wallObstacle = new Obstacle();
 			var wallCollidable = new Collidable
 			(
+				false, // canCollideAgainWithoutSeparating
 				0, wallCollider, [ Movable.name ], wallObstacle.collide
 			);
 			var wallVisual = VisualRectangle.fromSizeAndColorFill(wallSize, wallColor);
@@ -1641,7 +1643,7 @@ class PlaceBuilderDemo // Main.
 
 				if (damagePerHit > 0)
 				{
-					var damager = new Damager(Damage.fromAmount(10));
+					var damager = Damager.fromDamagePerHit(Damage.fromAmount(10));
 					wallEntity.propertyAdd(damager);
 				}
 
@@ -1671,7 +1673,8 @@ class PlaceBuilderDemo // Main.
 
 				var collidable = new Collidable
 				(
-					0,
+					false, // canCollideAgainWithoutSeparating
+					0, // ticks
 					portalBox,
 					[ Playable.name ],
 					portalCollide
@@ -1698,7 +1701,8 @@ class PlaceBuilderDemo // Main.
 				)
 				var forceFieldCollidable = new Collidable
 				(
-					0,
+					false, // canCollideAgainWithoutSeparating
+					0, // ticks
 					portalBox,
 					[ Playable.name ],
 					forceFieldCollide
@@ -2042,8 +2046,15 @@ class PlaceBuilderDemo // Main.
 					(
 						"BombExplosion",
 						[
-							new Collidable(0, explosionCollider, [ Killable.name ], explosionCollide),
-							new Damager(Damage.fromAmount(20)),
+							new Collidable
+							(
+								false, // canCollideAgainWithoutSeparating
+								0, // ticks
+								explosionCollider,
+								[ Killable.name ],
+								explosionCollide
+							),
+							Damager.fromDamagePerHit(Damage.fromAmount(20)),
 							Drawable.fromVisual(explosionVisual),
 							new Ephemeral(8, null),
 							entityDying.locatable()
@@ -2060,7 +2071,8 @@ class PlaceBuilderDemo // Main.
 						new Locatable( projectileLoc ),
 						new Collidable
 						(
-							0,
+							false, // canCollideAgainWithoutSeparating
+							0, // ticks
 							projectileCollider,
 							[ Collidable.name ],
 							projectileCollide
@@ -2219,12 +2231,13 @@ class PlaceBuilderDemo // Main.
 			(
 				"ProjectileArrow",
 				[
-					new Damager(Damage.fromAmount(10)),
+					Damager.fromDamagePerHit(Damage.fromAmount(10)),
 					new Ephemeral(32, null),
 					killable,
 					new Locatable( projectileLoc ),
 					new Collidable
 					(
+						false, // canCollideAgainWithoutSeparating
 						0, // ticksToWaitBetweenCollisions
 						projectileCollider,
 						[ Killable.name ],
@@ -2373,7 +2386,14 @@ class PlaceBuilderDemo // Main.
 			}
 		};
 
-		var carCollidable = new Collidable(0, carCollider, [Collidable.name], carCollide);
+		var carCollidable = new Collidable
+		(
+			false, // canCollideAgainWithoutSeparating
+			0,
+			carCollider,
+			[Collidable.name],
+			carCollide
+		);
 
 		var carConstrainable = new Constrainable
 		([
@@ -2535,7 +2555,8 @@ class PlaceBuilderDemo // Main.
 		var generator = new EntityGenerator
 		(
 			entityDefnToGenerate,
-			1200, // ticksToGenerate
+			RangeExtent.fromNumber(1200), // ticksPerGenerationAsRange
+			RangeExtent.fromNumber(1), // entitiesPerGenerationAsRange
 			1 // entitiesGeneratedMax
 		);
 
@@ -3041,7 +3062,7 @@ class PlaceBuilderDemo // Main.
 				effectsAndChances = [ effectAndChance ];
 			}
 
-			var projectileDamager = new Damager
+			var projectileDamager = Damager.fromDamagePerHit
 			(
 				new Damage
 				(
@@ -3059,6 +3080,7 @@ class PlaceBuilderDemo // Main.
 					new Locatable(projectileLoc),
 					new Collidable
 					(
+						false, // canCollideAgainWithoutSeparating
 						0, projectileCollider, [ Killable.name ], projectileCollide
 					),
 					Drawable.fromVisual(projectileVisual)

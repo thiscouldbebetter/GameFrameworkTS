@@ -4,6 +4,7 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Collidable implements EntityProperty<Collidable>
 {
+	canCollideAgainWithoutSeparating: boolean;
 	ticksToWaitBetweenCollisions: number;
 	colliderAtRest: ShapeBase;
 	entityPropertyNamesToCollideWith: string[];
@@ -20,12 +21,15 @@ export class Collidable implements EntityProperty<Collidable>
 
 	constructor
 	(
+		canCollideAgainWithoutSeparating: boolean,
 		ticksToWaitBetweenCollisions: number,
 		colliderAtRest: ShapeBase,
 		entityPropertyNamesToCollideWith: string[],
 		collideEntities: (uwpe: UniverseWorldPlaceEntities, c: Collision) => void
 	)
 	{
+		this.canCollideAgainWithoutSeparating =
+			canCollideAgainWithoutSeparating || false;
 		this.ticksToWaitBetweenCollisions =
 			ticksToWaitBetweenCollisions || 0;
 		this.colliderAtRest = colliderAtRest;
@@ -46,9 +50,20 @@ export class Collidable implements EntityProperty<Collidable>
 		this._collisions = new Array<Collision>();
 	}
 
+	static default(): Collidable
+	{
+		return Collidable.fromCollider
+		(
+			Box.fromSize
+			(
+				Coords.ones().multiplyScalar(10)
+			)
+		);
+	}
+
 	static fromCollider(colliderAtRest: ShapeBase): Collidable
 	{
-		return new Collidable(null, colliderAtRest, null, null);
+		return new Collidable(false, null, colliderAtRest, null, null);
 	}
 
 	static fromColliderAndCollideEntities
@@ -57,7 +72,7 @@ export class Collidable implements EntityProperty<Collidable>
 		collideEntities: (uwpe: UniverseWorldPlaceEntities, c: Collision)=>void
 	): Collidable
 	{
-		return new Collidable(null, colliderAtRest, null, collideEntities);
+		return new Collidable(false, null, colliderAtRest, null, collideEntities);
 	}
 
 	collideEntities
@@ -304,7 +319,11 @@ export class Collidable implements EntityProperty<Collidable>
 		{
 			if (wereEntitiesAlreadyColliding)
 			{
-				doEntitiesCollide = false;
+				doEntitiesCollide =
+				(
+					collidable0.canCollideAgainWithoutSeparating
+					|| collidable1.canCollideAgainWithoutSeparating
+				);
 			}
 			else
 			{
@@ -362,6 +381,7 @@ export class Collidable implements EntityProperty<Collidable>
 	{
 		return new Collidable
 		(
+			this.canCollideAgainWithoutSeparating,
 			this.ticksToWaitBetweenCollisions,
 			this.colliderAtRest.clone(),
 			this.entityPropertyNamesToCollideWith,

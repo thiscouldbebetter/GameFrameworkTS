@@ -20,7 +20,7 @@ export class AnimationDefn
 		this.propagateTransformsToAllKeyframes();
 	}
 
-	propagateTransformsToAllKeyframes()
+	propagateTransformsToAllKeyframes(): void
 	{
 		var propertyNamesAll = new Array<string>();
 		var propertyNameLookup = new Map<string, string>();

@@ -274,7 +274,8 @@ class PlaceBuilderDemo // Main.
                 }
             }
         };
-        var cellCollidable = new Collidable(0, cellCollider, [Playable.name], cellCollide);
+        var cellCollidable = new Collidable(false, // canCollideAgainWithoutSeparating
+        0, cellCollider, [Playable.name], cellCollide);
         var neighborOffsets = [
             // e, se, s, sw, w, nw, n, ne
             Coords.fromXY(1, 0), Coords.fromXY(1, 1), Coords.fromXY(0, 1),
@@ -860,7 +861,8 @@ class PlaceBuilderDemo // Main.
             }
             var wallCollider = new Box(Coords.create(), wallSize);
             var wallObstacle = new Obstacle();
-            var wallCollidable = new Collidable(0, wallCollider, [Movable.name], wallObstacle.collide);
+            var wallCollidable = new Collidable(false, // canCollideAgainWithoutSeparating
+            0, wallCollider, [Movable.name], wallObstacle.collide);
             var wallVisual = VisualRectangle.fromSizeAndColorFill(wallSize, wallColor);
             var numberOfWallPartsOnSide = (isNeighborConnected ? 2 : 1);
             for (var d = 0; d < numberOfWallPartsOnSide; d++) {
@@ -889,7 +891,7 @@ class PlaceBuilderDemo // Main.
                     wallObstacle
                 ]);
                 if (damagePerHit > 0) {
-                    var damager = new Damager(Damage.fromAmount(10));
+                    var damager = Damager.fromDamagePerHit(Damage.fromAmount(10));
                     wallEntity.propertyAdd(damager);
                 }
                 entities.push(wallEntity);
@@ -903,7 +905,9 @@ class PlaceBuilderDemo // Main.
                 var neighborName = placeNamePrefix + neighborPos.toStringXY();
                 var portal = new Portal(neighborName, "PortalToNeighbor" + ((i + 2) % 4), neighborOffset.clone().double());
                 var portalBox = new Box(Coords.create(), portalSize);
-                var collidable = new Collidable(0, portalBox, [Playable.name], portalCollide);
+                var collidable = new Collidable(false, // canCollideAgainWithoutSeparating
+                0, // ticks
+                portalBox, [Playable.name], portalCollide);
                 var locatable = new Locatable(new Disposition(portalPos, null, null));
                 var portalEntity = new Entity("PortalToNeighbor" + i, [
                     collidable,
@@ -913,7 +917,9 @@ class PlaceBuilderDemo // Main.
                 ]);
                 entities.push(portalEntity);
                 var forceField = new ForceField(null, neighborOffset.clone().invert());
-                var forceFieldCollidable = new Collidable(0, portalBox, [Playable.name], forceFieldCollide);
+                var forceFieldCollidable = new Collidable(false, // canCollideAgainWithoutSeparating
+                0, // ticks
+                portalBox, [Playable.name], forceFieldCollide);
                 var forceFieldEntity = new Entity("PortalToNeighbor" + i + "_ForceField", [
                     forceFieldCollidable,
                     forceField,
@@ -1100,8 +1106,10 @@ class PlaceBuilderDemo // Main.
                 };
                 var entityDying = uwpe.entity;
                 var explosionEntity = new Entity("BombExplosion", [
-                    new Collidable(0, explosionCollider, [Killable.name], explosionCollide),
-                    new Damager(Damage.fromAmount(20)),
+                    new Collidable(false, // canCollideAgainWithoutSeparating
+                    0, // ticks
+                    explosionCollider, [Killable.name], explosionCollide),
+                    Damager.fromDamagePerHit(Damage.fromAmount(20)),
                     Drawable.fromVisual(explosionVisual),
                     new Ephemeral(8, null),
                     entityDying.locatable()
@@ -1111,7 +1119,9 @@ class PlaceBuilderDemo // Main.
             var projectileEntity = new Entity("ProjectileBomb", [
                 new Ephemeral(64, projectileDie),
                 new Locatable(projectileLoc),
-                new Collidable(0, projectileCollider, [Collidable.name], projectileCollide),
+                new Collidable(false, // canCollideAgainWithoutSeparating
+                0, // ticks
+                projectileCollider, [Collidable.name], projectileCollide),
                 new Constrainable([new Constraint_FrictionXY(.03, .5)]),
                 Drawable.fromVisual(projectileVisual),
                 Equippable.default()
@@ -1206,11 +1216,12 @@ class PlaceBuilderDemo // Main.
                 uwpe.place.entityToSpawnAdd(entityStrike);
             });
             var projectileEntity = new Entity("ProjectileArrow", [
-                new Damager(Damage.fromAmount(10)),
+                Damager.fromDamagePerHit(Damage.fromAmount(10)),
                 new Ephemeral(32, null),
                 killable,
                 new Locatable(projectileLoc),
-                new Collidable(0, // ticksToWaitBetweenCollisions
+                new Collidable(false, // canCollideAgainWithoutSeparating
+                0, // ticksToWaitBetweenCollisions
                 projectileCollider, [Killable.name], projectileCollide),
                 Drawable.fromVisual(projectileVisual),
             ]);
@@ -1292,7 +1303,8 @@ class PlaceBuilderDemo // Main.
                 universe.collisionHelper.collideEntitiesBlock(entityVehicle, entityOther);
             }
         };
-        var carCollidable = new Collidable(0, carCollider, [Collidable.name], carCollide);
+        var carCollidable = new Collidable(false, // canCollideAgainWithoutSeparating
+        0, carCollider, [Collidable.name], carCollide);
         var carConstrainable = new Constrainable([
             new Constraint_FrictionXY(.03, .2)
         ]);
@@ -1387,7 +1399,8 @@ class PlaceBuilderDemo // Main.
         return itemFruitEntityDefn;
     }
     entityDefnBuildGenerator(entityDefnToGenerate) {
-        var generator = new EntityGenerator(entityDefnToGenerate, 1200, // ticksToGenerate
+        var generator = new EntityGenerator(entityDefnToGenerate, RangeExtent.fromNumber(1200), // ticksPerGenerationAsRange
+        RangeExtent.fromNumber(1), // entitiesPerGenerationAsRange
         1 // entitiesGeneratedMax
         );
         var entityDefnGenerator = new Entity(entityDefnToGenerate.name + "Generator", [
@@ -1680,13 +1693,14 @@ class PlaceBuilderDemo // Main.
                 var effectAndChance = [effect, 1];
                 effectsAndChances = [effectAndChance];
             }
-            var projectileDamager = new Damager(new Damage(DiceRoll.fromOffset(10), damageTypeName, effectsAndChances));
+            var projectileDamager = Damager.fromDamagePerHit(new Damage(DiceRoll.fromOffset(10), damageTypeName, effectsAndChances));
             var projectileEntity = new Entity("ProjectileSword", [
                 projectileDamager,
                 new Ephemeral(8, null),
                 killable,
                 new Locatable(projectileLoc),
-                new Collidable(0, projectileCollider, [Killable.name], projectileCollide),
+                new Collidable(false, // canCollideAgainWithoutSeparating
+                0, projectileCollider, [Killable.name], projectileCollide),
                 Drawable.fromVisual(projectileVisual)
             ]);
             place.entityToSpawnAdd(projectileEntity);

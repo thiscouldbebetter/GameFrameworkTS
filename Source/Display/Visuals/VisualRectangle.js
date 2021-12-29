@@ -12,6 +12,10 @@ var ThisCouldBeBetter;
                 this.sizeHalf = this.size.clone().half();
                 this._drawPos = GameFramework.Coords.create();
             }
+            static default() {
+                // For rapid prototyping.
+                return new VisualRectangle(GameFramework.Coords.fromXY(10, 10), null, GameFramework.Color.byName("Cyan"), true);
+            }
             static fromSizeAndColorFill(size, colorFill) {
                 return new VisualRectangle(size, colorFill, null, null);
             }

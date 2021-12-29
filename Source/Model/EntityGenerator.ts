@@ -5,24 +5,35 @@ namespace ThisCouldBeBetter.GameFramework
 export class EntityGenerator implements EntityProperty<EntityGenerator>
 {
 	entityToGenerate: Entity;
-	ticksToGenerate: number;
+	ticksPerGenerationAsRange: RangeExtent;
+	entitiesPerGenerationAsRange: RangeExtent;
 	entitiesGeneratedMax: number;
 
 	entitiesGenerated: Entity[];
-	tickLastGenerated: number
+	ticksUntilNextGeneration: number
 
 	constructor
 	(
-		entityToGenerate: Entity, ticksToGenerate: number,
+		entityToGenerate: Entity,
+		ticksPerGenerationAsRange: RangeExtent,
+		entitiesPerGenerationAsRange: RangeExtent,
 		entitiesGeneratedMax: number
 	)
 	{
 		this.entityToGenerate = entityToGenerate;
-		this.ticksToGenerate = ticksToGenerate;
+		this.ticksPerGenerationAsRange =
+			ticksPerGenerationAsRange || new RangeExtent(100, 100);
+		this.entitiesPerGenerationAsRange =
+			entitiesPerGenerationAsRange || new RangeExtent(1, 1);
 		this.entitiesGeneratedMax = entitiesGeneratedMax || 1;
 
 		this.entitiesGenerated = new Array<Entity>();
-		this.tickLastGenerated = 0 - this.ticksToGenerate;
+		this.ticksUntilNextGeneration = null;
+	}
+
+	toEntity(): Entity
+	{
+		return new Entity(EntityGenerator.name, [ this ] );
 	}
 
 	// EntityProperty.
@@ -32,38 +43,69 @@ export class EntityGenerator implements EntityProperty<EntityGenerator>
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
-		var world = uwpe.world;
 		var place = uwpe.place;
-		var entityGenerator = uwpe.entity;
 
 		var placeEntitiesByName = place.entitiesByName;
 
-		var entitiesGeneratedCountBefore = this.entitiesGenerated.length;
 		this.entitiesGenerated = this.entitiesGenerated.filter
 		(
 			e => placeEntitiesByName.has(e.name)
 		);
-		var entitiesGeneratedCountAfter = this.entitiesGenerated.length;
-		if (entitiesGeneratedCountAfter < entitiesGeneratedCountBefore)
-		{
-			this.tickLastGenerated = world.timerTicksSoFar;
-		}
 
 		if (this.entitiesGenerated.length < this.entitiesGeneratedMax)
 		{
-			var ticksSinceGenerated =
-				world.timerTicksSoFar - this.tickLastGenerated;
-			if (ticksSinceGenerated >= this.ticksToGenerate)
+			var randomizer = uwpe.universe.randomizer;
+
+			if (this.ticksUntilNextGeneration == null)
 			{
-				this.tickLastGenerated = world.timerTicksSoFar;
-				var entityGenerated = this.entityToGenerate.clone();
-				entityGenerated.locatable().loc.overwriteWith
+				this.ticksUntilNextGeneration = Math.round
 				(
-					entityGenerator.locatable().loc
+					this.ticksPerGenerationAsRange.random(randomizer)
 				);
-				this.entitiesGenerated.push(entityGenerated);
-				var uwpe2 = uwpe.clone().entitySet(entityGenerated);
-				place.entitySpawn(uwpe2);
+			}
+
+			if (this.ticksUntilNextGeneration > 0)
+			{
+				this.ticksUntilNextGeneration--;
+			}
+			else
+			{
+				this.ticksUntilNextGeneration = null;
+
+				var entityForGenerator = uwpe.entity;
+				var generatorLocatable = entityForGenerator.locatable();
+
+				var entitiesToGenerateCount = Math.round
+				(
+					this.entitiesPerGenerationAsRange.random(randomizer)
+				);
+
+				for (var i = 0; i < entitiesToGenerateCount; i++)
+				{
+					var entityGenerated = this.entityToGenerate.clone();
+					var entityGeneratedLoc = entityGenerated.locatable().loc;
+
+					if (generatorLocatable == null)
+					{
+						entityGeneratedLoc.pos.randomize
+						(
+							randomizer
+						).multiply
+						(
+							place.size
+						);
+					}
+					else
+					{
+						entityGeneratedLoc.overwriteWith
+						(
+							generatorLocatable.loc
+						);
+					}
+					this.entitiesGenerated.push(entityGenerated);
+					var uwpe2 = uwpe.clone().entitySet(entityGenerated);
+					place.entitySpawn(uwpe2);
+				}
 			}
 		}
 	}
@@ -74,14 +116,18 @@ export class EntityGenerator implements EntityProperty<EntityGenerator>
 	{
 		return new EntityGenerator
 		(
-			this.entityToGenerate, this.ticksToGenerate, this.entitiesGeneratedMax
+			this.entityToGenerate,
+			this.ticksPerGenerationAsRange.clone(),
+			this.entitiesPerGenerationAsRange.clone(),
+			this.entitiesGeneratedMax
 		);
 	}
 
 	overwriteWith(other: EntityGenerator): EntityGenerator
 	{
 		this.entityToGenerate = other.entityToGenerate; // todo
-		this.ticksToGenerate = other.ticksToGenerate;
+		this.ticksPerGenerationAsRange.overwriteWith(other.ticksPerGenerationAsRange);
+		this.entitiesPerGenerationAsRange.overwriteWith(other.entitiesPerGenerationAsRange);
 		this.entitiesGeneratedMax = other.entitiesGeneratedMax;
 		return this;
 	}

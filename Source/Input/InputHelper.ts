@@ -48,11 +48,11 @@ export class InputHelper implements Platformable
 		actionToInputsMappingsByInputName: Map<string, ActionToInputsMapping>
 	): Action[]
 	{
-		var returnValues = new Array<Action>();
+		var actionsSoFar = new Array<Action>();
 
 		if (this.isEnabled == false)
 		{
-			return returnValues;
+			return actionsSoFar;
 		}
 
 		var inputsPressed = this.inputsPressed;
@@ -66,7 +66,10 @@ export class InputHelper implements Platformable
 				{
 					var actionName = mapping.actionName;
 					var action = actionsByName.get(actionName);
-					returnValues.push(action);
+					if (actionsSoFar.indexOf(action) == -1)
+					{
+						actionsSoFar.push(action);
+					}
 					if (mapping.inactivateInputWhenActionPerformed)
 					{
 						inputPressed.isActive = false;
@@ -75,7 +78,7 @@ export class InputHelper implements Platformable
 			}
 		}
 
-		return returnValues;
+		return actionsSoFar;
 	}
 
 	initialize(universe: Universe): void

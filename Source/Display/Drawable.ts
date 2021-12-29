@@ -17,6 +17,15 @@ export class Drawable implements EntityProperty<Drawable>
 		}
 	}
 
+	static default(): Drawable
+	{
+		// For rapid prototyping.
+		return Drawable.fromVisual
+		(
+			VisualRectangle.default()
+		);
+	}
+
 	static fromVisual(visual: VisualBase): Drawable
 	{
 		return new Drawable(visual, null);
