@@ -33,6 +33,11 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 		return new ItemHolder(items, null, null);
 	}
 
+	static fromMassMax(massMax: number): ItemHolder
+	{
+		return new ItemHolder(null, massMax, null);
+	}
+
 	// Instance methods.
 
 	clear(): ItemHolder
@@ -195,7 +200,6 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 			}
 		}
 	}
-
 
 	itemEntities(uwpe: UniverseWorldPlaceEntities): Entity[]
 	{
@@ -422,7 +426,12 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 
 	massOfAllItemsOverMax(world: World): string
 	{
-		return "" + Math.ceil(this.massOfAllItems(world)) + "/" + this.massMax;
+		var returnValue = "" + Math.ceil(this.massOfAllItems(world));
+		if (this.massMax != null)
+		{
+			returnValue += "/" + this.massMax;
+		}
+		return returnValue;
 	}
 
 	tradeValueOfAllItems(world: World): number

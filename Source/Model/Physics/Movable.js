@@ -15,6 +15,9 @@ var ThisCouldBeBetter;
             static fromAccelerationAndSpeedMax(accelerationPerTick, speedMax) {
                 return new Movable(accelerationPerTick, speedMax, null);
             }
+            static fromSpeedMax(speedMax) {
+                return new Movable(speedMax, speedMax, null);
+            }
             accelerate(uwpe) {
                 this._accelerate(uwpe, this.accelerationPerTick);
             }

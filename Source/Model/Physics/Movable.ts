@@ -27,10 +27,19 @@ export class Movable implements EntityProperty<Movable>
 
 	static fromAccelerationAndSpeedMax
 	(
-		accelerationPerTick: number, speedMax: number
+		accelerationPerTick: number,
+		speedMax: number
 	): Movable
 	{
-		return new Movable(accelerationPerTick, speedMax, null)
+		return new Movable(accelerationPerTick, speedMax, null);
+	}
+
+	static fromSpeedMax
+	(
+		speedMax: number
+	): Movable
+	{
+		return new Movable(speedMax, speedMax, null);
 	}
 
 	accelerate

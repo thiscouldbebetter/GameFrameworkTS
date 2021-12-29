@@ -168,7 +168,9 @@ var ThisCouldBeBetter;
                 this.collisionsFindAndHandle(uwpe);
             }
             updateForTimerTick(uwpe) {
-                if (this.isEntityStationary(uwpe.entity)) {
+                var entity = uwpe.entity;
+                var isStationary = this.isEntityStationary(entity);
+                if (isStationary) {
                     this.entitiesAlreadyCollidedWith.length = 0;
                 }
                 else {

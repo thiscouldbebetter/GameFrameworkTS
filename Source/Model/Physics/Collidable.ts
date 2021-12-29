@@ -344,7 +344,9 @@ export class Collidable implements EntityProperty<Collidable>
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
-		if (this.isEntityStationary(uwpe.entity))
+		var entity = uwpe.entity;
+		var isStationary = this.isEntityStationary(entity);
+		if (isStationary)
 		{
 			this.entitiesAlreadyCollidedWith.length = 0;
 		}
