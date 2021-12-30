@@ -8,6 +8,7 @@ var ThisCouldBeBetter;
                 this.defnName = defnName;
                 this.targetEntitiesByName =
                     targetEntitiesByName || new Map([]);
+                this.isDone = false;
             }
             static fromDefnName(defnName) {
                 return new Activity(defnName, null);
@@ -41,6 +42,10 @@ var ThisCouldBeBetter;
             doNothing() {
                 this.defnNameSet(GameFramework.ActivityDefn.Instances().DoNothing.name);
                 this.targetEntitiesClearAll();
+            }
+            isDoneSet(value) {
+                this.isDone = value;
+                return this;
             }
             perform(uwpe) {
                 if (this.defnName != null) {
