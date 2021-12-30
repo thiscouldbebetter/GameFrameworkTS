@@ -44,6 +44,49 @@ export class ConversationScope
 		return this.talkNodeForOptionSelected;
 	}
 
+	optionSelectByNext(nextToMatch: string): TalkNode
+	{
+		if (this.talkNodesForOptions.length > 0)
+		{
+			var optionToSelect = this.talkNodesForOptions.find(x => x.next == nextToMatch);
+
+			var indexToSelect =
+				this.talkNodesForOptions.indexOf(optionToSelect);
+
+			if (indexToSelect == -1)
+			{
+				this.talkNodeForOptionSelected = null;
+			}
+			else
+			{
+				this.talkNodeForOptionSelected =
+					this.talkNodesForOptions[indexToSelect];
+			}
+		}
+
+		return this.talkNodeForOptionSelected;
+	}
+
+	optionSelectNext(): TalkNode
+	{
+		if (this.talkNodesForOptions.length > 0)
+		{
+			var indexSelected =
+				this.talkNodesForOptions.indexOf(this.talkNodeForOptionSelected);
+
+			indexSelected++;
+			if (indexSelected > this.talkNodesForOptions.length)
+			{
+				indexSelected = 0;
+			}
+
+			this.talkNodeForOptionSelected =
+				this.talkNodesForOptions[indexSelected];
+		}
+
+		return this.talkNodeForOptionSelected;
+	}
+
 	talkNodeAdvance
 	(
 		universe: Universe,

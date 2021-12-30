@@ -12,7 +12,10 @@ var ThisCouldBeBetter;
                 this.world.draw(universe);
             }
             finalize(universe) {
-                universe.soundHelper.soundForMusic.pause(universe);
+                var soundForMusic = universe.soundHelper.soundForMusic;
+                if (soundForMusic != null) {
+                    soundForMusic.pause(universe);
+                }
             }
             initialize(universe) {
                 universe.world = this.world;

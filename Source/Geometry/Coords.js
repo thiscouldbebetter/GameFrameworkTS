@@ -29,6 +29,9 @@ var ThisCouldBeBetter;
             static fromXY(x, y) {
                 return new Coords(x, y, 0);
             }
+            static oneOneZero() {
+                return new Coords(1, 1, 0);
+            }
             static ones() {
                 return new Coords(1, 1, 1);
             }

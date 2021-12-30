@@ -22,7 +22,11 @@ export class VenueWorld implements Venue
 
 	finalize(universe: Universe): void
 	{
-		universe.soundHelper.soundForMusic.pause(universe);
+		var soundForMusic = universe.soundHelper.soundForMusic;
+		if (soundForMusic != null)
+		{
+			soundForMusic.pause(universe);
+		}
 	}
 
 	initialize(universe: Universe): void

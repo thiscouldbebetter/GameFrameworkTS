@@ -7,6 +7,8 @@ export class Talker implements EntityProperty<Talker>
 	conversationDefnName: string;
 	quit: () => void;
 
+	conversationRun: ConversationRun;
+
 	constructor(conversationDefnName: string, quit: () => void)
 	{
 		this.conversationDefnName = conversationDefnName;
@@ -24,9 +26,37 @@ export class Talker implements EntityProperty<Talker>
 		var entityTalker = uwpe.entity;
 		var entityTalkee = uwpe.entity2;
 
+		var mediaLibrary = universe.mediaLibrary;
 		var conversationDefnAsJSON =
-			universe.mediaLibrary.textStringGetByName(this.conversationDefnName).value;
+			mediaLibrary.textStringGetByName(this.conversationDefnName).value;
 		var conversationDefn = ConversationDefn.deserialize(conversationDefnAsJSON);
+
+		var contentTextStringName = this.conversationDefnName + "-Content";
+		var contentTextString = mediaLibrary.textStringGetByName(contentTextStringName);
+		if (contentTextString != null)
+		{
+			var contentBlocks = contentTextString.value.split("\n\n");
+
+			var contentsById = new Map
+			(
+				contentBlocks.map
+				(
+					nodeAsBlock =>
+					{
+						var indexOfNewlineFirst = nodeAsBlock.indexOf("\n");
+						var contentId = nodeAsBlock.substr
+						(
+							0, indexOfNewlineFirst
+						).split("\t")[0];
+						var restOfBlock = nodeAsBlock.substr(indexOfNewlineFirst + 1);
+						return [ contentId, restOfBlock ];
+					}
+				)
+			);
+			conversationDefn.contentSubstitute(contentsById);
+			conversationDefn.displayNodesExpandByLines();
+		}
+
 		var conversationQuit = this.quit;
 		if (conversationQuit == null)
 		{
@@ -36,7 +66,7 @@ export class Talker implements EntityProperty<Talker>
 				universe.venueNext = venueToReturnTo;
 			};
 		}
-		var conversation = new ConversationRun
+		this.conversationRun = new ConversationRun
 		(
 			conversationDefn,
 			conversationQuit,
@@ -46,7 +76,7 @@ export class Talker implements EntityProperty<Talker>
 		);
 		var conversationSize = universe.display.sizeDefault().clone();
 		var conversationAsControl =
-			conversation.toControl(conversationSize, universe);
+			this.conversationRun.toControl(conversationSize, universe);
 
 		var venueNext = conversationAsControl.toVenue();
 

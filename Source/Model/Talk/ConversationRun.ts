@@ -106,6 +106,29 @@ export class ConversationRun
 		this.update(universe);
 	}
 
+	nextUntilPrompt(universe: Universe): void
+	{
+		var prompt = TalkNodeDefn.Instances().Prompt.name;
+		var quit = TalkNodeDefn.Instances().Quit.name;
+
+		var nodeDefnName = this.talkNodeCurrent().defnName;
+		if (nodeDefnName == prompt)
+		{
+			this.next(universe);
+		}
+
+		while (this.talkNodeCurrent().defnName != prompt)
+		{
+			this.next(universe);
+
+			if (this.talkNodeCurrent().defnName == quit)
+			{
+				this.next(universe);
+				break;
+			}
+		}
+	}
+
 	nodesByPrefix(nodeNamePrefix: string): TalkNode[]
 	{
 		// This convenience method is tersely named for use in scripts.
@@ -114,6 +137,26 @@ export class ConversationRun
 			x => x.name.startsWith(nodeNamePrefix)
 		);
 		return nodesStartingWithPrefix;
+	}
+
+	optionSelectByNext(nextToMatch: string): TalkNode
+	{
+		return this.scopeCurrent.optionSelectByNext(nextToMatch);
+	}
+
+	optionSelectNext(): TalkNode
+	{
+		return this.scopeCurrent.optionSelectNext();
+	}
+
+	optionsAvailable(): TalkNode[]
+	{
+		return this.scopeCurrent.talkNodesForOptions;
+	}
+
+	optionsAvailableAsStrings(): string[]
+	{
+		return this.optionsAvailable().map(x => x.content);
 	}
 
 	player(): Entity
@@ -141,6 +184,11 @@ export class ConversationRun
 	{
 		// This convenience method is tersely named for use in scripts.
 		return this.scopeCurrent;
+	}
+
+	talkNodeCurrent(): TalkNode
+	{
+		return this.scopeCurrent.talkNodeCurrent;
 	}
 
 	talker(): Entity

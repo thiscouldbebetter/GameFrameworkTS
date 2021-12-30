@@ -53,10 +53,37 @@ var ThisCouldBeBetter;
                 }
                 this.update(universe);
             }
+            nextUntilPrompt(universe) {
+                var prompt = GameFramework.TalkNodeDefn.Instances().Prompt.name;
+                var quit = GameFramework.TalkNodeDefn.Instances().Quit.name;
+                var nodeDefnName = this.talkNodeCurrent().defnName;
+                if (nodeDefnName == prompt) {
+                    this.next(universe);
+                }
+                while (this.talkNodeCurrent().defnName != prompt) {
+                    this.next(universe);
+                    if (this.talkNodeCurrent().defnName == quit) {
+                        this.next(universe);
+                        break;
+                    }
+                }
+            }
             nodesByPrefix(nodeNamePrefix) {
                 // This convenience method is tersely named for use in scripts.
                 var nodesStartingWithPrefix = this.defn.talkNodes.filter(x => x.name.startsWith(nodeNamePrefix));
                 return nodesStartingWithPrefix;
+            }
+            optionSelectByNext(nextToMatch) {
+                return this.scopeCurrent.optionSelectByNext(nextToMatch);
+            }
+            optionSelectNext() {
+                return this.scopeCurrent.optionSelectNext();
+            }
+            optionsAvailable() {
+                return this.scopeCurrent.talkNodesForOptions;
+            }
+            optionsAvailableAsStrings() {
+                return this.optionsAvailable().map(x => x.content);
             }
             player() {
                 // This convenience method is tersely named for use in scripts.
@@ -76,6 +103,9 @@ var ThisCouldBeBetter;
             scope() {
                 // This convenience method is tersely named for use in scripts.
                 return this.scopeCurrent;
+            }
+            talkNodeCurrent() {
+                return this.scopeCurrent.talkNodeCurrent;
             }
             talker() {
                 // This convenience method is tersely named for use in scripts.
