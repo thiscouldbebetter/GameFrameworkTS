@@ -8,7 +8,7 @@ class GameDemo {
         // deserialization of existing saved items after the schema changes.
         // localStorage.clear();
         var mediaFilePaths = this.mediaFilePathsBuild();
-        var mediaLibrary = MediaLibrary.fromFilePaths(mediaFilePaths);
+        var mediaLibrary = MediaLibrary.fromFilePaths("../Content/", mediaFilePaths);
         var displaySizesAvailable = [
             new Coords(400, 300, 1),
             new Coords(640, 480, 1),

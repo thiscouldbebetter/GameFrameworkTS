@@ -118,6 +118,7 @@ class PlaceBuilderDemo_Emplacements
 		);
 		var collidable = new Collidable
 		(
+			false, // canCollideAgainWithoutSeparating
 			0, // ticksToWaitBetweenCollisions
 			collider,
 			[ Collidable.name ], // entityPropertyNamesToCollideWith,
@@ -229,6 +230,7 @@ class PlaceBuilderDemo_Emplacements
 		};
 		var campfireCollidable = new Collidable
 		(
+			false, // canCollideAgainWithoutSeparating
 			0, // ticksToWaitBetweenCollisions
 			campfireCollider,
 			[ Collidable.name ],
@@ -279,9 +281,9 @@ class PlaceBuilderDemo_Emplacements
 		(
 			"Container",
 			[
-				new Collidable(
-					0, // ticksToWaitBetweenCollisions
-					new Box(Coords.create(), entitySize), null, null
+				Collidable.fromCollider
+				(
+					new Box(Coords.create(), entitySize)
 				),
 				Drawable.fromVisual(visual),
 				new ItemContainer(),
@@ -349,11 +351,9 @@ class PlaceBuilderDemo_Emplacements
 			"Exit", exitColor, visual
 		);
 
-		var collidable = new Collidable
+		var collidable = Collidable.fromCollider
 		(
-			0, // ticksToWaitBetweenCollisions
-			new Box(Coords.create(), entitySize),
-			null, null
+			new Box(Coords.create(), entitySize)
 		);
 
 		var exitEntityDefn = new Entity
@@ -483,7 +483,7 @@ class PlaceBuilderDemo_Emplacements
 			[
 				obstacleBoundable,
 				obstacleCollidable,
-				new Damager(Damage.fromAmount(10)),
+				Damager.fromDamagePerHit(Damage.fromAmount(10)),
 				Drawable.fromVisual(visual),
 				new Locatable(obstacleLoc)
 			]
@@ -553,10 +553,9 @@ class PlaceBuilderDemo_Emplacements
 			obstacleMappedMap, Disposition.create()
 		);
 
-		var obstacleCollidable = new Collidable
+		var obstacleCollidable = Collidable.fromCollider
 		(
-			0, // ticksToWaitBetweenCollisions
-			obstacleCollider, null, null
+			obstacleCollider
 		);
 		var obstacleBounds = new Box
 		(
@@ -570,7 +569,7 @@ class PlaceBuilderDemo_Emplacements
 			[
 				obstacleBoundable,
 				obstacleCollidable,
-				new Damager(Damage.fromAmount(10)),
+				Damager.fromDamagePerHit(Damage.fromAmount(10)),
 				Drawable.fromVisual(obstacleMappedVisual),
 				Locatable.create()
 			]
@@ -615,6 +614,7 @@ class PlaceBuilderDemo_Emplacements
 		var obstacleRingObstacle = new Obstacle();
 		var obstacleCollidable = new Collidable
 		(
+			false, // canCollideAgainWithoutSeparating
 			0, obstacleCollider, [Movable.name], obstacleRingObstacle.collide
 		);
 
@@ -624,7 +624,7 @@ class PlaceBuilderDemo_Emplacements
 			[
 				new Locatable(obstacleLoc),
 				obstacleCollidable,
-				//new Damager(Damage.fromAmount(10)),
+				//Damager.fromDamagePerHit(Damage.fromAmount(10)),
 				Drawable.fromVisual(obstacleRingVisual),
 			]
 		);
@@ -774,6 +774,7 @@ class PlaceBuilderDemo_Emplacements
 		var collider = new Sphere(Coords.create(), colliderRadius);
 		var collidable = new Collidable
 		(
+			false, // canCollideAgainWithoutSeparating
 			0, // ticksToWaitBetweenCollisions
 			collider,
 			[ Movable.name ], // entityPropertyNamesToCollideWith,
@@ -853,6 +854,7 @@ class PlaceBuilderDemo_Emplacements
 		);
 		var collidable = new Collidable
 		(
+			false, // canCollideAgainWithoutSeparating
 			0, // ticksToWaitBetweenCollisions
 			collider,
 			[ Collidable.name ], // entityPropertyNamesToCollideWith,

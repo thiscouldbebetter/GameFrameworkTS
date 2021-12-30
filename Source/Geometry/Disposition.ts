@@ -14,7 +14,12 @@ export class Disposition
 	spin: Rotation;
 	timeOffsetInTicks: number;
 
-	constructor(pos: Coords, orientation: Orientation, placeName: string)
+	constructor
+	(
+		pos: Coords,
+		orientation: Orientation,
+		placeName: string
+	)
 	{
 		this.pos = pos || Coords.create();
 
@@ -79,7 +84,7 @@ export class Disposition
 
 	place(world: World): Place
 	{
-		return world.placesByName.get(this.placeName);
+		return world.placeByName(this.placeName);
 	}
 
 	velSet(value: Coords): Disposition

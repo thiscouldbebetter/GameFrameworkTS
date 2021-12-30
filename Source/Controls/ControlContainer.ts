@@ -100,32 +100,20 @@ export class ControlContainer extends ControlBase
 
 			if (childWithFocus == null)
 			{
-				childWithFocus = this.childWithFocusNextInDirection(direction);
-				if (childWithFocus != null)
-				{
-					childWithFocus.focusGain();
-				}
+				childWithFocus = this.childFocusNextInDirection(direction);
 			}
 			else if (childWithFocus.childWithFocus() != null)
 			{
 				childWithFocus.actionHandle(actionNameToHandle, universe);
 				if (childWithFocus.childWithFocus() == null)
 				{
-					childWithFocus = this.childWithFocusNextInDirection(direction);
-					if (childWithFocus != null)
-					{
-						childWithFocus.focusGain();
-					}
+					childWithFocus = this.childFocusNextInDirection(direction);
 				}
 			}
 			else
 			{
 				childWithFocus.focusLose();
-				childWithFocus = this.childWithFocusNextInDirection(direction);
-				if (childWithFocus != null)
-				{
-					childWithFocus.focusGain();
-				}
+				childWithFocus = this.childFocusNextInDirection(direction);
 			}
 		}
 		else if (this._actionToInputsMappingsByInputName.has(actionNameToHandle))
@@ -170,12 +158,7 @@ export class ControlContainer extends ControlBase
 		return this.childrenByName.get(childName);
 	}
 
-	childWithFocus(): ControlBase
-	{
-		return (this.indexOfChildWithFocus == null ? null : this.children[this.indexOfChildWithFocus] );
-	}
-
-	childWithFocusNextInDirection(direction: number): ControlBase
+	childFocusNextInDirection(direction: number): ControlBase
 	{
 		if (this.indexOfChildWithFocus == null)
 		{
@@ -185,11 +168,7 @@ export class ControlContainer extends ControlBase
 			for (var i = iStart; i != iEnd; i += direction)
 			{
 				var child = this.children[i];
-				if
-				(
-					child.focusGain != null
-					&& ( child.isEnabled() )
-				)
+				if (child.isEnabled())
 				{
 					this.indexOfChildWithFocus = i;
 					break;
@@ -215,11 +194,7 @@ export class ControlContainer extends ControlBase
 				else
 				{
 					var child = this.children[this.indexOfChildWithFocus];
-					if
-					(
-						child.focusGain != null
-						&& ( child.isEnabled == null || child.isEnabled() )
-					)
+					if(child.isEnabled() )
 					{
 						break;
 					}
@@ -231,15 +206,30 @@ export class ControlContainer extends ControlBase
 
 		var returnValue = this.childWithFocus();
 
+		if (returnValue != null)
+		{
+			returnValue.focusGain();
+		}
+
 		return returnValue;
+	}
+
+	childWithFocus(): ControlBase
+	{
+		return (this.indexOfChildWithFocus == null ? null : this.children[this.indexOfChildWithFocus] );
 	}
 
 	childrenAtPosAddToList
 	(
-		posToCheck: Coords, listToAddTo: ControlBase[], addFirstChildOnly: boolean
+		posToCheck: Coords,
+		listToAddTo: ControlBase[],
+		addFirstChildOnly: boolean
 	): ControlBase[]
 	{
-		posToCheck = this._posToCheck.overwriteWith(posToCheck).clearZ();
+		posToCheck = this._posToCheck.overwriteWith
+		(
+			posToCheck
+		).clearZ();
 
 		for (var i = this.children.length - 1; i >= 0; i--)
 		{
@@ -264,10 +254,46 @@ export class ControlContainer extends ControlBase
 		return listToAddTo;
 	}
 
+	childrenLayOutWithSpacingAlongDimension
+	(
+		spacing: Coords,
+		dimensionIndex: number 
+	): ControlContainer
+	{
+		var axis = Coords.zeroes().dimensionSet(dimensionIndex, 1);
+
+		var spacingAlongAxis =
+			spacing.clone().multiply(axis);
+
+		var childPos = spacing.clone();
+
+		for (var i = 0; i < this.children.length; i++)
+		{
+			var child = this.children[i];
+
+			child.pos.overwriteWith(childPos);
+
+			childPos.add
+			(
+				child.size.clone().multiply(axis)
+			).add
+			(
+				spacingAlongAxis
+			);
+		}
+
+		return this;
+	}
+
+	childrenLayOutWithSpacingVertically(spacing: Coords): ControlContainer
+	{
+		return this.childrenLayOutWithSpacingAlongDimension(spacing, 1);
+	}
+
 	focusGain(): void
 	{
 		this.indexOfChildWithFocus = null;
-		var childWithFocus = this.childWithFocusNextInDirection(1);
+		var childWithFocus = this.childFocusNextInDirection(1);
 		if (childWithFocus != null)
 		{
 			childWithFocus.focusGain();
@@ -398,6 +424,11 @@ export class ControlContainer extends ControlBase
 			var child = this.children[i];
 			child.pos.add(displacement);
 		}
+	}
+
+	toControlContainerTransparent(): ControlContainerTransparent
+	{
+		return new ControlContainerTransparent(this);
 	}
 
 	// Drawable.

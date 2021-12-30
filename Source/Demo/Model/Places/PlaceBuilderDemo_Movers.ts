@@ -364,7 +364,10 @@ class PlaceBuilderDemo_Movers
 				Animatable2.create(),
 				new Constrainable([new Constraint_SpeedMaxXY(speedMax)]),
 				Collidable.fromCollider(enemyCollider),
-				new Damager(Damage.fromAmountAndTypeName(10, damageTypeName)),
+				Damager.fromDamagePerHit
+				(
+					Damage.fromAmountAndTypeName(10, damageTypeName)
+				),
 				Drawable.fromVisual(enemyVisual),
 				new Effectable([]),
 				new Enemy(weapon),
@@ -738,6 +741,7 @@ class PlaceBuilderDemo_Movers
 			};
 		var collidable = new Collidable
 		(
+			false, // canCollideAgainWithoutSeparating
 			0, friendlyCollider, [ Collidable.name ], friendlyCollide
 		);
 
@@ -902,7 +906,7 @@ class PlaceBuilderDemo_Movers
 				Locatable.create(),
 				Movable.default(),
 				routable,
-				new Talker("Conversation"),
+				new Talker("Conversation", null),
 			]
 		);
 
@@ -1308,8 +1312,10 @@ class PlaceBuilderDemo_Movers
 				//collisionHelper.collideEntitiesBackUp(entityPlayer, entityOther);
 				//collisionHelper.collideEntitiesBlock(entityPlayer, entityOther);
 
+				var damageToApply = entityOtherDamager.damageToApply(universe);
+
 				entityPlayer.killable().damageApply(
-					uwpe, entityOtherDamager.damagePerHit
+					uwpe, damageToApply
 				);
 
 				soundHelper.soundWithNamePlayAsEffect(universe, "Effects_Clang");
@@ -1608,6 +1614,7 @@ class PlaceBuilderDemo_Movers
 				Animatable2.create(),
 				new Collidable
 				(
+					false, // canCollideAgainWithoutSeparating
 					0, // ticksToWaitBetweenCollisions
 					playerCollider,
 					[ Collidable.name ], // entityPropertyNamesToCollideWith

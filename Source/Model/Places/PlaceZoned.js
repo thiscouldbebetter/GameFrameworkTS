@@ -5,7 +5,8 @@ var ThisCouldBeBetter;
     (function (GameFramework) {
         class PlaceZoned extends GameFramework.Place {
             constructor(name, defnName, size, entityToFollowName, zoneStartName, zoneGetByName, zoneAtPos) {
-                super(name, defnName, size, [] // entities
+                super(name, defnName, null, // parentName
+                size, null // entities
                 );
                 this.entityToFollowName = entityToFollowName;
                 this.zoneStartName = zoneStartName;

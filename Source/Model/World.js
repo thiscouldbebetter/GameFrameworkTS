@@ -39,6 +39,13 @@ var ThisCouldBeBetter;
                     this.placeCurrent.initialize(uwpe);
                 }
             }
+            placeAdd(place) {
+                this.places.push(place);
+                this.placesByName.set(place.name, place);
+            }
+            placeByName(placeName) {
+                return this.placesByName.get(placeName);
+            }
             timePlayingAsStringShort(universe) {
                 return universe.timerHelper.ticksToStringH_M_S(this.timerTicksSoFar);
             }

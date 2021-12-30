@@ -17,6 +17,9 @@ var ThisCouldBeBetter;
                 return new Killable(integrityMax, null, die);
             }
             damageApply(uwpe, damageToApply) {
+                if (damageToApply == null) {
+                    return 0;
+                }
                 var universe = uwpe.universe;
                 var entityDamager = uwpe.entity;
                 var entityKillable = uwpe.entity2;

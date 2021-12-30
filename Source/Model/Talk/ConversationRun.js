@@ -17,7 +17,6 @@ var ThisCouldBeBetter;
                 []);
                 this.talkNodesForTranscript = [];
                 this.variablesByName = new Map();
-                this.next(null);
                 // Abbreviate for scripts.
                 this.p = this.entityPlayer;
                 this.t = this.entityTalker;
@@ -33,13 +32,16 @@ var ThisCouldBeBetter;
             enableOrDisable(talkNodeToEnableOrDisableName, isDisabledValueToSet) {
                 var conversationDefn = this.defn;
                 var talkNodeToSet = conversationDefn.talkNodesByName.get(talkNodeToEnableOrDisableName);
-                talkNodeToSet.isDisabled = isDisabledValueToSet;
+                talkNodeToSet._isDisabled = () => isDisabledValueToSet;
             }
             goto(talkNodeNameNext, universe) {
                 // This convenience method is tersely named for use in scripts.
                 var scope = this.scopeCurrent;
                 scope.talkNodeCurrent = this.defn.talkNodeByName(talkNodeNameNext);
                 this.update(universe);
+            }
+            initialize(universe) {
+                this.next(universe);
             }
             next(universe) {
                 var responseSelected = this.scopeCurrent.talkNodeForOptionSelected;
@@ -51,21 +53,59 @@ var ThisCouldBeBetter;
                 }
                 this.update(universe);
             }
+            nextUntilPrompt(universe) {
+                var prompt = GameFramework.TalkNodeDefn.Instances().Prompt.name;
+                var quit = GameFramework.TalkNodeDefn.Instances().Quit.name;
+                var nodeDefnName = this.talkNodeCurrent().defnName;
+                if (nodeDefnName == prompt) {
+                    this.next(universe);
+                }
+                while (this.talkNodeCurrent().defnName != prompt) {
+                    this.next(universe);
+                    if (this.talkNodeCurrent().defnName == quit) {
+                        this.next(universe);
+                        break;
+                    }
+                }
+            }
             nodesByPrefix(nodeNamePrefix) {
                 // This convenience method is tersely named for use in scripts.
                 var nodesStartingWithPrefix = this.defn.talkNodes.filter(x => x.name.startsWith(nodeNamePrefix));
                 return nodesStartingWithPrefix;
             }
+            optionSelectByNext(nextToMatch) {
+                return this.scopeCurrent.optionSelectByNext(nextToMatch);
+            }
+            optionSelectNext() {
+                return this.scopeCurrent.optionSelectNext();
+            }
+            optionsAvailable() {
+                return this.scopeCurrent.talkNodesForOptions;
+            }
+            optionsAvailableAsStrings() {
+                return this.optionsAvailable().map(x => x.content);
+            }
             player() {
                 // This convenience method is tersely named for use in scripts.
                 return this.entityPlayer;
             }
-            quit() {
+            quit(universe) {
+                var nodeNamedFinalize = this.defn.talkNodes.find(x => x.name == "Finalize");
+                if (nodeNamedFinalize != null) {
+                    this.scopeCurrent.talkNodeCurrent = nodeNamedFinalize;
+                    this.scopeCurrent.talkNodeAdvance(universe, this);
+                    while (this.scopeCurrent.talkNodeCurrent != null) {
+                        this.next(universe);
+                    }
+                }
                 this._quit();
             }
             scope() {
                 // This convenience method is tersely named for use in scripts.
                 return this.scopeCurrent;
+            }
+            talkNodeCurrent() {
+                return this.scopeCurrent.talkNodeCurrent;
             }
             talker() {
                 // This convenience method is tersely named for use in scripts.
@@ -106,13 +146,39 @@ var ThisCouldBeBetter;
                 var next = () => {
                     conversationRun.next(universe);
                 };
-                var back = () => this.quit();
+                var back = () => this.quit(universe);
                 var viewLog = () => {
                     var venueCurrent = universe.venueCurrent;
                     var transcriptAsControl = conversationRun.toControlTranscript(size, universe, venueCurrent);
                     var venueNext = transcriptAsControl.toVenue();
                     universe.venueTransitionTo(venueNext);
                 };
+                var buttonNext = GameFramework.ControlButton.from8("buttonNext", GameFramework.Coords.fromXY(size.x - marginSize.x - buttonSize.x, size.y - marginSize.y * 3 - buttonSize.y * 3), buttonSize.clone(), "Next", fontHeight, true, // hasBorder
+                GameFramework.DataBinding.fromTrue(), // isEnabled
+                next // click
+                );
+                var buttonTranscript = GameFramework.ControlButton.from8("buttonTranscript", new GameFramework.Coords(size.x - marginSize.x - buttonSize.x, size.y - marginSize.y * 2 - buttonSize.y * 2, 0), buttonSize.clone(), "Log", fontHeight, true, // hasBorder
+                GameFramework.DataBinding.fromTrue(), // isEnabled
+                viewLog // click
+                );
+                var buttons = [
+                    buttonNext,
+                    buttonTranscript
+                ];
+                if (this._quit != null) {
+                    var buttonLeave = GameFramework.ControlButton.from8("buttonLeave", GameFramework.Coords.fromXY(size.x - marginSize.x - buttonSize.x, size.y - marginSize.y - buttonSize.y), buttonSize.clone(), "Leave", fontHeight, true, // hasBorder
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
+                    back // click
+                    );
+                    buttons.push(buttonLeave);
+                }
+                var containerButtonsSize = GameFramework.Coords.fromXY(buttonSize.x, buttonSize.y * (buttons.length + 1) + marginSize.y * (buttons.length));
+                var containerButtonsInner = GameFramework.ControlContainer.from4("containerButtons", GameFramework.Coords.fromXY(size.x - marginSize.x * 2 - buttonSize.x, size.y - marginSize.y * 4 - buttonSize.y * 3), // pos
+                containerButtonsSize, 
+                // children
+                buttons);
+                containerButtonsInner.childrenLayOutWithSpacingVertically(marginSize);
+                var containerButtons = containerButtonsInner.toControlContainerTransparent();
                 var returnValue = new GameFramework.ControlContainer("containerConversation", GameFramework.Coords.create(), // pos
                 size, 
                 // children
@@ -132,7 +198,7 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromContext("Response:"), fontHeight),
                     GameFramework.ControlList.from10("listResponses", new GameFramework.Coords(marginSize.x, marginSize.y * 3 + portraitSize.y, 0), listSize, 
                     // items
-                    GameFramework.DataBinding.fromContextAndGet(conversationRun, (c) => c.scopeCurrent.talkNodesForOptionsActive()), 
+                    GameFramework.DataBinding.fromContextAndGet(conversationRun, (c) => c.scopeCurrent.talkNodesForOptionsActive(universe, c)), 
                     // bindingForItemText
                     GameFramework.DataBinding.fromGet((c) => c.content), fontHeightShort, new GameFramework.DataBinding(conversationRun, (c) => c.scopeCurrent.talkNodeForOptionSelected, (c, v) => c.scopeCurrent.talkNodeForOptionSelected = v), // bindingForItemSelected
                     GameFramework.DataBinding.fromGet((c) => c.name), // bindingForItemValue
@@ -141,18 +207,7 @@ var ThisCouldBeBetter;
                      {
                         next();
                     }),
-                    GameFramework.ControlButton.from8("buttonNext", GameFramework.Coords.fromXY(size.x - marginSize.x - buttonSize.x, size.y - marginSize.y * 3 - buttonSize.y * 3), buttonSize.clone(), "Next", fontHeight, true, // hasBorder
-                    GameFramework.DataBinding.fromTrue(), // isEnabled
-                    next // click
-                    ),
-                    GameFramework.ControlButton.from8("buttonTranscript", new GameFramework.Coords(size.x - marginSize.x - buttonSize.x, size.y - marginSize.y * 2 - buttonSize.y * 2, 0), buttonSize.clone(), "Log", fontHeight, true, // hasBorder
-                    GameFramework.DataBinding.fromTrue(), // isEnabled
-                    viewLog // click
-                    ),
-                    GameFramework.ControlButton.from8("buttonDone", GameFramework.Coords.fromXY(size.x - marginSize.x - buttonSize.x, size.y - marginSize.y - buttonSize.y), buttonSize.clone(), "Done", fontHeight, true, // hasBorder
-                    GameFramework.DataBinding.fromTrue(), // isEnabled
-                    back // click
-                    ),
+                    containerButtons
                 ], // children
                 [
                     new GameFramework.Action("Back", back),

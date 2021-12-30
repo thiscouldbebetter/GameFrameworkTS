@@ -11,6 +11,10 @@ var ThisCouldBeBetter;
                     this.isVisible = true;
                 }
             }
+            static default() {
+                // For rapid prototyping.
+                return Drawable.fromVisual(GameFramework.VisualRectangle.default());
+            }
             static fromVisual(visual) {
                 return new Drawable(visual, null);
             }

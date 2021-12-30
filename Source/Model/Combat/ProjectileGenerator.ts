@@ -119,9 +119,10 @@ export class ProjectileGeneration
 
 		var projectileCollidable = new Collidable
 		(
+			false, // canCollideAgainWithoutSeparating
 			0, projectileCollider, [ Collidable.name ], this.collide
 		);
-		var projectileDamager = new Damager(this.damage);
+		var projectileDamager = Damager.fromDamagePerHit(this.damage);
 		var projectileDrawable = Drawable.fromVisual(this.visual); // hack
 		var projectileEphemeral = new Ephemeral(this.ticksToLive, null);
 		var projectileKillable = Killable.fromIntegrityMax(1);

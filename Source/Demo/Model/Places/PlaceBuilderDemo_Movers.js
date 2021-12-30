@@ -182,7 +182,7 @@ class PlaceBuilderDemo_Movers {
             Animatable2.create(),
             new Constrainable([new Constraint_SpeedMaxXY(speedMax)]),
             Collidable.fromCollider(enemyCollider),
-            new Damager(Damage.fromAmountAndTypeName(10, damageTypeName)),
+            Damager.fromDamagePerHit(Damage.fromAmountAndTypeName(10, damageTypeName)),
             Drawable.fromVisual(enemyVisual),
             new Effectable([]),
             new Enemy(weapon),
@@ -361,7 +361,8 @@ class PlaceBuilderDemo_Movers {
             //collisionHelper.collideEntitiesSeparate(eFriendly, eOther);
             collisionHelper.collideEntitiesBackUp(eFriendly, eOther);
         };
-        var collidable = new Collidable(0, friendlyCollider, [Collidable.name], friendlyCollide);
+        var collidable = new Collidable(false, // canCollideAgainWithoutSeparating
+        0, friendlyCollider, [Collidable.name], friendlyCollide);
         var visualEyeRadius = this.entityDimension * .75 / 2;
         var visualBuilder = new VisualBuilder();
         var visualEyesBlinking = visualBuilder.eyesBlinking(visualEyeRadius);
@@ -448,7 +449,7 @@ class PlaceBuilderDemo_Movers {
             Locatable.create(),
             Movable.default(),
             routable,
-            new Talker("Conversation"),
+            new Talker("Conversation", null),
         ]);
         return friendlyEntityDefn;
     }
@@ -652,7 +653,8 @@ class PlaceBuilderDemo_Movers {
                 collisionHelper.collideEntitiesBounce(entityPlayer, entityOther);
                 //collisionHelper.collideEntitiesBackUp(entityPlayer, entityOther);
                 //collisionHelper.collideEntitiesBlock(entityPlayer, entityOther);
-                entityPlayer.killable().damageApply(uwpe, entityOtherDamager.damagePerHit);
+                var damageToApply = entityOtherDamager.damageToApply(universe);
+                entityPlayer.killable().damageApply(uwpe, damageToApply);
                 soundHelper.soundWithNamePlayAsEffect(universe, "Effects_Clang");
             }
             else if (entityOther.propertiesByName.get(Goal.name) != null) {
@@ -828,7 +830,8 @@ class PlaceBuilderDemo_Movers {
         var playerEntityDefn = new Entity(entityDefnNamePlayer, [
             new Actor(playerActivity),
             Animatable2.create(),
-            new Collidable(0, // ticksToWaitBetweenCollisions
+            new Collidable(false, // canCollideAgainWithoutSeparating
+            0, // ticksToWaitBetweenCollisions
             playerCollider, [Collidable.name], // entityPropertyNamesToCollideWith
             playerCollide),
             constrainable,

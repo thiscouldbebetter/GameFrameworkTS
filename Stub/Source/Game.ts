@@ -16,7 +16,7 @@ class Game
 
 		var mediaFilePaths = this.mediaFilePathsBuild();
 
-		var mediaLibrary = MediaLibrary.fromFilePaths(mediaFilePaths);
+		var mediaLibrary = MediaLibrary.fromFilePaths("../Content/", mediaFilePaths);
 
 		var displaySizesAvailable =
 		[

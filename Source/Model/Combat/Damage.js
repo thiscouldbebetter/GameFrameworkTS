@@ -9,6 +9,9 @@ var ThisCouldBeBetter;
                 this.typeName = typeName;
                 this.effectsAndChances = effectsAndChances || [];
             }
+            static default() {
+                return Damage.fromAmount(1);
+            }
             static fromAmount(amount) {
                 var amountAsDiceRoll = GameFramework.DiceRoll.fromOffset(amount);
                 return new Damage(amountAsDiceRoll, null, null);

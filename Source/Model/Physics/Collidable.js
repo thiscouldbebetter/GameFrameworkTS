@@ -4,10 +4,14 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Collidable {
-            constructor(ticksToWaitBetweenCollisions, colliderAtRest, entityPropertyNamesToCollideWith, collideEntities) {
-                this.ticksToWaitBetweenCollisions = ticksToWaitBetweenCollisions || 0;
+            constructor(canCollideAgainWithoutSeparating, ticksToWaitBetweenCollisions, colliderAtRest, entityPropertyNamesToCollideWith, collideEntities) {
+                this.canCollideAgainWithoutSeparating =
+                    canCollideAgainWithoutSeparating || false;
+                this.ticksToWaitBetweenCollisions =
+                    ticksToWaitBetweenCollisions || 0;
                 this.colliderAtRest = colliderAtRest;
-                this.entityPropertyNamesToCollideWith = entityPropertyNamesToCollideWith || [];
+                this.entityPropertyNamesToCollideWith =
+                    entityPropertyNamesToCollideWith || []; // Or maybe [ Collidable.name ];
                 this._collideEntities = collideEntities;
                 this.collider = this.colliderAtRest.clone();
                 this.locPrev = GameFramework.Disposition.create();
@@ -19,11 +23,14 @@ var ThisCouldBeBetter;
                     new Array();
                 this._collisions = new Array();
             }
+            static default() {
+                return Collidable.fromCollider(GameFramework.Box.fromSize(GameFramework.Coords.ones().multiplyScalar(10)));
+            }
             static fromCollider(colliderAtRest) {
-                return new Collidable(null, colliderAtRest, null, null);
+                return new Collidable(false, null, colliderAtRest, null, null);
             }
             static fromColliderAndCollideEntities(colliderAtRest, collideEntities) {
-                return new Collidable(null, colliderAtRest, null, collideEntities);
+                return new Collidable(false, null, colliderAtRest, null, collideEntities);
             }
             collideEntities(uwpe, collision) {
                 if (this._collideEntities != null) {
@@ -51,11 +58,11 @@ var ThisCouldBeBetter;
                     var entity = uwpe.entity;
                     var entityLoc = entity.locatable().loc;
                     this.locPrev.overwriteWith(entityLoc);
+                    this.colliderLocateForEntity(entity);
                     if (this.ticksUntilCanCollide > 0) {
                         this.ticksUntilCanCollide--;
                     }
                     else {
-                        this.colliderLocateForEntity(entity);
                         var collisions = GameFramework.ArrayHelper.clear(this._collisions);
                         var collisions = this.collisionsFindForEntity(uwpe, collisions);
                         collisions.forEach(collision => this.collisionHandle(uwpe, collision));
@@ -138,7 +145,9 @@ var ThisCouldBeBetter;
                     || collidable1EntitiesAlreadyCollidedWith.indexOf(entity0) >= 0);
                 if (doEntitiesCollide) {
                     if (wereEntitiesAlreadyColliding) {
-                        doEntitiesCollide = false;
+                        doEntitiesCollide =
+                            (collidable0.canCollideAgainWithoutSeparating
+                                || collidable1.canCollideAgainWithoutSeparating);
                     }
                     else {
                         this.ticksUntilCanCollide = this.ticksToWaitBetweenCollisions;
@@ -166,7 +175,9 @@ var ThisCouldBeBetter;
                 this.collisionsFindAndHandle(uwpe);
             }
             updateForTimerTick(uwpe) {
-                if (this.isEntityStationary(uwpe.entity)) {
+                var entity = uwpe.entity;
+                var isStationary = this.isEntityStationary(entity);
+                if (isStationary) {
                     this.entitiesAlreadyCollidedWith.length = 0;
                 }
                 else {
@@ -175,7 +186,7 @@ var ThisCouldBeBetter;
             }
             // cloneable
             clone() {
-                return new Collidable(this.ticksToWaitBetweenCollisions, this.colliderAtRest.clone(), this.entityPropertyNamesToCollideWith, this._collideEntities);
+                return new Collidable(this.canCollideAgainWithoutSeparating, this.ticksToWaitBetweenCollisions, this.colliderAtRest.clone(), this.entityPropertyNamesToCollideWith, this._collideEntities);
             }
             // Equatable
             equals(other) { return false; } // todo

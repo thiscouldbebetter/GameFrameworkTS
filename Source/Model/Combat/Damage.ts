@@ -20,6 +20,11 @@ export class Damage
 		this.effectsAndChances = effectsAndChances || [];
 	}
 
+	static default(): Damage
+	{
+		return Damage.fromAmount(1);
+	}
+
 	static fromAmount(amount: number): Damage
 	{
 		var amountAsDiceRoll = DiceRoll.fromOffset(amount);

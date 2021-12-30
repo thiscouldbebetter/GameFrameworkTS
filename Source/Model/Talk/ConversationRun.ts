@@ -47,8 +47,6 @@ export class ConversationRun
 
 		this.variablesByName = new Map<string, unknown>();
 
-		this.next(null);
-
 		// Abbreviate for scripts.
 		this.p = this.entityPlayer;
 		this.t = this.entityTalker;
@@ -76,7 +74,7 @@ export class ConversationRun
 		var conversationDefn = this.defn;
 		var talkNodeToSet =
 			conversationDefn.talkNodesByName.get(talkNodeToEnableOrDisableName);
-		talkNodeToSet.isDisabled = isDisabledValueToSet;
+		talkNodeToSet._isDisabled = () => isDisabledValueToSet;
 	}
 
 	goto(talkNodeNameNext: string, universe: Universe): void
@@ -88,6 +86,11 @@ export class ConversationRun
 			talkNodeNameNext
 		);
 		this.update(universe);
+	}
+
+	initialize(universe: Universe): void
+	{
+		this.next(universe);
 	}
 
 	next(universe: Universe): void
@@ -103,6 +106,29 @@ export class ConversationRun
 		this.update(universe);
 	}
 
+	nextUntilPrompt(universe: Universe): void
+	{
+		var prompt = TalkNodeDefn.Instances().Prompt.name;
+		var quit = TalkNodeDefn.Instances().Quit.name;
+
+		var nodeDefnName = this.talkNodeCurrent().defnName;
+		if (nodeDefnName == prompt)
+		{
+			this.next(universe);
+		}
+
+		while (this.talkNodeCurrent().defnName != prompt)
+		{
+			this.next(universe);
+
+			if (this.talkNodeCurrent().defnName == quit)
+			{
+				this.next(universe);
+				break;
+			}
+		}
+	}
+
 	nodesByPrefix(nodeNamePrefix: string): TalkNode[]
 	{
 		// This convenience method is tersely named for use in scripts.
@@ -113,14 +139,44 @@ export class ConversationRun
 		return nodesStartingWithPrefix;
 	}
 
+	optionSelectByNext(nextToMatch: string): TalkNode
+	{
+		return this.scopeCurrent.optionSelectByNext(nextToMatch);
+	}
+
+	optionSelectNext(): TalkNode
+	{
+		return this.scopeCurrent.optionSelectNext();
+	}
+
+	optionsAvailable(): TalkNode[]
+	{
+		return this.scopeCurrent.talkNodesForOptions;
+	}
+
+	optionsAvailableAsStrings(): string[]
+	{
+		return this.optionsAvailable().map(x => x.content);
+	}
+
 	player(): Entity
 	{
 		// This convenience method is tersely named for use in scripts.
 		return this.entityPlayer;
 	}
 
-	quit(): void
+	quit(universe: Universe): void
 	{
+		var nodeNamedFinalize = this.defn.talkNodes.find(x => x.name == "Finalize");
+		if (nodeNamedFinalize != null)
+		{
+			this.scopeCurrent.talkNodeCurrent = nodeNamedFinalize;
+			this.scopeCurrent.talkNodeAdvance(universe, this);
+			while (this.scopeCurrent.talkNodeCurrent != null)
+			{
+				this.next(universe);
+			}
+		}
 		this._quit();
 	}
 
@@ -128,6 +184,11 @@ export class ConversationRun
 	{
 		// This convenience method is tersely named for use in scripts.
 		return this.scopeCurrent;
+	}
+
+	talkNodeCurrent(): TalkNode
+	{
+		return this.scopeCurrent.talkNodeCurrent;
 	}
 
 	talker(): Entity
@@ -193,7 +254,7 @@ export class ConversationRun
 			conversationRun.next(universe);
 		};
 
-		var back = () => this.quit();
+		var back = () => this.quit(universe);
 
 		var viewLog = () =>
 		{
@@ -205,6 +266,93 @@ export class ConversationRun
 			var venueNext: Venue = transcriptAsControl.toVenue();
 			universe.venueTransitionTo(venueNext);
 		};
+
+		var buttonNext = ControlButton.from8
+		(
+			"buttonNext",
+			Coords.fromXY
+			(
+				size.x - marginSize.x - buttonSize.x,
+				size.y - marginSize.y * 3 - buttonSize.y * 3
+			),
+			buttonSize.clone(),
+			"Next",
+			fontHeight,
+			true, // hasBorder
+			DataBinding.fromTrue(), // isEnabled
+			next // click
+		);
+
+		var buttonTranscript =ControlButton.from8
+		(
+			"buttonTranscript",
+			new Coords
+			(
+				size.x - marginSize.x - buttonSize.x,
+				size.y - marginSize.y * 2 - buttonSize.y * 2,
+				0
+			),
+			buttonSize.clone(),
+			"Log",
+			fontHeight,
+			true, // hasBorder
+			DataBinding.fromTrue(), // isEnabled
+			viewLog // click
+		);
+
+		var buttons =
+		[
+			buttonNext,
+			buttonTranscript
+		];
+
+		if (this._quit != null)
+		{
+			var buttonLeave = ControlButton.from8
+			(
+				"buttonLeave",
+				Coords.fromXY
+				(
+					size.x - marginSize.x - buttonSize.x,
+					size.y - marginSize.y - buttonSize.y
+				),
+				buttonSize.clone(),
+				"Leave",
+				fontHeight,
+				true, // hasBorder
+				DataBinding.fromTrue(), // isEnabled
+				back // click
+			);
+
+			buttons.push(buttonLeave);
+		}
+
+		var containerButtonsSize = Coords.fromXY
+		(
+			buttonSize.x,
+			buttonSize.y * (buttons.length + 1) + marginSize.y * (buttons.length)
+		);
+
+		var containerButtonsInner = ControlContainer.from4
+		(
+			"containerButtons",
+			Coords.fromXY
+			(
+				size.x - marginSize.x * 2 - buttonSize.x,
+				size.y - marginSize.y * 4 - buttonSize.y * 3
+			), // pos
+			containerButtonsSize,
+			// children
+			buttons
+		)
+
+		containerButtonsInner.childrenLayOutWithSpacingVertically
+		(
+			marginSize
+		);
+
+		var containerButtons =
+			containerButtonsInner.toControlContainerTransparent();
 
 		var returnValue = new ControlContainer
 		(
@@ -279,7 +427,7 @@ export class ConversationRun
 					(
 						conversationRun,
 						(c: ConversationRun) =>
-							c.scopeCurrent.talkNodesForOptionsActive()
+							c.scopeCurrent.talkNodesForOptionsActive(universe, c)
 					),
 					// bindingForItemText
 					DataBinding.fromGet
@@ -306,54 +454,7 @@ export class ConversationRun
 					}
 				),
 
-				ControlButton.from8
-				(
-					"buttonNext",
-					Coords.fromXY
-					(
-						size.x - marginSize.x - buttonSize.x,
-						size.y - marginSize.y * 3 - buttonSize.y * 3
-					),
-					buttonSize.clone(),
-					"Next",
-					fontHeight,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					next // click
-				),
-
-				ControlButton.from8
-				(
-					"buttonTranscript",
-					new Coords
-					(
-						size.x - marginSize.x - buttonSize.x,
-						size.y - marginSize.y * 2 - buttonSize.y * 2,
-						0
-					),
-					buttonSize.clone(),
-					"Log",
-					fontHeight,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					viewLog // click
-				),
-
-				ControlButton.from8
-				(
-					"buttonDone",
-					Coords.fromXY
-					(
-						size.x - marginSize.x - buttonSize.x,
-						size.y - marginSize.y - buttonSize.y
-					),
-					buttonSize.clone(),
-					"Done",
-					fontHeight,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					back // click
-				),
+				containerButtons
 
 			], // children
 

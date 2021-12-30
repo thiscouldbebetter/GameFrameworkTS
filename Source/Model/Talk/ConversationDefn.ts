@@ -162,7 +162,7 @@ export class ConversationDefn
 						talkNodeToExpandDefnName,
 						textLine,
 						talkNodeToExpand.next,
-						talkNodeToExpand.isDisabled
+						talkNodeToExpand._isDisabled
 					);
 					talkNodesExpanded.push(talkNodeExpanded);
 				}
@@ -230,6 +230,14 @@ export class ConversationDefn
 			if (talkNode.name == null)
 			{
 				talkNode.name = TalkNode.idNext();
+			}
+
+			if (talkNode.isDisabled != null)
+			{
+				var scriptToRunAsString = "( (u, cr) => " + talkNode.isDisabled + " )";
+				var scriptToRun = eval(scriptToRunAsString);
+
+				talkNode._isDisabled = scriptToRun;
 			}
 		}
 		conversationDefn.talkNodes = talkNodes;

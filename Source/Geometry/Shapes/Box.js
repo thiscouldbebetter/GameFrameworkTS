@@ -32,7 +32,7 @@ var ThisCouldBeBetter;
                 return new Box(center, size);
             }
             static fromSize(size) {
-                return new Box(GameFramework.Coords.create(), size);
+                return new Box(GameFramework.Coords.zeroes(), size);
             }
             static fromSizeAndCenter(size, center) {
                 // Same arguments as the constructor, but different order.

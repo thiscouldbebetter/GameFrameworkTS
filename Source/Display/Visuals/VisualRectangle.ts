@@ -13,7 +13,13 @@ export class VisualRectangle implements Visual<VisualRectangle>
 
 	_drawPos: Coords;
 
-	constructor(size: Coords, colorFill: Color, colorBorder: Color, isCentered: boolean)
+	constructor
+	(
+		size: Coords,
+		colorFill: Color,
+		colorBorder: Color,
+		isCentered: boolean
+	)
 	{
 		this.size = size;
 		this.colorFill = colorFill;
@@ -23,6 +29,12 @@ export class VisualRectangle implements Visual<VisualRectangle>
 		this.sizeHalf = this.size.clone().half();
 
 		this._drawPos = Coords.create();
+	}
+
+	static default(): VisualRectangle
+	{
+		// For rapid prototyping.
+		return new VisualRectangle(Coords.fromXY(10, 10), null, Color.byName("Cyan"), true);
 	}
 
 	static fromSizeAndColorFill(size: Coords, colorFill: Color): VisualRectangle

@@ -4,7 +4,8 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class MediaLibrary {
-            constructor(images, sounds, videos, fonts, textStrings) {
+            constructor(contentDirectoryPath, images, sounds, videos, fonts, textStrings) {
+                this.contentDirectoryPath = contentDirectoryPath;
                 this.images = images || [];
                 this.imagesByName = GameFramework.ArrayHelper.addLookupsByName(this.images);
                 this.sounds = sounds || [];
@@ -31,9 +32,9 @@ var ThisCouldBeBetter;
                 this.collectionsByName.set("TextStrings", this.textStringsByName);
             }
             static default() {
-                return MediaLibrary.fromFilePaths([]);
+                return MediaLibrary.fromFilePaths("../Content/", []);
             }
-            static fromFilePaths(mediaFilePaths) {
+            static fromFilePaths(contentDirectoryPath, mediaFilePaths) {
                 var images = new Array();
                 var sounds = new Array();
                 var videos = new Array();
@@ -69,7 +70,7 @@ var ThisCouldBeBetter;
                     var mediaObject = new mediaType(fileStem, filePath);
                     mediaArray.push(mediaObject);
                 }
-                var returnValue = new MediaLibrary(images, sounds, videos, fonts, textStrings);
+                var returnValue = new MediaLibrary(contentDirectoryPath, images, sounds, videos, fonts, textStrings);
                 return returnValue;
             }
             static fromFileNamesByCategory(contentPath, imageFileNames, effectFileNames, musicFileNames, videoFileNames, fontFileNames, textStringFileNames) {
@@ -105,7 +106,7 @@ var ThisCouldBeBetter;
                 var fonts = mediaCollectionsByPath.get("Fonts");
                 var textStrings = mediaCollectionsByPath.get("Text");
                 var sounds = soundEffects.concat(soundMusics);
-                var returnValue = new MediaLibrary(images, sounds, videos, fonts, textStrings);
+                var returnValue = new MediaLibrary(contentPath, images, sounds, videos, fonts, textStrings);
                 return returnValue;
             }
             // Instance methods.

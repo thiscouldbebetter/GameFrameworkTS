@@ -44,15 +44,66 @@ export class ConversationScope
 		return this.talkNodeForOptionSelected;
 	}
 
-	talkNodeAdvance(conversationRun: ConversationRun): ConversationScope
+	optionSelectByNext(nextToMatch: string): TalkNode
+	{
+		if (this.talkNodesForOptions.length > 0)
+		{
+			var optionToSelect = this.talkNodesForOptions.find(x => x.next == nextToMatch);
+
+			var indexToSelect =
+				this.talkNodesForOptions.indexOf(optionToSelect);
+
+			if (indexToSelect == -1)
+			{
+				this.talkNodeForOptionSelected = null;
+			}
+			else
+			{
+				this.talkNodeForOptionSelected =
+					this.talkNodesForOptions[indexToSelect];
+			}
+		}
+
+		return this.talkNodeForOptionSelected;
+	}
+
+	optionSelectNext(): TalkNode
+	{
+		if (this.talkNodesForOptions.length > 0)
+		{
+			var indexSelected =
+				this.talkNodesForOptions.indexOf(this.talkNodeForOptionSelected);
+
+			indexSelected++;
+			if (indexSelected > this.talkNodesForOptions.length)
+			{
+				indexSelected = 0;
+			}
+
+			this.talkNodeForOptionSelected =
+				this.talkNodesForOptions[indexSelected];
+		}
+
+		return this.talkNodeForOptionSelected;
+	}
+
+	talkNodeAdvance
+	(
+		universe: Universe,
+		conversationRun: ConversationRun
+	): ConversationScope
 	{
 		var conversationDefn = conversationRun.defn;
 		var defnTalkNodes = conversationDefn.talkNodes;
 		var talkNodeInitial = this.talkNodeCurrent;
 		while
 		(
-			this.talkNodeCurrent == talkNodeInitial
-			|| this.talkNodeCurrent.isDisabled
+			this.talkNodeCurrent != null
+			&&
+			(
+				this.talkNodeCurrent == talkNodeInitial
+				|| this.talkNodeCurrent.isEnabled(universe, conversationRun) == false
+			)
 		)
 		{
 			var talkNodeIndex = defnTalkNodes.indexOf(this.talkNodeCurrent);
@@ -62,13 +113,17 @@ export class ConversationScope
 		return this;
 	}
 
-	talkNodeNextSpecifiedOrAdvance(conversationRun: ConversationRun): TalkNode
+	talkNodeNextSpecifiedOrAdvance
+	(
+		universe: Universe,
+		conversationRun: ConversationRun
+	): TalkNode
 	{
 		var conversationDefn = conversationRun.defn;
 		var nodeNextNameSpecified = this.talkNodeCurrent.next;
 		if (nodeNextNameSpecified == null)
 		{
-			this.talkNodeAdvance(conversationRun);
+			this.talkNodeAdvance(universe, conversationRun);
 		}
 		else
 		{
@@ -79,7 +134,10 @@ export class ConversationScope
 		return this.talkNodeCurrent;
 	}
 
-	talkNodesForOptionsActive(): TalkNode[]
+	talkNodesForOptionsActive
+	(
+		universe: Universe, conversationRun: ConversationRun
+	): TalkNode[]
 	{
 		var returnValues;
 		if (this.isPromptingForResponse == false)
@@ -96,7 +154,8 @@ export class ConversationScope
 				for (var i = 0; i < this.talkNodesForOptions.length; i++)
 				{
 					var talkNode = this.talkNodesForOptions[i];
-					if (talkNode.isEnabled())
+					var isEnabled = talkNode.isEnabled(universe, conversationRun);
+					if (isEnabled)
 					{
 						this._talkNodesForOptionsActive.push(talkNode);
 					}
@@ -112,7 +171,10 @@ export class ConversationScope
 	update(universe: Universe, conversationRun: ConversationRun): void
 	{
 		this.haveOptionsBeenUpdated = true;
-		this.talkNodeCurrent.execute(universe, conversationRun, this);
+		if (this.talkNodeCurrent != null)
+		{
+			this.talkNodeCurrent.execute(universe, conversationRun, this);
+		}
 	}
 }
 

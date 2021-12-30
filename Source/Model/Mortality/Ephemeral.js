@@ -5,8 +5,14 @@ var ThisCouldBeBetter;
     (function (GameFramework) {
         class Ephemeral {
             constructor(ticksToLive, expire) {
-                this.ticksToLive = ticksToLive;
+                this.ticksToLive = ticksToLive || 100;
                 this.expire = expire;
+            }
+            static default() {
+                return Ephemeral.fromTicksToLive(100);
+            }
+            static fromTicksToLive(ticksToLive) {
+                return new Ephemeral(ticksToLive, null);
             }
             toEntity() { return new GameFramework.Entity(Ephemeral.name, [this]); }
             // EntityProperty.

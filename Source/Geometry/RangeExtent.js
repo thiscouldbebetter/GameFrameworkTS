@@ -11,6 +11,9 @@ var ThisCouldBeBetter;
             static create() {
                 return new RangeExtent(0, 0);
             }
+            static fromNumber(value) {
+                return new RangeExtent(value, value);
+            }
             static Instances() {
                 if (RangeExtent._instances == null) {
                     RangeExtent._instances = new RangeExtent_Instances();
@@ -50,7 +53,8 @@ var ThisCouldBeBetter;
                 return this;
             }
             random(randomizer) {
-                return this.min + (this.max - this.min) * randomizer.getNextRandom();
+                var randomNumber = (randomizer == null ? Math.random() : randomizer.getNextRandom());
+                return this.min + (this.max - this.min) * randomNumber;
             }
             size() {
                 return this.max - this.min;

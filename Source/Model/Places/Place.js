@@ -3,12 +3,13 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Place //
-         {
-            constructor(name, defnName, size, entities) {
+        class Place {
+            constructor(name, defnName, parentName, size, entities) {
                 this.name = name;
                 this.defnName = defnName;
+                this.parentName = parentName;
                 this.size = size;
+                entities = entities || [];
                 this.entities = [];
                 this.entitiesById = new Map();
                 this.entitiesByName = new Map();
@@ -19,13 +20,24 @@ var ThisCouldBeBetter;
             }
             static default() {
                 return new Place("Default", "Default", // defnName,
+                null, // parentName
                 GameFramework.Coords.fromXY(1, 1).multiplyScalar(1000), // size
-                [] // entities
+                null // entities
                 );
             }
             defn(world) {
                 return world.defn.placeDefnByName(this.defnName);
             }
+            placeParent(world) {
+                return (this.parentName == null ? null : world.placeByName(this.parentName));
+            }
+            placesAncestors(world, placesInAncestry) {
+                var placeParent = this.placeParent(world);
+                placeParent.placesAncestors(world, placesInAncestry);
+                placesInAncestry.push(this);
+                return placesInAncestry;
+            }
+            // Drawing.
             draw(universe, world, display) {
                 var uwpe = GameFramework.UniverseWorldPlaceEntities.fromUniverseWorldAndPlace(universe, world, this);
                 var colorBlack = GameFramework.Color.byName("Black");
@@ -42,6 +54,7 @@ var ThisCouldBeBetter;
                     camera.drawEntitiesInView(uwpe, cameraEntity, display);
                 }
             }
+            // Entities.
             entitiesByPropertyName(propertyName) {
                 var returnValues = this._entitiesByPropertyName.get(propertyName);
                 if (returnValues == null) {
@@ -120,6 +133,7 @@ var ThisCouldBeBetter;
             entityToSpawnAdd(entityToSpawn) {
                 this.entitiesToSpawn.push(entityToSpawn);
             }
+            // EntityProperties.
             finalize(uwpe) {
                 uwpe.place = this;
                 var universe = uwpe.universe;
@@ -142,22 +156,6 @@ var ThisCouldBeBetter;
                     entity.initialize(uwpe);
                 }
             }
-            load(uwpe) {
-                if (this.isLoaded == false) {
-                    var loadables = this.loadables();
-                    uwpe.place = this;
-                    loadables.forEach(x => x.loadable().load(uwpe.entitySet(x)));
-                    this.isLoaded = true;
-                }
-            }
-            unload(uwpe) {
-                if (this.isLoaded) {
-                    var loadables = this.loadables();
-                    uwpe.place = this;
-                    loadables.forEach(x => x.loadable().unload(uwpe.entitySet(x)));
-                    this.isLoaded = false;
-                }
-            }
             updateForTimerTick(uwpe) {
                 var world = uwpe.world;
                 this.entitiesRemove();
@@ -178,13 +176,34 @@ var ThisCouldBeBetter;
                     }
                 }
             }
-            // Controls.
+            // Loadable.
+            load(uwpe) {
+                if (this.isLoaded == false) {
+                    var loadables = this.loadables();
+                    uwpe.place = this;
+                    loadables.forEach(x => x.loadable().load(uwpe.entitySet(x)));
+                    this.isLoaded = true;
+                }
+            }
+            unload(uwpe) {
+                if (this.isLoaded) {
+                    var loadables = this.loadables();
+                    uwpe.place = this;
+                    loadables.forEach(x => x.loadable().unload(uwpe.entitySet(x)));
+                    this.isLoaded = false;
+                }
+            }
+            // Controllable.
             toControl(universe, world) {
                 var player = this.player();
                 var playerControllable = player.controllable();
                 var uwpe = new GameFramework.UniverseWorldPlaceEntities(universe, world, world.placeCurrent, player, null);
                 var returnValue = playerControllable.toControl(uwpe, null, null);
                 return returnValue;
+            }
+            // Equatable.
+            equals(other) {
+                return (this.name == other.name);
             }
             // Entity convenience accessors.
             camera() {

@@ -161,7 +161,10 @@ export class Locatable implements EntityProperty<Locatable>
 	// EntityProperty.
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		this.loc.placeName = uwpe.place.name;
+	}
 
 	// Equatable
 

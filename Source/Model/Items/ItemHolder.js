@@ -16,6 +16,9 @@ var ThisCouldBeBetter;
             static fromItems(items) {
                 return new ItemHolder(items, null, null);
             }
+            static fromMassMax(massMax) {
+                return new ItemHolder(null, massMax, null);
+            }
             // Instance methods.
             clear() {
                 this.items.length = 0;
@@ -239,7 +242,11 @@ var ThisCouldBeBetter;
                 return massTotal;
             }
             massOfAllItemsOverMax(world) {
-                return "" + Math.ceil(this.massOfAllItems(world)) + "/" + this.massMax;
+                var returnValue = "" + Math.ceil(this.massOfAllItems(world));
+                if (this.massMax != null) {
+                    returnValue += "/" + this.massMax;
+                }
+                return returnValue;
             }
             tradeValueOfAllItems(world) {
                 var tradeValueTotal = this.items.reduce((sumSoFar, item) => sumSoFar + item.tradeValue(world), 0 // sumSoFar

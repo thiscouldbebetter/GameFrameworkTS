@@ -49,6 +49,11 @@ export class Killable implements EntityProperty<Killable>
 		uwpe: UniverseWorldPlaceEntities, damageToApply: Damage
 	): number
 	{
+		if (damageToApply == null)
+		{
+			return 0;
+		}
+
 		var universe = uwpe.universe;
 		var entityDamager = uwpe.entity;
 		var entityKillable = uwpe.entity2;

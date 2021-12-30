@@ -110,7 +110,7 @@ export class TestFixture
 					}
 					catch (err)
 					{
-						var errAsString = err.message + err.stack;
+						var errAsString = err.message + "<br />" + err.stack;
 						labelStatus.innerHTML = "Failed: " + errAsString;
 					}
 				};

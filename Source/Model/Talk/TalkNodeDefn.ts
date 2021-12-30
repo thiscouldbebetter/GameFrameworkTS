@@ -100,7 +100,7 @@ class TalkNodeDefn_Instances
 						conversationRun.disable(talkNodeToDisable.name)
 				);
 
-				scope.talkNodeAdvance(conversationRun);
+				scope.talkNodeAdvance(universe, conversationRun);
 				conversationRun.update(universe);
 			},
 			null // activate
@@ -119,7 +119,7 @@ class TalkNodeDefn_Instances
 			{
 				scope.displayTextCurrent =
 					talkNode.content;
-				scope.talkNodeNextSpecifiedOrAdvance(conversationRun);
+				scope.talkNodeNextSpecifiedOrAdvance(universe, conversationRun);
 
 				conversationRun.talkNodesForTranscript.push(talkNode);
 			},
@@ -136,7 +136,7 @@ class TalkNodeDefn_Instances
 				talkNode: TalkNode
 			) => // execute
 			{
-				scope.talkNodeAdvance(conversationRun);
+				scope.talkNodeAdvance(universe, conversationRun);
 				conversationRun.update(universe);
 			},
 			null // activate
@@ -172,7 +172,7 @@ class TalkNodeDefn_Instances
 						conversationRun.enable(talkNodeToEnable.name)
 				);
 
-				scope.talkNodeAdvance(conversationRun);
+				scope.talkNodeAdvance(universe, conversationRun);
 				conversationRun.update(universe);
 			},
 			null // activate
@@ -209,7 +209,7 @@ class TalkNodeDefn_Instances
 				var variableValue = conversationRun.variableByName(variableName);
 				if ((variableValue as boolean) == true)
 				{
-					scope.talkNodeAdvance(conversationRun);
+					scope.talkNodeAdvance(universe, conversationRun);
 				}
 				else
 				{
@@ -246,7 +246,7 @@ class TalkNodeDefn_Instances
 				}
 				else
 				{
-					scope.talkNodeAdvance(conversationRun);
+					scope.talkNodeAdvance(universe, conversationRun);
 				}
 
 				conversationRun.update(universe);
@@ -270,7 +270,7 @@ class TalkNodeDefn_Instances
 					talkNodesForOptions.push(talkNode);
 					scope.talkNodesForOptionsByName.set(talkNode.name, talkNode);
 				}
-				scope.talkNodeAdvance(conversationRun);
+				scope.talkNodeAdvance(universe, conversationRun);
 				conversationRun.update(universe);
 			},
 			(conversationRun: ConversationRun, scope: ConversationScope, talkNode: TalkNode) => // activate
@@ -324,7 +324,7 @@ class TalkNodeDefn_Instances
 			) => // activate
 			{
 				var shouldClearOptions = talkNode.content;
-				if (shouldClearOptions == "true")
+				if (shouldClearOptions)
 				{
 					scope.talkNodesForOptions.length = 0;
 				}
@@ -370,7 +370,7 @@ class TalkNodeDefn_Instances
 				talkNode: TalkNode
 			) => // execute
 			{
-				conversationRun.quit();
+				conversationRun.quit(universe);
 			},
 			null // activate
 		);
@@ -388,7 +388,7 @@ class TalkNodeDefn_Instances
 				var scriptToRunAsString = "(" + talkNode.content + ")";
 				var scriptToRun = eval(scriptToRunAsString);
 				scriptToRun(universe, conversationRun);
-				scope.talkNodeNextSpecifiedOrAdvance(conversationRun);
+				scope.talkNodeNextSpecifiedOrAdvance(universe, conversationRun);
 				conversationRun.update(universe); // hack
 			},
 			null // activate
@@ -443,11 +443,11 @@ class TalkNodeDefn_Instances
 			{
 				var variableName = talkNode.content;
 				var scriptExpression = talkNode.next;
-				var scriptToRunAsString = "( (u, cr) => { return " + scriptExpression + "; } )";
+				var scriptToRunAsString = "( (u, cr) => " + scriptExpression + " )";
 				var scriptToRun = eval(scriptToRunAsString);
 				var scriptResult = scriptToRun(universe, conversationRun);
 				conversationRun.variableSet(variableName, scriptResult);
-				scope.talkNodeAdvance(conversationRun);
+				scope.talkNodeAdvance(universe, conversationRun);
 				conversationRun.update(universe); // hack
 			},
 			null // activate
@@ -466,7 +466,7 @@ class TalkNodeDefn_Instances
 				var variableName = talkNode.content;
 				var variableValue = talkNode.next;
 				conversationRun.variableSet(variableName, variableValue);
-				scope.talkNodeAdvance(conversationRun);
+				scope.talkNodeAdvance(universe, conversationRun);
 				conversationRun.update(universe); // hack
 			},
 			null // activate
@@ -483,12 +483,15 @@ class TalkNodeDefn_Instances
 			) => // execute
 			{
 				var variableName = talkNode.content;
-				var variableValue = conversationRun.variableByName(variableName);
+				var variableValue = conversationRun.variableByName(variableName).toString();
 				var scriptExpression = talkNode.next;
-				var scriptToRunAsString = "( (u, cr) => { " + scriptExpression + " = " + variableValue + "; } )";
+				var scriptExpressionWithValue =
+					scriptExpression.split("[value]").join(variableValue);
+				var scriptToRunAsString =
+					"( (u, cr) => { " + scriptExpressionWithValue + "; } )";
 				var scriptToRun = eval(scriptToRunAsString);
 				scriptToRun(universe, conversationRun);
-				scope.talkNodeAdvance(conversationRun);
+				scope.talkNodeAdvance(universe, conversationRun);
 				conversationRun.update(universe); // hack
 			},
 			null // activate

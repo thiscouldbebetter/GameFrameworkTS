@@ -22,9 +22,9 @@ var ThisCouldBeBetter;
                 this.isEnabled = true;
             }
             actionsFromInput(actionsByName, actionToInputsMappingsByInputName) {
-                var returnValues = new Array();
+                var actionsSoFar = new Array();
                 if (this.isEnabled == false) {
-                    return returnValues;
+                    return actionsSoFar;
                 }
                 var inputsPressed = this.inputsPressed;
                 for (var i = 0; i < inputsPressed.length; i++) {
@@ -34,14 +34,16 @@ var ThisCouldBeBetter;
                         if (mapping != null) {
                             var actionName = mapping.actionName;
                             var action = actionsByName.get(actionName);
-                            returnValues.push(action);
+                            if (actionsSoFar.indexOf(action) == -1) {
+                                actionsSoFar.push(action);
+                            }
                             if (mapping.inactivateInputWhenActionPerformed) {
                                 inputPressed.isActive = false;
                             }
                         }
                     }
                 }
-                return returnValues;
+                return actionsSoFar;
             }
             initialize(universe) {
                 this.inputsPressed = [];

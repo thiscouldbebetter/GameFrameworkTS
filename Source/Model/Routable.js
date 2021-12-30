@@ -35,6 +35,9 @@ var ThisCouldBeBetter;
                 // Helper variables.
                 this._tempPos = GameFramework.Coords.create();
             }
+            static fromNeighborOffsets(neighborOffsets) {
+                return new Route(neighborOffsets, null, null, null, null);
+            }
             calculate() {
                 var startPos = this.startPos.clone();
                 var goalPos = this.goalPos.clone();

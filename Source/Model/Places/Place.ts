@@ -2,10 +2,11 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Place //
+export class Place implements Equatable<Place>
 {
 	name: string;
 	defnName: string;
+	parentName: string;
 	size: Coords;
 	entities: Entity[];
 	entitiesById: Map<number, Entity>;
@@ -16,11 +17,21 @@ export class Place //
 	entitiesToRemove: Entity[];
 	isLoaded: boolean;
 
-	constructor(name: string, defnName: string, size: Coords, entities: Entity[])
+	constructor
+	(
+		name: string,
+		defnName: string,
+		parentName: string,
+		size: Coords,
+		entities: Entity[]
+	)
 	{
 		this.name = name;
 		this.defnName = defnName;
+		this.parentName = parentName;
 		this.size = size;
+		entities = entities || [];
+
 		this.entities = [];
 		this.entitiesById = new Map<number, Entity>();
 		this.entitiesByName = new Map<string, Entity>();
@@ -37,8 +48,9 @@ export class Place //
 		(
 			"Default",
 			"Default", // defnName,
+			null, // parentName
 			Coords.fromXY(1, 1).multiplyScalar(1000), // size
-			[] // entities
+			null // entities
 		);
 	}
 
@@ -46,6 +58,21 @@ export class Place //
 	{
 		return world.defn.placeDefnByName(this.defnName);
 	}
+
+	placeParent(world: World): Place
+	{
+		return (this.parentName == null ? null : world.placeByName(this.parentName));
+	}
+
+	placesAncestors(world: World, placesInAncestry: Place[]): Place[]
+	{
+		var placeParent = this.placeParent(world);
+		placeParent.placesAncestors(world, placesInAncestry);
+		placesInAncestry.push(this);
+		return placesInAncestry;
+	}
+
+	// Drawing.
 
 	draw(universe: Universe, world: World, display: Display): void
 	{
@@ -74,6 +101,8 @@ export class Place //
 			camera.drawEntitiesInView(uwpe, cameraEntity, display);
 		}
 	}
+
+	// Entities.
 
 	entitiesByPropertyName(propertyName: string): Entity[]
 	{
@@ -196,6 +225,8 @@ export class Place //
 		this.entitiesToSpawn.push(entityToSpawn);
 	}
 
+	// EntityProperties.
+
 	finalize(uwpe: UniverseWorldPlaceEntities): void
 	{
 		uwpe.place = this;
@@ -221,28 +252,6 @@ export class Place //
 		{
 			var entity = this.entities[i];
 			entity.initialize(uwpe);
-		}
-	}
-
-	load(uwpe: UniverseWorldPlaceEntities): void
-	{
-		if (this.isLoaded == false)
-		{
-			var loadables = this.loadables();
-			uwpe.place = this;
-			loadables.forEach(x => x.loadable().load(uwpe.entitySet(x) ) );
-			this.isLoaded = true;
-		}
-	}
-
-	unload(uwpe: UniverseWorldPlaceEntities): void
-	{
-		if (this.isLoaded)
-		{
-			var loadables = this.loadables();
-			uwpe.place = this;
-			loadables.forEach(x => x.loadable().unload(uwpe.entitySet(x) ) );
-			this.isLoaded = false;
 		}
 	}
 
@@ -275,7 +284,31 @@ export class Place //
 		}
 	}
 
-	// Controls.
+	// Loadable.
+
+	load(uwpe: UniverseWorldPlaceEntities): void
+	{
+		if (this.isLoaded == false)
+		{
+			var loadables = this.loadables();
+			uwpe.place = this;
+			loadables.forEach(x => x.loadable().load(uwpe.entitySet(x) ) );
+			this.isLoaded = true;
+		}
+	}
+
+	unload(uwpe: UniverseWorldPlaceEntities): void
+	{
+		if (this.isLoaded)
+		{
+			var loadables = this.loadables();
+			uwpe.place = this;
+			loadables.forEach(x => x.loadable().unload(uwpe.entitySet(x) ) );
+			this.isLoaded = false;
+		}
+	}
+
+	// Controllable.
 
 	toControl(universe: Universe, world: World): ControlBase
 	{
@@ -290,6 +323,13 @@ export class Place //
 			uwpe, null, null
 		);
 		return returnValue;
+	}
+
+	// Equatable.
+
+	equals(other: Place)
+	{
+		return (this.name == other.name);
 	}
 
 	// Entity convenience accessors.

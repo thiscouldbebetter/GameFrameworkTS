@@ -66,7 +66,7 @@ var ThisCouldBeBetter;
                             labelStatus.innerHTML = "Passed.";
                         }
                         catch (err) {
-                            var errAsString = err.message + err.stack;
+                            var errAsString = err.message + "<br />" + err.stack;
                             labelStatus.innerHTML = "Failed: " + errAsString;
                         }
                     };

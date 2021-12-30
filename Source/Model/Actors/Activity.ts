@@ -6,6 +6,7 @@ export class Activity
 {
 	defnName: string;
 	targetEntitiesByName: Map<string, Entity>;
+	isDone: boolean;
 
 	constructor
 	(
@@ -16,6 +17,8 @@ export class Activity
 		this.defnName = defnName;
 		this.targetEntitiesByName =
 			targetEntitiesByName || new Map<string, Entity>([]);
+
+		this.isDone = false;
 	}
 
 	static fromDefnName(defnName: string): Activity
@@ -66,10 +69,25 @@ export class Activity
 		return this;
 	}
 
+	defnTarget
+	(
+		defnName: string, targetEntity: Entity
+	): Activity
+	{
+		// Tersely-named alias.
+		return this.defnNameAndTargetEntitySet(defnName, targetEntity);
+	}
+
 	doNothing(): void
 	{
 		this.defnNameSet(ActivityDefn.Instances().DoNothing.name);
 		this.targetEntitiesClearAll();
+	}
+
+	isDoneSet(value: boolean): Activity
+	{
+		this.isDone = value;
+		return this;
 	}
 
 	perform(uwpe: UniverseWorldPlaceEntities): void

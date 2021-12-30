@@ -45,6 +45,11 @@ export class Sphere implements ShapeBase
 		return returnValue;
 	}
 
+	containsPoint(pointToCheck: Coords)
+	{
+		return (this._displacement.overwriteWith(pointToCheck).subtract(this.center).magnitude() < this.radius);
+	}
+
 	pointRandom(randomizer: Randomizer): Coords
 	{
 		return new Polar

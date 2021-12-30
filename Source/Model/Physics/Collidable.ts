@@ -4,6 +4,7 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Collidable implements EntityProperty<Collidable>
 {
+	canCollideAgainWithoutSeparating: boolean;
 	ticksToWaitBetweenCollisions: number;
 	colliderAtRest: ShapeBase;
 	entityPropertyNamesToCollideWith: string[];
@@ -20,15 +21,20 @@ export class Collidable implements EntityProperty<Collidable>
 
 	constructor
 	(
+		canCollideAgainWithoutSeparating: boolean,
 		ticksToWaitBetweenCollisions: number,
 		colliderAtRest: ShapeBase,
 		entityPropertyNamesToCollideWith: string[],
 		collideEntities: (uwpe: UniverseWorldPlaceEntities, c: Collision) => void
 	)
 	{
-		this.ticksToWaitBetweenCollisions = ticksToWaitBetweenCollisions || 0;
+		this.canCollideAgainWithoutSeparating =
+			canCollideAgainWithoutSeparating || false;
+		this.ticksToWaitBetweenCollisions =
+			ticksToWaitBetweenCollisions || 0;
 		this.colliderAtRest = colliderAtRest;
-		this.entityPropertyNamesToCollideWith = entityPropertyNamesToCollideWith || [];
+		this.entityPropertyNamesToCollideWith =
+			entityPropertyNamesToCollideWith || []; // Or maybe [ Collidable.name ];
 		this._collideEntities = collideEntities;
 
 		this.collider = this.colliderAtRest.clone();
@@ -44,9 +50,20 @@ export class Collidable implements EntityProperty<Collidable>
 		this._collisions = new Array<Collision>();
 	}
 
+	static default(): Collidable
+	{
+		return Collidable.fromCollider
+		(
+			Box.fromSize
+			(
+				Coords.ones().multiplyScalar(10)
+			)
+		);
+	}
+
 	static fromCollider(colliderAtRest: ShapeBase): Collidable
 	{
-		return new Collidable(null, colliderAtRest, null, null);
+		return new Collidable(false, null, colliderAtRest, null, null);
 	}
 
 	static fromColliderAndCollideEntities
@@ -55,7 +72,7 @@ export class Collidable implements EntityProperty<Collidable>
 		collideEntities: (uwpe: UniverseWorldPlaceEntities, c: Collision)=>void
 	): Collidable
 	{
-		return new Collidable(null, colliderAtRest, null, collideEntities);
+		return new Collidable(false, null, colliderAtRest, null, collideEntities);
 	}
 
 	collideEntities
@@ -106,14 +123,14 @@ export class Collidable implements EntityProperty<Collidable>
 			var entityLoc = entity.locatable().loc;
 			this.locPrev.overwriteWith(entityLoc);
 
+			this.colliderLocateForEntity(entity);
+
 			if (this.ticksUntilCanCollide > 0)
 			{
 				this.ticksUntilCanCollide--;
 			}
 			else
 			{
-				this.colliderLocateForEntity(entity);
-
 				var collisions = ArrayHelper.clear(this._collisions);
 				var collisions = this.collisionsFindForEntity
 				(
@@ -302,7 +319,11 @@ export class Collidable implements EntityProperty<Collidable>
 		{
 			if (wereEntitiesAlreadyColliding)
 			{
-				doEntitiesCollide = false;
+				doEntitiesCollide =
+				(
+					collidable0.canCollideAgainWithoutSeparating
+					|| collidable1.canCollideAgainWithoutSeparating
+				);
 			}
 			else
 			{
@@ -342,7 +363,9 @@ export class Collidable implements EntityProperty<Collidable>
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
-		if (this.isEntityStationary(uwpe.entity))
+		var entity = uwpe.entity;
+		var isStationary = this.isEntityStationary(entity);
+		if (isStationary)
 		{
 			this.entitiesAlreadyCollidedWith.length = 0;
 		}
@@ -358,6 +381,7 @@ export class Collidable implements EntityProperty<Collidable>
 	{
 		return new Collidable
 		(
+			this.canCollideAgainWithoutSeparating,
 			this.ticksToWaitBetweenCollisions,
 			this.colliderAtRest.clone(),
 			this.entityPropertyNamesToCollideWith,

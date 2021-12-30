@@ -18,6 +18,11 @@ export class RangeExtent
 		return new RangeExtent(0, 0);
 	}
 
+	static fromNumber(value: number): RangeExtent
+	{
+		return new RangeExtent(value, value);
+	}
+
 	static _instances: RangeExtent_Instances;
 	static Instances(): RangeExtent_Instances
 	{
@@ -82,7 +87,9 @@ export class RangeExtent
 
 	random(randomizer: Randomizer): number
 	{
-		return this.min + (this.max - this.min) * randomizer.getNextRandom();
+		var randomNumber =
+			(randomizer == null ? Math.random() : randomizer.getNextRandom());
+		return this.min + (this.max - this.min) * randomNumber;
 	}
 
 	size(): number

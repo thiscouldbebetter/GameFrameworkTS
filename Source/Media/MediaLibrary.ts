@@ -7,6 +7,7 @@ export interface MediaItemBase extends Loadable, Namable
 
 export class MediaLibrary
 {
+	contentDirectoryPath: string;
 	images: Image2[];
 	sounds: Sound[];
 	videos: Video[];
@@ -26,10 +27,16 @@ export class MediaLibrary
 
 	constructor
 	(
-		images: Image2[], sounds: Sound[], videos: Video[],
-		fonts: Font[], textStrings: TextString[]
+		contentDirectoryPath: string,
+		images: Image2[],
+		sounds: Sound[],
+		videos: Video[],
+		fonts: Font[],
+		textStrings: TextString[]
 	)
 	{
+		this.contentDirectoryPath = contentDirectoryPath;
+
 		this.images = images || [];
 		this.imagesByName = ArrayHelper.addLookupsByName(this.images);
 		this.sounds = sounds || [];
@@ -60,10 +67,10 @@ export class MediaLibrary
 
 	static default()
 	{
-		return MediaLibrary.fromFilePaths([]);
+		return MediaLibrary.fromFilePaths("../Content/", []);
 	}
 
-	static fromFilePaths(mediaFilePaths: string[]): MediaLibrary
+	static fromFilePaths(contentDirectoryPath: string, mediaFilePaths: string[]): MediaLibrary
 	{
 		var images = new Array<Image2>();
 		var sounds = new Array<Sound>();
@@ -117,7 +124,7 @@ export class MediaLibrary
 
 		var returnValue = new MediaLibrary
 		(
-			images, sounds, videos, fonts, textStrings
+			contentDirectoryPath, images, sounds, videos, fonts, textStrings
 		);
 
 		return returnValue;
@@ -178,7 +185,7 @@ export class MediaLibrary
 
 		var returnValue = new MediaLibrary
 		(
-			images, sounds, videos, fonts, textStrings
+			contentPath, images, sounds, videos, fonts, textStrings
 		);
 
 		return returnValue;

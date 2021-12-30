@@ -38,7 +38,10 @@ export class VisualAnimation implements Visual<VisualAnimation>
 			{
 				if (f >= this.ticksToHoldFrames.length)
 				{
-					this.ticksToHoldFrames.push(this.ticksToHoldFrames[f % this.ticksToHoldFrames.length]);
+					this.ticksToHoldFrames.push
+					(
+						this.ticksToHoldFrames[f % this.ticksToHoldFrames.length]
+					);
 				}
 			}
 		}
@@ -50,14 +53,14 @@ export class VisualAnimation implements Visual<VisualAnimation>
 		}
 	}
 
-	frameCurrent(world: World, tickStarted: number)
+	frameCurrent(world: World, tickStarted: number): VisualBase
 	{
 		var frameIndexCurrent = this.frameIndexCurrent(world, tickStarted);
 		var frameCurrent = this.frames[frameIndexCurrent];
 		return frameCurrent;
 	}
 
-	frameIndexCurrent(world: World, tickStarted: number)
+	frameIndexCurrent(world: World, tickStarted: number): number
 	{
 		var returnValue = -1;
 
@@ -94,7 +97,7 @@ export class VisualAnimation implements Visual<VisualAnimation>
 		return returnValue;
 	}
 
-	isComplete(world: World, tickStarted: number)
+	isComplete(world: World, tickStarted: number): boolean
 	{
 		var ticksSinceStarted = world.timerTicksSoFar - tickStarted;
 		var returnValue = (ticksSinceStarted >= this.ticksToComplete);
@@ -109,7 +112,8 @@ export class VisualAnimation implements Visual<VisualAnimation>
 		var entity = uwpe.entity;
 
 		var animatable = entity.animatable();
-		var tickStarted = animatable.animationWithNameStartIfNecessary(this.name, world);
+		var tickStarted =
+			animatable.animationWithNameStartIfNecessary(this.name, world);
 		var frameCurrent = this.frameCurrent(world, tickStarted);
 		frameCurrent.draw(uwpe, display);
 	}
