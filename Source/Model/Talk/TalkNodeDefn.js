@@ -151,7 +151,7 @@ var ThisCouldBeBetter;
                 );
                 this.Script = new TalkNodeDefn("Script", (universe, conversationRun, scope, talkNode) => // execute
                  {
-                    var scriptToRunAsString = "(" + talkNode.content + ")";
+                    var scriptToRunAsString = "( (u, cr) => " + talkNode.content + ")";
                     var scriptToRun = eval(scriptToRunAsString);
                     scriptToRun(universe, conversationRun);
                     scope.talkNodeNextSpecifiedOrAdvance(universe, conversationRun);
