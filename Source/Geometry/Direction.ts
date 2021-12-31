@@ -18,38 +18,38 @@ export class Direction
 
 export class Direction_Instances
 {
-	E: Coords;
-	N: Coords;
-	NE: Coords;
-	NW: Coords;
-	S: Coords;
-	SE: Coords;
-	SW: Coords;
-	W: Coords;
+	East: Coords;
+	North: Coords;
+	Northeast: Coords;
+	Northwest: Coords;
+	South: Coords;
+	Southeast: Coords;
+	Southwest: Coords;
+	West: Coords;
 
 	_ByHeading: Coords[];
 
 	constructor()
 	{
-		this.E 		= Coords.fromXY(1, 0);
-		this.N 		= Coords.fromXY(0, -1);
-		this.NE 	= Coords.fromXY(1, -1);
-		this.NW 	= Coords.fromXY(-1, -1);
-		this.S 		= Coords.fromXY(0, 1);
-		this.SE 	= Coords.fromXY(1, 1);
-		this.SW 	= Coords.fromXY(-1, 1);
-		this.W 		= Coords.fromXY(-1, 0);
+		this.East 		= Coords.fromXY(1, 0);
+		this.North 		= Coords.fromXY(0, -1);
+		this.Northeast 	= Coords.fromXY(1, -1);
+		this.Northwest 	= Coords.fromXY(-1, -1);
+		this.South 		= Coords.fromXY(0, 1);
+		this.Southeast 	= Coords.fromXY(1, 1);
+		this.Southwest 	= Coords.fromXY(-1, 1);
+		this.West 		= Coords.fromXY(-1, 0);
 
 		this._ByHeading =
 		[
-			this.E,
-			this.SE,
-			this.S,
-			this.SW,
-			this.W,
-			this.NW,
-			this.N,
-			this.NE,
+			this.East,
+			this.Southeast,
+			this.South,
+			this.Southwest,
+			this.West,
+			this.Northwest,
+			this.North,
+			this.Northeast
 		];
 	}
 }
