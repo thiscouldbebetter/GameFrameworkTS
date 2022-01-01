@@ -81,11 +81,9 @@ export class ConversationRun
 	{
 		// This convenience method is tersely named for use in scripts.
 		var scope = this.scopeCurrent;
-		scope.talkNodeCurrent = this.defn.talkNodeByName
-		(
-			talkNodeNameNext
-		);
-		this.update(universe);
+		var nodeNext = this.defn.talkNodeByName(talkNodeNameNext);
+		scope.talkNodeCurrentSet(nodeNext);
+		this.talkNodeCurrentExecute(universe);
 	}
 
 	initialize(universe: Universe): void
@@ -95,15 +93,28 @@ export class ConversationRun
 
 	next(universe: Universe): void
 	{
-		var responseSelected = this.scopeCurrent.talkNodeForOptionSelected;
+		var scope = this.scopeCurrent;
+		var responseSelected = scope.talkNodeForOptionSelected;
 		if (responseSelected != null)
 		{
-			var talkNodePrompt = this.scopeCurrent.talkNodeCurrent;
-			talkNodePrompt.activate(this, this.scopeCurrent);
-			responseSelected.activate(this, this.scopeCurrent);
-			this.scopeCurrent.talkNodeForOptionSelected = null;
+			scope.talkNodeForOptionSelected = null;
+			scope.isPromptingForResponse = false;
+
+			var talkNodePrompt = this.talkNodeCurrent();
+
+			var shouldClearOptions = talkNodePrompt.content;
+			if (shouldClearOptions)
+			{
+				scope.talkNodesForOptions.length = 0;
+			}
+
+			var nameOfTalkNodeNext = responseSelected.next;
+			var talkNodeNext = this.defn.talkNodeByName(nameOfTalkNodeNext);
+			scope.talkNodeCurrentSet(talkNodeNext);
+
+			this.talkNodesForTranscript.push(responseSelected);
 		}
-		this.update(universe);
+		this.talkNodeCurrentExecute(universe);
 	}
 
 	nextUntilPrompt(universe: Universe): void
@@ -170,7 +181,7 @@ export class ConversationRun
 		var nodeNamedFinalize = this.defn.talkNodes.find(x => x.name == "Finalize");
 		if (nodeNamedFinalize != null)
 		{
-			this.scopeCurrent.talkNodeCurrent = nodeNamedFinalize;
+			this.scopeCurrent.talkNodeCurrentSet(nodeNamedFinalize);
 			this.scopeCurrent.talkNodeAdvance(universe, this);
 			while (this.scopeCurrent.talkNodeCurrent != null)
 			{
@@ -186,9 +197,52 @@ export class ConversationRun
 		return this.scopeCurrent;
 	}
 
+	talkNodeAdvance(universe: Universe): void
+	{
+		this.scopeCurrent.talkNodeAdvance(universe, this);
+	}
+
+	talkNodeByName(nodeName: string): TalkNode
+	{
+		return this.defn.talkNodeByName(nodeName);
+	}
+
 	talkNodeCurrent(): TalkNode
 	{
-		return this.scopeCurrent.talkNodeCurrent;
+		return this.scopeCurrent.talkNodeCurrent();
+	}
+
+	talkNodeCurrentExecute(universe: Universe): void
+	{
+		this.scopeCurrent.talkNodeCurrentExecute(universe, this);
+	}
+
+	talkNodeCurrentSet(value: TalkNode): void
+	{
+		this.scopeCurrent.talkNodeCurrentSet(value);
+	}
+
+	talkNodeGoToNext(universe: Universe): TalkNode
+	{
+		return this.scopeCurrent.talkNodeGoToNext(universe, this);
+	}
+
+	talkNodeNext(): TalkNode
+	{
+		var nodeCurrent = this.talkNodeCurrent();
+		var nodeNextName = nodeCurrent.next;
+		var nodeNext = 
+		(
+			nodeNextName == null
+			? this.defn.talkNodes[this.defn.talkNodes.indexOf(nodeCurrent) + 1]
+			: this.talkNodeByName(nodeCurrent.next)
+		);
+		return nodeNext;
+	}
+
+	talkNodePrev(): TalkNode
+	{
+		return this.scopeCurrent.talkNodePrev();
 	}
 
 	talker(): Entity
@@ -200,11 +254,6 @@ export class ConversationRun
 	toVenue(universe: Universe): Venue
 	{
 		return this.toControl(universe.display.sizeInPixels, universe).toVenue();
-	}
-
-	update(universe: Universe): void
-	{
-		this.scopeCurrent.update(universe, this);
 	}
 
 	varGet(variableName: string): unknown

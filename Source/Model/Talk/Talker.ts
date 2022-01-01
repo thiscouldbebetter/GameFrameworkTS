@@ -74,6 +74,7 @@ export class Talker implements EntityProperty<Talker>
 			entityTalker, // entityTalker
 			null // contentsById
 		);
+		this.conversationRun.talkNodeCurrentExecute(universe);
 		var conversationSize = universe.display.sizeDefault().clone();
 		var conversationAsControl =
 			this.conversationRun.toControl(conversationSize, universe);

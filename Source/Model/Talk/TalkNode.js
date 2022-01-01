@@ -98,12 +98,6 @@ var ThisCouldBeBetter;
                 );
             }
             // instance methods
-            activate(conversationRun, scope) {
-                var defn = this.defn(conversationRun.defn);
-                if (defn.activate != null) {
-                    defn.activate(conversationRun, scope, this);
-                }
-            }
             defn(conversationDefn) {
                 return conversationDefn.talkNodeDefnsByName.get(this.defnName);
             }

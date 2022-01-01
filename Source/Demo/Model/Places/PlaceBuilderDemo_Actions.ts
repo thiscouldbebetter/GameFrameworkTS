@@ -256,10 +256,46 @@ class PlaceBuilderDemo_Actions
 		[
 			new ActionToInputsMapping(actions.ShowMenuPlayer.name, [ inputNames.Escape, inputNames.Tab ], inactivateFalse),
 
-			new ActionToInputsMapping(Movable.actionAccelerateDown().name, 	[ inputNames.ArrowDown, inputNames.GamepadMoveDown + "0" ], inactivateFalse),
-			new ActionToInputsMapping(Movable.actionAccelerateLeft().name, 	[ inputNames.ArrowLeft, inputNames.GamepadMoveLeft + "0" ], inactivateFalse),
-			new ActionToInputsMapping(Movable.actionAccelerateRight().name, [ inputNames.ArrowRight, inputNames.GamepadMoveRight + "0" ], inactivateFalse),
-			new ActionToInputsMapping(Movable.actionAccelerateUp().name, 	[ inputNames.ArrowUp, inputNames.GamepadMoveUp + "0" ], inactivateFalse),
+			new ActionToInputsMapping
+			(
+				Movable.actionAccelerateDown().name,
+				[
+					inputNames.ArrowDown,
+					"s",
+					inputNames.GamepadMoveDown + "0"
+				],
+				inactivateFalse
+			),
+			new ActionToInputsMapping
+			(
+				Movable.actionAccelerateLeft().name,
+				[
+					inputNames.ArrowLeft,
+					"a",
+					inputNames.GamepadMoveLeft + "0"
+				],
+				inactivateFalse
+			),
+			new ActionToInputsMapping
+			(
+				Movable.actionAccelerateRight().name,
+				[
+					inputNames.ArrowRight,
+					"d",
+					inputNames.GamepadMoveRight + "0"
+				],
+				inactivateFalse
+			),
+			new ActionToInputsMapping
+			(
+				Movable.actionAccelerateUp().name,
+				[
+					inputNames.ArrowUp,
+					"w",
+					inputNames.GamepadMoveUp + "0"
+				],
+				inactivateFalse
+			),
 
 			new ActionToInputsMapping("Fire", 		[ "f", inputNames.Enter, inputNames.GamepadButton0 + "0" ], inactivateTrue),
 			new ActionToInputsMapping("Hide", 		[ "h", inputNames.GamepadButton0 + "3" ], inactivateFalse),
@@ -268,7 +304,7 @@ class PlaceBuilderDemo_Actions
 			new ActionToInputsMapping("Run", 		[ inputNames.Shift, inputNames.GamepadButton0 + "2" ], inactivateFalse),
 			new ActionToInputsMapping("Sneak", 		[ inputNames.Control, inputNames.GamepadButton0 + "6" ], inactivateFalse),
 			new ActionToInputsMapping("Use", 		[ "e", inputNames.GamepadButton0 + "5" ], inactivateTrue),
-			new ActionToInputsMapping("Wait", 		[ "w" ], inactivateTrue),
+			new ActionToInputsMapping("Wait", 		[ "p" ], inactivateTrue),
 
 			new ActionToInputsMapping("Item0", 	[ "_0" ], inactivateTrue),
 			new ActionToInputsMapping("Item1", 	[ "_1" ], inactivateTrue),

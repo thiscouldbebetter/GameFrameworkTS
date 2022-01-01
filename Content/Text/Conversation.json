@@ -146,14 +146,12 @@
 			"content": "I don't want to talk about history anymore."
 		},
 		{
-			"defnName": "Activate",
-			"next": "Subject.History",
-			"content": false
+			"defnName": "Disable",
+			"content": "Subject.History"
 		},
 		{
-			"defnName": "Activate",
-			"next": "Subject.Carol",
-			"content": true
+			"defnName": "Enable",
+			"content": "Subject.Carol"
 		},
 		{
 			"defnName": "Pop",
@@ -168,6 +166,7 @@
 			"defnName": "Pop",
 			"next": "Subject"
 		},
+
 		{
 			"name": "SQLInjection",
 			"defnName": "Display",
@@ -175,17 +174,20 @@
 		},
 		{
 			"defnName": "Script",
-			"content": "function panic() { alert(\"ER-ROR!  ER-ROR!  DOES! NOT! COMPUTE!\"); }"
+			"content": "alert(\"ER-ROR!  ER-ROR!  DOES! NOT! COMPUTE!\")"
 		},
 		{
 			"defnName": "Goto",
 			"next": "Greet"
 		},
+
 		{
 			"name": "Game",
-			"defnName": "Push"
+			"defnName": "Push",
+			"next": "GameDescription"
 		},
 		{
+			"name": "GameDescription",
 			"defnName": "Display",
 			"content": "Well, it's kind of a moving target."
 		},
@@ -454,7 +456,7 @@
 		},
 		{
 			"defnName": "Script",
-			"content": "function(u, cr) { u.venueNext = new ItemBarterer().toControl(u, u.display.sizeInPixels, cr.p, cr.t, u.venueCurrent).toVenue(); }"
+			"content": "u.venueNext = new ItemBarterer().toControl(u, u.display.sizeInPixels, cr.p, cr.t, u.venueCurrent).toVenue()"
 		},
 		{
 			"defnName": "Display",

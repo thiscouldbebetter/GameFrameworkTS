@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class TalkNode
+export class TalkNode  
 {
 	name: string;
 	defnName: string;
@@ -210,15 +210,6 @@ export class TalkNode
 	}
 
 	// instance methods
-
-	activate(conversationRun: ConversationRun, scope: ConversationScope): void
-	{
-		var defn = this.defn(conversationRun.defn);
-		if (defn.activate != null)
-		{
-			defn.activate(conversationRun, scope, this);
-		}
-	}
 
 	defn(conversationDefn: ConversationDefn): TalkNodeDefn
 	{

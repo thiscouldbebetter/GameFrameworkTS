@@ -42,6 +42,7 @@ var ThisCouldBeBetter;
                 this.conversationRun = new GameFramework.ConversationRun(conversationDefn, conversationQuit, entityTalkee, entityTalker, // entityTalker
                 null // contentsById
                 );
+                this.conversationRun.talkNodeCurrentExecute(universe);
                 var conversationSize = universe.display.sizeDefault().clone();
                 var conversationAsControl = this.conversationRun.toControl(conversationSize, universe);
                 var venueNext = conversationAsControl.toVenue();
