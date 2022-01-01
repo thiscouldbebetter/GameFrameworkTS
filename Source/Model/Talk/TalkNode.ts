@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class TalkNode  
+export class TalkNode //
 {
 	name: string;
 	defnName: string;
@@ -222,6 +222,12 @@ export class TalkNode
 		return this;
 	}
 
+	enable(): TalkNode
+	{
+		this._isDisabled = () => false;
+		return this;
+	}
+
 	execute
 	(
 		universe: Universe,
@@ -230,7 +236,7 @@ export class TalkNode
 	): void
 	{
 		var defn = this.defn(conversationRun.defn);
-		defn.execute(universe, conversationRun, scope, this);
+		defn.execute(universe, conversationRun);
 	}
 
 	isEnabled(u: Universe, cr: ConversationRun): boolean
@@ -262,6 +268,16 @@ export class TalkNode
 			this.next,
 			this._isDisabled
 		);
+	}
+
+	overwriteWith(other: TalkNode): TalkNode
+	{
+		this.name = other.name;
+		this.defnName = other.defnName;
+		this.content = other.content;
+		this.next = other.next;
+		this._isDisabled = other._isDisabled;
+		return this;
 	}
 }
 
