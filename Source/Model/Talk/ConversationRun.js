@@ -46,21 +46,26 @@ var ThisCouldBeBetter;
             }
             next(universe) {
                 var scope = this.scopeCurrent;
-                var responseSelected = scope.talkNodeForOptionSelected;
-                if (responseSelected != null) {
-                    scope.talkNodeForOptionSelected = null;
-                    scope.isPromptingForResponse = false;
-                    var talkNodePrompt = this.talkNodeCurrent();
-                    var shouldClearOptions = talkNodePrompt.content;
-                    if (shouldClearOptions) {
-                        scope.talkNodesForOptions.length = 0;
+                if (scope.isPromptingForResponse) {
+                    var responseSelected = scope.talkNodeForOptionSelected;
+                    if (responseSelected != null) {
+                        scope.talkNodeForOptionSelected = null;
+                        scope.isPromptingForResponse = false;
+                        var talkNodePrompt = this.talkNodeCurrent();
+                        var shouldClearOptions = talkNodePrompt.content;
+                        if (shouldClearOptions) {
+                            scope.talkNodesForOptions.length = 0;
+                        }
+                        var nameOfTalkNodeNext = responseSelected.next;
+                        var talkNodeNext = this.defn.talkNodeByName(nameOfTalkNodeNext);
+                        scope.talkNodeCurrentSet(talkNodeNext);
+                        this.talkNodesForTranscript.push(responseSelected);
+                        this.talkNodeCurrentExecute(universe);
                     }
-                    var nameOfTalkNodeNext = responseSelected.next;
-                    var talkNodeNext = this.defn.talkNodeByName(nameOfTalkNodeNext);
-                    scope.talkNodeCurrentSet(talkNodeNext);
-                    this.talkNodesForTranscript.push(responseSelected);
                 }
-                this.talkNodeCurrentExecute(universe);
+                else {
+                    this.talkNodeCurrentExecute(universe);
+                }
             }
             nextUntilPrompt(universe) {
                 var prompt = GameFramework.TalkNodeDefn.Instances().Prompt.name;

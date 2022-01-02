@@ -94,27 +94,35 @@ export class ConversationRun
 	next(universe: Universe): void
 	{
 		var scope = this.scopeCurrent;
-		var responseSelected = scope.talkNodeForOptionSelected;
-		if (responseSelected != null)
+		if (scope.isPromptingForResponse)
 		{
-			scope.talkNodeForOptionSelected = null;
-			scope.isPromptingForResponse = false;
-
-			var talkNodePrompt = this.talkNodeCurrent();
-
-			var shouldClearOptions = talkNodePrompt.content;
-			if (shouldClearOptions)
+			var responseSelected = scope.talkNodeForOptionSelected;
+			if (responseSelected != null)
 			{
-				scope.talkNodesForOptions.length = 0;
+				scope.talkNodeForOptionSelected = null;
+				scope.isPromptingForResponse = false;
+
+				var talkNodePrompt = this.talkNodeCurrent();
+
+				var shouldClearOptions = talkNodePrompt.content;
+				if (shouldClearOptions)
+				{
+					scope.talkNodesForOptions.length = 0;
+				}
+
+				var nameOfTalkNodeNext = responseSelected.next;
+				var talkNodeNext = this.defn.talkNodeByName(nameOfTalkNodeNext);
+				scope.talkNodeCurrentSet(talkNodeNext);
+
+				this.talkNodesForTranscript.push(responseSelected);
+
+				this.talkNodeCurrentExecute(universe);
 			}
-
-			var nameOfTalkNodeNext = responseSelected.next;
-			var talkNodeNext = this.defn.talkNodeByName(nameOfTalkNodeNext);
-			scope.talkNodeCurrentSet(talkNodeNext);
-
-			this.talkNodesForTranscript.push(responseSelected);
 		}
-		this.talkNodeCurrentExecute(universe);
+		else
+		{
+			this.talkNodeCurrentExecute(universe);
+		}
 	}
 
 	nextUntilPrompt(universe: Universe): void

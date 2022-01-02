@@ -36,7 +36,10 @@ var ThisCouldBeBetter;
                     var venueToReturnTo = universe.venueCurrent;
                     conversationQuit = () => // quit
                      {
-                        universe.venueNext = venueToReturnTo;
+                        if (universe.venueNext == null) // May be set or not based on the conversation.
+                         {
+                            universe.venueNext = venueToReturnTo;
+                        }
                     };
                 }
                 this.conversationRun = new GameFramework.ConversationRun(conversationDefn, conversationQuit, entityTalkee, entityTalker, // entityTalker

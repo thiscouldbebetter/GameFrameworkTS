@@ -19,6 +19,9 @@ var ThisCouldBeBetter;
             static fromContextAndGet(context, get) {
                 return new DataBinding(context, get, null);
             }
+            static fromFalse() {
+                return DataBinding.fromBooleanWithContext(false, null);
+            }
             static fromFalseWithContext(context) {
                 return DataBinding.fromBooleanWithContext(false, context);
             }

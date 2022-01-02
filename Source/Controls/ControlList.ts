@@ -196,7 +196,12 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 	{
 		var wasActionHandled = false;
 		var controlActionNames = ControlActionNames.Instances();
-		if (actionNameToHandle == controlActionNames.ControlIncrement)
+
+		if (this.isEnabled() == false)
+		{
+			wasActionHandled = true; // ?
+		}
+		else if (actionNameToHandle == controlActionNames.ControlIncrement)
 		{
 			this.itemSelectNextInDirection(1);
 			wasActionHandled = true;
@@ -390,6 +395,11 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 
 	mouseClick(clickPos: Coords): boolean
 	{
+		if (this.isEnabled() == false)
+		{
+			return true; // wasActionHandled
+		}
+
 		clickPos = this._mouseClickPos.overwriteWith(clickPos);
 
 		var isClickPosInScrollbar =

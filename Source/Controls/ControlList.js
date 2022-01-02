@@ -56,7 +56,10 @@ var ThisCouldBeBetter;
             actionHandle(actionNameToHandle, universe) {
                 var wasActionHandled = false;
                 var controlActionNames = GameFramework.ControlActionNames.Instances();
-                if (actionNameToHandle == controlActionNames.ControlIncrement) {
+                if (this.isEnabled() == false) {
+                    wasActionHandled = true; // ?
+                }
+                else if (actionNameToHandle == controlActionNames.ControlIncrement) {
                     this.itemSelectNextInDirection(1);
                     wasActionHandled = true;
                 }
@@ -175,6 +178,9 @@ var ThisCouldBeBetter;
                 return this._items.get();
             }
             mouseClick(clickPos) {
+                if (this.isEnabled() == false) {
+                    return true; // wasActionHandled
+                }
                 clickPos = this._mouseClickPos.overwriteWith(clickPos);
                 var isClickPosInScrollbar = (clickPos.x - this.pos.x > this.size.x - this.scrollbar.handleSize.x);
                 if (isClickPosInScrollbar) {
