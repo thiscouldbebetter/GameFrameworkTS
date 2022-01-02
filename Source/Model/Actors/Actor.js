@@ -8,7 +8,7 @@ var ThisCouldBeBetter;
                 this.activity = activity;
                 this.actions = [];
             }
-            static create() {
+            static default() {
                 return Actor.fromActivityDefnName(GameFramework.ActivityDefn.Instances().DoNothing.name);
             }
             static fromActivityDefnName(activityDefnName) {

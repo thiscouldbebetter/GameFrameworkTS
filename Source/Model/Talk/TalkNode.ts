@@ -211,6 +211,24 @@ export class TalkNode //
 
 	// instance methods
 
+	contentVariablesSubstitute(conversationRun: ConversationRun): void
+	{
+		var content = this.content;
+		if (content.indexOf("^") > 0)
+		{
+			var contentParts = content.split("^");
+
+			for (var i = 1; i < contentParts.length; i += 2)
+			{
+				var variableName = contentParts[i];
+				var variableValue = conversationRun.variableByName(variableName);
+				contentParts[i] = variableValue.toString();
+			}
+
+			this.content = contentParts.join("");
+		}
+	}
+
 	defn(conversationDefn: ConversationDefn): TalkNodeDefn
 	{
 		return conversationDefn.talkNodeDefnsByName.get(this.defnName);

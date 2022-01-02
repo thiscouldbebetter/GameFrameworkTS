@@ -14,7 +14,7 @@ export class Actor implements EntityProperty<Actor>
 		this.actions = [];
 	}
 
-	static create(): Actor
+	static default(): Actor
 	{
 		return Actor.fromActivityDefnName
 		(

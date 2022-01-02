@@ -111,8 +111,10 @@ class TalkNodeDefn_Instances
 			{
 				var scope = conversationRun.scopeCurrent;
 				var talkNode = conversationRun.talkNodeCurrent();
-				scope.displayTextCurrent =
-					talkNode.content;
+
+				talkNode.contentVariablesSubstitute(conversationRun);
+
+				scope.displayTextCurrent = talkNode.content;
 				conversationRun.talkNodeGoToNext(universe);
 
 				conversationRun.talkNodesForTranscript.push(talkNode);
@@ -475,7 +477,7 @@ class TalkNodeDefn_Instances
 				var variableValue = conversationRun.variableByName(variableName).toString();
 				var scriptExpression = talkNode.next;
 				var scriptExpressionWithValue =
-					scriptExpression.split("[value]").join(variableValue);
+					scriptExpression.split("$value").join(variableValue);
 				var scriptToRunAsString =
 					"( (u, cr) => { " + scriptExpressionWithValue + "; } )";
 				var scriptToRun = eval(scriptToRunAsString);

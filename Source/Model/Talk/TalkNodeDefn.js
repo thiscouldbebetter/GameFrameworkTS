@@ -37,8 +37,8 @@ var ThisCouldBeBetter;
                  {
                     var scope = conversationRun.scopeCurrent;
                     var talkNode = conversationRun.talkNodeCurrent();
-                    scope.displayTextCurrent =
-                        talkNode.content;
+                    talkNode.contentVariablesSubstitute(conversationRun);
+                    scope.displayTextCurrent = talkNode.content;
                     conversationRun.talkNodeGoToNext(universe);
                     conversationRun.talkNodesForTranscript.push(talkNode);
                 });
@@ -214,7 +214,7 @@ var ThisCouldBeBetter;
                     var variableName = talkNode.content;
                     var variableValue = conversationRun.variableByName(variableName).toString();
                     var scriptExpression = talkNode.next;
-                    var scriptExpressionWithValue = scriptExpression.split("[value]").join(variableValue);
+                    var scriptExpressionWithValue = scriptExpression.split("$value").join(variableValue);
                     var scriptToRunAsString = "( (u, cr) => { " + scriptExpressionWithValue + "; } )";
                     var scriptToRun = eval(scriptToRunAsString);
                     scriptToRun(universe, conversationRun);
