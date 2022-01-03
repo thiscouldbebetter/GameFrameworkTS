@@ -46,7 +46,10 @@ var ThisCouldBeBetter;
             }
             next(universe) {
                 var scope = this.scopeCurrent;
-                if (scope.isPromptingForResponse) {
+                if (this.talkNodeCurrent() == null) {
+                    // Do nothing.
+                }
+                else if (scope.isPromptingForResponse) {
                     var responseSelected = scope.talkNodeForOptionSelected;
                     if (responseSelected != null) {
                         scope.talkNodeForOptionSelected = null;
@@ -71,15 +74,18 @@ var ThisCouldBeBetter;
                 var prompt = GameFramework.TalkNodeDefn.Instances().Prompt.name;
                 var quit = GameFramework.TalkNodeDefn.Instances().Quit.name;
                 var nodeDefnName = this.talkNodeCurrent().defnName;
-                if (nodeDefnName == prompt) {
+                if (nodeDefnName == prompt || this.scopeCurrent.isPromptingForResponse) {
                     this.next(universe);
                 }
-                while (this.talkNodeCurrent().defnName != prompt) {
+                var nodeCurrent = this.talkNodeCurrent();
+                while (nodeCurrent.defnName != prompt && this.scopeCurrent.isPromptingForResponse == false) {
                     this.next(universe);
-                    if (this.talkNodeCurrent().defnName == quit) {
+                    nodeCurrent = this.talkNodeCurrent();
+                    if (nodeCurrent.defnName == quit) {
                         this.next(universe);
                         break;
                     }
+                    nodeCurrent = this.talkNodeCurrent();
                 }
             }
             nodesByPrefix(nodeNamePrefix) {
@@ -105,12 +111,14 @@ var ThisCouldBeBetter;
             }
             quit(universe) {
                 var nodeNamedFinalize = this.defn.talkNodes.find(x => x.name == "Finalize");
-                if (nodeNamedFinalize != null) {
+                if (nodeNamedFinalize != null
+                    && nodeNamedFinalize.isEnabled(universe, this)) {
                     this.scopeCurrent.talkNodeCurrentSet(nodeNamedFinalize);
                     this.scopeCurrent.talkNodeAdvance(universe, this);
-                    while (this.scopeCurrent.talkNodeCurrent != null) {
+                    while (this.scopeCurrent.talkNodeCurrent() != null) {
                         this.next(universe);
                     }
+                    nodeNamedFinalize.disable();
                 }
                 this._quit();
             }

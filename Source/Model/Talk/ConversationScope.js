@@ -74,7 +74,7 @@ var ThisCouldBeBetter;
                 }
             }
             talkNodeCurrentSet(value) {
-                GameFramework.Assert.isNotNull(value);
+                //Assert.isNotNull(value);
                 this._talkNodePrev = this._talkNodeCurrent;
                 this._talkNodeCurrent = value;
             }
