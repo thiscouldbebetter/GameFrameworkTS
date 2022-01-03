@@ -63,7 +63,10 @@ export class Talker implements EntityProperty<Talker>
 			var venueToReturnTo = universe.venueCurrent;
 			conversationQuit = () => // quit
 			{
-				universe.venueNext = venueToReturnTo;
+				if (universe.venueNext == null) // May be set or not based on the conversation.
+				{
+					universe.venueNext = venueToReturnTo;
+				}
 			};
 		}
 		this.conversationRun = new ConversationRun
@@ -74,6 +77,7 @@ export class Talker implements EntityProperty<Talker>
 			entityTalker, // entityTalker
 			null // contentsById
 		);
+		this.conversationRun.talkNodeCurrentExecute(universe);
 		var conversationSize = universe.display.sizeDefault().clone();
 		var conversationAsControl =
 			this.conversationRun.toControl(conversationSize, universe);

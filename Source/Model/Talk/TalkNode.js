@@ -3,7 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class TalkNode {
+        class TalkNode //
+         {
             constructor(name, defnName, content, next, isDisabled) {
                 this.name = (name == null ? TalkNode.idNext() : name);
                 this.defnName = defnName;
@@ -98,10 +99,16 @@ var ThisCouldBeBetter;
                 );
             }
             // instance methods
-            activate(conversationRun, scope) {
-                var defn = this.defn(conversationRun.defn);
-                if (defn.activate != null) {
-                    defn.activate(conversationRun, scope, this);
+            contentVariablesSubstitute(conversationRun) {
+                var content = this.content;
+                if (content.indexOf("^") > 0) {
+                    var contentParts = content.split("^");
+                    for (var i = 1; i < contentParts.length; i += 2) {
+                        var variableName = contentParts[i];
+                        var variableValue = conversationRun.variableByName(variableName);
+                        contentParts[i] = variableValue.toString();
+                    }
+                    this.content = contentParts.join("");
                 }
             }
             defn(conversationDefn) {
@@ -111,9 +118,13 @@ var ThisCouldBeBetter;
                 this._isDisabled = () => true;
                 return this;
             }
+            enable() {
+                this._isDisabled = () => false;
+                return this;
+            }
             execute(universe, conversationRun, scope) {
                 var defn = this.defn(conversationRun.defn);
-                defn.execute(universe, conversationRun, scope, this);
+                defn.execute(universe, conversationRun);
             }
             isEnabled(u, cr) {
                 return (this._isDisabled == null ? true : this._isDisabled(u, cr) == false);
@@ -128,6 +139,14 @@ var ThisCouldBeBetter;
             // Clonable.
             clone() {
                 return new TalkNode(this.name, this.defnName, this.content, this.next, this._isDisabled);
+            }
+            overwriteWith(other) {
+                this.name = other.name;
+                this.defnName = other.defnName;
+                this.content = other.content;
+                this.next = other.next;
+                this._isDisabled = other._isDisabled;
+                return this;
             }
         }
         // static methods

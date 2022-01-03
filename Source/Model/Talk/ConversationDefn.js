@@ -15,10 +15,13 @@ var ThisCouldBeBetter;
             contentSubstitute(contentByNodeName) {
                 this.talkNodes.forEach(talkNode => {
                     var talkNodeName = talkNode.name;
-                    if (talkNodeName != null) {
-                        if (contentByNodeName.has(talkNodeName)) {
-                            talkNode.content = contentByNodeName.get(talkNodeName);
-                        }
+                    if (talkNodeName != null
+                        && talkNodeName.startsWith("_") == false
+                        && contentByNodeName.has(talkNodeName)) {
+                        talkNode.content = contentByNodeName.get(talkNodeName);
+                    }
+                    else if (contentByNodeName.has(talkNode.content)) {
+                        talkNode.content = contentByNodeName.get(talkNode.content);
                     }
                 });
                 return this;

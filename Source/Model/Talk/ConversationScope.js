@@ -4,9 +4,9 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ConversationScope {
-            constructor(parent, talkNodeCurrent, talkNodesForOptions) {
+            constructor(parent, talkNodeInitial, talkNodesForOptions) {
                 this.parent = parent;
-                this.talkNodeCurrent = talkNodeCurrent;
+                this.talkNodeCurrentSet(talkNodeInitial);
                 this.isPromptingForResponse = false;
                 this.talkNodesForOptions = talkNodesForOptions;
                 this.talkNodesForOptionsByName =
@@ -50,28 +50,48 @@ var ThisCouldBeBetter;
             talkNodeAdvance(universe, conversationRun) {
                 var conversationDefn = conversationRun.defn;
                 var defnTalkNodes = conversationDefn.talkNodes;
-                var talkNodeInitial = this.talkNodeCurrent;
-                while (this.talkNodeCurrent != null
+                var nodeInitial = this.talkNodeCurrent();
+                var nodeCurrent = nodeInitial;
+                while (nodeCurrent != null
                     &&
-                        (this.talkNodeCurrent == talkNodeInitial
-                            || this.talkNodeCurrent.isEnabled(universe, conversationRun) == false)) {
-                    var talkNodeIndex = defnTalkNodes.indexOf(this.talkNodeCurrent);
+                        (nodeCurrent == nodeInitial
+                            || nodeCurrent.isEnabled(universe, conversationRun) == false)) {
+                    var talkNodeIndex = defnTalkNodes.indexOf(nodeCurrent);
                     var talkNodeNext = defnTalkNodes[talkNodeIndex + 1];
-                    this.talkNodeCurrent = talkNodeNext;
+                    this.talkNodeCurrentSet(talkNodeNext);
+                    nodeCurrent = this.talkNodeCurrent();
                 }
                 return this;
             }
-            talkNodeNextSpecifiedOrAdvance(universe, conversationRun) {
+            talkNodeCurrent() {
+                return this._talkNodeCurrent;
+            }
+            talkNodeCurrentExecute(universe, conversationRun) {
+                this.haveOptionsBeenUpdated = true;
+                var nodeCurrent = this.talkNodeCurrent();
+                if (nodeCurrent != null) {
+                    nodeCurrent.execute(universe, conversationRun, this);
+                }
+            }
+            talkNodeCurrentSet(value) {
+                //Assert.isNotNull(value);
+                this._talkNodePrev = this._talkNodeCurrent;
+                this._talkNodeCurrent = value;
+            }
+            talkNodeGoToNext(universe, conversationRun) {
                 var conversationDefn = conversationRun.defn;
-                var nodeNextNameSpecified = this.talkNodeCurrent.next;
+                var nodeNextNameSpecified = this.talkNodeCurrent().next;
                 if (nodeNextNameSpecified == null) {
                     this.talkNodeAdvance(universe, conversationRun);
                 }
                 else {
-                    this.talkNodeCurrent =
-                        conversationDefn.talkNodeByName(nodeNextNameSpecified);
+                    var nodeNext = conversationDefn.talkNodeByName(nodeNextNameSpecified);
+                    this.talkNodeCurrentSet(nodeNext);
                 }
-                return this.talkNodeCurrent;
+                return this.talkNodeCurrent();
+            }
+            talkNodePrev() {
+                return this._talkNodePrev;
             }
             talkNodesForOptionsActive(universe, conversationRun) {
                 var returnValues;
@@ -93,12 +113,6 @@ var ThisCouldBeBetter;
                     returnValues = this._talkNodesForOptionsActive;
                 }
                 return returnValues;
-            }
-            update(universe, conversationRun) {
-                this.haveOptionsBeenUpdated = true;
-                if (this.talkNodeCurrent != null) {
-                    this.talkNodeCurrent.execute(universe, conversationRun, this);
-                }
             }
         }
         GameFramework.ConversationScope = ConversationScope;

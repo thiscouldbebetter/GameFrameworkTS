@@ -29,6 +29,12 @@
 			"next": "History"
 		},
 		{
+			"name": "Subject.Random",
+			"defnName": "Option",
+			"content": "Say something random.",
+			"next": "CoinFlip"
+		},
+		{
 			"name": "Subject.Carol",
 			"defnName": "Option",
 			"next": "TalkOver",
@@ -59,6 +65,7 @@
 			"name": "SubjectPrompt",
 			"defnName": "Prompt"
 		},
+
 		{
 			"name": "Math",
 			"defnName": "Display",
@@ -85,6 +92,7 @@
 			"defnName": "Goto",
 			"next": "SubjectPrompt"
 		},
+
 		{
 			"name": "History",
 			"defnName": "Push"
@@ -146,14 +154,12 @@
 			"content": "I don't want to talk about history anymore."
 		},
 		{
-			"defnName": "Activate",
-			"next": "Subject.History",
-			"content": false
+			"defnName": "Disable",
+			"content": "Subject.History"
 		},
 		{
-			"defnName": "Activate",
-			"next": "Subject.Carol",
-			"content": true
+			"defnName": "Enable",
+			"content": "Subject.Carol"
 		},
 		{
 			"defnName": "Pop",
@@ -168,6 +174,79 @@
 			"defnName": "Pop",
 			"next": "Subject"
 		},
+
+		{
+			"name": "CoinFlip",
+			"defnName": "Push"
+		},
+		{
+			"defnName": "Display",
+			"content": "Uh, okay:"
+		},
+		{
+			"defnName": "Display",
+			"content": "[Flips a coin.]"
+		},
+		{
+			"defnName": "Random"
+		},
+		{
+			"defnName": "Display",
+			"content": "Heads."
+		},
+		{
+			"defnName": "Display",
+			"content": "Tails."
+		},
+		{
+			"defnName": "DoNothing"
+		},
+		{
+			"defnName": "Display",
+			"content": "Was that random enough for you?"
+		},
+		{
+			"defnName": "Display",
+			"content": "Now YOU say something random, smart guy."
+		},
+		{
+			"defnName": "Random"
+		},
+		{
+			"defnName": "Option",
+			"next": "CoinFlip.Done",
+			"content": "Uhh... skibluhvwee."
+		},
+		{
+			"defnName": "Option",
+			"next": "CoinFlip.Done",
+			"content": "Uhh... jib--jibbluhkuhjax."
+		},
+		{
+			"defnName": "Option",
+			"next": "CoinFlip.Done",
+			"content": "My baloney... has no middle name."
+		},
+		{
+			"defnName": "DoNothing"
+		},
+		{
+			"defnName": "Option",
+			"next": "CoinFlip.Done",
+			"content": "I... can't."
+		},
+		{
+			"defnName": "Prompt"
+		},
+		{
+			"name": "CoinFlip.Done",
+			"defnName": "Display",
+			"content": "Yeah, that's what I figured."
+		},
+		{
+			"defnName": "Pop"
+		},
+
 		{
 			"name": "SQLInjection",
 			"defnName": "Display",
@@ -175,17 +254,20 @@
 		},
 		{
 			"defnName": "Script",
-			"content": "function panic() { alert(\"ER-ROR!  ER-ROR!  DOES! NOT! COMPUTE!\"); }"
+			"content": "alert(\"ER-ROR!  ER-ROR!  DOES! NOT! COMPUTE!\")"
 		},
 		{
 			"defnName": "Goto",
 			"next": "Greet"
 		},
+
 		{
 			"name": "Game",
-			"defnName": "Push"
+			"defnName": "Push",
+			"next": "GameDescription"
 		},
 		{
+			"name": "GameDescription",
 			"defnName": "Display",
 			"content": "Well, it's kind of a moving target."
 		},
@@ -413,9 +495,8 @@
 			"content": "[You have received a walkie-talkie.]"
 		},
 		{
-			"defnName": "Activate",
-			"next": "Game.GoWithMe.Option",
-			"content": false
+			"defnName": "Disable",
+			"content": "Game.GoWithMe.Option"
 		},
 		{
 			"defnName": "Goto",
@@ -454,7 +535,7 @@
 		},
 		{
 			"defnName": "Script",
-			"content": "function(u, cr) { u.venueNext = new ItemBarterer().toControl(u, u.display.sizeInPixels, cr.p, cr.t, u.venueCurrent).toVenue(); }"
+			"content": "u.venueNext = new ItemBarterer().toControl(u, u.display.sizeInPixels, cr.p, cr.t, u.venueCurrent).toVenue()"
 		},
 		{
 			"defnName": "Display",

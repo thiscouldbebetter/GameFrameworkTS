@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class TalkNode
+export class TalkNode //
 {
 	name: string;
 	defnName: string;
@@ -211,12 +211,21 @@ export class TalkNode
 
 	// instance methods
 
-	activate(conversationRun: ConversationRun, scope: ConversationScope): void
+	contentVariablesSubstitute(conversationRun: ConversationRun): void
 	{
-		var defn = this.defn(conversationRun.defn);
-		if (defn.activate != null)
+		var content = this.content;
+		if (content.indexOf("^") > 0)
 		{
-			defn.activate(conversationRun, scope, this);
+			var contentParts = content.split("^");
+
+			for (var i = 1; i < contentParts.length; i += 2)
+			{
+				var variableName = contentParts[i];
+				var variableValue = conversationRun.variableByName(variableName);
+				contentParts[i] = variableValue.toString();
+			}
+
+			this.content = contentParts.join("");
 		}
 	}
 
@@ -231,6 +240,12 @@ export class TalkNode
 		return this;
 	}
 
+	enable(): TalkNode
+	{
+		this._isDisabled = () => false;
+		return this;
+	}
+
 	execute
 	(
 		universe: Universe,
@@ -239,7 +254,7 @@ export class TalkNode
 	): void
 	{
 		var defn = this.defn(conversationRun.defn);
-		defn.execute(universe, conversationRun, scope, this);
+		defn.execute(universe, conversationRun);
 	}
 
 	isEnabled(u: Universe, cr: ConversationRun): boolean
@@ -271,6 +286,16 @@ export class TalkNode
 			this.next,
 			this._isDisabled
 		);
+	}
+
+	overwriteWith(other: TalkNode): TalkNode
+	{
+		this.name = other.name;
+		this.defnName = other.defnName;
+		this.content = other.content;
+		this.next = other.next;
+		this._isDisabled = other._isDisabled;
+		return this;
 	}
 }
 

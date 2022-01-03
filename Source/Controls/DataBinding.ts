@@ -55,6 +55,11 @@ export class DataBinding<TContext, TValue>
 		return new DataBinding(context, get, null);
 	}
 
+	static fromFalse<TContext>(): DataBinding<TContext,boolean>
+	{
+		return DataBinding.fromBooleanWithContext<TContext>(false, null);
+	}
+
 	static fromFalseWithContext<TContext>
 	(
 		context: TContext

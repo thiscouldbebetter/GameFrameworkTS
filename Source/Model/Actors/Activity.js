@@ -10,6 +10,9 @@ var ThisCouldBeBetter;
                     targetEntitiesByName || new Map([]);
                 this.isDone = false;
             }
+            static default() {
+                return Activity.fromDefnName(GameFramework.ActivityDefn.Instances().DoNothing.name);
+            }
             static fromDefnName(defnName) {
                 return new Activity(defnName, null);
             }

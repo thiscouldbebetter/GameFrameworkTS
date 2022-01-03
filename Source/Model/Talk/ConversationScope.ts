@@ -5,7 +5,8 @@ namespace ThisCouldBeBetter.GameFramework
 export class ConversationScope
 {
 	parent: ConversationScope;
-	talkNodeCurrent: TalkNode;
+	_talkNodeCurrent: TalkNode;
+	_talkNodePrev: TalkNode;
 	talkNodesForOptions: TalkNode[];
 	talkNodesForOptionsByName: Map<string, TalkNode>;
 
@@ -20,12 +21,12 @@ export class ConversationScope
 	constructor
 	(
 		parent: ConversationScope,
-		talkNodeCurrent: TalkNode,
+		talkNodeInitial: TalkNode,
 		talkNodesForOptions: TalkNode[]
 	)
 	{
 		this.parent = parent;
-		this.talkNodeCurrent = talkNodeCurrent;
+		this.talkNodeCurrentSet(talkNodeInitial);
 		this.isPromptingForResponse = false;
 		this.talkNodesForOptions = talkNodesForOptions;
 		this.talkNodesForOptionsByName =
@@ -48,7 +49,8 @@ export class ConversationScope
 	{
 		if (this.talkNodesForOptions.length > 0)
 		{
-			var optionToSelect = this.talkNodesForOptions.find(x => x.next == nextToMatch);
+			var optionToSelect =
+				this.talkNodesForOptions.find(x => x.next == nextToMatch);
 
 			var indexToSelect =
 				this.talkNodesForOptions.indexOf(optionToSelect);
@@ -95,43 +97,74 @@ export class ConversationScope
 	{
 		var conversationDefn = conversationRun.defn;
 		var defnTalkNodes = conversationDefn.talkNodes;
-		var talkNodeInitial = this.talkNodeCurrent;
+		var nodeInitial = this.talkNodeCurrent();
+		var nodeCurrent = nodeInitial;
 		while
 		(
-			this.talkNodeCurrent != null
+			nodeCurrent != null
 			&&
 			(
-				this.talkNodeCurrent == talkNodeInitial
-				|| this.talkNodeCurrent.isEnabled(universe, conversationRun) == false
+				nodeCurrent == nodeInitial
+				|| nodeCurrent.isEnabled(universe, conversationRun) == false
 			)
 		)
 		{
-			var talkNodeIndex = defnTalkNodes.indexOf(this.talkNodeCurrent);
+			var talkNodeIndex = defnTalkNodes.indexOf(nodeCurrent);
 			var talkNodeNext = defnTalkNodes[talkNodeIndex + 1];
-			this.talkNodeCurrent = talkNodeNext;
+			this.talkNodeCurrentSet(talkNodeNext);
+
+			nodeCurrent = this.talkNodeCurrent();
 		}
+
 		return this;
 	}
 
-	talkNodeNextSpecifiedOrAdvance
+	talkNodeCurrent(): TalkNode
+	{
+		return this._talkNodeCurrent;
+	}
+
+	talkNodeCurrentExecute(universe: Universe, conversationRun: ConversationRun): void
+	{
+		this.haveOptionsBeenUpdated = true;
+		var nodeCurrent = this.talkNodeCurrent();
+		if (nodeCurrent != null)
+		{
+			nodeCurrent.execute(universe, conversationRun, this);
+		}
+	}
+
+	talkNodeCurrentSet(value: TalkNode): void
+	{
+		//Assert.isNotNull(value);
+		this._talkNodePrev = this._talkNodeCurrent;
+		this._talkNodeCurrent = value;
+	}
+
+	talkNodeGoToNext
 	(
 		universe: Universe,
 		conversationRun: ConversationRun
 	): TalkNode
 	{
 		var conversationDefn = conversationRun.defn;
-		var nodeNextNameSpecified = this.talkNodeCurrent.next;
+		var nodeNextNameSpecified = this.talkNodeCurrent().next;
 		if (nodeNextNameSpecified == null)
 		{
 			this.talkNodeAdvance(universe, conversationRun);
 		}
 		else
 		{
-			this.talkNodeCurrent =
-				conversationDefn.talkNodeByName(nodeNextNameSpecified);
+			var nodeNext = conversationDefn.talkNodeByName(nodeNextNameSpecified);
+			this.talkNodeCurrentSet(nodeNext);
 		}
 
-		return this.talkNodeCurrent;
+		return this.talkNodeCurrent();
+	}
+
+	talkNodePrev(): TalkNode
+	{
+		return this._talkNodePrev;
 	}
 
 	talkNodesForOptionsActive
@@ -166,15 +199,6 @@ export class ConversationScope
 		}
 
 		return returnValues;
-	}
-
-	update(universe: Universe, conversationRun: ConversationRun): void
-	{
-		this.haveOptionsBeenUpdated = true;
-		if (this.talkNodeCurrent != null)
-		{
-			this.talkNodeCurrent.execute(universe, conversationRun, this);
-		}
 	}
 }
 

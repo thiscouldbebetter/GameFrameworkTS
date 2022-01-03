@@ -36,12 +36,16 @@ var ThisCouldBeBetter;
                     var venueToReturnTo = universe.venueCurrent;
                     conversationQuit = () => // quit
                      {
-                        universe.venueNext = venueToReturnTo;
+                        if (universe.venueNext == null) // May be set or not based on the conversation.
+                         {
+                            universe.venueNext = venueToReturnTo;
+                        }
                     };
                 }
                 this.conversationRun = new GameFramework.ConversationRun(conversationDefn, conversationQuit, entityTalkee, entityTalker, // entityTalker
                 null // contentsById
                 );
+                this.conversationRun.talkNodeCurrentExecute(universe);
                 var conversationSize = universe.display.sizeDefault().clone();
                 var conversationAsControl = this.conversationRun.toControl(conversationSize, universe);
                 var venueNext = conversationAsControl.toVenue();

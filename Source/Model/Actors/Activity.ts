@@ -21,6 +21,11 @@ export class Activity
 		this.isDone = false;
 	}
 
+	static default(): Activity
+	{
+		return Activity.fromDefnName(ActivityDefn.Instances().DoNothing.name);
+	}
+
 	static fromDefnName(defnName: string): Activity
 	{
 		return new Activity(defnName, null);

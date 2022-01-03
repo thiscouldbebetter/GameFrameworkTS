@@ -37,35 +37,55 @@ var ThisCouldBeBetter;
             goto(talkNodeNameNext, universe) {
                 // This convenience method is tersely named for use in scripts.
                 var scope = this.scopeCurrent;
-                scope.talkNodeCurrent = this.defn.talkNodeByName(talkNodeNameNext);
-                this.update(universe);
+                var nodeNext = this.defn.talkNodeByName(talkNodeNameNext);
+                scope.talkNodeCurrentSet(nodeNext);
+                this.talkNodeCurrentExecute(universe);
             }
             initialize(universe) {
                 this.next(universe);
             }
             next(universe) {
-                var responseSelected = this.scopeCurrent.talkNodeForOptionSelected;
-                if (responseSelected != null) {
-                    var talkNodePrompt = this.scopeCurrent.talkNodeCurrent;
-                    talkNodePrompt.activate(this, this.scopeCurrent);
-                    responseSelected.activate(this, this.scopeCurrent);
-                    this.scopeCurrent.talkNodeForOptionSelected = null;
+                var scope = this.scopeCurrent;
+                if (this.talkNodeCurrent() == null) {
+                    // Do nothing.
                 }
-                this.update(universe);
+                else if (scope.isPromptingForResponse) {
+                    var responseSelected = scope.talkNodeForOptionSelected;
+                    if (responseSelected != null) {
+                        scope.talkNodeForOptionSelected = null;
+                        scope.isPromptingForResponse = false;
+                        var talkNodePrompt = this.talkNodeCurrent();
+                        var shouldClearOptions = talkNodePrompt.content;
+                        if (shouldClearOptions) {
+                            scope.talkNodesForOptions.length = 0;
+                        }
+                        var nameOfTalkNodeNext = responseSelected.next;
+                        var talkNodeNext = this.defn.talkNodeByName(nameOfTalkNodeNext);
+                        scope.talkNodeCurrentSet(talkNodeNext);
+                        this.talkNodesForTranscript.push(responseSelected);
+                        this.talkNodeCurrentExecute(universe);
+                    }
+                }
+                else {
+                    this.talkNodeCurrentExecute(universe);
+                }
             }
             nextUntilPrompt(universe) {
                 var prompt = GameFramework.TalkNodeDefn.Instances().Prompt.name;
                 var quit = GameFramework.TalkNodeDefn.Instances().Quit.name;
                 var nodeDefnName = this.talkNodeCurrent().defnName;
-                if (nodeDefnName == prompt) {
+                if (nodeDefnName == prompt || this.scopeCurrent.isPromptingForResponse) {
                     this.next(universe);
                 }
-                while (this.talkNodeCurrent().defnName != prompt) {
+                var nodeCurrent = this.talkNodeCurrent();
+                while (nodeCurrent.defnName != prompt && this.scopeCurrent.isPromptingForResponse == false) {
                     this.next(universe);
-                    if (this.talkNodeCurrent().defnName == quit) {
+                    nodeCurrent = this.talkNodeCurrent();
+                    if (nodeCurrent.defnName == quit) {
                         this.next(universe);
                         break;
                     }
+                    nodeCurrent = this.talkNodeCurrent();
                 }
             }
             nodesByPrefix(nodeNamePrefix) {
@@ -91,12 +111,14 @@ var ThisCouldBeBetter;
             }
             quit(universe) {
                 var nodeNamedFinalize = this.defn.talkNodes.find(x => x.name == "Finalize");
-                if (nodeNamedFinalize != null) {
-                    this.scopeCurrent.talkNodeCurrent = nodeNamedFinalize;
+                if (nodeNamedFinalize != null
+                    && nodeNamedFinalize.isEnabled(universe, this)) {
+                    this.scopeCurrent.talkNodeCurrentSet(nodeNamedFinalize);
                     this.scopeCurrent.talkNodeAdvance(universe, this);
-                    while (this.scopeCurrent.talkNodeCurrent != null) {
+                    while (this.scopeCurrent.talkNodeCurrent() != null) {
                         this.next(universe);
                     }
+                    nodeNamedFinalize.disable();
                 }
                 this._quit();
             }
@@ -104,8 +126,34 @@ var ThisCouldBeBetter;
                 // This convenience method is tersely named for use in scripts.
                 return this.scopeCurrent;
             }
+            talkNodeAdvance(universe) {
+                this.scopeCurrent.talkNodeAdvance(universe, this);
+            }
+            talkNodeByName(nodeName) {
+                return this.defn.talkNodeByName(nodeName);
+            }
             talkNodeCurrent() {
-                return this.scopeCurrent.talkNodeCurrent;
+                return this.scopeCurrent.talkNodeCurrent();
+            }
+            talkNodeCurrentExecute(universe) {
+                this.scopeCurrent.talkNodeCurrentExecute(universe, this);
+            }
+            talkNodeCurrentSet(value) {
+                this.scopeCurrent.talkNodeCurrentSet(value);
+            }
+            talkNodeGoToNext(universe) {
+                return this.scopeCurrent.talkNodeGoToNext(universe, this);
+            }
+            talkNodeNext() {
+                var nodeCurrent = this.talkNodeCurrent();
+                var nodeNextName = nodeCurrent.next;
+                var nodeNext = (nodeNextName == null
+                    ? this.defn.talkNodes[this.defn.talkNodes.indexOf(nodeCurrent) + 1]
+                    : this.talkNodeByName(nodeCurrent.next));
+                return nodeNext;
+            }
+            talkNodePrev() {
+                return this.scopeCurrent.talkNodePrev();
             }
             talker() {
                 // This convenience method is tersely named for use in scripts.
@@ -113,9 +161,6 @@ var ThisCouldBeBetter;
             }
             toVenue(universe) {
                 return this.toControl(universe.display.sizeInPixels, universe).toVenue();
-            }
-            update(universe) {
-                this.scopeCurrent.update(universe, this);
             }
             varGet(variableName) {
                 // This convenience method is tersely named for use in scripts.
