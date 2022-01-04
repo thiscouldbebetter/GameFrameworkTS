@@ -60,8 +60,9 @@ var ThisCouldBeBetter;
                         - (buttonWidth * numberOfOptions)
                         - (spaceBetweenButtons * (numberOfOptions - 1))) / 2;
                     for (var i = 0; i < numberOfOptions; i++) {
-                        var button = GameFramework.ControlButton.from8("buttonOption" + i, GameFramework.Coords.fromXY(buttonMarginLeftRight + i * (buttonWidth + spaceBetweenButtons), buttonPosY), // pos
-                        buttonSize.clone(), optionNames[i], fontHeight, true, // hasBorder
+                        var optionName = optionNames[i];
+                        var button = GameFramework.ControlButton.from8("button" + optionName, GameFramework.Coords.fromXY(buttonMarginLeftRight + i * (buttonWidth + spaceBetweenButtons), buttonPosY), // pos
+                        buttonSize.clone(), optionName, fontHeight, true, // hasBorder
                         GameFramework.DataBinding.fromTrue(), // isEnabled
                         optionFunctions[i]);
                         childControls.push(button);
