@@ -51,6 +51,7 @@ class TalkNodeDefn_Instances
 	JumpIfFalse: TalkNodeDefn;
 	JumpIfTrue: TalkNodeDefn;
 	Option: TalkNodeDefn;
+	OptionsClear: TalkNodeDefn;
 	Pop: TalkNodeDefn;
 	Prompt: TalkNodeDefn;
 	Push: TalkNodeDefn;
@@ -76,7 +77,7 @@ class TalkNodeDefn_Instances
 			{
 				var talkNode = conversationRun.talkNodeCurrent();
 				var talkNodesToDisablePrefixesJoined =
-					talkNode.content;
+					talkNode.next;
 
 				var talkNodesToDisablePrefixes =
 					talkNodesToDisablePrefixesJoined.split(",");
@@ -162,7 +163,7 @@ class TalkNodeDefn_Instances
 				var talkNode = conversationRun.talkNodeCurrent();
 
 				var talkNodesToEnablePrefixesJoined =
-					talkNode.content;
+					talkNode.next;
 
 				var talkNodesToEnablePrefixes =
 					talkNodesToEnablePrefixesJoined.split(",");
@@ -275,6 +276,24 @@ class TalkNodeDefn_Instances
 					talkNodesForOptions.push(talkNode);
 					scope.talkNodesForOptionsByName.set(talkNode.name, talkNode);
 				}
+				conversationRun.talkNodeAdvance(universe);
+				conversationRun.talkNodeCurrentExecute(universe);
+			}
+		);
+
+		this.OptionsClear = new TalkNodeDefn
+		(
+			"OptionsClear",
+			(
+				universe: Universe,
+				conversationRun: ConversationRun
+			) => // execute
+			{
+				var scope = conversationRun.scopeCurrent;
+
+				var talkNodesForOptions = scope.talkNodesForOptions;
+				talkNodesForOptions.length = 0;
+
 				conversationRun.talkNodeAdvance(universe);
 				conversationRun.talkNodeCurrentExecute(universe);
 			}
@@ -461,6 +480,7 @@ class TalkNodeDefn_Instances
 			this.JumpIfFalse,
 			this.JumpIfTrue,
 			this.Option,
+			this.OptionsClear,
 			this.Pop,
 			this.Prompt,
 			this.Push,

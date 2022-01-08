@@ -25,7 +25,7 @@ var ThisCouldBeBetter;
                 this.Disable = new TalkNodeDefn("Disable", (universe, conversationRun) => // execute
                  {
                     var talkNode = conversationRun.talkNodeCurrent();
-                    var talkNodesToDisablePrefixesJoined = talkNode.content;
+                    var talkNodesToDisablePrefixesJoined = talkNode.next;
                     var talkNodesToDisablePrefixes = talkNodesToDisablePrefixesJoined.split(",");
                     var talkNodesToDisableAsArrays = talkNodesToDisablePrefixes.map(prefix => conversationRun.nodesByPrefix(prefix));
                     var talkNodesToDisable = GameFramework.ArrayHelper.flattenArrayOfArrays(talkNodesToDisableAsArrays);
@@ -61,7 +61,7 @@ var ThisCouldBeBetter;
                 this.Enable = new TalkNodeDefn("Enable", (universe, conversationRun) => // execute
                  {
                     var talkNode = conversationRun.talkNodeCurrent();
-                    var talkNodesToEnablePrefixesJoined = talkNode.content;
+                    var talkNodesToEnablePrefixesJoined = talkNode.next;
                     var talkNodesToEnablePrefixes = talkNodesToEnablePrefixesJoined.split(",");
                     var talkNodesToEnableAsArrays = talkNodesToEnablePrefixes.map(prefix => conversationRun.nodesByPrefix(prefix));
                     var talkNodesToEnable = GameFramework.ArrayHelper.flattenArrayOfArrays(talkNodesToEnableAsArrays);
@@ -114,6 +114,14 @@ var ThisCouldBeBetter;
                         talkNodesForOptions.push(talkNode);
                         scope.talkNodesForOptionsByName.set(talkNode.name, talkNode);
                     }
+                    conversationRun.talkNodeAdvance(universe);
+                    conversationRun.talkNodeCurrentExecute(universe);
+                });
+                this.OptionsClear = new TalkNodeDefn("OptionsClear", (universe, conversationRun) => // execute
+                 {
+                    var scope = conversationRun.scopeCurrent;
+                    var talkNodesForOptions = scope.talkNodesForOptions;
+                    talkNodesForOptions.length = 0;
                     conversationRun.talkNodeAdvance(universe);
                     conversationRun.talkNodeCurrentExecute(universe);
                 });
@@ -203,6 +211,7 @@ var ThisCouldBeBetter;
                         this.JumpIfFalse,
                         this.JumpIfTrue,
                         this.Option,
+                        this.OptionsClear,
                         this.Pop,
                         this.Prompt,
                         this.Push,
