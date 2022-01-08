@@ -96,10 +96,8 @@ export class Maze
 
 		var cellCurrent = this.cellAtPos(cellPos);
 
-		var neighborOffsetIndex = Math.floor
-		(
-			randomizer.getNextRandom() * numberOfNeighbors
-		);
+		var neighborOffsetIndex =
+			randomizer.integerLessThan(numberOfNeighbors);
 
 		var neighborOffset = neighborOffsets[neighborOffsetIndex];
 
@@ -111,7 +109,7 @@ export class Maze
 			neighborOffset
 		);
 
-		if (cellPosNeighbor.isInRangeMax(sizeInCellsMinusOnes) == true)
+		if (cellPosNeighbor.isInRangeMax(sizeInCellsMinusOnes))
 		{
 			if (cellCurrent.connectedToNeighbors[neighborOffsetIndex] == false)
 			{

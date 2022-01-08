@@ -33,7 +33,7 @@ var ThisCouldBeBetter;
                     for (var i = 0; i < this.effectsAndChances.length; i++) {
                         var effectAndChance = this.effectsAndChances[i];
                         var chance = effectAndChance[1];
-                        var roll = randomizer.getNextRandom();
+                        var roll = randomizer.fraction();
                         if (roll <= chance) {
                             var effect = effectAndChance[0];
                             effectsOccurring.push(effect);

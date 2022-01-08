@@ -87,8 +87,8 @@ export class Polar
 			randomizer = new RandomizerSystem();
 		}
 
-		this.azimuthInTurns = randomizer.getNextRandom();
-		this.elevationInTurns = randomizer.getNextRandom();
+		this.azimuthInTurns = randomizer.fraction();
+		this.elevationInTurns = randomizer.fraction();
 		return this;
 	}
 

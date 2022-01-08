@@ -88,7 +88,7 @@ export class RangeExtent
 	random(randomizer: Randomizer): number
 	{
 		var randomNumber =
-			(randomizer == null ? Math.random() : randomizer.getNextRandom());
+			(randomizer == null ? Math.random() : randomizer.fraction());
 		return this.min + (this.max - this.min) * randomNumber;
 	}
 

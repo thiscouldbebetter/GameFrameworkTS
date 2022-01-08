@@ -295,9 +295,38 @@ export class ConversationRun
 		return this.variablesByName.get(variableName);
 	}
 
+	variableLoad
+	(
+		universe: Universe,
+		variableName: string,
+		variableExpression: string
+	): void
+	{
+		var scriptText = "( (u, cr) => " + variableExpression + ")";
+		var scriptToRun = eval(scriptText);
+		var variableValue = scriptToRun(universe, this);
+		this.variableSet(variableName, variableValue);
+	}
+
 	variableSet(variableName: string, variableValue: unknown): void
 	{
 		this.variablesByName.set(variableName, variableValue);
+	}
+
+	variableStore
+	(
+		universe: Universe,
+		variableName: string,
+		scriptExpression: string
+	): void
+	{
+		var variableValue = this.variableByName(variableName).toString();
+		var scriptExpressionWithValue =
+			scriptExpression.split("$value").join(variableValue);
+		var scriptToRunAsString =
+			"( (u, cr) => { " + scriptExpressionWithValue + "; } )";
+		var scriptToRun = eval(scriptToRunAsString);
+		scriptToRun(universe, this);
 	}
 
 	// controls
@@ -462,7 +491,7 @@ export class ConversationRun
 					(
 						conversationRun,
 						(c: ConversationRun) =>
-							c.scopeCurrent.displayTextCurrent
+							c.scopeCurrent.displayTextCurrent()
 					),
 					fontHeight
 				),

@@ -216,7 +216,7 @@ class PlaceBuilderDemo_Movers {
                 }
                 var enemyEntityToPlace = enemyEntityPrototype.clone();
                 var placeSizeHalf = place.size.clone().half();
-                var directionFromCenter = new Polar(universe.randomizer.getNextRandom(), 1, 0);
+                var directionFromCenter = new Polar(universe.randomizer.fraction(), 1, 0);
                 var offsetFromCenter = directionFromCenter.toCoords(Coords.create()).multiply(placeSizeHalf).double();
                 var enemyPosToStartAt = offsetFromCenter.trimToRangeMinMax(placeSizeHalf.clone().invert(), placeSizeHalf);
                 enemyPosToStartAt.multiplyScalar(1.1);

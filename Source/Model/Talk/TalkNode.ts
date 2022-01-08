@@ -259,7 +259,14 @@ export class TalkNode //
 
 	isEnabled(u: Universe, cr: ConversationRun): boolean
 	{
-		return (this._isDisabled == null ? true : this._isDisabled(u, cr) == false);
+		var returnValue =
+		(
+			this._isDisabled == null
+			? true
+			: this._isDisabled(u, cr) == false
+		);
+
+		return returnValue;
 	}
 
 	textForTranscript(conversationRun: ConversationRun): string

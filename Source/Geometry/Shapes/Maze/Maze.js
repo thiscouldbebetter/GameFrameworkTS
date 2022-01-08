@@ -45,10 +45,10 @@ var ThisCouldBeBetter;
                 var numberOfNeighbors = neighborOffsets.length;
                 var numberOfCellsInNetworkMerged = 0;
                 var cellCurrent = this.cellAtPos(cellPos);
-                var neighborOffsetIndex = Math.floor(randomizer.getNextRandom() * numberOfNeighbors);
+                var neighborOffsetIndex = randomizer.integerLessThan(numberOfNeighbors);
                 var neighborOffset = neighborOffsets[neighborOffsetIndex];
                 cellPosNeighbor.overwriteWith(cellPos).add(neighborOffset);
-                if (cellPosNeighbor.isInRangeMax(sizeInCellsMinusOnes) == true) {
+                if (cellPosNeighbor.isInRangeMax(sizeInCellsMinusOnes)) {
                     if (cellCurrent.connectedToNeighbors[neighborOffsetIndex] == false) {
                         var cellNeighbor = this.cellAtPos(cellPosNeighbor);
                         if (cellCurrent.network.networkID != cellNeighbor.network.networkID) {

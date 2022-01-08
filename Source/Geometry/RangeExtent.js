@@ -53,7 +53,7 @@ var ThisCouldBeBetter;
                 return this;
             }
             random(randomizer) {
-                var randomNumber = (randomizer == null ? Math.random() : randomizer.getNextRandom());
+                var randomNumber = (randomizer == null ? Math.random() : randomizer.fraction());
                 return this.min + (this.max - this.min) * randomNumber;
             }
             size() {

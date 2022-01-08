@@ -58,7 +58,7 @@ class PlaceBuilderDemo // Main.
         itemOre.quantity = 3; // For crafting.
         container.itemHolder().itemAdd(itemOre);
         this.entities.push(container);
-        var randomizerSeed = this.randomizer.getNextRandom();
+        var randomizerSeed = this.randomizer.fraction();
         var place = new PlaceRoom(this.name, "Demo", size, this.entities, randomizerSeed);
         return place;
     }
@@ -75,7 +75,7 @@ class PlaceBuilderDemo // Main.
         this.entitiesAllGround();
         var entityCamera = this.build_Camera(this.cameraViewSize, this.size);
         this.entities.splice(0, 0, ...this.entityBuildBackground(entityCamera.camera()));
-        var randomizerSeed = this.randomizer.getNextRandom();
+        var randomizerSeed = this.randomizer.fraction();
         var place = new PlaceRoom(this.name, "Demo", size, this.entities, randomizerSeed);
         return place;
     }
@@ -88,14 +88,14 @@ class PlaceBuilderDemo // Main.
         this.build_Camera(this.cameraViewSize, this.size);
         var entityCamera = this.build_Camera(this.cameraViewSize, this.size);
         this.entities.splice(0, 0, ...this.entityBuildBackground(entityCamera.camera()));
-        var randomizerSeed = this.randomizer.getNextRandom();
+        var randomizerSeed = this.randomizer.fraction();
         var place = new PlaceRoom(this.name, "Demo", size, this.entities, randomizerSeed);
         return place;
     }
     buildTunnels(size, placeNameToReturnTo) {
         size = size.clone().multiplyScalar(4);
         this.build_Interior("Tunnels", size, placeNameToReturnTo);
-        var randomizerSeed = this.randomizer.getNextRandom();
+        var randomizerSeed = this.randomizer.fraction();
         var networkNodeCount = 24;
         var network = Network.random(networkNodeCount, this.randomizer);
         network = network.transform(new Transform_Scale(size));
@@ -573,7 +573,7 @@ class PlaceBuilderDemo // Main.
         this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Grazer"), 3, null, entityPosRange, randomizer));
         this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("MushroomGenerator"), 2, null, entityPosRange, randomizer));
         this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Tree"), 6, null, entityPosRange, randomizer));
-        var randomizerSeed = this.randomizer.getNextRandom();
+        var randomizerSeed = this.randomizer.fraction();
         var place = new PlaceRoom(this.name, "Demo", size, this.entities, randomizerSeed);
         return place;
     }

@@ -29,7 +29,7 @@ var ThisCouldBeBetter;
                         return [contentId, restOfBlock];
                     }));
                     conversationDefn.contentSubstitute(contentsById);
-                    conversationDefn.displayNodesExpandByLines();
+                    //conversationDefn.displayNodesExpandByLines();
                 }
                 var conversationQuit = this.quit;
                 if (conversationQuit == null) {

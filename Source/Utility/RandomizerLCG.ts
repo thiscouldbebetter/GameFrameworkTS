@@ -19,7 +19,7 @@ export class RandomizerLCG implements Randomizer
 		this.modulus = modulus || Math.pow(2.0, 31);
 	}
 
-	static default()
+	static default(): RandomizerLCG
 	{
 		return new RandomizerLCG
 		(
@@ -30,7 +30,7 @@ export class RandomizerLCG implements Randomizer
 		);
 	}
 
-	getNextRandom()
+	fraction(): number
 	{
 		this.currentRandom =
 		(
@@ -44,6 +44,11 @@ export class RandomizerLCG implements Randomizer
 		/ this.modulus;
 
 		return this.currentRandom;
+	}
+
+	integerLessThan(max: number): number
+	{
+		return Math.floor(this.fraction() * max);
 	}
 }
 

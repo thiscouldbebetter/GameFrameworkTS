@@ -183,7 +183,7 @@ var ThisCouldBeBetter;
                 return array;
             }
             static random(array, randomizer) {
-                return array[Math.floor(randomizer.getNextRandom() * array.length)];
+                return array[randomizer.integerLessThan(array.length)];
             }
             static remove(array, elementToRemove) {
                 var indexToRemoveAt = array.indexOf(elementToRemove);

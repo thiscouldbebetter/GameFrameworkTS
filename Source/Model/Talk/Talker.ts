@@ -54,7 +54,7 @@ export class Talker implements EntityProperty<Talker>
 				)
 			);
 			conversationDefn.contentSubstitute(contentsById);
-			conversationDefn.displayNodesExpandByLines();
+			//conversationDefn.displayNodesExpandByLines();
 		}
 
 		var conversationQuit = this.quit;

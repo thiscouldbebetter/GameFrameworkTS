@@ -54,7 +54,7 @@ var ThisCouldBeBetter;
                 for (var d = 0; d < this.numberOfDice; d++) {
                     var randomNumber = (randomizer == null
                         ? Math.random()
-                        : randomizer.getNextRandom());
+                        : randomizer.fraction());
                     var valueRolledOnDie = 1
                         + Math.floor(randomNumber
                             * this.sidesPerDie);

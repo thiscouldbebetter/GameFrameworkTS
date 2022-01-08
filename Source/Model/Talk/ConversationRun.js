@@ -173,8 +173,21 @@ var ThisCouldBeBetter;
             variableByName(variableName) {
                 return this.variablesByName.get(variableName);
             }
+            variableLoad(universe, variableName, variableExpression) {
+                var scriptText = "( (u, cr) => " + variableExpression + ")";
+                var scriptToRun = eval(scriptText);
+                var variableValue = scriptToRun(universe, this);
+                this.variableSet(variableName, variableValue);
+            }
             variableSet(variableName, variableValue) {
                 this.variablesByName.set(variableName, variableValue);
+            }
+            variableStore(universe, variableName, scriptExpression) {
+                var variableValue = this.variableByName(variableName).toString();
+                var scriptExpressionWithValue = scriptExpression.split("$value").join(variableValue);
+                var scriptToRunAsString = "( (u, cr) => { " + scriptExpressionWithValue + "; } )";
+                var scriptToRun = eval(scriptToRunAsString);
+                scriptToRun(universe, this);
             }
             // controls
             toControl(size, universe) {
@@ -236,7 +249,7 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(size.x - marginWidth * 3 - portraitSize.x, portraitSize.y), // size
                     false, // isTextCenteredHorizontally
                     true, // isTextCenteredVertically
-                    GameFramework.DataBinding.fromContextAndGet(conversationRun, (c) => c.scopeCurrent.displayTextCurrent), fontHeight),
+                    GameFramework.DataBinding.fromContextAndGet(conversationRun, (c) => c.scopeCurrent.displayTextCurrent()), fontHeight),
                     new GameFramework.ControlLabel("labelResponse", new GameFramework.Coords(marginSize.x, marginSize.y * 2 + portraitSize.y - fontHeight / 2, 0), size, // size
                     false, // isTextCenteredHorizontally
                     false, // isTextCenteredVertically
