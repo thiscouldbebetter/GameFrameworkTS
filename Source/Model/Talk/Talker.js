@@ -4,12 +4,13 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Talker {
-            constructor(conversationDefnName, quit) {
+            constructor(conversationDefnName, quit, toControl) {
                 this.conversationDefnName = conversationDefnName;
                 this.quit = quit;
+                this._toControl = toControl;
             }
             static fromConversationDefnName(conversationDefnName) {
-                return new Talker(conversationDefnName, null);
+                return new Talker(conversationDefnName, null, null);
             }
             talk(uwpe) {
                 var universe = uwpe.universe;
@@ -47,9 +48,19 @@ var ThisCouldBeBetter;
                 );
                 this.conversationRun.talkNodeCurrentExecute(universe);
                 var conversationSize = universe.display.sizeDefault().clone();
-                var conversationAsControl = this.conversationRun.toControl(conversationSize, universe);
+                var conversationAsControl = this.toControl(this.conversationRun, conversationSize, universe);
                 var venueNext = conversationAsControl.toVenue();
                 universe.venueNext = venueNext;
+            }
+            toControl(conversationRun, size, universe) {
+                var returnValue = null;
+                if (this._toControl == null) {
+                    returnValue = conversationRun.toControl(size, universe);
+                }
+                else {
+                    returnValue = this._toControl(conversationRun, size, universe);
+                }
+                return returnValue;
             }
             // EntityProperty.
             finalize(uwpe) { }
