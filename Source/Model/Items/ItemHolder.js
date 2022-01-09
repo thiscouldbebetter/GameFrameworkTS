@@ -47,6 +47,10 @@ var ThisCouldBeBetter;
                 var hasAllItems = (isMissingAtLeastOneItem == false);
                 return hasAllItems;
             }
+            hasItemWithCategoryName(categoryName, world) {
+                var returnValue = this.items.some(x => x.defn(world).categoryNames.indexOf(categoryName) >= 0);
+                return returnValue;
+            }
             hasItemWithDefnName(defnName) {
                 return this.hasItemWithDefnNameAndQuantity(defnName, 1);
             }

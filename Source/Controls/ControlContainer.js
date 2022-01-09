@@ -165,16 +165,14 @@ var ThisCouldBeBetter;
             }
             mouseClick(mouseClickPos) {
                 mouseClickPos = this._mouseClickPos.overwriteWith(mouseClickPos).subtract(this.pos);
-                var childrenContainingPos = this.childrenAtPosAddToList(mouseClickPos, GameFramework.ArrayHelper.clear(this.childrenContainingPos), true // addFirstChildOnly
+                var childrenContainingPos = this.childrenAtPosAddToList(mouseClickPos, GameFramework.ArrayHelper.clear(this.childrenContainingPos), false // addFirstChildOnly
                 );
                 var wasClickHandled = true;
-                if (childrenContainingPos.length > 0) {
-                    var child = childrenContainingPos[0];
-                    if (child.mouseClick != null) {
-                        var wasClickHandledByChild = child.mouseClick(mouseClickPos);
-                        if (wasClickHandledByChild) {
-                            wasClickHandled = true;
-                        }
+                for (var i = 0; i < childrenContainingPos.length; i++) {
+                    var child = childrenContainingPos[i];
+                    var wasClickHandledByChild = child.mouseClick(mouseClickPos);
+                    if (wasClickHandledByChild) {
+                        wasClickHandled = true;
                     }
                 }
                 return wasClickHandled;

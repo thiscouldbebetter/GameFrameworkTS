@@ -249,6 +249,10 @@ var ThisCouldBeBetter;
                     visualPortrait = new GameFramework.VisualImageScaled(visualPortrait, portraitSize);
                 }
                 var childControls = [
+                    GameFramework.ControlButton.from8("buttonNextUnderPortrait", portraitPos, portraitSize, "Next", fontHeight, true, // hasBorder
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
+                    next // click
+                    ),
                     new GameFramework.ControlVisual("visualPortrait", portraitPos, portraitSize, GameFramework.DataBinding.fromContext(visualPortrait), GameFramework.Color.byName("Black"), // colorBackground
                     null // colorBorder
                     ),

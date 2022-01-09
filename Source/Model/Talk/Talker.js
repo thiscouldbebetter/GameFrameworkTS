@@ -25,7 +25,9 @@ var ThisCouldBeBetter;
                     var contentBlocks = contentTextString.value.split("\n\n");
                     var contentsById = new Map(contentBlocks.map(nodeAsBlock => {
                         var indexOfNewlineFirst = nodeAsBlock.indexOf("\n");
-                        var contentId = nodeAsBlock.substr(0, indexOfNewlineFirst).split("\t")[0];
+                        var contentIdLine = nodeAsBlock.substr(0, indexOfNewlineFirst);
+                        var regexWhitespace = /\s+/;
+                        var contentId = contentIdLine.split(regexWhitespace)[0];
                         var restOfBlock = nodeAsBlock.substr(indexOfNewlineFirst + 1);
                         return [contentId, restOfBlock];
                     }));

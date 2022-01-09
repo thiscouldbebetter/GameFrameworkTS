@@ -512,6 +512,18 @@ export class ConversationRun
 
 		var childControls: ControlBase[] =
 		[
+			ControlButton.from8
+			(
+				"buttonNextUnderPortrait",
+				portraitPos,
+				portraitSize,
+				"Next",
+				fontHeight,
+				true, // hasBorder
+				DataBinding.fromTrue(), // isEnabled
+				next // click
+			),
+
 			new ControlVisual
 			(
 				"visualPortrait",

@@ -51,10 +51,12 @@ export class Talker implements EntityProperty<Talker>
 					nodeAsBlock =>
 					{
 						var indexOfNewlineFirst = nodeAsBlock.indexOf("\n");
-						var contentId = nodeAsBlock.substr
+						var contentIdLine = nodeAsBlock.substr
 						(
 							0, indexOfNewlineFirst
-						).split("\t")[0];
+						);
+						var regexWhitespace = /\s+/;
+						var contentId = contentIdLine.split(regexWhitespace)[0];
 						var restOfBlock = nodeAsBlock.substr(indexOfNewlineFirst + 1);
 						return [ contentId, restOfBlock ];
 					}
