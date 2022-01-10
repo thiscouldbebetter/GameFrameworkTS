@@ -22,7 +22,10 @@ var ThisCouldBeBetter;
                 var contentTextStringName = this.conversationDefnName + "-Content";
                 var contentTextString = mediaLibrary.textStringGetByName(contentTextStringName);
                 if (contentTextString != null) {
-                    var contentBlocks = contentTextString.value.split("\n\n");
+                    // hack - For a specific content tag format in a downstream project.
+                    var contentText = contentTextString.value.split("\n#").join("\n\n#");
+                    contentText = contentText.split("\n\n\n").join("\n\n");
+                    var contentBlocks = contentText.split("\n\n");
                     var contentsById = new Map(contentBlocks.map(nodeAsBlock => {
                         var indexOfNewlineFirst = nodeAsBlock.indexOf("\n");
                         var contentIdLine = nodeAsBlock.substr(0, indexOfNewlineFirst);
