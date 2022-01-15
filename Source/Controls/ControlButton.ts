@@ -7,7 +7,7 @@ export class ControlButton<TContext> extends ControlBase
 	text: string;
 	hasBorder: boolean;
 	_isEnabled: DataBinding<TContext, boolean>;
-	click: () => void;
+	_click: () => void;
 	canBeHeldDown: boolean;
 
 	_drawLoc: Disposition;
@@ -30,7 +30,7 @@ export class ControlButton<TContext> extends ControlBase
 		this.text = text;
 		this.hasBorder = hasBorder;
 		this._isEnabled = isEnabled;
-		this.click = click;
+		this._click = click;
 		this.canBeHeldDown = (canBeHeldDown == null ? false : canBeHeldDown);
 
 		// Helper variables.
@@ -65,6 +65,11 @@ export class ControlButton<TContext> extends ControlBase
 		}
 
 		return (this.canBeHeldDown == false); // wasActionHandled
+	}
+
+	click(): void
+	{
+		this._click();
 	}
 
 	isEnabled(): boolean
