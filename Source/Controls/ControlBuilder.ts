@@ -78,16 +78,18 @@ export class ControlBuilder
 		message: DataBinding<any, string>,
 		optionNames: Array<string>,
 		optionFunctions: Array<()=>void>,
-		showMessageOnly: boolean
+		showMessageOnly: boolean,
+		fontHeight: number,
+		buttonPosY: number
 	): ControlBase
 	{
 		size = size || universe.display.sizeDefault();
 		showMessageOnly = showMessageOnly || false;
+		fontHeight = fontHeight || this.fontHeightInPixelsBase;
 
 		var scaleMultiplier =
 			this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
 		var containerSizeScaled = size.clone().clearZ().divide(scaleMultiplier);
-		var fontHeight = this.fontHeightInPixelsBase;
 
 		var numberOfOptions = optionNames.length;
 
@@ -96,16 +98,17 @@ export class ControlBuilder
 			numberOfOptions = 0; // Is a single option really an option?
 		}
 
-		var buttonPosY = Math.round
+		var buttonPosY = buttonPosY || Math.round
 		(
 			this.sizeBase.y * (numberOfOptions > 0 ? (2 / 3) : 1)
 		);
 
+		var marginSize = Coords.oneOneZero().multiplyScalar(fontHeight);
 		var labelMessage = new ControlLabel
 		(
 			"labelMessage",
-			Coords.zeroes(),
-			Coords.fromXY(containerSizeScaled.x, buttonPosY),
+			marginSize,
+			Coords.fromXY(containerSizeScaled.x - marginSize.x * 2, buttonPosY),
 			true, // isTextCenteredHorizontally
 			true, // isTextCenteredVertically
 			message,
@@ -189,6 +192,22 @@ export class ControlBuilder
 		}
 
 		return returnValue;
+	}
+
+	choice5
+	(
+		universe: Universe,
+		size: Coords,
+		message: DataBinding<any, string>,
+		optionNames: Array<string>,
+		optionFunctions: Array<()=>void>
+	): ControlBase
+	{
+		return this.choice
+		(
+			universe, size, message, optionNames,
+			optionFunctions, null, null, null
+		);
 	}
 
 	choiceList<TContext, TItem>
@@ -275,14 +294,23 @@ export class ControlBuilder
 
 	confirm
 	(
-		universe: Universe, size: Coords, message: string,
-		confirm: () => void, cancel: () => void
+		universe: Universe,
+		size: Coords,
+		message: string,
+		confirm: () => void,
+		cancel: () => void
 	): ControlBase
 	{
 		return this.choice
 		(
-			universe, size, DataBinding.fromContext(message),
-			["Confirm", "Cancel"], [confirm, cancel], null
+			universe,
+			size,
+			DataBinding.fromContext(message),
+			["Confirm", "Cancel"],
+			[confirm, cancel],
+			null, // showMessageOnly
+			null, // fontHeight
+			null // buttonPosY
 		);
 	}
 
@@ -309,10 +337,14 @@ export class ControlBuilder
 
 		return this.choice
 		(
-			universe, size, DataBinding.fromContext(message),
+			universe,
+			size,
+			DataBinding.fromContext(message),
 			["Confirm", "Cancel"],
 			[confirmThenReturnToVenuePrev, cancelThenReturnToVenuePrev],
-			null
+			null, // showMessageOnly
+			null, // fontHeight
+			null // buttonPosY
 		);
 	}
 
@@ -858,8 +890,9 @@ export class ControlBuilder
 		universe: Universe,
 		size: Coords,
 		message: DataBinding<any, string>,
-		acknowledge: ()=>void,
-		showMessageOnly: boolean
+		acknowledge: () => void,
+		showMessageOnly: boolean,
+		fontHeightInPixels: number
 	): ControlBase
 	{
 		var optionNames = [];
@@ -873,9 +906,28 @@ export class ControlBuilder
 
 		return this.choice
 		(
-			universe, size, message, optionNames, optionFunctions, showMessageOnly
+			universe,
+			size,
+			message,
+			optionNames,
+			optionFunctions,
+			showMessageOnly,
+			fontHeightInPixels,
+			null // buttonPosY
 		);
 	}
+
+	message4
+	(
+		universe: Universe,
+		size: Coords,
+		message: DataBinding<any, string>,
+		acknowledge: () => void
+	)
+	{
+		return this.message(universe, size, message, acknowledge, null, null);
+	}
+
 
 	opening(universe: Universe, size: Coords): ControlBase
 	{
@@ -1544,7 +1596,7 @@ export class ControlBuilder
 							var textInstructions =
 								universe.mediaLibrary.textStringGetByName("Instructions");
 							var instructions = textInstructions.value;
-							var controlInstructions = controlBuilder.message
+							var controlInstructions = controlBuilder.message4
 							(
 								universe,
 								size,
@@ -1552,8 +1604,7 @@ export class ControlBuilder
 								() => // acknowledge
 								{
 									universe.venueTransitionTo(venueWorld);
-								},
-								false
+								}
 							);
 
 							var venueInstructions =
@@ -1788,7 +1839,7 @@ export class ControlBuilder
 						var venueFileUpload = new VenueFileUpload(null, null);
 
 						var controlMessageReadyToLoad =
-							universe.controlBuilder.message
+							universe.controlBuilder.message4
 							(
 								universe,
 								size,
@@ -1822,14 +1873,13 @@ export class ControlBuilder
 										callback,
 										null // contextForCallback
 									);
-								},
-								null
+								}
 							);
 
 						var venueMessageReadyToLoad =
 							controlMessageReadyToLoad.toVenue();
 
-						var controlMessageCancelled = universe.controlBuilder.message
+						var controlMessageCancelled = universe.controlBuilder.message4
 						(
 							universe,
 							size,
@@ -1841,8 +1891,7 @@ export class ControlBuilder
 									universe, size, universe.venueCurrent
 								).toVenue();
 								universe.venueTransitionTo(venueNext);
-							},
-							false //?
+							}
 						);
 
 						var venueMessageCancelled = controlMessageCancelled.toVenue();

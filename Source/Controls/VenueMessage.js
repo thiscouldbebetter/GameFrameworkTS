@@ -41,7 +41,8 @@ var ThisCouldBeBetter;
             venueInner(universe) {
                 if (this._venueInner == null) {
                     var sizeInPixels = this.sizeInPixels(universe);
-                    var controlMessage = universe.controlBuilder.message(universe, sizeInPixels, this.messageToShow, this.acknowledge, this.showMessageOnly);
+                    var controlMessage = universe.controlBuilder.message(universe, sizeInPixels, this.messageToShow, this.acknowledge, this.showMessageOnly, null // fontHeightInPixels
+                    );
                     var venuesToLayer = [];
                     if (this.venuePrev != null) {
                         venuesToLayer.push(this.venuePrev);

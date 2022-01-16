@@ -34,7 +34,13 @@ export class VisualRectangle implements Visual<VisualRectangle>
 	static default(): VisualRectangle
 	{
 		// For rapid prototyping.
-		return new VisualRectangle(Coords.fromXY(10, 10), null, Color.byName("Cyan"), true);
+		return VisualRectangle.fromColorFill(Color.Instances().Cyan);
+	}
+
+	static fromColorFill(colorFill: Color): VisualRectangle
+	{
+		// For rapid prototyping.
+		return new VisualRectangle(Coords.fromXY(1, 1).multiplyScalar(10), null, colorFill, true);
 	}
 
 	static fromSizeAndColorFill(size: Coords, colorFill: Color): VisualRectangle

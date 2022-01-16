@@ -199,7 +199,7 @@ export class Profile
 				: "Save failed due to errors."
 			);
 
-			var controlMessage = universe.controlBuilder.message
+			var controlMessage = universe.controlBuilder.message4
 			(
 				universe,
 				size,
@@ -211,8 +211,7 @@ export class Profile
 						universe, null, universe.venueCurrent
 					).toVenue();
 					universe.venueTransitionTo(venueNext);
-				},
-				false
+				}
 			);
 
 			var venueNext = controlMessage.toVenue();
@@ -278,7 +277,7 @@ export class Profile
 						worldCompressedAsBytes, universe.world.name + ".json.lzw"
 					);
 
-					var controlMessage = universe.controlBuilder.message
+					var controlMessage = universe.controlBuilder.message4
 					(
 						universe,
 						size,
@@ -290,8 +289,7 @@ export class Profile
 								universe, null, universe.venueCurrent
 							).toVenue();
 							universe.venueTransitionTo(venueNext);
-						},
-						null
+						}
 					);
 
 					var venueMessage = controlMessage.toVenue();
@@ -306,7 +304,7 @@ export class Profile
 		{
 			var venueFileUpload = new VenueFileUpload(null, null);
 
-			var controlMessageReadyToLoad = controlBuilder.message
+			var controlMessageReadyToLoad = controlBuilder.message4
 			(
 				universe,
 				size,
@@ -336,13 +334,12 @@ export class Profile
 						callback,
 						null // contextForCallback
 					);
-				},
-				null
+				}
 			);
 
 			var venueMessageReadyToLoad = controlMessageReadyToLoad.toVenue();
 
-			var controlMessageCancelled = controlBuilder.message
+			var controlMessageCancelled = controlBuilder.message4
 			(
 				universe,
 				size,
@@ -352,8 +349,7 @@ export class Profile
 					var venueNext=
 						controlBuilder.game(universe, size, universe.venueCurrent).toVenue();
 					universe.venueTransitionTo(venueNext);
-				},
-				false //?
+				}
 			);
 
 			var venueMessageCancelled = controlMessageCancelled.toVenue();

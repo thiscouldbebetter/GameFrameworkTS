@@ -14,7 +14,11 @@ var ThisCouldBeBetter;
             }
             static default() {
                 // For rapid prototyping.
-                return new VisualRectangle(GameFramework.Coords.fromXY(10, 10), null, GameFramework.Color.byName("Cyan"), true);
+                return VisualRectangle.fromColorFill(GameFramework.Color.Instances().Cyan);
+            }
+            static fromColorFill(colorFill) {
+                // For rapid prototyping.
+                return new VisualRectangle(GameFramework.Coords.fromXY(1, 1).multiplyScalar(10), null, colorFill, true);
             }
             static fromSizeAndColorFill(size, colorFill) {
                 return new VisualRectangle(size, colorFill, null, null);

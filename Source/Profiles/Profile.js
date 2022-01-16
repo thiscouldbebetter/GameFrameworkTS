@@ -113,11 +113,11 @@ var ThisCouldBeBetter;
                     var message = (wasSaveSuccessful
                         ? "Game saved successfully."
                         : "Save failed due to errors.");
-                    var controlMessage = universe.controlBuilder.message(universe, size, GameFramework.DataBinding.fromContext(message), () => // acknowledge
+                    var controlMessage = universe.controlBuilder.message4(universe, size, GameFramework.DataBinding.fromContext(message), () => // acknowledge
                      {
                         var venueNext = universe.controlBuilder.game(universe, null, universe.venueCurrent).toVenue();
                         universe.venueTransitionTo(venueNext);
-                    }, false);
+                    });
                     var venueNext = controlMessage.toVenue();
                     universe.venueTransitionTo(venueNext);
                 };
@@ -147,11 +147,11 @@ var ThisCouldBeBetter;
                         var wasSaveSuccessful = (worldCompressedAsBytes != null);
                         var message = (wasSaveSuccessful ? "Save ready: choose location on dialog." : "Save failed due to errors.");
                         new GameFramework.FileHelper().saveBytesToFileWithName(worldCompressedAsBytes, universe.world.name + ".json.lzw");
-                        var controlMessage = universe.controlBuilder.message(universe, size, GameFramework.DataBinding.fromContext(message), () => // acknowledge
+                        var controlMessage = universe.controlBuilder.message4(universe, size, GameFramework.DataBinding.fromContext(message), () => // acknowledge
                          {
                             var venueNext = universe.controlBuilder.game(universe, null, universe.venueCurrent).toVenue();
                             universe.venueTransitionTo(venueNext);
-                        }, null);
+                        });
                         var venueMessage = controlMessage.toVenue();
                         universe.venueTransitionTo(venueMessage);
                     });
@@ -160,7 +160,7 @@ var ThisCouldBeBetter;
                 var loadFromFile = () => // click
                  {
                     var venueFileUpload = new GameFramework.VenueFileUpload(null, null);
-                    var controlMessageReadyToLoad = controlBuilder.message(universe, size, GameFramework.DataBinding.fromContext("Ready to load from file..."), () => // acknowledge
+                    var controlMessageReadyToLoad = controlBuilder.message4(universe, size, GameFramework.DataBinding.fromContext("Ready to load from file..."), () => // acknowledge
                      {
                         var callback = (fileContentsAsString) => {
                             var worldAsStringCompressed = fileContentsAsString;
@@ -175,14 +175,13 @@ var ThisCouldBeBetter;
                         var fileToLoad = inputFile.files[0];
                         new GameFramework.FileHelper().loadFileAsBinaryString(fileToLoad, callback, null // contextForCallback
                         );
-                    }, null);
+                    });
                     var venueMessageReadyToLoad = controlMessageReadyToLoad.toVenue();
-                    var controlMessageCancelled = controlBuilder.message(universe, size, GameFramework.DataBinding.fromContext("No file specified."), () => // acknowlege
+                    var controlMessageCancelled = controlBuilder.message4(universe, size, GameFramework.DataBinding.fromContext("No file specified."), () => // acknowlege
                      {
                         var venueNext = controlBuilder.game(universe, size, universe.venueCurrent).toVenue();
                         universe.venueTransitionTo(venueNext);
-                    }, false //?
-                    );
+                    });
                     var venueMessageCancelled = controlMessageCancelled.toVenue();
                     venueFileUpload.venueNextIfFileSpecified = venueMessageReadyToLoad;
                     venueFileUpload.venueNextIfCancelled = venueMessageCancelled;

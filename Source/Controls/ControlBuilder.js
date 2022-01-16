@@ -37,18 +37,19 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             // Controls.
-            choice(universe, size, message, optionNames, optionFunctions, showMessageOnly) {
+            choice(universe, size, message, optionNames, optionFunctions, showMessageOnly, fontHeight, buttonPosY) {
                 size = size || universe.display.sizeDefault();
                 showMessageOnly = showMessageOnly || false;
+                fontHeight = fontHeight || this.fontHeightInPixelsBase;
                 var scaleMultiplier = this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
                 var containerSizeScaled = size.clone().clearZ().divide(scaleMultiplier);
-                var fontHeight = this.fontHeightInPixelsBase;
                 var numberOfOptions = optionNames.length;
                 if (showMessageOnly && numberOfOptions == 1) {
                     numberOfOptions = 0; // Is a single option really an option?
                 }
-                var buttonPosY = Math.round(this.sizeBase.y * (numberOfOptions > 0 ? (2 / 3) : 1));
-                var labelMessage = new GameFramework.ControlLabel("labelMessage", GameFramework.Coords.zeroes(), GameFramework.Coords.fromXY(containerSizeScaled.x, buttonPosY), true, // isTextCenteredHorizontally
+                var buttonPosY = buttonPosY || Math.round(this.sizeBase.y * (numberOfOptions > 0 ? (2 / 3) : 1));
+                var marginSize = GameFramework.Coords.oneOneZero().multiplyScalar(fontHeight);
+                var labelMessage = new GameFramework.ControlLabel("labelMessage", marginSize, GameFramework.Coords.fromXY(containerSizeScaled.x - marginSize.x * 2, buttonPosY), true, // isTextCenteredHorizontally
                 true, // isTextCenteredVertically
                 message, fontHeight);
                 var childControls = [labelMessage];
@@ -93,6 +94,9 @@ var ThisCouldBeBetter;
                 }
                 return returnValue;
             }
+            choice5(universe, size, message, optionNames, optionFunctions) {
+                return this.choice(universe, size, message, optionNames, optionFunctions, null, null, null);
+            }
             choiceList(universe, size, message, options, bindingForOptionText, buttonSelectText, select) {
                 // todo - Variable sizes.
                 size = size || universe.display.sizeDefault();
@@ -124,7 +128,10 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             confirm(universe, size, message, confirm, cancel) {
-                return this.choice(universe, size, GameFramework.DataBinding.fromContext(message), ["Confirm", "Cancel"], [confirm, cancel], null);
+                return this.choice(universe, size, GameFramework.DataBinding.fromContext(message), ["Confirm", "Cancel"], [confirm, cancel], null, // showMessageOnly
+                null, // fontHeight
+                null // buttonPosY
+                );
             }
             confirmAndReturnToVenue(universe, size, message, venuePrev, confirm, cancel) {
                 var confirmThenReturnToVenuePrev = () => {
@@ -137,7 +144,10 @@ var ThisCouldBeBetter;
                     }
                     universe.venueTransitionTo(venuePrev);
                 };
-                return this.choice(universe, size, GameFramework.DataBinding.fromContext(message), ["Confirm", "Cancel"], [confirmThenReturnToVenuePrev, cancelThenReturnToVenuePrev], null);
+                return this.choice(universe, size, GameFramework.DataBinding.fromContext(message), ["Confirm", "Cancel"], [confirmThenReturnToVenuePrev, cancelThenReturnToVenuePrev], null, // showMessageOnly
+                null, // fontHeight
+                null // buttonPosY
+                );
             }
             game(universe, size, venuePrev) {
                 var controlBuilder = this;
@@ -400,14 +410,18 @@ var ThisCouldBeBetter;
                 returnValue.scalePosAndSize(scaleMultiplier);
                 return returnValue;
             }
-            message(universe, size, message, acknowledge, showMessageOnly) {
+            message(universe, size, message, acknowledge, showMessageOnly, fontHeightInPixels) {
                 var optionNames = [];
                 var optionFunctions = [];
                 if (acknowledge != null) {
                     optionNames.push("Acknowledge");
                     optionFunctions.push(acknowledge);
                 }
-                return this.choice(universe, size, message, optionNames, optionFunctions, showMessageOnly);
+                return this.choice(universe, size, message, optionNames, optionFunctions, showMessageOnly, fontHeightInPixels, null // buttonPosY
+                );
+            }
+            message4(universe, size, message, acknowledge) {
+                return this.message(universe, size, message, acknowledge, null, null);
             }
             opening(universe, size) {
                 if (size == null) {
@@ -730,10 +744,10 @@ var ThisCouldBeBetter;
                         else {
                             var textInstructions = universe.mediaLibrary.textStringGetByName("Instructions");
                             var instructions = textInstructions.value;
-                            var controlInstructions = controlBuilder.message(universe, size, GameFramework.DataBinding.fromContext(instructions), () => // acknowledge
+                            var controlInstructions = controlBuilder.message4(universe, size, GameFramework.DataBinding.fromContext(instructions), () => // acknowledge
                              {
                                 universe.venueTransitionTo(venueWorld);
-                            }, false);
+                            });
                             var venueInstructions = controlInstructions.toVenue();
                             var venueMovie = new GameFramework.VenueVideo("Movie", // videoName
                             venueInstructions // fader implicit
@@ -847,7 +861,7 @@ var ThisCouldBeBetter;
                     () => // click
                      {
                         var venueFileUpload = new GameFramework.VenueFileUpload(null, null);
-                        var controlMessageReadyToLoad = universe.controlBuilder.message(universe, size, GameFramework.DataBinding.fromContext("Ready to load from file..."), () => // acknowledge
+                        var controlMessageReadyToLoad = universe.controlBuilder.message4(universe, size, GameFramework.DataBinding.fromContext("Ready to load from file..."), () => // acknowledge
                          {
                             var callback = (fileContentsAsString) => {
                                 var worldAsStringCompressed = fileContentsAsString;
@@ -862,14 +876,13 @@ var ThisCouldBeBetter;
                             var fileToLoad = inputFile.files[0];
                             new GameFramework.FileHelper().loadFileAsBinaryString(fileToLoad, callback, null // contextForCallback
                             );
-                        }, null);
+                        });
                         var venueMessageReadyToLoad = controlMessageReadyToLoad.toVenue();
-                        var controlMessageCancelled = universe.controlBuilder.message(universe, size, GameFramework.DataBinding.fromContext("No file specified."), () => // acknowlege
+                        var controlMessageCancelled = universe.controlBuilder.message4(universe, size, GameFramework.DataBinding.fromContext("No file specified."), () => // acknowlege
                          {
                             var venueNext = controlBuilder.game(universe, size, universe.venueCurrent).toVenue();
                             universe.venueTransitionTo(venueNext);
-                        }, false //?
-                        );
+                        });
                         var venueMessageCancelled = controlMessageCancelled.toVenue();
                         venueFileUpload.venueNextIfFileSpecified = venueMessageReadyToLoad;
                         venueFileUpload.venueNextIfCancelled = venueMessageCancelled;

@@ -103,7 +103,8 @@ export class VenueMessage<TContext> implements Venue
 				sizeInPixels,
 				this.messageToShow,
 				this.acknowledge,
-				this.showMessageOnly
+				this.showMessageOnly,
+				null // fontHeightInPixels
 			);
 
 			var venuesToLayer = [];
