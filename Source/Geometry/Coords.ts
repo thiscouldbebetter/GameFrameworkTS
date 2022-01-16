@@ -444,9 +444,9 @@ export class Coords
 		{
 			randomizer = RandomizerSystem.Instance();
 		}
-		this.x = randomizer.getNextRandom();
-		this.y = randomizer.getNextRandom();
-		this.z = randomizer.getNextRandom();
+		this.x = randomizer.fraction();
+		this.y = randomizer.fraction();
+		this.z = randomizer.fraction();
 		return this;
 	}
 

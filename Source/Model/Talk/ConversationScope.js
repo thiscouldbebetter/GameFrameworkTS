@@ -11,11 +11,29 @@ var ThisCouldBeBetter;
                 this.talkNodesForOptions = talkNodesForOptions;
                 this.talkNodesForOptionsByName =
                     GameFramework.ArrayHelper.addLookupsByName(this.talkNodesForOptions);
-                this.displayTextCurrent = null;
+                this.displayLinesCurrent = null;
+                this.displayLineIndexCurrent = null;
                 this.talkNodeForOptionSelected = null;
                 this._talkNodesForOptionsActive = [];
                 this._emptyArray = [];
                 this.haveOptionsBeenUpdated = true;
+            }
+            displayTextCurrent() {
+                var returnValue = (this.displayLineIndexCurrent == null
+                    ? null
+                    : this.displayLinesCurrent[this.displayLineIndexCurrent]);
+                return returnValue;
+            }
+            displayTextCurrentAdvance() {
+                if (this.displayLineIndexCurrent == null) {
+                    this.displayLineIndexCurrent = 0;
+                }
+                else {
+                    this.displayLineIndexCurrent++;
+                }
+                if (this.displayLineIndexCurrent >= this.displayLinesCurrent.length) {
+                    this.displayLineIndexCurrent = null;
+                }
             }
             node() {
                 // Tersely named convenience method for scripts.

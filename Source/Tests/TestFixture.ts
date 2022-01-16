@@ -16,7 +16,7 @@ export class TestFixture
 		return null;
 	}
 
-	run()
+	run(): void
 	{
 		var tests = this.tests();
 		var testCount = tests.length;

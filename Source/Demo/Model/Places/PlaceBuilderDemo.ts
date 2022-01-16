@@ -105,7 +105,7 @@ class PlaceBuilderDemo // Main.
 		container.itemHolder().itemAdd(itemOre);
 		this.entities.push(container);
 
-		var randomizerSeed = this.randomizer.getNextRandom();
+		var randomizerSeed = this.randomizer.fraction();
 		var place = new PlaceRoom(this.name, "Demo", size, this.entities, randomizerSeed);
 
 		return place;
@@ -132,7 +132,7 @@ class PlaceBuilderDemo // Main.
 		var entityCamera = this.build_Camera(this.cameraViewSize, this.size);
 		this.entities.splice(0, 0, ...this.entityBuildBackground(entityCamera.camera() ) );
 
-		var randomizerSeed = this.randomizer.getNextRandom();
+		var randomizerSeed = this.randomizer.fraction();
 		var place = new PlaceRoom(this.name, "Demo", size, this.entities, randomizerSeed);
 		return place;
 	}
@@ -151,7 +151,7 @@ class PlaceBuilderDemo // Main.
 		var entityCamera = this.build_Camera(this.cameraViewSize, this.size);
 		this.entities.splice(0, 0, ...this.entityBuildBackground(entityCamera.camera() ) );
 
-		var randomizerSeed = this.randomizer.getNextRandom();
+		var randomizerSeed = this.randomizer.fraction();
 		var place = new PlaceRoom(this.name, "Demo", size, this.entities, randomizerSeed);
 		return place;
 	}
@@ -162,7 +162,7 @@ class PlaceBuilderDemo // Main.
 
 		this.build_Interior("Tunnels", size, placeNameToReturnTo);
 
-		var randomizerSeed = this.randomizer.getNextRandom();
+		var randomizerSeed = this.randomizer.fraction();
 
 		var networkNodeCount = 24;
 		var network = Network.random(networkNodeCount, this.randomizer);
@@ -1041,7 +1041,7 @@ class PlaceBuilderDemo // Main.
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("MushroomGenerator"), 2, null, entityPosRange, randomizer));
 		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Tree"), 6, null, entityPosRange, randomizer));
 
-		var randomizerSeed = this.randomizer.getNextRandom();
+		var randomizerSeed = this.randomizer.fraction();
 		var place = new PlaceRoom(this.name, "Demo", size, this.entities, randomizerSeed);
 
 		return place;

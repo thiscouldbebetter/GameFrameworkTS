@@ -188,18 +188,19 @@
 			"content": "[Flips a coin.]"
 		},
 		{
-			"defnName": "Random"
+			"defnName": "VariableLoad",
+			"content": "HeadsOrTails",
+			"next": "u.randomizer.integerLessThan(2)"
 		},
 		{
 			"defnName": "Display",
-			"content": "Heads."
+			"content": "Heads.",
+			"isDisabled": "cr.varGet('HeadsOrTails') != 0"
 		},
 		{
 			"defnName": "Display",
-			"content": "Tails."
-		},
-		{
-			"defnName": "DoNothing"
+			"content": "Tails.",
+			"isDisabled": "cr.varGet('HeadsOrTails') != 1"
 		},
 		{
 			"defnName": "Display",
@@ -210,25 +211,27 @@
 			"content": "Now YOU say something random, smart guy."
 		},
 		{
-			"defnName": "Random"
+			"defnName": "VariableLoad",
+			"content": "SaySomethingRandomIndex",
+			"next": "u.randomizer.integerLessThan(3)"
 		},
 		{
 			"defnName": "Option",
 			"next": "CoinFlip.Done",
-			"content": "Uhh... skibluhvwee."
+			"content": "Uhh... skibluhvwee.",
+			"isDisabled": "cr.varGet('SaySomethingRandomIndex') != 0"
 		},
 		{
 			"defnName": "Option",
 			"next": "CoinFlip.Done",
-			"content": "Uhh... jib--jibbluhkuhjax."
+			"content": "Uhh... jib--jibbluhkuhjax.",
+			"isDisabled": "cr.varGet('SaySomethingRandomIndex') != 1"
 		},
 		{
 			"defnName": "Option",
 			"next": "CoinFlip.Done",
-			"content": "My baloney... has no middle name."
-		},
-		{
-			"defnName": "DoNothing"
+			"content": "My baloney... has no middle name.",
+			"isDisabled": "cr.varGet('SaySomethingRandomIndex') != 2"
 		},
 		{
 			"defnName": "Option",

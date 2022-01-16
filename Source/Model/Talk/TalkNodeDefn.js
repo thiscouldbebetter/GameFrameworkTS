@@ -25,7 +25,7 @@ var ThisCouldBeBetter;
                 this.Disable = new TalkNodeDefn("Disable", (universe, conversationRun) => // execute
                  {
                     var talkNode = conversationRun.talkNodeCurrent();
-                    var talkNodesToDisablePrefixesJoined = talkNode.content;
+                    var talkNodesToDisablePrefixesJoined = talkNode.next;
                     var talkNodesToDisablePrefixes = talkNodesToDisablePrefixesJoined.split(",");
                     var talkNodesToDisableAsArrays = talkNodesToDisablePrefixes.map(prefix => conversationRun.nodesByPrefix(prefix));
                     var talkNodesToDisable = GameFramework.ArrayHelper.flattenArrayOfArrays(talkNodesToDisableAsArrays);
@@ -38,9 +38,20 @@ var ThisCouldBeBetter;
                     var scope = conversationRun.scopeCurrent;
                     var talkNode = conversationRun.talkNodeCurrent();
                     talkNode.contentVariablesSubstitute(conversationRun);
-                    scope.displayTextCurrent = talkNode.content;
-                    conversationRun.talkNodeGoToNext(universe);
-                    conversationRun.talkNodesForTranscript.push(talkNode);
+                    if (scope.displayLinesCurrent == null) {
+                        scope.displayLinesCurrent = talkNode.content.split("\n");
+                    }
+                    scope.displayTextCurrentAdvance();
+                    var displayTextCurrent = scope.displayTextCurrent();
+                    if (displayTextCurrent == null) {
+                        scope.displayLinesCurrent = null;
+                        conversationRun.talkNodeGoToNext(universe);
+                        conversationRun.talkNodeCurrentExecute(universe);
+                    }
+                    else {
+                        var nodeForTranscript = GameFramework.TalkNode.display(null, displayTextCurrent);
+                        conversationRun.talkNodesForTranscript.push(nodeForTranscript);
+                    }
                 });
                 this.DoNothing = new TalkNodeDefn("DoNothing", (universe, conversationRun) => // execute
                  {
@@ -50,7 +61,7 @@ var ThisCouldBeBetter;
                 this.Enable = new TalkNodeDefn("Enable", (universe, conversationRun) => // execute
                  {
                     var talkNode = conversationRun.talkNodeCurrent();
-                    var talkNodesToEnablePrefixesJoined = talkNode.content;
+                    var talkNodesToEnablePrefixesJoined = talkNode.next;
                     var talkNodesToEnablePrefixes = talkNodesToEnablePrefixesJoined.split(",");
                     var talkNodesToEnableAsArrays = talkNodesToEnablePrefixes.map(prefix => conversationRun.nodesByPrefix(prefix));
                     var talkNodesToEnable = GameFramework.ArrayHelper.flattenArrayOfArrays(talkNodesToEnableAsArrays);
@@ -106,6 +117,14 @@ var ThisCouldBeBetter;
                     conversationRun.talkNodeAdvance(universe);
                     conversationRun.talkNodeCurrentExecute(universe);
                 });
+                this.OptionsClear = new TalkNodeDefn("OptionsClear", (universe, conversationRun) => // execute
+                 {
+                    var scope = conversationRun.scopeCurrent;
+                    var talkNodesForOptions = scope.talkNodesForOptions;
+                    talkNodesForOptions.length = 0;
+                    conversationRun.talkNodeAdvance(universe);
+                    conversationRun.talkNodeCurrentExecute(universe);
+                });
                 this.Pop = new TalkNodeDefn("Pop", (universe, conversationRun) => // execute
                  {
                     var scope = conversationRun.scopeCurrent;
@@ -137,38 +156,6 @@ var ThisCouldBeBetter;
                  {
                     conversationRun.quit(universe);
                 });
-                this.Random = new TalkNodeDefn("Random", (universe, conversationRun) => // execute
-                 {
-                    conversationRun.talkNodeAdvance(universe);
-                    var node = conversationRun.talkNodeCurrent();
-                    var nodeDefnName = node.defnName;
-                    var nodeDefnNameFirst = nodeDefnName;
-                    var nodesToChooseBetween = [];
-                    var nodesToRestoreFrom = [];
-                    while (nodeDefnName == nodeDefnNameFirst) {
-                        if (node.isEnabled(universe, conversationRun)) {
-                            nodesToRestoreFrom.push(node.clone());
-                            node.disable();
-                            nodesToChooseBetween.push(node);
-                        }
-                        conversationRun.talkNodeAdvance(universe);
-                        node = conversationRun.talkNodeCurrent();
-                        nodeDefnName = node.defnName;
-                    }
-                    var nodeNextAfterNodesToChooseBetween = node;
-                    var randomNumber = universe.randomizer.getNextRandom();
-                    var nodeIndex = Math.floor(randomNumber * nodesToChooseBetween.length);
-                    var nodeChosenAtRandom = nodesToChooseBetween[nodeIndex];
-                    nodeChosenAtRandom.enable();
-                    conversationRun.talkNodeCurrentSet(nodeChosenAtRandom);
-                    nodeChosenAtRandom.execute(universe, conversationRun, conversationRun.scopeCurrent);
-                    conversationRun.talkNodeCurrentSet(nodeNextAfterNodesToChooseBetween);
-                    for (var i = 0; i < nodesToChooseBetween.length; i++) {
-                        var nodeToBeRestored = nodesToChooseBetween[i];
-                        var nodeToRestoreFrom = nodesToRestoreFrom[i];
-                        nodeToBeRestored.overwriteWith(nodeToRestoreFrom);
-                    }
-                });
                 this.Script = new TalkNodeDefn("Script", (universe, conversationRun) => // execute
                  {
                     var talkNode = conversationRun.talkNodeCurrent();
@@ -192,10 +179,7 @@ var ThisCouldBeBetter;
                     var talkNode = conversationRun.talkNodeCurrent();
                     var variableName = talkNode.content;
                     var scriptExpression = talkNode.next;
-                    var scriptToRunAsString = "( (u, cr) => " + scriptExpression + " )";
-                    var scriptToRun = eval(scriptToRunAsString);
-                    var scriptResult = scriptToRun(universe, conversationRun);
-                    conversationRun.variableSet(variableName, scriptResult);
+                    conversationRun.variableLoad(universe, variableName, scriptExpression);
                     conversationRun.talkNodeAdvance(universe);
                     conversationRun.talkNodeCurrentExecute(universe); // hack
                 });
@@ -212,12 +196,8 @@ var ThisCouldBeBetter;
                  {
                     var talkNode = conversationRun.talkNodeCurrent();
                     var variableName = talkNode.content;
-                    var variableValue = conversationRun.variableByName(variableName).toString();
                     var scriptExpression = talkNode.next;
-                    var scriptExpressionWithValue = scriptExpression.split("$value").join(variableValue);
-                    var scriptToRunAsString = "( (u, cr) => { " + scriptExpressionWithValue + "; } )";
-                    var scriptToRun = eval(scriptToRunAsString);
-                    scriptToRun(universe, conversationRun);
+                    conversationRun.variableStore(universe, variableName, scriptExpression);
                     conversationRun.talkNodeAdvance(universe);
                     conversationRun.talkNodeCurrentExecute(universe); // hack
                 });
@@ -231,11 +211,11 @@ var ThisCouldBeBetter;
                         this.JumpIfFalse,
                         this.JumpIfTrue,
                         this.Option,
+                        this.OptionsClear,
                         this.Pop,
                         this.Prompt,
                         this.Push,
                         this.Quit,
-                        this.Random,
                         this.Script,
                         this.Switch,
                         this.VariableLoad,

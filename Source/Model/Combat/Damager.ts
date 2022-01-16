@@ -42,7 +42,7 @@ export class Damager implements EntityProperty<Damager>
 		{
 			this.ticksUntilCanAttempt = this.ticksPerAttempt;
 
-			var randomNumber = universe.randomizer.getNextRandom();
+			var randomNumber = universe.randomizer.fraction();
 
 			var doesAttemptSucceed =
 				(randomNumber < this.chanceOfHitPerAttempt);

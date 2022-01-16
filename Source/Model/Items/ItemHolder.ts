@@ -98,6 +98,14 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 		return hasAllItems;
 	}
 
+	hasItemWithCategoryName(categoryName: string, world: World): boolean
+	{
+		var returnValue =
+			this.items.some(x => x.defn(world).categoryNames.indexOf(categoryName) >= 0)
+
+		return returnValue;
+	}
+
 	hasItemWithDefnName(defnName: string): boolean
 	{
 		return this.hasItemWithDefnNameAndQuantity(defnName, 1);

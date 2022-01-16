@@ -296,7 +296,7 @@ export class ArrayHelper
 
 	static random<T>(array: T[], randomizer: Randomizer): T
 	{
-		return array[ Math.floor(randomizer.getNextRandom() * array.length) ];
+		return array[ randomizer.integerLessThan(array.length) ];
 	}
 
 	static remove<T>(array: T[], elementToRemove: T): T[]

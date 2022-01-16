@@ -10,7 +10,8 @@ export class ConversationScope
 	talkNodesForOptions: TalkNode[];
 	talkNodesForOptionsByName: Map<string, TalkNode>;
 
-	displayTextCurrent: string;
+	displayLineIndexCurrent: number;
+	displayLinesCurrent: string[];
 	haveOptionsBeenUpdated: boolean;
 	isPromptingForResponse: boolean;
 	talkNodeForOptionSelected: TalkNode;
@@ -32,12 +33,42 @@ export class ConversationScope
 		this.talkNodesForOptionsByName =
 			ArrayHelper.addLookupsByName(this.talkNodesForOptions);
 
-		this.displayTextCurrent = null;
+		this.displayLinesCurrent = null;
+		this.displayLineIndexCurrent = null;
 		this.talkNodeForOptionSelected = null;
 		this._talkNodesForOptionsActive = [];
 		this._emptyArray = [];
 		this.haveOptionsBeenUpdated = true;
 	}
+
+	displayTextCurrent(): string
+	{
+		var returnValue =
+		(
+			this.displayLineIndexCurrent == null
+			? null
+			: this.displayLinesCurrent[this.displayLineIndexCurrent]
+		);
+		return returnValue;
+	}
+
+	displayTextCurrentAdvance(): void
+	{
+		if (this.displayLineIndexCurrent == null)
+		{
+			this.displayLineIndexCurrent = 0;
+		}
+		else
+		{
+			this.displayLineIndexCurrent++;
+		}
+
+		if (this.displayLineIndexCurrent >= this.displayLinesCurrent.length)
+		{
+			this.displayLineIndexCurrent = null;
+		}
+	}
+
 
 	node(): TalkNode
 	{

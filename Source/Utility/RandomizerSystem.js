@@ -10,8 +10,11 @@ var ThisCouldBeBetter;
                 }
                 return RandomizerSystem._instance;
             }
-            getNextRandom() {
+            fraction() {
                 return Math.random();
+            }
+            integerLessThan(max) {
+                return Math.floor(this.fraction() * max);
             }
         }
         GameFramework.RandomizerSystem = RandomizerSystem;

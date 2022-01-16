@@ -20,7 +20,7 @@ var ThisCouldBeBetter;
                 var returnDamage = null;
                 if (this.ticksUntilCanAttempt <= 0) {
                     this.ticksUntilCanAttempt = this.ticksPerAttempt;
-                    var randomNumber = universe.randomizer.getNextRandom();
+                    var randomNumber = universe.randomizer.fraction();
                     var doesAttemptSucceed = (randomNumber < this.chanceOfHitPerAttempt);
                     if (doesAttemptSucceed) {
                         returnDamage = this.damagePerHit;

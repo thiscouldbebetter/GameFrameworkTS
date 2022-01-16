@@ -173,21 +173,67 @@ var ThisCouldBeBetter;
             variableByName(variableName) {
                 return this.variablesByName.get(variableName);
             }
+            variableLoad(universe, variableName, variableExpression) {
+                var scriptText = "( (u, cr) => " + variableExpression + ")";
+                var scriptToRun = eval(scriptText);
+                var variableValue = scriptToRun(universe, this);
+                this.variableSet(variableName, variableValue);
+            }
             variableSet(variableName, variableValue) {
                 this.variablesByName.set(variableName, variableValue);
             }
+            variableStore(universe, variableName, scriptExpression) {
+                var variableValue = this.variableByName(variableName).toString();
+                var scriptExpressionWithValue = scriptExpression.split("$value").join(variableValue);
+                var scriptToRunAsString = "( (u, cr) => { " + scriptExpressionWithValue + "; } )";
+                var scriptToRun = eval(scriptToRunAsString);
+                scriptToRun(universe, this);
+            }
             // controls
             toControl(size, universe) {
+                return this.toControl_Layout_Default(size, universe);
+            }
+            toControl_Layout_Default(size, universe) {
+                var fontHeight = 15;
+                var marginWidth = 15;
+                var marginSize = GameFramework.Coords.fromXY(1, 1).multiplyScalar(marginWidth);
+                var buttonHeight = 20;
+                var buttonSize = GameFramework.Coords.fromXY(2, 1).multiplyScalar(buttonHeight);
+                var containerButtonsMarginSize = marginSize;
+                var containerButtonsPos = GameFramework.Coords.fromXY(size.x - marginSize.x * 2 - buttonSize.x, size.y - marginSize.y * 4 - buttonSize.y * 3);
+                var portraitSize = GameFramework.Coords.fromXY(4, 4).multiplyScalar(buttonHeight);
+                var portraitPos = marginSize.clone();
+                var labelSpeakerSize = GameFramework.Coords.fromXY(size.x - marginSize.x * 3 - portraitSize.x, portraitSize.y);
+                var labelSpeakerPos = GameFramework.Coords.fromXY(marginSize.x * 2 + portraitSize.x, marginSize.y);
+                var listSize = GameFramework.Coords.fromXY(size.x - marginSize.x * 3 - buttonSize.x, size.y - portraitSize.y - marginSize.y * 4);
+                var listPos = GameFramework.Coords.fromXY(marginSize.x, marginSize.y * 2 + portraitSize.y + fontHeight);
+                var returnValue = this.toControl_WithCoords(size, universe, fontHeight, marginSize, containerButtonsPos, containerButtonsMarginSize, buttonSize, portraitPos, portraitSize, labelSpeakerPos, labelSpeakerSize, false, // labelSpeakerIsCenteredHorizontally
+                true, // labelSpeakerIsCenteredVertically
+                listPos, listSize);
+                return returnValue;
+            }
+            toControl_Layout_2(size, universe) {
+                var fontHeight = 15;
+                var marginWidth = 15;
+                var marginSize = GameFramework.Coords.fromXY(1, 1).multiplyScalar(marginWidth);
+                var portraitSize = GameFramework.Coords.fromXY(1, .44).multiplyScalar(size.x - marginSize.x * 2).round();
+                var portraitPos = marginSize.clone();
+                var labelSpeakerSize = portraitSize.clone().subtract(marginSize).subtract(marginSize);
+                var labelSpeakerPos = portraitPos.clone().add(marginSize);
+                var listSize = GameFramework.Coords.fromXY(portraitSize.x, size.y - portraitSize.y - fontHeight - marginSize.y * 3);
+                var listPos = GameFramework.Coords.fromXY(marginSize.x, marginSize.y * 2 + portraitSize.y + fontHeight);
+                var returnValue = this.toControl_WithCoords(size, universe, fontHeight, marginSize, null, // containerButtonsPos,
+                null, // containerButtonsMarginSize,
+                null, // buttonSize,
+                portraitPos, portraitSize, labelSpeakerPos, labelSpeakerSize, true, // labelSpeakerIsCenteredHorizontally
+                false, // labelSpeakerIsCenteredVertically
+                listPos, listSize);
+                return returnValue;
+            }
+            toControl_WithCoords(size, universe, fontHeight, marginSize, containerButtonsPos, containerButtonsMarginSize, buttonSize, portraitPos, portraitSize, labelSpeakerPos, labelSpeakerSize, labelSpeakerIsCenteredHorizontally, labelSpeakerIsCenteredVertically, listPos, listSize) {
+                var fontHeightShort = fontHeight; // todo
                 var conversationRun = this;
                 var conversationDefn = conversationRun.defn;
-                var fontHeight = 15;
-                var fontHeightShort = fontHeight; // todo
-                var marginWidth = 15;
-                var buttonHeight = 20;
-                var marginSize = GameFramework.Coords.fromXY(1, 1).multiplyScalar(marginWidth);
-                var buttonSize = GameFramework.Coords.fromXY(2, 1).multiplyScalar(buttonHeight);
-                var portraitSize = GameFramework.Coords.fromXY(4, 4).multiplyScalar(buttonHeight);
-                var listSize = GameFramework.Coords.fromXY(size.x - marginSize.x * 3 - buttonSize.x, size.y - portraitSize.y - marginSize.y * 4);
                 var next = () => {
                     conversationRun.next(universe);
                 };
@@ -198,50 +244,24 @@ var ThisCouldBeBetter;
                     var venueNext = transcriptAsControl.toVenue();
                     universe.venueTransitionTo(venueNext);
                 };
-                var buttonNext = GameFramework.ControlButton.from8("buttonNext", GameFramework.Coords.fromXY(size.x - marginSize.x - buttonSize.x, size.y - marginSize.y * 3 - buttonSize.y * 3), buttonSize.clone(), "Next", fontHeight, true, // hasBorder
-                GameFramework.DataBinding.fromTrue(), // isEnabled
-                next // click
-                );
-                var buttonTranscript = GameFramework.ControlButton.from8("buttonTranscript", new GameFramework.Coords(size.x - marginSize.x - buttonSize.x, size.y - marginSize.y * 2 - buttonSize.y * 2, 0), buttonSize.clone(), "Log", fontHeight, true, // hasBorder
-                GameFramework.DataBinding.fromTrue(), // isEnabled
-                viewLog // click
-                );
-                var buttons = [
-                    buttonNext,
-                    buttonTranscript
-                ];
-                if (this._quit != null) {
-                    var buttonLeave = GameFramework.ControlButton.from8("buttonLeave", GameFramework.Coords.fromXY(size.x - marginSize.x - buttonSize.x, size.y - marginSize.y - buttonSize.y), buttonSize.clone(), "Leave", fontHeight, true, // hasBorder
-                    GameFramework.DataBinding.fromTrue(), // isEnabled
-                    back // click
-                    );
-                    buttons.push(buttonLeave);
+                var visualPortrait = conversationDefn.visualPortrait;
+                if (visualPortrait.constructor.name.startsWith("VisualImage")) {
+                    visualPortrait = new GameFramework.VisualImageScaled(visualPortrait, portraitSize);
                 }
-                var containerButtonsSize = GameFramework.Coords.fromXY(buttonSize.x, buttonSize.y * (buttons.length + 1) + marginSize.y * (buttons.length));
-                var containerButtonsInner = GameFramework.ControlContainer.from4("containerButtons", GameFramework.Coords.fromXY(size.x - marginSize.x * 2 - buttonSize.x, size.y - marginSize.y * 4 - buttonSize.y * 3), // pos
-                containerButtonsSize, 
-                // children
-                buttons);
-                containerButtonsInner.childrenLayOutWithSpacingVertically(marginSize);
-                var containerButtons = containerButtonsInner.toControlContainerTransparent();
-                var returnValue = new GameFramework.ControlContainer("containerConversation", GameFramework.Coords.create(), // pos
-                size, 
-                // children
-                [
-                    new GameFramework.ControlVisual("visualPortrait", marginSize.clone(), portraitSize, // size
-                    GameFramework.DataBinding.fromContext(conversationDefn.visualPortrait), GameFramework.Color.byName("Black"), // colorBackground
+                var childControls = [
+                    GameFramework.ControlButton.from8("buttonNextUnderPortrait", portraitPos, portraitSize, "Next", fontHeight, true, // hasBorder
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
+                    next // click
+                    ),
+                    new GameFramework.ControlVisual("visualPortrait", portraitPos, portraitSize, GameFramework.DataBinding.fromContext(visualPortrait), GameFramework.Color.byName("Black"), // colorBackground
                     null // colorBorder
                     ),
-                    new GameFramework.ControlLabel("labelSpeaker", new GameFramework.Coords(marginSize.x * 2 + portraitSize.x, marginSize.y, 0), // pos
-                    GameFramework.Coords.fromXY(size.x - marginWidth * 3 - portraitSize.x, portraitSize.y), // size
-                    false, // isTextCenteredHorizontally
-                    true, // isTextCenteredVertically
-                    GameFramework.DataBinding.fromContextAndGet(conversationRun, (c) => c.scopeCurrent.displayTextCurrent), fontHeight),
-                    new GameFramework.ControlLabel("labelResponse", new GameFramework.Coords(marginSize.x, marginSize.y * 2 + portraitSize.y - fontHeight / 2, 0), size, // size
+                    new GameFramework.ControlLabel("labelSpeaker", labelSpeakerPos, labelSpeakerSize, labelSpeakerIsCenteredHorizontally, labelSpeakerIsCenteredVertically, GameFramework.DataBinding.fromContextAndGet(conversationRun, (c) => c.scopeCurrent.displayTextCurrent()), fontHeight),
+                    new GameFramework.ControlLabel("labelResponse", GameFramework.Coords.fromXY(marginSize.x, marginSize.y * 2 + portraitSize.y - fontHeight / 2), size, // size
                     false, // isTextCenteredHorizontally
                     false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Response:"), fontHeight),
-                    GameFramework.ControlList.from10("listResponses", new GameFramework.Coords(marginSize.x, marginSize.y * 3 + portraitSize.y, 0), listSize, 
+                    GameFramework.ControlList.from10("listResponses", listPos, listSize, 
                     // items
                     GameFramework.DataBinding.fromContextAndGet(conversationRun, (c) => c.scopeCurrent.talkNodesForOptionsActive(universe, c)), 
                     // bindingForItemText
@@ -251,10 +271,38 @@ var ThisCouldBeBetter;
                     (universe) => // confirm
                      {
                         next();
-                    }),
-                    containerButtons
-                ], // children
-                [
+                    })
+                ]; // children
+                if (containerButtonsPos != null) {
+                    var buttonNext = GameFramework.ControlButton.from8("buttonNext", GameFramework.Coords.fromXY(containerButtonsMarginSize.x, containerButtonsMarginSize.y), buttonSize.clone(), "Next", fontHeight, true, // hasBorder
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
+                    next // click
+                    );
+                    var buttonTranscript = GameFramework.ControlButton.from8("buttonTranscript", GameFramework.Coords.fromXY(containerButtonsMarginSize.x, containerButtonsMarginSize.y * 2 + buttonSize.y), buttonSize.clone(), "Log", fontHeight, true, // hasBorder
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
+                    viewLog // click
+                    );
+                    var buttons = [
+                        buttonNext,
+                        buttonTranscript
+                    ];
+                    if (this._quit != null) {
+                        var buttonLeave = GameFramework.ControlButton.from8("buttonLeave", GameFramework.Coords.fromXY(containerButtonsMarginSize.x, containerButtonsMarginSize.y * 3 + buttonSize.y * 2), buttonSize.clone(), "Leave", fontHeight, true, // hasBorder
+                        GameFramework.DataBinding.fromTrue(), // isEnabled
+                        back // click
+                        );
+                        buttons.push(buttonLeave);
+                    }
+                    var containerButtonsSize = GameFramework.Coords.fromXY(buttonSize.x, buttonSize.y * (buttons.length) + marginSize.y * (buttons.length + 1));
+                    var containerButtonsInner = GameFramework.ControlContainer.from4("containerButtons", containerButtonsPos, containerButtonsSize, 
+                    // children
+                    buttons);
+                    containerButtonsInner.childrenLayOutWithSpacingVertically(marginSize);
+                    var containerButtons = containerButtonsInner.toControlContainerTransparent();
+                    childControls.push(containerButtons);
+                }
+                var returnValue = new GameFramework.ControlContainer("containerConversation", GameFramework.Coords.create(), // pos
+                size, childControls, [
                     new GameFramework.Action("Back", back),
                     new GameFramework.Action("ViewLog", viewLog)
                 ], [

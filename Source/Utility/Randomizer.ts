@@ -4,7 +4,8 @@ namespace ThisCouldBeBetter.GameFramework
 
 export interface Randomizer
 {
-	getNextRandom(): number;
+	fraction(): number;
+	integerLessThan(max: number): number;
 }
 
 }

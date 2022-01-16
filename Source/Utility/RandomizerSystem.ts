@@ -7,7 +7,7 @@ export class RandomizerSystem implements Randomizer
 	// Uses the built-in JavaScript randomizer.
 
 	static _instance: RandomizerSystem;
-	static Instance()
+	static Instance(): RandomizerSystem
 	{
 		if (RandomizerSystem._instance == null)
 		{
@@ -16,9 +16,14 @@ export class RandomizerSystem implements Randomizer
 		return RandomizerSystem._instance;
 	}
 
-	getNextRandom()
+	fraction(): number
 	{
 		return Math.random();
+	}
+
+	integerLessThan(max: number): number
+	{
+		return Math.floor(this.fraction() * max);
 	}
 }
 

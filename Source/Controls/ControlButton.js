@@ -9,7 +9,7 @@ var ThisCouldBeBetter;
                 this.text = text;
                 this.hasBorder = hasBorder;
                 this._isEnabled = isEnabled;
-                this.click = click;
+                this._click = click;
                 this.canBeHeldDown = (canBeHeldDown == null ? false : canBeHeldDown);
                 // Helper variables.
                 this._drawLoc = GameFramework.Disposition.create();
@@ -24,6 +24,9 @@ var ThisCouldBeBetter;
                     this.click();
                 }
                 return (this.canBeHeldDown == false); // wasActionHandled
+            }
+            click() {
+                this._click();
             }
             isEnabled() {
                 return this._isEnabled.get();

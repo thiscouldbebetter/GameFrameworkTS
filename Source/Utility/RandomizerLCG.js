@@ -17,7 +17,7 @@ var ThisCouldBeBetter;
                 Math.pow(2.0, 31) // modulus
                 );
             }
-            getNextRandom() {
+            fraction() {
                 this.currentRandom =
                     ((this.multiplier
                         * (this.currentRandom * this.modulus)
@@ -25,6 +25,9 @@ var ThisCouldBeBetter;
                         % this.modulus)
                         / this.modulus;
                 return this.currentRandom;
+            }
+            integerLessThan(max) {
+                return Math.floor(this.fraction() * max);
             }
         }
         GameFramework.RandomizerLCG = RandomizerLCG;

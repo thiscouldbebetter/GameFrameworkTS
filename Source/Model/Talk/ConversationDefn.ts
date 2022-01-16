@@ -192,7 +192,6 @@ export class ConversationDefn
 		)
 	}
 
-
 	// Serialization.
 
 	static deserialize(conversationDefnAsJSON: string): ConversationDefn

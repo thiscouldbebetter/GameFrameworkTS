@@ -51,8 +51,8 @@ var ThisCouldBeBetter;
                 if (randomizer == null) {
                     randomizer = new GameFramework.RandomizerSystem();
                 }
-                this.azimuthInTurns = randomizer.getNextRandom();
-                this.elevationInTurns = randomizer.getNextRandom();
+                this.azimuthInTurns = randomizer.fraction();
+                this.elevationInTurns = randomizer.fraction();
                 return this;
             }
             toCoords(coords) {

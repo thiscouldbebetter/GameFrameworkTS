@@ -58,7 +58,7 @@ export class Damage
 			{
 				var effectAndChance = this.effectsAndChances[i];
 				var chance = effectAndChance[1];
-				var roll = randomizer.getNextRandom();
+				var roll = randomizer.fraction();
 				if (roll <= chance)
 				{
 					var effect = effectAndChance[0];

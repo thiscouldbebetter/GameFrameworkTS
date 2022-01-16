@@ -90,7 +90,7 @@ export class DiceRoll
 			(
 				randomizer == null
 				? Math.random()
-				: randomizer.getNextRandom()
+				: randomizer.fraction()
 			);
 
 			var valueRolledOnDie =

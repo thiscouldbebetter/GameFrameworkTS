@@ -6,18 +6,25 @@ export class Talker implements EntityProperty<Talker>
 {
 	conversationDefnName: string;
 	quit: () => void;
+	_toControl: (cr: ConversationRun, size: Coords, universe: Universe) => ControlBase;
 
 	conversationRun: ConversationRun;
 
-	constructor(conversationDefnName: string, quit: () => void)
+	constructor
+	(
+		conversationDefnName: string,
+		quit: () => void,
+		toControl: (cr: ConversationRun, size: Coords, universe: Universe) => ControlBase
+	)
 	{
 		this.conversationDefnName = conversationDefnName;
 		this.quit = quit;
+		this._toControl = toControl;
 	}
 
 	static fromConversationDefnName(conversationDefnName: string): Talker
 	{
-		return new Talker(conversationDefnName, null);
+		return new Talker(conversationDefnName, null, null);
 	}
 
 	talk(uwpe: UniverseWorldPlaceEntities): void
@@ -35,7 +42,11 @@ export class Talker implements EntityProperty<Talker>
 		var contentTextString = mediaLibrary.textStringGetByName(contentTextStringName);
 		if (contentTextString != null)
 		{
-			var contentBlocks = contentTextString.value.split("\n\n");
+			// hack - For a specific content tag format in a downstream project.
+			var contentText = contentTextString.value.split("\n#").join("\n\n#");
+			contentText = contentText.split("\n\n\n").join("\n\n");
+
+			var contentBlocks = contentText.split("\n\n");
 
 			var contentsById = new Map
 			(
@@ -44,17 +55,19 @@ export class Talker implements EntityProperty<Talker>
 					nodeAsBlock =>
 					{
 						var indexOfNewlineFirst = nodeAsBlock.indexOf("\n");
-						var contentId = nodeAsBlock.substr
+						var contentIdLine = nodeAsBlock.substr
 						(
 							0, indexOfNewlineFirst
-						).split("\t")[0];
+						);
+						var regexWhitespace = /\s+/;
+						var contentId = contentIdLine.split(regexWhitespace)[0];
 						var restOfBlock = nodeAsBlock.substr(indexOfNewlineFirst + 1);
 						return [ contentId, restOfBlock ];
 					}
 				)
 			);
 			conversationDefn.contentSubstitute(contentsById);
-			conversationDefn.displayNodesExpandByLines();
+			//conversationDefn.displayNodesExpandByLines();
 		}
 
 		var conversationQuit = this.quit;
@@ -80,11 +93,27 @@ export class Talker implements EntityProperty<Talker>
 		this.conversationRun.talkNodeCurrentExecute(universe);
 		var conversationSize = universe.display.sizeDefault().clone();
 		var conversationAsControl =
-			this.conversationRun.toControl(conversationSize, universe);
+			this.toControl(this.conversationRun, conversationSize, universe);
 
 		var venueNext = conversationAsControl.toVenue();
 
 		universe.venueNext = venueNext;
+	}
+
+	toControl(conversationRun: ConversationRun, size: Coords, universe: Universe): ControlBase
+	{
+		var returnValue: ControlBase = null;
+
+		if (this._toControl == null)
+		{
+			returnValue = conversationRun.toControl(size, universe);
+		}
+		else
+		{
+			returnValue = this._toControl(conversationRun, size, universe);
+		}
+
+		return returnValue;
 	}
 
 	// EntityProperty.

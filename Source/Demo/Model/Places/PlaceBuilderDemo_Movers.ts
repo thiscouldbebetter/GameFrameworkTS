@@ -418,7 +418,7 @@ class PlaceBuilderDemo_Movers
 				var placeSizeHalf = place.size.clone().half();
 				var directionFromCenter = new Polar
 				(
-					universe.randomizer.getNextRandom(), 1, 0
+					universe.randomizer.fraction(), 1, 0
 				);
 				var offsetFromCenter =
 					directionFromCenter.toCoords(Coords.create()).multiply

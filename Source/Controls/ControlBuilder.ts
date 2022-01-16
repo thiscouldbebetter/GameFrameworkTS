@@ -128,16 +128,18 @@ export class ControlBuilder
 
 			for (var i = 0; i < numberOfOptions; i++)
 			{
+				var optionName = optionNames[i];
+
 				var button = ControlButton.from8
 				(
-					"buttonOption" + i,
+					"button" + optionName,
 					Coords.fromXY
 					(
 						buttonMarginLeftRight + i * (buttonWidth + spaceBetweenButtons),
 						buttonPosY
 					), // pos
 					buttonSize.clone(),
-					optionNames[i],
+					optionName,
 					fontHeight,
 					true, // hasBorder
 					DataBinding.fromTrue(), // isEnabled

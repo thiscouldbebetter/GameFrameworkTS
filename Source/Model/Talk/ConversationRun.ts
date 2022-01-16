@@ -295,30 +295,193 @@ export class ConversationRun
 		return this.variablesByName.get(variableName);
 	}
 
+	variableLoad
+	(
+		universe: Universe,
+		variableName: string,
+		variableExpression: string
+	): void
+	{
+		var scriptText = "( (u, cr) => " + variableExpression + ")";
+		var scriptToRun = eval(scriptText);
+		var variableValue = scriptToRun(universe, this);
+		this.variableSet(variableName, variableValue);
+	}
+
 	variableSet(variableName: string, variableValue: unknown): void
 	{
 		this.variablesByName.set(variableName, variableValue);
+	}
+
+	variableStore
+	(
+		universe: Universe,
+		variableName: string,
+		scriptExpression: string
+	): void
+	{
+		var variableValue = this.variableByName(variableName).toString();
+		var scriptExpressionWithValue =
+			scriptExpression.split("$value").join(variableValue);
+		var scriptToRunAsString =
+			"( (u, cr) => { " + scriptExpressionWithValue + "; } )";
+		var scriptToRun = eval(scriptToRunAsString);
+		scriptToRun(universe, this);
 	}
 
 	// controls
 
 	toControl(size: Coords, universe: Universe): ControlBase
 	{
-		var conversationRun = this;
-		var conversationDefn = conversationRun.defn;
+		return this.toControl_Layout_Default(size, universe);
+	}
 
+	toControl_Layout_Default(size: Coords, universe: Universe): ControlBase
+	{
 		var fontHeight = 15;
-		var fontHeightShort = fontHeight; // todo
+
 		var marginWidth = 15;
-		var buttonHeight = 20;
 		var marginSize = Coords.fromXY(1, 1).multiplyScalar(marginWidth);
+
+		var buttonHeight = 20;
 		var buttonSize = Coords.fromXY(2, 1).multiplyScalar(buttonHeight);
+		var containerButtonsMarginSize = marginSize;
+
+		var containerButtonsPos = Coords.fromXY
+		(
+			size.x - marginSize.x * 2 - buttonSize.x,
+			size.y - marginSize.y * 4 - buttonSize.y * 3
+		);
+
 		var portraitSize = Coords.fromXY(4, 4).multiplyScalar(buttonHeight);
+
+		var portraitPos = marginSize.clone();
+
+		var labelSpeakerSize = Coords.fromXY
+		(
+			size.x - marginSize.x * 3 - portraitSize.x,
+			portraitSize.y
+		);
+
+		var labelSpeakerPos = Coords.fromXY
+		(
+			marginSize.x * 2 + portraitSize.x,
+			marginSize.y
+		);
+
 		var listSize = Coords.fromXY
 		(
 			size.x - marginSize.x * 3 - buttonSize.x,
 			size.y - portraitSize.y - marginSize.y * 4
 		);
+
+		var listPos = Coords.fromXY
+		(
+			marginSize.x,
+			marginSize.y * 2 + portraitSize.y + fontHeight
+		);
+
+		var returnValue = this.toControl_WithCoords
+		(
+			size,
+			universe,
+			fontHeight,
+			marginSize,
+			containerButtonsPos,
+			containerButtonsMarginSize,
+			buttonSize,
+			portraitPos,
+			portraitSize,
+			labelSpeakerPos,
+			labelSpeakerSize,
+			false, // labelSpeakerIsCenteredHorizontally
+			true, // labelSpeakerIsCenteredVertically
+			listPos,
+			listSize
+		);
+
+		return returnValue;
+	}
+
+	toControl_Layout_2(size: Coords, universe: Universe): ControlBase
+	{
+		var fontHeight = 15;
+
+		var marginWidth = 15;
+		var marginSize = Coords.fromXY(1, 1).multiplyScalar(marginWidth);
+
+		var portraitSize = Coords.fromXY
+		(
+			1,
+			.44
+		).multiplyScalar
+		(
+			size.x - marginSize.x * 2
+		).round();
+
+		var portraitPos = marginSize.clone();
+
+		var labelSpeakerSize = portraitSize.clone().subtract(marginSize).subtract(marginSize);
+
+		var labelSpeakerPos = portraitPos.clone().add(marginSize);
+
+		var listSize = Coords.fromXY
+		(
+			portraitSize.x,
+			size.y - portraitSize.y - fontHeight - marginSize.y * 3
+		);
+
+		var listPos = Coords.fromXY
+		(
+			marginSize.x,
+			marginSize.y * 2 + portraitSize.y + fontHeight
+		);
+
+		var returnValue = this.toControl_WithCoords
+		(
+			size,
+			universe,
+			fontHeight,
+			marginSize,
+			null, // containerButtonsPos,
+			null, // containerButtonsMarginSize,
+			null, // buttonSize,
+			portraitPos,
+			portraitSize,
+			labelSpeakerPos,
+			labelSpeakerSize,
+			true, // labelSpeakerIsCenteredHorizontally
+			false, // labelSpeakerIsCenteredVertically
+			listPos,
+			listSize
+		);
+
+		return returnValue;
+	}
+
+	toControl_WithCoords
+	(
+		size: Coords,
+		universe: Universe,
+		fontHeight: number,
+		marginSize: Coords,
+		containerButtonsPos: Coords,
+		containerButtonsMarginSize: Coords,
+		buttonSize: Coords,
+		portraitPos: Coords,
+		portraitSize: Coords,
+		labelSpeakerPos: Coords,
+		labelSpeakerSize: Coords,
+		labelSpeakerIsCenteredHorizontally: boolean,
+		labelSpeakerIsCenteredVertically: boolean,
+		listPos: Coords,
+		listSize: Coords
+	): ControlBase
+	{
+		var fontHeightShort = fontHeight; // todo
+
+		var conversationRun = this;
+		var conversationDefn = conversationRun.defn;
 
 		var next = () =>
 		{
@@ -338,196 +501,203 @@ export class ConversationRun
 			universe.venueTransitionTo(venueNext);
 		};
 
-		var buttonNext = ControlButton.from8
-		(
-			"buttonNext",
-			Coords.fromXY
-			(
-				size.x - marginSize.x - buttonSize.x,
-				size.y - marginSize.y * 3 - buttonSize.y * 3
-			),
-			buttonSize.clone(),
-			"Next",
-			fontHeight,
-			true, // hasBorder
-			DataBinding.fromTrue(), // isEnabled
-			next // click
-		);
-
-		var buttonTranscript =ControlButton.from8
-		(
-			"buttonTranscript",
-			new Coords
-			(
-				size.x - marginSize.x - buttonSize.x,
-				size.y - marginSize.y * 2 - buttonSize.y * 2,
-				0
-			),
-			buttonSize.clone(),
-			"Log",
-			fontHeight,
-			true, // hasBorder
-			DataBinding.fromTrue(), // isEnabled
-			viewLog // click
-		);
-
-		var buttons =
-		[
-			buttonNext,
-			buttonTranscript
-		];
-
-		if (this._quit != null)
+		var visualPortrait: VisualBase = conversationDefn.visualPortrait;
+		if (visualPortrait.constructor.name.startsWith("VisualImage"))
 		{
-			var buttonLeave = ControlButton.from8
+			visualPortrait = new VisualImageScaled
 			(
-				"buttonLeave",
-				Coords.fromXY
-				(
-					size.x - marginSize.x - buttonSize.x,
-					size.y - marginSize.y - buttonSize.y
-				),
-				buttonSize.clone(),
-				"Leave",
+				(visualPortrait as VisualImage), portraitSize
+			);
+		}
+
+		var childControls: ControlBase[] =
+		[
+			ControlButton.from8
+			(
+				"buttonNextUnderPortrait",
+				portraitPos,
+				portraitSize,
+				"Next",
 				fontHeight,
 				true, // hasBorder
 				DataBinding.fromTrue(), // isEnabled
-				back // click
+				next // click
+			),
+
+			new ControlVisual
+			(
+				"visualPortrait",
+				portraitPos,
+				portraitSize,
+				DataBinding.fromContext(visualPortrait),
+				Color.byName("Black"), // colorBackground
+				null // colorBorder
+			),
+
+			new ControlLabel
+			(
+				"labelSpeaker",
+				labelSpeakerPos,
+				labelSpeakerSize,
+				labelSpeakerIsCenteredHorizontally,
+				labelSpeakerIsCenteredVertically,
+				DataBinding.fromContextAndGet
+				(
+					conversationRun,
+					(c: ConversationRun) =>
+						c.scopeCurrent.displayTextCurrent()
+				),
+				fontHeight
+			),
+
+			new ControlLabel
+			(
+				"labelResponse",
+				Coords.fromXY
+				(
+					marginSize.x,
+					marginSize.y * 2 + portraitSize.y - fontHeight / 2
+				),
+				size, // size
+				false, // isTextCenteredHorizontally
+				false, // isTextCenteredVertically
+				DataBinding.fromContext("Response:"),
+				fontHeight
+			),
+
+			ControlList.from10
+			(
+				"listResponses",
+				listPos,
+				listSize,
+				// items
+				DataBinding.fromContextAndGet
+				(
+					conversationRun,
+					(c: ConversationRun) =>
+						c.scopeCurrent.talkNodesForOptionsActive(universe, c)
+				),
+				// bindingForItemText
+				DataBinding.fromGet
+				(
+					(c: TalkNode) => c.content
+				),
+				fontHeightShort,
+				new DataBinding
+				(
+					conversationRun,
+					(c: ConversationRun) =>
+						c.scopeCurrent.talkNodeForOptionSelected,
+					(c: ConversationRun, v: TalkNode) =>
+						c.scopeCurrent.talkNodeForOptionSelected = v
+				), // bindingForItemSelected
+				DataBinding.fromGet
+				(
+					(c: TalkNode) => c.name
+				), // bindingForItemValue
+				DataBinding.fromTrue(), // isEnabled
+				(universe: Universe) => // confirm
+				{
+					next();
+				}
+			)
+
+		]; // children
+
+		if (containerButtonsPos != null)
+		{
+			var buttonNext = ControlButton.from8
+			(
+				"buttonNext",
+				Coords.fromXY
+				(
+					containerButtonsMarginSize.x,
+					containerButtonsMarginSize.y
+				),
+				buttonSize.clone(),
+				"Next",
+				fontHeight,
+				true, // hasBorder
+				DataBinding.fromTrue(), // isEnabled
+				next // click
 			);
 
-			buttons.push(buttonLeave);
-		}
-
-		var containerButtonsSize = Coords.fromXY
-		(
-			buttonSize.x,
-			buttonSize.y * (buttons.length + 1) + marginSize.y * (buttons.length)
-		);
-
-		var containerButtonsInner = ControlContainer.from4
-		(
-			"containerButtons",
-			Coords.fromXY
+			var buttonTranscript =ControlButton.from8
 			(
-				size.x - marginSize.x * 2 - buttonSize.x,
-				size.y - marginSize.y * 4 - buttonSize.y * 3
-			), // pos
-			containerButtonsSize,
-			// children
-			buttons
-		)
+				"buttonTranscript",
+				Coords.fromXY
+				(
+					containerButtonsMarginSize.x,
+					containerButtonsMarginSize.y * 2 + buttonSize.y
+				),
+				buttonSize.clone(),
+				"Log",
+				fontHeight,
+				true, // hasBorder
+				DataBinding.fromTrue(), // isEnabled
+				viewLog // click
+			);
 
-		containerButtonsInner.childrenLayOutWithSpacingVertically
-		(
-			marginSize
-		);
+			var buttons =
+			[
+				buttonNext,
+				buttonTranscript
+			];
 
-		var containerButtons =
-			containerButtonsInner.toControlContainerTransparent();
+			if (this._quit != null)
+			{
+				var buttonLeave = ControlButton.from8
+				(
+					"buttonLeave",
+					Coords.fromXY
+					(
+						containerButtonsMarginSize.x,
+						containerButtonsMarginSize.y * 3 + buttonSize.y * 2
+					),
+					buttonSize.clone(),
+					"Leave",
+					fontHeight,
+					true, // hasBorder
+					DataBinding.fromTrue(), // isEnabled
+					back // click
+				);
+
+				buttons.push(buttonLeave);
+			}
+
+			var containerButtonsSize = Coords.fromXY
+			(
+				buttonSize.x,
+				buttonSize.y * (buttons.length) + marginSize.y * (buttons.length + 1)
+			);
+
+			var containerButtonsInner = ControlContainer.from4
+			(
+				"containerButtons",
+				containerButtonsPos,
+				containerButtonsSize,
+				// children
+				buttons
+			)
+
+			containerButtonsInner.childrenLayOutWithSpacingVertically
+			(
+				marginSize
+			);
+
+			var containerButtons =
+				containerButtonsInner.toControlContainerTransparent();
+
+			childControls.push(containerButtons);
+		}
 
 		var returnValue = new ControlContainer
 		(
 			"containerConversation",
 			Coords.create(), // pos
 			size,
-			// children
-			[
-				new ControlVisual
-				(
-					"visualPortrait",
-					marginSize.clone(),
-					portraitSize, // size
-					DataBinding.fromContext(conversationDefn.visualPortrait),
-					Color.byName("Black"), // colorBackground
-					null // colorBorder
-				),
 
-				new ControlLabel
-				(
-					"labelSpeaker",
-					new Coords
-					(
-						marginSize.x * 2 + portraitSize.x,
-						marginSize.y,
-						0
-					), // pos
-					Coords.fromXY
-					(
-						size.x - marginWidth * 3 - portraitSize.x,
-						portraitSize.y
-					), // size
-					false, // isTextCenteredHorizontally
-					true, // isTextCenteredVertically
-					DataBinding.fromContextAndGet
-					(
-						conversationRun,
-						(c: ConversationRun) =>
-							c.scopeCurrent.displayTextCurrent
-					),
-					fontHeight
-				),
-
-				new ControlLabel
-				(
-					"labelResponse",
-					new Coords
-					(
-						marginSize.x,
-						marginSize.y * 2 + portraitSize.y - fontHeight / 2,
-						0
-					),
-					size, // size
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
-					DataBinding.fromContext("Response:"),
-					fontHeight
-				),
-
-				ControlList.from10
-				(
-					"listResponses",
-					new Coords
-					(
-						marginSize.x,
-						marginSize.y * 3 + portraitSize.y,
-						0
-					),
-					listSize,
-					// items
-					DataBinding.fromContextAndGet
-					(
-						conversationRun,
-						(c: ConversationRun) =>
-							c.scopeCurrent.talkNodesForOptionsActive(universe, c)
-					),
-					// bindingForItemText
-					DataBinding.fromGet
-					(
-						(c: TalkNode) => c.content
-					),
-					fontHeightShort,
-					new DataBinding
-					(
-						conversationRun,
-						(c: ConversationRun) =>
-							c.scopeCurrent.talkNodeForOptionSelected,
-						(c: ConversationRun, v: TalkNode) =>
-							c.scopeCurrent.talkNodeForOptionSelected = v
-					), // bindingForItemSelected
-					DataBinding.fromGet
-					(
-						(c: TalkNode) => c.name
-					), // bindingForItemValue
-					DataBinding.fromTrue(), // isEnabled
-					(universe: Universe) => // confirm
-					{
-						next();
-					}
-				),
-
-				containerButtons
-
-			], // children
+			childControls,
 
 			[
 				new Action("Back", back),

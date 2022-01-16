@@ -13,8 +13,11 @@ export class ControlVisual extends ControlBase
 	_sizeHalf: Coords;
 
 	constructor(
-		name: string, pos: Coords, size: Coords,
-		visual: DataBinding<any, VisualBase>, colorBackground: Color,
+		name: string,
+		pos: Coords,
+		size: Coords,
+		visual: DataBinding<any, VisualBase>,
+		colorBackground: Color,
 		colorBorder: Color
 	)
 	{
