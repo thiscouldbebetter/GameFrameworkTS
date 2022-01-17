@@ -19,6 +19,27 @@ export class AnimationKeyframe implements Interpolatable<AnimationKeyframe>
 		);
 	}
 
+	// Clonable.
+	clone(): AnimationKeyframe
+	{
+		var returnValue = new AnimationKeyframe
+		(
+			this.frameIndex,
+			ArrayHelper.clone(this.transforms) as Transform_Interpolatable[]
+		);
+
+		return returnValue;
+	}
+
+	overwriteWith(other: AnimationKeyframe): AnimationKeyframe
+	{
+		this.frameIndex = other.frameIndex;
+		ArrayHelper.overwriteWith(this.transforms, other.transforms);
+		return this;
+	}
+
+	// Interpolatable.
+
 	interpolateWith
 	(
 		other: AnimationKeyframe,
@@ -44,6 +65,7 @@ export class AnimationKeyframe implements Interpolatable<AnimationKeyframe>
 			transformsInterpolated.push(transformInterpolated);
 		}
 
+		// todo - Don't instantiate here, clone it in calling scope.
 		var returnValue = new AnimationKeyframe
 		(
 			null, // frameIndex

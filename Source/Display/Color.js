@@ -30,6 +30,9 @@ var ThisCouldBeBetter;
                 return Color._instances;
             }
             // methods
+            add(other) {
+                return this.interpolateWith(other, .5);
+            }
             alpha(valueToSet) {
                 if (valueToSet != null) {
                     this.componentsRGBA[3] = valueToSet;
@@ -68,19 +71,19 @@ var ThisCouldBeBetter;
             }
             // Interpolatable.
             interpolateWith(other, fractionOfProgressTowardOther) {
+                var fractionOfProgressTowardOtherReversed = 1 - fractionOfProgressTowardOther;
                 var componentsRGBAThis = this.componentsRGBA;
                 var componentsRGBAOther = other.componentsRGBA;
                 var componentsRGBAInterpolated = new Array();
                 for (var i = 0; i < componentsRGBAThis.length; i++) {
                     var componentThis = componentsRGBAThis[i];
                     var componentOther = componentsRGBAOther[i];
-                    var componentInterpolated = componentThis
+                    var componentInterpolated = componentThis * fractionOfProgressTowardOtherReversed
                         + componentOther * fractionOfProgressTowardOther;
                     componentsRGBAInterpolated[i] = componentInterpolated;
+                    componentsRGBAThis[i] = componentInterpolated;
                 }
-                var colorInterpolated = new Color("Interpolated", null, // code
-                componentsRGBAInterpolated);
-                return colorInterpolated;
+                return this;
             }
         }
         // constants
@@ -90,7 +93,7 @@ var ThisCouldBeBetter;
             constructor() {
                 this._Transparent = new Color("Transparent", ".", [0, 0, 0, 0]);
                 this.Black = new Color("Black", "k", [0, 0, 0, 1]);
-                this.BlackHalfTransparent = new Color("Black", "k", [0, 0, 0, .5]);
+                this.BlackHalfTransparent = new Color("BlackHalfTransparent", "K", [0, 0, 0, .5]);
                 this.Blue = new Color("Blue", "b", [0, 0, 1, 1]);
                 this.BlueDark = new Color("BlueDark", "B", [0, 0, .5, 1]);
                 this.BlueLight = new Color("BlueLight", "$", [.5, .5, 1, 1]);

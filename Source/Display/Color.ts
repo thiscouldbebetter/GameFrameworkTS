@@ -59,6 +59,11 @@ export class Color implements Interpolatable<Color>
 
 	// methods
 
+	add(other: Color): Color
+	{
+		return this.interpolateWith(other, .5);
+	}
+
 	alpha(valueToSet: number)
 	{
 		if (valueToSet != null)
@@ -69,7 +74,7 @@ export class Color implements Interpolatable<Color>
 		return this.componentsRGBA[3];
 	}
 
-	multiplyRGBScalar(scalar: number)
+	multiplyRGBScalar(scalar: number): Color
 	{
 		for (var i = 0; i < 3; i++)
 		{
@@ -78,7 +83,7 @@ export class Color implements Interpolatable<Color>
 		return this;
 	}
 
-	systemColor()
+	systemColor(): string
 	{
 		if (this._systemColor == null)
 		{
@@ -96,12 +101,12 @@ export class Color implements Interpolatable<Color>
 
 	// Clonable.
 
-	clone()
+	clone(): Color
 	{
 		return new Color(this.name, this.code, this.componentsRGBA.slice());
 	}
 
-	overwriteWith(other: Color)
+	overwriteWith(other: Color): Color
 	{
 		this.name = other.name;
 		this.code = other.code;
@@ -117,6 +122,8 @@ export class Color implements Interpolatable<Color>
 
 	interpolateWith(other: Color, fractionOfProgressTowardOther: number): Color
 	{
+		var fractionOfProgressTowardOtherReversed =
+			1 - fractionOfProgressTowardOther;
 		var componentsRGBAThis = this.componentsRGBA;
 		var componentsRGBAOther = other.componentsRGBA;
 		var componentsRGBAInterpolated = new Array<number>();
@@ -125,19 +132,14 @@ export class Color implements Interpolatable<Color>
 			var componentThis = componentsRGBAThis[i];
 			var componentOther = componentsRGBAOther[i];
 			var componentInterpolated =
-				componentThis
+				componentThis * fractionOfProgressTowardOtherReversed
 				+ componentOther * fractionOfProgressTowardOther;
 			componentsRGBAInterpolated[i] = componentInterpolated;
+
+			componentsRGBAThis[i] = componentInterpolated;
 		}
 
-		var colorInterpolated = new Color
-		(
-			"Interpolated",
-			null, // code
-			componentsRGBAInterpolated
-		);
-
-		return colorInterpolated;
+		return this;
 	}
 }
 
@@ -181,7 +183,7 @@ export class Color_Instances
 		this._Transparent = new Color("Transparent", ".", [0, 0, 0, 0] );
 
 		this.Black = new Color("Black", "k", [0, 0, 0, 1] );
-		this.BlackHalfTransparent = new Color("Black", "k", [0, 0, 0, .5] );
+		this.BlackHalfTransparent = new Color("BlackHalfTransparent", "K", [0, 0, 0, .5] );
 		this.Blue = new Color("Blue", "b", [0, 0, 1, 1] );
 		this.BlueDark = new Color("BlueDark", "B", [0, 0, .5, 1] );
 		this.BlueLight = new Color("BlueLight", "$", [.5, .5, 1, 1] );

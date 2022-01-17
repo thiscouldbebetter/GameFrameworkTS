@@ -46,7 +46,7 @@ export class ValueBreakGroup<T extends Interpolatable<T>>
 			var positionToCheckMinusStopPrev = positionToCheck - stopPrev.position;
 			var fraction = positionToCheckMinusStopPrev / positionOfStopThisMinusPrev;
 			fraction = this.interpolationMode.fractionAdjust(fraction);
-			var valueInterpolated = stopPrevValue.interpolateWith(stopValue, fraction);
+			var valueInterpolated = stopPrevValue.clone().interpolateWith(stopValue, fraction);
 			returnValue = valueInterpolated;
 		}
 		else
@@ -55,6 +55,20 @@ export class ValueBreakGroup<T extends Interpolatable<T>>
 		}
 
 		return returnValue;
+	}
+
+	// Clonable.
+
+	clone(): ValueBreakGroup<T>
+	{
+		return new ValueBreakGroup<T>(ArrayHelper.clone(this.stops), this.interpolationMode);
+	}
+
+	overwriteWith(other: ValueBreakGroup<T>): ValueBreakGroup<T>
+	{
+		ArrayHelper.overwriteWith(this.stops, other.stops);
+		this.interpolationMode = other.interpolationMode;
+		return this;
 	}
 }
 
@@ -68,6 +82,21 @@ export class ValueBreak<T extends Interpolatable<T>>
 		this.position = position;
 		this.value = value;
 	}
+
+	// Clonable.
+
+	clone(): ValueBreak<T>
+	{
+		return new ValueBreak(this.position, this.value.clone());
+	}
+
+	overwriteWith(other: ValueBreak<T>): ValueBreak<T>
+	{
+		this.position = other.position;
+		this.value.overwriteWith(other.value);
+		return this;
+	}
+
 }
 
 }

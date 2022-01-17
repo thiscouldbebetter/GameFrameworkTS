@@ -27,7 +27,7 @@ var ThisCouldBeBetter;
                     var positionToCheckMinusStopPrev = positionToCheck - stopPrev.position;
                     var fraction = positionToCheckMinusStopPrev / positionOfStopThisMinusPrev;
                     fraction = this.interpolationMode.fractionAdjust(fraction);
-                    var valueInterpolated = stopPrevValue.interpolateWith(stopValue, fraction);
+                    var valueInterpolated = stopPrevValue.clone().interpolateWith(stopValue, fraction);
                     returnValue = valueInterpolated;
                 }
                 else {
@@ -35,12 +35,30 @@ var ThisCouldBeBetter;
                 }
                 return returnValue;
             }
+            // Clonable.
+            clone() {
+                return new ValueBreakGroup(GameFramework.ArrayHelper.clone(this.stops), this.interpolationMode);
+            }
+            overwriteWith(other) {
+                GameFramework.ArrayHelper.overwriteWith(this.stops, other.stops);
+                this.interpolationMode = other.interpolationMode;
+                return this;
+            }
         }
         GameFramework.ValueBreakGroup = ValueBreakGroup;
         class ValueBreak {
             constructor(position, value) {
                 this.position = position;
                 this.value = value;
+            }
+            // Clonable.
+            clone() {
+                return new ValueBreak(this.position, this.value.clone());
+            }
+            overwriteWith(other) {
+                this.position = other.position;
+                this.value.overwriteWith(other.value);
+                return this;
             }
         }
         GameFramework.ValueBreak = ValueBreak;

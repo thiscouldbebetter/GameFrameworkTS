@@ -11,7 +11,8 @@ var ThisCouldBeBetter;
             }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
-                display.drawCircleWithGradient(entity.locatable().loc.pos, this.radius, this.gradientFill, this.colorBorder);
+                var drawPos = entity.locatable().loc.pos;
+                display.drawCircleWithGradient(drawPos, this.radius, this.gradientFill, this.colorBorder);
             }
             // Clonable.
             clone() {

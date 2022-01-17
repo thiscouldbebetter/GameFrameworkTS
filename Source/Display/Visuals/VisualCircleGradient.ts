@@ -23,10 +23,10 @@ export class VisualCircleGradient implements Visual<VisualCircleGradient>
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var entity = uwpe.entity;
+		var drawPos = entity.locatable().loc.pos;
 		display.drawCircleWithGradient
 		(
-			entity.locatable().loc.pos, this.radius, this.gradientFill,
-			this.colorBorder
+			drawPos, this.radius, this.gradientFill, this.colorBorder
 		);
 	}
 
