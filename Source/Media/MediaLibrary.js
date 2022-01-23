@@ -47,6 +47,7 @@ var ThisCouldBeBetter;
                     ["jpg", imageTypeDirectoryNameAndArray],
                     ["png", imageTypeDirectoryNameAndArray],
                     ["svg", imageTypeDirectoryNameAndArray],
+                    ["mod", [GameFramework.SoundFromFileMod, "Audio", sounds]],
                     ["mp3", soundTypeDirectoryNameAndArray],
                     ["wav", soundTypeDirectoryNameAndArray],
                     ["webm", [GameFramework.Video, "Video", videos]],
@@ -127,8 +128,20 @@ var ThisCouldBeBetter;
                 }
                 return areAllItemsLoadedSoFar;
             }
+            itemsAll() {
+                var returnValues = new Array();
+                for (var c = 0; c < this.collectionsAll.length; c++) {
+                    var collection = this.collectionsAll[c];
+                    for (var i = 0; i < collection.length; i++) {
+                        var item = collection[i];
+                        returnValues.push(item);
+                    }
+                }
+                return returnValues;
+            }
             waitForItemToLoad(collectionName, itemName, callback) {
                 var itemToLoad = this.collectionsByName.get(collectionName).get(itemName);
+                itemToLoad.load(null, null);
                 this.timerHandle = setInterval(this.waitForItemToLoad_TimerTick.bind(this, itemToLoad, callback), 100 // milliseconds
                 );
             }
@@ -139,6 +152,7 @@ var ThisCouldBeBetter;
                 }
             }
             waitForItemsAllToLoad(callback) {
+                this.itemsAll().forEach(x => x.load(null, null));
                 this.timerHandle = setInterval(this.waitForItemsAllToLoad_TimerTick.bind(this, callback), 100 // milliseconds
                 );
             }

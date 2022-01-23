@@ -17,7 +17,7 @@ export class Image2 implements MediaItemBase
 		this.sourcePath = sourcePath;
 
 		this.isLoaded = false;
-		this.load();
+		//this.load();
 	}
 
 	// static methods

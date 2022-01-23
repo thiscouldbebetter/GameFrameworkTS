@@ -6,6 +6,7 @@ export class ConversationDefn
 {
 	name: string;
 	visualPortrait: VisualBase;
+	soundMusic: Sound;
 	talkNodeDefns: TalkNodeDefn[];
 	talkNodes: TalkNode[];
 
@@ -16,12 +17,14 @@ export class ConversationDefn
 	(
 		name: string,
 		visualPortrait: VisualBase,
+		soundMusic: Sound,
 		talkNodeDefns: TalkNodeDefn[],
 		talkNodes: TalkNode[]
 	)
 	{
 		this.name = name;
 		this.visualPortrait = visualPortrait;
+		this.soundMusic = soundMusic;
 		this.talkNodeDefns = talkNodeDefns;
 		this.talkNodeDefnsByName = ArrayHelper.addLookupsByName(this.talkNodeDefns);
 		this.talkNodes = talkNodes;
@@ -187,6 +190,7 @@ export class ConversationDefn
 		(
 			this.name,
 			this.visualPortrait,
+			this.soundMusic,
 			this.talkNodeDefns.map(x => x.clone()),
 			this.talkNodes.map(x => x.clone())
 		)
@@ -200,6 +204,7 @@ export class ConversationDefn
 
 		// Additional processing to support minification.
 		conversationDefn.name = conversationDefn["name"];
+
 		var imagePortraitName = conversationDefn["imagePortraitName"];
 		if (imagePortraitName == null)
 		{
@@ -208,6 +213,16 @@ export class ConversationDefn
 		else
 		{
 			conversationDefn.visualPortrait = new VisualImageFromLibrary(imagePortraitName);
+		}
+
+		var soundMusicName = conversationDefn["soundMusicName"];
+		if (imagePortraitName == null)
+		{
+			conversationDefn.soundMusic = new SoundNone();
+		}
+		else
+		{
+			conversationDefn.soundMusic = new SoundFromLibrary(soundMusicName);
 		}
 
 		var talkNodes = conversationDefn["talkNodes"];

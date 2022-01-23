@@ -4,9 +4,10 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ConversationDefn {
-            constructor(name, visualPortrait, talkNodeDefns, talkNodes) {
+            constructor(name, visualPortrait, soundMusic, talkNodeDefns, talkNodes) {
                 this.name = name;
                 this.visualPortrait = visualPortrait;
+                this.soundMusic = soundMusic;
                 this.talkNodeDefns = talkNodeDefns;
                 this.talkNodeDefnsByName = GameFramework.ArrayHelper.addLookupsByName(this.talkNodeDefns);
                 this.talkNodes = talkNodes;
@@ -110,7 +111,7 @@ var ThisCouldBeBetter;
             }
             // Clonable.
             clone() {
-                return new ConversationDefn(this.name, this.visualPortrait, this.talkNodeDefns.map(x => x.clone()), this.talkNodes.map(x => x.clone()));
+                return new ConversationDefn(this.name, this.visualPortrait, this.soundMusic, this.talkNodeDefns.map(x => x.clone()), this.talkNodes.map(x => x.clone()));
             }
             // Serialization.
             static deserialize(conversationDefnAsJSON) {
@@ -123,6 +124,13 @@ var ThisCouldBeBetter;
                 }
                 else {
                     conversationDefn.visualPortrait = new GameFramework.VisualImageFromLibrary(imagePortraitName);
+                }
+                var soundMusicName = conversationDefn["soundMusicName"];
+                if (imagePortraitName == null) {
+                    conversationDefn.soundMusic = new GameFramework.SoundNone();
+                }
+                else {
+                    conversationDefn.soundMusic = new GameFramework.SoundFromLibrary(soundMusicName);
                 }
                 var talkNodes = conversationDefn["talkNodes"];
                 for (var i = 0; i < talkNodes.length; i++) {

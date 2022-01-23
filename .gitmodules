@@ -1,0 +1,3 @@
+[submodule "Source/Media/Audio/MusicTracker"]
+	path = Source/Media/Audio/MusicTracker
+	url = https://github.com/thiscouldbebetter/MusicTracker

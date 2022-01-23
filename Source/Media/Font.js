@@ -8,7 +8,7 @@ var ThisCouldBeBetter;
                 this.name = name;
                 this.sourcePath = sourcePath;
                 this.isLoaded = false;
-                this.load();
+                //this.load();
             }
             load() {
                 var fontAsStyleElement = document.createElement("style");

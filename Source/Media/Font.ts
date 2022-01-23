@@ -14,7 +14,7 @@ export class Font implements MediaItemBase
 		this.sourcePath = sourcePath;
 
 		this.isLoaded = false;
-		this.load();
+		//this.load();
 	}
 
 	load(): void

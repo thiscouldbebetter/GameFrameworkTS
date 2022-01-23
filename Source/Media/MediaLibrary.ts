@@ -88,6 +88,8 @@ export class MediaLibrary
 			[ "png", imageTypeDirectoryNameAndArray ],
 			[ "svg", imageTypeDirectoryNameAndArray ],
 
+			[ "mod", [ SoundFromFileMod, "Audio", sounds ] ],
+
 			[ "mp3", soundTypeDirectoryNameAndArray ],
 			[ "wav", soundTypeDirectoryNameAndArray ],
 
@@ -219,12 +221,30 @@ export class MediaLibrary
 		return areAllItemsLoadedSoFar;
 	}
 
+	itemsAll(): MediaItemBase[]
+	{
+		var returnValues = new Array<MediaItemBase>();
+
+		for (var c = 0; c < this.collectionsAll.length; c++)
+		{
+			var collection = this.collectionsAll[c];
+			for (var i = 0; i < collection.length; i++)
+			{
+				var item = collection[i];
+				returnValues.push(item);
+			}
+		}
+
+		return returnValues;
+	}
+
 	waitForItemToLoad
 	(
-		collectionName: string, itemName: string, callback: ()=>void
+		collectionName: string, itemName: string, callback: () => void
 	): void
 	{
 		var itemToLoad = this.collectionsByName.get(collectionName).get(itemName);
+		itemToLoad.load(null, null);
 		this.timerHandle = setInterval
 		(
 			this.waitForItemToLoad_TimerTick.bind(this, itemToLoad, callback),
@@ -244,8 +264,9 @@ export class MediaLibrary
 		}
 	}
 
-	waitForItemsAllToLoad(callback: ()=>void): void
+	waitForItemsAllToLoad(callback: () => void): void
 	{
+		this.itemsAll().forEach(x => x.load(null, null));
 		this.timerHandle = setInterval
 		(
 			this.waitForItemsAllToLoad_TimerTick.bind(this, callback),
@@ -253,7 +274,7 @@ export class MediaLibrary
 		);
 	}
 
-	waitForItemsAllToLoad_TimerTick(callback: ()=>void)
+	waitForItemsAllToLoad_TimerTick(callback: () => void)
 	{
 		if (this.areAllItemsLoaded())
 		{

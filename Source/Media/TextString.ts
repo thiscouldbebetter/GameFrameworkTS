@@ -14,7 +14,7 @@ export class TextString implements MediaItemBase
 		this.name = name;
 		this.sourcePath = sourcePath;
 
-		this.load();
+		//this.load(null, null);
 	}
 
 	// static methods
@@ -35,16 +35,25 @@ export class TextString implements MediaItemBase
 
 	isLoaded: boolean;
 
-	load(): void
+	load
+	(
+		uwpe: UniverseWorldPlaceEntities,
+		callback: (result: Loadable) => void
+	): void
 	{
 		var text = this;
 
 		var xmlHttpRequest = new XMLHttpRequest();
 		xmlHttpRequest.open("GET", this.sourcePath);
-		xmlHttpRequest.onreadystatechange = () =>
+		xmlHttpRequest.responseType = "text"; // Default?
+		xmlHttpRequest.onloadend = () =>
 		{
 			text.value = xmlHttpRequest.responseText;
 			text.isLoaded = true;
+			if (callback != null)
+			{
+				callback(text);
+			}
 		};
 		xmlHttpRequest.send();
 
@@ -63,7 +72,7 @@ export class TextString implements MediaItemBase
 		*/
 	}
 
-	unload(): void {}
+	unload(uwpe: UniverseWorldPlaceEntities): void {}
 }
 
 }

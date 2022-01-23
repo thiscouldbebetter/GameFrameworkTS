@@ -7,7 +7,7 @@ var ThisCouldBeBetter;
             constructor(name, sourcePath) {
                 this.name = name;
                 this.sourcePath = sourcePath;
-                this.load();
+                //this.load(null, null);
             }
             // static methods
             static fromString(name, value) {
@@ -16,13 +16,17 @@ var ThisCouldBeBetter;
                 returnValue.value = value;
                 return returnValue;
             }
-            load() {
+            load(uwpe, callback) {
                 var text = this;
                 var xmlHttpRequest = new XMLHttpRequest();
                 xmlHttpRequest.open("GET", this.sourcePath);
-                xmlHttpRequest.onreadystatechange = () => {
+                xmlHttpRequest.responseType = "text"; // Default?
+                xmlHttpRequest.onloadend = () => {
                     text.value = xmlHttpRequest.responseText;
                     text.isLoaded = true;
+                    if (callback != null) {
+                        callback(text);
+                    }
                 };
                 xmlHttpRequest.send();
                 /*
@@ -39,7 +43,7 @@ var ThisCouldBeBetter;
                 );
                 */
             }
-            unload() { }
+            unload(uwpe) { }
         }
         GameFramework.TextString = TextString;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
