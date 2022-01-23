@@ -295,6 +295,41 @@ export class ConversationRun
 		return this.variablesByName.get(variableName);
 	}
 
+	variablesExport
+	(
+		universe: Universe,
+		variableLookupExpression: string
+	): void
+	{
+		var variablesByNameToExport = this.variablesByName;
+		for (var variableName in variablesByNameToExport)
+		{
+			var variableValue = this.variableByName(variableName).toString();
+			var scriptExpressionWithValue =
+				variableLookupExpression.split("$key").join(variableName).split("$value").join(variableValue);
+			var scriptToRunAsString =
+				"( (u, cr) => { " + scriptExpressionWithValue + "; } )";
+			var scriptToRun = eval(scriptToRunAsString);
+			scriptToRun(universe, this);
+		}
+	}
+
+	variablesImport
+	(
+		universe: Universe,
+		variableLookupExpression: string
+	): void
+	{
+		var scriptText = "( (u, cr) => " + variableLookupExpression + ")";
+		var scriptToRun = eval(scriptText);
+		var variablesByNameToImportFrom = scriptToRun(universe, this);
+		for (var variableName in variablesByNameToImportFrom)
+		{
+			var variableValue = variablesByNameToImportFrom.get(variableName);
+			this.variableSet(variableName, variableValue);
+		}
+	}
+
 	variableLoad
 	(
 		universe: Universe,
@@ -478,7 +513,7 @@ export class ConversationRun
 		listSize: Coords
 	): ControlBase
 	{
-		var fontHeightShort = fontHeight; // todo
+		var fontHeightShort = fontHeight * .75; // todo
 
 		var conversationRun = this;
 		var conversationDefn = conversationRun.defn;
@@ -663,8 +698,24 @@ export class ConversationRun
 				buttonTranscript
 			];
 
+			var actions = 
+			[
+				new Action("ViewLog", viewLog)
+			];
+
+			var actionToInputsMappings =
+			[
+				new ActionToInputsMapping( "ViewLog", [ Input.Names().Space ], true )
+			];
+
 			if (this._quit != null)
 			{
+				actions.push(new Action("Back", back));
+				actionToInputsMappings.push
+				(
+					new ActionToInputsMapping( "Back", [ Input.Names().Escape ], true )
+				);
+
 				var buttonLeave = ControlButton.from8
 				(
 					"buttonLeave",
@@ -718,15 +769,8 @@ export class ConversationRun
 
 			childControls,
 
-			[
-				new Action("Back", back),
-				new Action("ViewLog", viewLog)
-			],
-
-			[
-				new ActionToInputsMapping( "Back", [ Input.Names().Escape ], true ),
-				new ActionToInputsMapping( "ViewLog", [ Input.Names().Space ], true )
-			]
+			actions,
+			actionToInputsMappings
 		);
 
 		returnValue.focusGain();

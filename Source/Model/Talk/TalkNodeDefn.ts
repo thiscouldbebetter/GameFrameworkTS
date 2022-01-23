@@ -61,6 +61,8 @@ class TalkNodeDefn_Instances
 	VariableLoad: TalkNodeDefn;
 	VariableSet: TalkNodeDefn;
 	VariableStore: TalkNodeDefn;
+	VariablesExport: TalkNodeDefn;
+	VariablesImport: TalkNodeDefn;
 
 	_All: TalkNodeDefn[];
 	_AllByName: Map<string, TalkNodeDefn>;
@@ -470,6 +472,45 @@ class TalkNodeDefn_Instances
 			}
 		);
 
+		this.VariablesExport = new TalkNodeDefn
+		(
+			"VariablesExport",
+			(
+				universe: Universe,
+				conversationRun: ConversationRun
+			) => // execute
+			{
+				var talkNode = conversationRun.talkNodeCurrent();
+				var variableLookupToExportToName = talkNode.content;
+
+				conversationRun.variablesExport(universe, variableLookupToExportToName);
+
+				conversationRun.talkNodeAdvance(universe);
+				conversationRun.talkNodeCurrentExecute(universe); // hack
+			}
+		);
+
+		this.VariablesImport = new TalkNodeDefn
+		(
+			"VariablesImport",
+			(
+				universe: Universe,
+				conversationRun: ConversationRun
+			) => // execute
+			{
+				var talkNode = conversationRun.talkNodeCurrent();
+				var variableLookupToImportFromExpression = talkNode.content;
+
+				conversationRun.variablesImport
+				(
+					universe, variableLookupToImportFromExpression
+				);
+
+				conversationRun.talkNodeAdvance(universe);
+				conversationRun.talkNodeCurrentExecute(universe); // hack
+			}
+		);
+
 		this._All =
 		[
 			this.Disable,
@@ -490,6 +531,8 @@ class TalkNodeDefn_Instances
 			this.VariableLoad,
 			this.VariableSet,
 			this.VariableStore,
+			this.VariablesExport,
+			this.VariablesImport
 		];
 
 		this._AllByName = ArrayHelper.addLookupsByName(this._All);
