@@ -143,12 +143,12 @@ var Font = gf.Font;
 var Image2 = gf.Image2; // Name conflicts with a built-in class.
 var ImageBuilder = gf.ImageBuilder;
 var MediaLibrary = gf.MediaLibrary;
-var SoundFromFile = gf.SoundFromFile;
-var SoundHelperLive = gf.SoundHelperLive;
 var TextString = gf.TextString;
 var VenueVideo = gf.VenueVideo;
 var Video = gf.Video;
 var VideoHelper = gf.VideoHelper;
+var SoundFromFile = gf.SoundFromFile;
+var SoundHelperLive = gf.SoundHelperLive;
 var VisualSound = gf.VisualSound;
 // Model.
 var Entity = gf.Entity;

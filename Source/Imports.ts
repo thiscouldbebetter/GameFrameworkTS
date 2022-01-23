@@ -177,14 +177,16 @@ import Font = gf.Font;
 import Image2 = gf.Image2;  // Name conflicts with a built-in class.
 import ImageBuilder = gf.ImageBuilder;
 import MediaLibrary = gf.MediaLibrary;
-import Sound = gf.Sound;
-import SoundFromFile = gf.SoundFromFile;
-import SoundHelper = gf.SoundHelper;
-import SoundHelperLive = gf.SoundHelperLive;
 import TextString = gf.TextString;
 import VenueVideo = gf.VenueVideo;
 import Video = gf.Video;
 import VideoHelper = gf.VideoHelper;
+
+// Media - Audio.
+import Sound = gf.Sound;
+import SoundFromFile = gf.SoundFromFile;
+import SoundHelper = gf.SoundHelper;
+import SoundHelperLive = gf.SoundHelperLive;
 import VisualSound = gf.VisualSound;
 
 // Model.

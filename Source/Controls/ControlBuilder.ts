@@ -98,6 +98,11 @@ export class ControlBuilder
 			numberOfOptions = 0; // Is a single option really an option?
 		}
 
+		var labelPosY = Math.round
+		(
+			size.y * (numberOfOptions == 0 ? .5 : (1/3) ) - fontHeight * 2 // hack
+		);
+
 		var buttonPosY = buttonPosY || Math.round
 		(
 			this.sizeBase.y * (numberOfOptions > 0 ? (2 / 3) : 1)
@@ -108,7 +113,11 @@ export class ControlBuilder
 		(
 			"labelMessage",
 			marginSize,
-			Coords.fromXY(containerSizeScaled.x - marginSize.x * 2, buttonPosY),
+			Coords.fromXY
+			(
+				containerSizeScaled.x - marginSize.x * 2,
+				labelPosY
+			),
 			true, // isTextCenteredHorizontally
 			true, // isTextCenteredVertically
 			message,
