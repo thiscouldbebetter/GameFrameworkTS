@@ -22,11 +22,13 @@ export class VenueWorld implements Venue
 
 	finalize(universe: Universe): void
 	{
+		/*
 		var soundForMusic = universe.soundHelper.soundForMusic;
 		if (soundForMusic != null)
 		{
 			soundForMusic.pause(universe);
 		}
+		*/
 	}
 
 	initialize(universe: Universe): void
@@ -38,8 +40,10 @@ export class VenueWorld implements Venue
 		);
 		this.world.initialize(uwpe);
 
+		/*
 		var soundHelper = universe.soundHelper;
 		soundHelper.soundWithNamePlayAsMusic(universe, "Music_Music");
+		*/
 
 		this.venueControls = new VenueControls
 		(

@@ -50,9 +50,10 @@ class PlaceStub extends Place
 			Locatable.name
 		];
 
-		return PlaceDefn.from4
+		return PlaceDefn.from5
 		(
 			PlaceStub.name,
+			"Music_Music", // soundForMusicName
 			actions,
 			actionToInputsMappings,
 			entityPropertyNamesToProcess

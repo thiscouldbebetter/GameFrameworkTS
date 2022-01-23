@@ -12,17 +12,22 @@ var ThisCouldBeBetter;
                 this.world.draw(universe);
             }
             finalize(universe) {
+                /*
                 var soundForMusic = universe.soundHelper.soundForMusic;
-                if (soundForMusic != null) {
+                if (soundForMusic != null)
+                {
                     soundForMusic.pause(universe);
                 }
+                */
             }
             initialize(universe) {
                 universe.world = this.world;
                 var uwpe = GameFramework.UniverseWorldPlaceEntities.fromUniverseAndWorld(universe, this.world);
                 this.world.initialize(uwpe);
+                /*
                 var soundHelper = universe.soundHelper;
                 soundHelper.soundWithNamePlayAsMusic(universe, "Music_Music");
+                */
                 this.venueControls = new GameFramework.VenueControls(this.world.toControl(universe), true // ignoreKeyboardAndGamepadInputs
                 );
             }

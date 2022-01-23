@@ -4,10 +4,11 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ConversationDefn {
-            constructor(name, visualPortrait, soundMusic, talkNodeDefns, talkNodes) {
+            constructor(name, contentTextStringName, visualPortrait, soundMusicName, talkNodeDefns, talkNodes) {
                 this.name = name;
+                this.contentTextStringName = contentTextStringName;
                 this.visualPortrait = visualPortrait;
-                this.soundMusic = soundMusic;
+                this.soundMusicName = soundMusicName;
                 this.talkNodeDefns = talkNodeDefns;
                 this.talkNodeDefnsByName = GameFramework.ArrayHelper.addLookupsByName(this.talkNodeDefns);
                 this.talkNodes = talkNodes;
@@ -111,13 +112,16 @@ var ThisCouldBeBetter;
             }
             // Clonable.
             clone() {
-                return new ConversationDefn(this.name, this.visualPortrait, this.soundMusic, this.talkNodeDefns.map(x => x.clone()), this.talkNodes.map(x => x.clone()));
+                var talkNodeDefnsCloned = this.talkNodeDefns.map(x => x.clone());
+                var talkNodesCloned = this.talkNodes.map(x => x.clone());
+                return new ConversationDefn(this.name, this.contentTextStringName, this.visualPortrait, this.soundMusicName, talkNodeDefnsCloned, talkNodesCloned);
             }
             // Serialization.
             static deserialize(conversationDefnAsJSON) {
                 var conversationDefn = JSON.parse(conversationDefnAsJSON);
                 // Additional processing to support minification.
                 conversationDefn.name = conversationDefn["name"];
+                conversationDefn.contentTextStringName = conversationDefn["contentTextStringName"];
                 var imagePortraitName = conversationDefn["imagePortraitName"];
                 if (imagePortraitName == null) {
                     conversationDefn.visualPortrait = new GameFramework.VisualNone();
@@ -126,7 +130,7 @@ var ThisCouldBeBetter;
                     conversationDefn.visualPortrait = new GameFramework.VisualImageFromLibrary(imagePortraitName);
                 }
                 var soundMusicName = conversationDefn["soundMusicName"];
-                if (imagePortraitName == null) {
+                if (soundMusicName == null) {
                     conversationDefn.soundMusic = new GameFramework.SoundNone();
                 }
                 else {

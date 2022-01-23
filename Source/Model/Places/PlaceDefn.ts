@@ -5,6 +5,7 @@ namespace ThisCouldBeBetter.GameFramework
 export class PlaceDefn
 {
 	name: string;
+	soundForMusicName: string;
 	actions: Action[];
 	actionsByName: Map<string,Action>;
 	actionToInputsMappings: ActionToInputsMapping[];
@@ -20,6 +21,7 @@ export class PlaceDefn
 	constructor
 	(
 		name: string,
+		soundForMusicName: string,
 		actions: Action[],
 		actionToInputsMappings: ActionToInputsMapping[],
 		propertyNamesToProcess: string[],
@@ -28,7 +30,7 @@ export class PlaceDefn
 	)
 	{
 		this.name = name;
-
+		this.soundForMusicName = soundForMusicName;
 		this.actions = actions || [];
 		this.actionToInputsMappingsDefault = actionToInputsMappings || [];
 		this.propertyNamesToProcess = propertyNamesToProcess;
@@ -51,6 +53,7 @@ export class PlaceDefn
 		return new PlaceDefn
 		(
 			"Default", // name,
+			null, // soundForMusicName
 			[], // actions,
 			[], // actionToInputsMappings,
 			[], // propertyNamesToProcess,
@@ -59,9 +62,10 @@ export class PlaceDefn
 		);
 	}
 
-	static from4
+	static from5
 	(
 		name: string,
+		soundForMusicName: string,
 		actions: Action[],
 		actionToInputsMappings: ActionToInputsMapping[],
 		propertyNamesToProcess: string[]
@@ -69,7 +73,11 @@ export class PlaceDefn
 	{
 		return new PlaceDefn
 		(
-			name, actions, actionToInputsMappings, propertyNamesToProcess,
+			name,
+			soundForMusicName,
+			actions,
+			actionToInputsMappings,
+			propertyNamesToProcess,
 			null, null // placeInitialize, placeFinalize
 		);
 	}
@@ -116,6 +124,22 @@ export class PlaceDefn
 
 	placeInitialize(uwpe: UniverseWorldPlaceEntities): void
 	{
+		if (this.soundForMusicName != null)
+		{
+			var universe = uwpe.universe;
+			var soundHelper = universe.soundHelper;
+			var soundForMusicAlreadyPlaying = soundHelper.soundForMusic;
+			if
+			(
+				soundForMusicAlreadyPlaying != null
+				&& soundForMusicAlreadyPlaying.name != this.soundForMusicName
+			)
+			{
+				soundForMusicAlreadyPlaying.stop(universe);
+				soundHelper.soundWithNamePlayAsMusic(universe, this.soundForMusicName);
+			}
+		}
+
 		if (this._placeInitialize != null)
 		{
 			this._placeInitialize(uwpe);

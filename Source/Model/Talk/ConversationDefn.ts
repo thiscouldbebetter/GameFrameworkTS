@@ -5,8 +5,9 @@ namespace ThisCouldBeBetter.GameFramework
 export class ConversationDefn
 {
 	name: string;
+	contentTextStringName: string;
 	visualPortrait: VisualBase;
-	soundMusic: Sound;
+	soundMusicName: string;
 	talkNodeDefns: TalkNodeDefn[];
 	talkNodes: TalkNode[];
 
@@ -16,15 +17,17 @@ export class ConversationDefn
 	constructor
 	(
 		name: string,
+		contentTextStringName: string,
 		visualPortrait: VisualBase,
-		soundMusic: Sound,
+		soundMusicName: string,
 		talkNodeDefns: TalkNodeDefn[],
 		talkNodes: TalkNode[]
 	)
 	{
 		this.name = name;
+		this.contentTextStringName = contentTextStringName;
 		this.visualPortrait = visualPortrait;
-		this.soundMusic = soundMusic;
+		this.soundMusicName = soundMusicName;
 		this.talkNodeDefns = talkNodeDefns;
 		this.talkNodeDefnsByName = ArrayHelper.addLookupsByName(this.talkNodeDefns);
 		this.talkNodes = talkNodes;
@@ -186,13 +189,16 @@ export class ConversationDefn
 
 	clone(): ConversationDefn
 	{
+		var talkNodeDefnsCloned = this.talkNodeDefns.map(x => x.clone());
+		var talkNodesCloned = this.talkNodes.map(x => x.clone());
 		return new ConversationDefn
 		(
 			this.name,
+			this.contentTextStringName,
 			this.visualPortrait,
-			this.soundMusic,
-			this.talkNodeDefns.map(x => x.clone()),
-			this.talkNodes.map(x => x.clone())
+			this.soundMusicName,
+			talkNodeDefnsCloned,
+			talkNodesCloned
 		)
 	}
 
@@ -204,6 +210,7 @@ export class ConversationDefn
 
 		// Additional processing to support minification.
 		conversationDefn.name = conversationDefn["name"];
+		conversationDefn.contentTextStringName = conversationDefn["contentTextStringName"];
 
 		var imagePortraitName = conversationDefn["imagePortraitName"];
 		if (imagePortraitName == null)
@@ -216,7 +223,7 @@ export class ConversationDefn
 		}
 
 		var soundMusicName = conversationDefn["soundMusicName"];
-		if (imagePortraitName == null)
+		if (soundMusicName == null)
 		{
 			conversationDefn.soundMusic = new SoundNone();
 		}

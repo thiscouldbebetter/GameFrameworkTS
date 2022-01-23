@@ -19,7 +19,7 @@ var ThisCouldBeBetter;
                 var mediaLibrary = universe.mediaLibrary;
                 var conversationDefnAsJSON = mediaLibrary.textStringGetByName(this.conversationDefnName).value;
                 var conversationDefn = GameFramework.ConversationDefn.deserialize(conversationDefnAsJSON);
-                var contentTextStringName = this.conversationDefnName + "-Content";
+                var contentTextStringName = conversationDefn.contentTextStringName;
                 var contentTextString = mediaLibrary.textStringGetByName(contentTextStringName);
                 if (contentTextString != null) {
                     // hack - For a specific content tag format in a downstream project.

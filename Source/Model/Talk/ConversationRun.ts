@@ -604,6 +604,25 @@ export class ConversationRun
 
 		]; // children
 
+		var soundMusicName = this.defn.soundMusicName;
+		if (soundMusicName != null)
+		{
+			var visualSound: VisualBase = new VisualSound(soundMusicName, true);
+
+			var visualMusic = ControlVisual.from4
+			(
+				"visualMusic",
+				portraitPos,
+				portraitSize,
+				DataBinding.fromContext
+				(
+					visualSound
+				)
+			);
+
+			childControls.push(visualMusic);
+		}
+
 		if (containerButtonsPos != null)
 		{
 			var buttonNext = ControlButton.from8

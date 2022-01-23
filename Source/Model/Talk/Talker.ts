@@ -38,7 +38,7 @@ export class Talker implements EntityProperty<Talker>
 			mediaLibrary.textStringGetByName(this.conversationDefnName).value;
 		var conversationDefn = ConversationDefn.deserialize(conversationDefnAsJSON);
 
-		var contentTextStringName = this.conversationDefnName + "-Content";
+		var contentTextStringName = conversationDefn.contentTextStringName;
 		var contentTextString = mediaLibrary.textStringGetByName(contentTextStringName);
 		if (contentTextString != null)
 		{

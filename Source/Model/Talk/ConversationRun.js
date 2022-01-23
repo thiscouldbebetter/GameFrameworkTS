@@ -273,6 +273,12 @@ var ThisCouldBeBetter;
                         next();
                     })
                 ]; // children
+                var soundMusicName = this.defn.soundMusicName;
+                if (soundMusicName != null) {
+                    var visualSound = new GameFramework.VisualSound(soundMusicName, true);
+                    var visualMusic = GameFramework.ControlVisual.from4("visualMusic", portraitPos, portraitSize, GameFramework.DataBinding.fromContext(visualSound));
+                    childControls.push(visualMusic);
+                }
                 if (containerButtonsPos != null) {
                     var buttonNext = GameFramework.ControlButton.from8("buttonNext", GameFramework.Coords.fromXY(containerButtonsMarginSize.x, containerButtonsMarginSize.y), buttonSize.clone(), "Next", fontHeight, true, // hasBorder
                     GameFramework.DataBinding.fromTrue(), // isEnabled

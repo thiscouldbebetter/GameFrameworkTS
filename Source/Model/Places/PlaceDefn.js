@@ -4,8 +4,9 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class PlaceDefn {
-            constructor(name, actions, actionToInputsMappings, propertyNamesToProcess, placeInitialize, placeFinalize) {
+            constructor(name, soundForMusicName, actions, actionToInputsMappings, propertyNamesToProcess, placeInitialize, placeFinalize) {
                 this.name = name;
+                this.soundForMusicName = soundForMusicName;
                 this.actions = actions || [];
                 this.actionToInputsMappingsDefault = actionToInputsMappings || [];
                 this.propertyNamesToProcess = propertyNamesToProcess;
@@ -18,6 +19,7 @@ var ThisCouldBeBetter;
             }
             static default() {
                 return new PlaceDefn("Default", // name,
+                null, // soundForMusicName
                 [], // actions,
                 [], // actionToInputsMappings,
                 [], // propertyNamesToProcess,
@@ -25,8 +27,8 @@ var ThisCouldBeBetter;
                 null // placeFinalize
                 );
             }
-            static from4(name, actions, actionToInputsMappings, propertyNamesToProcess) {
-                return new PlaceDefn(name, actions, actionToInputsMappings, propertyNamesToProcess, null, null // placeInitialize, placeFinalize
+            static from5(name, soundForMusicName, actions, actionToInputsMappings, propertyNamesToProcess) {
+                return new PlaceDefn(name, soundForMusicName, actions, actionToInputsMappings, propertyNamesToProcess, null, null // placeInitialize, placeFinalize
                 );
             }
             actionToInputsMappingsEdit() {
@@ -46,6 +48,16 @@ var ThisCouldBeBetter;
                 }
             }
             placeInitialize(uwpe) {
+                if (this.soundForMusicName != null) {
+                    var universe = uwpe.universe;
+                    var soundHelper = universe.soundHelper;
+                    var soundForMusicAlreadyPlaying = soundHelper.soundForMusic;
+                    if (soundForMusicAlreadyPlaying != null
+                        && soundForMusicAlreadyPlaying.name != this.soundForMusicName) {
+                        soundForMusicAlreadyPlaying.stop(universe);
+                        soundHelper.soundWithNamePlayAsMusic(universe, this.soundForMusicName);
+                    }
+                }
                 if (this._placeInitialize != null) {
                     this._placeInitialize(uwpe);
                 }
