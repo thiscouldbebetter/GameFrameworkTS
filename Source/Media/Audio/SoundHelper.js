@@ -4,9 +4,7 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class SoundHelperLive {
-            constructor(sounds) {
-                this.sounds = sounds;
-                this.soundsByName = GameFramework.ArrayHelper.addLookupsByName(this.sounds);
+            constructor() {
                 this.musicVolume = 1;
                 this.soundVolume = 1;
                 this.soundForMusic = null;
@@ -37,6 +35,10 @@ var ThisCouldBeBetter;
                     this._audioContext = new AudioContext();
                 }
                 return this._audioContext;
+            }
+            initialize(sounds) {
+                this.sounds = sounds;
+                this.soundsByName = GameFramework.ArrayHelper.addLookupsByName(this.sounds);
             }
             reset() {
                 for (var i = 0; i < this.sounds.length; i++) {

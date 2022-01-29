@@ -8,6 +8,7 @@ export class Universe
 	version: string;
 	timerHelper: TimerHelper;
 	display: Display;
+	soundHelper: SoundHelper;
 	mediaLibrary: MediaLibrary;
 	controlStyle: ControlStyle;
 	worldCreator: WorldCreator;
@@ -22,7 +23,6 @@ export class Universe
 	platformHelper: PlatformHelper;
 	randomizer: RandomizerSystem;
 	serializer: Serializer;
-	soundHelper: SoundHelper;
 	storageHelper: StorageHelper;
 	videoHelper: VideoHelper;
 
@@ -37,6 +37,7 @@ export class Universe
 		version: string,
 		timerHelper: TimerHelper,
 		display: Display,
+		soundHelper: SoundHelper,
 		mediaLibrary: MediaLibrary,
 		controlBuilder: ControlBuilder,
 		worldCreator: WorldCreator
@@ -46,6 +47,7 @@ export class Universe
 		this.version = version;
 		this.timerHelper = timerHelper;
 		this.display = display;
+		this.soundHelper = soundHelper;
 		this.mediaLibrary = mediaLibrary;
 		this.controlBuilder = controlBuilder;
 		this.worldCreator = worldCreator;
@@ -83,12 +85,15 @@ export class Universe
 		worldCreator: WorldCreator
 	): Universe
 	{
+		var soundHelper = new SoundHelperLive();
+
 		var returnValue = new Universe
 		(
 			name,
 			version,
 			timerHelper,
 			display,
+			soundHelper,
 			mediaLibrary,
 			controlBuilder,
 			worldCreator
@@ -135,7 +140,7 @@ export class Universe
 		this.display.initialize(this);
 		this.platformHelper.platformableAdd(this.display);
 
-		this.soundHelper = new SoundHelperLive(this.mediaLibrary.sounds);
+		this.soundHelper.initialize(this.mediaLibrary.sounds);
 		this.videoHelper = new VideoHelper(this.mediaLibrary.videos);
 
 		var venueInitial: Venue = null;
