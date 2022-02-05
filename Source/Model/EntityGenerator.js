@@ -4,13 +4,15 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class EntityGenerator {
-            constructor(entityToGenerate, ticksPerGenerationAsRange, entitiesPerGenerationAsRange, entitiesGeneratedMax) {
+            constructor(entityToGenerate, ticksPerGenerationAsRange, entitiesPerGenerationAsRange, entitiesGeneratedMax, entitySpeedAsRange) {
                 this.entityToGenerate = entityToGenerate;
                 this.ticksPerGenerationAsRange =
                     ticksPerGenerationAsRange || new GameFramework.RangeExtent(100, 100);
                 this.entitiesPerGenerationAsRange =
                     entitiesPerGenerationAsRange || new GameFramework.RangeExtent(1, 1);
                 this.entitiesGeneratedMax = entitiesGeneratedMax || 1;
+                this.entitySpeedAsRange =
+                    entitySpeedAsRange || new GameFramework.RangeExtent(0, 0);
                 this.entitiesGenerated = new Array();
                 this.ticksUntilNextGeneration = null;
             }
@@ -45,6 +47,11 @@ var ThisCouldBeBetter;
                             }
                             else {
                                 entityGeneratedLoc.overwriteWith(generatorLocatable.loc);
+                                var entityGeneratedSpeed = this.entitySpeedAsRange.random(randomizer);
+                                if (entityGeneratedSpeed > 0) {
+                                    var entityGeneratedVel = entityGeneratedLoc.vel;
+                                    GameFramework.Polar.create().random(randomizer).toCoords(entityGeneratedVel).multiplyScalar(entityGeneratedSpeed);
+                                }
                             }
                             this.entitiesGenerated.push(entityGenerated);
                             var uwpe2 = uwpe.clone().entitySet(entityGenerated);
@@ -55,13 +62,14 @@ var ThisCouldBeBetter;
             }
             // Clonable.
             clone() {
-                return new EntityGenerator(this.entityToGenerate, this.ticksPerGenerationAsRange.clone(), this.entitiesPerGenerationAsRange.clone(), this.entitiesGeneratedMax);
+                return new EntityGenerator(this.entityToGenerate, this.ticksPerGenerationAsRange.clone(), this.entitiesPerGenerationAsRange.clone(), this.entitiesGeneratedMax, this.entitySpeedAsRange.clone());
             }
             overwriteWith(other) {
                 this.entityToGenerate = other.entityToGenerate; // todo
                 this.ticksPerGenerationAsRange.overwriteWith(other.ticksPerGenerationAsRange);
                 this.entitiesPerGenerationAsRange.overwriteWith(other.entitiesPerGenerationAsRange);
                 this.entitiesGeneratedMax = other.entitiesGeneratedMax;
+                this.entitySpeedAsRange.overwriteWith(other.entitySpeedAsRange);
                 return this;
             }
             // Equatable

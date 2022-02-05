@@ -15,14 +15,19 @@ export class Polar
 		this.elevationInTurns = (elevationInTurns == null ? 0 : elevationInTurns);
 	}
 
-	static create()
+	static create(): Polar
 	{
 		return new Polar(0, 0, 0);
 	}
 
-	static default()
+	static default(): Polar
 	{
 		return new Polar(0, 1, 0);
+	}
+
+	static fromAzimuthInTurns(azimuthInTurns: number): Polar
+	{
+		return new Polar(azimuthInTurns, 1, 0);
 	}
 
 	// constants
@@ -32,13 +37,13 @@ export class Polar
 
 	// instance methods
 
-	addToAzimuthInTurns(turnsToAdd: number)
+	addToAzimuthInTurns(turnsToAdd: number): Polar
 	{
 		this.azimuthInTurns += turnsToAdd;
 		return this;
 	}
 
-	fromCoords(coordsToConvert: Coords)
+	fromCoords(coordsToConvert: Coords): Polar
 	{
 		this.azimuthInTurns =
 			Math.atan2(coordsToConvert.y, coordsToConvert.x)
@@ -58,7 +63,7 @@ export class Polar
 		return this;
 	}
 
-	overwriteWith(other: Polar)
+	overwriteWith(other: Polar): Polar
 	{
 		this.azimuthInTurns = other.azimuthInTurns;
 		this.radius = other.radius;
@@ -69,7 +74,7 @@ export class Polar
 	overwriteWithAzimuthRadiusElevation
 	(
 		azimuthInTurns: number, radius: number, elevationInTurns: number
-	)
+	): Polar
 	{
 		this.azimuthInTurns = azimuthInTurns;
 		this.radius = radius;
@@ -80,7 +85,7 @@ export class Polar
 		return this;
 	}
 
-	random(randomizer: Randomizer)
+	random(randomizer: Randomizer): Polar
 	{
 		if (randomizer == null)
 		{
@@ -92,7 +97,7 @@ export class Polar
 		return this;
 	}
 
-	toCoords(coords: Coords)
+	toCoords(coords: Coords): Coords
 	{
 		var azimuthInRadians = this.azimuthInTurns * Polar.RadiansPerTurn;
 		var elevationInRadians = this.elevationInTurns * Polar.RadiansPerTurn;
@@ -109,7 +114,7 @@ export class Polar
 		return coords;
 	}
 
-	wrap()
+	wrap(): Polar
 	{
 		while (this.azimuthInTurns < 0)
 		{
@@ -124,7 +129,7 @@ export class Polar
 
 	// Clonable.
 
-	clone()
+	clone(): Polar
 	{
 		return new Polar(this.azimuthInTurns, this.radius, this.elevationInTurns);
 	}

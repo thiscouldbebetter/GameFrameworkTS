@@ -8,6 +8,7 @@ export class EntityGenerator implements EntityProperty<EntityGenerator>
 	ticksPerGenerationAsRange: RangeExtent;
 	entitiesPerGenerationAsRange: RangeExtent;
 	entitiesGeneratedMax: number;
+	entitySpeedAsRange: RangeExtent;
 
 	entitiesGenerated: Entity[];
 	ticksUntilNextGeneration: number
@@ -17,7 +18,8 @@ export class EntityGenerator implements EntityProperty<EntityGenerator>
 		entityToGenerate: Entity,
 		ticksPerGenerationAsRange: RangeExtent,
 		entitiesPerGenerationAsRange: RangeExtent,
-		entitiesGeneratedMax: number
+		entitiesGeneratedMax: number,
+		entitySpeedAsRange: RangeExtent
 	)
 	{
 		this.entityToGenerate = entityToGenerate;
@@ -26,6 +28,8 @@ export class EntityGenerator implements EntityProperty<EntityGenerator>
 		this.entitiesPerGenerationAsRange =
 			entitiesPerGenerationAsRange || new RangeExtent(1, 1);
 		this.entitiesGeneratedMax = entitiesGeneratedMax || 1;
+		this.entitySpeedAsRange =
+			entitySpeedAsRange || new RangeExtent(0, 0);
 
 		this.entitiesGenerated = new Array<Entity>();
 		this.ticksUntilNextGeneration = null;
@@ -101,6 +105,20 @@ export class EntityGenerator implements EntityProperty<EntityGenerator>
 						(
 							generatorLocatable.loc
 						);
+
+						var entityGeneratedSpeed =
+							this.entitySpeedAsRange.random(randomizer);
+						if (entityGeneratedSpeed > 0)
+						{
+							var entityGeneratedVel = entityGeneratedLoc.vel;
+							Polar.create().random(randomizer).toCoords
+							(
+								entityGeneratedVel
+							).multiplyScalar
+							(
+								entityGeneratedSpeed
+							);
+						}
 					}
 					this.entitiesGenerated.push(entityGenerated);
 					var uwpe2 = uwpe.clone().entitySet(entityGenerated);
@@ -119,7 +137,8 @@ export class EntityGenerator implements EntityProperty<EntityGenerator>
 			this.entityToGenerate,
 			this.ticksPerGenerationAsRange.clone(),
 			this.entitiesPerGenerationAsRange.clone(),
-			this.entitiesGeneratedMax
+			this.entitiesGeneratedMax,
+			this.entitySpeedAsRange.clone()
 		);
 	}
 
@@ -129,6 +148,7 @@ export class EntityGenerator implements EntityProperty<EntityGenerator>
 		this.ticksPerGenerationAsRange.overwriteWith(other.ticksPerGenerationAsRange);
 		this.entitiesPerGenerationAsRange.overwriteWith(other.entitiesPerGenerationAsRange);
 		this.entitiesGeneratedMax = other.entitiesGeneratedMax;
+		this.entitySpeedAsRange.overwriteWith(other.entitySpeedAsRange);
 		return this;
 	}
 
