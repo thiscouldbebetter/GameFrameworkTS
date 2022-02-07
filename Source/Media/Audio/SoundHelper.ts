@@ -6,6 +6,7 @@ export interface SoundHelper
 {
 	audioContext(): AudioContext;
 	controlSelectOptionsVolume(): ControlSelectOption<number>[];
+	initialize(sounds: Sound[]): void;
 	musicVolume: number;
 	reset(): void;
 	soundForMusic: Sound;
@@ -27,11 +28,8 @@ export class SoundHelperLive
 
 	_controlSelectOptionsVolume: ControlSelectOption<number>[];
 
-	constructor(sounds: Sound[])
+	constructor()
 	{
-		this.sounds = sounds;
-		this.soundsByName = ArrayHelper.addLookupsByName(this.sounds);
-
 		this.musicVolume = 1;
 		this.soundVolume = 1;
 
@@ -71,6 +69,12 @@ export class SoundHelperLive
 		}
 
 		return this._audioContext;
+	}
+
+	initialize(sounds: Sound[]): void
+	{
+		this.sounds = sounds;
+		this.soundsByName = ArrayHelper.addLookupsByName(this.sounds);
 	}
 
 	reset(): void

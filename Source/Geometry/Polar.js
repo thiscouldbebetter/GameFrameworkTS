@@ -15,6 +15,9 @@ var ThisCouldBeBetter;
             static default() {
                 return new Polar(0, 1, 0);
             }
+            static fromAzimuthInTurns(azimuthInTurns) {
+                return new Polar(azimuthInTurns, 1, 0);
+            }
             // instance methods
             addToAzimuthInTurns(turnsToAdd) {
                 this.azimuthInTurns += turnsToAdd;

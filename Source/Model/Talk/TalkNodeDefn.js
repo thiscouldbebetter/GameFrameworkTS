@@ -201,6 +201,22 @@ var ThisCouldBeBetter;
                     conversationRun.talkNodeAdvance(universe);
                     conversationRun.talkNodeCurrentExecute(universe); // hack
                 });
+                this.VariablesExport = new TalkNodeDefn("VariablesExport", (universe, conversationRun) => // execute
+                 {
+                    var talkNode = conversationRun.talkNodeCurrent();
+                    var variableLookupToExportToName = talkNode.content;
+                    conversationRun.variablesExport(universe, variableLookupToExportToName);
+                    conversationRun.talkNodeAdvance(universe);
+                    conversationRun.talkNodeCurrentExecute(universe); // hack
+                });
+                this.VariablesImport = new TalkNodeDefn("VariablesImport", (universe, conversationRun) => // execute
+                 {
+                    var talkNode = conversationRun.talkNodeCurrent();
+                    var variableLookupToImportFromExpression = talkNode.content;
+                    conversationRun.variablesImport(universe, variableLookupToImportFromExpression);
+                    conversationRun.talkNodeAdvance(universe);
+                    conversationRun.talkNodeCurrentExecute(universe); // hack
+                });
                 this._All =
                     [
                         this.Disable,
@@ -221,6 +237,8 @@ var ThisCouldBeBetter;
                         this.VariableLoad,
                         this.VariableSet,
                         this.VariableStore,
+                        this.VariablesExport,
+                        this.VariablesImport
                     ];
                 this._AllByName = GameFramework.ArrayHelper.addLookupsByName(this._All);
             }

@@ -6,7 +6,7 @@ var ThisCouldBeBetter;
         class VisualAnimation {
             constructor(name, ticksToHoldFrames, frames, isRepeating) {
                 this.name = name;
-                this.ticksToHoldFrames = ticksToHoldFrames;
+                this.ticksToHoldFrames = ticksToHoldFrames || frames.map(x => 1);
                 this.frames = frames;
                 this.isRepeating = (isRepeating == null ? true : isRepeating);
                 if (this.ticksToHoldFrames == null) {
@@ -26,6 +26,12 @@ var ThisCouldBeBetter;
                 for (var f = 0; f < this.ticksToHoldFrames.length; f++) {
                     this.ticksToComplete += this.ticksToHoldFrames[f];
                 }
+            }
+            static fromNameAndFrames(name, frames) {
+                var ticksToHoldFrames = frames.map(x => 1);
+                var returnValue = new VisualAnimation(name, ticksToHoldFrames, frames, false // isRepeating
+                );
+                return returnValue;
             }
             frameCurrent(world, tickStarted) {
                 var frameIndexCurrent = this.frameIndexCurrent(world, tickStarted);

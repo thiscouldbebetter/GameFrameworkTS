@@ -20,7 +20,7 @@ export class VisualAnimation implements Visual<VisualAnimation>
 	)
 	{
 		this.name = name;
-		this.ticksToHoldFrames = ticksToHoldFrames;
+		this.ticksToHoldFrames = ticksToHoldFrames || frames.map(x => 1);
 		this.frames = frames;
 		this.isRepeating = (isRepeating == null ? true : isRepeating);
 
@@ -51,6 +51,23 @@ export class VisualAnimation implements Visual<VisualAnimation>
 		{
 			this.ticksToComplete += this.ticksToHoldFrames[f];
 		}
+	}
+
+	static fromNameAndFrames
+	(
+		name: string, frames: VisualBase[]
+	): VisualAnimation
+	{
+		var ticksToHoldFrames = frames.map(x => 1);
+
+		var returnValue = new VisualAnimation
+		(
+			name,
+			ticksToHoldFrames,
+			frames,
+			false // isRepeating
+		);
+		return returnValue;
 	}
 
 	frameCurrent(world: World, tickStarted: number): VisualBase

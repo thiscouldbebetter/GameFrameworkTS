@@ -4,11 +4,12 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Universe {
-            constructor(name, version, timerHelper, display, mediaLibrary, controlBuilder, worldCreator) {
+            constructor(name, version, timerHelper, display, soundHelper, mediaLibrary, controlBuilder, worldCreator) {
                 this.name = name;
                 this.version = version;
                 this.timerHelper = timerHelper;
                 this.display = display;
+                this.soundHelper = soundHelper;
                 this.mediaLibrary = mediaLibrary;
                 this.controlBuilder = controlBuilder;
                 this.worldCreator = worldCreator;
@@ -28,7 +29,8 @@ var ThisCouldBeBetter;
             }
             // static methods
             static create(name, version, timerHelper, display, mediaLibrary, controlBuilder, worldCreator) {
-                var returnValue = new Universe(name, version, timerHelper, display, mediaLibrary, controlBuilder, worldCreator);
+                var soundHelper = new GameFramework.SoundHelperLive();
+                var returnValue = new Universe(name, version, timerHelper, display, soundHelper, mediaLibrary, controlBuilder, worldCreator);
                 return returnValue;
             }
             static default() {
@@ -42,7 +44,7 @@ var ThisCouldBeBetter;
                 this.storageHelper = new GameFramework.StorageHelper(GameFramework.StringHelper.replaceAll(this.name, " ", "_") + "_", this.serializer, new GameFramework.CompressorLZW());
                 this.display.initialize(this);
                 this.platformHelper.platformableAdd(this.display);
-                this.soundHelper = new GameFramework.SoundHelperLive(this.mediaLibrary.sounds);
+                this.soundHelper.initialize(this.mediaLibrary.sounds);
                 this.videoHelper = new GameFramework.VideoHelper(this.mediaLibrary.videos);
                 var venueInitial = null;
                 if (this.debuggingModeName == "SkipOpening") {

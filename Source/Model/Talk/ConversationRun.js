@@ -173,6 +173,25 @@ var ThisCouldBeBetter;
             variableByName(variableName) {
                 return this.variablesByName.get(variableName);
             }
+            variablesExport(universe, variableLookupExpression) {
+                var variablesByNameToExport = this.variablesByName;
+                for (var variableName in variablesByNameToExport) {
+                    var variableValue = this.variableByName(variableName).toString();
+                    var scriptExpressionWithValue = variableLookupExpression.split("$key").join(variableName).split("$value").join(variableValue);
+                    var scriptToRunAsString = "( (u, cr) => { " + scriptExpressionWithValue + "; } )";
+                    var scriptToRun = eval(scriptToRunAsString);
+                    scriptToRun(universe, this);
+                }
+            }
+            variablesImport(universe, variableLookupExpression) {
+                var scriptText = "( (u, cr) => " + variableLookupExpression + ")";
+                var scriptToRun = eval(scriptText);
+                var variablesByNameToImportFrom = scriptToRun(universe, this);
+                for (var variableName in variablesByNameToImportFrom) {
+                    var variableValue = variablesByNameToImportFrom.get(variableName);
+                    this.variableSet(variableName, variableValue);
+                }
+            }
             variableLoad(universe, variableName, variableExpression) {
                 var scriptText = "( (u, cr) => " + variableExpression + ")";
                 var scriptToRun = eval(scriptText);
@@ -231,7 +250,7 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             toControl_WithCoords(size, universe, fontHeight, marginSize, containerButtonsPos, containerButtonsMarginSize, buttonSize, portraitPos, portraitSize, labelSpeakerPos, labelSpeakerSize, labelSpeakerIsCenteredHorizontally, labelSpeakerIsCenteredVertically, listPos, listSize) {
-                var fontHeightShort = fontHeight; // todo
+                var fontHeightShort = fontHeight * .75; // todo
                 var conversationRun = this;
                 var conversationDefn = conversationRun.defn;
                 var next = () => {
@@ -292,7 +311,15 @@ var ThisCouldBeBetter;
                         buttonNext,
                         buttonTranscript
                     ];
+                    var actions = [
+                        new GameFramework.Action("ViewLog", viewLog)
+                    ];
+                    var actionToInputsMappings = [
+                        new GameFramework.ActionToInputsMapping("ViewLog", [GameFramework.Input.Names().Space], true)
+                    ];
                     if (this._quit != null) {
+                        actions.push(new GameFramework.Action("Back", back));
+                        actionToInputsMappings.push(new GameFramework.ActionToInputsMapping("Back", [GameFramework.Input.Names().Escape], true));
                         var buttonLeave = GameFramework.ControlButton.from8("buttonLeave", GameFramework.Coords.fromXY(containerButtonsMarginSize.x, containerButtonsMarginSize.y * 3 + buttonSize.y * 2), buttonSize.clone(), "Leave", fontHeight, true, // hasBorder
                         GameFramework.DataBinding.fromTrue(), // isEnabled
                         back // click
@@ -308,13 +335,7 @@ var ThisCouldBeBetter;
                     childControls.push(containerButtons);
                 }
                 var returnValue = new GameFramework.ControlContainer("containerConversation", GameFramework.Coords.create(), // pos
-                size, childControls, [
-                    new GameFramework.Action("Back", back),
-                    new GameFramework.Action("ViewLog", viewLog)
-                ], [
-                    new GameFramework.ActionToInputsMapping("Back", [GameFramework.Input.Names().Escape], true),
-                    new GameFramework.ActionToInputsMapping("ViewLog", [GameFramework.Input.Names().Space], true)
-                ]);
+                size, childControls, actions, actionToInputsMappings);
                 returnValue.focusGain();
                 return returnValue;
             }
