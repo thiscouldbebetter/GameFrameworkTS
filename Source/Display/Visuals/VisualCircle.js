@@ -10,6 +10,10 @@ var ThisCouldBeBetter;
                 this.colorBorder = colorBorder;
                 this.borderThickness = borderThickness || 1;
             }
+            static default() {
+                // Convenience method for rapid prototyping.
+                return new VisualCircle(10, null, GameFramework.Color.byName("Cyan"), null);
+            }
             static fromRadiusAndColorFill(radius, colorFill) {
                 return new VisualCircle(radius, colorFill, null, null);
             }

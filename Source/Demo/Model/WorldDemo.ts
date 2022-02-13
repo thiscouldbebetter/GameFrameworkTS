@@ -63,6 +63,7 @@ class WorldDemo extends World
 		var placeDefnDemo = new PlaceDefn
 		(
 			"Demo",
+			null, // soundForMusicName
 			actions,
 			actionToInputsMappings,
 			propertyNamesToProcess,

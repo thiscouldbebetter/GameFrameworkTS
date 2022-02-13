@@ -20,6 +20,9 @@ var ThisCouldBeBetter;
             static create() {
                 return new Disposition(GameFramework.Coords.create(), GameFramework.Orientation.default(), null);
             }
+            static from2(pos, orientation) {
+                return new Disposition(pos, orientation, null);
+            }
             static fromOrientation(orientation) {
                 return new Disposition(GameFramework.Coords.create(), orientation, null);
             }

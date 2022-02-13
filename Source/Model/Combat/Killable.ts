@@ -30,6 +30,11 @@ export class Killable implements EntityProperty<Killable>
 		this.integrity = this.integrityMax;
 	}
 
+	static default(): Killable
+	{
+		return Killable.fromIntegrityMax(1);
+	}
+
 	static fromIntegrityMax(integrityMax: number): Killable
 	{
 		return new Killable(integrityMax, null, null);
@@ -101,6 +106,11 @@ export class Killable implements EntityProperty<Killable>
 	integrityCurrentOverMax(): string
 	{
 		return this.integrity + "/" + this.integrityMax;
+	}
+
+	integritySetToMax(): void
+	{
+		this.integrity = this.integrityMax;
 	}
 
 	integritySubtract(amountToSubtract: number): void

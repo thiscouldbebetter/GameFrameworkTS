@@ -14,7 +14,9 @@ export class VisualPolygon implements Visual<VisualPolygon>
 
 	constructor
 	(
-		verticesAsPath: Path, colorFill: Color, colorBorder: Color,
+		verticesAsPath: Path,
+		colorFill: Color,
+		colorBorder: Color,
 		shouldUseEntityOrientation: boolean
 	)
 	{
@@ -22,15 +24,33 @@ export class VisualPolygon implements Visual<VisualPolygon>
 		this.colorFill = colorFill;
 		this.colorBorder = colorBorder;
 		this.shouldUseEntityOrientation =
-			shouldUseEntityOrientation || true;
+			(shouldUseEntityOrientation == null ? true : shouldUseEntityOrientation);
 
 		this.verticesAsPathTransformed = this.verticesAsPath.clone();
 		this.transformLocate = new Transform_Locate(null);
 	}
 
+	static default(): VisualPolygon
+	{
+		var dimension = 10;
+
+		return VisualPolygon.fromPathAndColors
+		(
+			new Path
+			([
+				Coords.fromXY(-1, 0).multiplyScalar(dimension),
+				Coords.fromXY(1, 0).multiplyScalar(dimension),
+				Coords.fromXY(0, 1).multiplyScalar(dimension),
+			]),
+			null, // colorFill
+			Color.byName("Cyan")
+		)
+	}
+
 	static fromPathAndColorFill
 	(
-		path: Path, colorFill: Color
+		path: Path,
+		colorFill: Color
 	): VisualPolygon
 	{
 		var returnValue = new VisualPolygon

@@ -12,7 +12,12 @@ export class VisualImageScaledPartial implements Visual<VisualImageScaledPartial
 
 	_posSaved: Coords;
 
-	constructor(visualImageToExtractFrom: VisualImage, regionToDrawAsBox: Box, sizeToDraw: Coords)
+	constructor
+	(
+		visualImageToExtractFrom: VisualImage,
+		regionToDrawAsBox: Box,
+		sizeToDraw: Coords
+	)
 	{
 		this.visualImageToExtractFrom = visualImageToExtractFrom;
 		this.regionToDrawAsBox = regionToDrawAsBox;
@@ -20,6 +25,52 @@ export class VisualImageScaledPartial implements Visual<VisualImageScaledPartial
 
 		this.sizeToDrawHalf = this.sizeToDraw.clone().half();
 		this._posSaved = Coords.create();
+	}
+
+	static manyFromVisualImageAndSizes
+	(
+		visualImage: VisualImage,
+		imageSizeInPixels: Coords,
+		imageSizeInTiles: Coords,
+		sizeToScaleTo: Coords
+	): VisualImageScaledPartial[]
+	{
+		var returnVisuals = new Array<VisualImageScaledPartial>();
+
+		var tileSizeInPixels =
+			imageSizeInPixels.clone().divide(imageSizeInTiles);
+
+		var sourcePosInTiles = Coords.create();
+
+		for (var y = 0; y < imageSizeInTiles.y; y++)
+		{
+			sourcePosInTiles.y = y;
+
+			for (var x = 0; x < imageSizeInTiles.x; x++)
+			{
+				sourcePosInTiles.x = x;
+
+				var sourcePosInPixels =
+					sourcePosInTiles.clone().multiply(tileSizeInPixels);
+
+				var sourceBox = Box.fromMinAndSize
+				(
+					sourcePosInPixels,
+					tileSizeInPixels
+				);
+
+				var visual = new VisualImageScaledPartial
+				(
+					visualImage,
+					sourceBox,
+					sizeToScaleTo
+				);
+
+				returnVisuals.push(visual);
+			}
+		}
+
+		return returnVisuals;
 	}
 
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display)

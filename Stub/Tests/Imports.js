@@ -123,8 +123,6 @@ var ShapeInverse = gf.ShapeInverse;
 var Shell = gf.Shell;
 var Sphere = gf.Sphere;
 var Wedge = gf.Wedge;
-// Geometry - Shapes - Map.
-var MapCell = gf.MapCell;
 var MapLocated = gf.MapLocated;
 var MapOfCells = gf.MapOfCells;
 // Geometry - Shapes - Meshes.
@@ -147,12 +145,11 @@ var UserInputListener = gf.UserInputListener;
 var Font = gf.Font;
 var Image2 = gf.Image2; // Name conflicts with a built-in class.
 var MediaLibrary = gf.MediaLibrary;
-var Sound = gf.Sound;
-var SoundHelper = gf.SoundHelper;
 var TextString = gf.TextString;
 var VenueVideo = gf.VenueVideo;
 var Video = gf.Video;
 var VideoHelper = gf.VideoHelper;
+var SoundHelperLive = gf.SoundHelperLive;
 var VisualSound = gf.VisualSound;
 // Model.
 var Entity = gf.Entity;

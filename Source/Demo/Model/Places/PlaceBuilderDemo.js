@@ -1400,8 +1400,9 @@ class PlaceBuilderDemo // Main.
     }
     entityDefnBuildGenerator(entityDefnToGenerate) {
         var generator = new EntityGenerator(entityDefnToGenerate, RangeExtent.fromNumber(1200), // ticksPerGenerationAsRange
-        RangeExtent.fromNumber(1), // entitiesPerGenerationAsRange
-        1 // entitiesGeneratedMax
+        RangeExtent.fromNumber(1), // entitiesPerGenerationAsRange\
+        1, // entitiesGeneratedMax
+        null // entitySpeedAsRange
         );
         var entityDefnGenerator = new Entity(entityDefnToGenerate.name + "Generator", [
             generator,

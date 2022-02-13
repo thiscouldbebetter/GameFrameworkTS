@@ -10,6 +10,9 @@ var ThisCouldBeBetter;
                 this._die = die;
                 this.integrity = this.integrityMax;
             }
+            static default() {
+                return Killable.fromIntegrityMax(1);
+            }
             static fromIntegrityMax(integrityMax) {
                 return new Killable(integrityMax, null, null);
             }
@@ -49,6 +52,9 @@ var ThisCouldBeBetter;
             }
             integrityCurrentOverMax() {
                 return this.integrity + "/" + this.integrityMax;
+            }
+            integritySetToMax() {
+                this.integrity = this.integrityMax;
             }
             integritySubtract(amountToSubtract) {
                 this.integrityAdd(0 - amountToSubtract);

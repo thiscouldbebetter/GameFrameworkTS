@@ -11,6 +11,22 @@ var ThisCouldBeBetter;
                 this.sizeToDrawHalf = this.sizeToDraw.clone().half();
                 this._posSaved = GameFramework.Coords.create();
             }
+            static manyFromVisualImageAndSizes(visualImage, imageSizeInPixels, imageSizeInTiles, sizeToScaleTo) {
+                var returnVisuals = new Array();
+                var tileSizeInPixels = imageSizeInPixels.clone().divide(imageSizeInTiles);
+                var sourcePosInTiles = GameFramework.Coords.create();
+                for (var y = 0; y < imageSizeInTiles.y; y++) {
+                    sourcePosInTiles.y = y;
+                    for (var x = 0; x < imageSizeInTiles.x; x++) {
+                        sourcePosInTiles.x = x;
+                        var sourcePosInPixels = sourcePosInTiles.clone().multiply(tileSizeInPixels);
+                        var sourceBox = GameFramework.Box.fromMinAndSize(sourcePosInPixels, tileSizeInPixels);
+                        var visual = new VisualImageScaledPartial(visualImage, sourceBox, sizeToScaleTo);
+                        returnVisuals.push(visual);
+                    }
+                }
+                return returnVisuals;
+            }
             draw(uwpe, display) {
                 var universe = uwpe.universe;
                 var entity = uwpe.entity;

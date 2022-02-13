@@ -1,7 +1,8 @@
 "use strict";
 class PlaceStub extends Place {
     constructor() {
-        super(PlaceStub.name, PlaceStub.defnBuild().name, Coords.fromXY(400, 300), // size
+        super(PlaceStub.name, PlaceStub.defnBuild().name, null, // parentName
+        Coords.fromXY(400, 300), // size
         // entities
         [
             new UserInputListener()
@@ -26,6 +27,7 @@ class PlaceStub extends Place {
             Constrainable.name,
             Locatable.name
         ];
-        return PlaceDefn.from4(PlaceStub.name, actions, actionToInputsMappings, entityPropertyNamesToProcess);
+        return PlaceDefn.from5(PlaceStub.name, "Music_Music", // soundForMusicName
+        actions, actionToInputsMappings, entityPropertyNamesToProcess);
     }
 }

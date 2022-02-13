@@ -9,9 +9,18 @@ var ThisCouldBeBetter;
                 this.colorFill = colorFill;
                 this.colorBorder = colorBorder;
                 this.shouldUseEntityOrientation =
-                    shouldUseEntityOrientation || true;
+                    (shouldUseEntityOrientation == null ? true : shouldUseEntityOrientation);
                 this.verticesAsPathTransformed = this.verticesAsPath.clone();
                 this.transformLocate = new GameFramework.Transform_Locate(null);
+            }
+            static default() {
+                var dimension = 10;
+                return VisualPolygon.fromPathAndColors(new GameFramework.Path([
+                    GameFramework.Coords.fromXY(-1, 0).multiplyScalar(dimension),
+                    GameFramework.Coords.fromXY(1, 0).multiplyScalar(dimension),
+                    GameFramework.Coords.fromXY(0, 1).multiplyScalar(dimension),
+                ]), null, // colorFill
+                GameFramework.Color.byName("Cyan"));
             }
             static fromPathAndColorFill(path, colorFill) {
                 var returnValue = new VisualPolygon(path, colorFill, null, null // shouldUseEntityOrientation

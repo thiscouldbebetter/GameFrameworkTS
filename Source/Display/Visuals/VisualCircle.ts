@@ -23,6 +23,12 @@ export class VisualCircle implements Visual<VisualCircle>
 		this.borderThickness = borderThickness || 1;
 	}
 
+	static default(): VisualCircle
+	{
+		// Convenience method for rapid prototyping.
+		return new VisualCircle(10, null, Color.byName("Cyan"), null);
+	}
+
 	static fromRadiusAndColorFill(radius: number, colorFill: Color): VisualCircle
 	{
 		return new VisualCircle(radius, colorFill, null, null);
