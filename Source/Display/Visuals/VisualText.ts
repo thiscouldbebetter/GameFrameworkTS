@@ -5,7 +5,6 @@ namespace ThisCouldBeBetter.GameFramework
 export class VisualText implements Visual<VisualText>
 {
 	_text: DataBinding<any, string>;
-	shouldTextContextBeReset: boolean;
 	colorFill: Color;
 	colorBorder: Color;
 	heightInPixels: number;
@@ -28,7 +27,8 @@ export class VisualText implements Visual<VisualText>
 		this._universeWorldPlaceEntities = UniverseWorldPlaceEntities.create();
 	}
 
-	static fromTextHeightAndColor(
+	static fromTextHeightAndColor
+	(
 		text: string, heightInPixels: number, colorFill: Color
 	): VisualText
 	{
@@ -60,7 +60,18 @@ export class VisualText implements Visual<VisualText>
 	{
 		var entity = uwpe.entity;
 
-		var text = this.text(uwpe, display);
+		var contextOld = this._text.context;
+		if
+		(
+			contextOld == null
+			|| contextOld.constructor.name == UniverseWorldPlaceEntities.name
+		)
+		{
+			this._text.contextSet(uwpe);
+		}
+
+		var text = this.text();
+
 		display.drawText
 		(
 			text,
@@ -74,7 +85,7 @@ export class VisualText implements Visual<VisualText>
 		);
 	}
 
-	text(uwpe: UniverseWorldPlaceEntities, display: Display)
+	text(): string
 	{
 		var returnValue = this._text.get();
 

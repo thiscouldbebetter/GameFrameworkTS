@@ -54,6 +54,12 @@ export class Entity implements Clonable<Entity>
 		return this;
 	}
 
+	nameSet(nameToSet: string): Entity
+	{
+		this.name = nameToSet;
+		return this;
+	}
+
 	propertyAdd(propertyToAdd: EntityPropertyBase): Entity
 	{
 		return this.propertyAddForPlace(propertyToAdd, null);

@@ -37,6 +37,10 @@ var ThisCouldBeBetter;
                 }
                 return this;
             }
+            nameSet(nameToSet) {
+                this.name = nameToSet;
+                return this;
+            }
             propertyAdd(propertyToAdd) {
                 return this.propertyAddForPlace(propertyToAdd, null);
             }

@@ -116,6 +116,9 @@ var ThisCouldBeBetter;
                 this.RedDark = new Color("RedDark", "R", [.5, 0, 0, 1]);
                 this.Tan = Color.fromSystemColor("Tan");
                 this.Violet = new Color("Violet", "v", [1, 0, 1, 1]);
+                this.VioletDark = new Color("VioletDark", "V2", [.5, 0, .5, 1]);
+                this.VioletEighth = new Color("VioletEighth", "V8", [.125, 0, .125, 1]);
+                this.VioletQuarter = new Color("VioletQuarter", "V4", [.25, 0, .25, 1]);
                 this.White = new Color("White", "w", [1, 1, 1, 1]);
                 this.Yellow = new Color("Yellow", "y", [1, 1, 0, 1]);
                 this.YellowDark = new Color("YellowDark", "Y", [.5, .5, 0, 1]);
@@ -146,6 +149,9 @@ var ThisCouldBeBetter;
                         this.RedDark,
                         this.Tan,
                         this.Violet,
+                        this.VioletDark,
+                        this.VioletEighth,
+                        this.VioletQuarter,
                         this.White,
                         this.Yellow,
                         this.YellowDark,

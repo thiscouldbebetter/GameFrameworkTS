@@ -22,13 +22,18 @@ var ThisCouldBeBetter;
             }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
-                var text = this.text(uwpe, display);
+                var contextOld = this._text.context;
+                if (contextOld == null
+                    || contextOld.constructor.name == GameFramework.UniverseWorldPlaceEntities.name) {
+                    this._text.contextSet(uwpe);
+                }
+                var text = this.text();
                 display.drawText(text, this.heightInPixels, entity.locatable().loc.pos, this.colorFill, this.colorBorder, true, // isCenteredHorizontally
                 true, // isCenteredVertically
                 null // sizeMaxInPixels
                 );
             }
-            text(uwpe, display) {
+            text() {
                 var returnValue = this._text.get();
                 return returnValue;
             }
