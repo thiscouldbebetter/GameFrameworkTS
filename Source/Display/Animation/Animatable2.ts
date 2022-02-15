@@ -28,6 +28,11 @@ export class Animatable2 implements EntityProperty<Animatable2>
 		return new Animatable2(null, null, null);
 	}
 
+	static default(): Animatable2
+	{
+		return new Animatable2(null, null, null);
+	}
+
 	animationStartByName(name: string, world: World): void
 	{
 		if (this.ticksStartedByAnimationName.has(name) == false)

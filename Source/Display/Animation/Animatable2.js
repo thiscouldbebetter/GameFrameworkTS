@@ -13,6 +13,9 @@ var ThisCouldBeBetter;
             static create() {
                 return new Animatable2(null, null, null);
             }
+            static default() {
+                return new Animatable2(null, null, null);
+            }
             animationStartByName(name, world) {
                 if (this.ticksStartedByAnimationName.has(name) == false) {
                     this.ticksStartedByAnimationName.set(name, world.timerTicksSoFar);

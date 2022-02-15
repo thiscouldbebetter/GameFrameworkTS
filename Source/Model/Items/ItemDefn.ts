@@ -50,6 +50,18 @@ export class ItemDefn implements EntityProperty<ItemDefn>
 		);
 	}
 
+	static fromNameAndAppearance
+	(
+		name: string, appearance: string
+	): ItemDefn
+	{
+		return new ItemDefn
+		(
+			name, appearance,
+			null, null, null, null, null, null, null, null
+		);
+	}
+
 	static fromNameCategoryNameAndUse
 	(
 		name: string,

@@ -75,6 +75,19 @@ export class Collidable implements EntityProperty<Collidable>
 		return new Collidable(false, null, colliderAtRest, null, collideEntities);
 	}
 
+	static from3
+	(
+		colliderAtRest: ShapeBase,
+		entityPropertyNamesToCollideWith: string[],
+		collideEntities: (uwpe: UniverseWorldPlaceEntities, c: Collision)=>void
+	): Collidable
+	{
+		return new Collidable
+		(
+			false, null, colliderAtRest, entityPropertyNamesToCollideWith, collideEntities
+		);
+	}
+
 	collideEntities
 	(
 		uwpe: UniverseWorldPlaceEntities, collision: Collision

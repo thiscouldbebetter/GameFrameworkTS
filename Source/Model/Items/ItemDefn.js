@@ -19,6 +19,9 @@ var ThisCouldBeBetter;
             static fromName(name) {
                 return new ItemDefn(name, null, null, null, null, null, null, null, null, null);
             }
+            static fromNameAndAppearance(name, appearance) {
+                return new ItemDefn(name, appearance, null, null, null, null, null, null, null, null);
+            }
             static fromNameCategoryNameAndUse(name, categoryName, use) {
                 var returnValue = ItemDefn.fromName(name);
                 returnValue.categoryNames = [categoryName];

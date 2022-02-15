@@ -32,6 +32,9 @@ var ThisCouldBeBetter;
             static fromColliderAndCollideEntities(colliderAtRest, collideEntities) {
                 return new Collidable(false, null, colliderAtRest, null, collideEntities);
             }
+            static from3(colliderAtRest, entityPropertyNamesToCollideWith, collideEntities) {
+                return new Collidable(false, null, colliderAtRest, entityPropertyNamesToCollideWith, collideEntities);
+            }
             collideEntities(uwpe, collision) {
                 if (this._collideEntities != null) {
                     this._collideEntities(uwpe, collision);
