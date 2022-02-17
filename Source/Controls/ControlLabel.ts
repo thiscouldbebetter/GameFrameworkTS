@@ -33,6 +33,24 @@ export class ControlLabel<TContext> extends ControlBase
 		this._drawPos = Coords.create();
 	}
 
+	static fromPosAndTextString<TContext>
+	(
+		pos: Coords,
+		textAsString: string
+	): ControlLabel<TContext>
+	{
+		return new ControlLabel<TContext>
+		(
+			null, //name
+			pos,
+			null, // size
+			false, // isTextCenteredHorizontally
+			false, // isTextCenteredVertically
+			DataBinding.fromGet((c: TContext) => textAsString),
+			10 // fontHeightInPixels
+		);
+	}
+
 	static fromPosHeightAndText<TContext>
 	(
 		pos: Coords,

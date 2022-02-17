@@ -14,13 +14,14 @@ var ThisCouldBeBetter;
                 this.transformLocate = new GameFramework.Transform_Locate(null);
             }
             static default() {
-                var dimension = 10;
-                return VisualPolygon.fromPathAndColors(new GameFramework.Path([
-                    GameFramework.Coords.fromXY(-1, 0).multiplyScalar(dimension),
-                    GameFramework.Coords.fromXY(1, 0).multiplyScalar(dimension),
-                    GameFramework.Coords.fromXY(0, 1).multiplyScalar(dimension),
-                ]), null, // colorFill
-                GameFramework.Color.byName("Cyan"));
+                return VisualPolygon.fromDimensionAndColorBorder(10, GameFramework.Color.byName("Cyan"));
+            }
+            static fromColorBorder(colorBorder) {
+                return VisualPolygon.fromDimensionAndColorBorder(10, colorBorder);
+            }
+            static fromDimensionAndColorBorder(dimension, colorBorder) {
+                return VisualPolygon.fromPathAndColors(GameFramework.Path.fromDimension(dimension), null, // colorFill
+                colorBorder);
             }
             static fromPathAndColorFill(path, colorFill) {
                 var returnValue = new VisualPolygon(path, colorFill, null, null // shouldUseEntityOrientation

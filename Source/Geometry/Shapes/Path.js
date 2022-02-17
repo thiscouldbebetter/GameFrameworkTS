@@ -7,6 +7,18 @@ var ThisCouldBeBetter;
             constructor(points) {
                 this.points = points;
             }
+            static default() {
+                // For rapid prototyping.
+                return Path.fromDimension(10);
+            }
+            static fromDimension(dimension) {
+                // For rapid prototyping.
+                return new Path([
+                    GameFramework.Coords.fromXY(-1, 0).multiplyScalar(dimension),
+                    GameFramework.Coords.fromXY(1, 0).multiplyScalar(dimension),
+                    GameFramework.Coords.fromXY(0, 1).multiplyScalar(dimension),
+                ]);
+            }
             // Clonable.
             clone() {
                 return new Path(GameFramework.ArrayHelper.clone(this.points));

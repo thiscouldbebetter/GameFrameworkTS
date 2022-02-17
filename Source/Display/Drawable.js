@@ -21,6 +21,13 @@ var ThisCouldBeBetter;
             static fromVisualAndIsVisible(visual, isVisible) {
                 return new Drawable(visual, isVisible);
             }
+            hide() {
+                this.isVisible = false;
+            }
+            show() {
+                this.isVisible = true;
+            }
+            // EntityProperty.
             updateForTimerTick(uwpe) {
                 if (this.isVisible) {
                     this.visual.draw(uwpe, uwpe.universe.display);

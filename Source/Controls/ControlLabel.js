@@ -12,6 +12,14 @@ var ThisCouldBeBetter;
                 // Helper variables.
                 this._drawPos = GameFramework.Coords.create();
             }
+            static fromPosAndTextString(pos, textAsString) {
+                return new ControlLabel(null, //name
+                pos, null, // size
+                false, // isTextCenteredHorizontally
+                false, // isTextCenteredVertically
+                GameFramework.DataBinding.fromGet((c) => textAsString), 10 // fontHeightInPixels
+                );
+            }
             static fromPosHeightAndText(pos, fontHeightInPixels, text) {
                 return new ControlLabel(null, //name
                 pos, null, // size

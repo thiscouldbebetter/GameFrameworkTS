@@ -36,6 +36,18 @@ export class Drawable implements EntityProperty<Drawable>
 		return new Drawable(visual, isVisible);
 	}
 
+	hide(): void
+	{
+		this.isVisible = false;
+	}
+
+	show(): void
+	{
+		this.isVisible = true;
+	}
+
+	// EntityProperty.
+
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this.isVisible)

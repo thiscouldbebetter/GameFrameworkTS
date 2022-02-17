@@ -32,18 +32,30 @@ export class VisualPolygon implements Visual<VisualPolygon>
 
 	static default(): VisualPolygon
 	{
-		var dimension = 10;
+		return VisualPolygon.fromDimensionAndColorBorder
+		(
+			10, Color.byName("Cyan")
+		)
+	}
 
+	static fromColorBorder
+	(
+		colorBorder: Color
+	): VisualPolygon
+	{
+		return VisualPolygon.fromDimensionAndColorBorder(10, colorBorder);
+	}
+
+	static fromDimensionAndColorBorder
+	(
+		dimension: number, colorBorder: Color
+	): VisualPolygon
+	{
 		return VisualPolygon.fromPathAndColors
 		(
-			new Path
-			([
-				Coords.fromXY(-1, 0).multiplyScalar(dimension),
-				Coords.fromXY(1, 0).multiplyScalar(dimension),
-				Coords.fromXY(0, 1).multiplyScalar(dimension),
-			]),
+			Path.fromDimension(dimension),
 			null, // colorFill
-			Color.byName("Cyan")
+			colorBorder
 		)
 	}
 
