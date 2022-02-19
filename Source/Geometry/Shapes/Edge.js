@@ -63,9 +63,11 @@ var ThisCouldBeBetter;
             pointRandom(randomizer) {
                 return null; // todo
             }
-            surfacePointNearPos(posToCheck, surfacePointOut) { throw new Error("Not implemented!"); }
+            surfacePointNearPos(posToCheck, surfacePointOut) {
+                throw new Error("Not implemented!");
+            }
             toBox(boxOut) {
-                return boxOut.ofPoints(this.vertices);
+                return boxOut.containPoints(this.vertices);
             }
             // Transformable.
             transform(transformToApply) { throw new Error("Not implemented!"); }

@@ -4,7 +4,7 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class VisualImageScaledPartial {
-            constructor(visualImageToExtractFrom, regionToDrawAsBox, sizeToDraw) {
+            constructor(regionToDrawAsBox, sizeToDraw, visualImageToExtractFrom) {
                 this.visualImageToExtractFrom = visualImageToExtractFrom;
                 this.regionToDrawAsBox = regionToDrawAsBox;
                 this.sizeToDraw = sizeToDraw;
@@ -21,7 +21,7 @@ var ThisCouldBeBetter;
                         sourcePosInTiles.x = x;
                         var sourcePosInPixels = sourcePosInTiles.clone().multiply(tileSizeInPixels);
                         var sourceBox = GameFramework.Box.fromMinAndSize(sourcePosInPixels, tileSizeInPixels);
-                        var visual = new VisualImageScaledPartial(visualImage, sourceBox, sizeToScaleTo);
+                        var visual = new VisualImageScaledPartial(sourceBox, sizeToScaleTo, visualImage);
                         returnVisuals.push(visual);
                     }
                 }

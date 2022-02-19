@@ -11,7 +11,7 @@ var ThisCouldBeBetter;
                 if (this._box == null) {
                     this._box = new GameFramework.Box(GameFramework.Coords.create(), GameFramework.Coords.create());
                 }
-                this._box.ofPoints(this.vertices);
+                this._box.containPoints(this.vertices);
                 return this._box;
             }
             containsPoint(pointToCheck) {
@@ -78,7 +78,7 @@ var ThisCouldBeBetter;
             }
             surfacePointNearPos(posToCheck, surfacePointOut) { throw new Error("Not implemented!"); }
             toBox(boxOut) {
-                return boxOut.ofPoints(this.vertices);
+                return boxOut.containPoints(this.vertices);
             }
             // Transformable.
             transform(transformToApply) {

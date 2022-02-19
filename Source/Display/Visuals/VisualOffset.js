@@ -4,14 +4,17 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class VisualOffset {
-            constructor(child, offset) {
-                this.child = child;
+            constructor(offset, child) {
                 this.offset = offset;
+                this.child = child;
                 // Helper variables.
                 this._posSaved = GameFramework.Coords.create();
             }
+            static fromChildAndOffset(child, offset) {
+                return new VisualOffset(offset, child);
+            }
             static fromOffsetAndChild(offset, child) {
-                return new VisualOffset(child, offset);
+                return new VisualOffset(offset, child);
             }
             draw(uwpe, display) {
                 var entity = uwpe.entity;

@@ -338,7 +338,7 @@ var ThisCouldBeBetter;
                         ([
                             new VisualImageScaled
                             (
-                                new VisualImageFromLibrary("Title"), size
+                                new VisualImageFromLibrary("Titles_Title"), size
                             )
                         ])
                     )

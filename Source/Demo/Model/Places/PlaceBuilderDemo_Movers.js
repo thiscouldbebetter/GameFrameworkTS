@@ -14,10 +14,10 @@ class PlaceBuilderDemo_Movers {
         var visualEyes = visualBuilder.eyesBlinking(visualEyeRadius);
         var visualEyesDirectional = new VisualDirectional(visualEyes, // visualForNoDirection
         [
-            new VisualOffset(visualEyes, Coords.fromXY(1, 0).multiplyScalar(visualEyeRadius)),
-            new VisualOffset(visualEyes, Coords.fromXY(0, 1).multiplyScalar(visualEyeRadius)),
-            new VisualOffset(visualEyes, Coords.fromXY(-1, 0).multiplyScalar(visualEyeRadius)),
-            new VisualOffset(visualEyes, Coords.fromXY(0, -1).multiplyScalar(visualEyeRadius))
+            new VisualOffset(Coords.fromXY(1, 0).multiplyScalar(visualEyeRadius), visualEyes),
+            new VisualOffset(Coords.fromXY(0, 1).multiplyScalar(visualEyeRadius), visualEyes),
+            new VisualOffset(Coords.fromXY(-1, 0).multiplyScalar(visualEyeRadius), visualEyes),
+            new VisualOffset(Coords.fromXY(0, -1).multiplyScalar(visualEyeRadius), visualEyes)
         ], null);
         var carnivoreVisualBody = new VisualGroup([
             VisualPolygon.fromPathAndColorFill(new Path([
@@ -30,7 +30,7 @@ class PlaceBuilderDemo_Movers {
                 new Transform_Translate(Coords.fromXY(0, -0.5)),
                 new Transform_Scale(Coords.ones().multiplyScalar(this.entityDimension))
             ])), carnivoreColor),
-            new VisualOffset(visualEyesDirectional, Coords.create()),
+            new VisualOffset(Coords.zeroes(), visualEyesDirectional),
         ]);
         var carnivoreVisualNormal = new VisualAnchor(carnivoreVisualBody, null, // posToAnchorAt
         Orientation.Instances().ForwardXDownZ);
@@ -273,20 +273,20 @@ class PlaceBuilderDemo_Movers {
             Coords.fromXY(0, -1)
         ];
         var visualEyesWithBrowsDirectional = new VisualDirectional(visualEyesBlinking, // visualForNoDirection
-        offsets.map(offset => new VisualOffset(visualEyesBlinkingWithBrows, offset.multiplyScalar(visualEyeRadius))), null);
+        offsets.map(offset => new VisualOffset(offset.multiplyScalar(visualEyeRadius), visualEyesBlinkingWithBrows)), null);
         var visualEffect = new VisualAnchor(new VisualDynamic((uwpe) => uwpe.entity.effectable().effectsAsVisual()), null, Orientation.Instances().ForwardXDownZ);
-        var visualStatusInfo = new VisualOffset(new VisualStack(Coords.fromXY(0, 0 - this.entityDimension), // childSpacing
+        var visualStatusInfo = new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 2), // offset
+        new VisualStack(Coords.fromXY(0, 0 - this.entityDimension), // childSpacing
         [
             visualEffect
-        ]), Coords.fromXY(0, 0 - this.entityDimension * 2) // offset
-        );
+        ]));
         var visualBody = new VisualAnchor(VisualPolygon.fromPathAndColors(new Path(enemyVertices), enemyColor, Color.byName("Red") // colorBorder
         ), null, // posToAnchorAt
         Orientation.Instances().ForwardXDownZ.clone());
         var visualArms = new VisualDirectional(new VisualNone(), [
             new VisualGroup([
-                new VisualOffset(enemyVisualArm, Coords.fromXY(-enemyDimension / 4, 0)),
-                new VisualOffset(enemyVisualArm, Coords.fromXY(enemyDimension / 4, 0))
+                new VisualOffset(Coords.fromXY(-enemyDimension / 4, 0), enemyVisualArm),
+                new VisualOffset(Coords.fromXY(enemyDimension / 4, 0), enemyVisualArm)
             ])
         ], null);
         var enemyVisual = new VisualGroup([
@@ -326,10 +326,10 @@ class PlaceBuilderDemo_Movers {
         var integrityMax = 20;
         var entityProjectile = new Entity("Projectile", [
             Drawable.fromVisual(VisualCircle.fromRadiusAndColorFill(2, Color.byName("Red"))),
-            new Ephemeral(32, null),
-            new Killable(1, null, null),
+            Ephemeral.fromTicksToLive(32),
+            Killable.fromIntegrityMax(1),
             Locatable.create(),
-            new Movable(3, 3, null)
+            Movable.fromSpeedMax(3)
         ]);
         var weapon = new Weapon(100, // ticksToRecharge
         entityProjectile);
@@ -372,14 +372,14 @@ class PlaceBuilderDemo_Movers {
             friendlyColor, null, // colorBorder
             false // shouldUseEntityOrientation
             ),
-            new VisualOffset(visualEyesBlinking, new Coords(0, -friendlyDimension / 3, 0)),
-            new VisualOffset(new VisualArc(friendlyDimension / 2, // radiusOuter
+            new VisualOffset(new Coords(0, -friendlyDimension / 3, 0), visualEyesBlinking),
+            new VisualOffset(new Coords(0, friendlyDimension / 3, 0), // offset
+            new VisualArc(friendlyDimension / 2, // radiusOuter
             0, // radiusInner
             Coords.fromXY(1, 0), // directionMin
             .5, // angleSpannedInTurns
             Color.byName("White"), null // todo
-            ), new Coords(0, friendlyDimension / 3, 0) // offset
-            )
+            ))
         ]);
         var friendlyVisualGroup = new VisualGroup([
             new VisualAnimation("Friendly", [100, 100], // ticksToHoldFrames
@@ -463,10 +463,10 @@ class PlaceBuilderDemo_Movers {
         var visualEyes = visualBuilder.eyesBlinking(visualEyeRadius);
         var visualEyesDirectional = new VisualDirectional(visualEyes, // visualForNoDirection
         [
-            new VisualOffset(visualEyes, Coords.fromXY(1, 0).multiplyScalar(visualEyeRadius)),
-            new VisualOffset(visualEyes, Coords.fromXY(0, 1).multiplyScalar(visualEyeRadius)),
-            new VisualOffset(visualEyes, Coords.fromXY(-1, 0).multiplyScalar(visualEyeRadius)),
-            new VisualOffset(visualEyes, Coords.fromXY(0, -1).multiplyScalar(visualEyeRadius))
+            new VisualOffset(Coords.fromXY(1, 0).multiplyScalar(visualEyeRadius), visualEyes),
+            new VisualOffset(Coords.fromXY(0, 1).multiplyScalar(visualEyeRadius), visualEyes),
+            new VisualOffset(Coords.fromXY(-1, 0).multiplyScalar(visualEyeRadius), visualEyes),
+            new VisualOffset(Coords.fromXY(0, -1).multiplyScalar(visualEyeRadius), visualEyes)
         ], null);
         var grazerVisualBodyJuvenile = new VisualEllipse(grazerDimension * .75, // semimajorAxis
         grazerDimension * .6, 0, // rotationInTurns
@@ -636,9 +636,9 @@ class PlaceBuilderDemo_Movers {
         if (this.parent.visualsHaveText) {
             playerVisualsForStatusInfo.splice(0, 0, VisualText.fromTextHeightAndColor(entityDefnNamePlayer, this.entityDimension, playerColor));
         }
-        var playerVisualStatusInfo = new VisualOffset(new VisualStack(Coords.fromXY(0, 0 - this.entityDimension), // childSpacing
-        playerVisualsForStatusInfo), Coords.fromXY(0, 0 - this.entityDimension * 2) // offset
-        );
+        var playerVisualStatusInfo = new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 2), // offset
+        new VisualStack(Coords.fromXY(0, 0 - this.entityDimension), // childSpacing
+        playerVisualsForStatusInfo));
         var playerVisual = new VisualGroup([
             playerVisualBodyJumpable, playerVisualStatusInfo
         ]);
@@ -759,19 +759,32 @@ class PlaceBuilderDemo_Movers {
          {
             // todo
         });
-        var movable = new Movable(0.5, // accelerationPerTick
-        1, // speedMax
-        (uwpe) => // accelerate
-         {
-            var entityMovable = uwpe.entity;
-            var equipmentUser = entityMovable.equipmentUser();
-            var accessoryEquipped = equipmentUser.itemEntityInSocketWithName("Accessory");
-            var areSpeedBootsEquipped = (accessoryEquipped != null
-                && accessoryEquipped.item().defnName == "Speed Boots");
-            entityMovable.movable().accelerateForward(uwpe);
-            var accelerationMultiplier = (areSpeedBootsEquipped ? 2 : 1);
-            entityMovable.locatable().loc.accel.multiplyScalar(accelerationMultiplier);
-        });
+        var movable = Movable.fromAccelerationAndSpeedMax(0.5, // accelerationPerTick
+        1 // speedMax
+        );
+        /*
+            // todo - Restore functionality of speed boots.
+
+            (uwpe: UniverseWorldPlaceEntities) => // accelerate
+            {
+                var entityMovable = uwpe.entity;
+                var equipmentUser = entityMovable.equipmentUser();
+                var accessoryEquipped =
+                    equipmentUser.itemEntityInSocketWithName("Accessory");
+                var areSpeedBootsEquipped =
+                (
+                    accessoryEquipped != null
+                    && accessoryEquipped.item().defnName == "Speed Boots"
+                );
+                entityMovable.movable().accelerateForward(uwpe);
+                var accelerationMultiplier = (areSpeedBootsEquipped ? 2 : 1);
+                entityMovable.locatable().loc.accel.multiplyScalar
+                (
+                    accelerationMultiplier
+                );
+            }
+        );
+        */
         var itemCrafter = new ItemCrafter([
             new CraftingRecipe("Iron", 0, // ticksToComplete
             [
@@ -800,7 +813,7 @@ class PlaceBuilderDemo_Movers {
             if (targetEntity == null) {
                 drawable.visual = new VisualGroup([
                     drawable.visual,
-                    new VisualOffset(VisualText.fromTextHeightAndColor("Waiting", this.entityDimension, Color.byName("Gray")), Coords.fromXY(0, 0 - this.entityDimension * 3))
+                    new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 3), VisualText.fromTextHeightAndColor("Waiting", this.entityDimension, Color.byName("Gray")))
                 ]);
                 ticksToWait = 60; // 3 seconds.
                 targetEntity = new Ephemeral(ticksToWait, null).toEntity();

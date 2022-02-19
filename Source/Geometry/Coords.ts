@@ -336,6 +336,11 @@ export class Coords
 		return this.isInRangeMinInclusiveMaxExclusive(Coords.Instances().Zeroes, max);
 	}
 
+	isInRangeMaxExclusiveXY(max: Coords)
+	{
+		return this.isInRangeMinInclusiveMaxExclusiveXY(Coords.Instances().Zeroes, max);
+	}
+
 	isInRangeMinMax(min: Coords, max: Coords): boolean
 	{
 		var returnValue =
@@ -351,6 +356,19 @@ export class Coords
 		return returnValue;
 	}
 
+	isInRangeMinMaxXY(min: Coords, max: Coords): boolean
+	{
+		var returnValue =
+		(
+			this.x >= min.x
+			&& this.x <= max.x
+			&& this.y >= min.y
+			&& this.y <= max.y
+		);
+
+		return returnValue;
+	}
+
 	isInRangeMinInclusiveMaxExclusive(min: Coords, max: Coords): boolean
 	{
 		var returnValue =
@@ -361,6 +379,19 @@ export class Coords
 			&& this.y < max.y
 			&& this.z >= min.z
 			&& this.z < max.z
+		);
+
+		return returnValue;
+	}
+
+	isInRangeMinInclusiveMaxExclusiveXY(min: Coords, max: Coords): boolean
+	{
+		var returnValue =
+		(
+			this.x >= min.x
+			&& this.x < max.x
+			&& this.y >= min.y
+			&& this.y < max.y
 		);
 
 		return returnValue;
@@ -532,6 +563,29 @@ export class Coords
 		else if (this.z > max.z)
 		{
 			this.z = max.z;
+		}
+
+		return this;
+	}
+
+	trimToRangeMaxXY(max: Coords): Coords
+	{
+		if (this.x < 0)
+		{
+			this.x = 0;
+		}
+		else if (this.x > max.x)
+		{
+			this.x = max.x;
+		}
+
+		if (this.y < 0)
+		{
+			this.y = 0;
+		}
+		else if (this.y > max.y)
+		{
+			this.y = max.y;
 		}
 
 		return this;

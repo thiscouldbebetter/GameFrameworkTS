@@ -180,8 +180,8 @@ class PlaceBuilderDemo // Main.
 			var node = nodes[i];
 			var visualWallNode = new VisualOffset
 			(
-				new VisualCircle(tunnelWidth, null, color, wallThickness),
-				node.pos.clone()
+				node.pos.clone(),
+				new VisualCircle(tunnelWidth, null, color, wallThickness)
 			);
 			tunnelsVisual.children.push(visualWallNode);
 		}
@@ -496,14 +496,14 @@ class PlaceBuilderDemo // Main.
 						// s
 						new VisualOffset
 						(
-							new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
-							new Coords(mapCellSize.x / 2, mapCellSize.y - borderSizeCorner.y, 0)
+							Coords.fromXY(mapCellSize.x / 2, mapCellSize.y - borderSizeCorner.y),
+							new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse)
 						),
 						// e
 						new VisualOffset
 						(
-							new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
-							new Coords(mapCellSize.x - borderSizeCorner.x, mapCellSize.y / 2, 0)
+							Coords.fromXY(mapCellSize.x - borderSizeCorner.x, mapCellSize.y / 2),
+							new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse)
 						)
 					])
 				],
@@ -514,14 +514,14 @@ class PlaceBuilderDemo // Main.
 						// s
 						new VisualOffset
 						(
-							new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
-							new Coords(0, mapCellSize.y - borderSizeCorner.y, 0)
+							Coords.fromXY(0, mapCellSize.y - borderSizeCorner.y),
+							new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse)
 						),
 						// w
 						new VisualOffset
 						(
-							new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
-							new Coords(0, mapCellSize.y / 2, 0)
+							Coords.fromXY(0, mapCellSize.y / 2),
+							new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse)
 						)
 					])
 				],
@@ -532,14 +532,14 @@ class PlaceBuilderDemo // Main.
 						// n
 						new VisualOffset
 						(
-							new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
-							Coords.create()
+							Coords.zeroes(),
+							new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse)
 						),
 						// w
 						new VisualOffset
 						(
-							new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
-							Coords.create()
+							Coords.zeroes(),
+							new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse)
 						)
 					])
 				],
@@ -550,14 +550,14 @@ class PlaceBuilderDemo // Main.
 						// n
 						new VisualOffset
 						(
-							new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
-							Coords.fromXY(mapCellSize.x / 2, 0)
+							Coords.fromXY(mapCellSize.x / 2, 0),
+							new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse)
 						),
 						// e
 						new VisualOffset
 						(
-							new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
-							Coords.fromXY(mapCellSize.x - borderSizeCorner.x, 0)
+							Coords.fromXY(mapCellSize.x - borderSizeCorner.x, 0),
+							new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse)
 						),
 					])
 				],
@@ -565,32 +565,32 @@ class PlaceBuilderDemo // Main.
 					"OutsideSE",
 					new VisualOffset
 					(
-						new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse),
-						Coords.create()
+						Coords.zeroes(),
+						new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse)
 					)
 				],
 				[
 					"OutsideSW",
 					new VisualOffset
 					(
-						new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse),
-						Coords.fromXY(mapCellSize.x - borderSizeCorner.x, 0)
+						Coords.fromXY(mapCellSize.x - borderSizeCorner.x, 0),
+						new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse)
 					)
 				],
 				[
 					"OutsideNW",
 					new VisualOffset
 					(
-						new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse),
-						Coords.fromXY(mapCellSize.x - borderSizeCorner.x, mapCellSize.y - borderSizeCorner.y)
+						Coords.fromXY(mapCellSize.x - borderSizeCorner.x, mapCellSize.y - borderSizeCorner.y),
+						new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse)
 					)
 				],
 				[
 					"OutsideNE",
 					new VisualOffset
 					(
-						new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse),
-						Coords.fromXY(0, mapCellSize.y - borderSizeCorner.y)
+						Coords.fromXY(0, mapCellSize.y - borderSizeCorner.y),
+						new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse)
 					)
 				],
 
@@ -598,64 +598,64 @@ class PlaceBuilderDemo // Main.
 					"ETop",
 					new VisualOffset
 					(
-						new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
-						Coords.fromXY(mapCellSize.x - borderSizeCorner.x, 0)
+						Coords.fromXY(mapCellSize.x - borderSizeCorner.x, 0),
+						new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse)
 					)
 				],
 				[
 					"EBottom",
 					new VisualOffset
 					(
-						new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
-						Coords.fromXY(mapCellSize.x - borderSizeCorner.x, mapCellSize.y / 2)
+						Coords.fromXY(mapCellSize.x - borderSizeCorner.x, mapCellSize.y / 2),
+						new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse)
 					)
 				],
 				[
 					"SRight",
 					new VisualOffset
 					(
-						new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
-						Coords.fromXY(mapCellSize.x / 2, mapCellSize.y - borderSizeCorner.y)
+						Coords.fromXY(mapCellSize.x / 2, mapCellSize.y - borderSizeCorner.y),
+						new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse)
 					)
 				],
 				[
 					"SLeft",
 					new VisualOffset
 					(
-						new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
-						new Coords(0, mapCellSize.y - borderSizeCorner.y, 0)
+						new Coords(0, mapCellSize.y - borderSizeCorner.y, 0),
+						new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse)
 					)
 				],
 				[
 					"WBottom",
 					new VisualOffset
 					(
-						new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
-						Coords.fromXY(0, mapCellSize.y / 2)
+						Coords.fromXY(0, mapCellSize.y / 2),
+						new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse)
 					)
 				],
 				[
 					"WTop",
 					new VisualOffset
 					(
-						new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse),
-						Coords.create()
+						Coords.zeroes(),
+						new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse)
 					)
 				],
 				[
 					"NLeft",
 					new VisualOffset
 					(
-						new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
-						Coords.create()
+						Coords.zeroes(),
+						new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse)
 					)
 				],
 				[
 					"NRight",
 					new VisualOffset
 					(
-						new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse),
-						Coords.fromXY(mapCellSize.x / 2, 0)
+						Coords.fromXY(mapCellSize.x / 2, 0),
+						new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse)
 					)
 				]
 			]);
@@ -713,14 +713,14 @@ class PlaceBuilderDemo // Main.
 			);
 			var terrainVisualCenter: VisualBase = new VisualImageScaledPartial
 			(
-				terrainVisualImageCombined,
 				tileCenterBounds,
-				mapCellSize // sizeToDraw
+				mapCellSize, // sizeToDraw
+				terrainVisualImageCombined
 			);
 			// hack - Correct for centering.
 			terrainVisualCenter = new VisualOffset
 			(
-				terrainVisualCenter, mapCellSizeHalf
+				mapCellSizeHalf, terrainVisualCenter
 			);
 
 			var tileOffsetInTilesHalf = Coords.create();
@@ -739,15 +739,15 @@ class PlaceBuilderDemo // Main.
 				);
 				var terrainVisual: VisualBase = new VisualImageScaledPartial
 				(
-					terrainVisualImageCombined,
 					terrainVisualBounds,
-					mapCellSizeHalf // sizeToDraw
+					mapCellSizeHalf, // sizeToDraw
+					terrainVisualImageCombined
 				);
 				// hack - Correct for centering.
 				terrainVisual = new VisualOffset
 				(
-					terrainVisual,
-					visualOffsetInMapCellsHalf.clone().multiply(mapCellSizeHalf)
+					visualOffsetInMapCellsHalf.clone().multiply(mapCellSizeHalf),
+					terrainVisual
 				);
 
 				return terrainVisual;
@@ -1206,7 +1206,7 @@ class PlaceBuilderDemo // Main.
 			cameraViewSize,
 			cameraHeightAbovePlayfield, // focalLength
 			cameraLoc,
-			Locatable.entitiesSortByZThenY
+			Camera.entitiesSortByZThenY
 		);
 		var cameraBoundable = new Boundable(camera.viewCollider);
 		var cameraCollidable = Collidable.fromCollider(camera.viewCollider);
@@ -1393,11 +1393,11 @@ class PlaceBuilderDemo // Main.
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension * 2),
 					VisualText.fromTextHeightAndColor
 					(
 						"Exit", fontHeight, goalColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension * 2)
+					)
 				)
 			);
 		}
@@ -1795,12 +1795,12 @@ class PlaceBuilderDemo // Main.
 			),
 			new VisualOffset
 			(
+				Coords.fromXY(0, -.75).multiplyScalar(this.entityDimension),
 				VisualRectangle.fromSizeAndColorFill
 				(
 					Coords.fromXY(1.1, .2).multiplyScalar(this.entityDimension),
 					Color.byName("Gray")
 				),
-				Coords.fromXY(0, -.75).multiplyScalar(this.entityDimension)
 			),
 		]);
 
@@ -1812,11 +1812,11 @@ class PlaceBuilderDemo // Main.
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension * 2),
 					VisualText.fromTextHeightAndColor
 					(
 						"Store", fontHeight, storeColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension * 2)
+					)
 				)
 			);
 		}
@@ -1893,7 +1893,13 @@ class PlaceBuilderDemo // Main.
 			Coords.create(), this.entityDimension / 2
 		);
 		var collidable = Collidable.fromCollider(itemArmorCollider);
-		var box = new Box(Coords.create(), Coords.create() ).ofPoints(path.points);
+		var box = new Box
+		(
+			Coords.create(), Coords.create()
+		).containPoints
+		(
+			path.points
+		);
 		box.center = itemArmorCollider.center;
 		var boundable = new Boundable(box);
 
@@ -2330,9 +2336,9 @@ class PlaceBuilderDemo // Main.
 
 				var visualForFrame = new VisualImageScaledPartial
 				(
-					visualTileset,
 					regionToDrawAsBox,
-					frameSizeScaled
+					frameSizeScaled,
+					visualTileset
 				);
 
 				frames.push(visualForFrame);
@@ -2355,11 +2361,11 @@ class PlaceBuilderDemo // Main.
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - entityDimension * 2.5),
 					VisualText.fromTextHeightAndColor
 					(
 						defnName, entityDimension, Color.byName("Blue")
-					),
-					Coords.fromXY(0, 0 - entityDimension * 2.5)
+					)
 				)
 			);
 		}
@@ -2837,13 +2843,13 @@ class PlaceBuilderDemo // Main.
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension),
 					VisualText.fromTextHeightAndColor
 					(
 						itemDefnPotionName,
 						this.entityDimension,
 						itemPotionColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension)
+					)
 				)
 			);
 		}
@@ -3284,13 +3290,13 @@ class PlaceBuilderDemo // Main.
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension),
 					VisualText.fromTextHeightAndColor
 					(
 						text,
 						this.entityDimension,
 						color
-					),
-					Coords.fromXY(0, 0 - this.entityDimension)
+					)
 				)
 			);
 		}

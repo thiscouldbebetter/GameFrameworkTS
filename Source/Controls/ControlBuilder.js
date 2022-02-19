@@ -437,7 +437,7 @@ var ThisCouldBeBetter;
                     universe.venueTransitionTo(venueNext);
                 };
                 var visual = new GameFramework.VisualGroup([
-                    new GameFramework.VisualImageScaled(new GameFramework.VisualImageFromLibrary("Opening"), size)
+                    new GameFramework.VisualImageScaled(size, new GameFramework.VisualImageFromLibrary("Titles_Opening"))
                     // Note: Sound won't work on the opening screen,
                     // because the user has to interact somehow
                     // before the browser will play sound.
@@ -476,7 +476,7 @@ var ThisCouldBeBetter;
                     universe.venueTransitionTo(venueTitle);
                 };
                 var visual = new GameFramework.VisualGroup([
-                    new GameFramework.VisualImageScaled(new GameFramework.VisualImageFromLibrary("Producer"), size),
+                    new GameFramework.VisualImageScaled(size, new GameFramework.VisualImageFromLibrary("Titles_Producer")),
                     new GameFramework.VisualSound("Music_Producer", false) // repeat
                 ]);
                 var controlActionNames = GameFramework.ControlActionNames.Instances();
@@ -634,8 +634,8 @@ var ThisCouldBeBetter;
                     // children
                     [
                         new GameFramework.ControlVisual("imageSlide", this._zeroes, this.sizeBase.clone(), // size
-                        GameFramework.DataBinding.fromContext(new GameFramework.VisualImageScaled(new GameFramework.VisualImageFromLibrary(imageName), this.sizeBase.clone().multiply(scaleMultiplier) // sizeToDrawScaled
-                        )), null, null // colorBackground, colorBorder
+                        GameFramework.DataBinding.fromContext(new GameFramework.VisualImageScaled(this.sizeBase.clone().multiply(scaleMultiplier), // sizeToDrawScaled
+                        new GameFramework.VisualImageFromLibrary(imageName))), null, null // colorBackground, colorBorder
                         ),
                         new GameFramework.ControlLabel("labelSlideText", GameFramework.Coords.fromXY(0, this.fontHeightInPixelsBase), // pos
                         GameFramework.Coords.fromXY(this.sizeBase.x, this.fontHeightInPixelsBase), // size
@@ -672,7 +672,7 @@ var ThisCouldBeBetter;
                     universe.venueTransitionTo(venueTask);
                 };
                 var visual = new GameFramework.VisualGroup([
-                    new GameFramework.VisualImageScaled(new GameFramework.VisualImageFromLibrary("Title"), size),
+                    new GameFramework.VisualImageScaled(size, new GameFramework.VisualImageFromLibrary("Titles_Title")),
                     new GameFramework.VisualSound("Music_Title", true) // isMusic
                 ]);
                 var returnValue = new GameFramework.ControlContainer("containerTitle", this._zeroes, // pos

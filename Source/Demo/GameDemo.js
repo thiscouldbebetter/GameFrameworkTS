@@ -34,14 +34,15 @@ class GameDemo {
         var contentDirectoryPath = this.contentDirectoryPath;
         var fontDirectoryPath = contentDirectoryPath + "Fonts/";
         var imageDirectoryPath = contentDirectoryPath + "Images/";
+        var imageTitlesDirectoryPath = imageDirectoryPath + "Titles/";
         var soundEffectDirectoryPath = contentDirectoryPath + "Audio/Effects/";
         var soundMusicDirectoryPath = contentDirectoryPath + "Audio/Music/";
         var textStringDirectoryPath = contentDirectoryPath + "Text/";
         var videoDirectoryPath = contentDirectoryPath + "Video/";
         var mediaFilePaths = [
-            imageDirectoryPath + "Opening.png",
-            imageDirectoryPath + "Producer.png",
-            imageDirectoryPath + "Title.png",
+            imageTitlesDirectoryPath + "Opening.png",
+            imageTitlesDirectoryPath + "Producer.png",
+            imageTitlesDirectoryPath + "Title.png",
             imageDirectoryPath + "Anvil.svg",
             imageDirectoryPath + "Car.png",
             imageDirectoryPath + "Friendly.png",

@@ -96,6 +96,69 @@ export class Box implements ShapeBase
 
 	// Instance methods.
 
+	containOthers(boxes: Box[]): Box
+	{
+		var boxExtremes = new Array<Coords>();
+
+		boxes.forEach
+		(
+			box =>
+			{
+				boxExtremes.push(box.min());
+				boxExtremes.push(box.max());
+			}
+		)
+
+		var boxContainingBoxes =
+			this.containPoints(boxExtremes);
+
+		return boxContainingBoxes;
+	}
+
+	containPoints(points: Coords[]): Box
+	{
+		var point0 = points[0];
+		var minSoFar = this._min.overwriteWith(point0);
+		var maxSoFar = this._max.overwriteWith(point0);
+
+		for (var i = 1; i < points.length; i++)
+		{
+			var point = points[i];
+
+			if (point.x < minSoFar.x)
+			{
+				minSoFar.x = point.x;
+			}
+			else if (point.x > maxSoFar.x)
+			{
+				maxSoFar.x = point.x;
+			}
+
+			if (point.y < minSoFar.y)
+			{
+				minSoFar.y = point.y;
+			}
+			else if (point.y > maxSoFar.y)
+			{
+				maxSoFar.y = point.y;
+			}
+
+			if (point.z < minSoFar.z)
+			{
+				minSoFar.z = point.z;
+			}
+			else if (point.z > maxSoFar.z)
+			{
+				maxSoFar.z = point.z;
+			}
+		}
+
+		this.center.overwriteWith(minSoFar).add(maxSoFar).half();
+		this.size.overwriteWith(maxSoFar).subtract(minSoFar);
+
+		return this;
+	}
+
 	containsOther(other: Box): boolean
 	{
 		return ( this.containsPoint(other.min()) && this.containsPoint(other.max()) );
@@ -104,6 +167,11 @@ export class Box implements ShapeBase
 	containsPoint(pointToCheck: Coords): boolean
 	{
 		return pointToCheck.isInRangeMinMax(this.min(), this.max());
+	}
+
+	containsPointXY(pointToCheck: Coords): boolean
+	{
+		return pointToCheck.isInRangeMinMaxXY(this.min(), this.max());
 	}
 
 	fromMinAndMax(min: Coords, max: Coords): Box
@@ -175,50 +243,6 @@ export class Box implements ShapeBase
 	min(): Coords
 	{
 		return this._min.overwriteWith(this.center).subtract(this.sizeHalf());
-	}
-
-	ofPoints(points: Coords[]): Box
-	{
-		var point0 = points[0];
-		var minSoFar = this._min.overwriteWith(point0);
-		var maxSoFar = this._max.overwriteWith(point0);
-
-		for (var i = 1; i < points.length; i++)
-		{
-			var point = points[i];
-
-			if (point.x < minSoFar.x)
-			{
-				minSoFar.x = point.x;
-			}
-			else if (point.x > maxSoFar.x)
-			{
-				maxSoFar.x = point.x;
-			}
-
-			if (point.y < minSoFar.y)
-			{
-				minSoFar.y = point.y;
-			}
-			else if (point.y > maxSoFar.y)
-			{
-				maxSoFar.y = point.y;
-			}
-
-			if (point.z < minSoFar.z)
-			{
-				minSoFar.z = point.z;
-			}
-			else if (point.z > maxSoFar.z)
-			{
-				maxSoFar.z = point.z;
-			}
-		}
-
-		this.center.overwriteWith(minSoFar).add(maxSoFar).half();
-		this.size.overwriteWith(maxSoFar).subtract(minSoFar);
-
-		return this;
 	}
 
 	overlapsWith(other: Box): boolean

@@ -265,7 +265,7 @@ var ThisCouldBeBetter;
                 };
                 var visualPortrait = conversationDefn.visualPortrait;
                 if (visualPortrait.constructor.name.startsWith("VisualImage")) {
-                    visualPortrait = new GameFramework.VisualImageScaled(visualPortrait, portraitSize);
+                    visualPortrait = new GameFramework.VisualImageScaled(portraitSize, visualPortrait);
                 }
                 var childControls = [
                     GameFramework.ControlButton.from8("buttonNextUnderPortrait", portraitPos, portraitSize, "Next", fontHeight, true, // hasBorder

@@ -541,7 +541,7 @@ export class ConversationRun
 		{
 			visualPortrait = new VisualImageScaled
 			(
-				(visualPortrait as VisualImage), portraitSize
+				portraitSize, (visualPortrait as VisualImage)
 			);
 		}
 

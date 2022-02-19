@@ -112,11 +112,17 @@ export class Edge implements ShapeBase
 		return null; // todo
 	}
 
-	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords { throw new Error("Not implemented!"); }
+	surfacePointNearPos
+	(
+		posToCheck: Coords, surfacePointOut: Coords
+	): Coords
+	{
+		throw new Error("Not implemented!");
+	}
 
 	toBox(boxOut: Box): Box
 	{
-		return boxOut.ofPoints(this.vertices);
+		return boxOut.containPoints(this.vertices);
 	}
 
 	// Transformable.

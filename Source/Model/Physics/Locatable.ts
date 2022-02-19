@@ -21,31 +21,6 @@ export class Locatable implements EntityProperty<Locatable>
 		return new Locatable(Disposition.fromPos(pos));
 	}
 
-	static entitiesSortByZThenY(entitiesToSort: Entity[]): Entity[]
-	{
-		entitiesToSort.sort
-		(
-			(a, b) =>
-			{
-				var aPos = a.locatable().loc.pos;
-				var bPos = b.locatable().loc.pos;
-				var returnValue;
-				if (aPos.z != bPos.z)
-				{
-					returnValue = bPos.z - aPos.z;
-				}
-				else
-				{
-					returnValue = aPos.y - bPos.y;
-				}
-
-				return returnValue;
-			}
-		);
-
-		return entitiesToSort;
-	}
-
 	approachOtherWithAccelerationAndSpeedMax
 	(
 		locatableToApproach: Locatable,

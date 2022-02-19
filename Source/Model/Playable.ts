@@ -215,8 +215,8 @@ export class Playable implements EntityProperty<Playable>
 			playerVisualHealthBar,
 			new VisualOffset
 			(
-				playerVisualHealthIcon,
-				Coords.fromXY(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0)
+				Coords.fromXY(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0),
+				playerVisualHealthIcon
 			)
 		]);
 
@@ -241,8 +241,8 @@ export class Playable implements EntityProperty<Playable>
 			playerVisualSatietyBar,
 			new VisualOffset
 			(
-				playerVisualSatietyIcon,
-				Coords.fromXY(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0)
+				Coords.fromXY(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0),
+				playerVisualSatietyIcon
 			)
 		]);
 
@@ -271,8 +271,8 @@ export class Playable implements EntityProperty<Playable>
 
 		var playerVisualStaminaIcon = new VisualImageScaled
 		(
-			new VisualImageFromLibrary("Zap"),
-			Coords.fromXY(1, 1).multiplyScalar(playerVisualBarSize.y * 1.5)
+			Coords.fromXY(1, 1).multiplyScalar(playerVisualBarSize.y * 1.5),
+			new VisualImageFromLibrary("Zap")
 		);
 
 		var playerVisualStaminaBarPlusIcon = new VisualGroup
@@ -280,8 +280,8 @@ export class Playable implements EntityProperty<Playable>
 			playerVisualStaminaBar,
 			new VisualOffset
 			(
-				playerVisualStaminaIcon,
-				Coords.fromXY(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0)
+				Coords.fromXY(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0),
+				playerVisualStaminaIcon
 			)
 		]);
 
@@ -338,8 +338,8 @@ export class Playable implements EntityProperty<Playable>
 			playerVisualTimeBar,
 			new VisualOffset
 			(
-				playerVisualTimeIcon,
-				Coords.fromXY(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0)
+				Coords.fromXY(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0),
+				playerVisualTimeIcon
 			)
 		]);
 
@@ -350,18 +350,18 @@ export class Playable implements EntityProperty<Playable>
 			playerVisualHealthBarPlusIcon,
 			new VisualOffset
 			(
-				playerVisualSatietyBarPlusIcon,
-				childSpacing
+				childSpacing,
+				playerVisualSatietyBarPlusIcon
 			),
 			new VisualOffset
 			(
-				playerVisualStaminaBarPlusIcon,
-				childSpacing.clone().double()
+				childSpacing.clone().double(),
+				playerVisualStaminaBarPlusIcon
 			),
 			new VisualOffset
 			(
-				playerVisualTimeBarPlusIcon,
-				childSpacing.clone().multiplyScalar(3)
+				childSpacing.clone().multiplyScalar(3),
+				playerVisualTimeBarPlusIcon
 			)
 		]);
 

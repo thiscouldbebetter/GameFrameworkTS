@@ -588,7 +588,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				([
 					new VisualImageScaled
 					(
-						new VisualImageFromLibrary("Title"), size
+						new VisualImageFromLibrary("Titles_Title"), size
 					)
 				])
 			)

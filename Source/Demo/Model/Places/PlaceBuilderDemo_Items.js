@@ -79,7 +79,7 @@ class PlaceBuilderDemo_Items {
             VisualPolygon.fromPathAndColorFill(path, itemArmorColor)
         ]);
         if (this.parent.visualsHaveText) {
-            itemArmorVisual.children.push(new VisualOffset(VisualText.fromTextHeightAndColor(itemArmorName, this.entityDimension, itemArmorColor), Coords.fromXY(0, 0 - this.entityDimension)));
+            itemArmorVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension), VisualText.fromTextHeightAndColor(itemArmorName, this.entityDimension, itemArmorColor)));
         }
         var itemArmor = new ItemDefn(itemArmorName, null, null, 50, 30, null, ["Armor"], this.itemUseEquip, itemArmorVisual, null);
         return itemArmor;
@@ -110,7 +110,7 @@ class PlaceBuilderDemo_Items {
             itemArrowVisualHead
         ]);
         if (this.parent.visualsHaveText) {
-            itemArrowVisual.children.push(new VisualOffset(VisualText.fromTextHeightAndColor(itemArrowName, this.entityDimension, itemArrowColor), Coords.fromXY(0, 0 - this.entityDimension * 1.5)));
+            itemArrowVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 1.5), VisualText.fromTextHeightAndColor(itemArrowName, this.entityDimension, itemArrowColor)));
         }
         var itemArrow = ItemDefn.fromNameMassValueAndVisual(itemArrowName, .05, 5, itemArrowVisual);
         return itemArrow;
@@ -120,14 +120,14 @@ class PlaceBuilderDemo_Items {
         var itemBombColor = Color.byName("BlueDark");
         var itemBombVisual = new VisualGroup([
             // fuse
-            new VisualOffset(VisualRectangle.fromSizeAndColorFill(new Coords(.2, 1, 1).multiplyScalar(this.entityDimensionHalf), Color.byName("Tan")), Coords.fromXY(0, -1).multiplyScalar(this.entityDimensionHalf)),
+            new VisualOffset(Coords.fromXY(0, -1).multiplyScalar(this.entityDimensionHalf), VisualRectangle.fromSizeAndColorFill(new Coords(.2, 1, 1).multiplyScalar(this.entityDimensionHalf), Color.byName("Tan"))),
             // body
             VisualCircle.fromRadiusAndColorFill(this.entityDimensionHalf, itemBombColor),
             // highlight
-            new VisualOffset(VisualCircle.fromRadiusAndColorFill(this.entityDimensionHalf * .3, Color.byName("Blue")), Coords.fromXY(-this.entityDimensionHalf / 3, -this.entityDimensionHalf / 3))
+            new VisualOffset(Coords.fromXY(-this.entityDimensionHalf / 3, -this.entityDimensionHalf / 3), VisualCircle.fromRadiusAndColorFill(this.entityDimensionHalf * .3, Color.byName("Blue")))
         ]);
         if (this.parent.visualsHaveText) {
-            itemBombVisual.children.push(new VisualOffset(VisualText.fromTextHeightAndColor(itemBombName, this.entityDimension, itemBombColor), Coords.fromXY(0, 0 - this.entityDimension * 2)));
+            itemBombVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 2), VisualText.fromTextHeightAndColor(itemBombName, this.entityDimension, itemBombColor)));
         }
         var itemBomb = new ItemDefn(itemBombName, null, null, 5, 10, null, ["Wieldable"], this.itemUseEquip, itemBombVisual, null);
         return itemBomb;
@@ -137,10 +137,10 @@ class PlaceBuilderDemo_Items {
         var itemBookColor = Color.byName("Blue");
         var itemBookVisual = new VisualGroup([
             VisualRectangle.fromSizeAndColorFill(Coords.fromXY(1, 1.25).multiplyScalar(this.entityDimension), itemBookColor),
-            new VisualOffset(VisualRectangle.fromSizeAndColorFill(Coords.fromXY(.1, 1.1).multiplyScalar(this.entityDimension), Color.byName("White")), Coords.fromXY(.4, 0).multiplyScalar(this.entityDimension))
+            new VisualOffset(Coords.fromXY(.4, 0).multiplyScalar(this.entityDimension), VisualRectangle.fromSizeAndColorFill(Coords.fromXY(.1, 1.1).multiplyScalar(this.entityDimension), Color.byName("White")))
         ]);
         if (this.parent.visualsHaveText) {
-            itemBookVisual.children.push(new VisualOffset(VisualText.fromTextHeightAndColor(itemBookName, this.entityDimension, itemBookColor), Coords.fromXY(0, 0 - this.entityDimension * 1.5)));
+            itemBookVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 1.5), VisualText.fromTextHeightAndColor(itemBookName, this.entityDimension, itemBookColor)));
         }
         var itemBookUse = (uwpe) => // use
          {
@@ -192,7 +192,7 @@ class PlaceBuilderDemo_Items {
             itemBowVisualBody
         ]);
         if (this.parent.visualsHaveText) {
-            itemBowVisual.children.push(new VisualOffset(VisualText.fromTextHeightAndColor(itemBowName, this.entityDimension, itemBowColor), Coords.fromXY(0, 0 - this.entityDimension * 2)));
+            itemBowVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 2), VisualText.fromTextHeightAndColor(itemBowName, this.entityDimension, itemBowColor)));
         }
         var itemBow = new ItemDefn(itemBowName, null, null, 5, 100, null, ["Wieldable"], this.itemUseEquip, itemBowVisual, null);
         return itemBow;
@@ -212,11 +212,11 @@ class PlaceBuilderDemo_Items {
             false // shouldUseEntityOrientation
             ),
             itemBreadVisualCut,
-            new VisualOffset(itemBreadVisualCut, Coords.fromXY(-this.entityDimensionHalf * 0.75, 0)),
-            new VisualOffset(itemBreadVisualCut, Coords.fromXY(this.entityDimensionHalf * 0.75, 0))
+            new VisualOffset(Coords.fromXY(-this.entityDimensionHalf * 0.75, 0), itemBreadVisualCut),
+            new VisualOffset(Coords.fromXY(this.entityDimensionHalf * 0.75, 0), itemBreadVisualCut)
         ]);
         if (this.parent.visualsHaveText) {
-            itemBreadVisual.children.push(new VisualOffset(VisualText.fromTextHeightAndColor(itemBreadName, this.entityDimension, itemBreadColor), Coords.fromXY(0, 0 - this.entityDimension * 1.5)));
+            itemBreadVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 1.5), VisualText.fromTextHeightAndColor(itemBreadName, this.entityDimension, itemBreadColor)));
         }
         var itemBread = new ItemDefn(itemBreadName, null, null, 1, 4, null, // name, appearance, descripton, mass, value, stackSize
         ["Consumable"], // categoryNames
@@ -241,7 +241,7 @@ class PlaceBuilderDemo_Items {
             new VisualCircle(this.entityDimensionHalf * .75, null, Color.byName("Gray"), null)
         ]);
         if (this.parent.visualsHaveText) {
-            itemCoinVisual.children.push(new VisualOffset(VisualText.fromTextHeightAndColor(itemCoinName, this.entityDimension, itemCoinColor), Coords.fromXY(0, 0 - this.entityDimension)));
+            itemCoinVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension), VisualText.fromTextHeightAndColor(itemCoinName, this.entityDimension, itemCoinColor)));
         }
         var itemCoin = ItemDefn.fromNameMassValueAndVisual(itemCoinName, .01, 1, itemCoinVisual);
         return itemCoin;
@@ -264,7 +264,7 @@ class PlaceBuilderDemo_Items {
             ]).transform(new Transform_Scale(Coords.ones().multiplyScalar(this.entityDimension / 4))), Color.byName("White"))
         ]);
         if (this.parent.visualsHaveText) {
-            itemCrystalVisual.children.push(new VisualOffset(VisualText.fromTextHeightAndColor(itemCrystalName, this.entityDimension, itemCrystalColor), Coords.fromXY(0, 0 - this.entityDimension)));
+            itemCrystalVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension), VisualText.fromTextHeightAndColor(itemCrystalName, this.entityDimension, itemCrystalColor)));
         }
         var itemCrystal = ItemDefn.fromNameMassValueAndVisual(itemCrystalName, .1, 1, itemCrystalVisual);
         return itemCrystal;
@@ -280,7 +280,7 @@ class PlaceBuilderDemo_Items {
         ]);
         var itemDoughnutVisual = new VisualBuffered(Coords.fromXY(1, 1).multiplyScalar(this.entityDimension * 1.2), itemDoughnutVisualBody);
         if (this.parent.visualsHaveText) {
-            itemDoughnutVisualBody.children.push(new VisualOffset(VisualText.fromTextHeightAndColor(itemDoughnutName, this.entityDimension, itemDoughnutColor), Coords.fromXY(0, 0 - this.entityDimension * 2)));
+            itemDoughnutVisualBody.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 2), VisualText.fromTextHeightAndColor(itemDoughnutName, this.entityDimension, itemDoughnutColor)));
         }
         var itemDoughnut = new ItemDefn(itemDoughnutName, null, null, 1, 4, null, // name, appearance, descripton, mass, value, stackSize
         ["Consumable"], // categoryNames
@@ -301,11 +301,11 @@ class PlaceBuilderDemo_Items {
         var itemFlowerName = "Flower";
         var colorFlower = Color.byName("Pink");
         var itemFlowerVisual = new VisualGroup([
-            new VisualOffset(new VisualArc(this.entityDimensionHalf * 2, // radiusOuter
+            new VisualOffset(Coords.fromXY(.5, 1.75).multiplyScalar(this.entityDimensionHalf), new VisualArc(this.entityDimensionHalf * 2, // radiusOuter
             this.entityDimensionHalf * 2 - 2, // radiusInner
             Coords.fromXY(-1, 1).normalize(), // directionMin
             .25, // angleSpannedInTurns
-            Color.byName("GreenDark"), null), Coords.fromXY(.5, 1.75).multiplyScalar(this.entityDimensionHalf)),
+            Color.byName("GreenDark"), null)),
             VisualPolygon.fromPathAndColors(new Path([
                 Coords.fromXY(1, 0),
                 Coords.fromXY(.3, .3),
@@ -318,7 +318,7 @@ class PlaceBuilderDemo_Items {
             ]).transform(new Transform_Scale(Coords.ones().multiplyScalar(this.entityDimensionHalf))), colorFlower, Color.byName("Red"))
         ]);
         if (this.parent.visualsHaveText) {
-            itemFlowerVisual.children.push(new VisualOffset(VisualText.fromTextHeightAndColor(itemFlowerName, this.entityDimension, colorFlower), Coords.fromXY(0, 0 - this.entityDimensionHalf * 2)));
+            itemFlowerVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimensionHalf * 2), VisualText.fromTextHeightAndColor(itemFlowerName, this.entityDimension, colorFlower)));
         }
         var itemFlower = ItemDefn.fromNameMassValueAndVisual(itemFlowerName, .01, 1, itemFlowerVisual);
         return itemFlower;
@@ -328,10 +328,10 @@ class PlaceBuilderDemo_Items {
         var itemFruitColor = Color.byName("Orange");
         var itemFruitVisual = new VisualGroup([
             VisualCircle.fromRadiusAndColorFill(this.entityDimensionHalf, itemFruitColor),
-            new VisualOffset(VisualCircle.fromRadiusAndColorFill(this.entityDimensionHalf * .25, Color.byName("White")), Coords.fromXY(-this.entityDimensionHalf / 2, -this.entityDimensionHalf / 2))
+            new VisualOffset(Coords.fromXY(-this.entityDimensionHalf / 2, -this.entityDimensionHalf / 2), VisualCircle.fromRadiusAndColorFill(this.entityDimensionHalf * .25, Color.byName("White")))
         ]);
         if (this.parent.visualsHaveText) {
-            itemFruitVisual.children.push(new VisualOffset(VisualText.fromTextHeightAndColor(itemFruitName, this.entityDimension, itemFruitColor), Coords.fromXY(0, 0 - this.entityDimension)));
+            itemFruitVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension), VisualText.fromTextHeightAndColor(itemFruitName, this.entityDimension, itemFruitColor)));
         }
         var itemFruit = new ItemDefn(itemFruitName, null, null, .25, 6, null, // name, appearance, descripton, mass, value, stackSize
         ["Consumable"], // categoryNames
@@ -362,11 +362,11 @@ class PlaceBuilderDemo_Items {
                 Coords.fromXY(-.075, -1.2).multiplyScalar(this.entityDimension)
             ),
             */
-            new VisualImageScaled(new VisualImageFromLibrary("Grass"), Coords.fromXY(1, 1).multiplyScalar(this.entityDimension * 2) // sizeScaled
-            ),
+            new VisualImageScaled(Coords.fromXY(1, 1).multiplyScalar(this.entityDimension * 2), // sizeScaled
+            new VisualImageFromLibrary("Grass")),
         ]);
         if (this.parent.visualsHaveText) {
-            itemGrassVisual.children.push(new VisualOffset(VisualText.fromTextHeightAndColor(itemGrassName, this.entityDimension, Color.byName("GreenDark")), Coords.fromXY(0, 0 - this.entityDimensionHalf * 3)));
+            itemGrassVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimensionHalf * 3), VisualText.fromTextHeightAndColor(itemGrassName, this.entityDimension, Color.byName("GreenDark"))));
         }
         var itemGrass = ItemDefn.fromNameMassValueAndVisual(itemGrassName, .01, 1, itemGrassVisual);
         return itemGrass;
@@ -376,16 +376,16 @@ class PlaceBuilderDemo_Items {
         var itemHeartName = "Heart";
         var itemHeartColor = Color.byName("Red");
         var itemHeartVisual = new VisualGroup([
-            new VisualOffset(new VisualArc(entityDimensionQuarter, // radiusOuter
+            new VisualOffset(Coords.fromXY(-entityDimensionQuarter, 0), new VisualArc(entityDimensionQuarter, // radiusOuter
             0, // radiusInner
             Coords.fromXY(-1, 0), // directionMin
             .5, // angleSpannedInTurns
-            itemHeartColor, null), Coords.fromXY(-entityDimensionQuarter, 0)),
-            new VisualOffset(new VisualArc(entityDimensionQuarter, // radiusOuter
+            itemHeartColor, null)),
+            new VisualOffset(Coords.fromXY(entityDimensionQuarter, 0), new VisualArc(entityDimensionQuarter, // radiusOuter
             0, // radiusInner
             Coords.fromXY(-1, 0), // directionMin
             .5, // angleSpannedInTurns
-            itemHeartColor, null), Coords.fromXY(entityDimensionQuarter, 0)),
+            itemHeartColor, null)),
             VisualPolygon.fromPathAndColorFill(new Path([
                 Coords.fromXY(-1.1, 0),
                 Coords.fromXY(1.1, 0),
@@ -393,9 +393,9 @@ class PlaceBuilderDemo_Items {
             ]).transform(Transform_Scale.fromScalar(this.entityDimensionHalf)), itemHeartColor)
         ]);
         if (this.parent.visualsHaveText) {
-            itemHeartVisual.children.push(new VisualOffset(VisualText.fromTextHeightAndColor(itemHeartName, this.entityDimension, itemHeartColor), Coords.fromXY(0, 0 - this.entityDimension * 1.5)));
+            itemHeartVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 1.5), VisualText.fromTextHeightAndColor(itemHeartName, this.entityDimension, itemHeartColor)));
         }
-        var itemHeartVisualShifted = new VisualOffset(itemHeartVisual, Coords.fromXY(0, -entityDimensionQuarter));
+        var itemHeartVisualShifted = new VisualOffset(Coords.fromXY(0, -entityDimensionQuarter), itemHeartVisual);
         var itemHeart = ItemDefn.fromNameMassValueAndVisual(itemHeartName, 10, 1, itemHeartVisualShifted);
         return itemHeart;
     }
@@ -411,7 +411,7 @@ class PlaceBuilderDemo_Items {
             ]).transform(Transform_Scale.fromScalar(this.entityDimension)), itemIronColor)
         ]);
         if (this.parent.visualsHaveText) {
-            itemIronVisual.children.push(new VisualOffset(VisualText.fromTextHeightAndColor(itemIronName, this.entityDimension, itemIronColor), Coords.fromXY(0, 0 - this.entityDimension)));
+            itemIronVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension), VisualText.fromTextHeightAndColor(itemIronName, this.entityDimension, itemIronColor)));
         }
         var itemIron = ItemDefn.fromNameMassValueAndVisual(itemIronName, 10, 5, itemIronVisual);
         return itemIron;
@@ -427,7 +427,7 @@ class PlaceBuilderDemo_Items {
             itemIronOreColor, null)
         ]);
         if (this.parent.visualsHaveText) {
-            itemIronOreVisual.children.push(new VisualOffset(VisualText.fromTextHeightAndColor(itemIronOreName, this.entityDimension, itemIronOreColor), Coords.fromXY(0, 0 - this.entityDimension * 1.5)));
+            itemIronOreVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 1.5), VisualText.fromTextHeightAndColor(itemIronOreName, this.entityDimension, itemIronOreColor)));
         }
         var itemIronOre = ItemDefn.fromNameMassValueAndVisual(itemIronOreName, 10, 1, itemIronOreVisual);
         return itemIronOre;
@@ -441,14 +441,14 @@ class PlaceBuilderDemo_Items {
             Coords.Instances().Ones, // directionMin
             1, // angleSpannedInTurns
             itemKeyColor, null),
-            new VisualOffset(new VisualPolars([
+            new VisualOffset(Coords.fromXY(this.entityDimensionHalf, 0), new VisualPolars([
                 new Polar(0, this.entityDimensionHalf, 0),
                 new Polar(.25, this.entityDimensionHalf / 2, 0)
             ], itemKeyColor, this.entityDimensionHalf / 2 // lineThickness
-            ), Coords.fromXY(this.entityDimensionHalf, 0)),
+            )),
         ]);
         if (this.parent.visualsHaveText) {
-            itemKeyVisual.children.push(new VisualOffset(VisualText.fromTextHeightAndColor(itemKeyName, this.entityDimension, itemKeyColor), Coords.fromXY(0, 0 - this.entityDimension * 2)));
+            itemKeyVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 2), VisualText.fromTextHeightAndColor(itemKeyName, this.entityDimension, itemKeyColor)));
         }
         var itemKey = ItemDefn.fromNameMassValueAndVisual(itemKeyName, .1, 5, itemKeyVisual);
         return itemKey;
@@ -457,12 +457,12 @@ class PlaceBuilderDemo_Items {
         var itemLogName = "Log";
         var itemLogColor = Color.byName("Brown");
         var itemLogVisual = new VisualGroup([
-            new VisualOffset(VisualCircle.fromRadiusAndColorFill(this.entityDimensionHalf, itemLogColor), Coords.fromXY(this.entityDimension, 0)),
+            new VisualOffset(Coords.fromXY(this.entityDimension, 0), VisualCircle.fromRadiusAndColorFill(this.entityDimensionHalf, itemLogColor)),
             VisualRectangle.fromSizeAndColorFill(Coords.fromXY(this.entityDimension * 2, this.entityDimension), itemLogColor),
-            new VisualOffset(VisualCircle.fromRadiusAndColorFill(this.entityDimensionHalf, Color.byName("Tan")), Coords.fromXY(-this.entityDimension, 0))
+            new VisualOffset(Coords.fromXY(-this.entityDimension, 0), VisualCircle.fromRadiusAndColorFill(this.entityDimensionHalf, Color.byName("Tan")))
         ]);
         if (this.parent.visualsHaveText) {
-            itemLogVisual.children.push(new VisualOffset(VisualText.fromTextHeightAndColor(itemLogName, this.entityDimension, itemLogColor), Coords.fromXY(0, 0 - this.entityDimension)));
+            itemLogVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension), VisualText.fromTextHeightAndColor(itemLogName, this.entityDimension, itemLogColor)));
         }
         var itemLog = ItemDefn.fromNameMassValueAndVisual(itemLogName, 10, 1, itemLogVisual);
         return itemLog;
@@ -473,11 +473,11 @@ class PlaceBuilderDemo_Items {
         var itemMeatVisual = new VisualGroup([
             VisualCircle.fromRadiusAndColorFill(this.entityDimensionHalf, itemMeatColor),
             new VisualCircle(this.entityDimensionHalf * .9, null, Color.byName("White"), null),
-            new VisualOffset(new VisualCircle(this.entityDimensionHalf * .2, Color.byName("Pink"), Color.byName("White"), null // ?
-            ), Coords.fromXY(this.entityDimensionHalf * .2, 0))
+            new VisualOffset(Coords.fromXY(this.entityDimensionHalf * .2, 0), new VisualCircle(this.entityDimensionHalf * .2, Color.byName("Pink"), Color.byName("White"), null // ?
+            ))
         ]);
         if (this.parent.visualsHaveText) {
-            itemMeatVisual.children.push(new VisualOffset(VisualText.fromTextHeightAndColor(itemMeatName, this.entityDimension, itemMeatColor), Coords.fromXY(0, 0 - this.entityDimension * 1.5)));
+            itemMeatVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 1.5), VisualText.fromTextHeightAndColor(itemMeatName, this.entityDimension, itemMeatColor)));
         }
         var itemMeat = new ItemDefn(itemMeatName, null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize
         ["Consumable"], // categoryNames
@@ -534,12 +534,12 @@ class PlaceBuilderDemo_Items {
         var colorStem = Color.byName("Gray");
         var colorCap = Color.byName("Violet");
         var itemMushroomVisual = new VisualGroup([
-            new VisualOffset(new VisualArc(this.entityDimensionHalf, // radiusOuter
+            new VisualOffset(Coords.fromXY(0, -this.entityDimensionHalf / 2), new VisualArc(this.entityDimensionHalf, // radiusOuter
             0, // radiusInner
             Coords.fromXY(-1, 0), // directionMin
             .5, // angleSpannedInTurns
-            colorCap, null), Coords.fromXY(0, -this.entityDimensionHalf / 2)),
-            new VisualOffset(VisualRectangle.fromSizeAndColorFill(Coords.fromXY(this.entityDimensionHalf / 2, this.entityDimensionHalf), colorStem), Coords.create())
+            colorCap, null)),
+            new VisualOffset(Coords.zeroes(), VisualRectangle.fromSizeAndColorFill(Coords.fromXY(this.entityDimensionHalf / 2, this.entityDimensionHalf), colorStem))
         ]);
         this.parent.textWithColorAddToVisual(itemMushroomName, colorCap, itemMushroomVisual);
         var itemMushroom = ItemDefn.fromNameMassValueAndVisual(itemMushroomName, .01, 1, itemMushroomVisual);
@@ -549,7 +549,7 @@ class PlaceBuilderDemo_Items {
         var itemPickName = "Pick";
         var itemPickColor = Color.byName("Gray");
         var itemPickVisual = new VisualGroup([
-            new VisualOffset(VisualRectangle.fromSizeAndColorFill(Coords.fromXY(this.entityDimension / 4, this.entityDimension), Color.byName("Brown")), Coords.fromXY(0, 0 - this.entityDimension / 2)),
+            new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension / 2), VisualRectangle.fromSizeAndColorFill(Coords.fromXY(this.entityDimension / 4, this.entityDimension), Color.byName("Brown"))),
             VisualPolygon.fromPathAndColorFill(new Path([
                 Coords.fromXY(0.75, -1),
                 Coords.fromXY(-0.75, -1),
@@ -558,7 +558,7 @@ class PlaceBuilderDemo_Items {
             ]).transform(Transform_Scale.fromScalar(this.entityDimension)), itemPickColor)
         ]);
         if (this.parent.visualsHaveText) {
-            itemPickVisual.children.push(new VisualOffset(VisualText.fromTextHeightAndColor(itemPickName, this.entityDimension, itemPickColor), Coords.fromXY(0, 0 - this.entityDimension * 2)));
+            itemPickVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 2), VisualText.fromTextHeightAndColor(itemPickName, this.entityDimension, itemPickColor)));
         }
         var itemPick = new ItemDefn(itemPickName, null, null, 1, 30, null, ["Wieldable"], this.itemUseEquip, itemPickVisual, null);
         return itemPick;
@@ -585,7 +585,7 @@ class PlaceBuilderDemo_Items {
             ]).transform(Transform_Scale.fromScalar(this.entityDimension)), itemPotionColor)
         ]);
         if (this.parent.visualsHaveText) {
-            itemPotionVisual.children.push(new VisualOffset(VisualText.fromTextHeightAndColor(itemPotionName, this.entityDimension, itemPotionColor), Coords.fromXY(0, 0 - this.entityDimension)));
+            itemPotionVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension), VisualText.fromTextHeightAndColor(itemPotionName, this.entityDimension, itemPotionColor)));
         }
         var itemPotion = new ItemDefn(itemPotionName, null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize
         ["Consumable"], // categoryNames
@@ -606,7 +606,7 @@ class PlaceBuilderDemo_Items {
         var itemShovelName = "Shovel";
         var itemShovelColor = Color.byName("Gray");
         var itemShovelVisual = new VisualGroup([
-            new VisualOffset(VisualRectangle.fromSizeAndColorFill(Coords.fromXY(this.entityDimension / 4, this.entityDimension), Color.byName("Brown")), Coords.fromXY(0, 0 + this.entityDimension / 2)),
+            new VisualOffset(Coords.fromXY(0, 0 + this.entityDimension / 2), VisualRectangle.fromSizeAndColorFill(Coords.fromXY(this.entityDimension / 4, this.entityDimension), Color.byName("Brown"))),
             VisualPolygon.fromPathAndColorFill(new Path([
                 Coords.fromXY(0.5, 1.5),
                 Coords.fromXY(0, 1.75),
@@ -639,7 +639,7 @@ class PlaceBuilderDemo_Items {
             ]).transform(Transform_Scale.fromScalar(this.entityDimension)), itemAccessoryColor)
         ]);
         if (this.parent.visualsHaveText) {
-            itemSpeedBootsVisual.children.push(new VisualOffset(VisualText.fromTextHeightAndColor(itemSpeedBootsName, this.entityDimension, itemAccessoryColor), Coords.fromXY(0, 0 - this.entityDimension * 2)));
+            itemSpeedBootsVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 2), VisualText.fromTextHeightAndColor(itemSpeedBootsName, this.entityDimension, itemAccessoryColor)));
         }
         var itemSpeedBoots = new ItemDefn(itemSpeedBootsName, null, null, 10, 30, null, ["Accessory"], this.itemUseEquip, itemSpeedBootsVisual, null);
         return itemSpeedBoots;
@@ -687,7 +687,7 @@ class PlaceBuilderDemo_Items {
             itemSwordVisualBody
         ]);
         if (this.parent.visualsHaveText) {
-            itemSwordVisual.children.push(new VisualOffset(VisualText.fromTextHeightAndColor("Sword", this.entityDimension, bladeColor), Coords.fromXY(0, 0 - this.entityDimension * 2)));
+            itemSwordVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 2), VisualText.fromTextHeightAndColor("Sword", this.entityDimension, bladeColor)));
         }
         return itemSwordVisual;
     }
@@ -709,7 +709,7 @@ class PlaceBuilderDemo_Items {
         var itemToolsetName = "Toolset";
         var itemToolsetColor = Color.byName("Gray");
         var itemToolsetVisual = new VisualGroup([
-            new VisualOffset(VisualRectangle.fromSizeAndColorFill(Coords.fromXY(this.entityDimension / 4, this.entityDimension), Color.byName("Brown")), Coords.fromXY(0, this.entityDimension / 2)),
+            new VisualOffset(Coords.fromXY(0, this.entityDimension / 2), VisualRectangle.fromSizeAndColorFill(Coords.fromXY(this.entityDimension / 4, this.entityDimension), Color.byName("Brown"))),
             VisualRectangle.fromSizeAndColorFill(Coords.fromXY(this.entityDimension, this.entityDimension / 2), itemToolsetColor)
         ]);
         this.parent.textWithColorAddToVisual(itemToolsetName, itemToolsetColor, itemToolsetVisual);
@@ -727,9 +727,9 @@ class PlaceBuilderDemo_Items {
         );
         var itemTorchVisualFlame = VisualBuilder.Instance().flame(this.entityDimensionHalf * .6);
         var itemTorchVisual = new VisualGroup([
-            new VisualOffset(itemTorchVisualBody, Coords.create()),
-            new VisualOffset(itemTorchVisualHead, Coords.fromXY(0, 0 - this.entityDimension * .75)),
-            new VisualOffset(itemTorchVisualFlame, Coords.fromXY(0, 0 - this.entityDimension * .7))
+            new VisualOffset(Coords.create(), itemTorchVisualBody),
+            new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * .75), itemTorchVisualHead),
+            new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * .7), itemTorchVisualFlame)
         ]);
         this.parent.textWithColorAddToVisual(itemTorchName, itemTorchColor, itemTorchVisual);
         var itemTorch = new ItemDefn(itemTorchName, null, null, 1, 4, null, // name, appearance, descripton, mass, value, stackSize
@@ -751,11 +751,11 @@ class PlaceBuilderDemo_Items {
         var itemWeightName = "Weight";
         var itemWeightColor = Color.byName("Blue");
         var itemWeightVisual = new VisualGroup([
-            new VisualOffset(new VisualArc(this.entityDimensionHalf, // radiusOuter
+            new VisualOffset(Coords.fromXY(0, -1).multiplyScalar(this.entityDimensionHalf), new VisualArc(this.entityDimensionHalf, // radiusOuter
             this.entityDimensionHalf / 2, // radiusInner
             Coords.fromXY(-1, 0).normalize(), // directionMin
             .5, // angleSpannedInTurns
-            itemWeightColor, null), Coords.fromXY(0, -1).multiplyScalar(this.entityDimensionHalf)),
+            itemWeightColor, null)),
             VisualPolygon.fromPathAndColorFill(new Path([
                 Coords.fromXY(-.75, .5),
                 Coords.fromXY(-.5, -.5),

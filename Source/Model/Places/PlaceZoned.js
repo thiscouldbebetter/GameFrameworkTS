@@ -10,9 +10,18 @@ var ThisCouldBeBetter;
                 );
                 this.entityToFollowName = entityToFollowName;
                 this.zoneStartName = zoneStartName;
-                this.zoneGetByName = zoneGetByName;
-                this.zoneAtPos = zoneAtPos;
+                this._zoneGetByName = zoneGetByName;
+                this._zoneAtPos = zoneAtPos;
                 this.zoneCentralAndNeighbors = [];
+            }
+            zoneAtPos(pos) {
+                return this._zoneAtPos(pos);
+            }
+            zoneGetByName(name) {
+                return this._zoneGetByName(name);
+            }
+            zoneStart() {
+                return this.zoneGetByName(this.zoneStartName);
             }
             // Place implementation.
             initialize(uwpe) {
@@ -23,28 +32,37 @@ var ThisCouldBeBetter;
             updateForTimerTick(uwpe) {
                 var entityToFollow = this.entitiesByName.get(this.entityToFollowName);
                 var entityToFollowPos = entityToFollow.locatable().loc.pos;
-                var zoneCentralCurrent = this.zoneAtPos(entityToFollowPos);
-                if (zoneCentralCurrent != null && zoneCentralCurrent != this.zoneCentral) {
-                    this.zoneCentral = zoneCentralCurrent;
-                    var zonesNeighboringZoneCentral = this.zoneCentral.zonesAdjacentNames.map(zoneName => this.zoneGetByName(zoneName));
-                    var zoneCentralAndNeighborsNext = [this.zoneCentral];
-                    zoneCentralAndNeighborsNext.push(...zonesNeighboringZoneCentral);
-                    var zoneCentralAndNeighborsPrev = this.zoneCentralAndNeighbors;
-                    var zonesToFinalize = zoneCentralAndNeighborsPrev.filter(x => zoneCentralAndNeighborsNext.indexOf(x) == -1);
-                    var zonesToInitialize = zoneCentralAndNeighborsNext.filter(x => zoneCentralAndNeighborsPrev.indexOf(x) == -1);
-                    zonesToFinalize.forEach(zone => {
-                        zone.entities.forEach(entity => {
-                            entity.locatable().loc.pos.subtract(zone.bounds.min());
-                            this.entitiesToRemove.push(entity);
+                var zoneCentralPrev = this.zoneCentral;
+                var zoneCentralNext = this.zoneAtPos(entityToFollowPos);
+                var hasZoneChanged = (zoneCentralNext != zoneCentralPrev);
+                if (hasZoneChanged) {
+                    if (zoneCentralNext != null) {
+                        var zonesNeighboringZoneCentralNext = zoneCentralNext.zonesAdjacentNames.map(zoneName => this.zoneGetByName(zoneName));
+                        var zoneCentralAndNeighborsNext = [
+                            zoneCentralNext
+                        ].concat(zonesNeighboringZoneCentralNext);
+                        var zoneCentralAndNeighborsPrev = this.zoneCentralAndNeighbors;
+                        var zonesToFinalize = zoneCentralAndNeighborsPrev.filter(x => zoneCentralAndNeighborsNext.indexOf(x) == -1);
+                        var zonesToInitialize = zoneCentralAndNeighborsNext.filter(x => zoneCentralAndNeighborsPrev.indexOf(x) == -1);
+                        zonesToFinalize.forEach(zone => {
+                            zone.entities.forEach(entity => {
+                                var entityPos = entity.locatable().loc.pos;
+                                var zoneMin = zone.bounds.min();
+                                entityPos.subtract(zoneMin);
+                                this.entityToRemoveAdd(entity);
+                            });
                         });
-                    });
-                    zonesToInitialize.forEach(zone => {
-                        zone.entities.forEach(entity => {
-                            entity.locatable().loc.pos.add(zone.bounds.min());
-                            this.entityToSpawnAdd(entity);
+                        zonesToInitialize.forEach(zone => {
+                            zone.entities.forEach(entity => {
+                                var entityPos = entity.locatable().loc.pos;
+                                var zoneMin = zone.bounds.min();
+                                entityPos.add(zoneMin);
+                                this.entityToSpawnAdd(entity);
+                            });
                         });
-                    });
-                    this.zoneCentralAndNeighbors = zoneCentralAndNeighborsNext;
+                        this.zoneCentral = zoneCentralNext;
+                        this.zoneCentralAndNeighbors = zoneCentralAndNeighborsNext;
+                    }
                 }
                 super.updateForTimerTick(uwpe);
             }

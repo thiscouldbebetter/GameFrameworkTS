@@ -4,9 +4,9 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class VisualImageScaled {
-            constructor(visualImage, sizeToDraw) {
-                this.visualImage = visualImage;
+            constructor(sizeToDraw, visualImage) {
                 this.sizeToDraw = sizeToDraw;
+                this.visualImage = visualImage;
                 this.sizeToDrawHalf = this.sizeToDraw.clone().half();
                 this._posSaved = GameFramework.Coords.create();
             }
@@ -14,7 +14,7 @@ var ThisCouldBeBetter;
                 var returnValues = [];
                 for (var i = 0; i < visualsToScale.length; i++) {
                     var visualToScale = visualsToScale[i];
-                    var visualScaled = new VisualImageScaled(visualToScale, sizeToDraw);
+                    var visualScaled = new VisualImageScaled(sizeToDraw, visualToScale);
                     returnValues.push(visualScaled);
                 }
                 return returnValues;

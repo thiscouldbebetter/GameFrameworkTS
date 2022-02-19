@@ -962,7 +962,7 @@ export class ControlBuilder
 		([
 			new VisualImageScaled
 			(
-				new VisualImageFromLibrary("Opening"), size
+				size, new VisualImageFromLibrary("Titles_Opening")
 			)
 			// Note: Sound won't work on the opening screen,
 			// because the user has to interact somehow
@@ -1037,7 +1037,7 @@ export class ControlBuilder
 		([
 			new VisualImageScaled
 			(
-				new VisualImageFromLibrary("Producer"), size
+				size, new VisualImageFromLibrary("Titles_Producer")
 			),
 			new VisualSound("Music_Producer", false) // repeat
 		]);
@@ -1371,8 +1371,8 @@ export class ControlBuilder
 						(
 							new VisualImageScaled
 							(
-								new VisualImageFromLibrary(imageName),
-								this.sizeBase.clone().multiply(scaleMultiplier) // sizeToDrawScaled
+								this.sizeBase.clone().multiply(scaleMultiplier), // sizeToDrawScaled
+								new VisualImageFromLibrary(imageName)
 							) as VisualBase
 						),
 						null, null // colorBackground, colorBorder
@@ -1458,7 +1458,7 @@ export class ControlBuilder
 		([
 			new VisualImageScaled
 			(
-				new VisualImageFromLibrary("Title"), size
+				size, new VisualImageFromLibrary("Titles_Title")
 			),
 			new VisualSound("Music_Title", true) // isMusic
 		]);

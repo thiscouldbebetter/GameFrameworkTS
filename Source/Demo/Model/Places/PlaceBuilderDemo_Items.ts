@@ -125,11 +125,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension),
 					VisualText.fromTextHeightAndColor
 					(
 						itemArmorName, this.entityDimension, itemArmorColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension)
+					)
 				)
 			);
 		}
@@ -197,11 +197,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension * 1.5),
 					VisualText.fromTextHeightAndColor
 					(
 						itemArrowName,  this.entityDimension, itemArrowColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension * 1.5)
+					)
 				)
 			);
 		}
@@ -223,12 +223,12 @@ class PlaceBuilderDemo_Items
 			// fuse
 			new VisualOffset
 			(
+				Coords.fromXY(0, -1).multiplyScalar(this.entityDimensionHalf),
 				VisualRectangle.fromSizeAndColorFill
 				(
 					new Coords(.2, 1, 1).multiplyScalar(this.entityDimensionHalf),
 					Color.byName("Tan")
-				),
-				Coords.fromXY(0, -1).multiplyScalar(this.entityDimensionHalf)
+				)
 			),
 			// body
 			VisualCircle.fromRadiusAndColorFill
@@ -238,11 +238,11 @@ class PlaceBuilderDemo_Items
 			// highlight
 			new VisualOffset
 			(
+				Coords.fromXY(-this.entityDimensionHalf / 3, -this.entityDimensionHalf / 3),
 				VisualCircle.fromRadiusAndColorFill
 				(
 					this.entityDimensionHalf * .3, Color.byName("Blue")
-				),
-				Coords.fromXY(-this.entityDimensionHalf / 3, -this.entityDimensionHalf / 3)
+				)
 			)
 		]);
 
@@ -252,11 +252,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension * 2),
 					VisualText.fromTextHeightAndColor
 					(
 						itemBombName,  this.entityDimension, itemBombColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension * 2)
+					)
 				)
 			);
 		}
@@ -283,12 +283,12 @@ class PlaceBuilderDemo_Items
 			),
 			new VisualOffset
 			(
+				Coords.fromXY(.4, 0).multiplyScalar(this.entityDimension),
 				VisualRectangle.fromSizeAndColorFill
 				(
 					Coords.fromXY(.1, 1.1).multiplyScalar(this.entityDimension),
 					Color.byName("White")
-				),
-				Coords.fromXY(.4, 0).multiplyScalar(this.entityDimension)
+				)
 			)
 		]);
 
@@ -298,11 +298,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension * 1.5),
 					VisualText.fromTextHeightAndColor
 					(
 						itemBookName, this.entityDimension, itemBookColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension * 1.5)
+					)
 				)
 			);
 		}
@@ -411,11 +411,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension * 2),
 					VisualText.fromTextHeightAndColor
 					(
 						itemBowName,  this.entityDimension, itemBowColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension * 2)
+					)
 				)
 			);
 		}
@@ -460,14 +460,14 @@ class PlaceBuilderDemo_Items
 
 			new VisualOffset
 			(
-				itemBreadVisualCut,
-				Coords.fromXY(-this.entityDimensionHalf * 0.75, 0)
+				Coords.fromXY(-this.entityDimensionHalf * 0.75, 0),
+				itemBreadVisualCut
 			),
 
 			new VisualOffset
 			(
-				itemBreadVisualCut,
-				Coords.fromXY(this.entityDimensionHalf * 0.75, 0)
+				Coords.fromXY(this.entityDimensionHalf * 0.75, 0),
+				itemBreadVisualCut
 			)
 		]);
 
@@ -477,11 +477,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension * 1.5),
 					VisualText.fromTextHeightAndColor
 					(
 						itemBreadName,  this.entityDimension, itemBreadColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension * 1.5)
+					)
 				)
 			);
 		}
@@ -529,11 +529,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension),
 					VisualText.fromTextHeightAndColor
 					(
 						itemCoinName, this.entityDimension, itemCoinColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension)
+					)
 				)
 			);
 		}
@@ -595,11 +595,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension),
 					VisualText.fromTextHeightAndColor
 					(
 						itemCrystalName, this.entityDimension, itemCrystalColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension)
+					)
 				)
 			);
 		}
@@ -646,11 +646,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension * 2),
 					VisualText.fromTextHeightAndColor
 					(
 						itemDoughnutName, this.entityDimension, itemDoughnutColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension * 2)
+					)
 				)
 			);
 		}
@@ -683,6 +683,7 @@ class PlaceBuilderDemo_Items
 		([
 			new VisualOffset
 			(
+				Coords.fromXY(.5, 1.75).multiplyScalar(this.entityDimensionHalf),
 				new VisualArc
 				(
 					this.entityDimensionHalf * 2, // radiusOuter
@@ -691,8 +692,7 @@ class PlaceBuilderDemo_Items
 					.25, // angleSpannedInTurns
 					Color.byName("GreenDark"),
 					null
-				),
-				Coords.fromXY(.5, 1.75).multiplyScalar(this.entityDimensionHalf)
+				)
 			),
 			VisualPolygon.fromPathAndColors
 			(
@@ -724,11 +724,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimensionHalf * 2),
 					VisualText.fromTextHeightAndColor
 					(
 						itemFlowerName, this.entityDimension, colorFlower
-					),
-					Coords.fromXY(0, 0 - this.entityDimensionHalf * 2)
+					)
 				)
 			);
 		}
@@ -753,11 +753,11 @@ class PlaceBuilderDemo_Items
 			),
 			new VisualOffset
 			(
+				Coords.fromXY(-this.entityDimensionHalf / 2, -this.entityDimensionHalf / 2),
 				VisualCircle.fromRadiusAndColorFill
 				(
 					this.entityDimensionHalf * .25, Color.byName("White")
-				),
-				Coords.fromXY(-this.entityDimensionHalf / 2, -this.entityDimensionHalf / 2)
+				)
 			)
 		]);
 
@@ -767,11 +767,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension),
 					VisualText.fromTextHeightAndColor
 					(
 						itemFruitName, this.entityDimension, itemFruitColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension)
+					)
 				)
 			);
 		}
@@ -815,8 +815,8 @@ class PlaceBuilderDemo_Items
 			*/
 			new VisualImageScaled
 			(
-				new VisualImageFromLibrary("Grass"),
-				Coords.fromXY(1, 1).multiplyScalar(this.entityDimension * 2) // sizeScaled
+				Coords.fromXY(1, 1).multiplyScalar(this.entityDimension * 2), // sizeScaled
+				new VisualImageFromLibrary("Grass")
 			),
 		]);
 
@@ -826,11 +826,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimensionHalf * 3),
 					VisualText.fromTextHeightAndColor
 					(
 						itemGrassName, this.entityDimension, Color.byName("GreenDark")
-					),
-					Coords.fromXY(0, 0 - this.entityDimensionHalf * 3)
+					)
 				)
 			);
 		}
@@ -852,6 +852,7 @@ class PlaceBuilderDemo_Items
 		([
 			new VisualOffset
 			(
+				Coords.fromXY(-entityDimensionQuarter, 0),
 				new VisualArc
 				(
 					entityDimensionQuarter, // radiusOuter
@@ -860,12 +861,12 @@ class PlaceBuilderDemo_Items
 					.5, // angleSpannedInTurns
 					itemHeartColor,
 					null
-				),
-				Coords.fromXY(-entityDimensionQuarter, 0)
+				)
 			),
 
 			new VisualOffset
 			(
+				Coords.fromXY(entityDimensionQuarter, 0),
 				new VisualArc
 				(
 					entityDimensionQuarter, // radiusOuter
@@ -874,8 +875,7 @@ class PlaceBuilderDemo_Items
 					.5, // angleSpannedInTurns
 					itemHeartColor,
 					null
-				),
-				Coords.fromXY(entityDimensionQuarter, 0)
+				)
 			),
 
 			VisualPolygon.fromPathAndColorFill
@@ -899,18 +899,19 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension * 1.5),
 					VisualText.fromTextHeightAndColor
 					(
 						itemHeartName, this.entityDimension, itemHeartColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension * 1.5)
+					)
 				)
 			);
 		}
 
 		var itemHeartVisualShifted = new VisualOffset
 		(
-			itemHeartVisual, Coords.fromXY(0, -entityDimensionQuarter)
+			Coords.fromXY(0, -entityDimensionQuarter),
+			itemHeartVisual
 		);
 
 		var itemHeart = ItemDefn.fromNameMassValueAndVisual
@@ -949,13 +950,13 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension),
 					VisualText.fromTextHeightAndColor
 					(
 						itemIronName,
 						this.entityDimension,
 						itemIronColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension)
+					)
 				)
 			);
 		}
@@ -991,13 +992,13 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension * 1.5),
 					VisualText.fromTextHeightAndColor
 					(
 						itemIronOreName,
 						this.entityDimension, 
 						itemIronOreColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension * 1.5)
+					)
 				)
 			);
 		}
@@ -1027,6 +1028,7 @@ class PlaceBuilderDemo_Items
 			),
 			new VisualOffset
 			(
+				Coords.fromXY(this.entityDimensionHalf, 0),
 				new VisualPolars
 				(
 					[
@@ -1035,8 +1037,7 @@ class PlaceBuilderDemo_Items
 					],
 					itemKeyColor,
 					this.entityDimensionHalf / 2 // lineThickness
-				),
-				Coords.fromXY(this.entityDimensionHalf, 0)
+				)
 			),
 		]);
 
@@ -1046,11 +1047,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension * 2),
 					VisualText.fromTextHeightAndColor
 					(
 						itemKeyName, this.entityDimension, itemKeyColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension * 2)
+					)
 				)
 			);
 		}
@@ -1071,11 +1072,11 @@ class PlaceBuilderDemo_Items
 		([
 			new VisualOffset
 			(
+				Coords.fromXY(this.entityDimension, 0),
 				VisualCircle.fromRadiusAndColorFill
 				(
 					this.entityDimensionHalf, itemLogColor
-				),
-				Coords.fromXY(this.entityDimension, 0)
+				)
 			),
 			VisualRectangle.fromSizeAndColorFill
 			(
@@ -1084,11 +1085,11 @@ class PlaceBuilderDemo_Items
 			),
 			new VisualOffset
 			(
+				Coords.fromXY(-this.entityDimension, 0),
 				VisualCircle.fromRadiusAndColorFill
 				(
 					this.entityDimensionHalf, Color.byName("Tan")
-				),
-				Coords.fromXY(-this.entityDimension, 0)
+				)
 			)
 		]);
 
@@ -1098,11 +1099,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension),
 					VisualText.fromTextHeightAndColor
 					(
 						itemLogName, this.entityDimension, itemLogColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension)
+					)
 				)
 			);
 		}
@@ -1131,13 +1132,13 @@ class PlaceBuilderDemo_Items
 			),
 			new VisualOffset
 			(
+				Coords.fromXY(this.entityDimensionHalf * .2, 0),
 				new VisualCircle
 				(
 					this.entityDimensionHalf * .2,
 					Color.byName("Pink"),
 					Color.byName("White"), null // ?
-				),
-				Coords.fromXY(this.entityDimensionHalf * .2, 0)
+				)
 			)
 		]);
 
@@ -1147,11 +1148,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension * 1.5),
 					VisualText.fromTextHeightAndColor
 					(
 						itemMeatName, this.entityDimension, itemMeatColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension * 1.5)
+					)
 				)
 			);
 		}
@@ -1248,6 +1249,7 @@ class PlaceBuilderDemo_Items
 		([
 			new VisualOffset
 			(
+				Coords.fromXY(0, -this.entityDimensionHalf / 2),
 				new VisualArc
 				(
 					this.entityDimensionHalf, // radiusOuter
@@ -1256,17 +1258,16 @@ class PlaceBuilderDemo_Items
 					.5, // angleSpannedInTurns
 					colorCap,
 					null
-				),
-				Coords.fromXY(0, -this.entityDimensionHalf / 2)
+				)
 			),
 			new VisualOffset
 			(
+				Coords.zeroes(),
 				VisualRectangle.fromSizeAndColorFill
 				(
 					Coords.fromXY(this.entityDimensionHalf / 2, this.entityDimensionHalf),
 					colorStem
-				),
-				Coords.create()
+				)
 			)
 		]);
 
@@ -1291,12 +1292,12 @@ class PlaceBuilderDemo_Items
 		([
 			new VisualOffset
 			(
+				Coords.fromXY(0, 0 - this.entityDimension / 2),
 				VisualRectangle.fromSizeAndColorFill
 				(
 					Coords.fromXY(this.entityDimension / 4, this.entityDimension),
 					Color.byName("Brown")
-				),
-				Coords.fromXY(0, 0 - this.entityDimension / 2)
+				)
 			),
 			VisualPolygon.fromPathAndColorFill
 			(
@@ -1320,11 +1321,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension * 2),
 					VisualText.fromTextHeightAndColor
 					(
 						itemPickName,  this.entityDimension, itemPickColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension * 2)
+					)
 				)
 			);
 		}
@@ -1381,11 +1382,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension),
 					VisualText.fromTextHeightAndColor
 					(
 						itemPotionName, this.entityDimension, itemPotionColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension)
+					)
 				)
 			);
 		}
@@ -1420,12 +1421,12 @@ class PlaceBuilderDemo_Items
 		([
 			new VisualOffset
 			(
+				Coords.fromXY(0, 0 + this.entityDimension / 2),
 				VisualRectangle.fromSizeAndColorFill
 				(
 					Coords.fromXY(this.entityDimension / 4, this.entityDimension),
 					Color.byName("Brown")
-				),
-				Coords.fromXY(0, 0 + this.entityDimension / 2)
+				)
 			),
 			VisualPolygon.fromPathAndColorFill
 			(
@@ -1503,11 +1504,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension * 2),
 					VisualText.fromTextHeightAndColor
 					(
 						itemSpeedBootsName,  this.entityDimension, itemAccessoryColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension * 2)
+					)
 				)
 			);
 		}
@@ -1597,11 +1598,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension * 2),
 					VisualText.fromTextHeightAndColor
 					(
 						"Sword",  this.entityDimension, bladeColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension * 2)
+					)
 				)
 			);
 		}
@@ -1643,12 +1644,12 @@ class PlaceBuilderDemo_Items
 		([
 			new VisualOffset
 			(
+				Coords.fromXY(0, this.entityDimension / 2),
 				VisualRectangle.fromSizeAndColorFill
 				(
 					Coords.fromXY(this.entityDimension / 4, this.entityDimension),
 					Color.byName("Brown")
-				),
-				Coords.fromXY(0, this.entityDimension / 2)
+				)
 			),
 			VisualRectangle.fromSizeAndColorFill
 			(
@@ -1702,20 +1703,20 @@ class PlaceBuilderDemo_Items
 		([
 			new VisualOffset
 			(
-				itemTorchVisualBody,
-				Coords.create()
+				Coords.create(),
+				itemTorchVisualBody
 			),
 
 			new VisualOffset
 			(
-				itemTorchVisualHead,
-				Coords.fromXY(0, 0 - this.entityDimension * .75)
+				Coords.fromXY(0, 0 - this.entityDimension * .75),
+				itemTorchVisualHead
 			),
 
 			new VisualOffset
 			(
-				itemTorchVisualFlame,
-				Coords.fromXY(0, 0 - this.entityDimension * .7)
+				Coords.fromXY(0, 0 - this.entityDimension * .7),
+				itemTorchVisualFlame
 			)
 		]);
 
@@ -1760,6 +1761,7 @@ class PlaceBuilderDemo_Items
 		([
 			new VisualOffset
 			(
+				Coords.fromXY(0, -1).multiplyScalar(this.entityDimensionHalf),
 				new VisualArc
 				(
 					this.entityDimensionHalf, // radiusOuter
@@ -1768,8 +1770,7 @@ class PlaceBuilderDemo_Items
 					.5, // angleSpannedInTurns
 					itemWeightColor,
 					null
-				),
-				Coords.fromXY(0, -1).multiplyScalar(this.entityDimensionHalf)
+				)
 			),
 			VisualPolygon.fromPathAndColorFill
 			(

@@ -15,8 +15,8 @@ class PlaceBuilderDemo_Emplacements
 		var anvilName = "Anvil";
 		var anvilVisual: VisualBase = new VisualImageScaled
 		(
-			new VisualImageFromLibrary(anvilName),
-			Coords.fromXY(1, 1).multiplyScalar(this.entityDimension * 2) // sizeScaled
+			Coords.fromXY(1, 1).multiplyScalar(this.entityDimension * 2), // sizeScaled
+			new VisualImageFromLibrary(anvilName)
 		);
 		anvilVisual = new VisualGroup( [ anvilVisual ] );
 
@@ -102,11 +102,11 @@ class PlaceBuilderDemo_Emplacements
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension * 3),
 					VisualText.fromTextHeightAndColor
 					(
 						itemDefnName, this.entityDimension, colorBoulder
-					),
-					Coords.fromXY(0, 0 - this.entityDimension * 3)
+					)
 				)
 			);
 		}
@@ -338,11 +338,11 @@ class PlaceBuilderDemo_Emplacements
 			),
 			new VisualOffset
 			(
+				Coords.fromXY(this.entityDimension / 4, 0 - this.entityDimension * .6),
 				VisualCircle.fromRadiusAndColorFill
 				(
 					this.entityDimension / 8, Color.byName("Yellow")
-				),
-				Coords.fromXY(this.entityDimension / 4, 0 - this.entityDimension * .6)
+				)
 			)
 		]);
 
@@ -637,8 +637,8 @@ class PlaceBuilderDemo_Emplacements
 		var pillowName = "Pillow";
 		var pillowVisual: VisualBase = new VisualImageScaled
 		(
-			new VisualImageFromLibrary(pillowName),
-			Coords.fromXY(1, .75).multiplyScalar(this.entityDimension * 2) // sizeScaled
+			Coords.fromXY(1, .75).multiplyScalar(this.entityDimension * 2), // sizeScaled
+			new VisualImageFromLibrary(pillowName)
 		);
 		pillowVisual = new VisualGroup( [ pillowVisual ] );
 
@@ -699,6 +699,7 @@ class PlaceBuilderDemo_Emplacements
 			),
 			new VisualOffset
 			(
+				Coords.fromXY(0, this.entityDimension),
 				new VisualDynamic
 				(
 					(uwpe: UniverseWorldPlaceEntities) =>
@@ -712,8 +713,7 @@ class PlaceBuilderDemo_Emplacements
 							baseColor
 						)
 					}
-				),
-				Coords.fromXY(0, this.entityDimension)
+				)
 			)
 		]);
 
@@ -825,6 +825,7 @@ class PlaceBuilderDemo_Emplacements
 			),
 			new VisualOffset
 			(
+				Coords.fromXY(0, 0 - this.entityDimension),
 				new VisualEllipse
 				(
 					this.entityDimension, // semimajorAxis
@@ -833,8 +834,7 @@ class PlaceBuilderDemo_Emplacements
 					color,
 					colorBorder,
 					false // shouldUseEntityOrientation
-				),
-				Coords.fromXY(0, 0 - this.entityDimension)
+				)
 			),
 		]);
 
@@ -845,7 +845,7 @@ class PlaceBuilderDemo_Emplacements
 
 		var visual = new VisualOffset
 		(
-			visualTree, Coords.fromXY(0, 0 - this.entityDimension)
+			Coords.fromXY(0, 0 - this.entityDimension), visualTree
 		);
 		var collider = new Box
 		(

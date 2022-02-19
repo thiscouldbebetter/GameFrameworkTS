@@ -18,7 +18,9 @@ export class Camera implements EntityProperty<Camera>
 
 	constructor
 	(
-		viewSize: Coords, focalLength: number, loc: Disposition,
+		viewSize: Coords,
+		focalLength: number,
+		loc: Disposition,
 		entitiesInViewSort: (e: Entity[]) => Entity[]
 	)
 	{
@@ -42,15 +44,31 @@ export class Camera implements EntityProperty<Camera>
 
 	static default(): Camera
 	{
+		return Camera.fromEntitiesInViewSort
+		(
+			null
+		);
+	}
+
+	static fromEntitiesInViewSort
+	(
+		entitiesInViewSort: (e: Entity[]) => Entity[]
+	): Camera
+	{
 		return new Camera
 		(
 			new Coords(400, 300, 1000), // viewSize
 			150, // focalLength
-			Disposition.fromPos(new Coords(0, 0, -150) ),
-			null // entitiesInViewSort
+			Disposition.fromPosAndOrientation
+			(
+				new Coords(0, 0, -150),
+				Orientation.Instances().ForwardZDownY.clone()
+			),
+			entitiesInViewSort
 		);
 	}
 
+	/*
 	clipPlanes(): Plane[]
 	{
 		if (this._clipPlanes == null)
@@ -148,6 +166,7 @@ export class Camera implements EntityProperty<Camera>
 
 		return this._clipPlanes;
 	}
+	*/
 
 	coordsTransformViewToWorld(viewCoords: Coords, ignoreZ: boolean): Coords
 	{
@@ -358,9 +377,42 @@ export class Camera implements EntityProperty<Camera>
 		return entitiesSorted;
 	}
 
+	static entitiesSortByZThenY(entitiesToSort: Entity[]): Entity[]
+	{
+		entitiesToSort.sort
+		(
+			(a, b) =>
+			{
+				var aPos = a.locatable().loc.pos;
+				var bPos = b.locatable().loc.pos;
+				var returnValue;
+				if (aPos.z != bPos.z)
+				{
+					returnValue = bPos.z - aPos.z;
+				}
+				else
+				{
+					returnValue = aPos.y - bPos.y;
+				}
+
+				return returnValue;
+			}
+		);
+
+		return entitiesToSort;
+	}
+
 	toEntity(): Entity
 	{
-		return new Entity(Camera.name, [ this ] );
+		return new Entity
+		(
+			Camera.name,
+			[
+				this,
+				new Constrainable([]),
+				new Locatable(this.loc),
+			]
+		);
 	}
 
 	// EntityProperty.

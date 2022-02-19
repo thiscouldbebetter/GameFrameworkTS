@@ -23,7 +23,7 @@ export class Orientation
 		this.axesRDF = [ this.right, this.down, this.forward ];
 	}
 
-	static default()
+	static default(): Orientation
 	{
 		return new Orientation(new Coords(1, 0, 0), new Coords(0, 0, 1) );
 	}

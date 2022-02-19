@@ -181,30 +181,33 @@ export class Place implements Equatable<Place>
 
 		var entity = uwpe.entity;
 
-		if (entity.name == null)
+		if (this.entities.indexOf(entity) == -1) // hack
 		{
-			entity.name = "Entity";
+			if (entity.name == null)
+			{
+				entity.name = "Entity";
+			}
+
+			if (this.entitiesByName.has(entity.name))
+			{
+				entity.name += entity.id;
+			}
+
+			this.entities.push(entity);
+			this.entitiesById.set(entity.id, entity);
+			this.entitiesByName.set(entity.name, entity);
+
+			var entityProperties = entity.properties;
+			for (var i = 0; i < entityProperties.length; i++)
+			{
+				var property = entityProperties[i];
+				var propertyName = property.constructor.name;
+				var entitiesWithProperty = this.entitiesByPropertyName(propertyName);
+				entitiesWithProperty.push(entity);
+			}
+
+			entity.initialize(uwpe);
 		}
-
-		if (this.entitiesByName.has(entity.name))
-		{
-			entity.name += entity.id;
-		}
-
-		this.entities.push(entity);
-		this.entitiesById.set(entity.id, entity);
-		this.entitiesByName.set(entity.name, entity);
-
-		var entityProperties = entity.properties;
-		for (var i = 0; i < entityProperties.length; i++)
-		{
-			var property = entityProperties[i];
-			var propertyName = property.constructor.name;
-			var entitiesWithProperty = this.entitiesByPropertyName(propertyName);
-			entitiesWithProperty.push(entity);
-		}
-
-		entity.initialize(uwpe);
 	}
 
 	entitySpawn2(universe: Universe, world: World, entity: Entity): void
@@ -247,7 +250,6 @@ export class Place implements Equatable<Place>
 		var defn = this.defn(world);
 		defn.placeInitialize(uwpe);
 		this.entitiesSpawn(uwpe);
-		this.entitiesToSpawn.length = 0;
 		for (var i = 0; i < this.entities.length; i++)
 		{
 			var entity = this.entities[i];

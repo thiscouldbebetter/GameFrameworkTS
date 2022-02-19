@@ -26,10 +26,10 @@ export class VisualBuilder
 		(
 			visualEyes, // visualForNoDirection
 			[
-				new VisualOffset(visualEyes, Coords.fromXY(1, 0).multiplyScalar(eyeRadius)),
-				new VisualOffset(visualEyes, Coords.fromXY(0, 1).multiplyScalar(eyeRadius)),
-				new VisualOffset(visualEyes, Coords.fromXY(-1, 0).multiplyScalar(eyeRadius)),
-				new VisualOffset(visualEyes, Coords.fromXY(0, -1).multiplyScalar(eyeRadius))
+				VisualOffset.fromChildAndOffset(visualEyes, Coords.fromXY(1, 0).multiplyScalar(eyeRadius)),
+				VisualOffset.fromChildAndOffset(visualEyes, Coords.fromXY(0, 1).multiplyScalar(eyeRadius)),
+				VisualOffset.fromChildAndOffset(visualEyes, Coords.fromXY(-1, 0).multiplyScalar(eyeRadius)),
+				VisualOffset.fromChildAndOffset(visualEyes, Coords.fromXY(0, -1).multiplyScalar(eyeRadius))
 			],
 			null
 		);
@@ -40,7 +40,7 @@ export class VisualBuilder
 			visualEyesDirectional
 		]);
 
-		circleWithEyes = new VisualOffset(circleWithEyes, Coords.fromXY(0, -circleRadius));
+		circleWithEyes = VisualOffset.fromChildAndOffset(circleWithEyes, Coords.fromXY(0, -circleRadius));
 
 		return circleWithEyes
 	}
@@ -93,15 +93,15 @@ export class VisualBuilder
 
 		var visualLegsFacingDownStanding = new VisualGroup
 		([
-			new VisualOffset(visualLegDownLeft, offsetLegLeft),
-			new VisualOffset(visualLegDownRight, offsetLegRight)
+			VisualOffset.fromChildAndOffset(visualLegDownLeft, offsetLegLeft),
+			VisualOffset.fromChildAndOffset(visualLegDownRight, offsetLegRight)
 		]);
 
 		var ticksPerStepAsArray = [ ticksPerStep, ticksPerStep ];
 
 		var visualLegsFacingDownWalking = new VisualGroup
 		([
-			new VisualOffset
+			VisualOffset.fromChildAndOffset
 			(
 				new VisualAnimation
 				(
@@ -109,7 +109,7 @@ export class VisualBuilder
 					ticksPerStepAsArray,
 					[
 						visualLegDownLeft,
-						new VisualOffset
+						VisualOffset.fromChildAndOffset
 						(
 							visualLegDownLeft,
 							new Coords(0, -legLengthHalf, 0)
@@ -119,14 +119,14 @@ export class VisualBuilder
 				),
 				offsetLegLeft
 			),
-			new VisualOffset
+			VisualOffset.fromChildAndOffset
 			(
 				new VisualAnimation
 				(
 					null, // name
 					ticksPerStepAsArray,
 					[
-						new VisualOffset
+						VisualOffset.fromChildAndOffset
 						(
 							visualLegDownRight,
 							new Coords(0, -legLengthHalf, 0)
@@ -167,13 +167,13 @@ export class VisualBuilder
 
 		var visualLegsFacingUpStanding = new VisualGroup
 		([
-			new VisualOffset(visualLegUpLeft, offsetLegLeft),
-			new VisualOffset(visualLegUpRight, offsetLegRight)
+			VisualOffset.fromChildAndOffset(visualLegUpLeft, offsetLegLeft),
+			VisualOffset.fromChildAndOffset(visualLegUpRight, offsetLegRight)
 		]);
 
 		var visualLegsFacingUpWalking = new VisualGroup
 		([
-			new VisualOffset
+			VisualOffset.fromChildAndOffset
 			(
 				new VisualAnimation
 				(
@@ -181,7 +181,7 @@ export class VisualBuilder
 					ticksPerStepAsArray,
 					[
 						visualLegUpLeft,
-						new VisualOffset
+						VisualOffset.fromChildAndOffset
 						(
 							visualLegUpLeft,
 							Coords.fromXY(0, -legLengthHalf)
@@ -191,14 +191,14 @@ export class VisualBuilder
 				),
 				offsetLegLeft
 			),
-			new VisualOffset
+			VisualOffset.fromChildAndOffset
 			(
 				new VisualAnimation
 				(
 					null, // name
 					ticksPerStepAsArray,
 					[
-						new VisualOffset
+						VisualOffset.fromChildAndOffset
 						(
 							visualLegUpRight,
 							Coords.fromXY(0, -legLengthHalf)
@@ -226,13 +226,13 @@ export class VisualBuilder
 
 		var visualLegsFacingLeftStanding = new VisualGroup
 		([
-			new VisualOffset(visualLegFacingLeft, offsetLegLeft),
-			new VisualOffset(visualLegFacingLeft, offsetLegRight)
+			VisualOffset.fromChildAndOffset(visualLegFacingLeft, offsetLegLeft),
+			VisualOffset.fromChildAndOffset(visualLegFacingLeft, offsetLegRight)
 		]);
 
 		var visualLegsFacingLeftWalking = new VisualGroup
 		([
-			new VisualOffset
+			VisualOffset.fromChildAndOffset
 			(
 				new VisualAnimation
 				(
@@ -240,7 +240,7 @@ export class VisualBuilder
 					ticksPerStepAsArray,
 					[
 						visualLegFacingLeft,
-						new VisualOffset
+						VisualOffset.fromChildAndOffset
 						(
 							visualLegFacingLeft,
 							new Coords(0, -legLengthHalf, 0)
@@ -250,14 +250,14 @@ export class VisualBuilder
 				),
 				offsetLegLeft
 			),
-			new VisualOffset
+			VisualOffset.fromChildAndOffset
 			(
 				new VisualAnimation
 				(
 					null, // name
 					ticksPerStepAsArray,
 					[
-						new VisualOffset
+						VisualOffset.fromChildAndOffset
 						(
 							visualLegFacingLeft,
 							new Coords(0, -legLengthHalf, 0)
@@ -285,13 +285,13 @@ export class VisualBuilder
 
 		var visualLegsFacingRightStanding = new VisualGroup
 		([
-			new VisualOffset(visualLegFacingRight, offsetLegLeft),
-			new VisualOffset(visualLegFacingRight, offsetLegRight)
+			VisualOffset.fromChildAndOffset(visualLegFacingRight, offsetLegLeft),
+			VisualOffset.fromChildAndOffset(visualLegFacingRight, offsetLegRight)
 		]);
 
 		var visualLegsFacingRightWalking = new VisualGroup
 		([
-			new VisualOffset
+			VisualOffset.fromChildAndOffset
 			(
 				new VisualAnimation
 				(
@@ -299,7 +299,7 @@ export class VisualBuilder
 					ticksPerStepAsArray,
 					[
 						visualLegFacingRight,
-						new VisualOffset
+						VisualOffset.fromChildAndOffset
 						(
 							visualLegFacingRight,
 							new Coords(0, -legLengthHalf, 0)
@@ -309,14 +309,14 @@ export class VisualBuilder
 				),
 				offsetLegLeft
 			),
-			new VisualOffset
+			VisualOffset.fromChildAndOffset
 			(
 				new VisualAnimation
 				(
 					null, // name
 					ticksPerStepAsArray,
 					[
-						new VisualOffset
+						VisualOffset.fromChildAndOffset
 						(
 							visualLegFacingRight,
 							new Coords(0, -legLengthHalf, 0)
@@ -460,7 +460,7 @@ export class VisualBuilder
 				null, orientationToAnchorTo
 			),
 			// wieldable
-			new VisualOffset
+			VisualOffset.fromChildAndOffset
 			(
 				visualWieldable,
 				Coords.fromXY(2, 1).multiplyScalar(circleRadius)
@@ -482,7 +482,7 @@ export class VisualBuilder
 				null, orientationToAnchorTo
 			),
 			// wieldable
-			new VisualOffset
+			VisualOffset.fromChildAndOffset
 			(
 				visualWieldable,
 				Coords.fromXY(-2, 0).multiplyScalar(circleRadius)
@@ -504,7 +504,7 @@ export class VisualBuilder
 				null, orientationToAnchorTo
 			),
 			// wieldable
-			new VisualOffset
+			VisualOffset.fromChildAndOffset
 			(
 				visualWieldable,
 				Coords.fromXY(-2, 1).multiplyScalar(circleRadius)
@@ -526,7 +526,7 @@ export class VisualBuilder
 				null, orientationToAnchorTo
 			),
 			// wieldable
-			new VisualOffset
+			VisualOffset.fromChildAndOffset
 			(
 				visualWieldable,
 				Coords.fromXY(2, 0).multiplyScalar(circleRadius)
@@ -545,7 +545,7 @@ export class VisualBuilder
 			null
 		);
 
-		var visualArmAndWieldableDirectionalOffset = new VisualOffset
+		var visualArmAndWieldableDirectionalOffset = VisualOffset.fromChildAndOffset
 		(
 			visualArmAndWieldableDirectional,
 			new Coords(0, 0 - circleRadius, 0)
@@ -591,11 +591,11 @@ export class VisualBuilder
 
 		var visualEyes = new VisualGroup
 		([
-			new VisualOffset
+			VisualOffset.fromChildAndOffset
 			(
 				visualEye, Coords.fromXY(-visualEyeRadius, 0)
 			),
-			new VisualOffset
+			VisualOffset.fromChildAndOffset
 			(
 				visualEye, Coords.fromXY(visualEyeRadius, 0)
 			)
