@@ -150,6 +150,7 @@ import UniverseWorldPlaceEntities = gf.UniverseWorldPlaceEntities;
 import Venue = gf.Venue;
 import VenueWorld = gf.VenueWorld;
 import World = gf.World;
+import WorldCreator = gf.WorldCreator;
 import WorldDefn = gf.WorldDefn;
 
 // Model - Actors.

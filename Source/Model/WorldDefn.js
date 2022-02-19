@@ -4,25 +4,69 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class WorldDefn {
-            constructor(actions, activityDefns, entityDefns, itemDefns, placeDefns, skills) {
-                this.actions = actions || [];
-                this.activityDefns = activityDefns || [];
-                this.entityDefns = entityDefns || [];
-                this.itemDefns = itemDefns || [];
-                this.placeDefns = placeDefns || [];
-                this.skills = skills || [];
-                this.actionsByName = GameFramework.ArrayHelper.addLookupsByName(this.actions);
-                this.activityDefnsByName = GameFramework.ArrayHelper.addLookupsByName(this.activityDefns);
-                this.entityDefnsByName = GameFramework.ArrayHelper.addLookupsByName(this.entityDefns);
-                this.itemDefnsByName = GameFramework.ArrayHelper.addLookupsByName(this.itemDefns);
-                this.placeDefnsByName = GameFramework.ArrayHelper.addLookupsByName(this.placeDefns);
-                this.skillsByName = GameFramework.ArrayHelper.addLookupsByName(this.skills);
+            constructor(defnArrays) {
+                for (var i = 0; i < defnArrays.length; i++) {
+                    var defns = defnArrays[i];
+                    var defn0 = defns[0];
+                    var defnTypeName = defn0.constructor.name;
+                    var notDefined = "undefined";
+                    if (typeof (GameFramework.Action) != notDefined
+                        && defnTypeName == GameFramework.Action.name) {
+                        this.actions = defns;
+                        this.actionsByName =
+                            GameFramework.ArrayHelper.addLookupsByName(this.actions);
+                    }
+                    else if (typeof (GameFramework.ActivityDefn) != notDefined
+                        && defnTypeName == GameFramework.ActivityDefn.name) {
+                        this.activityDefns = defns;
+                        this.activityDefnsByName =
+                            GameFramework.ArrayHelper.addLookupsByName(this.activityDefns);
+                    }
+                    else if (typeof (GameFramework.Entity) != notDefined
+                        && defnTypeName == GameFramework.Entity.name) {
+                        this.entityDefns = defns;
+                        this.entityDefnsByName =
+                            GameFramework.ArrayHelper.addLookupsByName(this.entityDefns);
+                    }
+                    else if (typeof (GameFramework.ItemDefn) != notDefined
+                        && defnTypeName == GameFramework.ItemDefn.name) {
+                        this.itemDefns = defns;
+                        this.itemDefnsByName =
+                            GameFramework.ArrayHelper.addLookupsByName(this.itemDefns);
+                    }
+                    else if (typeof (GameFramework.PlaceDefn) != notDefined
+                        && defnTypeName == GameFramework.PlaceDefn.name) {
+                        this.placeDefns = defns;
+                        this.placeDefnsByName =
+                            GameFramework.ArrayHelper.addLookupsByName(this.placeDefns);
+                    }
+                    else if (typeof (GameFramework.Skill) != notDefined
+                        && defnTypeName == GameFramework.Skill.name) {
+                        this.skills = defns;
+                        this.skillsByName =
+                            GameFramework.ArrayHelper.addLookupsByName(this.skills);
+                    }
+                    else {
+                        throw new Error("Unrecognized defn type: " + defnTypeName);
+                    }
+                }
             }
             static default() {
-                return new WorldDefn(null, null, null, null, null, null);
+                return new WorldDefn([]);
+            }
+            static from6 // ActionActivityEntityItemyPlaceAndSkillDefns
+            (actions, activityDefns, entityDefns, itemDefns, placeDefns, skills) {
+                return new WorldDefn([
+                    actions,
+                    activityDefns,
+                    entityDefns,
+                    itemDefns,
+                    placeDefns,
+                    skills
+                ]);
             }
             static fromPlaceDefns(placeDefns) {
-                return new WorldDefn([], [], [], [], placeDefns, []);
+                return new WorldDefn([placeDefns]);
             }
             // Convenience methods.
             actionByName(defnName) {

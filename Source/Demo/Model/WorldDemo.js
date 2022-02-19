@@ -49,7 +49,14 @@ class WorldDemo extends World {
         var itemDefns = placeBuilder.itemDefns;
         var entityDefns = placeBuilder.entityDefns;
         var skills = Skill.skillsDemo();
-        var defns = new WorldDefn(actions, activityDefns, entityDefns, itemDefns, placeDefns, skills);
+        var defns = new WorldDefn([
+            actions,
+            activityDefns,
+            entityDefns,
+            itemDefns,
+            placeDefns,
+            skills
+        ]);
         var places = [];
         var worldSizeInRooms = new Coords(2, 2, 1);
         var roomPos = Coords.create();

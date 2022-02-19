@@ -78,14 +78,14 @@ class WorldDemo extends World
 		var skills = Skill.skillsDemo();
 
 		var defns = new WorldDefn
-		(
+		([
 			actions,
 			activityDefns,
 			entityDefns,
 			itemDefns,
 			placeDefns,
 			skills
-		);
+		]);
 
 		var places = [];
 
