@@ -97,5 +97,31 @@ var ThisCouldBeBetter;
             }
         }
         GameFramework.MapOfCellsCellSourceArray = MapOfCellsCellSourceArray;
+        class MapOfCellsCellSourceImage {
+            constructor(cellsAsImage, cellCreate, cellSetFromColor) {
+                this.cellsAsDisplay = GameFramework.Display2D.fromImage(cellsAsImage);
+                this._cellCreate = cellCreate;
+                this._cellSetFromColor = cellSetFromColor;
+                this._pixelColor = GameFramework.Color.create();
+            }
+            cellAtPosInCells(map, posInCells, cellToOverwrite) {
+                var pixelColor = this.cellsAsDisplay.colorAtPos(posInCells, this._pixelColor);
+                this.cellSetFromColor(cellToOverwrite, pixelColor);
+                return cellToOverwrite;
+            }
+            cellCreate() {
+                return this._cellCreate();
+            }
+            cellSetFromColor(cell, color) {
+                return this._cellSetFromColor(cell, color);
+            }
+            clone() {
+                return this; // todo
+            }
+            overwriteWith(other) {
+                return this; // todo
+            }
+        }
+        GameFramework.MapOfCellsCellSourceImage = MapOfCellsCellSourceImage;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
 })(ThisCouldBeBetter || (ThisCouldBeBetter = {}));

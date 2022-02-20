@@ -12,6 +12,9 @@ var ThisCouldBeBetter;
             static byName(colorName) {
                 return Color.Instances()._AllByName.get(colorName);
             }
+            static create() {
+                return Color.fromRGB(0, 0, 0); // Black.
+            }
             static fromRGB(red, green, blue) {
                 return new Color(null, null, [red, green, blue, 1]);
             }
@@ -67,6 +70,13 @@ var ThisCouldBeBetter;
                 this.code = other.code;
                 GameFramework.ArrayHelper.overwriteWithNonClonables(this.componentsRGBA, other.componentsRGBA);
                 this._systemColor = null;
+                return this;
+            }
+            overwriteWithComponentsRGBA255(otherAsComponentsRGBA255) {
+                this.componentsRGBA[0] = otherAsComponentsRGBA255[0] / 255;
+                this.componentsRGBA[1] = otherAsComponentsRGBA255[1] / 255;
+                this.componentsRGBA[2] = otherAsComponentsRGBA255[2] / 255;
+                this.componentsRGBA[3] = otherAsComponentsRGBA255[3] / 255; // Alpha is integer <= 255 in this case.
                 return this;
             }
             // Interpolatable.

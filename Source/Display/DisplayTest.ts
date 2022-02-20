@@ -5,8 +5,7 @@ namespace ThisCouldBeBetter.GameFramework
 export class DisplayTest implements Display
 {
 	sizesAvailable: Coords[];
-	fontName: string;
-	fontHeightInPixels: number
+	fontNameAndHeight: FontNameAndHeight;
 	colorFore: Color;
 	colorBack: Color;
 	isInvisible: boolean
@@ -16,12 +15,15 @@ export class DisplayTest implements Display
 
 	constructor
 	(
-		sizesAvailable: Coords[], fontName: string, fontHeightInPixels: number,
-		colorFore: Color, colorBack: Color, isInvisible: boolean)
+		sizesAvailable: Coords[],
+		fontNameAndHeight: FontNameAndHeight,
+		colorFore: Color, colorBack: Color,
+		isInvisible: boolean
+	)
 	{
 		this.sizesAvailable = sizesAvailable;
-		this.fontName = fontName;
-		this.fontHeightInPixels = fontHeightInPixels || 10;
+		this.fontNameAndHeight =
+			fontNameAndHeight || FontNameAndHeight.default();
 		this.colorFore = colorFore;
 		this.colorBack = colorBack;
 		this.isInvisible = isInvisible || false;
@@ -37,15 +39,20 @@ export class DisplayTest implements Display
 
 	static fromSize(size: Coords): DisplayTest
 	{
-		return new DisplayTest([size], null, null, null, null, false);
+		return new DisplayTest([size], null, null, null, false);
 	}
 
 	static fromSizeAndIsInvisible(size: Coords, isInvisible: boolean): DisplayTest
 	{
-		return new DisplayTest([size], null, null, null, null, isInvisible);
+		return new DisplayTest([size], null, null, null, isInvisible);
 	}
 
 	clear(): void {}
+
+	colorAtPos(pos: Coords, colorOut: Color): Color
+	{
+		throw new Error("Not implemented!");
+	}
 
 	displayToUse(): Display
 	{
@@ -191,7 +198,7 @@ export class DisplayTest implements Display
 	eraseModeSet(value: boolean): void
 	{}
 
-	fontSet(fontName: string, fontHeightInPixels: number): void
+	fontSet(fontNameAndHeight: FontNameAndHeight): void
 	{}
 
 	flush(): void {}

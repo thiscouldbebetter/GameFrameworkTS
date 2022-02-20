@@ -4,10 +4,10 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class DisplayTest {
-            constructor(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorBack, isInvisible) {
+            constructor(sizesAvailable, fontNameAndHeight, colorFore, colorBack, isInvisible) {
                 this.sizesAvailable = sizesAvailable;
-                this.fontName = fontName;
-                this.fontHeightInPixels = fontHeightInPixels || 10;
+                this.fontNameAndHeight =
+                    fontNameAndHeight || GameFramework.FontNameAndHeight.default();
                 this.colorFore = colorFore;
                 this.colorBack = colorBack;
                 this.isInvisible = isInvisible || false;
@@ -18,12 +18,15 @@ var ThisCouldBeBetter;
                 return DisplayTest.fromSize(GameFramework.Coords.fromXY(100, 100));
             }
             static fromSize(size) {
-                return new DisplayTest([size], null, null, null, null, false);
+                return new DisplayTest([size], null, null, null, false);
             }
             static fromSizeAndIsInvisible(size, isInvisible) {
-                return new DisplayTest([size], null, null, null, null, isInvisible);
+                return new DisplayTest([size], null, null, null, isInvisible);
             }
             clear() { }
+            colorAtPos(pos, colorOut) {
+                throw new Error("Not implemented!");
+            }
             displayToUse() {
                 return this;
             }
@@ -49,7 +52,7 @@ var ThisCouldBeBetter;
             drawText(text, fontHeightInPixels, pos, colorFill, colorOutline, isCenteredHorizontally, isCenteredVertically, sizeMaxInPixels) { }
             drawWedge(center, radius, angleStartInTurns, angleStopInTurns, colorFill, colorBorder) { }
             eraseModeSet(value) { }
-            fontSet(fontName, fontHeightInPixels) { }
+            fontSet(fontNameAndHeight) { }
             flush() { }
             hide(universe) { }
             initialize(universe) {

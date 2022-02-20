@@ -32,7 +32,7 @@ export class MapLocated implements ShapeBase
 
 	// Equatable
 
-	equals(other: ShapeBase) { return false; } // todo
+	equals(other: ShapeBase): boolean { return false; } // todo
 
 	// translatable
 

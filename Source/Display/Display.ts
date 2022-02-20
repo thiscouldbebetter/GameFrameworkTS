@@ -6,13 +6,13 @@ export interface Display
 {
 	colorBack: Color;
 	colorFore: Color;
-	fontHeightInPixels: number;
-	fontName: string;
+	fontNameAndHeight: FontNameAndHeight;
 	sizeInPixels: Coords;
 	sizeInPixelsHalf: Coords;
 	sizesAvailable: Coords[];
 
 	clear(): void;
+	colorAtPos(pos: Coords, colorOut: Color): Color;
 	displayToUse() : Display;
 	drawArc
 	(
@@ -83,8 +83,11 @@ export interface Display
 	): void;
 	drawText
 	(
-		text: string, fontHeightInPixels: number, pos: Coords,
-		colorFill: Color, colorOutline: Color,
+		text: string,
+		fontHeightInPixels: number,
+		pos: Coords,
+		colorFill: Color,
+		colorOutline: Color,
 		isCenteredHorizontally: boolean,
 		isCenteredVertically: boolean,
 		sizeMaxInPixels: Coords
@@ -95,7 +98,7 @@ export interface Display
 		angleStopInTurns: number, colorFill: Color, colorBorder: Color
 	): void;
 	eraseModeSet(value: boolean): void;
-	fontSet(fontName: string, fontHeightInPixels: number): void;
+	fontSet(fontNameAndHeight: FontNameAndHeight): void;
 	flush(): void;
 	hide(universe: Universe): void;
 	initialize(universe: Universe): Display;

@@ -17,7 +17,7 @@ var ThisCouldBeBetter;
             static fromSystemImage(name, systemImage) {
                 var returnValue = new Image2(name, systemImage.src);
                 returnValue.systemImage = systemImage;
-                returnValue.sizeInPixels = new GameFramework.Coords(systemImage.width, systemImage.height, 0);
+                returnValue.sizeInPixels = GameFramework.Coords.fromXY(systemImage.width, systemImage.height);
                 returnValue.isLoaded = true;
                 return returnValue;
             }

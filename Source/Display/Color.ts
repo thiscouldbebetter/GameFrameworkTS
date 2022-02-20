@@ -17,24 +17,29 @@ export class Color implements Interpolatable<Color>
 		this.componentsRGBA = componentsRGBA;
 	}
 
-	static byName(colorName: string)
+	static byName(colorName: string): Color
 	{
 		return Color.Instances()._AllByName.get(colorName);
 	}
 
-	static fromRGB(red: number, green: number, blue: number)
+	static create(): Color
+	{
+		return Color.fromRGB(0, 0, 0); // Black.
+	}
+
+	static fromRGB(red: number, green: number, blue: number): Color
 	{
 		return new Color(null, null, [red, green, blue, 1]);
 	}
 
-	static fromSystemColor(systemColor: string)
+	static fromSystemColor(systemColor: string): Color
 	{
 		var returnValue = new Color(systemColor, null, null);
 		returnValue._systemColor = systemColor;
 		return returnValue;
 	}
 
-	static systemColorGet(color: Color)
+	static systemColorGet(color: Color): string
 	{
 		return (color == null ? null : color.systemColor() );
 	}
@@ -47,7 +52,7 @@ export class Color implements Interpolatable<Color>
 
 	static _instances: Color_Instances;
 
-	static Instances()
+	static Instances(): Color_Instances
 	{
 		if (Color._instances == null)
 		{
@@ -64,7 +69,7 @@ export class Color implements Interpolatable<Color>
 		return this.interpolateWith(other, .5);
 	}
 
-	alpha(valueToSet: number)
+	alpha(valueToSet: number): number
 	{
 		if (valueToSet != null)
 		{
@@ -115,6 +120,19 @@ export class Color implements Interpolatable<Color>
 			this.componentsRGBA, other.componentsRGBA
 		);
 		this._systemColor = null;
+		return this;
+	}
+
+	overwriteWithComponentsRGBA255
+	(
+		otherAsComponentsRGBA255: Uint8ClampedArray
+	): Color
+	{
+		this.componentsRGBA[0] = otherAsComponentsRGBA255[0] / 255;
+		this.componentsRGBA[1] = otherAsComponentsRGBA255[1] / 255;
+		this.componentsRGBA[2] = otherAsComponentsRGBA255[2] / 255;
+		this.componentsRGBA[3] = otherAsComponentsRGBA255[3] / 255; // Alpha is integer <= 255 in this case.
+
 		return this;
 	}
 

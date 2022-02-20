@@ -221,4 +221,62 @@ export class MapOfCellsCellSourceArray<TCell extends Clonable<TCell>>
 
 }
 
+export class MapOfCellsCellSourceImage<TCell extends Clonable<TCell>>
+	implements MapOfCellsCellSource<TCell>
+{
+	cellsAsDisplay: Display2D;
+	_cellCreate: () => TCell;
+	_cellSetFromColor: (cell: TCell, color: Color) => TCell
+
+	_pixelColor: Color;
+	
+	constructor
+	(
+		cellsAsImage: Image2,
+		cellCreate: () => TCell,
+		cellSetFromColor: (cell: TCell, color: Color) => TCell
+	)
+	{
+		this.cellsAsDisplay = Display2D.fromImage(cellsAsImage);
+		this._cellCreate = cellCreate;
+		this._cellSetFromColor = cellSetFromColor;
+
+		this._pixelColor = Color.create();
+	}
+
+	cellAtPosInCells
+	(
+		map: MapOfCells<TCell>,
+		posInCells: Coords,
+		cellToOverwrite: TCell
+	): TCell
+	{
+		var pixelColor =
+			this.cellsAsDisplay.colorAtPos(posInCells, this._pixelColor);
+		this.cellSetFromColor(cellToOverwrite, pixelColor);
+		return cellToOverwrite;
+	}
+
+	cellCreate(): TCell
+	{
+		return this._cellCreate();
+	}
+
+	cellSetFromColor(cell: TCell, color: Color): TCell
+	{
+		return this._cellSetFromColor(cell, color);
+	}
+
+	clone(): MapOfCellsCellSource<TCell>
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: MapOfCellsCellSource<TCell>): MapOfCellsCellSource<TCell>
+	{
+		return this; // todo
+	}
+}
+
+
 }

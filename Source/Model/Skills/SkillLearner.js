@@ -119,7 +119,7 @@ var ThisCouldBeBetter;
             toControl(universe, size, entity, venueToReturnTo, includeTitle) {
                 var display = universe.display;
                 //var size = display.sizeInPixels.clone();
-                var labelHeight = display.fontHeightInPixels * 1.2;
+                var labelHeight = display.fontNameAndHeight.heightInPixels * 1.2;
                 var margin = 20;
                 var labelHeightLarge = labelHeight * 2;
                 var fontHeightInPixels = margin / 2;

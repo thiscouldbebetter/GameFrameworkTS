@@ -5,8 +5,7 @@ namespace ThisCouldBeBetter.GameFramework
 export class Display2D implements Display
 {
 	sizesAvailable: Coords[];
-	fontName: string;
-	fontHeightInPixels: number
+	fontNameAndHeight: FontNameAndHeight;
 	colorFore: Color;
 	colorBack: Color;
 	isInvisible: boolean;
@@ -25,14 +24,18 @@ export class Display2D implements Display
 
 	constructor
 	(
-		sizesAvailable: Coords[], fontName: string, fontHeightInPixels: number,
-		colorFore: Color, colorBack: Color, isInvisible: boolean)
+		sizesAvailable: Coords[],
+		fontNameAndHeight: FontNameAndHeight,
+		colorFore: Color,
+		colorBack: Color,
+		isInvisible: boolean
+	)
 	{
 		this.sizesAvailable = sizesAvailable;
 		this._sizeDefault = this.sizesAvailable[0];
 		this.sizeInPixels = this._sizeDefault;
-		this.fontName = fontName;
-		this.fontHeightInPixels = fontHeightInPixels || 10;
+		this.fontNameAndHeight =
+			fontNameAndHeight || FontNameAndHeight.default();
 		this.colorFore = colorFore;
 		this.colorBack = colorBack;
 		this.isInvisible = isInvisible || false;
@@ -45,14 +48,26 @@ export class Display2D implements Display
 		this._zeroes = Coords.Instances().Zeroes;
 	}
 
+	static fromImage(image: Image2): Display2D
+	{
+		var returnDisplay = Display2D.fromSizeAndIsInvisible
+		(
+			image.sizeInPixels, true // isInvisible
+		);
+
+		returnDisplay.drawImage(image, Coords.Instances().Zeroes);
+
+		return returnDisplay;
+	}
+
 	static fromSize(size: Coords): Display2D
 	{
-		return new Display2D([size], null, null, null, null, false);
+		return new Display2D([size], null, null, null, false);
 	}
 
 	static fromSizeAndIsInvisible(size: Coords, isInvisible: boolean): Display2D
 	{
-		return new Display2D([size], null, null, null, null, isInvisible);
+		return new Display2D([size], null, null, null, isInvisible);
 	}
 
 	// constants
@@ -65,6 +80,19 @@ export class Display2D implements Display
 		(
 			0, 0, this.sizeInPixels.x, this.sizeInPixels.y
 		);
+	}
+
+	colorAtPos(pos: Coords, colorOut: Color): Color
+	{
+		var colorAsComponentsRGBA =
+			this.graphics.getImageData(pos.x, pos.y, 1, 1).data;
+
+		colorOut.overwriteWithComponentsRGBA255
+		(
+			colorAsComponentsRGBA
+		);
+
+		return colorOut;
 	}
 
 	displayToUse(): Display
@@ -621,12 +649,8 @@ export class Display2D implements Display
 	): void
 	{
 		var fontToRestore = this.graphics.font;
-		if (fontHeightInPixels == null)
-		{
-			fontHeightInPixels = this.fontHeightInPixels;
-		}
 
-		this.fontSet(null, fontHeightInPixels);
+		this.fontSet(this.fontNameAndHeight);
 
 		if (colorFill == null)
 		{
@@ -834,13 +858,12 @@ export class Display2D implements Display
 		}
 	}
 
-	fontSet(fontName: string, fontHeightInPixels: number): void
+	fontSet(fontNameAndHeight: FontNameAndHeight): void
 	{
-		if (fontName != this.fontName || fontHeightInPixels != this.fontHeightInPixels)
+		if (fontNameAndHeight.equals(this.fontNameAndHeight) == false)
 		{
-			this.fontName = fontName || this.fontName;
-			this.fontHeightInPixels = fontHeightInPixels || this.fontHeightInPixels;
-			this.graphics.font = this.fontHeightInPixels + "px " + this.fontName;
+			this.fontNameAndHeight = fontNameAndHeight;
+			this.graphics.font = this.fontNameAndHeight.toStringSystemFont();
 		}
 	}
 
@@ -925,7 +948,7 @@ export class Display2D implements Display
 	): number
 	{
 		var fontToRestore = this.graphics.font;
-		this.fontSet(null, fontHeightInPixels);
+		this.fontSet(this.fontNameAndHeight);
 		var returnValue = this.graphics.measureText(textToMeasure).width;
 		this.graphics.font = fontToRestore;
 		return returnValue;
@@ -950,7 +973,7 @@ export class Display2D implements Display
 
 			this.graphics = this.canvas.getContext("2d");
 
-			this.fontSet(null, this.fontHeightInPixels);
+			this.fontSet(this.fontNameAndHeight);
 
 			// todo
 			// var testString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";

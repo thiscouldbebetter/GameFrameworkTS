@@ -6,8 +6,7 @@ export class Display3D implements Display
 {
 	sizeInPixels: Coords;
 	sizesAvailable: Coords[];
-	fontName: string;
-	fontHeightInPixels: number;
+	fontNameAndHeight: FontNameAndHeight;
 	colorFore: Color;
 	colorBack: Color;
 
@@ -32,16 +31,15 @@ export class Display3D implements Display
 	constructor
 	(
 		sizeInPixels: Coords,
-		fontName: string,
-		fontHeightInPixels: number,
+		fontNameAndHeight: FontNameAndHeight,
 		colorFore: Color,
 		colorBack: Color
 	)
 	{
 		this.sizeInPixels = sizeInPixels;
 		this.sizesAvailable = [ this.sizeInPixels ];
-		this.fontName = fontName;
-		this.fontHeightInPixels = fontHeightInPixels;
+		this.fontNameAndHeight =
+			fontNameAndHeight || FontNameAndHeight.default();
 		this.colorFore = colorFore;
 		this.colorBack = colorBack;
 
@@ -50,7 +48,7 @@ export class Display3D implements Display
 		this._display2DOverlay = new Display2D
 		(
 			this.sizesAvailable,
-			fontName, fontHeightInPixels,
+			fontNameAndHeight,
 			colorFore, colorBack, null
 		);
 	}
@@ -105,6 +103,11 @@ export class Display3D implements Display
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 		this._display2DOverlay.clear();
+	}
+
+	colorAtPos(pos: Coords, colorOut: Color): Color
+	{
+		throw new Error("Not yet implemented!");
 	}
 
 	displayToUse(): Display
@@ -627,9 +630,9 @@ export class Display3D implements Display
 		this._display2DOverlay.eraseModeSet(value);
 	}
 
-	fontSet(fontName: string, fontHeightInPixels: number): void
+	fontSet(fontNameAndHeight: FontNameAndHeight): void
 	{
-		this._display2DOverlay.fontSet(fontName, fontHeightInPixels);
+		this._display2DOverlay.fontSet(fontNameAndHeight);
 	}
 
 	flush(): void {}
@@ -663,9 +666,15 @@ export class Display3D implements Display
 		this._display2DOverlay.stateSave();
 	}
 
-	textWidthForFontHeight(textToMeasure: string, fontHeightInPixels: number): number
+	textWidthForFontHeight
+	(
+		textToMeasure: string, fontHeightInPixels: number
+	): number
 	{
-		return this._display2DOverlay.textWidthForFontHeight(textToMeasure, fontHeightInPixels);
+		return this._display2DOverlay.textWidthForFontHeight
+		(
+			textToMeasure, fontHeightInPixels
+		);
 	}
 
 	toImage(): Image2

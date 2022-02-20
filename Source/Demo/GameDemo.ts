@@ -31,8 +31,7 @@ class GameDemo
 		var display = new Display2D
 		(
 			displaySizesAvailable,
-			"Font", // fontName
-			10, // fontHeightInPixels
+			new FontNameAndHeight("Font", 10),
 			Color.byName("Gray"),
 			Color.byName("White"), // colorFore, colorBack
 			null

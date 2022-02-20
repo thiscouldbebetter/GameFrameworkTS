@@ -36,7 +36,10 @@ export class Image2 implements MediaItemBase
 		);
 
 		returnValue.systemImage = systemImage;
-		returnValue.sizeInPixels = new Coords(systemImage.width, systemImage.height, 0);
+		returnValue.sizeInPixels = Coords.fromXY
+		(
+			systemImage.width, systemImage.height
+		);
 		returnValue.isLoaded = true;
 
 		return returnValue;
