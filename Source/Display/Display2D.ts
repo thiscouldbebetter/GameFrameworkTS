@@ -76,6 +76,18 @@ export class Display2D implements Display
 
 	static RadiansPerTurn = Math.PI * 2.0;
 
+	// Methods.
+
+	toComponentArrayRGBA(): Uint8ClampedArray
+	{
+		var pixelsAllAsComponentsRGBA =
+			this.graphics.getImageData(0, 0, this.sizeInPixels.x, this.sizeInPixels.y).data;
+
+		return pixelsAllAsComponentsRGBA;
+	}
+
+	// Display implementation.
+
 	clear(): void
 	{
 		this.graphics.clearRect
@@ -86,6 +98,10 @@ export class Display2D implements Display
 
 	colorAtPos(pos: Coords, colorOut: Color): Color
 	{
+		// This is amazingly, incredibly slow,
+		// and, due to browser security features,
+		// doesn't work when running from file.
+
 		var colorAsComponentsRGBA =
 			this.graphics.getImageData(pos.x, pos.y, 1, 1).data;
 
@@ -963,9 +979,9 @@ export class Display2D implements Display
 		return returnValue;
 	}
 
-	toImage(): Image2
+	toImage(name: string): Image2
 	{
-		return Image2.fromSystemImage("[fromDisplay]", this.canvas);
+		return Image2.fromSystemImage(name || "[fromDisplay]", this.canvas);
 	}
 
 	// platformable

@@ -230,6 +230,9 @@ var ThisCouldBeBetter;
             toString() {
                 return this.min().toString() + ":" + this.max().toString();
             }
+            toStringXY() {
+                return this.min().toStringXY() + ":" + this.max().toStringXY();
+            }
             // ShapeBase.
             collider() { return null; }
             dimensionForSurfaceClosestToPoint(posToCheck, displacementOverSizeHalf) {

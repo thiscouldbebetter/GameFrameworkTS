@@ -41,7 +41,8 @@ export class Image2 implements MediaItemBase
 			box
 		);
 
-		var returnImage = display.toImage();
+		var name = imageSource.name + box.toStringXY()
+		var returnImage = display.toImage(name);
 
 		return returnImage;
 	}

@@ -241,7 +241,7 @@ export class DisplayTest implements Display
 		return fontHeightInPixels * textToMeasure.length;
 	}
 
-	toImage(): Image2
+	toImage(name: string): Image2
 	{
 		return null;
 	}

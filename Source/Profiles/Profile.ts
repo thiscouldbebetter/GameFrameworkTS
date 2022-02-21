@@ -135,7 +135,7 @@ export class Profile
 			var displayFull = Display2D.fromSizeAndIsInvisible(displaySize, true);
 			displayFull.initialize(universe);
 			place.draw(universe, world, displayFull);
-			var imageSnapshotFull = displayFull.toImage();
+			var imageSnapshotFull = displayFull.toImage(Profile.name);
 
 			var imageSizeThumbnail = visualThumbnailSize.clone();
 			var displayThumbnail = Display2D.fromSizeAndIsInvisible
@@ -147,7 +147,7 @@ export class Profile
 			(
 				imageSnapshotFull, Coords.Instances().Zeroes, imageSizeThumbnail
 			);
-			var imageThumbnailFromDisplay = displayThumbnail.toImage();
+			var imageThumbnailFromDisplay = displayThumbnail.toImage(SaveState.name);
 			var imageThumbnailAsDataUrl = imageThumbnailFromDisplay.systemImage.toDataURL();
 			var imageThumbnail = new Image2("Snapshot", imageThumbnailAsDataUrl).unload();
 

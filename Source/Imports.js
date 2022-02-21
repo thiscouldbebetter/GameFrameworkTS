@@ -87,6 +87,7 @@ var Rotation = gf.Rotation;
 var Collision = gf.Collision;
 var CollisionHelper = gf.CollisionHelper;
 var CollisionTracker = gf.CollisionTracker;
+var CollisionTrackerMap = gf.CollisionTrackerMap;
 // Geometry - Constraints.
 var Constraint_AttachToEntityWithName = gf.Constraint_AttachToEntityWithName;
 var Constraint_Conditional = gf.Constraint_Conditional;
@@ -120,6 +121,7 @@ var ShapeInverse = gf.ShapeInverse;
 var Shell = gf.Shell;
 var Sphere = gf.Sphere;
 var Wedge = gf.Wedge;
+var MapCellCollidable = gf.MapCellCollidable;
 var MapLocated = gf.MapLocated;
 var MapOfCells = gf.MapOfCells;
 // Geometry - Shapes - Meshes.

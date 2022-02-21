@@ -32,10 +32,19 @@ var ThisCouldBeBetter;
             static fromSizeAndIsInvisible(size, isInvisible) {
                 return new Display2D([size], null, null, null, isInvisible);
             }
+            // Methods.
+            toComponentArrayRGBA() {
+                var pixelsAllAsComponentsRGBA = this.graphics.getImageData(0, 0, this.sizeInPixels.x, this.sizeInPixels.y).data;
+                return pixelsAllAsComponentsRGBA;
+            }
+            // Display implementation.
             clear() {
                 this.graphics.clearRect(0, 0, this.sizeInPixels.x, this.sizeInPixels.y);
             }
             colorAtPos(pos, colorOut) {
+                // This is amazingly, incredibly slow,
+                // and, due to browser security features,
+                // doesn't work when running from file.
                 var colorAsComponentsRGBA = this.graphics.getImageData(pos.x, pos.y, 1, 1).data;
                 colorOut.overwriteWithComponentsRGBA255(colorAsComponentsRGBA);
                 return colorOut;
@@ -477,8 +486,8 @@ var ThisCouldBeBetter;
                 this.graphics.font = fontToRestore;
                 return returnValue;
             }
-            toImage() {
-                return GameFramework.Image2.fromSystemImage("[fromDisplay]", this.canvas);
+            toImage(name) {
+                return GameFramework.Image2.fromSystemImage(name || "[fromDisplay]", this.canvas);
             }
             // platformable
             toDomElement() {

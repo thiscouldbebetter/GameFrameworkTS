@@ -97,7 +97,7 @@ class PlaceBuilderDemo_Emplacements {
             var transformableAsVisualCircle = transformable;
             transformableAsVisualCircle.radius *= 1.02;
             var color = transformableAsVisualCircle.colorFill.clone();
-            color.alpha(color.alpha(null) * .95);
+            color.alphaSet(color.alpha() * .95);
             transformableAsVisualCircle.colorFill = color;
             return transformable;
         }), smokePuffVisual);

@@ -268,7 +268,7 @@ var ThisCouldBeBetter;
             textWidthForFontHeight(textToMeasure, fontHeightInPixels) {
                 return this._display2DOverlay.textWidthForFontHeight(textToMeasure, fontHeightInPixels);
             }
-            toImage() {
+            toImage(name) {
                 return null;
             }
             // platformable

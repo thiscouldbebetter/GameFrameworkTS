@@ -39,12 +39,25 @@ var ThisCouldBeBetter;
             add(other) {
                 return this.interpolateWith(other, .5);
             }
-            alpha(valueToSet) {
-                if (valueToSet != null) {
-                    this.componentsRGBA[3] = valueToSet;
-                    this._systemColor = null;
-                }
+            alpha() {
                 return this.componentsRGBA[3];
+            }
+            alphaSet(valueToSet) {
+                this.componentsRGBA[3] = valueToSet;
+                this._systemColor = null;
+                return this;
+            }
+            componentsRGB() {
+                return this.componentsRGBA.slice(0, 3);
+            }
+            isBlack() {
+                return (this.componentsRGB().some(x => x > 0) == false);
+            }
+            isTransparent() {
+                return (this.alpha() < 1);
+            }
+            isWhite() {
+                return (this.componentsRGB().some(x => x < 1) == false);
             }
             multiplyRGBScalar(scalar) {
                 for (var i = 0; i < 3; i++) {
@@ -63,6 +76,13 @@ var ThisCouldBeBetter;
                             + ")";
                 }
                 return this._systemColor;
+            }
+            value() {
+                // This is "value" as in how dark or light the color is.
+                var returnValue = (this.componentsRGBA[0]
+                    + this.componentsRGBA[1]
+                    + this.componentsRGBA[2]) / 3;
+                return returnValue;
             }
             // Clonable.
             clone() {

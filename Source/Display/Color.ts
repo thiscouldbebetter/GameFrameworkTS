@@ -74,14 +74,37 @@ export class Color implements Interpolatable<Color>
 		return this.interpolateWith(other, .5);
 	}
 
-	alpha(valueToSet: number): number
+	alpha(): number
 	{
-		if (valueToSet != null)
-		{
-			this.componentsRGBA[3] = valueToSet;
-			this._systemColor = null;
-		}
 		return this.componentsRGBA[3];
+	}
+
+	alphaSet(valueToSet: number): Color
+	{
+		this.componentsRGBA[3] = valueToSet;
+		this._systemColor = null;
+
+		return this;
+	}
+
+	componentsRGB(): number[]
+	{
+		return this.componentsRGBA.slice(0, 3);
+	}
+
+	isBlack(): boolean
+	{
+		return (this.componentsRGB().some(x => x > 0) == false);
+	}
+
+	isTransparent(): boolean
+	{
+		return (this.alpha() < 1);
+	}
+
+	isWhite(): boolean
+	{
+		return (this.componentsRGB().some(x => x < 1) == false);
 	}
 
 	multiplyRGBScalar(scalar: number): Color
@@ -107,6 +130,19 @@ export class Color implements Interpolatable<Color>
 		}
 
 		return this._systemColor;
+	}
+
+	value(): number
+	{
+		// This is "value" as in how dark or light the color is.
+		var returnValue =
+		(
+			this.componentsRGBA[0]
+			+ this.componentsRGBA[1]
+			+ this.componentsRGBA[2]
+		) / 3;
+
+		return returnValue;
 	}
 
 	// Clonable.

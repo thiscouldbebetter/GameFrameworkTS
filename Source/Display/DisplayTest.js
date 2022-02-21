@@ -70,7 +70,7 @@ var ThisCouldBeBetter;
             textWidthForFontHeight(textToMeasure, fontHeightInPixels) {
                 return fontHeightInPixels * textToMeasure.length;
             }
-            toImage() {
+            toImage(name) {
                 return null;
             }
             // platformable

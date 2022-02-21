@@ -99,7 +99,7 @@ export class MapOfCells<TCell extends Clonable<TCell>>
 		return this.sizeInCells.x * this.sizeInCells.y;
 	}
 
-	cellsInBoxAddToList(box: Box, cellsInBox: TCell[]): TCell[]
+	cellsInBox(box: Box, cellsInBox: TCell[]): TCell[]
 	{
 		ArrayHelper.clear(cellsInBox);
 
@@ -263,43 +263,76 @@ export class MapOfCellsCellSourceArray<TCell extends Clonable<TCell>>
 	}
 }
 
-export class MapOfCellsCellSourceDisplay
-	implements MapOfCellsCellSource<MapCellGeneric<Color>>
+export class MapOfCellsCellSourceDisplay<TCell extends Clonable<TCell>>
+	implements MapOfCellsCellSource<TCell>
 {
-	display: Display2D;
+	displaySizeInPixels: Coords;
+	displayPixelsAsComponentArrayRGBA: Uint8ClampedArray;
+
+	_cellCreate: () => TCell;
+	_cellOverwriteFromColor: (cell: TCell, color: Color) => void;
 
 	_color: Color;
+	_componentsPerPixel: number;
 
-	constructor(display: Display2D)
+	constructor
+	(
+		display: Display2D,
+		cellCreate: () => TCell,
+		cellOverwriteFromColor: (cell: TCell, color: Color) => void
+	)
 	{
-		this.display = display;
+		this.displaySizeInPixels = display.sizeInPixels;
+		this.displayPixelsAsComponentArrayRGBA =
+			display.toComponentArrayRGBA();
+
+		this._cellCreate = cellCreate;
+		this._cellOverwriteFromColor = cellOverwriteFromColor;
 
 		this._color = Color.default();
+		this._componentsPerPixel = 4;
 	}
 
 	cellAtPosInCells
 	(
-		map: MapOfCells<MapCellGeneric<Color>>,
+		map: MapOfCells<TCell>,
 		posInCells: Coords,
-		cellToOverwrite: MapCellGeneric<Color>
-	): MapCellGeneric<Color>
+		cellToOverwrite: TCell
+	): TCell
 	{
-		var color = this.display.colorAtPos(posInCells, this._color);
-		cellToOverwrite.value.overwriteWith(color);
+		var color = this.colorAtPos(posInCells, this._color);
+		this._cellOverwriteFromColor(cellToOverwrite, color);
 		return cellToOverwrite;
 	}
 
-	cellCreate(): MapCellGeneric<Color>
+	cellCreate(): TCell
 	{
-		return new MapCellGeneric<Color>(this._color);
+		return this._cellCreate();
 	}
 
-	clone(): MapOfCellsCellSourceDisplay
+	clone(): MapOfCellsCellSourceDisplay<TCell>
 	{
 		return this; // todo
 	}
 
-	overwriteWith(other: MapOfCellsCellSourceDisplay): MapOfCellsCellSourceDisplay
+	colorAtPos(pos: Coords, colorOut: Color): Color
+	{
+		var pixelIndexStart =
+			(pos.y * this.displaySizeInPixels.x + pos.x)
+			* this._componentsPerPixel;
+
+		var pixelAsComponents =
+			this.displayPixelsAsComponentArrayRGBA.slice
+			(
+				pixelIndexStart, pixelIndexStart + this._componentsPerPixel
+			);
+
+		colorOut.overwriteWithComponentsRGBA255(pixelAsComponents);
+
+		return colorOut;
+	}
+
+	overwriteWith(other: MapOfCellsCellSourceDisplay<TCell>): MapOfCellsCellSourceDisplay<TCell>
 	{
 		return this; // todo
 	}

@@ -184,7 +184,7 @@ class PlaceBuilderDemo // Main.
         var place = new PlaceZoned("Zoned", // name
         "Demo", // defnName
         placeSize, "Player", // entityToFollowName
-        zoneStart.name, // zoneStartName
+        // zoneStart.name, // zoneStartName
         (zoneName) => zonesByName.get(zoneName), (posToCheck) => // zoneAtPos
          zonesByName.get("Zone" + posInZones.overwriteWith(posToCheck).divide(zoneSize).floor().toStringXY()));
         var entityCamera = this.build_Camera(this.cameraViewSize, place.size);

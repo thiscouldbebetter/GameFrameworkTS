@@ -378,6 +378,11 @@ export class Box implements ShapeBase
 		return this.min().toString() + ":" + this.max().toString();
 	}
 
+	toStringXY(): string
+	{
+		return this.min().toStringXY() + ":" + this.max().toStringXY();
+	}
+
 	// ShapeBase.
 
 	collider(): ShapeBase { return null; }

@@ -677,7 +677,7 @@ export class Display3D implements Display
 		);
 	}
 
-	toImage(): Image2
+	toImage(name: string): Image2
 	{
 		return null;
 	}
