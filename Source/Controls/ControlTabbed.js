@@ -4,8 +4,8 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ControlTabbed extends GameFramework.ControlBase {
-            constructor(name, pos, size, tabButtonSize, childrenForTabs, fontHeightInPixels, cancel, context) {
-                super(name, pos, size, fontHeightInPixels);
+            constructor(name, pos, size, tabButtonSize, childrenForTabs, fontNameAndHeight, cancel, context) {
+                super(name, pos, size, fontNameAndHeight);
                 this.tabButtonSize = tabButtonSize;
                 this.childrenForTabs = childrenForTabs;
                 this.childrenForTabsByName =
@@ -16,7 +16,7 @@ var ThisCouldBeBetter;
                 this.childrenContainingPos = new Array();
                 this.childrenContainingPosPrev = new Array();
                 this.isChildSelectedActive = false;
-                var marginSize = this.fontHeightInPixels;
+                var marginSize = this.fontNameAndHeight.heightInPixels;
                 var tabPaneHeight = marginSize + this.tabButtonSize.y;
                 var buttonsForChildren = new Array();
                 for (var i = 0; i < this.childrenForTabs.length; i++) {
@@ -25,7 +25,7 @@ var ThisCouldBeBetter;
                     var childName = child.name;
                     var buttonPos = GameFramework.Coords.fromXY(marginSize + this.tabButtonSize.x * i, marginSize);
                     var button = GameFramework.ControlButton.from8("button" + childName, buttonPos, this.tabButtonSize.clone(), childName, // text
-                    this.fontHeightInPixels, true, // hasBorder
+                    this.fontNameAndHeight, true, // hasBorder
                     GameFramework.DataBinding.fromTrueWithContext(this.context), // isEnabled
                     null // click - Assigned below.
                     );
@@ -84,7 +84,7 @@ var ThisCouldBeBetter;
                     this.childrenForTabs.push(null);
                     var button = GameFramework.ControlButton.from8("buttonCancel", GameFramework.Coords.fromXY(this.size.x - marginSize - this.tabButtonSize.x, marginSize), // pos
                     this.tabButtonSize.clone(), "Done", // text
-                    this.fontHeightInPixels, true, // hasBorder
+                    this.fontNameAndHeight, true, // hasBorder
                     GameFramework.DataBinding.fromTrueWithContext(this.context), // isEnabled
                     this.cancel // click
                     );
@@ -269,15 +269,14 @@ var ThisCouldBeBetter;
                 return wasMoveHandled;
             }
             scalePosAndSize(scaleFactor) {
-                this.pos.multiply(scaleFactor);
-                this.size.multiply(scaleFactor);
+                super.scalePosAndSize(scaleFactor);
                 for (var i = 0; i < this.childrenForTabs.length; i++) {
                     var child = this.childrenForTabs[i];
                     if (child.scalePosAndSize == null) {
                         child.pos.multiply(scaleFactor);
                         child.size.multiply(scaleFactor);
-                        if (child.fontHeightInPixels != null) {
-                            child.fontHeightInPixels *= scaleFactor.y;
+                        if (child.fontNameAndHeight != null) {
+                            child.fontNameAndHeight.heightInPixels *= scaleFactor.y;
                         }
                     }
                     else {

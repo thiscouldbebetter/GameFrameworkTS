@@ -323,7 +323,9 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 
 		var fontHeight = 10;
 		var fontHeightSmall = fontHeight * .6;
+		var fontSmall = FontNameAndHeight.fromHeightInPixels(fontHeightSmall);
 		var fontHeightLarge = fontHeight * 1.5;
+		var fontLarge = FontNameAndHeight.fromHeightInPixels(fontHeightLarge);
 
 		var itemHolder = entityEquipmentUser.itemHolder();
 		var equipmentUser = this;
@@ -388,7 +390,7 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 			(
 				(c: Entity) => c.item().toString(world),
 			), // bindingForItemText
-			fontHeightSmall,
+			fontSmall,
 			new DataBinding
 			(
 				this,
@@ -432,13 +434,15 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 			);
 		};
 
+		var fontButton = FontNameAndHeight.fromHeightInPixels(fontHeight * 0.8);
+
 		var buttonEquip = ControlButton.from8
 		(
 			"buttonEquip",
 			Coords.fromXY(85, 50), // pos
 			Coords.fromXY(10, 10), // size
 			">", // text
-			fontHeight * 0.8,
+			fontButton,
 			true, // hasBorder
 			DataBinding.fromTrue(), // isEnabled - todo
 			equipItemSelectedToSocketSelected
@@ -459,7 +463,7 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 			Coords.fromXY(85, 65), // pos
 			Coords.fromXY(10, 10), // size
 			"<", // text
-			fontHeight * 0.8,
+			fontButton,
 			true, // hasBorder
 			DataBinding.fromTrue(), // isEnabled - todo
 			unequipFromSocketSelected
@@ -479,7 +483,7 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 			(
 				(c: EquipmentSocket) => c.toString(world),
 			), // bindingForItemText
-			fontHeightSmall,
+			fontSmall,
 			new DataBinding
 			(
 				this,
@@ -509,7 +513,7 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 					false, // isTextCenteredHorizontally
 					false, // isTextCenteredVertically
 					DataBinding.fromContext("Equippable:"),
-					fontHeightSmall
+					fontSmall
 				),
 
 				listEquippables,
@@ -526,7 +530,7 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 					false, // isTextCenteredHorizontally
 					false, // isTextCenteredVertically
 					DataBinding.fromContext("Equipped:"),
-					fontHeightSmall
+					fontSmall
 				),
 
 				listEquipped,
@@ -543,7 +547,7 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 						this,
 						(c: EquipmentUser) => c.statusMessage
 					), // text
-					fontHeightSmall
+					fontSmall
 				)
 			],
 
@@ -592,7 +596,7 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 					true, // isTextCenteredHorizontally
 					false, // isTextCenteredVertically
 					DataBinding.fromContext("Equip"),
-					fontHeightLarge
+					fontLarge
 				)
 			);
 			childControls.push
@@ -603,7 +607,7 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 					Coords.fromXY(170, 115), // pos
 					Coords.fromXY(20, 10), // size
 					"Done",
-					fontHeightSmall,
+					fontSmall,
 					true, // hasBorder
 					DataBinding.fromTrue(), // isEnabled
 					back // click

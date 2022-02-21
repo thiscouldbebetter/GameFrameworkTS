@@ -4,8 +4,8 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ControlList extends GameFramework.ControlBase {
-            constructor(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected, bindingForItemValue, bindingForIsEnabled, confirm, widthInItems) {
-                super(name, pos, size, fontHeightInPixels);
+            constructor(name, pos, size, items, bindingForItemText, fontNameAndHeight, bindingForItemSelected, bindingForItemValue, bindingForIsEnabled, confirm, widthInItems) {
+                super(name, pos, size, fontNameAndHeight);
                 this._items = items;
                 this.bindingForItemText = bindingForItemText;
                 this.bindingForItemSelected = bindingForItemSelected;
@@ -15,13 +15,13 @@ var ThisCouldBeBetter;
                         || GameFramework.DataBinding.fromTrueWithContext(null);
                 this.confirm = confirm;
                 this.widthInItems = widthInItems || 1;
-                var itemSizeY = 1.2 * this.fontHeightInPixels; // hack
+                var itemSizeY = 1.2 * this.fontNameAndHeight.heightInPixels; // hack
                 this._itemSize = GameFramework.Coords.fromXY(size.x, itemSizeY);
                 var scrollbarWidth = itemSizeY;
                 this.isHighlighted = false;
                 this.scrollbar = new GameFramework.ControlScrollbar(GameFramework.Coords.fromXY(this.size.x - scrollbarWidth, 0), // pos
                 GameFramework.Coords.fromXY(scrollbarWidth, this.size.y), // size
-                this.fontHeightInPixels, itemSizeY, // itemHeight
+                this.fontNameAndHeight, itemSizeY, // itemHeight
                 this._items, 0 // value
                 );
                 // Helper variables.
@@ -31,27 +31,26 @@ var ThisCouldBeBetter;
             }
             static fromPosSizeItemsAndBindingForItemText(pos, size, items, bindingForItemText) {
                 var returnValue = new ControlList("", // name,
-                pos, size, items, bindingForItemText, 10, // fontHeightInPixels,
-                null, // bindingForItemSelected,
+                pos, size, items, bindingForItemText, GameFramework.FontNameAndHeight.default(), null, // bindingForItemSelected,
                 null, // bindingForItemValue,
                 GameFramework.DataBinding.fromTrue(), // isEnabled
                 null, null);
                 return returnValue;
             }
-            static from6(name, pos, size, items, bindingForItemText, fontHeightInPixels) {
-                return new ControlList(name, pos, size, items, bindingForItemText, fontHeightInPixels, null, null, null, null, null);
+            static from6(name, pos, size, items, bindingForItemText, fontNameAndHeight) {
+                return new ControlList(name, pos, size, items, bindingForItemText, fontNameAndHeight, null, null, null, null, null);
             }
-            static from7(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected) {
-                return new ControlList(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected, null, null, null, null);
+            static from7(name, pos, size, items, bindingForItemText, fontNameAndHeight, bindingForItemSelected) {
+                return new ControlList(name, pos, size, items, bindingForItemText, fontNameAndHeight, bindingForItemSelected, null, null, null, null);
             }
-            static from8(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected, bindingForItemValue) {
-                return new ControlList(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected, bindingForItemValue, null, null, null);
+            static from8(name, pos, size, items, bindingForItemText, fontNameAndHeight, bindingForItemSelected, bindingForItemValue) {
+                return new ControlList(name, pos, size, items, bindingForItemText, fontNameAndHeight, bindingForItemSelected, bindingForItemValue, null, null, null);
             }
-            static from9(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected, bindingForItemValue, bindingForIsEnabled) {
-                return new ControlList(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected, bindingForItemValue, bindingForIsEnabled, null, null);
+            static from9(name, pos, size, items, bindingForItemText, fontNameAndHeight, bindingForItemSelected, bindingForItemValue, bindingForIsEnabled) {
+                return new ControlList(name, pos, size, items, bindingForItemText, fontNameAndHeight, bindingForItemSelected, bindingForItemValue, bindingForIsEnabled, null, null);
             }
-            static from10(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected, bindingForItemValue, bindingForIsEnabled, confirm) {
-                return new ControlList(name, pos, size, items, bindingForItemText, fontHeightInPixels, bindingForItemSelected, bindingForItemValue, bindingForIsEnabled, confirm, null);
+            static from10(name, pos, size, items, bindingForItemText, fontNameAndHeight, bindingForItemSelected, bindingForItemValue, bindingForIsEnabled, confirm) {
+                return new ControlList(name, pos, size, items, bindingForItemText, fontNameAndHeight, bindingForItemSelected, bindingForItemValue, bindingForIsEnabled, confirm, null);
             }
             actionHandle(actionNameToHandle, universe) {
                 var wasActionHandled = false;
@@ -216,9 +215,7 @@ var ThisCouldBeBetter;
             mouseExit() { }
             mouseMove(movePos) { return false; }
             scalePosAndSize(scaleFactor) {
-                this.pos.multiply(scaleFactor);
-                this.size.multiply(scaleFactor);
-                this.fontHeightInPixels *= scaleFactor.y;
+                super.scalePosAndSize(scaleFactor);
                 this._itemSize.multiply(scaleFactor);
                 this.scrollbar.scalePosAndSize(scaleFactor);
                 return this;
@@ -258,8 +255,8 @@ var ThisCouldBeBetter;
                     var areColorsReversed = ((this.isHighlighted && !isItemSelected)
                         ||
                             (isItemSelected && !this.isHighlighted));
-                    var textSizeMax = GameFramework.Coords.fromXY(this.itemSize().x, this.fontHeightInPixels);
-                    display.drawText(text, this.fontHeightInPixels, drawPos2, (areColorsReversed ? colorBack : colorFore), (areColorsReversed ? colorFore : colorBack), false, // isCenteredHorizontally
+                    var textSizeMax = GameFramework.Coords.fromXY(this.itemSize().x, this.fontNameAndHeight.heightInPixels);
+                    display.drawText(text, this.fontNameAndHeight, drawPos2, (areColorsReversed ? colorBack : colorFore), (areColorsReversed ? colorFore : colorBack), false, // isCenteredHorizontally
                     false, // isTextCenteredVertically
                     textSizeMax);
                 }

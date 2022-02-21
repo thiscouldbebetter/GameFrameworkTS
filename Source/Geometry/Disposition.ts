@@ -45,6 +45,11 @@ export class Disposition
 		return new Disposition(Coords.create(), Orientation.default(), null);
 	}
 
+	static default(): Disposition
+	{
+		return Disposition.create();
+	}
+
 	static from2
 	(
 		pos: Coords, orientation: Orientation

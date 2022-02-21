@@ -15,6 +15,9 @@ var ThisCouldBeBetter;
             static create() {
                 return Color.fromRGB(0, 0, 0); // Black.
             }
+            static default() {
+                return Color.create();
+            }
             static fromRGB(red, green, blue) {
                 return new Color(null, null, [red, green, blue, 1]);
             }

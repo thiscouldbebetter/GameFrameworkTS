@@ -178,7 +178,7 @@ export class DisplayTest implements Display
 	drawText
 	(
 		text: string,
-		fontHeightInPixels: number,
+		fontNameAndHeight: FontNameAndHeight,
 		pos: Coords,
 		colorFill: Color,
 		colorOutline: Color,

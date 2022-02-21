@@ -70,6 +70,25 @@ export class VisualAnimation implements Visual<VisualAnimation>
 		return returnValue;
 	}
 
+	static fromNameFramesAndIsRepeating
+	(
+		name: string,
+		frames: VisualBase[],
+		isRepeating: boolean
+	): VisualAnimation
+	{
+		var ticksToHoldFrames = frames.map(x => 1);
+
+		var returnValue = new VisualAnimation
+		(
+			name,
+			ticksToHoldFrames,
+			frames,
+			isRepeating
+		);
+		return returnValue;
+	}
+
 	frameCurrent(world: World, tickStarted: number): VisualBase
 	{
 		var frameIndexCurrent = this.frameIndexCurrent(world, tickStarted);

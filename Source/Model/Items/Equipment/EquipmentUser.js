@@ -193,7 +193,9 @@ var ThisCouldBeBetter;
                 var sizeBase = new GameFramework.Coords(200, 135, 1);
                 var fontHeight = 10;
                 var fontHeightSmall = fontHeight * .6;
+                var fontSmall = GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeightSmall);
                 var fontHeightLarge = fontHeight * 1.5;
+                var fontLarge = GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeightLarge);
                 var itemHolder = entityEquipmentUser.itemHolder();
                 var equipmentUser = this;
                 var sockets = this.socketGroup.sockets;
@@ -227,7 +229,7 @@ var ThisCouldBeBetter;
                 GameFramework.Coords.fromXY(70, listHeight), // size
                 GameFramework.DataBinding.fromContextAndGet(this, (c) => itemEntitiesEquippable), // items
                 GameFramework.DataBinding.fromGet((c) => c.item().toString(world)), // bindingForItemText
-                fontHeightSmall, new GameFramework.DataBinding(this, (c) => c.itemEntitySelected, (c, v) => c.itemEntitySelected = v), // bindingForItemSelected
+                fontSmall, new GameFramework.DataBinding(this, (c) => c.itemEntitySelected, (c, v) => c.itemEntitySelected = v), // bindingForItemSelected
                 GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
                 null, // bindingForIsEnabled
                 equipItemSelectedToSocketDefault, null);
@@ -249,10 +251,11 @@ var ThisCouldBeBetter;
                     true // includeSocketNameInMessage
                     );
                 };
+                var fontButton = GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeight * 0.8);
                 var buttonEquip = GameFramework.ControlButton.from8("buttonEquip", GameFramework.Coords.fromXY(85, 50), // pos
                 GameFramework.Coords.fromXY(10, 10), // size
                 ">", // text
-                fontHeight * 0.8, true, // hasBorder
+                fontButton, true, // hasBorder
                 GameFramework.DataBinding.fromTrue(), // isEnabled - todo
                 equipItemSelectedToSocketSelected);
                 var unequipFromSocketSelected = () => {
@@ -262,14 +265,14 @@ var ThisCouldBeBetter;
                 var buttonUnequip = GameFramework.ControlButton.from8("buttonEquip", GameFramework.Coords.fromXY(85, 65), // pos
                 GameFramework.Coords.fromXY(10, 10), // size
                 "<", // text
-                fontHeight * 0.8, true, // hasBorder
+                fontButton, true, // hasBorder
                 GameFramework.DataBinding.fromTrue(), // isEnabled - todo
                 unequipFromSocketSelected);
                 var listEquipped = new GameFramework.ControlList("listEquipped", GameFramework.Coords.fromXY(100, 15), // pos
                 GameFramework.Coords.fromXY(90, listHeight), // size
                 GameFramework.DataBinding.fromContextAndGet(this, (c) => c.socketGroup.sockets), // items
                 GameFramework.DataBinding.fromGet((c) => c.toString(world)), // bindingForItemText
-                fontHeightSmall, new GameFramework.DataBinding(this, (c) => c.socketSelected, (c, v) => c.socketSelected = v), // bindingForItemSelected
+                fontSmall, new GameFramework.DataBinding(this, (c) => c.socketSelected, (c, v) => c.socketSelected = v), // bindingForItemSelected
                 GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
                 null, // bindingForIsEnabled
                 unequipFromSocketSelected, // confirm
@@ -283,7 +286,7 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(70, 25), // size
                     false, // isTextCenteredHorizontally
                     false, // isTextCenteredVertically
-                    GameFramework.DataBinding.fromContext("Equippable:"), fontHeightSmall),
+                    GameFramework.DataBinding.fromContext("Equippable:"), fontSmall),
                     listEquippables,
                     buttonEquip,
                     buttonUnequip,
@@ -291,14 +294,14 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(100, 25), // size
                     false, // isTextCenteredHorizontally
                     false, // isTextCenteredVertically
-                    GameFramework.DataBinding.fromContext("Equipped:"), fontHeightSmall),
+                    GameFramework.DataBinding.fromContext("Equipped:"), fontSmall),
                     listEquipped,
                     new GameFramework.ControlLabel("infoStatus", GameFramework.Coords.fromXY(sizeBase.x / 2, 125), // pos
                     GameFramework.Coords.fromXY(sizeBase.x, 15), // size
                     true, // isTextCenteredHorizontally
                     false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => c.statusMessage), // text
-                    fontHeightSmall)
+                    fontSmall)
                 ], [
                     new GameFramework.Action("Back", back),
                     new GameFramework.Action("EquipItemSelectedInQuickSlot0", () => equipItemSelectedInQuickSlot(0)),
@@ -330,10 +333,10 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(100, 25), // size
                     true, // isTextCenteredHorizontally
                     false, // isTextCenteredVertically
-                    GameFramework.DataBinding.fromContext("Equip"), fontHeightLarge));
+                    GameFramework.DataBinding.fromContext("Equip"), fontLarge));
                     childControls.push(GameFramework.ControlButton.from8("buttonDone", GameFramework.Coords.fromXY(170, 115), // pos
                     GameFramework.Coords.fromXY(20, 10), // size
-                    "Done", fontHeightSmall, true, // hasBorder
+                    "Done", fontSmall, true, // hasBorder
                     GameFramework.DataBinding.fromTrue(), // isEnabled
                     back // click
                     ));

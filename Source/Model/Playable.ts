@@ -12,6 +12,7 @@ export class Playable implements EntityProperty<Playable>
 		var controlsForTabs = new Array<ControlBase>();
 
 		var fontHeight = 12;
+		var font = FontNameAndHeight.fromHeightInPixels(fontHeight);
 		var labelSize = Coords.fromXY(300, fontHeight * 1.25);
 		var marginX = fontHeight;
 
@@ -31,7 +32,7 @@ export class Playable implements EntityProperty<Playable>
 				(
 					"Profile: " + universe.profile.name
 				),
-				fontHeight
+				font
 			),
 
 			new ControlLabel
@@ -45,7 +46,7 @@ export class Playable implements EntityProperty<Playable>
 				(
 					"Time Playing: " + timePlayingAsString
 				),
-				fontHeight
+				font
 			)
 		];
 
@@ -64,7 +65,7 @@ export class Playable implements EntityProperty<Playable>
 					"Health: " + entity.killable().integrity
 					+ "/" + entity.killable().integrityMax
 				),
-				fontHeight
+				font
 			);
 			controlsForStatusFields.push(labelHealth);
 		}
@@ -128,7 +129,7 @@ export class Playable implements EntityProperty<Playable>
 					"Experience: "
 					+ entity.skillLearner().learningAccumulated
 				),
-				fontHeight
+				font
 			);
 			controlsForStatusFields.push(labelExperience);
 		}
@@ -168,7 +169,7 @@ export class Playable implements EntityProperty<Playable>
 			size,
 			tabButtonSize,
 			controlsForTabs,
-			fontHeight,
+			font,
 			back,
 			entity // context
 		);
@@ -188,6 +189,7 @@ export class Playable implements EntityProperty<Playable>
 
 		var entityDimension = 10; // todo
 		var fontHeightInPixels = 10;
+		var font = FontNameAndHeight.fromHeightInPixels(fontHeightInPixels);
 		var margin = 10;
 
 		var worldDefn = world.defn;
@@ -439,7 +441,7 @@ export class Playable implements EntityProperty<Playable>
 				buttonPos.clone(),
 				buttonSize,
 				buttonText,
-				fontHeightInPixels,
+				font,
 				false, // hasBorder
 				DataBinding.fromTrue(), // isEnabled,
 				buttonClicks[i],

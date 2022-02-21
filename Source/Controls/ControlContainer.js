@@ -206,15 +206,14 @@ var ThisCouldBeBetter;
                 return false; // wasMoveHandled
             }
             scalePosAndSize(scaleFactor) {
-                this.pos.multiply(scaleFactor);
-                this.size.multiply(scaleFactor);
+                super.scalePosAndSize(scaleFactor);
                 for (var i = 0; i < this.children.length; i++) {
                     var child = this.children[i];
                     if (child.scalePosAndSize == null) {
                         child.pos.multiply(scaleFactor);
                         child.size.multiply(scaleFactor);
-                        if (child.fontHeightInPixels != null) {
-                            child.fontHeightInPixels *= scaleFactor.y;
+                        if (child.fontNameAndHeight != null) {
+                            child.fontNameAndHeight.heightInPixels *= scaleFactor.y;
                         }
                     }
                     else {

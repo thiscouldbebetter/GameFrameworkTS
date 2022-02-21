@@ -25,15 +25,14 @@ export class ControlNumber<TContext> extends ControlBase
 		value: DataBinding<TContext, number>,
 		valueMin: DataBinding<TContext, number>,
 		valueMax: DataBinding<TContext, number>,
-		fontHeightInPixels: number,
+		fontNameAndHeight: FontNameAndHeight,
 		isEnabled: DataBinding<TContext, boolean>,
 	)
 	{
-		super(name, pos, size, fontHeightInPixels);
+		super(name, pos, size, fontNameAndHeight);
 		this._value = value;
 		this._valueMin = valueMin;
 		this._valueMax = valueMax;
-		this.fontHeightInPixels = fontHeightInPixels;
 		this._isEnabled = isEnabled;
 
 		this.cursorPos = null;
@@ -200,14 +199,6 @@ export class ControlNumber<TContext> extends ControlBase
 
 	mouseExit(): void {}
 
-	scalePosAndSize(scaleFactor: Coords): ControlNumber<TContext>
-	{
-		this.pos.multiply(scaleFactor);
-		this.size.multiply(scaleFactor);
-		this.fontHeightInPixels *= scaleFactor.y;
-		return this;
-	}
-
 	// drawable
 
 	draw(universe: Universe, display: Display, drawLoc: Disposition): void
@@ -218,9 +209,9 @@ export class ControlNumber<TContext> extends ControlBase
 
 		var text = this.value().toString();
 		var textWidth =
-			display.textWidthForFontHeight(text, this.fontHeightInPixels);
+			display.textWidthForFontHeight(text, this.fontNameAndHeight.heightInPixels);
 		var textSize =
-			this._textSize.overwriteWithDimensions(textWidth, this.fontHeightInPixels, 0);
+			this._textSize.overwriteWithDimensions(textWidth, this.fontNameAndHeight.heightInPixels, 0);
 		var textMargin =
 			this._textMargin.overwriteWith(this.size).subtract(textSize).half();
 		var drawPosText =
@@ -239,7 +230,7 @@ export class ControlNumber<TContext> extends ControlBase
 			display.drawText
 			(
 				text,
-				this.fontHeightInPixels,
+				this.fontNameAndHeight,
 				drawPosText,
 				style.colorBorder(),
 				style.colorFill(),
@@ -253,7 +244,7 @@ export class ControlNumber<TContext> extends ControlBase
 			display.drawText
 			(
 				text,
-				this.fontHeightInPixels,
+				this.fontNameAndHeight,
 				drawPosText,
 				style.colorFill(),
 				style.colorBorder(),
@@ -266,17 +257,17 @@ export class ControlNumber<TContext> extends ControlBase
 			var textAtCursor = text.substr(this.cursorPos, 1);
 			var cursorX = display.textWidthForFontHeight
 			(
-				textBeforeCursor, this.fontHeightInPixels
+				textBeforeCursor, this.fontNameAndHeight.heightInPixels
 			);
 			var cursorWidth = display.textWidthForFontHeight
 			(
-				textAtCursor, this.fontHeightInPixels
+				textAtCursor, this.fontNameAndHeight.heightInPixels
 			);
 			drawPosText.x += cursorX;
 
 			style.drawBoxOfSizeAtPosWithColorsToDisplay
 			(
-				Coords.fromXY(cursorWidth, this.fontHeightInPixels), // size
+				Coords.fromXY(cursorWidth, this.fontNameAndHeight.heightInPixels), // size
 				drawPosText,
 				style.colorFill(),
 				style.colorFill(), // ?
@@ -287,7 +278,7 @@ export class ControlNumber<TContext> extends ControlBase
 			display.drawText
 			(
 				textAtCursor,
-				this.fontHeightInPixels,
+				this.fontNameAndHeight,
 				drawPosText,
 				style.colorBorder(),
 				null, // colorBack

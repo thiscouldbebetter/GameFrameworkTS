@@ -665,7 +665,7 @@ class PlaceBuilderDemo // Main.
         var cameraPos = viewSizeHalf.clone();
         var cameraLoc = new Disposition(cameraPos, Orientation.Instances().ForwardZDownY.clone(), null);
         var camera = new Camera(cameraViewSize, cameraHeightAbovePlayfield, // focalLength
-        cameraLoc, Camera.entitiesSortByZThenY);
+        cameraLoc, Camera.entitiesSortByRenderingOrderThenZThenY);
         var cameraBoundable = new Boundable(camera.viewCollider);
         var cameraCollidable = Collidable.fromCollider(camera.viewCollider);
         var cameraConstrainable = new Constrainable([

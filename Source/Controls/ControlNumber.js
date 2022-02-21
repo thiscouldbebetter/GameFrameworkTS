@@ -4,12 +4,11 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ControlNumber extends GameFramework.ControlBase {
-            constructor(name, pos, size, value, valueMin, valueMax, fontHeightInPixels, isEnabled) {
-                super(name, pos, size, fontHeightInPixels);
+            constructor(name, pos, size, value, valueMin, valueMax, fontNameAndHeight, isEnabled) {
+                super(name, pos, size, fontNameAndHeight);
                 this._value = value;
                 this._valueMin = valueMin;
                 this._valueMax = valueMax;
-                this.fontHeightInPixels = fontHeightInPixels;
                 this._isEnabled = isEnabled;
                 this.cursorPos = null;
                 // Helper variables.
@@ -104,40 +103,34 @@ var ThisCouldBeBetter;
             }
             mouseEnter() { }
             mouseExit() { }
-            scalePosAndSize(scaleFactor) {
-                this.pos.multiply(scaleFactor);
-                this.size.multiply(scaleFactor);
-                this.fontHeightInPixels *= scaleFactor.y;
-                return this;
-            }
             // drawable
             draw(universe, display, drawLoc) {
                 var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
                 var style = this.style(universe);
                 var text = this.value().toString();
-                var textWidth = display.textWidthForFontHeight(text, this.fontHeightInPixels);
-                var textSize = this._textSize.overwriteWithDimensions(textWidth, this.fontHeightInPixels, 0);
+                var textWidth = display.textWidthForFontHeight(text, this.fontNameAndHeight.heightInPixels);
+                var textSize = this._textSize.overwriteWithDimensions(textWidth, this.fontNameAndHeight.heightInPixels, 0);
                 var textMargin = this._textMargin.overwriteWith(this.size).subtract(textSize).half();
                 var drawPosText = this._drawPosText.overwriteWith(drawPos).add(textMargin);
                 style.drawBoxOfSizeAtPosWithColorsToDisplay(this.size, drawPos, style.colorFill(), style.colorBorder(), this.isHighlighted, display);
                 if (this.isHighlighted == false) {
-                    display.drawText(text, this.fontHeightInPixels, drawPosText, style.colorBorder(), style.colorFill(), false, // isCenteredHorizontally
+                    display.drawText(text, this.fontNameAndHeight, drawPosText, style.colorBorder(), style.colorFill(), false, // isCenteredHorizontally
                     false, // isCenteredVertically
                     this.size);
                 }
                 else {
-                    display.drawText(text, this.fontHeightInPixels, drawPosText, style.colorFill(), style.colorBorder(), false, // isCenteredHorizontally
+                    display.drawText(text, this.fontNameAndHeight, drawPosText, style.colorFill(), style.colorBorder(), false, // isCenteredHorizontally
                     false, // isCenteredVertically
                     this.size);
                     var textBeforeCursor = text.substr(0, this.cursorPos);
                     var textAtCursor = text.substr(this.cursorPos, 1);
-                    var cursorX = display.textWidthForFontHeight(textBeforeCursor, this.fontHeightInPixels);
-                    var cursorWidth = display.textWidthForFontHeight(textAtCursor, this.fontHeightInPixels);
+                    var cursorX = display.textWidthForFontHeight(textBeforeCursor, this.fontNameAndHeight.heightInPixels);
+                    var cursorWidth = display.textWidthForFontHeight(textAtCursor, this.fontNameAndHeight.heightInPixels);
                     drawPosText.x += cursorX;
-                    style.drawBoxOfSizeAtPosWithColorsToDisplay(GameFramework.Coords.fromXY(cursorWidth, this.fontHeightInPixels), // size
+                    style.drawBoxOfSizeAtPosWithColorsToDisplay(GameFramework.Coords.fromXY(cursorWidth, this.fontNameAndHeight.heightInPixels), // size
                     drawPosText, style.colorFill(), style.colorFill(), // ?
                     this.isHighlighted, display);
-                    display.drawText(textAtCursor, this.fontHeightInPixels, drawPosText, style.colorBorder(), null, // colorBack
+                    display.drawText(textAtCursor, this.fontNameAndHeight, drawPosText, style.colorBorder(), null, // colorBack
                     false, // isCenteredHorizontally
                     false, // isCenteredVertically
                     this.size);

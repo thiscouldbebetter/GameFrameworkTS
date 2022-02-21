@@ -112,7 +112,12 @@ export class VisualBar implements Visual<VisualBar>
 			if (this.text == null)
 			{
 				var remainingOverMax = Math.round(_amountCurrent) + "/" + _amountMax;
-				text = (this.abbreviation == null ? "" : (this.abbreviation + ":")) + remainingOverMax;
+				text =
+				(
+					this.abbreviation == null
+					? ""
+					: (this.abbreviation + ":")
+				) + remainingOverMax;
 			}
 			else
 			{
@@ -121,7 +126,7 @@ export class VisualBar implements Visual<VisualBar>
 			display.drawText
 			(
 				text,
-				this.size.y, // fontHeightInPixels
+				FontNameAndHeight.fromHeightInPixels(this.size.y), // fontHeightInPixels
 				pos,
 				colorForBorder,
 				Color.byName("Black"), // colorOutline

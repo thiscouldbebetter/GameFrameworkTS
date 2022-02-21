@@ -46,6 +46,7 @@ var VisualBuilder = gf.VisualBuilder;
 var VisualCircle = gf.VisualCircle;
 var VisualCircleGradient = gf.VisualCircleGradient;
 var VisualCrosshairs = gf.VisualCrosshairs;
+var VisualDeferred = gf.VisualDeferred;
 var VisualDirectional = gf.VisualDirectional;
 var VisualDynamic = gf.VisualDynamic;
 var VisualEllipse = gf.VisualEllipse;

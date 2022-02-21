@@ -29,6 +29,7 @@ var ThisCouldBeBetter;
                 var portraitSize = GameFramework.Coords.fromXY(1, 1).multiplyScalar(containerSize.y - margin * 2);
                 var wordPaneSize = GameFramework.Coords.fromXY(containerSize.x - portraitSize.x - margin * 3, portraitSize.y);
                 var fontHeight = margin;
+                var font = GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeight);
                 var buttonSize = GameFramework.Coords.fromXY(3, 1.2).multiplyScalar(fontHeight);
                 var wordBubble = this;
                 var containerWordBubble = GameFramework.ControlContainer.from4("containerWordBubble", GameFramework.Coords.fromXY(margin, sizeBase.y - margin - containerSize.y), // pos
@@ -42,8 +43,8 @@ var ThisCouldBeBetter;
                     new GameFramework.ControlLabel("labelSlideText", GameFramework.Coords.fromXY(portraitSize.x + margin, 0).add(marginSize), wordPaneSize, // size
                     false, // isTextCenteredHorizontally
                     false, // isTextCenteredVertically
-                    GameFramework.DataBinding.fromContextAndGet(this, (c) => c.statementCurrent()), fontHeight),
-                    GameFramework.ControlButton.from8("buttonNext", GameFramework.Coords.fromXY(containerSize.x - marginSize.x - buttonSize.x, containerSize.y - marginSize.y - buttonSize.y), buttonSize, "Next", fontHeight, true, // hasBorder
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => c.statementCurrent()), font),
+                    GameFramework.ControlButton.from8("buttonNext", GameFramework.Coords.fromXY(containerSize.x - marginSize.x - buttonSize.x, containerSize.y - marginSize.y - buttonSize.y), buttonSize, "Next", font, true, // hasBorder
                     GameFramework.DataBinding.fromTrue(), // isEnabled
                     () => wordBubble.statementAdvance(universe))
                 ]);

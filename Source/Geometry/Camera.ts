@@ -377,22 +377,35 @@ export class Camera implements EntityProperty<Camera>
 		return entitiesSorted;
 	}
 
-	static entitiesSortByZThenY(entitiesToSort: Entity[]): Entity[]
+	static entitiesSortByRenderingOrderThenZThenY
+	(
+		entitiesToSort: Entity[]
+	): Entity[]
 	{
 		entitiesToSort.sort
 		(
 			(a, b) =>
 			{
-				var aPos = a.locatable().loc.pos;
-				var bPos = b.locatable().loc.pos;
-				var returnValue;
-				if (aPos.z != bPos.z)
+				var aRenderingOrder = a.drawable().renderingOrder;
+				var bRenderingOrder = b.drawable().renderingOrder;
+
+				if (aRenderingOrder != bRenderingOrder)
 				{
-					returnValue = bPos.z - aPos.z;
+					returnValue = bRenderingOrder - aRenderingOrder;
 				}
 				else
 				{
-					returnValue = aPos.y - bPos.y;
+					var aPos = a.locatable().loc.pos;
+					var bPos = b.locatable().loc.pos;
+					var returnValue;
+					if (aPos.z != bPos.z)
+					{
+						returnValue = bPos.z - aPos.z;
+					}
+					else
+					{
+						returnValue = aPos.y - bPos.y;
+					}
 				}
 
 				return returnValue;

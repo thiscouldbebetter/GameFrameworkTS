@@ -13,7 +13,7 @@ export class ControlContainerTransparent extends ControlBase
 			containerInner.name,
 			containerInner.pos,
 			containerInner.size,
-			containerInner.fontHeightInPixels
+			containerInner.fontNameAndHeight
 		);
 		this.containerInner = containerInner;
 	}

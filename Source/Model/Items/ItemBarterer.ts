@@ -130,6 +130,7 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 		);
 
 		var fontHeight = 10;
+		var font = FontNameAndHeight.fromHeightInPixels(fontHeight);
 		var margin = fontHeight * 1.5;
 		var buttonSize = Coords.fromXY(4, 2).multiplyScalar(fontHeight);
 		var buttonSizeSmall = Coords.fromXY(2, 2).multiplyScalar(fontHeight);
@@ -248,7 +249,7 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 					false, // isTextCenteredHorizontally
 					false, // isTextCenteredVertically
 					DataBinding.fromContext(entityStore.name + ":"),
-					fontHeight
+					font
 				),
 
 				new ControlList
@@ -266,7 +267,7 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 					(
 						(c: Item) => c.toString(world)
 					), // bindingForItemText
-					fontHeight,
+					font,
 					new DataBinding
 					(
 						itemHolderStore,
@@ -289,7 +290,7 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 					), // pos
 					buttonSizeSmall.clone(),
 					"v",
-					fontHeight,
+					font,
 					true, // hasBorder
 					DataBinding.fromContextAndGet
 					(
@@ -310,7 +311,7 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 					), // pos
 					buttonSizeSmall.clone(),
 					"^",
-					fontHeight,
+					font,
 					true, // hasBorder
 					DataBinding.fromContextAndGet
 					(
@@ -334,7 +335,7 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 					false, // isTextCenteredHorizontally
 					false, // isTextCenteredVertically
 					DataBinding.fromContext("Offered:"),
-					fontHeight
+					font
 				),
 
 				new ControlList
@@ -355,7 +356,7 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 					(
 						(c: Item) => c.toString(world)
 					), // bindingForItemText
-					fontHeight,
+					font,
 					new DataBinding
 					(
 						this.itemHolderStoreOffer,
@@ -379,7 +380,7 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 					false, // isTextCenteredHorizontally
 					false, // isTextCenteredVertically
 					DataBinding.fromContext(entityCustomer.name + ":"),
-					fontHeight
+					font
 				),
 
 				new ControlList
@@ -400,7 +401,7 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 					(
 						(c: Item) => c.toString(world)
 					), // bindingForItemText
-					fontHeight,
+					font,
 					new DataBinding
 					(
 						itemHolderCustomer,
@@ -423,7 +424,7 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 					), // pos
 					buttonSizeSmall.clone(),
 					"v",
-					fontHeight,
+					font,
 					true, // hasBorder
 					DataBinding.fromContextAndGet
 					(
@@ -444,7 +445,7 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 					), // pos
 					buttonSizeSmall.clone(),
 					"^",
-					fontHeight,
+					font,
 					true, // hasBorder
 					DataBinding.fromContextAndGet
 					(
@@ -467,7 +468,7 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 					false, // isTextCenteredHorizontally
 					false, // isTextCenteredVertically
 					DataBinding.fromContext("Offered:"),
-					fontHeight
+					font
 				),
 
 				ControlList.from10
@@ -488,7 +489,7 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 					(
 						(c: Item) => c.toString(world)
 					), // bindingForItemText
-					fontHeight,
+					font,
 					new DataBinding
 					(
 						this,
@@ -510,7 +511,7 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 					true, // isTextCenteredHorizontally
 					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet(this, c => c.statusMessage),
-					fontHeight
+					font
 				),
 
 				ControlButton.from8
@@ -519,7 +520,7 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 					Coords.fromXY(margin, size.y - margin - buttonSize.y), // pos
 					buttonSize.clone(),
 					"Reset",
-					fontHeight,
+					font,
 					true, // hasBorder
 					DataBinding.fromContextAndGet
 					(
@@ -540,7 +541,7 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 					), // pos
 					buttonSize.clone(),
 					"Offer",
-					fontHeight,
+					font,
 					true, // hasBorder
 					DataBinding.fromContextAndGet
 					(
@@ -560,7 +561,7 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 					), // pos
 					buttonSize.clone(),
 					"Done",
-					fontHeight,
+					font,
 					true, // hasBorder
 					DataBinding.fromTrue(), // isEnabled
 					back // click

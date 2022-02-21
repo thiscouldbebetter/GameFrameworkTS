@@ -14,6 +14,13 @@ var ThisCouldBeBetter;
             static create() {
                 return new Image2(null, null);
             }
+            static fromImageAndBox(imageSource, box) {
+                var display = GameFramework.Display2D.fromSizeAndIsInvisible(box.size, true // isInvisible
+                ).initialize(null);
+                display.drawImagePartial(imageSource, GameFramework.Coords.Instances().Zeroes, box);
+                var returnImage = display.toImage();
+                return returnImage;
+            }
             static fromSystemImage(name, systemImage) {
                 var returnValue = new Image2(name, systemImage.src);
                 returnValue.systemImage = systemImage;
@@ -21,7 +28,26 @@ var ThisCouldBeBetter;
                 returnValue.isLoaded = true;
                 return returnValue;
             }
-            // instance methods
+            toTiles(sizeInTiles) {
+                var tilePosInTiles = GameFramework.Coords.create();
+                var tilePosInPixels = GameFramework.Coords.create();
+                var tileSizeInPixels = this.sizeInPixels.clone().divide(sizeInTiles);
+                var imageRows = [];
+                for (var y = 0; y < sizeInTiles.y; y++) {
+                    tilePosInTiles.y = y;
+                    var imagesInRow = [];
+                    for (var x = 0; x < sizeInTiles.x; x++) {
+                        tilePosInTiles.x = x;
+                        tilePosInPixels.overwriteWith(tilePosInTiles).multiply(tileSizeInPixels);
+                        var box = GameFramework.Box.fromMinAndSize(tilePosInPixels, tileSizeInPixels);
+                        var imageForTile = Image2.fromImageAndBox(this, box);
+                        imagesInRow.push(imageForTile);
+                    }
+                    imageRows.push(imagesInRow);
+                }
+                return imageRows;
+            }
+            // Clonable.
             clone() {
                 var returnValue = Image2.create();
                 returnValue.name = this.name;
@@ -31,6 +57,7 @@ var ThisCouldBeBetter;
                 returnValue.isLoaded = this.isLoaded;
                 return returnValue;
             }
+            // Loadable.
             load() {
                 if (this.sourcePath != null) {
                     var image = this;

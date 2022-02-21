@@ -4,18 +4,18 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ControlTextarea extends GameFramework.ControlBase {
-            constructor(name, pos, size, text, fontHeightInPixels, isEnabled) {
-                super(name, pos, size, fontHeightInPixels);
+            constructor(name, pos, size, text, fontNameAndHeight, isEnabled) {
+                super(name, pos, size, fontNameAndHeight);
                 this._text = text;
                 this._isEnabled = isEnabled;
                 this.charCountMax = null; // todo
                 this.cursorPos = null;
-                this.lineSpacing = 1.2 * this.fontHeightInPixels; // hack
+                this.lineSpacing = 1.2 * this.fontNameAndHeight.heightInPixels; // hack
                 var scrollbarWidth = this.lineSpacing;
                 var thisAsControlTextarea = this;
                 this.scrollbar = new GameFramework.ControlScrollbar(GameFramework.Coords.fromXY(this.size.x - scrollbarWidth, 0), // pos
                 GameFramework.Coords.fromXY(scrollbarWidth, this.size.y), // size
-                this.fontHeightInPixels, this.lineSpacing, // itemHeight
+                this.fontNameAndHeight, this.lineSpacing, // itemHeight
                 GameFramework.DataBinding.fromContextAndGet(thisAsControlTextarea, (c) => c.textAsLines()), 0 // sliderPosInItems
                 );
                 // Helper variables.
@@ -136,7 +136,7 @@ var ThisCouldBeBetter;
             }
             textAsLines() {
                 this._textAsLines = [];
-                var charWidthInPixels = this.fontHeightInPixels / 2; // hack
+                var charWidthInPixels = this.fontNameAndHeight.heightInPixels / 2; // hack
                 var charsPerLine = Math.floor(this.size.x / charWidthInPixels);
                 var textComplete = this.text(null);
                 var textLength = textComplete.length;
@@ -183,11 +183,10 @@ var ThisCouldBeBetter;
                 return true; // wasActionHandled
             }
             scalePosAndSize(scaleFactor) {
-                this.pos.multiply(scaleFactor);
-                this.size.multiply(scaleFactor);
-                this.fontHeightInPixels *= scaleFactor.y;
+                super.scalePosAndSize(scaleFactor);
                 this.lineSpacing *= scaleFactor.y;
                 this.scrollbar.scalePosAndSize(scaleFactor);
+                return this;
             }
             // drawable
             draw(universe, display, drawLoc, style) {
@@ -221,7 +220,7 @@ var ThisCouldBeBetter;
                 var drawPos2 = GameFramework.Coords.fromXY(drawPos.x + textMarginLeft, itemPosY);
                 for (var i = indexStart; i <= indexEnd; i++) {
                     var line = lines[i];
-                    display.drawText(line, this.fontHeightInPixels, drawPos2, colorFore, colorBack, false, // isCenteredHorizontally
+                    display.drawText(line, this.fontNameAndHeight, drawPos2, colorFore, colorBack, false, // isCenteredHorizontally
                     false, // isCenteredVertically
                     this.size);
                     drawPos2.y += itemSizeY;

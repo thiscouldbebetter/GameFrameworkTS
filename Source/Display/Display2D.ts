@@ -55,6 +55,8 @@ export class Display2D implements Display
 			image.sizeInPixels, true // isInvisible
 		);
 
+		returnDisplay.initialize(null);
+
 		returnDisplay.drawImage(image, Coords.Instances().Zeroes);
 
 		return returnDisplay;
@@ -336,7 +338,9 @@ export class Display2D implements Display
 
 	drawImagePartial
 	(
-		imageToDraw: Image2, pos: Coords, regionToDrawAsBox: Box
+		imageToDraw: Image2,
+		pos: Coords,
+		regionToDrawAsBox: Box
 	): void
 	{
 		this.drawImagePartialScaled(imageToDraw, pos, regionToDrawAsBox, null);
@@ -344,7 +348,10 @@ export class Display2D implements Display
 
 	drawImagePartialScaled
 	(
-		imageToDraw: Image2, pos: Coords, regionToDrawAsBox: Box, sizeToDraw: Coords
+		imageToDraw: Image2,
+		pos: Coords,
+		regionToDrawAsBox: Box,
+		sizeToDraw: Coords
 	): void
 	{
 		var sourcePos = regionToDrawAsBox.min();
@@ -639,7 +646,7 @@ export class Display2D implements Display
 	drawText
 	(
 		text: string,
-		fontHeightInPixels: number,
+		fontNameAndHeight: FontNameAndHeight,
 		pos: Coords,
 		colorFill: Color,
 		colorOutline: Color,
@@ -650,7 +657,12 @@ export class Display2D implements Display
 	{
 		var fontToRestore = this.graphics.font;
 
-		this.fontSet(this.fontNameAndHeight);
+		if (fontNameAndHeight != null)
+		{
+			this.fontSet(fontNameAndHeight);
+		}
+
+		var fontHeightInPixels = this.fontNameAndHeight.heightInPixels;
 
 		if (colorFill == null)
 		{
@@ -860,11 +872,8 @@ export class Display2D implements Display
 
 	fontSet(fontNameAndHeight: FontNameAndHeight): void
 	{
-		if (fontNameAndHeight.equals(this.fontNameAndHeight) == false)
-		{
-			this.fontNameAndHeight = fontNameAndHeight;
-			this.graphics.font = this.fontNameAndHeight.toStringSystemFont();
-		}
+		this.fontNameAndHeight = fontNameAndHeight;
+		this.graphics.font = this.fontNameAndHeight.toStringSystemFont();
 	}
 
 	flush(): void {}

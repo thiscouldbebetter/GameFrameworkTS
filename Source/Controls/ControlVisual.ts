@@ -74,10 +74,7 @@ export class ControlVisual extends ControlBase
 
 	scalePosAndSize(scaleFactors: Coords): ControlBase
 	{
-		this.pos.multiply(scaleFactors);
-		this.size.multiply(scaleFactors);
-		this._sizeHalf.multiply(scaleFactors);
-		return this;
+		return super.scalePosAndSize(scaleFactors);
 	}
 
 	// drawable

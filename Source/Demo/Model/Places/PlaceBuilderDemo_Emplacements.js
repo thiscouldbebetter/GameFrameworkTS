@@ -326,8 +326,7 @@ class PlaceBuilderDemo_Emplacements {
         };
         var itemPillowEntityDefn = new Entity(pillowName, [
             Locatable.create(),
-            new Drawable(pillowVisual, null),
-            new ItemHolder([], null, null),
+            Drawable.fromVisual(pillowVisual),
             new Usable(pillowUse)
         ]);
         return itemPillowEntityDefn;

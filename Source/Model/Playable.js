@@ -7,6 +7,7 @@ var ThisCouldBeBetter;
             static toControlMenu(universe, size, entity, venuePrev) {
                 var controlsForTabs = new Array();
                 var fontHeight = 12;
+                var font = GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeight);
                 var labelSize = GameFramework.Coords.fromXY(300, fontHeight * 1.25);
                 var marginX = fontHeight;
                 var timePlayingAsString = universe.world.timePlayingAsStringLong(universe);
@@ -14,11 +15,11 @@ var ThisCouldBeBetter;
                     new GameFramework.ControlLabel("labelProfile", GameFramework.Coords.fromXY(marginX, labelSize.y), // pos
                     labelSize.clone(), false, // isTextCenteredHorizontally
                     false, // isTextCenteredVertically
-                    GameFramework.DataBinding.fromContext("Profile: " + universe.profile.name), fontHeight),
+                    GameFramework.DataBinding.fromContext("Profile: " + universe.profile.name), font),
                     new GameFramework.ControlLabel("labelTimePlaying", GameFramework.Coords.fromXY(marginX, labelSize.y * 2), // pos
                     labelSize.clone(), false, // isTextCenteredHorizontally
                     false, // isTextCenteredVertically
-                    GameFramework.DataBinding.fromContext("Time Playing: " + timePlayingAsString), fontHeight)
+                    GameFramework.DataBinding.fromContext("Time Playing: " + timePlayingAsString), font)
                 ];
                 var killable = entity.killable();
                 if (killable != null) {
@@ -26,7 +27,7 @@ var ThisCouldBeBetter;
                     labelSize.clone(), false, // isTextCenteredHorizontally
                     false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Health: " + entity.killable().integrity
-                        + "/" + entity.killable().integrityMax), fontHeight);
+                        + "/" + entity.killable().integrityMax), font);
                     controlsForStatusFields.push(labelHealth);
                 }
                 var tabButtonSize = GameFramework.Coords.fromXY(36, 20);
@@ -55,7 +56,7 @@ var ThisCouldBeBetter;
                     labelSize.clone(), false, // isTextCenteredHorizontally
                     false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Experience: "
-                        + entity.skillLearner().learningAccumulated), fontHeight);
+                        + entity.skillLearner().learningAccumulated), font);
                     controlsForStatusFields.push(labelExperience);
                 }
                 var journalKeeper = entity.journalKeeper();
@@ -73,7 +74,7 @@ var ThisCouldBeBetter;
                 controlsForTabs.splice(0, 0, statusAsControl);
                 var back = () => universe.venueTransitionTo(venuePrev);
                 var returnValue = new GameFramework.ControlTabbed("tabbedItems", GameFramework.Coords.create(), // pos
-                size, tabButtonSize, controlsForTabs, fontHeight, back, entity // context
+                size, tabButtonSize, controlsForTabs, font, back, entity // context
                 );
                 return returnValue;
             }
@@ -84,6 +85,7 @@ var ThisCouldBeBetter;
                 var childControls = new Array();
                 var entityDimension = 10; // todo
                 var fontHeightInPixels = 10;
+                var font = GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeightInPixels);
                 var margin = 10;
                 var worldDefn = world.defn;
                 var playerVisualBarSize = GameFramework.Coords.fromXY(entityDimension * 4, entityDimension);
@@ -190,7 +192,7 @@ var ThisCouldBeBetter;
                 ];
                 for (var i = 0; i < itemQuickSlotCount; i++) {
                     var buttonText = "\n   " + i;
-                    var button = new GameFramework.ControlButton("buttonItemQuickSlot" + i, buttonPos.clone(), buttonSize, buttonText, fontHeightInPixels, false, // hasBorder
+                    var button = new GameFramework.ControlButton("buttonItemQuickSlot" + i, buttonPos.clone(), buttonSize, buttonText, font, false, // hasBorder
                     GameFramework.DataBinding.fromTrue(), // isEnabled,
                     buttonClicks[i], false // canBeHeldDown
                     );

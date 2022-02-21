@@ -5,7 +5,7 @@ var ThisCouldBeBetter;
     (function (GameFramework) {
         class ControlContainerTransparent extends GameFramework.ControlBase {
             constructor(containerInner) {
-                super(containerInner.name, containerInner.pos, containerInner.size, containerInner.fontHeightInPixels);
+                super(containerInner.name, containerInner.pos, containerInner.size, containerInner.fontNameAndHeight);
                 this.containerInner = containerInner;
             }
             // instance methods

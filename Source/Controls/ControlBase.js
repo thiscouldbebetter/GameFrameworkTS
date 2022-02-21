@@ -4,11 +4,12 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ControlBase {
-            constructor(name, pos, size, fontHeightInPixels) {
+            constructor(name, pos, size, fontNameAndHeight) {
                 this.name = name;
                 this.pos = pos;
                 this.size = size;
-                this.fontHeightInPixels = fontHeightInPixels;
+                this.fontNameAndHeight =
+                    fontNameAndHeight == null ? null : fontNameAndHeight.clone(); // hack
                 this._isVisible = true;
                 this.styleName = null;
                 this.isHighlighted = false;
@@ -25,7 +26,14 @@ var ThisCouldBeBetter;
             mouseEnter() { this.isHighlighted = true; }
             mouseExit() { this.isHighlighted = false; }
             mouseMove(x) { return false; }
-            scalePosAndSize(x) { }
+            scalePosAndSize(scaleFactors) {
+                this.pos.multiply(scaleFactors);
+                this.size.multiply(scaleFactors);
+                if (this.fontNameAndHeight != null) {
+                    this.fontNameAndHeight.heightInPixels *= scaleFactors.y;
+                }
+                return this;
+            }
             style(universe) {
                 var returnValue = (this.styleName == null
                     ? universe.controlBuilder.styleDefault()

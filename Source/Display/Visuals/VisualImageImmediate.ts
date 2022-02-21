@@ -19,6 +19,11 @@ export class VisualImageImmediate implements VisualImage
 		this._drawPos = Coords.create();
 	}
 
+	static fromImage(image: Image2): VisualImageImmediate
+	{
+		return new VisualImageImmediate(image, null);
+	}
+
 	// instance methods
 
 	image(universe: Universe): Image2

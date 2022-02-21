@@ -34,7 +34,8 @@ export class WorldCreator
 	{
 		var size = universe.display.sizeInPixels;
 		var margin = 8;
-		var fontHeightInPixels = 10;
+		var fontNameAndHeight = FontNameAndHeight.default();
+		var fontHeightInPixels = fontNameAndHeight.heightInPixels;
 		var controlHeight = fontHeightInPixels + margin;
 		var buttonSize =
 			Coords.fromXY(4, 1).multiplyScalar(controlHeight);
@@ -53,7 +54,7 @@ export class WorldCreator
 					false, // isTextCenteredHorizontally
 					false, // isTextCenteredVertically
 					DataBinding.fromContext("World Creation Settings"),
-					fontHeightInPixels
+					fontNameAndHeight
 				),
 
 				new ControlLabel
@@ -64,7 +65,7 @@ export class WorldCreator
 					false, // isTextCenteredHorizontally
 					false, // isTextCenteredVertically
 					DataBinding.fromContext("World Name:"),
-					fontHeightInPixels
+					fontNameAndHeight
 				),
 
 				new ControlTextBox
@@ -78,7 +79,7 @@ export class WorldCreator
 						(c: WorldCreator) => c.settings.name || "",
 						(c: WorldCreator, v: string) => c.settings.name = v
 					), // text
-					fontHeightInPixels,
+					fontNameAndHeight,
 					64, // charCountMax
 					DataBinding.fromTrue() // isEnabled
 				),
@@ -93,7 +94,7 @@ export class WorldCreator
 					),
 					buttonSize,
 					"Create",
-					fontHeightInPixels,
+					fontNameAndHeight,
 					true, // hasBorder
 					DataBinding.fromTrue(), // isEnabled
 					() =>

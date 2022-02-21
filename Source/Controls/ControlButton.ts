@@ -19,14 +19,14 @@ export class ControlButton<TContext> extends ControlBase
 		pos: Coords,
 		size: Coords,
 		text: string,
-		fontHeightInPixels: number,
+		fontNameAndHeight: FontNameAndHeight,
 		hasBorder: boolean,
 		isEnabled: DataBinding<TContext, boolean>,
 		click: () => void,
 		canBeHeldDown: boolean
 	)
 	{
-		super(name, pos, size, fontHeightInPixels);
+		super(name, pos, size, fontNameAndHeight);
 		this.text = text;
 		this.hasBorder = hasBorder;
 		this._isEnabled = isEnabled;
@@ -44,7 +44,7 @@ export class ControlButton<TContext> extends ControlBase
 		pos: Coords,
 		size: Coords,
 		text: string,
-		fontHeightInPixels: number,
+		fontNameAndHeight: FontNameAndHeight,
 		hasBorder: boolean,
 		isEnabled: DataBinding<TContext, boolean>,
 		click: () => void
@@ -52,7 +52,7 @@ export class ControlButton<TContext> extends ControlBase
 	{
 		return new ControlButton
 		(
-			name, pos, size, text, fontHeightInPixels, hasBorder,
+			name, pos, size, text, fontNameAndHeight, hasBorder,
 			isEnabled, click, false // canBeHeldDown
 		);
 	}
@@ -88,13 +88,6 @@ export class ControlButton<TContext> extends ControlBase
 		return (this.canBeHeldDown == false); // wasClickHandled
 	}
 
-	scalePosAndSize(scaleFactor: Coords): void
-	{
-		this.pos.multiply(scaleFactor);
-		this.size.multiply(scaleFactor);
-		this.fontHeightInPixels *= scaleFactor.y;
-	}
-
 	// drawable
 
 	draw
@@ -120,14 +113,12 @@ export class ControlButton<TContext> extends ControlBase
 			);
 		}
 
-		// drawPos.add(this._sizeHalf.overwriteWith(this.size).half());
-
 		var colorText = (isEnabled ? colorBorder : style.colorDisabled());
 
 		display.drawText
 		(
 			this.text,
-			this.fontHeightInPixels,
+			this.fontNameAndHeight,
 			drawPos,
 			(isHighlighted ? colorFill : colorText),
 			(isHighlighted ? colorText : colorFill),

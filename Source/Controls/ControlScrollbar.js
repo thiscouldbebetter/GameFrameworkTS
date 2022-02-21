@@ -4,8 +4,8 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ControlScrollbar extends GameFramework.ControlBase {
-            constructor(pos, size, fontHeightInPixels, itemHeight, items, sliderPosInItems) {
-                super(null, pos, size, fontHeightInPixels);
+            constructor(pos, size, fontNameAndHeight, itemHeight, items, sliderPosInItems) {
+                super(null, pos, size, fontNameAndHeight);
                 this.itemHeight = itemHeight;
                 this._items = items;
                 this._sliderPosInItems = sliderPosInItems;
@@ -15,7 +15,7 @@ var ThisCouldBeBetter;
                 GameFramework.Coords.create(), // pos
                 this.handleSize.clone(), // size
                 "-", // text
-                this.fontHeightInPixels, true, // hasBorder
+                this.fontNameAndHeight, true, // hasBorder
                 GameFramework.DataBinding.fromTrue(), // isEnabled
                 this.scrollUp // click
                 );
@@ -23,7 +23,7 @@ var ThisCouldBeBetter;
                 GameFramework.Coords.fromXY(0, this.size.y - this.handleSize.y), // pos
                 this.handleSize.clone(), // size
                 "+", // text
-                this.fontHeightInPixels, true, // hasBorder
+                this.fontNameAndHeight, true, // hasBorder
                 GameFramework.DataBinding.fromTrue(), // isEnabled
                 this.scrollDown // click
                 );
@@ -43,12 +43,11 @@ var ThisCouldBeBetter;
                 return false;
             }
             scalePosAndSize(scaleFactor) {
-                this.pos.multiply(scaleFactor);
-                this.size.multiply(scaleFactor);
+                super.scalePosAndSize(scaleFactor);
                 this.handleSize.multiply(scaleFactor);
-                this.fontHeightInPixels *= scaleFactor.y;
                 this.buttonScrollUp.scalePosAndSize(scaleFactor);
                 this.buttonScrollDown.scalePosAndSize(scaleFactor);
+                return this;
             }
             scrollDown() {
                 var sliderPosInItems = GameFramework.NumberHelper.trimToRangeMinMax(this.sliderPosInItems() + 1, 0, this.sliderMaxInItems());

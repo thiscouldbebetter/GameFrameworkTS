@@ -47,12 +47,35 @@ export class MapOfCells<TCell extends Clonable<TCell>>
 		this._posInCellsMin = Coords.create();
 	}
 
+	static default(): MapOfCells<MapCellGeneric<string>>
+	{
+		var cells = new Array<MapCellGeneric<string>>();
+		var cellCreate = () => new MapCellGeneric<string>("todo");
+
+		var cellSource = new MapOfCellsCellSourceArray
+		(
+			cells, cellCreate
+		)
+		return new MapOfCells
+		(
+			MapOfCells.name,
+			Coords.fromXY(3, 3), // sizeInCells
+			Coords.fromXY(10, 10), // cellSize
+			cellSource
+		);
+	}
+
 	static fromNameSizeInCellsAndCellSize<TCell extends Clonable<TCell>>
 	(
 		name: string, sizeInCells: Coords, cellSize: Coords
 	): MapOfCells<TCell>
 	{
-		return new MapOfCells(name, sizeInCells, cellSize, null);
+		var cells = new Array<TCell>();
+		var cellSource = new MapOfCellsCellSourceArray<TCell>
+		(
+			cells, () => null
+		);
+		return new MapOfCells(name, sizeInCells, cellSize, cellSource);
 	}
 
 	cellAtPos(pos: Coords): TCell
@@ -170,6 +193,26 @@ export class MapOfCells<TCell extends Clonable<TCell>>
 	}
 }
 
+export class MapCellGeneric<TValue> implements MapCell, Clonable<MapCellGeneric<TValue>>
+{
+	value: TValue;
+
+	constructor(value: TValue)
+	{
+		this.value = value;
+	}
+
+	clone(): MapCellGeneric<TValue>
+	{
+		return this;
+	}
+
+	overwriteWith(other: MapCellGeneric<TValue>): MapCellGeneric<TValue>
+	{
+		return this;
+	}
+}
+
 export interface MapOfCellsCellSource<TCell extends Clonable<TCell> >
 	extends Clonable<MapOfCellsCellSource<TCell> >
 {
@@ -218,7 +261,48 @@ export class MapOfCellsCellSourceArray<TCell extends Clonable<TCell>>
 	{
 		return this; // todo
 	}
+}
 
+export class MapOfCellsCellSourceDisplay
+	implements MapOfCellsCellSource<MapCellGeneric<Color>>
+{
+	display: Display2D;
+
+	_color: Color;
+
+	constructor(display: Display2D)
+	{
+		this.display = display;
+
+		this._color = Color.default();
+	}
+
+	cellAtPosInCells
+	(
+		map: MapOfCells<MapCellGeneric<Color>>,
+		posInCells: Coords,
+		cellToOverwrite: MapCellGeneric<Color>
+	): MapCellGeneric<Color>
+	{
+		var color = this.display.colorAtPos(posInCells, this._color);
+		cellToOverwrite.value.overwriteWith(color);
+		return cellToOverwrite;
+	}
+
+	cellCreate(): MapCellGeneric<Color>
+	{
+		return new MapCellGeneric<Color>(this._color);
+	}
+
+	clone(): MapOfCellsCellSourceDisplay
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: MapOfCellsCellSourceDisplay): MapOfCellsCellSourceDisplay
+	{
+		return this; // todo
+	}
 }
 
 export class MapOfCellsCellSourceImage<TCell extends Clonable<TCell>>

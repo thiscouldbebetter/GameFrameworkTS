@@ -1206,7 +1206,7 @@ class PlaceBuilderDemo // Main.
 			cameraViewSize,
 			cameraHeightAbovePlayfield, // focalLength
 			cameraLoc,
-			Camera.entitiesSortByZThenY
+			Camera.entitiesSortByRenderingOrderThenZThenY
 		);
 		var cameraBoundable = new Boundable(camera.viewCollider);
 		var cameraCollidable = Collidable.fromCollider(camera.viewCollider);

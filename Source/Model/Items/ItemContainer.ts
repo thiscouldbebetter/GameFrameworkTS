@@ -74,6 +74,7 @@ export class ItemContainer implements EntityProperty<ItemContainer>
 		}
 
 		var fontHeight = 10;
+		var font = FontNameAndHeight.fromHeightInPixels(fontHeight);
 		var margin = fontHeight * 1.5;
 		var buttonSize = Coords.fromXY(2, 2).multiplyScalar(fontHeight);
 		var listSize = Coords.fromXY
@@ -115,7 +116,7 @@ export class ItemContainer implements EntityProperty<ItemContainer>
 					false, // isTextCenteredHorizontally
 					false, // isTextCenteredVertically
 					DataBinding.fromContext(entityContainer.name + ":"),
-					fontHeight
+					font
 				),
 
 				new ControlList
@@ -132,7 +133,7 @@ export class ItemContainer implements EntityProperty<ItemContainer>
 					(
 						(c: Item) => c.toString(world)
 					), // bindingForItemText
-					fontHeight,
+					font,
 					new DataBinding
 					(
 						itemHolderContainer,
@@ -155,7 +156,7 @@ export class ItemContainer implements EntityProperty<ItemContainer>
 					), // pos
 					buttonSize.clone(),
 					">",
-					fontHeight,
+					font,
 					true, // hasBorder
 					DataBinding.fromTrue(), // isEnabled
 					get // click
@@ -171,7 +172,7 @@ export class ItemContainer implements EntityProperty<ItemContainer>
 					), // pos
 					buttonSize.clone(),
 					"<",
-					fontHeight,
+					font,
 					true, // hasBorder
 					DataBinding.fromTrue(), // isEnabled
 					put // click
@@ -185,7 +186,7 @@ export class ItemContainer implements EntityProperty<ItemContainer>
 					false, // isTextCenteredHorizontally
 					false, // isTextCenteredVertically
 					DataBinding.fromContext(entityGetterPutter.name + ":"),
-					fontHeight
+					font
 				),
 
 				new ControlList
@@ -203,7 +204,7 @@ export class ItemContainer implements EntityProperty<ItemContainer>
 					(
 						(c: Item) => c.toString(world)
 					), // bindingForItemText
-					fontHeight,
+					font,
 					new DataBinding
 					(
 						itemHolderGetterPutter,
@@ -225,7 +226,7 @@ export class ItemContainer implements EntityProperty<ItemContainer>
 					true, // isTextCenteredHorizontally
 					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet(this, c => c.statusMessage),
-					fontHeight
+					font
 				),
 
 				ControlButton.from8
@@ -238,7 +239,7 @@ export class ItemContainer implements EntityProperty<ItemContainer>
 					), // pos
 					buttonSize.clone(),
 					"Done",
-					fontHeight,
+					font,
 					true, // hasBorder
 					DataBinding.fromTrue(), // isEnabled
 					back // click

@@ -59,6 +59,7 @@ import VisualBuilder = gf.VisualBuilder;
 import VisualCircle = gf.VisualCircle;
 import VisualCircleGradient = gf.VisualCircleGradient;
 import VisualCrosshairs = gf.VisualCrosshairs;
+import VisualDeferred = gf.VisualDeferred;
 import VisualDirectional = gf.VisualDirectional;
 import VisualDynamic = gf.VisualDynamic;
 import VisualEllipse = gf.VisualEllipse;

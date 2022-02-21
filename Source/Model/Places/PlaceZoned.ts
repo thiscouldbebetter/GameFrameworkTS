@@ -5,7 +5,6 @@ namespace ThisCouldBeBetter.GameFramework
 export class PlaceZoned extends Place
 {
 	entityToFollowName: string;
-	zoneStartName: string;
 	_zoneGetByName: (zoneName: string) => Zone;
 	_zoneAtPos: (posToCheck: Coords) => Zone;
 
@@ -18,7 +17,6 @@ export class PlaceZoned extends Place
 		defnName: string,
 		size: Coords,
 		entityToFollowName: string,
-		zoneStartName: string,
 		zoneGetByName: (zoneName: string) => Zone,
 		zoneAtPos: (posToCheck: Coords) => Zone
 	)
@@ -33,7 +31,6 @@ export class PlaceZoned extends Place
 		);
 
 		this.entityToFollowName = entityToFollowName;
-		this.zoneStartName = zoneStartName;
 		this._zoneGetByName = zoneGetByName;
 		this._zoneAtPos = zoneAtPos;
 		this.zoneCentralAndNeighbors = [];
@@ -49,22 +46,10 @@ export class PlaceZoned extends Place
 		return this._zoneGetByName(name);
 	}
 
-	zoneStart(): Zone
-	{
-		return this.zoneGetByName(this.zoneStartName);
-	}
-
-	// Place implementation.
-
-	initialize(uwpe: UniverseWorldPlaceEntities): void
-	{
-		var zoneStart = this.zoneGetByName(this.zoneStartName);
-		this.entitiesToSpawnAdd(zoneStart.entities);
-		super.initialize(uwpe);
-	}
-
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
+		super.updateForTimerTick(uwpe);
+
 		var entityToFollow = this.entitiesByName.get(this.entityToFollowName);
 		var entityToFollowPos = entityToFollow.locatable().loc.pos;
 		var zoneCentralPrev = this.zoneCentral;
@@ -139,8 +124,6 @@ export class PlaceZoned extends Place
 				this.zoneCentralAndNeighbors = zoneCentralAndNeighborsNext;
 			}
 		}
-
-		super.updateForTimerTick(uwpe);
 	}
 }
 

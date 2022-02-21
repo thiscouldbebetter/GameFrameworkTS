@@ -4,8 +4,9 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Drawable {
-            constructor(visual, isVisible) {
+            constructor(visual, renderingOrder, isVisible) {
                 this.visual = visual;
+                this.renderingOrder = renderingOrder || 0;
                 this.isVisible = isVisible;
                 if (this.isVisible == null) {
                     this.isVisible = true;
@@ -16,10 +17,13 @@ var ThisCouldBeBetter;
                 return Drawable.fromVisual(GameFramework.VisualRectangle.default());
             }
             static fromVisual(visual) {
-                return new Drawable(visual, null);
+                return new Drawable(visual, null, null);
             }
             static fromVisualAndIsVisible(visual, isVisible) {
-                return new Drawable(visual, isVisible);
+                return new Drawable(visual, null, isVisible);
+            }
+            static fromVisualAndRenderingOrder(visual, renderingOrder) {
+                return new Drawable(visual, renderingOrder, null);
             }
             hide() {
                 this.isVisible = false;
@@ -35,7 +39,7 @@ var ThisCouldBeBetter;
             }
             // cloneable
             clone() {
-                return new Drawable(this.visual, this.isVisible);
+                return new Drawable(this.visual, this.renderingOrder, this.isVisible);
             }
             overwriteWith(other) {
                 this.visual.overwriteWith(other.visual);

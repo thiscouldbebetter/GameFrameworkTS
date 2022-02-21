@@ -229,16 +229,23 @@ var ThisCouldBeBetter;
                 }
                 return entitiesSorted;
             }
-            static entitiesSortByZThenY(entitiesToSort) {
+            static entitiesSortByRenderingOrderThenZThenY(entitiesToSort) {
                 entitiesToSort.sort((a, b) => {
-                    var aPos = a.locatable().loc.pos;
-                    var bPos = b.locatable().loc.pos;
-                    var returnValue;
-                    if (aPos.z != bPos.z) {
-                        returnValue = bPos.z - aPos.z;
+                    var aRenderingOrder = a.drawable().renderingOrder;
+                    var bRenderingOrder = b.drawable().renderingOrder;
+                    if (aRenderingOrder != bRenderingOrder) {
+                        returnValue = bRenderingOrder - aRenderingOrder;
                     }
                     else {
-                        returnValue = aPos.y - bPos.y;
+                        var aPos = a.locatable().loc.pos;
+                        var bPos = b.locatable().loc.pos;
+                        var returnValue;
+                        if (aPos.z != bPos.z) {
+                            returnValue = bPos.z - aPos.z;
+                        }
+                        else {
+                            returnValue = aPos.y - bPos.y;
+                        }
                     }
                     return returnValue;
                 });

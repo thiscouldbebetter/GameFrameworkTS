@@ -53,12 +53,15 @@ var ThisCouldBeBetter;
                     var text;
                     if (this.text == null) {
                         var remainingOverMax = Math.round(_amountCurrent) + "/" + _amountMax;
-                        text = (this.abbreviation == null ? "" : (this.abbreviation + ":")) + remainingOverMax;
+                        text =
+                            (this.abbreviation == null
+                                ? ""
+                                : (this.abbreviation + ":")) + remainingOverMax;
                     }
                     else {
                         text = this.text.get();
                     }
-                    display.drawText(text, this.size.y, // fontHeightInPixels
+                    display.drawText(text, GameFramework.FontNameAndHeight.fromHeightInPixels(this.size.y), // fontHeightInPixels
                     pos, colorForBorder, GameFramework.Color.byName("Black"), // colorOutline
                     true, // isCenteredHorizontally
                     true, // isCenteredVertically

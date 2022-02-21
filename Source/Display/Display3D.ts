@@ -591,7 +591,7 @@ export class Display3D implements Display
 	drawText
 	(
 		text: string,
-		fontHeightInPixels: number,
+		fontNameAndHeight: FontNameAndHeight,
 		pos: Coords,
 		colorFill: Color,
 		colorOutline: Color,
@@ -603,7 +603,7 @@ export class Display3D implements Display
 		this._display2DOverlay.drawText
 		(
 			text,
-			fontHeightInPixels,
+			fontNameAndHeight,
 			pos,
 			colorFill,
 			colorOutline,

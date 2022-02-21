@@ -4,8 +4,8 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ControlLabel extends GameFramework.ControlBase {
-            constructor(name, pos, size, isTextCenteredHorizontally, isTextCenteredVertically, text, fontHeightInPixels) {
-                super(name, pos, size, fontHeightInPixels);
+            constructor(name, pos, size, isTextCenteredHorizontally, isTextCenteredVertically, text, fontNameAndHeight) {
+                super(name, pos, size, fontNameAndHeight);
                 this.isTextCenteredHorizontally = isTextCenteredHorizontally;
                 this.isTextCenteredVertically = isTextCenteredVertically;
                 this._text = text;
@@ -17,15 +17,14 @@ var ThisCouldBeBetter;
                 pos, null, // size
                 false, // isTextCenteredHorizontally
                 false, // isTextCenteredVertically
-                GameFramework.DataBinding.fromGet((c) => textAsString), 10 // fontHeightInPixels
-                );
+                GameFramework.DataBinding.fromGet((c) => textAsString), GameFramework.FontNameAndHeight.default());
             }
-            static fromPosHeightAndText(pos, fontHeightInPixels, text) {
+            static fromPosHeightAndText(pos, fontNameAndHeight, text) {
                 return new ControlLabel(null, //name
                 pos, null, // size
                 false, // isTextCenteredHorizontally
                 false, // isTextCenteredVertically
-                text, fontHeightInPixels);
+                text, fontNameAndHeight);
             }
             actionHandle(actionName) {
                 return false; // wasActionHandled
@@ -36,11 +35,6 @@ var ThisCouldBeBetter;
             mouseClick(pos) {
                 return false;
             }
-            scalePosAndSize(scaleFactor) {
-                this.pos.multiply(scaleFactor);
-                this.size.multiply(scaleFactor);
-                this.fontHeightInPixels *= scaleFactor.y;
-            }
             text() {
                 return this._text.get();
             }
@@ -50,7 +44,7 @@ var ThisCouldBeBetter;
                 var style = style || this.style(universe);
                 var text = this.text();
                 if (text != null) {
-                    display.drawText(text, this.fontHeightInPixels, drawPos, style.colorBorder(), style.colorFill(), // colorOutline
+                    display.drawText(text, this.fontNameAndHeight, drawPos, style.colorBorder(), style.colorFill(), // colorOutline
                     this.isTextCenteredHorizontally, this.isTextCenteredVertically, this.size);
                 }
             }

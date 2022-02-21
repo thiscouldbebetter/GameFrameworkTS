@@ -665,8 +665,7 @@ class PlaceBuilderDemo_Emplacements
 			pillowName,
 			[
 				Locatable.create(),
-				new Drawable(pillowVisual, null),
-				new ItemHolder([], null, null),
+				Drawable.fromVisual(pillowVisual),
 				new Usable(pillowUse)
 			]
 		);

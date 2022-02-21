@@ -9,6 +9,9 @@ var ThisCouldBeBetter;
                 this.loc = loc;
                 this.box = new GameFramework.Box(this.loc.pos, this.map.size);
             }
+            static fromMap(map) {
+                return new MapLocated(map, GameFramework.Disposition.default());
+            }
             // cloneable
             clone() {
                 return new MapLocated(this.map, this.loc.clone());

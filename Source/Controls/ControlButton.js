@@ -4,8 +4,8 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ControlButton extends GameFramework.ControlBase {
-            constructor(name, pos, size, text, fontHeightInPixels, hasBorder, isEnabled, click, canBeHeldDown) {
-                super(name, pos, size, fontHeightInPixels);
+            constructor(name, pos, size, text, fontNameAndHeight, hasBorder, isEnabled, click, canBeHeldDown) {
+                super(name, pos, size, fontNameAndHeight);
                 this.text = text;
                 this.hasBorder = hasBorder;
                 this._isEnabled = isEnabled;
@@ -15,8 +15,8 @@ var ThisCouldBeBetter;
                 this._drawLoc = GameFramework.Disposition.create();
                 this._sizeHalf = GameFramework.Coords.create();
             }
-            static from8(name, pos, size, text, fontHeightInPixels, hasBorder, isEnabled, click) {
-                return new ControlButton(name, pos, size, text, fontHeightInPixels, hasBorder, isEnabled, click, false // canBeHeldDown
+            static from8(name, pos, size, text, fontNameAndHeight, hasBorder, isEnabled, click) {
+                return new ControlButton(name, pos, size, text, fontNameAndHeight, hasBorder, isEnabled, click, false // canBeHeldDown
                 );
             }
             actionHandle(actionNameToHandle, universe) {
@@ -38,11 +38,6 @@ var ThisCouldBeBetter;
                 }
                 return (this.canBeHeldDown == false); // wasClickHandled
             }
-            scalePosAndSize(scaleFactor) {
-                this.pos.multiply(scaleFactor);
-                this.size.multiply(scaleFactor);
-                this.fontHeightInPixels *= scaleFactor.y;
-            }
             // drawable
             draw(universe, display, drawLoc, style) {
                 var drawPos = this._drawLoc.overwriteWith(drawLoc).pos;
@@ -55,9 +50,8 @@ var ThisCouldBeBetter;
                 if (this.hasBorder) {
                     style.drawBoxOfSizeAtPosWithColorsToDisplay(this.size, drawPos, colorFill, colorBorder, isHighlighted, display);
                 }
-                // drawPos.add(this._sizeHalf.overwriteWith(this.size).half());
                 var colorText = (isEnabled ? colorBorder : style.colorDisabled());
-                display.drawText(this.text, this.fontHeightInPixels, drawPos, (isHighlighted ? colorFill : colorText), (isHighlighted ? colorText : colorFill), true, // isCenteredHorizontally
+                display.drawText(this.text, this.fontNameAndHeight, drawPos, (isHighlighted ? colorFill : colorText), (isHighlighted ? colorText : colorFill), true, // isCenteredHorizontally
                 true, // isCenteredVertically
                 this.size // sizeMaxInPixels
                 );

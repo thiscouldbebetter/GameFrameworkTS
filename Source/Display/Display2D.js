@@ -22,6 +22,7 @@ var ThisCouldBeBetter;
             static fromImage(image) {
                 var returnDisplay = Display2D.fromSizeAndIsInvisible(image.sizeInPixels, true // isInvisible
                 );
+                returnDisplay.initialize(null);
                 returnDisplay.drawImage(image, GameFramework.Coords.Instances().Zeroes);
                 return returnDisplay;
             }
@@ -313,9 +314,12 @@ var ThisCouldBeBetter;
                     this.graphics.stroke();
                 }
             }
-            drawText(text, fontHeightInPixels, pos, colorFill, colorOutline, isCenteredHorizontally, isCenteredVertically, sizeMaxInPixels) {
+            drawText(text, fontNameAndHeight, pos, colorFill, colorOutline, isCenteredHorizontally, isCenteredVertically, sizeMaxInPixels) {
                 var fontToRestore = this.graphics.font;
-                this.fontSet(this.fontNameAndHeight);
+                if (fontNameAndHeight != null) {
+                    this.fontSet(fontNameAndHeight);
+                }
+                var fontHeightInPixels = this.fontNameAndHeight.heightInPixels;
                 if (colorFill == null) {
                     colorFill = this.colorFore;
                 }
@@ -415,10 +419,8 @@ var ThisCouldBeBetter;
                 }
             }
             fontSet(fontNameAndHeight) {
-                if (fontNameAndHeight.equals(this.fontNameAndHeight) == false) {
-                    this.fontNameAndHeight = fontNameAndHeight;
-                    this.graphics.font = this.fontNameAndHeight.toStringSystemFont();
-                }
+                this.fontNameAndHeight = fontNameAndHeight;
+                this.graphics.font = this.fontNameAndHeight.toStringSystemFont();
             }
             flush() { }
             hide(universe) {

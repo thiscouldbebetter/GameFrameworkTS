@@ -17,6 +17,11 @@ export class MapLocated implements ShapeBase
 		this.box = new Box(this.loc.pos, this.map.size);
 	}
 
+	static fromMap(map: MapOfCells<any>): MapLocated
+	{
+		return new MapLocated(map, Disposition.default());
+	}
+
 	// cloneable
 
 	clone(): MapLocated

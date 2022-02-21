@@ -63,6 +63,7 @@ export class Profile
 		var sizeBase = controlBuilder.sizeBase;
 		var scaleMultiplier = size.clone().divide(sizeBase);
 		var fontHeight = controlBuilder.fontHeightInPixelsBase;
+		var fontNameAndHeight = new FontNameAndHeight(null, fontHeight);
 		var buttonHeightBase = controlBuilder.buttonHeightBase;
 
 		var visualThumbnailSize = Coords.fromXY(60, 45);
@@ -422,7 +423,7 @@ export class Profile
 					(
 						"Profile: " + universe.profile.name
 					),
-					fontHeight
+					fontNameAndHeight
 				),
 
 				new ControlLabel
@@ -437,7 +438,7 @@ export class Profile
 						"Choose a State to "
 						+ (isLoadNotSave ? "Restore" : "Overwrite") + ":"
 					),
-					fontHeight
+					fontNameAndHeight
 				),
 
 				ControlList.from10
@@ -458,7 +459,7 @@ export class Profile
 							return (timeSaved == null ? "-" : timeSaved.toStringYYYY_MM_DD_HH_MM_SS() )
 						}
 					), // bindingForOptionText
-					fontHeight,
+					fontNameAndHeight,
 					new DataBinding
 					(
 						universe.profile,
@@ -476,7 +477,7 @@ export class Profile
 					Coords.fromXY(10, 120), // pos
 					Coords.fromXY(25, buttonHeightBase), // size
 					"New",
-					fontHeight,
+					fontNameAndHeight,
 					true, // hasBorder
 					DataBinding.fromTrue(), // isEnabled
 					(isLoadNotSave ? loadNewWorld : saveToLocalStorageAsNewSlot) // click
@@ -488,7 +489,7 @@ export class Profile
 					Coords.fromXY(40, 120), // pos
 					Coords.fromXY(25, buttonHeightBase), // size
 					(isLoadNotSave ? "Load" : "Save"),
-					fontHeight,
+					fontNameAndHeight,
 					true, // hasBorder
 					// isEnabled
 					DataBinding.fromContextAndGet
@@ -506,7 +507,7 @@ export class Profile
 					Coords.fromXY(70, 120), // pos
 					Coords.fromXY(25, buttonHeightBase), // size
 					"File",
-					fontHeight,
+					fontNameAndHeight,
 					true, // hasBorder
 					// isEnabled
 					DataBinding.fromContextAndGet
@@ -523,7 +524,7 @@ export class Profile
 					Coords.fromXY(100, 120), // pos
 					Coords.fromXY(20, buttonHeightBase), // size
 					"X",
-					fontHeight,
+					fontNameAndHeight,
 					true, // hasBorder
 					// isEnabled
 					DataBinding.fromContextAndGet
@@ -579,7 +580,7 @@ export class Profile
 							return (saveState == null ? "" : saveState.placeName);
 						}
 					),
-					fontHeight
+					fontNameAndHeight
 				),
 
 				new ControlLabel
@@ -598,7 +599,7 @@ export class Profile
 							return (saveState == null ? "" : saveState.timePlayingAsString);
 						}
 					),
-					fontHeight
+					fontNameAndHeight
 				),
 
 				new ControlLabel
@@ -628,7 +629,7 @@ export class Profile
 							return returnValue;
 						}
 					),
-					fontHeight
+					fontNameAndHeight
 				),
 
 				new ControlLabel
@@ -647,7 +648,7 @@ export class Profile
 							return (saveState == null ? "" : saveState.timeSaved.toStringHH_MM_SS());
 						}
 					),
-					fontHeight
+					fontNameAndHeight
 				),
 
 				ControlButton.from8
@@ -659,7 +660,7 @@ export class Profile
 					), // pos
 					Coords.fromXY(25, 15), // size
 					"Back",
-					fontHeight,
+					fontNameAndHeight,
 					true, // hasBorder
 					DataBinding.fromTrue(), // isEnabled
 					back // click
@@ -683,7 +684,7 @@ export class Profile
 		var controlBuilder = universe.controlBuilder;
 		var sizeBase = controlBuilder.sizeBase;
 		var scaleMultiplier = size.clone().divide(sizeBase);
-		var fontHeight = controlBuilder.fontHeightInPixelsBase;
+		var fontNameAndHeight = controlBuilder.fontBase;
 		var buttonHeightBase = controlBuilder.buttonHeightBase;
 
 		var returnValue = ControlContainer.from4
@@ -701,7 +702,7 @@ export class Profile
 					true, // isTextCenteredHorizontally
 					true, // isTextCenteredVertically
 					DataBinding.fromContext("Profile Name:"),
-					fontHeight
+					fontNameAndHeight
 				),
 
 				new ControlTextBox
@@ -715,7 +716,7 @@ export class Profile
 						(c: Profile) => c.name,
 						(c: Profile, v: string) => c.name = v
 					), // text
-					fontHeight,
+					fontNameAndHeight,
 					null, // charCountMax
 					DataBinding.fromTrue() // isEnabled
 				),
@@ -726,7 +727,7 @@ export class Profile
 					Coords.fromXY(50, 80), // pos
 					Coords.fromXY(45, buttonHeightBase), // size
 					"Create",
-					fontHeight,
+					fontNameAndHeight,
 					true, // hasBorder
 					// isEnabled
 					DataBinding.fromContextAndGet
@@ -774,7 +775,7 @@ export class Profile
 					Coords.fromXY(105, 80), // pos
 					Coords.fromXY(45, buttonHeightBase), // size
 					"Cancel",
-					fontHeight,
+					fontNameAndHeight,
 					true, // hasBorder
 					DataBinding.fromTrue(), // isEnabled
 					() => // click
@@ -807,7 +808,7 @@ export class Profile
 		var controlBuilder = universe.controlBuilder;
 		var sizeBase = controlBuilder.sizeBase;
 		var scaleMultiplier = size.clone().divide(sizeBase);
-		var fontHeight = controlBuilder.fontHeightInPixelsBase;
+		var fontNameAndHeight = controlBuilder.fontBase;
 		var buttonHeightBase = controlBuilder.buttonHeightBase;
 
 		var storageHelper = universe.storageHelper;
@@ -892,7 +893,7 @@ export class Profile
 					true, // isTextCenteredHorizontally
 					true, // isTextCenteredVertically
 					DataBinding.fromContext("Select a Profile:"),
-					fontHeight
+					fontNameAndHeight
 				),
 
 				new ControlList<Universe, Profile, string>
@@ -908,7 +909,7 @@ export class Profile
 					(
 						(c: Profile) => c.name
 					), // bindingForItemText
-					fontHeight,
+					fontNameAndHeight,
 					new DataBinding
 					(
 						universe,
@@ -927,7 +928,7 @@ export class Profile
 					Coords.fromXY(30, 95), // pos
 					Coords.fromXY(35, buttonHeightBase), // size
 					"New",
-					fontHeight,
+					fontNameAndHeight,
 					true, // hasBorder
 					DataBinding.fromTrue(), // isEnabled
 					create // click
@@ -939,7 +940,7 @@ export class Profile
 					Coords.fromXY(70, 95), // pos
 					Coords.fromXY(35, buttonHeightBase), // size
 					"Select",
-					fontHeight,
+					fontNameAndHeight,
 					true, // hasBorder
 					// isEnabled
 					DataBinding.fromContextAndGet
@@ -956,7 +957,7 @@ export class Profile
 					Coords.fromXY(110, 95), // pos
 					Coords.fromXY(35, buttonHeightBase), // size
 					"Skip",
-					fontHeight,
+					fontNameAndHeight,
 					true, // hasBorder
 					DataBinding.fromTrue(), // isEnabled
 					// click
@@ -976,7 +977,7 @@ export class Profile
 					Coords.fromXY(150, 95), // pos
 					Coords.fromXY(20, buttonHeightBase), // size
 					"X",
-					fontHeight,
+					fontNameAndHeight,
 					true, // hasBorder
 					// isEnabled
 					DataBinding.fromContextAndGet
@@ -997,7 +998,7 @@ export class Profile
 					), // pos
 					Coords.fromXY(25, 20), // size
 					"Back",
-					fontHeight,
+					fontNameAndHeight,
 					true, // hasBorder
 					DataBinding.fromTrue(), // isEnabled
 					() => // click

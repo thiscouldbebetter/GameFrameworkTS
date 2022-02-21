@@ -27,6 +27,11 @@ export class Color implements Interpolatable<Color>
 		return Color.fromRGB(0, 0, 0); // Black.
 	}
 
+	static default(): Color
+	{
+		return Color.create();
+	}
+
 	static fromRGB(red: number, green: number, blue: number): Color
 	{
 		return new Color(null, null, [red, green, blue, 1]);

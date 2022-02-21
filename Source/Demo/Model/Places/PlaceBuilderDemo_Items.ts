@@ -320,13 +320,14 @@ class PlaceBuilderDemo_Items
 				+ " all men are created equal. ";
 			var size = universe.display.sizeInPixels.clone();
 			var fontHeight = 10;
+			var fontNameAndHeight = FontNameAndHeight.fromHeightInPixels(fontHeight);
 			var textarea = new ControlTextarea
 			(
 				"textareaContents",
 				size.clone().half().half(),
 				size.clone().half(),
 				DataBinding.fromContext(text),
-				fontHeight,
+				fontNameAndHeight,
 				DataBinding.fromFalseWithContext(text) // isEnabled
 			);
 			var button = new ControlButton
@@ -335,7 +336,7 @@ class PlaceBuilderDemo_Items
 				Coords.fromXY(size.x / 4, 3 * size.y / 4 + fontHeight),
 				Coords.fromXY(size.x / 2, fontHeight * 2),
 				"Done",
-				fontHeight,
+				fontNameAndHeight,
 				true, // hasBorder
 				DataBinding.fromTrue(), // isEnabled
 				back, // click

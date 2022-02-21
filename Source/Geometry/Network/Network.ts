@@ -219,6 +219,7 @@ export class VisualNetwork implements Visual<VisualNetwork>
 			display.drawLine(nodeFromPos, nodeToPos, colorCyan, 3); // lineThickness
 		}
 
+		var font = FontNameAndHeight.default();
 		var nodes = networkTransformed.nodes;
 		for (var i = 0; i < nodes.length; i++)
 		{
@@ -226,7 +227,7 @@ export class VisualNetwork implements Visual<VisualNetwork>
 			display.drawText
 			(
 				"" + node.id,
-				10, // fontHeightInPixels
+				font,
 				node.pos,
 				colorCyan,
 				null, // colorOutline

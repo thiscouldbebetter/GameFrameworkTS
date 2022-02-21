@@ -49,6 +49,11 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 		var fontHeightSmall = fontHeight * .6;
 		var fontHeightLarge = fontHeight * 1.5;
 
+		var fontSmall =
+			FontNameAndHeight.fromHeightInPixels(fontHeightSmall);
+		var fontLarge =
+			FontNameAndHeight.fromHeightInPixels(fontHeightLarge);
+
 		var back = () => universe.venueTransitionTo(venuePrev);
 
 		var buttonSize = Coords.fromXY(20, 10);
@@ -63,7 +68,7 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 				false, // isTextCenteredHorizontally
 				false, // isTextCenteredVertically
 				DataBinding.fromContext("Journal Entries:"),
-				fontHeightSmall
+				fontSmall
 			),
 
 			new ControlButton
@@ -72,7 +77,7 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 				Coords.fromXY(65, 5), // pos
 				Coords.fromXY(30, 8), // size
 				"New",
-				fontHeightSmall,
+				fontSmall,
 				true, // hasBorder,
 				DataBinding.fromTrueWithContext(this), // isEnabled
 				() =>
@@ -103,7 +108,7 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 				(
 					(c: JournalEntry) => c.toString(universe)
 				), // bindingForItemText
-				fontHeightSmall,
+				fontSmall,
 				new DataBinding
 				(
 					this,
@@ -131,7 +136,7 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 				false, // isTextCenteredHorizontally
 				false, // isTextCenteredVertically
 				DataBinding.fromContext("Entry Selected:"),
-				fontHeightSmall
+				fontSmall
 			),
 
 			new ControlButton
@@ -140,7 +145,7 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 				Coords.fromXY(146, 5), // pos
 				Coords.fromXY(15, 8), // size
 				"Lock",
-				fontHeightSmall,
+				fontSmall,
 				true, // hasBorder,
 				DataBinding.fromContextAndGet
 				(
@@ -164,7 +169,7 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 				Coords.fromXY(164, 5), // pos
 				Coords.fromXY(15, 8), // size
 				"Edit",
-				fontHeightSmall,
+				fontSmall,
 				true, // hasBorder,
 				DataBinding.fromContextAndGet
 				(
@@ -188,7 +193,7 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 				Coords.fromXY(182, 5), // pos
 				Coords.fromXY(8, 8), // size
 				"X",
-				fontHeightSmall,
+				fontSmall,
 				true, // hasBorder,
 				DataBinding.fromContextAndGet
 				(
@@ -228,7 +233,7 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 				false, // isTextCenteredHorizontally
 				false, // isTextCenteredVertically
 				DataBinding.fromContext("Time Recorded:"),
-				fontHeightSmall
+				fontSmall
 			),
 
 			new ControlLabel
@@ -247,7 +252,7 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 						return (entry == null ? "-" : entry.timeRecordedAsStringH_M_S(universe));
 					}
 				),
-				fontHeightSmall
+				fontSmall
 			),
 
 			new ControlTextBox
@@ -272,7 +277,7 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 						}
 					}
 				), // text
-				fontHeightSmall,
+				fontSmall,
 				32, // charCountMax
 				DataBinding.fromContextAndGet
 				(
@@ -304,7 +309,7 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 						}
 					}
 				), // text
-				fontHeightSmall,
+				fontSmall,
 				DataBinding.fromContextAndGet
 				(
 					this,
@@ -328,7 +333,7 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 						return c.statusMessage;
 					}
 				), // text
-				fontHeightSmall
+				fontSmall
 			)
 		];
 
@@ -361,7 +366,7 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 					true, // isTextCenteredHorizontally
 					false, // isTextCenteredVertically
 					DataBinding.fromContext("Journal"),
-					fontHeightLarge
+					fontLarge
 				)
 			);
 			childControls.push
@@ -372,7 +377,7 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 					Coords.fromXY(170, 115), // pos
 					buttonSize.clone(),
 					"Done",
-					fontHeightSmall,
+					fontSmall,
 					true, // hasBorder
 					DataBinding.fromTrue(), // isEnabled
 					back // click

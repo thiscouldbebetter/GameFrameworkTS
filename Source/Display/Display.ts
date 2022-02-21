@@ -84,7 +84,7 @@ export interface Display
 	drawText
 	(
 		text: string,
-		fontHeightInPixels: number,
+		fontNameAndHeight: FontNameAndHeight,
 		pos: Coords,
 		colorFill: Color,
 		colorOutline: Color,
@@ -92,6 +92,7 @@ export interface Display
 		isCenteredVertically: boolean,
 		sizeMaxInPixels: Coords
 	): void;
+
 	drawWedge
 	(
 		center: Coords, radius: number, angleStartInTurns: number,

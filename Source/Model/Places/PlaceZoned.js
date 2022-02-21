@@ -4,12 +4,11 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class PlaceZoned extends GameFramework.Place {
-            constructor(name, defnName, size, entityToFollowName, zoneStartName, zoneGetByName, zoneAtPos) {
+            constructor(name, defnName, size, entityToFollowName, zoneGetByName, zoneAtPos) {
                 super(name, defnName, null, // parentName
                 size, null // entities
                 );
                 this.entityToFollowName = entityToFollowName;
-                this.zoneStartName = zoneStartName;
                 this._zoneGetByName = zoneGetByName;
                 this._zoneAtPos = zoneAtPos;
                 this.zoneCentralAndNeighbors = [];
@@ -20,16 +19,8 @@ var ThisCouldBeBetter;
             zoneGetByName(name) {
                 return this._zoneGetByName(name);
             }
-            zoneStart() {
-                return this.zoneGetByName(this.zoneStartName);
-            }
-            // Place implementation.
-            initialize(uwpe) {
-                var zoneStart = this.zoneGetByName(this.zoneStartName);
-                this.entitiesToSpawnAdd(zoneStart.entities);
-                super.initialize(uwpe);
-            }
             updateForTimerTick(uwpe) {
+                super.updateForTimerTick(uwpe);
                 var entityToFollow = this.entitiesByName.get(this.entityToFollowName);
                 var entityToFollowPos = entityToFollow.locatable().loc.pos;
                 var zoneCentralPrev = this.zoneCentral;
@@ -64,7 +55,6 @@ var ThisCouldBeBetter;
                         this.zoneCentralAndNeighbors = zoneCentralAndNeighborsNext;
                     }
                 }
-                super.updateForTimerTick(uwpe);
             }
         }
         GameFramework.PlaceZoned = PlaceZoned;

@@ -260,6 +260,30 @@ var ThisCouldBeBetter;
                 ]);
                 return returnValue;
             }
+            directionalAnimationsFromTiledImage(visualImageSource, imageSource, imageSourceSizeInTiles, tileSizeToDraw) {
+                var imageSourceSizeInPixels = imageSource.sizeInPixels;
+                var tileSizeInPixels = imageSourceSizeInPixels.clone().divide(imageSourceSizeInTiles);
+                var tilePosInTiles = GameFramework.Coords.create();
+                var tilePosInPixels = GameFramework.Coords.create();
+                var directions = [];
+                for (var y = 0; y < imageSourceSizeInTiles.y; y++) {
+                    // Directions.
+                    tilePosInTiles.y = y;
+                    var frames = [];
+                    for (var x = 0; x < imageSourceSizeInTiles.x; x++) {
+                        // Frames.
+                        tilePosInTiles.x = x;
+                        tilePosInPixels.overwriteWith(tilePosInTiles).multiply(tileSizeInPixels);
+                        var sourceRegionBounds = GameFramework.Box.fromMinAndSize(tilePosInPixels.clone(), tileSizeInPixels);
+                        var frame = new GameFramework.VisualImageScaledPartial(sourceRegionBounds, tileSizeToDraw, visualImageSource);
+                        frames.push(frame);
+                    }
+                    var visualForDirection = GameFramework.VisualAnimation.fromNameAndFrames("Direction" + y, frames);
+                    directions.push(visualForDirection);
+                }
+                var returnValue = GameFramework.VisualDirectional.fromVisuals(directions[1], directions);
+                return returnValue;
+            }
             eyesBlinking(visualEyeRadius) {
                 var visualPupilRadius = visualEyeRadius / 2;
                 var visualEye = new GameFramework.VisualGroup([

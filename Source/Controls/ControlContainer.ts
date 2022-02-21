@@ -390,8 +390,7 @@ export class ControlContainer extends ControlBase
 
 	scalePosAndSize(scaleFactor: Coords): ControlBase
 	{
-		this.pos.multiply(scaleFactor);
-		this.size.multiply(scaleFactor);
+		super.scalePosAndSize(scaleFactor);
 
 		for (var i = 0; i < this.children.length; i++)
 		{
@@ -400,9 +399,9 @@ export class ControlContainer extends ControlBase
 			{
 				child.pos.multiply(scaleFactor);
 				child.size.multiply(scaleFactor);
-				if (child.fontHeightInPixels != null)
+				if (child.fontNameAndHeight != null)
 				{
-					child.fontHeightInPixels *= scaleFactor.y;
+					child.fontNameAndHeight.heightInPixels *= scaleFactor.y;
 				}
 			}
 			else

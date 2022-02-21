@@ -41,8 +41,8 @@ var ThisCouldBeBetter;
             venueInner(universe) {
                 if (this._venueInner == null) {
                     var sizeInPixels = this.sizeInPixels(universe);
-                    var controlMessage = universe.controlBuilder.message(universe, sizeInPixels, this.messageToShow, this.acknowledge, this.showMessageOnly, null // fontHeightInPixels
-                    );
+                    var fontNameAndHeight = GameFramework.FontNameAndHeight.default();
+                    var controlMessage = universe.controlBuilder.message(universe, sizeInPixels, this.messageToShow, this.acknowledge, this.showMessageOnly, fontNameAndHeight);
                     var venuesToLayer = [];
                     if (this.venuePrev != null) {
                         venuesToLayer.push(this.venuePrev);

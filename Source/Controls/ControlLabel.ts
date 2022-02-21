@@ -20,10 +20,10 @@ export class ControlLabel<TContext> extends ControlBase
 		isTextCenteredHorizontally: boolean,
 		isTextCenteredVertically: boolean,
 		text: DataBinding<TContext, string>,
-		fontHeightInPixels: number
+		fontNameAndHeight: FontNameAndHeight
 	)
 	{
-		super(name, pos, size, fontHeightInPixels);
+		super(name, pos, size, fontNameAndHeight);
 		this.isTextCenteredHorizontally = isTextCenteredHorizontally;
 		this.isTextCenteredVertically = isTextCenteredVertically;
 		this._text = text;
@@ -47,14 +47,14 @@ export class ControlLabel<TContext> extends ControlBase
 			false, // isTextCenteredHorizontally
 			false, // isTextCenteredVertically
 			DataBinding.fromGet((c: TContext) => textAsString),
-			10 // fontHeightInPixels
+			FontNameAndHeight.default()
 		);
 	}
 
 	static fromPosHeightAndText<TContext>
 	(
 		pos: Coords,
-		fontHeightInPixels: number,
+		fontNameAndHeight: FontNameAndHeight,
 		text: DataBinding<TContext, string>
 	): ControlLabel<TContext>
 	{
@@ -66,7 +66,7 @@ export class ControlLabel<TContext> extends ControlBase
 			false, // isTextCenteredHorizontally
 			false, // isTextCenteredVertically
 			text,
-			fontHeightInPixels
+			fontNameAndHeight
 		);
 	}
 
@@ -83,13 +83,6 @@ export class ControlLabel<TContext> extends ControlBase
 	mouseClick(pos: Coords): boolean
 	{
 		return false;
-	}
-
-	scalePosAndSize(scaleFactor: Coords): void
-	{
-		this.pos.multiply(scaleFactor);
-		this.size.multiply(scaleFactor);
-		this.fontHeightInPixels *= scaleFactor.y;
 	}
 
 	text(): string
@@ -116,7 +109,7 @@ export class ControlLabel<TContext> extends ControlBase
 			display.drawText
 			(
 				text,
-				this.fontHeightInPixels,
+				this.fontNameAndHeight,
 				drawPos,
 				style.colorBorder(),
 				style.colorFill(), // colorOutline

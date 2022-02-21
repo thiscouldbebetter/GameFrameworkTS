@@ -152,9 +152,10 @@ class PlaceBuilderDemo_Items {
                 + " all men are created equal. ";
             var size = universe.display.sizeInPixels.clone();
             var fontHeight = 10;
-            var textarea = new ControlTextarea("textareaContents", size.clone().half().half(), size.clone().half(), DataBinding.fromContext(text), fontHeight, DataBinding.fromFalseWithContext(text) // isEnabled
+            var fontNameAndHeight = FontNameAndHeight.fromHeightInPixels(fontHeight);
+            var textarea = new ControlTextarea("textareaContents", size.clone().half().half(), size.clone().half(), DataBinding.fromContext(text), fontNameAndHeight, DataBinding.fromFalseWithContext(text) // isEnabled
             );
-            var button = new ControlButton("buttonDone", Coords.fromXY(size.x / 4, 3 * size.y / 4 + fontHeight), Coords.fromXY(size.x / 2, fontHeight * 2), "Done", fontHeight, true, // hasBorder
+            var button = new ControlButton("buttonDone", Coords.fromXY(size.x / 4, 3 * size.y / 4 + fontHeight), Coords.fromXY(size.x / 2, fontHeight * 2), "Done", fontNameAndHeight, true, // hasBorder
             DataBinding.fromTrue(), // isEnabled
             back, // click
             false // canBeHeldDown

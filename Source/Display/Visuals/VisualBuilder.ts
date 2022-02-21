@@ -18,7 +18,7 @@ export class VisualBuilder
 	(
 		circleRadius: number, circleColor: Color, eyeRadius: number,
 		visualEyes: VisualBase
-	)
+	): VisualBase
 	{
 		visualEyes = visualEyes || this.eyesBlinking(eyeRadius);
 
@@ -49,7 +49,7 @@ export class VisualBuilder
 	(
 		circleRadius: number, circleColor: Color, eyeRadius: number,
 		visualEyes: VisualBase
-	)
+	): VisualBase
 	{
 		var circleWithEyes =
 			this.circleWithEyes(circleRadius, circleColor, eyeRadius, visualEyes);
@@ -407,7 +407,7 @@ export class VisualBuilder
 	(
 		circleRadius: number, circleColor: Color, eyeRadius: number,
 		visualEyes: VisualBase
-	)
+	): VisualBase
 	{
 		var lineThickness = 2;
 
@@ -578,8 +578,71 @@ export class VisualBuilder
 		return returnValue;
 	}
 
+	directionalAnimationsFromTiledImage
+	(
+		visualImageSource: VisualImage,
+		imageSource: Image2,
+		imageSourceSizeInTiles: Coords,
+		tileSizeToDraw: Coords
+	): VisualBase
+	{
+		var imageSourceSizeInPixels = imageSource.sizeInPixels;
+		var tileSizeInPixels =
+			imageSourceSizeInPixels.clone().divide(imageSourceSizeInTiles);
 
-	eyesBlinking(visualEyeRadius: number)
+		var tilePosInTiles = Coords.create();
+		var tilePosInPixels = Coords.create();
+
+		var directions = [];
+
+		for (var y = 0; y < imageSourceSizeInTiles.y; y++)
+		{
+			// Directions.
+			tilePosInTiles.y = y;
+
+			var frames = [];
+
+			for (var x = 0; x < imageSourceSizeInTiles.x; x++)
+			{
+				// Frames.
+				tilePosInTiles.x = x;
+
+				tilePosInPixels.overwriteWith
+				(
+					tilePosInTiles
+				).multiply
+				(
+					tileSizeInPixels
+				);
+
+				var sourceRegionBounds =
+					Box.fromMinAndSize(tilePosInPixels.clone(), tileSizeInPixels);
+
+				var frame = new VisualImageScaledPartial
+				(
+					sourceRegionBounds,
+					tileSizeToDraw,
+					visualImageSource
+				);
+
+				frames.push(frame);
+			}
+
+			var visualForDirection =
+				VisualAnimation.fromNameAndFrames("Direction" + y, frames);
+
+			directions.push(visualForDirection);
+		}
+
+		var returnValue = VisualDirectional.fromVisuals
+		(
+			directions[1], directions
+		);
+
+		return returnValue;
+	}
+
+	eyesBlinking(visualEyeRadius: number): VisualBase
 	{
 		var visualPupilRadius = visualEyeRadius / 2;
 
@@ -612,7 +675,7 @@ export class VisualBuilder
 		return visualEyesBlinking;
 	}
 
-	flame(dimension: number)
+	flame(dimension: number): VisualBase
 	{
 		var dimensionHalf = dimension / 2;
 		var flameVisualStatic = new VisualGroup
@@ -666,7 +729,7 @@ export class VisualBuilder
 		return flameVisual;
 	}
 
-	ice(dimension: number)
+	ice(dimension: number): VisualBase
 	{
 		var dimensionHalf = dimension / 2;
 		var color = Color.byName("Cyan");
@@ -692,7 +755,7 @@ export class VisualBuilder
 		return visual;
 	}
 
-	sun(dimension: number)
+	sun(dimension: number): VisualBase
 	{
 		var color = Color.Instances().Yellow;
 		var rayThickness = 1;
