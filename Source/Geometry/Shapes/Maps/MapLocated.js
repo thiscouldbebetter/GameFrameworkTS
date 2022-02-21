@@ -55,5 +55,23 @@ var ThisCouldBeBetter;
             }
         }
         GameFramework.MapLocated = MapLocated;
+        class MapLocated2 extends MapLocated {
+            // hack - To allow different collision calculations.
+            constructor(map, loc) {
+                super(map, loc);
+            }
+            static fromMap(map) {
+                return new MapLocated2(map, GameFramework.Disposition.default());
+            }
+            // Cloneable.
+            clone() {
+                return new MapLocated2(this.map, this.loc.clone());
+            }
+            overwriteWith(other) {
+                this.loc.overwriteWith(other.loc);
+                return this;
+            }
+        }
+        GameFramework.MapLocated2 = MapLocated2;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
 })(ThisCouldBeBetter || (ThisCouldBeBetter = {}));

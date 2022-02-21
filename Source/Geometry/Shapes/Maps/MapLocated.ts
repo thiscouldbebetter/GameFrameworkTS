@@ -94,4 +94,32 @@ export class MapLocated implements ShapeBase
 	}
 }
 
+export class MapLocated2 extends MapLocated
+{
+	// hack - To allow different collision calculations.
+
+	constructor(map: MapOfCells<any>, loc: Disposition)
+	{
+		super(map, loc);
+	}
+
+	static fromMap(map: MapOfCells<any>): MapLocated
+	{
+		return new MapLocated2(map, Disposition.default());
+	}
+
+	// Cloneable.
+
+	clone(): MapLocated2
+	{
+		return new MapLocated2(this.map, this.loc.clone());
+	}
+
+	overwriteWith(other: MapLocated2): MapLocated2
+	{
+		this.loc.overwriteWith(other.loc);
+		return this;
+	}
+}
+
 }

@@ -59,6 +59,7 @@ export class CollisionHelper
 		var boxName = ( typeof Box == notDefined ? null : Box.name );
 		var boxRotatedName = ( typeof BoxRotated == notDefined ? null : BoxRotated.name );
 		var mapLocatedName = ( typeof MapLocated == notDefined ? null : MapLocated.name );
+		var mapLocated2Name = ( typeof MapLocated2 == notDefined ? null : MapLocated2.name );
 		var meshName = ( typeof Mesh == notDefined ? null : Mesh.name );
 		var shapeGroupAllName = (typeof ShapeGroupAll == notDefined ? null : ShapeGroupAll.name);
 		var shapeInverseName = (typeof ShapeInverse == notDefined ? null : ShapeInverse.name);
@@ -71,6 +72,7 @@ export class CollisionHelper
 				[ boxName, this.collisionOfBoxAndBox ],
 				[ boxRotatedName, this.collisionOfBoxAndBoxRotated ],
 				[ mapLocatedName, this.collisionOfBoxAndMapLocated ],
+				[ mapLocated2Name, this.collisionOfBoxAndMapLocated ],
 				[ meshName, this.collisionOfBoxAndMesh ],
 				[ shapeGroupAllName, this.collisionOfShapeAndShapeGroupAll ],
 				[ shapeInverseName, this.collisionOfShapeAndShapeInverse ],
@@ -1402,6 +1404,11 @@ export class CollisionHelper
 
 	doBoxAndMapLocatedCollide(box: Box, mapLocated: MapLocated): boolean
 	{
+		return this.doBoxAndBoxCollide(box, mapLocated.box);
+	}
+
+	doBoxAndMapLocated2Collide(box: Box, mapLocated: MapLocated2): boolean
+	{
 		var doCollide = this.doBoxAndBoxCollide(box, mapLocated.box);
 		if (doCollide)
 		{
@@ -1675,6 +1682,11 @@ export class CollisionHelper
 	doMapLocatedAndBoxCollide(mapLocated: MapLocated, box: Box): boolean
 	{
 		return this.doBoxAndMapLocatedCollide(box, mapLocated);
+	}
+
+	doMapLocated2AndBoxCollide(mapLocated: MapLocated2, box: Box): boolean
+	{
+		return this.doBoxAndMapLocated2Collide(box, mapLocated);
 	}
 
 	doMapLocatedAndBoxRotatedCollide(mapLocated: MapLocated, boxRotated: BoxRotated): boolean

@@ -32,6 +32,7 @@ var ThisCouldBeBetter;
                 var boxName = (typeof GameFramework.Box == notDefined ? null : GameFramework.Box.name);
                 var boxRotatedName = (typeof GameFramework.BoxRotated == notDefined ? null : GameFramework.BoxRotated.name);
                 var mapLocatedName = (typeof GameFramework.MapLocated == notDefined ? null : GameFramework.MapLocated.name);
+                var mapLocated2Name = (typeof GameFramework.MapLocated2 == notDefined ? null : GameFramework.MapLocated2.name);
                 var meshName = (typeof GameFramework.Mesh == notDefined ? null : GameFramework.Mesh.name);
                 var shapeGroupAllName = (typeof GameFramework.ShapeGroupAll == notDefined ? null : GameFramework.ShapeGroupAll.name);
                 var shapeInverseName = (typeof GameFramework.ShapeInverse == notDefined ? null : GameFramework.ShapeInverse.name);
@@ -41,6 +42,7 @@ var ThisCouldBeBetter;
                         [boxName, this.collisionOfBoxAndBox],
                         [boxRotatedName, this.collisionOfBoxAndBoxRotated],
                         [mapLocatedName, this.collisionOfBoxAndMapLocated],
+                        [mapLocated2Name, this.collisionOfBoxAndMapLocated],
                         [meshName, this.collisionOfBoxAndMesh],
                         [shapeGroupAllName, this.collisionOfShapeAndShapeGroupAll],
                         [shapeInverseName, this.collisionOfShapeAndShapeInverse],
@@ -769,6 +771,9 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             doBoxAndMapLocatedCollide(box, mapLocated) {
+                return this.doBoxAndBoxCollide(box, mapLocated.box);
+            }
+            doBoxAndMapLocated2Collide(box, mapLocated) {
                 var doCollide = this.doBoxAndBoxCollide(box, mapLocated.box);
                 if (doCollide) {
                     doCollide = false;
@@ -952,6 +957,9 @@ var ThisCouldBeBetter;
             }
             doMapLocatedAndBoxCollide(mapLocated, box) {
                 return this.doBoxAndMapLocatedCollide(box, mapLocated);
+            }
+            doMapLocated2AndBoxCollide(mapLocated, box) {
+                return this.doBoxAndMapLocated2Collide(box, mapLocated);
             }
             doMapLocatedAndBoxRotatedCollide(mapLocated, boxRotated) {
                 return this.doBoxRotatedAndMapLocatedCollide(boxRotated, mapLocated);
