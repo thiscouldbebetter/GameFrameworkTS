@@ -43,7 +43,7 @@ class Game
 
 		var worldCreator = WorldCreator.fromWorldCreate
 		(
-			() => new WorldExtended()
+			() => new WorldGame()
 		);
 
 		var universe = Universe.create
