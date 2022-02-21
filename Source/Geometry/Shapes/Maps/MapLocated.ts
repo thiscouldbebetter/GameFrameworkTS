@@ -9,17 +9,31 @@ export class MapLocated implements ShapeBase
 
 	box: Box;
 
+	_boxTransformed: Box;
+
 	constructor(map: MapOfCells<any>, loc: Disposition)
 	{
 		this.map = map;
 		this.loc = loc;
 
 		this.box = new Box(this.loc.pos, this.map.size);
+
+		// Helper variables.
+		this._boxTransformed = Box.create();
 	}
 
 	static fromMap(map: MapOfCells<any>): MapLocated
 	{
 		return new MapLocated(map, Disposition.default());
+	}
+
+	cellsInBox(box: Box, cellsInBox: MapCell[]): MapCell[]
+	{
+		var boxTransformed =
+			this._boxTransformed.overwriteWith(box);
+		boxTransformed.center.subtract(this.loc.pos).add(this.map.sizeHalf);
+		var returnCells = this.map.cellsInBox(boxTransformed, cellsInBox);
+		return returnCells;
 	}
 
 	// cloneable

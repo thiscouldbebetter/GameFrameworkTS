@@ -20,7 +20,7 @@ var ThisCouldBeBetter;
                 this.child.draw(uwpe, this.displayForBuffer);
                 drawPos.overwriteWith(this._posSaved);
                 drawPos.subtract(this.sizeHalf);
-                display.drawImage(this.displayForBuffer.toImage(), drawPos);
+                display.drawImage(this.displayForBuffer.toImage(VisualBuffered.name), drawPos);
                 drawPos.overwriteWith(this._posSaved);
             }
             // Clonable.

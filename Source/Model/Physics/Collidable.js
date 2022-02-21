@@ -61,7 +61,9 @@ var ThisCouldBeBetter;
                 uwpe.entity2 = entityOther;
                 this.collideEntities(uwpe, collision);
                 var entityOtherCollidable = entityOther.collidable();
-                entityOtherCollidable.collideEntities(uwpe.clone().entitiesSwap(), collision);
+                uwpe.entitiesSwap();
+                entityOtherCollidable.collideEntities(uwpe, collision);
+                uwpe.entitiesSwap();
             }
             collisionsFindAndHandle(uwpe) {
                 if (this.isDisabled == false) {

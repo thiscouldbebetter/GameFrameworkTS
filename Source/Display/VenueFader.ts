@@ -107,10 +107,9 @@ export class VenueFader implements Venue
 		}
 
 		alphaOfFadeColor *= alphaOfFadeColor;
-		var fadeColor = this.backgroundColor.clone();
-		fadeColor.alpha
+		var fadeColor = this.backgroundColor.clone().alphaSet
 		(
-			alphaOfFadeColor * this.backgroundColor.alpha(null)
+			alphaOfFadeColor * this.backgroundColor.alpha()
 		);
 
 		var display = universe.display;

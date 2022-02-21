@@ -8,9 +8,17 @@ var ThisCouldBeBetter;
                 this.map = map;
                 this.loc = loc;
                 this.box = new GameFramework.Box(this.loc.pos, this.map.size);
+                // Helper variables.
+                this._boxTransformed = GameFramework.Box.create();
             }
             static fromMap(map) {
                 return new MapLocated(map, GameFramework.Disposition.default());
+            }
+            cellsInBox(box, cellsInBox) {
+                var boxTransformed = this._boxTransformed.overwriteWith(box);
+                boxTransformed.center.subtract(this.loc.pos).add(this.map.sizeHalf);
+                var returnCells = this.map.cellsInBox(boxTransformed, cellsInBox);
+                return returnCells;
             }
             // cloneable
             clone() {

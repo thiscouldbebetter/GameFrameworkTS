@@ -18,7 +18,8 @@ var ThisCouldBeBetter;
                 var display = GameFramework.Display2D.fromSizeAndIsInvisible(box.size, true // isInvisible
                 ).initialize(null);
                 display.drawImagePartial(imageSource, GameFramework.Coords.Instances().Zeroes, box);
-                var returnImage = display.toImage();
+                var name = imageSource.name + box.toStringXY();
+                var returnImage = display.toImage(name);
                 return returnImage;
             }
             static fromSystemImage(name, systemImage) {

@@ -20,7 +20,7 @@ var ThisCouldBeBetter;
                 var entityBoundable = entity.boundable();
                 var entityCollidable = entity.collidable();
                 var entityBounds = entityBoundable.bounds;
-                var cellsToAddEntityTo = this.collisionMap.cellsInBoxAddToList(entityBounds, GameFramework.ArrayHelper.clear(this._cells));
+                var cellsToAddEntityTo = this.collisionMap.cellsInBox(entityBounds, GameFramework.ArrayHelper.clear(this._cells));
                 entityCollidable._collisionTrackerMapCellsOccupied.push(...cellsToAddEntityTo);
                 for (var c = 0; c < cellsToAddEntityTo.length; c++) {
                     var cell = cellsToAddEntityTo[c];

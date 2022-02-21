@@ -35,7 +35,7 @@ var ThisCouldBeBetter;
                 while (framesRecorded.length >= recorder.bufferSizeInFrames) {
                     framesRecorded.splice(0, 1);
                 }
-                var displayAsImage = display.toImage();
+                var displayAsImage = display.toImage(DisplayRecorder.name);
                 var displayAsCanvas = displayAsImage.systemImage;
                 displayAsCanvas.toBlob((displayAsBlob) => {
                     var reader = new FileReader();

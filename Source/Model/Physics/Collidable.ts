@@ -141,10 +141,12 @@ export class Collidable implements EntityProperty<Collidable>
 		);
 
 		var entityOtherCollidable = entityOther.collidable();
+		uwpe.entitiesSwap();
 		entityOtherCollidable.collideEntities
 		(
-			uwpe.clone().entitiesSwap(), collision
+			uwpe, collision
 		);
+		uwpe.entitiesSwap();
 	}
 
 	collisionsFindAndHandle(uwpe: UniverseWorldPlaceEntities): void

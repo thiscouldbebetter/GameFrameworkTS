@@ -15,6 +15,7 @@ var ThisCouldBeBetter;
                 this._collision = GameFramework.Collision.create();
                 this._displacement = GameFramework.Coords.create();
                 this._edge = GameFramework.Edge.create();
+                this._mapCells = [];
                 this._polar = GameFramework.Polar.create();
                 this._pos = GameFramework.Coords.create();
                 this._range = GameFramework.RangeExtent.create();
@@ -296,13 +297,30 @@ var ThisCouldBeBetter;
                 var vel0InvertedNormalized = this._vel.overwriteWith(vel0).invert().normalize();
                 var vel1InvertedNormalized = this._vel2.overwriteWith(vel1).invert().normalize();
                 var distanceBackedUpSoFar = 0;
-                while (this.doEntitiesCollide(entity0, entity1) && distanceBackedUpSoFar < speedMax) {
+                while (this.doEntitiesCollide(entity0, entity1)
+                    && distanceBackedUpSoFar < speedMax) {
                     distanceBackedUpSoFar++;
                     pos0.add(vel0InvertedNormalized);
                     pos1.add(vel1InvertedNormalized);
                     collidable0.colliderLocateForEntity(entity0);
                     collidable1.colliderLocateForEntity(entity1);
                 }
+            }
+            collideEntitiesBackUpDistance(entity0, entity1, distanceToBackUp) {
+                var collidable0 = entity0.collidable();
+                var collidable1 = entity1.collidable();
+                var entity0Loc = entity0.locatable().loc;
+                var entity1Loc = entity1.locatable().loc;
+                var pos0 = entity0Loc.pos;
+                var pos1 = entity1Loc.pos;
+                var vel0 = entity0Loc.vel;
+                var vel1 = entity1Loc.vel;
+                var displacement0 = this._vel.overwriteWith(vel0).invert().normalize().multiplyScalar(distanceToBackUp);
+                var displacement1 = this._vel2.overwriteWith(vel1).invert().normalize().multiplyScalar(distanceToBackUp);
+                pos0.add(displacement0);
+                pos1.add(displacement1);
+                collidable0.colliderLocateForEntity(entity0);
+                collidable1.colliderLocateForEntity(entity1);
             }
             collideEntitiesBlock(entity0, entity1) {
                 // todo - Needs separation as well.
@@ -751,8 +769,14 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             doBoxAndMapLocatedCollide(box, mapLocated) {
-                // todo
-                return this.doBoxAndBoxCollide(box, mapLocated.box);
+                var doCollide = this.doBoxAndBoxCollide(box, mapLocated.box);
+                if (doCollide) {
+                    doCollide = false;
+                    var cellsInBox = mapLocated.cellsInBox(box, GameFramework.ArrayHelper.clear(this._mapCells));
+                    var areAnyCellsInBoxBlocking = cellsInBox.some(x => x.isBlocking);
+                    doCollide = areAnyCellsInBoxBlocking;
+                }
+                return doCollide;
             }
             doBoxAndMeshCollide(box, mesh) {
                 // todo

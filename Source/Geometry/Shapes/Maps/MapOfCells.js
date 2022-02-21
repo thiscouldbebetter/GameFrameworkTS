@@ -45,7 +45,7 @@ var ThisCouldBeBetter;
             cellsCount() {
                 return this.sizeInCells.x * this.sizeInCells.y;
             }
-            cellsInBoxAddToList(box, cellsInBox) {
+            cellsInBox(box, cellsInBox) {
                 GameFramework.ArrayHelper.clear(cellsInBox);
                 var minPosInCells = this._posInCellsMin.overwriteWith(box.min()).divide(this.cellSize).floor().trimToRangeMax(this.sizeInCellsMinusOnes);
                 var maxPosInCells = this._posInCellsMax.overwriteWith(box.max()).divide(this.cellSize).floor().trimToRangeMax(this.sizeInCellsMinusOnes);
@@ -120,20 +120,32 @@ var ThisCouldBeBetter;
         }
         GameFramework.MapOfCellsCellSourceArray = MapOfCellsCellSourceArray;
         class MapOfCellsCellSourceDisplay {
-            constructor(display) {
-                this.display = display;
+            constructor(display, cellCreate, cellOverwriteFromColor) {
+                this.displaySizeInPixels = display.sizeInPixels;
+                this.displayPixelsAsComponentArrayRGBA =
+                    display.toComponentArrayRGBA();
+                this._cellCreate = cellCreate;
+                this._cellOverwriteFromColor = cellOverwriteFromColor;
                 this._color = GameFramework.Color.default();
+                this._componentsPerPixel = 4;
             }
             cellAtPosInCells(map, posInCells, cellToOverwrite) {
-                var color = this.display.colorAtPos(posInCells, this._color);
-                cellToOverwrite.value.overwriteWith(color);
+                var color = this.colorAtPos(posInCells, this._color);
+                this._cellOverwriteFromColor(cellToOverwrite, color);
                 return cellToOverwrite;
             }
             cellCreate() {
-                return new MapCellGeneric(this._color);
+                return this._cellCreate();
             }
             clone() {
                 return this; // todo
+            }
+            colorAtPos(pos, colorOut) {
+                var pixelIndexStart = (pos.y * this.displaySizeInPixels.x + pos.x)
+                    * this._componentsPerPixel;
+                var pixelAsComponents = this.displayPixelsAsComponentArrayRGBA.slice(pixelIndexStart, pixelIndexStart + this._componentsPerPixel);
+                colorOut.overwriteWithComponentsRGBA255(pixelAsComponents);
+                return colorOut;
             }
             overwriteWith(other) {
                 return this; // todo

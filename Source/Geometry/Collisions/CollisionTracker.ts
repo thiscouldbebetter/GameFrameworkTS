@@ -46,7 +46,7 @@ export class CollisionTracker implements EntityProperty<CollisionTracker>
 		var entityCollidable = entity.collidable();
 
 		var entityBounds = entityBoundable.bounds as Box;
-		var cellsToAddEntityTo = this.collisionMap.cellsInBoxAddToList
+		var cellsToAddEntityTo = this.collisionMap.cellsInBox
 		(
 			entityBounds, ArrayHelper.clear(this._cells)
 		);

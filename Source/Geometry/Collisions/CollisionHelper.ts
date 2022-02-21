@@ -14,6 +14,7 @@ export class CollisionHelper
 	_collision: Collision;
 	_displacement: Coords;
 	_edge: Edge;
+	_mapCells: MapCell[];
 	_polar: Polar;
 	_pos: Coords;
 	_range: RangeExtent;
@@ -36,6 +37,7 @@ export class CollisionHelper
 		this._collision = Collision.create();
 		this._displacement = Coords.create();
 		this._edge = Edge.create();
+		this._mapCells = [];
 		this._polar = Polar.create();
 		this._pos = Coords.create();
 		this._range = RangeExtent.create();
@@ -486,7 +488,11 @@ export class CollisionHelper
 
 		var distanceBackedUpSoFar = 0;
 
-		while (this.doEntitiesCollide(entity0, entity1) && distanceBackedUpSoFar < speedMax)
+		while
+		(
+			this.doEntitiesCollide(entity0, entity1)
+			&& distanceBackedUpSoFar < speedMax
+		)
 		{
 			distanceBackedUpSoFar++;
 
@@ -496,6 +502,35 @@ export class CollisionHelper
 			collidable0.colliderLocateForEntity(entity0);
 			collidable1.colliderLocateForEntity(entity1);
 		}
+	}
+
+	collideEntitiesBackUpDistance
+	(
+		entity0: Entity, entity1: Entity, distanceToBackUp: number
+	): void
+	{
+		var collidable0 = entity0.collidable();
+		var collidable1 = entity1.collidable();
+
+		var entity0Loc = entity0.locatable().loc;
+		var entity1Loc = entity1.locatable().loc;
+
+		var pos0 = entity0Loc.pos;
+		var pos1 = entity1Loc.pos;
+
+		var vel0 = entity0Loc.vel;
+		var vel1 = entity1Loc.vel;
+
+		var displacement0 =
+			this._vel.overwriteWith(vel0).invert().normalize().multiplyScalar(distanceToBackUp);
+		var displacement1 =
+			this._vel2.overwriteWith(vel1).invert().normalize().multiplyScalar(distanceToBackUp);
+
+		pos0.add(displacement0);
+		pos1.add(displacement1);
+
+		collidable0.colliderLocateForEntity(entity0);
+		collidable1.colliderLocateForEntity(entity1);
 	}
 
 	collideEntitiesBlock(entity0: Entity, entity1: Entity): void
@@ -1367,8 +1402,23 @@ export class CollisionHelper
 
 	doBoxAndMapLocatedCollide(box: Box, mapLocated: MapLocated): boolean
 	{
-		// todo
-		return this.doBoxAndBoxCollide(box, mapLocated.box);
+		var doCollide = this.doBoxAndBoxCollide(box, mapLocated.box);
+		if (doCollide)
+		{
+			doCollide = false;
+
+			var cellsInBox = mapLocated.cellsInBox
+			(
+				box, ArrayHelper.clear(this._mapCells)
+			);
+			var areAnyCellsInBoxBlocking = cellsInBox.some
+			(
+				x => (x as MapCellCollidable).isBlocking
+			);
+			doCollide = areAnyCellsInBoxBlocking;
+		}
+
+		return doCollide;
 	}
 
 	doBoxAndMeshCollide(box: Box, mesh: Mesh): boolean

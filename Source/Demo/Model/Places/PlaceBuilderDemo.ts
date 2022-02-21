@@ -325,7 +325,7 @@ class PlaceBuilderDemo // Main.
 			"Demo", // defnName
 			placeSize,
 			"Player", // entityToFollowName
-			zoneStart.name, // zoneStartName
+			// zoneStart.name, // zoneStartName
 			(zoneName: string) => zonesByName.get(zoneName),
 			(posToCheck: Coords) => // zoneAtPos
 				zonesByName.get

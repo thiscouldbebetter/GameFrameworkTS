@@ -115,7 +115,7 @@ export interface Display
 	(
 		textToMeasure: string, fontHeightInPixels: number
 	): number;
-	toImage(): Image2;
+	toImage(name: string): Image2;
 	toDomElement(): HTMLElement;
 }
 
