@@ -87,12 +87,8 @@ export class ControlBuilder
 	{
 		size = size || universe.display.sizeDefault();
 		showMessageOnly = showMessageOnly || false;
-		var fontHeight =
-		(
-			fontNameAndHeight != null
-			? fontNameAndHeight.heightInPixels
-			: this.fontHeightInPixelsBase
-		);
+		fontNameAndHeight = fontNameAndHeight || this.fontBase;
+		var fontHeight = fontNameAndHeight.heightInPixels;
 
 		var scaleMultiplier =
 			this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
@@ -386,7 +382,7 @@ export class ControlBuilder
 		var buttonsAllHeight = rowCount * buttonHeight + (rowCount - 1) * padding;
 		var margin = (this.sizeBase.y - buttonsAllHeight) / 2;
 
-		var buttonSize = Coords.fromXY(60, buttonHeight);
+		var buttonSize = Coords.fromXY(40, buttonHeight);
 		var posX = (this.sizeBase.x - buttonSize.x) / 2;
 
 		var row0PosY = margin;
@@ -1727,7 +1723,7 @@ export class ControlBuilder
 			var messageAsDataBinding = DataBinding.fromContextAndGet
 			(
 				null, // Will be set below.
-				(c: VenueTask<SaveState>) => "Loading game..."
+				(c: VenueTask<SaveStateBase>) => "Loading game..."
 			);
 
 			var venueMessage = VenueMessage.fromMessage
@@ -1742,11 +1738,11 @@ export class ControlBuilder
 				{
 					var profile = universe.profile;
 					var saveStateSelected = profile.saveStateSelected;
-					return storageHelper.load(saveStateSelected.name);
+					return storageHelper.load<SaveStateBase>(saveStateSelected.name);
 				},
-				(saveStateReloaded: SaveState) => // done
+				(saveStateReloaded: SaveStateBase) => // done
 				{
-					universe.world = saveStateReloaded.world;
+					universe.world = saveStateReloaded.toWorld(universe);
 					var venueNext = universe.controlBuilder.worldLoad
 					(
 						universe, null
@@ -1765,6 +1761,78 @@ export class ControlBuilder
 			var venueNext = controlBuilder.worldLoad(universe, null).toVenue();
 			universe.venueTransitionTo(venueNext);
 		};
+
+		var loadFile = () =>
+		{
+			var venueFileUpload = new VenueFileUpload(null, null);
+
+			var acknowledge = () =>
+			{
+				var callback = (fileContentsAsString: string) =>
+				{
+					var worldAsStringCompressed =
+						fileContentsAsString;
+					var compressor =
+						universe.storageHelper.compressor;
+					var worldSerialized =
+						compressor.decompressString(worldAsStringCompressed);
+					var worldCreator = universe.worldCreator;
+					var worldBlank = worldCreator.worldCreate(universe, worldCreator);
+					var worldDeserialized = worldBlank.fromStringJson(worldSerialized, universe);
+					universe.world = worldDeserialized;
+
+					var venueNext = controlBuilder.game
+					(
+						universe, size, universe.venueCurrent
+					).toVenue();
+					universe.venueTransitionTo(venueNext);
+				}
+
+				var inputFile = venueFileUpload.toDomElement().getElementsByTagName("input")[0];
+				var fileToLoad = inputFile.files[0];
+				new FileHelper().loadFileAsBinaryString
+				(
+					fileToLoad,
+					callback,
+					null // contextForCallback
+				);
+			};
+
+			var controlMessageReadyToLoad =
+				universe.controlBuilder.message4
+				(
+					universe,
+					size,
+					DataBinding.fromContext("Ready to load from file..."),
+					acknowledge
+				);
+
+			var venueMessageReadyToLoad =
+				controlMessageReadyToLoad.toVenue();
+
+			var controlMessageCancelled = universe.controlBuilder.message4
+			(
+				universe,
+				size,
+				DataBinding.fromContext("No file specified."),
+				() => // acknowlege
+				{
+					var venueNext = controlBuilder.game
+					(
+						universe, size, universe.venueCurrent
+					).toVenue();
+					universe.venueTransitionTo(venueNext);
+				}
+			);
+
+			var venueMessageCancelled = controlMessageCancelled.toVenue();
+
+			venueFileUpload.venueNextIfFileSpecified = venueMessageReadyToLoad;
+			venueFileUpload.venueNextIfCancelled = venueMessageCancelled;
+
+			universe.venueNext = venueFileUpload;
+		};
+
 
 		var returnValue = ControlContainer.from4
 		(
@@ -1808,16 +1876,16 @@ export class ControlBuilder
 						universe.profile,
 						(c: Profile) => c.saveStates
 					), // items
-					DataBinding.fromGet( (c: SaveState) => c.name ), // bindingForOptionText
+					DataBinding.fromGet( (c: SaveStateBase) => c.name ), // bindingForOptionText
 					font,
 					new DataBinding
 					(
 						universe.profile,
 						(c: Profile) => c.saveStateSelected(),
-						(c: Profile, v: SaveState) =>
+						(c: Profile, v: SaveStateBase) =>
 							c.saveStateNameSelected = v.name
 					), // bindingForOptionSelected
-					DataBinding.fromGet( (v: SaveState) => v.name ), // value
+					DataBinding.fromGet( (v: SaveStateBase) => v.name ), // value
 				),
 
 				ControlButton.from8
@@ -1850,73 +1918,7 @@ export class ControlBuilder
 					font,
 					true, // hasBorder
 					DataBinding.fromTrue(), // isEnabled
-					() => // click
-					{
-						var venueFileUpload = new VenueFileUpload(null, null);
-
-						var controlMessageReadyToLoad =
-							universe.controlBuilder.message4
-							(
-								universe,
-								size,
-								DataBinding.fromContext("Ready to load from file..."),
-								() => // acknowledge
-								{
-									var callback = (fileContentsAsString: string) =>
-									{
-										var worldAsStringCompressed =
-											fileContentsAsString;
-										var compressor =
-											universe.storageHelper.compressor;
-										var worldSerialized =
-											compressor.decompressString(worldAsStringCompressed);
-										var worldDeserialized =
-											universe.serializer.deserialize(worldSerialized);
-										universe.world = worldDeserialized;
-
-										var venueNext = controlBuilder.game
-										(
-											universe, size, universe.venueCurrent
-										).toVenue();
-										universe.venueTransitionTo(venueNext);
-									}
-
-									var inputFile = venueFileUpload.toDomElement().getElementsByTagName("input")[0];
-									var fileToLoad = inputFile.files[0];
-									new FileHelper().loadFileAsBinaryString
-									(
-										fileToLoad,
-										callback,
-										null // contextForCallback
-									);
-								}
-							);
-
-						var venueMessageReadyToLoad =
-							controlMessageReadyToLoad.toVenue();
-
-						var controlMessageCancelled = universe.controlBuilder.message4
-						(
-							universe,
-							size,
-							DataBinding.fromContext("No file specified."),
-							() => // acknowlege
-							{
-								var venueNext = controlBuilder.game
-								(
-									universe, size, universe.venueCurrent
-								).toVenue();
-								universe.venueTransitionTo(venueNext);
-							}
-						);
-
-						var venueMessageCancelled = controlMessageCancelled.toVenue();
-
-						venueFileUpload.venueNextIfFileSpecified = venueMessageReadyToLoad;
-						venueFileUpload.venueNextIfCancelled = venueMessageCancelled;
-
-						universe.venueNext = venueFileUpload;
-					}
+					loadFile
 				),
 
 				ControlButton.from8

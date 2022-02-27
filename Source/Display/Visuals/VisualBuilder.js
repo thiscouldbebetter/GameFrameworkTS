@@ -139,32 +139,7 @@ var ThisCouldBeBetter;
                         visualLegFacingRight
                     ], isRepeating), offsetLegRight),
                 ]);
-                var visualLegsStandingNamesByHeading = [
-                    "FacingRightStanding",
-                    "FacingDownStanding",
-                    "FacingLeftStanding",
-                    "FacingUpStanding"
-                ];
-                var visualLegsWalkingNamesByHeading = [
-                    "FacingRightWalking",
-                    "FacingDownWalking",
-                    "FacingLeftWalking",
-                    "FacingUpWalking"
-                ];
-                var visualLegsDirectional = new GameFramework.VisualSelect(
-                // childrenByName
-                new Map([
-                    ["FacingRightStanding", visualLegsFacingRightStanding],
-                    ["FacingDownStanding", visualLegsFacingDownStanding],
-                    ["FacingLeftStanding", visualLegsFacingLeftStanding],
-                    ["FacingUpStanding", visualLegsFacingUpStanding],
-                    ["FacingRightWalking", visualLegsFacingRightWalking],
-                    ["FacingDownWalking", visualLegsFacingDownWalking],
-                    ["FacingLeftWalking", visualLegsFacingLeftWalking],
-                    ["FacingUpWalking", visualLegsFacingUpWalking]
-                ]), 
-                // selectChildNames
-                (uwpe, d) => {
+                var selectChildNames = (uwpe, d) => {
                     var e = uwpe.entity;
                     var entityLoc = e.locatable().loc;
                     var entityForward = entityLoc.orientation.forward;
@@ -180,15 +155,39 @@ var ThisCouldBeBetter;
                         var namesByHeading;
                         var speedMin = 0.2;
                         if (entitySpeed > speedMin) {
+                            var visualLegsWalkingNamesByHeading = [
+                                "FacingRightWalking",
+                                "FacingDownWalking",
+                                "FacingLeftWalking",
+                                "FacingUpWalking"
+                            ];
                             namesByHeading = visualLegsWalkingNamesByHeading;
                         }
                         else {
+                            var visualLegsStandingNamesByHeading = [
+                                "FacingRightStanding",
+                                "FacingDownStanding",
+                                "FacingLeftStanding",
+                                "FacingUpStanding"
+                            ];
                             namesByHeading = visualLegsStandingNamesByHeading;
                         }
                         childNameToSelect = namesByHeading[headingIndex];
                     }
                     return [childNameToSelect];
-                });
+                };
+                var visualLegsDirectional = new GameFramework.VisualSelect(
+                // childrenByName
+                new Map([
+                    ["FacingRightStanding", visualLegsFacingRightStanding],
+                    ["FacingDownStanding", visualLegsFacingDownStanding],
+                    ["FacingLeftStanding", visualLegsFacingLeftStanding],
+                    ["FacingUpStanding", visualLegsFacingUpStanding],
+                    ["FacingRightWalking", visualLegsFacingRightWalking],
+                    ["FacingDownWalking", visualLegsFacingDownWalking],
+                    ["FacingLeftWalking", visualLegsFacingLeftWalking],
+                    ["FacingUpWalking", visualLegsFacingUpWalking]
+                ]), selectChildNames);
                 var returnValue = new GameFramework.VisualGroup([
                     visualLegsDirectional,
                     circleWithEyes

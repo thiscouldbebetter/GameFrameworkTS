@@ -20,7 +20,7 @@ export class StorageHelper
 		this.compressor = compressor;
 	}
 
-	delete(propertyName: string)
+	delete(propertyName: string): void
 	{
 		var propertyNamePrefixed =
 			this.propertyNamePrefix + propertyName;
@@ -28,7 +28,7 @@ export class StorageHelper
 		localStorage.removeItem(propertyNamePrefixed);
 	}
 
-	deleteAll()
+	deleteAll(): void
 	{
 		var keysAll = Object.keys(localStorage);
 		var keysWithPrefix = keysAll.filter(x => x.startsWith(this.propertyNamePrefix));
@@ -39,7 +39,7 @@ export class StorageHelper
 		}
 	}
 
-	load(propertyName: string)
+	load<T>(propertyName: string): T
 	{
 		var returnValue;
 
@@ -70,7 +70,7 @@ export class StorageHelper
 		return returnValue;
 	}
 
-	save<T>(propertyName: string, valueToSave: T)
+	save<T>(propertyName: string, valueToSave: T): void
 	{
 		var valueToSaveSerialized = this.serializer.serialize
 		(

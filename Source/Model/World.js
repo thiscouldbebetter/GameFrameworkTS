@@ -73,6 +73,17 @@ var ThisCouldBeBetter;
             toControl(universe) {
                 return this.placeCurrent.toControl(universe, this);
             }
+            // Serializable.
+            fromStringJson(worldAsStringJson, universe) {
+                var serializer = universe.serializer;
+                var returnValue = serializer.deserialize(worldAsStringJson);
+                return returnValue;
+            }
+            toStringJson(universe) {
+                var serializer = universe.serializer;
+                var returnValue = serializer.serialize(this, false); // pretty-print
+                return returnValue;
+            }
         }
         GameFramework.World = World;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

@@ -88,6 +88,7 @@ var Collision = gf.Collision;
 var CollisionHelper = gf.CollisionHelper;
 var CollisionTracker = gf.CollisionTracker;
 var CollisionTrackerMap = gf.CollisionTrackerMap;
+var CollisionTrackerMapCell = gf.CollisionTrackerMapCell;
 // Geometry - Constraints.
 var Constraint_AttachToEntityWithName = gf.Constraint_AttachToEntityWithName;
 var Constraint_Conditional = gf.Constraint_Conditional;
@@ -124,6 +125,7 @@ var Wedge = gf.Wedge;
 var MapCellCollidable = gf.MapCellCollidable;
 var MapLocated = gf.MapLocated;
 var MapOfCells = gf.MapOfCells;
+var MapOfCellsCellSourceArray = gf.MapOfCellsCellSourceArray;
 // Geometry - Shapes - Meshes.
 var Mesh = gf.Mesh;
 var MeshTextured = gf.MeshTextured;
@@ -151,6 +153,8 @@ var TextString = gf.TextString;
 var VenueVideo = gf.VenueVideo;
 var Video = gf.Video;
 var VideoHelper = gf.VideoHelper;
+// Media - Audio.
+var Audible = gf.Audible;
 var SoundFromFile = gf.SoundFromFile;
 var SoundHelperLive = gf.SoundHelperLive;
 var VisualSound = gf.VisualSound;
@@ -201,6 +205,7 @@ var ItemCrafter = gf.ItemCrafter;
 var EquipmentSocket = gf.EquipmentSocket;
 var EquipmentSocketDefn = gf.EquipmentSocketDefn;
 var EquipmentSocketDefnGroup = gf.EquipmentSocketDefnGroup;
+var EquipmentSocketGroup = gf.EquipmentSocketGroup;
 var EquipmentUser = gf.EquipmentUser;
 var Equippable = gf.Equippable;
 // Model - Journal.
@@ -257,6 +262,7 @@ var Device = gf.Device;
 var Usable = gf.Usable;
 // Profiles.
 var Profile = gf.Profile;
+var SaveStateWorld = gf.SaveStateWorld;
 // Storage.
 var FileHelper = gf.FileHelper;
 var Serializer = gf.Serializer;

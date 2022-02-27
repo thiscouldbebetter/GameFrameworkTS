@@ -802,7 +802,7 @@ class PlaceBuilderDemo_Movers {
             ])
         ]);
         var controllable = this.entityDefnBuildPlayer_Controllable();
-        var playerActivityDefn = new ActivityDefn("Player", this.entityDefnBuildPlayer_PlayerActivityPerform);
+        var playerActivityDefn = new ActivityDefn("Player", (uwpe) => this.entityDefnBuildPlayer_PlayerActivityPerform(uwpe));
         this.parent.activityDefns.push(playerActivityDefn);
         var playerActivity = Activity.fromDefnName(playerActivityDefn.name);
         var playerActivityWaitPerform = (uwpe) => {
@@ -919,8 +919,6 @@ class PlaceBuilderDemo_Movers {
         }
     }
     entityDefnBuildPlayer_Controllable() {
-        var toControlMenu = Playable.toControlMenu;
-        var toControlWorldOverlay = Playable.toControlWorldOverlay;
         var toControl = (uwpe) => {
             var universe = uwpe.universe;
             var size = universe.display.sizeInPixels;
@@ -930,10 +928,10 @@ class PlaceBuilderDemo_Movers {
             );
             var returnValue;
             if (isMenu) {
-                returnValue = toControlMenu(universe, size, entity, venuePrev);
+                returnValue = Playable.toControlMenu(universe, size, entity, venuePrev);
             }
             else {
-                returnValue = toControlWorldOverlay(universe, size, entity);
+                returnValue = Playable.toControlWorldOverlay(universe, size, entity);
             }
             return returnValue;
         };

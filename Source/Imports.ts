@@ -105,6 +105,7 @@ import Collision = gf.Collision;
 import CollisionHelper = gf.CollisionHelper;
 import CollisionTracker = gf.CollisionTracker;
 import CollisionTrackerMap = gf.CollisionTrackerMap;
+import CollisionTrackerMapCell = gf.CollisionTrackerMapCell;
 
 // Geometry - Constraints.
 import Constraint_AttachToEntityWithName = gf.Constraint_AttachToEntityWithName;
@@ -149,6 +150,7 @@ import MapCellCollidable = gf.MapCellCollidable;
 import MapLocated = gf.MapLocated;
 import MapOfCells = gf.MapOfCells;
 import MapOfCellsCellSource = gf.MapOfCellsCellSource;
+import MapOfCellsCellSourceArray = gf.MapOfCellsCellSourceArray;
 
 // Geometry - Shapes - Meshes.
 import Mesh = gf.Mesh;
@@ -187,6 +189,7 @@ import Video = gf.Video;
 import VideoHelper = gf.VideoHelper;
 
 // Media - Audio.
+import Audible = gf.Audible;
 import Sound = gf.Sound;
 import SoundFromFile = gf.SoundFromFile;
 import SoundHelper = gf.SoundHelper;
@@ -247,6 +250,7 @@ import ItemCrafter = gf.ItemCrafter;
 import EquipmentSocket = gf.EquipmentSocket;
 import EquipmentSocketDefn = gf.EquipmentSocketDefn;
 import EquipmentSocketDefnGroup = gf.EquipmentSocketDefnGroup;
+import EquipmentSocketGroup = gf.EquipmentSocketGroup;
 import EquipmentUser = gf.EquipmentUser;
 import Equippable = gf.Equippable;
 
@@ -315,6 +319,7 @@ import Usable = gf.Usable;
 
 // Profiles.
 import Profile = gf.Profile;
+import SaveStateWorld = gf.SaveStateWorld;
 
 // Storage.
 import FileHelper = gf.FileHelper;

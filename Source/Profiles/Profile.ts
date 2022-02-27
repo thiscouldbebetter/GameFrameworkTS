@@ -5,15 +5,17 @@ namespace ThisCouldBeBetter.GameFramework
 export class Profile
 {
 	name: string;
-	saveStates: SaveState[];
+	saveStates: SaveStateBase[];
 	saveStateNameSelected: string;
 
-	constructor(name: string, saveStates: SaveState[])
+	constructor(name: string, saveStates: SaveStateBase[])
 	{
 		this.name = name;
 		this.saveStates = saveStates;
 		this.saveStateNameSelected = null;
 	}
+
+	static StorageKeyProfileNames = "ProfileNames";
 
 	static anonymous(): Profile
 	{
@@ -24,7 +26,7 @@ export class Profile
 		return profile;
 	}
 
-	saveStateSelected(): SaveState
+	saveStateSelected(): SaveStateBase
 	{
 		return this.saveStates.filter(x => x.name == this.saveStateNameSelected)[0];
 	}
@@ -51,7 +53,10 @@ export class Profile
 
 	static toControlSaveStateLoadOrSave
 	(
-		universe: Universe, size: Coords, venuePrev: Venue, isLoadNotSave: boolean
+		universe: Universe,
+		size: Coords,
+		venuePrev: Venue,
+		isLoadNotSave: boolean
 	): ControlBase
 	{
 		if (size == null)
@@ -66,165 +71,446 @@ export class Profile
 		var fontNameAndHeight = new FontNameAndHeight(null, fontHeight);
 		var buttonHeightBase = controlBuilder.buttonHeightBase;
 
-		var visualThumbnailSize = Coords.fromXY(60, 45);
+		var visualThumbnailSize = Profile.toControlSaveStateLoadOrSave_ThumbnailSize();
 
 		var venueToReturnTo = universe.venueCurrent;
 
-		var loadNewWorld = () =>
+		var back = () => universe.venueTransitionTo(venueToReturnTo);
+
+		var saveToLocalStorageOverwritingSlotSelected = () =>
 		{
-			var world = universe.worldCreate();
-			universe.world = world;
-			var venueNext = controlBuilder.worldDetail
+			Profile.toControlSaveStateLoadOrSave_DeleteSaveSelected_Confirm(universe);
+			Profile.toControlSaveStateLoadOrSave_SaveToLocalStorageAsNewSlot
 			(
-				universe, size, universe.venueCurrent
-			).toVenue();
-			universe.venueTransitionTo(venueNext);
+				universe, size
+			);
 		};
 
-		var loadSelectedSlotFromLocalStorage = () =>
-		{
-			var saveStateNameSelected = universe.profile.saveStateNameSelected;
-			if (saveStateNameSelected != null)
-			{
-				var messageAsDataBinding = DataBinding.fromContextAndGet
+		var childControls = 
+		[
+			new ControlLabel
+			(
+				"labelProfileName",
+				Coords.fromXY(10, 10), // pos
+				Coords.fromXY(sizeBase.x, fontHeight), // size
+				true, // isTextCenteredHorizontally
+				false, // isTextCenteredVertically
+				DataBinding.fromContext
 				(
-					null, // Will be set below.
-					(c: VenueTask<SaveState>) => "Loading game..."
-				);
+					"Profile: " + universe.profile.name
+				),
+				fontNameAndHeight
+			),
 
-				var venueMessage = VenueMessage.fromMessage
+			new ControlLabel
+			(
+				"labelChooseASave",
+				Coords.fromXY(10, 20), // pos
+				Coords.fromXY(sizeBase.x, 25), // size
+				true, // isTextCenteredHorizontally
+				false, // isTextCenteredVertically
+				DataBinding.fromContext
 				(
-					messageAsDataBinding
-				);
+					"Choose a State to "
+					+ (isLoadNotSave ? "Restore" : "Overwrite") + ":"
+				),
+				fontNameAndHeight
+			),
 
-				var venueTask = new VenueTask
+			ControlList.from10
+			(
+				"listSaveStates",
+				Coords.fromXY(10, 35), // pos
+				Coords.fromXY(110, 75), // size
+				DataBinding.fromContextAndGet
 				(
-					venueMessage,
-					() => // perform
+					universe.profile,
+					(c: Profile) => c.saveStates
+				), // items
+				DataBinding.fromGet
+				(
+					(c: SaveStateBase) =>
 					{
-						return universe.storageHelper.load(saveStateNameSelected);
-					},
-					(saveStateSelected: SaveState) => // done
-					{
-						var worldSelected = saveStateSelected.world;
-						universe.world = worldSelected;
-						var venueNext = worldSelected.toVenue();
-						universe.venueTransitionTo(venueNext);
+						var timeSaved = c.timeSaved;
+						return (timeSaved == null ? "-" : timeSaved.toStringYYYY_MM_DD_HH_MM_SS() )
 					}
-				);
+				), // bindingForOptionText
+				fontNameAndHeight,
+				new DataBinding
+				(
+					universe.profile,
+					(c: Profile) => c.saveStateSelected(),
+					(c: Profile, v: SaveStateBase) => c.saveStateNameSelected = v.name
+				), // bindingForOptionSelected
+				DataBinding.fromGet( (v: SaveStateBase) => v.name ), // value
+				null,
+				(
+					isLoadNotSave
+					? Profile.toControlSaveStateLoadOrSave_LoadSelectedSlotFromLocalStorage
+					: saveToLocalStorageOverwritingSlotSelected
+				) // confirm
+			),
 
-				messageAsDataBinding.contextSet(venueTask);
+			ControlButton.from8
+			(
+				"buttonNew",
+				Coords.fromXY(10, 120), // pos
+				Coords.fromXY(25, buttonHeightBase), // size
+				"New",
+				fontNameAndHeight,
+				true, // hasBorder
+				DataBinding.fromTrue(), // isEnabled
+				(
+					isLoadNotSave
+					? () => Profile.toControlSaveStateLoadOrSave_LoadNewWorld(universe, size)
+					: () =>
+						Profile.toControlSaveStateLoadOrSave_SaveToLocalStorageAsNewSlot
+						(
+							universe, size
+						)
+				) // click
+			),
 
-				universe.venueTransitionTo(venueTask);
-			}
-		};
+			new ControlButton
+			(
+				"buttonSelect",
+				Coords.fromXY(40, 120), // pos
+				Coords.fromXY(25, buttonHeightBase), // size
+				(isLoadNotSave ? "Load" : "Save"),
+				fontNameAndHeight,
+				true, // hasBorder
+				// isEnabled
+				DataBinding.fromContextAndGet
+				(
+					universe.profile,
+					(c: Profile) => (c.saveStateNameSelected != null)
+				),
+				(
+					isLoadNotSave
+					? () => Profile.toControlSaveStateLoadOrSave_LoadSelectedSlotFromLocalStorage(universe)
+					: saveToLocalStorageOverwritingSlotSelected
+				), // click
+				false // canBeHeldDown
+			),
 
-		var saveToLocalStorage = (): boolean =>
+			ControlButton.from8
+			(
+				"buttonFile",
+				Coords.fromXY(70, 120), // pos
+				Coords.fromXY(25, buttonHeightBase), // size
+				"File",
+				fontNameAndHeight,
+				true, // hasBorder
+				// isEnabled
+				DataBinding.fromContextAndGet
+				(
+					universe.profile,
+					(c: Profile) => (c.saveStateNameSelected != null),
+				),
+				(
+					isLoadNotSave
+					? () => Profile.toControlSaveStateLoadOrSave_LoadFromFile(universe, size)
+					: () => Profile.toControlSaveStateLoadOrSave_SaveToFilesystem(universe, size)
+				) // click
+			),
+
+			ControlButton.from8
+			(
+				"buttonDelete",
+				Coords.fromXY(100, 120), // pos
+				Coords.fromXY(20, buttonHeightBase), // size
+				"X",
+				fontNameAndHeight,
+				true, // hasBorder
+				// isEnabled
+				DataBinding.fromContextAndGet
+				(
+					universe.profile,
+					(c: Profile) => (c.saveStateNameSelected != null)
+				),
+				() => Profile.toControlSaveStateLoadOrSave_DeleteSaveSelected(universe, size) // click
+			),
+
+			ControlVisual.from5
+			(
+				"visualSnapshot",
+				Coords.fromXY(130, 35),
+				visualThumbnailSize,
+				DataBinding.fromContextAndGet
+				(
+					universe.profile,
+					(c: Profile) =>
+					{
+						var saveState = c.saveStateSelected();
+						var saveStateImageSnapshot =
+						(
+							saveState == null
+							? null
+							: saveState.imageSnapshot.load()
+						);
+						var returnValue =
+						(
+							saveStateImageSnapshot == null || saveStateImageSnapshot.isLoaded == false
+							? new VisualNone()
+							: new VisualImageImmediate(saveStateImageSnapshot, true) // isScaled
+						);
+						return returnValue;
+					}
+				),
+				Color.byName("White")
+			),
+
+			new ControlLabel
+			(
+				"labelPlaceName",
+				Coords.fromXY(130, 80), // pos
+				Coords.fromXY(120, buttonHeightBase), // size
+				false, // isTextCenteredHorizontally
+				false, // isTextCenteredVertically
+				DataBinding.fromContextAndGet
+				(
+					universe.profile,
+					(c: Profile) =>
+					{
+						var saveState = c.saveStateSelected();
+						return (saveState == null ? "" : saveState.placeName);
+					}
+				),
+				fontNameAndHeight
+			),
+
+			new ControlLabel
+			(
+				"labelTimePlaying",
+				Coords.fromXY(130, 90), // pos
+				Coords.fromXY(120, buttonHeightBase), // size
+				false, // isTextCenteredHorizontally
+				false, // isTextCenteredVertically
+				DataBinding.fromContextAndGet
+				(
+					universe.profile,
+					(c: Profile) =>
+					{
+						var saveState = c.saveStateSelected();
+						return (saveState == null ? "" : saveState.timePlayingAsString);
+					}
+				),
+				fontNameAndHeight
+			),
+
+			new ControlLabel
+			(
+				"labelDateSaved",
+				Coords.fromXY(130, 100), // pos
+				Coords.fromXY(120, buttonHeightBase), // size
+				false, // isTextCenteredHorizontally
+				false, // isTextCenteredVertically
+				DataBinding.fromContextAndGet
+				(
+					universe.profile,
+					(c: Profile) =>
+					{
+						var saveState = c.saveStateSelected();
+						var returnValue =
+						(
+							saveState == null
+							? ""
+							:
+							(
+								saveState.timeSaved == null
+								? ""
+								: saveState.timeSaved.toStringYYYY_MM_DD()
+							)
+						);
+						return returnValue;
+					}
+				),
+				fontNameAndHeight
+			),
+
+			new ControlLabel
+			(
+				"labelTimeSaved",
+				Coords.fromXY(130, 110), // pos
+				Coords.fromXY(120, buttonHeightBase), // size
+				false, // isTextCenteredHorizontally
+				false, // isTextCenteredVertically
+				DataBinding.fromContextAndGet
+				(
+					universe.profile,
+					(c: Profile) =>
+					{
+						var saveState = c.saveStateSelected();
+						return (saveState == null ? "" : saveState.timeSaved.toStringHH_MM_SS());
+					}
+				),
+				fontNameAndHeight
+			),
+
+			ControlButton.from8
+			(
+				"buttonBack",
+				Coords.fromXY
+				(
+					sizeBase.x - 10 - 25, sizeBase.y - 10 - 15
+				), // pos
+				Coords.fromXY(25, 15), // size
+				"Back",
+				fontNameAndHeight,
+				true, // hasBorder
+				DataBinding.fromTrue(), // isEnabled
+				back // click
+			),
+		];
+
+		var returnValue = new ControlContainer
+		(
+			"containerSaveStates",
+			Coords.create(), // pos
+			sizeBase.clone(), // size
+			childControls,
+			null, null
+		);
+
+		returnValue.scalePosAndSize(scaleMultiplier);
+
+		return returnValue;
+	}
+
+	static toControlSaveStateLoadOrSave_DeleteSaveSelected
+	(
+		universe: Universe, size: Coords
+	): void
+	{
+		var saveStateSelected = universe.profile.saveStateSelected();
+
+		if (saveStateSelected != null)
 		{
-			var profile = universe.profile;
-			var world = universe.world;
-			var now = DateTime.now();
-			world.dateSaved = now;
-
-			var nowAsString = now.toStringYYYYMMDD_HHMM_SS();
-			var place = world.placeCurrent;
-			var placeName = place.name;
-			var timePlayingAsString = world.timePlayingAsStringShort(universe);
-
-			var displaySize = universe.display.sizeInPixels;
-			var displayFull = Display2D.fromSizeAndIsInvisible(displaySize, true);
-			displayFull.initialize(universe);
-			place.draw(universe, world, displayFull);
-			var imageSnapshotFull = displayFull.toImage(Profile.name);
-
-			var imageSizeThumbnail = visualThumbnailSize.clone();
-			var displayThumbnail = Display2D.fromSizeAndIsInvisible
-			(
-				imageSizeThumbnail, true
-			);
-			displayThumbnail.initialize(universe);
-			displayThumbnail.drawImageScaled
-			(
-				imageSnapshotFull, Coords.Instances().Zeroes, imageSizeThumbnail
-			);
-			var imageThumbnailFromDisplay = displayThumbnail.toImage(SaveState.name);
-			var imageThumbnailAsDataUrl = imageThumbnailFromDisplay.systemImage.toDataURL();
-			var imageThumbnail = new Image2("Snapshot", imageThumbnailAsDataUrl).unload();
-
-			var saveStateName = "Save-" + nowAsString;
-			var saveState = new SaveState
-			(
-				saveStateName,
-				placeName,
-				timePlayingAsString,
-				now,
-				imageThumbnail,
-				world
-			);
-
-			var storageHelper = universe.storageHelper;
-
-			var wasSaveSuccessful;
-			try
-			{
-				storageHelper.save(saveStateName, saveState);
-				if (profile.saveStates.some(x => x.name == saveStateName) == false)
-				{
-					saveState.unload();
-					profile.saveStates.push(saveState);
-					storageHelper.save(profile.name, profile);
-				}
-				var profileNames = storageHelper.load("ProfileNames");
-				if (profileNames.indexOf(profile.name) == -1)
-				{
-					profileNames.push(profile.name);
-					storageHelper.save("ProfileNames", profileNames);
-				}
-
-				wasSaveSuccessful = true;
-			}
-			catch (ex)
-			{
-				wasSaveSuccessful = false;
-			}
-
-			return wasSaveSuccessful;
-		};
-
-		var saveToLocalStorageDone = (wasSaveSuccessful: boolean) =>
-		{
-			var message =
-			(
-				wasSaveSuccessful
-				? "Game saved successfully."
-				: "Save failed due to errors."
-			);
-
-			var controlMessage = universe.controlBuilder.message4
+			var controlConfirm = universe.controlBuilder.confirmAndReturnToVenue
 			(
 				universe,
 				size,
-				DataBinding.fromContext(message),
-				() => // acknowledge
+				"Delete save state \""
+					+ saveStateSelected.timeSaved.toStringYYYY_MM_DD_HH_MM_SS()
+					+ "\"?",
+				universe.venueCurrent,
+				() =>
+					Profile.toControlSaveStateLoadOrSave_DeleteSaveSelected_Confirm(universe),
+				null // cancel
+			);
+
+			var venueNext = controlConfirm.toVenue();
+			universe.venueTransitionTo(venueNext);
+		}
+	}
+
+	static toControlSaveStateLoadOrSave_DeleteSaveSelected_Confirm
+	(
+		universe: Universe
+	): void
+	{
+		var saveStateSelected = universe.profile.saveStateSelected();
+
+		var storageHelper = universe.storageHelper;
+		storageHelper.delete(saveStateSelected.name);
+		var profile = universe.profile;
+		ArrayHelper.remove(profile.saveStates, saveStateSelected);
+		storageHelper.save(profile.name, profile);
+	};
+
+	static toControlSaveStateLoadOrSave_LoadFromFile
+	(
+		universe: Universe, size: Coords
+	): void
+	{
+		var venueFileUpload = new VenueFileUpload(null, null);
+
+		var controlBuilder = universe.controlBuilder;
+		var controlMessageReadyToLoad = controlBuilder.message4
+		(
+			universe,
+			size,
+			DataBinding.fromContext("Ready to load from file..."),
+			() => // acknowledge
+			{
+				var callback = (fileContentsAsString: string) =>
 				{
-					var venueNext: Venue = universe.controlBuilder.game
+					var worldAsStringCompressed = fileContentsAsString;
+					var compressor = universe.storageHelper.compressor;
+					var worldSerialized = compressor.decompressString(worldAsStringCompressed);
+					var worldCreator = universe.worldCreator;
+					var worldBlank = worldCreator.worldCreate(universe, worldCreator);
+					var worldDeserialized = worldBlank.fromStringJson(worldSerialized, universe);
+					universe.world = worldDeserialized;
+
+					var venueNext = universe.controlBuilder.game
 					(
-						universe, null, universe.venueCurrent
+						universe, size, universe.venueCurrent
 					).toVenue();
 					universe.venueTransitionTo(venueNext);
 				}
-			);
 
-			var venueNext = controlMessage.toVenue();
-			universe.venueTransitionTo(venueNext);
-		}
+				var inputFile = venueFileUpload.toDomElement().getElementsByTagName("input")[0];
+				var fileToLoad = inputFile.files[0];
+				new FileHelper().loadFileAsBinaryString
+				(
+					fileToLoad,
+					callback,
+					null // contextForCallback
+				);
+			}
+		);
 
-		var saveToLocalStorageAsNewSlot = () =>
+		var venueMessageReadyToLoad = controlMessageReadyToLoad.toVenue();
+
+		var controlMessageCancelled = controlBuilder.message4
+		(
+			universe,
+			size,
+			DataBinding.fromContext("No file specified."),
+			() => // acknowlege
+			{
+				var venueNext=
+					controlBuilder.game(universe, size, universe.venueCurrent).toVenue();
+				universe.venueTransitionTo(venueNext);
+			}
+		);
+
+		var venueMessageCancelled = controlMessageCancelled.toVenue();
+
+		venueFileUpload.venueNextIfFileSpecified = venueMessageReadyToLoad;
+		venueFileUpload.venueNextIfCancelled = venueMessageCancelled;
+
+		universe.venueNext = venueFileUpload;
+	};
+
+	static toControlSaveStateLoadOrSave_LoadNewWorld
+	(
+		universe: Universe, size: Coords
+	): void
+	{
+		var world = universe.worldCreate();
+		universe.world = world;
+		var controlBuilder = universe.controlBuilder;
+		var venueNext = controlBuilder.worldDetail
+		(
+			universe, size, universe.venueCurrent
+		).toVenue();
+		universe.venueTransitionTo(venueNext);
+	}
+
+	static toControlSaveStateLoadOrSave_LoadSelectedSlotFromLocalStorage
+	(
+		universe: Universe
+	): void
+	{
+		var saveStateNameSelected = universe.profile.saveStateNameSelected;
+		if (saveStateNameSelected != null)
 		{
 			var messageAsDataBinding = DataBinding.fromContextAndGet
 			(
-				null, // context - Set below.
-				(c: VenueTask<boolean>) => "Saving game..."
+				null, // Will be set below.
+				(c: VenueTask<SaveStateBase>) => "Loading game..."
 			);
 
 			var venueMessage = VenueMessage.fromMessage
@@ -235,443 +521,257 @@ export class Profile
 			var venueTask = new VenueTask
 			(
 				venueMessage,
-				() => saveToLocalStorage(),
-				(wasSaveSuccessful: boolean) => // done
-				{
-					saveToLocalStorageDone(wasSaveSuccessful);
-				}
-			);
-			messageAsDataBinding.contextSet(venueTask);
-
-			universe.venueTransitionTo(venueTask);
-		};
-
-		var saveToFilesystem = () =>
-		{
-			var venueMessage = VenueMessage.fromText("Saving game...");
-
-			var venueTask = new VenueTask
-			(
-				venueMessage,
 				() => // perform
 				{
-					var world = universe.world;
-
-					world.dateSaved = DateTime.now();
-					var worldSerialized = universe.serializer.serialize(world, null);
-
-					var compressor = universe.storageHelper.compressor;
-					var worldCompressedAsBytes = compressor.compressStringToBytes(worldSerialized);
-
-					return worldCompressedAsBytes;
+					return universe.storageHelper.load<SaveStateBase>(saveStateNameSelected);
 				},
-				(worldCompressedAsBytes: number[]) => // done
+				(saveStateSelected: SaveStateBase) => // done
 				{
-					var wasSaveSuccessful = (worldCompressedAsBytes != null);
-					var message =
-					(
-						wasSaveSuccessful ? "Save ready: choose location on dialog." : "Save failed due to errors."
-					);
-
-					new FileHelper().saveBytesToFileWithName
-					(
-						worldCompressedAsBytes, universe.world.name + ".json.lzw"
-					);
-
-					var controlMessage = universe.controlBuilder.message4
-					(
-						universe,
-						size,
-						DataBinding.fromContext(message),
-						() => // acknowledge
-						{
-							var venueNext = universe.controlBuilder.game
-							(
-								universe, null, universe.venueCurrent
-							).toVenue();
-							universe.venueTransitionTo(venueNext);
-						}
-					);
-
-					var venueMessage = controlMessage.toVenue();
-					universe.venueTransitionTo(venueMessage);
-				}
-			);
-
-			universe.venueTransitionTo(venueTask);
-		};
-
-		var loadFromFile = () => // click
-		{
-			var venueFileUpload = new VenueFileUpload(null, null);
-
-			var controlMessageReadyToLoad = controlBuilder.message4
-			(
-				universe,
-				size,
-				DataBinding.fromContext("Ready to load from file..."),
-				() => // acknowledge
-				{
-					var callback = (fileContentsAsString: string) =>
-					{
-						var worldAsStringCompressed = fileContentsAsString;
-						var compressor = universe.storageHelper.compressor;
-						var worldSerialized = compressor.decompressString(worldAsStringCompressed);
-						var worldDeserialized = universe.serializer.deserialize(worldSerialized);
-						universe.world = worldDeserialized;
-
-						var venueNext = universe.controlBuilder.game
-						(
-							universe, size, universe.venueCurrent
-						).toVenue();
-						universe.venueTransitionTo(venueNext);
-					}
-
-					var inputFile = venueFileUpload.toDomElement().getElementsByTagName("input")[0];
-					var fileToLoad = inputFile.files[0];
-					new FileHelper().loadFileAsBinaryString
-					(
-						fileToLoad,
-						callback,
-						null // contextForCallback
-					);
-				}
-			);
-
-			var venueMessageReadyToLoad = controlMessageReadyToLoad.toVenue();
-
-			var controlMessageCancelled = controlBuilder.message4
-			(
-				universe,
-				size,
-				DataBinding.fromContext("No file specified."),
-				() => // acknowlege
-				{
-					var venueNext=
-						controlBuilder.game(universe, size, universe.venueCurrent).toVenue();
+					var worldSelected = saveStateSelected.toWorld(universe);
+					universe.world = worldSelected;
+					var venueNext = worldSelected.toVenue();
 					universe.venueTransitionTo(venueNext);
 				}
 			);
 
-			var venueMessageCancelled = controlMessageCancelled.toVenue();
+			messageAsDataBinding.contextSet(venueTask);
 
-			venueFileUpload.venueNextIfFileSpecified = venueMessageReadyToLoad;
-			venueFileUpload.venueNextIfCancelled = venueMessageCancelled;
+			universe.venueTransitionTo(venueTask);
+		}
+	}
 
-			universe.venueNext = venueFileUpload;
-		};
+	static toControlSaveStateLoadOrSave_SaveToLocalStorage
+	(
+		universe: Universe
+	): string
+	{
+		var profile = universe.profile;
+		var world = universe.world;
+		var now = DateTime.now();
+		world.dateSaved = now;
 
-		var back = () => universe.venueTransitionTo(venueToReturnTo);
+		var nowAsString = now.toStringYYYYMMDD_HHMM_SS();
+		var place = world.placeCurrent;
+		var placeName = place.name;
+		var timePlayingAsString = world.timePlayingAsStringShort(universe);
 
-		var deleteSaveSelectedConfirm = () =>
+		var displaySize = universe.display.sizeInPixels;
+		var displayFull = Display2D.fromSizeAndIsInvisible(displaySize, true);
+		displayFull.initialize(universe);
+		place.draw(universe, world, displayFull);
+		var imageSnapshotFull = displayFull.toImage(Profile.name);
+
+		var imageSizeThumbnail = Profile.toControlSaveStateLoadOrSave_ThumbnailSize();
+		var displayThumbnail = Display2D.fromSizeAndIsInvisible
+		(
+			imageSizeThumbnail, true
+		);
+		displayThumbnail.initialize(universe);
+		displayThumbnail.drawImageScaled
+		(
+			imageSnapshotFull, Coords.Instances().Zeroes, imageSizeThumbnail
+		);
+		var imageThumbnailFromDisplay =
+			displayThumbnail.toImage(SaveStateBase.name);
+		var imageThumbnailAsDataUrl = imageThumbnailFromDisplay.systemImage.toDataURL();
+		var imageThumbnail = new Image2("Snapshot", imageThumbnailAsDataUrl).unload();
+
+		var saveStateName = "Save-" + nowAsString;
+		var saveState = new SaveStateWorld
+		(
+			saveStateName,
+			placeName,
+			timePlayingAsString,
+			now,
+			imageThumbnail,
+		).fromWorld
+		(
+			world
+		);
+
+		var storageHelper = universe.storageHelper;
+
+		var errorMessageFromSave;
+		try
 		{
-			var saveStateSelected = universe.profile.saveStateSelected();
+			storageHelper.save(saveStateName, saveState);
 
-			var storageHelper = universe.storageHelper;
-			storageHelper.delete(saveStateSelected.name);
-			var profile = universe.profile;
-			ArrayHelper.remove(profile.saveStates, saveStateSelected);
-			storageHelper.save(profile.name, profile);
-		};
-
-		var deleteSaveSelected = () =>
-		{
-			var saveStateSelected = universe.profile.saveStateSelected();
-
-			if (saveStateSelected == null)
+			if (profile.saveStates.some(x => x.name == saveStateName) == false)
 			{
-				return;
+				saveState.unload();
+				profile.saveStates.push(saveState);
+				storageHelper.save(profile.name, profile);
 			}
 
-			var controlConfirm = universe.controlBuilder.confirmAndReturnToVenue
+			var profileNames = storageHelper.load<string[]>(Profile.StorageKeyProfileNames);
+
+			if (profileNames == null)
+			{
+				profileNames = new Array<string>();
+				storageHelper.save(Profile.StorageKeyProfileNames, profileNames);
+			}
+
+			if (profileNames.indexOf(profile.name) == -1)
+			{
+				profileNames.push(profile.name);
+				storageHelper.save(Profile.StorageKeyProfileNames, profileNames);
+			}
+
+			errorMessageFromSave = null;
+		}
+		catch (ex)
+		{
+			var exceptionTypeName = ex.constructor.name;
+			var exceptionMessage = ex.message;
+
+			if
+			(
+				exceptionTypeName == DOMException.name
+				&& exceptionMessage.endsWith("exceeded the quota.")
+			)
+			{
+				errorMessageFromSave = "Browser out of storage space."
+			}
+			else
+			{
+				errorMessageFromSave = "Unexpected error.";
+			}
+		}
+
+		return errorMessageFromSave;
+	}
+
+	static toControlSaveStateLoadOrSave_SaveToLocalStorage_Done
+	(
+		universe: Universe,
+		size: Coords,
+		errorMessageFromSave: string
+	): void
+	{
+		var message =
+		(
+			errorMessageFromSave == null
+			? "Game saved successfully."
+			: "Save failed due to errors:\n" + errorMessageFromSave
+		);
+
+		var controlMessage = universe.controlBuilder.message4
+		(
+			universe,
+			size,
+			DataBinding.fromContext(message),
+			() => // acknowledge
+			{
+				var venueNext: Venue = universe.controlBuilder.game
+				(
+					universe, null, universe.venueCurrent
+				).toVenue();
+				universe.venueTransitionTo(venueNext);
+			}
+		);
+
+		var venueNext = controlMessage.toVenue();
+		universe.venueTransitionTo(venueNext);
+	}
+
+	static toControlSaveStateLoadOrSave_SaveToFilesystem
+	(
+		universe: Universe, size: Coords
+	): void
+	{
+		var venueMessage = VenueMessage.fromText("Saving game...");
+
+		var savePerform = () =>
+		{
+			var world = universe.world;
+
+			world.dateSaved = DateTime.now();
+			var worldSerialized = world.toStringJson(universe);
+
+			var compressor = universe.storageHelper.compressor;
+			var worldCompressedAsBytes = compressor.compressStringToBytes(worldSerialized);
+
+			return worldCompressedAsBytes;
+		};
+
+		var saveDone = (worldCompressedAsBytes: number[]) => // done
+		{
+			var wasSaveSuccessful = (worldCompressedAsBytes != null);
+			var message =
+			(
+				wasSaveSuccessful
+				? "Save ready: choose location on dialog."
+				: "Save failed due to errors."
+			);
+
+			new FileHelper().saveBytesToFileWithName
+			(
+				worldCompressedAsBytes, universe.world.name + ".json.lzw"
+			);
+
+			var controlMessage = universe.controlBuilder.message4
 			(
 				universe,
 				size,
-				"Delete save state \""
-					+ saveStateSelected.timeSaved.toStringYYYY_MM_DD_HH_MM_SS()
-					+ "\"?",
-				universe.venueCurrent,
-				deleteSaveSelectedConfirm,
-				null // cancel
+				DataBinding.fromContext(message),
+				() => // acknowledge
+				{
+					var venueNext = universe.controlBuilder.game
+					(
+						universe, null, universe.venueCurrent
+					).toVenue();
+					universe.venueTransitionTo(venueNext);
+				}
 			);
 
-			var venueNext = controlConfirm.toVenue();
-			universe.venueTransitionTo(venueNext);
-		};
+			var venueMessage = controlMessage.toVenue();
+			universe.venueTransitionTo(venueMessage);
+		}
 
-		var saveToLocalStorageOverwritingSlotSelected = () =>
-		{
-			deleteSaveSelectedConfirm();
-			saveToLocalStorageAsNewSlot();
-		};
+		var venueTask = new VenueTask(venueMessage, savePerform, saveDone);
 
-		var returnValue = new ControlContainer
+		universe.venueTransitionTo(venueTask);
+	}
+
+	static toControlSaveStateLoadOrSave_SaveToLocalStorageAsNewSlot
+	(
+		universe: Universe, size: Coords
+	): void
+	{
+		var messageAsDataBinding = DataBinding.fromContextAndGet
 		(
-			"containerSaveStates",
-			Coords.create(), // pos
-			sizeBase.clone(), // size
-			// children
-			[
-				new ControlLabel
-				(
-					"labelProfileName",
-					Coords.fromXY(10, 10), // pos
-					Coords.fromXY(sizeBase.x, fontHeight), // size
-					true, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
-					DataBinding.fromContext
-					(
-						"Profile: " + universe.profile.name
-					),
-					fontNameAndHeight
-				),
-
-				new ControlLabel
-				(
-					"labelChooseASave",
-					Coords.fromXY(10, 20), // pos
-					Coords.fromXY(sizeBase.x, 25), // size
-					true, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
-					DataBinding.fromContext
-					(
-						"Choose a State to "
-						+ (isLoadNotSave ? "Restore" : "Overwrite") + ":"
-					),
-					fontNameAndHeight
-				),
-
-				ControlList.from10
-				(
-					"listSaveStates",
-					Coords.fromXY(10, 35), // pos
-					Coords.fromXY(110, 75), // size
-					DataBinding.fromContextAndGet
-					(
-						universe.profile,
-						(c: Profile) => c.saveStates
-					), // items
-					DataBinding.fromGet
-					(
-						(c: SaveState) =>
-						{
-							var timeSaved = c.timeSaved;
-							return (timeSaved == null ? "-" : timeSaved.toStringYYYY_MM_DD_HH_MM_SS() )
-						}
-					), // bindingForOptionText
-					fontNameAndHeight,
-					new DataBinding
-					(
-						universe.profile,
-						(c: Profile) => c.saveStateSelected(),
-						(c: Profile, v: SaveState) => c.saveStateNameSelected = v.name
-					), // bindingForOptionSelected
-					DataBinding.fromGet( (v: SaveState) => v.name ), // value
-					null,
-					(isLoadNotSave ? loadSelectedSlotFromLocalStorage: saveToLocalStorageOverwritingSlotSelected) // confirm
-				),
-
-				ControlButton.from8
-				(
-					"buttonNew",
-					Coords.fromXY(10, 120), // pos
-					Coords.fromXY(25, buttonHeightBase), // size
-					"New",
-					fontNameAndHeight,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					(isLoadNotSave ? loadNewWorld : saveToLocalStorageAsNewSlot) // click
-				),
-
-				new ControlButton
-				(
-					"buttonSelect",
-					Coords.fromXY(40, 120), // pos
-					Coords.fromXY(25, buttonHeightBase), // size
-					(isLoadNotSave ? "Load" : "Save"),
-					fontNameAndHeight,
-					true, // hasBorder
-					// isEnabled
-					DataBinding.fromContextAndGet
-					(
-						universe.profile,
-						(c: Profile) => (c.saveStateNameSelected != null)
-					),
-					(isLoadNotSave ? loadSelectedSlotFromLocalStorage : saveToLocalStorageOverwritingSlotSelected), // click
-					false // canBeHeldDown
-				),
-
-				ControlButton.from8
-				(
-					"buttonFile",
-					Coords.fromXY(70, 120), // pos
-					Coords.fromXY(25, buttonHeightBase), // size
-					"File",
-					fontNameAndHeight,
-					true, // hasBorder
-					// isEnabled
-					DataBinding.fromContextAndGet
-					(
-						universe.profile,
-						(c: Profile) => (c.saveStateNameSelected != null),
-					),
-					(isLoadNotSave ? loadFromFile : saveToFilesystem) // click
-				),
-
-				ControlButton.from8
-				(
-					"buttonDelete",
-					Coords.fromXY(100, 120), // pos
-					Coords.fromXY(20, buttonHeightBase), // size
-					"X",
-					fontNameAndHeight,
-					true, // hasBorder
-					// isEnabled
-					DataBinding.fromContextAndGet
-					(
-						universe.profile,
-						(c: Profile) => (c.saveStateNameSelected != null)
-					),
-					deleteSaveSelected // click
-				),
-
-				ControlVisual.from5
-				(
-					"visualSnapshot",
-					Coords.fromXY(130, 35),
-					visualThumbnailSize,
-					DataBinding.fromContextAndGet
-					(
-						universe.profile,
-						(c: Profile) =>
-						{
-							var saveState = c.saveStateSelected();
-							var saveStateImageSnapshot =
-							(
-								saveState == null
-								? null
-								: saveState.imageSnapshot.load()
-							);
-							var returnValue =
-							(
-								saveStateImageSnapshot == null || saveStateImageSnapshot.isLoaded == false
-								? new VisualNone()
-								: new VisualImageImmediate(saveStateImageSnapshot, true) // isScaled
-							);
-							return returnValue;
-						}
-					),
-					Color.byName("White")
-				),
-
-				new ControlLabel
-				(
-					"labelPlaceName",
-					Coords.fromXY(130, 80), // pos
-					Coords.fromXY(120, buttonHeightBase), // size
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
-					DataBinding.fromContextAndGet
-					(
-						universe.profile,
-						(c: Profile) =>
-						{
-							var saveState = c.saveStateSelected();
-							return (saveState == null ? "" : saveState.placeName);
-						}
-					),
-					fontNameAndHeight
-				),
-
-				new ControlLabel
-				(
-					"labelTimePlaying",
-					Coords.fromXY(130, 90), // pos
-					Coords.fromXY(120, buttonHeightBase), // size
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
-					DataBinding.fromContextAndGet
-					(
-						universe.profile,
-						(c: Profile) =>
-						{
-							var saveState = c.saveStateSelected();
-							return (saveState == null ? "" : saveState.timePlayingAsString);
-						}
-					),
-					fontNameAndHeight
-				),
-
-				new ControlLabel
-				(
-					"labelDateSaved",
-					Coords.fromXY(130, 100), // pos
-					Coords.fromXY(120, buttonHeightBase), // size
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
-					DataBinding.fromContextAndGet
-					(
-						universe.profile,
-						(c: Profile) =>
-						{
-							var saveState = c.saveStateSelected();
-							var returnValue =
-							(
-								saveState == null
-								? ""
-								:
-								(
-									saveState.timeSaved == null
-									? ""
-									: saveState.timeSaved.toStringYYYY_MM_DD()
-								)
-							);
-							return returnValue;
-						}
-					),
-					fontNameAndHeight
-				),
-
-				new ControlLabel
-				(
-					"labelTimeSaved",
-					Coords.fromXY(130, 110), // pos
-					Coords.fromXY(120, buttonHeightBase), // size
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
-					DataBinding.fromContextAndGet
-					(
-						universe.profile,
-						(c: Profile) =>
-						{
-							var saveState = c.saveStateSelected();
-							return (saveState == null ? "" : saveState.timeSaved.toStringHH_MM_SS());
-						}
-					),
-					fontNameAndHeight
-				),
-
-				ControlButton.from8
-				(
-					"buttonBack",
-					Coords.fromXY
-					(
-						sizeBase.x - 10 - 25, sizeBase.y - 10 - 15
-					), // pos
-					Coords.fromXY(25, 15), // size
-					"Back",
-					fontNameAndHeight,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					back // click
-				),
-			],
-			null, null
+			null, // context - Set below.
+			(c: VenueTask<string>) => "Saving game..."
 		);
 
-		returnValue.scalePosAndSize(scaleMultiplier);
+		var venueMessage = VenueMessage.fromMessage
+		(
+			messageAsDataBinding
+		);
 
-		return returnValue;
+		var perform = () =>
+			Profile.toControlSaveStateLoadOrSave_SaveToLocalStorage(universe);
+
+		var venueTask = new VenueTask
+		(
+			venueMessage,
+			perform,
+			(errorMessageFromSave: string) => // done
+			{
+				Profile.toControlSaveStateLoadOrSave_SaveToLocalStorage_Done
+				(
+					universe, size, errorMessageFromSave
+				);
+			}
+		);
+		messageAsDataBinding.contextSet(venueTask);
+
+		universe.venueTransitionTo(venueTask);
+	}
+
+	static toControlSaveStateLoadOrSave_ThumbnailSize()
+	{
+		return Coords.fromXY(60, 45);
 	}
 
 	static toControlProfileNew(universe: Universe, size: Coords): ControlBase
@@ -686,6 +786,39 @@ export class Profile
 		var scaleMultiplier = size.clone().divide(sizeBase);
 		var fontNameAndHeight = controlBuilder.fontBase;
 		var buttonHeightBase = controlBuilder.buttonHeightBase;
+
+		var create = () =>
+		{
+			var venueControls = universe.venueCurrent as VenueControls;
+			var controlRootAsContainer = venueControls.controlRoot as ControlContainer;
+			var textBoxName =
+				controlRootAsContainer.childrenByName.get("textBoxName") as ControlTextBox<any>;
+			var profileName = textBoxName.text(null);
+			if (profileName == "")
+			{
+				return;
+			}
+
+			var storageHelper = universe.storageHelper;
+
+			var profile = new Profile(profileName, []);
+			var profileNames = storageHelper.load<string[]>(Profile.StorageKeyProfileNames);
+			if (profileNames == null)
+			{
+				profileNames = [];
+			}
+			profileNames.push(profileName);
+			storageHelper.save(Profile.StorageKeyProfileNames, profileNames);
+			storageHelper.save(profileName, profile);
+
+			universe.profile = profile;
+			var venueNext: Venue = Profile.toControlSaveStateLoad
+			(
+				universe, null, universe.venueCurrent
+			).toVenue();
+			venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
+			universe.venueNext = venueNext;
+		};
 
 		var returnValue = ControlContainer.from4
 		(
@@ -735,38 +868,7 @@ export class Profile
 						universe.profile,
 						(c: Profile) => { return c.name.length > 0; }
 					),
-					() => // click
-					{
-						var venueControls = universe.venueCurrent as VenueControls;
-						var controlRootAsContainer = venueControls.controlRoot as ControlContainer;
-						var textBoxName =
-							controlRootAsContainer.childrenByName.get("textBoxName") as ControlTextBox<any>;
-						var profileName = textBoxName.text(null);
-						if (profileName == "")
-						{
-							return;
-						}
-
-						var storageHelper = universe.storageHelper;
-
-						var profile = new Profile(profileName, []);
-						var profileNames = storageHelper.load("ProfileNames");
-						if (profileNames == null)
-						{
-							profileNames = [];
-						}
-						profileNames.push(profileName);
-						storageHelper.save("ProfileNames", profileNames);
-						storageHelper.save(profileName, profile);
-
-						universe.profile = profile;
-						var venueNext: Venue = Profile.toControlSaveStateLoad
-						(
-							universe, null, universe.venueCurrent
-						).toVenue();
-						venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-						universe.venueNext = venueNext;
-					}
+					create
 				),
 
 				ControlButton.from8
@@ -812,13 +914,13 @@ export class Profile
 		var buttonHeightBase = controlBuilder.buttonHeightBase;
 
 		var storageHelper = universe.storageHelper;
-		var profileNames = storageHelper.load("ProfileNames") as Array<string>;
+		var profileNames = storageHelper.load(Profile.StorageKeyProfileNames) as Array<string>;
 		if (profileNames == null)
 		{
 			profileNames = [];
-			storageHelper.save("ProfileNames", profileNames);
+			storageHelper.save(Profile.StorageKeyProfileNames, profileNames);
 		}
-		var profiles = profileNames.map(x => storageHelper.load(x));
+		var profiles = profileNames.map(x => storageHelper.load<Profile>(x));
 
 		var create = () =>
 		{
@@ -851,9 +953,10 @@ export class Profile
 
 			var storageHelper = universe.storageHelper;
 			storageHelper.delete(profileSelected.name);
-			var profileNames = storageHelper.load("ProfileNames");
+			var profileNames =
+				storageHelper.load<string[]>(Profile.StorageKeyProfileNames);
 			ArrayHelper.remove(profileNames, profileSelected.name);
-			storageHelper.save("ProfileNames", profileNames);
+			storageHelper.save(Profile.StorageKeyProfileNames, profileNames);
 		};
 
 		var deleteProfile = () =>

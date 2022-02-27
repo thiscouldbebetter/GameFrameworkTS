@@ -2,19 +2,21 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class SaveState
+export class SaveStateBase
 {
 	name: string;
 	placeName: string
 	timePlayingAsString: string;
 	timeSaved: DateTime;
 	imageSnapshot: Image2;
-	world: World;
 
 	constructor
 	(
-		name: string, placeName: string, timePlayingAsString: string,
-		timeSaved: DateTime, imageSnapshot: Image2, world: World
+		name: string,
+		placeName: string,
+		timePlayingAsString: string,
+		timeSaved: DateTime,
+		imageSnapshot: Image2
 	)
 	{
 		this.name = name;
@@ -22,15 +24,73 @@ export class SaveState
 		this.timePlayingAsString = timePlayingAsString;
 		this.timeSaved = timeSaved;
 		this.imageSnapshot = imageSnapshot;
-		this.world = world;
 	}
 
-	load()
+	fromWorld(world: World): SaveStateBase
+	{
+		throw new Error("Must be implemented in subclass!");
+	}
+
+	toWorld(universe: Universe): World
+	{
+		throw new Error("Must be implemented in subclass!");
+	}
+
+	// Loadable.
+
+	load(): void
+	{
+		throw new Error("Must be implemented in subclass!");
+	}
+
+	unload(): void
+	{
+		throw new Error("Must be implemented in subclass!");
+	}
+}
+
+export class SaveStateWorld extends SaveStateBase
+{
+	world: World;
+
+	constructor
+	(
+		name: string,
+		placeName: string,
+		timePlayingAsString: string,
+		timeSaved: DateTime,
+		imageSnapshot: Image2
+	)
+	{
+		super
+		(
+			name,
+			placeName,
+			timePlayingAsString,
+			timeSaved,
+			imageSnapshot
+		);
+	}
+
+	fromWorld(world: World): SaveStateBase
+	{
+		this.world = world;
+		return this;
+	}
+
+	toWorld(universe: Universe): World
+	{
+		return this.world;
+	}
+
+	// Loadable.
+
+	load(): void
 	{
 		// todo
 	}
 
-	unload()
+	unload(): void
 	{
 		this.world = null;
 	}

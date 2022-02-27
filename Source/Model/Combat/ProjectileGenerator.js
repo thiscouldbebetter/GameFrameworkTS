@@ -62,7 +62,7 @@ var ThisCouldBeBetter;
                 projectileLoc.vel.overwriteWith(userForward).multiplyScalar(userSpeed + this.speed);
                 var projectileCollider = new GameFramework.Sphere(GameFramework.Coords.create(), this.radius);
                 var projectileCollidable = new GameFramework.Collidable(false, // canCollideAgainWithoutSeparating
-                0, projectileCollider, [GameFramework.Collidable.name], this.collide);
+                0, projectileCollider, [GameFramework.Collidable.name], (uwpe) => this.collide(uwpe));
                 var projectileDamager = GameFramework.Damager.fromDamagePerHit(this.damage);
                 var projectileDrawable = GameFramework.Drawable.fromVisual(this.visual); // hack
                 var projectileEphemeral = new GameFramework.Ephemeral(this.ticksToLive, null);

@@ -1206,7 +1206,7 @@ class PlaceBuilderDemo // Main.
 			cameraViewSize,
 			cameraHeightAbovePlayfield, // focalLength
 			cameraLoc,
-			Camera.entitiesSortByRenderingOrderThenZThenY
+			(entities: Entity[]) => Camera.entitiesSortByRenderingOrderThenZThenY(entities)
 		);
 		var cameraBoundable = new Boundable(camera.viewCollider);
 		var cameraCollidable = Collidable.fromCollider(camera.viewCollider);
@@ -1598,7 +1598,12 @@ class PlaceBuilderDemo // Main.
 			var wallCollidable = new Collidable
 			(
 				false, // canCollideAgainWithoutSeparating
-				0, wallCollider, [ Movable.name ], wallObstacle.collide
+				0,
+				wallCollider,
+				[
+					Movable.name
+				],
+				(uwpe: UniverseWorldPlaceEntities) => wallObstacle.collide(uwpe)
 			);
 			var wallVisual = VisualRectangle.fromSizeAndColorFill(wallSize, wallColor);
 
@@ -2708,7 +2713,7 @@ class PlaceBuilderDemo // Main.
 				Locatable.create(),
 				Collidable.fromCollider(itemMeatCollider),
 				Drawable.fromVisual(itemMeatVisual),
-				new Usable(itemMeatDefn.use)
+				new Usable((uwpe: UniverseWorldPlaceEntities) => itemMeatDefn.use(uwpe))
 			]
 		);
 
@@ -2727,11 +2732,11 @@ class PlaceBuilderDemo // Main.
 		(
 			itemDefnMedicineName,
 			[
-				new Item(itemDefnMedicineName, 1),
-				Locatable.create(),
 				Collidable.fromCollider(itemMedicineCollider),
 				Drawable.fromVisual(itemMedicineVisual),
-				Equippable.default()
+				Equippable.default(),
+				new Item(itemDefnMedicineName, 1),
+				Locatable.create()
 			]
 		);
 

@@ -57,8 +57,11 @@ var ThisCouldBeBetter;
             venueWorldGenerate(universe) {
                 var messageAsDataBinding = GameFramework.DataBinding.fromGet((c) => "Generating world...");
                 var venueMessage = GameFramework.VenueMessage.fromMessage(messageAsDataBinding);
-                var venueTask = new GameFramework.VenueTask(venueMessage, () => universe.worldCreator.worldCreate(universe, universe.worldCreator), // perform
-                (world) => // done
+                var worldGeneratePerform = () => {
+                    var worldCreator = universe.worldCreator;
+                    return worldCreator.worldCreate(universe, worldCreator);
+                };
+                var venueTask = new GameFramework.VenueTask(venueMessage, worldGeneratePerform, (world) => // done
                  {
                     universe.world = world;
                     var venueNext = universe.world.toVenue();

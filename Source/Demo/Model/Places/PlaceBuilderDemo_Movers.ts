@@ -1553,7 +1553,9 @@ class PlaceBuilderDemo_Movers
 
 		var playerActivityDefn = new ActivityDefn
 		(
-			"Player", this.entityDefnBuildPlayer_PlayerActivityPerform
+			"Player",
+			(uwpe: UniverseWorldPlaceEntities) =>
+				this.entityDefnBuildPlayer_PlayerActivityPerform(uwpe)
 		);
 		this.parent.activityDefns.push(playerActivityDefn);
 		var playerActivity = Activity.fromDefnName(playerActivityDefn.name);
@@ -1734,8 +1736,6 @@ class PlaceBuilderDemo_Movers
 
 	entityDefnBuildPlayer_Controllable(): Controllable
 	{
-		var toControlMenu = Playable.toControlMenu;
-		var toControlWorldOverlay = Playable.toControlWorldOverlay;
 		var toControl =
 			(uwpe: UniverseWorldPlaceEntities) =>
 			{
@@ -1751,11 +1751,11 @@ class PlaceBuilderDemo_Movers
 				var returnValue;
 				if (isMenu)
 				{
-					returnValue = toControlMenu(universe, size, entity, venuePrev);
+					returnValue = Playable.toControlMenu(universe, size, entity, venuePrev);
 				}
 				else
 				{
-					returnValue = toControlWorldOverlay(universe, size, entity);
+					returnValue = Playable.toControlWorldOverlay(universe, size, entity);
 				}
 				return returnValue;
 			}

@@ -33,7 +33,7 @@ export class DisplayRecorder
 		return new Action
 		(
 			"Recording Start/Stop", DisplayRecorder.actionStartStopPerform
-		)
+		);
 	}
 
 	static actionStartStopPerform

@@ -299,7 +299,7 @@ class PlaceBuilderDemo_Emplacements {
         obstacleAngleSpannedInTurns, obstacleColor, null);
         var obstacleRingObstacle = new Obstacle();
         var obstacleCollidable = new Collidable(false, // canCollideAgainWithoutSeparating
-        0, obstacleCollider, [Movable.name], obstacleRingObstacle.collide);
+        0, obstacleCollider, [Movable.name], (uwpe) => obstacleRingObstacle.collide(uwpe));
         var obstacleRingEntityDefn = new Entity("Ring", [
             new Locatable(obstacleLoc),
             obstacleCollidable,

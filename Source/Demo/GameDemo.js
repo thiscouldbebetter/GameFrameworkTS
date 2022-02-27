@@ -24,7 +24,7 @@ class GameDemo {
             ControlStyle.Instances().Rounded,
             ControlStyle.Instances().Dark
         ]);
-        var universe = Universe.create("Game Framework Demo Game", "0.0.0-20220122", // version
+        var universe = Universe.create("Game Framework Demo Game", "0.0.0-20220227", // version
         timerHelper, display, mediaLibrary, controlBuilder, WorldCreator.fromWorldCreate(WorldDemo.create));
         universe.initialize(() => universe.start());
     }

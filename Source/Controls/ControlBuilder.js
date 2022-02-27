@@ -41,9 +41,8 @@ var ThisCouldBeBetter;
             choice(universe, size, message, optionNames, optionFunctions, showMessageOnly, fontNameAndHeight, buttonPosY) {
                 size = size || universe.display.sizeDefault();
                 showMessageOnly = showMessageOnly || false;
-                var fontHeight = (fontNameAndHeight != null
-                    ? fontNameAndHeight.heightInPixels
-                    : this.fontHeightInPixelsBase);
+                fontNameAndHeight = fontNameAndHeight || this.fontBase;
+                var fontHeight = fontNameAndHeight.heightInPixels;
                 var scaleMultiplier = this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
                 var containerSizeScaled = size.clone().clearZ().divide(scaleMultiplier);
                 var numberOfOptions = optionNames.length;
@@ -168,7 +167,7 @@ var ThisCouldBeBetter;
                 var rowCount = 5;
                 var buttonsAllHeight = rowCount * buttonHeight + (rowCount - 1) * padding;
                 var margin = (this.sizeBase.y - buttonsAllHeight) / 2;
-                var buttonSize = GameFramework.Coords.fromXY(60, buttonHeight);
+                var buttonSize = GameFramework.Coords.fromXY(40, buttonHeight);
                 var posX = (this.sizeBase.x - buttonSize.x) / 2;
                 var row0PosY = margin;
                 var row1PosY = row0PosY + rowHeight;
@@ -819,7 +818,7 @@ var ThisCouldBeBetter;
                         return storageHelper.load(saveStateSelected.name);
                     }, (saveStateReloaded) => // done
                      {
-                        universe.world = saveStateReloaded.world;
+                        universe.world = saveStateReloaded.toWorld(universe);
                         var venueNext = universe.controlBuilder.worldLoad(universe, null).toVenue();
                         universe.venueTransitionTo(venueNext);
                     });
@@ -829,6 +828,37 @@ var ThisCouldBeBetter;
                 var cancel = () => {
                     var venueNext = controlBuilder.worldLoad(universe, null).toVenue();
                     universe.venueTransitionTo(venueNext);
+                };
+                var loadFile = () => {
+                    var venueFileUpload = new GameFramework.VenueFileUpload(null, null);
+                    var acknowledge = () => {
+                        var callback = (fileContentsAsString) => {
+                            var worldAsStringCompressed = fileContentsAsString;
+                            var compressor = universe.storageHelper.compressor;
+                            var worldSerialized = compressor.decompressString(worldAsStringCompressed);
+                            var worldCreator = universe.worldCreator;
+                            var worldBlank = worldCreator.worldCreate(universe, worldCreator);
+                            var worldDeserialized = worldBlank.fromStringJson(worldSerialized, universe);
+                            universe.world = worldDeserialized;
+                            var venueNext = controlBuilder.game(universe, size, universe.venueCurrent).toVenue();
+                            universe.venueTransitionTo(venueNext);
+                        };
+                        var inputFile = venueFileUpload.toDomElement().getElementsByTagName("input")[0];
+                        var fileToLoad = inputFile.files[0];
+                        new GameFramework.FileHelper().loadFileAsBinaryString(fileToLoad, callback, null // contextForCallback
+                        );
+                    };
+                    var controlMessageReadyToLoad = universe.controlBuilder.message4(universe, size, GameFramework.DataBinding.fromContext("Ready to load from file..."), acknowledge);
+                    var venueMessageReadyToLoad = controlMessageReadyToLoad.toVenue();
+                    var controlMessageCancelled = universe.controlBuilder.message4(universe, size, GameFramework.DataBinding.fromContext("No file specified."), () => // acknowlege
+                     {
+                        var venueNext = controlBuilder.game(universe, size, universe.venueCurrent).toVenue();
+                        universe.venueTransitionTo(venueNext);
+                    });
+                    var venueMessageCancelled = controlMessageCancelled.toVenue();
+                    venueFileUpload.venueNextIfFileSpecified = venueMessageReadyToLoad;
+                    venueFileUpload.venueNextIfCancelled = venueMessageCancelled;
+                    universe.venueNext = venueFileUpload;
                 };
                 var returnValue = GameFramework.ControlContainer.from4("containerWorldLoad", this._zeroes, // pos
                 this.sizeBase.clone(), // size
@@ -864,36 +894,7 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(40, this.buttonHeightBase), // size
                     "Load File", font, true, // hasBorder
                     GameFramework.DataBinding.fromTrue(), // isEnabled
-                    () => // click
-                     {
-                        var venueFileUpload = new GameFramework.VenueFileUpload(null, null);
-                        var controlMessageReadyToLoad = universe.controlBuilder.message4(universe, size, GameFramework.DataBinding.fromContext("Ready to load from file..."), () => // acknowledge
-                         {
-                            var callback = (fileContentsAsString) => {
-                                var worldAsStringCompressed = fileContentsAsString;
-                                var compressor = universe.storageHelper.compressor;
-                                var worldSerialized = compressor.decompressString(worldAsStringCompressed);
-                                var worldDeserialized = universe.serializer.deserialize(worldSerialized);
-                                universe.world = worldDeserialized;
-                                var venueNext = controlBuilder.game(universe, size, universe.venueCurrent).toVenue();
-                                universe.venueTransitionTo(venueNext);
-                            };
-                            var inputFile = venueFileUpload.toDomElement().getElementsByTagName("input")[0];
-                            var fileToLoad = inputFile.files[0];
-                            new GameFramework.FileHelper().loadFileAsBinaryString(fileToLoad, callback, null // contextForCallback
-                            );
-                        });
-                        var venueMessageReadyToLoad = controlMessageReadyToLoad.toVenue();
-                        var controlMessageCancelled = universe.controlBuilder.message4(universe, size, GameFramework.DataBinding.fromContext("No file specified."), () => // acknowlege
-                         {
-                            var venueNext = controlBuilder.game(universe, size, universe.venueCurrent).toVenue();
-                            universe.venueTransitionTo(venueNext);
-                        });
-                        var venueMessageCancelled = controlMessageCancelled.toVenue();
-                        venueFileUpload.venueNextIfFileSpecified = venueMessageReadyToLoad;
-                        venueFileUpload.venueNextIfCancelled = venueMessageCancelled;
-                        universe.venueNext = venueFileUpload;
-                    }),
+                    loadFile),
                     GameFramework.ControlButton.from8("buttonReturn", GameFramework.Coords.fromXY(130, 105), // pos
                     GameFramework.Coords.fromXY(40, this.buttonHeightBase), // size
                     "Return", font, true, // hasBorder

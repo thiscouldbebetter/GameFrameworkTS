@@ -93,7 +93,8 @@ class PlaceBuilderDemo_Items
 		var itemArmor = new ItemDefn
 		(
 			itemArmorName, null, null, 50, 30, null, [ "Armor" ],
-			this.itemUseEquip, itemArmorVisual, null
+			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
+			itemArmorVisual, null
 		);
 
 		return itemArmor;
@@ -137,7 +138,8 @@ class PlaceBuilderDemo_Items
 		var itemArmor = new ItemDefn
 		(
 			itemArmorName, null, null, 50, 30, null, [ "Armor" ],
-			this.itemUseEquip, itemArmorVisual, null
+			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
+			itemArmorVisual, null
 		);
 
 		return itemArmor;
@@ -264,7 +266,8 @@ class PlaceBuilderDemo_Items
 		var itemBomb = new ItemDefn
 		(
 			itemBombName, null, null, 5, 10, null, [ "Wieldable" ],
-			this.itemUseEquip, itemBombVisual, null
+			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
+			itemBombVisual, null
 		);
 
 		return itemBomb;
@@ -424,7 +427,8 @@ class PlaceBuilderDemo_Items
 		var itemBow = new ItemDefn
 		(
 			itemBowName, null, null, 5, 100, null, [ "Wieldable" ],
-			this.itemUseEquip, itemBowVisual, null
+			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
+			itemBowVisual, null
 		);
 
 		return itemBow;
@@ -635,11 +639,15 @@ class PlaceBuilderDemo_Items
 			)
 		]);
 
+		/*
+		// This causes tainted canvas errors on deserialization.
 		var itemDoughnutVisual = new VisualBuffered
 		(
 			Coords.fromXY(1, 1).multiplyScalar(this.entityDimension * 1.2),
 			itemDoughnutVisualBody
 		)
+		*/
+		var itemDoughnutVisual = itemDoughnutVisualBody;
 
 		if (this.parent.visualsHaveText)
 		{
@@ -1334,7 +1342,8 @@ class PlaceBuilderDemo_Items
 		var itemPick = new ItemDefn
 		(
 			itemPickName, null, null, 1, 30, null, [ "Wieldable" ],
-			this.itemUseEquip, itemPickVisual, null
+			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
+			itemPickVisual, null
 		);
 
 		return itemPick;
@@ -1454,7 +1463,8 @@ class PlaceBuilderDemo_Items
 		var itemShovel = new ItemDefn
 		(
 			itemShovelName, null, null, 1, 30, null, [ "Wieldable" ],
-			this.itemUseEquip, itemShovelVisual, null
+			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
+			itemShovelVisual, null
 		);
 
 		return itemShovel;
@@ -1517,7 +1527,8 @@ class PlaceBuilderDemo_Items
 		var itemSpeedBoots = new ItemDefn
 		(
 			itemSpeedBootsName, null, null, 10, 30, null, [ "Accessory" ],
-			this.itemUseEquip, itemSpeedBootsVisual, null
+			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
+			itemSpeedBootsVisual, null
 		);
 
 		return itemSpeedBoots;
@@ -1529,7 +1540,8 @@ class PlaceBuilderDemo_Items
 		var itemSword = new ItemDefn
 		(
 			"Sword", null, null, 10, 100, null, [ "Wieldable" ],
-			this.itemUseEquip, itemSwordVisual, null
+			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
+			itemSwordVisual, null
 		);
 		return itemSword;
 	}
@@ -1619,7 +1631,9 @@ class PlaceBuilderDemo_Items
 		var itemSword = new ItemDefn
 		(
 			"Sword" + damageTypeName, null, null, 10, 100, null,
-			[ "Wieldable" ], this.itemUseEquip, itemSwordVisual, null
+			[ "Wieldable" ],
+			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
+			itemSwordVisual, null
 		);
 		return itemSword;
 	}
@@ -1632,7 +1646,10 @@ class PlaceBuilderDemo_Items
 		var itemSword = new ItemDefn
 		(
 			"Sword" + damageTypeName, null, null, 10, 100, null,
-			[ "Wieldable" ], this.itemUseEquip, itemSwordVisual, null
+			[ "Wieldable" ],
+			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
+			itemSwordVisual,
+			null
 		);
 		return itemSword;
 	}

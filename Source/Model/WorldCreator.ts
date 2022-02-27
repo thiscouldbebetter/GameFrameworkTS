@@ -139,10 +139,16 @@ export class WorldCreator
 		var venueMessage =
 			VenueMessage.fromMessage(messageAsDataBinding);
 
+		var worldGeneratePerform = () =>
+		{
+			var worldCreator = universe.worldCreator;
+			return worldCreator.worldCreate(universe, worldCreator);
+		};
+
 		var venueTask = new VenueTask
 		(
 			venueMessage,
-			() => universe.worldCreator.worldCreate(universe, universe.worldCreator), // perform
+			worldGeneratePerform,
 			(world: World) => // done
 			{
 				universe.world = world;

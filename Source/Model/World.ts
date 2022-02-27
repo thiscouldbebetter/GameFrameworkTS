@@ -126,6 +126,22 @@ export class World //
 	{
 		return this.placeCurrent.toControl(universe, this);
 	}
+
+	// Serializable.
+
+	fromStringJson(worldAsStringJson: string, universe: Universe): World
+	{
+		var serializer = universe.serializer;
+		var returnValue = serializer.deserialize(worldAsStringJson);
+		return returnValue;
+	}
+
+	toStringJson(universe: Universe): string
+	{
+		var serializer = universe.serializer;
+		var returnValue = serializer.serialize(this, false); // pretty-print
+		return returnValue;
+	}
 }
 
 }

@@ -62,7 +62,7 @@ class PlaceBuilderDemo_Items {
             VisualPolygon.fromPathAndColorFill(path, itemArmorColor)
         ]);
         this.parent.textWithColorAddToVisual(itemArmorName, itemArmorColor, itemArmorVisual);
-        var itemArmor = new ItemDefn(itemArmorName, null, null, 50, 30, null, ["Armor"], this.itemUseEquip, itemArmorVisual, null);
+        var itemArmor = new ItemDefn(itemArmorName, null, null, 50, 30, null, ["Armor"], (uwpe) => this.itemUseEquip(uwpe), itemArmorVisual, null);
         return itemArmor;
     }
     armorEnhanced() {
@@ -81,7 +81,7 @@ class PlaceBuilderDemo_Items {
         if (this.parent.visualsHaveText) {
             itemArmorVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension), VisualText.fromTextHeightAndColor(itemArmorName, this.entityDimension, itemArmorColor)));
         }
-        var itemArmor = new ItemDefn(itemArmorName, null, null, 50, 30, null, ["Armor"], this.itemUseEquip, itemArmorVisual, null);
+        var itemArmor = new ItemDefn(itemArmorName, null, null, 50, 30, null, ["Armor"], (uwpe) => this.itemUseEquip(uwpe), itemArmorVisual, null);
         return itemArmor;
     }
     arrow() {
@@ -129,7 +129,7 @@ class PlaceBuilderDemo_Items {
         if (this.parent.visualsHaveText) {
             itemBombVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 2), VisualText.fromTextHeightAndColor(itemBombName, this.entityDimension, itemBombColor)));
         }
-        var itemBomb = new ItemDefn(itemBombName, null, null, 5, 10, null, ["Wieldable"], this.itemUseEquip, itemBombVisual, null);
+        var itemBomb = new ItemDefn(itemBombName, null, null, 5, 10, null, ["Wieldable"], (uwpe) => this.itemUseEquip(uwpe), itemBombVisual, null);
         return itemBomb;
     }
     book() {
@@ -195,7 +195,7 @@ class PlaceBuilderDemo_Items {
         if (this.parent.visualsHaveText) {
             itemBowVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 2), VisualText.fromTextHeightAndColor(itemBowName, this.entityDimension, itemBowColor)));
         }
-        var itemBow = new ItemDefn(itemBowName, null, null, 5, 100, null, ["Wieldable"], this.itemUseEquip, itemBowVisual, null);
+        var itemBow = new ItemDefn(itemBowName, null, null, 5, 100, null, ["Wieldable"], (uwpe) => this.itemUseEquip(uwpe), itemBowVisual, null);
         return itemBow;
     }
     bread() {
@@ -279,7 +279,15 @@ class PlaceBuilderDemo_Items {
             // hole
             new VisualErase(VisualCircle.fromRadiusAndColorFill(this.entityDimensionHalf * .3, itemDoughnutColor))
         ]);
-        var itemDoughnutVisual = new VisualBuffered(Coords.fromXY(1, 1).multiplyScalar(this.entityDimension * 1.2), itemDoughnutVisualBody);
+        /*
+        // This causes tainted canvas errors on deserialization.
+        var itemDoughnutVisual = new VisualBuffered
+        (
+            Coords.fromXY(1, 1).multiplyScalar(this.entityDimension * 1.2),
+            itemDoughnutVisualBody
+        )
+        */
+        var itemDoughnutVisual = itemDoughnutVisualBody;
         if (this.parent.visualsHaveText) {
             itemDoughnutVisualBody.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 2), VisualText.fromTextHeightAndColor(itemDoughnutName, this.entityDimension, itemDoughnutColor)));
         }
@@ -561,7 +569,7 @@ class PlaceBuilderDemo_Items {
         if (this.parent.visualsHaveText) {
             itemPickVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 2), VisualText.fromTextHeightAndColor(itemPickName, this.entityDimension, itemPickColor)));
         }
-        var itemPick = new ItemDefn(itemPickName, null, null, 1, 30, null, ["Wieldable"], this.itemUseEquip, itemPickVisual, null);
+        var itemPick = new ItemDefn(itemPickName, null, null, 1, 30, null, ["Wieldable"], (uwpe) => this.itemUseEquip(uwpe), itemPickVisual, null);
         return itemPick;
     }
     potion() {
@@ -617,7 +625,7 @@ class PlaceBuilderDemo_Items {
             ]).transform(Transform_Scale.fromScalar(this.entityDimension)), itemShovelColor)
         ]);
         this.parent.textWithColorAddToVisual(itemShovelName, itemShovelColor, itemShovelVisual);
-        var itemShovel = new ItemDefn(itemShovelName, null, null, 1, 30, null, ["Wieldable"], this.itemUseEquip, itemShovelVisual, null);
+        var itemShovel = new ItemDefn(itemShovelName, null, null, 1, 30, null, ["Wieldable"], (uwpe) => this.itemUseEquip(uwpe), itemShovelVisual, null);
         return itemShovel;
     }
     speedBoots() {
@@ -642,12 +650,12 @@ class PlaceBuilderDemo_Items {
         if (this.parent.visualsHaveText) {
             itemSpeedBootsVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 2), VisualText.fromTextHeightAndColor(itemSpeedBootsName, this.entityDimension, itemAccessoryColor)));
         }
-        var itemSpeedBoots = new ItemDefn(itemSpeedBootsName, null, null, 10, 30, null, ["Accessory"], this.itemUseEquip, itemSpeedBootsVisual, null);
+        var itemSpeedBoots = new ItemDefn(itemSpeedBootsName, null, null, 10, 30, null, ["Accessory"], (uwpe) => this.itemUseEquip(uwpe), itemSpeedBootsVisual, null);
         return itemSpeedBoots;
     }
     sword() {
         var itemSwordVisual = this.sword_Visual(Color.byName("GrayLight"));
-        var itemSword = new ItemDefn("Sword", null, null, 10, 100, null, ["Wieldable"], this.itemUseEquip, itemSwordVisual, null);
+        var itemSword = new ItemDefn("Sword", null, null, 10, 100, null, ["Wieldable"], (uwpe) => this.itemUseEquip(uwpe), itemSwordVisual, null);
         return itemSword;
     }
     sword_Visual(bladeColor) {
@@ -696,14 +704,14 @@ class PlaceBuilderDemo_Items {
         var bladeColor = Color.byName("Cyan");
         var damageTypeName = "Cold";
         var itemSwordVisual = this.sword_Visual(bladeColor);
-        var itemSword = new ItemDefn("Sword" + damageTypeName, null, null, 10, 100, null, ["Wieldable"], this.itemUseEquip, itemSwordVisual, null);
+        var itemSword = new ItemDefn("Sword" + damageTypeName, null, null, 10, 100, null, ["Wieldable"], (uwpe) => this.itemUseEquip(uwpe), itemSwordVisual, null);
         return itemSword;
     }
     swordHeat() {
         var bladeColor = Color.byName("Yellow");
         var damageTypeName = "Heat";
         var itemSwordVisual = this.sword_Visual(bladeColor);
-        var itemSword = new ItemDefn("Sword" + damageTypeName, null, null, 10, 100, null, ["Wieldable"], this.itemUseEquip, itemSwordVisual, null);
+        var itemSword = new ItemDefn("Sword" + damageTypeName, null, null, 10, 100, null, ["Wieldable"], (uwpe) => this.itemUseEquip(uwpe), itemSwordVisual, null);
         return itemSword;
     }
     toolset() {

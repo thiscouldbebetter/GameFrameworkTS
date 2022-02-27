@@ -329,21 +329,53 @@ export class VisualBuilder
 			),
 		]);
 
-		var visualLegsStandingNamesByHeading =
-		[
-			"FacingRightStanding",
-			"FacingDownStanding",
-			"FacingLeftStanding",
-			"FacingUpStanding"
-		];
+		var selectChildNames = (uwpe: UniverseWorldPlaceEntities, d: Display) =>
+		{
+			var e = uwpe.entity;
+			var entityLoc = e.locatable().loc;
+			var entityForward = entityLoc.orientation.forward;
+			var entityForwardInTurns = entityForward.headingInTurns();
+			var childNameToSelect;
+			if (entityForwardInTurns == null)
+			{
+				childNameToSelect = "FacingDownStanding";
+			}
+			else
+			{
+				var headingCount = 4;
+				var headingIndex =
+					Math.floor(entityForwardInTurns * headingCount); // todo
+				var entitySpeed = entityLoc.vel.magnitude();
+				var namesByHeading;
+				var speedMin = 0.2;
+				if (entitySpeed > speedMin)
+				{
+					var visualLegsWalkingNamesByHeading =
+					[
+						"FacingRightWalking",
+						"FacingDownWalking",
+						"FacingLeftWalking",
+						"FacingUpWalking"
+					];
 
-		var visualLegsWalkingNamesByHeading =
-		[
-			"FacingRightWalking",
-			"FacingDownWalking",
-			"FacingLeftWalking",
-			"FacingUpWalking"
-		];
+					namesByHeading = visualLegsWalkingNamesByHeading;
+				}
+				else
+				{
+					var visualLegsStandingNamesByHeading =
+					[
+						"FacingRightStanding",
+						"FacingDownStanding",
+						"FacingLeftStanding",
+						"FacingUpStanding"
+					];
+
+					namesByHeading = visualLegsStandingNamesByHeading;
+				}
+				childNameToSelect = namesByHeading[headingIndex];
+			}
+			return [ childNameToSelect ];
+		};
 
 		var visualLegsDirectional = new VisualSelect
 		(
@@ -360,38 +392,7 @@ export class VisualBuilder
 				[ "FacingLeftWalking", visualLegsFacingLeftWalking ],
 				[ "FacingUpWalking", visualLegsFacingUpWalking ]
 			]),
-			// selectChildNames
-			(uwpe: UniverseWorldPlaceEntities, d: Display) =>
-			{
-				var e = uwpe.entity;
-				var entityLoc = e.locatable().loc;
-				var entityForward = entityLoc.orientation.forward;
-				var entityForwardInTurns = entityForward.headingInTurns();
-				var childNameToSelect;
-				if (entityForwardInTurns == null)
-				{
-					childNameToSelect = "FacingDownStanding";
-				}
-				else
-				{
-					var headingCount = 4;
-					var headingIndex =
-						Math.floor(entityForwardInTurns * headingCount); // todo
-					var entitySpeed = entityLoc.vel.magnitude();
-					var namesByHeading;
-					var speedMin = 0.2;
-					if (entitySpeed > speedMin)
-					{
-						namesByHeading = visualLegsWalkingNamesByHeading;
-					}
-					else
-					{
-						namesByHeading = visualLegsStandingNamesByHeading;
-					}
-					childNameToSelect = namesByHeading[headingIndex];
-				}
-				return [ childNameToSelect ];
-			},
+			selectChildNames
 		);
 
 		var returnValue = new VisualGroup

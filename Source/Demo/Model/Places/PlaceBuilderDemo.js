@@ -665,7 +665,7 @@ class PlaceBuilderDemo // Main.
         var cameraPos = viewSizeHalf.clone();
         var cameraLoc = new Disposition(cameraPos, Orientation.Instances().ForwardZDownY.clone(), null);
         var camera = new Camera(cameraViewSize, cameraHeightAbovePlayfield, // focalLength
-        cameraLoc, Camera.entitiesSortByRenderingOrderThenZThenY);
+        cameraLoc, (entities) => Camera.entitiesSortByRenderingOrderThenZThenY(entities));
         var cameraBoundable = new Boundable(camera.viewCollider);
         var cameraCollidable = Collidable.fromCollider(camera.viewCollider);
         var cameraConstrainable = new Constrainable([
@@ -862,7 +862,9 @@ class PlaceBuilderDemo // Main.
             var wallCollider = new Box(Coords.create(), wallSize);
             var wallObstacle = new Obstacle();
             var wallCollidable = new Collidable(false, // canCollideAgainWithoutSeparating
-            0, wallCollider, [Movable.name], wallObstacle.collide);
+            0, wallCollider, [
+                Movable.name
+            ], (uwpe) => wallObstacle.collide(uwpe));
             var wallVisual = VisualRectangle.fromSizeAndColorFill(wallSize, wallColor);
             var numberOfWallPartsOnSide = (isNeighborConnected ? 2 : 1);
             for (var d = 0; d < numberOfWallPartsOnSide; d++) {
@@ -1486,7 +1488,7 @@ class PlaceBuilderDemo // Main.
             Locatable.create(),
             Collidable.fromCollider(itemMeatCollider),
             Drawable.fromVisual(itemMeatVisual),
-            new Usable(itemMeatDefn.use)
+            new Usable((uwpe) => itemMeatDefn.use(uwpe))
         ]);
         return itemMeatEntityDefn;
     }
@@ -1496,11 +1498,11 @@ class PlaceBuilderDemo // Main.
         var itemMedicineVisual = this.itemDefnsByName.get(itemDefnMedicineName).visual;
         var itemMedicineCollider = new Sphere(Coords.create(), entityDimensionHalf);
         var itemMedicineEntityDefn = new Entity(itemDefnMedicineName, [
-            new Item(itemDefnMedicineName, 1),
-            Locatable.create(),
             Collidable.fromCollider(itemMedicineCollider),
             Drawable.fromVisual(itemMedicineVisual),
-            Equippable.default()
+            Equippable.default(),
+            new Item(itemDefnMedicineName, 1),
+            Locatable.create()
         ]);
         return itemMedicineEntityDefn;
     }
