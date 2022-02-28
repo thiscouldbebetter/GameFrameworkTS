@@ -252,7 +252,11 @@ export class Profile
 						(
 							saveStateImageSnapshot == null || saveStateImageSnapshot.isLoaded == false
 							? new VisualNone()
-							: new VisualImageImmediate(saveStateImageSnapshot, true) // isScaled
+							: new VisualImageScaled
+							(
+								visualThumbnailSize.clone(),
+								new VisualImageImmediate(saveStateImageSnapshot, true) // isScaled
+							)
 						);
 						return returnValue;
 					}

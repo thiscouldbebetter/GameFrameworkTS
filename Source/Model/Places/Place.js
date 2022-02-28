@@ -29,7 +29,7 @@ var ThisCouldBeBetter;
                 return world.defn.placeDefnByName(this.defnName);
             }
             placeParent(world) {
-                return (this.parentName == null ? null : world.placeByName(this.parentName));
+                return (this.parentName == null ? null : world.placeGetByName(this.parentName));
             }
             placesAncestors(world, placesInAncestry) {
                 var placeParent = this.placeParent(world);
@@ -179,7 +179,7 @@ var ThisCouldBeBetter;
                 }
             }
             // Loadable.
-            load(uwpe) {
+            load(uwpe, callback) {
                 if (this.isLoaded == false) {
                     var loadables = this.loadables();
                     uwpe.place = this;

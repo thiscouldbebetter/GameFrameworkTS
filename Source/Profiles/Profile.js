@@ -108,8 +108,8 @@ var ThisCouldBeBetter;
                             : saveState.imageSnapshot.load());
                         var returnValue = (saveStateImageSnapshot == null || saveStateImageSnapshot.isLoaded == false
                             ? new GameFramework.VisualNone()
-                            : new GameFramework.VisualImageImmediate(saveStateImageSnapshot, true) // isScaled
-                        );
+                            : new GameFramework.VisualImageScaled(visualThumbnailSize.clone(), new GameFramework.VisualImageImmediate(saveStateImageSnapshot, true) // isScaled
+                            ));
                         return returnValue;
                     }), GameFramework.Color.byName("White")),
                     new GameFramework.ControlLabel("labelPlaceName", GameFramework.Coords.fromXY(130, 80), // pos

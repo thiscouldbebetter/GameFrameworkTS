@@ -1,7 +1,10 @@
 "use strict";
 class WorldDemo extends World {
     constructor(name, dateCreated, defn, places) {
-        super(name, dateCreated, defn, places);
+        var placesByName = ArrayHelper.addLookupsByName(places);
+        var placeGetByName = (placeName) => placesByName.get(placeName);
+        var placeInitialName = places[0].name;
+        super(name, dateCreated, defn, placeGetByName, placeInitialName);
     }
     // static methods
     static create(universe) {

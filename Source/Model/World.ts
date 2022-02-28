@@ -6,8 +6,7 @@ export class World //
 	name: string;
 	dateCreated: DateTime;
 	defn: WorldDefn;
-	places: Place[];
-	placesByName: Map<string, Place>;
+	_placeGetByName: (placeName: string) => Place
 
 	dateSaved: DateTime;
 	timerTicksSoFar: number;
@@ -19,7 +18,8 @@ export class World //
 		name: string,
 		dateCreated: DateTime,
 		defn: WorldDefn,
-		places: Place[]
+		placeGetByName: (placeName: string) => Place,
+		placeInitialName: string
 	)
 	{
 		this.name = name;
@@ -29,22 +29,39 @@ export class World //
 
 		this.defn = defn;
 
-		this.places = places;
-		this.placesByName = ArrayHelper.addLookupsByName(this.places);
-		this.placeNext = this.places[0];
+		this._placeGetByName = placeGetByName;
+		this.placeNext = this.placeGetByName(placeInitialName);
 	}
 
 	static default(): World
 	{
-		return new World
+		return World.fromNameDateCreatedDefnAndPlaces
 		(
 			"name",
 			DateTime.now(),
 			WorldDefn.default(),
 			[
 				Place.default()
-			] // places
+			]
 		);
+	}
+
+	static fromNameDateCreatedDefnAndPlaces
+	(
+		name: string,
+		dateCreated: DateTime,
+		defn: WorldDefn,
+		places: Place[]
+	): World
+	{
+		var placesByName = ArrayHelper.addLookupsByName(places);
+		var placeGetByName = (placeName: string) => placesByName.get(placeName);
+		var placeInitialName = places[0].name;
+		var returnValue = new World
+		(
+			name, dateCreated, defn, placeGetByName, placeInitialName
+		);
+		return returnValue;
 	}
 
 	draw(universe: Universe): void
@@ -76,15 +93,9 @@ export class World //
 		}
 	}
 
-	placeAdd(place: Place): void
+	placeGetByName(placeName: string): Place
 	{
-		this.places.push(place);
-		this.placesByName.set(place.name, place);
-	}
-
-	placeByName(placeName: string): Place
-	{
-		return this.placesByName.get(placeName);
+		return this._placeGetByName(placeName);
 	}
 
 	timePlayingAsStringShort(universe: Universe): string
@@ -125,6 +136,24 @@ export class World //
 	toControl(universe: Universe): ControlBase
 	{
 		return this.placeCurrent.toControl(universe, this);
+	}
+
+	// Loadable.
+
+	isLoaded: boolean;
+
+	load
+	(
+		uwpe: UniverseWorldPlaceEntities,
+		callback: (result: Loadable) => void
+	): void
+	{
+		throw new Error("Should be implemented in subclass.")
+	}
+
+	unload(uwpe: UniverseWorldPlaceEntities): void
+	{
+		throw new Error("Should be implemented in subclass.");
 	}
 
 	// Serializable.

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Place implements Equatable<Place>
+export class Place implements Equatable<Place>, Loadable
 {
 	name: string;
 	defnName: string;
@@ -61,7 +61,7 @@ export class Place implements Equatable<Place>
 
 	placeParent(world: World): Place
 	{
-		return (this.parentName == null ? null : world.placeByName(this.parentName));
+		return (this.parentName == null ? null : world.placeGetByName(this.parentName));
 	}
 
 	placesAncestors(world: World, placesInAncestry: Place[]): Place[]
@@ -288,7 +288,11 @@ export class Place implements Equatable<Place>
 
 	// Loadable.
 
-	load(uwpe: UniverseWorldPlaceEntities): void
+	load
+	(
+		uwpe: UniverseWorldPlaceEntities,
+		callback: (placeLoaded: Loadable) => void
+	): void
 	{
 		if (this.isLoaded == false)
 		{

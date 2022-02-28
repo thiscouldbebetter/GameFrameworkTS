@@ -822,7 +822,9 @@ class PlaceBuilderDemo // Main.
                 var usable = ePortal.usable();
                 if (usable == null) {
                     var portal = ePortal.portal();
+                    uwpe.entitiesSwap(); // hack
                     portal.use(uwpe);
+                    uwpe.entitiesSwap();
                 }
             }
         };
