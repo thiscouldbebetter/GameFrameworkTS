@@ -12,6 +12,12 @@ var ThisCouldBeBetter;
             static byName(colorName) {
                 return Color.Instances()._AllByName.get(colorName);
             }
+            static create() {
+                return Color.fromRGB(0, 0, 0); // Black.
+            }
+            static default() {
+                return Color.create();
+            }
             static fromRGB(red, green, blue) {
                 return new Color(null, null, [red, green, blue, 1]);
             }
@@ -33,12 +39,25 @@ var ThisCouldBeBetter;
             add(other) {
                 return this.interpolateWith(other, .5);
             }
-            alpha(valueToSet) {
-                if (valueToSet != null) {
-                    this.componentsRGBA[3] = valueToSet;
-                    this._systemColor = null;
-                }
+            alpha() {
                 return this.componentsRGBA[3];
+            }
+            alphaSet(valueToSet) {
+                this.componentsRGBA[3] = valueToSet;
+                this._systemColor = null;
+                return this;
+            }
+            componentsRGB() {
+                return this.componentsRGBA.slice(0, 3);
+            }
+            isBlack() {
+                return (this.componentsRGB().some(x => x > 0) == false);
+            }
+            isTransparent() {
+                return (this.alpha() < 1);
+            }
+            isWhite() {
+                return (this.componentsRGB().some(x => x < 1) == false);
             }
             multiplyRGBScalar(scalar) {
                 for (var i = 0; i < 3; i++) {
@@ -58,6 +77,13 @@ var ThisCouldBeBetter;
                 }
                 return this._systemColor;
             }
+            value() {
+                // This is "value" as in how dark or light the color is.
+                var returnValue = (this.componentsRGBA[0]
+                    + this.componentsRGBA[1]
+                    + this.componentsRGBA[2]) / 3;
+                return returnValue;
+            }
             // Clonable.
             clone() {
                 return new Color(this.name, this.code, this.componentsRGBA.slice());
@@ -67,6 +93,13 @@ var ThisCouldBeBetter;
                 this.code = other.code;
                 GameFramework.ArrayHelper.overwriteWithNonClonables(this.componentsRGBA, other.componentsRGBA);
                 this._systemColor = null;
+                return this;
+            }
+            overwriteWithComponentsRGBA255(otherAsComponentsRGBA255) {
+                this.componentsRGBA[0] = otherAsComponentsRGBA255[0] / 255;
+                this.componentsRGBA[1] = otherAsComponentsRGBA255[1] / 255;
+                this.componentsRGBA[2] = otherAsComponentsRGBA255[2] / 255;
+                this.componentsRGBA[3] = otherAsComponentsRGBA255[3] / 255; // Alpha is integer <= 255 in this case.
                 return this;
             }
             // Interpolatable.

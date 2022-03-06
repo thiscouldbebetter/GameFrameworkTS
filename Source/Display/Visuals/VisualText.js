@@ -4,9 +4,10 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class VisualText {
-            constructor(text, heightInPixels, colorFill, colorBorder) {
+            constructor(text, fontNameAndHeight, colorFill, colorBorder) {
                 this._text = text;
-                this.heightInPixels = heightInPixels || 10;
+                this.fontNameAndHeight =
+                    fontNameAndHeight || GameFramework.FontNameAndHeight.default();
                 this.colorFill = colorFill;
                 this.colorBorder = colorBorder;
                 this._universeWorldPlaceEntities = GameFramework.UniverseWorldPlaceEntities.create();
@@ -28,7 +29,7 @@ var ThisCouldBeBetter;
                     this._text.contextSet(uwpe);
                 }
                 var text = this.text();
-                display.drawText(text, this.heightInPixels, entity.locatable().loc.pos, this.colorFill, this.colorBorder, true, // isCenteredHorizontally
+                display.drawText(text, this.fontNameAndHeight, entity.locatable().loc.pos, this.colorFill, this.colorBorder, true, // isCenteredHorizontally
                 true, // isCenteredVertically
                 null // sizeMaxInPixels
                 );

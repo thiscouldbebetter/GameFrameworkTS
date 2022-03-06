@@ -6,10 +6,17 @@ export class Drawable implements EntityProperty<Drawable>
 {
 	visual: VisualBase;
 	isVisible: boolean;
+	renderingOrder: number;
 
-	constructor(visual: VisualBase, isVisible: boolean)
+	constructor
+	(
+		visual: VisualBase,
+		renderingOrder: number,
+		isVisible: boolean
+	)
 	{
 		this.visual = visual;
+		this.renderingOrder = renderingOrder || 0;
 		this.isVisible = isVisible;
 		if (this.isVisible == null)
 		{
@@ -28,12 +35,20 @@ export class Drawable implements EntityProperty<Drawable>
 
 	static fromVisual(visual: VisualBase): Drawable
 	{
-		return new Drawable(visual, null);
+		return new Drawable(visual, null, null);
 	}
 
 	static fromVisualAndIsVisible(visual: VisualBase, isVisible: boolean): Drawable
 	{
-		return new Drawable(visual, isVisible);
+		return new Drawable(visual, null, isVisible);
+	}
+
+	static fromVisualAndRenderingOrder
+	(
+		visual: VisualBase, renderingOrder: number
+	): Drawable
+	{
+		return new Drawable(visual, renderingOrder, null);
 	}
 
 	hide(): void
@@ -60,7 +75,10 @@ export class Drawable implements EntityProperty<Drawable>
 
 	clone(): Drawable
 	{
-		return new Drawable(this.visual, this.isVisible);
+		return new Drawable
+		(
+			this.visual, this.renderingOrder, this.isVisible
+		);
 	}
 
 	overwriteWith(other: Drawable): Drawable

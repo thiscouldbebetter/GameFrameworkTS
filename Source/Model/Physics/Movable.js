@@ -4,45 +4,71 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Movable {
-            constructor(accelerationPerTick, speedMax, accelerate) {
-                this.accelerationPerTick = accelerationPerTick || .1;
-                this.speedMax = speedMax || 3;
-                this._accelerate = accelerate || this.accelerateForward;
+            constructor(accelerationPerTick, speedMax, canAccelerate) {
+                this._accelerationPerTick =
+                    accelerationPerTick == null
+                        ? (uwpe2) => .1
+                        : accelerationPerTick;
+                this._speedMax =
+                    (speedMax == null
+                        ? (uwpe2) => 3
+                        : speedMax);
+                this._canAccelerate = canAccelerate;
             }
             static default() {
                 return new Movable(null, null, null);
             }
             static fromAccelerationAndSpeedMax(accelerationPerTick, speedMax) {
-                return new Movable(accelerationPerTick, speedMax, null);
+                return new Movable((uwpe) => accelerationPerTick, (uwpe) => speedMax, null);
             }
             static fromSpeedMax(speedMax) {
-                return new Movable(speedMax, speedMax, null);
+                var speedMaxGet = (uwpe) => speedMax;
+                return new Movable(speedMaxGet, speedMaxGet, null);
             }
-            accelerate(uwpe) {
-                this._accelerate(uwpe, this.accelerationPerTick);
+            accelerationPerTick(uwpe) {
+                return this._accelerationPerTick(uwpe);
             }
             accelerateForward(uwpe) {
                 var entityMovable = uwpe.entity;
                 var entityLoc = entityMovable.locatable().loc;
-                entityLoc.accel.overwriteWith(entityLoc.orientation.forward).multiplyScalar(this.accelerationPerTick);
+                var forward = entityLoc.orientation.forward;
+                var accel = this.accelerationPerTick(uwpe);
+                entityLoc.accel.overwriteWith(forward).multiplyScalar(accel);
             }
-            accelerateInDirection(uwpe, directionToMove) {
+            accelerateForwardIfAble(uwpe) {
+                if (this.canAccelerate(uwpe)) {
+                    this.accelerateForward(uwpe);
+                }
+            }
+            accelerateInDirectionIfAble(uwpe, directionToMove) {
                 var entity = uwpe.entity;
                 var entityLoc = entity.locatable().loc;
-                var isEntityStandingOnGround = (entityLoc.pos.z >= 0 && entityLoc.vel.z >= 0);
-                if (isEntityStandingOnGround) {
+                var canAccelerate = this.canAccelerate(uwpe);
+                if (canAccelerate) {
                     entityLoc.orientation.forwardSet(directionToMove);
-                    entity.movable().accelerate(uwpe);
+                    entity.movable().accelerateForward(uwpe);
                 }
+            }
+            canAccelerate(uwpe) {
+                var returnValue = (this._canAccelerate == null
+                    ? true
+                    : this._canAccelerate(uwpe));
+                return returnValue;
+            }
+            speedMax(uwpe) {
+                return this._speedMax(uwpe);
+            }
+            toConstraint() {
+                return new GameFramework.Constraint_SpeedMaxXY(this.speedMax(null));
             }
             // Clonable.
             clone() {
-                return new Movable(this.accelerationPerTick, this.speedMax, this._accelerate);
+                return new Movable(this._accelerationPerTick, this._speedMax, this._canAccelerate);
             }
             overwriteWith(other) {
                 this.accelerationPerTick = other.accelerationPerTick;
                 this.speedMax = other.speedMax;
-                this._accelerate = other._accelerate;
+                this._canAccelerate = other._canAccelerate;
                 return this;
             }
             // EntityProperty.
@@ -57,7 +83,9 @@ var ThisCouldBeBetter;
                 // perform
                 (uwpe) => {
                     var actor = uwpe.entity;
-                    actor.movable().accelerateInDirection(uwpe, GameFramework.Coords.Instances().ZeroOneZero);
+                    var movable = actor.movable();
+                    var direction = GameFramework.Coords.Instances().ZeroOneZero;
+                    movable.accelerateInDirectionIfAble(uwpe, direction);
                 });
             }
             static actionAccelerateLeft() {
@@ -65,7 +93,9 @@ var ThisCouldBeBetter;
                 // perform
                 (uwpe) => {
                     var actor = uwpe.entity;
-                    actor.movable().accelerateInDirection(uwpe, GameFramework.Coords.Instances().MinusOneZeroZero);
+                    var movable = actor.movable();
+                    var direction = GameFramework.Coords.Instances().MinusOneZeroZero;
+                    movable.accelerateInDirectionIfAble(uwpe, direction);
                 });
             }
             static actionAccelerateRight() {
@@ -73,7 +103,9 @@ var ThisCouldBeBetter;
                 // perform
                 (uwpe) => {
                     var actor = uwpe.entity;
-                    actor.movable().accelerateInDirection(uwpe, GameFramework.Coords.Instances().OneZeroZero);
+                    var movable = actor.movable();
+                    var direction = GameFramework.Coords.Instances().OneZeroZero;
+                    movable.accelerateInDirectionIfAble(uwpe, direction);
                 });
             }
             static actionAccelerateUp() {
@@ -81,7 +113,9 @@ var ThisCouldBeBetter;
                 // perform
                 (uwpe) => {
                     var actor = uwpe.entity;
-                    actor.movable().accelerateInDirection(uwpe, GameFramework.Coords.Instances().ZeroMinusOneZero);
+                    var movable = actor.movable();
+                    var direction = GameFramework.Coords.Instances().ZeroMinusOneZero;
+                    movable.accelerateInDirectionIfAble(uwpe, direction);
                 });
             }
             // Activities.
@@ -101,8 +135,10 @@ var ThisCouldBeBetter;
                     var movable = entityActor.movable();
                     var actorLocatable = entityActor.locatable();
                     var targetLocatable = targetEntity.locatable();
-                    var distanceToTarget = actorLocatable.approachOtherWithAccelerationAndSpeedMax(targetLocatable, movable.accelerationPerTick, movable.speedMax);
-                    if (distanceToTarget < movable.speedMax) {
+                    var accelerationPerTick = movable.accelerationPerTick(uwpe);
+                    var speedMax = movable.speedMax(uwpe);
+                    var distanceToTarget = actorLocatable.approachOtherWithAccelerationAndSpeedMax(targetLocatable, accelerationPerTick, speedMax);
+                    if (distanceToTarget < speedMax) {
                         activity.targetEntityClear();
                     }
                 });

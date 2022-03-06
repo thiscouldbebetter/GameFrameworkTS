@@ -20,10 +20,10 @@ export class ControlLabel<TContext> extends ControlBase
 		isTextCenteredHorizontally: boolean,
 		isTextCenteredVertically: boolean,
 		text: DataBinding<TContext, string>,
-		fontHeightInPixels: number
+		fontNameAndHeight: FontNameAndHeight
 	)
 	{
-		super(name, pos, size, fontHeightInPixels);
+		super(name, pos, size, fontNameAndHeight);
 		this.isTextCenteredHorizontally = isTextCenteredHorizontally;
 		this.isTextCenteredVertically = isTextCenteredVertically;
 		this._text = text;
@@ -39,7 +39,8 @@ export class ControlLabel<TContext> extends ControlBase
 		text: DataBinding<TContext, string>
 	): ControlLabel<TContext>
 	{
-		var fontHeightInPixels = 10; // hack
+		var fontNameAndHeight = FontNameAndHeight.default();
+		var fontHeightInPixels = fontNameAndHeight.heightInPixels;
 		var size = Coords.fromXY(100, 1).multiplyScalar(fontHeightInPixels);
 
 		return new ControlLabel<TContext>
@@ -50,7 +51,7 @@ export class ControlLabel<TContext> extends ControlBase
 			false, // isTextCenteredHorizontally
 			false, // isTextCenteredVertically
 			text,
-			fontHeightInPixels
+			fontNameAndHeight
 		);
 	}
 
@@ -60,7 +61,8 @@ export class ControlLabel<TContext> extends ControlBase
 		textAsString: string
 	): ControlLabel<TContext>
 	{
-		var fontHeightInPixels = 10; // hack
+		var fontNameAndHeight = FontNameAndHeight.default();
+		var fontHeightInPixels = fontNameAndHeight.heightInPixels;
 		var size = Coords.fromXY(100, 1).multiplyScalar(fontHeightInPixels);
 		var text = DataBinding.fromGet((c: TContext) => textAsString);
 
@@ -72,14 +74,14 @@ export class ControlLabel<TContext> extends ControlBase
 			false, // isTextCenteredHorizontally
 			false, // isTextCenteredVertically
 			text,
-			fontHeightInPixels
+			fontNameAndHeight
 		);
 	}
 
 	static fromPosHeightAndText<TContext>
 	(
 		pos: Coords,
-		fontHeightInPixels: number,
+		fontNameAndHeight: FontNameAndHeight,
 		text: DataBinding<TContext, string>
 	): ControlLabel<TContext>
 	{
@@ -91,7 +93,7 @@ export class ControlLabel<TContext> extends ControlBase
 			false, // isTextCenteredHorizontally
 			false, // isTextCenteredVertically
 			text,
-			fontHeightInPixels
+			fontNameAndHeight
 		);
 	}
 
@@ -108,13 +110,6 @@ export class ControlLabel<TContext> extends ControlBase
 	mouseClick(pos: Coords): boolean
 	{
 		return false;
-	}
-
-	scalePosAndSize(scaleFactor: Coords): void
-	{
-		this.pos.multiply(scaleFactor);
-		this.size.multiply(scaleFactor);
-		this.fontHeightInPixels *= scaleFactor.y;
 	}
 
 	text(): string
@@ -141,7 +136,7 @@ export class ControlLabel<TContext> extends ControlBase
 			display.drawText
 			(
 				text,
-				this.fontHeightInPixels,
+				this.fontNameAndHeight,
 				drawPos,
 				style.colorBorder(),
 				style.colorFill(), // colorOutline

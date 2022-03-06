@@ -4,16 +4,16 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Display3D {
-            constructor(sizeInPixels, fontName, fontHeightInPixels, colorFore, colorBack) {
+            constructor(sizeInPixels, fontNameAndHeight, colorFore, colorBack) {
                 this.sizeInPixels = sizeInPixels;
                 this.sizesAvailable = [this.sizeInPixels];
-                this.fontName = fontName;
-                this.fontHeightInPixels = fontHeightInPixels;
+                this.fontNameAndHeight =
+                    fontNameAndHeight || GameFramework.FontNameAndHeight.default();
                 this.colorFore = colorFore;
                 this.colorBack = colorBack;
                 this._sizeDefault = sizeInPixels;
                 this._scaleFactor = GameFramework.Coords.ones();
-                this._display2DOverlay = new GameFramework.Display2D(this.sizesAvailable, fontName, fontHeightInPixels, colorFore, colorBack, null);
+                this._display2DOverlay = new GameFramework.Display2D(this.sizesAvailable, fontNameAndHeight, colorFore, colorBack, null);
             }
             // methods
             cameraSet(camera) {
@@ -33,6 +33,9 @@ var ThisCouldBeBetter;
                 gl.viewport(0, 0, viewportDimensionsAsIntegers[2], viewportDimensionsAsIntegers[3]);
                 gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
                 this._display2DOverlay.clear();
+            }
+            colorAtPos(pos, colorOut) {
+                throw new Error("Not yet implemented!");
             }
             displayToUse() {
                 return this;
@@ -232,8 +235,8 @@ var ThisCouldBeBetter;
             drawRectangleWithRoundedCorners(pos, size, colorFill, colorBorder, cornerRadius) {
                 this._display2DOverlay.drawRectangleWithRoundedCorners(pos, size, colorFill, colorBorder, cornerRadius);
             }
-            drawText(text, fontHeightInPixels, pos, colorFill, colorOutline, isCenteredHorizontally, isCenteredVertically, sizeMaxInPixels) {
-                this._display2DOverlay.drawText(text, fontHeightInPixels, pos, colorFill, colorOutline, isCenteredHorizontally, isCenteredVertically, sizeMaxInPixels);
+            drawText(text, fontNameAndHeight, pos, colorFill, colorOutline, isCenteredHorizontally, isCenteredVertically, sizeMaxInPixels) {
+                this._display2DOverlay.drawText(text, fontNameAndHeight, pos, colorFill, colorOutline, isCenteredHorizontally, isCenteredVertically, sizeMaxInPixels);
             }
             drawWedge(center, radius, angleStartInTurns, angleStopInTurns, colorFill, colorBorder) {
                 this._display2DOverlay.drawWedge(center, radius, angleStartInTurns, angleStopInTurns, colorFill, colorBorder);
@@ -241,8 +244,8 @@ var ThisCouldBeBetter;
             eraseModeSet(value) {
                 this._display2DOverlay.eraseModeSet(value);
             }
-            fontSet(fontName, fontHeightInPixels) {
-                this._display2DOverlay.fontSet(fontName, fontHeightInPixels);
+            fontSet(fontNameAndHeight) {
+                this._display2DOverlay.fontSet(fontNameAndHeight);
             }
             flush() { }
             hide() { }
@@ -265,7 +268,7 @@ var ThisCouldBeBetter;
             textWidthForFontHeight(textToMeasure, fontHeightInPixels) {
                 return this._display2DOverlay.textWidthForFontHeight(textToMeasure, fontHeightInPixels);
             }
-            toImage() {
+            toImage(name) {
                 return null;
             }
             // platformable

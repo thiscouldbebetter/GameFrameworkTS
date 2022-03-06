@@ -17,16 +17,14 @@ class GameDemo {
             // Wrap.
             new Coords(200, 150, 1),
         ];
-        var display = new Display2D(displaySizesAvailable, "Font", // fontName
-        10, // fontHeightInPixels
-        Color.byName("Gray"), Color.byName("White"), // colorFore, colorBack
+        var display = new Display2D(displaySizesAvailable, new FontNameAndHeight("Font", 10), Color.byName("Gray"), Color.byName("White"), // colorFore, colorBack
         null);
         var timerHelper = new TimerHelper(20);
         var controlBuilder = ControlBuilder.fromStyles([
             ControlStyle.Instances().Rounded,
             ControlStyle.Instances().Dark
         ]);
-        var universe = Universe.create("Game Framework Demo Game", "0.0.0-20220122", // version
+        var universe = Universe.create("Game Framework Demo Game", "0.0.0-20220227", // version
         timerHelper, display, mediaLibrary, controlBuilder, WorldCreator.fromWorldCreate(WorldDemo.create));
         universe.initialize(() => universe.start());
     }
@@ -34,14 +32,15 @@ class GameDemo {
         var contentDirectoryPath = this.contentDirectoryPath;
         var fontDirectoryPath = contentDirectoryPath + "Fonts/";
         var imageDirectoryPath = contentDirectoryPath + "Images/";
+        var imageTitlesDirectoryPath = imageDirectoryPath + "Titles/";
         var soundEffectDirectoryPath = contentDirectoryPath + "Audio/Effects/";
         var soundMusicDirectoryPath = contentDirectoryPath + "Audio/Music/";
         var textStringDirectoryPath = contentDirectoryPath + "Text/";
         var videoDirectoryPath = contentDirectoryPath + "Video/";
         var mediaFilePaths = [
-            imageDirectoryPath + "Opening.png",
-            imageDirectoryPath + "Producer.png",
-            imageDirectoryPath + "Title.png",
+            imageTitlesDirectoryPath + "Opening.png",
+            imageTitlesDirectoryPath + "Producer.png",
+            imageTitlesDirectoryPath + "Title.png",
             imageDirectoryPath + "Anvil.svg",
             imageDirectoryPath + "Car.png",
             imageDirectoryPath + "Friendly.png",

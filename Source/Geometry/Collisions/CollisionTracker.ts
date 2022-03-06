@@ -6,28 +6,14 @@ export class CollisionTracker implements EntityProperty<CollisionTracker>
 {
 	collisionMap: MapOfCells<CollisionTrackerMapCell>;
 
-	private _cells: CollisionTrackerMapCell[];
+	_cells: CollisionTrackerMapCell[];
 
 	constructor(size: Coords, collisionMapSizeInCells: Coords)
 	{
-		collisionMapSizeInCells =
-			collisionMapSizeInCells || Coords.fromXY(1, 1).multiplyScalar(4);
+		this.collisionMap =
+			new CollisionTrackerMap(size, collisionMapSizeInCells);
 
-		var collisionMapCellSize = size.clone().divide(collisionMapSizeInCells);
-
-		this._cells = new Array<CollisionTrackerMapCell>();
-
-		this.collisionMap = new MapOfCells
-		(
-			CollisionTracker.name,
-			collisionMapSizeInCells,
-			collisionMapCellSize,
-			new MapOfCellsCellSourceArray<CollisionTrackerMapCell>
-			(
-				this._cells,
-				() => new CollisionTrackerMapCell()
-			) // cellSource
-		);
+		this._cells = [];
 	}
 
 	static fromSize(size: Coords): CollisionTracker
@@ -46,7 +32,7 @@ export class CollisionTracker implements EntityProperty<CollisionTracker>
 		var entityCollidable = entity.collidable();
 
 		var entityBounds = entityBoundable.bounds as Box;
-		var cellsToAddEntityTo = this.collisionMap.cellsInBoxAddToList
+		var cellsToAddEntityTo = this.collisionMap.cellsInBox
 		(
 			entityBounds, ArrayHelper.clear(this._cells)
 		);
@@ -122,6 +108,29 @@ export class CollisionTracker implements EntityProperty<CollisionTracker>
 	// Equatable
 
 	equals(other: CollisionTracker): boolean { return false; } // todo
+}
+
+export class CollisionTrackerMap extends MapOfCells<CollisionTrackerMapCell>
+{
+	constructor(size: Coords, sizeInCells: Coords)
+	{
+		sizeInCells =
+			sizeInCells || Coords.fromXY(1, 1).multiplyScalar(4);
+
+		var cellSize = size.clone().divide(sizeInCells);
+
+		super
+		(
+			CollisionTrackerMap.name,
+			sizeInCells,
+			cellSize,
+			new MapOfCellsCellSourceArray<CollisionTrackerMapCell>
+			(
+				[], // cells
+				() => new CollisionTrackerMapCell()
+			) // cellSource
+		);
+	}
 }
 
 export class CollisionTrackerMapCell

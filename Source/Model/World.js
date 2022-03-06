@@ -5,20 +5,25 @@ var ThisCouldBeBetter;
     (function (GameFramework) {
         class World //
          {
-            constructor(name, dateCreated, defn, places) {
+            constructor(name, dateCreated, defn, placeGetByName, placeInitialName) {
                 this.name = name;
                 this.dateCreated = dateCreated;
                 this.timerTicksSoFar = 0;
                 this.defn = defn;
-                this.places = places;
-                this.placesByName = GameFramework.ArrayHelper.addLookupsByName(this.places);
-                this.placeNext = this.places[0];
+                this._placeGetByName = placeGetByName;
+                this.placeNext = this.placeGetByName(placeInitialName);
             }
             static default() {
-                return new World("name", GameFramework.DateTime.now(), GameFramework.WorldDefn.default(), [
+                return World.fromNameDateCreatedDefnAndPlaces("name", GameFramework.DateTime.now(), GameFramework.WorldDefn.default(), [
                     GameFramework.Place.default()
-                ] // places
-                );
+                ]);
+            }
+            static fromNameDateCreatedDefnAndPlaces(name, dateCreated, defn, places) {
+                var placesByName = GameFramework.ArrayHelper.addLookupsByName(places);
+                var placeGetByName = (placeName) => placesByName.get(placeName);
+                var placeInitialName = places[0].name;
+                var returnValue = new World(name, dateCreated, defn, placeGetByName, placeInitialName);
+                return returnValue;
             }
             draw(universe) {
                 if (this.placeCurrent != null) {
@@ -39,12 +44,8 @@ var ThisCouldBeBetter;
                     this.placeCurrent.initialize(uwpe);
                 }
             }
-            placeAdd(place) {
-                this.places.push(place);
-                this.placesByName.set(place.name, place);
-            }
-            placeByName(placeName) {
-                return this.placesByName.get(placeName);
+            placeGetByName(placeName) {
+                return this._placeGetByName(placeName);
             }
             timePlayingAsStringShort(universe) {
                 return universe.timerHelper.ticksToStringH_M_S(this.timerTicksSoFar);
@@ -72,6 +73,23 @@ var ThisCouldBeBetter;
             // Controls.
             toControl(universe) {
                 return this.placeCurrent.toControl(universe, this);
+            }
+            load(uwpe, callback) {
+                throw new Error("Should be implemented in subclass.");
+            }
+            unload(uwpe) {
+                throw new Error("Should be implemented in subclass.");
+            }
+            // Serializable.
+            fromStringJson(worldAsStringJson, universe) {
+                var serializer = universe.serializer;
+                var returnValue = serializer.deserialize(worldAsStringJson);
+                return returnValue;
+            }
+            toStringJson(universe) {
+                var serializer = universe.serializer;
+                var returnValue = serializer.serialize(this, false); // pretty-print
+                return returnValue;
             }
         }
         GameFramework.World = World;

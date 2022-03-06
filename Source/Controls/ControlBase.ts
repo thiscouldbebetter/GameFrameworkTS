@@ -4,7 +4,7 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class ControlBase
 {
-	fontHeightInPixels: number;
+	fontNameAndHeight: FontNameAndHeight
 	name: string;
 	parent: ControlBase;
 	pos: Coords;
@@ -15,12 +15,19 @@ export class ControlBase
 
 	isHighlighted: boolean;
 
-	constructor(name: string, pos: Coords, size: Coords, fontHeightInPixels: number)
+	constructor
+	(
+		name: string,
+		pos: Coords,
+		size: Coords,
+		fontNameAndHeight: FontNameAndHeight
+	)
 	{
 		this.name = name;
 		this.pos = pos;
 		this.size = size;
-		this.fontHeightInPixels = fontHeightInPixels;
+		this.fontNameAndHeight =
+			fontNameAndHeight == null ? null : fontNameAndHeight.clone(); // hack
 
 		this._isVisible = true;
 		this.styleName = null;
@@ -40,7 +47,16 @@ export class ControlBase
 	mouseEnter(): void { this.isHighlighted = true; }
 	mouseExit(): void { this.isHighlighted = false; }
 	mouseMove(x: Coords): boolean { return false; }
-	scalePosAndSize(x: Coords): void {}
+	scalePosAndSize(scaleFactors: Coords): ControlBase
+	{
+		this.pos.multiply(scaleFactors);
+		this.size.multiply(scaleFactors);
+		if (this.fontNameAndHeight != null)
+		{
+			this.fontNameAndHeight.heightInPixels *= scaleFactors.y;
+		}
+		return this;
+	}
 	style(universe: Universe)
 	{
 		var returnValue =

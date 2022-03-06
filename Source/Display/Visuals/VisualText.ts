@@ -7,20 +7,21 @@ export class VisualText implements Visual<VisualText>
 	_text: DataBinding<any, string>;
 	colorFill: Color;
 	colorBorder: Color;
-	heightInPixels: number;
+	fontNameAndHeight: FontNameAndHeight;
 
 	_universeWorldPlaceEntities: UniverseWorldPlaceEntities;
 
 	constructor
 	(
 		text: DataBinding<any, string>,
-		heightInPixels: number,
+		fontNameAndHeight: FontNameAndHeight,
 		colorFill: Color,
 		colorBorder: Color
 	)
 	{
 		this._text = text;
-		this.heightInPixels = heightInPixels || 10;
+		this.fontNameAndHeight =
+			fontNameAndHeight || FontNameAndHeight.default();
 		this.colorFill = colorFill;
 		this.colorBorder = colorBorder;
 
@@ -75,7 +76,7 @@ export class VisualText implements Visual<VisualText>
 		display.drawText
 		(
 			text,
-			this.heightInPixels,
+			this.fontNameAndHeight,
 			entity.locatable().loc.pos,
 			this.colorFill,
 			this.colorBorder,

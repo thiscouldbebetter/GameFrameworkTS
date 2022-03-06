@@ -18,7 +18,91 @@ export class WorldDefn
 	placeDefnsByName: Map<string, PlaceDefn>;
 	skillsByName: Map<string, Skill>;
 
-	constructor
+	constructor(defnArrays: unknown[][])
+	{
+		for (var i = 0; i < defnArrays.length; i++)
+		{
+			var defns = defnArrays[i];
+			if (defns.length > 0)
+			{
+				var defn0 = defns[0];
+				var defnTypeName = defn0.constructor.name;
+
+				var notDefined = "undefined";
+				if
+				(
+					typeof(Action) != notDefined
+					&& defnTypeName == Action.name
+				)
+				{
+					this.actions = defns as Array<Action>;
+					this.actionsByName =
+						ArrayHelper.addLookupsByName(this.actions);
+				}
+				else if
+				(
+					typeof(ActivityDefn) != notDefined
+					&& defnTypeName == ActivityDefn.name
+				)
+				{
+					this.activityDefns = defns as Array<ActivityDefn>;
+					this.activityDefnsByName =
+						ArrayHelper.addLookupsByName(this.activityDefns);
+				}
+				else if
+				(
+					typeof(Entity) != notDefined
+					&& defnTypeName == Entity.name
+				)
+				{
+					this.entityDefns = defns as Array<Entity>;
+					this.entityDefnsByName =
+						ArrayHelper.addLookupsByName(this.entityDefns);
+				}
+				else if
+				(
+					typeof(ItemDefn) != notDefined
+					&& defnTypeName == ItemDefn.name
+				)
+				{
+					this.itemDefns = defns as Array<ItemDefn>;
+					this.itemDefnsByName =
+						ArrayHelper.addLookupsByName(this.itemDefns);
+				}
+				else if
+				(
+					typeof(PlaceDefn) != notDefined
+					&& defnTypeName == PlaceDefn.name
+				)
+				{
+					this.placeDefns = defns as Array<PlaceDefn>;
+					this.placeDefnsByName =
+						ArrayHelper.addLookupsByName(this.placeDefns);
+				}
+				else if
+				(
+					typeof(Skill) != notDefined
+					&& defnTypeName == Skill.name
+				)
+				{
+					this.skills = defns as Array<Skill>;
+					this.skillsByName =
+						ArrayHelper.addLookupsByName(this.skills);
+				}
+				else
+				{
+					throw new Error("Unrecognized defn type: " + defnTypeName);
+				}
+			}
+		}
+	}
+
+	static default(): WorldDefn
+	{
+		return new WorldDefn([]);
+	}
+
+	static from6 // ActionActivityEntityItemyPlaceAndSkillDefns
 	(
 		actions: Action[],
 		activityDefns: ActivityDefn[],
@@ -26,31 +110,22 @@ export class WorldDefn
 		itemDefns: ItemDefn[],
 		placeDefns: PlaceDefn[],
 		skills: Skill[]
-	)
+	): WorldDefn
 	{
-		this.actions = actions || [];
-		this.activityDefns = activityDefns || [];
-		this.entityDefns = entityDefns || [];
-		this.itemDefns = itemDefns || [];
-		this.placeDefns = placeDefns || [];
-		this.skills = skills || [];
-
-		this.actionsByName = ArrayHelper.addLookupsByName(this.actions);
-		this.activityDefnsByName = ArrayHelper.addLookupsByName(this.activityDefns);
-		this.entityDefnsByName = ArrayHelper.addLookupsByName(this.entityDefns);
-		this.itemDefnsByName = ArrayHelper.addLookupsByName(this.itemDefns);
-		this.placeDefnsByName = ArrayHelper.addLookupsByName(this.placeDefns);
-		this.skillsByName = ArrayHelper.addLookupsByName(this.skills);
-	}
-
-	static default(): WorldDefn
-	{
-		return new WorldDefn(null, null, null, null, null, null);
+		return new WorldDefn
+		([
+			actions,
+			activityDefns,
+			entityDefns,
+			itemDefns,
+			placeDefns,
+			skills
+		]);
 	}
 
 	static fromPlaceDefns(placeDefns: PlaceDefn[]): WorldDefn
 	{
-		return new WorldDefn([], [], [], [], placeDefns, []);
+		return new WorldDefn([ placeDefns ]);
 	}
 
 	// Convenience methods.

@@ -52,7 +52,20 @@ var ThisCouldBeBetter;
                         objectIndexToNodeLookup[objectIndex] = this;
                         this.t = typeId;
                         if (typeName == Function.name) {
-                            this.o = objectWrapped.toString();
+                            var functionText = objectWrapped.toString();
+                            if (functionText.startsWith(Function.name) == false
+                                && functionText.indexOf("=>") == -1) {
+                                // This sometimes happens when passing class methods
+                                // as lambdas instead of using 'big-arrow' syntax.
+                                console.log("Modifying lambda text for serialization.");
+                                var firstIndexOfOpenParenthesis = functionText.indexOf("(");
+                                var firstIndexOfCloseParenthesis = functionText.indexOf(")");
+                                var functionName = functionText.substr(0, firstIndexOfOpenParenthesis);
+                                var functionParametersLength = firstIndexOfCloseParenthesis - firstIndexOfOpenParenthesis + 1;
+                                var functionParameters = functionText.substr(firstIndexOfOpenParenthesis, functionParametersLength);
+                                functionText = functionParameters + " => " + functionName + functionParameters;
+                            }
+                            this.o = functionText;
                         }
                         else {
                             var children = {}; // new Map<string, any>();
@@ -68,23 +81,34 @@ var ThisCouldBeBetter;
                                 objectWrapped = objectWrappedAsObject;
                             }
                             for (var propertyName in objectWrapped) {
-                                if (objectWrapped.__proto__[propertyName] == null) {
-                                    var propertyValue = objectWrapped[propertyName];
-                                    if (propertyValue == null) {
-                                        child = null;
-                                    }
-                                    else {
-                                        var propertyValueTypeName = propertyValue.constructor.name;
-                                        if (propertyValueTypeName == Boolean.name
-                                            || propertyValueTypeName == Number.name
-                                            || propertyValueTypeName == String.name) {
-                                            child = propertyValue;
+                                var property = null;
+                                try {
+                                    var objectWrappedPrototype = Object.getPrototypeOf(objectWrapped);
+                                    property = objectWrappedPrototype[propertyName];
+                                    if (property == null) {
+                                        var propertyValue = objectWrapped[propertyName];
+                                        if (propertyValue == null) {
+                                            child = null;
                                         }
                                         else {
-                                            child = new SerializerNode(propertyValue);
+                                            var propertyValueTypeName = propertyValue.constructor.name;
+                                            if (propertyValueTypeName == Boolean.name
+                                                || propertyValueTypeName == Number.name
+                                                || propertyValueTypeName == String.name) {
+                                                child = propertyValue;
+                                            }
+                                            else {
+                                                child = new SerializerNode(propertyValue);
+                                            }
                                         }
+                                        children[propertyName] = child;
                                     }
-                                    children[propertyName] = child;
+                                }
+                                catch (ex) {
+                                    // This usually happens on attempting to serialize a DOM element.
+                                    var errorMessage = "Error accessing property '" + propertyName
+                                        + "' on type '" + typeName + "'.  Ignoring.";
+                                    console.log(errorMessage);
                                 }
                             }
                             delete this.o;
@@ -134,7 +158,15 @@ var ThisCouldBeBetter;
                         this.o = [];
                     }
                     else if (typeName == Function.name) {
-                        this.o = eval("(" + this.o + ")");
+                        try {
+                            this.o = eval("(" + this.o + ")");
+                        }
+                        catch (ex) {
+                            // This sometimes happens when passing class methods
+                            // as lambdas instead of using 'big-arrow' syntax.
+                            console.log("An error occurred while deserializing a function.");
+                            throw ex;
+                        }
                     }
                     else if (typeName == Map.name) {
                         this.o = new Map();

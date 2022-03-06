@@ -514,6 +514,10 @@ export class ConversationRun
 	): ControlBase
 	{
 		var fontHeightShort = fontHeight * .75; // todo
+		var fontNameAndHeight =
+			FontNameAndHeight.fromHeightInPixels(fontHeight);
+		var fontNameAndHeightShort =
+			FontNameAndHeight.fromHeightInPixels(fontHeightShort);
 
 		var conversationRun = this;
 		var conversationDefn = conversationRun.defn;
@@ -541,7 +545,7 @@ export class ConversationRun
 		{
 			visualPortrait = new VisualImageScaled
 			(
-				(visualPortrait as VisualImage), portraitSize
+				portraitSize, (visualPortrait as VisualImage)
 			);
 		}
 
@@ -553,7 +557,7 @@ export class ConversationRun
 				portraitPos,
 				portraitSize,
 				"Next",
-				fontHeight,
+				fontNameAndHeight,
 				true, // hasBorder
 				DataBinding.fromTrue(), // isEnabled
 				next // click
@@ -582,7 +586,7 @@ export class ConversationRun
 					(c: ConversationRun) =>
 						c.scopeCurrent.displayTextCurrent()
 				),
-				fontHeight
+				fontNameAndHeight
 			),
 
 			new ControlLabel
@@ -597,7 +601,7 @@ export class ConversationRun
 				false, // isTextCenteredHorizontally
 				false, // isTextCenteredVertically
 				DataBinding.fromContext("Response:"),
-				fontHeight
+				fontNameAndHeight
 			),
 
 			ControlList.from10
@@ -617,7 +621,7 @@ export class ConversationRun
 				(
 					(c: TalkNode) => c.content
 				),
-				fontHeightShort,
+				fontNameAndHeightShort,
 				new DataBinding
 				(
 					conversationRun,
@@ -670,7 +674,7 @@ export class ConversationRun
 				),
 				buttonSize.clone(),
 				"Next",
-				fontHeight,
+				fontNameAndHeight,
 				true, // hasBorder
 				DataBinding.fromTrue(), // isEnabled
 				next // click
@@ -686,7 +690,7 @@ export class ConversationRun
 				),
 				buttonSize.clone(),
 				"Log",
-				fontHeight,
+				fontNameAndHeight,
 				true, // hasBorder
 				DataBinding.fromTrue(), // isEnabled
 				viewLog // click
@@ -726,7 +730,7 @@ export class ConversationRun
 					),
 					buttonSize.clone(),
 					"Leave",
-					fontHeight,
+					fontNameAndHeight,
 					true, // hasBorder
 					DataBinding.fromTrue(), // isEnabled
 					back // click
@@ -788,6 +792,8 @@ export class ConversationRun
 		venueToReturnTo = universe.venueCurrent;
 		var fontHeight = 20;
 		var fontHeightShort = fontHeight * .6;
+		var fontNameAndHeight = FontNameAndHeight.fromHeightInPixels(fontHeight);
+		var fontNameAndHeightShort = FontNameAndHeight.fromHeightInPixels(fontHeightShort);
 		var marginWidth = 25;
 		var labelHeight = fontHeight;
 		var buttonHeight = 25;
@@ -816,7 +822,7 @@ export class ConversationRun
 					true, // isTextCenteredHorizontally
 					false, // isTextCenteredVertically
 					DataBinding.fromContext("Transcript"),
-					fontHeight
+					fontNameAndHeight
 				),
 
 				ControlButton.from8
@@ -825,7 +831,7 @@ export class ConversationRun
 					marginSize, // pos
 					Coords.fromXY(1, 1).multiplyScalar(buttonHeight), // size
 					"<",
-					fontHeight,
+					fontNameAndHeight,
 					true, // hasBorder
 					DataBinding.fromTrue(), // isEnabled
 					() => // click
@@ -853,7 +859,7 @@ export class ConversationRun
 					(
 						(c: TalkNode) => c.textForTranscript(conversationRun)
 					), // bindingForItemText
-					fontHeightShort
+					fontNameAndHeightShort
 				),
 			]
 		);

@@ -93,7 +93,8 @@ class PlaceBuilderDemo_Items
 		var itemArmor = new ItemDefn
 		(
 			itemArmorName, null, null, 50, 30, null, [ "Armor" ],
-			this.itemUseEquip, itemArmorVisual, null
+			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
+			itemArmorVisual, null
 		);
 
 		return itemArmor;
@@ -125,11 +126,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension),
 					VisualText.fromTextHeightAndColor
 					(
 						itemArmorName, this.entityDimension, itemArmorColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension)
+					)
 				)
 			);
 		}
@@ -137,7 +138,8 @@ class PlaceBuilderDemo_Items
 		var itemArmor = new ItemDefn
 		(
 			itemArmorName, null, null, 50, 30, null, [ "Armor" ],
-			this.itemUseEquip, itemArmorVisual, null
+			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
+			itemArmorVisual, null
 		);
 
 		return itemArmor;
@@ -197,11 +199,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension * 1.5),
 					VisualText.fromTextHeightAndColor
 					(
 						itemArrowName,  this.entityDimension, itemArrowColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension * 1.5)
+					)
 				)
 			);
 		}
@@ -223,12 +225,12 @@ class PlaceBuilderDemo_Items
 			// fuse
 			new VisualOffset
 			(
+				Coords.fromXY(0, -1).multiplyScalar(this.entityDimensionHalf),
 				VisualRectangle.fromSizeAndColorFill
 				(
 					new Coords(.2, 1, 1).multiplyScalar(this.entityDimensionHalf),
 					Color.byName("Tan")
-				),
-				Coords.fromXY(0, -1).multiplyScalar(this.entityDimensionHalf)
+				)
 			),
 			// body
 			VisualCircle.fromRadiusAndColorFill
@@ -238,11 +240,11 @@ class PlaceBuilderDemo_Items
 			// highlight
 			new VisualOffset
 			(
+				Coords.fromXY(-this.entityDimensionHalf / 3, -this.entityDimensionHalf / 3),
 				VisualCircle.fromRadiusAndColorFill
 				(
 					this.entityDimensionHalf * .3, Color.byName("Blue")
-				),
-				Coords.fromXY(-this.entityDimensionHalf / 3, -this.entityDimensionHalf / 3)
+				)
 			)
 		]);
 
@@ -252,11 +254,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension * 2),
 					VisualText.fromTextHeightAndColor
 					(
 						itemBombName,  this.entityDimension, itemBombColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension * 2)
+					)
 				)
 			);
 		}
@@ -264,7 +266,8 @@ class PlaceBuilderDemo_Items
 		var itemBomb = new ItemDefn
 		(
 			itemBombName, null, null, 5, 10, null, [ "Wieldable" ],
-			this.itemUseEquip, itemBombVisual, null
+			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
+			itemBombVisual, null
 		);
 
 		return itemBomb;
@@ -283,12 +286,12 @@ class PlaceBuilderDemo_Items
 			),
 			new VisualOffset
 			(
+				Coords.fromXY(.4, 0).multiplyScalar(this.entityDimension),
 				VisualRectangle.fromSizeAndColorFill
 				(
 					Coords.fromXY(.1, 1.1).multiplyScalar(this.entityDimension),
 					Color.byName("White")
-				),
-				Coords.fromXY(.4, 0).multiplyScalar(this.entityDimension)
+				)
 			)
 		]);
 
@@ -298,11 +301,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension * 1.5),
 					VisualText.fromTextHeightAndColor
 					(
 						itemBookName, this.entityDimension, itemBookColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension * 1.5)
+					)
 				)
 			);
 		}
@@ -320,13 +323,14 @@ class PlaceBuilderDemo_Items
 				+ " all men are created equal. ";
 			var size = universe.display.sizeInPixels.clone();
 			var fontHeight = 10;
+			var fontNameAndHeight = FontNameAndHeight.fromHeightInPixels(fontHeight);
 			var textarea = new ControlTextarea
 			(
 				"textareaContents",
 				size.clone().half().half(),
 				size.clone().half(),
 				DataBinding.fromContext(text),
-				fontHeight,
+				fontNameAndHeight,
 				DataBinding.fromFalseWithContext(text) // isEnabled
 			);
 			var button = new ControlButton
@@ -335,7 +339,7 @@ class PlaceBuilderDemo_Items
 				Coords.fromXY(size.x / 4, 3 * size.y / 4 + fontHeight),
 				Coords.fromXY(size.x / 2, fontHeight * 2),
 				"Done",
-				fontHeight,
+				fontNameAndHeight,
 				true, // hasBorder
 				DataBinding.fromTrue(), // isEnabled
 				back, // click
@@ -411,11 +415,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension * 2),
 					VisualText.fromTextHeightAndColor
 					(
 						itemBowName,  this.entityDimension, itemBowColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension * 2)
+					)
 				)
 			);
 		}
@@ -423,7 +427,8 @@ class PlaceBuilderDemo_Items
 		var itemBow = new ItemDefn
 		(
 			itemBowName, null, null, 5, 100, null, [ "Wieldable" ],
-			this.itemUseEquip, itemBowVisual, null
+			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
+			itemBowVisual, null
 		);
 
 		return itemBow;
@@ -460,14 +465,14 @@ class PlaceBuilderDemo_Items
 
 			new VisualOffset
 			(
-				itemBreadVisualCut,
-				Coords.fromXY(-this.entityDimensionHalf * 0.75, 0)
+				Coords.fromXY(-this.entityDimensionHalf * 0.75, 0),
+				itemBreadVisualCut
 			),
 
 			new VisualOffset
 			(
-				itemBreadVisualCut,
-				Coords.fromXY(this.entityDimensionHalf * 0.75, 0)
+				Coords.fromXY(this.entityDimensionHalf * 0.75, 0),
+				itemBreadVisualCut
 			)
 		]);
 
@@ -477,11 +482,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension * 1.5),
 					VisualText.fromTextHeightAndColor
 					(
 						itemBreadName,  this.entityDimension, itemBreadColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension * 1.5)
+					)
 				)
 			);
 		}
@@ -529,11 +534,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension),
 					VisualText.fromTextHeightAndColor
 					(
 						itemCoinName, this.entityDimension, itemCoinColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension)
+					)
 				)
 			);
 		}
@@ -595,11 +600,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension),
 					VisualText.fromTextHeightAndColor
 					(
 						itemCrystalName, this.entityDimension, itemCrystalColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension)
+					)
 				)
 			);
 		}
@@ -634,11 +639,15 @@ class PlaceBuilderDemo_Items
 			)
 		]);
 
+		/*
+		// This causes tainted canvas errors on deserialization.
 		var itemDoughnutVisual = new VisualBuffered
 		(
 			Coords.fromXY(1, 1).multiplyScalar(this.entityDimension * 1.2),
 			itemDoughnutVisualBody
 		)
+		*/
+		var itemDoughnutVisual = itemDoughnutVisualBody;
 
 		if (this.parent.visualsHaveText)
 		{
@@ -646,11 +655,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension * 2),
 					VisualText.fromTextHeightAndColor
 					(
 						itemDoughnutName, this.entityDimension, itemDoughnutColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension * 2)
+					)
 				)
 			);
 		}
@@ -683,6 +692,7 @@ class PlaceBuilderDemo_Items
 		([
 			new VisualOffset
 			(
+				Coords.fromXY(.5, 1.75).multiplyScalar(this.entityDimensionHalf),
 				new VisualArc
 				(
 					this.entityDimensionHalf * 2, // radiusOuter
@@ -691,8 +701,7 @@ class PlaceBuilderDemo_Items
 					.25, // angleSpannedInTurns
 					Color.byName("GreenDark"),
 					null
-				),
-				Coords.fromXY(.5, 1.75).multiplyScalar(this.entityDimensionHalf)
+				)
 			),
 			VisualPolygon.fromPathAndColors
 			(
@@ -724,11 +733,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimensionHalf * 2),
 					VisualText.fromTextHeightAndColor
 					(
 						itemFlowerName, this.entityDimension, colorFlower
-					),
-					Coords.fromXY(0, 0 - this.entityDimensionHalf * 2)
+					)
 				)
 			);
 		}
@@ -753,11 +762,11 @@ class PlaceBuilderDemo_Items
 			),
 			new VisualOffset
 			(
+				Coords.fromXY(-this.entityDimensionHalf / 2, -this.entityDimensionHalf / 2),
 				VisualCircle.fromRadiusAndColorFill
 				(
 					this.entityDimensionHalf * .25, Color.byName("White")
-				),
-				Coords.fromXY(-this.entityDimensionHalf / 2, -this.entityDimensionHalf / 2)
+				)
 			)
 		]);
 
@@ -767,11 +776,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension),
 					VisualText.fromTextHeightAndColor
 					(
 						itemFruitName, this.entityDimension, itemFruitColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension)
+					)
 				)
 			);
 		}
@@ -815,8 +824,8 @@ class PlaceBuilderDemo_Items
 			*/
 			new VisualImageScaled
 			(
-				new VisualImageFromLibrary("Grass"),
-				Coords.fromXY(1, 1).multiplyScalar(this.entityDimension * 2) // sizeScaled
+				Coords.fromXY(1, 1).multiplyScalar(this.entityDimension * 2), // sizeScaled
+				new VisualImageFromLibrary("Grass")
 			),
 		]);
 
@@ -826,11 +835,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimensionHalf * 3),
 					VisualText.fromTextHeightAndColor
 					(
 						itemGrassName, this.entityDimension, Color.byName("GreenDark")
-					),
-					Coords.fromXY(0, 0 - this.entityDimensionHalf * 3)
+					)
 				)
 			);
 		}
@@ -852,6 +861,7 @@ class PlaceBuilderDemo_Items
 		([
 			new VisualOffset
 			(
+				Coords.fromXY(-entityDimensionQuarter, 0),
 				new VisualArc
 				(
 					entityDimensionQuarter, // radiusOuter
@@ -860,12 +870,12 @@ class PlaceBuilderDemo_Items
 					.5, // angleSpannedInTurns
 					itemHeartColor,
 					null
-				),
-				Coords.fromXY(-entityDimensionQuarter, 0)
+				)
 			),
 
 			new VisualOffset
 			(
+				Coords.fromXY(entityDimensionQuarter, 0),
 				new VisualArc
 				(
 					entityDimensionQuarter, // radiusOuter
@@ -874,8 +884,7 @@ class PlaceBuilderDemo_Items
 					.5, // angleSpannedInTurns
 					itemHeartColor,
 					null
-				),
-				Coords.fromXY(entityDimensionQuarter, 0)
+				)
 			),
 
 			VisualPolygon.fromPathAndColorFill
@@ -899,18 +908,19 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension * 1.5),
 					VisualText.fromTextHeightAndColor
 					(
 						itemHeartName, this.entityDimension, itemHeartColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension * 1.5)
+					)
 				)
 			);
 		}
 
 		var itemHeartVisualShifted = new VisualOffset
 		(
-			itemHeartVisual, Coords.fromXY(0, -entityDimensionQuarter)
+			Coords.fromXY(0, -entityDimensionQuarter),
+			itemHeartVisual
 		);
 
 		var itemHeart = ItemDefn.fromNameMassValueAndVisual
@@ -949,13 +959,13 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension),
 					VisualText.fromTextHeightAndColor
 					(
 						itemIronName,
 						this.entityDimension,
 						itemIronColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension)
+					)
 				)
 			);
 		}
@@ -991,13 +1001,13 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension * 1.5),
 					VisualText.fromTextHeightAndColor
 					(
 						itemIronOreName,
 						this.entityDimension, 
 						itemIronOreColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension * 1.5)
+					)
 				)
 			);
 		}
@@ -1027,6 +1037,7 @@ class PlaceBuilderDemo_Items
 			),
 			new VisualOffset
 			(
+				Coords.fromXY(this.entityDimensionHalf, 0),
 				new VisualPolars
 				(
 					[
@@ -1035,8 +1046,7 @@ class PlaceBuilderDemo_Items
 					],
 					itemKeyColor,
 					this.entityDimensionHalf / 2 // lineThickness
-				),
-				Coords.fromXY(this.entityDimensionHalf, 0)
+				)
 			),
 		]);
 
@@ -1046,11 +1056,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension * 2),
 					VisualText.fromTextHeightAndColor
 					(
 						itemKeyName, this.entityDimension, itemKeyColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension * 2)
+					)
 				)
 			);
 		}
@@ -1071,11 +1081,11 @@ class PlaceBuilderDemo_Items
 		([
 			new VisualOffset
 			(
+				Coords.fromXY(this.entityDimension, 0),
 				VisualCircle.fromRadiusAndColorFill
 				(
 					this.entityDimensionHalf, itemLogColor
-				),
-				Coords.fromXY(this.entityDimension, 0)
+				)
 			),
 			VisualRectangle.fromSizeAndColorFill
 			(
@@ -1084,11 +1094,11 @@ class PlaceBuilderDemo_Items
 			),
 			new VisualOffset
 			(
+				Coords.fromXY(-this.entityDimension, 0),
 				VisualCircle.fromRadiusAndColorFill
 				(
 					this.entityDimensionHalf, Color.byName("Tan")
-				),
-				Coords.fromXY(-this.entityDimension, 0)
+				)
 			)
 		]);
 
@@ -1098,11 +1108,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension),
 					VisualText.fromTextHeightAndColor
 					(
 						itemLogName, this.entityDimension, itemLogColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension)
+					)
 				)
 			);
 		}
@@ -1131,13 +1141,13 @@ class PlaceBuilderDemo_Items
 			),
 			new VisualOffset
 			(
+				Coords.fromXY(this.entityDimensionHalf * .2, 0),
 				new VisualCircle
 				(
 					this.entityDimensionHalf * .2,
 					Color.byName("Pink"),
 					Color.byName("White"), null // ?
-				),
-				Coords.fromXY(this.entityDimensionHalf * .2, 0)
+				)
 			)
 		]);
 
@@ -1147,11 +1157,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension * 1.5),
 					VisualText.fromTextHeightAndColor
 					(
 						itemMeatName, this.entityDimension, itemMeatColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension * 1.5)
+					)
 				)
 			);
 		}
@@ -1248,6 +1258,7 @@ class PlaceBuilderDemo_Items
 		([
 			new VisualOffset
 			(
+				Coords.fromXY(0, -this.entityDimensionHalf / 2),
 				new VisualArc
 				(
 					this.entityDimensionHalf, // radiusOuter
@@ -1256,17 +1267,16 @@ class PlaceBuilderDemo_Items
 					.5, // angleSpannedInTurns
 					colorCap,
 					null
-				),
-				Coords.fromXY(0, -this.entityDimensionHalf / 2)
+				)
 			),
 			new VisualOffset
 			(
+				Coords.zeroes(),
 				VisualRectangle.fromSizeAndColorFill
 				(
 					Coords.fromXY(this.entityDimensionHalf / 2, this.entityDimensionHalf),
 					colorStem
-				),
-				Coords.create()
+				)
 			)
 		]);
 
@@ -1291,12 +1301,12 @@ class PlaceBuilderDemo_Items
 		([
 			new VisualOffset
 			(
+				Coords.fromXY(0, 0 - this.entityDimension / 2),
 				VisualRectangle.fromSizeAndColorFill
 				(
 					Coords.fromXY(this.entityDimension / 4, this.entityDimension),
 					Color.byName("Brown")
-				),
-				Coords.fromXY(0, 0 - this.entityDimension / 2)
+				)
 			),
 			VisualPolygon.fromPathAndColorFill
 			(
@@ -1320,11 +1330,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension * 2),
 					VisualText.fromTextHeightAndColor
 					(
 						itemPickName,  this.entityDimension, itemPickColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension * 2)
+					)
 				)
 			);
 		}
@@ -1332,7 +1342,8 @@ class PlaceBuilderDemo_Items
 		var itemPick = new ItemDefn
 		(
 			itemPickName, null, null, 1, 30, null, [ "Wieldable" ],
-			this.itemUseEquip, itemPickVisual, null
+			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
+			itemPickVisual, null
 		);
 
 		return itemPick;
@@ -1381,11 +1392,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension),
 					VisualText.fromTextHeightAndColor
 					(
 						itemPotionName, this.entityDimension, itemPotionColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension)
+					)
 				)
 			);
 		}
@@ -1420,12 +1431,12 @@ class PlaceBuilderDemo_Items
 		([
 			new VisualOffset
 			(
+				Coords.fromXY(0, 0 + this.entityDimension / 2),
 				VisualRectangle.fromSizeAndColorFill
 				(
 					Coords.fromXY(this.entityDimension / 4, this.entityDimension),
 					Color.byName("Brown")
-				),
-				Coords.fromXY(0, 0 + this.entityDimension / 2)
+				)
 			),
 			VisualPolygon.fromPathAndColorFill
 			(
@@ -1452,7 +1463,8 @@ class PlaceBuilderDemo_Items
 		var itemShovel = new ItemDefn
 		(
 			itemShovelName, null, null, 1, 30, null, [ "Wieldable" ],
-			this.itemUseEquip, itemShovelVisual, null
+			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
+			itemShovelVisual, null
 		);
 
 		return itemShovel;
@@ -1503,11 +1515,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension * 2),
 					VisualText.fromTextHeightAndColor
 					(
 						itemSpeedBootsName,  this.entityDimension, itemAccessoryColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension * 2)
+					)
 				)
 			);
 		}
@@ -1515,7 +1527,8 @@ class PlaceBuilderDemo_Items
 		var itemSpeedBoots = new ItemDefn
 		(
 			itemSpeedBootsName, null, null, 10, 30, null, [ "Accessory" ],
-			this.itemUseEquip, itemSpeedBootsVisual, null
+			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
+			itemSpeedBootsVisual, null
 		);
 
 		return itemSpeedBoots;
@@ -1527,7 +1540,8 @@ class PlaceBuilderDemo_Items
 		var itemSword = new ItemDefn
 		(
 			"Sword", null, null, 10, 100, null, [ "Wieldable" ],
-			this.itemUseEquip, itemSwordVisual, null
+			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
+			itemSwordVisual, null
 		);
 		return itemSword;
 	}
@@ -1597,11 +1611,11 @@ class PlaceBuilderDemo_Items
 			(
 				new VisualOffset
 				(
+					Coords.fromXY(0, 0 - this.entityDimension * 2),
 					VisualText.fromTextHeightAndColor
 					(
 						"Sword",  this.entityDimension, bladeColor
-					),
-					Coords.fromXY(0, 0 - this.entityDimension * 2)
+					)
 				)
 			);
 		}
@@ -1617,7 +1631,9 @@ class PlaceBuilderDemo_Items
 		var itemSword = new ItemDefn
 		(
 			"Sword" + damageTypeName, null, null, 10, 100, null,
-			[ "Wieldable" ], this.itemUseEquip, itemSwordVisual, null
+			[ "Wieldable" ],
+			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
+			itemSwordVisual, null
 		);
 		return itemSword;
 	}
@@ -1630,7 +1646,10 @@ class PlaceBuilderDemo_Items
 		var itemSword = new ItemDefn
 		(
 			"Sword" + damageTypeName, null, null, 10, 100, null,
-			[ "Wieldable" ], this.itemUseEquip, itemSwordVisual, null
+			[ "Wieldable" ],
+			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
+			itemSwordVisual,
+			null
 		);
 		return itemSword;
 	}
@@ -1643,12 +1662,12 @@ class PlaceBuilderDemo_Items
 		([
 			new VisualOffset
 			(
+				Coords.fromXY(0, this.entityDimension / 2),
 				VisualRectangle.fromSizeAndColorFill
 				(
 					Coords.fromXY(this.entityDimension / 4, this.entityDimension),
 					Color.byName("Brown")
-				),
-				Coords.fromXY(0, this.entityDimension / 2)
+				)
 			),
 			VisualRectangle.fromSizeAndColorFill
 			(
@@ -1702,20 +1721,20 @@ class PlaceBuilderDemo_Items
 		([
 			new VisualOffset
 			(
-				itemTorchVisualBody,
-				Coords.create()
+				Coords.create(),
+				itemTorchVisualBody
 			),
 
 			new VisualOffset
 			(
-				itemTorchVisualHead,
-				Coords.fromXY(0, 0 - this.entityDimension * .75)
+				Coords.fromXY(0, 0 - this.entityDimension * .75),
+				itemTorchVisualHead
 			),
 
 			new VisualOffset
 			(
-				itemTorchVisualFlame,
-				Coords.fromXY(0, 0 - this.entityDimension * .7)
+				Coords.fromXY(0, 0 - this.entityDimension * .7),
+				itemTorchVisualFlame
 			)
 		]);
 
@@ -1760,6 +1779,7 @@ class PlaceBuilderDemo_Items
 		([
 			new VisualOffset
 			(
+				Coords.fromXY(0, -1).multiplyScalar(this.entityDimensionHalf),
 				new VisualArc
 				(
 					this.entityDimensionHalf, // radiusOuter
@@ -1768,8 +1788,7 @@ class PlaceBuilderDemo_Items
 					.5, // angleSpannedInTurns
 					itemWeightColor,
 					null
-				),
-				Coords.fromXY(0, -1).multiplyScalar(this.entityDimensionHalf)
+				)
 			),
 			VisualPolygon.fromPathAndColorFill
 			(

@@ -6,15 +6,15 @@ var ThisCouldBeBetter;
         class UserInputListener extends GameFramework.Entity {
             constructor() {
                 super(UserInputListener.name, [
-                    GameFramework.Actor.fromActivityDefnName(UserInputListener.activityDefnHandleUserInputBuild().name),
+                    GameFramework.Actor.fromActivityDefnName(UserInputListener.activityDefn().name),
                     GameFramework.Drawable.fromVisual(UserInputListener.visualBuild()),
                     GameFramework.Selector.fromCursorDimension(20)
                 ]);
             }
-            static activityDefnHandleUserInputBuild() {
-                return new GameFramework.ActivityDefn("HandleUserInput", UserInputListener.activityDefnHandleUserInputPerform);
+            static activityDefn() {
+                return new GameFramework.ActivityDefn("HandleUserInput", UserInputListener.activityDefnPerform);
             }
-            static activityDefnHandleUserInputPerform(uwpe) {
+            static activityDefnPerform(uwpe) {
                 var universe = uwpe.universe;
                 var world = uwpe.world;
                 var place = uwpe.place;

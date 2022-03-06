@@ -20,6 +20,9 @@ var ThisCouldBeBetter;
             static create() {
                 return new Disposition(GameFramework.Coords.create(), GameFramework.Orientation.default(), null);
             }
+            static default() {
+                return Disposition.create();
+            }
             static from2(pos, orientation) {
                 return new Disposition(pos, orientation, null);
             }
@@ -44,7 +47,7 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             place(world) {
-                return world.placeByName(this.placeName);
+                return world.placeGetByName(this.placeName);
             }
             velSet(value) {
                 this.vel.overwriteWith(value);

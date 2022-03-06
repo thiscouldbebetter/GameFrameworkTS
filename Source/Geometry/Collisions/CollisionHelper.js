@@ -15,6 +15,7 @@ var ThisCouldBeBetter;
                 this._collision = GameFramework.Collision.create();
                 this._displacement = GameFramework.Coords.create();
                 this._edge = GameFramework.Edge.create();
+                this._mapCells = [];
                 this._polar = GameFramework.Polar.create();
                 this._pos = GameFramework.Coords.create();
                 this._range = GameFramework.RangeExtent.create();
@@ -31,6 +32,7 @@ var ThisCouldBeBetter;
                 var boxName = (typeof GameFramework.Box == notDefined ? null : GameFramework.Box.name);
                 var boxRotatedName = (typeof GameFramework.BoxRotated == notDefined ? null : GameFramework.BoxRotated.name);
                 var mapLocatedName = (typeof GameFramework.MapLocated == notDefined ? null : GameFramework.MapLocated.name);
+                var mapLocated2Name = (typeof GameFramework.MapLocated2 == notDefined ? null : GameFramework.MapLocated2.name);
                 var meshName = (typeof GameFramework.Mesh == notDefined ? null : GameFramework.Mesh.name);
                 var shapeGroupAllName = (typeof GameFramework.ShapeGroupAll == notDefined ? null : GameFramework.ShapeGroupAll.name);
                 var shapeInverseName = (typeof GameFramework.ShapeInverse == notDefined ? null : GameFramework.ShapeInverse.name);
@@ -40,6 +42,7 @@ var ThisCouldBeBetter;
                         [boxName, this.collisionOfBoxAndBox],
                         [boxRotatedName, this.collisionOfBoxAndBoxRotated],
                         [mapLocatedName, this.collisionOfBoxAndMapLocated],
+                        [mapLocated2Name, this.collisionOfBoxAndMapLocated],
                         [meshName, this.collisionOfBoxAndMesh],
                         [shapeGroupAllName, this.collisionOfShapeAndShapeGroupAll],
                         [shapeInverseName, this.collisionOfShapeAndShapeInverse],
@@ -296,13 +299,30 @@ var ThisCouldBeBetter;
                 var vel0InvertedNormalized = this._vel.overwriteWith(vel0).invert().normalize();
                 var vel1InvertedNormalized = this._vel2.overwriteWith(vel1).invert().normalize();
                 var distanceBackedUpSoFar = 0;
-                while (this.doEntitiesCollide(entity0, entity1) && distanceBackedUpSoFar < speedMax) {
+                while (this.doEntitiesCollide(entity0, entity1)
+                    && distanceBackedUpSoFar < speedMax) {
                     distanceBackedUpSoFar++;
                     pos0.add(vel0InvertedNormalized);
                     pos1.add(vel1InvertedNormalized);
                     collidable0.colliderLocateForEntity(entity0);
                     collidable1.colliderLocateForEntity(entity1);
                 }
+            }
+            collideEntitiesBackUpDistance(entity0, entity1, distanceToBackUp) {
+                var collidable0 = entity0.collidable();
+                var collidable1 = entity1.collidable();
+                var entity0Loc = entity0.locatable().loc;
+                var entity1Loc = entity1.locatable().loc;
+                var pos0 = entity0Loc.pos;
+                var pos1 = entity1Loc.pos;
+                var vel0 = entity0Loc.vel;
+                var vel1 = entity1Loc.vel;
+                var displacement0 = this._vel.overwriteWith(vel0).invert().normalize().multiplyScalar(distanceToBackUp);
+                var displacement1 = this._vel2.overwriteWith(vel1).invert().normalize().multiplyScalar(distanceToBackUp);
+                pos0.add(displacement0);
+                pos1.add(displacement1);
+                collidable0.colliderLocateForEntity(entity0);
+                collidable1.colliderLocateForEntity(entity1);
             }
             collideEntitiesBlock(entity0, entity1) {
                 // todo - Needs separation as well.
@@ -751,8 +771,17 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             doBoxAndMapLocatedCollide(box, mapLocated) {
-                // todo
                 return this.doBoxAndBoxCollide(box, mapLocated.box);
+            }
+            doBoxAndMapLocated2Collide(box, mapLocated) {
+                var doCollide = this.doBoxAndBoxCollide(box, mapLocated.box);
+                if (doCollide) {
+                    doCollide = false;
+                    var cellsInBox = mapLocated.cellsInBox(box, GameFramework.ArrayHelper.clear(this._mapCells));
+                    var areAnyCellsInBoxBlocking = cellsInBox.some(x => x.isBlocking);
+                    doCollide = areAnyCellsInBoxBlocking;
+                }
+                return doCollide;
             }
             doBoxAndMeshCollide(box, mesh) {
                 // todo
@@ -928,6 +957,9 @@ var ThisCouldBeBetter;
             }
             doMapLocatedAndBoxCollide(mapLocated, box) {
                 return this.doBoxAndMapLocatedCollide(box, mapLocated);
+            }
+            doMapLocated2AndBoxCollide(mapLocated, box) {
+                return this.doBoxAndMapLocated2Collide(box, mapLocated);
             }
             doMapLocatedAndBoxRotatedCollide(mapLocated, boxRotated) {
                 return this.doBoxRotatedAndMapLocatedCollide(boxRotated, mapLocated);

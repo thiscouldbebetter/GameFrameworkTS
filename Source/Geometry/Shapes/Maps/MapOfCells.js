@@ -19,8 +19,18 @@ var ThisCouldBeBetter;
                 this._posInCellsMax = GameFramework.Coords.create();
                 this._posInCellsMin = GameFramework.Coords.create();
             }
+            static default() {
+                var cells = new Array();
+                var cellCreate = () => new MapCellGeneric("todo");
+                var cellSource = new MapOfCellsCellSourceArray(cells, cellCreate);
+                return new MapOfCells(MapOfCells.name, GameFramework.Coords.fromXY(3, 3), // sizeInCells
+                GameFramework.Coords.fromXY(10, 10), // cellSize
+                cellSource);
+            }
             static fromNameSizeInCellsAndCellSize(name, sizeInCells, cellSize) {
-                return new MapOfCells(name, sizeInCells, cellSize, null);
+                var cells = new Array();
+                var cellSource = new MapOfCellsCellSourceArray(cells, () => null);
+                return new MapOfCells(name, sizeInCells, cellSize, cellSource);
             }
             cellAtPos(pos) {
                 this._posInCells.overwriteWith(pos).divide(this.cellSize).floor();
@@ -35,7 +45,7 @@ var ThisCouldBeBetter;
             cellsCount() {
                 return this.sizeInCells.x * this.sizeInCells.y;
             }
-            cellsInBoxAddToList(box, cellsInBox) {
+            cellsInBox(box, cellsInBox) {
                 GameFramework.ArrayHelper.clear(cellsInBox);
                 var minPosInCells = this._posInCellsMin.overwriteWith(box.min()).divide(this.cellSize).floor().trimToRangeMax(this.sizeInCellsMinusOnes);
                 var maxPosInCells = this._posInCellsMax.overwriteWith(box.max()).divide(this.cellSize).floor().trimToRangeMax(this.sizeInCellsMinusOnes);
@@ -75,6 +85,18 @@ var ThisCouldBeBetter;
             }
         }
         GameFramework.MapOfCells = MapOfCells;
+        class MapCellGeneric {
+            constructor(value) {
+                this.value = value;
+            }
+            clone() {
+                return this;
+            }
+            overwriteWith(other) {
+                return this;
+            }
+        }
+        GameFramework.MapCellGeneric = MapCellGeneric;
         class MapOfCellsCellSourceArray {
             constructor(cells, cellCreate) {
                 this.cells = cells;
@@ -97,5 +119,64 @@ var ThisCouldBeBetter;
             }
         }
         GameFramework.MapOfCellsCellSourceArray = MapOfCellsCellSourceArray;
+        class MapOfCellsCellSourceDisplay {
+            constructor(display, cellCreate, cellOverwriteFromColor) {
+                this.displaySizeInPixels = display.sizeInPixels;
+                this.displayPixelsAsComponentArrayRGBA =
+                    display.toComponentArrayRGBA();
+                this._cellCreate = cellCreate;
+                this._cellOverwriteFromColor = cellOverwriteFromColor;
+                this._color = GameFramework.Color.default();
+                this._componentsPerPixel = 4;
+            }
+            cellAtPosInCells(map, posInCells, cellToOverwrite) {
+                var color = this.colorAtPos(posInCells, this._color);
+                this._cellOverwriteFromColor(cellToOverwrite, color);
+                return cellToOverwrite;
+            }
+            cellCreate() {
+                return this._cellCreate();
+            }
+            clone() {
+                return this; // todo
+            }
+            colorAtPos(pos, colorOut) {
+                var pixelIndexStart = (pos.y * this.displaySizeInPixels.x + pos.x)
+                    * this._componentsPerPixel;
+                var pixelAsComponents = this.displayPixelsAsComponentArrayRGBA.slice(pixelIndexStart, pixelIndexStart + this._componentsPerPixel);
+                colorOut.overwriteWithComponentsRGBA255(pixelAsComponents);
+                return colorOut;
+            }
+            overwriteWith(other) {
+                return this; // todo
+            }
+        }
+        GameFramework.MapOfCellsCellSourceDisplay = MapOfCellsCellSourceDisplay;
+        class MapOfCellsCellSourceImage {
+            constructor(cellsAsImage, cellCreate, cellSetFromColor) {
+                this.cellsAsDisplay = GameFramework.Display2D.fromImage(cellsAsImage);
+                this._cellCreate = cellCreate;
+                this._cellSetFromColor = cellSetFromColor;
+                this._pixelColor = GameFramework.Color.create();
+            }
+            cellAtPosInCells(map, posInCells, cellToOverwrite) {
+                var pixelColor = this.cellsAsDisplay.colorAtPos(posInCells, this._pixelColor);
+                this.cellSetFromColor(cellToOverwrite, pixelColor);
+                return cellToOverwrite;
+            }
+            cellCreate() {
+                return this._cellCreate();
+            }
+            cellSetFromColor(cell, color) {
+                return this._cellSetFromColor(cell, color);
+            }
+            clone() {
+                return this; // todo
+            }
+            overwriteWith(other) {
+                return this; // todo
+            }
+        }
+        GameFramework.MapOfCellsCellSourceImage = MapOfCellsCellSourceImage;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
 })(ThisCouldBeBetter || (ThisCouldBeBetter = {}));

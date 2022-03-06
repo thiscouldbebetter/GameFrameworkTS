@@ -6,13 +6,13 @@ export interface Display
 {
 	colorBack: Color;
 	colorFore: Color;
-	fontHeightInPixels: number;
-	fontName: string;
+	fontNameAndHeight: FontNameAndHeight;
 	sizeInPixels: Coords;
 	sizeInPixelsHalf: Coords;
 	sizesAvailable: Coords[];
 
 	clear(): void;
+	colorAtPos(pos: Coords, colorOut: Color): Color;
 	displayToUse() : Display;
 	drawArc
 	(
@@ -83,19 +83,23 @@ export interface Display
 	): void;
 	drawText
 	(
-		text: string, fontHeightInPixels: number, pos: Coords,
-		colorFill: Color, colorOutline: Color,
+		text: string,
+		fontNameAndHeight: FontNameAndHeight,
+		pos: Coords,
+		colorFill: Color,
+		colorOutline: Color,
 		isCenteredHorizontally: boolean,
 		isCenteredVertically: boolean,
 		sizeMaxInPixels: Coords
 	): void;
+
 	drawWedge
 	(
 		center: Coords, radius: number, angleStartInTurns: number,
 		angleStopInTurns: number, colorFill: Color, colorBorder: Color
 	): void;
 	eraseModeSet(value: boolean): void;
-	fontSet(fontName: string, fontHeightInPixels: number): void;
+	fontSet(fontNameAndHeight: FontNameAndHeight): void;
 	flush(): void;
 	hide(universe: Universe): void;
 	initialize(universe: Universe): Display;
@@ -111,7 +115,7 @@ export interface Display
 	(
 		textToMeasure: string, fontHeightInPixels: number
 	): number;
-	toImage(): Image2;
+	toImage(name: string): Image2;
 	toDomElement(): HTMLElement;
 }
 

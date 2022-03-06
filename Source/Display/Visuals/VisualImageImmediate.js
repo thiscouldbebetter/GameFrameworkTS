@@ -10,6 +10,9 @@ var ThisCouldBeBetter;
                 // Helper variables.
                 this._drawPos = GameFramework.Coords.create();
             }
+            static fromImage(image) {
+                return new VisualImageImmediate(image, null);
+            }
             // instance methods
             image(universe) {
                 return this._image;

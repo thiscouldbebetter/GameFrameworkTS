@@ -21,7 +21,7 @@ export class Face implements ShapeBase
 		{
 			this._box = new Box(Coords.create(), Coords.create());
 		}
-		this._box.ofPoints(this.vertices);
+		this._box.containPoints(this.vertices);
 		return this._box;
 	}
 
@@ -151,7 +151,7 @@ export class Face implements ShapeBase
 
 	toBox(boxOut: Box): Box
 	{
-		return boxOut.ofPoints(this.vertices);
+		return boxOut.containPoints(this.vertices);
 	}
 
 	// Transformable.

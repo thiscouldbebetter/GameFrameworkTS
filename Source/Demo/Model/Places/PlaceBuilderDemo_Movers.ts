@@ -27,10 +27,10 @@ class PlaceBuilderDemo_Movers
 		(
 			visualEyes, // visualForNoDirection
 			[
-				new VisualOffset(visualEyes, Coords.fromXY(1, 0).multiplyScalar(visualEyeRadius)),
-				new VisualOffset(visualEyes, Coords.fromXY(0, 1).multiplyScalar(visualEyeRadius)),
-				new VisualOffset(visualEyes, Coords.fromXY(-1, 0).multiplyScalar(visualEyeRadius)),
-				new VisualOffset(visualEyes, Coords.fromXY(0, -1).multiplyScalar(visualEyeRadius))
+				new VisualOffset(Coords.fromXY(1, 0).multiplyScalar(visualEyeRadius), visualEyes),
+				new VisualOffset(Coords.fromXY(0, 1).multiplyScalar(visualEyeRadius), visualEyes),
+				new VisualOffset(Coords.fromXY(-1, 0).multiplyScalar(visualEyeRadius), visualEyes),
+				new VisualOffset(Coords.fromXY(0, -1).multiplyScalar(visualEyeRadius), visualEyes)
 			],
 			null
 		);
@@ -61,8 +61,8 @@ class PlaceBuilderDemo_Movers
 			),
 			new VisualOffset
 			(
-				visualEyesDirectional,
-				Coords.create()
+				Coords.zeroes(),
+				visualEyesDirectional
 			),
 		]);
 
@@ -536,8 +536,8 @@ class PlaceBuilderDemo_Movers
 			(
 				offset => new VisualOffset
 				(
-					visualEyesBlinkingWithBrows,
-					offset.multiplyScalar(visualEyeRadius)
+					offset.multiplyScalar(visualEyeRadius),
+					visualEyesBlinkingWithBrows
 				)
 			),
 			null
@@ -555,14 +555,14 @@ class PlaceBuilderDemo_Movers
 
 		var visualStatusInfo = new VisualOffset
 		(
+			Coords.fromXY(0, 0 - this.entityDimension * 2), // offset
 			new VisualStack
 			(
 				Coords.fromXY(0, 0 - this.entityDimension), // childSpacing
 				[
 					visualEffect
 				]
-			),
-			Coords.fromXY(0, 0 - this.entityDimension * 2) // offset
+			)
 		);
 
 		var visualBody = new VisualAnchor
@@ -585,11 +585,11 @@ class PlaceBuilderDemo_Movers
 				([
 					new VisualOffset
 					(
-						enemyVisualArm, Coords.fromXY(-enemyDimension / 4, 0)
+						Coords.fromXY(-enemyDimension / 4, 0), enemyVisualArm
 					),
 					new VisualOffset
 					(
-						enemyVisualArm, Coords.fromXY(enemyDimension / 4, 0)
+						Coords.fromXY(enemyDimension / 4, 0), enemyVisualArm
 					)
 				])
 			],
@@ -674,10 +674,10 @@ class PlaceBuilderDemo_Movers
 				Drawable.fromVisual(
 					VisualCircle.fromRadiusAndColorFill(2, Color.byName("Red"))
 				),
-				new Ephemeral(32, null),
-				new Killable(1, null, null),
+				Ephemeral.fromTicksToLive(32),
+				Killable.fromIntegrityMax(1),
 				Locatable.create(),
-				new Movable(3, 3, null)
+				Movable.fromSpeedMax(3)
 			]
 		);
 		var weapon = new Weapon
@@ -763,12 +763,13 @@ class PlaceBuilderDemo_Movers
 
 			new VisualOffset
 			(
-				visualEyesBlinking,
-				new Coords(0, -friendlyDimension / 3, 0)
+				new Coords(0, -friendlyDimension / 3, 0),
+				visualEyesBlinking
 			),
 
 			new VisualOffset
 			(
+				new Coords(0, friendlyDimension / 3, 0), // offset
 				new VisualArc
 				(
 					friendlyDimension / 2, // radiusOuter
@@ -777,8 +778,7 @@ class PlaceBuilderDemo_Movers
 					.5, // angleSpannedInTurns
 					Color.byName("White"),
 					null // todo
-				),
-				new Coords(0, friendlyDimension / 3, 0) // offset
+				)
 			)
 		]);
 
@@ -930,10 +930,10 @@ class PlaceBuilderDemo_Movers
 		(
 			visualEyes, // visualForNoDirection
 			[
-				new VisualOffset(visualEyes, Coords.fromXY(1, 0).multiplyScalar(visualEyeRadius)),
-				new VisualOffset(visualEyes, Coords.fromXY(0, 1).multiplyScalar(visualEyeRadius)),
-				new VisualOffset(visualEyes, Coords.fromXY(-1, 0).multiplyScalar(visualEyeRadius)),
-				new VisualOffset(visualEyes, Coords.fromXY(0, -1).multiplyScalar(visualEyeRadius))
+				new VisualOffset(Coords.fromXY(1, 0).multiplyScalar(visualEyeRadius), visualEyes),
+				new VisualOffset(Coords.fromXY(0, 1).multiplyScalar(visualEyeRadius), visualEyes), 
+				new VisualOffset(Coords.fromXY(-1, 0).multiplyScalar(visualEyeRadius), visualEyes),
+				new VisualOffset(Coords.fromXY(0, -1).multiplyScalar(visualEyeRadius), visualEyes)
 			],
 			null
 		);
@@ -1282,12 +1282,12 @@ class PlaceBuilderDemo_Movers
 
 		var playerVisualStatusInfo = new VisualOffset
 		(
+			Coords.fromXY(0, 0 - this.entityDimension * 2), // offset
 			new VisualStack
 			(
 				Coords.fromXY(0, 0 - this.entityDimension), // childSpacing
 				playerVisualsForStatusInfo
-			),
-			Coords.fromXY(0, 0 - this.entityDimension * 2) // offset
+			)
 		);
 
 		var playerVisual = new VisualGroup
@@ -1490,10 +1490,15 @@ class PlaceBuilderDemo_Movers
 			}
 		);
 
-		var movable = new Movable
+		var movable = Movable.fromAccelerationAndSpeedMax
 		(
 			0.5, // accelerationPerTick
-			1, // speedMax
+			1 // speedMax
+		);
+
+		/*
+			// todo - Restore functionality of speed boots.
+
 			(uwpe: UniverseWorldPlaceEntities) => // accelerate
 			{
 				var entityMovable = uwpe.entity;
@@ -1513,6 +1518,7 @@ class PlaceBuilderDemo_Movers
 				);
 			}
 		);
+		*/
 
 		var itemCrafter = new ItemCrafter
 		([
@@ -1547,7 +1553,9 @@ class PlaceBuilderDemo_Movers
 
 		var playerActivityDefn = new ActivityDefn
 		(
-			"Player", this.entityDefnBuildPlayer_PlayerActivityPerform
+			"Player",
+			(uwpe: UniverseWorldPlaceEntities) =>
+				this.entityDefnBuildPlayer_PlayerActivityPerform(uwpe)
 		);
 		this.parent.activityDefns.push(playerActivityDefn);
 		var playerActivity = Activity.fromDefnName(playerActivityDefn.name);
@@ -1567,11 +1575,11 @@ class PlaceBuilderDemo_Movers
 					drawable.visual,
 					new VisualOffset
 					(
+						Coords.fromXY(0, 0 - this.entityDimension * 3),
 						VisualText.fromTextHeightAndColor
 						(
 							"Waiting", this.entityDimension, Color.byName("Gray")
-						),
-						Coords.fromXY(0, 0 - this.entityDimension * 3)
+						)
 					)
 				]);
 				ticksToWait = 60; // 3 seconds.
@@ -1728,8 +1736,6 @@ class PlaceBuilderDemo_Movers
 
 	entityDefnBuildPlayer_Controllable(): Controllable
 	{
-		var toControlMenu = Playable.toControlMenu;
-		var toControlWorldOverlay = Playable.toControlWorldOverlay;
 		var toControl =
 			(uwpe: UniverseWorldPlaceEntities) =>
 			{
@@ -1745,11 +1751,11 @@ class PlaceBuilderDemo_Movers
 				var returnValue;
 				if (isMenu)
 				{
-					returnValue = toControlMenu(universe, size, entity, venuePrev);
+					returnValue = Playable.toControlMenu(universe, size, entity, venuePrev);
 				}
 				else
 				{
-					returnValue = toControlWorldOverlay(universe, size, entity);
+					returnValue = Playable.toControlWorldOverlay(universe, size, entity);
 				}
 				return returnValue;
 			}

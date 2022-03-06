@@ -11,7 +11,7 @@ var ThisCouldBeBetter;
                     ticksToWaitBetweenCollisions || 0;
                 this.colliderAtRest = colliderAtRest;
                 this.entityPropertyNamesToCollideWith =
-                    entityPropertyNamesToCollideWith || []; // Or maybe [ Collidable.name ];
+                    entityPropertyNamesToCollideWith || [Collidable.name];
                 this._collideEntities = collideEntities;
                 this.collider = this.colliderAtRest.clone();
                 this.locPrev = GameFramework.Disposition.create();
@@ -24,10 +24,11 @@ var ThisCouldBeBetter;
                 this._collisions = new Array();
             }
             static default() {
-                return Collidable.fromCollider(GameFramework.Box.fromSize(GameFramework.Coords.ones().multiplyScalar(10)));
+                var collider = GameFramework.Box.fromSize(GameFramework.Coords.ones().multiplyScalar(10));
+                return Collidable.fromColliderAndCollideEntities(collider, Collidable.collideEntitiesLog);
             }
             static fromCollider(colliderAtRest) {
-                return new Collidable(false, null, colliderAtRest, null, null);
+                return Collidable.fromColliderAndCollideEntities(colliderAtRest, null);
             }
             static fromColliderAndCollideEntities(colliderAtRest, collideEntities) {
                 return new Collidable(false, null, colliderAtRest, null, collideEntities);
@@ -39,6 +40,12 @@ var ThisCouldBeBetter;
                 if (this._collideEntities != null) {
                     this._collideEntities(uwpe, collision);
                 }
+                return collision;
+            }
+            static collideEntitiesLog(uwpe, collision) {
+                var collisionAsString = collision.toString();
+                var message = "Collision detected: " + collisionAsString;
+                console.log(message);
                 return collision;
             }
             colliderLocateForEntity(entity) {
@@ -54,7 +61,9 @@ var ThisCouldBeBetter;
                 uwpe.entity2 = entityOther;
                 this.collideEntities(uwpe, collision);
                 var entityOtherCollidable = entityOther.collidable();
-                entityOtherCollidable.collideEntities(uwpe.clone().entitiesSwap(), collision);
+                uwpe.entitiesSwap();
+                entityOtherCollidable.collideEntities(uwpe, collision);
+                uwpe.entitiesSwap();
             }
             collisionsFindAndHandle(uwpe) {
                 if (this.isDisabled == false) {

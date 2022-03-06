@@ -4,12 +4,12 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Display2D {
-            constructor(sizesAvailable, fontName, fontHeightInPixels, colorFore, colorBack, isInvisible) {
+            constructor(sizesAvailable, fontNameAndHeight, colorFore, colorBack, isInvisible) {
                 this.sizesAvailable = sizesAvailable;
                 this._sizeDefault = this.sizesAvailable[0];
                 this.sizeInPixels = this._sizeDefault;
-                this.fontName = fontName;
-                this.fontHeightInPixels = fontHeightInPixels || 10;
+                this.fontNameAndHeight =
+                    fontNameAndHeight || GameFramework.FontNameAndHeight.default();
                 this.colorFore = colorFore;
                 this.colorBack = colorBack;
                 this.isInvisible = isInvisible || false;
@@ -19,14 +19,35 @@ var ThisCouldBeBetter;
                 this._sizeHalf = GameFramework.Coords.create();
                 this._zeroes = GameFramework.Coords.Instances().Zeroes;
             }
+            static fromImage(image) {
+                var returnDisplay = Display2D.fromSizeAndIsInvisible(image.sizeInPixels, true // isInvisible
+                );
+                returnDisplay.initialize(null);
+                returnDisplay.drawImage(image, GameFramework.Coords.Instances().Zeroes);
+                return returnDisplay;
+            }
             static fromSize(size) {
-                return new Display2D([size], null, null, null, null, false);
+                return new Display2D([size], null, null, null, false);
             }
             static fromSizeAndIsInvisible(size, isInvisible) {
-                return new Display2D([size], null, null, null, null, isInvisible);
+                return new Display2D([size], null, null, null, isInvisible);
             }
+            // Methods.
+            toComponentArrayRGBA() {
+                var pixelsAllAsComponentsRGBA = this.graphics.getImageData(0, 0, this.sizeInPixels.x, this.sizeInPixels.y).data;
+                return pixelsAllAsComponentsRGBA;
+            }
+            // Display implementation.
             clear() {
                 this.graphics.clearRect(0, 0, this.sizeInPixels.x, this.sizeInPixels.y);
+            }
+            colorAtPos(pos, colorOut) {
+                // This is amazingly, incredibly slow,
+                // and, due to browser security features,
+                // doesn't work when running from file.
+                var colorAsComponentsRGBA = this.graphics.getImageData(pos.x, pos.y, 1, 1).data;
+                colorOut.overwriteWithComponentsRGBA255(colorAsComponentsRGBA);
+                return colorOut;
             }
             displayToUse() {
                 return this;
@@ -302,12 +323,12 @@ var ThisCouldBeBetter;
                     this.graphics.stroke();
                 }
             }
-            drawText(text, fontHeightInPixels, pos, colorFill, colorOutline, isCenteredHorizontally, isCenteredVertically, sizeMaxInPixels) {
+            drawText(text, fontNameAndHeight, pos, colorFill, colorOutline, isCenteredHorizontally, isCenteredVertically, sizeMaxInPixels) {
                 var fontToRestore = this.graphics.font;
-                if (fontHeightInPixels == null) {
-                    fontHeightInPixels = this.fontHeightInPixels;
+                if (fontNameAndHeight != null) {
+                    this.fontSet(fontNameAndHeight);
                 }
-                this.fontSet(null, fontHeightInPixels);
+                var fontHeightInPixels = this.fontNameAndHeight.heightInPixels;
                 if (colorFill == null) {
                     colorFill = this.colorFore;
                 }
@@ -406,12 +427,9 @@ var ThisCouldBeBetter;
                     this.graphics.globalCompositeOperation = "source-atop";
                 }
             }
-            fontSet(fontName, fontHeightInPixels) {
-                if (fontName != this.fontName || fontHeightInPixels != this.fontHeightInPixels) {
-                    this.fontName = fontName || this.fontName;
-                    this.fontHeightInPixels = fontHeightInPixels || this.fontHeightInPixels;
-                    this.graphics.font = this.fontHeightInPixels + "px " + this.fontName;
-                }
+            fontSet(fontNameAndHeight) {
+                this.fontNameAndHeight = fontNameAndHeight;
+                this.graphics.font = this.fontNameAndHeight.toStringSystemFont();
             }
             flush() { }
             hide(universe) {
@@ -463,13 +481,13 @@ var ThisCouldBeBetter;
             }
             textWidthForFontHeight(textToMeasure, fontHeightInPixels) {
                 var fontToRestore = this.graphics.font;
-                this.fontSet(null, fontHeightInPixels);
+                this.fontSet(this.fontNameAndHeight);
                 var returnValue = this.graphics.measureText(textToMeasure).width;
                 this.graphics.font = fontToRestore;
                 return returnValue;
             }
-            toImage() {
-                return GameFramework.Image2.fromSystemImage("[fromDisplay]", this.canvas);
+            toImage(name) {
+                return GameFramework.Image2.fromSystemImage(name || "[fromDisplay]", this.canvas);
             }
             // platformable
             toDomElement() {
@@ -479,7 +497,7 @@ var ThisCouldBeBetter;
                     this.canvas.height = this.sizeInPixels.y;
                     this.canvas.oncontextmenu = () => false;
                     this.graphics = this.canvas.getContext("2d");
-                    this.fontSet(null, this.fontHeightInPixels);
+                    this.fontSet(this.fontNameAndHeight);
                     // todo
                     // var testString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                     // var widthWithFontFallthrough = this.graphics.measureText(testString).width;

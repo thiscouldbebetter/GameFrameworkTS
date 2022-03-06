@@ -5,12 +5,9 @@ var ThisCouldBeBetter;
     (function (GameFramework) {
         class CollisionTracker {
             constructor(size, collisionMapSizeInCells) {
-                collisionMapSizeInCells =
-                    collisionMapSizeInCells || GameFramework.Coords.fromXY(1, 1).multiplyScalar(4);
-                var collisionMapCellSize = size.clone().divide(collisionMapSizeInCells);
-                this._cells = new Array();
-                this.collisionMap = new GameFramework.MapOfCells(CollisionTracker.name, collisionMapSizeInCells, collisionMapCellSize, new GameFramework.MapOfCellsCellSourceArray(this._cells, () => new CollisionTrackerMapCell()) // cellSource
-                );
+                this.collisionMap =
+                    new CollisionTrackerMap(size, collisionMapSizeInCells);
+                this._cells = [];
             }
             static fromSize(size) {
                 return new CollisionTracker(size, GameFramework.Coords.fromXY(4, 4));
@@ -20,7 +17,7 @@ var ThisCouldBeBetter;
                 var entityBoundable = entity.boundable();
                 var entityCollidable = entity.collidable();
                 var entityBounds = entityBoundable.bounds;
-                var cellsToAddEntityTo = this.collisionMap.cellsInBoxAddToList(entityBounds, GameFramework.ArrayHelper.clear(this._cells));
+                var cellsToAddEntityTo = this.collisionMap.cellsInBox(entityBounds, GameFramework.ArrayHelper.clear(this._cells));
                 entityCollidable._collisionTrackerMapCellsOccupied.push(...cellsToAddEntityTo);
                 for (var c = 0; c < cellsToAddEntityTo.length; c++) {
                     var cell = cellsToAddEntityTo[c];
@@ -61,6 +58,17 @@ var ThisCouldBeBetter;
             equals(other) { return false; } // todo
         }
         GameFramework.CollisionTracker = CollisionTracker;
+        class CollisionTrackerMap extends GameFramework.MapOfCells {
+            constructor(size, sizeInCells) {
+                sizeInCells =
+                    sizeInCells || GameFramework.Coords.fromXY(1, 1).multiplyScalar(4);
+                var cellSize = size.clone().divide(sizeInCells);
+                super(CollisionTrackerMap.name, sizeInCells, cellSize, new GameFramework.MapOfCellsCellSourceArray([], // cells
+                () => new CollisionTrackerMapCell()) // cellSource
+                );
+            }
+        }
+        GameFramework.CollisionTrackerMap = CollisionTrackerMap;
         class CollisionTrackerMapCell {
             constructor() {
                 this.entitiesPresent = new Array();

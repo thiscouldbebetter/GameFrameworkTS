@@ -59,6 +59,7 @@ import VisualBuilder = gf.VisualBuilder;
 import VisualCircle = gf.VisualCircle;
 import VisualCircleGradient = gf.VisualCircleGradient;
 import VisualCrosshairs = gf.VisualCrosshairs;
+import VisualDeferred = gf.VisualDeferred;
 import VisualDirectional = gf.VisualDirectional;
 import VisualDynamic = gf.VisualDynamic;
 import VisualEllipse = gf.VisualEllipse;
@@ -103,6 +104,8 @@ import Rotation = gf.Rotation;
 import Collision = gf.Collision;
 import CollisionHelper = gf.CollisionHelper;
 import CollisionTracker = gf.CollisionTracker;
+import CollisionTrackerMap = gf.CollisionTrackerMap;
+import CollisionTrackerMapCell = gf.CollisionTrackerMapCell;
 
 // Geometry - Constraints.
 import Constraint_AttachToEntityWithName = gf.Constraint_AttachToEntityWithName;
@@ -143,9 +146,11 @@ import Wedge = gf.Wedge;
 
 // Geometry - Shapes - Map.
 import MapCell = gf.MapCell;
+import MapCellCollidable = gf.MapCellCollidable;
 import MapLocated = gf.MapLocated;
 import MapOfCells = gf.MapOfCells;
 import MapOfCellsCellSource = gf.MapOfCellsCellSource;
+import MapOfCellsCellSourceArray = gf.MapOfCellsCellSourceArray;
 
 // Geometry - Shapes - Meshes.
 import Mesh = gf.Mesh;
@@ -174,6 +179,7 @@ import UserInputListener = gf.UserInputListener;
 
 // Media.
 import Font = gf.Font;
+import FontNameAndHeight = gf.FontNameAndHeight;
 import Image2 = gf.Image2;  // Name conflicts with a built-in class.
 import ImageBuilder = gf.ImageBuilder;
 import MediaLibrary = gf.MediaLibrary;
@@ -183,6 +189,7 @@ import Video = gf.Video;
 import VideoHelper = gf.VideoHelper;
 
 // Media - Audio.
+import Audible = gf.Audible;
 import Sound = gf.Sound;
 import SoundFromFile = gf.SoundFromFile;
 import SoundHelper = gf.SoundHelper;
@@ -243,6 +250,7 @@ import ItemCrafter = gf.ItemCrafter;
 import EquipmentSocket = gf.EquipmentSocket;
 import EquipmentSocketDefn = gf.EquipmentSocketDefn;
 import EquipmentSocketDefnGroup = gf.EquipmentSocketDefnGroup;
+import EquipmentSocketGroup = gf.EquipmentSocketGroup;
 import EquipmentUser = gf.EquipmentUser;
 import Equippable = gf.Equippable;
 
@@ -311,6 +319,7 @@ import Usable = gf.Usable;
 
 // Profiles.
 import Profile = gf.Profile;
+import SaveStateWorld = gf.SaveStateWorld;
 
 // Storage.
 import FileHelper = gf.FileHelper;

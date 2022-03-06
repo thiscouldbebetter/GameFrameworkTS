@@ -116,19 +116,20 @@ var ThisCouldBeBetter;
             // Controllable.
             toControl(size, pos) {
                 var fontHeightInPixels = 12;
+                var font = GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeightInPixels);
                 var margin = fontHeightInPixels / 2;
                 var labelSize = GameFramework.Coords.fromXY(size.x, fontHeightInPixels);
                 var selectionAsContainer = new GameFramework.ControlContainer("visualPlayerSelection", pos, size, [
                     new GameFramework.ControlLabel("labelSelected", GameFramework.Coords.fromXY(1, 0).multiplyScalar(margin), // pos
                     labelSize, false, // isTextCenteredHorizontally
                     false, // isTextCenteredVertically
-                    GameFramework.DataBinding.fromContext("Selected:"), fontHeightInPixels),
+                    GameFramework.DataBinding.fromContext("Selected:"), font),
                     new GameFramework.ControlLabel("textEntitySelectedName", GameFramework.Coords.fromXY(1, 1.5).multiplyScalar(margin), // pos
                     labelSize, false, // isTextCenteredHorizontally
                     false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.entitiesSelected.length == 0
                         ? "-"
-                        : c.entitiesSelected[0].name)), fontHeightInPixels)
+                        : c.entitiesSelected[0].name)), font)
                 ], null, null);
                 var controlSelection = new GameFramework.ControlContainerTransparent(selectionAsContainer);
                 this._control = controlSelection;

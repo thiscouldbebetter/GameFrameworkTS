@@ -12,7 +12,7 @@ export class UserInputListener extends Entity
 			[
 				Actor.fromActivityDefnName
 				(
-					UserInputListener.activityDefnHandleUserInputBuild().name
+					UserInputListener.activityDefn().name
 				),
 
 				Drawable.fromVisual
@@ -25,16 +25,16 @@ export class UserInputListener extends Entity
 		);
 	}
 
-	static activityDefnHandleUserInputBuild(): ActivityDefn
+	static activityDefn(): ActivityDefn
 	{
 		return new ActivityDefn
 		(
 			"HandleUserInput",
-			UserInputListener.activityDefnHandleUserInputPerform
+			UserInputListener.activityDefnPerform
 		);
 	}
 
-	static activityDefnHandleUserInputPerform
+	static activityDefnPerform
 	(
 		uwpe: UniverseWorldPlaceEntities
 	): void

@@ -14,9 +14,9 @@ export class VisualImageScaledPartial implements Visual<VisualImageScaledPartial
 
 	constructor
 	(
-		visualImageToExtractFrom: VisualImage,
 		regionToDrawAsBox: Box,
-		sizeToDraw: Coords
+		sizeToDraw: Coords,
+		visualImageToExtractFrom: VisualImage
 	)
 	{
 		this.visualImageToExtractFrom = visualImageToExtractFrom;
@@ -61,9 +61,9 @@ export class VisualImageScaledPartial implements Visual<VisualImageScaledPartial
 
 				var visual = new VisualImageScaledPartial
 				(
-					visualImage,
 					sourceBox,
-					sizeToScaleTo
+					sizeToScaleTo,
+					visualImage
 				);
 
 				returnVisuals.push(visual);

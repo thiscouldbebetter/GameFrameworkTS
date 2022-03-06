@@ -47,12 +47,35 @@ export class MapOfCells<TCell extends Clonable<TCell>>
 		this._posInCellsMin = Coords.create();
 	}
 
+	static default(): MapOfCells<MapCellGeneric<string>>
+	{
+		var cells = new Array<MapCellGeneric<string>>();
+		var cellCreate = () => new MapCellGeneric<string>("todo");
+
+		var cellSource = new MapOfCellsCellSourceArray
+		(
+			cells, cellCreate
+		)
+		return new MapOfCells
+		(
+			MapOfCells.name,
+			Coords.fromXY(3, 3), // sizeInCells
+			Coords.fromXY(10, 10), // cellSize
+			cellSource
+		);
+	}
+
 	static fromNameSizeInCellsAndCellSize<TCell extends Clonable<TCell>>
 	(
 		name: string, sizeInCells: Coords, cellSize: Coords
 	): MapOfCells<TCell>
 	{
-		return new MapOfCells(name, sizeInCells, cellSize, null);
+		var cells = new Array<TCell>();
+		var cellSource = new MapOfCellsCellSourceArray<TCell>
+		(
+			cells, () => null
+		);
+		return new MapOfCells(name, sizeInCells, cellSize, cellSource);
 	}
 
 	cellAtPos(pos: Coords): TCell
@@ -76,7 +99,7 @@ export class MapOfCells<TCell extends Clonable<TCell>>
 		return this.sizeInCells.x * this.sizeInCells.y;
 	}
 
-	cellsInBoxAddToList(box: Box, cellsInBox: TCell[]): TCell[]
+	cellsInBox(box: Box, cellsInBox: TCell[]): TCell[]
 	{
 		ArrayHelper.clear(cellsInBox);
 
@@ -170,6 +193,26 @@ export class MapOfCells<TCell extends Clonable<TCell>>
 	}
 }
 
+export class MapCellGeneric<TValue> implements MapCell, Clonable<MapCellGeneric<TValue>>
+{
+	value: TValue;
+
+	constructor(value: TValue)
+	{
+		this.value = value;
+	}
+
+	clone(): MapCellGeneric<TValue>
+	{
+		return this;
+	}
+
+	overwriteWith(other: MapCellGeneric<TValue>): MapCellGeneric<TValue>
+	{
+		return this;
+	}
+}
+
 export interface MapOfCellsCellSource<TCell extends Clonable<TCell> >
 	extends Clonable<MapOfCellsCellSource<TCell> >
 {
@@ -218,7 +261,139 @@ export class MapOfCellsCellSourceArray<TCell extends Clonable<TCell>>
 	{
 		return this; // todo
 	}
-
 }
+
+export class MapOfCellsCellSourceDisplay<TCell extends Clonable<TCell>>
+	implements MapOfCellsCellSource<TCell>
+{
+	displaySizeInPixels: Coords;
+	displayPixelsAsComponentArrayRGBA: Uint8ClampedArray;
+
+	_cellCreate: () => TCell;
+	_cellOverwriteFromColor: (cell: TCell, color: Color) => void;
+
+	_color: Color;
+	_componentsPerPixel: number;
+
+	constructor
+	(
+		display: Display2D,
+		cellCreate: () => TCell,
+		cellOverwriteFromColor: (cell: TCell, color: Color) => void
+	)
+	{
+		this.displaySizeInPixels = display.sizeInPixels;
+		this.displayPixelsAsComponentArrayRGBA =
+			display.toComponentArrayRGBA();
+
+		this._cellCreate = cellCreate;
+		this._cellOverwriteFromColor = cellOverwriteFromColor;
+
+		this._color = Color.default();
+		this._componentsPerPixel = 4;
+	}
+
+	cellAtPosInCells
+	(
+		map: MapOfCells<TCell>,
+		posInCells: Coords,
+		cellToOverwrite: TCell
+	): TCell
+	{
+		var color = this.colorAtPos(posInCells, this._color);
+		this._cellOverwriteFromColor(cellToOverwrite, color);
+		return cellToOverwrite;
+	}
+
+	cellCreate(): TCell
+	{
+		return this._cellCreate();
+	}
+
+	clone(): MapOfCellsCellSourceDisplay<TCell>
+	{
+		return this; // todo
+	}
+
+	colorAtPos(pos: Coords, colorOut: Color): Color
+	{
+		var pixelIndexStart =
+			(pos.y * this.displaySizeInPixels.x + pos.x)
+			* this._componentsPerPixel;
+
+		var pixelAsComponents =
+			this.displayPixelsAsComponentArrayRGBA.slice
+			(
+				pixelIndexStart, pixelIndexStart + this._componentsPerPixel
+			);
+
+		colorOut.overwriteWithComponentsRGBA255(pixelAsComponents);
+
+		return colorOut;
+	}
+
+	overwriteWith(other: MapOfCellsCellSourceDisplay<TCell>): MapOfCellsCellSourceDisplay<TCell>
+	{
+		return this; // todo
+	}
+}
+
+export class MapOfCellsCellSourceImage<TCell extends Clonable<TCell>>
+	implements MapOfCellsCellSource<TCell>
+{
+	cellsAsDisplay: Display2D;
+	_cellCreate: () => TCell;
+	_cellSetFromColor: (cell: TCell, color: Color) => TCell
+
+	_pixelColor: Color;
+	
+	constructor
+	(
+		cellsAsImage: Image2,
+		cellCreate: () => TCell,
+		cellSetFromColor: (cell: TCell, color: Color) => TCell
+	)
+	{
+		this.cellsAsDisplay = Display2D.fromImage(cellsAsImage);
+		this._cellCreate = cellCreate;
+		this._cellSetFromColor = cellSetFromColor;
+
+		this._pixelColor = Color.create();
+	}
+
+	cellAtPosInCells
+	(
+		map: MapOfCells<TCell>,
+		posInCells: Coords,
+		cellToOverwrite: TCell
+	): TCell
+	{
+		var pixelColor =
+			this.cellsAsDisplay.colorAtPos(posInCells, this._pixelColor);
+		this.cellSetFromColor(cellToOverwrite, pixelColor);
+		return cellToOverwrite;
+	}
+
+	cellCreate(): TCell
+	{
+		return this._cellCreate();
+	}
+
+	cellSetFromColor(cell: TCell, color: Color): TCell
+	{
+		return this._cellSetFromColor(cell, color);
+	}
+
+	clone(): MapOfCellsCellSource<TCell>
+	{
+		return this; // todo
+	}
+
+	overwriteWith(other: MapOfCellsCellSource<TCell>): MapOfCellsCellSource<TCell>
+	{
+		return this; // todo
+	}
+}
+
 
 }

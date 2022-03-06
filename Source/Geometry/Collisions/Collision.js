@@ -29,6 +29,10 @@ var ThisCouldBeBetter;
                 this.distanceToCollision = null;
                 return this;
             }
+            toString() {
+                return this.entitiesColliding.map(x => x.name).join("+");
+            }
+            // Equatable.
             equals(other) {
                 var returnValue = (this.isActive == other.isActive
                     &&
@@ -39,6 +43,7 @@ var ThisCouldBeBetter;
                                     && GameFramework.ArrayHelper.equals(this.colliders, other.colliders))));
                 return returnValue;
             }
+            // Clonable.
             clone() {
                 var returnValue = new Collision(this.pos.clone(), this.distanceToCollision, this.colliders, this.entitiesColliding);
                 // hack

@@ -31,8 +31,7 @@ class GameDemo
 		var display = new Display2D
 		(
 			displaySizesAvailable,
-			"Font", // fontName
-			10, // fontHeightInPixels
+			new FontNameAndHeight("Font", 10),
 			Color.byName("Gray"),
 			Color.byName("White"), // colorFore, colorBack
 			null
@@ -49,7 +48,7 @@ class GameDemo
 		var universe = Universe.create
 		(
 			"Game Framework Demo Game",
-			"0.0.0-20220122", // version
+			"0.0.0-20220227", // version
 			timerHelper,
 			display,
 			mediaLibrary,
@@ -68,6 +67,7 @@ class GameDemo
 
 		var fontDirectoryPath = contentDirectoryPath + "Fonts/";
 		var imageDirectoryPath = contentDirectoryPath + "Images/";
+		var imageTitlesDirectoryPath = imageDirectoryPath + "Titles/";
 		var soundEffectDirectoryPath = contentDirectoryPath + "Audio/Effects/";
 		var soundMusicDirectoryPath = contentDirectoryPath + "Audio/Music/";
 		var textStringDirectoryPath = contentDirectoryPath + "Text/";
@@ -75,9 +75,9 @@ class GameDemo
 
 		var mediaFilePaths =
 		[
-			imageDirectoryPath + "Opening.png",
-			imageDirectoryPath + "Producer.png",
-			imageDirectoryPath + "Title.png",
+			imageTitlesDirectoryPath + "Opening.png",
+			imageTitlesDirectoryPath + "Producer.png",
+			imageTitlesDirectoryPath + "Title.png",
 
 			imageDirectoryPath + "Anvil.svg",
 			imageDirectoryPath + "Car.png",

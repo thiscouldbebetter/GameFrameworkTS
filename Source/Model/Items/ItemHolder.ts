@@ -489,6 +489,8 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 		var fontHeight = 10;
 		var fontHeightSmall = fontHeight * .6;
 		var fontHeightLarge = fontHeight * 1.5;
+		var fontSmall = FontNameAndHeight.fromHeightInPixels(fontHeightSmall);
+		var fontLarge = FontNameAndHeight.fromHeightInPixels(fontHeightLarge);
 
 		var itemHolder = this;
 		var world = universe.world;
@@ -588,7 +590,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				([
 					new VisualImageScaled
 					(
-						new VisualImageFromLibrary("Title"), size
+						new VisualImageFromLibrary("Titles_Title"), size
 					)
 				])
 			)
@@ -607,7 +609,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				true, // isTextCenteredHorizontally
 				false, // isTextCenteredVertically
 				DataBinding.fromContext("Items Held:"),
-				fontHeightSmall
+				fontSmall
 			),
 
 			ControlList.from10
@@ -623,7 +625,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				(
 					(c: Item) => c.toString(world)
 				), // bindingForItemText
-				fontHeightSmall,
+				fontSmall,
 				new DataBinding
 				(
 					this,
@@ -647,7 +649,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 					this,
 					(c: ItemHolder) => "Weight: " + c.massOfAllItemsOverMax(world)
 				),
-				fontHeightSmall
+				fontSmall
 			),
 
 			ControlButton.from8
@@ -656,7 +658,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				Coords.fromXY(85, 15), // pos
 				Coords.fromXY(15, 10), // size
 				"Up",
-				fontHeightSmall,
+				fontSmall,
 				true, // hasBorder
 				DataBinding.fromContextAndGet
 				(
@@ -680,7 +682,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				Coords.fromXY(85, 30), // pos
 				Coords.fromXY(15, 10), // size
 				"Down",
-				fontHeightSmall,
+				fontSmall,
 				true, // hasBorder
 				DataBinding.fromContextAndGet
 				(
@@ -704,7 +706,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				Coords.fromXY(85, 45), // pos
 				Coords.fromXY(15, 10), // size
 				"Split",
-				fontHeightSmall,
+				fontSmall,
 				true, // hasBorder
 				DataBinding.fromContextAndGet
 				(
@@ -729,7 +731,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				Coords.fromXY(85, 60), // pos
 				Coords.fromXY(15, 10), // size
 				"Join",
-				fontHeightSmall,
+				fontSmall,
 				true, // hasBorder
 				DataBinding.fromContextAndGet
 				(
@@ -753,7 +755,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				Coords.fromXY(85, 75), // pos
 				Coords.fromXY(15, 10), // size
 				"Sort",
-				fontHeightSmall,
+				fontSmall,
 				true, // hasBorder
 				DataBinding.fromContextAndGet
 				(
@@ -771,7 +773,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				true, // isTextCenteredHorizontally
 				false, // isTextCenteredVertically
 				DataBinding.fromContext("Item Selected:"),
-				fontHeightSmall
+				fontSmall
 			),
 
 			new ControlLabel
@@ -790,7 +792,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 						return (i == null ? "-" : i.toString(world));
 					}
 				), // text
-				fontHeightSmall
+				fontSmall
 			),
 
 			ControlVisual.from5
@@ -822,7 +824,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 					this,
 					(c: ItemHolder) => c.statusMessage
 				), // text
-				fontHeightSmall
+				fontSmall
 			),
 
 			ControlButton.from8
@@ -831,7 +833,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				Coords.fromXY(132.5, 95), // pos
 				Coords.fromXY(15, 10), // size
 				"Use",
-				fontHeightSmall,
+				fontSmall,
 				true, // hasBorder
 				DataBinding.fromContextAndGet
 				(
@@ -851,7 +853,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				Coords.fromXY(152.5, 95), // pos
 				Coords.fromXY(15, 10), // size
 				"Drop",
-				fontHeightSmall,
+				fontSmall,
 				true, // hasBorder
 				DataBinding.fromContextAndGet
 				(
@@ -930,7 +932,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 					true, // isTextCenteredHorizontally
 					false, // isTextCenteredVertically
 					DataBinding.fromContext("Items"),
-					fontHeightLarge
+					fontLarge
 				)
 			);
 			childControls.push
@@ -941,7 +943,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 					Coords.fromXY(170, 115), // pos
 					buttonSize.clone(),
 					"Done",
-					fontHeightSmall,
+					fontSmall,
 					true, // hasBorder
 					DataBinding.fromTrue(), // isEnabled
 					back // click

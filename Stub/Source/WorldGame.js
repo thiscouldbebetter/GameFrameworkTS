@@ -6,7 +6,7 @@ class WorldGame extends World {
     static defnBuild() {
         return new WorldDefn([
             [
-                UserInputListener.activityDefnHandleUserInputBuild()
+                UserInputListener.activityDefn()
             ],
             [
                 PlaceStub.defnBuild()

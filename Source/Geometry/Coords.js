@@ -212,6 +212,9 @@ var ThisCouldBeBetter;
             isInRangeMaxExclusive(max) {
                 return this.isInRangeMinInclusiveMaxExclusive(Coords.Instances().Zeroes, max);
             }
+            isInRangeMaxExclusiveXY(max) {
+                return this.isInRangeMinInclusiveMaxExclusiveXY(Coords.Instances().Zeroes, max);
+            }
             isInRangeMinMax(min, max) {
                 var returnValue = (this.x >= min.x
                     && this.x <= max.x
@@ -221,6 +224,13 @@ var ThisCouldBeBetter;
                     && this.z <= max.z);
                 return returnValue;
             }
+            isInRangeMinMaxXY(min, max) {
+                var returnValue = (this.x >= min.x
+                    && this.x <= max.x
+                    && this.y >= min.y
+                    && this.y <= max.y);
+                return returnValue;
+            }
             isInRangeMinInclusiveMaxExclusive(min, max) {
                 var returnValue = (this.x >= min.x
                     && this.x < max.x
@@ -228,6 +238,13 @@ var ThisCouldBeBetter;
                     && this.y < max.y
                     && this.z >= min.z
                     && this.z < max.z);
+                return returnValue;
+            }
+            isInRangeMinInclusiveMaxExclusiveXY(min, max) {
+                var returnValue = (this.x >= min.x
+                    && this.x < max.x
+                    && this.y >= min.y
+                    && this.y < max.y);
                 return returnValue;
             }
             magnitude() {
@@ -348,6 +365,21 @@ var ThisCouldBeBetter;
                 }
                 else if (this.z > max.z) {
                     this.z = max.z;
+                }
+                return this;
+            }
+            trimToRangeMaxXY(max) {
+                if (this.x < 0) {
+                    this.x = 0;
+                }
+                else if (this.x > max.x) {
+                    this.x = max.x;
+                }
+                if (this.y < 0) {
+                    this.y = 0;
+                }
+                else if (this.y > max.y) {
+                    this.y = max.y;
                 }
                 return this;
             }

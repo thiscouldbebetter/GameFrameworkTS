@@ -127,11 +127,11 @@ var ThisCouldBeBetter;
                     var nodeToPos = nodesLinked[1].pos;
                     display.drawLine(nodeFromPos, nodeToPos, colorCyan, 3); // lineThickness
                 }
+                var font = GameFramework.FontNameAndHeight.default();
                 var nodes = networkTransformed.nodes;
                 for (var i = 0; i < nodes.length; i++) {
                     var node = nodes[i];
-                    display.drawText("" + node.id, 10, // fontHeightInPixels
-                    node.pos, colorCyan, null, // colorOutline
+                    display.drawText("" + node.id, font, node.pos, colorCyan, null, // colorOutline
                     false, // isCenteredHorizontally
                     false, // isCenteredVertically
                     null // sizeMaxInPixels

@@ -30,12 +30,12 @@ export class ControlTabbed<TContext> extends ControlBase
 		size: Coords,
 		tabButtonSize: Coords,
 		childrenForTabs: ControlBase[],
-		fontHeightInPixels: number,
+		fontNameAndHeight: FontNameAndHeight,
 		cancel: () => void,
 		context: TContext
 	)
 	{
-		super(name, pos, size, fontHeightInPixels);
+		super(name, pos, size, fontNameAndHeight);
 		this.tabButtonSize = tabButtonSize;
 		this.childrenForTabs = childrenForTabs;
 		this.childrenForTabsByName =
@@ -48,7 +48,7 @@ export class ControlTabbed<TContext> extends ControlBase
 		this.childrenContainingPosPrev = new Array<ControlBase>();
 		this.isChildSelectedActive = false;
 
-		var marginSize = this.fontHeightInPixels;
+		var marginSize = this.fontNameAndHeight.heightInPixels;
 		var tabPaneHeight = marginSize + this.tabButtonSize.y;
 		var buttonsForChildren = new Array<ControlButton<TContext>>();
 
@@ -71,7 +71,7 @@ export class ControlTabbed<TContext> extends ControlBase
 				buttonPos,
 				this.tabButtonSize.clone(),
 				childName, // text
-				this.fontHeightInPixels,
+				this.fontNameAndHeight,
 				true, // hasBorder
 				DataBinding.fromTrueWithContext(this.context), // isEnabled
 				null // click - Assigned below.
@@ -158,7 +158,7 @@ export class ControlTabbed<TContext> extends ControlBase
 				), // pos
 				this.tabButtonSize.clone(),
 				"Done", // text
-				this.fontHeightInPixels,
+				this.fontNameAndHeight,
 				true, // hasBorder
 				DataBinding.fromTrueWithContext(this.context), // isEnabled
 				this.cancel // click
@@ -475,8 +475,7 @@ export class ControlTabbed<TContext> extends ControlBase
 
 	scalePosAndSize(scaleFactor: Coords): ControlTabbed<TContext>
 	{
-		this.pos.multiply(scaleFactor);
-		this.size.multiply(scaleFactor);
+		super.scalePosAndSize(scaleFactor);
 
 		for (var i = 0; i < this.childrenForTabs.length; i++)
 		{
@@ -485,9 +484,9 @@ export class ControlTabbed<TContext> extends ControlBase
 			{
 				child.pos.multiply(scaleFactor);
 				child.size.multiply(scaleFactor);
-				if (child.fontHeightInPixels != null)
+				if (child.fontNameAndHeight != null)
 				{
-					child.fontHeightInPixels *= scaleFactor.y;
+					child.fontNameAndHeight.heightInPixels *= scaleFactor.y;
 				}
 			}
 			else

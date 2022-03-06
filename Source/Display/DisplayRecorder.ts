@@ -33,7 +33,7 @@ export class DisplayRecorder
 		return new Action
 		(
 			"Recording Start/Stop", DisplayRecorder.actionStartStopPerform
-		)
+		);
 	}
 
 	static actionStartStopPerform
@@ -69,7 +69,7 @@ export class DisplayRecorder
 			framesRecorded.splice(0, 1);
 		}
 
-		var displayAsImage = display.toImage();
+		var displayAsImage = display.toImage(DisplayRecorder.name);
 		var displayAsCanvas = displayAsImage.systemImage;
 		displayAsCanvas.toBlob
 		(

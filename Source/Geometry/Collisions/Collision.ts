@@ -56,6 +56,13 @@ export class Collision //
 		return this;
 	}
 
+	toString(): string
+	{
+		return this.entitiesColliding.map(x => x.name).join("+");
+	}
+
+	// Equatable.
+
 	equals(other: Collision): boolean
 	{
 		var returnValue =
@@ -75,6 +82,8 @@ export class Collision //
 
 		return returnValue;
 	}
+
+	// Clonable.
 
 	clone(): Collision
 	{

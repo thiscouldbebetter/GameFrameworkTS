@@ -34,7 +34,7 @@ export class Collidable implements EntityProperty<Collidable>
 			ticksToWaitBetweenCollisions || 0;
 		this.colliderAtRest = colliderAtRest;
 		this.entityPropertyNamesToCollideWith =
-			entityPropertyNamesToCollideWith || []; // Or maybe [ Collidable.name ];
+			entityPropertyNamesToCollideWith || [ Collidable.name ];
 		this._collideEntities = collideEntities;
 
 		this.collider = this.colliderAtRest.clone();
@@ -52,18 +52,23 @@ export class Collidable implements EntityProperty<Collidable>
 
 	static default(): Collidable
 	{
-		return Collidable.fromCollider
+		var collider = Box.fromSize
 		(
-			Box.fromSize
-			(
-				Coords.ones().multiplyScalar(10)
-			)
+			Coords.ones().multiplyScalar(10)
+		);
+
+		return Collidable.fromColliderAndCollideEntities
+		(
+			collider, Collidable.collideEntitiesLog
 		);
 	}
 
 	static fromCollider(colliderAtRest: ShapeBase): Collidable
 	{
-		return new Collidable(false, null, colliderAtRest, null, null);
+		return Collidable.fromColliderAndCollideEntities
+		(
+			colliderAtRest, null
+		);
 	}
 
 	static fromColliderAndCollideEntities
@@ -72,7 +77,10 @@ export class Collidable implements EntityProperty<Collidable>
 		collideEntities: (uwpe: UniverseWorldPlaceEntities, c: Collision)=>void
 	): Collidable
 	{
-		return new Collidable(false, null, colliderAtRest, null, collideEntities);
+		return new Collidable
+		(
+			false, null, colliderAtRest, null, collideEntities
+		);
 	}
 
 	static from3
@@ -100,6 +108,17 @@ export class Collidable implements EntityProperty<Collidable>
 		return collision;
 	}
 
+	static collideEntitiesLog
+	(
+		uwpe: UniverseWorldPlaceEntities, collision: Collision
+	): Collision
+	{
+		var collisionAsString = collision.toString();
+		var message = "Collision detected: " + collisionAsString;
+		console.log(message);
+		return collision;
+	}
+
 	colliderLocateForEntity(entity: Entity): void
 	{
 		this.collider.overwriteWith(this.colliderAtRest);
@@ -122,10 +141,12 @@ export class Collidable implements EntityProperty<Collidable>
 		);
 
 		var entityOtherCollidable = entityOther.collidable();
+		uwpe.entitiesSwap();
 		entityOtherCollidable.collideEntities
 		(
-			uwpe.clone().entitiesSwap(), collision
+			uwpe, collision
 		);
+		uwpe.entitiesSwap();
 	}
 
 	collisionsFindAndHandle(uwpe: UniverseWorldPlaceEntities): void

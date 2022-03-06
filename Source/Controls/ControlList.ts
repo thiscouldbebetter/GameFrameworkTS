@@ -29,7 +29,7 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 		size: Coords,
 		items: DataBinding<TContext, TItem[]>,
 		bindingForItemText: DataBinding<TItem, string>,
-		fontHeightInPixels: number,
+		fontNameAndHeight: FontNameAndHeight,
 		bindingForItemSelected: DataBinding<TContext, TItem>,
 		bindingForItemValue: DataBinding<TItem, TValue>,
 		bindingForIsEnabled: DataBinding<TContext, boolean>,
@@ -37,7 +37,7 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 		widthInItems: number
 	)
 	{
-		super(name, pos, size, fontHeightInPixels);
+		super(name, pos, size, fontNameAndHeight);
 		this._items = items;
 		this.bindingForItemText = bindingForItemText;
 		this.bindingForItemSelected = bindingForItemSelected;
@@ -48,7 +48,7 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 		this._confirm = confirm;
 		this.widthInItems = widthInItems || 1;
 
-		var itemSizeY = 1.2 * this.fontHeightInPixels; // hack
+		var itemSizeY = 1.2 * this.fontNameAndHeight.heightInPixels; // hack
 		this._itemSize = Coords.fromXY(size.x, itemSizeY);
 		var scrollbarWidth = itemSizeY;
 
@@ -58,7 +58,7 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 		(
 			Coords.fromXY(this.size.x - scrollbarWidth, 0), // pos
 			Coords.fromXY(scrollbarWidth, this.size.y), // size
-			this.fontHeightInPixels,
+			this.fontNameAndHeight,
 			itemSizeY, // itemHeight
 			this._items,
 			0 // value
@@ -85,7 +85,7 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 			size,
 			items,
 			bindingForItemText,
-			10, // fontHeightInPixels,
+			FontNameAndHeight.default(),
 			null, // bindingForItemSelected,
 			null, // bindingForItemValue,
 			DataBinding.fromTrue(), // isEnabled
@@ -103,12 +103,12 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 		size: Coords,
 		items: DataBinding<TContext, TItem[]>,
 		bindingForItemText: DataBinding<TItem, string>,
-		fontHeightInPixels: number
+		fontNameAndHeight: FontNameAndHeight
 	): ControlList<TContext, TItem, TValue>
 	{
 		return new ControlList<TContext, TItem, TValue>
 		(
-			name, pos, size, items, bindingForItemText, fontHeightInPixels,
+			name, pos, size, items, bindingForItemText, fontNameAndHeight,
 			null, null, null, null, null
 		);
 	}
@@ -120,13 +120,13 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 		size: Coords,
 		items: DataBinding<TContext, TItem[]>,
 		bindingForItemText: DataBinding<TItem, string>,
-		fontHeightInPixels: number,
+		fontNameAndHeight: FontNameAndHeight,
 		bindingForItemSelected: DataBinding<TContext, TItem>,
 	): ControlList<TContext, TItem, TValue>
 	{
 		return new ControlList<TContext, TItem, TValue>
 		(
-			name, pos, size, items, bindingForItemText, fontHeightInPixels,
+			name, pos, size, items, bindingForItemText, fontNameAndHeight,
 			bindingForItemSelected, null, null, null, null
 		);
 	}
@@ -138,14 +138,14 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 		size: Coords,
 		items: DataBinding<TContext, TItem[]>,
 		bindingForItemText: DataBinding<TItem, string>,
-		fontHeightInPixels: number,
+		fontNameAndHeight: FontNameAndHeight,
 		bindingForItemSelected: DataBinding<TContext, TItem>,
 		bindingForItemValue: DataBinding<TItem, TValue>,
 	): ControlList<TContext, TItem, TValue>
 	{
 		return new ControlList<TContext, TItem, TValue>
 		(
-			name, pos, size, items, bindingForItemText, fontHeightInPixels,
+			name, pos, size, items, bindingForItemText, fontNameAndHeight,
 			bindingForItemSelected, bindingForItemValue, null, null, null
 		);
 	}
@@ -157,7 +157,7 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 		size: Coords,
 		items: DataBinding<TContext, TItem[]>,
 		bindingForItemText: DataBinding<TItem, string>,
-		fontHeightInPixels: number,
+		fontNameAndHeight: FontNameAndHeight,
 		bindingForItemSelected: DataBinding<TContext, TItem>,
 		bindingForItemValue: DataBinding<TItem, TValue>,
 		bindingForIsEnabled: DataBinding<TContext, boolean>
@@ -165,7 +165,7 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 	{
 		return new ControlList<TContext, TItem, TValue>
 		(
-			name, pos, size, items, bindingForItemText, fontHeightInPixels,
+			name, pos, size, items, bindingForItemText, fontNameAndHeight,
 			bindingForItemSelected, bindingForItemValue, bindingForIsEnabled,
 			null, null
 		);
@@ -178,7 +178,7 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 		size: Coords,
 		items: DataBinding<TContext, TItem[]>,
 		bindingForItemText: DataBinding<TItem, string>,
-		fontHeightInPixels: number,
+		fontNameAndHeight: FontNameAndHeight,
 		bindingForItemSelected: DataBinding<TContext, TItem>,
 		bindingForItemValue: DataBinding<TItem, TValue>,
 		bindingForIsEnabled: DataBinding<TContext, boolean>,
@@ -187,7 +187,7 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 	{
 		return new ControlList<TContext, TItem, TValue>
 		(
-			name, pos, size, items, bindingForItemText, fontHeightInPixels,
+			name, pos, size, items, bindingForItemText, fontNameAndHeight,
 			bindingForItemSelected, bindingForItemValue, bindingForIsEnabled,
 			confirm, null
 		);
@@ -464,9 +464,8 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 
 	scalePosAndSize(scaleFactor: Coords): ControlBase
 	{
-		this.pos.multiply(scaleFactor);
-		this.size.multiply(scaleFactor);
-		this.fontHeightInPixels *= scaleFactor.y;
+		super.scalePosAndSize(scaleFactor);
+
 		this._itemSize.multiply(scaleFactor);
 		this.scrollbar.scalePosAndSize(scaleFactor);
 
@@ -573,13 +572,13 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 
 			var textSizeMax = Coords.fromXY
 			(
-				this.itemSize().x, this.fontHeightInPixels
+				this.itemSize().x, this.fontNameAndHeight.heightInPixels
 			);
 
 			display.drawText
 			(
 				text,
-				this.fontHeightInPixels,
+				this.fontNameAndHeight,
 				drawPos2,
 				(areColorsReversed ? colorBack : colorFore),
 				(areColorsReversed ? colorFore : colorBack),

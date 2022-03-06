@@ -19,13 +19,13 @@ export class ControlScrollbar<TContext, TItem> extends ControlBase
 	(
 		pos: Coords,
 		size: Coords,
-		fontHeightInPixels: number,
+		fontNameAndHeight: FontNameAndHeight,
 		itemHeight: number,
 		items: DataBinding<TContext, TItem[]>,
 		sliderPosInItems: number
 	)
 	{
-		super(null, pos, size, fontHeightInPixels);
+		super(null, pos, size, fontNameAndHeight);
 		this.itemHeight = itemHeight;
 		this._items = items;
 		this._sliderPosInItems = sliderPosInItems;
@@ -40,7 +40,7 @@ export class ControlScrollbar<TContext, TItem> extends ControlBase
 			Coords.create(), // pos
 			this.handleSize.clone(), // size
 			"-", // text
-			this.fontHeightInPixels,
+			this.fontNameAndHeight,
 			true, // hasBorder
 			DataBinding.fromTrue(), // isEnabled
 			this.scrollUp // click
@@ -52,7 +52,7 @@ export class ControlScrollbar<TContext, TItem> extends ControlBase
 			Coords.fromXY(0, this.size.y - this.handleSize.y), // pos
 			this.handleSize.clone(), // size
 			"+", // text
-			this.fontHeightInPixels,
+			this.fontNameAndHeight,
 			true, // hasBorder
 			DataBinding.fromTrue(), // isEnabled
 			this.scrollDown // click
@@ -82,14 +82,15 @@ export class ControlScrollbar<TContext, TItem> extends ControlBase
 		return false;
 	}
 
-	scalePosAndSize(scaleFactor: Coords): void
+	scalePosAndSize(scaleFactor: Coords): ControlBase
 	{
-		this.pos.multiply(scaleFactor);
-		this.size.multiply(scaleFactor);
+		super.scalePosAndSize(scaleFactor);
+
 		this.handleSize.multiply(scaleFactor);
-		this.fontHeightInPixels *= scaleFactor.y;
 		this.buttonScrollUp.scalePosAndSize(scaleFactor);
 		this.buttonScrollDown.scalePosAndSize(scaleFactor);
+
+		return this;
 	}
 
 	scrollDown(): void

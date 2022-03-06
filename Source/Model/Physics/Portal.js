@@ -31,7 +31,7 @@ var ThisCouldBeBetter;
                 var world = uwpe.world;
                 var placeToDepart = uwpe.place;
                 var entityToTransport = uwpe.entity;
-                var destinationPlace = world.placeByName(this.destinationPlaceName);
+                var destinationPlace = world.placeGetByName(this.destinationPlaceName);
                 destinationPlace.initialize(uwpe);
                 var destinationEntity = destinationPlace.entitiesByName.get(this.destinationEntityName);
                 var destinationCollidable = destinationEntity.collidable();

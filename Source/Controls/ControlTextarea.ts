@@ -24,18 +24,18 @@ export class ControlTextarea<TContext> extends ControlBase
 		pos: Coords,
 		size: Coords,
 		text: DataBinding<TContext, string>,
-		fontHeightInPixels: number,
+		fontNameAndHeight: FontNameAndHeight,
 		isEnabled: DataBinding<TContext, boolean>
 	)
 	{
-		super(name, pos, size, fontHeightInPixels);
+		super(name, pos, size, fontNameAndHeight);
 		this._text = text;
 		this._isEnabled = isEnabled;
 
 		this.charCountMax = null; // todo
 		this.cursorPos = null;
 
-		this.lineSpacing = 1.2 * this.fontHeightInPixels; // hack
+		this.lineSpacing = 1.2 * this.fontNameAndHeight.heightInPixels; // hack
 
 		var scrollbarWidth = this.lineSpacing;
 		var thisAsControlTextarea = this as ControlTextarea<TContext>;
@@ -43,7 +43,7 @@ export class ControlTextarea<TContext> extends ControlBase
 		(
 			Coords.fromXY(this.size.x - scrollbarWidth, 0), // pos
 			Coords.fromXY(scrollbarWidth, this.size.y), // size
-			this.fontHeightInPixels,
+			this.fontNameAndHeight,
 			this.lineSpacing, // itemHeight
 			DataBinding.fromContextAndGet
 			(
@@ -219,7 +219,7 @@ export class ControlTextarea<TContext> extends ControlBase
 	{
 		this._textAsLines = [];
 
-		var charWidthInPixels = this.fontHeightInPixels / 2; // hack
+		var charWidthInPixels = this.fontNameAndHeight.heightInPixels / 2; // hack
 		var charsPerLine = Math.floor(this.size.x / charWidthInPixels);
 		var textComplete = this.text(null);
 		var textLength = textComplete.length;
@@ -284,13 +284,14 @@ export class ControlTextarea<TContext> extends ControlBase
 		return true; // wasActionHandled
 	}
 
-	scalePosAndSize(scaleFactor: Coords): void
+	scalePosAndSize(scaleFactor: Coords): ControlBase
 	{
-		this.pos.multiply(scaleFactor);
-		this.size.multiply(scaleFactor);
-		this.fontHeightInPixels *= scaleFactor.y;
+		super.scalePosAndSize(scaleFactor);
+
 		this.lineSpacing *= scaleFactor.y;
 		this.scrollbar.scalePosAndSize(scaleFactor);
+
+		return this;
 	}
 
 	// drawable
@@ -355,7 +356,7 @@ export class ControlTextarea<TContext> extends ControlBase
 			display.drawText
 			(
 				line,
-				this.fontHeightInPixels,
+				this.fontNameAndHeight,
 				drawPos2,
 				colorFore,
 				colorBack,

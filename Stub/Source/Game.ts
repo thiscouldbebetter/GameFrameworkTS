@@ -41,15 +41,20 @@ class Game
 
 		var controlBuilder = ControlBuilder.default();
 
+		var worldCreator = WorldCreator.fromWorldCreate
+		(
+			() => new WorldGame()
+		);
+
 		var universe = Universe.create
 		(
 			"Game",
-			"0.0.0-20210407-0000", // version
+			"0.0.0-20220218-0000", // version
 			timerHelper,
 			display,
 			mediaLibrary,
 			controlBuilder,
-			() => new WorldGame()
+			worldCreator
 		);
 		universe.initialize
 		(
@@ -63,6 +68,7 @@ class Game
 
 		var fontDirectoryPath = contentDirectoryPath + "Fonts/";
 		var imageDirectoryPath = contentDirectoryPath + "Images/";
+		var imageTitlesDirectoryPath = imageDirectoryPath + "Titles/";
 		var soundEffectDirectoryPath = contentDirectoryPath + "Audio/Effects/";
 		var soundMusicDirectoryPath = contentDirectoryPath + "Audio/Music/";
 		var textStringDirectoryPath = contentDirectoryPath + "Text/";
@@ -70,9 +76,9 @@ class Game
 
 		var mediaFilePaths =
 		[
-			imageDirectoryPath + "Opening.png",
-			imageDirectoryPath + "Producer.png",
-			imageDirectoryPath + "Title.png",
+			imageTitlesDirectoryPath + "Opening.png",
+			imageTitlesDirectoryPath + "Producer.png",
+			imageTitlesDirectoryPath + "Title.png",
 
 			soundEffectDirectoryPath + "Sound.wav",
 

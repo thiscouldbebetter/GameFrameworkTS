@@ -17,12 +17,12 @@ export class WordBubble
 		this.statementIndexCurrent = 0;
 	}
 
-	statementCurrent()
+	statementCurrent(): string
 	{
 		return this.statements[this.statementIndexCurrent];
 	}
 
-	statementAdvance(universe: Universe)
+	statementAdvance(universe: Universe): void
 	{
 		this.statementIndexCurrent++;
 		if (this.statementIndexCurrent >= this.statements.length)
@@ -34,7 +34,7 @@ export class WordBubble
 
 	// Controllable.
 
-	toControl(universe: Universe)
+	toControl(universe: Universe): ControlBase
 	{
 		var size = universe.display.sizeInPixels;
 		var sizeBase = size.clone();
@@ -59,6 +59,7 @@ export class WordBubble
 		);
 
 		var fontHeight = margin;
+		var font = FontNameAndHeight.fromHeightInPixels(fontHeight);
 
 		var buttonSize = Coords.fromXY(3, 1.2).multiplyScalar(fontHeight);
 
@@ -103,7 +104,7 @@ export class WordBubble
 						this,
 						(c: WordBubble) => c.statementCurrent()
 					),
-					fontHeight
+					font
 				),
 
 				ControlButton.from8
@@ -116,7 +117,7 @@ export class WordBubble
 					),
 					buttonSize,
 					"Next",
-					fontHeight,
+					font,
 					true, // hasBorder
 					DataBinding.fromTrue(), // isEnabled
 					() => wordBubble.statementAdvance(universe)

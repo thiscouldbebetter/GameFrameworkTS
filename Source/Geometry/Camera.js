@@ -17,46 +17,112 @@ var ThisCouldBeBetter;
                 this._posSaved = GameFramework.Coords.create();
             }
             static default() {
+                return Camera.fromEntitiesInViewSort(null);
+            }
+            static fromEntitiesInViewSort(entitiesInViewSort) {
                 return new Camera(new GameFramework.Coords(400, 300, 1000), // viewSize
                 150, // focalLength
-                GameFramework.Disposition.fromPos(new GameFramework.Coords(0, 0, -150)), null // entitiesInViewSort
-                );
+                GameFramework.Disposition.fromPosAndOrientation(new GameFramework.Coords(0, 0, -150), GameFramework.Orientation.Instances().ForwardZDownY.clone()), entitiesInViewSort);
             }
-            clipPlanes() {
-                if (this._clipPlanes == null) {
+            /*
+            clipPlanes(): Plane[]
+            {
+                if (this._clipPlanes == null)
+                {
                     this._clipPlanes =
-                        [
-                            new GameFramework.Plane(GameFramework.Coords.create(), 0),
-                            new GameFramework.Plane(GameFramework.Coords.create(), 0),
-                            new GameFramework.Plane(GameFramework.Coords.create(), 0),
-                            new GameFramework.Plane(GameFramework.Coords.create(), 0),
-                        ];
+                    [
+                        new Plane(Coords.create(), 0),
+                        new Plane(Coords.create(), 0),
+                        new Plane(Coords.create(), 0),
+                        new Plane(Coords.create(), 0),
+                    ];
                 }
+        
                 var cameraLoc = this.loc;
                 var cameraOrientation = cameraLoc.orientation;
+        
                 var cameraPos = cameraLoc.pos;
-                var centerOfViewPlane = cameraPos.clone().add(cameraOrientation.forward.clone().multiplyScalar(this.focalLength));
-                var cornerOffsetRight = cameraOrientation.right.clone().multiplyScalar(this.viewSizeHalf.x);
-                var cornerOffsetDown = cameraOrientation.down.clone().multiplyScalar(this.viewSizeHalf.y);
-                var cameraViewCorners = [
-                    centerOfViewPlane.clone().add(cornerOffsetRight).add(cornerOffsetDown),
-                    centerOfViewPlane.clone().subtract(cornerOffsetRight).add(cornerOffsetDown),
-                    centerOfViewPlane.clone().subtract(cornerOffsetRight).subtract(cornerOffsetDown),
-                    centerOfViewPlane.clone().add(cornerOffsetRight).subtract(cornerOffsetDown),
+        
+                var centerOfViewPlane = cameraPos.clone().add
+                (
+                    cameraOrientation.forward.clone().multiplyScalar
+                    (
+                        this.focalLength
+                    )
+                );
+        
+                var cornerOffsetRight =	cameraOrientation.right.clone().multiplyScalar
+                (
+                    this.viewSizeHalf.x
+                );
+        
+                var cornerOffsetDown = cameraOrientation.down.clone().multiplyScalar
+                (
+                    this.viewSizeHalf.y
+                );
+        
+                var cameraViewCorners =
+                [
+                    centerOfViewPlane.clone().add
+                    (
+                        cornerOffsetRight
+                    ).add
+                    (
+                        cornerOffsetDown
+                    ),
+        
+                    centerOfViewPlane.clone().subtract
+                    (
+                        cornerOffsetRight
+                    ).add
+                    (
+                        cornerOffsetDown
+                    ),
+        
+                    centerOfViewPlane.clone().subtract
+                    (
+                        cornerOffsetRight
+                    ).subtract
+                    (
+                        cornerOffsetDown
+                    ),
+        
+                    centerOfViewPlane.clone().add
+                    (
+                        cornerOffsetRight
+                    ).subtract
+                    (
+                        cornerOffsetDown
+                    ),
+        
                 ];
+        
                 var numberOfCorners = cameraViewCorners.length;
-                for (var i = 0; i < numberOfCorners; i++) {
+        
+                for (var i = 0; i < numberOfCorners; i++)
+                {
                     var iNext = i + 1;
-                    if (iNext >= numberOfCorners) {
+                    if (iNext >= numberOfCorners)
+                    {
                         iNext = 0;
                     }
+        
                     var clipPlane = this._clipPlanes[i];
+        
                     var cameraViewCorner = cameraViewCorners[i];
                     var cameraViewCornerNext = cameraViewCorners[iNext];
-                    clipPlane.fromPoints(cameraPos, cameraViewCorner, cameraViewCornerNext);
+        
+                    clipPlane.fromPoints
+                    (
+                        cameraPos,
+                        cameraViewCorner,
+                        cameraViewCornerNext
+                    );
                 }
+        
                 return this._clipPlanes;
             }
+            */
             coordsTransformViewToWorld(viewCoords, ignoreZ) {
                 var cameraLoc = this.loc;
                 if (ignoreZ) {
@@ -163,8 +229,34 @@ var ThisCouldBeBetter;
                 }
                 return entitiesSorted;
             }
+            static entitiesSortByRenderingOrderThenZThenY(entitiesToSort) {
+                entitiesToSort.sort((a, b) => {
+                    var aRenderingOrder = a.drawable().renderingOrder;
+                    var bRenderingOrder = b.drawable().renderingOrder;
+                    if (aRenderingOrder != bRenderingOrder) {
+                        returnValue = bRenderingOrder - aRenderingOrder;
+                    }
+                    else {
+                        var aPos = a.locatable().loc.pos;
+                        var bPos = b.locatable().loc.pos;
+                        var returnValue;
+                        if (aPos.z != bPos.z) {
+                            returnValue = bPos.z - aPos.z;
+                        }
+                        else {
+                            returnValue = aPos.y - bPos.y;
+                        }
+                    }
+                    return returnValue;
+                });
+                return entitiesToSort;
+            }
             toEntity() {
-                return new GameFramework.Entity(Camera.name, [this]);
+                return new GameFramework.Entity(Camera.name, [
+                    this,
+                    new GameFramework.Constrainable([]),
+                    new GameFramework.Locatable(this.loc),
+                ]);
             }
             // EntityProperty.
             finalize(uwpe) { }

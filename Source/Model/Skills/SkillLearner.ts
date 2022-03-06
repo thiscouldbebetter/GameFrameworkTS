@@ -228,10 +228,16 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 	{
 		var display = universe.display;
 		//var size = display.sizeInPixels.clone();
-		var labelHeight = display.fontHeightInPixels * 1.2;
+		var fontNameAndHeight = display.fontNameAndHeight.clone();
+		var labelHeight = fontNameAndHeight.heightInPixels * 1.2;
+		var labelFont = FontNameAndHeight.fromHeightInPixels
+		(
+			labelHeight
+		);
 		var margin = 20;
 		var labelHeightLarge = labelHeight * 2;
-		var fontHeightInPixels = margin / 2;
+		var labelLargeFont = FontNameAndHeight.fromHeightInPixels(labelHeightLarge);
+		// var fontHeightInPixels = margin / 2;
 
 		size = size.clone().addDimensions(0, 30, 0); // hack
 
@@ -260,7 +266,7 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 					false, // isTextCenteredHorizontally
 					false, // isTextCenteredVertically
 					DataBinding.fromContext("Skills Known:"), //text
-					labelHeight // fontHeightInPixels
+					labelFont // fontNameAndHeight
 				),
 
 				ControlList.from6
@@ -271,7 +277,7 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 					// items
 					DataBinding.fromContext(this.skillsKnownNames),
 					DataBinding.fromContext(null), // bindingForItemText
-					labelHeight // fontHeightInPixels
+					labelFont // fontNameAndHeight
 				),
 
 				new ControlLabel
@@ -282,7 +288,7 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 					false, // isTextCenteredHorizontally
 					false, // isTextCenteredVertically
 					DataBinding.fromContext("Skills Available:"), // text
-					labelHeight // fontHeightInPixels
+					labelFont // fontNameAndHeight
 				),
 
 				ControlList.from10
@@ -301,7 +307,7 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 					(
 						(c: Skill) => c.name
 					), // bindingForItemText
-					labelHeight, // fontHeightInPixels
+					labelFont, // fontNameAndHeight
 					new DataBinding
 					(
 						this,
@@ -332,7 +338,7 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 					false, // isTextCenteredHorizontally
 					false, // isTextCenteredVertically
 					DataBinding.fromContext("Selected:"), // text
-					fontHeightInPixels
+					fontNameAndHeight
 				),
 
 				new ControlLabel
@@ -346,7 +352,7 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 					(
 						this, (c: SkillLearner) => (c.skillSelectedName || "-")
 					),
-					fontHeightInPixels
+					fontNameAndHeight
 				),
 
 				new ControlLabel
@@ -365,7 +371,7 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 							return (skill == null ? "-" : skill.description);
 						}
 					),
-					fontHeightInPixels
+					fontNameAndHeight
 				),
 
 				new ControlLabel
@@ -376,7 +382,7 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 					false, // isTextCenteredHorizontally
 					false, // isTextCenteredVertically
 					DataBinding.fromContext("Skill Being Learned:"), // text
-					fontHeightInPixels
+					fontNameAndHeight
 				),
 
 				new ControlLabel
@@ -394,7 +400,7 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 							return (c.skillBeingLearnedName || "-");
 						}
 					),
-					fontHeightInPixels
+					fontNameAndHeight
 				),
 
 				new ControlLabel
@@ -405,7 +411,7 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 					false, // isTextCenteredHorizontally
 					false, // isTextCenteredVertically
 					DataBinding.fromContext("Learning Accumulated:"), // text
-					fontHeightInPixels
+					fontNameAndHeight
 				),
 
 				new ControlLabel
@@ -421,7 +427,7 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 						(c: SkillLearner) =>
 							c.learningAccumulatedOverRequired(skillsAllByName)
 					), // text
-					fontHeightInPixels
+					fontNameAndHeight
 				),
 			]
 		);
@@ -440,7 +446,7 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 					true, // isTextCenteredHorizontally
 					false, // isTextCenteredVertically
 					DataBinding.fromContext("Skills"),
-					labelHeightLarge
+					labelLargeFont
 				)
 			);
 		}

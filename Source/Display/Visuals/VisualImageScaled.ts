@@ -4,16 +4,16 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class VisualImageScaled implements VisualImage
 {
-	visualImage: VisualImage;
 	sizeToDraw: Coords;
+	visualImage: VisualImage;
 
 	sizeToDrawHalf: Coords;
 	_posSaved: Coords;
 
-	constructor(visualImage: VisualImage, sizeToDraw: Coords)
+	constructor(sizeToDraw: Coords, visualImage: VisualImage)
 	{
-		this.visualImage = visualImage;
 		this.sizeToDraw = sizeToDraw;
+		this.visualImage = visualImage;
 
 		this.sizeToDrawHalf = this.sizeToDraw.clone().half();
 		this._posSaved = Coords.create();
@@ -28,7 +28,7 @@ export class VisualImageScaled implements VisualImage
 		for (var i = 0; i < visualsToScale.length; i++)
 		{
 			var visualToScale = visualsToScale[i];
-			var visualScaled = new VisualImageScaled(visualToScale, sizeToDraw);
+			var visualScaled = new VisualImageScaled(sizeToDraw, visualToScale);
 			returnValues.push(visualScaled);
 		}
 		return returnValues;

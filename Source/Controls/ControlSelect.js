@@ -4,8 +4,8 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ControlSelect extends GameFramework.ControlBase {
-            constructor(name, pos, size, valueSelected, options, bindingForOptionValues, bindingForOptionText, fontHeightInPixels) {
-                super(name, pos, size, fontHeightInPixels);
+            constructor(name, pos, size, valueSelected, options, bindingForOptionValues, bindingForOptionText, fontNameAndHeight) {
+                super(name, pos, size, fontNameAndHeight);
                 this._valueSelected = valueSelected;
                 this._options = options;
                 this.bindingForOptionValues = bindingForOptionValues;
@@ -22,7 +22,7 @@ var ThisCouldBeBetter;
                     }
                 }
                 // Helper variables.
-                this._drawPos = GameFramework.Coords.create();
+                this._drawLoc = GameFramework.Disposition.create();
                 this._sizeHalf = GameFramework.Coords.create();
             }
             actionHandle(actionNameToHandle, universe) {
@@ -58,28 +58,29 @@ var ThisCouldBeBetter;
             options() {
                 return this._options.get();
             }
-            scalePosAndSize(scaleFactor) {
-                this.pos.multiply(scaleFactor);
-                this.size.multiply(scaleFactor);
-                this.fontHeightInPixels *= scaleFactor.y;
-            }
             valueSelected() {
                 var returnValue = this._valueSelected.get();
                 return returnValue;
             }
             // drawable
-            draw(universe, display, drawLoc) {
-                var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
-                var style = this.style(universe);
-                display.drawRectangle(drawPos, this.size, (this.isHighlighted ? style.colorBorder() : style.colorFill()), (this.isHighlighted ? style.colorFill() : style.colorBorder()));
-                drawPos.add(this._sizeHalf.overwriteWith(this.size).half());
+            draw(universe, display, drawLoc, style) {
+                var drawPos = this._drawLoc.overwriteWith(drawLoc).pos;
+                drawPos.add(this.pos);
+                var isEnabled = this.isEnabled();
+                var isHighlighted = this.isHighlighted && isEnabled;
+                style = style || this.style(universe);
+                var colorFill = style.colorFill();
+                var colorBorder = style.colorBorder();
+                style.drawBoxOfSizeAtPosWithColorsToDisplay(this.size, drawPos, colorFill, colorBorder, isHighlighted, display);
+                var colorText = (isEnabled ? colorBorder : style.colorDisabled());
                 var optionSelected = this.optionSelected();
                 var text = (optionSelected == null
                     ? "-"
                     : this.bindingForOptionText.contextSet(optionSelected).get());
-                display.drawText(text, this.fontHeightInPixels, drawPos, (this.isHighlighted ? style.colorFill() : style.colorBorder()), (this.isHighlighted ? style.colorBorder() : style.colorFill()), true, // isCenteredHorizontally,
-                false, // isCenteredVertically
-                this.size);
+                display.drawText(text, this.fontNameAndHeight, drawPos, (isHighlighted ? colorFill : colorText), (isHighlighted ? colorText : colorFill), true, // isCenteredHorizontally
+                true, // isCenteredVertically
+                this.size // sizeMaxInPixels
+                );
             }
         }
         GameFramework.ControlSelect = ControlSelect;

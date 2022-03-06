@@ -56,7 +56,7 @@ export class Portal implements EntityProperty<Portal>
 		var placeToDepart = uwpe.place;
 		var entityToTransport = uwpe.entity;
 
-		var destinationPlace = world.placeByName(this.destinationPlaceName);
+		var destinationPlace = world.placeGetByName(this.destinationPlaceName);
 		destinationPlace.initialize(uwpe);
 		var destinationEntity =
 			destinationPlace.entitiesByName.get(this.destinationEntityName);

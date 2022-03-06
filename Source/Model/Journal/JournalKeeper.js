@@ -25,6 +25,8 @@ var ThisCouldBeBetter;
                 var fontHeight = 10;
                 var fontHeightSmall = fontHeight * .6;
                 var fontHeightLarge = fontHeight * 1.5;
+                var fontSmall = GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeightSmall);
+                var fontLarge = GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeightLarge);
                 var back = () => universe.venueTransitionTo(venuePrev);
                 var buttonSize = GameFramework.Coords.fromXY(20, 10);
                 var childControls = [
@@ -32,10 +34,10 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(70, 25), // size
                     false, // isTextCenteredHorizontally
                     false, // isTextCenteredVertically
-                    GameFramework.DataBinding.fromContext("Journal Entries:"), fontHeightSmall),
+                    GameFramework.DataBinding.fromContext("Journal Entries:"), fontSmall),
                     new GameFramework.ControlButton("buttonEntryNew", GameFramework.Coords.fromXY(65, 5), // pos
                     GameFramework.Coords.fromXY(30, 8), // size
-                    "New", fontHeightSmall, true, // hasBorder,
+                    "New", fontSmall, true, // hasBorder,
                     GameFramework.DataBinding.fromTrueWithContext(this), // isEnabled
                     () => {
                         var journal = journalKeeper.journal;
@@ -49,7 +51,7 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(85, 110), // size
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => c.journal.entries), // items
                     GameFramework.DataBinding.fromGet((c) => c.toString(universe)), // bindingForItemText
-                    fontHeightSmall, new GameFramework.DataBinding(this, (c) => c.journalEntrySelected, (c, v) => {
+                    fontSmall, new GameFramework.DataBinding(this, (c) => c.journalEntrySelected, (c, v) => {
                         c.journalEntrySelected = v;
                         c.isJournalEntrySelectedEditable = false;
                     }), // bindingForItemSelected
@@ -63,10 +65,10 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(100, 15), // size
                     false, // isTextCenteredHorizontally
                     false, // isTextCenteredVertically
-                    GameFramework.DataBinding.fromContext("Entry Selected:"), fontHeightSmall),
+                    GameFramework.DataBinding.fromContext("Entry Selected:"), fontSmall),
                     new GameFramework.ControlButton("buttonEntrySelectedEdit", GameFramework.Coords.fromXY(146, 5), // pos
                     GameFramework.Coords.fromXY(15, 8), // size
-                    "Lock", fontHeightSmall, true, // hasBorder,
+                    "Lock", fontSmall, true, // hasBorder,
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.journalEntrySelected != null
                         && c.isJournalEntrySelectedEditable)), // isEnabled
                     () => {
@@ -75,7 +77,7 @@ var ThisCouldBeBetter;
                     false),
                     new GameFramework.ControlButton("buttonEntrySelectedEdit", GameFramework.Coords.fromXY(164, 5), // pos
                     GameFramework.Coords.fromXY(15, 8), // size
-                    "Edit", fontHeightSmall, true, // hasBorder,
+                    "Edit", fontSmall, true, // hasBorder,
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.journalEntrySelected != null
                         && c.isJournalEntrySelectedEditable == false)), // isEnabled
                     () => {
@@ -84,7 +86,7 @@ var ThisCouldBeBetter;
                     false),
                     new GameFramework.ControlButton("buttonEntrySelectedDelete", GameFramework.Coords.fromXY(182, 5), // pos
                     GameFramework.Coords.fromXY(8, 8), // size
-                    "X", fontHeightSmall, true, // hasBorder,
+                    "X", fontSmall, true, // hasBorder,
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.journalEntrySelected != null)), // isEnabled
                     () => {
                         var controlConfirm = universe.controlBuilder.confirmAndReturnToVenue(universe, universe.display.sizeInPixels, // size
@@ -105,7 +107,7 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(100, 15), // size
                     false, // isTextCenteredHorizontally
                     false, // isTextCenteredVertically
-                    GameFramework.DataBinding.fromContext("Time Recorded:"), fontHeightSmall),
+                    GameFramework.DataBinding.fromContext("Time Recorded:"), fontSmall),
                     new GameFramework.ControlLabel("labelEntrySelectedTimeRecorded", GameFramework.Coords.fromXY(145, 15), // pos
                     GameFramework.Coords.fromXY(100, 15), // size
                     false, // isTextCenteredHorizontally
@@ -113,7 +115,7 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => {
                         var entry = c.journalEntrySelected;
                         return (entry == null ? "-" : entry.timeRecordedAsStringH_M_S(universe));
-                    }), fontHeightSmall),
+                    }), fontSmall),
                     new GameFramework.ControlTextBox("textTitle", GameFramework.Coords.fromXY(105, 25), // pos
                     GameFramework.Coords.fromXY(85, 10), // size
                     new GameFramework.DataBinding(this, (c) => {
@@ -125,7 +127,7 @@ var ThisCouldBeBetter;
                             journalEntry.title = v;
                         }
                     }), // text
-                    fontHeightSmall, 32, // charCountMax
+                    fontSmall, 32, // charCountMax
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.journalEntrySelected != null && c.isJournalEntrySelectedEditable)) // isEnabled
                     ),
                     new GameFramework.ControlTextarea("textareaEntryBody", GameFramework.Coords.fromXY(105, 40), // pos
@@ -139,7 +141,7 @@ var ThisCouldBeBetter;
                             journalEntry.body = v;
                         }
                     }), // text
-                    fontHeightSmall, GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.journalEntrySelected != null && c.isJournalEntrySelectedEditable)) // isEnabled
+                    fontSmall, GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.journalEntrySelected != null && c.isJournalEntrySelectedEditable)) // isEnabled
                     ),
                     new GameFramework.ControlLabel("infoStatus", GameFramework.Coords.fromXY(150, 120), // pos
                     GameFramework.Coords.fromXY(200, 15), // size
@@ -148,7 +150,7 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => {
                         return c.statusMessage;
                     }), // text
-                    fontHeightSmall)
+                    fontSmall)
                 ];
                 var returnValue = new GameFramework.ControlContainer("Notes", GameFramework.Coords.create(), // pos
                 sizeBase.clone(), // size
@@ -163,9 +165,9 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(100, 25), // size
                     true, // isTextCenteredHorizontally
                     false, // isTextCenteredVertically
-                    GameFramework.DataBinding.fromContext("Journal"), fontHeightLarge));
+                    GameFramework.DataBinding.fromContext("Journal"), fontLarge));
                     childControls.push(GameFramework.ControlButton.from8("buttonDone", GameFramework.Coords.fromXY(170, 115), // pos
-                    buttonSize.clone(), "Done", fontHeightSmall, true, // hasBorder
+                    buttonSize.clone(), "Done", fontSmall, true, // hasBorder
                     GameFramework.DataBinding.fromTrue(), // isEnabled
                     back // click
                     ));

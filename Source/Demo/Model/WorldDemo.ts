@@ -3,7 +3,13 @@ class WorldDemo extends World
 {
 	constructor(name: string, dateCreated: DateTime, defn: WorldDefn, places: Place[])
 	{
-		super(name, dateCreated, defn, places);
+		var placesByName = ArrayHelper.addLookupsByName(places);
+		var placeGetByName = (placeName: string) => placesByName.get(placeName);
+		var placeInitialName = places[0].name;
+		super
+		(
+			name, dateCreated, defn, placeGetByName, placeInitialName
+		);
 	}
 
 	// static methods
@@ -78,14 +84,14 @@ class WorldDemo extends World
 		var skills = Skill.skillsDemo();
 
 		var defns = new WorldDefn
-		(
+		([
 			actions,
 			activityDefns,
 			entityDefns,
 			itemDefns,
 			placeDefns,
 			skills
-		);
+		]);
 
 		var places = [];
 

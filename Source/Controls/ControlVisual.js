@@ -34,10 +34,7 @@ var ThisCouldBeBetter;
                 return false;
             }
             scalePosAndSize(scaleFactors) {
-                this.pos.multiply(scaleFactors);
-                this.size.multiply(scaleFactors);
-                this._sizeHalf.multiply(scaleFactors);
-                return this;
+                return super.scalePosAndSize(scaleFactors);
             }
             // drawable
             draw(universe, display, drawLoc, style) {

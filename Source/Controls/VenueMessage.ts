@@ -97,6 +97,8 @@ export class VenueMessage<TContext> implements Venue
 		{
 			var sizeInPixels = this.sizeInPixels(universe);
 
+			var fontNameAndHeight = FontNameAndHeight.default();
+
 			var controlMessage = universe.controlBuilder.message
 			(
 				universe,
@@ -104,7 +106,7 @@ export class VenueMessage<TContext> implements Venue
 				this.messageToShow,
 				this.acknowledge,
 				this.showMessageOnly,
-				null // fontHeightInPixels
+				fontNameAndHeight
 			);
 
 			var venuesToLayer = [];

@@ -251,6 +251,7 @@ export class Selector implements EntityProperty<Selector>
 	toControl(size: Coords, pos: Coords): ControlBase
 	{
 		var fontHeightInPixels = 12;
+		var font = FontNameAndHeight.fromHeightInPixels(fontHeightInPixels);
 		var margin = fontHeightInPixels / 2;
 
 		var labelSize = Coords.fromXY(size.x, fontHeightInPixels);
@@ -269,7 +270,7 @@ export class Selector implements EntityProperty<Selector>
 					false, // isTextCenteredHorizontally
 					false, // isTextCenteredVertically
 					DataBinding.fromContext("Selected:"),
-					fontHeightInPixels
+					font
 				),
 
 				new ControlLabel
@@ -289,7 +290,7 @@ export class Selector implements EntityProperty<Selector>
 								: c.entitiesSelected[0].name
 							)
 					),
-					fontHeightInPixels
+					font
 				)
 			],
 			null, null

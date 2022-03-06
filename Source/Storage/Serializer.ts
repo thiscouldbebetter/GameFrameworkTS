@@ -48,7 +48,13 @@ export class SerializerNode
 		this.o = objectWrapped;
 	}
 
-	wrap(typeNamesSoFar: string[], typeIdsByName: Map<string, number>, objectsAlreadyWrapped: any, objectIndexToNodeLookup: any)
+	wrap
+	(
+		typeNamesSoFar: string[],
+		typeIdsByName: Map<string, number>,
+		objectsAlreadyWrapped: any,
+		objectIndexToNodeLookup: any
+	): SerializerNode
 	{
 		var objectWrapped = this.o;
 		if (objectWrapped != null)
@@ -85,7 +91,25 @@ export class SerializerNode
 
 				if (typeName == Function.name)
 				{
-					this.o = objectWrapped.toString();
+					var functionText = objectWrapped.toString();
+					if
+					(
+						functionText.startsWith(Function.name) == false
+						&& functionText.indexOf("=>") == -1
+					)
+					{
+						// This sometimes happens when passing class methods
+						// as lambdas instead of using 'big-arrow' syntax.
+						console.log("Modifying lambda text for serialization.");
+						var firstIndexOfOpenParenthesis = functionText.indexOf("(");
+						var firstIndexOfCloseParenthesis = functionText.indexOf(")");
+						var functionName = functionText.substr(0, firstIndexOfOpenParenthesis);
+						var functionParametersLength =
+							firstIndexOfCloseParenthesis - firstIndexOfOpenParenthesis + 1;
+						var functionParameters = functionText.substr(firstIndexOfOpenParenthesis, functionParametersLength);
+						functionText = functionParameters + " => " + functionName + functionParameters;
+					}
+					this.o = functionText;
 				}
 				else
 				{
@@ -107,38 +131,53 @@ export class SerializerNode
 
 					for (var propertyName in objectWrapped)
 					{
-						if (objectWrapped.__proto__[propertyName] == null)
+						var property = null;
+						try
 						{
-							var propertyValue = objectWrapped[propertyName];
+							var objectWrappedPrototype = Object.getPrototypeOf(objectWrapped);
+							property = objectWrappedPrototype[propertyName];
 
-							if (propertyValue == null)
+							if (property == null)
 							{
-								child = null;
-							}
-							else
-							{
-								var propertyValueTypeName = propertyValue.constructor.name;
+								var propertyValue = objectWrapped[propertyName];
 
-								if
-								(
-									propertyValueTypeName == Boolean.name
-									|| propertyValueTypeName == Number.name
-									|| propertyValueTypeName == String.name
-								)
+								if (propertyValue == null)
 								{
-									child = propertyValue;
+									child = null;
 								}
 								else
 								{
-									child = new SerializerNode
+									var propertyValueTypeName = propertyValue.constructor.name;
+
+									if
 									(
-										propertyValue
-									);
+										propertyValueTypeName == Boolean.name
+										|| propertyValueTypeName == Number.name
+										|| propertyValueTypeName == String.name
+									)
+									{
+										child = propertyValue;
+									}
+									else
+									{
+										child = new SerializerNode
+										(
+											propertyValue
+										);
+									}
+
 								}
 
+								children[propertyName] = child;
 							}
-
-							children[propertyName] = child;
+						}
+						catch (ex)
+						{
+							// This usually happens on attempting to serialize a DOM element.
+							var errorMessage =
+								"Error accessing property '" + propertyName
+								+ "' on type '" + typeName + "'.  Ignoring.";
+							console.log(errorMessage);
 						}
 					}
 
@@ -171,7 +210,7 @@ export class SerializerNode
 
 	}
 
-	prototypesAssign()
+	prototypesAssign(): void
 	{
 		var children = this.c;
 		if (children != null)
@@ -192,7 +231,7 @@ export class SerializerNode
 		}
 	}
 
-	unwrap(typeNames: string[], nodesAlreadyProcessed: any)
+	unwrap(typeNames: string[], nodesAlreadyProcessed: any): any
 	{
 		var isReference = (this.r == 1);
 		if (isReference)
@@ -215,7 +254,17 @@ export class SerializerNode
 			}
 			else if (typeName == Function.name)
 			{
-				this.o = eval("(" + this.o + ")");
+				try
+				{
+					this.o = eval("(" + this.o + ")");
+				}
+				catch (ex)
+				{
+					// This sometimes happens when passing class methods
+					// as lambdas instead of using 'big-arrow' syntax.
+					console.log("An error occurred while deserializing a function.");
+					throw ex;
+				}
 			}
 			else if (typeName == Map.name)
 			{

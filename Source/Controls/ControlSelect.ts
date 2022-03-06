@@ -11,7 +11,7 @@ export class ControlSelect<TContext, TItem, TValue> extends ControlBase
 
 	indexOfOptionSelected: number;
 
-	_drawPos: Coords;
+	_drawLoc: Disposition;
 	_sizeHalf: Coords;
 
 	constructor
@@ -23,10 +23,10 @@ export class ControlSelect<TContext, TItem, TValue> extends ControlBase
 		options: DataBinding<TContext, TItem[]>,
 		bindingForOptionValues: DataBinding<TItem, TValue>,
 		bindingForOptionText: DataBinding<TItem, string>,
-		fontHeightInPixels: number
+		fontNameAndHeight: FontNameAndHeight
 	)
 	{
-		super(name, pos, size, fontHeightInPixels);
+		super(name, pos, size, fontNameAndHeight);
 		this._valueSelected = valueSelected;
 		this._options = options;
 		this.bindingForOptionValues = bindingForOptionValues;
@@ -51,7 +51,7 @@ export class ControlSelect<TContext, TItem, TValue> extends ControlBase
 		}
 
 		// Helper variables.
-		this._drawPos = Coords.create();
+		this._drawLoc = Disposition.create();
 		this._sizeHalf = Coords.create();
 	}
 
@@ -115,13 +115,6 @@ export class ControlSelect<TContext, TItem, TValue> extends ControlBase
 		return this._options.get();
 	}
 
-	scalePosAndSize(scaleFactor: Coords): void
-	{
-		this.pos.multiply(scaleFactor);
-		this.size.multiply(scaleFactor);
-		this.fontHeightInPixels *= scaleFactor.y;
-	}
-
 	valueSelected(): TValue
 	{
 		var returnValue = this._valueSelected.get();
@@ -130,20 +123,29 @@ export class ControlSelect<TContext, TItem, TValue> extends ControlBase
 
 	// drawable
 
-	draw(universe: Universe, display: Display, drawLoc: Disposition): void
+	draw
+	(
+		universe: Universe,
+		display: Display,
+		drawLoc: Disposition, style: ControlStyle
+	): void
 	{
-		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
+		var drawPos = this._drawLoc.overwriteWith(drawLoc).pos;
+		drawPos.add(this.pos);
 
-		var style = this.style(universe);
+		var isEnabled = this.isEnabled();
+		var isHighlighted = this.isHighlighted && isEnabled;
 
-		display.drawRectangle
+		style = style || this.style(universe);
+		var colorFill = style.colorFill();
+		var colorBorder = style.colorBorder();
+
+		style.drawBoxOfSizeAtPosWithColorsToDisplay
 		(
-			drawPos, this.size,
-			(this.isHighlighted ? style.colorBorder() : style.colorFill()),
-			(this.isHighlighted ? style.colorFill() : style.colorBorder())
+			this.size, drawPos, colorFill, colorBorder, isHighlighted, display
 		);
 
-		drawPos.add(this._sizeHalf.overwriteWith(this.size).half());
+		var colorText = (isEnabled ? colorBorder : style.colorDisabled());
 
 		var optionSelected = this.optionSelected();
 		var text =
@@ -156,13 +158,13 @@ export class ControlSelect<TContext, TItem, TValue> extends ControlBase
 		display.drawText
 		(
 			text,
-			this.fontHeightInPixels,
+			this.fontNameAndHeight,
 			drawPos,
-			(this.isHighlighted ? style.colorFill() : style.colorBorder()),
-			(this.isHighlighted ? style.colorBorder() : style.colorFill()),
-			true, // isCenteredHorizontally,
-			false, // isCenteredVertically
-			this.size
+			(isHighlighted ? colorFill : colorText),
+			(isHighlighted ? colorText : colorFill),
+			true, // isCenteredHorizontally
+			true, // isCenteredVertically
+			this.size // sizeMaxInPixels
 		);
 	}
 }

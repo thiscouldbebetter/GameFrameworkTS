@@ -45,6 +45,11 @@ export class Disposition
 		return new Disposition(Coords.create(), Orientation.default(), null);
 	}
 
+	static default(): Disposition
+	{
+		return Disposition.create();
+	}
+
 	static from2
 	(
 		pos: Coords, orientation: Orientation
@@ -92,7 +97,7 @@ export class Disposition
 
 	place(world: World): Place
 	{
-		return world.placeByName(this.placeName);
+		return world.placeGetByName(this.placeName);
 	}
 
 	velSet(value: Coords): Disposition

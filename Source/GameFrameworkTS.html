@@ -57,6 +57,7 @@ so it can be published on thiscouldbebetter.github.io.
 <script type="text/javascript" src="Display/Visuals/VisualCircle.js"></script>
 <script type="text/javascript" src="Display/Visuals/VisualControl.js"></script>
 <script type="text/javascript" src="Display/Visuals/VisualCrosshairs.js"></script>
+<script type="text/javascript" src="Display/Visuals/VisualDeferred.js"></script>
 <script type="text/javascript" src="Display/Visuals/VisualDirectional.js"></script>
 <script type="text/javascript" src="Display/Visuals/VisualDynamic.js"></script>
 <script type="text/javascript" src="Display/Visuals/VisualEllipse.js"></script>
@@ -95,10 +96,6 @@ so it can be published on thiscouldbebetter.github.io.
 <script type="text/javascript" src="Geometry/RangeExtent.js"></script>
 <script type="text/javascript" src="Geometry/Rotation.js"></script>
 
-<script type="text/javascript" src="Geometry/Collisions/Collision.js"></script>
-<script type="text/javascript" src="Geometry/Collisions/CollisionHelper.js"></script>
-<script type="text/javascript" src="Geometry/Collisions/CollisionTracker.js"></script>
-
 <script type="text/javascript" src="Geometry/Constraints/Constraint_AttachToEntityWithName.js"></script>
 <script type="text/javascript" src="Geometry/Constraints/Constraint_Conditional.js"></script>
 <script type="text/javascript" src="Geometry/Constraints/Constraint_ContainInBox.js"></script>
@@ -135,6 +132,11 @@ so it can be published on thiscouldbebetter.github.io.
 <script type="text/javascript" src="Geometry/Shapes/Meshes/Mesh.js"></script>
 <script type="text/javascript" src="Geometry/Shapes/Meshes/MeshBuilder.js"></script>
 
+<!-- hack - Had to move these here for inheritance reasons. -->
+<script type="text/javascript" src="Geometry/Collisions/Collision.js"></script>
+<script type="text/javascript" src="Geometry/Collisions/CollisionHelper.js"></script>
+<script type="text/javascript" src="Geometry/Collisions/CollisionTracker.js"></script>
+
 <script type="text/javascript" src="Geometry/Transforms/Transform_Dynamic.js"></script>
 <script type="text/javascript" src="Geometry/Transforms/Transform_Multiple.js"></script>
 <script type="text/javascript" src="Geometry/Transforms/Transform_None.js"></script>
@@ -154,6 +156,7 @@ so it can be published on thiscouldbebetter.github.io.
 
 <script type="text/javascript" src="Media/BinaryFile.js"></script>
 <script type="text/javascript" src="Media/Font.js"></script>
+<script type="text/javascript" src="Media/FontNameAndHeight.js"></script>
 <script type="text/javascript" src="Media/Image.js"></script>
 <script type="text/javascript" src="Media/MediaLibrary.js"></script>
 <script type="text/javascript" src="Media/TextString.js"></script>
@@ -166,6 +169,7 @@ so it can be published on thiscouldbebetter.github.io.
 <script type="text/javascript" src="Media/Audio/SoundFromAudioContext.js"></script>
 <script type="text/javascript" src="Media/Audio/SoundFromFile.js"></script>
 <script type="text/javascript" src="Media/Audio/SoundFromFileMod.js"></script>
+<script type="text/javascript" src="Media/Audio/SoundNone.js"></script>
 <script type="text/javascript" src="Media/Audio/SoundHelper.js"></script>
 <script type="text/javascript" src="Media/Audio/VisualSound.js"></script>
 
@@ -339,10 +343,7 @@ so it can be published on thiscouldbebetter.github.io.
 
 <script type="text/javascript" src="Demo/GameDemo.js"></script>
 
-<script type="text/javascript">
-var contentDirectoryPath = "../Content/";
-new GameDemo(contentDirectoryPath).main();
-</script>
+<script type="text/javascript" src="main.js"></script>
 
 </body>
 </html>

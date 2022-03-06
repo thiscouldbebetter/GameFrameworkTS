@@ -38,6 +38,7 @@ var ThisCouldBeBetter;
                     size = universe.display.sizeDefault();
                 }
                 var fontHeight = 10;
+                var font = GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeight);
                 var margin = fontHeight * 1.5;
                 var buttonSize = GameFramework.Coords.fromXY(2, 2).multiplyScalar(fontHeight);
                 var listSize = GameFramework.Coords.fromXY((size.x - margin * 4 - buttonSize.x) / 2, size.y - margin * 4 - fontHeight * 2);
@@ -60,22 +61,22 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(listSize.x, 25), // size
                     false, // isTextCenteredHorizontally
                     false, // isTextCenteredVertically
-                    GameFramework.DataBinding.fromContext(entityContainer.name + ":"), fontHeight),
+                    GameFramework.DataBinding.fromContext(entityContainer.name + ":"), font),
                     new GameFramework.ControlList("listContainerItems", GameFramework.Coords.fromXY(margin, margin * 2), // pos
                     listSize.clone(), GameFramework.DataBinding.fromContextAndGet(itemHolderContainer, (c) => c.items), // items
                     GameFramework.DataBinding.fromGet((c) => c.toString(world)), // bindingForItemText
-                    fontHeight, new GameFramework.DataBinding(itemHolderContainer, (c) => c.itemSelected, (c, v) => c.itemSelected = v), // bindingForItemSelected
+                    font, new GameFramework.DataBinding(itemHolderContainer, (c) => c.itemSelected, (c, v) => c.itemSelected = v), // bindingForItemSelected
                     GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
                     GameFramework.DataBinding.fromTrue(), // isEnabled
                     get, // confirm
                     null),
                     GameFramework.ControlButton.from8("buttonGet", GameFramework.Coords.fromXY((size.x - buttonSize.x) / 2, (size.y - buttonSize.y - margin) / 2), // pos
-                    buttonSize.clone(), ">", fontHeight, true, // hasBorder
+                    buttonSize.clone(), ">", font, true, // hasBorder
                     GameFramework.DataBinding.fromTrue(), // isEnabled
                     get // click
                     ),
                     GameFramework.ControlButton.from8("buttonPut", GameFramework.Coords.fromXY((size.x - buttonSize.x) / 2, (size.y + buttonSize.y + margin) / 2), // pos
-                    buttonSize.clone(), "<", fontHeight, true, // hasBorder
+                    buttonSize.clone(), "<", font, true, // hasBorder
                     GameFramework.DataBinding.fromTrue(), // isEnabled
                     put // click
                     ),
@@ -83,12 +84,12 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(85, 25), // size
                     false, // isTextCenteredHorizontally
                     false, // isTextCenteredVertically
-                    GameFramework.DataBinding.fromContext(entityGetterPutter.name + ":"), fontHeight),
+                    GameFramework.DataBinding.fromContext(entityGetterPutter.name + ":"), font),
                     new GameFramework.ControlList("listOtherItems", GameFramework.Coords.fromXY(size.x - margin - listSize.x, margin * 2), // pos
                     listSize.clone(), GameFramework.DataBinding.fromContextAndGet(itemHolderGetterPutter, (c) => c.items //.filter(x => x.item().defnName != itemDefnNameCurrency);
                     ), // items
                     GameFramework.DataBinding.fromGet((c) => c.toString(world)), // bindingForItemText
-                    fontHeight, new GameFramework.DataBinding(itemHolderGetterPutter, (c) => c.itemSelected, (c, v) => c.itemSelected = v), // bindingForItemSelected
+                    font, new GameFramework.DataBinding(itemHolderGetterPutter, (c) => c.itemSelected, (c, v) => c.itemSelected = v), // bindingForItemSelected
                     GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
                     GameFramework.DataBinding.fromTrue(), // isEnabled
                     put, // confirm
@@ -97,9 +98,9 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(size.x, fontHeight), // size
                     true, // isTextCenteredHorizontally
                     false, // isTextCenteredVertically
-                    GameFramework.DataBinding.fromContextAndGet(this, c => c.statusMessage), fontHeight),
+                    GameFramework.DataBinding.fromContextAndGet(this, c => c.statusMessage), font),
                     GameFramework.ControlButton.from8("buttonDone", GameFramework.Coords.fromXY(size.x - margin - buttonSize.x, size.y - margin - buttonSize.y), // pos
-                    buttonSize.clone(), "Done", fontHeight, true, // hasBorder
+                    buttonSize.clone(), "Done", font, true, // hasBorder
                     GameFramework.DataBinding.fromTrue(), // isEnabled
                     back // click
                     )

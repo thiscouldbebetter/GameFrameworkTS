@@ -90,7 +90,7 @@ var ThisCouldBeBetter;
                 if (this._box == null) {
                     this._box = new GameFramework.Box(GameFramework.Coords.create(), GameFramework.Coords.create());
                 }
-                this._box.ofPoints(this.vertices());
+                this._box.containPoints(this.vertices());
                 return this._box;
             }
             edges() {
@@ -162,7 +162,7 @@ var ThisCouldBeBetter;
                 return surfacePointOut.overwriteWith(posToCheck); // todo
             }
             toBox(boxOut) {
-                return boxOut.ofPoints(this.vertices());
+                return boxOut.containPoints(this.vertices());
             }
         }
         GameFramework.Mesh = Mesh;

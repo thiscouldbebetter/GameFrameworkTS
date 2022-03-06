@@ -27,6 +27,26 @@ export class Image2 implements MediaItemBase
 		return new Image2(null, null);
 	}
 
+	static fromImageAndBox(imageSource: Image2, box: Box): Image2
+	{
+		var display = Display2D.fromSizeAndIsInvisible
+		(
+			box.size, true // isInvisible
+		).initialize(null);
+
+		display.drawImagePartial
+		(
+			imageSource,
+			Coords.Instances().Zeroes,
+			box
+		);
+
+		var name = imageSource.name + box.toStringXY()
+		var returnImage = display.toImage(name);
+
+		return returnImage;
+	}
+
 	static fromSystemImage(name: string, systemImage: any): Image2
 	{
 		var returnValue = new Image2
@@ -36,13 +56,60 @@ export class Image2 implements MediaItemBase
 		);
 
 		returnValue.systemImage = systemImage;
-		returnValue.sizeInPixels = new Coords(systemImage.width, systemImage.height, 0);
+		returnValue.sizeInPixels = Coords.fromXY
+		(
+			systemImage.width, systemImage.height
+		);
 		returnValue.isLoaded = true;
 
 		return returnValue;
 	}
 
-	// instance methods
+	toTiles(sizeInTiles: Coords): Image2[][]
+	{
+		var tilePosInTiles = Coords.create();
+		var tilePosInPixels = Coords.create();
+		var tileSizeInPixels =
+			this.sizeInPixels.clone().divide(sizeInTiles);
+
+		var imageRows = [];
+
+		for (var y = 0; y < sizeInTiles.y; y++)
+		{
+			tilePosInTiles.y = y;
+
+			var imagesInRow = [];
+
+			for (var x = 0; x < sizeInTiles.x; x++)
+			{
+				tilePosInTiles.x = x;
+
+				tilePosInPixels.overwriteWith
+				(
+					tilePosInTiles
+				).multiply
+				(
+					tileSizeInPixels
+				);
+
+				var box = Box.fromMinAndSize
+				(
+					tilePosInPixels, tileSizeInPixels
+				);
+
+				var imageForTile =
+					Image2.fromImageAndBox(this, box);
+
+				imagesInRow.push(imageForTile);
+			}
+
+			imageRows.push(imagesInRow);
+		}
+
+		return imageRows;
+	}
+
+	// Clonable.
 
 	clone(): Image2
 	{
@@ -56,6 +123,8 @@ export class Image2 implements MediaItemBase
 
 		return returnValue;
 	}
+
+	// Loadable.
 
 	load(): Image2
 	{

@@ -33,6 +33,11 @@ var ThisCouldBeBetter;
                 );
                 return returnValue;
             }
+            static fromNameFramesAndIsRepeating(name, frames, isRepeating) {
+                var ticksToHoldFrames = frames.map(x => 1);
+                var returnValue = new VisualAnimation(name, ticksToHoldFrames, frames, isRepeating);
+                return returnValue;
+            }
             frameCurrent(world, tickStarted) {
                 var frameIndexCurrent = this.frameIndexCurrent(world, tickStarted);
                 var frameCurrent = this.frames[frameIndexCurrent];

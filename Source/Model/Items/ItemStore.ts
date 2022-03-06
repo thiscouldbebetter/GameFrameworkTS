@@ -92,6 +92,7 @@ export class ItemStore implements EntityProperty<ItemStore>
 		}
 
 		var fontHeight = 10;
+		var font = FontNameAndHeight.fromHeightInPixels(fontHeight);
 		var margin = fontHeight * 1.5;
 		var buttonSize = Coords.fromXY(4, 2).multiplyScalar(fontHeight);
 		var listSize = Coords.fromXY
@@ -138,7 +139,7 @@ export class ItemStore implements EntityProperty<ItemStore>
 					false, // isTextCenteredHorizontally
 					false, // isTextCenteredVertically
 					DataBinding.fromContext(entityStore.name + ":"),
-					fontHeight
+					font
 				),
 
 				ControlList.from10
@@ -156,7 +157,7 @@ export class ItemStore implements EntityProperty<ItemStore>
 					(
 						(c: Item) => c.toString(world)
 					), // bindingForItemText
-					fontHeight,
+					font,
 					new DataBinding
 					(
 						itemHolderStore,
@@ -176,7 +177,7 @@ export class ItemStore implements EntityProperty<ItemStore>
 					false, // isTextCenteredHorizontally
 					false, // isTextCenteredVertically
 					DataBinding.fromContext(entityCustomer.name + ":"),
-					fontHeight
+					font
 				),
 
 				ControlButton.from8
@@ -189,7 +190,7 @@ export class ItemStore implements EntityProperty<ItemStore>
 					), // pos
 					buttonSize.clone(),
 					"Buy",
-					fontHeight,
+					font,
 					true, // hasBorder
 					DataBinding.fromTrue(), // isEnabled
 					buy // click
@@ -210,7 +211,7 @@ export class ItemStore implements EntityProperty<ItemStore>
 					(
 						(c: Item) => c.toString(world)
 					), // bindingForItemText
-					fontHeight,
+					font,
 					new DataBinding
 					(
 						itemHolderCustomer,
@@ -232,7 +233,7 @@ export class ItemStore implements EntityProperty<ItemStore>
 					), // pos
 					buttonSize.clone(),
 					"Sell",
-					fontHeight,
+					font,
 					true, // hasBorder
 					DataBinding.fromTrue(), // isEnabled
 					sell // click
@@ -246,7 +247,7 @@ export class ItemStore implements EntityProperty<ItemStore>
 					true, // isTextCenteredHorizontally
 					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet(this, c => c.statusMessage),
-					fontHeight
+					font
 				),
 
 				ControlButton.from8
@@ -259,7 +260,7 @@ export class ItemStore implements EntityProperty<ItemStore>
 					), // pos
 					buttonSize.clone(),
 					"Done",
-					fontHeight,
+					font,
 					true, // hasBorder
 					DataBinding.fromTrue(), // isEnabled
 					back // click
