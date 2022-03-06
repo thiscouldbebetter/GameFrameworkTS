@@ -31,9 +31,14 @@ var ThisCouldBeBetter;
                     this.azimuthInTurns += 1;
                 }
                 this.radius = coordsToConvert.magnitude();
-                this.elevationInTurns =
-                    Math.asin(coordsToConvert.z / this.radius)
-                        / Polar.RadiansPerTurn;
+                if (this.radius == 0) {
+                    this.elevationInTurns = 0;
+                }
+                else {
+                    this.elevationInTurns =
+                        Math.asin(coordsToConvert.z / this.radius)
+                            / Polar.RadiansPerTurn;
+                }
                 return this;
             }
             overwriteWith(other) {

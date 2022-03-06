@@ -9,7 +9,7 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 	bindingForItemSelected: DataBinding<TContext, TItem>;
 	bindingForItemValue: DataBinding<TItem, TValue>;
 	bindingForIsEnabled: DataBinding<TContext, boolean>;
-	confirm: (u: Universe) => void;
+	_confirm: (u: Universe) => void;
 	widthInItems: number;
 
 	isHighlighted: boolean;
@@ -45,7 +45,7 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 		this.bindingForIsEnabled =
 			bindingForIsEnabled
 			|| DataBinding.fromTrueWithContext<TContext>(null);
-		this.confirm = confirm;
+		this._confirm = confirm;
 		this.widthInItems = widthInItems || 1;
 
 		var itemSizeY = 1.2 * this.fontHeightInPixels; // hack
@@ -89,7 +89,8 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 			null, // bindingForItemSelected,
 			null, // bindingForItemValue,
 			DataBinding.fromTrue(), // isEnabled
-			null, null
+			null, // confirm
+			null // widthInItems
 		);
 
 		return returnValue;
@@ -213,13 +214,18 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 		}
 		else if (actionNameToHandle == controlActionNames.ControlConfirm)
 		{
-			if (this.confirm != null)
-			{
-				this.confirm(universe);
-				wasActionHandled = true;
-			}
+			this.confirm(universe);
+			wasActionHandled = true;
 		}
 		return wasActionHandled;
+	}
+
+	confirm(universe: Universe): void
+	{
+		if (this._confirm != null)
+		{
+			this._confirm(universe);
+		}
 	}
 
 	indexOfFirstItemVisible(): number

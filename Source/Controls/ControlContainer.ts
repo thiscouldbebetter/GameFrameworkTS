@@ -234,11 +234,12 @@ export class ControlContainer extends ControlBase
 		for (var i = this.children.length - 1; i >= 0; i--)
 		{
 			var child = this.children[i];
+			var childPos = child.pos;
+			var childMax = this._childMax.overwriteWith(childPos).add(child.size);
 
 			var doesChildContainPos = posToCheck.isInRangeMinMax
 			(
-				child.pos,
-				this._childMax.overwriteWith(child.pos).add(child.size)
+				childPos, childMax
 			);
 
 			if (doesChildContainPos)

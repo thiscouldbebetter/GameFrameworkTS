@@ -184,8 +184,9 @@ var ThisCouldBeBetter;
                 for (var i = childrenActive.length - 1; i >= 0; i--) {
                     var child = childrenActive[i];
                     if (child != null) {
-                        var childMax = this._childMax.overwriteWith(child.pos).add(child.size);
-                        var doesChildContainPos = posToCheck.isInRangeMinMax(child.pos, childMax);
+                        var childPos = child.pos;
+                        var childMax = this._childMax.overwriteWith(childPos).add(child.size);
+                        var doesChildContainPos = posToCheck.isInRangeMinMax(childPos, childMax);
                         if (doesChildContainPos) {
                             listToAddTo.push(child);
                             if (addFirstChildOnly) {

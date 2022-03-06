@@ -30,6 +30,22 @@ export class VisualPolygon implements Visual<VisualPolygon>
 		this.transformLocate = new Transform_Locate(null);
 	}
 
+	static arrow
+	(
+		width: number,
+		length: number,
+		headingInTurns: number,
+		colorFill: Color,
+		colorBorder: Color
+	): VisualPolygon
+	{
+		var pathArrow = Path.arrowOfWidthAndLength(width, length);
+		var transform = new Transform_Rotate2D(headingInTurns);
+		pathArrow.transform(transform);
+		var returnValue = new VisualPolygon(pathArrow, colorFill, colorBorder, null);
+		return returnValue;
+	}
+
 	static default(): VisualPolygon
 	{
 		return VisualPolygon.fromDimensionAndColorBorder

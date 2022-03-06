@@ -13,6 +13,13 @@ var ThisCouldBeBetter;
                 this.verticesAsPathTransformed = this.verticesAsPath.clone();
                 this.transformLocate = new GameFramework.Transform_Locate(null);
             }
+            static arrow(width, length, headingInTurns, colorFill, colorBorder) {
+                var pathArrow = GameFramework.Path.arrowOfWidthAndLength(width, length);
+                var transform = new GameFramework.Transform_Rotate2D(headingInTurns);
+                pathArrow.transform(transform);
+                var returnValue = new VisualPolygon(pathArrow, colorFill, colorBorder, null);
+                return returnValue;
+            }
             static default() {
                 return VisualPolygon.fromDimensionAndColorBorder(10, GameFramework.Color.byName("Cyan"));
             }

@@ -12,13 +12,22 @@ var ThisCouldBeBetter;
                 // Helper variables.
                 this._drawPos = GameFramework.Coords.create();
             }
-            static fromPosAndTextString(pos, textAsString) {
-                return new ControlLabel(null, //name
-                pos, null, // size
-                false, // isTextCenteredHorizontally
+            static fromPosAndText(pos, text) {
+                var fontHeightInPixels = 10; // hack
+                var size = GameFramework.Coords.fromXY(100, 1).multiplyScalar(fontHeightInPixels);
+                return new ControlLabel(ControlLabel.name + "_" + text.get(), //name
+                pos, size, false, // isTextCenteredHorizontally
                 false, // isTextCenteredVertically
-                GameFramework.DataBinding.fromGet((c) => textAsString), 10 // fontHeightInPixels
-                );
+                text, fontHeightInPixels);
+            }
+            static fromPosAndTextString(pos, textAsString) {
+                var fontHeightInPixels = 10; // hack
+                var size = GameFramework.Coords.fromXY(100, 1).multiplyScalar(fontHeightInPixels);
+                var text = GameFramework.DataBinding.fromGet((c) => textAsString);
+                return new ControlLabel(ControlLabel.name + "_" + textAsString, //name
+                pos, size, false, // isTextCenteredHorizontally
+                false, // isTextCenteredVertically
+                text, fontHeightInPixels);
             }
             static fromPosHeightAndText(pos, fontHeightInPixels, text) {
                 return new ControlLabel(null, //name

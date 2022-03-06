@@ -13,7 +13,7 @@ var ThisCouldBeBetter;
                 this.bindingForIsEnabled =
                     bindingForIsEnabled
                         || GameFramework.DataBinding.fromTrueWithContext(null);
-                this.confirm = confirm;
+                this._confirm = confirm;
                 this.widthInItems = widthInItems || 1;
                 var itemSizeY = 1.2 * this.fontHeightInPixels; // hack
                 this._itemSize = GameFramework.Coords.fromXY(size.x, itemSizeY);
@@ -35,7 +35,9 @@ var ThisCouldBeBetter;
                 null, // bindingForItemSelected,
                 null, // bindingForItemValue,
                 GameFramework.DataBinding.fromTrue(), // isEnabled
-                null, null);
+                null, // confirm
+                null // widthInItems
+                );
                 return returnValue;
             }
             static from6(name, pos, size, items, bindingForItemText, fontHeightInPixels) {
@@ -68,12 +70,15 @@ var ThisCouldBeBetter;
                     wasActionHandled = true;
                 }
                 else if (actionNameToHandle == controlActionNames.ControlConfirm) {
-                    if (this.confirm != null) {
-                        this.confirm(universe);
-                        wasActionHandled = true;
-                    }
+                    this.confirm(universe);
+                    wasActionHandled = true;
                 }
                 return wasActionHandled;
+            }
+            confirm(universe) {
+                if (this._confirm != null) {
+                    this._confirm(universe);
+                }
             }
             indexOfFirstItemVisible() {
                 return this.indexOfFirstRowVisible() * this.widthInItems;

@@ -11,6 +11,22 @@ export class Path
 		this.points = points;
 	}
 
+	static arrowOfWidthAndLength
+	(
+		width: number, length: number
+	): Path
+	{
+		var backOffset = Coords.fromXY(-1, 0).multiplyScalar(length);
+		var rightOffset = Coords.fromXY(0, 1).multiplyScalar(width / 2);
+
+		return new Path
+		([
+			Coords.fromXY(0, 0), // tip
+			backOffset.clone().add(rightOffset),
+			backOffset.clone().subtract(rightOffset)
+		]);
+	}
+
 	static default(): Path
 	{
 		// For rapid prototyping.

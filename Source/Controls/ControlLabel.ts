@@ -6,7 +6,7 @@ export class ControlLabel<TContext> extends ControlBase
 {
 	isTextCenteredHorizontally: boolean;
 	isTextCenteredVertically: boolean;
-	_text: DataBinding<TContext,string>;
+	_text: DataBinding<TContext, string>;
 
 	parent: ControlBase;
 
@@ -33,21 +33,46 @@ export class ControlLabel<TContext> extends ControlBase
 		this._drawPos = Coords.create();
 	}
 
+	static fromPosAndText<TContext>
+	(
+		pos: Coords,
+		text: DataBinding<TContext, string>
+	): ControlLabel<TContext>
+	{
+		var fontHeightInPixels = 10; // hack
+		var size = Coords.fromXY(100, 1).multiplyScalar(fontHeightInPixels);
+
+		return new ControlLabel<TContext>
+		(
+			ControlLabel.name + "_" + text.get(), //name
+			pos,
+			size,
+			false, // isTextCenteredHorizontally
+			false, // isTextCenteredVertically
+			text,
+			fontHeightInPixels
+		);
+	}
+
 	static fromPosAndTextString<TContext>
 	(
 		pos: Coords,
 		textAsString: string
 	): ControlLabel<TContext>
 	{
+		var fontHeightInPixels = 10; // hack
+		var size = Coords.fromXY(100, 1).multiplyScalar(fontHeightInPixels);
+		var text = DataBinding.fromGet((c: TContext) => textAsString);
+
 		return new ControlLabel<TContext>
 		(
-			null, //name
+			ControlLabel.name + "_" + textAsString, //name
 			pos,
-			null, // size
+			size,
 			false, // isTextCenteredHorizontally
 			false, // isTextCenteredVertically
-			DataBinding.fromGet((c: TContext) => textAsString),
-			10 // fontHeightInPixels
+			text,
+			fontHeightInPixels
 		);
 	}
 
