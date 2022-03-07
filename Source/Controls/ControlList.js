@@ -39,6 +39,15 @@ var ThisCouldBeBetter;
                 );
                 return returnValue;
             }
+            static fromPosSizeItemsAndBindingsForItemTextAndSelected(pos, size, items, bindingForItemText, bindingForItemSelected) {
+                var returnValue = new ControlList("", // name,
+                pos, size, items, bindingForItemText, GameFramework.FontNameAndHeight.default(), bindingForItemSelected, null, // bindingForItemValue,
+                GameFramework.DataBinding.fromTrue(), // isEnabled
+                null, // confirm
+                null // widthInItems
+                );
+                return returnValue;
+            }
             static from6(name, pos, size, items, bindingForItemText, fontNameAndHeight) {
                 return new ControlList(name, pos, size, items, bindingForItemText, fontNameAndHeight, null, null, null, null, null);
             }

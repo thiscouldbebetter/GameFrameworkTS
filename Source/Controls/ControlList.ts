@@ -96,6 +96,33 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 		return returnValue;
 	}
 
+	static fromPosSizeItemsAndBindingsForItemTextAndSelected<TContext, TItem, TValue>
+	(
+		pos: Coords,
+		size: Coords,
+		items: DataBinding<TContext, TItem[]>,
+		bindingForItemText: DataBinding<TItem, string>,
+		bindingForItemSelected: DataBinding<TContext, TItem>
+	)
+	{
+		var returnValue = new ControlList<TContext, TItem, TValue>
+		(
+			"", // name,
+			pos,
+			size,
+			items,
+			bindingForItemText,
+			FontNameAndHeight.default(),
+			bindingForItemSelected,
+			null, // bindingForItemValue,
+			DataBinding.fromTrue(), // isEnabled
+			null, // confirm
+			null // widthInItems
+		);
+
+		return returnValue;
+	}
+
 	static from6<TContext, TItem, TValue>
 	(
 		name: string,
