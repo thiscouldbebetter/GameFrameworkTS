@@ -25,7 +25,7 @@ var ThisCouldBeBetter;
             }
             static default() {
                 var collider = GameFramework.Box.fromSize(GameFramework.Coords.ones().multiplyScalar(10));
-                return Collidable.fromColliderAndCollideEntities(collider, Collidable.collideEntitiesLog);
+                return Collidable.fromColliderAndCollideEntities(collider, Collidable.collideEntitiesInCollisionLog);
             }
             static fromCollider(colliderAtRest) {
                 return Collidable.fromColliderAndCollideEntities(colliderAtRest, null);
@@ -36,13 +36,13 @@ var ThisCouldBeBetter;
             static from3(colliderAtRest, entityPropertyNamesToCollideWith, collideEntities) {
                 return new Collidable(false, null, colliderAtRest, entityPropertyNamesToCollideWith, collideEntities);
             }
-            collideEntities(uwpe, collision) {
+            collideEntitiesInCollision(uwpe, collision) {
                 if (this._collideEntities != null) {
                     this._collideEntities(uwpe, collision);
                 }
                 return collision;
             }
-            static collideEntitiesLog(uwpe, collision) {
+            static collideEntitiesInCollisionLog(uwpe, collision) {
                 var collisionAsString = collision.toString();
                 var message = "Collision detected: " + collisionAsString;
                 console.log(message);
@@ -59,10 +59,10 @@ var ThisCouldBeBetter;
                 var entityOther = entitiesColliding[1];
                 uwpe.entity = entity;
                 uwpe.entity2 = entityOther;
-                this.collideEntities(uwpe, collision);
+                this.collideEntitiesInCollision(uwpe, collision);
                 var entityOtherCollidable = entityOther.collidable();
                 uwpe.entitiesSwap();
-                entityOtherCollidable.collideEntities(uwpe, collision);
+                entityOtherCollidable.collideEntitiesInCollision(uwpe, collision);
                 uwpe.entitiesSwap();
             }
             collisionsFindAndHandle(uwpe) {

@@ -49,11 +49,11 @@ var ThisCouldBeBetter;
                 if (showMessageOnly && numberOfOptions == 1) {
                     numberOfOptions = 0; // Is a single option really an option?
                 }
-                var labelPosY = Math.round(size.y * (numberOfOptions == 0 ? .5 : (1 / 3)) - fontHeight * 2 // hack
-                );
-                var buttonPosY = buttonPosY || Math.round(this.sizeBase.y * (numberOfOptions > 0 ? (2 / 3) : 1));
-                var marginSize = GameFramework.Coords.oneOneZero().multiplyScalar(fontHeight);
-                var labelMessage = new GameFramework.ControlLabel("labelMessage", marginSize, GameFramework.Coords.fromXY(containerSizeScaled.x - marginSize.x * 2, labelPosY), true, // isTextCenteredHorizontally
+                var labelMessageSizeY = Math.round(this.sizeBase.y * (numberOfOptions == 0 ? 1 : (2 / 3)));
+                buttonPosY = buttonPosY || Math.round(this.sizeBase.y * (numberOfOptions > 0 ? (2 / 3) : 1));
+                var labelMessagePos = GameFramework.Coords.fromXY(0, 0);
+                var labelMessageSize = GameFramework.Coords.fromXY(this.sizeBase.x, labelMessageSizeY);
+                var labelMessage = new GameFramework.ControlLabel("labelMessage", labelMessagePos, labelMessageSize, true, // isTextCenteredHorizontally
                 true, // isTextCenteredVertically
                 message, fontNameAndHeight);
                 var childControls = [labelMessage];

@@ -40,9 +40,15 @@ export class Collision //
 		);
 	}
 
+	static fromEntitiesColliding(entityColliding: Entity, entityCollidedWith: Entity): Collision
+	{
+		var entitiesColliding = [ entityColliding, entityCollidedWith ];
+		return new Collision(null, null, null, entitiesColliding);
+	}
+
 	static fromPosAndDistance(pos: Coords, distance: number): Collision
 	{
-		return new Collision(pos, distance, [], []);
+		return new Collision(pos, distance, null, null);
 	}
 
 	clear(): Collision

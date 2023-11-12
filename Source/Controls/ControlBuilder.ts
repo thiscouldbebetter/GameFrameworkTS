@@ -101,26 +101,24 @@ export class ControlBuilder
 			numberOfOptions = 0; // Is a single option really an option?
 		}
 
-		var labelPosY = Math.round
+		var labelMessageSizeY = Math.round
 		(
-			size.y * (numberOfOptions == 0 ? .5 : (1/3) ) - fontHeight * 2 // hack
+			this.sizeBase.y * (numberOfOptions == 0 ? 1 : (2/3) )
 		);
 
-		var buttonPosY = buttonPosY || Math.round
+		buttonPosY = buttonPosY || Math.round
 		(
 			this.sizeBase.y * (numberOfOptions > 0 ? (2 / 3) : 1)
 		);
 
-		var marginSize = Coords.oneOneZero().multiplyScalar(fontHeight);
+		var labelMessagePos = Coords.fromXY(0, 0);
+		var labelMessageSize = Coords.fromXY(this.sizeBase.x, labelMessageSizeY);
+
 		var labelMessage = new ControlLabel
 		(
 			"labelMessage",
-			marginSize,
-			Coords.fromXY
-			(
-				containerSizeScaled.x - marginSize.x * 2,
-				labelPosY
-			),
+			labelMessagePos,
+			labelMessageSize,
 			true, // isTextCenteredHorizontally
 			true, // isTextCenteredVertically
 			message,

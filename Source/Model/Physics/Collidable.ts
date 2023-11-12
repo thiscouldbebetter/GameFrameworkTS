@@ -59,7 +59,7 @@ export class Collidable implements EntityProperty<Collidable>
 
 		return Collidable.fromColliderAndCollideEntities
 		(
-			collider, Collidable.collideEntitiesLog
+			collider, Collidable.collideEntitiesInCollisionLog
 		);
 	}
 
@@ -96,7 +96,7 @@ export class Collidable implements EntityProperty<Collidable>
 		);
 	}
 
-	collideEntities
+	collideEntitiesInCollision
 	(
 		uwpe: UniverseWorldPlaceEntities, collision: Collision
 	): Collision
@@ -108,7 +108,7 @@ export class Collidable implements EntityProperty<Collidable>
 		return collision;
 	}
 
-	static collideEntitiesLog
+	static collideEntitiesInCollisionLog
 	(
 		uwpe: UniverseWorldPlaceEntities, collision: Collision
 	): Collision
@@ -135,14 +135,14 @@ export class Collidable implements EntityProperty<Collidable>
 		uwpe.entity = entity;
 		uwpe.entity2 = entityOther;
 
-		this.collideEntities
+		this.collideEntitiesInCollision
 		(
 			uwpe, collision
 		);
 
 		var entityOtherCollidable = entityOther.collidable();
 		uwpe.entitiesSwap();
-		entityOtherCollidable.collideEntities
+		entityOtherCollidable.collideEntitiesInCollision
 		(
 			uwpe, collision
 		);

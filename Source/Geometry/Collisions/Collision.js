@@ -17,8 +17,12 @@ var ThisCouldBeBetter;
             static create() {
                 return new Collision(GameFramework.Coords.create(), 0, new Array(), new Array());
             }
+            static fromEntitiesColliding(entityColliding, entityCollidedWith) {
+                var entitiesColliding = [entityColliding, entityCollidedWith];
+                return new Collision(null, null, null, entitiesColliding);
+            }
             static fromPosAndDistance(pos, distance) {
-                return new Collision(pos, distance, [], []);
+                return new Collision(pos, distance, null, null);
             }
             clear() {
                 this.isActive = false;
