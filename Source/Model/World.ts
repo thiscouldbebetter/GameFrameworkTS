@@ -7,6 +7,7 @@ export class World //
 	dateCreated: DateTime;
 	defn: WorldDefn;
 	_placeGetByName: (placeName: string) => Place
+	placeNextName: string;
 
 	dateSaved: DateTime;
 	timerTicksSoFar: number;
@@ -30,7 +31,7 @@ export class World //
 		this.defn = defn;
 
 		this._placeGetByName = placeGetByName;
-		this.placeNext = this.placeGetByName(placeInitialName);
+		this.placeNextName = placeInitialName;
 	}
 
 	static default(): World
@@ -76,6 +77,12 @@ export class World //
 	{
 		uwpe.world = this;
 
+		if (this.placeNextName != null)
+		{
+			this.placeNext = this.placeGetByName(this.placeNextName);
+			this.placeNextName = null;
+		}
+
 		if (this.placeNext != null)
 		{
 			if (this.placeCurrent != null)
@@ -95,7 +102,7 @@ export class World //
 
 	placeGetByName(placeName: string): Place
 	{
-		return this._placeGetByName(placeName);
+		return this._placeGetByName.call(this, placeName);
 	}
 
 	timePlayingAsStringShort(universe: Universe): string

@@ -55,9 +55,7 @@ export class WorldDefn
 					&& defnTypeName == Entity.name
 				)
 				{
-					this.entityDefns = defns as Array<Entity>;
-					this.entityDefnsByName =
-						ArrayHelper.addLookupsByName(this.entityDefns);
+					this.entityDefnsInitialize(defns as Entity[]);
 				}
 				else if
 				(
@@ -65,9 +63,7 @@ export class WorldDefn
 					&& defnTypeName == ItemDefn.name
 				)
 				{
-					this.itemDefns = defns as Array<ItemDefn>;
-					this.itemDefnsByName =
-						ArrayHelper.addLookupsByName(this.itemDefns);
+					this.itemDefnsInitialize(defns as ItemDefn[]);
 				}
 				else if
 				(
@@ -148,10 +144,26 @@ export class WorldDefn
 		return returnValue;
 	}
 
+	entityDefnsInitialize(defns: Entity[]): void
+	{
+		defns = defns || [];
+		this.entityDefns = defns as Array<Entity>;
+		this.entityDefnsByName =
+			ArrayHelper.addLookupsByName(this.entityDefns);
+	}
+
 	itemDefnByName(defnName: string): ItemDefn
 	{
 		var returnValue = this.itemDefnsByName.get(defnName);
 		return returnValue;
+	}
+
+	itemDefnsInitialize(defns: ItemDefn[]): void
+	{
+		defns = defns || [];
+		this.itemDefns = defns as Array<ItemDefn>;
+		this.itemDefnsByName =
+			ArrayHelper.addLookupsByName(this.itemDefns);
 	}
 
 	placeDefnByName(defnName: string): PlaceDefn

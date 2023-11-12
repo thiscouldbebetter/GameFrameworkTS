@@ -328,7 +328,8 @@ export class ControlContainer extends ControlBase
 			false // addFirstChildOnly
 		);
 
-		var wasClickHandled = true;
+		var wasClickHandled = false;
+
 		for (var i = 0; i < childrenContainingPos.length; i++)
 		{
 			var child = childrenContainingPos[i];

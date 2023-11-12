@@ -169,7 +169,7 @@ var ThisCouldBeBetter;
                 mouseClickPos = this._mouseClickPos.overwriteWith(mouseClickPos).subtract(this.pos);
                 var childrenContainingPos = this.childrenAtPosAddToList(mouseClickPos, GameFramework.ArrayHelper.clear(this.childrenContainingPos), false // addFirstChildOnly
                 );
-                var wasClickHandled = true;
+                var wasClickHandled = false;
                 for (var i = 0; i < childrenContainingPos.length; i++) {
                     var child = childrenContainingPos[i];
                     var wasClickHandledByChild = child.mouseClick(mouseClickPos);

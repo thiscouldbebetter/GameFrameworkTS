@@ -25,15 +25,11 @@ var ThisCouldBeBetter;
                         }
                         else if (typeof (GameFramework.Entity) != notDefined
                             && defnTypeName == GameFramework.Entity.name) {
-                            this.entityDefns = defns;
-                            this.entityDefnsByName =
-                                GameFramework.ArrayHelper.addLookupsByName(this.entityDefns);
+                            this.entityDefnsInitialize(defns);
                         }
                         else if (typeof (GameFramework.ItemDefn) != notDefined
                             && defnTypeName == GameFramework.ItemDefn.name) {
-                            this.itemDefns = defns;
-                            this.itemDefnsByName =
-                                GameFramework.ArrayHelper.addLookupsByName(this.itemDefns);
+                            this.itemDefnsInitialize(defns);
                         }
                         else if (typeof (GameFramework.PlaceDefn) != notDefined
                             && defnTypeName == GameFramework.PlaceDefn.name) {
@@ -83,9 +79,21 @@ var ThisCouldBeBetter;
                 var returnValue = this.entityDefnsByName.get(defnName);
                 return returnValue;
             }
+            entityDefnsInitialize(defns) {
+                defns = defns || [];
+                this.entityDefns = defns;
+                this.entityDefnsByName =
+                    GameFramework.ArrayHelper.addLookupsByName(this.entityDefns);
+            }
             itemDefnByName(defnName) {
                 var returnValue = this.itemDefnsByName.get(defnName);
                 return returnValue;
+            }
+            itemDefnsInitialize(defns) {
+                defns = defns || [];
+                this.itemDefns = defns;
+                this.itemDefnsByName =
+                    GameFramework.ArrayHelper.addLookupsByName(this.itemDefns);
             }
             placeDefnByName(defnName) {
                 var returnValue = this.placeDefnsByName.get(defnName);

@@ -11,7 +11,7 @@ var ThisCouldBeBetter;
                 this.timerTicksSoFar = 0;
                 this.defn = defn;
                 this._placeGetByName = placeGetByName;
-                this.placeNext = this.placeGetByName(placeInitialName);
+                this.placeNextName = placeInitialName;
             }
             static default() {
                 return World.fromNameDateCreatedDefnAndPlaces("name", GameFramework.DateTime.now(), GameFramework.WorldDefn.default(), [
@@ -32,6 +32,10 @@ var ThisCouldBeBetter;
             }
             initialize(uwpe) {
                 uwpe.world = this;
+                if (this.placeNextName != null) {
+                    this.placeNext = this.placeGetByName(this.placeNextName);
+                    this.placeNextName = null;
+                }
                 if (this.placeNext != null) {
                     if (this.placeCurrent != null) {
                         this.placeCurrent.finalize(uwpe);
@@ -45,7 +49,7 @@ var ThisCouldBeBetter;
                 }
             }
             placeGetByName(placeName) {
-                return this._placeGetByName(placeName);
+                return this._placeGetByName.call(this, placeName);
             }
             timePlayingAsStringShort(universe) {
                 return universe.timerHelper.ticksToStringH_M_S(this.timerTicksSoFar);
