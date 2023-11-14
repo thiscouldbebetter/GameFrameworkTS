@@ -137,7 +137,7 @@ var ThisCouldBeBetter;
                     var targetLocatable = targetEntity.locatable();
                     var accelerationPerTick = movable.accelerationPerTick(uwpe);
                     var speedMax = movable.speedMax(uwpe);
-                    var distanceToTarget = actorLocatable.approachOtherWithAccelerationAndSpeedMax(targetLocatable, accelerationPerTick, speedMax);
+                    var distanceToTarget = actorLocatable.approachOtherWithAccelerationAndSpeedMaxAndReturnDistance(targetLocatable, accelerationPerTick, speedMax);
                     if (distanceToTarget < speedMax) {
                         activity.targetEntityClear();
                     }

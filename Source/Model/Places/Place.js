@@ -164,16 +164,21 @@ var ThisCouldBeBetter;
                 this.entitiesSpawn(uwpe);
                 uwpe.placeSet(this);
                 var placeDefn = this.defn(world);
-                var propertyNamesToProcess = placeDefn.propertyNamesToProcess;
-                for (var p = 0; p < propertyNamesToProcess.length; p++) {
-                    var propertyName = propertyNamesToProcess[p];
-                    var entitiesWithProperty = this.entitiesByPropertyName(propertyName);
-                    if (entitiesWithProperty != null) {
-                        for (var i = 0; i < entitiesWithProperty.length; i++) {
-                            var entity = entitiesWithProperty[i];
-                            var entityProperty = entity.propertiesByName.get(propertyName);
-                            uwpe.entity = entity;
-                            entityProperty.updateForTimerTick(uwpe);
+                if (placeDefn == null) {
+                    this.entities.forEach(entity => entity.updateForTimerTick(uwpe));
+                }
+                else {
+                    var propertyNamesToProcess = placeDefn.propertyNamesToProcess;
+                    for (var p = 0; p < propertyNamesToProcess.length; p++) {
+                        var propertyName = propertyNamesToProcess[p];
+                        var entitiesWithProperty = this.entitiesByPropertyName(propertyName);
+                        if (entitiesWithProperty != null) {
+                            for (var i = 0; i < entitiesWithProperty.length; i++) {
+                                var entity = entitiesWithProperty[i];
+                                var entityProperty = entity.propertiesByName.get(propertyName);
+                                uwpe.entity = entity;
+                                entityProperty.updateForTimerTick(uwpe);
+                            }
                         }
                     }
                 }

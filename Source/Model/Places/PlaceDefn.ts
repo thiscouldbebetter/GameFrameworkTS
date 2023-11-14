@@ -62,6 +62,24 @@ export class PlaceDefn
 		);
 	}
 
+	static fromNameAndPropertyNamesToProcess
+	(
+		name: string,
+		propertyNamesToProcess: string[]
+	)
+	{
+		return new PlaceDefn
+		(
+			name,
+			null, // soundForMusicName
+			[], // actions,
+			[], // actionToInputsMappings,
+			propertyNamesToProcess,
+			null, // placeInitialize
+			null // placeFinalize
+		);
+	}
+
 	static from5
 	(
 		name: string,

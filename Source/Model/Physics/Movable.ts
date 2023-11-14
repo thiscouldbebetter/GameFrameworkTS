@@ -257,7 +257,7 @@ export class Movable implements EntityProperty<Movable>
 				var accelerationPerTick = movable.accelerationPerTick(uwpe);
 				var speedMax = movable.speedMax(uwpe);
 				var distanceToTarget =
-					actorLocatable.approachOtherWithAccelerationAndSpeedMax
+					actorLocatable.approachOtherWithAccelerationAndSpeedMaxAndReturnDistance
 					(
 						targetLocatable,
 						accelerationPerTick,

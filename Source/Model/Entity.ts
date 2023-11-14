@@ -113,9 +113,9 @@ export class Entity implements Clonable<Entity>
 		for (var p = 0; p < entityProperties.length; p++)
 		{
 			var property = entityProperties[p];
-			if (property.finalize != null)
+			if (property.updateForTimerTick != null)
 			{
-				property.finalize(uwpe);
+				property.updateForTimerTick(uwpe);
 			}
 		}
 		return this;

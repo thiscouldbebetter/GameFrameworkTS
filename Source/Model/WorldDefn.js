@@ -96,7 +96,9 @@ var ThisCouldBeBetter;
                     GameFramework.ArrayHelper.addLookupsByName(this.itemDefns);
             }
             placeDefnByName(defnName) {
-                var returnValue = this.placeDefnsByName.get(defnName);
+                var returnValue = this.placeDefnsByName == null
+                    ? null
+                    : this.placeDefnsByName.get(defnName);
                 return returnValue;
             }
         }

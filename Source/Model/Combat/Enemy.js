@@ -52,9 +52,7 @@ var ThisCouldBeBetter;
                     var enemy = actor.enemy();
                     var weapon = enemy.weapon;
                     var distanceToApproach = (weapon == null ? 4 : weapon.range);
-                    var distanceToTarget = actorLocatable.approachOtherWithAccelerationAndSpeedMax //ToDistance
-                    (targetLocatable, .1, 1 //, distanceToApproach
-                    );
+                    var distanceToTarget = actorLocatable.approachOtherWithAccelerationAndSpeedMaxAndReturnDistance(targetLocatable, .1, 1);
                     if (distanceToTarget <= distanceToApproach) {
                         activity.targetEntityClear();
                     }

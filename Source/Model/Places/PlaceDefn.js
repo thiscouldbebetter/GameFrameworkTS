@@ -27,6 +27,14 @@ var ThisCouldBeBetter;
                 null // placeFinalize
                 );
             }
+            static fromNameAndPropertyNamesToProcess(name, propertyNamesToProcess) {
+                return new PlaceDefn(name, null, // soundForMusicName
+                [], // actions,
+                [], // actionToInputsMappings,
+                propertyNamesToProcess, null, // placeInitialize
+                null // placeFinalize
+                );
+            }
             static from5(name, soundForMusicName, actions, actionToInputsMappings, propertyNamesToProcess) {
                 return new PlaceDefn(name, soundForMusicName, actions, actionToInputsMappings, propertyNamesToProcess, null, null // placeInitialize, placeFinalize
                 );

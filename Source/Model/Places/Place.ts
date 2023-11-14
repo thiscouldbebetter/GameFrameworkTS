@@ -268,19 +268,29 @@ export class Place implements Equatable<Place>, Loadable
 		uwpe.placeSet(this);
 
 		var placeDefn = this.defn(world);
-		var propertyNamesToProcess = placeDefn.propertyNamesToProcess;
-		for (var p = 0; p < propertyNamesToProcess.length; p++)
+		if (placeDefn == null)
 		{
-			var propertyName = propertyNamesToProcess[p];
-			var entitiesWithProperty = this.entitiesByPropertyName(propertyName);
-			if (entitiesWithProperty != null)
+			this.entities.forEach
+			(
+				entity => entity.updateForTimerTick(uwpe)
+			)
+		}
+		else
+		{
+			var propertyNamesToProcess = placeDefn.propertyNamesToProcess;
+			for (var p = 0; p < propertyNamesToProcess.length; p++)
 			{
-				for (var i = 0; i < entitiesWithProperty.length; i++)
+				var propertyName = propertyNamesToProcess[p];
+				var entitiesWithProperty = this.entitiesByPropertyName(propertyName);
+				if (entitiesWithProperty != null)
 				{
-					var entity = entitiesWithProperty[i];
-					var entityProperty = entity.propertiesByName.get(propertyName);
-					uwpe.entity = entity;
-					entityProperty.updateForTimerTick(uwpe);
+					for (var i = 0; i < entitiesWithProperty.length; i++)
+					{
+						var entity = entitiesWithProperty[i];
+						var entityProperty = entity.propertiesByName.get(propertyName);
+						uwpe.entity = entity;
+						entityProperty.updateForTimerTick(uwpe);
+					}
 				}
 			}
 		}

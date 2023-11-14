@@ -1705,7 +1705,7 @@ class PlaceBuilderDemo_Movers
 
 			var itemLocatable = itemEntityGettingPickedUp.locatable();
 			var distance =
-				itemLocatable.approachOtherWithAccelerationAndSpeedMax
+				itemLocatable.approachOtherWithAccelerationAndSpeedMaxAndReturnDistance
 				(
 					entityPickingUpLocatable, .5, 4 //, 1
 				);

@@ -21,7 +21,7 @@ export class Locatable implements EntityProperty<Locatable>
 		return new Locatable(Disposition.fromPos(pos));
 	}
 
-	approachOtherWithAccelerationAndSpeedMax
+	approachOtherWithAccelerationAndSpeedMaxAndReturnDistance
 	(
 		locatableToApproach: Locatable,
 		accelerationPerTick: number,
@@ -42,7 +42,6 @@ export class Locatable implements EntityProperty<Locatable>
 
 		var targetPosRelative = targetPos.clone().subtract(actorPos);
 		var distanceToTarget = targetPosRelative.magnitude();
-
 
 		actorVel.trimToMagnitudeMax(speedMax);
 

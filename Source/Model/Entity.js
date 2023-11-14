@@ -74,8 +74,8 @@ var ThisCouldBeBetter;
                 var entityProperties = this.properties;
                 for (var p = 0; p < entityProperties.length; p++) {
                     var property = entityProperties[p];
-                    if (property.finalize != null) {
-                        property.finalize(uwpe);
+                    if (property.updateForTimerTick != null) {
+                        property.updateForTimerTick(uwpe);
                     }
                 }
                 return this;
