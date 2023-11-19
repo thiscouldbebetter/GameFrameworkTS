@@ -49,9 +49,12 @@ var ThisCouldBeBetter;
                 return collision;
             }
             colliderLocateForEntity(entity) {
-                this.collider.overwriteWith(this.colliderAtRest);
+                this.colliderResetToRestPosition();
                 var entityLoc = entity.locatable().loc;
                 this.collider.locate(entityLoc);
+            }
+            colliderResetToRestPosition() {
+                this.collider.overwriteWith(this.colliderAtRest);
             }
             collisionHandle(uwpe, collision) {
                 var entitiesColliding = collision.entitiesColliding;

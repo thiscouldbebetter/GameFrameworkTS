@@ -121,9 +121,14 @@ export class Collidable implements EntityProperty<Collidable>
 
 	colliderLocateForEntity(entity: Entity): void
 	{
-		this.collider.overwriteWith(this.colliderAtRest);
+		this.colliderResetToRestPosition();
 		var entityLoc = entity.locatable().loc;
 		this.collider.locate(entityLoc);
+	}
+
+	colliderResetToRestPosition(): void
+	{
+		this.collider.overwriteWith(this.colliderAtRest);
 	}
 
 	collisionHandle(uwpe: UniverseWorldPlaceEntities, collision: Collision): void
