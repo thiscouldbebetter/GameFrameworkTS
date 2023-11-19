@@ -26,6 +26,9 @@ var ThisCouldBeBetter;
                 returnValue._systemColor = systemColor;
                 return returnValue;
             }
+            static grayWithValue(value) {
+                return Color.fromRGB(value, value, value);
+            }
             static systemColorGet(color) {
                 return (color == null ? null : color.systemColor());
             }
@@ -83,6 +86,18 @@ var ThisCouldBeBetter;
                     + this.componentsRGBA[1]
                     + this.componentsRGBA[2]) / 3;
                 return returnValue;
+            }
+            valueMultiplyByScalar(scalar) {
+                // This is "value" as in how dark or light the color is.
+                for (var i = 0; i < 3; i++) {
+                    var component = this.componentsRGBA[i];
+                    component = Math.round(component * scalar);
+                    if (component > 1) {
+                        component = 1;
+                    }
+                    this.componentsRGBA[i] = component;
+                }
+                return this;
             }
             // Clonable.
             clone() {

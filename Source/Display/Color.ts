@@ -44,6 +44,11 @@ export class Color implements Interpolatable<Color>
 		return returnValue;
 	}
 
+	static grayWithValue(value: number): Color
+	{
+		return Color.fromRGB(value, value, value);
+	}
+
 	static systemColorGet(color: Color): string
 	{
 		return (color == null ? null : color.systemColor() );
@@ -143,6 +148,24 @@ export class Color implements Interpolatable<Color>
 		) / 3;
 
 		return returnValue;
+	}
+
+	valueMultiplyByScalar(scalar: number): Color
+	{
+		// This is "value" as in how dark or light the color is.
+
+		for (var i = 0; i < 3; i++)
+		{
+			var component = this.componentsRGBA[i];
+			component = Math.round(component * scalar);
+			if (component > 1)
+			{
+				component = 1;
+			}
+			this.componentsRGBA[i] = component;
+		}
+
+		return this;
 	}
 
 	// Clonable.
