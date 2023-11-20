@@ -61,9 +61,11 @@ class ControlBuilderTests extends TestFixture
 			this._universe,
 			null, // size,
 			DataBinding.fromContext("[message]"),
-			[ "[option1]", "[option2]" ], // options
-			[ () => {}, () => {} ], //optionFunctions
-			true // showMessageOnly
+			[ "[option1]", "[option2]" ], // optionNames
+			[ () => {}, () => {} ], // optionFunctions
+			true, // showMessageOnly
+			FontNameAndHeight.default(),
+			null // buttonPosY
 		);
 		Assert.isNotNull(controlChoice);
 	}
@@ -163,7 +165,8 @@ class ControlBuilderTests extends TestFixture
 			null, // size
 			DataBinding.fromContext("[message]"),
 			() => {}, // acknowledge
-			false // showMessageOnly
+			false, // showMessageOnly
+			FontNameAndHeight.default()
 		);
 		Assert.isNotNull(controlMessage);
 	}

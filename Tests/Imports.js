@@ -145,6 +145,7 @@ var InputHelper = gf.InputHelper;
 var UserInputListener = gf.UserInputListener;
 // Media.
 var Font = gf.Font;
+var FontNameAndHeight = gf.FontNameAndHeight;
 var Image2 = gf.Image2; // Name conflicts with a built-in class.
 var MediaLibrary = gf.MediaLibrary;
 var SoundHelperLive = gf.SoundHelperLive;

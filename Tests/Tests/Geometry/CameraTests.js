@@ -6,7 +6,6 @@ class CameraTests extends TestFixture {
     }
     tests() {
         var tests = [
-            this.clipPlanes,
             this.coordsTransformViewToWorld,
             this.coordsTransformWorldToView,
             this.drawEntitiesInView,
@@ -18,11 +17,6 @@ class CameraTests extends TestFixture {
         ];
         return tests;
     }
-    clipPlanes() {
-        var cameraClipPlanes = this._camera.clipPlanes();
-        Assert.isNotNull(cameraClipPlanes);
-        Assert.areNumbersEqual(4, cameraClipPlanes.length);
-    }
     coordsTransformViewToWorld() {
         var viewCoords = Coords.fromXY(0, 0);
         var ignoreZFalse = false;
@@ -31,7 +25,7 @@ class CameraTests extends TestFixture {
         Assert.areEqual(worldCoordsExpected, worldCoords);
     }
     coordsTransformWorldToView() {
-        var worldCoords = new Coords(0, 0, 0);
+        var worldCoords = Coords.zeroes();
         var viewCoords = this._camera.coordsTransformWorldToView(worldCoords);
         var viewCoordsExpected = new Coords(200, 300, 0); // todo
         Assert.areEqual(viewCoordsExpected, viewCoords);
@@ -44,7 +38,7 @@ class CameraTests extends TestFixture {
         Assert.isTrue(true); // todo
     }
     entitiesInViewSort() {
-        var entityNear = new Entity("EntityNear", [Locatable.fromPos(new Coords(0, 0, 0))]);
+        var entityNear = new Entity("EntityNear", [Locatable.fromPos(Coords.zeroes())]);
         var entityFar = new Entity("EntityFar", [Locatable.fromPos(new Coords(0, 0, 100))]);
         var entitiesToSort = [entityNear, entityFar];
         var entitiesSorted = this._camera.entitiesInViewSort(ArrayHelper.clone(entitiesToSort));

@@ -39,9 +39,10 @@ class ControlBuilderTests extends TestFixture {
     // Controls.
     choice() {
         var controlChoice = this._controlBuilder.choice(this._universe, null, // size,
-        DataBinding.fromContext("[message]"), ["[option1]", "[option2]"], // options
-        [() => { }, () => { }], //optionFunctions
-        true // showMessageOnly
+        DataBinding.fromContext("[message]"), ["[option1]", "[option2]"], // optionNames
+        [() => { }, () => { }], // optionFunctions
+        true, // showMessageOnly
+        FontNameAndHeight.default(), null // buttonPosY
         );
         Assert.isNotNull(controlChoice);
     }
@@ -94,8 +95,8 @@ class ControlBuilderTests extends TestFixture {
     message() {
         var controlMessage = this._controlBuilder.message(this._universe, null, // size
         DataBinding.fromContext("[message]"), () => { }, // acknowledge
-        false // showMessageOnly
-        );
+        false, // showMessageOnly
+        FontNameAndHeight.default());
         Assert.isNotNull(controlMessage);
     }
     opening() {

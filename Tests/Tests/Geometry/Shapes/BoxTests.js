@@ -16,6 +16,7 @@ class BoxTests extends TestFixture {
             // Static methods.
             this.doBoxesInSetsOverlap,
             // Instance methods.
+            this.containPoints,
             this.containsOther,
             this.containsPoint,
             this.fromMinAndMax,
@@ -23,7 +24,6 @@ class BoxTests extends TestFixture {
             this.locate,
             this.max,
             this.min,
-            this.ofPoints,
             this.overlapsWith,
             this.overlapsWithXY,
             this.overlapsWithOtherInDimension,
@@ -71,7 +71,7 @@ class BoxTests extends TestFixture {
     }
     fromMinAndMax_Static() {
         var min = new Coords(-1, -1, -1);
-        var max = new Coords(1, 1, 1);
+        var max = Coords.ones();
         var boxToTest = Box.fromMinAndMax(min, max);
         var boxOfSide2AtOrigin = Box.fromSizeAndCenter(Coords.twos(), Coords.zeroes());
         Assert.isTrue(boxOfSide2AtOrigin.equals(boxToTest));
@@ -98,8 +98,8 @@ class BoxTests extends TestFixture {
     }
     // Static methods.
     doBoxesInSetsOverlap() {
-        var boxSize = new Coords(1, 1, 1);
-        var boxOfSide1AtOrigin = Box.fromSizeAndCenter(boxSize, new Coords(0, 0, 0));
+        var boxSize = Coords.ones();
+        var boxOfSide1AtOrigin = Box.fromSizeAndCenter(boxSize, Coords.zeroes());
         var boxOfSide1AtXHalf = Box.fromSizeAndCenter(boxSize, new Coords(.5, 0, 0));
         var boxOfSide1AtX1 = Box.fromSizeAndCenter(boxSize, new Coords(1, 0, 0));
         var doBoxesOverlap = Box.doBoxesInSetsOverlap([boxOfSide1AtOrigin], [boxOfSide1AtXHalf]);
@@ -109,6 +109,15 @@ class BoxTests extends TestFixture {
         Assert.isFalse(doBoxesOverlap);
     }
     // Instance methods.
+    containPoints() {
+        var pointOrigin = Coords.zeroes();
+        var pointOnes = Coords.ones();
+        var pointNegativeOnes = Coords.ones().invert();
+        var points = [pointOrigin, pointOnes, pointNegativeOnes];
+        var boxFromPoints = Box.create().containPoints(points);
+        var boxOfSize2AtOrigin = Box.fromSize(Coords.twos());
+        Assert.isTrue(boxOfSize2AtOrigin.equals(boxFromPoints));
+    }
     containsOther() {
         var boxContaining = Box.fromSize(Coords.twos());
         var boxContained = Box.fromSize(Coords.ones());
@@ -162,15 +171,6 @@ class BoxTests extends TestFixture {
         var max = Coords.create().randomize(null).add(min).roundToDecimalPlaces(decimalPlaces);
         var box = Box.fromMinAndMax(min, max);
         Assert.isTrue(min.equalsWithinOneBillionth(box.min()));
-    }
-    ofPoints() {
-        var pointOrigin = Coords.zeroes();
-        var pointOnes = Coords.ones();
-        var pointNegativeOnes = Coords.ones().invert();
-        var points = [pointOrigin, pointOnes, pointNegativeOnes];
-        var boxFromPoints = Box.create().ofPoints(points);
-        var boxOfSize2AtOrigin = Box.fromSize(Coords.twos());
-        Assert.isTrue(boxOfSize2AtOrigin.equals(boxFromPoints));
     }
     overlapsWith() {
         var ones = Coords.ones();

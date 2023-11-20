@@ -177,6 +177,7 @@ import UserInputListener = gf.UserInputListener;
 
 // Media.
 import Font = gf.Font;
+import FontNameAndHeight = gf.FontNameAndHeight;
 import Image2 = gf.Image2;  // Name conflicts with a built-in class.
 import MediaLibrary = gf.MediaLibrary;
 import Sound = gf.Sound;

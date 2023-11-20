@@ -13,7 +13,6 @@ class CameraTests extends TestFixture
 	{
 		var tests =
 		[
-			this.clipPlanes,
 			this.coordsTransformViewToWorld,
 			this.coordsTransformWorldToView,
 			this.drawEntitiesInView,
@@ -26,13 +25,6 @@ class CameraTests extends TestFixture
 		];
 
 		return tests;
-	}
-
-	clipPlanes(): void
-	{
-		var cameraClipPlanes = this._camera.clipPlanes();
-		Assert.isNotNull(cameraClipPlanes);
-		Assert.areNumbersEqual(4, cameraClipPlanes.length);
 	}
 
 	coordsTransformViewToWorld(): void
