@@ -57,6 +57,7 @@ class GameDemo {
             videoDirectoryPath + "Movie.webm",
             fontDirectoryPath + "Font.ttf",
             textStringDirectoryPath + "Conversation.json",
+            textStringDirectoryPath + "Conversation.json.txtpng",
             textStringDirectoryPath + "Instructions.txt",
         ];
         return mediaFilePaths;

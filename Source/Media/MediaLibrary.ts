@@ -99,6 +99,8 @@ export class MediaLibrary
 
 			[ "json", textStringTypeDirectoryNameAndArray ],
 			[ "txt", textStringTypeDirectoryNameAndArray ],
+
+			[ "txtpng", [ TextStringFromImage, "Text", textStrings ] ],
 		]);
 
 		for (var i = 0; i < mediaFilePaths.length; i++)

@@ -100,6 +100,7 @@ class GameDemo
 			fontDirectoryPath + "Font.ttf",
 
 			textStringDirectoryPath + "Conversation.json",
+			textStringDirectoryPath + "Conversation.json.txtpng",
 			textStringDirectoryPath + "Instructions.txt",
 		];
 

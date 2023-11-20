@@ -54,6 +54,7 @@ var ThisCouldBeBetter;
                     ["ttf", [GameFramework.Font, "Fonts", fonts]],
                     ["json", textStringTypeDirectoryNameAndArray],
                     ["txt", textStringTypeDirectoryNameAndArray],
+                    ["txtpng", [GameFramework.TextStringFromImage, "Text", textStrings]],
                 ]);
                 for (var i = 0; i < mediaFilePaths.length; i++) {
                     var filePath = mediaFilePaths[i];

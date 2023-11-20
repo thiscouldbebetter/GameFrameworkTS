@@ -126,7 +126,7 @@ export class Image2 implements MediaItemBase
 
 	// Loadable.
 
-	load(): Image2
+	load(callback: any): Image2
 	{
 		if (this.sourcePath != null)
 		{
@@ -142,6 +142,11 @@ export class Image2 implements MediaItemBase
 				(
 					imgLoaded.width, imgLoaded.height, 0
 				);
+
+				if (callback != null)
+				{
+					callback(this);
+				}
 			};
 			imgElement.src = this.sourcePath;
 		}

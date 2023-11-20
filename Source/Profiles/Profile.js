@@ -105,7 +105,7 @@ var ThisCouldBeBetter;
                         var saveState = c.saveStateSelected();
                         var saveStateImageSnapshot = (saveState == null
                             ? null
-                            : saveState.imageSnapshot.load());
+                            : saveState.imageSnapshot.load(null));
                         var returnValue = (saveStateImageSnapshot == null || saveStateImageSnapshot.isLoaded == false
                             ? new GameFramework.VisualNone()
                             : new GameFramework.VisualImageScaled(visualThumbnailSize.clone(), new GameFramework.VisualImageImmediate(saveStateImageSnapshot, true) // isScaled

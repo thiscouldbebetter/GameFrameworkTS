@@ -59,7 +59,7 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             // Loadable.
-            load() {
+            load(callback) {
                 if (this.sourcePath != null) {
                     var image = this;
                     var imgElement = document.createElement("img");
@@ -68,6 +68,9 @@ var ThisCouldBeBetter;
                         image.isLoaded = true;
                         image.systemImage = imgLoaded;
                         image.sizeInPixels = new GameFramework.Coords(imgLoaded.width, imgLoaded.height, 0);
+                        if (callback != null) {
+                            callback(this);
+                        }
                     };
                     imgElement.src = this.sourcePath;
                 }
