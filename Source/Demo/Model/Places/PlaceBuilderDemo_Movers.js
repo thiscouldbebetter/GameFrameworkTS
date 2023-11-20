@@ -902,7 +902,7 @@ class PlaceBuilderDemo_Movers {
             uwpe.entity2 = itemEntityGettingPickedUp;
             var entityPickingUpLocatable = entityPickingUp.locatable();
             var itemLocatable = itemEntityGettingPickedUp.locatable();
-            var distance = itemLocatable.approachOtherWithAccelerationAndSpeedMax(entityPickingUpLocatable, .5, 4 //, 1
+            var distance = itemLocatable.approachOtherWithAccelerationAndSpeedMaxAndReturnDistance(entityPickingUpLocatable, .5, 4 //, 1
             );
             itemLocatable.loc.orientation.default(); // hack
             if (distance < 1) {
