@@ -34,8 +34,8 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             static default() {
-                var universe = Universe.create("Default", "0.0.0", // version
-                new GameFramework.TimerHelper(20), GameFramework.Display2D.fromSize(GameFramework.Coords.fromXY(200, 150)), GameFramework.MediaLibrary.default(), GameFramework.ControlBuilder.default(), GameFramework.WorldCreator.fromWorldCreate(() => GameFramework.World.default()));
+                var version = _BuildRecord.version();
+                var universe = Universe.create("Default", version, new GameFramework.TimerHelper(20), GameFramework.Display2D.fromSize(GameFramework.Coords.fromXY(200, 150)), GameFramework.MediaLibrary.default(), GameFramework.ControlBuilder.default(), GameFramework.WorldCreator.fromWorldCreate(() => GameFramework.World.default()));
                 return universe;
             }
             // instance methods

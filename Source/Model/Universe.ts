@@ -104,10 +104,12 @@ export class Universe
 
 	static default(): Universe
 	{
+		var version = _BuildRecord.version();
+
 		var universe = Universe.create
 		(
 			"Default",
-			"0.0.0", // version
+			version,
 			new TimerHelper(20),
 			Display2D.fromSize
 			(
