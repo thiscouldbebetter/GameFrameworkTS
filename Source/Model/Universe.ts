@@ -44,7 +44,7 @@ export class Universe
 	)
 	{
 		this.name = name;
-		this.version = version;
+		this.version = version || _BuildRecord.version();
 		this.timerHelper = timerHelper;
 		this.display = display;
 		this.soundHelper = soundHelper;
@@ -104,12 +104,10 @@ export class Universe
 
 	static default(): Universe
 	{
-		var version = _BuildRecord.version();
-
 		var universe = Universe.create
 		(
 			"Default",
-			version,
+			null, // version
 			new TimerHelper(20),
 			Display2D.fromSize
 			(

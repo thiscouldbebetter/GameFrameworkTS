@@ -6,7 +6,7 @@ var ThisCouldBeBetter;
         class Universe {
             constructor(name, version, timerHelper, display, soundHelper, mediaLibrary, controlBuilder, worldCreator) {
                 this.name = name;
-                this.version = version;
+                this.version = version || _BuildRecord.version();
                 this.timerHelper = timerHelper;
                 this.display = display;
                 this.soundHelper = soundHelper;
@@ -34,8 +34,8 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             static default() {
-                var version = _BuildRecord.version();
-                var universe = Universe.create("Default", version, new GameFramework.TimerHelper(20), GameFramework.Display2D.fromSize(GameFramework.Coords.fromXY(200, 150)), GameFramework.MediaLibrary.default(), GameFramework.ControlBuilder.default(), GameFramework.WorldCreator.fromWorldCreate(() => GameFramework.World.default()));
+                var universe = Universe.create("Default", null, // version
+                new GameFramework.TimerHelper(20), GameFramework.Display2D.fromSize(GameFramework.Coords.fromXY(200, 150)), GameFramework.MediaLibrary.default(), GameFramework.ControlBuilder.default(), GameFramework.WorldCreator.fromWorldCreate(() => GameFramework.World.default()));
                 return universe;
             }
             // instance methods
