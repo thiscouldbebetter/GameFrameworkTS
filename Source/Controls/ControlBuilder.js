@@ -202,8 +202,15 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromTrue(), // isEnabled
                     () => // click
                      {
+                        var buildTime = _BuildRecord.buildTime();
+                        var aboutTextAsLines = [
+                            universe.name,
+                            "Version: " + universe.version,
+                            "Built: " + (buildTime == null ? "[unknown]" : buildTime.toISOString().split("T").join(" "))
+                        ];
+                        var aboutText = aboutTextAsLines.join("\n");
                         var venueCurrent = universe.venueCurrent;
-                        var venueNext = new GameFramework.VenueMessage(GameFramework.DataBinding.fromContext(universe.name + "\nv" + universe.version), () => // acknowledge
+                        var venueNext = new GameFramework.VenueMessage(GameFramework.DataBinding.fromContext(aboutText), () => // acknowledge
                          {
                             universe.venueTransitionTo(venueCurrent);
                         }, universe.venueCurrent, // venuePrev

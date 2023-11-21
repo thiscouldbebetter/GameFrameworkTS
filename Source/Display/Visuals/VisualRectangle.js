@@ -20,8 +20,14 @@ var ThisCouldBeBetter;
                 // For rapid prototyping.
                 return new VisualRectangle(GameFramework.Coords.fromXY(1, 1).multiplyScalar(10), null, colorFill, true);
             }
+            static fromSizeAndColorBorder(size, colorBorder) {
+                return new VisualRectangle(size, null, colorBorder, null);
+            }
             static fromSizeAndColorFill(size, colorFill) {
                 return new VisualRectangle(size, colorFill, null, null);
+            }
+            static fromSizeAndColorsFillAndBorder(size, colorFill, colorBorder) {
+                return new VisualRectangle(size, colorFill, colorBorder, null);
             }
             draw(uwpe, display) {
                 var entity = uwpe.entity;

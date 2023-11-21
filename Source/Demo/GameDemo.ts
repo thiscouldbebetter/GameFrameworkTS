@@ -45,10 +45,12 @@ class GameDemo
 			ControlStyle.Instances().Dark
 		]);
 
+		var version = _BuildRecord.version();
+
 		var universe = Universe.create
 		(
 			"Game Framework Demo Game",
-			"0.0.0-20220227", // version
+			version,
 			timerHelper,
 			display,
 			mediaLibrary,

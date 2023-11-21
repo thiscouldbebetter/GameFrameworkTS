@@ -450,10 +450,22 @@ export class ControlBuilder
 					DataBinding.fromTrue(), // isEnabled
 					() => // click
 					{
+						var buildTime = _BuildRecord.buildTime();
+
+						var aboutTextAsLines =
+						[
+							universe.name,
+							"Version: " + universe.version,
+							"Built: " + (buildTime == null ? "[unknown]" : buildTime.toISOString().split("T").join(" ") )
+						];
+
+						var aboutText = aboutTextAsLines.join("\n");
+
 						var venueCurrent = universe.venueCurrent;
+
 						var venueNext = new VenueMessage
 						(
-							DataBinding.fromContext(universe.name + "\nv" + universe.version),
+							DataBinding.fromContext(aboutText),
 							() => // acknowledge
 							{
 								universe.venueTransitionTo(venueCurrent);

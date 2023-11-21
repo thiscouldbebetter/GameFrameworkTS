@@ -43,9 +43,19 @@ export class VisualRectangle implements Visual<VisualRectangle>
 		return new VisualRectangle(Coords.fromXY(1, 1).multiplyScalar(10), null, colorFill, true);
 	}
 
+	static fromSizeAndColorBorder(size: Coords, colorBorder: Color): VisualRectangle
+	{
+		return new VisualRectangle(size, null, colorBorder, null);
+	}
+
 	static fromSizeAndColorFill(size: Coords, colorFill: Color): VisualRectangle
 	{
 		return new VisualRectangle(size, colorFill, null, null);
+	}
+
+	static fromSizeAndColorsFillAndBorder(size: Coords, colorFill: Color, colorBorder: Color): VisualRectangle
+	{
+		return new VisualRectangle(size, colorFill, colorBorder, null);
 	}
 
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
