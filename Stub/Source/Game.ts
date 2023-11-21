@@ -49,7 +49,7 @@ class Game
 		var universe = Universe.create
 		(
 			"Game",
-			"0.0.0-20220218-0000", // version
+			null, // version
 			timerHelper,
 			display,
 			mediaLibrary,

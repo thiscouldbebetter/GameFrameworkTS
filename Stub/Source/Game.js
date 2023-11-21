@@ -24,7 +24,7 @@ class Game {
         var timerHelper = new TimerHelper(20);
         var controlBuilder = ControlBuilder.default();
         var worldCreator = WorldCreator.fromWorldCreate(() => new WorldGame());
-        var universe = Universe.create("Game", "0.0.0-20220218-0000", // version
+        var universe = Universe.create("Game", null, // version
         timerHelper, display, mediaLibrary, controlBuilder, worldCreator);
         universe.initialize(() => { universe.start(); });
     }
