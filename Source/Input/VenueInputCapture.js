@@ -27,7 +27,7 @@ var ThisCouldBeBetter;
                         if (inputPressed.name.startsWith("Mouse") == false) {
                             if (inputPressed.isActive) {
                                 this.functionToPassInputCapturedTo(inputPressed);
-                                universe.venueNext = this.venueToReturnTo;
+                                universe.venueNextSet(this.venueToReturnTo);
                             }
                         }
                     }

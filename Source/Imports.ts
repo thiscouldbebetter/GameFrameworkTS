@@ -346,6 +346,7 @@ import PlatformHelper = gf.PlatformHelper;
 import Randomizer = gf.Randomizer;
 import RandomizerSystem = gf.RandomizerSystem;
 import Reference = gf.Reference;
+import Stack = gf.Stack;
 import TimerHelper = gf.TimerHelper;
 import Treeable = gf.Treeable;
 import URLParser = gf.URLParser;

@@ -73,12 +73,12 @@ export class Talker implements EntityProperty<Talker>
 		var conversationQuit = this.quit;
 		if (conversationQuit == null)
 		{
-			var venueToReturnTo = universe.venueCurrent;
+			var venueToReturnTo = universe.venueCurrent();
 			conversationQuit = () => // quit
 			{
-				if (universe.venueNext == null) // May be set or not based on the conversation.
+				if (universe.venueNext() == null) // May be set or not based on the conversation.
 				{
-					universe.venueNext = venueToReturnTo;
+					universe.venueTransitionTo(venueToReturnTo);
 				}
 			};
 		}
@@ -97,7 +97,7 @@ export class Talker implements EntityProperty<Talker>
 
 		var venueNext = conversationAsControl.toVenue();
 
-		universe.venueNext = venueNext;
+		universe.venueTransitionTo(venueNext);
 	}
 
 	toControl(conversationRun: ConversationRun, size: Coords, universe: Universe): ControlBase

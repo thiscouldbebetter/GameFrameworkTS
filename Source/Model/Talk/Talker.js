@@ -39,12 +39,12 @@ var ThisCouldBeBetter;
                 }
                 var conversationQuit = this.quit;
                 if (conversationQuit == null) {
-                    var venueToReturnTo = universe.venueCurrent;
+                    var venueToReturnTo = universe.venueCurrent();
                     conversationQuit = () => // quit
                      {
-                        if (universe.venueNext == null) // May be set or not based on the conversation.
+                        if (universe.venueNext() == null) // May be set or not based on the conversation.
                          {
-                            universe.venueNext = venueToReturnTo;
+                            universe.venueTransitionTo(venueToReturnTo);
                         }
                     };
                 }
@@ -55,7 +55,7 @@ var ThisCouldBeBetter;
                 var conversationSize = universe.display.sizeDefault().clone();
                 var conversationAsControl = this.toControl(this.conversationRun, conversationSize, universe);
                 var venueNext = conversationAsControl.toVenue();
-                universe.venueNext = venueNext;
+                universe.venueTransitionTo(venueNext);
             }
             toControl(conversationRun, size, universe) {
                 var returnValue = null;

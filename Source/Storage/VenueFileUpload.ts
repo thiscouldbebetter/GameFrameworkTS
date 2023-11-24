@@ -110,7 +110,7 @@ export class VenueFileUpload implements Venue
 					var actionName = actionToInputsMapping.actionName;
 					if (actionName == ControlActionNames.Instances().ControlCancel)
 					{
-						universe.venueNext = this.venueNextIfCancelled;
+						universe.venueTransitionTo(this.venueNextIfCancelled);
 					}
 				}
 			}
@@ -121,7 +121,7 @@ export class VenueFileUpload implements Venue
 
 	buttonCancel_Clicked(universe: Universe, event: Event): void
 	{
-		universe.venueNext = this.venueNextIfCancelled;
+		universe.venueTransitionTo(this.venueNextIfCancelled);
 	}
 
 	buttonLoad_Clicked(universe: Universe, event: Event): void
@@ -130,7 +130,7 @@ export class VenueFileUpload implements Venue
 		var fileToLoad = inputFileUpload.files[0];
 		if (fileToLoad != null)
 		{
-			universe.venueNext = this.venueNextIfFileSpecified;
+			universe.venueTransitionTo(this.venueNextIfFileSpecified);
 		}
 	}
 

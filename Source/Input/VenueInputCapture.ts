@@ -50,7 +50,7 @@ export class VenueInputCapture implements Venue
 					if (inputPressed.isActive)
 					{
 						this.functionToPassInputCapturedTo(inputPressed);
-						universe.venueNext = this.venueToReturnTo;
+						universe.venueNextSet(this.venueToReturnTo);
 					}
 				}
 			}

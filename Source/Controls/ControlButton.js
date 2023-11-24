@@ -15,6 +15,14 @@ var ThisCouldBeBetter;
                 this._drawLoc = GameFramework.Disposition.create();
                 this._sizeHalf = GameFramework.Coords.create();
             }
+            static from5(pos, size, text, fontNameAndHeight, click) {
+                return ControlButton.fromPosSizeTextFontClick(pos, size, text, fontNameAndHeight, click);
+            }
+            static fromPosSizeTextFontClick(pos, size, text, fontNameAndHeight, click) {
+                return ControlButton.from8("button" + text.split(" ").join(""), pos, size, text, fontNameAndHeight, true, // hasBorder
+                GameFramework.DataBinding.fromTrue(), // isEnabled,
+                click);
+            }
             static from8(name, pos, size, text, fontNameAndHeight, hasBorder, isEnabled, click) {
                 return new ControlButton(name, pos, size, text, fontNameAndHeight, hasBorder, isEnabled, click, false // canBeHeldDown
                 );

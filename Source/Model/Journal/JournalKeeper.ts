@@ -207,7 +207,7 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 						universe,
 						universe.display.sizeInPixels, // size
 						"Are you sure you want to delete this entry?",
-						universe.venueCurrent,
+						universe.venueCurrent(),
 						() => // confirm
 						{
 							var journal = journalKeeper.journal;

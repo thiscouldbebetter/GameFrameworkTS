@@ -71,7 +71,7 @@ var ThisCouldBeBetter;
                             inputPressed.isActive = false;
                             var actionName = actionToInputsMapping.actionName;
                             if (actionName == GameFramework.ControlActionNames.Instances().ControlCancel) {
-                                universe.venueNext = this.venueNextIfCancelled;
+                                universe.venueTransitionTo(this.venueNextIfCancelled);
                             }
                         }
                     }
@@ -79,13 +79,13 @@ var ThisCouldBeBetter;
             }
             // events
             buttonCancel_Clicked(universe, event) {
-                universe.venueNext = this.venueNextIfCancelled;
+                universe.venueTransitionTo(this.venueNextIfCancelled);
             }
             buttonLoad_Clicked(universe, event) {
                 var inputFileUpload = this.domElement.getElementsByTagName("input")[0];
                 var fileToLoad = inputFileUpload.files[0];
                 if (fileToLoad != null) {
-                    universe.venueNext = this.venueNextIfFileSpecified;
+                    universe.venueTransitionTo(this.venueNextIfFileSpecified);
                 }
             }
             // platformable

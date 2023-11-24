@@ -15,8 +15,8 @@ var ThisCouldBeBetter;
             statementAdvance(universe) {
                 this.statementIndexCurrent++;
                 if (this.statementIndexCurrent >= this.statements.length) {
-                    var venue = universe.venueCurrent; // ?
-                    universe.venueNext = venue.children[0];
+                    var venue = universe.venueCurrent(); // ?
+                    universe.venueNextSet(venue.children[0]);
                 }
             }
             // Controllable.

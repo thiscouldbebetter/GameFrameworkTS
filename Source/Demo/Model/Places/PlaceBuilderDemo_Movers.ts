@@ -1339,11 +1339,11 @@ class PlaceBuilderDemo_Movers
 								universe.controlBuilder.title(universe, null).toVenue();
 							universe.venueTransitionTo(venueNext);
 						},
-						universe.venueCurrent, // venuePrev
+						universe.venueCurrent(), // venuePrev
 						universe.display.sizeDefault().clone(),//.half(),
 						true // showMessageOnly
 					);
-					universe.venueNext = venueMessage as Venue;
+					universe.venueTransitionTo(venueMessage as Venue);
 				}
 			}
 			else if (entityOther.talker() != null)
@@ -1460,11 +1460,11 @@ class PlaceBuilderDemo_Movers
 							universe.controlBuilder.title(universe, null).toVenue()
 						universe.venueTransitionTo(venueNext);
 					},
-					universe.venueCurrent, // venuePrev
+					universe.venueCurrent(), // venuePrev
 					universe.display.sizeDefault().clone(),//.half(),
 					true // showMessageOnly
 				);
-				uwpe.universe.venueNext = venueMessage;
+				uwpe.universe.venueTransitionTo(venueMessage);
 			}
 		);
 
@@ -1742,7 +1742,7 @@ class PlaceBuilderDemo_Movers
 				var universe = uwpe.universe;
 				var size = universe.display.sizeInPixels;
 				var entity = uwpe.entity;
-				var venuePrev = universe.venueCurrent;
+				var venuePrev = universe.venueCurrent();
 				var isMenu = universe.inputHelper.inputsPressed.some
 				(
 					x => x.name == "Escape" || x.name == "Tab" // hack

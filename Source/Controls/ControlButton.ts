@@ -38,6 +38,43 @@ export class ControlButton<TContext> extends ControlBase
 		this._sizeHalf = Coords.create();
 	}
 
+	static from5
+	(
+		pos: Coords,
+		size: Coords,
+		text: string,
+		fontNameAndHeight: FontNameAndHeight,
+		click: () => void
+	)
+	{
+		return ControlButton.fromPosSizeTextFontClick
+		(
+			pos, size, text, fontNameAndHeight, click
+		);
+	}
+
+	static fromPosSizeTextFontClick<TContext>
+	(
+		pos: Coords,
+		size: Coords,
+		text: string,
+		fontNameAndHeight: FontNameAndHeight,
+		click: () => void
+	)
+	{
+		return ControlButton.from8
+		(
+			"button" + text.split(" ").join(""),
+			pos,
+			size,
+			text,
+			fontNameAndHeight,
+			true, // hasBorder
+			DataBinding.fromTrue(), // isEnabled,
+			click
+		);
+	}
+
 	static from8<TContext>
 	(
 		name: string,

@@ -957,10 +957,10 @@ class PlaceBuilderDemo // Main.
                     ]);
                     var wordBubbleAsControl = wordBubble.toControl(u);
                     var venuesForLayers = [
-                        u.venueCurrent,
+                        u.venueCurrent(),
                         wordBubbleAsControl.toVenue()
                     ];
-                    u.venueNext = new VenueLayered(venuesForLayers, null);
+                    u.venueTransitionTo(new VenueLayered(venuesForLayers, null));
                 }
             })
         ]);

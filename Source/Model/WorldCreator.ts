@@ -161,7 +161,11 @@ export class WorldCreator
 		messageAsDataBinding.contextSet(venueTask);
 
 		var returnValue =
-			universe.controlBuilder.venueTransitionalFromTo(universe.venueCurrent, venueTask);
+			universe.controlBuilder.venueTransitionalFromTo
+			(
+				universe.venueCurrent(),
+				venueTask
+			);
 
 		return returnValue;
 	}

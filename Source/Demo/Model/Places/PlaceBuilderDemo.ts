@@ -1771,14 +1771,17 @@ class PlaceBuilderDemo // Main.
 							var wordBubbleAsControl = wordBubble.toControl(u);
 							var venuesForLayers: Venue[] =
 							[
-								u.venueCurrent,
+								u.venueCurrent(),
 								wordBubbleAsControl.toVenue()
 							];
 
-							u.venueNext = new VenueLayered
+							u.venueTransitionTo
 							(
-								venuesForLayers,
-								null
+								new VenueLayered
+								(
+									venuesForLayers,
+									null
+								)
 							);
 						}
 					}

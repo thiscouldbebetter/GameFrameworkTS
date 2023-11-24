@@ -39,7 +39,7 @@ var ThisCouldBeBetter;
                 var fontNameAndHeight = new GameFramework.FontNameAndHeight(null, fontHeight);
                 var buttonHeightBase = controlBuilder.buttonHeightBase;
                 var visualThumbnailSize = Profile.toControlSaveStateLoadOrSave_ThumbnailSize();
-                var venueToReturnTo = universe.venueCurrent;
+                var venueToReturnTo = universe.venueCurrent();
                 var back = () => universe.venueTransitionTo(venueToReturnTo);
                 var saveToLocalStorageOverwritingSlotSelected = () => {
                     Profile.toControlSaveStateLoadOrSave_DeleteSaveSelected_Confirm(universe);
@@ -168,7 +168,7 @@ var ThisCouldBeBetter;
                 if (saveStateSelected != null) {
                     var controlConfirm = universe.controlBuilder.confirmAndReturnToVenue(universe, size, "Delete save state \""
                         + saveStateSelected.timeSaved.toStringYYYY_MM_DD_HH_MM_SS()
-                        + "\"?", universe.venueCurrent, () => Profile.toControlSaveStateLoadOrSave_DeleteSaveSelected_Confirm(universe), null // cancel
+                        + "\"?", universe.venueCurrent(), () => Profile.toControlSaveStateLoadOrSave_DeleteSaveSelected_Confirm(universe), null // cancel
                     );
                     var venueNext = controlConfirm.toVenue();
                     universe.venueTransitionTo(venueNext);
@@ -196,7 +196,7 @@ var ThisCouldBeBetter;
                         var worldBlank = worldCreator.worldCreate(universe, worldCreator);
                         var worldDeserialized = worldBlank.fromStringJson(worldSerialized, universe);
                         universe.world = worldDeserialized;
-                        var venueNext = universe.controlBuilder.game(universe, size, universe.venueCurrent).toVenue();
+                        var venueNext = universe.controlBuilder.game(universe, size, universe.venueCurrent()).toVenue();
                         universe.venueTransitionTo(venueNext);
                     };
                     var inputFile = venueFileUpload.toDomElement().getElementsByTagName("input")[0];
@@ -207,20 +207,20 @@ var ThisCouldBeBetter;
                 var venueMessageReadyToLoad = controlMessageReadyToLoad.toVenue();
                 var controlMessageCancelled = controlBuilder.message4(universe, size, GameFramework.DataBinding.fromContext("No file specified."), () => // acknowlege
                  {
-                    var venueNext = controlBuilder.game(universe, size, universe.venueCurrent).toVenue();
+                    var venueNext = controlBuilder.game(universe, size, universe.venueCurrent()).toVenue();
                     universe.venueTransitionTo(venueNext);
                 });
                 var venueMessageCancelled = controlMessageCancelled.toVenue();
                 venueFileUpload.venueNextIfFileSpecified = venueMessageReadyToLoad;
                 venueFileUpload.venueNextIfCancelled = venueMessageCancelled;
-                universe.venueNext = venueFileUpload;
+                universe.venueTransitionTo(venueFileUpload);
             }
             ;
             static toControlSaveStateLoadOrSave_LoadNewWorld(universe, size) {
                 var world = universe.worldCreate();
                 universe.world = world;
                 var controlBuilder = universe.controlBuilder;
-                var venueNext = controlBuilder.worldDetail(universe, size, universe.venueCurrent).toVenue();
+                var venueNext = controlBuilder.worldDetail(universe, size, universe.venueCurrent()).toVenue();
                 universe.venueTransitionTo(venueNext);
             }
             static toControlSaveStateLoadOrSave_LoadSelectedSlotFromLocalStorage(universe) {
@@ -305,7 +305,7 @@ var ThisCouldBeBetter;
                     : "Save failed due to errors:\n" + errorMessageFromSave);
                 var controlMessage = universe.controlBuilder.message4(universe, size, GameFramework.DataBinding.fromContext(message), () => // acknowledge
                  {
-                    var venueNext = universe.controlBuilder.game(universe, null, universe.venueCurrent).toVenue();
+                    var venueNext = universe.controlBuilder.game(universe, null, universe.venueCurrent()).toVenue();
                     universe.venueTransitionTo(venueNext);
                 });
                 var venueNext = controlMessage.toVenue();
@@ -330,7 +330,7 @@ var ThisCouldBeBetter;
                     new GameFramework.FileHelper().saveBytesToFileWithName(worldCompressedAsBytes, universe.world.name + ".json.lzw");
                     var controlMessage = universe.controlBuilder.message4(universe, size, GameFramework.DataBinding.fromContext(message), () => // acknowledge
                      {
-                        var venueNext = universe.controlBuilder.game(universe, null, universe.venueCurrent).toVenue();
+                        var venueNext = universe.controlBuilder.game(universe, null, universe.venueCurrent()).toVenue();
                         universe.venueTransitionTo(venueNext);
                     });
                     var venueMessage = controlMessage.toVenue();
@@ -364,7 +364,7 @@ var ThisCouldBeBetter;
                 var fontNameAndHeight = controlBuilder.fontBase;
                 var buttonHeightBase = controlBuilder.buttonHeightBase;
                 var create = () => {
-                    var venueControls = universe.venueCurrent;
+                    var venueControls = universe.venueCurrent();
                     var controlRootAsContainer = venueControls.controlRoot;
                     var textBoxName = controlRootAsContainer.childrenByName.get("textBoxName");
                     var profileName = textBoxName.text(null);
@@ -381,9 +381,8 @@ var ThisCouldBeBetter;
                     storageHelper.save(Profile.StorageKeyProfileNames, profileNames);
                     storageHelper.save(profileName, profile);
                     universe.profile = profile;
-                    var venueNext = Profile.toControlSaveStateLoad(universe, null, universe.venueCurrent).toVenue();
-                    venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-                    universe.venueNext = venueNext;
+                    var venueNext = Profile.toControlSaveStateLoad(universe, null, universe.venueCurrent()).toVenue();
+                    universe.venueTransitionTo(venueNext);
                 };
                 var returnValue = GameFramework.ControlContainer.from4("containerProfileNew", GameFramework.Coords.create(), // pos
                 sizeBase.clone(), // size
@@ -411,7 +410,7 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromTrue(), // isEnabled
                     () => // click
                      {
-                        var venueNext = Profile.toControlProfileSelect(universe, null, universe.venueCurrent).toVenue();
+                        var venueNext = Profile.toControlProfileSelect(universe, null, universe.venueCurrent()).toVenue();
                         universe.venueTransitionTo(venueNext);
                     }),
                 ]);
@@ -440,13 +439,13 @@ var ThisCouldBeBetter;
                     universe.venueTransitionTo(venueNext);
                 };
                 var select = () => {
-                    var venueControls = universe.venueCurrent;
+                    var venueControls = universe.venueCurrent();
                     var controlRootAsContainer = venueControls.controlRoot;
                     var listProfiles = controlRootAsContainer.childrenByName.get("listProfiles");
                     var profileSelected = listProfiles.itemSelected();
                     universe.profile = profileSelected;
                     if (profileSelected != null) {
-                        var venueNext = Profile.toControlSaveStateLoad(universe, null, universe.venueCurrent).toVenue();
+                        var venueNext = Profile.toControlSaveStateLoad(universe, null, universe.venueCurrent()).toVenue();
                         universe.venueTransitionTo(venueNext);
                     }
                 };
@@ -463,7 +462,7 @@ var ThisCouldBeBetter;
                     if (profileSelected != null) {
                         var controlConfirm = universe.controlBuilder.confirmAndReturnToVenue(universe, size, "Delete profile \""
                             + profileSelected.name
-                            + "\"?", universe.venueCurrent, deleteProfileConfirm, null // cancel
+                            + "\"?", universe.venueCurrent(), deleteProfileConfirm, null // cancel
                         );
                         var venueNext = controlConfirm.toVenue();
                         universe.venueTransitionTo(venueNext);

@@ -28,7 +28,7 @@ export class Portal implements EntityProperty<Portal>
 		entityPortalCollidable.ticksUntilCanCollide = 40; // hack
 
 		var portal = entityPortal.portal();
-		var venueCurrent = universe.venueCurrent;
+		var venueCurrent = universe.venueCurrent();
 		var messageBoxSize = universe.display.sizeDefault();
 		var messageText =
 			DataBinding.fromContext("Portal to: " + portal.destinationPlaceName);
@@ -36,7 +36,7 @@ export class Portal implements EntityProperty<Portal>
 		var acknowledge = () =>
 		{
 			portal.transport(uwpe);
-			universe.venueNext = VenueFader.fromVenueTo(venueCurrent);
+			universe.venueTransitionTo(venueCurrent);
 		};
 
 		var venueMessage = new VenueMessage
@@ -47,7 +47,7 @@ export class Portal implements EntityProperty<Portal>
 			messageBoxSize,
 			true // showMessageOnly
 		);
-		universe.venueNext = venueMessage;
+		universe.venueTransitionTo(venueMessage);
 	}
 
 	transport(uwpe: UniverseWorldPlaceEntities): void

@@ -15,17 +15,17 @@ var ThisCouldBeBetter;
                 var entityPortalCollidable = entityPortal.collidable();
                 entityPortalCollidable.ticksUntilCanCollide = 40; // hack
                 var portal = entityPortal.portal();
-                var venueCurrent = universe.venueCurrent;
+                var venueCurrent = universe.venueCurrent();
                 var messageBoxSize = universe.display.sizeDefault();
                 var messageText = GameFramework.DataBinding.fromContext("Portal to: " + portal.destinationPlaceName);
                 var acknowledge = () => {
                     portal.transport(uwpe);
-                    universe.venueNext = GameFramework.VenueFader.fromVenueTo(venueCurrent);
+                    universe.venueTransitionTo(venueCurrent);
                 };
                 var venueMessage = new GameFramework.VenueMessage(messageText, acknowledge, venueCurrent, // venuePrev
                 messageBoxSize, true // showMessageOnly
                 );
-                universe.venueNext = venueMessage;
+                universe.venueTransitionTo(venueMessage);
             }
             transport(uwpe) {
                 var world = uwpe.world;

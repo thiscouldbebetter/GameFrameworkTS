@@ -35,7 +35,7 @@ var ThisCouldBeBetter;
                 var entityUsing = uwpe.entity;
                 var entityUsed = uwpe.entity2;
                 //entityUsed.collidable().ticksUntilCanCollide = 50; // hack
-                var storeAsControl = entityUsed.itemStore().toControl(universe, universe.display.sizeInPixels, entityUsing, entityUsed, universe.venueCurrent);
+                var storeAsControl = entityUsed.itemStore().toControl(universe, universe.display.sizeInPixels, entityUsing, entityUsed, universe.venueCurrent());
                 var venueNext = storeAsControl.toVenue();
                 universe.venueTransitionTo(venueNext);
             }
@@ -60,9 +60,7 @@ var ThisCouldBeBetter;
                 var itemHolderStore = entityStore.itemHolder();
                 var world = universe.world;
                 var back = () => {
-                    var venueNext = venuePrev;
-                    venueNext = GameFramework.VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-                    universe.venueNext = venueNext;
+                    universe.venueTransitionTo(venuePrev);
                 };
                 var buy = () => {
                     itemBarterer.transfer(world, entityStore, entityCustomer, "Purchased");

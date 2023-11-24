@@ -68,7 +68,7 @@ var ThisCouldBeBetter;
                     universe.venueTransitionTo(venueNext);
                 });
                 messageAsDataBinding.contextSet(venueTask);
-                var returnValue = universe.controlBuilder.venueTransitionalFromTo(universe.venueCurrent, venueTask);
+                var returnValue = universe.controlBuilder.venueTransitionalFromTo(universe.venueCurrent(), venueTask);
                 return returnValue;
             }
         }

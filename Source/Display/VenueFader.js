@@ -48,7 +48,7 @@ var ThisCouldBeBetter;
                         this.timeFadeStarted = null;
                         var venueToFadeTo = this.venuesToFadeFromAndTo[1];
                         if (venueToFadeTo.draw == null) {
-                            universe.venueNext = venueToFadeTo;
+                            universe.venueNextSet(venueToFadeTo);
                         }
                     }
                     alphaOfFadeColor = fractionOfFadeCompleted;
@@ -57,7 +57,7 @@ var ThisCouldBeBetter;
                  {
                     if (fractionOfFadeCompleted > 1) {
                         fractionOfFadeCompleted = 1;
-                        universe.venueNext = this.venueCurrent();
+                        universe.venueNextSet(this.venueCurrent());
                     }
                     alphaOfFadeColor = 1 - fractionOfFadeCompleted;
                 }

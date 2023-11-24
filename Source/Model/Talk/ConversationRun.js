@@ -260,7 +260,7 @@ var ThisCouldBeBetter;
                 };
                 var back = () => this.quit(universe);
                 var viewLog = () => {
-                    var venueCurrent = universe.venueCurrent;
+                    var venueCurrent = universe.venueCurrent();
                     var transcriptAsControl = conversationRun.toControlTranscript(size, universe, venueCurrent);
                     var venueNext = transcriptAsControl.toVenue();
                     universe.venueTransitionTo(venueNext);
@@ -343,7 +343,7 @@ var ThisCouldBeBetter;
             }
             toControlTranscript(size, universe, venueToReturnTo) {
                 var conversationRun = this;
-                venueToReturnTo = universe.venueCurrent;
+                venueToReturnTo = universe.venueCurrent();
                 var fontHeight = 20;
                 var fontHeightShort = fontHeight * .6;
                 var fontNameAndHeight = GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeight);

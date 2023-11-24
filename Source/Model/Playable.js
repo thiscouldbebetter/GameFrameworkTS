@@ -64,7 +64,7 @@ var ThisCouldBeBetter;
                     var journalKeeperAsControl = journalKeeper.toControl(universe, tabPageSize, entity, venuePrev, includeTitleAndDoneButtonFalse);
                     controlsForTabs.push(journalKeeperAsControl);
                 }
-                var gameAndSettingsMenuAsControl = universe.controlBuilder.gameAndSettings(universe, tabPageSize, universe.venueCurrent, false // includeResumeButton
+                var gameAndSettingsMenuAsControl = universe.controlBuilder.gameAndSettings(universe, tabPageSize, universe.venueCurrent(), false // includeResumeButton
                 );
                 controlsForTabs.push(gameAndSettingsMenuAsControl);
                 var statusAsControl = GameFramework.ControlContainer.from4("Status", GameFramework.Coords.create(), // pos

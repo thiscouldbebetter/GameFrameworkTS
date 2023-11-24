@@ -114,13 +114,10 @@ export class ControlBuilder
 		var labelMessagePos = Coords.fromXY(0, 0);
 		var labelMessageSize = Coords.fromXY(this.sizeBase.x, labelMessageSizeY);
 
-		var labelMessage = new ControlLabel
+		var labelMessage = ControlLabel.from4Centered
 		(
-			"labelMessage",
 			labelMessagePos,
 			labelMessageSize,
-			true, // isTextCenteredHorizontally
-			true, // isTextCenteredVertically
 			message,
 			fontNameAndHeight
 		);
@@ -143,9 +140,8 @@ export class ControlBuilder
 			{
 				var optionName = optionNames[i];
 
-				var button = ControlButton.from8
+				var button = ControlButton.from5
 				(
-					"button" + optionName,
 					Coords.fromXY
 					(
 						buttonMarginLeftRight + i * (buttonWidth + spaceBetweenButtons),
@@ -154,8 +150,6 @@ export class ControlBuilder
 					buttonSize.clone(),
 					optionName,
 					fontNameAndHeight,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
 					optionFunctions[i]
 				);
 
@@ -265,28 +259,22 @@ export class ControlBuilder
 			Coords.create(),
 			size,
 			[
-				new ControlLabel
+				ControlLabel.from4CenteredHorizontally
 				(
-					"labelMessage",
 					Coords.fromXY(size.x / 2, marginSize.y + fontHeight / 2),
 					labelSize,
-					true, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContext(message),
 					font
 				),
 
 				listOptions,
 
-				new ControlButton
+				ControlButton.from5
 				(
-					"buttonSelect",
 					Coords.fromXY(marginSize.x, size.y - marginSize.y - buttonSize.y),
 					buttonSize,
 					buttonSelectText,
 					font,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled,
 					() => // click
 					{
 						var itemSelected = listOptions.itemSelected();
@@ -294,8 +282,7 @@ export class ControlBuilder
 						{
 							select(universe, itemSelected);
 						}
-					},
-					false // canBeHeldDown
+					}
 				),
 			]
 		);
@@ -304,6 +291,18 @@ export class ControlBuilder
 	}
 
 	confirm
+	(
+		universe: Universe,
+		size: Coords,
+		message: string,
+		confirm: () => void,
+		cancel: () => void
+	): ControlBase
+	{
+		return this.confirmForUniverseSizeMessageConfirmCancel(universe, size, message, confirm, cancel)
+	}
+
+	confirmForUniverseSizeMessageConfirmCancel
 	(
 		universe: Universe,
 		size: Coords,
@@ -389,10 +388,127 @@ export class ControlBuilder
 		var row3PosY = row2PosY + rowHeight;
 		var row4PosY = row3PosY + rowHeight;
 
+		var save = () =>
+		{
+			var venueNext = Profile.toControlSaveStateSave
+			(
+				universe, size, universe.venueCurrent()
+			).toVenue();
+			universe.venueTransitionTo(venueNext);
+		};
+
+		var load = () =>
+		{
+			var venueNext = Profile.toControlSaveStateLoad
+			(
+				universe, null, universe.venueCurrent()
+			).toVenue();
+			universe.venueTransitionTo(venueNext);
+		};
+
+		var about =	() =>
+		{
+			var buildTime = _BuildRecord.buildTime();
+
+			var aboutTextAsLines =
+			[
+				universe.name,
+				"Version: " + universe.version,
+				"Built: " + (buildTime == null ? "[unknown]" : buildTime.toISOString().split("T").join(" ") )
+			];
+
+			var aboutText = aboutTextAsLines.join("\n");
+
+			var venueCurrent = universe.venueCurrent();
+
+			var venueNext = new VenueMessage
+			(
+				DataBinding.fromContext(aboutText),
+				() => // acknowledge
+				{
+					universe.venueTransitionTo(venueCurrent);
+				},
+				universe.venueCurrent(), // venuePrev
+				size,
+				false
+			);
+			universe.venueTransitionTo(venueNext);
+		};
+
+		var quit = () =>
+		{
+			var controlConfirm = universe.controlBuilder.confirm
+			(
+				universe,
+				size,
+				"Are you sure you want to quit?",
+				() => // confirm
+				{
+					universe.reset();
+					var venueNext =
+						controlBuilder.title(universe, null).toVenue();
+					universe.venueTransitionTo(venueNext);
+				},
+				() => // cancel
+				{
+					var venueNext = venuePrev;
+					universe.venueTransitionTo(venueNext);
+				}
+			);
+
+			var venueNext: Venue = controlConfirm.toVenue();
+			universe.venueTransitionTo(venueNext);
+		};
+
 		var back = () =>
 		{
 			universe.venueTransitionTo(venuePrev);
-		}
+		};
+
+		var buttonSave = ControlButton.from5
+		(
+			Coords.fromXY(posX, row0PosY), // pos
+			buttonSize.clone(),
+			"Save",
+			font,
+			save
+		);
+
+		var buttonLoad = ControlButton.from5
+		(
+			Coords.fromXY(posX, row1PosY), // pos
+			buttonSize.clone(),
+			"Load",
+			font,
+			load
+		);
+
+		var buttonAbout = ControlButton.from5
+		(
+			Coords.fromXY(posX, row2PosY), // pos
+			buttonSize.clone(),
+			"About",
+			font,
+			about
+		);
+
+		var buttonQuit = ControlButton.from5
+		(
+			Coords.fromXY(posX, row3PosY), // pos
+			buttonSize.clone(),
+			"Quit",
+			font,
+			quit
+		);
+
+		var buttonBack = ControlButton.from5
+		(
+			Coords.fromXY(posX, row4PosY), // pos
+			buttonSize.clone(),
+			"Back",
+			font,
+			back // click
+		);
 
 		var returnValue = new ControlContainer
 		(
@@ -401,129 +517,11 @@ export class ControlBuilder
 			this.sizeBase.clone(),
 			// children
 			[
-				ControlButton.from8
-				(
-					"buttonSave",
-					Coords.fromXY(posX, row0PosY), // pos
-					buttonSize.clone(),
-					"Save",
-					font,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					() => // click
-					{
-						var venueNext = Profile.toControlSaveStateSave
-						(
-							universe, size, universe.venueCurrent
-						).toVenue();
-						universe.venueTransitionTo(venueNext);
-					}
-				),
-
-				ControlButton.from8
-				(
-					"buttonLoad",
-					Coords.fromXY(posX, row1PosY), // pos
-					buttonSize.clone(),
-					"Load",
-					font,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					() => // click
-					{
-						var venueNext = Profile.toControlSaveStateLoad
-						(
-							universe, null, universe.venueCurrent
-						).toVenue();
-						universe.venueTransitionTo(venueNext);
-					}
-				),
-
-				ControlButton.from8
-				(
-					"buttonAbout",
-					Coords.fromXY(posX, row2PosY), // pos
-					buttonSize.clone(),
-					"About",
-					font,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					() => // click
-					{
-						var buildTime = _BuildRecord.buildTime();
-
-						var aboutTextAsLines =
-						[
-							universe.name,
-							"Version: " + universe.version,
-							"Built: " + (buildTime == null ? "[unknown]" : buildTime.toISOString().split("T").join(" ") )
-						];
-
-						var aboutText = aboutTextAsLines.join("\n");
-
-						var venueCurrent = universe.venueCurrent;
-
-						var venueNext = new VenueMessage
-						(
-							DataBinding.fromContext(aboutText),
-							() => // acknowledge
-							{
-								universe.venueTransitionTo(venueCurrent);
-							},
-							universe.venueCurrent, // venuePrev
-							size,
-							false
-						);
-						universe.venueTransitionTo(venueNext);
-					}
-				),
-
-				ControlButton.from8
-				(
-					"buttonQuit",
-					Coords.fromXY(posX, row3PosY), // pos
-					buttonSize.clone(),
-					"Quit",
-					font,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					() => // click
-					{
-						var controlConfirm = universe.controlBuilder.confirm
-						(
-							universe,
-							size,
-							"Are you sure you want to quit?",
-							() => // confirm
-							{
-								universe.reset();
-								var venueNext =
-									controlBuilder.title(universe, null).toVenue();
-								universe.venueTransitionTo(venueNext);
-							},
-							() => // cancel
-							{
-								var venueNext = venuePrev;
-								universe.venueTransitionTo(venueNext);
-							}
-						);
-
-						var venueNext: Venue = controlConfirm.toVenue();
-						universe.venueTransitionTo(venueNext);
-					}
-				),
-
-				ControlButton.from8
-				(
-					"buttonBack",
-					Coords.fromXY(posX, row4PosY), // pos
-					buttonSize.clone(),
-					"Back",
-					font,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					back // click
-				),
+				buttonSave,
+				buttonLoad,
+				buttonAbout,
+				buttonQuit,
+				buttonBack
 			],
 
 			[ new Action("Back", back) ],
@@ -539,7 +537,13 @@ export class ControlBuilder
 
 	gameAndSettings1(universe: Universe): ControlBase
 	{
-		return this.gameAndSettings(universe, null, universe.venueCurrent, true);
+		return this.gameAndSettings
+		(
+			universe,
+			null, // size
+			universe.venueCurrent(),
+			true // includeResumeButton
+		);
 	}
 
 	gameAndSettings
@@ -574,6 +578,37 @@ export class ControlBuilder
 		var row0PosY = margin.y;
 		var row1PosY = row0PosY + rowHeight;
 		var row2PosY = row1PosY + rowHeight;
+		var buttonSize = Coords.fromXY(buttonWidth, buttonHeight);
+
+		var buttonGame = ControlButton.from5
+		(
+			Coords.fromXY(margin.x, row0PosY), // pos
+			buttonSize.clone(),
+			"Game",
+			font,
+			() => // click
+			{
+				var venueNext =
+					controlBuilder.game(universe, null, universe.venueCurrent() ).toVenue();
+				universe.venueTransitionTo(venueNext);
+			}
+		);
+
+		var buttonSettings = ControlButton.from5
+		(
+			Coords.fromXY(margin.x, row1PosY), // pos
+			buttonSize.clone(),
+			"Settings",
+			font,
+			() => // click
+			{
+				var venueNext = controlBuilder.settings
+				(
+					universe, null, universe.venueCurrent()
+				).toVenue();
+				universe.venueTransitionTo(venueNext);
+			}
+		);
 
 		var returnValue = new ControlContainer
 		(
@@ -582,41 +617,8 @@ export class ControlBuilder
 			this.sizeBase.clone(),
 			// children
 			[
-				ControlButton.from8
-				(
-					"buttonGame",
-					Coords.fromXY(margin.x, row0PosY), // pos
-					Coords.fromXY(buttonWidth, buttonHeight), // size
-					"Game",
-					font,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					() => // click
-					{
-						var venueNext =
-							controlBuilder.game(universe, null, universe.venueCurrent).toVenue();
-						universe.venueTransitionTo(venueNext);
-					}
-				),
-
-				ControlButton.from8
-				(
-					"buttonSettings",
-					Coords.fromXY(margin.x, row1PosY), // pos
-					Coords.fromXY(buttonWidth, buttonHeight), // size
-					"Settings",
-					font,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					() => // click
-					{
-						var venueNext = controlBuilder.settings
-						(
-							universe, null, universe.venueCurrent
-						).toVenue();
-						universe.venueTransitionTo(venueNext);
-					}
-				),
+				buttonGame,
+				buttonSettings
 			],
 			[], // actions
 			[] // mappings
@@ -629,15 +631,12 @@ export class ControlBuilder
 				universe.venueTransitionTo(venuePrev);
 			};
 
-			var buttonResume = ControlButton.from8
+			var buttonResume = ControlButton.from5
 			(
-				"buttonResume",
 				Coords.fromXY(margin.x, row2PosY), // pos
 				Coords.fromXY(buttonWidth, buttonHeight), // size
 				"Resume",
 				this.fontBase,
-				true, // hasBorder
-				DataBinding.fromTrue(), // isEnabled
 				back
 			);
 
@@ -681,13 +680,10 @@ export class ControlBuilder
 			this.sizeBase.clone(), // size
 			// children
 			[
-				new ControlLabel
+				ControlLabel.from4CenteredHorizontally
 				(
-					"labelActions",
 					Coords.fromXY(100, 15), // pos
 					Coords.fromXY(100, 20), // size
-					true, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContext("Actions:"),
 					font
 				),
@@ -715,24 +711,18 @@ export class ControlBuilder
 					DataBinding.fromGet( (c: ActionToInputsMapping) => c ) // bindingForItemValue
 				),
 
-				new ControlLabel
+				ControlLabel.from4CenteredHorizontally
 				(
-					"labelInput",
 					Coords.fromXY(100, 70), // pos
 					Coords.fromXY(100, 15), // size
-					true, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContext("Inputs:"),
 					font
 				),
 
-				new ControlLabel
+				ControlLabel.from4CenteredHorizontally
 				(
-					"infoInput",
 					Coords.fromXY(100, 80), // pos
 					Coords.fromXY(200, 15), // size
-					true, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet
 					(
 						placeDefn,
@@ -788,14 +778,14 @@ export class ControlBuilder
 						{
 							var venueInputCapture = new VenueInputCapture
 							(
-								universe.venueCurrent,
+								universe.venueCurrent(),
 								(inputCaptured: Input) =>
 								{
 									var inputName = inputCaptured.name;
 									mappingSelected.inputNames.push(inputName);
 								}
 							);
-							universe.venueNext = venueInputCapture
+							universe.venueTransitionTo(venueInputCapture)
 						}
 					}
 				),
@@ -827,18 +817,15 @@ export class ControlBuilder
 					}
 				),
 
-				ControlButton.from8
+				ControlButton.from5
 				(
-					"buttonRestoreDefaultsAll",
 					Coords.fromXY(50, 110), // pos
 					Coords.fromXY(100, 15), // size
 					"Default All",
 					font,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
 					() =>
 					{
-						var venueInputs = universe.venueCurrent;
+						var venueInputs = universe.venueCurrent();
 						var controlConfirm = universe.controlBuilder.confirmAndReturnToVenue
 						(
 							universe,
@@ -856,15 +843,12 @@ export class ControlBuilder
 					}
 				),
 
-				ControlButton.from8
+				ControlButton.from5
 				(
-					"buttonCancel",
 					Coords.fromXY(50, 130), // pos
 					Coords.fromXY(45, 15), // size
 					"Cancel",
 					font,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
 					() => // click
 					{
 						universe.venueTransitionTo(venuePrev);
@@ -949,7 +933,6 @@ export class ControlBuilder
 	{
 		return this.message(universe, size, message, acknowledge, null, null);
 	}
-
 
 	opening(universe: Universe, size: Coords): ControlBase
 	{
@@ -1128,6 +1111,166 @@ export class ControlBuilder
 			universe.venueTransitionTo(venuePrev);
 		};
 
+		var labelMusic = ControlLabel.from4Uncentered
+		(
+			Coords.fromXY(30, row1PosY + labelPadding), // pos
+			Coords.fromXY(75, buttonHeight), // size
+			DataBinding.fromContext("Music:"),
+			font
+		);
+
+		var selectMusicVolume = new ControlSelect
+		(
+			"selectMusicVolume",
+			Coords.fromXY(70, row1PosY), // pos
+			Coords.fromXY(30, buttonHeight), // size
+			new DataBinding
+			(
+				universe.soundHelper,
+				(c: SoundHelper) => c.musicVolume,
+				(c: SoundHelper, v: number) => c.musicVolume = v
+			), // valueSelected
+			DataBinding.fromContextAndGet
+			(
+				universe.soundHelper,
+				(c: SoundHelper) => c.controlSelectOptionsVolume()
+			), // options
+			DataBinding.fromGet
+			(
+				(c: ControlSelectOption<number>) => c.value
+			), // bindingForOptionValues,
+			DataBinding.fromGet
+			(
+				(c: ControlSelectOption<number>) => c.text
+			), // bindingForOptionText
+			font
+		);
+
+		var labelSound = ControlLabel.from4Uncentered
+		(
+			Coords.fromXY(105, row1PosY + labelPadding), // pos
+			Coords.fromXY(75, buttonHeight), // size
+			DataBinding.fromContext("Sound:"),
+			font
+		);
+
+		var selectSoundVolume = new ControlSelect
+		(
+			"selectSoundVolume",
+			Coords.fromXY(140, row1PosY), // pos
+			Coords.fromXY(30, buttonHeight), // size
+			new DataBinding
+			(
+				universe.soundHelper,
+				(c: SoundHelper) => c.soundVolume,
+				(c: SoundHelper, v: number) => { c.soundVolume = v; }
+			), // valueSelected
+			DataBinding.fromContextAndGet
+			(
+				universe.soundHelper,
+				(c: SoundHelper) => c.controlSelectOptionsVolume()
+			), // options
+			DataBinding.fromGet
+			(
+				(c: ControlSelectOption<number>) => c.value
+			), // bindingForOptionValues,
+			DataBinding.fromGet
+			(
+				(c: ControlSelectOption<number>) => c.text
+			), // bindingForOptionText
+			font
+		);
+
+		var labelDisplay = ControlLabel.from4Uncentered
+		(
+			Coords.fromXY(30, row2PosY + labelPadding), // pos
+			Coords.fromXY(75, buttonHeight), // size
+			DataBinding.fromContext("Display:"),
+			font
+		);
+
+		var selectDisplaySize = new ControlSelect<Display, Coords, Coords>
+		(
+			"selectDisplaySize",
+			Coords.fromXY(70, row2PosY), // pos
+			Coords.fromXY(65, buttonHeight), // size
+			DataBinding.fromContextAndGet
+			(
+				universe.display,
+				(c: Display) => c.sizeInPixels
+			), // valueSelected
+			// options
+			DataBinding.fromContextAndGet
+			(
+				universe.display,
+				(c: Display) => c.sizesAvailable
+			),
+			DataBinding.fromGet( (c: Coords) => c ), // bindingForOptionValues,
+			DataBinding.fromGet( (c: Coords) => c.toStringXY() ), // bindingForOptionText
+			font
+		);
+
+		var change = () => // click
+		{
+			var venueControls = universe.venueCurrent() as VenueControls;
+			var controlRootAsContainer =
+				venueControls.controlRoot as ControlContainer;
+			var selectDisplaySizeAsControl =
+				controlRootAsContainer.childrenByName.get("selectDisplaySize");
+			var selectDisplaySize =
+				selectDisplaySizeAsControl as ControlSelect<Coords, Coords, Coords>;
+			var displaySizeSpecified = selectDisplaySize.optionSelected();
+
+			var displayAsDisplay = universe.display;
+			var display = displayAsDisplay as Display2D;
+			var platformHelper = universe.platformHelper;
+			platformHelper.platformableRemove(display);
+			display.sizeInPixels = displaySizeSpecified;
+			display.canvas = null; // hack
+			display.initialize(universe);
+			platformHelper.initialize(universe);
+
+			var venueNext = universe.controlBuilder.settings
+			(
+				universe, null, universe.venueCurrent()
+			).toVenue();
+			universe.venueTransitionTo(venueNext);
+		};
+
+		var buttonChange = ControlButton.from5
+		(
+			Coords.fromXY(140, row2PosY), // pos
+			Coords.fromXY(30, buttonHeight), // size
+			"Change",
+			font,
+			change
+		);
+
+		var buttonInputs = ControlButton.from5
+		(
+			Coords.fromXY(70, row3PosY), // pos
+			Coords.fromXY(65, buttonHeight), // size
+			"Inputs",
+			font,
+			() => // click
+			{
+				var venueCurrent = universe.venueCurrent();
+				var controlGameControls =
+					universe.controlBuilder.inputs(universe, size, venueCurrent);
+				var venueNext = controlGameControls.toVenue();
+				universe.venueTransitionTo(venueNext);
+			}
+		);
+
+		var buttonDone = ControlButton.from5
+		(
+			Coords.fromXY(70, row4PosY), // pos
+			Coords.fromXY(65, buttonHeight), // size
+			"Done",
+			font,
+			back // click
+		);
+
 		var returnValue = new ControlContainer
 		(
 			"containerSettings",
@@ -1135,181 +1278,15 @@ export class ControlBuilder
 			this.sizeBase.clone(),
 			// children
 			[
-				new ControlLabel
-				(
-					"labelMusicVolume",
-					Coords.fromXY(30, row1PosY + labelPadding), // pos
-					Coords.fromXY(75, buttonHeight), // size
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
-					DataBinding.fromContext("Music:"),
-					font
-				),
-
-				new ControlSelect
-				(
-					"selectMusicVolume",
-					Coords.fromXY(70, row1PosY), // pos
-					Coords.fromXY(30, buttonHeight), // size
-					new DataBinding
-					(
-						universe.soundHelper,
-						(c: SoundHelper) => c.musicVolume,
-						(c: SoundHelper, v: number) => c.musicVolume = v
-					), // valueSelected
-					DataBinding.fromContextAndGet
-					(
-						universe.soundHelper,
-						(c: SoundHelper) => c.controlSelectOptionsVolume()
-					), // options
-					DataBinding.fromGet
-					(
-						(c: ControlSelectOption<number>) => c.value
-					), // bindingForOptionValues,
-					DataBinding.fromGet
-					(
-						(c: ControlSelectOption<number>) => c.text
-					), // bindingForOptionText
-					font
-				),
-
-				new ControlLabel
-				(
-					"labelSoundVolume",
-					Coords.fromXY(105, row1PosY + labelPadding), // pos
-					Coords.fromXY(75, buttonHeight), // size
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
-					DataBinding.fromContext("Sound:"),
-					font
-				),
-
-				new ControlSelect
-				(
-					"selectSoundVolume",
-					Coords.fromXY(140, row1PosY), // pos
-					Coords.fromXY(30, buttonHeight), // size
-					new DataBinding
-					(
-						universe.soundHelper,
-						(c: SoundHelper) => c.soundVolume,
-						(c: SoundHelper, v: number) => { c.soundVolume = v; }
-					), // valueSelected
-					DataBinding.fromContextAndGet
-					(
-						universe.soundHelper,
-						(c: SoundHelper) => c.controlSelectOptionsVolume()
-					), // options
-					DataBinding.fromGet
-					(
-						(c: ControlSelectOption<number>) => c.value
-					), // bindingForOptionValues,
-					DataBinding.fromGet
-					(
-						(c: ControlSelectOption<number>) => c.text
-					), // bindingForOptionText
-					font
-				),
-
-				new ControlLabel
-				(
-					"labelDisplaySize",
-					Coords.fromXY(30, row2PosY + labelPadding), // pos
-					Coords.fromXY(75, buttonHeight), // size
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
-					DataBinding.fromContext("Display:"),
-					font
-				),
-
-				new ControlSelect<Display, Coords, Coords>
-				(
-					"selectDisplaySize",
-					Coords.fromXY(70, row2PosY), // pos
-					Coords.fromXY(65, buttonHeight), // size
-					DataBinding.fromContextAndGet
-					(
-						universe.display,
-						(c: Display) => c.sizeInPixels
-					), // valueSelected
-					// options
-					DataBinding.fromContextAndGet
-					(
-						universe.display,
-						(c: Display) => c.sizesAvailable
-					),
-					DataBinding.fromGet( (c: Coords) => c ), // bindingForOptionValues,
-					DataBinding.fromGet( (c: Coords) => c.toStringXY() ), // bindingForOptionText
-					font
-				),
-
-				ControlButton.from8
-				(
-					"buttonDisplaySizeChange",
-					Coords.fromXY(140, row2PosY), // pos
-					Coords.fromXY(30, buttonHeight), // size
-					"Change",
-					font,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					() => // click
-					{
-						var venueControls = universe.venueCurrent as VenueControls;
-						var controlRootAsContainer =
-							venueControls.controlRoot as ControlContainer;
-						var selectDisplaySizeAsControl =
-							controlRootAsContainer.childrenByName.get("selectDisplaySize");
-						var selectDisplaySize =
-							selectDisplaySizeAsControl as ControlSelect<Coords, Coords, Coords>;
-						var displaySizeSpecified = selectDisplaySize.optionSelected();
-
-						var displayAsDisplay = universe.display;
-						var display = displayAsDisplay as Display2D;
-						var platformHelper = universe.platformHelper;
-						platformHelper.platformableRemove(display);
-						display.sizeInPixels = displaySizeSpecified;
-						display.canvas = null; // hack
-						display.initialize(universe);
-						platformHelper.initialize(universe);
-
-						var venueNext = universe.controlBuilder.settings
-						(
-							universe, null, universe.venueCurrent
-						).toVenue();
-						universe.venueTransitionTo(venueNext);
-					}
-				),
-
-				ControlButton.from8
-				(
-					"buttonInputs",
-					Coords.fromXY(70, row3PosY), // pos
-					Coords.fromXY(65, buttonHeight), // size
-					"Inputs",
-					font,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					() => // click
-					{
-						var venueCurrent = universe.venueCurrent;
-						var controlGameControls =
-							universe.controlBuilder.inputs(universe, size, venueCurrent);
-						var venueNext = controlGameControls.toVenue();
-						universe.venueTransitionTo(venueNext);
-					}
-				),
-
-				ControlButton.from8
-				(
-					"buttonDone",
-					Coords.fromXY(70, row4PosY), // pos
-					Coords.fromXY(65, buttonHeight), // size
-					"Done",
-					font,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					back // click
-				),
+				labelMusic,
+				selectMusicVolume,
+				labelSound,
+				selectSoundVolume,
+				labelDisplay,
+				selectDisplaySize,
+				buttonChange,
+				buttonInputs,
+				buttonDone
 			],
 
 			[ new Action("Back", back) ],
@@ -1368,6 +1345,43 @@ export class ControlBuilder
 
 			var next = nextDefn.bind(this, i + 1);
 
+			var imageSlide = new ControlVisual
+			(
+				"imageSlide",
+				this._zeroes,
+				this.sizeBase.clone(), // size
+				DataBinding.fromContext
+				(
+					new VisualImageScaled
+					(
+						this.sizeBase.clone().multiply(scaleMultiplier), // sizeToDrawScaled
+						new VisualImageFromLibrary(imageName)
+					) as VisualBase
+				),
+				null, null // colorBackground, colorBorder
+			);
+
+			var labelSlideText = ControlLabel.from4CenteredHorizontally
+			(
+				Coords.fromXY(0, this.fontHeightInPixelsBase), // pos
+				Coords.fromXY
+				(
+					this.sizeBase.x,
+					this.fontHeightInPixelsBase
+				), // size
+				DataBinding.fromContext(message),
+				this.fontBase
+			);
+
+			var buttonNext = ControlButton.from5
+			(
+				Coords.fromXY(75, 120), // pos
+				Coords.fromXY(50, 40), // size
+				"Next",
+				this.fontBase,
+				next
+			);
+
 			var containerSlide = new ControlContainer
 			(
 				"containerSlide_" + i,
@@ -1375,48 +1389,9 @@ export class ControlBuilder
 				this.sizeBase.clone(), // size
 				// children
 				[
-					new ControlVisual
-					(
-						"imageSlide",
-						this._zeroes,
-						this.sizeBase.clone(), // size
-						DataBinding.fromContext
-						(
-							new VisualImageScaled
-							(
-								this.sizeBase.clone().multiply(scaleMultiplier), // sizeToDrawScaled
-								new VisualImageFromLibrary(imageName)
-							) as VisualBase
-						),
-						null, null // colorBackground, colorBorder
-					),
-
-					new ControlLabel
-					(
-						"labelSlideText",
-						Coords.fromXY(0, this.fontHeightInPixelsBase), // pos
-						Coords.fromXY
-						(
-							this.sizeBase.x,
-							this.fontHeightInPixelsBase
-						), // size
-						true, // isTextCenteredHorizontally
-						false, // isTextCenteredVertically
-						DataBinding.fromContext(message),
-						this.fontBase
-					),
-
-					ControlButton.from8
-					(
-						"buttonNext",
-						Coords.fromXY(75, 120), // pos
-						Coords.fromXY(50, 40), // size
-						"Next",
-						this.fontBase,
-						false, // hasBorder
-						DataBinding.fromTrue(), // isEnabled
-						next
-					)
+					imageSlide,
+					labelSlideText,
+					buttonNext
 				],
 
 				[
@@ -1456,7 +1431,7 @@ export class ControlBuilder
 			(
 				venueMessage,
 				() =>
-					Profile.toControlProfileSelect(universe, null, universe.venueCurrent),
+					Profile.toControlProfileSelect(universe, null, universe.venueCurrent() ),
 				(result: ControlBase) => // done
 				{
 					var venueProfileSelect = result.toVenue();
@@ -1491,15 +1466,12 @@ export class ControlBuilder
 					DataBinding.fromContext(visual)
 				),
 
-				ControlButton.from8
+				ControlButton.from5
 				(
-					"buttonStart",
 					Coords.fromXY(75, 120), // pos
 					Coords.fromXY(50, fontHeight * 2), // size
 					"Start",
 					FontNameAndHeight.fromHeightInPixels(fontHeight * 2),
-					false, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
 					start // click
 				)
 			], // end children
@@ -1537,6 +1509,167 @@ export class ControlBuilder
 		var dateCreated = world.dateCreated;
 		var dateSaved = world.dateSaved;
 
+		var labelProfileName = new ControlLabel
+		(
+			"labelProfileName",
+			Coords.fromXY(0, 40), // pos
+			Coords.fromXY(sizeBase.x, 20), // size
+			true, // isTextCenteredHorizontally
+			false, // isTextCenteredVertically
+			DataBinding.fromContext
+			(
+				"Profile: " + universe.profile.name
+			),
+			font
+		);
+
+		var labelWorldName = new ControlLabel
+		(
+			"labelWorldName",
+			Coords.fromXY(0, 55), // pos
+			Coords.fromXY(sizeBase.x, 25), // size
+			true, // isTextCenteredHorizontally
+			false, // isTextCenteredVertically
+			DataBinding.fromContext("World: " + world.name),
+			font
+		);
+
+		var labelStartDate = new ControlLabel
+		(
+			"labelStartDate",
+			Coords.fromXY(0, 70), // pos
+			Coords.fromXY(sizeBase.x, 25), // size
+			true, // isTextCenteredHorizontally
+			false, // isTextCenteredVertically
+			DataBinding.fromContext
+			(
+				"Started: " + dateCreated.toStringTimestamp()
+			),
+			font
+		);
+
+		var labelSavedDate = new ControlLabel
+		(
+			"labelSavedDate",
+			Coords.fromXY(0, 85), // pos
+			Coords.fromXY(sizeBase.x, 25), // size
+			true, // isTextCenteredHorizontally
+			false, // isTextCenteredVertically
+			DataBinding.fromContext
+			(
+				"Saved: "
+				+ (dateSaved == null ? "[never]" : dateSaved.toStringTimestamp())
+			),
+			font
+		);
+
+		var start = () => // click
+		{
+			var world = universe.world;
+			var venueWorld = world.toVenue();
+			var venueNext;
+			if (world.dateSaved != null)
+			{
+				venueNext = venueWorld;
+			}
+			else
+			{
+				var textInstructions =
+					universe.mediaLibrary.textStringGetByName("Instructions");
+				var instructions = textInstructions.value;
+				var controlInstructions = controlBuilder.message4
+				(
+					universe,
+					size,
+					DataBinding.fromContext(instructions),
+					() => // acknowledge
+					{
+						universe.venueTransitionTo(venueWorld);
+					}
+				);
+
+				var venueInstructions =
+					controlInstructions.toVenue();
+
+				var venueMovie = new VenueVideo
+				(
+					"Movie", // videoName
+					venueInstructions // fader implicit
+				);
+
+				venueNext = venueMovie;
+			}
+
+			universe.venueTransitionTo(venueNext);
+		};
+
+		var buttonStart = ControlButton.from5
+		(
+			Coords.fromXY(50, 100), // pos
+			Coords.fromXY(100, this.buttonHeightBase), // size
+			"Start",
+			font,
+			start
+		);
+
+		var buttonBack = ControlButton.from8
+		(
+			"buttonBack",
+			Coords.fromXY(10, 10), // pos
+			Coords.fromXY(15, 15), // size
+			"<",
+			font,
+			true, // hasBorder
+			DataBinding.fromTrue(), // isEnabled
+			() => // click
+			{
+				universe.venueTransitionTo(venuePrev);
+			}
+		);
+
+		var buttonDelete = ControlButton.from8
+		(
+			"buttonDelete",
+			Coords.fromXY(180, 10), // pos
+			Coords.fromXY(15, 15), // size
+			"x",
+			font,
+			true, // hasBorder
+			DataBinding.fromTrue(), // isEnabled
+			() => // click
+			{
+				var saveState = universe.profile.saveStateSelected();
+				var saveStateName = saveState.name;
+
+				var controlConfirm = universe.controlBuilder.confirmAndReturnToVenue
+				(
+					universe,
+					size,
+					"Delete save \""
+						+ saveStateName
+						+ "\"?",
+					universe.venueCurrent(),
+					() => // confirm
+					{
+						var storageHelper = universe.storageHelper;
+
+						var profile = universe.profile;
+
+						var saveStates = profile.saveStates;
+						ArrayHelper.remove(saveStates, saveState);
+						storageHelper.save(profile.name, profile);
+
+						universe.world = null;
+						storageHelper.delete(saveStateName);
+					},
+					null // cancel
+				);
+
+				var venueNext = controlConfirm.toVenue();
+				universe.venueTransitionTo(venueNext);
+			}
+		);
+
 		var returnValue = ControlContainer.from4
 		(
 			"containerWorldDetail",
@@ -1544,167 +1677,14 @@ export class ControlBuilder
 			sizeBase.clone(), // size
 			// children
 			[
-				new ControlLabel
-				(
-					"labelProfileName",
-					Coords.fromXY(0, 40), // pos
-					Coords.fromXY(sizeBase.x, 20), // size
-					true, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
-					DataBinding.fromContext
-					(
-						"Profile: " + universe.profile.name
-					),
-					font
-				),
-				new ControlLabel
-				(
-					"labelWorldName",
-					Coords.fromXY(0, 55), // pos
-					Coords.fromXY(sizeBase.x, 25), // size
-					true, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
-					DataBinding.fromContext("World: " + world.name),
-					font
-				),
-				new ControlLabel
-				(
-					"labelStartDate",
-					Coords.fromXY(0, 70), // pos
-					Coords.fromXY(sizeBase.x, 25), // size
-					true, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
-					DataBinding.fromContext
-					(
-						"Started: " + dateCreated.toStringTimestamp()
-					),
-					font
-				),
-				new ControlLabel
-				(
-					"labelSavedDate",
-					Coords.fromXY(0, 85), // pos
-					Coords.fromXY(sizeBase.x, 25), // size
-					true, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
-					DataBinding.fromContext
-					(
-						"Saved: "
-						+ (dateSaved == null ? "[never]" : dateSaved.toStringTimestamp())
-					),
-					font
-				),
-
-				ControlButton.from8
-				(
-					"buttonStart",
-					Coords.fromXY(50, 100), // pos
-					Coords.fromXY(100, this.buttonHeightBase), // size
-					"Start",
-					font,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					() => // click
-					{
-						var world = universe.world;
-						var venueWorld = world.toVenue();
-						var venueNext;
-						if (world.dateSaved != null)
-						{
-							venueNext = venueWorld;
-						}
-						else
-						{
-							var textInstructions =
-								universe.mediaLibrary.textStringGetByName("Instructions");
-							var instructions = textInstructions.value;
-							var controlInstructions = controlBuilder.message4
-							(
-								universe,
-								size,
-								DataBinding.fromContext(instructions),
-								() => // acknowledge
-								{
-									universe.venueTransitionTo(venueWorld);
-								}
-							);
-
-							var venueInstructions =
-								controlInstructions.toVenue();
-
-							var venueMovie = new VenueVideo
-							(
-								"Movie", // videoName
-								venueInstructions // fader implicit
-							);
-
-							venueNext = venueMovie;
-						}
-
-						universe.venueTransitionTo(venueNext);
-					}
-				),
-
-				ControlButton.from8
-				(
-					"buttonBack",
-					Coords.fromXY(10, 10), // pos
-					Coords.fromXY(15, 15), // size
-					"<",
-					font,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					() => // click
-					{
-						universe.venueTransitionTo(venuePrev);
-					}
-				),
-
-				ControlButton.from8
-				(
-					"buttonDelete",
-					Coords.fromXY(180, 10), // pos
-					Coords.fromXY(15, 15), // size
-					"x",
-					font,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					() => // click
-					{
-						var saveState = universe.profile.saveStateSelected();
-						var saveStateName = saveState.name;
-
-						var controlConfirm = universe.controlBuilder.confirmAndReturnToVenue
-						(
-							universe,
-							size,
-							"Delete save \""
-								+ saveStateName
-								+ "\"?",
-							universe.venueCurrent,
-							() => // confirm
-							{
-								var storageHelper = universe.storageHelper;
-
-								var profile = universe.profile;
-
-								var saveStates = profile.saveStates;
-								ArrayHelper.remove(saveStates, saveState);
-								storageHelper.save(profile.name, profile);
-
-								universe.world = null;
-								storageHelper.delete(saveStateName);
-							},
-							null // cancel
-						);
-
-						var venueNext = controlConfirm.toVenue();
-						universe.venueTransitionTo(venueNext);
-
-						universe.venueNext = venueNext;
-					}
-				),
-			] // end children
+				labelProfileName,
+				labelWorldName,
+				labelStartDate,
+				labelSavedDate,
+				buttonStart,
+				buttonBack,
+				buttonDelete
+			]
 		);
 
 		returnValue.scalePosAndSize(scaleMultiplier);
@@ -1793,7 +1773,7 @@ export class ControlBuilder
 
 					var venueNext = controlBuilder.game
 					(
-						universe, size, universe.venueCurrent
+						universe, size, universe.venueCurrent()
 					).toVenue();
 					universe.venueTransitionTo(venueNext);
 				}
@@ -1829,7 +1809,7 @@ export class ControlBuilder
 				{
 					var venueNext = controlBuilder.game
 					(
-						universe, size, universe.venueCurrent
+						universe, size, universe.venueCurrent()
 					).toVenue();
 					universe.venueTransitionTo(venueNext);
 				}
@@ -1840,9 +1820,92 @@ export class ControlBuilder
 			venueFileUpload.venueNextIfFileSpecified = venueMessageReadyToLoad;
 			venueFileUpload.venueNextIfCancelled = venueMessageCancelled;
 
-			universe.venueNext = venueFileUpload;
+			universe.venueTransitionTo(venueFileUpload);
 		};
 
+		var labelProfileName = ControlLabel.from4CenteredHorizontally
+		(
+			Coords.fromXY(100, 25), // pos
+			Coords.fromXY(120, 25), // size
+			DataBinding.fromContext
+			(
+				"Profile: " + universe.profile.name
+			),
+			font
+		);
+
+		var labelSelectASave = ControlLabel.from4CenteredHorizontally
+		(
+			Coords.fromXY(100, 40), // pos
+			Coords.fromXY(100, 25), // size
+			DataBinding.fromContext("Select a Save:"),
+			font
+		);
+
+		var listSaveStates = ControlList.from8
+		(
+			"listSaveStates",
+			Coords.fromXY(30, 50), // pos
+			Coords.fromXY(140, 50), // size
+			DataBinding.fromContextAndGet
+			(
+				universe.profile,
+				(c: Profile) => c.saveStates
+			), // items
+			DataBinding.fromGet( (c: SaveStateBase) => c.name ), // bindingForOptionText
+			font,
+			new DataBinding
+			(
+				universe.profile,
+				(c: Profile) => c.saveStateSelected(),
+				(c: Profile, v: SaveStateBase) =>
+					c.saveStateNameSelected = v.name
+			), // bindingForOptionSelected
+			DataBinding.fromGet( (v: SaveStateBase) => v.name ), // value
+		);
+
+		var buttonLoadFromServer = ControlButton.from5
+		(
+			Coords.fromXY(30, 105), // pos
+			Coords.fromXY(40, this.buttonHeightBase), // size
+			"Load",
+			font,
+			() => // click
+			{
+				var controlConfirm = universe.controlBuilder.confirm
+				(
+					universe, size, "Abandon the current game?",
+					confirm, cancel
+				);
+				var venueConfirm = controlConfirm.toVenue();
+				universe.venueTransitionTo(venueConfirm);
+			}
+		);
+
+		var buttonLoadFromFile = ControlButton.from5
+		(
+			Coords.fromXY(80, 105), // pos
+			Coords.fromXY(40, this.buttonHeightBase), // size
+			"Load File",
+			font,
+			loadFile
+		);
+
+		var buttonReturn = ControlButton.from5
+		(
+			Coords.fromXY(130, 105), // pos
+			Coords.fromXY(40, this.buttonHeightBase), // size
+			"Return",
+			font,
+			() => // click
+			{
+				var venueGame = controlBuilder.game
+				(
+					universe, size, universe.venueCurrent()
+				).toVenue();
+				universe.venueTransitionTo(venueGame);
+			}
+		);
 
 		var returnValue = ControlContainer.from4
 		(
@@ -1851,104 +1914,12 @@ export class ControlBuilder
 			this.sizeBase.clone(), // size
 			// children
 			[
-				new ControlLabel
-				(
-					"labelProfileName",
-					Coords.fromXY(100, 25), // pos
-					Coords.fromXY(120, 25), // size
-					true, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
-					DataBinding.fromContext
-					(
-						"Profile: " + universe.profile.name
-					),
-					font
-				),
-
-				new ControlLabel
-				(
-					"labelSelectASave",
-					Coords.fromXY(100, 40), // pos
-					Coords.fromXY(100, 25), // size
-					true, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
-					DataBinding.fromContext("Select a Save:"),
-					font
-				),
-
-				ControlList.from8
-				(
-					"listSaveStates",
-					Coords.fromXY(30, 50), // pos
-					Coords.fromXY(140, 50), // size
-					DataBinding.fromContextAndGet
-					(
-						universe.profile,
-						(c: Profile) => c.saveStates
-					), // items
-					DataBinding.fromGet( (c: SaveStateBase) => c.name ), // bindingForOptionText
-					font,
-					new DataBinding
-					(
-						universe.profile,
-						(c: Profile) => c.saveStateSelected(),
-						(c: Profile, v: SaveStateBase) =>
-							c.saveStateNameSelected = v.name
-					), // bindingForOptionSelected
-					DataBinding.fromGet( (v: SaveStateBase) => v.name ), // value
-				),
-
-				ControlButton.from8
-				(
-					"buttonLoadFromServer",
-					Coords.fromXY(30, 105), // pos
-					Coords.fromXY(40, this.buttonHeightBase), // size
-					"Load",
-					font,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					() => // click
-					{
-						var controlConfirm = universe.controlBuilder.confirm
-						(
-							universe, size, "Abandon the current game?",
-							confirm, cancel
-						);
-						var venueConfirm = controlConfirm.toVenue();
-						universe.venueTransitionTo(venueConfirm);
-					}
-				),
-
-				ControlButton.from8
-				(
-					"buttonLoadFromFile",
-					Coords.fromXY(80, 105), // pos
-					Coords.fromXY(40, this.buttonHeightBase), // size
-					"Load File",
-					font,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					loadFile
-				),
-
-				ControlButton.from8
-				(
-					"buttonReturn",
-					Coords.fromXY(130, 105), // pos
-					Coords.fromXY(40, this.buttonHeightBase), // size
-					"Return",
-					font,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					() => // click
-					{
-						var venueGame = controlBuilder.game
-						(
-							universe, size, universe.venueCurrent
-						).toVenue();
-						universe.venueTransitionTo(venueGame);
-					}
-				),
+				labelProfileName,
+				labelSelectASave,
+				listSaveStates,
+				buttonLoadFromServer,
+				buttonLoadFromFile,
+				buttonReturn
 			]
 		);
 

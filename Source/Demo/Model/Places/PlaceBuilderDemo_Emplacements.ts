@@ -38,7 +38,7 @@ class PlaceBuilderDemo_Emplacements
 				universe.display.sizeInPixels,
 				entityUsed, // entityItemCrafter
 				entityUsing, // entityItemHolder
-				universe.venueCurrent,
+				universe.venueCurrent(),
 				true // includeTitleAndDoneButton
 			);
 			var venueNext = itemCrafterAsControls.toVenue();
@@ -302,7 +302,7 @@ class PlaceBuilderDemo_Emplacements
 						(
 							universe, universe.display.sizeInPixels,
 							entityUsing, entityOther,
-							universe.venueCurrent
+							universe.venueCurrent()
 						);
 						var venueNext = itemContainerAsControl.toVenue();
 						universe.venueTransitionTo(venueNext);
@@ -414,7 +414,7 @@ class PlaceBuilderDemo_Emplacements
 			var eUsed = uwpe.entity2;
 			var itemContainerAsControl = eUsed.itemContainer().toControl
 			(
-				u, u.display.sizeInPixels, eUsing, eUsed, u.venueCurrent
+				u, u.display.sizeInPixels, eUsing, eUsed, u.venueCurrent()
 			);
 			var venueNext = itemContainerAsControl.toVenue();
 			u.venueTransitionTo(venueNext);
@@ -657,9 +657,8 @@ class PlaceBuilderDemo_Emplacements
 
 			var tirable = entityUsing.tirable();
 			tirable.fallAsleep(uwpe);
-			var venueNext = universe.venueCurrent;
-			venueNext = VenueFader.fromVenuesToAndFrom(venueNext, venueNext);
-			universe.venueNext = venueNext;
+			var venueNext = universe.venueCurrent();
+			universe.venueTransitionTo(venueNext);
 			return ""; // todo
 		};
 

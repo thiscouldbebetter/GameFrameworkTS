@@ -146,7 +146,7 @@ export class Playable implements EntityProperty<Playable>
 
 		var gameAndSettingsMenuAsControl = universe.controlBuilder.gameAndSettings
 		(
-			universe, tabPageSize, universe.venueCurrent, false // includeResumeButton
+			universe, tabPageSize, universe.venueCurrent(), false // includeResumeButton
 		);
 		controlsForTabs.push(gameAndSettingsMenuAsControl);
 

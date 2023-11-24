@@ -23,7 +23,8 @@ var ThisCouldBeBetter;
                 this.platformHelper = new GameFramework.PlatformHelper();
                 this.randomizer = new GameFramework.RandomizerSystem();
                 this.serializer = new GameFramework.Serializer();
-                this.venueNext = null;
+                this.venueStack = new GameFramework.Stack();
+                this._venueNext = null;
                 var debuggingModeName = GameFramework.URLParser.fromWindow().queryStringParameterByName("debug");
                 this.debuggingModeName = debuggingModeName;
             }
@@ -55,7 +56,7 @@ var ThisCouldBeBetter;
                     venueInitial = this.controlBuilder.opening(this, this.display.sizeInPixels).toVenue();
                 }
                 venueInitial = this.controlBuilder.venueTransitionalFromTo(venueInitial, venueInitial);
-                this.venueNext = venueInitial;
+                this.venueNextSet(venueInitial);
                 this.inputHelper = new GameFramework.InputHelper();
                 this.inputHelper.initialize(this);
                 var universe = this;
@@ -70,19 +71,34 @@ var ThisCouldBeBetter;
             }
             updateForTimerTick() {
                 this.inputHelper.updateForTimerTick(this);
-                if (this.venueNext != null) {
-                    if (this.venueCurrent != null) {
-                        this.venueCurrent.finalize(this);
+                var venueNext = this.venueNext();
+                if (venueNext != null) {
+                    var venueCurrent = this.venueCurrent();
+                    if (venueCurrent != null) {
+                        venueCurrent.finalize(this);
                     }
-                    this.venueCurrent = this.venueNext;
-                    this.venueNext = null;
-                    this.venueCurrent.initialize(this);
+                    this.venueStack.push(venueNext);
+                    this.venueNextClear();
+                    this.venueCurrent().initialize(this);
                 }
-                this.venueCurrent.updateForTimerTick(this);
+                this.venueCurrent().updateForTimerTick(this);
                 this.displayRecorder.updateForTimerTick(this);
             }
+            venueCurrent() {
+                return this.venueStack.peek();
+            }
+            venueNext() {
+                return this._venueNext;
+            }
+            venueNextClear() {
+                this.venueNextSet(null);
+            }
+            venueNextSet(value) {
+                this._venueNext = value;
+            }
             venueTransitionTo(venueToTransitionTo) {
-                this.venueNext = this.controlBuilder.venueTransitionalFromTo(this.venueCurrent, venueToTransitionTo);
+                var venueNext = this.controlBuilder.venueTransitionalFromTo(this.venueCurrent(), venueToTransitionTo);
+                this.venueNextSet(venueNext);
             }
             worldCreate() {
                 this.world = this.worldCreator.worldCreate(this, this.worldCreator);

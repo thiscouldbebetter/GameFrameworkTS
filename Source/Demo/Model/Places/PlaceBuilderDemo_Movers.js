@@ -665,11 +665,11 @@ class PlaceBuilderDemo_Movers {
                      {
                         var venueNext = universe.controlBuilder.title(universe, null).toVenue();
                         universe.venueTransitionTo(venueNext);
-                    }, universe.venueCurrent, // venuePrev
+                    }, universe.venueCurrent(), // venuePrev
                     universe.display.sizeDefault().clone(), //.half(),
                     true // showMessageOnly
                     );
-                    universe.venueNext = venueMessage;
+                    universe.venueTransitionTo(venueMessage);
                 }
             }
             else if (entityOther.talker() != null) {
@@ -740,11 +740,11 @@ class PlaceBuilderDemo_Movers {
              {
                 var venueNext = universe.controlBuilder.title(universe, null).toVenue();
                 universe.venueTransitionTo(venueNext);
-            }, universe.venueCurrent, // venuePrev
+            }, universe.venueCurrent(), // venuePrev
             universe.display.sizeDefault().clone(), //.half(),
             true // showMessageOnly
             );
-            uwpe.universe.venueNext = venueMessage;
+            uwpe.universe.venueTransitionTo(venueMessage);
         });
         var starvable = new Starvable(100, // satietyMax
         .001, // satietyToLosePerTick
@@ -923,7 +923,7 @@ class PlaceBuilderDemo_Movers {
             var universe = uwpe.universe;
             var size = universe.display.sizeInPixels;
             var entity = uwpe.entity;
-            var venuePrev = universe.venueCurrent;
+            var venuePrev = universe.venueCurrent();
             var isMenu = universe.inputHelper.inputsPressed.some(x => x.name == "Escape" || x.name == "Tab" // hack
             );
             var returnValue;

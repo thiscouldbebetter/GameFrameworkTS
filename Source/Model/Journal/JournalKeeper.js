@@ -90,7 +90,7 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.journalEntrySelected != null)), // isEnabled
                     () => {
                         var controlConfirm = universe.controlBuilder.confirmAndReturnToVenue(universe, universe.display.sizeInPixels, // size
-                        "Are you sure you want to delete this entry?", universe.venueCurrent, () => // confirm
+                        "Are you sure you want to delete this entry?", universe.venueCurrent(), () => // confirm
                          {
                             var journal = journalKeeper.journal;
                             var entryToDelete = journalKeeper.journalEntrySelected;

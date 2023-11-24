@@ -73,7 +73,7 @@ export class Profile
 
 		var visualThumbnailSize = Profile.toControlSaveStateLoadOrSave_ThumbnailSize();
 
-		var venueToReturnTo = universe.venueCurrent;
+		var venueToReturnTo = universe.venueCurrent();
 
 		var back = () => universe.venueTransitionTo(venueToReturnTo);
 
@@ -397,7 +397,7 @@ export class Profile
 				"Delete save state \""
 					+ saveStateSelected.timeSaved.toStringYYYY_MM_DD_HH_MM_SS()
 					+ "\"?",
-				universe.venueCurrent,
+				universe.venueCurrent(),
 				() =>
 					Profile.toControlSaveStateLoadOrSave_DeleteSaveSelected_Confirm(universe),
 				null // cancel
@@ -449,7 +449,7 @@ export class Profile
 
 					var venueNext = universe.controlBuilder.game
 					(
-						universe, size, universe.venueCurrent
+						universe, size, universe.venueCurrent()
 					).toVenue();
 					universe.venueTransitionTo(venueNext);
 				}
@@ -475,7 +475,7 @@ export class Profile
 			() => // acknowlege
 			{
 				var venueNext=
-					controlBuilder.game(universe, size, universe.venueCurrent).toVenue();
+					controlBuilder.game(universe, size, universe.venueCurrent()).toVenue();
 				universe.venueTransitionTo(venueNext);
 			}
 		);
@@ -485,7 +485,7 @@ export class Profile
 		venueFileUpload.venueNextIfFileSpecified = venueMessageReadyToLoad;
 		venueFileUpload.venueNextIfCancelled = venueMessageCancelled;
 
-		universe.venueNext = venueFileUpload;
+		universe.venueTransitionTo(venueFileUpload);
 	};
 
 	static toControlSaveStateLoadOrSave_LoadNewWorld
@@ -498,7 +498,7 @@ export class Profile
 		var controlBuilder = universe.controlBuilder;
 		var venueNext = controlBuilder.worldDetail
 		(
-			universe, size, universe.venueCurrent
+			universe, size, universe.venueCurrent()
 		).toVenue();
 		universe.venueTransitionTo(venueNext);
 	}
@@ -668,7 +668,7 @@ export class Profile
 			{
 				var venueNext: Venue = universe.controlBuilder.game
 				(
-					universe, null, universe.venueCurrent
+					universe, null, universe.venueCurrent()
 				).toVenue();
 				universe.venueTransitionTo(venueNext);
 			}
@@ -722,7 +722,7 @@ export class Profile
 				{
 					var venueNext = universe.controlBuilder.game
 					(
-						universe, null, universe.venueCurrent
+						universe, null, universe.venueCurrent()
 					).toVenue();
 					universe.venueTransitionTo(venueNext);
 				}
@@ -793,7 +793,7 @@ export class Profile
 
 		var create = () =>
 		{
-			var venueControls = universe.venueCurrent as VenueControls;
+			var venueControls = universe.venueCurrent() as VenueControls;
 			var controlRootAsContainer = venueControls.controlRoot as ControlContainer;
 			var textBoxName =
 				controlRootAsContainer.childrenByName.get("textBoxName") as ControlTextBox<any>;
@@ -818,10 +818,9 @@ export class Profile
 			universe.profile = profile;
 			var venueNext: Venue = Profile.toControlSaveStateLoad
 			(
-				universe, null, universe.venueCurrent
+				universe, null, universe.venueCurrent()
 			).toVenue();
-			venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-			universe.venueNext = venueNext;
+			universe.venueTransitionTo(venueNext);
 		};
 
 		var returnValue = ControlContainer.from4
@@ -888,7 +887,7 @@ export class Profile
 					{
 						var venueNext = Profile.toControlProfileSelect
 						(
-							universe, null, universe.venueCurrent
+							universe, null, universe.venueCurrent()
 						).toVenue();
 						universe.venueTransitionTo(venueNext);
 					}
@@ -935,7 +934,7 @@ export class Profile
 
 		var select = () =>
 		{
-			var venueControls = universe.venueCurrent as VenueControls;
+			var venueControls = universe.venueCurrent() as VenueControls;
 			var controlRootAsContainer = venueControls.controlRoot as ControlContainer;
 			var listProfiles =
 				controlRootAsContainer.childrenByName.get("listProfiles") as ControlList<Universe, Profile, string>;
@@ -945,7 +944,7 @@ export class Profile
 			{
 				var venueNext = Profile.toControlSaveStateLoad
 				(
-					universe, null, universe.venueCurrent
+					universe, null, universe.venueCurrent()
 				).toVenue();
 				universe.venueTransitionTo(venueNext);
 			}
@@ -975,7 +974,7 @@ export class Profile
 					"Delete profile \""
 						+ profileSelected.name
 						+ "\"?",
-					universe.venueCurrent,
+					universe.venueCurrent(),
 					deleteProfileConfirm,
 					null // cancel
 				);

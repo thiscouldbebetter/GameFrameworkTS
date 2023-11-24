@@ -89,7 +89,7 @@ export class VenueFader implements Venue
 				var venueToFadeTo = this.venuesToFadeFromAndTo[1];
 				if (venueToFadeTo.draw == null)
 				{
-					universe.venueNext = venueToFadeTo;
+					universe.venueNextSet(venueToFadeTo);
 				}
 
 			}
@@ -100,7 +100,7 @@ export class VenueFader implements Venue
 			if (fractionOfFadeCompleted > 1)
 			{
 				fractionOfFadeCompleted = 1;
-				universe.venueNext = this.venueCurrent();
+				universe.venueNextSet(this.venueCurrent() );
 			}
 
 			alphaOfFadeColor = 1 - fractionOfFadeCompleted;

@@ -57,7 +57,7 @@ class GameDemo {
             videoDirectoryPath + "Movie.webm",
             fontDirectoryPath + "Font.ttf",
             textStringDirectoryPath + "Conversation.json",
-            textStringDirectoryPath + "Conversation.json.txtpng",
+            // textStringDirectoryPath + "Conversation.json.txtpng", // Turns out text read from images is subject to CORS too.
             textStringDirectoryPath + "Instructions.txt",
         ];
         return mediaFilePaths;

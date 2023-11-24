@@ -17,7 +17,7 @@ class PlaceBuilderDemo_Emplacements {
             var itemCrafter = entityUsed.itemCrafter();
             var itemCrafterAsControls = itemCrafter.toControl(universe, universe.display.sizeInPixels, entityUsed, // entityItemCrafter
             entityUsing, // entityItemHolder
-            universe.venueCurrent, true // includeTitleAndDoneButton
+            universe.venueCurrent(), true // includeTitleAndDoneButton
             );
             var venueNext = itemCrafterAsControls.toVenue();
             universe.venueTransitionTo(venueNext);
@@ -153,7 +153,7 @@ class PlaceBuilderDemo_Emplacements {
                 var entityOther = uwpe.entity2;
                 //entityOther.collidable().ticksUntilCanCollide = 50; // hack
                 var itemContainer = entityOther.itemContainer();
-                var itemContainerAsControl = itemContainer.toControl(universe, universe.display.sizeInPixels, entityUsing, entityOther, universe.venueCurrent);
+                var itemContainerAsControl = itemContainer.toControl(universe, universe.display.sizeInPixels, entityUsing, entityOther, universe.venueCurrent());
                 var venueNext = itemContainerAsControl.toVenue();
                 universe.venueTransitionTo(venueNext);
                 return null;
@@ -205,7 +205,7 @@ class PlaceBuilderDemo_Emplacements {
             var u = uwpe.universe;
             var eUsing = uwpe.entity;
             var eUsed = uwpe.entity2;
-            var itemContainerAsControl = eUsed.itemContainer().toControl(u, u.display.sizeInPixels, eUsing, eUsed, u.venueCurrent);
+            var itemContainerAsControl = eUsed.itemContainer().toControl(u, u.display.sizeInPixels, eUsing, eUsed, u.venueCurrent());
             var venueNext = itemContainerAsControl.toVenue();
             u.venueTransitionTo(venueNext);
         };
@@ -319,9 +319,8 @@ class PlaceBuilderDemo_Emplacements {
             var entityUsing = uwpe.entity;
             var tirable = entityUsing.tirable();
             tirable.fallAsleep(uwpe);
-            var venueNext = universe.venueCurrent;
-            venueNext = VenueFader.fromVenuesToAndFrom(venueNext, venueNext);
-            universe.venueNext = venueNext;
+            var venueNext = universe.venueCurrent();
+            universe.venueTransitionTo(venueNext);
             return ""; // todo
         };
         var itemPillowEntityDefn = new Entity(pillowName, [

@@ -28,8 +28,8 @@ export class Universe
 
 	debuggingModeName: string;
 	profile: Profile;
-	venueNext: Venue;
-	venueCurrent: Venue;
+	private _venueNext: Venue;
+	venueStack: Stack<Venue>;
 
 	constructor
 	(
@@ -65,7 +65,8 @@ export class Universe
 		this.randomizer = new RandomizerSystem();
 		this.serializer = new Serializer();
 
-		this.venueNext = null;
+		this.venueStack = new Stack<Venue>();
+		this._venueNext = null;
 
 		var debuggingModeName =
 			URLParser.fromWindow().queryStringParameterByName("debug");
@@ -163,7 +164,7 @@ export class Universe
 			venueInitial, venueInitial
 		);
 
-		this.venueNext = venueInitial;
+		this.venueNextSet(venueInitial);
 
 		this.inputHelper = new InputHelper();
 		this.inputHelper.initialize(this);
@@ -190,29 +191,54 @@ export class Universe
 	{
 		this.inputHelper.updateForTimerTick(this);
 
-		if (this.venueNext != null)
+		var venueNext = this.venueNext();
+		if (venueNext != null)
 		{
-			if (this.venueCurrent != null)
+			var venueCurrent = this.venueCurrent();
+
+			if (venueCurrent != null)
 			{
-				this.venueCurrent.finalize(this);
+				venueCurrent.finalize(this);
 			}
 
-			this.venueCurrent = this.venueNext;
-			this.venueNext = null;
+			this.venueStack.push(venueNext);
+			this.venueNextClear();
 
-			this.venueCurrent.initialize(this);
+			this.venueCurrent().initialize(this);
 		}
-		this.venueCurrent.updateForTimerTick(this);
+
+		this.venueCurrent().updateForTimerTick(this);
 
 		this.displayRecorder.updateForTimerTick(this);
 	}
 
+	venueCurrent(): Venue
+	{
+		return this.venueStack.peek();
+	}
+
+	venueNext(): Venue
+	{
+		return this._venueNext;
+	}
+
+	venueNextClear(): void
+	{
+		this.venueNextSet(null);
+	}
+
+	venueNextSet(value: Venue): void
+	{
+		this._venueNext = value;
+	}
+
 	venueTransitionTo(venueToTransitionTo: Venue): void
 	{
-		this.venueNext = this.controlBuilder.venueTransitionalFromTo
+		var venueNext = this.controlBuilder.venueTransitionalFromTo
 		(
-			this.venueCurrent, venueToTransitionTo
+			this.venueCurrent(), venueToTransitionTo
 		);
+		this.venueNextSet(venueNext);
 	}
 
 	worldCreate(): World

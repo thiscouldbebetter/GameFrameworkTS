@@ -314,7 +314,7 @@ class PlaceBuilderDemo_Items
 		{
 			var universe = uwpe.universe;
 
-			var venuePrev = universe.venueCurrent;
+			var venuePrev = universe.venueCurrent();
 			var back = () => universe.venueTransitionTo(venuePrev);
 
 			var text =

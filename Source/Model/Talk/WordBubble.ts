@@ -27,8 +27,8 @@ export class WordBubble
 		this.statementIndexCurrent++;
 		if (this.statementIndexCurrent >= this.statements.length)
 		{
-			var venue = universe.venueCurrent as VenueLayered; // ?
-			universe.venueNext = venue.children[0];
+			var venue = universe.venueCurrent() as VenueLayered; // ?
+			universe.venueNextSet(venue.children[0]);
 		}
 	}
 

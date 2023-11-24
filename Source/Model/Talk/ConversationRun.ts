@@ -531,7 +531,7 @@ export class ConversationRun
 
 		var viewLog = () =>
 		{
-			var venueCurrent = universe.venueCurrent;
+			var venueCurrent = universe.venueCurrent();
 			var transcriptAsControl = conversationRun.toControlTranscript
 			(
 				size, universe, venueCurrent
@@ -789,7 +789,7 @@ export class ConversationRun
 	{
 		var conversationRun = this;
 
-		venueToReturnTo = universe.venueCurrent;
+		venueToReturnTo = universe.venueCurrent();
 		var fontHeight = 20;
 		var fontHeightShort = fontHeight * .6;
 		var fontNameAndHeight = FontNameAndHeight.fromHeightInPixels(fontHeight);

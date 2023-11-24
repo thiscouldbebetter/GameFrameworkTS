@@ -62,7 +62,7 @@ export class ItemStore implements EntityProperty<ItemStore>
 		(
 			universe, universe.display.sizeInPixels,
 			entityUsing, entityUsed,
-			universe.venueCurrent
+			universe.venueCurrent()
 		);
 		var venueNext = storeAsControl.toVenue();
 		universe.venueTransitionTo(venueNext);
@@ -109,9 +109,7 @@ export class ItemStore implements EntityProperty<ItemStore>
 
 		var back = () =>
 		{
-			var venueNext: Venue = venuePrev;
-			venueNext = VenueFader.fromVenuesToAndFrom(venueNext, universe.venueCurrent);
-			universe.venueNext = venueNext;
+			universe.venueTransitionTo(venuePrev);
 		};
 
 		var buy = () =>

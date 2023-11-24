@@ -280,6 +280,7 @@ var IDHelper = gf.IDHelper;
 var PlatformHelper = gf.PlatformHelper;
 var RandomizerSystem = gf.RandomizerSystem;
 var Reference = gf.Reference;
+var Stack = gf.Stack;
 var TimerHelper = gf.TimerHelper;
 var URLParser = gf.URLParser;
 var ValueBreak = gf.ValueBreak;

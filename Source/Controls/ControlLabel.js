@@ -12,6 +12,15 @@ var ThisCouldBeBetter;
                 // Helper variables.
                 this._drawPos = GameFramework.Coords.create();
             }
+            static from4Centered(pos, size, text, fontNameAndHeight) {
+                return ControlLabel.fromPosSizeTextFontCentered(pos, size, text, fontNameAndHeight);
+            }
+            static from4CenteredHorizontally(pos, size, text, fontNameAndHeight) {
+                return ControlLabel.fromPosSizeTextFontCenteredHorizontally(pos, size, text, fontNameAndHeight);
+            }
+            static from4Uncentered(pos, size, text, fontNameAndHeight) {
+                return ControlLabel.fromPosSizeTextFontUncentered(pos, size, text, fontNameAndHeight);
+            }
             static fromPosAndText(pos, text) {
                 var fontNameAndHeight = GameFramework.FontNameAndHeight.default();
                 var fontHeightInPixels = fontNameAndHeight.heightInPixels;
@@ -35,6 +44,24 @@ var ThisCouldBeBetter;
                 return new ControlLabel(null, //name
                 pos, null, // size
                 false, // isTextCenteredHorizontally
+                false, // isTextCenteredVertically
+                text, fontNameAndHeight);
+            }
+            static fromPosSizeTextFontCentered(pos, size, text, fontNameAndHeight) {
+                var textFromBindingInitial = text.get();
+                return new ControlLabel("label" + textFromBindingInitial.split(" ").join(""), pos, size, true, // isTextCenteredHorizontally
+                true, // isTextCenteredVertically
+                text, fontNameAndHeight);
+            }
+            static fromPosSizeTextFontCenteredHorizontally(pos, size, text, fontNameAndHeight) {
+                var textFromBindingInitial = text.get();
+                return new ControlLabel("label" + textFromBindingInitial.split(" ").join(""), pos, size, true, // isTextCenteredHorizontally
+                false, // isTextCenteredVertically
+                text, fontNameAndHeight);
+            }
+            static fromPosSizeTextFontUncentered(pos, size, text, fontNameAndHeight) {
+                var textFromBindingInitial = text.get();
+                return new ControlLabel("label" + textFromBindingInitial.split(" ").join(""), pos, size, false, // isTextCenteredHorizontally
                 false, // isTextCenteredVertically
                 text, fontNameAndHeight);
             }
