@@ -150,7 +150,7 @@ export class ControlLabel<TContext> extends ControlBase
 		fontNameAndHeight: FontNameAndHeight
 	): ControlLabel<TContext>
 	{
-		var textFromBindingInitial = text.get();
+		var textFromBindingInitial = text.get() || "";
 
 		return new ControlLabel
 		(
@@ -172,7 +172,7 @@ export class ControlLabel<TContext> extends ControlBase
 		fontNameAndHeight: FontNameAndHeight
 	): ControlLabel<TContext>
 	{
-		var textFromBindingInitial = text.get();
+		var textFromBindingInitial = text.get() || "";
 
 		return new ControlLabel
 		(
@@ -194,7 +194,7 @@ export class ControlLabel<TContext> extends ControlBase
 		fontNameAndHeight: FontNameAndHeight
 	): ControlLabel<TContext>
 	{
-		var textFromBindingInitial = text.get();
+		var textFromBindingInitial = text.get() || "";
 
 		return new ControlLabel
 		(

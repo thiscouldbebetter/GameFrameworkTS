@@ -41,6 +41,12 @@ export class Stack<T>
 		return returnValue;
 	}
 
+	popThenPeek(): T
+	{
+		this.pop();
+		return this.peek();
+	}
+
 	push(itemToPush: T): void
 	{
 		this.items.splice(0, 0, itemToPush);

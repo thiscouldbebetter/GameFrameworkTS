@@ -14,11 +14,19 @@ var ThisCouldBeBetter;
             static fromMessage(message) {
                 return VenueMessage.fromMessageAndAcknowledge(message, null);
             }
+            static fromMessageAcknowledgeAndSize(messageToShow, acknowledge, sizeInPixels) {
+                return new VenueMessage(messageToShow, acknowledge, null, // venuePrev
+                sizeInPixels, null // showMessageOnly
+                );
+            }
             static fromMessageAndAcknowledge(messageToShow, acknowledge) {
                 return new VenueMessage(messageToShow, acknowledge, null, null, null);
             }
             static fromText(text) {
                 return VenueMessage.fromMessage(GameFramework.DataBinding.fromGet((c) => text));
+            }
+            static fromTextAcknowledgeAndSize(text, acknowledge, sizeInPixels) {
+                return VenueMessage.fromMessageAcknowledgeAndSize(GameFramework.DataBinding.fromGet((c) => text), acknowledge, sizeInPixels);
             }
             static fromTextAndAcknowledge(text, acknowledge) {
                 return VenueMessage.fromMessageAndAcknowledge(GameFramework.DataBinding.fromGet((c) => text), acknowledge);

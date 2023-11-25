@@ -217,6 +217,11 @@ export class Universe
 		return this.venueStack.peek();
 	}
 
+	venueJumpTo(value: Venue): void
+	{
+		this.venueNextSet(value);
+	}
+
 	venueNext(): Venue
 	{
 		return this._venueNext;
@@ -230,6 +235,16 @@ export class Universe
 	venueNextSet(value: Venue): void
 	{
 		this._venueNext = value;
+	}
+
+	venuePrevJumpTo(): void
+	{
+		this.venueJumpTo(this.venueStack.popThenPeek());
+	}
+
+	venuePrevTransitionTo(): void
+	{
+		this.venueTransitionTo(this.venueStack.popThenPeek());
 	}
 
 	venueTransitionTo(venueToTransitionTo: Venue): void

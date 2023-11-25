@@ -48,19 +48,19 @@ var ThisCouldBeBetter;
                 text, fontNameAndHeight);
             }
             static fromPosSizeTextFontCentered(pos, size, text, fontNameAndHeight) {
-                var textFromBindingInitial = text.get();
+                var textFromBindingInitial = text.get() || "";
                 return new ControlLabel("label" + textFromBindingInitial.split(" ").join(""), pos, size, true, // isTextCenteredHorizontally
                 true, // isTextCenteredVertically
                 text, fontNameAndHeight);
             }
             static fromPosSizeTextFontCenteredHorizontally(pos, size, text, fontNameAndHeight) {
-                var textFromBindingInitial = text.get();
+                var textFromBindingInitial = text.get() || "";
                 return new ControlLabel("label" + textFromBindingInitial.split(" ").join(""), pos, size, true, // isTextCenteredHorizontally
                 false, // isTextCenteredVertically
                 text, fontNameAndHeight);
             }
             static fromPosSizeTextFontUncentered(pos, size, text, fontNameAndHeight) {
-                var textFromBindingInitial = text.get();
+                var textFromBindingInitial = text.get() || "";
                 return new ControlLabel("label" + textFromBindingInitial.split(" ").join(""), pos, size, false, // isTextCenteredHorizontally
                 false, // isTextCenteredVertically
                 text, fontNameAndHeight);

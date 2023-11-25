@@ -87,6 +87,9 @@ var ThisCouldBeBetter;
             venueCurrent() {
                 return this.venueStack.peek();
             }
+            venueJumpTo(value) {
+                this.venueNextSet(value);
+            }
             venueNext() {
                 return this._venueNext;
             }
@@ -95,6 +98,12 @@ var ThisCouldBeBetter;
             }
             venueNextSet(value) {
                 this._venueNext = value;
+            }
+            venuePrevJumpTo() {
+                this.venueJumpTo(this.venueStack.popThenPeek());
+            }
+            venuePrevTransitionTo() {
+                this.venueTransitionTo(this.venueStack.popThenPeek());
             }
             venueTransitionTo(venueToTransitionTo) {
                 var venueNext = this.controlBuilder.venueTransitionalFromTo(this.venueCurrent(), venueToTransitionTo);

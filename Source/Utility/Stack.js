@@ -26,6 +26,10 @@ var ThisCouldBeBetter;
                 }
                 return returnValue;
             }
+            popThenPeek() {
+                this.pop();
+                return this.peek();
+            }
             push(itemToPush) {
                 this.items.splice(0, 0, itemToPush);
             }

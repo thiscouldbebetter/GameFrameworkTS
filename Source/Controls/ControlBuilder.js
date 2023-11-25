@@ -127,6 +127,9 @@ var ThisCouldBeBetter;
                 return this.confirmForUniverseSizeMessageConfirmCancel(universe, size, message, confirm, cancel);
             }
             confirmForUniverseSizeMessageConfirmCancel(universe, size, message, confirm, cancel) {
+                if (cancel == null) {
+                    cancel = () => universe.venuePrevJumpTo();
+                }
                 return this.choice(universe, size, GameFramework.DataBinding.fromContext(message), ["Confirm", "Cancel"], [confirm, cancel], null, // showMessageOnly
                 null, // fontHeight
                 null // buttonPosY

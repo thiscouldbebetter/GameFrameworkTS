@@ -36,6 +36,23 @@ export class VenueMessage<TContext> implements Venue
 		return VenueMessage.fromMessageAndAcknowledge(message, null);
 	}
 
+	static fromMessageAcknowledgeAndSize<TContext>
+	(
+		messageToShow: DataBinding<TContext, string>,
+		acknowledge: () => void,
+		sizeInPixels: Coords
+	): VenueMessage<TContext>
+	{
+		return new VenueMessage<TContext>
+		(
+			messageToShow,
+			acknowledge,
+			null, // venuePrev
+			sizeInPixels,
+			null // showMessageOnly
+		);
+	}
+
 	static fromMessageAndAcknowledge<TContext>
 	(
 		messageToShow: DataBinding<TContext, string>,
@@ -50,6 +67,19 @@ export class VenueMessage<TContext> implements Venue
 		return VenueMessage.fromMessage<TContext>
 		(
 			DataBinding.fromGet( (c: TContext) => text )
+		);
+	}
+
+	static fromTextAcknowledgeAndSize<TContext>
+	(
+		text: string, acknowledge: () => void, sizeInPixels: Coords
+	): VenueMessage<TContext>
+	{
+		return VenueMessage.fromMessageAcknowledgeAndSize
+		(
+			DataBinding.fromGet( (c: TContext) => text ),
+			acknowledge,
+			sizeInPixels
 		);
 	}
 

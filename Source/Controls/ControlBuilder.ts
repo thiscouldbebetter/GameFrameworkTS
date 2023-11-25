@@ -311,6 +311,11 @@ export class ControlBuilder
 		cancel: () => void
 	): ControlBase
 	{
+		if (cancel == null)
+		{
+			cancel = () => universe.venuePrevJumpTo();
+		}
+
 		return this.choice
 		(
 			universe,
