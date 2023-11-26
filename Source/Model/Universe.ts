@@ -242,6 +242,11 @@ export class Universe
 		this.venueJumpTo(this.venueStack.popThenPeek());
 	}
 
+	venueCurrentRemove(): void
+	{
+		this.venueStack.pop();
+	}
+
 	venuePrevTransitionTo(): void
 	{
 		this.venueTransitionTo(this.venueStack.popThenPeek());

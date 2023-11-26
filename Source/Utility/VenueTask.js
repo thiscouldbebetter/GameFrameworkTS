@@ -33,6 +33,7 @@ var ThisCouldBeBetter;
                 var result = this.perform();
                 clearInterval(timerHandle);
                 this.done(result);
+                universe.venueCurrentRemove();
             }
         }
         GameFramework.VenueTask = VenueTask;

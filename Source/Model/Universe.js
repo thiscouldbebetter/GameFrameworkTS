@@ -102,6 +102,9 @@ var ThisCouldBeBetter;
             venuePrevJumpTo() {
                 this.venueJumpTo(this.venueStack.popThenPeek());
             }
+            venueCurrentRemove() {
+                this.venueStack.pop();
+            }
             venuePrevTransitionTo() {
                 this.venueTransitionTo(this.venueStack.popThenPeek());
             }

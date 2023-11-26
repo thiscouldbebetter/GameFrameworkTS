@@ -26,7 +26,10 @@ var ThisCouldBeBetter;
             static fromVenuesToAndFrom(venueToFadeTo, venueToFadeFrom) {
                 return new VenueFader(venueToFadeTo, venueToFadeFrom, null, null);
             }
-            finalize(universe) { }
+            finalize(universe) {
+                var venueToFadeTo = this.venuesToFadeFromAndTo[1];
+                universe.venueNextSet(venueToFadeTo);
+            }
             initialize(universe) {
                 var venueToFadeTo = this.venueToFadeTo();
                 venueToFadeTo.initialize(universe);
@@ -49,6 +52,7 @@ var ThisCouldBeBetter;
                         var venueToFadeTo = this.venuesToFadeFromAndTo[1];
                         if (venueToFadeTo.draw == null) {
                             universe.venueNextSet(venueToFadeTo);
+                            universe.venueCurrentRemove();
                         }
                     }
                     alphaOfFadeColor = fractionOfFadeCompleted;
@@ -58,6 +62,7 @@ var ThisCouldBeBetter;
                     if (fractionOfFadeCompleted > 1) {
                         fractionOfFadeCompleted = 1;
                         universe.venueNextSet(this.venueCurrent());
+                        universe.venueCurrentRemove();
                     }
                     alphaOfFadeColor = 1 - fractionOfFadeCompleted;
                 }

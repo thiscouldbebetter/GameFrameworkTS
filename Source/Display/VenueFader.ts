@@ -50,7 +50,11 @@ export class VenueFader implements Venue
 		return new VenueFader(venueToFadeTo, venueToFadeFrom, null, null)
 	}
 
-	finalize(universe: Universe): void {}
+	finalize(universe: Universe): void
+	{
+		var venueToFadeTo = this.venuesToFadeFromAndTo[1];
+		universe.venueNextSet(venueToFadeTo);
+	}
 
 	initialize(universe: Universe): void
 	{
@@ -90,8 +94,8 @@ export class VenueFader implements Venue
 				if (venueToFadeTo.draw == null)
 				{
 					universe.venueNextSet(venueToFadeTo);
+					universe.venueCurrentRemove();
 				}
-
 			}
 			alphaOfFadeColor = fractionOfFadeCompleted;
 		}
@@ -101,6 +105,7 @@ export class VenueFader implements Venue
 			{
 				fractionOfFadeCompleted = 1;
 				universe.venueNextSet(this.venueCurrent() );
+				universe.venueCurrentRemove();
 			}
 
 			alphaOfFadeColor = 1 - fractionOfFadeCompleted;

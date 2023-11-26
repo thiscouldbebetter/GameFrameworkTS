@@ -65,6 +65,7 @@ export class VenueTask<TResult> implements Venue
 		clearInterval(timerHandle);
 
 		this.done(result);
+		universe.venueCurrentRemove();
 	}
 }
 
