@@ -31,7 +31,7 @@ export class ControlButton<TContext> extends ControlBase
 		this.hasBorder = hasBorder;
 		this._isEnabled = isEnabled;
 		this._click = click;
-		this.canBeHeldDown = (canBeHeldDown == null ? false : canBeHeldDown);
+		this.canBeHeldDown = canBeHeldDown || false;
 
 		// Helper variables.
 		this._drawLoc = Disposition.create();

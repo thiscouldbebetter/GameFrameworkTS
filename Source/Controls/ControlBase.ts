@@ -35,18 +35,43 @@ export class ControlBase
 		this.isHighlighted = false;
 	}
 
+	// Setters.
+
+	fontNameAndHeightSet(value: FontNameAndHeight): ControlBase
+	{
+		this.fontNameAndHeight.overwriteWith(value);
+		return this;
+	}
+
+	posSet(value: Coords): ControlBase
+	{
+		this.pos.overwriteWith(value);
+		return this;
+	}
+
+	sizeSet(value: Coords): ControlBase
+	{
+		this.size.overwriteWith(value);
+		return this;
+	}
+
+	// Events.
+
 	actionHandle(actionName: string, universe: Universe): boolean { return false; }
-	actionToInputsMappings(): ActionToInputsMapping[] { return new Array<ActionToInputsMapping>(); }
-	childWithFocus(): ControlBase { return null; }
-	draw(u: Universe, d: Display, drawLoc: Disposition, style: ControlStyle): void {}
 	focusGain(): void { this.isHighlighted = true; }
 	focusLose(): void { this.isHighlighted = false; }
-	isEnabled(): boolean { return true; }
-	isVisible(): boolean { return this._isVisible; }
 	mouseClick(x: Coords): boolean { return false; }
 	mouseEnter(): void { this.isHighlighted = true; }
 	mouseExit(): void { this.isHighlighted = false; }
 	mouseMove(x: Coords): boolean { return false; }
+
+	// Other methods.
+
+	actionToInputsMappings(): ActionToInputsMapping[] { return new Array<ActionToInputsMapping>(); }
+	childWithFocus(): ControlBase { return null; }
+	draw(u: Universe, d: Display, drawLoc: Disposition, style: ControlStyle): void {}
+	isEnabled(): boolean { return true; }
+	isVisible(): boolean { return this._isVisible; }
 	scalePosAndSize(scaleFactors: Coords): ControlBase
 	{
 		this.pos.multiply(scaleFactors);
@@ -68,6 +93,7 @@ export class ControlBase
 		return returnValue;
 	}
 	toVenue(): VenueControls { return VenueControls.fromControl(this); }
+
 }
 
 }

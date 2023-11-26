@@ -14,18 +14,33 @@ var ThisCouldBeBetter;
                 this.styleName = null;
                 this.isHighlighted = false;
             }
+            // Setters.
+            fontNameAndHeightSet(value) {
+                this.fontNameAndHeight.overwriteWith(value);
+                return this;
+            }
+            posSet(value) {
+                this.pos.overwriteWith(value);
+                return this;
+            }
+            sizeSet(value) {
+                this.size.overwriteWith(value);
+                return this;
+            }
+            // Events.
             actionHandle(actionName, universe) { return false; }
-            actionToInputsMappings() { return new Array(); }
-            childWithFocus() { return null; }
-            draw(u, d, drawLoc, style) { }
             focusGain() { this.isHighlighted = true; }
             focusLose() { this.isHighlighted = false; }
-            isEnabled() { return true; }
-            isVisible() { return this._isVisible; }
             mouseClick(x) { return false; }
             mouseEnter() { this.isHighlighted = true; }
             mouseExit() { this.isHighlighted = false; }
             mouseMove(x) { return false; }
+            // Other methods.
+            actionToInputsMappings() { return new Array(); }
+            childWithFocus() { return null; }
+            draw(u, d, drawLoc, style) { }
+            isEnabled() { return true; }
+            isVisible() { return this._isVisible; }
             scalePosAndSize(scaleFactors) {
                 this.pos.multiply(scaleFactors);
                 this.size.multiply(scaleFactors);

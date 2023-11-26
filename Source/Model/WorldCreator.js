@@ -19,26 +19,23 @@ var ThisCouldBeBetter;
                 var fontHeightInPixels = fontNameAndHeight.heightInPixels;
                 var controlHeight = fontHeightInPixels + margin;
                 var buttonSize = GameFramework.Coords.fromXY(4, 1).multiplyScalar(controlHeight);
+                var labelWorldCreationSettings = GameFramework.ControlLabel.from4Uncentered(GameFramework.Coords.fromXY(margin, margin), // pos
+                GameFramework.Coords.fromXY(size.x - margin * 2, controlHeight), GameFramework.DataBinding.fromContext("World Creation Settings"), fontNameAndHeight);
+                var labelWorldName = GameFramework.ControlLabel.from4Uncentered(GameFramework.Coords.fromXY(margin, margin * 2 + controlHeight), // pos
+                GameFramework.Coords.fromXY(size.x - margin * 2, controlHeight), GameFramework.DataBinding.fromContext("World Name:"), fontNameAndHeight);
+                var textWorldName = new GameFramework.ControlTextBox("textBoxWorldName", GameFramework.Coords.fromXY(margin * 8, margin * 2 + controlHeight), // pos
+                GameFramework.Coords.fromXY(margin * 12, controlHeight), // size
+                new GameFramework.DataBinding(worldCreator, (c) => c.settings.name || "", (c, v) => c.settings.name = v), // text
+                fontNameAndHeight, 64, // charCountMax
+                GameFramework.DataBinding.fromTrue() // isEnabled
+                );
+                var buttonCreate = GameFramework.ControlButton.from5(GameFramework.Coords.fromXY(size.x - margin - buttonSize.x, size.y - margin - buttonSize.y), buttonSize, "Create", fontNameAndHeight, () => universe.venueTransitionTo(worldCreator.venueWorldGenerate(universe)));
                 var returnControl = GameFramework.ControlContainer.from4("containerWorldCreator", GameFramework.Coords.zeroes(), // pos
                 size, [
-                    new GameFramework.ControlLabel("labelWorldCreationSettings", GameFramework.Coords.fromXY(margin, margin), // pos
-                    GameFramework.Coords.fromXY(size.x - margin * 2, controlHeight), false, // isTextCenteredHorizontally
-                    false, // isTextCenteredVertically
-                    GameFramework.DataBinding.fromContext("World Creation Settings"), fontNameAndHeight),
-                    new GameFramework.ControlLabel("labelWorldName", GameFramework.Coords.fromXY(margin, margin * 2 + controlHeight), // pos
-                    GameFramework.Coords.fromXY(size.x - margin * 2, controlHeight), false, // isTextCenteredHorizontally
-                    false, // isTextCenteredVertically
-                    GameFramework.DataBinding.fromContext("World Name:"), fontNameAndHeight),
-                    new GameFramework.ControlTextBox("textBoxWorldName", GameFramework.Coords.fromXY(margin * 8, margin * 2 + controlHeight), // pos
-                    GameFramework.Coords.fromXY(margin * 12, controlHeight), // size
-                    new GameFramework.DataBinding(worldCreator, (c) => c.settings.name || "", (c, v) => c.settings.name = v), // text
-                    fontNameAndHeight, 64, // charCountMax
-                    GameFramework.DataBinding.fromTrue() // isEnabled
-                    ),
-                    new GameFramework.ControlButton("buttonCreate", GameFramework.Coords.fromXY(size.x - margin - buttonSize.x, size.y - margin - buttonSize.y), buttonSize, "Create", fontNameAndHeight, true, // hasBorder
-                    GameFramework.DataBinding.fromTrue(), // isEnabled
-                    () => universe.venueTransitionTo(worldCreator.venueWorldGenerate(universe)), false // canBeHeldDown
-                    )
+                    labelWorldCreationSettings,
+                    labelWorldName,
+                    textWorldName,
+                    buttonCreate
                 ]);
                 return returnControl;
             }

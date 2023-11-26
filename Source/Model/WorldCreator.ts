@@ -40,70 +40,65 @@ export class WorldCreator
 		var buttonSize =
 			Coords.fromXY(4, 1).multiplyScalar(controlHeight);
 
+		var labelWorldCreationSettings = ControlLabel.from4Uncentered
+		(
+			Coords.fromXY(margin, margin), // pos
+			Coords.fromXY(size.x - margin * 2, controlHeight),
+			DataBinding.fromContext("World Creation Settings"),
+			fontNameAndHeight
+		);
+
+		var labelWorldName = ControlLabel.from4Uncentered
+		(
+			Coords.fromXY(margin, margin * 2 + controlHeight), // pos
+			Coords.fromXY(size.x - margin * 2, controlHeight),
+			DataBinding.fromContext("World Name:"),
+			fontNameAndHeight
+		);
+
+		var textWorldName = new ControlTextBox
+		(
+			"textBoxWorldName",
+			Coords.fromXY(margin * 8, margin * 2 + controlHeight), // pos
+			Coords.fromXY(margin * 12, controlHeight), // size
+			new DataBinding
+			(
+				worldCreator,
+				(c: WorldCreator) => c.settings.name || "",
+				(c: WorldCreator, v: string) => c.settings.name = v
+			), // text
+			fontNameAndHeight,
+			64, // charCountMax
+			DataBinding.fromTrue() // isEnabled
+		);
+
+		var buttonCreate = ControlButton.from5
+		(
+			Coords.fromXY
+			(
+				size.x - margin - buttonSize.x,
+				size.y - margin - buttonSize.y
+			),
+			buttonSize,
+			"Create",
+			fontNameAndHeight,
+			() =>
+				universe.venueTransitionTo
+				(
+					worldCreator.venueWorldGenerate(universe)
+				)
+		);
+
 		var returnControl = ControlContainer.from4
 		(
 			"containerWorldCreator",
 			Coords.zeroes(), // pos
 			size,
 			[
-				new ControlLabel
-				(
-					"labelWorldCreationSettings",
-					Coords.fromXY(margin, margin), // pos
-					Coords.fromXY(size.x - margin * 2, controlHeight),
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
-					DataBinding.fromContext("World Creation Settings"),
-					fontNameAndHeight
-				),
-
-				new ControlLabel
-				(
-					"labelWorldName",
-					Coords.fromXY(margin, margin * 2 + controlHeight), // pos
-					Coords.fromXY(size.x - margin * 2, controlHeight),
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
-					DataBinding.fromContext("World Name:"),
-					fontNameAndHeight
-				),
-
-				new ControlTextBox
-				(
-					"textBoxWorldName",
-					Coords.fromXY(margin * 8, margin * 2 + controlHeight), // pos
-					Coords.fromXY(margin * 12, controlHeight), // size
-					new DataBinding
-					(
-						worldCreator,
-						(c: WorldCreator) => c.settings.name || "",
-						(c: WorldCreator, v: string) => c.settings.name = v
-					), // text
-					fontNameAndHeight,
-					64, // charCountMax
-					DataBinding.fromTrue() // isEnabled
-				),
-
-				new ControlButton
-				(
-					"buttonCreate",
-					Coords.fromXY
-					(
-						size.x - margin - buttonSize.x,
-						size.y - margin - buttonSize.y
-					),
-					buttonSize,
-					"Create",
-					fontNameAndHeight,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					() =>
-						universe.venueTransitionTo
-						(
-							worldCreator.venueWorldGenerate(universe)
-						),
-					false // canBeHeldDown
-				)
+				labelWorldCreationSettings,
+				labelWorldName,
+				textWorldName,
+				buttonCreate
 			]
 		);
 

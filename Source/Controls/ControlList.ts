@@ -356,6 +356,11 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 		return returnValue;
 	}
 
+	itemSelectFirstIfAny(): TItem
+	{
+		return this.itemSelectByIndex(0);
+	}
+
 	itemSelectNextInDirection(direction: number): TItem
 	{
 		var items = this.items();

@@ -151,6 +151,9 @@ var ThisCouldBeBetter;
                 }
                 return returnValue;
             }
+            itemSelectFirstIfAny() {
+                return this.itemSelectByIndex(0);
+            }
             itemSelectNextInDirection(direction) {
                 var items = this.items();
                 var numberOfItems = items.length;

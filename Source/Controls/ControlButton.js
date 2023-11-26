@@ -10,7 +10,7 @@ var ThisCouldBeBetter;
                 this.hasBorder = hasBorder;
                 this._isEnabled = isEnabled;
                 this._click = click;
-                this.canBeHeldDown = (canBeHeldDown == null ? false : canBeHeldDown);
+                this.canBeHeldDown = canBeHeldDown || false;
                 // Helper variables.
                 this._drawLoc = GameFramework.Disposition.create();
                 this._sizeHalf = GameFramework.Coords.create();
