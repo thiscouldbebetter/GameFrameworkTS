@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class RandomizerLCG {
+        class RandomizerLCG extends GameFramework.Randomizer {
             constructor(firstRandom, multiplier, addend, modulus) {
+                super();
                 this.currentRandom = firstRandom;
                 this.multiplier = multiplier || 1103515245;
                 this.addend = addend || 12345;
@@ -17,6 +18,7 @@ var ThisCouldBeBetter;
                 Math.pow(2.0, 31) // modulus
                 );
             }
+            // Randomizer implementation.
             fraction() {
                 this.currentRandom =
                     ((this.multiplier

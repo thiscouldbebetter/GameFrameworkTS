@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class RandomizerLCG implements Randomizer
+export class RandomizerLCG extends Randomizer
 {
 	// "LCG" = "Linear Congruential Generator"
 
@@ -11,8 +11,16 @@ export class RandomizerLCG implements Randomizer
 	modulus: number;
 	currentRandom: number;
 
-	constructor(firstRandom: number, multiplier: number, addend: number, modulus: number)
+	constructor
+	(
+		firstRandom: number,
+		multiplier: number,
+		addend: number,
+		modulus: number
+	)
 	{
+		super();
+
 		this.currentRandom = firstRandom;
 		this.multiplier = multiplier || 1103515245;
 		this.addend = addend || 12345;
@@ -29,6 +37,8 @@ export class RandomizerLCG implements Randomizer
 			Math.pow(2.0, 31) // modulus
 		);
 	}
+
+	// Randomizer implementation.
 
 	fraction(): number
 	{

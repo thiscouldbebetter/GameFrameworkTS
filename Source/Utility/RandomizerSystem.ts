@@ -2,9 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class RandomizerSystem implements Randomizer
+export class RandomizerSystem extends Randomizer
 {
 	// Uses the built-in JavaScript randomizer.
+
+	constructor()
+	{
+		super();
+	}
 
 	static _instance: RandomizerSystem;
 	static Instance(): RandomizerSystem

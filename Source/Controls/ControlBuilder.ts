@@ -1471,12 +1471,15 @@ export class ControlBuilder
 					DataBinding.fromContext(visual)
 				),
 
-				ControlButton.from5
+				ControlButton.from8
 				(
+					"buttonStart",
 					Coords.fromXY(75, 120), // pos
 					Coords.fromXY(50, fontHeight * 2), // size
 					"Start",
 					FontNameAndHeight.fromHeightInPixels(fontHeight * 2),
+					false, // hasBorder
+					DataBinding.fromTrue(), // isEnabled
 					start // click
 				)
 			], // end children

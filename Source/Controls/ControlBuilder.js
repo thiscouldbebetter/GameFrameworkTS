@@ -667,9 +667,11 @@ var ThisCouldBeBetter;
                 [
                     GameFramework.ControlVisual.from4("imageTitle", this._zeroes.clone(), this.sizeBase.clone(), // size
                     GameFramework.DataBinding.fromContext(visual)),
-                    GameFramework.ControlButton.from5(GameFramework.Coords.fromXY(75, 120), // pos
+                    GameFramework.ControlButton.from8("buttonStart", GameFramework.Coords.fromXY(75, 120), // pos
                     GameFramework.Coords.fromXY(50, fontHeight * 2), // size
-                    "Start", GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeight * 2), start // click
+                    "Start", GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeight * 2), false, // hasBorder
+                    GameFramework.DataBinding.fromTrue(), // isEnabled
+                    start // click
                     )
                 ], // end children
                 [

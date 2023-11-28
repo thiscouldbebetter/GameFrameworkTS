@@ -16,7 +16,10 @@ export class ItemStore implements EntityProperty<ItemStore>
 
 	transfer
 	(
-		world: World, entityFrom: Entity, entityTo: Entity, messagePrefix: string
+		world: World,
+		entityFrom: Entity,
+		entityTo: Entity,
+		messagePrefix: string
 	): void
 	{
 		var itemHolderFrom = entityFrom.itemHolder();
@@ -26,9 +29,12 @@ export class ItemStore implements EntityProperty<ItemStore>
 		{
 			var itemToTransfer = itemHolderFrom.itemSelected;
 			var tradeValue = itemToTransfer.defn(world).tradeValue;
-			var itemCurrencyNeeded = new Item(this.itemDefnNameCurrency, tradeValue);
+			var itemCurrencyNeeded
+				= new Item(this.itemDefnNameCurrency, tradeValue);
 			var itemDefnCurrency = itemCurrencyNeeded.defn(world);
-			itemCurrencyNeeded.quantity = Math.ceil(tradeValue / itemDefnCurrency.tradeValue);
+			itemCurrencyNeeded.quantity =
+				Math.ceil(tradeValue / itemDefnCurrency.tradeValue);
+
 			if (itemHolderTo.hasItem(itemCurrencyNeeded))
 			{
 				itemHolderFrom.itemTransferSingleTo
@@ -57,11 +63,12 @@ export class ItemStore implements EntityProperty<ItemStore>
 		var universe = uwpe.universe;
 		var entityUsing = uwpe.entity;
 		var entityUsed = uwpe.entity2;
-		//entityUsed.collidable().ticksUntilCanCollide = 50; // hack
 		var storeAsControl = entityUsed.itemStore().toControl
 		(
-			universe, universe.display.sizeInPixels,
-			entityUsing, entityUsed,
+			universe,
+			universe.display.sizeInPixels,
+			entityUsing,
+			entityUsed,
 			universe.venueCurrent()
 		);
 		var venueNext = storeAsControl.toVenue();
@@ -82,8 +89,11 @@ export class ItemStore implements EntityProperty<ItemStore>
 
 	toControl
 	(
-		universe: Universe, size: Coords, entityCustomer: Entity,
-		entityStore: Entity, venuePrev: Venue
+		universe: Universe,
+		size: Coords,
+		entityCustomer: Entity,
+		entityStore: Entity,
+		venuePrev: Venue
 	): ControlBase
 	{
 		if (size == null)
@@ -122,6 +132,129 @@ export class ItemStore implements EntityProperty<ItemStore>
 			itemBarterer.transfer(world, entityCustomer, entityStore, "Sold");
 		};
 
+		var labelStoreName = ControlLabel.from4Uncentered
+		(
+			Coords.fromXY(margin, margin), // pos
+			Coords.fromXY(listSize.x, 25), // size
+			DataBinding.fromContext(entityStore.name + ":"),
+			font
+		);
+
+		var listStoreItems = ControlList.from10
+		(
+			"listStoreItems",
+			Coords.fromXY(margin, margin * 2), // pos
+			listSize.clone(),
+			DataBinding.fromContextAndGet
+			(
+				itemHolderStore,
+				(c: ItemHolder) =>
+					c.items //.filter(x => x.item().defnName != itemDefnNameCurrency);
+			), // items
+			DataBinding.fromGet
+			(
+				(c: Item) => c.toString(world)
+			), // bindingForItemText
+			font,
+			new DataBinding
+			(
+				itemHolderStore,
+				(c: ItemHolder) => c.itemSelected,
+				(c: ItemHolder, v: Item) => c.itemSelected = v
+			), // bindingForItemSelected
+			DataBinding.fromGet( (c: Item) => c ), // bindingForItemValue
+			DataBinding.fromTrue(), // isEnabled
+			buy // confirm
+		);
+
+		var labelCustomerName = ControlLabel.from4Uncentered
+		(
+			Coords.fromXY(size.x - margin - listSize.x, margin), // pos
+			Coords.fromXY(85, 25), // size
+			DataBinding.fromContext(entityCustomer.name + ":"),
+			font
+		);
+
+		var buttonBuy = ControlButton.from8
+		(
+			"buttonBuy",
+			Coords.fromXY
+			(
+				size.x / 2 - buttonSize.x - margin / 2,
+				size.y - margin - buttonSize.y
+			), // pos
+			buttonSize.clone(),
+			"Buy",
+			font,
+			true, // hasBorder
+			DataBinding.fromTrue(), // isEnabled
+			buy // click
+		);
+
+		var listCustomerItems = ControlList.from10
+		(
+			"listCustomerItems",
+			Coords.fromXY(size.x - margin - listSize.x, margin * 2), // pos
+			listSize.clone(),
+			DataBinding.fromContextAndGet
+			(
+				itemHolderCustomer,
+				(c: ItemHolder) => 
+					c.items //.filter(x => x.item().defnName != itemDefnNameCurrency);
+			), // items
+			DataBinding.fromGet
+			(
+				(c: Item) => c.toString(world)
+			), // bindingForItemText
+			font,
+			new DataBinding
+			(
+				itemHolderCustomer,
+				(c: ItemHolder) => c.itemSelected,
+				(c: ItemHolder, v: Item) => c.itemSelected = v
+			), // bindingForItemSelected
+			DataBinding.fromGet( (c: Item) => c ), // bindingForItemValue
+			DataBinding.fromTrue(), // isEnabled
+			sell // confirm
+		);
+
+		var buttonSell = ControlButton.from8
+		(
+			"buttonSell",
+			Coords.fromXY
+			(
+				size.x / 2 + margin / 2,
+				size.y - margin - buttonSize.y
+			), // pos
+			buttonSize.clone(),
+			"Sell",
+			font,
+			true, // hasBorder
+			DataBinding.fromTrue(), // isEnabled
+			sell // click
+		);
+
+		var infoStatus = ControlLabel.from4CenteredHorizontally
+		(
+			Coords.fromXY(size.x / 2, size.y - margin * 2 - buttonSize.y), // pos
+			Coords.fromXY(size.x, fontHeight), // size
+			DataBinding.fromContextAndGet(this, c => c.statusMessage),
+			font
+		);
+
+		var buttonDone = ControlButton.from5
+		(
+			Coords.fromXY
+			(
+				size.x - margin - buttonSize.x,
+				size.y - margin - buttonSize.y
+			), // pos
+			buttonSize.clone(),
+			"Done",
+			font,
+			back // click
+		);
+
 		var returnValue = new ControlContainer
 		(
 			"containerTransfer",
@@ -129,140 +262,14 @@ export class ItemStore implements EntityProperty<ItemStore>
 			size.clone(),
 			// children
 			[
-				new ControlLabel
-				(
-					"labelStoreName",
-					Coords.fromXY(margin, margin), // pos
-					Coords.fromXY(listSize.x, 25), // size
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
-					DataBinding.fromContext(entityStore.name + ":"),
-					font
-				),
-
-				ControlList.from10
-				(
-					"listStoreItems",
-					Coords.fromXY(margin, margin * 2), // pos
-					listSize.clone(),
-					DataBinding.fromContextAndGet
-					(
-						itemHolderStore,
-						(c: ItemHolder) =>
-							c.items //.filter(x => x.item().defnName != itemDefnNameCurrency);
-					), // items
-					DataBinding.fromGet
-					(
-						(c: Item) => c.toString(world)
-					), // bindingForItemText
-					font,
-					new DataBinding
-					(
-						itemHolderStore,
-						(c: ItemHolder) => c.itemSelected,
-						(c: ItemHolder, v: Item) => c.itemSelected = v
-					), // bindingForItemSelected
-					DataBinding.fromGet( (c: Item) => c ), // bindingForItemValue
-					DataBinding.fromTrue(), // isEnabled
-					buy // confirm
-				),
-
-				new ControlLabel
-				(
-					"labelCustomerName",
-					Coords.fromXY(size.x - margin - listSize.x, margin), // pos
-					Coords.fromXY(85, 25), // size
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
-					DataBinding.fromContext(entityCustomer.name + ":"),
-					font
-				),
-
-				ControlButton.from8
-				(
-					"buttonBuy",
-					Coords.fromXY
-					(
-						size.x / 2 - buttonSize.x - margin / 2,
-						size.y - margin - buttonSize.y
-					), // pos
-					buttonSize.clone(),
-					"Buy",
-					font,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					buy // click
-				),
-
-				ControlList.from10
-				(
-					"listCustomerItems",
-					Coords.fromXY(size.x - margin - listSize.x, margin * 2), // pos
-					listSize.clone(),
-					DataBinding.fromContextAndGet
-					(
-						itemHolderCustomer,
-						(c: ItemHolder) => 
-							c.items //.filter(x => x.item().defnName != itemDefnNameCurrency);
-					), // items
-					DataBinding.fromGet
-					(
-						(c: Item) => c.toString(world)
-					), // bindingForItemText
-					font,
-					new DataBinding
-					(
-						itemHolderCustomer,
-						(c: ItemHolder) => c.itemSelected,
-						(c: ItemHolder, v: Item) => c.itemSelected = v
-					), // bindingForItemSelected
-					DataBinding.fromGet( (c: Item) => c ), // bindingForItemValue
-					DataBinding.fromTrue(), // isEnabled
-					sell // confirm
-				),
-
-				ControlButton.from8
-				(
-					"buttonSell",
-					Coords.fromXY
-					(
-						size.x / 2 + margin / 2,
-						size.y - margin - buttonSize.y
-					), // pos
-					buttonSize.clone(),
-					"Sell",
-					font,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					sell // click
-				),
-
-				new ControlLabel
-				(
-					"infoStatus",
-					Coords.fromXY(size.x / 2, size.y - margin * 2 - buttonSize.y), // pos
-					Coords.fromXY(size.x, fontHeight), // size
-					true, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
-					DataBinding.fromContextAndGet(this, c => c.statusMessage),
-					font
-				),
-
-				ControlButton.from8
-				(
-					"buttonDone",
-					Coords.fromXY
-					(
-						size.x - margin - buttonSize.x,
-						size.y - margin - buttonSize.y
-					), // pos
-					buttonSize.clone(),
-					"Done",
-					font,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					back // click
-				)
+				labelStoreName,
+				listStoreItems,
+				labelCustomerName,
+				buttonBuy,
+				listCustomerItems,
+				buttonSell,
+				infoStatus,
+				buttonDone
 			],
 
 			[ new Action("Back", back) ],
