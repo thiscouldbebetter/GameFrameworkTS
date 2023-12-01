@@ -8,7 +8,7 @@ echo class _BuildRecord >> _BuildRecord.ts
 echo { >> _BuildRecord.ts
 
 rem The parsing in the next line is because leading zeroes are disallowed in TypeScript, because they're interpreted as octals, which are deprecated!
-echo %tab%static buildTime(): Date { return new Date(%date:~10,4%, (%date:~4,2% - 1), %date:~7,2%, %time:~0,2%, parseInt("%time:~3,2%"), parseInt("%time:~6,2%")); } >> _BuildRecord.ts
+echo %tab%static buildTime(): Date { return new Date(%date:~10,4%, (parseInt("%date:~4,2%") - 1), parseInt("%date:~7,2%"), parseInt("%time:~0,2%"), parseInt("%time:~3,2%"), parseInt("%time:~6,2%")); } >> _BuildRecord.ts
 
 rem Reads the current version from git tags, or, if none available, uses "unknown".
 set version=
