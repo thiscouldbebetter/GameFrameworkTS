@@ -198,6 +198,21 @@ var ThisCouldBeBetter;
             handleEventMouseUp(event) {
                 this.inputRemove(GameFramework.Input.Names().MouseClick);
             }
+            // Events - Touch.
+            handleEventTouchStart(event) {
+                event.preventDefault();
+                var touches = event.targetTouches;
+                if (touches.length > 0) {
+                    var touch = touches[0];
+                    var canvas = event.target;
+                    var canvasBox = canvas.getBoundingClientRect();
+                    this.mouseClickPos.overwriteWithDimensions(touch.clientX - canvasBox.left, touch.clientY - canvasBox.top, 0);
+                    this.inputAdd(GameFramework.Input.Names().MouseClick);
+                }
+            }
+            handleEventTouchEnd(event) {
+                this.inputRemove(GameFramework.Input.Names().MouseClick);
+            }
             // gamepads
             gamepadsCheck() {
                 var systemGamepads = this.systemGamepads();
@@ -225,6 +240,8 @@ var ThisCouldBeBetter;
                     (this.isMouseMovementTracked
                         ? this.handleEventMouseMove.bind(this)
                         : null);
+                divMain.ontouchstart = this.handleEventTouchStart.bind(this);
+                divMain.ontouchend = this.handleEventTouchEnd.bind(this);
                 return null;
             }
         }

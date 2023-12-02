@@ -318,6 +318,34 @@ export class InputHelper implements Platformable
 		this.inputRemove(Input.Names().MouseClick);
 	}
 
+	// Events - Touch.
+
+	handleEventTouchStart(event: TouchEvent): void
+	{
+		event.preventDefault();
+
+		var touches = event.targetTouches;
+		if (touches.length > 0)
+		{
+			var touch = touches[0];
+
+			var canvas = event.target as HTMLCanvasElement;
+			var canvasBox = canvas.getBoundingClientRect();
+			this.mouseClickPos.overwriteWithDimensions
+			(
+				touch.clientX - canvasBox.left,
+				touch.clientY - canvasBox.top,
+				0
+			);
+			this.inputAdd(Input.Names().MouseClick);
+		}
+	}
+
+	handleEventTouchEnd(event: TouchEvent): void
+	{
+		this.inputRemove(Input.Names().MouseClick);
+	}
+
 	// gamepads
 
 	gamepadsCheck(): void
@@ -351,6 +379,7 @@ export class InputHelper implements Platformable
 			? document.getElementById("divMain")
 			: platformHelper.divMain
 		);
+
 		divMain.onmousedown = this.handleEventMouseDown.bind(this);
 		divMain.onmouseup = this.handleEventMouseUp.bind(this);
 		divMain.onmousemove =
@@ -359,6 +388,10 @@ export class InputHelper implements Platformable
 			? this.handleEventMouseMove.bind(this)
 			: null
 		);
+
+		divMain.ontouchstart = this.handleEventTouchStart.bind(this);
+		divMain.ontouchend = this.handleEventTouchEnd.bind(this);
+
 		return null;
 	}
 }
