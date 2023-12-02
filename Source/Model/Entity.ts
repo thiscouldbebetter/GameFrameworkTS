@@ -71,10 +71,14 @@ export class Entity implements Clonable<Entity>
 	): Entity
 	{
 		this.properties.push(propertyToAdd);
-		this.propertiesByName.set(propertyToAdd.constructor.name, propertyToAdd);
+		this.propertiesByName.set
+		(
+			propertyToAdd.constructor.name, propertyToAdd
+		);
 		if (place != null)
 		{
-			if (place.entities.indexOf(this) >= 0)
+			var placeEntities = place.entitiesAll();
+			if (placeEntities.indexOf(this) >= 0)
 			{
 				var propertyName = propertyToAdd.constructor.name;
 				var entitiesWithProperty = place.entitiesByPropertyName(propertyName);

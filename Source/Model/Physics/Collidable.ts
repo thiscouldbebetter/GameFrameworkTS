@@ -192,7 +192,7 @@ export class Collidable implements EntityProperty<Collidable>
 		var place = uwpe.place;
 		var entity = uwpe.entity;
 
-		var collisionTracker = place.collisionTracker();
+		var collisionTracker = (place as PlaceBase).collisionTracker();
 		var entityBoundable = entity.boundable();
 
 		if

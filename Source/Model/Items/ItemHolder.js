@@ -121,7 +121,7 @@ var ThisCouldBeBetter;
                 var place = uwpe.place;
                 var entityItemHolder = uwpe.entity;
                 var entityItemsInPlace = place.items();
-                var entityItemClosest = entityItemsInPlace.filter(x => x.locatable().distanceFromEntity(entityItemHolder) < this.reachRadius).sort((a, b) => a.locatable().distanceFromEntity(entityItemHolder)
+                var entityItemClosest = entityItemsInPlace.filter((x) => x.locatable().distanceFromEntity(entityItemHolder) < this.reachRadius).sort((a, b) => a.locatable().distanceFromEntity(entityItemHolder)
                     - b.locatable().distanceFromEntity(entityItemHolder))[0];
                 return entityItemClosest;
             }

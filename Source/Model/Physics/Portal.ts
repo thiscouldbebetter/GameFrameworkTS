@@ -59,7 +59,7 @@ export class Portal implements EntityProperty<Portal>
 		var destinationPlace = world.placeGetByName(this.destinationPlaceName);
 		destinationPlace.initialize(uwpe);
 		var destinationEntity =
-			destinationPlace.entitiesByName.get(this.destinationEntityName);
+			destinationPlace.entityByName(this.destinationEntityName);
 		var destinationCollidable = destinationEntity.collidable();
 		if (destinationCollidable != null)
 		{

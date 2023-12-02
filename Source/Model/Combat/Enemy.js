@@ -16,10 +16,11 @@ var ThisCouldBeBetter;
                     var activity = actor.actor().activity;
                     var actorLocatable = actor.locatable();
                     var entityToTargetPrefix = "Player";
-                    var targetsPreferred = place.entities.filter(x => x.name.startsWith(entityToTargetPrefix));
+                    var placeEntities = place.entitiesAll();
+                    var targetsPreferred = placeEntities.filter((x) => x.name.startsWith(entityToTargetPrefix));
                     var displacement = GameFramework.Coords.create();
                     var sortClosest = (a, b) => displacement.overwriteWith(a.locatable().loc.pos).subtract(b.locatable().loc.pos).magnitude();
-                    var targetPreferredInSight = targetsPreferred.filter(x => x.perceptible() == null
+                    var targetPreferredInSight = targetsPreferred.filter((x) => x.perceptible() == null
                         || x.perceptible().canBeSeen(new GameFramework.UniverseWorldPlaceEntities(universe, world, place, x, actor))).sort(sortClosest)[0];
                     var targetPosToApproach;
                     if (targetPreferredInSight != null) {
@@ -27,7 +28,7 @@ var ThisCouldBeBetter;
                             targetPreferredInSight.locatable().loc.pos.clone();
                     }
                     else {
-                        var targetPreferredInHearing = targetsPreferred.filter(x => x.perceptible() == null
+                        var targetPreferredInHearing = targetsPreferred.filter((x) => x.perceptible() == null
                             || x.perceptible().canBeHeard(uwpe.entitiesSet(x, actor))).sort(sortClosest)[0];
                         if (targetPreferredInHearing != null) {
                             targetPosToApproach =
@@ -36,8 +37,9 @@ var ThisCouldBeBetter;
                         else {
                             var targetEntity = activity.targetEntity();
                             if (targetEntity == null) {
+                                var placeSize = place.size();
                                 targetPosToApproach =
-                                    GameFramework.Coords.create().randomize(universe.randomizer).multiply(place.size);
+                                    GameFramework.Coords.create().randomize(universe.randomizer).multiply(placeSize);
                             }
                             else {
                                 var targetPosExisting = targetEntity.locatable().loc.pos;

@@ -8,7 +8,7 @@ export class Constraint_WrapToPlaceSizeXTrimY implements Constraint
 		var place = uwpe.place;
 		var entity = uwpe.entity;
 
-		var placeSize = place.size;
+		var placeSize = place.size();
 
 		var entityLoc = entity.locatable().loc;
 		var entityPos = entityLoc.pos;

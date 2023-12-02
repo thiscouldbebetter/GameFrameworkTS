@@ -10,7 +10,8 @@ export class Constraint_WrapToPlaceSize implements Constraint
 		var entity = uwpe.entity;
 
 		var entityLoc = entity.locatable().loc;
-		entityLoc.pos.wrapToRangeMax(place.size);
+		var placeSize = place.size();
+		entityLoc.pos.wrapToRangeMax(placeSize);
 	}
 
 	// Clonable.

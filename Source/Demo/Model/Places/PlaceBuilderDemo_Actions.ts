@@ -202,13 +202,14 @@ class PlaceBuilderDemo_Actions
 				(uwpe: UniverseWorldPlaceEntities) => // perform
 				{
 					var actor = uwpe.entity;
-					var place = uwpe.place;
+					var place = uwpe.place as PlaceBase;
 					var entityUsablesInPlace = place.usables();
 					var actorPos = actor.locatable().loc.pos;
 					var radiusOfReach = 20; // todo
 					var entityUsablesWithinReach = entityUsablesInPlace.filter
 					(
-						x => x.locatable().loc.pos.clone().subtract(actorPos).magnitude() < radiusOfReach
+						(x: Entity) =>
+							x.locatable().loc.pos.clone().subtract(actorPos).magnitude() < radiusOfReach
 					);
 					if (entityUsablesWithinReach.length > 0)
 					{

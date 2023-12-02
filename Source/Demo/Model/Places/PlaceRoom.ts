@@ -1,5 +1,5 @@
 
-class PlaceRoom extends Place
+class PlaceRoom extends PlaceBase
 {
 	randomizerSeed: number;
 

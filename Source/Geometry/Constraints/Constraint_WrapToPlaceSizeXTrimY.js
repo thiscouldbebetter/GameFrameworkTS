@@ -7,7 +7,7 @@ var ThisCouldBeBetter;
             constrain(uwpe) {
                 var place = uwpe.place;
                 var entity = uwpe.entity;
-                var placeSize = place.size;
+                var placeSize = place.size();
                 var entityLoc = entity.locatable().loc;
                 var entityPos = entityLoc.pos;
                 entityPos.x = GameFramework.NumberHelper.wrapToRangeMax(entityPos.x, placeSize.x);

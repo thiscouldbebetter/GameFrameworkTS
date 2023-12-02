@@ -244,7 +244,7 @@ export class Camera implements EntityProperty<Camera>
 		collisionHelper: CollisionHelper, entitiesInView: Entity[]
 	): Entity[]
 	{
-		var collisionTracker = place.collisionTracker();
+		var collisionTracker = (place as PlaceBase).collisionTracker();
 		if (collisionTracker == null)
 		{
 			entitiesInView = this.drawEntitiesInView_1_FindEntitiesInView_WithoutTracker

@@ -244,7 +244,7 @@ export class Movable implements EntityProperty<Movable>
 						randomizer
 					).multiply
 					(
-						place.size
+						place.size()
 					);
 
 					targetEntity = Locatable.fromPos(targetPos).toEntity();

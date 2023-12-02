@@ -340,7 +340,7 @@ class PlaceBuilderDemo // Main.
 				)
 		);
 
-		var entityCamera = this.build_Camera(this.cameraViewSize, place.size);
+		var entityCamera = this.build_Camera(this.cameraViewSize, place.size() );
 		zoneStart.entities.push(entityCamera);
 
 		return place;
@@ -1469,7 +1469,8 @@ class PlaceBuilderDemo // Main.
 				var place = uwpe.place;
 				var placeAsPlaceRoom = place as PlaceRoom;
 				var randomizer = new RandomizerLCG(placeAsPlaceRoom.randomizerSeed, null, null, null);
-				var entityPosRange = new Box(place.size.clone().half(), place.size.clone());
+				var placeSize = place.size();
+				var entityPosRange = new Box(placeSize.clone().half(), placeSize.clone() );
 				var entitiesCreated = placeBuilder.entitiesBuildFromDefnAndCount
 				(
 					entityDefn, entityCount, null, entityPosRange, randomizer
@@ -1482,13 +1483,11 @@ class PlaceBuilderDemo // Main.
 			(uwpe: UniverseWorldPlaceEntities) => // unload
 			{
 				var p = uwpe.place;
-				p.entitiesToRemove.push
+				var entitiesToRemove = p.entitiesAll().filter
 				(
-					...p.entities.filter
-					(
-						(x: Entity) => x.name.startsWith("Mine")
-					)
+					(x: Entity) => x.name.startsWith("Mine")
 				);
+				p.entitiesToRemoveAdd(entitiesToRemove);
 			}
 		);
 
@@ -1748,7 +1747,7 @@ class PlaceBuilderDemo // Main.
 					(uwpe: UniverseWorldPlaceEntities) =>
 					{
 						var u = uwpe.universe;
-						var p = uwpe.place;
+						var p = uwpe.place as PlaceBase;
 						var e = uwpe.entity;
 
 						var player = p.player();
@@ -2428,7 +2427,7 @@ class PlaceBuilderDemo // Main.
 
 				var vehicle = eUsed.propertiesByName.get(Vehicle.name) as Vehicle;
 				vehicle.entityOccupant = eUsing;
-				p.entitiesToRemove.push(eUsing);
+				p.entityToRemoveAdd(eUsing);
 				return null;
 			}
 		);
@@ -2791,7 +2790,7 @@ class PlaceBuilderDemo // Main.
 				var eUser = uwpe.entity;
 
 				var bouldersInPlace =
-					p.entities.filter(x => x.name.startsWith("Boulder"));
+					p.entitiesAll().filter(x => x.name.startsWith("Boulder"));
 				var rangeMax = 20; // todo
 				var boulderInRange = bouldersInPlace.filter
 				(
@@ -2899,7 +2898,7 @@ class PlaceBuilderDemo // Main.
 				var p = uwpe.place;
 				var eUser = uwpe.entity;
 
-				var holesInPlace = p.entities.filter(x => x.name.startsWith("Hole"));
+				var holesInPlace = p.entitiesAll().filter(x => x.name.startsWith("Hole"));
 				var rangeMax = 20; // todo
 				var holeInRange = holesInPlace.filter
 				(
@@ -2910,7 +2909,7 @@ class PlaceBuilderDemo // Main.
 					var isHoleEmpty = (holeInRange.itemHolder().items.length == 0);
 					if (isHoleEmpty)
 					{
-						p.entitiesToRemove.push(holeInRange);
+						p.entityToRemoveAdd(holeInRange);
 					}
 					else
 					{

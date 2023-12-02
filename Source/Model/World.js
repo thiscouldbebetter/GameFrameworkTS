@@ -15,7 +15,7 @@ var ThisCouldBeBetter;
             }
             static default() {
                 return World.fromNameDateCreatedDefnAndPlaces("name", GameFramework.DateTime.now(), GameFramework.WorldDefn.default(), [
-                    GameFramework.Place.default()
+                    GameFramework.PlaceBase.default()
                 ]);
             }
             static fromNameDateCreatedDefnAndPlaces(name, dateCreated, defn, places) {

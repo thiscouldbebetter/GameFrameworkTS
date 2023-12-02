@@ -11,7 +11,7 @@ var ThisCouldBeBetter;
             finalize(uwpe) { }
             initialize(uwpe) {
                 this.route.bounds =
-                    GameFramework.Box.fromMinAndMax(GameFramework.Coords.create(), uwpe.place.size.clone());
+                    GameFramework.Box.fromMinAndMax(GameFramework.Coords.create(), uwpe.place.size().clone());
             }
             updateForTimerTick(uwpe) { }
             // Clonable.

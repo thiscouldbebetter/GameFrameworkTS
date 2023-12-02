@@ -23,7 +23,7 @@ export class Constraint_OrientToward implements Constraint
 		var constrainableOrientation = constrainableLoc.orientation;
 		var constrainableForward = constrainableOrientation.forward;
 
-		var target = place.entitiesByName.get(targetEntityName);
+		var target = place.entityByName(targetEntityName);
 		var targetPos = target.locatable().loc.pos;
 
 		constrainableForward.overwriteWith

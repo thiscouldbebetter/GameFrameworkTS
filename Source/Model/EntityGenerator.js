@@ -24,8 +24,7 @@ var ThisCouldBeBetter;
             initialize(uwpe) { }
             updateForTimerTick(uwpe) {
                 var place = uwpe.place;
-                var placeEntitiesByName = place.entitiesByName;
-                this.entitiesGenerated = this.entitiesGenerated.filter(e => placeEntitiesByName.has(e.name));
+                this.entitiesGenerated = this.entitiesGenerated.filter(e => place.entityByName(e.name) != null);
                 if (this.entitiesGenerated.length < this.entitiesGeneratedMax) {
                     var randomizer = uwpe.universe.randomizer;
                     if (this.ticksUntilNextGeneration == null) {
@@ -43,7 +42,8 @@ var ThisCouldBeBetter;
                             var entityGenerated = this.entityToGenerate.clone();
                             var entityGeneratedLoc = entityGenerated.locatable().loc;
                             if (generatorLocatable == null) {
-                                entityGeneratedLoc.pos.randomize(randomizer).multiply(place.size);
+                                var placeSize = place.size();
+                                entityGeneratedLoc.pos.randomize(randomizer).multiply(placeSize);
                             }
                             else {
                                 entityGeneratedLoc.overwriteWith(generatorLocatable.loc);

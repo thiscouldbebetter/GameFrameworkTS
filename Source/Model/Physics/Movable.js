@@ -128,7 +128,7 @@ var ThisCouldBeBetter;
                     if (targetEntity == null) {
                         var place = uwpe.place;
                         var randomizer = uwpe.universe.randomizer;
-                        var targetPos = GameFramework.Coords.create().randomize(randomizer).multiply(place.size);
+                        var targetPos = GameFramework.Coords.create().randomize(randomizer).multiply(place.size());
                         targetEntity = GameFramework.Locatable.fromPos(targetPos).toEntity();
                         activity.targetEntitySet(targetEntity);
                     }

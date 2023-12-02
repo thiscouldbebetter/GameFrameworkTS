@@ -49,11 +49,9 @@ export class EntityGenerator implements EntityProperty<EntityGenerator>
 	{
 		var place = uwpe.place;
 
-		var placeEntitiesByName = place.entitiesByName;
-
 		this.entitiesGenerated = this.entitiesGenerated.filter
 		(
-			e => placeEntitiesByName.has(e.name)
+			e => place.entityByName(e.name) != null
 		);
 
 		if (this.entitiesGenerated.length < this.entitiesGeneratedMax)
@@ -91,12 +89,13 @@ export class EntityGenerator implements EntityProperty<EntityGenerator>
 
 					if (generatorLocatable == null)
 					{
+						var placeSize = place.size();
 						entityGeneratedLoc.pos.randomize
 						(
 							randomizer
 						).multiply
 						(
-							place.size
+							placeSize
 						);
 					}
 					else

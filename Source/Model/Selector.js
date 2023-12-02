@@ -69,9 +69,9 @@ var ThisCouldBeBetter;
             entityAtMouseClickPosSelect(uwpe) {
                 var place = uwpe.place;
                 var mousePosAbsolute = this.mouseClickPosAbsoluteGet(uwpe);
-                var entitiesInPlace = place.entities;
+                var entitiesInPlace = place.entitiesAll();
                 var range = this.cursorDimension / 2;
-                var entityToSelect = entitiesInPlace.filter(x => {
+                var entityToSelect = entitiesInPlace.filter((x) => {
                     var locatable = x.locatable();
                     var entityNotAlreadySelectedInRange = (x != this.entityForCursor
                         && this.entitiesSelected.indexOf(x) == -1
@@ -95,7 +95,8 @@ var ThisCouldBeBetter;
             }
             mousePosConvertToAbsolute(uwpe, mousePosRelativeToCameraView) {
                 var mousePosAbsolute = mousePosRelativeToCameraView.clone();
-                var cameraEntity = uwpe.place.camera();
+                var place = uwpe.place;
+                var cameraEntity = place.camera();
                 if (cameraEntity != null) {
                     var camera = cameraEntity.camera();
                     mousePosAbsolute.divide(uwpe.universe.display.scaleFactor()).add(camera.loc.pos).subtract(camera.viewSizeHalf).clearZ();

@@ -145,11 +145,11 @@ export class Selector implements EntityProperty<Selector>
 
 		var mousePosAbsolute = this.mouseClickPosAbsoluteGet(uwpe);
 
-		var entitiesInPlace = place.entities;
+		var entitiesInPlace = place.entitiesAll();
 		var range = this.cursorDimension / 2;
 		var entityToSelect = entitiesInPlace.filter
 		(
-			x =>
+			(x: Entity) =>
 			{
 				var locatable = x.locatable();
 				var entityNotAlreadySelectedInRange =
@@ -204,7 +204,8 @@ export class Selector implements EntityProperty<Selector>
 	{
 		var mousePosAbsolute = mousePosRelativeToCameraView.clone();
 
-		var cameraEntity = uwpe.place.camera();
+		var place = uwpe.place;
+		var cameraEntity = place.camera();
 
 		if (cameraEntity != null)
 		{

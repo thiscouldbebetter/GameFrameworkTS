@@ -216,17 +216,17 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 
 	itemEntityFindClosest(uwpe: UniverseWorldPlaceEntities): Entity
 	{
-		var place = uwpe.place;
+		var place = uwpe.place as PlaceBase;
 		var entityItemHolder = uwpe.entity;
 
 		var entityItemsInPlace = place.items();
 		var entityItemClosest = entityItemsInPlace.filter
 		(
-			x =>
+			(x: Entity) =>
 				x.locatable().distanceFromEntity(entityItemHolder) < this.reachRadius
 		).sort
 		(
-			(a, b) =>
+			(a: Entity, b: Entity) =>
 				a.locatable().distanceFromEntity(entityItemHolder)
 				- b.locatable().distanceFromEntity(entityItemHolder)
 		)[0];

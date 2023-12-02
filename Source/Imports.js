@@ -235,8 +235,7 @@ var Obstacle = gf.Obstacle;
 var Portal = gf.Portal;
 var Traversable = gf.Traversable;
 var Vehicle = gf.Vehicle;
-// Model - Places.
-var Place = gf.Place;
+var PlaceBase = gf.PlaceBase;
 var PlaceDefn = gf.PlaceDefn;
 var PlaceZoned = gf.PlaceZoned;
 var Zone = gf.Zone;

@@ -18,7 +18,7 @@ export class Routable implements EntityProperty<Routable>
 	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
 		this.route.bounds =
-			Box.fromMinAndMax(Coords.create(), uwpe.place.size.clone());
+			Box.fromMinAndMax(Coords.create(), uwpe.place.size().clone());
 	}
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}

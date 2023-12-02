@@ -288,6 +288,7 @@ import Vehicle = gf.Vehicle;
 
 // Model - Places.
 import Place = gf.Place;
+import PlaceBase = gf.PlaceBase;
 import PlaceDefn = gf.PlaceDefn;
 import PlaceZoned = gf.PlaceZoned;
 import Zone = gf.Zone;

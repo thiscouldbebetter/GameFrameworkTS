@@ -6,7 +6,8 @@ var ThisCouldBeBetter;
         class Constraint_TrimToPlaceSize {
             constrain(uwpe) {
                 var entityLoc = uwpe.entity.locatable().loc;
-                entityLoc.pos.trimToRangeMax(uwpe.place.size);
+                var placeSize = uwpe.place.size();
+                entityLoc.pos.trimToRangeMax(placeSize);
             }
             // Clonable.
             clone() {

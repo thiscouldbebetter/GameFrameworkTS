@@ -8,7 +8,8 @@ export class Constraint_TrimToPlaceSizeXY implements Constraint
 	{
 		var entityLoc = uwpe.entity.locatable().loc;
 		var entityPos = entityLoc.pos;
-		entityPos.trimToRangeMaxXY(uwpe.place.size);
+		var placeSize = uwpe.place.size();
+		entityPos.trimToRangeMaxXY(placeSize);
 	}
 
 	// Clonable.

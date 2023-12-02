@@ -56,11 +56,12 @@ class PlaceBuilderDemo_Movers {
             var targetEntity = activity.targetEntity();
             if (targetEntity == null) {
                 var moversInPlace = place.movables();
-                var grazersInPlace = moversInPlace.filter(x => x.name.startsWith("Grazer"));
+                var grazersInPlace = moversInPlace.filter((x) => x.name.startsWith("Grazer"));
                 if (grazersInPlace.length == 0) {
                     var randomizer = universe.randomizer;
+                    var placeSize = place.size();
                     targetPos =
-                        Coords.create().randomize(randomizer).multiply(place.size);
+                        Coords.create().randomize(randomizer).multiply(placeSize);
                 }
                 else {
                     targetPos = grazersInPlace[0].locatable().loc.pos;
@@ -215,7 +216,7 @@ class PlaceBuilderDemo_Movers {
                     activity.targetEntityClear();
                 }
                 var enemyEntityToPlace = enemyEntityPrototype.clone();
-                var placeSizeHalf = place.size.clone().half();
+                var placeSizeHalf = place.size().clone().half();
                 var directionFromCenter = new Polar(universe.randomizer.fraction(), 1, 0);
                 var offsetFromCenter = directionFromCenter.toCoords(Coords.create()).multiply(placeSizeHalf).double();
                 var enemyPosToStartAt = offsetFromCenter.trimToRangeMinMax(placeSizeHalf.clone().invert(), placeSizeHalf);
@@ -404,7 +405,8 @@ class PlaceBuilderDemo_Movers {
             var targetEntity = activity.targetEntity();
             if (targetEntity == null) {
                 var randomizer = universe.randomizer;
-                var targetPos = Coords.create().randomize(randomizer).multiply(place.size);
+                var placeSize = place.size();
+                var targetPos = Coords.create().randomize(randomizer).multiply(placeSize);
                 targetEntity = Locatable.fromPos(targetPos).toEntity();
                 activity.targetEntitySet(targetEntity);
             }
@@ -521,8 +523,9 @@ class PlaceBuilderDemo_Movers {
                 var itemsGrassInPlace = itemsInPlace.filter((x) => x.item().defnName == "Grass");
                 if (itemsGrassInPlace.length == 0) {
                     var randomizer = universe.randomizer;
+                    var placeSize = place.size();
                     targetPos =
-                        Coords.create().randomize(randomizer).multiply(place.size);
+                        Coords.create().randomize(randomizer).multiply(placeSize);
                 }
                 else {
                     targetPos = itemsGrassInPlace[0].locatable().loc.pos;

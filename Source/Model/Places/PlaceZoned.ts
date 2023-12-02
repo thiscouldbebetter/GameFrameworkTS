@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class PlaceZoned extends Place
+export class PlaceZoned extends PlaceBase
 {
 	entityToFollowName: string;
 	_zoneGetByName: (zoneName: string) => Zone;

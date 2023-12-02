@@ -108,7 +108,7 @@ class PlaceBuilderDemo_Movers
 		var carnivoreActivityPerform = (uwpe: UniverseWorldPlaceEntities) =>
 		{
 			var universe = uwpe.universe;
-			var place = uwpe.place;
+			var place = uwpe.place as PlaceBase;
 			var entityActor = uwpe.entity;
 
 			var activity = entityActor.actor().activity;
@@ -117,12 +117,13 @@ class PlaceBuilderDemo_Movers
 			{
 				var moversInPlace = place.movables();
 				var grazersInPlace =
-					moversInPlace.filter(x => x.name.startsWith("Grazer"));
+					moversInPlace.filter( (x: Entity) => x.name.startsWith("Grazer"));
 				if (grazersInPlace.length == 0)
 				{
 					var randomizer = universe.randomizer;
+					var placeSize = place.size();
 					targetPos =
-						Coords.create().randomize(randomizer).multiply(place.size);
+						Coords.create().randomize(randomizer).multiply(placeSize);
 				}
 				else
 				{
@@ -243,7 +244,7 @@ class PlaceBuilderDemo_Movers
 		var enemyDamageApply = (uwpe: UniverseWorldPlaceEntities, damageToApply: Damage) =>
 		{
 			var universe = uwpe.universe;
-			var place = uwpe.place;
+			var place = uwpe.place as PlaceBase;
 			var eKillable = uwpe.entity;
 
 			var damageToApplyTypeName = damageToApply.typeName;
@@ -302,7 +303,7 @@ class PlaceBuilderDemo_Movers
 		{
 			var universe = uwpe.universe;
 			var world = uwpe.world;
-			var place = uwpe.place;
+			var place = uwpe.place as PlaceBase;
 			var entityDying = uwpe.entity;
 
 			var chanceOfDroppingCoin = 1;
@@ -415,7 +416,7 @@ class PlaceBuilderDemo_Movers
 
 				var enemyEntityToPlace = enemyEntityPrototype.clone();
 
-				var placeSizeHalf = place.size.clone().half();
+				var placeSizeHalf = place.size().clone().half();
 				var directionFromCenter = new Polar
 				(
 					universe.randomizer.fraction(), 1, 0
@@ -822,15 +823,16 @@ class PlaceBuilderDemo_Movers
 		var friendlyActivityPerform = (uwpe: UniverseWorldPlaceEntities) =>
 		{
 			var universe = uwpe.universe;
-			var place = uwpe.place;
+			var place = uwpe.place as PlaceBase;
 			var entityActor = uwpe.entity;
 			var activity = entityActor.actor().activity;
 			var targetEntity = activity.targetEntity();
 			if (targetEntity == null)
 			{
 				var randomizer = universe.randomizer;
+				var placeSize = place.size();
 				var targetPos =
-					Coords.create().randomize(randomizer).multiply(place.size);
+					Coords.create().randomize(randomizer).multiply(placeSize);
 				targetEntity = Locatable.fromPos(targetPos).toEntity();
 				activity.targetEntitySet(targetEntity);
 			}
@@ -1024,7 +1026,7 @@ class PlaceBuilderDemo_Movers
 		var grazerActivityPerform = (uwpe: UniverseWorldPlaceEntities) =>
 		{
 			var universe = uwpe.universe;
-			var place = uwpe.place;
+			var place = uwpe.place as PlaceBase;
 			var entityActor = uwpe.entity;
 
 			var activity = entityActor.actor().activity;
@@ -1041,8 +1043,9 @@ class PlaceBuilderDemo_Movers
 				if (itemsGrassInPlace.length == 0)
 				{
 					var randomizer = universe.randomizer;
+					var placeSize = place.size();
 					targetPos =
-						Coords.create().randomize(randomizer).multiply(place.size);
+						Coords.create().randomize(randomizer).multiply(placeSize);
 				}
 				else
 				{

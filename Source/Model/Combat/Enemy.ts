@@ -24,9 +24,10 @@ export class Enemy implements EntityProperty<Enemy>
 			var actorLocatable = actor.locatable();
 
 			var entityToTargetPrefix = "Player";
-			var targetsPreferred = place.entities.filter
+			var placeEntities = place.entitiesAll();
+			var targetsPreferred = placeEntities.filter
 			(
-				x => x.name.startsWith(entityToTargetPrefix)
+				(x: Entity) => x.name.startsWith(entityToTargetPrefix)
 			);
 
 			var displacement = Coords.create();
@@ -41,7 +42,7 @@ export class Enemy implements EntityProperty<Enemy>
 
 			var targetPreferredInSight = targetsPreferred.filter
 			(
-				x =>
+				(x: Entity) =>
 					x.perceptible() == null
 					|| x.perceptible().canBeSeen
 					(
@@ -63,7 +64,7 @@ export class Enemy implements EntityProperty<Enemy>
 			{
 				var targetPreferredInHearing = targetsPreferred.filter
 				(
-					x =>
+					(x: Entity) =>
 						x.perceptible() == null
 						|| x.perceptible().canBeHeard(uwpe.entitiesSet(x, actor))
 				).sort(sortClosest)[0];
@@ -78,8 +79,9 @@ export class Enemy implements EntityProperty<Enemy>
 					var targetEntity = activity.targetEntity();
 					if (targetEntity == null)
 					{
+						var placeSize = place.size();
 						targetPosToApproach =
-							Coords.create().randomize(universe.randomizer).multiply(place.size);
+							Coords.create().randomize(universe.randomizer).multiply(placeSize);
 					}
 					else
 					{

@@ -3,7 +3,7 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class PlaceZoned extends GameFramework.Place {
+        class PlaceZoned extends GameFramework.PlaceBase {
             constructor(name, defnName, size, entityToFollowName, zoneGetByName, zoneAtPos) {
                 super(name, defnName, null, // parentName
                 size, null // entities

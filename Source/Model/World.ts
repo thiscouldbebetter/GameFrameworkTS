@@ -42,7 +42,7 @@ export class World //
 			DateTime.now(),
 			WorldDefn.default(),
 			[
-				Place.default()
+				PlaceBase.default()
 			]
 		);
 	}

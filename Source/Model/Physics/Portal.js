@@ -33,7 +33,7 @@ var ThisCouldBeBetter;
                 var entityToTransport = uwpe.entity;
                 var destinationPlace = world.placeGetByName(this.destinationPlaceName);
                 destinationPlace.initialize(uwpe);
-                var destinationEntity = destinationPlace.entitiesByName.get(this.destinationEntityName);
+                var destinationEntity = destinationPlace.entityByName(this.destinationEntityName);
                 var destinationCollidable = destinationEntity.collidable();
                 if (destinationCollidable != null) {
                     destinationCollidable.ticksUntilCanCollide = 50; // hack

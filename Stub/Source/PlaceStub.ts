@@ -1,5 +1,5 @@
 
-class PlaceStub extends Place
+class PlaceStub extends PlaceBase
 {
 	constructor()
 	{

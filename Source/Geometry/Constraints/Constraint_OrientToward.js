@@ -15,7 +15,7 @@ var ThisCouldBeBetter;
                 var constrainablePos = constrainableLoc.pos;
                 var constrainableOrientation = constrainableLoc.orientation;
                 var constrainableForward = constrainableOrientation.forward;
-                var target = place.entitiesByName.get(targetEntityName);
+                var target = place.entityByName(targetEntityName);
                 var targetPos = target.locatable().loc.pos;
                 constrainableForward.overwriteWith(targetPos).subtract(constrainablePos).normalize();
                 constrainableOrientation.forwardSet(constrainableForward);
