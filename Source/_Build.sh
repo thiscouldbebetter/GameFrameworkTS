@@ -23,7 +23,7 @@ nowSecond=`echo $now | cut -c 18-19`
 
 echo About to write .buildTime\(\) to _BuildRecord.ts...
 #The parsing in the next line is because leading zeroes are disallowed in TypeScript, because they're interpreted as octals, which are deprecated!
-echo \\tstatic buildTime\(\): Date { return new Date\($nowYear, \($nowMonth - 1\), $nowDay, parseInt\(\"$nowHour\"\), parseInt\(\"$nowMinute\"\), parseInt\(\"$nowSecond\"\) \)\; } >> _BuildRecord.ts
+echo \\tstatic buildTime\(\): Date { return new Date\($nowYear, \(parseInt\(\"$nowMonth\"\) - 1\), parseInt\(\"$nowDay\"\), parseInt\(\"$nowHour\"\), parseInt\(\"$nowMinute\"\), parseInt\(\"$nowSecond\"\) \)\; } >> _BuildRecord.ts
 echo ...done writing .buildTime\(\) to _BuildRecord.ts.
 
 echo Attempting to get version from Git tags \(if none, will use \"unknown\"\)...
