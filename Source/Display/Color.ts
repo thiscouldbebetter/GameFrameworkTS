@@ -235,6 +235,7 @@ export class Color_Instances
 	BlueLight: Color;
 	Brown: Color;
 	Cyan: Color;
+	Gold: Color;
 	Gray: Color;
 	GrayDark: Color;
 	GrayDarker: Color
@@ -274,6 +275,7 @@ export class Color_Instances
 		this.BlueLight = new Color("BlueLight", "$", [.5, .5, 1, 1] );
 		this.Brown = new Color("Brown", "O", [0.5, 0.25, 0, 1] );
 		this.Cyan = new Color("Cyan", "c", [0, 1, 1, 1] );
+		this.Gold = new Color("Gold", null, [.5, .5, 0, 1] );
 		this.Gray = new Color("Gray", "a", [0.5, 0.5, 0.5, 1] );
 		this.GrayDark = new Color("GrayDark", "A", [0.25, 0.25, 0.25, 1] );
 		this.GrayDarker = new Color("GrayDarker", "#", [0.125, 0.125, 0.125, 1] );
@@ -309,6 +311,7 @@ export class Color_Instances
 			this.BlueLight,
 			this.Brown,
 			this.Cyan,
+			this.Gold,
 			this.Gray,
 			this.GrayDark,
 			this.GrayDarker,

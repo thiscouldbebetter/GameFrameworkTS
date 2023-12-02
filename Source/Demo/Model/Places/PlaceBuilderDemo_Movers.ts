@@ -1273,7 +1273,7 @@ class PlaceBuilderDemo_Movers
 			playerVisualsForStatusInfo.splice
 			(
 				0, 0,
-				VisualText.fromTextHeightAndColor
+				VisualText.fromTextImmediateHeightAndColor
 				(
 					entityDefnNamePlayer, this.entityDimension, playerColor
 				)
@@ -1576,7 +1576,7 @@ class PlaceBuilderDemo_Movers
 					new VisualOffset
 					(
 						Coords.fromXY(0, 0 - this.entityDimension * 3),
-						VisualText.fromTextHeightAndColor
+						VisualText.fromTextImmediateHeightAndColor
 						(
 							"Waiting", this.entityDimension, Color.byName("Gray")
 						)

@@ -12,12 +12,17 @@ var ThisCouldBeBetter;
                 this.colorBorder = colorBorder;
                 this._universeWorldPlaceEntities = GameFramework.UniverseWorldPlaceEntities.create();
             }
-            static fromTextHeightAndColor(text, heightInPixels, colorFill) {
+            static fromTextBindingHeightAndColor(textBinding, heightInPixels, colorFill) {
+                return new VisualText(textBinding, null, // heightInPixels
+                colorFill, null // colorBorder
+                );
+            }
+            static fromTextImmediateHeightAndColor(text, heightInPixels, colorFill) {
                 return new VisualText(GameFramework.DataBinding.fromContext(text), null, // heightInPixels
                 colorFill, null // colorBorder
                 );
             }
-            static fromTextHeightAndColors(text, heightInPixels, colorFill, colorBorder) {
+            static fromTextImmediateHeightAndColors(text, heightInPixels, colorFill, colorBorder) {
                 return new VisualText(GameFramework.DataBinding.fromContext(text), null, // heightInPixels
                 colorFill, colorBorder);
             }

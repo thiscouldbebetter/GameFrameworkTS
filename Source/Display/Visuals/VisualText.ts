@@ -28,7 +28,23 @@ export class VisualText implements Visual<VisualText>
 		this._universeWorldPlaceEntities = UniverseWorldPlaceEntities.create();
 	}
 
-	static fromTextHeightAndColor
+	static fromTextBindingHeightAndColor
+	(
+		textBinding: DataBinding<any, string>,
+		heightInPixels: number,
+		colorFill: Color
+	): VisualText
+	{
+		return new VisualText
+		(
+			textBinding,
+			null, // heightInPixels
+			colorFill,
+			null // colorBorder
+		);
+	}
+
+	static fromTextImmediateHeightAndColor
 	(
 		text: string, heightInPixels: number, colorFill: Color
 	): VisualText
@@ -42,7 +58,7 @@ export class VisualText implements Visual<VisualText>
 		);
 	}
 
-	static fromTextHeightAndColors
+	static fromTextImmediateHeightAndColors
 	(
 		text: string, heightInPixels: number,
 		colorFill: Color, colorBorder: Color

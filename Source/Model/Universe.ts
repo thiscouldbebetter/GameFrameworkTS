@@ -237,6 +237,14 @@ export class Universe
 		this._venueNext = value;
 	}
 
+	venuePrev(): Venue
+	{
+		var venueCurrent = this.venueStack.pop();
+		var venuePrev = this.venueStack.peek();
+		this.venueStack.push(venueCurrent);
+		return venuePrev;
+	}
+
 	venuePrevJumpTo(): void
 	{
 		this.venueJumpTo(this.venueStack.popThenPeek());

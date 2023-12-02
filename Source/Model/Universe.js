@@ -99,6 +99,12 @@ var ThisCouldBeBetter;
             venueNextSet(value) {
                 this._venueNext = value;
             }
+            venuePrev() {
+                var venueCurrent = this.venueStack.pop();
+                var venuePrev = this.venueStack.peek();
+                this.venueStack.push(venueCurrent);
+                return venuePrev;
+            }
             venuePrevJumpTo() {
                 this.venueJumpTo(this.venueStack.popThenPeek());
             }

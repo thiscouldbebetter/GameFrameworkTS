@@ -48,7 +48,17 @@ var ThisCouldBeBetter;
             }
             optionSelectedNextInDirection(direction) {
                 var options = this.options();
-                this.indexOfOptionSelected = GameFramework.NumberHelper.wrapToRangeMinMax(this.indexOfOptionSelected + direction, 0, options.length);
+                if (this.indexOfOptionSelected == null) {
+                    if (direction == 1) {
+                        this.indexOfOptionSelected = 0;
+                    }
+                    else {
+                        this.indexOfOptionSelected = options.length - 1;
+                    }
+                }
+                else {
+                    this.indexOfOptionSelected = GameFramework.NumberHelper.wrapToRangeMinMax(this.indexOfOptionSelected + direction, 0, options.length);
+                }
                 var optionSelected = this.optionSelected();
                 var valueToSelect = (optionSelected == null
                     ? null

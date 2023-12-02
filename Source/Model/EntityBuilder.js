@@ -7,7 +7,7 @@ var ThisCouldBeBetter;
             messageFloater(text, fontHeightInPixels, pos, color) {
                 var ticksToLive = 32;
                 var riseSpeed = -1;
-                var visual = GameFramework.VisualText.fromTextHeightAndColor(text, fontHeightInPixels, color);
+                var visual = GameFramework.VisualText.fromTextImmediateHeightAndColor(text, fontHeightInPixels, color);
                 pos = pos.clone();
                 pos.z--;
                 var messageEntity = new GameFramework.Entity("Message" + text, // name

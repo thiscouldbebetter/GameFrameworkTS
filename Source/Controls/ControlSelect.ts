@@ -94,10 +94,24 @@ export class ControlSelect<TContext, TItem, TValue> extends ControlBase
 	{
 		var options = this.options();
 
-		this.indexOfOptionSelected = NumberHelper.wrapToRangeMinMax
-		(
-			this.indexOfOptionSelected + direction, 0, options.length
-		);
+		if (this.indexOfOptionSelected == null)
+		{
+			if (direction == 1)
+			{
+				this.indexOfOptionSelected = 0;
+			}
+			else
+			{
+				this.indexOfOptionSelected = options.length - 1;
+			}
+		}
+		else
+		{
+			this.indexOfOptionSelected = NumberHelper.wrapToRangeMinMax
+			(
+				this.indexOfOptionSelected + direction, 0, options.length
+			);
+		}
 
 		var optionSelected = this.optionSelected();
 		var valueToSelect =

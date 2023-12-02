@@ -13,7 +13,7 @@ export class EntityBuilder
 	{
 		var ticksToLive = 32;
 		var riseSpeed = -1;
-		var visual = VisualText.fromTextHeightAndColor
+		var visual = VisualText.fromTextImmediateHeightAndColor
 		(
 			text, fontHeightInPixels, color
 		);

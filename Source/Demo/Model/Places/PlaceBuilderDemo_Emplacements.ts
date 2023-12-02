@@ -103,7 +103,7 @@ class PlaceBuilderDemo_Emplacements
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 3),
-					VisualText.fromTextHeightAndColor
+					VisualText.fromTextImmediateHeightAndColor
 					(
 						itemDefnName, this.entityDimension, colorBoulder
 					)
@@ -707,7 +707,7 @@ class PlaceBuilderDemo_Emplacements
 					{
 						var e = uwpe.entity;
 						var baseColor = Color.byName("Brown");
-						return VisualText.fromTextHeightAndColor
+						return VisualText.fromTextImmediateHeightAndColor
 						(
 							e.portal().destinationPlaceName,
 							this.entityDimension,

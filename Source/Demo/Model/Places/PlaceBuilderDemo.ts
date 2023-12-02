@@ -1382,7 +1382,7 @@ class PlaceBuilderDemo // Main.
 		var goalVisual = new VisualGroup
 		([
 			VisualRectangle.fromSizeAndColorFill(entitySize, goalColor),
-			VisualText.fromTextHeightAndColor
+			VisualText.fromTextImmediateHeightAndColor
 			(
 				"" + numberOfKeysToUnlockGoal, fontHeight, itemKeyColor
 			)
@@ -1394,7 +1394,7 @@ class PlaceBuilderDemo // Main.
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 2),
-					VisualText.fromTextHeightAndColor
+					VisualText.fromTextImmediateHeightAndColor
 					(
 						"Exit", fontHeight, goalColor
 					)
@@ -1823,7 +1823,7 @@ class PlaceBuilderDemo // Main.
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 2),
-					VisualText.fromTextHeightAndColor
+					VisualText.fromTextImmediateHeightAndColor
 					(
 						"Store", fontHeight, storeColor
 					)
@@ -2372,7 +2372,7 @@ class PlaceBuilderDemo // Main.
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - entityDimension * 2.5),
-					VisualText.fromTextHeightAndColor
+					VisualText.fromTextImmediateHeightAndColor
 					(
 						defnName, entityDimension, Color.byName("Blue")
 					)
@@ -2854,7 +2854,7 @@ class PlaceBuilderDemo // Main.
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension),
-					VisualText.fromTextHeightAndColor
+					VisualText.fromTextImmediateHeightAndColor
 					(
 						itemDefnPotionName,
 						this.entityDimension,
@@ -3301,7 +3301,7 @@ class PlaceBuilderDemo // Main.
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension),
-					VisualText.fromTextHeightAndColor
+					VisualText.fromTextImmediateHeightAndColor
 					(
 						text,
 						this.entityDimension,

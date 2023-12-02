@@ -127,7 +127,7 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension),
-					VisualText.fromTextHeightAndColor
+					VisualText.fromTextImmediateHeightAndColor
 					(
 						itemArmorName, this.entityDimension, itemArmorColor
 					)
@@ -200,7 +200,7 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 1.5),
-					VisualText.fromTextHeightAndColor
+					VisualText.fromTextImmediateHeightAndColor
 					(
 						itemArrowName,  this.entityDimension, itemArrowColor
 					)
@@ -255,7 +255,7 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 2),
-					VisualText.fromTextHeightAndColor
+					VisualText.fromTextImmediateHeightAndColor
 					(
 						itemBombName,  this.entityDimension, itemBombColor
 					)
@@ -302,7 +302,7 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 1.5),
-					VisualText.fromTextHeightAndColor
+					VisualText.fromTextImmediateHeightAndColor
 					(
 						itemBookName, this.entityDimension, itemBookColor
 					)
@@ -416,7 +416,7 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 2),
-					VisualText.fromTextHeightAndColor
+					VisualText.fromTextImmediateHeightAndColor
 					(
 						itemBowName,  this.entityDimension, itemBowColor
 					)
@@ -483,7 +483,7 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 1.5),
-					VisualText.fromTextHeightAndColor
+					VisualText.fromTextImmediateHeightAndColor
 					(
 						itemBreadName,  this.entityDimension, itemBreadColor
 					)
@@ -535,7 +535,7 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension),
-					VisualText.fromTextHeightAndColor
+					VisualText.fromTextImmediateHeightAndColor
 					(
 						itemCoinName, this.entityDimension, itemCoinColor
 					)
@@ -601,7 +601,7 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension),
-					VisualText.fromTextHeightAndColor
+					VisualText.fromTextImmediateHeightAndColor
 					(
 						itemCrystalName, this.entityDimension, itemCrystalColor
 					)
@@ -656,7 +656,7 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 2),
-					VisualText.fromTextHeightAndColor
+					VisualText.fromTextImmediateHeightAndColor
 					(
 						itemDoughnutName, this.entityDimension, itemDoughnutColor
 					)
@@ -734,7 +734,7 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimensionHalf * 2),
-					VisualText.fromTextHeightAndColor
+					VisualText.fromTextImmediateHeightAndColor
 					(
 						itemFlowerName, this.entityDimension, colorFlower
 					)
@@ -777,7 +777,7 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension),
-					VisualText.fromTextHeightAndColor
+					VisualText.fromTextImmediateHeightAndColor
 					(
 						itemFruitName, this.entityDimension, itemFruitColor
 					)
@@ -836,7 +836,7 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimensionHalf * 3),
-					VisualText.fromTextHeightAndColor
+					VisualText.fromTextImmediateHeightAndColor
 					(
 						itemGrassName, this.entityDimension, Color.byName("GreenDark")
 					)
@@ -909,7 +909,7 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 1.5),
-					VisualText.fromTextHeightAndColor
+					VisualText.fromTextImmediateHeightAndColor
 					(
 						itemHeartName, this.entityDimension, itemHeartColor
 					)
@@ -960,7 +960,7 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension),
-					VisualText.fromTextHeightAndColor
+					VisualText.fromTextImmediateHeightAndColor
 					(
 						itemIronName,
 						this.entityDimension,
@@ -1002,7 +1002,7 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 1.5),
-					VisualText.fromTextHeightAndColor
+					VisualText.fromTextImmediateHeightAndColor
 					(
 						itemIronOreName,
 						this.entityDimension, 
@@ -1057,7 +1057,7 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 2),
-					VisualText.fromTextHeightAndColor
+					VisualText.fromTextImmediateHeightAndColor
 					(
 						itemKeyName, this.entityDimension, itemKeyColor
 					)
@@ -1109,7 +1109,7 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension),
-					VisualText.fromTextHeightAndColor
+					VisualText.fromTextImmediateHeightAndColor
 					(
 						itemLogName, this.entityDimension, itemLogColor
 					)
@@ -1158,7 +1158,7 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 1.5),
-					VisualText.fromTextHeightAndColor
+					VisualText.fromTextImmediateHeightAndColor
 					(
 						itemMeatName, this.entityDimension, itemMeatColor
 					)
@@ -1331,7 +1331,7 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 2),
-					VisualText.fromTextHeightAndColor
+					VisualText.fromTextImmediateHeightAndColor
 					(
 						itemPickName,  this.entityDimension, itemPickColor
 					)
@@ -1393,7 +1393,7 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension),
-					VisualText.fromTextHeightAndColor
+					VisualText.fromTextImmediateHeightAndColor
 					(
 						itemPotionName, this.entityDimension, itemPotionColor
 					)
@@ -1516,7 +1516,7 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 2),
-					VisualText.fromTextHeightAndColor
+					VisualText.fromTextImmediateHeightAndColor
 					(
 						itemSpeedBootsName,  this.entityDimension, itemAccessoryColor
 					)
@@ -1612,7 +1612,7 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 2),
-					VisualText.fromTextHeightAndColor
+					VisualText.fromTextImmediateHeightAndColor
 					(
 						"Sword",  this.entityDimension, bladeColor
 					)
