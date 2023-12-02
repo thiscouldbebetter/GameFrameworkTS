@@ -55,7 +55,7 @@ class PlaceBuilderDemo_Emplacements {
             colorBoulder, null)
         ]);
         if (this.parent.visualsHaveText) {
-            itemBoulderVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 3), VisualText.fromTextHeightAndColor(itemDefnName, this.entityDimension, colorBoulder)));
+            itemBoulderVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 3), VisualText.fromTextImmediateHeightAndColor(itemDefnName, this.entityDimension, colorBoulder)));
         }
         var collider = new Box(Coords.create(), new Coords(1, .1, 1).multiplyScalar(this.entityDimension));
         var collidable = new Collidable(false, // canCollideAgainWithoutSeparating
@@ -344,7 +344,7 @@ class PlaceBuilderDemo_Emplacements {
             new VisualOffset(Coords.fromXY(0, this.entityDimension), new VisualDynamic((uwpe) => {
                 var e = uwpe.entity;
                 var baseColor = Color.byName("Brown");
-                return VisualText.fromTextHeightAndColor(e.portal().destinationPlaceName, this.entityDimension, baseColor);
+                return VisualText.fromTextImmediateHeightAndColor(e.portal().destinationPlaceName, this.entityDimension, baseColor);
             }))
         ]);
         var portalUse = (uwpe) => {

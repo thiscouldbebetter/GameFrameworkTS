@@ -634,7 +634,7 @@ class PlaceBuilderDemo_Movers {
             playerVisualEffect
         ];
         if (this.parent.visualsHaveText) {
-            playerVisualsForStatusInfo.splice(0, 0, VisualText.fromTextHeightAndColor(entityDefnNamePlayer, this.entityDimension, playerColor));
+            playerVisualsForStatusInfo.splice(0, 0, VisualText.fromTextImmediateHeightAndColor(entityDefnNamePlayer, this.entityDimension, playerColor));
         }
         var playerVisualStatusInfo = new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 2), // offset
         new VisualStack(Coords.fromXY(0, 0 - this.entityDimension), // childSpacing
@@ -813,7 +813,7 @@ class PlaceBuilderDemo_Movers {
             if (targetEntity == null) {
                 drawable.visual = new VisualGroup([
                     drawable.visual,
-                    new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 3), VisualText.fromTextHeightAndColor("Waiting", this.entityDimension, Color.byName("Gray")))
+                    new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 3), VisualText.fromTextImmediateHeightAndColor("Waiting", this.entityDimension, Color.byName("Gray")))
                 ]);
                 ticksToWait = 60; // 3 seconds.
                 targetEntity = new Ephemeral(ticksToWait, null).toEntity();
