@@ -72,6 +72,9 @@ var ThisCouldBeBetter;
                 display.drawRectangle(GameFramework.Coords.create(), display.sizeDefault(), // Scaled automatically.
                 fadeColor, null);
             }
+            venueToFadeFrom() {
+                return this.venuesToFadeFromAndTo[0];
+            }
             venueToFadeTo() {
                 return this.venuesToFadeFromAndTo[1];
             }

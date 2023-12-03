@@ -127,6 +127,11 @@ export class VenueFader implements Venue
 		);
 	}
 
+	venueToFadeFrom(): Venue
+	{
+		return this.venuesToFadeFromAndTo[0];
+	}
+
 	venueToFadeTo(): Venue
 	{
 		return this.venuesToFadeFromAndTo[1];
