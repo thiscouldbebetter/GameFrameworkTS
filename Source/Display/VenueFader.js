@@ -84,6 +84,9 @@ var ThisCouldBeBetter;
             draw(universe) {
                 var venueCurrent = this.venueCurrent();
                 if (venueCurrent != null) {
+                    if (venueCurrent.hasOwnProperty("hasBeenUpdatedSinceDrawn")) {
+                        venueCurrent.hasBeenUpdatedSinceDrawn = true;
+                    }
                     venueCurrent.draw(universe);
                 }
             }

@@ -210,6 +210,7 @@ import Selector = gf.Selector;
 import Universe = gf.Universe;
 import UniverseWorldPlaceEntities = gf.UniverseWorldPlaceEntities;
 import Venue = gf.Venue;
+import VenueDrawnOnlyWhenUpdated = gf.VenueDrawnOnlyWhenUpdated;
 import VenueWorld = gf.VenueWorld;
 import World = gf.World;
 import WorldCreator = gf.WorldCreator;

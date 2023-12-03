@@ -147,6 +147,10 @@ export class VenueFader implements Venue
 		var venueCurrent = this.venueCurrent();
 		if (venueCurrent != null)
 		{
+			if (venueCurrent.hasOwnProperty("hasBeenUpdatedSinceDrawn") )
+			{
+				(venueCurrent as VenueDrawnOnlyWhenUpdated).hasBeenUpdatedSinceDrawn = true;
+			}
 			venueCurrent.draw(universe);
 		}
 	}
