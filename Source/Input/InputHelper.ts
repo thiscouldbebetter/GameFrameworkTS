@@ -162,6 +162,16 @@ export class InputHelper implements Platformable
 		}
 	}
 
+	pause(): void
+	{
+		this.isEnabled = false;
+	}
+
+	unpause(): void
+	{
+		this.isEnabled = true;
+	}
+
 	updateForTimerTick(universe: Universe): void
 	{
 		this.updateForTimerTick_Gamepads(universe);

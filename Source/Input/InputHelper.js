@@ -98,6 +98,12 @@ var ThisCouldBeBetter;
                     this.inputRemove(inputNameMouseClick);
                 }
             }
+            pause() {
+                this.isEnabled = false;
+            }
+            unpause() {
+                this.isEnabled = true;
+            }
             updateForTimerTick(universe) {
                 this.updateForTimerTick_Gamepads(universe);
             }

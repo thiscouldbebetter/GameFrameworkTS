@@ -74,6 +74,12 @@ export class Activity
 		return this;
 	}
 
+	defnSet(defn: ActivityDefn): Activity
+	{
+		this.defnName = defn.name;
+		return this;
+	}
+
 	defnTarget
 	(
 		defnName: string, targetEntity: Entity

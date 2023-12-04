@@ -38,6 +38,10 @@ var ThisCouldBeBetter;
                 this.targetEntitySet(targetEntity);
                 return this;
             }
+            defnSet(defn) {
+                this.defnName = defn.name;
+                return this;
+            }
             defnTarget(defnName, targetEntity) {
                 // Tersely-named alias.
                 return this.defnNameAndTargetEntitySet(defnName, targetEntity);
