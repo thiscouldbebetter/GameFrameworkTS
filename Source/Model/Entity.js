@@ -6,7 +6,7 @@ var ThisCouldBeBetter;
         class Entity {
             constructor(name, properties) {
                 this.id = GameFramework.IDHelper.Instance().idNext();
-                this.name = name;
+                this.name = name || "_" + this.id;
                 this.properties = properties;
                 this.propertiesByName = new Map();
                 for (var i = 0; i < this.properties.length; i++) {
@@ -14,6 +14,9 @@ var ThisCouldBeBetter;
                     var propertyName = property.constructor.name;
                     this.propertiesByName.set(propertyName, property);
                 }
+            }
+            static fromProperty(property) {
+                return new Entity(null, [property]);
             }
             finalize(uwpe) {
                 uwpe.entity = this;

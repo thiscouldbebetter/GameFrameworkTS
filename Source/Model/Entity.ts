@@ -12,7 +12,7 @@ export class Entity implements Clonable<Entity>
 	constructor(name: string, properties: EntityPropertyBase[])
 	{
 		this.id = IDHelper.Instance().idNext();
-		this.name = name;
+		this.name = name || "_" + this.id;
 		this.properties = properties;
 
 		this.propertiesByName = new Map<string, any>();
@@ -22,6 +22,11 @@ export class Entity implements Clonable<Entity>
 			var propertyName = property.constructor.name;
 			this.propertiesByName.set(propertyName, property);
 		}
+	}
+
+	static fromProperty(property: EntityPropertyBase): Entity
+	{
+		return new Entity(null, [ property ] );
 	}
 
 	finalize(uwpe: UniverseWorldPlaceEntities): Entity
