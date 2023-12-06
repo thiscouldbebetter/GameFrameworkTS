@@ -7,15 +7,15 @@ export class EntityBuilder
 	messageFloater
 	(
 		text: string,
-		fontHeightInPixels: number,
+		font: FontNameAndHeight,
 		pos: Coords, color: Color
 	): Entity
 	{
 		var ticksToLive = 32;
 		var riseSpeed = -1;
-		var visual = VisualText.fromTextImmediateHeightAndColor
+		var visual = VisualText.fromTextImmediateFontAndColor
 		(
-			text, fontHeightInPixels, color
+			text, font, color
 		);
 		pos = pos.clone();
 		pos.z--;

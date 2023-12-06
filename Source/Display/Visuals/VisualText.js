@@ -12,19 +12,19 @@ var ThisCouldBeBetter;
                 this.colorBorder = colorBorder;
                 this._universeWorldPlaceEntities = GameFramework.UniverseWorldPlaceEntities.create();
             }
-            static fromTextBindingHeightAndColor(textBinding, heightInPixels, colorFill) {
-                return new VisualText(textBinding, null, // heightInPixels
-                colorFill, null // colorBorder
+            static fromTextBindingFontAndColor(textBinding, font, colorFill) {
+                return new VisualText(textBinding, font, colorFill, null // colorBorder
                 );
             }
-            static fromTextImmediateHeightAndColor(text, heightInPixels, colorFill) {
-                return new VisualText(GameFramework.DataBinding.fromContext(text), null, // heightInPixels
-                colorFill, null // colorBorder
+            static fromTextBindingFontAndColorsFillAndBorder(textBinding, font, colorFill, colorBorder) {
+                return new VisualText(textBinding, font, colorFill, colorBorder);
+            }
+            static fromTextImmediateFontAndColor(text, font, colorFill) {
+                return new VisualText(GameFramework.DataBinding.fromContext(text), font, colorFill, null // colorBorder
                 );
             }
-            static fromTextImmediateHeightAndColors(text, heightInPixels, colorFill, colorBorder) {
-                return new VisualText(GameFramework.DataBinding.fromContext(text), null, // heightInPixels
-                colorFill, colorBorder);
+            static fromTextImmediateFontAndColorsFillAndBorder(text, font, colorFill, colorBorder) {
+                return new VisualText(GameFramework.DataBinding.fromContext(text), font, colorFill, colorBorder);
             }
             draw(uwpe, display) {
                 var entity = uwpe.entity;

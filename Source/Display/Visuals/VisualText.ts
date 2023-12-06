@@ -28,46 +28,67 @@ export class VisualText implements Visual<VisualText>
 		this._universeWorldPlaceEntities = UniverseWorldPlaceEntities.create();
 	}
 
-	static fromTextBindingHeightAndColor
+	static fromTextBindingFontAndColor
 	(
 		textBinding: DataBinding<any, string>,
-		heightInPixels: number,
+		font: FontNameAndHeight,
 		colorFill: Color
 	): VisualText
 	{
 		return new VisualText
 		(
 			textBinding,
-			null, // heightInPixels
+			font,
 			colorFill,
 			null // colorBorder
 		);
 	}
 
-	static fromTextImmediateHeightAndColor
+	static fromTextBindingFontAndColorsFillAndBorder
 	(
-		text: string, heightInPixels: number, colorFill: Color
+		textBinding: DataBinding<any, string>,
+		font: FontNameAndHeight,
+		colorFill: Color,
+		colorBorder: Color
+	): VisualText
+	{
+		return new VisualText
+		(
+			textBinding,
+			font,
+			colorFill,
+			colorBorder
+		);
+	}
+
+	static fromTextImmediateFontAndColor
+	(
+		text: string,
+		font: FontNameAndHeight,
+		colorFill: Color
 	): VisualText
 	{
 		return new VisualText
 		(
 			DataBinding.fromContext(text),
-			null, // heightInPixels
+			font,
 			colorFill,
 			null // colorBorder
 		);
 	}
 
-	static fromTextImmediateHeightAndColors
+	static fromTextImmediateFontAndColorsFillAndBorder
 	(
-		text: string, heightInPixels: number,
-		colorFill: Color, colorBorder: Color
+		text: string,
+		font: FontNameAndHeight,
+		colorFill: Color,
+		colorBorder: Color
 	): VisualText
 	{
 		return new VisualText
 		(
 			DataBinding.fromContext(text),
-			null, // heightInPixels
+			font,
 			colorFill,
 			colorBorder
 		);

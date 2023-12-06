@@ -2,10 +2,12 @@
 class PlaceBuilderDemo_Actions
 {
 	parent: PlaceBuilderDemo;
+	font: FontNameAndHeight;
 
 	constructor(parent: PlaceBuilderDemo)
 	{
 		this.parent = parent;
+		this.font = FontNameAndHeight.fromHeightInPixels(this.parent.entityDimension);
 	}
 
 	// actions
@@ -137,7 +139,7 @@ class PlaceBuilderDemo_Actions
 							universe.entityBuilder.messageFloater
 							(
 								message,
-								this.parent.entityDimension, // fontHeightInPixels
+								this.font,
 								entityActor.locatable().loc.pos,
 								Color.byName("Red")
 							)

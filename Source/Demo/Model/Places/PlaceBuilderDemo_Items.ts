@@ -3,6 +3,7 @@ class PlaceBuilderDemo_Items
 {
 	parent: PlaceBuilderDemo;
 	entityDimension: number;
+	font: FontNameAndHeight;
 
 	entityDimensionHalf: number;
 
@@ -10,6 +11,7 @@ class PlaceBuilderDemo_Items
 	{
 		this.parent = parent;
 		this.entityDimension = this.parent.entityDimension;
+		this.font = FontNameAndHeight.fromHeightInPixels(this.entityDimension);
 
 		this.entityDimensionHalf = this.entityDimension / 2;
 	}
@@ -127,9 +129,9 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension),
-					VisualText.fromTextImmediateHeightAndColor
+					VisualText.fromTextImmediateFontAndColor
 					(
-						itemArmorName, this.entityDimension, itemArmorColor
+						itemArmorName, this.font, itemArmorColor
 					)
 				)
 			);
@@ -200,9 +202,9 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 1.5),
-					VisualText.fromTextImmediateHeightAndColor
+					VisualText.fromTextImmediateFontAndColor
 					(
-						itemArrowName,  this.entityDimension, itemArrowColor
+						itemArrowName,  this.font, itemArrowColor
 					)
 				)
 			);
@@ -255,9 +257,9 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 2),
-					VisualText.fromTextImmediateHeightAndColor
+					VisualText.fromTextImmediateFontAndColor
 					(
-						itemBombName,  this.entityDimension, itemBombColor
+						itemBombName,  this.font, itemBombColor
 					)
 				)
 			);
@@ -302,9 +304,9 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 1.5),
-					VisualText.fromTextImmediateHeightAndColor
+					VisualText.fromTextImmediateFontAndColor
 					(
-						itemBookName, this.entityDimension, itemBookColor
+						itemBookName, this.font, itemBookColor
 					)
 				)
 			);
@@ -416,9 +418,9 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 2),
-					VisualText.fromTextImmediateHeightAndColor
+					VisualText.fromTextImmediateFontAndColor
 					(
-						itemBowName,  this.entityDimension, itemBowColor
+						itemBowName,  this.font, itemBowColor
 					)
 				)
 			);
@@ -483,9 +485,9 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 1.5),
-					VisualText.fromTextImmediateHeightAndColor
+					VisualText.fromTextImmediateFontAndColor
 					(
-						itemBreadName,  this.entityDimension, itemBreadColor
+						itemBreadName,  this.font, itemBreadColor
 					)
 				)
 			);
@@ -535,9 +537,9 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension),
-					VisualText.fromTextImmediateHeightAndColor
+					VisualText.fromTextImmediateFontAndColor
 					(
-						itemCoinName, this.entityDimension, itemCoinColor
+						itemCoinName, this.font, itemCoinColor
 					)
 				)
 			);
@@ -601,9 +603,9 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension),
-					VisualText.fromTextImmediateHeightAndColor
+					VisualText.fromTextImmediateFontAndColor
 					(
-						itemCrystalName, this.entityDimension, itemCrystalColor
+						itemCrystalName, this.font, itemCrystalColor
 					)
 				)
 			);
@@ -656,9 +658,9 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 2),
-					VisualText.fromTextImmediateHeightAndColor
+					VisualText.fromTextImmediateFontAndColor
 					(
-						itemDoughnutName, this.entityDimension, itemDoughnutColor
+						itemDoughnutName, this.font, itemDoughnutColor
 					)
 				)
 			);
@@ -734,9 +736,9 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimensionHalf * 2),
-					VisualText.fromTextImmediateHeightAndColor
+					VisualText.fromTextImmediateFontAndColor
 					(
-						itemFlowerName, this.entityDimension, colorFlower
+						itemFlowerName, this.font, colorFlower
 					)
 				)
 			);
@@ -777,9 +779,9 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension),
-					VisualText.fromTextImmediateHeightAndColor
+					VisualText.fromTextImmediateFontAndColor
 					(
-						itemFruitName, this.entityDimension, itemFruitColor
+						itemFruitName, this.font, itemFruitColor
 					)
 				)
 			);
@@ -836,9 +838,9 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimensionHalf * 3),
-					VisualText.fromTextImmediateHeightAndColor
+					VisualText.fromTextImmediateFontAndColor
 					(
-						itemGrassName, this.entityDimension, Color.byName("GreenDark")
+						itemGrassName, this.font, Color.byName("GreenDark")
 					)
 				)
 			);
@@ -909,9 +911,9 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 1.5),
-					VisualText.fromTextImmediateHeightAndColor
+					VisualText.fromTextImmediateFontAndColor
 					(
-						itemHeartName, this.entityDimension, itemHeartColor
+						itemHeartName, this.font, itemHeartColor
 					)
 				)
 			);
@@ -960,10 +962,10 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension),
-					VisualText.fromTextImmediateHeightAndColor
+					VisualText.fromTextImmediateFontAndColor
 					(
 						itemIronName,
-						this.entityDimension,
+						this.font,
 						itemIronColor
 					)
 				)
@@ -1002,10 +1004,10 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 1.5),
-					VisualText.fromTextImmediateHeightAndColor
+					VisualText.fromTextImmediateFontAndColor
 					(
 						itemIronOreName,
-						this.entityDimension, 
+						this.font, 
 						itemIronOreColor
 					)
 				)
@@ -1057,9 +1059,9 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 2),
-					VisualText.fromTextImmediateHeightAndColor
+					VisualText.fromTextImmediateFontAndColor
 					(
-						itemKeyName, this.entityDimension, itemKeyColor
+						itemKeyName, this.font, itemKeyColor
 					)
 				)
 			);
@@ -1109,9 +1111,9 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension),
-					VisualText.fromTextImmediateHeightAndColor
+					VisualText.fromTextImmediateFontAndColor
 					(
-						itemLogName, this.entityDimension, itemLogColor
+						itemLogName, this.font, itemLogColor
 					)
 				)
 			);
@@ -1158,9 +1160,9 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 1.5),
-					VisualText.fromTextImmediateHeightAndColor
+					VisualText.fromTextImmediateFontAndColor
 					(
-						itemMeatName, this.entityDimension, itemMeatColor
+						itemMeatName, this.font, itemMeatColor
 					)
 				)
 			);
@@ -1331,9 +1333,9 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 2),
-					VisualText.fromTextImmediateHeightAndColor
+					VisualText.fromTextImmediateFontAndColor
 					(
-						itemPickName,  this.entityDimension, itemPickColor
+						itemPickName, this.font, itemPickColor
 					)
 				)
 			);
@@ -1393,9 +1395,9 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension),
-					VisualText.fromTextImmediateHeightAndColor
+					VisualText.fromTextImmediateFontAndColor
 					(
-						itemPotionName, this.entityDimension, itemPotionColor
+						itemPotionName, this.font, itemPotionColor
 					)
 				)
 			);
@@ -1516,9 +1518,9 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 2),
-					VisualText.fromTextImmediateHeightAndColor
+					VisualText.fromTextImmediateFontAndColor
 					(
-						itemSpeedBootsName,  this.entityDimension, itemAccessoryColor
+						itemSpeedBootsName, this.font, itemAccessoryColor
 					)
 				)
 			);
@@ -1612,9 +1614,9 @@ class PlaceBuilderDemo_Items
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 2),
-					VisualText.fromTextImmediateHeightAndColor
+					VisualText.fromTextImmediateFontAndColor
 					(
-						"Sword",  this.entityDimension, bladeColor
+						"Sword", this.font, bladeColor
 					)
 				)
 			);

@@ -6,6 +6,7 @@ class PlaceBuilderDemo // Main.
         this.randomizer = randomizer || RandomizerLCG.default();
         this.visualsHaveText = false;
         this.entityDimension = 10;
+        this.font = FontNameAndHeight.fromHeightInPixels(this.entityDimension);
         this.actionsBuilder = new PlaceBuilderDemo_Actions(this);
         this.emplacementsBuilder = new PlaceBuilderDemo_Emplacements(this);
         this.itemsBuilder = new PlaceBuilderDemo_Items(this);
@@ -18,7 +19,6 @@ class PlaceBuilderDemo // Main.
         this.itemDefnsByName = ArrayHelper.addLookupsByName(this.itemDefns);
         this.entityDefns = this.entityDefnsBuild();
         this.entityDefnsByName = ArrayHelper.addLookupsByName(this.entityDefns);
-        this.fontHeight = 10;
     }
     buildBase(size, placeNameToReturnTo) {
         this.build_Interior("Base", size, placeNameToReturnTo);
@@ -742,17 +742,16 @@ class PlaceBuilderDemo // Main.
         return entity;
     }
     entityBuildGoal(entities, entitySize, numberOfKeysToUnlockGoal) {
-        var fontHeight = this.entityDimension;
         var itemKeyColor = Color.byName("Yellow");
         var goalPos = Coords.create().randomize(this.randomizer).multiplyScalar(.5).addDimensions(.25, .25, 0).multiply(this.size);
         var goalLoc = Disposition.fromPos(goalPos);
         var goalColor = Color.byName("GreenDark");
         var goalVisual = new VisualGroup([
             VisualRectangle.fromSizeAndColorFill(entitySize, goalColor),
-            VisualText.fromTextImmediateHeightAndColor("" + numberOfKeysToUnlockGoal, fontHeight, itemKeyColor)
+            VisualText.fromTextImmediateFontAndColor("" + numberOfKeysToUnlockGoal, this.font, itemKeyColor)
         ]);
         if (this.visualsHaveText) {
-            goalVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 2), VisualText.fromTextImmediateHeightAndColor("Exit", fontHeight, goalColor)));
+            goalVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 2), VisualText.fromTextImmediateFontAndColor("Exit", this.font, goalColor)));
         }
         var goalEntity = new Entity("Goal", [
             new Locatable(goalLoc),
@@ -975,8 +974,7 @@ class PlaceBuilderDemo // Main.
             new VisualOffset(Coords.fromXY(0, -.75).multiplyScalar(this.entityDimension), VisualRectangle.fromSizeAndColorFill(Coords.fromXY(1.1, .2).multiplyScalar(this.entityDimension), Color.byName("Gray"))),
         ]);
         if (this.visualsHaveText) {
-            var fontHeight = this.entityDimension;
-            visual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 2), VisualText.fromTextImmediateHeightAndColor("Store", fontHeight, storeColor)));
+            visual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 2), VisualText.fromTextImmediateFontAndColor("Store", this.font, storeColor)));
         }
         var storeEntityDefn = new Entity("Store", [
             Collidable.fromCollider(new Box(Coords.create(), entitySize)),
@@ -1291,7 +1289,7 @@ class PlaceBuilderDemo // Main.
             carVisualBody
         ]);
         if (this.visualsHaveText) {
-            carVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - entityDimension * 2.5), VisualText.fromTextImmediateHeightAndColor(defnName, entityDimension, Color.byName("Blue"))));
+            carVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - entityDimension * 2.5), VisualText.fromTextImmediateFontAndColor(defnName, this.font, Color.byName("Blue"))));
         }
         var carCollider = new Sphere(Coords.create(), entityDimension / 2);
         var carCollide = (uwpe) => {
@@ -1566,7 +1564,7 @@ class PlaceBuilderDemo // Main.
             ]).transform(Transform_Scale.fromScalar(this.entityDimension)), itemPotionColor, Color.byName("White"))
         ]);
         if (this.visualsHaveText) {
-            itemPotionVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension), VisualText.fromTextImmediateHeightAndColor(itemDefnPotionName, this.entityDimension, itemPotionColor)));
+            itemPotionVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension), VisualText.fromTextImmediateFontAndColor(itemDefnPotionName, this.font, itemPotionColor)));
         }
         var itemPotionCollider = new Sphere(Coords.create(), entityDimensionHalf);
         var itemPotionEntityDefn = new Entity(itemDefnPotionName, [
@@ -1646,8 +1644,7 @@ class PlaceBuilderDemo // Main.
             var staminaToFire = 10;
             if (userTirable.stamina < staminaToFire) {
                 var message = "Too tired!";
-                place.entitySpawn2(universe, world, universe.entityBuilder.messageFloater(message, 10, // fontHeightInPixels
-                userPos.clone(), Color.byName("Red")));
+                place.entitySpawn2(universe, world, universe.entityBuilder.messageFloater(message, this.font, userPos.clone(), Color.byName("Red")));
                 return;
             }
             userTirable.staminaSubtract(staminaToFire);
@@ -1835,7 +1832,7 @@ class PlaceBuilderDemo // Main.
     // Helpers.
     textWithColorAddToVisual(text, color, visual) {
         if (this.visualsHaveText) {
-            visual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension), VisualText.fromTextImmediateHeightAndColor(text, this.entityDimension, color)));
+            visual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension), VisualText.fromTextImmediateFontAndColor(text, this.font, color)));
         }
     }
 }

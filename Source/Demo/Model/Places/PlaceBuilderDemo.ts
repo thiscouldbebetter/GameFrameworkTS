@@ -12,7 +12,7 @@ class PlaceBuilderDemo // Main.
 	entityDefns: Entity[];
 	entityDefnsByName: Map<string,Entity>;
 	entityDimension: number;
-	fontHeight: number;
+	font: FontNameAndHeight;
 	itemDefns: ItemDefn[];
 	itemDefnsByName: Map<string, ItemDefn>;
 	marginSize: Coords;
@@ -37,6 +37,7 @@ class PlaceBuilderDemo // Main.
 		this.visualsHaveText = false;
 
 		this.entityDimension = 10;
+		this.font = FontNameAndHeight.fromHeightInPixels(this.entityDimension);
 
 		this.actionsBuilder = new PlaceBuilderDemo_Actions(this);
 		this.emplacementsBuilder = new PlaceBuilderDemo_Emplacements(this);
@@ -54,8 +55,6 @@ class PlaceBuilderDemo // Main.
 
 		this.entityDefns = this.entityDefnsBuild();
 		this.entityDefnsByName = ArrayHelper.addLookupsByName(this.entityDefns);
-
-		this.fontHeight = 10;
 	}
 
 	buildBase(size: Coords, placeNameToReturnTo: string)
@@ -1362,8 +1361,6 @@ class PlaceBuilderDemo // Main.
 		numberOfKeysToUnlockGoal: number
 	): Entity
 	{
-		var fontHeight = this.entityDimension;
-
 		var itemKeyColor = Color.byName("Yellow");
 
 		var goalPos = Coords.create().randomize(this.randomizer).multiplyScalar
@@ -1382,9 +1379,9 @@ class PlaceBuilderDemo // Main.
 		var goalVisual = new VisualGroup
 		([
 			VisualRectangle.fromSizeAndColorFill(entitySize, goalColor),
-			VisualText.fromTextImmediateHeightAndColor
+			VisualText.fromTextImmediateFontAndColor
 			(
-				"" + numberOfKeysToUnlockGoal, fontHeight, itemKeyColor
+				"" + numberOfKeysToUnlockGoal, this.font, itemKeyColor
 			)
 		]);
 		if (this.visualsHaveText)
@@ -1394,9 +1391,9 @@ class PlaceBuilderDemo // Main.
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 2),
-					VisualText.fromTextImmediateHeightAndColor
+					VisualText.fromTextImmediateFontAndColor
 					(
-						"Exit", fontHeight, goalColor
+						"Exit", this.font, goalColor
 					)
 				)
 			);
@@ -1815,16 +1812,14 @@ class PlaceBuilderDemo // Main.
 
 		if (this.visualsHaveText)
 		{
-			var fontHeight = this.entityDimension;
-
 			visual.children.push
 			(
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 2),
-					VisualText.fromTextImmediateHeightAndColor
+					VisualText.fromTextImmediateFontAndColor
 					(
-						"Store", fontHeight, storeColor
+						"Store", this.font, storeColor
 					)
 				)
 			);
@@ -2371,9 +2366,9 @@ class PlaceBuilderDemo // Main.
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - entityDimension * 2.5),
-					VisualText.fromTextImmediateHeightAndColor
+					VisualText.fromTextImmediateFontAndColor
 					(
-						defnName, entityDimension, Color.byName("Blue")
+						defnName, this.font, Color.byName("Blue")
 					)
 				)
 			);
@@ -2853,10 +2848,10 @@ class PlaceBuilderDemo // Main.
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension),
-					VisualText.fromTextImmediateHeightAndColor
+					VisualText.fromTextImmediateFontAndColor
 					(
 						itemDefnPotionName,
-						this.entityDimension,
+						this.font,
 						itemPotionColor
 					)
 				)
@@ -2987,7 +2982,7 @@ class PlaceBuilderDemo // Main.
 					universe.entityBuilder.messageFloater
 					(
 						message,
-						10, // fontHeightInPixels
+						this.font,
 						userPos.clone(),
 						Color.byName("Red")
 					)
@@ -3300,10 +3295,10 @@ class PlaceBuilderDemo // Main.
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension),
-					VisualText.fromTextImmediateHeightAndColor
+					VisualText.fromTextImmediateFontAndColor
 					(
 						text,
-						this.entityDimension,
+						this.font,
 						color
 					)
 				)

@@ -3,11 +3,13 @@ class PlaceBuilderDemo_Emplacements
 {
 	parent: PlaceBuilderDemo;
 	entityDimension: number;
+	font: FontNameAndHeight;
 
 	constructor(parent: PlaceBuilderDemo)
 	{
 		this.parent = parent;
 		this.entityDimension = this.parent.entityDimension;
+		this.font = FontNameAndHeight.fromHeightInPixels(this.entityDimension);
 	}
 
 	entityDefnBuildAnvil(): Entity
@@ -103,9 +105,9 @@ class PlaceBuilderDemo_Emplacements
 				new VisualOffset
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 3),
-					VisualText.fromTextImmediateHeightAndColor
+					VisualText.fromTextImmediateFontAndColor
 					(
-						itemDefnName, this.entityDimension, colorBoulder
+						itemDefnName, this.font, colorBoulder
 					)
 				)
 			);
@@ -707,10 +709,10 @@ class PlaceBuilderDemo_Emplacements
 					{
 						var e = uwpe.entity;
 						var baseColor = Color.byName("Brown");
-						return VisualText.fromTextImmediateHeightAndColor
+						return VisualText.fromTextImmediateFontAndColor
 						(
 							e.portal().destinationPlaceName,
-							this.entityDimension,
+							this.font,
 							baseColor
 						)
 					}

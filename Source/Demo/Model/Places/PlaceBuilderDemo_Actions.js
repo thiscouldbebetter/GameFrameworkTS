@@ -2,6 +2,7 @@
 class PlaceBuilderDemo_Actions {
     constructor(parent) {
         this.parent = parent;
+        this.font = FontNameAndHeight.fromHeightInPixels(this.parent.entityDimension);
     }
     // actions
     actionsBuild() {
@@ -77,8 +78,7 @@ class PlaceBuilderDemo_Actions {
                 }
                 else {
                     var message = "Can't pick up!";
-                    place.entitySpawn2(universe, world, universe.entityBuilder.messageFloater(message, this.parent.entityDimension, // fontHeightInPixels
-                    entityActor.locatable().loc.pos, Color.byName("Red")));
+                    place.entitySpawn2(universe, world, universe.entityBuilder.messageFloater(message, this.font, entityActor.locatable().loc.pos, Color.byName("Red")));
                 }
             }),
             new Action("Run", (uwpe) => // perform

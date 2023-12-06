@@ -3,6 +3,7 @@ class PlaceBuilderDemo_Movers {
     constructor(parent) {
         this.parent = parent;
         this.entityDimension = this.parent.entityDimension;
+        this.font = FontNameAndHeight.fromHeightInPixels(this.entityDimension);
     }
     entityDefnBuildCarnivore() {
         var carnivoreColor = Color.byName("GrayDark");
@@ -144,8 +145,7 @@ class PlaceBuilderDemo_Movers {
             var randomizer = universe.randomizer;
             var effectsToApply = damageToApply.effectsOccurring(randomizer);
             effectsToApply.forEach(effect => effectable.effectAdd(effect.clone()));
-            place.entitySpawn(uwpe.clone().entitySet(universe.entityBuilder.messageFloater("" + damageApplied.toString(), this.entityDimension, // fontHeightInPixels
-            eKillable.locatable().loc.pos, Color.byName("Red"))));
+            place.entitySpawn(uwpe.clone().entitySet(universe.entityBuilder.messageFloater("" + damageApplied.toString(), this.font, eKillable.locatable().loc.pos, Color.byName("Red"))));
             var damageAmount = damageApplied.amount(randomizer);
             return damageAmount;
         };
@@ -169,8 +169,7 @@ class PlaceBuilderDemo_Movers {
             learner.learningIncrement(skillsAll, skillsByName, 1);
             var learningMessage = learner.statusMessage;
             if (learningMessage != null) {
-                place.entitySpawn(uwpe.clone().entitySet(universe.entityBuilder.messageFloater(learningMessage, this.entityDimension, // fontHeightInPixels
-                entityPlayer.locatable().loc.pos, Color.byName("Green"))));
+                place.entitySpawn(uwpe.clone().entitySet(universe.entityBuilder.messageFloater(learningMessage, this.font, entityPlayer.locatable().loc.pos, Color.byName("Green"))));
             }
         };
         var enemyKillable = new Killable(integrityMax, enemyDamageApply, enemyDie);
@@ -637,7 +636,7 @@ class PlaceBuilderDemo_Movers {
             playerVisualEffect
         ];
         if (this.parent.visualsHaveText) {
-            playerVisualsForStatusInfo.splice(0, 0, VisualText.fromTextImmediateHeightAndColor(entityDefnNamePlayer, this.entityDimension, playerColor));
+            playerVisualsForStatusInfo.splice(0, 0, VisualText.fromTextImmediateFontAndColor(entityDefnNamePlayer, this.font, playerColor));
         }
         var playerVisualStatusInfo = new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 2), // offset
         new VisualStack(Coords.fromXY(0, 0 - this.entityDimension), // childSpacing
@@ -731,8 +730,7 @@ class PlaceBuilderDemo_Movers {
             entityKillable.killable().integritySubtract(damageAmount);
             var damageAmountAsString = "" + (damageAmount > 0 ? "" : "+") + (0 - damageAmount);
             var messageColorName = (damageAmount > 0 ? "Red" : "Green");
-            var messageEntity = universe.entityBuilder.messageFloater(damageAmountAsString, this.entityDimension, // fontHeightInPixels
-            entityKillable.locatable().loc.pos, Color.byName(messageColorName));
+            var messageEntity = universe.entityBuilder.messageFloater(damageAmountAsString, this.font, entityKillable.locatable().loc.pos, Color.byName(messageColorName));
             uwpe.entity = messageEntity;
             place.entitySpawn(uwpe);
             return damageAmount;
@@ -816,7 +814,7 @@ class PlaceBuilderDemo_Movers {
             if (targetEntity == null) {
                 drawable.visual = new VisualGroup([
                     drawable.visual,
-                    new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 3), VisualText.fromTextImmediateHeightAndColor("Waiting", this.entityDimension, Color.byName("Gray")))
+                    new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 3), VisualText.fromTextImmediateFontAndColor("Waiting", this.font, Color.byName("Gray")))
                 ]);
                 ticksToWait = 60; // 3 seconds.
                 targetEntity = new Ephemeral(ticksToWait, null).toEntity();

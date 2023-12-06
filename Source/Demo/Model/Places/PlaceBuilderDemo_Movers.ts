@@ -3,11 +3,13 @@ class PlaceBuilderDemo_Movers
 {
 	parent: PlaceBuilderDemo;
 	entityDimension: number;
+	font: FontNameAndHeight;
 
 	constructor(parent: PlaceBuilderDemo)
 	{
 		this.parent = parent;
 		this.entityDimension = this.parent.entityDimension;
+		this.font = FontNameAndHeight.fromHeightInPixels(this.entityDimension);
 	}
 
 	entityDefnBuildCarnivore(): Entity
@@ -288,7 +290,7 @@ class PlaceBuilderDemo_Movers
 					universe.entityBuilder.messageFloater
 					(
 						"" + damageApplied.toString(),
-						this.entityDimension, // fontHeightInPixels
+						this.font,
 						eKillable.locatable().loc.pos,
 						Color.byName("Red")
 					)
@@ -336,7 +338,7 @@ class PlaceBuilderDemo_Movers
 						universe.entityBuilder.messageFloater
 						(
 							learningMessage,
-							this.entityDimension, // fontHeightInPixels
+							this.font,
 							entityPlayer.locatable().loc.pos,
 							Color.byName("Green")
 						)
@@ -1276,9 +1278,9 @@ class PlaceBuilderDemo_Movers
 			playerVisualsForStatusInfo.splice
 			(
 				0, 0,
-				VisualText.fromTextImmediateHeightAndColor
+				VisualText.fromTextImmediateFontAndColor
 				(
-					entityDefnNamePlayer, this.entityDimension, playerColor
+					entityDefnNamePlayer, this.font, playerColor
 				)
 			);
 		}
@@ -1442,7 +1444,7 @@ class PlaceBuilderDemo_Movers
 				var messageEntity = universe.entityBuilder.messageFloater
 				(
 					damageAmountAsString,
-					this.entityDimension, // fontHeightInPixels
+					this.font,
 					entityKillable.locatable().loc.pos,
 					Color.byName(messageColorName)
 				);
@@ -1579,9 +1581,9 @@ class PlaceBuilderDemo_Movers
 					new VisualOffset
 					(
 						Coords.fromXY(0, 0 - this.entityDimension * 3),
-						VisualText.fromTextImmediateHeightAndColor
+						VisualText.fromTextImmediateFontAndColor
 						(
-							"Waiting", this.entityDimension, Color.byName("Gray")
+							"Waiting", this.font, Color.byName("Gray")
 						)
 					)
 				]);
