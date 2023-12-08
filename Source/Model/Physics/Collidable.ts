@@ -8,7 +8,8 @@ export class Collidable implements EntityProperty<Collidable>
 	ticksToWaitBetweenCollisions: number;
 	colliderAtRest: ShapeBase;
 	entityPropertyNamesToCollideWith: string[];
-	_collideEntities: (uwpe: UniverseWorldPlaceEntities, c: Collision) => void;
+	_collideEntitiesForUniverseWorldPlaceEntitiesAndCollision:
+		(uwpe: UniverseWorldPlaceEntities, c: Collision) => void;
 
 	collider: ShapeBase;
 	locPrev: Disposition;
@@ -17,7 +18,9 @@ export class Collidable implements EntityProperty<Collidable>
 	isDisabled: boolean;
 
 	_collisionTrackerMapCellsOccupied: CollisionTrackerMapCell[];
+	private _collision: Collision;
 	private _collisions: Collision[];
+	private _uwpe: UniverseWorldPlaceEntities;
 
 	constructor
 	(
@@ -25,7 +28,8 @@ export class Collidable implements EntityProperty<Collidable>
 		ticksToWaitBetweenCollisions: number,
 		colliderAtRest: ShapeBase,
 		entityPropertyNamesToCollideWith: string[],
-		collideEntities: (uwpe: UniverseWorldPlaceEntities, c: Collision) => void
+		collideEntitiesForUniverseWorldPlaceEntitiesAndCollision:
+			(uwpe: UniverseWorldPlaceEntities, c: Collision) => void
 	)
 	{
 		this.canCollideAgainWithoutSeparating =
@@ -35,7 +39,8 @@ export class Collidable implements EntityProperty<Collidable>
 		this.colliderAtRest = colliderAtRest;
 		this.entityPropertyNamesToCollideWith =
 			entityPropertyNamesToCollideWith || [ Collidable.name ];
-		this._collideEntities = collideEntities;
+		this._collideEntitiesForUniverseWorldPlaceEntitiesAndCollision =
+			collideEntitiesForUniverseWorldPlaceEntitiesAndCollision;
 
 		this.collider = this.colliderAtRest.clone();
 		this.locPrev = Disposition.create();
@@ -47,7 +52,14 @@ export class Collidable implements EntityProperty<Collidable>
 
 		this._collisionTrackerMapCellsOccupied =
 			new Array<CollisionTrackerMapCell>();
+		this._collision = Collision.create();
 		this._collisions = new Array<Collision>();
+		this._uwpe = UniverseWorldPlaceEntities.create();
+	}
+
+	static create(): Collidable
+	{
+		return Collidable.fromCollider(new ShapeNone());
 	}
 
 	static default(): Collidable
@@ -59,7 +71,8 @@ export class Collidable implements EntityProperty<Collidable>
 
 		return Collidable.fromColliderAndCollideEntities
 		(
-			collider, Collidable.collideEntitiesInCollisionLog
+			collider,
+			Collidable.collideEntitiesForUniverseWorldPlaceEntitiesAndCollisionLog
 		);
 	}
 
@@ -96,27 +109,68 @@ export class Collidable implements EntityProperty<Collidable>
 		);
 	}
 
-	collideEntitiesInCollision
+	collideEntities(entityColliding: Entity, entityCollidedWith: Entity): Collision
+	{
+		var uwpe = this._uwpe.clear().entitySet
+		(
+			entityColliding
+		).entity2Set
+		(
+			entityCollidedWith
+		);
+
+		var collision =
+			this._collision.clear().entityCollidableAdd
+			(
+				entityColliding
+			).entityCollidableAdd
+			(
+				entityCollidedWith
+			);
+
+		return this.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision
+		(
+			uwpe, collision
+		)
+	}
+
+	collideEntitiesForUniverseWorldPlaceEntities(uwpe: UniverseWorldPlaceEntities)
+	{
+		this.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision(uwpe, null);
+	}
+
+	collideEntitiesForUniverseWorldPlaceEntitiesAndCollision
 	(
-		uwpe: UniverseWorldPlaceEntities, collision: Collision
+		uwpe: UniverseWorldPlaceEntities,
+		collision: Collision
 	): Collision
 	{
-		if (this._collideEntities != null)
+		if (this._collideEntitiesForUniverseWorldPlaceEntitiesAndCollision != null)
 		{
-			this._collideEntities(uwpe, collision);
+			this._collideEntitiesForUniverseWorldPlaceEntitiesAndCollision(uwpe, collision);
 		}
 		return collision;
 	}
 
-	static collideEntitiesInCollisionLog
+	collideEntitiesForUniverseWorldPlaceEntitiesAndCollisionWithLogging
 	(
-		uwpe: UniverseWorldPlaceEntities, collision: Collision
+		uwpe: UniverseWorldPlaceEntities,
+		collision: Collision
 	): Collision
+	{
+		Collidable.collideEntitiesForUniverseWorldPlaceEntitiesAndCollisionLog(uwpe, collision);
+		return this.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision(uwpe, collision);
+	}
+
+	static collideEntitiesForUniverseWorldPlaceEntitiesAndCollisionLog
+	(
+		uwpe: UniverseWorldPlaceEntities,
+		collision: Collision
+	)
 	{
 		var collisionAsString = collision.toString();
 		var message = "Collision detected: " + collisionAsString;
 		console.log(message);
-		return collision;
 	}
 
 	colliderLocateForEntity(entity: Entity): void
@@ -137,17 +191,16 @@ export class Collidable implements EntityProperty<Collidable>
 		var entity = entitiesColliding[0];
 		var entityOther = entitiesColliding[1];
 
-		uwpe.entity = entity;
-		uwpe.entity2 = entityOther;
+		uwpe.entitySet(entity).entity2Set(entityOther);
 
-		this.collideEntitiesInCollision
+		this.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision
 		(
 			uwpe, collision
 		);
 
 		var entityOtherCollidable = entityOther.collidable();
 		uwpe.entitiesSwap();
-		entityOtherCollidable.collideEntitiesInCollision
+		entityOtherCollidable.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision
 		(
 			uwpe, collision
 		);
@@ -410,6 +463,7 @@ export class Collidable implements EntityProperty<Collidable>
 		}
 		else
 		{
+			this.colliderLocateForEntity(entity);
 			this.collisionsFindAndHandle(uwpe);
 		}
 	}
@@ -424,7 +478,7 @@ export class Collidable implements EntityProperty<Collidable>
 			this.ticksToWaitBetweenCollisions,
 			this.colliderAtRest.clone(),
 			this.entityPropertyNamesToCollideWith,
-			this._collideEntities
+			this._collideEntitiesForUniverseWorldPlaceEntitiesAndCollision
 		);
 	}
 

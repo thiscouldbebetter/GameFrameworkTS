@@ -49,6 +49,16 @@ export class UniverseWorldPlaceEntities
 		return new UniverseWorldPlaceEntities(universe, world, place, null, null);
 	}
 
+	clear(): UniverseWorldPlaceEntities
+	{
+		this.universe = null;
+		this.world = null;
+		this.place = null;
+		this.entity = null;
+		this.entity2 = null;
+		return this;
+	}
+
 	entitiesSet(entity: Entity, entity2: Entity): UniverseWorldPlaceEntities
 	{
 		this.entity = entity;

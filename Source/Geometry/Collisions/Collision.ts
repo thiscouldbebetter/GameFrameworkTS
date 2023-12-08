@@ -62,6 +62,12 @@ export class Collision //
 		return this;
 	}
 
+	entityCollidableAdd(entity: Entity): Collision
+	{
+		this.entitiesColliding.push(entity);
+		return this;
+	}
+
 	toString(): string
 	{
 		return this.entitiesColliding.map(x => x.name).join("+");

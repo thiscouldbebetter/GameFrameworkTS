@@ -134,6 +134,7 @@ import Hemispace = gf.Hemispace;
 import Path = gf.Path;
 import PathBuilder = gf.PathBuilder;
 import Plane = gf.Plane;
+import Point = gf.Point;
 import Ray = gf.Ray;
 import ShapeBase = gf.ShapeBase;
 import ShapeContainer = gf.ShapeContainer;

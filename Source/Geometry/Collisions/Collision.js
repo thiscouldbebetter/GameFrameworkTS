@@ -33,6 +33,10 @@ var ThisCouldBeBetter;
                 this.distanceToCollision = null;
                 return this;
             }
+            entityCollidableAdd(entity) {
+                this.entitiesColliding.push(entity);
+                return this;
+            }
             toString() {
                 return this.entitiesColliding.map(x => x.name).join("+");
             }

@@ -23,6 +23,14 @@ var ThisCouldBeBetter;
             static fromUniverseWorldAndPlace(universe, world, place) {
                 return new UniverseWorldPlaceEntities(universe, world, place, null, null);
             }
+            clear() {
+                this.universe = null;
+                this.world = null;
+                this.place = null;
+                this.entity = null;
+                this.entity2 = null;
+                return this;
+            }
             entitiesSet(entity, entity2) {
                 this.entity = entity;
                 this.entity2 = entity2;

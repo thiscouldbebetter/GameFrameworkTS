@@ -4,7 +4,7 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Collidable {
-            constructor(canCollideAgainWithoutSeparating, ticksToWaitBetweenCollisions, colliderAtRest, entityPropertyNamesToCollideWith, collideEntities) {
+            constructor(canCollideAgainWithoutSeparating, ticksToWaitBetweenCollisions, colliderAtRest, entityPropertyNamesToCollideWith, collideEntitiesForUniverseWorldPlaceEntitiesAndCollision) {
                 this.canCollideAgainWithoutSeparating =
                     canCollideAgainWithoutSeparating || false;
                 this.ticksToWaitBetweenCollisions =
@@ -12,7 +12,8 @@ var ThisCouldBeBetter;
                 this.colliderAtRest = colliderAtRest;
                 this.entityPropertyNamesToCollideWith =
                     entityPropertyNamesToCollideWith || [Collidable.name];
-                this._collideEntities = collideEntities;
+                this._collideEntitiesForUniverseWorldPlaceEntitiesAndCollision =
+                    collideEntitiesForUniverseWorldPlaceEntitiesAndCollision;
                 this.collider = this.colliderAtRest.clone();
                 this.locPrev = GameFramework.Disposition.create();
                 this.ticksUntilCanCollide = 0;
@@ -21,11 +22,16 @@ var ThisCouldBeBetter;
                 // Helper variables.
                 this._collisionTrackerMapCellsOccupied =
                     new Array();
+                this._collision = GameFramework.Collision.create();
                 this._collisions = new Array();
+                this._uwpe = GameFramework.UniverseWorldPlaceEntities.create();
+            }
+            static create() {
+                return Collidable.fromCollider(new GameFramework.ShapeNone());
             }
             static default() {
                 var collider = GameFramework.Box.fromSize(GameFramework.Coords.ones().multiplyScalar(10));
-                return Collidable.fromColliderAndCollideEntities(collider, Collidable.collideEntitiesInCollisionLog);
+                return Collidable.fromColliderAndCollideEntities(collider, Collidable.collideEntitiesForUniverseWorldPlaceEntitiesAndCollisionLog);
             }
             static fromCollider(colliderAtRest) {
                 return Collidable.fromColliderAndCollideEntities(colliderAtRest, null);
@@ -36,17 +42,28 @@ var ThisCouldBeBetter;
             static from3(colliderAtRest, entityPropertyNamesToCollideWith, collideEntities) {
                 return new Collidable(false, null, colliderAtRest, entityPropertyNamesToCollideWith, collideEntities);
             }
-            collideEntitiesInCollision(uwpe, collision) {
-                if (this._collideEntities != null) {
-                    this._collideEntities(uwpe, collision);
+            collideEntities(entityColliding, entityCollidedWith) {
+                var uwpe = this._uwpe.clear().entitySet(entityColliding).entity2Set(entityCollidedWith);
+                var collision = this._collision.clear().entityCollidableAdd(entityColliding).entityCollidableAdd(entityCollidedWith);
+                return this.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision(uwpe, collision);
+            }
+            collideEntitiesForUniverseWorldPlaceEntities(uwpe) {
+                this.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision(uwpe, null);
+            }
+            collideEntitiesForUniverseWorldPlaceEntitiesAndCollision(uwpe, collision) {
+                if (this._collideEntitiesForUniverseWorldPlaceEntitiesAndCollision != null) {
+                    this._collideEntitiesForUniverseWorldPlaceEntitiesAndCollision(uwpe, collision);
                 }
                 return collision;
             }
-            static collideEntitiesInCollisionLog(uwpe, collision) {
+            collideEntitiesForUniverseWorldPlaceEntitiesAndCollisionWithLogging(uwpe, collision) {
+                Collidable.collideEntitiesForUniverseWorldPlaceEntitiesAndCollisionLog(uwpe, collision);
+                return this.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision(uwpe, collision);
+            }
+            static collideEntitiesForUniverseWorldPlaceEntitiesAndCollisionLog(uwpe, collision) {
                 var collisionAsString = collision.toString();
                 var message = "Collision detected: " + collisionAsString;
                 console.log(message);
-                return collision;
             }
             colliderLocateForEntity(entity) {
                 this.colliderResetToRestPosition();
@@ -60,12 +77,11 @@ var ThisCouldBeBetter;
                 var entitiesColliding = collision.entitiesColliding;
                 var entity = entitiesColliding[0];
                 var entityOther = entitiesColliding[1];
-                uwpe.entity = entity;
-                uwpe.entity2 = entityOther;
-                this.collideEntitiesInCollision(uwpe, collision);
+                uwpe.entitySet(entity).entity2Set(entityOther);
+                this.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision(uwpe, collision);
                 var entityOtherCollidable = entityOther.collidable();
                 uwpe.entitiesSwap();
-                entityOtherCollidable.collideEntitiesInCollision(uwpe, collision);
+                entityOtherCollidable.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision(uwpe, collision);
                 uwpe.entitiesSwap();
             }
             collisionsFindAndHandle(uwpe) {
@@ -196,12 +212,13 @@ var ThisCouldBeBetter;
                     this.entitiesAlreadyCollidedWith.length = 0;
                 }
                 else {
+                    this.colliderLocateForEntity(entity);
                     this.collisionsFindAndHandle(uwpe);
                 }
             }
             // cloneable
             clone() {
-                return new Collidable(this.canCollideAgainWithoutSeparating, this.ticksToWaitBetweenCollisions, this.colliderAtRest.clone(), this.entityPropertyNamesToCollideWith, this._collideEntities);
+                return new Collidable(this.canCollideAgainWithoutSeparating, this.ticksToWaitBetweenCollisions, this.colliderAtRest.clone(), this.entityPropertyNamesToCollideWith, this._collideEntitiesForUniverseWorldPlaceEntitiesAndCollision);
             }
             // Equatable
             equals(other) { return false; } // todo
