@@ -75,6 +75,10 @@ export class ItemStore implements EntityProperty<ItemStore>
 		universe.venueTransitionTo(venueNext);
 	}
 
+	// Clonable.
+	clone(): ItemStore { throw new Error("Not yet implemented."); }
+	overwriteWith(other: ItemStore): ItemStore { throw new Error("Not yet implemented."); }
+
 	// EntityProperty.
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}

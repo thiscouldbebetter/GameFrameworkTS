@@ -50,9 +50,11 @@ var ThisCouldBeBetter;
                 placeToDepart.entityToRemoveAdd(entityToTransport);
                 destinationPlace.entityToSpawnAdd(entityToTransport);
             }
+            // Clonable.
             clone() {
                 return new Portal(this.destinationPlaceName, this.destinationEntityName, this.velocityToApply == null ? null : this.velocityToApply.clone());
             }
+            overwriteWith(other) { throw new Error("Not yet implemented."); }
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }

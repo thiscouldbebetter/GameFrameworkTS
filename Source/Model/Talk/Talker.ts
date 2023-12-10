@@ -116,6 +116,18 @@ export class Talker implements EntityProperty<Talker>
 		return returnValue;
 	}
 
+	// Clonable.
+
+	clone(): Talker
+	{
+		throw new Error("Not yet implemented.");
+	}
+
+	overwriteWith(other: Talker): Talker
+	{
+		throw new Error("Not yet implemented.");
+	}
+
 	// EntityProperty.
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}

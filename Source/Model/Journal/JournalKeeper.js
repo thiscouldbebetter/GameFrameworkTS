@@ -7,6 +7,9 @@ var ThisCouldBeBetter;
             constructor(journal) {
                 this.journal = journal;
             }
+            // Clonable.
+            clone() { throw new Error("Not yet implemented."); }
+            overwriteWith(other) { throw new Error("Not yet implemented."); }
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }

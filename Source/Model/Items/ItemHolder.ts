@@ -972,6 +972,9 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 			this.reachRadius
 		);
 	}
+
+	overwriteWith(other: ItemHolder): ItemHolder { throw new Error("Not yet implemented."); }
+
 }
 
 }

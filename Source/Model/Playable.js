@@ -215,6 +215,9 @@ var ThisCouldBeBetter;
                 controlOverlayTransparent.styleName = GameFramework.ControlStyle.Instances().Dark.name;
                 return controlOverlayTransparent;
             }
+            // Clonable.
+            clone() { throw new Error("Not yet implemented."); }
+            overwriteWith(other) { throw new Error("Not yet implemented."); }
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }

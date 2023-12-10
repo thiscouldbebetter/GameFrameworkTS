@@ -24,6 +24,10 @@ export class Controllable implements EntityProperty<Controllable>
 		this.toControl = toControl;
 	}
 
+	// Clonable.
+	clone(): Controllable { throw new Error("Not yet implemented."); }
+	overwriteWith(other: Controllable): Controllable { throw new Error("Not yet implemented."); }
+
 	// EntityProperty.
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}

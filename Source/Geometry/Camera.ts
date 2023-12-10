@@ -428,6 +428,10 @@ export class Camera implements EntityProperty<Camera>
 		);
 	}
 
+	// Clonable.
+	clone(): Camera { throw new Error("Not yet implemented."); }
+	overwriteWith(other: Camera): Camera { throw new Error("Not yet implemented."); }
+
 	// EntityProperty.
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}

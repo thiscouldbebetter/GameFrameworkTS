@@ -10,7 +10,7 @@ export interface EntityPropertyBase extends Equatable<EntityPropertyBase>
 }
 
 export interface EntityProperty<T extends EntityPropertyBase>
-	extends Equatable<T>
+	extends Equatable<T>, Clonable<T>
 {}
 
 }

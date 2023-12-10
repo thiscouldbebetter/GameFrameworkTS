@@ -27,6 +27,10 @@ export class Effectable implements EntityProperty<Effectable>
 		return returnValue;
 	}
 
+	// Clonable.
+	clone(): Effectable { throw new Error("Not yet implemented."); }
+	overwriteWith(other: Effectable): Effectable { throw new Error("Not yet implemented."); }
+
 	// EntityProperty.
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}

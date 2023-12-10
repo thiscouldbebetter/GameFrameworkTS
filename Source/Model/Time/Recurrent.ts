@@ -52,6 +52,8 @@ export class Recurrent implements EntityProperty<Recurrent>
 		return new Recurrent(this.ticksPerRecurrence, this.timesToRecur, this.recur);
 	}
 
+	overwriteWith(other: Recurrent): Recurrent { throw new Error("Not yet implemented."); }
+
 	// Equatable
 
 	equals(other: Recurrent): boolean { return false; } // todo

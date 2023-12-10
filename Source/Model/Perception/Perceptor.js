@@ -8,6 +8,9 @@ var ThisCouldBeBetter;
                 this.sightThreshold = sightThreshold;
                 this.hearingThreshold = hearingThreshold;
             }
+            // Clonable.
+            clone() { throw new Error("Not yet implemented."); }
+            overwriteWith(other) { throw new Error("Not yet implemented."); }
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }

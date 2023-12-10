@@ -50,6 +50,10 @@ export class ItemContainer implements EntityProperty<ItemContainer>
 		}
 	}
 
+	// Clonable.
+	clone(): ItemContainer { throw new Error("Not yet implemented."); }
+	overwriteWith(other: ItemContainer): ItemContainer { throw new Error("Not yet implemented."); }
+
 	// EntityProperty.
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}

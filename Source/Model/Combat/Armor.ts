@@ -11,6 +11,10 @@ export class Armor implements EntityProperty<Armor>
 		this.damageMultiplier = damageMultiplier;
 	}
 
+	// Clonable.
+	clone(): Armor { throw new Error("Not yet implemented."); }
+	overwriteWith(other: Armor): Armor { throw new Error("Not yet implemented."); }
+
 	// EntityProperty.
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}

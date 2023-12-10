@@ -116,6 +116,10 @@ export class Enemy implements EntityProperty<Enemy>
 		return enemyActivityDefn;
 	}
 
+	// Clonable.
+	clone(): Enemy { throw new Error("Not yet implemented."); }
+	overwriteWith(other: Enemy): Enemy { throw new Error("Not yet implemented."); }
+
 	// EntityProperty.
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}

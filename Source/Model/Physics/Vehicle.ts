@@ -24,6 +24,10 @@ export class Vehicle implements EntityProperty<Vehicle>
 		this.steeringDirection = 0;
 	}
 
+	// Clonable.
+	clone(): Vehicle { throw new Error("Not yet implemented."); }
+	overwriteWith(other: Vehicle): Vehicle { throw new Error("Not yet implemented."); }
+
 	// EntityProperty.
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}

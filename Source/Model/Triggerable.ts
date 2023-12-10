@@ -18,7 +18,7 @@ export class Triggerable implements EntityProperty<Triggerable>
 		return new Triggerable(this.triggers.map(x => x.clone() ) );
 	}
 
-	overwriteWith(other: Trigger): Triggerable
+	overwriteWith(other: Triggerable): Triggerable
 	{
 		return this; // todo
 	}

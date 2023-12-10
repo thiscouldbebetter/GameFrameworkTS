@@ -56,6 +56,7 @@ var ThisCouldBeBetter;
             clone() {
                 return new Tirable(this.staminaMaxAfterSleep, this.staminaRecoveredPerTick, this.staminaMaxLostPerTick, this.staminaMaxRecoveredPerTickOfSleep, this._fallAsleep);
             }
+            overwriteWith(other) { throw new Error("Not yet implemented."); }
             // Equatable
             equals(other) { return false; } // todo
         }

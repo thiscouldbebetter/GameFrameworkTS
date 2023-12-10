@@ -46,6 +46,7 @@ var ThisCouldBeBetter;
             clone() {
                 return new Starvable(this.satietyMax, this.satietyLostPerTick, this._starve);
             }
+            overwriteWith(other) { throw new Error("Not yet implemented."); }
             // Equatable
             equals(other) { return false; } // todo
         }

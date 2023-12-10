@@ -112,6 +112,8 @@ export class Tirable implements EntityProperty<Tirable>
 		);
 	}
 
+	overwriteWith(other: Tirable): Tirable { throw new Error("Not yet implemented."); }
+
 	// Equatable
 
 	equals(other: Tirable): boolean { return false; } // todo

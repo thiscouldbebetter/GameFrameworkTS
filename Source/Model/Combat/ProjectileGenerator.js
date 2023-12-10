@@ -23,6 +23,9 @@ var ThisCouldBeBetter;
                 var returnValues = this.projectileGenerations.map(x => x.projectileEntityFromEntityFiring(entityFiring));
                 return returnValues;
             }
+            // Clonable.
+            clone() { throw new Error("Not yet implemented."); }
+            overwriteWith(other) { throw new Error("Not yet implemented."); }
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }

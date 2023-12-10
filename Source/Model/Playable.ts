@@ -493,6 +493,11 @@ export class Playable implements EntityProperty<Playable>
 		return controlOverlayTransparent;
 	}
 
+	// Clonable.
+
+	clone(): Playable { throw new Error("Not yet implemented."); }
+	overwriteWith(other: Playable): Playable { throw new Error("Not yet implemented."); }
+
 	// EntityProperty.
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}

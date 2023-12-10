@@ -34,6 +34,18 @@ export class Idleable implements EntityProperty<Idleable>
 		return world.timerTicksSoFar - this.tickLastActionPerformed;
 	}
 
+	// Clonable.
+
+	clone(): Idleable
+	{
+		throw new Error("Not yet implemented.");
+	}
+
+	overwriteWith(other: Idleable): Idleable
+	{
+		throw new Error("Not yet implemented.");
+	}
+
 	// EntityProperty.
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}

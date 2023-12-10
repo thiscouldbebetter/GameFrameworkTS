@@ -64,6 +64,9 @@ var ThisCouldBeBetter;
             updateForTimerTick(uwpe) { }
             // Equatable
             equals(other) { return false; } // todo
+            // Clonable.
+            clone() { throw new Error("Not yet implemented."); }
+            overwriteWith(other) { throw new Error("Not yet implemented."); }
         }
         GameFramework.ItemDefn = ItemDefn;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

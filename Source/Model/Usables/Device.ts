@@ -66,6 +66,8 @@ export class Device implements EntityProperty<Device>
 		);
 	}
 
+	overwriteWith(other: Device): Device { throw new Error("Not yet implemented."); }
+
 	// Equatable
 
 	equals(other: Device): boolean { return false; } // todo

@@ -59,6 +59,10 @@ export class LoadableProperty
 		// Do nothing.
 	}
 
+	// Clonable.
+	clone(): LoadableProperty { throw new Error("Not yet implemented."); }
+	overwriteWith(other: LoadableProperty): LoadableProperty { throw new Error("Not yet implemented."); }
+
 	// Equatable
 
 	equals(other: LoadableProperty): boolean { return false; } // todo

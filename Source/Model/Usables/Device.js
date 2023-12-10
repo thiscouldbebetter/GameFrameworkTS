@@ -33,6 +33,7 @@ var ThisCouldBeBetter;
             clone() {
                 return new Device(this.name, this.ticksToCharge, this._initialize, this.update, this.use);
             }
+            overwriteWith(other) { throw new Error("Not yet implemented."); }
             // Equatable
             equals(other) { return false; } // todo
         }

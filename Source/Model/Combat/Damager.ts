@@ -56,6 +56,10 @@ export class Damager implements EntityProperty<Damager>
 		return returnDamage;
 	}
 
+	// Clonable.
+	clone(): Damager { throw new Error("Not yet implemented."); }
+	overwriteWith(other: Damager): Damager { throw new Error("Not yet implemented."); }
+
 	// EntityProperty.
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}

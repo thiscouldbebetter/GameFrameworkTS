@@ -15,6 +15,10 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 		this.journal = journal;
 	}
 
+	// Clonable.
+	clone(): JournalKeeper { throw new Error("Not yet implemented."); }
+	overwriteWith(other: JournalKeeper): JournalKeeper { throw new Error("Not yet implemented."); }
+
 	// EntityProperty.
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}

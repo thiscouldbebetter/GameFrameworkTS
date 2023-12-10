@@ -7,6 +7,9 @@ var ThisCouldBeBetter;
             constructor(isBlocking) {
                 this.isBlocking = isBlocking;
             }
+            // Clonable.
+            clone() { throw new Error("Not yet implemented."); }
+            overwriteWith(other) { throw new Error("Not yet implemented."); }
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }

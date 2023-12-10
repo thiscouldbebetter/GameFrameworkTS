@@ -87,6 +87,8 @@ export class Starvable implements EntityProperty<Starvable>
 		return new Starvable(this.satietyMax, this.satietyLostPerTick, this._starve);
 	}
 
+	overwriteWith(other: Starvable): Starvable { throw new Error("Not yet implemented."); }
+
 	// Equatable
 
 	equals(other: Starvable): boolean { return false; } // todo

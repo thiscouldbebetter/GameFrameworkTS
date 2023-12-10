@@ -220,6 +220,7 @@ var ThisCouldBeBetter;
             clone() {
                 return new ItemCrafter(GameFramework.ArrayHelper.clone(this.recipesAvailable));
             }
+            overwriteWith(other) { throw new Error("Not yet implemented."); }
             // Equatable
             equals(other) { return false; } // todo
         }

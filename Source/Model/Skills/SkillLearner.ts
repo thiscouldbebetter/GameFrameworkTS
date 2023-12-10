@@ -201,6 +201,10 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 		return returnValue;
 	}
 
+	// Clonable.
+	clone(): SkillLearner { throw new Error("Not yet implemented."); }
+	overwriteWith(other: SkillLearner): SkillLearner { throw new Error("Not yet implemented."); }
+
 	// EntityProperty.
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}

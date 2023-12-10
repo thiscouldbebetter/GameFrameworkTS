@@ -80,6 +80,7 @@ var ThisCouldBeBetter;
             clone() {
                 return new Killable(this.integrityMax, this._damageApply, this._die);
             }
+            overwriteWith(other) { throw new Error("Not yet implemented."); }
             // Equatable
             equals(other) { return false; } // todo
         }

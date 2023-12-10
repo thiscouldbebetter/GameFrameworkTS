@@ -13,6 +13,10 @@ export class Perceptor implements EntityProperty<Perceptor>
 		this.hearingThreshold = hearingThreshold;
 	}
 
+	// Clonable.
+	clone(): Perceptor { throw new Error("Not yet implemented."); }
+	overwriteWith(other: Perceptor): Perceptor { throw new Error("Not yet implemented."); }
+
 	// EntityProperty.
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}

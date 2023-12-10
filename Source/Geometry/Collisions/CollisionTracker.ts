@@ -87,6 +87,10 @@ export class CollisionTracker implements EntityProperty<CollisionTracker>
 		);
 	}
 
+	// Clonable.
+	clone(): CollisionTracker { throw new Error("Not yet implemented."); }
+	overwriteWith(other: CollisionTracker): CollisionTracker { throw new Error("Not yet implemented."); }
+
 	// EntityProperty.
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}

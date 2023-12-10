@@ -83,6 +83,8 @@ export class Portal implements EntityProperty<Portal>
 		destinationPlace.entityToSpawnAdd(entityToTransport);
 	}
 
+	// Clonable.
+
 	clone(): Portal
 	{
 		return new Portal
@@ -92,6 +94,8 @@ export class Portal implements EntityProperty<Portal>
 			this.velocityToApply == null ? null : this.velocityToApply.clone()
 		);
 	}
+
+	overwriteWith(other: Portal): Portal { throw new Error("Not yet implemented."); }
 
 	// EntityProperty.
 

@@ -14,6 +14,10 @@ export class Modellable<TModel> implements EntityProperty<Modellable<TModel>>
 		this.model = model;
 	}
 
+	// Clonable.
+	clone(): Modellable<TModel> { throw new Error("Not yet implemented."); }
+	overwriteWith(other: Modellable<TModel>): Modellable<TModel> { throw new Error("Not yet implemented."); }
+
 	// EntityProperty.
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
