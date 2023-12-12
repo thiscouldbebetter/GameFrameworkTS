@@ -22,10 +22,10 @@ var ThisCouldBeBetter;
             }
             // Clonable.
             clone() {
-                throw new Error("Not yet implemented.");
+                return this;
             }
             overwriteWith(other) {
-                throw new Error("Not yet implemented.");
+                return this;
             }
             // EntityProperty.
             finalize(uwpe) { }

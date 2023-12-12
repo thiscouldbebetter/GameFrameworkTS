@@ -233,7 +233,7 @@ class PlaceBuilderDemo_Emplacements {
             new VisualRectangle(obstacleCollider.box.size, obstacleColor, obstacleColor, null)
         ]);
         this.parent.textWithColorAddToVisual("Bar", obstacleColor, visualBody);
-        var visual = new VisualRotate(visualBody);
+        var visual = VisualRotate.fromChild(visualBody);
         var obstacleBarEntityDefn = new Entity("Bar", [
             obstacleBoundable,
             obstacleCollidable,

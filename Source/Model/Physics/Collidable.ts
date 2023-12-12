@@ -482,7 +482,7 @@ export class Collidable implements EntityProperty<Collidable>
 		);
 	}
 
-	overwriteWith(other: Collidable): Collidable { throw new Error("Not yet implemented."); }
+	overwriteWith(other: Collidable): Collidable { return this; }
 
 	// Equatable
 

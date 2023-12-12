@@ -8,6 +8,11 @@ class Goal implements EntityProperty<Goal>
 		this.numberOfKeysToUnlock = numberOfKeysToUnlock;
 	}
 
+	// Clonable.
+
+	clone(): Goal { return this; }
+	overwriteWith(other: Goal): Goal { return this; }
+
 	// EntityProperty.
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}

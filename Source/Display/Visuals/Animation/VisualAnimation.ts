@@ -53,21 +53,33 @@ export class VisualAnimation implements Visual<VisualAnimation>
 		}
 	}
 
+	static fromFrames
+	(
+		frames: VisualBase[]
+	): VisualAnimation
+	{
+		var name = VisualAnimation.name + frames[0].constructor.name + frames.length;
+		return this.fromNameAndFrames(name, frames);
+	}
+
+	static fromFramesRepeating
+	(
+		frames: VisualBase[]
+	): VisualAnimation
+	{
+		var name = VisualAnimation.name + frames[0].constructor.name + frames.length;
+		return this.fromNameFramesAndIsRepeating(name, frames, true);
+	}
+
 	static fromNameAndFrames
 	(
 		name: string, frames: VisualBase[]
 	): VisualAnimation
 	{
-		var ticksToHoldFrames = frames.map(x => 1);
-
-		var returnValue = new VisualAnimation
+		return VisualAnimation.fromNameFramesAndIsRepeating
 		(
-			name,
-			ticksToHoldFrames,
-			frames,
-			false // isRepeating
+			name, frames, false // isRepeating - This should probably be true, which is the default, but it hasn't been.
 		);
-		return returnValue;
 	}
 
 	static fromNameFramesAndIsRepeating
@@ -98,7 +110,7 @@ export class VisualAnimation implements Visual<VisualAnimation>
 
 	frameIndexCurrent(world: World, tickStarted: number): number
 	{
-		var returnValue = -1;
+		var returnValue = null;
 
 		var ticksSinceStarted = world.timerTicksSoFar - tickStarted;
 
@@ -114,7 +126,7 @@ export class VisualAnimation implements Visual<VisualAnimation>
 			}
 		}
 
-		if (returnValue < 0)
+		if (returnValue == null)
 		{
 			var ticksForFramesSoFar = 0;
 			var f = 0;
@@ -122,7 +134,7 @@ export class VisualAnimation implements Visual<VisualAnimation>
 			{
 				var ticksToHoldFrame = this.ticksToHoldFrames[f];
 				ticksForFramesSoFar += ticksToHoldFrame;
-				if (ticksForFramesSoFar >= ticksSinceStarted)
+				if (ticksForFramesSoFar >= ticksSinceStarted) // hack - Moving this up causes problems in some places, leaving it here causes others.
 				{
 					break;
 				}
@@ -147,9 +159,15 @@ export class VisualAnimation implements Visual<VisualAnimation>
 		var world = uwpe.world;
 		var entity = uwpe.entity;
 
-		var animatable = entity.animatable();
+		var animatable =
+			Animatable2 == null
+			? null
+			: entity.animatable();
+
 		var tickStarted =
-			animatable.animationWithNameStartIfNecessary(this.name, world);
+			animatable == null
+			? 0
+			: animatable.animationWithNameStartIfNecessary(this.name, world);
 		var frameCurrent = this.frameCurrent(world, tickStarted);
 		frameCurrent.draw(uwpe, display);
 	}

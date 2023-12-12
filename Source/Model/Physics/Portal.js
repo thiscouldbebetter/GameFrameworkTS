@@ -54,7 +54,7 @@ var ThisCouldBeBetter;
             clone() {
                 return new Portal(this.destinationPlaceName, this.destinationEntityName, this.velocityToApply == null ? null : this.velocityToApply.clone());
             }
-            overwriteWith(other) { throw new Error("Not yet implemented."); }
+            overwriteWith(other) { return this; }
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }

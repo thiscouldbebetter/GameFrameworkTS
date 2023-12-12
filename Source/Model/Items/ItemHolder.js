@@ -516,7 +516,7 @@ var ThisCouldBeBetter;
             clone() {
                 return new ItemHolder(GameFramework.ArrayHelper.clone(this.items), this.massMax, this.reachRadius);
             }
-            overwriteWith(other) { throw new Error("Not yet implemented."); }
+            overwriteWith(other) { return this; }
         }
         GameFramework.ItemHolder = ItemHolder;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

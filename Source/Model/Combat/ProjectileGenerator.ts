@@ -42,8 +42,8 @@ export class ProjectileGenerator
 	}
 
 	// Clonable.
-	clone(): ProjectileGenerator { throw new Error("Not yet implemented."); }
-	overwriteWith(other: ProjectileGenerator): ProjectileGenerator { throw new Error("Not yet implemented."); }
+	clone(): ProjectileGenerator { return this; }
+	overwriteWith(other: ProjectileGenerator): ProjectileGenerator { return this; }
 
 	// EntityProperty.
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}

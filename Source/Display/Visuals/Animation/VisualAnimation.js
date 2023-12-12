@@ -27,11 +27,17 @@ var ThisCouldBeBetter;
                     this.ticksToComplete += this.ticksToHoldFrames[f];
                 }
             }
+            static fromFrames(frames) {
+                var name = VisualAnimation.name + frames[0].constructor.name + frames.length;
+                return this.fromNameAndFrames(name, frames);
+            }
+            static fromFramesRepeating(frames) {
+                var name = VisualAnimation.name + frames[0].constructor.name + frames.length;
+                return this.fromNameFramesAndIsRepeating(name, frames, true);
+            }
             static fromNameAndFrames(name, frames) {
-                var ticksToHoldFrames = frames.map(x => 1);
-                var returnValue = new VisualAnimation(name, ticksToHoldFrames, frames, false // isRepeating
+                return VisualAnimation.fromNameFramesAndIsRepeating(name, frames, false // isRepeating - This should probably be true, which is the default, but it hasn't been.
                 );
-                return returnValue;
             }
             static fromNameFramesAndIsRepeating(name, frames, isRepeating) {
                 var ticksToHoldFrames = frames.map(x => 1);
@@ -44,7 +50,7 @@ var ThisCouldBeBetter;
                 return frameCurrent;
             }
             frameIndexCurrent(world, tickStarted) {
-                var returnValue = -1;
+                var returnValue = null;
                 var ticksSinceStarted = world.timerTicksSoFar - tickStarted;
                 if (ticksSinceStarted >= this.ticksToComplete) {
                     if (this.isRepeating) {
@@ -54,13 +60,14 @@ var ThisCouldBeBetter;
                         returnValue = this.frames.length - 1;
                     }
                 }
-                if (returnValue < 0) {
+                if (returnValue == null) {
                     var ticksForFramesSoFar = 0;
                     var f = 0;
                     for (f = 0; f < this.ticksToHoldFrames.length; f++) {
                         var ticksToHoldFrame = this.ticksToHoldFrames[f];
                         ticksForFramesSoFar += ticksToHoldFrame;
-                        if (ticksForFramesSoFar >= ticksSinceStarted) {
+                        if (ticksForFramesSoFar >= ticksSinceStarted) // hack - Moving this up causes problems in some places, leaving it here causes others.
+                         {
                             break;
                         }
                     }
@@ -77,8 +84,12 @@ var ThisCouldBeBetter;
             draw(uwpe, display) {
                 var world = uwpe.world;
                 var entity = uwpe.entity;
-                var animatable = entity.animatable();
-                var tickStarted = animatable.animationWithNameStartIfNecessary(this.name, world);
+                var animatable = GameFramework.Animatable2 == null
+                    ? null
+                    : entity.animatable();
+                var tickStarted = animatable == null
+                    ? 0
+                    : animatable.animationWithNameStartIfNecessary(this.name, world);
                 var frameCurrent = this.frameCurrent(world, tickStarted);
                 frameCurrent.draw(uwpe, display);
             }

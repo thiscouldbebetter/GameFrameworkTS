@@ -76,8 +76,8 @@ export class ItemStore implements EntityProperty<ItemStore>
 	}
 
 	// Clonable.
-	clone(): ItemStore { throw new Error("Not yet implemented."); }
-	overwriteWith(other: ItemStore): ItemStore { throw new Error("Not yet implemented."); }
+	clone(): ItemStore { return this; }
+	overwriteWith(other: ItemStore): ItemStore { return this; }
 
 	// EntityProperty.
 

@@ -25,8 +25,8 @@ export class Controllable implements EntityProperty<Controllable>
 	}
 
 	// Clonable.
-	clone(): Controllable { throw new Error("Not yet implemented."); }
-	overwriteWith(other: Controllable): Controllable { throw new Error("Not yet implemented."); }
+	clone(): Controllable { return this; }
+	overwriteWith(other: Controllable): Controllable { return this; }
 
 	// EntityProperty.
 

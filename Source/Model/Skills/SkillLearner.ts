@@ -202,8 +202,8 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 	}
 
 	// Clonable.
-	clone(): SkillLearner { throw new Error("Not yet implemented."); }
-	overwriteWith(other: SkillLearner): SkillLearner { throw new Error("Not yet implemented."); }
+	clone(): SkillLearner { return this; }
+	overwriteWith(other: SkillLearner): SkillLearner { return this; }
 
 	// EntityProperty.
 

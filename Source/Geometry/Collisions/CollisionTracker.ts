@@ -88,8 +88,8 @@ export class CollisionTracker implements EntityProperty<CollisionTracker>
 	}
 
 	// Clonable.
-	clone(): CollisionTracker { throw new Error("Not yet implemented."); }
-	overwriteWith(other: CollisionTracker): CollisionTracker { throw new Error("Not yet implemented."); }
+	clone(): CollisionTracker { return this; }
+	overwriteWith(other: CollisionTracker): CollisionTracker { return this; }
 
 	// EntityProperty.
 

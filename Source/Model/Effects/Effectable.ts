@@ -28,8 +28,8 @@ export class Effectable implements EntityProperty<Effectable>
 	}
 
 	// Clonable.
-	clone(): Effectable { throw new Error("Not yet implemented."); }
-	overwriteWith(other: Effectable): Effectable { throw new Error("Not yet implemented."); }
+	clone(): Effectable { return this; }
+	overwriteWith(other: Effectable): Effectable { return this; }
 
 	// EntityProperty.
 

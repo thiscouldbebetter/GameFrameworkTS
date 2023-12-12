@@ -15,8 +15,8 @@ export class Modellable<TModel> implements EntityProperty<Modellable<TModel>>
 	}
 
 	// Clonable.
-	clone(): Modellable<TModel> { throw new Error("Not yet implemented."); }
-	overwriteWith(other: Modellable<TModel>): Modellable<TModel> { throw new Error("Not yet implemented."); }
+	clone(): Modellable<TModel> { return this; }
+	overwriteWith(other: Modellable<TModel>): Modellable<TModel> { return this; }
 
 	// EntityProperty.
 

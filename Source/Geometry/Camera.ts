@@ -429,8 +429,8 @@ export class Camera implements EntityProperty<Camera>
 	}
 
 	// Clonable.
-	clone(): Camera { throw new Error("Not yet implemented."); }
-	overwriteWith(other: Camera): Camera { throw new Error("Not yet implemented."); }
+	clone(): Camera { return this; }
+	overwriteWith(other: Camera): Camera { return this; }
 
 	// EntityProperty.
 

@@ -154,7 +154,7 @@ export class Killable implements EntityProperty<Killable>
 		return new Killable(this.integrityMax, this._damageApply, this._die);
 	}
 
-	overwriteWith(other: Killable): Killable { throw new Error("Not yet implemented."); }
+	overwriteWith(other: Killable): Killable { return this; }
 
 	// Equatable
 

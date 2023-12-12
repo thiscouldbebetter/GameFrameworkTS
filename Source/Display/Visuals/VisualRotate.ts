@@ -5,21 +5,51 @@ namespace ThisCouldBeBetter.GameFramework
 export class VisualRotate implements Visual<VisualRotate>
 {
 	child: VisualBase;
+	_rotationInTurnsGet: (uwpe: UniverseWorldPlaceEntities) => number;
 
-	constructor(child: VisualBase)
+	constructor
+	(
+		child: VisualBase,
+		rotationInTurnsGet: (uwpe: UniverseWorldPlaceEntities) => number
+	)
 	{
 		this.child = child;
+		this._rotationInTurnsGet = rotationInTurnsGet;
 	}
+
+	static fromChild(child: VisualBase): VisualRotate
+	{
+		return new VisualRotate(child, null);
+	}
+
+	rotationInTurnsGet(uwpe: UniverseWorldPlaceEntities): number
+	{
+		var rotationInTurns = 0;
+		if (this._rotationInTurnsGet == null)
+		{
+			var entity = uwpe.entity;
+			var entityLoc = entity.locatable().loc;
+			rotationInTurns = entityLoc.orientation.forward.headingInTurns();
+		}
+		else
+		{
+			rotationInTurns = this._rotationInTurnsGet(uwpe);
+		}
+		return rotationInTurns;
+	}
+
+	// Visual.
 
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var entity = uwpe.entity;
 
-		display.stateSave();
-
 		var entityLoc = entity.locatable().loc;
 
-		var rotationInTurns = entityLoc.orientation.forward.headingInTurns();
+		var rotationInTurns = this.rotationInTurnsGet(uwpe);
+
+		display.stateSave();
+
 		display.rotateTurnsAroundCenter
 		(
 			rotationInTurns, entityLoc.pos

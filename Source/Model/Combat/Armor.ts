@@ -12,8 +12,8 @@ export class Armor implements EntityProperty<Armor>
 	}
 
 	// Clonable.
-	clone(): Armor { throw new Error("Not yet implemented."); }
-	overwriteWith(other: Armor): Armor { throw new Error("Not yet implemented."); }
+	clone(): Armor { return this; }
+	overwriteWith(other: Armor): Armor { return this; }
 
 	// EntityProperty.
 

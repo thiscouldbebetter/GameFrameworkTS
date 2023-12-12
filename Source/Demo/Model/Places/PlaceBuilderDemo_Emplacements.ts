@@ -477,7 +477,7 @@ class PlaceBuilderDemo_Emplacements
 			"Bar", obstacleColor, visualBody
 		);
 
-		var visual = new VisualRotate(visualBody);
+		var visual = VisualRotate.fromChild(visualBody);
 
 		var obstacleBarEntityDefn = new Entity
 		(

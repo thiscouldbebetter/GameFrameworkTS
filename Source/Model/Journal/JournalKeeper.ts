@@ -16,8 +16,8 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 	}
 
 	// Clonable.
-	clone(): JournalKeeper { throw new Error("Not yet implemented."); }
-	overwriteWith(other: JournalKeeper): JournalKeeper { throw new Error("Not yet implemented."); }
+	clone(): JournalKeeper { return this; }
+	overwriteWith(other: JournalKeeper): JournalKeeper { return this; }
 
 	// EntityProperty.
 

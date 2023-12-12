@@ -25,8 +25,8 @@ export class Vehicle implements EntityProperty<Vehicle>
 	}
 
 	// Clonable.
-	clone(): Vehicle { throw new Error("Not yet implemented."); }
-	overwriteWith(other: Vehicle): Vehicle { throw new Error("Not yet implemented."); }
+	clone(): Vehicle { return this; }
+	overwriteWith(other: Vehicle): Vehicle { return this; }
 
 	// EntityProperty.
 

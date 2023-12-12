@@ -8,8 +8,8 @@ var ThisCouldBeBetter;
                 this.toControl = toControl;
             }
             // Clonable.
-            clone() { throw new Error("Not yet implemented."); }
-            overwriteWith(other) { throw new Error("Not yet implemented."); }
+            clone() { return this; }
+            overwriteWith(other) { return this; }
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }

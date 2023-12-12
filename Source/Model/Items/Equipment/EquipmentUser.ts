@@ -627,8 +627,8 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 	}
 
 	// Clonable.
-	clone(): EquipmentUser { throw new Error("Not yet implemented."); }
-	overwriteWith(other: EquipmentUser): EquipmentUser { throw new Error("Not yet implemented."); }
+	clone(): EquipmentUser { return this; }
+	overwriteWith(other: EquipmentUser): EquipmentUser { return this; }
 
 	// Equatable
 

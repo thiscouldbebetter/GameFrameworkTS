@@ -973,7 +973,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 		);
 	}
 
-	overwriteWith(other: ItemHolder): ItemHolder { throw new Error("Not yet implemented."); }
+	overwriteWith(other: ItemHolder): ItemHolder { return this; }
 
 }
 

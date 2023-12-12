@@ -57,8 +57,8 @@ export class Damager implements EntityProperty<Damager>
 	}
 
 	// Clonable.
-	clone(): Damager { throw new Error("Not yet implemented."); }
-	overwriteWith(other: Damager): Damager { throw new Error("Not yet implemented."); }
+	clone(): Damager { return this; }
+	overwriteWith(other: Damager): Damager { return this; }
 
 	// EntityProperty.
 

@@ -114,6 +114,7 @@ var Hemispace = gf.Hemispace;
 var Path = gf.Path;
 var PathBuilder = gf.PathBuilder;
 var Plane = gf.Plane;
+var Point = gf.Point;
 var Ray = gf.Ray;
 var ShapeContainer = gf.ShapeContainer;
 var ShapeGroupAll = gf.ShapeGroupAll;

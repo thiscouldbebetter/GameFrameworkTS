@@ -495,8 +495,8 @@ export class Playable implements EntityProperty<Playable>
 
 	// Clonable.
 
-	clone(): Playable { throw new Error("Not yet implemented."); }
-	overwriteWith(other: Playable): Playable { throw new Error("Not yet implemented."); }
+	clone(): Playable { return this; }
+	overwriteWith(other: Playable): Playable { return this; }
 
 	// EntityProperty.
 

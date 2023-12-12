@@ -120,12 +120,12 @@ export class Talker implements EntityProperty<Talker>
 
 	clone(): Talker
 	{
-		throw new Error("Not yet implemented.");
+		return this;
 	}
 
 	overwriteWith(other: Talker): Talker
 	{
-		throw new Error("Not yet implemented.");
+		return this;
 	}
 
 	// EntityProperty.

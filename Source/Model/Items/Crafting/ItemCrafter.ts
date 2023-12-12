@@ -451,7 +451,7 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 		return new ItemCrafter(ArrayHelper.clone(this.recipesAvailable) );
 	}
 
-	overwriteWith(other: ItemCrafter): ItemCrafter { throw new Error("Not yet implemented."); }
+	overwriteWith(other: ItemCrafter): ItemCrafter { return this; }
 
 
 	// Equatable

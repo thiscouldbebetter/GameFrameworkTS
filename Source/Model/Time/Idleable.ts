@@ -38,12 +38,12 @@ export class Idleable implements EntityProperty<Idleable>
 
 	clone(): Idleable
 	{
-		throw new Error("Not yet implemented.");
+		return this;
 	}
 
 	overwriteWith(other: Idleable): Idleable
 	{
-		throw new Error("Not yet implemented.");
+		return this;
 	}
 
 	// EntityProperty.

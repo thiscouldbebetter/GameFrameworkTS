@@ -51,8 +51,8 @@ export class ItemContainer implements EntityProperty<ItemContainer>
 	}
 
 	// Clonable.
-	clone(): ItemContainer { throw new Error("Not yet implemented."); }
-	overwriteWith(other: ItemContainer): ItemContainer { throw new Error("Not yet implemented."); }
+	clone(): ItemContainer { return this; }
+	overwriteWith(other: ItemContainer): ItemContainer { return this; }
 
 	// EntityProperty.
 

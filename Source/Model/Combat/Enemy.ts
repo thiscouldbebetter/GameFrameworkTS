@@ -117,8 +117,8 @@ export class Enemy implements EntityProperty<Enemy>
 	}
 
 	// Clonable.
-	clone(): Enemy { throw new Error("Not yet implemented."); }
-	overwriteWith(other: Enemy): Enemy { throw new Error("Not yet implemented."); }
+	clone(): Enemy { return this; }
+	overwriteWith(other: Enemy): Enemy { return this; }
 
 	// EntityProperty.
 

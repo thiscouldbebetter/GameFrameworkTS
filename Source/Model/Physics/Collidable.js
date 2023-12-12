@@ -220,7 +220,7 @@ var ThisCouldBeBetter;
             clone() {
                 return new Collidable(this.canCollideAgainWithoutSeparating, this.ticksToWaitBetweenCollisions, this.colliderAtRest.clone(), this.entityPropertyNamesToCollideWith, this._collideEntitiesForUniverseWorldPlaceEntitiesAndCollision);
             }
-            overwriteWith(other) { throw new Error("Not yet implemented."); }
+            overwriteWith(other) { return this; }
             // Equatable
             equals(other) { return false; } // todo
         }

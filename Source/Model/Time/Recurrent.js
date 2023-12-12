@@ -28,7 +28,7 @@ var ThisCouldBeBetter;
             clone() {
                 return new Recurrent(this.ticksPerRecurrence, this.timesToRecur, this.recur);
             }
-            overwriteWith(other) { throw new Error("Not yet implemented."); }
+            overwriteWith(other) { return this; }
             // Equatable
             equals(other) { return false; } // todo
         }

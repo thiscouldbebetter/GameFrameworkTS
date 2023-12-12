@@ -49,7 +49,7 @@ export class VisualEllipse implements Visual<VisualEllipse>
 			var drawableOrientation = drawableLoc.orientation;
 			var drawableRotationInTurns =
 				drawableOrientation.forward.headingInTurns();
-			rotationInTurns += + drawableRotationInTurns;
+			rotationInTurns += drawableRotationInTurns;
 		}
 
 		display.drawEllipse

@@ -12,8 +12,8 @@ export class Traversable implements EntityProperty<Traversable>
 	}
 
 	// Clonable.
-	clone(): Traversable { throw new Error("Not yet implemented."); }
-	overwriteWith(other: Traversable): Traversable { throw new Error("Not yet implemented."); }
+	clone(): Traversable { return this; }
+	overwriteWith(other: Traversable): Traversable { return this; }
 
 	// EntityProperty.
 

@@ -55,7 +55,7 @@ export class Ephemeral implements EntityProperty<Ephemeral>
 		return new Ephemeral(this.ticksToLive, this.expire);
 	}
 
-	overwriteWith(other: Ephemeral): Ephemeral { throw new Error("Not yet implemented."); }
+	overwriteWith(other: Ephemeral): Ephemeral { return this; }
 
 	// Equatable
 

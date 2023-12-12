@@ -141,8 +141,8 @@ export class ItemDefn implements EntityProperty<ItemDefn>
 	equals(other: ItemDefn): boolean { return false; } // todo
 
 	// Clonable.
-	clone(): ItemDefn { throw new Error("Not yet implemented."); }
-	overwriteWith(other: ItemDefn): ItemDefn { throw new Error("Not yet implemented."); }
+	clone(): ItemDefn { return this; }
+	overwriteWith(other: ItemDefn): ItemDefn { return this; }
 
 }
 

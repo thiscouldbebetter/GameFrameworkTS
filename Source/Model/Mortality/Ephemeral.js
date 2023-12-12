@@ -32,7 +32,7 @@ var ThisCouldBeBetter;
             clone() {
                 return new Ephemeral(this.ticksToLive, this.expire);
             }
-            overwriteWith(other) { throw new Error("Not yet implemented."); }
+            overwriteWith(other) { return this; }
             // Equatable
             equals(other) { return false; } // todo
         }

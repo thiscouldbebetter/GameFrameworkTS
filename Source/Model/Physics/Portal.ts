@@ -95,7 +95,7 @@ export class Portal implements EntityProperty<Portal>
 		);
 	}
 
-	overwriteWith(other: Portal): Portal { throw new Error("Not yet implemented."); }
+	overwriteWith(other: Portal): Portal { return this; }
 
 	// EntityProperty.
 

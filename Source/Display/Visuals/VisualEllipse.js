@@ -22,7 +22,7 @@ var ThisCouldBeBetter;
                 if (this.shouldUseEntityOrientation) {
                     var drawableOrientation = drawableLoc.orientation;
                     var drawableRotationInTurns = drawableOrientation.forward.headingInTurns();
-                    rotationInTurns += +drawableRotationInTurns;
+                    rotationInTurns += drawableRotationInTurns;
                 }
                 display.drawEllipse(drawableLoc.pos, this.semiaxisHorizontal, this.semiaxisVertical, GameFramework.NumberHelper.wrapToRangeZeroOne(rotationInTurns), this.colorFill, this.colorBorder);
             }

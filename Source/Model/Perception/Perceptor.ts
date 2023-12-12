@@ -14,8 +14,8 @@ export class Perceptor implements EntityProperty<Perceptor>
 	}
 
 	// Clonable.
-	clone(): Perceptor { throw new Error("Not yet implemented."); }
-	overwriteWith(other: Perceptor): Perceptor { throw new Error("Not yet implemented."); }
+	clone(): Perceptor { return this; }
+	overwriteWith(other: Perceptor): Perceptor { return this; }
 
 	// EntityProperty.
 

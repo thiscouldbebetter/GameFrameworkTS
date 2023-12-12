@@ -578,8 +578,8 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 	}
 
 	// Clonable.
-	clone(): ItemBarterer { throw new Error("Not yet implemented."); }
-	overwriteWith(other: ItemBarterer): ItemBarterer { throw new Error("Not yet implemented."); }
+	clone(): ItemBarterer { return this; }
+	overwriteWith(other: ItemBarterer): ItemBarterer { return this; }
 
 }
 
