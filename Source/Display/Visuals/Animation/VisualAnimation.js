@@ -66,8 +66,7 @@ var ThisCouldBeBetter;
                     for (f = 0; f < this.ticksToHoldFrames.length; f++) {
                         var ticksToHoldFrame = this.ticksToHoldFrames[f];
                         ticksForFramesSoFar += ticksToHoldFrame;
-                        if (ticksForFramesSoFar >= ticksSinceStarted) // hack - Moving this up causes problems in some places, leaving it here causes others.
-                         {
+                        if (ticksForFramesSoFar > ticksSinceStarted) {
                             break;
                         }
                     }

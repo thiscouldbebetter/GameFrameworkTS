@@ -134,7 +134,7 @@ export class VisualAnimation implements Visual<VisualAnimation>
 			{
 				var ticksToHoldFrame = this.ticksToHoldFrames[f];
 				ticksForFramesSoFar += ticksToHoldFrame;
-				if (ticksForFramesSoFar >= ticksSinceStarted) // hack - Moving this up causes problems in some places, leaving it here causes others.
+				if (ticksForFramesSoFar > ticksSinceStarted)
 				{
 					break;
 				}
