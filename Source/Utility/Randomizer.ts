@@ -34,6 +34,13 @@ export class Randomizer
 
 		return elementsChosen;
 	}
+
+	chooseRandomElementFromArray<T>(arrayToChooseFrom: T[]): T
+	{
+		var randomIndex = this.integerLessThan(arrayToChooseFrom.length);
+		var randomElement = arrayToChooseFrom[randomIndex];
+		return randomElement;
+	}
 }
 
 }

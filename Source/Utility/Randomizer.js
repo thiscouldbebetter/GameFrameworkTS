@@ -19,6 +19,11 @@ var ThisCouldBeBetter;
                 }
                 return elementsChosen;
             }
+            chooseRandomElementFromArray(arrayToChooseFrom) {
+                var randomIndex = this.integerLessThan(arrayToChooseFrom.length);
+                var randomElement = arrayToChooseFrom[randomIndex];
+                return randomElement;
+            }
         }
         GameFramework.Randomizer = Randomizer;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
