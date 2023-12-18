@@ -53,6 +53,9 @@ var ThisCouldBeBetter;
             componentsRGB() {
                 return this.componentsRGBA.slice(0, 3);
             }
+            darken() {
+                return this.multiplyRGBScalar(0.5);
+            }
             isBlack() {
                 return (this.componentsRGB().some(x => x > 0) == false);
             }
@@ -62,9 +65,15 @@ var ThisCouldBeBetter;
             isWhite() {
                 return (this.componentsRGB().some(x => x < 1) == false);
             }
+            lighten() {
+                return this.multiplyRGBScalar(2);
+            }
             multiplyRGBScalar(scalar) {
                 for (var i = 0; i < 3; i++) {
                     this.componentsRGBA[i] *= scalar;
+                    if (this.componentsRGBA[i] > 1) {
+                        this.componentsRGBA[i] = 1;
+                    }
                 }
                 return this;
             }
