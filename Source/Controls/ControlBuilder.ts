@@ -5,7 +5,7 @@ namespace ThisCouldBeBetter.GameFramework
 export class ControlBuilder
 {
 	styles: ControlStyle[];
-	stylesByName: Map<string,ControlStyle>;
+	stylesByName: Map<string, ControlStyle>;
 	venueTransitionalFromTo: (vFrom: Venue, vTo: Venue) => Venue;
 
 	buttonHeightBase: number;
@@ -44,6 +44,11 @@ export class ControlBuilder
 	static default(): ControlBuilder
 	{
 		return new ControlBuilder(null, null);
+	}
+
+	static fromStyle(style: ControlStyle): ControlBuilder
+	{
+		return ControlBuilder.fromStyles( [ style ] );
 	}
 
 	static fromStyles(styles: ControlStyle[]): ControlBuilder

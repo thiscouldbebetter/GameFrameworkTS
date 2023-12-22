@@ -21,6 +21,9 @@ var ThisCouldBeBetter;
             static default() {
                 return new ControlBuilder(null, null);
             }
+            static fromStyle(style) {
+                return ControlBuilder.fromStyles([style]);
+            }
             static fromStyles(styles) {
                 return new ControlBuilder(styles, null);
             }
