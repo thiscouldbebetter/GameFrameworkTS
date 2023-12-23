@@ -33,12 +33,10 @@ var ThisCouldBeBetter;
                 var back = () => universe.venueTransitionTo(venuePrev);
                 var buttonSize = GameFramework.Coords.fromXY(20, 10);
                 var childControls = [
-                    new GameFramework.ControlLabel("labelJournalEntries", GameFramework.Coords.fromXY(10, 5), // pos
+                    GameFramework.ControlLabel.from4Uncentered(GameFramework.Coords.fromXY(10, 5), // pos
                     GameFramework.Coords.fromXY(70, 25), // size
-                    false, // isTextCenteredHorizontally
-                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Journal Entries:"), fontSmall),
-                    new GameFramework.ControlButton("buttonEntryNew", GameFramework.Coords.fromXY(65, 5), // pos
+                    GameFramework.ControlButton.from11("buttonEntryNew", GameFramework.Coords.fromXY(65, 5), // pos
                     GameFramework.Coords.fromXY(30, 8), // size
                     "New", fontSmall, true, // hasBorder,
                     GameFramework.DataBinding.fromTrueWithContext(this), // isEnabled
@@ -69,7 +67,7 @@ var ThisCouldBeBetter;
                     false, // isTextCenteredHorizontally
                     false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Entry Selected:"), fontSmall),
-                    new GameFramework.ControlButton("buttonEntrySelectedEdit", GameFramework.Coords.fromXY(146, 5), // pos
+                    GameFramework.ControlButton.from11("buttonEntrySelectedEdit", GameFramework.Coords.fromXY(146, 5), // pos
                     GameFramework.Coords.fromXY(15, 8), // size
                     "Lock", fontSmall, true, // hasBorder,
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.journalEntrySelected != null
@@ -78,7 +76,7 @@ var ThisCouldBeBetter;
                         journalKeeper.isJournalEntrySelectedEditable = false;
                     }, // click
                     false),
-                    new GameFramework.ControlButton("buttonEntrySelectedEdit", GameFramework.Coords.fromXY(164, 5), // pos
+                    GameFramework.ControlButton.from11("buttonEntrySelectedEdit", GameFramework.Coords.fromXY(164, 5), // pos
                     GameFramework.Coords.fromXY(15, 8), // size
                     "Edit", fontSmall, true, // hasBorder,
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.journalEntrySelected != null
@@ -87,7 +85,7 @@ var ThisCouldBeBetter;
                         journalKeeper.isJournalEntrySelectedEditable = true;
                     }, // click
                     false),
-                    new GameFramework.ControlButton("buttonEntrySelectedDelete", GameFramework.Coords.fromXY(182, 5), // pos
+                    GameFramework.ControlButton.from11("buttonEntrySelectedDelete", GameFramework.Coords.fromXY(182, 5), // pos
                     GameFramework.Coords.fromXY(8, 8), // size
                     "X", fontSmall, true, // hasBorder,
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.journalEntrySelected != null)), // isEnabled
@@ -106,15 +104,11 @@ var ThisCouldBeBetter;
                     }, // click
                     false // canBeHeldDown
                     ),
-                    new GameFramework.ControlLabel("labelEntrySelectedTimeRecorded", GameFramework.Coords.fromXY(105, 15), // pos
+                    GameFramework.ControlLabel.from4Uncentered(GameFramework.Coords.fromXY(105, 15), // pos
                     GameFramework.Coords.fromXY(100, 15), // size
-                    false, // isTextCenteredHorizontally
-                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Time Recorded:"), fontSmall),
-                    new GameFramework.ControlLabel("labelEntrySelectedTimeRecorded", GameFramework.Coords.fromXY(145, 15), // pos
+                    GameFramework.ControlLabel.from4Uncentered(GameFramework.Coords.fromXY(145, 15), // pos
                     GameFramework.Coords.fromXY(100, 15), // size
-                    false, // isTextCenteredHorizontally
-                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => {
                         var entry = c.journalEntrySelected;
                         return (entry == null ? "-" : entry.timeRecordedAsStringH_M_S(universe));

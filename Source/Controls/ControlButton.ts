@@ -4,7 +4,7 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class ControlButton<TContext> extends ControlBase
 {
-	text: string;
+	_text: DataBinding<TContext, string>;
 	hasBorder: boolean;
 	_isEnabled: DataBinding<TContext, boolean>;
 	_click: () => void;
@@ -18,7 +18,7 @@ export class ControlButton<TContext> extends ControlBase
 		name: string,
 		pos: Coords,
 		size: Coords,
-		text: string,
+		text: DataBinding<TContext, string>,
 		fontNameAndHeight: FontNameAndHeight,
 		hasBorder: boolean,
 		isEnabled: DataBinding<TContext, boolean>,
@@ -27,7 +27,7 @@ export class ControlButton<TContext> extends ControlBase
 	)
 	{
 		super(name, pos, size, fontNameAndHeight);
-		this.text = text;
+		this._text = text;
 		this.hasBorder = hasBorder;
 		this._isEnabled = isEnabled;
 		this._click = click;
@@ -57,17 +57,17 @@ export class ControlButton<TContext> extends ControlBase
 	(
 		pos: Coords,
 		size: Coords,
-		text: string,
+		textAsString: string,
 		fontNameAndHeight: FontNameAndHeight,
 		click: () => void
 	)
 	{
 		return ControlButton.from8
 		(
-			"button" + text.split(" ").join(""),
+			"button" + textAsString.split(" ").join(""),
 			pos,
 			size,
-			text,
+			textAsString,
 			fontNameAndHeight,
 			true, // hasBorder
 			DataBinding.fromTrue(), // isEnabled,
@@ -80,7 +80,35 @@ export class ControlButton<TContext> extends ControlBase
 		name: string,
 		pos: Coords,
 		size: Coords,
-		text: string,
+		textAsString: string,
+		fontNameAndHeight: FontNameAndHeight,
+		hasBorder: boolean,
+		isEnabled: DataBinding<TContext, boolean>,
+		click: () => void
+	)
+	{
+		var textAsBinding = DataBinding.fromGet( (c: TContext) => textAsString);
+
+		return new ControlButton
+		(
+			name,
+			pos,
+			size,
+			textAsBinding,
+			fontNameAndHeight,
+			hasBorder,
+			isEnabled,
+			click,
+			false // canBeHeldDown
+		);
+	}
+
+	static from8WithTextAsBinding<TContext>
+	(
+		name: string,
+		pos: Coords,
+		size: Coords,
+		textAsBinding: DataBinding<TContext, string>,
 		fontNameAndHeight: FontNameAndHeight,
 		hasBorder: boolean,
 		isEnabled: DataBinding<TContext, boolean>,
@@ -89,8 +117,42 @@ export class ControlButton<TContext> extends ControlBase
 	{
 		return new ControlButton
 		(
-			name, pos, size, text, fontNameAndHeight, hasBorder,
-			isEnabled, click, false // canBeHeldDown
+			name,
+			pos,
+			size,
+			textAsBinding,
+			fontNameAndHeight,
+			hasBorder,
+			isEnabled,
+			click,
+			false // canBeHeldDown
+		);
+	}
+
+	static from11<TContext>
+	(
+		name: string,
+		pos: Coords,
+		size: Coords,
+		textAsString: string,
+		fontNameAndHeight: FontNameAndHeight,
+		hasBorder: boolean,
+		isEnabled: DataBinding<TContext, boolean>,
+		click: () => void,
+		canBeHeldDown: boolean
+	)
+	{
+		return new ControlButton
+		(
+			name,
+			pos,
+			size,
+			DataBinding.fromGet( (c: TContext) => textAsString),
+			fontNameAndHeight,
+			hasBorder,
+			isEnabled,
+			click,
+			canBeHeldDown
 		);
 	}
 
@@ -112,6 +174,11 @@ export class ControlButton<TContext> extends ControlBase
 	isEnabled(): boolean
 	{
 		return this._isEnabled.get();
+	}
+
+	text(): string
+	{
+		return this._text.get();
 	}
 
 	// events
@@ -152,9 +219,11 @@ export class ControlButton<TContext> extends ControlBase
 
 		var colorText = (isEnabled ? colorBorder : style.colorDisabled());
 
+		var textAsString = this.text();
+
 		display.drawText
 		(
-			this.text,
+			textAsString,
 			this.fontNameAndHeight,
 			drawPos,
 			(isHighlighted ? colorFill : colorText),

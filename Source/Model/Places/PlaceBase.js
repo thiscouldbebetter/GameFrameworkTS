@@ -97,6 +97,9 @@ var ThisCouldBeBetter;
             entityByName(entityName) {
                 return this.entitiesByName.get(entityName);
             }
+            entityIsPresent(entity) {
+                return (this._entities.indexOf(entity) >= 0);
+            }
             entityRemove(entity) {
                 var entityProperties = entity.properties;
                 for (var p = 0; p < entityProperties.length; p++) {

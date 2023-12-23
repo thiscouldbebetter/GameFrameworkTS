@@ -78,7 +78,7 @@ var ThisCouldBeBetter;
                         ? () => Profile.toControlSaveStateLoadOrSave_LoadNewWorld(universe, size)
                         : () => Profile.toControlSaveStateLoadOrSave_SaveToLocalStorageAsNewSlot(universe, size)) // click
                     ),
-                    new GameFramework.ControlButton("buttonSelect", GameFramework.Coords.fromXY(40, 120), // pos
+                    GameFramework.ControlButton.from11("buttonSelect", GameFramework.Coords.fromXY(40, 120), // pos
                     GameFramework.Coords.fromXY(25, buttonHeightBase), // size
                     (isLoadNotSave ? "Load" : "Save"), fontNameAndHeight, true, // hasBorder
                     // isEnabled

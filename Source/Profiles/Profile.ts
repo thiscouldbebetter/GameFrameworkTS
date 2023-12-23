@@ -171,7 +171,7 @@ export class Profile
 				) // click
 			),
 
-			new ControlButton
+			ControlButton.from11
 			(
 				"buttonSelect",
 				Coords.fromXY(40, 120), // pos

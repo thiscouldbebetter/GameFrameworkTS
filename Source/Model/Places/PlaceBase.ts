@@ -169,6 +169,11 @@ export class PlaceBase implements Place, Loadable
 		return this.entitiesByName.get(entityName);
 	}
 
+	entityIsPresent(entity:Entity): boolean
+	{
+		return (this._entities.indexOf(entity) >= 0);
+	}
+
 	entityRemove(entity: Entity): void
 	{
 		var entityProperties = entity.properties;
