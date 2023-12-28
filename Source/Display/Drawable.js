@@ -25,6 +25,11 @@ var ThisCouldBeBetter;
             static fromVisualAndRenderingOrder(visual, renderingOrder) {
                 return new Drawable(visual, renderingOrder, null);
             }
+            draw(uwpe) {
+                if (this.isVisible) {
+                    this.visual.draw(uwpe, uwpe.universe.display);
+                }
+            }
             hide() {
                 this.isVisible = false;
             }
@@ -33,9 +38,7 @@ var ThisCouldBeBetter;
             }
             // EntityProperty.
             updateForTimerTick(uwpe) {
-                if (this.isVisible) {
-                    this.visual.draw(uwpe, uwpe.universe.display);
-                }
+                this.draw(uwpe);
             }
             // cloneable
             clone() {

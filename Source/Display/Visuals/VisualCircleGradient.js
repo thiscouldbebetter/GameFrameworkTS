@@ -16,10 +16,13 @@ var ThisCouldBeBetter;
             }
             // Clonable.
             clone() {
-                return this; // todo
+                return new VisualCircleGradient(this.radius, this.gradientFill, this.colorBorder);
             }
             overwriteWith(other) {
-                return this; // todo
+                this.radius = other.radius;
+                this.gradientFill = other.gradientFill;
+                this.colorBorder = other.colorBorder;
+                return this;
             }
             // Transformable.
             transform(transformToApply) {

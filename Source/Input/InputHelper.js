@@ -14,12 +14,17 @@ var ThisCouldBeBetter;
                 this.inputNamesLookup = inputNames._AllByName;
                 this.keysToPreventDefaultsFor =
                     [
-                        inputNames.ArrowDown, inputNames.ArrowLeft, inputNames.ArrowRight,
-                        inputNames.ArrowUp, inputNames.Tab,
+                        inputNames.ArrowDown,
+                        inputNames.ArrowLeft,
+                        inputNames.ArrowRight,
+                        inputNames.ArrowUp,
+                        inputNames.Tab
                     ];
                 this.inputsPressed = [];
                 this.inputsPressedByName = new Map();
                 this.isEnabled = true;
+                this.isMouseMovementTracked = true;
+                this.isMouseWheelTracked = false;
             }
             actionsFromInput(actionsByName, actionToInputsMappingsByInputName) {
                 var actionsSoFar = new Array();
@@ -48,7 +53,6 @@ var ThisCouldBeBetter;
             initialize(universe) {
                 this.inputsPressed = [];
                 this.gamepadsConnected = [];
-                this.isMouseMovementTracked = true; // hack
                 if (universe == null) {
                     // hack - Allows use of this class
                     // without including PlatformHelper or Universe.
@@ -74,7 +78,8 @@ var ThisCouldBeBetter;
                 }
             }
             inputsActive() {
-                return this.inputsPressed.filter((x) => x.isActive);
+                var inputsActive = this.inputsPressed.filter((x) => x.isActive);
+                return inputsActive;
             }
             inputsRemoveAll() {
                 for (var i = 0; i < this.inputsPressed.length; i++) {
@@ -204,6 +209,16 @@ var ThisCouldBeBetter;
             handleEventMouseUp(event) {
                 this.inputRemove(GameFramework.Input.Names().MouseClick);
             }
+            handleEventMouseWheel(event) {
+                if (this.isMouseWheelTracked) {
+                    var wheelMovementAmountInPixels = event.deltaY; // Seems a strange unit.
+                    var inputNames = GameFramework.Input.Names();
+                    var inputName = wheelMovementAmountInPixels > 0
+                        ? inputNames.MouseWheelDown
+                        : inputNames.MouseWheelUp;
+                    this.inputAdd(inputName);
+                }
+            }
             // Events - Touch.
             handleEventTouchStart(event) {
                 event.preventDefault();
@@ -246,6 +261,7 @@ var ThisCouldBeBetter;
                     (this.isMouseMovementTracked
                         ? this.handleEventMouseMove.bind(this)
                         : null);
+                divMain.onwheel = this.handleEventMouseWheel.bind(this);
                 divMain.ontouchstart = this.handleEventTouchStart.bind(this);
                 divMain.ontouchend = this.handleEventTouchEnd.bind(this);
                 return null;

@@ -34,12 +34,20 @@ export class VisualCircleGradient implements Visual<VisualCircleGradient>
 
 	clone(): VisualCircleGradient
 	{
-		return this; // todo
+		return new VisualCircleGradient
+		(
+			this.radius,
+			this.gradientFill,
+			this.colorBorder
+		);
 	}
 
 	overwriteWith(other: VisualCircleGradient): VisualCircleGradient
 	{
-		return this; // todo
+		this.radius = other.radius;
+		this.gradientFill = other.gradientFill;
+		this.colorBorder = other.colorBorder;
+		return this;
 	}
 
 	// Transformable.

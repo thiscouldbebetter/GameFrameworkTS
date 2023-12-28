@@ -24,6 +24,7 @@ var ThisCouldBeBetter;
                 if (distanceAlongCameraForward != 0) {
                     coordsToTransform.divideScalar(distanceAlongCameraForward);
                 }
+                coordsToTransform.z = distanceAlongCameraForward;
                 return coordsToTransform;
             }
         }
