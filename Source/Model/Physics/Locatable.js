@@ -79,7 +79,7 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) {
-                this.loc.placeName = uwpe.place.name;
+                this.loc.placeName = (uwpe.place == null ? null : uwpe.place.name);
             }
             // Equatable
             equals(other) {

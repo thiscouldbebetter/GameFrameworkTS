@@ -5,8 +5,9 @@ var ThisCouldBeBetter;
     (function (GameFramework) {
         class SoundHelperLive {
             constructor() {
+                this.effectVolume = 1;
                 this.musicVolume = 1;
-                this.soundVolume = 1;
+                this.soundsForEffectsInProgress = [];
                 this.soundForMusic = null;
             }
             controlSelectOptionsVolume() {
@@ -46,10 +47,19 @@ var ThisCouldBeBetter;
                     sound.seek(0);
                 }
             }
+            soundForMusicPause(universe) {
+                if (this.soundForMusic != null) {
+                    this.soundForMusic.pause(universe);
+                }
+            }
             soundWithNamePlayAsEffect(universe, soundName) {
                 var sound = this.soundsByName.get(soundName);
                 sound.isRepeating = false;
-                sound.play(universe, this.soundVolume);
+                var soundIsAlreadyPlaying = (this.soundsForEffectsInProgress.indexOf(sound) >= 0);
+                if (soundIsAlreadyPlaying == false) {
+                    this.soundsForEffectsInProgress.push(sound);
+                    sound.play(universe, this.effectVolume);
+                }
             }
             soundWithNamePlayAsMusic(universe, soundToPlayName) {
                 var soundToPlay = this.soundsByName.get(soundToPlayName);
@@ -63,6 +73,16 @@ var ThisCouldBeBetter;
                     soundToPlay.play(universe, this.musicVolume);
                 }
                 this.soundForMusic = soundToPlay;
+            }
+            soundWithNameStop(soundToStopName) {
+                var soundToStop = this.soundsByName.get(soundToStopName);
+                var soundToStopIndex = this.soundsForEffectsInProgress.indexOf(soundToStop);
+                if (soundToStopIndex >= 0) {
+                    this.soundsForEffectsInProgress.splice(soundToStopIndex, 1);
+                }
+                if (soundToStop == this.soundForMusic) {
+                    this.soundForMusic = null;
+                }
             }
             soundsAllStop(universe) {
                 this.sounds.forEach(x => x.stop(universe));

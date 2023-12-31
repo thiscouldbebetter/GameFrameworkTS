@@ -203,7 +203,8 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) {
-                this.collisionsFindAndHandle(uwpe);
+                // This causes problems sometimes.
+                // this.collisionsFindAndHandle(uwpe);
             }
             updateForTimerTick(uwpe) {
                 var entity = uwpe.entity;

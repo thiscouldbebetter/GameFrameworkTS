@@ -1172,8 +1172,8 @@ export class ControlBuilder
 			new DataBinding
 			(
 				universe.soundHelper,
-				(c: SoundHelper) => c.soundVolume,
-				(c: SoundHelper, v: number) => { c.soundVolume = v; }
+				(c: SoundHelper) => c.effectVolume,
+				(c: SoundHelper, v: number) => { c.effectVolume = v; }
 			), // valueSelected
 			DataBinding.fromContextAndGet
 			(

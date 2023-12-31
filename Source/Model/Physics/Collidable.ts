@@ -450,7 +450,8 @@ export class Collidable implements EntityProperty<Collidable>
 
 	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
-		this.collisionsFindAndHandle(uwpe);
+		// This causes problems sometimes.
+		// this.collisionsFindAndHandle(uwpe);
 	}
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
