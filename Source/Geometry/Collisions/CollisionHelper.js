@@ -34,6 +34,7 @@ var ThisCouldBeBetter;
                 var mapLocatedName = (typeof GameFramework.MapLocated == notDefined ? null : GameFramework.MapLocated.name);
                 var mapLocated2Name = (typeof GameFramework.MapLocated2 == notDefined ? null : GameFramework.MapLocated2.name);
                 var meshName = (typeof GameFramework.Mesh == notDefined ? null : GameFramework.Mesh.name);
+                var pointName = (typeof GameFramework.Point == notDefined ? null : GameFramework.Point.name);
                 var shapeGroupAllName = (typeof GameFramework.ShapeGroupAll == notDefined ? null : GameFramework.ShapeGroupAll.name);
                 var shapeInverseName = (typeof GameFramework.ShapeInverse == notDefined ? null : GameFramework.ShapeInverse.name);
                 var sphereName = (typeof GameFramework.Sphere == notDefined ? null : GameFramework.Sphere.name);
@@ -75,6 +76,12 @@ var ThisCouldBeBetter;
                         [sphereName, this.collisionOfMeshAndSphere]
                     ]);
                     lookupOfLookups.set(meshName, lookup);
+                }
+                if (pointName != null) {
+                    lookup = new Map([
+                        [pointName, this.collisionOfPointAndPoint],
+                    ]);
+                    lookupOfLookups.set(pointName, lookup);
                 }
                 if (shapeGroupAllName != null) {
                     lookup = new Map([
@@ -690,6 +697,10 @@ var ThisCouldBeBetter;
                 var meshBoundsAsBox = mesh.box();
                 return this.collisionOfBoxAndSphere(meshBoundsAsBox, sphere, collision, true); // shouldCalculatePos
             }
+            collisionOfPointAndPoint(point0, point1, collisionOut) {
+                collisionOut.pos.overwriteWith(point0.pos);
+                return collisionOut;
+            }
             collisionOfShapeAndShapeGroupAll(shape, shapeGroupAll, collisionOut) {
                 return this.collisionOfColliders(shape, shapeGroupAll.shapes[0], collisionOut);
             }
@@ -1066,6 +1077,9 @@ var ThisCouldBeBetter;
                     }
                 }
                 return returnValue;
+            }
+            doPointAndPointCollide(point0, point1) {
+                return point0.pos.equals(point1.pos);
             }
             doSphereAndBoxCollide(sphere, box) {
                 return this.doBoxAndSphereCollide(box, sphere);

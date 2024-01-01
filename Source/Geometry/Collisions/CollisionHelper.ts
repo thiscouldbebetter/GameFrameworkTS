@@ -61,6 +61,7 @@ export class CollisionHelper
 		var mapLocatedName = ( typeof MapLocated == notDefined ? null : MapLocated.name );
 		var mapLocated2Name = ( typeof MapLocated2 == notDefined ? null : MapLocated2.name );
 		var meshName = ( typeof Mesh == notDefined ? null : Mesh.name );
+		var pointName = (typeof Point == notDefined ? null : Point.name );
 		var shapeGroupAllName = (typeof ShapeGroupAll == notDefined ? null : ShapeGroupAll.name);
 		var shapeInverseName = (typeof ShapeInverse == notDefined ? null : ShapeInverse.name);
 		var sphereName = ( typeof Sphere == notDefined ? null : Sphere.name );
@@ -80,7 +81,7 @@ export class CollisionHelper
 			]);
 			lookupOfLookups.set(boxName, lookup);
 		}
-		
+
 		if (boxRotatedName != null)
 		{
 			lookup = new Map<string, any>
@@ -114,6 +115,15 @@ export class CollisionHelper
 				[ sphereName, this.collisionOfMeshAndSphere ]
 			]);
 			lookupOfLookups.set(meshName, lookup);
+		}
+
+		if (pointName != null)
+		{
+			lookup = new Map<string, any>
+			([
+				[ pointName, this.collisionOfPointAndPoint ],
+			]);
+			lookupOfLookups.set(pointName, lookup);
 		}
 
 		if (shapeGroupAllName != null)
@@ -1235,6 +1245,16 @@ export class CollisionHelper
 		return this.collisionOfBoxAndSphere(meshBoundsAsBox, sphere, collision, true); // shouldCalculatePos
 	}
 
+	collisionOfPointAndPoint(point0: Point, point1: Point, collisionOut: Collision): Collision
+	{
+		collisionOut.pos.overwriteWith
+		(
+			point0.pos
+		);
+
+		return collisionOut;
+	}
+
 	collisionOfShapeAndShapeGroupAll(shape: ShapeBase, shapeGroupAll: ShapeGroupAll, collisionOut: Collision): Collision
 	{
 		return this.collisionOfColliders(shape, shapeGroupAll.shapes[0], collisionOut);
@@ -1880,6 +1900,11 @@ export class CollisionHelper
 		}
 
 		return returnValue;
+	}
+
+	doPointAndPointCollide(point0: Point, point1: Point): boolean
+	{
+		return point0.pos.equals(point1.pos);
 	}
 
 	doSphereAndBoxCollide(sphere: Sphere, box: Box): boolean
