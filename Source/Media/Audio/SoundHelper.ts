@@ -6,13 +6,15 @@ export interface SoundHelper
 {
 	audioContext(): AudioContext;
 	controlSelectOptionsVolume(): ControlSelectOption<number>[];
+	effectVolume: number;
 	initialize(sounds: Sound[]): void;
 	musicVolume: number;
 	reset(): void;
 	soundForMusic: Sound;
-	soundVolume: number;
+	soundForMusicPause(universe: Universe): void;
 	soundWithNamePlayAsEffect(universe: Universe, soundName: string): void;
 	soundWithNamePlayAsMusic(universe: Universe, soundName: string): void;
+	soundWithNameStop(soundName: string): void;
 	soundsAllStop(universe: Universe): void;
 }
 
@@ -21,8 +23,10 @@ export class SoundHelperLive
 	sounds: Sound[];
 
 	soundsByName: Map<string, Sound>;
+
+	effectVolume: number;
 	musicVolume: number;
-	soundVolume: number;
+	soundsForEffectsInProgress: Sound[];
 	soundForMusic: Sound;
 	_audioContext: AudioContext;
 
@@ -30,9 +34,10 @@ export class SoundHelperLive
 
 	constructor()
 	{
+		this.effectVolume = 1;
 		this.musicVolume = 1;
-		this.soundVolume = 1;
 
+		this.soundsForEffectsInProgress = [];
 		this.soundForMusic = null;
 	}
 
@@ -86,11 +91,26 @@ export class SoundHelperLive
 		}
 	}
 
+	soundForMusicPause(universe: Universe): void
+	{
+		if (this.soundForMusic != null)
+		{
+			this.soundForMusic.pause(universe);
+		}
+	}
+
 	soundWithNamePlayAsEffect(universe: Universe, soundName: string): void
 	{
 		var sound = this.soundsByName.get(soundName);
 		sound.isRepeating = false;
-		sound.play(universe, this.soundVolume);
+
+		var soundIsAlreadyPlaying =
+			(this.soundsForEffectsInProgress.indexOf(sound) >= 0);
+		if (soundIsAlreadyPlaying == false)
+		{
+			this.soundsForEffectsInProgress.push(sound);
+			sound.play(universe, this.effectVolume);
+		}
 	}
 
 	soundWithNamePlayAsMusic(universe: Universe, soundToPlayName: string): void
@@ -111,6 +131,22 @@ export class SoundHelperLive
 		}
 
 		this.soundForMusic = soundToPlay;
+	}
+
+	soundWithNameStop(soundToStopName: string): void
+	{
+		var soundToStop = this.soundsByName.get(soundToStopName);
+
+		var soundToStopIndex = this.soundsForEffectsInProgress.indexOf(soundToStop);
+		if (soundToStopIndex >= 0)
+		{
+			this.soundsForEffectsInProgress.splice(soundToStopIndex, 1);
+		}
+
+		if (soundToStop == this.soundForMusic)
+		{
+			this.soundForMusic = null;
+		}
 	}
 
 	soundsAllStop(universe: Universe): void

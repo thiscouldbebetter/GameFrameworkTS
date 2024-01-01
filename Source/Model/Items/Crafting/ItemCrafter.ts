@@ -184,13 +184,10 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 			sizeBase.clone(), // size
 			// children
 			[
-				new ControlLabel
+				ControlLabel.from4Uncentered
 				(
-					"labelRecipes",
 					Coords.fromXY(10, 5), // pos
 					Coords.fromXY(70, 25), // size
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContext("Recipes:"),
 					fontSmall
 				),
@@ -226,18 +223,15 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 					null
 				),
 
-				new ControlLabel
+				ControlLabel.from4Uncentered
 				(
-					"labelRecipeSelected",
 					Coords.fromXY(105, 5), // pos
 					Coords.fromXY(70, 25), // size
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContext("Recipe Selected:"),
 					fontSmall
 				),
 
-				new ControlButton
+				ControlButton.from11
 				(
 					"buttonCraft",
 					Coords.fromXY(170, 5), // pos
@@ -255,13 +249,10 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 					null // ?
 				),
 
-				new ControlLabel
+				ControlLabel.from4Uncentered
 				(
-					"infoRecipeSelected",
 					Coords.fromXY(105, 10), // pos
 					Coords.fromXY(75, 25), // size
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet
 					(
 						this,
@@ -307,13 +298,10 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 					null // bindingForItemValue
 				),
 
-				new ControlLabel
+				ControlLabel.from4Uncentered
 				(
-					"labelCrafting",
 					Coords.fromXY(105, 50), // pos
 					Coords.fromXY(75, 25), // size
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContext("Crafting:"),
 					fontSmall
 				),
@@ -334,13 +322,10 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 					crafter.recipeInProgressCancel // click
 				),
 
-				new ControlLabel
+				ControlLabel.from4Uncentered
 				(
-					"infoCrafting",
 					Coords.fromXY(105, 55), // pos
 					Coords.fromXY(75, 25), // size
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet
 					(
 						this,

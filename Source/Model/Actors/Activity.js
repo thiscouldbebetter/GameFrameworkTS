@@ -24,6 +24,7 @@ var ThisCouldBeBetter;
             clear() {
                 this.defnName = GameFramework.ActivityDefn.Instances().DoNothing.name;
                 this.targetEntityClear();
+                this.targetEntitiesByName.clear();
                 return this;
             }
             defn(world) {

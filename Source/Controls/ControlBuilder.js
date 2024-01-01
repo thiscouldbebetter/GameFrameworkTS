@@ -21,6 +21,9 @@ var ThisCouldBeBetter;
             static default() {
                 return new ControlBuilder(null, null);
             }
+            static fromStyle(style) {
+                return ControlBuilder.fromStyles([style]);
+            }
             static fromStyles(styles) {
                 return new ControlBuilder(styles, null);
             }
@@ -524,7 +527,7 @@ var ThisCouldBeBetter;
                 GameFramework.DataBinding.fromContext("Sound:"), font);
                 var selectSoundVolume = new GameFramework.ControlSelect("selectSoundVolume", GameFramework.Coords.fromXY(140, row1PosY), // pos
                 GameFramework.Coords.fromXY(30, buttonHeight), // size
-                new GameFramework.DataBinding(universe.soundHelper, (c) => c.soundVolume, (c, v) => { c.soundVolume = v; }), // valueSelected
+                new GameFramework.DataBinding(universe.soundHelper, (c) => c.effectVolume, (c, v) => { c.effectVolume = v; }), // valueSelected
                 GameFramework.DataBinding.fromContextAndGet(universe.soundHelper, (c) => c.controlSelectOptionsVolume()), // options
                 GameFramework.DataBinding.fromGet((c) => c.value), // bindingForOptionValues,
                 GameFramework.DataBinding.fromGet((c) => c.text), // bindingForOptionText

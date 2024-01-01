@@ -435,7 +435,7 @@ export class Playable implements EntityProperty<Playable>
 		{
 			var buttonText = "\n   " + i;
 
-			var button = new ControlButton
+			var button = ControlButton.from11
 			(
 				"buttonItemQuickSlot" + i,
 				buttonPos.clone(),

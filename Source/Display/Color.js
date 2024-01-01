@@ -54,7 +54,7 @@ var ThisCouldBeBetter;
                 return this.componentsRGBA.slice(0, 3);
             }
             darken() {
-                return this.multiplyRGBScalar(0.5);
+                return this.multiplyRGBScalar(.5);
             }
             isBlack() {
                 return (this.componentsRGB().some(x => x > 0) == false);
@@ -172,7 +172,7 @@ var ThisCouldBeBetter;
                 this.Pink = new Color("Pink", "p", [1, 0.5, 0.5, 1]);
                 this.Red = new Color("Red", "r", [1, 0, 0, 1]);
                 this.RedDark = new Color("RedDark", "R", [.5, 0, 0, 1]);
-                this.Tan = Color.fromSystemColor("Tan");
+                this.Tan = new Color("Tan", "T", [.8, .7, .5, 1]);
                 this.Violet = new Color("Violet", "v", [1, 0, 1, 1]);
                 this.VioletDark = new Color("VioletDark", "V2", [.5, 0, .5, 1]);
                 this.VioletEighth = new Color("VioletEighth", "V8", [.125, 0, .125, 1]);

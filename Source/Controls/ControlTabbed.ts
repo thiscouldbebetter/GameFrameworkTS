@@ -65,7 +65,7 @@ export class ControlTabbed<TContext> extends ControlBase
 				marginSize + this.tabButtonSize.x * i, marginSize
 			);
 
-			var button = ControlButton.from8
+			var button = ControlButton.from8<TContext>
 			(
 				"button" + childName,
 				buttonPos,
@@ -148,7 +148,7 @@ export class ControlTabbed<TContext> extends ControlBase
 		if (this.cancel != null)
 		{
 			this.childrenForTabs.push(null);
-			var button = ControlButton.from8
+			var button = ControlButton.from8<TContext>
 			(
 				"buttonCancel",
 				Coords.fromXY

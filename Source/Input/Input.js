@@ -35,6 +35,8 @@ var ThisCouldBeBetter;
                 this.GamepadMoveUp = "GamepadMoveUp_";
                 this.MouseClick = "MouseClick";
                 this.MouseMove = "MouseMove";
+                this.MouseWheelDown = "MouseWheelDown";
+                this.MouseWheelUp = "MouseWheelUp";
                 this.Shift = "Shift";
                 this.Space = "_";
                 this.Tab = "Tab";

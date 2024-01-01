@@ -6,7 +6,7 @@ var ThisCouldBeBetter;
         class ControlButton extends GameFramework.ControlBase {
             constructor(name, pos, size, text, fontNameAndHeight, hasBorder, isEnabled, click, canBeHeldDown) {
                 super(name, pos, size, fontNameAndHeight);
-                this.text = text;
+                this._text = text;
                 this.hasBorder = hasBorder;
                 this._isEnabled = isEnabled;
                 this._click = click;
@@ -18,14 +18,22 @@ var ThisCouldBeBetter;
             static from5(pos, size, text, fontNameAndHeight, click) {
                 return ControlButton.fromPosSizeTextFontClick(pos, size, text, fontNameAndHeight, click);
             }
-            static fromPosSizeTextFontClick(pos, size, text, fontNameAndHeight, click) {
-                return ControlButton.from8("button" + text.split(" ").join(""), pos, size, text, fontNameAndHeight, true, // hasBorder
+            static fromPosSizeTextFontClick(pos, size, textAsString, fontNameAndHeight, click) {
+                return ControlButton.from8("button" + textAsString.split(" ").join(""), pos, size, textAsString, fontNameAndHeight, true, // hasBorder
                 GameFramework.DataBinding.fromTrue(), // isEnabled,
                 click);
             }
-            static from8(name, pos, size, text, fontNameAndHeight, hasBorder, isEnabled, click) {
-                return new ControlButton(name, pos, size, text, fontNameAndHeight, hasBorder, isEnabled, click, false // canBeHeldDown
+            static from8(name, pos, size, textAsString, fontNameAndHeight, hasBorder, isEnabled, click) {
+                var textAsBinding = GameFramework.DataBinding.fromGet((c) => textAsString);
+                return new ControlButton(name, pos, size, textAsBinding, fontNameAndHeight, hasBorder, isEnabled, click, false // canBeHeldDown
                 );
+            }
+            static from8WithTextAsBinding(name, pos, size, textAsBinding, fontNameAndHeight, hasBorder, isEnabled, click) {
+                return new ControlButton(name, pos, size, textAsBinding, fontNameAndHeight, hasBorder, isEnabled, click, false // canBeHeldDown
+                );
+            }
+            static from11(name, pos, size, textAsString, fontNameAndHeight, hasBorder, isEnabled, click, canBeHeldDown) {
+                return new ControlButton(name, pos, size, GameFramework.DataBinding.fromGet((c) => textAsString), fontNameAndHeight, hasBorder, isEnabled, click, canBeHeldDown);
             }
             actionHandle(actionNameToHandle, universe) {
                 if (actionNameToHandle == GameFramework.ControlActionNames.Instances().ControlConfirm) {
@@ -38,6 +46,9 @@ var ThisCouldBeBetter;
             }
             isEnabled() {
                 return this._isEnabled.get();
+            }
+            text() {
+                return this._text.get();
             }
             // events
             mouseClick(clickPos) {
@@ -59,7 +70,8 @@ var ThisCouldBeBetter;
                     style.drawBoxOfSizeAtPosWithColorsToDisplay(this.size, drawPos, colorFill, colorBorder, isHighlighted, display);
                 }
                 var colorText = (isEnabled ? colorBorder : style.colorDisabled());
-                display.drawText(this.text, this.fontNameAndHeight, drawPos, (isHighlighted ? colorFill : colorText), (isHighlighted ? colorText : colorFill), true, // isCenteredHorizontally
+                var textAsString = this.text();
+                display.drawText(textAsString, this.fontNameAndHeight, drawPos, (isHighlighted ? colorFill : colorText), (isHighlighted ? colorText : colorFill), true, // isCenteredHorizontally
                 true, // isCenteredVertically
                 this.size // sizeMaxInPixels
                 );

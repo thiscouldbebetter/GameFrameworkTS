@@ -27,6 +27,9 @@ var ThisCouldBeBetter;
                 this._mouseMovePos = GameFramework.Coords.create();
                 this._posToCheck = GameFramework.Coords.create();
             }
+            static from3(name, pos, size, children) {
+                return ControlContainer.from4(ControlContainer.name, pos, size, children);
+            }
             static from4(name, pos, size, children) {
                 return new ControlContainer(name, pos, size, children, null, null);
             }

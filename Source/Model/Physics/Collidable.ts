@@ -224,7 +224,7 @@ export class Collidable implements EntityProperty<Collidable>
 			else
 			{
 				var collisions = ArrayHelper.clear(this._collisions);
-				var collisions = this.collisionsFindForEntity
+				collisions = this.collisionsFindForEntity
 				(
 					uwpe, collisions
 				);
@@ -378,10 +378,13 @@ export class Collidable implements EntityProperty<Collidable>
 				|| collidable1Boundable == null
 			);
 
-			var isEitherUnboundableOrDoBoundsCollide =
-				isEitherUnboundable;
+			var isEitherUnboundableOrDoBoundsCollide: boolean;
 
-			if (isEitherUnboundable == false)
+			if (isEitherUnboundable)
+			{
+				isEitherUnboundableOrDoBoundsCollide = true;
+			}
+			else
 			{
 				var doBoundsCollide = collisionHelper.doCollidersCollide
 				(
@@ -450,7 +453,8 @@ export class Collidable implements EntityProperty<Collidable>
 
 	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
-		this.collisionsFindAndHandle(uwpe);
+		// This causes problems sometimes.
+		// this.collisionsFindAndHandle(uwpe);
 	}
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void

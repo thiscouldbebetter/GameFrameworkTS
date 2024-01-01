@@ -50,6 +50,7 @@ export class Activity
 	{
 		this.defnName = ActivityDefn.Instances().DoNothing.name;
 		this.targetEntityClear();
+		this.targetEntitiesByName.clear();
 		return this;
 	}
 

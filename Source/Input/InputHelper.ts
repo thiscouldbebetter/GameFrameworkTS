@@ -18,6 +18,7 @@ export class InputHelper implements Platformable
 
 	isEnabled: boolean;
 	isMouseMovementTracked: boolean;
+	isMouseWheelTracked: boolean;
 
 	constructor()
 	{
@@ -32,14 +33,19 @@ export class InputHelper implements Platformable
 		this.inputNamesLookup = inputNames._AllByName;
 		this.keysToPreventDefaultsFor =
 		[
-			inputNames.ArrowDown, inputNames.ArrowLeft, inputNames.ArrowRight,
-			inputNames.ArrowUp, inputNames.Tab,
+			inputNames.ArrowDown,
+			inputNames.ArrowLeft,
+			inputNames.ArrowRight,
+			inputNames.ArrowUp,
+			inputNames.Tab
 		];
 
 		this.inputsPressed = [];
 		this.inputsPressedByName = new Map<string, Input>();
 
 		this.isEnabled = true;
+		this.isMouseMovementTracked = true;
+		this.isMouseWheelTracked = false;
 	}
 
 	actionsFromInput
@@ -86,8 +92,6 @@ export class InputHelper implements Platformable
 		this.inputsPressed = [];
 		this.gamepadsConnected = [];
 
-		this.isMouseMovementTracked = true; // hack
-
 		if (universe == null)
 		{
 			// hack - Allows use of this class
@@ -124,7 +128,8 @@ export class InputHelper implements Platformable
 
 	inputsActive(): Input[]
 	{
-		return this.inputsPressed.filter( (x) => x.isActive );
+		var inputsActive = this.inputsPressed.filter( (x) => x.isActive );
+		return inputsActive;
 	}
 
 	inputsRemoveAll(): void
@@ -328,6 +333,21 @@ export class InputHelper implements Platformable
 		this.inputRemove(Input.Names().MouseClick);
 	}
 
+	handleEventMouseWheel(event: WheelEvent): void
+	{
+		if (this.isMouseWheelTracked)
+		{
+			var wheelMovementAmountInPixels = event.deltaY; // Seems a strange unit.
+			var inputNames = Input.Names();
+			var inputName =
+				wheelMovementAmountInPixels > 0
+				? inputNames.MouseWheelDown
+				: inputNames.MouseWheelUp;
+
+			this.inputAdd(inputName);
+		}
+	}
+
 	// Events - Touch.
 
 	handleEventTouchStart(event: TouchEvent): void
@@ -398,6 +418,7 @@ export class InputHelper implements Platformable
 			? this.handleEventMouseMove.bind(this)
 			: null
 		);
+		divMain.onwheel = this.handleEventMouseWheel.bind(this);
 
 		divMain.ontouchstart = this.handleEventTouchStart.bind(this);
 		divMain.ontouchend = this.handleEventTouchEnd.bind(this);

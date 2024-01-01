@@ -95,7 +95,7 @@ var ThisCouldBeBetter;
                     }
                     else {
                         var collisions = GameFramework.ArrayHelper.clear(this._collisions);
-                        var collisions = this.collisionsFindForEntity(uwpe, collisions);
+                        collisions = this.collisionsFindForEntity(uwpe, collisions);
                         collisions.forEach(collision => this.collisionHandle(uwpe, collision));
                     }
                 }
@@ -160,8 +160,11 @@ var ThisCouldBeBetter;
                     var collidable1Boundable = entity1.boundable();
                     var isEitherUnboundable = (collidable0Boundable == null
                         || collidable1Boundable == null);
-                    var isEitherUnboundableOrDoBoundsCollide = isEitherUnboundable;
-                    if (isEitherUnboundable == false) {
+                    var isEitherUnboundableOrDoBoundsCollide;
+                    if (isEitherUnboundable) {
+                        isEitherUnboundableOrDoBoundsCollide = true;
+                    }
+                    else {
                         var doBoundsCollide = collisionHelper.doCollidersCollide(collidable0Boundable.bounds, collidable1Boundable.bounds);
                         isEitherUnboundableOrDoBoundsCollide = doBoundsCollide;
                     }
@@ -203,7 +206,8 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) {
-                this.collisionsFindAndHandle(uwpe);
+                // This causes problems sometimes.
+                // this.collisionsFindAndHandle(uwpe);
             }
             updateForTimerTick(uwpe) {
                 var entity = uwpe.entity;

@@ -91,6 +91,7 @@ export class ControlStyle_Instances
 	Beveled: ControlStyle;
 	Default: ControlStyle;
 	Dark: ControlStyle;
+	DarkAndRounded: ControlStyle;
 	Rounded: ControlStyle;
 
 	_All: ControlStyle[];
@@ -114,11 +115,16 @@ export class ControlStyle_Instances
 			null // drawBoxOfSizeAtPosToDisplay
 		);
 
+		this.DarkAndRounded = this.darkAndRounded();
+
 		this.Rounded = this.rounded();
 
 		this._All =
 		[
-			this.Default, this.Dark, this.Rounded
+			this.Default,
+			this.Dark,
+			this.DarkAndRounded,
+			this.Rounded
 		];
 
 		this._AllByName = ArrayHelper.addLookupsByName(this._All);
@@ -152,33 +158,51 @@ export class ControlStyle_Instances
 		return beveled;
 	}
 
-	rounded(): ControlStyle
+	darkAndRounded(): ControlStyle
 	{
-		var rounded = this.Default.clone();
-		var cornerRadius = 5;
+		var rounded = this.Dark.clone();
 		rounded._drawBoxOfSizeAtPosWithColorsToDisplay =
-			(
-				size: Coords, pos: Coords,
-				colorFill: Color, colorBorder: Color,
-				isHighlighted: boolean,
-				display: Display
-			) =>
-			{
-				if (isHighlighted)
-				{
-					var temp = colorFill;
-					colorFill = colorBorder;
-					colorBorder = temp;
-				}
-
-				display.drawRectangleWithRoundedCorners
-				(
-					pos, size, colorFill, colorBorder, cornerRadius
-				);
-			};
+			this.drawBoxOfSizeAtPosWithColorsToDisplay;
 
 		return rounded;
 	}
+
+	rounded(): ControlStyle
+	{
+		var rounded = this.Default.clone();
+		rounded._drawBoxOfSizeAtPosWithColorsToDisplay =
+			this.drawBoxOfSizeAtPosWithColorsToDisplay;
+
+		return rounded;
+	}
+
+	// Helpers.
+
+	drawBoxOfSizeAtPosWithColorsToDisplay
+	(
+		size: Coords,
+		pos: Coords,
+		colorFill: Color,
+		colorBorder: Color,
+		isHighlighted: boolean,
+		display: Display
+	): void
+	{
+		if (isHighlighted)
+		{
+			var temp = colorFill;
+			colorFill = colorBorder;
+			colorBorder = temp;
+		}
+
+		var cornerRadius = 5;
+
+		display.drawRectangleWithRoundedCorners
+		(
+			pos, size, colorFill, colorBorder, cornerRadius
+		);
+	}
+
 
 }
 

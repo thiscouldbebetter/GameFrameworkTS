@@ -192,7 +192,7 @@ var ThisCouldBeBetter;
                 ];
                 for (var i = 0; i < itemQuickSlotCount; i++) {
                     var buttonText = "\n   " + i;
-                    var button = new GameFramework.ControlButton("buttonItemQuickSlot" + i, buttonPos.clone(), buttonSize, buttonText, font, false, // hasBorder
+                    var button = GameFramework.ControlButton.from11("buttonItemQuickSlot" + i, buttonPos.clone(), buttonSize, buttonText, font, false, // hasBorder
                     GameFramework.DataBinding.fromTrue(), // isEnabled,
                     buttonClicks[i], false // canBeHeldDown
                     );

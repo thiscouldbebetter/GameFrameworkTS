@@ -51,6 +51,14 @@ export class Drawable implements EntityProperty<Drawable>
 		return new Drawable(visual, renderingOrder, null);
 	}
 
+	draw(uwpe: UniverseWorldPlaceEntities): void
+	{
+		if (this.isVisible)
+		{
+			this.visual.draw(uwpe, uwpe.universe.display);
+		}
+	}
+
 	hide(): void
 	{
 		this.isVisible = false;
@@ -65,10 +73,7 @@ export class Drawable implements EntityProperty<Drawable>
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
-		if (this.isVisible)
-		{
-			this.visual.draw(uwpe, uwpe.universe.display);
-		}
+		this.draw(uwpe);
 	}
 
 	// cloneable

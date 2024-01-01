@@ -39,6 +39,7 @@ var ThisCouldBeBetter;
             }
             stop(universe) {
                 universe.platformHelper.platformableRemove(this);
+                universe.soundHelper.soundWithNameStop(this.name);
                 this.offsetInSeconds = 0;
             }
             stopOrRepeat(universe) {

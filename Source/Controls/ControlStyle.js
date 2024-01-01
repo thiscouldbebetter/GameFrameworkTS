@@ -50,10 +50,14 @@ var ThisCouldBeBetter;
                 this.Dark = new ControlStyle("Dark", // name
                 GameFramework.ControlColorScheme.Instances().Dark, null // drawBoxOfSizeAtPosToDisplay
                 );
+                this.DarkAndRounded = this.darkAndRounded();
                 this.Rounded = this.rounded();
                 this._All =
                     [
-                        this.Default, this.Dark, this.Rounded
+                        this.Default,
+                        this.Dark,
+                        this.DarkAndRounded,
+                        this.Rounded
                     ];
                 this._AllByName = GameFramework.ArrayHelper.addLookupsByName(this._All);
             }
@@ -71,19 +75,27 @@ var ThisCouldBeBetter;
                     };
                 return beveled;
             }
+            darkAndRounded() {
+                var rounded = this.Dark.clone();
+                rounded._drawBoxOfSizeAtPosWithColorsToDisplay =
+                    this.drawBoxOfSizeAtPosWithColorsToDisplay;
+                return rounded;
+            }
             rounded() {
                 var rounded = this.Default.clone();
-                var cornerRadius = 5;
                 rounded._drawBoxOfSizeAtPosWithColorsToDisplay =
-                    (size, pos, colorFill, colorBorder, isHighlighted, display) => {
-                        if (isHighlighted) {
-                            var temp = colorFill;
-                            colorFill = colorBorder;
-                            colorBorder = temp;
-                        }
-                        display.drawRectangleWithRoundedCorners(pos, size, colorFill, colorBorder, cornerRadius);
-                    };
+                    this.drawBoxOfSizeAtPosWithColorsToDisplay;
                 return rounded;
+            }
+            // Helpers.
+            drawBoxOfSizeAtPosWithColorsToDisplay(size, pos, colorFill, colorBorder, isHighlighted, display) {
+                if (isHighlighted) {
+                    var temp = colorFill;
+                    colorFill = colorBorder;
+                    colorBorder = temp;
+                }
+                var cornerRadius = 5;
+                display.drawRectangleWithRoundedCorners(pos, size, colorFill, colorBorder, cornerRadius);
             }
         }
         GameFramework.ControlStyle_Instances = ControlStyle_Instances;

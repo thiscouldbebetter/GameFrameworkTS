@@ -68,6 +68,7 @@ export class SoundFromFile implements Sound
 	stop(universe: Universe): void
 	{
 		universe.platformHelper.platformableRemove(this);
+		universe.soundHelper.soundWithNameStop(this.name);
 		this.offsetInSeconds = 0;
 	}
 

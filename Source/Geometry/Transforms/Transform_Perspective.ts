@@ -45,6 +45,9 @@ export class Transform_Perspective implements Transform<Transform_Perspective>
 				distanceAlongCameraForward
 			);
 		}
+
+		coordsToTransform.z = distanceAlongCameraForward;
+
 		return coordsToTransform;
 	}
 }

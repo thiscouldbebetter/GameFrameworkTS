@@ -34,6 +34,7 @@ export class Display2D implements Display
 		this.sizesAvailable = sizesAvailable;
 		this._sizeDefault = this.sizesAvailable[0];
 		this.sizeInPixels = this._sizeDefault;
+		this.sizeInPixelsHalf = this.sizeInPixels.clone().half();
 		this.fontNameAndHeight =
 			fontNameAndHeight || FontNameAndHeight.default();
 		this.colorFore = colorFore;

@@ -64,18 +64,15 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 
 		var childControls: ControlBase[] =
 		[
-			new ControlLabel
+			ControlLabel.from4Uncentered
 			(
-				"labelJournalEntries",
 				Coords.fromXY(10, 5), // pos
 				Coords.fromXY(70, 25), // size
-				false, // isTextCenteredHorizontally
-				false, // isTextCenteredVertically
 				DataBinding.fromContext("Journal Entries:"),
 				fontSmall
 			),
 
-			new ControlButton
+			ControlButton.from11
 			(
 				"buttonEntryNew",
 				Coords.fromXY(65, 5), // pos
@@ -143,7 +140,7 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 				fontSmall
 			),
 
-			new ControlButton
+			ControlButton.from11
 			(
 				"buttonEntrySelectedEdit",
 				Coords.fromXY(146, 5), // pos
@@ -167,7 +164,7 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 				false, // canBeHeldDown
 			),
 
-			new ControlButton
+			ControlButton.from11
 			(
 				"buttonEntrySelectedEdit",
 				Coords.fromXY(164, 5), // pos
@@ -191,7 +188,7 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 				false, // canBeHeldDown
 			),
 
-			new ControlButton
+			ControlButton.from11
 			(
 				"buttonEntrySelectedDelete",
 				Coords.fromXY(182, 5), // pos
@@ -229,24 +226,18 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 				false // canBeHeldDown
 			),
 
-			new ControlLabel
+			ControlLabel.from4Uncentered
 			(
-				"labelEntrySelectedTimeRecorded",
 				Coords.fromXY(105, 15), // pos
 				Coords.fromXY(100, 15), // size
-				false, // isTextCenteredHorizontally
-				false, // isTextCenteredVertically
 				DataBinding.fromContext("Time Recorded:"),
 				fontSmall
 			),
 
-			new ControlLabel
+			ControlLabel.from4Uncentered
 			(
-				"labelEntrySelectedTimeRecorded",
 				Coords.fromXY(145, 15), // pos
 				Coords.fromXY(100, 15), // size
-				false, // isTextCenteredHorizontally
-				false, // isTextCenteredVertically
 				DataBinding.fromContextAndGet
 				(
 					this,
