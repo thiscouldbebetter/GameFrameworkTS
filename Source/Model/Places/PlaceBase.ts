@@ -10,7 +10,6 @@ export class PlaceBase implements Place, Loadable
 	_size: Coords;
 	_entities: Entity[];
 	entitiesById: Map<number, Entity>;
-	entitiesByName: Map<string, Entity>;
 
 	_entitiesByPropertyName: Map<string, Entity[]>;
 	entitiesToSpawn: Entity[];
@@ -34,7 +33,6 @@ export class PlaceBase implements Place, Loadable
 
 		this._entities = [];
 		this.entitiesById = new Map<number, Entity>();
-		this.entitiesByName = new Map<string, Entity>();
 
 		this._entitiesByPropertyName = new Map<string, Entity[]>();
 		this.entitiesToSpawn = entities.slice();
@@ -166,7 +164,7 @@ export class PlaceBase implements Place, Loadable
 
 	entityByName(entityName: string): Entity
 	{
-		return this.entitiesByName.get(entityName);
+		return this._entities.find(x => x.name == entityName);
 	}
 
 	entityIsPresent(entity:Entity): boolean
@@ -187,7 +185,6 @@ export class PlaceBase implements Place, Loadable
 		}
 		ArrayHelper.remove(this._entities, entity);
 		this.entitiesById.delete(entity.id);
-		this.entitiesByName.delete(entity.name);
 	}
 
 	entitySpawn(uwpe: UniverseWorldPlaceEntities): void
@@ -203,14 +200,8 @@ export class PlaceBase implements Place, Loadable
 				entity.name = "Entity";
 			}
 
-			if (this.entitiesByName.has(entity.name))
-			{
-				entity.name += entity.id;
-			}
-
 			this._entities.push(entity);
 			this.entitiesById.set(entity.id, entity);
-			this.entitiesByName.set(entity.name, entity);
 
 			var entityProperties = entity.properties;
 			for (var i = 0; i < entityProperties.length; i++)

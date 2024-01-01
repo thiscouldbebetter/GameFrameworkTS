@@ -12,7 +12,6 @@ var ThisCouldBeBetter;
                 entities = entities || [];
                 this._entities = [];
                 this.entitiesById = new Map();
-                this.entitiesByName = new Map();
                 this._entitiesByPropertyName = new Map();
                 this.entitiesToSpawn = entities.slice();
                 this.entitiesToRemove = [];
@@ -95,7 +94,7 @@ var ThisCouldBeBetter;
                 return this.entitiesById.get(entityId);
             }
             entityByName(entityName) {
-                return this.entitiesByName.get(entityName);
+                return this._entities.find(x => x.name == entityName);
             }
             entityIsPresent(entity) {
                 return (this._entities.indexOf(entity) >= 0);
@@ -110,7 +109,6 @@ var ThisCouldBeBetter;
                 }
                 GameFramework.ArrayHelper.remove(this._entities, entity);
                 this.entitiesById.delete(entity.id);
-                this.entitiesByName.delete(entity.name);
             }
             entitySpawn(uwpe) {
                 uwpe.place = this;
@@ -120,12 +118,8 @@ var ThisCouldBeBetter;
                     if (entity.name == null) {
                         entity.name = "Entity";
                     }
-                    if (this.entitiesByName.has(entity.name)) {
-                        entity.name += entity.id;
-                    }
                     this._entities.push(entity);
                     this.entitiesById.set(entity.id, entity);
-                    this.entitiesByName.set(entity.name, entity);
                     var entityProperties = entity.properties;
                     for (var i = 0; i < entityProperties.length; i++) {
                         var property = entityProperties[i];

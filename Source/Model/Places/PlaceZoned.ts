@@ -50,7 +50,7 @@ export class PlaceZoned extends PlaceBase
 	{
 		super.updateForTimerTick(uwpe);
 
-		var entityToFollow = this.entitiesByName.get(this.entityToFollowName);
+		var entityToFollow = this.entityByName(this.entityToFollowName);
 		var entityToFollowPos = entityToFollow.locatable().loc.pos;
 		var zoneCentralPrev = this.zoneCentral;
 		var zoneCentralNext = this.zoneAtPos(entityToFollowPos);
