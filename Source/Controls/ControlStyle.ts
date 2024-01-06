@@ -6,6 +6,7 @@ export class ControlStyle
 {
 	name: string;
 	colorScheme: ControlColorScheme;
+	soundScheme: ControlSoundScheme;
 	_drawBoxOfSizeAtPosWithColorsToDisplay:
 		(size: Coords, pos: Coords, colorFill: Color, colorBorder: Color, isHighlighted: boolean, display: Display) => void;
 
@@ -13,13 +14,16 @@ export class ControlStyle
 	(
 		name: string,
 		colorScheme: ControlColorScheme,
+		soundScheme: ControlSoundScheme,
 		drawBoxOfSizeAtPosWithColorsToDisplay:
 			(size: Coords, pos: Coords, colorFill: Color, colorBorder: Color, isHighlighted: boolean, display: Display) => void
 	)
 	{
 		this.name = name;
 		this.colorScheme = colorScheme;
-		this._drawBoxOfSizeAtPosWithColorsToDisplay = drawBoxOfSizeAtPosWithColorsToDisplay;
+		this.soundScheme = soundScheme;
+		this._drawBoxOfSizeAtPosWithColorsToDisplay =
+			drawBoxOfSizeAtPosWithColorsToDisplay;
 	}
 
 	static _instances: ControlStyle_Instances;
@@ -43,6 +47,7 @@ export class ControlStyle
 		(
 			this.name,
 			this.colorScheme.clone(),
+			this.soundScheme.clone(),
 			this._drawBoxOfSizeAtPosWithColorsToDisplay
 		);
 	}
@@ -99,10 +104,13 @@ export class ControlStyle_Instances
 
 	constructor()
 	{
+		var soundScheme = ControlSoundScheme.Instances().Default;
+
 		this.Default = new ControlStyle
 		(
 			"Default", // name
 			ControlColorScheme.Instances().Default,
+			soundScheme,
 			null // drawBoxOfSizeAtPosToDisplay
 		);
 
@@ -110,8 +118,9 @@ export class ControlStyle_Instances
 
 		this.Dark = new ControlStyle
 		(
-			"Dark", // name
+			"Dark", // name,
 			ControlColorScheme.Instances().Dark,
+			soundScheme,
 			null // drawBoxOfSizeAtPosToDisplay
 		);
 

@@ -12,7 +12,10 @@ var ThisCouldBeBetter;
             }
             static default() {
                 // Convenience method for rapid prototyping.
-                return new VisualCircle(10, null, GameFramework.Color.byName("Cyan"), null);
+                return new VisualCircle(10, null, GameFramework.Color.Instances().Cyan, null);
+            }
+            static fromRadiusAndColorBorder(radius, colorBorder) {
+                return new VisualCircle(radius, null, colorBorder, null);
             }
             static fromRadiusAndColorFill(radius, colorFill) {
                 return new VisualCircle(radius, colorFill, null, null);

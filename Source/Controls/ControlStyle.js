@@ -4,10 +4,12 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ControlStyle {
-            constructor(name, colorScheme, drawBoxOfSizeAtPosWithColorsToDisplay) {
+            constructor(name, colorScheme, soundScheme, drawBoxOfSizeAtPosWithColorsToDisplay) {
                 this.name = name;
                 this.colorScheme = colorScheme;
-                this._drawBoxOfSizeAtPosWithColorsToDisplay = drawBoxOfSizeAtPosWithColorsToDisplay;
+                this.soundScheme = soundScheme;
+                this._drawBoxOfSizeAtPosWithColorsToDisplay =
+                    drawBoxOfSizeAtPosWithColorsToDisplay;
             }
             static Instances() {
                 if (ControlStyle._instances == null) {
@@ -19,7 +21,7 @@ var ThisCouldBeBetter;
                 return ControlStyle.Instances()._AllByName.get(styleName);
             }
             clone() {
-                return new ControlStyle(this.name, this.colorScheme.clone(), this._drawBoxOfSizeAtPosWithColorsToDisplay);
+                return new ControlStyle(this.name, this.colorScheme.clone(), this.soundScheme.clone(), this._drawBoxOfSizeAtPosWithColorsToDisplay);
             }
             drawBoxOfSizeAtPosWithColorsToDisplay(size, pos, colorFill, colorBorder, isHighlighted, display) {
                 if (this._drawBoxOfSizeAtPosWithColorsToDisplay == null) {
@@ -43,12 +45,13 @@ var ThisCouldBeBetter;
         GameFramework.ControlStyle = ControlStyle;
         class ControlStyle_Instances {
             constructor() {
+                var soundScheme = GameFramework.ControlSoundScheme.Instances().Default;
                 this.Default = new ControlStyle("Default", // name
-                GameFramework.ControlColorScheme.Instances().Default, null // drawBoxOfSizeAtPosToDisplay
+                GameFramework.ControlColorScheme.Instances().Default, soundScheme, null // drawBoxOfSizeAtPosToDisplay
                 );
                 this.Beveled = this.beveled();
-                this.Dark = new ControlStyle("Dark", // name
-                GameFramework.ControlColorScheme.Instances().Dark, null // drawBoxOfSizeAtPosToDisplay
+                this.Dark = new ControlStyle("Dark", // name,
+                GameFramework.ControlColorScheme.Instances().Dark, soundScheme, null // drawBoxOfSizeAtPosToDisplay
                 );
                 this.DarkAndRounded = this.darkAndRounded();
                 this.Rounded = this.rounded();

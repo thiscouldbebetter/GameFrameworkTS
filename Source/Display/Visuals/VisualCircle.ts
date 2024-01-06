@@ -26,7 +26,12 @@ export class VisualCircle implements Visual<VisualCircle>
 	static default(): VisualCircle
 	{
 		// Convenience method for rapid prototyping.
-		return new VisualCircle(10, null, Color.byName("Cyan"), null);
+		return new VisualCircle(10, null, Color.Instances().Cyan, null);
+	}
+
+	static fromRadiusAndColorBorder(radius: number, colorBorder: Color): VisualCircle
+	{
+		return new VisualCircle(radius, null, colorBorder, null);
 	}
 
 	static fromRadiusAndColorFill(radius: number, colorFill: Color): VisualCircle
